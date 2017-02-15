@@ -103,7 +103,9 @@ public:
     unsigned multiplicationsPerEvaluation() const;
 
     friend std::ostream& operator<<( std::ostream& lhs, const SupportFunctionT<Number, Converter>& rhs ) {
+#ifdef HYPRO_LOGGING
     	lhs << rhs.content << std::endl;
+#endif
     	return lhs;
 	}
 
@@ -111,7 +113,7 @@ public:
 		return lhs.content == rhs.content;
 	}
 
-	std::list<unsigned> collectProjections() const;
+	std::vector<unsigned> collectProjections() const;
 
 private:
 	void evaluateTemplate() const;

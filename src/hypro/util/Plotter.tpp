@@ -8,6 +8,7 @@ Plotter<Number>::~Plotter() {}
 template <typename Number>
 void Plotter<Number>::setFilename( const std::string &_filename ) {
 	mFilename = _filename;
+	mSettings.name = _filename;
 }
 
 template <typename Number>
@@ -70,6 +71,7 @@ void Plotter<Number>::plot2d() const {
 
 
 		mOutfile << "# settings\n";
+		mOutfile << "set title \"" << mSettings.name << "\"\n";
 		if(mSettings.keepAspectRatio) {
 			mOutfile << "set size square\n";
 		}

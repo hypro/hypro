@@ -34,6 +34,11 @@ namespace hypro {
 		// calculate all possible Halfspace intersections -> TODO: dPermutation can
 		// be improved.
 		assert(_constraints.rows() == _constants.rows());
+		if(_constraints.rows() == 0) {
+			assert(this->empty());
+			assert(this->dimension() == 0);
+			return;
+		}
 		Permutator permutator = Permutator( _constraints.rows(), _constraints.cols() );
 		matrix_t<Number> intersection = matrix_t<Number>( _constraints.cols(), _constraints.cols() );
 		vector_t<Number> intersectionConstants = vector_t<Number>( _constraints.cols() );
@@ -518,6 +523,28 @@ BoxT<Number,Converter> BoxT<Number,Converter>::intersectHalfspace( const Halfspa
 			//std::cout << __func__ << " Min and Max are below the halfspace." << std::endl;
 			return *this;
 		}
+
+		// another special case: if the hspace normal is axis-aligned, i.e. it has only one non-zero entry, we simply can use interval-
+		// style intersection.
+		if(hspace.normal().nonZeros() == 1) {
+			// from previous checks we know that either the lowest or the highest point is not contained. If both are not
+			// contained and the normal is axis-aligned, the set is empty.
+			if(!holdsMin && !holdsMax) {
+				return Empty(this->dimension());
+			}
+
+			// find the one, non-zero component
+			unsigned nonZeroDim = 0;
+			while(hspace.normal()(nonZeroDim) == 0 ) ++nonZeroDim;
+
+			if(hspace.normal()(nonZeroDim) > 0) {
+				mLimits.second[nonZeroDim] = hspace.offset() / hspace.normal()(nonZeroDim);
+			} else {
+				mLimits.first[nonZeroDim] = hspace.offset() / hspace.normal()(nonZeroDim);
+			}
+			return *this;
+		}
+
 		//std::cout << __func__ << " Min below: " << holdsMin << ", Max below: " << holdsMax << std::endl;
 		unsigned dim = this->dimension();
 

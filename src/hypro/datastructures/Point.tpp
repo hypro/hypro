@@ -8,7 +8,7 @@ Point<Number>::Point()
 	mHash(0),
 	// mNeighbors(),
 	mComposedOf() {
-	assert(this->dimension() >= 0);
+	assert(this->dimension() == 0);
 }
 
 template <typename Number>

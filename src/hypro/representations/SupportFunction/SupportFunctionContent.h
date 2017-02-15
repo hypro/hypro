@@ -234,7 +234,7 @@ class SupportFunctionContent {
 
 	Point<Number> supremumPoint() const;
 
-	std::list<unsigned> collectProjections() const;
+	std::vector<unsigned> collectProjections() const;
 
 	// getter for the union types
 	sumContent<Number>* summands() const;

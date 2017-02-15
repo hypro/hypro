@@ -29,6 +29,28 @@ namespace hypro {
 	template<typename Converter>
 	BoxT<double,Converter>::BoxT( const matrix_t<double>& _constraints, const vector_t<double>& _constants )
 	{
+		assert(_constraints.rows() == _constants.rows());
+		if(_constraints.rows() == 0) {
+			assert(this->empty());
+			assert(this->dimension() == 0);
+			return;
+		}
+
+		Optimizer<double> opt(_constraints, _constants);
+
+		vector_t<double> posDir = vector_t<double>::Ones(_constraints.cols());
+
+		EvaluationResult<double> posPoint = opt.evaluate(posDir);
+		EvaluationResult<double> negPoint = opt.evaluate(-posDir);
+
+		if(posPoint.errorCode == SOLUTION::INFEAS) {
+			*this = Empty(_constraints.cols());
+		}
+
+		mLimits.first = negPoint.optimumValue;
+		mLimits.second = posPoint.optimumValue;
+
+		/*
 		//std::cout << __func__ << ": matrix: " << _constraints << ", vector: " << _constants << std::endl;
 		// calculate all possible Halfspace intersections -> TODO: dPermutation can
 		// be improved.
@@ -100,6 +122,7 @@ namespace hypro {
 			}
 			mLimits = std::make_pair(Point<double>(min), Point<double>(max));
 		}
+		*/
 	}
 
 template<typename Converter>
@@ -421,6 +444,28 @@ BoxT<double,Converter> BoxT<double,Converter>::intersectHalfspace( const Halfspa
 			//std::cout << __func__ << " Min and Max are below the halfspace." << std::endl;
 			return *this;
 		}
+
+		// another special case: if the hspace normal is axis-aligned, i.e. it has only one non-zero entry, we simply can use interval-
+		// style intersection.
+		if(hspace.normal().nonZeros() == 1) {
+			// from previous checks we know that either the lowest or the highest point is not contained. If both are not
+			// contained and the normal is axis-aligned, the set is empty.
+			if(!holdsMin && !holdsMax) {
+				return Empty(this->dimension());
+			}
+
+			// find the one, non-zero component
+			unsigned nonZeroDim = 0;
+			while(hspace.normal()(nonZeroDim) == 0 ) ++nonZeroDim;
+
+			if(hspace.normal()(nonZeroDim) > 0) {
+				mLimits.second[nonZeroDim] = hspace.offset() / hspace.normal()(nonZeroDim);
+			} else {
+				mLimits.first[nonZeroDim] = hspace.offset() / hspace.normal()(nonZeroDim);
+			}
+			return *this;
+		}
+
 		//std::cout << __func__ << " Min below: " << holdsMin << ", Max below: " << holdsMax << std::endl;
 		unsigned dim = this->dimension();
 

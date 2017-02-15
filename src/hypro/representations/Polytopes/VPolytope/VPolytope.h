@@ -428,11 +428,13 @@ class VPolytopeT : public GeometricObject<Number, VPolytopeT<Number,Converter>> 
 
 template <typename Number, typename Converter>
 std::ostream& operator<<( std::ostream& out, const hypro::VPolytopeT<Number, Converter>& lhs ) {
+#ifdef HYPRO_LOGGING
 	out << "{ ";
 	for ( const auto& vector : lhs ) {
 		out << vector << " ";
 	}
 	out << "}";
+#endif
 	return out;
 }
 

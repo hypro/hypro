@@ -115,7 +115,7 @@ static std::vector<vector_t<Number>> computeTemplate(unsigned dimension, unsigne
 }
 
 template<typename Number>
-static std::vector<vector_t<Number>> computeTemplate(std::list<unsigned> dimensions, unsigned numberDirections, unsigned dim) {
+static std::vector<vector_t<Number>> computeTemplate(std::vector<unsigned> dimensions, unsigned numberDirections, unsigned dim) {
 	std::vector<vector_t<Number>> directions, directions2d;
 
 	if(numberDirections == 4) {

@@ -45,6 +45,7 @@ namespace plotting {
 	 * @brief      A struct holding a basic set of options for the gnuplot plotting.
 	 */
 	struct gnuplotSettings {
+		std::string name = "";				// filename
 		std::size_t color = colors[blue];  // default petrol
 		bool fill = false;					 // do not fill
 		bool axes = true;					 // plot axes

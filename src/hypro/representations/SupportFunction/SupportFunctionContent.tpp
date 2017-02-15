@@ -781,13 +781,13 @@ Point<Number> SupportFunctionContent<Number>::supremumPoint() const {
 }
 
 template<typename Number>
-std::list<unsigned> SupportFunctionContent<Number>::collectProjections() const {
+std::vector<unsigned> SupportFunctionContent<Number>::collectProjections() const {
 	switch ( mType ) {
 		case SF_TYPE::INFTY_BALL:
 		case SF_TYPE::TWO_BALL:
 		case SF_TYPE::POLY:
 		case SF_TYPE::ELLIPSOID: {
-			std::list<unsigned> res;
+			std::vector<unsigned> res;
 			DEBUG("hypro.representations.supportFunction","mDimension " << mDimension);
 			for(unsigned i = 0; i < mDimension; ++i){
 				DEBUG("hypro.representations.supportFunction","Added dimension " << i);
@@ -800,10 +800,12 @@ std::list<unsigned> SupportFunctionContent<Number>::collectProjections() const {
 		}
 		case SF_TYPE::PROJECTION: {
 			DEBUG("hypro.representations.supportFunction","Projection Object.");
-			std::list<unsigned> res = mProjectionParameters->origin->collectProjections();
+			std::vector<unsigned> tmp = mProjectionParameters->origin->collectProjections();
+			std::vector<unsigned> res = mProjectionParameters->dimensions;
 			DEBUG("hypro.representations.supportFunction","Projection Object: got " << res.size() << " dimensions.");
+
 			for(auto resIt = res.begin(); resIt != res.end(); ){
-				if(std::find(mProjectionParameters->dimensions.begin(), mProjectionParameters->dimensions.end(), *resIt) == mProjectionParameters->dimensions.end()) {
+				if(std::find(tmp.begin(), tmp.end(), *resIt) == res.end()) {
 					DEBUG("hypro.representations.supportFunction","Delete dim " << *resIt);
 					resIt = res.erase(resIt);
 				} else {
@@ -817,66 +819,66 @@ std::list<unsigned> SupportFunctionContent<Number>::collectProjections() const {
 			return mScaleParameters->origin->collectProjections();
 		}
 		case SF_TYPE::SUM: {
-			std::list<unsigned> lhsProjections = mSummands->lhs->collectProjections();
-			std::list<unsigned> rhsProjections = mSummands->rhs->collectProjections();
-			std::list<unsigned> res;
+			std::vector<unsigned> lhsProjections = mSummands->lhs->collectProjections();
+			std::vector<unsigned> rhsProjections = mSummands->rhs->collectProjections();
+			std::vector<unsigned> res;
 			while(!lhsProjections.empty() && !rhsProjections.empty()){
 				if(lhsProjections.front() == rhsProjections.front()){
 					res.emplace_back(lhsProjections.front());
 					DEBUG("hypro.representations.supportFunction","Sum, add dimension " << res.back());
-					lhsProjections.pop_front();
-					rhsProjections.pop_front();
+					lhsProjections.erase(lhsProjections.begin());
+					rhsProjections.erase(rhsProjections.begin());
 				} else {
 					if(lhsProjections.front() < rhsProjections.front()){
 						DEBUG("hypro.representations.supportFunction","Sum, dimension " << lhsProjections.front() << " not part in rhs, drop.");
-						lhsProjections.pop_front();
+						lhsProjections.erase(lhsProjections.begin());
 					} else {
 						DEBUG("hypro.representations.supportFunction","Sum, dimension " << rhsProjections.front() << " not part in lhs, drop.");
-						rhsProjections.pop_front();
+						rhsProjections.erase(rhsProjections.begin());
 					}
 				}
 			}
 			return res;
 		}
 		case SF_TYPE::UNITE: {
-			std::list<unsigned> lhsProjections = mUnionParameters->lhs->collectProjections();
-			std::list<unsigned> rhsProjections = mUnionParameters->rhs->collectProjections();
-			std::list<unsigned> res;
+			std::vector<unsigned> lhsProjections = mUnionParameters->lhs->collectProjections();
+			std::vector<unsigned> rhsProjections = mUnionParameters->rhs->collectProjections();
+			std::vector<unsigned> res;
 			while(!lhsProjections.empty() && !rhsProjections.empty()){
 				if(lhsProjections.front() == rhsProjections.front()){
 					res.emplace_back(lhsProjections.front());
 					DEBUG("hypro.representations.supportFunction","Union, add dimension " << res.back());
-					lhsProjections.pop_front();
-					rhsProjections.pop_front();
+					lhsProjections.erase(lhsProjections.begin());
+					rhsProjections.erase(rhsProjections.begin());
 				} else {
 					if(lhsProjections.front() < rhsProjections.front()){
 						DEBUG("hypro.representations.supportFunction","Union, dimension " << lhsProjections.front() << " not part in rhs, drop.");
-						lhsProjections.pop_front();
+						lhsProjections.erase(lhsProjections.begin());
 					} else {
 						DEBUG("hypro.representations.supportFunction","Union, dimension " << rhsProjections.front() << " not part in lhs, drop.");
-						rhsProjections.pop_front();
+						rhsProjections.erase(rhsProjections.begin());
 					}
 				}
 			}
 			return res;
 		}
 		case SF_TYPE::INTERSECT: {
-			std::list<unsigned> lhsProjections = mIntersectionParameters->lhs->collectProjections();
-			std::list<unsigned> rhsProjections = mIntersectionParameters->rhs->collectProjections();
-			std::list<unsigned> res;
+			std::vector<unsigned> lhsProjections = mIntersectionParameters->lhs->collectProjections();
+			std::vector<unsigned> rhsProjections = mIntersectionParameters->rhs->collectProjections();
+			std::vector<unsigned> res;
 			while(!lhsProjections.empty() && !rhsProjections.empty()){
 				if(lhsProjections.front() == rhsProjections.front()){
 					res.emplace_back(lhsProjections.front());
 					DEBUG("hypro.representations.supportFunction","Intersection, add dimension " << res.back());
-					lhsProjections.pop_front();
-					rhsProjections.pop_front();
+					lhsProjections.erase(lhsProjections.begin());
+					rhsProjections.erase(rhsProjections.begin());
 				} else {
 					if(lhsProjections.front() < rhsProjections.front()){
 						DEBUG("hypro.representations.supportFunction","Intersection, dimension " << lhsProjections.front() << " not part in rhs, drop.");
-						lhsProjections.pop_front();
+						lhsProjections.erase(lhsProjections.begin());
 					} else {
 						DEBUG("hypro.representations.supportFunction","Intersection, dimension " << rhsProjections.front() << " not part in lhs, drop.");
-						rhsProjections.pop_front();
+						rhsProjections.erase(rhsProjections.begin());
 					}
 				}
 			}
@@ -884,7 +886,7 @@ std::list<unsigned> SupportFunctionContent<Number>::collectProjections() const {
 		}
 		default:
 			assert(false);
-			return std::list<unsigned>();
+			return std::vector<unsigned>();
 	}
 }
 

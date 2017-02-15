@@ -88,7 +88,8 @@ typename Converter<Number>::HPolytope Converter<Number>::toHPolytope( const Supp
     //gets dimension of source object
     unsigned dim = _source.dimension();
 
-    std::list<unsigned> projections = _source.collectProjections();
+    std::vector<unsigned> projections = _source.collectProjections();
+    //std::cout << __func__ << ": collected " << projections.size() << " projections." << std::endl;
 	if( projections.size() == dim ){
 		//computes a vector of template directions based on the dimension and the requested number of directions which should get evaluated
 	    std::vector<vector_t<Number>> templateDirections = computeTemplate<Number>(dim, numberOfDirections);
@@ -137,7 +138,7 @@ typename Converter<Number>::HPolytope Converter<Number>::toHPolytope( const Supp
 
 	} else {
 		//std::cout << "Projection" << std::endl;
-		//for(const auto& dim : projections) {
+		//for(auto dim : projections) {
 		//	std::cout << "projection dimension " << dim << std::endl;
 		//}
 		std::list<unsigned> zeroDimensions;
@@ -147,7 +148,9 @@ typename Converter<Number>::HPolytope Converter<Number>::toHPolytope( const Supp
 				zeroDimensions.emplace_back(i);
 			}
 		}
+		//std::cout << __func__ << ": compute template ... ";
 		std::vector<vector_t<Number>> templateDirections = computeTemplate<Number>(projections, numberOfDirections, dim); // TODO: ATTENTION, 8 is hardcoded here.
+		//std::cout << "done." << std::endl;
 		for(auto direction : additionalDirections) {
 			// project direction
 			for(const auto& dir : zeroDimensions) {
@@ -171,51 +174,25 @@ typename Converter<Number>::HPolytope Converter<Number>::toHPolytope( const Supp
 			templateDirectionMatrix.row(adIndex) = additionalDirections.at(pos);
 			++pos;
 		}
-		//std::cout << "TemplateDirectionMatrix: " << std::endl << templateDirectionMatrix << std::endl;
+		//std::cout << __func__ << ": TemplateDirectionMatrix: " << std::endl << templateDirectionMatrix << std::endl;
 
 		std::vector<EvaluationResult<Number>> offsets = _source.multiEvaluate(templateDirectionMatrix);
 		assert(offsets.size() == unsigned(templateDirectionMatrix.rows()));
 
-		//std::cout << "Multi-Eval done, add zero constraints" << std::endl;
+		//std::cout << "Multi-Eval done, reduce to relevant dimensions" << std::endl;
 
-		std::vector<unsigned> boundedConstraints;
-		for(unsigned offsetIndex = 0; offsetIndex < offsets.size(); ++offsetIndex){
-			if(offsets[offsetIndex].errorCode != SOLUTION::INFTY){
-				boundedConstraints.push_back(offsetIndex);
+		unsigned newDim = projections.size();
+		matrix_t<Number> constraints = matrix_t<Number>(offsets.size(), newDim);
+		vector_t<Number> constants = vector_t<Number>(offsets.size());
+		for(unsigned rowIndex = 0; rowIndex < offsets.size(); ++rowIndex) {
+			unsigned colPos = 0;
+			for(auto projIt = projections.begin(); projIt != projections.end(); ++projIt, ++colPos) {
+				constraints(rowIndex,colPos) = templateDirectionMatrix(rowIndex, (*projIt));
 			}
-		}
-		matrix_t<Number> constraints = matrix_t<Number>::Zero(boundedConstraints.size()+2*zeroDimensions.size(), dim);
-		vector_t<Number> constants = vector_t<Number>::Zero(boundedConstraints.size()+2*zeroDimensions.size());
-		pos = boundedConstraints.size()-1;
-		unsigned zeroDimensionPos = boundedConstraints.size();
-		while(!boundedConstraints.empty()){
-			constraints.row(pos) = templateDirectionMatrix.row(boundedConstraints.back());
-			constants(pos) = offsets[boundedConstraints.back()].supportValue;
-			boundedConstraints.pop_back();
-			--pos;
+			constants(rowIndex) = offsets.at(rowIndex).supportValue;
 		}
 
-		//std::cout << "Projected Polytope wiithout zero constraints: " << std::endl << constraints << std::endl << constants << std::endl;
-
-		// add zero dimension constraints
-		while(!zeroDimensions.empty()) {
-			//std::cout << "Add zero constraints for dimension " << zeroDimensions.front() << " at rows " << zeroDimensionPos << "f" << std::endl;
-			vector_t<Number> zDimConstraint = vector_t<Number>::Zero(dim);
-			zDimConstraint(zeroDimensions.front()) = Number(1);
-			constraints.row(zeroDimensionPos) = zDimConstraint;
-			constants(zeroDimensionPos) = Number(0);
-			//std::cout << "Positive zero constraint for dimension " << zeroDimensions.front() << ": " << zDimConstraint << std::endl;
-
-			++zeroDimensionPos;
-
-			zDimConstraint(zeroDimensions.front()) = Number(-1);
-			constraints.row(zeroDimensionPos) = zDimConstraint;
-			constants(zeroDimensionPos) = Number(0);
-			//std::cout << "Negative zero constraint for dimension " << zeroDimensions.front() << ": " << zDimConstraint << std::endl;
-
-			zeroDimensions.pop_front();
-			++zeroDimensionPos;
-		}
+		//std::cout << "Construct polytope from constraints " << constraints << " and constants " << constants << std::endl;
 
 		//constructs a H-Polytope out of the computed halfspaces
     	return HPolytope(constraints, constants);

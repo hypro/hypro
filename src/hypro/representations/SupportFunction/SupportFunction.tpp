@@ -436,13 +436,14 @@ namespace hypro{
 				//std::cout << "Set is (Hpoly): " << std::endl << Converter::toHPolytope(*this) << std::endl;
 				assert(Converter::toHPolytope(*this).empty());
         		return std::make_pair(false, *this);
-        	} else if(planeEvalRes.supportValue > _vec(rowI)){
+        	} else if(!carl::AlmostEqual2sComplement(planeEvalRes.supportValue, _vec(rowI)) && planeEvalRes.supportValue > _vec(rowI)){
 				//std::cout << "Object will be limited. " << std::endl;
         		// the actual object will be limited by the new plane
         		limitingPlanes.push_back(rowI);
 				// std::cout << "evaluate(" << convert<Number,double>(-(_mat.row(rowI))) << ") <=  " << -(_vec(rowI)) << ": " << content->evaluate(-(_mat.row(rowI))).supportValue << " <= " << -(_vec(rowI)) << std::endl;
         		// std::cout << __func__ <<  ": Limiting plane " << convert<Number,double>(_mat.row(rowI)).transpose() << " <= " << carl::toDouble(_vec(rowI)) << std::endl;
-	            if(content->evaluate(-(_mat.row(rowI))).supportValue < -(_vec(rowI))){
+        		Number invDirVal = content->evaluate(-(_mat.row(rowI))).supportValue;
+	            if(!carl::AlmostEqual2sComplement(invDirVal, Number(-(_vec(rowI)))) && invDirVal < -(_vec(rowI))) {
 					//std::cout << "fullyOutside" << std::endl;
 	                // the object lies fully outside one of the planes -> return false
 	                return std::make_pair(false, this->intersectHalfspaces(_mat,_vec) );
@@ -496,7 +497,7 @@ namespace hypro{
     }
 
 	template<typename Number, typename Converter>
-	std::list<unsigned> SupportFunctionT<Number,Converter>::collectProjections() const {
+	std::vector<unsigned> SupportFunctionT<Number,Converter>::collectProjections() const {
 		return content->collectProjections();
 	}
 

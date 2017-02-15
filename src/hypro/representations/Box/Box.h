@@ -54,7 +54,7 @@ class BoxT : public GeometricObject<Number, BoxT<Number,Converter>> {
 	 * @brief      Creates an empty box.
 	 * @details   The empty box is represented by a zero-dimensional point pair.
 	 */
-	BoxT() : mLimits(std::make_pair(Point<Number>(vector_t<Number>::Zero(0)), Point<Number>(vector_t<Number>::Zero(0)))) {}
+	BoxT() { assert(this->dimension() == 0); assert(this->empty()); }
 
 	/**
 	 * @brief      Copy constructor.
@@ -294,11 +294,13 @@ class BoxT : public GeometricObject<Number, BoxT<Number,Converter>> {
 	 * @param b A box.
 	 */
 	friend std::ostream& operator<<( std::ostream& ostr, const BoxT<Number,Converter>& b ) {
+#ifdef HYPRO_LOGGING
 		ostr << "{ ";
 		if(!b.empty()) {
 			ostr << b.min() << "; " << b.max() << std::endl;
 		}
 		ostr << " }";
+#endif
 		return ostr;
 	}
 

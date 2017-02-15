@@ -5,14 +5,14 @@ namespace hypro {
 	int initializeLogging(int& i) {
 		carl::logging::logger().configure("logfile", "hypro.log");
 		carl::logging::logger().filter("logfile")
-	    ("hypro", carl::logging::LogLevel::LVL_WARN)
-		("hypro.representations", carl::logging::LogLevel::LVL_WARN)
+	    ("hypro", carl::logging::LogLevel::LVL_TRACE)
+		("hypro.representations", carl::logging::LogLevel::LVL_TRACE)
 		;
 
 	  	carl::logging::logger().configure("stdout", std::cout);
 		carl::logging::logger().filter("stdout")
 	    ("hypro", carl::logging::LogLevel::LVL_WARN)
-		("hypro.representations", carl::logging::LogLevel::LVL_WARN)
+		("hypro.representations", carl::logging::LogLevel::LVL_TRACE)
 		;
 
 	  	carl::logging::logger().resetFormatter();
