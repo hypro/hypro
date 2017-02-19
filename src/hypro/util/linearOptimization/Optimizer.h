@@ -123,7 +123,7 @@ namespace hypro {
 		void setVector(const vector_t<Number>& _vector);
 		void clear();
 
-		EvaluationResult<Number> evaluate(const vector_t<Number>& _direction, bool overapproximate = false) const;
+		EvaluationResult<Number> evaluate(const vector_t<Number>& _direction, bool useExactGlpk) const;
 		bool checkConsistency() const;
 		bool checkPoint(const Point<Number>& _point) const;
 		EvaluationResult<Number> getInternalPoint() const;

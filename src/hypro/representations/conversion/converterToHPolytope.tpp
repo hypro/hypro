@@ -111,7 +111,7 @@ typename Converter<Number>::HPolytope Converter<Number>::toHPolytope( const Supp
 	    //std::cout << "Template direction matrix: " << std::endl << templateDirectionMatrix << std::endl;
 
 	    //lets the support function evaluate the offset of the halfspaces for each direction
-	    std::vector<EvaluationResult<Number>> offsets = _source.multiEvaluate(templateDirectionMatrix);
+	    std::vector<EvaluationResult<Number>> offsets = _source.multiEvaluate(templateDirectionMatrix, true);
 	    assert(offsets.size() == std::size_t(templateDirectionMatrix.rows()));
 
 	    std::vector<std::size_t> boundedConstraints;
@@ -176,7 +176,7 @@ typename Converter<Number>::HPolytope Converter<Number>::toHPolytope( const Supp
 		}
 		//std::cout << __func__ << ": TemplateDirectionMatrix: " << std::endl << templateDirectionMatrix << std::endl;
 
-		std::vector<EvaluationResult<Number>> offsets = _source.multiEvaluate(templateDirectionMatrix);
+		std::vector<EvaluationResult<Number>> offsets = _source.multiEvaluate(templateDirectionMatrix, true);
 		assert(offsets.size() == unsigned(templateDirectionMatrix.rows()));
 
 		//std::cout << "Multi-Eval done, reduce to relevant dimensions" << std::endl;

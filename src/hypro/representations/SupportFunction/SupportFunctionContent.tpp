@@ -318,7 +318,7 @@ std::shared_ptr<SupportFunctionContent<Number>>& SupportFunctionContent<Number>:
 }
 
 template <typename Number>
-EvaluationResult<Number> SupportFunctionContent<Number>::evaluate( const vector_t<Number> &_direction ) const {
+EvaluationResult<Number> SupportFunctionContent<Number>::evaluate( const vector_t<Number> &_direction, bool useExact ) const {
 	switch ( mType ) {
 		case SF_TYPE::ELLIPSOID: {
 			return mEllipsoid->evaluate( _direction );
@@ -330,7 +330,7 @@ EvaluationResult<Number> SupportFunctionContent<Number>::evaluate( const vector_
 		case SF_TYPE::LINTRAFO: {
 			std::pair<matrix_t<Number>, vector_t<Number>> parameterPair = mLinearTrafoParameters->parameters->getParameterSet(mLinearTrafoParameters->currentExponent);
 			matrix_t<Number> tmp = parameterPair.first.transpose();
-			EvaluationResult<Number> res = mLinearTrafoParameters->origin->evaluate( tmp * _direction );
+			EvaluationResult<Number> res = mLinearTrafoParameters->origin->evaluate( tmp * _direction, useExact);
 			switch(res.errorCode){
 				case SOLUTION::INFTY:
 				case SOLUTION::INFEAS:{
@@ -346,7 +346,7 @@ EvaluationResult<Number> SupportFunctionContent<Number>::evaluate( const vector_
 			}
 		}
 		case SF_TYPE::POLY: {
-			return mPolytope->evaluate( _direction );
+			return mPolytope->evaluate( _direction, useExact);
 		}
 		case SF_TYPE::PROJECTION: {
 			vector_t<Number> projectedDirection = vector_t<Number>::Zero(mDimension);
@@ -359,27 +359,27 @@ EvaluationResult<Number> SupportFunctionContent<Number>::evaluate( const vector_
 			if(projectedDirection.nonZeros() == 0) {
 				return EvaluationResult<Number>(0,projectedDirection, SOLUTION::INFTY);
 			}
-			return mProjectionParameters->origin->evaluate(projectedDirection);
+			return mProjectionParameters->origin->evaluate(projectedDirection, useExact);
 		}
 		case SF_TYPE::SCALE: {
-			EvaluationResult<Number> res = mScaleParameters->origin->evaluate( _direction );
+			EvaluationResult<Number> res = mScaleParameters->origin->evaluate( _direction, useExact);
 			res.optimumValue *= mScaleParameters->factor;
 			res.supportValue *= mScaleParameters->factor;
 			return res;
 		}
 		case SF_TYPE::SUM: {
-			EvaluationResult<Number> resA = mSummands->lhs->evaluate( _direction );
+			EvaluationResult<Number> resA = mSummands->lhs->evaluate( _direction, useExact);
 			if(resA.errorCode == SOLUTION::INFEAS){
 				return resA;
 			}
-			EvaluationResult<Number> resB = mSummands->rhs->evaluate( _direction );
+			EvaluationResult<Number> resB = mSummands->rhs->evaluate( _direction, useExact);
 			resA.optimumValue += resB.optimumValue;
 			resA.supportValue += resB.supportValue;
 			return resA;
 		}
 		case SF_TYPE::UNITE: {
-			EvaluationResult<Number> resA = mSummands->lhs->evaluate( _direction );
-			EvaluationResult<Number> resB = mSummands->rhs->evaluate( _direction );
+			EvaluationResult<Number> resA = mSummands->lhs->evaluate( _direction, useExact);
+			EvaluationResult<Number> resB = mSummands->rhs->evaluate( _direction, useExact);
 			if(resA.errorCode == SOLUTION::INFTY || resB.errorCode == SOLUTION::INFTY){
 				EvaluationResult<Number> res;
 				res.errorCode = SOLUTION::INFTY;
@@ -399,11 +399,11 @@ EvaluationResult<Number> SupportFunctionContent<Number>::evaluate( const vector_
 		}
 		case SF_TYPE::INTERSECT: {
 			// easy checks for infeasibility and unboundedness first
-			EvaluationResult<Number> resA = mIntersectionParameters->lhs->evaluate( _direction );
+			EvaluationResult<Number> resA = mIntersectionParameters->lhs->evaluate( _direction, useExact);
 			if(resA.errorCode == SOLUTION::INFEAS){
 				return resA;
 			}
-			EvaluationResult<Number> resB = mIntersectionParameters->rhs->evaluate( _direction );
+			EvaluationResult<Number> resB = mIntersectionParameters->rhs->evaluate( _direction, useExact);
 			if(resB.errorCode == SOLUTION::INFEAS){
 				return resB;
 			}
@@ -426,7 +426,7 @@ EvaluationResult<Number> SupportFunctionContent<Number>::evaluate( const vector_
 }
 
 template <typename Number>
-std::vector<EvaluationResult<Number>> SupportFunctionContent<Number>::multiEvaluate( const matrix_t<Number> &_directions ) const {
+std::vector<EvaluationResult<Number>> SupportFunctionContent<Number>::multiEvaluate( const matrix_t<Number> &_directions, bool useExact ) const {
 	//std::cout << "Multi-evaluate, type: " << mType << std::endl;
 	switch ( mType ) {
 		case SF_TYPE::ELLIPSOID: {
@@ -439,7 +439,7 @@ std::vector<EvaluationResult<Number>> SupportFunctionContent<Number>::multiEvalu
 		case SF_TYPE::LINTRAFO: {
 			// std::cout << "Directions " << convert<Number,double>(_directions) << std::endl << "A:" << convert<Number,double>(mLinearTrafoParameters->a) << std::endl;
 			std::pair<matrix_t<Number>, vector_t<Number>> parameterPair = mLinearTrafoParameters->parameters->getParameterSet(mLinearTrafoParameters->currentExponent);
-			std::vector<EvaluationResult<Number>> res = mLinearTrafoParameters->origin->multiEvaluate( _directions * parameterPair.first );
+			std::vector<EvaluationResult<Number>> res = mLinearTrafoParameters->origin->multiEvaluate( _directions * parameterPair.first, useExact );
 			if(res.begin()->errorCode != SOLUTION::INFEAS) {
 				unsigned directionCnt = 0;
 				for(auto& entry : res){
@@ -459,7 +459,7 @@ std::vector<EvaluationResult<Number>> SupportFunctionContent<Number>::multiEvalu
 			return res;
 		}
 		case SF_TYPE::POLY: {
-			return mPolytope->multiEvaluate( _directions );
+			return mPolytope->multiEvaluate( _directions, useExact );
 		}
 		case SF_TYPE::PROJECTION: {
 			matrix_t<Number> tmp = matrix_t<Number>::Zero(_directions.rows(), _directions.cols());
@@ -467,10 +467,10 @@ std::vector<EvaluationResult<Number>> SupportFunctionContent<Number>::multiEvalu
 				if(entry < mDimension)
 					tmp.col(entry) = _directions.col(entry);
 			}
-			return mProjectionParameters->origin->multiEvaluate(tmp);
+			return mProjectionParameters->origin->multiEvaluate(tmp, useExact);
 		}
 		case SF_TYPE::SCALE: {
-			std::vector<EvaluationResult<Number>> res = mScaleParameters->origin->multiEvaluate( _directions );
+			std::vector<EvaluationResult<Number>> res = mScaleParameters->origin->multiEvaluate( _directions, useExact );
 			// if one result is infeasible, the others will be too -> do not process.
 			if(res.begin()->errorCode != SOLUTION::INFEAS){
 				for(auto& singleRes : res){
@@ -484,8 +484,8 @@ std::vector<EvaluationResult<Number>> SupportFunctionContent<Number>::multiEvalu
 			return res;
 		}
 		case SF_TYPE::SUM: {
-			std::vector<EvaluationResult<Number>> resA = mSummands->lhs->multiEvaluate( _directions );
-			std::vector<EvaluationResult<Number>> resB = mSummands->rhs->multiEvaluate( _directions );
+			std::vector<EvaluationResult<Number>> resA = mSummands->lhs->multiEvaluate( _directions, useExact );
+			std::vector<EvaluationResult<Number>> resB = mSummands->rhs->multiEvaluate( _directions, useExact );
 			std::vector<EvaluationResult<Number>> res;
 			assert( resA.size() == std::size_t(_directions.rows()));
 			assert(resA.size() == resB.size());
@@ -509,8 +509,8 @@ std::vector<EvaluationResult<Number>> SupportFunctionContent<Number>::multiEvalu
 			return ( res );
 		}
 		case SF_TYPE::UNITE: {
-			std::vector<EvaluationResult<Number>> resA = mUnionParameters->lhs->multiEvaluate( _directions );
-			std::vector<EvaluationResult<Number>> resB = mUnionParameters->rhs->multiEvaluate( _directions );
+			std::vector<EvaluationResult<Number>> resA = mUnionParameters->lhs->multiEvaluate( _directions, useExact );
+			std::vector<EvaluationResult<Number>> resB = mUnionParameters->rhs->multiEvaluate( _directions, useExact );
 			assert( resA.size() == std::size_t(_directions.rows()));
 			assert( resA.size() == resB.size() );
 			std::vector<EvaluationResult<Number>> result;
@@ -544,8 +544,8 @@ std::vector<EvaluationResult<Number>> SupportFunctionContent<Number>::multiEvalu
 			return result;
 		}
 		case SF_TYPE::INTERSECT: {
-			std::vector<EvaluationResult<Number>> resA = mIntersectionParameters->lhs->multiEvaluate( _directions );
-			std::vector<EvaluationResult<Number>> resB = mIntersectionParameters->rhs->multiEvaluate( _directions );
+			std::vector<EvaluationResult<Number>> resA = mIntersectionParameters->lhs->multiEvaluate( _directions, useExact );
+			std::vector<EvaluationResult<Number>> resB = mIntersectionParameters->rhs->multiEvaluate( _directions, useExact );
 			assert( resA.size() == resB.size() );
 			// in case one of the results is infeasible (the set is empty), return this result.
 			if(resA.begin()->errorCode == SOLUTION::INFEAS){
@@ -1026,9 +1026,9 @@ bool SupportFunctionContent<Number>::contains( const vector_t<Number> &_point ) 
 			// use single evaluation, as one invalid eval is enough to determine the point is not contained.
 			for(const auto& dir : templates) {
 				DEBUG("hypro.representations.supportFunction","Evaluate " << dir);
-				EvaluationResult<Number> rhsRes =  mSummands->rhs->evaluate(dir);
+				EvaluationResult<Number> rhsRes =  mSummands->rhs->evaluate(dir, false);
 				DEBUG("hypro.representations.supportFunction","Rhsres: " << rhsRes.supportValue);
-				EvaluationResult<Number> lhsRes =  mSummands->lhs->evaluate(dir);
+				EvaluationResult<Number> lhsRes =  mSummands->lhs->evaluate(dir, false);
 				DEBUG("hypro.representations.supportFunction","Lhsres: " << lhsRes.supportValue);
 				DEBUG("hypro.representations.supportFunction","Summed: " << rhsRes.supportValue + lhsRes.supportValue << " and point dist: " << dir.dot(_point));
 				if(dir.dot(_point) > (lhsRes.supportValue + rhsRes.supportValue)) {
@@ -1111,11 +1111,11 @@ bool SupportFunctionContent<Number>::empty() const {
 			// TODO: Current implementation uses template evaluation.
 			std::vector<vector_t<Number>> directions = computeTemplate<Number>(this->dimension(), defaultTemplateDirectionCount);
 			for(const auto& direction : directions){
-				Number rhsPos = mIntersectionParameters->rhs->evaluate(direction).supportValue;
-				Number lhsNeg = mIntersectionParameters->lhs->evaluate(-direction).supportValue;
+				Number rhsPos = mIntersectionParameters->rhs->evaluate(direction, false).supportValue;
+				Number lhsNeg = mIntersectionParameters->lhs->evaluate(-direction, false).supportValue;
 				if(rhsPos < -lhsNeg) return true;
-				Number rhsNeg = mIntersectionParameters->rhs->evaluate(-direction).supportValue;
-				Number lhsPos = mIntersectionParameters->lhs->evaluate(direction).supportValue;
+				Number rhsNeg = mIntersectionParameters->rhs->evaluate(-direction, false).supportValue;
+				Number lhsPos = mIntersectionParameters->lhs->evaluate(direction, false).supportValue;
 				if(-rhsNeg > lhsPos) return true;
 			}
 			return false;

@@ -3,7 +3,7 @@
 namespace hypro {
 
 	template<>
-	EvaluationResult<double> glpkOptimizeLinear(glp_prob* glpkProblem, const vector_t<double>& _direction, const matrix_t<double>& constraints, const vector_t<double>&) {
+	EvaluationResult<double> glpkOptimizeLinear(glp_prob* glpkProblem, const vector_t<double>& _direction, const matrix_t<double>& constraints, const vector_t<double>&, bool useExact) {
 
 		//std::cout << __func__ << " in direction " << _direction.transpose() << std::endl;
 		//std::cout << __func__ << " constraints: " << std::endl << constraints << std::endl << "Glpk Problem: " << std::endl;
@@ -15,8 +15,17 @@ namespace hypro {
 			glp_set_col_bnds( glpkProblem, i + 1, GLP_FR, 0.0, 0.0 );
 			glp_set_obj_coef( glpkProblem, i + 1, carl::toDouble( _direction( i ) ) );
 		}
+
+		// scale problem to improve its stability
+		glp_scale_prob( glpkProblem, GLP_SF_AUTO );
+
 		/* solve problem */
-		glp_simplex( glpkProblem, NULL );
+		if(useExact){
+			glp_simplex( glpkProblem, NULL );
+			glp_exact( glpkProblem, NULL );
+		} else {
+			glp_simplex( glpkProblem, NULL );
+		}
 
 		switch ( glp_get_status( glpkProblem ) ) {
 			case GLP_OPT:
@@ -76,7 +85,7 @@ namespace hypro {
 
 		for(int constraintIndex = constraints.rows()-1; constraintIndex >= 0; --constraintIndex) {
 			// evaluate in current constraint direction
-			EvaluationResult<double> actualRes = glpkOptimizeLinear(glpkProblem, vector_t<double>(constraints.row(constraintIndex)), constraints, constants);
+			EvaluationResult<double> actualRes = glpkOptimizeLinear(glpkProblem, vector_t<double>(constraints.row(constraintIndex)), constraints, constants, false);
 			//std::cout << "Actual res support Value: " << actualRes.supportValue << std::endl;
 			// Necessary to cope with glpk inexactness.
 			if(actualRes.supportValue > constants(constraintIndex)) {
@@ -85,7 +94,7 @@ namespace hypro {
 
 			// remove constraint by removing the boundaries
 			glp_set_row_bnds(glpkProblem, constraintIndex+1, GLP_FR, 0.0, 0.0);
-			EvaluationResult<double> updatedRes = glpkOptimizeLinear(glpkProblem, vector_t<double>(constraints.row(constraintIndex)), constraints, constants);
+			EvaluationResult<double> updatedRes = glpkOptimizeLinear(glpkProblem, vector_t<double>(constraints.row(constraintIndex)), constraints, constants, false);
 			//std::cout << "Updated res support Value: " << updatedRes.supportValue << std::endl;
 
 			if(updatedRes.supportValue == actualRes.supportValue && updatedRes.errorCode == actualRes.errorCode) {

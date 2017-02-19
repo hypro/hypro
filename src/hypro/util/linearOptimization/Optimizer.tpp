@@ -56,7 +56,7 @@ namespace hypro {
 	}
 
 	template<typename Number>
-	EvaluationResult<Number> Optimizer<Number>::evaluate(const vector_t<Number>& _direction, bool ) const {
+	EvaluationResult<Number> Optimizer<Number>::evaluate(const vector_t<Number>& _direction, bool useExactGlpk) const {
 		if(!mConstraintsSet) {
 			updateConstraints();
 		}
@@ -82,9 +82,9 @@ namespace hypro {
 
 		COUNT("glpk");
 		#if defined(HYPRO_USE_SMTRAT) || defined(HYPRO_USE_Z3) || defined(HYPRO_USE_SOPLEX)
-		res = glpkOptimizeLinear(lp,_direction,mConstraintMatrix,mConstraintVector);
+		res = glpkOptimizeLinear(lp,_direction,mConstraintMatrix,mConstraintVector,useExactGlpk);
 		#else
-		return glpkOptimizeLinear(lp,_direction,mConstraintMatrix,mConstraintVector);
+		return glpkOptimizeLinear(lp,_direction,mConstraintMatrix,mConstraintVector,useExactGlpk);
 		#endif
 
 		#if defined(HYPRO_USE_SMTRAT) || defined(HYPRO_USE_Z3) || defined(HYPRO_USE_SOPLEX)

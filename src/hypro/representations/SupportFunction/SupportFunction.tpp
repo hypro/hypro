@@ -85,15 +85,15 @@ namespace hypro{
 // FUNCTIONS
 
     template<typename Number, typename Converter>
-    EvaluationResult<Number> SupportFunctionT<Number,Converter>::evaluate( const vector_t<Number> &_direction ) const {
+    EvaluationResult<Number> SupportFunctionT<Number,Converter>::evaluate( const vector_t<Number> &_direction, bool useExact ) const {
         //std::cout << __func__ << "(" << _direction << ") :" << tmp.supportValue << std::endl;
-        return content->evaluate(_direction);
+        return content->evaluate(_direction, useExact);
     }
 
     template<typename Number, typename Converter>
-    std::vector<EvaluationResult<Number>> SupportFunctionT<Number,Converter>::multiEvaluate( const matrix_t<Number> &_directions ) const {
+    std::vector<EvaluationResult<Number>> SupportFunctionT<Number,Converter>::multiEvaluate( const matrix_t<Number> &_directions, bool useExact ) const {
         //std::cout << __func__ << " " << convert<Number,double>(_directions) << std::endl;
-        std::vector<EvaluationResult<Number>> res = content->multiEvaluate(_directions);
+        std::vector<EvaluationResult<Number>> res = content->multiEvaluate(_directions, useExact);
         assert(res.size() == std::size_t(_directions.rows()));
         //std::cout << __func__ << " Distances: " << std::endl;
         //for(const auto& item : res){
@@ -394,7 +394,7 @@ namespace hypro{
 		}
 
 		bool limiting = false;
-    	EvaluationResult<Number> planeEvalRes = content->evaluate(rhs.normal());
+    	EvaluationResult<Number> planeEvalRes = content->evaluate(rhs.normal(), false);
     	if(planeEvalRes.errorCode == SOLUTION::INFEAS){
 			//std::cout << "Is infeasible (should not happen)." << std::endl;
 			//std::cout << "Set is (Hpoly): " << std::endl << Converter::toHPolytope(*this) << std::endl;
@@ -406,7 +406,7 @@ namespace hypro{
     		limiting = true;
 			// std::cout << "evaluate(" << convert<Number,double>(-(_mat.row(rowI))) << ") <=  " << -(_vec(rowI)) << ": " << content->evaluate(-(_mat.row(rowI))).supportValue << " <= " << -(_vec(rowI)) << std::endl;
     		// std::cout << __func__ <<  ": Limiting plane " << convert<Number,double>(_mat.row(rowI)).transpose() << " <= " << carl::toDouble(_vec(rowI)) << std::endl;
-            if(content->evaluate(-(rhs.normal())).supportValue < -(rhs.offset())){
+            if(content->evaluate(-(rhs.normal()), false ).supportValue < -(rhs.offset())){
 				//std::cout << "fullyOutside" << std::endl;
                 // the object lies fully outside one of the planes -> return false
                 return std::make_pair(false, this->intersectHalfspace(rhs) );
@@ -430,23 +430,39 @@ namespace hypro{
         std::vector<unsigned> limitingPlanes;
         for(unsigned rowI = 0; rowI < _mat.rows(); ++rowI) {
         	//std::cout << "Evaluate against plane " << rowI << std::endl;
-        	EvaluationResult<Number> planeEvalRes = content->evaluate(_mat.row(rowI));
+        	EvaluationResult<Number> planeEvalRes = content->evaluate(_mat.row(rowI), false);
         	if(planeEvalRes.errorCode == SOLUTION::INFEAS){
 				//std::cout << "Is infeasible (should not happen)." << std::endl;
 				//std::cout << "Set is (Hpoly): " << std::endl << Converter::toHPolytope(*this) << std::endl;
 				assert(Converter::toHPolytope(*this).empty());
         		return std::make_pair(false, *this);
-        	} else if(!carl::AlmostEqual2sComplement(planeEvalRes.supportValue, _vec(rowI)) && planeEvalRes.supportValue > _vec(rowI)){
+        	//} else if(!carl::AlmostEqual2sComplement(planeEvalRes.supportValue, _vec(rowI), 2) && planeEvalRes.supportValue > _vec(rowI)){
+        	} else if(planeEvalRes.supportValue > _vec(rowI)){
 				//std::cout << "Object will be limited. " << std::endl;
         		// the actual object will be limited by the new plane
         		limitingPlanes.push_back(rowI);
 				// std::cout << "evaluate(" << convert<Number,double>(-(_mat.row(rowI))) << ") <=  " << -(_vec(rowI)) << ": " << content->evaluate(-(_mat.row(rowI))).supportValue << " <= " << -(_vec(rowI)) << std::endl;
         		// std::cout << __func__ <<  ": Limiting plane " << convert<Number,double>(_mat.row(rowI)).transpose() << " <= " << carl::toDouble(_vec(rowI)) << std::endl;
-        		Number invDirVal = content->evaluate(-(_mat.row(rowI))).supportValue;
-	            if(!carl::AlmostEqual2sComplement(invDirVal, Number(-(_vec(rowI)))) && invDirVal < -(_vec(rowI))) {
-					//std::cout << "fullyOutside" << std::endl;
-	                // the object lies fully outside one of the planes -> return false
-	                return std::make_pair(false, this->intersectHalfspaces(_mat,_vec) );
+        		Number invDirVal = content->evaluate(-(_mat.row(rowI)), false).supportValue;
+	            //if(!carl::AlmostEqual2sComplement(invDirVal, Number(-(_vec(rowI))), 2) && invDirVal < -(_vec(rowI))) {
+	            if(invDirVal < -(_vec(rowI))) {
+	            	// exact verification in case the values are close to each other
+	            	if(carl::AlmostEqual2sComplement(Number(-invDirVal), planeEvalRes.supportValue, 16)) {
+	            		EvaluationResult<Number> secndPosEval = content->evaluate(_mat.row(rowI), true);
+	            		if(secndPosEval.supportValue > _vec(rowI)) {
+	            			EvaluationResult<Number> secndNegEval = content->evaluate(-(_mat.row(rowI)), true);
+	            			if(secndNegEval.supportValue < -(_vec(rowI))) {
+	            				//std::cout << "fullyOutside" << std::endl;
+				                // the object lies fully outside one of the planes -> return false
+				                return std::make_pair(false, this->intersectHalfspaces(_mat,_vec) );
+	            			}
+	            		}
+	            	} else {
+	            		// the values are far enough away from each other to make this result a false negative.
+	            		//std::cout << "fullyOutside" << std::endl;
+		                // the object lies fully outside one of the planes -> return false
+		                return std::make_pair(false, this->intersectHalfspaces(_mat,_vec) );
+	            	}
 	            }
         	}
         }

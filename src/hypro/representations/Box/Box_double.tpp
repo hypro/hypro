@@ -40,8 +40,8 @@ namespace hypro {
 
 		vector_t<double> posDir = vector_t<double>::Ones(_constraints.cols());
 
-		EvaluationResult<double> posPoint = opt.evaluate(posDir);
-		EvaluationResult<double> negPoint = opt.evaluate(-posDir);
+		EvaluationResult<double> posPoint = opt.evaluate(posDir, false);
+		EvaluationResult<double> negPoint = opt.evaluate(-posDir, false);
 
 		if(posPoint.errorCode == SOLUTION::INFEAS) {
 			*this = Empty(_constraints.cols());

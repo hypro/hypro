@@ -45,8 +45,8 @@ public:
 
 	SupportFunctionT<Number,Converter>& operator=(SupportFunctionT<Number,Converter> _orig );
 
-	EvaluationResult<Number> evaluate( const vector_t<Number>& _direction ) const;
-	std::vector<EvaluationResult<Number>> multiEvaluate( const matrix_t<Number>& _directions ) const;
+	EvaluationResult<Number> evaluate( const vector_t<Number>& _direction, bool useExact = true ) const;
+	std::vector<EvaluationResult<Number>> multiEvaluate( const matrix_t<Number>& _directions, bool useExact = true ) const;
 
 	std::size_t dimension() const;
 	std::size_t size() const { return 0; } // TODO: Better implementation?

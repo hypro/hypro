@@ -202,8 +202,8 @@ Point<Number> PolytopeSupportFunction<Number>::supremumPoint() const {
 		vector_t<Number> negDir = vector_t<Number>::Zero(mDimension);
 		negDir(d) = -1;
 
-		EvaluationResult<Number> positive = this->evaluate(posDir);
-		EvaluationResult<Number> negative = this->evaluate(negDir);
+		EvaluationResult<Number> positive = this->evaluate(posDir, false);
+		EvaluationResult<Number> negative = this->evaluate(negDir, false);
 		assert(positive.errorCode != SOLUTION::UNKNOWN);
 		assert(negative.errorCode != SOLUTION::UNKNOWN);
 
@@ -227,7 +227,7 @@ Point<Number> PolytopeSupportFunction<Number>::supremumPoint() const {
 }
 
 template <typename Number>
-EvaluationResult<Number> PolytopeSupportFunction<Number>::evaluate( const vector_t<Number> &l ) const {
+EvaluationResult<Number> PolytopeSupportFunction<Number>::evaluate( const vector_t<Number> &l, bool useExact ) const {
 	// catch half-space
 	if(mConstraints.rows() == 1) {
 		//std::cout << "only one constraint! -> we evaluate against a plane!" << std::endl;
@@ -252,7 +252,7 @@ EvaluationResult<Number> PolytopeSupportFunction<Number>::evaluate( const vector
 		}
 	}
 
-	EvaluationResult<Number> res(mOpt.evaluate(l));
+	EvaluationResult<Number> res(mOpt.evaluate(l, useExact));
 #ifdef PPOLYTOPESUPPORTFUNCTION_VERBOSE
 	std::cout << __func__ << ": " << *this << " evaluated in direction " << convert<Number,double>(l) << " results in " << res << std::endl;
 #endif
@@ -264,7 +264,7 @@ EvaluationResult<Number> PolytopeSupportFunction<Number>::evaluate( const vector
 }
 
 template <typename Number>
-std::vector<EvaluationResult<Number>> PolytopeSupportFunction<Number>::multiEvaluate( const matrix_t<Number> &_A ) const {
+std::vector<EvaluationResult<Number>> PolytopeSupportFunction<Number>::multiEvaluate( const matrix_t<Number> &_A, bool useExact ) const {
 	assert( _A.cols() == mDimension );
 	std::vector<EvaluationResult<Number>> res;
 	//std::cout << "POLY SF, evaluate in directions " << convert<Number,double>(_A) << std::endl << "POLY SF IS " << *this << std::endl;
@@ -294,7 +294,7 @@ std::vector<EvaluationResult<Number>> PolytopeSupportFunction<Number>::multiEval
 	}
 
 	for ( unsigned index = 0; index < _A.rows(); ++index ) {
-		res.emplace_back(mOpt.evaluate( _A.row( index ) ));
+		res.emplace_back(mOpt.evaluate( _A.row( index ), useExact ));
 	}
 	assert(res.size() == std::size_t(_A.rows()));
 	return res;

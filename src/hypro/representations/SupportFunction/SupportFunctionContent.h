@@ -217,8 +217,8 @@ class SupportFunctionContent {
 
 	std::shared_ptr<SupportFunctionContent<Number>>& operator=( const std::shared_ptr<SupportFunctionContent<Number>>& _orig ) ;
 
-	EvaluationResult<Number> evaluate( const vector_t<Number>& _direction ) const;
-	std::vector<EvaluationResult<Number>> multiEvaluate( const matrix_t<Number>& _directions ) const;
+	EvaluationResult<Number> evaluate( const vector_t<Number>& _direction, bool useExact ) const;
+	std::vector<EvaluationResult<Number>> multiEvaluate( const matrix_t<Number>& _directions, bool useExact ) const;
 
 	std::size_t dimension() const;
 	SF_TYPE type() const;

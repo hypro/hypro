@@ -508,7 +508,7 @@ EvaluationResult<Number> HPolytopeT<Number, Converter>::evaluate( const vector_t
 	opt.setMatrix(this->matrix());
 	opt.setVector(this->vector());
 
-	return opt.evaluate(_direction);
+	return opt.evaluate(_direction, true);
 }
 
 /*

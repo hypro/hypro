@@ -11,7 +11,7 @@ namespace hypro {
 	inline void printProblem(glp_prob* glpkProblem);
 
 	template<typename Number>
-	EvaluationResult<Number> glpkOptimizeLinear(glp_prob* glpkProblem, const vector_t<Number>& _direction, const matrix_t<Number>& constraints, const vector_t<Number>& constants);
+	EvaluationResult<Number> glpkOptimizeLinear(glp_prob* glpkProblem, const vector_t<Number>& _direction, const matrix_t<Number>& constraints, const vector_t<Number>& constants, bool useExact);
 
 	template<typename Number>
 	bool glpkCheckPoint(glp_prob* glpkProblem, const matrix_t<Number>& constraints, const vector_t<Number>& , const Point<Number>& point);
@@ -21,7 +21,7 @@ namespace hypro {
 
 	// specializations
 	template<>
-	EvaluationResult<double> glpkOptimizeLinear(glp_prob* glpkProblem, const vector_t<double>& _direction, const matrix_t<double>& constraints, const vector_t<double>& constants);
+	EvaluationResult<double> glpkOptimizeLinear(glp_prob* glpkProblem, const vector_t<double>& _direction, const matrix_t<double>& constraints, const vector_t<double>& constants, bool useExact);
 
 	template<>
 	bool glpkCheckPoint(glp_prob* glpkProblem, const matrix_t<double>& constraints, const vector_t<double>& , const Point<double>& point);

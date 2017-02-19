@@ -35,7 +35,7 @@ namespace hypro {
 	}
 
 	template<typename Number>
-	EvaluationResult<Number> glpkOptimizeLinear(glp_prob* glpkProblem, const vector_t<Number>& _direction, const matrix_t<Number>& constraints, const vector_t<Number>& constants) {
+	EvaluationResult<Number> glpkOptimizeLinear(glp_prob* glpkProblem, const vector_t<Number>& _direction, const matrix_t<Number>& constraints, const vector_t<Number>& constants, bool useExact) {
 		/*
 		std::cout << __func__ << " in direction " << convert<Number,double>(_direction).transpose() << std::endl;
 		std::cout << __func__ << " constraints: " << std::endl << constraints << std::endl << "constants: " << std::endl << constants << std::endl << "Glpk Problem: " << std::endl;
@@ -48,7 +48,11 @@ namespace hypro {
 			glp_set_obj_coef( glpkProblem, i + 1, carl::toDouble( _direction( i ) ) );
 		}
 		/* solve problem */
-		glp_exact( glpkProblem, NULL );
+		if(useExact){
+			glp_exact( glpkProblem, NULL );
+		} else {
+			glp_simplex( glpkProblem, NULL );
+		}
 
 		vector_t<Number> exactSolution;
 		switch ( glp_get_status( glpkProblem ) ) {
@@ -127,12 +131,12 @@ namespace hypro {
 
 		for(int constraintIndex = constraints.rows()-1; constraintIndex >= 0; --constraintIndex) {
 			// evaluate in current constraint direction
-			EvaluationResult<Number> actualRes = glpkOptimizeLinear(glpkProblem, vector_t<Number>(constraints.row(constraintIndex)), constraints, constants);
+			EvaluationResult<Number> actualRes = glpkOptimizeLinear(glpkProblem, vector_t<Number>(constraints.row(constraintIndex)), constraints, constants, true);
 			//assert(actualRes.supportValue <= constants(constraintIndex));
 
 			// remove constraint by removing the boundaries
 			glp_set_row_bnds(glpkProblem, constraintIndex+1, GLP_FR, 0.0, 0.0);
-			EvaluationResult<Number> updatedRes = glpkOptimizeLinear(glpkProblem, vector_t<Number>(constraints.row(constraintIndex)), constraints, constants);
+			EvaluationResult<Number> updatedRes = glpkOptimizeLinear(glpkProblem, vector_t<Number>(constraints.row(constraintIndex)), constraints, constants, true);
 
 			if(updatedRes.supportValue == actualRes.supportValue && updatedRes.errorCode == actualRes.errorCode) {
 				res.push_back(constraintIndex);
