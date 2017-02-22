@@ -7,6 +7,10 @@
 
 namespace hypro {
 
+/**
+ * @brief      Class for convex hull computation.
+ * @tparam     Number  The used number type.
+ */
 template<typename Number>
 class ConvexHull {
 	private:
@@ -17,15 +21,15 @@ class ConvexHull {
 		std::vector<Halfspace<Number>> mDualHsv;
 		std::vector<Halfspace<Number>> mHsv;
 		vector_t<Number> mOffset;//translqtion applied to all ertices such that 0 is inside the polyhedron
-		
+
 	public:
 		ConvexHull() = default;
 		ConvexHull(const ConvexHull<Number>& _orig) = default;
 		ConvexHull(const std::vector<Point<Number>> points);
-		ConvexHull(const std::vector<Point<Number>> points, const std::vector<vector_t<Number>> cone);	
-		ConvexHull(const std::vector<Point<Number>> points, const std::vector<vector_t<Number>> cone, 
-								const std::vector<vector_t<Number>> linealty);		
-		
+		ConvexHull(const std::vector<Point<Number>> points, const std::vector<vector_t<Number>> cone);
+		ConvexHull(const std::vector<Point<Number>> points, const std::vector<vector_t<Number>> cone,
+								const std::vector<vector_t<Number>> linealty);
+
 		std::vector<Point<Number>> getPoints() const;
 		std::vector<vector_t<Number>> getCone() const;
 		std::vector<vector_t<Number>> getLinealtySpace() const;
@@ -44,7 +48,7 @@ class ConvexHull {
 		 */
 		void toPrimal(const std::vector<Point<Number>> points);
 		/**
-		 * @brief puts the dual of the points in "points" in mHsv 
+		 * @brief puts the dual of the points in "points" in mHsv
 		 */
 		void convexHullVertices();
 		/**
@@ -58,7 +62,7 @@ class ConvexHull {
 		/**
 		 * @brief Finds the convex hull of a polyhedron.
 		 */
-		
+
 		void translateHsv();
 		/**
 		 * @brief modify the hyperplanes in mHsv to take ino account the offset

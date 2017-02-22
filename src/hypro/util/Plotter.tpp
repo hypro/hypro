@@ -28,48 +28,11 @@ plotting::gnuplotSettings& Plotter<Number>::rSettings() {
 
 template <typename Number>
 void Plotter<Number>::plot2d() const {
-	prepareObjects();
-	TRACE("hypro.plotter", "Prepared objects.");
-
 	mOutfile.open( mFilename + ".plt" );
 
-	if(!mVectors.empty()){
-		mOutfile << "# plotting vectors normalized to length 1\n";
-		unsigned arrowIndex = 0;
-		for(auto& vector : mVectors) {
-			vector_t<Number> normalized = vector.second/norm(vector.second);
-			mOutfile << "set arrow " << arrowIndex++ << " from 0,0 to " << normalized(0) << "," << normalized(1) << "\n";
-		}
-		mOutfile << "\n";
-	}
-
-
 	if ( (!mObjects.empty() && !mObjects.begin()->second.empty()) || !mPoints.empty() ) {
-		TRACE("hypro.plotter","Start plotting objects.");
-		// std::cout << "mObjects.empty(): " << mObjects.empty() << std::endl;
-		// std::cout << "mPoints.empty(): " << mPoints.empty() << std::endl;
-		// std::cout << "mObjects.begin()->second.empty(): " << mObjects.begin()->second.empty() << std::endl;
-		// std::cout << "mObjects.size: " << mObjects.size() << " and mPoints.size() " << mPoints.size() << std::endl;
-		// set object
-		vector_t<Number> min = vector_t<Number>(2);
-		vector_t<Number> max = vector_t<Number>(2);
-		min(0) = mLimits.first(0);
-		min(1) = mLimits.first(1);
-		max(0) = mLimits.second(0);
-		max(1) = mLimits.second(1);
-		// extend ranges
-		std::map<unsigned, carl::Interval<double>> ranges;
-		for ( unsigned d = 0; d < min.rows(); ++d ) {
-			double rangeExt = carl::toDouble( ( carl::toDouble(max( d )) - carl::toDouble(min( d )) ) * 0.1 );
-			if(rangeExt != 0){
-				ranges[d] = carl::Interval<double>(carl::toDouble(min( d )) - rangeExt, carl::toDouble(max( d )) + rangeExt );
-			} else{
-				rangeExt = carl::toDouble(carl::toDouble(min( d ))* 0.1);
-				ranges[d] = carl::Interval<double>(carl::toDouble(min( d )) - rangeExt, carl::toDouble(max( d )) + rangeExt );
-			}
-		}
 
-
+		// preamble
 		mOutfile << "# settings\n";
 		mOutfile << "set title \"" << mSettings.name << "\"\n";
 		if(mSettings.keepAspectRatio) {
@@ -77,295 +40,33 @@ void Plotter<Number>::plot2d() const {
 		}
 		mOutfile << "set term pdf font ',10'\n";
 		mOutfile << "set output \"" << mFilename << ".pdf\n";
-		if(mSettings.grid) {
-			mOutfile << "set xtics autofreq\n";
-			mOutfile << "set ytics autofreq\n";
-			mOutfile << "set grid back\n";
-		}
-		if(mSettings.axes) {
-			mOutfile << "# axis settings\n";
-			mOutfile << "set xzeroaxis \n";
-			mOutfile << "set zeroaxis \n";
-            mOutfile << "set xtics axis \n";
-            mOutfile << "set xrange ["<< ranges[0].lower() << ":" << ranges[0].upper() << "] \n";
-			mOutfile << "set yzeroaxis \n";
-            mOutfile << "set ytics axis \n";
-            mOutfile << "set yrange ["<< ranges[1].lower() << ":" << ranges[1].upper() << "] \n";
-		}
-		unsigned objectCount = 1;
-		unsigned currId = 0;
-		unsigned tmpId = 0;
-		mOutfile << "\n# plotting sets\n";
 
-		//std::cout << "Start plotting sets." << std::endl;
-
-		for ( auto objectIt = mObjects.begin(); objectIt != mObjects.end(); ++objectIt ) {
-			if ( currId != objectIt->first ) {
-				currId = objectIt->first;
-				tmpId++;
-				INFO("hypro.plotter","Plotting object " << tmpId << "/" << (mObjects.size() + mPoints.size() + mPlanes.size()));
-			}
-			if(objectIt->second.size() > 0){
-				mOutfile << "set object " << std::dec << objectCount << " polygon from \\\n";
-				for ( unsigned pointIndex = 0; pointIndex < objectIt->second.size(); ++pointIndex ) {
-					assert( objectIt->second[pointIndex].dimension() == 2 );
-					if ( objectIt->second[pointIndex].dimension() == 0 ) {
-						continue;
-					}
-					mOutfile << "  " << carl::toDouble( objectIt->second[pointIndex].at( 0 ) );
-					for ( unsigned d = 1; d < objectIt->second[pointIndex].dimension(); ++d ) {
-						mOutfile << ", " << carl::toDouble( objectIt->second[pointIndex].at( d ) );
-					}
-					mOutfile << " to \\\n";
-				}
-				// assert(objectIt->objectIt->size()-1].dimension() <= 2); // TODO:
-				// Project to 2d	TODO: REINSERT ASSERTION
-				// std::cout << carl::toDouble(objectIt->0].at(0)) << std::endl;
-				mOutfile << "  " << carl::toDouble( objectIt->second[0].at( 0 ) );
-				for ( unsigned d = 1; d < objectIt->second[0].dimension(); ++d ) {
-					mOutfile << ", " << carl::toDouble( objectIt->second[0].at( d ) );
-				}
-
-				// color lookup
-				auto color = mSettings.color;
-				//std::cout << "Lookup color for object " << objectIt->first << std::endl;
-				if ( mObjectColors.find( objectIt->first ) != mObjectColors.end() ) {
-					color = mObjectColors.at( objectIt->first );
-					//std::cout << "Found" << std::endl;
-				}
-
-				if ( mSettings.fill )
-					mOutfile << " front fs transparent solid 0.75 fc rgb '#" << std::hex << color << "' lw " << mSettings.linewidth << "\n";
-				else
-					mOutfile << " front fs empty border lc rgb '#" << std::hex << color << "' lw " << mSettings.linewidth << "\n";
-
-				if(mSettings.cummulative){
-					mOutfile << "\nplot ";
-					for ( unsigned d = 0; d < min.rows(); ++d ) {
-						mOutfile << "[" << ranges[d].lower() << ":" << ranges[d].upper() << "] ";
-					}
-					mOutfile << "NaN notitle \n";
-				}
-			}
-			++objectCount;
-		}
-
-		//std::cout << "Done plotting sets." << std::endl;
-
-		if(mPlanes.empty() && mPoints.empty()){
-			mOutfile << "plot ";
-			for ( unsigned d = 0; d < min.rows(); ++d ) {
-				mOutfile << "[" << ranges[d].lower() << ":" << ranges[d].upper() << "] ";
-			}
-			mOutfile << "NaN notitle \n";
-		}
-
-
-		// create plane functions
-		int index = 1;
-		if(!mPlanes.empty()){
-			mOutfile << "\n";
-			mOutfile << "# plotting Halfspaces\n";
-			for( const auto& planePair : mPlanes ) {
-				for( const auto& plane : planePair.second ) {
-					std::cout << "Plot plane " << plane << std::endl;
-					assert(plane.dimension() == 2);
-					vector_t<Number> normal = plane.normal();
-					if(normal(1) == Number(0)){
-						mOutfile << "set arrow from " << carl::toDouble(Number(plane.offset()/normal(0))) <<",graph(0,0) to " << carl::toDouble(Number(plane.offset()/normal(0))) << ",graph(1,1) nohead\n";
-					} else {
-						mOutfile << "f_" << index << "(x) = " << carl::toDouble(Number(-normal(0)/normal(1))) << "*x";
-						double off = carl::toDouble(Number(plane.offset()/normal(1)));
-						if(off > 0)
-							mOutfile << "+";
-
-						mOutfile << off << "\n";
-						++index;
-					}
-				}
-			}
-
-		}
-
-		if(!mPoints.empty()){
-			mOutfile << "# plotting points\n";
-			mOutfile << "set multiplot\n";
-			mOutfile << "unset key\n";
-			mOutfile << "set pointsize " << mSettings.pointSize << "\n";
-			mOutfile << "set style line 1 lc rgb '#" << std::hex << mSettings.color << "'\n";
-			mOutfile << "plot ";
-			mOutfile << "'-' w p ls 1";
-			for(unsigned pos = 1; pos < mPoints.size(); ++pos){
-				mOutfile << ", '-' w p ls 1";
-			}
-			mOutfile << "\n";
-		}
-		for(auto pointIt = mPoints.begin(); pointIt != mPoints.end(); ++pointIt ){
-			mOutfile << carl::toDouble(pointIt->second.at(0)) << " " << carl::toDouble(pointIt->second.at(1)) << "\n";
-			mOutfile << "e\n";
-		}
-		mOutfile << "\n";
-
-		if(!mPlanes.empty()){
-			if(mPoints.empty()){
-				mOutfile << "set multiplot \n";
-				mOutfile << "unset key\n";
-			}
-			//plot all planes
-			auto color = mSettings.color;
-			mOutfile << "set style line 1 linecolor rgb '#" << std::hex << color << "' \n";
-			while(index > 1){
-				--index;
-				mOutfile << "plot f_" << index << "(x) with lines linestyle 1\n";
-			}
-		}
-
-		if(!mPlanes.empty() || !mPoints.empty())
-			mOutfile << "\n unset multiplot\n";
+		writeGnuplot();
 	}
-	mOutfile.close();
+
 	std::cout << std::endl << "Plotted to " << mFilename << ".plt" << std::endl;
 	mOutfile.close();
 }
 
 template<typename Number>
 void Plotter<Number>::plotTex() const {
-	prepareObjects();
 
-	mOutfile.open( mFilename + ".tex" );
+	mOutfile.open( mFilename + ".plt" );
+	if ( (!mObjects.empty() && !mObjects.begin()->second.empty()) || !mPoints.empty() ) {
 
-	if ( !mObjects.empty() || !mPoints.empty() ) {
-		// set object
-		vector_t<Number> min = mObjects.begin()->second[0].rawCoordinates();
-		vector_t<Number> max = mObjects.begin()->second[0].rawCoordinates();
-
-		mOutfile << "\\begin{tikzpicture}[]\n";
-
-		unsigned objectCount = 1;
-		unsigned currId = 0;
-		unsigned tmpId = 0;
-		unsigned maxObj = mObjects.size() + mPoints.size() + mPlanes.size();
-		for ( auto objectIt = mObjects.begin(); objectIt != mObjects.end(); ++objectIt ) {
-			if ( currId != objectIt->first ) {
-				currId = objectIt->first;
-				tmpId++;
-				std::cout << "\rPlotting object " << tmpId << "/" << maxObj << std::flush;
-			}
-
-			if(mSettings.fill)
-				mOutfile << "\t\\draw[blue, thick, fill=blue, fill opacity=.5]";
-			else
-				mOutfile << "\t\\draw[blue, thick]";
-
-			for ( unsigned pointIndex = 0; pointIndex < objectIt->second.size()-1; ++pointIndex ) {
-				assert( objectIt->second[pointIndex].dimension() <= 2 );  // TODO: Project to 2d
-				if ( objectIt->second[pointIndex].dimension() == 0 ) {
-					continue;
-				}
-				mOutfile << " (" << carl::toDouble( objectIt->second[pointIndex].at( 0 ) );
-
-				// update min and max
-				min( 0 ) =
-					  min( 0 ) < objectIt->second[pointIndex].at( 0 ) ? min( 0 ) : objectIt->second[pointIndex].at( 0 );
-				max( 0 ) =
-					  max( 0 ) > objectIt->second[pointIndex].at( 0 ) ? max( 0 ) : objectIt->second[pointIndex].at( 0 );
-
-				for ( unsigned d = 1; d < objectIt->second[pointIndex].dimension(); ++d ) {
-					mOutfile << ", " << carl::toDouble( objectIt->second[pointIndex].at( d ) );
-					// update min and max
-					min( d ) = min( d ) < objectIt->second[pointIndex].at( d ) ? min( d )
-																			   : objectIt->second[pointIndex].at( d );
-					max( d ) = max( d ) > objectIt->second[pointIndex].at( d ) ? max( d )
-																			   : objectIt->second[pointIndex].at( d );
-				}
-				mOutfile << ") -- ";
-			}
-			// last point
-			assert( objectIt->second[objectIt->second.size()-1].dimension() <= 2 );  // TODO: Project to 2d
-			if ( objectIt->second[objectIt->second.size()-1].dimension() == 0 ) {
-				continue;
-			}
-			mOutfile << " (" << carl::toDouble( objectIt->second[objectIt->second.size()-1].at( 0 ) );
-
-			// update min and max
-			min( 0 ) =
-				  min( 0 ) < objectIt->second[objectIt->second.size()-1].at( 0 ) ? min( 0 ) : objectIt->second[objectIt->second.size()-1].at( 0 );
-			max( 0 ) =
-				  max( 0 ) > objectIt->second[objectIt->second.size()-1].at( 0 ) ? max( 0 ) : objectIt->second[objectIt->second.size()-1].at( 0 );
-
-			for ( unsigned d = 1; d < objectIt->second[objectIt->second.size()-1].dimension(); ++d ) {
-				mOutfile << ", " << carl::toDouble( objectIt->second[objectIt->second.size()-1].at( d ) );
-				// update min and max
-				min( d ) = min( d ) < objectIt->second[objectIt->second.size()-1].at( d ) ? min( d )
-																		   : objectIt->second[objectIt->second.size()-1].at( d );
-				max( d ) = max( d ) > objectIt->second[objectIt->second.size()-1].at( d ) ? max( d )
-																		   : objectIt->second[objectIt->second.size()-1].at( d );
-			}
-			mOutfile << ") -- cycle;\n";
-
-			//// color lookup
-			//auto color = mSettings.color;
-			//if ( mObjectColors.find( objectIt->first ) != mObjectColors.end() ) {
-			//	color = mObjectColors.at( objectIt->first );
-			//}
-//
-//			//if ( mSettings.fill )
-//			//	mOutfile << " front fs transparent solid 0.75 fc rgb '#" << std::hex << color << "'\n";
-//			//else
-			//	mOutfile << " front fs empty border lc rgb '#" << std::hex << color << "'\n";
-
-			++objectCount;
+		// preamble
+		mOutfile << "# settings\n";
+		mOutfile << "set title \"" << mSettings.name << "\"\n";
+		if(mSettings.keepAspectRatio) {
+			mOutfile << "set size square\n";
 		}
+		mOutfile << "set terminal lua tikz latex standalone color header \"\\\\usepackage[T1]{fontenc}\\\n\\\\usepackage{mathptmx}\\\n\\\\usepackage{helvet}\\\n\\\\usepackage{amsmath}\"\n";
+		mOutfile << "set output \"" << mFilename << ".tex\" \n";
 
-		mOutfile << "\n";
-
-		// collect ranges
-		for(auto pointIt = mPoints.begin(); pointIt != mPoints.end(); ++pointIt ){
-			// update min and max
-			min(0) = min(0) > pointIt->second.at(0) ? pointIt->second.at(0) : min(0);
-			min(1) = min(1) > pointIt->second.at(1) ? pointIt->second.at(1) : min(1);
-			max(0) = max(0) < pointIt->second.at(0) ? pointIt->second.at(0) : max(0);
-			max(1) = max(1) < pointIt->second.at(1) ? pointIt->second.at(1) : max(1);
-		}
-		std::map<unsigned, carl::Interval<double>> ranges;
-		for ( unsigned d = 0; d < min.rows(); ++d ) {
-			double rangeExt = carl::toDouble( ( carl::toDouble(max( d )) - carl::toDouble(min( d )) ) * 0.1 );
-			ranges[d] = carl::Interval<double>(carl::toDouble(min( d )) - rangeExt, carl::toDouble(max( d )) + rangeExt );
-		}
-		assert(ranges.size() == 2);
-
-		// create plane functions
-		if(!mPlanes.empty()){
-			mOutfile << "\n";
-			for( const auto& planePair : mPlanes ) {
-				for( const auto& plane : planePair.second ) {
-					assert(plane.dimension() == 2);
-					mOutfile << "\t\\draw[domain="<< ranges[0].lower() << ":" << ranges[0].upper() <<", smooth, variable=\\x] plot ({\\x},";
-					mOutfile << "{" << carl::toDouble(Number(-plane.normal()(0)/plane.normal()(1))) << "*x";
-					double off = carl::toDouble(Number(plane.offset()/plane.normal()(1)));
-					if(off > 0)
-						mOutfile << "+" << off << "}";
-					else
-						mOutfile << "}";
-
-					mOutfile << ");\n";
-				}
-			}
-
-		}
-
-		if(mSettings.axes) {
-			mOutfile << "\t\\draw[help lines]";
-			mOutfile << " (" << ranges[0].lower() << "," << ranges[1].lower() << ") grid (" << ranges[0].upper() << "," << ranges[1].upper() << ");\n";
-		}
-
-		for(auto pointIt = mPoints.begin(); pointIt != mPoints.end(); ++pointIt ){
-			mOutfile << "\t\\fill[fill=blue] (" << carl::toDouble(pointIt->second.at(0)) << "," << carl::toDouble(pointIt->second.at(1)) << ") circle [radius=2pt];\n";
-		}
-
-		mOutfile << "\\end{tikzpicture}\n";
+		writeGnuplot();
 	}
-	INFO("hypro.plotter","Plotted to " << mFilename << ".tex");
+
+	std::cout << std::endl << "Plotted to " << mFilename << ".plt" << std::endl;
 	mOutfile.close();
 }
 
@@ -514,6 +215,194 @@ template <typename Number>
 void Plotter<Number>::init( const std::string &_filename ) {
 	mOutfile.open( _filename );
 }
+
+template <typename Number>
+void Plotter<Number>::writeGnuplot() const {
+	prepareObjects();
+	TRACE("hypro.plotter", "Prepared objects.");
+
+	if(!mVectors.empty()){
+		mOutfile << "# plotting vectors normalized to length 1\n";
+		unsigned arrowIndex = 0;
+		for(auto& vector : mVectors) {
+			vector_t<Number> normalized = vector.second/norm(vector.second);
+			mOutfile << "set arrow " << arrowIndex++ << " from 0,0 to " << normalized(0) << "," << normalized(1) << "\n";
+		}
+		mOutfile << "\n";
+	}
+
+
+	if ( (!mObjects.empty() && !mObjects.begin()->second.empty()) || !mPoints.empty() ) {
+		TRACE("hypro.plotter","Start plotting objects.");
+		// set object
+		vector_t<Number> min = vector_t<Number>(2);
+		vector_t<Number> max = vector_t<Number>(2);
+		min(0) = mLimits.first(0);
+		min(1) = mLimits.first(1);
+		max(0) = mLimits.second(0);
+		max(1) = mLimits.second(1);
+		// extend ranges
+		std::map<unsigned, carl::Interval<double>> ranges;
+		for ( unsigned d = 0; d < min.rows(); ++d ) {
+			double rangeExt = carl::toDouble( ( carl::toDouble(max( d )) - carl::toDouble(min( d )) ) * 0.1 );
+			if(rangeExt != 0){
+				ranges[d] = carl::Interval<double>(carl::toDouble(min( d )) - rangeExt, carl::toDouble(max( d )) + rangeExt );
+			} else{
+				rangeExt = carl::toDouble(carl::toDouble(min( d ))* 0.1);
+				ranges[d] = carl::Interval<double>(carl::toDouble(min( d )) - rangeExt, carl::toDouble(max( d )) + rangeExt );
+			}
+		}
+
+		// preamble
+
+		if(mSettings.grid) {
+			mOutfile << "set xtics autofreq\n";
+			mOutfile << "set ytics autofreq\n";
+			mOutfile << "set grid back\n";
+		}
+		if(mSettings.axes) {
+			mOutfile << "# axis settings\n";
+			mOutfile << "set xzeroaxis \n";
+			mOutfile << "set zeroaxis \n";
+            mOutfile << "set xtics axis \n";
+            mOutfile << "set xrange ["<< ranges[0].lower() << ":" << ranges[0].upper() << "] \n";
+			mOutfile << "set yzeroaxis \n";
+            mOutfile << "set ytics axis \n";
+            mOutfile << "set yrange ["<< ranges[1].lower() << ":" << ranges[1].upper() << "] \n";
+		}
+		unsigned objectCount = 1;
+		unsigned currId = 0;
+		unsigned tmpId = 0;
+		mOutfile << "\n# plotting sets\n";
+
+		//std::cout << "Start plotting sets." << std::endl;
+
+		for ( auto objectIt = mObjects.begin(); objectIt != mObjects.end(); ++objectIt ) {
+			if ( currId != objectIt->first ) {
+				currId = objectIt->first;
+				tmpId++;
+				INFO("hypro.plotter","Plotting object " << tmpId << "/" << (mObjects.size() + mPoints.size() + mPlanes.size()));
+			}
+			if(objectIt->second.size() > 0){
+				mOutfile << "set object " << std::dec << objectCount << " polygon from \\\n";
+				for ( unsigned pointIndex = 0; pointIndex < objectIt->second.size(); ++pointIndex ) {
+					assert( objectIt->second[pointIndex].dimension() == 2 );
+					if ( objectIt->second[pointIndex].dimension() == 0 ) {
+						continue;
+					}
+					mOutfile << "  " << carl::toDouble( objectIt->second[pointIndex].at( 0 ) );
+					for ( unsigned d = 1; d < objectIt->second[pointIndex].dimension(); ++d ) {
+						mOutfile << ", " << carl::toDouble( objectIt->second[pointIndex].at( d ) );
+					}
+					mOutfile << " to \\\n";
+				}
+				// assert(objectIt->objectIt->size()-1].dimension() <= 2); // TODO:
+				// Project to 2d	TODO: REINSERT ASSERTION
+				// std::cout << carl::toDouble(objectIt->0].at(0)) << std::endl;
+				mOutfile << "  " << carl::toDouble( objectIt->second[0].at( 0 ) );
+				for ( unsigned d = 1; d < objectIt->second[0].dimension(); ++d ) {
+					mOutfile << ", " << carl::toDouble( objectIt->second[0].at( d ) );
+				}
+
+				// color lookup
+				auto color = mSettings.color;
+				//std::cout << "Lookup color for object " << objectIt->first << std::endl;
+				if ( mObjectColors.find( objectIt->first ) != mObjectColors.end() ) {
+					color = mObjectColors.at( objectIt->first );
+					//std::cout << "Found" << std::endl;
+				}
+
+				if ( mSettings.fill )
+					mOutfile << " front fs transparent solid 0.75 fc rgb '#" << std::hex << color << "' lw " << mSettings.linewidth << "\n";
+				else
+					mOutfile << " front fs empty border lc rgb '#" << std::hex << color << "' lw " << mSettings.linewidth << "\n";
+
+				if(mSettings.cummulative){
+					mOutfile << "\nplot ";
+					for ( unsigned d = 0; d < min.rows(); ++d ) {
+						mOutfile << "[" << ranges[d].lower() << ":" << ranges[d].upper() << "] ";
+					}
+					mOutfile << "NaN notitle \n";
+				}
+			}
+			++objectCount;
+		}
+
+		//std::cout << "Done plotting sets." << std::endl;
+
+		if(mPlanes.empty() && mPoints.empty()){
+			mOutfile << "plot ";
+			for ( unsigned d = 0; d < min.rows(); ++d ) {
+				mOutfile << "[" << ranges[d].lower() << ":" << ranges[d].upper() << "] ";
+			}
+			mOutfile << "NaN notitle \n";
+		}
+
+
+		// create plane functions
+		int index = 1;
+		if(!mPlanes.empty()){
+			mOutfile << "\n";
+			mOutfile << "# plotting Halfspaces\n";
+			for( const auto& planePair : mPlanes ) {
+				for( const auto& plane : planePair.second ) {
+					std::cout << "Plot plane " << plane << std::endl;
+					assert(plane.dimension() == 2);
+					vector_t<Number> normal = plane.normal();
+					if(normal(1) == Number(0)){
+						mOutfile << "set arrow from " << carl::toDouble(Number(plane.offset()/normal(0))) <<",graph(0,0) to " << carl::toDouble(Number(plane.offset()/normal(0))) << ",graph(1,1) nohead\n";
+					} else {
+						mOutfile << "f_" << index << "(x) = " << carl::toDouble(Number(-normal(0)/normal(1))) << "*x";
+						double off = carl::toDouble(Number(plane.offset()/normal(1)));
+						if(off > 0)
+							mOutfile << "+";
+
+						mOutfile << off << "\n";
+						++index;
+					}
+				}
+			}
+
+		}
+
+		if(!mPoints.empty()){
+			mOutfile << "# plotting points\n";
+			mOutfile << "set multiplot\n";
+			mOutfile << "unset key\n";
+			mOutfile << "set pointsize " << mSettings.pointSize << "\n";
+			mOutfile << "set style line 1 lc rgb '#" << std::hex << mSettings.color << "'\n";
+			mOutfile << "plot ";
+			mOutfile << "'-' w p ls 1";
+			for(unsigned pos = 1; pos < mPoints.size(); ++pos){
+				mOutfile << ", '-' w p ls 1";
+			}
+			mOutfile << "\n";
+		}
+		for(auto pointIt = mPoints.begin(); pointIt != mPoints.end(); ++pointIt ){
+			mOutfile << carl::toDouble(pointIt->second.at(0)) << " " << carl::toDouble(pointIt->second.at(1)) << "\n";
+			mOutfile << "e\n";
+		}
+		mOutfile << "\n";
+
+		if(!mPlanes.empty()){
+			if(mPoints.empty()){
+				mOutfile << "set multiplot \n";
+				mOutfile << "unset key\n";
+			}
+			//plot all planes
+			auto color = mSettings.color;
+			mOutfile << "set style line 1 linecolor rgb '#" << std::hex << color << "' \n";
+			while(index > 1){
+				--index;
+				mOutfile << "plot f_" << index << "(x) with lines linestyle 1\n";
+			}
+		}
+
+		if(!mPlanes.empty() || !mPoints.empty())
+			mOutfile << "\n unset multiplot\n";
+	}
+}
+
 
 template <typename Number>
 std::vector<Point<Number>> Plotter<Number>::grahamScan( const std::vector<Point<Number>> &_points ) {
