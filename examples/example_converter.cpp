@@ -5,7 +5,7 @@
  * V-polytope and a zonotope.
  */
 
-#include "../src/hypro/representations/GeometricObject.h"
+#include "representations/GeometricObject.h"
 
 using namespace hypro;
 

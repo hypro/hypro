@@ -1,15 +1,9 @@
 /**
- * This file shows how to use the plotter.
- * @file example_plot.cpp
- *
- * @author Stefan Schupp <stefan.schupp@cs.rwth-aachen.de>
- *
- * @since	2015-03-01
- * @version	2015-10-05
+ * \example example_plot.cpp This file shows how to use the plotter.
  */
 
-#include "../src/hypro/util/Plotter.h"
-#include "../src/hypro/representations/GeometricObject.h"
+#include "util/Plotter.h"
+#include "representations/GeometricObject.h"
 
 using namespace hypro;
 
@@ -32,16 +26,16 @@ int main() {
 
 	plotter.addObject(vertices);
 
-	std::cout << "Added points." << std::endl;
-
-	plotter.addObject(poly.constraints());
-	plotter.addObject(Halfspace<Number>({1,0},1));
-
-	std::cout << "Added planes." << std::endl;
-
-	plotter.addPoint(Point<Number>({carl::rationalize<Number>(-1.5),3}));
-
-	std::cout << "Added point." << std::endl;
+	//std::cout << "Added points." << std::endl;
+//
+//	//plotter.addObject(poly.constraints());
+//	//plotter.addObject(Halfspace<Number>({1,0},1));
+//
+//	//std::cout << "Added planes." << std::endl;
+//
+//	//plotter.addPoint(Point<Number>({carl::rationalize<Number>(-1.5),3}));
+//
+	//std::cout << "Added point." << std::endl;
 
 	plotter.plot2d();
 	plotter.plotTex();
