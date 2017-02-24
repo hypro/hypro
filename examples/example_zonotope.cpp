@@ -86,8 +86,6 @@ hypro::matrix_t<Number> vGenerators2 = hypro::matrix_t<Number>(2,2);
 	plotter.setObjectColor(z6, hypro::plotting::colors[hypro::plotting::blue]);
 
     plotter.plot2d();
-    plotter.plotTex();
-
 
     // All we want now is write to see the results
     std::ofstream results("example_zonotope.txt");
