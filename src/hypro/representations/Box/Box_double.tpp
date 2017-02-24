@@ -305,9 +305,9 @@ std::pair<bool, BoxT<double,Converter>> BoxT<double,Converter>::satisfiesHalfspa
 		return std::make_pair(false, *this);
 	}
 
-	//std::cout << __func__ << " This: " << convert<double,double>(*this) << std::endl;
-	//std::cout << __func__ << ": input matrix: " << convert<double,double>(_mat) << std::endl << "input vector: " << convert<double,double>(_vec) << std::endl;
-	//std::cout << __func__ << ": This->dimension() = " << this->dimension() << std::endl;
+	std::cout << __func__ << " This: " << convert<double,double>(*this) << std::endl;
+	std::cout << __func__ << ": input matrix: " << convert<double,double>(_mat) << std::endl << "input vector: " << convert<double,double>(_vec) << std::endl;
+	std::cout << __func__ << ": This->dimension() = " << this->dimension() << std::endl;
 	assert(this->dimension() == unsigned(_mat.cols()));
 	std::vector<unsigned> limitingPlanes;
 
@@ -318,9 +318,9 @@ std::pair<bool, BoxT<double,Converter>> BoxT<double,Converter>::satisfiesHalfspa
 			evaluatedBox += carl::Interval<double>(mLimits.first.at(d), mLimits.second.at(d)) * double(_mat(rowIndex,d));
 		}
 
-		//std::cout << __func__ << " Row: " << convert<double,double>(_mat.row(rowIndex)) << std::endl;
-		//std::cout << __func__ << " Evaluated box: " << evaluatedBox << std::endl;
-		//std::cout << __func__ << " Distance: " << carl::convert<double,double>(_vec(rowIndex)) << std::endl;
+		std::cout << __func__ << " Row: " << convert<double,double>(_mat.row(rowIndex)) << std::endl;
+		std::cout << __func__ << " Evaluated box: " << evaluatedBox << std::endl;
+		std::cout << __func__ << " Distance: " << carl::convert<double,double>(_vec(rowIndex)) << std::endl;
 
 		//if( !carl::AlmostEqual2sComplement(evaluatedBox.lower(), _vec(rowIndex), 128) && evaluatedBox.lower() > _vec(rowIndex)){
 		if( evaluatedBox.lower() > _vec(rowIndex)){

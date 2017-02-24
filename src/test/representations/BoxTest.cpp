@@ -446,20 +446,36 @@ TYPED_TEST(BoxTest, SatisfiesHalfspace)
 	hypro::Box<TypeParam> box;
 	box.insert(xInterval);
 
+	std::cout << "Box: " << box << std::endl;
+
 	hypro::Halfspace<TypeParam> hsp1({1},3);
 	hypro::Halfspace<TypeParam> hsp2({1},0);
 	hypro::Halfspace<TypeParam> hsp3({1},1);
 
 	EXPECT_TRUE(box.satisfiesHalfspace(hsp1).first);
+
+	std::cout << "Box: " << box << std::endl;
+
 	EXPECT_FALSE(box.satisfiesHalfspace(hsp2).first);
+
+	std::cout << "Box: " << box << std::endl;
+
 	EXPECT_TRUE(box.satisfiesHalfspace(hsp3).first);
+
+	std::cout << "Box: " << box << std::endl;
 
 	EXPECT_TRUE(box.satisfiesHalfspaces(hypro::matrix_t<TypeParam>(), hypro::vector_t<TypeParam>()).first);
 	hypro::matrix_t<TypeParam> mat = hypro::matrix_t<TypeParam>(2,1);
 	mat << 1,-1;
 	hypro::vector_t<TypeParam> vec = hypro::vector_t<TypeParam>(2);
 	vec << 2,-2;
+
+	std::cout << "Box: " << box << std::endl;
+
 	EXPECT_TRUE(box.satisfiesHalfspaces(mat,vec).first);
+
+	std::cout << "Box: " << box << std::endl;
+
 	EXPECT_EQ(box.satisfiesHalfspaces(mat,vec).second, hypro::Box<TypeParam>( std::make_pair(hypro::Point<TypeParam>({2}), hypro::Point<TypeParam>({2}))));
 	vec << 3,-4;
 	EXPECT_FALSE(box.satisfiesHalfspaces(mat,vec).first);

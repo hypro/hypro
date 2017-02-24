@@ -43,7 +43,7 @@ class BoxT : public GeometricObject<Number, BoxT<Number,Converter>> {
 	 * Members
 	 **************************************************************************/
   protected:
-    mutable std::pair<Point<Number>, Point<Number>> mLimits; /*!< Pair of points describing the minimal and the maximal point of the box.*/
+    std::pair<Point<Number>, Point<Number>> mLimits; /*!< Pair of points describing the minimal and the maximal point of the box.*/
 
   public:
 	/***************************************************************************
