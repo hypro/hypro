@@ -437,6 +437,7 @@ template<typename Converter>
 BoxT<double,Converter> BoxT<double,Converter>::intersectHalfspace( const Halfspace<double>& hspace ) const {
 	//std::cout << __func__ << " of " << *this << " and " << hspace << std::endl;
 	if(!this->empty()) {
+		BoxT<double,Converter> copyBox(*this);
 		// Preprocessing: If any two points opposite to each other are contained, the box stays the same - test limit points
 		bool holdsMin = hspace.contains(mLimits.first.rawCoordinates());
 		bool holdsMax = hspace.contains(mLimits.second.rawCoordinates());
@@ -459,35 +460,35 @@ BoxT<double,Converter> BoxT<double,Converter>::intersectHalfspace( const Halfspa
 			while(hspace.normal()(nonZeroDim) == 0 ) ++nonZeroDim;
 
 			if(hspace.normal()(nonZeroDim) > 0) {
-				mLimits.second[nonZeroDim] = hspace.offset() / hspace.normal()(nonZeroDim);
+				copyBox.rLimits().second[nonZeroDim] = hspace.offset() / hspace.normal()(nonZeroDim);
 			} else {
-				mLimits.first[nonZeroDim] = hspace.offset() / hspace.normal()(nonZeroDim);
+				copyBox.rLimits().first[nonZeroDim] = hspace.offset() / hspace.normal()(nonZeroDim);
 			}
-			return *this;
+			return copyBox;
 		}
 
 		//std::cout << __func__ << " Min below: " << holdsMin << ", Max below: " << holdsMax << std::endl;
 		unsigned dim = this->dimension();
 
 		// Phase 1: Find starting point (point outside) for phase 2 by depth-first search or use limit points, if applicable
-		Point<double> farestPointOutside = mLimits.first;
-		Point<double> farestPointInside = mLimits.first;
+		Point<double> farestPointOutside = copyBox.limits().first;
+		Point<double> farestPointInside = copyBox.limits().first;
 		unsigned usedDimension = 0;
 		// determine walk direction by using plane normal and variable order
 		for(; usedDimension < dim; ++usedDimension){
 			if(hspace.normal()(usedDimension) > 0){
-				if(farestPointOutside.at(usedDimension) != mLimits.second.at(usedDimension)) {
-					farestPointOutside[usedDimension] = mLimits.second.at(usedDimension);
+				if(farestPointOutside.at(usedDimension) != copyBox.limits().second.at(usedDimension)) {
+					farestPointOutside[usedDimension] = copyBox.limits().second.at(usedDimension);
 				}
-				if(farestPointInside.at(usedDimension) != mLimits.first.at(usedDimension)) {
-					farestPointInside[usedDimension] = mLimits.first.at(usedDimension);
+				if(farestPointInside.at(usedDimension) != copyBox.limits().first.at(usedDimension)) {
+					farestPointInside[usedDimension] = copyBox.limits().first.at(usedDimension);
 				}
 			} else if( hspace.normal()(usedDimension) < 0){
-				if( farestPointOutside.at(usedDimension) != mLimits.first.at(usedDimension) ) {
-					farestPointOutside[usedDimension] = mLimits.first.at(usedDimension);
+				if( farestPointOutside.at(usedDimension) != copyBox.limits().first.at(usedDimension) ) {
+					farestPointOutside[usedDimension] = copyBox.limits().first.at(usedDimension);
 				}
-				if(farestPointInside.at(usedDimension) != mLimits.second.at(usedDimension)) {
-					farestPointInside[usedDimension] = mLimits.second.at(usedDimension);
+				if(farestPointInside.at(usedDimension) != copyBox.limits().second.at(usedDimension)) {
+					farestPointInside[usedDimension] = copyBox.limits().second.at(usedDimension);
 				}
 			}
 		}
@@ -519,12 +520,12 @@ BoxT<double,Converter> BoxT<double,Converter>::intersectHalfspace( const Halfspa
 			// create and test neighbors
 			for(unsigned d = 0; d < dim; ++d ) {
 				Point<double> tmp = current;
-				if( hspace.normal()(d) < 0 && current.at(d) == mLimits.first.at(d) ){
-					tmp[d] = mLimits.second.at(d);
-				} else if ( hspace.normal()(d) > 0 && current.at(d) == mLimits.second.at(d) ) {
-					tmp[d] = mLimits.first.at(d);
+				if( hspace.normal()(d) < 0 && current.at(d) == copyBox.limits().first.at(d) ){
+					tmp[d] = copyBox.limits().second.at(d);
+				} else if ( hspace.normal()(d) > 0 && current.at(d) == copyBox.limits().second.at(d) ) {
+					tmp[d] = copyBox.limits().first.at(d);
 				} else if ( hspace.normal()(d) == 0 ) {
-					tmp[d] = tmp.at(d) == mLimits.first.at(d) ? mLimits.second.at(d) : mLimits.first.at(d);
+					tmp[d] = tmp.at(d) == copyBox.limits().first.at(d) ? copyBox.limits().second.at(d) : copyBox.limits().first.at(d);
 				} else {
 					// UNSINN!?
 					//std::cout << "Could create point " << tmp << ", but is the same as " << current << std::endl;
@@ -565,9 +566,9 @@ BoxT<double,Converter> BoxT<double,Converter>::intersectHalfspace( const Halfspa
 			return BoxT<double,Converter>(intersectionPoints);
 		} else {
 			if(holdsMin){
-				intersectionPoints.push_back(mLimits.first);
+				intersectionPoints.push_back(copyBox.limits().first);
 			} else {
-				intersectionPoints.push_back(mLimits.second);
+				intersectionPoints.push_back(copyBox.limits().second);
 			}
 			//std::cout << __func__ << " Intersection points:" << std::endl;
 			//for(const auto& point : intersectionPoints) {

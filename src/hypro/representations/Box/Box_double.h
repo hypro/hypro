@@ -23,7 +23,7 @@ class BoxT<double,Converter> : public GeometricObject<double, BoxT<double,Conver
 	 * Members
 	 **************************************************************************/
   protected:
-    mutable std::pair<Point<double>, Point<double>> mLimits; /*!< Pair of points describing the minimal and the maximal point of the box.*/
+    std::pair<Point<double>, Point<double>> mLimits; /*!< Pair of points describing the minimal and the maximal point of the box.*/
 
   public:
 	/***************************************************************************
@@ -130,6 +130,12 @@ class BoxT<double,Converter> : public GeometricObject<double, BoxT<double,Conver
 	 * @return A pair of points.
 	 */
 	const std::pair<Point<double>, Point<double>>& limits() const { return mLimits; }
+
+	/**
+	 * @brief      Getter for a reference to the limit points.
+	 * @return     A reference to the limit point pair of the object.
+	 */
+	std::pair<Point<double>, Point<double>>& rLimits() { return mLimits; }
 
 	matrix_t<double> matrix() const;
 	vector_t<double> vector() const;
@@ -330,7 +336,7 @@ class BoxT<double,Converter> : public GeometricObject<double, BoxT<double,Conver
 	 * @brief Empty function for number size reduction, which is omitted when using native double numbers.
 	 * @param limit Parameter for a length estimation.
 	 */
-	const BoxT<double,Converter>& reduceNumberRepresentation(unsigned = fReach_DENOMINATOR) const { return *this; }
+	const BoxT<double,Converter>& reduceNumberRepresentation(unsigned = fReach_DENOMINATOR) { return *this; }
 
 	/**
 	 * @brief      Makes a symmetric box from the current box.

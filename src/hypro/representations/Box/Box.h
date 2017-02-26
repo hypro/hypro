@@ -145,6 +145,12 @@ class BoxT : public GeometricObject<Number, BoxT<Number,Converter>> {
 	 */
 	const std::pair<Point<Number>, Point<Number>>& limits() const { return mLimits; }
 
+	/**
+	 * @brief      Reference getter for limiting points.
+	 * @return     A reference to the limit point pair of the object.
+	 */
+	std::pair<Point<Number>, Point<Number>>& rLimits() { return mLimits; }
+
 	matrix_t<Number> matrix() const;
 	vector_t<Number> vector() const;
 
@@ -341,7 +347,7 @@ class BoxT : public GeometricObject<Number, BoxT<Number,Converter>> {
 	 *
 	 * @param[in]  limit      The limit
 	 */
-	const BoxT<Number,Converter>& reduceNumberRepresentation(unsigned limit = fReach_DENOMINATOR) const;
+	const BoxT<Number,Converter>& reduceNumberRepresentation(unsigned limit = fReach_DENOMINATOR);
 
 	/**
 	 * @brief      Makes a symmetric box from the current box.

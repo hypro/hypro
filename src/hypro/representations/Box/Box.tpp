@@ -292,7 +292,7 @@ std::size_t BoxT<Number,Converter>::size() const {
 }
 
 template<typename Number, typename Converter>
-const BoxT<Number,Converter>& BoxT<Number,Converter>::reduceNumberRepresentation(unsigned limit) const {
+const BoxT<Number,Converter>& BoxT<Number,Converter>::reduceNumberRepresentation(unsigned limit) {
 	Number limit2 = Number(limit)*Number(limit);
 	for(unsigned d = 0; d < this->dimension(); ++d) {
 		//std::cout << "(Upper Bound) Number: " << mLimits.second.at(d) << std::endl;
@@ -426,9 +426,7 @@ std::pair<bool, BoxT<Number,Converter>> BoxT<Number,Converter>::satisfiesHalfspa
 		limitingPlanes.pop_back();
 	}
 	assert(newPlanes.rows() == newDistances.rows());
-	BoxT<Number,Converter> tmpBox = this->intersectHalfspaces(newPlanes,newDistances);
-	//std::cout << __func__ << " TRUE, " << convert<Number,double>(tmpBox) << std::endl;
-	return std::make_pair(true, tmpBox);
+	return std::make_pair(true, this->intersectHalfspaces(newPlanes,newDistances));
 }
 
 template<typename Number, typename Converter>
@@ -516,9 +514,10 @@ template<typename Number, typename Converter>
 BoxT<Number,Converter> BoxT<Number,Converter>::intersectHalfspace( const Halfspace<Number>& hspace ) const {
 	//std::cout << __func__ << " of " << *this << " and " << hspace << std::endl;
 	if(!this->empty()) {
+		BoxT<Number,Converter> boxcopy(*this);
 		// Preprocessing: If any two points opposite to each other are contained, the box stays the same - test limit points
-		bool holdsMin = hspace.contains(mLimits.first.rawCoordinates());
-		bool holdsMax = hspace.contains(mLimits.second.rawCoordinates());
+		bool holdsMin = hspace.contains(boxcopy.limits().first.rawCoordinates());
+		bool holdsMax = hspace.contains(boxcopy.limits().second.rawCoordinates());
 		if(holdsMin && holdsMax){
 			//std::cout << __func__ << " Min and Max are below the halfspace." << std::endl;
 			return *this;
@@ -538,35 +537,35 @@ BoxT<Number,Converter> BoxT<Number,Converter>::intersectHalfspace( const Halfspa
 			while(hspace.normal()(nonZeroDim) == 0 ) ++nonZeroDim;
 
 			if(hspace.normal()(nonZeroDim) > 0) {
-				mLimits.second[nonZeroDim] = hspace.offset() / hspace.normal()(nonZeroDim);
+				boxcopy.rLimits().second[nonZeroDim] = hspace.offset() / hspace.normal()(nonZeroDim);
 			} else {
-				mLimits.first[nonZeroDim] = hspace.offset() / hspace.normal()(nonZeroDim);
+				boxcopy.rLimits().first[nonZeroDim] = hspace.offset() / hspace.normal()(nonZeroDim);
 			}
-			return *this;
+			return boxcopy;
 		}
 
 		//std::cout << __func__ << " Min below: " << holdsMin << ", Max below: " << holdsMax << std::endl;
 		unsigned dim = this->dimension();
 
 		// Phase 1: Find starting point (point outside) for phase 2 by depth-first search or use limit points, if applicable
-		Point<Number> farestPointOutside = mLimits.first;
-		Point<Number> farestPointInside = mLimits.first;
+		Point<Number> farestPointOutside = boxcopy.limits().first;
+		Point<Number> farestPointInside = boxcopy.limits().first;
 		unsigned usedDimension = 0;
 		// determine walk direction by using plane normal and variable order
 		for(; usedDimension < dim; ++usedDimension){
 			if(hspace.normal()(usedDimension) > 0){
-				if(farestPointOutside.at(usedDimension) != mLimits.second.at(usedDimension)) {
-					farestPointOutside[usedDimension] = mLimits.second.at(usedDimension);
+				if(farestPointOutside.at(usedDimension) != boxcopy.limits().second.at(usedDimension)) {
+					farestPointOutside[usedDimension] = boxcopy.limits().second.at(usedDimension);
 				}
-				if(farestPointInside.at(usedDimension) != mLimits.first.at(usedDimension)) {
-					farestPointInside[usedDimension] = mLimits.first.at(usedDimension);
+				if(farestPointInside.at(usedDimension) != boxcopy.limits().first.at(usedDimension)) {
+					farestPointInside[usedDimension] = boxcopy.limits().first.at(usedDimension);
 				}
 			} else if( hspace.normal()(usedDimension) < 0){
-				if( farestPointOutside.at(usedDimension) != mLimits.first.at(usedDimension) ) {
-					farestPointOutside[usedDimension] = mLimits.first.at(usedDimension);
+				if( farestPointOutside.at(usedDimension) != boxcopy.limits().first.at(usedDimension) ) {
+					farestPointOutside[usedDimension] = boxcopy.limits().first.at(usedDimension);
 				}
-				if(farestPointInside.at(usedDimension) != mLimits.second.at(usedDimension)) {
-					farestPointInside[usedDimension] = mLimits.second.at(usedDimension);
+				if(farestPointInside.at(usedDimension) != boxcopy.limits().second.at(usedDimension)) {
+					farestPointInside[usedDimension] = boxcopy.limits().second.at(usedDimension);
 				}
 			}
 		}
@@ -598,12 +597,12 @@ BoxT<Number,Converter> BoxT<Number,Converter>::intersectHalfspace( const Halfspa
 			// create and test neighbors
 			for(unsigned d = 0; d < dim; ++d ) {
 				Point<Number> tmp = current;
-				if( hspace.normal()(d) < 0 && current.at(d) == mLimits.first.at(d) ){
-					tmp[d] = mLimits.second.at(d);
-				} else if ( hspace.normal()(d) > 0 && current.at(d) == mLimits.second.at(d) ) {
-					tmp[d] = mLimits.first.at(d);
+				if( hspace.normal()(d) < 0 && current.at(d) == boxcopy.limits().first.at(d) ){
+					tmp[d] = boxcopy.limits().second.at(d);
+				} else if ( hspace.normal()(d) > 0 && current.at(d) == boxcopy.limits().second.at(d) ) {
+					tmp[d] = boxcopy.limits().first.at(d);
 				} else if ( hspace.normal()(d) == 0 ) {
-					tmp[d] = tmp.at(d) == mLimits.first.at(d) ? mLimits.second.at(d) : mLimits.first.at(d);
+					tmp[d] = tmp.at(d) == boxcopy.limits().first.at(d) ? boxcopy.limits().second.at(d) : boxcopy.limits().first.at(d);
 				} else {
 					// UNSINN!?
 					//std::cout << "Could create point " << tmp << ", but is the same as " << current << std::endl;
@@ -644,14 +643,10 @@ BoxT<Number,Converter> BoxT<Number,Converter>::intersectHalfspace( const Halfspa
 			return BoxT<Number,Converter>(intersectionPoints);
 		} else {
 			if(holdsMin){
-				intersectionPoints.push_back(mLimits.first);
+				intersectionPoints.push_back(boxcopy.limits().first);
 			} else {
-				intersectionPoints.push_back(mLimits.second);
+				intersectionPoints.push_back(boxcopy.limits().second);
 			}
-			//std::cout << __func__ << " Intersection points:" << std::endl;
-			//for(const auto& point : intersectionPoints) {
-			//	std::cout << convert<Number,double>(point.rawCoordinates()).transpose() << std::endl;
-			//}
 			return BoxT<Number,Converter>(intersectionPoints);
 		}
 	}
