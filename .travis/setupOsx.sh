@@ -3,7 +3,8 @@
 set -ev
 
 brew update --quiet
-brew install cmake doxygen eigen llvm latex
+brew install cmake doxygen eigen llvm
+brew cask install mactex
 
 if [[ ${COMPILER} == "g++-4.8" ]]; then
 	echo "g++-4.8 is not supported"
