@@ -3,7 +3,7 @@
 set -ev
 
 brew update --quiet
-brew install cmake doxygen eigen llvm
+brew install doxygen eigen llvm
 brew cask install mactex
 
 if [[ ${COMPILER} == "g++-4.8" ]]; then
