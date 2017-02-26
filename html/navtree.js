@@ -6,6 +6,8 @@ var NAVTREE =
     [ "State set representations", "md__home_travis_build_hypro_hypro_doc_markdown_stateSetRepresentations_generalStateSets.html", null ],
     [ "Usage", "md__home_travis_build_hypro_hypro_doc_markdown_stateSetRepresentations_usage.html", null ],
     [ "State set represetations", "md__home_travis_build_hypro_hypro_doc_markdown_stateSets.html", null ],
+    [ "Utility functions", "md__home_travis_build_hypro_hypro_doc_markdown_utilityFunctions.html", "md__home_travis_build_hypro_hypro_doc_markdown_utilityFunctions" ],
+    [ "Bibliography", "citelist.html", null ],
     [ "Namespaces", null, [
       [ "Namespace List", "namespaces.html", "namespaces" ],
       [ "Namespace Members", "namespacemembers.html", [
@@ -37,14 +39,14 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 ".html",
-"classhypro_1_1BoxT_3_01double_00_01Converter_01_4.html#ad7f69d76d84a82c79531679ecc180494",
-"classhypro_1_1GeometricObject.html#a478635198d1f273913e9438b08baa858",
-"classhypro_1_1Optimizer.html#a57d9aea697e3087a60b776d70a942baa",
-"classhypro_1_1ReachTreeNode.html#a76dd5f08800ccbe123dee9d32c9b0f3b",
-"classhypro_1_1Transition.html#ae377cff6cc50913a7aa45e4434cb13a3",
-"dir_2c8758a5fdbf28946c502b471e14bb83.html",
-"structhypro_1_1is__same.html",
-"structhypro_1_1reachability_1_1ReachabilitySettings.html#afe047eb0c302876a8be98dd9892e2108"
+"classhypro_1_1BoxT_3_01double_00_01Converter_01_4.html#ab7afcb410dfc489bad1ad279063061b0",
+"classhypro_1_1GeometricObject.html#a44174a8a83b9f3328daa3fd6d61ae6cd",
+"classhypro_1_1Optimizer.html#a37a12c32ebf96ff35b1218c7eb936084",
+"classhypro_1_1ReachTreeNode.html#a6065da0d3da6946698b5c38637cf3e9e",
+"classhypro_1_1Transition.html#a98e62114617c7415e6a4e2dd289515a8",
+"dir_1afb9b508effaad8769db21f900b5139.html",
+"structhypro_1_1Transition_1_1Reset.html#aed674be8e22f4053d67d46442b4c8544",
+"structhypro_1_1reachability_1_1ReachabilitySettings.html#a4ed8bc5659909aa70ea4bbe5ceb9646c"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

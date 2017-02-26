@@ -124,6 +124,7 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ConstrainSet.html">ConstrainSet</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ConvexHull.html">ConvexHull</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Class for convex hull computation.  <a href="classhypro_1_1ConvexHull.html#details">More...</a><br/></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Dictionary.html">Dictionary</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -269,6 +270,7 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1EvaluationResult.html">EvaluationResult</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Optimizer.html">Optimizer</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wrapper class for linear optimization.  <a href="classhypro_1_1Optimizer.html#details">More...</a><br/></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1PrincipalComponentAnalysis.html">PrincipalComponentAnalysis</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -627,10 +629,10 @@ template&lt;typename Key , typename T &gt; </td></tr>
 <tr class="memitem:a98621e28b64149f811a18be367484a82"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a98621e28b64149f811a18be367484a82"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>printProblem</b> (glp_prob *glpkProblem)</td></tr>
 <tr class="separator:a98621e28b64149f811a18be367484a82"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acddcf5058b7ae8f425664f3a76517e5d"><td class="memTemplParams" colspan="2"><a class="anchor" id="acddcf5058b7ae8f425664f3a76517e5d"></a>
+<tr class="memitem:ab3c06080d90937e6edf672defa0a3a3a"><td class="memTemplParams" colspan="2"><a class="anchor" id="ab3c06080d90937e6edf672defa0a3a3a"></a>
 template&lt;typename Number &gt; </td></tr>
-<tr class="memitem:acddcf5058b7ae8f425664f3a76517e5d"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="structhypro_1_1EvaluationResult.html">EvaluationResult</a>&lt; Number &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>glpkOptimizeLinear</b> (glp_prob *glpkProblem, const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;_direction, const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;constraints, const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;constants)</td></tr>
-<tr class="separator:acddcf5058b7ae8f425664f3a76517e5d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab3c06080d90937e6edf672defa0a3a3a"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="structhypro_1_1EvaluationResult.html">EvaluationResult</a>&lt; Number &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>glpkOptimizeLinear</b> (glp_prob *glpkProblem, const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;_direction, const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;constraints, const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;constants, bool useExact)</td></tr>
+<tr class="separator:ab3c06080d90937e6edf672defa0a3a3a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aefc605ab2226cf2b205fdc7335bff07a"><td class="memTemplParams" colspan="2"><a class="anchor" id="aefc605ab2226cf2b205fdc7335bff07a"></a>
 template&lt;typename Number &gt; </td></tr>
 <tr class="memitem:aefc605ab2226cf2b205fdc7335bff07a"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><b>glpkCheckPoint</b> (glp_prob *glpkProblem, const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;constraints, const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;, const <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; Number &gt; &amp;point)</td></tr>
@@ -639,10 +641,10 @@ template&lt;typename Number &gt; </td></tr>
 template&lt;typename Number &gt; </td></tr>
 <tr class="memitem:ae62496b24d8503f1d0a675375526c9ad"><td class="memTemplItemLeft" align="right" valign="top">std::vector&lt; std::size_t &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>glpkRedundantConstraints</b> (glp_prob *glpkProblem, <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; constraints, <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; constants)</td></tr>
 <tr class="separator:ae62496b24d8503f1d0a675375526c9ad"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae16f85dc3a5dab3c46037f40015e82d1"><td class="memTemplParams" colspan="2"><a class="anchor" id="ae16f85dc3a5dab3c46037f40015e82d1"></a>
+<tr class="memitem:afcce4e76e6e231d00b7f0fe6b87df00d"><td class="memTemplParams" colspan="2"><a class="anchor" id="afcce4e76e6e231d00b7f0fe6b87df00d"></a>
 template&lt;&gt; </td></tr>
-<tr class="memitem:ae16f85dc3a5dab3c46037f40015e82d1"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="structhypro_1_1EvaluationResult.html">EvaluationResult</a>&lt; double &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>glpkOptimizeLinear</b> (glp_prob *glpkProblem, const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; double &gt; &amp;_direction, const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; double &gt; &amp;constraints, const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; double &gt; &amp;constants)</td></tr>
-<tr class="separator:ae16f85dc3a5dab3c46037f40015e82d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afcce4e76e6e231d00b7f0fe6b87df00d"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="structhypro_1_1EvaluationResult.html">EvaluationResult</a>&lt; double &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>glpkOptimizeLinear</b> (glp_prob *glpkProblem, const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; double &gt; &amp;_direction, const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; double &gt; &amp;constraints, const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; double &gt; &amp;constants, bool useExact)</td></tr>
+<tr class="separator:afcce4e76e6e231d00b7f0fe6b87df00d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa6e4436a79dcce480009227cfa3569e4"><td class="memTemplParams" colspan="2"><a class="anchor" id="aa6e4436a79dcce480009227cfa3569e4"></a>
 template&lt;&gt; </td></tr>
 <tr class="memitem:aa6e4436a79dcce480009227cfa3569e4"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><b>glpkCheckPoint</b> (glp_prob *glpkProblem, const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; double &gt; &amp;constraints, const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; double &gt; &amp;, const <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; double &gt; &amp;point)</td></tr>
@@ -923,7 +925,7 @@ template&lt;typename Number , typename Converter &gt; </div>
 
 <p>Definition at line <a class="el" href="representations_2conversion_2util_8h_source.html#l00022">22</a> of file <a class="el" href="representations_2conversion_2util_8h_source.html">util.h</a>.</p>
 
-<p>References <a class="el" href="Point_8h_source.html#l00343">hypro::Point&lt; Number &gt;::removeDuplicatePoints()</a>.</p>
+<p>References <a class="el" href="classhypro_1_1SupportFunctionT.html#a2c64b19107b4c7971c795cb8110d868c">hypro::SupportFunctionT&lt; Number, Converter &gt;::contains()</a>, <a class="el" href="classhypro_1_1SupportFunctionT.html#ab6be1f3c4f371abff2180eee0c5fa251">hypro::SupportFunctionT&lt; Number, Converter &gt;::dimension()</a>, and <a class="el" href="Point_8h_source.html#l00343">hypro::Point&lt; Number &gt;::removeDuplicatePoints()</a>.</p>
 
 </div>
 </div>
@@ -1020,7 +1022,7 @@ template&lt;typename From , typename To , typename Converter &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The resulting box. </dd></dl>
 
-<p>Definition at line <a class="el" href="Box_8h_source.html#l00495">495</a> of file <a class="el" href="Box_8h_source.html">Box.h</a>.</p>
+<p>Definition at line <a class="el" href="Box_8h_source.html#l00503">503</a> of file <a class="el" href="Box_8h_source.html">Box.h</a>.</p>
 
 <p>References <a class="el" href="Box_8h_source.html#l00146">hypro::BoxT&lt; Number, Converter &gt;::limits()</a>.</p>
 
@@ -1196,9 +1198,9 @@ template&lt;typename Number , typename Converter &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The resulting box. </dd></dl>
 
-<p>Definition at line <a class="el" href="Box_8h_source.html#l00479">479</a> of file <a class="el" href="Box_8h_source.html">Box.h</a>.</p>
+<p>Definition at line <a class="el" href="Box_8h_source.html#l00487">487</a> of file <a class="el" href="Box_8h_source.html">Box.h</a>.</p>
 
-<p>References <a class="el" href="Box_8h_source.html#l00191">hypro::BoxT&lt; Number, Converter &gt;::empty()</a>.</p>
+<p>References <a class="el" href="Box_8h_source.html#l00197">hypro::BoxT&lt; Number, Converter &gt;::empty()</a>.</p>
 
 </div>
 </div>

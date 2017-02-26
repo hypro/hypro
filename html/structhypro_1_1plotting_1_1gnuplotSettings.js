@@ -8,5 +8,6 @@ var structhypro_1_1plotting_1_1gnuplotSettings =
     [ "grid", "structhypro_1_1plotting_1_1gnuplotSettings.html#abd230e8c60e90101c6dd02defb3f9ef7", null ],
     [ "keepAspectRatio", "structhypro_1_1plotting_1_1gnuplotSettings.html#a4637892cb3c7bff314df47fecc8c353f", null ],
     [ "linewidth", "structhypro_1_1plotting_1_1gnuplotSettings.html#a0595d1fe82343d0610c78e36dbd3a118", null ],
+    [ "name", "structhypro_1_1plotting_1_1gnuplotSettings.html#ad3e9a2e11d309052a706f3fe7cbc131d", null ],
     [ "pointSize", "structhypro_1_1plotting_1_1gnuplotSettings.html#a1157e4047220ce782086d72f2051dac6", null ]
 ];

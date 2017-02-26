@@ -129,7 +129,7 @@ Public Member Functions</h2></td></tr>
 &#160;</td><td class="memItemRight" valign="bottom"><b>SupportFunctionT</b> (const <a class="el" href="classhypro_1_1SupportFunctionT.html">SupportFunctionT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt; &amp;_orig)</td></tr>
 <tr class="separator:aefd078611ee83cd0a01ab44bc6f26d85"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1bc59f5a69349b3a491ad51062178541"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1bc59f5a69349b3a491ad51062178541"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>SupportFunctionT</b> (<a class="el" href="namespacehypro.html#a862b0cdf77254036feeb8ad6fb6da2b7">SF_TYPE</a> _type, Number _radius, unsigned dimension)</td></tr>
+&#160;</td><td class="memItemRight" valign="bottom"><b>SupportFunctionT</b> (<a class="el" href="namespacehypro.html#a862b0cdf77254036feeb8ad6fb6da2b7">SF_TYPE</a> _type, Number _radius, unsigned <a class="el" href="classhypro_1_1SupportFunctionT.html#ab6be1f3c4f371abff2180eee0c5fa251">dimension</a>)</td></tr>
 <tr class="separator:a1bc59f5a69349b3a491ad51062178541"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aade64ee224d0b096ab10c78666429558"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aade64ee224d0b096ab10c78666429558"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>SupportFunctionT</b> (const std::vector&lt; <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; Number &gt;&gt; &amp;_vertices)</td></tr>
@@ -150,15 +150,15 @@ Public Member Functions</h2></td></tr>
 <a class="el" href="classhypro_1_1SupportFunctionT.html">SupportFunctionT</a>&lt; Number, <br class="typebreak"/>
 <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator=</b> (<a class="el" href="classhypro_1_1SupportFunctionT.html">SupportFunctionT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt; _orig)</td></tr>
 <tr class="separator:a834b056de4c8b06da637c80ae557c486"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa581a385341842fb530c2f5d7b2220d0"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa581a385341842fb530c2f5d7b2220d0"></a>
-<a class="el" href="structhypro_1_1EvaluationResult.html">EvaluationResult</a>&lt; Number &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>evaluate</b> (const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;_direction) const </td></tr>
-<tr class="separator:aa581a385341842fb530c2f5d7b2220d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a84f86d5908ffb553ddeb536ed40e2827"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a84f86d5908ffb553ddeb536ed40e2827"></a>
+<tr class="memitem:a082cbc14dcb51d49d598b953daf2804e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a082cbc14dcb51d49d598b953daf2804e"></a>
+<a class="el" href="structhypro_1_1EvaluationResult.html">EvaluationResult</a>&lt; Number &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>evaluate</b> (const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;_direction, bool useExact=true) const </td></tr>
+<tr class="separator:a082cbc14dcb51d49d598b953daf2804e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9bb44b91d42ddedce51b8cd84ae41cb1"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9bb44b91d42ddedce51b8cd84ae41cb1"></a>
 std::vector&lt; <a class="el" href="structhypro_1_1EvaluationResult.html">EvaluationResult</a><br class="typebreak"/>
-&lt; Number &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>multiEvaluate</b> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;_directions) const </td></tr>
-<tr class="separator:a84f86d5908ffb553ddeb536ed40e2827"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab6be1f3c4f371abff2180eee0c5fa251"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab6be1f3c4f371abff2180eee0c5fa251"></a>
-std::size_t&#160;</td><td class="memItemRight" valign="bottom"><b>dimension</b> () const </td></tr>
+&lt; Number &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>multiEvaluate</b> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;_directions, bool useExact=true) const </td></tr>
+<tr class="separator:a9bb44b91d42ddedce51b8cd84ae41cb1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab6be1f3c4f371abff2180eee0c5fa251"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1SupportFunctionT.html#ab6be1f3c4f371abff2180eee0c5fa251">dimension</a> () const </td></tr>
+<tr class="memdesc:ab6be1f3c4f371abff2180eee0c5fa251"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the space dimension of the object.  <a href="#ab6be1f3c4f371abff2180eee0c5fa251">More...</a><br/></td></tr>
 <tr class="separator:ab6be1f3c4f371abff2180eee0c5fa251"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5e577685366129d54f1badb601035ec6"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5e577685366129d54f1badb601035ec6"></a>
 std::size_t&#160;</td><td class="memItemRight" valign="bottom"><b>size</b> () const </td></tr>
@@ -209,42 +209,42 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>removeRedundancy</b> 
 <tr class="memitem:a25fd7ee230ac1e4012556d086147f345"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a25fd7ee230ac1e4012556d086147f345"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>reduceNumberRepresentation</b> ()</td></tr>
 <tr class="separator:a25fd7ee230ac1e4012556d086147f345"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1750c945d518d758dabea3c7a136bee0"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1750c945d518d758dabea3c7a136bee0"></a>
-std::vector&lt; <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; Number &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>vertices</b> (const <a class="el" href="classhypro_1_1Location.html">Location</a>&lt; Number &gt; *=nullptr) const </td></tr>
+<tr class="memitem:a1750c945d518d758dabea3c7a136bee0"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; Number &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1SupportFunctionT.html#a1750c945d518d758dabea3c7a136bee0">vertices</a> (const <a class="el" href="classhypro_1_1Location.html">Location</a>&lt; Number &gt; *=nullptr) const </td></tr>
+<tr class="memdesc:a1750c945d518d758dabea3c7a136bee0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the set of extreme vertices, whose convex hull is the smallest convex set containing this set.  <a href="#a1750c945d518d758dabea3c7a136bee0">More...</a><br/></td></tr>
 <tr class="separator:a1750c945d518d758dabea3c7a136bee0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acc4adc872d5b153951d634d001639b6e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="acc4adc872d5b153951d634d001639b6e"></a>
 Number&#160;</td><td class="memItemRight" valign="bottom"><b>supremum</b> () const </td></tr>
 <tr class="separator:acc4adc872d5b153951d634d001639b6e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac86b70574582b04018f764d98ef5eca9"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac86b70574582b04018f764d98ef5eca9"></a>
-<a class="el" href="classhypro_1_1SupportFunctionT.html">SupportFunctionT</a>&lt; Number, <br class="typebreak"/>
-<a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>project</b> (const std::vector&lt; unsigned &gt; &amp;dimensions) const </td></tr>
+<tr class="memitem:ac86b70574582b04018f764d98ef5eca9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1SupportFunctionT.html">SupportFunctionT</a>&lt; Number, <br class="typebreak"/>
+<a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1SupportFunctionT.html#ac86b70574582b04018f764d98ef5eca9">project</a> (const std::vector&lt; unsigned &gt; &amp;dimensions) const </td></tr>
+<tr class="memdesc:ac86b70574582b04018f764d98ef5eca9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Projects the set on the ordered set of given dimensions.  <a href="#ac86b70574582b04018f764d98ef5eca9">More...</a><br/></td></tr>
 <tr class="separator:ac86b70574582b04018f764d98ef5eca9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a180a7366945d1a7936a50c745e30b53b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a180a7366945d1a7936a50c745e30b53b"></a>
-<a class="el" href="classhypro_1_1SupportFunctionT.html">SupportFunctionT</a>&lt; Number, <br class="typebreak"/>
-<a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>linearTransformation</b> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;A) const </td></tr>
+<tr class="memitem:a180a7366945d1a7936a50c745e30b53b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1SupportFunctionT.html">SupportFunctionT</a>&lt; Number, <br class="typebreak"/>
+<a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1SupportFunctionT.html#a180a7366945d1a7936a50c745e30b53b">linearTransformation</a> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;A) const </td></tr>
+<tr class="memdesc:a180a7366945d1a7936a50c745e30b53b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Applies a linear transformation with the matrix A to the set.  <a href="#a180a7366945d1a7936a50c745e30b53b">More...</a><br/></td></tr>
 <tr class="separator:a180a7366945d1a7936a50c745e30b53b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7728df10d18edc42f578a2c1a4e910b2"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7728df10d18edc42f578a2c1a4e910b2"></a>
-<a class="el" href="classhypro_1_1SupportFunctionT.html">SupportFunctionT</a>&lt; Number, <br class="typebreak"/>
-<a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>affineTransformation</b> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;A, const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;b) const </td></tr>
+<tr class="memitem:a7728df10d18edc42f578a2c1a4e910b2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1SupportFunctionT.html">SupportFunctionT</a>&lt; Number, <br class="typebreak"/>
+<a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1SupportFunctionT.html#a7728df10d18edc42f578a2c1a4e910b2">affineTransformation</a> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;A, const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;b) const </td></tr>
+<tr class="memdesc:a7728df10d18edc42f578a2c1a4e910b2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Applies an affine transformation with the matrix A and the translation vector b to the set.  <a href="#a7728df10d18edc42f578a2c1a4e910b2">More...</a><br/></td></tr>
 <tr class="separator:a7728df10d18edc42f578a2c1a4e910b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6c409c96f0c00954bb648239785c1b18"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6c409c96f0c00954bb648239785c1b18"></a>
-<a class="el" href="classhypro_1_1SupportFunctionT.html">SupportFunctionT</a>&lt; Number, <br class="typebreak"/>
-<a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>minkowskiSum</b> (const <a class="el" href="classhypro_1_1SupportFunctionT.html">SupportFunctionT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt; &amp;_rhs) const </td></tr>
+<tr class="memitem:a6c409c96f0c00954bb648239785c1b18"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1SupportFunctionT.html">SupportFunctionT</a>&lt; Number, <br class="typebreak"/>
+<a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1SupportFunctionT.html#a6c409c96f0c00954bb648239785c1b18">minkowskiSum</a> (const <a class="el" href="classhypro_1_1SupportFunctionT.html">SupportFunctionT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt; &amp;_rhs) const </td></tr>
+<tr class="memdesc:a6c409c96f0c00954bb648239785c1b18"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes Minkowski's sum of the current set and the passed set.  <a href="#a6c409c96f0c00954bb648239785c1b18">More...</a><br/></td></tr>
 <tr class="separator:a6c409c96f0c00954bb648239785c1b18"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a74198fced21ae8063bb8ee504db1a96a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a74198fced21ae8063bb8ee504db1a96a"></a>
 <a class="el" href="classhypro_1_1SupportFunctionT.html">SupportFunctionT</a>&lt; Number, <br class="typebreak"/>
 <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>intersect</b> (const <a class="el" href="classhypro_1_1SupportFunctionT.html">SupportFunctionT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt; &amp;_rhs) const </td></tr>
 <tr class="separator:a74198fced21ae8063bb8ee504db1a96a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6f732d287604ef2eeae9e7137019eb02"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6f732d287604ef2eeae9e7137019eb02"></a>
-<a class="el" href="classhypro_1_1SupportFunctionT.html">SupportFunctionT</a>&lt; Number, <br class="typebreak"/>
-<a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>intersectHalfspace</b> (const <a class="el" href="classhypro_1_1Halfspace.html">Halfspace</a>&lt; Number &gt; &amp;hs) const </td></tr>
+<tr class="memitem:a6f732d287604ef2eeae9e7137019eb02"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1SupportFunctionT.html">SupportFunctionT</a>&lt; Number, <br class="typebreak"/>
+<a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1SupportFunctionT.html#a6f732d287604ef2eeae9e7137019eb02">intersectHalfspace</a> (const <a class="el" href="classhypro_1_1Halfspace.html">Halfspace</a>&lt; Number &gt; &amp;hs) const </td></tr>
+<tr class="memdesc:a6f732d287604ef2eeae9e7137019eb02"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the intersection of the set with the given halfspace.  <a href="#a6f732d287604ef2eeae9e7137019eb02">More...</a><br/></td></tr>
 <tr class="separator:a6f732d287604ef2eeae9e7137019eb02"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa7998a175aca8046106b0a6c0dc4a85b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa7998a175aca8046106b0a6c0dc4a85b"></a>
-<a class="el" href="classhypro_1_1SupportFunctionT.html">SupportFunctionT</a>&lt; Number, <br class="typebreak"/>
-<a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>intersectHalfspaces</b> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;_mat, const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;_vec) const </td></tr>
+<tr class="memitem:aa7998a175aca8046106b0a6c0dc4a85b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1SupportFunctionT.html">SupportFunctionT</a>&lt; Number, <br class="typebreak"/>
+<a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1SupportFunctionT.html#aa7998a175aca8046106b0a6c0dc4a85b">intersectHalfspaces</a> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;_mat, const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;_vec) const </td></tr>
+<tr class="memdesc:aa7998a175aca8046106b0a6c0dc4a85b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the intersection of the set with a set of halfspaces.  <a href="#aa7998a175aca8046106b0a6c0dc4a85b">More...</a><br/></td></tr>
 <tr class="separator:aa7998a175aca8046106b0a6c0dc4a85b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2c64b19107b4c7971c795cb8110d868c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2c64b19107b4c7971c795cb8110d868c"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>contains</b> (const <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; Number &gt; &amp;_point) const </td></tr>
+<tr class="memitem:a2c64b19107b4c7971c795cb8110d868c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1SupportFunctionT.html#a2c64b19107b4c7971c795cb8110d868c">contains</a> (const <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; Number &gt; &amp;_point) const </td></tr>
+<tr class="memdesc:a2c64b19107b4c7971c795cb8110d868c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks, whether the set contains the passed point.  <a href="#a2c64b19107b4c7971c795cb8110d868c">More...</a><br/></td></tr>
 <tr class="separator:a2c64b19107b4c7971c795cb8110d868c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5e5b983a6ab89e0670b668aae8bf36b6"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5e5b983a6ab89e0670b668aae8bf36b6"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>contains</b> (const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;_point) const </td></tr>
@@ -252,22 +252,22 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>contains</b> (const <
 <tr class="memitem:aaf1137ec66da52fae07a19154c7f4169"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aaf1137ec66da52fae07a19154c7f4169"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>contains</b> (const <a class="el" href="classhypro_1_1SupportFunctionT.html">SupportFunctionT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt; &amp;rhs, unsigned directions=8) const </td></tr>
 <tr class="separator:aaf1137ec66da52fae07a19154c7f4169"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a057371717b73aab19f6559112c2ef401"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a057371717b73aab19f6559112c2ef401"></a>
-<a class="el" href="classhypro_1_1SupportFunctionT.html">SupportFunctionT</a>&lt; Number, <br class="typebreak"/>
-<a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>unite</b> (const <a class="el" href="classhypro_1_1SupportFunctionT.html">SupportFunctionT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt; &amp;_rhs) const </td></tr>
+<tr class="memitem:a057371717b73aab19f6559112c2ef401"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1SupportFunctionT.html">SupportFunctionT</a>&lt; Number, <br class="typebreak"/>
+<a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1SupportFunctionT.html#a057371717b73aab19f6559112c2ef401">unite</a> (const <a class="el" href="classhypro_1_1SupportFunctionT.html">SupportFunctionT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt; &amp;_rhs) const </td></tr>
+<tr class="memdesc:a057371717b73aab19f6559112c2ef401"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the convex hull of the union of the set and the passed set.  <a href="#a057371717b73aab19f6559112c2ef401">More...</a><br/></td></tr>
 <tr class="separator:a057371717b73aab19f6559112c2ef401"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a918774b7e807f03f9a706c790edb5926"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a918774b7e807f03f9a706c790edb5926"></a>
 <a class="el" href="classhypro_1_1SupportFunctionT.html">SupportFunctionT</a>&lt; Number, <br class="typebreak"/>
 <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>scale</b> (const Number &amp;_factor=1) const </td></tr>
 <tr class="separator:a918774b7e807f03f9a706c790edb5926"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab43df31b24bb1566eb7d544b316ebcb9"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab43df31b24bb1566eb7d544b316ebcb9"></a>
-std::pair&lt; bool, <a class="el" href="classhypro_1_1SupportFunctionT.html">SupportFunctionT</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>satisfiesHalfspace</b> (const <a class="el" href="classhypro_1_1Halfspace.html">Halfspace</a>&lt; Number &gt; &amp;rhs) const </td></tr>
+<tr class="memitem:ab43df31b24bb1566eb7d544b316ebcb9"><td class="memItemLeft" align="right" valign="top">std::pair&lt; bool, <a class="el" href="classhypro_1_1SupportFunctionT.html">SupportFunctionT</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1SupportFunctionT.html#ab43df31b24bb1566eb7d544b316ebcb9">satisfiesHalfspace</a> (const <a class="el" href="classhypro_1_1Halfspace.html">Halfspace</a>&lt; Number &gt; &amp;rhs) const </td></tr>
+<tr class="memdesc:ab43df31b24bb1566eb7d544b316ebcb9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Method combining the intersection of the set with a halfspace and a test for emptiness of the resulting set.  <a href="#ab43df31b24bb1566eb7d544b316ebcb9">More...</a><br/></td></tr>
 <tr class="separator:ab43df31b24bb1566eb7d544b316ebcb9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6d24295a6282c89ab4392dbcb79f1ed7"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6d24295a6282c89ab4392dbcb79f1ed7"></a>
-std::pair&lt; bool, <a class="el" href="classhypro_1_1SupportFunctionT.html">SupportFunctionT</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>satisfiesHalfspaces</b> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;_mat, const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;_vec) const </td></tr>
+<tr class="memitem:a6d24295a6282c89ab4392dbcb79f1ed7"><td class="memItemLeft" align="right" valign="top">std::pair&lt; bool, <a class="el" href="classhypro_1_1SupportFunctionT.html">SupportFunctionT</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1SupportFunctionT.html#a6d24295a6282c89ab4392dbcb79f1ed7">satisfiesHalfspaces</a> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;_mat, const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;_vec) const </td></tr>
+<tr class="memdesc:a6d24295a6282c89ab4392dbcb79f1ed7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Method combining the intersection of the set with a set of halfspaces and a test for emptiness of the resulting set.  <a href="#a6d24295a6282c89ab4392dbcb79f1ed7">More...</a><br/></td></tr>
 <tr class="separator:a6d24295a6282c89ab4392dbcb79f1ed7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acae27c62d3c09c9b84c79ededecb1543"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="acae27c62d3c09c9b84c79ededecb1543"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>empty</b> () const </td></tr>
+<tr class="memitem:acae27c62d3c09c9b84c79ededecb1543"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1SupportFunctionT.html#acae27c62d3c09c9b84c79ededecb1543">empty</a> () const </td></tr>
+<tr class="memdesc:acae27c62d3c09c9b84c79ededecb1543"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines, whether the set is empty.  <a href="#acae27c62d3c09c9b84c79ededecb1543">More...</a><br/></td></tr>
 <tr class="separator:acae27c62d3c09c9b84c79ededecb1543"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a211417e92658b83f9c37fd13c5aa2122"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a211417e92658b83f9c37fd13c5aa2122"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>print</b> () const </td></tr>
@@ -279,9 +279,14 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>swap</b> (<a class="e
 <tr class="separator:ac0442fe54bd25ed7f8d07f1f23ab2df1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab20f3e77ba2f1d31a56d32937ce40c65"><td class="memItemLeft" align="right" valign="top">unsigned&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1SupportFunctionT.html#ab20f3e77ba2f1d31a56d32937ce40c65">multiplicationsPerEvaluation</a> () const </td></tr>
 <tr class="separator:ab20f3e77ba2f1d31a56d32937ce40c65"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab630e4e9dac8c8d1488213036b9d9bf3"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab630e4e9dac8c8d1488213036b9d9bf3"></a>
-std::list&lt; unsigned &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>collectProjections</b> () const </td></tr>
-<tr class="separator:ab630e4e9dac8c8d1488213036b9d9bf3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a19c7c1901aaa73d83f7aa7a4753fecf6"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a19c7c1901aaa73d83f7aa7a4753fecf6"></a>
+std::vector&lt; unsigned &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>collectProjections</b> () const </td></tr>
+<tr class="separator:a19c7c1901aaa73d83f7aa7a4753fecf6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_methods_classhypro_1_1GeometricObject"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classhypro_1_1GeometricObject')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classhypro_1_1GeometricObject.html">hypro::GeometricObject&lt; Number, SupportFunctionT&lt; Number, Converter &gt; &gt;</a></td></tr>
+<tr class="memitem:a28cf65685f4fa5e04c3dbf428a9d97b0 inherit pub_methods_classhypro_1_1GeometricObject"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a28cf65685f4fa5e04c3dbf428a9d97b0"></a>
+virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1GeometricObject.html#a28cf65685f4fa5e04c3dbf428a9d97b0">~GeometricObject</a> ()</td></tr>
+<tr class="memdesc:a28cf65685f4fa5e04c3dbf428a9d97b0 inherit pub_methods_classhypro_1_1GeometricObject"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destroys the object. <br/></td></tr>
+<tr class="separator:a28cf65685f4fa5e04c3dbf428a9d97b0 inherit pub_methods_classhypro_1_1GeometricObject"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
@@ -313,6 +318,156 @@ class hypro::SupportFunctionT&lt; Number, Converter &gt;</h3>
 
 <p>Definition at line <a class="el" href="SupportFunction_8h_source.html#l00024">24</a> of file <a class="el" href="SupportFunction_8h_source.html">SupportFunction.h</a>.</p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
+<a class="anchor" id="a7728df10d18edc42f578a2c1a4e910b2"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number, typename Converter&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhypro_1_1SupportFunctionT.html">SupportFunctionT</a>&lt;Number,<a class="el" href="classhypro_1_1Converter.html">Converter</a>&gt; <a class="el" href="classhypro_1_1SupportFunctionT.html">hypro::SupportFunctionT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt;::affineTransformation </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;&#160;</td>
+          <td class="paramname"><em>A</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;&#160;</td>
+          <td class="paramname"><em>b</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Applies an affine transformation with the matrix A and the translation vector b to the set. </p>
+<p>The resulting set R is the result of the affine transformation of the set S with A and b such that <img class="formulaInl" alt="$ R = \{ x | x \in A\cdot S + b \} $" src="form_2.png"/> </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">A</td><td>The matrix. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">b</td><td>The vector. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The resulting set. </dd></dl>
+
+<p>Implements <a class="el" href="classhypro_1_1GeometricObject.html#a607fb37c2b6a0d9a59ed85d07160392a">hypro::GeometricObject&lt; Number, SupportFunctionT&lt; Number, Converter &gt; &gt;</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a2c64b19107b4c7971c795cb8110d868c"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number, typename Converter&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classhypro_1_1SupportFunctionT.html">hypro::SupportFunctionT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt;::contains </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; Number &gt; &amp;&#160;</td>
+          <td class="paramname"><em>point</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Checks, whether the set contains the passed point. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">point</td><td>The point. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True, if the point lies inside the set, false otherwise. </dd></dl>
+
+<p>Implements <a class="el" href="classhypro_1_1GeometricObject.html#a44bae859470ea4cb3bc74c16f94b9638">hypro::GeometricObject&lt; Number, SupportFunctionT&lt; Number, Converter &gt; &gt;</a>.</p>
+
+<p>Referenced by <a class="el" href="representations_2conversion_2util_8h_source.html#l00022">hypro::computeBoundaryPointsExpensive()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ab6be1f3c4f371abff2180eee0c5fa251"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number, typename Converter&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::size_t <a class="el" href="classhypro_1_1SupportFunctionT.html">hypro::SupportFunctionT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt;::dimension </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the space dimension of the object. </p>
+<dl class="section return"><dt>Returns</dt><dd>The dimension. </dd></dl>
+
+<p>Implements <a class="el" href="classhypro_1_1GeometricObject.html#aecbf17700fe297f643f401b7ae17dd9c">hypro::GeometricObject&lt; Number, SupportFunctionT&lt; Number, Converter &gt; &gt;</a>.</p>
+
+<p>Referenced by <a class="el" href="representations_2conversion_2util_8h_source.html#l00022">hypro::computeBoundaryPointsExpensive()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="acae27c62d3c09c9b84c79ededecb1543"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number, typename Converter&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classhypro_1_1SupportFunctionT.html">hypro::SupportFunctionT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt;::empty </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Determines, whether the set is empty. </p>
+<dl class="section return"><dt>Returns</dt><dd>True, if the set is empty, false otherwise. </dd></dl>
+
+<p>Implements <a class="el" href="classhypro_1_1GeometricObject.html#a3de514fbb8514689331e65a247a64927">hypro::GeometricObject&lt; Number, SupportFunctionT&lt; Number, Converter &gt; &gt;</a>.</p>
+
+</div>
+</div>
 <a class="anchor" id="ac0442fe54bd25ed7f8d07f1f23ab2df1"></a>
 <div class="memitem">
 <div class="memproto">
@@ -332,6 +487,167 @@ template&lt;typename Number, typename Converter&gt; </div>
 
 </div>
 </div>
+<a class="anchor" id="a6f732d287604ef2eeae9e7137019eb02"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number, typename Converter&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhypro_1_1SupportFunctionT.html">SupportFunctionT</a>&lt;Number,<a class="el" href="classhypro_1_1Converter.html">Converter</a>&gt; <a class="el" href="classhypro_1_1SupportFunctionT.html">hypro::SupportFunctionT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt;::intersectHalfspace </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classhypro_1_1Halfspace.html">Halfspace</a>&lt; Number &gt; &amp;&#160;</td>
+          <td class="paramname"><em>rhs</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Computes the intersection of the set with the given halfspace. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">rhs</td><td>The halfspace. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The resulting set. </dd></dl>
+
+<p>Implements <a class="el" href="classhypro_1_1GeometricObject.html#a478635198d1f273913e9438b08baa858">hypro::GeometricObject&lt; Number, SupportFunctionT&lt; Number, Converter &gt; &gt;</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="aa7998a175aca8046106b0a6c0dc4a85b"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number, typename Converter&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhypro_1_1SupportFunctionT.html">SupportFunctionT</a>&lt;Number,<a class="el" href="classhypro_1_1Converter.html">Converter</a>&gt; <a class="el" href="classhypro_1_1SupportFunctionT.html">hypro::SupportFunctionT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt;::intersectHalfspaces </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;&#160;</td>
+          <td class="paramname"><em>_mat</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;&#160;</td>
+          <td class="paramname"><em>_vec</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Computes the intersection of the set with a set of halfspaces. </p>
+<p>The halfspaces are given as a matrix A and a vector b such that the resulting intersection of the set S with the set of halfspaces is the set R = <img class="formulaInl" alt="$ \{ x | x \in S \land A\cdot x \leq b \} $" src="form_0.png"/>. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">_mat</td><td>The matrix. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">_vec</td><td>The vector. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The resulting set. </dd></dl>
+
+<p>Implements <a class="el" href="classhypro_1_1GeometricObject.html#a44174a8a83b9f3328daa3fd6d61ae6cd">hypro::GeometricObject&lt; Number, SupportFunctionT&lt; Number, Converter &gt; &gt;</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a180a7366945d1a7936a50c745e30b53b"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number, typename Converter&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhypro_1_1SupportFunctionT.html">SupportFunctionT</a>&lt;Number,<a class="el" href="classhypro_1_1Converter.html">Converter</a>&gt; <a class="el" href="classhypro_1_1SupportFunctionT.html">hypro::SupportFunctionT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt;::linearTransformation </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;&#160;</td>
+          <td class="paramname"><em>A</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Applies a linear transformation with the matrix A to the set. </p>
+<p>The resulting set R is the result of the linear transformation of the set S with A such that <img class="formulaInl" alt="$ R = \{ x | x \in A\cdot S \} $" src="form_1.png"/> </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">A</td><td>The matrix. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The resulting set. </dd></dl>
+
+<p>Implements <a class="el" href="classhypro_1_1GeometricObject.html#aa8ba3e6ef5dd89dec24c4876b9b85d55">hypro::GeometricObject&lt; Number, SupportFunctionT&lt; Number, Converter &gt; &gt;</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a6c409c96f0c00954bb648239785c1b18"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number, typename Converter&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhypro_1_1SupportFunctionT.html">SupportFunctionT</a>&lt;Number,<a class="el" href="classhypro_1_1Converter.html">Converter</a>&gt; <a class="el" href="classhypro_1_1SupportFunctionT.html">hypro::SupportFunctionT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt;::minkowskiSum </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classhypro_1_1SupportFunctionT.html">SupportFunctionT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>rhs</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Computes Minkowski's sum of the current set and the passed set. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">rhs</td><td>The other passed set. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The resulting set. </dd></dl>
+
+<p>Implements <a class="el" href="classhypro_1_1GeometricObject.html#a6d5b4a8d675cbe9da63408a5beab8460">hypro::GeometricObject&lt; Number, SupportFunctionT&lt; Number, Converter &gt; &gt;</a>.</p>
+
+</div>
+</div>
 <a class="anchor" id="ab20f3e77ba2f1d31a56d32937ce40c65"></a>
 <div class="memitem">
 <div class="memproto">
@@ -347,6 +663,197 @@ template&lt;typename Number, typename Converter&gt; </div>
       </table>
 </div><div class="memdoc">
 <dl class="section return"><dt>Returns</dt><dd>number of mv multiplications needed for a single evaluation on the SF </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="ac86b70574582b04018f764d98ef5eca9"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number, typename Converter&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhypro_1_1SupportFunctionT.html">SupportFunctionT</a>&lt;Number,<a class="el" href="classhypro_1_1Converter.html">Converter</a>&gt; <a class="el" href="classhypro_1_1SupportFunctionT.html">hypro::SupportFunctionT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt;::project </td>
+          <td>(</td>
+          <td class="paramtype">const std::vector&lt; unsigned &gt; &amp;&#160;</td>
+          <td class="paramname"><em>dimensions</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Projects the set on the ordered set of given dimensions. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">dimensions</td><td>The dimensions. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The resulting set. </dd></dl>
+
+<p>Implements <a class="el" href="classhypro_1_1GeometricObject.html#a9dc6d2b65cc0342a998e81db64d86938">hypro::GeometricObject&lt; Number, SupportFunctionT&lt; Number, Converter &gt; &gt;</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ab43df31b24bb1566eb7d544b316ebcb9"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number, typename Converter&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::pair&lt;bool, <a class="el" href="classhypro_1_1SupportFunctionT.html">SupportFunctionT</a>&gt; <a class="el" href="classhypro_1_1SupportFunctionT.html">hypro::SupportFunctionT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt;::satisfiesHalfspace </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classhypro_1_1Halfspace.html">Halfspace</a>&lt; Number &gt; &amp;&#160;</td>
+          <td class="paramname"><em>rhs</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Method combining the intersection of the set with a halfspace and a test for emptiness of the resulting set. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">rhs</td><td>The halfspace. Note that this check is at least as fast as performing the intersection and testing for emptiness, but in general we encourage to use this method instead. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A pair of a Boolean stating whether the resulting set is empty and the resulting set. </dd></dl>
+
+<p>Implements <a class="el" href="classhypro_1_1GeometricObject.html#a45218953a280ddc544176842774346c8">hypro::GeometricObject&lt; Number, SupportFunctionT&lt; Number, Converter &gt; &gt;</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a6d24295a6282c89ab4392dbcb79f1ed7"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number, typename Converter&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::pair&lt;bool, <a class="el" href="classhypro_1_1SupportFunctionT.html">SupportFunctionT</a>&gt; <a class="el" href="classhypro_1_1SupportFunctionT.html">hypro::SupportFunctionT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt;::satisfiesHalfspaces </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;&#160;</td>
+          <td class="paramname"><em>_mat</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;&#160;</td>
+          <td class="paramname"><em>_vec</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Method combining the intersection of the set with a set of halfspaces and a test for emptiness of the resulting set. </p>
+<p>The halfspaces are given as a matrix A and a vector b such that the resulting intersection of the set S with the set of halfspaces is the set R = <img class="formulaInl" alt="$ \{ x | x \in S \land A\cdot x \leq b \} $" src="form_0.png"/>. Note that this check is at least as fast as performing the intersection and testing for emptiness, but in general we encourage to use this method instead. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">_mat</td><td>The matrix. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">_vec</td><td>The vector. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A pair of a Boolean stating whether the resulting set is empty and the resulting set. </dd></dl>
+
+<p>Implements <a class="el" href="classhypro_1_1GeometricObject.html#acddc7fbfe0fde344fa0c66c155bdc6a2">hypro::GeometricObject&lt; Number, SupportFunctionT&lt; Number, Converter &gt; &gt;</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a057371717b73aab19f6559112c2ef401"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number, typename Converter&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhypro_1_1SupportFunctionT.html">SupportFunctionT</a>&lt;Number,<a class="el" href="classhypro_1_1Converter.html">Converter</a>&gt; <a class="el" href="classhypro_1_1SupportFunctionT.html">hypro::SupportFunctionT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt;::unite </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classhypro_1_1SupportFunctionT.html">SupportFunctionT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>rhs</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Computes the convex hull of the union of the set and the passed set. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">rhs</td><td>The passed set. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The resulting set. </dd></dl>
+
+<p>Implements <a class="el" href="classhypro_1_1GeometricObject.html#a3ed4020101437144b34b62cc01d5bf01">hypro::GeometricObject&lt; Number, SupportFunctionT&lt; Number, Converter &gt; &gt;</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a1750c945d518d758dabea3c7a136bee0"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number, typename Converter&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;<a class="el" href="classhypro_1_1Point.html">Point</a>&lt;Number&gt; &gt; <a class="el" href="classhypro_1_1SupportFunctionT.html">hypro::SupportFunctionT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt;::vertices </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classhypro_1_1Location.html">Location</a>&lt; Number &gt; *&#160;</td>
+          <td class="paramname"> = <code>nullptr</code></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Computes the set of extreme vertices, whose convex hull is the smallest convex set containing this set. </p>
+<dl class="section return"><dt>Returns</dt><dd>A set of extreme vertices. </dd></dl>
+
+<p>Implements <a class="el" href="classhypro_1_1GeometricObject.html#a2e9b23a267023e8bf2ce5b36d14f1de5">hypro::GeometricObject&lt; Number, SupportFunctionT&lt; Number, Converter &gt; &gt;</a>.</p>
 
 </div>
 </div>

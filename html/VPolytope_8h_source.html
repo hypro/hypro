@@ -282,9 +282,9 @@ $(document).ready(function(){initNavTree('VPolytope_8h_source.html','');});
 <div class="line"><a name="l00321"></a><span class="lineno">  321</span>&#160;        <span class="keywordflow">return</span> mVertices.insert( mVertices.end(), begin, end );</div>
 <div class="line"><a name="l00322"></a><span class="lineno">  322</span>&#160;    }</div>
 <div class="line"><a name="l00323"></a><span class="lineno">  323</span>&#160;</div>
-<div class="line"><a name="l00324"></a><span class="lineno">  324</span>&#160;    std::vector&lt;Point&lt;Number&gt;&gt; vertices( <span class="keyword">const</span> Location&lt;Number&gt;* = <span class="keyword">nullptr</span> )<span class="keyword"> const </span>{ <span class="keywordflow">return</span> mVertices; };</div>
+<div class="line"><a name="l00324"></a><span class="lineno"><a class="line" href="classhypro_1_1VPolytopeT.html#a7af34bcb9e3d970727059224dcc3ef8c">  324</a></span>&#160;    std::vector&lt;Point&lt;Number&gt;&gt; <a class="code" href="classhypro_1_1VPolytopeT.html#a7af34bcb9e3d970727059224dcc3ef8c">vertices</a>( <span class="keyword">const</span> <a class="code" href="classhypro_1_1Location.html">Location&lt;Number&gt;</a>* = <span class="keyword">nullptr</span> )<span class="keyword"> const </span>{ <span class="keywordflow">return</span> mVertices; };</div>
 <div class="line"><a name="l00325"></a><span class="lineno">  325</span>&#160;</div>
-<div class="line"><a name="l00326"></a><span class="lineno">  326</span>&#160;    <span class="keywordtype">bool</span> hasVertex( <span class="keyword">const</span> Point&lt;Number&gt;&amp; vertex )<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00326"></a><span class="lineno">  326</span>&#160;    <span class="keywordtype">bool</span> hasVertex( <span class="keyword">const</span> <a class="code" href="classhypro_1_1Point.html">Point&lt;Number&gt;</a>&amp; vertex )<span class="keyword"> const </span>{</div>
 <div class="line"><a name="l00327"></a><span class="lineno">  327</span>&#160;        <span class="keywordflow">for</span> ( <span class="keyword">const</span> <span class="keyword">auto</span> point : mVertices ) {</div>
 <div class="line"><a name="l00328"></a><span class="lineno">  328</span>&#160;            <span class="keywordflow">if</span> ( point == vertex ) <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
 <div class="line"><a name="l00329"></a><span class="lineno">  329</span>&#160;        }</div>
@@ -389,30 +389,33 @@ $(document).ready(function(){initNavTree('VPolytope_8h_source.html','');});
 <div class="line"><a name="l00428"></a><span class="lineno">  428</span>&#160;</div>
 <div class="line"><a name="l00429"></a><span class="lineno">  429</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> Number, <span class="keyword">typename</span> Converter&gt;</div>
 <div class="line"><a name="l00430"></a><span class="lineno">  430</span>&#160;std::ostream&amp; operator&lt;&lt;( std::ostream&amp; out, const hypro::VPolytopeT&lt;Number, Converter&gt;&amp; lhs ) {</div>
-<div class="line"><a name="l00431"></a><span class="lineno">  431</span>&#160;    out &lt;&lt; <span class="stringliteral">&quot;{ &quot;</span>;</div>
-<div class="line"><a name="l00432"></a><span class="lineno">  432</span>&#160;    <span class="keywordflow">for</span> ( <span class="keyword">const</span> <span class="keyword">auto</span>&amp; vector : lhs ) {</div>
-<div class="line"><a name="l00433"></a><span class="lineno">  433</span>&#160;        out &lt;&lt; vector &lt;&lt; <span class="stringliteral">&quot; &quot;</span>;</div>
-<div class="line"><a name="l00434"></a><span class="lineno">  434</span>&#160;    }</div>
-<div class="line"><a name="l00435"></a><span class="lineno">  435</span>&#160;    out &lt;&lt; <span class="stringliteral">&quot;}&quot;</span>;</div>
-<div class="line"><a name="l00436"></a><span class="lineno">  436</span>&#160;    <span class="keywordflow">return</span> out;</div>
-<div class="line"><a name="l00437"></a><span class="lineno">  437</span>&#160;}</div>
-<div class="line"><a name="l00438"></a><span class="lineno">  438</span>&#160;</div>
-<div class="line"><a name="l00439"></a><span class="lineno">  439</span>&#160;<span class="keyword">template</span>&lt;<span class="keyword">typename</span> From, <span class="keyword">typename</span> To, <span class="keyword">typename</span> Converter&gt;</div>
-<div class="line"><a name="l00440"></a><span class="lineno">  440</span>&#160;VPolytopeT&lt;To,Converter&gt; <a class="code" href="namespacehypro.html#a430a74d1edbcc624d5e03c4ec111c24c">convert</a>(<span class="keyword">const</span> VPolytopeT&lt;From,Converter&gt;&amp; in) {</div>
-<div class="line"><a name="l00441"></a><span class="lineno">  441</span>&#160;    std::vector&lt;Point&lt;To&gt;&gt; convertedVertices;</div>
-<div class="line"><a name="l00442"></a><span class="lineno">  442</span>&#160;    <span class="keywordflow">for</span>(<span class="keyword">const</span> <span class="keyword">auto</span>&amp; vertex : in.vertices()) {</div>
-<div class="line"><a name="l00443"></a><span class="lineno">  443</span>&#160;        convertedVertices.push_back(Point&lt;To&gt;(convert&lt;From,To&gt;(vertex.rawCoordinates())));</div>
-<div class="line"><a name="l00444"></a><span class="lineno">  444</span>&#160;    }</div>
-<div class="line"><a name="l00445"></a><span class="lineno">  445</span>&#160;    <span class="keywordflow">return</span> VPolytopeT&lt;To,Converter&gt;(convertedVertices);</div>
-<div class="line"><a name="l00446"></a><span class="lineno">  446</span>&#160;}</div>
-<div class="line"><a name="l00447"></a><span class="lineno">  447</span>&#160;</div>
-<div class="line"><a name="l00448"></a><span class="lineno">  448</span>&#160;}  <span class="comment">// namespace</span></div>
+<div class="line"><a name="l00431"></a><span class="lineno">  431</span>&#160;<span class="preprocessor">#ifdef HYPRO_LOGGING</span></div>
+<div class="line"><a name="l00432"></a><span class="lineno">  432</span>&#160;<span class="preprocessor"></span>    out &lt;&lt; <span class="stringliteral">&quot;{ &quot;</span>;</div>
+<div class="line"><a name="l00433"></a><span class="lineno">  433</span>&#160;    <span class="keywordflow">for</span> ( <span class="keyword">const</span> <span class="keyword">auto</span>&amp; vector : lhs ) {</div>
+<div class="line"><a name="l00434"></a><span class="lineno">  434</span>&#160;        out &lt;&lt; vector &lt;&lt; <span class="stringliteral">&quot; &quot;</span>;</div>
+<div class="line"><a name="l00435"></a><span class="lineno">  435</span>&#160;    }</div>
+<div class="line"><a name="l00436"></a><span class="lineno">  436</span>&#160;    out &lt;&lt; <span class="stringliteral">&quot;}&quot;</span>;</div>
+<div class="line"><a name="l00437"></a><span class="lineno">  437</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00438"></a><span class="lineno">  438</span>&#160;<span class="preprocessor"></span>    <span class="keywordflow">return</span> out;</div>
+<div class="line"><a name="l00439"></a><span class="lineno">  439</span>&#160;}</div>
+<div class="line"><a name="l00440"></a><span class="lineno">  440</span>&#160;</div>
+<div class="line"><a name="l00441"></a><span class="lineno">  441</span>&#160;<span class="keyword">template</span>&lt;<span class="keyword">typename</span> From, <span class="keyword">typename</span> To, <span class="keyword">typename</span> Converter&gt;</div>
+<div class="line"><a name="l00442"></a><span class="lineno">  442</span>&#160;VPolytopeT&lt;To,Converter&gt; <a class="code" href="namespacehypro.html#a430a74d1edbcc624d5e03c4ec111c24c">convert</a>(<span class="keyword">const</span> VPolytopeT&lt;From,Converter&gt;&amp; in) {</div>
+<div class="line"><a name="l00443"></a><span class="lineno">  443</span>&#160;    std::vector&lt;Point&lt;To&gt;&gt; convertedVertices;</div>
+<div class="line"><a name="l00444"></a><span class="lineno">  444</span>&#160;    <span class="keywordflow">for</span>(<span class="keyword">const</span> <span class="keyword">auto</span>&amp; vertex : in.vertices()) {</div>
+<div class="line"><a name="l00445"></a><span class="lineno">  445</span>&#160;        convertedVertices.push_back(Point&lt;To&gt;(convert&lt;From,To&gt;(vertex.rawCoordinates())));</div>
+<div class="line"><a name="l00446"></a><span class="lineno">  446</span>&#160;    }</div>
+<div class="line"><a name="l00447"></a><span class="lineno">  447</span>&#160;    <span class="keywordflow">return</span> VPolytopeT&lt;To,Converter&gt;(convertedVertices);</div>
+<div class="line"><a name="l00448"></a><span class="lineno">  448</span>&#160;}</div>
 <div class="line"><a name="l00449"></a><span class="lineno">  449</span>&#160;</div>
-<div class="line"><a name="l00450"></a><span class="lineno">  450</span>&#160;<span class="preprocessor">#include &quot;VPolytope.tpp&quot;</span></div>
+<div class="line"><a name="l00450"></a><span class="lineno">  450</span>&#160;}  <span class="comment">// namespace</span></div>
+<div class="line"><a name="l00451"></a><span class="lineno">  451</span>&#160;</div>
+<div class="line"><a name="l00452"></a><span class="lineno">  452</span>&#160;<span class="preprocessor">#include &quot;VPolytope.tpp&quot;</span></div>
 <div class="ttc" id="namespacehypro_html_aada824f660cac25bb643be870cdc0a86"><div class="ttname"><a href="namespacehypro.html#aada824f660cac25bb643be870cdc0a86">hypro::representation_name</a></div><div class="ttdeci">representation_name</div><div class="ttdoc">Enum encapsulating all provided state set representations to be able to determine a type...</div><div class="ttdef"><b>Definition:</b> <a href="representations_2types_8h_source.html#l00008">types.h:8</a></div></div>
 <div class="ttc" id="classhypro_1_1VPolytopeT_html_aa3897fe113359146138d2c84abd06752"><div class="ttname"><a href="classhypro_1_1VPolytopeT.html#aa3897fe113359146138d2c84abd06752">hypro::VPolytopeT::empty</a></div><div class="ttdeci">bool empty() const </div><div class="ttdoc">Checks if the polytope represents the empty set. </div><div class="ttdef"><b>Definition:</b> <a href="VPolytope_8h_source.html#l00218">VPolytope.h:218</a></div></div>
 <div class="ttc" id="classhypro_1_1VPolytopeT_html_ac8ef11edeefbb938a05c140ec72cfee5"><div class="ttname"><a href="classhypro_1_1VPolytopeT.html#ac8ef11edeefbb938a05c140ec72cfee5">hypro::VPolytopeT::~VPolytopeT</a></div><div class="ttdeci">~VPolytopeT()</div><div class="ttdoc">Destroys the object. </div><div class="ttdef"><b>Definition:</b> <a href="VPolytope_8h_source.html#l00096">VPolytope.h:96</a></div></div>
 <div class="ttc" id="classhypro_1_1VPolytopeT_html_a1121ee3ad173f9ed6c0be6b282c7622d"><div class="ttname"><a href="classhypro_1_1VPolytopeT.html#a1121ee3ad173f9ed6c0be6b282c7622d">hypro::VPolytopeT::unite</a></div><div class="ttdeci">VPolytopeT unite(const VPolytopeT &amp;rhs) const </div><div class="ttdoc">Computes the convex hull of this and the right hand side polytope. </div></div>
+<div class="ttc" id="classhypro_1_1Location_html"><div class="ttname"><a href="classhypro_1_1Location.html">hypro::Location</a></div><div class="ttdoc">Class for a single location of a hybrid automaton. </div><div class="ttdef"><b>Definition:</b> <a href="Location_8h_source.html#l00024">Location.h:24</a></div></div>
 <div class="ttc" id="classhypro_1_1Point_html"><div class="ttname"><a href="classhypro_1_1Point.html">hypro::Point</a></div><div class="ttdoc">Class for a point. </div><div class="ttdef"><b>Definition:</b> <a href="Point_8h_source.html#l00025">Point.h:25</a></div></div>
 <div class="ttc" id="namespacehypro_html_a52a4896e811a0710bcfc5a410a780034"><div class="ttname"><a href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">hypro::matrix_t</a></div><div class="ttdeci">Eigen::Matrix&lt; Number, Eigen::Dynamic, Eigen::Dynamic &gt; matrix_t</div><div class="ttdef"><b>Definition:</b> <a href="types_8h_source.html#l00027">types.h:27</a></div></div>
 <div class="ttc" id="classhypro_1_1VPolytopeT_html_a6bf5683c7447ca454c0f5e2c64db2ce4"><div class="ttname"><a href="classhypro_1_1VPolytopeT.html#a6bf5683c7447ca454c0f5e2c64db2ce4">hypro::VPolytopeT::contains</a></div><div class="ttdeci">bool contains(const Point&lt; Number &gt; &amp;point) const </div><div class="ttdoc">Checks if a point is contained in the polytope. </div></div>
@@ -443,6 +446,7 @@ $(document).ready(function(){initNavTree('VPolytope_8h_source.html','');});
 <div class="ttc" id="classhypro_1_1VPolytopeT_html_aa0f568279ad700889dbe2d708b9ccccd"><div class="ttname"><a href="classhypro_1_1VPolytopeT.html#aa0f568279ad700889dbe2d708b9ccccd">hypro::VPolytopeT::project</a></div><div class="ttdeci">VPolytopeT project(const std::vector&lt; unsigned &gt; &amp;dimensions) const </div><div class="ttdoc">Projects the polytope on the passed dimensions. </div></div>
 <div class="ttc" id="classhypro_1_1Cone_html"><div class="ttname"><a href="classhypro_1_1Cone.html">hypro::Cone</a></div><div class="ttdef"><b>Definition:</b> <a href="Cone_8h_source.html#l00022">Cone.h:22</a></div></div>
 <div class="ttc" id="classhypro_1_1VPolytopeT_html_a0ea8f9617dcaa57cabfd1384e2192082"><div class="ttname"><a href="classhypro_1_1VPolytopeT.html#a0ea8f9617dcaa57cabfd1384e2192082">hypro::VPolytopeT::cone</a></div><div class="ttdeci">const Cone&lt; Number &gt; &amp; cone() const </div><div class="ttdoc">Returns the cone of this. </div><div class="ttdef"><b>Definition:</b> <a href="VPolytope_8h_source.html#l00263">VPolytope.h:263</a></div></div>
+<div class="ttc" id="classhypro_1_1VPolytopeT_html_a7af34bcb9e3d970727059224dcc3ef8c"><div class="ttname"><a href="classhypro_1_1VPolytopeT.html#a7af34bcb9e3d970727059224dcc3ef8c">hypro::VPolytopeT::vertices</a></div><div class="ttdeci">std::vector&lt; Point&lt; Number &gt; &gt; vertices(const Location&lt; Number &gt; *=nullptr) const </div><div class="ttdoc">Computes the set of extreme vertices, whose convex hull is the smallest convex set containing this se...</div><div class="ttdef"><b>Definition:</b> <a href="VPolytope_8h_source.html#l00324">VPolytope.h:324</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- HTML footer for doxygen 1.8.12-->

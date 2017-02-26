@@ -151,12 +151,12 @@ std::vector&lt; <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; Numb
 <tr class="memitem:a4a8e244abd470060fc5313fe0c41d2e8"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4a8e244abd470060fc5313fe0c41d2e8"></a>
 <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; Number &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>supremumPoint</b> () const </td></tr>
 <tr class="separator:a4a8e244abd470060fc5313fe0c41d2e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5e3ce748d0b4370d4016355db465663f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structhypro_1_1EvaluationResult.html">EvaluationResult</a>&lt; Number &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1PolytopeSupportFunction.html#a5e3ce748d0b4370d4016355db465663f">evaluate</a> (const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;l) const </td></tr>
-<tr class="separator:a5e3ce748d0b4370d4016355db465663f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a836f9159ee9891c898191c833c8a0352"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="structhypro_1_1EvaluationResult.html">EvaluationResult</a><br class="typebreak"/>
-&lt; Number &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1PolytopeSupportFunction.html#a836f9159ee9891c898191c833c8a0352">multiEvaluate</a> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;_A) const </td></tr>
-<tr class="memdesc:a836f9159ee9891c898191c833c8a0352"><td class="mdescLeft">&#160;</td><td class="mdescRight">Evaluates the support function in the directions given in the passed matrix.  <a href="#a836f9159ee9891c898191c833c8a0352">More...</a><br/></td></tr>
-<tr class="separator:a836f9159ee9891c898191c833c8a0352"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae4ebb4686ed603e4b84bdde09eed029b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structhypro_1_1EvaluationResult.html">EvaluationResult</a>&lt; Number &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1PolytopeSupportFunction.html#ae4ebb4686ed603e4b84bdde09eed029b">evaluate</a> (const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;l, bool useExact) const </td></tr>
+<tr class="separator:ae4ebb4686ed603e4b84bdde09eed029b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a439527356f046467eceed47615de3753"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="structhypro_1_1EvaluationResult.html">EvaluationResult</a><br class="typebreak"/>
+&lt; Number &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1PolytopeSupportFunction.html#a439527356f046467eceed47615de3753">multiEvaluate</a> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;_A, bool useExact) const </td></tr>
+<tr class="memdesc:a439527356f046467eceed47615de3753"><td class="mdescLeft">&#160;</td><td class="mdescRight">Evaluates the support function in the directions given in the passed matrix.  <a href="#a439527356f046467eceed47615de3753">More...</a><br/></td></tr>
+<tr class="separator:a439527356f046467eceed47615de3753"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac6a2ce4737e4f4b29189fc3b3ed21858"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1PolytopeSupportFunction.html#ac6a2ce4737e4f4b29189fc3b3ed21858">contains</a> (const <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; Number &gt; &amp;_point) const </td></tr>
 <tr class="memdesc:ac6a2ce4737e4f4b29189fc3b3ed21858"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if point is contained in the support function.  <a href="#ac6a2ce4737e4f4b29189fc3b3ed21858">More...</a><br/></td></tr>
 <tr class="separator:ac6a2ce4737e4f4b29189fc3b3ed21858"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -258,7 +258,7 @@ template&lt;typename Number&gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="a5e3ce748d0b4370d4016355db465663f"></a>
+<a class="anchor" id="ae4ebb4686ed603e4b84bdde09eed029b"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
@@ -268,8 +268,18 @@ template&lt;typename Number&gt; </div>
           <td class="memname"><a class="el" href="structhypro_1_1EvaluationResult.html">EvaluationResult</a>&lt;Number&gt; <a class="el" href="classhypro_1_1PolytopeSupportFunction.html">hypro::PolytopeSupportFunction</a>&lt; Number &gt;::evaluate </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;&#160;</td>
-          <td class="paramname"><em>l</em></td><td>)</td>
-          <td> const</td>
+          <td class="paramname"><em>l</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>useExact</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -284,7 +294,7 @@ template&lt;typename Number&gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="a836f9159ee9891c898191c833c8a0352"></a>
+<a class="anchor" id="a439527356f046467eceed47615de3753"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
@@ -294,8 +304,18 @@ template&lt;typename Number&gt; </div>
           <td class="memname">std::vector&lt;<a class="el" href="structhypro_1_1EvaluationResult.html">EvaluationResult</a>&lt;Number&gt; &gt; <a class="el" href="classhypro_1_1PolytopeSupportFunction.html">hypro::PolytopeSupportFunction</a>&lt; Number &gt;::multiEvaluate </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;&#160;</td>
-          <td class="paramname"><em>_A</em></td><td>)</td>
-          <td> const</td>
+          <td class="paramname"><em>_A</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>useExact</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
         </tr>
       </table>
 </div><div class="memdoc">

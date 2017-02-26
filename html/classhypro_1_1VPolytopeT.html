@@ -242,8 +242,8 @@ pointVector::iterator&#160;</td><td class="memItemRight" valign="bottom"><b>inse
 <tr class="memitem:ac5d1019d396ee24f86e554d54555a69e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac5d1019d396ee24f86e554d54555a69e"></a>
 pointVector::iterator&#160;</td><td class="memItemRight" valign="bottom"><b>insert</b> (const typename pointVector::const_iterator begin, const typename pointVector::const_iterator end)</td></tr>
 <tr class="separator:ac5d1019d396ee24f86e554d54555a69e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7af34bcb9e3d970727059224dcc3ef8c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7af34bcb9e3d970727059224dcc3ef8c"></a>
-std::vector&lt; <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; Number &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>vertices</b> (const <a class="el" href="classhypro_1_1Location.html">Location</a>&lt; Number &gt; *=nullptr) const </td></tr>
+<tr class="memitem:a7af34bcb9e3d970727059224dcc3ef8c"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; Number &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1VPolytopeT.html#a7af34bcb9e3d970727059224dcc3ef8c">vertices</a> (const <a class="el" href="classhypro_1_1Location.html">Location</a>&lt; Number &gt; *=nullptr) const </td></tr>
+<tr class="memdesc:a7af34bcb9e3d970727059224dcc3ef8c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the set of extreme vertices, whose convex hull is the smallest convex set containing this set.  <a href="#a7af34bcb9e3d970727059224dcc3ef8c">More...</a><br/></td></tr>
 <tr class="separator:a7af34bcb9e3d970727059224dcc3ef8c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac5d46a5456072d2bb9c90862ab919447"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac5d46a5456072d2bb9c90862ab919447"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>hasVertex</b> (const <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; Number &gt; &amp;vertex) const </td></tr>
@@ -287,13 +287,17 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>updateNeighbors</b> (
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator==</b> (const <a class="el" href="classhypro_1_1VPolytopeT.html">VPolytopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt; &amp;rhs) const </td></tr>
 <tr class="separator:a6b1b20d62c33ad421bfe55e0d5a3fb3d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classhypro_1_1GeometricObject"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classhypro_1_1GeometricObject')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classhypro_1_1GeometricObject.html">hypro::GeometricObject&lt; Number, VPolytopeT&lt; Number, Converter &gt; &gt;</a></td></tr>
-<tr class="memitem:a6d5b4a8d675cbe9da63408a5beab8460 inherit pub_methods_classhypro_1_1GeometricObject"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6d5b4a8d675cbe9da63408a5beab8460"></a>
-virtual <a class="el" href="classhypro_1_1VPolytopeT.html">VPolytopeT</a>&lt; Number, <br class="typebreak"/>
-<a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>minkowskiSum</b> (const <a class="el" href="classhypro_1_1VPolytopeT.html">VPolytopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt; &amp;rhs) const =0</td></tr>
+<tr class="memitem:a28cf65685f4fa5e04c3dbf428a9d97b0 inherit pub_methods_classhypro_1_1GeometricObject"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a28cf65685f4fa5e04c3dbf428a9d97b0"></a>
+virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1GeometricObject.html#a28cf65685f4fa5e04c3dbf428a9d97b0">~GeometricObject</a> ()</td></tr>
+<tr class="memdesc:a28cf65685f4fa5e04c3dbf428a9d97b0 inherit pub_methods_classhypro_1_1GeometricObject"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destroys the object. <br/></td></tr>
+<tr class="separator:a28cf65685f4fa5e04c3dbf428a9d97b0 inherit pub_methods_classhypro_1_1GeometricObject"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6d5b4a8d675cbe9da63408a5beab8460 inherit pub_methods_classhypro_1_1GeometricObject"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classhypro_1_1VPolytopeT.html">VPolytopeT</a>&lt; Number, <br class="typebreak"/>
+<a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1GeometricObject.html#a6d5b4a8d675cbe9da63408a5beab8460">minkowskiSum</a> (const <a class="el" href="classhypro_1_1VPolytopeT.html">VPolytopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt; &amp;rhs) const =0</td></tr>
+<tr class="memdesc:a6d5b4a8d675cbe9da63408a5beab8460 inherit pub_methods_classhypro_1_1GeometricObject"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes Minkowski's sum of the current set and the passed set.  <a href="#a6d5b4a8d675cbe9da63408a5beab8460">More...</a><br/></td></tr>
 <tr class="separator:a6d5b4a8d675cbe9da63408a5beab8460 inherit pub_methods_classhypro_1_1GeometricObject"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3ed4020101437144b34b62cc01d5bf01 inherit pub_methods_classhypro_1_1GeometricObject"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3ed4020101437144b34b62cc01d5bf01"></a>
-virtual <a class="el" href="classhypro_1_1VPolytopeT.html">VPolytopeT</a>&lt; Number, <br class="typebreak"/>
-<a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>unite</b> (const <a class="el" href="classhypro_1_1VPolytopeT.html">VPolytopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt; &amp;rhs) const =0</td></tr>
+<tr class="memitem:a3ed4020101437144b34b62cc01d5bf01 inherit pub_methods_classhypro_1_1GeometricObject"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classhypro_1_1VPolytopeT.html">VPolytopeT</a>&lt; Number, <br class="typebreak"/>
+<a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1GeometricObject.html#a3ed4020101437144b34b62cc01d5bf01">unite</a> (const <a class="el" href="classhypro_1_1VPolytopeT.html">VPolytopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt; &amp;rhs) const =0</td></tr>
+<tr class="memdesc:a3ed4020101437144b34b62cc01d5bf01 inherit pub_methods_classhypro_1_1GeometricObject"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the convex hull of the union of the set and the passed set.  <a href="#a3ed4020101437144b34b62cc01d5bf01">More...</a><br/></td></tr>
 <tr class="separator:a3ed4020101437144b34b62cc01d5bf01 inherit pub_methods_classhypro_1_1GeometricObject"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
@@ -548,7 +552,7 @@ template&lt;typename Number , typename Converter &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The resulting object. </dd></dl>
 
-<p>Implements <a class="el" href="classhypro_1_1GeometricObject.html">hypro::GeometricObject&lt; Number, VPolytopeT&lt; Number, Converter &gt; &gt;</a>.</p>
+<p>Implements <a class="el" href="classhypro_1_1GeometricObject.html#a607fb37c2b6a0d9a59ed85d07160392a">hypro::GeometricObject&lt; Number, VPolytopeT&lt; Number, Converter &gt; &gt;</a>.</p>
 
 </div>
 </div>
@@ -615,7 +619,7 @@ template&lt;typename Number , typename Converter &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True, if the point lies inside the polytope. </dd></dl>
 
-<p>Implements <a class="el" href="classhypro_1_1GeometricObject.html">hypro::GeometricObject&lt; Number, VPolytopeT&lt; Number, Converter &gt; &gt;</a>.</p>
+<p>Implements <a class="el" href="classhypro_1_1GeometricObject.html#a44bae859470ea4cb3bc74c16f94b9638">hypro::GeometricObject&lt; Number, VPolytopeT&lt; Number, Converter &gt; &gt;</a>.</p>
 
 </div>
 </div>
@@ -699,7 +703,7 @@ template&lt;typename Number , typename Converter &gt; </div>
 <p>Returns the space dimension. </p>
 <dl class="section return"><dt>Returns</dt><dd>The space dimension. </dd></dl>
 
-<p>Implements <a class="el" href="classhypro_1_1GeometricObject.html">hypro::GeometricObject&lt; Number, VPolytopeT&lt; Number, Converter &gt; &gt;</a>.</p>
+<p>Implements <a class="el" href="classhypro_1_1GeometricObject.html#aecbf17700fe297f643f401b7ae17dd9c">hypro::GeometricObject&lt; Number, VPolytopeT&lt; Number, Converter &gt; &gt;</a>.</p>
 
 <p>Definition at line <a class="el" href="VPolytope_8h_source.html#l00230">230</a> of file <a class="el" href="VPolytope_8h_source.html">VPolytope.h</a>.</p>
 
@@ -731,7 +735,7 @@ template&lt;typename Number , typename Converter &gt; </div>
 <p>Checks if the polytope represents the empty set. </p>
 <dl class="section return"><dt>Returns</dt><dd>True if there are no vertices. </dd></dl>
 
-<p>Implements <a class="el" href="classhypro_1_1GeometricObject.html">hypro::GeometricObject&lt; Number, VPolytopeT&lt; Number, Converter &gt; &gt;</a>.</p>
+<p>Implements <a class="el" href="classhypro_1_1GeometricObject.html#a3de514fbb8514689331e65a247a64927">hypro::GeometricObject&lt; Number, VPolytopeT&lt; Number, Converter &gt; &gt;</a>.</p>
 
 <p>Definition at line <a class="el" href="VPolytope_8h_source.html#l00218">218</a> of file <a class="el" href="VPolytope_8h_source.html">VPolytope.h</a>.</p>
 
@@ -829,7 +833,7 @@ template&lt;typename Number , typename Converter &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The resulting object. </dd></dl>
 
-<p>Implements <a class="el" href="classhypro_1_1GeometricObject.html">hypro::GeometricObject&lt; Number, VPolytopeT&lt; Number, Converter &gt; &gt;</a>.</p>
+<p>Implements <a class="el" href="classhypro_1_1GeometricObject.html#a478635198d1f273913e9438b08baa858">hypro::GeometricObject&lt; Number, VPolytopeT&lt; Number, Converter &gt; &gt;</a>.</p>
 
 </div>
 </div>
@@ -877,7 +881,7 @@ template&lt;typename Number , typename Converter &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The resulting object. </dd></dl>
 
-<p>Implements <a class="el" href="classhypro_1_1GeometricObject.html">hypro::GeometricObject&lt; Number, VPolytopeT&lt; Number, Converter &gt; &gt;</a>.</p>
+<p>Implements <a class="el" href="classhypro_1_1GeometricObject.html#a44174a8a83b9f3328daa3fd6d61ae6cd">hypro::GeometricObject&lt; Number, VPolytopeT&lt; Number, Converter &gt; &gt;</a>.</p>
 
 </div>
 </div>
@@ -914,7 +918,7 @@ template&lt;typename Number , typename Converter &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The resulting object. </dd></dl>
 
-<p>Implements <a class="el" href="classhypro_1_1GeometricObject.html">hypro::GeometricObject&lt; Number, VPolytopeT&lt; Number, Converter &gt; &gt;</a>.</p>
+<p>Implements <a class="el" href="classhypro_1_1GeometricObject.html#aa8ba3e6ef5dd89dec24c4876b9b85d55">hypro::GeometricObject&lt; Number, VPolytopeT&lt; Number, Converter &gt; &gt;</a>.</p>
 
 </div>
 </div>
@@ -978,7 +982,7 @@ template&lt;typename Number , typename Converter &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The projected polytope. </dd></dl>
 
-<p>Implements <a class="el" href="classhypro_1_1GeometricObject.html">hypro::GeometricObject&lt; Number, VPolytopeT&lt; Number, Converter &gt; &gt;</a>.</p>
+<p>Implements <a class="el" href="classhypro_1_1GeometricObject.html#a9dc6d2b65cc0342a998e81db64d86938">hypro::GeometricObject&lt; Number, VPolytopeT&lt; Number, Converter &gt; &gt;</a>.</p>
 
 </div>
 </div>
@@ -1045,7 +1049,7 @@ template&lt;typename Number , typename Converter &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A pair of a Boolean and a polytope. The Boolean states if the resulting polytope is empty. </dd></dl>
 
-<p>Implements <a class="el" href="classhypro_1_1GeometricObject.html">hypro::GeometricObject&lt; Number, VPolytopeT&lt; Number, Converter &gt; &gt;</a>.</p>
+<p>Implements <a class="el" href="classhypro_1_1GeometricObject.html#a45218953a280ddc544176842774346c8">hypro::GeometricObject&lt; Number, VPolytopeT&lt; Number, Converter &gt; &gt;</a>.</p>
 
 </div>
 </div>
@@ -1093,7 +1097,7 @@ template&lt;typename Number , typename Converter &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A pair of a Boolean and a polytope. The Boolean states if the resulting polytope is empty. </dd></dl>
 
-<p>Implements <a class="el" href="classhypro_1_1GeometricObject.html">hypro::GeometricObject&lt; Number, VPolytopeT&lt; Number, Converter &gt; &gt;</a>.</p>
+<p>Implements <a class="el" href="classhypro_1_1GeometricObject.html#acddc7fbfe0fde344fa0c66c155bdc6a2">hypro::GeometricObject&lt; Number, VPolytopeT&lt; Number, Converter &gt; &gt;</a>.</p>
 
 </div>
 </div>
@@ -1264,6 +1268,39 @@ template&lt;typename Number , typename Converter &gt; </div>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The resulting object. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a7af34bcb9e3d970727059224dcc3ef8c"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number , typename Converter &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;<a class="el" href="classhypro_1_1Point.html">Point</a>&lt;Number&gt; &gt; <a class="el" href="classhypro_1_1VPolytopeT.html">hypro::VPolytopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt;::vertices </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classhypro_1_1Location.html">Location</a>&lt; Number &gt; *&#160;</td>
+          <td class="paramname"> = <code>nullptr</code></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Computes the set of extreme vertices, whose convex hull is the smallest convex set containing this set. </p>
+<dl class="section return"><dt>Returns</dt><dd>A set of extreme vertices. </dd></dl>
+
+<p>Implements <a class="el" href="classhypro_1_1GeometricObject.html#a2e9b23a267023e8bf2ce5b36d14f1de5">hypro::GeometricObject&lt; Number, VPolytopeT&lt; Number, Converter &gt; &gt;</a>.</p>
+
+<p>Definition at line <a class="el" href="VPolytope_8h_source.html#l00324">324</a> of file <a class="el" href="VPolytope_8h_source.html">VPolytope.h</a>.</p>
 
 </div>
 </div>
