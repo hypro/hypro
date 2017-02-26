@@ -17,6 +17,6 @@ elif [[ ${COMPILER} == "clang++-3.4" ]]; then
 	echo "clang++-3.4 is not supported"
 	#install clang-3.4
 	#defCXX clang-3.4 clang++-3.4
-elif [[ ${COMPILER} == "clang++-3.5" ]]; then
+elif [[ ${COMPILER} == "clang++" ]]; then
 	defCXX clang clang++
 fi
