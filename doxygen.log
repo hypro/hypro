@@ -438,8 +438,6 @@ Please use a more specific name by including a (larger) part of the path!
 
 /home/travis/build/hypro/hypro/src/hypro/util/Plotter.h:69: warning: documented symbol `Singleton< Plotter< Number > >' was not declared or defined.
 /home/travis/build/hypro/hypro/src/hypro/util/VariablePool.h:28: warning: documented symbol `Singleton< VariablePool >' was not declared or defined.
-error opening bib10996.bbl: No such file or directory
-bibtex command failed: No such file or directory
 le_zonotope.cpp...
 Preprocessing /home/travis/build/hypro/hypro/examples/INCOMPLETE_example_benchmarks.cpp...
 Parsing file /home/travis/build/hypro/hypro/examples/INCOMPLETE_example_benchmarks.cpp...
@@ -703,7 +701,10 @@ Generating docs for page md__home_travis_build_hypro_hypro_doc_markdown_stateSet
 Generating docs for page md__home_travis_build_hypro_hypro_doc_markdown_stateSetRepresentations_usage...
 Generating docs for page md__home_travis_build_hypro_hypro_doc_markdown_stateSets...
 Generating docs for page plotting...
-Generating docs for page /home/travis/build/hypro/hypro/src/hypro/util/multithreading/ScopedLock.h:14: warning: Member ScopedLock(Lockable &mtx) (function) of class ScopedLock is not documented.
+Generating docs for page citelist:11: warning: Unexpected new line character
+citelist:21: warning: Unexpected new line character
+citelist:22: warning: Unexpected new line character
+/home/travis/build/hypro/hypro/src/hypro/util/multithreading/ScopedLock.h:14: warning: Member ScopedLock(Lockable &mtx) (function) of class ScopedLock is not documented.
 /home/travis/build/hypro/hypro/src/hypro/types.h:57: warning: Member Real (typedef) of class Eigen::NumTraits< carl::FLOAT_T< Number > > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/types.h:58: warning: Member NonInteger (typedef) of class Eigen::NumTraits< carl::FLOAT_T< Number > > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/types.h:59: warning: Member Nested (typedef) of class Eigen::NumTraits< carl::FLOAT_T< Number > > is not documented.
@@ -2231,10 +2232,100 @@ Generating dependency graph for directory /home/travis/build/hypro/hypro/src/hyp
 Generating dependency graph for directory /home/travis/build/hypro/hypro/src/hypro
 Generating dependency graph for directory /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization
 Generating dependency graph for directory /home/travis/build/hypro/hypro/src/hypro/util/logging
-Generating dependency graph for directory /home/travis/build/hypro/hypro/src/hypro/util/multithreadsh: 1: latex: not found
-error: Problems running latex. Check your installation or look for typos in _formulas.tex and check _formulas.log!
-sh: 1: dvips: not found
-error: Problems running dvips. Check your installation!
+Generating dependency graph for directory /home/travis/build/hypro/hypro/src/hypro/util/multithreadThis is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian)
+ restricted \write18 enabled.
+entering extended mode
+(./_formulas.tex
+LaTeX2e <2011/06/27>
+Babel <3.9h> and hyphenation patterns for 2 languages loaded.
+(/usr/share/texlive/texmf-dist/tex/latex/base/article.cls
+Document Class: article 2007/10/19 v1.4h Standard LaTeX document class
+(/usr/share/texlive/texmf-dist/tex/latex/base/size10.clo))
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/epsfig.sty
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/graphicx.sty
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/keyval.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/graphics.sty
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/trig.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/latexconfig/graphics.cfg)
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/dvips.def))))
+(/usr/share/texlive/texmf-dist/tex/latex/amsfonts/amsfonts.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsmath.sty
+For additional information on amsmath, use the `?' option.
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amstext.sty
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsgen.sty))
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsbsy.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsopn.sty))
+(/usr/share/texmf/tex/latex/pgf/frontendlayer/tikz.sty
+(/usr/share/texmf/tex/latex/pgf/basiclayer/pgf.sty
+(/usr/share/texmf/tex/latex/pgf/utilities/pgfrcs.sty
+(/usr/share/texmf/tex/generic/pgf/utilities/pgfutil-common.tex)
+(/usr/share/texmf/tex/generic/pgf/utilities/pgfutil-latex.def
+(/usr/share/texlive/texmf-dist/tex/latex/ms/everyshi.sty))
+(/usr/share/texmf/tex/generic/pgf/utilities/pgfrcs.code.tex))
+(/usr/share/texmf/tex/latex/pgf/basiclayer/pgfcore.sty
+(/usr/share/texmf/tex/latex/pgf/systemlayer/pgfsys.sty
+(/usr/share/texmf/tex/generic/pgf/systemlayer/pgfsys.code.tex
+(/usr/share/texmf/tex/generic/pgf/utilities/pgfkeys.code.tex
+(/usr/share/texmf/tex/generic/pgf/utilities/pgfkeysfiltered.code.tex))
+(/usr/share/texmf/tex/generic/pgf/systemlayer/pgf.cfg)
+(/usr/share/texmf/tex/generic/pgf/systemlayer/pgfsys-dvips.def
+(/usr/share/texmf/tex/generic/pgf/systemlayer/pgfsys-common-postscript.def)))
+(/usr/share/texmf/tex/generic/pgf/systemlayer/pgfsyssoftpath.code.tex)
+(/usr/share/texmf/tex/generic/pgf/systemlayer/pgfsysprotocol.code.tex))
+(/usr/share/texmf/tex/latex/xcolor/xcolor.sty
+(/usr/share/texlive/texmf-dist/tex/latex/latexconfig/color.cfg))
+(/usr/share/texmf/tex/generic/pgf/basiclayer/pgfcore.code.tex
+(/usr/share/texmf/tex/generic/pgf/math/pgfmath.code.tex
+(/usr/share/texmf/tex/generic/pgf/math/pgfmathcalc.code.tex
+(/usr/share/texmf/tex/generic/pgf/math/pgfmathutil.code.tex)
+(/usr/share/texmf/tex/generic/pgf/math/pgfmathparser.code.tex)
+(/usr/share/texmf/tex/generic/pgf/math/pgfmathfunctions.code.tex
+(/usr/share/texmf/tex/generic/pgf/math/pgfmathfunctions.basic.code.tex)
+(/usr/share/texmf/tex/generic/pgf/math/pgfmathfunctions.trigonometric.code.tex)
+(/usr/share/texmf/tex/generic/pgf/math/pgfmathfunctions.random.code.tex)
+(/usr/share/texmf/tex/generic/pgf/math/pgfmathfunctions.comparison.code.tex)
+(/usr/share/texmf/tex/generic/pgf/math/pgfmathfunctions.base.code.tex)
+(/usr/share/texmf/tex/generic/pgf/math/pgfmathfunctions.round.code.tex)
+(/usr/share/texmf/tex/generic/pgf/math/pgfmathfunctions.misc.code.tex)))
+(/usr/share/texmf/tex/generic/pgf/math/pgfmathfloat.code.tex))
+(/usr/share/texmf/tex/generic/pgf/basiclayer/pgfcorepoints.code.tex)
+(/usr/share/texmf/tex/generic/pgf/basiclayer/pgfcorepathconstruct.code.tex)
+(/usr/share/texmf/tex/generic/pgf/basiclayer/pgfcorepathusage.code.tex)
+(/usr/share/texmf/tex/generic/pgf/basiclayer/pgfcorescopes.code.tex)
+(/usr/share/texmf/tex/generic/pgf/basiclayer/pgfcoregraphicstate.code.tex)
+(/usr/share/texmf/tex/generic/pgf/basiclayer/pgfcoretransformations.code.tex)
+(/usr/share/texmf/tex/generic/pgf/basiclayer/pgfcorequick.code.tex)
+(/usr/share/texmf/tex/generic/pgf/basiclayer/pgfcoreobjects.code.tex)
+(/usr/share/texmf/tex/generic/pgf/basiclayer/pgfcorepathprocessing.code.tex)
+(/usr/share/texmf/tex/generic/pgf/basiclayer/pgfcorearrows.code.tex)
+(/usr/share/texmf/tex/generic/pgf/basiclayer/pgfcoreshade.code.tex)
+(/usr/share/texmf/tex/generic/pgf/basiclayer/pgfcoreimage.code.tex
+(/usr/share/texmf/tex/generic/pgf/basiclayer/pgfcoreexternal.code.tex))
+(/usr/share/texmf/tex/generic/pgf/basiclayer/pgfcorelayers.code.tex)
+(/usr/share/texmf/tex/generic/pgf/basiclayer/pgfcoretransparency.code.tex)
+(/usr/share/texmf/tex/generic/pgf/basiclayer/pgfcorepatterns.code.tex)))
+(/usr/share/texmf/tex/generic/pgf/modules/pgfmoduleshapes.code.tex)
+(/usr/share/texmf/tex/generic/pgf/modules/pgfmoduleplot.code.tex)
+(/usr/share/texmf/tex/latex/pgf/compatibility/pgfcomp-version-0-65.sty)
+(/usr/share/texmf/tex/latex/pgf/compatibility/pgfcomp-version-1-18.sty))
+(/usr/share/texmf/tex/latex/pgf/utilities/pgffor.sty
+(/usr/share/texmf/tex/latex/pgf/utilities/pgfkeys.sty
+(/usr/share/texmf/tex/generic/pgf/utilities/pgfkeys.code.tex))
+(/usr/share/texmf/tex/generic/pgf/utilities/pgffor.code.tex))
+(/usr/share/texmf/tex/generic/pgf/frontendlayer/tikz/tikz.code.tex
+(/usr/share/texmf/tex/generic/pgf/libraries/pgflibraryplothandlers.code.tex)
+(/usr/share/texmf/tex/generic/pgf/modules/pgfmodulematrix.code.tex)
+(/usr/share/texmf/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibrarytopat
+hs.code.tex)))
+No file _formulas.aux.
+ABD: EveryShipout initializing macros
+(/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd)
+(/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd) [1] [2] [3] [4]
+[5] [6] [7] [8] [9] [10] [11] [12] [13] [14] [15] [16] [17] [18] [19] [20]
+[21] [22] [23] [24] [25] [26] [27] [28] [29] [30] [31] [32] [33] [34] [35]
+[36] (./_formulas.aux) )
+Output written on _formulas.dvi (36 pages, 12508 bytes).
+Transcript written on _formulas.log.
 /home/travis/build/hypro/hypro/doc/markdown/hypro.md:6: warning: unable to resolve reference to `installation' for \ref command
 /home/travis/build/hypro/hypro/doc/markdown/hypro.md:8: warning: unable to resolve reference to `stateSets' for \ref command
 ing
@@ -2257,6 +2348,41 @@ Generating dependency graph for directory /home/travis/build/hypro/hypro/src/hyp
 Generating dependency graph for directory /home/travis/build/hypro/hypro/src/hypro/representations/Zonotope
 Generating bitmaps for formulas in HTML...
 Generating image form_0.png for formula
+Generating image form_1.png for formula
+Generating image form_2.png for formula
+Generating image form_3.png for formula
+Generating image form_4.png for formula
+Generating image form_5.png for formula
+Generating image form_6.png for formula
+Generating image form_7.png for formula
+Generating image form_8.png for formula
+Generating image form_9.png for formula
+Generating image form_10.png for formula
+Generating image form_11.png for formula
+Generating image form_12.png for formula
+Generating image form_13.png for formula
+Generating image form_14.png for formula
+Generating image form_15.png for formula
+Generating image form_16.png for formula
+Generating image form_17.png for formula
+Generating image form_18.png for formula
+Generating image form_19.png for formula
+Generating image form_20.png for formula
+Generating image form_21.png for formula
+Generating image form_22.png for formula
+Generating image form_23.png for formula
+Generating image form_24.png for formula
+Generating image form_25.png for formula
+Generating image form_26.png for formula
+Generating image form_27.png for formula
+Generating image form_28.png for formula
+Generating image form_29.png for formula
+Generating image form_30.png for formula
+Generating image form_31.png for formula
+Generating image form_32.png for formula
+Generating image form_33.png for formula
+Generating image form_34.png for formula
+Generating image form_35.png for formula
 Generating index page...
 Generating page index...
 Generating module index...
