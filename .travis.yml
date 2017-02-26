@@ -49,7 +49,8 @@ addons:
       - clang-3.9
       - libglpk-dev
       - graphviz
-      - latex
+      - texlive-latex-extra
+      - texlive-latex-recommended
 
 matrix:
   include:
