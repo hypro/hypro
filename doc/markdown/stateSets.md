@@ -1,4 +1,4 @@
-# State set represetations {#stateSets}
+# State set representations {#stateSets}
 
 Here we show general information about the provided state set representations as well as usage examples.
 
