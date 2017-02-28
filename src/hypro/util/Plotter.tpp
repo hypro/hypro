@@ -28,7 +28,7 @@ plotting::gnuplotSettings& Plotter<Number>::rSettings() {
 
 template <typename Number>
 void Plotter<Number>::plot2d() const {
-	mOutfile.open( mFilename + ".plt" );
+	mOutfile.open( mFilename + "_pdf.plt" );
 
 	if ( (!mObjects.empty() && !mObjects.begin()->second.empty()) || !mPoints.empty() ) {
 
@@ -44,14 +44,13 @@ void Plotter<Number>::plot2d() const {
 		writeGnuplot();
 	}
 
-	std::cout << std::endl << "Plotted to " << mFilename << ".plt" << std::endl;
+	std::cout << std::endl << "Plotted to " << mFilename << "_pdf.plt" << std::endl;
 	mOutfile.close();
 }
 
 template<typename Number>
 void Plotter<Number>::plotTex() const {
-
-	mOutfile.open( mFilename + ".plt" );
+	mOutfile.open( mFilename + "_tex.plt" );
 	if ( (!mObjects.empty() && !mObjects.begin()->second.empty()) || !mPoints.empty() ) {
 
 		// preamble
@@ -66,7 +65,7 @@ void Plotter<Number>::plotTex() const {
 		writeGnuplot();
 	}
 
-	std::cout << std::endl << "Plotted to " << mFilename << ".plt" << std::endl;
+	std::cout << std::endl << "Plotted to " << mFilename << "_tex.plt" << std::endl;
 	mOutfile.close();
 }
 

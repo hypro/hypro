@@ -113,11 +113,14 @@ class Plotter : public carl::Singleton<Plotter<Number>> {
 
 	/**
 	 * @brief      Creates a gnuplot file of the currently passed objects.
+	 * @details    The resulting *.plt file can be compiled to a pdf invoking gnuplot.
 	 */
 	void plot2d() const;
 
 	/**
 	 * @brief      Creates a LaTeX file of the currently passed objects.
+	 * @details    We use the gnuplot latex terminal type in standalone mode. Note that for Linux systems at least Texlive 2015 has to be
+	 * installed to be able to compile the resulting *.tex file.
 	 */
 	void plotTex() const;
 
