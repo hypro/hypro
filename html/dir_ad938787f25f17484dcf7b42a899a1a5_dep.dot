@@ -1,0 +1,22 @@
+digraph "/Users/travis/build/hypro/hypro/src/hypro/representations/Polytopes" {
+  compound=true
+  node [ fontsize="10", fontname="Helvetica"];
+  edge [ labelfontsize="10", labelfontname="Helvetica"];
+  subgraph clusterdir_7fa927d8fbf9dfbeef69af27f63bc81b {
+    graph [ bgcolor="#ddddee", pencolor="black", label="representations" fontname="Helvetica", fontsize="10", URL="dir_7fa927d8fbf9dfbeef69af27f63bc81b.html"]
+  subgraph clusterdir_ad938787f25f17484dcf7b42a899a1a5 {
+    graph [ bgcolor="#eeeeff", pencolor="black", label="" URL="dir_ad938787f25f17484dcf7b42a899a1a5.html"];
+    dir_ad938787f25f17484dcf7b42a899a1a5 [shape=plaintext label="Polytopes"];
+    dir_19f7ed9a1a9707d41c15619f6b9af49c [shape=box label="HPolytope" color="black" fillcolor="white" style="filled" URL="dir_19f7ed9a1a9707d41c15619f6b9af49c.html"];
+    dir_7ca784a8a47198f8f271993b816bdc67 [shape=box label="VPolytope" color="black" fillcolor="white" style="filled" URL="dir_7ca784a8a47198f8f271993b816bdc67.html"];
+  }
+  }
+  dir_879d833e0dfbe8f31a5e860bb94efb50 [shape=box label="util" fillcolor="white" style="filled" color="red" URL="dir_879d833e0dfbe8f31a5e860bb94efb50.html"];
+  dir_bce2075adec303dcb2f0c4fbfcbc8493 [shape=box label="datastructures" fillcolor="white" style="filled" color="red" URL="dir_bce2075adec303dcb2f0c4fbfcbc8493.html"];
+  dir_879d833e0dfbe8f31a5e860bb94efb50->dir_bce2075adec303dcb2f0c4fbfcbc8493 [headlabel="10", labeldistance=1.5 headhref="dir_000022_000010.html"];
+  dir_19f7ed9a1a9707d41c15619f6b9af49c->dir_879d833e0dfbe8f31a5e860bb94efb50 [headlabel="1", labeldistance=1.5 headhref="dir_000019_000022.html"];
+  dir_bce2075adec303dcb2f0c4fbfcbc8493->dir_879d833e0dfbe8f31a5e860bb94efb50 [headlabel="2", labeldistance=1.5 headhref="dir_000010_000022.html"];
+  dir_ad938787f25f17484dcf7b42a899a1a5->dir_bce2075adec303dcb2f0c4fbfcbc8493 [headlabel="3", labeldistance=1.5 headhref="dir_000018_000010.html"];
+  dir_7ca784a8a47198f8f271993b816bdc67->dir_879d833e0dfbe8f31a5e860bb94efb50 [headlabel="1", labeldistance=1.5 headhref="dir_000020_000022.html"];
+  dir_7ca784a8a47198f8f271993b816bdc67->dir_bce2075adec303dcb2f0c4fbfcbc8493 [headlabel="1", labeldistance=1.5 headhref="dir_000020_000010.html"];
+}
