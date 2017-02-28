@@ -2326,8 +2326,9 @@ ABD: EveryShipout initializing macros
 [36] (./_formulas.aux) )
 Output written on _formulas.dvi (36 pages, 12508 bytes).
 Transcript written on _formulas.log.
-/home/travis/build/hypro/hypro/doc/markdown/hypro.md:6: warning: unable to resolve reference to `installation' for \ref command
+/home/travis/build/hypro/hypro/doc/markdown/hypro.md:6: warning: unable to resolve reference to `gettingStarted' for \ref command
 /home/travis/build/hypro/hypro/doc/markdown/hypro.md:8: warning: unable to resolve reference to `stateSets' for \ref command
+/home/travis/build/hypro/hypro/doc/markdown/hypro.md:10: warning: unable to resolve reference to `utilFunc' for \ref command
 ing
 Generating dependency graph for directory /home/travis/build/hypro/hypro/src/hypro/representations/OrthogonalPolyhedron
 Generating dependency graph for directory /home/travis/build/hypro/hypro/src/hypro/parser
@@ -2559,5 +2560,5 @@ Patching output file 31/34
 Patching output file 32/34
 Patching output file 33/34
 Patching output file 34/34
-lookup cache used 4858/65536 hits=40309 misses=5537
+lookup cache used 4860/65536 hits=40316 misses=5539
 finished...

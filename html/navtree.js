@@ -5,7 +5,7 @@ var NAVTREE =
     [ "Getting started", "md__home_travis_build_hypro_hypro_doc_markdown_gettingStarted.html", "md__home_travis_build_hypro_hypro_doc_markdown_gettingStarted" ],
     [ "State set representations", "md__home_travis_build_hypro_hypro_doc_markdown_stateSetRepresentations_generalStateSets.html", null ],
     [ "Usage", "md__home_travis_build_hypro_hypro_doc_markdown_stateSetRepresentations_usage.html", null ],
-    [ "State set represetations", "md__home_travis_build_hypro_hypro_doc_markdown_stateSets.html", null ],
+    [ "State set representations", "md__home_travis_build_hypro_hypro_doc_markdown_stateSets.html", null ],
     [ "Utility functions", "md__home_travis_build_hypro_hypro_doc_markdown_utilityFunctions.html", "md__home_travis_build_hypro_hypro_doc_markdown_utilityFunctions" ],
     [ "Bibliography", "citelist.html", null ],
     [ "Namespaces", null, [
