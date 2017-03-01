@@ -258,38 +258,40 @@ $(document).ready(function(){initNavTree('Halfspace_8h_source.html','');});
 <div class="line"><a name="l00338"></a><span class="lineno">  338</span>&#160;</div>
 <div class="line"><a name="l00346"></a><span class="lineno">  346</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> Number&gt;</div>
 <div class="line"><a name="l00347"></a><span class="lineno"><a class="line" href="namespacehypro.html#a9a150c6e20b04da861f629116fe195a1">  347</a></span>&#160;<a class="code" href="classhypro_1_1Halfspace.html">Halfspace&lt;Number&gt;</a> <a class="code" href="namespacehypro.html#a9a150c6e20b04da861f629116fe195a1">operator-</a>( <span class="keyword">const</span> <a class="code" href="classhypro_1_1Halfspace.html">Halfspace&lt;Number&gt;</a>&amp; _in ) {</div>
-<div class="line"><a name="l00348"></a><span class="lineno">  348</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="classhypro_1_1Halfspace.html">Halfspace&lt;Number&gt;</a>(_in).invert();</div>
-<div class="line"><a name="l00349"></a><span class="lineno">  349</span>&#160;}</div>
-<div class="line"><a name="l00350"></a><span class="lineno">  350</span>&#160;</div>
-<div class="line"><a name="l00351"></a><span class="lineno">  351</span>&#160;<span class="preprocessor">    #ifdef EXTERNALIZE_CLASSES</span></div>
-<div class="line"><a name="l00352"></a><span class="lineno">  352</span>&#160;<span class="preprocessor"></span>    <span class="keyword">extern</span> <span class="keyword">template</span> <span class="keyword">class </span>Halfspace&lt;double&gt;;</div>
-<div class="line"><a name="l00353"></a><span class="lineno">  353</span>&#160;</div>
-<div class="line"><a name="l00354"></a><span class="lineno">  354</span>&#160;<span class="preprocessor">    #ifdef USE_MPFR_FLOAT</span></div>
-<div class="line"><a name="l00355"></a><span class="lineno">  355</span>&#160;<span class="preprocessor"></span>    <span class="keyword">extern</span> <span class="keyword">template</span> <span class="keyword">class </span>Halfspace&lt;carl::FLOAT_T&lt;mpfr_t&gt;&gt;;</div>
-<div class="line"><a name="l00356"></a><span class="lineno">  356</span>&#160;<span class="preprocessor">    #endif</span></div>
-<div class="line"><a name="l00357"></a><span class="lineno">  357</span>&#160;<span class="preprocessor"></span></div>
-<div class="line"><a name="l00358"></a><span class="lineno">  358</span>&#160;    <span class="keyword">extern</span> <span class="keyword">template</span> <span class="keyword">class </span>Halfspace&lt;carl::FLOAT_T&lt;double&gt;&gt;;</div>
-<div class="line"><a name="l00359"></a><span class="lineno">  359</span>&#160;<span class="preprocessor">    #endif</span></div>
-<div class="line"><a name="l00360"></a><span class="lineno">  360</span>&#160;<span class="preprocessor"></span>}  <span class="comment">// namespace hypro</span></div>
-<div class="line"><a name="l00361"></a><span class="lineno">  361</span>&#160;</div>
-<div class="line"><a name="l00362"></a><span class="lineno">  362</span>&#160;<span class="keyword">namespace </span>std{</div>
-<div class="line"><a name="l00367"></a><span class="lineno">  367</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">class</span> Number&gt;</div>
-<div class="line"><a name="l00368"></a><span class="lineno"><a class="line" href="structstd_1_1hash_3_01hypro_1_1Halfspace_3_01Number_01_4_01_4.html">  368</a></span>&#160;    <span class="keyword">struct </span>hash&lt;hypro::Halfspace&lt;Number&gt;&gt; {</div>
-<div class="line"><a name="l00369"></a><span class="lineno">  369</span>&#160;        std::size_t operator()(<a class="code" href="classhypro_1_1Halfspace.html">hypro::Halfspace&lt;Number&gt;</a> <span class="keyword">const</span>&amp; Halfspace)<span class="keyword"> const</span></div>
-<div class="line"><a name="l00370"></a><span class="lineno">  370</span>&#160;<span class="keyword">        </span>{</div>
-<div class="line"><a name="l00371"></a><span class="lineno">  371</span>&#160;            <span class="keywordtype">size_t</span> seed = 0;</div>
-<div class="line"><a name="l00372"></a><span class="lineno">  372</span>&#160;            <a class="code" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">hypro::vector_t&lt;Number&gt;</a> normal = Halfspace.<a class="code" href="classhypro_1_1Halfspace.html#ada47c49e9dca6befeef4c6fc2fac5a22">normal</a>();</div>
-<div class="line"><a name="l00373"></a><span class="lineno">  373</span>&#160;            Number scalar = Halfspace.scalar();</div>
-<div class="line"><a name="l00374"></a><span class="lineno">  374</span>&#160;            std::hash&lt;hypro::vector_t&lt;Number&gt;&gt; vectorHasher;</div>
-<div class="line"><a name="l00375"></a><span class="lineno">  375</span>&#160;            std::hash&lt;Number&gt; numberHasher;</div>
-<div class="line"><a name="l00376"></a><span class="lineno">  376</span>&#160;            seed = vectorHasher(normal);</div>
-<div class="line"><a name="l00377"></a><span class="lineno">  377</span>&#160;            boost::hash_combine(seed, numberHasher(scalar));</div>
-<div class="line"><a name="l00378"></a><span class="lineno">  378</span>&#160;            <span class="keywordflow">return</span> seed;</div>
-<div class="line"><a name="l00379"></a><span class="lineno">  379</span>&#160;        }</div>
-<div class="line"><a name="l00380"></a><span class="lineno">  380</span>&#160;    };</div>
-<div class="line"><a name="l00381"></a><span class="lineno">  381</span>&#160;} <span class="comment">//namespace std</span></div>
-<div class="line"><a name="l00382"></a><span class="lineno">  382</span>&#160;</div>
-<div class="line"><a name="l00383"></a><span class="lineno">  383</span>&#160;<span class="preprocessor">#include &quot;Halfspace.tpp&quot;</span></div>
+<div class="line"><a name="l00348"></a><span class="lineno">  348</span>&#160;    <a class="code" href="classhypro_1_1Halfspace.html">Halfspace&lt;Number&gt;</a> tmp(_in);</div>
+<div class="line"><a name="l00349"></a><span class="lineno">  349</span>&#160;    tmp.<a class="code" href="classhypro_1_1Halfspace.html#a4aa912984e200de42b4d36f413506de3">invert</a>();</div>
+<div class="line"><a name="l00350"></a><span class="lineno">  350</span>&#160;    <span class="keywordflow">return</span> tmp;</div>
+<div class="line"><a name="l00351"></a><span class="lineno">  351</span>&#160;}</div>
+<div class="line"><a name="l00352"></a><span class="lineno">  352</span>&#160;</div>
+<div class="line"><a name="l00353"></a><span class="lineno">  353</span>&#160;<span class="preprocessor">    #ifdef EXTERNALIZE_CLASSES</span></div>
+<div class="line"><a name="l00354"></a><span class="lineno">  354</span>&#160;<span class="preprocessor"></span>    <span class="keyword">extern</span> <span class="keyword">template</span> <span class="keyword">class </span>Halfspace&lt;double&gt;;</div>
+<div class="line"><a name="l00355"></a><span class="lineno">  355</span>&#160;</div>
+<div class="line"><a name="l00356"></a><span class="lineno">  356</span>&#160;<span class="preprocessor">    #ifdef USE_MPFR_FLOAT</span></div>
+<div class="line"><a name="l00357"></a><span class="lineno">  357</span>&#160;<span class="preprocessor"></span>    <span class="keyword">extern</span> <span class="keyword">template</span> <span class="keyword">class </span>Halfspace&lt;carl::FLOAT_T&lt;mpfr_t&gt;&gt;;</div>
+<div class="line"><a name="l00358"></a><span class="lineno">  358</span>&#160;<span class="preprocessor">    #endif</span></div>
+<div class="line"><a name="l00359"></a><span class="lineno">  359</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00360"></a><span class="lineno">  360</span>&#160;    <span class="keyword">extern</span> <span class="keyword">template</span> <span class="keyword">class </span>Halfspace&lt;carl::FLOAT_T&lt;double&gt;&gt;;</div>
+<div class="line"><a name="l00361"></a><span class="lineno">  361</span>&#160;<span class="preprocessor">    #endif</span></div>
+<div class="line"><a name="l00362"></a><span class="lineno">  362</span>&#160;<span class="preprocessor"></span>}  <span class="comment">// namespace hypro</span></div>
+<div class="line"><a name="l00363"></a><span class="lineno">  363</span>&#160;</div>
+<div class="line"><a name="l00364"></a><span class="lineno">  364</span>&#160;<span class="keyword">namespace </span>std{</div>
+<div class="line"><a name="l00369"></a><span class="lineno">  369</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">class</span> Number&gt;</div>
+<div class="line"><a name="l00370"></a><span class="lineno"><a class="line" href="structstd_1_1hash_3_01hypro_1_1Halfspace_3_01Number_01_4_01_4.html">  370</a></span>&#160;    <span class="keyword">struct </span>hash&lt;hypro::Halfspace&lt;Number&gt;&gt; {</div>
+<div class="line"><a name="l00371"></a><span class="lineno">  371</span>&#160;        std::size_t operator()(<a class="code" href="classhypro_1_1Halfspace.html">hypro::Halfspace&lt;Number&gt;</a> <span class="keyword">const</span>&amp; Halfspace)<span class="keyword"> const</span></div>
+<div class="line"><a name="l00372"></a><span class="lineno">  372</span>&#160;<span class="keyword">        </span>{</div>
+<div class="line"><a name="l00373"></a><span class="lineno">  373</span>&#160;            <span class="keywordtype">size_t</span> seed = 0;</div>
+<div class="line"><a name="l00374"></a><span class="lineno">  374</span>&#160;            <a class="code" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">hypro::vector_t&lt;Number&gt;</a> normal = Halfspace.<a class="code" href="classhypro_1_1Halfspace.html#ada47c49e9dca6befeef4c6fc2fac5a22">normal</a>();</div>
+<div class="line"><a name="l00375"></a><span class="lineno">  375</span>&#160;            Number scalar = Halfspace.scalar();</div>
+<div class="line"><a name="l00376"></a><span class="lineno">  376</span>&#160;            std::hash&lt;hypro::vector_t&lt;Number&gt;&gt; vectorHasher;</div>
+<div class="line"><a name="l00377"></a><span class="lineno">  377</span>&#160;            std::hash&lt;Number&gt; numberHasher;</div>
+<div class="line"><a name="l00378"></a><span class="lineno">  378</span>&#160;            seed = vectorHasher(normal);</div>
+<div class="line"><a name="l00379"></a><span class="lineno">  379</span>&#160;            boost::hash_combine(seed, numberHasher(scalar));</div>
+<div class="line"><a name="l00380"></a><span class="lineno">  380</span>&#160;            <span class="keywordflow">return</span> seed;</div>
+<div class="line"><a name="l00381"></a><span class="lineno">  381</span>&#160;        }</div>
+<div class="line"><a name="l00382"></a><span class="lineno">  382</span>&#160;    };</div>
+<div class="line"><a name="l00383"></a><span class="lineno">  383</span>&#160;} <span class="comment">//namespace std</span></div>
+<div class="line"><a name="l00384"></a><span class="lineno">  384</span>&#160;</div>
+<div class="line"><a name="l00385"></a><span class="lineno">  385</span>&#160;<span class="preprocessor">#include &quot;Halfspace.tpp&quot;</span></div>
 <div class="ttc" id="classhypro_1_1Halfspace_html_aa93bb0bba3e6ae942ed15867a7d19f2a"><div class="ttname"><a href="classhypro_1_1Halfspace.html#aa93bb0bba3e6ae942ed15867a7d19f2a">hypro::Halfspace::linearTransformation</a></div><div class="ttdeci">Halfspace&lt; Number &gt; linearTransformation(const matrix_t&lt; Number &gt; &amp;A) const </div><div class="ttdoc">Computes the linear transformation of the plane. </div></div>
 <div class="ttc" id="classhypro_1_1Halfspace_html_a4aa912984e200de42b4d36f413506de3"><div class="ttname"><a href="classhypro_1_1Halfspace.html#a4aa912984e200de42b4d36f413506de3">hypro::Halfspace::invert</a></div><div class="ttdeci">void invert()</div><div class="ttdoc">Inverts the halfspace by negating the plane normal and the offset. </div></div>
 <div class="ttc" id="classhypro_1_1Halfspace_html_a608609251d6e74f69dc60ea69168a2e1"><div class="ttname"><a href="classhypro_1_1Halfspace.html#a608609251d6e74f69dc60ea69168a2e1">hypro::Halfspace::projectPointOnPlane</a></div><div class="ttdeci">Point&lt; Number &gt; projectPointOnPlane(const Point&lt; Number &gt;) const </div><div class="ttdoc">Projects a given point on the plane. </div></div>

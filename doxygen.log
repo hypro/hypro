@@ -2163,7 +2163,7 @@ Generating docs for compound hypro::PrincipalComponentAnalysis./home/travis/buil
 /home/travis/build/hypro/hypro/src/hypro/util/statistics/CounterRepository.h:45: warning: Member get(std::string name) (function) of class hypro::statistics::CounterRepository is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/statistics/CounterRepository.h:54: warning: Member size() const  (function) of class hypro::statistics::CounterRepository is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/statistics/CounterRepository.h:59: warning: Member operator<<(std::ostream &ostr, const CounterRepository &repo) (friend) of class hypro::statistics::CounterRepository is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:369: warning: Member operator()(hypro::Halfspace< Number > const &Halfspace) const  (function) of class std::hash< hypro::Halfspace< Number > > is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:371: warning: Member operator()(hypro::Halfspace< Number > const &Halfspace) const  (function) of class std::hash< hypro::Halfspace< Number > > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Point.h:717: warning: Member operator()(hypro::Point< Number > const &point) const  (function) of class std::hash< hypro::Point< Number > > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Ridge.h:93: warning: Member operator()(const hypro::Ridge< Number > &ridge) const  (function) of class std::hash< hypro::Ridge< Number > > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Vertex.h:241: warning: Member operator()(const hypro::Vertex< Number > &vertex) (function) of class std::hash< hypro::Vertex< Number > > is not documented.
@@ -2560,5 +2560,5 @@ Patching output file 31/34
 Patching output file 32/34
 Patching output file 33/34
 Patching output file 34/34
-lookup cache used 4860/65536 hits=40316 misses=5539
+lookup cache used 4859/65536 hits=40314 misses=5538
 finished...
