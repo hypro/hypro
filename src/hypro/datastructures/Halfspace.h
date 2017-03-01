@@ -345,7 +345,9 @@ bool operator<( const Halfspace<Number>& lhs, const Halfspace<Number>& rhs ) {
  */
 template <typename Number>
 Halfspace<Number> operator-( const Halfspace<Number>& _in ) {
-	return Halfspace<Number>(_in).invert();
+	Halfspace<Number> tmp(_in);
+	tmp.invert();
+	return tmp;
 }
 
     #ifdef EXTERNALIZE_CLASSES
