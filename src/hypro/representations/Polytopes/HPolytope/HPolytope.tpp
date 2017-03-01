@@ -547,12 +547,10 @@ HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::project(const std::
 		return Empty();
 	}
 
-	HalfspaceVector projectedPlanes;
+	auto box = Converter::toBox(*this);
+	box = box.project(dimensions);
 
-	for(const auto& hspace : mHPlanes) {
-		projectedPlanes.emplace_back(hspace.project(dimensions));
-	}
-	return HPolytopeT<Number,Converter>(projectedPlanes);
+	return Converter::toHPolytope(box);
 }
 
 template <typename Number, typename Converter>
