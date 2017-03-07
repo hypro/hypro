@@ -35,7 +35,6 @@ namespace hypro {
 
 	/**
 	 * @brief      Wrapper class for linear optimization.
-	 *
 	 * @tparam     Number  The used number type.
 	 */
 	template<typename Number>
@@ -88,11 +87,9 @@ namespace hypro {
 				if(stat (name.c_str(), &buffer) != 0) {
 					break;
 				}
-				//std::cout << "File " << name << " exists." << std::endl;
 				++cnt;
 			}
 			fileCounter = cnt;
-			//std::cout << "Set file number to " << fileCounter << std::endl;
 			#endif
 			#if !defined HYPRO_USE_SMTRAT && !defined HYPRO_USE_Z3 && !defined HYPRO_USE_SOPLEX
 			if(!mWarnInexact && carl::is_rational<Number>().value){

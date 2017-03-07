@@ -1,13 +1,18 @@
 #pragma once
-#include "../types.h"
+
+#include "types.h"
 
 namespace hypro {
 
+/**
+ * @brief      Struct holding results obtained from the linear optimization engine.
+ * @tparam     Number  The used number type.
+ */
 template <typename Number>
 struct EvaluationResult {
-	Number supportValue;			// the value returned by the evaluation
-	vector_t<Number> optimumValue;  // the point leading to the evaluation value (extremum in direction)
-	SOLUTION errorCode;				// potential error code indicating success or failure of the evaluation
+	Number supportValue;			//*< The value returned by the evaluation.
+	vector_t<Number> optimumValue;  //*< The point leading to the evaluation value (extremum in direction).
+	SOLUTION errorCode;				//*< Potential error code indicating success or failure of the evaluation.
 
 	EvaluationResult() : supportValue(Number(0)), optimumValue(vector_t<Number>::Zero(0)), errorCode(SOLUTION::INFEAS)
 		{}

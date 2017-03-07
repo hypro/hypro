@@ -9,10 +9,10 @@
 
 #pragma once
 
-#include "../datastructures/Halfspace.h"
-#include "../datastructures/Facet.h"
-#include "../datastructures/Ridge.h"
-#include "../datastructures/Point.h"
+#include "datastructures/Halfspace.h"
+#include "datastructures/Facet.h"
+#include "datastructures/Ridge.h"
+#include "datastructures/Point.h"
 
 namespace hypro {
 

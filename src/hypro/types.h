@@ -1,6 +1,5 @@
 #pragma once
 
-#include <set>
 #include <iostream>
 
 #include <carl/numbers/numbers.h>

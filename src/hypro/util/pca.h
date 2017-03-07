@@ -9,8 +9,8 @@
 
 #pragma once
 
-#include "../datastructures/Point.h"
-#include "../datastructures/Halfspace.h"
+#include "datastructures/Point.h"
+#include "datastructures/Halfspace.h"
 
 
 namespace hypro {
