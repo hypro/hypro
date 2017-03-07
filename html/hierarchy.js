@@ -71,8 +71,6 @@ var hierarchy =
     [ "hypro::HybridAutomaton< Number >", "classhypro_1_1HybridAutomaton.html", null ],
     [ "hypro::intersectionContent< Number >", "structhypro_1_1intersectionContent.html", null ],
     [ "hypro::Location< Number >::Invariant", "structhypro_1_1Location_1_1Invariant.html", null ],
-    [ "hypro::is_same< T, U >", "structhypro_1_1is__same.html", null ],
-    [ "hypro::is_same< T, T >", "structhypro_1_1is__same_3_01T_00_01T_01_4.html", null ],
     [ "ZUtility::Line_t< Number >", "structZUtility_1_1Line__t.html", null ],
     [ "hypro::lintrafoParameters< Number >", "structhypro_1_1lintrafoParameters.html", null ],
     [ "hypro::Location< Number >", "classhypro_1_1Location.html", null ],
