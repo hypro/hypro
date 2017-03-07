@@ -268,34 +268,36 @@ $(document).ready(function(){initNavTree('Zonotope_8h_source.html','');});
 <div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160;<span class="preprocessor"></span></div>
 <div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160;    <a class="code" href="classhypro_1_1ZonotopeT.html">ZonotopeT&lt;Number,Converter&gt;</a> <a class="code" href="classhypro_1_1ZonotopeT.html#a0d2a1a24abd99f823a6e7872673b9d5d">unite</a>( <span class="keyword">const</span> <a class="code" href="classhypro_1_1ZonotopeT.html">ZonotopeT&lt;Number,Converter&gt;</a>&amp; other ) <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160;</div>
-<div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160;    <a class="code" href="classhypro_1_1ZonotopeT.html">ZonotopeT&lt;Number,Converter&gt;</a> <a class="code" href="classhypro_1_1ZonotopeT.html#ad3a9ff15e52702539ac249a7edc5099d">intervalHull</a>() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160;</div>
-<div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="classhypro_1_1ZonotopeT.html#abdccc3b3c8a661710b36d80a780b2915">contains</a>(<span class="keyword">const</span> <a class="code" href="classhypro_1_1Point.html">Point&lt;Number&gt;</a>&amp; point) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160;};</div>
-<div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160;</div>
-<div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160;<span class="keyword">template</span>&lt;<span class="keyword">typename</span> Number, <span class="keyword">typename</span> Converter&gt;</div>
-<div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160;std::ostream&amp; operator&lt;&lt;(std::ostream&amp; out, const ZonotopeT&lt;Number,Converter&gt;&amp; in ) {</div>
-<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;    out &lt;&lt; <span class="stringliteral">&quot;&lt; c: &quot;</span> &lt;&lt; convert&lt;Number,double&gt;(in.center()).transpose() &lt;&lt; <span class="stringliteral">&quot;,&quot;</span> &lt;&lt; std::endl;</div>
-<div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;    <span class="keywordflow">for</span>(<span class="keywordtype">unsigned</span> i = 0; i &lt; in.generators().rows(); ++i) {</div>
-<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;        <span class="keywordflow">for</span>(<span class="keywordtype">unsigned</span> j = 0; j &lt; in.generators().cols(); ++j) {</div>
-<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;            <span class="keywordflow">if</span>(i != in.generators().rows()-1) {</div>
-<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;                out &lt;&lt; carl::convert&lt;Number,double&gt;(in.generators()(i,j)) &lt;&lt; <span class="stringliteral">&quot; &quot;</span>;</div>
-<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;            } <span class="keywordflow">else</span> {</div>
-<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;                <span class="keywordflow">if</span>(j != in.generators().cols()-1) {</div>
-<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;                    out &lt;&lt; carl::convert&lt;Number,double&gt;(in.generators()(i,j)) &lt;&lt; <span class="stringliteral">&quot;,&quot;</span>;</div>
-<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;                } <span class="keywordflow">else</span> {</div>
-<div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160;                    out &lt;&lt; carl::convert&lt;Number,double&gt;(in.generators()(i,j)) &lt;&lt; <span class="stringliteral">&quot; &gt;&quot;</span>;</div>
-<div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160;                }</div>
-<div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160;            }</div>
-<div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160;        }</div>
-<div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;        out &lt;&lt; std::endl;</div>
-<div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160;    }</div>
-<div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160;    <span class="keywordflow">return</span> out;</div>
-<div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160;}</div>
-<div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160;</div>
-<div class="line"><a name="l00292"></a><span class="lineno">  292</span>&#160;}  <span class="comment">// namespace</span></div>
+<div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160;    <span class="keyword">static</span> <a class="code" href="classhypro_1_1ZonotopeT.html">ZonotopeT&lt;Number,Converter&gt;</a> <a class="code" href="classhypro_1_1ZonotopeT.html#a0d2a1a24abd99f823a6e7872673b9d5d">unite</a>( <span class="keyword">const</span> std::vector&lt;<a class="code" href="classhypro_1_1ZonotopeT.html">ZonotopeT&lt;Number,Converter&gt;</a>&gt;&amp; sets );</div>
+<div class="line"><a name="l00261"></a><span class="lineno">  261</span>&#160;</div>
+<div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160;    <a class="code" href="classhypro_1_1ZonotopeT.html">ZonotopeT&lt;Number,Converter&gt;</a> <a class="code" href="classhypro_1_1ZonotopeT.html#ad3a9ff15e52702539ac249a7edc5099d">intervalHull</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160;</div>
+<div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="classhypro_1_1ZonotopeT.html#abdccc3b3c8a661710b36d80a780b2915">contains</a>(<span class="keyword">const</span> <a class="code" href="classhypro_1_1Point.html">Point&lt;Number&gt;</a>&amp; point) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160;};</div>
+<div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160;</div>
+<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;<span class="keyword">template</span>&lt;<span class="keyword">typename</span> Number, <span class="keyword">typename</span> Converter&gt;</div>
+<div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;std::ostream&amp; operator&lt;&lt;(std::ostream&amp; out, const ZonotopeT&lt;Number,Converter&gt;&amp; in ) {</div>
+<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;    out &lt;&lt; <span class="stringliteral">&quot;&lt; c: &quot;</span> &lt;&lt; convert&lt;Number,double&gt;(in.center()).transpose() &lt;&lt; <span class="stringliteral">&quot;,&quot;</span> &lt;&lt; std::endl;</div>
+<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;    <span class="keywordflow">for</span>(<span class="keywordtype">unsigned</span> i = 0; i &lt; in.generators().rows(); ++i) {</div>
+<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;        <span class="keywordflow">for</span>(<span class="keywordtype">unsigned</span> j = 0; j &lt; in.generators().cols(); ++j) {</div>
+<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;            <span class="keywordflow">if</span>(i != in.generators().rows()-1) {</div>
+<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;                out &lt;&lt; carl::convert&lt;Number,double&gt;(in.generators()(i,j)) &lt;&lt; <span class="stringliteral">&quot; &quot;</span>;</div>
+<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;            } <span class="keywordflow">else</span> {</div>
+<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;                <span class="keywordflow">if</span>(j != in.generators().cols()-1) {</div>
+<div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160;                    out &lt;&lt; carl::convert&lt;Number,double&gt;(in.generators()(i,j)) &lt;&lt; <span class="stringliteral">&quot;,&quot;</span>;</div>
+<div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160;                } <span class="keywordflow">else</span> {</div>
+<div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160;                    out &lt;&lt; carl::convert&lt;Number,double&gt;(in.generators()(i,j)) &lt;&lt; <span class="stringliteral">&quot; &gt;&quot;</span>;</div>
+<div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160;                }</div>
+<div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;            }</div>
+<div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160;        }</div>
+<div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160;        out &lt;&lt; std::endl;</div>
+<div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160;    }</div>
+<div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160;    <span class="keywordflow">return</span> out;</div>
+<div class="line"><a name="l00292"></a><span class="lineno">  292</span>&#160;}</div>
 <div class="line"><a name="l00293"></a><span class="lineno">  293</span>&#160;</div>
-<div class="line"><a name="l00294"></a><span class="lineno">  294</span>&#160;<span class="preprocessor">#include &quot;Zonotope.tpp&quot;</span></div>
+<div class="line"><a name="l00294"></a><span class="lineno">  294</span>&#160;}  <span class="comment">// namespace</span></div>
+<div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160;</div>
+<div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160;<span class="preprocessor">#include &quot;Zonotope.tpp&quot;</span></div>
 <div class="ttc" id="namespacehypro_html_aada824f660cac25bb643be870cdc0a86"><div class="ttname"><a href="namespacehypro.html#aada824f660cac25bb643be870cdc0a86">hypro::representation_name</a></div><div class="ttdeci">representation_name</div><div class="ttdoc">Enum encapsulating all provided state set representations to be able to determine a type...</div><div class="ttdef"><b>Definition:</b> <a href="representations_2types_8h_source.html#l00008">types.h:8</a></div></div>
 <div class="ttc" id="classhypro_1_1ZonotopeT_html_a8a724a58e36b633e0bf4d1a33374da9c"><div class="ttname"><a href="classhypro_1_1ZonotopeT.html#a8a724a58e36b633e0bf4d1a33374da9c">hypro::ZonotopeT::removeEmptyGenerators</a></div><div class="ttdeci">void removeEmptyGenerators()</div></div>
 <div class="ttc" id="classhypro_1_1ZonotopeT_html_a06326a8d391a121c5f3ab6e4baf76153"><div class="ttname"><a href="classhypro_1_1ZonotopeT.html#a06326a8d391a121c5f3ab6e4baf76153">hypro::ZonotopeT::intersectHalfspace</a></div><div class="ttdeci">ZonotopeT&lt; Number, Converter &gt; intersectHalfspace(const Halfspace&lt; Number &gt; &amp;rhs) const </div><div class="ttdoc">Computes the intersection of the set with the given halfspace. </div></div>

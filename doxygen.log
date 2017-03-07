@@ -718,7 +718,7 @@ citelist:22: warning: Unexpected new line character
 /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/helperMethods.h:263: warning: Member addZeroColumn(matrix_t< double > m) (function) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/helperMethods.h:297: warning: Member addZeroRow(matrix_t< double > m) (function) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/TaylorModel/continuous.h:65: warning: Member output_2D_interval_gnuplot(std::list< Flowpipe< Number >> &flowpipes, std::ofstream &os, const std::string &fileName, const carl::Variable &axis_x, const carl::Variable &axis_y) (function) of namespace hypro is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/Zonotope/Zonotope.h:273: warning: Member operator<<(std::ostream &out, const ZonotopeT< Number, Converter > &in) (function) of namespace hypro is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/Zonotope/Zonotope.h:275: warning: Member operator<<(std::ostream &out, const ZonotopeT< Number, Converter > &in) (function) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:224: warning: Member normalize(const vector_t< Number > &in) (function) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:229: warning: Member project(const vector_t< Number > &in, const std::vector< unsigned > &dimensions) (function) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:244: warning: Member scalarProjection(const vector_t< Number > &source, const vector_t< Number > &target) (function) of namespace hypro is not documented.
@@ -1813,6 +1813,7 @@ Generating d/home/travis/build/hypro/hypro/src/hypro/algorithms/convexHull/Conve
 /home/travis/build/hypro/hypro/src/hypro/representations/Zonotope/Zonotope.h:179: warning: Member reduceNumberRepresentation() (function) of class hypro::ZonotopeT is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/Zonotope/Zonotope.h:102: warning: Member Empty(std::size_t dimension=1) (function) of class hypro::ZonotopeT is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/Zonotope/Zonotope.h:106: warning: Member type() (function) of class hypro::ZonotopeT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/Zonotope/Zonotope.h:260: warning: Member unite(const std::vector< ZonotopeT< Number, Converter >> &sets) (function) of class hypro::ZonotopeT is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/Zonotope/Zonotope.h:224: warning: argument 'result' of command @param is not found in the argument list of hypro::ZonotopeT< Number, Converter >::intersect(const Halfspace< Number > &rhs, int method)
 /home/travis/build/hypro/hypro/src/hypro/representations/Zonotope/Zonotope.h:224: warning: The following parameters of hypro::ZonotopeT::intersect(const Halfspace< Number > &rhs, int method) are not documented:
   parameter 'method'
@@ -1825,7 +1826,7 @@ Generating d/home/travis/build/hypro/hypro/src/hypro/algorithms/convexHull/Conve
   parameter 'mat'
   parameter 'vec'
   parameter 'method'
-/home/travis/build/hypro/hypro/src/hypro/representations/Zonotope/Zonotope.h:261: warning: argument 'result' of command @param is not found in the argument list of hypro::ZonotopeT< Number, Converter >::intervalHull() const
+/home/travis/build/hypro/hypro/src/hypro/representations/Zonotope/Zonotope.h:263: warning: argument 'result' of command @param is not found in the argument list of hypro::ZonotopeT< Number, Converter >::intervalHull() const
 /home/travis/build/hypro/hypro/src/hypro/representations/Zonotope/Zonotope.h:115: warning: argument 'new_generators' of command @param is not found in the argument list of hypro::ZonotopeT< Number, Converter >::setGenerators(const matrix_t< Number > &generators_)
 /home/travis/build/hypro/hypro/src/hypro/representations/Zonotope/Zonotope.h:115: warning: The following parameters of hypro::ZonotopeT::setGenerators(const matrix_t< Number > &generators_) are not documented:
   parameter 'generators_'
@@ -2539,5 +2540,5 @@ Patching output file 31/34
 Patching output file 32/34
 Patching output file 33/34
 Patching output file 34/34
-lookup cache used 4847/65536 hits=40306 misses=5529
+lookup cache used 4847/65536 hits=40324 misses=5529
 finished...
