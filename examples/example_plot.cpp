@@ -9,11 +9,7 @@ using namespace hypro;
 
 int main() {
 
-	#ifdef USE_CLN_NUMBERS
-	typedef cln::cl_RA Number;
-	#else
 	typedef double Number;
-	#endif
 
 	Plotter<Number>& plotter = Plotter<Number>::getInstance();
 
@@ -26,16 +22,10 @@ int main() {
 
 	plotter.addObject(vertices);
 
-	//std::cout << "Added points." << std::endl;
-//
-//	//plotter.addObject(poly.constraints());
-//	//plotter.addObject(Halfspace<Number>({1,0},1));
-//
-//	//std::cout << "Added planes." << std::endl;
-//
-//	//plotter.addPoint(Point<Number>({carl::rationalize<Number>(-1.5),3}));
-//
-	//std::cout << "Added point." << std::endl;
+	plotter.addObject(poly.constraints());
+	plotter.addObject(Halfspace<Number>({1,0},1));
+
+	plotter.addPoint(Point<Number>({carl::rationalize<Number>(-1.5),3}));
 
 	plotter.plot2d();
 	plotter.plotTex();
