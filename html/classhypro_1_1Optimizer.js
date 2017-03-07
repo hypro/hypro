@@ -5,15 +5,15 @@ var classhypro_1_1Optimizer =
     [ "Optimizer", "classhypro_1_1Optimizer.html#aef6b5f7e57bf63f07ce7afa588d01f39", null ],
     [ "Optimizer", "classhypro_1_1Optimizer.html#a1cfdd1e5b90db026835b7c6947a5c290", null ],
     [ "~Optimizer", "classhypro_1_1Optimizer.html#a992438299160290cb0f08e243ded782c", null ],
-    [ "checkConsistency", "classhypro_1_1Optimizer.html#aa3a3061045ce77bf38b4bfc8d7a094db", null ],
-    [ "checkPoint", "classhypro_1_1Optimizer.html#a09b6152601ee63a81dc5702e35fc6987", null ],
+    [ "checkConsistency", "classhypro_1_1Optimizer.html#a9be5c80cccc5a7e6eef6af0c227e10d7", null ],
+    [ "checkPoint", "classhypro_1_1Optimizer.html#a528ae62064de85098bc5746c11a3a045", null ],
     [ "clear", "classhypro_1_1Optimizer.html#a57d9aea697e3087a60b776d70a942baa", null ],
-    [ "evaluate", "classhypro_1_1Optimizer.html#a10387c3c2315b1878d6e1dca3cfad714", null ],
-    [ "getInternalPoint", "classhypro_1_1Optimizer.html#a2c527e64320b847eb9f7cd37f30f56bd", null ],
-    [ "matrix", "classhypro_1_1Optimizer.html#a705ba35f9bda85c516ae41dcd34a800f", null ],
+    [ "evaluate", "classhypro_1_1Optimizer.html#ad6092f75a76c246fedc19806bd2baa7d", null ],
+    [ "getInternalPoint", "classhypro_1_1Optimizer.html#a30e10c735ed9c4fce9184f62625aaeb7", null ],
+    [ "matrix", "classhypro_1_1Optimizer.html#abce506a254bbcd7b47a8cdd149fb3c6d", null ],
     [ "operator=", "classhypro_1_1Optimizer.html#a58cf754a2a364133b52f7dfae4d24e7d", null ],
-    [ "redundantConstraints", "classhypro_1_1Optimizer.html#a750d8942e3c3a10959473c5a64535aec", null ],
+    [ "redundantConstraints", "classhypro_1_1Optimizer.html#a37a12c32ebf96ff35b1218c7eb936084", null ],
     [ "setMatrix", "classhypro_1_1Optimizer.html#a3af3093ab6949ce7448109036feacaa2", null ],
     [ "setVector", "classhypro_1_1Optimizer.html#a9a40a723d2553a38a480e4ba18ad02db", null ],
-    [ "vector", "classhypro_1_1Optimizer.html#a2f488e78267f3606a1c9bf7a54e2a774", null ]
+    [ "vector", "classhypro_1_1Optimizer.html#af794665f4c5ec520cdfed3a9aeb7bfb2", null ]
 ];
