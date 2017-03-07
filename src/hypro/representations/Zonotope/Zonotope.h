@@ -257,6 +257,8 @@ class ZonotopeT : public GeometricObject<Number, ZonotopeT<Number,Converter>> {
 
 	ZonotopeT<Number,Converter> unite( const ZonotopeT<Number,Converter>& other ) const;
 
+	static ZonotopeT<Number,Converter> unite( const std::vector<ZonotopeT<Number,Converter>>& sets );
+
 	/**
 	 * Computes the interval hull of the member zonotopeT
 	 * @param result: the resulting interval hull (also a zonotopeT)

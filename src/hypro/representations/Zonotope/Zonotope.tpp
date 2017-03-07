@@ -1160,6 +1160,15 @@ ZonotopeT<Number,Converter> ZonotopeT<Number,Converter>::unite( const ZonotopeT<
 }
 
 template<typename Number, typename Converter>
+ZonotopeT<Number,Converter> ZonotopeT<Number,Converter>::unite( const std::vector<ZonotopeT<Number,Converter>>& sets ) {
+	ZonotopeT<Number,Converter> res = sets.begin();
+	for(auto zonoIt = ++(sets.begin()); zonoIt != sets.end(); ++zonoIt) {
+		res = res.unite(*zonoIt);
+	}
+	return res;
+}
+
+template<typename Number, typename Converter>
 ZonotopeT<Number,Converter> ZonotopeT<Number,Converter>::intervalHull() const {
 	ZonotopeT<Number,Converter> result;
 	vector_t<Number> imax, imin, sumOfGenerators, center = this->mCenter;
