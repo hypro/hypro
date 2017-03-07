@@ -104,11 +104,16 @@ struct scaleContent {
 
 template <typename Number>
 struct unionContent {
-	std::shared_ptr<SupportFunctionContent<Number>> lhs;
-	std::shared_ptr<SupportFunctionContent<Number>> rhs;
+	std::vector<std::shared_ptr<SupportFunctionContent<Number>>> items;
 	unionContent( std::shared_ptr<SupportFunctionContent<Number>> _lhs, std::shared_ptr<SupportFunctionContent<Number>> _rhs )
-		: lhs( _lhs ), rhs( _rhs ) {}
-	unionContent( const unionContent<Number>& _origin ) : lhs( _origin.lhs ), rhs( _origin.rhs ) {}
+	{
+		// This constructor is legacy.
+		items.push_back(_lhs);
+		items.push_back(_rhs);
+	}
+
+	unionContent( const std::vector<std::shared_ptr<SupportFunctionContent<Number>>>& sfVector ) : items(sfVector) {}
+	unionContent( const unionContent<Number>& _origin ) = default;
 };
 
 template <typename Number>
@@ -165,6 +170,7 @@ class SupportFunctionContent {
 	SupportFunctionContent( const std::vector<Point<Number>>& _points, SF_TYPE _type = SF_TYPE::POLY );
 	SupportFunctionContent( std::shared_ptr<SupportFunctionContent<Number>> _lhs, std::shared_ptr<SupportFunctionContent<Number>> _rhs,
 					 SF_TYPE _type );
+	SupportFunctionContent( std::vector<std::shared_ptr<SupportFunctionContent<Number>>> _rhs, SF_TYPE _type = SF_TYPE::UNITE );
 	SupportFunctionContent( std::shared_ptr<SupportFunctionContent<Number>> _origin, const matrix_t<Number>& A, const vector_t<Number>& b, SF_TYPE _type );
 	SupportFunctionContent( std::shared_ptr<SupportFunctionContent<Number>> _origin, const Number& _factor,
 					 SF_TYPE _type = SF_TYPE::SCALE );
@@ -254,6 +260,7 @@ class SupportFunctionContent {
 	bool contains( const Point<Number>& _point ) const;
 	bool contains( const vector_t<Number>& _point ) const;
 	std::shared_ptr<SupportFunctionContent<Number>> unite( std::shared_ptr<SupportFunctionContent<Number>> _rhs ) const;
+	static std::shared_ptr<SupportFunctionContent<Number>> unite( std::vector<std::shared_ptr<SupportFunctionContent<Number>>>& _rhs );
 	std::shared_ptr<SupportFunctionContent<Number>> scale( const Number& _factor = 1 ) const;
 
 	bool empty() const;
@@ -276,7 +283,7 @@ class SupportFunctionContent {
 
 private:
 
-	bool hasTrafo(std::shared_ptr<const lintrafoParameters<Number>>& resNode, const matrix_t<Number>& A, const vector_t<Number>& b) {
+	bool hasTrafo(std::shared_ptr<const lintrafoParameters<Number>>& resNode, const matrix_t<Number>& A, const vector_t<Number>& b) const {
 		switch ( mType ) {
 			case SF_TYPE::SUM: {
 				bool res = mSummands->lhs->hasTrafo(resNode, A, b);
@@ -303,11 +310,12 @@ private:
 				return mScaleParameters->origin->hasTrafo(resNode, A, b);
 			}
 			case SF_TYPE::UNITE: {
-				bool res = mUnionParameters->lhs->hasTrafo(resNode, A, b);
-				if(!res) {
-					res = mUnionParameters->rhs->hasTrafo(resNode, A, b);
+				for(const auto& item : mUnionParameters->items) {
+					if(item->hasTrafo(resNode,A,b)) {
+						return true;
+					}
 				}
-				return res;
+				return false;
 			}
 			case SF_TYPE::POLY:
 			case SF_TYPE::INFTY_BALL:

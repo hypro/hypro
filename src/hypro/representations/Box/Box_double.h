@@ -451,7 +451,7 @@ class BoxT<double,Converter> : public GeometricObject<double, BoxT<double,Conver
 	 * @param[in]  boxes  The boxes.
 	 * @return     The resulting box.
 	 */
-	BoxT<double,Converter> unite( const std::vector<BoxT<double,Converter>>& boxes ) const;
+	static BoxT<double,Converter> unite( const std::vector<BoxT<double,Converter>>& boxes );
 
 	/**
 	 * @brief      Makes this box the empty box.

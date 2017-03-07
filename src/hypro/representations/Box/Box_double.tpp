@@ -646,8 +646,12 @@ BoxT<double,Converter> BoxT<double,Converter>::unite( const BoxT<double,Converte
 }
 
 template<typename Converter>
-BoxT<double,Converter> BoxT<double,Converter>::unite( const std::vector<BoxT<double,Converter>>& boxes ) const {
-	std::pair<Point<double>, Point<double>> newLimits = this->mLimits;
+BoxT<double,Converter> BoxT<double,Converter>::unite( const std::vector<BoxT<double,Converter>>& boxes ) {
+	if(boxes.empty()) {
+		return BoxT<double,Converter>::Empty();
+	}
+
+	std::pair<Point<double>, Point<double>> newLimits = boxes.begin()->limits();
 	for(const auto& box : boxes) {
 		newLimits.first = coeffWiseMin(newLimits.first, box.limits().first);
 		newLimits.second = coeffWiseMax(newLimits.first, box.limits().second);

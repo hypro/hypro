@@ -381,6 +381,15 @@ namespace hypro{
         return SupportFunctionT<Number,Converter>(content->unite(_rhs.content));
     }
 
+	template<typename Number, typename Converter>
+    SupportFunctionT<Number,Converter> unite( const std::vector<SupportFunctionT<Number,Converter>>& _rhs ) {
+    	std::vector<SupportFunctionContent<Number>> converted;
+    	for(const auto& set : _rhs) {
+    		converted.push_back(set->content);
+    	}
+    	return SupportFunctionT<Number,Converter>(SupportFunctionContent<Number>::unite(converted));
+    }
+
     template<typename Number, typename Converter>
     SupportFunctionT<Number,Converter> SupportFunctionT<Number,Converter>::scale( const Number &_factor ) const {
         return SupportFunctionT<Number,Converter>(content->scale( _factor));

@@ -103,7 +103,7 @@ void PolytopeT<Number,Converter>::addPoint( const Point<Number> &point ) {
 
 template <typename Number, typename Converter>
 void PolytopeT<Number,Converter>::updatePoints() const {
-	using Parma_Polyhedra_Library::IO_Operators::operator<<;
+	//using Parma_Polyhedra_Library::IO_Operators::operator<<;
 	if ( !mPointsUpToDate ) {
 		//std::cout << __func__ << ": " << *this << std::endl;
 		mPoints.clear();
@@ -714,68 +714,28 @@ PolytopeT<Number,Converter> PolytopeT<Number,Converter>::unite( const PolytopeT<
 		return *this;
 	}
 
-	if ( !mPointsUpToDate ) {
-		updatePoints();
-	}
+	updatePoints();
 
 	C_Polyhedron res = mPolyhedron;
 	res.poly_hull_assign(rhs.rawPolyhedron());
 	PolytopeT<Number,Converter> result = PolytopeT<Number,Converter>(res);
 	return result;
+}
 
-	/*
-	if ( rhs.dimension() == 0 ) {
-		return PolytopeT<Number,Converter>( this->vertices() );
-	} else {
-		std::vector<Point<Number>> unitedVertices = rhs.vertices();
-		unitedVertices.insert( unitedVertices.end(), this->vertices().begin(), this->vertices().end() );
-		assert( unitedVertices.size() == this->vertices().size() + rhs.vertices().size() );
-
-		// std::cout << "United vertices: " << std::endl;
-		// for(const auto& vertex : unitedVertices)
-		//	std::cout << vertex.rawCoordinates().transpose() << std::endl;
-
-		// std::cout << "Ping" << std::endl;
-		std::vector<std::shared_ptr<Facet<Number>>> hull = convexHull( unitedVertices ).first;
-		// std::cout << "Ping" << std::endl;
-
-		std::set<Point<Number>> preresult;
-		for ( unsigned i = 0; i < hull.size(); i++ ) {
-			for ( unsigned j = 0; j < hull[i]->vertices().size(); j++ ) {
-				// std::cout << "Unite created point: " <<
-				// hull[i]->vertices().at(j).rawCoordinates().transpose() <<
-				// std::endl;
-
-
-				//if((preresult.find(hull[i]->vertices().at(j))) != preresult.end()){
-				//		Point<Number> pt = *(preresult.find(hull[i]->vertices().at(j)));
-				//		std::vector<Point<Number>> neighbors =
-				//hull[i]->vertices().at(j).neighbors();
-				//		for(auto& neigh:neighbors){
-				//				pt.addNeighbor(neigh);
-				//		}
-				//}
-				//else {
-				preresult.insert( hull[i]->vertices().at( j ) );
-				//}
-
-				//	std::cout << "Set after insert: ";
-				//	for(const auto& point : preresult) {
-				//	std::cout << point.rawCoordinates().transpose() << ", ";
-				//	}
-				//	std::cout << std::endl;
-			}
-		}
-		std::vector<Point<Number>> points;
-		for ( auto &point : preresult ) {
-			points.push_back( point );
-		}
-
-		PolytopeT<Number,Converter> result = PolytopeT<Number,Converter>( points );
-		return result;
+template <typename Number, typename Converter>
+PolytopeT<Number,Converter> PolytopeT<Number,Converter>::unite(const PolytopeT<Number,Converter>& polytopes) {
+	if(polytopes.empty()) {
+		return PolytopeT<Number,Converter>::Empty();
 	}
-	//    	return this->hull();
-	*/
+
+	C_Polyhedron res;
+	for(const auto& poly : polytopes) {
+		poly.updatePoints();
+		res.poly_hull_assign(poly.rawPolyhedron());
+	}
+
+	PolytopeT<Number,Converter> result = PolytopeT<Number,Converter>(res);
+	return result;
 }
 
 template <typename Number, typename Converter>

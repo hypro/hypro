@@ -152,7 +152,6 @@ public:
 	 * @return     The resulting set.
 	 */
 	virtual DerivedShape unite( const DerivedShape& rhs ) const = 0;
-	//virtual DerivedShape unite( const std::vector<DerivedShape>& rhs ) const = 0;
 
 };
 

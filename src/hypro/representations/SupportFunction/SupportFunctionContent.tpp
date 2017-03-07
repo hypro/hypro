@@ -189,6 +189,31 @@ SupportFunctionContent<Number>::SupportFunctionContent( std::shared_ptr<SupportF
 }
 
 template <typename Number>
+SupportFunctionContent<Number>::SupportFunctionContent( std::vector<std::shared_ptr<SupportFunctionContent<Number>>> _rhs, SF_TYPE _type ) {
+	// assert(_lhs.dimension() == _rhs.dimension());
+	switch ( _type ) {
+		case SF_TYPE::UNITE: {
+			assert(!_rhs.empty());
+			mUnionParameters = new unionContent<Number>( _rhs );
+			mType = SF_TYPE::UNITE;
+			mDimension = _rhs.begin()->dimension();
+			mDepth = 0;
+			mOperationCount = 1;
+			for(const auto& sf : _rhs ) {
+				assert(sf->dimension() == mDimension);
+				if(mDepth < sf->depth()) {
+					mDepth = sf->depth();
+				}
+				mOperationCount += sf->operationCount();
+			}
+			break;
+		}
+		default:
+			assert( false );
+	}
+}
+
+template <typename Number>
 SupportFunctionContent<Number>::SupportFunctionContent( std::shared_ptr<SupportFunctionContent<Number>> _origin, const matrix_t<Number>& A, const vector_t<Number>& b
 			, SF_TYPE _type ) {
 	switch ( _type ) {
@@ -378,24 +403,27 @@ EvaluationResult<Number> SupportFunctionContent<Number>::evaluate( const vector_
 			return resA;
 		}
 		case SF_TYPE::UNITE: {
-			EvaluationResult<Number> resA = mSummands->lhs->evaluate( _direction, useExact);
-			EvaluationResult<Number> resB = mSummands->rhs->evaluate( _direction, useExact);
-			if(resA.errorCode == SOLUTION::INFTY || resB.errorCode == SOLUTION::INFTY){
-				EvaluationResult<Number> res;
-				res.errorCode = SOLUTION::INFTY;
-				res.supportValue = 1;
-				res.optimumValue = resA.errorCode == SOLUTION::INFTY ? resA.optimumValue : resB.optimumValue;
+			EvaluationResult<Number> res = (*mUnionParameters->items.begin())->evaluate( _direction, useExact );
+			if(res.errorCode == SOLUTION::INFEAS) {
 				return res;
 			}
-			if(resA.errorCode == SOLUTION::INFEAS){
-				return resB;
+			if(res.errorCode == SOLUTION::INFTY) {
+				res.supportValue = 1;
+				return res;
 			}
-			if(resB.errorCode == SOLUTION::INFEAS){
-				assert(resA.errorCode == SOLUTION::FEAS);
-				return resA;
+			for(auto sfIt = ++(mUnionParameters->items.begin()); sfIt != mUnionParameters->items.end(); ++sfIt) {
+				EvaluationResult<Number> tmp = (*sfIt)->evaluate( _direction, useExact );
+				if(tmp.errorCode == SOLUTION::INFEAS) {
+					return tmp;
+				}
+				if(tmp.errorCode == SOLUTION::INFTY) {
+					tmp.supportValue = 1;
+					return tmp;
+				}
+				res = tmp > res ? tmp : res;
 			}
-			assert(resA.errorCode == SOLUTION::FEAS && resB.errorCode == SOLUTION::FEAS);
-			return ( resA.supportValue >= resB.supportValue ? resA : resB );
+			assert(res.errorCode == SOLUTION::FEAS);
+			return ( res );
 		}
 		case SF_TYPE::INTERSECT: {
 			// easy checks for infeasibility and unboundedness first
@@ -509,39 +537,33 @@ std::vector<EvaluationResult<Number>> SupportFunctionContent<Number>::multiEvalu
 			return ( res );
 		}
 		case SF_TYPE::UNITE: {
-			std::vector<EvaluationResult<Number>> resA = mUnionParameters->lhs->multiEvaluate( _directions, useExact );
-			std::vector<EvaluationResult<Number>> resB = mUnionParameters->rhs->multiEvaluate( _directions, useExact );
-			assert( resA.size() == std::size_t(_directions.rows()));
-			assert( resA.size() == resB.size() );
-			std::vector<EvaluationResult<Number>> result;
-			// in case one of the results is empty, return the other result (if both are empty, this is correct as well).
-			if(resA.begin()->errorCode == SOLUTION::INFEAS){
-				return resB;
-			}
-			if(resB.begin()->errorCode == SOLUTION::INFEAS){
-				return resA;
+			std::vector<EvaluationResult<Number>> res = (*mUnionParameters->items.begin())->multiEvaluate( _directions, useExact );
+			for(const auto& result : res ) {
+				if(result.errorCode == SOLUTION::INFEAS) {
+					return res;
+				}
+				if(result.errorCode == SOLUTION::INFTY) {
+					return res;
+				}
 			}
 
-			for ( unsigned i = 0; i < resA.size(); ++i ) {
-				assert(resA[i].errorCode != SOLUTION::INFEAS && resB[i].errorCode != SOLUTION::INFEAS);
-				EvaluationResult<Number> res;
-				if(resA[i].errorCode == SOLUTION::INFTY || resB[i].errorCode == SOLUTION::INFTY){
-					res.errorCode = SOLUTION::INFTY;
-					res.supportValue = 1;
-				} else {
-					res.errorCode = SOLUTION::FEAS;
-					if(resA[i].supportValue > resB[i].supportValue){
-						res.supportValue = resA[i].supportValue;
-						res.optimumValue = resA[i].optimumValue;
+			for(auto& sfIt = ++(mUnionParameters->items.begin()); sfIt != mUnionParameters->items.end(); ++sfIt) {
+				std::vector<EvaluationResult<Number>> tmp = (*sfIt)->multiEvaluate( _directions, useExact );
+				assert(tmp.size() == res.size());
+				for( unsigned resultId = 0; resultId < res.size(); ++resultId ) {
+					if(tmp[resultId].errorCode == SOLUTION::INFEAS) {
+						res[resultId] = tmp[resultId];
+						return tmp;
+					} else if(tmp[resultId].errorCode == SOLUTION::INFTY) {
+						tmp[resultId].supportValue = 1;
+						res[resultId] = tmp[resultId];
 					} else {
-						res.supportValue = resB[i].supportValue;
-						res.optimumValue = resB[i].optimumValue;
+						res[resultId] = tmp[resultId] > res[resultId] ? tmp[resultId] : res[resultId];
 					}
 				}
-				result.push_back(res);
 			}
-			assert(result.size() == std::size_t(_directions.rows()));
-			return result;
+			assert(res.errorCode == SOLUTION::FEAS);
+			return ( res );
 		}
 		case SF_TYPE::INTERSECT: {
 			std::vector<EvaluationResult<Number>> resA = mIntersectionParameters->lhs->multiEvaluate( _directions, useExact );
@@ -634,7 +656,11 @@ unsigned SupportFunctionContent<Number>::multiplicationsPerEvaluation() const {
             return (mSummands->lhs.get()->multiplicationsPerEvaluation() + mSummands->rhs.get()->multiplicationsPerEvaluation());
         }
         case SF_TYPE::UNITE: {
-            return (mUnionParameters->rhs.get()->multiplicationsPerEvaluation() + mUnionParameters->lhs.get()->multiplicationsPerEvaluation());
+        	unsigned res = 0;
+        	for(const auto& item : mUnionParameters->items) {
+        		res += item.get()->multiplicationsPerEvaluation();
+        	}
+        	return res;
         }
         default:
             return 0;
@@ -673,10 +699,12 @@ void SupportFunctionContent<Number>::forceLinTransReduction(){
 			mOperationCount = mSummands->lhs.get()->operationCount() + mSummands->rhs.get()->operationCount() +1;
         }   break;
         case SF_TYPE::UNITE: {
-            mUnionParameters->rhs.get()->forceLinTransReduction();
-            mUnionParameters->lhs.get()->forceLinTransReduction();
-			mDepth = std::max(mSummands->lhs.get()->operationCount(), mSummands->rhs.get()->operationCount()) +1;
-			mOperationCount = mSummands->lhs.get()->operationCount() + mSummands->rhs.get()->operationCount() +1;
+        	mOperationCount = 1;
+        	for(auto& item : mUnionParameters->items) {
+        		item->forceLinTransReduction();
+        		mDepth = mDepth > item->depth() ? mDepth : item->depth();
+        		mOperationCount += item->operationCount();
+        	}
         }   break;
 		case SF_TYPE::PROJECTION: {
 			mProjectionParameters->origin.get()->forceLinTransReduction();
@@ -747,18 +775,15 @@ Point<Number> SupportFunctionContent<Number>::supremumPoint() const {
 			return lhsPoint+rhsPoint;
 		}
 		case SF_TYPE::UNITE: {
-			Point<Number> lhsPoint = mUnionParameters->lhs->supremumPoint();
-			Point<Number> rhsPoint = mUnionParameters->rhs->supremumPoint();
-			if(lhsPoint.dimension() == 0) {
-				return lhsPoint;
+			Point<Number> resPoint = (*mUnionParameters->items.begin())->supremumPoint();
+			if(resPoint.dimension() == 0) {
+				return resPoint;
 			}
-			if(rhsPoint.dimension() == 0) {
-				return rhsPoint;
+			for(auto itemIt = ++(mUnionParameters->items.begin()); itemIt != mUnionParameters->items.end(); ++itemIt) {
+				Point<Number> tmpPoint = (*itemIt)->supremumPoint();
+				resPoint = Point<Number>::inftyNorm(resPoint) > Point<Number>::inftyNorm(tmpPoint) ? resPoint : tmpPoint;
 			}
-			if(Point<Number>::inftyNorm(lhsPoint) > Point<Number>::inftyNorm(rhsPoint)) {
-				return lhsPoint;
-			}
-			return rhsPoint;
+			return resPoint;
 		}
 		case SF_TYPE::INTERSECT: {
 			Point<Number> lhsPoint = mIntersectionParameters->lhs->supremumPoint();
@@ -841,22 +866,27 @@ std::vector<unsigned> SupportFunctionContent<Number>::collectProjections() const
 			return res;
 		}
 		case SF_TYPE::UNITE: {
-			std::vector<unsigned> lhsProjections = mUnionParameters->lhs->collectProjections();
-			std::vector<unsigned> rhsProjections = mUnionParameters->rhs->collectProjections();
+			std::vector<std::vector<unsigned>> projections;
 			std::vector<unsigned> res;
-			while(!lhsProjections.empty() && !rhsProjections.empty()){
-				if(lhsProjections.front() == rhsProjections.front()){
-					res.emplace_back(lhsProjections.front());
-					DEBUG("hypro.representations.supportFunction","Union, add dimension " << res.back());
-					lhsProjections.erase(lhsProjections.begin());
-					rhsProjections.erase(rhsProjections.begin());
-				} else {
-					if(lhsProjections.front() < rhsProjections.front()){
-						DEBUG("hypro.representations.supportFunction","Union, dimension " << lhsProjections.front() << " not part in rhs, drop.");
-						lhsProjections.erase(lhsProjections.begin());
-					} else {
-						DEBUG("hypro.representations.supportFunction","Union, dimension " << rhsProjections.front() << " not part in lhs, drop.");
-						rhsProjections.erase(rhsProjections.begin());
+			for(const auto& set : mUnionParameters->items) {
+				projections.emplace_back(set->collectProjections());
+			}
+			bool allNotEmpty = true;
+			while(allNotEmpty) {
+				unsigned frontDimension = projections[0].front();
+				bool allHaveFrontDimensionInCommon = true;
+				for(const auto& row : projections) {
+					if(row.front() != frontDimension ) {
+						allHaveFrontDimensionInCommon = false;
+					}
+				}
+				if(allHaveFrontDimensionInCommon) {
+					res.emplace_back(frontDimension);
+				}
+				// in any case erase all fronts that are equal to the current front dimension
+				for(auto& row : projections) {
+					if(row.front() == frontDimension ) {
+						row.erase(row.begin());
 					}
 				}
 			}
@@ -1039,7 +1069,12 @@ bool SupportFunctionContent<Number>::contains( const vector_t<Number> &_point ) 
 		}
 		case SF_TYPE::UNITE: {
 			DEBUG("hypro.representations.supportFunction","UNION, point: " << _point);
-			return (mUnionParameters->rhs->contains(_point) || mUnionParameters->lhs->contains(_point));
+			for(const auto& set : mUnionParameters->items) {
+				if(set->contains(_point)) {
+					return true;
+				}
+			}
+			return false;
 		}
 		case SF_TYPE::INTERSECT: {
 			DEBUG("hypro.representations.supportFunction","INTERSECTION, point: " << _point);
@@ -1060,6 +1095,15 @@ std::shared_ptr<SupportFunctionContent<Number>> SupportFunctionContent<Number>::
 		  std::shared_ptr<SupportFunctionContent<Number>>( this->pThis ), _rhs, SF_TYPE::UNITE ) );
 	obj->pThis = obj;
 	return obj;
+}
+
+template<typename Number>
+std::shared_ptr<SupportFunctionContent<Number>> SupportFunctionContent<Number>::unite( std::vector<std::shared_ptr<SupportFunctionContent<Number>>>& _rhs ) {
+	if(!_rhs.empty()) {
+		auto obj = std::shared_ptr<SupportFunctionContent<Number>>( new SupportFunctionContent<Number>( _rhs, SF_TYPE::UNITE ) );
+		obj->pThis = obj;
+		return obj;
+	}
 }
 
 template <typename Number>
@@ -1102,7 +1146,12 @@ bool SupportFunctionContent<Number>::empty() const {
 			return ( mSummands->lhs->empty() && mSummands->rhs->empty() );
 		}
 		case SF_TYPE::UNITE: {
-			return ( mUnionParameters->lhs->empty() && mUnionParameters->rhs->empty() );
+			for(const auto& item : mUnionParameters->items) {
+				if(item->empty()) {
+					return true;
+				}
+			}
+			return false;
 		}
 		case SF_TYPE::INTERSECT: {
 			if (mIntersectionParameters->rhs->empty() || mIntersectionParameters->lhs->empty()) {

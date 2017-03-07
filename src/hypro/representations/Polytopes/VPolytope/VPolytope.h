@@ -139,7 +139,7 @@ class VPolytopeT : public GeometricObject<Number, VPolytopeT<Number,Converter>> 
 	 * @param[in]  rhs   The set of polytopes.
 	 * @return     The resulting object.
 	 */
-	VPolytopeT unite( const std::vector<VPolytopeT>& rhs ) const;
+	static VPolytopeT unite( const std::vector<VPolytopeT>& rhs );
 
 	/**
 	 * @brief      Clears the polytope.

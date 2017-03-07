@@ -815,9 +815,10 @@ HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::unite( const HPolyt
 }
 
 template<typename Number, typename Converter>
-HPolytopeT<Number,Converter> HPolytopeT<Number,Converter>::unite( const std::vector<HPolytopeT>& rhs ) const {
+HPolytopeT<Number,Converter> HPolytopeT<Number,Converter>::unite( const std::vector<HPolytopeT>& rhs ) {
 	// Todo: Implement alternative avoiding conversion.
-	std::vector<Point<Number>> vertices = this->vertices();
+	// Idea: Use templated evaluation.
+	std::vector<Point<Number>> vertices;
 	for(const auto& poly : rhs) {
 		vertices.insert(vertices.end(), poly.vertices().begin(), poly.vertices().end());
 	}

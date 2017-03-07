@@ -368,16 +368,15 @@ VPolytopeT<Number, Converter> VPolytopeT<Number, Converter>::unite( const VPolyt
 }
 
 template<typename Number, typename Converter>
-VPolytopeT<Number,Converter> VPolytopeT<Number,Converter>::unite( const std::vector<VPolytopeT>& rhs ) const {
+VPolytopeT<Number,Converter> VPolytopeT<Number,Converter>::unite( const std::vector<VPolytopeT>& rhs ) {
 	if ( rhs.size() == 0 ) {
-		return VPolytopeT<Number, Converter>( mVertices );
+		return VPolytopeT<Number, Converter>::Empty();
 	} else {
 		VPolytopeT<Number,Converter> result;
 		//std::cout << __func__ << " : of " << *this << " and " << rhs << std::endl;
 		VPolytopeT<Number, Converter>::pointVector points;
 
 		std::set<Point<Number>> pointSet;
-		pointSet.insert( this->mVertices.begin(), this->mVertices.end() );
 		for(const auto& poly : rhs){
 			pointSet.insert( rhs.mVertices.begin(), rhs.mVertices.end() );
 		}

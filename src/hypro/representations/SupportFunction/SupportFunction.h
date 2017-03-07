@@ -81,6 +81,7 @@ public:
 	bool contains( const vector_t<Number>& _point ) const;
 	bool contains( const SupportFunctionT<Number, Converter>& rhs, unsigned directions = 8 ) const;
 	SupportFunctionT<Number,Converter> unite( const SupportFunctionT<Number,Converter>& _rhs ) const;
+	static SupportFunctionT<Number,Converter> unite( const std::vector<SupportFunctionT<Number,Converter>>& _rhs );
 	SupportFunctionT<Number,Converter> scale( const Number& _factor = 1 ) const;
 	std::pair<bool, SupportFunctionT> satisfiesHalfspace( const Halfspace<Number>& rhs ) const;
 	std::pair<bool, SupportFunctionT> satisfiesHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const;

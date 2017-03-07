@@ -402,7 +402,7 @@ class BoxT : public GeometricObject<Number, BoxT<Number,Converter>> {
 	 * @param[in]  boxes  The boxes.
 	 * @return     The resulting box.
 	 */
-	BoxT<Number,Converter> unite( const std::vector<BoxT<Number,Converter>>& boxes ) const;
+	static BoxT<Number,Converter> unite( const std::vector<BoxT<Number,Converter>>& boxes );
 
 	/**
 	 * @brief      Makes this box the empty box.
