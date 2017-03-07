@@ -9,7 +9,7 @@
 #pragma once
 
 #include "../hypro/config.h"
-#include "../hypro/util/types.h"
+#include "util.h"
 
 typedef ::testing::Types<
 	#ifdef USE_MPFR_FLOAT

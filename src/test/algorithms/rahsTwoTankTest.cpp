@@ -12,9 +12,8 @@
 #include "../../hypro/representations/Zonotope/ZUtility.h"
 #include "../../hypro/representations/Zonotope/Zonotope.h"
 #include "../../hypro/algorithms/reachability/RAHS.h"
-//#include "../Visualizer.h"
 #include <fstream>
-//#include "mat.h"
+
 
 
 /*
