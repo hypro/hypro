@@ -11,14 +11,14 @@
 
 #include "gtest/gtest.h"
 #include "../defines.h"
-#include "../../hypro/util/types.h"
-#include "../../hypro/util/VariablePool.h"
-#include "../../hypro/datastructures/Point.h"
-#include "../../hypro/datastructures/Vertex.h"
-#include "../../hypro/datastructures/VertexContainer.h"
-#include "../../hypro/representations/GeometricObject.h"
-#include "../../hypro/representations/OrthogonalPolyhedron/OrthogonalPolyhedron.h"
-#include "../../hypro/representations/OrthogonalPolyhedron/NeighborhoodContainer.h"
+#include "types.h"
+#include "util/VariablePool.h"
+#include "datastructures/Point.h"
+#include "datastructures/Vertex.h"
+#include "datastructures/VertexContainer.h"
+#include "representations/GeometricObject.h"
+#include "representations/OrthogonalPolyhedron/OrthogonalPolyhedron.h"
+#include "representations/OrthogonalPolyhedron/NeighborhoodContainer.h"
 
 #include <map>
 #include <carl/core/VariablePool.h>

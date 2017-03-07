@@ -7,8 +7,8 @@
  */
 
 #pragma once
-#include "../types.h"
-#include "VariablePool.h"
+#include "types.h"
+#include "util/VariablePool.h"
 #include <vector>
 #include <cassert>
 

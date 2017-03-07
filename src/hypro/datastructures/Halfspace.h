@@ -11,7 +11,6 @@
 #pragma once
 #include "Point.h"
 #include "util/VariablePool.h"
-#include "util/linearSolving.h"
 #include "util/adaptions_eigen/adaptions_eigen.h"
 #include <carl/formula/Constraint.h>
 #include <cassert>

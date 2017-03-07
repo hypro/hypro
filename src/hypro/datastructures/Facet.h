@@ -4,9 +4,8 @@
 
 #pragma once
 
-#include "../types.h"
+#include "types.h"
 #include "Halfspace.h"
-#include "util/linearSolving.h"
 
 namespace hypro {
 
@@ -347,16 +346,7 @@ class Facet {
 	    	copyMatrix.col(colIt) = matrix.col(colIt);
 	    }
 	    copyMatrix.col(copyMatrix.cols()-1) = b;
-
-
-		//vector_t<Number> result = matrix.fullPivHouseholderQr().solve( b );
-
-		//std::cout << "RESULT EIGEN: " << result << std::endl;
-
-		vector_t<Number> result = gauss(matrix, b);
-
-		//std::cout << "RESULT Gauss: " << result << std::endl;
-
+		vector_t<Number> result = matrix.fullPivLu().solve( b );
 		return result;
 	}
 
