@@ -138,7 +138,7 @@ class Halfspace {
 	/**
 	 * @brief      Inverts the halfspace by negating the plane normal and the offset.
 	 */
-	void invert();
+	Halfspace<Number>& invert();
 
 	/**
 	 * @brief      Returns the plane offset.

@@ -90,9 +90,10 @@ void Halfspace<Number>::setNormal( const vector_t<Number> &_normal ) {
 }
 
 template<typename Number>
-void Halfspace<Number>::invert() {
+Halfspace<Number>& Halfspace<Number>::invert() {
 	mNormal = -mNormal;
 	mScalar = -mScalar;
+	return *this;
 }
 
 template <typename Number>
