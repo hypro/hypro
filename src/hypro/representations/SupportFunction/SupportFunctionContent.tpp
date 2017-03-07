@@ -559,10 +559,10 @@ std::vector<EvaluationResult<Number>> SupportFunctionContent<Number>::multiEvalu
 						res[resultId] = tmp[resultId];
 					} else {
 						res[resultId] = tmp[resultId] > res[resultId] ? tmp[resultId] : res[resultId];
+						assert(res[resultId].errorCode == SOLUTION::FEAS);
 					}
 				}
 			}
-			assert(res.errorCode == SOLUTION::FEAS);
 			return ( res );
 		}
 		case SF_TYPE::INTERSECT: {
