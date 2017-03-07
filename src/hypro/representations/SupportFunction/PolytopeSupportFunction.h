@@ -13,12 +13,12 @@
 #pragma once
 
 #include "util.h"
-#include "../../config.h"
-#include "../../datastructures/Point.h"
-#include "../../datastructures/Halfspace.h"
-#include "../../util/convexHull.h"
-#include "../../util/linearOptimization/Optimizer.h"
-#include "../../util/Permutator.h"
+#include "config.h"
+#include "datastructures/Point.h"
+#include "datastructures/Halfspace.h"
+#include "util/convexHull.h"
+#include "util/linearOptimization/Optimizer.h"
+#include "util/Permutator.h"
 
 //#define PPOLYTOPESUPPORTFUNCTION_VERBOSE
 #define PPOLYTOPESUPPORTFUNCTION_VERIFY

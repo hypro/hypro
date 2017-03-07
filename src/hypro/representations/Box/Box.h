@@ -31,9 +31,9 @@ class Location;
 /**
  * @brief      The class which represents a box.
  * @details    A box is represented by two points, its maximal and its minimal vertex.
- *
  * @tparam     Number     The used number type.
  * @tparam     Converter  The used converter.
+ * \ingroup geoState @{
  */
 template <typename Number, typename Converter>
 class BoxT : public GeometricObject<Number, BoxT<Number,Converter>> {
@@ -357,54 +357,12 @@ class BoxT : public GeometricObject<Number, BoxT<Number,Converter>> {
 	 */
 	BoxT<Number,Converter> makeSymmetric() const;
 
-	/**
-	 * @brief      Checks, if the box lies inside the given halfspace.
-	 * @details    This function combines the intersection with a given halfspace along with the emptiness test on the result, which is
-	 * often faster than the sequential execution of both commands.
-	 * @param[in]  rhs  The halfspace.
-	 * @return     A pair of a Boolean value and a box. The Boolean is true in case the resulting box is not empty and false otherwise.
-	 */
+
 	std::pair<bool, BoxT> satisfiesHalfspace( const Halfspace<Number>& rhs ) const;
-
-	/**
-	 * @brief      Checks, if the box lies inside the given set of halfspaces.
-	 * @details    This function combines the intersection with a given set of halfspaces along with the emptiness test on the result, which is
-	 * often faster than the sequential execution of both commands.
-	 * @param[in]  _mat  The normals of the halfspaces.
-	 * @param[in]  _vec  The offsets of the halfspaces.
-	 * @return     A pair of a Boolean value and a box. The Boolean is true in case the resulting box is not empty and false otherwise.
-	 */
 	std::pair<bool, BoxT> satisfiesHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const;
-
-	/**
-	 * @brief      Projects the box onto the given dimensions.
-	 * @param[in]  dimensions  The dimensions.
-	 * @return     The projected box.
-	 */
 	BoxT<Number,Converter> project(const std::vector<unsigned>& dimensions) const;
-
-	/**
-	 * @brief      Applies a linear transformation to the box.
-	 * @details    The transformation is done on the two limit points directly. TODO: Add more extensive description here.
-	 * @param[in]  A     A matrix for the linear transformation.
-	 * @return     The resulting box.
-	 */
 	BoxT<Number,Converter> linearTransformation( const matrix_t<Number>& A ) const;
-
-	/**
-	 * @brief      Applies an affine transformation to the box.
-	 * @details    The transformation is done on the two limit points directly. TODO: Add more extensive description here.
-	 * @param[in]  A     A matrix for the affine transformation.
-	 * @param[in]  b     A vector for the offset.
-	 * @return     The resulting box.
-	 */
 	BoxT<Number,Converter> affineTransformation( const matrix_t<Number>& A, const vector_t<Number>& b ) const;
-
-	/**
-	 * @brief      Computes the Minkowski sum of two boxes.
-	 * @param[in]  rhs   The right hand side box.
-	 * @return     The resulting box.
-	 */
 	BoxT<Number,Converter> minkowskiSum( const BoxT<Number,Converter>& rhs ) const;
 
 	/**
@@ -421,26 +379,8 @@ class BoxT : public GeometricObject<Number, BoxT<Number,Converter>> {
 	 */
 	BoxT<Number,Converter> intersect( const BoxT<Number,Converter>& rhs ) const;
 
-	/**
-	 * @brief      Computes the intersection of the current box with a given halfspace.
-	 * @param[in]  hspace  The halfspace.
-	 * @return     The resulting box.
-	 */
 	BoxT<Number,Converter> intersectHalfspace( const Halfspace<Number>& hspace ) const;
-
-	/**
-	 * @brief      Computes the intersection of the current box with a set of halfspaces.
-	 * @param[in]  _mat  The matrix representing the normal vectors.
-	 * @param[in]  _vec  The vector representing the offsets.
-	 * @return     The resulting box.
-	 */
 	BoxT<Number,Converter> intersectHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const;
-
-	/**
-	 * @brief      Containment check for a point.
-	 * @param[in]  point  The point.
-	 * @return     True, if the point is contained inside the current box, false otherwise.
-	 */
 	bool contains( const Point<Number>& point ) const;
 
 	/**
@@ -474,6 +414,8 @@ class BoxT : public GeometricObject<Number, BoxT<Number,Converter>> {
 	 */
 	void print() const;
 };
+/** @} */
+
 
 /**
  * @brief      Operator for scaling a box.

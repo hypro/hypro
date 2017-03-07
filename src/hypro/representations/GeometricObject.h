@@ -1,5 +1,7 @@
 /**
  * @file GeometricObject.h
+ * \defgroup geoState State set representations
+ * This is the description.
  */
 
 #pragma once
@@ -8,7 +10,7 @@
 
 #include "types.h"
 #include "flags.h"
-#include "../config.h"
+#include "config.h"
 #include "util/adaptions_eigen/adaptions_eigen.h"
 #include "util/logging/Logger.h"
 
@@ -38,6 +40,7 @@ class Location;
 /**
  * @brief      Purely virtual class defining a common interface for geometric objects.
  * @tparam     Number  The used number type.
+ * \ingroup geoState @{
  */
 template<typename Number, typename DerivedShape>
 class GeometricObject {
@@ -152,6 +155,8 @@ public:
 	//virtual DerivedShape unite( const std::vector<DerivedShape>& rhs ) const = 0;
 
 };
+
+/** @} */
 
 } // namespace hypro
 

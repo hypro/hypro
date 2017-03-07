@@ -32,6 +32,7 @@ class Location;
  * @brief      Class for a H-polytope.
  * @tparam     Number     The used number type.
  * @tparam     Converter  The used converter.
+ * \ingroup geoState @{
  */
 template <typename Number, typename Converter>
 class HPolytopeT : public GeometricObject<Number, HPolytopeT<Number,Converter>> {
@@ -395,6 +396,7 @@ public:
 	Point<Number> getVertexForVector(vector_t<Number> vector, std::vector<Point<Number>> vertices) const;
 
 };
+/** @} */
 
 template<typename From, typename To, typename Converter>
 HPolytopeT<To,Converter> convert(const HPolytopeT<From,Converter>& in) {

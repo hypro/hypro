@@ -9,16 +9,14 @@
 #include "SupportFunctionContent.h"
 #include "util/templateDirections.h"
 #include "datastructures/hybridAutomata/Location.h"
-#include "algorithms/convexHull/vertexEnumeration.h"
-#include <list>
 
 namespace hypro {
 
 /**
  * @brief      Class wrapping the support function content.
- *
  * @tparam     Number     The used number type.
  * @tparam     Converter  The used converter.
+ * \ingroup geoState @{
  */
 template <typename Number, typename Converter>
 class SupportFunctionT : public GeometricObject<Number, SupportFunctionT<Number,Converter>> {
@@ -118,6 +116,8 @@ public:
 private:
 	void evaluateTemplate() const;
 };
+
+/** @} */
 
 } //namespace hypro
 #include "SupportFunction.tpp"

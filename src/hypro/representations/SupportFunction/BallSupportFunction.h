@@ -12,8 +12,8 @@
 #pragma once
 
 #include "util.h"
-#include "../../config.h"
-#include "../../datastructures/Point.h"
+#include "config.h"
+#include "datastructures/Point.h"
 
 namespace hypro {
 template <typename Number>

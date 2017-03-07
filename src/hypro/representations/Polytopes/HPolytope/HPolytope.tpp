@@ -447,14 +447,11 @@ template <typename Number, typename Converter>
 const HPolytopeT<Number,Converter>& HPolytopeT<Number, Converter>::removeRedundancy() {
 	//std::cout << __func__ << std::endl;
 	if(!mNonRedundant && mHPlanes.size() > 1){
-		//std::cout << "Not already reduced." << std::endl;
 		Optimizer<Number> opt;
 		opt.setMatrix(this->matrix());
 		opt.setVector(this->vector());
 
 		std::vector<std::size_t> redundant = opt.redundantConstraints();
-		//std::cout << __func__ << ": found " << redundant.size() << " redundant constraints." << std::endl;
-		//std::cout << __func__ << ": Redundant constraints: " << redundant << std::endl;
 
 		if(!redundant.empty()){
 			std::size_t cnt = mHPlanes.size()-1;

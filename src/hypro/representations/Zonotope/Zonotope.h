@@ -30,6 +30,12 @@ namespace hypro {
 
 static const unsigned ZONOTOPE_ORDERLIMIT = 4;
 
+/**
+ * @brief      Class for Zonotopes.
+ * @tparam     Number     The used number type.
+ * @tparam     Converter  The converter.
+ * \ingroup geoState @{
+ */
 template<typename Number, typename Converter>
 class ZonotopeT : public GeometricObject<Number, ZonotopeT<Number,Converter>> {
   private:
@@ -178,33 +184,9 @@ class ZonotopeT : public GeometricObject<Number, ZonotopeT<Number,Converter>> {
 	*                                                                           *
 	*****************************************************************************/
 
-	/**
-	 * Applies the Minkowskisum of the given stateset and a second stateset.
-	 * @param result The resulting stateset.
-	 * @param rhs The other right-hand-side stateset. Is not modified.
-	 * @return True if the operation has been successfully applied.
-	 */
 	ZonotopeT<Number,Converter> minkowskiSum( const ZonotopeT<Number,Converter>& rhs ) const;
-
-	/**
-	 * @brief      Projects the zonotope on the given dimensions.
-	 * @param[in]  dimensions  The dimensions.
-	 * @return     The projected zonotope.
-	 */
 	ZonotopeT<Number,Converter> project( const std::vector<unsigned>& dimensions ) const;
-
-	/**
-	 * Applies a linear transformation on the given stateset.
-	 * @param result The resulting stateset.
-	 * @return True if the operation has been successfully applied.
-	 */
 	ZonotopeT<Number,Converter> linearTransformation( const matrix_t<Number>& A) const;
-
-	/**
-	 * Applies an affine transformation on the given stateset.
-	 * @param result The resulting stateset.
-	 * @return True if the operation has been successfully applied.
-	 */
 	ZonotopeT<Number,Converter> affineTransformation( const matrix_t<Number>& A, const vector_t<Number>& b ) const;
 
 	/**
@@ -222,14 +204,6 @@ class ZonotopeT : public GeometricObject<Number, ZonotopeT<Number,Converter>> {
 	 */
 	std::vector<Point<Number>> vertices( const Location<Number>* = nullptr ) const;
 
-	/**
-	 * Calculates zonotopeT intersect with halfspace (represented as d*x <= e, where d is a column vector of dimension n
-	 * and e a scalar)
-	 * @param result : The resulting intersect
-	 * @param d_vec : Vector representing the halfspace
-	 * @param e_scalar : Scalar representing the halfspace
-	 * @return true if intersect is found, false otherwise (result parameter is not modified if false)
-	 */
 	ZonotopeT<Number,Converter> intersectHalfspace( const Halfspace<Number>& rhs ) const;
 	ZonotopeT<Number,Converter> intersectHalfspaces( const matrix_t<Number>& mat, const vector_t<Number>& vec ) const;
 
@@ -281,12 +255,6 @@ class ZonotopeT : public GeometricObject<Number, ZonotopeT<Number,Converter>> {
 	ZonotopeT<Number,Converter> intersect( const Parma_Polyhedra_Library::C_Polyhedron& rhs ) const;
 	#endif
 
-	/**
-	 * Computes the convex hull of the member zonotopeT and another given zonotopeT
-	 * @param result: resulting convex hull (also itself a zonotopeT)
-	 * @param other: the other zonotopeT
-	 * @return true for all cases.
-	 */
 	ZonotopeT<Number,Converter> unite( const ZonotopeT<Number,Converter>& other ) const;
 
 	/**
@@ -298,6 +266,8 @@ class ZonotopeT : public GeometricObject<Number, ZonotopeT<Number,Converter>> {
 
 	bool contains(const Point<Number>& point) const;
 };
+
+/** @} */
 
 template<typename Number, typename Converter>
 std::ostream& operator<<(std::ostream& out, const ZonotopeT<Number,Converter>& in ) {

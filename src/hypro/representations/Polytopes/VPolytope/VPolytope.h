@@ -23,9 +23,9 @@ namespace hypro {
 
 /**
  * @brief      The class implementing the vertex representation of a convex polytope.
- *
  * @tparam     Number     The used number type.
  * @tparam     Converter  The used converter.
+ * \ingroup geoState @{
  */
 template <typename Number, typename Converter>
 class VPolytopeT : public GeometricObject<Number, VPolytopeT<Number,Converter>> {
@@ -100,33 +100,9 @@ class VPolytopeT : public GeometricObject<Number, VPolytopeT<Number,Converter>> 
 	* General interface
 	**************************************************************************/
 
-	/**
-	 * @brief      Projects the polytope on the passed dimensions.
-	 * @param[in]  dimensions  The dimensions.
-	 * @return     The projected polytope.
-	 */
 	VPolytopeT project( const std::vector<unsigned>& dimensions ) const;
-
-	/**
-	 * @brief      Applies a linear transformation.
-	 * @param[in]  A     The matrix representing the transformation.
-	 * @return     The resulting object.
-	 */
 	VPolytopeT linearTransformation( const matrix_t<Number>& A ) const;
-
-	/**
-	 * @brief      Applies an affine transformation.
-	 * @param[in]  A     The matrix describing the linear part of the transformation.
-	 * @param[in]  b     The offset vector.
-	 * @return     The resulting object.
-	 */
 	VPolytopeT affineTransformation( const matrix_t<Number>& A, const vector_t<Number>& b ) const;
-
-	/**
-	 * @brief      Computes the Minkowski sum of two V-polytopes.
-	 * @param[in]  rhs   The right hand side.
-	 * @return     The resulting object.
-	 */
 	VPolytopeT minkowskiSum( const VPolytopeT& rhs ) const;
 
 	/**
@@ -136,42 +112,10 @@ class VPolytopeT : public GeometricObject<Number, VPolytopeT<Number,Converter>> 
 	 */
 	VPolytopeT intersect( const VPolytopeT& rhs ) const;
 
-	/**
-	 * @brief      Intersects the polytope with a halfspace.
-	 * @param[in]  rhs   The halfspace.
-	 * @return     The resulting object.
-	 */
 	VPolytopeT intersectHalfspace( const Halfspace<Number>& rhs ) const;
-
-	/**
-	 * @brief      Intersects the polytope with a set of halfspaces represented by constraints.
-	 * @param[in]  _mat  The constraint matrix.
-	 * @param[in]  _vec  The constraint vector.
-	 * @return     The resulting object.
-	 */
 	VPolytopeT intersectHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const;
-
-	/**
-	 * @brief      Intersects the polytope with a halfspace and determines if the result is empty.
-	 * @param[in]  rhs   The halfspace.
-	 * @return     A pair of a Boolean and a polytope. The Boolean states if the resulting polytope is empty.
-	 */
 	std::pair<bool, VPolytopeT> satisfiesHalfspace( const Halfspace<Number>& rhs ) const;
-
-	/**
-	 * @brief      Intersects the polytope with a set of halfspaces represented by a matrix and a vector. Determines if the result is
-	 * empty.
-	 * @param[in]  _mat  The matrix.
-	 * @param[in]  _vec  The vector.
-	 * @return     A pair of a Boolean and a polytope. The Boolean states if the resulting polytope is empty.
-	 */
 	std::pair<bool, VPolytopeT> satisfiesHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const;
-
-	/**
-	 * @brief      Checks if a point is contained in the polytope.
-	 * @param[in]  point  The point.
-	 * @return     True, if the point lies inside the polytope.
-	 */
 	bool contains( const Point<Number>& point ) const;
 
 	/**
@@ -188,11 +132,6 @@ class VPolytopeT : public GeometricObject<Number, VPolytopeT<Number,Converter>> 
 	 */
 	bool contains( const VPolytopeT& _other ) const;
 
-	/**
-	 * @brief      Computes the convex hull of this and the right hand side polytope.
-	 * @param[in]  rhs   The right hand side.
-	 * @return     The resulting object.
-	 */
 	VPolytopeT unite( const VPolytopeT& rhs ) const;
 
 	/**
@@ -425,6 +364,8 @@ class VPolytopeT : public GeometricObject<Number, VPolytopeT<Number,Converter>> 
 	VPolytopeT<Number, Converter>& operator=( VPolytopeT<Number, Converter>&& rhs ) = default;
 	bool operator==( const VPolytopeT<Number, Converter>& rhs ) const;
 };
+
+/** @} */
 
 template <typename Number, typename Converter>
 std::ostream& operator<<( std::ostream& out, const hypro::VPolytopeT<Number, Converter>& lhs ) {
