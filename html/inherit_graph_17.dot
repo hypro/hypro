@@ -1,0 +1,9 @@
+digraph "Graphical Class Hierarchy"
+{
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  rankdir="LR";
+  Node0 [label="hypro::GeometricObject\l\< double, BoxT\< double,\l Converter \> \>",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classhypro_1_1GeometricObject.html"];
+  Node0 -> Node1 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node1 [label="hypro::BoxT\< double,\l Converter \>",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classhypro_1_1BoxT_3_01double_00_01Converter_01_4.html",tooltip="Class holding a specialization of the generic BoxT type with double numbers. "];
+}
