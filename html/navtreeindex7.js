@@ -231,9 +231,9 @@ var NAVTREEINDEX7 =
 "structhypro_1_1pointIt.html#aab90f1675f5e500bb83770fcda8777ce":[6,0,1,39,3],
 "structhypro_1_1pointIt.html#aafa9557c86088b2d3e1e758a4814587c":[6,0,1,39,4],
 "structhypro_1_1projectionContent.html":[6,0,1,43],
+"structhypro_1_1projectionContent.html#a35f9880d46928dfd8b51c33ac02d7e99":[6,0,1,43,0],
 "structhypro_1_1projectionContent.html#a79c53a039617dc8990cf25f4865bb5a6":[6,0,1,43,2],
 "structhypro_1_1projectionContent.html#a7ab48c5966b01187654e094cd89e234a":[6,0,1,43,1],
-"structhypro_1_1projectionContent.html#a99a4b33b81e842c18ea53de6304e67a3":[6,0,1,43,0],
 "structhypro_1_1projectionContent.html#aff275dee97c4f7924daef312433d3dbd":[6,0,1,43,3],
 "structhypro_1_1reachability_1_1ReachabilitySettings.html":[6,0,1,2,2],
 "structhypro_1_1reachability_1_1ReachabilitySettings.html#a056381b77baf20bf405ed78e2f0b318c":[6,0,1,2,2,6],
@@ -249,5 +249,5 @@ var NAVTREEINDEX7 =
 "structhypro_1_1reachability_1_1ReachabilitySettings.html#ad0d482dce8078aa12455c48e5d14a62f":[6,0,1,2,2,11],
 "structhypro_1_1reachability_1_1ReachabilitySettings.html#afe047eb0c302876a8be98dd9892e2108":[6,0,1,2,2,2],
 "structhypro_1_1scaleContent.html":[6,0,1,50],
-"structhypro_1_1scaleContent.html#a00e29c2dc8cbab60df74d2d7bddf7583":[6,0,1,50,0]
+"structhypro_1_1scaleContent.html#a6af5744edb66f9b41f9ea9833e65645f":[6,0,1,50,2]
 };

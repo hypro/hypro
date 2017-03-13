@@ -281,7 +281,7 @@ Please use a more specific name by including a (larger) part of the path!
 /Users/travis/build/hypro/hypro/src/hypro/parser/flowstar/componentsAdapt.h:16: warning: member with no name found.
 /Users/travis/build/hypro/hypro/src/hypro/util/Plotter.h:69: warning: documented symbol `Singleton< Plotter< Number > >' was not declared or defined.
 /Users/travis/build/hypro/hypro/src/hypro/util/VariablePool.h:28: warning: documented symbol `Singleton< VariablePool >' was not declared or defined.
-error opening bib11957.bbl: No such file or directory
+error opening bib12146.bbl: No such file or directory
 bibtex command failed: No such file or directory
 error: Problems running bibtex. Verify that the command 'perl --version' works from the command line. Exit code: 2
 .
@@ -1136,7 +1136,7 @@ Generating docs for compound Eig/Users/travis/build/hypro/hypro/src/hypro/types.
 /Users/travis/build/hypro/hypro/src/hypro/datastructures/hybridAutomata/HybridAutomaton.h:79: warning: Member dimension() const (function) of class hypro::HybridAutomaton is not documented.
 /Users/travis/build/hypro/hypro/src/hypro/datastructures/hybridAutomata/HybridAutomaton.h:80: warning: Member addArtificialDimension() (function) of class hypro::HybridAutomaton is not documented.
 /Users/travis/build/hypro/hypro/src/hypro/datastructures/hybridAutomata/HybridAutomaton.h:176: warning: Member operator==(const HybridAutomaton< Number > &rhs) const (function) of class hypro::HybridAutomaton is not documented.
-/Users/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunctionContent.h:123: warning: Member intersectionContent(std::shared_ptr< SupportFunctionContent< Number >> _lhs, std::shared_ptr< SupportFunctionContent< Number >> _rhs) (function) of class hypro::intersectionContent is not documented.
+/Users/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunctionContent.h:123: warning: Member intersectionContent(const std::shared_ptr< SupportFunctionContent< Number >> &_lhs, const std::shared_ptr< SupportFunctionContent< Number >> &_rhs) (function) of class hypro::intersectionContent is not documented.
 /Users/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunctionContent.h:125: warning: Member intersectionContent(const intersectionContent< Number > &_origin) (function) of class hypro::intersectionContent is not documented.
 /Users/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunctionContent.h:121: warning: Member lhs (variable) of class hypro::intersectionContent is not documented.
 /Users/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunctionContent.h:122: warning: Member rhs (variable) of class hypro::intersectionContent is not documented.
@@ -1213,11 +1213,11 @@ Generating docs for compound Eig/Users/travis/build/hypro/hypro/src/hypro/types.
 /Users/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunctionContent.h:254: warning: Member ellipsoid() const (function) of class hypro::SupportFunctionContent is not documented.
 /Users/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunctionContent.h:256: warning: Member project(const std::vector< unsigned > &dimensions) const (function) of class hypro::SupportFunctionContent is not documented.
 /Users/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunctionContent.h:257: warning: Member affineTransformation(const matrix_t< Number > &A, const vector_t< Number > &b) const (function) of class hypro::SupportFunctionContent is not documented.
-/Users/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunctionContent.h:258: warning: Member minkowskiSum(std::shared_ptr< SupportFunctionContent< Number >> _rhs) const (function) of class hypro::SupportFunctionContent is not documented.
-/Users/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunctionContent.h:259: warning: Member intersect(std::shared_ptr< SupportFunctionContent< Number >> _rhs) const (function) of class hypro::SupportFunctionContent is not documented.
+/Users/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunctionContent.h:258: warning: Member minkowskiSum(const std::shared_ptr< SupportFunctionContent< Number >> &_rhs) const (function) of class hypro::SupportFunctionContent is not documented.
+/Users/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunctionContent.h:259: warning: Member intersect(const std::shared_ptr< SupportFunctionContent< Number >> &_rhs) const (function) of class hypro::SupportFunctionContent is not documented.
 /Users/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunctionContent.h:260: warning: Member contains(const Point< Number > &_point) const (function) of class hypro::SupportFunctionContent is not documented.
 /Users/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunctionContent.h:261: warning: Member contains(const vector_t< Number > &_point) const (function) of class hypro::SupportFunctionContent is not documented.
-/Users/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunctionContent.h:262: warning: Member unite(std::shared_ptr< SupportFunctionContent< Number >> _rhs) const (function) of class hypro::SupportFunctionContent is not documented.
+/Users/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunctionContent.h:262: warning: Member unite(const std::shared_ptr< SupportFunctionContent< Number >> &_rhs) const (function) of class hypro::SupportFunctionContent is not documented.
 /Users/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunctionContent.h:264: warning: Member scale(const Number &_factor=1) const (function) of class hypro::SupportFunctionContent is not documented.
 /Users/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunctionContent.h:266: warning: Member empty() const (function) of class hypro::SupportFunctionContent is not documented.
 /Users/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunctionContent.h:268: warning: Member print() const (function) of class hypro::SupportFunctionContent is not documented.
@@ -1227,7 +1227,7 @@ Generating docs for compound Eig/Users/travis/build/hypro/hypro/src/hypro/types.
 /Users/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunctionContent.h:202: warning: Member create(SF_TYPE _type, const std::vector< Halfspace< Number >> &_planes) (function) of class hypro::SupportFunctionContent is not documented.
 /Users/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunctionContent.h:209: warning: Member create(SF_TYPE _type, const std::vector< Point< Number >> &_points) (function) of class hypro::SupportFunctionContent is not documented.
 /Users/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunctionContent.h:216: warning: Member create(const std::shared_ptr< SupportFunctionContent< Number >> &orig) (function) of class hypro::SupportFunctionContent is not documented.
-/Users/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunctionContent.h:263: warning: Member unite(std::vector< std::shared_ptr< SupportFunctionContent< Number >>> &_rhs) (function) of class hypro::SupportFunctionContent is not documented.
+/Users/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunctionContent.h:263: warning: Member unite(const std::vector< std::shared_ptr< SupportFunctionContent< Number >>> &_rhs) (function) of class hypro::SupportFunctionContent is not documented.
 /Users/travis/build/hypro/hypro/src/hypro/representations/OrthogonalPolyhedron/representations/Neighborhood.h:27: warning: Member OrthogonalPolyhedron(const Vertex< Number > &_vertex) (function) of class hypro::OrthogonalPolyhedron is not documented.
 /Users/travis/build/hypro/hypro/src/hypro/representations/OrthogonalPolyhedron/representations/Neighborhood.h:28: warning: Member OrthogonalPolyhedron(const VertexContainer< Number > &vertices) (function) of class hypro::OrthogonalPolyhedron is not documented.
 /Users/travis/build/hypro/hypro/src/hypro/representations/OrthogonalPolyhedron/representations/Neighborhood.h:29: warning: Member OrthogonalPolyhedron(const std::set< Vertex< Number >> &points) (function) of class hypro::OrthogonalPolyhedron is not documented.
@@ -1396,7 +1396,7 @@ Generating docs for compound Eig/Users/travis/build/hypro/hypro/src/hypro/types.
 /Users/travis/build/hypro/hypro/src/hypro/util/pca.h:44: warning: Member setSamples(const std::vector< Point< Number >> &samples) (function) of class hypro::PrincipalComponentAnalysis is not documented.
 /Users/travis/build/hypro/hypro/src/hypro/util/pca.h:46: warning: Member computeMean() const (function) of class hypro::PrincipalComponentAnalysis is not documented.
 /Users/travis/build/hypro/hypro/src/hypro/util/pca.h:47: warning: Member computeOrientedBox() const (function) of class hypro::PrincipalComponentAnalysis is not documented.
-/Users/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunctionContent.h:132: warning: Member projectionContent(std::shared_ptr< SupportFunctionContent< Number >> _origin, const std::vector< unsigned > &_dimensions) (function) of class hypro::projectionContent is not documented.
+/Users/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunctionContent.h:132: warning: Member projectionContent(const std::shared_ptr< SupportFunctionContent< Number >> &_origin, const std::vector< unsigned > &_dimensions) (function) of class hypro::projectionContent is not documented.
 /Users/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunctionContent.h:134: warning: Member projectionContent(const projectionContent< Number > &_original) (function) of class hypro::projectionContent is not documented.
 /Users/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunctionContent.h:130: warning: Member origin (variable) of class hypro::projectionContent is not documented.
 /Users/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunctionContent.h:131: warning: Member dimensions (variable) of class hypro::projectionContent is not documented.
@@ -1461,7 +1461,7 @@ Generating docs for compound Eig/Users/travis/build/hypro/hypro/src/hypro/types.
 /Users/travis/build/hypro/hypro/src/hypro/datastructures/Ridge.h:74: warning: Member rNeighbors() (function) of class hypro::Ridge is not documented.
 /Users/travis/build/hypro/hypro/src/hypro/datastructures/Ridge.h:76: warning: Member neighbors() const (function) of class hypro::Ridge is not documented.
 /Users/travis/build/hypro/hypro/src/hypro/datastructures/Ridge.h:78: warning: Member halfspace() const (function) of class hypro::Ridge is not documented.
-/Users/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunctionContent.h:100: warning: Member scaleContent(std::shared_ptr< SupportFunctionContent< Number >> _origin, Number _factor) (function) of class hypro::scaleContent is not documented.
+/Users/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunctionContent.h:100: warning: Member scaleContent(const std::shared_ptr< SupportFunctionContent< Number >> &_origin, Number _factor) (function) of class hypro::scaleContent is not documented.
 /Users/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunctionContent.h:102: warning: Member scaleContent(const scaleContent< Number > &_origin) (function) of class hypro::scaleContent is not documented.
 /Users/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunctionContent.h:98: warning: Member origin (variable) of class hypro::scaleContent is not documented.
 /Users/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunctionContent.h:99: warning: Member factor (variable) of class hypro::scaleContent is not documented.
@@ -1471,7 +1471,7 @@ Generating docs for compound Eig/Users/travis/build/hypro/hypro/src/hypro/types.
 /Users/travis/build/hypro/hypro/src/hypro/datastructures/hybridAutomata/State.h:49: warning: Member discreteAssignment (variable) of class hypro::State is not documented.
 /Users/travis/build/hypro/hypro/src/hypro/datastructures/hybridAutomata/State.h:50: warning: Member timestamp (variable) of class hypro::State is not documented.
 /Users/travis/build/hypro/hypro/src/hypro/datastructures/hybridAutomata/State.h:73: warning: Member operator<<(std::ostream &_ostr, const State< Number > &s) (friend) of class hypro::State is not documented.
-/Users/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunctionContent.h:34: warning: Member sumContent(std::shared_ptr< SupportFunctionContent< Number >> _lhs, std::shared_ptr< SupportFunctionContent< Number >> _rhs) (function) of class hypro::sumContent is not documented.
+/Users/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunctionContent.h:34: warning: Member sumContent(const std::shared_ptr< SupportFunctionContent< Number >> &_lhs, const std::shared_ptr< SupportFunctionContent< Number >> &_rhs) (function) of class hypro::sumContent is not documented.
 /Users/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunctionContent.h:36: warning: Member sumContent(const sumContent< Number > &_origin) (function) of class hypro::sumContent is not documented.
 /Users/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunctionContent.h:32: warning: Member lhs (variable) of class hypro::sumContent is not documented.
 /Users/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunctionContent.h:33: warning: Member rhs (variable) of class hypro::sumContent is not documented.
@@ -1497,11 +1497,11 @@ Generating docs for compound Eig/Users/travis/build/hypro/hypro/src/hypro/types.
 /Users/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunctionContent.h:254: warning: Member ellipsoid() const (function) of class hypro::SupportFunctionContent is not documented.
 /Users/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunctionContent.h:256: warning: Member project(const std::vector< unsigned > &dimensions) const (function) of class hypro::SupportFunctionContent is not documented.
 /Users/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunctionContent.h:257: warning: Member affineTransformation(const matrix_t< Number > &A, const vector_t< Number > &b) const (function) of class hypro::SupportFunctionContent is not documented.
-/Users/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunctionContent.h:258: warning: Member minkowskiSum(std::shared_ptr< SupportFunctionContent< Number >> _rhs) const (function) of class hypro::SupportFunctionContent is not documented.
-/Users/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunctionContent.h:259: warning: Member intersect(std::shared_ptr< SupportFunctionContent< Number >> _rhs) const (function) of class hypro::SupportFunctionContent is not documented.
+/Users/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunctionContent.h:258: warning: Member minkowskiSum(const std::shared_ptr< SupportFunctionContent< Number >> &_rhs) const (function) of class hypro::SupportFunctionContent is not documented.
+/Users/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunctionContent.h:259: warning: Member intersect(const std::shared_ptr< SupportFunctionContent< Number >> &_rhs) const (function) of class hypro::SupportFunctionContent is not documented.
 /Users/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunctionContent.h:260: warning: Member contains(const Point< Number > &_point) const (function) of class hypro::SupportFunctionContent is not documented.
 /Users/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunctionContent.h:261: warning: Member contains(const vector_t< Number > &_point) const (function) of class hypro::SupportFunctionContent is not documented.
-/Users/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunctionContent.h:262: warning: Member unite(std::shared_ptr< SupportFunctionContent< Number >> _rhs) const (function) of class hypro::SupportFunctionContent is not documented.
+/Users/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunctionContent.h:262: warning: Member unite(const std::shared_ptr< SupportFunctionContent< Number >> &_rhs) const (function) of class hypro::SupportFunctionContent is not documented.
 /Users/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunctionContent.h:264: warning: Member scale(const Number &_factor=1) const (function) of class hypro::SupportFunctionContent is not documented.
 /Users/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunctionContent.h:266: warning: Member empty() const (function) of class hypro::SupportFunctionContent is not documented.
 /Users/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunctionContent.h:268: warning: Member print() const (function) of class hypro::SupportFunctionContent is not documented.
@@ -1511,7 +1511,7 @@ Generating docs for compound Eig/Users/travis/build/hypro/hypro/src/hypro/types.
 /Users/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunctionContent.h:202: warning: Member create(SF_TYPE _type, const std::vector< Halfspace< Number >> &_planes) (function) of class hypro::SupportFunctionContent is not documented.
 /Users/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunctionContent.h:209: warning: Member create(SF_TYPE _type, const std::vector< Point< Number >> &_points) (function) of class hypro::SupportFunctionContent is not documented.
 /Users/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunctionContent.h:216: warning: Member create(const std::shared_ptr< SupportFunctionContent< Number >> &orig) (function) of class hypro::SupportFunctionContent is not documented.
-/Users/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunctionContent.h:263: warning: Member unite(std::vector< std::shared_ptr< SupportFunctionContent< Number >>> &_rhs) (function) of class hypro::SupportFunctionContent is not documented.
+/Users/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunctionContent.h:263: warning: Member unite(const std::vector< std::shared_ptr< SupportFunctionContent< Number >>> &_rhs) (function) of class hypro::SupportFunctionContent is not documented.
 /Users/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunctionContent.h:269: warning: Member operator<<(std::ostream &lhs, const std::shared_ptr< SupportFunctionContent< Number >> &rhs) (friend) of class hypro::SupportFunctionContent is not documented.
 /Users/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunction.h:34: warning: Member SupportFunctionT(const SupportFunctionT< Number, Converter > &_orig) (function) of class hypro::SupportFunctionT is not documented.
 /Users/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunction.h:35: warning: Member SupportFunctionT(SF_TYPE _type, Number _radius, unsigned dimension) (function) of class hypro::SupportFunctionT is not documented.
@@ -1576,11 +1576,11 @@ Generating docs for compound Eig/Users/travis/build/hypro/hypro/src/hypro/types.
 /Users/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunctionContent.h:254: warning: Member ellipsoid() const (function) of class hypro::SupportFunctionContent is not documented.
 /Users/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunctionContent.h:256: warning: Member project(const std::vector< unsigned > &dimensions) const (function) of class hypro::SupportFunctionContent is not documented.
 /Users/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunctionContent.h:257: warning: Member affineTransformation(const matrix_t< Number > &A, const vector_t< Number > &b) const (function) of class hypro::SupportFunctionContent is not documented.
-/Users/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunctionContent.h:258: warning: Member minkowskiSum(std::shared_ptr< SupportFunctionContent< Number >> _rhs) const (function) of class hypro::SupportFunctionContent is not documented.
-/Users/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunctionContent.h:259: warning: Member intersect(std::shared_ptr< SupportFunctionContent< Number >> _rhs) const (function) of class hypro::SupportFunctionContent is not documented.
+/Users/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunctionContent.h:258: warning: Member minkowskiSum(const std::shared_ptr< SupportFunctionContent< Number >> &_rhs) const (function) of class hypro::SupportFunctionContent is not documented.
+/Users/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunctionContent.h:259: warning: Member intersect(const std::shared_ptr< SupportFunctionContent< Number >> &_rhs) const (function) of class hypro::SupportFunctionContent is not documented.
 /Users/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunctionContent.h:260: warning: Member contains(const Point< Number > &_point) const (function) of class hypro::SupportFunctionContent is not documented.
 /Users/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunctionContent.h:261: warning: Member contains(const vector_t< Number > &_point) const (function) of class hypro::SupportFunctionContent is not documented.
-/Users/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunctionContent.h:262: warning: Member unite(std::shared_ptr< SupportFunctionContent< Number >> _rhs) const (function) of class hypro::SupportFunctionContent is not documented.
+/Users/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunctionContent.h:262: warning: Member unite(const std::shared_ptr< SupportFunctionContent< Number >> &_rhs) const (function) of class hypro::SupportFunctionContent is not documented.
 /Users/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunctionContent.h:264: warning: Member scale(const Number &_factor=1) const (function) of class hypro::SupportFunctionContent is not documented.
 /Users/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunctionContent.h:266: warning: Member empty() const (function) of class hypro::SupportFunctionContent is not documented.
 /Users/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunctionContent.h:268: warning: Member print() const (function) of class hypro::SupportFunctionContent is not documented.
@@ -1590,7 +1590,7 @@ Generating docs for compound Eig/Users/travis/build/hypro/hypro/src/hypro/types.
 /Users/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunctionContent.h:202: warning: Member create(SF_TYPE _type, const std::vector< Halfspace< Number >> &_planes) (function) of class hypro::SupportFunctionContent is not documented.
 /Users/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunctionContent.h:209: warning: Member create(SF_TYPE _type, const std::vector< Point< Number >> &_points) (function) of class hypro::SupportFunctionContent is not documented.
 /Users/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunctionContent.h:216: warning: Member create(const std::shared_ptr< SupportFunctionContent< Number >> &orig) (function) of class hypro::SupportFunctionContent is not documented.
-/Users/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunctionContent.h:263: warning: Member unite(std::vector< std::shared_ptr< SupportFunctionContent< Number >>> &_rhs) (function) of class hypro::SupportFunctionContent is not documented.
+/Users/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunctionContent.h:263: warning: Member unite(const std::vector< std::shared_ptr< SupportFunctionContent< Number >>> &_rhs) (function) of class hypro::SupportFunctionContent is not documented.
 /Users/travis/build/hypro/hypro/src/hypro/representations/TaylorModel/TaylorModel.h:87: warning: Member TaylorModel(const MultivariatePolynomial< carl::Interval< Number >> &p, const carl::Interval< Number > &r) (function) of class hypro::TaylorModel is not documented.
 /Users/travis/build/hypro/hypro/src/hypro/representations/TaylorModel/TaylorModel.h:88: warning: Member TaylorModel(const MultivariatePolynomial< carl::Interval< Number >> &p) (function) of class hypro::TaylorModel is not documented.
 /Users/travis/build/hypro/hypro/src/hypro/representations/TaylorModel/TaylorModel.h:89: warning: Member TaylorModel(const carl::Interval< Number > &I) (function) of class hypro::TaylorModel is not documented.
@@ -1671,7 +1671,7 @@ Generating docs for compound Eig/Users/travis/build/hypro/hypro/src/hypro/types.
 /Users/travis/build/hypro/hypro/src/hypro/representations/TaylorModel/TaylorModel.h:244: warning: Member Picard_assign(const TaylorModelVec< Number > &x0, const PolynomialODE< Number > &ode, Domain< Number > &domain, carl::Variable::Arg t, const carl::Interval< Number > &range_of_t, const exponent order) (function) of class hypro::TaylorModelVec is not documented.
 /Users/travis/build/hypro/hypro/src/hypro/representations/TaylorModel/TaylorModel.h:194: warning: Member tms (variable) of class hypro::TaylorModelVec is not documented.
 /Users/travis/build/hypro/hypro/src/hypro/representations/TaylorModel/TaylorModel.h:248: warning: Member operator<<(std::ostream &os, const TaylorModelVec< N > &tmv) (friend) of class hypro::TaylorModelVec is not documented.
-/Users/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunctionContent.h:47: warning: Member trafoContent(std::shared_ptr< SupportFunctionContent< Number >> _origin, const matrix_t< Number > &A, const vector_t< Number > &b) (function) of class hypro::trafoContent is not documented.
+/Users/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunctionContent.h:47: warning: Member trafoContent(const std::shared_ptr< SupportFunctionContent< Number >> &_origin, const matrix_t< Number > &A, const vector_t< Number > &b) (function) of class hypro::trafoContent is not documented.
 /Users/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunctionContent.h:77: warning: Member trafoContent(const trafoContent< Number > &_origin) (function) of class hypro::trafoContent is not documented.
 /Users/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunctionContent.h:80: warning: Member reduceLinTrans(const matrix_t< Number > &_a, const vector_t< Number > &_b, std::size_t _power) (function) of class hypro::trafoContent is not documented.
 /Users/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunctionContent.h:41: warning: Member origin (variable) of class hypro::trafoContent is not documented.
@@ -1719,7 +1719,7 @@ Generating docs for compound Eig/Users/travis/build/hypro/hypro/src/hypro/types.
 /Users/travis/build/hypro/hypro/src/hypro/util/convenienceOperators.h:74: warning: Member get() (function) of class hypro::typeName is not documented.
 /Users/travis/build/hypro/hypro/src/hypro/util/convenienceOperators.h:81: warning: Member get() (function) of class hypro::typeName< double > is not documented.
 /Users/travis/build/hypro/hypro/src/hypro/util/convenienceOperators.h:88: warning: Member get() (function) of class hypro::typeName< mpq_class > is not documented.
-/Users/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunctionContent.h:108: warning: Member unionContent(std::shared_ptr< SupportFunctionContent< Number >> _lhs, std::shared_ptr< SupportFunctionContent< Number >> _rhs) (function) of class hypro::unionContent is not documented.
+/Users/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunctionContent.h:108: warning: Member unionContent(const std::shared_ptr< SupportFunctionContent< Number >> &_lhs, const std::shared_ptr< SupportFunctionContent< Number >> &_rhs) (function) of class hypro::unionContent is not documented.
 /Users/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunctionContent.h:115: warning: Member unionContent(const std::vector< std::shared_ptr< SupportFunctionContent< Number >>> &sfVector) (function) of class hypro::unionContent is not documented.
 /Users/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunctionContent.h:116: warning: Member unionContent(const unionContent< Number > &_origin)=default (function) of class hypro::unionContent is not documented.
 /Users/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunctionContent.h:107: warning: Member items (variable) of class hypro::unionContent is not documented.
@@ -2093,34 +2093,34 @@ error: Problems running latex. Check your installation or look for typos in _for
 sh: dvips: command not found
 error: Problems running dvips. Check your installation!
 sh: dot: command not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/dir_55730fee9a0c1f12da77eb14a8325c4c_dep.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/dir_55730fee9a0c1f12da77eb14a8325c4c_dep.png"'
 sh: dot: command not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/graph_legend.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/graph_legend.png"'
-error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/dir_55730fee9a0c1f12da77eb14a8325c4c_dep.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/dir_55730fee9a0c1f12da77eb14a8325c4c_dep.png"'
+sh: dot: command not found
 sh: dot: command not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/dir_2a022a7dd5883d249fd19381a9acb7ca_dep.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/dir_2a022a7dd5883d249fd19381a9acb7ca_dep.png"'
 sh: dot: command not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/dir_9daea738ba0665232cd58b81f5fd3268_dep.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/dir_9daea738ba0665232cd58b81f5fd3268_dep.png"'
-sh: dot: command not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/dir_3595f83f5be0d6a3539bc1ea5a059474_dep.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/dir_3595f83f5be0d6a3539bc1ea5a059474_dep.png"'
+sh: dot: command not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/dir_9daea738ba0665232cd58b81f5fd3268_dep.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/dir_9daea738ba0665232cd58b81f5fd3268_dep.png"'
 sh: dot: command not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/dir_bce2075adec303dcb2f0c4fbfcbc8493_dep.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/dir_bce2075adec303dcb2f0c4fbfcbc8493_dep.png"'
 sh: dot: command not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/dir_d2e0e2e7c131de54c32d81549b14c3d5_dep.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/dir_d2e0e2e7c131de54c32d81549b14c3d5_dep.png"'
 sh: dot: command not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/dir_d28a4824dc47e487b107a5db32ef43c4_dep.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/dir_d28a4824dc47e487b107a5db32ef43c4_dep.png"'
-sh: dot: command not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/dir_f9717485e2c54dccf37fdcc8c536ee8a_dep.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/dir_f9717485e2c54dccf37fdcc8c536ee8a_dep.png"'
 sh: dot: command not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/dir_6a5e837390fbd392226c1c2e9854e767_dep.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/dir_6a5e837390fbd392226c1c2e9854e767_dep.png"'
+error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/dir_d28a4824dc47e487b107a5db32ef43c4_dep.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/dir_d28a4824dc47e487b107a5db32ef43c4_dep.png"'
 sh: dot: command not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/dir_6a5e837390fbd392226c1c2e9854e767_dep.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/dir_6a5e837390fbd392226c1c2e9854e767_dep.png"'
 error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/dir_19f7ed9a1a9707d41c15619f6b9af49c_dep.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/dir_19f7ed9a1a9707d41c15619f6b9af49c_dep.png"'
 sh: dot: command not found
+sh: dot: command not found
+sh: dot: command not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/dir_1afb9b508effaad8769db21f900b5139_dep.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/dir_1afb9b508effaad8769db21f900b5139_dep.png"'
-sh: dot: command not found
-sh: dot: command not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/dir_2ce0cb9797b50c8d842bc50008b46cdd_dep.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/dir_2ce0cb9797b50c8d842bc50008b46cdd_dep.png"'
-error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/dir_3100e148cb0b6b745355fdee31bcb5c6_dep.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/dir_3100e148cb0b6b745355fdee31bcb5c6_dep.png"'
 sh: dot: command not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/dir_3100e148cb0b6b745355fdee31bcb5c6_dep.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/dir_3100e148cb0b6b745355fdee31bcb5c6_dep.png"'
 sh: dot: command not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/dir_c3a99445e85233736dff89b095acd8fe_dep.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/dir_c3a99445e85233736dff89b095acd8fe_dep.png"'
 error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/dir_2c8758a5fdbf28946c502b471e14bb83_dep.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/dir_2c8758a5fdbf28946c502b471e14bb83_dep.png"'
@@ -2131,116 +2131,116 @@ error: Problems running dot: exit code=127, command='dot', arguments='"/Users/tr
 sh: dot: command not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/dir_7fa927d8fbf9dfbeef69af27f63bc81b_dep.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/dir_7fa927d8fbf9dfbeef69af27f63bc81b_dep.png"'
 sh: dot: command not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/dir_68267d1309a1af8e8297ef4c3efbcdba_dep.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/dir_68267d1309a1af8e8297ef4c3efbcdba_dep.png"'
 sh: dot: command not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/dir_5cc8785239517cfd59e944398d6252f9_dep.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/dir_5cc8785239517cfd59e944398d6252f9_dep.png"'
+error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/dir_68267d1309a1af8e8297ef4c3efbcdba_dep.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/dir_68267d1309a1af8e8297ef4c3efbcdba_dep.png"'
 sh: dot: command not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/dir_879d833e0dfbe8f31a5e860bb94efb50_dep.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/dir_879d833e0dfbe8f31a5e860bb94efb50_dep.png"'
 sh: dot: command not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/dir_5cc8785239517cfd59e944398d6252f9_dep.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/dir_5cc8785239517cfd59e944398d6252f9_dep.png"'
-sh: dot: command not found
 sh: dot: command not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/dir_7ca784a8a47198f8f271993b816bdc67_dep.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/dir_7ca784a8a47198f8f271993b816bdc67_dep.png"'
+sh: dot: command not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/dir_97de49a5bc6f4f4b12a8405ff97bd656_dep.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/dir_97de49a5bc6f4f4b12a8405ff97bd656_dep.png"'
 sh: dot: command not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/dir_41e6b291ceaca213b8048a0ff55a26ee_dep.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/dir_41e6b291ceaca213b8048a0ff55a26ee_dep.png"'
 sh: dot: command not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_0.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_0.png"'
 sh: dot: command not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_0.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_0.png"'
 error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_1.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_1.png"'
 sh: dot: command not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_2.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_2.png"'
 sh: dot: command not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_3.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_3.png"'
 sh: dot: command not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_3.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_3.png"'
 error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_4.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_4.png"'
 sh: dot: command not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_5.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_5.png"'
-sh: dot: command not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_6.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_6.png"'
+sh: dot: command not found
 sh: dot: command not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_7.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_7.png"'
 sh: dot: command not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_8.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_8.png"'
-sh: dot: command not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_9.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_9.png"'
 sh: dot: command not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_10.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_10.png"'
+error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_8.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_8.png"'
 sh: dot: command not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_11.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_11.png"'
+error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_10.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_10.png"'
 sh: dot: command not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_12.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_12.png"'
 sh: dot: command not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_13.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_13.png"'
 sh: dot: command not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_12.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_12.png"'
+sh: dot: command not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_14.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_14.png"'
 sh: dot: command not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_15.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_15.png"'
 sh: dot: command not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_15.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_15.png"'
 error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_16.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_16.png"'
 sh: dot: command not found
+sh: dot: command not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_17.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_17.png"'
+error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_19.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_19.png"'
 sh: dot: command not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_18.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_18.png"'
 sh: dot: command not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_19.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_19.png"'
+error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_21.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_21.png"'
 sh: dot: command not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_20.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_20.png"'
 sh: dot: command not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_21.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_21.png"'
+error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_23.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_23.png"'
 sh: dot: command not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_22.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_22.png"'
 sh: dot: command not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_23.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_23.png"'
-sh: dot: command not found
-sh: dot: command not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_26.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_26.png"'
-error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_24.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_24.png"'
-sh: dot: command not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_25.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_25.png"'
+sh: dot: command not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_24.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_24.png"'
 sh: dot: command not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_27.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_27.png"'
 sh: dot: command not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_28.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_28.png"'
+error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_26.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_26.png"'
 sh: dot: command not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_29.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_29.png"'
 sh: dot: command not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_28.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_28.png"'
+sh: dot: command not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_31.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_31.png"'
+sh: dot: command not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_30.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_30.png"'
 sh: dot: command not found
-sh: dot: command not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_32.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_32.png"'
-error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_31.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_31.png"'
 sh: dot: command not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_33.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_33.png"'
 sh: dot: command not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_35.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_35.png"'
-sh: dot: command not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_34.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_34.png"'
+sh: dot: command not found
 sh: dot: command not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_36.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_36.png"'
 sh: dot: command not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_38.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_38.png"'
-sh: dot: command not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_37.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_37.png"'
 sh: dot: command not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_40.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_40.png"'
+error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_38.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_38.png"'
+sh: dot: command not found
 sh: dot: command not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_39.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_39.png"'
+error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_40.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_40.png"'
+sh: dot: command not found
 sh: dot: command not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_41.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_41.png"'
-sh: dot: command not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_43.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_43.png"'
 error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_42.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_42.png"'
 sh: dot: command not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_43.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_43.png"'
+sh: dot: command not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_46.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_46.png"'
 sh: dot: command not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_44.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_44.png"'
 sh: dot: command not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_46.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_46.png"'
+error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_47.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_47.png"'
 sh: dot: command not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_45.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_45.png"'
 sh: dot: command not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_48.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_48.png"'
-sh: dot: command not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_47.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_47.png"'
 sh: dot: command not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_49.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_49.png"'
 sh: dot: command not found
@@ -2252,15 +2252,15 @@ error: Problems running dot: exit code=127, command='dot', arguments='"/Users/tr
 sh: dot: command not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_53.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_53.png"'
 sh: dot: command not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_54.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_54.png"'
 sh: dot: command not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_55.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_55.png"'
-sh: dot: command not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_56.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_56.png"'
 sh: dot: command not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_58.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_58.png"'
+error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_54.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_54.png"'
 sh: dot: command not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_57.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_57.png"'
+sh: dot: command not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_58.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_58.png"'
 sh: dot: command not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_59.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_59.png"'
 sh: dot: command not found
@@ -2274,35 +2274,35 @@ error: Problems running dot: exit code=127, command='dot', arguments='"/Users/tr
 sh: dot: command not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_64.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_64.png"'
 sh: dot: command not found
+sh: dot: command not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_65.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_65.png"'
-sh: dot: command not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_66.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_66.png"'
-sh: dot: command not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_67.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_67.png"'
 sh: dot: command not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_68.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_68.png"'
-sh: dot: command not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_70.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_70.png"'
 sh: dot: command not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_69.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_69.png"'
+sh: dot: command not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_70.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_70.png"'
 sh: dot: command not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_71.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_71.png"'
 sh: dot: command not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_72.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_72.png"'
 sh: dot: command not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_73.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_73.png"'
+error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_68.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_68.png"'
+sh: dot: command not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_66.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_66.png"'
 sh: dot: command not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_74.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_74.png"'
 sh: dot: command not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_76.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_76.png"'
 sh: dot: command not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_77.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_77.png"'
 sh: dot: command not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_78.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_78.png"'
 sh: dot: command not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_79.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_79.png"'
 sh: dot: command not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_80.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_80.png"'
+error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_77.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_77.png"'
 sh: dot: command not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_81.dot" -Tpng -o "/Users/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_81.png"'
 sh: dot: command not found

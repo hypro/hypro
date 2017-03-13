@@ -244,10 +244,10 @@ var NAVTREEINDEX6 =
 "structhypro_1_1Transition_1_1Reset.html#ad377decfff16115894a42ffe31a7419b":[6,0,1,60,1,4],
 "structhypro_1_1Transition_1_1Reset.html#aed674be8e22f4053d67d46442b4c8544":[6,0,1,60,1,2],
 "structhypro_1_1intersectionContent.html":[6,0,1,26],
-"structhypro_1_1intersectionContent.html#a012731981fbc6ced6925a409fdbe0fe5":[6,0,1,26,0],
 "structhypro_1_1intersectionContent.html#a6ae8e9d6bbc3a38200bbe79497b8c777":[6,0,1,26,2],
 "structhypro_1_1intersectionContent.html#a6b9b49c17c6647960f41cbac9175ce66":[6,0,1,26,1],
 "structhypro_1_1intersectionContent.html#ab613c2c095b93a45c6898eb9ea0bb371":[6,0,1,26,3],
+"structhypro_1_1intersectionContent.html#ac4fe5eb22d926cc0d864579fa327bd45":[6,0,1,26,0],
 "structhypro_1_1lintrafoParameters.html":[6,0,1,27],
 "structhypro_1_1lintrafoParameters.html#a086b97d85c9b3406d784b90276792d5a":[6,0,1,27,6]
 };
