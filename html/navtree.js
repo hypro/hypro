@@ -46,7 +46,7 @@ var NAVTREEINDEX =
 "classhypro_1_1ReachTreeNode.html#a70895dfe29eda1f29f875f4966a2e349",
 "classhypro_1_1Transition.html#ac767abec5cc620735b9bb2bfb6638786",
 "dir_2c8758a5fdbf28946c502b471e14bb83.html",
-"structhypro_1_1intersectionContent.html#a012731981fbc6ced6925a409fdbe0fe5",
+"structhypro_1_1intersectionContent.html#a6ae8e9d6bbc3a38200bbe79497b8c777",
 "structhypro_1_1reachability_1_1ReachabilitySettings.html#acbdad032521c6e6e26acd7f4597a0aa1"
 ];
 
