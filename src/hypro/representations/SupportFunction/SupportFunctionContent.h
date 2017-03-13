@@ -31,7 +31,7 @@ template <typename Number>
 struct sumContent {
 	std::shared_ptr<SupportFunctionContent<Number>> lhs;
 	std::shared_ptr<SupportFunctionContent<Number>> rhs;
-	sumContent( std::shared_ptr<SupportFunctionContent<Number>> _lhs, std::shared_ptr<SupportFunctionContent<Number>> _rhs )
+	sumContent( const std::shared_ptr<SupportFunctionContent<Number>>& _lhs, const std::shared_ptr<SupportFunctionContent<Number>>& _rhs )
 		: lhs( _lhs ), rhs( _rhs ) {}
 	sumContent( const sumContent<Number>& _origin ) : lhs( _origin.lhs ), rhs( _origin.rhs ) {}
 };
@@ -44,7 +44,7 @@ struct trafoContent {
 	std::size_t successiveTransformations;
 	// 2^power defines the max. number of successive lin.trans before reducing the SF
 
-	trafoContent( std::shared_ptr<SupportFunctionContent<Number>> _origin, const matrix_t<Number>& A, const vector_t<Number>& b )
+	trafoContent( const std::shared_ptr<SupportFunctionContent<Number>>& _origin, const matrix_t<Number>& A, const vector_t<Number>& b )
 		: origin( _origin ), currentExponent(1) {
 		// Determine, if we need to create new parameters or if this matrix and vector pair has already been used (recursive).
 		parameters = std::make_shared<const lintrafoParameters<Number>>(A,b);
@@ -97,7 +97,7 @@ template <typename Number>
 struct scaleContent {
 	std::shared_ptr<SupportFunctionContent<Number>> origin;
 	Number factor;
-	scaleContent( std::shared_ptr<SupportFunctionContent<Number>> _origin, Number _factor )
+	scaleContent( const std::shared_ptr<SupportFunctionContent<Number>>& _origin, Number _factor )
 		: origin( _origin ), factor( _factor ) {}
 	scaleContent( const scaleContent<Number>& _origin ) : origin( _origin.origin ), factor( _origin.factor ) {}
 };
@@ -105,7 +105,7 @@ struct scaleContent {
 template <typename Number>
 struct unionContent {
 	std::vector<std::shared_ptr<SupportFunctionContent<Number>>> items;
-	unionContent( std::shared_ptr<SupportFunctionContent<Number>> _lhs, std::shared_ptr<SupportFunctionContent<Number>> _rhs )
+	unionContent( const std::shared_ptr<SupportFunctionContent<Number>>& _lhs, const std::shared_ptr<SupportFunctionContent<Number>>& _rhs )
 	{
 		// This constructor is legacy.
 		items.push_back(_lhs);
@@ -120,7 +120,7 @@ template <typename Number>
 struct intersectionContent {
 	std::shared_ptr<SupportFunctionContent<Number>> lhs;
 	std::shared_ptr<SupportFunctionContent<Number>> rhs;
-	intersectionContent( std::shared_ptr<SupportFunctionContent<Number>> _lhs, std::shared_ptr<SupportFunctionContent<Number>> _rhs )
+	intersectionContent( const std::shared_ptr<SupportFunctionContent<Number>>& _lhs, const std::shared_ptr<SupportFunctionContent<Number>>& _rhs )
 		: lhs( _lhs ), rhs( _rhs ) {}
 	intersectionContent( const intersectionContent<Number>& _origin ) : lhs( _origin.lhs ), rhs( _origin.rhs ) {}
 };
@@ -129,7 +129,7 @@ template<typename Number>
 struct projectionContent {
 	std::shared_ptr<SupportFunctionContent<Number>> origin;
 	std::vector<unsigned> dimensions;
-	projectionContent( std::shared_ptr<SupportFunctionContent<Number>> _origin, const std::vector<unsigned>& _dimensions )
+	projectionContent( const std::shared_ptr<SupportFunctionContent<Number>>& _origin, const std::vector<unsigned>& _dimensions )
 		: origin(_origin), dimensions(_dimensions) {}
 	projectionContent( const projectionContent<Number>& _original ) : origin(_original.origin), dimensions(_original.dimensions) {}
 };
@@ -168,13 +168,13 @@ class SupportFunctionContent {
 					 SF_TYPE _type = SF_TYPE::POLY );
 	SupportFunctionContent( const std::vector<Halfspace<Number>>& _planes, SF_TYPE _type = SF_TYPE::POLY );
 	SupportFunctionContent( const std::vector<Point<Number>>& _points, SF_TYPE _type = SF_TYPE::POLY );
-	SupportFunctionContent( std::shared_ptr<SupportFunctionContent<Number>> _lhs, std::shared_ptr<SupportFunctionContent<Number>> _rhs,
+	SupportFunctionContent( const std::shared_ptr<SupportFunctionContent<Number>>& _lhs, const std::shared_ptr<SupportFunctionContent<Number>>& _rhs,
 					 SF_TYPE _type );
-	SupportFunctionContent( std::vector<std::shared_ptr<SupportFunctionContent<Number>>> _rhs, SF_TYPE _type = SF_TYPE::UNITE );
-	SupportFunctionContent( std::shared_ptr<SupportFunctionContent<Number>> _origin, const matrix_t<Number>& A, const vector_t<Number>& b, SF_TYPE _type );
-	SupportFunctionContent( std::shared_ptr<SupportFunctionContent<Number>> _origin, const Number& _factor,
+	SupportFunctionContent( const std::vector<std::shared_ptr<SupportFunctionContent<Number>>>& _rhs, SF_TYPE _type = SF_TYPE::UNITE );
+	SupportFunctionContent( const std::shared_ptr<SupportFunctionContent<Number>>& _origin, const matrix_t<Number>& A, const vector_t<Number>& b, SF_TYPE _type );
+	SupportFunctionContent( const std::shared_ptr<SupportFunctionContent<Number>>& _origin, const Number& _factor,
 					 SF_TYPE _type = SF_TYPE::SCALE );
-	SupportFunctionContent( std::shared_ptr<SupportFunctionContent<Number>> _origin, const std::vector<unsigned>& dimensions, SF_TYPE _type = SF_TYPE::PROJECTION );
+	SupportFunctionContent( const std::shared_ptr<SupportFunctionContent<Number>>& _origin, const std::vector<unsigned>& dimensions, SF_TYPE _type = SF_TYPE::PROJECTION );
 
   public:
 	SupportFunctionContent( const SupportFunctionContent<Number>& _orig );
@@ -255,12 +255,12 @@ class SupportFunctionContent {
 
 	std::shared_ptr<SupportFunctionContent<Number>> project(const std::vector<unsigned>& dimensions) const;
 	std::shared_ptr<SupportFunctionContent<Number>> affineTransformation( const matrix_t<Number>& A, const vector_t<Number>& b ) const;
-	std::shared_ptr<SupportFunctionContent<Number>> minkowskiSum( std::shared_ptr<SupportFunctionContent<Number>> _rhs ) const;
-	std::shared_ptr<SupportFunctionContent<Number>> intersect( std::shared_ptr<SupportFunctionContent<Number>> _rhs ) const;
+	std::shared_ptr<SupportFunctionContent<Number>> minkowskiSum( const std::shared_ptr<SupportFunctionContent<Number>>& _rhs ) const;
+	std::shared_ptr<SupportFunctionContent<Number>> intersect( const std::shared_ptr<SupportFunctionContent<Number>>& _rhs ) const;
 	bool contains( const Point<Number>& _point ) const;
 	bool contains( const vector_t<Number>& _point ) const;
-	std::shared_ptr<SupportFunctionContent<Number>> unite( std::shared_ptr<SupportFunctionContent<Number>> _rhs ) const;
-	static std::shared_ptr<SupportFunctionContent<Number>> unite( std::vector<std::shared_ptr<SupportFunctionContent<Number>>>& _rhs );
+	std::shared_ptr<SupportFunctionContent<Number>> unite( const std::shared_ptr<SupportFunctionContent<Number>>& _rhs ) const;
+	static std::shared_ptr<SupportFunctionContent<Number>> unite( const std::vector<std::shared_ptr<SupportFunctionContent<Number>>>& _rhs );
 	std::shared_ptr<SupportFunctionContent<Number>> scale( const Number& _factor = 1 ) const;
 
 	bool empty() const;

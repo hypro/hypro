@@ -142,8 +142,8 @@ SupportFunctionContent<Number>::SupportFunctionContent( const std::vector<Point<
 }
 
 template <typename Number>
-SupportFunctionContent<Number>::SupportFunctionContent( std::shared_ptr<SupportFunctionContent<Number>> _lhs,
-										  std::shared_ptr<SupportFunctionContent<Number>> _rhs, SF_TYPE _type ) {
+SupportFunctionContent<Number>::SupportFunctionContent( const std::shared_ptr<SupportFunctionContent<Number>>& _lhs,
+										  const std::shared_ptr<SupportFunctionContent<Number>>& _rhs, SF_TYPE _type ) {
 	// assert(_lhs.dimension() == _rhs.dimension());
 	switch ( _type ) {
 		case SF_TYPE::SUM: {
@@ -189,7 +189,7 @@ SupportFunctionContent<Number>::SupportFunctionContent( std::shared_ptr<SupportF
 }
 
 template <typename Number>
-SupportFunctionContent<Number>::SupportFunctionContent( std::vector<std::shared_ptr<SupportFunctionContent<Number>>> _rhs, SF_TYPE _type ) {
+SupportFunctionContent<Number>::SupportFunctionContent( const std::vector<std::shared_ptr<SupportFunctionContent<Number>>>& _rhs, SF_TYPE _type ) {
 	// assert(_lhs.dimension() == _rhs.dimension());
 	switch ( _type ) {
 		case SF_TYPE::UNITE: {
@@ -214,7 +214,7 @@ SupportFunctionContent<Number>::SupportFunctionContent( std::vector<std::shared_
 }
 
 template <typename Number>
-SupportFunctionContent<Number>::SupportFunctionContent( std::shared_ptr<SupportFunctionContent<Number>> _origin, const matrix_t<Number>& A, const vector_t<Number>& b
+SupportFunctionContent<Number>::SupportFunctionContent( const std::shared_ptr<SupportFunctionContent<Number>>& _origin, const matrix_t<Number>& A, const vector_t<Number>& b
 			, SF_TYPE _type ) {
 	switch ( _type ) {
 		case SF_TYPE::LINTRAFO: {
@@ -231,7 +231,7 @@ SupportFunctionContent<Number>::SupportFunctionContent( std::shared_ptr<SupportF
 }
 
 template <typename Number>
-SupportFunctionContent<Number>::SupportFunctionContent( std::shared_ptr<SupportFunctionContent<Number>> _origin, const Number &_factor,
+SupportFunctionContent<Number>::SupportFunctionContent( const std::shared_ptr<SupportFunctionContent<Number>>& _origin, const Number &_factor,
 										  SF_TYPE _type ) {
 	switch ( _type ) {
 		case SF_TYPE::SCALE: {
@@ -248,7 +248,7 @@ SupportFunctionContent<Number>::SupportFunctionContent( std::shared_ptr<SupportF
 }
 
 template<typename Number>
-SupportFunctionContent<Number>::SupportFunctionContent( std::shared_ptr<SupportFunctionContent<Number>> _origin, const std::vector<unsigned>& dimensions, SF_TYPE _type ) {
+SupportFunctionContent<Number>::SupportFunctionContent( const std::shared_ptr<SupportFunctionContent<Number>>& _origin, const std::vector<unsigned>& dimensions, SF_TYPE _type ) {
 	switch ( _type ) {
 		case SF_TYPE::PROJECTION: {
 			mProjectionParameters = new projectionContent<Number>(_origin,dimensions);
@@ -307,9 +307,9 @@ std::shared_ptr<SupportFunctionContent<Number>>& SupportFunctionContent<Number>:
 	//std::cout << "Assignment, this->type:" << _other->type() << std::endl;
 	mType = _other->type();
 	switch ( mType ) {
-                case SF_TYPE::ELLIPSOID:
-                        mEllipsoid = _other->ellipsoid();
-                        break;
+		case SF_TYPE::ELLIPSOID:
+			mEllipsoid = _other->ellipsoid();
+			break;
 		case SF_TYPE::INFTY_BALL:
 		case SF_TYPE::TWO_BALL:
 			mBall = _other->ball();
@@ -1000,7 +1000,7 @@ std::shared_ptr<SupportFunctionContent<Number>> SupportFunctionContent<Number>::
 
 template <typename Number>
 std::shared_ptr<SupportFunctionContent<Number>> SupportFunctionContent<Number>::minkowskiSum(
-	  std::shared_ptr<SupportFunctionContent<Number>> _rhs ) const {
+	  const std::shared_ptr<SupportFunctionContent<Number>>& _rhs ) const {
 	auto obj = std::shared_ptr<SupportFunctionContent<Number>>(
 		  new SupportFunctionContent<Number>( std::shared_ptr<SupportFunctionContent<Number>>( this->pThis ), _rhs, SF_TYPE::SUM ) );
 	obj->pThis = obj;
@@ -1009,7 +1009,7 @@ std::shared_ptr<SupportFunctionContent<Number>> SupportFunctionContent<Number>::
 
 template <typename Number>
 std::shared_ptr<SupportFunctionContent<Number>> SupportFunctionContent<Number>::intersect(
-	  std::shared_ptr<SupportFunctionContent<Number>> _rhs ) const {
+	  const std::shared_ptr<SupportFunctionContent<Number>>& _rhs ) const {
 	auto obj = std::shared_ptr<SupportFunctionContent<Number>>( new SupportFunctionContent<Number>(
 		  std::shared_ptr<SupportFunctionContent<Number>>( this->pThis ), _rhs, SF_TYPE::INTERSECT ) );
 	obj->pThis = obj;
@@ -1095,7 +1095,7 @@ bool SupportFunctionContent<Number>::contains( const vector_t<Number> &_point ) 
 
 template <typename Number>
 std::shared_ptr<SupportFunctionContent<Number>> SupportFunctionContent<Number>::unite(
-	  std::shared_ptr<SupportFunctionContent<Number>> _rhs ) const {
+	  const std::shared_ptr<SupportFunctionContent<Number>>& _rhs ) const {
 	auto obj = std::shared_ptr<SupportFunctionContent<Number>>( new SupportFunctionContent<Number>(
 		  std::shared_ptr<SupportFunctionContent<Number>>( this->pThis ), _rhs, SF_TYPE::UNITE ) );
 	obj->pThis = obj;
@@ -1103,7 +1103,7 @@ std::shared_ptr<SupportFunctionContent<Number>> SupportFunctionContent<Number>::
 }
 
 template<typename Number>
-std::shared_ptr<SupportFunctionContent<Number>> SupportFunctionContent<Number>::unite( std::vector<std::shared_ptr<SupportFunctionContent<Number>>>& _rhs ) {
+std::shared_ptr<SupportFunctionContent<Number>> SupportFunctionContent<Number>::unite( const std::vector<std::shared_ptr<SupportFunctionContent<Number>>>& _rhs ) {
 	if(!_rhs.empty()) {
 		auto obj = std::shared_ptr<SupportFunctionContent<Number>>( new SupportFunctionContent<Number>( _rhs, SF_TYPE::UNITE ) );
 		obj->pThis = obj;
