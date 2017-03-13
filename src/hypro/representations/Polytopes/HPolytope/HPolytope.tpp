@@ -121,7 +121,7 @@ HPolytopeT<Number, Converter>::HPolytopeT( const std::vector<Point<Number>>& poi
 			std::vector<unsigned> projectionDimensions;
 			std::vector<unsigned> droppedDimensions;
 			for(unsigned d = 0; d < mDimension; ++d){
-				if(d < effectiveDim){
+				if(d < unsigned(effectiveDim)){
 					projectionDimensions.push_back(d);
 				} else {
 					droppedDimensions.push_back(d);
@@ -241,7 +241,7 @@ matrix_t<Number> HPolytopeT<Number, Converter>::matrix() const {
 	matrix_t<Number> res( mHPlanes.size(), dimension() );
 	for ( unsigned planeIndex = 0; planeIndex < mHPlanes.size(); ++planeIndex ) {
 		//std::cout << "Plane normal: " << mHPlanes.at( planeIndex ).normal() << " and dimension: " << dimension() << std::endl;
-		assert(mHPlanes.at( planeIndex ).normal().rows() == dimension());
+		assert(mHPlanes.at( planeIndex ).normal().rows() == int(dimension()));
 		//std::cout << "Add HPlane " << mHPlanes.at( planeIndex ) << " to matrix ( " << res.rows() << " x " << res.cols() << " )" << std::endl;
 		res.row( planeIndex ) = mHPlanes.at( planeIndex ).normal();
 	}

@@ -292,66 +292,6 @@ VPolytopeT<Number, Converter> VPolytopeT<Number, Converter>::unite( const VPolyt
 			bool TEMPORARY_SOLUTION = false;
 			return VPolytopeT<Number,Converter>(points);
 
-			pointSet.clear();
-			TRACE("hypro.representations.vpolytope","Using pca to determine fully dimensional point set.");
-			TRACE("hypro.representations.vpolytope","Point set:");
-			for(const auto& vertex : points) {
-				Point<double> tmp = convert<Number,double>(vertex);
-				TRACE("hypro.representations.vpolytope", "vertex: " << tmp );
-			}
-			PrincipalComponentAnalysis<Number> pca(points);
-			std::vector<Halfspace<Number>> orientedHalfspaces = pca.box();
-			//std::cout << "Box has " << orientedHalfspaces.size() << " halfspaces in dimension " << points.begin()->dimension() << std::endl;
-			//assert(orientedHalfspaces.size() == points.begin()->dimension());
-
-			// vertex computation of the oriented box
-			unsigned dim = points.begin()->dimension();
-			Permutator permutator(orientedHalfspaces.size(), dim);
-			std::vector<unsigned> permutation;
-			while(!permutator.end()) {
-				permutation = permutator();
-
-				matrix_t<Number> A( dim, dim );
-				vector_t<Number> b( dim );
-				unsigned pos = 0;
-				for(auto planeIt = permutation.begin(); planeIt != permutation.end(); ++planeIt) {
-					A.row(pos) = orientedHalfspaces.at(*planeIt).normal().transpose();
-					b(pos) = orientedHalfspaces.at(*planeIt).offset();
-					++pos;
-				}
-				Eigen::FullPivLU<matrix_t<Number>> lu_decomp( A );
-				if ( lu_decomp.rank() < A.rows() ) {
-					continue;
-				}
-
-				vector_t<Number> res = lu_decomp.solve( b );
-
-				// Check if the computed vertex is a real vertex
-				bool outside = false;
-				for(unsigned planePos = 0; planePos < orientedHalfspaces.size(); ++planePos) {
-					bool skip = false;
-					for(unsigned permPos = 0; permPos < permutation.size(); ++permPos) {
-						if(planePos == permutation.at(permPos)) {
-							skip = true;
-							break;
-						}
-					}
-
-					if(!skip) {
-						if( orientedHalfspaces.at(planePos).offset() - orientedHalfspaces.at(planePos).normal().dot(res) < 0 ) {
-							//std::cout << "Drop vertex: " << res << " because of plane " << planePos << std::endl;
-							outside = true;
-							break;
-						}
-					}
-				}
-				if(!outside) {
-					pointSet.emplace(res);
-				}
-			}
-			for ( const auto &point : pointSet ) {
-				result.insert( point );
-			}
 		} else if(points.size() > points.begin()->dimension()){
 			TRACE("hypro.representations.vpolytope","Using convex hull algorithm to reduce point set.");
 			std::vector<std::shared_ptr<Facet<Number>>> facets = convexHull( points ).first;
