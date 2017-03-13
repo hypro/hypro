@@ -19,6 +19,7 @@
 #include "util/convexHull.h"
 #include "util/linearOptimization/Optimizer.h"
 #include "util/Permutator.h"
+#include <map>
 
 //#define PPOLYTOPESUPPORTFUNCTION_VERBOSE
 #define PPOLYTOPESUPPORTFUNCTION_VERIFY
@@ -35,10 +36,9 @@ class PolytopeSupportFunction {
 
 	matrix_t<Number> mConstraints;
 	vector_t<Number> mConstraintConstants;
-
 	Optimizer<Number> mOpt;
-
 	unsigned mDimension;
+	std::map<vector_t<Number>, Number> mCache;
 
   public:
 	PolytopeSupportFunction( matrix_t<Number> constraints, vector_t<Number> constraintConstants );
@@ -57,6 +57,7 @@ class PolytopeSupportFunction {
 
 	SF_TYPE type() const;
 
+	bool isTemplate() const { return mCache.size() > 0; }
 	matrix_t<Number> constraints() const;
 	vector_t<Number> constants() const;
 
@@ -78,7 +79,7 @@ class PolytopeSupportFunction {
 	 * @param _A Matrix holding the directions in which to evaluate.
 	 * @return Vector of support values.
 	 */
-	std::vector<EvaluationResult<Number>> multiEvaluate( const matrix_t<Number>& _A, bool useExact ) const;
+	std::vector<EvaluationResult<Number>> multiEvaluate( const matrix_t<Number>& _A, bool useExact, bool setTemplate = false ) const;
 
 	/**
 	 * @brief Check if point is contained in the support function.

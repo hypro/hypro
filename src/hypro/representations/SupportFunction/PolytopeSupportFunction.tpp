@@ -264,7 +264,7 @@ EvaluationResult<Number> PolytopeSupportFunction<Number>::evaluate( const vector
 }
 
 template <typename Number>
-std::vector<EvaluationResult<Number>> PolytopeSupportFunction<Number>::multiEvaluate( const matrix_t<Number> &_A, bool useExact ) const {
+std::vector<EvaluationResult<Number>> PolytopeSupportFunction<Number>::multiEvaluate( const matrix_t<Number> &_A, bool useExact, bool setTemplate ) const {
 	assert( _A.cols() == mDimension );
 	std::vector<EvaluationResult<Number>> res;
 	//std::cout << "POLY SF, evaluate in directions " << convert<Number,double>(_A) << std::endl << "POLY SF IS " << *this << std::endl;

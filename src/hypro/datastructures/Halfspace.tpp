@@ -49,16 +49,10 @@ Halfspace<Number>::Halfspace( const vector_t<Number> &_vec, const std::vector<ve
 	// the normal vector of the Halfspace is computed by solving a system of
 	// equations
 	mNormal = computePlaneNormal( _vectorSet );
-#ifdef fukuda_DEBUG
-	std::cout << "computed Plane Normal: " << mNormal << std::endl;
-#endif
 
 	// the scalar is just the scalar product of the normal vector & a point in the
 	// Halfspace
 	mScalar = mNormal.dot( _vec );
-#ifdef fukuda_DEBUG
-	std::cout << "computed Offset: " << mScalar << std::endl;
-#endif
 	mIsInteger = false;
 }
 
@@ -127,13 +121,7 @@ template <typename Number>
 bool Halfspace<Number>::intersection( Number &_result, const vector_t<Number> &_vector ) const {
 	bool intersect = false;
 	Number factor = 0;
-#ifdef fukuda_DEBUG
-	std::cout << "mNormal: " << mNormal << std::endl;
-#endif
 	Number dotProduct = ( mNormal.dot( _vector ) );
-#ifdef fukuda_DEBUG
-	std::cout << "dotProduct: " << dotProduct << std::endl;
-#endif
 	if ( dotProduct != 0 ) {
 		intersect = true;
 		factor = mScalar / dotProduct;
@@ -214,13 +202,9 @@ vector_t<Number> Halfspace<Number>::fastIntersect( const std::vector<Halfspace<N
 	std::size_t pos = 0;
 	for(auto planeIt = _planes.begin(); planeIt != _planes.end(); ++planeIt){
 		A.row(pos) = planeIt->normal().transpose();
-		// std::cout << A.row(pos) << std::endl;
 		b(pos) = planeIt->offset();
-		// std::cout << b(pos) << std::endl;
 		++pos;
 	}
-
-	//std::cout << "Created first matrix" << std::endl;
 
 	Eigen::FullPivLU<matrix_t<Number>> lu_decomp( A );
 	if ( lu_decomp.rank() < A.rows() ) {
@@ -252,13 +236,9 @@ vector_t<Number> Halfspace<Number>::saveIntersect( const std::vector<Halfspace<N
 	std::size_t pos = 0;
 	for(auto planeIt = _planes.begin(); planeIt != _planes.end(); ++planeIt){
 		A.row(pos) = planeIt->normal().transpose();
-		// std::cout << A.row(pos) << std::endl;
 		b(pos) = planeIt->offset();
-		// std::cout << b(pos) << std::endl;
 		++pos;
 	}
-
-	//std::cout << "Created first matrix" << std::endl;
 
 	Eigen::FullPivLU<matrix_t<Number>> lu_decomp( A );
 	if ( lu_decomp.rank() < A.rows() ) {
@@ -277,7 +257,6 @@ vector_t<Number> Halfspace<Number>::saveIntersect( const std::vector<Halfspace<N
 	Number eps = std::numeric_limits<Number>::epsilon();
 	std::size_t iterationCount = 0;
 	while (!belowIndices.empty()){
-		//std::cout << "\r" << iterationCount << " Is below, ";
 		// enlarge as long as point lies below one of the planes.
 		if(eps < threshold) {
 			eps = eps*2;
@@ -302,11 +281,9 @@ vector_t<Number> Halfspace<Number>::saveIntersect( const std::vector<Halfspace<N
 		for(std::size_t i = 0; i < _planes.size(); ++i){
 			Number dist = _planes.at(i).offset() - _planes.at(i).normal().dot(tmp);
 			if(dist > 0) {
-				//std::cout << dist << " ";
 				belowIndices.push_back(i);
 			}
 		}
-		//std::cout << std::flush;
 		++iterationCount;
 		if(belowIndices.empty()) {
 			res = tmp;
@@ -350,7 +327,7 @@ bool Halfspace<Number>::holds( const vector_t<Number> _vector ) const {
 template <typename Number>
 vector_t<Number> Halfspace<Number>::computePlaneNormal( const std::vector<vector_t<Number>> &_edgeSet ) {
 	assert(_edgeSet.size() > 0);
-	assert(_edgeSet.size() >= (unsigned)_edgeSet.begin()->rows() - 1);
+
 	if(_edgeSet.size() == unsigned(_edgeSet.begin()->rows()) - 1 ) {
 		// method avoiding glpk and using Eigen instead (higher precision)
 		matrix_t<Number> constraints(_edgeSet.size(), _edgeSet.begin()->rows());
@@ -408,9 +385,6 @@ vector_t<Number> Halfspace<Number>::computePlaneNormal( const std::vector<vector
 				ja[pos] = j;
 				vector_t<Number> tmpVec = _edgeSet.at( i - 1 );
 				ar[pos] = carl::toDouble( tmpVec( j - 1 ) );
-	#ifdef fukuda_DEBUG
-				std::cout << "Coeff. at (" << i << "," << j << "): " << ar[pos] << std::endl;
-	#endif
 				++pos;
 			}
 		}
@@ -438,7 +412,7 @@ vector_t<Number> Halfspace<Number>::computePlaneNormal( const std::vector<vector
 
 template<typename Number>
 Number Halfspace<Number>::computePlaneOffset( const vector_t<Number>& normal, const Point<Number>& pointOnPlane) {
-	return normal.dot(-pointOnPlane.rawCoordinates());
+	return normal.dot(pointOnPlane.rawCoordinates());
 }
 
 } // namespace hypro

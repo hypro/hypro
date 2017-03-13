@@ -60,8 +60,6 @@ TYPED_TEST(HPolytopeTest, Constructor)
 	EXPECT_TRUE(alienPolytope.contains(p1));
 	EXPECT_TRUE(alienPolytope.contains(p2));
 
-	std::cout << "Result1: " << alienPolytope << std::endl;
-
 	Point<TypeParam> p3({1,0,0});
 	Point<TypeParam> p4({0,1,0});
 	Point<TypeParam> p5({0,0,1});
@@ -74,8 +72,6 @@ TYPED_TEST(HPolytopeTest, Constructor)
 	EXPECT_TRUE(alienPolytope2.contains(p3));
 	EXPECT_TRUE(alienPolytope2.contains(p4));
 	EXPECT_TRUE(alienPolytope2.contains(p5));
-
-	std::cout << "Result2: " << alienPolytope2 << std::endl;
 
 	SUCCEED();
 }
@@ -253,16 +249,6 @@ TYPED_TEST(HPolytopeTest, LinearTransformation)
 	HPolytope<TypeParam> res = hpt1.linearTransformation(A);
 	VPolytope<TypeParam> test(hpt1.vertices());
 	test = test.linearTransformation(A);
-
-	std::cout << "Res vertices: " << std::endl;
-	for(const auto& vertex : res.vertices()) {
-		std::cout << vertex << std::endl;
-	}
-
-	std::cout << "Test vertices: " << std::endl;
-	for(const auto& vertex : test.vertices()) {
-		std::cout << vertex << std::endl;
-	}
 
 	for(const auto& vertex : test.vertices()) {
 		EXPECT_TRUE(res.contains(vertex));

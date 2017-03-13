@@ -107,7 +107,7 @@ HPolytopeT<Number, Converter>::HPolytopeT( const std::vector<Point<Number>>& poi
 		mEmpty = TRIBOOL::FALSE;
 		//if ( points.size() <= mDimension ) {
 		if ( unsigned(effectiveDim) < mDimension ) {
-			std::cout << "Points size: " << points.size() << std::endl;
+			//std::cout << "Points size: " << points.size() << std::endl;
 			// get common plane
 			std::vector<vector_t<Number>> vectorsInPlane;
 			for(unsigned i = 1; i < points.size(); ++i) {
@@ -134,10 +134,14 @@ HPolytopeT<Number, Converter>::HPolytopeT( const std::vector<Point<Number>>& poi
 			}
 
 			HPolytopeT<Number,Converter> projectedPoly(projectedPoints);
+			//std::cout << "Projected polytope: " << projectedPoly << std::endl;
 			projectedPoly.insertEmptyDimensions(projectionDimensions,droppedDimensions);
-			std::cout << "Poly dimensoin: " << projectedPoly.dimension() << " and plane dimension : " << planeNormal.rows() << std::endl;
+			//std::cout << "After inserting empty dimensions: " << projectedPoly << std::endl;
+			//std::cout << "Poly dimension: " << projectedPoly.dimension() << " and plane dimension : " << planeNormal.rows() << std::endl;
 			projectedPoly.insert(Halfspace<Number>(planeNormal,planeOffset));
 			projectedPoly.insert(Halfspace<Number>(-planeNormal,-planeOffset));
+
+			*this = projectedPoly;
 
 			//PrincipalComponentAnalysis<Number> pca(points);
 			//std::vector<Halfspace<Number>> boxConstraints = pca.box();
@@ -236,7 +240,7 @@ template <typename Number, typename Converter>
 matrix_t<Number> HPolytopeT<Number, Converter>::matrix() const {
 	matrix_t<Number> res( mHPlanes.size(), dimension() );
 	for ( unsigned planeIndex = 0; planeIndex < mHPlanes.size(); ++planeIndex ) {
-		std::cout << "Plane normal: " << mHPlanes.at( planeIndex ).normal() << " and dimension: " << dimension() << std::endl;
+		//std::cout << "Plane normal: " << mHPlanes.at( planeIndex ).normal() << " and dimension: " << dimension() << std::endl;
 		assert(mHPlanes.at( planeIndex ).normal().rows() == dimension());
 		//std::cout << "Add HPlane " << mHPlanes.at( planeIndex ) << " to matrix ( " << res.rows() << " x " << res.cols() << " )" << std::endl;
 		res.row( planeIndex ) = mHPlanes.at( planeIndex ).normal();
@@ -746,9 +750,12 @@ bool HPolytopeT<Number, Converter>::contains( const Point<Number> &point ) const
 
 template <typename Number, typename Converter>
 bool HPolytopeT<Number, Converter>::contains( const vector_t<Number> &vec ) const {
+	//std::cout << __func__ << ": point: " << vec << std::endl;
 	for ( const auto &plane : mHPlanes ) {
 		// The 2's complement check for equality is required to ensure double compatibility.
+		//std::cout << "Test plane " << plane << ": dot product: " << plane.normal().dot( vec ) << std::endl;
 		if (!carl::AlmostEqual2sComplement(plane.normal().dot( vec ), plane.offset(), 128) && plane.normal().dot( vec ) > plane.offset()) {
+			//std::cout << "falsified." << std::endl;
 			return false;
 		}
 	}
@@ -914,17 +921,26 @@ template<typename Number, typename Converter>
 void HPolytopeT<Number, Converter>::insertEmptyDimensions(const std::vector<unsigned>& existingDimensions, const std::vector<unsigned>& newDimensions) {
 	assert(mDimension == existingDimensions.size());
 
+	//std::cout << __func__ << "Existing dimensions: " << existingDimensions << " and new dimensions: " << newDimensions << std::endl;
+
 	for(auto& halfspace : mHPlanes) {
 		vector_t<Number> newNormal = vector_t<Number>::Zero(existingDimensions.size() + newDimensions.size());
+		//std::cout << "New normal: " << newNormal << std::endl;
 		unsigned currentPos = 0;
 		for(unsigned d = 0; d < existingDimensions.size() + newDimensions.size(); ++d) {
+			//std::cout << "Check dimension " << d << std::endl;
 			if(std::find(existingDimensions.begin(), existingDimensions.end(),d) != existingDimensions.end()) {
+				//std::cout << "Found in existing dimensions." << std::endl;
 				assert(std::find(newDimensions.begin(), newDimensions.end(),d) == newDimensions.end());
 				newNormal(d) = halfspace.normal()(currentPos);
+				//std::cout << "updated normal: " << newNormal << std::endl;
 				++currentPos;
 			}
 		}
+		halfspace.setNormal(newNormal);
+		//std::cout << "Updated halfspace: " << halfspace << std::endl;
 	}
+	mDimension = existingDimensions.size() + newDimensions.size();
 }
 
 }  // namespace hypro
