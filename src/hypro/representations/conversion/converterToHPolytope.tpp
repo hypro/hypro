@@ -20,11 +20,13 @@ typename Converter<Number>::HPolytope Converter<Number>::toHPolytope( const HPol
 //conversion from V-Polytope to H-Polytope (EXACT or OVER)
 template<typename Number>
 typename Converter<Number>::HPolytope Converter<Number>::toHPolytope( const VPolytope& _source, const CONV_MODE mode ){
+	if(_source.empty()) {
+		return HPolytope::Empty();
+	}
+
 	HPolytope target;
     if (mode == EXACT){
-	    if ( !_source.empty() ) {
-			target = HPolytope(_source.vertices());
-		}                                                  //Converter<Number>::toHPolytopes the source object into an H-polytope via constructor
+		target = HPolytope(_source.vertices());
     } else if (mode == OVER) {
 	    //gets vertices from source object
 	    typename VPolytopeT<Number,Converter>::pointVector vertices = _source.vertices();
@@ -108,15 +110,13 @@ typename Converter<Number>::HPolytope Converter<Number>::toHPolytope( const Supp
 	        ++pos;
 	    }
 
-	    //std::cout << "Template direction matrix: " << std::endl << templateDirectionMatrix << std::endl;
-
 	    //lets the support function evaluate the offset of the halfspaces for each direction
 	    std::vector<EvaluationResult<Number>> offsets = _source.multiEvaluate(templateDirectionMatrix, true);
 	    assert(offsets.size() == std::size_t(templateDirectionMatrix.rows()));
 
 	    std::vector<std::size_t> boundedConstraints;
 	    for(unsigned offsetIndex = 0; offsetIndex < offsets.size(); ++offsetIndex){
-			// std::cout << "Result: " << offsets[offsetIndex] << std::endl;
+			//std::cout << "Result: " << offsets[offsetIndex] << std::endl;
 	        if(offsets[offsetIndex].errorCode != SOLUTION::INFTY){
 	            boundedConstraints.push_back(offsetIndex);
 	        }
@@ -130,8 +130,6 @@ typename Converter<Number>::HPolytope Converter<Number>::toHPolytope( const Supp
 	        boundedConstraints.pop_back();
 	        --pos;
 	    }
-
-	    //std::cout << "Construct HPoly from " << constraints << " <= " << constants << std::endl;
 
 	    //constructs a H-Polytope out of the computed halfspaces
     	return HPolytope(constraints, constants);

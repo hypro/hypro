@@ -395,6 +395,14 @@ public:
 
 	Point<Number> getVertexForVector(vector_t<Number> vector, std::vector<Point<Number>> vertices) const;
 
+	/**
+	 * @brief      Extends the constraint to a higher dimension. This effectively unbounds the polytope in that direction. The passed set of
+	 * existing dimensions is used to allow adding dimensions in between. Note that both vectors have to be ordered ascending.
+	 * @param[in]  existingDimensions  The existing dimensions.
+	 * @param[in]  newDimensions       The new dimensions.
+	 */
+	void insertEmptyDimensions(const std::vector<unsigned>& existingDimensions, const std::vector<unsigned>& newDimensions);
+
 };
 /** @} */
 

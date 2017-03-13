@@ -94,6 +94,8 @@ protected:
 		poly = valuation_t<Number>(vecSet);
 		auto hpoly = hypro::Converter<Number>::toHPolytope(poly);
 
+		std::cout << "Poly: " << poly << " and corresponding hpoly: " << hpoly << std::endl;
+
 		hybrid.setLocations(locSet);
 		for(auto loc : initLocSet) {
 			RawState<Number> initState(loc, std::make_pair(hpoly.matrix(), hpoly.vector()));

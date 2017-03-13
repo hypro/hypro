@@ -272,8 +272,6 @@ class Halfspace {
 		swap( a.mScalar, b.mScalar );
 	}
 
-  private:
-
 	/**
 	 * @author 	Chris K
 	 * @brief 	Method to compute the normal of a plane based on two direction vectors
@@ -281,7 +279,16 @@ class Halfspace {
 	 * @param[in] The set of vectors.
 	 * @return 		A vector representing the resulting plane normal.
 	 */
-	vector_t<Number> computePlaneNormal( const std::vector<vector_t<Number>>& _edgeSet ) const;
+	static vector_t<Number> computePlaneNormal( const std::vector<vector_t<Number>>& _edgeSet );
+
+	/**
+	 * @brief      Calculates the plane offset of a given normal vector for that plane and a point lying on the plane.
+	 * This corresponds to the dot product of the normal vector and the negated point coordinates.
+	 * @param[in]  normal        The normal.
+	 * @param[in]  pointOnPlane  The point on plane.
+	 * @return     The plane offset.
+	 */
+	static Number computePlaneOffset( const vector_t<Number>& normal, const Point<Number>& pointOnPlane);
 };
 
 /**

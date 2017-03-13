@@ -71,12 +71,25 @@ HPolytopeT<Number, Converter>::HPolytopeT( const std::vector<Point<Number>>& poi
 	}
 	*/
 
+	// special case: 1 point - we can directly use box constraints.
+	if(points.size() == 1) {
+		mDimension = points.begin()->dimension();
+		for(unsigned d = 0; d < points.begin()->dimension(); ++d) {
+			vector_t<Number> normal = vector_t<Number>::Zero(points.begin()->dimension());
+			normal(d) = 1;
+			mHPlanes.insert(mHPlanes.end(), Halfspace<Number>(normal, points.begin()->at(d)));
+			mHPlanes.insert(mHPlanes.end(), Halfspace<Number>(-normal, -(points.begin()->at(d))));
+		}
+		return;
+	}
+
+
 	if ( !points.empty() ) {
 		mDimension = points.begin()->dimension();
 		// check affine independence - verify object dimension.
 		std::vector<vector_t<Number>> coordinates;
 		for(const auto& vertex : points){
-			coordinates.emplace_back(vertex.rawCoordinates());
+			coordinates.push_back(vertex.rawCoordinates());
 		}
 		int effectiveDim = effectiveDimension(coordinates);
 		assert(effectiveDim >= 0);
@@ -94,11 +107,43 @@ HPolytopeT<Number, Converter>::HPolytopeT( const std::vector<Point<Number>>& poi
 		mEmpty = TRIBOOL::FALSE;
 		//if ( points.size() <= mDimension ) {
 		if ( unsigned(effectiveDim) < mDimension ) {
-			PrincipalComponentAnalysis<Number> pca(points);
-			std::vector<Halfspace<Number>> boxConstraints = pca.box();
-			for(const auto& constraint : boxConstraints){
-				mHPlanes.emplace_back(constraint);
+			std::cout << "Points size: " << points.size() << std::endl;
+			// get common plane
+			std::vector<vector_t<Number>> vectorsInPlane;
+			for(unsigned i = 1; i < points.size(); ++i) {
+				vectorsInPlane.emplace_back(points[i].rawCoordinates() - points[0].rawCoordinates());
 			}
+			vector_t<Number> planeNormal = Halfspace<Number>::computePlaneNormal(vectorsInPlane);
+			Number planeOffset = Halfspace<Number>::computePlaneOffset(planeNormal, points[0]);
+
+			// project on lower dimension.
+			// TODO: Use dimensions with largest coordinate range for improved stability.
+			std::vector<unsigned> projectionDimensions;
+			std::vector<unsigned> droppedDimensions;
+			for(unsigned d = 0; d < mDimension; ++d){
+				if(d < effectiveDim){
+					projectionDimensions.push_back(d);
+				} else {
+					droppedDimensions.push_back(d);
+				}
+			}
+
+			std::vector<Point<Number>> projectedPoints;
+			for(const auto& point : points){
+				projectedPoints.emplace_back(point.project(projectionDimensions));
+			}
+
+			HPolytopeT<Number,Converter> projectedPoly(projectedPoints);
+			projectedPoly.insertEmptyDimensions(projectionDimensions,droppedDimensions);
+			std::cout << "Poly dimensoin: " << projectedPoly.dimension() << " and plane dimension : " << planeNormal.rows() << std::endl;
+			projectedPoly.insert(Halfspace<Number>(planeNormal,planeOffset));
+			projectedPoly.insert(Halfspace<Number>(-planeNormal,-planeOffset));
+
+			//PrincipalComponentAnalysis<Number> pca(points);
+			//std::vector<Halfspace<Number>> boxConstraints = pca.box();
+			//for(const auto& constraint : boxConstraints){
+			//	mHPlanes.emplace_back(constraint);
+			//}
 
 			// Alternative version
 			// We need a copy of the set of points since auxiliary points will be added
@@ -191,6 +236,8 @@ template <typename Number, typename Converter>
 matrix_t<Number> HPolytopeT<Number, Converter>::matrix() const {
 	matrix_t<Number> res( mHPlanes.size(), dimension() );
 	for ( unsigned planeIndex = 0; planeIndex < mHPlanes.size(); ++planeIndex ) {
+		std::cout << "Plane normal: " << mHPlanes.at( planeIndex ).normal() << " and dimension: " << dimension() << std::endl;
+		assert(mHPlanes.at( planeIndex ).normal().rows() == dimension());
 		//std::cout << "Add HPlane " << mHPlanes.at( planeIndex ) << " to matrix ( " << res.rows() << " x " << res.cols() << " )" << std::endl;
 		res.row( planeIndex ) = mHPlanes.at( planeIndex ).normal();
 	}
@@ -284,6 +331,9 @@ typename std::vector<Point<Number>> HPolytopeT<Number, Converter>::vertices( con
 					vertices.push_back(tmp);
 				}
 				TRACE("hypro.hPolytope","Final vertex: " << (convert<Number,double>(res).transpose()));
+				if(vertices.back().at(0) >= 94.5 && vertices.back().at(0) <= 94.6) {
+					TRACE("hypro.hPolytope","Created by planes " << permutation);
+				}
 			}
 		}
 	}
@@ -544,10 +594,10 @@ HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::project(const std::
 		return Empty();
 	}
 
-	auto box = Converter::toBox(*this);
-	box = box.project(dimensions);
+	auto vpoly = Converter::toVPolytope(*this);
+	vpoly = vpoly.project(dimensions);
 
-	return Converter::toHPolytope(box);
+	return Converter::toHPolytope(vpoly);
 }
 
 template <typename Number, typename Converter>
@@ -858,6 +908,23 @@ typename HPolytopeT<Number, Converter>::HalfspaceVector HPolytopeT<Number, Conve
 	HalfspaceVector result = commputeConstraintsForDegeneratedPolytope(points, degeneratedDimensions - 1);
 	result.push_back(std::move(h)); // decreases the effective dimension again
 	return result;
+}
+
+template<typename Number, typename Converter>
+void HPolytopeT<Number, Converter>::insertEmptyDimensions(const std::vector<unsigned>& existingDimensions, const std::vector<unsigned>& newDimensions) {
+	assert(mDimension == existingDimensions.size());
+
+	for(auto& halfspace : mHPlanes) {
+		vector_t<Number> newNormal = vector_t<Number>::Zero(existingDimensions.size() + newDimensions.size());
+		unsigned currentPos = 0;
+		for(unsigned d = 0; d < existingDimensions.size() + newDimensions.size(); ++d) {
+			if(std::find(existingDimensions.begin(), existingDimensions.end(),d) != existingDimensions.end()) {
+				assert(std::find(newDimensions.begin(), newDimensions.end(),d) == newDimensions.end());
+				newNormal(d) = halfspace.normal()(currentPos);
+				++currentPos;
+			}
+		}
+	}
 }
 
 }  // namespace hypro

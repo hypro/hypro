@@ -350,6 +350,7 @@ class VPolytopeT : public GeometricObject<Number, VPolytopeT<Number,Converter>> 
 		for(unsigned rowIndex = 0; rowIndex < normals.rows(); ++rowIndex){
 			// compare with tolerance of 128 ULPs.
 			if( !carl::AlmostEqual2sComplement(vertex.dot(normals.row(rowIndex)),offsets(rowIndex), 128) ){
+				DEBUG("hypro.representations.vpolytope","Values " << vertex.dot(normals.row(rowIndex)) << " and " << offsets(rowIndex) << " are not equal.");
 				return false;
 			}
 		}

@@ -50,11 +50,32 @@ TYPED_TEST(HPolytopeTest, Constructor)
 
 	HPolytope<TypeParam> copyAssignment = HPolytope<TypeParam>(anotherHPolytope);
 
-	//VPolytope<TypeParam> alien;
-	//alien.insert(Point<TypeParam>({5,3,2}));
-	//alien.insert(Point<TypeParam>({7,5,-1}));
-//
-	//HPolytope<TypeParam> alienPolytope(alien);
+	VPolytope<TypeParam> alien;
+	Point<TypeParam> p1({5,3,2});
+	Point<TypeParam> p2({7,5,-1});
+	alien.insert(p1);
+	alien.insert(p2);
+
+	HPolytope<TypeParam> alienPolytope(alien.vertices());
+	EXPECT_TRUE(alienPolytope.contains(p1));
+	EXPECT_TRUE(alienPolytope.contains(p2));
+
+	std::cout << "Result1: " << alienPolytope << std::endl;
+
+	Point<TypeParam> p3({1,0,0});
+	Point<TypeParam> p4({0,1,0});
+	Point<TypeParam> p5({0,0,1});
+
+	VPolytope<TypeParam> alien2;
+	alien2.insert(p3);
+	alien2.insert(p4);
+	alien2.insert(p5);
+	HPolytope<TypeParam> alienPolytope2(alien2.vertices());
+	EXPECT_TRUE(alienPolytope2.contains(p3));
+	EXPECT_TRUE(alienPolytope2.contains(p4));
+	EXPECT_TRUE(alienPolytope2.contains(p5));
+
+	std::cout << "Result2: " << alienPolytope2 << std::endl;
 
 	SUCCEED();
 }

@@ -348,7 +348,8 @@ bool Halfspace<Number>::holds( const vector_t<Number> _vector ) const {
  * necessarily 3
  */
 template <typename Number>
-vector_t<Number> Halfspace<Number>::computePlaneNormal( const std::vector<vector_t<Number>> &_edgeSet ) const {
+vector_t<Number> Halfspace<Number>::computePlaneNormal( const std::vector<vector_t<Number>> &_edgeSet ) {
+	assert(_edgeSet.size() > 0);
 	assert(_edgeSet.size() >= (unsigned)_edgeSet.begin()->rows() - 1);
 	if(_edgeSet.size() == unsigned(_edgeSet.begin()->rows()) - 1 ) {
 		// method avoiding glpk and using Eigen instead (higher precision)
@@ -360,7 +361,6 @@ vector_t<Number> Halfspace<Number>::computePlaneNormal( const std::vector<vector
 
 		return normal;
 	} else {
-		assert (false);
 		/*
 		 * Setup LP with GLPK
 		 */
@@ -434,6 +434,11 @@ vector_t<Number> Halfspace<Number>::computePlaneNormal( const std::vector<vector
 
 		return result;
 	}
+}
+
+template<typename Number>
+Number Halfspace<Number>::computePlaneOffset( const vector_t<Number>& normal, const Point<Number>& pointOnPlane) {
+	return normal.dot(-pointOnPlane.rawCoordinates());
 }
 
 } // namespace hypro

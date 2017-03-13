@@ -48,8 +48,7 @@ VPolytopeT<Number, Converter>::VPolytopeT( const std::vector<vector_t<Number>>& 
 
 template <typename Number, typename Converter>
 VPolytopeT<Number, Converter>::VPolytopeT( const matrix_t<Number> &_constraints, const vector_t<Number> _constants ) {
-	// calculate all possible Halfspace intersections -> TODO: dPermutation can
-	// be improved.
+	// calculate all possible Halfspace intersections
 
 	//std::cout << __func__ << ": matrix: " << _constraints << " and vector: " << _constants << std::endl;
 	assert(_constraints.rows() == _constants.rows());
@@ -287,9 +286,19 @@ VPolytopeT<Number, Converter> VPolytopeT<Number, Converter>::unite( const VPolyt
 		unsigned effDim = unsigned(effectiveDimension(pointSet));
 		points.insert( points.end(), pointSet.begin(), pointSet.end() );
 		assert(!points.empty());
+		TRACE("hypro.representations.vpolytope","Effective dimension: " << effDim << ", points dimension: " << points.begin()->dimension());
 
 		if(effDim < points.begin()->dimension()){
+			bool TEMPORARY_SOLUTION = false;
+			return VPolytopeT<Number,Converter>(points);
+
 			pointSet.clear();
+			TRACE("hypro.representations.vpolytope","Using pca to determine fully dimensional point set.");
+			TRACE("hypro.representations.vpolytope","Point set:");
+			for(const auto& vertex : points) {
+				Point<double> tmp = convert<Number,double>(vertex);
+				TRACE("hypro.representations.vpolytope", "vertex: " << tmp );
+			}
 			PrincipalComponentAnalysis<Number> pca(points);
 			std::vector<Halfspace<Number>> orientedHalfspaces = pca.box();
 			//std::cout << "Box has " << orientedHalfspaces.size() << " halfspaces in dimension " << points.begin()->dimension() << std::endl;
@@ -344,6 +353,7 @@ VPolytopeT<Number, Converter> VPolytopeT<Number, Converter>::unite( const VPolyt
 				result.insert( point );
 			}
 		} else if(points.size() > points.begin()->dimension()){
+			TRACE("hypro.representations.vpolytope","Using convex hull algorithm to reduce point set.");
 			std::vector<std::shared_ptr<Facet<Number>>> facets = convexHull( points ).first;
 			std::set<Point<Number>> preresult;
 			for ( unsigned i = 0; i < facets.size(); i++ ) {

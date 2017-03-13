@@ -411,7 +411,7 @@ EvaluationResult<Number> SupportFunctionContent<Number>::evaluate( const vector_
 				res.supportValue = 1;
 				return res;
 			}
-			for(auto sfIt = ++(mUnionParameters->items.begin()); sfIt != mUnionParameters->items.end(); ++sfIt) {
+			for(auto sfIt = (mUnionParameters->items.begin()); sfIt != mUnionParameters->items.end(); ++sfIt) {
 				EvaluationResult<Number> tmp = (*sfIt)->evaluate( _direction, useExact );
 				if(tmp.errorCode == SOLUTION::INFEAS) {
 					return tmp;
@@ -546,8 +546,7 @@ std::vector<EvaluationResult<Number>> SupportFunctionContent<Number>::multiEvalu
 					return res;
 				}
 			}
-
-			for(auto& sfIt = ++(mUnionParameters->items.begin()); sfIt != mUnionParameters->items.end(); ++sfIt) {
+			for(auto sfIt = (mUnionParameters->items.begin()); sfIt != mUnionParameters->items.end(); ++sfIt) {
 				std::vector<EvaluationResult<Number>> tmp = (*sfIt)->multiEvaluate( _directions, useExact );
 				assert(tmp.size() == res.size());
 				for( unsigned resultId = 0; resultId < res.size(); ++resultId ) {
@@ -868,10 +867,13 @@ std::vector<unsigned> SupportFunctionContent<Number>::collectProjections() const
 		case SF_TYPE::UNITE: {
 			std::vector<std::vector<unsigned>> projections;
 			std::vector<unsigned> res;
-			for(const auto& set : mUnionParameters->items) {
-				projections.emplace_back(set->collectProjections());
-			}
 			bool allNotEmpty = true;
+			for(const auto& set : mUnionParameters->items) {
+				projections.push_back(set->collectProjections());
+				if(projections.back().empty()) {
+					allNotEmpty = false;
+				}
+			}
 			while(allNotEmpty) {
 				unsigned frontDimension = projections[0].front();
 				bool allHaveFrontDimensionInCommon = true;
@@ -881,12 +883,15 @@ std::vector<unsigned> SupportFunctionContent<Number>::collectProjections() const
 					}
 				}
 				if(allHaveFrontDimensionInCommon) {
-					res.emplace_back(frontDimension);
+					res.push_back(frontDimension);
 				}
 				// in any case erase all fronts that are equal to the current front dimension
 				for(auto& row : projections) {
 					if(row.front() == frontDimension ) {
 						row.erase(row.begin());
+						if(row.empty()){
+							allNotEmpty = false;
+						}
 					}
 				}
 			}
