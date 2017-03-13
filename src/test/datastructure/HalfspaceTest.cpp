@@ -9,7 +9,7 @@
 
 #include "gtest/gtest.h"
 #include "../defines.h"
-#include "../../hypro/datastructures/Halfspace.h"
+#include "datastructures/Halfspace.h"
 
 using namespace hypro;
 using namespace carl;
@@ -40,9 +40,6 @@ TYPED_TEST(HalfspaceTest, Constructor)
 	normal(0) = TypeParam(2);
 	normal(1) = TypeParam(4);
 	Halfspace<TypeParam>(normal, TypeParam(3));
-	//Halfspace(const vector_t<Number>& _vec, const std::vector<vector_t<Number>>& _vectorSet);
-
-	//std::cout << __func__ << ": vec " << vec << ", normal: " << normal << std::endl;
 
 	Halfspace<TypeParam> copy = Halfspace<TypeParam>(normals);
 	EXPECT_EQ(copy, normals);
@@ -53,7 +50,6 @@ TYPED_TEST(HalfspaceTest, Constructor)
 TYPED_TEST(HalfspaceTest, Access)
 {
 	Halfspace<TypeParam> tmp ({1,2},3);
-	std::cout << tmp << std::endl;
 }
 
 TYPED_TEST(HalfspaceTest, Evaluation)
@@ -100,12 +96,7 @@ TYPED_TEST(HalfspaceTest, Intersection)
 	normal2(3) = 4;
 	Halfspace<TypeParam> hp2 = Halfspace<TypeParam>(normal2, TypeParam(4));
 
-	//HPolytope<TypeParam> res = hp1.intersection(hp2);
-	//std::cout << res << std::endl;
-
-	//std::cout << "Intersection Vector calculation result: " << std::endl;
 	vector_t<TypeParam> v = hp1.intersectionVector(hp2);
-	//std::cout << "Intersection Vector: " << v << std::endl;
 }
 
 TYPED_TEST(HalfspaceTest, saveIntersection)

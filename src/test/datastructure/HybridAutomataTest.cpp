@@ -5,11 +5,11 @@
 
 #include "gtest/gtest.h"
 #include "../defines.h"
-#include "../../hypro/datastructures/hybridAutomata/LocationManager.h"
-#include "../../hypro/datastructures/hybridAutomata/Transition.h"
-#include "../../hypro/datastructures/hybridAutomata/HybridAutomaton.h"
-#include "../../hypro/datastructures/hybridAutomata/RawState.h"
-#include "../../hypro/representations/GeometricObject.h"
+#include "datastructures/hybridAutomata/LocationManager.h"
+#include "datastructures/hybridAutomata/Transition.h"
+#include "datastructures/hybridAutomata/HybridAutomaton.h"
+#include "datastructures/hybridAutomata/RawState.h"
+#include "representations/GeometricObject.h"
 #include "carl/core/VariablePool.h"
 
 using namespace hypro;
@@ -93,8 +93,6 @@ protected:
     	vecSet.push_back(coordinates);
 		poly = valuation_t<Number>(vecSet);
 		auto hpoly = hypro::Converter<Number>::toHPolytope(poly);
-
-		std::cout << "Poly: " << poly << " and corresponding hpoly: " << hpoly << std::endl;
 
 		hybrid.setLocations(locSet);
 		for(auto loc : initLocSet) {
