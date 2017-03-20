@@ -77,6 +77,7 @@ VPolytopeT<Number, Converter>::VPolytopeT( const matrix_t<Number> &_constraints,
 			possibleVertices.emplace( std::move(vertex) );
 		}
 	}
+	TRACE("hypro.representations.vpolytope",": Computed " << possibleVertices.size() << " possible vertices.");
 
 	// check if vertices are true vertices (i.e. they fulfill all constraints)
 	for ( auto vertex = possibleVertices.begin(); vertex != possibleVertices.end(); ) {
@@ -97,6 +98,9 @@ VPolytopeT<Number, Converter>::VPolytopeT( const matrix_t<Number> &_constraints,
 			++vertex;
 		}
 	}
+
+	TRACE("hypro.representations.vpolytope","Deleted vertices. Remaining " << possibleVertices.size() << " vertices.");
+
 	// std::cout<<__func__ << " : " <<__LINE__ <<std::endl;
 	// finish initialization
 	for ( const auto &point : possibleVertices ) {
@@ -232,9 +236,10 @@ std::pair<bool, VPolytopeT<Number, Converter>> VPolytopeT<Number, Converter>::sa
 	auto resultPair = intermediate.satisfiesHalfspaces(_mat, _vec);
 	if(resultPair.first){
 		//resultPair.second.removeRedundancy();
-		//std::cout << typeid(*this).name() << "::" << __func__ << ": Intermediate hpoly convert back: " << resultPair.second << std::endl;
+		assert(!resultPair.second.empty());
+		TRACE("hypro.representations.vpolytope",": Intermediate hpoly convert back: " << resultPair.second);
 		VPolytopeT<Number, Converter> res(Converter::toVPolytope(resultPair.second));
-		//std::cout << typeid(*this).name() << "::"<< __func__ << ": Re-Converted v-poly: " << res << std::endl;
+		TRACE("hypro.representations.vpolytope","Re-Converted v-poly: " << res);
 		assert(!res.empty());
 		return std::make_pair(true, res);
 	}

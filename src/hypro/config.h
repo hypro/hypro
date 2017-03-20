@@ -63,6 +63,8 @@ static const double EPSILON = 0.000001;
 /** Some required positive constant for Fukudas Minkowski-Sum algorithm.*/
 static const long POS_CONSTANT = 100;
 
+static const unsigned SF_CACHE_SIZE = 200;
+
 /** Enables debug output for Fukudas Minkowski-Sum algorithm. */
 //#define fukuda_DEBUG
 

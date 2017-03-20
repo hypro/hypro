@@ -50,8 +50,9 @@ template <typename Number, typename Converter>
 HPolytopeT<Number, Converter>::HPolytopeT( const std::vector<Point<Number>>& points )
 	: mHPlanes(), mDimension( 0 ), mEmpty(TRIBOOL::NSET), mNonRedundant(true) {
 	TRACE("hypro.hPolytope","Construct from vertices: ");
-	for(const auto& vertex : points) {
-		TRACE("hypro.hPolytope", vertex);
+	for(auto vertex : points) {
+		Point<double> tmp = convert<Number,double>(vertex);
+		TRACE("hypro.hPolytope",tmp);
 	}
 	/*
 	if ( !points.empty() ) {

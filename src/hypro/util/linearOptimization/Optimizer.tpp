@@ -60,7 +60,9 @@ namespace hypro {
 		if(!mConstraintsSet) {
 			updateConstraints();
 		}
-		TRACE("hypro.optimizer","Direction: " << _direction << ", constraintMatrix: " << std::endl << mConstraintMatrix << ", and vector:" << std::endl << mConstraintVector);
+		TRACE("hypro.optimizer","Direction: " << _direction);
+		TRACE("hypro.optimizer","ConstraintMatrix: " << std::endl << mConstraintMatrix);
+		TRACE("hypro.optimizer","and vector:" << std::endl << mConstraintVector);
 		assert( _direction.rows() == mConstraintMatrix.cols() );
 
 		if( mConstraintMatrix.rows() == 0 ) {
