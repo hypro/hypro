@@ -2,7 +2,7 @@
  * @file   util.h
  */
 
-//#define HYPRO_USE_VECTOR_CACHING
+#define HYPRO_USE_VECTOR_CACHING
 
 #pragma once
 
@@ -18,6 +18,46 @@ namespace hypro {
  */
 enum SF_TYPE { SUM, INTERSECT, LINTRAFO, SCALE, UNITE, POLY, INFTY_BALL, TWO_BALL, ELLIPSOID, BOX, ZONOTOPE, PROJECTION, NONE };
 
+	template<typename Content>
+	struct Cacheable {
+		mutable std::size_t mHash = 0;
+		std::pair<unsigned, Content> item;
+
+		std::size_t hash() const {
+			if(mHash == 0) {
+				mHash = std::hash<std::pair<unsigned, Content>>()(item);
+			}
+			return mHash;
+		}
+
+		Cacheable(const std::pair<unsigned, Content>& i) : item(i) {}
+		Cacheable(unsigned exp, const Content& cont) : item(std::make_pair(exp,cont)) {}
+
+		friend bool operator==(const Cacheable<Content>& lhs, const Cacheable<Content>& rhs) {
+			if(lhs.hash() != rhs.hash()) {
+				return false;
+			}
+
+			return (lhs.item.first == rhs.item.first) && (lhs.item.second == rhs.item.second);
+		}
+	};
+
+} // namespace
+
+
+namespace std {
+	template<typename Content>
+	struct hash<hypro::Cacheable<Content>> {
+	    std::size_t operator()(hypro::Cacheable<Content> const& item) const
+	    {
+	    	return item.hash();
+	    }
+	};
+}
+
+
+namespace hypro {
+
 	/**
 	 * @brief      Struct holding linear and affine transformation parameters.
 	 * @tparam     Number  The used number type.
@@ -26,8 +66,8 @@ enum SF_TYPE { SUM, INTERSECT, LINTRAFO, SCALE, UNITE, POLY, INFTY_BALL, TWO_BAL
 	struct lintrafoParameters {
 		mutable std::map<unsigned, std::pair<matrix_t<Number>, vector_t<Number>>> parameters;
 		#ifdef HYPRO_USE_VECTOR_CACHING
-		mutable LRUCache<std::pair<unsigned, vector_t<Number>>, vector_t<Number>> mVectorCache;
-		mutable LRUCache<std::pair<unsigned, matrix_t<Number>>, matrix_t<Number>> mMatrixCache;
+		mutable LRUCache<Cacheable<vector_t<Number>>, vector_t<Number>> mVectorCache;
+		mutable LRUCache<Cacheable<matrix_t<Number>>, matrix_t<Number>> mMatrixCache;
 		#endif
 		unsigned power = 2; // 2^power operations are collected
 
@@ -75,18 +115,18 @@ enum SF_TYPE { SUM, INTERSECT, LINTRAFO, SCALE, UNITE, POLY, INFTY_BALL, TWO_BAL
 		vector_t<Number> getTransformedDirection(const vector_t<Number>& inDirection, unsigned exponent) const {
 			#ifdef HYPRO_USE_VECTOR_CACHING
 			TRACE("hypro.representations.supportFunction","Attempt to access cache." << " (@" << this << ")");
-			auto cachePos = mVectorCache.get(std::make_pair(exponent,inDirection));
+			auto cachePos = mVectorCache.get(Cacheable<vector_t<Number>>(exponent,inDirection));
 			if(cachePos == mVectorCache.end()) {
 				TRACE("hypro.representations.supportFunction","Insert item into cache." << " (@" << this << ")");
 				vector_t<Number> tmp = getParameterSet(exponent).first.transpose() * inDirection;
-				auto pos = mVectorCache.insert(std::make_pair(exponent,inDirection), tmp);
+				auto pos = mVectorCache.insert(Cacheable<vector_t<Number>>(exponent,inDirection), tmp);
 				assert((*pos).second.rows() == inDirection.rows());
 				return (*pos).second;
 			}
 			assert((*cachePos).second.rows() == inDirection.rows());
 			return (*cachePos).second;
 			#else
-			vector_t<Number> tmp = getParameterSet(exponent).first.transpose();
+			matrix_t<Number> tmp = getParameterSet(exponent).first.transpose();
 			return tmp * inDirection;
 			#endif
 		}
@@ -94,11 +134,11 @@ enum SF_TYPE { SUM, INTERSECT, LINTRAFO, SCALE, UNITE, POLY, INFTY_BALL, TWO_BAL
 		matrix_t<Number> getTransformedDirections(const matrix_t<Number>& inDirections, unsigned exponent) const {
 			#ifdef HYPRO_USE_VECTOR_CACHING
 			//std::cout << __func__ << " attempt to access cache ";
-			auto cachePos = mMatrixCache.get(std::make_pair(exponent,inDirections));
+			auto cachePos = mMatrixCache.get(Cacheable<matrix_t<Number>>(exponent,inDirections));
 			//std::cout << "done." << std::endl;
 			if(cachePos == mMatrixCache.end()) {
 				//std::cout << __func__ << " insert item into cache." << std::endl;
-				auto pos = mMatrixCache.insert(std::make_pair(exponent,inDirections), inDirections * getParameterSet(exponent).first);
+				auto pos = mMatrixCache.insert(Cacheable<matrix_t<Number>>(exponent,inDirections), inDirections * getParameterSet(exponent).first);
 				return (*pos).second;
 			}
 			return (*cachePos).second;
