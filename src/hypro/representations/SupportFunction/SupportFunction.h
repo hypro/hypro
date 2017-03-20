@@ -5,6 +5,7 @@
 	static_assert(false, "This file may only be included indirectly by GeometricObject.h");
 #endif
 
+#include "config.h"
 #include "util.h"
 #include "SupportFunctionContent.h"
 #include "util/templateDirections.h"
@@ -79,7 +80,7 @@ public:
 	SupportFunctionT<Number,Converter> intersectHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const;
 	bool contains( const Point<Number>& _point ) const;
 	bool contains( const vector_t<Number>& _point ) const;
-	bool contains( const SupportFunctionT<Number, Converter>& rhs, unsigned directions = 8 ) const;
+	bool contains( const SupportFunctionT<Number, Converter>& rhs, unsigned directions = defaultTemplateDirectionCount ) const;
 	SupportFunctionT<Number,Converter> unite( const SupportFunctionT<Number,Converter>& _rhs ) const;
 	static SupportFunctionT<Number,Converter> unite( const std::vector<SupportFunctionT<Number,Converter>>& _rhs );
 	SupportFunctionT<Number,Converter> scale( const Number& _factor = 1 ) const;

@@ -2,10 +2,15 @@
  * @file   util.h
  */
 
+//#define HYPRO_USE_VECTOR_CACHING
+
 #pragma once
 
 #include "config.h"
 #include "types.h"
+#ifdef HYPRO_USE_VECTOR_CACHING
+#include "datastructures/LRUCache.h"
+#endif
 
 namespace hypro {
 /**
@@ -19,15 +24,29 @@ enum SF_TYPE { SUM, INTERSECT, LINTRAFO, SCALE, UNITE, POLY, INFTY_BALL, TWO_BAL
 	 */
 	template<typename Number>
 	struct lintrafoParameters {
-		unsigned power = 2; // 2^power operations are collected
 		mutable std::map<unsigned, std::pair<matrix_t<Number>, vector_t<Number>>> parameters;
+		#ifdef HYPRO_USE_VECTOR_CACHING
+		mutable LRUCache<std::pair<unsigned, vector_t<Number>>, vector_t<Number>> mVectorCache;
+		mutable LRUCache<std::pair<unsigned, matrix_t<Number>>, matrix_t<Number>> mMatrixCache;
+		#endif
+		unsigned power = 2; // 2^power operations are collected
 
 		lintrafoParameters() = delete;
+
 		lintrafoParameters(const matrix_t<Number>& _A, const vector_t<Number>& _b, unsigned _power = 2) :
+			#ifdef HYPRO_USE_VECTOR_CACHING
+			mVectorCache(SF_CACHE_SIZE),
+			mMatrixCache(SF_CACHE_SIZE),
+			#endif
 			power(_power)
 		{
+			TRACE("hypro.representations.supportFunction", "Created new lintrafo object." << " (@" << this << ")");
 			assert(_A.rows() == _b.rows());
 			parameters[1] = std::make_pair(_A, _b);
+		}
+
+		~lintrafoParameters(){
+			TRACE("hypro.representations.supportFunction", "Delete lintrafo object." << " (@" << this << ")");
 		}
 
 		matrix_t<Number> matrix() const {
@@ -52,6 +71,41 @@ enum SF_TYPE { SUM, INTERSECT, LINTRAFO, SCALE, UNITE, POLY, INFTY_BALL, TWO_BAL
 			assert(parameters.find(exponent) != parameters.end());
 			return parameters.at(exponent);
 		};
+
+		vector_t<Number> getTransformedDirection(const vector_t<Number>& inDirection, unsigned exponent) const {
+			#ifdef HYPRO_USE_VECTOR_CACHING
+			TRACE("hypro.representations.supportFunction","Attempt to access cache." << " (@" << this << ")");
+			auto cachePos = mVectorCache.get(std::make_pair(exponent,inDirection));
+			if(cachePos == mVectorCache.end()) {
+				TRACE("hypro.representations.supportFunction","Insert item into cache." << " (@" << this << ")");
+				vector_t<Number> tmp = getParameterSet(exponent).first.transpose() * inDirection;
+				auto pos = mVectorCache.insert(std::make_pair(exponent,inDirection), tmp);
+				assert((*pos).second.rows() == inDirection.rows());
+				return (*pos).second;
+			}
+			assert((*cachePos).second.rows() == inDirection.rows());
+			return (*cachePos).second;
+			#else
+			vector_t<Number> tmp = getParameterSet(exponent).first.transpose();
+			return tmp * inDirection;
+			#endif
+		}
+
+		matrix_t<Number> getTransformedDirections(const matrix_t<Number>& inDirections, unsigned exponent) const {
+			#ifdef HYPRO_USE_VECTOR_CACHING
+			//std::cout << __func__ << " attempt to access cache ";
+			auto cachePos = mMatrixCache.get(std::make_pair(exponent,inDirections));
+			//std::cout << "done." << std::endl;
+			if(cachePos == mMatrixCache.end()) {
+				//std::cout << __func__ << " insert item into cache." << std::endl;
+				auto pos = mMatrixCache.insert(std::make_pair(exponent,inDirections), inDirections * getParameterSet(exponent).first);
+				return (*pos).second;
+			}
+			return (*cachePos).second;
+			#else
+			return inDirections * getParameterSet(exponent).first;
+			#endif
+		}
 
 		void createNextReduct() const {
 			// the last created reduction pair is at the back, as a std::map is per default sorted ascending

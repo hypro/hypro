@@ -333,6 +333,14 @@ namespace std {
         }
     };
 
+    template<class Number>
+    struct hash<hypro::matrix_t<Number>> {
+        std::size_t operator()(hypro::matrix_t<Number> const& matrix) const
+        {
+            return Eigen::MatrixHashValue(matrix);
+        }
+    };
+
     inline mpq_class abs(const mpq_class& x) {return carl::abs(x);}
 	inline mpq_class sqrt(const mpq_class& x) {return carl::sqrt(x);}
 	inline mpq_class max(const mpq_class& x, const mpq_class& y) {return ( x > y ? x : y);}

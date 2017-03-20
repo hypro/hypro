@@ -529,7 +529,7 @@ namespace hypro{
 	template<typename Number, typename Converter>
 	void SupportFunctionT<Number,Converter>::evaluateTemplate() const {
 		if(!mTemplateSet) {
-			std::vector<vector_t<Number>> templateDirections = computeTemplate<Number>(this->dimension(), 8);
+			std::vector<vector_t<Number>> templateDirections = computeTemplate<Number>(this->dimension(), defaultTemplateDirectionCount);
 
 		    matrix_t<Number> templateDirectionMatrix = matrix_t<Number>(templateDirections.size(), this->dimension());
 

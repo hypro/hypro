@@ -353,18 +353,27 @@ EvaluationResult<Number> SupportFunctionContent<Number>::evaluate( const vector_
 			return mBall->evaluate( _direction );
 		}
 		case SF_TYPE::LINTRAFO: {
+			TRACE("hypro.representations.supportFunction","Direction rows: " << _direction.rows());
 			std::pair<matrix_t<Number>, vector_t<Number>> parameterPair = mLinearTrafoParameters->parameters->getParameterSet(mLinearTrafoParameters->currentExponent);
-			matrix_t<Number> tmp = parameterPair.first.transpose();
-			EvaluationResult<Number> res = mLinearTrafoParameters->origin->evaluate( tmp * _direction, useExact);
+			#ifndef HYPRO_USE_VECTOR_CACHING
+			//matrix_t<Number> tmp = parameterPair.first.transpose();
+			//EvaluationResult<Number> res = mLinearTrafoParameters->origin->evaluate( tmp * _direction, useExact);
+			EvaluationResult<Number> res = mLinearTrafoParameters->origin->evaluate( mLinearTrafoParameters->parameters->getTransformedDirection(_direction, mLinearTrafoParameters->currentExponent), useExact);
+			#else
+			EvaluationResult<Number> res = mLinearTrafoParameters->origin->evaluate( mLinearTrafoParameters->parameters->getTransformedDirection(_direction, mLinearTrafoParameters->currentExponent), useExact);
+			#endif
 			switch(res.errorCode){
 				case SOLUTION::INFTY:
 				case SOLUTION::INFEAS:{
 					return res;
 				}
 				default:{
+					TRACE("hypro.representations.supportFunction","opt val rows: " << res.optimumValue.rows() << " and direction rows: " << _direction.rows());
 					assert(res.errorCode == SOLUTION::FEAS);
+					assert(res.optimumValue.rows() == _direction.rows());
 					res.optimumValue = parameterPair.first * res.optimumValue + parameterPair.second;
-					// As we know, that the optimal vertex lies on the supporting Halfspace, we can obtain the distance by dot product.
+					assert(res.optimumValue.rows() == _direction.rows());
+					// As we know, that the optimal vertex lies on the supporting hyperplane, we can obtain the distance by dot product.
 					res.supportValue = res.optimumValue.dot(_direction);
 					return res;
 				}
@@ -467,7 +476,9 @@ std::vector<EvaluationResult<Number>> SupportFunctionContent<Number>::multiEvalu
 		case SF_TYPE::LINTRAFO: {
 			// std::cout << "Directions " << convert<Number,double>(_directions) << std::endl << "A:" << convert<Number,double>(mLinearTrafoParameters->a) << std::endl;
 			std::pair<matrix_t<Number>, vector_t<Number>> parameterPair = mLinearTrafoParameters->parameters->getParameterSet(mLinearTrafoParameters->currentExponent);
-			std::vector<EvaluationResult<Number>> res = mLinearTrafoParameters->origin->multiEvaluate( _directions * parameterPair.first, useExact );
+			//std::vector<EvaluationResult<Number>> res = mLinearTrafoParameters->origin->multiEvaluate( _directions * parameterPair.first, useExact );
+			assert((_directions * parameterPair.first) == (mLinearTrafoParameters->parameters->getTransformedDirections(_directions, mLinearTrafoParameters->currentExponent)));
+			std::vector<EvaluationResult<Number>> res = mLinearTrafoParameters->origin->multiEvaluate( mLinearTrafoParameters->parameters->getTransformedDirections(_directions, mLinearTrafoParameters->currentExponent), useExact );
 			if(res.begin()->errorCode != SOLUTION::INFEAS) {
 				unsigned directionCnt = 0;
 				for(auto& entry : res){
