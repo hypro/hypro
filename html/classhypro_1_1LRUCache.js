@@ -5,7 +5,7 @@ var classhypro_1_1LRUCache =
     [ "begin", "classhypro_1_1LRUCache.html#abf0989d35bacbafc467ff64b6eaab87d", null ],
     [ "end", "classhypro_1_1LRUCache.html#a52091e358838e95fcd79d71e466bc504", null ],
     [ "get", "classhypro_1_1LRUCache.html#a618212dc714116c3c98a026545c37e56", null ],
-    [ "has", "classhypro_1_1LRUCache.html#ae344b6df13636fbb16706601520b3757", null ],
+    [ "has", "classhypro_1_1LRUCache.html#ab07b006cb576e5da3e161ff589ab32d1", null ],
     [ "insert", "classhypro_1_1LRUCache.html#a4649d9e646a2964f3081b833c31de537", null ],
-    [ "size", "classhypro_1_1LRUCache.html#a8b69a8c560638669a64ed88dd322f065", null ]
+    [ "size", "classhypro_1_1LRUCache.html#ae4535fe45ffcd23cdcd722fbcedf260f", null ]
 ];
