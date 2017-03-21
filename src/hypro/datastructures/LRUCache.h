@@ -1,6 +1,7 @@
 #pragma once
 
 #include "util/adaptions_eigen/adaptions_eigen.h"
+#include "util/statistics/statistics.h"
 #include <list>
 #include <boost/unordered_map.hpp>
 
@@ -44,10 +45,13 @@ namespace hypro {
 		typename CacheList::iterator end() { return mCacheList.end(); }
 
 		inline typename CacheList::iterator get(const Key& key) {
+			COUNT("Cache-Access");
 			auto it = mCacheMap.find(key);
 			if(it == mCacheMap.end()) {
+				COUNT("Cache-Miss");
 				return mCacheList.end();
 			}
+			COUNT("Cache-Find");
 			return it->second;
 		}
 
