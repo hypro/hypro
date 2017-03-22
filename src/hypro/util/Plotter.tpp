@@ -115,6 +115,28 @@ void Plotter<Number>::plotGen() const {
 	std::cout << std::endl << "Plotted to " << mFilename << ".gen" << std::endl;
 }
 
+template<typename Number>
+void Plotter<Number>::plotEps() const {
+	mOutfile.open( mFilename + "_eps.plt" );
+	if ( (!mObjects.empty() && !mObjects.begin()->second.empty()) || !mPoints.empty() ) {
+
+		// preamble
+		mOutfile << "# settings\n";
+		mOutfile << "set title \"" << mSettings.name << "\"\n";
+		if(mSettings.keepAspectRatio) {
+			mOutfile << "set size square\n";
+		}
+		mOutfile << "set terminal postscript eps  enhanced color \\
+    font 'Helvetica,20' linewidth 2\n";
+		mOutfile << "set output \"" << mFilename << ".eps\" \n";
+
+		writeGnuplot();
+	}
+
+	std::cout << std::endl << "Plotted to " << mFilename << "_eps.plt" << std::endl;
+	mOutfile.close();
+}
+
 template <typename Number>
 unsigned Plotter<Number>::addObject( const std::vector<Point<Number>> &_points ) {
 	TRACE("hypro.plotter","");
