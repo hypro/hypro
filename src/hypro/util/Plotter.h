@@ -130,6 +130,11 @@ class Plotter : public carl::Singleton<Plotter<Number>> {
 	void plotGen() const;
 
 	/**
+	 * @brief      Creates a .eps file of the currently passed objects, which can be used in gnuplot as well.
+	 */
+	void plotEps() const;
+
+	/**
 	 * @brief      Adds an object represented as a vector of points. Duplicates and points inside will be removed by the plotter,
 	 * which runs a 2d-convex hull algorithm (Graham's scan) one the vertices.
 	 * @param[in]  _points  The points.
