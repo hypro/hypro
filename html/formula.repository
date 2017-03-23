@@ -1,0 +1,36 @@
+\form#0:$ \{ x | x \in S \land A\cdot x \leq b \} $
+\form#1:$ R = \{ x | x \in A\cdot S \} $
+\form#2:$ R = \{ x | x \in A\cdot S + b \} $
+\form#3:$\mathcal{B}\subseteq\mathbb{R}^d$
+\form#4:$I_1,\ldots,I_d \in \mathbb{I}$
+\form#5:\[ \mathcal{B} = I_0 \times \ldots \times I_d\, . \]
+\form#6:$(I_1,\ldots,I_d)$
+\form#7:$\mathcal{P}\subseteq\mathbb{R}^d$
+\form#8:$n\in\mathbb{N}$
+\form#9:$c_i\in\mathbb{R}^n$
+\form#10:$d_i \in \mathbb{R}$
+\form#11:$i=1,\ldots,n$
+\form#12:\[ \mathcal{P} = \bigcap_{i=1}^n h_i \text{ where } h_i = \{x\in\mathbb{R}^d \ |\ c_i x\leq d_i\}\, . \]
+\form#13:$\mathcal{H}$
+\form#14:$(C,d)$
+\form#15:$n\times d$
+\form#16:$C$
+\form#17:$c_i$
+\form#18:$i$
+\form#19:$n$
+\form#20:$d$
+\form#21:$d_i$
+\form#22:$\mathcal{P} = \bigcap_{i=1}^n \{x \ |\ c_i x\leq d_i\}$
+\form#23:$\mathcal{V}$
+\form#24:$V$
+\form#25:$\mathcal{P} = \textit{conv}(V)$
+\form#26:$\mathcal{Z}\subseteq\mathbb{R}$
+\form#27:$c\in\mathbb{R}^n$
+\form#28:$G=\{g_1,\ldots,g_n\}$
+\form#29:$g_i\in \mathbb{R}^d$
+\form#30:\[ \mathcal{Z} = \left\lbrace x\ \bigg|\ x = c + \sum_i^n \lambda_i\cdot g_i,\ {-1}\leq \lambda_i \leq 1 \right\rbrace\, . \]
+\form#31:$(c,g_1,\ldots,g_n)$
+\form#32:$\sigma:\mathbb{R}^d\rightarrow\mathbb{R}$
+\form#33:\[ \mathcal{S} = \left\lbrace x\in\mathbb{R}^d\ \big|\ r\cdot x \leq \sigma(r) \text{ for all } r\in\mathbb{R}^d \right\rbrace\, , \]
+\form#34:$\sigma(r)\in\mathbb{R}$
+\form#35:$r\in\mathbb{R}^d$
