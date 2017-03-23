@@ -1,5 +1,6 @@
 #include "Logger.h"
 
+#ifdef HYPRO_LOGGING
 namespace hypro {
 
 	int initializeLogging(int& i) {
@@ -24,3 +25,5 @@ namespace hypro {
 	}
 
 } // namespace hypro
+
+#endif
