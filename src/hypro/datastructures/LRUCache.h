@@ -31,12 +31,15 @@ namespace hypro {
 		using CacheList = std::list<EntryPair>;
 
 		CacheList mCacheList;
-		boost::unordered_map<Key, typename CacheList::iterator, std::hash<Key>> mCacheMap;
+		std::unordered_map<Key, typename CacheList::iterator, std::hash<Key>> mCacheMap;
 		std::size_t mEntryCount = 0;
 		std::size_t mMaxSize;
 
 	public:
 		LRUCache() = delete;
+		LRUCache(const LRUCache& orig ) = delete;
+		LRUCache(LRUCache&& orig ) = delete;
+
 		LRUCache(std::size_t size) : mMaxSize(size) {
 			TRACE("hypro.datastructures.cache","Created cache of size " << size << " (@" << this << ")" );
 		}
@@ -44,7 +47,7 @@ namespace hypro {
 		typename CacheList::iterator begin() { return mCacheList.begin(); }
 		typename CacheList::iterator end() { return mCacheList.end(); }
 
-		inline typename CacheList::iterator get(const Key& key) {
+		inline typename CacheList::const_iterator get(const Key& key) const {
 			COUNT("Cache-Access");
 			auto it = mCacheMap.find(key);
 			if(it == mCacheMap.end()) {
@@ -63,18 +66,19 @@ namespace hypro {
 			auto it = mCacheMap.find(key);
 			if(it != mCacheMap.end()) {
 				mCacheList.erase(it->second);
-				mCacheMap[key] = mCacheList.insert(mCacheList.begin(), std::make_pair(key,value));
-				return mCacheList.begin();
+				(*it).second = mCacheList.insert(mCacheList.begin(), std::make_pair(key,value));
+				return (*it).second;
 			} else {
 				if(mEntryCount == mMaxSize){
 					TRACE("hypro.datastructures.cache","Cache full, remove least used element." << " (@" << this << ")");
 					mCacheMap.erase(mCacheList.back().first);
-					mCacheList.erase(--mCacheList.end());
+					mCacheList.pop_back();
 					--mEntryCount;
 				}
-				mCacheMap[key] = mCacheList.insert(mCacheList.begin(), std::make_pair(key,value));
+				auto it = mCacheList.insert(mCacheList.begin(), std::make_pair(key,value));
+				mCacheMap.emplace(key, it);
 				++mEntryCount;
-				return mCacheList.begin();
+				return it;
 			}
 		}
 
