@@ -110,6 +110,7 @@ struct unionContent {
 		// This constructor is legacy.
 		items.push_back(_lhs);
 		items.push_back(_rhs);
+		assert(items.size() == 2);
 	}
 
 	unionContent( const std::vector<std::shared_ptr<SupportFunctionContent<Number>>>& sfVector ) : items(sfVector) {}
@@ -122,7 +123,7 @@ struct intersectionContent {
 	std::shared_ptr<SupportFunctionContent<Number>> rhs;
 	intersectionContent( const std::shared_ptr<SupportFunctionContent<Number>>& _lhs, const std::shared_ptr<SupportFunctionContent<Number>>& _rhs )
 		: lhs( _lhs ), rhs( _rhs ) {}
-	intersectionContent( const intersectionContent<Number>& _origin ) : lhs( _origin.lhs ), rhs( _origin.rhs ) {}
+	intersectionContent( const intersectionContent<Number>& _origin ) = default;
 };
 
 template<typename Number>
@@ -143,7 +144,7 @@ class SupportFunctionContent {
 	friend trafoContent<Number>;
 
   private:
-	SF_TYPE mType;
+	SF_TYPE mType = SF_TYPE::NONE;
 	unsigned mDepth;
 	unsigned mOperationCount;
 	unsigned mDimension;
@@ -182,12 +183,14 @@ class SupportFunctionContent {
 	static std::shared_ptr<SupportFunctionContent<Number>> create( SF_TYPE _type, Number _radius, unsigned dimension ) {
 		auto obj = std::shared_ptr<SupportFunctionContent<Number>>( new SupportFunctionContent<Number>( _radius, dimension, _type ) );
 		obj->pThis = obj;
+		assert(obj->checkTreeValidity());
 		return obj;
 	}
 
 	static std::shared_ptr<SupportFunctionContent<Number>> create( SF_TYPE _type, matrix_t<Number> _shapeMatrix ) {
 		auto obj = std::shared_ptr<SupportFunctionContent<Number>>( new SupportFunctionContent<Number>( _shapeMatrix, _type ) );
 		obj->pThis = obj;
+		assert(obj->checkTreeValidity());
 		return obj;
 	}
 
@@ -196,6 +199,7 @@ class SupportFunctionContent {
 		auto obj =
 			  std::shared_ptr<SupportFunctionContent<Number>>( new SupportFunctionContent<Number>( _directions, _distances, _type ) );
 		obj->pThis = obj;
+		assert(obj->checkTreeValidity());
 		return obj;
 	}
 
@@ -203,6 +207,7 @@ class SupportFunctionContent {
 															const std::vector<Halfspace<Number>>& _planes ) {
 		auto obj = std::shared_ptr<SupportFunctionContent<Number>>( new SupportFunctionContent<Number>( _planes, _type ) );
 		obj->pThis = obj;
+		assert(obj->checkTreeValidity());
 		return obj;
 	}
 
@@ -210,12 +215,14 @@ class SupportFunctionContent {
 															const std::vector<Point<Number>>& _points ) {
 		auto obj = std::shared_ptr<SupportFunctionContent<Number>>( new SupportFunctionContent<Number>( _points, _type ) );
 		obj->pThis = obj;
+		assert(obj->checkTreeValidity());
 		return obj;
 	}
 
 	static std::shared_ptr<SupportFunctionContent<Number>> create( const std::shared_ptr<SupportFunctionContent<Number>>& orig ) {
 		auto obj = std::make_shared<SupportFunctionContent<Number>>(*orig);
 		obj->pThis = obj;
+		assert(obj->checkTreeValidity());
 		return obj;
 	}
 
@@ -281,7 +288,44 @@ class SupportFunctionContent {
 		return lhs;
 	}
 
-private:
+	bool checkTreeValidity() const {
+		assert(this == pThis.lock().get());
+		switch ( mType ) {
+			case SF_TYPE::TWO_BALL:
+			case SF_TYPE::INFTY_BALL:
+			case SF_TYPE::POLY:
+			case SF_TYPE::ELLIPSOID:
+			case SF_TYPE::BOX:
+			case SF_TYPE::ZONOTOPE:
+				return true;
+			case SF_TYPE::LINTRAFO: {
+				return mLinearTrafoParameters->origin->checkTreeValidity();
+			}
+			case SF_TYPE::SCALE: {
+				return mScaleParameters->origin->checkTreeValidity();
+			}
+			case SF_TYPE::PROJECTION: {
+				return mProjectionParameters->origin->checkTreeValidity();
+			}
+			case SF_TYPE::SUM: {
+				return mSummands->lhs->checkTreeValidity() && mSummands->rhs->checkTreeValidity();
+			}
+			case SF_TYPE::UNITE: {
+				for(const auto& item : mUnionParameters->items) {
+					if(!item->checkTreeValidity())
+						return false;
+				}
+				return true;
+			}
+			case SF_TYPE::INTERSECT: {
+				return mIntersectionParameters->lhs->checkTreeValidity() && mIntersectionParameters->rhs->checkTreeValidity();
+			}
+			default:
+				return false;
+		}
+	}
+
+	private:
 
 	bool hasTrafo(std::shared_ptr<const lintrafoParameters<Number>>& resNode, const matrix_t<Number>& A, const vector_t<Number>& b) const {
 		switch ( mType ) {
@@ -376,11 +420,12 @@ private:
 			}
 			case SF_TYPE::UNITE: {
 				//std::cout << "Current: union" << std::endl;
-				std::vector<SF_TYPE> lhsItems = mUnionParameters->lhs->collectLevelEntries(level-1);
-				std::vector<SF_TYPE> rhsItems = mUnionParameters->rhs->collectLevelEntries(level-1);
-				items.insert(items.end(), lhsItems.begin(), lhsItems.end());
-				items.insert(items.end(), rhsItems.begin(), rhsItems.end());
-				return items;
+				std::vector<SF_TYPE> res;
+				for(const auto& item : mUnionParameters->items) {
+					std::vector<SF_TYPE> tmp = item->collectLevelEntries(level-1);
+					res.insert(res.end(), tmp.begin(), tmp.end());
+				}
+				return res;
 			}
 			case SF_TYPE::INTERSECT: {
 				//std::cout << "Current: intersect" << std::endl;

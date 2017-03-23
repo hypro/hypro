@@ -523,6 +523,7 @@ namespace hypro{
 
 	template<typename Number, typename Converter>
 	std::vector<unsigned> SupportFunctionT<Number,Converter>::collectProjections() const {
+		assert(content->checkTreeValidity());
 		return content->collectProjections();
 	}
 

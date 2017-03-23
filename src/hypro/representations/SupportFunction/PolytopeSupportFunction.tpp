@@ -331,6 +331,17 @@ void PolytopeSupportFunction<Number>::print() const{
 }
 
 template<typename Number>
+std::string PolytopeSupportFunction<Number>::createCode(unsigned index) const {
+	std::stringstream res;
+	std::string tmp = createCode(mConstraints);
+	std::string tmp2 = createCode(mConstraintConstants, index);
+	res << tmp << tmp2;
+	res << "PolytopeSupportFunction<TypeParam> psf" << index << " = PolytopeSupportFunction<TypeParam>(matrix" << index << ", vector" << index << ");\n";
+	return res.str();
+
+}
+
+template<typename Number>
 void PolytopeSupportFunction<Number>::removeRedundancy() {
 	if(mConstraints.rows() > 1){
 

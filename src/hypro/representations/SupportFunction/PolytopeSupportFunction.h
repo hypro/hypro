@@ -17,6 +17,7 @@
 #include "datastructures/Point.h"
 #include "datastructures/Halfspace.h"
 #include "util/convexHull.h"
+#include "util/adaptions_eigen/adaptions_eigen.h"
 #include "util/linearOptimization/Optimizer.h"
 #include "util/Permutator.h"
 #include <map>
@@ -104,6 +105,8 @@ class PolytopeSupportFunction {
 	bool empty() const;
 
     void print() const;
+
+    std::string createCode( unsigned index = 0 ) const;
 
     friend std::ostream& operator<<( std::ostream& lhs, const PolytopeSupportFunction<Number>& rhs ) {
     	lhs << "[ ";

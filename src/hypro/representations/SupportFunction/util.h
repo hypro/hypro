@@ -37,7 +37,6 @@ enum SF_TYPE { SUM, INTERSECT, LINTRAFO, SCALE, UNITE, POLY, INFTY_BALL, TWO_BAL
 			if(lhs.hash() != rhs.hash()) {
 				return false;
 			}
-
 			return (lhs.item.first == rhs.item.first) && (lhs.item.second == rhs.item.second);
 		}
 	};
