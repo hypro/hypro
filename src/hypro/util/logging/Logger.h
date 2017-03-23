@@ -12,6 +12,8 @@
 #define COUT(expr) std::cout << expr
 #define CERR(expr) std::cerr << expr
 
+#ifdef HYPRO_LOGGING
+
 #include <carl/core/carlLogging.h>
 
 namespace hypro {
@@ -36,3 +38,4 @@ namespace hypro {
 #define WARN(channel,expr) __HYPRO_LOG(carl::logging::LogLevel::LVL_WARN, channel, expr)
 #define FATAL(channel,expr) __HYPRO_LOG(carl::logging::LogLevel::LVL_FATAL, channel, expr)
 
+#endif

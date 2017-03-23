@@ -41,7 +41,7 @@ namespace hypro {
 		LRUCache(LRUCache&& orig ) = delete;
 
 		LRUCache(std::size_t size) : mMaxSize(size) {
-			TRACE("hypro.datastructures.cache","Created cache of size " << size << " (@" << this << ")" );
+			//TRACE("hypro.datastructures.cache","Created cache of size " << size << " (@" << this << ")" );
 		}
 
 		typename CacheList::iterator begin() { return mCacheList.begin(); }
@@ -51,17 +51,17 @@ namespace hypro {
 			COUNT("Cache-Access");
 			auto it = mCacheMap.find(key);
 			if(it == mCacheMap.end()) {
-				COUNT("Cache-Miss");
+				//COUNT("Cache-Miss");
 				return mCacheList.end();
 			}
-			COUNT("Cache-Find");
+			//COUNT("Cache-Find");
 			return it->second;
 		}
 
 		inline bool has(const Key& key) const { return mCacheMap.find(key) != mCacheMap.end(); }
 
 		inline typename CacheList::iterator insert(const Key& key, const Value& value) {
-			TRACE("hypro.datastructures.cache","Add element to cache. Current size: " << this->size() << " (@" << this << ")");
+			//TRACE("hypro.datastructures.cache","Add element to cache. Current size: " << this->size() << " (@" << this << ")");
 			assert(mEntryCount == mCacheList.size() && mEntryCount == mCacheMap.size());
 			auto it = mCacheMap.find(key);
 			if(it != mCacheMap.end()) {
@@ -70,7 +70,7 @@ namespace hypro {
 				return (*it).second;
 			} else {
 				if(mEntryCount == mMaxSize){
-					TRACE("hypro.datastructures.cache","Cache full, remove least used element." << " (@" << this << ")");
+					//TRACE("hypro.datastructures.cache","Cache full, remove least used element." << " (@" << this << ")");
 					mCacheMap.erase(mCacheList.back().first);
 					mCacheList.pop_back();
 					--mEntryCount;

@@ -40,7 +40,7 @@ namespace hypro {
 		z3::optimize::handle result = z3Optimizer.maximize(formulaObjectivePair.second);
 
 		#ifdef DEBUG_MSG
-		std::cout << "Optimizer String: " << z3Optimizer << std::endl;
+		//std::cout << "Optimizer String: " << z3Optimizer << std::endl;
 		#endif
 
 		// verify and set result

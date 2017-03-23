@@ -36,7 +36,7 @@ namespace hypro {
 		z3::optimize::handle result = z3Optimizer.maximize(formulaObjectivePair.second);
 
 		#ifdef DEBUG_MSG
-		std::cout << "Optimizer String: " << z3Optimizer << std::endl;
+		//std::cout << "Optimizer String: " << z3Optimizer << std::endl;
 		#endif
 
 		// verify and set result
@@ -178,7 +178,7 @@ namespace hypro {
 		// first call to check satisfiability
 		z3::check_result firstCheck = z3Solver.check();
 		#ifdef DEBUG_MSG
-		std::cout << __func__ << " Original problem solution: " << firstCheck << std::endl;
+		//std::cout << __func__ << " Original problem solution: " << firstCheck << std::endl;
 		#endif
 		switch (firstCheck) {
 			case z3::check_result::unsat: {
@@ -198,7 +198,7 @@ namespace hypro {
 		for(unsigned constraintIndex = 0; constraintIndex < formulas.size(); ++constraintIndex) {
 			z3::expr originalConstraint = formulas[constraintIndex];
 			#ifdef DEBUG_MSG
-			std::cout << __func__ << " Original constraint: " << originalConstraint << std::endl;
+			//std::cout << __func__ << " Original constraint: " << originalConstraint << std::endl;
 			#endif
 			z3::expr negatedConstraint = !originalConstraint;
 
@@ -215,7 +215,7 @@ namespace hypro {
 			assert(isRedundant != z3::check_result::unknown);
 			if(isRedundant == z3::check_result::unsat){
 				#ifdef DEBUG_MSG
-				std::cout << __func__ << " is redundant." << std::endl;
+				//std::cout << __func__ << " is redundant." << std::endl;
 				#endif
 				res.push_back(constraintIndex);
 			}

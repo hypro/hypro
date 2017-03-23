@@ -79,13 +79,13 @@ namespace hypro {
 			#endif
 			power(_power)
 		{
-			TRACE("hypro.representations.supportFunction", "Created new lintrafo object." << " (@" << this << ")");
+			//TRACE("hypro.representations.supportFunction", "Created new lintrafo object." << " (@" << this << ")");
 			assert(_A.rows() == _b.rows());
 			parameters[1] = std::make_pair(_A, _b);
 		}
 
 		~lintrafoParameters(){
-			TRACE("hypro.representations.supportFunction", "Delete lintrafo object." << " (@" << this << ")");
+			//TRACE("hypro.representations.supportFunction", "Delete lintrafo object." << " (@" << this << ")");
 		}
 
 		matrix_t<Number> matrix() const {
@@ -113,10 +113,10 @@ namespace hypro {
 
 		vector_t<Number> getTransformedDirection(const vector_t<Number>& inDirection, unsigned exponent) const {
 			#ifdef HYPRO_USE_VECTOR_CACHING
-			TRACE("hypro.representations.supportFunction","Attempt to access cache." << " (@" << this << ")");
+			//TRACE("hypro.representations.supportFunction","Attempt to access cache." << " (@" << this << ")");
 			auto cachePos = mVectorCache.get(Cacheable<vector_t<Number>>(exponent,inDirection));
 			if(cachePos == mVectorCache.end()) {
-				TRACE("hypro.representations.supportFunction","Insert item into cache." << " (@" << this << ")");
+				//TRACE("hypro.representations.supportFunction","Insert item into cache." << " (@" << this << ")");
 				vector_t<Number> tmp = getParameterSet(exponent).first.transpose() * inDirection;
 				auto pos = mVectorCache.insert(Cacheable<vector_t<Number>>(exponent,inDirection), tmp);
 				assert((*pos).second.rows() == inDirection.rows());

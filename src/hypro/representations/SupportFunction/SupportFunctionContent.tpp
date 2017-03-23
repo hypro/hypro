@@ -367,7 +367,7 @@ EvaluationResult<Number> SupportFunctionContent<Number>::evaluate( const vector_
 			return mBall->evaluate( _direction );
 		}
 		case SF_TYPE::LINTRAFO: {
-			TRACE("hypro.representations.supportFunction","Direction rows: " << _direction.rows());
+			//TRACE("hypro.representations.supportFunction","Direction rows: " << _direction.rows());
 			std::pair<matrix_t<Number>, vector_t<Number>> parameterPair = mLinearTrafoParameters->parameters->getParameterSet(mLinearTrafoParameters->currentExponent);
 			#ifndef HYPRO_USE_VECTOR_CACHING
 			matrix_t<Number> tmp = parameterPair.first.transpose();
@@ -383,7 +383,7 @@ EvaluationResult<Number> SupportFunctionContent<Number>::evaluate( const vector_
 					return res;
 				}
 				default:{
-					TRACE("hypro.representations.supportFunction","opt val rows: " << res.optimumValue.rows() << " and direction rows: " << _direction.rows());
+					//TRACE("hypro.representations.supportFunction","opt val rows: " << res.optimumValue.rows() << " and direction rows: " << _direction.rows());
 					assert(res.errorCode == SOLUTION::FEAS);
 					assert(res.optimumValue.rows() == _direction.rows());
 					res.optimumValue = parameterPair.first * res.optimumValue + parameterPair.second;
