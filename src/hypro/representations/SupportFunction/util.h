@@ -2,7 +2,7 @@
  * @file   util.h
  */
 
-#define HYPRO_USE_VECTOR_CACHING
+//#define HYPRO_USE_VECTOR_CACHING
 
 #pragma once
 

@@ -47,7 +47,7 @@ namespace hypro {
 		typename CacheList::iterator begin() { return mCacheList.begin(); }
 		typename CacheList::iterator end() { return mCacheList.end(); }
 
-		inline typename CacheList::const_iterator get(const Key& key) const {
+		typename CacheList::const_iterator get(const Key& key) const {
 			COUNT("Cache-Access");
 			auto it = mCacheMap.find(key);
 			if(it == mCacheMap.end()) {
@@ -58,9 +58,9 @@ namespace hypro {
 			return it->second;
 		}
 
-		inline bool has(const Key& key) const { return mCacheMap.find(key) != mCacheMap.end(); }
+		bool has(const Key& key) const { return mCacheMap.find(key) != mCacheMap.end(); }
 
-		inline typename CacheList::iterator insert(const Key& key, const Value& value) {
+		typename CacheList::iterator insert(const Key& key, const Value& value) {
 			//TRACE("hypro.datastructures.cache","Add element to cache. Current size: " << this->size() << " (@" << this << ")");
 			assert(mEntryCount == mCacheList.size() && mEntryCount == mCacheMap.size());
 			auto it = mCacheMap.find(key);

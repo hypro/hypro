@@ -23,7 +23,7 @@ namespace hypro {
 			TrafoParameters(const matrix_t<Number>& A, const vector_t<Number>& b) :
 				mMatrix(A),
 				mVector(b),
-				mLintrafoParameters(std::make_shared<lintrafoParameters<Number>>(A,b))
+				mLintrafoParameters(std::make_shared<lintrafoParameters<Number>>(mMatrix,mVector))
 			{}
 
 			TrafoParameters(std::shared_ptr<lintrafoParameters<Number>> parameters) :
