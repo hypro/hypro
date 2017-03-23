@@ -60,13 +60,13 @@ namespace hypro {
 		if(!mConstraintsSet) {
 			updateConstraints();
 		}
-		TRACE("hypro.optimizer","Direction: " << _direction);
-		TRACE("hypro.optimizer","ConstraintMatrix: " << std::endl << mConstraintMatrix);
-		TRACE("hypro.optimizer","and vector:" << std::endl << mConstraintVector);
+		//TRACE("hypro.optimizer","Direction: " << _direction);
+		//TRACE("hypro.optimizer","ConstraintMatrix: " << std::endl << mConstraintMatrix);
+		//TRACE("hypro.optimizer","and vector:" << std::endl << mConstraintVector);
 		assert( _direction.rows() == mConstraintMatrix.cols() );
 
 		if( mConstraintMatrix.rows() == 0 ) {
-			TRACE("hypro.optimizer", "System is unbounded.");
+			//TRACE("hypro.optimizer", "System is unbounded.");
 			return EvaluationResult<Number>( Number(0),vector_t<Number>::Zero(1), SOLUTION::INFTY);
 		}
 
@@ -82,7 +82,7 @@ namespace hypro {
 		EvaluationResult<Number> res;
 		#endif
 
-		COUNT("glpk");
+		//COUNT("glpk");
 		#if defined(HYPRO_USE_SMTRAT) || defined(HYPRO_USE_Z3) || defined(HYPRO_USE_SOPLEX)
 		res = glpkOptimizeLinear(lp,_direction,mConstraintMatrix,mConstraintVector,useExactGlpk);
 		#else
@@ -91,7 +91,7 @@ namespace hypro {
 
 		#if defined(HYPRO_USE_SMTRAT) || defined(HYPRO_USE_Z3) || defined(HYPRO_USE_SOPLEX)
 		#ifdef DEBUG_MSG
-		std::cout << "glpk optimumValue: " << res.optimumValue << ", glpk errorcode: " << res.errorCode << std::endl;
+		//std::cout << "glpk optimumValue: " << res.optimumValue << ", glpk errorcode: " << res.errorCode << std::endl;
 		#endif
 
 		// At this point we can check, whether the glpk result is already exact and optimal.
@@ -170,7 +170,7 @@ namespace hypro {
 		//std::cout << "Point: " << res.optimumValue << " contained: " << checkPoint(Point<Number>(res.optimumValue)) << ", Solution is feasible: " << (res.errorCode==SOLUTION::FEAS) << std::endl;
 		//assert(res.errorCode  != FEAS || checkPoint(Point<Number>(res.optimumValue)));
 		#ifdef DEBUG_MSG
-		std::cout << "Final solution distance: " << res.supportValue << std::endl;
+		//std::cout << "Final solution distance: " << res.supportValue << std::endl;
 		#endif
 		return res;
 		#endif
@@ -190,7 +190,7 @@ namespace hypro {
 		//std::cout << __func__ << ": matrix: " << mConstraintMatrix << std::endl << "Vector: " << mConstraintVector << std::endl;
 
 		#ifdef HYPRO_USE_SMTRAT
-		TRACE("hypro.optimizer","Use smtrat for consistency check.");
+		//TRACE("hypro.optimizer","Use smtrat for consistency check.");
 		mLastConsistencyAnswer = smtratCheckConsistency(mConstraintMatrix,mConstraintVector) == true ? SOLUTION::FEAS : SOLUTION::INFEAS;
 		mConsistencyChecked = true;
         #elif defined(HYPRO_USE_Z3)
@@ -201,7 +201,7 @@ namespace hypro {
 		mConsistencyChecked = true;
 		#else // use glpk
 		if(!mConsistencyChecked){
-			TRACE("hypro.optimizer","Use glpk for consistency check.");
+			//TRACE("hypro.optimizer","Use glpk for consistency check.");
 			glp_simplex( lp, NULL);
 			glp_exact( lp, NULL );
 			mLastConsistencyAnswer = glp_get_status(lp) == GLP_NOFEAS ? SOLUTION::INFEAS : SOLUTION::FEAS;

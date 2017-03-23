@@ -35,9 +35,9 @@ namespace hypro {
 		simplex.addObjective(objective, false);
 
 		#ifdef DEBUG_MSG
-		std::cout << "(push)" << std::endl;
-		std::cout << ((smtrat::FormulaT)simplex.formula()).toString( false, 1, "", true, false, true, true ) << std::endl;
-		std::cout << "(maximize " << objective.toString(false,true) << ")" << std::endl;
+		//std::cout << "(push)" << std::endl;
+		//std::cout << ((smtrat::FormulaT)simplex.formula()).toString( false, 1, "", true, false, true, true ) << std::endl;
+		//std::cout << "(maximize " << objective.toString(false,true) << ")" << std::endl;
 		#endif
 
 		#ifdef VERIFY_RESULT
@@ -47,7 +47,7 @@ namespace hypro {
 		smtrat::Answer smtratCheck = simplex.check();
 
 		#ifdef DEBUG_MSG
-		std::cout << "Done checking." << std::endl;
+		//std::cout << "Done checking." << std::endl;
 		#endif
 
 		switch(smtratCheck) {
@@ -199,7 +199,7 @@ namespace hypro {
 		// first call to check satisfiability
 		smtrat::Answer firstCheck = simplex.check();
 		#ifdef DEBUG_MSG
-		std::cout << __func__ << " Original problem solution: " << firstCheck << std::endl;
+		//std::cout << __func__ << " Original problem solution: " << firstCheck << std::endl;
 		#endif
 		switch (firstCheck) {
 				case smtrat::Answer::UNSAT: {
@@ -217,15 +217,15 @@ namespace hypro {
 
 		std::size_t count = 0;
 		#ifdef DEBUG_MSG
-		std::cout << __func__ << " Original Formula: " << std::endl;
-		simplex.printAssertions();
+		//std::cout << __func__ << " Original Formula: " << std::endl;
+		//simplex.printAssertions();
 		#endif
 
 		std::size_t formulaSize = simplex.formula().size();
 		for(auto formulaIt = simplex.formulaBegin(); count < formulaSize; ++count) {
 			smtrat::FormulaT originalConstraint = (*formulaIt).formula();
 			#ifdef DEBUG_MSG
-			std::cout << __func__ << " Original constraint: " << originalConstraint << std::endl;
+			//std::cout << __func__ << " Original constraint: " << originalConstraint << std::endl;
 			#endif
 			smtrat::FormulaT negatedConstraint = smtrat::FormulaT( (*formulaIt).formula().constraint().lhs(), carl::turnAroundRelation( (*formulaIt).formula().constraint().relation() ) );
 			unsigned currentFormulaSize = simplex.formula().size();
@@ -235,14 +235,14 @@ namespace hypro {
 			if(simplex.formula().size() > currentFormulaSize) {
 				formulaIt = simplex.remove(formulaIt);
 				#ifdef DEBUG_MSG
-				std::cout << __func__ << " Negated Constraint: " << negatedConstraint << std::endl;
+				//std::cout << __func__ << " Negated Constraint: " << negatedConstraint << std::endl;
 				#endif
 
 				smtrat::Answer isRedundant = simplex.check();
 				assert(isRedundant != smtrat::Answer::UNKNOWN);
 				if(isRedundant == smtrat::Answer::UNSAT){
 					#ifdef DEBUG_MSG
-					std::cout << __func__ << " is redundant." << std::endl;
+					//std::cout << __func__ << " is redundant." << std::endl;
 					#endif
 					assert(formulaMapping.find(originalConstraint) != formulaMapping.end());
 					assert(unsigned(formulaMapping.at(originalConstraint)) < constraints.rows());

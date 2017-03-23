@@ -25,9 +25,9 @@ namespace hypro {
 				}
 			}
 			if( glp_get_row_type(glpkProblem,i) == GLP_UP ) {
-				std::cout << " <= " << glp_get_row_ub(glpkProblem,i) << std::endl;
+				//std::cout << " <= " << glp_get_row_ub(glpkProblem,i) << std::endl;
 			} else if ( glp_get_row_type(glpkProblem,i) == GLP_FR ) {
-				std::cout << " <= +INF" << std::endl;
+				//std::cout << " <= +INF" << std::endl;
 			}
 		}
 		delete[] ind;
@@ -67,7 +67,7 @@ namespace hypro {
 					int status = glp_get_row_stat( glpkProblem, i);
 					if( status == GLP_NU ) {
 						#ifdef DEBUG_MSG
-						std::cout << "Row " << i << " is at its upper bounds." << std::endl;
+						//std::cout << "Row " << i << " is at its upper bounds." << std::endl;
 						#endif
 						exactSolutionMatrix.row(pos) = constraints.row(i-1);
 						exactSolutionVector(pos) = constants(i-1);
@@ -76,8 +76,8 @@ namespace hypro {
 				}
 				exactSolution = Eigen::FullPivLU<matrix_t<Number>>(exactSolutionMatrix).solve(exactSolutionVector);
 				#ifdef DEBUG_MSG
-				std::cout << "Problem for exact solution: " << exactSolutionMatrix << ", " << exactSolutionVector << std::endl;
-				std::cout << "Exact solution is: " << exactSolution << std::endl << "with support value: " << _direction.dot(exactSolution) << std::endl;
+				//std::cout << "Problem for exact solution: " << exactSolutionMatrix << ", " << exactSolutionVector << std::endl;
+				//std::cout << "Exact solution is: " << exactSolution << std::endl << "with support value: " << _direction.dot(exactSolution) << std::endl;
 				#endif
 				return EvaluationResult<Number>(_direction.dot(exactSolution), exactSolution, SOLUTION::FEAS);
 				break;
