@@ -14,6 +14,7 @@ namespace hypro {
 template <typename Number>
 SupportFunctionContent<Number>::SupportFunctionContent( const SupportFunctionContent<Number> &_orig )
 	: mType( _orig.type() ), mDimension( _orig.dimension(), mDepth( _orig.depth()) ) {
+	assert(_orig.checkTreeValidity());
 	//std::cout << "Copy constructor, this->type:" << mType << std::endl;
 	switch ( mType ) {
 		case SF_TYPE::ELLIPSOID: {
@@ -150,6 +151,8 @@ template <typename Number>
 SupportFunctionContent<Number>::SupportFunctionContent( const std::shared_ptr<SupportFunctionContent<Number>>& _lhs,
 										  const std::shared_ptr<SupportFunctionContent<Number>>& _rhs, SF_TYPE _type ) {
 	// assert(_lhs.dimension() == _rhs.dimension());
+	assert(_lhs->checkTreeValidity());
+	assert(_rhs->checkTreeValidity());
 	switch ( _type ) {
 		case SF_TYPE::SUM: {
 			mSummands = new sumContent<Number>( _lhs, _rhs );
@@ -196,6 +199,7 @@ SupportFunctionContent<Number>::SupportFunctionContent( const std::shared_ptr<Su
 template <typename Number>
 SupportFunctionContent<Number>::SupportFunctionContent( const std::vector<std::shared_ptr<SupportFunctionContent<Number>>>& _rhs, SF_TYPE _type ) {
 	// assert(_lhs.dimension() == _rhs.dimension());
+	assert(_rhs->checkTreeValidity());
 	switch ( _type ) {
 		case SF_TYPE::UNITE: {
 			assert(!_rhs.empty());
@@ -205,6 +209,7 @@ SupportFunctionContent<Number>::SupportFunctionContent( const std::vector<std::s
 			mDepth = 0;
 			mOperationCount = 1;
 			for(const auto& sf : _rhs ) {
+				assert(sf->checkTreeValidity());
 				assert(sf->dimension() == mDimension);
 				if(mDepth < sf->depth()) {
 					mDepth = sf->depth();
@@ -221,6 +226,7 @@ SupportFunctionContent<Number>::SupportFunctionContent( const std::vector<std::s
 template <typename Number>
 SupportFunctionContent<Number>::SupportFunctionContent( const std::shared_ptr<SupportFunctionContent<Number>>& _origin, const matrix_t<Number>& A, const vector_t<Number>& b
 			, SF_TYPE _type ) {
+	assert(_origin->checkTreeValidity());
 	switch ( _type ) {
 		case SF_TYPE::LINTRAFO: {
 			mLinearTrafoParameters = new trafoContent<Number>( _origin, A, b );
@@ -238,6 +244,7 @@ SupportFunctionContent<Number>::SupportFunctionContent( const std::shared_ptr<Su
 template <typename Number>
 SupportFunctionContent<Number>::SupportFunctionContent( const std::shared_ptr<SupportFunctionContent<Number>>& _origin, const Number &_factor,
 										  SF_TYPE _type ) {
+	assert(_origin->checkTreeValidity());
 	switch ( _type ) {
 		case SF_TYPE::SCALE: {
 			mScaleParameters = new scaleContent<Number>( _origin, _factor );
@@ -254,6 +261,7 @@ SupportFunctionContent<Number>::SupportFunctionContent( const std::shared_ptr<Su
 
 template<typename Number>
 SupportFunctionContent<Number>::SupportFunctionContent( const std::shared_ptr<SupportFunctionContent<Number>>& _origin, const std::vector<unsigned>& dimensions, SF_TYPE _type ) {
+	assert(_origin->checkTreeValidity());
 	switch ( _type ) {
 		case SF_TYPE::PROJECTION: {
 			mProjectionParameters = new projectionContent<Number>(_origin,dimensions);
@@ -314,6 +322,7 @@ std::shared_ptr<SupportFunctionContent<Number>>& SupportFunctionContent<Number>:
 	  const std::shared_ptr<SupportFunctionContent<Number>>& _other ){
         // std::cout << "SupportFunctionContent Copy\n";
 	//std::cout << "Assignment, this->type:" << _other->type() << std::endl;
+	assert(_other->checkTreeValidity());
 	mType = _other->type();
 	switch ( mType ) {
 		case SF_TYPE::ELLIPSOID:
@@ -358,6 +367,7 @@ std::shared_ptr<SupportFunctionContent<Number>>& SupportFunctionContent<Number>:
 
 template <typename Number>
 EvaluationResult<Number> SupportFunctionContent<Number>::evaluate( const vector_t<Number> &_direction, bool useExact ) const {
+	assert(checkTreeValidity());
 	switch ( mType ) {
 		case SF_TYPE::ELLIPSOID: {
 			return mEllipsoid->evaluate( _direction );
@@ -484,6 +494,7 @@ EvaluationResult<Number> SupportFunctionContent<Number>::evaluate( const vector_
 template <typename Number>
 std::vector<EvaluationResult<Number>> SupportFunctionContent<Number>::multiEvaluate( const matrix_t<Number> &_directions, bool useExact ) const {
 	//std::cout << "Multi-evaluate, type: " << mType << std::endl;
+	assert(checkTreeValidity());
 	switch ( mType ) {
 		case SF_TYPE::ELLIPSOID: {
 			return mEllipsoid->multiEvaluate( _directions );
@@ -712,6 +723,7 @@ unsigned SupportFunctionContent<Number>::multiplicationsPerEvaluation() const {
 
 template <typename Number>
 void SupportFunctionContent<Number>::forceLinTransReduction(){
+	assert(checkTreeValidity());
     switch ( mType ) {
         case SF_TYPE::LINTRAFO: {
             std::shared_ptr<SupportFunctionContent<Number>> origin = mLinearTrafoParameters->origin;
@@ -772,11 +784,13 @@ void SupportFunctionContent<Number>::forceLinTransReduction(){
         default:
             break;
     }
+    assert(checkTreeValidity());
 }
 
 
 template<typename Number>
 Point<Number> SupportFunctionContent<Number>::supremumPoint() const {
+	assert(checkTreeValidity());
 	switch ( mType ) {
 		case SF_TYPE::INFTY_BALL:
 		case SF_TYPE::TWO_BALL: {
@@ -882,6 +896,8 @@ std::vector<unsigned> SupportFunctionContent<Number>::collectProjections() const
 			return res;
 		}
 		case SF_TYPE::LINTRAFO: {
+			std::cout << __func__ << " Depth: " << this->depth() << std::endl;
+			std::cout << __func__ << " origin type: " << mLinearTrafoParameters->origin->type() << std::endl;
 			assert(mLinearTrafoParameters->origin->checkTreeValidity());
 			auto tmp = mLinearTrafoParameters->origin->collectProjections();
 			assert(checkTreeValidity());
@@ -1201,6 +1217,7 @@ std::shared_ptr<SupportFunctionContent<Number>> SupportFunctionContent<Number>::
 
 template <typename Number>
 bool SupportFunctionContent<Number>::empty() const {
+	assert(checkTreeValidity());
 	switch ( mType ) {
 		case SF_TYPE::ELLIPSOID: {
 			return mEllipsoid->empty();

@@ -17,3 +17,12 @@ TYPED_TEST(EigenAdaptionsTest, reduceNumberRepresentation)
 {
 	// TODO: finish vector rounding.
 }
+
+TYPED_TEST(EigenAdaptionsTest, createCode)
+{
+	hypro::matrix_t<TypeParam> a = hypro::matrix_t<TypeParam>(2,2);
+	a << 1,2,3,4;
+
+	std::string out = hypro::createCode(a,0);
+	std::cout << out << std::endl;
+}

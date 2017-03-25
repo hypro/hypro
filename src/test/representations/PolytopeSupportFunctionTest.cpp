@@ -98,3 +98,10 @@ TYPED_TEST(PolytopeSupportFunctionTest, contains) {
 	EXPECT_TRUE(psf1.contains(Point<TypeParam>({xCoord,yCoord})));
 	EXPECT_FALSE(psf1.contains(Point<TypeParam>({xCoord+carl::rationalize<TypeParam>(0.001),yCoord+carl::rationalize<TypeParam>(0.001)})));
 }
+
+TYPED_TEST(PolytopeSupportFunctionTest, createCode) {
+	PolytopeSupportFunction<TypeParam> psf1 = PolytopeSupportFunction<TypeParam>(this->constraints, this->constants);
+	//std::string res = psf1.createCode();
+
+	//std::cout << res << std::endl;
+}

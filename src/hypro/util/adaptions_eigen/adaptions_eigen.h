@@ -322,6 +322,40 @@ namespace hypro {
 		return in;
 	}
 
+	template<typename Number>
+	std::string createCode(const matrix_t<Number>& in, unsigned index = 0) {
+		std::stringstream st;
+		st << "matrix_t<Number> matrix" << index << " = matrix_t<Number>(" << in.rows() << "," << in.cols() << ");\n";
+		st << "matrix" << index << " << ";
+		for(unsigned rowIndex = 0; rowIndex < in.rows(); ++rowIndex) {
+			for(unsigned colIndex = 0; colIndex < in.cols(); ++colIndex) {
+				if(rowIndex == in.rows()-1 && colIndex == in.cols()-1) {
+					st << in(rowIndex,colIndex);
+				} else {
+					st << in(rowIndex,colIndex) << ", ";
+				}
+			}
+		}
+		st << ";\n";
+		return st.str();
+	}
+
+	template<typename Number>
+	std::string createCode(const vector_t<Number>& in, unsigned index = 0) {
+		std::stringstream st;
+		st << "vector_t<Number> vector" << index << " = vector_t<Number>(" << in.rows() << ");\n";
+		st << "vector" << index << " << ";
+		for(unsigned rowIndex = 0; rowIndex < in.rows(); ++rowIndex) {
+			if(rowIndex == in.rows()-1 ) {
+				st << in(rowIndex);
+			} else {
+				st << in(rowIndex) << ", ";
+			}
+		}
+		st << ";\n";
+		return st.str();
+	}
+
 } // namespace hypro
 
 namespace std {

@@ -289,6 +289,7 @@ class SupportFunctionContent {
 	}
 
 	bool checkTreeValidity() const {
+		assert(!pThis.expired());
 		assert(this == pThis.lock().get());
 		switch ( mType ) {
 			case SF_TYPE::TWO_BALL:
