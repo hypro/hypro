@@ -52,7 +52,7 @@ static const unsigned long fReach_DENOMINATOR = 1000000000;
 static const unsigned long default_double_comparison_ulps = 128;
 
 /** The default number of template directions used in templated evaluation. */
-static const unsigned long defaultTemplateDirectionCount = 4;
+static const unsigned long defaultTemplateDirectionCount = 8;
 
 /** TODO: Document! */
 static const unsigned long MAX_DIMENSION_LIMIT = 100;

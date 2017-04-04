@@ -22,7 +22,7 @@ namespace hypro{
 
     //-------PUBLIC---------
     template<typename Number, typename Converter>
-    SupportFunctionT<Number,Converter>::SupportFunctionT() : content(std::shared_ptr<SupportFunctionContent<Number>>()){
+    SupportFunctionT<Number,Converter>::SupportFunctionT() {
         //handled by initializer list
     }
 

@@ -111,7 +111,7 @@ if(NOT CMAKE_BUILD_TYPE)
 	set(CMAKE_BUILD_TYPE Release CACHE STRING "Choose the type of build, options are: None Debug Release" FORCE)
 endif()
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -pedantic -fPIC -DBOOST_SPIRIT_USE_PHOENIX_V3=1")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -pedantic -fPIC -DBOOST_SPIRIT_USE_PHOENIX_V3=1 -ftemplate-backtrace-limit=0")
 if(STATICLIB_SWITCH)
 	set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static -Wl,--whole-archive -lpthread -Wl,--no-whole-archive")
 	set(CMAKE_FIND_LIBRARY_SUFFIXES ".a")

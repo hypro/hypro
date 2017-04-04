@@ -55,8 +55,8 @@ struct trafoContent {
 		bool reduced;
 		do {
 			reduced = false;
-			if ( (origin.get()->type() == SF_TYPE::LINTRAFO) && (*origin.get()->linearTrafoParameters()->parameters == *parameters) && origin->linearTrafoParameters()->currentExponent == currentExponent ) {
-				successiveTransformations = origin.get()->linearTrafoParameters()->successiveTransformations +1 ;
+			if ( (origin->type() == SF_TYPE::LINTRAFO) && (*origin->linearTrafoParameters()->parameters == *parameters) && origin->linearTrafoParameters()->currentExponent == currentExponent ) {
+				successiveTransformations = origin->linearTrafoParameters()->successiveTransformations +1 ;
 			} else {
 				successiveTransformations = 0;
 			}
@@ -65,12 +65,13 @@ struct trafoContent {
 				reduced = true;
 				currentExponent = currentExponent*(carl::pow(2,parameters->power));
 				for(std::size_t i = 0; i < unsigned(carl::pow(2,parameters->power)-1); i++ ){
-					origin = origin.get()->linearTrafoParameters()->origin;
+					origin = origin->linearTrafoParameters()->origin;
 				}
 				// Note: The following assertion does not hold in combination with the current reduction techniques.
-				//assert(origin.get()->type() != SF_TYPE::LINTRAFO || (origin.get()->linearTrafoParameters()->parameters == this->parameters && origin.get()->linearTrafoParameters()->currentExponent >= currentExponent) );
+				//assert(origin->type() != SF_TYPE::LINTRAFO || (origin->linearTrafoParameters()->parameters == this->parameters && origin->linearTrafoParameters()->currentExponent >= currentExponent) );
 			}
 		} while (reduced == true);
+		assert(origin->checkTreeValidity());
 #endif
 	}
 
@@ -171,56 +172,89 @@ class SupportFunctionContent {
 	SupportFunctionContent( const std::vector<Point<Number>>& _points, SF_TYPE _type = SF_TYPE::POLY );
 	SupportFunctionContent( const std::shared_ptr<SupportFunctionContent<Number>>& _lhs, const std::shared_ptr<SupportFunctionContent<Number>>& _rhs,
 					 SF_TYPE _type );
-	SupportFunctionContent( const std::vector<std::shared_ptr<SupportFunctionContent<Number>>>& _rhs, SF_TYPE _type = SF_TYPE::UNITE );
+	SupportFunctionContent( const std::vector<std::shared_ptr<SupportFunctionContent<Number>>>& rhs, SF_TYPE type = SF_TYPE::UNITE );
 	SupportFunctionContent( const std::shared_ptr<SupportFunctionContent<Number>>& _origin, const matrix_t<Number>& A, const vector_t<Number>& b, SF_TYPE _type );
 	SupportFunctionContent( const std::shared_ptr<SupportFunctionContent<Number>>& _origin, const Number& _factor,
 					 SF_TYPE _type = SF_TYPE::SCALE );
 	SupportFunctionContent( const std::shared_ptr<SupportFunctionContent<Number>>& _origin, const std::vector<unsigned>& dimensions, SF_TYPE _type = SF_TYPE::PROJECTION );
-
-  public:
 	SupportFunctionContent( const SupportFunctionContent<Number>& _orig );
 
-	static std::shared_ptr<SupportFunctionContent<Number>> create( SF_TYPE _type, Number _radius, unsigned dimension ) {
-		auto obj = std::shared_ptr<SupportFunctionContent<Number>>( new SupportFunctionContent<Number>( _radius, dimension, _type ) );
+  public:
+
+	static std::shared_ptr<SupportFunctionContent<Number>> create( SF_TYPE _type, matrix_t<Number> _shapeMatrix ) {
+		auto obj = std::shared_ptr<SupportFunctionContent<Number>>( new SupportFunctionContent<Number>( _shapeMatrix, _type ));
 		obj->pThis = obj;
 		assert(obj->checkTreeValidity());
 		return obj;
 	}
 
-	static std::shared_ptr<SupportFunctionContent<Number>> create( SF_TYPE _type, matrix_t<Number> _shapeMatrix ) {
-		auto obj = std::shared_ptr<SupportFunctionContent<Number>>( new SupportFunctionContent<Number>( _shapeMatrix, _type ) );
+	static std::shared_ptr<SupportFunctionContent<Number>> create( SF_TYPE _type, Number _radius, unsigned dimension ) {
+		auto obj = std::shared_ptr<SupportFunctionContent<Number>>( new SupportFunctionContent<Number>( _radius, dimension, _type ));
 		obj->pThis = obj;
 		assert(obj->checkTreeValidity());
 		return obj;
 	}
 
 	static std::shared_ptr<SupportFunctionContent<Number>> create( SF_TYPE _type, const matrix_t<Number>& _directions,
-															const vector_t<Number>& _distances ) {
-		auto obj =
-			  std::shared_ptr<SupportFunctionContent<Number>>( new SupportFunctionContent<Number>( _directions, _distances, _type ) );
+																	const vector_t<Number>& _distances ) {
+		auto obj = std::shared_ptr<SupportFunctionContent<Number>>( new SupportFunctionContent<Number>( _directions, _distances, _type ));
 		obj->pThis = obj;
 		assert(obj->checkTreeValidity());
 		return obj;
 	}
 
-	static std::shared_ptr<SupportFunctionContent<Number>> create( SF_TYPE _type,
-															const std::vector<Halfspace<Number>>& _planes ) {
-		auto obj = std::shared_ptr<SupportFunctionContent<Number>>( new SupportFunctionContent<Number>( _planes, _type ) );
+	static std::shared_ptr<SupportFunctionContent<Number>> create( SF_TYPE _type, const std::vector<Halfspace<Number>>& _planes ) {
+		auto obj = std::shared_ptr<SupportFunctionContent<Number>>( new SupportFunctionContent<Number>( _planes, _type ));
 		obj->pThis = obj;
 		assert(obj->checkTreeValidity());
 		return obj;
 	}
 
-	static std::shared_ptr<SupportFunctionContent<Number>> create( SF_TYPE _type,
-															const std::vector<Point<Number>>& _points ) {
-		auto obj = std::shared_ptr<SupportFunctionContent<Number>>( new SupportFunctionContent<Number>( _points, _type ) );
+	static std::shared_ptr<SupportFunctionContent<Number>> create( SF_TYPE _type, const std::vector<Point<Number>>& _points ) {
+		auto obj = std::shared_ptr<SupportFunctionContent<Number>>( new SupportFunctionContent<Number>( _points, _type ));
+		obj->pThis = obj;
+		assert(obj->checkTreeValidity());
+		return obj;
+	}
+
+	static std::shared_ptr<SupportFunctionContent<Number>> create( SF_TYPE type, const std::shared_ptr<SupportFunctionContent<Number>>& lhs, const std::shared_ptr<SupportFunctionContent<Number>>& rhs ) {
+		auto obj = std::shared_ptr<SupportFunctionContent<Number>>( new SupportFunctionContent<Number>( lhs, rhs, type ));
+		obj->pThis = obj;
+		assert(obj->checkTreeValidity());
+		return obj;
+	}
+
+	static std::shared_ptr<SupportFunctionContent<Number>> create( SF_TYPE type, const std::vector<std::shared_ptr<SupportFunctionContent<Number>>>& rhs ) {
+		auto obj = std::shared_ptr<SupportFunctionContent<Number>>( new SupportFunctionContent<Number>(rhs, type));
+		obj->pThis = obj;
+		assert(obj->checkTreeValidity());
+		return obj;
+	}
+
+	static std::shared_ptr<SupportFunctionContent<Number>> create( const std::shared_ptr<SupportFunctionContent<Number>>& orig, const matrix_t<Number>& constraints,
+															const vector_t<Number>& constants ) {
+		auto obj = std::shared_ptr<SupportFunctionContent<Number>>( new SupportFunctionContent<Number>(orig, constraints, constants, SF_TYPE::LINTRAFO));
+		obj->pThis = obj;
+		assert(obj->checkTreeValidity());
+		return obj;
+	}
+
+	static std::shared_ptr<SupportFunctionContent<Number>> create( const std::shared_ptr<SupportFunctionContent<Number>>& orig, Number factor ) {
+		auto obj = std::shared_ptr<SupportFunctionContent<Number>>( new SupportFunctionContent<Number>(orig, factor, SF_TYPE::SCALE));
+		obj->pThis = obj;
+		assert(obj->checkTreeValidity());
+		return obj;
+	}
+
+	static std::shared_ptr<SupportFunctionContent<Number>> create( const std::shared_ptr<SupportFunctionContent<Number>>& orig, const std::vector<unsigned>& dimensions ) {
+		auto obj = std::shared_ptr<SupportFunctionContent<Number>>( new SupportFunctionContent<Number>(orig, dimensions, SF_TYPE::PROJECTION));
 		obj->pThis = obj;
 		assert(obj->checkTreeValidity());
 		return obj;
 	}
 
 	static std::shared_ptr<SupportFunctionContent<Number>> create( const std::shared_ptr<SupportFunctionContent<Number>>& orig ) {
-		auto obj = std::make_shared<SupportFunctionContent<Number>>(*orig);
+		auto obj = std::shared_ptr<SupportFunctionContent<Number>>( new SupportFunctionContent<Number>(orig));
 		obj->pThis = obj;
 		assert(obj->checkTreeValidity());
 		return obj;
@@ -237,6 +271,7 @@ class SupportFunctionContent {
 	SF_TYPE type() const;
 	unsigned depth() const;
 	unsigned operationCount() const;
+	std::shared_ptr<SupportFunctionContent<Number>> getThis() const { return std::shared_ptr<SupportFunctionContent<Number>>(pThis); }
 
 	/**
 	 * Returns an approximation of the number of mv multiplications neccessary for an evaluation of the SF
@@ -298,30 +333,65 @@ class SupportFunctionContent {
 			case SF_TYPE::ELLIPSOID:
 			case SF_TYPE::BOX:
 			case SF_TYPE::ZONOTOPE:
+				//std::cout << __func__ << ": Reached bottom, return true." << std::endl;
 				return true;
 			case SF_TYPE::LINTRAFO: {
-				return mLinearTrafoParameters->origin->checkTreeValidity();
+				assert( linearTrafoParameters()->origin != nullptr);
+				assert( linearTrafoParameters()->origin->type() != SF_TYPE::NONE );
+				assert( linearTrafoParameters()->origin->checkTreeValidity());
+				//return mLinearTrafoParameters->origin->checkTreeValidity();
+				return true;
 			}
 			case SF_TYPE::SCALE: {
-				return mScaleParameters->origin->checkTreeValidity();
+				//assert(scaleParameters()->origin->checkTreeValidity());
+				assert(scaleParameters()->origin != nullptr);
+				assert(scaleParameters()->origin->type() != SF_TYPE::NONE );
+				return scaleParameters()->origin->checkTreeValidity();
+				//return true;
 			}
 			case SF_TYPE::PROJECTION: {
-				return mProjectionParameters->origin->checkTreeValidity();
+				//assert(projectionParameters()->origin->checkTreeValidity());
+				assert(projectionParameters()->origin != nullptr);
+				assert(projectionParameters()->origin->type() != SF_TYPE::NONE);
+				return projectionParameters()->origin->checkTreeValidity();
+				//return true;
 			}
 			case SF_TYPE::SUM: {
-				return mSummands->lhs->checkTreeValidity() && mSummands->rhs->checkTreeValidity();
+				//assert(summands()->lhs->checkTreeValidity());
+				//assert(summands()->rhs->checkTreeValidity());
+				assert(summands()->lhs != nullptr);
+				assert(summands()->rhs != nullptr);
+				assert(summands()->lhs->type() != SF_TYPE::NONE);
+				assert(summands()->rhs->type() != SF_TYPE::NONE);
+				return summands()->lhs->checkTreeValidity() && summands()->rhs->checkTreeValidity();
+				//return true;
 			}
 			case SF_TYPE::UNITE: {
-				for(const auto& item : mUnionParameters->items) {
-					if(!item->checkTreeValidity())
+				assert(!unionParameters()->items.empty());
+				for(const auto& item : unionParameters()->items) {
+					//assert(item->checkTreeValidity());
+
+					if(!item->checkTreeValidity()){
+						std::cerr << __func__ << ": One UNION Content was not valid!" << std::endl << std::flush;
+						assert(false);
 						return false;
+					}
 				}
 				return true;
 			}
 			case SF_TYPE::INTERSECT: {
-				return mIntersectionParameters->lhs->checkTreeValidity() && mIntersectionParameters->rhs->checkTreeValidity();
+				//assert(mIntersectionParameters->lhs->checkTreeValidity());
+				//assert(mIntersectionParameters->rhs->checkTreeValidity());
+				assert(intersectionParameters()->lhs != nullptr);
+				assert(intersectionParameters()->rhs != nullptr);
+				assert(intersectionParameters()->lhs->type() != SF_TYPE::NONE);
+				assert(intersectionParameters()->rhs->type() != SF_TYPE::NONE);
+				return intersectionParameters()->lhs->checkTreeValidity() && intersectionParameters()->rhs->checkTreeValidity();
+				return true;
 			}
 			default:
+				std::cerr << __func__ << ": Default case, SHOULD NOT HAPPEN!" << std::endl << std::flush;
+				assert(false);
 				return false;
 		}
 	}
