@@ -337,6 +337,149 @@ class SupportFunctionContent {
 	}
 
 	bool checkTreeValidity() const {
+		using Node = std::shared_ptr<SupportFunctionContent<Number>>;
+		using Res = bool;
+		std::vector<Node> callStack;
+		std::vector<std::pair<std::size_t,std::vector<Res>>> resultStack; // The first value is an iterator to the calling frame
+
+		callStack.push_back(getThis());
+		resultStack.push_back(std::make_pair(-1, std::vector<Res>()));
+
+		while(!callStack.empty()) {
+			Node cur = callStack.back();
+
+			if(cur->originCount() == 0) {
+				// Do computation and write results in case recursion ends.
+
+				std::pair<std::size_t,std::vector<Res>> currentResult = resultStack.back();
+
+				// update result
+				// special case: When the node is a leaf, we directly return the result.
+				if(currentResult.first == -1) {
+					// first item is also top.
+					return true;
+				}
+
+				switch(cur->type()) {
+					case SF_TYPE::INFTY_BALL:
+					case SF_TYPE::TWO_BALL:
+					case SF_TYPE::POLY:
+					case SF_TYPE::ELLIPSOID: {
+			            resultStack.at(currentResult.first).second.push_back(true);
+			            break;
+			        }
+			        default:
+			        	assert(false);
+				}
+
+				// leave recursive call.
+				callStack.pop_back();
+				resultStack.pop_back();
+
+			} else {
+				// Detect, if this call is finished or new.
+				if(resultStack.back().second.size() == cur->originCount()) {
+					// the call is finished, perform accumulating operations and forward result.
+
+					// accumulate results
+					Res accumulatedResult = 0;
+					switch(cur->type()) {
+						case SF_TYPE::INTERSECT:
+				        case SF_TYPE::SUM:
+				        case SF_TYPE::LINTRAFO:
+				        case SF_TYPE::UNITE:
+				        case SF_TYPE::SCALE:
+				        case SF_TYPE::PROJECTION:
+				        	accumulatedResult = true;
+				        	for(auto val : resultStack.back().second) {
+				        		if(!val){
+				        			accumulatedResult = false;
+				        			break;
+				        		}
+				        	}
+				        	break;
+				        case SF_TYPE::NONE: {
+							std::cout << __func__ << ": SF Type not properly initialized!" << std::endl;
+							assert(false);
+							break;
+						}
+						default:
+							std::cout << __func__ << ": SF Type unexpected!" << std::endl;
+							assert(false);
+					}
+
+					if(resultStack.back().first == -1) {
+						// we reached the top
+						return accumulatedResult;
+					}
+
+					resultStack.at(resultStack.back().first).second.push_back(accumulatedResult);
+
+					// delete result frame and close recursive call
+					callStack.pop_back();
+					resultStack.pop_back();
+
+				} else {
+					// this is the branch for calling recursively
+
+					// here we create the new stack levels. As the parameters are all the same, we do not care for their order (could be extended).
+					std::size_t callingFrame = callStack.size() - 1 ;
+
+					switch ( cur->type() ) {
+				        case SF_TYPE::SUM: {
+							callStack.push_back(cur->summands()->rhs);
+							callStack.push_back(cur->summands()->lhs);
+							resultStack.push_back(std::make_pair(callingFrame,std::vector<Res>()));
+							resultStack.push_back(std::make_pair(callingFrame,std::vector<Res>()));
+							break;
+						}
+						case SF_TYPE::INTERSECT: {
+							callStack.push_back(cur->intersectionParameters()->rhs);
+							callStack.push_back(cur->intersectionParameters()->lhs);
+							resultStack.push_back(std::make_pair(callingFrame,std::vector<Res>()));
+							resultStack.push_back(std::make_pair(callingFrame,std::vector<Res>()));
+							break;
+						}
+						case SF_TYPE::LINTRAFO: {
+							callStack.push_back(cur->linearTrafoParameters()->origin);
+							resultStack.push_back(std::make_pair(callingFrame,std::vector<Res>()));
+							break;
+						}
+						case SF_TYPE::SCALE: {
+							callStack.push_back(cur->scaleParameters()->origin);
+							resultStack.push_back(std::make_pair(callingFrame,std::vector<Res>()));
+							break;
+						}
+						case SF_TYPE::UNITE: {
+							for(unsigned i = 0; i < cur->unionParameters()->items.size(); ++i){
+								callStack.push_back(cur->unionParameters()->items.at(i));
+								resultStack.push_back(std::make_pair(callingFrame,std::vector<Res>()));
+							}
+							break;
+						}
+						case SF_TYPE::POLY:
+						case SF_TYPE::INFTY_BALL:
+						case SF_TYPE::TWO_BALL:
+						case SF_TYPE::ELLIPSOID:
+						case SF_TYPE::BOX:
+						case SF_TYPE::ZONOTOPE: {
+							assert(false);
+							break;
+						}
+						case SF_TYPE::PROJECTION: {
+							callStack.push_back(cur->projectionParameters()->origin);
+							resultStack.push_back(std::make_pair(callingFrame,std::vector<Res>()));
+							break;
+						}
+						case SF_TYPE::NONE:
+						default:
+							assert(false);
+				    }
+				}
+			}
+		}
+
+		/*
 		assert(!pThis.expired());
 		assert(this == pThis.lock().get());
 		switch ( mType ) {
@@ -407,6 +550,7 @@ class SupportFunctionContent {
 				assert(false);
 				return false;
 		}
+		*/
 	}
 
 	private:

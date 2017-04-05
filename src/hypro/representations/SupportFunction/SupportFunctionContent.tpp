@@ -381,14 +381,11 @@ EvaluationResult<Number> SupportFunctionContent<Number>::evaluate( const vector_
 	paramStack.push_back(_direction);
 	resultStack.push_back(std::make_pair(-1, std::vector<Res>()));
 
-	std::cout << "Initialized stacks." << std::endl;
-
 	while(!callStack.empty()) {
 		Node cur = callStack.back();
 		Param currentParam = paramStack.back();
 
 		if(cur->originCount() == 0) {
-			std::cout << "Reached bottom." << std::endl;
 			// Do computation and write results in case recursion ends.
 
 			std::pair<std::size_t,std::vector<Res>> currentResult = resultStack.back();
@@ -432,7 +429,6 @@ EvaluationResult<Number> SupportFunctionContent<Number>::evaluate( const vector_
 						FATAL("hypro.representations.supportFunction","Wrong type.");
 				}
 			}
-			std::cout << "Write result for calling node on pos " << currentResult.first << std::endl;
 
 			// leave recursive call.
 			callStack.pop_back();
@@ -443,7 +439,6 @@ EvaluationResult<Number> SupportFunctionContent<Number>::evaluate( const vector_
 
 			// Detect, if this call is finished or new.
 			if(resultStack.back().second.size() == cur->originCount()) {
-				std::cout << "intermediate node on way up." << std::endl;
 				// the call is finished, perform accumulating operations and forward result.
 
 				// accumulate results - in this case sum.
@@ -567,7 +562,6 @@ EvaluationResult<Number> SupportFunctionContent<Number>::evaluate( const vector_
 				}
 
 				// forward result.
-				std::cout << "Accumulate " << resultStack.back().second.size() << " results as result for node on pos " << resultStack.back().first << " with param " << paramStack.back() << std::endl;
 
 				resultStack.at(resultStack.back().first).second.push_back(accumulatedResult);
 
@@ -577,14 +571,10 @@ EvaluationResult<Number> SupportFunctionContent<Number>::evaluate( const vector_
 				resultStack.pop_back();
 
 			} else {
-				std::cout << "intermediate node on way down." << std::endl;
 				// this is the branch for calling recursively
 
 				// here we create the new stack levels.
 				std::size_t callingFrame = callStack.size() - 1 ;
-
-				std::cout << "Spawn " << cur->originCount() << " recursive calls." << std::endl;
-
 				// Do some parameter transformation, i.e. create passed parameters
 				switch( cur->type() ) {
 					case SF_TYPE::ELLIPSOID:
@@ -814,14 +804,11 @@ std::vector<EvaluationResult<Number>> SupportFunctionContent<Number>::multiEvalu
 	paramStack.push_back(_directions);
 	resultStack.push_back(std::make_pair(-1, std::vector<Res>()));
 
-	std::cout << "Initialized stacks." << std::endl;
-
 	while(!callStack.empty()) {
 		Node cur = callStack.back();
 		Param currentParam = paramStack.back();
 
 		if(cur->originCount() == 0) {
-			std::cout << "Reached bottom." << std::endl;
 			// Do computation and write results in case recursion ends.
 
 			std::pair<std::size_t,std::vector<Res>> currentResult = resultStack.back();
@@ -865,7 +852,6 @@ std::vector<EvaluationResult<Number>> SupportFunctionContent<Number>::multiEvalu
 						FATAL("hypro.representations.supportFunction","Wrong type.");
 				}
 			}
-			std::cout << "Write result for calling node on pos " << currentResult.first << std::endl;
 
 			// leave recursive call.
 			callStack.pop_back();
@@ -876,7 +862,6 @@ std::vector<EvaluationResult<Number>> SupportFunctionContent<Number>::multiEvalu
 
 			// Detect, if this call is finished or new.
 			if(resultStack.back().second.size() == cur->originCount()) {
-				std::cout << "intermediate node on way up." << std::endl;
 				// the call is finished, perform accumulating operations and forward result.
 
 				// accumulate results - in this case sum.
@@ -1035,7 +1020,6 @@ std::vector<EvaluationResult<Number>> SupportFunctionContent<Number>::multiEvalu
 				}
 
 				// forward result.
-				std::cout << "Accumulate " << resultStack.back().second.size() << " results as result for node on pos " << resultStack.back().first << " with param " << paramStack.back() << std::endl;
 
 				resultStack.at(resultStack.back().first).second.push_back(accumulatedResult);
 
@@ -1045,13 +1029,10 @@ std::vector<EvaluationResult<Number>> SupportFunctionContent<Number>::multiEvalu
 				resultStack.pop_back();
 
 			} else {
-				std::cout << "intermediate node on way down." << std::endl;
 				// this is the branch for calling recursively
 
 				// here we create the new stack levels.
 				std::size_t callingFrame = callStack.size() - 1 ;
-
-				std::cout << "Spawn " << cur->originCount() << " recursive calls." << std::endl;
 
 				// Do some parameter transformation, i.e. create passed parameters
 				switch( cur->type() ) {
@@ -1135,11 +1116,7 @@ std::vector<EvaluationResult<Number>> SupportFunctionContent<Number>::multiEvalu
 				}
 			}
 		}
-
 	}
-
-
-
 
 
 	/*
@@ -1392,7 +1369,8 @@ unsigned SupportFunctionContent<Number>::multiplicationsPerEvaluation() const {
 				Res accumulatedResult = 0;
 				switch(cur->type()) {
 					case SF_TYPE::INTERSECT:
-			        case SF_TYPE::SUM:
+			        case SF_TYPE::LINTRAFO:
+			        case SF_TYPE::PROJECTION:
 			        case SF_TYPE::UNITE:
 			        	for(auto val : resultStack.back().second) {
 			        		accumulatedResult += val;
