@@ -405,6 +405,11 @@ TYPED_TEST(SupportFunctionTest, projection) {
 	EXPECT_EQ(psf1.evaluate(vector_t<TypeParam>(this->constraints.row(1))).supportValue, psf1.evaluate(vector_t<TypeParam>(dir2)).supportValue );
 	EXPECT_EQ(psf1.evaluate(vector_t<TypeParam>(this->constraints.row(2))).supportValue, psf1.evaluate(vector_t<TypeParam>(dir3)).supportValue );
 
+	EXPECT_EQ(psf1.collectProjections().size(), dims.size());
+
+	std::cout <<  "++++++++++++++++++++++" << std::endl;
+
+
 	SupportFunction<TypeParam> projected = this->sfChainComplete.project(dims);
 
 	dir1 << 1,0;
@@ -412,4 +417,6 @@ TYPED_TEST(SupportFunctionTest, projection) {
 
 	EXPECT_EQ(projected.evaluate(vector_t<TypeParam>(dir1)).supportValue, this->sfChainComplete.evaluate(dir1).supportValue );
 	EXPECT_EQ(projected.evaluate(vector_t<TypeParam>(dir2)).supportValue, this->sfChainComplete.evaluate(dir2).supportValue );
+
+	EXPECT_EQ(projected.collectProjections().size(), dims.size());
 }

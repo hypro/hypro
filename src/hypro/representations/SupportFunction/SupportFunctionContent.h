@@ -34,6 +34,8 @@ struct sumContent {
 	sumContent( const std::shared_ptr<SupportFunctionContent<Number>>& _lhs, const std::shared_ptr<SupportFunctionContent<Number>>& _rhs )
 		: lhs( _lhs ), rhs( _rhs ) {}
 	sumContent( const sumContent<Number>& _origin ) : lhs( _origin.lhs ), rhs( _origin.rhs ) {}
+
+	std::size_t originCount() const { return 2; }
 };
 
 template <typename Number>
@@ -78,6 +80,8 @@ struct trafoContent {
 	trafoContent( const trafoContent<Number>& _origin ) : origin( _origin.origin ), parameters(_origin.parameters), currentExponent(_origin.currentExponent), successiveTransformations( _origin.successiveTransformations )
 	{}
 
+	std::size_t originCount() const { return 1; }
+
 	std::pair<matrix_t<Number>, vector_t<Number>> reduceLinTrans(const matrix_t<Number>& _a, const vector_t<Number>& _b, std::size_t _power){
 		std::size_t powerOfTwo = carl::pow(2, _power);
 			// first compute the new b
@@ -101,6 +105,8 @@ struct scaleContent {
 	scaleContent( const std::shared_ptr<SupportFunctionContent<Number>>& _origin, Number _factor )
 		: origin( _origin ), factor( _factor ) {}
 	scaleContent( const scaleContent<Number>& _origin ) : origin( _origin.origin ), factor( _origin.factor ) {}
+
+	std::size_t originCount() const { return 1; }
 };
 
 template <typename Number>
@@ -116,6 +122,8 @@ struct unionContent {
 
 	unionContent( const std::vector<std::shared_ptr<SupportFunctionContent<Number>>>& sfVector ) : items(sfVector) {}
 	unionContent( const unionContent<Number>& _origin ) = default;
+
+	std::size_t originCount() const { return items.size(); }
 };
 
 template <typename Number>
@@ -125,6 +133,8 @@ struct intersectionContent {
 	intersectionContent( const std::shared_ptr<SupportFunctionContent<Number>>& _lhs, const std::shared_ptr<SupportFunctionContent<Number>>& _rhs )
 		: lhs( _lhs ), rhs( _rhs ) {}
 	intersectionContent( const intersectionContent<Number>& _origin ) = default;
+
+	std::size_t originCount() const { return 2; }
 };
 
 template<typename Number>
@@ -134,6 +144,8 @@ struct projectionContent {
 	projectionContent( const std::shared_ptr<SupportFunctionContent<Number>>& _origin, const std::vector<unsigned>& _dimensions )
 		: origin(_origin), dimensions(_dimensions) {}
 	projectionContent( const projectionContent<Number>& _original ) : origin(_original.origin), dimensions(_original.dimensions) {}
+
+	std::size_t originCount() const { return 1; }
 };
 
 /**
@@ -283,6 +295,7 @@ class SupportFunctionContent {
 	Point<Number> supremumPoint() const;
 
 	std::vector<unsigned> collectProjections() const;
+	std::vector<unsigned> collectProjectionsIterative() const;
 
 	// getter for the union types
 	sumContent<Number>* summands() const;
@@ -398,34 +411,69 @@ class SupportFunctionContent {
 
 	private:
 
+	std::size_t originCount() const {
+		switch ( mType ) {
+			case SF_TYPE::SUM: {
+				return summands()->originCount();
+			}
+			case SF_TYPE::INTERSECT: {
+				return intersectionParameters()->originCount();
+			}
+			case SF_TYPE::LINTRAFO: {
+				return linearTrafoParameters()->originCount();
+			}
+			case SF_TYPE::SCALE: {
+				return scaleParameters()->originCount();
+			}
+			case SF_TYPE::UNITE: {
+				return unionParameters()->originCount();
+			}
+			case SF_TYPE::POLY:
+			case SF_TYPE::INFTY_BALL:
+			case SF_TYPE::TWO_BALL:
+			case SF_TYPE::ELLIPSOID:
+			case SF_TYPE::BOX:
+			case SF_TYPE::ZONOTOPE: {
+				return 0;
+			}
+			case SF_TYPE::PROJECTION: {
+				return projectionParameters()->originCount();
+			}
+			case SF_TYPE::NONE:
+			default:
+				assert(false);
+				return -1;
+		}
+	}
+
 	bool hasTrafo(std::shared_ptr<const lintrafoParameters<Number>>& resNode, const matrix_t<Number>& A, const vector_t<Number>& b) const {
 		switch ( mType ) {
 			case SF_TYPE::SUM: {
-				bool res = mSummands->lhs->hasTrafo(resNode, A, b);
+				bool res = summands()->lhs->hasTrafo(resNode, A, b);
 				if(!res) {
-					res = mSummands->rhs->hasTrafo(resNode, A, b);
+					res = summands()->rhs->hasTrafo(resNode, A, b);
 				}
 				return res;
 			}
 			case SF_TYPE::INTERSECT: {
-				bool res = mIntersectionParameters->lhs->hasTrafo(resNode, A, b);
+				bool res = intersectionParameters()->lhs->hasTrafo(resNode, A, b);
 				if(!res) {
-					res = mIntersectionParameters->rhs->hasTrafo(resNode, A, b);
+					res = intersectionParameters()->rhs->hasTrafo(resNode, A, b);
 				}
 				return res;
 			}
 			case SF_TYPE::LINTRAFO: {
-				if(mLinearTrafoParameters->parameters->matrix() == A && mLinearTrafoParameters->parameters->vector() == b) {
-					resNode = mLinearTrafoParameters->parameters;
+				if(linearTrafoParameters()->parameters->matrix() == A && linearTrafoParameters()->parameters->vector() == b) {
+					resNode = linearTrafoParameters()->parameters;
 					return true;
 				}
-				return mLinearTrafoParameters->origin->hasTrafo(resNode, A, b);
+				return linearTrafoParameters()->origin->hasTrafo(resNode, A, b);
 			}
 			case SF_TYPE::SCALE: {
-				return mScaleParameters->origin->hasTrafo(resNode, A, b);
+				return scaleParameters()->origin->hasTrafo(resNode, A, b);
 			}
 			case SF_TYPE::UNITE: {
-				for(const auto& item : mUnionParameters->items) {
+				for(const auto& item : unionParameters()->items) {
 					if(item->hasTrafo(resNode,A,b)) {
 						return true;
 					}
@@ -441,7 +489,7 @@ class SupportFunctionContent {
 				return false;
 			}
 			case SF_TYPE::PROJECTION: {
-				return mProjectionParameters->origin->hasTrafo(resNode, A, b);
+				return projectionParameters()->origin->hasTrafo(resNode, A, b);
 				break;
 			}
 			case SF_TYPE::NONE:
@@ -465,26 +513,26 @@ class SupportFunctionContent {
 		switch ( mType ) {
 			case SF_TYPE::LINTRAFO: {
 				//std::cout << "Current: lintrafor" << std::endl;
-				std::vector<SF_TYPE> tmpItems = mLinearTrafoParameters->origin->collectLevelEntries(level-1);
+				std::vector<SF_TYPE> tmpItems = linearTrafoParameters()->origin->collectLevelEntries(level-1);
 				items.insert(items.end(), tmpItems.begin(), tmpItems.end());
 				return items;
 			}
 			case SF_TYPE::SCALE: {
 				//std::cout << "Current: scale" << std::endl;
-				std::vector<SF_TYPE> tmpItems = mScaleParameters->origin->collectLevelEntries(level-1);
+				std::vector<SF_TYPE> tmpItems = scaleParameters()->origin->collectLevelEntries(level-1);
 				items.insert(items.end(), tmpItems.begin(), tmpItems.end());
 				return items;
 			}
 			case SF_TYPE::PROJECTION: {
 				//std::cout << "Current: projection" << std::endl;
-				std::vector<SF_TYPE> tmpItems = mProjectionParameters->origin->collectLevelEntries(level-1);
+				std::vector<SF_TYPE> tmpItems = projectionParameters()->origin->collectLevelEntries(level-1);
 				items.insert(items.end(), tmpItems.begin(), tmpItems.end());
 				return items;
 			}
 			case SF_TYPE::SUM: {
 				//std::cout << "Current: sum" << std::endl;
-				std::vector<SF_TYPE> lhsItems = mSummands->lhs->collectLevelEntries(level-1);
-				std::vector<SF_TYPE> rhsItems = mSummands->rhs->collectLevelEntries(level-1);
+				std::vector<SF_TYPE> lhsItems = summands()->lhs->collectLevelEntries(level-1);
+				std::vector<SF_TYPE> rhsItems = summands()->rhs->collectLevelEntries(level-1);
 				items.insert(items.end(), lhsItems.begin(), lhsItems.end());
 				items.insert(items.end(), rhsItems.begin(), rhsItems.end());
 				return items;
@@ -492,7 +540,7 @@ class SupportFunctionContent {
 			case SF_TYPE::UNITE: {
 				//std::cout << "Current: union" << std::endl;
 				std::vector<SF_TYPE> res;
-				for(const auto& item : mUnionParameters->items) {
+				for(const auto& item : unionParameters()->items) {
 					std::vector<SF_TYPE> tmp = item->collectLevelEntries(level-1);
 					res.insert(res.end(), tmp.begin(), tmp.end());
 				}
@@ -500,8 +548,8 @@ class SupportFunctionContent {
 			}
 			case SF_TYPE::INTERSECT: {
 				//std::cout << "Current: intersect" << std::endl;
-				std::vector<SF_TYPE> lhsItems = mIntersectionParameters->lhs->collectLevelEntries(level-1);
-				std::vector<SF_TYPE> rhsItems = mIntersectionParameters->rhs->collectLevelEntries(level-1);
+				std::vector<SF_TYPE> lhsItems = intersectionParameters()->lhs->collectLevelEntries(level-1);
+				std::vector<SF_TYPE> rhsItems = intersectionParameters()->rhs->collectLevelEntries(level-1);
 				items.insert(items.end(), lhsItems.begin(), lhsItems.end());
 				items.insert(items.end(), rhsItems.begin(), rhsItems.end());
 				return items;
