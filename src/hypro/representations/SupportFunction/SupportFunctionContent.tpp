@@ -368,6 +368,311 @@ std::shared_ptr<SupportFunctionContent<Number>>& SupportFunctionContent<Number>:
 template <typename Number>
 EvaluationResult<Number> SupportFunctionContent<Number>::evaluate( const vector_t<Number> &_direction, bool useExact ) const {
 	checkTreeValidity();
+
+	using Node = std::shared_ptr<SupportFunctionContent<Number>>;
+	using Param = vector_t<Number>;
+	using Res = EvaluationResult<Number>;
+
+	std::vector<Node> callStack;
+	std::vector<Param> paramStack;
+	std::vector<std::pair<std::size_t,std::vector<Res>>> resultStack; // The first value is an iterator to the calling frame
+
+	callStack.push_back(getThis());
+	paramStack.push_back(_direction);
+	resultStack.push_back(std::make_pair(-1, std::vector<Res>()));
+
+	std::cout << "Initialized stacks." << std::endl;
+
+	while(!callStack.empty()) {
+		Node cur = callStack.back();
+		Param currentParam = paramStack.back();
+
+		if(cur->originCount() == 0) {
+			std::cout << "Reached bottom." << std::endl;
+			// Do computation and write results in case recursion ends.
+
+			std::pair<std::size_t,std::vector<Res>> currentResult = resultStack.back();
+
+			// update result
+			// special case: When the node is a leaf, we directly return the result.
+			if(currentResult.first == -1) {
+				// we reached the top, exit (or return result or whatever)
+				switch ( cur->type() ) {
+					case SF_TYPE::ELLIPSOID: {
+						return ellipsoid()->evaluate( currentParam );
+					}
+					case SF_TYPE::INFTY_BALL:
+					case SF_TYPE::TWO_BALL: {
+						return ball()->evaluate( currentParam );
+					}
+					case SF_TYPE::POLY: {
+						return polytope()->evaluate( currentParam, useExact );
+					}
+					default:
+						assert(false);
+						FATAL("hypro.representations.supportFunction","Wrong type.");
+				}
+			} else {
+				switch ( cur->type() ) {
+					case SF_TYPE::ELLIPSOID: {
+						resultStack.at(currentResult.first).second.push_back(cur->ellipsoid()->evaluate( currentParam ));
+						break;
+					}
+					case SF_TYPE::INFTY_BALL:
+					case SF_TYPE::TWO_BALL: {
+						resultStack.at(currentResult.first).second.push_back(cur->ball()->evaluate( currentParam ));
+						break;
+					}
+					case SF_TYPE::POLY: {
+						resultStack.at(currentResult.first).second.push_back(cur->polytope()->evaluate( currentParam, useExact ));
+						break;
+					}
+					default:
+						assert(false);
+						FATAL("hypro.representations.supportFunction","Wrong type.");
+				}
+			}
+			std::cout << "Write result for calling node on pos " << currentResult.first << std::endl;
+
+			// leave recursive call.
+			callStack.pop_back();
+			paramStack.pop_back();
+			resultStack.pop_back();
+
+		} else {
+
+			// Detect, if this call is finished or new.
+			if(resultStack.back().second.size() == cur->originCount()) {
+				std::cout << "intermediate node on way up." << std::endl;
+				// the call is finished, perform accumulating operations and forward result.
+
+				// accumulate results - in this case sum.
+				Res accumulatedResult;
+				switch( cur->type() ) {
+					case SF_TYPE::LINTRAFO: {
+						assert(resultStack.back().second.size() == 1);
+						std::pair<matrix_t<Number>, vector_t<Number>> parameterPair = cur->linearTrafoParameters()->parameters->getParameterSet(cur->linearTrafoParameters()->currentExponent);
+						accumulatedResult = resultStack.back().second.front();
+						switch(accumulatedResult.errorCode){
+							case SOLUTION::INFTY:
+							case SOLUTION::INFEAS:{
+								break;
+							}
+							default:{
+								//TRACE("hypro.representations.supportFunction","opt val rows: " << res.optimumValue.rows() << " and direction rows: " << _direction.rows());
+								assert(accumulatedResult.errorCode == SOLUTION::FEAS);
+								assert(accumulatedResult.optimumValue.rows() == currentParam.rows());
+								accumulatedResult.optimumValue = parameterPair.first * accumulatedResult.optimumValue + parameterPair.second;
+								assert(accumulatedResult.optimumValue.rows() == currentParam.rows());
+								// As we know, that the optimal vertex lies on the supporting hyperplane, we can obtain the distance by dot product.
+								accumulatedResult.supportValue = accumulatedResult.optimumValue.dot(currentParam);
+							}
+						}
+						break;
+					}
+					case SF_TYPE::PROJECTION: {
+						assert(resultStack.back().second.size() == 1);
+						// simply forward the results
+						accumulatedResult = resultStack.back().second.front();
+						break;
+					}
+					case SF_TYPE::SCALE: {
+						assert(resultStack.back().second.size() == 1);
+						accumulatedResult = resultStack.back().second.front();
+						accumulatedResult.optimumValue *= scaleParameters()->factor;
+						accumulatedResult.supportValue *= scaleParameters()->factor;
+						break;
+					}
+					case SF_TYPE::SUM: {
+						assert( resultStack.back().second.size() == 2);
+						Res& resA = resultStack.back().second.at(0);
+						Res& resB = resultStack.back().second.at(1);
+						accumulatedResult = resA;
+						if(resB.errorCode == SOLUTION::INFEAS || resB.errorCode == SOLUTION::INFTY){
+							accumulatedResult = resB;
+							break;
+						} else {
+							if(resA.errorCode != SOLUTION::INFEAS && resA.errorCode != SOLUTION::INFTY) {
+								accumulatedResult.optimumValue += resB.optimumValue;
+								accumulatedResult.supportValue += resB.supportValue;
+							}
+						}
+						break;
+					}
+					case SF_TYPE::UNITE: {
+						assert(resultStack.back().second.size() > 0);
+						assert(resultStack.back().second.size() == cur->unionParameters()->items.size());
+						accumulatedResult = resultStack.back().second.front();
+
+						if(accumulatedResult.errorCode == SOLUTION::INFEAS) {
+							break;
+						} else if(accumulatedResult.errorCode == SOLUTION::INFTY) {
+							accumulatedResult.supportValue = 1;
+							break;
+						} else {
+							for(auto resIt = resultStack.back().second.begin(); resIt != resultStack.back().second.end(); ++resIt) {
+								if(resIt->errorCode == SOLUTION::INFEAS) {
+									accumulatedResult = *resIt;
+									break;
+								} else if(resIt->errorCode == SOLUTION::INFTY) {
+									resIt->supportValue = 1;
+									break;
+								} else {
+									accumulatedResult = accumulatedResult > *resIt ? accumulatedResult : *resIt;
+								}
+							}
+							assert(accumulatedResult.errorCode == SOLUTION::FEAS);
+						}
+						break;
+					}
+					case SF_TYPE::INTERSECT: {
+						assert(resultStack.back().second.size() == 2);
+						Res& resA = resultStack.back().second.at(0);
+						Res& resB = resultStack.back().second.at(1);
+
+						// easy checks for infeasibility and unboundedness first
+						if(resA.errorCode == SOLUTION::INFEAS){
+							accumulatedResult = resA;
+							break;
+						} else if(resB.errorCode == SOLUTION::INFEAS){
+							accumulatedResult = resB;
+							break;
+						}
+						assert(resA.errorCode != SOLUTION::INFEAS && resB.errorCode != SOLUTION::INFEAS);
+						if(resA.errorCode == SOLUTION::INFTY){
+							accumulatedResult = resB;
+							break;
+						} else if(resB.errorCode == SOLUTION::INFTY){
+							accumulatedResult = resA;
+							break;
+						}
+						// complete checks -> real containment TODO!!
+						assert(resA.errorCode == SOLUTION::FEAS && resB.errorCode == SOLUTION::FEAS);
+						accumulatedResult = resA.supportValue <= resB.supportValue ? resA : resB;
+						break;
+					}
+					case SF_TYPE::NONE: {
+						std::cout << __func__ << ": SF Type not properly initialized!" << std::endl;
+						assert(false);
+					}
+					default:{
+						assert(false);
+						return EvaluationResult<Number>();
+					}
+				}
+
+				if(resultStack.back().first == -1) {
+					// we reached the top, exit
+					return accumulatedResult;
+				}
+
+				// forward result.
+				std::cout << "Accumulate " << resultStack.back().second.size() << " results as result for node on pos " << resultStack.back().first << " with param " << paramStack.back() << std::endl;
+
+				resultStack.at(resultStack.back().first).second.push_back(accumulatedResult);
+
+				// delete result frame and close recursive call
+				callStack.pop_back();
+				paramStack.pop_back();
+				resultStack.pop_back();
+
+			} else {
+				std::cout << "intermediate node on way down." << std::endl;
+				// this is the branch for calling recursively
+
+				// here we create the new stack levels.
+				std::size_t callingFrame = callStack.size() - 1 ;
+
+				std::cout << "Spawn " << cur->originCount() << " recursive calls." << std::endl;
+
+				// Do some parameter transformation, i.e. create passed parameters
+				switch( cur->type() ) {
+					case SF_TYPE::ELLIPSOID:
+					case SF_TYPE::INFTY_BALL:
+					case SF_TYPE::POLY:
+					case SF_TYPE::TWO_BALL: {
+						assert(false);
+						FATAL("hypro.representations.supportFunction","Leaf node cannot be an intermediate case.");
+						break;
+					}
+					case SF_TYPE::LINTRAFO: {
+						std::pair<matrix_t<Number>, vector_t<Number>> parameterPair = cur->linearTrafoParameters()->parameters->getParameterSet(cur->linearTrafoParameters()->currentExponent);
+						#ifndef HYPRO_USE_VECTOR_CACHING
+						matrix_t<Number> tmp = parameterPair.first.transpose();
+						currentParam = tmp * _direction;
+						#else
+						currentParam = cur->linearTrafoParameters()->parameters->getTransformedDirection(currentParam, cur->linearTrafoParameters()->currentExponent);
+						#endif
+						callStack.push_back(cur->linearTrafoParameters()->origin);
+						paramStack.push_back(currentParam);
+						resultStack.push_back(std::make_pair(callingFrame,std::vector<Res>()));
+						break;
+					}
+					case SF_TYPE::PROJECTION: {
+						vector_t<Number> projectedDirection = vector_t<Number>::Zero(mDimension);
+						// reduce evaluation to projection dimensions
+						for(const auto& projectionDimension : cur->projectionParameters()->dimensions) {
+							if(projectionDimension < cur->dimension())
+								projectedDirection(projectionDimension) = currentParam(projectionDimension);
+						}
+						currentParam = projectedDirection;
+						callStack.push_back(cur->projectionParameters()->origin);
+						paramStack.push_back(currentParam);
+						resultStack.push_back(std::make_pair(callingFrame,std::vector<Res>()));
+						break;
+					}
+					case SF_TYPE::SCALE: {
+						// Do nothing for scaling -> processing is done afterwards.
+						callStack.push_back(cur->scaleParameters()->origin);
+						paramStack.push_back(currentParam);
+						resultStack.push_back(std::make_pair(callingFrame,std::vector<Res>()));
+						break;
+					}
+					case SF_TYPE::SUM: {
+						// Do nothing for sum -> processing is done afterwards.
+						callStack.push_back(cur->summands()->rhs);
+						callStack.push_back(cur->summands()->lhs);
+						paramStack.push_back(currentParam);
+						paramStack.push_back(currentParam);
+						resultStack.push_back(std::make_pair(callingFrame,std::vector<Res>()));
+						resultStack.push_back(std::make_pair(callingFrame,std::vector<Res>()));
+						break;
+					}
+					case SF_TYPE::UNITE: {
+						// Do nothing for union -> processing is done afterwards.
+						for(unsigned i = 0; i < cur->unionParameters()->items.size(); ++i) {
+							callStack.push_back(cur->unionParameters()->items.at(i));
+							paramStack.push_back(currentParam);
+							resultStack.push_back(std::make_pair(callingFrame,std::vector<Res>()));
+						}
+						break;
+					}
+					case SF_TYPE::INTERSECT: {
+						// Do nothing for intersection -> processing is done afterwards.
+						callStack.push_back(cur->intersectionParameters()->rhs);
+						callStack.push_back(cur->intersectionParameters()->lhs);
+						paramStack.push_back(currentParam);
+						paramStack.push_back(currentParam);
+						resultStack.push_back(std::make_pair(callingFrame,std::vector<Res>()));
+						resultStack.push_back(std::make_pair(callingFrame,std::vector<Res>()));
+						break;
+					}
+					case SF_TYPE::NONE: {
+						std::cout << __func__ << ": SF Type not properly initialized!" << std::endl;
+						assert(false);
+					}
+					default:{
+						assert(false);
+						return EvaluationResult<Number>();
+					}
+				}
+			}
+		}
+
+	}
+
+
+	/*
 	switch ( mType ) {
 		case SF_TYPE::ELLIPSOID: {
 			return ellipsoid()->evaluate( _direction );
@@ -489,6 +794,7 @@ EvaluationResult<Number> SupportFunctionContent<Number>::evaluate( const vector_
 			return EvaluationResult<Number>();
 		}
 	}
+	*/
 }
 
 template <typename Number>
@@ -606,7 +912,6 @@ std::vector<EvaluationResult<Number>> SupportFunctionContent<Number>::multiEvalu
 					}
 					case SF_TYPE::SCALE: {
 						assert(resultStack.back().second.size() == 1);
-						std::vector<EvaluationResult<Number>> res = cur->scaleParameters()->origin->multiEvaluate( _directions, useExact );
 						// if one result is infeasible, the others will be too -> do not process.
 						if(resultStack.back().second.front().begin()->errorCode != SOLUTION::INFEAS){
 							for(auto& singleRes : resultStack.back().second.front()){
@@ -724,13 +1029,13 @@ std::vector<EvaluationResult<Number>> SupportFunctionContent<Number>::multiEvalu
 
 				}
 
-				// forward result.
-				std::cout << "Accumulate " << resultStack.back().second.size() << " results as result for node on pos " << resultStack.back().first << " with param " << paramStack.back() << std::endl;
-
 				if(resultStack.back().first == -1) {
 					// we reached the top, exit
 					return accumulatedResult;
 				}
+
+				// forward result.
+				std::cout << "Accumulate " << resultStack.back().second.size() << " results as result for node on pos " << resultStack.back().first << " with param " << paramStack.back() << std::endl;
 
 				resultStack.at(resultStack.back().first).second.push_back(accumulatedResult);
 
