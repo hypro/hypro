@@ -32,7 +32,7 @@ int main(int argc, char** argv) {
 	SupportFunction<Number> current = rounded1;
 
 	// create large tree
-	unsigned targetDepth = 1200;
+	unsigned targetDepth = 10000;
 	while (targetDepth > 0) {
 		std::cout << current.depth() << ",";
 		current = current.affineTransformation(trafoMatrix, shift);
@@ -42,6 +42,15 @@ int main(int argc, char** argv) {
 
 	std::cout << "Current depth: " << current.depth() << std::endl;
 
-	//current.collectProjections();
+	vector_t<Number> direction = vector_t<Number>(3);
+
+	//current.evaluate(direction);
+
+	auto tmp = current.collectProjections();
+	std::cout << "Collected projections: ";
+	for(const auto& item : tmp)
+		std::cout << item << " ";
+
+	std::cout << std::endl;
 
 }
