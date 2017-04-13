@@ -80,8 +80,6 @@ var hierarchy =
     [ "hypro::Location< Number >", "classhypro_1_1Location.html", null ],
     [ "hypro::locPtrComp< Number >", "structhypro_1_1locPtrComp.html", null ],
     [ "hypro::LRUCache< Key, Value >", "classhypro_1_1LRUCache.html", null ],
-    [ "hypro::LRUCache< hypro::Cacheable< matrix_t< Number > >, matrix_t< Number > >", "classhypro_1_1LRUCache.html", null ],
-    [ "hypro::LRUCache< hypro::Cacheable< vector_t< Number > >, vector_t< Number > >", "classhypro_1_1LRUCache.html", null ],
     [ "hypro::NeighborhoodContainer", "classhypro_1_1NeighborhoodContainer.html", null ],
     [ "Eigen::NumTraits< carl::FLOAT_T< Number > >", "structEigen_1_1NumTraits_3_01carl_1_1FLOAT__T_3_01Number_01_4_01_4.html", null ],
     [ "hypro::Optimizer< Number >", "classhypro_1_1Optimizer.html", null ],

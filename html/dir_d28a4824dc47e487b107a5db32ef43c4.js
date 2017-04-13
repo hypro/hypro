@@ -6,6 +6,7 @@ var dir_d28a4824dc47e487b107a5db32ef43c4 =
     [ "example_boxConversion.cpp", "example__boxConversion_8cpp_source.html", null ],
     [ "example_converter.cpp", "example__converter_8cpp_source.html", null ],
     [ "example_convexHull.cpp", "example__convexHull_8cpp_source.html", null ],
+    [ "example_deepSFTree.cpp", "example__deepSFTree_8cpp_source.html", null ],
     [ "example_dynamicStrategies.cpp", "example__dynamicStrategies_8cpp_source.html", null ],
     [ "example_ellipsoidPlot.cpp", "example__ellipsoidPlot_8cpp_source.html", null ],
     [ "example_hashMatrix.cpp", "example__hashMatrix_8cpp_source.html", null ],
