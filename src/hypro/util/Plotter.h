@@ -199,6 +199,8 @@ class Plotter : public carl::Singleton<Plotter<Number>> {
 	 */
 	void setObjectColor( unsigned _id, const std::size_t _color );
 
+	void clear();
+
   private:
 	// auxiliary functions
 	void init( const std::string& _filename );

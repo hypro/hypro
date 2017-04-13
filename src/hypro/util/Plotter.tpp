@@ -232,6 +232,17 @@ void Plotter<Number>::setObjectColor( unsigned _id, const std::size_t _color ) {
 	}
 }
 
+template<typename Number>
+void Plotter<Number>::clear() {
+	mLastDimensions = std::make_pair(-1,-1);
+	mId = 1;
+	mObjects.clear();
+	mPlanes.clear();
+	mPoints.clear();
+	mVectors.clear();
+	mObjectColors.clear();
+}
+
 template <typename Number>
 void Plotter<Number>::init( const std::string &_filename ) {
 	mOutfile.open( _filename );
