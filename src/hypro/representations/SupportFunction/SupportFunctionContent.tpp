@@ -863,39 +863,47 @@ std::vector<EvaluationResult<Number>> SupportFunctionContent<Number>::multiEvalu
 			// Detect, if this call is finished or new.
 			if(resultStack.back().second.size() == cur->originCount()) {
 				// the call is finished, perform accumulating operations and forward result.
-
+				TRACE("hypro.representations.supportFunction", ": Accumulate results.");
 				// accumulate results - in this case sum.
 				Res accumulatedResult;
 				switch( cur->type() ) {
 					case SF_TYPE::LINTRAFO: {
+						TRACE("hypro.representations.supportFunction", ": LINTRAFO, accumulate results.")
 						assert(resultStack.back().second.size() == 1);
 						std::pair<matrix_t<Number>, vector_t<Number>> parameterPair = cur->linearTrafoParameters()->parameters->getParameterSet(cur->linearTrafoParameters()->currentExponent);
+						TRACE("hypro.representations.supportFunction", "Matrix: " << parameterPair.first);
+						TRACE("hypro.representations.supportFunction", "Vector: " << parameterPair.second);
 						if(resultStack.back().second.front().begin()->errorCode != SOLUTION::INFEAS) {
 							unsigned directionCnt = 0;
-							for(auto& entry : resultStack.back().second.front()){
+							for(auto& entry : resultStack.back().second.front()) {
 								vector_t<Number> currentDir(currentParam.row(directionCnt));
 								if(entry.errorCode == SOLUTION::INFTY) {
 									entry.optimumValue = entry.optimumValue;
 									entry.supportValue = 1;
 								} else {
+									TRACE("hypro.representations.supportFunction", ": Entry val before trafo: " << entry.optimumValue);
 									entry.optimumValue = parameterPair.first * entry.optimumValue + parameterPair.second;
 									// As we know, that the optimal vertex lies on the supporting Halfspace, we can obtain the distance by dot product.
 									entry.supportValue = entry.optimumValue.dot(currentDir);
 								}
+								auto t = convert<Number,double>(currentParam.row(directionCnt));
+								TRACE("hypro.representations.supportFunction", "Direction: " << t << ", Entry value: " << entry.supportValue);
 								++directionCnt;
-								//std::cout << "Entry value: " << entry.supportValue << std::endl;
 							}
 						}
+						TRACE("hypro.representations.supportFunction",": LINTRAFO, accumulate results done.");
 						accumulatedResult = resultStack.back().second.front();
 						break;
 					}
 					case SF_TYPE::PROJECTION: {
+						TRACE("hypro.representations.supportFunction", ": PROJECTION, accumulate results.")
 						assert(resultStack.back().second.size() == 1);
 						// simply forward the results
 						accumulatedResult = resultStack.back().second.front();
 						break;
 					}
 					case SF_TYPE::SCALE: {
+						TRACE("hypro.representations.supportFunction", ": SCALE, accumulate results.")
 						assert(resultStack.back().second.size() == 1);
 						// if one result is infeasible, the others will be too -> do not process.
 						if(resultStack.back().second.front().begin()->errorCode != SOLUTION::INFEAS){
@@ -911,6 +919,7 @@ std::vector<EvaluationResult<Number>> SupportFunctionContent<Number>::multiEvalu
 						break;
 					}
 					case SF_TYPE::SUM: {
+						TRACE("hypro.representations.supportFunction", ": SUM, accumulate results.")
 						assert( resultStack.back().second.size() == 2);
 						assert( resultStack.back().second.at(0).size() == std::size_t(currentParam.rows()));
 						assert( resultStack.back().second.at(0).size() == resultStack.back().second.at(1).size());
@@ -937,6 +946,7 @@ std::vector<EvaluationResult<Number>> SupportFunctionContent<Number>::multiEvalu
 						break;
 					}
 					case SF_TYPE::UNITE: {
+						TRACE("hypro.representations.supportFunction", ": UNITE, accumulate results.")
 						assert(resultStack.back().second.size() > 0);
 						assert(resultStack.back().second.size() == cur->unionParameters()->items.size());
 						accumulatedResult = resultStack.back().second.front();
@@ -958,6 +968,7 @@ std::vector<EvaluationResult<Number>> SupportFunctionContent<Number>::multiEvalu
 						break;
 					}
 					case SF_TYPE::INTERSECT: {
+						TRACE("hypro.representations.supportFunction", ": INTERSECT, accumulate results.")
 						assert(resultStack.back().second.size() == 2);
 						Res& resA = resultStack.back().second.at(0);
 						Res& resB = resultStack.back().second.at(1);
@@ -976,19 +987,19 @@ std::vector<EvaluationResult<Number>> SupportFunctionContent<Number>::multiEvalu
 							assert(resA[i].errorCode != SOLUTION::INFEAS && resB[i].errorCode != SOLUTION::INFEAS);
 							EvaluationResult<Number> res;
 							if (resA[i].errorCode == SOLUTION::INFTY) {
-								//std::cout << "resA infinite" << std::endl;
+								TRACE("hypro.representations.supportFunction","resA infinite");
 								res.errorCode = resB[i].errorCode;
 								res.supportValue = resB[i].supportValue;
 								res.optimumValue = resB[i].optimumValue;
 							} else if (resB[i].errorCode == SOLUTION::INFTY) {
-								//std::cout << "resB infinite" << std::endl;
+								TRACE("hypro.representations.supportFunction","resB infinite");
 								assert(resA[i].errorCode == SOLUTION::FEAS);
 								res.errorCode = resA[i].errorCode;
 								res.supportValue = resA[i].supportValue;
 								res.optimumValue = resA[i].optimumValue;
 							} else {
 								assert(resA[i].errorCode == SOLUTION::FEAS && resB[i].errorCode == SOLUTION::FEAS);
-								//std::cout << "Both finite: A " << resA[i].supportValue << " vs B " << resB[i].supportValue << std::endl;
+								TRACE("hypro.representations.supportFunction","Both finite: A " << resA[i].supportValue << " vs B " << resB[i].supportValue);
 								res.errorCode = SOLUTION::FEAS;
 								if(resA[i].supportValue < resB[i].supportValue){
 									res.supportValue = resA[i].supportValue;
@@ -998,6 +1009,8 @@ std::vector<EvaluationResult<Number>> SupportFunctionContent<Number>::multiEvalu
 									res.optimumValue = resB[i].optimumValue;
 								}
 							}
+							auto t = convert<Number,double>(res.optimumValue);
+							TRACE("hypro.representations.supportFunction", ": INTERSECT, accumulated result: " << t << " and value: " << res.supportValue );
 							accumulatedResult.push_back(res);
 						}
 						assert(accumulatedResult.size() == std::size_t(currentParam.rows()));
@@ -1016,11 +1029,12 @@ std::vector<EvaluationResult<Number>> SupportFunctionContent<Number>::multiEvalu
 
 				if(resultStack.back().first == -1) {
 					// we reached the top, exit
+					TRACE("hypro.representations.supportFunction","Return accumulated result.");
 					return accumulatedResult;
 				}
 
 				// forward result.
-
+				TRACE("hypro.representations.supportFunction","Push accumulated result up.");
 				resultStack.at(resultStack.back().first).second.push_back(accumulatedResult);
 
 				// delete result frame and close recursive call
@@ -1833,22 +1847,21 @@ std::vector<unsigned> SupportFunctionContent<Number>::collectProjectionsIterativ
 					// std::cout << __func__ << ": Type is projection: " << (cur->type() == SF_TYPE::PROJECTION) << std::endl;
 					// We need to filter, in case the element is a projection.
 					if(cur->type() == SF_TYPE::PROJECTION) {
-						for(auto elemIt = resultStack.back().second.front().begin(); elemIt != resultStack.back().second.front().end(); ) {
-							// std::cout << __func__ << ": Search for element " << *elemIt << " in dimensions." << std::endl;
-							if(std::find(cur->projectionParameters()->dimensions.begin(), cur->projectionParameters()->dimensions.end(), *elemIt) == cur->projectionParameters()->dimensions.end()) {
-								// std::cout << __func__ << ": delete element " << *elemIt << std::endl;
-								elemIt = resultStack.back().second.front().erase(elemIt);
+						assert(resultStack.back().second.size() == 1);
+						std::vector<unsigned> tmp = cur->projectionParameters()->dimensions;
+						for(auto dimIt = tmp.begin(); dimIt != tmp.end(); ) {
+							if(std::find(resultStack.back().second.front().begin(), resultStack.back().second.front().end(), *dimIt) == resultStack.back().second.front().end()) {
+								dimIt = tmp.erase(dimIt);
 							} else {
-								// std::cout << __func__ << ": Keep element " << *elemIt << std::endl;
-								++elemIt;
+								++dimIt;
 							}
 						}
+						std::swap(resultStack.back().second.front(), tmp);
 					}
 
 
 					if(resultStack.back().first == -1) {
 						// std::cout << __func__ << ": resulting dimension size: " << resultStack.back().second.front().size() << std::endl;
-
 						return resultStack.back().second.front();
 					}
 					resultStack.at(resultStack.back().first).second.push_back(resultStack.back().second.front());
@@ -1889,20 +1902,12 @@ std::vector<unsigned> SupportFunctionContent<Number>::collectProjectionsIterativ
 
 				// delete result frame and close recursive call
 				callStack.pop_back();
-				//paramStack.pop_back();
 				resultStack.pop_back();
 
 			} else {
 				//std::cout << "intermediate node on way down." << std::endl;
-				//std::cout << "Current type: " << cur->type() << std::endl;
-				// this is the branch for calling recursively
-
-				// Do some parameter transformation, i.e. create passed parameters
-				//currentParam += 1;
 
 				// NEW RECURSIVE CALLS
-				//std::cout << "Spawn " << cur->originCount() << " recursive calls." << std::endl;
-				// here we create the new stack levels. As the parameters are all the same, we do not care for their order (could be extended).
 				std::size_t callingFrame = callStack.size() - 1 ;
 
 				switch ( cur->type() ) {

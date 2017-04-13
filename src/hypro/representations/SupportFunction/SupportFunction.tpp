@@ -298,12 +298,17 @@ namespace hypro{
 	SupportFunctionT<Number,Converter> SupportFunctionT<Number,Converter>::project(const std::vector<unsigned>& dimensions) const {
 		// check for full projection
 		bool fullProjection = true;
-		for(unsigned i = 0; i < this->dimension(); ++i) {
-			if(std::find(dimensions.begin(), dimensions.end(), i) == dimensions.end()) {
-				fullProjection = false;
-				break;
+		if(dimensions.size() == this->dimension()) {
+			for(unsigned i = 0; i < this->dimension(); ++i) {
+				if(dimensions.at(i) != i) {
+					fullProjection = false;
+					break;
+				}
 			}
+		} else {
+			fullProjection = false;
 		}
+
 		if(!fullProjection){
 			DEBUG("hypro.represetations.supportFunction", "No full projection, create.");
 			SupportFunctionT<Number,Converter> res = SupportFunctionT<Number,Converter>(content->project(dimensions));
@@ -443,7 +448,8 @@ namespace hypro{
         	if(planeEvalRes.errorCode == SOLUTION::INFEAS){
 				//std::cout << "Is infeasible (should not happen)." << std::endl;
 				//std::cout << "Set is (Hpoly): " << std::endl << Converter::toHPolytope(*this) << std::endl;
-				assert(Converter::toHPolytope(*this).empty());
+				bool OUTCOMMENTED_ASSERTION = false;
+				//assert(Converter::toHPolytope(*this).empty());
         		return std::make_pair(false, *this);
         	//} else if(!carl::AlmostEqual2sComplement(planeEvalRes.supportValue, _vec(rowI), 2) && planeEvalRes.supportValue > _vec(rowI)){
         	} else if(planeEvalRes.supportValue > _vec(rowI)){
