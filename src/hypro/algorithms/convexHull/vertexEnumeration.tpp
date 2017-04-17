@@ -91,20 +91,24 @@ namespace hypro {
 
 	template<typename Number>
 	void VertexEnumeration<Number>::enumerateVertices() {
+		/*
 		DEBUG("hypro.vertexEnumeration","Input:");
 		for(const auto& plane : mHsv) {
 			DEBUG("hypro.vertexEnumeration",plane);
 		}
+		*/
 
 		if(findPositiveConstrains()) {//if non empty
 			enumerateDictionaries();
 			enumerateVerticesEachDictionary();
 			toGeneralCoordinates();
 
+			/*
 			DEBUG("hypro.vertexEnumeration","Output:");
 			for(const auto& vertex : mPoints) {
 				DEBUG("hypro.vertexEnumeration",vertex);
 			}
+			*/
 
 			#ifndef NDEBUG
 			for(const auto& vertex : mPoints) {
