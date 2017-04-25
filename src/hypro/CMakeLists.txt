@@ -29,7 +29,7 @@ if(STATICLIB_SWITCH)
 		OUTPUT_NAME hypro
 		LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}
 		ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}
-		# we currently do not use public header option, as it doesnt support multi-directory headers
+		INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_SOURCE_DIR}/src"
 	)
 	#message("hypro libraries static: " ${hypro_LIBRARIES_STATIC})
 	#message("hypro include dirs: " ${hypro_INCLUDE_DIRS})
@@ -50,6 +50,7 @@ else()
 		OUTPUT_NAME hypro
 		LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}
 		ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}
+		INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_SOURCE_DIR}/src"
 	)
 	#message("hypro libraries dynamic: " ${hypro_LIBRARIES_DYNAMIC})
 	#message("hypro include dirs: " ${hypro_INCLUDE_DIRS})
