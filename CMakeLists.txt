@@ -261,7 +261,11 @@ file(RELATIVE_PATH REL_INCLUDE_DIR "${PROJECT_BINARY_DIR}" "${PROJECT_BINARY_DIR
 # ... for the build tree
 set(CONF_INCLUDE_DIRS "${PROJECT_SOURCE_DIR}/src") # TODO looks not correct, this would be hypro_INCLUDE_DIR
 set(CONF_INCLUDES ${INCLUDES})
-set(CONF_LINKER_LIBS ${hypro_DYNAMIC_LIBRARIES})
+if(STATICLIB_SWITCH)
+	set(CONF_LINKER_LIBS ${hypro_STATIC_LIBRARIES})
+else ()
+	set(CONF_LINKER_LIBS ${hypro_DYNAMIC_LIBRARIES})
+endif()
 
 configure_package_config_file(cmake/Modules/hyproConfig.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/hyproConfig.cmake
 							  INSTALL_DESTINATION ${PROJECT_BINARY_DIR}

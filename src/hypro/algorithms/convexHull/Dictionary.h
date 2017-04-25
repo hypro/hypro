@@ -10,9 +10,9 @@
 
 #pragma once
 
-#include "config.h"
-#include "datastructures/Point.h"
-#include "datastructures/Halfspace.h"
+#include "../../config.h"
+#include "../../datastructures/Point.h"
+#include "../../datastructures/Halfspace.h"
 #include "ConstrainSet.h"
 
 #define FUKUDA_VERTEX_ENUM_DEBUG

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "flags.h"
+#include "../../flags.h"
 #include <carl/util/Singleton.h>
 
 #define PRINT_STATS()

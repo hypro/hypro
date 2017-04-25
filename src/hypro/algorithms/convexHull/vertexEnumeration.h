@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Dictionary.h"
-#include "util/Permutator.h"
+#include "../../util/Permutator.h"
 
 namespace hypro {
 

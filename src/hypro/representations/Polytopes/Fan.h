@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Cone.h"
-#include "datastructures/Point.h"
+#include "../../datastructures/Point.h"
 #include <carl/formula/Constraint.h>
 #include <cassert>
 #include <glpk.h>

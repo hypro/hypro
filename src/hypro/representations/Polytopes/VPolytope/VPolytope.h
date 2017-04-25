@@ -9,12 +9,12 @@
 #endif
 
 #include "../Cone.h"
-#include "algorithms/convexHull/ConvexHull.h"
-#include "util/convexHull.h"
-#include "util/linearOptimization/Optimizer.h"
-#include "util/Permutator.h"
-#include "util/pca.h"
-#include "datastructures/Facet.h"
+#include "../../../algorithms/convexHull/ConvexHull.h"
+#include "../../../util/convexHull.h"
+#include "../../../util/linearOptimization/Optimizer.h"
+#include "../../../util/Permutator.h"
+#include "../../../util/pca.h"
+#include "../../../datastructures/Facet.h"
 #include <set>
 #include <cassert>
 #include <vector>

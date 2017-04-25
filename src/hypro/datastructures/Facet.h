@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include "types.h"
+#include "../types.h"
 #include "Halfspace.h"
 
 namespace hypro {

@@ -1,8 +1,5 @@
 /*
- * This file contains the basic implementation of support functions of polyhedra
- * (template polyhedra) and their
- * evaluation.
- * @file Ellipsoid.tpp
+ * @file EllipsoidT.tpp
  *
  * @author Phillip Florian
  *
@@ -14,11 +11,8 @@
 
 namespace hypro {
 
-
-
-
-template <typename Number>
-Ellipsoid<Number>::Ellipsoid( Number _radius, std::size_t _dimension ) {
+template<typename Number, typename Converter>
+EllipsoidT<Number,Converter>::EllipsoidT( Number _radius, std::size_t _dimension ) {
     mShapeMatrix = matrix_t<Number>::Zero(_dimension,_dimension);
     for( std::size_t i = 0; i < _dimension; i++ ){
         mShapeMatrix(i,i) = _radius;
@@ -27,36 +21,36 @@ Ellipsoid<Number>::Ellipsoid( Number _radius, std::size_t _dimension ) {
     mIsEmpty = empty();
 }
 
-template <typename Number>
-Ellipsoid<Number>::Ellipsoid( matrix_t<Number> _matrix)
+template<typename Number, typename Converter>
+EllipsoidT<Number,Converter>::EllipsoidT( matrix_t<Number> _matrix)
       : mDimension( _matrix.rows() ), mShapeMatrix( _matrix ) {
 	assert( _matrix.transpose() == _matrix );  // symmetric
         // Todo: _matrix is positive definite? x * Qx >= 0
     mIsEmpty = empty();
 }
 
-template <typename Number>
-Ellipsoid<Number>::Ellipsoid( const Ellipsoid<Number>& _orig )
+template<typename Number, typename Converter>
+EllipsoidT<Number,Converter>::EllipsoidT( const EllipsoidT<Number,Converter>& _orig )
       : mDimension( _orig.dimension() ), mShapeMatrix( _orig.matrix() ) {
     mIsEmpty = empty();
 }
 
-template <typename Number>
-Ellipsoid<Number>::~Ellipsoid() {
+template<typename Number, typename Converter>
+EllipsoidT<Number,Converter>::~EllipsoidT() {
 }
 
-template <typename Number>
-matrix_t<Number> Ellipsoid<Number>::matrix() const {
+template<typename Number, typename Converter>
+matrix_t<Number> EllipsoidT<Number,Converter>::matrix() const {
     return mShapeMatrix;
 }
 
-template <typename Number>
-std::size_t Ellipsoid<Number>::dimension() const {
+template<typename Number, typename Converter>
+std::size_t EllipsoidT<Number,Converter>::dimension() const {
 	return mDimension;
 }
 
-template <typename Number>
-bool Ellipsoid<Number>::empty() const {
+template<typename Number, typename Converter>
+bool EllipsoidT<Number,Converter>::empty() const {
     for (unsigned i = 0; i < mShapeMatrix.rows(); i++) {
         for (unsigned j = 0; j < mShapeMatrix.cols(); j++) {
             if (mShapeMatrix(i,j) != 0)
@@ -66,22 +60,25 @@ bool Ellipsoid<Number>::empty() const {
     return true;
 }
 
-template <typename Number>
-Ellipsoid<Number> Ellipsoid<Number>::linearTransformation(const matrix_t<Number>& _A, const vector_t<Number>& _b) const {
-    vector_t<Number> b = _b; // TODO remove this. just wanted to get rid of the warning
-    return Ellipsoid<Number>(_A * mShapeMatrix * _A.transpose());
+template<typename Number, typename Converter>
+EllipsoidT<Number,Converter> EllipsoidT<Number,Converter>::linearTransformation(const matrix_t<Number>& _A) const {
+    return EllipsoidT<Number,Converter>(_A * mShapeMatrix * _A.transpose());
 }
 
+template<typename Number, typename Converter>
+EllipsoidT<Number,Converter> EllipsoidT<Number,Converter>::affineTransformation(const matrix_t<Number>& _A, const vector_t<Number>& _b) const {
+    vector_t<Number> b = _b; // TODO remove this. just wanted to get rid of the warning
+    return EllipsoidT<Number,Converter>(_A * mShapeMatrix * _A.transpose());
+}
 
-
-template <typename Number>
-Ellipsoid<Number> Ellipsoid<Number>::minkowskiSum(const Ellipsoid<Number>& _rhs, bool _approx) const {
+template<typename Number, typename Converter>
+EllipsoidT<Number,Converter> EllipsoidT<Number,Converter>::minkowskiSum(const EllipsoidT<Number,Converter>& _rhs, bool _approx) const {
     // TODO l needs to be normalized in order for this to work!!
     vector_t<Number> l;
     l.setZero(this->mDimension);
     l(0) = 1;
     if (mIsEmpty) {
-        return Ellipsoid<Number>(_rhs);
+        return EllipsoidT<Number,Converter>(_rhs);
     }
     Number lhsScalar, rhsScalar;
     Number lhsFactor, rhsFactor;
@@ -91,15 +88,15 @@ Ellipsoid<Number> Ellipsoid<Number>::minkowskiSum(const Ellipsoid<Number>& _rhs,
     rhsFactor = (lhsScalar + rhsScalar) / rhsScalar;
     matrix_t<Number> matrix = lhsFactor*this->mShapeMatrix + rhsFactor*_rhs.mShapeMatrix;
     if (_approx) {
-        return Ellipsoid<Number>(approxEllipsoidMatrix(matrix));
+        return EllipsoidT<Number,Converter>(approxEllipsoidTMatrix(matrix));
     } else {
-        return Ellipsoid<Number>(matrix);
+        return EllipsoidT<Number,Converter>(matrix);
     }
 
 }
 
-template <typename Number>
-matrix_t<Number> Ellipsoid<Number>::approxEllipsoidMatrix(const matrix_t<Number> _matrix) const {
+template<typename Number, typename Converter>
+matrix_t<Number> EllipsoidT<Number,Converter>::approxEllipsoidTMatrix(const matrix_t<Number> _matrix) const {
     matrix_t<Number> roundetMatrix(_matrix.rows(), _matrix.cols());
     Number remains = 0;
     Number roundedValue;
@@ -134,8 +131,8 @@ matrix_t<Number> Ellipsoid<Number>::approxEllipsoidMatrix(const matrix_t<Number>
 
 }
 
-template <typename Number>
-vector_t<Number> Ellipsoid<Number>::evaluate(vector_t<Number> const _l) const {
+template<typename Number, typename Converter>
+vector_t<Number> EllipsoidT<Number,Converter>::evaluate(vector_t<Number> const _l) const {
     return _l * (carl::sqrt(_l.dot(mShapeMatrix * _l)));
 }
 

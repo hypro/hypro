@@ -10,8 +10,8 @@
 
 #pragma once
 
-#include "flags.h"
-#include "util/logging/Logger.h"
+#include "../flags.h"
+#include "logging/Logger.h"
 #include <carl/core/Variable.h>
 #include <carl/core/VariablePool.h>
 #include <carl/util/Singleton.h>

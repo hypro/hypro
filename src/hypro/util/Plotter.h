@@ -9,8 +9,8 @@
 #pragma once
 
 #include "../config.h"
-#include "datastructures/Point.h"
-#include "datastructures/Halfspace.h"
+#include "../datastructures/Point.h"
+#include "../datastructures/Halfspace.h"
 #include <carl/util/Singleton.h>
 #include <vector>
 #include <string>

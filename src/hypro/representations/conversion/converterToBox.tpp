@@ -17,6 +17,23 @@ template<typename Number>
 typename Converter<Number>::Box Converter<Number>::toBox( const Box& _source, const CONV_MODE  ) {
 	return _source;
 }
+
+template<typename Number>
+typename Converter<Number>::Box Converter<Number>::toBox( const Ellipsoid& _source, const CONV_MODE  ) {
+	vector_t<Number> l(_source.dimension());
+	vector_t<Number> evaluation;
+	l.setZero();
+	std::vector<carl::Interval<Number>> intervals(_source.dimension());
+	for ( std::size_t i = 0; i < _source.dimension(); i++) {
+	    l(i) = 1;
+	    evaluation = _source.evaluate(l);
+	    intervals.at(i).setLower(evaluation(i));
+	    intervals.at(i).setUpper(-evaluation(i));
+	    l(i) = 0;
+	}
+	return BoxT<Number,Converter>(intervals);
+}
+
 // conversion from support function to box (no differentiation between conversion modes - always OVER)
 template<typename Number>
 typename Converter<Number>::Box Converter<Number>::toBox( const SupportFunction& _source, const CONV_MODE  ) {

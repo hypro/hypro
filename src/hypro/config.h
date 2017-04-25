@@ -39,31 +39,24 @@ extern "C" {
  * @{
  */
 
-// Do we eliminate dimensions according to a dynamic heuristic.
-#define DYNAMICHEURISTIC 0
-
 #define PI_UP 3.1415926535897932384626433832795028841972
 #define PI_DN 3.1415926535897932384626433832795028841971
+/// Do we eliminate dimensions according to a dynamic heuristic.
+#define DYNAMICHEURISTIC 0
 
-/** The common denominator used for the PPL wrapper class. */
-static const unsigned long fReach_DENOMINATOR = 1000000000;
+static const unsigned long fReach_DENOMINATOR = 1000000000; //!< @brief The common denominator used for the PPL wrapper class.
 
-/** The default threshold value for double ULP-comparison. */
-static const unsigned long default_double_comparison_ulps = 128;
+static const unsigned long default_double_comparison_ulps = 128; //!< @brief The default threshold value for double ULP-comparison.
 
-/** The default number of template directions used in templated evaluation. */
-static const unsigned long defaultTemplateDirectionCount = 8;
+static const unsigned long defaultTemplateDirectionCount = 8; //!< @brief The default number of template directions used in templated evaluation.
 
-/** TODO: Document! */
-static const unsigned long MAX_DIMENSION_LIMIT = 100;
+static const unsigned long MAX_DIMENSION_LIMIT = 100; //!< @brief
 
-/** A limit required for Fukudas Minkowski-Sum algorithm. */
-static const double EPSILON = 0.000001;
+static const double EPSILON = 0.000001; //!< @brief A limit required for Fukudas Minkowski-Sum algorithm.
 
-/** Some required positive constant for Fukudas Minkowski-Sum algorithm.*/
-static const long POS_CONSTANT = 100;
+static const long POS_CONSTANT = 100; //!< @brief Some required positive constant for Fukudas Minkowski-Sum algorithm.
 
-static const unsigned SF_CACHE_SIZE = 200;
+static const unsigned SF_CACHE_SIZE = 200; //!< @brief
 
 /** Enables debug output for Fukudas Minkowski-Sum algorithm. */
 //#define fukuda_DEBUG

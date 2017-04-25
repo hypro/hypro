@@ -7,9 +7,9 @@
 
 #pragma once
 
-#include "datastructures/Point.h"
-#include "datastructures/Vertex.h"
-#include "datastructures/VertexContainer.h"
+#include "../../datastructures/Point.h"
+#include "../../datastructures/Vertex.h"
+#include "../../datastructures/VertexContainer.h"
 #include "../Box/Box.h"
 #include "NeighborhoodContainer.h"
 #include "Grid.h"

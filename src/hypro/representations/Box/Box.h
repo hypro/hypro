@@ -9,11 +9,11 @@
 	static_assert(false, "This file may only be included indirectly by GeometricObject.h");
 #endif
 
-#include "datastructures/Halfspace.h"
-#include "datastructures/Point.h"
-#include "util/Permutator.h"
-#include "util/linearOptimization/Optimizer.h"
-#include "util/logging/Logger.h"
+#include "../../datastructures/Halfspace.h"
+#include "../../datastructures/Point.h"
+#include "../../util/Permutator.h"
+#include "../../util/linearOptimization/Optimizer.h"
+#include "../../util/logging/Logger.h"
 #include <carl/interval/Interval.h>
 #include <cassert>
 #include <map>

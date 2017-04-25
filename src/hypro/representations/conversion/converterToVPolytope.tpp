@@ -15,6 +15,47 @@ typename Converter<Number>::VPolytope Converter<Number>::toVPolytope( const VPol
 	return _source;
 }
 
+template<typename Number>
+typename Converter<Number>::VPolytope Converter<Number>::toVPolytope( const Ellipsoid& _source, const CONV_MODE  ){
+	vector_t<Number> l(_source.dimension());
+	l.setZero();
+	vector_t<Number> evaluation;
+	std::vector<vector_t<Number>> constraints;
+	vector_t<Number> b;
+	for ( std::size_t i = 0; i < _source.dimension(); i++) {
+	    for (std:: size_t j = i+1; j < _source.dimension(); j++ ) {
+	        // Evaluation in 8 directions for each pair of dimensions
+	        // only compute 4 directions, as E is symmetric. Comments denote the combination of i,j
+	        // (1,0)
+	        l(i) = 1;
+	        evaluation = _source.evaluate(l);
+	        constraints.push_back(evaluation);
+	        constraints.push_back(-evaluation);
+	        // (1,1)
+	        l(j) = 1;
+	        evaluation = _source.evaluate(l);
+	        constraints.push_back(evaluation);
+	        constraints.push_back(-evaluation);
+	        // (-1,1)
+	        l(i) = -1;
+	        evaluation = _source.evaluate(l);
+	        constraints.push_back(evaluation);
+	        constraints.push_back(-evaluation);
+	        // (0,1)
+	        l(i) = 0;
+	        evaluation = _source.evaluate(l);
+	        constraints.push_back(evaluation);
+	        constraints.push_back(-evaluation);
+	        l(j) = 0;
+	    }
+	}
+	b.setOnes(constraints.size());
+	matrix_t<Number> constraintMatrix(constraints.size(),_source.dimension());
+	for (std::size_t i = 0; i < constraints.size(); i++){
+	    constraintMatrix.row(i) = constraints.at(i);
+	}
+	return VPolytope(constraintMatrix, b);
+}
 
 //conversion from H-Polytope to V-Polytope (no differentiation between conversion modes - always EXACT)
 template<typename Number>

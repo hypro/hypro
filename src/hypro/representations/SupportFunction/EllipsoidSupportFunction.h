@@ -12,7 +12,7 @@
 
 #pragma once
 
-#include "config.h"
+#include "../../config.h"
 #include "util.h"
 
 namespace hypro {

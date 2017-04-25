@@ -6,10 +6,10 @@
 
 #pragma once
 
-#include "config.h"
-#include "types.h"
+#include "../../config.h"
+#include "../../types.h"
 #ifdef HYPRO_USE_VECTOR_CACHING
-#include "datastructures/LRUCache.h"
+#include "../../datastructures/LRUCache.h"
 #endif
 
 namespace hypro {

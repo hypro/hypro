@@ -14,6 +14,31 @@ template <typename Number>
 typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const Zonotope& _source, const CONV_MODE  ){
     return _source;
 }
+
+
+template <typename Number>
+typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const Ellipsoid& _source, const CONV_MODE  ){
+    /*
+    vector_t<Number> l(_source.dimension());
+	l.setZero();
+	vector_t<Number> evaluation;
+	std::vector<vector_t<Number>> constraints;
+	for ( std::size_t i = 0; i < _source.dimension(); i++) {
+	        l(i) = 1;
+	        evaluation = _source.evaluate(l);
+	        constraints.push_back(evaluation);
+	        l(i) = 0;
+	}
+	matrix_t<Number> constraintMatrix(constraints.size(),_source.dimension());
+	for (std::size_t i = 0; i < constraints.size(); i++){
+	    constraintMatrix.row(i) = constraints.at(i);
+	}
+	return ZonotopeT<Number,Converter> (constraintMatrix);
+	*/
+	WARN("hypro.representations","Conversion to Zonotopes not implemented yet.");
+	return ZonotopeT<Number,Converter>();
+}
+
 //conversion from H-Polytope to Zonotope (no differentiation between conversion modes - always OVER)
 template <typename Number>
 typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const HPolytope& _source, const CONV_MODE mode ){

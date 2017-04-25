@@ -10,8 +10,8 @@
 
 #pragma once
 #include "Point.h"
-#include "util/VariablePool.h"
-#include "util/adaptions_eigen/adaptions_eigen.h"
+#include "../util/VariablePool.h"
+#include "../util/adaptions_eigen/adaptions_eigen.h"
 #include <carl/formula/Constraint.h>
 #include <cassert>
 #include <glpk.h>

@@ -1,7 +1,8 @@
 /**
  * @file GeometricObject.h
  * \defgroup geoState State set representations
- * This is the description.
+ * Most state set representations conform to a unified interface, which is defined in GeometricObject.h.
+ * Furthermore some of the representations have additional functionality, which is documented separately.
  */
 
 #pragma once
@@ -9,10 +10,10 @@
 #define INCL_FROM_GOHEADER true
 
 #include "types.h"
-#include "flags.h"
-#include "config.h"
-#include "util/adaptions_eigen/adaptions_eigen.h"
-#include "util/logging/Logger.h"
+#include "../flags.h"
+#include "../config.h"
+#include "../util/adaptions_eigen/adaptions_eigen.h"
+#include "../util/logging/Logger.h"
 
 namespace hypro {
 

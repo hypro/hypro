@@ -9,19 +9,19 @@
 	static_assert(false, "This file may only be included indirectly by GeometricObject.h");
 #endif
 
-#include "flags.h"
+#include "../../flags.h"
 
 #ifdef HYPRO_USE_PPL
 #include "util.h"
-#include "representations/GeometricObject.h"
-#include "representations/Polytopes/Cone.h"
-#include "representations/Polytopes/Fan.h"
-#include "datastructures/Point.h"
-#include "datastructures/Facet.h"
-#include "datastructures/Ridge.h"
-#include "datastructures/Halfspace.h"
-#include "util/convexHull.h"
-#include "util/VariablePool.h"
+#include "../GeometricObject.h"
+#include "../Polytopes/Cone.h"
+#include "../Polytopes/Fan.h"
+#include "../../datastructures/Point.h"
+#include "../../datastructures/Facet.h"
+#include "../../datastructures/Ridge.h"
+#include "../../datastructures/Halfspace.h"
+#include "../../util/convexHull.h"
+#include "../../util/VariablePool.h"
 #include <map>
 #include <cassert>
 #include <string>

@@ -5,11 +5,11 @@
 	static_assert(false, "This file may only be included indirectly by GeometricObject.h");
 #endif
 
-#include "config.h"
+#include "../../config.h"
 #include "util.h"
 #include "SupportFunctionContent.h"
-#include "util/templateDirections.h"
-#include "datastructures/hybridAutomata/Location.h"
+#include "../../util/templateDirections.h"
+#include "../../datastructures/hybridAutomata/Location.h"
 
 namespace hypro {
 
@@ -22,13 +22,13 @@ namespace hypro {
 template <typename Number, typename Converter>
 class SupportFunctionT : public GeometricObject<Number, SupportFunctionT<Number,Converter>> {
 private:
-	std::shared_ptr<SupportFunctionContent<Number>> content;
+	SupportFunctionContent<Number>* content;
 
 	mutable matrix_t<Number> mMatrix;
 	mutable vector_t<Number> mVector;
 	mutable bool mTemplateSet = false;
 
-	SupportFunctionT<Number,Converter> (const std::shared_ptr<SupportFunctionContent<Number>> _source);
+	SupportFunctionT<Number,Converter> (SupportFunctionContent<Number>* _source);
 
 public:
 	SupportFunctionT ();

@@ -39,6 +39,11 @@ typename Converter<Number>::SupportFunction Converter<Number>::toSupportFunction
     return SupportFunction( directions, distances);
 }
 
+template <typename Number>
+typename Converter<Number>::SupportFunction Converter<Number>::toSupportFunction( const Ellipsoid& _source, const CONV_MODE ){
+    return SupportFunctionT<Number,Converter>(_source.matrix());
+}
+
 // conversion from V-Polytope to support function (no differentiation between conversion modes - always EXACT)
 template <typename Number>
 typename Converter<Number>::SupportFunction Converter<Number>::toSupportFunction( const VPolytope& _source, const CONV_MODE mode) {
