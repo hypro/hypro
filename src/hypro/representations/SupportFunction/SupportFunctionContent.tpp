@@ -1383,16 +1383,16 @@ unsigned SupportFunctionContent<Number>::multiplicationsPerEvaluation() const {
 				Res accumulatedResult = 0;
 				switch(cur->type()) {
 					case SF_TYPE::INTERSECT:
-			        case SF_TYPE::LINTRAFO:
 			        case SF_TYPE::PROJECTION:
-			        case SF_TYPE::UNITE:
-			        	for(auto val : resultStack.back().second) {
-			        		accumulatedResult += val;
-			        	}
 			        case SF_TYPE::LINTRAFO: {
 			            accumulatedResult += 1;
 			            break;
 			        }
+			        case SF_TYPE::UNITE:
+			        	for(auto val : resultStack.back().second) {
+			        		accumulatedResult += val;
+			        	}
+			        	break;
 			        case SF_TYPE::NONE: {
 						std::cout << __func__ << ": SF Type not properly initialized!" << std::endl;
 						assert(false);

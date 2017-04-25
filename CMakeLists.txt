@@ -253,7 +253,14 @@ export(TARGETS ${HYPRO_TARGETS} FILE "${PROJECT_BINARY_DIR}/hyproTargets.cmake")
 
 # Export the package for use from the build-tree
 # (this registers the build-tree with a global CMake-registry)
-export(PACKAGE ${PROJECT_NAME})
+if(STATICLIB_SWITCH)
+	export(PACKAGE ${PROJECT_NAME}_static)
+	set(TARGET ${PROJECT_NAME})
+else()
+	export(PACKAGE ${PROJECT_NAME})
+	set(TARGET ${PROJECT_NAME})
+endif()
+
 
 include(CMakePackageConfigHelpers)
 # Create the hyproConfig.cmake and hyproConfigVersion files
