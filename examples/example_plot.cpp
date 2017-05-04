@@ -29,6 +29,7 @@ int main() {
 
 	plotter.plot2d();
 	plotter.plotTex();
+	plotter.plotEps();
 
 	return 0;
 }

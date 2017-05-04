@@ -17,6 +17,7 @@ namespace hypro{
     //-------PRIVATE---------
     template<typename Number, typename Converter>
     SupportFunctionT<Number,Converter>::SupportFunctionT( SupportFunctionContent<Number>* _source) : content(_source){
+    	content->setThis(content);
         //handled by initializer list
     }
 
@@ -41,27 +42,32 @@ namespace hypro{
 
     template<typename Number, typename Converter>
     SupportFunctionT<Number,Converter>::SupportFunctionT(SF_TYPE _type, Number _radius, unsigned dimension ) : content( new SupportFunctionContent<Number>(_radius, dimension, _type)){
+    	content->setThis(content);
         //handled by initializer list
     }
 
     template<typename Number, typename Converter>
     SupportFunctionT<Number,Converter>::SupportFunctionT(const std::vector<Point<Number>>& _vertices)
         : content( new SupportFunctionContent<Number>(_vertices, SF_TYPE::POLY)) {
+        content->setThis(content);
         //handled by initializer list
     }
 
     template<typename Number, typename Converter>
     SupportFunctionT<Number,Converter>::SupportFunctionT(const matrix_t<Number>& _directions, const vector_t<Number>& _distances) : content( new SupportFunctionContent<Number>(_directions, _distances, SF_TYPE::POLY)){
+    	content->setThis(content);
          //handled by initializer list
     }
 
     template<typename Number, typename Converter>
     SupportFunctionT<Number,Converter>::SupportFunctionT(const std::vector<Halfspace<Number>>& _planes) : content( new SupportFunctionContent<Number>(_planes, SF_TYPE::POLY)){
+    	content->setThis(content);
          //handled by initializer list
     }
 
     template<typename Number, typename Converter>
     SupportFunctionT<Number,Converter>::SupportFunctionT(const matrix_t<Number>& _shapeMatrix) : content( new SupportFunctionContent<Number>(_shapeMatrix, SF_TYPE::ELLIPSOID)){
+    	content->setThis(content);
          //handled by initializer list
     }
 
@@ -312,6 +318,7 @@ namespace hypro{
 		if(!fullProjection){
 			DEBUG("hypro.represetations.supportFunction", "No full projection, create.");
 			SupportFunctionT<Number,Converter> res = SupportFunctionT<Number,Converter>(new SupportFunctionContent<Number>(std::unique_ptr<SupportFunctionContent<Number>>(content), dimensions, SF_TYPE::PROJECTION));
+			std::cout << "Projection content adress: " << res.getContent()->getThis() << std::endl;
 			return res;
 		}
 		DEBUG("hypro.represetations.supportFunction", "Full projection, copy.");
@@ -350,13 +357,17 @@ namespace hypro{
     	}
     	vector_t<Number> vec = vector_t<Number>(1);
     	vec(0) = hs.offset();
-        SupportFunctionT<Number,Converter> res = SupportFunctionT<Number,Converter>(new SupportFunctionContent<Number>(std::unique_ptr<SupportFunctionContent<Number>>(content),  std::unique_ptr<SupportFunctionContent<Number>>(new SupportFunctionContent<Number>(mat,vec,SF_TYPE::POLY)), SF_TYPE::INTERSECT));
+    	SupportFunctionContent<Number>* tmp = new SupportFunctionContent<Number>(mat,vec,SF_TYPE::POLY);
+    	tmp->setThis(tmp);
+        SupportFunctionT<Number,Converter> res = SupportFunctionT<Number,Converter>(new SupportFunctionContent<Number>(std::unique_ptr<SupportFunctionContent<Number>>(content),  std::unique_ptr<SupportFunctionContent<Number>>(tmp), SF_TYPE::INTERSECT));
         return res;
     }
 
     template<typename Number, typename Converter>
     SupportFunctionT<Number,Converter> SupportFunctionT<Number,Converter>::intersectHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const{
-        SupportFunctionT<Number,Converter> res = SupportFunctionT<Number,Converter>(new SupportFunctionContent<Number>(std::unique_ptr<SupportFunctionContent<Number>>(content),  std::unique_ptr<SupportFunctionContent<Number>>(new SupportFunctionContent<Number>(_mat,_vec,SF_TYPE::POLY)), SF_TYPE::INTERSECT));
+    	SupportFunctionContent<Number>* tmp = new SupportFunctionContent<Number>(_mat,_vec,SF_TYPE::POLY);
+    	tmp->setThis(tmp);
+        SupportFunctionT<Number,Converter> res = SupportFunctionT<Number,Converter>(new SupportFunctionContent<Number>(std::unique_ptr<SupportFunctionContent<Number>>(content),  std::unique_ptr<SupportFunctionContent<Number>>(tmp), SF_TYPE::INTERSECT));
         return res;
     }
 
@@ -383,7 +394,8 @@ namespace hypro{
 
     template<typename Number, typename Converter>
     SupportFunctionT<Number,Converter>  SupportFunctionT<Number,Converter>::unite( const SupportFunctionT<Number,Converter> &_rhs ) const {
-        return SupportFunctionT<Number,Converter>( new SupportFunctionContent<Number>( std::unique_ptr<SupportFunctionContent<Number>>(content), std::unique_ptr<SupportFunctionContent<Number>>(_rhs.content), SF_TYPE::UNITE));
+    	SupportFunctionT<Number,Converter> res = SupportFunctionT<Number,Converter>( new SupportFunctionContent<Number>( std::unique_ptr<SupportFunctionContent<Number>>(content), std::unique_ptr<SupportFunctionContent<Number>>(_rhs.content), SF_TYPE::UNITE));
+        return res;
     }
 
 	template<typename Number, typename Converter>
@@ -392,12 +404,14 @@ namespace hypro{
     	for(const auto& set : _rhs) {
     		converted.push_back(set->content);
     	}
-    	return SupportFunctionT<Number,Converter>(SupportFunctionContent<Number>::unite(converted));
+    	SupportFunctionT<Number,Converter> res = SupportFunctionT<Number,Converter>( new SupportFunctionContent<Number>(converted, SF_TYPE::UNITE) );
+    	return res;
     }
 
     template<typename Number, typename Converter>
     SupportFunctionT<Number,Converter> SupportFunctionT<Number,Converter>::scale( const Number &_factor ) const {
-        return SupportFunctionT<Number,Converter>(new SupportFunctionContent<Number>( std::unique_ptr<SupportFunctionContent<Number>>(content),  _factor, SF_TYPE::SCALE));
+    	SupportFunctionT<Number,Converter> res = SupportFunctionT<Number,Converter>(new SupportFunctionContent<Number>( std::unique_ptr<SupportFunctionContent<Number>>(content),  _factor, SF_TYPE::SCALE));
+        return res;
     }
 
     template<typename Number, typename Converter>

@@ -151,44 +151,46 @@ template <typename Number>
 SupportFunctionContent<Number>::SupportFunctionContent( std::unique_ptr<SupportFunctionContent<Number>>&& _lhs,
 										 std::unique_ptr<SupportFunctionContent<Number>>&& _rhs, SF_TYPE _type ) {
 	// assert(_lhs.dimension() == _rhs.dimension());
-	assert(_lhs->checkTreeValidity());
-	assert(_rhs->checkTreeValidity());
 	switch ( _type ) {
 		case SF_TYPE::SUM: {
 			mSummands = new sumContent<Number>( std::move(_lhs), std::move(_rhs) );
+			assert(mSummands->lhs->checkTreeValidity());
+			assert(mSummands->rhs->checkTreeValidity());
 			mType = SF_TYPE::SUM;
-			mDimension = _lhs->dimension();
-			assert( _lhs->type() == summands()->lhs->type() && _rhs->type() == summands()->rhs->type() );
-			if (_rhs->depth() > _lhs->depth()){
-				mDepth = _rhs->depth();
+			mDimension = mSummands->lhs->dimension();
+			if (mSummands->rhs->depth() > mSummands->lhs->depth()){
+				mDepth = mSummands->rhs->depth();
 			} else {
-				mDepth = _lhs->depth();
+				mDepth = mSummands->lhs->depth();
 			}
-			mOperationCount = _rhs->operationCount() + _lhs->operationCount()+1;
+			mOperationCount = mSummands->rhs->operationCount() + mSummands->lhs->operationCount()+1;
 			break;
 		}
 		case SF_TYPE::UNITE: {
 			mUnionParameters = new unionContent<Number>( std::move(_lhs), std::move(_rhs) );
 			mType = SF_TYPE::UNITE;
-			mDimension = _lhs->dimension();
-			if (_rhs->depth() > _lhs->depth()){
-				mDepth = _rhs->depth();
-			} else {
-				mDepth = _lhs->depth();
+			mDimension = (*mUnionParameters->items.begin())->dimension();
+			mDepth = (*mUnionParameters->items.begin())->depth();
+			mOperationCount = 1;
+			for(auto& item : mUnionParameters->items){
+				assert(item->checkTreeValidity());
+				mDepth = item->depth() > mDepth ? item->depth() : mDepth;
+				mOperationCount += item->operationCount();
 			}
-			mOperationCount = _rhs->operationCount() + _lhs->operationCount()+1;
 			break;
 		}
 		case SF_TYPE::INTERSECT: {
 			mIntersectionParameters = new intersectionContent<Number>( std::move(_lhs), std::move(_rhs) );
+			assert(mIntersectionParameters->lhs->checkTreeValidity());
+			assert(mIntersectionParameters->rhs->checkTreeValidity());
 			mType = SF_TYPE::INTERSECT;
-			mDimension = _lhs->dimension();
-			if (_rhs->depth() > _lhs->depth()){
-				mDepth = _rhs->depth();
+			mDimension = mIntersectionParameters->lhs->dimension();
+			if (mIntersectionParameters->rhs->depth() > mIntersectionParameters->lhs->depth()){
+				mDepth = mIntersectionParameters->rhs->depth();
 			} else {
-				mDepth = _lhs->depth();
+				mDepth = mIntersectionParameters->lhs->depth();
 			}
-			mOperationCount = _rhs->operationCount() + _lhs->operationCount()+1;
+			mOperationCount = mIntersectionParameters->rhs->operationCount() + mIntersectionParameters->lhs->operationCount()+1;
 			break;
 		}
 		default:
@@ -199,7 +201,7 @@ SupportFunctionContent<Number>::SupportFunctionContent( std::unique_ptr<SupportF
 template <typename Number>
 SupportFunctionContent<Number>::SupportFunctionContent( const std::vector<std::unique_ptr<SupportFunctionContent<Number>>>& rhs, SF_TYPE type ) {
 	// assert(_lhs.dimension() == _rhs.dimension());
-	assert(rhs->checkTreeValidity());
+	// assert(rhs->checkTreeValidity());
 	switch ( type ) {
 		case SF_TYPE::UNITE: {
 			assert(!rhs.empty());
@@ -226,10 +228,10 @@ SupportFunctionContent<Number>::SupportFunctionContent( const std::vector<std::u
 template <typename Number>
 SupportFunctionContent<Number>::SupportFunctionContent( const std::shared_ptr<SupportFunctionContent<Number>>& _origin, const matrix_t<Number>& A, const vector_t<Number>& b
 			, SF_TYPE _type ) {
-	assert(_origin->checkTreeValidity());
 	switch ( _type ) {
 		case SF_TYPE::LINTRAFO: {
 			mLinearTrafoParameters = new trafoContent<Number>( _origin, A, b );
+			assert(mLinearTrafoParameters->origin->checkTreeValidity());
 			mType = SF_TYPE::LINTRAFO;
 			mDimension = _origin->dimension();
 			mDepth = linearTrafoParameters()->origin->depth() +1;
@@ -244,14 +246,14 @@ SupportFunctionContent<Number>::SupportFunctionContent( const std::shared_ptr<Su
 template <typename Number>
 SupportFunctionContent<Number>::SupportFunctionContent( std::unique_ptr<SupportFunctionContent<Number>>&& _origin, const Number &_factor,
 										  SF_TYPE _type ) {
-	assert(_origin->checkTreeValidity());
 	switch ( _type ) {
 		case SF_TYPE::SCALE: {
 			mScaleParameters = new scaleContent<Number>( std::move(_origin), _factor );
+			assert(mScaleParameters->origin->checkTreeValidity());
 			mType = SF_TYPE::SCALE;
-			mDimension = _origin->dimension();
-			mDepth = _origin->depth() +1;
-			mOperationCount = _origin->operationCount() + 1;
+			mDimension = mScaleParameters->origin->dimension();
+			mDepth = mScaleParameters->origin->depth() +1;
+			mOperationCount = mScaleParameters->origin->operationCount() + 1;
 			break;
 		}
 		default:
@@ -261,14 +263,14 @@ SupportFunctionContent<Number>::SupportFunctionContent( std::unique_ptr<SupportF
 
 template<typename Number>
 SupportFunctionContent<Number>::SupportFunctionContent( std::unique_ptr<SupportFunctionContent<Number>>&& _origin, const std::vector<unsigned>& dimensions, SF_TYPE _type ) {
-	assert(_origin->checkTreeValidity());
 	switch ( _type ) {
 		case SF_TYPE::PROJECTION: {
 			mProjectionParameters = new projectionContent<Number>(std::move(_origin),dimensions);
+			assert(mProjectionParameters->origin->checkTreeValidity());
 			mType = SF_TYPE::PROJECTION;
-			mDimension = _origin->dimension();
-			mDepth = _origin->depth() + 1;
-			mOperationCount = _origin->operationCount() + 1;
+			mDimension = mProjectionParameters->origin->dimension();
+			mDepth = mProjectionParameters->origin->depth() + 1;
+			mOperationCount = mProjectionParameters->origin->operationCount() + 1;
 			break;
 		}
 		default:
@@ -388,7 +390,7 @@ EvaluationResult<Number> SupportFunctionContent<Number>::evaluate( const vector_
 		if(cur->originCount() == 0) {
 			// Do computation and write results in case recursion ends.
 
-			std::pair<std::size_t,std::vector<Res>> currentResult = resultStack.back();
+			std::pair<int,std::vector<Res>> currentResult = resultStack.back();
 
 			// update result
 			// special case: When the node is a leaf, we directly return the result.
@@ -814,7 +816,7 @@ std::vector<EvaluationResult<Number>> SupportFunctionContent<Number>::multiEvalu
 		if(cur->originCount() == 0) {
 			// Do computation and write results in case recursion ends.
 
-			std::pair<std::size_t,std::vector<Res>> currentResult = resultStack.back();
+			std::pair<int,std::vector<Res>> currentResult = resultStack.back();
 
 			// update result
 			// special case: When the node is a leaf, we directly return the result.
@@ -1813,7 +1815,7 @@ std::vector<unsigned> SupportFunctionContent<Number>::collectProjectionsIterativ
 			//std::cout << "Reached bottom." << std::endl;
 			// Do computation and write results in case recursion ends.
 
-			std::pair<std::size_t,std::vector<Res>> currentResult = resultStack.back();
+			std::pair<int,std::vector<Res>> currentResult = resultStack.back();
 
 			// update result
 			Res res;
@@ -2019,7 +2021,7 @@ PolytopeSupportFunction<Number> *SupportFunctionContent<Number>::polytope() cons
 template <typename Number>
 EllipsoidSupportFunction<Number> *SupportFunctionContent<Number>::ellipsoid() const {
 	assert( mType == SF_TYPE::ELLIPSOID );
-	return ellipsoid();
+	return mEllipsoid;
 }
 
 template <typename Number>

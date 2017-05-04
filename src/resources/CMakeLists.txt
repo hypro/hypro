@@ -1,4 +1,4 @@
-add_custom_target(resources ALL)
+add_custom_target(resources)
 
 # Enable ExternalProject CMake module
 INCLUDE(ExternalProject)
@@ -21,9 +21,6 @@ else()
 	include(gtest.cmake)
 endif()
 
-if(GLPK_FOUND)
-	message("-- Use system version of glpk")
-else()
-	message("-- Download version of glpk")
-	include(glpk.cmake)
-endif()
+
+include(glpk.cmake)
+

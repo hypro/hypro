@@ -158,7 +158,7 @@ class SupportFunctionContent {
 
   private:
 	SF_TYPE mType = SF_TYPE::NONE;
-	SupportFunctionContent<Number>* mThis;
+	SupportFunctionContent<Number>* mThis = nullptr;
 	unsigned mDepth;
 	unsigned mOperationCount;
 	unsigned mDimension;
@@ -191,6 +191,7 @@ class SupportFunctionContent {
 					 SF_TYPE _type = SF_TYPE::SCALE );
 	SupportFunctionContent( std::unique_ptr<SupportFunctionContent<Number>>&& _origin, const std::vector<unsigned>& dimensions, SF_TYPE _type = SF_TYPE::PROJECTION );
 	SupportFunctionContent( const SupportFunctionContent<Number>& _orig );
+	SupportFunctionContent( SupportFunctionContent<Number>&& _orig ) = default;
 
 	static std::unique_ptr<SupportFunctionContent<Number>> create( SF_TYPE _type, matrix_t<Number> _shapeMatrix ) {
 		auto obj = std::unique_ptr<SupportFunctionContent<Number>>( new SupportFunctionContent<Number>( _shapeMatrix, _type ));
@@ -282,7 +283,8 @@ class SupportFunctionContent {
 	SF_TYPE type() const;
 	unsigned depth() const;
 	unsigned operationCount() const;
-	SupportFunctionContent<Number>* getThis() const { return mThis; }
+	SupportFunctionContent<Number>* getThis() const { assert(mThis != nullptr); return mThis; }
+	void setThis(hypro::SupportFunctionContent<Number>* in) { mThis = in; }
 
 	/**
 	 * Returns an approximation of the number of mv multiplications neccessary for an evaluation of the SF
@@ -342,6 +344,8 @@ class SupportFunctionContent {
 		std::vector<std::pair<int,std::vector<Res>>> resultStack; // The first value is an iterator to the calling frame
 
 		callStack.push_back(getThis());
+		std::cout << "This: " << callStack.back() << std::endl;
+		std::cout << "This type: " << callStack.back()->type() << std::endl;
 		resultStack.push_back(std::make_pair(-1, std::vector<Res>()));
 
 		while(!callStack.empty()) {
@@ -350,7 +354,7 @@ class SupportFunctionContent {
 			if(cur->originCount() == 0) {
 				// Do computation and write results in case recursion ends.
 
-				std::pair<std::size_t,std::vector<Res>> currentResult = resultStack.back();
+				std::pair<int,std::vector<Res>> currentResult = resultStack.back();
 
 				// update result
 				// special case: When the node is a leaf, we directly return the result.

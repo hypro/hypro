@@ -1,0 +1,5 @@
+glpnet01.lo: glpnet01.c /usr/include/stdc-predef.h glpnet.h
+
+/usr/include/stdc-predef.h:
+
+glpnet.h:

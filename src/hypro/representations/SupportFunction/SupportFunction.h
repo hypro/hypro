@@ -117,6 +117,7 @@ public:
 
 private:
 	void evaluateTemplate() const;
+	SupportFunctionContent<Number>* getContent() const { return content; }
 };
 
 /** @} */

@@ -287,9 +287,10 @@ void Plotter<Number>::writeGnuplot() const {
 
 		// preamble
 
+		mOutfile << "set xtics autofreq\n";
+		mOutfile << "set ytics autofreq\n";
+
 		if(mSettings.grid) {
-			mOutfile << "set xtics autofreq\n";
-			mOutfile << "set ytics autofreq\n";
 			mOutfile << "set grid back\n";
 		}
 		if(mSettings.axes) {
@@ -297,11 +298,13 @@ void Plotter<Number>::writeGnuplot() const {
 			mOutfile << "set xzeroaxis \n";
 			mOutfile << "set zeroaxis \n";
             mOutfile << "set xtics axis \n";
-            mOutfile << "set xrange ["<< ranges[0].lower() << ":" << ranges[0].upper() << "] \n";
 			mOutfile << "set yzeroaxis \n";
             mOutfile << "set ytics axis \n";
-            mOutfile << "set yrange ["<< ranges[1].lower() << ":" << ranges[1].upper() << "] \n";
 		}
+
+		mOutfile << "set xrange ["<< ranges[0].lower() << ":" << ranges[0].upper() << "] \n";
+		mOutfile << "set yrange ["<< ranges[1].lower() << ":" << ranges[1].upper() << "] \n";
+
 		unsigned objectCount = 1;
 		unsigned currId = 0;
 		unsigned tmpId = 0;
@@ -363,11 +366,7 @@ void Plotter<Number>::writeGnuplot() const {
 		//std::cout << "Done plotting sets." << std::endl;
 
 		if(mPlanes.empty() && mPoints.empty()){
-			mOutfile << "plot ";
-			for ( unsigned d = 0; d < min.rows(); ++d ) {
-				mOutfile << "[" << ranges[d].lower() << ":" << ranges[d].upper() << "] ";
-			}
-			mOutfile << "NaN notitle \n";
+			mOutfile << "plot - NaN notitle \n";
 		}
 
 
