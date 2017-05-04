@@ -7,6 +7,7 @@
  */
 
 #include "../../hypro/representations/GeometricObject.h"
+#include "../../hypro/util/Plotter.h"
 #include "gtest/gtest.h"
 #include "../defines.h"
 
@@ -98,7 +99,20 @@ TYPED_TEST(SupportFunctionTest, constructor) {
 	ball.setDimension(3);
 	EXPECT_EQ(unsigned(3), ball.dimension());
 	EXPECT_FALSE(ball.empty());
+
+	SupportFunction<TypeParam> copied(this->sfChainComplete);
+	EXPECT_EQ(this->sfChainComplete.evaluate(this->vec1), copied.evaluate(this->vec1));
+	EXPECT_EQ(this->sfChainComplete.evaluate(this->vec2), copied.evaluate(this->vec2));
+	EXPECT_EQ(this->sfChainComplete.evaluate(this->vec3), copied.evaluate(this->vec3));
+
 	SUCCEED();
+}
+
+TYPED_TEST(SupportFunctionTest, assignment) {
+	SupportFunction<TypeParam> psf1Assigned = this->sfChainComplete;
+	EXPECT_EQ(this->sfChainComplete.evaluate(this->vec1), psf1Assigned.evaluate(this->vec1));
+	EXPECT_EQ(this->sfChainComplete.evaluate(this->vec2), psf1Assigned.evaluate(this->vec2));
+	EXPECT_EQ(this->sfChainComplete.evaluate(this->vec3), psf1Assigned.evaluate(this->vec3));
 }
 
 TYPED_TEST(SupportFunctionTest, simpleEvaluation) {
@@ -407,9 +421,6 @@ TYPED_TEST(SupportFunctionTest, projection) {
 
 	EXPECT_EQ(psf1.collectProjections().size(), dims.size());
 
-	std::cout <<  "++++++++++++++++++++++" << std::endl;
-
-
 	SupportFunction<TypeParam> projected = this->sfChainComplete.project(dims);
 
 	dir1 << 1,0;
@@ -419,4 +430,12 @@ TYPED_TEST(SupportFunctionTest, projection) {
 	EXPECT_EQ(projected.evaluate(vector_t<TypeParam>(dir2)).supportValue, this->sfChainComplete.evaluate(dir2).supportValue );
 
 	EXPECT_EQ(projected.collectProjections().size(), dims.size());
+}
+
+TYPED_TEST(SupportFunctionTest, plotting) {
+	std::vector<unsigned> projectionDimensions;
+	projectionDimensions.push_back(0);
+	projectionDimensions.push_back(1);
+
+	unsigned objId = Plotter<TypeParam>::getInstance().addObject(this->sfChainComplete.project(projectionDimensions).vertices());
 }

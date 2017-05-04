@@ -54,4 +54,16 @@ bool operator>(const EvaluationResult<Number>& lhs, const EvaluationResult<Numbe
 	return rhs < lhs;
 }
 
+template<typename Number>
+bool operator==(const EvaluationResult<Number>& lhs, const EvaluationResult<Number>& rhs) {
+	if(lhs.errorCode != rhs.errorCode) {
+		return false;
+	}
+	if(lhs.supportValue != rhs.supportValue) {
+		return false;
+	}
+
+	return lhs.optimumValue == rhs.optimumValue;
+}
+
 } // namespace hypro
