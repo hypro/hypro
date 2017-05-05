@@ -143,7 +143,7 @@ struct projectionContent {
 	std::vector<unsigned> dimensions;
 	projectionContent( std::unique_ptr<SupportFunctionContent<Number>>&& _origin, const std::vector<unsigned>& _dimensions )
 		: origin(std::move(_origin)), dimensions(_dimensions) {}
-	projectionContent( const projectionContent<Number>& _original ) : origin(_original.origin), dimensions(_original.dimensions) {}
+	projectionContent( const projectionContent<Number>& _original ) = default;
 
 	std::size_t originCount() const { return 1; }
 };

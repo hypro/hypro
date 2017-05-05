@@ -266,7 +266,7 @@ SupportFunctionContent<Number>::SupportFunctionContent( std::unique_ptr<SupportF
 	switch ( _type ) {
 		case SF_TYPE::PROJECTION: {
 			mProjectionParameters = new projectionContent<Number>(std::move(_origin),dimensions);
-			assert(mProjectionParameters->origin->checkTreeValidity());
+			//assert(mProjectionParameters->origin->checkTreeValidity());
 			mType = SF_TYPE::PROJECTION;
 			mDimension = mProjectionParameters->origin->dimension();
 			mDepth = mProjectionParameters->origin->depth() + 1;
