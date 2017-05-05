@@ -448,8 +448,6 @@ namespace hypro{
         	if(planeEvalRes.errorCode == SOLUTION::INFEAS){
 				//std::cout << "Is infeasible (should not happen)." << std::endl;
 				//std::cout << "Set is (Hpoly): " << std::endl << Converter::toHPolytope(*this) << std::endl;
-				bool OUTCOMMENTED_ASSERTION = false;
-				//assert(Converter::toHPolytope(*this).empty());
         		return std::make_pair(false, *this);
         	//} else if(!carl::AlmostEqual2sComplement(planeEvalRes.supportValue, _vec(rowI), 2) && planeEvalRes.supportValue > _vec(rowI)){
         	} else if(planeEvalRes.supportValue > _vec(rowI)){

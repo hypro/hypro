@@ -375,7 +375,7 @@ EvaluationResult<Number> SupportFunctionContent<Number>::evaluate( const vector_
 
 	std::vector<Node> callStack;
 	std::vector<Param> paramStack;
-	std::vector<std::pair<std::size_t,std::vector<Res>>> resultStack; // The first value is an iterator to the calling frame
+	std::vector<std::pair<int,std::vector<Res>>> resultStack; // The first value is an iterator to the calling frame
 
 	callStack.push_back(getThis());
 	paramStack.push_back(_direction);
@@ -388,7 +388,7 @@ EvaluationResult<Number> SupportFunctionContent<Number>::evaluate( const vector_
 		if(cur->originCount() == 0) {
 			// Do computation and write results in case recursion ends.
 
-			std::pair<std::size_t,std::vector<Res>> currentResult = resultStack.back();
+			std::pair<int,std::vector<Res>> currentResult = resultStack.back();
 
 			// update result
 			// special case: When the node is a leaf, we directly return the result.
@@ -785,6 +785,10 @@ EvaluationResult<Number> SupportFunctionContent<Number>::evaluate( const vector_
 		}
 	}
 	*/
+
+	assert(false);
+	std::cout << "THIS SHOULD NOT HAPPEN." << std::endl;
+	return EvaluationResult<Number>();
 }
 
 template <typename Number>
@@ -798,7 +802,7 @@ std::vector<EvaluationResult<Number>> SupportFunctionContent<Number>::multiEvalu
 
 	std::vector<Node> callStack;
 	std::vector<Param> paramStack;
-	std::vector<std::pair<std::size_t,std::vector<Res>>> resultStack; // The first value is an iterator to the calling frame
+	std::vector<std::pair<int,std::vector<Res>>> resultStack; // The first value is an iterator to the calling frame
 
 	callStack.push_back(getThis());
 	paramStack.push_back(_directions);
@@ -811,7 +815,7 @@ std::vector<EvaluationResult<Number>> SupportFunctionContent<Number>::multiEvalu
 		if(cur->originCount() == 0) {
 			// Do computation and write results in case recursion ends.
 
-			std::pair<std::size_t,std::vector<Res>> currentResult = resultStack.back();
+			std::pair<int,std::vector<Res>> currentResult = resultStack.back();
 
 			// update result
 			// special case: When the node is a leaf, we directly return the result.
@@ -1301,6 +1305,10 @@ std::vector<EvaluationResult<Number>> SupportFunctionContent<Number>::multiEvalu
 		}
 	}
 	*/
+
+	assert(false);
+	std::cout << "THIS SHOULD NOT HAPPEN." << std::endl;
+	return std::vector<EvaluationResult<Number>>();
 }
 
 template <typename Number>
@@ -1331,7 +1339,7 @@ unsigned SupportFunctionContent<Number>::multiplicationsPerEvaluation() const {
 	using Node = std::shared_ptr<SupportFunctionContent<Number>>;
 	using Res = unsigned;
 	std::vector<Node> callStack;
-	std::vector<std::pair<std::size_t,std::vector<Res>>> resultStack; // The first value is an iterator to the calling frame
+	std::vector<std::pair<int,std::vector<Res>>> resultStack; // The first value is an iterator to the calling frame
 
 	callStack.push_back(getThis());
 	resultStack.push_back(std::make_pair(-1, std::vector<Res>()));
@@ -1790,7 +1798,7 @@ std::vector<unsigned> SupportFunctionContent<Number>::collectProjectionsIterativ
 
 	std::vector<Node> callStack;
 	//std::vector<vector_t<Number>> paramStack;
-	std::vector<std::pair<std::size_t,std::vector<Res>>> resultStack; // The first value is an iterator to the calling frame
+	std::vector<std::pair<int,std::vector<Res>>> resultStack; // The first value is an iterator to the calling frame
 
 	callStack.push_back(getThis());
 	//paramStack.push_back(1);
@@ -1807,7 +1815,7 @@ std::vector<unsigned> SupportFunctionContent<Number>::collectProjectionsIterativ
 			//std::cout << "Reached bottom." << std::endl;
 			// Do computation and write results in case recursion ends.
 
-			std::pair<std::size_t,std::vector<Res>> currentResult = resultStack.back();
+			std::pair<int,std::vector<Res>> currentResult = resultStack.back();
 
 			// update result
 			Res res;
@@ -1963,6 +1971,9 @@ std::vector<unsigned> SupportFunctionContent<Number>::collectProjectionsIterativ
 			}
 		}
 	}
+	assert(false);
+	std::cout << "THIS SHOULD NOT HAPPEN." << std::endl;
+	return std::vector<unsigned>();
 }
 
 template <typename Number>
@@ -2011,7 +2022,7 @@ PolytopeSupportFunction<Number> *SupportFunctionContent<Number>::polytope() cons
 template <typename Number>
 EllipsoidSupportFunction<Number> *SupportFunctionContent<Number>::ellipsoid() const {
 	assert( mType == SF_TYPE::ELLIPSOID );
-	return ellipsoid();
+	return mEllipsoid;
 }
 
 template <typename Number>

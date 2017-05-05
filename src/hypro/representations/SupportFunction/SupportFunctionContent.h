@@ -340,7 +340,7 @@ class SupportFunctionContent {
 		using Node = std::shared_ptr<SupportFunctionContent<Number>>;
 		using Res = bool;
 		std::vector<Node> callStack;
-		std::vector<std::pair<std::size_t,std::vector<Res>>> resultStack; // The first value is an iterator to the calling frame
+		std::vector<std::pair<int,std::vector<Res>>> resultStack; // The first value is an iterator to the calling frame
 
 		callStack.push_back(getThis());
 		resultStack.push_back(std::make_pair(-1, std::vector<Res>()));
@@ -351,7 +351,7 @@ class SupportFunctionContent {
 			if(cur->originCount() == 0) {
 				// Do computation and write results in case recursion ends.
 
-				std::pair<std::size_t,std::vector<Res>> currentResult = resultStack.back();
+				std::pair<int,std::vector<Res>> currentResult = resultStack.back();
 
 				// update result
 				// special case: When the node is a leaf, we directly return the result.
@@ -551,6 +551,10 @@ class SupportFunctionContent {
 				return false;
 		}
 		*/
+
+		assert(false);
+		std::cout << "THIS SHOULD NOT HAPPEN." << std::endl;
+		return false;
 	}
 
 	private:
