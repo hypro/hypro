@@ -126,8 +126,7 @@ void Plotter<Number>::plotEps() const {
 		if(mSettings.keepAspectRatio) {
 			mOutfile << "set size square\n";
 		}
-		mOutfile << "set terminal postscript eps  enhanced color \\
-    font 'Helvetica,20' linewidth 2\n";
+		mOutfile << "set terminal postscript eps  enhanced color font 'Helvetica,20' linewidth 2\n";
 		mOutfile << "set output \"" << mFilename << ".eps\" \n";
 
 		writeGnuplot();

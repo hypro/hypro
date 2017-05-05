@@ -288,6 +288,7 @@ namespace hypro {
 
 	template<typename Number>
 	void Optimizer<Number>::initialize() const {
+		glp_term_out( GLP_OFF );
 		if(!mInitialized) {
 			/* create glpk problem */
 			lp = glp_create_prob();
