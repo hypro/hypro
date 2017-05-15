@@ -1,7 +1,7 @@
 
 #pragma once
-#include "types.h"
-#include "representations/SupportFunction/util.h"
+#include "../../types.h"
+#include "../../representations/SupportFunction/util.h"
 
 namespace hypro {
 
