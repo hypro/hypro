@@ -437,5 +437,5 @@ TYPED_TEST(SupportFunctionTest, plotting) {
 	projectionDimensions.push_back(0);
 	projectionDimensions.push_back(1);
 
-	unsigned objId = Plotter<TypeParam>::getInstance().addObject(this->sfChainComplete.project(projectionDimensions).vertices());
+	Plotter<TypeParam>::getInstance().addObject(this->sfChainComplete.project(projectionDimensions).vertices());
 }

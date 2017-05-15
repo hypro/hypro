@@ -294,9 +294,8 @@ VPolytopeT<Number, Converter> VPolytopeT<Number, Converter>::unite( const VPolyt
 		TRACE("hypro.representations.vpolytope","Effective dimension: " << effDim << ", points dimension: " << points.begin()->dimension());
 
 		if(effDim < points.begin()->dimension()){
-			bool TEMPORARY_SOLUTION = false;
+			// TODO: We can optimize this here.
 			return VPolytopeT<Number,Converter>(points);
-
 		} else if(points.size() > points.begin()->dimension()){
 			TRACE("hypro.representations.vpolytope","Using convex hull algorithm to reduce point set.");
 			std::vector<std::shared_ptr<Facet<Number>>> facets = convexHull( points ).first;

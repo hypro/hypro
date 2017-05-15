@@ -148,49 +148,47 @@ SupportFunctionContent<Number>::SupportFunctionContent( const std::vector<Point<
 }
 
 template <typename Number>
-SupportFunctionContent<Number>::SupportFunctionContent( std::unique_ptr<SupportFunctionContent<Number>>&& _lhs,
-										 std::unique_ptr<SupportFunctionContent<Number>>&& _rhs, SF_TYPE _type ) {
+SupportFunctionContent<Number>::SupportFunctionContent( const std::shared_ptr<SupportFunctionContent<Number>>& _lhs,
+										 const std::shared_ptr<SupportFunctionContent<Number>>& _rhs, SF_TYPE _type ) {
 	// assert(_lhs.dimension() == _rhs.dimension());
+	assert(_lhs->checkTreeValidity());
+	assert(_rhs->checkTreeValidity());
 	switch ( _type ) {
 		case SF_TYPE::SUM: {
-			mSummands = new sumContent<Number>( std::move(_lhs), std::move(_rhs) );
-			assert(mSummands->lhs->checkTreeValidity());
-			assert(mSummands->rhs->checkTreeValidity());
+			mSummands = new sumContent<Number>( _lhs, _rhs );
 			mType = SF_TYPE::SUM;
-			mDimension = mSummands->lhs->dimension();
-			if (mSummands->rhs->depth() > mSummands->lhs->depth()){
-				mDepth = mSummands->rhs->depth();
+			mDimension = _lhs->dimension();
+			assert( _lhs->type() == summands()->lhs->type() && _rhs->type() == summands()->rhs->type() );
+			if (_rhs->depth() > _lhs->depth()){
+				mDepth = _rhs->depth();
 			} else {
-				mDepth = mSummands->lhs->depth();
+				mDepth = _lhs->depth();
 			}
-			mOperationCount = mSummands->rhs->operationCount() + mSummands->lhs->operationCount()+1;
+			mOperationCount = _rhs->operationCount() + _lhs->operationCount()+1;
 			break;
 		}
 		case SF_TYPE::UNITE: {
-			mUnionParameters = new unionContent<Number>( std::move(_lhs), std::move(_rhs) );
+			mUnionParameters = new unionContent<Number>( _lhs, _rhs );
 			mType = SF_TYPE::UNITE;
-			mDimension = (*mUnionParameters->items.begin())->dimension();
-			mDepth = (*mUnionParameters->items.begin())->depth();
-			mOperationCount = 1;
-			for(auto& item : mUnionParameters->items){
-				assert(item->checkTreeValidity());
-				mDepth = item->depth() > mDepth ? item->depth() : mDepth;
-				mOperationCount += item->operationCount();
+			mDimension = _lhs->dimension();
+			if (_rhs->depth() > _lhs->depth()){
+				mDepth = _rhs->depth();
+			} else {
+				mDepth = _lhs->depth();
 			}
+			mOperationCount = _rhs->operationCount() + _lhs->operationCount()+1;
 			break;
 		}
 		case SF_TYPE::INTERSECT: {
-			mIntersectionParameters = new intersectionContent<Number>( std::move(_lhs), std::move(_rhs) );
-			assert(mIntersectionParameters->lhs->checkTreeValidity());
-			assert(mIntersectionParameters->rhs->checkTreeValidity());
+			mIntersectionParameters = new intersectionContent<Number>( _lhs, _rhs );
 			mType = SF_TYPE::INTERSECT;
-			mDimension = mIntersectionParameters->lhs->dimension();
-			if (mIntersectionParameters->rhs->depth() > mIntersectionParameters->lhs->depth()){
-				mDepth = mIntersectionParameters->rhs->depth();
+			mDimension = _lhs->dimension();
+			if (_rhs->depth() > _lhs->depth()){
+				mDepth = _rhs->depth();
 			} else {
-				mDepth = mIntersectionParameters->lhs->depth();
+				mDepth = _lhs->depth();
 			}
-			mOperationCount = mIntersectionParameters->rhs->operationCount() + mIntersectionParameters->lhs->operationCount()+1;
+			mOperationCount = _rhs->operationCount() + _lhs->operationCount()+1;
 			break;
 		}
 		default:
@@ -199,9 +197,9 @@ SupportFunctionContent<Number>::SupportFunctionContent( std::unique_ptr<SupportF
 }
 
 template <typename Number>
-SupportFunctionContent<Number>::SupportFunctionContent( const std::vector<std::unique_ptr<SupportFunctionContent<Number>>>& rhs, SF_TYPE type ) {
+SupportFunctionContent<Number>::SupportFunctionContent( const std::vector<std::shared_ptr<SupportFunctionContent<Number>>>& rhs, SF_TYPE type ) {
 	// assert(_lhs.dimension() == _rhs.dimension());
-	// assert(rhs->checkTreeValidity());
+	assert(rhs->checkTreeValidity());
 	switch ( type ) {
 		case SF_TYPE::UNITE: {
 			assert(!rhs.empty());
@@ -228,10 +226,10 @@ SupportFunctionContent<Number>::SupportFunctionContent( const std::vector<std::u
 template <typename Number>
 SupportFunctionContent<Number>::SupportFunctionContent( const std::shared_ptr<SupportFunctionContent<Number>>& _origin, const matrix_t<Number>& A, const vector_t<Number>& b
 			, SF_TYPE _type ) {
+	assert(_origin->checkTreeValidity());
 	switch ( _type ) {
 		case SF_TYPE::LINTRAFO: {
 			mLinearTrafoParameters = new trafoContent<Number>( _origin, A, b );
-			assert(mLinearTrafoParameters->origin->checkTreeValidity());
 			mType = SF_TYPE::LINTRAFO;
 			mDimension = _origin->dimension();
 			mDepth = linearTrafoParameters()->origin->depth() +1;
@@ -244,16 +242,16 @@ SupportFunctionContent<Number>::SupportFunctionContent( const std::shared_ptr<Su
 }
 
 template <typename Number>
-SupportFunctionContent<Number>::SupportFunctionContent( std::unique_ptr<SupportFunctionContent<Number>>&& _origin, const Number &_factor,
+SupportFunctionContent<Number>::SupportFunctionContent( const std::shared_ptr<SupportFunctionContent<Number>>& _origin, const Number &_factor,
 										  SF_TYPE _type ) {
+	assert(_origin->checkTreeValidity());
 	switch ( _type ) {
 		case SF_TYPE::SCALE: {
-			mScaleParameters = new scaleContent<Number>( std::move(_origin), _factor );
-			assert(mScaleParameters->origin->checkTreeValidity());
+			mScaleParameters = new scaleContent<Number>( _origin, _factor );
 			mType = SF_TYPE::SCALE;
-			mDimension = mScaleParameters->origin->dimension();
-			mDepth = mScaleParameters->origin->depth() +1;
-			mOperationCount = mScaleParameters->origin->operationCount() + 1;
+			mDimension = _origin->dimension();
+			mDepth = _origin->depth() +1;
+			mOperationCount = _origin->operationCount() + 1;
 			break;
 		}
 		default:
@@ -262,15 +260,15 @@ SupportFunctionContent<Number>::SupportFunctionContent( std::unique_ptr<SupportF
 }
 
 template<typename Number>
-SupportFunctionContent<Number>::SupportFunctionContent( std::unique_ptr<SupportFunctionContent<Number>>&& _origin, const std::vector<unsigned>& dimensions, SF_TYPE _type ) {
+SupportFunctionContent<Number>::SupportFunctionContent( const std::shared_ptr<SupportFunctionContent<Number>>& _origin, const std::vector<unsigned>& dimensions, SF_TYPE _type ) {
+	assert(_origin->checkTreeValidity());
 	switch ( _type ) {
 		case SF_TYPE::PROJECTION: {
-			mProjectionParameters = new projectionContent<Number>(std::move(_origin),dimensions);
-			//assert(mProjectionParameters->origin->checkTreeValidity());
+			mProjectionParameters = new projectionContent<Number>(_origin,dimensions);
 			mType = SF_TYPE::PROJECTION;
-			mDimension = mProjectionParameters->origin->dimension();
-			mDepth = mProjectionParameters->origin->depth() + 1;
-			mOperationCount = mProjectionParameters->origin->operationCount() + 1;
+			mDimension = _origin->dimension();
+			mDepth = _origin->depth() + 1;
+			mOperationCount = _origin->operationCount() + 1;
 			break;
 		}
 		default:
@@ -320,8 +318,8 @@ SupportFunctionContent<Number>::~SupportFunctionContent() {
 }
 
 template <typename Number>
-std::unique_ptr<SupportFunctionContent<Number>> SupportFunctionContent<Number>::operator=(
-	  std::unique_ptr<SupportFunctionContent<Number>>&& _other ){
+std::shared_ptr<SupportFunctionContent<Number>>& SupportFunctionContent<Number>::operator=(
+	  const std::shared_ptr<SupportFunctionContent<Number>>& _other ){
         // std::cout << "SupportFunctionContent Copy\n";
 	//std::cout << "Assignment, this->type:" << _other->type() << std::endl;
 	assert(_other->checkTreeValidity());
@@ -364,14 +362,14 @@ std::unique_ptr<SupportFunctionContent<Number>> SupportFunctionContent<Number>::
 			assert( false );
 	}
 	checkTreeValidity();
-	return std::unique_ptr<SupportFunctionContent<Number>>( this->mThis );
+	return std::shared_ptr<SupportFunctionContent<Number>>( this->pThis );
 }
 
 template <typename Number>
 EvaluationResult<Number> SupportFunctionContent<Number>::evaluate( const vector_t<Number> &_direction, bool useExact ) const {
 	checkTreeValidity();
 
-	using Node = SupportFunctionContent<Number>*;
+	using Node = std::shared_ptr<SupportFunctionContent<Number>>;
 	using Param = vector_t<Number>;
 	using Res = EvaluationResult<Number>;
 
@@ -595,7 +593,7 @@ EvaluationResult<Number> SupportFunctionContent<Number>::evaluate( const vector_
 						#else
 						currentParam = cur->linearTrafoParameters()->parameters->getTransformedDirection(currentParam, cur->linearTrafoParameters()->currentExponent);
 						#endif
-						callStack.push_back(cur->linearTrafoParameters()->origin->getThis());
+						callStack.push_back(cur->linearTrafoParameters()->origin);
 						paramStack.push_back(currentParam);
 						resultStack.push_back(std::make_pair(callingFrame,std::vector<Res>()));
 						break;
@@ -608,22 +606,22 @@ EvaluationResult<Number> SupportFunctionContent<Number>::evaluate( const vector_
 								projectedDirection(projectionDimension) = currentParam(projectionDimension);
 						}
 						currentParam = projectedDirection;
-						callStack.push_back(cur->projectionParameters()->origin->getThis());
+						callStack.push_back(cur->projectionParameters()->origin);
 						paramStack.push_back(currentParam);
 						resultStack.push_back(std::make_pair(callingFrame,std::vector<Res>()));
 						break;
 					}
 					case SF_TYPE::SCALE: {
 						// Do nothing for scaling -> processing is done afterwards.
-						callStack.push_back(cur->scaleParameters()->origin->getThis());
+						callStack.push_back(cur->scaleParameters()->origin);
 						paramStack.push_back(currentParam);
 						resultStack.push_back(std::make_pair(callingFrame,std::vector<Res>()));
 						break;
 					}
 					case SF_TYPE::SUM: {
 						// Do nothing for sum -> processing is done afterwards.
-						callStack.push_back(cur->summands()->rhs->getThis());
-						callStack.push_back(cur->summands()->lhs->getThis());
+						callStack.push_back(cur->summands()->rhs);
+						callStack.push_back(cur->summands()->lhs);
 						paramStack.push_back(currentParam);
 						paramStack.push_back(currentParam);
 						resultStack.push_back(std::make_pair(callingFrame,std::vector<Res>()));
@@ -633,7 +631,7 @@ EvaluationResult<Number> SupportFunctionContent<Number>::evaluate( const vector_
 					case SF_TYPE::UNITE: {
 						// Do nothing for union -> processing is done afterwards.
 						for(unsigned i = 0; i < cur->unionParameters()->items.size(); ++i) {
-							callStack.push_back(cur->unionParameters()->items.at(i)->getThis());
+							callStack.push_back(cur->unionParameters()->items.at(i));
 							paramStack.push_back(currentParam);
 							resultStack.push_back(std::make_pair(callingFrame,std::vector<Res>()));
 						}
@@ -641,8 +639,8 @@ EvaluationResult<Number> SupportFunctionContent<Number>::evaluate( const vector_
 					}
 					case SF_TYPE::INTERSECT: {
 						// Do nothing for intersection -> processing is done afterwards.
-						callStack.push_back(cur->intersectionParameters()->rhs->getThis());
-						callStack.push_back(cur->intersectionParameters()->lhs->getThis());
+						callStack.push_back(cur->intersectionParameters()->rhs);
+						callStack.push_back(cur->intersectionParameters()->lhs);
 						paramStack.push_back(currentParam);
 						paramStack.push_back(currentParam);
 						resultStack.push_back(std::make_pair(callingFrame,std::vector<Res>()));
@@ -662,9 +660,6 @@ EvaluationResult<Number> SupportFunctionContent<Number>::evaluate( const vector_
 		}
 
 	}
-
-	assert(false);
-	return EvaluationResult<Number>();
 
 
 	/*
@@ -790,6 +785,10 @@ EvaluationResult<Number> SupportFunctionContent<Number>::evaluate( const vector_
 		}
 	}
 	*/
+
+	assert(false);
+	std::cout << "THIS SHOULD NOT HAPPEN." << std::endl;
+	return EvaluationResult<Number>();
 }
 
 template <typename Number>
@@ -797,7 +796,7 @@ std::vector<EvaluationResult<Number>> SupportFunctionContent<Number>::multiEvalu
 	//std::cout << "Multi-evaluate, type: " << mType << std::endl;
 	checkTreeValidity();
 
-	using Node = SupportFunctionContent<Number>*;
+	using Node = std::shared_ptr<SupportFunctionContent<Number>>;
 	using Param = matrix_t<Number>;
 	using Res = std::vector<EvaluationResult<Number>>;
 
@@ -867,7 +866,7 @@ std::vector<EvaluationResult<Number>> SupportFunctionContent<Number>::multiEvalu
 
 			// Detect, if this call is finished or new.
 			if(resultStack.back().second.size() == cur->originCount()) {
-				// the call is finished, perform operations and forward result.
+				// the call is finished, perform accumulating operations and forward result.
 				TRACE("hypro.representations.supportFunction", ": Accumulate results.");
 				// accumulate results - in this case sum.
 				Res accumulatedResult;
@@ -1071,7 +1070,7 @@ std::vector<EvaluationResult<Number>> SupportFunctionContent<Number>::multiEvalu
 						#else
 						currentParam = cur->linearTrafoParameters()->parameters->getTransformedDirections(currentParam, cur->linearTrafoParameters()->currentExponent);
 						#endif
-						callStack.push_back(cur->linearTrafoParameters()->origin->getThis());
+						callStack.push_back(cur->linearTrafoParameters()->origin);
 						paramStack.push_back(currentParam);
 						resultStack.push_back(std::make_pair(callingFrame,std::vector<Res>()));
 						break;
@@ -1083,22 +1082,22 @@ std::vector<EvaluationResult<Number>> SupportFunctionContent<Number>::multiEvalu
 								tmp.col(entry) = currentParam.col(entry);
 						}
 						currentParam = tmp;
-						callStack.push_back(cur->projectionParameters()->origin->getThis());
+						callStack.push_back(cur->projectionParameters()->origin);
 						paramStack.push_back(currentParam);
 						resultStack.push_back(std::make_pair(callingFrame,std::vector<Res>()));
 						break;
 					}
 					case SF_TYPE::SCALE: {
 						// Do nothing for scaling -> processing is done afterwards.
-						callStack.push_back(cur->scaleParameters()->origin->getThis());
+						callStack.push_back(cur->scaleParameters()->origin);
 						paramStack.push_back(currentParam);
 						resultStack.push_back(std::make_pair(callingFrame,std::vector<Res>()));
 						break;
 					}
 					case SF_TYPE::SUM: {
 						// Do nothing for sum -> processing is done afterwards.
-						callStack.push_back(cur->summands()->rhs->getThis());
-						callStack.push_back(cur->summands()->lhs->getThis());
+						callStack.push_back(cur->summands()->rhs);
+						callStack.push_back(cur->summands()->lhs);
 						paramStack.push_back(currentParam);
 						paramStack.push_back(currentParam);
 						resultStack.push_back(std::make_pair(callingFrame,std::vector<Res>()));
@@ -1108,7 +1107,7 @@ std::vector<EvaluationResult<Number>> SupportFunctionContent<Number>::multiEvalu
 					case SF_TYPE::UNITE: {
 						// Do nothing for union -> processing is done afterwards.
 						for(unsigned i = 0; i < cur->unionParameters()->items.size(); ++i) {
-							callStack.push_back(cur->unionParameters()->items.at(i)->getThis());
+							callStack.push_back(cur->unionParameters()->items.at(i));
 							paramStack.push_back(currentParam);
 							resultStack.push_back(std::make_pair(callingFrame,std::vector<Res>()));
 						}
@@ -1116,8 +1115,8 @@ std::vector<EvaluationResult<Number>> SupportFunctionContent<Number>::multiEvalu
 					}
 					case SF_TYPE::INTERSECT: {
 						// Do nothing for intersection -> processing is done afterwards.
-						callStack.push_back(cur->intersectionParameters()->rhs->getThis());
-						callStack.push_back(cur->intersectionParameters()->lhs->getThis());
+						callStack.push_back(cur->intersectionParameters()->rhs);
+						callStack.push_back(cur->intersectionParameters()->lhs);
 						paramStack.push_back(currentParam);
 						paramStack.push_back(currentParam);
 						resultStack.push_back(std::make_pair(callingFrame,std::vector<Res>()));
@@ -1136,9 +1135,6 @@ std::vector<EvaluationResult<Number>> SupportFunctionContent<Number>::multiEvalu
 			}
 		}
 	}
-
-	assert(false);
-	return std::vector<EvaluationResult<Number>>();
 
 
 	/*
@@ -1309,6 +1305,10 @@ std::vector<EvaluationResult<Number>> SupportFunctionContent<Number>::multiEvalu
 		}
 	}
 	*/
+
+	assert(false);
+	std::cout << "THIS SHOULD NOT HAPPEN." << std::endl;
+	return std::vector<EvaluationResult<Number>>();
 }
 
 template <typename Number>
@@ -1336,10 +1336,10 @@ unsigned SupportFunctionContent<Number>::operationCount() const {
 
 template <typename Number>
 unsigned SupportFunctionContent<Number>::multiplicationsPerEvaluation() const {
-	using Node = std::unique_ptr<SupportFunctionContent<Number>>;
+	using Node = std::shared_ptr<SupportFunctionContent<Number>>;
 	using Res = unsigned;
 	std::vector<Node> callStack;
-	std::vector<std::pair<std::size_t,std::vector<Res>>> resultStack; // The first value is an iterator to the calling frame
+	std::vector<std::pair<int,std::vector<Res>>> resultStack; // The first value is an iterator to the calling frame
 
 	callStack.push_back(getThis());
 	resultStack.push_back(std::make_pair(-1, std::vector<Res>()));
@@ -1488,7 +1488,7 @@ void SupportFunctionContent<Number>::forceLinTransReduction(){
 	checkTreeValidity();
     switch ( mType ) {
         case SF_TYPE::LINTRAFO: {
-            std::unique_ptr<SupportFunctionContent<Number>> origin = linearTrafoParameters()->origin;
+            std::shared_ptr<SupportFunctionContent<Number>> origin = linearTrafoParameters()->origin;
             std::pair<matrix_t<Number>, vector_t<Number>> parameterPair = linearTrafoParameters()->parameters->getParameterSet(linearTrafoParameters()->currentExponent);
             std::pair<matrix_t<Number>, vector_t<Number>> nextPair;
             while(origin->type() == SF_TYPE::LINTRAFO){
@@ -1793,7 +1793,7 @@ std::vector<unsigned> SupportFunctionContent<Number>::collectProjections() const
 
 template<typename Number>
 std::vector<unsigned> SupportFunctionContent<Number>::collectProjectionsIterative() const {
-	using Node = SupportFunctionContent<Number>*;
+	using Node = std::shared_ptr<SupportFunctionContent<Number>>;
 	using Res = std::vector<unsigned>;
 
 	std::vector<Node> callStack;
@@ -1920,32 +1920,32 @@ std::vector<unsigned> SupportFunctionContent<Number>::collectProjectionsIterativ
 
 				switch ( cur->type() ) {
 					case SF_TYPE::SUM: {
-						callStack.push_back(cur->summands()->rhs->getThis());
-						callStack.push_back(cur->summands()->lhs->getThis());
+						callStack.push_back(cur->summands()->rhs);
+						callStack.push_back(cur->summands()->lhs);
 						resultStack.push_back(std::make_pair(callingFrame,std::vector<Res>()));
 						resultStack.push_back(std::make_pair(callingFrame,std::vector<Res>()));
 						break;
 					}
 					case SF_TYPE::INTERSECT: {
-						callStack.push_back(cur->intersectionParameters()->rhs->getThis());
-						callStack.push_back(cur->intersectionParameters()->lhs->getThis());
+						callStack.push_back(cur->intersectionParameters()->rhs);
+						callStack.push_back(cur->intersectionParameters()->lhs);
 						resultStack.push_back(std::make_pair(callingFrame,std::vector<Res>()));
 						resultStack.push_back(std::make_pair(callingFrame,std::vector<Res>()));
 						break;
 					}
 					case SF_TYPE::LINTRAFO: {
-						callStack.push_back(cur->linearTrafoParameters()->origin->getThis());
+						callStack.push_back(cur->linearTrafoParameters()->origin);
 						resultStack.push_back(std::make_pair(callingFrame,std::vector<Res>()));
 						break;
 					}
 					case SF_TYPE::SCALE: {
-						callStack.push_back(cur->scaleParameters()->origin->getThis());
+						callStack.push_back(cur->scaleParameters()->origin);
 						resultStack.push_back(std::make_pair(callingFrame,std::vector<Res>()));
 						break;
 					}
 					case SF_TYPE::UNITE: {
 						for(unsigned i = 0; i < cur->unionParameters()->items.size(); ++i){
-							callStack.push_back(cur->unionParameters()->items.at(i)->getThis());
+							callStack.push_back(cur->unionParameters()->items.at(i));
 							resultStack.push_back(std::make_pair(callingFrame,std::vector<Res>()));
 						}
 						break;
@@ -1960,7 +1960,7 @@ std::vector<unsigned> SupportFunctionContent<Number>::collectProjectionsIterativ
 						break;
 					}
 					case SF_TYPE::PROJECTION: {
-						callStack.push_back(cur->projectionParameters()->origin->getThis());
+						callStack.push_back(cur->projectionParameters()->origin);
 						resultStack.push_back(std::make_pair(callingFrame,std::vector<Res>()));
 						break;
 					}
@@ -1972,6 +1972,7 @@ std::vector<unsigned> SupportFunctionContent<Number>::collectProjectionsIterativ
 		}
 	}
 	assert(false);
+	std::cout << "THIS SHOULD NOT HAPPEN." << std::endl;
 	return std::vector<unsigned>();
 }
 
@@ -2030,30 +2031,28 @@ BallSupportFunction<Number> *SupportFunctionContent<Number>::ball() const {
 	return mBall;
 }
 
-/*
 template<typename Number>
-std::unique_ptr<SupportFunctionContent<Number>> SupportFunctionContent<Number>::project(const std::vector<unsigned>& dimensions) const {
+std::shared_ptr<SupportFunctionContent<Number>> SupportFunctionContent<Number>::project(const std::vector<unsigned>& dimensions) const {
 	return create(getThis(),dimensions);
 }
 
 template <typename Number>
-std::unique_ptr<SupportFunctionContent<Number>> SupportFunctionContent<Number>::affineTransformation(
+std::shared_ptr<SupportFunctionContent<Number>> SupportFunctionContent<Number>::affineTransformation(
 	  const matrix_t<Number>& A, const vector_t<Number>& b ) const {
 	return create(getThis(), A, b);
 }
 
 template <typename Number>
-std::unique_ptr<SupportFunctionContent<Number>> SupportFunctionContent<Number>::minkowskiSum(
-	  std::unique_ptr<SupportFunctionContent<Number>>&& rhs ) const {
+std::shared_ptr<SupportFunctionContent<Number>> SupportFunctionContent<Number>::minkowskiSum(
+	  const std::shared_ptr<SupportFunctionContent<Number>>& rhs ) const {
 	return create(SF_TYPE::SUM, getThis(), rhs);
 }
 
 template <typename Number>
-std::unique_ptr<SupportFunctionContent<Number>> SupportFunctionContent<Number>::intersect(
-	  std::unique_ptr<SupportFunctionContent<Number>>&& rhs ) const {
+std::shared_ptr<SupportFunctionContent<Number>> SupportFunctionContent<Number>::intersect(
+	  const std::shared_ptr<SupportFunctionContent<Number>>& rhs ) const {
 	return create(SF_TYPE::INTERSECT, getThis() , rhs);
 }
-*/
 
 template <typename Number>
 bool SupportFunctionContent<Number>::contains( const Point<Number> &_point ) const {
@@ -2137,23 +2136,21 @@ bool SupportFunctionContent<Number>::contains( const vector_t<Number> &_point ) 
 	return true;
 }
 
-/*
 template <typename Number>
-std::unique_ptr<SupportFunctionContent<Number>> SupportFunctionContent<Number>::unite(
-	  std::unique_ptr<SupportFunctionContent<Number>>&& rhs ) const {
+std::shared_ptr<SupportFunctionContent<Number>> SupportFunctionContent<Number>::unite(
+	  const std::shared_ptr<SupportFunctionContent<Number>>& rhs ) const {
 	return create(SF_TYPE::UNITE, getThis(), rhs);
 }
 
 template<typename Number>
-std::unique_ptr<SupportFunctionContent<Number>> SupportFunctionContent<Number>::unite( const std::vector<std::unique_ptr<SupportFunctionContent<Number>>>& rhs ) {
+std::shared_ptr<SupportFunctionContent<Number>> SupportFunctionContent<Number>::unite( const std::vector<std::shared_ptr<SupportFunctionContent<Number>>>& rhs ) {
 	return create(SF_TYPE::UNITE, rhs);
 }
 
 template <typename Number>
-std::unique_ptr<SupportFunctionContent<Number>> SupportFunctionContent<Number>::scale( const Number& factor ) const {;
+std::shared_ptr<SupportFunctionContent<Number>> SupportFunctionContent<Number>::scale( const Number& factor ) const {;
 	return create(getThis(), factor);
 }
-*/
 
 template <typename Number>
 bool SupportFunctionContent<Number>::empty() const {
