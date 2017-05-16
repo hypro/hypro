@@ -1,0 +1,11 @@
+digraph "/Users/travis/build/hypro/hypro/src/hypro/algorithms/convexHull" {
+  compound=true
+  node [ fontsize="10", fontname="Helvetica"];
+  edge [ labelfontsize="10", labelfontname="Helvetica"];
+  subgraph clusterdir_55730fee9a0c1f12da77eb14a8325c4c {
+    graph [ bgcolor="#ddddee", pencolor="black", label="algorithms" fontname="Helvetica", fontsize="10", URL="dir_55730fee9a0c1f12da77eb14a8325c4c.html"]
+  dir_3595f83f5be0d6a3539bc1ea5a059474 [shape=box, label="convexHull", style="filled", fillcolor="#eeeeff", pencolor="black", URL="dir_3595f83f5be0d6a3539bc1ea5a059474.html"];
+  }
+  dir_bce2075adec303dcb2f0c4fbfcbc8493 [shape=box label="datastructures" fillcolor="white" style="filled" color="red" URL="dir_bce2075adec303dcb2f0c4fbfcbc8493.html"];
+  dir_3595f83f5be0d6a3539bc1ea5a059474->dir_bce2075adec303dcb2f0c4fbfcbc8493 [headlabel="4", labeldistance=1.5 headhref="dir_000004_000010.html"];
+}
