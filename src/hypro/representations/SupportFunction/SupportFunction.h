@@ -5,11 +5,11 @@
 	static_assert(false, "This file may only be included indirectly by GeometricObject.h");
 #endif
 
-#include "config.h"
+#include "../../config.h"
 #include "util.h"
 #include "SupportFunctionContent.h"
-#include "util/templateDirections.h"
-#include "datastructures/hybridAutomata/Location.h"
+#include "../../util/templateDirections.h"
+#include "../../datastructures/hybridAutomata/Location.h"
 
 namespace hypro {
 
