@@ -77,10 +77,10 @@ int main(int argc, char** argv) {
 	SupportFunction<Number> elli1(matrix);
 	SupportFunction<Number> elli2(matrix2);
 	SupportFunction<Number> mink = elli2.minkowskiSum(elli1);
-        Ellipsoid<Number> ellips1(matrix);
-        Ellipsoid<Number> ellips2(matrix2);
-        ellips2 = ellips2.minkowskiSum(ellips1);
-        SupportFunction<Number> mink2 = SupportFunction<Number>(ellips2);
+    Ellipsoid<Number> ellips1(matrix);
+    Ellipsoid<Number> ellips2(matrix2);
+    ellips2 = ellips2.minkowskiSum(ellips1);
+    SupportFunction<Number> mink2 = SupportFunction<Number>(ellips2.matrix());
 	//SupportFunction<Number> intersectedInvariant = poly1.intersectHalfspaces(invariant, invariantConstants);
 	//std::pair<bool, SupportFunction<Number>> intersectionPair = rounded1.satisfiesHalfspaces(invariant, invariantConstants);
 	//SupportFunction<Number> intersection = rounded1.intersectHalfspaces(invariant, invariantConstants);
