@@ -25,3 +25,4 @@ set_target_properties(GLPK_SHARED PROPERTIES INTERFACE_INCLUDE_DIRECTORIES "${GL
 set(hypro_LIBRARIES_DYNAMIC ${hypro_LIBRARIES_DYNAMIC} ${GLPK_LIBRARIES} )
 
 add_dependencies(resources glpk)
+add_dependencies(hypro glpk)

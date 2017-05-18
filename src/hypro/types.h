@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-#include "carl/numbers/numbers.h"
+#include <carl/numbers/numbers.h>
 #include <carl/interval/Interval.h>
 #include <carl/core/Variable.h>
 #include <carl/util/hash.h>
