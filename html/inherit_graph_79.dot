@@ -1,7 +1,0 @@
-digraph "Graphical Class Hierarchy"
-{
-  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
-  node [fontname="Helvetica",fontsize="10",shape=record];
-  rankdir="LR";
-  Node0 [label="hypro::Transition\<\l Number \>::Guard",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$structhypro_1_1Transition_1_1Guard.html"];
-}
