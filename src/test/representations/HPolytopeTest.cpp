@@ -136,11 +136,40 @@ TYPED_TEST(HPolytopeTest, Corners)
 
 TYPED_TEST(HPolytopeTest, Insertion)
 {
+	// create unit box (scaled by 2)
 	HPolytope<TypeParam> hpt1 = HPolytope<TypeParam>(this->planes1);
+
+	// halfspace containing the whole box
 	Halfspace<TypeParam> p1({TypeParam(1),TypeParam(1)}, TypeParam(4));
 	hpt1.insert(p1);
 
 	EXPECT_TRUE(hpt1.hasConstraint(p1));
+	EXPECT_FALSE(hpt1.empty());
+	EXPECT_EQ(hpt1.vertices().size(), 4);
+
+	// halfspace containing parts of the box
+	Halfspace<TypeParam> p2({TypeParam(1),TypeParam(1)}, TypeParam(2));
+	hpt1.insert(p2);
+
+	EXPECT_TRUE(hpt1.hasConstraint(p2));
+	EXPECT_FALSE(hpt1.empty());
+	EXPECT_EQ(hpt1.vertices().size(), 5);
+
+	// halfspace containing one point of the box
+	Halfspace<TypeParam> p3({TypeParam(1),TypeParam(1)}, TypeParam(-4));
+	hpt1.insert(p3);
+
+	EXPECT_TRUE(hpt1.hasConstraint(p3));
+	EXPECT_FALSE(hpt1.empty());
+	EXPECT_EQ(hpt1.vertices().size(), 1);
+
+	// halfspace not containing the box
+	Halfspace<TypeParam> p4({TypeParam(1),TypeParam(1)}, TypeParam(-5));
+	hpt1.insert(p4);
+
+	EXPECT_TRUE(hpt1.hasConstraint(p4));
+	EXPECT_TRUE(hpt1.empty());
+	EXPECT_EQ(hpt1.vertices().size(), 0);
 }
 
 
