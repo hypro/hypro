@@ -334,6 +334,7 @@ vector_t<Number> Halfspace<Number>::computePlaneNormal( const std::vector<vector
 		for(unsigned pos = 0; pos < _edgeSet.size(); ++pos) {
 			constraints.row(pos) = _edgeSet.at(pos).transpose();
 		}
+
 		vector_t<Number> normal = constraints.fullPivLu().kernel();
 
 		return normal;

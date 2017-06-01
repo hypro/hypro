@@ -74,7 +74,10 @@ VPolytopeT<Number, Converter>::VPolytopeT( const matrix_t<Number> &_constraints,
 			vector_t<Number> vertex = intersection.fullPivLu().solve( intersectionConstants );
 			assert(vertex.rows() == _constraints.cols());
 			assert(insidePlanes(vertex, intersection, intersectionConstants));
-			possibleVertices.emplace( std::move(vertex) );
+			// avoid duplicate entries
+			if(std::find(possibleVertices.begin(), possibleVertices.end(),vertex) == possibleVertices.end()) {
+				possibleVertices.emplace( std::move(vertex) );
+			}
 		}
 	}
 	TRACE("hypro.representations.vpolytope",": Computed " << possibleVertices.size() << " possible vertices.");
@@ -133,7 +136,10 @@ VPolytopeT<Number, Converter> VPolytopeT<Number, Converter>::linearTransformatio
 	// std::cout << __func__ << " A: " << A << ", b: " << b << std::endl;
 	VPolytopeT<Number, Converter> result;
 	for ( const auto &vertex : mVertices ) {
-		result.insert( vertex.linearTransformation( A ) );
+		Point<Number> tmp(vertex.linearTransformation( A ));
+		if(std::find(result.begin(), result.end(), tmp) == result.end()) {
+			result.emplace_back( std::move(tmp) );
+		}
 	}
 	result.setCone( mCone.linearTransformation( A ) );
 	result.unsafeSetNeighbors( mNeighbors );
@@ -146,7 +152,10 @@ VPolytopeT<Number, Converter> VPolytopeT<Number, Converter>::affineTransformatio
 	// std::cout << __func__ << " A: " << A << ", b: " << b << std::endl;
 	VPolytopeT<Number, Converter> result;
 	for ( const auto &vertex : mVertices ) {
-		result.insert( vertex.affineTransformation( A, b ) );
+		Point<Number> tmp(vertex.affineTransformation( A, b ));
+		if(std::find(result.begin(), result.end(), tmp) == result.end()) {
+			result.emplace_back( std::move(tmp) );
+		}
 	}
 	result.setCone( mCone.affineTransformation( A, b ) );
 	result.unsafeSetNeighbors( mNeighbors );

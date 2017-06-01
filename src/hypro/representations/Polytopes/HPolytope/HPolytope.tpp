@@ -74,6 +74,7 @@ HPolytopeT<Number, Converter>::HPolytopeT( const std::vector<Point<Number>>& poi
 
 	// special case: 1 point - we can directly use box constraints.
 	if(points.size() == 1) {
+		assert( (*points.begin()).dimension() > 0 );
 		mDimension = points.begin()->dimension();
 		for(unsigned d = 0; d < points.begin()->dimension(); ++d) {
 			vector_t<Number> normal = vector_t<Number>::Zero(points.begin()->dimension());
@@ -108,9 +109,10 @@ HPolytopeT<Number, Converter>::HPolytopeT( const std::vector<Point<Number>>& poi
 		mEmpty = TRIBOOL::FALSE;
 		//if ( points.size() <= mDimension ) {
 		if ( unsigned(effectiveDim) < mDimension ) {
-			//std::cout << "Points size: " << points.size() << std::endl;
+			std::cout << "Points size: " << points.size() << std::endl;
 			// get common plane
 			std::vector<vector_t<Number>> vectorsInPlane;
+			std::cout << "first point: " << *points.begin() << std::endl;
 			for(unsigned i = 1; i < points.size(); ++i) {
 				vectorsInPlane.emplace_back(points[i].rawCoordinates() - points[0].rawCoordinates());
 			}

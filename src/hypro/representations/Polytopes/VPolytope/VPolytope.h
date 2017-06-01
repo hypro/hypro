@@ -245,6 +245,14 @@ class VPolytopeT : public GeometricObject<Number, VPolytopeT<Number,Converter>> 
 		return res;
 	}
 
+	Point<Number>& emplace_back( Point<Number>&& i ) {
+		assert( dimension() == 0 || dimension() == i.dimension() );
+		mReduced = false;
+		mVertices.emplace_back( std::move(i) );
+		mNeighbors.push_back( std::set<unsigned>() );
+		return mVertices.back();
+	}
+
 	typename pointVector::iterator insert( const vector_t<Number>& _coord ) {
 		assert( dimension() == 0 || dimension() == _coord.rows() );
 		mReduced = false;
