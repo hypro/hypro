@@ -249,7 +249,7 @@ add_subdirectory(examples EXCLUDE_FROM_ALL)
 include(export)
 
 # Add all targets to the build-tree export set
-export(TARGETS ${HYPRO_TARGETS} FILE "${PROJECT_BINARY_DIR}/hyproTargets.cmake")
+export(TARGETS ${HYPRO_TARGETS} FILE "${PROJECT_BINARY_DIR}/hyproTargets.cmake" EXPORT_LINK_INTERFACE_LIBRARIES)
 
 # Export the package for use from the build-tree
 # (this registers the build-tree with a global CMake-registry)
