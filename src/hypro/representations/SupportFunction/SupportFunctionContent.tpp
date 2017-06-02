@@ -1350,7 +1350,7 @@ unsigned SupportFunctionContent<Number>::multiplicationsPerEvaluation() const {
 		if(cur->originCount() == 0) {
 			// Do computation and write results in case recursion ends.
 
-			std::pair<std::size_t,std::vector<Res>> currentResult = resultStack.back();
+			std::pair<int,std::vector<Res>> currentResult = resultStack.back();
 
 			// update result
 			// special case: When the node is a leaf, we directly return the result.
@@ -1481,6 +1481,8 @@ unsigned SupportFunctionContent<Number>::multiplicationsPerEvaluation() const {
 			}
 		}
 	}
+	std::cout << __func__ << ": This should not be reachable." << std::endl;
+	return 0;
 }
 
 template <typename Number>
