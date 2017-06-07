@@ -1,5 +1,4 @@
 if(${STATICLIB_SWITCH} STREQUAL "OFF")
-	include_directories(${GTEST_INCLUDE_DIR})
 
 	################################
 	# Unit Tests
@@ -14,6 +13,7 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
 	)
 
 	add_dependencies(runDatastructureTests googletest)
+	target_include_directories(runDatastructureTests PRIVATE ${GTEST_INCLUDE_DIR})
 
 	target_link_libraries(runDatastructureTests
 							${PROJECT_NAME}

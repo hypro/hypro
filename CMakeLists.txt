@@ -55,6 +55,7 @@ option(HYPRO_COVERAGE "Enable compiler flags for test coverage diagnostics." OFF
 option(HYPRO_STATISTICS "Create a statistic file." OFF)
 option(CLANG_TIDY "Enable usage of clang-tidy" OFF )
 option(CREATE_DOC "Allow creation of a doxygen documentation." OFF)
+option(EXPORT_TO_CMAKE "Export the project to CMake for easy inclusion" ON)
 mark_as_advanced(HYPRO_COVERAGE)
 mark_as_advanced(HYPRO_STATISTICS)
 mark_as_advanced(CLANG_TIDY)
@@ -68,6 +69,20 @@ include( hypromacros )
 set(INCLUDE_INSTALL_DIR include/ CACHE PATH "Installation directory for header files" )
 set(LIB_INSTALL_DIR lib/ CACHE PATH "Installation directory for libraries")
 set(BIN_INSTALL_DIR lib/ CACHE PATH "Installation directory for executables")
+
+if(WIN32 AND NOT CYGWIN)
+  set(DEF_INSTALL_CMAKE_DIR CMake)
+else()
+  set(DEF_INSTALL_CMAKE_DIR lib/cmake/${PROJECT_NAME})
+endif()
+set(CMAKE_INSTALL_DIR ${DEF_INSTALL_CMAKE_DIR} CACHE PATH "Installation directory for CMake files")
+
+foreach(p LIB BIN INCLUDE CMAKE)
+  set(var ${p}_INSTALL_DIR)
+  if(NOT IS_ABSOLUTE "${${var}}")
+    set(${var} "${CMAKE_INSTALL_PREFIX}/${${var}}")
+  endif()
+endforeach()
 
 ###########################################################################################
 
@@ -196,8 +211,8 @@ if(NOT FORCE_DOWNLOAD_RESOURCES)
 	if(NOT carl_FOUND)
 		set(hypro_LIBRARIES_DYNAMIC ${hypro_LIBRARIES_DYNAMIC} ${carl_LIBRARIES} )
 		set(hypro_INCLUDE_DIRS ${hypro_INCLUDE_DIRS} ${carl_INCLUDE_DIR} )
-	endif()	
-	include_directories( ${GLPK_INCLUDE_DIR} )
+	endif()
+	# include_directories( ${GLPK_INCLUDE_DIR} )
 else()
 	add_subdirectory(src/resources)
 	#include_directories( ${GLPK_INCLUDE_DIR} )
@@ -219,7 +234,6 @@ if(CLANG_TIDY)
 	message(STATUS "Enabled checks for clang-tidy: ${CLANG_TIDY_CHECKS}")
 endif()
 
-include_directories( src/hypro )
 add_subdirectory(src)
 
 enable_testing()
@@ -251,49 +265,3 @@ add_subdirectory(examples EXCLUDE_FROM_ALL)
 # # # # # # # # # # # # # # # # # # # # # #
 
 include(export)
-
-# Add all targets to the build-tree export set
-export(TARGETS ${HYPRO_TARGETS} FILE "${PROJECT_BINARY_DIR}/hyproTargets.cmake" EXPORT_LINK_INTERFACE_LIBRARIES)
-
-# Export the package for use from the build-tree
-# (this registers the build-tree with a global CMake-registry)
-if(STATICLIB_SWITCH)
-	export(PACKAGE ${PROJECT_NAME}_static)
-	set(TARGET ${PROJECT_NAME})
-else()
-	export(PACKAGE ${PROJECT_NAME})
-	set(TARGET ${PROJECT_NAME})
-endif()
-
-
-include(CMakePackageConfigHelpers)
-# Create the hyproConfig.cmake and hyproConfigVersion files
-file(RELATIVE_PATH REL_INCLUDE_DIR "${PROJECT_BINARY_DIR}" "${PROJECT_BINARY_DIR}")
-# ... for the build tree
-set(CONF_INCLUDE_DIRS "${PROJECT_SOURCE_DIR}/src") # TODO looks not correct, this would be hypro_INCLUDE_DIR
-set(CONF_INCLUDES ${INCLUDES})
-if(STATICLIB_SWITCH)
-	set(CONF_LINKER_LIBS ${hypro_STATIC_LIBRARIES})
-else ()
-	set(CONF_LINKER_LIBS ${hypro_DYNAMIC_LIBRARIES})
-endif()
-
-configure_package_config_file(cmake/Modules/hyproConfig.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/hyproConfig.cmake
-							  INSTALL_DESTINATION ${PROJECT_BINARY_DIR}
-							  PATH_VARS PROJECT_BINARY_DIR #SYSCONFIG_INSTALL_DIR
-							 )
-
-# ... for the install tree
-set(CONF_INCLUDE_DIRS "\${hypro_CMAKE_DIR}/${REL_INCLUDE_DIR}")
-configure_package_config_file(cmake/Modules/hyproConfig.cmake.in ${CMAKE_CURRENT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/hyproConfig.cmake
-							  INSTALL_DESTINATION ${PROJECT_BINARY_DIR}
-							  PATH_VARS PROJECT_BINARY_DIR #SYSCONFIG_INSTALL_DIR
-			 )
-write_basic_package_version_file(${CMAKE_CURRENT_BINARY_DIR}/hyproConfigVersion.cmake
-								 VERSION ${hypro_VERSION}
-								 COMPATIBILITY SameMajorVersion )
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/hyproConfig.cmake ${CMAKE_CURRENT_BINARY_DIR}/hyproConfigVersion.cmake
-		DESTINATION ${PROJECT_BINARY_DIR} )
-
-# Install the export set for use with the install-tree
-#install(EXPORT ${HYPRO_TARGETS} DESTINATION ${PROJECT_BINARY_DIR}) # COMPONENT dev)

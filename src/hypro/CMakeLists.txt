@@ -29,7 +29,6 @@ if(STATICLIB_SWITCH)
 		OUTPUT_NAME hypro
 		LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}
 		ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}
-		INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_SOURCE_DIR}/src"
 		LINKER_LANGUAGE CXX
 	)
 	#message("hypro libraries static: " ${hypro_LIBRARIES_STATIC})
@@ -37,7 +36,12 @@ if(STATICLIB_SWITCH)
 	#message("hypro sources: " ${sources})
 	#message("hypro headers: " ${headers})
 	target_link_libraries(${PROJECT_NAME}_static PUBLIC ${hypro_LIBRARIES_STATIC})
-	target_include_directories(${PROJECT_NAME}_static PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ${hypro_INCLUDE_DIRS})
+	target_include_directories(${PROJECT_NAME}_static
+		PRIVATE ${hypro_INCLUDE_DIRS}
+		PUBLIC
+		$<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src>
+		$<INSTALL_INTERFACE:include/${PROJECT_NAME}>
+	)
 else()
 	message(STATUS "linking dynamic")
 	add_library(${PROJECT_NAME} SHARED ${sources})
@@ -51,7 +55,6 @@ else()
 		OUTPUT_NAME hypro
 		LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}
 		ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}
-		INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_SOURCE_DIR}/src"
 		LINKER_LANGUAGE CXX
 	)
 	#message("hypro libraries dynamic: " ${hypro_LIBRARIES_DYNAMIC})
@@ -59,7 +62,14 @@ else()
 	#message("hypro sources: " ${sources})
 	#message("hypro headers: " ${headers})
 	target_link_libraries(${PROJECT_NAME} PUBLIC ${hypro_LIBRARIES_DYNAMIC} pthread)
-	target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ${hypro_INCLUDE_DIRS})
+	target_include_directories(${PROJECT_NAME}
+		PRIVATE ${hypro_INCLUDE_DIRS}
+		PUBLIC
+		$<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src>
+		$<INSTALL_INTERFACE:include/${PROJECT_NAME}>
+	)
+	get_target_property(debug ${PROJECT_NAME} INTERFACE_INCLUDE_DIRECTORIES)
+	message("${debug}")
 endif()
 
 if(STATICLIB_SWITCH)
@@ -91,6 +101,12 @@ cotire(${PROJECT_NAME})
 
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} DESTINATION include FILES_MATCHING PATTERN "*.h")
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} DESTINATION include FILES_MATCHING PATTERN "*.tpp")
+
+install(TARGETS ${PROJECT_NAME}
+		EXPORT ${PROJECT_NAME}
+		RUNTIME DESTINATION bin
+		LIBRARY DESTINATION ${LIB_INSTALL_DIR}
+		ARCHIVE DESTINATION lib/static)
 
 ########################################################################################
 
