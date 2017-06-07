@@ -1,7 +1,6 @@
 var searchData=
 [
-  ['permutator',['Permutator',['../classhypro_1_1hypro_1_1Permutator.html',1,'hypro::hypro']]],
-  ['permutator',['Permutator',['../classhypro_1_1Permutator.html',1,'hypro']]],
+  ['permutator',['Permutator',['../classhypro_1_1hypro_1_1Permutator.html',1,'hypro::hypro::Permutator'],['../classhypro_1_1Permutator.html',1,'hypro::Permutator']]],
   ['plotter',['Plotter',['../classhypro_1_1Plotter.html',1,'hypro']]],
   ['point',['Point',['../classhypro_1_1Point.html',1,'hypro']]],
   ['point_3c_20int_20_3e',['Point&lt; int &gt;',['../classhypro_1_1Point.html',1,'hypro']]],
