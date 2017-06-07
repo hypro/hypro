@@ -1,6 +1,6 @@
 
 if(STATICLIB_SWITCH)
-	export_target(DEPENDENT_TARGETS carl_STATIC)
+	#export_target(DEPENDENT_TARGETS carl_STATIC)
 	#export_target(DEPENDENT_TARGETS GLPK_STATIC)
 	if (HYPRO_USE_Z3)
 		export_target(DEPENDENT_TARGETS z3_STATIC)
@@ -9,7 +9,11 @@ if(STATICLIB_SWITCH)
 	    export_target(DEPENDENT_TARGETS smtrat_STATIC)
 	endif()
 else()
-	export_target(DEPENDENT_TARGETS carl_SHARED)
+	# export carl by invoking its find script
+	set(DEPENDENT_TARGETS "${${DEPENDENT_TARGETS}}find_package(carl)
+include_directories(${carl_INCLUDE_DIR})")
+
+	#export_target(DEPENDENT_TARGETS carl_SHARED)
 	#export_target(DEPENDENT_TARGETS GLPK_SHARED)
 	if (HYPRO_USE_Z3)
 		export_target(DEPENDENT_TARGETS z3_SHARED)
@@ -18,6 +22,7 @@ else()
 	    export_target(DEPENDENT_TARGETS smtrat_SHARED)
 	endif()
 endif()
+
 #export_target(DEPENDENT_TARGETS EIGEN3)
 #export_target(DEPENDENT_TARGETS GMP_SHARED)
 #export_target(DEPENDENT_TARGETS GMP_STATIC)

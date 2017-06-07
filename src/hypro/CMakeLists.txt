@@ -30,9 +30,10 @@ if(STATICLIB_SWITCH)
 		LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}
 		ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}
 		INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_SOURCE_DIR}/src"
+		LINKER_LANGUAGE CXX
 	)
-	message("hypro libraries static: " ${hypro_LIBRARIES_STATIC})
-	message("hypro include dirs: " ${hypro_INCLUDE_DIRS})
+	#message("hypro libraries static: " ${hypro_LIBRARIES_STATIC})
+	#message("hypro include dirs: " ${hypro_INCLUDE_DIRS})
 	#message("hypro sources: " ${sources})
 	#message("hypro headers: " ${headers})
 	target_link_libraries(${PROJECT_NAME}_static PUBLIC ${hypro_LIBRARIES_STATIC})
@@ -51,9 +52,10 @@ else()
 		LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}
 		ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}
 		INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_SOURCE_DIR}/src"
+		LINKER_LANGUAGE CXX
 	)
-	message("hypro libraries dynamic: " ${hypro_LIBRARIES_DYNAMIC})
-	message("hypro include dirs: " ${hypro_INCLUDE_DIRS})
+	#message("hypro libraries dynamic: " ${hypro_LIBRARIES_DYNAMIC})
+	#message("hypro include dirs: " ${hypro_INCLUDE_DIRS})
 	#message("hypro sources: " ${sources})
 	#message("hypro headers: " ${headers})
 	target_link_libraries(${PROJECT_NAME} PUBLIC ${hypro_LIBRARIES_DYNAMIC} pthread)
