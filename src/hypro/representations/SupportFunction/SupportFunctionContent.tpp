@@ -549,6 +549,7 @@ EvaluationResult<Number> SupportFunctionContent<Number>::evaluate( const vector_
 					case SF_TYPE::NONE: {
 						std::cout << __func__ << ": SF Type not properly initialized!" << std::endl;
 						assert(false);
+						break;
 					}
 					default:{
 						assert(false);
@@ -650,6 +651,7 @@ EvaluationResult<Number> SupportFunctionContent<Number>::evaluate( const vector_
 					case SF_TYPE::NONE: {
 						std::cout << __func__ << ": SF Type not properly initialized!" << std::endl;
 						assert(false);
+						break;
 					}
 					default:{
 						assert(false);
@@ -1023,6 +1025,7 @@ std::vector<EvaluationResult<Number>> SupportFunctionContent<Number>::multiEvalu
 					case SF_TYPE::NONE: {
 						std::cout << __func__ << ": SF Type not properly initialized!" << std::endl;
 						assert(false);
+						break;
 					}
 					default:{
 						assert(false);
@@ -1126,6 +1129,7 @@ std::vector<EvaluationResult<Number>> SupportFunctionContent<Number>::multiEvalu
 					case SF_TYPE::NONE: {
 						std::cout << __func__ << ": SF Type not properly initialized!" << std::endl;
 						assert(false);
+						break;
 					}
 					default:{
 						assert(false);
@@ -1632,6 +1636,7 @@ Point<Number> SupportFunctionContent<Number>::supremumPoint() const {
 		}
 		case SF_TYPE::NONE: {
 			std::cout << __func__ << ": SF Type not properly initialized!" << std::endl;
+			return Point<Number>();
 			assert(false);
 		}
 		default:
@@ -2129,6 +2134,7 @@ bool SupportFunctionContent<Number>::contains( const vector_t<Number> &_point ) 
 		case SF_TYPE::NONE: {
 			std::cout << __func__ << ": SF Type not properly initialized!" << std::endl;
 			assert(false);
+			return false;
 		}
 		default:
 			DEBUG("hypro.representations.supportFunction","UNKNOWN, point: " << _point);
@@ -2213,6 +2219,7 @@ bool SupportFunctionContent<Number>::empty() const {
 		case SF_TYPE::NONE: {
 			std::cout << __func__ << ": SF Type not properly initialized!" << std::endl;
 			assert(false);
+			return false;
 		}
 		default:
 			assert( false );
