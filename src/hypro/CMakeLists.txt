@@ -68,8 +68,6 @@ else()
 		$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
 		$<INSTALL_INTERFACE:include/${PROJECT_NAME}>
 	)
-	get_target_property(debug ${PROJECT_NAME} INTERFACE_INCLUDE_DIRECTORIES)
-	message("${debug}")
 endif()
 
 if(STATICLIB_SWITCH)
