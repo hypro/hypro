@@ -202,7 +202,7 @@ if(NOT FORCE_DOWNLOAD_RESOURCES)
 
 	load_library(hypro GTest 0)
 	load_library(hypro carl 0)
-	load_library(hypro GLPK 0)
+	# load_library(hypro GLPK 0)
 	add_subdirectory(src/resources)
 
 	if(NOT GLPK_FOUND)
