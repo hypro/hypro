@@ -2,6 +2,7 @@
 ExternalProject_Add(
 	carl
 	GIT_REPOSITORY http://github.com/smtrat/carl.git
+	GIT_TAG "17.04"
 	BUILD_COMMAND make lib_carl
 	INSTALL_COMMAND "")
 
