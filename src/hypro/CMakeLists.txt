@@ -37,9 +37,9 @@ if(STATICLIB_SWITCH)
 	#message("hypro headers: " ${headers})
 	target_link_libraries(${PROJECT_NAME}_static PUBLIC ${hypro_LIBRARIES_STATIC})
 	target_include_directories(${PROJECT_NAME}_static
-		PRIVATE ${hypro_INCLUDE_DIRS}
+		PRIVATE ${hypro_INCLUDE_DIRS} ${CMAKE_CURRENT_SOURCE_DIR}
 		PUBLIC
-		$<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src>
+		$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
 		$<INSTALL_INTERFACE:include/${PROJECT_NAME}>
 	)
 else()
@@ -63,9 +63,9 @@ else()
 	#message("hypro headers: " ${headers})
 	target_link_libraries(${PROJECT_NAME} PUBLIC ${hypro_LIBRARIES_DYNAMIC} pthread)
 	target_include_directories(${PROJECT_NAME}
-		PRIVATE ${hypro_INCLUDE_DIRS}
+		PRIVATE ${hypro_INCLUDE_DIRS} ${CMAKE_CURRENT_SOURCE_DIR}
 		PUBLIC
-		$<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src>
+		$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
 		$<INSTALL_INTERFACE:include/${PROJECT_NAME}>
 	)
 	get_target_property(debug ${PROJECT_NAME} INTERFACE_INCLUDE_DIRECTORIES)
@@ -104,7 +104,6 @@ install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} DESTINATION include FILES_MATCHING
 
 install(TARGETS ${PROJECT_NAME}
 		EXPORT ${PROJECT_NAME}
-		RUNTIME DESTINATION bin
 		LIBRARY DESTINATION ${LIB_INSTALL_DIR}
 		ARCHIVE DESTINATION lib/static)
 
