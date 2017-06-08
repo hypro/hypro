@@ -168,7 +168,7 @@ macro(load_library group name version)
         else()
         		list(APPEND ${group}_LIBRARIES_DYNAMIC ${${LIBNAME}_LIBRARIES})
         		add_imported_library(${LIBNAME} SHARED "${${LIBNAME}_LIBRARIES}" "${${LIBNAME}_INCLUDE_DIR}")
-    	endif()
+        endif()
         list(APPEND ${group}_INCLUDE_DIRS ${${LIBNAME}_INCLUDE_DIR})
 
         unset(${LIBNAME}_FOUND CACHE)

@@ -4,7 +4,6 @@ configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/flags.h.in ${CMAKE_CURRENT_SOURCE_DI
 
 ########################################################################################
 
-file(GLOB_RECURSE headers RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} *.h)
 file(GLOB_RECURSE sources RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} *.cpp)
 #MESSAGE(STATUS "Globbed header sources: ${sources}")
 
@@ -34,7 +33,6 @@ if(STATICLIB_SWITCH)
 	#message("hypro libraries static: " ${hypro_LIBRARIES_STATIC})
 	#message("hypro include dirs: " ${hypro_INCLUDE_DIRS})
 	#message("hypro sources: " ${sources})
-	#message("hypro headers: " ${headers})
 	target_link_libraries(${PROJECT_NAME}_static PUBLIC ${hypro_LIBRARIES_STATIC})
 	target_include_directories(${PROJECT_NAME}_static
 		PRIVATE ${hypro_INCLUDE_DIRS} ${CMAKE_CURRENT_SOURCE_DIR}
@@ -57,10 +55,9 @@ else()
 		ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}
 		LINKER_LANGUAGE CXX
 	)
-	#message("hypro libraries dynamic: " ${hypro_LIBRARIES_DYNAMIC})
+	message(STATUS "hypro libraries dynamic: " "${hypro_LIBRARIES_DYNAMIC}")
 	#message("hypro include dirs: " ${hypro_INCLUDE_DIRS})
 	#message("hypro sources: " ${sources})
-	#message("hypro headers: " ${headers})
 	target_link_libraries(${PROJECT_NAME} PUBLIC ${hypro_LIBRARIES_DYNAMIC} pthread)
 	target_include_directories(${PROJECT_NAME}
 		PRIVATE ${hypro_INCLUDE_DIRS} ${CMAKE_CURRENT_SOURCE_DIR}
@@ -103,7 +100,7 @@ install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} DESTINATION include FILES_MATCHING
 install(TARGETS ${PROJECT_NAME}
 		EXPORT ${PROJECT_NAME}
 		LIBRARY DESTINATION ${LIB_INSTALL_DIR}
-		ARCHIVE DESTINATION lib/static)
+		ARCHIVE DESTINATION ${LIB_INSTALL_DIR}/static)
 
 ########################################################################################
 
