@@ -55,7 +55,7 @@ else()
 		ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}
 		LINKER_LANGUAGE CXX
 	)
-	message(STATUS "hypro libraries dynamic: " "${hypro_LIBRARIES_DYNAMIC}")
+	#message(STATUS "hypro libraries dynamic: " "${hypro_LIBRARIES_DYNAMIC}")
 	#message("hypro include dirs: " ${hypro_INCLUDE_DIRS})
 	#message("hypro sources: " ${sources})
 	target_link_libraries(${PROJECT_NAME} PUBLIC ${hypro_LIBRARIES_DYNAMIC} pthread)
