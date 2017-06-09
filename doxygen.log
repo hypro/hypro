@@ -956,14 +956,14 @@ Generating class d/home/travis/build/hypro/hypro/src/hypro/util/multithreading/S
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Facet.h:439: warning: Member isNeighbor(std::shared_ptr< Facet< Number >> facet) const  (function) of class hypro::Facet is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Facet.h:450: warning: Member operator==(const Facet< Number > &_f1, const Facet< Number > &_f2) (friend) of class hypro::Facet is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Facet.h:471: warning: Member operator!=(const Facet< Number > &_f1, const Facet< Number > &_f2) (friend) of class hypro::Facet is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:95: warning: Member makeInteger() (function) of class hypro::Halfspace is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:114: warning: Member makeInteger() (function) of class hypro::Halfspace is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:222: warning: Member fastIntersect(const std::vector< Halfspace< Number >> &_planes) (function) of class hypro::Halfspace is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:223: warning: Member saveIntersect(const std::vector< Halfspace< Number >> &_planes, Number threshold=0) (function) of class hypro::Halfspace is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:276: warning: argument 'The' of command @param is not found in the argument list of hypro::Halfspace< Number >::computePlaneNormal(const std::vector< vector_t< Number >> &_edgeSet)
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:276: warning: The following parameters of hypro::Halfspace::computePlaneNormal(const std::vector< vector_t< Number >> &_edgeSet) are not documented:
+/home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:96: warning: Member makeInteger() (function) of class hypro::Halfspace is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:115: warning: Member makeInteger() (function) of class hypro::Halfspace is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:223: warning: Member fastIntersect(const std::vector< Halfspace< Number >> &_planes) (function) of class hypro::Halfspace is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:224: warning: Member saveIntersect(const std::vector< Halfspace< Number >> &_planes, Number threshold=0) (function) of class hypro::Halfspace is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:277: warning: argument 'The' of command @param is not found in the argument list of hypro::Halfspace< Number >::computePlaneNormal(const std::vector< vector_t< Number >> &_edgeSet)
+/home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:277: warning: The following parameters of hypro::Halfspace::computePlaneNormal(const std::vector< vector_t< Number >> &_edgeSet) are not documented:
   parameter '_edgeSet'
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:170: warning: argument 'unnamed' of command @param is not found in the argument list of hypro::Halfspace< Number >::projectPointOnPlane(const Point< Number >) const
+/home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:171: warning: argument 'unnamed' of command @param is not found in the argument list of hypro::Halfspace< Number >::projectPointOnPlane(const Point< Number >) const
 /home/travis/build/hypro/hypro/src/hypro/datastructures/hybridAutomata/HybridAutomaton.h:25: warning: Member locationSet (typedef) of class hypro::HybridAutomaton is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/hybridAutomata/HybridAutomaton.h:26: warning: Member transitionSet (typedef) of class hypro::HybridAutomaton is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/hybridAutomata/HybridAutomaton.h:27: warning: Member locationStateMap (typedef) of class hypro::HybridAutomaton is not documented.
@@ -2290,7 +2290,7 @@ Gener/home/travis/build/hypro/hypro/src/hypro/util/Plotter.h:202: warning: Membe
 /home/travis/build/hypro/hypro/src/hypro/util/statistics/CounterRepository.h:59: warning: Member operator<<(std::ostream &ostr, const CounterRepository &repo) (friend) of class hypro::statistics::CounterRepository is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:365: warning: Member operator()(hypro::vector_t< Number > const &vector) const  (function) of class hypro::std::hash< hypro::vector_t< Number > > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:373: warning: Member operator()(hypro::matrix_t< Number > const &matrix) const  (function) of class hypro::std::hash< hypro::matrix_t< Number > > is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:377: warning: Member operator()(hypro::Halfspace< Number > const &Halfspace) const  (function) of class std::hash< hypro::Halfspace< Number > > is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:378: warning: Member operator()(hypro::Halfspace< Number > const &Halfspace) const  (function) of class std::hash< hypro::Halfspace< Number > > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/LRUCache.h:12: warning: Member operator()(std::pair< first, second > const &keyPair) const  (function) of class std::hash< std::pair< first, second > > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Point.h:717: warning: Member operator()(hypro::Point< Number > const &point) const  (function) of class std::hash< hypro::Point< Number > > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Ridge.h:93: warning: Member operator()(const hypro::Ridge< Number > &ridge) const  (function) of class std::hash< hypro::Ridge< Number > > is not documented.
