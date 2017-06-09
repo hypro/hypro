@@ -29,7 +29,7 @@
 #include "../statistics/statistics.h"
 #include "../logging/Logger.h"
 
-#include "../../../resources/glpk-4.45/install/include/glpk.h"
+#include "../../../resources/glpk-4.45/build/include/glpk.h"
 
 namespace hypro {
 
