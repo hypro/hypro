@@ -47,7 +47,6 @@ addons:
       - clang-3.7
       - clang-3.8
       - clang-3.9
-      - libglpk-dev
       - graphviz
       - pgf
       - texlive-latex-extra

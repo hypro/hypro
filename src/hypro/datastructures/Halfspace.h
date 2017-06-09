@@ -12,9 +12,10 @@
 #include "Point.h"
 #include "../util/VariablePool.h"
 #include "../util/adaptions_eigen/adaptions_eigen.h"
+#include "../../resources/glpk-4.45/install/include/glpk.h"
 #include <carl/formula/Constraint.h>
 #include <cassert>
-#include <glpk.h>
+
 
 namespace hypro {
 
