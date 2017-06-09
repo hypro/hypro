@@ -1,5 +1,4 @@
 if(${STATICLIB_SWITCH} STREQUAL "OFF")
-	include_directories(${GTEST_INCLUDE_DIR})
 
 	################################
 	# Unit Tests
@@ -10,6 +9,7 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
 	)
 
 	add_dependencies(runBenchmark googletest)
+	target_include_directories(runBenchmark PRIVATE ${GTEST_INCLUDE_DIR})
 
 	target_link_libraries(runBenchmark
 							${PROJECT_NAME}
