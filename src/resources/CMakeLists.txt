@@ -23,10 +23,10 @@ else()
 endif()
 
 
-if(GLPK_FOUND)
-	message("-- Use system version of GLPK")
-else()
+#if(GLPK_FOUND)
+#	message("-- Use system version of GLPK")
+#else()
 	message("-- Use included version of GLPK")
 	include(glpk.cmake)
-endif()
+#endif()
 
