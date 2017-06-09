@@ -107,7 +107,8 @@ script:
 
 # Generate and deploy documentation
 after_success:
-  - chmod +x .travis/processCoverage.sh
+  - cd ${TRAVIS_BUILD_DIR}
+  - chmod +x .travis/buildDoc.sh
   - ./.travis/buildDoc.sh
   # coveralls
   - chmod +x processCoverage.sh
