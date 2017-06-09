@@ -60,7 +60,7 @@ matrix:
     - os: linux
       dist: trusty
       compiler: gcc
-      env: COMPILER=g++-5
+      env: COMPILER=g++-5 FLAGS=-DCREATE_DOC=ON
     - os: linux
       dist: trusty
       compiler: gcc
@@ -78,6 +78,10 @@ matrix:
       compiler: clang
       env: COMPILER=clang++-3.8
     - os: osx
+      osx_image: xcode6.4
+      compiler: clang
+      env: COMPILER=clang++
+    - os: osx
       osx_image: xcode7.3
       compiler: clang
       env: COMPILER=clang++
@@ -86,20 +90,7 @@ matrix:
       compiler: clang
       env: COMPILER=clang++
     - os: osx
-      osx_image: xcode8.1
-      compiler: clang
-      env: COMPILER=clang++
-    - os: osx
-      osx_image: xcode8.2
-      compiler: clang
-      env: COMPILER=clang++
-    - os: osx
       osx_image: xcode8.3
-      compiler: clang
-      env: COMPILER=clang++
-  allow_failures:
-    - os: osx
-      osx_image: xcode6.4
       compiler: clang
       env: COMPILER=clang++
 
@@ -116,10 +107,8 @@ script:
 
 # Generate and deploy documentation
 after_success:
-  - cmake -DCREATE_DOC=ON ..
-  - cd $TRAVIS_BUILD_DIR
-  - chmod +x createAndDeployDocumentation.sh
-  - ./createAndDeployDocumentation.sh
+  - chmod +x .travis/processCoverage.sh
+  - ./.travis/buildDoc.sh
   # coveralls
   - chmod +x processCoverage.sh
   - ./processCoverage.sh
