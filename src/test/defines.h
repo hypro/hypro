@@ -46,6 +46,7 @@ TYPED_TEST_CASE(Benchmark, allTypes);
 
 // Core
 TYPED_TEST_CASE(EigenAdaptionsTest, allTypes);
+TYPED_TEST_CASE(AntlrParserTest, allTypes);
 
 // Datastructure
 TYPED_TEST_CASE(HalfspaceTest, allTypes);

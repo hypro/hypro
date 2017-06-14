@@ -12,6 +12,7 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
 		OptimizerTest.cpp
 		ParserTest.cpp
 		UtilityTest.cpp
+		AntlrParserTest.cpp				#new for antlr
 	)
 
 	add_dependencies(runCoreTests googletest)
