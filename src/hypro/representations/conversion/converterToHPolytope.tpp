@@ -18,6 +18,11 @@ typename Converter<Number>::HPolytope Converter<Number>::toHPolytope( const HPol
 }
 
 template<typename Number>
+typename Converter<Number>::HPolytope Converter<Number>::toHPolytope( const ConstraintSet& _source, const CONV_MODE ){
+    return HPolytopeT<Number,Converter>(_source.matrix(), _source.vector());
+}
+
+template<typename Number>
 typename Converter<Number>::HPolytope Converter<Number>::toHPolytope( const Ellipsoid& _source, const CONV_MODE ){
 	vector_t<Number> l(_source.dimension());
 	l.setZero();

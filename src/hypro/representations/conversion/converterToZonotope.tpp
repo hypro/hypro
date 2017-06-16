@@ -51,6 +51,17 @@ typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const HPolyt
     return res;
 }
 
+template <typename Number>
+typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const ConstraintSet& _source, const CONV_MODE mode ){
+    //converts source object into a v-polytope
+    auto temp = toHPolytope(_source, mode);
+
+    //conversion is from here done just like V -> Zonotope
+    Zonotope res = toZonotope(temp, mode);
+
+    return res;
+}
+
 //conversion from Box to Zonotope (no differentiation between conversion modes - always EXACT)
 template <typename Number>
 typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const Box& _source, const CONV_MODE  ){

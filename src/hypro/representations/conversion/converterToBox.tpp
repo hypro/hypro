@@ -19,6 +19,11 @@ typename Converter<Number>::Box Converter<Number>::toBox( const Box& _source, co
 }
 
 template<typename Number>
+typename Converter<Number>::Box Converter<Number>::toBox(const ConstraintSet& source, const CONV_MODE) {
+	return BoxT<Number,Converter>(source.matrix(), source.vector());
+}
+
+template<typename Number>
 typename Converter<Number>::Box Converter<Number>::toBox( const Ellipsoid& _source, const CONV_MODE  ) {
 	vector_t<Number> l(_source.dimension());
 	vector_t<Number> evaluation;

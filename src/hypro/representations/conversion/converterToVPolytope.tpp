@@ -16,6 +16,11 @@ typename Converter<Number>::VPolytope Converter<Number>::toVPolytope( const VPol
 }
 
 template<typename Number>
+typename Converter<Number>::VPolytope Converter<Number>::toVPolytope( const ConstraintSet& _source, const CONV_MODE ){
+    return VPolytopeT<Number,Converter>(_source.matrix(), _source.vector());
+}
+
+template<typename Number>
 typename Converter<Number>::VPolytope Converter<Number>::toVPolytope( const Ellipsoid& _source, const CONV_MODE  ){
 	vector_t<Number> l(_source.dimension());
 	l.setZero();
