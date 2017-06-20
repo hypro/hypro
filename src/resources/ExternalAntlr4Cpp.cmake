@@ -66,9 +66,11 @@ set(ANTLR4CPP_LOCAL_ROOT ${CMAKE_BINARY_DIR}/locals/antlr4cpp)
 
 # external repository
 # GIT_REPOSITORY     https://github.com/antlr/antlr4.git
-set(ANTLR4CPP_EXTERNAL_REPO "https://github.com/antlr/antlr4.git")
-set(ANTLR4CPP_EXTERNAL_TAG  "4.7")
-set(ANTLR4CPP_LOCAL_REPO ${PROJECT_SOURCE_DIR}/src/resources/antlr4-cpp-runtime-4.7-source.zip)
+#set(ANTLR4CPP_EXTERNAL_REPO "https://github.com/antlr/antlr4.git")
+#set(ANTLR4CPP_EXTERNAL_TAG  "4.7")
+#set(ANTLR4CPP_LOCAL_REPO ${PROJECT_SOURCE_DIR}/src/resources/antlr4-cpp-runtime-4.7-source.zip)
+set(ANTLR4CPP_LOCAL_REPO ${PROJECT_SOURCE_DIR}/src/resources/antlr4-cpp-runtime-4.7-source)
+#message("Set local repo boyz!")
 
 if(NOT EXISTS "${ANTLR4CPP_JAR_LOCATION}")
   message(FATAL_ERROR "Unable to find antlr tool. ANTLR4CPP_JAR_LOCATION:${ANTLR4CPP_JAR_LOCATION}")
@@ -164,7 +166,9 @@ foreach(src_path misc atn dfa tree support)
   list(APPEND ANTLR4CPP_INCLUDE_DIRS ${INSTALL_DIR}/include/antlr4-runtime/${src_path})
 endforeach(src_path)
 
-set(ANTLR4CPP_LIBS "${INSTALL_DIR}/lib")
+set(ANTLR4CPP_LIBS "${INSTALL_DIR}/lib/libantlr4-runtime.a")
+set(ANTLR4CPP_LIBS ${ANTLR4CPP_LIBS} PARENT_SCOPE)
+set(ANTLR4CPP_INCLUDE_DIRS ${ANTLR4CPP_INCLUDE_DIRS} PARENT_SCOPE)
 
 # antlr4_shared ${INSTALL_DIR}/lib/libantlr4-runtime.so
 # antlr4_static ${INSTALL_DIR}/lib/libantlr4-runtime.a
