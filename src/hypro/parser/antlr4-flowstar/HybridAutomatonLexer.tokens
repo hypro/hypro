@@ -1,0 +1,26 @@
+T__0=1
+T__1=2
+T__2=3
+T__3=4
+T__4=5
+T__5=6
+T__6=7
+T__7=8
+IN=9
+EQUALS=10
+BOOLRELATION=11
+BINOPERATOR=12
+VARIABLE=13
+NUMBER=14
+INTERVAL=15
+WS=16
+'hybrid reachability'=1
+'{'=2
+'}'=3
+'state var'=4
+','=5
+'modes'=6
+'poly ode 1'=7
+'inv'=8
+'in'=9
+'='=10

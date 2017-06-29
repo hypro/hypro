@@ -1,5 +1,5 @@
 /*
- * Expression.g4
+ * Formula.g4
  *
  * @author Phillip Tse
  * @date 22.6.2017
@@ -18,6 +18,7 @@ term				: (NUMBER | VARIABLE) ((BINOPERATOR (NUMBER | VARIABLE))+)? ;
 equation 			: VARIABLE EQUALS term;
 boolexpr			: term BOOLRELATION NUMBER; 
 intervalexpr		: term IN INTERVAL;  
+formula 			: equation | boolexpr | intervalexpr ;
 
 ////// Lexer Rules
 

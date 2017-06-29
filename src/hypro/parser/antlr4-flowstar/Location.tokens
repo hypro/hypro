@@ -1,0 +1,20 @@
+T__0=1
+T__1=2
+T__2=3
+T__3=4
+T__4=5
+IN=6
+EQUALS=7
+BOOLRELATION=8
+BINOPERATOR=9
+VARIABLE=10
+NUMBER=11
+INTERVAL=12
+WS=13
+'modes'=1
+'{'=2
+'}'=3
+'poly ode 1'=4
+'inv'=5
+'in'=6
+'='=7

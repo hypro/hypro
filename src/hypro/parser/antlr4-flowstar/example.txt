@@ -1,0 +1,23 @@
+
+hybrid reachability
+{
+ state var x,c1,c2
+
+ modes
+ {
+  rod1
+  {
+   poly ode 1
+   {
+    x' = 0.1*x + -56
+    c1' = 1
+    c2' = 1
+   }
+
+   inv
+   {
+    x >= 510
+   }
+  }
+ }
+}

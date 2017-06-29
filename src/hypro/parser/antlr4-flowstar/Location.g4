@@ -17,7 +17,7 @@ modes			: 'modes' '{' location* '}' ;
 
 location 		: VARIABLE '{' activities invariants '}' ;
 
-activities		: 'poly ode 1' '{' equation* '}' ;
+activities		: 'poly ode 1' '{' equation* '}' ;				//can be poly ode 1/2/3 or linear ode 1
 
 invariants		: 'inv' '{' (boolexpr | intervalexpr)* '}' ;
 
