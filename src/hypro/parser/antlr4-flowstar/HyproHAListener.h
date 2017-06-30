@@ -13,6 +13,7 @@
 
 #pragma once
 
+#include <string>
 #include <antlr4-runtime.h>
 #include "HybridAutomatonLexer.h"
 #include "HybridAutomatonParser.h"
@@ -32,25 +33,38 @@ class HyproHAListener : public HybridAutomatonBaseListener {
 		//Set of locations a hybrid automaton needs
 		std::set<Location<Number>*> locSet; 
 
-		//A temporary reusable location that is needed to build a location
-		Location<Number> loc;
-
 		//A vector of all variables that are defined 
 		std::vector<std::string> vars;
 
 		//A vector of all location names 
 		std::vector<std::string> locNames;
 
+		//A temporary reusable location that is needed to build a location
+		//Location<Number> loc;
+
+		//A temporary flow matrix and needed positioning variable
+		matrix_t<Number> flowMatrix;
+		int currentRow = -1;
+
 	public:
 		
 		HyproHAListener();
 		~HyproHAListener();
 
+		Number stringToNumber(std::string string);
+
+		inline std::vector<std::string> getLocNames(){ return locNames; }
+		inline std::vector<std::string> getVarNames(){ return vars; }
+		inline matrix_t<Number> getFlow(){ return flowMatrix; }
+
 		void enterVardeclaration(HybridAutomatonParser::VardeclarationContext* ctx) override;
 		void enterLocation(HybridAutomatonParser::LocationContext* ctx) override;
 		void enterActivities(HybridAutomatonParser::ActivitiesContext* ctx) override;
 		void enterEquation(HybridAutomatonParser::EquationContext* ctx) override;
+		void enterMult(HybridAutomatonParser::MultContext* ctx) override;
+		
 		void enterTerm(HybridAutomatonParser::TermContext* ctx) override;
+		void exitTerm(HybridAutomatonParser::TermContext* ctx) override;
 
 		void exitEquation(HybridAutomatonParser::EquationContext* ctx) override;
 
@@ -67,9 +81,22 @@ class HyproHAListener : public HybridAutomatonBaseListener {
 	
 		void exitStart(HybridAutomatonParser::StartContext* ctx) override; 
 
-
-
-	
 };
 
+template<typename Number>
+std::ostream& operator<<(std::ostream& ostr, HyproHAListener<Number> listener){
+	ostr << "Location Names: " << std::endl;
+	for(auto loc : listener.getLocNames()){
+		ostr << loc << std::endl;
+	}
+	ostr << "Variable Names: " << std::endl;
+	for(auto var : listener.getVarNames()){
+		ostr << var << std::endl; 
+	}
+	ostr << "flowMatrix is:\n " << listener.getFlow() << std::endl;
+	return ostr;
+}
+
 } //namespace hypro
+
+#include "HyproHAListener.tpp"

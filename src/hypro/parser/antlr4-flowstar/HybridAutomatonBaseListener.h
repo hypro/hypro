@@ -34,6 +34,12 @@ public:
   virtual void enterInvariants(HybridAutomatonParser::InvariantsContext * /*ctx*/) override { }
   virtual void exitInvariants(HybridAutomatonParser::InvariantsContext * /*ctx*/) override { }
 
+  virtual void enterAdd(HybridAutomatonParser::AddContext * /*ctx*/) override { }
+  virtual void exitAdd(HybridAutomatonParser::AddContext * /*ctx*/) override { }
+
+  virtual void enterMult(HybridAutomatonParser::MultContext * /*ctx*/) override { }
+  virtual void exitMult(HybridAutomatonParser::MultContext * /*ctx*/) override { }
+
   virtual void enterTerm(HybridAutomatonParser::TermContext * /*ctx*/) override { }
   virtual void exitTerm(HybridAutomatonParser::TermContext * /*ctx*/) override { }
 

@@ -32,6 +32,12 @@ public:
   virtual void enterInvariants(HybridAutomatonParser::InvariantsContext *ctx) = 0;
   virtual void exitInvariants(HybridAutomatonParser::InvariantsContext *ctx) = 0;
 
+  virtual void enterAdd(HybridAutomatonParser::AddContext *ctx) = 0;
+  virtual void exitAdd(HybridAutomatonParser::AddContext *ctx) = 0;
+
+  virtual void enterMult(HybridAutomatonParser::MultContext *ctx) = 0;
+  virtual void exitMult(HybridAutomatonParser::MultContext *ctx) = 0;
+
   virtual void enterTerm(HybridAutomatonParser::TermContext *ctx) = 0;
   virtual void exitTerm(HybridAutomatonParser::TermContext *ctx) = 0;
 

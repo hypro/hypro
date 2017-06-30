@@ -13,8 +13,10 @@ grammar Formula;
 
 //Add possiblity of boolexpr v boolexpr ...
 
-//variable 			: (UPPERCASE | LOWERCASE)((UPPERCASE | LOWERCASE | DIGIT | SPECIALCHAR)+)? ;
-term				: (NUMBER | VARIABLE) ((BINOPERATOR (NUMBER | VARIABLE))+)? ;
+add					: PLUS term ;
+mult 				: (NUMBER | VARIABLE) (TIMES (NUMBER | VARIABLE))*?; 
+term				: mult add*?;
+
 equation 			: VARIABLE EQUALS term;
 boolexpr			: term BOOLRELATION NUMBER; 
 intervalexpr		: term IN INTERVAL;  
@@ -30,14 +32,15 @@ IN 					: 'in' ;
 
 EQUALS				: '=' ;
 BOOLRELATION		: '<=' | '>=' | '<' | '>' | '=' ;
-BINOPERATOR			: '+' | '*' ;
+//BINOPERATOR		: '+' | '*' ;
+PLUS				: '+' ;
+TIMES				: '*' ;
 
 fragment UPPERCASE	: [A-Z] ;
 fragment LOWERCASE	: [a-z] ;
 fragment DIGIT		: [0-9] ;
 fragment SPECIALCHAR: '+' | '-' | '\'' ;
 VARIABLE			: (UPPERCASE | LOWERCASE)(UPPERCASE | LOWERCASE | DIGIT | SPECIALCHAR)* ;
-//VARIABLE 			: ;  
 NUMBER				: '-'? DIGIT+ ('.' DIGIT+)? ;
 INTERVAL 			: '[' NUMBER ',' NUMBER ']' ;
 

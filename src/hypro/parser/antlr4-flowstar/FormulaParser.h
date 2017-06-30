@@ -12,13 +12,13 @@
 class  FormulaParser : public antlr4::Parser {
 public:
   enum {
-    IN = 1, EQUALS = 2, BOOLRELATION = 3, BINOPERATOR = 4, VARIABLE = 5, 
-    NUMBER = 6, INTERVAL = 7, WS = 8
+    IN = 1, EQUALS = 2, BOOLRELATION = 3, PLUS = 4, TIMES = 5, VARIABLE = 6, 
+    NUMBER = 7, INTERVAL = 8, WS = 9
   };
 
   enum {
-    RuleTerm = 0, RuleEquation = 1, RuleBoolexpr = 2, RuleIntervalexpr = 3, 
-    RuleFormula = 4
+    RuleAdd = 0, RuleMult = 1, RuleTerm = 2, RuleEquation = 3, RuleBoolexpr = 4, 
+    RuleIntervalexpr = 5, RuleFormula = 6
   };
 
   FormulaParser(antlr4::TokenStream *input);
@@ -31,22 +31,49 @@ public:
   virtual antlr4::dfa::Vocabulary& getVocabulary() const override;
 
 
+  class AddContext;
+  class MultContext;
   class TermContext;
   class EquationContext;
   class BoolexprContext;
   class IntervalexprContext;
   class FormulaContext; 
 
-  class  TermContext : public antlr4::ParserRuleContext {
+  class  AddContext : public antlr4::ParserRuleContext {
   public:
-    TermContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    AddContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    antlr4::tree::TerminalNode *PLUS();
+    TermContext *term();
+
+   
+  };
+
+  AddContext* add();
+
+  class  MultContext : public antlr4::ParserRuleContext {
+  public:
+    MultContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
     std::vector<antlr4::tree::TerminalNode *> NUMBER();
     antlr4::tree::TerminalNode* NUMBER(size_t i);
     std::vector<antlr4::tree::TerminalNode *> VARIABLE();
     antlr4::tree::TerminalNode* VARIABLE(size_t i);
-    std::vector<antlr4::tree::TerminalNode *> BINOPERATOR();
-    antlr4::tree::TerminalNode* BINOPERATOR(size_t i);
+    std::vector<antlr4::tree::TerminalNode *> TIMES();
+    antlr4::tree::TerminalNode* TIMES(size_t i);
+
+   
+  };
+
+  MultContext* mult();
+
+  class  TermContext : public antlr4::ParserRuleContext {
+  public:
+    TermContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    MultContext *mult();
+    std::vector<AddContext *> add();
+    AddContext* add(size_t i);
 
    
   };

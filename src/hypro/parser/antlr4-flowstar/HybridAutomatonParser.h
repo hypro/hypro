@@ -13,14 +13,14 @@ class  HybridAutomatonParser : public antlr4::Parser {
 public:
   enum {
     T__0 = 1, T__1 = 2, T__2 = 3, T__3 = 4, T__4 = 5, T__5 = 6, T__6 = 7, 
-    T__7 = 8, IN = 9, EQUALS = 10, BOOLRELATION = 11, BINOPERATOR = 12, 
-    VARIABLE = 13, NUMBER = 14, INTERVAL = 15, WS = 16
+    T__7 = 8, IN = 9, EQUALS = 10, BOOLRELATION = 11, PLUS = 12, TIMES = 13, 
+    VARIABLE = 14, NUMBER = 15, INTERVAL = 16, WS = 17
   };
 
   enum {
     RuleStart = 0, RuleVardeclaration = 1, RuleModes = 2, RuleLocation = 3, 
-    RuleActivities = 4, RuleInvariants = 5, RuleTerm = 6, RuleEquation = 7, 
-    RuleBoolexpr = 8, RuleIntervalexpr = 9, RuleFormula = 10
+    RuleActivities = 4, RuleInvariants = 5, RuleAdd = 6, RuleMult = 7, RuleTerm = 8, 
+    RuleEquation = 9, RuleBoolexpr = 10, RuleIntervalexpr = 11, RuleFormula = 12
   };
 
   HybridAutomatonParser(antlr4::TokenStream *input);
@@ -39,6 +39,8 @@ public:
   class LocationContext;
   class ActivitiesContext;
   class InvariantsContext;
+  class AddContext;
+  class MultContext;
   class TermContext;
   class EquationContext;
   class BoolexprContext;
@@ -132,16 +134,45 @@ public:
 
   InvariantsContext* invariants();
 
-  class  TermContext : public antlr4::ParserRuleContext {
+  class  AddContext : public antlr4::ParserRuleContext {
   public:
-    TermContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    AddContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    antlr4::tree::TerminalNode *PLUS();
+    TermContext *term();
+
+    virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
+    virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
+   
+  };
+
+  AddContext* add();
+
+  class  MultContext : public antlr4::ParserRuleContext {
+  public:
+    MultContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
     std::vector<antlr4::tree::TerminalNode *> NUMBER();
     antlr4::tree::TerminalNode* NUMBER(size_t i);
     std::vector<antlr4::tree::TerminalNode *> VARIABLE();
     antlr4::tree::TerminalNode* VARIABLE(size_t i);
-    std::vector<antlr4::tree::TerminalNode *> BINOPERATOR();
-    antlr4::tree::TerminalNode* BINOPERATOR(size_t i);
+    std::vector<antlr4::tree::TerminalNode *> TIMES();
+    antlr4::tree::TerminalNode* TIMES(size_t i);
+
+    virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
+    virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
+   
+  };
+
+  MultContext* mult();
+
+  class  TermContext : public antlr4::ParserRuleContext {
+  public:
+    TermContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    MultContext *mult();
+    std::vector<AddContext *> add();
+    AddContext* add(size_t i);
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;

@@ -13,14 +13,14 @@ class  LocationParser : public antlr4::Parser {
 public:
   enum {
     T__0 = 1, T__1 = 2, T__2 = 3, T__3 = 4, T__4 = 5, IN = 6, EQUALS = 7, 
-    BOOLRELATION = 8, BINOPERATOR = 9, VARIABLE = 10, NUMBER = 11, INTERVAL = 12, 
-    WS = 13
+    BOOLRELATION = 8, PLUS = 9, TIMES = 10, VARIABLE = 11, NUMBER = 12, 
+    INTERVAL = 13, WS = 14
   };
 
   enum {
     RuleModes = 0, RuleLocation = 1, RuleActivities = 2, RuleInvariants = 3, 
-    RuleTerm = 4, RuleEquation = 5, RuleBoolexpr = 6, RuleIntervalexpr = 7, 
-    RuleFormula = 8
+    RuleAdd = 4, RuleMult = 5, RuleTerm = 6, RuleEquation = 7, RuleBoolexpr = 8, 
+    RuleIntervalexpr = 9, RuleFormula = 10
   };
 
   LocationParser(antlr4::TokenStream *input);
@@ -37,6 +37,8 @@ public:
   class LocationContext;
   class ActivitiesContext;
   class InvariantsContext;
+  class AddContext;
+  class MultContext;
   class TermContext;
   class EquationContext;
   class BoolexprContext;
@@ -94,16 +96,41 @@ public:
 
   InvariantsContext* invariants();
 
-  class  TermContext : public antlr4::ParserRuleContext {
+  class  AddContext : public antlr4::ParserRuleContext {
   public:
-    TermContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    AddContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    antlr4::tree::TerminalNode *PLUS();
+    TermContext *term();
+
+   
+  };
+
+  AddContext* add();
+
+  class  MultContext : public antlr4::ParserRuleContext {
+  public:
+    MultContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
     std::vector<antlr4::tree::TerminalNode *> NUMBER();
     antlr4::tree::TerminalNode* NUMBER(size_t i);
     std::vector<antlr4::tree::TerminalNode *> VARIABLE();
     antlr4::tree::TerminalNode* VARIABLE(size_t i);
-    std::vector<antlr4::tree::TerminalNode *> BINOPERATOR();
-    antlr4::tree::TerminalNode* BINOPERATOR(size_t i);
+    std::vector<antlr4::tree::TerminalNode *> TIMES();
+    antlr4::tree::TerminalNode* TIMES(size_t i);
+
+   
+  };
+
+  MultContext* mult();
+
+  class  TermContext : public antlr4::ParserRuleContext {
+  public:
+    TermContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    MultContext *mult();
+    std::vector<AddContext *> add();
+    AddContext* add(size_t i);
 
    
   };

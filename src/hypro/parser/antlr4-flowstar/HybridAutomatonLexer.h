@@ -13,8 +13,8 @@ class  HybridAutomatonLexer : public antlr4::Lexer {
 public:
   enum {
     T__0 = 1, T__1 = 2, T__2 = 3, T__3 = 4, T__4 = 5, T__5 = 6, T__6 = 7, 
-    T__7 = 8, IN = 9, EQUALS = 10, BOOLRELATION = 11, BINOPERATOR = 12, 
-    VARIABLE = 13, NUMBER = 14, INTERVAL = 15, WS = 16
+    T__7 = 8, IN = 9, EQUALS = 10, BOOLRELATION = 11, PLUS = 12, TIMES = 13, 
+    VARIABLE = 14, NUMBER = 15, INTERVAL = 16, WS = 17
   };
 
   HybridAutomatonLexer(antlr4::CharStream *input);
