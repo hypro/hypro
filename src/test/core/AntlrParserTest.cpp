@@ -13,7 +13,7 @@ using namespace antlr4;
 template<typename Number>
 class AntlrParserTest : public ::testing::Test {
 
-	protected:		
+	protected:
 
 		AntlrParserTest(){}
 
@@ -26,24 +26,27 @@ class AntlrParserTest : public ::testing::Test {
 
 TYPED_TEST(AntlrParserTest, ParseLocation){
 
-	
-	//Open examples.txt 
+
+	//Open examples.txt
 
 
 	ANTLRInputStream input;
 	//std::string path = "example.txt";
-	std::string path = "../../src/test/core/blub.txt"; 
-	//std::string path = "../../../../../../src/test/core/example.txt"; 
+	std::string path = "../../src/test/core/blub.txt";
+	//std::string path = "../../../../../../src/test/core/example.txt";
 	//std::ifstream ifs(path);
 
-	std::fstream ifs(path);
+	std::fstream ifs("../src/test/core/example.txt");
+
+	assert(ifs.good());
+
 	//ifs.open(path);
 	//ifs.open("../../hypro/parser/antlr4-flowstar/example.txt", std::ifstream::in);
 
-	//Create an AnTLRInputStream 
+	//Create an AnTLRInputStream
 	// TODO: STILL DOES NOT WORK
 	if(ifs.good()){
-		input = ANTLRInputStream(ifs);									
+		input = ANTLRInputStream(ifs);
 	} else {
 		std::cerr << "InputStream was bad." << std::endl;
 		if(ifs.fail()){
@@ -57,17 +60,17 @@ TYPED_TEST(AntlrParserTest, ParseLocation){
 		}
 		FAIL();
 	}
-	
+
 	if(!ifs.is_open()){
 		std::cout << "ifs hasn't opened anything" << std::endl;
 		//std::cout << "path is: " << path << std::endl;
 		FAIL();
 	}
-	
+
 	std::cout << "input stream content: " << input.toString() << std::endl;
 
 	//ANTLRInputStream input("hybrid reachability { state var x,c1,c2 modes { rod1 { poly ode 1 { x' = 4 c1' = 34*23 c2' = 18 } inv { x >= 510 } } } }");
-	//2*x + -56*y + 
+	//2*x + -56*y +
 
 	//Create a Lexer and feed it with the input
 	HybridAutomatonLexer lexer(&input);
