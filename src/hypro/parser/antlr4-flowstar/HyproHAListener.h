@@ -44,7 +44,7 @@ class HyproHAListener : public HybridAutomatonBaseListener {
 
 		//A temporary flow matrix and needed positioning variable
 		matrix_t<Number> flowMatrix;
-		int currentRow = -1;
+		unsigned int currentRow = 0;
 
 	public:
 		

@@ -55,17 +55,11 @@ else()
 		ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}
 		LINKER_LANGUAGE CXX
 	)
-	#include_directories(${ANTLR4CPP_INCLUDE_DIRS})
-	#link_directories(${ANTLR4CPP_LIBS})
-	#message("sources is actually: " ${sources})
-	message(STATUS "antlr libs path: " ${ANTLR4CPP_LIBS})
-	message(STATUS "antlr include dirs path: " ${ANTLR4CPP_INCLUDE_DIRS}) 
-	#list(APPEND hypro_LIBRARIES_DYNAMIC ${ANTLR4CPP_LIBS})
-	#list(APPEND hypro_INCLUDE_DIRS ${ANTLR4CPP_INCLUDE_DIRS})
-	#set(hypro_LIBRARIES_DYNAMIC ${hypro_LIBRARIES_DYNAMIC}
-	message(STATUS "hypro libraries dynamic: " "${hypro_LIBRARIES_DYNAMIC}")
-	message("hypro include dirs: " ${hypro_INCLUDE_DIRS})
-	message("hypro sources: " ${sources})
+	#message(STATUS "antlr libs path: " ${ANTLR4CPP_LIBS})
+	#message(STATUS "antlr include dirs path: " ${ANTLR4CPP_INCLUDE_DIRS}) 
+	#message(STATUS "hypro libraries dynamic: " "${hypro_LIBRARIES_DYNAMIC}")
+	#message("hypro include dirs: " ${hypro_INCLUDE_DIRS})
+	#message("hypro sources: " ${sources})
 	target_link_libraries(${PROJECT_NAME} PUBLIC ${hypro_LIBRARIES_DYNAMIC} pthread)
 	target_include_directories(${PROJECT_NAME}
 		PRIVATE ${hypro_INCLUDE_DIRS} ${CMAKE_CURRENT_SOURCE_DIR}

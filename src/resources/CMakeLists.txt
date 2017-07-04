@@ -38,10 +38,6 @@ message("-- Use system version of AnTLR")
 set(ANTLR4CPP_JAR_LOCATION ${PROJECT_SOURCE_DIR}/src/resources/antlr-4.7-complete.jar)
 #include external cmake file
 include(ExternalAntlr4Cpp.cmake)
-#include runtime to compile against
-#ANTLR4CPP_INCLUDE_DIRS and ANTLR4CPP_LIBS is already defined by the package
-#include_directories(${ANTLR4CPP_INCLUDE_DIRS})
-#link_directories(${ANTLR4CPP_LIBS})
-message(STATUS "Found antlr4cpp libs: ${ANTLR4CPP_LIBS} and includes: ${ANTLR4CPP_INCLUDE_DIRS} ")
+#message(STATUS "Found antlr4cpp libs: ${ANTLR4CPP_LIBS} and includes: ${ANTLR4CPP_INCLUDE_DIRS} ")
 
 
