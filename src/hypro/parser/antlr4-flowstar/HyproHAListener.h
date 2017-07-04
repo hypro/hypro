@@ -44,6 +44,8 @@ class HyproHAListener : public HybridAutomatonBaseListener {
 
 		//A temporary flow matrix and needed positioning variable
 		matrix_t<Number> flowMatrix;
+		matrix_t<Number> invMatrix;
+		std::shared_ptr<matrix<Number>> fillingTarget;
 		unsigned int currentRow = 0;
 
 	public:
@@ -56,6 +58,8 @@ class HyproHAListener : public HybridAutomatonBaseListener {
 		inline std::vector<std::string> getLocNames(){ return locNames; }
 		inline std::vector<std::string> getVarNames(){ return vars; }
 		inline matrix_t<Number> getFlow(){ return flowMatrix; }
+		inline matrix_t<Number> getInv(){ return invMatrix; }
+		inline matrix_t<Number> getFillingTarget(){ return *fillingTarget; }
 
 		void enterVardeclaration(HybridAutomatonParser::VardeclarationContext* ctx) override;
 		void enterLocation(HybridAutomatonParser::LocationContext* ctx) override;
