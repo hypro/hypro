@@ -227,3 +227,5 @@ macro(antlr4cpp_process_grammar
   message(STATUS "Antlr4Cpp ${antlr4cpp_project_namespace} include: ${ANTLR4CPP_GENERATED_SRC_DIR}/${antlr4cpp_project_namespace}")
 
 endmacro()
+
+add_dependencies(resources antlr4cpp)
