@@ -9,6 +9,7 @@ namespace hypro {
 		vars = std::vector<std::string>();
 		locNames = std::vector<std::string>();
 		flowMatrix = matrix_t<Number>(1,1);
+		fillingTarget = std::make_shared<matrix_t<Number>>(flowMatrix);
 		std::cout << "Ich wurde gebaut!" << std::endl;
 	}
 

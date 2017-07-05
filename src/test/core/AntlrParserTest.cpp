@@ -7,6 +7,9 @@
 #include "../defines.h"
 #include <antlr4-runtime.h>
 
+#include <unistd.h>
+#include <errno.h>
+
 using namespace antlr4;
 //using namespace hypro;
 
@@ -22,29 +25,26 @@ class AntlrParserTest : public ::testing::Test {
 		virtual void setUp(){}
 
 		virtual void tearDown(){}
+
+		void shit(){
+			char cwd[1024];
+		   	if (getcwd(cwd, sizeof(cwd)) != NULL)
+		       fprintf(stdout, "Current working dir: %s\n", cwd);
+		   	else
+		       perror("getcwd() error");
+		}
 };
 
 TYPED_TEST(AntlrParserTest, ParseLocation){
 
-
 	//Open examples.txt
+	this->shit();
 
-
-	ANTLRInputStream input;
-	//std::string path = "example.txt";
-	std::string path = "../../src/test/core/blub.txt";
-	//std::string path = "../../../../../../src/test/core/example.txt";
-	//std::ifstream ifs(path);
-
-	std::fstream ifs("../src/test/core/example.txt");
-
-	assert(ifs.good());
-
-	//ifs.open(path);
-	//ifs.open("../../hypro/parser/antlr4-flowstar/example.txt", std::ifstream::in);
+	std::fstream ifs("../../../../src/test/core/example_location_parsing.txt");
+	//std::fstream ifs("../src/test/core/example.txt"); The path from ../hypro/build
 
 	//Create an AnTLRInputStream
-	// TODO: STILL DOES NOT WORK
+	ANTLRInputStream input;
 	if(ifs.good()){
 		input = ANTLRInputStream(ifs);
 	} else {
@@ -63,14 +63,10 @@ TYPED_TEST(AntlrParserTest, ParseLocation){
 
 	if(!ifs.is_open()){
 		std::cout << "ifs hasn't opened anything" << std::endl;
-		//std::cout << "path is: " << path << std::endl;
 		FAIL();
 	}
 
-	std::cout << "input stream content: " << input.toString() << std::endl;
-
-	//ANTLRInputStream input("hybrid reachability { state var x,c1,c2 modes { rod1 { poly ode 1 { x' = 4 c1' = 34*23 c2' = 18 } inv { x >= 510 } } } }");
-	//2*x + -56*y +
+	std::cout << "input stream content:\n" << input.toString() << std::endl;
 
 	//Create a Lexer and feed it with the input
 	HybridAutomatonLexer lexer(&input);

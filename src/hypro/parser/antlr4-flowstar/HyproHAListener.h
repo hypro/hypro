@@ -14,6 +14,7 @@
 #pragma once
 
 #include <string>
+#include <memory>
 #include <antlr4-runtime.h>
 #include "HybridAutomatonLexer.h"
 #include "HybridAutomatonParser.h"
@@ -45,7 +46,7 @@ class HyproHAListener : public HybridAutomatonBaseListener {
 		//A temporary flow matrix and needed positioning variable
 		matrix_t<Number> flowMatrix;
 		matrix_t<Number> invMatrix;
-		std::shared_ptr<matrix<Number>> fillingTarget;
+		std::shared_ptr<matrix_t<Number>> fillingTarget;
 		unsigned int currentRow = 0;
 
 	public:
@@ -60,6 +61,7 @@ class HyproHAListener : public HybridAutomatonBaseListener {
 		inline matrix_t<Number> getFlow(){ return flowMatrix; }
 		inline matrix_t<Number> getInv(){ return invMatrix; }
 		inline matrix_t<Number> getFillingTarget(){ return *fillingTarget; }
+		inline void setFillingTarget(matrix_t<Number> newTarget){ fillingTarget = std::make_shared<matrix_t<Number>>(newTarget); }
 
 		void enterVardeclaration(HybridAutomatonParser::VardeclarationContext* ctx) override;
 		void enterLocation(HybridAutomatonParser::LocationContext* ctx) override;
