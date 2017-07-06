@@ -1,3 +1,5 @@
+/*
+
 #pragma once
 #include "../../flags.h"
 #include <string>
@@ -16,3 +18,5 @@ namespace hypro {
 	template<typename Number>
 	boost::tuple<HybridAutomaton<Number>, reachability::ReachabilitySettings<Number>> parseFlowstarFile(const std::string& filename);
 } // namespace hypro
+
+*/

@@ -1,3 +1,4 @@
+/*
 #include "ParserWrapper.h"
 
 #include "flowstarParser.h"
@@ -24,3 +25,4 @@ namespace hypro {
 		return boost::tuple<HybridAutomaton<double>, reachability::ReachabilitySettings<double>>(parser.parseInput(filename), parser.mSettings);
 	}
 } // namespace hypro
+*/
