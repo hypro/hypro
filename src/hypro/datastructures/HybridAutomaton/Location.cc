@@ -1,3 +1,4 @@
+/*
 #include "Location.h"
 
 namespace hypro
@@ -50,3 +51,5 @@ std::ostream& operator<<(std::ostream& _ostr, const Location& _l)
 }
 
 }  // namespace hydra
+
+*/

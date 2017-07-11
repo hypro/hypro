@@ -19,7 +19,6 @@
 
 namespace hypro
 {
-class ReachTreeNode;
 
 class HybridAutomaton
 {

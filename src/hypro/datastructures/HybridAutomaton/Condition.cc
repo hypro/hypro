@@ -1,3 +1,4 @@
+/*
 #include "Condition.h"
 
 namespace hypro {
@@ -108,3 +109,5 @@ std::pair<bool,State> Condition::clockIsSatisfiedBy(const State& inState) const 
 
 
 } // namespace
+
+*/

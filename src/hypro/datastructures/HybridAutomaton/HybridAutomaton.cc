@@ -1,3 +1,4 @@
+/*
 #include "HybridAutomaton.h"
 
 namespace hypro
@@ -15,3 +16,5 @@ unsigned HybridAutomaton::dimension() const
 }
 
 }  // namespace hydra
+
+*/

@@ -1,3 +1,4 @@
+/*
 #include "LocationManager.h"
 
 namespace hypro
@@ -74,3 +75,5 @@ Location *LocationManager<Number>::location(std::string name) const
 }
 
 }  // namespace hydra
+
+*/

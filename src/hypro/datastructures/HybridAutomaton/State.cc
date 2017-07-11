@@ -1,3 +1,4 @@
+/*
 #include "State.h"
 
 namespace hypro
@@ -80,3 +81,4 @@ State State<Number>::applyTimeStep(const hypro::matrix_t<Number>& trafoMatrix, c
 }
 
 }
+*/
