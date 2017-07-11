@@ -48,7 +48,7 @@ namespace hypro {
 	}
 
 	template<typename Number>
-	bool Path<Number>::sharePrefix(const Path &lhs, const Path &rhs) {
+	bool Path<Number>::sharePrefix(const Path<Number>& lhs, const Path<Number>& rhs) {
         for (auto lhsIt = lhs.mPath.begin(); lhsIt != lhs.mPath.end(); ++lhsIt) {
             for (auto rhsIt = rhs.mPath.begin(); rhsIt != rhs.mPath.end(); ++rhsIt) {
                 if (*lhsIt == *rhsIt) {
@@ -60,7 +60,7 @@ namespace hypro {
 	}
 
 	template<typename Number>
-	Path Path<Number>::sharedPrefix(const Path& lhs) const {
+	Path Path<Number>::sharedPrefix(const Path<Number>& lhs) const {
 		Path prefix;
 		for(unsigned pos = 0; pos < mPath.size() && pos < lhs.size(); ++pos) {
 			if( mPath.at(pos) == lhs.at(pos)) {
@@ -193,7 +193,7 @@ namespace hypro {
 	}
 
 	template<typename Number>
-	bool Path<Number>::operator>(const Path& r) const {
+	bool Path<Number>::operator>(const Path<Number>& r) const {
 		return mPath.size() > r.mPath.size();
 	}
 
@@ -223,7 +223,7 @@ namespace hypro {
 	}
 
 	template<typename Number>
-	bool Path<Number>::sharesPrefix(const Path &rhs) const {
+	bool Path<Number>::sharesPrefix(const Path<Number>& rhs) const {
 		return sharePrefix(*this, rhs);
 	}
 

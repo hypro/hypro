@@ -3,9 +3,9 @@
 namespace hypro {
 
 	template<typename Number>
-	State Reset<Number>::applyReset(const State& inState) const {
+	State<Number> Reset<Number>::applyReset(const State<Number>& inState) const {
 		//TRACE("hydra.datastructures","Apply reset on " << inState);
-		State res(inState);
+		State<Number> res(inState);
 		if(hasContinuousReset) {
 			//TRACE("hydra.datastructures","Apply continuous reset");
 			//TRACE("hydra.datastructures","Continuous reset matrix: " << continuousMat);
@@ -36,8 +36,8 @@ namespace hypro {
 	}
 
 	template<typename Number>
-	State Reset<Number>::applyDiscreteReset(const State& inState) const {
-		State res(inState);
+	State<Number> Reset<Number>::applyDiscreteReset(const State<Number>& inState) const {
+		State<Number> res(inState);
 		if(hasDiscreteReset){
 			//TRACE("hydra.datastructures","Apply discrete reset");
 			//TRACE("hydra.datastructures","Discrete reset matrix: " << discreteMat);

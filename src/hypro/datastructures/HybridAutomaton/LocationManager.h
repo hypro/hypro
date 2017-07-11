@@ -8,15 +8,14 @@
 
 #include "Location.h"
 #include <carl/util/Singleton.h>
-//#include <hypro/types.h>
 #include "../../types.h"
 
 namespace hypro
 {
 template<typename Number>
-class LocationManager : public carl::Singleton<LocationManager>
+class LocationManager : public carl::Singleton<LocationManager<Number>>
 {
-    friend carl::Singleton<LocationManager>;
+    friend carl::Singleton<LocationManager<Number>>;
 
   private:
     std::map<unsigned, Location<Number>*> mLocations;
@@ -32,10 +31,10 @@ class LocationManager : public carl::Singleton<LocationManager>
     ~LocationManager() {}
     Location<Number>* create();
     Location<Number>* create(const Location<Number>* _loc);
-    Location<Number>* create(const hypro::matrix_t<Number> _mat);
-    Location<Number>* create(const hypro::matrix_t<Number> _mat, const typename Location::transitionSet _trans, const Condition<Number>& _inv);
-    Location<Number>* create(const hypro::matrix_t<Number> _mat, const typename Location::transitionSet _trans, const Condition<Number>& _inv,
-                     const hypro::matrix_t<Number> _extInputMat);
+    Location<Number>* create(const matrix_t<Number> _mat);
+    Location<Number>* create(const matrix_t<Number> _mat, const typename Location<Number>::transitionSet _trans, const Condition<Number>& _inv);
+    Location<Number>* create(const matrix_t<Number> _mat, const typename Location<Number>::transitionSet _trans, const Condition<Number>& _inv,
+                     const matrix_t<Number> _extInputMat);
 
     unsigned id(Location<Number>* _loc) const;
     Location<Number>* location(unsigned _id) const;

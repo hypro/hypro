@@ -49,21 +49,21 @@ Location<Number> *LocationManager<Number>::create(const hypro::matrix_t<Number> 
 }
 
 template<typename Number>
-unsigned LocationManager<Number>::id(Location<Number> *_loc) const
+unsigned LocationManager<Number>::id(Location<Number>* _loc) const
 {
     assert(mIds.find(_loc) != mIds.end());
     return mIds.at(_loc);
 }
 
 template<typename Number>
-Location<Number> *LocationManager<Number>::location(unsigned _id) const
+Location<Number>* LocationManager<Number>::location(unsigned _id) const
 {
     assert(mLocations.find(_id) != mLocations.end());
     return mLocations.at(_id);
 }
 
 template<typename Number>
-Location<Number> *LocationManager<Number>::location(std::string name) const
+Location<Number>* LocationManager<Number>::location(std::string name) const
 {
 	for(auto locIt = mLocations.begin(); locIt != mLocations.end(); ++ locIt) {
 		if((*locIt).second->getName() == name) {
