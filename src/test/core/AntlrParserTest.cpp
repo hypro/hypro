@@ -7,8 +7,7 @@
 #include "../defines.h"
 #include <antlr4-runtime.h>
 
-#include <unistd.h>
-#include <errno.h>
+#include <unistd.h>		//getcwd()
 
 using namespace antlr4;
 //using namespace hypro;
@@ -26,19 +25,19 @@ class AntlrParserTest : public ::testing::Test {
 
 		virtual void tearDown(){}
 
-		void shit(){
+		void cwd(){
 			char cwd[1024];
 		   	if (getcwd(cwd, sizeof(cwd)) != NULL)
 		       fprintf(stdout, "Current working dir: %s\n", cwd);
 		   	else
-		       perror("getcwd() error");
+		       std::cerr << "getcwd() error" << std::endl;
 		}
 };
 
 TYPED_TEST(AntlrParserTest, ParseLocation){
 
 	//Open examples.txt
-	this->shit();
+	this->cwd();
 
 	std::fstream ifs("../../../../src/test/core/example_location_parsing.txt");
 	//std::fstream ifs("../src/test/core/example.txt"); The path from ../hypro/build

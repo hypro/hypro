@@ -7,8 +7,8 @@ hybrid reachability
   {
    poly ode 1
    {
-    x' = 2*x + -56*y + 4
-    c1' = 34*23
+    x' = 2*x + -56*c1 + 4
+    c1' = 34*23*c1
     c2' = 1
    }
    inv
