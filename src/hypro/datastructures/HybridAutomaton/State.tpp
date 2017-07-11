@@ -3,32 +3,32 @@
 namespace hypro
 {
 
-template<typename Number>
-void State<Number>::addTimeToClocks(Number t) {
+template<typename Number, typename Representation>
+void State<Number,Representation>::addTimeToClocks(Number t) {
 	//TRACE("hydra.datastructures","Add timestep of size " << t << " to clocks.");
 	if(mHasClocks) {
-		matrix_t<Number> identity = matrix_t<Number>::Identity(boost::get<clockSetRepresentation>(mClockAssignment).dimension(), boost::get<clockSetRepresentation>(mClockAssignment).dimension());
-		vector_t<Number> clockShift = vector_t<Number>::Ones(boost::get<clockSetRepresentation>(mClockAssignment).dimension());
+		matrix_t<Number> identity = matrix_t<Number>::Identity(mClockAssignment.dimension(), mClockAssignment.dimension());
+		vector_t<Number> clockShift = vector_t<Number>::Ones(mClockAssignment.dimension());
 		clockShift = clockShift * t;
-		mClockAssignment = boost::apply_visitor(genericAffineTransformationVisitor<RepresentationVariant>(identity,clockShift), mClockAssignment);
+		mClockAssignment = mClockAssignment.affineTransformation(identity,clockShift);
 	}
 	mTimestamp += t;
 }
 
-template<typename Number>
-State State<Number>::aggregate(const State& in) const {
+template<typename Number, typename Representation>
+State<Number,Representation> State<Number,Representation>::aggregate(const State<Number,Representation>& in) const {
 	assert(mDiscreteAssignment == in.getDiscreteAssignment());
 	assert(mSetRepresentationName == in.getSetRepresentation());
-	State res(*this);
+	State<Number,Representation> res(*this);
 
 	//TRACE("hydra.datastructures","Aggregation of " << res << " and " << in);
 
-	res.setSet(boost::apply_visitor(genericUniteVisitor<RepresentationVariant>(), in.getSet(), getSet()));
+	res.setSet(in.getSet().unite(getSet()));
 
 	//TRACE("hydra.datastructures","After continuous aggregation " << res );
 
 	if(mHasClocks) {
-		res.setClockAssignment(boost::apply_visitor(genericUniteVisitor<RepresentationVariant>(), in.getClockAssignment(), res.getClockAssignment()));
+		res.setClockAssignment(in.getClockAssignment().unite(res.getClockAssignment()));
 		//TRACE("hydra.datastructures","After clock aggregation " << res );
 	}
 
@@ -36,14 +36,14 @@ State State<Number>::aggregate(const State& in) const {
 	return res;
 }
 
-template<typename Number>
-std::pair<bool,State> State<Number>::intersect(const State& in) const {
+template<typename Number, typename Representation>
+std::pair<bool,State<Number,Representation>> State<Number,Representation>::intersect(const State<Number,Representation>& in) const {
 	//DEBUG("hydra.datastructures","this rep name: " << mSetRepresentationName << " vs " << in.getSetRepresentation());
 	//assert(mSetRepresentationName == in.getSetRepresentation());
 
-	State res(*this);
+	State<Number,Representation> res(*this);
 	bool empty = true;
-	std::pair<bool,RepresentationVariant> contPair = boost::apply_visitor(genericSatisfiesHalfspacesVisitor<RepresentationVariant>(boost::get<cPair>(in.getSet()).first, boost::get<cPair>(in.getSet()).second), res.getSet());
+	std::pair<bool,Representation> contPair = mSet.satisfiesHalfspaces(in.getSet().matrix(), in.getSet().vector());
 	if(contPair.first) {
 		empty = false;
 		res.setSet(contPair.second);
@@ -51,7 +51,7 @@ std::pair<bool,State> State<Number>::intersect(const State& in) const {
 
 	// clock sets.
 	if(mHasClocks && !empty) {
-		std::pair<bool,RepresentationVariant> clockPair = boost::apply_visitor(genericSatisfiesHalfspacesVisitor<RepresentationVariant>(boost::get<cPair>(in.getClockAssignment()).first, boost::get<cPair>(in.getClockAssignment()).second), res.getClockAssignment());
+		std::pair<bool,clockSetRepresentation> clockPair = mClockAssignment.satisfiesHalfspaces(in.getClockAssignment().matrix(), in.getClockAssignment().vector());
 		if(clockPair.first) {
 			empty = false;
 			res.setClockAssignment(clockPair.second);
@@ -60,7 +60,7 @@ std::pair<bool,State> State<Number>::intersect(const State& in) const {
 
 	// discrete sets.
 	if(mHasDiscreteVariables && !empty) {
-		std::pair<bool,RepresentationVariant> discretePair = boost::apply_visitor(genericSatisfiesHalfspacesVisitor<RepresentationVariant>(boost::get<cPair>(in.getDiscreteAssignment()).first, boost::get<cPair>(in.getDiscreteAssignment()).second), res.getDiscreteAssignment());
+		std::pair<bool,discreteSetRepresentation> discretePair = mDiscreteAssignment.satisfiesHalfspaces(in.getDiscreteAssignment().matrix(), in.getDiscreteAssignment().vector());
 		if(discretePair.first) {
 			empty = false;
 			res.setDiscreteAssignment(discretePair.second);
@@ -70,11 +70,11 @@ std::pair<bool,State> State<Number>::intersect(const State& in) const {
 	return std::make_pair(!empty, res);
 }
 
-template<typename Number>
-State State<Number>::applyTimeStep(const matrix_t<Number>& trafoMatrix, const vector_t<Number>& trafoVector, Number timeStepSize ) const {
-	State res(*this);
+template<typename Number, typename Representation>
+State<Number,Representation> State<Number,Representation>::applyTimeStep(const matrix_t<Number>& trafoMatrix, const vector_t<Number>& trafoVector, Number timeStepSize ) const {
+	State<Number,Representation> res(*this);
 	//TRACE("hydra.datastructures","Apply timestep of size " << timeStepSize);
-	res.setSet(boost::apply_visitor(genericAffineTransformationVisitor<RepresentationVariant>(trafoMatrix,trafoVector), res.getSet()));
+	res.setSet(mSet.affineTransformation(trafoMatrix,trafoVector));
 	res.addTimeToClocks(timeStepSize);
 	return res;
 }

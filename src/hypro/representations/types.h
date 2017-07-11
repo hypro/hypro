@@ -8,7 +8,4 @@ namespace hypro {
  */
 enum representation_name { constraint_set, box, zonotope, polytope_h, polytope_v, ppl_polytope, support_function, taylor_model };
 
-using RepresentationVariant =
-      boost::variant<ConstraintSet<Number>, VPolytope<Number>, HPolytope<Number>, Box<Number>, SupportFunction<Number>, Zonotope<Number>>;
-
 } // namespace hypro

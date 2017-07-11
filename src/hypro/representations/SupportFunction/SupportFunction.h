@@ -9,7 +9,7 @@
 #include "util.h"
 #include "SupportFunctionContent.h"
 #include "../../util/templateDirections.h"
-#include "../../datastructures/hybridAutomata/Location.h"
+#include "../../datastructures/HybridAutomaton/Location.h"
 
 namespace hypro {
 

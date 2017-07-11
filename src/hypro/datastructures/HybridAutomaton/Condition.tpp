@@ -3,70 +3,41 @@
 namespace hypro {
 
 template<typename Number>
-std::pair<bool,State<Number>> Condition<Number>::isSatisfiedBy(const State& inState) const {
-	State<Number> res(inState);
-
+template<typename Representation>
+std::pair<bool,State<Number,Representation>> Condition<Number>::isSatisfiedBy(const State<Number,Representation>& inState) const {
 #ifdef HYDRA_USE_LOGGING
 	DEBUG("hydra.datastructures","Checking condition.");
 	DEBUG("hydra.datastructures","State: " << inState);
 	DEBUG("hydra.datastructures","Continuous constraint matrix: " << mat << " and continuous constraint vector: " << vec);
 #endif
 
-	bool empty = true;
-	if(mat.rows() == 0) {
-		assert(vec.rows() == 0);
-		empty = false;
-	} else {
-		std::pair<bool, RepresentationVariant> contSet = boost::apply_visitor(genericSatisfiesHalfspacesVisitor<RepresentationVariant, Number>(mat,vec), res.getSet());
-		if(contSet.first) {
-			//TRACE("hydra.datastructures","Continuous condition satisfied.");
-			empty = false;
-			res.setSet(contSet.second);
-			//TRACE("hydra.datastructures","Resulting set after continuous intersection: " << res);
-		} else {
-			//TRACE("hydra.datastructures","Continuous condition fails.");
-		}
+	// TODO: Overthink order here - it would be nice to test clocks first, then discrete assignments and continuous sets last.
+
+	std::pair<bool,State<Number,Representation>> res = this->continuousIsSatisfiedBy(inState);
+
+	if(hasDiscreteConstraints && res.first) {
+		res = res.discreteIsSatisfiedBy(inState);
 	}
 
-	if(hasDiscreteConstraints && !empty) {
-		//TRACE("hydra.datastructures","Check discrete condition.");
-		std::pair<bool, RepresentationVariant> discSet = boost::apply_visitor(genericSatisfiesHalfspacesVisitor<RepresentationVariant, Number>(discreteMat,discreteVec), res.getDiscreteAssignment());
-		if(discSet.first) {
-			//TRACE("hydra.datastructures","Discrete condition satisfied.");
-			res.setDiscreteAssignment(discSet.second);
-			empty = false;
-		} else {
-			//TRACE("hydra.datastructures","Discrete condition fails.");
-			empty = true;
-		}
-	}
-	if(hasClockConstraints && !empty) {
-		//TRACE("hydra.datastructures","Check clock condition.");
-		std::pair<bool, RepresentationVariant> clkSet = boost::apply_visitor(genericSatisfiesHalfspacesVisitor<RepresentationVariant, Number>(clockMat,clockVec), res.getClockAssignment());
-		if(clkSet.first) {
-			//TRACE("hydra.datastructures","Clock condition satisfied.");
-			res.setClockAssignment(clkSet.second);
-			empty = false;
-		} else {
-			//TRACE("hydra.datastructures","Clock condition fails.");
-			empty = true;
-		}
+	if(hasClockConstraints && res.first) {
+		res = res.clockIsSatisfiedBy(inState);
 	}
 	//DEBUG("hydra.datastructures","Condition is satisfied: " << !empty);
-	return std::make_pair(!empty,res);
+	return res;
 }
 
 template<typename Number>
-std::pair<bool,State<Number>> Condition<Number>::continuousIsSatisfiedBy(const State<Number>& inState) const {
+template<typename Representation>
+std::pair<bool,State<Number,Representation>> Condition<Number>::continuousIsSatisfiedBy(const State<Number,Representation>& inState) const {
 	if(mat.rows() == 0) {
 		assert(vec.rows() == 0);
 		return std::make_pair(true,inState);
 	}
-	State<Number> res(inState);
+	State<Number,Representation> res(inState);
 
 	bool empty = true;
 	//TRACE("hydra.datastructures","Check continuous condition, mat: " << mat << " and vector " << vec << " of state " << inState);
-	std::pair<bool, RepresentationVariant> contSet = boost::apply_visitor(genericSatisfiesHalfspacesVisitor<RepresentationVariant, Number>(mat,vec), res.getSet());
+	std::pair<bool, Representation> contSet = res.getSet().satisfiesHalfspaces(mat,vec);
 	if(contSet.first) {
 		//TRACE("hydra.datastructures","Not empty, resulting set: ");
 		empty = false;
@@ -77,14 +48,15 @@ std::pair<bool,State<Number>> Condition<Number>::continuousIsSatisfiedBy(const S
 }
 
 template<typename Number>
-std::pair<bool,State<Number>> Condition<Number>::discreteIsSatisfiedBy(const State<Number>& inState) const {
+template<typename Representation>
+std::pair<bool,State<Number,Representation>> Condition<Number>::discreteIsSatisfiedBy(const State<Number,Representation>& inState) const {
 	if(!hasDiscreteConstraints) {
 		return std::make_pair(true,inState);
 	}
-	State<Number> res(inState);
+	State<Number,Representation> res(inState);
 	bool empty = true;
 	//TRACE("hydra.datastructures","Check discrete condition.");
-	std::pair<bool, RepresentationVariant> discSet = boost::apply_visitor(genericSatisfiesHalfspacesVisitor<RepresentationVariant, Number>(discreteMat,discreteVec), res.getDiscreteAssignment());
+	std::pair<bool, typename State<Number,Representation>::discreteSetRepresentation> discSet = res.getDiscreteAssignment().satisfiesHalfspaces(discreteMat,discreteVec);
 	if(discSet.first) {
 		//TRACE("hydra.datastructures","Not empty.");
 		res.setDiscreteAssignment(discSet.second);
@@ -94,14 +66,15 @@ std::pair<bool,State<Number>> Condition<Number>::discreteIsSatisfiedBy(const Sta
 }
 
 template<typename Number>
-std::pair<bool,State<Number>> Condition<Number>::clockIsSatisfiedBy(const State<Number>& inState) const {
+template<typename Representation>
+std::pair<bool,State<Number,Representation>> Condition<Number>::clockIsSatisfiedBy(const State<Number,Representation>& inState) const {
 	if(!hasClockConstraints) {
 		return std::make_pair(true,inState);
 	}
-	State<Number> res(inState);
+	State<Number,Representation> res(inState);
 	bool empty = true;
 	//TRACE("hydra.datastructures","Check clock condition.");
-	std::pair<bool, RepresentationVariant> clkSet = boost::apply_visitor(genericSatisfiesHalfspacesVisitor<RepresentationVariant, Number>(clockMat,clockVec), res.getClockAssignment());
+	std::pair<bool, typename State<Number,Representation>::clockSetRepresentation> clkSet = res.getClockAssignment().satisfiesHalfspaces(clockMat,clockVec);
 	if(clkSet.first) {
 		//TRACE("hydra.datastructures","Not empty.");
 		res.setClockAssignment(clkSet.second);

@@ -5,16 +5,17 @@
 #include "../../representations/types.h"
 #include <iostream>
 
-namespace hydra {
+namespace hypro {
 
+template<typename Number>
 class Condition {
 private:
-    hypro::vector_t<Number> vec;
-    hypro::matrix_t<Number> mat;
-    hypro::vector_t<Number> discreteVec;
-    hypro::matrix_t<Number> discreteMat;
-    hypro::vector_t<Number> clockVec;
-    hypro::matrix_t<Number> clockMat;
+    vector_t<Number> vec;
+    matrix_t<Number> mat;
+    vector_t<Number> discreteVec;
+    matrix_t<Number> discreteMat;
+    vector_t<Number> clockVec;
+    matrix_t<Number> clockMat;
     bool hasDiscreteConstraints = false;
     bool hasClockConstraints = false;
 
@@ -27,25 +28,29 @@ public:
 	~Condition() {}
 
 	// Access
-	const hypro::vector_t<Number>& getVector() const { return vec; }
-	const hypro::matrix_t<Number>& getMatrix() const { return mat; }
-	const hypro::vector_t<Number>& getDiscreteVector() const { return discreteVec; }
-	const hypro::matrix_t<Number>& getDiscreteMatrix() const { return discreteMat; }
-	const hypro::vector_t<Number>& getClockVector() const { return clockVec; }
-	const hypro::matrix_t<Number>& getClockMatrix() const { return clockMat; }
+	const vector_t<Number>& getVector() const { return vec; }
+	const matrix_t<Number>& getMatrix() const { return mat; }
+	const vector_t<Number>& getDiscreteVector() const { return discreteVec; }
+	const matrix_t<Number>& getDiscreteMatrix() const { return discreteMat; }
+	const vector_t<Number>& getClockVector() const { return clockVec; }
+	const matrix_t<Number>& getClockMatrix() const { return clockMat; }
 
-	void setVector(const hypro::vector_t<Number>& v) { vec = v; }
-	void setMatrix(const hypro::matrix_t<Number>& m) { mat = m; }
-	void setDiscreteVector(const hypro::vector_t<Number>& v) { discreteVec = v; hasDiscreteConstraints = true; }
-	void setDiscreteMatrix(const hypro::matrix_t<Number>& m) { discreteMat = m; hasDiscreteConstraints = true; }
-	void setClockVector(const hypro::vector_t<Number>& v) { clockVec = v; hasClockConstraints = true; }
-	void setClockMatrix(const hypro::matrix_t<Number>& m) { clockMat = m; hasClockConstraints = true; }
+	void setVector(const vector_t<Number>& v) { vec = v; }
+	void setMatrix(const matrix_t<Number>& m) { mat = m; }
+	void setDiscreteVector(const vector_t<Number>& v) { discreteVec = v; hasDiscreteConstraints = true; }
+	void setDiscreteMatrix(const matrix_t<Number>& m) { discreteMat = m; hasDiscreteConstraints = true; }
+	void setClockVector(const vector_t<Number>& v) { clockVec = v; hasClockConstraints = true; }
+	void setClockMatrix(const matrix_t<Number>& m) { clockMat = m; hasClockConstraints = true; }
 
 	// helper methods
-	std::pair<bool,State> isSatisfiedBy(const State& inState) const;
-	std::pair<bool,State> continuousIsSatisfiedBy(const State& inState) const;
-	std::pair<bool,State> discreteIsSatisfiedBy(const State& inState) const;
-	std::pair<bool,State> clockIsSatisfiedBy(const State& inState) const;
+	template<typename Representation>
+	std::pair<bool,State<Number,Representation>> isSatisfiedBy(const State<Number,Representation>& inState) const;
+	template<typename Representation>
+	std::pair<bool,State<Number,Representation>> continuousIsSatisfiedBy(const State<Number,Representation>& inState) const;
+	template<typename Representation>
+	std::pair<bool,State<Number,Representation>> discreteIsSatisfiedBy(const State<Number,Representation>& inState) const;
+	template<typename Representation>
+	std::pair<bool,State<Number,Representation>> clockIsSatisfiedBy(const State<Number,Representation>& inState) const;
 
 	friend bool operator==(const Condition& lhs, const Condition& rhs) {
 		return (lhs.vec == rhs.vec && lhs.mat == rhs.mat &&
@@ -72,3 +77,5 @@ public:
 };
 
 } // namespace
+
+#include "Condition.tpp"

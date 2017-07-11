@@ -3,16 +3,22 @@
 namespace hypro {
 
 	template<typename Number>
-	HyproHAListener<Number>::HyproHAListener(){
-		locSet = std::set<Location<Number>*>();
-		//loc = Location<Number>(0);
-		vars = std::vector<std::string>();
-		locNames = std::vector<std::string>();
-		flowMatrix = matrix_t<Number>::Zero(1,1);
-		//invMatrix = matrix_t<Number>::Zero(1,1);
-		inv.vec = vector_t<Number>::Zero(1);
-		inv.mat = matrix_t<Number>::Zero(1,1);
-		fillingTarget = std::make_shared<matrix_t<Number>>(flowMatrix);
+	HyproHAListener<Number>::HyproHAListener()
+		: locSet(),
+		vars(),
+		locNames(),
+		flowMatrix(matrix_t<Number>::Zero(1,1)),
+		inv(),
+		fillingTarget(std::make_shared<matrix_t<Number>>(flowMatrix))
+	{
+		////loc = Location<Number>(0);
+		//vars = std::vector<std::string>();
+		//locNames = std::vector<std::string>();
+		//flowMatrix = matrix_t<Number>::Zero(1,1);
+		////invMatrix = matrix_t<Number>::Zero(1,1);
+		//inv.vec = vector_t<Number>::Zero(1);
+		//inv.mat = matrix_t<Number>::Zero(1,1);
+		//fillingTarget = std::make_shared<matrix_t<Number>>(flowMatrix);
 		std::cout << "Ich wurde gebaut!" << std::endl;
 	}
 
@@ -27,7 +33,7 @@ namespace hypro {
 	}
 
 	template<typename Number>
-	void HyproHAListener<Number>::enterVardeclaration(HybridAutomatonParser::VardeclarationContext* ctx) { 
+	void HyproHAListener<Number>::enterVardeclaration(HybridAutomatonParser::VardeclarationContext* ctx) {
 		std::cout << "Bin bei enterVardeclaration!" << std::endl;
 		for(tree::TerminalNode* variable : ctx->VARIABLE()){
 			this->vars.push_back(variable->getText());
@@ -57,7 +63,7 @@ namespace hypro {
 		//Since we are in activities, we will only fill the flow matrix. Set the filling target accordingly
 		this->setFillingTarget(this->flowMatrix);
 	}
-	
+
 	template<typename Number>
 	void HyproHAListener<Number>::enterEquation(HybridAutomatonParser::EquationContext* ctx){
 		std::cout << "Bin bei enterEquation!" << std::endl;
@@ -81,7 +87,7 @@ namespace hypro {
 			std::cout << "currentRow after inc is: " << currentRow << std::endl;
 		} else {
 			std::cout << "currentRow with " << this->currentRow << " is bigger or equal than var size with " << this->vars.size() << std::endl;
-		}	
+		}
 	}
 
 	template<typename Number>
@@ -99,7 +105,7 @@ namespace hypro {
 				}
 			}
 			if(!found){
-				undefinedVars = maybeVar->getText() + ", " + undefinedVars; 
+				undefinedVars = maybeVar->getText() + ", " + undefinedVars;
 				allVarsFound = false;
 			}
 		}
@@ -124,24 +130,24 @@ namespace hypro {
 				std::string num = ctxNum->getText();
 				Number numInNumber = this->stringToNumber(num);
 				multed = multed * numInNumber;
-			}	
+			}
 		} else if(ctx->NUMBER().size() == 1){
 			std::string num = ctx->NUMBER()[0]->getText();
 			multed = this->stringToNumber(num);
 		}
 		std::cout << "Multiplied constants to " << multed << std::endl;
-		
+
 		if(ctx->VARIABLE().size() == 0){
 			//No variables at all: Just put multed into matrix
 			std::cout << "currentRow is " << currentRow << " and flowMatrix.cols() is " << flowMatrix.cols() << std::endl;
-			this->getFillingTarget(this->currentRow, flowMatrix.cols()-1) = multed;
+			(*this->rGetFillingTarget())(this->currentRow, flowMatrix.cols()-1) = multed;
 			std::cout << "flowMatrix is now:\n" << flowMatrix << std::endl;
 		} else if(ctx->VARIABLE().size() == 1){
-			//Exactly one variable: 
+			//Exactly one variable:
 			for(unsigned int i=0; i < this->vars.size(); i++){
 				std::cout << "vars[i] is: " << vars[i] << " and ctx variable 0 is: " << ctx->VARIABLE()[0]->getText() << std::endl;
 				if(vars[i] == ctx->VARIABLE()[0]->getText()){
-					this->getFillingTarget(this->currentRow, i) = multed;	
+					(*this->rGetFillingTarget())(this->currentRow, i) = multed;
 					std::cout << "flowMatrix is now:\n" << flowMatrix << std::endl;
 				}
 			}
@@ -159,13 +165,13 @@ namespace hypro {
 
 	template<typename Number>
 	void HyproHAListener<Number>::enterInvariants(HybridAutomatonParser::InvariantsContext* ctx){
-		std::cout << "Bin bei enterInvariants!" << std::endl;	
+		std::cout << "Bin bei enterInvariants!" << std::endl;
 		this->setFillingTarget(this->inv.getMatrix());
 	}
 
 	template<typename Number>
 	void HyproHAListener<Number>::exitInvariants(HybridAutomatonParser::InvariantsContext* ctx){
-		std::cout << "Bin bei exitInvariants!" << std::endl;		
+		std::cout << "Bin bei exitInvariants!" << std::endl;
 	}
 
 	template<typename Number>
@@ -174,11 +180,11 @@ namespace hypro {
 
 		//Syntax check: Block all invariants where "<" and ">" occur
 		if(ctx->BOOLRELATION()->getText() == "<" || ctx->BOOLRELATION()->getText() == ">"){
-			std::cerr << "Strict relations are not allowed in current build!"
+			std::cerr << "Strict relations are not allowed in current build!";
 		}
 		//Else: Convert equation to a form such that its relation is always "<=" and then put into matrix
 		if(ctx->BOOLRELATION()->getText() == "<="){
-			
+
 		}
 
 
@@ -186,28 +192,28 @@ namespace hypro {
 
 	template<typename Number>
  	void HyproHAListener<Number>::exitBoolexpr(HybridAutomatonParser::BoolexprContext* ctx){
- 		std::cout << "Bin bei exitBoolexpr!" << std::endl;	
+ 		std::cout << "Bin bei exitBoolexpr!" << std::endl;
  	}
 
  	template<typename Number>
   	void HyproHAListener<Number>::enterIntervalexpr(HybridAutomatonParser::IntervalexprContext* ctx){
-  		
+
   	}
 
   	template<typename Number>
   	void HyproHAListener<Number>::exitIntervalexpr(HybridAutomatonParser::IntervalexprContext* ctx){
-  		
+
   	}
 
   	template<typename Number>
   	void HyproHAListener<Number>::exitLocation(HybridAutomatonParser::LocationContext* ctx){
   		std::cout << "Bin bei exitLocation!" << std::endl;
   	}
-	
+
 	template<typename Number>
 	void HyproHAListener<Number>::exitStart(HybridAutomatonParser::StartContext* ctx){
 		std::cout << "Bin bei exitStart!" << std::endl;
-	} 
+	}
 
 
 
