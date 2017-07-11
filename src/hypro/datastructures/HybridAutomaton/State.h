@@ -5,7 +5,6 @@
 #include "lib/datastructures/ReachTree/types.h"         //???
 #include "lib/utils/types.h"                            //???
 #include <carl/interval/Interval.h>
-//#include <hypro/representations/GeometricObject.h>
 #include "../../representations/GeometricObject.h"
 
 namespace hypro
@@ -18,12 +17,12 @@ template<typename Number>
 class State
 {
 public:
-	using discreteSetRepresentation = hypro::Box<Number>;
-	using clockSetRepresentation = hypro::Box<Number>;
+	using discreteSetRepresentation = Box<Number>;
+	using clockSetRepresentation = Box<Number>;
   protected:
-    const Location* mLoc = nullptr; // Todo: Check if the location pointer is really needed.
+    const Location<Number>* mLoc = nullptr; // Todo: Check if the location pointer is really needed.
     RepresentationVariant mSet;
-    hypro::representation_name mSetRepresentationName;
+    representation_name mSetRepresentationName;
     RepresentationVariant mDiscreteAssignment;
     RepresentationVariant mClockAssignment;
     carl::Interval<Number> mTimestamp = carl::Interval<Number>::unboundedInterval();
@@ -34,7 +33,7 @@ public:
   public:
     State() = default;
 
-    State(const State& orig) :
+    State(const State<Number>& orig) :
     	mLoc(orig.getLocation()),
     	mSet(orig.getSet()),
     	mSetRepresentationName(orig.getSetRepresentation()),
@@ -45,7 +44,7 @@ public:
     	mHasDiscreteVariables(orig.hasDiscreteVariables())
     {}
 
-    State(State&& orig) :
+    State(State<Number>&& orig) :
     	mLoc(orig.getLocation()),
     	mSet(orig.getSet()),
     	mSetRepresentationName(orig.getSetRepresentation()),
@@ -56,7 +55,7 @@ public:
     	mHasDiscreteVariables(orig.hasDiscreteVariables())
     {}
 
-    State& operator=(const State& orig) {
+    State<Number>& operator=(const State<Number>& orig) {
     	mLoc = orig.getLocation();
     	mSet = orig.getSet();
     	mSetRepresentationName = orig.getSetRepresentation();
@@ -68,7 +67,7 @@ public:
     	return *this;
     }
 
-    State& operator=(State&& orig) {
+    State<Number>& operator=(State<Number>&& orig) {
     	mLoc = orig.getLocation();
     	mSet = orig.getSet();
     	mSetRepresentationName = orig.getSetRepresentation();
@@ -80,10 +79,10 @@ public:
     	return *this;
     }
 
-    State(const hydra::Location* _loc) : mLoc(_loc), mSet(), mDiscreteAssignment() { assert(mLoc != nullptr); }
-    State(const hydra::Location* _loc, const RepresentationVariant& _rep) : mLoc(_loc), mSet(_rep), mDiscreteAssignment() { assert(mLoc != nullptr); }
-    State(const hydra::Location* _loc, const RepresentationVariant& _rep, const carl::Interval<Number>& _timestamp) : mLoc(_loc), mSet(_rep), mDiscreteAssignment(), mTimestamp(_timestamp) { assert(mLoc != nullptr); }
-    State(const hydra::Location* _loc,
+    State(const Location<Number>* _loc) : mLoc(_loc), mSet(), mDiscreteAssignment() { assert(mLoc != nullptr); }
+    State(const Location<Number>* _loc, const RepresentationVariant& _rep) : mLoc(_loc), mSet(_rep), mDiscreteAssignment() { assert(mLoc != nullptr); }
+    State(const Location<Number>* _loc, const RepresentationVariant& _rep, const carl::Interval<Number>& _timestamp) : mLoc(_loc), mSet(_rep), mDiscreteAssignment(), mTimestamp(_timestamp) { assert(mLoc != nullptr); }
+    State(const Location<Number>* _loc,
     		const RepresentationVariant& _rep,
     		const RepresentationVariant& discreteAssingment,
     		const RepresentationVariant& clockAssignment,
@@ -99,10 +98,10 @@ public:
     	assert(mLoc != nullptr);
     }
 
-    const hydra::Location* getLocation() const { assert(mLoc != nullptr); return mLoc; }
+    const Location<Number>* getLocation() const { assert(mLoc != nullptr); return mLoc; }
     const RepresentationVariant& getSet() const { return mSet; }
     RepresentationVariant& rGetSet() { return mSet; }
-    inline hypro::representation_name getSetRepresentation() const { return mSetRepresentationName; }
+    inline representation_name getSetRepresentation() const { return mSetRepresentationName; }
     const RepresentationVariant& getDiscreteAssignment() const { return mDiscreteAssignment; }
     const RepresentationVariant& getClockAssignment() const { return mClockAssignment; }
     const carl::Interval<Number>& getTimestamp() const { return mTimestamp; }
@@ -111,29 +110,29 @@ public:
     bool hasDiscreteVariables() const { return mHasDiscreteVariables; }
     bool isEmpty() const { return mIsEmpty; }
 
-    void setLocation(const Location* l) { assert(l != nullptr); mLoc = l; }
+    void setLocation<Number>(const Location<Number>* l) { assert(l != nullptr); mLoc = l; }
     void setSet(const RepresentationVariant& s) { mSet = s; }
-    void setSetRepresentation(hypro::representation_name n) { mSetRepresentationName = n; }
+    void setSetRepresentation(representation_name n) { mSetRepresentationName = n; }
     void setTimestamp(carl::Interval<Number> t) { mTimestamp = t; }
     void setDiscreteAssignment(const RepresentationVariant& d) { mDiscreteAssignment = d; mHasDiscreteVariables = true;}
     void setClockAssignment(const RepresentationVariant& c) { mClockAssignment = c; mHasClocks = true;}
 
     void addTimeToClocks(Number t);
-    State aggregate(const State& in) const;
-    std::pair<bool,State> intersect(const State& in) const;
-    State applyTimeStep(const hypro::matrix_t<Number>& trafoMatrix, const hypro::vector_t<Number>& trafoVector, Number timeStepSize ) const;
+    State aggregate(const State<Number>& in) const;
+    std::pair<bool,State> intersect(const State<Number>& in) const;
+    State applyTimeStep(const matrix_t<Number>& trafoMatrix, const vector_t<Number>& trafoVector, Number timeStepSize ) const;
 
-    friend ostream& operator<<(ostream& out, const State& state) {
-//#ifdef HYDRA_USE_LOGGING
+    friend ostream& operator<<(ostream& out, const State<Number>& state) {
+		#ifdef HYPRO_USE_LOGGING
     	//out << "location: " << state.mLoc->getName() << " at timestamp " << state.mTimestamp << std::endl;
-    	out << "Set: " << hypro::convert<Number,double>(boost::get<hypro::Box<Number>>(boost::apply_visitor(genericConversionVisitor<RepresentationVariant>(hypro::representation_name::box), state.getSet()))) << std::endl;
+    	out << "Set: " << convert<Number,double>(boost::get<Box<Number>>(boost::apply_visitor(genericConversionVisitor<RepresentationVariant>(representation_name::box), state.getSet()))) << std::endl;
     	out << "Discrete Set: " << boost::get<discreteSetRepresentation>(state.mDiscreteAssignment) << std::endl;
     	out << "Clock Set: " << boost::get<clockSetRepresentation>(state.mClockAssignment);
-//#endif
+		#endif
     	return out;
     }
 
-    friend bool operator==(const State& lhs, const State& rhs) {
+    friend bool operator==(const State<Number>& lhs, const State<Number>& rhs) {
     	return ( lhs.mLoc == rhs.mLoc &&
     			 lhs.mSet == rhs.mSet &&
     			 lhs.mSetRepresentationName == rhs.mSetRepresentationName &&
@@ -142,7 +141,7 @@ public:
     			 lhs.mTimestamp == rhs.mTimestamp);
     }
 
-    friend bool operator!=(const State& lhs, const State& rhs) {
+    friend bool operator!=(const State<Number>& lhs, const State<Number>& rhs) {
     	return !(lhs == rhs);
     }
 

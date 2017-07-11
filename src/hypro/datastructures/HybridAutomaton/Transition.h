@@ -11,10 +11,7 @@
 #include "Condition.h"
 #include "Location.h"
 #include "Reset.h"
-#include "lib/utils/types.h"            //???
 #include <carl/interval/Interval.h>
-//#include <hypro/types.h>
-#include "../../types.h"
 
 namespace hypro
 {
@@ -26,48 +23,70 @@ class Location;
 class Transition
 {
   private:
-    Location* mSource = nullptr;
-    Location* mTarget = nullptr;
-    Condition mGuard;
-    Reset mReset;
+    Location<Number>* mSource = nullptr;
+    Location<Number>* mTarget = nullptr;
+    Condition<Number> mGuard;
+    Reset<Number> mReset;
     Aggregation mAggregationSetting = Aggregation::none;
     bool mUrgent = false;
 
   public:
 
     Transition() = default;
-    Transition(const Transition& orig) = default;
-    Transition(Transition&& orig) = default;
-    Transition& operator=(const Transition& orig) = default;
-    Transition& operator=(Transition&& orig) = default;
+    Transition(const Transition<Number>& orig) = default;
+    Transition(Transition<Number>&& orig) = default;
+    Transition& operator=(const Transition<Number>& orig) = default;
+    Transition& operator=(Transition<Number>&& orig) = default;
     ~Transition() {}
 
-    Transition(Location* source, Location* target)
+    Transition(Location<Number>* source, Location<Number>* target)
         : mSource(source), mTarget(target), mGuard(), mReset(), mAggregationSetting(), mUrgent(false)
     {}
 
-    Transition(Location* source, Location* target, const Condition& guard, const Reset& reset)
+    Transition(Location<Number>* source, Location<Number>* target, const Condition<Number>& guard, const Reset<Number>& reset)
         : mSource(source), mTarget(target), mGuard(guard), mReset(reset), mAggregationSetting(), mUrgent(false)
     {}
 
     /**
      * Getter & Setter
      */
-    Location* getSource() const { return mSource; }
-    Location* getTarget() const { return mTarget; }
-    const Condition& getGuard() const { return mGuard; }
-    const Reset& getReset() const { return mReset; }
+    Location<Number>* getSource() const { return mSource; }
+    Location<Number>* getTarget() const { return mTarget; }
+    const Condition<Number>& getGuard() const { return mGuard; }
+    const Reset<Number>& getReset<Number>() const { return mReset; }
     Aggregation getAggregation() const { return mAggregationSetting; }
     bool isUrgent() const { return mUrgent; }
 
-    void setSource(Location* source) { mSource = source; }
-    void setTarget(Location* target) { mTarget = target; }
-    void setGuard(const Condition& guard) { mGuard = guard; }
-    void setReset(const Reset& val) { mReset = val; }
+    void setSource(Location<Number>* source) { mSource = source; }
+    void setTarget(Location<Number>* target) { mTarget = target; }
+    void setGuard(const Condition<Number>& guard) { mGuard = guard; }
+    void setReset(const Reset<Number>& val) { mReset = val; }
     void setAggregation(Aggregation agg) { mAggregationSetting = agg; }
     void setUrgent(bool urgent = true) { mUrgent = urgent; }
 
-    friend std::ostream& operator<<(std::ostream& ostr, const Transition& t);
-    friend bool operator==(const Transition& lhs, const Transition& rhs);
+    friend std::ostream& operator<<(std::ostream& ostr, const Transition<Number>& t) {
+		#ifdef HYDRA_USE_LOGGING
+	    ostr << "transition(" << std::endl
+	          << "\t Source = " << t.getSource()->getId() << std::endl
+	          << "\t Target = " << t.getTarget()->getId() << std::endl
+	          << "\t urgent = " << t.isUrgent() << std::endl
+	          << "\t Guard = " << t.getGuard() << std::endl
+	          << "\t Reset = " << t.getReset() << std::endl
+	          << ")";
+		#endif
+	    return ostr;
+    }
+
+    friend bool operator==(const Transition<Number>& lhs, const Transition<Number>& rhs) {
+    	if( (*lhs.mSource != *rhs.mSource) ||
+			(*lhs.mTarget != *rhs.mTarget) ||
+			(lhs.mUrgent != rhs.mUrgent) ||
+			(lhs.mGuard != rhs.mGuard) ||
+			(lhs.mReset != rhs.mReset) ) {
+			return false;
+		}
+
+		return true;
+    }
 };
-}  // namespace hydra
+}  // namespace hypro

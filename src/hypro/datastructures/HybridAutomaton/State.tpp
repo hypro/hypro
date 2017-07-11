@@ -7,8 +7,8 @@ template<typename Number>
 void State<Number>::addTimeToClocks(Number t) {
 	//TRACE("hydra.datastructures","Add timestep of size " << t << " to clocks.");
 	if(mHasClocks) {
-		hypro::matrix_t<Number> identity = hypro::matrix_t<Number>::Identity(boost::get<clockSetRepresentation>(mClockAssignment).dimension(), boost::get<clockSetRepresentation>(mClockAssignment).dimension());
-		hypro::vector_t<Number> clockShift = hypro::vector_t<Number>::Ones(boost::get<clockSetRepresentation>(mClockAssignment).dimension());
+		matrix_t<Number> identity = matrix_t<Number>::Identity(boost::get<clockSetRepresentation>(mClockAssignment).dimension(), boost::get<clockSetRepresentation>(mClockAssignment).dimension());
+		vector_t<Number> clockShift = vector_t<Number>::Ones(boost::get<clockSetRepresentation>(mClockAssignment).dimension());
 		clockShift = clockShift * t;
 		mClockAssignment = boost::apply_visitor(genericAffineTransformationVisitor<RepresentationVariant>(identity,clockShift), mClockAssignment);
 	}
@@ -71,7 +71,7 @@ std::pair<bool,State> State<Number>::intersect(const State& in) const {
 }
 
 template<typename Number>
-State State<Number>::applyTimeStep(const hypro::matrix_t<Number>& trafoMatrix, const hypro::vector_t<Number>& trafoVector, Number timeStepSize ) const {
+State State<Number>::applyTimeStep(const matrix_t<Number>& trafoMatrix, const vector_t<Number>& trafoVector, Number timeStepSize ) const {
 	State res(*this);
 	//TRACE("hydra.datastructures","Apply timestep of size " << timeStepSize);
 	res.setSet(boost::apply_visitor(genericAffineTransformationVisitor<RepresentationVariant>(trafoMatrix,trafoVector), res.getSet()));
