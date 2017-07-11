@@ -2,10 +2,9 @@
 #pragma once
 
 #include "Visitors.h"
-#include "lib/datastructures/ReachTree/types.h"         //???
-#include "lib/utils/types.h"                            //???
 #include <carl/interval/Interval.h>
 #include "../../representations/GeometricObject.h"
+#include "../../representations/types.h"
 
 namespace hypro
 {

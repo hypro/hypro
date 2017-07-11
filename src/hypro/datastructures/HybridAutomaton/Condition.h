@@ -1,9 +1,8 @@
 #pragma once
 #include "State.h"
 #include "Visitors.h"
-#include "lib/utils/types.h"
-#include <hypro/types.h>
-#include <hypro/representations/GeometricObject.h>
+#include "../../representations/GeometricObject.h"
+#include "../../representations/types.h"
 #include <iostream>
 
 namespace hydra {

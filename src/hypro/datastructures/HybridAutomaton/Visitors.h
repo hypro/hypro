@@ -1,4 +1,5 @@
 #pragma once
+#include "../../representations/types.h"
 
 namespace hypro {
 
