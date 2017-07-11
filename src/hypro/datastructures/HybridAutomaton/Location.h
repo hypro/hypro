@@ -16,8 +16,10 @@
 
 namespace hypro
 {
+template<typename Number>
 class Transition;
 
+template<typename Number>
 class LocationManager;
 
 template<typename Number>
@@ -26,7 +28,7 @@ class Location
     friend LocationManager;
 
 protected:
-    using transitionSet = std::set<hydra::Transition*>;
+    using transitionSet = std::set<hydra::Transition<Number>*>;
 
     Location(unsigned id);
     Location(unsigned id, const Location& loc);
@@ -57,17 +59,18 @@ public:
     void setFlow(const hypro::matrix_t<Number>& mat) { mFlow = mat; }
     void setInvariant(const hydra::Condition& inv) { mInvariant = inv; }
     void setTransitions(const transitionSet& trans) { mTransitions = trans; }
-    void addTransition(Transition* trans) { mTransitions.insert(trans); }
+    void addTransition(Transition<Number>* trans) { mTransitions.insert(trans); }
     void setExtInputMat(const hypro::matrix_t<Number>& mat) { mExternalInput = mat; }
 
-    inline bool operator<(const Location& rhs) const { return (mId < rhs.getId()); }
-    inline bool operator==(const Location& rhs) const { return (mId == rhs.getId()); }
-    inline bool operator!=(const Location& rhs) const { return (mId != rhs.getId()); }
-    friend std::ostream& operator<<(std::ostream& ostr, const Location& l);
+    inline bool operator<(const Location<Number>& rhs) const { return (mId < rhs.getId()); }
+    inline bool operator==(const Location<Number>& rhs) const { return (mId == rhs.getId()); }
+    inline bool operator!=(const Location<Number>& rhs) const { return (mId != rhs.getId()); }
+    friend std::ostream& operator<<(std::ostream& ostr, const Location<Number>& l);
 };
 
+template<typename Number>
 struct locPtrComp {
-    bool operator()(const Location* lhs, const Location* rhs) const { return (*lhs < *rhs); }
+    bool operator()(const Location<Number>* lhs, const Location<Number>* rhs) const { return (*lhs < *rhs); }
 };
 
 }  // namespace hypro

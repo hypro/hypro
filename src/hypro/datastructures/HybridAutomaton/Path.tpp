@@ -14,7 +14,7 @@ namespace hypro {
 	}
 
 	template<typename Number>
-	void Path<Number>::addTransition(Transition* t, const carl::Interval<Number>& enabledTime) {
+	void Path<Number>::addTransition(Transition<Number>* t, const carl::Interval<Number>& enabledTime) {
 		mPath.push_back(TPathElement(t,enabledTime));
 		//TRACE("hydra.datastructures","Add transition " << t << " with timestamp " << enabledTime << " to path.");
 	}
@@ -26,7 +26,7 @@ namespace hypro {
 	}
 
 	template<typename Number>
-	std::pair<Transition*, carl::Interval<Number>> Path<Number>::getTransitionToJumpDepth(unsigned depth) const {
+	std::pair<Transition<Number>*, carl::Interval<Number>> Path<Number>::getTransitionToJumpDepth(unsigned depth) const {
 		if(depth == 0) {
 			return std::make_pair(nullptr, carl::Interval<Number>::unboundedInterval());
 		}
@@ -105,9 +105,9 @@ namespace hypro {
 	}
 
 	template<typename Number>
-	std::vector<Transition*> Path<Number>::getTransitionSequence(std::deque<TPathElement>::const_iterator start, std::deque<TPathElement>::const_iterator end) const {
+	std::vector<Transition<Number>*> Path<Number>::getTransitionSequence(std::deque<TPathElement>::const_iterator start, std::deque<TPathElement>::const_iterator end) const {
 		auto currentPos = start;
-		std::vector<Transition*> res;
+		std::vector<Transition<Number>*> res;
 		while(currentPos != mPath.end() && currentPos != end) {
 			if(currentPos->isDiscreteStep()){
 				res.push_back(currentPos->transition);
@@ -116,7 +116,7 @@ namespace hypro {
 		}
 		if(currentPos == mPath.end() && end != mPath.end()) {
 			// path end is not part of mPath or lies before start.
-			return std::vector<Transition*>();
+			return std::vector<Transition<Number>*>();
 		}
 		return res;
 	}
@@ -125,7 +125,7 @@ namespace hypro {
 	bool Path<Number>::hasChatteringZeno() const {
 		// find all cycles first and store potential cycles
 		// std::cout << __func__ << ": checking path: " << *this << std::endl;
-		std::vector<std::vector<Transition*>> potentialCycles;
+		std::vector<std::vector<Transition<Number>*>> potentialCycles;
 		for(auto startElemIt = mPath.begin(); startElemIt != mPath.end(); ++startElemIt) {
 			// start measuring the time from a timestep -> if the startElement is not a timestep, increase it.
 			if(!startElemIt->isDiscreteStep()){
@@ -143,9 +143,9 @@ namespace hypro {
 				if((nextElem) == mPath.end()) {
 					break;
 				}
-				const Location* startLoc = (startElemIt)->transition->getSource();
+				const Location<Number>* startLoc = (startElemIt)->transition->getSource();
 				// std::cout << "Dimension: " << (startElemIt)->transition->getReset().getContinuousResetMatrix().cols() << std::endl;
-				std::vector<Transition*> transitionSequence;
+				std::vector<Transition<Number>*> transitionSequence;
 				transitionSequence.push_back((startElemIt)->transition);
 				//std::cout << __func__ << ": Starting location is " << startLoc->getId() << std::endl;
 				for( ; nextElem != mPath.end(); ++nextElem) {
@@ -156,7 +156,7 @@ namespace hypro {
 						maximalTimeSpan(startElemIt,nextElem) == 0 ){
 							transitionSequence.push_back(nextElem->transition);
 							// std::cout << "Found potential path." << std::endl;
-							// std::cout << "Transition sequence length: " << transitionSequence.size() << std::endl;
+							// std::cout << "Transition<Number> sequence length: " << transitionSequence.size() << std::endl;
 							potentialCycles.push_back(transitionSequence);
 							break;
 					} else if (nextElem->isDiscreteStep()) {

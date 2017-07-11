@@ -8,10 +8,10 @@ namespace hypro {
 
 	template <typename Number>
 	struct TPathElement {
-		Transition* transition = nullptr;
+		Transition<Number>* transition = nullptr;
 		carl::Interval<Number> timeInterval = carl::Interval<Number>::unboundedInterval();
 
-		TPathElement(Transition* t, const carl::Interval<Number>& enabledTime)
+		TPathElement(Transition<Number>* t, const carl::Interval<Number>& enabledTime)
 			: transition(t)
 			, timeInterval(enabledTime)
 		{}
@@ -63,17 +63,17 @@ namespace hypro {
 			Path() = default;
 
 			void add(const TPathElement& elem);
-			void addTransition(Transition* t, const carl::Interval<Number>& enabledTime);
+			void addTransition(Transition<Number>* t, const carl::Interval<Number>& enabledTime);
 			void addTimeStep(const carl::Interval<Number>& timeStep);
 
-			std::pair<Transition*, carl::Interval<Number>> getTransitionToJumpDepth(unsigned depth) const;
+			std::pair<Transition<Number>*, carl::Interval<Number>> getTransitionToJumpDepth(unsigned depth) const;
 
 			static bool sharePrefix(const Path& lhs, const Path& rhs);
 			bool sharesPrefix(const Path& rhs) const;
 			Path sharedPrefix(const Path& rhs) const;
 			bool isEmpty() const { return (mPath.size() == 0); }
 			Number maximalTimeSpan(std::deque<TPathElement>::const_iterator start, std::deque<TPathElement>::const_iterator end) const;
-			std::vector<Transition*> getTransitionSequence(std::deque<TPathElement>::const_iterator start, std::deque<TPathElement>::const_iterator end) const;
+			std::vector<Transition<Number>*> getTransitionSequence(std::deque<TPathElement>::const_iterator start, std::deque<TPathElement>::const_iterator end) const;
 			bool hasChatteringZeno() const;
 
 			// comparison - read as "is longer than"

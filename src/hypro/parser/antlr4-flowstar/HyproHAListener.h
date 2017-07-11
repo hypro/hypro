@@ -20,7 +20,7 @@
 #include "HybridAutomatonParser.h"
 #include "HybridAutomatonBaseListener.h"
 #include "../../types.h"
-#include "../../datastructures/hybridAutomata/Location.h"
+#include "../../datastructures/HybridAutomaton/Location.h"
 
 //using namespace org::antlr::v4::runtime;
 using namespace antlr4;
@@ -46,21 +46,22 @@ class HyproHAListener : public HybridAutomatonBaseListener {
 		//A temporary flow matrix and needed positioning variable
 		matrix_t<Number> flowMatrix;
 		//matrix_t<Number> invMatrix;
-		Invariant inv;
+		Condition<Number> inv;
 		std::shared_ptr<matrix_t<Number>> fillingTarget;
 		unsigned int currentRow = 0;
+
+		Number stringToNumber(std::string string);
 
 	public:
 		
 		HyproHAListener();
 		~HyproHAListener();
 
-		Number stringToNumber(std::string string);
-
 		inline std::vector<std::string> getLocNames(){ return locNames; }
 		inline std::vector<std::string> getVarNames(){ return vars; }
 		inline matrix_t<Number> getFlow(){ return flowMatrix; }
-		inline matrix_t<Number> getInv(){ return inv.mat; }
+		inline matrix_t<Number> getInvMat(){ return inv.getMatrix(); }
+		inline matrix_t<Number> getInvVec(){ return inv.getVector(); }
 		inline matrix_t<Number> getFillingTarget(){ return *fillingTarget; }
 		inline void setFillingTarget(matrix_t<Number> newTarget){ fillingTarget = std::make_shared<matrix_t<Number>>(newTarget); }
 

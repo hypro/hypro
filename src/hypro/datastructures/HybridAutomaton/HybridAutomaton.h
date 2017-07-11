@@ -20,14 +20,15 @@
 namespace hypro
 {
 
+template <typename Number>
 class HybridAutomaton
 {
   public:
-    using locationSet = std::set<Location*>;
-    using transitionSet = std::set<Transition*>;
-    using locationStateMap = std::multimap<const Location*, State, locPtrComp>;
-    using locationConditionMap = std::map<const Location*, Condition, locPtrComp>;
-    using conditionVector = std::vector<Condition>;
+    using locationSet = std::set<Location<Number>*>;
+    using transitionSet = std::set<Transition<Number>*>;
+    using locationStateMap = std::multimap<const Location<Number>*, State<Number>, locPtrComp<Number>>;
+    using locationConditionMap = std::map<const Location<Number>*, Condition<Number>, locPtrComp<Number>>;
+    using conditionVector = std::vector<Condition<Number>>;
 
   private:
     locationSet mLocations;
@@ -38,8 +39,8 @@ class HybridAutomaton
 
   public:
     HybridAutomaton() {}
-    HybridAutomaton(const HybridAutomaton& hybrid) = default;
-    HybridAutomaton(HybridAutomaton&& hybrid) = default;
+    HybridAutomaton(const HybridAutomaton<Number>& hybrid) = default;
+    HybridAutomaton(HybridAutomaton<Number>&& hybrid) = default;
     HybridAutomaton(const locationSet& locs, const transitionSet& trans, const locationStateMap& initialStates);
     virtual ~HybridAutomaton() {}
 
@@ -56,17 +57,17 @@ class HybridAutomaton
     void setLocalBadStates(const locationConditionMap& states) { mLocalBadStates = states; }
     void setGlobalBadStates(const conditionVector& states) { mGlobalBadStates = states; }
 
-    void addLocation(Location* location) { mLocations.insert(location); }
-    void addTransition(Transition* transition) { mTransitions.insert(transition); }
-    void addInitialState(const State& state) { mInitialStates.insert(std::make_pair(state.getLocation(),state)); }
-    void addLocalBadState(const Location* loc, const Condition& condition) { mLocalBadStates.insert(std::make_pair(loc,condition)); }
-    void addGlobalBadState(const Condition& state) { mGlobalBadStates.push_back(state); }
+    void addLocation(Location<Number>* location) { mLocations.insert(location); }
+    void addTransition(Transition<Number>* transition) { mTransitions.insert(transition); }
+    void addInitialState(const State<Number>& state) { mInitialStates.insert(std::make_pair(state.getLocation(),state)); }
+    void addLocalBadState(const Location<Number>* loc, const Condition& condition) { mLocalBadStates.insert(std::make_pair(loc,condition)); }
+    void addGlobalBadState(const Condition<Number>& state) { mGlobalBadStates.push_back(state); }
 
     // copy assignment operator, TODO: implement via swap
-    inline HybridAutomaton& operator=(const HybridAutomaton& rhs) = default;
-    inline HybridAutomaton& operator=(HybridAutomaton&& rhs) = default;
+    inline HybridAutomaton& operator=(const HybridAutomaton<Number>& rhs) = default;
+    inline HybridAutomaton& operator=(HybridAutomaton<Number>&& rhs) = default;
 
-    friend std::ostream& operator<<(std::ostream& ostr, const HybridAutomaton& a)
+    friend std::ostream& operator<<(std::ostream& ostr, const HybridAutomaton<Number>& a)
     {
 #ifdef HYDRA_USE_LOGGING
         /*_ostr << "initial states: " << std::endl;

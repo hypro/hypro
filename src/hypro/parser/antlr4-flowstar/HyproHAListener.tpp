@@ -160,7 +160,7 @@ namespace hypro {
 	template<typename Number>
 	void HyproHAListener<Number>::enterInvariants(HybridAutomatonParser::InvariantsContext* ctx){
 		std::cout << "Bin bei enterInvariants!" << std::endl;	
-		this->setFillingTarget(this->invMatrix);
+		this->setFillingTarget(this->inv.getMatrix());
 	}
 
 	template<typename Number>
@@ -175,6 +175,10 @@ namespace hypro {
 		//Syntax check: Block all invariants where "<" and ">" occur
 		if(ctx->BOOLRELATION()->getText() == "<" || ctx->BOOLRELATION()->getText() == ">"){
 			std::cerr << "Strict relations are not allowed in current build!"
+		}
+		//Else: Convert equation to a form such that its relation is always "<=" and then put into matrix
+		if(ctx->BOOLRELATION()->getText() == "<="){
+			
 		}
 
 
