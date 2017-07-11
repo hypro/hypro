@@ -2,17 +2,19 @@
 #pragma once
 
 #include "Visitors.h"
-#include "lib/datastructures/ReachTree/types.h"
-#include "lib/utils/types.h"
-
+#include "lib/datastructures/ReachTree/types.h"         //???
+#include "lib/utils/types.h"                            //???
 #include <carl/interval/Interval.h>
-#include <hypro/representations/GeometricObject.h>
+//#include <hypro/representations/GeometricObject.h>
+#include "../../representations/GeometricObject.h"
 
-namespace hydra
+namespace hypro
 {
 
+template<typename Number>
 class Location;
 
+template<typename Number>
 class State
 {
 public:
@@ -146,3 +148,5 @@ public:
 
 };
 }
+
+#include "State.tpp"

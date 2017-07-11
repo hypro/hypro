@@ -1,11 +1,12 @@
 #pragma once
 
-#include "lib/datastructures/HybridAutomaton/Transition.h"
+#include "Transition.h"
 #include <deque>
 
 
-namespace hydra {
+namespace hypro {
 
+	template <typename Number>
 	struct TPathElement {
 		Transition* transition = nullptr;
 		carl::Interval<Number> timeInterval = carl::Interval<Number>::unboundedInterval();
@@ -55,6 +56,7 @@ namespace hydra {
 	/**
 	 * @brief      Class to define a path in some hybrid automaton.
 	 */
+	template<typename Number>
 	class Path {
 		public:
 
@@ -126,3 +128,5 @@ namespace hydra {
 	};
 
 } // namespace hydra
+
+#include "Path.tpp"

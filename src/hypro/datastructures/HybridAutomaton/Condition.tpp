@@ -2,7 +2,8 @@
 
 namespace hypro {
 
-std::pair<bool,State> Condition::isSatisfiedBy(const State& inState) const {
+template<typename Number>
+std::pair<bool,State> Condition<Number>::isSatisfiedBy(const State& inState) const {
 	State res(inState);
 
 #ifdef HYDRA_USE_LOGGING
@@ -55,7 +56,8 @@ std::pair<bool,State> Condition::isSatisfiedBy(const State& inState) const {
 	return std::make_pair(!empty,res);
 }
 
-std::pair<bool,State> Condition::continuousIsSatisfiedBy(const State& inState) const {
+template<typename Number>
+std::pair<bool,State> Condition<Number>::continuousIsSatisfiedBy(const State& inState) const {
 	if(mat.rows() == 0) {
 		assert(vec.rows() == 0);
 		return std::make_pair(true,inState);
@@ -74,7 +76,8 @@ std::pair<bool,State> Condition::continuousIsSatisfiedBy(const State& inState) c
 	return std::make_pair(!empty,res);
 }
 
-std::pair<bool,State> Condition::discreteIsSatisfiedBy(const State& inState) const {
+template<typename Number>
+std::pair<bool,State> Condition<Number>::discreteIsSatisfiedBy(const State& inState) const {
 	if(!hasDiscreteConstraints) {
 		return std::make_pair(true,inState);
 	}
@@ -90,7 +93,8 @@ std::pair<bool,State> Condition::discreteIsSatisfiedBy(const State& inState) con
 	return std::make_pair(!empty,res);
 }
 
-std::pair<bool,State> Condition::clockIsSatisfiedBy(const State& inState) const {
+template<typename Number>
+std::pair<bool,State> Condition<Number>::clockIsSatisfiedBy(const State& inState) const {
 	if(!hasClockConstraints) {
 		return std::make_pair(true,inState);
 	}

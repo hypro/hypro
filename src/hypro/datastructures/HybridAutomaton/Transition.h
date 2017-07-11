@@ -11,14 +11,16 @@
 #include "Condition.h"
 #include "Location.h"
 #include "Reset.h"
-#include "lib/utils/types.h"
+#include "lib/utils/types.h"            //???
 #include <carl/interval/Interval.h>
-#include <hypro/types.h>
+//#include <hypro/types.h>
+#include "../../types.h"
 
-namespace hydra
+namespace hypro
 {
 enum Aggregation { none, boxAgg, parallelotopeAgg };
 
+template<typename Number>
 class Location;
 
 class Transition

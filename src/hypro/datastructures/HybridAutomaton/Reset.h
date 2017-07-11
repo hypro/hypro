@@ -1,10 +1,12 @@
 #pragma once
 #include "State.h"
 #include "Visitors.h"
-#include <hypro/types.h>
+//#include <hypro/types.h>
+#include "../../types.h"
 
-namespace hydra {
+namespace hypro {
 
+template<typename Number>
 class Reset {
 protected:
     hypro::vector_t<Number> continuousVec;  // Translation Vector
@@ -64,3 +66,5 @@ public:
 };
 
 } // namespace
+
+#include "Reset.tpp"

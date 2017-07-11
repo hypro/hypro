@@ -1,7 +1,7 @@
 #pragma once
-#include "lib/datastructures/ReachTree/types.h"
+#include "lib/datastructures/ReachTree/types.h"			//???
 
-namespace hydra {
+namespace hypro {
 
 template<typename T>
 class genericUniteVisitor
@@ -51,7 +51,7 @@ public:
     }
 };
 
-template<typename T>
+template<typename T, typename Number>
 class genericAffineTransformationVisitor
     : public boost::static_visitor<T>
 {
@@ -90,7 +90,7 @@ public:
 		toType(to)
 	{}
 
-	template<typename B>
+	template<typename B, typename Number>
     T operator()(const B& lhs) const {
  		switch(toType){
  			case hypro::representation_name::box: {
@@ -132,7 +132,7 @@ public:
     }
 };
 
-template<typename T>
+template<typename T, typename Number>
 class genericReductionVisitor
     : public boost::static_visitor<T>
 {
@@ -165,7 +165,7 @@ public:
     }
 };
 
-template<typename T>
+template<typename T, typename Number>
 class genericSatisfiesHalfspacesVisitor
     : public boost::static_visitor<std::pair<bool,T>>
 {

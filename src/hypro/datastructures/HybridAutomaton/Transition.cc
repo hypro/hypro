@@ -1,6 +1,6 @@
-#include "lib/datastructures/HybridAutomaton/Transition.h"
+#include "Transition.h"
 
-namespace hydra
+namespace hypro
 {
 std::ostream& operator<<(std::ostream& ostr, const Transition& t)
 {

@@ -13,10 +13,11 @@
 #include "State.h"
 #include "Transition.h"
 #include "Condition.h"
-#include <hypro/types.h>
+//#include <hypro/types.h>
+#include "../../types.h"
 #include <map>
 
-namespace hydra
+namespace hypro
 {
 class ReachTreeNode;
 

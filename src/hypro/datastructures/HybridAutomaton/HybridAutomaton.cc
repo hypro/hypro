@@ -1,6 +1,6 @@
-#include "lib/datastructures/HybridAutomaton/HybridAutomaton.h"
+#include "HybridAutomaton.h"
 
-namespace hydra
+namespace hypro
 {
 HybridAutomaton::HybridAutomaton(const locationSet& _locs, const transitionSet& _trans, const locationStateMap& _initialStates)
     : mLocations(_locs), mTransitions(_trans), mInitialStates(_initialStates)

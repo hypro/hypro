@@ -8,17 +8,19 @@
 #pragma once
 
 #include "Condition.h"
-#include "lib/utils/types.h"
-#include <hypro/types.h>
+//#include "lib/utils/types.h"
+//#include <hypro/types.h>
+#include "../../types.h"
 #include <iostream>
 #include <string>
 
-namespace hydra
+namespace hypro
 {
 class Transition;
 
 class LocationManager;
 
+template<typename Number>
 class Location
 {
     friend LocationManager;
@@ -69,3 +71,5 @@ struct locPtrComp {
 };
 
 }  // namespace hypro
+
+#include "Location.tpp"

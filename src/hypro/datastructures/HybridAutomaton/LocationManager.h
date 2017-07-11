@@ -8,10 +8,12 @@
 
 #include "Location.h"
 #include <carl/util/Singleton.h>
-#include <hypro/types.h>
+//#include <hypro/types.h>
+#include "../../types.h"
 
-namespace hydra
+namespace hypro
 {
+template<typename Number>
 class LocationManager : public carl::Singleton<LocationManager>
 {
     friend carl::Singleton<LocationManager>;
@@ -41,3 +43,5 @@ class LocationManager : public carl::Singleton<LocationManager>
 };
 
 }  // namespace hydra
+
+#include "LocationManager.tpp"
