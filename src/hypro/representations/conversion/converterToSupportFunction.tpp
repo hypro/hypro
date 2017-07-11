@@ -40,6 +40,11 @@ typename Converter<Number>::SupportFunction Converter<Number>::toSupportFunction
 }
 
 template <typename Number>
+typename Converter<Number>::SupportFunction Converter<Number>::toSupportFunction( const ConstraintSet& _source, const CONV_MODE ){
+    return SupportFunctionT<Number,Converter>(_source.matrix(), _source.vector());
+}
+
+template <typename Number>
 typename Converter<Number>::SupportFunction Converter<Number>::toSupportFunction( const Ellipsoid& _source, const CONV_MODE ){
     return SupportFunctionT<Number,Converter>(_source.matrix());
 }
