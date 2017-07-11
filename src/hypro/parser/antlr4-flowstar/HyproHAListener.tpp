@@ -26,8 +26,8 @@ namespace hypro {
 	HyproHAListener<Number>::~HyproHAListener(){ }
 
 	template<typename Number>
-	Number HyproHAListener<Number>::stringToNumber(std::string string){
-		float numInFloat = std::stof(string);
+	Number HyproHAListener<Number>::stringToNumber(std::string& string){
+		double numInFloat = std::stod(string);
 		Number numInNumber = Number(numInFloat);
 		return numInNumber;
 	}
@@ -36,7 +36,7 @@ namespace hypro {
 	void HyproHAListener<Number>::enterVardeclaration(HybridAutomatonParser::VardeclarationContext* ctx) {
 		std::cout << "Bin bei enterVardeclaration!" << std::endl;
 		for(tree::TerminalNode* variable : ctx->VARIABLE()){
-			this->vars.push_back(variable->getText());
+			vars.push_back(variable->getText());
 			//NOTE: the respective position in the vars vector is the assigned id to the variable!
 			this->flowMatrix = matrix_t<Number>::Zero(this->vars.size()+1, this->vars.size()+1);
 		}
@@ -170,29 +170,30 @@ namespace hypro {
 	}
 
 	template<typename Number>
-	void HyproHAListener<Number>::exitInvariants(HybridAutomatonParser::InvariantsContext* ctx){
-		std::cout << "Bin bei exitInvariants!" << std::endl;
-	}
-
-	template<typename Number>
 	void HyproHAListener<Number>::enterBoolexpr(HybridAutomatonParser::BoolexprContext* ctx){
 		std::cout << "Bin bei enterBoolexpr!" << std::endl;
-
 		//Syntax check: Block all invariants where "<" and ">" occur
 		if(ctx->BOOLRELATION()->getText() == "<" || ctx->BOOLRELATION()->getText() == ">"){
 			std::cerr << "Strict relations are not allowed in current build!";
-		}
-		//Else: Convert equation to a form such that its relation is always "<=" and then put into matrix
-		if(ctx->BOOLRELATION()->getText() == "<="){
+		} else if(ctx->BOOLRELATION()->getText() == "<="){
 
 		}
 
+		//1.Check relation, if < or > throw error. 
+	}
+
+	template<typename Number>
+	void HyproHAListener<Number>::exitInvariants(HybridAutomatonParser::InvariantsContext* ctx){
+		std::cout << "Bin bei exitInvariants!" << std::endl;
 
 	}
 
 	template<typename Number>
  	void HyproHAListener<Number>::exitBoolexpr(HybridAutomatonParser::BoolexprContext* ctx){
  		std::cout << "Bin bei exitBoolexpr!" << std::endl;
+ 		//2.In exitBoolexpr: If = copy values of that row, emplace in matrix and negate it.
+		//In exitBoolexpr: If >= negate the row when exitBoolexpr
+
  	}
 
  	template<typename Number>
