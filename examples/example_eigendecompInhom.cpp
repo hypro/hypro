@@ -6,6 +6,7 @@
 #include "representations/GeometricObject.h"
 #include "util/Plotter.h"
 #include <Eigen/Eigenvalues> 
+//TRAJECTORY of e-function plotting comment for no
 #define TRAJECTORY 1
 //#include <Eigen/LU>
 
@@ -15,11 +16,7 @@ int main()
 	using Number = double;
 	using Matrix = matrix_t<Number>;
 	using Vector = vector_t<Number>;
-
-    #ifdef TRAJECTORY
-        Number steps = 0.01;
-    #endif
-  
+ 
     int n = 2;                  //<--- DIMENSION --->
     int i;
 	Matrix A = Matrix(n,n);
@@ -37,10 +34,15 @@ int main()
     Vector derivLineEnd = Vector(n);
     Vector linGrowth = Vector(n);
     Vector directLineStart = Vector(n);
-    Vector directLineEnd = Vector(n);
-
+    Vector directLineEnd = Vector(n);    
+    #ifdef TRAJECTORY
+        Number timestep = 0.02;
+        Number traj_time;
+        Vector plot_all_temp = Vector(n);
+        Vector plot_vector = Vector(n);
+    #endif
     Number tstart = 0;
-    Number tend = 20;
+    Number tend = 2;
     Number beginElTime, curTime;
     Number delta = 1; //segment stepping time
     Matrix V = Matrix(n,n);
@@ -58,6 +60,7 @@ int main()
     std::cout << "x0: "<< std::endl << x0 << std::endl;
     //decompose directly + constructor
     Eigen::EigenSolver<Matrix> es(A);
+    Plotter<Number>& plotter = Plotter<Number>::getInstance();
      
     V << es.eigenvectors().real();
     D.diagonal() << es.eigenvalues().real();
@@ -73,7 +76,6 @@ int main()
     xinhomconst = b_tr.array() / D.diagonal().array();
     xhomconst = xinhomconst.array() + x0_tr.array();
 
-    //be aware that we calculate points of e-function as well in debug
     beginElTime = tstart;
     //main stepping
     /*
@@ -93,16 +95,16 @@ int main()
         beginElTime = curTime - delta;
         for (i=0; i<n; ++i) {
             derivFactor(i) = xhomconst(i)*D.diagonal()(i) * \
-              std::exp(D.diagonal()(i)* delta);
+              std::exp(D.diagonal()(i) * beginElTime );
             xvalueStart(i) = xhomconst(i)* \
-              std::exp(D.diagonal()(i) * delta)-xinhomconst(i);
-            xvalueEnd(i) = xhomconst(i)* \
-              std::exp(D.diagonal()(i) * delta)-xinhomconst(i);
+              std::exp(D.diagonal()(i) * beginElTime ) - xinhomconst(i);
+            xvalueEnd(i)   = xhomconst(i)* \
+              std::exp(D.diagonal()(i) * curTime )     - xinhomconst(i);
         }
         //derivative line
         derivAdditive = xvalueStart.array() - derivFactor.array()*beginElTime;
         derivLineStart = derivFactor.array()*beginElTime+derivAdditive.array();
-        derivLineEnd = derivFactor.array()*curTime+derivAdditive.array();
+        derivLineEnd   = derivFactor.array()*curTime    +derivAdditive.array();
         //direct line
         linGrowth = (xvalueEnd - xvalueStart).array()/(curTime-beginElTime);
         directLineStart = xvalueStart;
@@ -111,7 +113,7 @@ int main()
         //std::cout << "derivFactor: " << derivFactor;
         //std::cout << "xvalueStart: " << xvalueStart;
         //std::cout << "xvalueEnd: " << xvalueEnd;
-        std::cout << "posStart: " << V*xvalueStart;
+        std::cout << "posStart: " << V*xvalueStart << std::endl;
         //plotting dimension!
         //Point<Number> p1(xvalueStart);
         //plotter.addPoint(p1);
@@ -119,33 +121,27 @@ int main()
         
         //on debug plot complete trajectory of e function
         #ifdef TRAJECTORY
-            std::cout << "steps: " << steps << std::endl;
+            for (traj_time=beginElTime; traj_time<curTime; traj_time+=timestep) {
+                //calculate point
+                for (i=0; i<n; ++i) {
+                    plot_all_temp(i) = xhomconst(i)* \
+                      std::exp(D.diagonal()(i) * traj_time) - xinhomconst(i);
+                }
+                plot_all_temp = V*plot_all_temp; //transform back
+                plot_vector(0) = traj_time;
+                plot_vector(1) = plot_all_temp(0); //plotting time vs. height
+                //plot point: HOPE that we have references/pointer and not copies
+                Point<Number> p1(plot_vector);
+                plotter.addPoint(p1);
+            }
         #endif
     }
-
-
-
-	//re-create matrix
-/*
-	Matrix D = Matrix::Zero(2,2);
-	D(0,0) = es.eigenvalues()(0);
-	D(1,1) = es.eigenvalues()(1);
-
-	std::cout << "D: " << D << std::endl;
-
-	Matrix Q = Matrix::Zero(2,2);
-	Q(0,0) = es.eigenvectors()(0,0);
-	Q(0,1) = es.eigenvectors()(0,1);
-	Q(1,0) = es.eigenvectors()(1,0);
-	Q(1,1) = es.eigenvectors()(1,1);
-
-	std::cout << "Q: " << Q << std::endl;
-	std::cout << "Q^-1: " << Q.inverse() << std::endl;
-
-	Matrix newA = Q*D*Q.inverse();
-
-	std::cout << "Re-assembled A: " << newA << std::endl;
-*/
+    #ifdef TRAJECTORY
+        std::cout << "stepping size of e function: " << timestep << std::endl;
+    #endif
+    plotter.plot2d();
+    //plotter.plotTex();
+    plotter.plotEps();
 
 	return 0;
 }
