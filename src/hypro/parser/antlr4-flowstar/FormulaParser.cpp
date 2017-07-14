@@ -30,158 +30,34 @@ dfa::Vocabulary& FormulaParser::getVocabulary() const {
 }
 
 
-//----------------- AddContext ------------------------------------------------------------------
-
-FormulaParser::AddContext::AddContext(ParserRuleContext *parent, size_t invokingState)
-  : ParserRuleContext(parent, invokingState) {
-}
-
-tree::TerminalNode* FormulaParser::AddContext::PLUS() {
-  return getToken(FormulaParser::PLUS, 0);
-}
-
-FormulaParser::TermContext* FormulaParser::AddContext::term() {
-  return getRuleContext<FormulaParser::TermContext>(0);
-}
-
-
-size_t FormulaParser::AddContext::getRuleIndex() const {
-  return FormulaParser::RuleAdd;
-}
-
-
-FormulaParser::AddContext* FormulaParser::add() {
-  AddContext *_localctx = _tracker.createInstance<AddContext>(_ctx, getState());
-  enterRule(_localctx, 0, FormulaParser::RuleAdd);
-
-  auto onExit = finally([=] {
-    exitRule();
-  });
-  try {
-    enterOuterAlt(_localctx, 1);
-    setState(14);
-    match(FormulaParser::PLUS);
-    setState(15);
-    term();
-   
-  }
-  catch (RecognitionException &e) {
-    _errHandler->reportError(this, e);
-    _localctx->exception = std::current_exception();
-    _errHandler->recover(this, _localctx->exception);
-  }
-
-  return _localctx;
-}
-
-//----------------- MultContext ------------------------------------------------------------------
-
-FormulaParser::MultContext::MultContext(ParserRuleContext *parent, size_t invokingState)
-  : ParserRuleContext(parent, invokingState) {
-}
-
-std::vector<tree::TerminalNode *> FormulaParser::MultContext::NUMBER() {
-  return getTokens(FormulaParser::NUMBER);
-}
-
-tree::TerminalNode* FormulaParser::MultContext::NUMBER(size_t i) {
-  return getToken(FormulaParser::NUMBER, i);
-}
-
-std::vector<tree::TerminalNode *> FormulaParser::MultContext::VARIABLE() {
-  return getTokens(FormulaParser::VARIABLE);
-}
-
-tree::TerminalNode* FormulaParser::MultContext::VARIABLE(size_t i) {
-  return getToken(FormulaParser::VARIABLE, i);
-}
-
-std::vector<tree::TerminalNode *> FormulaParser::MultContext::TIMES() {
-  return getTokens(FormulaParser::TIMES);
-}
-
-tree::TerminalNode* FormulaParser::MultContext::TIMES(size_t i) {
-  return getToken(FormulaParser::TIMES, i);
-}
-
-
-size_t FormulaParser::MultContext::getRuleIndex() const {
-  return FormulaParser::RuleMult;
-}
-
-
-FormulaParser::MultContext* FormulaParser::mult() {
-  MultContext *_localctx = _tracker.createInstance<MultContext>(_ctx, getState());
-  enterRule(_localctx, 2, FormulaParser::RuleMult);
-  size_t _la = 0;
-
-  auto onExit = finally([=] {
-    exitRule();
-  });
-  try {
-    size_t alt;
-    enterOuterAlt(_localctx, 1);
-    setState(17);
-    _la = _input->LA(1);
-    if (!(_la == FormulaParser::VARIABLE
-
-    || _la == FormulaParser::NUMBER)) {
-    _errHandler->recoverInline(this);
-    }
-    else {
-      _errHandler->reportMatch(this);
-      consume();
-    }
-    setState(22);
-    _errHandler->sync(this);
-    alt = getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 0, _ctx);
-    while (alt != 1 && alt != atn::ATN::INVALID_ALT_NUMBER) {
-      if (alt == 1 + 1) {
-        setState(18);
-        match(FormulaParser::TIMES);
-        setState(19);
-        _la = _input->LA(1);
-        if (!(_la == FormulaParser::VARIABLE
-
-        || _la == FormulaParser::NUMBER)) {
-        _errHandler->recoverInline(this);
-        }
-        else {
-          _errHandler->reportMatch(this);
-          consume();
-        } 
-      }
-      setState(24);
-      _errHandler->sync(this);
-      alt = getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 0, _ctx);
-    }
-   
-  }
-  catch (RecognitionException &e) {
-    _errHandler->reportError(this, e);
-    _localctx->exception = std::current_exception();
-    _errHandler->recover(this, _localctx->exception);
-  }
-
-  return _localctx;
-}
-
 //----------------- TermContext ------------------------------------------------------------------
 
 FormulaParser::TermContext::TermContext(ParserRuleContext *parent, size_t invokingState)
   : ParserRuleContext(parent, invokingState) {
 }
 
-FormulaParser::MultContext* FormulaParser::TermContext::mult() {
-  return getRuleContext<FormulaParser::MultContext>(0);
+std::vector<tree::TerminalNode *> FormulaParser::TermContext::NUMBER() {
+  return getTokens(FormulaParser::NUMBER);
 }
 
-std::vector<FormulaParser::AddContext *> FormulaParser::TermContext::add() {
-  return getRuleContexts<FormulaParser::AddContext>();
+tree::TerminalNode* FormulaParser::TermContext::NUMBER(size_t i) {
+  return getToken(FormulaParser::NUMBER, i);
 }
 
-FormulaParser::AddContext* FormulaParser::TermContext::add(size_t i) {
-  return getRuleContext<FormulaParser::AddContext>(i);
+std::vector<tree::TerminalNode *> FormulaParser::TermContext::VARIABLE() {
+  return getTokens(FormulaParser::VARIABLE);
+}
+
+tree::TerminalNode* FormulaParser::TermContext::VARIABLE(size_t i) {
+  return getToken(FormulaParser::VARIABLE, i);
+}
+
+std::vector<tree::TerminalNode *> FormulaParser::TermContext::TIMES() {
+  return getTokens(FormulaParser::TIMES);
+}
+
+tree::TerminalNode* FormulaParser::TermContext::TIMES(size_t i) {
+  return getToken(FormulaParser::TIMES, i);
 }
 
 
@@ -192,27 +68,108 @@ size_t FormulaParser::TermContext::getRuleIndex() const {
 
 FormulaParser::TermContext* FormulaParser::term() {
   TermContext *_localctx = _tracker.createInstance<TermContext>(_ctx, getState());
-  enterRule(_localctx, 4, FormulaParser::RuleTerm);
+  enterRule(_localctx, 0, FormulaParser::RuleTerm);
+  size_t _la = 0;
 
   auto onExit = finally([=] {
     exitRule();
   });
   try {
-    size_t alt;
     enterOuterAlt(_localctx, 1);
-    setState(25);
-    mult();
-    setState(29);
+    setState(10);
+    _la = _input->LA(1);
+    if (!(_la == FormulaParser::NUMBER
+
+    || _la == FormulaParser::VARIABLE)) {
+    _errHandler->recoverInline(this);
+    }
+    else {
+      _errHandler->reportMatch(this);
+      consume();
+    }
+    setState(15);
     _errHandler->sync(this);
-    alt = getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 1, _ctx);
-    while (alt != 1 && alt != atn::ATN::INVALID_ALT_NUMBER) {
-      if (alt == 1 + 1) {
-        setState(26);
-        add(); 
+    _la = _input->LA(1);
+    while (_la == FormulaParser::TIMES) {
+      setState(11);
+      match(FormulaParser::TIMES);
+      setState(12);
+      _la = _input->LA(1);
+      if (!(_la == FormulaParser::NUMBER
+
+      || _la == FormulaParser::VARIABLE)) {
+      _errHandler->recoverInline(this);
       }
-      setState(31);
+      else {
+        _errHandler->reportMatch(this);
+        consume();
+      }
+      setState(17);
       _errHandler->sync(this);
-      alt = getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 1, _ctx);
+      _la = _input->LA(1);
+    }
+   
+  }
+  catch (RecognitionException &e) {
+    _errHandler->reportError(this, e);
+    _localctx->exception = std::current_exception();
+    _errHandler->recover(this, _localctx->exception);
+  }
+
+  return _localctx;
+}
+
+//----------------- PolynomContext ------------------------------------------------------------------
+
+FormulaParser::PolynomContext::PolynomContext(ParserRuleContext *parent, size_t invokingState)
+  : ParserRuleContext(parent, invokingState) {
+}
+
+std::vector<FormulaParser::TermContext *> FormulaParser::PolynomContext::term() {
+  return getRuleContexts<FormulaParser::TermContext>();
+}
+
+FormulaParser::TermContext* FormulaParser::PolynomContext::term(size_t i) {
+  return getRuleContext<FormulaParser::TermContext>(i);
+}
+
+std::vector<tree::TerminalNode *> FormulaParser::PolynomContext::PLUS() {
+  return getTokens(FormulaParser::PLUS);
+}
+
+tree::TerminalNode* FormulaParser::PolynomContext::PLUS(size_t i) {
+  return getToken(FormulaParser::PLUS, i);
+}
+
+
+size_t FormulaParser::PolynomContext::getRuleIndex() const {
+  return FormulaParser::RulePolynom;
+}
+
+
+FormulaParser::PolynomContext* FormulaParser::polynom() {
+  PolynomContext *_localctx = _tracker.createInstance<PolynomContext>(_ctx, getState());
+  enterRule(_localctx, 2, FormulaParser::RulePolynom);
+  size_t _la = 0;
+
+  auto onExit = finally([=] {
+    exitRule();
+  });
+  try {
+    enterOuterAlt(_localctx, 1);
+    setState(18);
+    term();
+    setState(23);
+    _errHandler->sync(this);
+    _la = _input->LA(1);
+    while (_la == FormulaParser::PLUS) {
+      setState(19);
+      match(FormulaParser::PLUS);
+      setState(20);
+      term();
+      setState(25);
+      _errHandler->sync(this);
+      _la = _input->LA(1);
     }
    
   }
@@ -239,8 +196,8 @@ tree::TerminalNode* FormulaParser::EquationContext::EQUALS() {
   return getToken(FormulaParser::EQUALS, 0);
 }
 
-FormulaParser::TermContext* FormulaParser::EquationContext::term() {
-  return getRuleContext<FormulaParser::TermContext>(0);
+FormulaParser::PolynomContext* FormulaParser::EquationContext::polynom() {
+  return getRuleContext<FormulaParser::PolynomContext>(0);
 }
 
 
@@ -251,19 +208,19 @@ size_t FormulaParser::EquationContext::getRuleIndex() const {
 
 FormulaParser::EquationContext* FormulaParser::equation() {
   EquationContext *_localctx = _tracker.createInstance<EquationContext>(_ctx, getState());
-  enterRule(_localctx, 6, FormulaParser::RuleEquation);
+  enterRule(_localctx, 4, FormulaParser::RuleEquation);
 
   auto onExit = finally([=] {
     exitRule();
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(32);
+    setState(26);
     match(FormulaParser::VARIABLE);
-    setState(33);
+    setState(27);
     match(FormulaParser::EQUALS);
-    setState(34);
-    term();
+    setState(28);
+    polynom();
    
   }
   catch (RecognitionException &e) {
@@ -275,45 +232,45 @@ FormulaParser::EquationContext* FormulaParser::equation() {
   return _localctx;
 }
 
-//----------------- BoolexprContext ------------------------------------------------------------------
+//----------------- ConstraintContext ------------------------------------------------------------------
 
-FormulaParser::BoolexprContext::BoolexprContext(ParserRuleContext *parent, size_t invokingState)
+FormulaParser::ConstraintContext::ConstraintContext(ParserRuleContext *parent, size_t invokingState)
   : ParserRuleContext(parent, invokingState) {
 }
 
-FormulaParser::TermContext* FormulaParser::BoolexprContext::term() {
-  return getRuleContext<FormulaParser::TermContext>(0);
+std::vector<FormulaParser::PolynomContext *> FormulaParser::ConstraintContext::polynom() {
+  return getRuleContexts<FormulaParser::PolynomContext>();
 }
 
-tree::TerminalNode* FormulaParser::BoolexprContext::BOOLRELATION() {
+FormulaParser::PolynomContext* FormulaParser::ConstraintContext::polynom(size_t i) {
+  return getRuleContext<FormulaParser::PolynomContext>(i);
+}
+
+tree::TerminalNode* FormulaParser::ConstraintContext::BOOLRELATION() {
   return getToken(FormulaParser::BOOLRELATION, 0);
 }
 
-tree::TerminalNode* FormulaParser::BoolexprContext::NUMBER() {
-  return getToken(FormulaParser::NUMBER, 0);
+
+size_t FormulaParser::ConstraintContext::getRuleIndex() const {
+  return FormulaParser::RuleConstraint;
 }
 
 
-size_t FormulaParser::BoolexprContext::getRuleIndex() const {
-  return FormulaParser::RuleBoolexpr;
-}
-
-
-FormulaParser::BoolexprContext* FormulaParser::boolexpr() {
-  BoolexprContext *_localctx = _tracker.createInstance<BoolexprContext>(_ctx, getState());
-  enterRule(_localctx, 8, FormulaParser::RuleBoolexpr);
+FormulaParser::ConstraintContext* FormulaParser::constraint() {
+  ConstraintContext *_localctx = _tracker.createInstance<ConstraintContext>(_ctx, getState());
+  enterRule(_localctx, 6, FormulaParser::RuleConstraint);
 
   auto onExit = finally([=] {
     exitRule();
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(36);
-    term();
-    setState(37);
+    setState(30);
+    polynom();
+    setState(31);
     match(FormulaParser::BOOLRELATION);
-    setState(38);
-    match(FormulaParser::NUMBER);
+    setState(32);
+    polynom();
    
   }
   catch (RecognitionException &e) {
@@ -331,8 +288,8 @@ FormulaParser::IntervalexprContext::IntervalexprContext(ParserRuleContext *paren
   : ParserRuleContext(parent, invokingState) {
 }
 
-FormulaParser::TermContext* FormulaParser::IntervalexprContext::term() {
-  return getRuleContext<FormulaParser::TermContext>(0);
+tree::TerminalNode* FormulaParser::IntervalexprContext::VARIABLE() {
+  return getToken(FormulaParser::VARIABLE, 0);
 }
 
 tree::TerminalNode* FormulaParser::IntervalexprContext::IN() {
@@ -351,87 +308,19 @@ size_t FormulaParser::IntervalexprContext::getRuleIndex() const {
 
 FormulaParser::IntervalexprContext* FormulaParser::intervalexpr() {
   IntervalexprContext *_localctx = _tracker.createInstance<IntervalexprContext>(_ctx, getState());
-  enterRule(_localctx, 10, FormulaParser::RuleIntervalexpr);
+  enterRule(_localctx, 8, FormulaParser::RuleIntervalexpr);
 
   auto onExit = finally([=] {
     exitRule();
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(40);
-    term();
-    setState(41);
+    setState(34);
+    match(FormulaParser::VARIABLE);
+    setState(35);
     match(FormulaParser::IN);
-    setState(42);
+    setState(36);
     match(FormulaParser::INTERVAL);
-   
-  }
-  catch (RecognitionException &e) {
-    _errHandler->reportError(this, e);
-    _localctx->exception = std::current_exception();
-    _errHandler->recover(this, _localctx->exception);
-  }
-
-  return _localctx;
-}
-
-//----------------- FormulaContext ------------------------------------------------------------------
-
-FormulaParser::FormulaContext::FormulaContext(ParserRuleContext *parent, size_t invokingState)
-  : ParserRuleContext(parent, invokingState) {
-}
-
-FormulaParser::EquationContext* FormulaParser::FormulaContext::equation() {
-  return getRuleContext<FormulaParser::EquationContext>(0);
-}
-
-FormulaParser::BoolexprContext* FormulaParser::FormulaContext::boolexpr() {
-  return getRuleContext<FormulaParser::BoolexprContext>(0);
-}
-
-FormulaParser::IntervalexprContext* FormulaParser::FormulaContext::intervalexpr() {
-  return getRuleContext<FormulaParser::IntervalexprContext>(0);
-}
-
-
-size_t FormulaParser::FormulaContext::getRuleIndex() const {
-  return FormulaParser::RuleFormula;
-}
-
-
-FormulaParser::FormulaContext* FormulaParser::formula() {
-  FormulaContext *_localctx = _tracker.createInstance<FormulaContext>(_ctx, getState());
-  enterRule(_localctx, 12, FormulaParser::RuleFormula);
-
-  auto onExit = finally([=] {
-    exitRule();
-  });
-  try {
-    setState(47);
-    _errHandler->sync(this);
-    switch (getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 2, _ctx)) {
-    case 1: {
-      enterOuterAlt(_localctx, 1);
-      setState(44);
-      equation();
-      break;
-    }
-
-    case 2: {
-      enterOuterAlt(_localctx, 2);
-      setState(45);
-      boolexpr();
-      break;
-    }
-
-    case 3: {
-      enterOuterAlt(_localctx, 3);
-      setState(46);
-      intervalexpr();
-      break;
-    }
-
-    }
    
   }
   catch (RecognitionException &e) {
@@ -452,7 +341,7 @@ atn::ATN FormulaParser::_atn;
 std::vector<uint16_t> FormulaParser::_serializedATN;
 
 std::vector<std::string> FormulaParser::_ruleNames = {
-  "add", "mult", "term", "equation", "boolexpr", "intervalexpr", "formula"
+  "term", "polynom", "equation", "constraint", "intervalexpr"
 };
 
 std::vector<std::string> FormulaParser::_literalNames = {
@@ -460,7 +349,7 @@ std::vector<std::string> FormulaParser::_literalNames = {
 };
 
 std::vector<std::string> FormulaParser::_symbolicNames = {
-  "", "IN", "EQUALS", "BOOLRELATION", "PLUS", "TIMES", "VARIABLE", "NUMBER", 
+  "", "IN", "EQUALS", "BOOLRELATION", "PLUS", "TIMES", "NUMBER", "VARIABLE", 
   "INTERVAL", "WS"
 };
 
@@ -484,37 +373,30 @@ FormulaParser::Initializer::Initializer() {
 
   _serializedATN = {
     0x3, 0x608b, 0xa72a, 0x8133, 0xb9ed, 0x417c, 0x3be7, 0x7786, 0x5964, 
-    0x3, 0xb, 0x34, 0x4, 0x2, 0x9, 0x2, 0x4, 0x3, 0x9, 0x3, 0x4, 0x4, 0x9, 
-    0x4, 0x4, 0x5, 0x9, 0x5, 0x4, 0x6, 0x9, 0x6, 0x4, 0x7, 0x9, 0x7, 0x4, 
-    0x8, 0x9, 0x8, 0x3, 0x2, 0x3, 0x2, 0x3, 0x2, 0x3, 0x3, 0x3, 0x3, 0x3, 
-    0x3, 0x7, 0x3, 0x17, 0xa, 0x3, 0xc, 0x3, 0xe, 0x3, 0x1a, 0xb, 0x3, 0x3, 
-    0x4, 0x3, 0x4, 0x7, 0x4, 0x1e, 0xa, 0x4, 0xc, 0x4, 0xe, 0x4, 0x21, 0xb, 
-    0x4, 0x3, 0x5, 0x3, 0x5, 0x3, 0x5, 0x3, 0x5, 0x3, 0x6, 0x3, 0x6, 0x3, 
-    0x6, 0x3, 0x6, 0x3, 0x7, 0x3, 0x7, 0x3, 0x7, 0x3, 0x7, 0x3, 0x8, 0x3, 
-    0x8, 0x3, 0x8, 0x5, 0x8, 0x32, 0xa, 0x8, 0x3, 0x8, 0x4, 0x18, 0x1f, 
-    0x2, 0x9, 0x2, 0x4, 0x6, 0x8, 0xa, 0xc, 0xe, 0x2, 0x3, 0x3, 0x2, 0x8, 
-    0x9, 0x2, 0x30, 0x2, 0x10, 0x3, 0x2, 0x2, 0x2, 0x4, 0x13, 0x3, 0x2, 
-    0x2, 0x2, 0x6, 0x1b, 0x3, 0x2, 0x2, 0x2, 0x8, 0x22, 0x3, 0x2, 0x2, 0x2, 
-    0xa, 0x26, 0x3, 0x2, 0x2, 0x2, 0xc, 0x2a, 0x3, 0x2, 0x2, 0x2, 0xe, 0x31, 
-    0x3, 0x2, 0x2, 0x2, 0x10, 0x11, 0x7, 0x6, 0x2, 0x2, 0x11, 0x12, 0x5, 
-    0x6, 0x4, 0x2, 0x12, 0x3, 0x3, 0x2, 0x2, 0x2, 0x13, 0x18, 0x9, 0x2, 
-    0x2, 0x2, 0x14, 0x15, 0x7, 0x7, 0x2, 0x2, 0x15, 0x17, 0x9, 0x2, 0x2, 
-    0x2, 0x16, 0x14, 0x3, 0x2, 0x2, 0x2, 0x17, 0x1a, 0x3, 0x2, 0x2, 0x2, 
-    0x18, 0x19, 0x3, 0x2, 0x2, 0x2, 0x18, 0x16, 0x3, 0x2, 0x2, 0x2, 0x19, 
-    0x5, 0x3, 0x2, 0x2, 0x2, 0x1a, 0x18, 0x3, 0x2, 0x2, 0x2, 0x1b, 0x1f, 
-    0x5, 0x4, 0x3, 0x2, 0x1c, 0x1e, 0x5, 0x2, 0x2, 0x2, 0x1d, 0x1c, 0x3, 
-    0x2, 0x2, 0x2, 0x1e, 0x21, 0x3, 0x2, 0x2, 0x2, 0x1f, 0x20, 0x3, 0x2, 
-    0x2, 0x2, 0x1f, 0x1d, 0x3, 0x2, 0x2, 0x2, 0x20, 0x7, 0x3, 0x2, 0x2, 
-    0x2, 0x21, 0x1f, 0x3, 0x2, 0x2, 0x2, 0x22, 0x23, 0x7, 0x8, 0x2, 0x2, 
-    0x23, 0x24, 0x7, 0x4, 0x2, 0x2, 0x24, 0x25, 0x5, 0x6, 0x4, 0x2, 0x25, 
-    0x9, 0x3, 0x2, 0x2, 0x2, 0x26, 0x27, 0x5, 0x6, 0x4, 0x2, 0x27, 0x28, 
-    0x7, 0x5, 0x2, 0x2, 0x28, 0x29, 0x7, 0x9, 0x2, 0x2, 0x29, 0xb, 0x3, 
-    0x2, 0x2, 0x2, 0x2a, 0x2b, 0x5, 0x6, 0x4, 0x2, 0x2b, 0x2c, 0x7, 0x3, 
-    0x2, 0x2, 0x2c, 0x2d, 0x7, 0xa, 0x2, 0x2, 0x2d, 0xd, 0x3, 0x2, 0x2, 
-    0x2, 0x2e, 0x32, 0x5, 0x8, 0x5, 0x2, 0x2f, 0x32, 0x5, 0xa, 0x6, 0x2, 
-    0x30, 0x32, 0x5, 0xc, 0x7, 0x2, 0x31, 0x2e, 0x3, 0x2, 0x2, 0x2, 0x31, 
-    0x2f, 0x3, 0x2, 0x2, 0x2, 0x31, 0x30, 0x3, 0x2, 0x2, 0x2, 0x32, 0xf, 
-    0x3, 0x2, 0x2, 0x2, 0x5, 0x18, 0x1f, 0x31, 
+    0x3, 0xb, 0x29, 0x4, 0x2, 0x9, 0x2, 0x4, 0x3, 0x9, 0x3, 0x4, 0x4, 0x9, 
+    0x4, 0x4, 0x5, 0x9, 0x5, 0x4, 0x6, 0x9, 0x6, 0x3, 0x2, 0x3, 0x2, 0x3, 
+    0x2, 0x7, 0x2, 0x10, 0xa, 0x2, 0xc, 0x2, 0xe, 0x2, 0x13, 0xb, 0x2, 0x3, 
+    0x3, 0x3, 0x3, 0x3, 0x3, 0x7, 0x3, 0x18, 0xa, 0x3, 0xc, 0x3, 0xe, 0x3, 
+    0x1b, 0xb, 0x3, 0x3, 0x4, 0x3, 0x4, 0x3, 0x4, 0x3, 0x4, 0x3, 0x5, 0x3, 
+    0x5, 0x3, 0x5, 0x3, 0x5, 0x3, 0x6, 0x3, 0x6, 0x3, 0x6, 0x3, 0x6, 0x3, 
+    0x6, 0x2, 0x2, 0x7, 0x2, 0x4, 0x6, 0x8, 0xa, 0x2, 0x3, 0x3, 0x2, 0x8, 
+    0x9, 0x2, 0x25, 0x2, 0xc, 0x3, 0x2, 0x2, 0x2, 0x4, 0x14, 0x3, 0x2, 0x2, 
+    0x2, 0x6, 0x1c, 0x3, 0x2, 0x2, 0x2, 0x8, 0x20, 0x3, 0x2, 0x2, 0x2, 0xa, 
+    0x24, 0x3, 0x2, 0x2, 0x2, 0xc, 0x11, 0x9, 0x2, 0x2, 0x2, 0xd, 0xe, 0x7, 
+    0x7, 0x2, 0x2, 0xe, 0x10, 0x9, 0x2, 0x2, 0x2, 0xf, 0xd, 0x3, 0x2, 0x2, 
+    0x2, 0x10, 0x13, 0x3, 0x2, 0x2, 0x2, 0x11, 0xf, 0x3, 0x2, 0x2, 0x2, 
+    0x11, 0x12, 0x3, 0x2, 0x2, 0x2, 0x12, 0x3, 0x3, 0x2, 0x2, 0x2, 0x13, 
+    0x11, 0x3, 0x2, 0x2, 0x2, 0x14, 0x19, 0x5, 0x2, 0x2, 0x2, 0x15, 0x16, 
+    0x7, 0x6, 0x2, 0x2, 0x16, 0x18, 0x5, 0x2, 0x2, 0x2, 0x17, 0x15, 0x3, 
+    0x2, 0x2, 0x2, 0x18, 0x1b, 0x3, 0x2, 0x2, 0x2, 0x19, 0x17, 0x3, 0x2, 
+    0x2, 0x2, 0x19, 0x1a, 0x3, 0x2, 0x2, 0x2, 0x1a, 0x5, 0x3, 0x2, 0x2, 
+    0x2, 0x1b, 0x19, 0x3, 0x2, 0x2, 0x2, 0x1c, 0x1d, 0x7, 0x9, 0x2, 0x2, 
+    0x1d, 0x1e, 0x7, 0x4, 0x2, 0x2, 0x1e, 0x1f, 0x5, 0x4, 0x3, 0x2, 0x1f, 
+    0x7, 0x3, 0x2, 0x2, 0x2, 0x20, 0x21, 0x5, 0x4, 0x3, 0x2, 0x21, 0x22, 
+    0x7, 0x5, 0x2, 0x2, 0x22, 0x23, 0x5, 0x4, 0x3, 0x2, 0x23, 0x9, 0x3, 
+    0x2, 0x2, 0x2, 0x24, 0x25, 0x7, 0x9, 0x2, 0x2, 0x25, 0x26, 0x7, 0x3, 
+    0x2, 0x2, 0x26, 0x27, 0x7, 0xa, 0x2, 0x2, 0x27, 0xb, 0x3, 0x2, 0x2, 
+    0x2, 0x4, 0x11, 0x19, 
   };
 
   atn::ATNDeserializer deserializer;

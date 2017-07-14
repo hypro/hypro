@@ -32,26 +32,20 @@ public:
   virtual void enterInvariants(HybridAutomatonParser::InvariantsContext *ctx) = 0;
   virtual void exitInvariants(HybridAutomatonParser::InvariantsContext *ctx) = 0;
 
-  virtual void enterAdd(HybridAutomatonParser::AddContext *ctx) = 0;
-  virtual void exitAdd(HybridAutomatonParser::AddContext *ctx) = 0;
-
-  virtual void enterMult(HybridAutomatonParser::MultContext *ctx) = 0;
-  virtual void exitMult(HybridAutomatonParser::MultContext *ctx) = 0;
-
   virtual void enterTerm(HybridAutomatonParser::TermContext *ctx) = 0;
   virtual void exitTerm(HybridAutomatonParser::TermContext *ctx) = 0;
+
+  virtual void enterPolynom(HybridAutomatonParser::PolynomContext *ctx) = 0;
+  virtual void exitPolynom(HybridAutomatonParser::PolynomContext *ctx) = 0;
 
   virtual void enterEquation(HybridAutomatonParser::EquationContext *ctx) = 0;
   virtual void exitEquation(HybridAutomatonParser::EquationContext *ctx) = 0;
 
-  virtual void enterBoolexpr(HybridAutomatonParser::BoolexprContext *ctx) = 0;
-  virtual void exitBoolexpr(HybridAutomatonParser::BoolexprContext *ctx) = 0;
+  virtual void enterConstraint(HybridAutomatonParser::ConstraintContext *ctx) = 0;
+  virtual void exitConstraint(HybridAutomatonParser::ConstraintContext *ctx) = 0;
 
   virtual void enterIntervalexpr(HybridAutomatonParser::IntervalexprContext *ctx) = 0;
   virtual void exitIntervalexpr(HybridAutomatonParser::IntervalexprContext *ctx) = 0;
-
-  virtual void enterFormula(HybridAutomatonParser::FormulaContext *ctx) = 0;
-  virtual void exitFormula(HybridAutomatonParser::FormulaContext *ctx) = 0;
 
 
 };

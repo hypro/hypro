@@ -13,14 +13,14 @@ class  HybridAutomatonParser : public antlr4::Parser {
 public:
   enum {
     T__0 = 1, T__1 = 2, T__2 = 3, T__3 = 4, T__4 = 5, T__5 = 6, T__6 = 7, 
-    T__7 = 8, IN = 9, EQUALS = 10, BOOLRELATION = 11, PLUS = 12, TIMES = 13, 
-    VARIABLE = 14, NUMBER = 15, INTERVAL = 16, WS = 17
+    T__7 = 8, T__8 = 9, T__9 = 10, T__10 = 11, IN = 12, EQUALS = 13, BOOLRELATION = 14, 
+    PLUS = 15, TIMES = 16, NUMBER = 17, VARIABLE = 18, INTERVAL = 19, WS = 20
   };
 
   enum {
     RuleStart = 0, RuleVardeclaration = 1, RuleModes = 2, RuleLocation = 3, 
-    RuleActivities = 4, RuleInvariants = 5, RuleAdd = 6, RuleMult = 7, RuleTerm = 8, 
-    RuleEquation = 9, RuleBoolexpr = 10, RuleIntervalexpr = 11, RuleFormula = 12
+    RuleActivities = 4, RuleInvariants = 5, RuleTerm = 6, RulePolynom = 7, 
+    RuleEquation = 8, RuleConstraint = 9, RuleIntervalexpr = 10
   };
 
   HybridAutomatonParser(antlr4::TokenStream *input);
@@ -39,13 +39,11 @@ public:
   class LocationContext;
   class ActivitiesContext;
   class InvariantsContext;
-  class AddContext;
-  class MultContext;
   class TermContext;
+  class PolynomContext;
   class EquationContext;
-  class BoolexprContext;
-  class IntervalexprContext;
-  class FormulaContext; 
+  class ConstraintContext;
+  class IntervalexprContext; 
 
   class  StartContext : public antlr4::ParserRuleContext {
   public:
@@ -122,8 +120,8 @@ public:
   public:
     InvariantsContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
-    std::vector<BoolexprContext *> boolexpr();
-    BoolexprContext* boolexpr(size_t i);
+    std::vector<ConstraintContext *> constraint();
+    ConstraintContext* constraint(size_t i);
     std::vector<IntervalexprContext *> intervalexpr();
     IntervalexprContext* intervalexpr(size_t i);
 
@@ -134,23 +132,9 @@ public:
 
   InvariantsContext* invariants();
 
-  class  AddContext : public antlr4::ParserRuleContext {
+  class  TermContext : public antlr4::ParserRuleContext {
   public:
-    AddContext(antlr4::ParserRuleContext *parent, size_t invokingState);
-    virtual size_t getRuleIndex() const override;
-    antlr4::tree::TerminalNode *PLUS();
-    TermContext *term();
-
-    virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
-    virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
-   
-  };
-
-  AddContext* add();
-
-  class  MultContext : public antlr4::ParserRuleContext {
-  public:
-    MultContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    TermContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
     std::vector<antlr4::tree::TerminalNode *> NUMBER();
     antlr4::tree::TerminalNode* NUMBER(size_t i);
@@ -164,22 +148,23 @@ public:
    
   };
 
-  MultContext* mult();
+  TermContext* term();
 
-  class  TermContext : public antlr4::ParserRuleContext {
+  class  PolynomContext : public antlr4::ParserRuleContext {
   public:
-    TermContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    PolynomContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
-    MultContext *mult();
-    std::vector<AddContext *> add();
-    AddContext* add(size_t i);
+    std::vector<TermContext *> term();
+    TermContext* term(size_t i);
+    std::vector<antlr4::tree::TerminalNode *> PLUS();
+    antlr4::tree::TerminalNode* PLUS(size_t i);
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
    
   };
 
-  TermContext* term();
+  PolynomContext* polynom();
 
   class  EquationContext : public antlr4::ParserRuleContext {
   public:
@@ -187,7 +172,7 @@ public:
     virtual size_t getRuleIndex() const override;
     antlr4::tree::TerminalNode *VARIABLE();
     antlr4::tree::TerminalNode *EQUALS();
-    TermContext *term();
+    PolynomContext *polynom();
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
@@ -196,26 +181,26 @@ public:
 
   EquationContext* equation();
 
-  class  BoolexprContext : public antlr4::ParserRuleContext {
+  class  ConstraintContext : public antlr4::ParserRuleContext {
   public:
-    BoolexprContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    ConstraintContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
-    TermContext *term();
+    std::vector<PolynomContext *> polynom();
+    PolynomContext* polynom(size_t i);
     antlr4::tree::TerminalNode *BOOLRELATION();
-    antlr4::tree::TerminalNode *NUMBER();
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
    
   };
 
-  BoolexprContext* boolexpr();
+  ConstraintContext* constraint();
 
   class  IntervalexprContext : public antlr4::ParserRuleContext {
   public:
     IntervalexprContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
-    TermContext *term();
+    antlr4::tree::TerminalNode *VARIABLE();
     antlr4::tree::TerminalNode *IN();
     antlr4::tree::TerminalNode *INTERVAL();
 
@@ -225,21 +210,6 @@ public:
   };
 
   IntervalexprContext* intervalexpr();
-
-  class  FormulaContext : public antlr4::ParserRuleContext {
-  public:
-    FormulaContext(antlr4::ParserRuleContext *parent, size_t invokingState);
-    virtual size_t getRuleIndex() const override;
-    EquationContext *equation();
-    BoolexprContext *boolexpr();
-    IntervalexprContext *intervalexpr();
-
-    virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
-    virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
-   
-  };
-
-  FormulaContext* formula();
 
 
 private:

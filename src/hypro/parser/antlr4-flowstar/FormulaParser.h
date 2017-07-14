@@ -12,13 +12,13 @@
 class  FormulaParser : public antlr4::Parser {
 public:
   enum {
-    IN = 1, EQUALS = 2, BOOLRELATION = 3, PLUS = 4, TIMES = 5, VARIABLE = 6, 
-    NUMBER = 7, INTERVAL = 8, WS = 9
+    IN = 1, EQUALS = 2, BOOLRELATION = 3, PLUS = 4, TIMES = 5, NUMBER = 6, 
+    VARIABLE = 7, INTERVAL = 8, WS = 9
   };
 
   enum {
-    RuleAdd = 0, RuleMult = 1, RuleTerm = 2, RuleEquation = 3, RuleBoolexpr = 4, 
-    RuleIntervalexpr = 5, RuleFormula = 6
+    RuleTerm = 0, RulePolynom = 1, RuleEquation = 2, RuleConstraint = 3, 
+    RuleIntervalexpr = 4
   };
 
   FormulaParser(antlr4::TokenStream *input);
@@ -31,29 +31,15 @@ public:
   virtual antlr4::dfa::Vocabulary& getVocabulary() const override;
 
 
-  class AddContext;
-  class MultContext;
   class TermContext;
+  class PolynomContext;
   class EquationContext;
-  class BoolexprContext;
-  class IntervalexprContext;
-  class FormulaContext; 
+  class ConstraintContext;
+  class IntervalexprContext; 
 
-  class  AddContext : public antlr4::ParserRuleContext {
+  class  TermContext : public antlr4::ParserRuleContext {
   public:
-    AddContext(antlr4::ParserRuleContext *parent, size_t invokingState);
-    virtual size_t getRuleIndex() const override;
-    antlr4::tree::TerminalNode *PLUS();
-    TermContext *term();
-
-   
-  };
-
-  AddContext* add();
-
-  class  MultContext : public antlr4::ParserRuleContext {
-  public:
-    MultContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    TermContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
     std::vector<antlr4::tree::TerminalNode *> NUMBER();
     antlr4::tree::TerminalNode* NUMBER(size_t i);
@@ -65,20 +51,21 @@ public:
    
   };
 
-  MultContext* mult();
+  TermContext* term();
 
-  class  TermContext : public antlr4::ParserRuleContext {
+  class  PolynomContext : public antlr4::ParserRuleContext {
   public:
-    TermContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    PolynomContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
-    MultContext *mult();
-    std::vector<AddContext *> add();
-    AddContext* add(size_t i);
+    std::vector<TermContext *> term();
+    TermContext* term(size_t i);
+    std::vector<antlr4::tree::TerminalNode *> PLUS();
+    antlr4::tree::TerminalNode* PLUS(size_t i);
 
    
   };
 
-  TermContext* term();
+  PolynomContext* polynom();
 
   class  EquationContext : public antlr4::ParserRuleContext {
   public:
@@ -86,31 +73,31 @@ public:
     virtual size_t getRuleIndex() const override;
     antlr4::tree::TerminalNode *VARIABLE();
     antlr4::tree::TerminalNode *EQUALS();
-    TermContext *term();
+    PolynomContext *polynom();
 
    
   };
 
   EquationContext* equation();
 
-  class  BoolexprContext : public antlr4::ParserRuleContext {
+  class  ConstraintContext : public antlr4::ParserRuleContext {
   public:
-    BoolexprContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    ConstraintContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
-    TermContext *term();
+    std::vector<PolynomContext *> polynom();
+    PolynomContext* polynom(size_t i);
     antlr4::tree::TerminalNode *BOOLRELATION();
-    antlr4::tree::TerminalNode *NUMBER();
 
    
   };
 
-  BoolexprContext* boolexpr();
+  ConstraintContext* constraint();
 
   class  IntervalexprContext : public antlr4::ParserRuleContext {
   public:
     IntervalexprContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
-    TermContext *term();
+    antlr4::tree::TerminalNode *VARIABLE();
     antlr4::tree::TerminalNode *IN();
     antlr4::tree::TerminalNode *INTERVAL();
 
@@ -118,19 +105,6 @@ public:
   };
 
   IntervalexprContext* intervalexpr();
-
-  class  FormulaContext : public antlr4::ParserRuleContext {
-  public:
-    FormulaContext(antlr4::ParserRuleContext *parent, size_t invokingState);
-    virtual size_t getRuleIndex() const override;
-    EquationContext *equation();
-    BoolexprContext *boolexpr();
-    IntervalexprContext *intervalexpr();
-
-   
-  };
-
-  FormulaContext* formula();
 
 
 private:

@@ -34,26 +34,20 @@ public:
   virtual void enterInvariants(HybridAutomatonParser::InvariantsContext * /*ctx*/) override { }
   virtual void exitInvariants(HybridAutomatonParser::InvariantsContext * /*ctx*/) override { }
 
-  virtual void enterAdd(HybridAutomatonParser::AddContext * /*ctx*/) override { }
-  virtual void exitAdd(HybridAutomatonParser::AddContext * /*ctx*/) override { }
-
-  virtual void enterMult(HybridAutomatonParser::MultContext * /*ctx*/) override { }
-  virtual void exitMult(HybridAutomatonParser::MultContext * /*ctx*/) override { }
-
   virtual void enterTerm(HybridAutomatonParser::TermContext * /*ctx*/) override { }
   virtual void exitTerm(HybridAutomatonParser::TermContext * /*ctx*/) override { }
+
+  virtual void enterPolynom(HybridAutomatonParser::PolynomContext * /*ctx*/) override { }
+  virtual void exitPolynom(HybridAutomatonParser::PolynomContext * /*ctx*/) override { }
 
   virtual void enterEquation(HybridAutomatonParser::EquationContext * /*ctx*/) override { }
   virtual void exitEquation(HybridAutomatonParser::EquationContext * /*ctx*/) override { }
 
-  virtual void enterBoolexpr(HybridAutomatonParser::BoolexprContext * /*ctx*/) override { }
-  virtual void exitBoolexpr(HybridAutomatonParser::BoolexprContext * /*ctx*/) override { }
+  virtual void enterConstraint(HybridAutomatonParser::ConstraintContext * /*ctx*/) override { }
+  virtual void exitConstraint(HybridAutomatonParser::ConstraintContext * /*ctx*/) override { }
 
   virtual void enterIntervalexpr(HybridAutomatonParser::IntervalexprContext * /*ctx*/) override { }
   virtual void exitIntervalexpr(HybridAutomatonParser::IntervalexprContext * /*ctx*/) override { }
-
-  virtual void enterFormula(HybridAutomatonParser::FormulaContext * /*ctx*/) override { }
-  virtual void exitFormula(HybridAutomatonParser::FormulaContext * /*ctx*/) override { }
 
 
   virtual void enterEveryRule(antlr4::ParserRuleContext * /*ctx*/) override { }

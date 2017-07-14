@@ -12,15 +12,15 @@
 class  LocationParser : public antlr4::Parser {
 public:
   enum {
-    T__0 = 1, T__1 = 2, T__2 = 3, T__3 = 4, T__4 = 5, IN = 6, EQUALS = 7, 
-    BOOLRELATION = 8, PLUS = 9, TIMES = 10, VARIABLE = 11, NUMBER = 12, 
-    INTERVAL = 13, WS = 14
+    T__0 = 1, T__1 = 2, T__2 = 3, T__3 = 4, T__4 = 5, T__5 = 6, T__6 = 7, 
+    T__7 = 8, IN = 9, EQUALS = 10, BOOLRELATION = 11, PLUS = 12, TIMES = 13, 
+    NUMBER = 14, VARIABLE = 15, INTERVAL = 16, WS = 17
   };
 
   enum {
     RuleModes = 0, RuleLocation = 1, RuleActivities = 2, RuleInvariants = 3, 
-    RuleAdd = 4, RuleMult = 5, RuleTerm = 6, RuleEquation = 7, RuleBoolexpr = 8, 
-    RuleIntervalexpr = 9, RuleFormula = 10
+    RuleTerm = 4, RulePolynom = 5, RuleEquation = 6, RuleConstraint = 7, 
+    RuleIntervalexpr = 8
   };
 
   LocationParser(antlr4::TokenStream *input);
@@ -37,13 +37,11 @@ public:
   class LocationContext;
   class ActivitiesContext;
   class InvariantsContext;
-  class AddContext;
-  class MultContext;
   class TermContext;
+  class PolynomContext;
   class EquationContext;
-  class BoolexprContext;
-  class IntervalexprContext;
-  class FormulaContext; 
+  class ConstraintContext;
+  class IntervalexprContext; 
 
   class  ModesContext : public antlr4::ParserRuleContext {
   public:
@@ -86,8 +84,8 @@ public:
   public:
     InvariantsContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
-    std::vector<BoolexprContext *> boolexpr();
-    BoolexprContext* boolexpr(size_t i);
+    std::vector<ConstraintContext *> constraint();
+    ConstraintContext* constraint(size_t i);
     std::vector<IntervalexprContext *> intervalexpr();
     IntervalexprContext* intervalexpr(size_t i);
 
@@ -96,21 +94,9 @@ public:
 
   InvariantsContext* invariants();
 
-  class  AddContext : public antlr4::ParserRuleContext {
+  class  TermContext : public antlr4::ParserRuleContext {
   public:
-    AddContext(antlr4::ParserRuleContext *parent, size_t invokingState);
-    virtual size_t getRuleIndex() const override;
-    antlr4::tree::TerminalNode *PLUS();
-    TermContext *term();
-
-   
-  };
-
-  AddContext* add();
-
-  class  MultContext : public antlr4::ParserRuleContext {
-  public:
-    MultContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    TermContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
     std::vector<antlr4::tree::TerminalNode *> NUMBER();
     antlr4::tree::TerminalNode* NUMBER(size_t i);
@@ -122,20 +108,21 @@ public:
    
   };
 
-  MultContext* mult();
+  TermContext* term();
 
-  class  TermContext : public antlr4::ParserRuleContext {
+  class  PolynomContext : public antlr4::ParserRuleContext {
   public:
-    TermContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    PolynomContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
-    MultContext *mult();
-    std::vector<AddContext *> add();
-    AddContext* add(size_t i);
+    std::vector<TermContext *> term();
+    TermContext* term(size_t i);
+    std::vector<antlr4::tree::TerminalNode *> PLUS();
+    antlr4::tree::TerminalNode* PLUS(size_t i);
 
    
   };
 
-  TermContext* term();
+  PolynomContext* polynom();
 
   class  EquationContext : public antlr4::ParserRuleContext {
   public:
@@ -143,31 +130,31 @@ public:
     virtual size_t getRuleIndex() const override;
     antlr4::tree::TerminalNode *VARIABLE();
     antlr4::tree::TerminalNode *EQUALS();
-    TermContext *term();
+    PolynomContext *polynom();
 
    
   };
 
   EquationContext* equation();
 
-  class  BoolexprContext : public antlr4::ParserRuleContext {
+  class  ConstraintContext : public antlr4::ParserRuleContext {
   public:
-    BoolexprContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    ConstraintContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
-    TermContext *term();
+    std::vector<PolynomContext *> polynom();
+    PolynomContext* polynom(size_t i);
     antlr4::tree::TerminalNode *BOOLRELATION();
-    antlr4::tree::TerminalNode *NUMBER();
 
    
   };
 
-  BoolexprContext* boolexpr();
+  ConstraintContext* constraint();
 
   class  IntervalexprContext : public antlr4::ParserRuleContext {
   public:
     IntervalexprContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
-    TermContext *term();
+    antlr4::tree::TerminalNode *VARIABLE();
     antlr4::tree::TerminalNode *IN();
     antlr4::tree::TerminalNode *INTERVAL();
 
@@ -175,19 +162,6 @@ public:
   };
 
   IntervalexprContext* intervalexpr();
-
-  class  FormulaContext : public antlr4::ParserRuleContext {
-  public:
-    FormulaContext(antlr4::ParserRuleContext *parent, size_t invokingState);
-    virtual size_t getRuleIndex() const override;
-    EquationContext *equation();
-    BoolexprContext *boolexpr();
-    IntervalexprContext *intervalexpr();
-
-   
-  };
-
-  FormulaContext* formula();
 
 
 private:

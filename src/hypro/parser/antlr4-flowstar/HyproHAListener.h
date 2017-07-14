@@ -67,26 +67,29 @@ class HyproHAListener : public HybridAutomatonBaseListener {
 		inline void setFillingTarget(matrix_t<Number> newTarget){ fillingTarget = std::make_shared<matrix_t<Number>>(newTarget); }
 
 		void enterVardeclaration(HybridAutomatonParser::VardeclarationContext* ctx) override;
+
 		void enterLocation(HybridAutomatonParser::LocationContext* ctx) override;
+		void exitLocation(HybridAutomatonParser::LocationContext* ctx) override;
+
 		void enterActivities(HybridAutomatonParser::ActivitiesContext* ctx) override;
+
 		void enterEquation(HybridAutomatonParser::EquationContext* ctx) override;
-		void enterMult(HybridAutomatonParser::MultContext* ctx) override;
+		void exitEquation(HybridAutomatonParser::EquationContext* ctx) override;
+
+		void enterPolynom(HybridAutomatonParser::PolynomContext * ctx) override;
+  		void exitPolynom(HybridAutomatonParser::PolynomContext * ctx) override;
 
 		void enterTerm(HybridAutomatonParser::TermContext* ctx) override;
 		void exitTerm(HybridAutomatonParser::TermContext* ctx) override;
 
-		void exitEquation(HybridAutomatonParser::EquationContext* ctx) override;
-
 		void enterInvariants(HybridAutomatonParser::InvariantsContext* ctx) override;
 	    void exitInvariants(HybridAutomatonParser::InvariantsContext* ctx) override;
 
-		void enterBoolexpr(HybridAutomatonParser::BoolexprContext* ctx) override;
- 		void exitBoolexpr(HybridAutomatonParser::BoolexprContext* ctx) override;
+		void enterConstraint(HybridAutomatonParser::ConstraintContext* ctx) override;
+ 		void exitConstraint(HybridAutomatonParser::ConstraintContext* ctx) override;
 
   		void enterIntervalexpr(HybridAutomatonParser::IntervalexprContext* ctx) override;
   		void exitIntervalexpr(HybridAutomatonParser::IntervalexprContext* ctx) override;
-
-  		void exitLocation(HybridAutomatonParser::LocationContext* ctx) override;
 
 		void exitStart(HybridAutomatonParser::StartContext* ctx) override;
 

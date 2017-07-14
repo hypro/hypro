@@ -17,9 +17,9 @@ modes			: 'modes' '{' location* '}' ;
 
 location 		: VARIABLE '{' activities invariants '}' ;
 
-activities		: 'poly ode 1' '{' equation* '}' ;				//can be poly ode 1/2/3 or linear ode 1
+activities		: ('poly ode 1' | 'poly ode 2' | 'poly ode 3' | 'linear ode') '{' equation* '}' ; 
 
-invariants		: 'inv' '{' (boolexpr | intervalexpr)* '}' ;
+invariants		: 'inv' '{' (constraint | intervalexpr)* '}' ;
 
 ////// Lexer Rules
 

@@ -71,15 +71,15 @@ HybridAutomatonParser::StartContext* HybridAutomatonParser::start() {
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(26);
+    setState(22);
     match(HybridAutomatonParser::T__0);
-    setState(27);
+    setState(23);
     match(HybridAutomatonParser::T__1);
-    setState(28);
+    setState(24);
     vardeclaration();
-    setState(29);
+    setState(25);
     modes();
-    setState(30);
+    setState(26);
     match(HybridAutomatonParser::T__2);
    
   }
@@ -133,24 +133,24 @@ HybridAutomatonParser::VardeclarationContext* HybridAutomatonParser::vardeclarat
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(32);
+    setState(28);
     match(HybridAutomatonParser::T__3);
-    setState(33);
+    setState(29);
     match(HybridAutomatonParser::VARIABLE);
-    setState(40);
+    setState(36);
     _errHandler->sync(this);
 
     _la = _input->LA(1);
     if (_la == HybridAutomatonParser::T__4) {
-      setState(36); 
+      setState(32); 
       _errHandler->sync(this);
       _la = _input->LA(1);
       do {
-        setState(34);
+        setState(30);
         match(HybridAutomatonParser::T__4);
-        setState(35);
+        setState(31);
         match(HybridAutomatonParser::VARIABLE);
-        setState(38); 
+        setState(34); 
         _errHandler->sync(this);
         _la = _input->LA(1);
       } while (_la == HybridAutomatonParser::T__4);
@@ -207,21 +207,21 @@ HybridAutomatonParser::ModesContext* HybridAutomatonParser::modes() {
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(42);
+    setState(38);
     match(HybridAutomatonParser::T__5);
-    setState(43);
+    setState(39);
     match(HybridAutomatonParser::T__1);
-    setState(47);
+    setState(43);
     _errHandler->sync(this);
     _la = _input->LA(1);
     while (_la == HybridAutomatonParser::VARIABLE) {
-      setState(44);
+      setState(40);
       location();
-      setState(49);
+      setState(45);
       _errHandler->sync(this);
       _la = _input->LA(1);
     }
-    setState(50);
+    setState(46);
     match(HybridAutomatonParser::T__2);
    
   }
@@ -278,15 +278,15 @@ HybridAutomatonParser::LocationContext* HybridAutomatonParser::location() {
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(52);
+    setState(48);
     match(HybridAutomatonParser::VARIABLE);
-    setState(53);
+    setState(49);
     match(HybridAutomatonParser::T__1);
-    setState(54);
+    setState(50);
     activities();
-    setState(55);
+    setState(51);
     invariants();
-    setState(56);
+    setState(52);
     match(HybridAutomatonParser::T__2);
    
   }
@@ -340,21 +340,32 @@ HybridAutomatonParser::ActivitiesContext* HybridAutomatonParser::activities() {
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(58);
-    match(HybridAutomatonParser::T__6);
-    setState(59);
+    setState(54);
+    _la = _input->LA(1);
+    if (!((((_la & ~ 0x3fULL) == 0) &&
+      ((1ULL << _la) & ((1ULL << HybridAutomatonParser::T__6)
+      | (1ULL << HybridAutomatonParser::T__7)
+      | (1ULL << HybridAutomatonParser::T__8)
+      | (1ULL << HybridAutomatonParser::T__9))) != 0))) {
+    _errHandler->recoverInline(this);
+    }
+    else {
+      _errHandler->reportMatch(this);
+      consume();
+    }
+    setState(55);
     match(HybridAutomatonParser::T__1);
-    setState(63);
+    setState(59);
     _errHandler->sync(this);
     _la = _input->LA(1);
     while (_la == HybridAutomatonParser::VARIABLE) {
-      setState(60);
+      setState(56);
       equation();
-      setState(65);
+      setState(61);
       _errHandler->sync(this);
       _la = _input->LA(1);
     }
-    setState(66);
+    setState(62);
     match(HybridAutomatonParser::T__2);
    
   }
@@ -373,12 +384,12 @@ HybridAutomatonParser::InvariantsContext::InvariantsContext(ParserRuleContext *p
   : ParserRuleContext(parent, invokingState) {
 }
 
-std::vector<HybridAutomatonParser::BoolexprContext *> HybridAutomatonParser::InvariantsContext::boolexpr() {
-  return getRuleContexts<HybridAutomatonParser::BoolexprContext>();
+std::vector<HybridAutomatonParser::ConstraintContext *> HybridAutomatonParser::InvariantsContext::constraint() {
+  return getRuleContexts<HybridAutomatonParser::ConstraintContext>();
 }
 
-HybridAutomatonParser::BoolexprContext* HybridAutomatonParser::InvariantsContext::boolexpr(size_t i) {
-  return getRuleContext<HybridAutomatonParser::BoolexprContext>(i);
+HybridAutomatonParser::ConstraintContext* HybridAutomatonParser::InvariantsContext::constraint(size_t i) {
+  return getRuleContext<HybridAutomatonParser::ConstraintContext>(i);
 }
 
 std::vector<HybridAutomatonParser::IntervalexprContext *> HybridAutomatonParser::InvariantsContext::intervalexpr() {
@@ -416,196 +427,38 @@ HybridAutomatonParser::InvariantsContext* HybridAutomatonParser::invariants() {
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(68);
-    match(HybridAutomatonParser::T__7);
-    setState(69);
+    setState(64);
+    match(HybridAutomatonParser::T__10);
+    setState(65);
     match(HybridAutomatonParser::T__1);
-    setState(74);
+    setState(70);
     _errHandler->sync(this);
     _la = _input->LA(1);
-    while (_la == HybridAutomatonParser::VARIABLE
+    while (_la == HybridAutomatonParser::NUMBER
 
-    || _la == HybridAutomatonParser::NUMBER) {
-      setState(72);
+    || _la == HybridAutomatonParser::VARIABLE) {
+      setState(68);
       _errHandler->sync(this);
       switch (getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 4, _ctx)) {
       case 1: {
-        setState(70);
-        boolexpr();
+        setState(66);
+        constraint();
         break;
       }
 
       case 2: {
-        setState(71);
+        setState(67);
         intervalexpr();
         break;
       }
 
       }
-      setState(76);
+      setState(72);
       _errHandler->sync(this);
       _la = _input->LA(1);
     }
-    setState(77);
+    setState(73);
     match(HybridAutomatonParser::T__2);
-   
-  }
-  catch (RecognitionException &e) {
-    _errHandler->reportError(this, e);
-    _localctx->exception = std::current_exception();
-    _errHandler->recover(this, _localctx->exception);
-  }
-
-  return _localctx;
-}
-
-//----------------- AddContext ------------------------------------------------------------------
-
-HybridAutomatonParser::AddContext::AddContext(ParserRuleContext *parent, size_t invokingState)
-  : ParserRuleContext(parent, invokingState) {
-}
-
-tree::TerminalNode* HybridAutomatonParser::AddContext::PLUS() {
-  return getToken(HybridAutomatonParser::PLUS, 0);
-}
-
-HybridAutomatonParser::TermContext* HybridAutomatonParser::AddContext::term() {
-  return getRuleContext<HybridAutomatonParser::TermContext>(0);
-}
-
-
-size_t HybridAutomatonParser::AddContext::getRuleIndex() const {
-  return HybridAutomatonParser::RuleAdd;
-}
-
-void HybridAutomatonParser::AddContext::enterRule(tree::ParseTreeListener *listener) {
-  auto parserListener = dynamic_cast<HybridAutomatonListener *>(listener);
-  if (parserListener != nullptr)
-    parserListener->enterAdd(this);
-}
-
-void HybridAutomatonParser::AddContext::exitRule(tree::ParseTreeListener *listener) {
-  auto parserListener = dynamic_cast<HybridAutomatonListener *>(listener);
-  if (parserListener != nullptr)
-    parserListener->exitAdd(this);
-}
-
-HybridAutomatonParser::AddContext* HybridAutomatonParser::add() {
-  AddContext *_localctx = _tracker.createInstance<AddContext>(_ctx, getState());
-  enterRule(_localctx, 12, HybridAutomatonParser::RuleAdd);
-
-  auto onExit = finally([=] {
-    exitRule();
-  });
-  try {
-    enterOuterAlt(_localctx, 1);
-    setState(79);
-    match(HybridAutomatonParser::PLUS);
-    setState(80);
-    term();
-   
-  }
-  catch (RecognitionException &e) {
-    _errHandler->reportError(this, e);
-    _localctx->exception = std::current_exception();
-    _errHandler->recover(this, _localctx->exception);
-  }
-
-  return _localctx;
-}
-
-//----------------- MultContext ------------------------------------------------------------------
-
-HybridAutomatonParser::MultContext::MultContext(ParserRuleContext *parent, size_t invokingState)
-  : ParserRuleContext(parent, invokingState) {
-}
-
-std::vector<tree::TerminalNode *> HybridAutomatonParser::MultContext::NUMBER() {
-  return getTokens(HybridAutomatonParser::NUMBER);
-}
-
-tree::TerminalNode* HybridAutomatonParser::MultContext::NUMBER(size_t i) {
-  return getToken(HybridAutomatonParser::NUMBER, i);
-}
-
-std::vector<tree::TerminalNode *> HybridAutomatonParser::MultContext::VARIABLE() {
-  return getTokens(HybridAutomatonParser::VARIABLE);
-}
-
-tree::TerminalNode* HybridAutomatonParser::MultContext::VARIABLE(size_t i) {
-  return getToken(HybridAutomatonParser::VARIABLE, i);
-}
-
-std::vector<tree::TerminalNode *> HybridAutomatonParser::MultContext::TIMES() {
-  return getTokens(HybridAutomatonParser::TIMES);
-}
-
-tree::TerminalNode* HybridAutomatonParser::MultContext::TIMES(size_t i) {
-  return getToken(HybridAutomatonParser::TIMES, i);
-}
-
-
-size_t HybridAutomatonParser::MultContext::getRuleIndex() const {
-  return HybridAutomatonParser::RuleMult;
-}
-
-void HybridAutomatonParser::MultContext::enterRule(tree::ParseTreeListener *listener) {
-  auto parserListener = dynamic_cast<HybridAutomatonListener *>(listener);
-  if (parserListener != nullptr)
-    parserListener->enterMult(this);
-}
-
-void HybridAutomatonParser::MultContext::exitRule(tree::ParseTreeListener *listener) {
-  auto parserListener = dynamic_cast<HybridAutomatonListener *>(listener);
-  if (parserListener != nullptr)
-    parserListener->exitMult(this);
-}
-
-HybridAutomatonParser::MultContext* HybridAutomatonParser::mult() {
-  MultContext *_localctx = _tracker.createInstance<MultContext>(_ctx, getState());
-  enterRule(_localctx, 14, HybridAutomatonParser::RuleMult);
-  size_t _la = 0;
-
-  auto onExit = finally([=] {
-    exitRule();
-  });
-  try {
-    size_t alt;
-    enterOuterAlt(_localctx, 1);
-    setState(82);
-    _la = _input->LA(1);
-    if (!(_la == HybridAutomatonParser::VARIABLE
-
-    || _la == HybridAutomatonParser::NUMBER)) {
-    _errHandler->recoverInline(this);
-    }
-    else {
-      _errHandler->reportMatch(this);
-      consume();
-    }
-    setState(87);
-    _errHandler->sync(this);
-    alt = getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 6, _ctx);
-    while (alt != 1 && alt != atn::ATN::INVALID_ALT_NUMBER) {
-      if (alt == 1 + 1) {
-        setState(83);
-        match(HybridAutomatonParser::TIMES);
-        setState(84);
-        _la = _input->LA(1);
-        if (!(_la == HybridAutomatonParser::VARIABLE
-
-        || _la == HybridAutomatonParser::NUMBER)) {
-        _errHandler->recoverInline(this);
-        }
-        else {
-          _errHandler->reportMatch(this);
-          consume();
-        } 
-      }
-      setState(89);
-      _errHandler->sync(this);
-      alt = getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 6, _ctx);
-    }
    
   }
   catch (RecognitionException &e) {
@@ -623,16 +476,28 @@ HybridAutomatonParser::TermContext::TermContext(ParserRuleContext *parent, size_
   : ParserRuleContext(parent, invokingState) {
 }
 
-HybridAutomatonParser::MultContext* HybridAutomatonParser::TermContext::mult() {
-  return getRuleContext<HybridAutomatonParser::MultContext>(0);
+std::vector<tree::TerminalNode *> HybridAutomatonParser::TermContext::NUMBER() {
+  return getTokens(HybridAutomatonParser::NUMBER);
 }
 
-std::vector<HybridAutomatonParser::AddContext *> HybridAutomatonParser::TermContext::add() {
-  return getRuleContexts<HybridAutomatonParser::AddContext>();
+tree::TerminalNode* HybridAutomatonParser::TermContext::NUMBER(size_t i) {
+  return getToken(HybridAutomatonParser::NUMBER, i);
 }
 
-HybridAutomatonParser::AddContext* HybridAutomatonParser::TermContext::add(size_t i) {
-  return getRuleContext<HybridAutomatonParser::AddContext>(i);
+std::vector<tree::TerminalNode *> HybridAutomatonParser::TermContext::VARIABLE() {
+  return getTokens(HybridAutomatonParser::VARIABLE);
+}
+
+tree::TerminalNode* HybridAutomatonParser::TermContext::VARIABLE(size_t i) {
+  return getToken(HybridAutomatonParser::VARIABLE, i);
+}
+
+std::vector<tree::TerminalNode *> HybridAutomatonParser::TermContext::TIMES() {
+  return getTokens(HybridAutomatonParser::TIMES);
+}
+
+tree::TerminalNode* HybridAutomatonParser::TermContext::TIMES(size_t i) {
+  return getToken(HybridAutomatonParser::TIMES, i);
 }
 
 
@@ -654,27 +519,119 @@ void HybridAutomatonParser::TermContext::exitRule(tree::ParseTreeListener *liste
 
 HybridAutomatonParser::TermContext* HybridAutomatonParser::term() {
   TermContext *_localctx = _tracker.createInstance<TermContext>(_ctx, getState());
-  enterRule(_localctx, 16, HybridAutomatonParser::RuleTerm);
+  enterRule(_localctx, 12, HybridAutomatonParser::RuleTerm);
+  size_t _la = 0;
 
   auto onExit = finally([=] {
     exitRule();
   });
   try {
-    size_t alt;
     enterOuterAlt(_localctx, 1);
-    setState(90);
-    mult();
-    setState(94);
+    setState(75);
+    _la = _input->LA(1);
+    if (!(_la == HybridAutomatonParser::NUMBER
+
+    || _la == HybridAutomatonParser::VARIABLE)) {
+    _errHandler->recoverInline(this);
+    }
+    else {
+      _errHandler->reportMatch(this);
+      consume();
+    }
+    setState(80);
     _errHandler->sync(this);
-    alt = getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 7, _ctx);
-    while (alt != 1 && alt != atn::ATN::INVALID_ALT_NUMBER) {
-      if (alt == 1 + 1) {
-        setState(91);
-        add(); 
+    _la = _input->LA(1);
+    while (_la == HybridAutomatonParser::TIMES) {
+      setState(76);
+      match(HybridAutomatonParser::TIMES);
+      setState(77);
+      _la = _input->LA(1);
+      if (!(_la == HybridAutomatonParser::NUMBER
+
+      || _la == HybridAutomatonParser::VARIABLE)) {
+      _errHandler->recoverInline(this);
       }
-      setState(96);
+      else {
+        _errHandler->reportMatch(this);
+        consume();
+      }
+      setState(82);
       _errHandler->sync(this);
-      alt = getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 7, _ctx);
+      _la = _input->LA(1);
+    }
+   
+  }
+  catch (RecognitionException &e) {
+    _errHandler->reportError(this, e);
+    _localctx->exception = std::current_exception();
+    _errHandler->recover(this, _localctx->exception);
+  }
+
+  return _localctx;
+}
+
+//----------------- PolynomContext ------------------------------------------------------------------
+
+HybridAutomatonParser::PolynomContext::PolynomContext(ParserRuleContext *parent, size_t invokingState)
+  : ParserRuleContext(parent, invokingState) {
+}
+
+std::vector<HybridAutomatonParser::TermContext *> HybridAutomatonParser::PolynomContext::term() {
+  return getRuleContexts<HybridAutomatonParser::TermContext>();
+}
+
+HybridAutomatonParser::TermContext* HybridAutomatonParser::PolynomContext::term(size_t i) {
+  return getRuleContext<HybridAutomatonParser::TermContext>(i);
+}
+
+std::vector<tree::TerminalNode *> HybridAutomatonParser::PolynomContext::PLUS() {
+  return getTokens(HybridAutomatonParser::PLUS);
+}
+
+tree::TerminalNode* HybridAutomatonParser::PolynomContext::PLUS(size_t i) {
+  return getToken(HybridAutomatonParser::PLUS, i);
+}
+
+
+size_t HybridAutomatonParser::PolynomContext::getRuleIndex() const {
+  return HybridAutomatonParser::RulePolynom;
+}
+
+void HybridAutomatonParser::PolynomContext::enterRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<HybridAutomatonListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->enterPolynom(this);
+}
+
+void HybridAutomatonParser::PolynomContext::exitRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<HybridAutomatonListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->exitPolynom(this);
+}
+
+HybridAutomatonParser::PolynomContext* HybridAutomatonParser::polynom() {
+  PolynomContext *_localctx = _tracker.createInstance<PolynomContext>(_ctx, getState());
+  enterRule(_localctx, 14, HybridAutomatonParser::RulePolynom);
+  size_t _la = 0;
+
+  auto onExit = finally([=] {
+    exitRule();
+  });
+  try {
+    enterOuterAlt(_localctx, 1);
+    setState(83);
+    term();
+    setState(88);
+    _errHandler->sync(this);
+    _la = _input->LA(1);
+    while (_la == HybridAutomatonParser::PLUS) {
+      setState(84);
+      match(HybridAutomatonParser::PLUS);
+      setState(85);
+      term();
+      setState(90);
+      _errHandler->sync(this);
+      _la = _input->LA(1);
     }
    
   }
@@ -701,8 +658,8 @@ tree::TerminalNode* HybridAutomatonParser::EquationContext::EQUALS() {
   return getToken(HybridAutomatonParser::EQUALS, 0);
 }
 
-HybridAutomatonParser::TermContext* HybridAutomatonParser::EquationContext::term() {
-  return getRuleContext<HybridAutomatonParser::TermContext>(0);
+HybridAutomatonParser::PolynomContext* HybridAutomatonParser::EquationContext::polynom() {
+  return getRuleContext<HybridAutomatonParser::PolynomContext>(0);
 }
 
 
@@ -724,19 +681,19 @@ void HybridAutomatonParser::EquationContext::exitRule(tree::ParseTreeListener *l
 
 HybridAutomatonParser::EquationContext* HybridAutomatonParser::equation() {
   EquationContext *_localctx = _tracker.createInstance<EquationContext>(_ctx, getState());
-  enterRule(_localctx, 18, HybridAutomatonParser::RuleEquation);
+  enterRule(_localctx, 16, HybridAutomatonParser::RuleEquation);
 
   auto onExit = finally([=] {
     exitRule();
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(97);
+    setState(91);
     match(HybridAutomatonParser::VARIABLE);
-    setState(98);
+    setState(92);
     match(HybridAutomatonParser::EQUALS);
-    setState(99);
-    term();
+    setState(93);
+    polynom();
    
   }
   catch (RecognitionException &e) {
@@ -748,56 +705,56 @@ HybridAutomatonParser::EquationContext* HybridAutomatonParser::equation() {
   return _localctx;
 }
 
-//----------------- BoolexprContext ------------------------------------------------------------------
+//----------------- ConstraintContext ------------------------------------------------------------------
 
-HybridAutomatonParser::BoolexprContext::BoolexprContext(ParserRuleContext *parent, size_t invokingState)
+HybridAutomatonParser::ConstraintContext::ConstraintContext(ParserRuleContext *parent, size_t invokingState)
   : ParserRuleContext(parent, invokingState) {
 }
 
-HybridAutomatonParser::TermContext* HybridAutomatonParser::BoolexprContext::term() {
-  return getRuleContext<HybridAutomatonParser::TermContext>(0);
+std::vector<HybridAutomatonParser::PolynomContext *> HybridAutomatonParser::ConstraintContext::polynom() {
+  return getRuleContexts<HybridAutomatonParser::PolynomContext>();
 }
 
-tree::TerminalNode* HybridAutomatonParser::BoolexprContext::BOOLRELATION() {
+HybridAutomatonParser::PolynomContext* HybridAutomatonParser::ConstraintContext::polynom(size_t i) {
+  return getRuleContext<HybridAutomatonParser::PolynomContext>(i);
+}
+
+tree::TerminalNode* HybridAutomatonParser::ConstraintContext::BOOLRELATION() {
   return getToken(HybridAutomatonParser::BOOLRELATION, 0);
 }
 
-tree::TerminalNode* HybridAutomatonParser::BoolexprContext::NUMBER() {
-  return getToken(HybridAutomatonParser::NUMBER, 0);
+
+size_t HybridAutomatonParser::ConstraintContext::getRuleIndex() const {
+  return HybridAutomatonParser::RuleConstraint;
 }
 
-
-size_t HybridAutomatonParser::BoolexprContext::getRuleIndex() const {
-  return HybridAutomatonParser::RuleBoolexpr;
-}
-
-void HybridAutomatonParser::BoolexprContext::enterRule(tree::ParseTreeListener *listener) {
+void HybridAutomatonParser::ConstraintContext::enterRule(tree::ParseTreeListener *listener) {
   auto parserListener = dynamic_cast<HybridAutomatonListener *>(listener);
   if (parserListener != nullptr)
-    parserListener->enterBoolexpr(this);
+    parserListener->enterConstraint(this);
 }
 
-void HybridAutomatonParser::BoolexprContext::exitRule(tree::ParseTreeListener *listener) {
+void HybridAutomatonParser::ConstraintContext::exitRule(tree::ParseTreeListener *listener) {
   auto parserListener = dynamic_cast<HybridAutomatonListener *>(listener);
   if (parserListener != nullptr)
-    parserListener->exitBoolexpr(this);
+    parserListener->exitConstraint(this);
 }
 
-HybridAutomatonParser::BoolexprContext* HybridAutomatonParser::boolexpr() {
-  BoolexprContext *_localctx = _tracker.createInstance<BoolexprContext>(_ctx, getState());
-  enterRule(_localctx, 20, HybridAutomatonParser::RuleBoolexpr);
+HybridAutomatonParser::ConstraintContext* HybridAutomatonParser::constraint() {
+  ConstraintContext *_localctx = _tracker.createInstance<ConstraintContext>(_ctx, getState());
+  enterRule(_localctx, 18, HybridAutomatonParser::RuleConstraint);
 
   auto onExit = finally([=] {
     exitRule();
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(101);
-    term();
-    setState(102);
+    setState(95);
+    polynom();
+    setState(96);
     match(HybridAutomatonParser::BOOLRELATION);
-    setState(103);
-    match(HybridAutomatonParser::NUMBER);
+    setState(97);
+    polynom();
    
   }
   catch (RecognitionException &e) {
@@ -815,8 +772,8 @@ HybridAutomatonParser::IntervalexprContext::IntervalexprContext(ParserRuleContex
   : ParserRuleContext(parent, invokingState) {
 }
 
-HybridAutomatonParser::TermContext* HybridAutomatonParser::IntervalexprContext::term() {
-  return getRuleContext<HybridAutomatonParser::TermContext>(0);
+tree::TerminalNode* HybridAutomatonParser::IntervalexprContext::VARIABLE() {
+  return getToken(HybridAutomatonParser::VARIABLE, 0);
 }
 
 tree::TerminalNode* HybridAutomatonParser::IntervalexprContext::IN() {
@@ -846,98 +803,19 @@ void HybridAutomatonParser::IntervalexprContext::exitRule(tree::ParseTreeListene
 
 HybridAutomatonParser::IntervalexprContext* HybridAutomatonParser::intervalexpr() {
   IntervalexprContext *_localctx = _tracker.createInstance<IntervalexprContext>(_ctx, getState());
-  enterRule(_localctx, 22, HybridAutomatonParser::RuleIntervalexpr);
+  enterRule(_localctx, 20, HybridAutomatonParser::RuleIntervalexpr);
 
   auto onExit = finally([=] {
     exitRule();
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(105);
-    term();
-    setState(106);
+    setState(99);
+    match(HybridAutomatonParser::VARIABLE);
+    setState(100);
     match(HybridAutomatonParser::IN);
-    setState(107);
+    setState(101);
     match(HybridAutomatonParser::INTERVAL);
-   
-  }
-  catch (RecognitionException &e) {
-    _errHandler->reportError(this, e);
-    _localctx->exception = std::current_exception();
-    _errHandler->recover(this, _localctx->exception);
-  }
-
-  return _localctx;
-}
-
-//----------------- FormulaContext ------------------------------------------------------------------
-
-HybridAutomatonParser::FormulaContext::FormulaContext(ParserRuleContext *parent, size_t invokingState)
-  : ParserRuleContext(parent, invokingState) {
-}
-
-HybridAutomatonParser::EquationContext* HybridAutomatonParser::FormulaContext::equation() {
-  return getRuleContext<HybridAutomatonParser::EquationContext>(0);
-}
-
-HybridAutomatonParser::BoolexprContext* HybridAutomatonParser::FormulaContext::boolexpr() {
-  return getRuleContext<HybridAutomatonParser::BoolexprContext>(0);
-}
-
-HybridAutomatonParser::IntervalexprContext* HybridAutomatonParser::FormulaContext::intervalexpr() {
-  return getRuleContext<HybridAutomatonParser::IntervalexprContext>(0);
-}
-
-
-size_t HybridAutomatonParser::FormulaContext::getRuleIndex() const {
-  return HybridAutomatonParser::RuleFormula;
-}
-
-void HybridAutomatonParser::FormulaContext::enterRule(tree::ParseTreeListener *listener) {
-  auto parserListener = dynamic_cast<HybridAutomatonListener *>(listener);
-  if (parserListener != nullptr)
-    parserListener->enterFormula(this);
-}
-
-void HybridAutomatonParser::FormulaContext::exitRule(tree::ParseTreeListener *listener) {
-  auto parserListener = dynamic_cast<HybridAutomatonListener *>(listener);
-  if (parserListener != nullptr)
-    parserListener->exitFormula(this);
-}
-
-HybridAutomatonParser::FormulaContext* HybridAutomatonParser::formula() {
-  FormulaContext *_localctx = _tracker.createInstance<FormulaContext>(_ctx, getState());
-  enterRule(_localctx, 24, HybridAutomatonParser::RuleFormula);
-
-  auto onExit = finally([=] {
-    exitRule();
-  });
-  try {
-    setState(112);
-    _errHandler->sync(this);
-    switch (getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 8, _ctx)) {
-    case 1: {
-      enterOuterAlt(_localctx, 1);
-      setState(109);
-      equation();
-      break;
-    }
-
-    case 2: {
-      enterOuterAlt(_localctx, 2);
-      setState(110);
-      boolexpr();
-      break;
-    }
-
-    case 3: {
-      enterOuterAlt(_localctx, 3);
-      setState(111);
-      intervalexpr();
-      break;
-    }
-
-    }
    
   }
   catch (RecognitionException &e) {
@@ -959,17 +837,18 @@ std::vector<uint16_t> HybridAutomatonParser::_serializedATN;
 
 std::vector<std::string> HybridAutomatonParser::_ruleNames = {
   "start", "vardeclaration", "modes", "location", "activities", "invariants", 
-  "add", "mult", "term", "equation", "boolexpr", "intervalexpr", "formula"
+  "term", "polynom", "equation", "constraint", "intervalexpr"
 };
 
 std::vector<std::string> HybridAutomatonParser::_literalNames = {
   "", "'hybrid reachability'", "'{'", "'}'", "'state var'", "','", "'modes'", 
-  "'poly ode 1'", "'inv'", "'in'", "'='", "", "'+'", "'*'"
+  "'poly ode 1'", "'poly ode 2'", "'poly ode 3'", "'linear ode'", "'inv'", 
+  "'in'", "'='", "", "'+'", "'*'"
 };
 
 std::vector<std::string> HybridAutomatonParser::_symbolicNames = {
-  "", "", "", "", "", "", "", "", "", "IN", "EQUALS", "BOOLRELATION", "PLUS", 
-  "TIMES", "VARIABLE", "NUMBER", "INTERVAL", "WS"
+  "", "", "", "", "", "", "", "", "", "", "", "", "IN", "EQUALS", "BOOLRELATION", 
+  "PLUS", "TIMES", "NUMBER", "VARIABLE", "INTERVAL", "WS"
 };
 
 dfa::Vocabulary HybridAutomatonParser::_vocabulary(_literalNames, _symbolicNames);
@@ -992,78 +871,71 @@ HybridAutomatonParser::Initializer::Initializer() {
 
   _serializedATN = {
     0x3, 0x608b, 0xa72a, 0x8133, 0xb9ed, 0x417c, 0x3be7, 0x7786, 0x5964, 
-    0x3, 0x13, 0x75, 0x4, 0x2, 0x9, 0x2, 0x4, 0x3, 0x9, 0x3, 0x4, 0x4, 0x9, 
+    0x3, 0x16, 0x6a, 0x4, 0x2, 0x9, 0x2, 0x4, 0x3, 0x9, 0x3, 0x4, 0x4, 0x9, 
     0x4, 0x4, 0x5, 0x9, 0x5, 0x4, 0x6, 0x9, 0x6, 0x4, 0x7, 0x9, 0x7, 0x4, 
     0x8, 0x9, 0x8, 0x4, 0x9, 0x9, 0x9, 0x4, 0xa, 0x9, 0xa, 0x4, 0xb, 0x9, 
-    0xb, 0x4, 0xc, 0x9, 0xc, 0x4, 0xd, 0x9, 0xd, 0x4, 0xe, 0x9, 0xe, 0x3, 
-    0x2, 0x3, 0x2, 0x3, 0x2, 0x3, 0x2, 0x3, 0x2, 0x3, 0x2, 0x3, 0x3, 0x3, 
-    0x3, 0x3, 0x3, 0x3, 0x3, 0x6, 0x3, 0x27, 0xa, 0x3, 0xd, 0x3, 0xe, 0x3, 
-    0x28, 0x5, 0x3, 0x2b, 0xa, 0x3, 0x3, 0x4, 0x3, 0x4, 0x3, 0x4, 0x7, 0x4, 
-    0x30, 0xa, 0x4, 0xc, 0x4, 0xe, 0x4, 0x33, 0xb, 0x4, 0x3, 0x4, 0x3, 0x4, 
-    0x3, 0x5, 0x3, 0x5, 0x3, 0x5, 0x3, 0x5, 0x3, 0x5, 0x3, 0x5, 0x3, 0x6, 
-    0x3, 0x6, 0x3, 0x6, 0x7, 0x6, 0x40, 0xa, 0x6, 0xc, 0x6, 0xe, 0x6, 0x43, 
-    0xb, 0x6, 0x3, 0x6, 0x3, 0x6, 0x3, 0x7, 0x3, 0x7, 0x3, 0x7, 0x3, 0x7, 
-    0x7, 0x7, 0x4b, 0xa, 0x7, 0xc, 0x7, 0xe, 0x7, 0x4e, 0xb, 0x7, 0x3, 0x7, 
-    0x3, 0x7, 0x3, 0x8, 0x3, 0x8, 0x3, 0x8, 0x3, 0x9, 0x3, 0x9, 0x3, 0x9, 
-    0x7, 0x9, 0x58, 0xa, 0x9, 0xc, 0x9, 0xe, 0x9, 0x5b, 0xb, 0x9, 0x3, 0xa, 
-    0x3, 0xa, 0x7, 0xa, 0x5f, 0xa, 0xa, 0xc, 0xa, 0xe, 0xa, 0x62, 0xb, 0xa, 
-    0x3, 0xb, 0x3, 0xb, 0x3, 0xb, 0x3, 0xb, 0x3, 0xc, 0x3, 0xc, 0x3, 0xc, 
-    0x3, 0xc, 0x3, 0xd, 0x3, 0xd, 0x3, 0xd, 0x3, 0xd, 0x3, 0xe, 0x3, 0xe, 
-    0x3, 0xe, 0x5, 0xe, 0x73, 0xa, 0xe, 0x3, 0xe, 0x4, 0x59, 0x60, 0x2, 
-    0xf, 0x2, 0x4, 0x6, 0x8, 0xa, 0xc, 0xe, 0x10, 0x12, 0x14, 0x16, 0x18, 
-    0x1a, 0x2, 0x3, 0x3, 0x2, 0x10, 0x11, 0x2, 0x71, 0x2, 0x1c, 0x3, 0x2, 
-    0x2, 0x2, 0x4, 0x22, 0x3, 0x2, 0x2, 0x2, 0x6, 0x2c, 0x3, 0x2, 0x2, 0x2, 
-    0x8, 0x36, 0x3, 0x2, 0x2, 0x2, 0xa, 0x3c, 0x3, 0x2, 0x2, 0x2, 0xc, 0x46, 
-    0x3, 0x2, 0x2, 0x2, 0xe, 0x51, 0x3, 0x2, 0x2, 0x2, 0x10, 0x54, 0x3, 
-    0x2, 0x2, 0x2, 0x12, 0x5c, 0x3, 0x2, 0x2, 0x2, 0x14, 0x63, 0x3, 0x2, 
-    0x2, 0x2, 0x16, 0x67, 0x3, 0x2, 0x2, 0x2, 0x18, 0x6b, 0x3, 0x2, 0x2, 
-    0x2, 0x1a, 0x72, 0x3, 0x2, 0x2, 0x2, 0x1c, 0x1d, 0x7, 0x3, 0x2, 0x2, 
-    0x1d, 0x1e, 0x7, 0x4, 0x2, 0x2, 0x1e, 0x1f, 0x5, 0x4, 0x3, 0x2, 0x1f, 
-    0x20, 0x5, 0x6, 0x4, 0x2, 0x20, 0x21, 0x7, 0x5, 0x2, 0x2, 0x21, 0x3, 
-    0x3, 0x2, 0x2, 0x2, 0x22, 0x23, 0x7, 0x6, 0x2, 0x2, 0x23, 0x2a, 0x7, 
-    0x10, 0x2, 0x2, 0x24, 0x25, 0x7, 0x7, 0x2, 0x2, 0x25, 0x27, 0x7, 0x10, 
-    0x2, 0x2, 0x26, 0x24, 0x3, 0x2, 0x2, 0x2, 0x27, 0x28, 0x3, 0x2, 0x2, 
-    0x2, 0x28, 0x26, 0x3, 0x2, 0x2, 0x2, 0x28, 0x29, 0x3, 0x2, 0x2, 0x2, 
-    0x29, 0x2b, 0x3, 0x2, 0x2, 0x2, 0x2a, 0x26, 0x3, 0x2, 0x2, 0x2, 0x2a, 
-    0x2b, 0x3, 0x2, 0x2, 0x2, 0x2b, 0x5, 0x3, 0x2, 0x2, 0x2, 0x2c, 0x2d, 
-    0x7, 0x8, 0x2, 0x2, 0x2d, 0x31, 0x7, 0x4, 0x2, 0x2, 0x2e, 0x30, 0x5, 
-    0x8, 0x5, 0x2, 0x2f, 0x2e, 0x3, 0x2, 0x2, 0x2, 0x30, 0x33, 0x3, 0x2, 
-    0x2, 0x2, 0x31, 0x2f, 0x3, 0x2, 0x2, 0x2, 0x31, 0x32, 0x3, 0x2, 0x2, 
-    0x2, 0x32, 0x34, 0x3, 0x2, 0x2, 0x2, 0x33, 0x31, 0x3, 0x2, 0x2, 0x2, 
-    0x34, 0x35, 0x7, 0x5, 0x2, 0x2, 0x35, 0x7, 0x3, 0x2, 0x2, 0x2, 0x36, 
-    0x37, 0x7, 0x10, 0x2, 0x2, 0x37, 0x38, 0x7, 0x4, 0x2, 0x2, 0x38, 0x39, 
-    0x5, 0xa, 0x6, 0x2, 0x39, 0x3a, 0x5, 0xc, 0x7, 0x2, 0x3a, 0x3b, 0x7, 
-    0x5, 0x2, 0x2, 0x3b, 0x9, 0x3, 0x2, 0x2, 0x2, 0x3c, 0x3d, 0x7, 0x9, 
-    0x2, 0x2, 0x3d, 0x41, 0x7, 0x4, 0x2, 0x2, 0x3e, 0x40, 0x5, 0x14, 0xb, 
-    0x2, 0x3f, 0x3e, 0x3, 0x2, 0x2, 0x2, 0x40, 0x43, 0x3, 0x2, 0x2, 0x2, 
-    0x41, 0x3f, 0x3, 0x2, 0x2, 0x2, 0x41, 0x42, 0x3, 0x2, 0x2, 0x2, 0x42, 
-    0x44, 0x3, 0x2, 0x2, 0x2, 0x43, 0x41, 0x3, 0x2, 0x2, 0x2, 0x44, 0x45, 
-    0x7, 0x5, 0x2, 0x2, 0x45, 0xb, 0x3, 0x2, 0x2, 0x2, 0x46, 0x47, 0x7, 
-    0xa, 0x2, 0x2, 0x47, 0x4c, 0x7, 0x4, 0x2, 0x2, 0x48, 0x4b, 0x5, 0x16, 
-    0xc, 0x2, 0x49, 0x4b, 0x5, 0x18, 0xd, 0x2, 0x4a, 0x48, 0x3, 0x2, 0x2, 
-    0x2, 0x4a, 0x49, 0x3, 0x2, 0x2, 0x2, 0x4b, 0x4e, 0x3, 0x2, 0x2, 0x2, 
-    0x4c, 0x4a, 0x3, 0x2, 0x2, 0x2, 0x4c, 0x4d, 0x3, 0x2, 0x2, 0x2, 0x4d, 
-    0x4f, 0x3, 0x2, 0x2, 0x2, 0x4e, 0x4c, 0x3, 0x2, 0x2, 0x2, 0x4f, 0x50, 
-    0x7, 0x5, 0x2, 0x2, 0x50, 0xd, 0x3, 0x2, 0x2, 0x2, 0x51, 0x52, 0x7, 
-    0xe, 0x2, 0x2, 0x52, 0x53, 0x5, 0x12, 0xa, 0x2, 0x53, 0xf, 0x3, 0x2, 
-    0x2, 0x2, 0x54, 0x59, 0x9, 0x2, 0x2, 0x2, 0x55, 0x56, 0x7, 0xf, 0x2, 
-    0x2, 0x56, 0x58, 0x9, 0x2, 0x2, 0x2, 0x57, 0x55, 0x3, 0x2, 0x2, 0x2, 
-    0x58, 0x5b, 0x3, 0x2, 0x2, 0x2, 0x59, 0x5a, 0x3, 0x2, 0x2, 0x2, 0x59, 
-    0x57, 0x3, 0x2, 0x2, 0x2, 0x5a, 0x11, 0x3, 0x2, 0x2, 0x2, 0x5b, 0x59, 
-    0x3, 0x2, 0x2, 0x2, 0x5c, 0x60, 0x5, 0x10, 0x9, 0x2, 0x5d, 0x5f, 0x5, 
-    0xe, 0x8, 0x2, 0x5e, 0x5d, 0x3, 0x2, 0x2, 0x2, 0x5f, 0x62, 0x3, 0x2, 
-    0x2, 0x2, 0x60, 0x61, 0x3, 0x2, 0x2, 0x2, 0x60, 0x5e, 0x3, 0x2, 0x2, 
-    0x2, 0x61, 0x13, 0x3, 0x2, 0x2, 0x2, 0x62, 0x60, 0x3, 0x2, 0x2, 0x2, 
-    0x63, 0x64, 0x7, 0x10, 0x2, 0x2, 0x64, 0x65, 0x7, 0xc, 0x2, 0x2, 0x65, 
-    0x66, 0x5, 0x12, 0xa, 0x2, 0x66, 0x15, 0x3, 0x2, 0x2, 0x2, 0x67, 0x68, 
-    0x5, 0x12, 0xa, 0x2, 0x68, 0x69, 0x7, 0xd, 0x2, 0x2, 0x69, 0x6a, 0x7, 
-    0x11, 0x2, 0x2, 0x6a, 0x17, 0x3, 0x2, 0x2, 0x2, 0x6b, 0x6c, 0x5, 0x12, 
-    0xa, 0x2, 0x6c, 0x6d, 0x7, 0xb, 0x2, 0x2, 0x6d, 0x6e, 0x7, 0x12, 0x2, 
-    0x2, 0x6e, 0x19, 0x3, 0x2, 0x2, 0x2, 0x6f, 0x73, 0x5, 0x14, 0xb, 0x2, 
-    0x70, 0x73, 0x5, 0x16, 0xc, 0x2, 0x71, 0x73, 0x5, 0x18, 0xd, 0x2, 0x72, 
-    0x6f, 0x3, 0x2, 0x2, 0x2, 0x72, 0x70, 0x3, 0x2, 0x2, 0x2, 0x72, 0x71, 
-    0x3, 0x2, 0x2, 0x2, 0x73, 0x1b, 0x3, 0x2, 0x2, 0x2, 0xb, 0x28, 0x2a, 
-    0x31, 0x41, 0x4a, 0x4c, 0x59, 0x60, 0x72, 
+    0xb, 0x4, 0xc, 0x9, 0xc, 0x3, 0x2, 0x3, 0x2, 0x3, 0x2, 0x3, 0x2, 0x3, 
+    0x2, 0x3, 0x2, 0x3, 0x3, 0x3, 0x3, 0x3, 0x3, 0x3, 0x3, 0x6, 0x3, 0x23, 
+    0xa, 0x3, 0xd, 0x3, 0xe, 0x3, 0x24, 0x5, 0x3, 0x27, 0xa, 0x3, 0x3, 0x4, 
+    0x3, 0x4, 0x3, 0x4, 0x7, 0x4, 0x2c, 0xa, 0x4, 0xc, 0x4, 0xe, 0x4, 0x2f, 
+    0xb, 0x4, 0x3, 0x4, 0x3, 0x4, 0x3, 0x5, 0x3, 0x5, 0x3, 0x5, 0x3, 0x5, 
+    0x3, 0x5, 0x3, 0x5, 0x3, 0x6, 0x3, 0x6, 0x3, 0x6, 0x7, 0x6, 0x3c, 0xa, 
+    0x6, 0xc, 0x6, 0xe, 0x6, 0x3f, 0xb, 0x6, 0x3, 0x6, 0x3, 0x6, 0x3, 0x7, 
+    0x3, 0x7, 0x3, 0x7, 0x3, 0x7, 0x7, 0x7, 0x47, 0xa, 0x7, 0xc, 0x7, 0xe, 
+    0x7, 0x4a, 0xb, 0x7, 0x3, 0x7, 0x3, 0x7, 0x3, 0x8, 0x3, 0x8, 0x3, 0x8, 
+    0x7, 0x8, 0x51, 0xa, 0x8, 0xc, 0x8, 0xe, 0x8, 0x54, 0xb, 0x8, 0x3, 0x9, 
+    0x3, 0x9, 0x3, 0x9, 0x7, 0x9, 0x59, 0xa, 0x9, 0xc, 0x9, 0xe, 0x9, 0x5c, 
+    0xb, 0x9, 0x3, 0xa, 0x3, 0xa, 0x3, 0xa, 0x3, 0xa, 0x3, 0xb, 0x3, 0xb, 
+    0x3, 0xb, 0x3, 0xb, 0x3, 0xc, 0x3, 0xc, 0x3, 0xc, 0x3, 0xc, 0x3, 0xc, 
+    0x2, 0x2, 0xd, 0x2, 0x4, 0x6, 0x8, 0xa, 0xc, 0xe, 0x10, 0x12, 0x14, 
+    0x16, 0x2, 0x4, 0x3, 0x2, 0x9, 0xc, 0x3, 0x2, 0x13, 0x14, 0x2, 0x66, 
+    0x2, 0x18, 0x3, 0x2, 0x2, 0x2, 0x4, 0x1e, 0x3, 0x2, 0x2, 0x2, 0x6, 0x28, 
+    0x3, 0x2, 0x2, 0x2, 0x8, 0x32, 0x3, 0x2, 0x2, 0x2, 0xa, 0x38, 0x3, 0x2, 
+    0x2, 0x2, 0xc, 0x42, 0x3, 0x2, 0x2, 0x2, 0xe, 0x4d, 0x3, 0x2, 0x2, 0x2, 
+    0x10, 0x55, 0x3, 0x2, 0x2, 0x2, 0x12, 0x5d, 0x3, 0x2, 0x2, 0x2, 0x14, 
+    0x61, 0x3, 0x2, 0x2, 0x2, 0x16, 0x65, 0x3, 0x2, 0x2, 0x2, 0x18, 0x19, 
+    0x7, 0x3, 0x2, 0x2, 0x19, 0x1a, 0x7, 0x4, 0x2, 0x2, 0x1a, 0x1b, 0x5, 
+    0x4, 0x3, 0x2, 0x1b, 0x1c, 0x5, 0x6, 0x4, 0x2, 0x1c, 0x1d, 0x7, 0x5, 
+    0x2, 0x2, 0x1d, 0x3, 0x3, 0x2, 0x2, 0x2, 0x1e, 0x1f, 0x7, 0x6, 0x2, 
+    0x2, 0x1f, 0x26, 0x7, 0x14, 0x2, 0x2, 0x20, 0x21, 0x7, 0x7, 0x2, 0x2, 
+    0x21, 0x23, 0x7, 0x14, 0x2, 0x2, 0x22, 0x20, 0x3, 0x2, 0x2, 0x2, 0x23, 
+    0x24, 0x3, 0x2, 0x2, 0x2, 0x24, 0x22, 0x3, 0x2, 0x2, 0x2, 0x24, 0x25, 
+    0x3, 0x2, 0x2, 0x2, 0x25, 0x27, 0x3, 0x2, 0x2, 0x2, 0x26, 0x22, 0x3, 
+    0x2, 0x2, 0x2, 0x26, 0x27, 0x3, 0x2, 0x2, 0x2, 0x27, 0x5, 0x3, 0x2, 
+    0x2, 0x2, 0x28, 0x29, 0x7, 0x8, 0x2, 0x2, 0x29, 0x2d, 0x7, 0x4, 0x2, 
+    0x2, 0x2a, 0x2c, 0x5, 0x8, 0x5, 0x2, 0x2b, 0x2a, 0x3, 0x2, 0x2, 0x2, 
+    0x2c, 0x2f, 0x3, 0x2, 0x2, 0x2, 0x2d, 0x2b, 0x3, 0x2, 0x2, 0x2, 0x2d, 
+    0x2e, 0x3, 0x2, 0x2, 0x2, 0x2e, 0x30, 0x3, 0x2, 0x2, 0x2, 0x2f, 0x2d, 
+    0x3, 0x2, 0x2, 0x2, 0x30, 0x31, 0x7, 0x5, 0x2, 0x2, 0x31, 0x7, 0x3, 
+    0x2, 0x2, 0x2, 0x32, 0x33, 0x7, 0x14, 0x2, 0x2, 0x33, 0x34, 0x7, 0x4, 
+    0x2, 0x2, 0x34, 0x35, 0x5, 0xa, 0x6, 0x2, 0x35, 0x36, 0x5, 0xc, 0x7, 
+    0x2, 0x36, 0x37, 0x7, 0x5, 0x2, 0x2, 0x37, 0x9, 0x3, 0x2, 0x2, 0x2, 
+    0x38, 0x39, 0x9, 0x2, 0x2, 0x2, 0x39, 0x3d, 0x7, 0x4, 0x2, 0x2, 0x3a, 
+    0x3c, 0x5, 0x12, 0xa, 0x2, 0x3b, 0x3a, 0x3, 0x2, 0x2, 0x2, 0x3c, 0x3f, 
+    0x3, 0x2, 0x2, 0x2, 0x3d, 0x3b, 0x3, 0x2, 0x2, 0x2, 0x3d, 0x3e, 0x3, 
+    0x2, 0x2, 0x2, 0x3e, 0x40, 0x3, 0x2, 0x2, 0x2, 0x3f, 0x3d, 0x3, 0x2, 
+    0x2, 0x2, 0x40, 0x41, 0x7, 0x5, 0x2, 0x2, 0x41, 0xb, 0x3, 0x2, 0x2, 
+    0x2, 0x42, 0x43, 0x7, 0xd, 0x2, 0x2, 0x43, 0x48, 0x7, 0x4, 0x2, 0x2, 
+    0x44, 0x47, 0x5, 0x14, 0xb, 0x2, 0x45, 0x47, 0x5, 0x16, 0xc, 0x2, 0x46, 
+    0x44, 0x3, 0x2, 0x2, 0x2, 0x46, 0x45, 0x3, 0x2, 0x2, 0x2, 0x47, 0x4a, 
+    0x3, 0x2, 0x2, 0x2, 0x48, 0x46, 0x3, 0x2, 0x2, 0x2, 0x48, 0x49, 0x3, 
+    0x2, 0x2, 0x2, 0x49, 0x4b, 0x3, 0x2, 0x2, 0x2, 0x4a, 0x48, 0x3, 0x2, 
+    0x2, 0x2, 0x4b, 0x4c, 0x7, 0x5, 0x2, 0x2, 0x4c, 0xd, 0x3, 0x2, 0x2, 
+    0x2, 0x4d, 0x52, 0x9, 0x3, 0x2, 0x2, 0x4e, 0x4f, 0x7, 0x12, 0x2, 0x2, 
+    0x4f, 0x51, 0x9, 0x3, 0x2, 0x2, 0x50, 0x4e, 0x3, 0x2, 0x2, 0x2, 0x51, 
+    0x54, 0x3, 0x2, 0x2, 0x2, 0x52, 0x50, 0x3, 0x2, 0x2, 0x2, 0x52, 0x53, 
+    0x3, 0x2, 0x2, 0x2, 0x53, 0xf, 0x3, 0x2, 0x2, 0x2, 0x54, 0x52, 0x3, 
+    0x2, 0x2, 0x2, 0x55, 0x5a, 0x5, 0xe, 0x8, 0x2, 0x56, 0x57, 0x7, 0x11, 
+    0x2, 0x2, 0x57, 0x59, 0x5, 0xe, 0x8, 0x2, 0x58, 0x56, 0x3, 0x2, 0x2, 
+    0x2, 0x59, 0x5c, 0x3, 0x2, 0x2, 0x2, 0x5a, 0x58, 0x3, 0x2, 0x2, 0x2, 
+    0x5a, 0x5b, 0x3, 0x2, 0x2, 0x2, 0x5b, 0x11, 0x3, 0x2, 0x2, 0x2, 0x5c, 
+    0x5a, 0x3, 0x2, 0x2, 0x2, 0x5d, 0x5e, 0x7, 0x14, 0x2, 0x2, 0x5e, 0x5f, 
+    0x7, 0xf, 0x2, 0x2, 0x5f, 0x60, 0x5, 0x10, 0x9, 0x2, 0x60, 0x13, 0x3, 
+    0x2, 0x2, 0x2, 0x61, 0x62, 0x5, 0x10, 0x9, 0x2, 0x62, 0x63, 0x7, 0x10, 
+    0x2, 0x2, 0x63, 0x64, 0x5, 0x10, 0x9, 0x2, 0x64, 0x15, 0x3, 0x2, 0x2, 
+    0x2, 0x65, 0x66, 0x7, 0x14, 0x2, 0x2, 0x66, 0x67, 0x7, 0xe, 0x2, 0x2, 
+    0x67, 0x68, 0x7, 0x15, 0x2, 0x2, 0x68, 0x17, 0x3, 0x2, 0x2, 0x2, 0xa, 
+    0x24, 0x26, 0x2d, 0x3d, 0x46, 0x48, 0x52, 0x5a, 
   };
 
   atn::ATNDeserializer deserializer;

@@ -91,22 +91,24 @@ namespace hypro {
 	}
 
 	template<typename Number>
-	void HyproHAListener<Number>::enterTerm(HybridAutomatonParser::TermContext* ctx){
+	void HyproHAListener<Number>::enterPolynom(HybridAutomatonParser::PolynomContext* ctx){
 		//Syntax check : if only defined variables occur
 		//adding terms will be checked implicitly as every add contains a term
 		std::cout << "Bin bei enterTerm!" << std::endl;
 		bool allVarsFound = true;
 		std::string undefinedVars;
-		for(auto maybeVar : ctx->mult()->VARIABLE()){
-			bool found = false;
-			for(auto var : this->vars){
-				if(maybeVar->getText() == var){
-					found = true;
+		for(auto currTerm : ctx->term()){
+			for(auto maybeVar : currTerm->VARIABLE()){
+				bool found = false;
+				for(auto var : this->vars){
+					if(maybeVar->getText() == var){
+						found = true;
+					}
 				}
-			}
-			if(!found){
-				undefinedVars = maybeVar->getText() + ", " + undefinedVars;
-				allVarsFound = false;
+				if(!found){
+					undefinedVars = maybeVar->getText() + ", " + undefinedVars;
+					allVarsFound = false;
+				}
 			}
 		}
 		if(!allVarsFound){
@@ -121,8 +123,14 @@ namespace hypro {
 	}
 
 	template<typename Number>
-	void HyproHAListener<Number>::enterMult(HybridAutomatonParser::MultContext* ctx){
-		std::cout << "Bin bei enterMult!" << std::endl;
+	void HyproHAListener<Number>::exitPolynom(HybridAutomatonParser::PolynomContext* ctx){
+
+	}
+
+
+	template<typename Number>
+	void HyproHAListener<Number>::enterTerm(HybridAutomatonParser::TermContext* ctx){
+		std::cout << "Bin bei enterTerm!" << std::endl;
 		//Turn 2*3*4*5*x ... into 120*x
 		Number multed = 1;
 		if(ctx->NUMBER().size() > 1){
@@ -154,7 +162,7 @@ namespace hypro {
 		} else {
 			//TODO: Multiple variables in one mult, i.e. x = axy
 			//IDEA: Turn x = axy = (a/2)*xy + (a/2)*xy and save for x in matrix (a/2)y and for y in matrix (a/2)x
-			std::cout << "blub" << std::endl;
+			std::cout << "Hypro does not support multiplication of several variables in the current build." << std::endl;
 		}
 	}
 
@@ -170,8 +178,14 @@ namespace hypro {
 	}
 
 	template<typename Number>
-	void HyproHAListener<Number>::enterBoolexpr(HybridAutomatonParser::BoolexprContext* ctx){
-		std::cout << "Bin bei enterBoolexpr!" << std::endl;
+	void HyproHAListener<Number>::exitInvariants(HybridAutomatonParser::InvariantsContext* ctx){
+		std::cout << "Bin bei exitInvariants!" << std::endl;
+
+	}
+
+	template<typename Number>
+	void HyproHAListener<Number>::enterConstraint(HybridAutomatonParser::ConstraintContext* ctx){
+		std::cout << "Bin bei enterConstraint!" << std::endl;
 		//Syntax check: Block all invariants where "<" and ">" occur
 		if(ctx->BOOLRELATION()->getText() == "<" || ctx->BOOLRELATION()->getText() == ">"){
 			std::cerr << "Strict relations are not allowed in current build!";
@@ -183,14 +197,8 @@ namespace hypro {
 	}
 
 	template<typename Number>
-	void HyproHAListener<Number>::exitInvariants(HybridAutomatonParser::InvariantsContext* ctx){
-		std::cout << "Bin bei exitInvariants!" << std::endl;
-
-	}
-
-	template<typename Number>
- 	void HyproHAListener<Number>::exitBoolexpr(HybridAutomatonParser::BoolexprContext* ctx){
- 		std::cout << "Bin bei exitBoolexpr!" << std::endl;
+ 	void HyproHAListener<Number>::exitConstraint(HybridAutomatonParser::ConstraintContext* ctx){
+ 		std::cout << "Bin bei exitConstraint!" << std::endl;
  		//2.In exitBoolexpr: If = copy values of that row, emplace in matrix and negate it.
 		//In exitBoolexpr: If >= negate the row when exitBoolexpr
 

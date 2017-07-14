@@ -11,26 +11,18 @@ grammar Formula;
 
 ////// Parser Rules
 
-//1.Change term namewise to polynom
-//2.Change term: mult add*? to term: mult ('+' mult)*? and remove add rule
-//3.term should be a NUMBER (TIMES NUMBER)*? (TIMES MONOM)*?
-//4.MONOM should be VARIABLE+
-//5.boolexpr should be named constraint 
+//1. Maybe add MONOM 
+//2. Add possiblity of boolexpr v boolexpr ...
 
-//Add possiblity of boolexpr v boolexpr ...
+term 				: (NUMBER | VARIABLE) (TIMES (NUMBER | VARIABLE))* ;
+polynom				: term (PLUS term)* ;
 
-add					: PLUS term ;
-mult 				: (NUMBER | VARIABLE) (TIMES (NUMBER | VARIABLE))*?; 
-term				: mult add*?;
-
-equation 			: VARIABLE EQUALS term;
-boolexpr			: term BOOLRELATION NUMBER; 
-intervalexpr		: term IN INTERVAL;  
-formula 			: equation | boolexpr | intervalexpr ;
+equation 			: VARIABLE EQUALS polynom ;
+constraint			: polynom BOOLRELATION polynom; 
+intervalexpr		: VARIABLE IN INTERVAL;  
 
 ////// Lexer Rules
 
-//TODO: Add 'in'-keyword for intervals 
 //TODO: Add either 'v' keyword for OR for multiple boolean expressions 
 
 //Always remember: Keywords first!
@@ -38,18 +30,18 @@ IN 					: 'in' ;
 
 EQUALS				: '=' ;
 BOOLRELATION		: '<=' | '>=' | '<' | '>' | '=' ;
-//BINOPERATOR		: '+' | '*' ;
 PLUS				: '+' ;
 TIMES				: '*' ;
 
 fragment UPPERCASE	: [A-Z] ;
 fragment LOWERCASE	: [a-z] ;
 fragment DIGIT		: [0-9] ;
-fragment SPECIALCHAR: '+' | '-' | '\'' ;
-VARIABLE			: (UPPERCASE | LOWERCASE)(UPPERCASE | LOWERCASE | DIGIT | SPECIALCHAR)* ;
-NUMBER				: '-'? DIGIT+ ('.' DIGIT+)? ;
-INTERVAL 			: '[' NUMBER ',' NUMBER ']' ;
+fragment SPECIALCHAR: '_' | '\'' ;
 
+//MONOM				: VARIABLE (TIMES VARIABLE)+? ;
+NUMBER				: '-'? DIGIT+ ('.' DIGIT+)? ;
+VARIABLE			: (UPPERCASE | LOWERCASE)(UPPERCASE | LOWERCASE | DIGIT | SPECIALCHAR)* ;
+INTERVAL 			: '[' NUMBER ',' NUMBER ']' ;
 WS					: (' ' | '\t' | '\n' | '\r' )+ -> skip ;
 
 
