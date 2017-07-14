@@ -21,6 +21,7 @@ private:
 
 public:
 	Condition() = default;
+	Condition(const matrix_t<Number>& mat, const vector_t<Number>& vec) : mat(mat), vec(vec) {}
 	Condition(const Condition& orig) = default;
 	Condition(Condition&& orig) = default;
 	Condition& operator=(const Condition& orig) = default;
