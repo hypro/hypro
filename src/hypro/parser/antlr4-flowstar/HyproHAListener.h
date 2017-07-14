@@ -50,19 +50,19 @@ class HyproHAListener : public HybridAutomatonBaseListener {
 		std::shared_ptr<matrix_t<Number>> fillingTarget;
 		unsigned int currentRow = 0;
 
-		Number stringToNumber(std::string string);
+		Number stringToNumber(std::string& string);
 
 	public:
 
 		HyproHAListener();
 		~HyproHAListener();
 
-		inline std::vector<std::string> getLocNames(){ return locNames; }
-		inline std::vector<std::string> getVarNames(){ return vars; }
-		inline matrix_t<Number> getFlow(){ return flowMatrix; }
-		inline matrix_t<Number> getInvMat(){ return inv.getMatrix(); }
-		inline matrix_t<Number> getInvVec(){ return inv.getVector(); }
-		inline matrix_t<Number> getFillingTarget(){ return *fillingTarget; }
+		inline const std::vector<std::string>& getLocNames() const { return locNames; }
+		inline const std::vector<std::string>& getVarNames() const { return vars; }
+		inline const matrix_t<Number>& getFlow() const { return flowMatrix; }
+		inline const matrix_t<Number>& getInvMat() const { return inv.getMatrix(); }
+		inline const matrix_t<Number>& getInvVec() const { return inv.getVector(); }
+		inline matrix_t<Number>& getFillingTarget() const { return *fillingTarget; }
 		inline std::shared_ptr<matrix_t<Number>>& rGetFillingTarget(){ return fillingTarget; }
 		inline void setFillingTarget(matrix_t<Number> newTarget){ fillingTarget = std::make_shared<matrix_t<Number>>(newTarget); }
 

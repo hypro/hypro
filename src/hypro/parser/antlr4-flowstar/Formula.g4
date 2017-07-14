@@ -11,6 +11,12 @@ grammar Formula;
 
 ////// Parser Rules
 
+//1.Change term namewise to polynom
+//2.Change term: mult add*? to term: mult ('+' mult)*? and remove add rule
+//3.term should be a NUMBER (TIMES NUMBER)*? (TIMES MONOM)*?
+//4.MONOM should be VARIABLE+
+//5.boolexpr should be named constraint 
+
 //Add possiblity of boolexpr v boolexpr ...
 
 add					: PLUS term ;
