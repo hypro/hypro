@@ -6,6 +6,10 @@
 #include "representations/GeometricObject.h"
 #include "util/Plotter.h"
 #include <Eigen/Eigenvalues> 
+#define FLOATING_FIX 10e-12
+#define PTS_DEBUG 1         //show all added points
+#define TRANFORMED_PLOT 1   //for later use
+#define DIM_PLOT 0          //starting with 0..n-1 what to plot might be added with multiple dim or data format (struct/enum)
 //TRAJECTORY of e-function plotting comment for no
 //#define TRAJECTORY 1
 //#include <Eigen/LU>
@@ -34,17 +38,17 @@ int main()
     Vector derivLineEnd = Vector(n);
     Vector linGrowth = Vector(n);
     Vector directLineStart = Vector(n);
-    Vector directLineEnd = Vector(n);    
+    Vector directLineEnd = Vector(n);   
+    Vector plot_vector = Vector(n);
     #ifdef TRAJECTORY
         Number timestep = 0.02;
         Number traj_time;
         Vector plot_all_temp = Vector(n);
-        Vector plot_vector = Vector(n);
     #endif
     Number tstart = 0;
-    Number tend = 2;
+    Number tend = 4;
     Number beginElTime, curTime;
-    Number delta = 1; //segment stepping time
+    Number delta = 0.1; //segment stepping time
     Matrix V = Matrix(n,n);
     Matrix Vinv = Matrix(n,n);
 	Eigen::DiagonalMatrix<Number,2> D; //type Number size 2
@@ -90,7 +94,9 @@ int main()
     Vector directLineEnd = Vector(n);
     */  
     //needs: curTime (delta as additive)
-    for (curTime = delta; curTime<=tend; curTime += delta) {
+    //ugly floating fix
+    for (curTime = delta; curTime<tend+FLOATING_FIX; curTime += delta) {
+        //std::cout << curTime << " < " << tend+FLOATING_FIX << std::endl;
         //calculating invariants+ cases for delta
         beginElTime = curTime - delta;
         for (i=0; i<n; ++i) {
@@ -101,6 +107,7 @@ int main()
             xvalueEnd(i)   = xhomconst(i)* \
               std::exp(D.diagonal()(i) * curTime )     - xinhomconst(i);
         }
+        
         //derivative line
         derivAdditive = xvalueStart.array() - derivFactor.array()*beginElTime;
         derivLineStart = derivFactor.array()*beginElTime+derivAdditive.array();
@@ -110,18 +117,45 @@ int main()
         directLineStart = xvalueStart;
         directLineEnd = linGrowth.array()*(curTime-beginElTime) + \
           xvalueStart.array();
+        // ----------------   OUTPUT + PLOTTING ------------------
         //std::cout << "derivFactor: " << derivFactor;
         //std::cout << "xvalueStart: " << xvalueStart;
         //std::cout << "xvalueEnd: " << xvalueEnd;
-        std::cout << "posStart: " << V*xvalueStart << std::endl;
-        //plotting dimension!
-        //Point<Number> p1(xvalueStart);
-        //plotter.addPoint(p1);
+        //std::cout << "posStart: " << V*xvalueStart << std::endl;
+        plot_vector(0) = beginElTime;
+        plot_vector(1) = xvalueStart(DIM_PLOT);
+
+        //std::cout << "curTime" << curTime << std::endl;
+        //std::cout << "xvalueEnd" << xvalueEnd(0) << std::endl;
+        Point<Number> p1(xvalueStart);
+        plotter.addPoint(p1);
+        #ifdef PTS_DEBUG
+            //std::cout << "pt adding: (" << beginElTime << "," << xvalueStart(DIM_PLOT) << ")" << std::endl;
+            std::cout << "time (end+1)  = ["  << beginElTime            << "];" << std::endl;
+            std::cout << "value(end+1)  = ["  << xvalueStart(DIM_PLOT)  << "];" << std::endl;
+        #endif
+        //std::cout << "pt" << std::endl << plot_vector << std::endl;
+        //floating values assign wrong size (awkward fix)
+        if (curTime+delta > tend+FLOATING_FIX) {
+            //std::cout << curTime + delta << " > " << tend << std::endl;
+            //std::cout << "curTime" << curTime << std::endl;
+            //std::cout << "xvalueEnd" << xvalueEnd(0) << std::endl;
+            plot_vector(0) = curTime;
+            plot_vector(1) = xvalueEnd(DIM_PLOT);
+            Point<Number> p1(plot_vector);
+            plotter.addPoint(p1);
+            #ifdef PTS_DEBUG
+                //std::cout << "pt adding: (" << curTime << "," << xvalueEnd(DIM_PLOT) << ")" << std::endl;
+                std::cout << "time (end+1)  = ["  << curTime              << "];" << std::endl;
+                std::cout << "value(end+1)  = ["  << xvalueEnd(DIM_PLOT)  << "];" << std::endl;
+            #endif
+            //std::cout << "pt" << std::endl << plot_vector << std::endl;
+        }
         //plotter.addObject(p1.vertices();
         //plotting lines of segments
         //TODO lines creating by normal vectors
-        Halfspace<Number> hsp = Halfspace<Number>({-1,1},0);
-        plotter.addHalfspace(hsp);
+        //Halfspace<Number> hsp = Halfspace<Number>({-1,1},0);
+        //plotter.addObject(hsp);     //plotter.addHalfspace(hsp); did not WORK EITHER <---------------------------------------
         //on debug plot complete trajectory of e function
         #ifdef TRAJECTORY
             for (traj_time=beginElTime; traj_time<curTime; traj_time+=timestep) {
@@ -140,8 +174,10 @@ int main()
         #endif
     }
     #ifdef TRAJECTORY
+        std::cout << "TRAJECTORY was set" << std::endl;
         std::cout << "stepping size of e function: " << timestep << std::endl;
     #endif
+    //Halfspace<Number> hsp = Halfspace<Number>({-1,1},0);
     plotter.plot2d();
     //plotter.plotTex();
     //plotter.plotEps();
