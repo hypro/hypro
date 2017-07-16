@@ -2458,6 +2458,11 @@ ABD: EveryShipout initializing macros
 [36] (./_formulas.aux) )
 Output written on _formulas.dvi (36 pages, 12508 bytes).
 Transcript written on _formulas.log.
+sh: 1: gs: not found
+error: Problem running ghostscript gs -q -g520x66 -r384x384x -sDEVICE=ppmraw -sOutputFile=_form0.pnm -dNOPAUSE -dBATCH -- _form0.ps. Check your installation!
+/home/travis/build/hypro/hypro/doc/markdown/hypro.md:6: warning: unable to resolve reference to `gettingStarted' for \ref command
+/home/travis/build/hypro/hypro/doc/markdown/hypro.md:8: warning: unable to resolve reference to `stateSets' for \ref command
+/home/travis/build/hypro/hypro/doc/markdown/hypro.md:10: warning: unable to resolve reference to `utilFunc' for \ref command
 owstar
 Generating dependency graph for directory /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/glpk
 Generating dependency graph for directory /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope
@@ -2485,45 +2490,7 @@ Generating dependency graph for directory /home/travis/build/hypro/hypro/src/hyp
 Generating dependency graph for directory /home/travis/build/hypro/hypro/src/hypro/representations/Zonotope
 Generating bitmaps for formulas in HTML...
 Generating image form_0.png for formula
-Generating image form_1.png for formula
-Generating image form_2.png for formula
-Generating image form_3.png for formula
-Generating image form_4.png for formula
-Generating image form_5.png for formula
-Generating image form_6.png for formula
-Generating image form_7.png for formula
-Generating image form_8.png for formula
-Generating image form_9.png for formula
-Generating image form_10.png for formula
-Generating image form_11.png for formula
-Generating image form_12.png for formula
-Generating image form_13.png for formula
-Generating image form_14.png for formula
-Generating image form_15.png for formula
-Generating image form_16.png for formula
-Generating image form_17.png for formula
-Generating image form_18.png for formula
-Generating image form_19.png for formula
-Generating image form_20.png for formula
-Generating image form_21.png for formula
-Generating image form_22.png for formula
-Generating image form_23.png for formula
-Generating image form_24.png for formula
-Generating image form_25.png for formula
-Generating image form_26.png for formula
-Generating image form_27.png for formula
-Generating image form_28.png for formula
-Generating image form_29.png for formula
-Generating image form_30.png for formula
-Generating image form_31.png for formula
-Generating image form_32.png for formula
-Generating image form_33.png for formula
-Generating image form_34.png for formula
-Generating image form_35.png for formula
-Generating index page../home/travis/build/hypro/hypro/doc/markdown/hypro.md:6: warning: unable to resolve reference to `gettingStarted' for \ref command
-/home/travis/build/hypro/hypro/doc/markdown/hypro.md:8: warning: unable to resolve reference to `stateSets' for \ref command
-/home/travis/build/hypro/hypro/doc/markdown/hypro.md:10: warning: unable to resolve reference to `utilFunc' for \ref command
-.
+Generating index page...
 Generating page index...
 Generating module index...
 Generating namespace index...
