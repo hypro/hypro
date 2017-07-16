@@ -1,6 +1,5 @@
 #pragma once
 #include "State.h"
-#include "Visitors.h"
 #include "../../representations/GeometricObject.h"
 #include "../../representations/types.h"
 #include <iostream>

@@ -9,6 +9,28 @@
 
 #include "Converter.h"
 
+/*
+ *Computes the arithmetic mean for a given Point Vector
+ */
+
+template <typename Number>
+vector_t<Number> computeArithmeticMeanPoint(const std::vector<Point<Number>>& pointVec){
+    //defines an empty solution vector
+    if(!pointVec.empty()){
+    	vector_t<Number> res = vector_t<Number>::Zero(pointVec.at(0).rawCoordinates().rows());
+
+		//computes the arithmetic mean by first building the sum of all points and then dividing it by the number of points
+		for (unsigned i=0; i < pointVec.size(); ++i){
+			assert(res.rows() == pointVec.at(i).rawCoordinates().rows());
+			res += pointVec.at(i).rawCoordinates();
+		}
+		res = res*( ((Number) 1)/pointVec.size());
+		return res;
+    }
+    return vector_t<Number>::Zero(0);
+}
+
+
 //conversion from Zonotope to Zonotope (no differentiation between conversion modes - always EXACT)
 template <typename Number>
 typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const Zonotope& _source, const CONV_MODE  ){

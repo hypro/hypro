@@ -3,28 +3,29 @@
 namespace hypro {
 
 	template<typename Number>
-	State<Number> Reset<Number>::applyReset(const State<Number>& inState) const {
+	template<typename Representation>
+	State<Number,Representation> Reset<Number>::applyReset(const State<Number,Representation>& inState) const {
 		//TRACE("hydra.datastructures","Apply reset on " << inState);
-		State<Number> res(inState);
+		State<Number,Representation> res(inState);
 		if(hasContinuousReset) {
 			//TRACE("hydra.datastructures","Apply continuous reset");
 			//TRACE("hydra.datastructures","Continuous reset matrix: " << continuousMat);
 			//TRACE("hydra.datastructures","Continuous reset vector: " << continuousVec);
-			res.setSet(boost::apply_visitor(genericAffineTransformationVisitor<RepresentationVariant>(continuousMat,continuousVec), inState.getSet()));
+			res.setSet(inState.getSet().affineTransformation(continuousMat,continuousVec));
 		}
 
 		if(hasDiscreteReset){
 			//TRACE("hydra.datastructures","Apply discrete reset");
 			//TRACE("hydra.datastructures","Discrete reset matrix: " << discreteMat);
 			//TRACE("hydra.datastructures","Discrete reset vector: " << discreteVec);
-			res.setDiscreteAssignment(boost::apply_visitor(genericAffineTransformationVisitor<RepresentationVariant>(discreteMat,discreteVec), inState.getDiscreteAssignment()));
+			res.setDiscreteAssignment(inState.getDiscreteAssignment().affineTransformation(discreteMat,discreteVec));
 			//res.setDiscreteAssignment(inState.getDiscreteAssignment().affineTransformation(discreteMat,discreteVec));
 		}
 		if(hasClockReset){
 			//TRACE("hydra.datastructures","Apply clock reset");
 			//TRACE("hydra.datastructures","Clock reset matrix: " << clockMat);
 			//TRACE("hydra.datastructures","Clock reset vector: " << clockVec);
-			res.setClockAssignment(boost::apply_visitor(genericAffineTransformationVisitor<RepresentationVariant>(clockMat,clockVec), inState.getClockAssignment()));
+			res.setClockAssignment(inState.getClockAssignment().affineTransformation(clockMat,clockVec));
 			//res.setClockAssignment(inState.getClockAssignment().affineTransformation(clockMat,clockVec));
 		}
 
@@ -36,13 +37,14 @@ namespace hypro {
 	}
 
 	template<typename Number>
-	State<Number> Reset<Number>::applyDiscreteReset(const State<Number>& inState) const {
-		State<Number> res(inState);
+	template<typename Representation>
+	State<Number,Representation> Reset<Number>::applyDiscreteReset(const State<Number,Representation>& inState) const {
+		State<Number,Representation> res(inState);
 		if(hasDiscreteReset){
 			//TRACE("hydra.datastructures","Apply discrete reset");
 			//TRACE("hydra.datastructures","Discrete reset matrix: " << discreteMat);
 			//TRACE("hydra.datastructures","Discrete reset vector: " << discreteVec);
-			res.setDiscreteAssignment(boost::apply_visitor(genericAffineTransformationVisitor<RepresentationVariant>(discreteMat,discreteVec), inState.getDiscreteAssignment()));
+			res.setDiscreteAssignment(inState.getDiscreteAssignment().affineTransformation(discreteMat,discreteVec));
 			//res.setDiscreteAssignment(inState.getDiscreteAssignment().affineTransformation(discreteMat,discreteVec));
 		}
 		return res;

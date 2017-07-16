@@ -192,8 +192,8 @@ namespace hypro{
     std::vector<Point<Number>> SupportFunctionT<Number,Converter>::vertices(const Location<Number>* loc) const {
 		std::vector<vector_t<Number>> additionalDirections;
 		if(loc != nullptr) {
-			for(unsigned rowIndex = 0; rowIndex < loc->invariant().mat.rows(); ++rowIndex){
-				additionalDirections.push_back(vector_t<Number>(loc->invariant().mat.row(rowIndex)));
+			for(unsigned rowIndex = 0; rowIndex < loc->getInvariant().getMatrix().rows(); ++rowIndex){
+				additionalDirections.push_back(vector_t<Number>(loc->getInvariant().getMatrix().row(rowIndex)));
 			}
 		}
 

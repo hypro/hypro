@@ -40,8 +40,10 @@ public:
 	void setClockResetVector(const vector_t<Number>& in) { clockVec = in; hasClockReset = true; }
 	void setClockResetMatrix(const matrix_t<Number>& in) { clockMat = in; hasClockReset = true; }
 
-	State applyReset(const State<Number>& inState) const;
-	State applyDiscreteReset(const State<Number>& inState) const;
+	template<typename Representation>
+	State<Number,Representation> applyReset(const State<Number,Representation>& inState) const;
+	template<typename Representation>
+	State<Number,Representation> applyDiscreteReset(const State<Number,Representation>& inState) const;
 
     friend std::ostream& operator<<(std::ostream& ostr, const Reset<Number>& a)
     {

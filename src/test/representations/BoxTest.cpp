@@ -9,11 +9,10 @@
  * @version 2014-05-27
  */
 
-#include "gtest/gtest.h"
 #include "../defines.h"
-#include <carl/core/VariablePool.h>
 #include "../../hypro/datastructures/Point.h"
 #include "../../hypro/representations/GeometricObject.h"
+#include "gtest/gtest.h"
 
 template<typename Number>
 class BoxTest : public ::testing::Test

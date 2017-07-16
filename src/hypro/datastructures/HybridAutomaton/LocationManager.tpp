@@ -21,7 +21,7 @@ Location<Number> *LocationManager<Number>::create(const Location<Number> *_loc)
 }
 
 template<typename Number>
-Location<Number> *LocationManager<Number>::create(const hypro::matrix_t<Number> _mat)
+Location<Number> *LocationManager<Number>::create(const matrix_t<Number> _mat)
 {
     Location<Number> *loc = new Location<Number>(mId++, _mat);
     mLocations[mId - 1] = loc;
@@ -30,7 +30,7 @@ Location<Number> *LocationManager<Number>::create(const hypro::matrix_t<Number> 
 }
 
 template<typename Number>
-Location<Number> *LocationManager<Number>::create(const hypro::matrix_t<Number> _mat, const typename Location<Number>::transitionSet _trans, const Condition& _inv)
+Location<Number> *LocationManager<Number>::create(const matrix_t<Number> _mat, const typename Location<Number>::transitionSet _trans, const Condition<Number>& _inv)
 {
     Location<Number> *loc = new Location<Number>(mId++, _mat, _trans, _inv);
     mLocations[mId - 1] = loc;
@@ -39,8 +39,8 @@ Location<Number> *LocationManager<Number>::create(const hypro::matrix_t<Number> 
 }
 
 template<typename Number>
-Location<Number> *LocationManager<Number>::create(const hypro::matrix_t<Number> _mat, const typename Location<Number>::transitionSet _trans, const Condition& _inv,
-                                  const hypro::matrix_t<Number> _extInputMat)
+Location<Number> *LocationManager<Number>::create(const matrix_t<Number> _mat, const typename Location<Number>::transitionSet _trans, const Condition<Number>& _inv,
+                                  const matrix_t<Number> _extInputMat)
 {
     Location<Number> *loc = new Location<Number>(mId++, _mat, _trans, _inv, _extInputMat);
     mLocations[mId - 1] = loc;

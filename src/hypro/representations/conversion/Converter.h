@@ -5,7 +5,6 @@
 #endif
 
 #include "../../flags.h"
-#include "util.h"
 #include "../Box/Box.h"
 #include "../ConstraintSet/ConstraintSet.h"
 #include "../Ellipsoids/Ellipsoid.h"

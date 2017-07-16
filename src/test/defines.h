@@ -10,6 +10,7 @@
 
 #include "../hypro/config.h"
 #include "util.h"
+#include "gtest/gtest.h"
 
 typedef ::testing::Types<
 	#ifdef USE_MPFR_FLOAT
