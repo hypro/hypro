@@ -274,6 +274,8 @@ TYPED_TEST(HybridAutomataTest, State) {
 
 	EXPECT_EQ(s1.getLocation()->getId(), this->loc1->getId());
 	EXPECT_EQ(s2.getLocation()->getId(), this->loc1->getId());
-	//EXPECT_EQ(s2.getSet().matrix(), matr);
-	//EXPECT_EQ(s2.getSet().vector(), vec);
+	EXPECT_EQ(s2.getSet().matrix(), matr);
+	EXPECT_EQ(s2.getSet().vector(), vec);
+	EXPECT_EQ(s2.getSet<0>().matrix(), matr);
+	EXPECT_EQ(s2.getSet<0>().vector(), vec);
 }

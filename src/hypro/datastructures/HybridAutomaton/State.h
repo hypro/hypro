@@ -16,7 +16,7 @@ class State
 {
   protected:
     const Location<Number>* mLoc = nullptr; // Todo: Check if the location pointer is really needed.
-    std::vector<boost::variant<Representation,Rargs...>> mSets; // Todo: Initialize to right size.
+    std::tuple<Representation,Rargs...> mSets; // Todo: Initialize to right size.
     carl::Interval<Number> mTimestamp = carl::Interval<Number>::unboundedInterval();
     bool mIsEmpty = false;
 
@@ -50,7 +50,7 @@ class State
     }
 
     State(const Location<Number>* _loc) : mLoc(_loc) { assert(mLoc != nullptr); }
-    State(const Location<Number>* _loc, const Representation& _rep) : mLoc(_loc), mSets() { mSets.push_back(_rep); assert(mLoc != nullptr); }
+    State(const Location<Number>* _loc, const Representation& _rep) : mLoc(_loc), mSets() { std::get<0>(mSets) = _rep; assert(mLoc != nullptr); }
     State(const Location<Number>* _loc,
     		const Representation& _rep,
     		const Rargs... sets,
@@ -58,20 +58,23 @@ class State
     	: mLoc(_loc)
     	, mTimestamp(_timestamp)
     {
-    	mSets.push_back(boost::variant<Representation,Rargs...>(sets...));
+    	mSets = std::make_tuple(sets...);
     	assert(mLoc != nullptr);
     }
 
     const Location<Number>* getLocation() const { assert(mLoc != nullptr); return mLoc; }
-    //const Representation& getSet() const { return mSet; }
+
+    template<std::size_t I>
+    const Representation& getSet() const { return std::get<I>(mSets); }
+
     //Representation& rGetSet() { return mSet; }
-    const std::vector<boost::variant<Representation,Rargs...>>& getSets() const { return mSets; }
+    const std::tuple<Representation,Rargs...>& getSets() const { return mSets; }
     const carl::Interval<Number>& getTimestamp() const { return mTimestamp; }
 
     bool isEmpty() const { return mIsEmpty; }
 
     void setLocation(const Location<Number>* l) { assert(l != nullptr); mLoc = l; }
-    //void setSet(const Representation& s) { mSet = s; }
+    void setSet(const Representation& s) { std::get<0>(mSets) = s; }
     void setTimestamp(carl::Interval<Number> t) { mTimestamp = t; }
     void setSets(const std::vector<boost::variant<Representation,Rargs...>>& sets) { mSets = sets; }
 
