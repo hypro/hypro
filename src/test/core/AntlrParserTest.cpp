@@ -1,6 +1,7 @@
 #include "../../hypro/parser/antlr4-flowstar/HybridAutomatonLexer.h"
 #include "../../hypro/parser/antlr4-flowstar/HybridAutomatonParser.h"
-#include "../../hypro/parser/antlr4-flowstar/HyproHAListener.h"
+//#include "../../hypro/parser/antlr4-flowstar/HyproHAListener.h"
+#include "../../hypro/parser/antlr4-flowstar/HyproHAVisitor.h"
 #include <iostream>
 #include <fstream>
 #include "gtest/gtest.h"
@@ -90,11 +91,15 @@ TYPED_TEST(AntlrParserTest, ParseLocation){
 	//std::cout << tree->toStringTree(&parser) << std::endl;
 
 	//Let's create a listener
-	hypro::HyproHAListener<TypeParam> listener; //= HyproHAListener::HyproHAListener<TypeParam>();
+	//hypro::HyproHAListener<TypeParam> listener; //= HyproHAListener::HyproHAListener<TypeParam>();
+	//tree::ParseTreeWalker::DEFAULT.walk(&listener, tree);
 
-	tree::ParseTreeWalker::DEFAULT.walk(&listener, tree);
+	//Let's create a visitor
+	hypro::HyproHAVisitor<TypeParam> visitor;
+	visitor.visit(tree);
+	//HybridAutomaton h = visitor.visit(tree); or smth like this
 
-	std::cout << listener << std::endl;
+	std::cout << visitor << std::endl;
 
 	SUCCEED();
 
