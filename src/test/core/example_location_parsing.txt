@@ -13,7 +13,7 @@ hybrid reachability
    }
    inv
    {
-    x >= 510
+    x = 510
    }
   }
  }

@@ -18,7 +18,7 @@ term 				: (NUMBER | VARIABLE) (TIMES (NUMBER | VARIABLE))* ;
 polynom				: term (PLUS term)* ;
 
 equation 			: VARIABLE EQUALS polynom ;
-constraint			: polynom BOOLRELATION polynom; 
+constraint			: polynom (BOOLRELATION | EQUALS) polynom; 
 intervalexpr		: VARIABLE IN INTERVAL;  
 
 ////// Lexer Rules
@@ -29,7 +29,7 @@ intervalexpr		: VARIABLE IN INTERVAL;
 IN 					: 'in' ;
 
 EQUALS				: '=' ;
-BOOLRELATION		: '<=' | '>=' | '<' | '>' | '=' ;
+BOOLRELATION		: '<=' | '>=' | '<' | '>' ;
 PLUS				: '+' ;
 TIMES				: '*' ;
 
@@ -38,7 +38,6 @@ fragment LOWERCASE	: [a-z] ;
 fragment DIGIT		: [0-9] ;
 fragment SPECIALCHAR: '_' | '\'' ;
 
-//MONOM				: VARIABLE (TIMES VARIABLE)+? ;
 NUMBER				: '-'? DIGIT+ ('.' DIGIT+)? ;
 VARIABLE			: (UPPERCASE | LOWERCASE)(UPPERCASE | LOWERCASE | DIGIT | SPECIALCHAR)* ;
 INTERVAL 			: '[' NUMBER ',' NUMBER ']' ;

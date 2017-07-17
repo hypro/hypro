@@ -21,6 +21,7 @@
 #include "HybridAutomatonBaseListener.h"
 #include "../../types.h"
 #include "../../datastructures/HybridAutomaton/Location.h"
+#include "../../datastructures/HybridAutomaton/LocationManager.h"
 
 //using namespace org::antlr::v4::runtime;
 using namespace antlr4;
@@ -37,34 +38,34 @@ class HyproHAListener : public HybridAutomatonBaseListener {
 		//A vector of all variables that are defined
 		std::vector<std::string> vars;
 
-		//A vector of all location names
-		std::vector<std::string> locNames;
+		//A temporary location
+		Location<Number>* loc;
 
-		//A temporary reusable location that is needed to build a location
-		//Location<Number> loc;
-
-		//A temporary flow matrix and needed positioning variable
-		matrix_t<Number> flowMatrix;
-		//matrix_t<Number> invMatrix;
-		Condition<Number> inv;
-		std::shared_ptr<matrix_t<Number>> fillingTarget;
+		//A temporary matrix and needed positioning variable
+		matrix_t<Number> tmpMatrix;
+		vector_t<Number> tmpVector;
 		unsigned int currentRow = 0;
 
+		//Helping functions
 		Number stringToNumber(std::string& string);
+		Number multTogether(HybridAutomatonParser::TermContext* ctx);
+		vector_t<Number> getPolynomCoeff(HybridAutomatonParser::PolynomContext* ctx);
+
 
 	public:
 
 		HyproHAListener();
 		~HyproHAListener();
 
-		inline const std::vector<std::string>& getLocNames() const { return locNames; }
+		//inline const std::vector<std::string>& getLocNames() const { return locNames; }
+		inline const std::set<Location<Number>*>& getLocSet() const { return locSet; }
 		inline const std::vector<std::string>& getVarNames() const { return vars; }
-		inline const matrix_t<Number>& getFlow() const { return flowMatrix; }
-		inline const matrix_t<Number>& getInvMat() const { return inv.getMatrix(); }
-		inline const matrix_t<Number>& getInvVec() const { return inv.getVector(); }
-		inline matrix_t<Number>& getFillingTarget() const { return *fillingTarget; }
-		inline std::shared_ptr<matrix_t<Number>>& rGetFillingTarget(){ return fillingTarget; }
-		inline void setFillingTarget(matrix_t<Number> newTarget){ fillingTarget = std::make_shared<matrix_t<Number>>(newTarget); }
+		//inline const matrix_t<Number>& getFlow() const { return flowMatrix; }
+		//inline const matrix_t<Number>& getInvMat() const { return inv.getMatrix(); }
+		//inline const matrix_t<Number>& getInvVec() const { return inv.getVector(); }
+		//inline matrix_t<Number>& getFillingTarget() const { return *fillingTarget; }
+		//inline std::shared_ptr<matrix_t<Number>>& rGetFillingTarget(){ return fillingTarget; }
+		//inline void setFillingTarget(matrix_t<Number> newTarget){ fillingTarget = std::make_shared<matrix_t<Number>>(newTarget); }
 
 		void enterVardeclaration(HybridAutomatonParser::VardeclarationContext* ctx) override;
 
@@ -72,12 +73,13 @@ class HyproHAListener : public HybridAutomatonBaseListener {
 		void exitLocation(HybridAutomatonParser::LocationContext* ctx) override;
 
 		void enterActivities(HybridAutomatonParser::ActivitiesContext* ctx) override;
+		void exitActivities(HybridAutomatonParser::ActivitiesContext* ctx) override;
 
 		void enterEquation(HybridAutomatonParser::EquationContext* ctx) override;
 		void exitEquation(HybridAutomatonParser::EquationContext* ctx) override;
 
-		void enterPolynom(HybridAutomatonParser::PolynomContext * ctx) override;
-  		void exitPolynom(HybridAutomatonParser::PolynomContext * ctx) override;
+		void enterPolynom(HybridAutomatonParser::PolynomContext* ctx) override;
+  		void exitPolynom(HybridAutomatonParser::PolynomContext* ctx) override;
 
 		void enterTerm(HybridAutomatonParser::TermContext* ctx) override;
 		void exitTerm(HybridAutomatonParser::TermContext* ctx) override;
@@ -98,15 +100,15 @@ class HyproHAListener : public HybridAutomatonBaseListener {
 template<typename Number>
 std::ostream& operator<<(std::ostream& ostr, HyproHAListener<Number> listener){
 	ostr << "Location Names: " << std::endl;
-	for(auto loc : listener.getLocNames()){
+	for(auto loc : listener.getLocSet()){
 		ostr << loc << std::endl;
 	}
 	ostr << "Variable Names: " << std::endl;
 	for(auto var : listener.getVarNames()){
 		ostr << var << std::endl;
 	}
-	ostr << "flowMatrix is:\n " << listener.getFlow() << std::endl;
-	ostr << "invMatrix is:\n " << listener.getInvMat() << std::endl;
+	//ostr << "flowMatrix is:\n " << listener.getFlow() << std::endl;
+	//ostr << "invMatrix is:\n " << listener.getInvMat() << std::endl;
 	return ostr;
 }
 
