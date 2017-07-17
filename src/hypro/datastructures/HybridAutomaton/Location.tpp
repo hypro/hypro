@@ -5,8 +5,7 @@ namespace hypro
 
 template<typename Number>
 Location<Number>::Location(unsigned _id) : mFlow(), mExternalInput(), mTransitions(), mInvariant(), mId(_id)
-{
-}
+{}
 
 template<typename Number>
 Location<Number>::Location(unsigned _id, const Location<Number>& _loc)

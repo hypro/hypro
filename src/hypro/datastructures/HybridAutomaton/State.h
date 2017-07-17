@@ -50,15 +50,14 @@ class State
     }
 
     State(const Location<Number>* _loc) : mLoc(_loc) { assert(mLoc != nullptr); }
-    State(const Location<Number>* _loc, const Representation& _rep) : mLoc(_loc), mSets() { std::get<0>(mSets) = _rep; assert(mLoc != nullptr); }
     State(const Location<Number>* _loc,
     		const Representation& _rep,
     		const Rargs... sets,
-    		const carl::Interval<Number>& _timestamp)
+    		const carl::Interval<Number>& _timestamp = carl::Interval<Number>::unboundedInterval())
     	: mLoc(_loc)
     	, mTimestamp(_timestamp)
     {
-    	mSets = std::make_tuple(sets...);
+    	mSets = std::make_tuple(_rep, sets...);
     	assert(mLoc != nullptr);
     }
 
@@ -66,6 +65,7 @@ class State
 
     template<std::size_t I>
     const Representation& getSet() const { return std::get<I>(mSets); }
+    const Representation& getSet() const { return std::get<0>(mSets); }
 
     //Representation& rGetSet() { return mSet; }
     const std::tuple<Representation,Rargs...>& getSets() const { return mSets; }
@@ -74,7 +74,10 @@ class State
     bool isEmpty() const { return mIsEmpty; }
 
     void setLocation(const Location<Number>* l) { assert(l != nullptr); mLoc = l; }
-    void setSet(const Representation& s) { std::get<0>(mSets) = s; }
+    template<std::size_t I, typename otherRepresentation>
+    void setSet(const otherRepresentation& s) { std::get<I>(mSets) = s; }
+    template<typename otherRepresentation>
+    void setSet(const otherRepresentation& s) { std::get<0>(mSets) = s; }
     void setTimestamp(carl::Interval<Number> t) { mTimestamp = t; }
     void setSets(const std::vector<boost::variant<Representation,Rargs...>>& sets) { mSets = sets; }
 

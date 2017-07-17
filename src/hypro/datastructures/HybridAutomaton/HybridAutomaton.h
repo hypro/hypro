@@ -10,6 +10,7 @@
 #pragma once
 
 #include "Location.h"
+#include "LocationManager.h"
 #include "State.h"
 #include "Transition.h"
 #include "Condition.h"
