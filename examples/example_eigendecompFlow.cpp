@@ -108,15 +108,32 @@ int main()
     // hypro::Plotter<Number>& plt = hypro::Plotter<Number>::getInstance();
     //
     // plt.addObject(v0.vertices());
+    // std::vector<VPolytope<Number>> sets;
+    // sets.push_back(v0);
     //
     // /* define working ptope */
     // VPolytope<Number> current = v0;
     // for(std::size_t i = 0; i < (tend/delta); ++i) {
+    // 		sets.push_back(current);
     // 		VPolytope<Number> next = current.affineTransformation(A,b);
     //  	/* VPolytope<Number> next = current.linearTransformation(A); */
     // 		plt.addObject(next.vertices());
     // 		current = next;
     // }
+    //
+    // /* compute points of exact solution ... E_points
+    //
+    // #ifndef NDEBUG
+    // for( const auto& p : ePoints) {
+    // 		bool contained = false;
+    // 		for( const auto& set : sets) {
+    // 			if(set.contains(p)) {
+    // 				contained = true;
+    // 			}
+    // 		}
+    // 		assert(contained);
+    // }
+    // #endif
     //
     //
     for (curTime = delta; curTime<tend+FLOATING_FIX; curTime += delta) {
