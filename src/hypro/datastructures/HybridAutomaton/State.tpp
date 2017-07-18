@@ -4,6 +4,21 @@ namespace hypro
 {
 
 template<typename Number, typename Representation, typename ...Rargs>
+const auto& State<Number,Representation,Rargs...>::getSet(std::size_t i) const {
+	assert(mTypes.size() == mSets.size());
+	auto res = getSet(mSets.at(i), mTypes.at(i));
+	return res;
+}
+
+template<typename Number, typename Representation, typename ...Rargs>
+auto& State<Number,Representation,Rargs...>::rGetSet(std::size_t i) {
+	assert(mTypes.size() == mSets.size());
+
+	return getSet(mSets.at(i), mTypes.at(i));
+}
+
+
+template<typename Number, typename Representation, typename ...Rargs>
 void State<Number,Representation,Rargs...>::addTimeToClocks(Number t) {
 	//TRACE("hydra.datastructures","Add timestep of size " << t << " to clocks.");
 	//if(mHasClocks) {
@@ -21,26 +36,37 @@ State<Number,Representation,Rargs...> State<Number,Representation,Rargs...>::agg
 
 	//TRACE("hydra.datastructures","Aggregation of " << res << " and " << in);
 
-	//res.setSet(in.getSet().unite(getSet()));
+	// element-wise union.
+	assert(mSets.size() == in.getSets().size());
+	for(std::size_t i = 0; i < mSets.size(); ++i) {
+		res.setSet(mSets.at(i).unite(in.getSet(i)), i);
+	}
 
 	//TRACE("hydra.datastructures","After continuous aggregation " << res );
-
-	//if(mHasClocks) {
-	//	res.setClockAssignment(in.getClockAssignment().unite(res.getClockAssignment()));
-	//	//TRACE("hydra.datastructures","After clock aggregation " << res );
-	//}
 
 	res.setTimestamp(mTimestamp.convexHull(in.getTimestamp()));
 	return res;
 }
 
 template<typename Number, typename Representation, typename ...Rargs>
-std::pair<bool,State<Number,Representation,Rargs...>> State<Number,Representation,Rargs...>::intersect(const State<Number,Representation,Rargs...>& in) const {
+std::pair<bool,State<Number,Representation,Rargs...>> State<Number,Representation,Rargs...>::intersect(const Condition<Number>& in) const {
 	//DEBUG("hydra.datastructures","this rep name: " << mSetRepresentationName << " vs " << in.getSetRepresentation());
 	//assert(mSetRepresentationName == in.getSetRepresentation());
 
+	assert(in.size() == mSets.size());
 	State<Number,Representation,Rargs...> res(*this);
-	bool empty = true;
+	bool empty = false;
+
+	for(std::size_t i = 0; i < mSets.size(); ++i) {
+		auto resultPair = mSets.at(i).satisfiesHalfspaces(in.getMatrix(i), in.getVector(i));
+		res.setSet(resultPair.second,i);
+		if(!resultPair.first) {
+			empty = true;
+			break;
+		}
+	}
+
+
 	//std::pair<bool,Representation> contPair = mSet.satisfiesHalfspaces(in.getSet().matrix(), in.getSet().vector());
 	//if(contPair.first) {
 	//	empty = false;
@@ -69,10 +95,14 @@ std::pair<bool,State<Number,Representation,Rargs...>> State<Number,Representatio
 }
 
 template<typename Number, typename Representation, typename ...Rargs>
-State<Number,Representation,Rargs...> State<Number,Representation,Rargs...>::applyTimeStep(const matrix_t<Number>& trafoMatrix, const vector_t<Number>& trafoVector, Number timeStepSize ) const {
+State<Number,Representation,Rargs...> State<Number,Representation,Rargs...>::applyTimeStep(const std::vector<std::pair<const matrix_t<Number>&, const vector_t<Number>&>>& flows, Number timeStepSize ) const {
 	State<Number,Representation,Rargs...> res(*this);
 	//TRACE("hydra.datastructures","Apply timestep of size " << timeStepSize);
 	//res.setSet(mSet.affineTransformation(trafoMatrix,trafoVector));
+	assert(flows.size() == mSets.size());
+	for(std::size_t i = 0; i < mSets.size(); ++i) {
+		res.setSet(mSets.at(i).affineTransformation(flows.at(i).first, flows.at(i).second));
+	}
 	res.addTimeToClocks(timeStepSize);
 	return res;
 }

@@ -42,7 +42,10 @@ class ConstraintSetT : public GeometricObject<Number, ConstraintSetT<Number,Conv
 	 * @brief      Copy constructor.
 	 * @param[in]  orig  The original.
 	 */
-	ConstraintSetT( const ConstraintSetT& orig ) = default;
+	ConstraintSetT( const ConstraintSetT& orig )
+		: mConstraints(orig.matrix())
+		, mConstants(orig.vector())
+	{}
 
 	/**
 	 * @brief      Move constructor.
