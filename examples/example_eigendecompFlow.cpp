@@ -5,7 +5,7 @@
 
 #include "representations/GeometricObject.h"
 #include "util/Plotter.h"
-#include <Eigen/Eigenvalues> 
+#include <Eigen/Eigenvalues>
 #define FLOATING_FIX 10e-12
 #define PTS_DEBUG 1         //show all added points
 #define TRANFORMED_PLOT 1   //for later use
@@ -20,7 +20,7 @@ int main()
 	using Number = double;
 	using Matrix = matrix_t<Number>;
 	using Vector = vector_t<Number>;
- 
+
     int n = 2;                  //<--- DIMENSION --->
     int i;
 	Matrix A = Matrix(n,n);
@@ -38,7 +38,7 @@ int main()
     Vector derivLineEnd = Vector(n);
     Vector linGrowth = Vector(n);
     Vector directLineStart = Vector(n);
-    Vector directLineEnd = Vector(n);   
+    Vector directLineEnd = Vector(n);
     Vector plot_vector = Vector(n);
     #ifdef TRAJECTORY
         Number timestep = 0.02;
@@ -54,18 +54,18 @@ int main()
 	Eigen::DiagonalMatrix<Number,2> D; //type Number size 2
 
     //######   d/dx = A*x + b  ######
-	A << 	0.001, 1, 
+	A << 	0.001, 1,
 			0.001, -0.002;
     b <<    0, -9.81;
     x0<<    10, 0;
-	
+
 	std::cout << "d/dx = A*x+b, A:"<< std::endl << A << std::endl;
 	std::cout << "b: "<< std::endl << b << std::endl;
     std::cout << "x0: "<< std::endl << x0 << std::endl;
     //decompose directly + constructor
     Eigen::EigenSolver<Matrix> es(A);
     Plotter<Number>& plotter = Plotter<Number>::getInstance();
-     
+
     V << es.eigenvectors().real();
     D.diagonal() << es.eigenvalues().real();
     Vinv = V.inverse();
@@ -92,9 +92,33 @@ int main()
     Vector linGrowth = Vector(n);
     Vector directLineStart = Vector(n);
     Vector directLineEnd = Vector(n);
-    */  
+    */
     //needs: curTime (delta as additive)
     //ugly floating fix
+    //
+    //
+    // std::vector<vector_t<Number>> points;
+    // points.push_back(x0);
+    // /* compute over-approximative point p2 and exact solution point p1
+    // /* also obtain A and b -> v' = Av + b
+    // points.push_back(p1);
+    // points.push_back(p2);
+    // hypro::VPolytope<Number> v0 = hypro::VPolytope<Number>(points);
+    //
+    // hypro::Plotter<Number>& plt = hypro::Plotter<Number>::getInstance();
+    //
+    // plt.addObject(v0.vertices());
+    //
+    // /* define working ptope */
+    // VPolytope<Number> current = v0;
+    // for(std::size_t i = 0; i < (tend/delta); ++i) {
+    // 		VPolytope<Number> next = current.affineTransformation(A,b);
+    //  	/* VPolytope<Number> next = current.linearTransformation(A); */
+    // 		plt.addObject(next.vertices());
+    // 		current = next;
+    // }
+    //
+    //
     for (curTime = delta; curTime<tend+FLOATING_FIX; curTime += delta) {
         //std::cout << curTime << " < " << tend+FLOATING_FIX << std::endl;
         //calculating invariants+ cases for delta
@@ -107,7 +131,7 @@ int main()
             xvalueEnd(i)   = xhomconst(i)* \
               std::exp(D.diagonal()(i) * curTime )     - xinhomconst(i);
         }
-        
+
         //derivative line
         derivAdditive = xvalueStart.array() - derivFactor.array()*beginElTime;
         derivLineStart = derivFactor.array()*beginElTime+derivAdditive.array();
