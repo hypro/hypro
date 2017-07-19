@@ -21,6 +21,7 @@
 #include "../../types.h"
 #include "../../datastructures/HybridAutomaton/Location.h"
 #include "../../datastructures/HybridAutomaton/LocationManager.h"
+//#include "../../datastructures/HybridAutomaton/HybridAutomaton.h"
 
 using namespace antlr4;
 
@@ -31,18 +32,10 @@ class HyproHAVisitor : public HybridAutomatonBaseVisitor {
 
 	private:
 		//Set of locations a hybrid automaton needs
-		//std::set<Location<Number>*> locSet;
+		std::set<Location<Number>*> locSet;
 
 		//A vector of all variables that are defined
-		//std::vector<std::string> vars;
-
-		//A temporary location
-		//Location<Number>* loc;
-
-		//A temporary matrix and needed positioning variable
-		//matrix_t<Number> tmpMatrix;
-		//vector_t<Number> tmpVector;
-		//unsigned int currentRow = 0;
+		std::vector<std::string> vars;
 
 		//Helping functions
 		Number stringToNumber(std::string& string);
@@ -69,8 +62,6 @@ class HyproHAVisitor : public HybridAutomatonBaseVisitor {
 		antlrcpp::Any visitActivities(HybridAutomatonParser::ActivitiesContext *ctx) override;
 
 		antlrcpp::Any visitInvariants(HybridAutomatonParser::InvariantsContext *ctx) override;
-
-		antlrcpp::Any visitTerm(HybridAutomatonParser::TermContext *ctx) override;
 
 		antlrcpp::Any visitPolynom(HybridAutomatonParser::PolynomContext *ctx) override;
 

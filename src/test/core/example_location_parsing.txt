@@ -14,6 +14,8 @@ hybrid reachability
    inv
    {
     x = 510
+    c1 <= 5*5
+    c2+c1 >= -11*x
    }
   }
  }

@@ -99,7 +99,7 @@ TYPED_TEST(AntlrParserTest, ParseLocation){
 	visitor.visit(tree);
 	//HybridAutomaton h = visitor.visit(tree); or smth like this
 
-	std::cout << visitor << std::endl;
+	//std::cout << visitor << std::endl;
 
 	SUCCEED();
 

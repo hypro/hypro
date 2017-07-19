@@ -26,8 +26,9 @@ class LocationManager : public carl::Singleton<LocationManager<Number>>
     /**
      * Default constructor and destructor
      */
-    LocationManager() : mId(0) {}
+    //LocationManager() : mId(0) {}
   public:
+    LocationManager() : mId(0) {}
     ~LocationManager() {}
     Location<Number>* create();
     Location<Number>* create(const Location<Number>* _loc);
