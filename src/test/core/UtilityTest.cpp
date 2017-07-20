@@ -72,40 +72,38 @@ TEST(UtilityTest, CreateTemplateDirections)
 
 	// test higher dimensional reduced template creation
 	std::vector<unsigned> dimensions;
-	dimensions.push_back(0,2);
-
-	res = hypro::computeTemplate<double>(dimensions,1,3);
-	EXPECT_EQ(res.size(), unsigned(2));
+	dimensions.push_back(0);
+	dimensions.push_back(2);
 
 	res = hypro::computeTemplate<double>(dimensions,4,3);
 	EXPECT_EQ(res.size(), unsigned(4));
-	hypro::vector_t<double> toFind = hypro::vector_t<double>(2);
-	toFind << 1,0;
+	toFind = hypro::vector_t<double>(3);
+	toFind << 1,0,0;
 	EXPECT_TRUE(std::find(res.begin(), res.end(), toFind) != res.end() );
-	toFind << 0,1;
+	toFind << 0,0,1;
 	EXPECT_TRUE(std::find(res.begin(), res.end(), toFind) != res.end() );
-	toFind << -1,0;
+	toFind << -1,0,0;
 	EXPECT_TRUE(std::find(res.begin(), res.end(), toFind) != res.end() );
-	toFind << 0,-1;
+	toFind << 0,0,-1;
 	EXPECT_TRUE(std::find(res.begin(), res.end(), toFind) != res.end() );
 
 	res = hypro::computeTemplate<double>(dimensions,8,3);
 	EXPECT_EQ(res.size(), unsigned(8));
-	toFind << 1,0;
+	toFind << 1,0,0;
 	EXPECT_TRUE(std::find(res.begin(), res.end(), toFind) != res.end() );
-	toFind << 1,1;
+	toFind << 1,0,1;
 	EXPECT_TRUE(std::find(res.begin(), res.end(), toFind) != res.end() );
-	toFind << 0,1;
+	toFind << 0,0,1;
 	EXPECT_TRUE(std::find(res.begin(), res.end(), toFind) != res.end() );
-	toFind << -1,1;
+	toFind << -1,0,1;
 	EXPECT_TRUE(std::find(res.begin(), res.end(), toFind) != res.end() );
-	toFind << -1,0;
+	toFind << -1,0,0;
 	EXPECT_TRUE(std::find(res.begin(), res.end(), toFind) != res.end() );
-	toFind << -1,-1;
+	toFind << -1,0,-1;
 	EXPECT_TRUE(std::find(res.begin(), res.end(), toFind) != res.end() );
-	toFind << 0,-1;
+	toFind << 0,0,-1;
 	EXPECT_TRUE(std::find(res.begin(), res.end(), toFind) != res.end() );
-	toFind << 1,-1;
+	toFind << 1,0,-1;
 	EXPECT_TRUE(std::find(res.begin(), res.end(), toFind) != res.end() );
 
 	// we do not test for containment of all vectors here (numerics)
