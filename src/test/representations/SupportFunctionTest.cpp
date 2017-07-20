@@ -179,9 +179,23 @@ TYPED_TEST(SupportFunctionTest, linearTransformation) {
 
 	SupportFunction<TypeParam> res = psf1.linearTransformation(rotation);
 
+	EXPECT_EQ(rotation, res.linearTrafoParameters()->parameters->matrix());
+	EXPECT_EQ(vector_t<TypeParam>::Zero(2), res.linearTrafoParameters()->parameters->vector());
+
 	EXPECT_LE(TypeParam(20), res.evaluate(v1Rot).supportValue);
 	EXPECT_LE(TypeParam(5), res.evaluate(v2Rot).supportValue);
 	EXPECT_TRUE(carl::AlmostEqual2sComplement(TypeParam(17), res.evaluate(v3Rot).supportValue) || TypeParam(17) <= res.evaluate(v3Rot).supportValue);
+
+	// execute many linear transformations to test reduction
+
+	for( std::size_t i = 1; i < pow(2,res.linearTrafoParameters()->parameters->power*2); ++i) {
+		res = res.linearTransformation(rotation);
+	}
+	EXPECT_EQ(res.linearTrafoParameters()->currentExponent, 16);
+	EXPECT_EQ(res.linearTrafoParameters()->parameters->parameters.size(), 1);
+	// reduction is only invoked when using the support function ->evaluate
+	res.evaluate(v2Rot);
+	EXPECT_EQ(res.linearTrafoParameters()->parameters->parameters.size(), 3);
 }
 
 TYPED_TEST(SupportFunctionTest, scale) {
