@@ -156,7 +156,7 @@ $(document).ready(function(){initNavTree('Optimizer_8h_source.html','');});
 <div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;</div>
 <div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;        <span class="keyword">mutable</span> <span class="keywordtype">bool</span>                mConsistencyChecked;</div>
 <div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;        <span class="keyword">mutable</span> <a class="code" href="namespacehypro.html#a402d1e5727bcf52f5ee140924452c3cc">SOLUTION</a>            mLastConsistencyAnswer;</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;        <span class="keyword">static</span> <span class="keywordtype">bool</span>         mWarnInexact;</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;        <span class="keyword">static</span> <span class="keywordtype">bool</span>         warnInexact;</div>
 <div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;</div>
 <div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;        <span class="comment">// dependent members, all mutable</span></div>
 <div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;<span class="preprocessor">        #ifdef HYPRO_USE_SMTRAT</span></div>
@@ -197,9 +197,9 @@ $(document).ready(function(){initNavTree('Optimizer_8h_source.html','');});
 <div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;            fileCounter = cnt;</div>
 <div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;<span class="preprocessor">            #endif</span></div>
 <div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;<span class="preprocessor"></span><span class="preprocessor">            #if !defined HYPRO_USE_SMTRAT &amp;&amp; !defined HYPRO_USE_Z3 &amp;&amp; !defined HYPRO_USE_SOPLEX</span></div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;<span class="preprocessor"></span>            <span class="keywordflow">if</span>(!mWarnInexact &amp;&amp; carl::is_rational&lt;Number&gt;().value){</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;<span class="preprocessor"></span>            <span class="keywordflow">if</span>(!<a class="code" href="classhypro_1_1Optimizer.html">Optimizer&lt;Number&gt;::warnInexact</a> &amp;&amp; carl::is_rational&lt;Number&gt;().value){</div>
 <div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;                <span class="comment">// only warn once</span></div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;                mWarnInexact = <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;                <a class="code" href="classhypro_1_1Optimizer.html">Optimizer&lt;Number&gt;::warnInexact</a> = <span class="keyword">true</span>;</div>
 <div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;                WARN(<span class="stringliteral">&quot;hypro.optimizer&quot;</span>,<span class="stringliteral">&quot;Attention, using exact arithmetic with inexact linear optimization setup (glpk only, no exact backend).&quot;</span>);</div>
 <div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;            }</div>
 <div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;<span class="preprocessor">            #endif</span></div>

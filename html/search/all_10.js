@@ -16,10 +16,10 @@ var searchData=
   ['translatetooriginal',['translateToOriginal',['../classhypro_1_1Grid.html#acd735b21b365469cfd36836478b3522c',1,'hypro::Grid']]],
   ['tribool',['TRIBOOL',['../namespacehypro_1_1hypro.html#aa4baff5f023c645e8b1809f4611478a1',1,'hypro::hypro::TRIBOOL()'],['../namespacehypro.html#aadba9c45e18a68d4ad85d2032811081d',1,'hypro::TRIBOOL()']]],
   ['type',['type',['../classhypro_1_1VPolytopeT.html#a7c1b97a9750fb1016766d82a8b135d3c',1,'hypro::VPolytopeT']]],
-  ['typename',['typeName',['../structhypro_1_1typeName.html',1,'hypro']]],
   ['typename',['typeName',['../structhypro_1_1hypro_1_1typeName.html',1,'hypro::hypro']]],
+  ['typename',['typeName',['../structhypro_1_1typeName.html',1,'hypro']]],
   ['typename_3c_20double_20_3e',['typeName&lt; double &gt;',['../structhypro_1_1hypro_1_1typeName_3_01double_01_4.html',1,'hypro::hypro']]],
   ['typename_3c_20double_20_3e',['typeName&lt; double &gt;',['../structhypro_1_1typeName_3_01double_01_4.html',1,'hypro']]],
-  ['typename_3c_20mpq_5fclass_20_3e',['typeName&lt; mpq_class &gt;',['../structhypro_1_1typeName_3_01mpq__class_01_4.html',1,'hypro']]],
-  ['typename_3c_20mpq_5fclass_20_3e',['typeName&lt; mpq_class &gt;',['../structhypro_1_1hypro_1_1typeName_3_01mpq__class_01_4.html',1,'hypro::hypro']]]
+  ['typename_3c_20mpq_5fclass_20_3e',['typeName&lt; mpq_class &gt;',['../structhypro_1_1hypro_1_1typeName_3_01mpq__class_01_4.html',1,'hypro::hypro']]],
+  ['typename_3c_20mpq_5fclass_20_3e',['typeName&lt; mpq_class &gt;',['../structhypro_1_1typeName_3_01mpq__class_01_4.html',1,'hypro']]]
 ];

@@ -4,6 +4,7 @@ var searchData=
   ['geometricobject_3c_20double_2c_20boxt_3c_20double_2c_20converter_20_3e_20_3e',['GeometricObject&lt; double, BoxT&lt; double, Converter &gt; &gt;',['../classhypro_1_1GeometricObject.html',1,'hypro']]],
   ['geometricobject_3c_20number_2c_20boxt_3c_20number_2c_20converter_20_3e_20_3e',['GeometricObject&lt; Number, BoxT&lt; Number, Converter &gt; &gt;',['../classhypro_1_1GeometricObject.html',1,'hypro']]],
   ['geometricobject_3c_20number_2c_20boxt_3c_20number_2c_20hypro_3a_3aconverter_20_3e_20_3e',['GeometricObject&lt; Number, BoxT&lt; Number, hypro::Converter &gt; &gt;',['../classhypro_1_1GeometricObject.html',1,'hypro']]],
+  ['geometricobject_3c_20number_2c_20constraintsett_3c_20number_2c_20converter_20_3e_20_3e',['GeometricObject&lt; Number, ConstraintSetT&lt; Number, Converter &gt; &gt;',['../classhypro_1_1GeometricObject.html',1,'hypro']]],
   ['geometricobject_3c_20number_2c_20hpolytopet_3c_20number_2c_20converter_20_3e_20_3e',['GeometricObject&lt; Number, HPolytopeT&lt; Number, Converter &gt; &gt;',['../classhypro_1_1GeometricObject.html',1,'hypro']]],
   ['geometricobject_3c_20number_2c_20supportfunctiont_3c_20number_2c_20converter_20_3e_20_3e',['GeometricObject&lt; Number, SupportFunctionT&lt; Number, Converter &gt; &gt;',['../classhypro_1_1GeometricObject.html',1,'hypro']]],
   ['geometricobject_3c_20number_2c_20vpolytopet_3c_20number_2c_20converter_20_3e_20_3e',['GeometricObject&lt; Number, VPolytopeT&lt; Number, Converter &gt; &gt;',['../classhypro_1_1GeometricObject.html',1,'hypro']]],

@@ -33,6 +33,9 @@ var hierarchy =
     [ "hypro::GeometricObject< Number, BoxT< Number, hypro::Converter > >", "classhypro_1_1GeometricObject.html", [
       [ "hypro::BoxT< Number, hypro::Converter >", "classhypro_1_1BoxT.html", null ]
     ] ],
+    [ "hypro::GeometricObject< Number, ConstraintSetT< Number, Converter > >", "classhypro_1_1GeometricObject.html", [
+      [ "hypro::ConstraintSetT< Number, Converter >", "classhypro_1_1ConstraintSetT.html", null ]
+    ] ],
     [ "hypro::GeometricObject< Number, HPolytopeT< Number, Converter > >", "classhypro_1_1GeometricObject.html", [
       [ "hypro::HPolytopeT< Number, Converter >", "classhypro_1_1HPolytopeT.html", null ]
     ] ],
@@ -85,14 +88,14 @@ var hierarchy =
     [ "hypro::locPtrComp< Number >", "structhypro_1_1locPtrComp.html", null ],
     [ "hypro::LRUCache< Key, Value >", "classhypro_1_1LRUCache.html", null ],
     [ "hypro::NeighborhoodContainer", "classhypro_1_1NeighborhoodContainer.html", null ],
-    [ "Eigen::NumTraits< carl::FLOAT_T< Number > >", "structEigen_1_1NumTraits_3_01carl_1_1FLOAT__T_3_01Number_01_4_01_4.html", null ],
     [ "hypro::Eigen::NumTraits< carl::FLOAT_T< Number > >", "structhypro_1_1Eigen_1_1NumTraits_3_01carl_1_1FLOAT__T_3_01Number_01_4_01_4.html", null ],
+    [ "Eigen::NumTraits< carl::FLOAT_T< Number > >", "structEigen_1_1NumTraits_3_01carl_1_1FLOAT__T_3_01Number_01_4_01_4.html", null ],
     [ "hypro::Optimizer< Number >", "classhypro_1_1Optimizer.html", null ],
     [ "ZUtility::Options", "structZUtility_1_1Options.html", null ],
     [ "hypro::OrthogonalPolyhedron< Number, NEIGHBORHOOD >", "classhypro_1_1OrthogonalPolyhedron.html", null ],
     [ "hypro::OrthogonalPolyhedronT< Number, Converter, Type >", "classhypro_1_1OrthogonalPolyhedronT.html", null ],
-    [ "hypro::hypro::Permutator", "classhypro_1_1hypro_1_1Permutator.html", null ],
     [ "hypro::Permutator", "classhypro_1_1Permutator.html", null ],
+    [ "hypro::hypro::Permutator", "classhypro_1_1hypro_1_1Permutator.html", null ],
     [ "hypro::Point< Number >", "classhypro_1_1Point.html", null ],
     [ "hypro::Point< int >", "classhypro_1_1Point.html", null ],
     [ "hypro::Point< unsigned >", "classhypro_1_1Point.html", null ],
@@ -137,12 +140,12 @@ var hierarchy =
     [ "hypro::trafoContent< Number >", "structhypro_1_1trafoContent.html", null ],
     [ "hypro::TrafoParameters< Number >", "classhypro_1_1TrafoParameters.html", null ],
     [ "hypro::Transition< Number >", "classhypro_1_1Transition.html", null ],
-    [ "hypro::hypro::typeName< T >", "structhypro_1_1hypro_1_1typeName.html", null ],
     [ "hypro::typeName< T >", "structhypro_1_1typeName.html", null ],
+    [ "hypro::hypro::typeName< T >", "structhypro_1_1hypro_1_1typeName.html", null ],
     [ "hypro::hypro::typeName< double >", "structhypro_1_1hypro_1_1typeName_3_01double_01_4.html", null ],
     [ "hypro::typeName< double >", "structhypro_1_1typeName_3_01double_01_4.html", null ],
-    [ "hypro::hypro::typeName< mpq_class >", "structhypro_1_1hypro_1_1typeName_3_01mpq__class_01_4.html", null ],
     [ "hypro::typeName< mpq_class >", "structhypro_1_1typeName_3_01mpq__class_01_4.html", null ],
+    [ "hypro::hypro::typeName< mpq_class >", "structhypro_1_1hypro_1_1typeName_3_01mpq__class_01_4.html", null ],
     [ "hypro::unionContent< Number >", "structhypro_1_1unionContent.html", null ],
     [ "hypro::Vertex< Number >", "classhypro_1_1Vertex.html", null ],
     [ "hypro::Vertex< unsigned >", "classhypro_1_1Vertex.html", null ],

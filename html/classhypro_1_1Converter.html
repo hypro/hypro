@@ -123,6 +123,9 @@ Public Types</h2></td></tr>
 <tr class="memitem:af6631ec648297a75619d87f8a374af2b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af6631ec648297a75619d87f8a374af2b"></a>
 using&#160;</td><td class="memItemRight" valign="bottom"><b>Box</b> = <a class="el" href="classhypro_1_1BoxT.html">BoxT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt;</td></tr>
 <tr class="separator:af6631ec648297a75619d87f8a374af2b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae4963ab58e4dd216520f049077d332cb"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae4963ab58e4dd216520f049077d332cb"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>ConstraintSet</b> = <a class="el" href="classhypro_1_1ConstraintSetT.html">ConstraintSetT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt;</td></tr>
+<tr class="separator:ae4963ab58e4dd216520f049077d332cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a782e84d160d8571b3d56bbf371686832"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a782e84d160d8571b3d56bbf371686832"></a>
 using&#160;</td><td class="memItemRight" valign="bottom"><b>Ellipsoid</b> = <a class="el" href="classhypro_1_1EllipsoidT.html">EllipsoidT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt;</td></tr>
 <tr class="separator:a782e84d160d8571b3d56bbf371686832"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -147,6 +150,9 @@ Static Public Member Functions</h2></td></tr>
 <tr class="memitem:a7c14284468fe01032d3bed29530776de"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7c14284468fe01032d3bed29530776de"></a>
 static <a class="el" href="classhypro_1_1BoxT.html">Box</a>&#160;</td><td class="memItemRight" valign="bottom"><b>toBox</b> (const <a class="el" href="classhypro_1_1BoxT.html">Box</a> &amp;source, const <a class="el" href="namespacehypro.html#ac9529cbda09f61cc0cdcc5a8940300cd">CONV_MODE</a>=CONV_MODE::EXACT)</td></tr>
 <tr class="separator:a7c14284468fe01032d3bed29530776de"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1caadb57d156a58fb6af95b3ea116f41"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1caadb57d156a58fb6af95b3ea116f41"></a>
+static <a class="el" href="classhypro_1_1BoxT.html">Box</a>&#160;</td><td class="memItemRight" valign="bottom"><b>toBox</b> (const <a class="el" href="classhypro_1_1ConstraintSetT.html">ConstraintSet</a> &amp;source, const <a class="el" href="namespacehypro.html#ac9529cbda09f61cc0cdcc5a8940300cd">CONV_MODE</a>=CONV_MODE::EXACT)</td></tr>
+<tr class="separator:a1caadb57d156a58fb6af95b3ea116f41"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a563731ab4953e6ca1ea68e4fd5161fe2"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a563731ab4953e6ca1ea68e4fd5161fe2"></a>
 static <a class="el" href="classhypro_1_1BoxT.html">Box</a>&#160;</td><td class="memItemRight" valign="bottom"><b>toBox</b> (const <a class="el" href="classhypro_1_1EllipsoidT.html">Ellipsoid</a> &amp;source, const <a class="el" href="namespacehypro.html#ac9529cbda09f61cc0cdcc5a8940300cd">CONV_MODE</a>=CONV_MODE::EXACT)</td></tr>
 <tr class="separator:a563731ab4953e6ca1ea68e4fd5161fe2"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -162,9 +168,33 @@ static <a class="el" href="classhypro_1_1BoxT.html">Box</a>&#160;</td><td class=
 <tr class="memitem:af16c936873739679ab345eb1ef6f3d36"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af16c936873739679ab345eb1ef6f3d36"></a>
 static <a class="el" href="classhypro_1_1BoxT.html">Box</a>&#160;</td><td class="memItemRight" valign="bottom"><b>toBox</b> (const <a class="el" href="classhypro_1_1ZonotopeT.html">Zonotope</a> &amp;source, const <a class="el" href="namespacehypro.html#ac9529cbda09f61cc0cdcc5a8940300cd">CONV_MODE</a>=CONV_MODE::OVER)</td></tr>
 <tr class="separator:af16c936873739679ab345eb1ef6f3d36"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a821b5576737c2a90bea389f7045157d8"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a821b5576737c2a90bea389f7045157d8"></a>
+static <a class="el" href="classhypro_1_1ConstraintSetT.html">ConstraintSet</a>&#160;</td><td class="memItemRight" valign="bottom"><b>toConstraintSet</b> (const <a class="el" href="classhypro_1_1BoxT.html">Box</a> &amp;source, const <a class="el" href="namespacehypro.html#ac9529cbda09f61cc0cdcc5a8940300cd">CONV_MODE</a>=CONV_MODE::EXACT)</td></tr>
+<tr class="separator:a821b5576737c2a90bea389f7045157d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa382127841e111388e105b836d9bbe7e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa382127841e111388e105b836d9bbe7e"></a>
+static <a class="el" href="classhypro_1_1ConstraintSetT.html">ConstraintSet</a>&#160;</td><td class="memItemRight" valign="bottom"><b>toConstraintSet</b> (const <a class="el" href="classhypro_1_1ConstraintSetT.html">ConstraintSet</a> &amp;source, const <a class="el" href="namespacehypro.html#ac9529cbda09f61cc0cdcc5a8940300cd">CONV_MODE</a>=CONV_MODE::EXACT)</td></tr>
+<tr class="separator:aa382127841e111388e105b836d9bbe7e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8554ab4a1e8d707c1a53f9b157aa1ad3"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8554ab4a1e8d707c1a53f9b157aa1ad3"></a>
+static <a class="el" href="classhypro_1_1ConstraintSetT.html">ConstraintSet</a>&#160;</td><td class="memItemRight" valign="bottom"><b>toConstraintSet</b> (const <a class="el" href="classhypro_1_1EllipsoidT.html">Ellipsoid</a> &amp;source, const <a class="el" href="namespacehypro.html#ac9529cbda09f61cc0cdcc5a8940300cd">CONV_MODE</a>=CONV_MODE::EXACT)</td></tr>
+<tr class="separator:a8554ab4a1e8d707c1a53f9b157aa1ad3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4989c4403facc4e5372a1fae30efe0e2"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4989c4403facc4e5372a1fae30efe0e2"></a>
+static <a class="el" href="classhypro_1_1ConstraintSetT.html">ConstraintSet</a>&#160;</td><td class="memItemRight" valign="bottom"><b>toConstraintSet</b> (const <a class="el" href="classhypro_1_1HPolytopeT.html">HPolytope</a> &amp;source, const <a class="el" href="namespacehypro.html#ac9529cbda09f61cc0cdcc5a8940300cd">CONV_MODE</a>=CONV_MODE::OVER)</td></tr>
+<tr class="separator:a4989c4403facc4e5372a1fae30efe0e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6956d12c2f44fde3d176c50c7cfa0dd5"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6956d12c2f44fde3d176c50c7cfa0dd5"></a>
+static <a class="el" href="classhypro_1_1ConstraintSetT.html">ConstraintSet</a>&#160;</td><td class="memItemRight" valign="bottom"><b>toConstraintSet</b> (const <a class="el" href="classhypro_1_1VPolytopeT.html">VPolytope</a> &amp;source, const <a class="el" href="namespacehypro.html#ac9529cbda09f61cc0cdcc5a8940300cd">CONV_MODE</a>=CONV_MODE::OVER)</td></tr>
+<tr class="separator:a6956d12c2f44fde3d176c50c7cfa0dd5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7bcd9becad97aa9a66ea84bd876933eb"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7bcd9becad97aa9a66ea84bd876933eb"></a>
+static <a class="el" href="classhypro_1_1ConstraintSetT.html">ConstraintSet</a>&#160;</td><td class="memItemRight" valign="bottom"><b>toConstraintSet</b> (const <a class="el" href="classhypro_1_1SupportFunctionT.html">SupportFunction</a> &amp;source, const <a class="el" href="namespacehypro.html#ac9529cbda09f61cc0cdcc5a8940300cd">CONV_MODE</a>=CONV_MODE::OVER)</td></tr>
+<tr class="separator:a7bcd9becad97aa9a66ea84bd876933eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5ed0b54b043c6ee22322edaa68d72988"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5ed0b54b043c6ee22322edaa68d72988"></a>
+static <a class="el" href="classhypro_1_1ConstraintSetT.html">ConstraintSet</a>&#160;</td><td class="memItemRight" valign="bottom"><b>toConstraintSet</b> (const <a class="el" href="classhypro_1_1ZonotopeT.html">Zonotope</a> &amp;source, const <a class="el" href="namespacehypro.html#ac9529cbda09f61cc0cdcc5a8940300cd">CONV_MODE</a>=CONV_MODE::OVER)</td></tr>
+<tr class="separator:a5ed0b54b043c6ee22322edaa68d72988"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aec47751c7797a4a94fec0543f3e5e99d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aec47751c7797a4a94fec0543f3e5e99d"></a>
 static <a class="el" href="classhypro_1_1HPolytopeT.html">HPolytope</a>&#160;</td><td class="memItemRight" valign="bottom"><b>toHPolytope</b> (const <a class="el" href="classhypro_1_1BoxT.html">Box</a> &amp;source, const <a class="el" href="namespacehypro.html#ac9529cbda09f61cc0cdcc5a8940300cd">CONV_MODE</a>=CONV_MODE::EXACT)</td></tr>
 <tr class="separator:aec47751c7797a4a94fec0543f3e5e99d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a87777c01c7602973091c5918902c59e3"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a87777c01c7602973091c5918902c59e3"></a>
+static <a class="el" href="classhypro_1_1HPolytopeT.html">HPolytope</a>&#160;</td><td class="memItemRight" valign="bottom"><b>toHPolytope</b> (const <a class="el" href="classhypro_1_1ConstraintSetT.html">ConstraintSet</a> &amp;source, const <a class="el" href="namespacehypro.html#ac9529cbda09f61cc0cdcc5a8940300cd">CONV_MODE</a>=CONV_MODE::EXACT)</td></tr>
+<tr class="separator:a87777c01c7602973091c5918902c59e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4ff081b17772cc6e7596c0e9d1eae229"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4ff081b17772cc6e7596c0e9d1eae229"></a>
 static <a class="el" href="classhypro_1_1HPolytopeT.html">HPolytope</a>&#160;</td><td class="memItemRight" valign="bottom"><b>toHPolytope</b> (const <a class="el" href="classhypro_1_1EllipsoidT.html">Ellipsoid</a> &amp;source, const <a class="el" href="namespacehypro.html#ac9529cbda09f61cc0cdcc5a8940300cd">CONV_MODE</a>=CONV_MODE::EXACT)</td></tr>
 <tr class="separator:a4ff081b17772cc6e7596c0e9d1eae229"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -183,6 +213,9 @@ static <a class="el" href="classhypro_1_1HPolytopeT.html">HPolytope</a>&#160;</t
 <tr class="memitem:a77988e3ea239017e9f419b84bf8f01af"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a77988e3ea239017e9f419b84bf8f01af"></a>
 static <a class="el" href="classhypro_1_1VPolytopeT.html">VPolytope</a>&#160;</td><td class="memItemRight" valign="bottom"><b>toVPolytope</b> (const <a class="el" href="classhypro_1_1BoxT.html">Box</a> &amp;source, const <a class="el" href="namespacehypro.html#ac9529cbda09f61cc0cdcc5a8940300cd">CONV_MODE</a>=CONV_MODE::EXACT)</td></tr>
 <tr class="separator:a77988e3ea239017e9f419b84bf8f01af"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a32dddd5f5d4541226b6db80b465203c4"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a32dddd5f5d4541226b6db80b465203c4"></a>
+static <a class="el" href="classhypro_1_1VPolytopeT.html">VPolytope</a>&#160;</td><td class="memItemRight" valign="bottom"><b>toVPolytope</b> (const <a class="el" href="classhypro_1_1ConstraintSetT.html">ConstraintSet</a> &amp;source, const <a class="el" href="namespacehypro.html#ac9529cbda09f61cc0cdcc5a8940300cd">CONV_MODE</a>=CONV_MODE::EXACT)</td></tr>
+<tr class="separator:a32dddd5f5d4541226b6db80b465203c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab719cceaca933d12ce2764d6fef253e8"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab719cceaca933d12ce2764d6fef253e8"></a>
 static <a class="el" href="classhypro_1_1VPolytopeT.html">VPolytope</a>&#160;</td><td class="memItemRight" valign="bottom"><b>toVPolytope</b> (const <a class="el" href="classhypro_1_1EllipsoidT.html">Ellipsoid</a> &amp;source, const <a class="el" href="namespacehypro.html#ac9529cbda09f61cc0cdcc5a8940300cd">CONV_MODE</a>=CONV_MODE::EXACT)</td></tr>
 <tr class="separator:ab719cceaca933d12ce2764d6fef253e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -201,6 +234,9 @@ static <a class="el" href="classhypro_1_1VPolytopeT.html">VPolytope</a>&#160;</t
 <tr class="memitem:a49818650d67516be1a5337995d6911d9"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a49818650d67516be1a5337995d6911d9"></a>
 static <a class="el" href="classhypro_1_1SupportFunctionT.html">SupportFunction</a>&#160;</td><td class="memItemRight" valign="bottom"><b>toSupportFunction</b> (const <a class="el" href="classhypro_1_1BoxT.html">Box</a> &amp;source, const <a class="el" href="namespacehypro.html#ac9529cbda09f61cc0cdcc5a8940300cd">CONV_MODE</a>=CONV_MODE::EXACT)</td></tr>
 <tr class="separator:a49818650d67516be1a5337995d6911d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5005cbe2a39ed273d64f0d5009efa01e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5005cbe2a39ed273d64f0d5009efa01e"></a>
+static <a class="el" href="classhypro_1_1SupportFunctionT.html">SupportFunction</a>&#160;</td><td class="memItemRight" valign="bottom"><b>toSupportFunction</b> (const <a class="el" href="classhypro_1_1ConstraintSetT.html">ConstraintSet</a> &amp;source, const <a class="el" href="namespacehypro.html#ac9529cbda09f61cc0cdcc5a8940300cd">CONV_MODE</a>=CONV_MODE::EXACT)</td></tr>
+<tr class="separator:a5005cbe2a39ed273d64f0d5009efa01e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1d00f0f02b3082162676cc2b018b0017"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1d00f0f02b3082162676cc2b018b0017"></a>
 static <a class="el" href="classhypro_1_1SupportFunctionT.html">SupportFunction</a>&#160;</td><td class="memItemRight" valign="bottom"><b>toSupportFunction</b> (const <a class="el" href="classhypro_1_1EllipsoidT.html">Ellipsoid</a> &amp;source, const <a class="el" href="namespacehypro.html#ac9529cbda09f61cc0cdcc5a8940300cd">CONV_MODE</a>=CONV_MODE::EXACT)</td></tr>
 <tr class="separator:a1d00f0f02b3082162676cc2b018b0017"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -219,6 +255,9 @@ static <a class="el" href="classhypro_1_1SupportFunctionT.html">SupportFunction<
 <tr class="memitem:a9e3a0a9712f2f4b3c4bff29177b941e9"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9e3a0a9712f2f4b3c4bff29177b941e9"></a>
 static <a class="el" href="classhypro_1_1ZonotopeT.html">Zonotope</a>&#160;</td><td class="memItemRight" valign="bottom"><b>toZonotope</b> (const <a class="el" href="classhypro_1_1BoxT.html">Box</a> &amp;source, const <a class="el" href="namespacehypro.html#ac9529cbda09f61cc0cdcc5a8940300cd">CONV_MODE</a>=CONV_MODE::EXACT)</td></tr>
 <tr class="separator:a9e3a0a9712f2f4b3c4bff29177b941e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab04fee4059460bbc08e6e3d46cdd7a55"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab04fee4059460bbc08e6e3d46cdd7a55"></a>
+static <a class="el" href="classhypro_1_1ZonotopeT.html">Zonotope</a>&#160;</td><td class="memItemRight" valign="bottom"><b>toZonotope</b> (const <a class="el" href="classhypro_1_1ConstraintSetT.html">ConstraintSet</a> &amp;source, const <a class="el" href="namespacehypro.html#ac9529cbda09f61cc0cdcc5a8940300cd">CONV_MODE</a>=CONV_MODE::EXACT)</td></tr>
+<tr class="separator:ab04fee4059460bbc08e6e3d46cdd7a55"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9c288eba51b5857c3966cd4b7694e729"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9c288eba51b5857c3966cd4b7694e729"></a>
 static <a class="el" href="classhypro_1_1ZonotopeT.html">Zonotope</a>&#160;</td><td class="memItemRight" valign="bottom"><b>toZonotope</b> (const <a class="el" href="classhypro_1_1EllipsoidT.html">Ellipsoid</a> &amp;source, const <a class="el" href="namespacehypro.html#ac9529cbda09f61cc0cdcc5a8940300cd">CONV_MODE</a>=CONV_MODE::EXACT)</td></tr>
 <tr class="separator:a9c288eba51b5857c3966cd4b7694e729"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -241,7 +280,7 @@ class hypro::Converter&lt; Number &gt;</h3>
 
 <dl><dt><b>Examples: </b></dt><dd><a class="el" href="example_converter_8cpp-example.html#_a0">example_converter.cpp</a>.</dd>
 </dl>
-<p>Definition at line <a class="el" href="Converter_8h_source.html#l00029">29</a> of file <a class="el" href="Converter_8h_source.html">Converter.h</a>.</p>
+<p>Definition at line <a class="el" href="Converter_8h_source.html#l00030">30</a> of file <a class="el" href="Converter_8h_source.html">Converter.h</a>.</p>
 </div><hr/>The documentation for this class was generated from the following file:<ul>
 <li>/home/travis/build/hypro/hypro/src/hypro/representations/conversion/<a class="el" href="Converter_8h_source.html">Converter.h</a></li>
 </ul>

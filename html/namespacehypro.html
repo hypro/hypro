@@ -189,6 +189,9 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1BoxT_3_01double_00_01Converter_01_4.html">BoxT&lt; double, Converter &gt;</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Class holding a specialization of the generic <a class="el" href="classhypro_1_1BoxT.html" title="The class which represents a box. ">BoxT</a> type with double numbers.  <a href="classhypro_1_1BoxT_3_01double_00_01Converter_01_4.html#details">More...</a><br/></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ConstraintSetT.html">ConstraintSetT</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A class representing a plain constraint set.  <a href="classhypro_1_1ConstraintSetT.html#details">More...</a><br/></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Converter.html">Converter</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1EllipsoidT.html">EllipsoidT</a></td></tr>
@@ -337,6 +340,10 @@ template&lt;typename Number &gt; </td></tr>
 template&lt;typename Number &gt; </td></tr>
 <tr class="memitem:a26fa0b70f0eef004bebcc80332eab2dd"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><b>Box</b> = typename <a class="el" href="classhypro_1_1Converter.html">Converter</a>&lt; Number &gt;::Box</td></tr>
 <tr class="separator:a26fa0b70f0eef004bebcc80332eab2dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0fc65cb36f6ca752c7f12b5b9744c156"><td class="memTemplParams" colspan="2"><a class="anchor" id="a0fc65cb36f6ca752c7f12b5b9744c156"></a>
+template&lt;typename Number &gt; </td></tr>
+<tr class="memitem:a0fc65cb36f6ca752c7f12b5b9744c156"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><b>ConstraintSet</b> = typename <a class="el" href="classhypro_1_1Converter.html">Converter</a>&lt; Number &gt;::ConstraintSet</td></tr>
+<tr class="separator:a0fc65cb36f6ca752c7f12b5b9744c156"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a59e69be0f51280c4b18721ea43acdc78"><td class="memTemplParams" colspan="2"><a class="anchor" id="a59e69be0f51280c4b18721ea43acdc78"></a>
 template&lt;typename Number &gt; </td></tr>
 <tr class="memitem:a59e69be0f51280c4b18721ea43acdc78"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><b>Ellipsoid</b> = typename <a class="el" href="classhypro_1_1Converter.html">Converter</a>&lt; Number &gt;::Ellipsoid</td></tr>
@@ -410,7 +417,7 @@ Enumerations</h2></td></tr>
  }</td></tr>
 <tr class="separator:a862b0cdf77254036feeb8ad6fb6da2b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aada824f660cac25bb643be870cdc0a86"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehypro.html#aada824f660cac25bb643be870cdc0a86">representation_name</a> { <br/>
-&#160;&#160;<b>cpair</b>, 
+&#160;&#160;<b>constraint_set</b>, 
 <b>box</b>, 
 <b>zonotope</b>, 
 <b>polytope_h</b>, 
@@ -515,6 +522,10 @@ template&lt;typename Number &gt; </td></tr>
 <tr class="memitem:a0fda7ff06e94f42bca9d3ec8f3056277"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1BoxT.html">BoxT</a>&lt; To, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacehypro.html#a0fda7ff06e94f42bca9d3ec8f3056277">convert</a> (const <a class="el" href="classhypro_1_1BoxT.html">BoxT</a>&lt; From, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt; &amp;in)</td></tr>
 <tr class="memdesc:a0fda7ff06e94f42bca9d3ec8f3056277"><td class="mdescLeft">&#160;</td><td class="mdescRight">Conversion function for different number types.  <a href="#a0fda7ff06e94f42bca9d3ec8f3056277">More...</a><br/></td></tr>
 <tr class="separator:a0fda7ff06e94f42bca9d3ec8f3056277"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adfbd8e75b9999cddf06f18e38b20dea2"><td class="memTemplParams" colspan="2">template&lt;typename From , typename To , typename Converter &gt; </td></tr>
+<tr class="memitem:adfbd8e75b9999cddf06f18e38b20dea2"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1ConstraintSetT.html">ConstraintSetT</a>&lt; To, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacehypro.html#adfbd8e75b9999cddf06f18e38b20dea2">convert</a> (const <a class="el" href="classhypro_1_1ConstraintSetT.html">ConstraintSetT</a>&lt; From, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt; &amp;in)</td></tr>
+<tr class="memdesc:adfbd8e75b9999cddf06f18e38b20dea2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Conversion function for different number types.  <a href="#adfbd8e75b9999cddf06f18e38b20dea2">More...</a><br/></td></tr>
+<tr class="separator:adfbd8e75b9999cddf06f18e38b20dea2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa3f92a4c96a06ef1f89757ee38cd1660"><td class="memTemplParams" colspan="2">template&lt;typename Number , typename Converter &gt; </td></tr>
 <tr class="memitem:aa3f92a4c96a06ef1f89757ee38cd1660"><td class="memTemplItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; Number &gt; &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacehypro.html#aa3f92a4c96a06ef1f89757ee38cd1660">computeBoundaryPointsExpensive</a> (const <a class="el" href="classhypro_1_1SupportFunctionT.html">SupportFunctionT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt; &amp;sf, const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;directions)</td></tr>
 <tr class="separator:aa3f92a4c96a06ef1f89757ee38cd1660"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -799,7 +810,7 @@ template&lt;typename Number &gt; </div>
 </div><div class="memdoc">
 <p>Typedef for HpolytopeT. </p>
 
-<p>Definition at line <a class="el" href="Converter_8h_source.html#l00091">91</a> of file <a class="el" href="Converter_8h_source.html">Converter.h</a>.</p>
+<p>Definition at line <a class="el" href="Converter_8h_source.html#l00112">112</a> of file <a class="el" href="Converter_8h_source.html">Converter.h</a>.</p>
 
 </div>
 </div>
@@ -833,7 +844,7 @@ template&lt;typename Number &gt; </div>
 </div><div class="memdoc">
 <p>Typedef for <a class="el" href="classhypro_1_1SupportFunctionT.html" title="Class wrapping the support function content. ">SupportFunctionT</a>. </p>
 
-<p>Definition at line <a class="el" href="Converter_8h_source.html#l00111">111</a> of file <a class="el" href="Converter_8h_source.html">Converter.h</a>.</p>
+<p>Definition at line <a class="el" href="Converter_8h_source.html#l00132">132</a> of file <a class="el" href="Converter_8h_source.html">Converter.h</a>.</p>
 
 </div>
 </div>
@@ -867,7 +878,7 @@ template&lt;typename Number &gt; </div>
 </div><div class="memdoc">
 <p>Typedef for <a class="el" href="classhypro_1_1VPolytopeT.html" title="The class implementing the vertex representation of a convex polytope. ">VPolytopeT</a>. </p>
 
-<p>Definition at line <a class="el" href="Converter_8h_source.html#l00100">100</a> of file <a class="el" href="Converter_8h_source.html">Converter.h</a>.</p>
+<p>Definition at line <a class="el" href="Converter_8h_source.html#l00121">121</a> of file <a class="el" href="Converter_8h_source.html">Converter.h</a>.</p>
 
 </div>
 </div>
@@ -884,7 +895,7 @@ template&lt;typename Number &gt; </div>
 </div><div class="memdoc">
 <p>Typedef for <a class="el" href="classhypro_1_1ZonotopeT.html" title="Class for Zonotopes. ">ZonotopeT</a>. </p>
 
-<p>Definition at line <a class="el" href="Converter_8h_source.html#l00117">117</a> of file <a class="el" href="Converter_8h_source.html">Converter.h</a>.</p>
+<p>Definition at line <a class="el" href="Converter_8h_source.html#l00138">138</a> of file <a class="el" href="Converter_8h_source.html">Converter.h</a>.</p>
 
 </div>
 </div>
@@ -973,6 +984,43 @@ template&lt;typename From , typename To &gt; </div>
 <p>conversion of a matrix_t </p>
 
 <p>Definition at line <a class="el" href="adaptions__eigen_8h_source.html#l00211">211</a> of file <a class="el" href="adaptions__eigen_8h_source.html">adaptions_eigen.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="adfbd8e75b9999cddf06f18e38b20dea2"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename From , typename To , typename Converter &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhypro_1_1ConstraintSetT.html">ConstraintSetT</a>&lt;To,<a class="el" href="classhypro_1_1Converter.html">Converter</a>&gt; hypro::convert </td>
+          <td>(</td>
+          <td class="paramtype">const ConstraintSetT&lt; From, Converter &gt; &amp;&#160;</td>
+          <td class="paramname"><em>in</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Conversion function for different number types. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">in</td><td>The input constraintSet. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">From</td><td>The current number type. </td></tr>
+    <tr><td class="paramname">To</td><td>The number type the constraintSet is to be converted to. </td></tr>
+    <tr><td class="paramname"><a class="el" href="classhypro_1_1Converter.html">Converter</a></td><td>The passed representation converter. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The resulting constraintSet. </dd></dl>
+
+<p>Definition at line <a class="el" href="ConstraintSet_8h_source.html#l00234">234</a> of file <a class="el" href="ConstraintSet_8h_source.html">ConstraintSet.h</a>.</p>
 
 </div>
 </div>
