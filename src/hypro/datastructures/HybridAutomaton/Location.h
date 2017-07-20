@@ -68,12 +68,12 @@ public:
 
     friend std::ostream& operator<<(std::ostream& ostr, const Location<Number>& l) {
     	#ifdef HYDRA_USE_LOGGING
-	    matrix_t<Number> tmp = matrix_t<Number>(_l.getInvariant().getMatrix().rows(), _l.getInvariant().getMatrix().cols() + 1);
-	    tmp << _l.getInvariant().getMatrix(), _l.getInvariant().getVector();
-	    ostr << "location " << _l.getName() << " (id: " << _l.getId() << ")"<< std::endl << "\t Flow: " << std::endl << _l.getFlow() << std::endl << "\t Inv: " << std::endl << tmp;
-	    //ostr << _l.getInvariant().getDiscreteCondition() << std::endl;
+	    matrix_t<Number> tmp = matrix_t<Number>(l.getInvariant().getMatrix().rows(), l.getInvariant().getMatrix().cols() + 1);
+	    tmp << l.getInvariant().getMatrix(), l.getInvariant().getVector();
+	    ostr << "location " << l.getName() << " (id: " << l.getId() << ")"<< std::endl << "\t Flow: " << std::endl << l.getFlow() << std::endl << "\t Inv: " << std::endl << tmp;
+	    //ostr << l.getInvariant().getDiscreteCondition() << std::endl;
 	    ostr << "Transitions: " << std::endl;
-	    for (auto transitionPtr : _l.getTransitions()) {
+	    for (auto transitionPtr : l.getTransitions()) {
 	        ostr << transitionPtr << std::endl;
 	    }
 	    ostr << std::endl << ")";

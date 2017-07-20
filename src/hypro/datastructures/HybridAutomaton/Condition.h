@@ -29,6 +29,8 @@ public:
 	void setMatrix(const matrix_t<Number>& m, std::size_t I = 0) { mConstraints[I].first = m; }
 	void setVector(const vector_t<Number>& v, std::size_t I = 0) { mConstraints[I].second = v; }
 
+	const std::vector<std::pair<matrix_t<Number>, vector_t<Number>>>& constraints() const { return mConstraints; }
+
 	// helper methods
 	//template<typename Representation, typename ...Rargs>
 	//std::pair<bool,State<Number,Representation, Rargs...>> isSatisfiedBy(const State<Number,Representation, Rargs...>& inState) const;
@@ -53,7 +55,7 @@ public:
 	friend std::ostream& operator<<(std::ostream& out, const Condition& in) {
 #ifdef HYDRA_USE_LOGGING
 		std::size_t i = 0;
-		for(const auto& pair : mConstraints) {
+		for(const auto& pair : in.constraints()) {
 			out << "Constraint " << i << ": " << pair.first << " constants: " << pair.second << std::endl;
 			++i;
 		}
