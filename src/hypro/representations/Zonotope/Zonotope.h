@@ -202,7 +202,7 @@ class ZonotopeT : public GeometricObject<Number, ZonotopeT<Number,Converter>> {
 	 * internal points.
 	 * @return vector of points.
 	 */
-	std::vector<Point<Number>> vertices( const Location<Number>* = nullptr ) const;
+	std::vector<Point<Number>> vertices( const matrix_t<Number>& = matrix_t<Number>::Zero(0,0) ) const;
 
 	ZonotopeT<Number,Converter> intersectHalfspace( const Halfspace<Number>& rhs ) const;
 	ZonotopeT<Number,Converter> intersectHalfspaces( const matrix_t<Number>& mat, const vector_t<Number>& vec ) const;

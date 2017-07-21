@@ -9,7 +9,6 @@
 #include "util.h"
 #include "SupportFunctionContent.h"
 #include "../../util/templateDirections.h"
-#include "../../datastructures/hybridAutomata/Location.h"
 
 namespace hypro {
 
@@ -69,7 +68,7 @@ public:
 
 	void removeRedundancy();
 	void reduceNumberRepresentation() {}
-	std::vector<Point<Number>> vertices( const Location<Number>* = nullptr ) const;
+	std::vector<Point<Number>> vertices( const matrix_t<Number>& = matrix_t<Number>::Zero(0,0) ) const;
 	Number supremum() const;
 	SupportFunctionT<Number,Converter> project(const std::vector<unsigned>& dimensions) const;
 	SupportFunctionT<Number,Converter> linearTransformation( const matrix_t<Number>& A ) const;

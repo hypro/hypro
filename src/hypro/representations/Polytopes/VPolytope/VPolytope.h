@@ -268,7 +268,7 @@ class VPolytopeT : public GeometricObject<Number, VPolytopeT<Number,Converter>> 
 		return mVertices.insert( mVertices.end(), begin, end );
 	}
 
-	std::vector<Point<Number>> vertices( const Location<Number>* = nullptr ) const { return mVertices; };
+	std::vector<Point<Number>> vertices( const matrix_t<Number>& = matrix_t<Number>::Zero(0,0) ) const { return mVertices; };
 
 	bool hasVertex( const Point<Number>& vertex ) const {
 		for ( const auto point : mVertices ) {

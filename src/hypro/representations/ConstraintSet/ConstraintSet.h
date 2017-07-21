@@ -36,13 +36,16 @@ class ConstraintSetT : public GeometricObject<Number, ConstraintSetT<Number,Conv
 	 * @brief      Creates an empty constraintSet.
 	 * @details   The empty constraintSet is represented by a zero-dimensional point pair.
 	 */
-	ConstraintSetT() {}
+	ConstraintSetT() = default;
 
 	/**
 	 * @brief      Copy constructor.
 	 * @param[in]  orig  The original.
 	 */
-	ConstraintSetT( const ConstraintSetT& orig ) = default;
+	ConstraintSetT( const ConstraintSetT& orig )
+		: mConstraints(orig.matrix())
+		, mConstants(orig.vector())
+	{}
 
 	/**
 	 * @brief      Move constructor.
@@ -71,8 +74,8 @@ class ConstraintSetT : public GeometricObject<Number, ConstraintSetT<Number,Conv
 	 * Getters & setters
 	 **************************************************************************/
 
-	matrix_t<Number> matrix() const { return mConstraints; }
-	vector_t<Number> vector() const { return mConstants; }
+	const matrix_t<Number>& matrix() const { return mConstraints; }
+	const vector_t<Number>& vector() const { return mConstants; }
 
 	matrix_t<Number>& rMatrix() { return mConstraints; }
 	vector_t<Number>& rVector() { return mConstants; }
@@ -92,7 +95,7 @@ class ConstraintSetT : public GeometricObject<Number, ConstraintSetT<Number,Conv
 	 * @details Not implemented.
 	 * @return An empty vector of points.
 	 */
-	std::vector<Point<Number>> vertices( const Location<Number>* = nullptr ) const { return std::vector<Point<Number>>(); }
+	std::vector<Point<Number>> vertices( const matrix_t<Number>& = matrix_t<Number>::Zero(0,0) ) const { return std::vector<Point<Number>>(); }
 
 	/**
 	 * @brief Checks if two constraintSets are equal.

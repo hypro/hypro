@@ -5,7 +5,6 @@
 #endif
 
 #include "../../flags.h"
-#include "util.h"
 #include "../Box/Box.h"
 #include "../ConstraintSet/ConstraintSet.h"
 #include "../Ellipsoids/Ellipsoid.h"
@@ -22,6 +21,7 @@ namespace hypro {
 /**
  * @brief      enum for differentiating between exact conversion and over-/underapproximation (some functions support an alternative computation method).
  */
+
 enum CONV_MODE {
 	EXACT, OVER, UNDER, ALTERNATIVE
 };
@@ -145,3 +145,5 @@ using Zonotope = typename Converter<Number>::Zonotope;
 #include "converterToZonotope.tpp"
 
 } // namespace hypro
+
+#include "convenienceOperators.h"
