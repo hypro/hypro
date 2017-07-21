@@ -213,11 +213,11 @@ TYPED_TEST(HybridAutomataTest, TransitionTest)
 	Transition<TypeParam>* t = new Transition<TypeParam>(this->loc1, this->loc2);
 	EXPECT_EQ(t->getSource(), this->loc1);
 	EXPECT_EQ(t->getTarget(), this->loc2);
-	EXPECT_EQ(t->getAggregation(), Aggregation::boxAgg);
+	EXPECT_EQ(t->getAggregation(), Aggregation::none);
 	EXPECT_FALSE(t->isTimeTriggered());
 
-	t->setAggregation(Aggregation::none);
-	EXPECT_EQ(t->getAggregation(), Aggregation::none);
+	t->setAggregation(Aggregation::boxAgg);
+	EXPECT_EQ(t->getAggregation(), Aggregation::boxAgg);
 
 	t->setTriggerTime(TypeParam(1));
 	EXPECT_TRUE(t->isTimeTriggered());
@@ -274,8 +274,8 @@ TYPED_TEST(HybridAutomataTest, State) {
 
 	EXPECT_EQ(s1.getLocation()->getId(), this->loc1->getId());
 	EXPECT_EQ(s2.getLocation()->getId(), this->loc1->getId());
-	EXPECT_EQ(s2.getSet().matrix(), matr);
-	EXPECT_EQ(s2.getSet().vector(), vec);
-	EXPECT_EQ(s2.getSet<0>().matrix(), matr);
-	EXPECT_EQ(s2.getSet<0>().vector(), vec);
+	EXPECT_EQ(boost::get<ConstraintSet<TypeParam>>(s2.getSet()).matrix(), matr);
+	EXPECT_EQ(boost::get<ConstraintSet<TypeParam>>(s2.getSet()).vector(), vec);
+	EXPECT_EQ(boost::get<ConstraintSet<TypeParam>>(s2.getSet(0)).matrix(), matr);
+	EXPECT_EQ(boost::get<ConstraintSet<TypeParam>>(s2.getSet(0)).vector(), vec);
 }
