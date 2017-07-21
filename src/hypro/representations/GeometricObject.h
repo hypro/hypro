@@ -68,7 +68,7 @@ public:
 	 * @brief      Computes the set of extreme vertices, whose convex hull is the smallest convex set containing this set.
 	 * @return     A set of extreme vertices.
 	 */
-	virtual std::vector<Point<Number>> vertices( const Location<Number>* = nullptr ) const = 0;
+	virtual std::vector<Point<Number>> vertices( const matrix_t<Number>& = matrix_t<Number>::Zero(0,0) ) const = 0;
 
 	/**
 	 * @brief      Method combining the intersection of the set with a halfspace and a test for emptiness of the resulting set.
