@@ -4,17 +4,42 @@ namespace hypro
 {
 
 template<typename Number, typename Representation, typename ...Rargs>
-const auto& State<Number,Representation,Rargs...>::getSet(std::size_t i) const {
+const boost::variant<Representation,Rargs...>& State<Number,Representation,Rargs...>::getSet(std::size_t i) const {
 	assert(mTypes.size() == mSets.size());
-	auto res = getSet(mSets.at(i), mTypes.at(i));
-	return res;
+	return mSets.at(i);
+//	switch(mTypes.at(i)) {
+//		case representation_name::box: {
+//			return boost::get<Box<Number>>(mSets.at(i));
+//		}
+//		case representation_name::constraint_set: {
+//			return boost::get<ConstraintSet<Number>>(mSets.at(i));
+//		}
+//		case representation_name::polytope_h: {
+//			return boost::get<HPolytope<Number>>(mSets.at(i));
+//		}
+//		case representation_name::polytope_v: {
+//			return boost::get<VPolytope<Number>>(mSets.at(i));
+//		}
+//		#ifdef HYPRO_USE_PPL
+//		case representation_name::ppl_polytope: {
+//			return boost::get<Polytope<Number>>(mSets.at(i));
+//		}
+//		#endif
+//		case representation_name::support_function: {
+//			return boost::get<SupportFunction<Number>>(mSets.at(i));
+//		}
+//		case representation_name::zonotope: {
+//			return boost::get<Zonotope<Number>>(mSets.at(i));
+//		}
+//		default:
+//			assert(false);
+//	}
 }
 
 template<typename Number, typename Representation, typename ...Rargs>
-auto& State<Number,Representation,Rargs...>::rGetSet(std::size_t i) {
+boost::variant<Representation,Rargs...>& State<Number,Representation,Rargs...>::rGetSet(std::size_t i) {
 	assert(mTypes.size() == mSets.size());
-
-	return getSet(mSets.at(i), mTypes.at(i));
+	return mSets.at(i);
 }
 
 

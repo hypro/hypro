@@ -1,19 +1,19 @@
 #pragma once
-//#include "State.h"
 #include "functors.h"
 #include "../../representations/GeometricObject.h"
 #include "../../representations/types.h"
 #include <iostream>
+#include <cstdlib>
 
 namespace hypro {
 
 template<typename Number>
 class Condition {
 private:
-	std::vector<std::pair<matrix_t<Number>, vector_t<Number>>> mConstraints;
+	std::vector<ConstraintSet<Number>> mConstraints;
 public:
 	Condition() = default;
-	Condition(const matrix_t<Number>& mat, const vector_t<Number>& vec) : mConstraints( {std::make_pair(mat,vec)} ) {}
+	Condition(const matrix_t<Number>& mat, const vector_t<Number>& vec) : mConstraints( {ConstraintSet<Number>(mat,vec)} ) {}
 	Condition(const Condition& orig) = default;
 	Condition(Condition&& orig) = default;
 	Condition& operator=(const Condition& orig) = default;
@@ -23,13 +23,13 @@ public:
 	// Access
 	std::size_t size() const { return mConstraints.size(); }
 
-	const matrix_t<Number>& getMatrix(std::size_t I = 0) const { return mConstraints.at(I).first; }
-	const vector_t<Number>& getVector(std::size_t I = 0) const { return mConstraints.at(I).second; }
+	const matrix_t<Number>& getMatrix(std::size_t I = 0) const { assert(mConstraints.size()>I); return mConstraints.at(I).matrix(); }
+	const vector_t<Number>& getVector(std::size_t I = 0) const { assert(mConstraints.size()>I); return mConstraints.at(I).vector(); }
 
-	void setMatrix(const matrix_t<Number>& m, std::size_t I = 0) { mConstraints[I].first = m; }
-	void setVector(const vector_t<Number>& v, std::size_t I = 0) { mConstraints[I].second = v; }
+	void setMatrix(const matrix_t<Number>& m, std::size_t I = 0);
+	void setVector(const vector_t<Number>& v, std::size_t I = 0);
 
-	const std::vector<std::pair<matrix_t<Number>, vector_t<Number>>>& constraints() const { return mConstraints; }
+	const std::vector<ConstraintSet<Number>>& constraints() const { return mConstraints; }
 
 	// helper methods
 	//template<typename Representation, typename ...Rargs>
@@ -56,7 +56,7 @@ public:
 #ifdef HYDRA_USE_LOGGING
 		std::size_t i = 0;
 		for(const auto& pair : in.constraints()) {
-			out << "Constraint " << i << ": " << pair.first << " constants: " << pair.second << std::endl;
+			out << "Constraint " << i << ": " << pair.matrix() << " constants: " << pair.vector() << std::endl;
 			++i;
 		}
 #endif

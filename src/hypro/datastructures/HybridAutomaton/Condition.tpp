@@ -2,6 +2,23 @@
 
 namespace hypro {
 
+
+template<typename Number>
+void Condition<Number>::setMatrix(const matrix_t<Number>& m, std::size_t I) {
+	while (mConstraints.size() < I+1) {
+		mConstraints.push_back(ConstraintSet<Number>());
+	}
+	mConstraints[I].rMatrix() = m;
+}
+
+template<typename Number>
+void Condition<Number>::setVector(const vector_t<Number>& v, std::size_t I) {
+	while (mConstraints.size() < I+1) {
+		mConstraints.push_back(ConstraintSet<Number>());
+	}
+	mConstraints[I].rVector() = v;
+}
+
 //template<typename Number>
 //template<typename Representation, typename ...Rargs>
 //std::pair<bool,State<Number,Representation, Rargs...>> Condition<Number>::isSatisfiedBy(const State<Number,Representation, Rargs...>& inState) const {

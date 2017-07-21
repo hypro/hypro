@@ -77,12 +77,13 @@ class State
     const Location<Number>* getLocation() const { assert(mLoc != nullptr); return mLoc; }
     std::size_t getNumberSets() const { assert(mSets.size() == mTypes.size()); return mSets.size(); }
 
-    const auto& getSet(std::size_t i = 0) const;
-    auto& rGetSet(std::size_t i = 0);
+    const boost::variant<Representation,Rargs...>& getSet(std::size_t i = 0) const;
+    boost::variant<Representation,Rargs...>& rGetSet(std::size_t i = 0);
     representation_name getSetType(std::size_t i = 0) const { return mTypes.at(i); }
 
     //Representation& rGetSet() { return mSet; }
     const std::vector<boost::variant<Representation,Rargs...>>& getSets() const { return mSets; }
+    const std::vector<representation_name>& getTypes() const { return mTypes; }
     const carl::Interval<Number>& getTimestamp() const { return mTimestamp; }
 
     bool isEmpty() const { return mIsEmpty; }
@@ -117,7 +118,10 @@ class State
     	}
 
     	for(std::size_t i = 0; i < lhs.getNumberSets(); ++i) {
-    		if( lhs.getType(i) != rhs.getType(i) || lhs.getSet(i) != rhs.getSet(i)) {
+    		if( lhs.getSetType(i) != rhs.getSetType(i)) {
+    			return false;
+    		}
+    		if( lhs.getSet(i) != rhs.getSet(i)) {
     			return false;
     		}
     	}
