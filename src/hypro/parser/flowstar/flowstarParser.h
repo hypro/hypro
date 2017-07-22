@@ -32,9 +32,9 @@
 #include "config.h"
 #include "common.h"
 #include "algorithms/reachability/Settings.h"
-#include "datastructures/hybridAutomata/RawState.h"
-#include "datastructures/hybridAutomata/LocationManager.h"
-#include "datastructures/hybridAutomata/HybridAutomaton.h"
+#include "datastructures/HybridAutomaton/State.h"
+#include "datastructures/HybridAutomaton/LocationManager.h"
+#include "datastructures/HybridAutomaton/HybridAutomaton.h"
 #include "util/logging/Logger.h"
 #include "util/VariablePool.h"
 #include "symbols.h"
@@ -61,12 +61,12 @@ struct flowstarParser : qi::grammar<Iterator, Skipper>
 	symbol_table mModes;
 	VariablePool& mVariablePool = VariablePool::getInstance();
 	std::set<Transition<Number>*> mTransitions;
-	std::vector<RawState<Number>> mInitialStates;
-	std::vector<RawState<Number>> mLocalBadStates;
+	std::vector<State<Number,ConstraintSet<Number>>> mInitialStates;
+	std::vector<State<Number,ConstraintSet<Number>>> mLocalBadStates;
 	std::vector<unsigned> mModeIds;
 	std::vector<unsigned> mVariableIds;
 	std::vector<unsigned> mDiscreteVariableIds;
-	hypro::reachability::ReachabilitySettings<Number> mSettings;
+	hypro::ReachabilitySettings<Number> mSettings;
 	unsigned mDimensionLimit;
 	unsigned mDiscreteDimensionLimit;
 
@@ -110,23 +110,22 @@ struct flowstarParser : qi::grammar<Iterator, Skipper>
 		}
 	}
 
-	void addContinuousState(const std::vector<matrix_t<Number>>& _constraint, unsigned id, std::vector<RawState<Number>>& _states) {
+	void addContinuousState(const std::vector<matrix_t<Number>>& _constraint, unsigned id, std::vector<State<Number,ConstraintSet<Number>>>& _states) {
 		if(_constraint.size() > 0) {
 			//std::cout << "Add continuous state for location " << id << std::endl;
 			bool found = false;
 			// due to the creation of initial states, which uses this function as well and the occurrence of duplicates in the initial states, we need the last instance of a matching state.
 			for(auto stateIt = _states.rbegin(); stateIt != _states.rend(); ++stateIt) {
-				if(stateIt->location->id() == id){
+				if(stateIt->getLocation()->getId() == id){
 					//std::cout << "stateIt->already exists." << std::endl;
 					found = true;
-					assert(stateIt->discreteAssignment.size() == mDiscreteVariableIds.size());
-					unsigned constraintsNum = stateIt->set.first.rows();
-					unsigned dimension = constraintsNum > 0 ? stateIt->set.first.cols() : (_constraint.begin()->cols())-1;
-					//std::cout << "current constraints: " << boost::get<cPair<Number>>(stateIt->set).first << std::endl;
-					cPair<Number> set = stateIt->set;
+					unsigned constraintsNum = boost::get<ConstraintSet<Number>>(stateIt->getSet()).matrix().rows();
+					unsigned dimension = constraintsNum > 0 ? boost::get<ConstraintSet<Number>>(stateIt->getSet()).matrix().cols() : (_constraint.begin()->cols())-1;
+					//std::cout << "current constraints: " << boost::get<ConstraintSet<Number>>(stateIt->getSet()).first << std::endl;
+					ConstraintSet<Number> set = boost::get<ConstraintSet<Number>>(stateIt->getSet());
 					//std::cout << "Resize to " << constraintsNum+_constraint.size() << " x " << dimension << std::endl;
-					set.first.conservativeResize(constraintsNum+_constraint.size(), dimension);
-					set.second.conservativeResize(constraintsNum+_constraint.size());
+					set.rMatrix().conservativeResize(constraintsNum+_constraint.size(), dimension);
+					set.rVector().conservativeResize(constraintsNum+_constraint.size());
 					//std::cout << "State already existing with " << constraintsNum << " rows." << std::endl;
 					for(const auto& row : _constraint) {
 						assert(row.rows() == 1);
@@ -134,99 +133,96 @@ struct flowstarParser : qi::grammar<Iterator, Skipper>
 						//std::cout << "add row " << constraintsNum;
 						//std::cout << "row properties: " << row.rows() << " , " << row.cols() << std::endl;
 						//std::cout << "set properties: " << set.first.rows() << " , " << set.first.cols() << std::endl;
-						set.first.row(constraintsNum) = row.block(0,0,1,row.cols()-1);
+						set.rMatrix().row(constraintsNum) = row.block(0,0,1,row.cols()-1);
 						//std::cout << " " << convert<Number,double>(set.first.row(constraintsNum)) << " <= ";
-						set.second(constraintsNum) = -row(0,row.cols()-1);
+						set.rVector()(constraintsNum) = -row(0,row.cols()-1);
 						//std::cout << set.second(constraintsNum) << std::endl;
 						++constraintsNum;
 					}
-					stateIt->set = set;
-					//std::cout << "New constraints: " << boost::get<cPair<Number>>(stateIt->set).first << std::endl;
+					stateIt->setSet(set);
+					//std::cout << "New constraints: " << boost::get<ConstraintSet<Number>>(stateIt->getSet()).first << std::endl;
 					break;
 				}
 			}
 			if(!found){
-				RawState<Number> s(mLocationManager.location(id));
-				std::pair<matrix_t<Number>, vector_t<Number>> set;
-				set.first = matrix_t<Number>(_constraint.size(), _constraint.begin()->cols()-1);
-				set.second = vector_t<Number>(_constraint.size());
+				State<Number,ConstraintSet<Number>> s(mLocationManager.location(id));
+				ConstraintSet<Number> set(matrix_t<Number>(_constraint.size(), _constraint.begin()->cols()-1), vector_t<Number>(_constraint.size()));
 				unsigned constraintsNum = 0;
 				//std::cout << "State newly created with " << _constraint.size() << " rows." << std::endl;
 				for(const auto& row : _constraint) {
 					assert(row.rows() == 1);
 					//std::cout << "add row " << constraintsNum;
-					set.first.row(constraintsNum) = row.block(0,0,1,row.cols()-1);
+					set.rMatrix().row(constraintsNum) = row.block(0,0,1,row.cols()-1);
 					//std::cout << " " << set.first.row(constraintsNum) << " <= ";
-					set.second(constraintsNum) = -row(0,row.cols()-1);
+					set.rVector()(constraintsNum) = -row(0,row.cols()-1);
 					//std::cout << set.second(constraintsNum) << std::endl;
 					++constraintsNum;
 				}
-				s.set = set;
-				// initial setup of the discrete assignment
-				for(const auto& id : mDiscreteVariableIds ){
-					s.discreteAssignment[VariablePool::getInstance().carlVarByIndex(id)] = carl::Interval<Number>::unboundedInterval();
-				}
+				s.setSet(set);
 				_states.emplace_back(s);
 			}
 		}
 	}
 
-	void addDiscreteState(const std::pair<unsigned, carl::Interval<Number>>& _initPair, unsigned id, std::vector<RawState<Number>>& _states) {
+	void addDiscreteState(const std::pair<unsigned, carl::Interval<Number>>& _initPair, unsigned id, std::vector<State<Number,ConstraintSet<Number>>>& _states) {
 		//std::cout << "Add discrete state for location " << id << std::endl;
 		bool found = false;
 		// due to the creation of initial states, which uses this function as well and the occurrence of duplicates in the initial states, we need the last instance of a matching state.
 		for(auto stateIt = _states.rbegin(); stateIt != _states.rend(); ++stateIt) {
-			assert(stateIt->discreteAssignment.size() == mDiscreteVariableIds.size());
-			if(stateIt->location == mLocationManager.location(id)){
+			if(stateIt->getLocation() == mLocationManager.location(id)){
 				found = true;
-				stateIt->discreteAssignment[VariablePool::getInstance().carlVarByIndex(_initPair.first)] = _initPair.second;
+				vector_t<Number> lowerNormal = vector_t<Number>::Zero(mDiscreteVariableIds.size());
+				vector_t<Number> upperNormal = vector_t<Number>::Zero(mDiscreteVariableIds.size());
+				lowerNormal(_initPair.first) = -1;
+				upperNormal(_initPair.first) = 1;
+
+				ConstraintSet<Number> currentAssignment = boost::get<ConstraintSet<Number>>(stateIt->getSet(1));
+				currentAssignment.addConstraint(lowerNormal,-_initPair.second.lower());
+				currentAssignment.addConstraint(upperNormal,_initPair.second.upper());
+				//stateIt->discreteAssignment[VariablePool::getInstance().carlVarByIndex(_initPair.first)] = _initPair.second;
+				stateIt->setSet(currentAssignment,1);
 			}
-			assert(stateIt->discreteAssignment.size() == mDiscreteVariableIds.size());
 			break;
 		}
 		if(!found){
-			RawState<Number> s(mLocationManager.location(id));
-			// initialize all discrete assignments to unbounded, when a new state is created
-			for(const auto& id : mDiscreteVariableIds ){
-				if(id == _initPair.first){
-					s.discreteAssignment[VariablePool::getInstance().carlVarByIndex(_initPair.first)] = _initPair.second;
-				} else {
-					s.discreteAssignment[VariablePool::getInstance().carlVarByIndex(id)] = carl::Interval<Number>::unboundedInterval();
-				}
-			}
-			assert(s.discreteAssignment.size() == mDiscreteVariableIds.size());
+			State<Number,ConstraintSet<Number>> s(mLocationManager.location(id));
+			vector_t<Number> lowerNormal = vector_t<Number>::Zero(mDiscreteVariableIds.size());
+			vector_t<Number> upperNormal = vector_t<Number>::Zero(mDiscreteVariableIds.size());
+			lowerNormal(_initPair.first) = -1;
+			upperNormal(_initPair.first) = 1;
+
+			ConstraintSet<Number> currentAssignment;
+			currentAssignment.addConstraint(lowerNormal,-_initPair.second.lower());
+			currentAssignment.addConstraint(upperNormal,_initPair.second.upper());
+			//stateIt->discreteAssignment[VariablePool::getInstance().carlVarByIndex(_initPair.first)] = _initPair.second;
+			s.setSet(currentAssignment,1);
 			_states.emplace_back(s);
 		}
 	}
 
-	unsigned addInitState(unsigned _id, std::vector<RawState<Number>>& _states) {
-		RawState<Number> s(mLocationManager.location(_id));
-		// initial setup of the discrete assignment
-		for(const auto& id : mDiscreteVariableIds ){
-			s.discreteAssignment[VariablePool::getInstance().carlVarByIndex(id)] = carl::Interval<Number>::unboundedInterval();
-		}
-		assert(s.discreteAssignment.size() == mDiscreteVariableIds.size());
+	unsigned addInitState(unsigned _id, std::vector<State<Number,ConstraintSet<Number>>>& _states) {
+		State<Number,ConstraintSet<Number>> s(mLocationManager.location(_id));
 		_states.emplace_back(s);
 		return _id;
 	}
 
-	void insertSettings(const hypro::reachability::ReachabilitySettings<Number>& _in) {
+	void insertSettings(const hypro::ReachabilitySettings<Number>& _in) {
 		mSettings = _in;
 	}
 
 	void insertModes(const std::vector<std::pair<std::string, Location<Number>*>>& _in) {
 		for(const auto& modePair : _in) {
-			//std::cout << "Found mode " << modePair.first << " mapped to " << modePair.second->id() << std::endl;
+			//std::cout << "Found mode " << modePair.first << " mapped to " << modePair.second->getId() << std::endl;
 			//std::cout << "Mode: " << *modePair.second << std::endl;
 
 			if(mModes.find(modePair.first) == nullptr) {
-				mModes.add(modePair.first, modePair.second->id());
-				mModeIds.push_back(modePair.second->id());
-				TRACE("hypro.parser","Add new mode " << modePair.first << " mapped to id " << modePair.second->id());
+				mModes.add(modePair.first, modePair.second->getId());
+				mModeIds.push_back(modePair.second->getId());
+				TRACE("hypro.parser","Add new mode " << modePair.first << " mapped to id " << modePair.second->getId());
 			} else {
-				TRACE("hypro.parser","Overwrite mode " << modePair.first << " mapped to id " << mModes.at(modePair.first) << " with mode mapped to id " << modePair.second->id());
+				TRACE("hypro.parser","Overwrite mode " << modePair.first << " mapped to id " << mModes.at(modePair.first) << " with mode mapped to id " << modePair.second->getId());
 				unsigned redundantId = mModes.at(modePair.first);
-				mModes.at(modePair.first) = modePair.second->id();
+				mModes.at(modePair.first) = modePair.second->getId();
 				mLocationManager.erase(redundantId);
 				// update mModeIds
 				auto modeIdIt = mModeIds.begin();
@@ -235,7 +231,7 @@ struct flowstarParser : qi::grammar<Iterator, Skipper>
 				if(modeIdIt != mModeIds.end()) {
 					mModeIds.erase(modeIdIt);
 				}
-				mModeIds.push_back(modePair.second->id());
+				mModeIds.push_back(modePair.second->getId());
 			}
 		}
 	}

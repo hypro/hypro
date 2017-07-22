@@ -98,6 +98,7 @@ class State
     State<Number,Representation,Rargs...> aggregate(const State<Number,Representation,Rargs...>& in) const;
     std::pair<bool,State<Number,Representation,Rargs...>> intersect(const Condition<Number>& in) const;
     State<Number,Representation,Rargs...> applyTimeStep(const std::vector<std::pair<const matrix_t<Number>&, const vector_t<Number>&>>& flows, Number timeStepSize ) const;
+    State<Number,Representation,Rargs...> applyTransformation(const std::vector<const ConstraintSet<Number>&>& trafos ) const;
 
     friend ostream& operator<<(ostream& out, const State<Number,Representation,Rargs...>& state) {
 		#ifdef HYPRO_USE_LOGGING

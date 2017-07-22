@@ -132,4 +132,16 @@ State<Number,Representation,Rargs...> State<Number,Representation,Rargs...>::app
 	return res;
 }
 
+template<typename Number, typename Representation, typename ...Rargs>
+State<Number,Representation,Rargs...> State<Number,Representation,Rargs...>::applyTransformation(const std::vector<const ConstraintSet<Number>&>& trafos ) const {
+	State<Number,Representation,Rargs...> res(*this);
+	//TRACE("hydra.datastructures","Apply timestep of size " << timeStepSize);
+	//res.setSet(mSet.affineTransformation(trafoMatrix,trafoVector));
+	assert(trafos.size() == mSets.size());
+	for(std::size_t i = 0; i < mSets.size(); ++i) {
+		res.setSet(mSets.at(i).affineTransformation(trafos.at(i).getMatrix(), trafos.at(i).getVector()));
+	}
+	return res;
+}
+
 }

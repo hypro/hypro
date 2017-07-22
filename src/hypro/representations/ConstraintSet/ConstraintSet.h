@@ -89,6 +89,21 @@ class ConstraintSetT : public GeometricObject<Number, ConstraintSetT<Number,Conv
 		return !Optimizer<Number>(mConstraints,mConstants).checkConsistency();
 	}
 
+	void addConstraint(const vector_t<Number>& normal, Number offset) {
+		if(mConstraints.cols() == 0) {
+			mConstraints = matrix_t<Number>(normal);
+			mConstants = vector_t<Number>::Zero(1);
+			mConstants << offset;
+		} else {
+			assert(mConstraints.cols() == normal.rows());
+			mConstraints.conservativeResize(mConstraints.rows()+1, mConstraints.cols());
+			mConstants.conservativeResize(mConstraints.rows()+1);
+
+			mConstraints.row(mConstraints.rows()-1) = normal;
+			mConstants(mConstants.rows()-1) = offset;
+		}
+	}
+
 
 	/**
 	 * @brief Getter for a vertex-representation of the current constraintSet.

@@ -4,11 +4,11 @@
 
 TEST(UtilityTest, ReachabilitySettings)
 {
-	hypro::reachability::ReachabilitySettings<double> settings;
+	hypro::ReachabilitySettings<double> settings;
 	settings.timeBound = 3.0;
 
-	hypro::reachability::ReachabilitySettings<double> copy(settings);
-	hypro::reachability::ReachabilitySettings<double> copy2 = settings;
+	hypro::ReachabilitySettings<double> copy(settings);
+	hypro::ReachabilitySettings<double> copy2 = settings;
 
 	EXPECT_EQ(settings, copy);
 	EXPECT_EQ(settings, copy2);

@@ -109,7 +109,7 @@ namespace parser {
 
 			// setting guard
 			if(mContinuousGuards.size() + mDiscreteGuards.size() > 0) {
-				typename Transition<Number>::Guard g;
+				Condition<Number> g;
 				matrix_t<Number> matr = matrix_t<Number>(mContinuousGuards.size(), _dim);
 				vector_t<Number> vec = vector_t<Number>(mContinuousGuards.size());
 				unsigned rowCnt = 0;
@@ -119,26 +119,32 @@ namespace parser {
 					vec(rowCnt) = -row(0,_dim);
 					++rowCnt;
 				}
-				g.mat = matr;
-				g.vec = vec;
+				g.setMatrix(matr);
+				g.setVector(vec);
 				// handle discrete guards
-				g.discreteOffset = _dim;
+				//g.discreteOffset = _dim;
+
+				matrix_t<Number> guardMatrix = matrix_t<Number>::Zero(mDiscreteGuards.size(),_discreteDim-_dim+1);
+				vector_t<Number> guardVector = vector_t<Number>::Zero(mDiscreteGuards.size());
+				unsigned row = 0;
 				for(const auto& guardPair : mDiscreteGuards) {
 					matrix_t<Number> reducedGuard = matrix_t<Number>(1,_discreteDim-_dim+1);
 					reducedGuard = guardPair.second.block(0,_dim,1,_discreteDim-_dim+1);
-					g.discreteGuard.emplace_back(VariablePool::getInstance().carlVarByIndex(guardPair.first), reducedGuard);
+					guardMatrix.row(row) = reducedGuard.block(0,0,1,reducedGuard.cols()-1);
+					guardVector(row) = reducedGuard(0,reducedGuard.cols()-1);
+
+					++row;
+					//g.discreteGuard.emplace_back(VariablePool::getInstance().carlVarByIndex(guardPair.first), reducedGuard);
 				}
+				g.setMatrix(guardMatrix,1);
+				g.setVector(guardVector,1);
 
 				res->setGuard(g);
 			}
 
 			// setting reset
-			typename Transition<Number>::Reset r;
-			r.mat = matrix_t<Number>::Identity(_dim, _dim);
-			r.vec = vector_t<Number>::Zero(_dim);
-			r.discreteOffset = _dim;
-			r.discreteMat = matrix_t<Number>::Identity(_discreteDim-_dim, _discreteDim-_dim);
-			r.discreteVec = vector_t<Number>::Zero(_discreteDim-_dim);
+			Reset<Number> r;
+			//r.discreteOffset = _dim;
 			if(mContinuousResets.size() + mDiscreteResets.size() > 0) {
 				matrix_t<Number> matr = matrix_t<Number>::Identity(_dim,_dim);
 				vector_t<Number> vec = vector_t<Number>::Zero(_dim);
@@ -146,8 +152,8 @@ namespace parser {
 					matr.row(resetPair.first) = resetPair.second.block(0,0,1,_dim);
 					vec(resetPair.first) = resetPair.second(0,_dim);
 				}
-				r.mat = matr;
-				r.vec = vec;
+				r.setMatrix(matr);
+				r.setVector(vec);
 				matrix_t<Number> discreteMat = matrix_t<Number>::Identity(_discreteDim-_dim,_discreteDim-_dim);
 				vector_t<Number> discreteVec = vector_t<Number>::Zero(_discreteDim-_dim);
 				//std::cout << "Identity reset: " << discreteMat << std::endl;
@@ -158,8 +164,8 @@ namespace parser {
 					discreteMat.row(resetPair.first-_dim) = resetPair.second.block(0,_dim,1,_discreteDim-_dim);
 					discreteVec(resetPair.first-_dim) = resetPair.second(0,_discreteDim);
 				}
-				r.discreteMat = discreteMat;
-				r.discreteVec = discreteVec;
+				r.setMatrix(discreteMat,1);
+				r.setVector(discreteVec,1);
 			}
 			res->setReset(r);
 
@@ -272,7 +278,7 @@ namespace parser {
 				Location<Number>* tmp = mLocationManager.create(_flow);
 				//std::cout << "creating location " << tmp->id() << std::endl;
 				//std::cout << "flow: " << tmp->flow() << std::endl;
-				typename Location<Number>::Invariant inv;
+				Condition<Number> inv;
 				matrix_t<Number> invariantMat = matrix_t<Number>(mContinuousInvariants.size(), _flow.cols()-1);
 				vector_t<Number> constants = vector_t<Number>(mContinuousInvariants.size());
 				unsigned rowCnt = 0;
@@ -282,8 +288,8 @@ namespace parser {
 					constants(rowCnt) = -invariantConstaint(0,_flow.cols()-1);
 					++rowCnt;
 				}
-				inv.mat = invariantMat;
-				inv.vec = constants;
+				inv.setMatrix(invariantMat);
+				inv.setVector(constants);
 				//std::cout << "set continuous invariant to " << invariantMat << std::endl;
 				for(const auto& invariantConstaintPair : mDiscreteInvariants) {
 					assert(invariantConstaintPair.second.rows() == 1);
@@ -291,10 +297,26 @@ namespace parser {
 					//std::cout << "new number of cols: " << _discreteDim-_flow.cols()+2 << std::endl;
 					matrix_t<Number> resizedInvariant = matrix_t<Number>(1, _discreteDim-_flow.cols()+2);
 					resizedInvariant = invariantConstaintPair.second.block(0, _flow.cols()-1, 1, _discreteDim-_flow.cols()+2);
-					inv.discreteInvariant.emplace_back(VariablePool::getInstance().carlVarByIndex(invariantConstaintPair.first), resizedInvariant);
+
+					matrix_t<Number> currentInvariant = inv.getMatrix(1);
+					vector_t<Number> currentVector = inv.getVector(1);
+					if(currentInvariant.rows() == 0) {
+						currentInvariant = resizedInvariant.block(0,0,resizedInvariant.rows(), resizedInvariant.cols()-1);
+						currentVector = -resizedInvariant.block(0,resizedInvariant.cols()-1,resizedInvariant.rows(),1);
+					} else {
+						assert(currentInvariant.cols() == resizedInvariant.cols());
+						currentInvariant.conservativeResize(currentInvariant.rows()+resizedInvariant.rows(), currentInvariant.cols());
+						currentVector.conservativeResize(currentVector.rows()+resizedInvariant.rows());
+
+						currentInvariant.block(currentInvariant.rows()-resizedInvariant.rows(),0,currentInvariant.rows(),currentInvariant.cols()) = resizedInvariant.block(0,0,resizedInvariant.rows(), resizedInvariant.cols()-1);
+						currentVector.block(currentVector.rows()-resizedInvariant.rows(),0,resizedInvariant.rows(),1) = -resizedInvariant.block(0,resizedInvariant.cols()-1,resizedInvariant.rows(),1);
+					}
+					inv.setMatrix(currentInvariant,1);
+					inv.setVector(currentVector,1);
+					//inv.discreteInvariant.emplace_back(VariablePool::getInstance().carlVarByIndex(invariantConstaintPair.first), resizedInvariant);
 					//std::cout << "added discrete invariant for var " << VariablePool::getInstance().carlVarByIndex(invariantConstaintPair.first) << ": " << resizedInvariant << std::endl;
 				}
-				inv.discreteOffset = _flow.cols()-1;
+				//inv.discreteOffset = _flow.cols()-1;
 				tmp->setInvariant(inv);
 
 				// clear local storage
@@ -307,9 +329,9 @@ namespace parser {
 
 	template <typename Iterator, typename Number>
 	struct settingsParser
-	    : qi::grammar<Iterator, hypro::reachability::ReachabilitySettings<Number>(symbol_table const&),Skipper>
+	    : qi::grammar<Iterator, hypro::ReachabilitySettings<Number>(symbol_table const&),Skipper>
 	{
-		hypro::reachability::ReachabilitySettings<Number> mLocalSettings;
+		hypro::ReachabilitySettings<Number> mLocalSettings;
 		px::function<ErrorHandler> errorHandler;
 
 		settingsParser() : settingsParser::base_type( start ), mLocalSettings() {
@@ -357,10 +379,10 @@ namespace parser {
  		void setFileName(const std::string& _in){ mLocalSettings.fileName = _in; }
  		void setPlotDimensions(const std::vector<unsigned>& _dimensions){
  			assert(_dimensions.size() <= 2);
- 			mLocalSettings.plotDimensions = _dimensions;
+ 			mLocalSettings.plotDimensions.push_back(_dimensions);
  		}
 
-		qi::rule<Iterator, hypro::reachability::ReachabilitySettings<Number>(symbol_table const&), Skipper> start;
+		qi::rule<Iterator, hypro::ReachabilitySettings<Number>(symbol_table const&), Skipper> start;
 		qi::rule<Iterator, Skipper> steps;
 		qi::rule<Iterator, Skipper> order;
 		qi::rule<Iterator, Skipper> time;

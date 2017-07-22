@@ -39,6 +39,8 @@ class LocationManager : public carl::Singleton<LocationManager<Number>>
     unsigned id(Location<Number>* _loc) const;
     Location<Number>* location(unsigned _id) const;
     Location<Number>* location(std::string name) const;
+
+    void erase(unsigned _id);
 };
 
 }  // namespace hydra

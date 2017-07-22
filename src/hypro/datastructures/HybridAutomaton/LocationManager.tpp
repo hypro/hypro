@@ -73,4 +73,13 @@ Location<Number>* LocationManager<Number>::location(std::string name) const
     return nullptr;
 }
 
+template<typename Number>
+void LocationManager<Number>::erase(unsigned _id) {
+    auto locationMapPtr = mLocations.find(_id);
+    if(locationMapPtr != mLocations.end()) {
+        TRACE("hypro.locationManager", "Erase location " << _id);
+        mLocations.erase(locationMapPtr);
+    }
+}
+
 }  // namespace hydra

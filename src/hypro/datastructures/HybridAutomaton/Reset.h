@@ -8,15 +8,7 @@ namespace hypro {
 template<typename Number>
 class Reset {
 protected:
-    vector_t<Number> continuousVec;  // Translation Vector
-    matrix_t<Number> continuousMat;  // Transformation Matrix
-    vector_t<Number> discreteVec;  // Translation Vector
-    matrix_t<Number> discreteMat;  // Transformation Matrix
-	vector_t<Number> clockVec;  // Translation Vector
-    matrix_t<Number> clockMat;  // Transformation Matrix
-    bool hasContinuousReset = false;
-    bool hasDiscreteReset = false;
-    bool hasClockReset = false;
+	std::vector<ConstraintSet<Number>> mResets;
 
 public:
 	Reset() = default;
@@ -26,39 +18,43 @@ public:
 	Reset& operator=(Reset<Number>&& orig) = default;
 	~Reset() {}
 
-	const vector_t<Number>& getContinuousResetVector() const { return continuousVec; }
-	const matrix_t<Number>& getContinuousResetMatrix() const { return continuousMat; }
-	const vector_t<Number>& getDiscreteResetVector() const { return discreteVec; }
-	const matrix_t<Number>& getDiscreteResetMatrix() const { return discreteMat; }
-	const vector_t<Number>& getClockResetVector() const { return clockVec; }
-	const matrix_t<Number>& getClockResetMatrix() const { return clockMat; }
+	std::size_t size() const { return mResets.size(); }
 
-	void setContinuousResetVector(const vector_t<Number>& in) { continuousVec = in; hasContinuousReset = true; }
-	void setContinuousResetMatrix(const matrix_t<Number>& in) { continuousMat = in; hasContinuousReset = true; }
-	void setDiscreteResetVector(const vector_t<Number>& in) { discreteVec = in; hasDiscreteReset = true; }
-	void setDiscreteResetMatrix(const matrix_t<Number>& in) { discreteMat = in; hasDiscreteReset = true; }
-	void setClockResetVector(const vector_t<Number>& in) { clockVec = in; hasClockReset = true; }
-	void setClockResetMatrix(const matrix_t<Number>& in) { clockMat = in; hasClockReset = true; }
+	const vector_t<Number>& getVector(std::size_t I = 0) const { return mResets.at(I).matrix(); }
+	const matrix_t<Number>& getMatrix(std::size_t I = 0) const { return mResets.at(I).vector(); }
+	matrix_t<Number>& rGetMatrix(std::size_t I = 0) const { return mResets[I].rMatrix(); }
+	vector_t<Number>& rGetVector(std::size_t I = 0) const { return mResets[I].rVector(); }
+
+	const ConstraintSet<Number>& getReset(std::size_t I = 0) const { return mResets.at(I); }
+	ConstraintSet<Number>& rGetReset(std::size_t I = 0) const { return mResets[I]; }
+
+	void setVector(const vector_t<Number>& in, std::size_t I = 0);
+	void setMatrix(const matrix_t<Number>& in, std::size_t I = 0);
 
 	template<typename Representation>
 	State<Number,Representation> applyReset(const State<Number,Representation>& inState) const;
-	template<typename Representation>
-	State<Number,Representation> applyDiscreteReset(const State<Number,Representation>& inState) const;
 
     friend std::ostream& operator<<(std::ostream& ostr, const Reset<Number>& a)
     {
 #ifdef HYPRO_USE_LOGGING
-        ostr << "Continuous transformation: " << a.continuousMat << " and const " << a.continuousVec;
-        ostr << "Discrete transformation: " << a.discreteMat << " and const " << a.discreteVec;
-        ostr << "Clock transformation: " << a.clockMat << " and const " << a.clockVec;
+        //ostr << "Continuous transformation: " << a.continuousMat << " and const " << a.continuousVec;
+        //ostr << "Discrete transformation: " << a.discreteMat << " and const " << a.discreteVec;
+        //ostr << "Clock transformation: " << a.clockMat << " and const " << a.clockVec;
 #endif
         return ostr;
     }
 
     friend bool operator==(const Reset<Number>& lhs, const Reset<Number>& rhs) {
-    	return (lhs.continuousVec == rhs.continuousVec && lhs.continuousMat == rhs.continuousMat &&
-    			lhs.discreteVec == rhs.discreteVec && lhs.discreteMat == rhs.discreteMat &&
-    			lhs.clockVec == rhs.clockVec && lhs.clockMat == rhs.clockMat);
+    	if(lhs.size() != rhs.size()) {
+    		return false;
+    	}
+
+    	for(std::size_t i = 0; i < lhs.size(); ++i) {
+    		if(lhs.getReset(i) != rhs.getReset(i)) {
+    			return false;
+    		}
+    	}
+    	return true;
     }
 
     friend bool operator!=(const Reset<Number>& lhs, const Reset<Number>& rhs) {

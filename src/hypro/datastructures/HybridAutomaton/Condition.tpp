@@ -2,6 +2,13 @@
 
 namespace hypro {
 
+template<typename Number>
+Condition<Number>::Condition(const std::vector<boost::variant<ConstraintSet<Number>>>& sets)
+{
+	for(const auto& item : sets) {
+		mConstraints.push_back(boost::get<ConstraintSet<Number>>(item));
+	}
+}
 
 template<typename Number>
 void Condition<Number>::setMatrix(const matrix_t<Number>& m, std::size_t I) {

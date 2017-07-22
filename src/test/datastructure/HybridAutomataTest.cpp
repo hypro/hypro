@@ -67,8 +67,8 @@ protected:
 		guard.setMatrix(inv.getMatrix());
 		guard.setVector(inv.getVector());
 
-		reset.setContinuousResetMatrix(inv.getMatrix());
-		reset.setContinuousResetVector(inv.getVector());
+		reset.setMatrix(inv.getMatrix());
+		reset.setVector(inv.getVector());
 
 		trans->setGuard(guard);
 		trans->setSource(loc1);
@@ -202,8 +202,8 @@ TYPED_TEST(HybridAutomataTest, TransitionTest)
 	EXPECT_EQ(this->trans->getTarget(), this->loc2);
 
 	//transition: Assignment
-	EXPECT_EQ(this->trans->getReset().getContinuousResetVector(), this->reset.getContinuousResetVector());
-	EXPECT_EQ(this->trans->getReset().getContinuousResetMatrix(), this->reset.getContinuousResetMatrix());
+	EXPECT_EQ(this->trans->getReset().getVector(), this->reset.getVector());
+	EXPECT_EQ(this->trans->getReset().getMatrix(), this->reset.getMatrix());
 
 	//transition: Guard
 	EXPECT_EQ(this->trans->getGuard().getVector(), this->guard.getVector());
