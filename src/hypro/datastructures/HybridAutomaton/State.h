@@ -5,6 +5,7 @@
 #include "Condition.h"
 #include "../../representations/types.h"
 #include "../../representations/GeometricObject.h"
+#include "../HybridAutomaton/Visitors.h"
 //#include "../../util/tuple_expansion/for_each.h"
 #include <carl/util/tuple_util.h>
 #include <carl/interval/Interval.h>
@@ -122,7 +123,7 @@ class State
     		if( lhs.getSetType(i) != rhs.getSetType(i)) {
     			return false;
     		}
-    		if( lhs.getSet(i) != rhs.getSet(i)) {
+    		if(!boost::apply_visitor(genericCompareVisitor(), lhs.getSet(i), rhs.getSet(i))) {
     			return false;
     		}
     	}

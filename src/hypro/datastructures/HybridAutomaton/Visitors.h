@@ -167,4 +167,20 @@ public:
     }
 };
 
+
+class genericCompareVisitor
+    : public boost::static_visitor<bool>
+{
+public:
+	template<typename A, typename B>
+	bool operator()(const A& lhs, const B&) const {
+		return false;
+	}
+
+	template<typename T>
+    bool operator()(const T& lhs, const T& rhs) const {
+ 		return (lhs == rhs);
+    }
+};
+
 } // namespace
