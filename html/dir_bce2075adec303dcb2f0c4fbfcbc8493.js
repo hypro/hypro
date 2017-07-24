@@ -1,6 +1,6 @@
 var dir_bce2075adec303dcb2f0c4fbfcbc8493 =
 [
-    [ "hybridAutomata", "dir_1afb9b508effaad8769db21f900b5139.html", "dir_1afb9b508effaad8769db21f900b5139" ],
+    [ "HybridAutomaton", "dir_fc0efe5d2249fba2a29c6d003d9b04e9.html", "dir_fc0efe5d2249fba2a29c6d003d9b04e9" ],
     [ "Facet.h", "Facet_8h.html", "Facet_8h" ],
     [ "Halfspace.cpp", "Halfspace_8cpp_source.html", null ],
     [ "Halfspace.h", "Halfspace_8h.html", "Halfspace_8h" ],

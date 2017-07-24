@@ -126,18 +126,18 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>insertContinuousSymbo
 <tr class="memitem:a11519eb801b95700d3543f45555b696d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a11519eb801b95700d3543f45555b696d"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>insertDiscreteSymbols</b> (const std::vector&lt; std::string &gt; &amp;_in)</td></tr>
 <tr class="separator:a11519eb801b95700d3543f45555b696d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abed514dd89ec437b8e3d3ad8e3dc5569"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="abed514dd89ec437b8e3d3ad8e3dc5569"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>addContinuousState</b> (const std::vector&lt; <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt;&gt; &amp;_constraint, unsigned id, std::vector&lt; <a class="el" href="structhypro_1_1RawState.html">RawState</a>&lt; Number &gt;&gt; &amp;_states)</td></tr>
-<tr class="separator:abed514dd89ec437b8e3d3ad8e3dc5569"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9843681e08f656233b1aaeaed35db92a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9843681e08f656233b1aaeaed35db92a"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>addDiscreteState</b> (const std::pair&lt; unsigned, carl::Interval&lt; Number &gt;&gt; &amp;_initPair, unsigned id, std::vector&lt; <a class="el" href="structhypro_1_1RawState.html">RawState</a>&lt; Number &gt;&gt; &amp;_states)</td></tr>
-<tr class="separator:a9843681e08f656233b1aaeaed35db92a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a685b1d25683ef500b2d789079bf8b2be"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a685b1d25683ef500b2d789079bf8b2be"></a>
-unsigned&#160;</td><td class="memItemRight" valign="bottom"><b>addInitState</b> (unsigned _id, std::vector&lt; <a class="el" href="structhypro_1_1RawState.html">RawState</a>&lt; Number &gt;&gt; &amp;_states)</td></tr>
-<tr class="separator:a685b1d25683ef500b2d789079bf8b2be"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6abb98064b252da3fee7df3a328bf1f6"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6abb98064b252da3fee7df3a328bf1f6"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>insertSettings</b> (const <a class="el" href="structhypro_1_1reachability_1_1ReachabilitySettings.html">hypro::reachability::ReachabilitySettings</a>&lt; Number &gt; &amp;_in)</td></tr>
-<tr class="separator:a6abb98064b252da3fee7df3a328bf1f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad6ecbfa14d29c0be637fba7255724a85"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad6ecbfa14d29c0be637fba7255724a85"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>addContinuousState</b> (const std::vector&lt; <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt;&gt; &amp;_constraint, unsigned id, std::vector&lt; <a class="el" href="classhypro_1_1State.html">State</a>&lt; Number, ConstraintSet&lt; Number &gt;&gt;&gt; &amp;_states)</td></tr>
+<tr class="separator:ad6ecbfa14d29c0be637fba7255724a85"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5da45edc1ba5fdf9a4b9d68fdf971f32"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5da45edc1ba5fdf9a4b9d68fdf971f32"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>addDiscreteState</b> (const std::pair&lt; unsigned, carl::Interval&lt; Number &gt;&gt; &amp;_initPair, unsigned id, std::vector&lt; <a class="el" href="classhypro_1_1State.html">State</a>&lt; Number, ConstraintSet&lt; Number &gt;&gt;&gt; &amp;_states)</td></tr>
+<tr class="separator:a5da45edc1ba5fdf9a4b9d68fdf971f32"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad279d1b158eeb1874ec629afb75c8180"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad279d1b158eeb1874ec629afb75c8180"></a>
+unsigned&#160;</td><td class="memItemRight" valign="bottom"><b>addInitState</b> (unsigned _id, std::vector&lt; <a class="el" href="classhypro_1_1State.html">State</a>&lt; Number, ConstraintSet&lt; Number &gt;&gt;&gt; &amp;_states)</td></tr>
+<tr class="separator:ad279d1b158eeb1874ec629afb75c8180"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab22fdf04379daee8de6e9a17a162a4d5"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab22fdf04379daee8de6e9a17a162a4d5"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>insertSettings</b> (const <a class="el" href="structhypro_1_1ReachabilitySettings.html">hypro::ReachabilitySettings</a>&lt; Number &gt; &amp;_in)</td></tr>
+<tr class="separator:ab22fdf04379daee8de6e9a17a162a4d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a557af33e1b5f7810b4b3cbfdfe73d210"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a557af33e1b5f7810b4b3cbfdfe73d210"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>insertModes</b> (const std::vector&lt; std::pair&lt; std::string, <a class="el" href="classhypro_1_1Location.html">Location</a>&lt; Number &gt; * &gt;&gt; &amp;_in)</td></tr>
 <tr class="separator:a557af33e1b5f7810b4b3cbfdfe73d210"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -198,12 +198,14 @@ symbol_table&#160;</td><td class="memItemRight" valign="bottom"><b>mModes</b></t
 <tr class="memitem:af1072a1c81ed4df6f2757f7a187cd78d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af1072a1c81ed4df6f2757f7a187cd78d"></a>
 std::set&lt; <a class="el" href="classhypro_1_1Transition.html">Transition</a>&lt; Number &gt; * &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>mTransitions</b></td></tr>
 <tr class="separator:af1072a1c81ed4df6f2757f7a187cd78d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a350577365491fd177262b0f33e1d061c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a350577365491fd177262b0f33e1d061c"></a>
-std::vector&lt; <a class="el" href="structhypro_1_1RawState.html">RawState</a>&lt; Number &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>mInitialStates</b></td></tr>
-<tr class="separator:a350577365491fd177262b0f33e1d061c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aabaa63ff325acc8cd8dd600156bb9b4e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aabaa63ff325acc8cd8dd600156bb9b4e"></a>
-std::vector&lt; <a class="el" href="structhypro_1_1RawState.html">RawState</a>&lt; Number &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>mLocalBadStates</b></td></tr>
-<tr class="separator:aabaa63ff325acc8cd8dd600156bb9b4e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4eb0cd81089e3ef8de1fa0ee9de38b2c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4eb0cd81089e3ef8de1fa0ee9de38b2c"></a>
+std::vector&lt; <a class="el" href="classhypro_1_1State.html">State</a>&lt; Number, <br class="typebreak"/>
+ConstraintSet&lt; Number &gt; &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>mInitialStates</b></td></tr>
+<tr class="separator:a4eb0cd81089e3ef8de1fa0ee9de38b2c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a07a4b7d40ab12e92db28b1d6199ee255"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a07a4b7d40ab12e92db28b1d6199ee255"></a>
+std::vector&lt; <a class="el" href="classhypro_1_1State.html">State</a>&lt; Number, <br class="typebreak"/>
+ConstraintSet&lt; Number &gt; &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>mLocalBadStates</b></td></tr>
+<tr class="separator:a07a4b7d40ab12e92db28b1d6199ee255"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1f7f582b2cf6159640f472bde4e5dbe6"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1f7f582b2cf6159640f472bde4e5dbe6"></a>
 std::vector&lt; unsigned &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>mModeIds</b></td></tr>
 <tr class="separator:a1f7f582b2cf6159640f472bde4e5dbe6"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -213,10 +215,10 @@ std::vector&lt; unsigned &gt;&#160;</td><td class="memItemRight" valign="bottom"
 <tr class="memitem:a5cee2c347d43438f5f652aad00157ad3"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5cee2c347d43438f5f652aad00157ad3"></a>
 std::vector&lt; unsigned &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>mDiscreteVariableIds</b></td></tr>
 <tr class="separator:a5cee2c347d43438f5f652aad00157ad3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7f2e55fb17f0d5e53f59a93ea71a5c6e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7f2e55fb17f0d5e53f59a93ea71a5c6e"></a>
-<a class="el" href="structhypro_1_1reachability_1_1ReachabilitySettings.html">hypro::reachability::ReachabilitySettings</a><br class="typebreak"/>
+<tr class="memitem:a28148f1dacc1b4eea279b0aedacfcf71"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a28148f1dacc1b4eea279b0aedacfcf71"></a>
+<a class="el" href="structhypro_1_1ReachabilitySettings.html">hypro::ReachabilitySettings</a><br class="typebreak"/>
 &lt; Number &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>mSettings</b></td></tr>
-<tr class="separator:a7f2e55fb17f0d5e53f59a93ea71a5c6e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="separator:a28148f1dacc1b4eea279b0aedacfcf71"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9bf2547569eddbd598bd699c4745b932"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9bf2547569eddbd598bd699c4745b932"></a>
 unsigned&#160;</td><td class="memItemRight" valign="bottom"><b>mDimensionLimit</b></td></tr>
 <tr class="separator:a9bf2547569eddbd598bd699c4745b932"><td class="memSeparator" colspan="2">&#160;</td></tr>

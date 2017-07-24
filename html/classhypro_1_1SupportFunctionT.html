@@ -210,9 +210,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>removeRedundancy</b> 
 <tr class="memitem:a25fd7ee230ac1e4012556d086147f345"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a25fd7ee230ac1e4012556d086147f345"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>reduceNumberRepresentation</b> ()</td></tr>
 <tr class="separator:a25fd7ee230ac1e4012556d086147f345"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1750c945d518d758dabea3c7a136bee0"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; Number &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1SupportFunctionT.html#a1750c945d518d758dabea3c7a136bee0">vertices</a> (const <a class="el" href="classhypro_1_1Location.html">Location</a>&lt; Number &gt; *=nullptr) const </td></tr>
-<tr class="memdesc:a1750c945d518d758dabea3c7a136bee0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the set of extreme vertices, whose convex hull is the smallest convex set containing this set.  <a href="#a1750c945d518d758dabea3c7a136bee0">More...</a><br/></td></tr>
-<tr class="separator:a1750c945d518d758dabea3c7a136bee0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a96627e362bf40eb7d2cdc1f9eb57acc9"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; Number &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1SupportFunctionT.html#a96627e362bf40eb7d2cdc1f9eb57acc9">vertices</a> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;=<a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt;::Zero(0, 0)) const </td></tr>
+<tr class="memdesc:a96627e362bf40eb7d2cdc1f9eb57acc9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the set of extreme vertices, whose convex hull is the smallest convex set containing this set.  <a href="#a96627e362bf40eb7d2cdc1f9eb57acc9">More...</a><br/></td></tr>
+<tr class="separator:a96627e362bf40eb7d2cdc1f9eb57acc9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acc4adc872d5b153951d634d001639b6e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="acc4adc872d5b153951d634d001639b6e"></a>
 Number&#160;</td><td class="memItemRight" valign="bottom"><b>supremum</b> () const </td></tr>
 <tr class="separator:acc4adc872d5b153951d634d001639b6e"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -321,7 +321,7 @@ class hypro::SupportFunctionT&lt; Number, Converter &gt;</h3>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="SupportFunction_8h_source.html#l00023">23</a> of file <a class="el" href="SupportFunction_8h_source.html">SupportFunction.h</a>.</p>
+<p>Definition at line <a class="el" href="SupportFunction_8h_source.html#l00022">22</a> of file <a class="el" href="SupportFunction_8h_source.html">SupportFunction.h</a>.</p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a class="anchor" id="a7728df10d18edc42f578a2c1a4e910b2"></a>
 <div class="memitem">
@@ -407,8 +407,6 @@ template&lt;typename Number, typename Converter&gt; </div>
 
 <p>Implements <a class="el" href="classhypro_1_1GeometricObject.html#a44bae859470ea4cb3bc74c16f94b9638">hypro::GeometricObject&lt; Number, SupportFunctionT&lt; Number, Converter &gt; &gt;</a>.</p>
 
-<p>Referenced by <a class="el" href="representations_2conversion_2util_8h_source.html#l00022">hypro::computeBoundaryPointsExpensive()</a>.</p>
-
 </div>
 </div>
 <a class="anchor" id="ab6be1f3c4f371abff2180eee0c5fa251"></a>
@@ -438,8 +436,6 @@ template&lt;typename Number, typename Converter&gt; </div>
 <dl class="section return"><dt>Returns</dt><dd>The dimension. </dd></dl>
 
 <p>Implements <a class="el" href="classhypro_1_1GeometricObject.html#aecbf17700fe297f643f401b7ae17dd9c">hypro::GeometricObject&lt; Number, SupportFunctionT&lt; Number, Converter &gt; &gt;</a>.</p>
-
-<p>Referenced by <a class="el" href="representations_2conversion_2util_8h_source.html#l00022">hypro::computeBoundaryPointsExpensive()</a>.</p>
 
 </div>
 </div>
@@ -831,7 +827,7 @@ template&lt;typename Number, typename Converter&gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="a1750c945d518d758dabea3c7a136bee0"></a>
+<a class="anchor" id="a96627e362bf40eb7d2cdc1f9eb57acc9"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
@@ -843,8 +839,8 @@ template&lt;typename Number, typename Converter&gt; </div>
         <tr>
           <td class="memname">std::vector&lt;<a class="el" href="classhypro_1_1Point.html">Point</a>&lt;Number&gt; &gt; <a class="el" href="classhypro_1_1SupportFunctionT.html">hypro::SupportFunctionT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt;::vertices </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="classhypro_1_1Location.html">Location</a>&lt; Number &gt; *&#160;</td>
-          <td class="paramname"> = <code>nullptr</code></td><td>)</td>
+          <td class="paramtype">const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;&#160;</td>
+          <td class="paramname"> = <code><a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt;Number&gt;::Zero(0,0)</code></td><td>)</td>
           <td> const</td>
         </tr>
       </table>
@@ -858,7 +854,7 @@ template&lt;typename Number, typename Converter&gt; </div>
 <p>Computes the set of extreme vertices, whose convex hull is the smallest convex set containing this set. </p>
 <dl class="section return"><dt>Returns</dt><dd>A set of extreme vertices. </dd></dl>
 
-<p>Implements <a class="el" href="classhypro_1_1GeometricObject.html#a2e9b23a267023e8bf2ce5b36d14f1de5">hypro::GeometricObject&lt; Number, SupportFunctionT&lt; Number, Converter &gt; &gt;</a>.</p>
+<p>Implements <a class="el" href="classhypro_1_1GeometricObject.html#ada1c4dd741b73792ada09f17ac2894c4">hypro::GeometricObject&lt; Number, SupportFunctionT&lt; Number, Converter &gt; &gt;</a>.</p>
 
 </div>
 </div>

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['conv_5fmode',['CONV_MODE',['../namespacehypro.html#ac9529cbda09f61cc0cdcc5a8940300cd',1,'hypro']]]
+  ['ortho_5ftype',['ORTHO_TYPE',['../namespacehypro.html#a2178b258724a50a2191326e5e17a4a01',1,'hypro']]]
 ];

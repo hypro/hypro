@@ -202,9 +202,9 @@ Public Member Functions</h2></td></tr>
 , <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HPolytopeT.html#a0867ea7d1992ee8c0b4c7e40cf430b6a">inequalities</a> () const </td></tr>
 <tr class="memdesc:a0867ea7d1992ee8c0b4c7e40cf430b6a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Getter for the full description of the polytope as a pair of a matrix and a vector.  <a href="#a0867ea7d1992ee8c0b4c7e40cf430b6a">More...</a><br/></td></tr>
 <tr class="separator:a0867ea7d1992ee8c0b4c7e40cf430b6a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab77db028b9a480259ff088e930d8782f"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; Number &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HPolytopeT.html#ab77db028b9a480259ff088e930d8782f">vertices</a> (const <a class="el" href="classhypro_1_1Location.html">Location</a>&lt; Number &gt; *=nullptr) const </td></tr>
-<tr class="memdesc:ab77db028b9a480259ff088e930d8782f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Getter for the vertices of the current polytope.  <a href="#ab77db028b9a480259ff088e930d8782f">More...</a><br/></td></tr>
-<tr class="separator:ab77db028b9a480259ff088e930d8782f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a897e9a51988a1807fdf3ee7c161b9925"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; Number &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HPolytopeT.html#a897e9a51988a1807fdf3ee7c161b9925">vertices</a> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;=<a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt;::Zero(0, 0)) const </td></tr>
+<tr class="memdesc:a897e9a51988a1807fdf3ee7c161b9925"><td class="mdescLeft">&#160;</td><td class="mdescRight">Getter for the vertices of the current polytope.  <a href="#a897e9a51988a1807fdf3ee7c161b9925">More...</a><br/></td></tr>
+<tr class="separator:a897e9a51988a1807fdf3ee7c161b9925"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa5af684567a05e44faedc26237114e24"><td class="memItemLeft" align="right" valign="top">Number&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HPolytopeT.html#aa5af684567a05e44faedc26237114e24">supremum</a> () const </td></tr>
 <tr class="memdesc:aa5af684567a05e44faedc26237114e24"><td class="mdescLeft">&#160;</td><td class="mdescRight">Getter for a number representing the supremum according to the infinity norm of the polytope.  <a href="#aa5af684567a05e44faedc26237114e24">More...</a><br/></td></tr>
 <tr class="separator:aa5af684567a05e44faedc26237114e24"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1253,7 +1253,7 @@ template&lt;typename Number, typename Converter&gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="ab77db028b9a480259ff088e930d8782f"></a>
+<a class="anchor" id="a897e9a51988a1807fdf3ee7c161b9925"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
@@ -1265,8 +1265,8 @@ template&lt;typename Number, typename Converter&gt; </div>
         <tr>
           <td class="memname">std::vector&lt;<a class="el" href="classhypro_1_1Point.html">Point</a>&lt;Number&gt; &gt; <a class="el" href="classhypro_1_1HPolytopeT.html">hypro::HPolytopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt;::vertices </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="classhypro_1_1Location.html">Location</a>&lt; Number &gt; *&#160;</td>
-          <td class="paramname"> = <code>nullptr</code></td><td>)</td>
+          <td class="paramtype">const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;&#160;</td>
+          <td class="paramname"> = <code><a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt;&#160;Number&#160;&gt;::Zero(0,&#160;0)</code></td><td>)</td>
           <td> const</td>
         </tr>
       </table>
@@ -1281,7 +1281,7 @@ template&lt;typename Number, typename Converter&gt; </div>
 <p>Solves the vertex enumeration problem, i.e. converts the hyperplanar description into a vertex description. </p>
 <dl class="section return"><dt>Returns</dt><dd>A vector of points. </dd></dl>
 
-<p>Implements <a class="el" href="classhypro_1_1GeometricObject.html#a2e9b23a267023e8bf2ce5b36d14f1de5">hypro::GeometricObject&lt; Number, HPolytopeT&lt; Number, Converter &gt; &gt;</a>.</p>
+<p>Implements <a class="el" href="classhypro_1_1GeometricObject.html#ada1c4dd741b73792ada09f17ac2894c4">hypro::GeometricObject&lt; Number, HPolytopeT&lt; Number, Converter &gt; &gt;</a>.</p>
 
 </div>
 </div>

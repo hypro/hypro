@@ -243,9 +243,9 @@ pointVector::iterator&#160;</td><td class="memItemRight" valign="bottom"><b>inse
 <tr class="memitem:ac5d1019d396ee24f86e554d54555a69e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac5d1019d396ee24f86e554d54555a69e"></a>
 pointVector::iterator&#160;</td><td class="memItemRight" valign="bottom"><b>insert</b> (const typename pointVector::const_iterator begin, const typename pointVector::const_iterator end)</td></tr>
 <tr class="separator:ac5d1019d396ee24f86e554d54555a69e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7af34bcb9e3d970727059224dcc3ef8c"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; Number &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1VPolytopeT.html#a7af34bcb9e3d970727059224dcc3ef8c">vertices</a> (const <a class="el" href="classhypro_1_1Location.html">Location</a>&lt; Number &gt; *=nullptr) const </td></tr>
-<tr class="memdesc:a7af34bcb9e3d970727059224dcc3ef8c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the set of extreme vertices, whose convex hull is the smallest convex set containing this set.  <a href="#a7af34bcb9e3d970727059224dcc3ef8c">More...</a><br/></td></tr>
-<tr class="separator:a7af34bcb9e3d970727059224dcc3ef8c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af1bc0c0567aa7fd607ed34f0783b88a2"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; Number &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1VPolytopeT.html#af1bc0c0567aa7fd607ed34f0783b88a2">vertices</a> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;=<a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt;::Zero(0, 0)) const </td></tr>
+<tr class="memdesc:af1bc0c0567aa7fd607ed34f0783b88a2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the set of extreme vertices, whose convex hull is the smallest convex set containing this set.  <a href="#af1bc0c0567aa7fd607ed34f0783b88a2">More...</a><br/></td></tr>
+<tr class="separator:af1bc0c0567aa7fd607ed34f0783b88a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac5d46a5456072d2bb9c90862ab919447"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac5d46a5456072d2bb9c90862ab919447"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>hasVertex</b> (const <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; Number &gt; &amp;vertex) const </td></tr>
 <tr class="separator:ac5d46a5456072d2bb9c90862ab919447"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1233,7 +1233,7 @@ template&lt;typename Number , typename Converter &gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="a7af34bcb9e3d970727059224dcc3ef8c"></a>
+<a class="anchor" id="af1bc0c0567aa7fd607ed34f0783b88a2"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
@@ -1245,8 +1245,8 @@ template&lt;typename Number , typename Converter &gt; </div>
         <tr>
           <td class="memname">std::vector&lt;<a class="el" href="classhypro_1_1Point.html">Point</a>&lt;Number&gt; &gt; <a class="el" href="classhypro_1_1VPolytopeT.html">hypro::VPolytopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt;::vertices </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="classhypro_1_1Location.html">Location</a>&lt; Number &gt; *&#160;</td>
-          <td class="paramname"> = <code>nullptr</code></td><td>)</td>
+          <td class="paramtype">const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;&#160;</td>
+          <td class="paramname"> = <code><a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt;Number&gt;::Zero(0,0)</code></td><td>)</td>
           <td> const</td>
         </tr>
       </table>
@@ -1260,7 +1260,7 @@ template&lt;typename Number , typename Converter &gt; </div>
 <p>Computes the set of extreme vertices, whose convex hull is the smallest convex set containing this set. </p>
 <dl class="section return"><dt>Returns</dt><dd>A set of extreme vertices. </dd></dl>
 
-<p>Implements <a class="el" href="classhypro_1_1GeometricObject.html#a2e9b23a267023e8bf2ce5b36d14f1de5">hypro::GeometricObject&lt; Number, VPolytopeT&lt; Number, Converter &gt; &gt;</a>.</p>
+<p>Implements <a class="el" href="classhypro_1_1GeometricObject.html#ada1c4dd741b73792ada09f17ac2894c4">hypro::GeometricObject&lt; Number, VPolytopeT&lt; Number, Converter &gt; &gt;</a>.</p>
 
 <p>Definition at line <a class="el" href="VPolytope_8h_source.html#l00271">271</a> of file <a class="el" href="VPolytope_8h_source.html">VPolytope.h</a>.</p>
 

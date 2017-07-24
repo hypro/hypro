@@ -47,7 +47,7 @@ var classhypro_1_1BoxT =
     [ "supremum", "classhypro_1_1BoxT.html#a79bc17eb96d58ccbc16749a7388190eb", null ],
     [ "unite", "classhypro_1_1BoxT.html#aa009fb013a5cd664e38130771b852cda", null ],
     [ "vector", "classhypro_1_1BoxT.html#a0d97126678bac33606dff79f124a8334", null ],
-    [ "vertices", "classhypro_1_1BoxT.html#a52c7c5c52bf69b24f11389abdb1bb899", null ],
+    [ "vertices", "classhypro_1_1BoxT.html#a617b4c5905701b5fb5da8bcf4373da4e", null ],
     [ "operator!=", "classhypro_1_1BoxT.html#ad04aaa49953bc98924e23a8935fc0573", null ],
     [ "operator<<", "classhypro_1_1BoxT.html#af7340bba357e6f3b815192a642cdd941", null ],
     [ "operator==", "classhypro_1_1BoxT.html#a0d86569082f10fe8c8f63f06a6f044bf", null ],

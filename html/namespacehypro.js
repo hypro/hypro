@@ -1,5 +1,10 @@
 var namespacehypro =
 [
+    [ "detail", null, [
+      [ "seq", "structhypro_1_1detail_1_1seq.html", null ],
+      [ "gen_seq", "structhypro_1_1detail_1_1gen__seq.html", null ],
+      [ "gen_seq< 0, Is...>", "structhypro_1_1detail_1_1gen__seq_3_010_00_01Is_8_8_8_4.html", null ]
+    ] ],
     [ "Eigen", null, [
       [ "NumTraits< carl::FLOAT_T< Number > >", "structhypro_1_1Eigen_1_1NumTraits_3_01carl_1_1FLOAT__T_3_01Number_01_4_01_4.html", "structhypro_1_1Eigen_1_1NumTraits_3_01carl_1_1FLOAT__T_3_01Number_01_4_01_4" ],
       [ "NumTraits< mpq_class >", "structhypro_1_1Eigen_1_1NumTraits_3_01mpq__class_01_4.html", "structhypro_1_1Eigen_1_1NumTraits_3_01mpq__class_01_4" ],
@@ -28,8 +33,7 @@ var namespacehypro =
     ] ],
     [ "reachability", null, [
       [ "Reach", "classhypro_1_1reachability_1_1Reach.html", "classhypro_1_1reachability_1_1Reach" ],
-      [ "Reach< Number, SupportFunction< Number > >", "classhypro_1_1reachability_1_1Reach_3_01Number_00_01SupportFunction_3_01Number_01_4_01_4.html", "classhypro_1_1reachability_1_1Reach_3_01Number_00_01SupportFunction_3_01Number_01_4_01_4" ],
-      [ "ReachabilitySettings", "structhypro_1_1reachability_1_1ReachabilitySettings.html", "structhypro_1_1reachability_1_1ReachabilitySettings" ]
+      [ "Reach< Number, SupportFunction< Number > >", "classhypro_1_1reachability_1_1Reach_3_01Number_00_01SupportFunction_3_01Number_01_4_01_4.html", "classhypro_1_1reachability_1_1Reach_3_01Number_00_01SupportFunction_3_01Number_01_4_01_4" ]
     ] ],
     [ "statistics", null, [
       [ "CounterRepository", "classhypro_1_1statistics_1_1CounterRepository.html", "classhypro_1_1statistics_1_1CounterRepository" ]
@@ -42,17 +46,30 @@ var namespacehypro =
     [ "ConvexHull", "classhypro_1_1ConvexHull.html", "classhypro_1_1ConvexHull" ],
     [ "Dictionary", "classhypro_1_1Dictionary.html", "classhypro_1_1Dictionary" ],
     [ "VertexEnumeration", "classhypro_1_1VertexEnumeration.html", "classhypro_1_1VertexEnumeration" ],
+    [ "ReachabilitySettings", "structhypro_1_1ReachabilitySettings.html", "structhypro_1_1ReachabilitySettings" ],
     [ "TrafoParameters", "classhypro_1_1TrafoParameters.html", "classhypro_1_1TrafoParameters" ],
     [ "Facet", "classhypro_1_1Facet.html", "classhypro_1_1Facet" ],
     [ "Halfspace", "classhypro_1_1Halfspace.html", "classhypro_1_1Halfspace" ],
+    [ "Condition", "classhypro_1_1Condition.html", "classhypro_1_1Condition" ],
+    [ "union_functor", "structhypro_1_1union__functor.html", "structhypro_1_1union__functor" ],
+    [ "affineTransformation_functor", "structhypro_1_1affineTransformation__functor.html", "structhypro_1_1affineTransformation__functor" ],
+    [ "satisfiesHalfspaces_functor", "structhypro_1_1satisfiesHalfspaces__functor.html", "structhypro_1_1satisfiesHalfspaces__functor" ],
     [ "HybridAutomaton", "classhypro_1_1HybridAutomaton.html", "classhypro_1_1HybridAutomaton" ],
     [ "Transition", "classhypro_1_1Transition.html", "classhypro_1_1Transition" ],
     [ "LocationManager", "classhypro_1_1LocationManager.html", "classhypro_1_1LocationManager" ],
     [ "Location", "classhypro_1_1Location.html", "classhypro_1_1Location" ],
     [ "locPtrComp", "structhypro_1_1locPtrComp.html", "structhypro_1_1locPtrComp" ],
-    [ "RawState", "structhypro_1_1RawState.html", "structhypro_1_1RawState" ],
-    [ "are_strict_equals", "classhypro_1_1are__strict__equals.html", "classhypro_1_1are__strict__equals" ],
-    [ "State", "structhypro_1_1State.html", "structhypro_1_1State" ],
+    [ "TPathElement", "structhypro_1_1TPathElement.html", "structhypro_1_1TPathElement" ],
+    [ "Path", "classhypro_1_1Path.html", "classhypro_1_1Path" ],
+    [ "Reset", "classhypro_1_1Reset.html", "classhypro_1_1Reset" ],
+    [ "State", "classhypro_1_1State.html", "classhypro_1_1State" ],
+    [ "genericUniteVisitor", "classhypro_1_1genericUniteVisitor.html", "classhypro_1_1genericUniteVisitor" ],
+    [ "genericIntersectVisitor", "classhypro_1_1genericIntersectVisitor.html", "classhypro_1_1genericIntersectVisitor" ],
+    [ "genericAffineTransformationVisitor", "classhypro_1_1genericAffineTransformationVisitor.html", "classhypro_1_1genericAffineTransformationVisitor" ],
+    [ "genericConversionVisitor", "classhypro_1_1genericConversionVisitor.html", "classhypro_1_1genericConversionVisitor" ],
+    [ "genericReductionVisitor", "classhypro_1_1genericReductionVisitor.html", "classhypro_1_1genericReductionVisitor" ],
+    [ "genericSatisfiesHalfspacesVisitor", "classhypro_1_1genericSatisfiesHalfspacesVisitor.html", "classhypro_1_1genericSatisfiesHalfspacesVisitor" ],
+    [ "genericCompareVisitor", "classhypro_1_1genericCompareVisitor.html", "classhypro_1_1genericCompareVisitor" ],
     [ "LRUCache", "classhypro_1_1LRUCache.html", "classhypro_1_1LRUCache" ],
     [ "Point", "classhypro_1_1Point.html", "classhypro_1_1Point" ],
     [ "ReachTree", "classhypro_1_1ReachTree.html", "classhypro_1_1ReachTree" ],

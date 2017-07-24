@@ -139,7 +139,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>addContinuousReset</b
 void&#160;</td><td class="memItemRight" valign="bottom"><b>addDiscreteReset</b> (const std::pair&lt; unsigned, <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; double &gt;&gt; &amp;_constraint)</td></tr>
 <tr class="separator:abfec6384b919ea37c47026294ca7a889"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7c93a4c0f6a64e6b1ac47ceb2e01212c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7c93a4c0f6a64e6b1ac47ceb2e01212c"></a>
-<a class="el" href="classhypro_1_1Transition.html">Transition</a>&lt; Number &gt; *&#160;</td><td class="memItemRight" valign="bottom"><b>createTransition</b> (const std::pair&lt; unsigned, unsigned &gt; &amp;_transition, const boost::optional&lt; <a class="el" href="namespacehypro.html#a03ed815dbbaab8a64776d7b39035977f">Aggregation</a> &gt; &amp;_aggregation, const boost::optional&lt; double &gt; &amp;_triggerTime, unsigned _dim, unsigned _discreteDim)</td></tr>
+<a class="el" href="classhypro_1_1Transition.html">Transition</a>&lt; Number &gt; *&#160;</td><td class="memItemRight" valign="bottom"><b>createTransition</b> (const std::pair&lt; unsigned, unsigned &gt; &amp;_transition, const boost::optional&lt; Aggregation &gt; &amp;_aggregation, const boost::optional&lt; double &gt; &amp;_triggerTime, unsigned _dim, unsigned _discreteDim)</td></tr>
 <tr class="separator:a7c93a4c0f6a64e6b1ac47ceb2e01212c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af09c4b9f23b3ae37088eca153a8a8bce"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af09c4b9f23b3ae37088eca153a8a8bce"></a>
 <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>createMatrix</b> (const std::vector&lt; std::pair&lt; unsigned, <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; double &gt;&gt;&gt; &amp;_assignments, unsigned _dim)</td></tr>
@@ -249,7 +249,7 @@ qi::unused_type(symbol_table <br class="typebreak"/>
 const &amp;, unsigned const &amp;)&gt;&#160;</td><td class="memItemRight" valign="bottom"><b>discreteReset</b></td></tr>
 <tr class="separator:a9b869ef5200329f611d0424c7b41f251"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5abb78d498b532df07129f47cbfbcdfa"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5abb78d498b532df07129f47cbfbcdfa"></a>
-qi::rule&lt; Iterator, <a class="el" href="namespacehypro.html#a03ed815dbbaab8a64776d7b39035977f">Aggregation</a>()&gt;&#160;</td><td class="memItemRight" valign="bottom"><b>agg</b></td></tr>
+qi::rule&lt; Iterator, Aggregation()&gt;&#160;</td><td class="memItemRight" valign="bottom"><b>agg</b></td></tr>
 <tr class="separator:a5abb78d498b532df07129f47cbfbcdfa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8d3142232b3833d0e6178247c9d2ae97"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8d3142232b3833d0e6178247c9d2ae97"></a>
 qi::rule&lt; Iterator, double()&gt;&#160;</td><td class="memItemRight" valign="bottom"><b>timed</b></td></tr>

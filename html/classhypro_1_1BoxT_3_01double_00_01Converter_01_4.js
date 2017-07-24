@@ -48,7 +48,7 @@ var classhypro_1_1BoxT_3_01double_00_01Converter_01_4 =
     [ "supremum", "classhypro_1_1BoxT_3_01double_00_01Converter_01_4.html#a43b004f2890484c451eb923a250c0de4", null ],
     [ "unite", "classhypro_1_1BoxT_3_01double_00_01Converter_01_4.html#aa36c664a817e2a683ee2cd3ea905bdef", null ],
     [ "vector", "classhypro_1_1BoxT_3_01double_00_01Converter_01_4.html#a7833fb8498eaba524a2d9756810064e4", null ],
-    [ "vertices", "classhypro_1_1BoxT_3_01double_00_01Converter_01_4.html#a84ec9af8847898e5a80133f016871d90", null ],
+    [ "vertices", "classhypro_1_1BoxT_3_01double_00_01Converter_01_4.html#ac7982e9f84ae7dc9719908611f97b8c1", null ],
     [ "operator!=", "classhypro_1_1BoxT_3_01double_00_01Converter_01_4.html#af55af398df214d4f35b755816ff20f12", null ],
     [ "operator<<", "classhypro_1_1BoxT_3_01double_00_01Converter_01_4.html#a4b920f446605087a729d1317a059d553", null ],
     [ "operator==", "classhypro_1_1BoxT_3_01double_00_01Converter_01_4.html#a78f1e1774a6594ddbcdd53dcf74a7606", null ],

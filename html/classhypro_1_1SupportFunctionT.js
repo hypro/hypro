@@ -50,7 +50,7 @@ var classhypro_1_1SupportFunctionT =
     [ "unionParameters", "classhypro_1_1SupportFunctionT.html#ad0fe5b986c1d3fc5f5337641ccebd329", null ],
     [ "unite", "classhypro_1_1SupportFunctionT.html#a057371717b73aab19f6559112c2ef401", null ],
     [ "vector", "classhypro_1_1SupportFunctionT.html#a4048fdc0ce40c348c3826df496b56da9", null ],
-    [ "vertices", "classhypro_1_1SupportFunctionT.html#a1750c945d518d758dabea3c7a136bee0", null ],
+    [ "vertices", "classhypro_1_1SupportFunctionT.html#a96627e362bf40eb7d2cdc1f9eb57acc9", null ],
     [ "operator<<", "classhypro_1_1SupportFunctionT.html#ac8ed3c50959aa35570bca83e5fe57d7a", null ],
     [ "operator==", "classhypro_1_1SupportFunctionT.html#a229f47919a7057f6b0ef4fc9cbd74e6b", null ]
 ];

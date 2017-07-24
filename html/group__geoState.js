@@ -48,18 +48,19 @@ var group__geoState =
       [ "supremum", "classhypro_1_1BoxT.html#a79bc17eb96d58ccbc16749a7388190eb", null ],
       [ "unite", "classhypro_1_1BoxT.html#aa009fb013a5cd664e38130771b852cda", null ],
       [ "vector", "classhypro_1_1BoxT.html#a0d97126678bac33606dff79f124a8334", null ],
-      [ "vertices", "classhypro_1_1BoxT.html#a52c7c5c52bf69b24f11389abdb1bb899", null ],
+      [ "vertices", "classhypro_1_1BoxT.html#a617b4c5905701b5fb5da8bcf4373da4e", null ],
       [ "operator!=", "classhypro_1_1BoxT.html#ad04aaa49953bc98924e23a8935fc0573", null ],
       [ "operator<<", "classhypro_1_1BoxT.html#af7340bba357e6f3b815192a642cdd941", null ],
       [ "operator==", "classhypro_1_1BoxT.html#a0d86569082f10fe8c8f63f06a6f044bf", null ],
       [ "mLimits", "classhypro_1_1BoxT.html#a61df8663327f487aa0d12d64b71fc228", null ]
     ] ],
     [ "ConstraintSetT", "classhypro_1_1ConstraintSetT.html", [
-      [ "ConstraintSetT", "classhypro_1_1ConstraintSetT.html#ab364cbf6be2383cbdecec00c0f3e9edb", null ],
-      [ "ConstraintSetT", "classhypro_1_1ConstraintSetT.html#a4318bf71e22f75d0c53d5ce48b2e87af", null ],
+      [ "ConstraintSetT", "classhypro_1_1ConstraintSetT.html#a9b8336013737c9d62b1505262e124429", null ],
+      [ "ConstraintSetT", "classhypro_1_1ConstraintSetT.html#acc5c46951b296c93e2cc29d8988c1cf3", null ],
       [ "ConstraintSetT", "classhypro_1_1ConstraintSetT.html#a2efa3ebe969d32387caa6c30bd96d77d", null ],
       [ "ConstraintSetT", "classhypro_1_1ConstraintSetT.html#a83d762711fed227a2b2d4115bc8a6b4d", null ],
       [ "~ConstraintSetT", "classhypro_1_1ConstraintSetT.html#a60e0ed75b7fa9a7f92715451958b2bee", null ],
+      [ "addConstraint", "classhypro_1_1ConstraintSetT.html#a0d163f8b3651293f70f61d1c7e364999", null ],
       [ "affineTransformation", "classhypro_1_1ConstraintSetT.html#afbb595115dda728b4c1c77d489111328", null ],
       [ "clear", "classhypro_1_1ConstraintSetT.html#a6dd25ffd56f4ba83b06b29703250cfc2", null ],
       [ "contains", "classhypro_1_1ConstraintSetT.html#a2babb51a2e23ac48622a1abace3f50f9", null ],
@@ -70,7 +71,7 @@ var group__geoState =
       [ "intersectHalfspace", "classhypro_1_1ConstraintSetT.html#ab722f3f23728d988a82e819d9b5f1c9a", null ],
       [ "intersectHalfspaces", "classhypro_1_1ConstraintSetT.html#a0a0d6b5ce8e8d1f9ad33228f3437b97c", null ],
       [ "linearTransformation", "classhypro_1_1ConstraintSetT.html#addd73d4ab4e004dae4a2f9d90f022ce4", null ],
-      [ "matrix", "classhypro_1_1ConstraintSetT.html#a10f5320ce838fd5df496412ee58570e9", null ],
+      [ "matrix", "classhypro_1_1ConstraintSetT.html#a1ba449cad7db14ccd0449432068ad243", null ],
       [ "minkowskiSum", "classhypro_1_1ConstraintSetT.html#abf13e462505114b64961482c1741e8e2", null ],
       [ "operator=", "classhypro_1_1ConstraintSetT.html#a82b7bbd5b076534ea309d2bf6a57ffb2", null ],
       [ "operator=", "classhypro_1_1ConstraintSetT.html#afe63dc58b9bed84eb3bf4fbc088d1250", null ],
@@ -83,8 +84,8 @@ var group__geoState =
       [ "satisfiesHalfspaces", "classhypro_1_1ConstraintSetT.html#a17b7f2c90aab96206139f1ee3af9494b", null ],
       [ "size", "classhypro_1_1ConstraintSetT.html#a6e387a09c5e1410fb41b474ab5b3c0e6", null ],
       [ "unite", "classhypro_1_1ConstraintSetT.html#a064a73e11c0c1e6f0714350c1d84cd35", null ],
-      [ "vector", "classhypro_1_1ConstraintSetT.html#ad42b50d6bf4fd987989bbbb84996f8f4", null ],
-      [ "vertices", "classhypro_1_1ConstraintSetT.html#a344ec42a40b4a817e3dedd97fc0c34db", null ],
+      [ "vector", "classhypro_1_1ConstraintSetT.html#a23d9c1852754214a65b3c822ceb97995", null ],
+      [ "vertices", "classhypro_1_1ConstraintSetT.html#a8cf1314861edc469174f5369669451de", null ],
       [ "operator!=", "classhypro_1_1ConstraintSetT.html#a5616f15bef0ceb159912960a5f3f4499", null ],
       [ "operator<<", "classhypro_1_1ConstraintSetT.html#aa8c7bd561fc89d9e904ac406a1320309", null ],
       [ "operator==", "classhypro_1_1ConstraintSetT.html#a8028a8af7bbf5335bd61798c605b0b42", null ],
@@ -105,7 +106,7 @@ var group__geoState =
       [ "satisfiesHalfspace", "classhypro_1_1GeometricObject.html#a45218953a280ddc544176842774346c8", null ],
       [ "satisfiesHalfspaces", "classhypro_1_1GeometricObject.html#acddc7fbfe0fde344fa0c66c155bdc6a2", null ],
       [ "unite", "classhypro_1_1GeometricObject.html#a3ed4020101437144b34b62cc01d5bf01", null ],
-      [ "vertices", "classhypro_1_1GeometricObject.html#a2e9b23a267023e8bf2ce5b36d14f1de5", null ]
+      [ "vertices", "classhypro_1_1GeometricObject.html#ada1c4dd741b73792ada09f17ac2894c4", null ]
     ] ],
     [ "HPolytopeT", "classhypro_1_1HPolytopeT.html", [
       [ "HalfspaceVector", "classhypro_1_1HPolytopeT.html#a4bee86703282d9bf9841210472b5a8cc", null ],
@@ -172,7 +173,7 @@ var group__geoState =
       [ "unreduce", "classhypro_1_1HPolytopeT.html#a784e7ef64309241caf0491ca81a1971d", null ],
       [ "vector", "classhypro_1_1HPolytopeT.html#ac5422e940bafc97069f453837100e4ef", null ],
       [ "vertexEnumeration", "classhypro_1_1HPolytopeT.html#a6954b5f275c5556cbd7c91f934a2da00", null ],
-      [ "vertices", "classhypro_1_1HPolytopeT.html#ab77db028b9a480259ff088e930d8782f", null ],
+      [ "vertices", "classhypro_1_1HPolytopeT.html#a897e9a51988a1807fdf3ee7c161b9925", null ],
       [ "operator<<", "classhypro_1_1HPolytopeT.html#a5884f4f86940ce952a4a8bfbbf70c751", null ],
       [ "swap", "classhypro_1_1HPolytopeT.html#a4b9cab5a8a39df186fa727463c617811", null ]
     ] ],
@@ -227,7 +228,7 @@ var group__geoState =
       [ "unite", "classhypro_1_1VPolytopeT.html#a1121ee3ad173f9ed6c0be6b282c7622d", null ],
       [ "unsafeSetNeighbors", "classhypro_1_1VPolytopeT.html#a6aaad82f80c7ae53d5fef36a3ae12406", null ],
       [ "updateNeighbors", "classhypro_1_1VPolytopeT.html#a08246835822202d4c7498daff899588e", null ],
-      [ "vertices", "classhypro_1_1VPolytopeT.html#a7af34bcb9e3d970727059224dcc3ef8c", null ]
+      [ "vertices", "classhypro_1_1VPolytopeT.html#af1bc0c0567aa7fd607ed34f0783b88a2", null ]
     ] ],
     [ "SupportFunctionT", "classhypro_1_1SupportFunctionT.html", [
       [ "SupportFunctionT", "classhypro_1_1SupportFunctionT.html#a204068b51fd43f8a3dd2af5720c3a7e0", null ],
@@ -280,7 +281,7 @@ var group__geoState =
       [ "unionParameters", "classhypro_1_1SupportFunctionT.html#ad0fe5b986c1d3fc5f5337641ccebd329", null ],
       [ "unite", "classhypro_1_1SupportFunctionT.html#a057371717b73aab19f6559112c2ef401", null ],
       [ "vector", "classhypro_1_1SupportFunctionT.html#a4048fdc0ce40c348c3826df496b56da9", null ],
-      [ "vertices", "classhypro_1_1SupportFunctionT.html#a1750c945d518d758dabea3c7a136bee0", null ],
+      [ "vertices", "classhypro_1_1SupportFunctionT.html#a96627e362bf40eb7d2cdc1f9eb57acc9", null ],
       [ "operator<<", "classhypro_1_1SupportFunctionT.html#ac8ed3c50959aa35570bca83e5fe57d7a", null ],
       [ "operator==", "classhypro_1_1SupportFunctionT.html#a229f47919a7057f6b0ef4fc9cbd74e6b", null ]
     ] ],
@@ -325,6 +326,6 @@ var group__geoState =
       [ "supremum", "classhypro_1_1ZonotopeT.html#a5f0edaa86017da294d6ccc608cebf30b", null ],
       [ "unite", "classhypro_1_1ZonotopeT.html#a0d2a1a24abd99f823a6e7872673b9d5d", null ],
       [ "uniteEqualVectors", "classhypro_1_1ZonotopeT.html#a2826dbe69a33cbcfb65fccbcf8943e4f", null ],
-      [ "vertices", "classhypro_1_1ZonotopeT.html#ae8fcbde0c2acae76eff2d1365b958f2d", null ]
+      [ "vertices", "classhypro_1_1ZonotopeT.html#a9b13ff579f3fa8978107792fa2862de4", null ]
     ] ]
 ];

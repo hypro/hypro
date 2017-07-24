@@ -108,9 +108,9 @@ $(document).ready(function(){initNavTree('example_bouncingBall_8cpp-example.html
 <p>An example file showing how to construct the automaton for a bouncing ball system and afterwards determine the set of reachable states for this system using H-polytopes as a state set representation.</p>
 <div class="fragment"><div class="line"></div>
 <div class="line"><span class="preprocessor">#include &quot;config.h&quot;</span></div>
-<div class="line"><span class="preprocessor">#include &quot;<a class="code" href="LocationManager_8h.html">datastructures/hybridAutomata/LocationManager.h</a>&quot;</span></div>
-<div class="line"><span class="preprocessor">#include &quot;<a class="code" href="Transition_8h.html">datastructures/hybridAutomata/Transition.h</a>&quot;</span></div>
-<div class="line"><span class="preprocessor">#include &quot;<a class="code" href="HybridAutomaton_8h.html">datastructures/hybridAutomata/HybridAutomaton.h</a>&quot;</span></div>
+<div class="line"><span class="preprocessor">#include &quot;datastructures/hybridAutomata/LocationManager.h&quot;</span></div>
+<div class="line"><span class="preprocessor">#include &quot;datastructures/hybridAutomata/Transition.h&quot;</span></div>
+<div class="line"><span class="preprocessor">#include &quot;datastructures/hybridAutomata/HybridAutomaton.h&quot;</span></div>
 <div class="line"><span class="preprocessor">#include &quot;<a class="code" href="Point_8h.html">datastructures/Point.h</a>&quot;</span></div>
 <div class="line"><span class="preprocessor">#include &quot;<a class="code" href="GeometricObject_8h.html">representations/GeometricObject.h</a>&quot;</span></div>
 <div class="line"><span class="preprocessor">#include &quot;<a class="code" href="Reach_8h.html">algorithms/reachability/Reach.h</a>&quot;</span></div>
@@ -183,7 +183,7 @@ $(document).ready(function(){initNavTree('example_bouncingBall_8cpp-example.html
 <div class="line">    guard.vec = guardVec;</div>
 <div class="line"></div>
 <div class="line">    <span class="comment">// reset function</span></div>
-<div class="line">    typename <a class="code" href="classhypro_1_1Transition.html">Transition</a>&lt;Number&gt;::Reset reset;</div>
+<div class="line">    typename <a class="code" href="classhypro_1_1Transition.html">Transition</a>&lt;Number&gt;<a name="_a4"></a><a class="code" href="classhypro_1_1Reset.html">::Reset</a> reset;</div>
 <div class="line">    <a class="code" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt;Number&gt; constantReset = <a class="code" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt;Number&gt;(2,1);</div>
 <div class="line">    <a class="code" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt;Number&gt; linearReset = <a class="code" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt;Number&gt;(2,2);</div>
 <div class="line"></div>
@@ -230,7 +230,7 @@ $(document).ready(function(){initNavTree('example_bouncingBall_8cpp-example.html
 <div class="line">    boxMat(3,1) = Number(-1);</div>
 <div class="line"></div>
 <div class="line">    <span class="comment">// create initial state.</span></div>
-<div class="line">    <a name="_a4"></a><a class="code" href="structhypro_1_1RawState.html">RawState</a>&lt;Number&gt; initialState(loc1, std::make_pair(boxMat, boxVec));</div>
+<div class="line">    RawState&lt;Number&gt; initialState(loc1, std::make_pair(boxMat, boxVec));</div>
 <div class="line">    bBallAutomaton.addInitialState(initialState);</div>
 <div class="line"></div>
 <div class="line">    <span class="comment">// vector of sets to collect flowpipes (which are again a vector of sets).</span></div>
@@ -238,8 +238,8 @@ $(document).ready(function(){initNavTree('example_bouncingBall_8cpp-example.html
 <div class="line"></div>
 <div class="line">    <span class="comment">// instanciate reachability analysis algorithm.</span></div>
 <div class="line">    <a name="_a5"></a><a class="code" href="classhypro_1_1reachability_1_1Reach.html">hypro::reachability::Reach</a>&lt;Number, Representation&gt; reacher(bBallAutomaton);</div>
-<div class="line">    <a name="_a6"></a><a class="code" href="structhypro_1_1reachability_1_1ReachabilitySettings.html">hypro::reachability::ReachabilitySettings</a>&lt;Number&gt; settings = reacher.settings();</div>
-<div class="line">    settings.timeStep = <a name="a7"></a><a class="code" href="namespacehypro.html#a430a74d1edbcc624d5e03c4ec111c24c">carl::convert</a>&lt;double,Number&gt;(0.01);</div>
+<div class="line">    hypro::reachability::ReachabilitySettings&lt;Number&gt; settings = reacher.settings();</div>
+<div class="line">    settings.timeStep = <a name="a6"></a><a class="code" href="namespacehypro.html#a430a74d1edbcc624d5e03c4ec111c24c">carl::convert</a>&lt;double,Number&gt;(0.01);</div>
 <div class="line">    settings.timeBound = Number(3);</div>
 <div class="line">    settings.jumpDepth = 3;</div>
 <div class="line">    reacher.setSettings(settings);</div>
@@ -248,7 +248,7 @@ $(document).ready(function(){initNavTree('example_bouncingBall_8cpp-example.html
 <div class="line">    std::vector&lt;std::pair&lt;unsigned, reachability::flowpipe_t&lt;Representation&gt;&gt;&gt; flowpipeIndices = reacher.computeForwardReachability();</div>
 <div class="line"></div>
 <div class="line">    <span class="comment">// plot flowpipes.</span></div>
-<div class="line">    <a name="_a8"></a><a class="code" href="classhypro_1_1Plotter.html">Plotter</a>&lt;Number&gt;&amp; plotter = <a class="code" href="classhypro_1_1Plotter.html">Plotter</a>&lt;Number&gt;::getInstance();</div>
+<div class="line">    <a name="_a7"></a><a class="code" href="classhypro_1_1Plotter.html">Plotter</a>&lt;Number&gt;&amp; plotter = <a class="code" href="classhypro_1_1Plotter.html">Plotter</a>&lt;Number&gt;::getInstance();</div>
 <div class="line">    plotter.setFilename(&quot;bouncingBall&quot;);</div>
 <div class="line">    for(auto&amp; indexPair : flowpipeIndices){</div>
 <div class="line">        std::vector&lt;Representation&gt; flowpipe = indexPair.second;</div>
@@ -259,7 +259,7 @@ $(document).ready(function(){initNavTree('example_bouncingBall_8cpp-example.html
 <div class="line">                <span class="keywordflow">for</span>(<span class="keyword">auto</span>&amp; point : points) {</div>
 <div class="line">                    point.reduceDimension(2);</div>
 <div class="line">                }</div>
-<div class="line">                plotter.<a name="a9"></a><a class="code" href="classhypro_1_1Plotter.html#a5993c1c7ece6f9f3c2c03b61a58d60ce">addObject</a>(points);</div>
+<div class="line">                plotter.<a name="a8"></a><a class="code" href="classhypro_1_1Plotter.html#a5993c1c7ece6f9f3c2c03b61a58d60ce">addObject</a>(points);</div>
 <div class="line">                points.clear();</div>
 <div class="line">            }</div>
 <div class="line">        }</div>

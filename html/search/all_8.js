@@ -15,7 +15,6 @@ var searchData=
   ['intersectionvector',['intersectionVector',['../classhypro_1_1Halfspace.html#a5ff5825856dbcd3841ced99d12042490',1,'hypro::Halfspace']]],
   ['interval',['interval',['../classhypro_1_1BoxT.html#af1360a0b7ee8a326a20f98428a84ec1b',1,'hypro::BoxT::interval()'],['../classhypro_1_1BoxT_3_01double_00_01Converter_01_4.html#a5eb82b14cc33f482b30954882fa04612',1,'hypro::BoxT&lt; double, Converter &gt;::interval()']]],
   ['intervalhull',['intervalHull',['../classhypro_1_1ZonotopeT.html#ad3a9ff15e52702539ac249a7edc5099d',1,'hypro::ZonotopeT']]],
-  ['invariant',['Invariant',['../structhypro_1_1Location_1_1Invariant.html',1,'hypro::Location']]],
   ['invert',['invert',['../classhypro_1_1Halfspace.html#add63f3e4fa20331e03570eda43654558',1,'hypro::Halfspace']]],
   ['invertcolor',['invertColor',['../classhypro_1_1Vertex.html#aba2719a95c51fb51ea2e5b39ad6e85e1',1,'hypro::Vertex']]],
   ['isinboundary',['isInBoundary',['../classhypro_1_1Point.html#ae41a08b161b35220aef8893bb0639c63',1,'hypro::Point']]],
