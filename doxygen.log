@@ -1435,6 +1435,11 @@ Generating docs for compound hypro::BoxT< double, /home/travis/build/hypro/hypro
 /home/travis/build/hypro/hypro/src/hypro/representations/ConstraintSet/ConstraintSet.h:81: warning: Member rVector() (function) of class hypro::ConstraintSetT is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/ConstraintSet/ConstraintSet.h:92: warning: Member addConstraint(const vector_t< Number > &normal, Number offset) (function) of class hypro::ConstraintSetT is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/ConstraintSet/ConstraintSet.h:183: warning: Member type() (function) of class hypro::ConstraintSetT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/ConstraintSet/ConstraintSet.h:213: warning: argument 'constraintSet' of command @param is not found in the argument list of hypro::ConstraintSetT< Number, Converter >::contains(const ConstraintSetT< Number, Converter > &) const
+/home/travis/build/hypro/hypro/src/hypro/representations/ConstraintSet/ConstraintSet.h:202: warning: argument 'rhs' of command @param is not found in the argument list of hypro::ConstraintSetT< Number, Converter >::intersect(const ConstraintSetT< Number, Converter > &) const
+/home/travis/build/hypro/hypro/src/hypro/representations/ConstraintSet/ConstraintSet.h:188: warning: argument 'limit' of command @param is not found in the argument list of hypro::ConstraintSetT< Number, Converter >::reduceNumberRepresentation(unsigned)
+/home/travis/build/hypro/hypro/src/hypro/representations/ConstraintSet/ConstraintSet.h:220: warning: argument 'rhs' of command @param is not found in the argument list of hypro::ConstraintSetT< Number, Converter >::unite(const ConstraintSetT< Number, Converter > &) const
+/home/travis/build/hypro/hypro/src/hypro/representations/ConstraintSet/ConstraintSet.h:227: warning: argument 'constraintSets' of command @param is not found in the argument list of hypro::ConstraintSetT< Number, Converter >::unite(const std::vector< ConstraintSetT< Number, Converter >> &)
 /home/travis/build/hypro/hypro/src/hypro/representations/ConstraintSet/ConstraintSet.h:149: warning: argument 'b' of command @param is not found in the argument list of hypro::ConstraintSetT< Number, Converter >::operator<<(std::ostream &ostr, const ConstraintSetT< Number, Converter > &)
 /home/travis/build/hypro/hypro/src/hypro/representations/conversion/Converter.h:32: warning: Member Box (typedef) of class hypro::Converter is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/conversion/Converter.h:33: warning: Member ConstraintSet (typedef) of class hypro::Converter is not documented.
@@ -2868,5 +2873,5 @@ Patching output file 33/36
 Patching output file 34/36
 Patching output file 35/36
 Patching output file 36/36
-lookup cache used 5348/65536 hits=44943 misses=6062
+lookup cache used 5344/65536 hits=44852 misses=6058
 finished...

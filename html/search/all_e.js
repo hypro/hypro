@@ -16,7 +16,7 @@ var searchData=
   ['reachtreenodesimple',['ReachTreeNodeSimple',['../classhypro_1_1ReachTreeNodeSimple.html',1,'hypro']]],
   ['reduced',['reduced',['../classhypro_1_1VPolytopeT.html#a348a9485ad052d94057c694664c2e59e',1,'hypro::VPolytopeT']]],
   ['reducedimension',['reduceDimension',['../classhypro_1_1Point.html#ab5852c9fed54d03484bcec3a99a99484',1,'hypro::Point']]],
-  ['reducenumberrepresentation',['reduceNumberRepresentation',['../classhypro_1_1BoxT.html#a25675fe6ea22b2ed4a70dbec481e768d',1,'hypro::BoxT::reduceNumberRepresentation()'],['../classhypro_1_1BoxT_3_01double_00_01Converter_01_4.html#a4973437d1710a49f122eea212b6286c4',1,'hypro::BoxT&lt; double, Converter &gt;::reduceNumberRepresentation()'],['../classhypro_1_1ConstraintSetT.html#a61dc1b2cb2f3b21df6b2fe3971d89c8d',1,'hypro::ConstraintSetT::reduceNumberRepresentation()']]],
+  ['reducenumberrepresentation',['reduceNumberRepresentation',['../classhypro_1_1BoxT.html#a25675fe6ea22b2ed4a70dbec481e768d',1,'hypro::BoxT::reduceNumberRepresentation()'],['../classhypro_1_1BoxT_3_01double_00_01Converter_01_4.html#a4973437d1710a49f122eea212b6286c4',1,'hypro::BoxT&lt; double, Converter &gt;::reduceNumberRepresentation()'],['../classhypro_1_1ConstraintSetT.html#ad2ee7ce67966057d729a02ff0c8eb68c',1,'hypro::ConstraintSetT::reduceNumberRepresentation()']]],
   ['reducetodimensions',['reduceToDimensions',['../classhypro_1_1Point.html#aac36f52442ba29d0ecf58d1042cfd9ac',1,'hypro::Point']]],
   ['redundantconstraints',['redundantConstraints',['../classhypro_1_1Optimizer.html#a37a12c32ebf96ff35b1218c7eb936084',1,'hypro::Optimizer']]],
   ['removeduplicatepoints',['removeDuplicatePoints',['../classhypro_1_1Point.html#a7a8c12183c854b044cdfc6122ad385ed',1,'hypro::Point']]],
