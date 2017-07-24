@@ -191,7 +191,7 @@ TYPED_TEST(SupportFunctionTest, linearTransformation) {
 	for( std::size_t i = 1; i < pow(2,res.linearTrafoParameters()->parameters->power*2); ++i) {
 		res = res.linearTransformation(rotation);
 	}
-	EXPECT_EQ(res.linearTrafoParameters()->currentExponent, 16);
+	EXPECT_EQ(res.linearTrafoParameters()->currentExponent, unsigned(16));
 	EXPECT_EQ(res.linearTrafoParameters()->parameters->parameters.size(), 1);
 	// reduction is only invoked when using the support function ->evaluate
 	res.evaluate(v2Rot);
