@@ -309,6 +309,50 @@ TYPED_TEST(SupportFunctionTest, intersect) {
 	EXPECT_EQ(result.evaluate(dir4).supportValue, TypeParam(1));
 }
 
+TYPED_TEST(SupportFunctionTest, satisfiesHalfspaces) {
+	matrix_t<TypeParam> constraints1 = matrix_t<TypeParam>::Zero(4,2);
+	constraints1 << 1,0,
+					-1,0,
+					0,1,
+					0,-1;
+	vector_t<TypeParam> constants1 = vector_t<TypeParam>::Zero(4);
+	constants1 << 1,1,1,1;
+
+	SupportFunction<TypeParam> psf1 = SupportFunction<TypeParam>(constraints1, constants1);
+
+	matrix_t<TypeParam> normal = matrix_t<TypeParam>::Zero(1,2);
+	normal << 1,1;
+	vector_t<TypeParam> offset = vector_t<TypeParam>::Zero(1);
+	offset << 2;
+
+	std::pair<bool,SupportFunction<TypeParam>> fullyContained = psf1.satisfiesHalfspaces(normal, offset);
+	EXPECT_TRUE(fullyContained.first);
+	vector_t<TypeParam> evalDir = normal.row(0);
+	EXPECT_TRUE(fullyContained.second.evaluate(evalDir).supportValue >= 1);
+
+	normal << 1,0;
+	offset << 1;
+	std::pair<bool,SupportFunction<TypeParam>> onBorder = psf1.satisfiesHalfspaces(normal, offset);
+	EXPECT_TRUE(onBorder.first);
+	evalDir = normal.row(0);
+	EXPECT_TRUE(onBorder.second.evaluate(evalDir).supportValue == 1);
+
+	offset << 0;
+	std::pair<bool,SupportFunction<TypeParam>> cutHalf = psf1.satisfiesHalfspaces(normal, offset);
+	EXPECT_TRUE(cutHalf.first);
+	EXPECT_TRUE(cutHalf.second.evaluate(evalDir).supportValue == 0);
+
+	offset << -1;
+	std::pair<bool,SupportFunction<TypeParam>> barelyContained = psf1.satisfiesHalfspaces(normal, offset);
+	EXPECT_TRUE(barelyContained.first);
+	EXPECT_EQ(barelyContained.second.evaluate(evalDir).supportValue, -1);
+
+	offset << -1.1;
+	std::pair<bool,SupportFunction<TypeParam>> notContained = psf1.satisfiesHalfspaces(normal, offset);
+	EXPECT_FALSE(notContained.first);
+	EXPECT_TRUE(notContained.second.empty());
+}
+
 TYPED_TEST(SupportFunctionTest, unite) {
 	matrix_t<TypeParam> constraints1 = matrix_t<TypeParam>(3,2);
 	matrix_t<TypeParam> constraints2 = matrix_t<TypeParam>(3,2);
