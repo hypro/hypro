@@ -38,7 +38,7 @@ class HyproHAVisitor : public HybridAutomatonBaseVisitor {
 		std::vector<std::string> vars;
 
 		//Helping functions
-		Number stringToNumber(std::string& string);
+		Number stringToNumber(std::string string);
 		Number multTogether(HybridAutomatonParser::TermContext* ctx);
 		vector_t<Number> getPolynomCoeff(HybridAutomatonParser::PolynomContext* ctx);
 
@@ -47,9 +47,6 @@ class HyproHAVisitor : public HybridAutomatonBaseVisitor {
 
 		HyproHAVisitor();
 		~HyproHAVisitor();
-
-		//inline const std::set<Location<Number>*>& getLocSet() const { return locSet; }
-		//inline const std::vector<std::string>& getVarNames() const { return vars; }
 
 		antlrcpp::Any visitStart(HybridAutomatonParser::StartContext *ctx) override;
 

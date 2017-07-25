@@ -16,6 +16,7 @@ hybrid reachability
     x = 510
     c1 <= 5*5
     c2+c1 >= -11*x
+    c2 in [-2,2]
    }
   }
  }

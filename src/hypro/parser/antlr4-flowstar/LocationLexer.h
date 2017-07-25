@@ -13,8 +13,8 @@ class  LocationLexer : public antlr4::Lexer {
 public:
   enum {
     T__0 = 1, T__1 = 2, T__2 = 3, T__3 = 4, T__4 = 5, T__5 = 6, T__6 = 7, 
-    T__7 = 8, IN = 9, EQUALS = 10, BOOLRELATION = 11, PLUS = 12, TIMES = 13, 
-    NUMBER = 14, VARIABLE = 15, INTERVAL = 16, WS = 17
+    T__7 = 8, T__8 = 9, T__9 = 10, T__10 = 11, IN = 12, EQUALS = 13, BOOLRELATION = 14, 
+    PLUS = 15, TIMES = 16, NUMBER = 17, VARIABLE = 18, WS = 19
   };
 
   LocationLexer(antlr4::CharStream *input);

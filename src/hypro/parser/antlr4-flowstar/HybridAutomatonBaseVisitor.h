@@ -55,6 +55,10 @@ public:
     return visitChildren(ctx);
   }
 
+  virtual antlrcpp::Any visitInterval(HybridAutomatonParser::IntervalContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
   virtual antlrcpp::Any visitIntervalexpr(HybridAutomatonParser::IntervalexprContext *ctx) override {
     return visitChildren(ctx);
   }

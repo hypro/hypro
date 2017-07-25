@@ -12,8 +12,8 @@
 class  FormulaLexer : public antlr4::Lexer {
 public:
   enum {
-    IN = 1, EQUALS = 2, BOOLRELATION = 3, PLUS = 4, TIMES = 5, NUMBER = 6, 
-    VARIABLE = 7, INTERVAL = 8, WS = 9
+    T__0 = 1, T__1 = 2, T__2 = 3, IN = 4, EQUALS = 5, BOOLRELATION = 6, 
+    PLUS = 7, TIMES = 8, NUMBER = 9, VARIABLE = 10, WS = 11
   };
 
   FormulaLexer(antlr4::CharStream *input);

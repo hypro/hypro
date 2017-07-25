@@ -12,13 +12,13 @@
 class  FormulaParser : public antlr4::Parser {
 public:
   enum {
-    IN = 1, EQUALS = 2, BOOLRELATION = 3, PLUS = 4, TIMES = 5, NUMBER = 6, 
-    VARIABLE = 7, INTERVAL = 8, WS = 9
+    T__0 = 1, T__1 = 2, T__2 = 3, IN = 4, EQUALS = 5, BOOLRELATION = 6, 
+    PLUS = 7, TIMES = 8, NUMBER = 9, VARIABLE = 10, WS = 11
   };
 
   enum {
     RuleTerm = 0, RulePolynom = 1, RuleEquation = 2, RuleConstraint = 3, 
-    RuleIntervalexpr = 4
+    RuleInterval = 4, RuleIntervalexpr = 5
   };
 
   FormulaParser(antlr4::TokenStream *input);
@@ -35,6 +35,7 @@ public:
   class PolynomContext;
   class EquationContext;
   class ConstraintContext;
+  class IntervalContext;
   class IntervalexprContext; 
 
   class  TermContext : public antlr4::ParserRuleContext {
@@ -48,6 +49,7 @@ public:
     std::vector<antlr4::tree::TerminalNode *> TIMES();
     antlr4::tree::TerminalNode* TIMES(size_t i);
 
+    virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
    
   };
 
@@ -62,6 +64,7 @@ public:
     std::vector<antlr4::tree::TerminalNode *> PLUS();
     antlr4::tree::TerminalNode* PLUS(size_t i);
 
+    virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
    
   };
 
@@ -75,6 +78,7 @@ public:
     antlr4::tree::TerminalNode *EQUALS();
     PolynomContext *polynom();
 
+    virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
    
   };
 
@@ -87,11 +91,26 @@ public:
     std::vector<PolynomContext *> polynom();
     PolynomContext* polynom(size_t i);
     antlr4::tree::TerminalNode *BOOLRELATION();
+    antlr4::tree::TerminalNode *EQUALS();
 
+    virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
    
   };
 
   ConstraintContext* constraint();
+
+  class  IntervalContext : public antlr4::ParserRuleContext {
+  public:
+    IntervalContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    std::vector<antlr4::tree::TerminalNode *> NUMBER();
+    antlr4::tree::TerminalNode* NUMBER(size_t i);
+
+    virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+   
+  };
+
+  IntervalContext* interval();
 
   class  IntervalexprContext : public antlr4::ParserRuleContext {
   public:
@@ -99,8 +118,9 @@ public:
     virtual size_t getRuleIndex() const override;
     antlr4::tree::TerminalNode *VARIABLE();
     antlr4::tree::TerminalNode *IN();
-    antlr4::tree::TerminalNode *INTERVAL();
+    IntervalContext *interval();
 
+    virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
    
   };
 

@@ -13,14 +13,14 @@ class  LocationParser : public antlr4::Parser {
 public:
   enum {
     T__0 = 1, T__1 = 2, T__2 = 3, T__3 = 4, T__4 = 5, T__5 = 6, T__6 = 7, 
-    T__7 = 8, IN = 9, EQUALS = 10, BOOLRELATION = 11, PLUS = 12, TIMES = 13, 
-    NUMBER = 14, VARIABLE = 15, INTERVAL = 16, WS = 17
+    T__7 = 8, T__8 = 9, T__9 = 10, T__10 = 11, IN = 12, EQUALS = 13, BOOLRELATION = 14, 
+    PLUS = 15, TIMES = 16, NUMBER = 17, VARIABLE = 18, WS = 19
   };
 
   enum {
     RuleModes = 0, RuleLocation = 1, RuleActivities = 2, RuleInvariants = 3, 
     RuleTerm = 4, RulePolynom = 5, RuleEquation = 6, RuleConstraint = 7, 
-    RuleIntervalexpr = 8
+    RuleInterval = 8, RuleIntervalexpr = 9
   };
 
   LocationParser(antlr4::TokenStream *input);
@@ -41,6 +41,7 @@ public:
   class PolynomContext;
   class EquationContext;
   class ConstraintContext;
+  class IntervalContext;
   class IntervalexprContext; 
 
   class  ModesContext : public antlr4::ParserRuleContext {
@@ -50,6 +51,7 @@ public:
     std::vector<LocationContext *> location();
     LocationContext* location(size_t i);
 
+    virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
    
   };
 
@@ -63,6 +65,7 @@ public:
     ActivitiesContext *activities();
     InvariantsContext *invariants();
 
+    virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
    
   };
 
@@ -75,6 +78,7 @@ public:
     std::vector<EquationContext *> equation();
     EquationContext* equation(size_t i);
 
+    virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
    
   };
 
@@ -89,6 +93,7 @@ public:
     std::vector<IntervalexprContext *> intervalexpr();
     IntervalexprContext* intervalexpr(size_t i);
 
+    virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
    
   };
 
@@ -105,6 +110,7 @@ public:
     std::vector<antlr4::tree::TerminalNode *> TIMES();
     antlr4::tree::TerminalNode* TIMES(size_t i);
 
+    virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
    
   };
 
@@ -119,6 +125,7 @@ public:
     std::vector<antlr4::tree::TerminalNode *> PLUS();
     antlr4::tree::TerminalNode* PLUS(size_t i);
 
+    virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
    
   };
 
@@ -132,6 +139,7 @@ public:
     antlr4::tree::TerminalNode *EQUALS();
     PolynomContext *polynom();
 
+    virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
    
   };
 
@@ -144,11 +152,26 @@ public:
     std::vector<PolynomContext *> polynom();
     PolynomContext* polynom(size_t i);
     antlr4::tree::TerminalNode *BOOLRELATION();
+    antlr4::tree::TerminalNode *EQUALS();
 
+    virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
    
   };
 
   ConstraintContext* constraint();
+
+  class  IntervalContext : public antlr4::ParserRuleContext {
+  public:
+    IntervalContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    std::vector<antlr4::tree::TerminalNode *> NUMBER();
+    antlr4::tree::TerminalNode* NUMBER(size_t i);
+
+    virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+   
+  };
+
+  IntervalContext* interval();
 
   class  IntervalexprContext : public antlr4::ParserRuleContext {
   public:
@@ -156,8 +179,9 @@ public:
     virtual size_t getRuleIndex() const override;
     antlr4::tree::TerminalNode *VARIABLE();
     antlr4::tree::TerminalNode *IN();
-    antlr4::tree::TerminalNode *INTERVAL();
+    IntervalContext *interval();
 
+    virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
    
   };
 

@@ -19,7 +19,8 @@ polynom				: term (PLUS term)* ;
 
 equation 			: VARIABLE EQUALS polynom ;
 constraint			: polynom (BOOLRELATION | EQUALS) polynom; 
-intervalexpr		: VARIABLE IN INTERVAL;  
+interval 			: '[' NUMBER ',' NUMBER ']' ;
+intervalexpr		: VARIABLE IN interval;  
 
 ////// Lexer Rules
 
@@ -40,7 +41,7 @@ fragment SPECIALCHAR: '_' | '\'' ;
 
 NUMBER				: '-'? DIGIT+ ('.' DIGIT+)? ;
 VARIABLE			: (UPPERCASE | LOWERCASE)(UPPERCASE | LOWERCASE | DIGIT | SPECIALCHAR)* ;
-INTERVAL 			: '[' NUMBER ',' NUMBER ']' ;
+//INTERVAL 			: '[' NUMBER ',' NUMBER ']' ;
 WS					: (' ' | '\t' | '\n' | '\r' )+ -> skip ;
 
 

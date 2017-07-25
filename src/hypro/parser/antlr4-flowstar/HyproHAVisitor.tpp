@@ -12,7 +12,7 @@ namespace hypro {
 	HyproHAVisitor<Number>::~HyproHAVisitor(){ }
 
 	template<typename Number>
-	Number HyproHAVisitor<Number>::stringToNumber(std::string& string){
+	Number HyproHAVisitor<Number>::stringToNumber(std::string string){
 		double numInFloat = std::stod(string);
 		Number numInNumber = Number(numInFloat);
 		return numInNumber;
@@ -42,7 +42,7 @@ namespace hypro {
 	vector_t<Number> HyproHAVisitor<Number>::getPolynomCoeff(HybridAutomatonParser::PolynomContext* ctx){
 		std::cout << "-- Bin bei getPolynomCoeff!" << std::endl;		
 		vector_t<Number> coeffVec = vector_t<Number>::Zero(vars.size()+1);
-		std::cout << "---- coeffVec inital is:\n" << coeffVec << std::endl;
+		//std::cout << "---- coeffVec inital is:\n" << coeffVec << std::endl;
 		for(auto mTerm : ctx->term()){
 			Number multed = multTogether(mTerm);
 			std::cout << "---- Amount of variables in this term: " << mTerm->VARIABLE().size() << std::endl;
@@ -141,6 +141,7 @@ namespace hypro {
 
 		//3.Returns a location
 		//NOTE: Vorerst nur leere location
+		//LocationManager<Number> manager = LocationManager<Number>::getInstance();
 		LocationManager<Number> manager;
 		return manager.create();
 	}
@@ -230,49 +231,56 @@ namespace hypro {
 		std::cout << "-- Bin bei visitInvariants!" << std::endl;
 
 		//1.Iteratively call visit(ctx->constraint()) to get vector of pairs of constraint vectors and constant Numbers
-		matrix_t<Number> tmpMatrix = matrix_t<Number>::Zero(ctx->constraint().size(), ctx->constraint().size());
-		vector_t<Number> tmpVector = vector_t<Number>::Zero(ctx->constraint().size());
+		unsigned size = ctx->constraint().size() + ctx->intervalexpr().size();
+		matrix_t<Number> tmpMatrix = matrix_t<Number>::Zero(size, vars.size());
+		vector_t<Number> tmpVector = vector_t<Number>::Zero(size);
 		unsigned i = 0;
 		int rowToFill = 0;
-		while(i < ctx->constraint().size()){
-			if(ctx->constraint().at(i) != NULL){
+		std::vector<std::pair<vector_t<Number>,Number>> values;
+		while(i < size){
 
-				//Get constraints vector from one constraint, as "="-constraints spit out 2 constraints
-				std::vector<std::pair<vector_t<Number>,Number>> values = visit(ctx->constraint().at(i));
-
-				//Print stuff
-				std::cout << "---- Received following constraint Vec:" << std::endl;
-				for(auto v : values){
-					std::cout << v.first << "and \n" << v.second << "\n" << std::endl;
-				}
-
-				//Resize tmpMatrix and tmpVector and initialise them with 0, then write values inside
-				tmpMatrix.conservativeResize(tmpMatrix.rows()+values.size()-1, Eigen::NoChange_t::NoChange);
-				tmpVector.conservativeResize(tmpVector.rows()+values.size()-1, Eigen::NoChange_t::NoChange);
-				for(int k=rowToFill; k < tmpMatrix.rows(); k++){
-					tmpMatrix.row(k) = vector_t<Number>::Zero(tmpMatrix.cols());
-					tmpVector(k) = Number(0);
-				}
-				std::cout << "---- Resized tmpMatrix to:\n" << tmpMatrix << std::endl;
-				std::cout << "---- Resized tmpVector to:\n" << tmpVector << std::endl;
-				for(unsigned k=0; k < values.size(); k++){
-					tmpMatrix.row(rowToFill+k) = values[k].first;
-					tmpVector(rowToFill+k) = values[k].second;
-				}
-
-				//Increment i by our added size
-				std::cout << "---- After insertion tmpMatrix is:\n" << tmpMatrix << " and tmpVector is:\n" << tmpVector << std::endl;
-				rowToFill += values.size();
-				i++;
-				//	
+			//Choose constraints until there are no more, then choose intervalexprs
+			if(i < ctx->constraint().size()){
+				values = visit(ctx->constraint().at(i)).antlrcpp::Any::as<std::vector<std::pair<vector_t<Number>,Number>>>();
+				std::cout << "---- Have chosen the " << i << "-th constraint vector!" << std::endl;
 			} else {
-				std::cerr << "ERROR: There is no " << i << "-th constraint parsed!" << std::endl;
-				i++;
+				unsigned posInIntervalExpr = i - ctx->constraint().size();
+				std::cout << "---- Have chosen the " << posInIntervalExpr << "-th intervalexpr vector!" << std::endl;
+				//std::cout << "---- intervalexpr size: " << ctx->intervalexpr().size() << std::endl;
+				if(posInIntervalExpr < ctx->intervalexpr().size()){
+					values = visit(ctx->intervalexpr().at(posInIntervalExpr)).antlrcpp::Any::as<std::vector<std::pair<vector_t<Number>,Number>>>();					
+					//std::cout << "---- intervalexpr existed!" << std::endl;					
+				} else {
+					std::cerr << "ERROR: There is no " << posInIntervalExpr << "-th constraint parsed!" << std::endl;
+				}
 			}
-			
-		}
 
-		//2.Iteratively call visit(ctx->intervalexpr()) to get vector of pairs of constraint vectors and constant Numbers
+			//Print stuff
+			std::cout << "---- Received following constraint Vec:" << std::endl;
+			for(auto v : values){
+				std::cout << v.first << "and \n" << v.second << "\n" << std::endl;
+			}
+
+			//Resize tmpMatrix and tmpVector and initialise them with 0, then write values inside
+			tmpMatrix.conservativeResize(tmpMatrix.rows()+values.size()-1, Eigen::NoChange_t::NoChange);
+			tmpVector.conservativeResize(tmpVector.rows()+values.size()-1, Eigen::NoChange_t::NoChange);
+			for(int k=rowToFill; k < tmpMatrix.rows(); k++){
+				tmpMatrix.row(k) = vector_t<Number>::Zero(tmpMatrix.cols());
+				tmpVector(k) = Number(0);
+			}
+			std::cout << "---- Resized tmpMatrix to:\n" << tmpMatrix << std::endl;
+			std::cout << "---- Resized tmpVector to:\n" << tmpVector << std::endl;
+			for(unsigned k=0; k < values.size(); k++){
+				tmpMatrix.row(rowToFill+k) = values[k].first;
+				tmpVector(rowToFill+k) = values[k].second;
+			}
+
+			//Increment i by our added size
+			std::cout << "---- After insertion tmpMatrix is:\n" << tmpMatrix << " and tmpVector is:\n" << tmpVector << std::endl;
+			rowToFill += values.size();
+			i++;
+			std::cout << "---- AFTER UPDATE size: " << size << " rowToFill: " << rowToFill << " i: " << i << std::endl;
+		}
 
 		//3.Build condition out of them
 		Condition<Number> inv;
@@ -343,10 +351,44 @@ namespace hypro {
 
 	template<typename Number>
 	antlrcpp::Any HyproHAVisitor<Number>::visitIntervalexpr(HybridAutomatonParser::IntervalexprContext *ctx){
+		std::cout << "-- Bin bei visitIntervalexpr!" << std::endl;
+
 		//0.Syntax Check - Check if interval is legal
+		if(ctx->interval()->NUMBER()[0] > ctx->interval()->NUMBER()[1]){
+			std::cerr << "ERROR: Interval left side is bigger than right side!" << std::endl;
+		}	
+		bool found = false;
+		for(auto var : vars){
+			if(ctx->VARIABLE()->getText() == var){
+				found = true;
+			}
+		}
+		if(!found){
+			std::cerr << "ERROR: Variable in interval expression has not been defined!" << std::endl;
+		}
+
 		//1.Make constraint vectors
+		std::vector<std::pair<vector_t<Number>,Number>> constraintVec;
+		vector_t<Number> firstConstraint = vector_t<Number>::Zero(vars.size());
+		vector_t<Number> secondConstraint = vector_t<Number>::Zero(vars.size());
+		unsigned dest = 0;
+		for(unsigned i=0; i < vars.size(); i++){
+			if(vars[i] == ctx->VARIABLE()->getText()){
+				dest = i;
+				break;
+			}
+		}
+		firstConstraint(dest) = Number(-1);
+		secondConstraint(dest) = Number(1);
+		Number firstConstant = Number(-1) * stringToNumber(ctx->interval()->NUMBER()[0]->getText());
+		Number secondConstant = stringToNumber(ctx->interval()->NUMBER()[1]->getText());
+		auto firstPair = std::make_pair(firstConstraint, firstConstant);
+		auto secondPair = std::make_pair(secondConstraint, secondConstant);
+		constraintVec.push_back(firstPair);
+		constraintVec.push_back(secondPair);
+
 		//2.Return vector of pairs of constraint vectors and constant Numbers!
-		return 0;
+		return constraintVec;
 	}
 
 }
