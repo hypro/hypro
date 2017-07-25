@@ -1,5 +1,5 @@
 
-// Generated from Location.g4 by ANTLR 4.7
+// Generated from ../src/hypro/parser/antlr4-flowstar/Location.g4 by ANTLR 4.7
 
 
 #include "LocationLexer.h"

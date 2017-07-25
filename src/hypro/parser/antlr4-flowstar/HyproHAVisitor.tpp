@@ -4,13 +4,13 @@ namespace hypro {
 
 	template<typename Number>
 	HyproHAVisitor<Number>::HyproHAVisitor() :
-		locSet(),
+		//locSet(),
 		vars()
 	{ }
 
 	template<typename Number>
 	HyproHAVisitor<Number>::~HyproHAVisitor(){ }
-
+/*
 	template<typename Number>
 	Number HyproHAVisitor<Number>::stringToNumber(std::string string){
 		double numInFloat = std::stod(string);
@@ -68,7 +68,7 @@ namespace hypro {
 		}
 		return coeffVec;
 	}
-
+*/
 	template<typename Number>
 	antlrcpp::Any HyproHAVisitor<Number>::visitStart(HybridAutomatonParser::StartContext *ctx){
 		std::cout << "-- Bin bei visitStart!" << std::endl;
@@ -79,7 +79,11 @@ namespace hypro {
 		std::cout << "---- vars is now: " << vars << std::endl;
 
 		//2.Calls visit(ctx->modes()) to get locSet 
-		locSet = visit(ctx->modes()).antlrcpp::Any::as<std::set<Location<Number>*>>();
+		HyproLocationVisitor<Number> locVisitor = HyproLocationVisitor<Number>(vars);
+		std::cout << "-- created locvisitor!" << std::endl;
+		//std::set<Location<Number>*> locSet = locVisitor.visit(ctx->modes()).antlrcpp::Any::as<std::set<Location<Number>*>>();
+		std::set<Location<Number>*> locSet = locVisitor.visit(ctx->modes());
+		std::cout << "-- locVisitor visited!" << std::endl;
 		//std::cout << "---- locSet is now: " << locSet << std::endl;		
 
 		//3.Later calls visit to get transitions
@@ -104,7 +108,7 @@ namespace hypro {
 		}
 		return varVec;
 	}
-
+/*
 	template<typename Number>
 	antlrcpp::Any HyproHAVisitor<Number>::visitModes(HybridAutomatonParser::ModesContext *ctx){
 		std::cout << "-- Bin bei visitModes!" << std::endl;
@@ -157,23 +161,25 @@ namespace hypro {
 
 		//1.Calls iteratively visit(ctx->equation()) to get vector, store them
 		matrix_t<Number> tmpMatrix = matrix_t<Number>::Zero(vars.size()+1, vars.size()+1);
+		HyproFormulaVisitor<Number> visitor(vars);
 		for(unsigned i=0; i < ctx->equation().size(); i++){
-			vector_t<Number> tmpRow = visit(ctx->equation()[i]);
+			vector_t<Number> tmpRow = visitor.visit(ctx->equation()[i]);
 			std::cout << "---- From equation " << i << " we got tmpRow:\n" << tmpRow << std::endl;
 			tmpMatrix.row(i) = tmpRow;
 			std::cout << "---- After insertion tmpMatrix is now:\n" << tmpMatrix << std::endl;
 		}
-
+*/
 		//3.Syntax check - Last row completely 0's?
 /*		if(tmpMatrix.row(tmpMatrix.rows()-1) == vector_t<Number>::Zero(tmpMatrix.rows()-1)){
 			std::cout << "Last row of tmpMatrix is:\n " << tmpMatrix.row(tmpMatrix.rows()-1) << std::endl;
 			std::cerr << "Last row of tmpMatrix was not completely zero!" << std::endl;
 		}
-*/
+
 		//4.Returns a matrix
 		return tmpMatrix;
 	}
-
+*/
+/*
 	template<typename Number>
 	antlrcpp::Any HyproHAVisitor<Number>::visitEquation(HybridAutomatonParser::EquationContext *ctx){
 		std::cout << "-- Bin bei visitEquation!" << std::endl;		
@@ -225,7 +231,8 @@ namespace hypro {
 		//2.Return Vector
 		return tmpVec;
 	}
-
+*/
+/*
 	template<typename Number>
 	antlrcpp::Any HyproHAVisitor<Number>::visitInvariants(HybridAutomatonParser::InvariantsContext *ctx){
 		std::cout << "-- Bin bei visitInvariants!" << std::endl;
@@ -237,18 +244,19 @@ namespace hypro {
 		unsigned i = 0;
 		int rowToFill = 0;
 		std::vector<std::pair<vector_t<Number>,Number>> values;
+		HyproFormulaVisitor<Number> visitor(vars);
 		while(i < size){
 
 			//Choose constraints until there are no more, then choose intervalexprs
 			if(i < ctx->constraint().size()){
-				values = visit(ctx->constraint().at(i)).antlrcpp::Any::as<std::vector<std::pair<vector_t<Number>,Number>>>();
+				values = visitor.visit(ctx->constraint().at(i)).antlrcpp::Any::as<std::vector<std::pair<vector_t<Number>,Number>>>();
 				std::cout << "---- Have chosen the " << i << "-th constraint vector!" << std::endl;
 			} else {
 				unsigned posInIntervalExpr = i - ctx->constraint().size();
 				std::cout << "---- Have chosen the " << posInIntervalExpr << "-th intervalexpr vector!" << std::endl;
 				//std::cout << "---- intervalexpr size: " << ctx->intervalexpr().size() << std::endl;
 				if(posInIntervalExpr < ctx->intervalexpr().size()){
-					values = visit(ctx->intervalexpr().at(posInIntervalExpr)).antlrcpp::Any::as<std::vector<std::pair<vector_t<Number>,Number>>>();					
+					values = visitor.visit(ctx->intervalexpr().at(posInIntervalExpr)).antlrcpp::Any::as<std::vector<std::pair<vector_t<Number>,Number>>>();					
 					//std::cout << "---- intervalexpr existed!" << std::endl;					
 				} else {
 					std::cerr << "ERROR: There is no " << posInIntervalExpr << "-th constraint parsed!" << std::endl;
@@ -290,7 +298,8 @@ namespace hypro {
 		//4.Return condition
 		return inv;
 	}
-
+*/
+/*
 	template<typename Number>
 	antlrcpp::Any HyproHAVisitor<Number>::visitConstraint(HybridAutomatonParser::ConstraintContext *ctx){
 		std::cout << "-- Bin bei visitConstraint!" << std::endl;
@@ -390,5 +399,5 @@ namespace hypro {
 		//2.Return vector of pairs of constraint vectors and constant Numbers!
 		return constraintVec;
 	}
-
+*/
 }

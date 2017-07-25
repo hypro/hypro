@@ -1,8 +1,7 @@
 
-// Generated from Formula.g4 by ANTLR 4.7
+// Generated from ../src/hypro/parser/antlr4-flowstar/Formula.g4 by ANTLR 4.7
 
 
-#include "FormulaVisitor.h"
 
 #include "FormulaParser.h"
 
@@ -66,12 +65,6 @@ size_t FormulaParser::TermContext::getRuleIndex() const {
   return FormulaParser::RuleTerm;
 }
 
-antlrcpp::Any FormulaParser::TermContext::accept(tree::ParseTreeVisitor *visitor) {
-  if (auto parserVisitor = dynamic_cast<FormulaVisitor*>(visitor))
-    return parserVisitor->visitTerm(this);
-  else
-    return visitor->visitChildren(this);
-}
 
 FormulaParser::TermContext* FormulaParser::term() {
   TermContext *_localctx = _tracker.createInstance<TermContext>(_ctx, getState());
@@ -153,12 +146,6 @@ size_t FormulaParser::PolynomContext::getRuleIndex() const {
   return FormulaParser::RulePolynom;
 }
 
-antlrcpp::Any FormulaParser::PolynomContext::accept(tree::ParseTreeVisitor *visitor) {
-  if (auto parserVisitor = dynamic_cast<FormulaVisitor*>(visitor))
-    return parserVisitor->visitPolynom(this);
-  else
-    return visitor->visitChildren(this);
-}
 
 FormulaParser::PolynomContext* FormulaParser::polynom() {
   PolynomContext *_localctx = _tracker.createInstance<PolynomContext>(_ctx, getState());
@@ -218,12 +205,6 @@ size_t FormulaParser::EquationContext::getRuleIndex() const {
   return FormulaParser::RuleEquation;
 }
 
-antlrcpp::Any FormulaParser::EquationContext::accept(tree::ParseTreeVisitor *visitor) {
-  if (auto parserVisitor = dynamic_cast<FormulaVisitor*>(visitor))
-    return parserVisitor->visitEquation(this);
-  else
-    return visitor->visitChildren(this);
-}
 
 FormulaParser::EquationContext* FormulaParser::equation() {
   EquationContext *_localctx = _tracker.createInstance<EquationContext>(_ctx, getState());
@@ -278,12 +259,6 @@ size_t FormulaParser::ConstraintContext::getRuleIndex() const {
   return FormulaParser::RuleConstraint;
 }
 
-antlrcpp::Any FormulaParser::ConstraintContext::accept(tree::ParseTreeVisitor *visitor) {
-  if (auto parserVisitor = dynamic_cast<FormulaVisitor*>(visitor))
-    return parserVisitor->visitConstraint(this);
-  else
-    return visitor->visitChildren(this);
-}
 
 FormulaParser::ConstraintContext* FormulaParser::constraint() {
   ConstraintContext *_localctx = _tracker.createInstance<ConstraintContext>(_ctx, getState());
@@ -340,12 +315,6 @@ size_t FormulaParser::IntervalContext::getRuleIndex() const {
   return FormulaParser::RuleInterval;
 }
 
-antlrcpp::Any FormulaParser::IntervalContext::accept(tree::ParseTreeVisitor *visitor) {
-  if (auto parserVisitor = dynamic_cast<FormulaVisitor*>(visitor))
-    return parserVisitor->visitInterval(this);
-  else
-    return visitor->visitChildren(this);
-}
 
 FormulaParser::IntervalContext* FormulaParser::interval() {
   IntervalContext *_localctx = _tracker.createInstance<IntervalContext>(_ctx, getState());
@@ -400,12 +369,6 @@ size_t FormulaParser::IntervalexprContext::getRuleIndex() const {
   return FormulaParser::RuleIntervalexpr;
 }
 
-antlrcpp::Any FormulaParser::IntervalexprContext::accept(tree::ParseTreeVisitor *visitor) {
-  if (auto parserVisitor = dynamic_cast<FormulaVisitor*>(visitor))
-    return parserVisitor->visitIntervalexpr(this);
-  else
-    return visitor->visitChildren(this);
-}
 
 FormulaParser::IntervalexprContext* FormulaParser::intervalexpr() {
   IntervalexprContext *_localctx = _tracker.createInstance<IntervalexprContext>(_ctx, getState());

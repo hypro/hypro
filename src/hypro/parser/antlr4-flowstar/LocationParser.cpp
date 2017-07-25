@@ -1,8 +1,7 @@
 
-// Generated from Location.g4 by ANTLR 4.7
+// Generated from ../src/hypro/parser/antlr4-flowstar/Location.g4 by ANTLR 4.7
 
 
-#include "LocationVisitor.h"
 
 #include "LocationParser.h"
 
@@ -50,12 +49,6 @@ size_t LocationParser::ModesContext::getRuleIndex() const {
   return LocationParser::RuleModes;
 }
 
-antlrcpp::Any LocationParser::ModesContext::accept(tree::ParseTreeVisitor *visitor) {
-  if (auto parserVisitor = dynamic_cast<LocationVisitor*>(visitor))
-    return parserVisitor->visitModes(this);
-  else
-    return visitor->visitChildren(this);
-}
 
 LocationParser::ModesContext* LocationParser::modes() {
   ModesContext *_localctx = _tracker.createInstance<ModesContext>(_ctx, getState());
@@ -117,12 +110,6 @@ size_t LocationParser::LocationContext::getRuleIndex() const {
   return LocationParser::RuleLocation;
 }
 
-antlrcpp::Any LocationParser::LocationContext::accept(tree::ParseTreeVisitor *visitor) {
-  if (auto parserVisitor = dynamic_cast<LocationVisitor*>(visitor))
-    return parserVisitor->visitLocation(this);
-  else
-    return visitor->visitChildren(this);
-}
 
 LocationParser::LocationContext* LocationParser::location() {
   LocationContext *_localctx = _tracker.createInstance<LocationContext>(_ctx, getState());
@@ -173,12 +160,6 @@ size_t LocationParser::ActivitiesContext::getRuleIndex() const {
   return LocationParser::RuleActivities;
 }
 
-antlrcpp::Any LocationParser::ActivitiesContext::accept(tree::ParseTreeVisitor *visitor) {
-  if (auto parserVisitor = dynamic_cast<LocationVisitor*>(visitor))
-    return parserVisitor->visitActivities(this);
-  else
-    return visitor->visitChildren(this);
-}
 
 LocationParser::ActivitiesContext* LocationParser::activities() {
   ActivitiesContext *_localctx = _tracker.createInstance<ActivitiesContext>(_ctx, getState());
@@ -255,12 +236,6 @@ size_t LocationParser::InvariantsContext::getRuleIndex() const {
   return LocationParser::RuleInvariants;
 }
 
-antlrcpp::Any LocationParser::InvariantsContext::accept(tree::ParseTreeVisitor *visitor) {
-  if (auto parserVisitor = dynamic_cast<LocationVisitor*>(visitor))
-    return parserVisitor->visitInvariants(this);
-  else
-    return visitor->visitChildren(this);
-}
 
 LocationParser::InvariantsContext* LocationParser::invariants() {
   InvariantsContext *_localctx = _tracker.createInstance<InvariantsContext>(_ctx, getState());
@@ -350,12 +325,6 @@ size_t LocationParser::TermContext::getRuleIndex() const {
   return LocationParser::RuleTerm;
 }
 
-antlrcpp::Any LocationParser::TermContext::accept(tree::ParseTreeVisitor *visitor) {
-  if (auto parserVisitor = dynamic_cast<LocationVisitor*>(visitor))
-    return parserVisitor->visitTerm(this);
-  else
-    return visitor->visitChildren(this);
-}
 
 LocationParser::TermContext* LocationParser::term() {
   TermContext *_localctx = _tracker.createInstance<TermContext>(_ctx, getState());
@@ -437,12 +406,6 @@ size_t LocationParser::PolynomContext::getRuleIndex() const {
   return LocationParser::RulePolynom;
 }
 
-antlrcpp::Any LocationParser::PolynomContext::accept(tree::ParseTreeVisitor *visitor) {
-  if (auto parserVisitor = dynamic_cast<LocationVisitor*>(visitor))
-    return parserVisitor->visitPolynom(this);
-  else
-    return visitor->visitChildren(this);
-}
 
 LocationParser::PolynomContext* LocationParser::polynom() {
   PolynomContext *_localctx = _tracker.createInstance<PolynomContext>(_ctx, getState());
@@ -502,12 +465,6 @@ size_t LocationParser::EquationContext::getRuleIndex() const {
   return LocationParser::RuleEquation;
 }
 
-antlrcpp::Any LocationParser::EquationContext::accept(tree::ParseTreeVisitor *visitor) {
-  if (auto parserVisitor = dynamic_cast<LocationVisitor*>(visitor))
-    return parserVisitor->visitEquation(this);
-  else
-    return visitor->visitChildren(this);
-}
 
 LocationParser::EquationContext* LocationParser::equation() {
   EquationContext *_localctx = _tracker.createInstance<EquationContext>(_ctx, getState());
@@ -562,12 +519,6 @@ size_t LocationParser::ConstraintContext::getRuleIndex() const {
   return LocationParser::RuleConstraint;
 }
 
-antlrcpp::Any LocationParser::ConstraintContext::accept(tree::ParseTreeVisitor *visitor) {
-  if (auto parserVisitor = dynamic_cast<LocationVisitor*>(visitor))
-    return parserVisitor->visitConstraint(this);
-  else
-    return visitor->visitChildren(this);
-}
 
 LocationParser::ConstraintContext* LocationParser::constraint() {
   ConstraintContext *_localctx = _tracker.createInstance<ConstraintContext>(_ctx, getState());
@@ -624,12 +575,6 @@ size_t LocationParser::IntervalContext::getRuleIndex() const {
   return LocationParser::RuleInterval;
 }
 
-antlrcpp::Any LocationParser::IntervalContext::accept(tree::ParseTreeVisitor *visitor) {
-  if (auto parserVisitor = dynamic_cast<LocationVisitor*>(visitor))
-    return parserVisitor->visitInterval(this);
-  else
-    return visitor->visitChildren(this);
-}
 
 LocationParser::IntervalContext* LocationParser::interval() {
   IntervalContext *_localctx = _tracker.createInstance<IntervalContext>(_ctx, getState());
@@ -684,12 +629,6 @@ size_t LocationParser::IntervalexprContext::getRuleIndex() const {
   return LocationParser::RuleIntervalexpr;
 }
 
-antlrcpp::Any LocationParser::IntervalexprContext::accept(tree::ParseTreeVisitor *visitor) {
-  if (auto parserVisitor = dynamic_cast<LocationVisitor*>(visitor))
-    return parserVisitor->visitIntervalexpr(this);
-  else
-    return visitor->visitChildren(this);
-}
 
 LocationParser::IntervalexprContext* LocationParser::intervalexpr() {
   IntervalexprContext *_localctx = _tracker.createInstance<IntervalexprContext>(_ctx, getState());

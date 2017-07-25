@@ -1,5 +1,5 @@
 
-// Generated from Formula.g4 by ANTLR 4.7
+// Generated from ../src/hypro/parser/antlr4-flowstar/Formula.g4 by ANTLR 4.7
 
 #pragma once
 
@@ -49,7 +49,6 @@ public:
     std::vector<antlr4::tree::TerminalNode *> TIMES();
     antlr4::tree::TerminalNode* TIMES(size_t i);
 
-    virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
    
   };
 
@@ -64,7 +63,6 @@ public:
     std::vector<antlr4::tree::TerminalNode *> PLUS();
     antlr4::tree::TerminalNode* PLUS(size_t i);
 
-    virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
    
   };
 
@@ -78,7 +76,6 @@ public:
     antlr4::tree::TerminalNode *EQUALS();
     PolynomContext *polynom();
 
-    virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
    
   };
 
@@ -93,7 +90,6 @@ public:
     antlr4::tree::TerminalNode *BOOLRELATION();
     antlr4::tree::TerminalNode *EQUALS();
 
-    virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
    
   };
 
@@ -106,7 +102,6 @@ public:
     std::vector<antlr4::tree::TerminalNode *> NUMBER();
     antlr4::tree::TerminalNode* NUMBER(size_t i);
 
-    virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
    
   };
 
@@ -120,7 +115,6 @@ public:
     antlr4::tree::TerminalNode *IN();
     IntervalContext *interval();
 
-    virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
    
   };
 
