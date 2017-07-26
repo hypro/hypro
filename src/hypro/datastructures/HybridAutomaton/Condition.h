@@ -1,27 +1,20 @@
 #pragma once
-#include "State.h"
-#include "Visitors.h"
+#include "functors.h"
 #include "../../representations/GeometricObject.h"
 #include "../../representations/types.h"
 #include <iostream>
+#include <cstdlib>
 
 namespace hypro {
 
 template<typename Number>
 class Condition {
 private:
-    vector_t<Number> vec;
-    matrix_t<Number> mat;
-    vector_t<Number> discreteVec;
-    matrix_t<Number> discreteMat;
-    vector_t<Number> clockVec;
-    matrix_t<Number> clockMat;
-    bool hasDiscreteConstraints = false;
-    bool hasClockConstraints = false;
-
+	std::vector<ConstraintSet<Number>> mConstraints;
 public:
 	Condition() = default;
-	Condition(const matrix_t<Number>& mat, const vector_t<Number>& vec) : mat(mat), vec(vec) {}
+	Condition(const matrix_t<Number>& mat, const vector_t<Number>& vec) : mConstraints( {ConstraintSet<Number>(mat,vec)} ) {}
+	Condition(const std::vector<boost::variant<ConstraintSet<Number>>>& sets);
 	Condition(const Condition& orig) = default;
 	Condition(Condition&& orig) = default;
 	Condition& operator=(const Condition& orig) = default;
@@ -29,35 +22,31 @@ public:
 	~Condition() {}
 
 	// Access
-	const vector_t<Number>& getVector() const { return vec; }
-	const matrix_t<Number>& getMatrix() const { return mat; }
-	const vector_t<Number>& getDiscreteVector() const { return discreteVec; }
-	const matrix_t<Number>& getDiscreteMatrix() const { return discreteMat; }
-	const vector_t<Number>& getClockVector() const { return clockVec; }
-	const matrix_t<Number>& getClockMatrix() const { return clockMat; }
+	std::size_t size() const { return mConstraints.size(); }
 
-	void setVector(const vector_t<Number>& v) { vec = v; }
-	void setMatrix(const matrix_t<Number>& m) { mat = m; }
-	void setDiscreteVector(const vector_t<Number>& v) { discreteVec = v; hasDiscreteConstraints = true; }
-	void setDiscreteMatrix(const matrix_t<Number>& m) { discreteMat = m; hasDiscreteConstraints = true; }
-	void setClockVector(const vector_t<Number>& v) { clockVec = v; hasClockConstraints = true; }
-	void setClockMatrix(const matrix_t<Number>& m) { clockMat = m; hasClockConstraints = true; }
+	const matrix_t<Number>& getMatrix(std::size_t I = 0) const { assert(mConstraints.size()>I); return mConstraints.at(I).matrix(); }
+	const vector_t<Number>& getVector(std::size_t I = 0) const { assert(mConstraints.size()>I); return mConstraints.at(I).vector(); }
+
+	void setMatrix(const matrix_t<Number>& m, std::size_t I = 0);
+	void setVector(const vector_t<Number>& v, std::size_t I = 0);
+
+	const std::vector<ConstraintSet<Number>>& constraints() const { return mConstraints; }
 
 	// helper methods
-	template<typename Representation>
-	std::pair<bool,State<Number,Representation>> isSatisfiedBy(const State<Number,Representation>& inState) const;
-	template<typename Representation>
-	std::pair<bool,State<Number,Representation>> continuousIsSatisfiedBy(const State<Number,Representation>& inState) const;
-	template<typename Representation>
-	std::pair<bool,State<Number,Representation>> discreteIsSatisfiedBy(const State<Number,Representation>& inState) const;
-	template<typename Representation>
-	std::pair<bool,State<Number,Representation>> clockIsSatisfiedBy(const State<Number,Representation>& inState) const;
+	//template<typename Representation, typename ...Rargs>
+	//std::pair<bool,State<Number,Representation, Rargs...>> isSatisfiedBy(const State<Number,Representation, Rargs...>& inState) const;
 
 	friend bool operator==(const Condition& lhs, const Condition& rhs) {
-		return (lhs.vec == rhs.vec && lhs.mat == rhs.mat &&
-				lhs.discreteVec == rhs.discreteVec && lhs.discreteMat == rhs.discreteMat &&
-				lhs.clockVec == rhs.clockVec && lhs.clockMat == rhs.clockMat
-				);
+		if (lhs.size() != rhs.size()) {
+			return false;
+		}
+
+		for(std::size_t i = 0; i < lhs.size(); ++i) {
+			if ((lhs.getVector(i) != rhs.getVector(i)) || (lhs.getMatrix(i) != rhs.getMatrix(i))) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 	friend bool operator!=(const Condition& lhs, const Condition& rhs) {
@@ -66,12 +55,11 @@ public:
 
 	friend std::ostream& operator<<(std::ostream& out, const Condition& in) {
 #ifdef HYDRA_USE_LOGGING
-		out << "Cont. Mat: " << in.mat << std::endl;
-		out << "Cont. Vec: " << in.vec << std::endl;
-		out << "Disc. Mat: " << in.discreteMat << std::endl;
-		out << "Disc. Vec: " << in.discreteVec << std::endl;
-		out << "Clck. Mat: " << in.clockMat << std::endl;
-		out << "Clck. Vec: " << in.clockVec << std::endl;
+		std::size_t i = 0;
+		for(const auto& pair : in.constraints()) {
+			out << "Constraint " << i << ": " << pair.matrix() << " constants: " << pair.vector() << std::endl;
+			++i;
+		}
 #endif
 		return out;
 	}

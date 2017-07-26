@@ -36,7 +36,7 @@ protected:
     	loc2 = locMan.create();
 
 
-    	trans = new hypro::Transition<Number>();
+    	trans = new Transition<Number>();
 
 		invariantVec(0) = 10;
 		invariantVec(1) = 20;
@@ -64,11 +64,11 @@ protected:
 		/*
 		 * Transition Setup
 		 */
-		guard.setMatrix(inv.mat);
-		guard.setVector(inv.vec);
+		guard.setMatrix(inv.getMatrix());
+		guard.setVector(inv.getVector());
 
-		reset.setMatrix(inv.mat);
-		reset.setVector(inv.vec);
+		reset.setMatrix(inv.getMatrix());
+		reset.setVector(inv.getVector());
 
 		trans->setGuard(guard);
 		trans->setSource(loc1);
@@ -81,9 +81,9 @@ protected:
 		locations[0] = loc1;
 		locations[1] = loc2;
 
-		locSet = std::set<hypro::Location<Number>*>(locations, locations+2);
+		locSet = std::set<Location<Number>*>(locations, locations+2);
 		init[0] = loc1;
-		initLocSet = std::set<hypro::Location<Number>*>(init, init+1);
+		initLocSet = std::set<Location<Number>*>(init, init+1);
 
 		//Polytope for InitialValuation & Guard Assignment
 		coordinates(0) = 2;
@@ -92,16 +92,16 @@ protected:
     	std::vector< vector_t<Number> > vecSet;
     	vecSet.push_back(coordinates);
 		poly = valuation_t<Number>(vecSet);
-		auto hpoly = hypro::Converter<Number>::toHPolytope(poly);
+		auto hpoly = Converter<Number>::toHPolytope(poly);
 
 		hybrid.setLocations(locSet);
 		for(auto loc : initLocSet) {
-			RawState<Number> initState(loc, std::make_pair(hpoly.matrix(), hpoly.vector()));
+			State<Number,ConstraintSet<Number>> initState(loc, ConstraintSet<Number>(hpoly.matrix(), hpoly.vector()));
 			hybrid.addInitialState(initState);
 		}
 
 		transition[0] = trans;
-		transSet = std::set<hypro::Transition<Number>*>(transition, transition+1);
+		transSet = std::set<Transition<Number>*>(transition, transition+1);
 
 		hybrid.setTransitions(transSet);
 		loc1->setTransitions(transSet);
@@ -152,24 +152,24 @@ protected:
 TYPED_TEST(HybridAutomataTest, LocationTest)
 {
     //invariant: vector
-    EXPECT_EQ(this->loc1->invariant().getVector(), this->invariantVec);
-    EXPECT_EQ(this->loc2->invariant().getVector(), this->invariantVec);
+    EXPECT_EQ(this->loc1->getInvariant().getVector(), this->invariantVec);
+    EXPECT_EQ(this->loc2->getInvariant().getVector(), this->invariantVec);
 
 	vector_t<TypeParam> invariantVec2(2,1);
 	invariantVec2(0) = 10;
 	invariantVec2(1) = 10;
-	EXPECT_NE(this->loc1->invariant().getVector(), invariantVec2);
+	EXPECT_NE(this->loc1->getInvariant().getVector(), invariantVec2);
 
 	//invariant: matrix
-	EXPECT_EQ(this->loc1->invariant().getMatrix(), this->invariantMat);
-	EXPECT_EQ(this->loc2->invariant().getMatrix(), this->invariantMat);
+	EXPECT_EQ(this->loc1->getInvariant().getMatrix(), this->invariantMat);
+	EXPECT_EQ(this->loc2->getInvariant().getMatrix(), this->invariantMat);
 
 	matrix_t<TypeParam> invariantMat2(2,2);
 	invariantMat2(0,0) = 1;
 	invariantMat2(0,1) = 0;
 	invariantMat2(1,0) = 0;
 	invariantMat2(1,1) = 3;
-	EXPECT_NE(this->loc1->invariant().getMatrix(), invariantMat2);
+	EXPECT_NE(this->loc1->getInvariant().getMatrix(), invariantMat2);
 
 	//location: matrix
 	EXPECT_EQ(this->loc1->getFlow(), this->locationMat);
@@ -213,11 +213,11 @@ TYPED_TEST(HybridAutomataTest, TransitionTest)
 	Transition<TypeParam>* t = new Transition<TypeParam>(this->loc1, this->loc2);
 	EXPECT_EQ(t->getSource(), this->loc1);
 	EXPECT_EQ(t->getTarget(), this->loc2);
-	EXPECT_EQ(t->getAggregation(), Aggregation::boxAgg);
+	EXPECT_EQ(t->getAggregation(), Aggregation::none);
 	EXPECT_FALSE(t->isTimeTriggered());
 
-	t->setAggregation(Aggregation::none);
-	EXPECT_EQ(t->getAggregation(), Aggregation::none);
+	t->setAggregation(Aggregation::boxAgg);
+	EXPECT_EQ(t->getAggregation(), Aggregation::boxAgg);
 
 	t->setTriggerTime(TypeParam(1));
 	EXPECT_TRUE(t->isTimeTriggered());
@@ -245,7 +245,7 @@ TYPED_TEST(HybridAutomataTest, HybridAutomatonTest)
 	vector_t<TypeParam> vec = vector_t<TypeParam>(2);
 	vec << 1,2;
 
-	h1.addInitialState(RawState<TypeParam>(this->loc1, std::make_pair(matr, vec)));
+	h1.addInitialState(State<TypeParam,ConstraintSet<TypeParam>>(this->loc1, ConstraintSet<TypeParam>(matr, vec)));
 
 	// copy assignment operator
 	HybridAutomaton<TypeParam> h2 = h1;
@@ -263,7 +263,7 @@ TYPED_TEST(HybridAutomataTest, LocationManagerTest)
 }
 
 
-TYPED_TEST(HybridAutomataTest, RawState) {
+TYPED_TEST(HybridAutomataTest, State) {
 	// Constructors
 	State<TypeParam, ConstraintSet<TypeParam>> s1(this->loc1);
 
@@ -272,8 +272,10 @@ TYPED_TEST(HybridAutomataTest, RawState) {
 	vec << 1,2;
 	State<TypeParam, ConstraintSet<TypeParam>> s2(this->loc1, ConstraintSet<TypeParam>(matr, vec));
 
-	EXPECT_EQ(s1.location->id(), this->loc1->id());
-	EXPECT_EQ(s2.location->id(), this->loc1->id());
-	EXPECT_EQ(s2.getSet.getMatrix(), matr);
-	EXPECT_EQ(s2.getSet.getVector(), vec);
+	EXPECT_EQ(s1.getLocation()->getId(), this->loc1->getId());
+	EXPECT_EQ(s2.getLocation()->getId(), this->loc1->getId());
+	EXPECT_EQ(boost::get<ConstraintSet<TypeParam>>(s2.getSet()).matrix(), matr);
+	EXPECT_EQ(boost::get<ConstraintSet<TypeParam>>(s2.getSet()).vector(), vec);
+	EXPECT_EQ(boost::get<ConstraintSet<TypeParam>>(s2.getSet(0)).matrix(), matr);
+	EXPECT_EQ(boost::get<ConstraintSet<TypeParam>>(s2.getSet(0)).vector(), vec);
 }

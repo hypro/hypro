@@ -52,9 +52,8 @@ namespace hypro {
 		std::cout << "---- inv is:\n" << inv.getMatrix() << "and\n" << inv.getVector() << std::endl;		
 
 		//3.Returns a location
-		//NOTE: Vorerst nur leere location
-		//LocationManager<Number> manager = LocationManager<Number>::getInstance();
-		LocationManager<Number> manager;
+		////////////////NOTE: Vorerst nur leere location
+		LocationManager<Number>& manager = LocationManager<Number>::getInstance();
 		return manager.create();
 	}
 

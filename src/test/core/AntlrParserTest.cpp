@@ -40,8 +40,8 @@ TYPED_TEST(AntlrParserTest, ParseLocation){
 	//Open examples.txt
 	this->cwd();
 
-	std::fstream ifs("../../../../src/test/core/example_location_parsing.txt");
-	//std::fstream ifs("../src/test/core/example.txt"); The path from ../hypro/build
+	//std::fstream ifs("../../../../src/test/core/example_location_parsing.txt");
+	std::fstream ifs("../../../../src/test/core/example_transition_parsing.txt");
 
 	//Create an AnTLRInputStream
 	ANTLRInputStream input;

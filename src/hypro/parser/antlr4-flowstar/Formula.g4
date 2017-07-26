@@ -12,7 +12,6 @@ grammar Formula;
 ////// Parser Rules
 
 //1. Maybe add MONOM 
-//2. Add possiblity of boolexpr v boolexpr ...
 
 term 				: (NUMBER | VARIABLE) (TIMES (NUMBER | VARIABLE))* ;
 polynom				: term (PLUS term)* ;
@@ -24,15 +23,16 @@ intervalexpr		: VARIABLE IN interval;
 
 ////// Lexer Rules
 
-//TODO: Add either 'v' keyword for OR for multiple boolean expressions 
-
 //Always remember: Keywords first!
 IN 					: 'in' ;
+COMMENT				: '#' ~[\r\n] -> skip ;
 
 EQUALS				: '=' ;
 BOOLRELATION		: '<=' | '>=' | '<' | '>' ;
 PLUS				: '+' ;
 TIMES				: '*' ;
+JUMP				: '->' ;
+DEFINE 				: ':=' ;
 
 fragment UPPERCASE	: [A-Z] ;
 fragment LOWERCASE	: [a-z] ;
@@ -41,7 +41,6 @@ fragment SPECIALCHAR: '_' | '\'' ;
 
 NUMBER				: '-'? DIGIT+ ('.' DIGIT+)? ;
 VARIABLE			: (UPPERCASE | LOWERCASE)(UPPERCASE | LOWERCASE | DIGIT | SPECIALCHAR)* ;
-//INTERVAL 			: '[' NUMBER ',' NUMBER ']' ;
 WS					: (' ' | '\t' | '\n' | '\r' )+ -> skip ;
 
 

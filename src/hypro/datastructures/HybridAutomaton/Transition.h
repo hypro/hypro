@@ -20,6 +20,7 @@ enum Aggregation { none, boxAgg, parallelotopeAgg };
 template<typename Number>
 class Location;
 
+template<typename Number>
 class Transition
 {
   private:
@@ -29,6 +30,7 @@ class Transition
     Reset<Number> mReset;
     Aggregation mAggregationSetting = Aggregation::none;
     bool mUrgent = false;
+    Number mTriggerTime = Number(-1);
 
   public:
 
@@ -53,9 +55,11 @@ class Transition
     Location<Number>* getSource() const { return mSource; }
     Location<Number>* getTarget() const { return mTarget; }
     const Condition<Number>& getGuard() const { return mGuard; }
-    const Reset<Number>& getReset<Number>() const { return mReset; }
+    const Reset<Number>& getReset() const { return mReset; }
     Aggregation getAggregation() const { return mAggregationSetting; }
+    Number getTriggerTime() const { return mTriggerTime; }
     bool isUrgent() const { return mUrgent; }
+    bool isTimeTriggered() const { return mTriggerTime >= 0; }
 
     void setSource(Location<Number>* source) { mSource = source; }
     void setTarget(Location<Number>* target) { mTarget = target; }
@@ -63,6 +67,7 @@ class Transition
     void setReset(const Reset<Number>& val) { mReset = val; }
     void setAggregation(Aggregation agg) { mAggregationSetting = agg; }
     void setUrgent(bool urgent = true) { mUrgent = urgent; }
+    void setTriggerTime(Number t) { mTriggerTime = t; }
 
     friend std::ostream& operator<<(std::ostream& ostr, const Transition<Number>& t) {
 		#ifdef HYDRA_USE_LOGGING

@@ -6,17 +6,17 @@
  *
  * A grammar for AnTLR to generate a parser for a hybrid automaton.
  */
-
+ 
 grammar HybridAutomaton;
-
-import Location;
-
+ 
+import Location, Transition;
+ 
 ////// Parser Rules
-
+ 
 // TODO: Until now only declaring the variables correctly implement parsing of locations
-
-start				: 'hybrid reachability' '{' vardeclaration modes '}' ;
-
-vardeclaration		: 'state var' VARIABLE ((',' VARIABLE)+)? ;
-
-//setting				: 'setting' '{'  '}'; 
+ 
+start               : 'hybrid reachability' '{' vardeclaration modes jumps '}' ;
+ 
+vardeclaration      : 'state var' VARIABLE ((',' VARIABLE)+)? ;
+ 
+//setting               : 'setting' '{'  '}'; 

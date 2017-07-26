@@ -34,7 +34,7 @@ endif()
 #AntLR
 message("-- Use system version of AnTLR")
 
-#set variable pointing to antlr tool 
+#set variable pointing to antlr tool
 set(ANTLR4CPP_JAR_LOCATION ${PROJECT_SOURCE_DIR}/src/resources/antlr-4.7-complete.jar)
 #include external cmake file
 include(ExternalAntlr4Cpp.cmake)

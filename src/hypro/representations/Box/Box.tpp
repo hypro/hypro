@@ -263,7 +263,7 @@ Number BoxT<Number,Converter>::supremum() const {
 }
 
 template<typename Number, typename Converter>
-std::vector<Point<Number>> BoxT<Number,Converter>::vertices( const Location<Number>* ) const {
+std::vector<Point<Number>> BoxT<Number,Converter>::vertices( const matrix_t<Number>& ) const {
 	std::vector<Point<Number>> result;
 	std::size_t limit = pow( 2, mLimits.first.dimension() );
 

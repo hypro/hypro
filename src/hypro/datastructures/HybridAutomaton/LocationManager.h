@@ -26,9 +26,9 @@ class LocationManager : public carl::Singleton<LocationManager<Number>>
     /**
      * Default constructor and destructor
      */
-    //LocationManager() : mId(0) {}
-  public:
     LocationManager() : mId(0) {}
+  public:
+    //LocationManager() : mId(0) {}
     ~LocationManager() {}
     Location<Number>* create();
     Location<Number>* create(const Location<Number>* _loc);
@@ -40,6 +40,8 @@ class LocationManager : public carl::Singleton<LocationManager<Number>>
     unsigned id(Location<Number>* _loc) const;
     Location<Number>* location(unsigned _id) const;
     Location<Number>* location(std::string name) const;
+
+    void erase(unsigned _id);
 };
 
 }  // namespace hydra

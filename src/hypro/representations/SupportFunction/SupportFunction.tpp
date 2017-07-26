@@ -189,12 +189,10 @@ namespace hypro{
     }
 
     template<typename Number, typename Converter>
-    std::vector<Point<Number>> SupportFunctionT<Number,Converter>::vertices(const Location<Number>* loc) const {
-		std::vector<vector_t<Number>> additionalDirections;
-		if(loc != nullptr) {
-			for(unsigned rowIndex = 0; rowIndex < loc->invariant().mat.rows(); ++rowIndex){
-				additionalDirections.push_back(vector_t<Number>(loc->invariant().mat.row(rowIndex)));
-			}
+    std::vector<Point<Number>> SupportFunctionT<Number,Converter>::vertices(const matrix_t<Number>& additionalDirections) const {
+		std::vector<vector_t<Number>> additionalDirectionVector;
+		for(unsigned rowIndex = 0; rowIndex < additionalDirections.rows(); ++rowIndex){
+			additionalDirectionVector.push_back(vector_t<Number>(additionalDirections.row(rowIndex)));
 		}
 
 		//std::cout << "Added " << additionalDirections.size() << " additional directions for evaluation." << std::endl;
@@ -284,7 +282,7 @@ namespace hypro{
 			return ve.getPoints();
 		}
 		*/
-		auto tmp = Converter::toHPolytope(*this, additionalDirections);
+		auto tmp = Converter::toHPolytope(*this, additionalDirectionVector);
 		return tmp.vertices();
     }
 

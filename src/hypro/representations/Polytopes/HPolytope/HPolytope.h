@@ -192,7 +192,7 @@ public:
 	 * @details Solves the vertex enumeration problem, i.e. converts the hyperplanar description into a vertex description.
 	 * @return A vector of points.
 	 */
-	std::vector<Point<Number>> vertices( const Location<Number>* = nullptr ) const;
+	std::vector<Point<Number>> vertices( const matrix_t<Number>& = matrix_t<Number>::Zero(0,0) ) const;
 
 	/**
 	 * @brief Getter for a number representing the supremum according to the infinity norm of the polytope.

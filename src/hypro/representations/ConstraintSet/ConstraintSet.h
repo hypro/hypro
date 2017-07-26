@@ -36,13 +36,16 @@ class ConstraintSetT : public GeometricObject<Number, ConstraintSetT<Number,Conv
 	 * @brief      Creates an empty constraintSet.
 	 * @details   The empty constraintSet is represented by a zero-dimensional point pair.
 	 */
-	ConstraintSetT() {}
+	ConstraintSetT() = default;
 
 	/**
 	 * @brief      Copy constructor.
 	 * @param[in]  orig  The original.
 	 */
-	ConstraintSetT( const ConstraintSetT& orig ) = default;
+	ConstraintSetT( const ConstraintSetT& orig )
+		: mConstraints(orig.matrix())
+		, mConstants(orig.vector())
+	{}
 
 	/**
 	 * @brief      Move constructor.
@@ -71,8 +74,8 @@ class ConstraintSetT : public GeometricObject<Number, ConstraintSetT<Number,Conv
 	 * Getters & setters
 	 **************************************************************************/
 
-	matrix_t<Number> matrix() const { return mConstraints; }
-	vector_t<Number> vector() const { return mConstants; }
+	const matrix_t<Number>& matrix() const { return mConstraints; }
+	const vector_t<Number>& vector() const { return mConstants; }
 
 	matrix_t<Number>& rMatrix() { return mConstraints; }
 	vector_t<Number>& rVector() { return mConstants; }
@@ -86,13 +89,28 @@ class ConstraintSetT : public GeometricObject<Number, ConstraintSetT<Number,Conv
 		return !Optimizer<Number>(mConstraints,mConstants).checkConsistency();
 	}
 
+	void addConstraint(const vector_t<Number>& normal, Number offset) {
+		if(mConstraints.cols() == 0) {
+			mConstraints = matrix_t<Number>(normal);
+			mConstants = vector_t<Number>::Zero(1);
+			mConstants << offset;
+		} else {
+			assert(mConstraints.cols() == normal.rows());
+			mConstraints.conservativeResize(mConstraints.rows()+1, mConstraints.cols());
+			mConstants.conservativeResize(mConstraints.rows()+1);
+
+			mConstraints.row(mConstraints.rows()-1) = normal;
+			mConstants(mConstants.rows()-1) = offset;
+		}
+	}
+
 
 	/**
 	 * @brief Getter for a vertex-representation of the current constraintSet.
 	 * @details Not implemented.
 	 * @return An empty vector of points.
 	 */
-	std::vector<Point<Number>> vertices( const Location<Number>* = nullptr ) const { return std::vector<Point<Number>>(); }
+	std::vector<Point<Number>> vertices( const matrix_t<Number>& = matrix_t<Number>::Zero(0,0) ) const { return std::vector<Point<Number>>(); }
 
 	/**
 	 * @brief Checks if two constraintSets are equal.
@@ -171,46 +189,46 @@ class ConstraintSetT : public GeometricObject<Number, ConstraintSetT<Number,Conv
 	 *
 	 * @param[in]  limit      The limit
 	 */
-	const ConstraintSetT<Number,Converter>& reduceNumberRepresentation(unsigned limit = fReach_DENOMINATOR) { return *this; }
+	const ConstraintSetT<Number,Converter>& reduceNumberRepresentation(unsigned) { return *this; }
 
-	std::pair<bool, ConstraintSetT> satisfiesHalfspace( const Halfspace<Number>& rhs ) const { return std::make_pair(true,*this); }
-	std::pair<bool, ConstraintSetT> satisfiesHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const { return std::make_pair(true,*this); }
-	ConstraintSetT<Number,Converter> project(const std::vector<unsigned>& dimensions) const { return *this; }
-	ConstraintSetT<Number,Converter> linearTransformation( const matrix_t<Number>& A ) const { return *this; }
-	ConstraintSetT<Number,Converter> affineTransformation( const matrix_t<Number>& A, const vector_t<Number>& b ) const { return *this; }
-	ConstraintSetT<Number,Converter> minkowskiSum( const ConstraintSetT<Number,Converter>& rhs ) const { return *this; }
+	std::pair<bool, ConstraintSetT> satisfiesHalfspace( const Halfspace<Number>&  ) const { return std::make_pair(true,*this); }
+	std::pair<bool, ConstraintSetT> satisfiesHalfspaces( const matrix_t<Number>& , const vector_t<Number>&  ) const { return std::make_pair(true,*this); }
+	ConstraintSetT<Number,Converter> project(const std::vector<unsigned>& ) const { return *this; }
+	ConstraintSetT<Number,Converter> linearTransformation( const matrix_t<Number>& ) const { return *this; }
+	ConstraintSetT<Number,Converter> affineTransformation( const matrix_t<Number>& , const vector_t<Number>& ) const { return *this; }
+	ConstraintSetT<Number,Converter> minkowskiSum( const ConstraintSetT<Number,Converter>& ) const { return *this; }
 
 	/**
 	 * @brief      Computes the intersection of two constraintSets.
 	 * @param[in]  rhs   The right hand side constraintSet.
 	 * @return     The resulting constraintSet.
 	 */
-	ConstraintSetT<Number,Converter> intersect( const ConstraintSetT<Number,Converter>& rhs ) const { return *this; }
+	ConstraintSetT<Number,Converter> intersect( const ConstraintSetT<Number,Converter>& ) const { return *this; }
 
-	ConstraintSetT<Number,Converter> intersectHalfspace( const Halfspace<Number>& hspace ) const { return *this; }
-	ConstraintSetT<Number,Converter> intersectHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const { return *this; }
-	bool contains( const Point<Number>& point ) const { return true; }
+	ConstraintSetT<Number,Converter> intersectHalfspace( const Halfspace<Number>& ) const { return *this; }
+	ConstraintSetT<Number,Converter> intersectHalfspaces( const matrix_t<Number>& , const vector_t<Number>& ) const { return *this; }
+	bool contains( const Point<Number>& ) const { return true; }
 
 	/**
 	 * @brief      Containment check for a constraintSet.
 	 * @param[in]  constraintSet   The constraintSet.
 	 * @return     True, if the given constraintSet is contained in the current constraintSet, false otherwise.
 	 */
-	bool contains( const ConstraintSetT<Number,Converter>& constraintSet ) const { assert(false); return true; }
+	bool contains( const ConstraintSetT<Number,Converter>& ) const { assert(false); return true; }
 
 	/**
 	 * @brief      Computes the union of two constraintSets.
 	 * @param[in]  rhs   The right hand side constraintSet.
 	 * @return     The resulting constraintSet.
 	 */
-	ConstraintSetT<Number,Converter> unite( const ConstraintSetT<Number,Converter>& rhs ) const { return *this; }
+	ConstraintSetT<Number,Converter> unite( const ConstraintSetT<Number,Converter>& ) const { return *this; }
 
 	/**
 	 * @brief      Computes the union of the current constraintSet with a set of constraintSets.
 	 * @param[in]  constraintSets  The constraintSets.
 	 * @return     The resulting constraintSet.
 	 */
-	static ConstraintSetT<Number,Converter> unite( const std::vector<ConstraintSetT<Number,Converter>>& constraintSets ) { return ConstraintSetT<Number,Converter>(); }
+	static ConstraintSetT<Number,Converter> unite( const std::vector<ConstraintSetT<Number,Converter>>& ) { return ConstraintSetT<Number,Converter>(); }
 
 	/**
 	 * @brief      Makes this constraintSet the empty constraintSet.

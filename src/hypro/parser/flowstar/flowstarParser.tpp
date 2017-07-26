@@ -95,15 +95,14 @@ namespace parser {
 
 		for(const auto state : mInitialStates ){
 			TRACE("hypro.parser", "Add initial state for location " << state.location->id());
-			assert(state.discreteAssignment.size() == mDiscreteVariableIds.size());
 			result.addInitialState(state);
 		}
 
 		for(const auto state : mLocalBadStates ){
-			result.addLocalBadState(state);
+			result.addLocalBadState(state.getLocation(), Condition<Number>(state.getSets()));
 		}
 
-		result.setReachabilitySettings(mSettings);
+		//result.setReachabilitySettings(mSettings);
 
 		return result;
 	}

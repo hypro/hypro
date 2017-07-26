@@ -116,7 +116,7 @@ void PolytopeT<Number,Converter>::updatePoints() const {
 }
 
 template <typename Number, typename Converter>
-std::vector<Point<Number>> PolytopeT<Number,Converter>::vertices( const Location<Number>* ) const {
+std::vector<Point<Number>> PolytopeT<Number,Converter>::vertices( const matrix_t<Number>& ) const {
 	if ( !mPointsUpToDate ) {
 		updatePoints();
 	}
