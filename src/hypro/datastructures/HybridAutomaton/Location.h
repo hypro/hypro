@@ -38,7 +38,7 @@ protected:
              const matrix_t<Number>& extInputMat);
 
 private:
-    mutable matrix_t<Number> mFlow;
+    mutable std::vector<matrix_t<Number>> mFlows;
     matrix_t<Number> mExternalInput;
     transitionSet mTransitions;
     Condition<Number> mInvariant;
@@ -49,14 +49,15 @@ public:
   	Location() = delete;
     ~Location() {}
 
-    const matrix_t<Number>& getFlow() const { return mFlow; }
+    matrix_t<Number> getFlow(std::size_t I = 0) const { return mFlows.at(I); }
+    matrix_t<Number>& rGetFlow(std::size_t I = 0) { return mFlows[I]; }
     const Condition<Number>& getInvariant() const { return mInvariant; }
     const transitionSet& getTransitions() const { return mTransitions; }
     const matrix_t<Number>& getExternalInput() const { return mExternalInput; }
     unsigned getId() const { return mId; }
 	std::string getName() const { return mName; }
     void setName(const std::string& name) { mName = name; }
-    void setFlow(const matrix_t<Number>& mat) { mFlow = mat; }
+    void setFlow(const matrix_t<Number>& mat, std::size_t I = 0);
     void setInvariant(const Condition<Number>& inv) { mInvariant = inv; }
     void setTransitions(const transitionSet& trans) { mTransitions = trans; }
     void addTransition(Transition<Number>* trans) { mTransitions.insert(trans); }

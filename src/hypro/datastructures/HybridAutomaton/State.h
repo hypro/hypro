@@ -97,9 +97,13 @@ class State
 
     void addTimeToClocks(Number t);
     State<Number,Representation,Rargs...> aggregate(const State<Number,Representation,Rargs...>& in) const;
-    std::pair<bool,State<Number,Representation,Rargs...>> intersect(const Condition<Number>& in) const;
+    std::pair<bool,State<Number,Representation,Rargs...>> satisfies(const Condition<Number>& in) const;
+    std::pair<bool,State<Number,Representation,Rargs...>> partiallySatisfies(const Condition<Number>& in, std::size_t I) const;
     State<Number,Representation,Rargs...> applyTimeStep(const std::vector<std::pair<const matrix_t<Number>&, const vector_t<Number>&>>& flows, Number timeStepSize ) const;
-    State<Number,Representation,Rargs...> applyTransformation(const std::vector<const ConstraintSet<Number>&>& trafos ) const;
+    State<Number,Representation,Rargs...> partiallyApplyTimeStep(const ConstraintSet<Number>& flow, Number timeStepSize, std::size_t I ) const;
+    State<Number,Representation,Rargs...> applyTransformation(const std::vector<ConstraintSet<Number>>& trafos ) const;
+    State<Number,Representation,Rargs...> partiallyApplyTransformation(const std::vector<ConstraintSet<Number>>& trafos, const std::vector<std::size_t>& sets ) const;
+    State<Number,Representation,Rargs...> partiallyApplyTransformation(const ConstraintSet<Number>& trafo, std::size_t setsIndex ) const;
 
     friend ostream& operator<<(ostream& out, const State<Number,Representation,Rargs...>& state) {
 		#ifdef HYPRO_USE_LOGGING

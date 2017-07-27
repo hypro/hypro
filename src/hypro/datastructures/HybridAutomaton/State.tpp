@@ -74,7 +74,7 @@ State<Number,Representation,Rargs...> State<Number,Representation,Rargs...>::agg
 }
 
 template<typename Number, typename Representation, typename ...Rargs>
-std::pair<bool,State<Number,Representation,Rargs...>> State<Number,Representation,Rargs...>::intersect(const Condition<Number>& in) const {
+std::pair<bool,State<Number,Representation,Rargs...>> State<Number,Representation,Rargs...>::satisfies(const Condition<Number>& in) const {
 	//DEBUG("hydra.datastructures","this rep name: " << mSetRepresentationName << " vs " << in.getSetRepresentation());
 	//assert(mSetRepresentationName == in.getSetRepresentation());
 
@@ -120,6 +120,18 @@ std::pair<bool,State<Number,Representation,Rargs...>> State<Number,Representatio
 }
 
 template<typename Number, typename Representation, typename ...Rargs>
+std::pair<bool,State<Number,Representation,Rargs...>> State<Number,Representation,Rargs...>::partiallySatisfies(const Condition<Number>& in, std::size_t I) const {
+	assert(in.size() == mSets.size());
+	State<Number,Representation,Rargs...> res(*this);
+
+	auto resultPair = mSets.at(I).satisfiesHalfspaces(in.getMatrix(I), in.getVector(I));
+	res.setSet(resultPair.second,I);
+
+	return std::make_pair(!resultPair.first, res);
+}
+
+
+template<typename Number, typename Representation, typename ...Rargs>
 State<Number,Representation,Rargs...> State<Number,Representation,Rargs...>::applyTimeStep(const std::vector<std::pair<const matrix_t<Number>&, const vector_t<Number>&>>& flows, Number timeStepSize ) const {
 	State<Number,Representation,Rargs...> res(*this);
 	//TRACE("hydra.datastructures","Apply timestep of size " << timeStepSize);
@@ -133,7 +145,17 @@ State<Number,Representation,Rargs...> State<Number,Representation,Rargs...>::app
 }
 
 template<typename Number, typename Representation, typename ...Rargs>
-State<Number,Representation,Rargs...> State<Number,Representation,Rargs...>::applyTransformation(const std::vector<const ConstraintSet<Number>&>& trafos ) const {
+State<Number,Representation,Rargs...> State<Number,Representation,Rargs...>::partiallyApplyTimeStep(const ConstraintSet<Number>& flow, Number timeStepSize, std::size_t I ) const {
+	State<Number,Representation,Rargs...> res(*this);
+	assert(I < mSets.size());
+	res.setSet(mSets.at(I).affineTransformation(flow.getMatrix(), flow.getVector()));
+
+	res.addTimeToClocks(timeStepSize);
+	return res;
+}
+
+template<typename Number, typename Representation, typename ...Rargs>
+State<Number,Representation,Rargs...> State<Number,Representation,Rargs...>::applyTransformation(const std::vector<ConstraintSet<Number>>& trafos ) const {
 	State<Number,Representation,Rargs...> res(*this);
 	//TRACE("hydra.datastructures","Apply timestep of size " << timeStepSize);
 	//res.setSet(mSet.affineTransformation(trafoMatrix,trafoVector));
@@ -141,6 +163,26 @@ State<Number,Representation,Rargs...> State<Number,Representation,Rargs...>::app
 	for(std::size_t i = 0; i < mSets.size(); ++i) {
 		res.setSet(mSets.at(i).affineTransformation(trafos.at(i).getMatrix(), trafos.at(i).getVector()));
 	}
+	return res;
+}
+
+
+template<typename Number, typename Representation, typename ...Rargs>
+State<Number,Representation,Rargs...> State<Number,Representation,Rargs...>::partiallyApplyTransformation(const std::vector<ConstraintSet<Number>>& trafos, const std::vector<std::size_t>& sets ) const {
+	State<Number,Representation,Rargs...> res(*this);
+	assert(trafos.size() == sets.size());
+	for(std::size_t i = 0; i < sets.size(); ++i) {
+		assert(sets.at(i) < mSets.size());
+		res.setSet(mSets.at(sets.at(i)).affineTransformation(trafos.at(i).getMatrix(), trafos.at(i).getVector()));
+	}
+	return res;
+}
+
+template<typename Number, typename Representation, typename ...Rargs>
+State<Number,Representation,Rargs...> State<Number,Representation,Rargs...>::partiallyApplyTransformation(const ConstraintSet<Number>& trafo, std::size_t setIndex ) const {
+	State<Number,Representation,Rargs...> res(*this);
+	assert(setIndex < mSets.size());
+	res.setSet(mSets.at(setIndex).affineTransformation(trafo.getMatrix(), trafo.getVector()));
 	return res;
 }
 

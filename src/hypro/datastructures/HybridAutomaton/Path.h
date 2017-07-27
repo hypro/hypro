@@ -71,9 +71,9 @@ namespace hypro {
 			bool sharesPrefix(const Path<Number>& rhs) const;
 			Path sharedPrefix(const Path<Number>& rhs) const;
 			bool isEmpty() const { return (mPath.size() == 0); }
-			Number maximalTimeSpan(std::deque<TPathElement>::const_iterator start, std::deque<TPathElement<Number>>::const_iterator end) const;
+			Number maximalTimeSpan(typename std::deque<TPathElement<Number>>::const_iterator start, typename std::deque<TPathElement<Number>>::const_iterator end) const;
 
-			std::vector<Transition<Number>*> getTransitionSequence(std::deque<TPathElement<Number>>::const_iterator start, std::deque<TPathElement>::const_iterator end) const;
+			std::vector<Transition<Number>*> getTransitionSequence(typename std::deque<TPathElement<Number>>::const_iterator start, typename std::deque<TPathElement<Number>>::const_iterator end) const;
 			bool hasChatteringZeno() const;
 
 			// comparison - read as "is longer than"
@@ -81,7 +81,7 @@ namespace hypro {
 			bool operator>(unsigned r) const;
 
 			// Iterator
-			typedef std::deque<TPathElement<Number>>::iterator TIterator;
+			using TIterator = typename std::deque<TPathElement<Number>>::iterator;
 			TIterator begin ();
 			TIterator end();
 

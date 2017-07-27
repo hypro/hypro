@@ -25,8 +25,9 @@ public:
 	matrix_t<Number>& rGetMatrix(std::size_t I = 0) const { return mResets[I].rMatrix(); }
 	vector_t<Number>& rGetVector(std::size_t I = 0) const { return mResets[I].rVector(); }
 
-	const ConstraintSet<Number>& getReset(std::size_t I = 0) const { return mResets.at(I); }
+	ConstraintSet<Number> getReset(std::size_t I = 0) const { return mResets.at(I); }
 	ConstraintSet<Number>& rGetReset(std::size_t I = 0) const { return mResets[I]; }
+	const std::vector<ConstraintSet<Number>>& getResetTransformations() const { return mResets; }
 
 	void setVector(const vector_t<Number>& in, std::size_t I = 0);
 	void setMatrix(const matrix_t<Number>& in, std::size_t I = 0);
