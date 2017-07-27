@@ -37,7 +37,7 @@ public:
 
     friend std::ostream& operator<<(std::ostream& ostr, const Reset<Number>& a)
     {
-#ifdef HYPRO_USE_LOGGING
+#ifdef HYPRO_LOGGING
         //ostr << "Continuous transformation: " << a.continuousMat << " and const " << a.continuousVec;
         //ostr << "Discrete transformation: " << a.discreteMat << " and const " << a.discreteVec;
         //ostr << "Clock transformation: " << a.clockMat << " and const " << a.clockVec;

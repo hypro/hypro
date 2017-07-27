@@ -63,7 +63,7 @@ public:
     }
 };
 
-template<typename T>
+template<typename T, typename Number>
 class genericConversionVisitor
     : public boost::static_visitor<T>
 {
@@ -76,7 +76,7 @@ public:
 		toType(to)
 	{}
 
-	template<typename B, typename Number>
+	template<typename B>
     T operator()(const B& lhs) const {
  		switch(toType){
  			case representation_name::box: {

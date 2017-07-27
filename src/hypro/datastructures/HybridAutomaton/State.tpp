@@ -6,6 +6,7 @@ namespace hypro
 template<typename Number, typename Representation, typename ...Rargs>
 const boost::variant<Representation,Rargs...>& State<Number,Representation,Rargs...>::getSet(std::size_t i) const {
 	assert(mTypes.size() == mSets.size());
+	assert(i < mSets.size());
 	return mSets.at(i);
 //	switch(mTypes.at(i)) {
 //		case representation_name::box: {
@@ -42,6 +43,18 @@ boost::variant<Representation,Rargs...>& State<Number,Representation,Rargs...>::
 	return mSets.at(i);
 }
 
+template<typename Number, typename Representation, typename ...Rargs>
+template<typename R>
+void State<Number,Representation,Rargs...>::setSet(const R& s, std::size_t i) {
+	assert(mSets.size() == mTypes.size());
+	while(i <= mSets.size()) {
+		mSets.push_back(ConstraintSet<Number>()); // some default set.
+		mTypes.push_back(representation_name::constraint_set); // some default set type.
+	}
+	mSets[i] = s;
+	mTypes[i] = R::type();
+}
+
 
 template<typename Number, typename Representation, typename ...Rargs>
 void State<Number,Representation,Rargs...>::addTimeToClocks(Number t) {
@@ -64,7 +77,7 @@ State<Number,Representation,Rargs...> State<Number,Representation,Rargs...>::agg
 	// element-wise union.
 	assert(mSets.size() == in.getSets().size());
 	for(std::size_t i = 0; i < mSets.size(); ++i) {
-		res.setSet(mSets.at(i).unite(in.getSet(i)), i);
+		res.setSetDirect( boost::apply_visitor(genericUniteVisitor<repVariant>(), mSets.at(i), in.getSet(i)), i);
 	}
 
 	//TRACE("hydra.datastructures","After continuous aggregation " << res );
@@ -83,38 +96,14 @@ std::pair<bool,State<Number,Representation,Rargs...>> State<Number,Representatio
 	bool empty = false;
 
 	for(std::size_t i = 0; i < mSets.size(); ++i) {
-		auto resultPair = mSets.at(i).satisfiesHalfspaces(in.getMatrix(i), in.getVector(i));
-		res.setSet(resultPair.second,i);
+		auto resultPair = boost::apply_visitor(genericSatisfiesHalfspacesVisitor<repVariant, Number>(in.getMatrix(), in.getVector()), mSets.at(i));
+		res.setSetDirect(resultPair.second, i);
+
 		if(!resultPair.first) {
 			empty = true;
 			break;
 		}
 	}
-
-
-	//std::pair<bool,Representation> contPair = mSet.satisfiesHalfspaces(in.getSet().matrix(), in.getSet().vector());
-	//if(contPair.first) {
-	//	empty = false;
-	//	res.setSet(contPair.second);
-	//}
-
-	//// clock sets.
-	//if(mHasClocks && !empty) {
-	//	std::pair<bool,clockSetRepresentation> clockPair = mClockAssignment.satisfiesHalfspaces(in.getClockAssignment().matrix(), in.getClockAssignment().vector());
-	//	if(clockPair.first) {
-	//		empty = false;
-	//		res.setClockAssignment(clockPair.second);
-	//	}
-	//}
-//
-//	//// discrete sets.
-//	//if(mHasDiscreteVariables && !empty) {
-//	//	std::pair<bool,discreteSetRepresentation> discretePair = mDiscreteAssignment.satisfiesHalfspaces(in.getDiscreteAssignment().matrix(), in.getDiscreteAssignment().vector());
-//	//	if(discretePair.first) {
-//	//		empty = false;
-//	//		res.setDiscreteAssignment(discretePair.second);
-//	//	}
-	//}
 
 	return std::make_pair(!empty, res);
 }
@@ -124,10 +113,10 @@ std::pair<bool,State<Number,Representation,Rargs...>> State<Number,Representatio
 	assert(in.size() == mSets.size());
 	State<Number,Representation,Rargs...> res(*this);
 
-	auto resultPair = mSets.at(I).satisfiesHalfspaces(in.getMatrix(I), in.getVector(I));
-	res.setSet(resultPair.second,I);
+	auto resultPair = boost::apply_visitor(genericSatisfiesHalfspacesVisitor<repVariant, Number>(in.getMatrix(), in.getVector()), mSets.at(I));
+	res.setSetDirect(resultPair.second, I);
 
-	return std::make_pair(!resultPair.first, res);
+	return std::make_pair(resultPair.first, res);
 }
 
 
@@ -138,7 +127,7 @@ State<Number,Representation,Rargs...> State<Number,Representation,Rargs...>::app
 	//res.setSet(mSet.affineTransformation(trafoMatrix,trafoVector));
 	assert(flows.size() == mSets.size());
 	for(std::size_t i = 0; i < mSets.size(); ++i) {
-		res.setSet(mSets.at(i).affineTransformation(flows.at(i).first, flows.at(i).second));
+		res.setSetDirect(boost::apply_visitor(genericAffineTransformationVisitor<repVariant, Number>(flows.at(i).first, flows.at(i).second), mSets.at(i)), i);
 	}
 	res.addTimeToClocks(timeStepSize);
 	return res;
@@ -148,7 +137,7 @@ template<typename Number, typename Representation, typename ...Rargs>
 State<Number,Representation,Rargs...> State<Number,Representation,Rargs...>::partiallyApplyTimeStep(const ConstraintSet<Number>& flow, Number timeStepSize, std::size_t I ) const {
 	State<Number,Representation,Rargs...> res(*this);
 	assert(I < mSets.size());
-	res.setSet(mSets.at(I).affineTransformation(flow.getMatrix(), flow.getVector()));
+	res.setSetDirect(boost::apply_visitor(genericAffineTransformationVisitor<repVariant, Number>(flow.matrix(), flow.vector()), mSets.at(I)), I);
 
 	res.addTimeToClocks(timeStepSize);
 	return res;
@@ -161,7 +150,7 @@ State<Number,Representation,Rargs...> State<Number,Representation,Rargs...>::app
 	//res.setSet(mSet.affineTransformation(trafoMatrix,trafoVector));
 	assert(trafos.size() == mSets.size());
 	for(std::size_t i = 0; i < mSets.size(); ++i) {
-		res.setSet(mSets.at(i).affineTransformation(trafos.at(i).getMatrix(), trafos.at(i).getVector()));
+		res.setSetDirect(boost::apply_visitor(genericAffineTransformationVisitor<repVariant, Number>(trafos.at(i).matrix(), trafos.at(i).vector()), mSets.at(i)), i);
 	}
 	return res;
 }
@@ -173,17 +162,19 @@ State<Number,Representation,Rargs...> State<Number,Representation,Rargs...>::par
 	assert(trafos.size() == sets.size());
 	for(std::size_t i = 0; i < sets.size(); ++i) {
 		assert(sets.at(i) < mSets.size());
-		res.setSet(mSets.at(sets.at(i)).affineTransformation(trafos.at(i).getMatrix(), trafos.at(i).getVector()));
+		res.setSetDirect(boost::apply_visitor(genericAffineTransformationVisitor<repVariant, Number>(trafos.at(i).matrix(), trafos.at(i).vector()), mSets.at(sets.at(i))), sets.at(i));
 	}
 	return res;
 }
 
 template<typename Number, typename Representation, typename ...Rargs>
-State<Number,Representation,Rargs...> State<Number,Representation,Rargs...>::partiallyApplyTransformation(const ConstraintSet<Number>& trafo, std::size_t setIndex ) const {
+State<Number,Representation,Rargs...> State<Number,Representation,Rargs...>::partiallyApplyTransformation(const ConstraintSet<Number>& trafo, std::size_t I ) const {
 	State<Number,Representation,Rargs...> res(*this);
-	assert(setIndex < mSets.size());
-	res.setSet(mSets.at(setIndex).affineTransformation(trafo.getMatrix(), trafo.getVector()));
+	assert(I < mSets.size());
+
+	res.setSetDirect(boost::apply_visitor(genericAffineTransformationVisitor<repVariant, Number>(trafo.matrix(), trafo.vector()), mSets.at(I)), I);
+
 	return res;
 }
 
-}
+} // hypro

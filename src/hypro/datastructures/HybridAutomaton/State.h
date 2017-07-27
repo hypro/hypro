@@ -19,9 +19,12 @@ class Location;
 template<typename Number, typename Representation, typename ...Rargs>
 class State
 {
+	private:
+		using repVariant = boost::variant<Representation,Rargs...>;
+
   protected:
     const Location<Number>* mLoc = nullptr; // Todo: Check if the location pointer is really needed.
-    std::vector<boost::variant<Representation,Rargs...>> mSets;
+    std::vector<repVariant> mSets;
     std::vector<representation_name> mTypes;
     carl::Interval<Number> mTimestamp = carl::Interval<Number>::unboundedInterval();
     bool mIsEmpty = false;
@@ -91,9 +94,21 @@ class State
     void setLocation(const Location<Number>* l) { assert(l != nullptr); mLoc = l; }
 
     template<typename R>
-    void setSet(const R& s, std::size_t i = 0) { mSets[i] = s; mTypes[i] = R::type(); }
+    void setSet(const R& s, std::size_t i = 0);
+    void setSetType(representation_name type, std::size_t I = 0) { assert(mSets.size() < I && mTypes.size() < I);  mTypes[I] = type; }
     void setTimestamp(carl::Interval<Number> t) { mTimestamp = t; }
     void setSets(const std::vector<boost::variant<Representation,Rargs...>>& sets) { mSets = sets; }
+    /**
+	 * @brief      Sets the set.
+	 * @details    Does not update the type for the respective position - can be used if type does not change to avoid unpacking.
+	 *
+	 * @param[in]  in    The set as a boost::variant.
+	 * @param[in]  I     The position in the sets vector.
+	 */
+	void setSetDirect(const repVariant& in, std::size_t I = 0) {
+		assert(I < mSets.size());
+		mSets[I] = in;
+	}
 
     void addTimeToClocks(Number t);
     State<Number,Representation,Rargs...> aggregate(const State<Number,Representation,Rargs...>& in) const;
@@ -103,7 +118,7 @@ class State
     State<Number,Representation,Rargs...> partiallyApplyTimeStep(const ConstraintSet<Number>& flow, Number timeStepSize, std::size_t I ) const;
     State<Number,Representation,Rargs...> applyTransformation(const std::vector<ConstraintSet<Number>>& trafos ) const;
     State<Number,Representation,Rargs...> partiallyApplyTransformation(const std::vector<ConstraintSet<Number>>& trafos, const std::vector<std::size_t>& sets ) const;
-    State<Number,Representation,Rargs...> partiallyApplyTransformation(const ConstraintSet<Number>& trafo, std::size_t setsIndex ) const;
+    State<Number,Representation,Rargs...> partiallyApplyTransformation(const ConstraintSet<Number>& trafo, std::size_t I ) const;
 
     friend ostream& operator<<(ostream& out, const State<Number,Representation,Rargs...>& state) {
 		#ifdef HYPRO_USE_LOGGING

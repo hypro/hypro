@@ -31,7 +31,7 @@
 
 #include "config.h"
 #include "common.h"
-#include "algorithms/reachability/Settings.h"
+#include "datastructures/HybridAutomaton/Settings.h"
 #include "datastructures/HybridAutomaton/State.h"
 #include "datastructures/HybridAutomaton/LocationManager.h"
 #include "datastructures/HybridAutomaton/HybridAutomaton.h"
@@ -119,10 +119,13 @@ struct flowstarParser : qi::grammar<Iterator, Skipper>
 				if(stateIt->getLocation()->getId() == id){
 					//std::cout << "stateIt->already exists." << std::endl;
 					found = true;
-					unsigned constraintsNum = boost::get<ConstraintSet<Number>>(stateIt->getSet()).matrix().rows();
+					unsigned constraintsNum = 0;
+					if(stateIt->getNumberSets() > 0) {
+						constraintsNum = boost::get<ConstraintSet<Number>>(stateIt->getSet()).matrix().rows();
+					}
 					unsigned dimension = constraintsNum > 0 ? boost::get<ConstraintSet<Number>>(stateIt->getSet()).matrix().cols() : (_constraint.begin()->cols())-1;
 					//std::cout << "current constraints: " << boost::get<ConstraintSet<Number>>(stateIt->getSet()).first << std::endl;
-					ConstraintSet<Number> set = boost::get<ConstraintSet<Number>>(stateIt->getSet());
+					ConstraintSet<Number> set = constraintsNum > 0 ? boost::get<ConstraintSet<Number>>(stateIt->getSet()) : ConstraintSet<Number>();
 					//std::cout << "Resize to " << constraintsNum+_constraint.size() << " x " << dimension << std::endl;
 					set.rMatrix().conservativeResize(constraintsNum+_constraint.size(), dimension);
 					set.rVector().conservativeResize(constraintsNum+_constraint.size());

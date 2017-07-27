@@ -68,7 +68,7 @@ public:
     inline bool operator!=(const Location<Number>& rhs) const { return (mId != rhs.getId()); }
 
     friend std::ostream& operator<<(std::ostream& ostr, const Location<Number>& l) {
-    	#ifdef HYDRA_USE_LOGGING
+    	#ifdef HYPRO_LOGGING
 	    matrix_t<Number> tmp = matrix_t<Number>(l.getInvariant().getMatrix().rows(), l.getInvariant().getMatrix().cols() + 1);
 	    tmp << l.getInvariant().getMatrix(), l.getInvariant().getVector();
 	    ostr << "location " << l.getName() << " (id: " << l.getId() << ")"<< std::endl << "\t Flow: " << std::endl << l.getFlow() << std::endl << "\t Inv: " << std::endl << tmp;

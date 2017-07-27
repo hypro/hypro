@@ -36,7 +36,10 @@ class ConstraintSetT : public GeometricObject<Number, ConstraintSetT<Number,Conv
 	 * @brief      Creates an empty constraintSet.
 	 * @details   The empty constraintSet is represented by a zero-dimensional point pair.
 	 */
-	ConstraintSetT() = default;
+	ConstraintSetT()
+		: mConstraints(matrix_t<Number>::Zero(0,0))
+		, mConstants(vector_t<Number>::Zero(0))
+	{}
 
 	/**
 	 * @brief      Copy constructor.
