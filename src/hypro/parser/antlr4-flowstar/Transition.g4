@@ -16,7 +16,9 @@ import Formula;
 //fromto must be at the beginning. Then, all the other options are optional.
 //It can be that one will have (fromto reset reset reset), in this case trigger a warning!
 
-jumps		: 'jumps' '{' (fromto (urgent | guard | resetfct | aggregation)*)* '}' ;
+jumps		: 'jumps' '{' transition* '}' ;
+
+transition 	: fromto (urgent | guard | resetfct | aggregation)* ;
 
 fromto		: VARIABLE JUMP VARIABLE ;
 
@@ -28,7 +30,14 @@ allocation	: VARIABLE DEFINE (polynom | interval) ;
 
 resetfct	: 'reset' '{' allocation* '}' ;
 
-aggregation	: 'parallelotope aggregation' '{' '}' ;
+aggregation	: (PARALLELOTOPE | BOX) '{' '}' ;
 
 //////// Lexer Rules
 
+PARALLELOTOPE 	: 'parallelotope aggregation' ;
+
+BOX 			: 'box aggregation' ;
+
+JUMP			: '->' ;
+
+DEFINE 			: ':=' ;

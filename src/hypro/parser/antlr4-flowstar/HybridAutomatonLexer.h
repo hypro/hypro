@@ -1,5 +1,5 @@
 
-// Generated from ../src/hypro/parser/antlr4-flowstar/HybridAutomaton.g4 by ANTLR 4.7
+// Generated from HybridAutomaton.g4 by ANTLR 4.7
 
 #pragma once
 
@@ -13,9 +13,10 @@ class  HybridAutomatonLexer : public antlr4::Lexer {
 public:
   enum {
     T__0 = 1, T__1 = 2, T__2 = 3, T__3 = 4, T__4 = 5, T__5 = 6, T__6 = 7, 
-    T__7 = 8, T__8 = 9, T__9 = 10, T__10 = 11, T__11 = 12, T__12 = 13, IN = 14, 
-    EQUALS = 15, BOOLRELATION = 16, PLUS = 17, TIMES = 18, NUMBER = 19, 
-    VARIABLE = 20, WS = 21
+    T__7 = 8, T__8 = 9, T__9 = 10, T__10 = 11, T__11 = 12, T__12 = 13, T__13 = 14, 
+    T__14 = 15, T__15 = 16, T__16 = 17, T__17 = 18, IN = 19, COMMENT = 20, 
+    EQUALS = 21, BOOLRELATION = 22, PLUS = 23, TIMES = 24, NUMBER = 25, 
+    VARIABLE = 26, WS = 27, PARALLELOTOPE = 28, BOX = 29, JUMP = 30, DEFINE = 31
   };
 
   HybridAutomatonLexer(antlr4::CharStream *input);

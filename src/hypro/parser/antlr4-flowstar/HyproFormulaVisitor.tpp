@@ -36,7 +36,7 @@ namespace hypro {
 			std::string num = ctx->NUMBER()[0]->getText();
 			multed = stringToNumber(num);
 		}
-		std::cout << "Multiplied constants to " << multed << std::endl;
+		//std::cout << "Multiplied constants to " << multed << std::endl;
 		return multed;
 	}
 
@@ -49,11 +49,11 @@ namespace hypro {
 		//std::cout << "---- coeffVec inital is:\n" << coeffVec << std::endl;
 		for(auto mTerm : ctx->term()){
 			Number multed = multTogether(mTerm);
-			std::cout << "---- Amount of variables in this term: " << mTerm->VARIABLE().size() << std::endl;
+			//std::cout << "---- Amount of variables in this term: " << mTerm->VARIABLE().size() << std::endl;
 			if(mTerm->VARIABLE().size() == 0){
 				//put into last place of coeffVec
 				coeffVec(coeffVec.rows()-1) = multed;
-				std::cout << "---- No variables, just numbers. coeffVec is then:\n" << coeffVec << std::endl;
+				//std::cout << "---- No variables, just numbers. coeffVec is then:\n" << coeffVec << std::endl;
 			} else if(mTerm->VARIABLE().size() == 1) {
 				//put into place according to place of variable in vars	
 				unsigned dest = 0;
@@ -65,7 +65,7 @@ namespace hypro {
 					}
 				}
 				coeffVec(dest) = multed;
-				std::cout << "---- Variable was: " << tmpVar << ". coeffVec is now:\n" << coeffVec << std::endl;
+				//std::cout << "---- Variable was: " << tmpVar << ". coeffVec is now:\n" << coeffVec << std::endl;
 			} else {
 				std::cout << "ERROR: multiplication of several variables not allowed!" << std::endl;
 			}
@@ -98,7 +98,7 @@ namespace hypro {
 		}
 		if(!allVarsFound){
 			// TODO: FIND OUT HOW TO GET COMPLETE CONTEXT
-			std::cerr << "Following variables were undefined in a term " << ": " << undefinedVars << std::endl;
+			std::cerr << "ERROR: Following variables were undefined in a term " << ": " << undefinedVars << std::endl;
 		}
 
 		//1.Call getPolynomCoeff to fill vector of length vars.size()+1
@@ -120,7 +120,7 @@ namespace hypro {
 			}
 		}
 		if(!found){
-			std::cerr << "An equation has a not defined variable." << std::endl;
+			std::cerr << "ERROR: An equation has a not defined variable." << std::endl;
 		}
 
 		//1.Call visit(ctx->polynom()) to get vector and return it
@@ -140,20 +140,20 @@ namespace hypro {
 
 		//1.Call visit(ctx->polynom()) for both sides to get 2 vectors
 		vector_t<Number> poly1 = visit(ctx->polynom()[0]);
-		std::cout << "---- visited poly1" << std::endl;
+		//std::cout << "---- visited poly1" << std::endl;
 		vector_t<Number> poly2 = visit(ctx->polynom()[1]);
-		std::cout << "---- visited poly2" << std::endl;
+		//std::cout << "---- visited poly2" << std::endl;
 
 		//2.Shorten both vectors by one, save last coeff and save everything in pair
-		std::cout << "---- poly1 is:\n" << poly1 << std::endl;
+		//std::cout << "---- poly1 is:\n" << poly1 << std::endl;
 		Number poly1Back = poly1(poly1.size()-1);
 		poly1.conservativeResize(poly1.size()-1, Eigen::NoChange_t::NoChange);
-		std::cout << "---- After shortening poly1 is:\n" << poly1 << " and poly1Back is: " << poly1Back << std::endl;
+		//std::cout << "---- After shortening poly1 is:\n" << poly1 << " and poly1Back is: " << poly1Back << std::endl;
 
-		std::cout << "---- poly2 is:\n" << poly2 << std::endl;
+		//std::cout << "---- poly2 is:\n" << poly2 << std::endl;
 		Number poly2Back = poly2(poly2.size()-1);
 		poly2.conservativeResize(poly2.size()-1, Eigen::NoChange_t::NoChange);
-		std::cout << "---- After shortening poly2 is:\n" << poly2 << " and poly2Back is: " << poly2Back << std::endl;
+		//std::cout << "---- After shortening poly2 is:\n" << poly2 << " and poly2Back is: " << poly2Back << std::endl;
 
 		//2.Use them to calculate constraint vector
 		std::vector<std::pair<vector_t<Number>,Number>> constraintVec;

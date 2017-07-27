@@ -23,7 +23,7 @@ using namespace antlr4;
 
 namespace hypro {
 
-	//TODO: make HyproHAVisitor a friend of this class and make constructor private
+	//TODO: make HAVisitor a friend of this class and make constructor private
 
 template<typename Number>
 class HyproFormulaVisitor : public HybridAutomatonBaseVisitor {

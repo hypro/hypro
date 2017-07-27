@@ -1,5 +1,5 @@
 
-// Generated from ../src/hypro/parser/antlr4-flowstar/HybridAutomaton.g4 by ANTLR 4.7
+// Generated from HybridAutomaton.g4 by ANTLR 4.7
 
 #pragma once
 
@@ -47,6 +47,10 @@ public:
     return visitChildren(ctx);
   }
 
+  virtual antlrcpp::Any visitInterval(HybridAutomatonParser::IntervalContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
   virtual antlrcpp::Any visitEquation(HybridAutomatonParser::EquationContext *ctx) override {
     return visitChildren(ctx);
   }
@@ -55,11 +59,39 @@ public:
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitInterval(HybridAutomatonParser::IntervalContext *ctx) override {
+  virtual antlrcpp::Any visitIntervalexpr(HybridAutomatonParser::IntervalexprContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitIntervalexpr(HybridAutomatonParser::IntervalexprContext *ctx) override {
+  virtual antlrcpp::Any visitJumps(HybridAutomatonParser::JumpsContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitTransition(HybridAutomatonParser::TransitionContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitFromto(HybridAutomatonParser::FromtoContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitUrgent(HybridAutomatonParser::UrgentContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitGuard(HybridAutomatonParser::GuardContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitAllocation(HybridAutomatonParser::AllocationContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitResetfct(HybridAutomatonParser::ResetfctContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitAggregation(HybridAutomatonParser::AggregationContext *ctx) override {
     return visitChildren(ctx);
   }
 

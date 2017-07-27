@@ -15,10 +15,10 @@ grammar Formula;
 
 term 				: (NUMBER | VARIABLE) (TIMES (NUMBER | VARIABLE))* ;
 polynom				: term (PLUS term)* ;
+interval 			: '[' NUMBER ',' NUMBER ']' ;
 
 equation 			: VARIABLE EQUALS polynom ;
 constraint			: polynom (BOOLRELATION | EQUALS) polynom; 
-interval 			: '[' NUMBER ',' NUMBER ']' ;
 intervalexpr		: VARIABLE IN interval;  
 
 ////// Lexer Rules
@@ -31,8 +31,6 @@ EQUALS				: '=' ;
 BOOLRELATION		: '<=' | '>=' | '<' | '>' ;
 PLUS				: '+' ;
 TIMES				: '*' ;
-JUMP				: '->' ;
-DEFINE 				: ':=' ;
 
 fragment UPPERCASE	: [A-Z] ;
 fragment LOWERCASE	: [a-z] ;

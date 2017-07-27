@@ -1,5 +1,5 @@
 
-// Generated from ../src/hypro/parser/antlr4-flowstar/Formula.g4 by ANTLR 4.7
+// Generated from Formula.g4 by ANTLR 4.7
 
 #pragma once
 
@@ -12,13 +12,13 @@
 class  FormulaParser : public antlr4::Parser {
 public:
   enum {
-    T__0 = 1, T__1 = 2, T__2 = 3, IN = 4, EQUALS = 5, BOOLRELATION = 6, 
-    PLUS = 7, TIMES = 8, NUMBER = 9, VARIABLE = 10, WS = 11
+    T__0 = 1, T__1 = 2, T__2 = 3, IN = 4, COMMENT = 5, EQUALS = 6, BOOLRELATION = 7, 
+    PLUS = 8, TIMES = 9, NUMBER = 10, VARIABLE = 11, WS = 12
   };
 
   enum {
-    RuleTerm = 0, RulePolynom = 1, RuleEquation = 2, RuleConstraint = 3, 
-    RuleInterval = 4, RuleIntervalexpr = 5
+    RuleTerm = 0, RulePolynom = 1, RuleInterval = 2, RuleEquation = 3, RuleConstraint = 4, 
+    RuleIntervalexpr = 5
   };
 
   FormulaParser(antlr4::TokenStream *input);
@@ -33,9 +33,9 @@ public:
 
   class TermContext;
   class PolynomContext;
+  class IntervalContext;
   class EquationContext;
   class ConstraintContext;
-  class IntervalContext;
   class IntervalexprContext; 
 
   class  TermContext : public antlr4::ParserRuleContext {
@@ -68,6 +68,18 @@ public:
 
   PolynomContext* polynom();
 
+  class  IntervalContext : public antlr4::ParserRuleContext {
+  public:
+    IntervalContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    std::vector<antlr4::tree::TerminalNode *> NUMBER();
+    antlr4::tree::TerminalNode* NUMBER(size_t i);
+
+   
+  };
+
+  IntervalContext* interval();
+
   class  EquationContext : public antlr4::ParserRuleContext {
   public:
     EquationContext(antlr4::ParserRuleContext *parent, size_t invokingState);
@@ -94,18 +106,6 @@ public:
   };
 
   ConstraintContext* constraint();
-
-  class  IntervalContext : public antlr4::ParserRuleContext {
-  public:
-    IntervalContext(antlr4::ParserRuleContext *parent, size_t invokingState);
-    virtual size_t getRuleIndex() const override;
-    std::vector<antlr4::tree::TerminalNode *> NUMBER();
-    antlr4::tree::TerminalNode* NUMBER(size_t i);
-
-   
-  };
-
-  IntervalContext* interval();
 
   class  IntervalexprContext : public antlr4::ParserRuleContext {
   public:

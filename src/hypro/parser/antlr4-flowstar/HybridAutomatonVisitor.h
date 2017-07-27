@@ -1,5 +1,5 @@
 
-// Generated from ../src/hypro/parser/antlr4-flowstar/HybridAutomaton.g4 by ANTLR 4.7
+// Generated from HybridAutomaton.g4 by ANTLR 4.7
 
 #pragma once
 
@@ -35,13 +35,29 @@ public:
 
     virtual antlrcpp::Any visitPolynom(HybridAutomatonParser::PolynomContext *context) = 0;
 
+    virtual antlrcpp::Any visitInterval(HybridAutomatonParser::IntervalContext *context) = 0;
+
     virtual antlrcpp::Any visitEquation(HybridAutomatonParser::EquationContext *context) = 0;
 
     virtual antlrcpp::Any visitConstraint(HybridAutomatonParser::ConstraintContext *context) = 0;
 
-    virtual antlrcpp::Any visitInterval(HybridAutomatonParser::IntervalContext *context) = 0;
-
     virtual antlrcpp::Any visitIntervalexpr(HybridAutomatonParser::IntervalexprContext *context) = 0;
+
+    virtual antlrcpp::Any visitJumps(HybridAutomatonParser::JumpsContext *context) = 0;
+
+    virtual antlrcpp::Any visitTransition(HybridAutomatonParser::TransitionContext *context) = 0;
+
+    virtual antlrcpp::Any visitFromto(HybridAutomatonParser::FromtoContext *context) = 0;
+
+    virtual antlrcpp::Any visitUrgent(HybridAutomatonParser::UrgentContext *context) = 0;
+
+    virtual antlrcpp::Any visitGuard(HybridAutomatonParser::GuardContext *context) = 0;
+
+    virtual antlrcpp::Any visitAllocation(HybridAutomatonParser::AllocationContext *context) = 0;
+
+    virtual antlrcpp::Any visitResetfct(HybridAutomatonParser::ResetfctContext *context) = 0;
+
+    virtual antlrcpp::Any visitAggregation(HybridAutomatonParser::AggregationContext *context) = 0;
 
 
 };

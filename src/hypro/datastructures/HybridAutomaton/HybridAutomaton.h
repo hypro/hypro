@@ -43,7 +43,11 @@ class HybridAutomaton
     HybridAutomaton(const HybridAutomaton<Number>& hybrid) = default;
     HybridAutomaton(HybridAutomaton<Number>&& hybrid) = default;
     HybridAutomaton(const locationSet& locs, const transitionSet& trans, const locationStateMap& initialStates);
-    virtual ~HybridAutomaton() {}
+    virtual ~HybridAutomaton() {
+        for(auto tPointer : mTransitions) {
+            delete tPointer;
+        }
+    }
 
     const locationSet& getLocations() const { return mLocations; }
     const transitionSet& getTransitions() const { return mTransitions; }
