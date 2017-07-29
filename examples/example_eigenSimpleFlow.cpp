@@ -8,8 +8,8 @@
 #include <Eigen/Eigenvalues>
 #define PTS_DEBUG 1         //show all added points
 #define TRANFORMED_PLOT 1   //for later use
-#define DIM_PLOT 1          //starting with 0..n-1 what to plot might be added with multiple dim or data format (struct/enum)
-//#define TRAJECTORY 1
+#define DIM_PLOT 0          //starting with 0..n-1 what to plot might be added with multiple dim or data format (struct/enum)
+#define TRAJECTORY 1
 //#include <Eigen/LU>
 
 int main()
@@ -24,21 +24,27 @@ int main()
 	Matrix A = Matrix(n,n);
     Vector b = Vector(n);
     Vector x0 = Vector(n);
+    Vector x0_2 = Vector(n);
     Vector b_tr = Vector(n);    //transformed
     Vector x0_tr = Vector(n);   //transformed
+    Vector x0_2_tr = Vector(n);   //transformed
     Vector xinhomconst = Vector(n);
     Vector xhomconst = Vector(n);
+    Vector xhomconst2 = Vector(n);
+    Vector factor = Vector(n);
     Vector xvalue = Vector(n);
     Vector derivFactor = Vector(n);
     Vector derivLineEnd = Vector(n);
     Vector plot_vector = Vector(n);
     #ifdef TRAJECTORY
-        Number timestep = 0.02;
+        Number timestep = 0.1;
         Number traj_time;
-        Vector plot_all_temp = Vector(n);
+        Vector pts_traj = Vector(n);
+        VPolytope<Number> traj_poly;
+        std::vector<vector_t<Number>> plot_traj;
     #endif
-    Number tend = 2;
-    Number delta = 0.1; //segment stepping time
+    Number tend = 100;
+    Number delta = 10; //segment stepping time
     Matrix V = Matrix(n,n);
     Matrix Vinv = Matrix(n,n);
 	Eigen::DiagonalMatrix<Number,2> D; //type Number size 2
@@ -47,11 +53,13 @@ int main()
 	A << 	0.001, 1,
 			0.001, -0.002;
     b <<    0, -9.81;
-    x0<<    10, 0;
+    x0<<    1000, 0;
+    x0_2 << -1000, 0;
 
 	std::cout << "d/dx = A*x+b, A:"<< std::endl << A << std::endl;
 	std::cout << "b: "<< std::endl << b << std::endl;
     std::cout << "x0: "<< std::endl << x0 << std::endl;
+    std::cout << "x0_2: "<< std::endl << x0_2 << std::endl;
     //decompose directly + constructor
     Eigen::EigenSolver<Matrix> es(A);
     Plotter<Number>& plotter = Plotter<Number>::getInstance();
@@ -67,8 +75,31 @@ int main()
     //invariants+transformed system
     b_tr = Vinv*b;
     x0_tr = Vinv*x0;
+    x0_2_tr = Vinv*x0_2;
     xinhomconst = b_tr.array() / D.diagonal().array();
     xhomconst = xinhomconst.array() + x0_tr.array();
+    for(i=0; i<n; ++i) {
+        if (x0_tr(i) >= x0_2_tr(i)) {
+            //check if case 1+4 of e function e^x/-e^(-x)
+            if ((xhomconst(i)>= 0 && D.diagonal()(i)>=0) || (xhomconst(i)<0 && D.diagonal()(i)<0)) {
+                //xhomconst(i) = xinhomconst(i) + x0_tr(i); //direct line xhomconst
+                xhomconst2(i) = xinhomconst(i) + x0_2_tr(i); //derived line
+                //std::cout << "x0tr>=x0_2tr, direct line x0, i: " << i << std::endl;
+            } else {
+                xhomconst(i) = xinhomconst(i) + x0_2_tr(i); //direct line xhomconst
+                xhomconst2(i) = xinhomconst(i) + x0_tr(i); //derived line
+                //std::cout << "x0tr>=x0_2tr, direct x0_2, i: " << i << std::endl;
+            }
+        } else {
+            if ((xhomconst(i)>= 0 && D.diagonal()(i)>=0) || (xhomconst(i)<0 && D.diagonal()(i)<0)) {
+                xhomconst(i) = xinhomconst(i) + x0_2_tr(i); //direct line xhomconst
+                xhomconst2(i) = xinhomconst(i) + x0_tr(i); //derived line
+            } else {
+                //xhomconst(i) = xinhomconst(i) + x0_tr(i); //direct line xhomconst
+                xhomconst2(i) = xinhomconst(i) + x0_2_tr(i); //derived line
+            }
+        }
+    }
     std::vector<vector_t<Number>> points;
     std::vector<vector_t<Number>> approx_points;
     VPolytope<Number> vpoly;
@@ -82,18 +113,30 @@ int main()
     //std::cout << "tlimit: " << tlimit << std::endl; //better:rationals
     for(std::size_t j = 0; j <= deltalimit;  ++j) { 
         for (i=0; i<n; ++i) {
-            derivFactor(i) = xhomconst(i)*D.diagonal()(i) * \
-              std::exp(D.diagonal()(i) *j*delta  );
-            xvalue(i) = xhomconst(i)* \
-              std::exp(D.diagonal()(i) *j*delta ) - xinhomconst(i);
+            factor(i) = std::exp(D.diagonal()(i) *j*delta);
         }
-        std::cout << "time, "<< j*delta <<", value, "<< xvalue(DIM_PLOT) << std::endl;
-        //plotting
+        derivFactor = xhomconst2.array()*D.diagonal().array()*factor.array();
+        xvalue = xhomconst.array()*factor.array() - xinhomconst.array();
         plot_vector(0) = j;
-        plot_vector(1) =       xvalue(DIM_PLOT);
-        //Point<Number> plot_point(plot_vector);
-        //plotter.addPoint(plot_point);
+        plot_vector(1) = xvalue(DIM_PLOT); 
         points.push_back(plot_vector);
+        #ifdef TRAJECTORY
+        for(traj_time = j; traj_time<j+1; traj_time+=timestep) {
+            for (i=0; i<n; ++i) {
+                factor(i) = std::exp(D.diagonal()(i) *traj_time*delta);
+            }   
+            pts_traj = xhomconst2.array()*factor.array() - xinhomconst.array();
+            plot_vector(0) = traj_time;
+            plot_vector(1) = pts_traj(DIM_PLOT);
+            plot_traj.push_back(plot_vector);
+            traj_poly = VPolytope<Number>(plot_traj);
+            if(traj_time > j) {
+                plotter.addObject(traj_poly.vertices());
+                plot_traj.erase(plot_traj.begin() );
+            }
+        }
+        plot_vector(0) = j;
+        #endif
         plot_vector(1) = derivLineEnd(DIM_PLOT);
         approx_points.push_back(plot_vector);
         vpoly = VPolytope<Number>(points);
@@ -104,7 +147,6 @@ int main()
             points.erase( points.begin() );
             approx_points.erase( approx_points.begin() );
         }
-
         derivLineEnd = derivFactor.array()*delta+derivLineEnd.array();
     }
     // ???? USE ???? e-function derivation is NOT linear thus 
