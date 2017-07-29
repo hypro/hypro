@@ -111,7 +111,7 @@ int main()
     derivLineEnd = x0_tr;
     std::size_t deltalimit = std::ceil( (tend/delta) );
     //std::cout << "tlimit: " << tlimit << std::endl; //better:rationals
-    for(std::size_t j = 0; j <= deltalimit;  ++j) { 
+    for(std::size_t j = 0; j <= deltalimit;  ++j) {
         for (i=0; i<n; ++i) {
             factor(i) = std::exp(D.diagonal()(i) *j*delta);
         }
@@ -149,7 +149,13 @@ int main()
         }
         derivLineEnd = derivFactor.array()*delta+derivLineEnd.array();
     }
-    // ???? USE ???? e-function derivation is NOT linear thus 
+
+    /* What we can do: The matrix shouldn't change, right? Just the inhomogenous part ... so we can re-compute that
+     * for every step. How much effort is this?
+     */
+
+
+    // ???? USE ???? e-function derivation is NOT linear thus
     // we can not use such transformation or our error gets high
     // 		sets.push_back(current);
     // 		VPolytope<Number> next = current.affineTransformation(A,b); //Ax+b is affine so we need -b
