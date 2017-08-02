@@ -23,10 +23,21 @@ using namespace antlr4;
 
 namespace hypro {
 
-	//TODO: make HAVisitor a friend of this class and make constructor private
+template<typename Number>
+class HyproLocationVisitor;
+
+template<typename Number>
+class HyproTransitionVisitor;
+
+template<typename Number>
+class HyproInitialSetVisitor;
 
 template<typename Number>
 class HyproFormulaVisitor : public HybridAutomatonBaseVisitor {
+
+	friend class HyproLocationVisitor<Number>;
+	friend class HyproTransitionVisitor<Number>;
+	friend class HyproInitialSetVisitor<Number>;
 
 	private:
 
@@ -38,11 +49,11 @@ class HyproFormulaVisitor : public HybridAutomatonBaseVisitor {
 		Number multTogether(HybridAutomatonParser::TermContext* ctx);
 		vector_t<Number> getPolynomCoeff(HybridAutomatonParser::PolynomContext* ctx);
 
-	public:
-
 		//Constructor and Destructor
 		HyproFormulaVisitor(std::vector<std::string> varVec);
 		~HyproFormulaVisitor();
+
+	public:
 
 		//Functions inherited by FormulaBaseVisitor
 		antlrcpp::Any visitPolynom(HybridAutomatonParser::PolynomContext *ctx) override;

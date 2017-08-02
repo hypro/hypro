@@ -1,5 +1,5 @@
 
-// Generated from Transition.g4 by ANTLR 4.7
+// Generated from InitialSet.g4 by ANTLR 4.7
 
 #pragma once
 
@@ -9,17 +9,16 @@
 
 
 
-class  TransitionLexer : public antlr4::Lexer {
+class  InitialSetLexer : public antlr4::Lexer {
 public:
   enum {
-    T__0 = 1, T__1 = 2, T__2 = 3, T__3 = 4, T__4 = 5, T__5 = 6, T__6 = 7, 
-    T__7 = 8, T__8 = 9, PARALLELOTOPE = 10, BOX = 11, JUMP = 12, DEFINE = 13, 
-    IN = 14, COMMENT = 15, EQUALS = 16, BOOLRELATION = 17, PLUS = 18, TIMES = 19, 
-    NUMBER = 20, VARIABLE = 21, WS = 22
+    T__0 = 1, T__1 = 2, T__2 = 3, T__3 = 4, T__4 = 5, T__5 = 6, IN = 7, 
+    COMMENT = 8, EQUALS = 9, BOOLRELATION = 10, PLUS = 11, TIMES = 12, NUMBER = 13, 
+    VARIABLE = 14, WS = 15
   };
 
-  TransitionLexer(antlr4::CharStream *input);
-  ~TransitionLexer();
+  InitialSetLexer(antlr4::CharStream *input);
+  ~InitialSetLexer();
 
   virtual std::string getGrammarFileName() const override;
   virtual const std::vector<std::string>& getRuleNames() const override;

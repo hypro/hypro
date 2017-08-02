@@ -59,6 +59,10 @@ public:
 
     virtual antlrcpp::Any visitAggregation(HybridAutomatonParser::AggregationContext *context) = 0;
 
+    virtual antlrcpp::Any visitInit(HybridAutomatonParser::InitContext *context) = 0;
+
+    virtual antlrcpp::Any visitInitstate(HybridAutomatonParser::InitstateContext *context) = 0;
+
 
 };
 

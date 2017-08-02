@@ -19,7 +19,8 @@
 #include "HybridAutomatonBaseVisitor.h"
 #include "HyproLocationVisitor.h"
 #include "HyproTransitionVisitor.h"
-//#include "../../datastructures/HybridAutomaton/HybridAutomaton.h"
+#include "HyproInitialSetVisitor.h"
+#include "../../datastructures/HybridAutomaton/HybridAutomaton.h"
 
 using namespace antlr4;
 
@@ -35,9 +36,12 @@ class HyproHAVisitor : public HybridAutomatonBaseVisitor {
 
 	public:
 
+		using locationStateMap = std::multimap<const Location<Number>*, State<Number,ConstraintSet<Number>>, locPtrComp<Number>>;
+
 		HyproHAVisitor();
 		~HyproHAVisitor();
 
+		//Inherited from HybridAutomatonBaseVisitor which is generated from AnTLR
 		antlrcpp::Any visitStart(HybridAutomatonParser::StartContext *ctx) override;
 		antlrcpp::Any visitVardeclaration(HybridAutomatonParser::VardeclarationContext *ctx) override;
 

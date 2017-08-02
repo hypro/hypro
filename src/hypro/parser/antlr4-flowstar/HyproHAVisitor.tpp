@@ -31,6 +31,9 @@ namespace hypro {
 		std::cout << "-- transVisitor visited!" << std::endl;
 
 		//4.Later calls visit to get initial states
+		HyproInitialSetVisitor<Number> initVisitor = HyproInitialSetVisitor<Number>(vars, locSet);
+		locationStateMap initSet = initVisitor.visit(ctx->init());
+		std::cout << "-- initVisitor visited!" << std::endl;
 
 		//Vorerst: Gib leeren HA zurück, später mit inhalt
 		//return HybridAutomaton<Number>();
@@ -47,6 +50,9 @@ namespace hypro {
 			//NOTE: the respective position in the vars vector is the assigned id to the variable!
 			varVec.push_back(variable->getText());
 			//matrix_t<Number>tmpMatrix = matrix_t<Number>::Zero(vars.size()+1, vars.size()+1);
+		}
+		if(varVec.size() == 0){
+			std::cout << "ERROR: No variables were defined" << std::endl;
 		}
 		return varVec;
 	}

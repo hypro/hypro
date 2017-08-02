@@ -95,6 +95,14 @@ public:
     return visitChildren(ctx);
   }
 
+  virtual antlrcpp::Any visitInit(HybridAutomatonParser::InitContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitInitstate(HybridAutomatonParser::InitstateContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
 
 };
 

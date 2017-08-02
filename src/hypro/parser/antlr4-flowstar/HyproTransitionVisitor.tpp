@@ -103,8 +103,7 @@ namespace hypro {
 		bool foundLeft = false;
 		bool foundRight = false;
 		std::pair<Location<Number>*,Location<Number>*> fromTo;
-		std::cout << "Is locSet empty? " << locSet.empty() << std::endl;
-		for(auto loc : locSet){
+		for(auto& loc : locSet){
 			std::cout << "---- Name of loc: " << loc->getName() << " name of variable 0: " << ctx->VARIABLE()[0]->getText() << " name of variable 1: " << ctx->VARIABLE()[1]->getText() << std::endl;
 			if(loc->getName() == ctx->VARIABLE()[0]->getText()){
 				foundLeft = true;

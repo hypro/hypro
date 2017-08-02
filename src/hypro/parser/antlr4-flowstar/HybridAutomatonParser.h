@@ -24,7 +24,8 @@ public:
     RuleActivities = 4, RuleInvariants = 5, RuleTerm = 6, RulePolynom = 7, 
     RuleInterval = 8, RuleEquation = 9, RuleConstraint = 10, RuleIntervalexpr = 11, 
     RuleJumps = 12, RuleTransition = 13, RuleFromto = 14, RuleUrgent = 15, 
-    RuleGuard = 16, RuleAllocation = 17, RuleResetfct = 18, RuleAggregation = 19
+    RuleGuard = 16, RuleAllocation = 17, RuleResetfct = 18, RuleAggregation = 19, 
+    RuleInit = 20, RuleInitstate = 21
   };
 
   HybridAutomatonParser(antlr4::TokenStream *input);
@@ -56,7 +57,9 @@ public:
   class GuardContext;
   class AllocationContext;
   class ResetfctContext;
-  class AggregationContext; 
+  class AggregationContext;
+  class InitContext;
+  class InitstateContext; 
 
   class  StartContext : public antlr4::ParserRuleContext {
   public:
@@ -65,6 +68,7 @@ public:
     VardeclarationContext *vardeclaration();
     ModesContext *modes();
     JumpsContext *jumps();
+    InitContext *init();
 
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
    
@@ -341,6 +345,34 @@ public:
   };
 
   AggregationContext* aggregation();
+
+  class  InitContext : public antlr4::ParserRuleContext {
+  public:
+    InitContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    InitstateContext *initstate();
+
+    virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+   
+  };
+
+  InitContext* init();
+
+  class  InitstateContext : public antlr4::ParserRuleContext {
+  public:
+    InitstateContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    antlr4::tree::TerminalNode *VARIABLE();
+    std::vector<ConstraintContext *> constraint();
+    ConstraintContext* constraint(size_t i);
+    std::vector<IntervalexprContext *> intervalexpr();
+    IntervalexprContext* intervalexpr(size_t i);
+
+    virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+   
+  };
+
+  InitstateContext* initstate();
 
 
 private:

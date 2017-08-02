@@ -1,6 +1,5 @@
 #include "../../hypro/parser/antlr4-flowstar/HybridAutomatonLexer.h"
 #include "../../hypro/parser/antlr4-flowstar/HybridAutomatonParser.h"
-//#include "../../hypro/parser/antlr4-flowstar/HyproHAListener.h"
 #include "../../hypro/parser/antlr4-flowstar/HyproHAVisitor.h"
 #include <iostream>
 #include <fstream>
@@ -18,12 +17,12 @@ class AntlrParserTest : public ::testing::Test {
 
 	protected:
 
+		//The one visitor to rule them all
+		hypro::HyproHAVisitor<Number> visitor;
+
 		AntlrParserTest(){}
-
 		~AntlrParserTest(){}
-
 		virtual void setUp(){}
-
 		virtual void tearDown(){}
 
 		void cwd(){
@@ -35,13 +34,17 @@ class AntlrParserTest : public ::testing::Test {
 		}
 };
 
-TYPED_TEST(AntlrParserTest, ParseLocation){
+TYPED_TEST(AntlrParserTest, JustTesting){
 
-	//Open examples.txt
+
+	std::string path("../../../../src/test/core/examples/example_init_parsing.txt");
+	//std::string path("../../../../examples/input/bouncing_ball.model");
+
+	//Tell current path - /home/ptse/hiwi/hypro/build/src/test/core
 	this->cwd();
 
 	//std::fstream ifs("../../../../src/test/core/example_location_parsing.txt");
-	std::fstream ifs("../../../../src/test/core/example_transition_parsing.txt");
+	std::fstream ifs(path);
 
 	//Create an AnTLRInputStream
 	ANTLRInputStream input;
@@ -60,12 +63,10 @@ TYPED_TEST(AntlrParserTest, ParseLocation){
 		}
 		FAIL();
 	}
-
 	if(!ifs.is_open()){
 		std::cout << "ifs hasn't opened anything" << std::endl;
 		FAIL();
 	}
-
 	std::cout << "input stream content:\n" << input.toString() << std::endl;
 
 	//Create a Lexer and feed it with the input
@@ -76,31 +77,25 @@ TYPED_TEST(AntlrParserTest, ParseLocation){
 
 	//Fill the TokenStream (and output it for demonstration)
 	tokens.fill();
-	//for(auto token : tokens.getTokens()){
-	//	std::cout << token->toString() << std::endl;
-	//}
 
 	//Create a parser
 	HybridAutomatonParser parser(&tokens);
 
-	//Generate a parse tree from the parser.
-	//The function on the right side is the rule within the parser we want to start with.
 	tree::ParseTree* tree = parser.start();
 
-	//Output the tree
-	//std::cout << tree->toStringTree(&parser) << std::endl;
-
-	//Let's create a listener
-	//hypro::HyproHAListener<TypeParam> listener; //= HyproHAListener::HyproHAListener<TypeParam>();
-	//tree::ParseTreeWalker::DEFAULT.walk(&listener, tree);
-
-	//Let's create a visitor
-	hypro::HyproHAVisitor<TypeParam> visitor;
-	visitor.visit(tree);
+	this->visitor.visit(tree);
 	//HybridAutomaton h = visitor.visit(tree); or smth like this
-
-	//std::cout << visitor << std::endl;
 
 	SUCCEED();
 
 }
+
+/*
+TYPED_TEST(AntlrParserTest, EmptyFile){
+
+	tree::ParseTree* tree = this->generateParseTree("../../../../src/test/core/examples/example_empty_file.txt");	
+	this->visitor.visit(tree);
+	SUCCEED();
+
+}
+*/

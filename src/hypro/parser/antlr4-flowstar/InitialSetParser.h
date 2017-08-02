@@ -1,5 +1,5 @@
 
-// Generated from Transition.g4 by ANTLR 4.7
+// Generated from InitialSet.g4 by ANTLR 4.7
 
 #pragma once
 
@@ -9,24 +9,21 @@
 
 
 
-class  TransitionParser : public antlr4::Parser {
+class  InitialSetParser : public antlr4::Parser {
 public:
   enum {
-    T__0 = 1, T__1 = 2, T__2 = 3, T__3 = 4, T__4 = 5, T__5 = 6, T__6 = 7, 
-    T__7 = 8, T__8 = 9, PARALLELOTOPE = 10, BOX = 11, JUMP = 12, DEFINE = 13, 
-    IN = 14, COMMENT = 15, EQUALS = 16, BOOLRELATION = 17, PLUS = 18, TIMES = 19, 
-    NUMBER = 20, VARIABLE = 21, WS = 22
+    T__0 = 1, T__1 = 2, T__2 = 3, T__3 = 4, T__4 = 5, T__5 = 6, IN = 7, 
+    COMMENT = 8, EQUALS = 9, BOOLRELATION = 10, PLUS = 11, TIMES = 12, NUMBER = 13, 
+    VARIABLE = 14, WS = 15
   };
 
   enum {
-    RuleJumps = 0, RuleTransition = 1, RuleFromto = 2, RuleUrgent = 3, RuleGuard = 4, 
-    RuleAllocation = 5, RuleResetfct = 6, RuleAggregation = 7, RuleTerm = 8, 
-    RulePolynom = 9, RuleInterval = 10, RuleEquation = 11, RuleConstraint = 12, 
-    RuleIntervalexpr = 13
+    RuleInit = 0, RuleInitstate = 1, RuleTerm = 2, RulePolynom = 3, RuleInterval = 4, 
+    RuleEquation = 5, RuleConstraint = 6, RuleIntervalexpr = 7
   };
 
-  TransitionParser(antlr4::TokenStream *input);
-  ~TransitionParser();
+  InitialSetParser(antlr4::TokenStream *input);
+  ~InitialSetParser();
 
   virtual std::string getGrammarFileName() const override;
   virtual const antlr4::atn::ATN& getATN() const override { return _atn; };
@@ -35,14 +32,8 @@ public:
   virtual antlr4::dfa::Vocabulary& getVocabulary() const override;
 
 
-  class JumpsContext;
-  class TransitionContext;
-  class FromtoContext;
-  class UrgentContext;
-  class GuardContext;
-  class AllocationContext;
-  class ResetfctContext;
-  class AggregationContext;
+  class InitContext;
+  class InitstateContext;
   class TermContext;
   class PolynomContext;
   class IntervalContext;
@@ -50,64 +41,22 @@ public:
   class ConstraintContext;
   class IntervalexprContext; 
 
-  class  JumpsContext : public antlr4::ParserRuleContext {
+  class  InitContext : public antlr4::ParserRuleContext {
   public:
-    JumpsContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    InitContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
-    std::vector<TransitionContext *> transition();
-    TransitionContext* transition(size_t i);
+    InitstateContext *initstate();
 
    
   };
 
-  JumpsContext* jumps();
+  InitContext* init();
 
-  class  TransitionContext : public antlr4::ParserRuleContext {
+  class  InitstateContext : public antlr4::ParserRuleContext {
   public:
-    TransitionContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    InitstateContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
-    FromtoContext *fromto();
-    std::vector<UrgentContext *> urgent();
-    UrgentContext* urgent(size_t i);
-    std::vector<GuardContext *> guard();
-    GuardContext* guard(size_t i);
-    std::vector<ResetfctContext *> resetfct();
-    ResetfctContext* resetfct(size_t i);
-    std::vector<AggregationContext *> aggregation();
-    AggregationContext* aggregation(size_t i);
-
-   
-  };
-
-  TransitionContext* transition();
-
-  class  FromtoContext : public antlr4::ParserRuleContext {
-  public:
-    FromtoContext(antlr4::ParserRuleContext *parent, size_t invokingState);
-    virtual size_t getRuleIndex() const override;
-    std::vector<antlr4::tree::TerminalNode *> VARIABLE();
-    antlr4::tree::TerminalNode* VARIABLE(size_t i);
-    antlr4::tree::TerminalNode *JUMP();
-
-   
-  };
-
-  FromtoContext* fromto();
-
-  class  UrgentContext : public antlr4::ParserRuleContext {
-  public:
-    UrgentContext(antlr4::ParserRuleContext *parent, size_t invokingState);
-    virtual size_t getRuleIndex() const override;
-
-   
-  };
-
-  UrgentContext* urgent();
-
-  class  GuardContext : public antlr4::ParserRuleContext {
-  public:
-    GuardContext(antlr4::ParserRuleContext *parent, size_t invokingState);
-    virtual size_t getRuleIndex() const override;
+    antlr4::tree::TerminalNode *VARIABLE();
     std::vector<ConstraintContext *> constraint();
     ConstraintContext* constraint(size_t i);
     std::vector<IntervalexprContext *> intervalexpr();
@@ -116,45 +65,7 @@ public:
    
   };
 
-  GuardContext* guard();
-
-  class  AllocationContext : public antlr4::ParserRuleContext {
-  public:
-    AllocationContext(antlr4::ParserRuleContext *parent, size_t invokingState);
-    virtual size_t getRuleIndex() const override;
-    antlr4::tree::TerminalNode *VARIABLE();
-    antlr4::tree::TerminalNode *DEFINE();
-    PolynomContext *polynom();
-    IntervalContext *interval();
-
-   
-  };
-
-  AllocationContext* allocation();
-
-  class  ResetfctContext : public antlr4::ParserRuleContext {
-  public:
-    ResetfctContext(antlr4::ParserRuleContext *parent, size_t invokingState);
-    virtual size_t getRuleIndex() const override;
-    std::vector<AllocationContext *> allocation();
-    AllocationContext* allocation(size_t i);
-
-   
-  };
-
-  ResetfctContext* resetfct();
-
-  class  AggregationContext : public antlr4::ParserRuleContext {
-  public:
-    AggregationContext(antlr4::ParserRuleContext *parent, size_t invokingState);
-    virtual size_t getRuleIndex() const override;
-    antlr4::tree::TerminalNode *PARALLELOTOPE();
-    antlr4::tree::TerminalNode *BOX();
-
-   
-  };
-
-  AggregationContext* aggregation();
+  InitstateContext* initstate();
 
   class  TermContext : public antlr4::ParserRuleContext {
   public:
