@@ -60,6 +60,7 @@ class HyproFormulaVisitor : public HybridAutomatonBaseVisitor {
 		antlrcpp::Any visitEquation(HybridAutomatonParser::EquationContext *ctx) override;
 		antlrcpp::Any visitConstraint(HybridAutomatonParser::ConstraintContext *ctx) override;
 		antlrcpp::Any visitIntervalexpr(HybridAutomatonParser::IntervalexprContext *ctx) override;
+		antlrcpp::Any visitConstrset(HybridAutomatonParser::ConstrsetContext *ctx) override;
 
 };
 

@@ -23,9 +23,9 @@ public:
     RuleStart = 0, RuleVardeclaration = 1, RuleModes = 2, RuleLocation = 3, 
     RuleActivities = 4, RuleInvariants = 5, RuleTerm = 6, RulePolynom = 7, 
     RuleInterval = 8, RuleEquation = 9, RuleConstraint = 10, RuleIntervalexpr = 11, 
-    RuleJumps = 12, RuleTransition = 13, RuleFromto = 14, RuleUrgent = 15, 
-    RuleGuard = 16, RuleAllocation = 17, RuleResetfct = 18, RuleAggregation = 19, 
-    RuleInit = 20, RuleInitstate = 21
+    RuleConstrset = 12, RuleJumps = 13, RuleTransition = 14, RuleFromto = 15, 
+    RuleUrgent = 16, RuleGuard = 17, RuleAllocation = 18, RuleResetfct = 19, 
+    RuleAggregation = 20, RuleInit = 21, RuleInitstate = 22
   };
 
   HybridAutomatonParser(antlr4::TokenStream *input);
@@ -50,6 +50,7 @@ public:
   class EquationContext;
   class ConstraintContext;
   class IntervalexprContext;
+  class ConstrsetContext;
   class JumpsContext;
   class TransitionContext;
   class FromtoContext;
@@ -133,10 +134,7 @@ public:
   public:
     InvariantsContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
-    std::vector<ConstraintContext *> constraint();
-    ConstraintContext* constraint(size_t i);
-    std::vector<IntervalexprContext *> intervalexpr();
-    IntervalexprContext* intervalexpr(size_t i);
+    ConstrsetContext *constrset();
 
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
    
@@ -232,6 +230,21 @@ public:
 
   IntervalexprContext* intervalexpr();
 
+  class  ConstrsetContext : public antlr4::ParserRuleContext {
+  public:
+    ConstrsetContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    std::vector<ConstraintContext *> constraint();
+    ConstraintContext* constraint(size_t i);
+    std::vector<IntervalexprContext *> intervalexpr();
+    IntervalexprContext* intervalexpr(size_t i);
+
+    virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+   
+  };
+
+  ConstrsetContext* constrset();
+
   class  JumpsContext : public antlr4::ParserRuleContext {
   public:
     JumpsContext(antlr4::ParserRuleContext *parent, size_t invokingState);
@@ -294,10 +307,7 @@ public:
   public:
     GuardContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
-    std::vector<ConstraintContext *> constraint();
-    ConstraintContext* constraint(size_t i);
-    std::vector<IntervalexprContext *> intervalexpr();
-    IntervalexprContext* intervalexpr(size_t i);
+    ConstrsetContext *constrset();
 
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
    
@@ -363,10 +373,7 @@ public:
     InitstateContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
     antlr4::tree::TerminalNode *VARIABLE();
-    std::vector<ConstraintContext *> constraint();
-    ConstraintContext* constraint(size_t i);
-    std::vector<IntervalexprContext *> intervalexpr();
-    IntervalexprContext* intervalexpr(size_t i);
+    ConstrsetContext *constrset();
 
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
    

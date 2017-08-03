@@ -18,7 +18,7 @@ public:
 
   enum {
     RuleTerm = 0, RulePolynom = 1, RuleInterval = 2, RuleEquation = 3, RuleConstraint = 4, 
-    RuleIntervalexpr = 5
+    RuleIntervalexpr = 5, RuleConstrset = 6
   };
 
   FormulaParser(antlr4::TokenStream *input);
@@ -36,7 +36,8 @@ public:
   class IntervalContext;
   class EquationContext;
   class ConstraintContext;
-  class IntervalexprContext; 
+  class IntervalexprContext;
+  class ConstrsetContext; 
 
   class  TermContext : public antlr4::ParserRuleContext {
   public:
@@ -119,6 +120,20 @@ public:
   };
 
   IntervalexprContext* intervalexpr();
+
+  class  ConstrsetContext : public antlr4::ParserRuleContext {
+  public:
+    ConstrsetContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    std::vector<ConstraintContext *> constraint();
+    ConstraintContext* constraint(size_t i);
+    std::vector<IntervalexprContext *> intervalexpr();
+    IntervalexprContext* intervalexpr(size_t i);
+
+   
+  };
+
+  ConstrsetContext* constrset();
 
 
 private:

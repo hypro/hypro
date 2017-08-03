@@ -44,9 +44,13 @@ class HybridAutomaton
     HybridAutomaton(HybridAutomaton<Number>&& hybrid) = default;
     HybridAutomaton(const locationSet& locs, const transitionSet& trans, const locationStateMap& initialStates);
     virtual ~HybridAutomaton() {
+/*  Without this we have a memory leak from HyproTransitionVisitor. 
+    The leak will be patched later by using only references.
+        std::cout << "I DESTROY" << std::endl;
         for(auto tPointer : mTransitions) {
             delete tPointer;
         }
+*/
     }
 
     const locationSet& getLocations() const { return mLocations; }

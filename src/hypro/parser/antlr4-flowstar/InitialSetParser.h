@@ -19,7 +19,7 @@ public:
 
   enum {
     RuleInit = 0, RuleInitstate = 1, RuleTerm = 2, RulePolynom = 3, RuleInterval = 4, 
-    RuleEquation = 5, RuleConstraint = 6, RuleIntervalexpr = 7
+    RuleEquation = 5, RuleConstraint = 6, RuleIntervalexpr = 7, RuleConstrset = 8
   };
 
   InitialSetParser(antlr4::TokenStream *input);
@@ -39,7 +39,8 @@ public:
   class IntervalContext;
   class EquationContext;
   class ConstraintContext;
-  class IntervalexprContext; 
+  class IntervalexprContext;
+  class ConstrsetContext; 
 
   class  InitContext : public antlr4::ParserRuleContext {
   public:
@@ -57,10 +58,7 @@ public:
     InitstateContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
     antlr4::tree::TerminalNode *VARIABLE();
-    std::vector<ConstraintContext *> constraint();
-    ConstraintContext* constraint(size_t i);
-    std::vector<IntervalexprContext *> intervalexpr();
-    IntervalexprContext* intervalexpr(size_t i);
+    ConstrsetContext *constrset();
 
    
   };
@@ -148,6 +146,20 @@ public:
   };
 
   IntervalexprContext* intervalexpr();
+
+  class  ConstrsetContext : public antlr4::ParserRuleContext {
+  public:
+    ConstrsetContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    std::vector<ConstraintContext *> constraint();
+    ConstraintContext* constraint(size_t i);
+    std::vector<IntervalexprContext *> intervalexpr();
+    IntervalexprContext* intervalexpr(size_t i);
+
+   
+  };
+
+  ConstrsetContext* constrset();
 
 
 private:

@@ -20,6 +20,7 @@ interval 			: '[' NUMBER ',' NUMBER ']' ;
 equation 			: VARIABLE EQUALS polynom ;
 constraint			: polynom (BOOLRELATION | EQUALS) polynom; 
 intervalexpr		: VARIABLE IN interval;  
+constrset	 		: (constraint | intervalexpr)*;
 
 ////// Lexer Rules
 

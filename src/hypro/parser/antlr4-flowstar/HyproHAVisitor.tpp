@@ -20,24 +20,26 @@ namespace hypro {
 
 		//2.Calls visit(ctx->modes()) to get locSet 
 		HyproLocationVisitor<Number> locVisitor = HyproLocationVisitor<Number>(vars);
-		//std::set<Location<Number>*> locSet = locVisitor.visit(ctx->modes()).antlrcpp::Any::as<std::set<Location<Number>*>>();
-		std::set<Location<Number>*> locSet = locVisitor.visit(ctx->modes());
+		std::set<Location<Number>*> locSet = locVisitor.visit(ctx->modes()).antlrcpp::Any::as<std::set<Location<Number>*>>();
 		std::cout << "-- locVisitor visited!" << std::endl;
 		//std::cout << "---- locSet is now: " << locSet << std::endl;		
 
 		//3.Later calls visit to get transitions
 		HyproTransitionVisitor<Number> transVisitor = HyproTransitionVisitor<Number>(vars, locSet);
-		std::set<Transition<Number>*> transSet = transVisitor.visit(ctx->jumps());
+		std::set<Transition<Number>*> transSet = transVisitor.visit(ctx->jumps()).antlrcpp::Any::as<std::set<Transition<Number>*>>();
 		std::cout << "-- transVisitor visited!" << std::endl;
 
 		//4.Later calls visit to get initial states
 		HyproInitialSetVisitor<Number> initVisitor = HyproInitialSetVisitor<Number>(vars, locSet);
-		locationStateMap initSet = initVisitor.visit(ctx->init());
+		locationStateMap initSet = initVisitor.visit(ctx->init()).antlrcpp::Any::as<locationStateMap>();
 		std::cout << "-- initVisitor visited!" << std::endl;
 
-		//Vorerst: Gib leeren HA zurück, später mit inhalt
-		//return HybridAutomaton<Number>();
-		return true;
+		//5.Build HybridAutomaton, return it
+		HybridAutomaton<Number> ha;
+		ha.setLocations(locSet);
+		ha.setTransitions(transSet);
+		ha.setInitialStates(initSet);
+		return std::move(ha);			//Move the ownership of ha to whoever uses ha then, i.e. the test suite
 	}
 
 	template<typename Number>

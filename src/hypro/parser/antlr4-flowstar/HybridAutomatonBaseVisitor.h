@@ -63,6 +63,10 @@ public:
     return visitChildren(ctx);
   }
 
+  virtual antlrcpp::Any visitConstrset(HybridAutomatonParser::ConstrsetContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
   virtual antlrcpp::Any visitJumps(HybridAutomatonParser::JumpsContext *ctx) override {
     return visitChildren(ctx);
   }

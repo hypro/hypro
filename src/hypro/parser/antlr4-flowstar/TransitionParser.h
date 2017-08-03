@@ -22,7 +22,7 @@ public:
     RuleJumps = 0, RuleTransition = 1, RuleFromto = 2, RuleUrgent = 3, RuleGuard = 4, 
     RuleAllocation = 5, RuleResetfct = 6, RuleAggregation = 7, RuleTerm = 8, 
     RulePolynom = 9, RuleInterval = 10, RuleEquation = 11, RuleConstraint = 12, 
-    RuleIntervalexpr = 13
+    RuleIntervalexpr = 13, RuleConstrset = 14
   };
 
   TransitionParser(antlr4::TokenStream *input);
@@ -48,7 +48,8 @@ public:
   class IntervalContext;
   class EquationContext;
   class ConstraintContext;
-  class IntervalexprContext; 
+  class IntervalexprContext;
+  class ConstrsetContext; 
 
   class  JumpsContext : public antlr4::ParserRuleContext {
   public:
@@ -108,10 +109,7 @@ public:
   public:
     GuardContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
-    std::vector<ConstraintContext *> constraint();
-    ConstraintContext* constraint(size_t i);
-    std::vector<IntervalexprContext *> intervalexpr();
-    IntervalexprContext* intervalexpr(size_t i);
+    ConstrsetContext *constrset();
 
    
   };
@@ -237,6 +235,20 @@ public:
   };
 
   IntervalexprContext* intervalexpr();
+
+  class  ConstrsetContext : public antlr4::ParserRuleContext {
+  public:
+    ConstrsetContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    std::vector<ConstraintContext *> constraint();
+    ConstraintContext* constraint(size_t i);
+    std::vector<IntervalexprContext *> intervalexpr();
+    IntervalexprContext* intervalexpr(size_t i);
+
+   
+  };
+
+  ConstrsetContext* constrset();
 
 
 private:

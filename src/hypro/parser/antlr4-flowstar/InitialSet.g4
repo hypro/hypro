@@ -15,4 +15,4 @@ import Formula;
 
 init 	 		: 'init' '{' initstate '}' ;
 
-initstate 		: VARIABLE '{' (constraint | intervalexpr)* '}' ;
+initstate 		: VARIABLE '{' constrset '}' ;

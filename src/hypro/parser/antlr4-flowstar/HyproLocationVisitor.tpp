@@ -92,64 +92,15 @@ namespace hypro {
 	template<typename Number>
 	antlrcpp::Any HyproLocationVisitor<Number>::visitInvariants(HybridAutomatonParser::InvariantsContext *ctx){
 		std::cout << "-- Bin bei visitInvariants!" << std::endl;
-	
-		//1.Iteratively call visit(ctx->constraint()) to get vector of pairs of constraint vectors and constant Numbers
-		unsigned size = ctx->constraint().size() + ctx->intervalexpr().size();
-		matrix_t<Number> tmpMatrix = matrix_t<Number>::Zero(size, vars.size());
-		vector_t<Number> tmpVector = vector_t<Number>::Zero(size);
-		unsigned i = 0;
-		int rowToFill = 0;
-		std::vector<std::pair<vector_t<Number>,Number>> values;
+
+		//2.Call HyproFormulaVisitor and get pair of matrix and vector
 		HyproFormulaVisitor<Number> visitor(vars);
-		while(i < size){
-
-			//Choose constraints until there are no more, then choose intervalexprs
-			if(i < ctx->constraint().size()){
-				values = visitor.visit(ctx->constraint().at(i)).antlrcpp::Any::as<std::vector<std::pair<vector_t<Number>,Number>>>();
-				//std::cout << "---- Have chosen the " << i << "-th constraint vector!" << std::endl;
-			} else {
-				unsigned posInIntervalExpr = i - ctx->constraint().size();
-				//std::cout << "---- Have chosen the " << posInIntervalExpr << "-th intervalexpr vector!" << std::endl;
-				//std::cout << "---- intervalexpr size: " << ctx->intervalexpr().size() << std::endl;
-				if(posInIntervalExpr < ctx->intervalexpr().size()){
-					values = visitor.visit(ctx->intervalexpr().at(posInIntervalExpr)).antlrcpp::Any::as<std::vector<std::pair<vector_t<Number>,Number>>>();					
-					//std::cout << "---- intervalexpr existed!" << std::endl;					
-				} else {
-					std::cerr << "ERROR: There is no " << posInIntervalExpr << "-th constraint parsed!" << std::endl;
-				}
-			}
-
-			//Print stuff
-			//std::cout << "---- Received following constraint Vec:" << std::endl;
-			//for(auto v : values){
-			//	std::cout << v.first << "and \n" << v.second << "\n" << std::endl;
-			//}
-
-			//Resize tmpMatrix and tmpVector and initialise them with 0, then write values inside
-			tmpMatrix.conservativeResize(tmpMatrix.rows()+values.size()-1, Eigen::NoChange_t::NoChange);
-			tmpVector.conservativeResize(tmpVector.rows()+values.size()-1, Eigen::NoChange_t::NoChange);
-			for(int k=rowToFill; k < tmpMatrix.rows(); k++){
-				tmpMatrix.row(k) = vector_t<Number>::Zero(tmpMatrix.cols());
-				tmpVector(k) = Number(0);
-			}
-			//std::cout << "---- Resized tmpMatrix to:\n" << tmpMatrix << std::endl;
-			//std::cout << "---- Resized tmpVector to:\n" << tmpVector << std::endl;
-			for(unsigned k=0; k < values.size(); k++){
-				tmpMatrix.row(rowToFill+k) = values[k].first;
-				tmpVector(rowToFill+k) = values[k].second;
-			}
-
-			//Increment rowToFill by our added size
-			//std::cout << "---- After insertion tmpMatrix is:\n" << tmpMatrix << " and tmpVector is:\n" << tmpVector << std::endl;
-			rowToFill += values.size();
-			i++;
-			//std::cout << "---- AFTER UPDATE size: " << size << " rowToFill: " << rowToFill << " i: " << i << std::endl;
-		}
+		std::pair<matrix_t<Number>,vector_t<Number>> result = visitor.visit(ctx->constrset());
 
 		//3.Build condition out of them
 		Condition<Number> inv;
-		inv.setMatrix(tmpMatrix);
-		inv.setVector(tmpVector);
+		inv.setMatrix(result.first);
+		inv.setVector(result.second);
 
 		//4.Return condition
 		return inv;	

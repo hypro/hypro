@@ -43,6 +43,8 @@ public:
 
     virtual antlrcpp::Any visitIntervalexpr(HybridAutomatonParser::IntervalexprContext *context) = 0;
 
+    virtual antlrcpp::Any visitConstrset(HybridAutomatonParser::ConstrsetContext *context) = 0;
+
     virtual antlrcpp::Any visitJumps(HybridAutomatonParser::JumpsContext *context) = 0;
 
     virtual antlrcpp::Any visitTransition(HybridAutomatonParser::TransitionContext *context) = 0;

@@ -19,7 +19,7 @@ location 		: VARIABLE '{' activities invariants '}' ;
 
 activities		: ('poly ode 1' | 'poly ode 2' | 'poly ode 3' | 'linear ode') '{' equation* '}' ; 
 
-invariants		: 'inv' '{' (constraint | intervalexpr)* '}' ;
+invariants		: 'inv' '{' constrset '}' ;
 
 ////// Lexer Rules
 
