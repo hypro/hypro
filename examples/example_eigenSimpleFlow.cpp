@@ -37,14 +37,14 @@ int main()
     Vector derivLineEnd = Vector(n);
     Vector plot_vector = Vector(n);
     #ifdef TRAJECTORY
-        Number timestep = 0.1;
+        Number timestep = 0.01;
         Number traj_time;
         Vector pts_traj = Vector(n);
         VPolytope<Number> traj_poly;
         std::vector<vector_t<Number>> plot_traj;
     #endif
-    Number tend = 100;
-    Number delta = 10; //segment stepping time
+    Number tend = 1;
+    Number delta = 0.01; //segment stepping time
     Matrix V = Matrix(n,n);
     Matrix Vinv = Matrix(n,n);
 	Eigen::DiagonalMatrix<Number,2> D; //type Number size 2
@@ -53,8 +53,8 @@ int main()
 	A << 	0.001, 1,
 			0.001, -0.002;
     b <<    0, -9.81;
-    x0<<    1000, 0;
-    x0_2 << -1000, 0;
+    x0<<    10.2, 0;
+    x0_2 << 10, 0;
 
 	std::cout << "d/dx = A*x+b, A:"<< std::endl << A << std::endl;
 	std::cout << "b: "<< std::endl << b << std::endl;
@@ -112,26 +112,28 @@ int main()
     std::size_t deltalimit = std::ceil( (tend/delta) );
     //std::cout << "tlimit: " << tlimit << std::endl; //better:rationals
     for(std::size_t j = 0; j <= deltalimit;  ++j) {
+    	std::cout << "Time: " << j*delta << std::endl;
         for (i=0; i<n; ++i) {
             factor(i) = std::exp(D.diagonal()(i) *j*delta);
         }
         derivFactor = xhomconst2.array()*D.diagonal().array()*factor.array();
         xvalue = xhomconst.array()*factor.array() - xinhomconst.array();
         plot_vector(0) = j;
-        plot_vector(1) = xvalue(DIM_PLOT); 
+        plot_vector(1) = xvalue(DIM_PLOT);
         points.push_back(plot_vector);
         #ifdef TRAJECTORY
         for(traj_time = j; traj_time<j+1; traj_time+=timestep) {
             for (i=0; i<n; ++i) {
                 factor(i) = std::exp(D.diagonal()(i) *traj_time*delta);
-            }   
+            }
             pts_traj = xhomconst2.array()*factor.array() - xinhomconst.array();
             plot_vector(0) = traj_time;
             plot_vector(1) = pts_traj(DIM_PLOT);
             plot_traj.push_back(plot_vector);
             traj_poly = VPolytope<Number>(plot_traj);
             if(traj_time > j) {
-                plotter.addObject(traj_poly.vertices());
+                unsigned t = plotter.addObject(traj_poly.vertices());
+                plotter.setObjectColor(t, plotting::colors[plotting::green]);
                 plot_traj.erase(plot_traj.begin() );
             }
         }
@@ -142,8 +144,10 @@ int main()
         vpoly = VPolytope<Number>(points);
         vpoly2 = VPolytope<Number>(approx_points);
         if (j>0) {
-            plotter.addObject(vpoly.vertices());
-            plotter.addObject(vpoly2.vertices());
+			unsigned v = plotter.addObject(vpoly.vertices());
+			plotter.setObjectColor(v, plotting::colors[plotting::red]);
+            unsigned w = plotter.addObject(vpoly2.vertices());
+            plotter.setObjectColor(w, plotting::colors[plotting::blue]);
             points.erase( points.begin() );
             approx_points.erase( approx_points.begin() );
         }
@@ -192,6 +196,7 @@ int main()
     //
     //Halfspace<Number> hsp = Halfspace<Number>({-1,1},0);
     plotter.plot2d();
+    plotter.plotGen();
     //plotter.plotTex();
     //plotter.plotEps();
 	return 0;
