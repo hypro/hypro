@@ -23,12 +23,13 @@ template<typename R>
 void State<Number,Representation,Rargs...>::setSet(const R& s, std::size_t i) {
 	DEBUG("hypro.datastructures","Attempt to set set at pos " << i << ", mSets.size() = " << mSets.size());
 	assert(mSets.size() == mTypes.size());
-	while(i > mSets.size()) {
+	while(i >= mSets.size()) {
 		mSets.push_back(ConstraintSet<Number>()); // some default set.
 		mTypes.push_back(representation_name::constraint_set); // some default set type.
 	}
-	mSets.push_back(s);
-	mTypes.push_back(R::type());
+	TRACE("hypro.datastructures","Set set to:" << s);
+	mSets[i] =s;
+	mTypes[i] = R::type();
 	DEBUG("hypro.datastructures","Set set at pos " << i << ", mSets.size() = " << mSets.size());
 	assert(mSets.size() > i);
 }
@@ -88,6 +89,7 @@ std::pair<bool,State<Number,Representation,Rargs...>> State<Number,Representatio
 
 template<typename Number, typename Representation, typename ...Rargs>
 std::pair<bool,State<Number,Representation,Rargs...>> State<Number,Representation,Rargs...>::partiallySatisfies(const Condition<Number>& in, std::size_t I) const {
+	TRACE("hypro.datastructures","Check Condition of size " << in.size() << " against set at pos " << I);
 	assert(in.size() == mSets.size());
 	State<Number,Representation,Rargs...> res(*this);
 
