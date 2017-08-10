@@ -8,7 +8,7 @@
 #include <Eigen/Eigenvalues>
 #include <Eigen/Dense>
 //#define PTS_DEBUG 1         //NO USE
-#define ORIGINAL_SYS_PLOT 1   //original system plot
+//#define ORIGINAL_SYS_PLOT 1   //original system plot
 #define DIM_PLOT 0          //starting with 0..n-1 what to plot might be added with multiple dim or data format (struct/enum)
 //#define TRAJECTORY 1
 //#include <Eigen/LU>
@@ -17,25 +17,22 @@ using namespace hypro;
 using Number = double;
 using Matrix = matrix_t<Number>;
 using Vector = vector_t<Number>;
+using DiagonalMatrix = Eigen::DiagonalMatrix<Number,Eigen::Dynamic>;
+using BoolMatrix = matrix_t<bool>;
 //using madef = Matrix<Number, Dynamic, Dynamic>;
 //Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>;
 #define vecdef         std::vector<vector_t<Number>>
-#define maconstrefd    Eigen::Ref<const Matrix>&
-#define marefd         Eigen::Ref<Matrix>
-#define diaconstrefd   Eigen::Ref<const Eigen::DiagonalMatrix<Number,Eigen::Dynamic>>&
-#define maconstrefbool Eigen::Ref<const Eigen::Matrix<bool,Eigen::Dynamic, Eigen::Dynamic>>&
-#define marefbool      Eigen::Ref<Eigen::Matrix<bool,Eigen::Dynamic, Eigen::Dynamic>>
 
-void elwise_maxtransformation(marefd x_tr, const int n);
-void elwise_backtranformation(marefd x_tr, const int n);
-void initialize (const maconstrefd xhomconst, const diaconstrefd D, marefbool directmaxmin,
-                    marefd derivFactormaxmin, Eigen::Ref<vecdef> ptsxmax_tr,
-                        Eigen::Ref<vecdef> ptsxmin_tr, const int n);
+void elwise_maxtransformation(Matrix& x_tr, const int n);
+void elwise_backtranformation(Matrix& x_tr, const int n);
+void initialize (const Matrix& xhomconst, const DiagonalMatrix& D, BoolMatrix& directmaxmin,
+                    Matrix& derivFactormaxmin, std::vector<Vector>& ptsxmax_tr,
+                        std::vector<Vector>& ptsxmin_tr, const int n);
 
-void loop (const std::size_t deltalimit,const  maconstrefbool directmaxmin,const diaconstrefd D,const maconstrefd xhomconstmaxmin,
-            const Number delta, const Number tend, const int n, Eigen::Ref<vecdef> ptsmax_tr,
-            Eigen::Ref<vecdef> ptsmin_tr, marefd derivFactormaxmin,
-            marefd x_tr, Eigen::Ref<Plotter<Number>&> plotter, Eigen::Ref<VPolytope<Number>> vpoly_upper, Eigen::Ref<<VPolytope<Number>> vpoly_lower);  
+void loop (std::size_t deltalimit, const BoolMatrix& directmaxmin, const DiagonalMatrix& D, const Matrix& xhomconstmaxmin,
+            Number delta, Number tend, int n, std::vector<Vector>& ptsmax_tr,
+            std::vector<Vector>& ptsmin_tr, Matrix& derivFactormaxmin,
+            Matrix& x_tr);
     //calculate values according to directmaxmin boolean array
 
 
@@ -53,28 +50,28 @@ int main()
     Vector x0 = Vector(n);
     Vector x0_2 = Vector(n);
     Vector b_tr = Vector(n);      //transformed
-    Eigen::Matrix<Number, 2, 3> x_tr;
+    Matrix x_tr = Matrix::Zero(2,3);
     x_tr.col(2).array() = 0;
-    Eigen::Matrix<Number, 2, 2> xhomconstmaxmin;
+    Matrix xhomconstmaxmin = Matrix::Zero(2,2);
 
     Vector xinhomconst = Vector(n);
     Vector factor = Vector(n);
     Vector xvalue = Vector(n);
     Matrix derivFactormaxmin = Matrix(n,2);
-    Eigen::Matrix<bool, 2, 2> directmaxmin;
+    BoolMatrix directmaxmin = BoolMatrix(2,2);
     directmaxmin.setConstant(0);
     #ifdef TRAJECTORY
         Number timestep = 0.01;
         Number traj_time;
         Vector pts_traj = Vector(n);
         VPolytope<Number> traj_poly;
-        std::vector<vector_t<Number>> plot_traj;
+        std::vector<Vector> plot_traj;
     #endif
     Number tend = 1;
     Number delta = 0.01; //segment stepping time
     Matrix V = Matrix(n,n);
     Matrix Vinv = Matrix(n,n);
-	Eigen::DiagonalMatrix<Number,2> D; //type Number size 2
+	DiagonalMatrix D = DiagonalMatrix(2); //type Number size 2
 
     //######   d/dx = A*x + b  ######
 	A << 	0.001, 1,
@@ -105,23 +102,22 @@ int main()
     elwise_maxtransformation(x_tr, n); //ref to Eigen::Matrix to write Eigen::Matrix
     xinhomconst = b_tr.array() / D.diagonal().array();
 
-    xhomconstmaxmin.col(0) = xinhomconst.array() + x_tr.col(0).array(); 
-    xhomconstmaxmin.col(1) = xinhomconst.array() + x_tr.col(1).array(); 
+    xhomconstmaxmin.col(0) = xinhomconst.array() + x_tr.col(0).array();
+    xhomconstmaxmin.col(1) = xinhomconst.array() + x_tr.col(1).array();
     //plotting structures
     Plotter<Number>& plotter = Plotter<Number>::getInstance();
-    std::vector<vector_t<Number>> ptsxmax_tr;
-    std::vector<vector_t<Number>> ptsxmin_tr;
-    //function pointers + 1.step(derivative+value) 
-    //initialize (const Ref<Matrix>& a); //
-    initialize (xhomconst, D, directmaxmin, derivFactormaxmin, ptsxmax_tr, ptsxmin_tr, n);
+    std::vector<Vector> ptsxmax_tr;
+    std::vector<Vector> ptsxmin_tr;
+    //function pointers + 1.step(derivative+value)
+    //initialize (const Matrix& a); //
+    initialize (xhomconstmaxmin, D, directmaxmin, derivFactormaxmin, ptsxmax_tr, ptsxmin_tr, n);
 
     //initial value calculation+derivative, possible trajectory value
     //starting on delta: rational numbers might be better here
     std::size_t deltalimit = std::ceil( (tend/delta) );
-    loop ( deltalimit, directmaxmin, D, xhomconstmaxmin, delta, tend, n, ptsmax_tr, ptsmin_tr, 
-            derivFactormaxmin, x_tr, plotter, vpoly_upper, vpoly_lower);  
+    loop ( deltalimit, directmaxmin, D, xhomconstmaxmin, delta, tend, n, ptsxmax_tr, ptsxmin_tr, derivFactormaxmin, x_tr);
     //calculate values according to directmaxmin boolean array
-    
+
     plotter.plot2d();
     plotter.plotGen();
 
@@ -148,23 +144,23 @@ int main()
 }
 
 //assigning elwise maximum/min address to xmax and xmin
-void elwise_maxtransformation(Ref<Matrix> x_tr, const int n) {
+void elwise_maxtransformation(Matrix& x_tr, const int n) {
     for(int i=0; i<n; ++i) {   //check if x0_tr >= x0_2_tr
-        if(x_tr(i)(0) < x_tr(i)(1)) {
-            x_tr(i)(2) =x_tr(i)(0);
-            x_tr(i)(0) = x_tr(i)(1);
-            x_tr(i)(1) = x_tr(i)(2);
-            x_tr(i)(2) = 1; //mark second column to recognize later
+        if(x_tr(i,0) < x_tr(i,1)) {
+            x_tr(i,2) = x_tr(i,0);
+            x_tr(i,0) = x_tr(i,1);
+            x_tr(i,1) = x_tr(i,2);
+            x_tr(i,2) = 1; //mark second column to recognize later
         }
     }
 }
-void elwise_backtranformation(Ref<Matrix> x_tr, const int n) {
-    for(int i=0; i<n; ++i) {   
-        if(x_tr(i)(2) == 1) { //check if x0_tr >= x0_2_tr
-            x_tr(i)(2) =x_tr(i)(0);
-            x_tr(i)(0) = x_tr(i)(1);
-            x_tr(i)(1) = x_tr(i)(2);
-            x_tr(i)(2) = 0; //mark second column to recognize later
+void elwise_backtranformation(Matrix& x_tr, const int n) {
+    for(int i=0; i<n; ++i) {
+        if(x_tr(i,2) == 1) { //check if x0_tr >= x0_2_tr
+            x_tr(i,2) =x_tr(i,0);
+            x_tr(i,0) = x_tr(i,1);
+            x_tr(i,1) = x_tr(i,2);
+            x_tr(i,2) = 0; //mark second column to recognize later
         }
     }
 }
@@ -179,54 +175,54 @@ void elwise_backtranformation(Ref<Matrix> x_tr, const int n) {
             //case2: -e^(-x)   --- etc
             //case3: -e^(x)    --- D>0, xhomconst<0
             //case4:  e^(-x)   --- etc
-void initialize (const  Ref<Matrix>& xhomconst, const Ref<DiagonalMatrix>& D, Ref<Eigen::Matrix<bool> directmaxmin,
-                        Ref<Matrix> derivFactormaxmin,Ref<std::vector<vector_t<Number>> > ptsxmax_tr,
-                        Ref<std::vector<vector_t<Number>> > ptsxmin_tr, const int n) {
+void initialize (const  Matrix& xhomconst, const DiagonalMatrix& D, BoolMatrix& directmaxmin,
+                        Matrix& derivFactormaxmin, std::vector<Vector>& ptsxmax_tr,
+                        std::vector<Vector>& ptsxmin_tr, int n) {
     using namespace hypro;
     Vector plot_vector = Vector(n);
-    for(int i=0; i<n; ++i) { 
+    for(int i=0; i<n; ++i) {
         if (D.diagonal()(i)>0) { //divergence
-            if (xhomconstmaxmin(i)(0) >= 0) {
-                directmaxmin(i)(0) = true;      //xmax(i) directLine 
-                if (xhomconstmaxmin(i)(1) >= 0) {
+            if (xhomconst(i,0) >= 0) {
+                directmaxmin(i,0) = true;      //xmax(i) directLine
+                if (xhomconst(i,1) >= 0) {
                     //xmin(i) derivLine
                 } else {
-                    directmaxmin(i)(1) = true;  //unusual!! xmin(i) directLine
+                    directmaxmin(i,1) = true;  //unusual!! xmin(i) directLine
                 }
             } else {
-                    //xmax(i) derivLine 
-                if(xhomconstmaxmin(i)(1) >= 0) {
+                    //xmax(i) derivLine
+                if(xhomconst(i,1) >= 0) {
                     //ERROR upwards and downwards
                 } else {
-                    directmaxmin(i)(1) = true;  //xmin(i) directLine
+                    directmaxmin(i,1) = true;  //xmin(i) directLine
                 }
             }
         } else { //case 2 and 4
         //convergence
-            if (xhomconstmaxmin(i)(0) >=0) {
-                directmaxmin(i)(0) = true;      //xmax(i) directLine
-                if (xhomconstmaxmin(i)(1) >=0) {
+            if (xhomconst(i,0) >=0) {
+                directmaxmin(i,0) = true;      //xmax(i) directLine
+                if (xhomconst(i,1) >=0) {
                     //xmin(i) derivLine
                 } else {
-                    directmaxmin(i)(1) = true;  //xmin(i) directLine
+                    directmaxmin(i,1) = true;  //xmin(i) directLine
                     //convergence point between initial set
                 }
             } else {
                 //xmax(i) derivLine
-                if (xhomconstmaxmin(i)(1) >=0) {
+                if (xhomconst(i,1) >=0) {
                     //xmin(i) derivLine
                     //2 convergence points!!
                 } else {
-                    directmaxmin(i)(1) = true;   //xmin(i) directLine
+                    directmaxmin(i,1) = true;   //xmin(i) directLine
                 }
             }
         }
     }
     //1.step calculation + inserting
     //e^0 = 1
-    derivFactormaxmin.col(0) = xhomconstmaxmin.col(0).array()*D.diagonal().array();
-    derivFactormaxmin.col(1) = xhomconstmaxmin.col(1).array()*D.diagonal().array();
-    
+    derivFactormaxmin.col(0) = xhomconst.col(0).array()*D.diagonal().array();
+    derivFactormaxmin.col(1) = xhomconst.col(1).array()*D.diagonal().array();
+
     #ifdef ORIGINAL_SYS_PLOT
         elwise_backtranformation();
         plot_vector(0) = j;
@@ -235,7 +231,7 @@ void initialize (const  Ref<Matrix>& xhomconst, const Ref<DiagonalMatrix>& D, Re
         plot_vector(1) = (V*x_tr.col(1))(DIM_PLOT);
     #endif
     #ifndef ORIGINAL_SYS_PLOT
-    plot_vector(0) = j;
+    plot_vector(0) = 0; // TODO: Check again, was "j"
     plot_vector(1) = x_tr(DIM_PLOT)(0);
     ptsxmax_tr.push_back(plot_vector);
     plot_vector(1) = x_tr(DIM_PLOT)(1);
@@ -246,31 +242,33 @@ void initialize (const  Ref<Matrix>& xhomconst, const Ref<DiagonalMatrix>& D, Re
     //1.1 possible trajectory calculation pushing writing deleting
     //2.pushing,writing,deleting   [maybe flushing in between??]
 
-void loop (const std::size_t deltalimit, const Ref<Eigen::Matrix<bool>& directmaxmin, const Ref<DiagonalMatrix>& D, 
-            const Ref<Matrix>& xhomconstmaxmin, const Number delta, const Number tend, const int n, 
-            Ref<std::vector<vector_t<Number>> > ptsmax_tr, Ref<std::vector<vector_t<Number>> > ptsmin_tr, 
-            Ref<Matrix> derivFactormaxmin, Ref<Matrix> x_tr, Ref<Plotter<Number>&> plotter, 
-            Ref<VPolytope<Number>> vpoly_upper, Ref<<VPolytope<Number>> vpoly_lower) {
+void loop (std::size_t deltalimit, const BoolMatrix& directmaxmin, const DiagonalMatrix& D, const Matrix& xhomconst,
+            Number delta, Number tend, int n, std::vector<Vector>& ptsmax_tr,
+            std::vector<Vector>& ptsmin_tr, Matrix& derivFactormaxmin,
+            Matrix& x_tr) {
     using namespace hypro;
 
+    Plotter<Number>& plotter = Plotter<Number>::getInstance();
     VPolytope<Number> vpoly_upper;
     VPolytope<Number> vpoly_lower;
+    Vector factor = Vector::Zero(n);
+    Vector plot_vector = Vector(2);
     for(std::size_t j = 0; j <= deltalimit;  ++j) {
     	std::cout << "Time: " << j*delta << std::endl;
         for (int i=0; i<n; ++i) {
             factor(i) = std::exp(D.diagonal()(i) *j*delta);
-        
-            if(directmax(i)) {
-                x_tr(i)(0) = xhomconstmax(i)*factor(i) - xinhomconst(i);
+
+            if(directmaxmin(i,0)) {
+                x_tr(i)(0) = xhomconst(i,0)*factor(i) - xinhomconst(i);
             } else {
-                x_tr(i)(0) = x_tr(i)(0) + derivFactormax(i)*delta;
-                derivFactormax(i) = xhomconstmax(i)*D.diagonal()(i)*factor(i);
+                x_tr(i)(0) = x_tr(i)(0) + derivFactormaxmin(i,0)*delta;
+                derivFactormaxmin(i,0) = xhomconst(i,0)*D.diagonal()(i)*factor(i);
             }
-            if(directmin(i)) {
-                x_tr(i)(1) = xhomconstmin(i)*factor(i) - xinhomconst(i);
+            if(directmaxmin(i,1)) {
+                x_tr(i)(1) = xhomconst(i,1)*factor(i) - xinhomconst(i);
             } else {
-                x_tr(i)(1) = x_tr(i)(1) + derivFactormin(i)*delta;
-                derivFactormin(i) = xhomconstmin(i)*D.diagonal()(i)*factor(i);
+                x_tr(i)(1) = x_tr(i)(1) + derivFactormaxmin(i,1)*delta;
+                derivFactormaxmin(i,1) = xhomconst(i,1)*D.diagonal()(i)*factor(i);
             }
         }
         #ifdef ORIGINAL_SYS_PLOT
@@ -279,16 +277,17 @@ void loop (const std::size_t deltalimit, const Ref<Eigen::Matrix<bool>& directma
             plot_vector(1) = (V*x_tr.col(0))(DIM_PLOT);
             ptsmax_tr.push_back(plot_vector);
             plot_vector(1) = (V*x_tr.col(1))(DIM_PLOT);
+            ptsxmin_tr.push_back(plot_vector);
         #endif
         #ifndef ORIGINAL_SYS_PLOT
         plot_vector(0) = j;
         plot_vector(1) = x_tr(DIM_PLOT)(0);
-        ptsxmax_tr.push_back(plot_vector);
+        ptsmax_tr.push_back(plot_vector);
         plot_vector(1) = x_tr(DIM_PLOT)(1);
-        ptsxmin_tr.push_back(plot_vector);
+        ptsmin_tr.push_back(plot_vector);
         #endif
-        vpoly_upper = VPolytope<Number>(ptsxmax_tr);
-        vpoly_lower = VPolytope<Number>(ptsxmin_tr);
+        vpoly_upper = VPolytope<Number>(ptsmax_tr);
+        vpoly_lower = VPolytope<Number>(ptsmin_tr);
         #ifdef TRAJECTORY
         for(traj_time = j; traj_time<j+1; traj_time+=timestep) {
             for (i=0; i<n; ++i) {
@@ -306,12 +305,12 @@ void loop (const std::size_t deltalimit, const Ref<Eigen::Matrix<bool>& directma
                 plot_traj.erase(plot_traj.begin() );
             }
         }
-        #endif 
+        #endif
 		unsigned v = plotter.addObject(vpoly_upper.vertices());
 		plotter.setObjectColor(v, plotting::colors[plotting::red]);
         unsigned w = plotter.addObject(vpoly_lower.vertices());
         plotter.setObjectColor(w, plotting::colors[plotting::blue]);
-        ptsxmax_tr.erase( ptsxmax_tr.begin() );
-        ptsxmin_tr.erase( ptsxmin_tr.begin() );
+        ptsmax_tr.erase( ptsmax_tr.begin() );
+        ptsmin_tr.erase( ptsmin_tr.begin() );
     }
 }
