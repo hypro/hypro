@@ -179,7 +179,7 @@ $(document).ready(function(){initNavTree('Transition_8h_source.html','');});
 <div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;    <span class="keywordtype">void</span> setTriggerTime(Number t) { mTriggerTime = t; }</div>
 <div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;</div>
 <div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;    <span class="keyword">friend</span> std::ostream&amp; operator&lt;&lt;(std::ostream&amp; ostr, const Transition&lt;Number&gt;&amp; t) {</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;<span class="preprocessor">        #ifdef HYDRA_USE_LOGGING</span></div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;<span class="preprocessor">        #ifdef HYPRO_LOGGING</span></div>
 <div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;<span class="preprocessor"></span>        ostr &lt;&lt; <span class="stringliteral">&quot;transition(&quot;</span> &lt;&lt; std::endl</div>
 <div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;              &lt;&lt; <span class="stringliteral">&quot;\t Source = &quot;</span> &lt;&lt; t.getSource()-&gt;getId() &lt;&lt; std::endl</div>
 <div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;              &lt;&lt; <span class="stringliteral">&quot;\t Target = &quot;</span> &lt;&lt; t.getTarget()-&gt;getId() &lt;&lt; std::endl</div>

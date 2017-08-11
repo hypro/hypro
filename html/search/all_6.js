@@ -6,6 +6,7 @@ var searchData=
   ['genericcomparevisitor',['genericCompareVisitor',['../classhypro_1_1genericCompareVisitor.html',1,'hypro']]],
   ['genericconversionvisitor',['genericConversionVisitor',['../classhypro_1_1genericConversionVisitor.html',1,'hypro']]],
   ['genericintersectvisitor',['genericIntersectVisitor',['../classhypro_1_1genericIntersectVisitor.html',1,'hypro']]],
+  ['genericoutstreamvisitor',['genericOutstreamVisitor',['../classhypro_1_1genericOutstreamVisitor.html',1,'hypro']]],
   ['genericreductionvisitor',['genericReductionVisitor',['../classhypro_1_1genericReductionVisitor.html',1,'hypro']]],
   ['genericsatisfieshalfspacesvisitor',['genericSatisfiesHalfspacesVisitor',['../classhypro_1_1genericSatisfiesHalfspacesVisitor.html',1,'hypro']]],
   ['genericunitevisitor',['genericUniteVisitor',['../classhypro_1_1genericUniteVisitor.html',1,'hypro']]],

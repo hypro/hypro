@@ -111,6 +111,7 @@ $(document).ready(function(){initNavTree('classhypro_1_1GeometricObject.html',''
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#friends">Friends</a> &#124;
 <a href="classhypro_1_1GeometricObject-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">hypro::GeometricObject&lt; Number, DerivedShape &gt; Class Template Reference<span class="mlabels"><span class="mlabel">abstract</span></span><div class="ingroups"><a class="el" href="group__geoState.html">State set representations</a></div></div>  </div>
@@ -170,6 +171,12 @@ DerivedShape &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="e
 <tr class="memitem:a3ed4020101437144b34b62cc01d5bf01"><td class="memItemLeft" align="right" valign="top">virtual DerivedShape&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1GeometricObject.html#a3ed4020101437144b34b62cc01d5bf01">unite</a> (const DerivedShape &amp;rhs) const =0</td></tr>
 <tr class="memdesc:a3ed4020101437144b34b62cc01d5bf01"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the convex hull of the union of the set and the passed set.  <a href="#a3ed4020101437144b34b62cc01d5bf01">More...</a><br/></td></tr>
 <tr class="separator:a3ed4020101437144b34b62cc01d5bf01"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
+Friends</h2></td></tr>
+<tr class="memitem:aeec96cc4ca50fdc639b1ffab4b7b0c69"><td class="memItemLeft" align="right" valign="top">std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1GeometricObject.html#aeec96cc4ca50fdc639b1ffab4b7b0c69">operator&lt;&lt;</a> (std::ostream &amp;out, const <a class="el" href="classhypro_1_1GeometricObject.html">GeometricObject</a>&lt; Number, DerivedShape &gt; &amp;in)</td></tr>
+<tr class="memdesc:aeec96cc4ca50fdc639b1ffab4b7b0c69"><td class="mdescLeft">&#160;</td><td class="mdescRight">Outstream operator.  <a href="#aeec96cc4ca50fdc639b1ffab4b7b0c69">More...</a><br/></td></tr>
+<tr class="separator:aeec96cc4ca50fdc639b1ffab4b7b0c69"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><h3>template&lt;typename Number, typename DerivedShape&gt;<br/>
@@ -680,6 +687,55 @@ template&lt;typename Number, typename DerivedShape&gt; </div>
 <dl class="section return"><dt>Returns</dt><dd>A set of extreme vertices. </dd></dl>
 
 <p>Implemented in <a class="el" href="classhypro_1_1VPolytopeT.html#af1bc0c0567aa7fd607ed34f0783b88a2">hypro::VPolytopeT&lt; Number, Converter &gt;</a>, <a class="el" href="classhypro_1_1BoxT.html#a617b4c5905701b5fb5da8bcf4373da4e">hypro::BoxT&lt; Number, Converter &gt;</a>, <a class="el" href="classhypro_1_1BoxT.html#a617b4c5905701b5fb5da8bcf4373da4e">hypro::BoxT&lt; Number, hypro::Converter &gt;</a>, <a class="el" href="classhypro_1_1BoxT_3_01double_00_01Converter_01_4.html#ac7982e9f84ae7dc9719908611f97b8c1">hypro::BoxT&lt; double, Converter &gt;</a>, <a class="el" href="classhypro_1_1ZonotopeT.html#a9b13ff579f3fa8978107792fa2862de4">hypro::ZonotopeT&lt; Number, Converter &gt;</a>, <a class="el" href="classhypro_1_1HPolytopeT.html#a897e9a51988a1807fdf3ee7c161b9925">hypro::HPolytopeT&lt; Number, Converter &gt;</a>, <a class="el" href="classhypro_1_1ConstraintSetT.html#a8cf1314861edc469174f5369669451de">hypro::ConstraintSetT&lt; Number, Converter &gt;</a>, and <a class="el" href="classhypro_1_1SupportFunctionT.html#a96627e362bf40eb7d2cdc1f9eb57acc9">hypro::SupportFunctionT&lt; Number, Converter &gt;</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Friends And Related Function Documentation</h2>
+<a class="anchor" id="aeec96cc4ca50fdc639b1ffab4b7b0c69"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number, typename DerivedShape&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::ostream&amp; operator&lt;&lt; </td>
+          <td>(</td>
+          <td class="paramtype">std::ostream &amp;&#160;</td>
+          <td class="paramname"><em>out</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classhypro_1_1GeometricObject.html">GeometricObject</a>&lt; Number, DerivedShape &gt; &amp;&#160;</td>
+          <td class="paramname"><em>in</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">friend</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Outstream operator. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir"></td><td class="paramname">out</td><td>The outstream. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">obj</td><td>The object. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Reference to the passed outstream. </dd></dl>
+
+<p>Definition at line <a class="el" href="GeometricObject_8h_source.html#l00163">163</a> of file <a class="el" href="GeometricObject_8h_source.html">GeometricObject.h</a>.</p>
 
 </div>
 </div>

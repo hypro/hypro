@@ -13,5 +13,6 @@ var classhypro_1_1GeometricObject =
     [ "satisfiesHalfspace", "classhypro_1_1GeometricObject.html#a45218953a280ddc544176842774346c8", null ],
     [ "satisfiesHalfspaces", "classhypro_1_1GeometricObject.html#acddc7fbfe0fde344fa0c66c155bdc6a2", null ],
     [ "unite", "classhypro_1_1GeometricObject.html#a3ed4020101437144b34b62cc01d5bf01", null ],
-    [ "vertices", "classhypro_1_1GeometricObject.html#ada1c4dd741b73792ada09f17ac2894c4", null ]
+    [ "vertices", "classhypro_1_1GeometricObject.html#ada1c4dd741b73792ada09f17ac2894c4", null ],
+    [ "operator<<", "classhypro_1_1GeometricObject.html#aeec96cc4ca50fdc639b1ffab4b7b0c69", null ]
 ];

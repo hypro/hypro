@@ -167,11 +167,14 @@ $(document).ready(function(){initNavTree('GeometricObject_8h_source.html','');})
 <div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;</div>
 <div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;    <span class="keyword">virtual</span> DerivedShape <a class="code" href="classhypro_1_1GeometricObject.html#a3ed4020101437144b34b62cc01d5bf01">unite</a>( <span class="keyword">const</span> DerivedShape&amp; rhs ) <span class="keyword">const</span> = 0;</div>
 <div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;</div>
-<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;};</div>
-<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;</div>
-<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;} <span class="comment">// namespace hypro</span></div>
-<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;</div>
-<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;<span class="preprocessor">#include &quot;conversion/Converter.h&quot;</span></div>
+<div class="line"><a name="l00163"></a><span class="lineno"><a class="line" href="classhypro_1_1GeometricObject.html#aeec96cc4ca50fdc639b1ffab4b7b0c69">  163</a></span>&#160;    <span class="keyword">friend</span> std::ostream&amp; operator&lt;&lt;(std::ostream&amp; out, const GeometricObject&lt;Number,DerivedShape&gt;&amp; in){</div>
+<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;        <span class="keywordflow">return</span> out &lt;&lt; static_cast&lt;DerivedShape&gt;(in);</div>
+<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;    }</div>
+<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;};</div>
+<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;</div>
+<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;} <span class="comment">// namespace hypro</span></div>
+<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;</div>
+<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;<span class="preprocessor">#include &quot;conversion/Converter.h&quot;</span></div>
 <div class="ttc" id="classhypro_1_1GeometricObject_html_aecbf17700fe297f643f401b7ae17dd9c"><div class="ttname"><a href="classhypro_1_1GeometricObject.html#aecbf17700fe297f643f401b7ae17dd9c">hypro::GeometricObject::dimension</a></div><div class="ttdeci">virtual std::size_t dimension() const =0</div><div class="ttdoc">Returns the space dimension of the object. </div></div>
 <div class="ttc" id="classhypro_1_1GeometricObject_html_a3ed4020101437144b34b62cc01d5bf01"><div class="ttname"><a href="classhypro_1_1GeometricObject.html#a3ed4020101437144b34b62cc01d5bf01">hypro::GeometricObject::unite</a></div><div class="ttdeci">virtual DerivedShape unite(const DerivedShape &amp;rhs) const =0</div><div class="ttdoc">Computes the convex hull of the union of the set and the passed set. </div></div>
 <div class="ttc" id="classhypro_1_1GeometricObject_html_a3de514fbb8514689331e65a247a64927"><div class="ttname"><a href="classhypro_1_1GeometricObject.html#a3de514fbb8514689331e65a247a64927">hypro::GeometricObject::empty</a></div><div class="ttdeci">virtual bool empty() const =0</div><div class="ttdoc">Determines, whether the set is empty. </div></div>

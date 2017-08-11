@@ -180,12 +180,18 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setLocation</b> (cons
 template&lt;typename R &gt; </td></tr>
 <tr class="memitem:a7e84fc95eb0335c56508ad6353f7c899"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>setSet</b> (const R &amp;s, std::size_t i=0)</td></tr>
 <tr class="separator:a7e84fc95eb0335c56508ad6353f7c899"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad09f4d08fd29ffb18803f776ccd839dd"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad09f4d08fd29ffb18803f776ccd839dd"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setSetType</b> (<a class="el" href="namespacehypro.html#aada824f660cac25bb643be870cdc0a86">representation_name</a> type, std::size_t I=0)</td></tr>
+<tr class="separator:ad09f4d08fd29ffb18803f776ccd839dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a15175d62905ccd0a3e14aff4b4c07cf9"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a15175d62905ccd0a3e14aff4b4c07cf9"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>setTimestamp</b> (carl::Interval&lt; Number &gt; t)</td></tr>
 <tr class="separator:a15175d62905ccd0a3e14aff4b4c07cf9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6ce1f5cecd1263870cd8381043db84d9"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6ce1f5cecd1263870cd8381043db84d9"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>setSets</b> (const std::vector&lt; boost::variant&lt; Representation, Rargs...&gt;&gt; &amp;sets)</td></tr>
 <tr class="separator:a6ce1f5cecd1263870cd8381043db84d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6d6967061238ce37745fa48b87273304"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1State.html#a6d6967061238ce37745fa48b87273304">setSetDirect</a> (const repVariant &amp;in, std::size_t I=0)</td></tr>
+<tr class="memdesc:a6d6967061238ce37745fa48b87273304"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the set.  <a href="#a6d6967061238ce37745fa48b87273304">More...</a><br/></td></tr>
+<tr class="separator:a6d6967061238ce37745fa48b87273304"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab4a21f6a59f5321957d1c2cbfea207c2"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab4a21f6a59f5321957d1c2cbfea207c2"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>addTimeToClocks</b> (Number t)</td></tr>
 <tr class="separator:ab4a21f6a59f5321957d1c2cbfea207c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -193,28 +199,43 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>addTimeToClocks</b> (
 <a class="el" href="classhypro_1_1State.html">State</a>&lt; Number, Representation, <br class="typebreak"/>
 Rargs...&gt;&#160;</td><td class="memItemRight" valign="bottom"><b>aggregate</b> (const <a class="el" href="classhypro_1_1State.html">State</a>&lt; Number, Representation, Rargs...&gt; &amp;in) const </td></tr>
 <tr class="separator:ab19560ddb5bd9d11a9b6f9453464cd59"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a21dc5ac80529c04ece0a240785caa1b5"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a21dc5ac80529c04ece0a240785caa1b5"></a>
+<tr class="memitem:a5fb00395d6a7b8353b57dabc71bf2521"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5fb00395d6a7b8353b57dabc71bf2521"></a>
 std::pair&lt; bool, <a class="el" href="classhypro_1_1State.html">State</a>&lt; Number, <br class="typebreak"/>
-Representation, Rargs...&gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>intersect</b> (const <a class="el" href="classhypro_1_1Condition.html">Condition</a>&lt; Number &gt; &amp;in) const </td></tr>
-<tr class="separator:a21dc5ac80529c04ece0a240785caa1b5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+Representation, Rargs...&gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>satisfies</b> (const <a class="el" href="classhypro_1_1Condition.html">Condition</a>&lt; Number &gt; &amp;in) const </td></tr>
+<tr class="separator:a5fb00395d6a7b8353b57dabc71bf2521"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1afe57c7f7b90a7bf04b8abd676cf646"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1afe57c7f7b90a7bf04b8abd676cf646"></a>
+std::pair&lt; bool, <a class="el" href="classhypro_1_1State.html">State</a>&lt; Number, <br class="typebreak"/>
+Representation, Rargs...&gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>partiallySatisfies</b> (const <a class="el" href="classhypro_1_1Condition.html">Condition</a>&lt; Number &gt; &amp;in, std::size_t I) const </td></tr>
+<tr class="separator:a1afe57c7f7b90a7bf04b8abd676cf646"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aaf47d85c87649793b7903066944f9609"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aaf47d85c87649793b7903066944f9609"></a>
 <a class="el" href="classhypro_1_1State.html">State</a>&lt; Number, Representation, <br class="typebreak"/>
 Rargs...&gt;&#160;</td><td class="memItemRight" valign="bottom"><b>applyTimeStep</b> (const std::vector&lt; std::pair&lt; const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;, const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp; &gt;&gt; &amp;flows, Number timeStepSize) const </td></tr>
 <tr class="separator:aaf47d85c87649793b7903066944f9609"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a20e3c52d29066defff39924e2e3174ca"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a20e3c52d29066defff39924e2e3174ca"></a>
+<tr class="memitem:acd1f46001ffcd65b52026c4d1c7443aa"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="acd1f46001ffcd65b52026c4d1c7443aa"></a>
 <a class="el" href="classhypro_1_1State.html">State</a>&lt; Number, Representation, <br class="typebreak"/>
-Rargs...&gt;&#160;</td><td class="memItemRight" valign="bottom"><b>applyTransformation</b> (const std::vector&lt; const ConstraintSet&lt; Number &gt; &amp; &gt; &amp;trafos) const </td></tr>
-<tr class="separator:a20e3c52d29066defff39924e2e3174ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
+Rargs...&gt;&#160;</td><td class="memItemRight" valign="bottom"><b>partiallyApplyTimeStep</b> (const ConstraintSet&lt; Number &gt; &amp;flow, Number timeStepSize, std::size_t I) const </td></tr>
+<tr class="separator:acd1f46001ffcd65b52026c4d1c7443aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae61911d686847fde2f28494d83d67419"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae61911d686847fde2f28494d83d67419"></a>
+<a class="el" href="classhypro_1_1State.html">State</a>&lt; Number, Representation, <br class="typebreak"/>
+Rargs...&gt;&#160;</td><td class="memItemRight" valign="bottom"><b>applyTransformation</b> (const std::vector&lt; ConstraintSet&lt; Number &gt;&gt; &amp;trafos) const </td></tr>
+<tr class="separator:ae61911d686847fde2f28494d83d67419"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a11400de14d909daf6df146be35499a7b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a11400de14d909daf6df146be35499a7b"></a>
+<a class="el" href="classhypro_1_1State.html">State</a>&lt; Number, Representation, <br class="typebreak"/>
+Rargs...&gt;&#160;</td><td class="memItemRight" valign="bottom"><b>partiallyApplyTransformation</b> (const std::vector&lt; ConstraintSet&lt; Number &gt;&gt; &amp;trafos, const std::vector&lt; std::size_t &gt; &amp;sets) const </td></tr>
+<tr class="separator:a11400de14d909daf6df146be35499a7b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaa9da1575a5e146aa9a9d660e9259c41"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aaa9da1575a5e146aa9a9d660e9259c41"></a>
+<a class="el" href="classhypro_1_1State.html">State</a>&lt; Number, Representation, <br class="typebreak"/>
+Rargs...&gt;&#160;</td><td class="memItemRight" valign="bottom"><b>partiallyApplyTransformation</b> (const ConstraintSet&lt; Number &gt; &amp;trafo, std::size_t I) const </td></tr>
+<tr class="separator:aaa9da1575a5e146aa9a9d660e9259c41"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
 <tr class="memitem:ac445985a576c8c560e95884e16743099"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac445985a576c8c560e95884e16743099"></a>
 const <a class="el" href="classhypro_1_1Location.html">Location</a>&lt; Number &gt; *&#160;</td><td class="memItemRight" valign="bottom"><b>mLoc</b> = nullptr</td></tr>
 <tr class="separator:ac445985a576c8c560e95884e16743099"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ada80ad915eb552a471eef97deed9ac9b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ada80ad915eb552a471eef97deed9ac9b"></a>
-std::vector&lt; boost::variant<br class="typebreak"/>
-&lt; Representation, Rargs...&gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>mSets</b></td></tr>
-<tr class="separator:ada80ad915eb552a471eef97deed9ac9b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a986a6aeff5e10b7d89108cdc50aef3e3"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a986a6aeff5e10b7d89108cdc50aef3e3"></a>
+std::vector&lt; repVariant &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>mSets</b></td></tr>
+<tr class="separator:a986a6aeff5e10b7d89108cdc50aef3e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac1dbfaa16416bf85b062405bffbca55d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac1dbfaa16416bf85b062405bffbca55d"></a>
 std::vector&lt; <a class="el" href="namespacehypro.html#aada824f660cac25bb643be870cdc0a86">representation_name</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>mTypes</b></td></tr>
 <tr class="separator:ac1dbfaa16416bf85b062405bffbca55d"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -243,7 +264,56 @@ class hypro::State&lt; Number, Representation, Rargs &gt;</h3>
 
 
 <p>Definition at line <a class="el" href="State_8h_source.html#l00020">20</a> of file <a class="el" href="State_8h_source.html">State.h</a>.</p>
-</div><hr/>The documentation for this class was generated from the following file:<ul>
+</div><h2 class="groupheader">Member Function Documentation</h2>
+<a class="anchor" id="a6d6967061238ce37745fa48b87273304"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number, typename Representation, typename... Rargs&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classhypro_1_1State.html">hypro::State</a>&lt; Number, Representation, Rargs &gt;::setSetDirect </td>
+          <td>(</td>
+          <td class="paramtype">const repVariant &amp;&#160;</td>
+          <td class="paramname"><em>in</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::size_t&#160;</td>
+          <td class="paramname"><em>I</em> = <code>0</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Sets the set. </p>
+<p>Does not update the type for the respective position - can be used if type does not change to avoid unpacking.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">in</td><td>The set as a boost::variant. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">I</td><td>The position in the sets vector. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Definition at line <a class="el" href="State_8h_source.html#l00108">108</a> of file <a class="el" href="State_8h_source.html">State.h</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following file:<ul>
 <li>/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/<a class="el" href="State_8h_source.html">State.h</a></li>
 </ul>
 </div><!-- contents -->

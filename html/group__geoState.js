@@ -55,7 +55,7 @@ var group__geoState =
       [ "mLimits", "classhypro_1_1BoxT.html#a61df8663327f487aa0d12d64b71fc228", null ]
     ] ],
     [ "ConstraintSetT", "classhypro_1_1ConstraintSetT.html", [
-      [ "ConstraintSetT", "classhypro_1_1ConstraintSetT.html#a9b8336013737c9d62b1505262e124429", null ],
+      [ "ConstraintSetT", "classhypro_1_1ConstraintSetT.html#ab364cbf6be2383cbdecec00c0f3e9edb", null ],
       [ "ConstraintSetT", "classhypro_1_1ConstraintSetT.html#acc5c46951b296c93e2cc29d8988c1cf3", null ],
       [ "ConstraintSetT", "classhypro_1_1ConstraintSetT.html#a2efa3ebe969d32387caa6c30bd96d77d", null ],
       [ "ConstraintSetT", "classhypro_1_1ConstraintSetT.html#a83d762711fed227a2b2d4115bc8a6b4d", null ],
@@ -106,7 +106,8 @@ var group__geoState =
       [ "satisfiesHalfspace", "classhypro_1_1GeometricObject.html#a45218953a280ddc544176842774346c8", null ],
       [ "satisfiesHalfspaces", "classhypro_1_1GeometricObject.html#acddc7fbfe0fde344fa0c66c155bdc6a2", null ],
       [ "unite", "classhypro_1_1GeometricObject.html#a3ed4020101437144b34b62cc01d5bf01", null ],
-      [ "vertices", "classhypro_1_1GeometricObject.html#ada1c4dd741b73792ada09f17ac2894c4", null ]
+      [ "vertices", "classhypro_1_1GeometricObject.html#ada1c4dd741b73792ada09f17ac2894c4", null ],
+      [ "operator<<", "classhypro_1_1GeometricObject.html#aeec96cc4ca50fdc639b1ffab4b7b0c69", null ]
     ] ],
     [ "HPolytopeT", "classhypro_1_1HPolytopeT.html", [
       [ "HalfspaceVector", "classhypro_1_1HPolytopeT.html#a4bee86703282d9bf9841210472b5a8cc", null ],

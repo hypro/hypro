@@ -166,7 +166,7 @@ $(document).ready(function(){initNavTree('Condition_8h_source.html','');});
 <div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    }</div>
 <div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;</div>
 <div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    <span class="keyword">friend</span> std::ostream&amp; operator&lt;&lt;(std::ostream&amp; out, <span class="keyword">const</span> <a class="code" href="classhypro_1_1Condition.html">Condition</a>&amp; in) {</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;<span class="preprocessor">#ifdef HYDRA_USE_LOGGING</span></div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;<span class="preprocessor">#ifdef HYPRO_LOGGING</span></div>
 <div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;<span class="preprocessor"></span>        std::size_t i = 0;</div>
 <div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;        <span class="keywordflow">for</span>(<span class="keyword">const</span> <span class="keyword">auto</span>&amp; pair : in.constraints()) {</div>
 <div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;            out &lt;&lt; <span class="stringliteral">&quot;Constraint &quot;</span> &lt;&lt; i &lt;&lt; <span class="stringliteral">&quot;: &quot;</span> &lt;&lt; pair.matrix() &lt;&lt; <span class="stringliteral">&quot; constants: &quot;</span> &lt;&lt; pair.vector() &lt;&lt; std::endl;</div>

@@ -29,6 +29,7 @@ var searchData=
   ['setones',['setOnes',['../classhypro_1_1Dictionary.html#a49cd7e9d33a0cdbe4ba64f550f4a6718',1,'hypro::Dictionary']]],
   ['setpoint',['setPoint',['../classhypro_1_1Vertex.html#a7f6466528dbc07736390861973b69162',1,'hypro::Vertex']]],
   ['setreduced',['setReduced',['../classhypro_1_1HPolytopeT.html#afac3ecf13ac1ff4ec7f8c993acbde80a',1,'hypro::HPolytopeT']]],
+  ['setsetdirect',['setSetDirect',['../classhypro_1_1State.html#a6d6967061238ce37745fa48b87273304',1,'hypro::State']]],
   ['settings',['settings',['../classhypro_1_1Plotter.html#a7d25a45e3dc66139c2e8ad85f2ee685c',1,'hypro::Plotter']]],
   ['settingsparser',['settingsParser',['../structhypro_1_1parser_1_1settingsParser.html',1,'hypro::parser']]],
   ['setvalue',['setValue',['../classhypro_1_1Dictionary.html#ad0bddaf9d922dcc00e3e89386b6a66e4',1,'hypro::Dictionary']]],
