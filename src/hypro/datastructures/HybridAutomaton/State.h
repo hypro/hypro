@@ -121,13 +121,15 @@ class State
     State<Number,Representation,Rargs...> partiallyApplyTransformation(const ConstraintSet<Number>& trafo, std::size_t I ) const;
 
     friend ostream& operator<<(ostream& out, const State<Number,Representation,Rargs...>& state) {
-		#ifdef HYPRO_USE_LOGGING
-    	//out << "location: " << state.mLoc->getName() << " at timestamp " << state.mTimestamp << std::endl;
+		#ifdef HYPRO_LOGGING
+    	out << "location: " << state.getLocation()->getName() << " at timestamp " << state.getTimestamp() << std::endl;
     	//out << "Set: " << convert<Number,double>(Converter<Number>::toBox(state.getSet())) << std::endl;
-    	out << "Other sets: " << std::endl;
-    	for(int i = 0; i < sizeof...(Rargs); ++i)
-    		out << convert<Number,double>(boost::get<Rargs>(mSets)) << std::endl;
-    	out << "Clock Set: " << convert<Number,double>(state.mClockAssignment);
+    	out << "Set: " << boost::apply_visitor(genericConversionVisitor<repVariant,Number>(representation_name::box), state.getSet()) << std::endl;
+    	if(state.getNumberSets() > 1) {
+    		out << "Other sets: " << std::endl;
+	    	for(std::size_t i = 0; i < sizeof...(Rargs); ++i)
+	    		out << state.getSet(i) << std::endl;
+    	}
 		#endif
     	return out;
     }

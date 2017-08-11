@@ -156,18 +156,20 @@ namespace parser {
 				}
 				r.setMatrix(matr);
 				r.setVector(vec);
-				matrix_t<Number> discreteMat = matrix_t<Number>::Identity(_discreteDim-_dim,_discreteDim-_dim);
-				vector_t<Number> discreteVec = vector_t<Number>::Zero(_discreteDim-_dim);
-				TRACE("hypro.parser","Identity reset: " << discreteMat );
-				for(const auto& resetPair : mDiscreteResets){
-					TRACE("hypro.parser", resetPair.second  << " should fit in " << discreteMat );
-					TRACE("hypro.parser","Block start 0," << _dim << ", size: 1," << _discreteDim-_dim );
-					TRACE("hypro.parser","RowNum:" << resetPair.first-_dim );
-					discreteMat.row(resetPair.first-_dim) = resetPair.second.block(0,_dim,1,_discreteDim-_dim);
-					discreteVec(resetPair.first-_dim) = resetPair.second(0,_discreteDim);
+				if(mDiscreteResets.size() > 0) {
+					matrix_t<Number> discreteMat = matrix_t<Number>::Identity(_discreteDim-_dim,_discreteDim-_dim);
+					vector_t<Number> discreteVec = vector_t<Number>::Zero(_discreteDim-_dim);
+					TRACE("hypro.parser","Identity reset: " << discreteMat );
+					for(const auto& resetPair : mDiscreteResets){
+						TRACE("hypro.parser", resetPair.second  << " should fit in " << discreteMat );
+						TRACE("hypro.parser","Block start 0," << _dim << ", size: 1," << _discreteDim-_dim );
+						TRACE("hypro.parser","RowNum:" << resetPair.first-_dim );
+						discreteMat.row(resetPair.first-_dim) = resetPair.second.block(0,_dim,1,_discreteDim-_dim);
+						discreteVec(resetPair.first-_dim) = resetPair.second(0,_discreteDim);
+					}
+					r.setMatrix(discreteMat,1);
+					r.setVector(discreteVec,1);
 				}
-				r.setMatrix(discreteMat,1);
-				r.setVector(discreteVec,1);
 			}
 			res->setReset(r);
 
