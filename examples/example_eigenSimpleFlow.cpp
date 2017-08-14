@@ -33,7 +33,7 @@ void loop (std::size_t deltalimit, const BoolMatrix& directmaxmin, const Diagona
             Number delta, int n, std::vector<Vector>& ptsxmax_tr,
             std::vector<Vector>& ptsxmin_tr, Matrix& derivFactormaxmin,
             Matrix& x_tr, const Vector& xinhomconst, const Matrix& V,
-            Matrix& traj_tr, const Matrix& traj_homconst, std::size_t        
+            Matrix& traj_tr, const Matrix& traj_homconst, std::size_t
             traj_scale);
     //calculate values according to directmaxmin boolean array
 
@@ -65,7 +65,7 @@ int main()
     //#ifdef TRAJECTORY
     std::size_t traj_scale = 1;
     //even if not plotting functions requires these
-    Matrix traj_tr = Matrix::Zero(n,2); 
+    Matrix traj_tr = Matrix::Zero(n,2);
     Matrix traj_homconst = Matrix::Zero(n,2);
     //#endif
     Number tend = 2;
@@ -109,13 +109,13 @@ int main()
     std::cout << "x_tr: "<< std::endl << x_tr << std::endl;
     elwise_maxtransformation(x_tr, n); //ref to Eigen::Matrix to write Eigen::Matrix
     xinhomconst = b_tr.array() / D.diagonal().array();
-    #ifdef TRAJECTOR
+    #ifdef TRAJECTORY
     traj_homconst.col(0) = xinhomconst.array() + traj_tr.col(0).array();
     traj_homconst.col(1) = xinhomconst.array() + traj_tr.col(1).array();
     #endif
     xhomconstmaxmin.col(0) = xinhomconst.array() + x_tr.col(0).array();
     xhomconstmaxmin.col(1) = xinhomconst.array() + x_tr.col(1).array();
-    
+
     //std::cout << "xhomconstmaxmin: "<< std::endl << xhomconstmaxmin << std::endl;
     //plotting structures
     Plotter<Number>& plotter = Plotter<Number>::getInstance();
@@ -123,7 +123,7 @@ int main()
     std::vector<Vector> ptsxmin_tr;
     //function pointers + 1.step(derivative+value)
     //initialize (const Matrix& a); //
-    initialize (xhomconstmaxmin, D, directmaxmin, derivFactormaxmin, ptsxmax_tr, ptsxmin_tr, n, 
+    initialize (xhomconstmaxmin, D, directmaxmin, derivFactormaxmin, ptsxmax_tr, ptsxmin_tr, n,
                 x_tr, V);
 
     //initial value calculation+derivative, possible trajectory value
@@ -160,7 +160,7 @@ int main()
 }
 
 //assigning elwise maximum/min address to xmax and xmin
-void elwise_maxtransformation(Matrix& x_tr, const int n) {     
+void elwise_maxtransformation(Matrix& x_tr, const int n) {
     //std::cout << "x_tr beforemax: "<< std::endl << x_tr << std::endl;
     for(int i=0; i<n; ++i) {   //check if x0_tr >= x0_2_tr
         if(x_tr(i,0) < x_tr(i,1)) {
@@ -169,7 +169,7 @@ void elwise_maxtransformation(Matrix& x_tr, const int n) {
             x_tr(i,1) = x_tr(i,2);
             x_tr(i,2) = 1; //mark second column to recognize later
         }
-    }    
+    }
     //std::cout << "x_tr aftermax: "<< std::endl << x_tr << std::endl;
 }
 void elwise_backtransformation(Matrix& x_tr, const int n) {
@@ -267,17 +267,17 @@ void initialize (const  Matrix& xhomconst, const DiagonalMatrix& D, BoolMatrix& 
     //1.1 possible trajectory calculation pushing writing deleting
     //2.pushing,writing,deleting   [maybe flushing in between??]
 
-void loop (std::size_t deltalimit, const BoolMatrix& directmaxmin, 
-    const DiagonalMatrix& D, const Matrix& xhomconst, Number delta, 
-    int n, std::vector<Vector>& ptsxmax_tr, std::vector<Vector>& 
+void loop (std::size_t deltalimit, const BoolMatrix& directmaxmin,
+    const DiagonalMatrix& D, const Matrix& xhomconst, Number delta,
+    int n, std::vector<Vector>& ptsxmax_tr, std::vector<Vector>&
     ptsxmin_tr, Matrix& derivFactormaxmin, Matrix& x_tr, const Vector&
-    xinhomconst, const Matrix& V, Matrix& traj_tr, const Matrix& 
+    xinhomconst, const Matrix& V, Matrix& traj_tr, const Matrix&
     traj_homconst, std::size_t traj_scale) {
     std::cout<<"entering loop"<<std::endl;
     std::cout<<"traj_tr: "<<std::endl<<traj_tr;
     traj_tr(0,0) = 42;
     std::cout<<"traj_tr: "<<std::endl<<traj_tr;
-    
+
     Plotter<Number>& plotter = Plotter<Number>::getInstance();
     VPolytope<Number> vpoly_upper;
     VPolytope<Number> vpoly_lower;
@@ -338,6 +338,8 @@ void loop (std::size_t deltalimit, const BoolMatrix& directmaxmin,
             traj_tr.col(1) = traj_homconst.col(1).array()*factor.array()  - xinhomconst.array();
             plot_vector(0) = traj_time;
             std::cout<<"traj_tr"<<std::endl<<traj_tr;
+            std::cout <<"Homconst is " << traj_homconst << std::endl;
+            std::cout <<"Inhomconst is " << xinhomconst << std::endl;
     #ifdef ORIGINAL_SYS_PLOT
             plot_vector(1) = (V*traj_tr.col(0))(DIM_PLOT);
             std::cout << "t: " << traj_time << "V*x(t): " << plot_vector(1) << std::endl;
@@ -352,7 +354,7 @@ void loop (std::size_t deltalimit, const BoolMatrix& directmaxmin,
             plot_traj_lower.push_back(plot_vector);
             traj_poly_upper = VPolytope<Number>(plot_traj_upper);
             traj_poly_lower = VPolytope<Number>(plot_traj_lower);
-            if(traj_time > j) {
+            if(traj_time > 0) {
                 unsigned t = plotter.addObject(traj_poly_upper.vertices());
                 plotter.setObjectColor(t, plotting::colors[plotting::green]);
                 plot_traj_upper.erase(plot_traj_upper.begin() );
