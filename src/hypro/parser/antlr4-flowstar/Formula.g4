@@ -26,6 +26,7 @@ constrset	 		: (constraint | intervalexpr)*;
 
 //Always remember: Keywords first!
 IN 					: 'in' ;
+
 COMMENT				: '#' ~[\r\n] -> skip ;
 
 EQUALS				: '=' ;
@@ -39,7 +40,7 @@ fragment DIGIT		: [0-9] ;
 fragment SPECIALCHAR: '_' | '\'' ;
 
 NUMBER				: '-'? DIGIT+ ('.' DIGIT+)? ;
-VARIABLE			: (UPPERCASE | LOWERCASE)(UPPERCASE | LOWERCASE | DIGIT | SPECIALCHAR)* ;
+VARIABLE			: (UPPERCASE | LOWERCASE)(UPPERCASE | LOWERCASE | DIGIT | SPECIALCHAR)*  ;
 WS					: (' ' | '\t' | '\n' | '\r' )+ -> skip ;
 
 
