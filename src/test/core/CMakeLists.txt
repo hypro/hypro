@@ -13,6 +13,7 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
 		#ParserTest.cpp
 		UtilityTest.cpp
 		#AntlrParserTest.cpp				#new for antlr
+		#AntlrParserCIFTest.cpp				#new for antlr with CIF
 	)
 
 	add_dependencies(runCoreTests googletest)
@@ -29,7 +30,10 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
 
 	#New for AnTLR
 	#message("I made it to AntlrTests")
-	add_executable(runAntlrTests AntlrParserTest.cpp)
+	add_executable(runAntlrTests 
+		AntlrParserTest.cpp 
+		AntlrParserCIFTest.cpp
+	)
 	#message("Added executable")
 	add_dependencies(runAntlrTests googletest antlr4cpp)
 	#message("Added dependencies")
@@ -38,4 +42,8 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
 	#message("Targeted link libraries: " ${PROJECT_NAME} ${GTEST_LIBRARIES} ${ANTLR4CPP_LIBS})
 	add_test( NAME parser COMMAND runAntlrTests )
 	#message("Added a test named parser")
+
+	
+
+
 endif()
