@@ -33,6 +33,9 @@ template<typename Number>
 class HyproInitialSetVisitor;
 
 template<typename Number>
+class HyproSettingVisitor;
+
+template<typename Number>
 class HyproFormulaVisitor : public HybridAutomatonBaseVisitor {
 
 	friend class HyproLocationVisitor<Number>;

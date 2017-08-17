@@ -1,5 +1,5 @@
 
-// Generated from HybridAutomaton.g4 by ANTLR 4.7
+// Generated from Setting.g4 by ANTLR 4.7
 
 #pragma once
 
@@ -9,21 +9,18 @@
 
 
 
-class  HybridAutomatonLexer : public antlr4::Lexer {
+class  SettingLexer : public antlr4::Lexer {
 public:
   enum {
     T__0 = 1, T__1 = 2, T__2 = 3, T__3 = 4, T__4 = 5, T__5 = 6, T__6 = 7, 
     T__7 = 8, T__8 = 9, T__9 = 10, T__10 = 11, T__11 = 12, T__12 = 13, T__13 = 14, 
-    T__14 = 15, T__15 = 16, T__16 = 17, T__17 = 18, T__18 = 19, T__19 = 20, 
-    T__20 = 21, T__21 = 22, T__22 = 23, T__23 = 24, T__24 = 25, T__25 = 26, 
-    T__26 = 27, T__27 = 28, T__28 = 29, T__29 = 30, PARALLELOTOPE = 31, 
-    BOX = 32, JUMP = 33, DEFINE = 34, IN = 35, COMMENT = 36, EQUALS = 37, 
-    BOOLRELATION = 38, PLUS = 39, TIMES = 40, NUMBER = 41, VARIABLE = 42, 
-    WS = 43, EXPONENTIAL = 44
+    T__14 = 15, T__15 = 16, T__16 = 17, EXPONENTIAL = 18, IN = 19, COMMENT = 20, 
+    EQUALS = 21, BOOLRELATION = 22, PLUS = 23, TIMES = 24, NUMBER = 25, 
+    VARIABLE = 26, WS = 27
   };
 
-  HybridAutomatonLexer(antlr4::CharStream *input);
-  ~HybridAutomatonLexer();
+  SettingLexer(antlr4::CharStream *input);
+  ~SettingLexer();
 
   virtual std::string getGrammarFileName() const override;
   virtual const std::vector<std::string>& getRuleNames() const override;

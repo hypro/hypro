@@ -8,14 +8,13 @@
  */
  
 grammar HybridAutomaton;
- 
-import Location, Transition, InitialSet, Setting;
- 
+
+import Transition, Setting, Location, InitialSet;
+
 ////// Parser Rules
- 
-// TODO: Until now only declaring the variables correctly implement parsing of locations
  
 start               : 'hybrid reachability' '{' vardeclaration setting modes jumps init'}' ;
  
 vardeclaration      : 'state var' VARIABLE ((',' VARIABLE)+)? ;
+
 

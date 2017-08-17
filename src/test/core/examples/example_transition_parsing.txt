@@ -1,6 +1,4 @@
-hybrid reachability
-{
- state var x,v
+hybrid reachability { state var x,v
 
  modes
  {

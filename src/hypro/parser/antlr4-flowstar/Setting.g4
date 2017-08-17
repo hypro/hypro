@@ -9,11 +9,13 @@
 
 grammar Setting;
 
+//options { tokenVocab = AllLexerRules; }
+
 import Formula;
 
 //////// Parser Rules
 
-setting 		: 'setting' '{' fixedsteps time remainder identity plotsetting fixedorders cutoff precision filename maxjumps print '}' ;
+setting 		: 'setting' '{' (fixedsteps | time | remainder | identity | plotsetting | fixedorders | cutoff | precision | filename | maxjumps | print)* '}' ;
 
 //// Important Parser Rules
 
@@ -28,9 +30,6 @@ filename 		: 'output' VARIABLE ;
 maxjumps 		: 'max jumps' NUMBER ;
 
 print 			: 'print' VARIABLE ; 
-//Note: VARIABLE is only allowed to be "on" or "off". We do not define "on"/"off" lexer rules in 
-//this file since all "on"/"off" tokens would be matched as a VARIABLE.
-//We do not define "on"/"off" lexer rules in Formula.g4 since 
 
 //// Unimportant Parser Rules
 

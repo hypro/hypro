@@ -23,28 +23,6 @@ public:
 
     virtual antlrcpp::Any visitVardeclaration(HybridAutomatonParser::VardeclarationContext *context) = 0;
 
-    virtual antlrcpp::Any visitModes(HybridAutomatonParser::ModesContext *context) = 0;
-
-    virtual antlrcpp::Any visitLocation(HybridAutomatonParser::LocationContext *context) = 0;
-
-    virtual antlrcpp::Any visitActivities(HybridAutomatonParser::ActivitiesContext *context) = 0;
-
-    virtual antlrcpp::Any visitInvariants(HybridAutomatonParser::InvariantsContext *context) = 0;
-
-    virtual antlrcpp::Any visitTerm(HybridAutomatonParser::TermContext *context) = 0;
-
-    virtual antlrcpp::Any visitPolynom(HybridAutomatonParser::PolynomContext *context) = 0;
-
-    virtual antlrcpp::Any visitInterval(HybridAutomatonParser::IntervalContext *context) = 0;
-
-    virtual antlrcpp::Any visitEquation(HybridAutomatonParser::EquationContext *context) = 0;
-
-    virtual antlrcpp::Any visitConstraint(HybridAutomatonParser::ConstraintContext *context) = 0;
-
-    virtual antlrcpp::Any visitIntervalexpr(HybridAutomatonParser::IntervalexprContext *context) = 0;
-
-    virtual antlrcpp::Any visitConstrset(HybridAutomatonParser::ConstrsetContext *context) = 0;
-
     virtual antlrcpp::Any visitJumps(HybridAutomatonParser::JumpsContext *context) = 0;
 
     virtual antlrcpp::Any visitTransition(HybridAutomatonParser::TransitionContext *context) = 0;
@@ -60,6 +38,52 @@ public:
     virtual antlrcpp::Any visitResetfct(HybridAutomatonParser::ResetfctContext *context) = 0;
 
     virtual antlrcpp::Any visitAggregation(HybridAutomatonParser::AggregationContext *context) = 0;
+
+    virtual antlrcpp::Any visitTerm(HybridAutomatonParser::TermContext *context) = 0;
+
+    virtual antlrcpp::Any visitPolynom(HybridAutomatonParser::PolynomContext *context) = 0;
+
+    virtual antlrcpp::Any visitInterval(HybridAutomatonParser::IntervalContext *context) = 0;
+
+    virtual antlrcpp::Any visitEquation(HybridAutomatonParser::EquationContext *context) = 0;
+
+    virtual antlrcpp::Any visitConstraint(HybridAutomatonParser::ConstraintContext *context) = 0;
+
+    virtual antlrcpp::Any visitIntervalexpr(HybridAutomatonParser::IntervalexprContext *context) = 0;
+
+    virtual antlrcpp::Any visitConstrset(HybridAutomatonParser::ConstrsetContext *context) = 0;
+
+    virtual antlrcpp::Any visitSetting(HybridAutomatonParser::SettingContext *context) = 0;
+
+    virtual antlrcpp::Any visitFixedsteps(HybridAutomatonParser::FixedstepsContext *context) = 0;
+
+    virtual antlrcpp::Any visitTime(HybridAutomatonParser::TimeContext *context) = 0;
+
+    virtual antlrcpp::Any visitPlotsetting(HybridAutomatonParser::PlotsettingContext *context) = 0;
+
+    virtual antlrcpp::Any visitFilename(HybridAutomatonParser::FilenameContext *context) = 0;
+
+    virtual antlrcpp::Any visitMaxjumps(HybridAutomatonParser::MaxjumpsContext *context) = 0;
+
+    virtual antlrcpp::Any visitPrint(HybridAutomatonParser::PrintContext *context) = 0;
+
+    virtual antlrcpp::Any visitRemainder(HybridAutomatonParser::RemainderContext *context) = 0;
+
+    virtual antlrcpp::Any visitIdentity(HybridAutomatonParser::IdentityContext *context) = 0;
+
+    virtual antlrcpp::Any visitFixedorders(HybridAutomatonParser::FixedordersContext *context) = 0;
+
+    virtual antlrcpp::Any visitCutoff(HybridAutomatonParser::CutoffContext *context) = 0;
+
+    virtual antlrcpp::Any visitPrecision(HybridAutomatonParser::PrecisionContext *context) = 0;
+
+    virtual antlrcpp::Any visitModes(HybridAutomatonParser::ModesContext *context) = 0;
+
+    virtual antlrcpp::Any visitLocation(HybridAutomatonParser::LocationContext *context) = 0;
+
+    virtual antlrcpp::Any visitActivities(HybridAutomatonParser::ActivitiesContext *context) = 0;
+
+    virtual antlrcpp::Any visitInvariants(HybridAutomatonParser::InvariantsContext *context) = 0;
 
     virtual antlrcpp::Any visitInit(HybridAutomatonParser::InitContext *context) = 0;
 

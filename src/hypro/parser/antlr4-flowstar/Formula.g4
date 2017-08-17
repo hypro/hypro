@@ -4,7 +4,7 @@
  * @author Phillip Tse
  * @date 22.6.2017
  *
- * A grammar for AnTLR to generate a parser for boolean expressions, equations and formulas.
+ * A parser grammar for AnTLR to generate a parser for boolean expressions, equations and formulas.
  */
 
 grammar Formula;
