@@ -8,7 +8,7 @@ namespace hypro
 template <typename Number>
 struct ReachabilitySettings {
     Number timeBound;
-    std::size_t jumpDepth;
+    int jumpDepth;
     Number timeStep;
     std::string fileName;
     unsigned long pplDenomimator;

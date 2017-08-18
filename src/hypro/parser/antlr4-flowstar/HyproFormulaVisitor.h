@@ -41,6 +41,7 @@ class HyproFormulaVisitor : public HybridAutomatonBaseVisitor {
 	friend class HyproLocationVisitor<Number>;
 	friend class HyproTransitionVisitor<Number>;
 	friend class HyproInitialSetVisitor<Number>;
+	friend class HyproSettingVisitor<Number>;
 
 	private:
 

@@ -6,20 +6,11 @@ namespace hypro {
 
 	template<typename Number>
 	HyproSettingVisitor<Number>::HyproSettingVisitor(std::vector<std::string> varVec) : 
-		vars(varVec),
-		plotDims()
+		vars(varVec)
 	{ }
 
 	template<typename Number>
 	HyproSettingVisitor<Number>::~HyproSettingVisitor() { }
-
-	////////////// Helping Functions
-
-	template<typename Number>
-	Number HyproSettingVisitor<Number>::toIntValue(Number& num){
-		int converted = dynamic_cast<int>(num);
-		return Number(converted);
-	}
 
 	////////////// Inherited
 
@@ -32,10 +23,10 @@ namespace hypro {
 
 		//fixed steps
 		Number tStep = Number(1);
-		if(ctx->fixedstep().size() > 1){
+		if(ctx->fixedsteps().size() > 1){
 			std::cerr << "ERROR: fixed step in settings has been defined multiple times." << std::endl;
-		} else if(ctx->fixedstep().size() == 1){
-			tStep = visit(ctx->fixedstep());	
+		} else if(ctx->fixedsteps().size() == 1){
+			tStep = visit(ctx->fixedsteps()[0]).antlrcpp::Any::as<Number>();	
 		} else {
 			std::cerr << "ERROR: fixed step size has not been defined" << std::endl;
 		}
@@ -45,7 +36,7 @@ namespace hypro {
 		if(ctx->time().size() > 1){
 			std::cerr << "ERROR: time in settings has been defined multiple times." << std::endl;
 		} else if(ctx->time().size() == 1){
-			tBound = visit(ctx->time());	
+			tBound = visit(ctx->time()[0]).antlrcpp::Any::as<Number>();	
 		} else {
 			std::cerr << "ERROR: time has not been defined" << std::endl;
 		}
@@ -66,17 +57,17 @@ namespace hypro {
 		if(ctx->filename().size() > 1){
 			std::cerr << "ERROR: filename in settings has been defined multiple times." << std::endl;
 		} else if(ctx->filename().size() == 1){
-			name = visit(ctx->fileName());
+			name = visit(ctx->filename()[0]).antlrcpp::Any::as<std::string>();
 		} else {
 			std::cerr << "ERROR: filename has not been defined" << std::endl;
 		}
 
 		//maxjumps
-		size_t jumps = 0;
+		int jumps = 0;
 		if(ctx->maxjumps().size() > 1){
 			std::cerr << "ERROR: max jumps in settings has been defined multiple times." << std::endl;
 		} else if(ctx->maxjumps().size() == 1){
-			jumps = visit(ctx->maxjumps());		
+			jumps = visit(ctx->maxjumps()[0]);		
 		} else {
 			std::cerr << "ERROR: max jumps has not been defined" << std::endl;
 		}
@@ -89,7 +80,8 @@ namespace hypro {
 		//print
 
 		//2.Build ReachabilitySettings and return it.
-		ReachabilitySettings r;
+		std::cout << "-- Reaching this reachability part" << std::endl;
+		ReachabilitySettings<Number> r;
 		r.timeStep = tStep;
 		r.timeBound = tBound;
 		r.plotDimensions = plotDims;
@@ -101,8 +93,10 @@ namespace hypro {
 	template<typename Number>
   	antlrcpp::Any HyproSettingVisitor<Number>::visitFixedsteps(HybridAutomatonParser::FixedstepsContext *ctx){
 
+  		std::cout << "-- Bin bei visitFixedsteps!" << std::endl;
+
   		//Nur Zahlen >0 erlaubt
-  		HyproFormulaVisitor<Number> h;
+  		HyproFormulaVisitor<Number> h(vars);
   		Number converted = h.stringToNumber(ctx->NUMBER()->getText());
   		if(converted <= Number(0)){
   			std::cerr << "ERROR: No numbers below or equal 0 are allowed when defining fixed steps." << std::endl;
@@ -113,33 +107,82 @@ namespace hypro {
   	template<typename Number>
   	antlrcpp::Any HyproSettingVisitor<Number>::visitTime(HybridAutomatonParser::TimeContext *ctx){
   		//Alle Zahlen erlaubt
-  		HyproFormulaVisitor<Number> h;
+  		HyproFormulaVisitor<Number> h(vars);
   		return h.stringToNumber(ctx->NUMBER()->getText());
   	}
 
   	template<typename Number>
   	antlrcpp::Any HyproSettingVisitor<Number>::visitPlotsetting(HybridAutomatonParser::PlotsettingContext *ctx){
   		
-  		//TODO: schließe doppelte Variablen aus -> mitzählen wie oft variablen vorkommen
+  		std::cout << "-- Bin bei visitPlotsetting!" << std::endl;
 
   		//0.Syntax Check - only declared variables?
+  		bool found = false;
+  		for(const auto& maybeVar : ctx->VARIABLE()){
+  			std::string culprit = maybeVar->getText();
+  			for(const auto& var : vars){
+  				if(var == maybeVar->getText()){
+  					found = true;
+  				}
+  			}
+  			if(!found){
+  				std::cerr << "ERROR: variable " << culprit << " in gnuplot octagon has not been defined in state var." << std::endl;
+  			}
+  		}
 
-  		//1.Find variable indices, push their indices into a vector of unsigned
-  		
+  		//1.Count how often variables occur and throw error if a variable is mentioned more than one time
+  		std::vector<unsigned> varCount;
+  		for(unsigned i=0; i < vars.size(); i++){
+  			varCount.push_back(0);
+  		}
+  		int startIndex = ctx->start->getStartIndex();
+  		int endIndex = ctx->stop->getStopIndex();
+  		misc::Interval inter(startIndex, endIndex);
+  		CharStream* input = ctx->start->getInputStream();
+  		std::string text = input->getText(inter);
+  		for(unsigned i=0; i < vars.size(); i++){
+  			unsigned pos = text.find(vars[i]);
+  			if(pos != std::string::npos){
+  				varCount[i]++;
+  				text = text.erase(pos, vars[i].size());
+  			}
+  		}
+  		for(unsigned i=0; i < varCount.size(); i++){
+  			if(varCount[i] > 1){
+  				std::cerr << "ERROR: Variable " << vars[i] << "has been mentioned multiple times in gnuplot octagon. Please mention every variable at most one time." << std::endl;
+  			}
+  		}
+
+  		//2.Find variable indices, push their indices into a vector of unsigned
+  		std::vector<unsigned> res;
+  		for(const auto& maybeVar : ctx->VARIABLE()){
+  			for(unsigned i=0; i < vars.size(); i++){
+  				if(maybeVar->getText() == vars[i]){
+  					res.push_back(i);
+  				}
+  			}
+  		}
+  		return res;
   	}
 
   	template<typename Number>
   	antlrcpp::Any HyproSettingVisitor<Number>::visitFilename(HybridAutomatonParser::FilenameContext *ctx){
+  		std::cout << "-- Bin bei visitFilename!" << std::endl;
   		return ctx->VARIABLE()->getText();
   	}
 
   	template<typename Number>
   	antlrcpp::Any HyproSettingVisitor<Number>::visitMaxjumps(HybridAutomatonParser::MaxjumpsContext *ctx){
-  		
-  		//Alle Zahlen erlaubt
-  		HyproFormulaVisitor<Number> h;
-  		Number num = h.stringToNumber(ctx->NUMBER()->getText());
-  		return toIntValue(num);
+  		std::cout << "-- Bin bei visitMaxjumps!" << std::endl;
+  		//Only integers allowed
+  		std::string numAsText = ctx->NUMBER()->getText();
+  		std::cout << "---- num before: " << numAsText << std::endl;
+  		unsigned pos = numAsText.find(".");
+		if(pos != std::string::npos){
+			numAsText = std::string(numAsText, 0, pos);
+		}
+		std::cout << "---- num after: " << numAsText << std::endl;
+		return std::stoi(numAsText);
   	}
 /*
   	template<typename Number>

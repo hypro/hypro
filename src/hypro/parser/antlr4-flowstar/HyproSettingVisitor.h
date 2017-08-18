@@ -15,8 +15,8 @@
 #include "HybridAutomatonParser.h"
 #include "HybridAutomatonBaseVisitor.h"
 #include "HyproFormulaVisitor.h"
-#include "../../algorithms/reachability/Setting.h"
-#include <map>
+#include "../../algorithms/reachability/Settings.h"
+#include <math.h>
 
 using namespace antlr4;
 
@@ -38,9 +38,6 @@ class HyproSettingVisitor : HybridAutomatonBaseVisitor {
 		//Constructor & Destructor
 		HyproSettingVisitor(std::vector<std::string> varVec);
 		~HyproSettingVisitor();
-
-		//Helping Functions
-		Number toIntValue(Number& num);
 
 	public:
 

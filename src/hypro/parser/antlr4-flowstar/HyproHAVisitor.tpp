@@ -18,23 +18,29 @@ namespace hypro {
 		vars = visit(ctx->vardeclaration()).antlrcpp::Any::as<std::vector<std::string>>();
 		std::cout << "---- vars is now: " << vars << std::endl;
 
-		//2.Calls visit(ctx->modes()) to get locSet 
+		//2.Calls visit(ctx->setting()) to get reachability settings
+		//.antlrcpp::Any::as<ReachabilitySettings<Number>>();
+		HyproSettingVisitor<Number> settingVisitor = HyproSettingVisitor<Number>(vars);
+		ReachabilitySettings<Number> rSettings = settingVisitor.visit(ctx->setting());
+		std::cout << "---- rSettings is now: " << rSettings << std::endl;
+
+		//3.Calls visit(ctx->modes()) to get locSet 
 		HyproLocationVisitor<Number> locVisitor = HyproLocationVisitor<Number>(vars);
 		std::set<Location<Number>*> locSet = locVisitor.visit(ctx->modes()).antlrcpp::Any::as<std::set<Location<Number>*>>();
 		std::cout << "-- locVisitor visited!" << std::endl;
 		//std::cout << "---- locSet is now: " << locSet << std::endl;		
 
-		//3.Later calls visit to get transitions
+		//4.Later calls visit to get transitions
 		HyproTransitionVisitor<Number> transVisitor = HyproTransitionVisitor<Number>(vars, locSet);
 		std::set<Transition<Number>*> transSet = transVisitor.visit(ctx->jumps()).antlrcpp::Any::as<std::set<Transition<Number>*>>();
 		std::cout << "-- transVisitor visited!" << std::endl;
 
-		//4.Later calls visit to get initial states
+		//5.Later calls visit to get initial states
 		HyproInitialSetVisitor<Number> initVisitor = HyproInitialSetVisitor<Number>(vars, locSet);
 		locationStateMap initSet = initVisitor.visit(ctx->init()).antlrcpp::Any::as<locationStateMap>();
 		std::cout << "-- initVisitor visited!" << std::endl;
 
-		//5.Build HybridAutomaton, return it
+		//6.Build HybridAutomaton, return it
 		HybridAutomaton<Number> ha;
 		ha.setLocations(locSet);
 		ha.setTransitions(transSet);

@@ -327,17 +327,28 @@ public:
   public:
     SettingContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
-    FixedstepsContext *fixedsteps();
-    TimeContext *time();
-    RemainderContext *remainder();
-    IdentityContext *identity();
-    PlotsettingContext *plotsetting();
-    FixedordersContext *fixedorders();
-    CutoffContext *cutoff();
-    PrecisionContext *precision();
-    FilenameContext *filename();
-    MaxjumpsContext *maxjumps();
-    PrintContext *print();
+    std::vector<FixedstepsContext *> fixedsteps();
+    FixedstepsContext* fixedsteps(size_t i);
+    std::vector<TimeContext *> time();
+    TimeContext* time(size_t i);
+    std::vector<RemainderContext *> remainder();
+    RemainderContext* remainder(size_t i);
+    std::vector<IdentityContext *> identity();
+    IdentityContext* identity(size_t i);
+    std::vector<PlotsettingContext *> plotsetting();
+    PlotsettingContext* plotsetting(size_t i);
+    std::vector<FixedordersContext *> fixedorders();
+    FixedordersContext* fixedorders(size_t i);
+    std::vector<CutoffContext *> cutoff();
+    CutoffContext* cutoff(size_t i);
+    std::vector<PrecisionContext *> precision();
+    PrecisionContext* precision(size_t i);
+    std::vector<FilenameContext *> filename();
+    FilenameContext* filename(size_t i);
+    std::vector<MaxjumpsContext *> maxjumps();
+    MaxjumpsContext* maxjumps(size_t i);
+    std::vector<PrintContext *> print();
+    PrintContext* print(size_t i);
 
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
    

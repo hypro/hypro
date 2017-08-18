@@ -20,7 +20,9 @@
 #include "HyproLocationVisitor.h"
 #include "HyproTransitionVisitor.h"
 #include "HyproInitialSetVisitor.h"
+#include "HyproSettingVisitor.h"
 #include "../../datastructures/HybridAutomaton/HybridAutomaton.h"
+#include "../../algorithms/reachability/Settings.h"
 
 using namespace antlr4;
 

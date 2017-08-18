@@ -71,7 +71,7 @@ namespace hypro {
   		CharStream* input = ctx->start->getInputStream();
   		std::string text = input->getText(inter);
   		for(unsigned i=0; i < vars.size(); i++){
-  			int pos = text.find(vars[i]);
+  			unsigned pos = text.find(vars[i]);
   			if(pos != std::string::npos){
   				varCount[i]++;
   				text = text.erase(pos, vars[i].size());

@@ -190,7 +190,7 @@ namespace hypro {
 		vector_t<Number> resetVector = vector_t<Number>::Zero(vars.size());
 		for(unsigned i=0; i < ctx->allocation().size(); i++){
 			std::pair<vector_t<Number>,unsigned> valuesNPos = visit(ctx->allocation()[i]);
-			if(valuesNPos.first.rows() != vars.size()+1){
+			if(static_cast<unsigned>(valuesNPos.first.rows()) != vars.size()+1){
 				std::cerr << "ERROR: Visiting Allocation brought forth vec of size: " << valuesNPos.first.rows() << " but we need: " << vars.size() << std::endl;
 			}
 			//1.2.Find out into which row according to vars we have to place the row

@@ -82,8 +82,8 @@ class AntlrParserTest : public ::testing::Test {
 
 TYPED_TEST(AntlrParserTest, JustTesting){
 
-	std::string path("../../../../src/test/core/examples/example_init_parsing.txt");
-	//std::string path("../../../../examples/input/bouncing_ball.model");
+	//std::string path("../../../../src/test/core/examples/example_init_parsing.txt");
+	std::string path("../../../../examples/input/bouncing_ball.model");
 
 	//Tell current path - /home/ptse/hiwi/hypro/build/src/test/core
 	this->cwd();
