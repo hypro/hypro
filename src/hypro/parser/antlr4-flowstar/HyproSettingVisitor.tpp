@@ -5,7 +5,7 @@ namespace hypro {
 	////////////// Constructor & Destructor
 
 	template<typename Number>
-	HyproSettingVisitor<Number>::HyproSettingVisitor(std::vector<std::string> varVec) : 
+	HyproSettingVisitor<Number>::HyproSettingVisitor(std::vector<std::string>& varVec) : 
 		vars(varVec)
 	{ }
 
@@ -44,7 +44,7 @@ namespace hypro {
 		//gnuplot octagon
 		std::vector<std::vector<unsigned>> plotDims;
 		if(ctx->plotsetting().size() >= 1){
-			for(auto p : ctx->plotsetting()){
+			for(const auto& p : ctx->plotsetting()){
 				std::vector<unsigned> plotDimTupel = visit(p);
 				plotDims.push_back(plotDimTupel);
 			}
@@ -80,7 +80,7 @@ namespace hypro {
 		//print
 
 		//2.Build ReachabilitySettings and return it.
-		std::cout << "-- Reaching this reachability part" << std::endl;
+		std::cout << "-- Building reachability settings" << std::endl;
 		ReachabilitySettings<Number> r;
 		r.timeStep = tStep;
 		r.timeBound = tBound;

@@ -33,29 +33,32 @@ class HyproSettingVisitor : HybridAutomatonBaseVisitor {
 	private:
 
 		//A vector of all variables that are defined
-		std::vector<std::string> vars;
+		std::vector<std::string>& vars;
 
 		//Constructor & Destructor
-		HyproSettingVisitor(std::vector<std::string> varVec);
+		HyproSettingVisitor(std::vector<std::string>& varVec);
 		~HyproSettingVisitor();
+
+        //Inherited
+        antlrcpp::Any visitFixedsteps(HybridAutomatonParser::FixedstepsContext *ctx) override;
+        antlrcpp::Any visitTime(HybridAutomatonParser::TimeContext *ctx) override;
+        antlrcpp::Any visitPlotsetting(HybridAutomatonParser::PlotsettingContext *ctx) override;
+        antlrcpp::Any visitFilename(HybridAutomatonParser::FilenameContext *ctx) override;
+        antlrcpp::Any visitMaxjumps(HybridAutomatonParser::MaxjumpsContext *ctx) override;
+/*          
+        antlrcpp::Any visitPrint(HybridAutomatonParser::PrintContext *ctx) override;
+        antlrcpp::Any visitRemainder(HybridAutomatonParser::RemainderContext *ctx) override;
+        antlrcpp::Any visitIdentity(HybridAutomatonParser::IdentityContext *ctx) override;
+        antlrcpp::Any visitFixedorders(HybridAutomatonParser::FixedordersContext *ctx) override;
+        antlrcpp::Any visitCutoff(HybridAutomatonParser::CutoffContext *ctx) override;
+        antlrcpp::Any visitPrecision(HybridAutomatonParser::PrecisionContext *ctx) override;
+*/
 
 	public:
 
-		//Inherited
+		//Inherited - stays public so we can access it for testing/debugging
 		antlrcpp::Any visitSetting(HybridAutomatonParser::SettingContext *ctx) override;
-  		antlrcpp::Any visitFixedsteps(HybridAutomatonParser::FixedstepsContext *ctx) override;
-  		antlrcpp::Any visitTime(HybridAutomatonParser::TimeContext *ctx) override;
-  		antlrcpp::Any visitPlotsetting(HybridAutomatonParser::PlotsettingContext *ctx) override;
-  		antlrcpp::Any visitFilename(HybridAutomatonParser::FilenameContext *ctx) override;
-  		antlrcpp::Any visitMaxjumps(HybridAutomatonParser::MaxjumpsContext *ctx) override;
-/*  		
-  		antlrcpp::Any visitPrint(HybridAutomatonParser::PrintContext *ctx) override;
-  		antlrcpp::Any visitRemainder(HybridAutomatonParser::RemainderContext *ctx) override;
-  		antlrcpp::Any visitIdentity(HybridAutomatonParser::IdentityContext *ctx) override;
-  		antlrcpp::Any visitFixedorders(HybridAutomatonParser::FixedordersContext *ctx) override;
-  		antlrcpp::Any visitCutoff(HybridAutomatonParser::CutoffContext *ctx) override;
-  		antlrcpp::Any visitPrecision(HybridAutomatonParser::PrecisionContext *ctx) override;
-*/
+
 };
 
 } //namespace hypro

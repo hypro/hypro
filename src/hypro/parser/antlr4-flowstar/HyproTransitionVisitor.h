@@ -32,25 +32,27 @@ class HyproTransitionVisitor : public HybridAutomatonBaseVisitor{
 	private:
 
 		//A vector of all variables that are defined
-		std::vector<std::string> vars;
+		std::vector<std::string>& vars;
 
 		//The set of possible locations 
-		std::set<Location<Number>*> locSet;
+		std::set<Location<Number>*>& locSet;
 
 		//Constructor and Destructor
-		HyproTransitionVisitor(std::vector<std::string> varVec, std::set<Location<Number>*> lSet);
+		HyproTransitionVisitor(std::vector<std::string>& varVec, std::set<Location<Number>*>& lSet);
 		~HyproTransitionVisitor();
 
-	public:
-
-		//Inherited from HybridAutomatonBaseVisitor
-		antlrcpp::Any visitJumps(HybridAutomatonParser::JumpsContext *ctx) override;
+		//Inherited
 		antlrcpp::Any visitTransition(HybridAutomatonParser::TransitionContext *ctx) override;
 		antlrcpp::Any visitFromto(HybridAutomatonParser::FromtoContext *ctx) override;
 		antlrcpp::Any visitGuard(HybridAutomatonParser::GuardContext *ctx) override;
 		antlrcpp::Any visitAllocation(HybridAutomatonParser::AllocationContext *ctx) override;
 		antlrcpp::Any visitResetfct(HybridAutomatonParser::ResetfctContext *ctx) override;
 		antlrcpp::Any visitAggregation(HybridAutomatonParser::AggregationContext *ctx) override;
+
+	public:
+
+		//Inherited from HybridAutomatonBaseVisitor - stays public for testing/debugging
+		antlrcpp::Any visitJumps(HybridAutomatonParser::JumpsContext *ctx) override;
 		
 };
 

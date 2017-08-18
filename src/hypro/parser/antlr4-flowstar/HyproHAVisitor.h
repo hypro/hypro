@@ -33,8 +33,13 @@ class HyproHAVisitor : public HybridAutomatonBaseVisitor {
 
 	private:
 
-		//A vector of all variables that are defined
+		//A vector of all variables that are defined. 
+		//This must be passed onto all the underlying visitors as they need to have
+		//access to the variable names stated in the variable declaration
 		std::vector<std::string> vars;
+
+		//Inherited from HybridAutomatonBaseVisitor which is generated from AnTLR
+		antlrcpp::Any visitVardeclaration(HybridAutomatonParser::VardeclarationContext *ctx) override;
 
 	public:
 
@@ -44,8 +49,9 @@ class HyproHAVisitor : public HybridAutomatonBaseVisitor {
 		~HyproHAVisitor();
 
 		//Inherited from HybridAutomatonBaseVisitor which is generated from AnTLR
+		//As this is the starting rule, it must stay public.
 		antlrcpp::Any visitStart(HybridAutomatonParser::StartContext *ctx) override;
-		antlrcpp::Any visitVardeclaration(HybridAutomatonParser::VardeclarationContext *ctx) override;
+		
 
 };
 

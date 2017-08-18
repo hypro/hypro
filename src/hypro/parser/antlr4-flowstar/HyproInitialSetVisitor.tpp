@@ -4,7 +4,7 @@ namespace hypro {
 	
 	//Constructor & Destructor
 	template<typename Number>
-	HyproInitialSetVisitor<Number>::HyproInitialSetVisitor(std::vector<std::string> varVec, std::set<Location<Number>*> lSet) : 
+	HyproInitialSetVisitor<Number>::HyproInitialSetVisitor(std::vector<std::string>& varVec, std::set<Location<Number>*>& lSet) : 
 		vars(varVec),
 		locSet(lSet)
 	{ }

@@ -33,21 +33,21 @@ class HyproLocationVisitor : public HybridAutomatonBaseVisitor {
 	private:
 
 		//The vector of defined variables
-		std::vector<std::string> vars;
+		std::vector<std::string>& vars;
 
 		//Constuctor and Destructor
-		HyproLocationVisitor(std::vector<std::string> varVec);
+		HyproLocationVisitor(std::vector<std::string>& varVec);
 		~HyproLocationVisitor();
 
-	public:
-		
 		//Inherited Functions
-		antlrcpp::Any visitModes(HybridAutomatonParser::ModesContext *ctx) override;
 		antlrcpp::Any visitLocation(HybridAutomatonParser::LocationContext *ctx) override;
 		antlrcpp::Any visitActivities(HybridAutomatonParser::ActivitiesContext *ctx) override;
 		antlrcpp::Any visitInvariants(HybridAutomatonParser::InvariantsContext *ctx) override;
 		
-
+	public:
+		
+		//Inherited Functions - stays public so we can access it for testing/debugging
+		antlrcpp::Any visitModes(HybridAutomatonParser::ModesContext *ctx) override;
 };
 
 } //namespace hypro

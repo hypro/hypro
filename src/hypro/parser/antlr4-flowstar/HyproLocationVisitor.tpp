@@ -5,7 +5,7 @@ namespace hypro {
 	///////////////// Constructor & Destructor
 	
 	template<typename Number>
-	HyproLocationVisitor<Number>::HyproLocationVisitor(std::vector<std::string> varVec) :
+	HyproLocationVisitor<Number>::HyproLocationVisitor(std::vector<std::string>& varVec) :
 		vars(varVec)
 	{ }
 

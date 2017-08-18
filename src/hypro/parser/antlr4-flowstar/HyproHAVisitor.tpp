@@ -17,26 +17,28 @@ namespace hypro {
 		//1.Calls visit(ctx->vardeclaration()) to get vars vector 
 		vars = visit(ctx->vardeclaration()).antlrcpp::Any::as<std::vector<std::string>>();
 		std::cout << "---- vars is now: " << vars << std::endl;
+		std::vector<std::string>& varVec = vars;
 
 		//2.Calls visit(ctx->setting()) to get reachability settings
 		//.antlrcpp::Any::as<ReachabilitySettings<Number>>();
-		HyproSettingVisitor<Number> settingVisitor = HyproSettingVisitor<Number>(vars);
+		HyproSettingVisitor<Number> settingVisitor = HyproSettingVisitor<Number>(varVec);
 		ReachabilitySettings<Number> rSettings = settingVisitor.visit(ctx->setting());
 		std::cout << "---- rSettings is now: " << rSettings << std::endl;
 
 		//3.Calls visit(ctx->modes()) to get locSet 
-		HyproLocationVisitor<Number> locVisitor = HyproLocationVisitor<Number>(vars);
+		HyproLocationVisitor<Number> locVisitor = HyproLocationVisitor<Number>(varVec);
 		std::set<Location<Number>*> locSet = locVisitor.visit(ctx->modes()).antlrcpp::Any::as<std::set<Location<Number>*>>();
 		std::cout << "-- locVisitor visited!" << std::endl;
+		std::set<Location<Number>*>& rLocSet = locSet;
 		//std::cout << "---- locSet is now: " << locSet << std::endl;		
 
 		//4.Later calls visit to get transitions
-		HyproTransitionVisitor<Number> transVisitor = HyproTransitionVisitor<Number>(vars, locSet);
+		HyproTransitionVisitor<Number> transVisitor = HyproTransitionVisitor<Number>(varVec, rLocSet);
 		std::set<Transition<Number>*> transSet = transVisitor.visit(ctx->jumps()).antlrcpp::Any::as<std::set<Transition<Number>*>>();
 		std::cout << "-- transVisitor visited!" << std::endl;
 
 		//5.Later calls visit to get initial states
-		HyproInitialSetVisitor<Number> initVisitor = HyproInitialSetVisitor<Number>(vars, locSet);
+		HyproInitialSetVisitor<Number> initVisitor = HyproInitialSetVisitor<Number>(varVec, rLocSet);
 		locationStateMap initSet = initVisitor.visit(ctx->init()).antlrcpp::Any::as<locationStateMap>();
 		std::cout << "-- initVisitor visited!" << std::endl;
 

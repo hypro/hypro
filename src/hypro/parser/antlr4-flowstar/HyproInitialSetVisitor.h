@@ -33,22 +33,25 @@ class HyproInitialSetVisitor : HybridAutomatonBaseVisitor {
 	private:
 
 		//A vector of all variables that are defined
-		std::vector<std::string> vars;
+		std::vector<std::string>& vars;
 
 		//The set of possible locations 
-		std::set<Location<Number>*> locSet;
+		std::set<Location<Number>*>& locSet;
 
 		//Constructor & Destructor
-		HyproInitialSetVisitor(std::vector<std::string> varVec, std::set<Location<Number>*> lSet);
+		HyproInitialSetVisitor(std::vector<std::string>& varVec, std::set<Location<Number>*>& lSet);
 		~HyproInitialSetVisitor();
+
+		//Inherited 
+		antlrcpp::Any visitInitstate(HybridAutomatonParser::InitstateContext *ctx) override;
 
 	public:
 
 		using locationStateMap = std::multimap<const Location<Number>*, State<Number,ConstraintSet<Number>>, locPtrComp<Number>>;
 
-		//Inherited
+		//Inherited - stays public for testing/debugging
 		antlrcpp::Any visitInit(HybridAutomatonParser::InitContext *ctx) override;
-  		antlrcpp::Any visitInitstate(HybridAutomatonParser::InitstateContext *ctx) override;
+  		
 
 };
 

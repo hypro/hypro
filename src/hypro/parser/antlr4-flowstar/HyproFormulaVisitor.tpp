@@ -5,7 +5,7 @@ namespace hypro {
 	////////////// Constructor and Destructor
 
 	template<typename Number>
-	HyproFormulaVisitor<Number>::HyproFormulaVisitor(std::vector<std::string> varVec) :
+	HyproFormulaVisitor<Number>::HyproFormulaVisitor(std::vector<std::string>& varVec) :
 		vars(varVec)
 	{ }
 
@@ -15,19 +15,19 @@ namespace hypro {
 	///////////// Helping functions
 
 	template<typename Number>
-	Number HyproFormulaVisitor<Number>::stringToNumber(std::string string){
+	Number HyproFormulaVisitor<Number>::stringToNumber(const std::string& string) const {
 		double numInFloat = std::stod(string);
 		Number numInNumber = Number(numInFloat);
 		return numInNumber;
 	}
 
 	template<typename Number>
-	Number HyproFormulaVisitor<Number>::multTogether(HybridAutomatonParser::TermContext* ctx){
+	Number HyproFormulaVisitor<Number>::multTogether(HybridAutomatonParser::TermContext* ctx) const {
 
 		//Turn 2*3*4*5*x ... into 120*x
 		Number multed = 1;
 		if(ctx->NUMBER().size() > 1){
-			for(auto ctxNum : ctx->NUMBER()){
+			for(const auto& ctxNum : ctx->NUMBER()){
 				std::string num = ctxNum->getText();
 				Number numInNumber = stringToNumber(num);
 				multed = multed * numInNumber;
@@ -43,11 +43,11 @@ namespace hypro {
 	//For a given polynom context, return the vector of coefficients in the order of variables pushed into vars
 	//The last coefficient is a constant, so the one without a respective variable
 	template<typename Number>
-	vector_t<Number> HyproFormulaVisitor<Number>::getPolynomCoeff(HybridAutomatonParser::PolynomContext* ctx){
+	vector_t<Number> HyproFormulaVisitor<Number>::getPolynomCoeff(HybridAutomatonParser::PolynomContext* ctx) const {
 		std::cout << "-- Bin bei getPolynomCoeff!" << std::endl;		
 		vector_t<Number> coeffVec = vector_t<Number>::Zero(vars.size()+1);
 		//std::cout << "---- coeffVec inital is:\n" << coeffVec << std::endl;
-		for(auto mTerm : ctx->term()){
+		for(const auto& mTerm : ctx->term()){
 			Number multed = multTogether(mTerm);
 			//std::cout << "---- Amount of variables in this term: " << mTerm->VARIABLE().size() << std::endl;
 			if(mTerm->VARIABLE().size() == 0){
@@ -82,10 +82,10 @@ namespace hypro {
 		//0.Syntax Check - Only legal variables in polynom?
 		bool allVarsFound = true;
 		std::string undefinedVars;
-		for(auto currTerm : ctx->term()){
-			for(auto maybeVar : currTerm->VARIABLE()){
+		for(const auto& currTerm : ctx->term()){
+			for(const auto& maybeVar : currTerm->VARIABLE()){
 				bool found = false;
-				for(auto var : vars){
+				for(const auto& var : vars){
 					if(maybeVar->getText() == var){
 						found = true;
 					}
@@ -190,11 +190,13 @@ namespace hypro {
 		std::cout << "-- Bin bei visitIntervalexpr!" << std::endl;
 
 		//0.Syntax Check - Check if interval is legal
-		if(ctx->interval()->NUMBER()[0] > ctx->interval()->NUMBER()[1]){
-			std::cerr << "ERROR: Interval left side is bigger than right side!" << std::endl;
+		Number left = stringToNumber(ctx->interval()->NUMBER()[0]->getText());
+		Number right = stringToNumber(ctx->interval()->NUMBER()[1]->getText());
+		if(left > right){
+			std::cerr << "ERROR: Interval left side with " << " is bigger than right side!" << std::endl;
 		}	
 		bool found = false;
-		for(auto var : vars){
+		for(const auto& var : vars){
 			if(ctx->VARIABLE()->getText() == var){
 				found = true;
 			}
@@ -216,8 +218,8 @@ namespace hypro {
 		}
 		firstConstraint(dest) = Number(-1);
 		secondConstraint(dest) = Number(1);
-		Number firstConstant = Number(-1) * stringToNumber(ctx->interval()->NUMBER()[0]->getText());
-		Number secondConstant = stringToNumber(ctx->interval()->NUMBER()[1]->getText());
+		Number firstConstant = Number(-1) * left;
+		Number secondConstant = right;
 		auto firstPair = std::make_pair(firstConstraint, firstConstant);
 		auto secondPair = std::make_pair(secondConstraint, secondConstant);
 		constraintVec.push_back(firstPair);

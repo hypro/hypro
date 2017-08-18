@@ -46,26 +46,23 @@ class HyproFormulaVisitor : public HybridAutomatonBaseVisitor {
 	private:
 
 		//The vector of defined variables
-		std::vector<std::string> vars;
+		std::vector<std::string>& vars;
 
 		//Helping functions
-		Number stringToNumber(std::string string);
-		Number multTogether(HybridAutomatonParser::TermContext* ctx);
-		vector_t<Number> getPolynomCoeff(HybridAutomatonParser::PolynomContext* ctx);
+		Number stringToNumber(const std::string& string) const;
+		Number multTogether(HybridAutomatonParser::TermContext* ctx) const;
+		vector_t<Number> getPolynomCoeff(HybridAutomatonParser::PolynomContext* ctx) const;
 
 		//Constructor and Destructor
-		HyproFormulaVisitor(std::vector<std::string> varVec);
+		HyproFormulaVisitor(std::vector<std::string>& varVec);
 		~HyproFormulaVisitor();
 
-	public:
-
-		//Functions inherited by FormulaBaseVisitor
+		//Functions inherited by HybridAutomatonBaseVisitor
 		antlrcpp::Any visitPolynom(HybridAutomatonParser::PolynomContext *ctx) override;
 		antlrcpp::Any visitEquation(HybridAutomatonParser::EquationContext *ctx) override;
 		antlrcpp::Any visitConstraint(HybridAutomatonParser::ConstraintContext *ctx) override;
 		antlrcpp::Any visitIntervalexpr(HybridAutomatonParser::IntervalexprContext *ctx) override;
-		antlrcpp::Any visitConstrset(HybridAutomatonParser::ConstrsetContext *ctx) override;
-
+		antlrcpp::Any visitConstrset(HybridAutomatonParser::ConstrsetContext *ctx) override;		
 };
 
 } //namespace hypro
