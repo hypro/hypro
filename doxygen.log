@@ -1152,40 +1152,40 @@ citelist:22: warning: Unexpected new line character
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/State.h:35: warning: Member State(const State< Number, Representation, Rargs...> &orig) (function) of class hypro::State is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/State.h:42: warning: Member State(State< Number, Representation, Rargs...> &&orig) (function) of class hypro::State is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/State.h:49: warning: Member operator=(const State< Number, Representation, Rargs...> &orig) (function) of class hypro::State is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/State.h:57: warning: Member operator=(State< Number, Representation, Rargs...> &&orig) (function) of class hypro::State is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/State.h:65: warning: Member State(const Location< Number > *_loc) (function) of class hypro::State is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/State.h:66: warning: Member State(const Location< Number > *_loc, const Representation &_rep, const Rargs...sets, const carl::Interval< Number > &_timestamp=carl::Interval< Number >::unboundedInterval()) (function) of class hypro::State is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/State.h:81: warning: Member getLocation() const  (function) of class hypro::State is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/State.h:82: warning: Member getNumberSets() const  (function) of class hypro::State is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/State.h:84: warning: Member getSet(std::size_t i=0) const  (function) of class hypro::State is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/State.h:85: warning: Member rGetSet(std::size_t i=0) (function) of class hypro::State is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/State.h:86: warning: Member getSetType(std::size_t i=0) const  (function) of class hypro::State is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/State.h:89: warning: Member getSets() const  (function) of class hypro::State is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/State.h:90: warning: Member getTypes() const  (function) of class hypro::State is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/State.h:91: warning: Member getTimestamp() const  (function) of class hypro::State is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/State.h:93: warning: Member isEmpty() const  (function) of class hypro::State is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/State.h:94: warning: Member setLocation(const Location< Number > *l) (function) of class hypro::State is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/State.h:97: warning: Member setSet(const R &s, std::size_t i=0) (function) of class hypro::State is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/State.h:98: warning: Member setSetType(representation_name type, std::size_t I=0) (function) of class hypro::State is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/State.h:99: warning: Member setTimestamp(carl::Interval< Number > t) (function) of class hypro::State is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/State.h:100: warning: Member setSets(const std::vector< boost::variant< Representation, Rargs...>> &sets) (function) of class hypro::State is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/State.h:113: warning: Member addTimeToClocks(Number t) (function) of class hypro::State is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/State.h:114: warning: Member aggregate(const State< Number, Representation, Rargs...> &in) const  (function) of class hypro::State is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/State.h:115: warning: Member satisfies(const Condition< Number > &in) const  (function) of class hypro::State is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/State.h:116: warning: Member partiallySatisfies(const Condition< Number > &in, std::size_t I) const  (function) of class hypro::State is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/State.h:117: warning: Member applyTimeStep(const std::vector< std::pair< const matrix_t< Number > &, const vector_t< Number > & >> &flows, Number timeStepSize) const  (function) of class hypro::State is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/State.h:118: warning: Member partiallyApplyTimeStep(const ConstraintSet< Number > &flow, Number timeStepSize, std::size_t I) const  (function) of class hypro::State is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/State.h:119: warning: Member applyTransformation(const std::vector< ConstraintSet< Number >> &trafos) const  (function) of class hypro::State is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/State.h:120: warning: Member partiallyApplyTransformation(const std::vector< ConstraintSet< Number >> &trafos, const std::vector< std::size_t > &sets) const  (function) of class hypro::State is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/State.h:121: warning: Member partiallyApplyTransformation(const ConstraintSet< Number > &trafo, std::size_t I) const  (function) of class hypro::State is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/State.h:86: warning: Member operator=(State< Number, Representation, Rargs...> &&orig) (function) of class hypro::State is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/State.h:94: warning: Member State(const Location< Number > *_loc) (function) of class hypro::State is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/State.h:100: warning: Member State(const Location< Number > *_loc, const Representation &_rep, const Rargs...sets, const carl::Interval< Number > &_timestamp=carl::Interval< Number >::unboundedInterval()) (function) of class hypro::State is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/State.h:115: warning: Member getLocation() const  (function) of class hypro::State is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/State.h:116: warning: Member getNumberSets() const  (function) of class hypro::State is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/State.h:118: warning: Member getSet(std::size_t i=0) const  (function) of class hypro::State is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/State.h:119: warning: Member rGetSet(std::size_t i=0) (function) of class hypro::State is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/State.h:120: warning: Member getSetType(std::size_t i=0) const  (function) of class hypro::State is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/State.h:127: warning: Member getSets() const  (function) of class hypro::State is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/State.h:128: warning: Member getTypes() const  (function) of class hypro::State is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/State.h:129: warning: Member getTimestamp() const  (function) of class hypro::State is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/State.h:131: warning: Member isEmpty() const  (function) of class hypro::State is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/State.h:132: warning: Member setLocation(const Location< Number > *l) (function) of class hypro::State is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/State.h:135: warning: Member setSet(const R &s, std::size_t i=0) (function) of class hypro::State is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/State.h:136: warning: Member setSetType(representation_name type, std::size_t I=0) (function) of class hypro::State is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/State.h:145: warning: Member setTimestamp(carl::Interval< Number > t) (function) of class hypro::State is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/State.h:146: warning: Member setSets(const std::vector< boost::variant< Representation, Rargs...>> &sets) (function) of class hypro::State is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/State.h:165: warning: Member addTimeToClocks(Number t) (function) of class hypro::State is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/State.h:166: warning: Member aggregate(const State< Number, Representation, Rargs...> &in) const  (function) of class hypro::State is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/State.h:167: warning: Member satisfies(const Condition< Number > &in) const  (function) of class hypro::State is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/State.h:168: warning: Member partiallySatisfies(const Condition< Number > &in, std::size_t I) const  (function) of class hypro::State is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/State.h:169: warning: Member applyTimeStep(const std::vector< std::pair< const matrix_t< Number > &, const vector_t< Number > & >> &flows, Number timeStepSize) const  (function) of class hypro::State is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/State.h:170: warning: Member partiallyApplyTimeStep(const ConstraintSet< Number > &flow, Number timeStepSize, std::size_t I) const  (function) of class hypro::State is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/State.h:171: warning: Member applyTransformation(const std::vector< ConstraintSet< Number >> &trafos) const  (function) of class hypro::State is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/State.h:172: warning: Member partiallyApplyTransformation(const std::vector< ConstraintSet< Number >> &trafos, const std::vector< std::size_t > &sets) const  (function) of class hypro::State is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/State.h:173: warning: Member partiallyApplyTransformation(const ConstraintSet< Number > &trafo, std::size_t I) const  (function) of class hypro::State is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/State.h:26: warning: Member mLoc (variable) of class hypro::State is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/State.h:27: warning: Member mSets (variable) of class hypro::State is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/State.h:28: warning: Member mTypes (variable) of class hypro::State is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/State.h:29: warning: Member mTimestamp (variable) of class hypro::State is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/State.h:30: warning: Member mIsEmpty (variable) of class hypro::State is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/State.h:123: warning: Member operator<<(ostream &out, const State< Number, Representation, Rargs...> &state) (friend) of class hypro::State is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/State.h:137: warning: Member operator==(const State< Number, Representation, Rargs...> &lhs, const State< Number, Representation, Rargs...> &rhs) (friend) of class hypro::State is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/State.h:154: warning: Member operator!=(const State< Number, Representation, Rargs...> &lhs, const State< Number, Representation, Rargs...> &rhs) (friend) of class hypro::State is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/State.h:175: warning: Member operator<<(ostream &out, const State< Number, Representation, Rargs...> &state) (friend) of class hypro::State is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/State.h:189: warning: Member operator==(const State< Number, Representation, Rargs...> &lhs, const State< Number, Representation, Rargs...> &rhs) (friend) of class hypro::State is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/State.h:206: warning: Member operator!=(const State< Number, Representation, Rargs...> &lhs, const State< Number, Representation, Rargs...> &rhs) (friend) of class hypro::State is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Visitors.h:14: warning: Member operator()(const A &lhs, const B &) const  (function) of class hypro::genericUniteVisitor is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Visitors.h:20: warning: Member operator()(const A &lhs, const A &rhs) const  (function) of class hypro::genericUniteVisitor is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Visitors.h:35: warning: Member operator()(const A &lhs, const B &) const  (function) of class hypro::genericIntersectVisitor is not documented.
@@ -2888,5 +2888,5 @@ Patching output file 33/36
 Patching output file 34/36
 Patching output file 35/36
 Patching output file 36/36
-lookup cache used 5390/65536 hits=45333 misses=6114
+lookup cache used 5398/65536 hits=45436 misses=6122
 finished...
