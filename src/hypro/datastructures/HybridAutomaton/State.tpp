@@ -70,6 +70,7 @@ std::pair<bool,State<Number,Representation,Rargs...>> State<Number,Representatio
 	//DEBUG("hypro.datastructures","this rep name: " << mSetRepresentationName << " vs " << in.getSetRepresentation());
 	//assert(mSetRepresentationName == in.getSetRepresentation());
 
+	DEBUG("hypro.datastructures","This size: " << mSets.size() << ", condition size: " << in.size());
 	assert(in.size() == mSets.size());
 	State<Number,Representation,Rargs...> res(*this);
 	bool empty = false;

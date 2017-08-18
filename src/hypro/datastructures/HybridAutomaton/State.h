@@ -47,10 +47,39 @@ class State
     {}
 
     State<Number,Representation,Rargs...>& operator=(const State<Number,Representation,Rargs...>& orig) {
+    	TRACE("hypro.datastructures","Assignment operator for state with " << orig.getNumberSets() << " sets.");
+    	TRACE("hypro.datastructures","Self: mSets.size(): " << mSets.size() << " and types: " << mTypes.size());
     	mLoc = orig.getLocation();
+
     	mSets = orig.getSets();
     	mTypes = orig.getTypes();
+
+    	//if(!mSets.empty()){
+    	//	mSets.clear();
+    	//	mTypes.clear();
+    	//}
+//
+//    	//for(std::size_t i = 0; i < orig.getNumberSets(); ++i) {
+//    	//	repVariant tmp = orig.getSet(i);
+//    	//	mSets.push_back(tmp);
+//    	//	mTypes.push_back(orig.getSetType(i));
+//    	//	//if(i < mSets.size()){
+//    	//	//	mSets[i] = orig.getSet(i);
+//    	//	//	mTypes[i] = orig.getSetType(i);
+//    	//	//} else {
+//    	//	//	mSets.push_back(orig.getSet(i));
+//    	//	//	mTypes.push_back(orig.getSetType(i));
+//    	//	//}
+//    	//}
+//    	////if(orig.getNumberSets() < mSets.size()){
+//    	////	for(std::size_t i = orig.getNumberSets(); i < tmp; ++i){
+//    	////		mSets.erase()
+//    	////	}
+    	////}
+    	assert(mSets.size() == mTypes.size());
+    	assert(mSets.size() == orig.getNumberSets());
     	mTimestamp = orig.getTimestamp();
+    	TRACE("hypro.datastructures","Assignment operator created state with " << mSets.size() << " sets.");
     	return *this;
     }
 
@@ -62,7 +91,12 @@ class State
     	return *this;
     }
 
-    State(const Location<Number>* _loc) : mLoc(_loc) { assert(mLoc != nullptr); }
+    State(const Location<Number>* _loc)
+    	: mLoc(_loc),
+    	mSets(),
+    	mTypes(),
+    	mTimestamp(carl::Interval<Number>::unboundedInterval())
+    { assert(mLoc != nullptr); }
     State(const Location<Number>* _loc,
     		const Representation& _rep,
     		const Rargs... sets,
@@ -83,10 +117,14 @@ class State
 
     const boost::variant<Representation,Rargs...>& getSet(std::size_t i = 0) const;
     boost::variant<Representation,Rargs...>& rGetSet(std::size_t i = 0);
-    representation_name getSetType(std::size_t i = 0) const { return mTypes.at(i); }
+    representation_name getSetType(std::size_t i = 0) const {
+    	TRACE("hypro.datastructures","Attempt to get set type at pos " << i << ", mTypes.size() = " << mTypes.size());
+    	assert(mSets.size() == mTypes.size());
+    	return mTypes.at(i);
+    }
 
     //Representation& rGetSet() { return mSet; }
-    const std::vector<boost::variant<Representation,Rargs...>>& getSets() const { return mSets; }
+    const std::vector<repVariant>& getSets() const { return mSets; }
     const std::vector<representation_name>& getTypes() const { return mTypes; }
     const carl::Interval<Number>& getTimestamp() const { return mTimestamp; }
 
@@ -95,7 +133,15 @@ class State
 
     template<typename R>
     void setSet(const R& s, std::size_t i = 0);
-    void setSetType(representation_name type, std::size_t I = 0) { assert(mSets.size() < I && mTypes.size() < I);  mTypes[I] = type; }
+    void setSetType(representation_name type, std::size_t I = 0) {
+    	TRACE("hypro.datastructures","Attempt to set set type at pos " << I << ", mSets.size() = " << mSets.size());
+    	assert(mSets.size() == mTypes.size());
+		while(I >= mSets.size()) {
+			mSets.push_back(ConstraintSet<Number>()); // some default set.
+			mTypes.push_back(representation_name::constraint_set); // some default set type.
+		}
+		mTypes[I] = type;
+	}
     void setTimestamp(carl::Interval<Number> t) { mTimestamp = t; }
     void setSets(const std::vector<boost::variant<Representation,Rargs...>>& sets) { mSets = sets; }
     /**
@@ -106,8 +152,14 @@ class State
 	 * @param[in]  I     The position in the sets vector.
 	 */
 	void setSetDirect(const repVariant& in, std::size_t I = 0) {
-		assert(I < mSets.size());
+		TRACE("hypro.datastructures","Attempt to set set direct at pos " << I << ", mSets.size() = " << mSets.size());
+		assert(mSets.size() == mTypes.size());
+		while(I >= mSets.size()) {
+			mSets.push_back(ConstraintSet<Number>()); // some default set.
+			mTypes.push_back(representation_name::constraint_set); // some default set type.
+		}
 		mSets[I] = in;
+
 	}
 
     void addTimeToClocks(Number t);
@@ -127,7 +179,7 @@ class State
     	out << "Set: " << boost::apply_visitor(genericConversionVisitor<repVariant,Number>(representation_name::box), state.getSet()) << std::endl;
     	if(state.getNumberSets() > 1) {
     		out << "Other sets: " << std::endl;
-	    	for(std::size_t i = 0; i < sizeof...(Rargs); ++i)
+	    	for(std::size_t i = 1; i <= sizeof...(Rargs); ++i)
 	    		out << state.getSet(i) << std::endl;
     	}
 		#endif
