@@ -11,6 +11,7 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
 		#endif
 		OptimizerTest.cpp
 		#ParserTest.cpp
+		PlotterTest.cpp
 		UtilityTest.cpp
 		#AntlrParserTest.cpp				#new for antlr
 	)
