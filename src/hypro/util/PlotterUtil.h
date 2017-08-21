@@ -25,55 +25,73 @@ namespace hypro {
 
 	std::vector<double> RGBtoHSV(const std::vector<std::size_t>& color) {
 		assert(color.size() == 3);
-        std::size_t min = *std::min_element(color.begin(), color.end());
-        std::size_t max = *std::max_element(color.begin(), color.end());
+		// scale domain from [0,255] to [0,1]
+		std::vector<double> scaled;
+		for(auto item : color){
+			scaled.push_back(item/255.0);
+		}
 
-        double v = max/255;
+        auto min = std::min_element(scaled.begin(), scaled.end());
+        auto max = std::max_element(scaled.begin(), scaled.end());
+
+        double v = (*max);
         double s = 0;
         double h = 0;
-        double delta = (max - min)/255;
-        if( max != 0 )
-            s = delta / max;        // s
+        double delta = (*max - *min);
+        if( *max != 0 )
+            s = delta / *max ;        // s
         else {
             //// r = g = b = 0        // s = 0, v is undefined
             s = 0;
             h = -1;
-            return std::vector<int>({h,s,0});
+            return std::vector<double>({h,s,0});
         }
-        if( color[0] == max )
-            h = ( color[1] - color[2] ) / delta;      // between yellow & magenta
-        else if( color[1] == max )
-            h = 2 + ( color[2] - color[0] ) / delta;  // between cyan & yellow
-        else
-            h = 4 + ( color[0] - color[1] ) / delta;  // between magenta & cyan
-        h *= 60;                // degrees
+        if( 0 == max - scaled.begin() ) // the max element is at position 0
+            h = ( scaled[1] - scaled[2] ) / delta;      // between yellow & magenta
+        else if( 1 == max - scaled.begin() ) // the max element is at position 1
+            h = 2 + ( scaled[2] - scaled[0] ) / delta;  // between cyan & yellow
+        else // the max element is at position 2
+            h = 4 + ( scaled[0] - scaled[1] ) / delta;  // between magenta & cyan
+
+        h *= 60;                // degrees -> domain of h is [0,360]
         if( h < 0 )
             h += 360;
         if ( std::isnan(h) )
             h = 0;
         std::cout << "H: " << h << ", S: " << s << ", V: " << v << std::endl;
-        return std::vector<int>({h,s,v});
+        assert(0 <= h && h <= 360);
+        assert(0 <= s && s <= 1);
+        assert(0 <= v && v <= 1);
+        return std::vector<double>({h,s,v});
     }
 
-	std::vector<std::size_t> HSVtoRGB(const std::vector<int>& color) {
-        std::size_t r = 0;
-        std::size_t g = 0;
-        std::size_t b = 0;
-        int h= color[0];
-        int s= color[1];
-        int v= color[2];
+	std::vector<std::size_t> HSVtoRGB(const std::vector<double>& color) {
+        double r = 0;
+        double g = 0;
+        double b = 0;
+        double h= color[0];
+        double s= color[1];
+        double v= color[2];
+        assert(0 <= h && h <= 360);
+        assert(0 <= s && s <= 1);
+        assert(0 <= v && v <= 1);
+
         int i = 0;
         if(s == 0 ) {
             // achromatic (grey)
-            r = g = b = v;
-            return std::vector<std::size_t>({r,g,b});
+            // r,g,b in [0,1] -> scale
+        	r = g = b = v;
+        	std::size_t resR = std::size_t(r*255.0);
+        	std::size_t resG = std::size_t(g*255.0);
+        	std::size_t resB = std::size_t(b*255.0);
+            return std::vector<std::size_t>({resR,resG,resB});
         }
-        h /= 60;            // sector 0 to 5
+        h /= 60.0;            // sector 0 to 5
         i = std::floor( h );
-        int f = h - i;          // factorial part of h
-        int p = v * ( 1 - s );
-        int q = v * ( 1 - s * f );
-        int t = v * ( 1 - s * ( 1 - f ) );
+        double f = h - i;          // factorial part of h
+        double p = v * ( 1 - s );
+        double q = v * ( 1 - s * f );
+        double t = v * ( 1 - s * ( 1 - f ) );
         switch( i ) {
             case 0:
                 r = v;
@@ -106,11 +124,15 @@ namespace hypro {
                 b = q;
                 break;
         }
-        return std::vector<std::size_t>({r,g,b});
+        // r,g,b in [0,1] -> scale
+        std::size_t resR = std::size_t(r*255.0);
+        std::size_t resG = std::size_t(g*255.0);
+        std::size_t resB = std::size_t(b*255.0);
+        return std::vector<std::size_t>({resR,resG,resB});
     }
 
     std::vector<std::size_t> adjustSaturation(const std::vector<std::size_t>& rgbColor, double factor) {
-		std::vector<int> hsvColor = RGBtoHSV(rgbColor);
+		std::vector<double> hsvColor = RGBtoHSV(rgbColor);
 		hsvColor[1] *= factor;
 		return HSVtoRGB(hsvColor);
 	}
