@@ -35,12 +35,17 @@ public:
 	template<typename Representation>
 	State<Number,Representation> applyReset(const State<Number,Representation>& inState) const;
 
+#ifdef HYPRO_LOGGING
     friend std::ostream& operator<<(std::ostream& ostr, const Reset<Number>& a)
+#else
+    friend std::ostream& operator<<(std::ostream& ostr, const Reset<Number>&)
+#endif
     {
 #ifdef HYPRO_LOGGING
-        //ostr << "Continuous transformation: " << a.continuousMat << " and const " << a.continuousVec;
-        //ostr << "Discrete transformation: " << a.discreteMat << " and const " << a.discreteVec;
-        //ostr << "Clock transformation: " << a.clockMat << " and const " << a.clockVec;
+    	ostr << "Resets: " << std::endl;
+    	for(const auto& r : a.getResetTransformations()) {
+    		ostr << r;
+    	}
 #endif
         return ostr;
     }

@@ -53,29 +53,6 @@ class State
 
     	mSets = orig.getSets();
     	mTypes = orig.getTypes();
-
-    	//if(!mSets.empty()){
-    	//	mSets.clear();
-    	//	mTypes.clear();
-    	//}
-//
-//    	//for(std::size_t i = 0; i < orig.getNumberSets(); ++i) {
-//    	//	repVariant tmp = orig.getSet(i);
-//    	//	mSets.push_back(tmp);
-//    	//	mTypes.push_back(orig.getSetType(i));
-//    	//	//if(i < mSets.size()){
-//    	//	//	mSets[i] = orig.getSet(i);
-//    	//	//	mTypes[i] = orig.getSetType(i);
-//    	//	//} else {
-//    	//	//	mSets.push_back(orig.getSet(i));
-//    	//	//	mTypes.push_back(orig.getSetType(i));
-//    	//	//}
-//    	//}
-//    	////if(orig.getNumberSets() < mSets.size()){
-//    	////	for(std::size_t i = orig.getNumberSets(); i < tmp; ++i){
-//    	////		mSets.erase()
-//    	////	}
-    	////}
     	assert(mSets.size() == mTypes.size());
     	assert(mSets.size() == orig.getNumberSets());
     	mTimestamp = orig.getTimestamp();
@@ -110,6 +87,8 @@ class State
     	// parameter pack expansion
     	int dummy[sizeof...(Rargs)] = { (mSets.push_back(sets), 0)... };
     	int dummy2[sizeof...(Rargs)] = { (mTypes.push_back(sets.type()), 0)... };
+    	(void*) dummy;
+    	(void*) dummy2;
     }
 
     const Location<Number>* getLocation() const { assert(mLoc != nullptr); return mLoc; }
