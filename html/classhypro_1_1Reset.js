@@ -18,7 +18,7 @@ var classhypro_1_1Reset =
     [ "setVector", "classhypro_1_1Reset.html#ac9c9196595d85c87c01526eb860e27d9", null ],
     [ "size", "classhypro_1_1Reset.html#ab796685f61aa2e21a89ac4ca6a1e4207", null ],
     [ "operator!=", "classhypro_1_1Reset.html#a519225333c976d3c64fd91cda40e6bfe", null ],
-    [ "operator<<", "classhypro_1_1Reset.html#a115a946ae646aeaa0612a3ae7c6e4f85", null ],
+    [ "operator<<", "classhypro_1_1Reset.html#a77bc6233604980910f6162442605c7e0", null ],
     [ "operator==", "classhypro_1_1Reset.html#a710d843b4628d1ec4605793b6d0bce4c", null ],
     [ "mResets", "classhypro_1_1Reset.html#aa143735f3c77411ffc3a5b5a9ee0a208", null ]
 ];

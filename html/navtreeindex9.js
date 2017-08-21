@@ -1,5 +1,6 @@
 var NAVTREEINDEX9 =
 {
+"structhypro_1_1sumContent.html#ab6bd8dceed2382bd94da89e2c5fd7d8d":[9,0,1,67,4],
 "structhypro_1_1sumContent.html#ab943d1013454c465304ecd852a7e957f":[9,0,1,67,0],
 "structhypro_1_1sumContent.html#ad082008fc6be546aeb826d0f83031105":[9,0,1,67,3],
 "structhypro_1_1trafoContent.html":[9,0,1,68],
@@ -46,7 +47,7 @@ var NAVTREEINDEX9 =
 "structstd_1_1hash_3_01std_1_1pair_3_01first_00_01second_01_4_01_4.html":[9,0,6,1],
 "structstd_1_1hash_3_01std_1_1pair_3_01first_00_01second_01_4_01_4.html#ae62947175df518ad6f395e8dec0576ef":[9,0,6,1,0],
 "symbols_8h_source.html":[10,0,1,0,2,0,7],
-"templateDirections_8h_source.html":[10,0,1,0,4,11],
+"templateDirections_8h_source.html":[10,0,1,0,4,12],
 "types_8h_source.html":[10,0,1,0,7],
 "util_2convenienceOperators_8h_source.html":[10,0,1,0,4,6],
 "vertexEnumeration_8h.html":[10,0,1,0,0,0,3],
