@@ -122,7 +122,7 @@ class State
 		mTypes[I] = type;
 	}
     void setTimestamp(carl::Interval<Number> t) { mTimestamp = t; }
-    void setSets(const std::vector<boost::variant<Representation,Rargs...>>& sets) { mSets = sets; }
+    //void setSets(const std::vector<boost::variant<Representation,Rargs...>>& sets) { mSets = sets; }
     /**
 	 * @brief      Sets the set.
 	 * @details    Does not update the type for the respective position - can be used if type does not change to avoid unpacking.
@@ -155,7 +155,10 @@ class State
 		#ifdef HYPRO_LOGGING
     	out << "location: " << state.getLocation()->getName() << " at timestamp " << state.getTimestamp() << std::endl;
     	//out << "Set: " << convert<Number,double>(Converter<Number>::toBox(state.getSet())) << std::endl;
-    	out << "Set: " << boost::apply_visitor(genericConversionVisitor<repVariant,Number>(representation_name::box), state.getSet()) << std::endl;
+    	//out << "Set: " << boost::apply_visitor(genericConversionVisitor<repVariant,Number>(representation_name::box), state.getSet()) << std::endl;
+    	if(state.getNumberSets() > 0) {
+    	out << "Set: " << state.getSet(0) << std::endl;
+    	}
     	if(state.getNumberSets() > 1) {
     		out << "Other sets: " << std::endl;
 	    	for(std::size_t i = 1; i <= sizeof...(Rargs); ++i)

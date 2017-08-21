@@ -83,7 +83,7 @@ class AntlrParserTest : public ::testing::Test {
 TYPED_TEST(AntlrParserTest, JustTesting){
 
 	//std::string path("../../../../src/test/core/examples/example_init_parsing.txt");
-	std::string path("../../../../examples/input/bouncing_ball.model");
+	std::string path("../examples/input/bouncing_ball.model");
 
 	//Tell current path - /home/ptse/hiwi/hypro/build/src/test/core
 	this->cwd();
@@ -140,7 +140,7 @@ TYPED_TEST(AntlrParserTest, JustTesting){
 /*
 TYPED_TEST(AntlrParserTest, EmptyFile){
 
-	tree::ParseTree* tree = this->generateParseTree("../../../../src/test/core/examples/example_empty_file.txt");	
+	tree::ParseTree* tree = this->generateParseTree("../../../../src/test/core/examples/example_empty_file.txt");
 	this->visitor.visit(tree);
 	SUCCEED();
 

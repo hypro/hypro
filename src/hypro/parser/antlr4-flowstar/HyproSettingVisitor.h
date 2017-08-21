@@ -15,7 +15,7 @@
 #include "HybridAutomatonParser.h"
 #include "HybridAutomatonBaseVisitor.h"
 #include "HyproFormulaVisitor.h"
-#include "../../algorithms/reachability/Settings.h"
+#include "../../datastructures/HybridAutomaton/Settings.h"
 #include <math.h>
 
 using namespace antlr4;
@@ -48,7 +48,7 @@ class HyproSettingVisitor : HybridAutomatonBaseVisitor {
   		antlrcpp::Any visitPlotsetting(HybridAutomatonParser::PlotsettingContext *ctx) override;
   		antlrcpp::Any visitFilename(HybridAutomatonParser::FilenameContext *ctx) override;
   		antlrcpp::Any visitMaxjumps(HybridAutomatonParser::MaxjumpsContext *ctx) override;
-/*  		
+/*
   		antlrcpp::Any visitPrint(HybridAutomatonParser::PrintContext *ctx) override;
   		antlrcpp::Any visitRemainder(HybridAutomatonParser::RemainderContext *ctx) override;
   		antlrcpp::Any visitIdentity(HybridAutomatonParser::IdentityContext *ctx) override;

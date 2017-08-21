@@ -62,6 +62,12 @@ class BoxT : public GeometricObject<Number, BoxT<Number,Converter>> {
 	 */
 	BoxT( const BoxT& orig ) = default;
 
+	/**
+	 * @brief      Move constructor.
+	 * @param[in]  orig  The original.
+	 */
+	BoxT( BoxT&& orig ) = default;
+
 	 /**
 	  * @brief      Box constructor from one interval, results in a one-dimensional box.
 	  * @param[in]  val   An interval.

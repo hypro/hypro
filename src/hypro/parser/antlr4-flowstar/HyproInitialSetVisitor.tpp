@@ -1,10 +1,10 @@
 #include "HyproInitialSetVisitor.h"
 
 namespace hypro {
-	
+
 	//Constructor & Destructor
 	template<typename Number>
-	HyproInitialSetVisitor<Number>::HyproInitialSetVisitor(std::vector<std::string> varVec, std::set<Location<Number>*> lSet) : 
+	HyproInitialSetVisitor<Number>::HyproInitialSetVisitor(std::vector<std::string> varVec, std::set<Location<Number>*> lSet) :
 		vars(varVec),
 		locSet(lSet)
 	{ }
@@ -40,11 +40,12 @@ namespace hypro {
 		std::cout << "---- state deklariert" << std::endl;
 		state.setLocation(initialLoc);
 		std::cout << "---- location gesettet" << std::endl;
-		std::vector<boost::variant<ConstraintSet<Number>>> mSet;
+		//std::vector<boost::variant<ConstraintSet<Number>>> mSet;
 		std::cout << "---- Made a vecter of sets" << std::endl;
-		mSet.push_back(conSet);
+		//mSet.push_back(conSet);
 		std::cout << "---- pushed conSet inside" << std::endl;
-		state.setSets(mSet);	
+		state.setSet(conSet,0);
+		assert(state.getNumberSets() == 1);
 		std::cout << "---- State gebaut!" << std::endl;
 		std::cout << state << std::endl;
 		locationStateMap initialState;
@@ -59,14 +60,14 @@ namespace hypro {
 
   		//0.Check if there is a constraint for every stated variable
   		//We get the the assigned text via the start and stop indices given by ctx.
-  		//In the text we count the occurrences of every variable name and check if every variable occurs 
+  		//In the text we count the occurrences of every variable name and check if every variable occurs
   		//at least one time.
   		std::vector<unsigned> varCount;
   		for(unsigned i=0; i < vars.size(); i++){
   			varCount.push_back(0);
   		}
-  		int startIndex = ctx->start->getStartIndex();
-  		int endIndex = ctx->stop->getStopIndex();
+  		std::size_t startIndex = ctx->start->getStartIndex();
+  		std::size_t endIndex = ctx->stop->getStopIndex();
   		misc::Interval inter(startIndex, endIndex);
   		CharStream* input = ctx->start->getInputStream();
   		std::string text = input->getText(inter);

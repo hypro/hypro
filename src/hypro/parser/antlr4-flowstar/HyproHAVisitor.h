@@ -22,7 +22,7 @@
 #include "HyproInitialSetVisitor.h"
 #include "HyproSettingVisitor.h"
 #include "../../datastructures/HybridAutomaton/HybridAutomaton.h"
-#include "../../algorithms/reachability/Settings.h"
+#include "../../datastructures/HybridAutomaton/Settings.h"
 
 using namespace antlr4;
 
