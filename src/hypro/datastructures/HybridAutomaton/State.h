@@ -87,8 +87,8 @@ class State
     	// parameter pack expansion
     	int dummy[sizeof...(Rargs)] = { (mSets.push_back(sets), 0)... };
     	int dummy2[sizeof...(Rargs)] = { (mTypes.push_back(sets.type()), 0)... };
-    	(void*) dummy;
-    	(void*) dummy2;
+    	(void) dummy;
+    	(void) dummy2;
     }
 
     const Location<Number>* getLocation() const { assert(mLoc != nullptr); return mLoc; }
