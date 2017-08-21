@@ -70,7 +70,7 @@ class Transition
     void setTriggerTime(Number t) { mTriggerTime = t; }
 
     friend std::ostream& operator<<(std::ostream& ostr, const Transition<Number>& t) {
-		#ifdef HYPRO_USE_LOGGING
+		#ifdef HYPRO_LOGGING
 	    ostr << "transition(" << std::endl
 	          << "\t Source = " << t.getSource()->getId() << std::endl
 	          << "\t Target = " << t.getTarget()->getId() << std::endl

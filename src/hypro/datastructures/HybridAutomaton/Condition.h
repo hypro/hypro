@@ -54,7 +54,7 @@ public:
 	}
 
 	friend std::ostream& operator<<(std::ostream& out, const Condition& in) {
-#ifdef HYDRA_USE_LOGGING
+#ifdef HYPRO_LOGGING
 		std::size_t i = 0;
 		for(const auto& pair : in.constraints()) {
 			out << "Constraint " << i << ": " << pair.matrix() << " constants: " << pair.vector() << std::endl;

@@ -30,7 +30,7 @@ namespace hypro {
 	template<typename Number, typename Converter>
 	BoxT<Number,Converter>::BoxT( const matrix_t<Number>& _constraints, const vector_t<Number>& _constants )
 	{
-		// std::cout << __func__ << ": matrix: " << _constraints << ", vector: " << _constants << std::endl;
+		TRACE("hypro.representations","matrix: " << _constraints << ", vector: " << _constants);
 		// calculate all possible Halfspace intersections -> TODO: dPermutation can
 		// be improved.
 		assert(_constraints.rows() == _constants.rows());

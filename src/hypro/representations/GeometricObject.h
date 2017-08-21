@@ -154,6 +154,15 @@ public:
 	 */
 	virtual DerivedShape unite( const DerivedShape& rhs ) const = 0;
 
+	/**
+	 * @brief      Outstream operator.
+	 * @param      out   The outstream.
+	 * @param[in]  obj   The object.
+	 * @return     Reference to the passed outstream.
+	 */
+	friend std::ostream& operator<<(std::ostream& out, const GeometricObject<Number,DerivedShape>& in){
+		return out << static_cast<DerivedShape>(in);
+	}
 };
 
 /** @} */

@@ -31,7 +31,7 @@
 
 #include "config.h"
 #include "common.h"
-#include "algorithms/reachability/Settings.h"
+#include "datastructures/HybridAutomaton/Settings.h"
 #include "datastructures/HybridAutomaton/State.h"
 #include "datastructures/HybridAutomaton/LocationManager.h"
 #include "datastructures/HybridAutomaton/HybridAutomaton.h"
@@ -90,57 +90,61 @@ struct flowstarParser : qi::grammar<Iterator, Skipper>
 	void insertContinuousSymbols(const std::vector<std::string>& _in) {
 		for(const auto& varName : _in ) {
 			carl::Variable tmp = mVariablePool.newCarlVariable(varName);
-			//std::cout << "Mapped var " << varName << " to dimension " << mVariablePool.id(tmp) << std::endl;
+			TRACE("hypro.parser","Mapped var " << varName << " to dimension " << mVariablePool.id(tmp));
 			mVariableSymbolTable.add(varName, mVariablePool.id(tmp));
 			mVariableIds.push_back(mVariablePool.id(tmp));
 			++mDimensionLimit;
 			++mDiscreteDimensionLimit;
-			//std::cout << "New continuous dimension: " << mDimensionLimit << std::endl;
+			TRACE("hypro.parser","New continuous dimension: " << mDimensionLimit);
 		}
 	}
 
 	void insertDiscreteSymbols(const std::vector<std::string>& _in) {
 		for(const auto& varName : _in ) {
 			carl::Variable tmp = mVariablePool.newCarlVariable(varName);
-			//std::cout << "Mapped var " << varName << " to dimension " << mVariablePool.id(tmp) << std::endl;
+			TRACE("hypro.parser","Mapped var " << varName << " to dimension " << mVariablePool.id(tmp));
 			mDiscreteVariableSymbolTable.add(varName, mVariablePool.id(tmp));
 			mDiscreteVariableIds.push_back(mVariablePool.id(tmp));
 			++mDiscreteDimensionLimit;
-			//std::cout << "New discrete dimension: " << mDiscreteDimensionLimit << std::endl;
+			TRACE("hypro.parser","New discrete dimension: " << mDiscreteDimensionLimit);
 		}
 	}
 
 	void addContinuousState(const std::vector<matrix_t<Number>>& _constraint, unsigned id, std::vector<State<Number,ConstraintSet<Number>>>& _states) {
+		TRACE("hypro.parser","Add new continuous state.");
 		if(_constraint.size() > 0) {
-			//std::cout << "Add continuous state for location " << id << std::endl;
+			TRACE("hypro.parser","Add continuous state for location " << id);
 			bool found = false;
 			// due to the creation of initial states, which uses this function as well and the occurrence of duplicates in the initial states, we need the last instance of a matching state.
 			for(auto stateIt = _states.rbegin(); stateIt != _states.rend(); ++stateIt) {
 				if(stateIt->getLocation()->getId() == id){
-					//std::cout << "stateIt->already exists." << std::endl;
+					TRACE("hypro.parser","stateIt->already exists.");
 					found = true;
-					unsigned constraintsNum = boost::get<ConstraintSet<Number>>(stateIt->getSet()).matrix().rows();
+					unsigned constraintsNum = 0;
+					if(stateIt->getNumberSets() > 0) {
+						constraintsNum = boost::get<ConstraintSet<Number>>(stateIt->getSet()).matrix().rows();
+						TRACE("hypro.parser","current constraints: " << boost::get<ConstraintSet<Number>>(stateIt->getSet()).matrix());
+					}
 					unsigned dimension = constraintsNum > 0 ? boost::get<ConstraintSet<Number>>(stateIt->getSet()).matrix().cols() : (_constraint.begin()->cols())-1;
-					//std::cout << "current constraints: " << boost::get<ConstraintSet<Number>>(stateIt->getSet()).first << std::endl;
-					ConstraintSet<Number> set = boost::get<ConstraintSet<Number>>(stateIt->getSet());
-					//std::cout << "Resize to " << constraintsNum+_constraint.size() << " x " << dimension << std::endl;
+					ConstraintSet<Number> set = constraintsNum > 0 ? boost::get<ConstraintSet<Number>>(stateIt->getSet()) : ConstraintSet<Number>();
+					TRACE("hypro.parser","Resize to " << constraintsNum+_constraint.size() << " x " << dimension);
 					set.rMatrix().conservativeResize(constraintsNum+_constraint.size(), dimension);
 					set.rVector().conservativeResize(constraintsNum+_constraint.size());
-					//std::cout << "State already existing with " << constraintsNum << " rows." << std::endl;
+					TRACE("hypro.parser","State already existing with " << constraintsNum << " rows.");
 					for(const auto& row : _constraint) {
 						assert(row.rows() == 1);
 						assert(row.cols() > 0);
-						//std::cout << "add row " << constraintsNum;
-						//std::cout << "row properties: " << row.rows() << " , " << row.cols() << std::endl;
-						//std::cout << "set properties: " << set.first.rows() << " , " << set.first.cols() << std::endl;
+						TRACE("hypro.parser","add row " << constraintsNum);
+						TRACE("hypro.parser","row properties: " << row.rows() << " , " << row.cols());
+						TRACE("hypro.parser","set properties: " << set.matrix().rows() << " , " << set.matrix().cols());
 						set.rMatrix().row(constraintsNum) = row.block(0,0,1,row.cols()-1);
-						//std::cout << " " << convert<Number,double>(set.first.row(constraintsNum)) << " <= ";
+						//TRACE("hypro.parser"," " << set.matrix().row(constraintsNum) << " <= " );
 						set.rVector()(constraintsNum) = -row(0,row.cols()-1);
-						//std::cout << set.second(constraintsNum) << std::endl;
+						//TRACE("hypro.parser",set.vector()(constraintsNum));
 						++constraintsNum;
 					}
 					stateIt->setSet(set);
-					//std::cout << "New constraints: " << boost::get<ConstraintSet<Number>>(stateIt->getSet()).first << std::endl;
+					TRACE("hypro.parser","New constraints: " << boost::get<ConstraintSet<Number>>(stateIt->getSet()).matrix());
 					break;
 				}
 			}
@@ -148,14 +152,14 @@ struct flowstarParser : qi::grammar<Iterator, Skipper>
 				State<Number,ConstraintSet<Number>> s(mLocationManager.location(id));
 				ConstraintSet<Number> set(matrix_t<Number>(_constraint.size(), _constraint.begin()->cols()-1), vector_t<Number>(_constraint.size()));
 				unsigned constraintsNum = 0;
-				//std::cout << "State newly created with " << _constraint.size() << " rows." << std::endl;
+				TRACE("hypro.parser","State newly created with " << _constraint.size() << " rows.");
 				for(const auto& row : _constraint) {
 					assert(row.rows() == 1);
-					//std::cout << "add row " << constraintsNum;
+					TRACE("hypro.parser","add row " << constraintsNum);
 					set.rMatrix().row(constraintsNum) = row.block(0,0,1,row.cols()-1);
-					//std::cout << " " << set.first.row(constraintsNum) << " <= ";
+					//TRACE("hypro.parser"," " << set.matrix().row(constraintsNum) << " <= ");
 					set.rVector()(constraintsNum) = -row(0,row.cols()-1);
-					//std::cout << set.second(constraintsNum) << std::endl;
+					//TRACE("hypro.parser",set.vector()(constraintsNum));
 					++constraintsNum;
 				}
 				s.setSet(set);
@@ -165,7 +169,7 @@ struct flowstarParser : qi::grammar<Iterator, Skipper>
 	}
 
 	void addDiscreteState(const std::pair<unsigned, carl::Interval<Number>>& _initPair, unsigned id, std::vector<State<Number,ConstraintSet<Number>>>& _states) {
-		//std::cout << "Add discrete state for location " << id << std::endl;
+		TRACE("hypro.parser","Add discrete state for location " << id);
 		bool found = false;
 		// due to the creation of initial states, which uses this function as well and the occurrence of duplicates in the initial states, we need the last instance of a matching state.
 		for(auto stateIt = _states.rbegin(); stateIt != _states.rend(); ++stateIt) {
@@ -201,7 +205,9 @@ struct flowstarParser : qi::grammar<Iterator, Skipper>
 	}
 
 	unsigned addInitState(unsigned _id, std::vector<State<Number,ConstraintSet<Number>>>& _states) {
+		TRACE("hypro.parser","Add initial state for location " << _id);
 		State<Number,ConstraintSet<Number>> s(mLocationManager.location(_id));
+		s.setTimestamp(carl::Interval<Number>(0));
 		_states.emplace_back(s);
 		return _id;
 	}
@@ -212,8 +218,8 @@ struct flowstarParser : qi::grammar<Iterator, Skipper>
 
 	void insertModes(const std::vector<std::pair<std::string, Location<Number>*>>& _in) {
 		for(const auto& modePair : _in) {
-			//std::cout << "Found mode " << modePair.first << " mapped to " << modePair.second->getId() << std::endl;
-			//std::cout << "Mode: " << *modePair.second << std::endl;
+			TRACE("hypro.parser","Found mode " << modePair.first << " mapped to " << modePair.second->getId());
+			TRACE("hypro.parser","Mode: " << *modePair.second);
 
 			if(mModes.find(modePair.first) == nullptr) {
 				mModes.add(modePair.first, modePair.second->getId());

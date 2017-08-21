@@ -74,7 +74,7 @@ namespace parser {
 		}
 
 		std::pair<unsigned, unsigned> createEdge(unsigned start, unsigned target) {
-			//std::cout << "Found transition from " << start << " to " << target << std::endl;
+			TRACE("hypro.parser","Found transition from " << start << " to " << target );
 			return std::make_pair(start, target);
 		}
 
@@ -124,20 +124,22 @@ namespace parser {
 				// handle discrete guards
 				//g.discreteOffset = _dim;
 
-				matrix_t<Number> guardMatrix = matrix_t<Number>::Zero(mDiscreteGuards.size(),_discreteDim-_dim+1);
-				vector_t<Number> guardVector = vector_t<Number>::Zero(mDiscreteGuards.size());
-				unsigned row = 0;
-				for(const auto& guardPair : mDiscreteGuards) {
-					matrix_t<Number> reducedGuard = matrix_t<Number>(1,_discreteDim-_dim+1);
-					reducedGuard = guardPair.second.block(0,_dim,1,_discreteDim-_dim+1);
-					guardMatrix.row(row) = reducedGuard.block(0,0,1,reducedGuard.cols()-1);
-					guardVector(row) = reducedGuard(0,reducedGuard.cols()-1);
+				if(mDiscreteGuards.size() > 0) {
+					matrix_t<Number> guardMatrix = matrix_t<Number>::Zero(mDiscreteGuards.size(),_discreteDim-_dim+1);
+					vector_t<Number> guardVector = vector_t<Number>::Zero(mDiscreteGuards.size());
+					unsigned row = 0;
+					for(const auto& guardPair : mDiscreteGuards) {
+						matrix_t<Number> reducedGuard = matrix_t<Number>(1,_discreteDim-_dim+1);
+						reducedGuard = guardPair.second.block(0,_dim,1,_discreteDim-_dim+1);
+						guardMatrix.row(row) = reducedGuard.block(0,0,1,reducedGuard.cols()-1);
+						guardVector(row) = reducedGuard(0,reducedGuard.cols()-1);
 
-					++row;
-					//g.discreteGuard.emplace_back(VariablePool::getInstance().carlVarByIndex(guardPair.first), reducedGuard);
+						++row;
+						//g.discreteGuard.emplace_back(VariablePool::getInstance().carlVarByIndex(guardPair.first), reducedGuard);
+					}
+					g.setMatrix(guardMatrix,1);
+					g.setVector(guardVector,1);
 				}
-				g.setMatrix(guardMatrix,1);
-				g.setVector(guardVector,1);
 
 				res->setGuard(g);
 			}
@@ -154,18 +156,20 @@ namespace parser {
 				}
 				r.setMatrix(matr);
 				r.setVector(vec);
-				matrix_t<Number> discreteMat = matrix_t<Number>::Identity(_discreteDim-_dim,_discreteDim-_dim);
-				vector_t<Number> discreteVec = vector_t<Number>::Zero(_discreteDim-_dim);
-				//std::cout << "Identity reset: " << discreteMat << std::endl;
-				for(const auto& resetPair : mDiscreteResets){
-					//std::cout << resetPair.second << " should fit in " << discreteMat << std::endl;
-					//std::cout << "Block start 0," << _dim << ", size: 1," << _discreteDim-_dim << std::endl;
-					//std::cout << "RowNum:" << resetPair.first-_dim << std::endl;
-					discreteMat.row(resetPair.first-_dim) = resetPair.second.block(0,_dim,1,_discreteDim-_dim);
-					discreteVec(resetPair.first-_dim) = resetPair.second(0,_discreteDim);
+				if(mDiscreteResets.size() > 0) {
+					matrix_t<Number> discreteMat = matrix_t<Number>::Identity(_discreteDim-_dim,_discreteDim-_dim);
+					vector_t<Number> discreteVec = vector_t<Number>::Zero(_discreteDim-_dim);
+					TRACE("hypro.parser","Identity reset: " << discreteMat );
+					for(const auto& resetPair : mDiscreteResets){
+						TRACE("hypro.parser", resetPair.second  << " should fit in " << discreteMat );
+						TRACE("hypro.parser","Block start 0," << _dim << ", size: 1," << _discreteDim-_dim );
+						TRACE("hypro.parser","RowNum:" << resetPair.first-_dim );
+						discreteMat.row(resetPair.first-_dim) = resetPair.second.block(0,_dim,1,_discreteDim-_dim);
+						discreteVec(resetPair.first-_dim) = resetPair.second(0,_discreteDim);
+					}
+					r.setMatrix(discreteMat,1);
+					r.setVector(discreteVec,1);
 				}
-				r.setMatrix(discreteMat,1);
-				r.setVector(discreteVec,1);
 			}
 			res->setReset(r);
 
@@ -249,7 +253,7 @@ namespace parser {
 		void addDiscreteInvariant(const std::pair<unsigned, std::vector<matrix_t<Number>>>& _constraints) {
 			for(const auto& matrix : _constraints.second){
 				assert(matrix.rows() == 1);
-				//std::cout << "Parsed invariant for dimension " << _constraints.first << " = " << matrix << std::endl;
+				TRACE("hypro.parser","Parsed invariant for dimension " << _constraints.first << " = " << matrix );
 				mDiscreteInvariants.emplace_back(_constraints.first, matrix);
 			}
 		}
@@ -258,14 +262,14 @@ namespace parser {
 			assert(!_in.empty());
 			// matrix template with additional row of zeroes for constants, no need for rows for discrete variables, as their flow is 0
 			unsigned rowCnt = _in.begin()->second.rows();
-			//std::cout << "In-size: " << _in.size() << ", cols: " << _in.begin()->second.rows() << std::endl;
+			TRACE("hypro.parser","In-size: " << _in.size() << ", cols: " << _in.begin()->second.rows() );
 			assert(_in.size() == rowCnt-1);
 			matrix_t<double> res = matrix_t<double>::Zero(rowCnt, rowCnt);
-			//std::cout << "Flow is a " << res.rows() << " by " << res.cols() << " matrix." << std::endl;
+			TRACE("hypro.parser","Flow is a " << res.rows() << " by " << res.cols() << " matrix." );
  			for(const auto& pair : _in) {
  				assert(pair.second.rows() == res.cols());
  				assert(pair.first < res.rows());
- 				//std::cout << "Row " << pair.first << " = " << pair.second.transpose() << std::endl;
+ 				TRACE("hypro.parser","Row " << pair.first << " = " << pair.second.transpose() );
 				res.row(pair.first) << pair.second.transpose();
 			}
 			// Temporary, until Number template has been propagated fully.
@@ -276,8 +280,8 @@ namespace parser {
 			assert(_flow.rows() == _flow.cols());
 			if(mDiscreteInvariants.size() + mContinuousInvariants.size() > 0) {
 				Location<Number>* tmp = mLocationManager.create(_flow);
-				//std::cout << "creating location " << tmp->id() << std::endl;
-				//std::cout << "flow: " << tmp->flow() << std::endl;
+				TRACE("hypro.parser","creating location " << tmp->getId() );
+				TRACE("hypro.parser","flow: " << tmp->getFlow() );
 				Condition<Number> inv;
 				matrix_t<Number> invariantMat = matrix_t<Number>(mContinuousInvariants.size(), _flow.cols()-1);
 				vector_t<Number> constants = vector_t<Number>(mContinuousInvariants.size());
@@ -290,11 +294,11 @@ namespace parser {
 				}
 				inv.setMatrix(invariantMat);
 				inv.setVector(constants);
-				//std::cout << "set continuous invariant to " << invariantMat << std::endl;
+				TRACE("hypro.parser","set continuous invariant to " << invariantMat );
 				for(const auto& invariantConstaintPair : mDiscreteInvariants) {
 					assert(invariantConstaintPair.second.rows() == 1);
 					// resize
-					//std::cout << "new number of cols: " << _discreteDim-_flow.cols()+2 << std::endl;
+					TRACE("hypro.parser","new number of cols: " << _discreteDim-_flow.cols()+2 );
 					matrix_t<Number> resizedInvariant = matrix_t<Number>(1, _discreteDim-_flow.cols()+2);
 					resizedInvariant = invariantConstaintPair.second.block(0, _flow.cols()-1, 1, _discreteDim-_flow.cols()+2);
 
@@ -314,7 +318,7 @@ namespace parser {
 					inv.setMatrix(currentInvariant,1);
 					inv.setVector(currentVector,1);
 					//inv.discreteInvariant.emplace_back(VariablePool::getInstance().carlVarByIndex(invariantConstaintPair.first), resizedInvariant);
-					//std::cout << "added discrete invariant for var " << VariablePool::getInstance().carlVarByIndex(invariantConstaintPair.first) << ": " << resizedInvariant << std::endl;
+					TRACE("hypro.parser","added discrete invariant for var " << VariablePool::getInstance().carlVarByIndex(invariantConstaintPair.first) << ": " << resizedInvariant );
 				}
 				//inv.discreteOffset = _flow.cols()-1;
 				tmp->setInvariant(inv);

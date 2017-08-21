@@ -12,18 +12,20 @@ Condition<Number>::Condition(const std::vector<boost::variant<ConstraintSet<Numb
 
 template<typename Number>
 void Condition<Number>::setMatrix(const matrix_t<Number>& m, std::size_t I) {
-	while (mConstraints.size() < I+1) {
+	while (I >= mConstraints.size()) {
 		mConstraints.push_back(ConstraintSet<Number>());
 	}
 	mConstraints[I].rMatrix() = m;
+	DEBUG("hypro.datastructures","Set matrix at pos " << I << ", mConstraints.size() = " << mConstraints.size());
 }
 
 template<typename Number>
 void Condition<Number>::setVector(const vector_t<Number>& v, std::size_t I) {
-	while (mConstraints.size() < I+1) {
+	while (I > mConstraints.size()) {
 		mConstraints.push_back(ConstraintSet<Number>());
 	}
 	mConstraints[I].rVector() = v;
+	DEBUG("hypro.datastructures","Set vector at pos " << I << ", mConstraints.size() = " << mConstraints.size());
 }
 
 //template<typename Number>

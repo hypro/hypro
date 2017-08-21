@@ -94,7 +94,7 @@ namespace parser {
 		}
 
 		for(const auto state : mInitialStates ){
-			TRACE("hypro.parser", "Add initial state for location " << state.location->id());
+			TRACE("hypro.parser", "Add initial state for location " << state.getLocation()->getId());
 			result.addInitialState(state);
 		}
 
