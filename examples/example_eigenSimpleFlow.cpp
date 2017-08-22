@@ -7,10 +7,10 @@
 #include "util/Plotter.h"
 #include <Eigen/Eigenvalues>
 #include <Eigen/Dense>
-//#define PTS_DEBUG 1         //NO USE
-#define ORIGINAL_SYS_PLOT 1   //original system plot
+//#define PTS_DEBUG          //NO USE
+#define ORIGINAL_SYS_PLOT   //original system plot
 #define DIM_PLOT 0          //starting with 0..n-1 what to plot might be added with multiple dim or data format (struct/enum)
-#define TRAJECTORY 1
+//#define TRAJECTORY
 //#include <Eigen/LU>
 using namespace hypro;
 //using namespace Eigen;
@@ -91,7 +91,7 @@ int main()
     V << es.eigenvectors().real();
     D.diagonal() << es.eigenvalues().real();
     Vinv = V.inverse();
-	std::cout << "Eigenvectors: "<< std::endl << V << std::endl;
+    std::cout << "Eigenvectors: "<< std::endl << V << std::endl;
 	std::cout << "Vinverse: "<< std::endl << Vinv << std::endl;
 	std::cout << "Eigenvalues: "<< std::endl << D.diagonal() << std::endl;
     //stop on bad conditioning ??
@@ -106,8 +106,9 @@ int main()
     #endif
     std::cout << "traj_tr: " << std::endl << traj_tr << std::endl;
 
-    std::cout << "x_tr: "<< std::endl << x_tr << std::endl;
+    std::cout << "x_tr_bef_maxtrafo: "<< std::endl << x_tr << std::endl;
     elwise_maxtransformation(x_tr, n); //ref to Eigen::Matrix to write Eigen::Matrix
+    std::cout << "x_tr_after_maxtrafo: "<< std::endl << x_tr << std::endl;
     xinhomconst = b_tr.array() / D.diagonal().array();
     #ifdef TRAJECTORY
     traj_homconst.col(0) = xinhomconst.array() + traj_tr.col(0).array();
@@ -115,8 +116,7 @@ int main()
     #endif
     xhomconstmaxmin.col(0) = xinhomconst.array() + x_tr.col(0).array();
     xhomconstmaxmin.col(1) = xinhomconst.array() + x_tr.col(1).array();
-
-    //std::cout << "xhomconstmaxmin: "<< std::endl << xhomconstmaxmin << std::endl;
+    std::cout << "xhomconstmaxmin: "<< std::endl << xhomconstmaxmin;
     //plotting structures
     Plotter<Number>& plotter = Plotter<Number>::getInstance();
     std::vector<Vector> ptsxmax_tr;
@@ -201,42 +201,45 @@ void initialize (const  Matrix& xhomconst, const DiagonalMatrix& D, BoolMatrix& 
     Vector plot_vector = Vector(n);
     for(int i=0; i<n; ++i) {
         if (D.diagonal()(i)>0) { //divergence
-            if (xhomconst(i,0) >= 0) {
+            if (xhomconst(i,0) >= 0) {  //
                 directmaxmin(i,0) = true;      //xmax(i) directLine
-                if (xhomconst(i,1) >= 0) {
+                if (xhomconst(i,1) > 0) {
                     //xmin(i) derivLine
-                } else {
+                } else {    //xmin: -e^x
                     directmaxmin(i,1) = true;  //unusual!! xmin(i) directLine
+                    std::cout<<"set evolves as opposite diverging trajectoris"<<std::endl;
                 }
-            } else {
+            } else {    //xmax: -e^x
                     //xmax(i) derivLine
-                if(xhomconst(i,1) >= 0) {
+                if(xhomconst(i,1) > 0) {
+                    std::cout<<"ERROR upwards and downwards"<<std::endl;
                     //ERROR upwards and downwards
                 } else {
                     directmaxmin(i,1) = true;  //xmin(i) directLine
                 }
             }
-        } else { //case 2 and 4
+        } else { //e^(-x) and -e^(-x) whereas -x fixed here
         //convergence
-            if (xhomconst(i,0) >=0) {
+            if (xhomconst(i,0) <= 0) {  //xmax:-e^(-x)
                 directmaxmin(i,0) = true;      //xmax(i) directLine
-                if (xhomconst(i,1) >=0) {
+                if (xhomconst(i,1) < 0) {
                     //xmin(i) derivLine
                 } else {
                     directmaxmin(i,1) = true;  //xmin(i) directLine
-                    //convergence point between initial set
+                    std::cout<<"convergence point between initial set"<<std::endl;
                 }
-            } else {
+            } else {    //xmax:e^(-x)
                 //xmax(i) derivLine
                 if (xhomconst(i,1) >=0) {
-                    //xmin(i) derivLine
-                    //2 convergence points!!
-                } else {
                     directmaxmin(i,1) = true;   //xmin(i) directLine
+                } else {
+                    //xmin(i) derivLine
+                    std::cout<<"2 convergence points, check if intended"<<std::endl;
                 }
             }
         }
     }
+    std::cout<<"directmaxmin:"<<std::endl<<directmaxmin;
     //std::cout << "xhomconst: "<< std::endl << x0_2 << std::endl;
     // .... TODO
     //1.step calculation + inserting
@@ -249,8 +252,10 @@ void initialize (const  Matrix& xhomconst, const DiagonalMatrix& D, BoolMatrix& 
     plot_vector(0) = 0; //was j before
     plot_vector(1) = (V*x_tr.col(0))(DIM_PLOT);
     ptsxmax_tr.push_back(plot_vector);
+    std::cout << "plotvector(max/x0): "<< std::endl << plot_vector(1) << std::endl;
     plot_vector(1) = (V*x_tr.col(1))(DIM_PLOT);
     ptsxmin_tr.push_back(plot_vector);
+    std::cout << "plotvector(min/x0_2): "<< std::endl << plot_vector(1) << std::endl;
     elwise_maxtransformation(x_tr, n);
 #endif
 #ifndef ORIGINAL_SYS_PLOT
@@ -260,8 +265,8 @@ void initialize (const  Matrix& xhomconst, const DiagonalMatrix& D, BoolMatrix& 
     plot_vector(1) = x_tr(DIM_PLOT,1);
     ptsxmin_tr.push_back(plot_vector);
 #endif
+
     //STARTING POINT
-    std::cout << "plotvector(0): "<< std::endl << plot_vector(0) << std::endl;
 }
     //1.linear value + derivative OR direct value
     //1.1 possible trajectory calculation pushing writing deleting
@@ -273,10 +278,8 @@ void loop (std::size_t deltalimit, const BoolMatrix& directmaxmin,
     ptsxmin_tr, Matrix& derivFactormaxmin, Matrix& x_tr, const Vector&
     xinhomconst, const Matrix& V, Matrix& traj_tr, const Matrix&
     traj_homconst, std::size_t traj_scale) {
-    std::cout<<"entering loop"<<std::endl;
-    std::cout<<"traj_tr: "<<std::endl<<traj_tr;
-    traj_tr(0,0) = 42;
-    std::cout<<"traj_tr: "<<std::endl<<traj_tr;
+    //std::cout<<"entering loop"<<std::endl;
+    //std::cout<<"traj_tr: "<<std::endl<<traj_tr;
 
     Plotter<Number>& plotter = Plotter<Number>::getInstance();
     VPolytope<Number> vpoly_upper;
@@ -284,13 +287,15 @@ void loop (std::size_t deltalimit, const BoolMatrix& directmaxmin,
     Vector factor = Vector::Zero(n);
     Vector plot_vector = Vector(n);
     for(std::size_t j = 0; j <= deltalimit;  ++j) {
-    	std::cout << "Time: " << j*delta << std::endl;
+    	//std::cout << "Time: " << j*delta << std::endl;
         for (int i=0; i<n; ++i) {
             factor(i) = std::exp(D.diagonal()(i) *j*delta);
 
             if(directmaxmin(i,0)) {
+                //e^x OR -e^(-x)
                 x_tr(i,0) = xhomconst(i,0)*factor(i) - xinhomconst(i);
             } else {
+                //e^(-x) OR -e^x
                 x_tr(i,0) = x_tr(i,0) + derivFactormaxmin(i,0)*delta;
                 derivFactormaxmin(i,0) = xhomconst(i,0)*D.diagonal()(i)*factor(i);
             }
@@ -302,16 +307,22 @@ void loop (std::size_t deltalimit, const BoolMatrix& directmaxmin,
             }
             //std::cout << "x0_2: "<< std::endl << x0_2 << std::endl; TODO
         }
-        std::cout<<"j: "<<j<<" factor: "<<std::endl<<factor;
+        std::cout<<"x_tr["<<j<<"]: "<<std::endl<<x_tr;
+        //std::cout<<"j: "<<j<<" factor: "<<std::endl<<factor;
     #ifdef ORIGINAL_SYS_PLOT
+        std::cout<<"x_tr_before_backtrafo:"<<std::endl<<x_tr;
         elwise_backtransformation(x_tr, n);
+        std::cout<<"x_tr_after_backtrafo:"<<std::endl<<x_tr;
         plot_vector(0) = j;
         plot_vector(1) = (V*x_tr.col(0))(DIM_PLOT);
+        //on first run correct, then wrong values:
         std::cout<<"j: "<<j<<" V*x_tr: "<<plot_vector(1)<<std::endl;
         ptsxmax_tr.push_back(plot_vector);
         plot_vector(1) = (V*x_tr.col(1))(DIM_PLOT);
         ptsxmin_tr.push_back(plot_vector);
+        std::cout<<"x_tr_before_trafo:"<<std::endl<<x_tr;
         elwise_maxtransformation(x_tr, n);
+        std::cout<<"x_tr_after_trafo:"<<std::endl<<x_tr;
     #endif
     #ifndef ORIGINAL_SYS_PLOT
         plot_vector(0) = j;
@@ -332,17 +343,17 @@ void loop (std::size_t deltalimit, const BoolMatrix& directmaxmin,
             for (int i=0; i<n; ++i) {
                 factor(i) = std::exp(D.diagonal()(i) *traj_time*delta/traj_scale);
             }
-            std::cout<<"traj_time*"<<traj_scale<<" "<<traj_time<<" factor "<<std::endl<<factor<<std::endl;
+            //std::cout<<"traj_time*"<<traj_scale<<" "<<traj_time<<" factor "<<std::endl<<factor<<std::endl;
             //depends what we want to plot here
             traj_tr.col(0) = traj_homconst.col(0).array()*factor.array()  - xinhomconst.array();
             traj_tr.col(1) = traj_homconst.col(1).array()*factor.array()  - xinhomconst.array();
             plot_vector(0) = traj_time;
-            std::cout<<"traj_tr"<<std::endl<<traj_tr;
-            std::cout <<"Homconst is " << traj_homconst << std::endl;
-            std::cout <<"Inhomconst is " << xinhomconst << std::endl;
+            //std::cout<<"traj_tr"<<std::endl<<traj_tr;
+            //std::cout <<"Homconst is " << traj_homconst << std::endl;
+            //std::cout <<"Inhomconst is " << xinhomconst << std::endl;
     #ifdef ORIGINAL_SYS_PLOT
             plot_vector(1) = (V*traj_tr.col(0))(DIM_PLOT);
-            std::cout << "t: " << traj_time << "V*x(t): " << plot_vector(1) << std::endl;
+            //std::cout << "t: " << traj_time << "V*x(t): " << plot_vector(1) << std::endl;
             plot_traj_upper.push_back(plot_vector);
             plot_vector(1) = (V*traj_tr.col(1))(DIM_PLOT);
     #endif
