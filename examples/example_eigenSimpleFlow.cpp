@@ -78,7 +78,7 @@ int main()
 	A << 	0.001, 1,
 			0.001, -0.002;
     b <<    0, -9.81;
-    x0<<    10.2, 0;        //we require x0 > x0_2 elementwise
+    x0<<    20, 0;        //we require x0 > x0_2 elementwise
     x0_2 << 10, 0;          //else we swap values
 
 	std::cout << "d/dx = A*x+b, A:"<< std::endl << A << std::endl;
@@ -252,10 +252,10 @@ void initialize (const  Matrix& xhomconst, const DiagonalMatrix& D, BoolMatrix& 
     plot_vector(0) = 0; //was j before
     plot_vector(1) = (V*x_tr.col(0))(DIM_PLOT);
     ptsxmax_tr.push_back(plot_vector);
-    std::cout << "plotvector(max/x0): "<< std::endl << plot_vector(1) << std::endl;
+    //std::cout << "plotvector(max/x0): "<< std::endl << plot_vector(1) << std::endl;
     plot_vector(1) = (V*x_tr.col(1))(DIM_PLOT);
     ptsxmin_tr.push_back(plot_vector);
-    std::cout << "plotvector(min/x0_2): "<< std::endl << plot_vector(1) << std::endl;
+    //std::cout << "plotvector(min/x0_2): "<< std::endl << plot_vector(1) << std::endl;
     elwise_maxtransformation(x_tr, n);
 #endif
 #ifndef ORIGINAL_SYS_PLOT
@@ -286,7 +286,8 @@ void loop (std::size_t deltalimit, const BoolMatrix& directmaxmin,
     VPolytope<Number> vpoly_lower;
     Vector factor = Vector::Zero(n);
     Vector plot_vector = Vector(n);
-    for(std::size_t j = 0; j <= deltalimit;  ++j) {
+    //WE ASSUME we always want to check 1 timestep
+    for(std::size_t j = 1; j <= deltalimit;  ++j) {
     	//std::cout << "Time: " << j*delta << std::endl;
         for (int i=0; i<n; ++i) {
             factor(i) = std::exp(D.diagonal()(i) *j*delta);
