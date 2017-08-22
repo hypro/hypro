@@ -137,8 +137,8 @@ namespace hypro {
 		return HSVtoRGB(hsvColor);
 	}
 
-	std::vector<std::size_t> adjustSaturation(std::size_t rgbColor, double factor) {
-		return adjustSaturation(HEXtoRGB(rgbColor),factor);
+	std::size_t adjustSaturation(std::size_t rgbColor, double factor) {
+		return RGBtoHEX(adjustSaturation(HEXtoRGB(rgbColor),factor));
 	}
 
 } // namespace
