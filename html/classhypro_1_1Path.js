@@ -8,6 +8,7 @@ var classhypro_1_1Path =
     [ "at", "classhypro_1_1Path.html#a976b205be62152eb474313d5287f8b12", null ],
     [ "begin", "classhypro_1_1Path.html#ab034645d296f1eb66022e45ff2a9432b", null ],
     [ "end", "classhypro_1_1Path.html#a1019cdad12ebe2b59b79db32ee3afed8", null ],
+    [ "getNumberDiscreteJumps", "classhypro_1_1Path.html#ac6817277944dc364a6fc47cea63ee59a", null ],
     [ "getTransitionSequence", "classhypro_1_1Path.html#a801a6d5ca43b9b4ef74f61974bad3523", null ],
     [ "getTransitionToJumpDepth", "classhypro_1_1Path.html#a361c89024f76824e0f8625cc1a77f8e0", null ],
     [ "hasChatteringZeno", "classhypro_1_1Path.html#a50b0c3d2f19db4407c31feceaf10e20b", null ],

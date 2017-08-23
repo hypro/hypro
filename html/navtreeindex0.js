@@ -69,7 +69,8 @@ var NAVTREEINDEX0 =
 "ParserWrapper_8h_source.html":[10,0,1,0,2,0,5],
 "Path_8h_source.html":[10,0,1,0,1,0,5],
 "Permutator_8h_source.html":[10,0,1,0,4,9],
-"PlotterUtil_8h_source.html":[10,0,1,0,4,11],
+"PlotterUtil_8cpp_source.html":[10,0,1,0,4,11],
+"PlotterUtil_8h_source.html":[10,0,1,0,4,12],
 "Plotter_8h_source.html":[10,0,1,0,4,10],
 "Point_8cpp_source.html":[10,0,1,0,1,5],
 "Point_8h.html":[10,0,1,0,1,6],
@@ -111,7 +112,7 @@ var NAVTREEINDEX0 =
 "TrafoParameters_8h_source.html":[10,0,1,0,0,1,2],
 "Transition_8h_source.html":[10,0,1,0,1,0,9],
 "VPolytope_8h_source.html":[10,0,1,0,3,6,1,0],
-"VariablePool_8h_source.html":[10,0,1,0,4,13],
+"VariablePool_8h_source.html":[10,0,1,0,4,14],
 "VertexContainer_8h.html":[10,0,1,0,1,12],
 "VertexContainer_8h_source.html":[10,0,1,0,1,12],
 "Vertex_8h.html":[10,0,1,0,1,11],
@@ -248,6 +249,5 @@ var NAVTREEINDEX0 =
 "classhypro_1_1BoxT_3_01double_00_01Converter_01_4.html#ab7afcb410dfc489bad1ad279063061b0":[9,0,1,46,17],
 "classhypro_1_1BoxT_3_01double_00_01Converter_01_4.html#ab98f614f79eecd033adf4c963f30c4b9":[9,0,1,46,2],
 "classhypro_1_1BoxT_3_01double_00_01Converter_01_4.html#ac7982e9f84ae7dc9719908611f97b8c1":[9,0,1,46,48],
-"classhypro_1_1BoxT_3_01double_00_01Converter_01_4.html#acb24b20f976a729fa59c5c0f492c393c":[9,0,1,46,15],
-"classhypro_1_1BoxT_3_01double_00_01Converter_01_4.html#ad7f69d76d84a82c79531679ecc180494":[9,0,1,46,21]
+"classhypro_1_1BoxT_3_01double_00_01Converter_01_4.html#acb24b20f976a729fa59c5c0f492c393c":[9,0,1,46,15]
 };

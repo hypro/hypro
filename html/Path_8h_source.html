@@ -182,63 +182,64 @@ $(document).ready(function(){initNavTree('Path_8h_source.html','');});
 <div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;            <span class="keywordtype">bool</span> isEmpty()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> (mPath.size() == 0); }</div>
 <div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;            Number maximalTimeSpan(<span class="keyword">typename</span> std::deque&lt;<a class="code" href="structhypro_1_1TPathElement.html">TPathElement&lt;Number&gt;</a>&gt;::const_iterator start, <span class="keyword">typename</span> std::deque&lt;<a class="code" href="structhypro_1_1TPathElement.html">TPathElement&lt;Number&gt;</a>&gt;::const_iterator end) <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;            std::vector&lt;Transition&lt;Number&gt;*&gt; getTransitionSequence(<span class="keyword">typename</span> std::deque&lt;<a class="code" href="structhypro_1_1TPathElement.html">TPathElement&lt;Number&gt;</a>&gt;::const_iterator start, <span class="keyword">typename</span> std::deque&lt;<a class="code" href="structhypro_1_1TPathElement.html">TPathElement&lt;Number&gt;</a>&gt;::const_iterator end) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;            <span class="keywordtype">bool</span> hasChatteringZeno() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;</div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;            <span class="comment">// comparison - read as &quot;is longer than&quot;</span></div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;            <span class="keywordtype">bool</span> operator&gt;(<span class="keyword">const</span> <a class="code" href="classhypro_1_1Path.html">Path&lt;Number&gt;</a>&amp; r) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;            <span class="keywordtype">bool</span> operator&gt;(<span class="keywordtype">unsigned</span> r) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;</div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;            <span class="comment">// Iterator</span></div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;            <span class="keyword">using</span> TIterator = <span class="keyword">typename</span> std::deque&lt;TPathElement&lt;Number&gt;&gt;::iterator;</div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;            TIterator begin ();</div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;            TIterator end();</div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;</div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;            <span class="comment">// legacy operations - replace them</span></div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;            std::size_t size() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;            <a class="code" href="structhypro_1_1TPathElement.html">TPathElement&lt;Number&gt;</a> at(<span class="keywordtype">int</span> index) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;            <span class="keywordtype">void</span> pop_front();</div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;            <span class="keywordtype">void</span> push_front(<span class="keyword">const</span> <a class="code" href="structhypro_1_1TPathElement.html">TPathElement&lt;Number&gt;</a>&amp; elem);</div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;</div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;            <span class="keyword">friend</span> std::ostream&amp; operator&lt;&lt;(std::ostream&amp; _out, const Path&lt;Number&gt;&amp; path) {</div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;<span class="preprocessor">#ifdef HYDRA_USE_LOGGING</span></div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;<span class="preprocessor"></span>                <span class="keywordflow">if</span>(!path.isEmpty()) {</div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;                    _out &lt;&lt; path.at(0);</div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;                    <span class="keywordflow">for</span>(std::size_t i = 1; i &lt; path.size(); ++i) {</div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;                        _out &lt;&lt; <span class="stringliteral">&quot;, &quot;</span> &lt;&lt; path.at(i);</div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;                    }</div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;                }</div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;<span class="preprocessor"></span>                <span class="keywordflow">return</span> _out;</div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;            }</div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;</div>
-<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;            <span class="keywordtype">bool</span> operator==(<span class="keyword">const</span> <a class="code" href="classhypro_1_1Path.html">Path&lt;Number&gt;</a>&amp; rhs)<span class="keyword"> const </span>{</div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;                <span class="keywordflow">if</span>(this-&gt;size() != rhs.size()) {</div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;                    <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;                }</div>
-<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;                <span class="keywordflow">for</span>(std::size_t i = 0; i &lt; this-&gt;size(); ++i) {</div>
-<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;                    <span class="keywordflow">if</span>(this-&gt;at(i) != rhs.at(i)) {</div>
-<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;                        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;                    }</div>
-<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;                }</div>
-<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;                <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
-<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;            }</div>
-<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;</div>
-<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;            <span class="keywordtype">bool</span> operator!=(<span class="keyword">const</span> <a class="code" href="classhypro_1_1Path.html">Path&lt;Number&gt;</a>&amp; rhs)<span class="keyword"> const </span>{</div>
-<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;                <span class="keywordflow">return</span> !(*<span class="keyword">this</span> == rhs);</div>
-<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;            }</div>
-<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;</div>
-<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;        <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;            std::deque&lt;TPathElement&lt;Number&gt;&gt; mPath; <span class="comment">// why is this a deque? - shouldn&#39;t it be more of a double-linked list?</span></div>
-<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;            <span class="comment">// or even better: define this recursively. A path is empty or a subpath</span></div>
-<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;            <span class="comment">// Stefan: This is historic :).</span></div>
-<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;            <span class="keywordtype">bool</span> chatteringZeno = <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;</div>
-<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;    };</div>
-<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;</div>
-<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;} <span class="comment">// namespace hydra</span></div>
-<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;</div>
-<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;<span class="preprocessor">#include &quot;Path.tpp&quot;</span></div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;            std::size_t getNumberDiscreteJumps() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;            std::vector&lt;Transition&lt;Number&gt;*&gt; getTransitionSequence(<span class="keyword">typename</span> std::deque&lt;<a class="code" href="structhypro_1_1TPathElement.html">TPathElement&lt;Number&gt;</a>&gt;::const_iterator start, <span class="keyword">typename</span> std::deque&lt;<a class="code" href="structhypro_1_1TPathElement.html">TPathElement&lt;Number&gt;</a>&gt;::const_iterator end) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;            <span class="keywordtype">bool</span> hasChatteringZeno() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;            <span class="comment">// comparison - read as &quot;is longer than&quot;</span></div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;            <span class="keywordtype">bool</span> operator&gt;(<span class="keyword">const</span> <a class="code" href="classhypro_1_1Path.html">Path&lt;Number&gt;</a>&amp; r) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;            <span class="keywordtype">bool</span> operator&gt;(<span class="keywordtype">unsigned</span> r) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;            <span class="comment">// Iterator</span></div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;            <span class="keyword">using</span> TIterator = <span class="keyword">typename</span> std::deque&lt;TPathElement&lt;Number&gt;&gt;::iterator;</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;            TIterator begin ();</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;            TIterator end();</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;            <span class="comment">// legacy operations - replace them</span></div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;            std::size_t size() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;            <a class="code" href="structhypro_1_1TPathElement.html">TPathElement&lt;Number&gt;</a> at(<span class="keywordtype">int</span> index) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;            <span class="keywordtype">void</span> pop_front();</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;            <span class="keywordtype">void</span> push_front(<span class="keyword">const</span> <a class="code" href="structhypro_1_1TPathElement.html">TPathElement&lt;Number&gt;</a>&amp; elem);</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;            <span class="keyword">friend</span> std::ostream&amp; operator&lt;&lt;(std::ostream&amp; _out, const Path&lt;Number&gt;&amp; path) {</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;<span class="preprocessor">#ifdef HYDRA_USE_LOGGING</span></div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;<span class="preprocessor"></span>                <span class="keywordflow">if</span>(!path.isEmpty()) {</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;                    _out &lt;&lt; path.at(0);</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;                    <span class="keywordflow">for</span>(std::size_t i = 1; i &lt; path.size(); ++i) {</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;                        _out &lt;&lt; <span class="stringliteral">&quot;, &quot;</span> &lt;&lt; path.at(i);</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;                    }</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;                }</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;<span class="preprocessor"></span>                <span class="keywordflow">return</span> _out;</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;            }</div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;</div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;            <span class="keywordtype">bool</span> operator==(<span class="keyword">const</span> <a class="code" href="classhypro_1_1Path.html">Path&lt;Number&gt;</a>&amp; rhs)<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;                <span class="keywordflow">if</span>(this-&gt;size() != rhs.size()) {</div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;                    <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;                }</div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;                <span class="keywordflow">for</span>(std::size_t i = 0; i &lt; this-&gt;size(); ++i) {</div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;                    <span class="keywordflow">if</span>(this-&gt;at(i) != rhs.at(i)) {</div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;                        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;                    }</div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;                }</div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;                <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;            }</div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;</div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;            <span class="keywordtype">bool</span> operator!=(<span class="keyword">const</span> <a class="code" href="classhypro_1_1Path.html">Path&lt;Number&gt;</a>&amp; rhs)<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;                <span class="keywordflow">return</span> !(*<span class="keyword">this</span> == rhs);</div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;            }</div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;</div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;        <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;            std::deque&lt;TPathElement&lt;Number&gt;&gt; mPath; <span class="comment">// why is this a deque? - shouldn&#39;t it be more of a double-linked list?</span></div>
+<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;            <span class="comment">// or even better: define this recursively. A path is empty or a subpath</span></div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;            <span class="comment">// Stefan: This is historic :).</span></div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;            <span class="keywordtype">bool</span> chatteringZeno = <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;</div>
+<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;    };</div>
+<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;</div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;} <span class="comment">// namespace hydra</span></div>
+<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;</div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;<span class="preprocessor">#include &quot;Path.tpp&quot;</span></div>
 <div class="ttc" id="classhypro_1_1Transition_html"><div class="ttname"><a href="classhypro_1_1Transition.html">hypro::Transition</a></div><div class="ttdef"><b>Definition:</b> <a href="Location_8h_source.html#l00020">Location.h:20</a></div></div>
 <div class="ttc" id="classhypro_1_1Path_html"><div class="ttname"><a href="classhypro_1_1Path.html">hypro::Path</a></div><div class="ttdoc">Class to define a path in some hybrid automaton. </div><div class="ttdef"><b>Definition:</b> <a href="Path_8h_source.html#l00060">Path.h:60</a></div></div>
 <div class="ttc" id="structhypro_1_1TPathElement_html"><div class="ttname"><a href="structhypro_1_1TPathElement.html">hypro::TPathElement</a></div><div class="ttdef"><b>Definition:</b> <a href="Path_8h_source.html#l00010">Path.h:10</a></div></div>

@@ -1,5 +1,7 @@
 var NAVTREEINDEX6 =
 {
+"classhypro_1_1Vertex.html#abcd889574cdadf04c39ce65e3348d81f":[9,0,1,43,18],
+"classhypro_1_1Vertex.html#ac2565ac32f554668fecb1d0c040c35b9":[9,0,1,43,12],
 "classhypro_1_1Vertex.html#ace96e7f9e1e528dd1be155a92424bd49":[9,0,1,43,14],
 "classhypro_1_1Vertex.html#ae5d74ccdd8fffe703d792eeea9277254":[9,0,1,43,23],
 "classhypro_1_1Vertex.html#ae71a6387aaeb37a13ff216431c42d4d8":[9,0,1,43,5],
@@ -247,7 +249,5 @@ var NAVTREEINDEX6 =
 "example__pca_8cpp_source.html":[10,0,0,19],
 "example__plot_8cpp.html":[10,0,0,20],
 "example__plot_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4":[10,0,0,20,0],
-"example__plot_8cpp_source.html":[10,0,0,20],
-"example__polytope_8cpp_source.html":[10,0,0,21],
-"example__ppl__nncPolyhedra_8cpp.html":[10,0,0,22]
+"example__plot_8cpp_source.html":[10,0,0,20]
 };
