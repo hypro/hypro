@@ -5,20 +5,13 @@ configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/flags.h.in ${CMAKE_CURRENT_SOURCE_DI
 ########################################################################################
 
 file(GLOB_RECURSE sources RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} *.cpp)
-#MESSAGE(STATUS "Globbed header sources: ${sources}")
-
-if(STATICLIB_SWITCH)
-	set(STATICLIB "STATIC")
-else()
-	set(STATICLIB "SHARED")
-endif()
 
 ########################################################################################
 
-if(STATICLIB_SWITCH)
+#if(STATICLIB_SWITCH)
 	message(STATUS "linking static")
 	add_library(${PROJECT_NAME}_static STATIC ${sources})
-	set_target_properties( hypro_static PROPERTIES
+	set_target_properties( ${PROJECT_NAME}_static PROPERTIES
 		# create *nix style library versions + symbolic links
 		VERSION "${PROJECT_VERSION}"
 		SOVERSION "${PROJECT_VERSION}"
@@ -40,7 +33,7 @@ if(STATICLIB_SWITCH)
 		$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
 		$<INSTALL_INTERFACE:include/${PROJECT_NAME}>
 	)
-else()
+#else()
 	message(STATUS "linking dynamic")
 	add_library(${PROJECT_NAME} SHARED ${sources})
 	set_target_properties( ${PROJECT_NAME} PROPERTIES
@@ -56,7 +49,7 @@ else()
 		LINKER_LANGUAGE CXX
 	)
 	#message(STATUS "antlr libs path: " ${ANTLR4CPP_LIBS})
-	#message(STATUS "antlr include dirs path: " ${ANTLR4CPP_INCLUDE_DIRS}) 
+	#message(STATUS "antlr include dirs path: " ${ANTLR4CPP_INCLUDE_DIRS})
 	#message(STATUS "hypro libraries dynamic: " "${hypro_LIBRARIES_DYNAMIC}")
 	#message("hypro include dirs: " ${hypro_INCLUDE_DIRS})
 	#message("hypro sources: " ${sources})
@@ -67,7 +60,7 @@ else()
 		$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
 		$<INSTALL_INTERFACE:include/${PROJECT_NAME}>
 	)
-endif()
+#endif()
 
 if(STATICLIB_SWITCH)
 	if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
@@ -101,6 +94,11 @@ install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} DESTINATION include FILES_MATCHING
 
 install(TARGETS ${PROJECT_NAME}
 		EXPORT ${PROJECT_NAME}
+		LIBRARY DESTINATION ${LIB_INSTALL_DIR}
+		ARCHIVE DESTINATION ${LIB_INSTALL_DIR}/static)
+
+install(TARGETS ${PROJECT_NAME}_static
+		EXPORT ${PROJECT_NAME}_static
 		LIBRARY DESTINATION ${LIB_INSTALL_DIR}
 		ARCHIVE DESTINATION ${LIB_INSTALL_DIR}/static)
 
