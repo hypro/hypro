@@ -27,6 +27,7 @@ namespace hypro {
 
 	template<typename Number>
 	std::pair<Transition<Number>*, carl::Interval<Number>> Path<Number>::getTransitionToJumpDepth(unsigned depth) const {
+		TRACE("hypro.datastructures","Get transition for depth " << depth);
 		if(depth == 0) {
 			return std::make_pair(nullptr, carl::Interval<Number>::unboundedInterval());
 		}
@@ -42,6 +43,7 @@ namespace hypro {
 			}
 		}
 		if(pos == mPath.size()) {
+			TRACE("hypro.datastructures","Did not find appropriate transition.");
 			return std::make_pair(nullptr, carl::Interval<Number>::unboundedInterval());
 		}
 		return std::make_pair(mPath.at(pos).transition, mPath.at(pos).timeInterval);
@@ -102,6 +104,17 @@ namespace hypro {
 			return -1;
 		}
 		return timespan;
+	}
+
+	template<typename Number>
+	std::size_t Path<Number>::getNumberDiscreteJumps() const {
+		std::size_t res = 0;
+		for(const auto& pathElem : mPath) {
+			if(pathElem.isDiscreteStep()) {
+				++res;
+			}
+		}
+		return res;
 	}
 
 	template<typename Number>
