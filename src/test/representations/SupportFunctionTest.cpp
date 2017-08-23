@@ -569,6 +569,8 @@ TYPED_TEST(SupportFunctionTest, projection) {
 	EXPECT_EQ(projected.evaluate(vector_t<TypeParam>(dir2)).supportValue, this->sfChainComplete.evaluate(dir2).supportValue );
 
 	EXPECT_EQ(projected.collectProjections().size(), dims.size());
+
+	// Todo: Test projection where dimensions are exchanged, i.e. {1,0}
 }
 
 TYPED_TEST(SupportFunctionTest, plotting) {
