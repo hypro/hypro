@@ -350,7 +350,8 @@ std::pair<bool, BoxT<double,Converter>> BoxT<double,Converter>::satisfiesHalfspa
 	}
 	assert(newPlanes.rows() == newDistances.rows());
 	BoxT<double,Converter> tmpBox = this->intersectHalfspaces(newPlanes,newDistances);
-	assert(!tmpBox.empty());
+	// Todo-check: For rational numbers this assertion holds, what about native doubles?
+	//assert(!tmpBox.empty());
 	//std::cout << __func__ << " TRUE, " << convert<double,double>(tmpBox) << std::endl;
 	return std::make_pair(true, tmpBox);
 }
