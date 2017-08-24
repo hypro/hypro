@@ -166,7 +166,7 @@ macro(load_library group name version)
             set(LIBNAME ${name})
         endif()
         message(STATUS "Found Library ${name}.")
-        #message(STATUS "Library file: ${${LIBNAME}_LIBRARIES}")
+        message(STATUS "Library file: ${${LIBNAME}_LIBRARIES}")
 
         if(STATICLIB_SWITCH)
         		list(APPEND ${group}_LIBRARIES_STATIC ${${LIBNAME}_LIBRARIES})
