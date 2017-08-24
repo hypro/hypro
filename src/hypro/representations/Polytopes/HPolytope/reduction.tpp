@@ -134,7 +134,7 @@ namespace hypro {
 		res.push_back(setOfPoints);
 	} else {
 		Permutator permutator(cutPointsAround_a_b.size(), cutPointsAround_a_b.at(0).dimension());
-		std::vector<unsigned> permutation;
+		std::vector<std::size_t> permutation;
 		while(!permutator.end()) {
 			permutation = permutator();
 			std::vector<vector_t<Number>> setOfPoints;
@@ -288,7 +288,7 @@ namespace hypro {
 		   unsigned permutation_count=0;
 		   //std::cout << "Start permutation with " << membersOfFacets[i].size() << "/"<< vertices.size() << " (size) and " <<this->dimension() << std::endl;
 		   Permutator permutator(membersOfFacets[i].size(), this->dimension());
-			  std::vector<unsigned> permutation;
+			  std::vector<std::size_t> permutation;
 				while(!permutator.end()) {
 					permutation = permutator();
 				//std::cout << "Permutation for size: " << permutation << std::endl;
@@ -315,7 +315,7 @@ namespace hypro {
 	 for(auto memberOfVertex: membersOfVertices){
 	   if(memberOfVertex.size()>1){
 	  Permutator permutator(memberOfVertex.size(), 2);
-	  std::vector<unsigned> permutation;
+	  std::vector<std::size_t> permutation;
 		while(!permutator.end()) {
 			permutation = permutator();
 		  //std::cout << permutation << std::endl;
@@ -649,7 +649,7 @@ namespace hypro {
 
 			// compute weight a
 			Permutator permutator_a(vertices_a.size(), this->dimension());
-			  std::vector<unsigned> permutation;
+			  std::vector<std::size_t> permutation;
 				while(!permutator_a.end()) {
 					permutation = permutator_a();
 				 //std::cout << "Permutation_a for size: " << permutation << std::endl;

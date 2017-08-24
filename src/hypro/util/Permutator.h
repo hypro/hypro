@@ -13,8 +13,8 @@ namespace hypro {
 
 class Permutator {
 private:
-	std::vector<unsigned> mCurrent;
-	unsigned max;
+	std::vector<std::size_t> mCurrent;
+	std::size_t max;
 	bool mEnd;
 
 public:
@@ -22,18 +22,18 @@ public:
 	Permutator(std::size_t totalSize, std::size_t d) : mCurrent(d,0), max(totalSize), mEnd(false) {
 		assert(d <= totalSize);
 		if(d <= totalSize) {
-			for(unsigned i = 0; i < d; ++i) {
+			for(std::size_t i = 0; i < d; ++i) {
 				mCurrent[i] = d-i-1;
 			}
 		}
 	}
 
-	std::vector<unsigned> operator()() {
+	std::vector<std::size_t> operator()() {
 		if(mEnd) {
 			return mCurrent;
 		}
 
-		std::vector<unsigned> tmp = mCurrent;
+		std::vector<std::size_t> tmp = mCurrent;
 
 		// find pos to iterate
 		std::size_t pos = 0;

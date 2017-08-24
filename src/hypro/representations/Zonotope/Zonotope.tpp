@@ -626,7 +626,7 @@ static ZonotopeT<Number,Converter> intersectZonotopeHalfspace( ZonotopeT<Number,
 	std::vector<vector_t<Number>> vertices = inputZonotope.computeZonotopeBoundary();
 	vertices.pop_back();
 
-	unsigned numPts = vertices.size();
+	std::size_t numPts = vertices.size();
 	Eigen::Matrix<Number, 2, 2> xhp;
 
 	// Compute Halfspace points xhp
@@ -665,7 +665,7 @@ static ZonotopeT<Number,Converter> intersectZonotopeHalfspace( ZonotopeT<Number,
 		dzb[i] = ( res(0,0) );
 	}
 
-	std::vector<int> ltZeroIdxArray, mtZeroIdxArray;
+	std::vector<unsigned> ltZeroIdxArray, mtZeroIdxArray;
 	for ( i = 0; i < dzbme.size(); i++ ) {
 		if ( carl::abs( dzbme[i] ) < carl::abs( dzbme[minIdx] ) ) {
 			minIdx = i;
@@ -684,7 +684,7 @@ static ZonotopeT<Number,Converter> intersectZonotopeHalfspace( ZonotopeT<Number,
 	verticesValArray = verticesValArray.cshift( minIdx );
 	vertices.assign( std::begin( verticesValArray ), std::end( verticesValArray ) );
 
-	unsigned nil, il1p2, il2p1, il2p2;
+	std::size_t nil, il1p2, il2p1, il2p2;
 	if ( dzbme[0] < 0 ) {
 		nil = ltZeroIdxArray.size();
 		if ( dzbme[1] < 0 ) {
@@ -768,7 +768,8 @@ ZonotopeT<Number,Converter> intersectNDProjection( const ZonotopeT<Number,Conver
 	// Using SVD to calculate nullspace (kernel)
 	kernel = svd.matrixV().block( 0, 1, svd.matrixV().rows(), svd.matrixV().cols() - 1 );
 
-	unsigned nd, dim;
+	long nd;
+	unsigned dim;
 	nd = kernel.cols();
 	dim = inputZonotope.dimension();
 
@@ -781,7 +782,7 @@ ZonotopeT<Number,Converter> intersectNDProjection( const ZonotopeT<Number,Conver
 	dpQc = dVec.dot( inCenterD );
 	dpQg = dVec.transpose() * convert<Number,double>(inputZonotope.generators());
 
-	for ( unsigned i = 0; i < nd; i++ ) {
+	for ( long i = 0; i < nd; i++ ) {
 		// construct 2 dimensional Zonotope
 		Eigen::Matrix<double, 2, 1> projCenter;
 		Eigen::Matrix<double, 2, Eigen::Dynamic> projGenerators;

@@ -7,8 +7,8 @@ namespace hypro {
 
 	inline void printProblem(glp_prob* glpkProblem) {
 		int cols = glp_get_num_cols(glpkProblem);
-		int* ind = new int[cols+1];
-		double* val = new double[cols+1];
+		int* ind = new int[unsigned(cols) + 1];
+		double* val = new double[unsigned(cols) + 1];
 		for(int i = 1; i <= glp_get_num_rows(glpkProblem); ++i) {
 			int nonZeroCount = glp_get_mat_row(glpkProblem, i, ind, val);
 			for(int colIndex = 1; colIndex <= cols; ++colIndex) {
@@ -43,7 +43,7 @@ namespace hypro {
 		*/
 
 		// setup glpk
-		for ( unsigned i = 0; i < constraints.cols(); i++ ) {
+		for ( int i = 0; i < constraints.cols(); i++ ) {
 			glp_set_col_bnds( glpkProblem, i + 1, GLP_FR, 0.0, 0.0 );
 			glp_set_obj_coef( glpkProblem, i + 1, carl::toDouble( _direction( i ) ) );
 		}
@@ -62,7 +62,7 @@ namespace hypro {
 				matrix_t<Number> exactSolutionMatrix = matrix_t<Number>::Zero(constraints.cols(), constraints.cols());
 				vector_t<Number> exactSolutionVector = vector_t<Number>::Zero(constraints.cols());
 				unsigned pos = 0;
-				for(unsigned i = 1; i <= constraints.rows(); ++i) {
+				for(int i = 1; i <= constraints.rows(); ++i) {
 					// we search for d non-basic variables at their upper bound, which define the optimal point.
 					int status = glp_get_row_stat( glpkProblem, i);
 					if( status == GLP_NU ) {
@@ -99,7 +99,7 @@ namespace hypro {
 	bool glpkCheckPoint(glp_prob* glpkProblem, const matrix_t<Number>& constraints, const vector_t<Number>& , const Point<Number>& point) {
 		// set point
 		assert(constraints.cols() == point.rawCoordinates().rows());
-		for ( unsigned i = 0; i < constraints.cols(); ++i ) {
+		for ( int i = 0; i < constraints.cols(); ++i ) {
 			glp_set_col_bnds( glpkProblem, i + 1, GLP_FX, carl::toDouble(point.rawCoordinates()(i)), 0.0 );
 			glp_set_obj_coef( glpkProblem, i + 1, 1.0 ); // not needed?
 		}
@@ -113,7 +113,7 @@ namespace hypro {
 		std::vector<std::size_t> res;
 
 		// TODO: ATTENTION: This relies upon that glpk maintains the order of the constraints!
-		for ( unsigned i = 0; i < constraints.cols(); ++i ) {
+		for ( int i = 0; i < constraints.cols(); ++i ) {
 			glp_set_col_bnds( glpkProblem, i + 1, GLP_FR, 0.0, 0.0 );
 			glp_set_obj_coef( glpkProblem, i + 1, 1.0 ); // not needed?
 		}
@@ -129,19 +129,19 @@ namespace hypro {
 			}
 		}
 
-		for(int constraintIndex = constraints.rows()-1; constraintIndex >= 0; --constraintIndex) {
+		for(unsigned constraintIndex = constraints.rows()-1; constraintIndex >= 0; --constraintIndex) {
 			// evaluate in current constraint direction
 			EvaluationResult<Number> actualRes = glpkOptimizeLinear(glpkProblem, vector_t<Number>(constraints.row(constraintIndex)), constraints, constants, true);
 			//assert(actualRes.supportValue <= constants(constraintIndex));
 
 			// remove constraint by removing the boundaries
-			glp_set_row_bnds(glpkProblem, constraintIndex+1, GLP_FR, 0.0, 0.0);
+			glp_set_row_bnds(glpkProblem, int(constraintIndex)+1, GLP_FR, 0.0, 0.0);
 			EvaluationResult<Number> updatedRes = glpkOptimizeLinear(glpkProblem, vector_t<Number>(constraints.row(constraintIndex)), constraints, constants, true);
 
 			if(updatedRes.supportValue == actualRes.supportValue && updatedRes.errorCode == actualRes.errorCode) {
 				res.push_back(constraintIndex);
 			} else {
-				glp_set_row_bnds(glpkProblem, constraintIndex+1, GLP_UP,  0.0, carl::toDouble( constants(constraintIndex) ));
+				glp_set_row_bnds(glpkProblem, int(constraintIndex)+1, GLP_UP,  0.0, carl::toDouble( constants(constraintIndex) ));
 			}
 		}
 

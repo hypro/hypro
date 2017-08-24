@@ -609,7 +609,7 @@ Point<Number> Grid<Number>::calculateOriginal( const Point<unsigned> &inducedPoi
 		std::vector<Number> inducedGridPoints = inducedGridPointsIt.second;
 
 		// get the value of the element at the specified position
-		int induced = inducedPoint.at( fixed );
+		unsigned induced = inducedPoint.at( fixed );
 
 		coordinates[fixed] = inducedGridPoints.at( induced );
 	}
