@@ -225,7 +225,8 @@ void Point<Number>::setCoordinates( const vector_t<Number> &vector ) {
 
 template <typename Number>
 unsigned Point<Number>::dimension() const {
-	return mCoordinates.rows();
+	assert(mCoordinates.rows() >= 0);
+	return unsigned(mCoordinates.rows());
 }
 
 template <typename Number>

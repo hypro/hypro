@@ -131,7 +131,7 @@ BoxT<double,Converter>::BoxT( const std::set<Point<double>> &_points ) {
 		vector_t<double> lower = _points.begin()->rawCoordinates();
 		vector_t<double> upper = _points.begin()->rawCoordinates();
 		for(const auto& point : _points) {
-			for(std::size_t d = 0; d < point.dimension(); ++d){
+			for(long d = 0; d < point.dimension(); ++d){
 				if(point.at(d) < lower(d)) {
 					lower(d) = point.at(d);
 				}

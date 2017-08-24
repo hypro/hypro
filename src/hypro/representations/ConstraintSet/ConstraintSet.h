@@ -170,7 +170,7 @@ class ConstraintSetT : public GeometricObject<Number, ConstraintSetT<Number,Conv
 	  * @brief      Getter for the space dimension.
 	  * @return     The dimension of the space.
 	  */
-	std::size_t dimension() const { return mConstraints.cols(); }
+	std::size_t dimension() const { return std::size_t(mConstraints.cols()); }
 
 	/**
 	 * @brief      Removes redundancy (part of the general interface. Does nothing for constraintSets.)

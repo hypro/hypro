@@ -238,6 +238,105 @@ TYPED_TEST(BoxTest, LinearTransformation)
 	EXPECT_EQ(resZ, hypro::Box<TypeParam>(newCorners));
 }
 
+TYPED_TEST(BoxTest, affineTransformation)
+{
+	carl::Interval<TypeParam> x = carl::Interval<TypeParam>(-2,2);
+	carl::Interval<TypeParam> y = carl::Interval<TypeParam>(2,4);
+	carl::Interval<TypeParam> z = carl::Interval<TypeParam>(-4,-2);
+	std::vector<carl::Interval<TypeParam>> intervals1;
+	intervals1.push_back(x);
+	intervals1.push_back(y);
+	intervals1.push_back(z);
+
+	hypro::Box<TypeParam> b1(intervals1);
+
+	// rotation
+	TypeParam angle = 90;
+
+	hypro::matrix_t<TypeParam> rotX = hypro::matrix_t<TypeParam>::Zero(3,3);
+	rotX(0,0) = 1;
+	rotX(1,1) = carl::cos(angle);
+	rotX(1,2) = -carl::sin(angle);
+	rotX(2,1) = carl::sin(angle);
+	rotX(2,2) = carl::cos(angle);
+
+
+	hypro::matrix_t<TypeParam> rotY = hypro::matrix_t<TypeParam>::Zero(3,3);
+	rotY(0,0) = carl::cos(angle);
+	rotY(0,2) = carl::sin(angle);
+	rotY(1,1) = 1;
+	rotY(2,0) = -carl::sin(angle);
+	rotY(2,2) = carl::cos(angle);
+
+	hypro::matrix_t<TypeParam> rotZ = hypro::matrix_t<TypeParam>::Zero(3,3);
+	rotZ(0,0) = carl::cos(angle);
+	rotZ(0,1) = -carl::sin(angle);
+	rotZ(1,0) = carl::sin(angle);
+	rotZ(1,1) = carl::cos(angle);
+	rotZ(2,2) = 1;
+
+	hypro::vector_t<TypeParam> offset = hypro::vector_t<TypeParam>::Zero(3);
+
+	// result
+	hypro::Box<TypeParam> resX = b1.affineTransformation(rotX, offset);
+	hypro::Box<TypeParam> resY = b1.affineTransformation(rotY, offset);
+	hypro::Box<TypeParam> resZ = b1.affineTransformation(rotZ, offset);
+
+	std::vector<hypro::Point<TypeParam>> cornersX = resX.vertices();
+
+	std::vector<hypro::Point<TypeParam>> originalCorners = b1.vertices();
+	std::vector<hypro::Point<TypeParam>> newCorners;
+	for(auto& point : originalCorners) {
+		newCorners.push_back(hypro::Point<TypeParam>(rotX*point.rawCoordinates()));
+	}
+	EXPECT_EQ(resX, hypro::Box<TypeParam>(newCorners));
+
+
+	newCorners.clear();
+	std::vector<hypro::Point<TypeParam>> cornersY = resY.vertices();
+	for(auto& point : originalCorners) {
+		newCorners.push_back(hypro::Point<TypeParam>(rotY*point.rawCoordinates()));
+	}
+	EXPECT_EQ(resY, hypro::Box<TypeParam>(newCorners));
+
+	newCorners.clear();
+	std::vector<hypro::Point<TypeParam>> cornersZ = resZ.vertices();
+	for(auto& point : originalCorners) {
+		newCorners.push_back(hypro::Point<TypeParam>(rotZ*point.rawCoordinates()));
+	}
+	EXPECT_EQ(resZ, hypro::Box<TypeParam>(newCorners));
+
+	offset << TypeParam(1),TypeParam(1),TypeParam(1);
+
+	// result with shifting
+	resX = b1.affineTransformation(rotX, offset);
+	resY = b1.affineTransformation(rotY, offset);
+	resZ = b1.affineTransformation(rotZ, offset);
+
+	cornersX = resX.vertices();
+
+	originalCorners = b1.vertices();
+	newCorners.clear();
+	for(auto& point : originalCorners) {
+		newCorners.push_back(hypro::Point<TypeParam>(rotX*point.rawCoordinates() + offset));
+	}
+	EXPECT_EQ(resX, hypro::Box<TypeParam>(newCorners));
+
+	newCorners.clear();
+	cornersY = resY.vertices();
+	for(auto& point : originalCorners) {
+		newCorners.push_back(hypro::Point<TypeParam>(rotY*point.rawCoordinates() + offset));
+	}
+	EXPECT_EQ(resY, hypro::Box<TypeParam>(newCorners));
+
+	newCorners.clear();
+	cornersZ = resZ.vertices();
+	for(auto& point : originalCorners) {
+		newCorners.push_back(hypro::Point<TypeParam>(rotZ*point.rawCoordinates() + offset));
+	}
+	EXPECT_EQ(resZ, hypro::Box<TypeParam>(newCorners));
+}
+
 TYPED_TEST(BoxTest, MinkowskiSum)
 {
     hypro::Box<TypeParam> result;
@@ -458,6 +557,9 @@ TYPED_TEST(BoxTest, SatisfiesHalfspace)
 	vec << 3,-4;
 	EXPECT_FALSE(box.satisfiesHalfspaces(mat,vec).first);
 	EXPECT_TRUE(box.satisfiesHalfspaces(mat,vec).second.empty());
+	vec << 3,1;
+	EXPECT_TRUE(box.satisfiesHalfspaces(mat,vec).first);
+	EXPECT_EQ(box.satisfiesHalfspaces(mat,vec).second, box);
 }
 
 TYPED_TEST(BoxTest, Projection)
@@ -472,4 +574,5 @@ TYPED_TEST(BoxTest, Projection)
 	dims.push_back(0);
 
 	EXPECT_EQ(box.project(dims), hypro::Box<TypeParam>( std::make_pair(hypro::Point<TypeParam>({1}), hypro::Point<TypeParam>({2}))));
+	EXPECT_EQ(box.project(std::vector<unsigned>()), hypro::Box<TypeParam>::Empty());
 }

@@ -56,7 +56,7 @@ VPolytopeT<Number, Converter>::VPolytopeT( const matrix_t<Number> &_constraints,
 	matrix_t<Number> intersection = matrix_t<Number>( _constraints.cols(), _constraints.cols() );
 	vector_t<Number> intersectionConstants = vector_t<Number>( _constraints.cols() );
 	std::set<vector_t<Number>> possibleVertices;
-	std::vector<unsigned> permutation;
+	std::vector<std::size_t> permutation;
 	while ( !permutator.end()  ) {
 		permutation = permutator();
 		unsigned rowCount = 0;
@@ -361,7 +361,7 @@ VPolytopeT<Number,Converter> VPolytopeT<Number,Converter>::unite( const std::vec
 			// vertex computation of the oriented box
 			unsigned dim = points.begin()->dimension();
 			Permutator permutator(orientedHalfspaces.size(), dim);
-			std::vector<unsigned> permutation;
+			std::vector<std::size_t> permutation;
 			while(!permutator.end()) {
 				permutation = permutator();
 

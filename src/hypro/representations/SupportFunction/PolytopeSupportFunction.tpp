@@ -134,7 +134,7 @@ std::vector<Point<Number>> PolytopeSupportFunction<Number>::vertices() const {
 		unsigned dim = this->dimension();
 
 		Permutator permutator(mConstraints.rows(), dim);
-		std::vector<unsigned> permutation;
+		std::vector<std::size_t> permutation;
 		while(!permutator.end()) {
 			permutation = permutator();
 

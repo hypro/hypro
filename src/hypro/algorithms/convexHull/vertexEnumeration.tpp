@@ -130,7 +130,7 @@ namespace hypro {
 			unsigned dim = mHsv.begin()->dimension();
 
 			Permutator permutator(mHsv.size(), dim);
-			std::vector<unsigned> permutation;
+			std::vector<std::size_t> permutation;
 			while(!permutator.end()) {
 				permutation = permutator();
 

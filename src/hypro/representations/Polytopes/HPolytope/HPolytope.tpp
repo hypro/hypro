@@ -278,7 +278,7 @@ typename std::vector<Point<Number>> HPolytopeT<Number, Converter>::vertices( con
 		unsigned dim = this->dimension();
 
 		Permutator permutator(mHPlanes.size(), dim);
-		std::vector<unsigned> permutation;
+		std::vector<std::size_t> permutation;
 		while(!permutator.end()) {
 			permutation = permutator();
 

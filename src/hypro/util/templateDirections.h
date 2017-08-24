@@ -96,7 +96,7 @@ static std::vector<vector_t<Number>> computeTemplate(unsigned dimension, unsigne
 
 	//copy directions2d into directions
 	Permutator permutator(dimension, 2);
-	std::vector<unsigned> permutation;
+	std::vector<std::size_t> permutation;
 	while(!permutator.end()) {
 		permutation = permutator();
 		for(vector_t<Number> vectorOfdirections2d: directions2d) {
@@ -185,7 +185,7 @@ static std::vector<vector_t<Number>> computeTemplate(std::vector<unsigned> dimen
 
 	//copy directions2d into directions
 	Permutator permutator(dimensions.size(), 2);
-	std::vector<unsigned> permutation;
+	std::vector<std::size_t> permutation;
 	while(!permutator.end()) {
 		permutation = permutator();
 		//std::cout << "Progress permutation " << permutation << std::endl;
@@ -194,8 +194,9 @@ static std::vector<vector_t<Number>> computeTemplate(std::vector<unsigned> dimen
 			//std::cout << "Process template direction " << vectorOfdirections2d << std::endl;
 
 			auto pos = dimensions.begin();
-			unsigned permPos = permutation.at(0);
+			std::size_t permPos = permutation.at(0);
 			//std::cout << "PermPos = " << permPos << std::endl;
+			// TODO: This does not make sense?
 			while(permPos > 0 ){
 				++pos;
 				--permPos;

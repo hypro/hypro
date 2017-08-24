@@ -350,7 +350,7 @@ vector_t<Number> Halfspace<Number>::computePlaneNormal( const std::vector<vector
 		glp_add_rows( normal, _edgeSet.size() );
 
 		// constraints of auxiliary variables (bounds for rows)
-		for ( unsigned i = 1; i <= _edgeSet.size(); ++i ) {
+		for ( int i = 1; i <= _edgeSet.size(); ++i ) {
 			glp_set_row_bnds( normal, i, GLP_FX, 0.0, 0.0 );
 		}
 
@@ -359,29 +359,29 @@ vector_t<Number> Halfspace<Number>::computePlaneNormal( const std::vector<vector
 		glp_add_cols( normal, _edgeSet.at( 0 ).rows() );
 
 		// coefficients of objective function:
-		for ( unsigned i = 1; i <= _edgeSet.at( 0 ).rows(); ++i ) {
+		for ( int i = 1; i <= _edgeSet.at( 0 ).rows(); ++i ) {
 			glp_set_obj_coef( normal, i, 1.0 );
 		}
 
 		// constraints for structural variables
-		for ( unsigned i = 1; i <= _edgeSet.at( 0 ).rows(); ++i ) {
+		for ( int i = 1; i <= _edgeSet.at( 0 ).rows(); ++i ) {
 			glp_set_col_bnds( normal, i, GLP_DB, -1.0, 1.0 );
 		}
 
 		// setup matrix coefficients
 		unsigned elements = ( _edgeSet.size() ) * ( _edgeSet.at( 0 ).rows() );
-		int* ia = new int[1 + elements];
-		int* ja = new int[1 + elements];
-		double* ar = new double[1 + elements];
-		unsigned pos = 1;
+		int* ia = new int[elements + 1];
+		int* ja = new int[elements + 1];
+		double* ar = new double[elements + 1];
+		int pos = 1;
 
 		// to prevent bugs
 		ia[0] = 0;
 		ja[0] = 0;
 		ar[0] = 0;
 
-		for ( unsigned i = 1; i <= _edgeSet.size(); ++i ) {
-			for ( unsigned j = 1; j <= _edgeSet.at( 0 ).rows(); ++j ) {
+		for ( int i = 1; i <= _edgeSet.size(); ++i ) {
+			for ( int j = 1; j <= _edgeSet.at( 0 ).rows(); ++j ) {
 				ia[pos] = i;
 				ja[pos] = j;
 				vector_t<Number> tmpVec = _edgeSet.at( i - 1 );
@@ -391,7 +391,7 @@ vector_t<Number> Halfspace<Number>::computePlaneNormal( const std::vector<vector
 		}
 		assert( pos - 1 <= elements );
 
-		glp_load_matrix( normal, elements, ia, ja, ar );
+		glp_load_matrix( normal, int(elements), ia, ja, ar );
 		glp_simplex( normal, NULL );
 		glp_exact(normal, NULL);
 

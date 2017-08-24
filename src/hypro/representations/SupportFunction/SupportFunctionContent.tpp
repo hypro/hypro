@@ -1050,7 +1050,7 @@ unsigned SupportFunctionContent<Number>::multiplicationsPerEvaluation() const {
 	using Node = std::shared_ptr<SupportFunctionContent<Number>>;
 	using Res = unsigned;
 	std::vector<Node> callStack;
-	std::vector<std::pair<int,std::vector<Res>>> resultStack; // The first value is an iterator to the calling frame
+	std::vector<std::pair<std::size_t,std::vector<Res>>> resultStack; // The first value is an iterator to the calling frame
 
 	callStack.push_back(getThis());
 	resultStack.push_back(std::make_pair(-1, std::vector<Res>()));
@@ -1061,7 +1061,7 @@ unsigned SupportFunctionContent<Number>::multiplicationsPerEvaluation() const {
 		if(cur->originCount() == 0) {
 			// Do computation and write results in case recursion ends.
 
-			std::pair<int,std::vector<Res>> currentResult = resultStack.back();
+			std::pair<std::size_t,std::vector<Res>> currentResult = resultStack.back();
 
 			// update result
 			// special case: When the node is a leaf, we directly return the result.
@@ -1359,7 +1359,7 @@ std::vector<unsigned> SupportFunctionContent<Number>::collectProjections() const
 
 	std::vector<Node> callStack;
 	//std::vector<vector_t<Number>> paramStack;
-	std::vector<std::pair<int,std::vector<Res>>> resultStack; // The first value is an iterator to the calling frame
+	std::vector<std::pair<std::size_t,std::vector<Res>>> resultStack; // The first value is an iterator to the calling frame
 
 	callStack.push_back(getThis());
 	//paramStack.push_back(1);
@@ -1376,7 +1376,7 @@ std::vector<unsigned> SupportFunctionContent<Number>::collectProjections() const
 			//std::cout << "Reached bottom." << std::endl;
 			// Do computation and write results in case recursion ends.
 
-			std::pair<int,std::vector<Res>> currentResult = resultStack.back();
+			std::pair<std::size_t,std::vector<Res>> currentResult = resultStack.back();
 
 			// update result
 			Res res;
