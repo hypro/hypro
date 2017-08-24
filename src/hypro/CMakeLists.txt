@@ -8,7 +8,7 @@ file(GLOB_RECURSE sources RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} *.cpp)
 
 ########################################################################################
 
-#if(STATICLIB_SWITCH)
+if(STATICLIB_SWITCH)
 	message(STATUS "linking static")
 	add_library(${PROJECT_NAME}_static STATIC ${sources})
 	set_target_properties( ${PROJECT_NAME}_static PROPERTIES
@@ -33,7 +33,7 @@ file(GLOB_RECURSE sources RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} *.cpp)
 		$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
 		$<INSTALL_INTERFACE:include/${PROJECT_NAME}>
 	)
-#else()
+else()
 	message(STATUS "linking dynamic")
 	add_library(${PROJECT_NAME} SHARED ${sources})
 	set_target_properties( ${PROJECT_NAME} PROPERTIES
@@ -50,8 +50,8 @@ file(GLOB_RECURSE sources RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} *.cpp)
 	)
 	#message(STATUS "antlr libs path: " ${ANTLR4CPP_LIBS})
 	#message(STATUS "antlr include dirs path: " ${ANTLR4CPP_INCLUDE_DIRS})
-	#message(STATUS "hypro libraries dynamic: " "${hypro_LIBRARIES_DYNAMIC}")
-	#message("hypro include dirs: " ${hypro_INCLUDE_DIRS})
+	message(STATUS "hypro libraries dynamic: " "${hypro_LIBRARIES_DYNAMIC}")
+	message("hypro include dirs: " ${hypro_INCLUDE_DIRS})
 	#message("hypro sources: " ${sources})
 	target_link_libraries(${PROJECT_NAME} PUBLIC ${hypro_LIBRARIES_DYNAMIC} pthread)
 	target_include_directories(${PROJECT_NAME}
@@ -60,7 +60,7 @@ file(GLOB_RECURSE sources RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} *.cpp)
 		$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
 		$<INSTALL_INTERFACE:include/${PROJECT_NAME}>
 	)
-#endif()
+endif()
 
 if(STATICLIB_SWITCH)
 	if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
@@ -92,19 +92,23 @@ cotire(${PROJECT_NAME})
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} DESTINATION include FILES_MATCHING PATTERN "*.h")
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} DESTINATION include FILES_MATCHING PATTERN "*.tpp")
 
-install(TARGETS ${PROJECT_NAME}
-		EXPORT ${PROJECT_NAME}
-		LIBRARY DESTINATION ${LIB_INSTALL_DIR}
-		ARCHIVE DESTINATION ${LIB_INSTALL_DIR}/static)
-
+if(STATICLIB_SWITCH)
 install(TARGETS ${PROJECT_NAME}_static
 		EXPORT ${PROJECT_NAME}_static
 		LIBRARY DESTINATION ${LIB_INSTALL_DIR}
 		ARCHIVE DESTINATION ${LIB_INSTALL_DIR}/static)
+else()
+install(TARGETS ${PROJECT_NAME}
+		EXPORT ${PROJECT_NAME}
+		LIBRARY DESTINATION ${LIB_INSTALL_DIR}
+		ARCHIVE DESTINATION ${LIB_INSTALL_DIR}/static)
+endif()
+
+
 
 ########################################################################################
 
-if (CLANG_TIDY)
+if(CLANG_TIDY)
 	add_custom_target(tidy
 		COMMAND clang-tidy -p ../../build/compile_commands.json ${CLANG_TIDY_CHECKS} -header-filter='.*' ${sources}
 		WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/src/hypro/
