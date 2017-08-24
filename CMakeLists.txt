@@ -55,10 +55,12 @@ option(HYPRO_COVERAGE "Enable compiler flags for test coverage diagnostics." OFF
 option(HYPRO_STATISTICS "Create a statistic file." OFF)
 option(CLANG_TIDY "Enable usage of clang-tidy" OFF )
 option(CREATE_DOC "Allow creation of a doxygen documentation." OFF)
+option(DEVELOPER "Compile in developer mode, i.e. more warnings." OFF)
 option(EXPORT_TO_CMAKE "Export the project to CMake for easy inclusion" ON)
 mark_as_advanced(HYPRO_COVERAGE)
 mark_as_advanced(HYPRO_STATISTICS)
 mark_as_advanced(CLANG_TIDY)
+mark_as_advanced(DEVELOPER)
 # Include own macros.
 include( hypromacros )
 
@@ -136,6 +138,10 @@ if(STATICLIB_SWITCH)
 else()
 	set(CMAKE_FIND_LIBRARY_SUFFIXES ".so;.dylib")
 	SET(BUILD_SHARED_LIBRARIES ON)
+endif()
+
+if(DEVELOPER)
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wswitch -Wno-deprecated-declarations -Wempty-body -Wconversion -Wreturn-type -Wparentheses -Wno-pointer-sign -Wno-format -Wuninitialized -Wunreachable-code -Wunused-function -Wunused-value -Wunused-variable")
 endif()
 
 if(HYPRO_COVERAGE)
