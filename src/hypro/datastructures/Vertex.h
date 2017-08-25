@@ -111,14 +111,14 @@ class Vertex {
 	 */
 	Number coordinate( const carl::Variable& _var ) const { return mPoint.coordinate( _var ); }
 
-	Number coordinate( unsigned _dim ) const { return mPoint.coordinate( _dim ); }
+	Number coordinate( std::size_t _dim ) const { return mPoint.coordinate( _dim ); }
 
 	vector_t<Number> rawCoordinates() const { return mPoint.rawCoordinates(); }
 
 	/**
 	 * @see Point::dimension
 	 */
-	unsigned dimension() const { return mPoint.dimension(); }
+	std::size_t dimension() const { return mPoint.dimension(); }
 
 	/**
 	 * @see Point::variables

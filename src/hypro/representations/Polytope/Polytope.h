@@ -140,7 +140,7 @@ namespace hypro
 		std::size_t dimension() const;
 		PolytopeT<Number,Converter> linearTransformation(const matrix_t<Number>& A) const;
 		PolytopeT<Number,Converter> affineTransformation(const matrix_t<Number>& A, const vector_t<Number>& b) const;
-		PolytopeT<Number,Converter> project(const std::vector<unsigned>& dimensions) const;
+		PolytopeT<Number,Converter> project(const std::vector<std::size_t>& dimensions) const;
 		PolytopeT<Number,Converter> minkowskiSum(const PolytopeT<Number,Converter>& rhs) const;
 		// implemented according to Komei Fukuda 2004
 		PolytopeT<Number,Converter> altMinkowskiSum(PolytopeT<Number,Converter>& rhs);

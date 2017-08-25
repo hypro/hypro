@@ -570,9 +570,9 @@ TYPED_TEST(BoxTest, Projection)
 	box.insert(xInterval);
 	box.insert(yInterval);
 
-	std::vector<unsigned> dims;
+	std::vector<std::size_t> dims;
 	dims.push_back(0);
 
 	EXPECT_EQ(box.project(dims), hypro::Box<TypeParam>( std::make_pair(hypro::Point<TypeParam>({1}), hypro::Point<TypeParam>({2}))));
-	EXPECT_EQ(box.project(std::vector<unsigned>()), hypro::Box<TypeParam>::Empty());
+	EXPECT_EQ(box.project(std::vector<std::size_t>()), hypro::Box<TypeParam>::Empty());
 }

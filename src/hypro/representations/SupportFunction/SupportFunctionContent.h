@@ -140,8 +140,8 @@ struct intersectionContent {
 template<typename Number>
 struct projectionContent {
 	std::shared_ptr<SupportFunctionContent<Number>> origin;
-	std::vector<unsigned> dimensions;
-	projectionContent( const std::shared_ptr<SupportFunctionContent<Number>>& _origin, const std::vector<unsigned>& _dimensions )
+	std::vector<std::size_t> dimensions;
+	projectionContent( const std::shared_ptr<SupportFunctionContent<Number>>& _origin, const std::vector<std::size_t>& _dimensions )
 		: origin(_origin), dimensions(_dimensions) {}
 	projectionContent( const projectionContent<Number>& _original ) : origin(_original.origin), dimensions(_original.dimensions) {}
 
@@ -160,7 +160,7 @@ class SupportFunctionContent {
 	SF_TYPE mType = SF_TYPE::NONE;
 	unsigned mDepth;
 	unsigned mOperationCount;
-	unsigned mDimension;
+	std::size_t mDimension;
 	bool mContainsProjection;
 	union {
 		sumContent<Number>* mSummands;
@@ -188,7 +188,7 @@ class SupportFunctionContent {
 	SupportFunctionContent( const std::shared_ptr<SupportFunctionContent<Number>>& _origin, const matrix_t<Number>& A, const vector_t<Number>& b, SF_TYPE _type );
 	SupportFunctionContent( const std::shared_ptr<SupportFunctionContent<Number>>& _origin, const Number& _factor,
 					 SF_TYPE _type = SF_TYPE::SCALE );
-	SupportFunctionContent( const std::shared_ptr<SupportFunctionContent<Number>>& _origin, const std::vector<unsigned>& dimensions, SF_TYPE _type = SF_TYPE::PROJECTION );
+	SupportFunctionContent( const std::shared_ptr<SupportFunctionContent<Number>>& _origin, const std::vector<std::size_t>& dimensions, SF_TYPE _type = SF_TYPE::PROJECTION );
 	SupportFunctionContent( const SupportFunctionContent<Number>& _orig );
 
   public:
@@ -258,7 +258,7 @@ class SupportFunctionContent {
 		return obj;
 	}
 
-	static std::shared_ptr<SupportFunctionContent<Number>> create( const std::shared_ptr<SupportFunctionContent<Number>>& orig, const std::vector<unsigned>& dimensions ) {
+	static std::shared_ptr<SupportFunctionContent<Number>> create( const std::shared_ptr<SupportFunctionContent<Number>>& orig, const std::vector<std::size_t>& dimensions ) {
 		auto obj = std::shared_ptr<SupportFunctionContent<Number>>( new SupportFunctionContent<Number>(orig, dimensions, SF_TYPE::PROJECTION));
 		obj->pThis = obj;
 		assert(obj->checkTreeValidity());
@@ -294,8 +294,8 @@ class SupportFunctionContent {
 
 	Point<Number> supremumPoint() const;
 
-	std::vector<unsigned> collectProjections() const;
-	std::vector<unsigned> collectProjectionsIterative() const;
+	std::vector<std::size_t> collectProjections() const;
+	std::vector<std::size_t> collectProjectionsIterative() const;
 
 	// getter for the union types
 	sumContent<Number>* summands() const;
@@ -308,7 +308,7 @@ class SupportFunctionContent {
 	BallSupportFunction<Number>* ball() const;
 	EllipsoidSupportFunction<Number>* ellipsoid() const;
 
-	std::shared_ptr<SupportFunctionContent<Number>> project(const std::vector<unsigned>& dimensions) const;
+	std::shared_ptr<SupportFunctionContent<Number>> project(const std::vector<std::size_t>& dimensions) const;
 	std::shared_ptr<SupportFunctionContent<Number>> affineTransformation( const matrix_t<Number>& A, const vector_t<Number>& b ) const;
 	std::shared_ptr<SupportFunctionContent<Number>> minkowskiSum( const std::shared_ptr<SupportFunctionContent<Number>>& _rhs ) const;
 	std::shared_ptr<SupportFunctionContent<Number>> intersect( const std::shared_ptr<SupportFunctionContent<Number>>& _rhs ) const;
@@ -340,7 +340,7 @@ class SupportFunctionContent {
 		using Node = std::shared_ptr<SupportFunctionContent<Number>>;
 		using Res = bool;
 		std::vector<Node> callStack;
-		std::vector<std::pair<std::size_t,std::vector<Res>>> resultStack; // The first value is an iterator to the calling frame
+		std::vector<std::pair<int,std::vector<Res>>> resultStack; // The first value is an iterator to the calling frame
 
 		callStack.push_back(getThis());
 		resultStack.push_back(std::make_pair(-1, std::vector<Res>()));
@@ -351,7 +351,7 @@ class SupportFunctionContent {
 			if(cur->originCount() == 0) {
 				// Do computation and write results in case recursion ends.
 
-				std::pair<std::size_t,std::vector<Res>> currentResult = resultStack.back();
+				std::pair<int,std::vector<Res>> currentResult = resultStack.back();
 
 				// update result
 				// special case: When the node is a leaf, we directly return the result.
@@ -423,7 +423,7 @@ class SupportFunctionContent {
 					// this is the branch for calling recursively
 
 					// here we create the new stack levels. As the parameters are all the same, we do not care for their order (could be extended).
-					std::size_t callingFrame = callStack.size() - 1 ;
+					int callingFrame = int(callStack.size()) - 1 ;
 
 					switch ( cur->type() ) {
 				        case SF_TYPE::SUM: {

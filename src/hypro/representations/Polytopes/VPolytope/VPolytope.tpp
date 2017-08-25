@@ -118,7 +118,7 @@ VPolytopeT<Number, Converter>::VPolytopeT( const matrix_t<Number> &_constraints,
 }
 
 template<typename Number, typename Converter>
-VPolytopeT<Number,Converter> VPolytopeT<Number,Converter>::project(const std::vector<unsigned>& dimensions) const {
+VPolytopeT<Number,Converter> VPolytopeT<Number,Converter>::project(const std::vector<std::size_t>& dimensions) const {
 	if(dimensions.empty()) {
 		return Empty();
 	}

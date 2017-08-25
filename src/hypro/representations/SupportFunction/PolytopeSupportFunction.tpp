@@ -108,7 +108,7 @@ PolytopeSupportFunction<Number>& PolytopeSupportFunction<Number>::operator=(cons
 }
 
 template <typename Number>
-unsigned PolytopeSupportFunction<Number>::dimension() const {
+std::size_t PolytopeSupportFunction<Number>::dimension() const {
 	return mDimension;
 }
 

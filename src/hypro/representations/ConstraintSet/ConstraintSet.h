@@ -196,7 +196,7 @@ class ConstraintSetT : public GeometricObject<Number, ConstraintSetT<Number,Conv
 
 	std::pair<bool, ConstraintSetT> satisfiesHalfspace( const Halfspace<Number>&  ) const { return std::make_pair(true,*this); }
 	std::pair<bool, ConstraintSetT> satisfiesHalfspaces( const matrix_t<Number>& , const vector_t<Number>&  ) const { return std::make_pair(true,*this); }
-	ConstraintSetT<Number,Converter> project(const std::vector<unsigned>& ) const { return *this; }
+	ConstraintSetT<Number,Converter> project(const std::vector<std::size_t>& ) const { return *this; }
 	ConstraintSetT<Number,Converter> linearTransformation( const matrix_t<Number>& ) const { return *this; }
 	ConstraintSetT<Number,Converter> affineTransformation( const matrix_t<Number>& , const vector_t<Number>& ) const { return *this; }
 	ConstraintSetT<Number,Converter> minkowskiSum( const ConstraintSetT<Number,Converter>& ) const { return *this; }

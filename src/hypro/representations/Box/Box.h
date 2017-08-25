@@ -362,7 +362,7 @@ class BoxT : public GeometricObject<Number, BoxT<Number,Converter>> {
 
 	std::pair<bool, BoxT> satisfiesHalfspace( const Halfspace<Number>& rhs ) const;
 	std::pair<bool, BoxT> satisfiesHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const;
-	BoxT<Number,Converter> project(const std::vector<unsigned>& dimensions) const;
+	BoxT<Number,Converter> project(const std::vector<std::size_t>& dimensions) const;
 	BoxT<Number,Converter> linearTransformation( const matrix_t<Number>& A ) const;
 	BoxT<Number,Converter> affineTransformation( const matrix_t<Number>& A, const vector_t<Number>& b ) const;
 	BoxT<Number,Converter> minkowskiSum( const BoxT<Number,Converter>& rhs ) const;

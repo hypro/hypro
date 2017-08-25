@@ -42,7 +42,7 @@ class VertexEnumeration {
 		std::vector<vector_t<Number>> getCones() const;
 		void printCones() const;
 
-		void increment(std::size_t& i, std::size_t& j, std::size_t maxJ);
+		void increment(Eigen::Index& i, Eigen::Index& j, std::size_t maxJ);
 
 		void enumerateVertices();
 		/**

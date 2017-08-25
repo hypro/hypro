@@ -41,7 +41,7 @@ class VertexContainer {
 	 * Getters & Setters
 	 **********************************************************************/
 
-	unsigned dimension() const {
+	std::size_t dimension() const {
 		if ( mVertices.size() == 0 ) return 0;
 		return ( *mVertices.begin() ).dimension();
 	}
@@ -51,7 +51,7 @@ class VertexContainer {
 		return ( *mVertices.begin() ).variables();
 	}
 
-	unsigned size() const { return mVertices.size(); }
+	std::size_t size() const { return mVertices.size(); }
 
 	bool empty() const { return mVertices.empty(); }
 

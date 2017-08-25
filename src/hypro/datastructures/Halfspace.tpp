@@ -62,7 +62,7 @@ Halfspace<Number>::~Halfspace() {
 
 template <typename Number>
 unsigned Halfspace<Number>::dimension() const {
-	return mNormal.nonZeros();
+	return unsigned(mNormal.nonZeros());
 }
 
 template<typename Number>
@@ -347,16 +347,16 @@ vector_t<Number> Halfspace<Number>::computePlaneNormal( const std::vector<vector
 		glp_set_obj_dir( normal, GLP_MAX );
 
 		// we have one row for each edge in our set
-		glp_add_rows( normal, _edgeSet.size() );
+		glp_add_rows( normal, int(_edgeSet.size()) );
 
 		// constraints of auxiliary variables (bounds for rows)
-		for ( int i = 1; i <= _edgeSet.size(); ++i ) {
+		for ( int i = 1; i <= int(_edgeSet.size()); ++i ) {
 			glp_set_row_bnds( normal, i, GLP_FX, 0.0, 0.0 );
 		}
 
 		// each column corresponds to one dimension of a vector in our edgeSet
 		// TODO consider p1 & p2 of different dimensions? (-> two edge sets)
-		glp_add_cols( normal, _edgeSet.at( 0 ).rows() );
+		glp_add_cols( normal, int(_edgeSet.at( 0 ).rows()) );
 
 		// coefficients of objective function:
 		for ( int i = 1; i <= _edgeSet.at( 0 ).rows(); ++i ) {
@@ -369,7 +369,7 @@ vector_t<Number> Halfspace<Number>::computePlaneNormal( const std::vector<vector
 		}
 
 		// setup matrix coefficients
-		unsigned elements = ( _edgeSet.size() ) * ( _edgeSet.at( 0 ).rows() );
+		std::size_t elements = ( _edgeSet.size() ) * ( std::size_t(_edgeSet.at( 0 ).rows()) );
 		int* ia = new int[elements + 1];
 		int* ja = new int[elements + 1];
 		double* ar = new double[elements + 1];
@@ -380,7 +380,7 @@ vector_t<Number> Halfspace<Number>::computePlaneNormal( const std::vector<vector
 		ja[0] = 0;
 		ar[0] = 0;
 
-		for ( int i = 1; i <= _edgeSet.size(); ++i ) {
+		for ( int i = 1; i <= int(_edgeSet.size()); ++i ) {
 			for ( int j = 1; j <= _edgeSet.at( 0 ).rows(); ++j ) {
 				ia[pos] = i;
 				ja[pos] = j;

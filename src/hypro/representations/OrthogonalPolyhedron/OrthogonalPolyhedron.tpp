@@ -280,11 +280,11 @@ OrthogonalPolyhedronT<Number, Converter, Type> OrthogonalPolyhedronT<Number, Con
 		updateBoundaryBox();
 	}
 
-	int nrofVertices = pow( 2, dimension() );
+	std::size_t nrofVertices = std::size_t(pow( 2, dimension() ));
 	VertexContainer<Number> container;
 	Vertex<Number> vertex;
 
-	for ( int vertexNr = 0; vertexNr < nrofVertices; vertexNr++ ) {
+	for ( std::size_t vertexNr = 0; vertexNr < nrofVertices; vertexNr++ ) {
 		int i = 0;
 		for ( std::size_t p = 0; p < mGrid.dimension(); ++p ) {
 			// look if the bit of the current dimension is set

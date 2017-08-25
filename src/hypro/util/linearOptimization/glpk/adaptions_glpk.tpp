@@ -129,7 +129,7 @@ namespace hypro {
 			}
 		}
 
-		for(unsigned constraintIndex = constraints.rows()-1; constraintIndex >= 0; --constraintIndex) {
+		for(std::size_t constraintIndex = std::size_t(constraints.rows()-1); constraintIndex >= 0; --constraintIndex) {
 			// evaluate in current constraint direction
 			EvaluationResult<Number> actualRes = glpkOptimizeLinear(glpkProblem, vector_t<Number>(constraints.row(constraintIndex)), constraints, constants, true);
 			//assert(actualRes.supportValue <= constants(constraintIndex));
@@ -147,7 +147,7 @@ namespace hypro {
 
 		// restore original problem
 		for(const auto item : res ) {
-			glp_set_row_bnds(glpkProblem, item+1, GLP_UP,  0.0, carl::toDouble( constants(item) ));
+			glp_set_row_bnds(glpkProblem, int(item)+1, GLP_UP,  0.0, carl::toDouble( constants(item) ));
 		}
 
 		return res;

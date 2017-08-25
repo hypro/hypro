@@ -34,28 +34,28 @@ class ConstrainSet {
 		 * @param baseIndices A vector of possible variable indices.
 		 * @return True, if there is any variable out of bounds.
 		 */
-		bool outside(std::size_t& index, Number& diff, const std::vector<std::size_t>& baseIndices) {
+		bool outside(Eigen::Index& index, Number& diff, const std::vector<Eigen::Index>& baseIndices) {
 			index = constrainSet.size()+1;
 			diff = 0;
 			for(std::size_t i=0;i<baseIndices.size()-1;++i) {
-				if((index==constrainSet.size()+1||baseIndices[i]-1<baseIndices[index]) && not(std::get<0>(std::get<0>(constrainSet[baseIndices[i]-1]))||
+				if((index==Eigen::Index(constrainSet.size()+1)||baseIndices[i]-1<baseIndices[index]) && not(std::get<0>(std::get<0>(constrainSet[baseIndices[i]-1]))||
 							std::get<1>(std::get<0>(constrainSet[baseIndices[i]-1]))<=std::get<2>(constrainSet[baseIndices[i]-1]))) {
 					index = i;
 					diff = std::get<1>(std::get<0>(constrainSet[baseIndices[i]-1]))-std::get<2>(constrainSet[baseIndices[i]-1]);
-				} else if((index==constrainSet.size()+1||baseIndices[i]-1<baseIndices[index]) && not(std::get<0>(std::get<1>(constrainSet[baseIndices[i]-1]))||
+				} else if((index==Eigen::Index(constrainSet.size()+1)||baseIndices[i]-1<baseIndices[index]) && not(std::get<0>(std::get<1>(constrainSet[baseIndices[i]-1]))||
 							std::get<1>(std::get<1>(constrainSet[baseIndices[i]-1]))>=std::get<2>(constrainSet[baseIndices[i]-1]))) {
 					index = i;
 					diff = std::get<1>(std::get<1>(constrainSet[baseIndices[i]-1]))-std::get<2>(constrainSet[baseIndices[i]-1]);
 				}
 			}
-			return index!=constrainSet.size()+1;
+			return index!=Eigen::Index(constrainSet.size()+1);
 		}
 
-		bool getPivot(const std::size_t& index, const Number& diff, std::size_t& pivot, const std::vector<std::size_t>& cobaseIndices,
+		bool getPivot(const Eigen::Index& index, const Number& diff, Eigen::Index& pivot, const std::vector<Eigen::Index>& cobaseIndices,
 						const matrix_t<Number>& dictionary) {
 			pivot = constrainSet.size()+1;
 			for(std::size_t i=0;i<cobaseIndices.size()-1;++i) {
-				if(pivot==constrainSet.size()+1 || cobaseIndices[i]<pivot) {
+				if(pivot==Eigen::Index(constrainSet.size()+1) || cobaseIndices[i]<pivot) {
 					if(dictionary(index,i) * diff<0 && (std::get<0>(std::get<0>(constrainSet[cobaseIndices[i]-1]))
 								|| std::get<1>(std::get<0>(constrainSet[cobaseIndices[i]-1]))>std::get<2>(constrainSet[cobaseIndices[i]-1]))) {
 						pivot = i;
@@ -65,15 +65,15 @@ class ConstrainSet {
 					}
 				}
 			}
-			return(pivot!=constrainSet.size()+1);
+			return(pivot!=Eigen::Index(constrainSet.size()+1));
 		}
 	/**
 	 * @brief Finds a suitable pivot to get the variable "index" to its bounds.
 	 * @return True, if there is a suitable pivot.
 	 */
 
-		void modifyAssignment (const std::size_t& pivot,const Number& diff,const std::vector<std::size_t>& base,
-						const std::vector<std::size_t>& cobase, const matrix_t<Number>& dictionary) {
+		void modifyAssignment (const Eigen::Index& pivot,const Number& diff,const std::vector<Eigen::Index>& base,
+						const std::vector<Eigen::Index>& cobase, const matrix_t<Number>& dictionary) {
 			std::get<2>(constrainSet[cobase[pivot]-1])+=diff;
 			for(std::size_t rowIndex=0;rowIndex<base.size()-1;++rowIndex) {
 				std::get<2>(constrainSet[base[rowIndex]-1]) = 0;
@@ -115,11 +115,11 @@ class ConstrainSet {
 			||(not(std::get<0>(std::get<1>(constrainSet[var])))&&std::get<1>(std::get<1>(constrainSet[var]))==std::get<2>(constrainSet[var]));
 		}
 
-		bool finiteLowerBound(unsigned var) const {
+		bool finiteLowerBound(std::size_t var) const {
 			return not(std::get<0>(std::get<0>(constrainSet[var])));
 		}
 
-		Number diffToLowerBound(unsigned var) const {
+		Number diffToLowerBound(std::size_t var) const {
 			return std::get<1>(std::get<0>(constrainSet[var]))-std::get<2>(constrainSet[var]);
 		}
 	/**

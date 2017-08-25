@@ -46,9 +46,9 @@ template<typename Number>
 void PrincipalComponentAnalysis<Number>::computeOrientedBox() const {
 	if(!mSamples.empty()){
 		//gets dimension of sample points
-	    unsigned dim = mSamples.begin()->rawCoordinates().rows();
+	    long dim = mSamples.begin()->rawCoordinates().rows();
 	    //gets number of sample points
-	    unsigned sSize = mSamples.size();
+	    long sSize = mSamples.size();
 
 	    computeMean();
 

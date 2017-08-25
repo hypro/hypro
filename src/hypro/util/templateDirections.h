@@ -17,7 +17,7 @@ namespace hypro {
 */
 #define PI 3.14159265359
 template<typename Number>
-static std::vector<vector_t<Number>> computeTemplate(unsigned dimension, unsigned numberDirections) {
+static std::vector<vector_t<Number>> computeTemplate(std::size_t dimension, std::size_t numberDirections) {
 	if(dimension == 1) {
 		std::vector<vector_t<Number>> directions;
 		vector_t<Number> v0 = vector_t<Number>::Zero(1);
@@ -115,7 +115,7 @@ static std::vector<vector_t<Number>> computeTemplate(unsigned dimension, unsigne
 }
 
 template<typename Number>
-static std::vector<vector_t<Number>> computeTemplate(std::vector<unsigned> dimensions, unsigned numberDirections, unsigned dim) {
+static std::vector<vector_t<Number>> computeTemplate(std::vector<std::size_t> dimensions, std::size_t numberDirections, std::size_t dim) {
 	std::vector<vector_t<Number>> directions, directions2d;
 
 	if(numberDirections == 4) {

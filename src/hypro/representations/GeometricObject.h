@@ -94,7 +94,7 @@ public:
 	 * @param[in]  dimensions  The dimensions.
 	 * @return     The resulting set.
 	 */
-	virtual DerivedShape project(const std::vector<unsigned>& dimensions) const = 0;
+	virtual DerivedShape project(const std::vector<std::size_t>& dimensions) const = 0;
 
 	/**
 	 * @brief      Applies a linear transformation with the matrix A to the set.

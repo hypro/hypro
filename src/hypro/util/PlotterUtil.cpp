@@ -28,7 +28,7 @@ namespace hypro {
 		// scale domain from [0,255] to [0,1]
 		std::vector<double> scaled;
 		for(auto item : color){
-			scaled.push_back(item/255.0);
+			scaled.push_back(double(item)/255.0);
 		}
 
         auto min = std::min_element(scaled.begin(), scaled.end());
@@ -87,7 +87,7 @@ namespace hypro {
             return std::vector<std::size_t>({resR,resG,resB});
         }
         h /= 60.0;            // sector 0 to 5
-        i = std::floor( h );
+        i = int(std::floor( h ));
         double f = h - i;          // factorial part of h
         double p = v * ( 1 - s );
         double q = v * ( 1 - s * f );

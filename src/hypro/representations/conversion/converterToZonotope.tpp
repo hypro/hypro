@@ -24,7 +24,7 @@ vector_t<Number> computeArithmeticMeanPoint(const std::vector<Point<Number>>& po
 			assert(res.rows() == pointVec.at(i).rawCoordinates().rows());
 			res += pointVec.at(i).rawCoordinates();
 		}
-		res = res*( ((Number) 1)/pointVec.size());
+		res = res*( ((Number) 1)/Number(pointVec.size()));
 		return res;
     }
     return vector_t<Number>::Zero(0);
@@ -87,16 +87,16 @@ typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const Constr
 //conversion from Box to Zonotope (no differentiation between conversion modes - always EXACT)
 template <typename Number>
 typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const Box& _source, const CONV_MODE  ){
-    unsigned dim = _source.dimension();                                             //gets dimension from source object
+    std::size_t dim = _source.dimension();                                             //gets dimension from source object
     std::vector<carl::Interval<Number>> intervals = _source.boundaries();           //gets intervals from source object
     matrix_t<Number> generators = matrix_t<Number>::Zero(dim, dim);                 //defines an empty generator matrix for dim generators
     vector_t<Number> center = vector_t<Number>(dim);                                //defines an empty center vector
 
-    for (unsigned i=0; i<dim; ++i){                                                 //for every dimension
+    for (std::size_t i=0; i<dim; ++i){                                                 //for every dimension
         center[i] = (intervals[i].lower() + intervals[i].upper())/2;                //compute center component of the Box
     }
 
-    for (unsigned i=0; i<dim; ++i){                                                 //for every dimension
+    for (std::size_t i=0; i<dim; ++i){                                                 //for every dimension
         generators(i, i) = (intervals[i].upper() - intervals[i].lower())/ 2;        //compute the corresponding generator for that dimension by computing the length of the interval and dividing it by 2
     }
 
@@ -110,7 +110,7 @@ typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const VPolyt
     //overapproximation
     //if( mode == OVER){
         //gets dimension from source object
-        unsigned dim = _source.dimension();
+        std::size_t dim = _source.dimension();
 
         //gets vertices from source object
         typename VPolytopeT<Number,Converter>::pointVector vertices = _source.vertices();
@@ -139,14 +139,14 @@ typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const VPolyt
 		//defines a matrix with one exemplary point out of each set of halfspaces (on the border) for distance computation
 		matrix_t<Number> planePoints = matrix_t<Number>::Zero(dim, dim);
 		//for every dimension
-		for (unsigned i=0; i < dim; ++i){
+		for (std::size_t i=0; i < dim; ++i){
 			//read out normal of current halfspace pair
 			vector_t<Number> normal = planes[2*i].normal();
 
 			//only continue if normal is non-zero
 			assert (normal != vector_t<Number>::Zero(normal.rows()));
 			//for every dimension
-			for (unsigned j=0; j < dim; ++j){
+			for (std::size_t j=0; j < dim; ++j){
 				//construct point on the Halfspace by computing the intersection point with one of the axes (zero check ensures that plane is not parallel to that axis)
 				if (normal(j) != 0){
 					vector_t<Number> p = vector_t<Number>::Zero(dim);
@@ -158,7 +158,7 @@ typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const VPolyt
 		}
 
 		//computes distances from center to each pair of halfspaces
-		for (unsigned i=0; i < dim; ++i){
+		for (std::size_t i=0; i < dim; ++i){
 			vector_t<Number> normal = planes[2*i].normal();
 
 			Number normalDiff = normal.dot(center) - normal.dot(planePoints.row(i));
@@ -181,7 +181,7 @@ typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const VPolyt
 			}
 		}
 
-		for (unsigned i=0; i < dim; ++i){
+		for (std::size_t i=0; i < dim; ++i){
 			//computes scaling factors for normals in order to compute the generators later on
 			vector_t<Number> normal = planes[2*i].normal();
 			Number distancePow = distances(i)*distances(i);
@@ -203,11 +203,11 @@ typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const VPolyt
 //conversion from Support Function to Zonotope (OVER or ALTERNATIVE)
 //ALTERNATIVE computes a set of boundary points which then go to pca for an oriented rectangular hull before checking whether the source object is really in that box and maybe expanding it)
 template <typename Number>
-typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const SupportFunction& _source, const CONV_MODE mode, unsigned numberOfDirections){
+typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const SupportFunction& _source, const CONV_MODE mode, std::size_t numberOfDirections){
     Zonotope res;
     if (mode == OVER) {
          //gets dimension of source object
-        unsigned dim = _source.dimension();
+        std::size_t dim = _source.dimension();
 
          //computes a vector of template directions based on the dimension and the requested number of directions which should get evaluated
         std::vector<vector_t<Number>> templateDirections = computeTemplate<Number>(dim, numberOfDirections);
@@ -251,7 +251,7 @@ typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const Suppor
 
     if (mode == ALTERNATIVE){
         //gets dimension of source object
-        unsigned dim = _source.dimension();
+        std::size_t dim = _source.dimension();
 
         //computes a vector of template directions based on the dimension and the requested number of directions which should get evaluated
         std::vector<vector_t<Number>> templateDirections = computeTemplate<Number>(dim, numberOfDirections);
@@ -288,7 +288,7 @@ typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const Suppor
         std::vector<Halfspace<Number>> planes = pca.box();
 
         //gets number of planes
-        unsigned numberOfPlanes = planes.size();
+        std::size_t numberOfPlanes = planes.size();
 
         //defines an empty vector for the oriented box normals
         matrix_t<Number> normals = matrix_t<Number>(numberOfPlanes, dim);

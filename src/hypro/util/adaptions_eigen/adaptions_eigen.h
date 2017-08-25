@@ -226,14 +226,14 @@ namespace hypro {
 	}
 
 	template<typename Number>
-	vector_t<Number> project(const vector_t<Number>& in, const std::vector<unsigned>& dimensions) {
+	vector_t<Number> project(const vector_t<Number>& in, const std::vector<std::size_t>& dimensions) {
 		if(dimensions.empty()) {
 			return vector_t<Number>::Zero(0);
 		}
 		vector_t<Number> projectedVector = vector_t<Number>::Zero(dimensions.size());
 
-		for(unsigned i = 0; i < dimensions.size(); ++i) {
-			if(dimensions.at(i) < in.rows() && dimensions.at(i) >= 0) {
+		for(std::size_t i = 0; i < dimensions.size(); ++i) {
+			if(dimensions.at(i) < std::size_t(in.rows()) && dimensions.at(i) >= 0) {
 				projectedVector(i) = in(dimensions.at(i));
 			}
 		}
@@ -253,14 +253,14 @@ namespace hypro {
 			if(vertices.size() == 1) {
 				return 0;
 			}
-			unsigned maxDim = vertices.begin()->rows();
+			long maxDim = vertices.begin()->rows();
 			matrix_t<Number> matr = matrix_t<Number>(vertices.size()-1, maxDim);
 			// use first vertex as origin, start at second vertex
 			unsigned rowIndex = 0;
 			for(auto vertexIt = ++vertices.begin(); vertexIt != vertices.end(); ++vertexIt, ++rowIndex) {
 				matr.row(rowIndex) = (*vertexIt - *vertices.begin()).transpose();
 			}
-			return matr.fullPivLu().rank();
+			return int(matr.fullPivLu().rank());
 		}
 		return -1;
 	}

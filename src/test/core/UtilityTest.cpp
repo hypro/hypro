@@ -71,7 +71,7 @@ TEST(UtilityTest, CreateTemplateDirections)
 
 
 	// test higher dimensional reduced template creation
-	std::vector<unsigned> dimensions;
+	std::vector<std::size_t> dimensions;
 	dimensions.push_back(0);
 	dimensions.push_back(2);
 

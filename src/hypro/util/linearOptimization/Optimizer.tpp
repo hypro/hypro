@@ -344,7 +344,7 @@ namespace hypro {
 				#endif
 			}
 
-			int numberOfConstraints = mConstraintMatrix.rows();
+			int numberOfConstraints = int(mConstraintMatrix.rows());
 			if(numberOfConstraints > 0) {
 				// convert constraint constants
 				glp_add_rows( lp, numberOfConstraints );
@@ -352,8 +352,8 @@ namespace hypro {
 					glp_set_row_bnds( lp, i + 1, GLP_UP, 0.0, carl::toDouble( mConstraintVector(i) ) );
 				}
 				// add cols here
-				glp_add_cols( lp, mConstraintMatrix.cols() );
-				int cols = mConstraintMatrix.cols();
+				int cols = int(mConstraintMatrix.cols());
+				glp_add_cols( lp, cols );
 				createArrays( unsigned(numberOfConstraints * cols) );
 
 				// convert constraint matrix
