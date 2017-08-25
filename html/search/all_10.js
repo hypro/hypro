@@ -10,6 +10,7 @@ var searchData=
   ['trafoparameters',['TrafoParameters',['../classhypro_1_1TrafoParameters.html',1,'hypro']]],
   ['transition',['Transition',['../classhypro_1_1Transition.html',1,'hypro']]],
   ['transitionparser',['transitionParser',['../structhypro_1_1parser_1_1transitionParser.html',1,'hypro::parser']]],
+  ['transitionset',['transitionSet',['../classhypro_1_1HybridAutomaton.html#a5e051e1193fd31e5fa1a0569a6760e75',1,'hypro::HybridAutomaton']]],
   ['translatehsv',['translateHsv',['../classhypro_1_1ConvexHull.html#ad3a6390cab0ea7170b8f15d88d973368',1,'hypro::ConvexHull']]],
   ['translatetoinduced',['translateToInduced',['../classhypro_1_1Grid.html#a2b6588205d03b08cfef7f87f4c1f6ef0',1,'hypro::Grid']]],
   ['translatetooriginal',['translateToOriginal',['../classhypro_1_1Grid.html#a12235c5b0d9e081d8c40272edef5fd75',1,'hypro::Grid']]],
@@ -19,6 +20,6 @@ var searchData=
   ['typename',['typeName',['../structhypro_1_1hypro_1_1typeName.html',1,'hypro::hypro']]],
   ['typename_3c_20double_20_3e',['typeName&lt; double &gt;',['../structhypro_1_1typeName_3_01double_01_4.html',1,'hypro']]],
   ['typename_3c_20double_20_3e',['typeName&lt; double &gt;',['../structhypro_1_1hypro_1_1typeName_3_01double_01_4.html',1,'hypro::hypro']]],
-  ['typename_3c_20mpq_5fclass_20_3e',['typeName&lt; mpq_class &gt;',['../structhypro_1_1typeName_3_01mpq__class_01_4.html',1,'hypro']]],
-  ['typename_3c_20mpq_5fclass_20_3e',['typeName&lt; mpq_class &gt;',['../structhypro_1_1hypro_1_1typeName_3_01mpq__class_01_4.html',1,'hypro::hypro']]]
+  ['typename_3c_20mpq_5fclass_20_3e',['typeName&lt; mpq_class &gt;',['../structhypro_1_1hypro_1_1typeName_3_01mpq__class_01_4.html',1,'hypro::hypro']]],
+  ['typename_3c_20mpq_5fclass_20_3e',['typeName&lt; mpq_class &gt;',['../structhypro_1_1typeName_3_01mpq__class_01_4.html',1,'hypro']]]
 ];

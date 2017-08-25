@@ -234,7 +234,7 @@ $(document).ready(function(){initNavTree('example_benchmark_8cpp-example.html','
 <div class="line"></div>
 <div class="line"></div>
 <div class="line">    <span class="comment">// bad states plotting</span></div>
-<div class="line">    <span class="keyword">typename</span> hypro::HybridAutomaton&lt;Number&gt;::locationStateMap badStateMapping = boost::get&lt;0&gt;(ha).localBadStates();</div>
+<div class="line">    <span class="keyword">typename</span> <a class="code" href="classhypro_1_1HybridAutomaton.html#afab83f2ff2f138a4e43206427922ce34">hypro::HybridAutomaton&lt;Number&gt;::locationStateMap</a> badStateMapping = boost::get&lt;0&gt;(ha).localBadStates();</div>
 <div class="line">    <span class="keywordflow">for</span>(<span class="keyword">const</span> <span class="keyword">auto</span>&amp; state : badStateMapping) {</div>
 <div class="line">        <span class="keywordtype">unsigned</span> bs = plotter.<a name="a6"></a><a class="code" href="classhypro_1_1Plotter.html#a5993c1c7ece6f9f3c2c03b61a58d60ce">addObject</a>(Representation(state.second.set.first, state.second.set.second).vertices());</div>
 <div class="line">        plotter.<a name="a7"></a><a class="code" href="classhypro_1_1Plotter.html#a1fca511abc240a333e905d4431627119">setObjectColor</a>(bs, hypro::plotting::colors[hypro::plotting::red]);</div>

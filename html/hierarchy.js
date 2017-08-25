@@ -110,10 +110,6 @@ var hierarchy =
     [ "hypro::reachability::Reach< Number, Representation >", "classhypro_1_1reachability_1_1Reach.html", null ],
     [ "hypro::reachability::Reach< Number, SupportFunction< Number > >", "classhypro_1_1reachability_1_1Reach_3_01Number_00_01SupportFunction_3_01Number_01_4_01_4.html", null ],
     [ "hypro::ReachabilitySettings< Number >", "structhypro_1_1ReachabilitySettings.html", null ],
-    [ "hypro::ReachTree< Number, Representation >", "classhypro_1_1ReachTree.html", null ],
-    [ "hypro::ReachTreeNodeSimple< Number, Representation >", "classhypro_1_1ReachTreeNodeSimple.html", [
-      [ "hypro::ReachTreeNode< Number, Representation >", "classhypro_1_1ReachTreeNode.html", null ]
-    ] ],
     [ "hypro::Reset< Number >", "classhypro_1_1Reset.html", null ],
     [ "hypro::parser::ErrorHandler::result< typename >", "structhypro_1_1parser_1_1ErrorHandler_1_1result.html", null ],
     [ "hypro::Ridge< Number >", "classhypro_1_1Ridge.html", null ],
@@ -157,10 +153,10 @@ var hierarchy =
     [ "hypro::Transition< Number >", "classhypro_1_1Transition.html", null ],
     [ "hypro::typeName< T >", "structhypro_1_1typeName.html", null ],
     [ "hypro::hypro::typeName< T >", "structhypro_1_1hypro_1_1typeName.html", null ],
-    [ "hypro::typeName< double >", "structhypro_1_1typeName_3_01double_01_4.html", null ],
     [ "hypro::hypro::typeName< double >", "structhypro_1_1hypro_1_1typeName_3_01double_01_4.html", null ],
-    [ "hypro::hypro::typeName< mpq_class >", "structhypro_1_1hypro_1_1typeName_3_01mpq__class_01_4.html", null ],
+    [ "hypro::typeName< double >", "structhypro_1_1typeName_3_01double_01_4.html", null ],
     [ "hypro::typeName< mpq_class >", "structhypro_1_1typeName_3_01mpq__class_01_4.html", null ],
+    [ "hypro::hypro::typeName< mpq_class >", "structhypro_1_1hypro_1_1typeName_3_01mpq__class_01_4.html", null ],
     [ "hypro::union_functor", "structhypro_1_1union__functor.html", null ],
     [ "hypro::unionContent< Number >", "structhypro_1_1unionContent.html", null ],
     [ "hypro::Vertex< Number >", "classhypro_1_1Vertex.html", null ],

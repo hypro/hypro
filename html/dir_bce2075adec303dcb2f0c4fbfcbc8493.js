@@ -7,9 +7,6 @@ var dir_bce2075adec303dcb2f0c4fbfcbc8493 =
     [ "LRUCache.h", "LRUCache_8h_source.html", null ],
     [ "Point.cpp", "Point_8cpp_source.html", null ],
     [ "Point.h", "Point_8h.html", "Point_8h" ],
-    [ "ReachTree.h", "ReachTree_8h_source.html", null ],
-    [ "ReachTreeNode.h", "ReachTreeNode_8h_source.html", null ],
-    [ "ReachTreeNodeSimple.h", "ReachTreeNodeSimple_8h_source.html", null ],
     [ "Ridge.h", "Ridge_8h_source.html", null ],
     [ "Vertex.h", "Vertex_8h.html", "Vertex_8h" ],
     [ "VertexContainer.h", "VertexContainer_8h.html", [
