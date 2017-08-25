@@ -32,7 +32,9 @@ void trajectory_plot(std::size_t deltalimit, const DiagonalMatrix& D, Number del
             const Vector& xinhomconst, const Matrix& V,
             Matrix& traj_tr, const Matrix& traj_homconst, std::size_t traj_scale,
             std::size_t _DIM_PLOT_, bool _ORIGINAL_SYS_PLOT_);
-
+void plot_addTimeSegment(std::size_t traj_time, const Matrix& traj_tr, const Matrix& V, 
+        int n, std::vector<Vector>& plot_upper, std::vector<Vector>& plot_lower, 
+        std::size_t _DIM_PLOT_, bool _ORIGINAL_SYS_PLOT_);
 
 int main()
 {
@@ -40,7 +42,7 @@ int main()
     std::size_t _DIM_PLOT_ = 0;        //0..n-1 for the plot
     bool _ORIGINAL_SYS_PLOT_ = true; //plotting in original system or transformed?
     bool _HULLCONSTRUCTION_ = true;
-    bool _TRAJECTORY_ = true;
+    bool _TRAJECTORY_ = false;
 	Matrix A = Matrix(n,n);
     Vector b = Vector(n);
     Vector x0 = Vector(n);
@@ -70,7 +72,7 @@ int main()
 	A << 	0.001, 1,
 			0.001, -0.002;
     b <<    0, -9.81;
-    x0<<    20, 0;        //we require x0 > x0_2 elementwise
+    x0<<    100, 0;        //we require x0 > x0_2 elementwise
     x0_2 << 10, 0;          //else we swap values
 
 	std::cout << "d/dx = A*x+b, A:"<< std::endl << A << std::endl;
@@ -175,12 +177,9 @@ void elwise_backtransformation(Matrix& x_tr, const int n) {
     }
     //std::cout << "x_tr afterback: "<< std::endl << x_tr << std::endl;
 }
-//doing function pointer assigning on cases
-    //we might have 2 different conversion levels, 1 or divergence
+//1. assign e-Function behavior 2. calculate initial values
     //divergence: D>0
     //convergence D<0, 1 or 2 points
-    //depending on calculation we set according function pointer
-    //and assign according values
     //remind we assume x0 > x0_2 element wise and set addresses accordingly
             //case1:  e^x      --- D>0, xhomconst>0
             //case2: -e^(-x)   --- etc
@@ -233,28 +232,18 @@ void initialize (const  Matrix& xhomconst, const DiagonalMatrix& D, BoolMatrix& 
     }
     //std::cout<<"directmaxmin:"<<std::endl<<directmaxmin;
     //std::cout << "xhomconst: "<< std::endl << x0_2 << std::endl;
-    // .... TODO
     //1.step calculation + inserting
     //e^0 = 1
     derivFactormaxmin.col(0) = xhomconst.col(0).array()*D.diagonal().array();
     derivFactormaxmin.col(1) = xhomconst.col(1).array()*D.diagonal().array();
-
     if (_ORIGINAL_SYS_PLOT_) {
         elwise_backtransformation(x_tr, n);
-        plot_vector(0) = 0; //was j before
-        plot_vector(1) = (V*x_tr.col(0))(_DIM_PLOT_);
-        ptsxmax_tr.push_back(plot_vector);
-        //std::cout << "plotvector(max/x0): "<< std::endl << plot_vector(1) << std::endl;
-        plot_vector(1) = (V*x_tr.col(1))(_DIM_PLOT_);
-        ptsxmin_tr.push_back(plot_vector);
-        //std::cout << "plotvector(min/x0_2): "<< std::endl << plot_vector(1) << std::endl;
+        plot_addTimeSegment(0, x_tr, V, n, ptsxmax_tr, ptsxmin_tr, 
+        _DIM_PLOT_, _ORIGINAL_SYS_PLOT_);
         elwise_maxtransformation(x_tr, n);
     } else {
-        plot_vector(0) = 0; // TODO: Check again, was "j"
-        plot_vector(1) = x_tr(_DIM_PLOT_,0);
-        ptsxmax_tr.push_back(plot_vector);
-        plot_vector(1) = x_tr(_DIM_PLOT_,1);
-        ptsxmin_tr.push_back(plot_vector);
+        plot_addTimeSegment(0, x_tr, V, n, ptsxmax_tr, ptsxmin_tr, 
+        _DIM_PLOT_, _ORIGINAL_SYS_PLOT_);
     }
 
     //STARTING POINT
@@ -268,7 +257,6 @@ void loop (std::size_t deltalimit, const BoolMatrix& directmaxmin,
     int n, std::vector<Vector>& ptsxmax_tr, std::vector<Vector>& ptsxmin_tr, 
     Matrix& derivFactormaxmin, Matrix& x_tr, const Vector& xinhomconst, 
     const Matrix& V, std::size_t _DIM_PLOT_, bool _ORIGINAL_SYS_PLOT_) {
-    //std::cout<<"entering loop"<<std::endl;
     //std::cout<<"traj_tr: "<<std::endl<<traj_tr;
 
     Plotter<Number>& plotter = Plotter<Number>::getInstance();
@@ -301,26 +289,15 @@ void loop (std::size_t deltalimit, const BoolMatrix& directmaxmin,
         //std::cout<<"x_tr["<<j<<"]: "<<std::endl<<x_tr;
         //std::cout<<"j: "<<j<<" factor: "<<std::endl<<factor;
         if (_ORIGINAL_SYS_PLOT_) {
-            //std::cout<<"x_tr_before_backtrafo:"<<std::endl<<x_tr;
             elwise_backtransformation(x_tr, n);
-            //std::cout<<"x_tr_after_backtrafo:"<<std::endl<<x_tr;
-            plot_vector(0) = j;
-            plot_vector(1) = (V*x_tr.col(0))(_DIM_PLOT_);
-            //on first run correct, then wrong values:
-            //std::cout<<"j: "<<j<<" V*x_tr: "<<plot_vector(1)<<std::endl;
-            ptsxmax_tr.push_back(plot_vector);
-            plot_vector(1) = (V*x_tr.col(1))(_DIM_PLOT_);
-            ptsxmin_tr.push_back(plot_vector);
-            //std::cout<<"x_tr_before_trafo:"<<std::endl<<x_tr;
+            plot_addTimeSegment(j, x_tr, V, n, ptsxmax_tr, ptsxmin_tr, 
+            _DIM_PLOT_, _ORIGINAL_SYS_PLOT_);
             elwise_maxtransformation(x_tr, n);
-            //std::cout<<"x_tr_after_trafo:"<<std::endl<<x_tr;
         } else {
-            plot_vector(0) = j;
-            plot_vector(1) = x_tr(_DIM_PLOT_,0);
-            ptsxmax_tr.push_back(plot_vector);
-            plot_vector(1) = x_tr(_DIM_PLOT_,1);
-            ptsxmin_tr.push_back(plot_vector);
+            plot_addTimeSegment(j, x_tr, V, n, ptsxmax_tr, ptsxmin_tr, 
+            _DIM_PLOT_, _ORIGINAL_SYS_PLOT_);
         }
+        
         vpoly_upper = VPolytope<Number>(ptsxmax_tr);
         vpoly_lower = VPolytope<Number>(ptsxmin_tr);
 		unsigned v = plotter.addObject(vpoly_upper.vertices());
@@ -345,19 +322,8 @@ void trajectory_plot(std::size_t deltalimit, const DiagonalMatrix& D, Number del
     Vector factor = Vector::Zero(n);
     Vector plot_vector = Vector(n);
     //TODO recheck
-    plot_vector(0) = 0;
-    if(_ORIGINAL_SYS_PLOT_) {
-        plot_vector(1) = (V*traj_tr.col(0))(_DIM_PLOT_);
-        //std::cout << "t: " << traj_time << "V*x(t): " << plot_vector(1) << std::endl;
-        plot_traj_upper.push_back(plot_vector);
-        plot_vector(1) = (V*traj_tr.col(1))(_DIM_PLOT_);
-    } else {
-        plot_vector(1) = (traj_tr.col(0))(_DIM_PLOT_);
-        plot_traj_upper.push_back(plot_vector);
-        plot_vector(1) = (traj_tr.col(1))(_DIM_PLOT_);
-    }
-    plot_traj_lower.push_back(plot_vector);
-    //std::cout<<"plot_traj_lower init: "<<std::endl<<plot_vector;
+    plot_addTimeSegment(0, traj_tr, V, n, plot_traj_upper, plot_traj_lower, 
+        _DIM_PLOT_, _ORIGINAL_SYS_PLOT_);
     for(std::size_t traj_time = 1; traj_time<=traj_scale*deltalimit; traj_time+=1) {
         for (int i=0; i<n; ++i) {
             factor(i) = std::exp(D.diagonal()(i)*traj_time*delta/traj_scale);
@@ -366,31 +332,32 @@ void trajectory_plot(std::size_t deltalimit, const DiagonalMatrix& D, Number del
         //depends what we want to plot here
         traj_tr.col(0) = traj_homconst.col(0).array()*factor.array()  - xinhomconst.array();
         traj_tr.col(1) = traj_homconst.col(1).array()*factor.array()  - xinhomconst.array();
-        plot_vector(0) = traj_time;
-        //std::cout<<"traj_tr"<<std::endl<<traj_tr;
-        //std::cout <<"Homconst is " << traj_homconst << std::endl;
-        //std::cout <<"Inhomconst is " << xinhomconst << std::endl;
+        plot_addTimeSegment(traj_time, traj_tr, V, n, plot_traj_upper, plot_traj_lower, 
+        _DIM_PLOT_, _ORIGINAL_SYS_PLOT_);
+        traj_poly_upper = VPolytope<Number>(plot_traj_upper);
+        traj_poly_lower = VPolytope<Number>(plot_traj_lower);
+        
+        unsigned t = plotter.addObject(traj_poly_upper.vertices());
+        plotter.setObjectColor(t, plotting::colors[plotting::green]);
+        plot_traj_upper.erase(plot_traj_upper.begin() );
+        unsigned u = plotter.addObject(traj_poly_lower.vertices());
+        plotter.setObjectColor(u, plotting::colors[plotting::green]);
+        plot_traj_lower.erase(plot_traj_lower.begin() );
+    }
+}
+void plot_addTimeSegment(std::size_t traj_time, const Matrix& traj_tr, const Matrix& V, 
+        int n, std::vector<Vector>& plot_upper, std::vector<Vector>& plot_lower, 
+        std::size_t _DIM_PLOT_, bool _ORIGINAL_SYS_PLOT_) {
+    Vector plot_vector = Vector(n);
+    plot_vector(0) = traj_time;
     if(_ORIGINAL_SYS_PLOT_) {
         plot_vector(1) = (V*traj_tr.col(0))(_DIM_PLOT_);
-        //std::cout << "t: " << traj_time << "V*x(t): " << V*traj_tr.col(0) << std::endl;
-        plot_traj_upper.push_back(plot_vector);
+        plot_upper.push_back(plot_vector);
         plot_vector(1) = (V*traj_tr.col(1))(_DIM_PLOT_);
     } else {
         plot_vector(1) = (traj_tr.col(0))(_DIM_PLOT_);
-        plot_traj_upper.push_back(plot_vector);
+        plot_upper.push_back(plot_vector);
         plot_vector(1) = (traj_tr.col(1))(_DIM_PLOT_);
     }
-        plot_traj_lower.push_back(plot_vector);
-        //std::cout<<"plot_traj_lower step "<<traj_time<<": "<<std::endl<<plot_vector;
-        traj_poly_upper = VPolytope<Number>(plot_traj_upper);
-        traj_poly_lower = VPolytope<Number>(plot_traj_lower);
-        if(traj_time > 0) {
-            unsigned t = plotter.addObject(traj_poly_upper.vertices());
-            plotter.setObjectColor(t, plotting::colors[plotting::green]);
-            plot_traj_upper.erase(plot_traj_upper.begin() );
-            unsigned u = plotter.addObject(traj_poly_lower.vertices());
-            plotter.setObjectColor(u, plotting::colors[plotting::green]);
-            plot_traj_lower.erase(plot_traj_lower.begin() );
-        }
-    }
+    plot_lower.push_back(plot_vector);
 }
