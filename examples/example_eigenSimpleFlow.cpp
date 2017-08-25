@@ -2,7 +2,6 @@
  * Sandbox for the Eigendecomposition project.
  */
 
-
 #include "representations/GeometricObject.h"
 #include "util/Plotter.h"
 #include <Eigen/Eigenvalues>
@@ -22,27 +21,29 @@ void initialize (const Matrix& xhomconst, const DiagonalMatrix& D, BoolMatrix& d
                     Matrix& derivFactormaxmin, std::vector<Vector>& ptsxmax_tr,
                     std::vector<Vector>& ptsxmin_tr, int n, Matrix& x_tr, const Matrix& V,
                     std::size_t _DIM_PLOT_, bool _ORIGINAL_SYS_PLOT_);
-
-void loop (std::size_t deltalimit, const BoolMatrix& directmaxmin, const DiagonalMatrix& D, 
+void loop (std::vector<VPolytope<Number>>& flowpipe, std::size_t deltalimit, const BoolMatrix& directmaxmin, const DiagonalMatrix& D, 
             const Matrix& xhomconstmaxmin, Number delta, int n, 
             std::vector<Vector>& ptsxmax_tr, std::vector<Vector>& ptsxmin_tr, 
             Matrix& derivFactormaxmin,Matrix& x_tr, const Vector& xinhomconst, const Matrix& V,
             std::size_t _DIM_PLOT_, bool _ORIGINAL_SYS_PLOT_);
-void trajectory_plot(std::size_t deltalimit, const DiagonalMatrix& D, Number delta, int n, 
+void trajectory_plot(std::vector<VPolytope<Number>>& exactflowpipe, std::size_t deltalimit, 
+            const DiagonalMatrix& D, Number delta, int n, 
             const Vector& xinhomconst, const Matrix& V,
             Matrix& traj_tr, const Matrix& traj_homconst, std::size_t traj_scale,
             std::size_t _DIM_PLOT_, bool _ORIGINAL_SYS_PLOT_);
 void plot_addTimeSegment(std::size_t traj_time, const Matrix& traj_tr, const Matrix& V, 
         int n, std::vector<Vector>& plot_upper, std::vector<Vector>& plot_lower, 
         std::size_t _DIM_PLOT_, bool _ORIGINAL_SYS_PLOT_);
+void addSegment(std::vector<VPolytope<Number>>& flowpipe, std::vector<Vector>& ptsxmax_tr,
+        std::vector<Vector>& ptsxmin_tr, std::size_t colorUpper, std::size_t colorLower);
 
 int main()
 {
     int n = 2;                  //<--- DIMENSION --->
     std::size_t _DIM_PLOT_ = 0;        //0..n-1 for the plot
     bool _ORIGINAL_SYS_PLOT_ = true; //plotting in original system or transformed?
-    bool _HULLCONSTRUCTION_ = true;
-    bool _TRAJECTORY_ = false;
+    bool _HULLCONSTRUCTION_ = false;
+    bool _TRAJECTORY_ = true;
 	Matrix A = Matrix(n,n);
     Vector b = Vector(n);
     Vector x0 = Vector(n);
@@ -67,7 +68,9 @@ int main()
     Matrix V = Matrix(n,n);
     Matrix Vinv = Matrix(n,n);
 	DiagonalMatrix D = DiagonalMatrix(2); //type Number size 2
-
+    //*************** RESULT *******************
+    std::vector<VPolytope<Number>> flowpipe;
+    std::vector<VPolytope<Number>> exactflowpipe;
     //######   d/dx = A*x + b  ######
 	A << 	0.001, 1,
 			0.001, -0.002;
@@ -121,10 +124,10 @@ int main()
     std::size_t deltalimit = std::ceil( (tend/delta) );
     //traj_tr, traj_homconst, traj_scale
     if (_TRAJECTORY_) 
-        trajectory_plot(deltalimit, D, delta, n, xinhomconst, V, traj_tr, traj_homconst, 
+        trajectory_plot(exactflowpipe, deltalimit, D, delta, n, xinhomconst, V, traj_tr, traj_homconst, 
                         traj_scale, _DIM_PLOT_, _ORIGINAL_SYS_PLOT_);
     if (_HULLCONSTRUCTION_) {
-    loop (deltalimit, directmaxmin, D, xhomconstmaxmin, delta, n, ptsxmax_tr, ptsxmin_tr,
+    loop (flowpipe, deltalimit, directmaxmin, D, xhomconstmaxmin, delta, n, ptsxmax_tr, ptsxmin_tr,
           derivFactormaxmin, x_tr, xinhomconst, V, _DIM_PLOT_, _ORIGINAL_SYS_PLOT_);
     }
     plotter.plot2d();
@@ -252,18 +255,12 @@ void initialize (const  Matrix& xhomconst, const DiagonalMatrix& D, BoolMatrix& 
     //1.1 possible trajectory calculation pushing writing deleting
     //2.pushing,writing,deleting   [maybe flushing in between??]
 
-void loop (std::size_t deltalimit, const BoolMatrix& directmaxmin,
+void loop (std::vector<VPolytope<Number>>& flowpipe, std::size_t deltalimit, const BoolMatrix& directmaxmin,
     const DiagonalMatrix& D, const Matrix& xhomconst, Number delta,
     int n, std::vector<Vector>& ptsxmax_tr, std::vector<Vector>& ptsxmin_tr, 
     Matrix& derivFactormaxmin, Matrix& x_tr, const Vector& xinhomconst, 
     const Matrix& V, std::size_t _DIM_PLOT_, bool _ORIGINAL_SYS_PLOT_) {
-    //std::cout<<"traj_tr: "<<std::endl<<traj_tr;
-
-    Plotter<Number>& plotter = Plotter<Number>::getInstance();
-    VPolytope<Number> vpoly_upper;
-    VPolytope<Number> vpoly_lower;
     Vector factor = Vector::Zero(n);
-    Vector plot_vector = Vector(n);
     //WE ASSUME we always want to check 1 timestep
     for(std::size_t j = 1; j <= deltalimit;  ++j) {
     	//std::cout << "Time: " << j*delta << std::endl;
@@ -284,7 +281,6 @@ void loop (std::size_t deltalimit, const BoolMatrix& directmaxmin,
                 x_tr(i,1) = x_tr(i,1) + derivFactormaxmin(i,1)*delta;
                 derivFactormaxmin(i,1) = xhomconst(i,1)*D.diagonal()(i)*factor(i);
             }
-            //std::cout << "x0_2: "<< std::endl << x0_2 << std::endl; TODO
         }
         //std::cout<<"x_tr["<<j<<"]: "<<std::endl<<x_tr;
         //std::cout<<"j: "<<j<<" factor: "<<std::endl<<factor;
@@ -297,31 +293,18 @@ void loop (std::size_t deltalimit, const BoolMatrix& directmaxmin,
             plot_addTimeSegment(j, x_tr, V, n, ptsxmax_tr, ptsxmin_tr, 
             _DIM_PLOT_, _ORIGINAL_SYS_PLOT_);
         }
-        
-        vpoly_upper = VPolytope<Number>(ptsxmax_tr);
-        vpoly_lower = VPolytope<Number>(ptsxmin_tr);
-		unsigned v = plotter.addObject(vpoly_upper.vertices());
-		plotter.setObjectColor(v, plotting::colors[plotting::red]);
-        unsigned w = plotter.addObject(vpoly_lower.vertices());
-        plotter.setObjectColor(w, plotting::colors[plotting::blue]);
-        ptsxmax_tr.erase( ptsxmax_tr.begin() );
-        ptsxmin_tr.erase( ptsxmin_tr.begin() );
+        addSegment(flowpipe, ptsxmax_tr, ptsxmin_tr, plotting::colors[plotting::red], 
+            plotting::colors[plotting::blue]);
     }
 }
 
-void trajectory_plot(std::size_t deltalimit, const DiagonalMatrix& D, Number delta, 
+void trajectory_plot(std::vector<VPolytope<Number>>& exactflowpipe, std::size_t deltalimit, const DiagonalMatrix& D, Number delta, 
             int n, const Vector& xinhomconst, const Matrix& V, Matrix& traj_tr, 
             const Matrix& traj_homconst, std::size_t traj_scale, std::size_t _DIM_PLOT_, 
             bool _ORIGINAL_SYS_PLOT_) {
-    //Vector pts_traj = Vector(n);
-    Plotter<Number>& plotter = Plotter<Number>::getInstance();
-    VPolytope<Number> traj_poly_upper;
-    VPolytope<Number> traj_poly_lower;
     std::vector<Vector> plot_traj_upper;
     std::vector<Vector> plot_traj_lower;
     Vector factor = Vector::Zero(n);
-    Vector plot_vector = Vector(n);
-    //TODO recheck
     plot_addTimeSegment(0, traj_tr, V, n, plot_traj_upper, plot_traj_lower, 
         _DIM_PLOT_, _ORIGINAL_SYS_PLOT_);
     for(std::size_t traj_time = 1; traj_time<=traj_scale*deltalimit; traj_time+=1) {
@@ -334,15 +317,9 @@ void trajectory_plot(std::size_t deltalimit, const DiagonalMatrix& D, Number del
         traj_tr.col(1) = traj_homconst.col(1).array()*factor.array()  - xinhomconst.array();
         plot_addTimeSegment(traj_time, traj_tr, V, n, plot_traj_upper, plot_traj_lower, 
         _DIM_PLOT_, _ORIGINAL_SYS_PLOT_);
-        traj_poly_upper = VPolytope<Number>(plot_traj_upper);
-        traj_poly_lower = VPolytope<Number>(plot_traj_lower);
-        
-        unsigned t = plotter.addObject(traj_poly_upper.vertices());
-        plotter.setObjectColor(t, plotting::colors[plotting::green]);
-        plot_traj_upper.erase(plot_traj_upper.begin() );
-        unsigned u = plotter.addObject(traj_poly_lower.vertices());
-        plotter.setObjectColor(u, plotting::colors[plotting::green]);
-        plot_traj_lower.erase(plot_traj_lower.begin() );
+
+        addSegment(exactflowpipe, plot_traj_upper, plot_traj_lower, plotting::colors[plotting::green], 
+            plotting::colors[plotting::green]);
     }
 }
 void plot_addTimeSegment(std::size_t traj_time, const Matrix& traj_tr, const Matrix& V, 
@@ -360,4 +337,18 @@ void plot_addTimeSegment(std::size_t traj_time, const Matrix& traj_tr, const Mat
         plot_vector(1) = (traj_tr.col(1))(_DIM_PLOT_);
     }
     plot_lower.push_back(plot_vector);
+}
+//lower plotting::colors[plotting::blue]
+//upper plotting::colors[plotting::red]
+void addSegment(std::vector<VPolytope<Number>>& flowpipe, std::vector<Vector>& ptsxmax_tr,
+        std::vector<Vector>& ptsxmin_tr, std::size_t colorUpper, std::size_t colorLower) { 
+    Plotter<Number>& plotter = Plotter<Number>::getInstance();
+    VPolytope<Number> vpoly_upper = VPolytope<Number>(ptsxmax_tr);
+    VPolytope<Number> vpoly_lower = VPolytope<Number>(ptsxmin_tr);
+    unsigned v = plotter.addObject(vpoly_upper.vertices());
+    plotter.setObjectColor(v, colorUpper);
+    unsigned w = plotter.addObject(vpoly_lower.vertices());
+    plotter.setObjectColor(w, colorLower);
+    ptsxmax_tr.erase( ptsxmax_tr.begin() );
+    ptsxmin_tr.erase( ptsxmin_tr.begin() );
 }
