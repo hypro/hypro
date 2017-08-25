@@ -195,7 +195,7 @@ TYPED_TEST(SupportFunctionTest, linearTransformation) {
 	EXPECT_EQ(res.linearTrafoParameters()->parameters->parameters.size(), std::size_t(1));
 	// reduction is only invoked when using the support function ->evaluate
 	res.evaluate(v2Rot);
-	EXPECT_EQ(res.linearTrafoParameters()->parameters->parameters.size(), 3);
+	EXPECT_EQ(res.linearTrafoParameters()->parameters->parameters.size(), std::size_t(3));
 }
 
 TYPED_TEST(SupportFunctionTest, scale) {

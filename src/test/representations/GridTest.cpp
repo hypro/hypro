@@ -59,7 +59,7 @@ TYPED_TEST(GridTest, Properties)
     Point<TypeParam> p1({3, 3});
 
     EXPECT_FALSE(this->grid1.empty());
-    EXPECT_EQ(this->grid1.size(), 6);
+    EXPECT_EQ(this->grid1.size(), std::size_t(6));
     EXPECT_TRUE(this->grid1.find(p1) != this->grid1.end());
 
     this->grid1.clear();
