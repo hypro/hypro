@@ -17,24 +17,12 @@
 
 namespace hypro {
 
-/**
- * @brief      Forward declaration of class Point.
- * @tparam     Number  The used number type.
- */
 template<typename Number>
 class Point;
 
-/**
- * @brief      Forward declaration of class Halfspace.
- * @tparam     Number  The used number type.
- */
 template<typename Number>
 class Halfspace;
 
-/**
- * @brief      Forward declaration of class Location.
- * @tparam     Number  The used number type.
- */
 template<typename Number>
 class Location;
 

@@ -22,6 +22,10 @@ class Transition;
 template<typename Number>
 class LocationManager;
 
+/**
+ * @brief      Class for location.
+ * @tparam     Number  The used number type.
+ */
 template<typename Number>
 class Location
 {
@@ -30,12 +34,24 @@ class Location
 protected:
     using transitionSet = std::set<Transition<Number>*>;
 
+    /**
+     * @brief      Constructor
+     * @details    Note that locations should only be constructed from the LocationManager.
+     * @param[in]  id    The identifier given by the LocationManager.
+     */
+    ///@{
     Location(unsigned id);
+    /**
+     * @param[in]  id    The identifier given by the LocationManager.
+     * @param[loc] The original location which is copied.
+     *
+     */
     Location(unsigned id, const Location& loc);
     Location(unsigned id, const matrix_t<Number>& mat);
     Location(unsigned id, const matrix_t<Number>& mat, const transitionSet& trans, const Condition<Number>& inv);
     Location(unsigned id, const matrix_t<Number>& mat, const transitionSet& trans, const Condition<Number>& inv,
              const matrix_t<Number>& extInputMat);
+    ///@}
 
 private:
     mutable std::vector<matrix_t<Number>> mFlows;
@@ -56,6 +72,7 @@ public:
     const matrix_t<Number>& getExternalInput() const { return mExternalInput; }
     unsigned getId() const { return mId; }
 	std::string getName() const { return mName; }
+
     void setName(const std::string& name) { mName = name; }
     void setFlow(const matrix_t<Number>& mat, std::size_t I = 0);
     void setInvariant(const Condition<Number>& inv) { mInvariant = inv; }
