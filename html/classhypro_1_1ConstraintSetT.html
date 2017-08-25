@@ -192,9 +192,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 <tr class="memitem:a3fe0a8c79d17eede53ff557f63ed81f1"><td class="memItemLeft" align="right" valign="top">std::pair&lt; bool, <a class="el" href="classhypro_1_1ConstraintSetT.html">ConstraintSetT</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ConstraintSetT.html#a3fe0a8c79d17eede53ff557f63ed81f1">satisfiesHalfspaces</a> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;, const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;) const </td></tr>
 <tr class="memdesc:a3fe0a8c79d17eede53ff557f63ed81f1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Method combining the intersection of the set with a set of halfspaces and a test for emptiness of the resulting set.  <a href="#a3fe0a8c79d17eede53ff557f63ed81f1">More...</a><br/></td></tr>
 <tr class="separator:a3fe0a8c79d17eede53ff557f63ed81f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a04451bfb1ef76ec4c8a907ccc1f3caf6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1ConstraintSetT.html">ConstraintSetT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ConstraintSetT.html#a04451bfb1ef76ec4c8a907ccc1f3caf6">project</a> (const std::vector&lt; unsigned &gt; &amp;) const </td></tr>
-<tr class="memdesc:a04451bfb1ef76ec4c8a907ccc1f3caf6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Projects the set on the ordered set of given dimensions.  <a href="#a04451bfb1ef76ec4c8a907ccc1f3caf6">More...</a><br/></td></tr>
-<tr class="separator:a04451bfb1ef76ec4c8a907ccc1f3caf6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a00e2100437a2866aed31ae18174f408b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1ConstraintSetT.html">ConstraintSetT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ConstraintSetT.html#a00e2100437a2866aed31ae18174f408b">project</a> (const std::vector&lt; std::size_t &gt; &amp;) const </td></tr>
+<tr class="memdesc:a00e2100437a2866aed31ae18174f408b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Projects the set on the ordered set of given dimensions.  <a href="#a00e2100437a2866aed31ae18174f408b">More...</a><br/></td></tr>
+<tr class="separator:a00e2100437a2866aed31ae18174f408b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae63b3160190de63ce935fe0ceb6bddeb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1ConstraintSetT.html">ConstraintSetT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ConstraintSetT.html#ae63b3160190de63ce935fe0ceb6bddeb">linearTransformation</a> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;) const </td></tr>
 <tr class="memdesc:ae63b3160190de63ce935fe0ceb6bddeb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Applies a linear transformation with the matrix A to the set.  <a href="#ae63b3160190de63ce935fe0ceb6bddeb">More...</a><br/></td></tr>
 <tr class="separator:ae63b3160190de63ce935fe0ceb6bddeb"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -896,7 +896,7 @@ template&lt;typename Number, typename Converter&gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="a04451bfb1ef76ec4c8a907ccc1f3caf6"></a>
+<a class="anchor" id="a00e2100437a2866aed31ae18174f408b"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
@@ -908,7 +908,7 @@ template&lt;typename Number, typename Converter&gt; </div>
         <tr>
           <td class="memname"><a class="el" href="classhypro_1_1ConstraintSetT.html">ConstraintSetT</a>&lt;Number,<a class="el" href="classhypro_1_1Converter.html">Converter</a>&gt; <a class="el" href="classhypro_1_1ConstraintSetT.html">hypro::ConstraintSetT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt;::project </td>
           <td>(</td>
-          <td class="paramtype">const std::vector&lt; unsigned &gt; &amp;&#160;</td>
+          <td class="paramtype">const std::vector&lt; std::size_t &gt; &amp;&#160;</td>
           <td class="paramname"><em>dimensions</em></td><td>)</td>
           <td> const</td>
         </tr>
@@ -929,7 +929,7 @@ template&lt;typename Number, typename Converter&gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The resulting set. </dd></dl>
 
-<p>Implements <a class="el" href="classhypro_1_1GeometricObject.html#a9dc6d2b65cc0342a998e81db64d86938">hypro::GeometricObject&lt; Number, ConstraintSetT&lt; Number, Converter &gt; &gt;</a>.</p>
+<p>Implements <a class="el" href="classhypro_1_1GeometricObject.html#ac59bf7420c712b4895c0a171e2e6e388">hypro::GeometricObject&lt; Number, ConstraintSetT&lt; Number, Converter &gt; &gt;</a>.</p>
 
 <p>Definition at line <a class="el" href="ConstraintSet_8h_source.html#l00199">199</a> of file <a class="el" href="ConstraintSet_8h_source.html">ConstraintSet.h</a>.</p>
 

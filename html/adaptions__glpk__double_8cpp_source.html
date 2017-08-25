@@ -195,7 +195,7 @@ $(document).ready(function(){initNavTree('adaptions__glpk__double_8cpp_source.ht
 <div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;            }</div>
 <div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;        }</div>
 <div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;</div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;        <span class="keywordflow">for</span>(<span class="keywordtype">int</span> constraintIndex = constraints.rows()-1; constraintIndex &gt;= 0; --constraintIndex) {</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;        <span class="keywordflow">for</span>(<span class="keywordtype">int</span> constraintIndex = <span class="keywordtype">int</span>(constraints.rows()-1); constraintIndex &gt;= 0; --constraintIndex) {</div>
 <div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;            <span class="comment">// evaluate in current constraint direction</span></div>
 <div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;            EvaluationResult&lt;double&gt; actualRes = glpkOptimizeLinear(glpkProblem, vector_t&lt;double&gt;(constraints.row(constraintIndex)), constraints, constants, <span class="keyword">false</span>);</div>
 <div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;            <span class="comment">//std::cout &lt;&lt; &quot;Actual res support Value: &quot; &lt;&lt; actualRes.supportValue &lt;&lt; std::endl;</span></div>
@@ -218,7 +218,7 @@ $(document).ready(function(){initNavTree('adaptions__glpk__double_8cpp_source.ht
 <div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;</div>
 <div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;        <span class="comment">// restore original problem</span></div>
 <div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;        <span class="keywordflow">for</span>(<span class="keyword">const</span> <span class="keyword">auto</span> item : res ) {</div>
-<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;            glp_set_row_bnds(glpkProblem, item+1, GLP_UP,  0.0, constants(item));</div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;            glp_set_row_bnds(glpkProblem, <span class="keywordtype">int</span>(item)+1, GLP_UP,  0.0, constants(item));</div>
 <div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;        }</div>
 <div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;</div>
 <div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;        <span class="keywordflow">return</span> res;</div>

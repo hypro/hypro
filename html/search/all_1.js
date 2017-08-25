@@ -1,7 +1,7 @@
 var searchData=
 [
   ['ballsupportfunction',['BallSupportFunction',['../classhypro_1_1BallSupportFunction.html',1,'hypro']]],
-  ['basis',['basis',['../classhypro_1_1Dictionary.html#a733154280f2f3ffc1421415602be3eb6',1,'hypro::Dictionary']]],
+  ['basis',['basis',['../classhypro_1_1Dictionary.html#acf2a69d0627481344926eea2900f3f37',1,'hypro::Dictionary']]],
   ['begin',['begin',['../classhypro_1_1VertexContainer.html#aef537b928a97102884943ff9794bfcd1',1,'hypro::VertexContainer']]],
   ['boundaries',['boundaries',['../classhypro_1_1BoxT.html#a57efa9dcc4c19efe764c04eb95e5f76f',1,'hypro::BoxT::boundaries()'],['../classhypro_1_1BoxT_3_01double_00_01Converter_01_4.html#a5038f31cc97cec104652a26880721904',1,'hypro::BoxT&lt; double, Converter &gt;::boundaries()']]],
   ['box_2eh',['Box.h',['../Box_8h.html',1,'']]],

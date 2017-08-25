@@ -10,7 +10,7 @@ var classhypro_1_1PolytopeSupportFunction =
     [ "contains", "classhypro_1_1PolytopeSupportFunction.html#ac6a2ce4737e4f4b29189fc3b3ed21858", null ],
     [ "contains", "classhypro_1_1PolytopeSupportFunction.html#a894669b0cd06de5d3355dd88189d31d9", null ],
     [ "createCode", "classhypro_1_1PolytopeSupportFunction.html#a46f720a3f93c5f4fdeb6ef5acd09eb04", null ],
-    [ "dimension", "classhypro_1_1PolytopeSupportFunction.html#a542a864da6c430d31943c9df34cd49c9", null ],
+    [ "dimension", "classhypro_1_1PolytopeSupportFunction.html#a299b67ceb2c8b0529bc6b5b250b59269", null ],
     [ "empty", "classhypro_1_1PolytopeSupportFunction.html#afda44c456865949e2627868fb8cb924a", null ],
     [ "evaluate", "classhypro_1_1PolytopeSupportFunction.html#ae4ebb4686ed603e4b84bdde09eed029b", null ],
     [ "isTemplate", "classhypro_1_1PolytopeSupportFunction.html#aff476003576305f7f5a1178e9b02a4c9", null ],

@@ -198,6 +198,7 @@ var NAVTREEINDEX0 =
 "classhypro_1_1BoxT.html#ac0f00b8aa88247e162dc4f91c120ae3f":[7,1,0,42],
 "classhypro_1_1BoxT.html#ad04aaa49953bc98924e23a8935fc0573":[7,1,0,48],
 "classhypro_1_1BoxT.html#ae88d4bbb5344d5c93f8601848b71d830":[7,1,0,18],
+"classhypro_1_1BoxT.html#ae967bb0981c2cb1783b32ba48f4e9877":[7,1,0,37],
 "classhypro_1_1BoxT.html#ae9b1f6d59e722f45d6dabe8f230de623":[7,1,0,28],
 "classhypro_1_1BoxT.html#af1360a0b7ee8a326a20f98428a84ec1b":[7,1,0,22],
 "classhypro_1_1BoxT.html#af35f1698abaa543841cb8133167ca1a8":[7,1,0,26],
@@ -205,7 +206,6 @@ var NAVTREEINDEX0 =
 "classhypro_1_1BoxT.html#af7340bba357e6f3b815192a642cdd941":[7,1,0,49],
 "classhypro_1_1BoxT.html#af73b8298a461e6b1a7f83245eb3fb5a9":[7,1,0,43],
 "classhypro_1_1BoxT.html#afca844f1277679ba2ae14490be4c2383":[7,1,0,3],
-"classhypro_1_1BoxT.html#aff3f2eb3059da28be163183966b55f45":[7,1,0,37],
 "classhypro_1_1BoxT.html#affc9425421fbee1e73d7f9193ab7a0bd":[7,1,0,19],
 "classhypro_1_1BoxT_3_01double_00_01Converter_01_4.html":[9,0,1,46],
 "classhypro_1_1BoxT_3_01double_00_01Converter_01_4.html#a06daabbc9d1d06960a5135f5fe8dea2a":[9,0,1,46,1],
@@ -239,7 +239,6 @@ var NAVTREEINDEX0 =
 "classhypro_1_1BoxT_3_01double_00_01Converter_01_4.html#a88cc4fdcb6d4845d2f89520446997e4b":[9,0,1,46,5],
 "classhypro_1_1BoxT_3_01double_00_01Converter_01_4.html#a912baa38dc1d9bcb4c8de62d72202397":[9,0,1,46,8],
 "classhypro_1_1BoxT_3_01double_00_01Converter_01_4.html#a94dd74e38efe368931d8efc053901a09":[9,0,1,46,36],
-"classhypro_1_1BoxT_3_01double_00_01Converter_01_4.html#a979e3583b5610071f9fd291a4dd87487":[9,0,1,46,38],
 "classhypro_1_1BoxT_3_01double_00_01Converter_01_4.html#a9a7fc0d415cecc659f5e76ca276ad92b":[9,0,1,46,4],
 "classhypro_1_1BoxT_3_01double_00_01Converter_01_4.html#aa36c664a817e2a683ee2cd3ea905bdef":[9,0,1,46,46],
 "classhypro_1_1BoxT_3_01double_00_01Converter_01_4.html#aa41ea91c1969e59a6b23aca39d93b08e":[9,0,1,46,29],
@@ -249,5 +248,6 @@ var NAVTREEINDEX0 =
 "classhypro_1_1BoxT_3_01double_00_01Converter_01_4.html#ab7afcb410dfc489bad1ad279063061b0":[9,0,1,46,17],
 "classhypro_1_1BoxT_3_01double_00_01Converter_01_4.html#ab98f614f79eecd033adf4c963f30c4b9":[9,0,1,46,2],
 "classhypro_1_1BoxT_3_01double_00_01Converter_01_4.html#ac7982e9f84ae7dc9719908611f97b8c1":[9,0,1,46,48],
-"classhypro_1_1BoxT_3_01double_00_01Converter_01_4.html#acb24b20f976a729fa59c5c0f492c393c":[9,0,1,46,15]
+"classhypro_1_1BoxT_3_01double_00_01Converter_01_4.html#acb24b20f976a729fa59c5c0f492c393c":[9,0,1,46,15],
+"classhypro_1_1BoxT_3_01double_00_01Converter_01_4.html#ad7f69d76d84a82c79531679ecc180494":[9,0,1,46,21]
 };

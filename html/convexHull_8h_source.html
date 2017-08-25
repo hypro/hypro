@@ -353,7 +353,7 @@ $(document).ready(function(){initNavTree('convexHull_8h_source.html','');});
 <div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> Number&gt;</div>
 <div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160;<span class="keyword">static</span> <span class="keywordtype">void</span> removeBorderFacets(std::vector&lt;std::shared_ptr&lt;Facet&lt;Number&gt;&gt;&gt;&amp; facets, std::queue&lt;std::shared_ptr&lt;Facet&lt;Number&gt;&gt;&gt;&amp; result) {</div>
 <div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160;    <span class="comment">// std::cout &lt;&lt; __func__ &lt;&lt; std::endl;</span></div>
-<div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;    <span class="keywordflow">for</span> (<span class="keywordtype">unsigned</span> i=facets.size(); i &gt; 0; i--) {</div>
+<div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;    <span class="keywordflow">for</span> (std::size_t i=facets.size(); i &gt; 0; i--) {</div>
 <div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160;        <span class="keywordflow">if</span> (!facets.at(i-1)-&gt;getOutsideSet().empty()) {</div>
 <div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;            result.push(facets.at(i-1));</div>
 <div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160;            facets.erase( facets.begin() + i-1 );</div>
@@ -428,9 +428,9 @@ $(document).ready(function(){initNavTree('convexHull_8h_source.html','');});
 <div class="line"><a name="l00316"></a><span class="lineno">  316</span>&#160;    }</div>
 <div class="line"><a name="l00317"></a><span class="lineno">  317</span>&#160;    <span class="keywordflow">else</span></div>
 <div class="line"><a name="l00318"></a><span class="lineno">  318</span>&#160;    {</div>
-<div class="line"><a name="l00319"></a><span class="lineno">  319</span>&#160;        <span class="keywordtype">int</span> checkValue = (facet2-&gt;vertices().size()&lt;facet1-&gt;vertices().size()) ? facet2-&gt;vertices().size(): facet1-&gt;vertices().size();</div>
+<div class="line"><a name="l00319"></a><span class="lineno">  319</span>&#160;        std::size_t checkValue = (facet2-&gt;vertices().size()&lt;facet1-&gt;vertices().size()) ? facet2-&gt;vertices().size(): facet1-&gt;vertices().size();</div>
 <div class="line"><a name="l00320"></a><span class="lineno">  320</span>&#160;</div>
-<div class="line"><a name="l00321"></a><span class="lineno">  321</span>&#160;        <span class="keywordtype">int</span> currentValue = 0;</div>
+<div class="line"><a name="l00321"></a><span class="lineno">  321</span>&#160;        std::size_t currentValue = 0;</div>
 <div class="line"><a name="l00322"></a><span class="lineno">  322</span>&#160;        <span class="keywordflow">for</span> (<span class="keyword">auto</span> vertex1: facet1-&gt;vertices()) {</div>
 <div class="line"><a name="l00323"></a><span class="lineno">  323</span>&#160;            <span class="keywordflow">for</span> (<span class="keyword">auto</span> vertex2: facet2-&gt;vertices()) {</div>
 <div class="line"><a name="l00324"></a><span class="lineno">  324</span>&#160;                <span class="keywordflow">if</span> ( vertex1 == vertex2) {</div>

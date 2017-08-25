@@ -163,12 +163,12 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>forceLinTransReductio
 <tr class="memitem:ad995bb841cc98c924bd3d1672b32f3ff"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad995bb841cc98c924bd3d1672b32f3ff"></a>
 <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; Number &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>supremumPoint</b> () const </td></tr>
 <tr class="separator:ad995bb841cc98c924bd3d1672b32f3ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a63cbd9910ba0dd0c18c1b7de6ff58644"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a63cbd9910ba0dd0c18c1b7de6ff58644"></a>
-std::vector&lt; unsigned &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>collectProjections</b> () const </td></tr>
-<tr class="separator:a63cbd9910ba0dd0c18c1b7de6ff58644"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6ad5c5919f228a9d69bba749790762ad"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6ad5c5919f228a9d69bba749790762ad"></a>
-std::vector&lt; unsigned &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>collectProjectionsIterative</b> () const </td></tr>
-<tr class="separator:a6ad5c5919f228a9d69bba749790762ad"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afb031be57f1f4ddd1410f8c567531823"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="afb031be57f1f4ddd1410f8c567531823"></a>
+std::vector&lt; std::size_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>collectProjections</b> () const </td></tr>
+<tr class="separator:afb031be57f1f4ddd1410f8c567531823"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8f529842461cdbeadd3c3503a6eed8aa"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8f529842461cdbeadd3c3503a6eed8aa"></a>
+std::vector&lt; std::size_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>collectProjectionsIterative</b> () const </td></tr>
+<tr class="separator:a8f529842461cdbeadd3c3503a6eed8aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac14e3a4041421c804a2f60d7351a790e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac14e3a4041421c804a2f60d7351a790e"></a>
 <a class="el" href="structhypro_1_1sumContent.html">sumContent</a>&lt; Number &gt; *&#160;</td><td class="memItemRight" valign="bottom"><b>summands</b> () const </td></tr>
 <tr class="separator:ac14e3a4041421c804a2f60d7351a790e"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -197,11 +197,11 @@ std::vector&lt; unsigned &gt;&#160;</td><td class="memItemRight" valign="bottom"
 <a class="el" href="classhypro_1_1EllipsoidSupportFunction.html">EllipsoidSupportFunction</a><br class="typebreak"/>
 &lt; Number &gt; *&#160;</td><td class="memItemRight" valign="bottom"><b>ellipsoid</b> () const </td></tr>
 <tr class="separator:a6957c65ec64d1f39c5f650728e1b4216"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab4bb4a006fb5f954631497eb78c4dd6e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab4bb4a006fb5f954631497eb78c4dd6e"></a>
+<tr class="memitem:ac77cb7cb5e2ad935dafc39721ec0d64d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac77cb7cb5e2ad935dafc39721ec0d64d"></a>
 std::shared_ptr<br class="typebreak"/>
 &lt; <a class="el" href="classhypro_1_1SupportFunctionContent.html">SupportFunctionContent</a><br class="typebreak"/>
-&lt; Number &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>project</b> (const std::vector&lt; unsigned &gt; &amp;dimensions) const </td></tr>
-<tr class="separator:ab4bb4a006fb5f954631497eb78c4dd6e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+&lt; Number &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>project</b> (const std::vector&lt; std::size_t &gt; &amp;dimensions) const </td></tr>
+<tr class="separator:ac77cb7cb5e2ad935dafc39721ec0d64d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7e4b16003fc17536bbabca4104636789"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7e4b16003fc17536bbabca4104636789"></a>
 std::shared_ptr<br class="typebreak"/>
 &lt; <a class="el" href="classhypro_1_1SupportFunctionContent.html">SupportFunctionContent</a><br class="typebreak"/>
@@ -290,11 +290,11 @@ static std::shared_ptr<br class="typebreak"/>
 &lt; <a class="el" href="classhypro_1_1SupportFunctionContent.html">SupportFunctionContent</a><br class="typebreak"/>
 &lt; Number &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>create</b> (const std::shared_ptr&lt; <a class="el" href="classhypro_1_1SupportFunctionContent.html">SupportFunctionContent</a>&lt; Number &gt;&gt; &amp;orig, Number factor)</td></tr>
 <tr class="separator:a1ed38392b47cb6314a2e4df2c9fe3bb3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab76ea70e0c565817c4015260c4c367c3"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab76ea70e0c565817c4015260c4c367c3"></a>
+<tr class="memitem:a6c8da24940a009c8e20da8ae95d8a65a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6c8da24940a009c8e20da8ae95d8a65a"></a>
 static std::shared_ptr<br class="typebreak"/>
 &lt; <a class="el" href="classhypro_1_1SupportFunctionContent.html">SupportFunctionContent</a><br class="typebreak"/>
-&lt; Number &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>create</b> (const std::shared_ptr&lt; <a class="el" href="classhypro_1_1SupportFunctionContent.html">SupportFunctionContent</a>&lt; Number &gt;&gt; &amp;orig, const std::vector&lt; unsigned &gt; &amp;dimensions)</td></tr>
-<tr class="separator:ab76ea70e0c565817c4015260c4c367c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+&lt; Number &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>create</b> (const std::shared_ptr&lt; <a class="el" href="classhypro_1_1SupportFunctionContent.html">SupportFunctionContent</a>&lt; Number &gt;&gt; &amp;orig, const std::vector&lt; std::size_t &gt; &amp;dimensions)</td></tr>
+<tr class="separator:a6c8da24940a009c8e20da8ae95d8a65a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab082a70e70713b917f0d2fbabf2e8d5d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab082a70e70713b917f0d2fbabf2e8d5d"></a>
 static std::shared_ptr<br class="typebreak"/>
 &lt; <a class="el" href="classhypro_1_1SupportFunctionContent.html">SupportFunctionContent</a><br class="typebreak"/>

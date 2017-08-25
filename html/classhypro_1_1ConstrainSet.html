@@ -131,15 +131,15 @@ std::size_t&#160;</td><td class="memItemRight" valign="bottom"><b>size</b> () co
 <tr class="memitem:a379a820467cb2e9545cb2e3a855abdee"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a379a820467cb2e9545cb2e3a855abdee"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>add</b> (std::tuple&lt; std::pair&lt; bool, Number &gt;, std::pair&lt; bool, Number &gt;, Number &gt; newElem)</td></tr>
 <tr class="separator:a379a820467cb2e9545cb2e3a855abdee"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa6e5bbcf0f8caf988266da591df33e78"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ConstrainSet.html#aa6e5bbcf0f8caf988266da591df33e78">outside</a> (std::size_t &amp;index, Number &amp;diff, const std::vector&lt; std::size_t &gt; &amp;baseIndices)</td></tr>
-<tr class="memdesc:aa6e5bbcf0f8caf988266da591df33e78"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if there is any variable out of bounds. The method returns the index of the next variable, which is out of bounds, diff holds the distance to the respective bound.  <a href="#aa6e5bbcf0f8caf988266da591df33e78">More...</a><br/></td></tr>
-<tr class="separator:aa6e5bbcf0f8caf988266da591df33e78"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aefcc86ea3bda89996a743378e17c91b8"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aefcc86ea3bda89996a743378e17c91b8"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>getPivot</b> (const std::size_t &amp;index, const Number &amp;diff, std::size_t &amp;pivot, const std::vector&lt; std::size_t &gt; &amp;cobaseIndices, const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;dictionary)</td></tr>
-<tr class="separator:aefcc86ea3bda89996a743378e17c91b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae60558101740b318dc07933325527f98"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ConstrainSet.html#ae60558101740b318dc07933325527f98">modifyAssignment</a> (const std::size_t &amp;pivot, const Number &amp;diff, const std::vector&lt; std::size_t &gt; &amp;base, const std::vector&lt; std::size_t &gt; &amp;cobase, const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;dictionary)</td></tr>
-<tr class="memdesc:ae60558101740b318dc07933325527f98"><td class="mdescLeft">&#160;</td><td class="mdescRight">Finds a suitable pivot to get the variable "index" to its bounds.  <a href="#ae60558101740b318dc07933325527f98">More...</a><br/></td></tr>
-<tr class="separator:ae60558101740b318dc07933325527f98"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adc00e2515013dcd1d2ee91bfcd0887db"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ConstrainSet.html#adc00e2515013dcd1d2ee91bfcd0887db">outside</a> (Eigen::Index &amp;index, Number &amp;diff, const std::vector&lt; Eigen::Index &gt; &amp;baseIndices)</td></tr>
+<tr class="memdesc:adc00e2515013dcd1d2ee91bfcd0887db"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if there is any variable out of bounds. The method returns the index of the next variable, which is out of bounds, diff holds the distance to the respective bound.  <a href="#adc00e2515013dcd1d2ee91bfcd0887db">More...</a><br/></td></tr>
+<tr class="separator:adc00e2515013dcd1d2ee91bfcd0887db"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a58c79e7f8082e0d30e5ff9da3443a0e4"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a58c79e7f8082e0d30e5ff9da3443a0e4"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>getPivot</b> (const Eigen::Index &amp;index, const Number &amp;diff, Eigen::Index &amp;pivot, const std::vector&lt; Eigen::Index &gt; &amp;cobaseIndices, const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;dictionary)</td></tr>
+<tr class="separator:a58c79e7f8082e0d30e5ff9da3443a0e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9bea754899d2de8a99607cb2cfc10d8d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ConstrainSet.html#a9bea754899d2de8a99607cb2cfc10d8d">modifyAssignment</a> (const Eigen::Index &amp;pivot, const Number &amp;diff, const std::vector&lt; Eigen::Index &gt; &amp;base, const std::vector&lt; Eigen::Index &gt; &amp;cobase, const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;dictionary)</td></tr>
+<tr class="memdesc:a9bea754899d2de8a99607cb2cfc10d8d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Finds a suitable pivot to get the variable "index" to its bounds.  <a href="#a9bea754899d2de8a99607cb2cfc10d8d">More...</a><br/></td></tr>
+<tr class="separator:a9bea754899d2de8a99607cb2cfc10d8d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aeb767c6f41fe577f5f8ec371799dc62d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aeb767c6f41fe577f5f8ec371799dc62d"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ConstrainSet.html#aeb767c6f41fe577f5f8ec371799dc62d">setLowerBoundToValue</a> (const std::size_t index)</td></tr>
 <tr class="memdesc:aeb767c6f41fe577f5f8ec371799dc62d"><td class="mdescLeft">&#160;</td><td class="mdescRight">modify the assignment of "pivot" by adding "diff" and recomputes the value of the variables in the basis <br/></td></tr>
@@ -153,12 +153,12 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>print</b> () const </
 <tr class="memitem:a77936a806b811376951a694ff6a9f4af"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a77936a806b811376951a694ff6a9f4af"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>isSaturated</b> (std::size_t var) const </td></tr>
 <tr class="separator:a77936a806b811376951a694ff6a9f4af"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acc96ac9a3a54aeeb121d6f74c395315f"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="acc96ac9a3a54aeeb121d6f74c395315f"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>finiteLowerBound</b> (unsigned var) const </td></tr>
-<tr class="separator:acc96ac9a3a54aeeb121d6f74c395315f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0b247d45fcefd14d6d958acbc8ef2afb"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0b247d45fcefd14d6d958acbc8ef2afb"></a>
-Number&#160;</td><td class="memItemRight" valign="bottom"><b>diffToLowerBound</b> (unsigned var) const </td></tr>
-<tr class="separator:a0b247d45fcefd14d6d958acbc8ef2afb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae86954a4fc6bc75c76baf4337d5d7206"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae86954a4fc6bc75c76baf4337d5d7206"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>finiteLowerBound</b> (std::size_t var) const </td></tr>
+<tr class="separator:ae86954a4fc6bc75c76baf4337d5d7206"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6e27b1aaf7390359688cb6765133009b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6e27b1aaf7390359688cb6765133009b"></a>
+Number&#160;</td><td class="memItemRight" valign="bottom"><b>diffToLowerBound</b> (std::size_t var) const </td></tr>
+<tr class="separator:a6e27b1aaf7390359688cb6765133009b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
 Friends</h2></td></tr>
@@ -180,7 +180,7 @@ class hypro::ConstrainSet&lt; Number &gt;</h3>
 
 <p>Definition at line <a class="el" href="ConstrainSet_8h_source.html#l00008">8</a> of file <a class="el" href="ConstrainSet_8h_source.html">ConstrainSet.h</a>.</p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="ae60558101740b318dc07933325527f98"></a>
+<a class="anchor" id="a9bea754899d2de8a99607cb2cfc10d8d"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
@@ -192,7 +192,7 @@ template&lt;typename Number&gt; </div>
         <tr>
           <td class="memname">void <a class="el" href="classhypro_1_1ConstrainSet.html">hypro::ConstrainSet</a>&lt; Number &gt;::modifyAssignment </td>
           <td>(</td>
-          <td class="paramtype">const std::size_t &amp;&#160;</td>
+          <td class="paramtype">const Eigen::Index &amp;&#160;</td>
           <td class="paramname"><em>pivot</em>, </td>
         </tr>
         <tr>
@@ -204,13 +204,13 @@ template&lt;typename Number&gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const std::vector&lt; std::size_t &gt; &amp;&#160;</td>
+          <td class="paramtype">const std::vector&lt; Eigen::Index &gt; &amp;&#160;</td>
           <td class="paramname"><em>base</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const std::vector&lt; std::size_t &gt; &amp;&#160;</td>
+          <td class="paramtype">const std::vector&lt; Eigen::Index &gt; &amp;&#160;</td>
           <td class="paramname"><em>cobase</em>, </td>
         </tr>
         <tr>
@@ -239,7 +239,7 @@ template&lt;typename Number&gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="aa6e5bbcf0f8caf988266da591df33e78"></a>
+<a class="anchor" id="adc00e2515013dcd1d2ee91bfcd0887db"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
@@ -251,7 +251,7 @@ template&lt;typename Number&gt; </div>
         <tr>
           <td class="memname">bool <a class="el" href="classhypro_1_1ConstrainSet.html">hypro::ConstrainSet</a>&lt; Number &gt;::outside </td>
           <td>(</td>
-          <td class="paramtype">std::size_t &amp;&#160;</td>
+          <td class="paramtype">Eigen::Index &amp;&#160;</td>
           <td class="paramname"><em>index</em>, </td>
         </tr>
         <tr>
@@ -263,7 +263,7 @@ template&lt;typename Number&gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const std::vector&lt; std::size_t &gt; &amp;&#160;</td>
+          <td class="paramtype">const std::vector&lt; Eigen::Index &gt; &amp;&#160;</td>
           <td class="paramname"><em>baseIndices</em>&#160;</td>
         </tr>
         <tr>

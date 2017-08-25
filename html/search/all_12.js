@@ -9,7 +9,7 @@ var searchData=
   ['vertex',['Vertex',['../classhypro_1_1Vertex.html',1,'hypro']]],
   ['vertex',['Vertex',['../classhypro_1_1Vertex.html#a9a3c97bcedc4f01ec01f823d634de46d',1,'hypro::Vertex::Vertex(bool color=false)'],['../classhypro_1_1Vertex.html#a3384ba4ec182ff15a79efc267a274962',1,'hypro::Vertex::Vertex(const Point&lt; Number &gt; &amp;p, bool color=false)'],['../classhypro_1_1Vertex.html#a1b3a11216b140a2535259d10b7f8b867',1,'hypro::Vertex::Vertex(const Vertex&lt; Number &gt; &amp;v)']]],
   ['vertex_2eh',['Vertex.h',['../Vertex_8h.html',1,'']]],
-  ['vertex_3c_20unsigned_20_3e',['Vertex&lt; unsigned &gt;',['../classhypro_1_1Vertex.html',1,'hypro']]],
+  ['vertex_3c_20std_3a_3asize_5ft_20_3e',['Vertex&lt; std::size_t &gt;',['../classhypro_1_1Vertex.html',1,'hypro']]],
   ['vertexcontainer',['VertexContainer',['../classhypro_1_1VertexContainer.html',1,'hypro']]],
   ['vertexcontainer_2eh',['VertexContainer.h',['../VertexContainer_8h.html',1,'']]],
   ['vertexenumeration',['VertexEnumeration',['../classhypro_1_1VertexEnumeration.html',1,'hypro']]],

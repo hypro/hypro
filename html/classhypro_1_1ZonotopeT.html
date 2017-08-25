@@ -184,9 +184,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>reduceNumberRepresent
 <tr class="memitem:ad0c80b3fef5376bee3e9966b7ebfa004"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1ZonotopeT.html">ZonotopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ZonotopeT.html#ad0c80b3fef5376bee3e9966b7ebfa004">minkowskiSum</a> (const <a class="el" href="classhypro_1_1ZonotopeT.html">ZonotopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt; &amp;rhs) const </td></tr>
 <tr class="memdesc:ad0c80b3fef5376bee3e9966b7ebfa004"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes Minkowski's sum of the current set and the passed set.  <a href="#ad0c80b3fef5376bee3e9966b7ebfa004">More...</a><br/></td></tr>
 <tr class="separator:ad0c80b3fef5376bee3e9966b7ebfa004"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1f28c2ba401deec6c74bd46ab3b528b4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1ZonotopeT.html">ZonotopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ZonotopeT.html#a1f28c2ba401deec6c74bd46ab3b528b4">project</a> (const std::vector&lt; unsigned &gt; &amp;dimensions) const </td></tr>
-<tr class="memdesc:a1f28c2ba401deec6c74bd46ab3b528b4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Projects the set on the ordered set of given dimensions.  <a href="#a1f28c2ba401deec6c74bd46ab3b528b4">More...</a><br/></td></tr>
-<tr class="separator:a1f28c2ba401deec6c74bd46ab3b528b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1592af5f65088470bc7a0cb0cd6adc63"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1ZonotopeT.html">ZonotopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ZonotopeT.html#a1592af5f65088470bc7a0cb0cd6adc63">project</a> (const std::vector&lt; std::size_t &gt; &amp;dimensions) const </td></tr>
+<tr class="memdesc:a1592af5f65088470bc7a0cb0cd6adc63"><td class="mdescLeft">&#160;</td><td class="mdescRight">Projects the set on the ordered set of given dimensions.  <a href="#a1592af5f65088470bc7a0cb0cd6adc63">More...</a><br/></td></tr>
+<tr class="separator:a1592af5f65088470bc7a0cb0cd6adc63"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6ae52d09fb15ad9348247e839aea28d3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1ZonotopeT.html">ZonotopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ZonotopeT.html#a6ae52d09fb15ad9348247e839aea28d3">linearTransformation</a> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;A) const </td></tr>
 <tr class="memdesc:a6ae52d09fb15ad9348247e839aea28d3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Applies a linear transformation with the matrix A to the set.  <a href="#a6ae52d09fb15ad9348247e839aea28d3">More...</a><br/></td></tr>
 <tr class="separator:a6ae52d09fb15ad9348247e839aea28d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -950,7 +950,7 @@ template&lt;typename Number, typename Converter&gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="a1f28c2ba401deec6c74bd46ab3b528b4"></a>
+<a class="anchor" id="a1592af5f65088470bc7a0cb0cd6adc63"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
@@ -962,7 +962,7 @@ template&lt;typename Number, typename Converter&gt; </div>
         <tr>
           <td class="memname"><a class="el" href="classhypro_1_1ZonotopeT.html">ZonotopeT</a>&lt;Number,<a class="el" href="classhypro_1_1Converter.html">Converter</a>&gt; <a class="el" href="classhypro_1_1ZonotopeT.html">hypro::ZonotopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt;::project </td>
           <td>(</td>
-          <td class="paramtype">const std::vector&lt; unsigned &gt; &amp;&#160;</td>
+          <td class="paramtype">const std::vector&lt; std::size_t &gt; &amp;&#160;</td>
           <td class="paramname"><em>dimensions</em></td><td>)</td>
           <td> const</td>
         </tr>
@@ -983,7 +983,7 @@ template&lt;typename Number, typename Converter&gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The resulting set. </dd></dl>
 
-<p>Implements <a class="el" href="classhypro_1_1GeometricObject.html#a9dc6d2b65cc0342a998e81db64d86938">hypro::GeometricObject&lt; Number, ZonotopeT&lt; Number, Converter &gt; &gt;</a>.</p>
+<p>Implements <a class="el" href="classhypro_1_1GeometricObject.html#ac59bf7420c712b4895c0a171e2e6e388">hypro::GeometricObject&lt; Number, ZonotopeT&lt; Number, Converter &gt; &gt;</a>.</p>
 
 </div>
 </div>

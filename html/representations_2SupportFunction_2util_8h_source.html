@@ -251,7 +251,7 @@ $(document).ready(function(){initNavTree('representations_2SupportFunction_2util
 <div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;        <span class="keywordtype">void</span> createNextReduct()<span class="keyword"> const </span>{</div>
 <div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;            <span class="comment">// the last created reduction pair is at the back, as a std::map is per default sorted ascending</span></div>
 <div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;            assert(parameters.size() &gt; 0);</div>
-<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;            std::size_t powerOfTwo = carl::pow(2, power);</div>
+<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;            <span class="keywordtype">unsigned</span> powerOfTwo = carl::pow(2, power);</div>
 <div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;            <span class="comment">// first compute the new b</span></div>
 <div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;            <a class="code" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t&lt;Number&gt;</a> bTrans = (--parameters.end())-&gt;second.second;</div>
 <div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;            <a class="code" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t&lt;Number&gt;</a> aTrans = (--parameters.end())-&gt;second.first;</div>

@@ -26,7 +26,7 @@ var searchData=
   ['reset',['Reset',['../classhypro_1_1Reset.html',1,'hypro']]],
   ['resetparser',['resetParser',['../structhypro_1_1parser_1_1resetParser.html',1,'hypro::parser']]],
   ['result',['result',['../structhypro_1_1parser_1_1ErrorHandler_1_1result.html',1,'hypro::parser::ErrorHandler']]],
-  ['reversedual',['reverseDual',['../classhypro_1_1Dictionary.html#aa048f4697e93331c26be6a7c48511ec6',1,'hypro::Dictionary']]],
+  ['reversedual',['reverseDual',['../classhypro_1_1Dictionary.html#ac6a5b2e8beccedb8f19b820617055b91',1,'hypro::Dictionary']]],
   ['ridge',['Ridge',['../classhypro_1_1Ridge.html',1,'hypro']]],
   ['ridge',['Ridge',['../classhypro_1_1Ridge.html#a563b394933f5fdb507bdd254db984db1',1,'hypro::Ridge']]],
   ['rlimits',['rLimits',['../classhypro_1_1BoxT.html#a8536fcb0edf4e7e4eda10b18008ef9aa',1,'hypro::BoxT::rLimits()'],['../classhypro_1_1BoxT_3_01double_00_01Converter_01_4.html#a165e2f6066be9a1737e8dcf2f8156361',1,'hypro::BoxT&lt; double, Converter &gt;::rLimits()']]],

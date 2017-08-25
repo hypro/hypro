@@ -237,9 +237,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 <tr class="memitem:ac0f00b8aa88247e162dc4f91c120ae3f"><td class="memItemLeft" align="right" valign="top">std::pair&lt; bool, <a class="el" href="classhypro_1_1BoxT.html">BoxT</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1BoxT.html#ac0f00b8aa88247e162dc4f91c120ae3f">satisfiesHalfspaces</a> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;_mat, const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;_vec) const </td></tr>
 <tr class="memdesc:ac0f00b8aa88247e162dc4f91c120ae3f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Method combining the intersection of the set with a set of halfspaces and a test for emptiness of the resulting set.  <a href="#ac0f00b8aa88247e162dc4f91c120ae3f">More...</a><br/></td></tr>
 <tr class="separator:ac0f00b8aa88247e162dc4f91c120ae3f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aff3f2eb3059da28be163183966b55f45"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1BoxT.html">BoxT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1BoxT.html#aff3f2eb3059da28be163183966b55f45">project</a> (const std::vector&lt; unsigned &gt; &amp;dimensions) const </td></tr>
-<tr class="memdesc:aff3f2eb3059da28be163183966b55f45"><td class="mdescLeft">&#160;</td><td class="mdescRight">Projects the set on the ordered set of given dimensions.  <a href="#aff3f2eb3059da28be163183966b55f45">More...</a><br/></td></tr>
-<tr class="separator:aff3f2eb3059da28be163183966b55f45"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae967bb0981c2cb1783b32ba48f4e9877"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1BoxT.html">BoxT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1BoxT.html#ae967bb0981c2cb1783b32ba48f4e9877">project</a> (const std::vector&lt; std::size_t &gt; &amp;dimensions) const </td></tr>
+<tr class="memdesc:ae967bb0981c2cb1783b32ba48f4e9877"><td class="mdescLeft">&#160;</td><td class="mdescRight">Projects the set on the ordered set of given dimensions.  <a href="#ae967bb0981c2cb1783b32ba48f4e9877">More...</a><br/></td></tr>
+<tr class="separator:ae967bb0981c2cb1783b32ba48f4e9877"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a75aca36667065ad32ae369de2bd8a89c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1BoxT.html">BoxT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1BoxT.html#a75aca36667065ad32ae369de2bd8a89c">linearTransformation</a> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;A) const </td></tr>
 <tr class="memdesc:a75aca36667065ad32ae369de2bd8a89c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Applies a linear transformation with the matrix A to the set.  <a href="#a75aca36667065ad32ae369de2bd8a89c">More...</a><br/></td></tr>
 <tr class="separator:a75aca36667065ad32ae369de2bd8a89c"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1476,7 +1476,7 @@ template&lt;typename Number, typename Converter&gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="aff3f2eb3059da28be163183966b55f45"></a>
+<a class="anchor" id="ae967bb0981c2cb1783b32ba48f4e9877"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
@@ -1488,7 +1488,7 @@ template&lt;typename Number, typename Converter&gt; </div>
         <tr>
           <td class="memname"><a class="el" href="classhypro_1_1BoxT.html">BoxT</a>&lt;Number,<a class="el" href="classhypro_1_1Converter.html">Converter</a>&gt; <a class="el" href="classhypro_1_1BoxT.html">hypro::BoxT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt;::project </td>
           <td>(</td>
-          <td class="paramtype">const std::vector&lt; unsigned &gt; &amp;&#160;</td>
+          <td class="paramtype">const std::vector&lt; std::size_t &gt; &amp;&#160;</td>
           <td class="paramname"><em>dimensions</em></td><td>)</td>
           <td> const</td>
         </tr>
@@ -1509,7 +1509,7 @@ template&lt;typename Number, typename Converter&gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The resulting set. </dd></dl>
 
-<p>Implements <a class="el" href="classhypro_1_1GeometricObject.html#a9dc6d2b65cc0342a998e81db64d86938">hypro::GeometricObject&lt; Number, BoxT&lt; Number, Converter &gt; &gt;</a>.</p>
+<p>Implements <a class="el" href="classhypro_1_1GeometricObject.html#ac59bf7420c712b4895c0a171e2e6e388">hypro::GeometricObject&lt; Number, BoxT&lt; Number, Converter &gt; &gt;</a>.</p>
 
 </div>
 </div>

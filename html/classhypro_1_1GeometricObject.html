@@ -147,9 +147,9 @@ DerivedShape &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="e
 DerivedShape &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1GeometricObject.html#acddc7fbfe0fde344fa0c66c155bdc6a2">satisfiesHalfspaces</a> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;_mat, const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;_vec) const =0</td></tr>
 <tr class="memdesc:acddc7fbfe0fde344fa0c66c155bdc6a2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Method combining the intersection of the set with a set of halfspaces and a test for emptiness of the resulting set.  <a href="#acddc7fbfe0fde344fa0c66c155bdc6a2">More...</a><br/></td></tr>
 <tr class="separator:acddc7fbfe0fde344fa0c66c155bdc6a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9dc6d2b65cc0342a998e81db64d86938"><td class="memItemLeft" align="right" valign="top">virtual DerivedShape&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1GeometricObject.html#a9dc6d2b65cc0342a998e81db64d86938">project</a> (const std::vector&lt; unsigned &gt; &amp;dimensions) const =0</td></tr>
-<tr class="memdesc:a9dc6d2b65cc0342a998e81db64d86938"><td class="mdescLeft">&#160;</td><td class="mdescRight">Projects the set on the ordered set of given dimensions.  <a href="#a9dc6d2b65cc0342a998e81db64d86938">More...</a><br/></td></tr>
-<tr class="separator:a9dc6d2b65cc0342a998e81db64d86938"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac59bf7420c712b4895c0a171e2e6e388"><td class="memItemLeft" align="right" valign="top">virtual DerivedShape&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1GeometricObject.html#ac59bf7420c712b4895c0a171e2e6e388">project</a> (const std::vector&lt; std::size_t &gt; &amp;dimensions) const =0</td></tr>
+<tr class="memdesc:ac59bf7420c712b4895c0a171e2e6e388"><td class="mdescLeft">&#160;</td><td class="mdescRight">Projects the set on the ordered set of given dimensions.  <a href="#ac59bf7420c712b4895c0a171e2e6e388">More...</a><br/></td></tr>
+<tr class="separator:ac59bf7420c712b4895c0a171e2e6e388"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa8ba3e6ef5dd89dec24c4876b9b85d55"><td class="memItemLeft" align="right" valign="top">virtual DerivedShape&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1GeometricObject.html#aa8ba3e6ef5dd89dec24c4876b9b85d55">linearTransformation</a> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;A) const =0</td></tr>
 <tr class="memdesc:aa8ba3e6ef5dd89dec24c4876b9b85d55"><td class="mdescLeft">&#160;</td><td class="mdescRight">Applies a linear transformation with the matrix A to the set.  <a href="#aa8ba3e6ef5dd89dec24c4876b9b85d55">More...</a><br/></td></tr>
 <tr class="separator:aa8ba3e6ef5dd89dec24c4876b9b85d55"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -499,7 +499,7 @@ template&lt;typename Number, typename DerivedShape&gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="a9dc6d2b65cc0342a998e81db64d86938"></a>
+<a class="anchor" id="ac59bf7420c712b4895c0a171e2e6e388"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
@@ -511,7 +511,7 @@ template&lt;typename Number, typename DerivedShape&gt; </div>
         <tr>
           <td class="memname">virtual DerivedShape <a class="el" href="classhypro_1_1GeometricObject.html">hypro::GeometricObject</a>&lt; Number, DerivedShape &gt;::project </td>
           <td>(</td>
-          <td class="paramtype">const std::vector&lt; unsigned &gt; &amp;&#160;</td>
+          <td class="paramtype">const std::vector&lt; std::size_t &gt; &amp;&#160;</td>
           <td class="paramname"><em>dimensions</em></td><td>)</td>
           <td> const</td>
         </tr>
@@ -532,7 +532,7 @@ template&lt;typename Number, typename DerivedShape&gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The resulting set. </dd></dl>
 
-<p>Implemented in <a class="el" href="classhypro_1_1BoxT_3_01double_00_01Converter_01_4.html#a979e3583b5610071f9fd291a4dd87487">hypro::BoxT&lt; double, Converter &gt;</a>, <a class="el" href="classhypro_1_1BoxT.html#aff3f2eb3059da28be163183966b55f45">hypro::BoxT&lt; Number, Converter &gt;</a>, <a class="el" href="classhypro_1_1BoxT.html#aff3f2eb3059da28be163183966b55f45">hypro::BoxT&lt; Number, hypro::Converter &gt;</a>, <a class="el" href="classhypro_1_1HPolytopeT.html#ae2e63c27da1ef098925443284f9bdf9b">hypro::HPolytopeT&lt; Number, Converter &gt;</a>, <a class="el" href="classhypro_1_1ConstraintSetT.html#a04451bfb1ef76ec4c8a907ccc1f3caf6">hypro::ConstraintSetT&lt; Number, Converter &gt;</a>, <a class="el" href="classhypro_1_1ZonotopeT.html#a1f28c2ba401deec6c74bd46ab3b528b4">hypro::ZonotopeT&lt; Number, Converter &gt;</a>, <a class="el" href="classhypro_1_1VPolytopeT.html#aa0f568279ad700889dbe2d708b9ccccd">hypro::VPolytopeT&lt; Number, Converter &gt;</a>, and <a class="el" href="classhypro_1_1SupportFunctionT.html#ac86b70574582b04018f764d98ef5eca9">hypro::SupportFunctionT&lt; Number, Converter &gt;</a>.</p>
+<p>Implemented in <a class="el" href="classhypro_1_1BoxT_3_01double_00_01Converter_01_4.html#add9b624de2eb3511afe89b1e8e61320f">hypro::BoxT&lt; double, Converter &gt;</a>, <a class="el" href="classhypro_1_1BoxT.html#ae967bb0981c2cb1783b32ba48f4e9877">hypro::BoxT&lt; Number, Converter &gt;</a>, <a class="el" href="classhypro_1_1BoxT.html#ae967bb0981c2cb1783b32ba48f4e9877">hypro::BoxT&lt; Number, hypro::Converter &gt;</a>, <a class="el" href="classhypro_1_1HPolytopeT.html#a4cca0fac19554916f9892e23fe7af124">hypro::HPolytopeT&lt; Number, Converter &gt;</a>, <a class="el" href="classhypro_1_1ConstraintSetT.html#a00e2100437a2866aed31ae18174f408b">hypro::ConstraintSetT&lt; Number, Converter &gt;</a>, <a class="el" href="classhypro_1_1ZonotopeT.html#a1592af5f65088470bc7a0cb0cd6adc63">hypro::ZonotopeT&lt; Number, Converter &gt;</a>, <a class="el" href="classhypro_1_1VPolytopeT.html#ae2110ae4fb6737d531fb68aa6f97c5aa">hypro::VPolytopeT&lt; Number, Converter &gt;</a>, and <a class="el" href="classhypro_1_1SupportFunctionT.html#af8c980e117c30cf8a44adf86d6e60843">hypro::SupportFunctionT&lt; Number, Converter &gt;</a>.</p>
 
 </div>
 </div>

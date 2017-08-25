@@ -1,8 +1,8 @@
 var searchData=
 [
   ['cacheable',['Cacheable',['../structhypro_1_1Cacheable.html',1,'hypro']]],
-  ['calculateinduced',['calculateInduced',['../classhypro_1_1Grid.html#ae89fd15368bb4059c43f65836fbc7dbc',1,'hypro::Grid']]],
-  ['calculateoriginal',['calculateOriginal',['../classhypro_1_1Grid.html#a498bc710715e01f596ede230d0524a6d',1,'hypro::Grid']]],
+  ['calculateinduced',['calculateInduced',['../classhypro_1_1Grid.html#aa300a49350c363539ea74ba0fc9d6745',1,'hypro::Grid']]],
+  ['calculateoriginal',['calculateOriginal',['../classhypro_1_1Grid.html#aca75bd8c550914250e7f170cae1e5a4a',1,'hypro::Grid']]],
   ['changedimension',['changeDimension',['../classhypro_1_1ZonotopeT.html#a513bffb25c4e68e5672911b67c11384f',1,'hypro::ZonotopeT']]],
   ['checkconsistency',['checkConsistency',['../classhypro_1_1Optimizer.html#a9be5c80cccc5a7e6eef6af0c227e10d7',1,'hypro::Optimizer']]],
   ['checkpoint',['checkPoint',['../classhypro_1_1Optimizer.html#a528ae62064de85098bc5746c11a3a045',1,'hypro::Optimizer']]],
@@ -34,7 +34,7 @@ var searchData=
   ['converter',['Converter',['../classhypro_1_1Converter.html',1,'hypro']]],
   ['convexhull',['ConvexHull',['../classhypro_1_1ConvexHull.html',1,'hypro']]],
   ['convexhullvertices',['convexHullVertices',['../classhypro_1_1ConvexHull.html#a5a1ef906a71ffcb97131ec56dda09dde',1,'hypro::ConvexHull']]],
-  ['coordinate',['coordinate',['../classhypro_1_1Point.html#aeaa2b4e9a55ea1ba4fe4ecf163cd0f53',1,'hypro::Point::coordinate(const carl::Variable &amp;_var) const '],['../classhypro_1_1Point.html#a34a6e8a0217243dcd811c595afdfd743',1,'hypro::Point::coordinate(unsigned _dimension) const '],['../classhypro_1_1Vertex.html#a52db98764c18889c9d28414df7ef7b68',1,'hypro::Vertex::coordinate()']]],
+  ['coordinate',['coordinate',['../classhypro_1_1Point.html#aeaa2b4e9a55ea1ba4fe4ecf163cd0f53',1,'hypro::Point::coordinate(const carl::Variable &amp;_var) const '],['../classhypro_1_1Point.html#af3a4db44815daa25768b01afaf88e68a',1,'hypro::Point::coordinate(std::size_t _dimension) const '],['../classhypro_1_1Vertex.html#a52db98764c18889c9d28414df7ef7b68',1,'hypro::Vertex::coordinate()']]],
   ['coordinates',['coordinates',['../classhypro_1_1Point.html#ab90b8ddb5ba4fcb0cab0554b36359ac3',1,'hypro::Point']]],
   ['counterrepository',['CounterRepository',['../classhypro_1_1statistics_1_1CounterRepository.html',1,'hypro::statistics']]]
 ];

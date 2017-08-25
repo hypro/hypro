@@ -11,6 +11,6 @@ var searchData=
   ['typename',['typeName',['../structhypro_1_1hypro_1_1typeName.html',1,'hypro::hypro']]],
   ['typename_3c_20double_20_3e',['typeName&lt; double &gt;',['../structhypro_1_1hypro_1_1typeName_3_01double_01_4.html',1,'hypro::hypro']]],
   ['typename_3c_20double_20_3e',['typeName&lt; double &gt;',['../structhypro_1_1typeName_3_01double_01_4.html',1,'hypro']]],
-  ['typename_3c_20mpq_5fclass_20_3e',['typeName&lt; mpq_class &gt;',['../structhypro_1_1hypro_1_1typeName_3_01mpq__class_01_4.html',1,'hypro::hypro']]],
-  ['typename_3c_20mpq_5fclass_20_3e',['typeName&lt; mpq_class &gt;',['../structhypro_1_1typeName_3_01mpq__class_01_4.html',1,'hypro']]]
+  ['typename_3c_20mpq_5fclass_20_3e',['typeName&lt; mpq_class &gt;',['../structhypro_1_1typeName_3_01mpq__class_01_4.html',1,'hypro']]],
+  ['typename_3c_20mpq_5fclass_20_3e',['typeName&lt; mpq_class &gt;',['../structhypro_1_1hypro_1_1typeName_3_01mpq__class_01_4.html',1,'hypro::hypro']]]
 ];

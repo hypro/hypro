@@ -47,7 +47,7 @@ var classhypro_1_1HPolytopeT =
     [ "operator=", "classhypro_1_1HPolytopeT.html#a4a3fbd6b29fcd85a204fb126ad8e7d1d", null ],
     [ "operator==", "classhypro_1_1HPolytopeT.html#a7ff48c5b2c7cb6b164b262ca6d715ae2", null ],
     [ "print", "classhypro_1_1HPolytopeT.html#a53a91697a83a1513a21da8553c9533db", null ],
-    [ "project", "classhypro_1_1HPolytopeT.html#ae2e63c27da1ef098925443284f9bdf9b", null ],
+    [ "project", "classhypro_1_1HPolytopeT.html#a4cca0fac19554916f9892e23fe7af124", null ],
     [ "reduce", "classhypro_1_1HPolytopeT.html#a1bee2f939c803423a1d7e466730bf092", null ],
     [ "reduce_directed", "classhypro_1_1HPolytopeT.html#a3f5ea270087840dd6021bf812e4c758a", null ],
     [ "reduceAssign", "classhypro_1_1HPolytopeT.html#a44204d4626bf36a7cf2a48cc0f040d89", null ],

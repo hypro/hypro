@@ -162,7 +162,7 @@ $(document).ready(function(){initNavTree('NeighborhoodContainer_8cpp_source.html
 <div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;        <span class="keywordtype">unsigned</span> dim = p.<a class="code" href="classhypro_1_1Point.html#aa299aa4647fb454b534fb93db59f7baa">dimension</a>();</div>
 <div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;</div>
 <div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;        <span class="comment">// the number of neighbors is 2^(dimension) - 1</span></div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;        <span class="keywordtype">int</span> nrofNeighbors = (pow(2, dim) - 1);</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;        <span class="keywordtype">int</span> nrofNeighbors = (int(pow(2, dim)) - 1);</div>
 <div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;</div>
 <div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;        <a class="code" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t&lt;int&gt;</a> coordinates = p.<a class="code" href="classhypro_1_1Point.html#a444e722bcad6e231fe24ec0dc55867df">rawCoordinates</a>();</div>
 <div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;        <a class="code" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t&lt;int&gt;</a> pointCoordinates = p.<a class="code" href="classhypro_1_1Point.html#a444e722bcad6e231fe24ec0dc55867df">rawCoordinates</a>();</div>

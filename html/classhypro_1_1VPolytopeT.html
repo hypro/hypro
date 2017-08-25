@@ -158,9 +158,9 @@ Public Member Functions</h2></td></tr>
 &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1VPolytopeT.html#ac8ef11edeefbb938a05c140ec72cfee5">~VPolytopeT</a> ()</td></tr>
 <tr class="memdesc:ac8ef11edeefbb938a05c140ec72cfee5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destroys the object. <br/></td></tr>
 <tr class="separator:ac8ef11edeefbb938a05c140ec72cfee5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa0f568279ad700889dbe2d708b9ccccd"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1VPolytopeT.html">VPolytopeT</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1VPolytopeT.html#aa0f568279ad700889dbe2d708b9ccccd">project</a> (const std::vector&lt; unsigned &gt; &amp;dimensions) const </td></tr>
-<tr class="memdesc:aa0f568279ad700889dbe2d708b9ccccd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Projects the set on the ordered set of given dimensions.  <a href="#aa0f568279ad700889dbe2d708b9ccccd">More...</a><br/></td></tr>
-<tr class="separator:aa0f568279ad700889dbe2d708b9ccccd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae2110ae4fb6737d531fb68aa6f97c5aa"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1VPolytopeT.html">VPolytopeT</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1VPolytopeT.html#ae2110ae4fb6737d531fb68aa6f97c5aa">project</a> (const std::vector&lt; std::size_t &gt; &amp;dimensions) const </td></tr>
+<tr class="memdesc:ae2110ae4fb6737d531fb68aa6f97c5aa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Projects the set on the ordered set of given dimensions.  <a href="#ae2110ae4fb6737d531fb68aa6f97c5aa">More...</a><br/></td></tr>
+<tr class="separator:ae2110ae4fb6737d531fb68aa6f97c5aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7938e23ef4c0361b99bafe146d897302"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1VPolytopeT.html">VPolytopeT</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1VPolytopeT.html#a7938e23ef4c0361b99bafe146d897302">linearTransformation</a> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;A) const </td></tr>
 <tr class="memdesc:a7938e23ef4c0361b99bafe146d897302"><td class="mdescLeft">&#160;</td><td class="mdescRight">Applies a linear transformation with the matrix A to the set.  <a href="#a7938e23ef4c0361b99bafe146d897302">More...</a><br/></td></tr>
 <tr class="separator:a7938e23ef4c0361b99bafe146d897302"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -267,10 +267,10 @@ pointVector::const_iterator&#160;</td><td class="memItemRight" valign="bottom"><
 <tr class="memitem:ad939c7de16b8284a7004b44ad017c04b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad939c7de16b8284a7004b44ad017c04b"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>removeRedundancy</b> ()</td></tr>
 <tr class="separator:ad939c7de16b8284a7004b44ad017c04b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a608b9f4eb93c2bb7e21db8cc1a4c66f1"><td class="memTemplParams" colspan="2"><a class="anchor" id="a608b9f4eb93c2bb7e21db8cc1a4c66f1"></a>
+<tr class="memitem:afaf13163761c7ce80e09bdf726509867"><td class="memTemplParams" colspan="2"><a class="anchor" id="afaf13163761c7ce80e09bdf726509867"></a>
 template&lt;typename N  = Number, carl::DisableIf&lt; carl::is_float&lt; N &gt; &gt;  = carl::dummy&gt; </td></tr>
-<tr class="memitem:a608b9f4eb93c2bb7e21db8cc1a4c66f1"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>reduceNumberRepresentation</b> (unsigned limit=fReach_DENOMINATOR) const </td></tr>
-<tr class="separator:a608b9f4eb93c2bb7e21db8cc1a4c66f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afaf13163761c7ce80e09bdf726509867"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>reduceNumberRepresentation</b> (std::size_t limit=fReach_DENOMINATOR) const </td></tr>
+<tr class="separator:afaf13163761c7ce80e09bdf726509867"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0a71fc6698eb1b74ed47806afec1c186"><td class="memTemplParams" colspan="2"><a class="anchor" id="a0a71fc6698eb1b74ed47806afec1c186"></a>
 template&lt;typename N  = Number, carl::EnableIf&lt; carl::is_float&lt; N &gt; &gt;  = carl::dummy&gt; </td></tr>
 <tr class="memitem:a0a71fc6698eb1b74ed47806afec1c186"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>reduceNumberRepresentation</b> (unsigned=fReach_DENOMINATOR) const </td></tr>
@@ -929,7 +929,7 @@ template&lt;typename Number , typename Converter &gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="aa0f568279ad700889dbe2d708b9ccccd"></a>
+<a class="anchor" id="ae2110ae4fb6737d531fb68aa6f97c5aa"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
@@ -941,7 +941,7 @@ template&lt;typename Number , typename Converter &gt; </div>
         <tr>
           <td class="memname"><a class="el" href="classhypro_1_1VPolytopeT.html">VPolytopeT</a> <a class="el" href="classhypro_1_1VPolytopeT.html">hypro::VPolytopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt;::project </td>
           <td>(</td>
-          <td class="paramtype">const std::vector&lt; unsigned &gt; &amp;&#160;</td>
+          <td class="paramtype">const std::vector&lt; std::size_t &gt; &amp;&#160;</td>
           <td class="paramname"><em>dimensions</em></td><td>)</td>
           <td> const</td>
         </tr>
@@ -962,7 +962,7 @@ template&lt;typename Number , typename Converter &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The resulting set. </dd></dl>
 
-<p>Implements <a class="el" href="classhypro_1_1GeometricObject.html#a9dc6d2b65cc0342a998e81db64d86938">hypro::GeometricObject&lt; Number, VPolytopeT&lt; Number, Converter &gt; &gt;</a>.</p>
+<p>Implements <a class="el" href="classhypro_1_1GeometricObject.html#ac59bf7420c712b4895c0a171e2e6e388">hypro::GeometricObject&lt; Number, VPolytopeT&lt; Number, Converter &gt; &gt;</a>.</p>
 
 </div>
 </div>

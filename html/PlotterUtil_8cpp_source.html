@@ -140,7 +140,7 @@ $(document).ready(function(){initNavTree('PlotterUtil_8cpp_source.html','');});
 <div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;        <span class="comment">// scale domain from [0,255] to [0,1]</span></div>
 <div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;        std::vector&lt;double&gt; scaled;</div>
 <div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;        <span class="keywordflow">for</span>(<span class="keyword">auto</span> item : color){</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;            scaled.push_back(item/255.0);</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;            scaled.push_back(<span class="keywordtype">double</span>(item)/255.0);</div>
 <div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;        }</div>
 <div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;</div>
 <div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;        <span class="keyword">auto</span> min = std::min_element(scaled.begin(), scaled.end());</div>
@@ -198,7 +198,7 @@ $(document).ready(function(){initNavTree('PlotterUtil_8cpp_source.html','');});
 <div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;            <span class="keywordflow">return</span> std::vector&lt;std::size_t&gt;({resR,resG,resB});</div>
 <div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;        }</div>
 <div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;        h /= 60.0;            <span class="comment">// sector 0 to 5</span></div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;        i = std::floor( h );</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;        i = int(std::floor( h ));</div>
 <div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;        <span class="keywordtype">double</span> f = h - i;          <span class="comment">// factorial part of h</span></div>
 <div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;        <span class="keywordtype">double</span> p = v * ( 1 - s );</div>
 <div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;        <span class="keywordtype">double</span> q = v * ( 1 - s * f );</div>

@@ -13,7 +13,7 @@ var searchData=
   ['removeduplicatepoints',['removeDuplicatePoints',['../classhypro_1_1Point.html#a7a8c12183c854b044cdfc6122ad385ed',1,'hypro::Point']]],
   ['removeemptygenerators',['removeEmptyGenerators',['../classhypro_1_1ZonotopeT.html#a8a724a58e36b633e0bf4d1a33374da9c',1,'hypro::ZonotopeT']]],
   ['removeredundancy',['removeRedundancy',['../classhypro_1_1BoxT.html#a47c20ababb80a0c8f229afb64ae5635a',1,'hypro::BoxT::removeRedundancy()'],['../classhypro_1_1BoxT_3_01double_00_01Converter_01_4.html#a55fe892445ce290a31e7c6a9d2637641',1,'hypro::BoxT&lt; double, Converter &gt;::removeRedundancy()'],['../classhypro_1_1ConstraintSetT.html#a7501c3b99c68dccfa621587c9b77c5cf',1,'hypro::ConstraintSetT::removeRedundancy()']]],
-  ['reversedual',['reverseDual',['../classhypro_1_1Dictionary.html#aa048f4697e93331c26be6a7c48511ec6',1,'hypro::Dictionary']]],
+  ['reversedual',['reverseDual',['../classhypro_1_1Dictionary.html#ac6a5b2e8beccedb8f19b820617055b91',1,'hypro::Dictionary']]],
   ['ridge',['Ridge',['../classhypro_1_1Ridge.html#a563b394933f5fdb507bdd254db984db1',1,'hypro::Ridge']]],
   ['rlimits',['rLimits',['../classhypro_1_1BoxT.html#a8536fcb0edf4e7e4eda10b18008ef9aa',1,'hypro::BoxT::rLimits()'],['../classhypro_1_1BoxT_3_01double_00_01Converter_01_4.html#a165e2f6066be9a1737e8dcf2f8156361',1,'hypro::BoxT&lt; double, Converter &gt;::rLimits()']]],
   ['rpoint',['rPoint',['../classhypro_1_1Vertex.html#af7f8ffba7a8fd6b213a457103c4df8ff',1,'hypro::Vertex']]],
