@@ -108,7 +108,7 @@ PolytopeSupportFunction<Number>& PolytopeSupportFunction<Number>::operator=(cons
 }
 
 template <typename Number>
-unsigned PolytopeSupportFunction<Number>::dimension() const {
+std::size_t PolytopeSupportFunction<Number>::dimension() const {
 	return mDimension;
 }
 
@@ -134,7 +134,7 @@ std::vector<Point<Number>> PolytopeSupportFunction<Number>::vertices() const {
 		unsigned dim = this->dimension();
 
 		Permutator permutator(mConstraints.rows(), dim);
-		std::vector<unsigned> permutation;
+		std::vector<std::size_t> permutation;
 		while(!permutator.end()) {
 			permutation = permutator();
 

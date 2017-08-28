@@ -64,7 +64,7 @@ else ()
 	set(CONF_LINKER_LIBS ${hypro_DYNAMIC_LIBRARIES})
 endif()
 
-configure_package_config_file(cmake/Modules/hyproConfig.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/hyproConfig.cmake
+configure_package_config_file(cmake/hyproConfig.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/hyproConfig.cmake
 							  INSTALL_DESTINATION ${PROJECT_BINARY_DIR}
 							  PATH_VARS PROJECT_BINARY_DIR #SYSCONFIG_INSTALL_DIR
 							 )
@@ -73,7 +73,7 @@ file(RELATIVE_PATH REL_INCLUDE_DIR "${CMAKE_INSTALL_DIR}" "${INCLUDE_INSTALL_DIR
 # ... for the install tree
 set(CONF_INCLUDE_DIRS "\${hypro_CMAKE_DIR}/${REL_INCLUDE_DIR}")
 
-configure_package_config_file(cmake/Modules/hyproConfig.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/installedConfig/hyproConfig.cmake
+configure_package_config_file(cmake/hyproConfig.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/installedConfig/hyproConfig.cmake
 							  INSTALL_DESTINATION ${CMAKE_INSTALL_DIR}
 							  PATH_VARS INCLUDE_INSTALL_DIR #SYSCONFIG_INSTALL_DIR
 			 )

@@ -52,8 +52,8 @@ class Transition
     /**
      * Getter & Setter
      */
-    Location<Number>* getSource() const { return mSource; }
-    Location<Number>* getTarget() const { return mTarget; }
+    Location<Number>* getSource() const { assert( mSource != nullptr ); return mSource; }
+    Location<Number>* getTarget() const { assert( mTarget != nullptr ); return mTarget; }
     const Condition<Number>& getGuard() const { return mGuard; }
     const Reset<Number>& getReset() const { return mReset; }
     Aggregation getAggregation() const { return mAggregationSetting; }

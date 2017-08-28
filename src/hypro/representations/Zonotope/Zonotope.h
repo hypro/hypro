@@ -185,7 +185,7 @@ class ZonotopeT : public GeometricObject<Number, ZonotopeT<Number,Converter>> {
 	*****************************************************************************/
 
 	ZonotopeT<Number,Converter> minkowskiSum( const ZonotopeT<Number,Converter>& rhs ) const;
-	ZonotopeT<Number,Converter> project( const std::vector<unsigned>& dimensions ) const;
+	ZonotopeT<Number,Converter> project( const std::vector<std::size_t>& dimensions ) const;
 	ZonotopeT<Number,Converter> linearTransformation( const matrix_t<Number>& A) const;
 	ZonotopeT<Number,Converter> affineTransformation( const matrix_t<Number>& A, const vector_t<Number>& b ) const;
 

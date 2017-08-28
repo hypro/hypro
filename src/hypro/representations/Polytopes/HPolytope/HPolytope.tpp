@@ -121,9 +121,9 @@ HPolytopeT<Number, Converter>::HPolytopeT( const std::vector<Point<Number>>& poi
 
 			// project on lower dimension.
 			// TODO: Use dimensions with largest coordinate range for improved stability.
-			std::vector<unsigned> projectionDimensions;
-			std::vector<unsigned> droppedDimensions;
-			for(unsigned d = 0; d < mDimension; ++d){
+			std::vector<std::size_t> projectionDimensions;
+			std::vector<std::size_t> droppedDimensions;
+			for(std::size_t d = 0; d < mDimension; ++d){
 				if(d < unsigned(effectiveDim)){
 					projectionDimensions.push_back(d);
 				} else {
@@ -275,10 +275,10 @@ template <typename Number, typename Converter>
 typename std::vector<Point<Number>> HPolytopeT<Number, Converter>::vertices( const matrix_t<Number>& ) const {
 	typename std::vector<Point<Number>> vertices;
 	if(!mHPlanes.empty() && mHPlanes.size() >= this->dimension() && !this->empty()) {
-		unsigned dim = this->dimension();
+		std::size_t dim = this->dimension();
 
 		Permutator permutator(mHPlanes.size(), dim);
-		std::vector<unsigned> permutation;
+		std::vector<std::size_t> permutation;
 		while(!permutator.end()) {
 			permutation = permutator();
 
@@ -595,7 +595,7 @@ std::pair<bool, HPolytopeT<Number, Converter>> HPolytopeT<Number, Converter>::sa
 }
 
 template <typename Number, typename Converter>
-HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::project(const std::vector<unsigned>& dimensions) const {
+HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::project(const std::vector<std::size_t>& dimensions) const {
 	TRACE("hypro.hPolytope","on dimensions " << dimensions);
 	if(dimensions.empty()) {
 		return Empty();
@@ -801,7 +801,7 @@ HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::unite( const HPolyt
 	}
 	// at this point, none is empty.
 	#ifdef AVOID_CONVERSION
-	unsigned numberOfDirections = 8;
+	std::size_t numberOfDirections = 8;
 	TRACE("hypro.hPolytope","Unite using templated evaluation using " << numberOfDirections << " directions.");
 	assert(this->dimension() == _rhs.dimension());
 	std::vector<vector_t<Number>> templateDirections = computeTemplate<Number>(this->dimension(), numberOfDirections);
@@ -921,7 +921,7 @@ typename HPolytopeT<Number, Converter>::HalfspaceVector HPolytopeT<Number, Conve
 }
 
 template<typename Number, typename Converter>
-void HPolytopeT<Number, Converter>::insertEmptyDimensions(const std::vector<unsigned>& existingDimensions, const std::vector<unsigned>& newDimensions) {
+void HPolytopeT<Number, Converter>::insertEmptyDimensions(const std::vector<std::size_t>& existingDimensions, const std::vector<std::size_t>& newDimensions) {
 	assert(mDimension == existingDimensions.size());
 
 	//std::cout << __func__ << "Existing dimensions: " << existingDimensions << " and new dimensions: " << newDimensions << std::endl;

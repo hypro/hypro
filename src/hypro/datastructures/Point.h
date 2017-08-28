@@ -147,7 +147,7 @@ class Point {
 	 * @param[in]  _dim  The dimension.
 	 * @return     The origin point.
 	 */
-	static Point<Number> Zero( unsigned _dim = 0 ) { return Point<Number>( vector_t<Number>::Zero( _dim )); }
+	static Point<Number> Zero( std::size_t _dim = 0 ) { return Point<Number>( vector_t<Number>::Zero( Eigen::Index(_dim) )); }
 
 	/**
 	 * @brief      Returns the origin of the current space.
@@ -167,7 +167,7 @@ class Point {
 	 * @param[in]  _dimension  The dimension.
 	 * @return     The coordinate.
 	 */
-	Number coordinate( unsigned _dimension ) const;
+	Number coordinate( std::size_t _dimension ) const;
 
 	/**
 	 * @brief      Returns a mapping from variables to coordinates for the current point.
@@ -265,7 +265,7 @@ class Point {
 	 * @param[in]  dimensions  The dimensions.
 	 * @return     The projected point.
 	 */
-	Point<Number> project( const std::vector<unsigned>& dimensions ) const;
+	Point<Number> project( const std::vector<std::size_t>& dimensions ) const;
 
 	/**
 	 * @brief      Applies an affine transformation on the current point.
@@ -541,7 +541,7 @@ class Point {
 	Number& operator[]( std::size_t _i );
 
 	const Number& at( const carl::Variable& _i ) const;
-	const Number& at( unsigned _index ) const;
+	const Number& at( std::size_t _index ) const;
 	//@}
 
 	/**
@@ -555,7 +555,7 @@ class Point {
 		for ( unsigned i = 0; i < _p.rawCoordinates().rows() - 1; ++i ) {
 			_ostr << _p.at( i ) << "[" << i  << "] , ";
 		}
-		_ostr << _p.at( _p.rawCoordinates().rows() - 1 ) << "[" << _p.rawCoordinates().rows() - 1 << "]";
+		_ostr << _p.at( unsigned(_p.rawCoordinates().rows()) - 1 ) << "[" << _p.rawCoordinates().rows() - 1 << "]";
 		_ostr << ")";
 		return _ostr;
 	}
@@ -656,14 +656,14 @@ int effectiveDimension(const std::vector<Point<Number>>& vertices) {
 		if(vertices.size() == 1) {
 			return 0;
 		}
-		unsigned maxDim = vertices.begin()->rawCoordinates().rows();
+		long maxDim = vertices.begin()->rawCoordinates().rows();
 		matrix_t<Number> matr = matrix_t<Number>(vertices.size()-1, maxDim);
 		// use first vertex as origin, start at second vertex
-		unsigned rowIndex = 0;
+		long rowIndex = 0;
 		for(auto vertexIt = ++vertices.begin(); vertexIt != vertices.end(); ++vertexIt, ++rowIndex) {
 			matr.row(rowIndex) = (vertexIt->rawCoordinates() - vertices.begin()->rawCoordinates()).transpose();
 		}
-		return matr.fullPivLu().rank();
+		return int(matr.fullPivLu().rank());
 	}
 	return -1;
 }
@@ -680,14 +680,14 @@ int effectiveDimension(const std::set<Point<Number>>& vertices) {
 		if(vertices.size() == 1) {
 			return 0;
 		}
-		unsigned maxDim = vertices.begin()->rawCoordinates().rows();
+		long maxDim = vertices.begin()->rawCoordinates().rows();
 		matrix_t<Number> matr = matrix_t<Number>(vertices.size()-1, maxDim);
 		// use first vertex as origin, start at second vertex
-		unsigned rowIndex = 0;
+		long rowIndex = 0;
 		for(auto vertexIt = ++vertices.begin(); vertexIt != vertices.end(); ++vertexIt, ++rowIndex) {
 			matr.row(rowIndex) = (vertexIt->rawCoordinates() - vertices.begin()->rawCoordinates()).transpose();
 		}
-		return matr.fullPivLu().rank();
+		return int(matr.fullPivLu().rank());
 	}
 	return -1;
 }

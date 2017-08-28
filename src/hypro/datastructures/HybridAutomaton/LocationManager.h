@@ -1,7 +1,5 @@
 /**
  * @author Stefan Schupp <stefan.schupp@cs.rwth-aachen.de>
- *
- *
  */
 
 #pragma once

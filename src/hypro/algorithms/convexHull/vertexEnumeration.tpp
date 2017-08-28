@@ -3,8 +3,8 @@
 namespace hypro {
 
 	template<typename Number>
-	void VertexEnumeration<Number>::increment(std::size_t& i, std::size_t& j, std::size_t maxJ) {
-		++j; if(j>=maxJ){j=0;++i;};
+	void VertexEnumeration<Number>::increment(Eigen::Index& i, Eigen::Index& j, std::size_t maxJ) {
+		++j; if(j>= Eigen::Index(maxJ)){j=0;++i;};
 		DEBUG("hypro.vertexEnumeration" ,": i=" << i << ", j=" << j);
 	}
 
@@ -130,7 +130,7 @@ namespace hypro {
 			unsigned dim = mHsv.begin()->dimension();
 
 			Permutator permutator(mHsv.size(), dim);
-			std::vector<unsigned> permutation;
+			std::vector<std::size_t> permutation;
 			while(!permutator.end()) {
 				permutation = permutator();
 
@@ -186,13 +186,13 @@ namespace hypro {
 		for(const auto& cone: cones) {
 			mPositiveCones.insert(cone);
 		}
-		std::size_t a=0;
-		std::size_t b=0;
+		Eigen::Index a=0;
+		Eigen::Index b=0;
 		int depth=0;//used to know when to stop
-		std::size_t& i=a;
-		std::size_t& j=b;
-		std::size_t m = dictionary.basis().size()-1;//different than the article
-		std::size_t n = dictionary.cobasis().size()-1;
+		Eigen::Index& i=a;
+		Eigen::Index& j=b;
+		Eigen::Index m = Eigen::Index(dictionary.basis().size()-1);//different than the article
+		Eigen::Index n = Eigen::Index(dictionary.cobasis().size()-1);
 		while(i<m || depth>=0){
 			while(i<m && not(dictionary.reverse(i,j))){
 				VertexEnumeration<Number>::increment(i,j,n);
@@ -255,17 +255,17 @@ namespace hypro {
 	void VertexEnumeration<Number>::enumerateDictionaries() {
 		Dictionary<Number> dictionary = mDictionaries[0];
 		assert(dictionary.isOptimal());
-		std::size_t a=0;
-		std::size_t b=0;
+		Eigen::Index a=0;
+		Eigen::Index b=0;
 		int depth=0;
-		std::vector<std::size_t> basisAux = dictionary.findZeros();//locate degenerated variables
+		std::vector<Eigen::Index> basisAux = dictionary.findZeros();//locate degenerated variables
 		std::vector<Number> memory;
-		std::size_t& i=a;
-		std::size_t& j=b;
-		std::size_t m = basisAux.size();//different than the article
-		std::size_t m2 = dictionary.basis().size()-1;
-		std::size_t n = dictionary.cobasis().size()-1;
-		for(std::size_t rowIndex = 0; rowIndex <= m2; ++rowIndex) {
+		Eigen::Index& i=a;
+		Eigen::Index& j=b;
+		Eigen::Index m = Eigen::Index(basisAux.size());//different than the article
+		Eigen::Index m2 = Eigen::Index(dictionary.basis().size()-1);
+		Eigen::Index n = Eigen::Index(dictionary.cobasis().size()-1);
+		for(Eigen::Index rowIndex = 0; rowIndex <= m2; ++rowIndex) {
 			memory.push_back(dictionary.get(rowIndex,n));// to restore the constant column
 		}
 		dictionary.setOnes(basisAux);
@@ -282,7 +282,7 @@ namespace hypro {
 				assert(dictionary.isDualFeasible());
 				//dictionary.printDictionary();
 				Dictionary<Number> newDictionary = (Dictionary<Number>(dictionary));
-				for(std::size_t rowIndex = 0; rowIndex <= m2; ++rowIndex) {
+				for(Eigen::Index rowIndex = 0; rowIndex <= m2; ++rowIndex) {
 					newDictionary.setValue(rowIndex,n,memory[rowIndex]);
 				}
 				mDictionaries.push_back(newDictionary);
@@ -307,8 +307,8 @@ namespace hypro {
 
 	template<typename Number>
 	Dictionary<Number> VertexEnumeration<Number>::findFirstVertex() {
-		std::size_t d = mHsv[0].dimension();
-		std::size_t n0 = mHsv.size();
+		Eigen::Index d = Eigen::Index(mHsv[0].dimension());
+		Eigen::Index n0 = Eigen::Index(mHsv.size());
 		Dictionary<Number> dictionary = Dictionary<Number>(mHsv);
 		DEBUG("hypro.vertexEnumeration","first dictionary");
 		DEBUG("hypro.vertexEnumeration",dictionary);
@@ -327,15 +327,15 @@ namespace hypro {
 		// At this point we need to start over again, as we added artificial constraints for the lineality space.
 
 		matrix_t<Number> dictio = matrix_t<Number>::Zero(mHsv.size()+1, d+1);
-		for(std::size_t colIndex=0;colIndex<=d;++colIndex) {//copy
-			for(std::size_t rowIndex=0;rowIndex<n0;++rowIndex) {
+		for(Eigen::Index colIndex=0;colIndex<=d;++colIndex) {//copy
+			for(Eigen::Index rowIndex=0;rowIndex<n0;++rowIndex) {
 				dictio(rowIndex,colIndex) = dictionary.get(rowIndex,colIndex);
 			}
 			dictio(mHsv.size(),colIndex) = dictionary.get(n0,colIndex);
 		}
-		for(std::size_t rowIndex=0;rowIndex<n0;++rowIndex) {//build the linealty constrains, the part with the var in the basis
-			if(dictionary.basis()[rowIndex]>=dictionary.basis().size()) {
-				for(std::size_t colIndex=0;colIndex<d;++colIndex) {
+		for(Eigen::Index rowIndex=0;rowIndex < n0;++rowIndex) {//build the linealty constrains, the part with the var in the basis
+			if(std::size_t(dictionary.basis()[rowIndex]) >= dictionary.basis().size()) {
+				for(Eigen::Index colIndex=0;colIndex<d;++colIndex) {
 					for(std::size_t rowIndexLinealty=0;rowIndexLinealty<mLinealtySpace.size();++rowIndexLinealty) {
 						dictio(n0+2*rowIndexLinealty,colIndex)-=
 								dictionary.get(rowIndex,colIndex)*mLinealtySpace[rowIndexLinealty][dictionary.basis()[rowIndex]-dictionary.basis().size()];
@@ -343,36 +343,36 @@ namespace hypro {
 				}
 			}
 		}
-		for(std::size_t colIndex=0;colIndex<d;++colIndex) {//build the linealty constrains, the part with the var in the cobasis
+		for(Eigen::Index colIndex=0;colIndex<d;++colIndex) {//build the linealty constrains, the part with the var in the cobasis
 			for(std::size_t rowIndexLinealty=0;rowIndexLinealty<mLinealtySpace.size();++rowIndexLinealty) {
-				if(dictionary.cobasis()[colIndex]>=dictionary.basis().size()) {
+				if( std::size_t(dictionary.cobasis()[colIndex]) >= dictionary.basis().size()) {
 					dictio(n0+2*rowIndexLinealty,colIndex)-=mLinealtySpace[rowIndexLinealty][colIndex];
 				}
 				dictio(n0+2*rowIndexLinealty+1,colIndex) = -dictio(n0+2*rowIndexLinealty,colIndex);
 			}
 		}
-		std::vector<std::size_t> basis = dictionary.basis();
-		std::vector<std::size_t> cobasis = dictionary.cobasis();
+		std::vector<Eigen::Index> basis = dictionary.basis();
+		std::vector<Eigen::Index> cobasis = dictionary.cobasis();
 		for(auto& index: basis) {
-			if(index>n0) {index+=2*mLinealtySpace.size();};
+			if(index>n0) {index+= Eigen::Index(2*mLinealtySpace.size());};
 		}
 		for(auto& index: cobasis) {
-			if(index>n0) {index+=2*mLinealtySpace.size();};
+			if(index>n0) {index+= Eigen::Index(2*mLinealtySpace.size());};
 		}
-		std::size_t back = basis.back();
+		Eigen::Index back = basis.back();
 		basis.pop_back();
 
-		for(std::size_t index = n0+1;index<=mHsv.size();++index) {basis.push_back(index);}
+		for(std::size_t index = n0+1;index<=mHsv.size();++index) {basis.push_back(Eigen::Index(index));}
 		basis.push_back(back);
 		ConstrainSet<Number> constrains;
-		for(std::size_t index=0; index<n0;++index) {
+		for(Eigen::Index index=0; index<n0;++index) {
 			constrains.add(dictionary.constrainSet().get(index));
 		}
 		for(std::size_t index=0; index<2*mLinealtySpace.size();++index) {
 			constrains.add(std::tuple<std::pair<bool,Number>,std::pair<bool,Number>,Number>(
 					std::pair<bool,Number>(false,Number(0)),std::pair<bool,Number>(true,Number(0)),Number(0)));//fix
 		}
-		for(std::size_t index=n0; index<n0+d;++index) {
+		for(Eigen::Index index=n0; index<n0+d;++index) {
 			constrains.add(dictionary.constrainSet().get(index));
 		}
 		Dictionary<Number> newDictionary = Dictionary<Number>(dictio,basis,cobasis,constrains);//creation of a new dictionary with the linealty constrains
@@ -381,16 +381,16 @@ namespace hypro {
 		DEBUG("hypro.vertexEnumeration",dictionary);
 		DEBUG("hypro.vertexEnumeration",dictionary.constrainSet());
 		newDictionary.nonSlackToBase();
-		std::set<std::size_t> hyperplanes;
+		std::set<Eigen::Index> hyperplanes;
 		for(std::size_t index=0;index<basis.size();++index) {//search for already saturated constrains
 			if(newDictionary.constrainSet().isSaturated(index)) {
-				hyperplanes.insert(index);
+				hyperplanes.insert(Eigen::Index(index));
 			}
 		}
-		std::set<std::size_t> frozenCols = newDictionary.toCobase(hyperplanes);
+		std::set<Eigen::Index> frozenCols = newDictionary.toCobase(hyperplanes);
 		DEBUG("hypro.vertexEnumeration","frozen cols:");
 		DEBUG("hypro.vertexEnumeration",frozenCols);
-		for(std::size_t colIndex=0; colIndex<d;++colIndex) {
+		for(Eigen::Index colIndex=0; colIndex < Eigen::Index(d);++colIndex) {
 			if(frozenCols.end()==frozenCols.find(colIndex)) {
 				newDictionary.pushToBounds(colIndex);
 			}
@@ -467,12 +467,12 @@ namespace hypro {
 			DEBUG("hypro.vertexEnumeration",dictionary);
 			DEBUG("hypro.vertexEnumeration",dictionary.constrainSet());
 			std::size_t dimension = dictionary.cobasis().size()-1;
-			std::size_t constrainsCount = dictionary.basis().size()-1;
+			Eigen::Index constrainsCount = dictionary.basis().size()-1;
 			matrix_t<Number> A1 = matrix_t<Number>(dimension, dimension);
 			matrix_t<Number> A2 = matrix_t<Number>(mHsv.size()-dimension, dimension);
 			vector_t<Number> b1 = vector_t<Number>(dimension);
-			std::vector<std::size_t> mB;
-			std::vector<std::size_t> mN;
+			std::vector<Eigen::Index> mB;
+			std::vector<Eigen::Index> mN;
 			for(std::size_t rowIndex=0; rowIndex<dimension; ++rowIndex) {
 				for(std::size_t colIndex=0; colIndex<dimension; ++colIndex) {
 					A1(rowIndex,colIndex) = (mHsv.at(dictionary.cobasis()[rowIndex]-1)).normal()[colIndex];
@@ -484,7 +484,7 @@ namespace hypro {
 
 			matrix_t<Number> invA1 = A1.inverse();
 			std::size_t skipped = 0;
-			for(std::size_t rowIndex=0; rowIndex<constrainsCount; ++rowIndex) {
+			for(Eigen::Index rowIndex=0; rowIndex<constrainsCount; ++rowIndex) {
 				if(dictionary.basis()[rowIndex]-1<constrainsCount) { // pick indices, which correspond to an original constraint in mHsv and skip original variables.
 					for(std::size_t colIndex=0; colIndex<dimension; ++colIndex) {
 						A2(rowIndex-skipped,colIndex) = (mHsv.at(dictionary.basis()[rowIndex]-1)).normal()[colIndex];
@@ -500,7 +500,7 @@ namespace hypro {
 
 			matrix_t<Number> newDictionary = matrix_t<Number>::Zero(constrainsCount-dimension+1, dimension+1);//faire la derniere ligne
 			skipped = 0;
-			for(std::size_t rowIndex=0; rowIndex<constrainsCount; ++rowIndex) {
+			for(Eigen::Index rowIndex=0; rowIndex<constrainsCount; ++rowIndex) {
 				if(dictionary.basis()[rowIndex]-1<constrainsCount) { // again only pick those indices, which correspond to original constraints.
 					for(std::size_t colIndex=0; colIndex<dimension; ++colIndex) {
 						//newDictionary(rowIndex-skipped,colIndex)=0; // Set all zero? -> removed by initiating all to zero in the creation of the matrix.
@@ -520,14 +520,14 @@ namespace hypro {
 				newDictionary(constrainsCount-dimension,colIndex)=Number(-1);
 			}
 
-			for(std::size_t i=1; i<constrainsCount-dimension+1; ++i){
-				mB.push_back(std::size_t(i));
+			for(Eigen::Index i=1; i<constrainsCount-Eigen::Index(dimension)+1; ++i){
+				mB.push_back(i);
 			}
 			mB.push_back(std::size_t(constrainsCount+1));
-			for(std::size_t i=constrainsCount-dimension+1; i<constrainsCount+1; ++i){
-				mN.push_back(std::size_t(i));
+			for(Eigen::Index i=constrainsCount-Eigen::Index(dimension)+1; i<constrainsCount+1; ++i){
+				mN.push_back(i);
 			}
-			mN.push_back(std::size_t(constrainsCount+2));
+			mN.push_back(constrainsCount+2);
 
 			mDictionaries.push_back(Dictionary<Number>(newDictionary,mB,mN));
 			DEBUG("hypro.vertexEnumeration","The newly added dictionary: ");

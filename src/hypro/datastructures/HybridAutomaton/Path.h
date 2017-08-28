@@ -73,6 +73,7 @@ namespace hypro {
 			bool isEmpty() const { return (mPath.size() == 0); }
 			Number maximalTimeSpan(typename std::deque<TPathElement<Number>>::const_iterator start, typename std::deque<TPathElement<Number>>::const_iterator end) const;
 
+			std::size_t getNumberDiscreteJumps() const;
 			std::vector<Transition<Number>*> getTransitionSequence(typename std::deque<TPathElement<Number>>::const_iterator start, typename std::deque<TPathElement<Number>>::const_iterator end) const;
 			bool hasChatteringZeno() const;
 

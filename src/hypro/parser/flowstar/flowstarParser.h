@@ -122,10 +122,10 @@ struct flowstarParser : qi::grammar<Iterator, Skipper>
 					found = true;
 					unsigned constraintsNum = 0;
 					if(stateIt->getNumberSets() > 0) {
-						constraintsNum = boost::get<ConstraintSet<Number>>(stateIt->getSet()).matrix().rows();
+						constraintsNum = unsigned(boost::get<ConstraintSet<Number>>(stateIt->getSet()).matrix().rows());
 						TRACE("hypro.parser","current constraints: " << boost::get<ConstraintSet<Number>>(stateIt->getSet()).matrix());
 					}
-					unsigned dimension = constraintsNum > 0 ? boost::get<ConstraintSet<Number>>(stateIt->getSet()).matrix().cols() : (_constraint.begin()->cols())-1;
+					unsigned dimension = constraintsNum > 0 ? unsigned(boost::get<ConstraintSet<Number>>(stateIt->getSet()).matrix().cols()) : unsigned((_constraint.begin()->cols())-1);
 					ConstraintSet<Number> set = constraintsNum > 0 ? boost::get<ConstraintSet<Number>>(stateIt->getSet()) : ConstraintSet<Number>();
 					TRACE("hypro.parser","Resize to " << constraintsNum+_constraint.size() << " x " << dimension);
 					set.rMatrix().conservativeResize(constraintsNum+_constraint.size(), dimension);

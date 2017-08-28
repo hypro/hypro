@@ -372,7 +372,7 @@ class BoxT<double,Converter> : public GeometricObject<double, BoxT<double,Conver
 	 * @param[in]  dimensions  The dimensions.
 	 * @return     The projected box.
 	 */
-	BoxT<double,Converter> project(const std::vector<unsigned>& dimensions) const;
+	BoxT<double,Converter> project(const std::vector<std::size_t>& dimensions) const;
 
 	/**
 	 * @brief      Applies a linear transformation to the box.

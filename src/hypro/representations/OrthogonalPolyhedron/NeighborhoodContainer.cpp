@@ -57,7 +57,7 @@ namespace hypro
         unsigned dim = p.dimension();
 
         // the number of neighbors is 2^(dimension) - 1
-        int nrofNeighbors = (pow(2, dim) - 1);
+        int nrofNeighbors = (int(pow(2, dim)) - 1);
 
         vector_t<int> coordinates = p.rawCoordinates();
         vector_t<int> pointCoordinates = p.rawCoordinates();

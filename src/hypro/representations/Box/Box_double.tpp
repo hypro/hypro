@@ -131,7 +131,7 @@ BoxT<double,Converter>::BoxT( const std::set<Point<double>> &_points ) {
 		vector_t<double> lower = _points.begin()->rawCoordinates();
 		vector_t<double> upper = _points.begin()->rawCoordinates();
 		for(const auto& point : _points) {
-			for(std::size_t d = 0; d < point.dimension(); ++d){
+			for(long d = 0; d < point.dimension(); ++d){
 				if(point.at(d) < lower(d)) {
 					lower(d) = point.at(d);
 				}
@@ -238,7 +238,7 @@ double BoxT<double,Converter>::supremum() const {
 template<typename Converter>
 std::vector<Point<double>> BoxT<double,Converter>::vertices( const matrix_t<double>& ) const {
 	std::vector<Point<double>> result;
-	std::size_t limit = pow( 2, mLimits.first.dimension() );
+	std::size_t limit = std::size_t(pow( 2, mLimits.first.dimension() ));
 
 	for ( std::size_t bitCount = 0; bitCount < limit; ++bitCount ) {
 		vector_t<double> coord = vector_t<double>( dimension() );
@@ -340,7 +340,7 @@ std::pair<bool, BoxT<double,Converter>> BoxT<double,Converter>::satisfiesHalfspa
 	// at this point the box will be limited but not empty.
 	matrix_t<double> newPlanes = matrix_t<double>(limitingPlanes.size(), _mat.cols());
 	vector_t<double> newDistances = vector_t<double>(limitingPlanes.size());
-	int rowPos = newPlanes.rows()-1;
+	Eigen::Index rowPos = newPlanes.rows()-1;
 	while(!limitingPlanes.empty()){
 		assert(rowPos >= 0);
 		newPlanes.row(rowPos) = _mat.row(limitingPlanes.back());
@@ -350,13 +350,14 @@ std::pair<bool, BoxT<double,Converter>> BoxT<double,Converter>::satisfiesHalfspa
 	}
 	assert(newPlanes.rows() == newDistances.rows());
 	BoxT<double,Converter> tmpBox = this->intersectHalfspaces(newPlanes,newDistances);
-	assert(!tmpBox.empty());
+	// Todo-check: For rational numbers this assertion holds, what about native doubles?
+	//assert(!tmpBox.empty());
 	//std::cout << __func__ << " TRUE, " << convert<double,double>(tmpBox) << std::endl;
 	return std::make_pair(true, tmpBox);
 }
 
 template<typename Converter>
-BoxT<double,Converter> BoxT<double,Converter>::project(const std::vector<unsigned>& dimensions) const {
+BoxT<double,Converter> BoxT<double,Converter>::project(const std::vector<std::size_t>& dimensions) const {
 	if(dimensions.empty()) {
 		return Empty();
 	}
@@ -468,12 +469,12 @@ BoxT<double,Converter> BoxT<double,Converter>::intersectHalfspace( const Halfspa
 		}
 
 		//std::cout << __func__ << " Min below: " << holdsMin << ", Max below: " << holdsMax << std::endl;
-		unsigned dim = this->dimension();
+		std::size_t dim = this->dimension();
 
 		// Phase 1: Find starting point (point outside) for phase 2 by depth-first search or use limit points, if applicable
 		Point<double> farestPointOutside = copyBox.limits().first;
 		Point<double> farestPointInside = copyBox.limits().first;
-		unsigned usedDimension = 0;
+		std::size_t usedDimension = 0;
 		// determine walk direction by using plane normal and variable order
 		for(; usedDimension < dim; ++usedDimension){
 			if(hspace.normal()(usedDimension) > 0){

@@ -42,10 +42,10 @@ typename Converter<Number>::Box Converter<Number>::toBox( const Ellipsoid& _sour
 // conversion from support function to box (no differentiation between conversion modes - always OVER)
 template<typename Number>
 typename Converter<Number>::Box Converter<Number>::toBox( const SupportFunction& _source, const CONV_MODE  ) {
-	unsigned dim = _source.dimension();                                                                     //gets dimension from the source object
+	std::size_t dim = _source.dimension();                                                                     //gets dimension from the source object
 
 	matrix_t<Number> directions = matrix_t<Number>::Zero( 2 * dim, dim );                                   //initialize normal matrix as zero matrix with 2*dim rows and dim columns
-	for ( unsigned i = 0; i < dim; ++i ) {                                                                  //for every dimension
+	for ( std::size_t i = 0; i < dim; ++i ) {                                                                  //for every dimension
 		directions( 2 * i, i ) = -1;
 		directions( 2 * i + 1, i ) = 1;                                                                 //write fixed entries (because of box) into the normal matrix (2 each column)
 	}
@@ -53,7 +53,7 @@ typename Converter<Number>::Box Converter<Number>::toBox( const SupportFunction&
 	std::vector<EvaluationResult<Number>> distances = _source.multiEvaluate( directions );                                       //evaluate the source support function into these 2*dim directions (to get the interval end points)
 
 	std::vector<carl::Interval<Number>> intervals;
-	for ( unsigned i = 0; i < dim; ++i ) {                                                                  //for every dimension
+	for ( std::size_t i = 0; i < dim; ++i ) {                                                                  //for every dimension
         carl::BoundType lowerBound = carl::BoundType::WEAK;
         carl::BoundType upperBound = carl::BoundType::WEAK;
         //if no bound is found in that direction (infinity) set interval end point to infinity
@@ -137,7 +137,7 @@ typename Converter<Number>::Box Converter<Number>::toBox( const HPolytope& _sour
 	                }
 
 	                std::vector<carl::Interval<Number>> intervals;
-	                for ( unsigned i = 0; i < _source.dimension(); ++i ) {                                          //for every dimension
+	                for ( std::size_t i = 0; i < _source.dimension(); ++i ) {                                          //for every dimension
 	                        intervals.push_back( carl::Interval<Number>( minima( i ), maxima( i ) ) );              //create one interval per dimension with the corresponding minimal and maximal values
 	                }
 
@@ -146,22 +146,22 @@ typename Converter<Number>::Box Converter<Number>::toBox( const HPolytope& _sour
          }
 
         if (mode == ALTERNATIVE){
-            unsigned dim = _source.dimension();                                                                              //gets dimension from the source object
+            std::size_t dim = _source.dimension();                                                                              //gets dimension from the source object
 
             matrix_t<Number> directions = matrix_t<Number>::Zero( 2 * dim, dim );                                            //initialize normal matrix as zero matrix with 2*dim rows and dim columns
-            for ( unsigned i = 0; i < dim; ++i ) {                                                                           //for every dimension
+            for ( std::size_t i = 0; i < dim; ++i ) {                                                                           //for every dimension
                      directions( 2 * i, i ) = -1;
                      directions( 2 * i + 1, i ) = 1;                                                                          //write fixed entries (because of box) into the normal matrix (2 each column)
             }
             //evaluate the source support function into these 2*dim directions (to get the interval end points)
             std::vector<EvaluationResult<Number>> distances = std::vector<EvaluationResult<Number>>(2*dim);
-            for (unsigned i=0; i < dim; ++i){
+            for (std::size_t i=0; i < dim; ++i){
                 distances[2*i] = _source.evaluate(directions.row(2*i));
                 distances[2*i+1] = _source.evaluate(directions.row(2*i+1));
             }
 
 		    std::vector<carl::Interval<Number>> intervals;
-		    for ( unsigned i = 0; i < dim; ++i ) {                                                                                      //for every dimension
+		    for ( std::size_t i = 0; i < dim; ++i ) {                                                                                      //for every dimension
                carl::BoundType lowerBound = carl::BoundType::WEAK;
                carl::BoundType upperBound = carl::BoundType::WEAK;
                //if no bound is found in that direction (infinity) set interval end point to infinity

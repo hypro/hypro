@@ -261,7 +261,7 @@ namespace parser {
 		matrix_t<Number> createFlow( const std::vector<std::pair<unsigned, vector_t<double>>>& _in ) {
 			assert(!_in.empty());
 			// matrix template with additional row of zeroes for constants, no need for rows for discrete variables, as their flow is 0
-			unsigned rowCnt = _in.begin()->second.rows();
+			unsigned rowCnt = unsigned(_in.begin()->second.rows());
 			TRACE("hypro.parser","In-size: " << _in.size() << ", cols: " << _in.begin()->second.rows() );
 			assert(_in.size() == rowCnt-1);
 			matrix_t<double> res = matrix_t<double>::Zero(rowCnt, rowCnt);

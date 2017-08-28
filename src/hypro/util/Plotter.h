@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include "PlotterUtil.h"
 #include "../config.h"
 #include "../datastructures/Point.h"
 #include "../datastructures/Halfspace.h"
