@@ -29,10 +29,10 @@ typedef struct Input_equation {
     Vector b;
 } In_eq;
 typedef struct Invariants {
-    Matrix iA;
-    Vector b;
-    //?? VA ?? b_VA ??
-} Inv;
+    Matrix iAV;
+    Vector ib;
+    //TODO: use std::vector<Matrix> and read from file etc
+} Invar;
 /***Eval_sol_funct contains values to evaluate e-function
  *  All matrices contain n-column vector for max on column 0 and 
  *                      n-column vector for min on column 1
@@ -49,10 +49,10 @@ typedef struct Input_part_funct {
     Matrix xhom;
     Matrix x_tr;
 } In_part_f;
-typedef struct ConstV_n {
-    Matrix V;
-    int n;
-} Const_V_n;
+typedef struct Eval_e_functions {
+    Matrix derivative;
+    BoolMatrix direct;
+} Eval_e_funct;
 typedef struct Flowpipe_segment { 
     std::vector<Vector> upper;
     std::vector<Vector> lower;
@@ -60,18 +60,16 @@ typedef struct Flowpipe_segment {
 
 void mark_x0isMin(Matrix& x_tr, int n);
 void swap_x0isMax(Matrix& x_tr, int n);
-void initialize (In_part_f& in_part_f, const DiagonalMatrix& D, BoolMatrix& directmaxmin,
-        Matrix& derivFactormaxmin, Flow_seg& safe_seg, int n, const Matrix& V, 
-        std::size_t DIM_PLOT, bool ORIG_SYS_PLOT);
+void initialize (In_part_f& in_part_f, const DiagonalMatrix& D, Eval_e_funct& eval_e_funct1, 
+        Flow_seg& safe_seg, const int n, const Matrix& V, std::size_t DIM_PLOT, bool ORIG_SYS_PLOT);
 void loop (std::vector<VPolytope<Number>>& flowpipe, const Ev_sol_f& ev_sol_f1, 
-        const BoolMatrix& directmaxmin, In_part_f& in_part_f, int n, 
-        Flow_seg& safe_seg, Matrix& derivFactormaxmin,  const Matrix& V, 
-        std::size_t DIM_PLOT, bool ORIG_SYS_PLOT);
+        Eval_e_funct& eval_e_funct1, In_part_f& in_part_f, const int n, Flow_seg& safe_seg, 
+        const Matrix& V, std::size_t DIM_PLOT, bool ORIG_SYS_PLOT);
 void trajectory_plot(std::vector<VPolytope<Number>>& exactflowpipe, const Ev_sol_f& ev_sol_f1, 
-        int n, const Matrix& V, In_part_f& in_traj, std::size_t traj_scale,
+        const int n, const Matrix& V, In_part_f& in_traj, const std::size_t traj_scale,
         std::size_t DIM_PLOT, bool ORIG_SYS_PLOT);
 void plot_addTimeSegment(std::size_t traj_time, const Matrix& x_tr, const Matrix& V, 
-        int n, Flow_seg& safe_seg, std::size_t DIM_PLOT, bool ORIG_SYS_PLOT);
+        const int n, Flow_seg& safe_seg, std::size_t DIM_PLOT, bool ORIG_SYS_PLOT);
 void addSegment(std::vector<VPolytope<Number>>& flowpipe, Flow_seg& safe_seg, 
         std::size_t colorUpper, std::size_t colorLower);
 
@@ -88,8 +86,17 @@ int main()
     in_eq1.b = Vector(n);
     in_eq1.x0 = Vector(n);
     in_eq1.x0_2 = Vector(n);
-    Matrix AV = Matrix(n,n);    //invariants
-    Vector b_AV = Vector(n);
+    Invar invar;                //invariants
+    invar.iAV = Matrix(n,n);
+    invar.ib  = Vector(n);
+    Vector b_tr = Vector(n);                            //transformed and dumped after use
+    Ev_sol_f ev_sol_f1;         //input independent part of e-function
+    ev_sol_f1.xinhom = Vector(n); 
+	ev_sol_f1.D = DiagonalMatrix(2); //type Number size 2
+    Number tend = 20;                                   //dumped after use
+    ev_sol_f1.delta = 0.1;                              //segment stepping time
+    //calculate number of discrete evaluation steps to compare time steps
+    ev_sol_f1.deltalimit = std::ceil( (tend/ev_sol_f1.delta) );
     In_part_f in_part_f;        //input dependent part of safe approximation of e-function
     in_part_f.x_tr = Matrix::Zero(n,3);
     in_part_f.x_tr.col(2).array() = 0;
@@ -97,35 +104,28 @@ int main()
     In_part_f in_traj;          //input dependent trajectory of e-function
     in_traj.x_tr = Matrix::Zero(n,2);
     in_traj.xhom = Matrix::Zero(n,2);
-    Vector b_tr = Vector(n);                            //transformed and dumped after use
-    Ev_sol_f ev_sol_f1;         //input independent part of e-function
-    ev_sol_f1.xinhom = Vector(n); 
-	ev_sol_f1.D = DiagonalMatrix(2); //type Number size 2
-    Number tend = 20;
-    ev_sol_f1.delta = 0.1;                              //segment stepping time
-    //calculate number of discrete evaluation steps to compare time steps
-    ev_sol_f1.deltalimit = std::ceil( (tend/ev_sol_f1.delta) );
+    Eval_e_funct eval_e_funct1; //evaluation of e-function for hull
+    eval_e_funct1.derivative = Matrix(n,2);
+    eval_e_funct1.direct     = BoolMatrix(n,2);
+    eval_e_funct1.direct.setConstant(0);
+    Plotter<Number>& plotter = Plotter<Number>::getInstance();
+    Flow_seg safe_seg;          //plotting_segment
 
-    Vector factor = Vector(n);
-    Matrix derivFactormaxmin = Matrix(n,2);
-    BoolMatrix directmaxmin = BoolMatrix(2,2);
-    directmaxmin.setConstant(0);
     std::size_t traj_scale = 1; //?needed?-> adapt step size
-    //even if not plotting functions requires these
-    Matrix V = Matrix(n,n);
-    Matrix Vinv = Matrix(n,n);
+    Matrix V = Matrix(n,n);                             //backtransformation
+    Matrix Vinv = Matrix(n,n);                          //dumped after use
     //*************** RESULT *******************
     std::vector<VPolytope<Number>> safeflowpipe;
     std::vector<VPolytope<Number>> exactflowpipe;
-    //######   d/dx = A*x + b  ######
+    //######  d/dx = A*x + b  ######
 	in_eq1.A << 	0.001, 1,
-			0.001, -0.002;
+			        0.001, -0.002;
     in_eq1.b <<    0, -9.81;
     in_eq1.x0<<    100, 0;        //we require in_eq1.x0 > .in_eq1.x0_2 elementwise
     in_eq1.x0_2 << 10, 0;          //else we swap values
-    //######   invariants      ######
-    //AV = A*(1,0)*V 
-    b_AV.array() = 0;
+    //######  AVV^(-1)x leq b ######
+    //invar.iAV = in_eq1.A;
+    invar.ib.array() = 0;
 
 	std::cout << "d/dx = A*x+b, A:"<< std::endl << in_eq1.A<< std::endl;
 	std::cout << "b: "<< std::endl << in_eq1.b << std::endl;
@@ -133,11 +133,10 @@ int main()
     std::cout << "in_eq1.x0_2: "<< std::endl << in_eq1.x0_2 << std::endl;
     //decompose directly + constructor
     Eigen::EigenSolver<Matrix> es(in_eq1.A);
-
     V << es.eigenvectors().real();
     ev_sol_f1.D.diagonal() << es.eigenvalues().real();
     Vinv = V.inverse();
-    std::cout << "Eigenvectors: "<< std::endl << V << std::endl;
+    std::cout << "Eigenvectors(V): "<< std::endl << V << std::endl;
 	std::cout << "Vinverse: "<< std::endl << Vinv << std::endl;
 	std::cout << "Eigenvalues: "<< std::endl << ev_sol_f1.D.diagonal() << std::endl;
     //stop on bad conditioning ??
@@ -148,9 +147,9 @@ int main()
     in_part_f.x_tr.col(1) = Vinv*in_eq1.x0_2;
     in_traj.x_tr.col(0) = in_part_f.x_tr.col(0);
     in_traj.x_tr.col(1) = in_part_f.x_tr.col(1);
-    std::cout << "traj_tr: " << std::endl << in_traj.x_tr << std::endl;
-    AV = in_eq1.A*V;
-    std::cout << "Invariants: A*V="<<std::endl << AV;
+    std::cout << "x_transformed: " << std::endl << in_traj.x_tr << std::endl;
+    //invar.iAV = invar.iAV*(1,0)*V;    //TODO fix
+    std::cout << "Invariants: A*V="<<std::endl << invar.iAV;
     //std::cout << "x_tr_bef_maxtrafo: "<< std::endl << x_tr << std::endl;
     mark_x0isMin(in_part_f.x_tr, n); 
     swap_x0isMax(in_part_f.x_tr, n);
@@ -161,20 +160,17 @@ int main()
     in_traj.xhom.col(0) = ev_sol_f1.xinhom.array() + in_traj.x_tr.col(0).array();
     in_traj.xhom.col(1) = ev_sol_f1.xinhom.array() + in_traj.x_tr.col(1).array();
     std::cout << "xhomconstmaxmin: "<< std::endl << in_part_f.xhom;
-    //plotting structures
-    Plotter<Number>& plotter = Plotter<Number>::getInstance();
-    Flow_seg safe_seg;
-    initialize (in_part_f, ev_sol_f1.D, directmaxmin, derivFactormaxmin, safe_seg, 
+    initialize (in_part_f, ev_sol_f1.D, eval_e_funct1, safe_seg, 
                 n, V, flag1.DIM_PLOT, flag1.ORIG_SYS_PLOT);
 
     //traj_tr, traj_homconst, traj_scale
     if (flag1.TRAJECTORY) {
         trajectory_plot(exactflowpipe, ev_sol_f1, n, V, in_traj, 
-                        traj_scale, flag1.DIM_PLOT, flag1.ORIG_SYS_PLOT);
+            traj_scale, flag1.DIM_PLOT, flag1.ORIG_SYS_PLOT);
     }
     if (flag1.HULLCONSTR) {
-    loop (safeflowpipe, ev_sol_f1, directmaxmin, in_part_f, n, safe_seg,
-          derivFactormaxmin, V, flag1.DIM_PLOT, flag1.ORIG_SYS_PLOT);
+    loop (safeflowpipe, ev_sol_f1, eval_e_funct1, in_part_f, n, safe_seg, V, 
+            flag1.DIM_PLOT, flag1.ORIG_SYS_PLOT);
     }
     //checking invariants for jump
     //std::pair<bool,VPolytope> res = Segment.satisfiesHalfspace(AV,b_AV);
@@ -232,18 +228,17 @@ void swap_x0isMax(Matrix& x_tr, const int n) {
             //case2: -e^(-x)   --- etc
             //case3: -e^(x)    --- D>0, xhomconst<0
             //case4:  e^(-x)   --- etc
-void initialize (In_part_f& in_approx, const DiagonalMatrix& D, BoolMatrix& directmaxmin,
-                        Matrix& derivFactormaxmin, Flow_seg& safe_seg, int n, const Matrix& V, 
-                        std::size_t DIM_PLOT, bool ORIG_SYS_PLOT) {
+void initialize (In_part_f& in_approx, const DiagonalMatrix& D, Eval_e_funct& eval_e_funct1, 
+        Flow_seg& safe_seg, const int n, const Matrix& V, std::size_t DIM_PLOT, bool ORIG_SYS_PLOT) {
     Vector plot_vector = Vector(n);
     for(int i=0; i<n; ++i) {
         if (D.diagonal()(i)>0) { //divergence
             if (in_approx.xhom(i,0) >= 0) {  //
-                directmaxmin(i,0) = true;      //xmax(i) directLine
+                eval_e_funct1.direct(i,0) = true;      //xmax(i) directLine
                 if (in_approx.xhom(i,1) > 0) {
                     //xmin(i) derivLine
                 } else {    //xmin: -e^x
-                    directmaxmin(i,1) = true;  //unusual!! xmin(i) directLine
+                    eval_e_funct1.direct(i,1) = true;  //unusual!! xmin(i) directLine
                     std::cout<<"set evolves as opposite diverging trajectoris"<<std::endl;
                 }
             } else {    //xmax: -e^x
@@ -252,23 +247,23 @@ void initialize (In_part_f& in_approx, const DiagonalMatrix& D, BoolMatrix& dire
                     std::cout<<"ERROR upwards and downwards"<<std::endl;
                     //ERROR upwards and downwards
                 } else {
-                    directmaxmin(i,1) = true;  //xmin(i) directLine
+                    eval_e_funct1.direct(i,1) = true;  //xmin(i) directLine
                 }
             }
         } else { //e^(-x) and -e^(-x) whereas -x fixed here
         //convergence
             if (in_approx.xhom(i,0) <= 0) {  //xmax:-e^(-x)
-                directmaxmin(i,0) = true;      //xmax(i) directLine
+                eval_e_funct1.direct(i,0) = true;      //xmax(i) directLine
                 if (in_approx.xhom(i,1) < 0) {
                     //xmin(i) derivLine
                 } else {
-                    directmaxmin(i,1) = true;  //xmin(i) directLine
+                    eval_e_funct1.direct(i,1) = true;  //xmin(i) directLine
                     std::cout<<"convergence point between initial set"<<std::endl;
                 }
             } else {    //xmax:e^(-x)
                 //xmax(i) derivLine
                 if (in_approx.xhom(i,1) >=0) {
-                    directmaxmin(i,1) = true;   //xmin(i) directLine
+                    eval_e_funct1.direct(i,1) = true;   //xmin(i) directLine
                 } else {
                     //xmin(i) derivLine
                     std::cout<<"2 convergence points, check if intended"<<std::endl;
@@ -276,12 +271,12 @@ void initialize (In_part_f& in_approx, const DiagonalMatrix& D, BoolMatrix& dire
             }
         }
     }
-    //std::cout<<"directmaxmin:"<<std::endl<<directmaxmin;
+    //std::cout<<"eval_e_funct1.direct:"<<std::endl<<eval_e_funct1.direct;
     //std::cout << "in_approx.xhom: "<< std::endl << x0_2 << std::endl;
     //1.step calculation + inserting
     //e^0 = 1
-    derivFactormaxmin.col(0) = in_approx.xhom.col(0).array()*D.diagonal().array();
-    derivFactormaxmin.col(1) = in_approx.xhom.col(1).array()*D.diagonal().array();
+    eval_e_funct1.derivative.col(0) = in_approx.xhom.col(0).array()*D.diagonal().array();
+    eval_e_funct1.derivative.col(1) = in_approx.xhom.col(1).array()*D.diagonal().array();
     if (ORIG_SYS_PLOT) {
         swap_x0isMax(in_approx.x_tr, n);
         plot_addTimeSegment(0, in_approx.x_tr, V, n, safe_seg, DIM_PLOT, ORIG_SYS_PLOT);
@@ -297,8 +292,8 @@ void initialize (In_part_f& in_approx, const DiagonalMatrix& D, BoolMatrix& dire
     //2.pushing,writing,deleting   [maybe flushing in between??]
 
 void loop (std::vector<VPolytope<Number>>& flowpipe, const Ev_sol_f& ev_sol_f1, 
-        const BoolMatrix& directmaxmin, In_part_f& in_part_f, int n, Flow_seg& safe_seg, 
-        Matrix& derivFactormaxmin, const Matrix& V, std::size_t DIM_PLOT, bool ORIG_SYS_PLOT) {
+        Eval_e_funct& eval_e_funct1, In_part_f& in_part_f, const int n, Flow_seg& safe_seg, 
+        const Matrix& V, std::size_t DIM_PLOT, bool ORIG_SYS_PLOT) {
     //bool _ERROR_PLOT_, 
     Vector factor = Vector::Zero(n);
     //Matrix x_tr_error = Matrix(n,2);
@@ -307,19 +302,19 @@ void loop (std::vector<VPolytope<Number>>& flowpipe, const Ev_sol_f& ev_sol_f1,
     	//std::cout << "Time: " << j*delta << std::endl;
         for (int i=0; i<n; ++i) {
             factor(i) = std::exp(ev_sol_f1.D.diagonal()(i) *j*ev_sol_f1.delta);
-            if(directmaxmin(i,0)) {
+            if(eval_e_funct1.direct(i,0)) {
                 //e^x OR -e^(-x)
                 in_part_f.x_tr(i,0) = in_part_f.xhom(i,0)*factor(i) - ev_sol_f1.xinhom(i);
             } else {
                 //e^(-x) OR -e^x
-                in_part_f.x_tr(i,0) = in_part_f.x_tr(i,0) + derivFactormaxmin(i,0)*ev_sol_f1.delta;
-                derivFactormaxmin(i,0) = in_part_f.xhom(i,0)*ev_sol_f1.D.diagonal()(i)*factor(i);
+                in_part_f.x_tr(i,0) = in_part_f.x_tr(i,0) + eval_e_funct1.derivative(i,0)*ev_sol_f1.delta;
+                eval_e_funct1.derivative(i,0) = in_part_f.xhom(i,0)*ev_sol_f1.D.diagonal()(i)*factor(i);
             }
-            if(directmaxmin(i,1)) {
+            if(eval_e_funct1.direct(i,1)) {
                 in_part_f.x_tr(i,1) = in_part_f.xhom(i,1)*factor(i) - ev_sol_f1.xinhom(i);
             } else {
-                in_part_f.x_tr(i,1) = in_part_f.x_tr(i,1) + derivFactormaxmin(i,1)*ev_sol_f1.delta;
-                derivFactormaxmin(i,1) = in_part_f.xhom(i,1)*ev_sol_f1.D.diagonal()(i)*factor(i);
+                in_part_f.x_tr(i,1) = in_part_f.x_tr(i,1) + eval_e_funct1.derivative(i,1)*ev_sol_f1.delta;
+                eval_e_funct1.derivative(i,1) = in_part_f.xhom(i,1)*ev_sol_f1.D.diagonal()(i)*factor(i);
             }
         }
         //x_tr_error.column(0).array() = ev_sol_f1.xhom.column(0).array()*factor.array()-ev_sol_f1.xinhom.array();
@@ -339,8 +334,8 @@ void loop (std::vector<VPolytope<Number>>& flowpipe, const Ev_sol_f& ev_sol_f1,
 }
 
 void trajectory_plot(std::vector<VPolytope<Number>>& exactflowpipe, const Ev_sol_f& ev_sol_f1, 
-        int n, const Matrix& V, In_part_f& traj_tr, std::size_t traj_scale, 
-        std::size_t DIM_PLOT,bool ORIG_SYS_PLOT) {
+        const int n, const Matrix& V, In_part_f& traj_tr, const std::size_t traj_scale, 
+        std::size_t DIM_PLOT, bool ORIG_SYS_PLOT) {
     Flow_seg traj_flow_seg;
     Vector factor = Vector::Zero(n);
     plot_addTimeSegment(0, traj_tr.x_tr, V, n, traj_flow_seg, DIM_PLOT, ORIG_SYS_PLOT);
@@ -358,7 +353,7 @@ void trajectory_plot(std::vector<VPolytope<Number>>& exactflowpipe, const Ev_sol
     }
 }
 void plot_addTimeSegment(std::size_t traj_time, const Matrix& x_tr, const Matrix& V, 
-        int n, Flow_seg& flow_segment, std::size_t DIM_PLOT, bool ORIG_SYS_PLOT) {
+        const int n, Flow_seg& flow_segment, std::size_t DIM_PLOT, bool ORIG_SYS_PLOT) {
     Vector plot_vector = Vector(n);
     plot_vector(0) = traj_time;
     if(ORIG_SYS_PLOT) {
