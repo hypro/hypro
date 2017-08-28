@@ -105,7 +105,7 @@ SupportFunctionContent<Number>::SupportFunctionContent( const matrix_t<Number> &
 		case SF_TYPE::POLY: {
 			mPolytope = new PolytopeSupportFunction<Number>( _directions, _distances );
 			mType = SF_TYPE::POLY;
-			mDimension = _directions.cols();
+			mDimension = std::size_t(_directions.cols());
 			mDepth = 0;
 			mOperationCount = 0;
 			break;
@@ -260,7 +260,7 @@ SupportFunctionContent<Number>::SupportFunctionContent( const std::shared_ptr<Su
 }
 
 template<typename Number>
-SupportFunctionContent<Number>::SupportFunctionContent( const std::shared_ptr<SupportFunctionContent<Number>>& _origin, const std::vector<unsigned>& dimensions, SF_TYPE _type ) {
+SupportFunctionContent<Number>::SupportFunctionContent( const std::shared_ptr<SupportFunctionContent<Number>>& _origin, const std::vector<std::size_t>& dimensions, SF_TYPE _type ) {
 	assert(_origin->checkTreeValidity());
 	switch ( _type ) {
 		case SF_TYPE::PROJECTION: {
@@ -602,9 +602,11 @@ EvaluationResult<Number> SupportFunctionContent<Number>::evaluate( const vector_
 					case SF_TYPE::PROJECTION: {
 						vector_t<Number> projectedDirection = vector_t<Number>::Zero(mDimension);
 						// reduce evaluation to projection dimensions
+						int entryIndex = 0;
 						for(const auto& projectionDimension : cur->projectionParameters()->dimensions) {
 							if(projectionDimension < cur->dimension())
-								projectedDirection(projectionDimension) = currentParam(projectionDimension);
+								projectedDirection(entryIndex) = currentParam(projectionDimension);
+							++entryIndex;
 						}
 						currentParam = projectedDirection;
 						callStack.push_back(cur->projectionParameters()->origin);
@@ -953,10 +955,13 @@ std::vector<EvaluationResult<Number>> SupportFunctionContent<Number>::multiEvalu
 					}
 					case SF_TYPE::PROJECTION: {
 						matrix_t<Number> tmp = matrix_t<Number>::Zero(_directions.rows(), _directions.cols());
+						int entryIndex = 0;
 						for(const auto& entry : cur->projectionParameters()->dimensions) {
 							if(entry < mDimension)
-								tmp.col(entry) = currentParam.col(entry);
+								tmp.col(entryIndex) = currentParam.col(entry);
+							++entryIndex;
 						}
+						assert(entryIndex == int(cur->projectionParameters()->dimensions.size()-1));
 						currentParam = tmp;
 						callStack.push_back(cur->projectionParameters()->origin);
 						paramStack.push_back(currentParam);
@@ -1045,7 +1050,7 @@ unsigned SupportFunctionContent<Number>::multiplicationsPerEvaluation() const {
 	using Node = std::shared_ptr<SupportFunctionContent<Number>>;
 	using Res = unsigned;
 	std::vector<Node> callStack;
-	std::vector<std::pair<int,std::vector<Res>>> resultStack; // The first value is an iterator to the calling frame
+	std::vector<std::pair<std::size_t,std::vector<Res>>> resultStack; // The first value is an iterator to the calling frame
 
 	callStack.push_back(getThis());
 	resultStack.push_back(std::make_pair(-1, std::vector<Res>()));
@@ -1056,7 +1061,7 @@ unsigned SupportFunctionContent<Number>::multiplicationsPerEvaluation() const {
 		if(cur->originCount() == 0) {
 			// Do computation and write results in case recursion ends.
 
-			std::pair<int,std::vector<Res>> currentResult = resultStack.back();
+			std::pair<std::size_t,std::vector<Res>> currentResult = resultStack.back();
 
 			// update result
 			// special case: When the node is a leaf, we directly return the result.
@@ -1348,9 +1353,9 @@ Point<Number> SupportFunctionContent<Number>::supremumPoint() const {
 }
 
 template<typename Number>
-std::vector<unsigned> SupportFunctionContent<Number>::collectProjections() const {
+std::vector<std::size_t> SupportFunctionContent<Number>::collectProjections() const {
 	using Node = std::shared_ptr<SupportFunctionContent<Number>>;
-	using Res = std::vector<unsigned>;
+	using Res = std::vector<std::size_t>;
 
 	std::vector<Node> callStack;
 	//std::vector<vector_t<Number>> paramStack;
@@ -1376,7 +1381,7 @@ std::vector<unsigned> SupportFunctionContent<Number>::collectProjections() const
 			// update result
 			Res res;
 			//DEBUG("hypro.representations.supportFunction","mDimension " << mDimension);
-			for(unsigned i = 0; i < mDimension; ++i){
+			for(std::size_t i = 0; i < mDimension; ++i){
 				//DEBUG("hypro.representations.supportFunction","Added dimension " << i);
 				res.emplace_back(i);
 			}
@@ -1412,7 +1417,7 @@ std::vector<unsigned> SupportFunctionContent<Number>::collectProjections() const
 					// We need to filter, in case the element is a projection.
 					if(cur->type() == SF_TYPE::PROJECTION) {
 						assert(resultStack.back().second.size() == 1);
-						std::vector<unsigned> tmp = cur->projectionParameters()->dimensions;
+						std::vector<std::size_t> tmp = cur->projectionParameters()->dimensions;
 						for(auto dimIt = tmp.begin(); dimIt != tmp.end(); ) {
 							if(std::find(resultStack.back().second.front().begin(), resultStack.back().second.front().end(), *dimIt) == resultStack.back().second.front().end()) {
 								dimIt = tmp.erase(dimIt);
@@ -1435,7 +1440,7 @@ std::vector<unsigned> SupportFunctionContent<Number>::collectProjections() const
 					// result vectors, if the respective element is contained. Iterating over the first is sufficient, as elements
 					// not in the first vector will not be in the intersection anyways.
 					for(unsigned pos = 0; pos < resultStack.back().second.begin()->size(); ++pos){
-						unsigned element = resultStack.back().second.begin()->at(pos);
+						std::size_t element = resultStack.back().second.begin()->at(pos);
 						bool elementInAllVectors = true;
 						for(unsigned resIndex = 1; resIndex < resultStack.back().second.size(); ++resIndex) {
 							if(std::find(resultStack.back().second.at(resIndex).begin(), resultStack.back().second.at(resIndex).end(), element) == resultStack.back().second.at(resIndex).end()){
@@ -1472,7 +1477,7 @@ std::vector<unsigned> SupportFunctionContent<Number>::collectProjections() const
 				//std::cout << "intermediate node on way down." << std::endl;
 
 				// NEW RECURSIVE CALLS
-				std::size_t callingFrame = callStack.size() - 1 ;
+				int callingFrame = int(callStack.size()) - 1 ;
 
 				switch ( cur->type() ) {
 					case SF_TYPE::SUM: {
@@ -1529,7 +1534,7 @@ std::vector<unsigned> SupportFunctionContent<Number>::collectProjections() const
 	}
 	assert(false);
 	std::cout << "THIS SHOULD NOT HAPPEN." << std::endl;
-	return std::vector<unsigned>();
+	return std::vector<std::size_t>();
 }
 
 template <typename Number>
@@ -1588,7 +1593,7 @@ BallSupportFunction<Number> *SupportFunctionContent<Number>::ball() const {
 }
 
 template<typename Number>
-std::shared_ptr<SupportFunctionContent<Number>> SupportFunctionContent<Number>::project(const std::vector<unsigned>& dimensions) const {
+std::shared_ptr<SupportFunctionContent<Number>> SupportFunctionContent<Number>::project(const std::vector<std::size_t>& dimensions) const {
 	return create(getThis(),dimensions);
 }
 

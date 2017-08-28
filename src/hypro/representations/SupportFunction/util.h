@@ -149,7 +149,7 @@ namespace hypro {
 		void createNextReduct() const {
 			// the last created reduction pair is at the back, as a std::map is per default sorted ascending
 			assert(parameters.size() > 0);
-			std::size_t powerOfTwo = carl::pow(2, power);
+			unsigned powerOfTwo = carl::pow(2, power);
 			// first compute the new b
 			vector_t<Number> bTrans = (--parameters.end())->second.second;
 			matrix_t<Number> aTrans = (--parameters.end())->second.first;

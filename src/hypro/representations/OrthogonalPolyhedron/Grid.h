@@ -27,7 +27,7 @@ struct pointIt {
 	bool end = false;
 
 	pointIt( const std::vector<std::vector<Number>>& _v ) : v( _v ) {
-		for ( unsigned i = 0; i < v.size(); ++i ) it.push_back( v.at( i ).begin() );
+		for ( std::size_t i = 0; i < v.size(); ++i ) it.push_back( v.at( i ).begin() );
 
 		end = false;
 	}
@@ -36,7 +36,7 @@ struct pointIt {
 	Point<Number> operator++() {
 		if ( end ) return std::move( current() );
 		++it.back();
-		unsigned i = it.size() - 1;
+		std::size_t i = it.size() - 1;
 		while ( it.at( i ) == v.at( i ).end() ) {
 			it[i] = v.at( i ).begin();
 			if ( i == 0 ) {
@@ -55,7 +55,7 @@ struct pointIt {
 	Point<Number> current() {
 		assert( v.size() == it.size() );
 		Point<Number> res;
-		for ( unsigned i = 0; i < v.size(); ++i ) res[i] = *it.at( i );
+		for ( std::size_t i = 0; i < v.size(); ++i ) res[i] = *it.at( i );
 
 		return std::move( res );
 	}
@@ -69,13 +69,13 @@ struct pointIt {
 template <typename Number>
 class Grid {
   public:
-	using gridMap = std::map<Point<unsigned>, bool>;  // store calculated colors
-	using gridPoints = std::map<unsigned, std::vector<Number>>;
+	using gridMap = std::map<Point<std::size_t>, bool>;  // store calculated colors
+	using gridPoints = std::map<std::size_t, std::vector<Number>>;
 	using gridMapIterator = gridMap::iterator;
 	using gridPointsIterator = typename gridPoints::iterator;
 
   private:
-	std::set<Vertex<unsigned>> mVertices;
+	std::set<Vertex<std::size_t>> mVertices;
 	mutable gridMap mGridMap;  // is mutable to allow storing of intermediate results
 	mutable gridPoints mInducedGridPoints;
 
@@ -96,11 +96,11 @@ class Grid {
 	 *
 	 * @return
 	 */
-	unsigned size() const;
-	unsigned dimension() const;
+	std::size_t size() const;
+	std::size_t dimension() const;
 	std::vector<carl::Variable> variables() const;
 	std::vector<Vertex<Number>> vertices() const;
-	std::vector<Number> inducedDimensionAt( unsigned dimension ) const;
+	std::vector<Number> inducedDimensionAt( std::size_t dimension ) const;
 	bool empty() const;
 
 	/**
@@ -110,29 +110,29 @@ class Grid {
 	 * @return the color of the point
 	 */
 	bool colorAt( const Point<Number>& point ) const;
-	bool colorAtInduced( const Point<unsigned>& inducedPoint ) const;
+	bool colorAtInduced( const Point<std::size_t>& inducedPoint ) const;
 	std::vector<Point<Number>> allBlack() const;
 	void colorAll() const;
 
-	Point<unsigned> iPredecessorInduced( const Point<unsigned>& _point, unsigned _dimension ) const;
-	Point<Number> iPredecessor( const Point<Number>& _point, unsigned _dimension ) const;
-	Point<unsigned> iSuccessorInduced( const Point<unsigned>& _point, unsigned _dimension ) const;
-	Point<Number> iSuccessor( const Point<Number>& _point, unsigned _dimension ) const;
-	Point<unsigned> directPredecessorInduced( const Point<unsigned>& _point ) const;
+	Point<std::size_t> iPredecessorInduced( const Point<std::size_t>& _point, std::size_t _dimension ) const;
+	Point<Number> iPredecessor( const Point<Number>& _point, std::size_t _dimension ) const;
+	Point<std::size_t> iSuccessorInduced( const Point<std::size_t>& _point, std::size_t _dimension ) const;
+	Point<Number> iSuccessor( const Point<Number>& _point, std::size_t _dimension ) const;
+	Point<std::size_t> directPredecessorInduced( const Point<std::size_t>& _point ) const;
 	Point<Number> directPredecessor( const Point<Number>& _point ) const;
-	Point<unsigned> directSuccessorInduced( const Point<unsigned>& _point ) const;
+	Point<std::size_t> directSuccessorInduced( const Point<std::size_t>& _point ) const;
 	Point<Number> directSuccessor( const Point<Number>& _point ) const;
 
-	std::vector<Point<unsigned>> iSliceInduced( unsigned i ) const;
-	std::vector<Point<Number>> iSlice( unsigned i, Number pos ) const;
-	std::vector<Point<unsigned>> iNeighborhoodInduced( const Point<unsigned>& _inducedPoint,
-													   unsigned _dimension ) const;
-	std::vector<Point<Number>> iNeighborhood( const Point<Number>& _point, unsigned _dimension ) const;
-	std::vector<Point<unsigned>> neighborhoodInduced( const Point<unsigned>& _inducedPoint ) const;
+	std::vector<Point<std::size_t>> iSliceInduced( std::size_t i ) const;
+	std::vector<Point<Number>> iSlice( std::size_t i, Number pos ) const;
+	std::vector<Point<std::size_t>> iNeighborhoodInduced( const Point<std::size_t>& _inducedPoint,
+													   std::size_t _dimension ) const;
+	std::vector<Point<Number>> iNeighborhood( const Point<Number>& _point, std::size_t _dimension ) const;
+	std::vector<Point<std::size_t>> neighborhoodInduced( const Point<std::size_t>& _inducedPoint ) const;
 	std::vector<Point<Number>> neighborhood( const Point<Number>& _point ) const;
 
 	bool isVertex( const Point<Number>& _point ) const;
-	bool isOnIFacet( const Point<Number>& _point, unsigned i ) const;
+	bool isOnIFacet( const Point<Number>& _point, std::size_t i ) const;
 	bool isOnFacet( const Point<Number>& _point ) const;
 	bool isOutside( const Point<Number>& _point ) const;
 
@@ -143,15 +143,15 @@ class Grid {
 	 * @param color
 	 */
 	void insert( const Point<Number>& point, bool color );
-	void insertInduced( const Point<unsigned>& inducedPoint, bool color );
+	void insertInduced( const Point<std::size_t>& inducedPoint, bool color );
 
-	void addCoordinate( Number value, unsigned dimension );
+	void addCoordinate( Number value, std::size_t dimension );
 	static Grid<Number> combine( const Grid<Number>& a, const Grid<Number>& b );
 
 	void clear();
 
 	typename gridMap::const_iterator find( const Point<Number>& point ) const;
-	typename gridMap::const_iterator findInduced( const Point<unsigned>& inducedPoint ) const;
+	typename gridMap::const_iterator findInduced( const Point<std::size_t>& inducedPoint ) const;
 	typename gridMap::const_iterator end() const;
 
 	/**
@@ -167,14 +167,14 @@ class Grid {
 	 * @param point
 	 * @return induced point
 	 */
-	std::pair<Point<unsigned>, bool> calculateInduced( const Point<Number>& point ) const;
+	std::pair<Point<std::size_t>, bool> calculateInduced( const Point<Number>& point ) const;
 
 	/**
 	 * Calculates the original coordinates of this induced point.
 	 * @param inducedPoint
 	 * @return original point
 	 */
-	Point<Number> calculateOriginal( const Point<unsigned>& inducedPoint ) const;
+	Point<Number> calculateOriginal( const Point<std::size_t>& inducedPoint ) const;
 
 	/**
 	 * Translates the points to induced points.
@@ -182,7 +182,7 @@ class Grid {
 	 * @param vertices
 	 * @return induced vertices
 	 */
-	vSet<unsigned> translateToInduced( const vSet<Number>& vertices ) const;
+	vSet<std::size_t> translateToInduced( const vSet<Number>& vertices ) const;
 
 	/**
 	 * Translates the induced points to original points.
@@ -190,7 +190,7 @@ class Grid {
 	 * @param inducedVertices
 	 * @return original vertices
 	 */
-	vSet<Number> translateToOriginal( const vSet<unsigned>& inducedVertices ) const;
+	vSet<Number> translateToOriginal( const vSet<std::size_t>& inducedVertices ) const;
 
 	friend bool operator==( const Grid<Number>& op1, const Grid<Number>& op2 ) {
 		return op1.mInducedGridPoints == op2.mInducedGridPoints;
@@ -202,9 +202,9 @@ class Grid {
 
 	friend std::ostream& operator<<( std::ostream& out, const Grid<Number>& grid ) {
 		out << "[";
-		for ( unsigned d = 0; d < grid.mInducedGridPoints.size(); ++d ) {
+		for ( std::size_t d = 0; d < grid.mInducedGridPoints.size(); ++d ) {
 			out << std::endl << d << ": ";
-			for ( unsigned p = 0; p < grid.mInducedGridPoints.at( d ).size(); ++p )
+			for ( std::size_t p = 0; p < grid.mInducedGridPoints.at( d ).size(); ++p )
 				out << grid.mInducedGridPoints.at( d ).at( p ) << " ";
 		}
 		out << std::endl << "]" << std::endl;

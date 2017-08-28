@@ -30,7 +30,7 @@ namespace hypro {
 	template<typename Number, typename Converter>
 	BoxT<Number,Converter>::BoxT( const matrix_t<Number>& _constraints, const vector_t<Number>& _constants )
 	{
-		// std::cout << __func__ << ": matrix: " << _constraints << ", vector: " << _constants << std::endl;
+		TRACE("hypro.representations","matrix: " << _constraints << ", vector: " << _constants);
 		// calculate all possible Halfspace intersections -> TODO: dPermutation can
 		// be improved.
 		assert(_constraints.rows() == _constants.rows());
@@ -43,7 +43,7 @@ namespace hypro {
 		matrix_t<Number> intersection = matrix_t<Number>( _constraints.cols(), _constraints.cols() );
 		vector_t<Number> intersectionConstants = vector_t<Number>( _constraints.cols() );
 		std::set<vector_t<Number>> possibleVertices;
-		std::vector<unsigned> permutation;
+		std::vector<std::size_t> permutation;
 		while ( !permutator.end()  ) {
 			permutation = permutator();
 			unsigned rowCount = 0;
@@ -265,7 +265,7 @@ Number BoxT<Number,Converter>::supremum() const {
 template<typename Number, typename Converter>
 std::vector<Point<Number>> BoxT<Number,Converter>::vertices( const matrix_t<Number>& ) const {
 	std::vector<Point<Number>> result;
-	std::size_t limit = pow( 2, mLimits.first.dimension() );
+	std::size_t limit = std::size_t(pow( 2, mLimits.first.dimension() ));
 
 	for ( std::size_t bitCount = 0; bitCount < limit; ++bitCount ) {
 		vector_t<Number> coord = vector_t<Number>( dimension() );
@@ -417,7 +417,7 @@ std::pair<bool, BoxT<Number,Converter>> BoxT<Number,Converter>::satisfiesHalfspa
 	// at this point the box will be limited but not empty.
 	matrix_t<Number> newPlanes = matrix_t<Number>(limitingPlanes.size(), _mat.cols());
 	vector_t<Number> newDistances = vector_t<Number>(limitingPlanes.size());
-	int rowPos = newPlanes.rows()-1;
+	Eigen::Index rowPos = newPlanes.rows()-1;
 	while(!limitingPlanes.empty()){
 		assert(rowPos >= 0);
 		newPlanes.row(rowPos) = _mat.row(limitingPlanes.back());
@@ -430,7 +430,7 @@ std::pair<bool, BoxT<Number,Converter>> BoxT<Number,Converter>::satisfiesHalfspa
 }
 
 template<typename Number, typename Converter>
-BoxT<Number,Converter> BoxT<Number,Converter>::project(const std::vector<unsigned>& dimensions) const {
+BoxT<Number,Converter> BoxT<Number,Converter>::project(const std::vector<std::size_t>& dimensions) const {
 	if(dimensions.empty()) {
 		return Empty();
 	}
@@ -545,12 +545,12 @@ BoxT<Number,Converter> BoxT<Number,Converter>::intersectHalfspace( const Halfspa
 		}
 
 		//std::cout << __func__ << " Min below: " << holdsMin << ", Max below: " << holdsMax << std::endl;
-		unsigned dim = this->dimension();
+		std::size_t dim = this->dimension();
 
 		// Phase 1: Find starting point (point outside) for phase 2 by depth-first search or use limit points, if applicable
 		Point<Number> farestPointOutside = boxcopy.limits().first;
 		Point<Number> farestPointInside = boxcopy.limits().first;
-		unsigned usedDimension = 0;
+		std::size_t usedDimension = 0;
 		// determine walk direction by using plane normal and variable order
 		for(; usedDimension < dim; ++usedDimension){
 			if(hspace.normal()(usedDimension) > 0){

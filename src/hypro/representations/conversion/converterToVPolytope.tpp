@@ -16,9 +16,9 @@
 template <typename Number, typename Converter>
 std::vector<Point<Number>> computeBoundaryPointsExpensive (const SupportFunctionT<Number,Converter>& sf, const matrix_t<Number>& directions) {
  //determines how many directions need to be checked
-    unsigned numberOfDirections = directions.rows();
+    Eigen::Index numberOfDirections = directions.rows();
     //gets dimension in which is currently computed
-    unsigned dim = directions.cols();
+    Eigen::Index dim = directions.cols();
     //only continue if directions and object match dimensionwise
     assert (dim == sf.dimension());
     //generates an empty PointVector for the return value
@@ -27,7 +27,7 @@ std::vector<Point<Number>> computeBoundaryPointsExpensive (const SupportFunction
     if (dim > 0){
         //generates an empty PointVector for the return values of the recursive calls
         std::vector<Point<Number>> recursiveSolutions;
-        for(unsigned i=0; i<numberOfDirections; ++i){
+        for(Eigen::Index i=0; i<numberOfDirections; ++i){
             //determines current evaluation direction
             vector_t<Number> curNormal = directions.row(i);
 
@@ -56,7 +56,7 @@ std::vector<Point<Number>> computeBoundaryPointsExpensive (const SupportFunction
             assert(curFace.dimension() == dim);
 
             //call of the recursive sub-function for the current face
-            recursiveSolutions.push_back(computeBoundaryPointsExpensiveRecursive(curFace, directions, dim-1));
+            recursiveSolutions.push_back(computeBoundaryPointsExpensiveRecursive(curFace, directions, std::size_t(dim-1)));
             }
         //removes duplicate points in order to enable the arithmetic mean to yield best possible results
         recursiveSolutions = Point<Number>::removeDuplicatePoints(recursiveSolutions);
@@ -77,18 +77,18 @@ std::vector<Point<Number>> computeBoundaryPointsExpensive (const SupportFunction
      *Recursively computes some boundary points that lie relatively central for each face of the object, this function is constructed to only be called by computeBoundaryPoints
      */
 template <typename Number, typename Converter>
-Point<Number> computeBoundaryPointsExpensiveRecursive (const SupportFunctionT<Number,Converter>& sf, const matrix_t<Number>& directions, const unsigned curDim) {
+Point<Number> computeBoundaryPointsExpensiveRecursive (const SupportFunctionT<Number,Converter>& sf, const matrix_t<Number>& directions, std::size_t curDim) {
     //determines how many directions need to be checked
-    unsigned numberOfDirections = directions.rows();
+    Eigen::Index numberOfDirections = directions.rows();
     //only continue if directions and object match dimensionwise
-    assert (unsigned(directions.cols()) == sf.dimension());
+    assert (std::size_t(directions.cols()) == sf.dimension());
     //generates an empty Point for the return value
     Point<Number> res;
     //if the function has an object that is not yet certainly a singleton (i.e. dimension is greater than zero)
     if (curDim > 0){
         //generates an empty PointVector for the return values of the recursive calls
         std::vector<Point<Number>> recursiveSolutions;
-        for(unsigned i=0; i<numberOfDirections; ++i){
+        for(Eigen::Index i=0; i<numberOfDirections; ++i){
             //determines current evaluation direction
             vector_t<Number> curNormal = directions.row(i);
 
@@ -217,11 +217,11 @@ typename Converter<Number>::VPolytope Converter<Number>::toVPolytope( const Zono
 // conversion from Support Function to V-Polytope (OVER, UNDER or ALTERNATIVE)
 //ALTERNATIVE mode gives an underapproximation that is probably better but costs a lot more to compute
 template<typename Number>
-typename Converter<Number>::VPolytope Converter<Number>::toVPolytope( const SupportFunction& _source, const CONV_MODE mode, unsigned numberOfDirections){
+typename Converter<Number>::VPolytope Converter<Number>::toVPolytope( const SupportFunction& _source, const CONV_MODE mode, std::size_t numberOfDirections){
 	VPolytope target;
 	if (mode == OVER){
 		//gets dimension of source object
-		unsigned dim = _source.dimension();
+		std::size_t dim = _source.dimension();
 
 		//computes a vector of template directions based on the dimension and the requested number of directions which should get evaluated
 		std::vector<vector_t<Number>> templateDirections = computeTemplate<Number>(dim, numberOfDirections);
@@ -231,75 +231,35 @@ typename Converter<Number>::VPolytope Converter<Number>::toVPolytope( const Supp
 		matrix_t<Number> templateDirectionMatrix = matrix_t<Number>(templateDirections.size(), dim);
 
 		//fills the matrix with the template directions
-		for (unsigned i=0; i<templateDirections.size();++i){
+		for (std::size_t i=0; i<templateDirections.size();++i){
 			templateDirectionMatrix.row(i) = templateDirections[i];
 		}
 
-                //lets the support function evaluate the offset of the halfspaces for each direction
-                std::vector<EvaluationResult<Number>> offsets = _source.multiEvaluate(templateDirectionMatrix);
-                assert(offsets.size() == std::size_t(templateDirectionMatrix.rows()));
-                std::vector<std::size_t> boundedConstraints;
-                for(unsigned offsetIndex = 0; offsetIndex < offsets.size(); ++offsetIndex){
-                        if(offsets[offsetIndex].errorCode != SOLUTION::INFTY)
-                                boundedConstraints.push_back(offsetIndex);
-                }
-                //builds halfspaces with the evaluation results (uses only results that are not infinity (i.e. where a bound exists))
-                matrix_t<Number> constraints = matrix_t<Number>(boundedConstraints.size(), dim);
-                vector_t<Number> constants = vector_t<Number>(boundedConstraints.size());
-                std::size_t pos = boundedConstraints.size()-1;
-                while(!boundedConstraints.empty()){
-                     constraints.row(pos) = templateDirectionMatrix.row(boundedConstraints.back());
-                     constants(pos) = offsets[boundedConstraints.back()].supportValue;
-                     boundedConstraints.pop_back();
-                     --pos;
-                }
-
-	        //constructs a V-Polytope out of the computed halfspaces (implicit conversion H->V)
-	        target = VPolytope(constraints, constants);
-	        }
-        if (mode == UNDER){
-                //gets dimension of source object
-		unsigned dim = _source.dimension();
-
-		//computes a vector of template directions based on the dimension and the requested number of directions which should get evaluated
-		std::vector<vector_t<Number>> templateDirections = computeTemplate<Number>(dim, numberOfDirections);
-		//only continue if size of the vector is not greater than the upper bound for maximum evaluations (uniformly distributed directions for higher dimensions yield many necessary evaluations)
-		assert (templateDirections.size() <= std::pow(numberOfDirections, dim));
-		//creates a matrix with one row for each direction and one column for each dimension
-		matrix_t<Number> templateDirectionMatrix = matrix_t<Number>(templateDirections.size(), dim);
-
-		//fills the matrix with the template directions
-		for (unsigned i=0; i<templateDirections.size();++i){
-			templateDirectionMatrix.row(i) = templateDirections[i];
-		}
-
-                //lets the support function evaluate the offset of the halfspaces for each direction
-                std::vector<EvaluationResult<Number>> offsets = _source.multiEvaluate(templateDirectionMatrix);
-                assert(offsets.size() == std::size_t(templateDirectionMatrix.rows()));
-                std::vector<std::size_t> boundedConstraints;
-                for(unsigned offsetIndex = 0; offsetIndex < offsets.size(); ++offsetIndex){
-                        if(offsets[offsetIndex].errorCode != SOLUTION::INFTY)
-                                boundedConstraints.push_back(offsetIndex);
-                }
-
-                //builds a pointVector from boundary points with the evaluation results (uses only results that are not infinity (i.e. where a bound exists))
-                std::vector<Point<Number>> points = std::vector<Point<Number>>(boundedConstraints.size());
-                std::size_t pos = boundedConstraints.size()-1;
-                while(!boundedConstraints.empty()){
-                     points[pos] = offsets[boundedConstraints.back()].optimumValue;
-                     boundedConstraints.pop_back();
-                     --pos;
-                }
-
-                //constructs a V-Polytope out of the computed points
-                target = VPolytope(points);
+        //lets the support function evaluate the offset of the halfspaces for each direction
+        std::vector<EvaluationResult<Number>> offsets = _source.multiEvaluate(templateDirectionMatrix);
+        assert(offsets.size() == std::size_t(templateDirectionMatrix.rows()));
+        std::vector<std::size_t> boundedConstraints;
+        for(std::size_t offsetIndex = 0; offsetIndex < offsets.size(); ++offsetIndex){
+                if(offsets[offsetIndex].errorCode != SOLUTION::INFTY)
+                        boundedConstraints.push_back(offsetIndex);
+        }
+        //builds halfspaces with the evaluation results (uses only results that are not infinity (i.e. where a bound exists))
+        matrix_t<Number> constraints = matrix_t<Number>(boundedConstraints.size(), dim);
+        vector_t<Number> constants = vector_t<Number>(boundedConstraints.size());
+        std::size_t pos = boundedConstraints.size()-1;
+        while(!boundedConstraints.empty()){
+             constraints.row(pos) = templateDirectionMatrix.row(boundedConstraints.back());
+             constants(pos) = offsets[boundedConstraints.back()].supportValue;
+             boundedConstraints.pop_back();
+             --pos;
         }
 
-
-
-        if (mode == ALTERNATIVE){
-                //gets dimension of source object
-		unsigned dim = _source.dimension();
+        //constructs a V-Polytope out of the computed halfspaces (implicit conversion H->V)
+        target = VPolytope(constraints, constants);
+    }
+    if (mode == UNDER){
+            //gets dimension of source object
+		std::size_t dim = _source.dimension();
 
 		//computes a vector of template directions based on the dimension and the requested number of directions which should get evaluated
 		std::vector<vector_t<Number>> templateDirections = computeTemplate<Number>(dim, numberOfDirections);
@@ -309,15 +269,52 @@ typename Converter<Number>::VPolytope Converter<Number>::toVPolytope( const Supp
 		matrix_t<Number> templateDirectionMatrix = matrix_t<Number>(templateDirections.size(), dim);
 
 		//fills the matrix with the template directions
-		for (unsigned i=0; i<templateDirections.size();++i){
+		for (std::size_t i=0; i<templateDirections.size();++i){
 			templateDirectionMatrix.row(i) = templateDirections[i];
 		}
 
-                //computes some central boundary points based on the directions (pretty precise but expensive)
-                std::vector<Point<Number>> boundaryPoints = computeBoundaryPointsExpensive(_source, templateDirectionMatrix);
-
-                target = VPolytope(boundaryPoints);
-
+        //lets the support function evaluate the offset of the halfspaces for each direction
+        std::vector<EvaluationResult<Number>> offsets = _source.multiEvaluate(templateDirectionMatrix);
+        assert(offsets.size() == std::size_t(templateDirectionMatrix.rows()));
+        std::vector<std::size_t> boundedConstraints;
+        for(std::size_t offsetIndex = 0; offsetIndex < offsets.size(); ++offsetIndex){
+                if(offsets[offsetIndex].errorCode != SOLUTION::INFTY)
+                        boundedConstraints.push_back(offsetIndex);
         }
-	        return target;
+
+        //builds a pointVector from boundary points with the evaluation results (uses only results that are not infinity (i.e. where a bound exists))
+        std::vector<Point<Number>> points = std::vector<Point<Number>>(boundedConstraints.size());
+        std::size_t pos = boundedConstraints.size()-1;
+        while(!boundedConstraints.empty()){
+             points[pos] = offsets[boundedConstraints.back()].optimumValue;
+             boundedConstraints.pop_back();
+             --pos;
+        }
+
+        //constructs a V-Polytope out of the computed points
+        target = VPolytope(points);
+	}
+
+    if (mode == ALTERNATIVE){
+            //gets dimension of source object
+		std::size_t dim = _source.dimension();
+
+		//computes a vector of template directions based on the dimension and the requested number of directions which should get evaluated
+		std::vector<vector_t<Number>> templateDirections = computeTemplate<Number>(dim, numberOfDirections);
+		//only continue if size of the vector is not greater than the upper bound for maximum evaluations (uniformly distributed directions for higher dimensions yield many necessary evaluations)
+		assert (templateDirections.size() <= std::pow(numberOfDirections, dim));
+		//creates a matrix with one row for each direction and one column for each dimension
+		matrix_t<Number> templateDirectionMatrix = matrix_t<Number>(templateDirections.size(), dim);
+
+		//fills the matrix with the template directions
+		for (std::size_t i=0; i<templateDirections.size();++i){
+			templateDirectionMatrix.row(i) = templateDirections[i];
+		}
+        //computes some central boundary points based on the directions (pretty precise but expensive)
+        std::vector<Point<Number>> boundaryPoints = computeBoundaryPointsExpensive(_source, templateDirectionMatrix);
+
+        target = VPolytope(boundaryPoints);
+
+    }
+	return target;
 }

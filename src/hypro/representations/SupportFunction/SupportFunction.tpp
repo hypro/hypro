@@ -293,7 +293,7 @@ namespace hypro{
     }
 
 	template<typename Number, typename Converter>
-	SupportFunctionT<Number,Converter> SupportFunctionT<Number,Converter>::project(const std::vector<unsigned>& dimensions) const {
+	SupportFunctionT<Number,Converter> SupportFunctionT<Number,Converter>::project(const std::vector<std::size_t>& dimensions) const {
 		// check for full projection
 		bool fullProjection = true;
 		if(dimensions.size() == this->dimension()) {
@@ -369,7 +369,7 @@ namespace hypro{
     }
 
     template<typename Number, typename Converter>
-    bool SupportFunctionT<Number,Converter>::contains( const SupportFunctionT<Number, Converter>& rhs, unsigned directions ) const {
+    bool SupportFunctionT<Number,Converter>::contains( const SupportFunctionT<Number, Converter>& rhs, std::size_t directions ) const {
     	std::vector<vector_t<Number>> templateDirections = computeTemplate<Number>(this->dimension(), directions);
     	for(const auto& direction : templateDirections) {
     		if(this->evaluate(direction).supportValue < rhs.evaluate(direction).supportValue){
@@ -524,7 +524,7 @@ namespace hypro{
     }
 
 	template<typename Number, typename Converter>
-	std::vector<unsigned> SupportFunctionT<Number,Converter>::collectProjections() const {
+	std::vector<std::size_t> SupportFunctionT<Number,Converter>::collectProjections() const {
 		assert(content->checkTreeValidity());
 		return content->collectProjections();
 	}

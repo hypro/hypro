@@ -36,7 +36,10 @@ class ConstraintSetT : public GeometricObject<Number, ConstraintSetT<Number,Conv
 	 * @brief      Creates an empty constraintSet.
 	 * @details   The empty constraintSet is represented by a zero-dimensional point pair.
 	 */
-	ConstraintSetT() = default;
+	ConstraintSetT()
+		: mConstraints(matrix_t<Number>::Zero(0,0))
+		, mConstants(vector_t<Number>::Zero(0))
+	{}
 
 	/**
 	 * @brief      Copy constructor.
@@ -167,7 +170,7 @@ class ConstraintSetT : public GeometricObject<Number, ConstraintSetT<Number,Conv
 	  * @brief      Getter for the space dimension.
 	  * @return     The dimension of the space.
 	  */
-	std::size_t dimension() const { return mConstraints.cols(); }
+	std::size_t dimension() const { return std::size_t(mConstraints.cols()); }
 
 	/**
 	 * @brief      Removes redundancy (part of the general interface. Does nothing for constraintSets.)
@@ -193,7 +196,7 @@ class ConstraintSetT : public GeometricObject<Number, ConstraintSetT<Number,Conv
 
 	std::pair<bool, ConstraintSetT> satisfiesHalfspace( const Halfspace<Number>&  ) const { return std::make_pair(true,*this); }
 	std::pair<bool, ConstraintSetT> satisfiesHalfspaces( const matrix_t<Number>& , const vector_t<Number>&  ) const { return std::make_pair(true,*this); }
-	ConstraintSetT<Number,Converter> project(const std::vector<unsigned>& ) const { return *this; }
+	ConstraintSetT<Number,Converter> project(const std::vector<std::size_t>& ) const { return *this; }
 	ConstraintSetT<Number,Converter> linearTransformation( const matrix_t<Number>& ) const { return *this; }
 	ConstraintSetT<Number,Converter> affineTransformation( const matrix_t<Number>& , const vector_t<Number>& ) const { return *this; }
 	ConstraintSetT<Number,Converter> minkowskiSum( const ConstraintSetT<Number,Converter>& ) const { return *this; }

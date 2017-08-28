@@ -3,7 +3,7 @@
 namespace hypro {
 
 	///////////////// Constructor & Destructor
-	
+
 	template<typename Number>
 	HyproLocationVisitor<Number>::HyproLocationVisitor(std::vector<std::string>& varVec) :
 		vars(varVec)
@@ -23,7 +23,7 @@ namespace hypro {
 		std::set<Location<Number>*> locSet;
 		while(i < ctx->location().size()){
 
-			//0.Syntax check - Location name already parsed? 
+			//0.Syntax check - Location name already parsed?
 			for(auto& loc : locSet){
 				if(loc->getName() == ctx->location().at(i)->VARIABLE()->getText()){
 					std::cerr << "ERROR: Location " << loc->getName() << " has already been parsed." << std::endl;
@@ -43,14 +43,14 @@ namespace hypro {
 	antlrcpp::Any HyproLocationVisitor<Number>::visitLocation(HybridAutomatonParser::LocationContext *ctx){
 		std::cout << "-- Bin bei visitLocation!" << std::endl;
 
-		
+
 		//1.Calls visit(ctx->activities()) to get matrix
 		matrix_t<Number> tmpMatrix = visit(ctx->activities());
 		std::cout << "---- Flow matrix is:\n" << tmpMatrix << std::endl;
 
 		//2.Calls visit(ctx->invariant()) to get Condition
 		Condition<Number> inv = visit(ctx->invariants());
-		std::cout << "---- inv is:\n" << inv.getMatrix() << "and\n" << inv.getVector() << std::endl;		
+		std::cout << "---- inv is:\n" << inv.getMatrix() << "and\n" << inv.getVector() << std::endl;
 
 		//3.Returns a location
 		LocationManager<Number>& manager = LocationManager<Number>::getInstance();
@@ -80,7 +80,7 @@ namespace hypro {
 		}
 
 		//3.Syntax check - Last row completely 0's?
-		if(tmpMatrix.row(tmpMatrix.rows()-1) != vector_t<Number>::Zero(tmpMatrix.rows()-1)){
+		if(vector_t<Number>(tmpMatrix.row(tmpMatrix.rows()-1)) != vector_t<Number>::Zero(tmpMatrix.cols())){
 			//std::cout << "Last row of tmpMatrix is:\n " << tmpMatrix.row(tmpMatrix.rows()-1) << std::endl;
 			std::cerr << "ERROR: Last row of tmpMatrix was not completely zero!" << std::endl;
 		}
@@ -103,6 +103,6 @@ namespace hypro {
 		inv.setVector(result.second);
 
 		//4.Return condition
-		return inv;	
+		return inv;
 	}
 }

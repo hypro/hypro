@@ -25,8 +25,9 @@ public:
 	matrix_t<Number>& rGetMatrix(std::size_t I = 0) const { return mResets[I].rMatrix(); }
 	vector_t<Number>& rGetVector(std::size_t I = 0) const { return mResets[I].rVector(); }
 
-	const ConstraintSet<Number>& getReset(std::size_t I = 0) const { return mResets.at(I); }
+	ConstraintSet<Number> getReset(std::size_t I = 0) const { return mResets.at(I); }
 	ConstraintSet<Number>& rGetReset(std::size_t I = 0) const { return mResets[I]; }
+	const std::vector<ConstraintSet<Number>>& getResetTransformations() const { return mResets; }
 
 	void setVector(const vector_t<Number>& in, std::size_t I = 0);
 	void setMatrix(const matrix_t<Number>& in, std::size_t I = 0);
@@ -34,12 +35,17 @@ public:
 	template<typename Representation>
 	State<Number,Representation> applyReset(const State<Number,Representation>& inState) const;
 
+#ifdef HYPRO_LOGGING
     friend std::ostream& operator<<(std::ostream& ostr, const Reset<Number>& a)
+#else
+    friend std::ostream& operator<<(std::ostream& ostr, const Reset<Number>&)
+#endif
     {
-#ifdef HYPRO_USE_LOGGING
-        //ostr << "Continuous transformation: " << a.continuousMat << " and const " << a.continuousVec;
-        //ostr << "Discrete transformation: " << a.discreteMat << " and const " << a.discreteVec;
-        //ostr << "Clock transformation: " << a.clockMat << " and const " << a.clockVec;
+#ifdef HYPRO_LOGGING
+    	ostr << "Resets: " << std::endl;
+    	for(const auto& r : a.getResetTransformations()) {
+    		ostr << r;
+    	}
 #endif
         return ostr;
     }

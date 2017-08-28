@@ -9,24 +9,25 @@
 namespace hypro {
 
 	template<typename Number>
-	void Path<Number>::add(const TPathElement& elem) {
+	void Path<Number>::add(const TPathElement<Number>& elem) {
 		mPath.push_back(elem);
 	}
 
 	template<typename Number>
 	void Path<Number>::addTransition(Transition<Number>* t, const carl::Interval<Number>& enabledTime) {
-		mPath.push_back(TPathElement(t,enabledTime));
+		mPath.push_back(TPathElement<Number>(t,enabledTime));
 		//TRACE("hydra.datastructures","Add transition " << t << " with timestamp " << enabledTime << " to path.");
 	}
 
 	template<typename Number>
 	void Path<Number>::addTimeStep(const carl::Interval<Number>& timeStep) {
-		mPath.push_back(TPathElement(timeStep));
+		mPath.push_back(TPathElement<Number>(timeStep));
 		//TRACE("hydra.datastructures","Add timestamp " << timeStep << " to path.");
 	}
 
 	template<typename Number>
 	std::pair<Transition<Number>*, carl::Interval<Number>> Path<Number>::getTransitionToJumpDepth(unsigned depth) const {
+		TRACE("hypro.datastructures","Get transition for depth " << depth);
 		if(depth == 0) {
 			return std::make_pair(nullptr, carl::Interval<Number>::unboundedInterval());
 		}
@@ -42,6 +43,7 @@ namespace hypro {
 			}
 		}
 		if(pos == mPath.size()) {
+			TRACE("hypro.datastructures","Did not find appropriate transition.");
 			return std::make_pair(nullptr, carl::Interval<Number>::unboundedInterval());
 		}
 		return std::make_pair(mPath.at(pos).transition, mPath.at(pos).timeInterval);
@@ -60,8 +62,8 @@ namespace hypro {
 	}
 
 	template<typename Number>
-	Path Path<Number>::sharedPrefix(const Path<Number>& lhs) const {
-		Path prefix;
+	Path<Number> Path<Number>::sharedPrefix(const Path<Number>& lhs) const {
+		Path<Number> prefix;
 		for(unsigned pos = 0; pos < mPath.size() && pos < lhs.size(); ++pos) {
 			if( mPath.at(pos) == lhs.at(pos)) {
 				prefix.add(mPath.at(pos));
@@ -71,7 +73,7 @@ namespace hypro {
 	}
 
 	template<typename Number>
-	Number Path<Number>::maximalTimeSpan(std::deque<TPathElement>::const_iterator start, std::deque<TPathElement>::const_iterator end) const {
+	Number Path<Number>::maximalTimeSpan(typename std::deque<TPathElement<Number>>::const_iterator start, typename std::deque<TPathElement<Number>>::const_iterator end) const {
 		Number timespan = 0;
 		bool validPath = true;
 		auto currentPos = start;
@@ -105,7 +107,18 @@ namespace hypro {
 	}
 
 	template<typename Number>
-	std::vector<Transition<Number>*> Path<Number>::getTransitionSequence(std::deque<TPathElement>::const_iterator start, std::deque<TPathElement>::const_iterator end) const {
+	std::size_t Path<Number>::getNumberDiscreteJumps() const {
+		std::size_t res = 0;
+		for(const auto& pathElem : mPath) {
+			if(pathElem.isDiscreteStep()) {
+				++res;
+			}
+		}
+		return res;
+	}
+
+	template<typename Number>
+	std::vector<Transition<Number>*> Path<Number>::getTransitionSequence(typename std::deque<TPathElement<Number>>::const_iterator start, typename std::deque<TPathElement<Number>>::const_iterator end) const {
 		auto currentPos = start;
 		std::vector<Transition<Number>*> res;
 		while(currentPos != mPath.end() && currentPos != end) {
@@ -208,7 +221,7 @@ namespace hypro {
 	}
 
 	template<typename Number>
-	TPathElement Path<Number>::at(int index) const {
+	TPathElement<Number> Path<Number>::at(int index) const {
 		return mPath.at(index);
 	}
 
@@ -218,7 +231,7 @@ namespace hypro {
 	}
 
 	template<typename Number>
-	void Path<Number>::push_front(const TPathElement& elem) {
+	void Path<Number>::push_front(const TPathElement<Number>& elem) {
 		mPath.push_front(elem);
 	}
 
@@ -228,12 +241,12 @@ namespace hypro {
 	}
 
 	template<typename Number>
-	Path<Number>::TIterator Path<Number>::begin () {
+	typename Path<Number>::TIterator Path<Number>::begin () {
 		return mPath.begin();
 	}
 
 	template<typename Number>
-	Path<Number>::TIterator Path<Number>::end() {
+	typename Path<Number>::TIterator Path<Number>::end() {
 		return mPath.end();
 	}
 

@@ -26,7 +26,7 @@ namespace hypro {
 		if(ctx->fixedsteps().size() > 1){
 			std::cerr << "ERROR: fixed step in settings has been defined multiple times." << std::endl;
 		} else if(ctx->fixedsteps().size() == 1){
-			tStep = visit(ctx->fixedsteps()[0]).antlrcpp::Any::as<Number>();	
+			tStep = visit(ctx->fixedsteps()[0]).antlrcpp::Any::as<Number>();
 		} else {
 			std::cerr << "ERROR: fixed step size has not been defined" << std::endl;
 		}
@@ -36,7 +36,7 @@ namespace hypro {
 		if(ctx->time().size() > 1){
 			std::cerr << "ERROR: time in settings has been defined multiple times." << std::endl;
 		} else if(ctx->time().size() == 1){
-			tBound = visit(ctx->time()[0]).antlrcpp::Any::as<Number>();	
+			tBound = visit(ctx->time()[0]).antlrcpp::Any::as<Number>();
 		} else {
 			std::cerr << "ERROR: time has not been defined" << std::endl;
 		}
@@ -67,7 +67,7 @@ namespace hypro {
 		if(ctx->maxjumps().size() > 1){
 			std::cerr << "ERROR: max jumps in settings has been defined multiple times." << std::endl;
 		} else if(ctx->maxjumps().size() == 1){
-			jumps = visit(ctx->maxjumps()[0]);		
+			jumps = visit(ctx->maxjumps()[0]);
 		} else {
 			std::cerr << "ERROR: max jumps has not been defined" << std::endl;
 		}
@@ -113,7 +113,7 @@ namespace hypro {
 
   	template<typename Number>
   	antlrcpp::Any HyproSettingVisitor<Number>::visitPlotsetting(HybridAutomatonParser::PlotsettingContext *ctx){
-  		
+
   		std::cout << "-- Bin bei visitPlotsetting!" << std::endl;
 
   		//0.Syntax Check - only declared variables?
@@ -135,8 +135,8 @@ namespace hypro {
   		for(unsigned i=0; i < vars.size(); i++){
   			varCount.push_back(0);
   		}
-  		int startIndex = ctx->start->getStartIndex();
-  		int endIndex = ctx->stop->getStopIndex();
+  		std::size_t startIndex = ctx->start->getStartIndex();
+  		std::size_t endIndex = ctx->stop->getStopIndex();
   		misc::Interval inter(startIndex, endIndex);
   		CharStream* input = ctx->start->getInputStream();
   		std::string text = input->getText(inter);

@@ -38,7 +38,7 @@ class PolytopeSupportFunction {
 	matrix_t<Number> mConstraints;
 	vector_t<Number> mConstraintConstants;
 	Optimizer<Number> mOpt;
-	unsigned mDimension;
+	std::size_t mDimension;
 	std::map<vector_t<Number>, Number> mCache;
 
   public:
@@ -54,7 +54,7 @@ class PolytopeSupportFunction {
 	 * Returns the dimension of the object.
 	 * @return
 	 */
-	unsigned dimension() const;
+	std::size_t dimension() const;
 
 	SF_TYPE type() const;
 

@@ -52,8 +52,8 @@ class Transition
     /**
      * Getter & Setter
      */
-    Location<Number>* getSource() const { return mSource; }
-    Location<Number>* getTarget() const { return mTarget; }
+    Location<Number>* getSource() const { assert( mSource != nullptr ); return mSource; }
+    Location<Number>* getTarget() const { assert( mTarget != nullptr ); return mTarget; }
     const Condition<Number>& getGuard() const { return mGuard; }
     const Reset<Number>& getReset() const { return mReset; }
     Aggregation getAggregation() const { return mAggregationSetting; }
@@ -70,7 +70,7 @@ class Transition
     void setTriggerTime(Number t) { mTriggerTime = t; }
 
     friend std::ostream& operator<<(std::ostream& ostr, const Transition<Number>& t) {
-		#ifdef HYPRO_USE_LOGGING
+		#ifdef HYPRO_LOGGING
 	    ostr << "transition(" << std::endl
 	          << "\t Source = " << t.getSource()->getId() << std::endl
 	          << "\t Target = " << t.getTarget()->getId() << std::endl

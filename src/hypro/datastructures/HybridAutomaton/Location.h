@@ -22,6 +22,10 @@ class Transition;
 template<typename Number>
 class LocationManager;
 
+/**
+ * @brief      Class for location.
+ * @tparam     Number  The used number type.
+ */
 template<typename Number>
 class Location
 {
@@ -30,15 +34,27 @@ class Location
 protected:
     using transitionSet = std::set<Transition<Number>*>;
 
+    /**
+     * @brief      Constructor
+     * @details    Note that locations should only be constructed from the LocationManager.
+     * @param[in]  id    The identifier given by the LocationManager.
+     */
+    ///@{
     Location(unsigned id);
+    /**
+     * @param[in]  id    The identifier given by the LocationManager.
+     * @param[loc] The original location which is copied.
+     *
+     */
     Location(unsigned id, const Location& loc);
     Location(unsigned id, const matrix_t<Number>& mat);
     Location(unsigned id, const matrix_t<Number>& mat, const transitionSet& trans, const Condition<Number>& inv);
     Location(unsigned id, const matrix_t<Number>& mat, const transitionSet& trans, const Condition<Number>& inv,
              const matrix_t<Number>& extInputMat);
+    ///@}
 
 private:
-    mutable matrix_t<Number> mFlow;
+    mutable std::vector<matrix_t<Number>> mFlows;
     matrix_t<Number> mExternalInput;
     transitionSet mTransitions;
     Condition<Number> mInvariant;
@@ -49,14 +65,16 @@ public:
   	Location() = delete;
     ~Location() {}
 
-    const matrix_t<Number>& getFlow() const { return mFlow; }
+    matrix_t<Number> getFlow(std::size_t I = 0) const { return mFlows.at(I); }
+    matrix_t<Number>& rGetFlow(std::size_t I = 0) { return mFlows[I]; }
     const Condition<Number>& getInvariant() const { return mInvariant; }
     const transitionSet& getTransitions() const { return mTransitions; }
     const matrix_t<Number>& getExternalInput() const { return mExternalInput; }
     unsigned getId() const { return mId; }
 	std::string getName() const { return mName; }
+
     void setName(const std::string& name) { mName = name; }
-    void setFlow(const matrix_t<Number>& mat) { mFlow = mat; }
+    void setFlow(const matrix_t<Number>& mat, std::size_t I = 0);
     void setInvariant(const Condition<Number>& inv) { mInvariant = inv; }
     void setTransitions(const transitionSet& trans) { mTransitions = trans; }
     void addTransition(Transition<Number>* trans) { mTransitions.insert(trans); }
@@ -67,7 +85,7 @@ public:
     inline bool operator!=(const Location<Number>& rhs) const { return (mId != rhs.getId()); }
 
     friend std::ostream& operator<<(std::ostream& ostr, const Location<Number>& l) {
-    	#ifdef HYDRA_USE_LOGGING
+    	#ifdef HYPRO_LOGGING
 	    matrix_t<Number> tmp = matrix_t<Number>(l.getInvariant().getMatrix().rows(), l.getInvariant().getMatrix().cols() + 1);
 	    tmp << l.getInvariant().getMatrix(), l.getInvariant().getVector();
 	    ostr << "location " << l.getName() << " (id: " << l.getId() << ")"<< std::endl << "\t Flow: " << std::endl << l.getFlow() << std::endl << "\t Inv: " << std::endl << tmp;

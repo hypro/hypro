@@ -188,14 +188,14 @@ TYPED_TEST(SupportFunctionTest, linearTransformation) {
 
 	// execute many linear transformations to test reduction
 
-	for( std::size_t i = 1; i < pow(2,res.linearTrafoParameters()->parameters->power*2); ++i) {
+	for( std::size_t i = 1; i < std::size_t(pow(2,res.linearTrafoParameters()->parameters->power*2)); ++i) {
 		res = res.linearTransformation(rotation);
 	}
 	EXPECT_EQ(res.linearTrafoParameters()->currentExponent, unsigned(16));
-	EXPECT_EQ(res.linearTrafoParameters()->parameters->parameters.size(), 1);
+	EXPECT_EQ(res.linearTrafoParameters()->parameters->parameters.size(), std::size_t(1));
 	// reduction is only invoked when using the support function ->evaluate
 	res.evaluate(v2Rot);
-	EXPECT_EQ(res.linearTrafoParameters()->parameters->parameters.size(), 3);
+	EXPECT_EQ(res.linearTrafoParameters()->parameters->parameters.size(), std::size_t(3));
 }
 
 TYPED_TEST(SupportFunctionTest, scale) {
@@ -542,7 +542,7 @@ TYPED_TEST(SupportFunctionTest, contains) {
 
 TYPED_TEST(SupportFunctionTest, projection) {
 	SupportFunction<TypeParam> psf1 = SupportFunction<TypeParam>(this->constraints, this->constants);
-	std::vector<unsigned> dims;
+	std::vector<std::size_t> dims;
 	dims.push_back(0);
 
 	psf1 = psf1.project(dims);
@@ -569,10 +569,12 @@ TYPED_TEST(SupportFunctionTest, projection) {
 	EXPECT_EQ(projected.evaluate(vector_t<TypeParam>(dir2)).supportValue, this->sfChainComplete.evaluate(dir2).supportValue );
 
 	EXPECT_EQ(projected.collectProjections().size(), dims.size());
+
+	// Todo: Test projection where dimensions are exchanged, i.e. {1,0}
 }
 
 TYPED_TEST(SupportFunctionTest, plotting) {
-	std::vector<unsigned> projectionDimensions;
+	std::vector<std::size_t> projectionDimensions;
 	projectionDimensions.push_back(0);
 	projectionDimensions.push_back(1);
 

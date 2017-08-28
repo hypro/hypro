@@ -344,24 +344,24 @@ namespace hypro {
 				#endif
 			}
 
-			unsigned numberOfConstraints = mConstraintMatrix.rows();
+			int numberOfConstraints = int(mConstraintMatrix.rows());
 			if(numberOfConstraints > 0) {
 				// convert constraint constants
 				glp_add_rows( lp, numberOfConstraints );
-				for ( unsigned i = 0; i < numberOfConstraints; i++ ) {
+				for ( int i = 0; i < numberOfConstraints; i++ ) {
 					glp_set_row_bnds( lp, i + 1, GLP_UP, 0.0, carl::toDouble( mConstraintVector(i) ) );
 				}
 				// add cols here
-				glp_add_cols( lp, mConstraintMatrix.cols() );
-				unsigned cols = mConstraintMatrix.cols();
-				createArrays( numberOfConstraints * cols );
+				int cols = int(mConstraintMatrix.cols());
+				glp_add_cols( lp, cols );
+				createArrays( unsigned(numberOfConstraints * cols) );
 
 				// convert constraint matrix
 				ia[0] = 0;
 				ja[0] = 0;
 				ar[0] = 0;
 				assert(mConstraintMatrix.size() == numberOfConstraints * cols);
-				for ( unsigned i = 0; i < numberOfConstraints * cols; ++i ) {
+				for ( int i = 0; i < numberOfConstraints * cols; ++i ) {
 					ia[i + 1] = ( int( i / cols ) ) + 1;
 					// std::cout << __func__ << " set ia[" << i+1 << "]= " << ia[i+1];
 					ja[i + 1] = ( int( i % cols ) ) + 1;
@@ -375,7 +375,7 @@ namespace hypro {
 
 				glp_load_matrix( lp, numberOfConstraints * cols, ia, ja, ar );
 				glp_term_out(GLP_OFF);
-				for ( unsigned i = 0; i < cols; ++i ) {
+				for ( int i = 0; i < cols; ++i ) {
 					glp_set_col_bnds( lp, i + 1, GLP_FR, 0.0, 0.0 );
 					glp_set_obj_coef( lp, i + 1, 1.0 ); // not needed?
 				}

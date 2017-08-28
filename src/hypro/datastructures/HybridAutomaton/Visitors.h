@@ -11,13 +11,13 @@ class genericUniteVisitor
 public:
 
 	template<typename A, typename B>
-	T operator()(const A& lhs, const B&) const {
+	inline T operator()(const A& lhs, const B&) const {
 		assert(false && "UNION OF DIFFERENT TYPES.");
 		return lhs;
 	}
 
 	template<typename A>
-    T operator()(const A& lhs, const A& rhs) const {
+    inline T operator()(const A& lhs, const A& rhs) const {
     	//auto tmpHPoly = Converter<Number>::toHPolytope(lhs);
 		//TRACE("hydra.datastructures","Union visitor lhs " << tmpHPoly);
 		//tmpHPoly = Converter<Number>::toHPolytope(rhs);
@@ -32,12 +32,12 @@ class genericIntersectVisitor
 {
 public:
 	template<typename A, typename B>
-	T operator()(const A& lhs, const B&) const {
+	inline T operator()(const A& lhs, const B&) const {
 		assert(false && "INTERSECTION OF DIFFERENT TYPES.");
 		return lhs;
 	}
 
-    T operator()(const T& lhs, const T& rhs) const {
+    inline T operator()(const T& lhs, const T& rhs) const {
  		return lhs.intersect(rhs);
     }
 };
@@ -58,12 +58,12 @@ public:
 	{}
 
 	template<typename B>
-    T operator()(const B& lhs) const {
+    inline T operator()(const B& lhs) const {
  		return lhs.affineTransformation(mat, vec);
     }
 };
 
-template<typename T>
+template<typename T, typename Number>
 class genericConversionVisitor
     : public boost::static_visitor<T>
 {
@@ -76,8 +76,8 @@ public:
 		toType(to)
 	{}
 
-	template<typename B, typename Number>
-    T operator()(const B& lhs) const {
+	template<typename B>
+    inline T operator()(const B& lhs) const {
  		switch(toType){
  			case representation_name::box: {
  				return Converter<Number>::toBox(lhs);
@@ -119,12 +119,12 @@ class genericReductionVisitor
 {
 public:
 
-    T operator()(const T& lhs) const {
+    inline T operator()(const T& lhs) const {
     	// Do nothing if not support function.
     	return lhs;
     }
 
-    T operator()(const SupportFunction<Number>& lhs) const {
+    inline T operator()(const SupportFunction<Number>& lhs) const {
     	/*
     	Number temp = timeBound/timeStep;
 		unsigned long multPerEval = lhs.multiplicationsPerEvaluation();
@@ -134,7 +134,7 @@ public:
 		unsigned long estimatedCostWithReduction = hyperplanesForReduction* multPerEval+ estimatedNumberOfEvaluations * carl::pow(hyperplanesForReduction, 2);
 		if (estimatedCostWithReduction < estimatedCostWithoutReduction) {
 			*/
-    	TRACE("hydra.datastructures", "GenericReduction for SF.");
+    	TRACE("hypro.datastructures", "GenericReduction for SF.");
 		auto tmpHPoly = Converter<Number>::toHPolytope(lhs);
 		//std::vector<unsigned> projDims;
 		//projDims.push_back(0);
@@ -162,24 +162,41 @@ public:
 	{}
 
 	template<typename B>
-    std::pair<bool,T> operator()(const B& lhs) const {
+    inline std::pair<bool,T> operator()(const B& lhs) const {
  		return lhs.satisfiesHalfspaces(constraints, constants);
     }
 };
-
 
 class genericCompareVisitor
     : public boost::static_visitor<bool>
 {
 public:
 	template<typename A, typename B>
-	bool operator()(const A& lhs, const B&) const {
+	inline bool operator()(const A& lhs, const B&) const {
 		return false;
 	}
 
 	template<typename T>
-    bool operator()(const T& lhs, const T& rhs) const {
+    inline bool operator()(const T& lhs, const T& rhs) const {
  		return (lhs == rhs);
+    }
+};
+
+
+class genericOutstreamVisitor
+    : public boost::static_visitor<std::ostream&>
+{
+protected:
+	std::ostream& out;
+public:
+	genericOutstreamVisitor()=delete;
+	genericOutstreamVisitor(std::ostream& o) :
+		out(o)
+	{}
+
+	template<typename T>
+    inline std::ostream& operator()(const T& shape) const {
+ 		return out << shape;
     }
 };
 

@@ -23,8 +23,8 @@ bool comparePoint( Eigen::Matrix<Number, 2, 1> &p1, Eigen::Matrix<Number, 2, 1> 
 
 template<typename Number>
 void removeGenerator( unsigned colToRemove, matrix_t<Number> &matrix ) {
-	unsigned numRows = matrix.rows();
-	unsigned numCols = matrix.cols() - 1;
+	Eigen::Index numRows = matrix.rows();
+	Eigen::Index numCols = matrix.cols() - 1;
 	if(matrix.cols() == 1 && colToRemove == 0) {
 		matrix.conservativeResize(Eigen::NoChange,0);
 	} else {
@@ -40,19 +40,19 @@ void removeGenerator( unsigned colToRemove, matrix_t<Number> &matrix ) {
 
 template<typename Number>
 void removeEmptyGenerators( matrix_t<Number> &generatorMatrix ) {
-	unsigned dim = generatorMatrix.rows();
+	Eigen::Index dim = generatorMatrix.rows();
 	vector_t<Number> zero_vector;
 	zero_vector.resize( dim, 1 );
 	zero_vector.setZero();
 
-	std::vector<unsigned> zeroIndex;
-	for ( unsigned i = 0; i < generatorMatrix.cols(); i++ ) {
+	std::vector<Eigen::Index> zeroIndex;
+	for ( Eigen::Index i = 0; i < generatorMatrix.cols(); i++ ) {
 		if ( generatorMatrix.col( i ) == zero_vector ) {
 			zeroIndex.push_back( i );
 		}
 	}
 
-	for ( std::vector<unsigned>::reverse_iterator rit = zeroIndex.rbegin(); rit != zeroIndex.rend(); ++rit ) {
+	for ( std::vector<Eigen::Index>::reverse_iterator rit = zeroIndex.rbegin(); rit != zeroIndex.rend(); ++rit ) {
 		removeGenerator<Number>( *rit, generatorMatrix );
 	}
 }
@@ -163,7 +163,7 @@ Number ZonotopeT<Number,Converter>::order() const {
 	if(mGenerators.rows() == 0) {
 		return Number(0);
 	}
-	return Number( mGenerators.cols()/Number(mGenerators.rows()) );
+	return Number(mGenerators.cols()) / Number(mGenerators.rows());
 }
 
 template<typename Number, typename Converter>
@@ -216,8 +216,8 @@ std::size_t ZonotopeT<Number,Converter>::size() const {
 
 template<typename Number, typename Converter>
 void ZonotopeT<Number,Converter>::removeGenerator( unsigned colToRemove ) {
-	unsigned numRows = mGenerators.rows();
-	unsigned numCols = mGenerators.cols() - 1;
+	Eigen::Index numRows = mGenerators.rows();
+	Eigen::Index numCols = mGenerators.cols() - 1;
 
 	if ( colToRemove < numCols ) {
 		mGenerators.block( 0, colToRemove, numRows, numCols - colToRemove ) =
@@ -297,11 +297,11 @@ void ZonotopeT<Number,Converter>::reduceOrder( Number limit ) {
 	//std::cout << __func__ << ": Current order: " << this->order() << std::endl;
 	while(this->order() > limit) {
 		matrix_t<Number> generators = mGenerators;
-		unsigned dim = mGenerators.rows();
+		Eigen::Index dim = mGenerators.rows();
 
 		// create duplicates of generators to sort them
 		std::vector<hypro::vector_t<Number>> sortedGenerators;
-		for ( unsigned i = 0; i < generators.cols(); i++ ) {
+		for ( Eigen::Index i = 0; i < generators.cols(); i++ ) {
 			sortedGenerators.push_back( generators.col( i ) );
 		}
 
@@ -316,12 +316,12 @@ void ZonotopeT<Number,Converter>::reduceOrder( Number limit ) {
 			sumVector += sortedGenerators[i].array().abs().matrix();
 		}
 
-		unsigned numRemainingGenerators = sortedGenerators.size() - ( 2 * dim );
+		Eigen::Index numRemainingGenerators = Eigen::Index(sortedGenerators.size() - ( 2 * dim ));
 
 		matrix_t<Number> remainingGenerators = matrix_t<Number>(dim, numRemainingGenerators);
 
 		// inserts the original remaining vectors
-		for ( unsigned i = 0; i < numRemainingGenerators; i++ ) {
+		for ( Eigen::Index i = 0; i < numRemainingGenerators; i++ ) {
 			remainingGenerators.col( i ) = sortedGenerators[i + ( 2 * dim )];
 		}
 
@@ -372,7 +372,7 @@ ZonotopeT<Number,Converter> ZonotopeT<Number,Converter>::minkowskiSum( const Zon
 }
 
 template<typename Number, typename Converter>
-ZonotopeT<Number,Converter> ZonotopeT<Number,Converter>::project(const std::vector<unsigned>& dimensions) const {
+ZonotopeT<Number,Converter> ZonotopeT<Number,Converter>::project(const std::vector<std::size_t>& dimensions) const {
 	if(dimensions.empty()) {
 		return Empty();
 	}
@@ -492,13 +492,13 @@ Number intersect2d( const ZonotopeT<Number,Converter> &input, const Halfspace<Nu
 	assert( input.dimension() == hp.dimension() && input.dimension() == 2 &&
 			"zonotope dimension must be of same dimension (only dim 2 accepted) "
 			"as Halfspace" );
-	unsigned size = input.size();
+	Eigen::Index size = Eigen::Index(input.size());
 	matrix_t<Number> gUpper, gLower, generators = input.generators();
 	matrix_t<Number> s, s1, pmNext, pm = input.center();
 
 	// ensure that all generators are pointing either upwards or all downwards (depends on minOrMax)
 	// minOrMax == 0 -> start from smallest point (cf. Algorithm Girard HSCC'08)
-	for ( unsigned i = 0; i < size; i++ ) {
+	for ( Eigen::Index i = 0; i < size; i++ ) {
 		// point downwards
 		if ( ( generators( 1, i ) > 0 || ( generators( 1, i ) == 0 && generators( 0, i ) > 0 ) ) && minOrMax == 1 ) {
 			generators.col( i ) = -1 * generators.col( i );
@@ -626,7 +626,7 @@ static ZonotopeT<Number,Converter> intersectZonotopeHalfspace( ZonotopeT<Number,
 	std::vector<vector_t<Number>> vertices = inputZonotope.computeZonotopeBoundary();
 	vertices.pop_back();
 
-	unsigned numPts = vertices.size();
+	std::size_t numPts = vertices.size();
 	Eigen::Matrix<Number, 2, 2> xhp;
 
 	// Compute Halfspace points xhp
@@ -665,7 +665,7 @@ static ZonotopeT<Number,Converter> intersectZonotopeHalfspace( ZonotopeT<Number,
 		dzb[i] = ( res(0,0) );
 	}
 
-	std::vector<int> ltZeroIdxArray, mtZeroIdxArray;
+	std::vector<unsigned> ltZeroIdxArray, mtZeroIdxArray;
 	for ( i = 0; i < dzbme.size(); i++ ) {
 		if ( carl::abs( dzbme[i] ) < carl::abs( dzbme[minIdx] ) ) {
 			minIdx = i;
@@ -684,7 +684,7 @@ static ZonotopeT<Number,Converter> intersectZonotopeHalfspace( ZonotopeT<Number,
 	verticesValArray = verticesValArray.cshift( minIdx );
 	vertices.assign( std::begin( verticesValArray ), std::end( verticesValArray ) );
 
-	unsigned nil, il1p2, il2p1, il2p2;
+	std::size_t nil, il1p2, il2p1, il2p2;
 	if ( dzbme[0] < 0 ) {
 		nil = ltZeroIdxArray.size();
 		if ( dzbme[1] < 0 ) {
@@ -768,7 +768,8 @@ ZonotopeT<Number,Converter> intersectNDProjection( const ZonotopeT<Number,Conver
 	// Using SVD to calculate nullspace (kernel)
 	kernel = svd.matrixV().block( 0, 1, svd.matrixV().rows(), svd.matrixV().cols() - 1 );
 
-	unsigned nd, dim;
+	Eigen::Index nd;
+	std::size_t dim;
 	nd = kernel.cols();
 	dim = inputZonotope.dimension();
 
@@ -781,7 +782,7 @@ ZonotopeT<Number,Converter> intersectNDProjection( const ZonotopeT<Number,Conver
 	dpQc = dVec.dot( inCenterD );
 	dpQg = dVec.transpose() * convert<Number,double>(inputZonotope.generators());
 
-	for ( unsigned i = 0; i < nd; i++ ) {
+	for ( Eigen::Index i = 0; i < nd; i++ ) {
 		// construct 2 dimensional Zonotope
 		Eigen::Matrix<double, 2, 1> projCenter;
 		Eigen::Matrix<double, 2, Eigen::Dynamic> projGenerators;
@@ -1118,7 +1119,7 @@ ZonotopeT<Number,Converter> ZonotopeT<Number,Converter>::unite( const ZonotopeT<
 			"Zonotopes must be of same "
 			"dimension in order to carry out "
 			"convex hull operations." );
-	unsigned numGenCurrent, numGenOther;
+	std::size_t numGenCurrent, numGenOther;
 	ZonotopeT<Number,Converter> temp;
 	numGenCurrent = this->size();
 	numGenOther = other.size();
@@ -1194,7 +1195,7 @@ bool ZonotopeT<Number,Converter>::contains(const Point<Number>& point) const {
 	// described by a linear combination of the generators with coefficients -1 to 1. Each generator
 	// is modeled as a bounded variable. Do not forget the influence of the center.
 
-	unsigned dim = this->dimension();
+	std::size_t dim = this->dimension();
 	matrix_t<Number> constraints = matrix_t<Number>::Zero(4*dim, this->mGenerators.cols());
 	vector_t<Number> constants = vector_t<Number>::Ones(4*dim);
 

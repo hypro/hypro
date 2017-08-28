@@ -17,24 +17,12 @@
 
 namespace hypro {
 
-/**
- * @brief      Forward declaration of class Point.
- * @tparam     Number  The used number type.
- */
 template<typename Number>
 class Point;
 
-/**
- * @brief      Forward declaration of class Halfspace.
- * @tparam     Number  The used number type.
- */
 template<typename Number>
 class Halfspace;
 
-/**
- * @brief      Forward declaration of class Location.
- * @tparam     Number  The used number type.
- */
 template<typename Number>
 class Location;
 
@@ -94,7 +82,7 @@ public:
 	 * @param[in]  dimensions  The dimensions.
 	 * @return     The resulting set.
 	 */
-	virtual DerivedShape project(const std::vector<unsigned>& dimensions) const = 0;
+	virtual DerivedShape project(const std::vector<std::size_t>& dimensions) const = 0;
 
 	/**
 	 * @brief      Applies a linear transformation with the matrix A to the set.
@@ -154,6 +142,15 @@ public:
 	 */
 	virtual DerivedShape unite( const DerivedShape& rhs ) const = 0;
 
+	/**
+	 * @brief      Outstream operator.
+	 * @param      out   The outstream.
+	 * @param[in]  obj   The object.
+	 * @return     Reference to the passed outstream.
+	 */
+	friend std::ostream& operator<<(std::ostream& out, const GeometricObject<Number,DerivedShape>& in){
+		return out << static_cast<DerivedShape>(in);
+	}
 };
 
 /** @} */

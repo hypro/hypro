@@ -348,7 +348,7 @@ PolytopeT<Number,Converter> PolytopeT<Number,Converter>::affineTransformation( c
 }
 
 template <typename Number, typename Converter>
-PolytopeT<Number,Converter> PolytopeT<Number,Converter>::project(const std::vector<unsigned>& dimensions) const {
+PolytopeT<Number,Converter> PolytopeT<Number,Converter>::project(const std::vector<std::size_t>& dimensions) const {
 	using namespace Parma_Polyhedra_Library;
 
 	// create inverse of dimensions to get the variables to unconstrain

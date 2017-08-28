@@ -264,7 +264,7 @@ TYPED_TEST(PointTest, AffineTransformation) {
 
 TYPED_TEST(PointTest, Projection) {
 	Point<TypeParam> p1({1,2,3,4,5,6,7});
-	std::vector<unsigned> dims;
+	std::vector<std::size_t> dims;
 	Point<TypeParam> empt = p1.project(dims);
 	EXPECT_EQ(empt.dimension(), unsigned(0));
 
