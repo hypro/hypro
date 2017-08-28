@@ -35,10 +35,6 @@ class HyproSettingVisitor : HybridAutomatonBaseVisitor {
 		//A vector of all variables that are defined
 		std::vector<std::string>& vars;
 
-		//Constructor & Destructor
-		HyproSettingVisitor(std::vector<std::string>& varVec);
-		~HyproSettingVisitor();
-
         //Inherited
         antlrcpp::Any visitFixedsteps(HybridAutomatonParser::FixedstepsContext *ctx) override;
         antlrcpp::Any visitTime(HybridAutomatonParser::TimeContext *ctx) override;
@@ -55,6 +51,10 @@ class HyproSettingVisitor : HybridAutomatonBaseVisitor {
 */
 
 	public:
+
+        //Constructor & Destructor
+        HyproSettingVisitor(std::vector<std::string>& varVec);
+        ~HyproSettingVisitor();
 
 		//Inherited - stays public so we can access it for testing/debugging
 		antlrcpp::Any visitSetting(HybridAutomatonParser::SettingContext *ctx) override;

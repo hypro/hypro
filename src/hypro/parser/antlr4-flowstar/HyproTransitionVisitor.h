@@ -16,7 +16,6 @@
 #include "HybridAutomatonBaseVisitor.h"
 #include "HyproFormulaVisitor.h"
 
-
 using namespace antlr4;
 
 namespace hypro {
@@ -37,10 +36,6 @@ class HyproTransitionVisitor : public HybridAutomatonBaseVisitor{
 		//The set of possible locations 
 		std::set<Location<Number>*>& locSet;
 
-		//Constructor and Destructor
-		HyproTransitionVisitor(std::vector<std::string>& varVec, std::set<Location<Number>*>& lSet);
-		~HyproTransitionVisitor();
-
 		//Inherited
 		antlrcpp::Any visitTransition(HybridAutomatonParser::TransitionContext *ctx) override;
 		antlrcpp::Any visitFromto(HybridAutomatonParser::FromtoContext *ctx) override;
@@ -50,6 +45,10 @@ class HyproTransitionVisitor : public HybridAutomatonBaseVisitor{
 		antlrcpp::Any visitAggregation(HybridAutomatonParser::AggregationContext *ctx) override;
 
 	public:
+
+		//Constructor and Destructor
+		HyproTransitionVisitor(std::vector<std::string>& varVec, std::set<Location<Number>*>& lSet);
+		~HyproTransitionVisitor();
 
 		//Inherited from HybridAutomatonBaseVisitor - stays public for testing/debugging
 		antlrcpp::Any visitJumps(HybridAutomatonParser::JumpsContext *ctx) override;
