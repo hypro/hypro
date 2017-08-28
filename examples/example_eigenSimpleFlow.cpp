@@ -14,9 +14,43 @@ using Matrix = matrix_t<Number>;
 using Vector = vector_t<Number>;
 using DiagonalMatrix = Eigen::DiagonalMatrix<Number,Eigen::Dynamic>;
 using BoolMatrix = matrix_t<bool>;
+typedef struct flags {
+    int n; //<--- DIMENSION --->
+    std::size_t _DIM_PLOT_;      //0..n-1 for the plot
+    bool _ORIGINAL_SYS_PLOT_; //plotting in original system or transformed?
+    bool _HULLCONSTRUCTION_;
+    bool _TRAJECTORY_;
+    bool _ERROR_PLOT_;
+} flags;
+typedef struct initEquation {
+    Matrix A;
+    Vector x0;
+    Vector x0_2;
+    Vector b;
+} initEquation;
+typedef struct invariants {
+    Matrix iA;
+    Vector b;
+    //?? VA ?? b_VA ??
+} invariants;
+typedef struct tmpFlowSeg { 
+    std::vector<Vector> upper;
+    std::vector<Vector> lower;
+} tmpFlowSeg;
+typedef struct const_solCalc {
+    Matrix xhomconst;
+    DiagonalMatrix D;
+    Matrix xinhomconst;
+    std::size_t delta;
+    std::size_t deltalimit;
+} const_solCalc;
+typedef struct const_V_n {
+    Matrix V;
+    int n;
+} const_V_n;
 
-void elwise_maxtransformation(Matrix& x_tr, int n);
-void elwise_backtransformation(Matrix& x_tr, int n);
+void mark_x0isMin(Matrix& x_tr, int n);
+void swap_x0isMax(Matrix& x_tr, int n);
 void initialize (const Matrix& xhomconst, const DiagonalMatrix& D, BoolMatrix& directmaxmin,
                     Matrix& derivFactormaxmin, std::vector<Vector>& ptsxmax_tr,
                     std::vector<Vector>& ptsxmin_tr, int n, Matrix& x_tr, const Matrix& V,
@@ -42,9 +76,10 @@ int main()
     int n = 2;                  //<--- DIMENSION --->
     std::size_t _DIM_PLOT_ = 0;        //0..n-1 for the plot
     bool _ORIGINAL_SYS_PLOT_ = true; //plotting in original system or transformed?
-    bool _HULLCONSTRUCTION_ = false;
-    bool _TRAJECTORY_ = true;
+    bool _HULLCONSTRUCTION_ = true;
+    bool _TRAJECTORY_ = false;
 	Matrix A = Matrix(n,n);
+    Matrix AV = Matrix(n,n);
     Vector b = Vector(n);
     Vector x0 = Vector(n);
     Vector x0_2 = Vector(n);
@@ -52,6 +87,8 @@ int main()
     Matrix x_tr = Matrix::Zero(n,3);
     x_tr.col(2).array() = 0;
     Matrix xhomconstmaxmin = Matrix::Zero(2,2);
+
+    Vector b_AV = Vector(n);
 
     Vector xinhomconst = Vector(n);
     Vector factor = Vector(n);
@@ -69,7 +106,7 @@ int main()
     Matrix Vinv = Matrix(n,n);
 	DiagonalMatrix D = DiagonalMatrix(2); //type Number size 2
     //*************** RESULT *******************
-    std::vector<VPolytope<Number>> flowpipe;
+    std::vector<VPolytope<Number>> safeflowpipe;
     std::vector<VPolytope<Number>> exactflowpipe;
     //######   d/dx = A*x + b  ######
 	A << 	0.001, 1,
@@ -77,6 +114,8 @@ int main()
     b <<    0, -9.81;
     x0<<    100, 0;        //we require x0 > x0_2 elementwise
     x0_2 << 10, 0;          //else we swap values
+    //######   invariants      ######
+    b_AV.array() = 0;
 
 	std::cout << "d/dx = A*x+b, A:"<< std::endl << A << std::endl;
 	std::cout << "b: "<< std::endl << b << std::endl;
@@ -100,9 +139,11 @@ int main()
     traj_tr.col(0) = x_tr.col(0);
     traj_tr.col(1) = x_tr.col(1);
     std::cout << "traj_tr: " << std::endl << traj_tr << std::endl;
-
+    AV = A*V;
+    std::cout << "Invariants: A*V="<<std::endl << AV;
     //std::cout << "x_tr_bef_maxtrafo: "<< std::endl << x_tr << std::endl;
-    elwise_maxtransformation(x_tr, n); //ref to Eigen::Matrix to write Eigen::Matrix
+    mark_x0isMin(x_tr, n); 
+    swap_x0isMax(x_tr, n);
     //std::cout << "x_tr_after_maxtrafo: "<< std::endl << x_tr << std::endl;
     xinhomconst = b_tr.array() / D.diagonal().array();
     traj_homconst.col(0) = xinhomconst.array() + traj_tr.col(0).array();
@@ -127,9 +168,11 @@ int main()
         trajectory_plot(exactflowpipe, deltalimit, D, delta, n, xinhomconst, V, traj_tr, traj_homconst, 
                         traj_scale, _DIM_PLOT_, _ORIGINAL_SYS_PLOT_);
     if (_HULLCONSTRUCTION_) {
-    loop (flowpipe, deltalimit, directmaxmin, D, xhomconstmaxmin, delta, n, ptsxmax_tr, ptsxmin_tr,
+    loop (safeflowpipe, deltalimit, directmaxmin, D, xhomconstmaxmin, delta, n, ptsxmax_tr, ptsxmin_tr,
           derivFactormaxmin, x_tr, xinhomconst, V, _DIM_PLOT_, _ORIGINAL_SYS_PLOT_);
     }
+    //checking invariants for jump
+    //std::pair<bool,VPolytope> res = Segment.satisfiesHalfspace(AV,b_AV);
     plotter.plot2d();
     plotter.plotGen();
 
@@ -155,27 +198,23 @@ int main()
 	return 0;
 }
 
-//assigning elwise maximum/min address to xmax and xmin
-void elwise_maxtransformation(Matrix& x_tr, const int n) {
-    //std::cout << "x_tr beforemax: "<< std::endl << x_tr << std::endl;
+//mark if in transformed system x0<x0_2 in 3rd column
+void mark_x0isMin(Matrix& x_tr, const int n) {
     for(int i=0; i<n; ++i) {   //check if x0_tr >= x0_2_tr
         if(x_tr(i,0) < x_tr(i,1)) {
-            x_tr(i,2) = x_tr(i,0);
-            x_tr(i,0) = x_tr(i,1);
-            x_tr(i,1) = x_tr(i,2);
             x_tr(i,2) = 1; //mark second column to recognize later
         }
     }
-    //std::cout << "x_tr aftermax: "<< std::endl << x_tr << std::endl;
 }
-void elwise_backtransformation(Matrix& x_tr, const int n) {
+//check if in transformed system x0<x0_2 and swap if needed
+void swap_x0isMax(Matrix& x_tr, const int n) {
     //std::cout << "x_tr beforeback: "<< std::endl << x_tr << std::endl;
+    Vector tmp = Vector(n);
     for(int i=0; i<n; ++i) {
-        if(x_tr(i,2) == 1) { //check if x0_tr >= x0_2_tr
-            x_tr(i,2) =x_tr(i,0);
+        if(x_tr(i,2) == 1) { 
+            tmp(i)    = x_tr(i,0);
             x_tr(i,0) = x_tr(i,1);
-            x_tr(i,1) = x_tr(i,2);
-            x_tr(i,2) = 0; //mark second column to recognize later
+            x_tr(i,1) = tmp(i);
         }
     }
     //std::cout << "x_tr afterback: "<< std::endl << x_tr << std::endl;
@@ -240,10 +279,10 @@ void initialize (const  Matrix& xhomconst, const DiagonalMatrix& D, BoolMatrix& 
     derivFactormaxmin.col(0) = xhomconst.col(0).array()*D.diagonal().array();
     derivFactormaxmin.col(1) = xhomconst.col(1).array()*D.diagonal().array();
     if (_ORIGINAL_SYS_PLOT_) {
-        elwise_backtransformation(x_tr, n);
+        swap_x0isMax(x_tr, n);
         plot_addTimeSegment(0, x_tr, V, n, ptsxmax_tr, ptsxmin_tr, 
         _DIM_PLOT_, _ORIGINAL_SYS_PLOT_);
-        elwise_maxtransformation(x_tr, n);
+        swap_x0isMax(x_tr, n);
     } else {
         plot_addTimeSegment(0, x_tr, V, n, ptsxmax_tr, ptsxmin_tr, 
         _DIM_PLOT_, _ORIGINAL_SYS_PLOT_);
@@ -256,11 +295,13 @@ void initialize (const  Matrix& xhomconst, const DiagonalMatrix& D, BoolMatrix& 
     //2.pushing,writing,deleting   [maybe flushing in between??]
 
 void loop (std::vector<VPolytope<Number>>& flowpipe, std::size_t deltalimit, const BoolMatrix& directmaxmin,
-    const DiagonalMatrix& D, const Matrix& xhomconst, Number delta,
-    int n, std::vector<Vector>& ptsxmax_tr, std::vector<Vector>& ptsxmin_tr, 
-    Matrix& derivFactormaxmin, Matrix& x_tr, const Vector& xinhomconst, 
-    const Matrix& V, std::size_t _DIM_PLOT_, bool _ORIGINAL_SYS_PLOT_) {
+        const DiagonalMatrix& D, const Matrix& xhomconst, Number delta,
+        int n, std::vector<Vector>& ptsxmax_tr, std::vector<Vector>& ptsxmin_tr, 
+        Matrix& derivFactormaxmin, Matrix& x_tr, const Vector& xinhomconst, 
+        const Matrix& V, std::size_t _DIM_PLOT_, bool _ORIGINAL_SYS_PLOT_) {
+    //bool _ERROR_PLOT_, 
     Vector factor = Vector::Zero(n);
+    //Matrix x_tr_error = Matrix(n,2);
     //WE ASSUME we always want to check 1 timestep
     for(std::size_t j = 1; j <= deltalimit;  ++j) {
     	//std::cout << "Time: " << j*delta << std::endl;
@@ -282,13 +323,15 @@ void loop (std::vector<VPolytope<Number>>& flowpipe, std::size_t deltalimit, con
                 derivFactormaxmin(i,1) = xhomconst(i,1)*D.diagonal()(i)*factor(i);
             }
         }
-        //std::cout<<"x_tr["<<j<<"]: "<<std::endl<<x_tr;
-        //std::cout<<"j: "<<j<<" factor: "<<std::endl<<factor;
+        //x_tr_error.column(0).array() = xhomconst.column(0).array()*factor.array()-xinhomconst.array();
+        //x_tr_error.column(1).array() = xhomconst.column(1).array()*factor.array()-xinhomconst.array();
+        //x_tr_error.column(0) = x_tr.column(0) - x_tr_error;
+        //x_tr_error.column(1) -= x_tr.column(1);
         if (_ORIGINAL_SYS_PLOT_) {
-            elwise_backtransformation(x_tr, n);
+            swap_x0isMax(x_tr, n);
             plot_addTimeSegment(j, x_tr, V, n, ptsxmax_tr, ptsxmin_tr, 
             _DIM_PLOT_, _ORIGINAL_SYS_PLOT_);
-            elwise_maxtransformation(x_tr, n);
+            swap_x0isMax(x_tr, n);
         } else {
             plot_addTimeSegment(j, x_tr, V, n, ptsxmax_tr, ptsxmin_tr, 
             _DIM_PLOT_, _ORIGINAL_SYS_PLOT_);
@@ -338,13 +381,12 @@ void plot_addTimeSegment(std::size_t traj_time, const Matrix& traj_tr, const Mat
     }
     plot_lower.push_back(plot_vector);
 }
-//lower plotting::colors[plotting::blue]
-//upper plotting::colors[plotting::red]
 void addSegment(std::vector<VPolytope<Number>>& flowpipe, std::vector<Vector>& ptsxmax_tr,
         std::vector<Vector>& ptsxmin_tr, std::size_t colorUpper, std::size_t colorLower) { 
     Plotter<Number>& plotter = Plotter<Number>::getInstance();
     VPolytope<Number> vpoly_upper = VPolytope<Number>(ptsxmax_tr);
     VPolytope<Number> vpoly_lower = VPolytope<Number>(ptsxmin_tr);
+    flowpipe.push_back(vpoly_upper.unite(vpoly_lower));
     unsigned v = plotter.addObject(vpoly_upper.vertices());
     plotter.setObjectColor(v, colorUpper);
     unsigned w = plotter.addObject(vpoly_lower.vertices());
