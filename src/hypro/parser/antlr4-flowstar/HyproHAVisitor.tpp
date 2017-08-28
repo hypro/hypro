@@ -4,7 +4,8 @@ namespace hypro {
 
 	template<typename Number>
 	HyproHAVisitor<Number>::HyproHAVisitor() :
-		vars()
+		vars(),
+		reachSettings()
 	{ }
 
 	template<typename Number>
@@ -22,8 +23,8 @@ namespace hypro {
 		//2.Calls visit(ctx->setting()) to get reachability settings
 		//.antlrcpp::Any::as<ReachabilitySettings<Number>>();
 		HyproSettingVisitor<Number> settingVisitor = HyproSettingVisitor<Number>(varVec);
-		ReachabilitySettings<Number> rSettings = settingVisitor.visit(ctx->setting());
-		std::cout << "---- rSettings is now: " << rSettings << std::endl;
+		reachSettings = settingVisitor.visit(ctx->setting());
+		std::cout << "---- reachSettings is now: " << reachSettings << std::endl;
 
 		//3.Calls visit(ctx->modes()) to get locSet 
 		HyproLocationVisitor<Number> locVisitor = HyproLocationVisitor<Number>(varVec);

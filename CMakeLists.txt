@@ -167,6 +167,7 @@ add_subdirectory(src/resources)
 #set(hypro_LIBRARIES_DYNAMIC ${hypro_LIBRARIES_DYNAMIC} ${GLPK_LIBRARIES} )
 set(hypro_LIBRARIES_DYNAMIC ${hypro_LIBRARIES_DYNAMIC} ${GLPK_LIBRARIES} ${ANTLR4CPP_LIBS} )
 set(hypro_INCLUDE_DIRS ${hypro_INCLUDE_DIRS} ${GLPK_INCLUDE_DIR} ${ANTLR4CPP_INCLUDE_DIRS} )
+message(STATUS "antlr_include_dirs: ${ANTLR4CPP_INCLUDE_DIRS}")
 
 # This is needed in case carl was not installed
 if(NOT carl_FOUND)

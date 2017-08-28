@@ -38,21 +38,27 @@ class HyproHAVisitor : public HybridAutomatonBaseVisitor {
 		//access to the variable names stated in the variable declaration
 		std::vector<std::string> vars;
 
+		//Stores the parsed reachability settings 
+		ReachabilitySettings<Number> reachSettings;
+
 		//Inherited from HybridAutomatonBaseVisitor which is generated from AnTLR
 		antlrcpp::Any visitVardeclaration(HybridAutomatonParser::VardeclarationContext *ctx) override;
 
 	public:
 
+		//Is first defined in HybridAutomaton.h
 		using locationStateMap = std::multimap<const Location<Number>*, State<Number,ConstraintSet<Number>>, locPtrComp<Number>>;
 
+		//Constructor and Destructor
 		HyproHAVisitor();
 		~HyproHAVisitor();
 
 		//Inherited from HybridAutomatonBaseVisitor which is generated from AnTLR
 		//As this is the starting rule, it must stay public.
 		antlrcpp::Any visitStart(HybridAutomatonParser::StartContext *ctx) override;
-		
 
+		//Getter for settings
+		inline ReachabilitySettings<Number> getSettings() { return reachSettings; }		
 };
 
 template<typename Number>

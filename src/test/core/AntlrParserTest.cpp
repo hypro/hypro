@@ -2,6 +2,7 @@
 #include "../../hypro/parser/antlr4-flowstar/HybridAutomatonParser.h"
 #include "../../hypro/parser/antlr4-flowstar/HyproHAVisitor.h"
 #include "../../hypro/datastructures/HybridAutomaton/HybridAutomaton.h"
+//#include "../../hypro/datastructures/HybridAutomaton/Settings.h"
 #include <iostream>
 #include <fstream>
 #include "gtest/gtest.h"
@@ -94,7 +95,8 @@ TYPED_TEST(AntlrParserTest, SettingVEmptySettings){
 TYPED_TEST(AntlrParserTest, JustTesting){
 
 	//std::string path("../../../../src/test/core/examples/example_init_parsing.txt");
-	std::string path("../examples/input/bouncing_ball.model");
+	//std::string path("../examples/input/bouncing_ball.model");
+	std::string path("../../../../examples/input/bouncing_ball.model");
 
 	//Tell current path - /home/ptse/hiwi/hypro/build/src/test/core
 	this->cwd();
@@ -142,6 +144,9 @@ TYPED_TEST(AntlrParserTest, JustTesting){
 	hypro::HyproHAVisitor<TypeParam> visitor;
 
 	hypro::HybridAutomaton<TypeParam> h = (visitor.visit(tree)).antlrcpp::Any::as<hypro::HybridAutomaton<TypeParam>>();
+	hypro::ReachabilitySettings<TypeParam> r = visitor.getSettings();
+	std::cout << r << std::endl;
+
 	std::cout << "I RETURNED FROM VISITING" << std::endl;
 
 	SUCCEED();

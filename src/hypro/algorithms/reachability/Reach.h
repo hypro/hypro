@@ -12,11 +12,14 @@
 
 #pragma once
 #include "util.h"
-#include "Settings.h"
+//#include "Settings.h"
+#include "datastructures/HybridAutomaton/Settings.h"
+#include "datastructures/HybridAutomaton/HybridAutomaton.h"
+#include "datastructures/HybridAutomaton/State.h"
 #include "config.h"
-#include "datastructures/hybridAutomata/HybridAutomaton.h"
-#include "datastructures/hybridAutomata/State.h"
-#include "datastructures/hybridAutomata/RawState.h"
+//#include "datastructures/hybridAutomata/HybridAutomaton.h"
+//#include "datastructures/hybridAutomata/State.h"
+//#include "datastructures/hybridAutomata/RawState.h"
 #include "util/Plotter.h"
 #include "representations/Ellipsoids/Ellipsoid.h"
 #include "representations/GeometricObject.h"
