@@ -163,10 +163,10 @@ load_library(hypro GTest 0)
 load_library(hypro carl 0)
 add_subdirectory(src/resources)
 
-set(hypro_LIBRARIES_STATIC ${hypro_LIBRARIES_STATIC} ${ANTLR4CPP_LIBS} ) # TODO: What about glpk static?
-set(hypro_LIBRARIES_DYNAMIC ${hypro_LIBRARIES_DYNAMIC} ${GLPK_LIBRARIES} )
-#set(hypro_LIBRARIES_DYNAMIC ${hypro_LIBRARIES_DYNAMIC} ${GLPK_LIBRARIES} ${ANTLR4CPP_LIBS} )
-#set(hypro_INCLUDE_DIRS ${hypro_INCLUDE_DIRS} ${GLPK_INCLUDE_DIR} ${ANTLR4CPP_INCLUDE_DIRS} )
+#set(hypro_LIBRARIES_STATIC ${hypro_LIBRARIES_STATIC} ${ANTLR4CPP_LIBS} ) # TODO: What about glpk static?
+#set(hypro_LIBRARIES_DYNAMIC ${hypro_LIBRARIES_DYNAMIC} ${GLPK_LIBRARIES} )
+set(hypro_LIBRARIES_DYNAMIC ${hypro_LIBRARIES_DYNAMIC} ${GLPK_LIBRARIES} ${ANTLR4CPP_LIBS} )
+set(hypro_INCLUDE_DIRS ${hypro_INCLUDE_DIRS} ${GLPK_INCLUDE_DIR} ${ANTLR4CPP_INCLUDE_DIRS} )
 
 # This is needed in case carl was not installed
 if(NOT carl_FOUND)
