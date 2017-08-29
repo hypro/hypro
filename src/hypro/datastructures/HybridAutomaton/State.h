@@ -338,7 +338,12 @@ class State
     State<Number,Representation,Rargs...> partiallyMinkowskiSum(const State<Number,Representation,Rargs...>& rhs, std::size_t I ) const;
 
     std::size_t getDimension(std::size_t I) const;
+
     Number getSupremum(std::size_t I) const;
+
+    void removeRedundancy();
+
+    void partiallyRemoveRedundancy(std::size_t I);
 
     /**
      * @brief      Outstream operator.

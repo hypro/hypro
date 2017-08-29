@@ -168,4 +168,81 @@ State<Number,Representation,Rargs...> State<Number,Representation,Rargs...>::par
 	return res;
 }
 
+
+template<typename Number, typename Representation, typename ...Rargs>
+State<Number,Representation,Rargs...> State<Number,Representation,Rargs...>::minkowskiSum(const State<Number,Representation,Rargs...>& rhs) const {
+	//If only one representation given: avoid boost visitor
+	if(mTypes.size() == 1){
+		return boost::get<Representation>(mSets.at(0)).minkowskiSum(rhs);
+	}
+	//For more representations: use boost visitor
+	State<Number,Representation,Rargs...> res(*this);
+	assert(mSets.size() == rhs.getSets().size());
+	for(std::size_t i=0; i < rhs.getSets().size(); i++){
+		res.setSetDirect(boost::apply_visitor(genericMinkowskiSumVisitor<repVariant>(mSets.at(i), rhs.getSet(i))), i);	
+	}
+	return res;
+}
+
+template<typename Number, typename Representation, typename ...Rargs>
+State<Number,Representation,Rargs...> State<Number,Representation,Rargs...>::partiallyMinkowskiSum(const State<Number,Representation,Rargs...>& rhs, std::size_t I ) const {
+	assert(i < mSets.size());
+	assert(i < rhs.getSets().size());
+	//If only one representation given: avoid boost visitor
+	if(mTypes.size() == 1){
+		return boost::get<Representation>(mSets.at(0)).minkowskiSum(rhs);
+	}
+	//For more representations avaiable: use boost visitor
+	State<Number,Representation,Rargs...> res(*this);
+	res.setSetDirect(boost::apply_visitor(genericMinkowskiSumVisitor<repVariant>(mSets.at(I), rhs.getSet(I))), I);	
+	return res;
+}
+
+template<typename Number, typename Representation, typename ...Rargs>
+std::size_t State<Number,Representation,Rargs...>::getDimension(std::size_t I) const {
+	assert(i < mSets.size());
+	//If only one representation given: avoid boost visitor
+	if(mTypes.size() == 1){
+		return boost::get<Representation>(mSets.at(0)).dimension();
+	}
+	//For more representations avaiable: use boost visitor
+	return boost::apply_visitor(genericDimensionVisitor()(mSets.at(I)));
+}
+
+template<typename Number, typename Representation, typename ...Rargs>
+Number State<Number,Representation,Rargs...>::getSupremum(std::size_t I) const {
+	assert(i < mSets.size());
+	//If only one representation given: avoid boost visitor
+	if(mTypes.size() == 1){
+		return boost::get<Representation>(mSets.at(0)).supremum();
+	}
+	//For more representations avaiable: use boost visitor
+	return boost::apply_visitor(genericSupremumVisitor<Number>()(mSets.at(I)));
+}
+
+template<typename Number, typename Representation, typename ...Rargs>
+void State<Number,Representation,Rargs...>::removeRedundancy(){
+	//If only one representation given: avoid boost visitor
+	if(mTypes.size() == 1){
+		return boost::get<Representation>(mSets.at(0)).removeRedundancy();
+	}
+	//For more representations avaiable: use boost visitor
+	State<Number,Representation,Rargs...> res(*this);
+	for(std::size_t i=0; i < mSets.size(); i++){
+		res.setSetDirect(boost::apply_visitor(genericReductionVisitor<repVariant,Number>()(mSets.at(i)), i));	
+	}
+	return res;
+}
+
+template<typename Number, typename Representation, typename ...Rargs>
+void State<Number,Representation,Rargs...>::partiallyRemoveRedundancy(std::size_t I){
+	assert(i < mSets.size());
+	//If only one representation given: avoid boost visitor
+	if(mTypes.size() == 1){
+		return boost::get<Representation>(mSets.at(0)).removeRedundancy();
+	}
+	//For more representations avaiable: use boost visitor
+	return boost::apply_visitor(genericReductionVisitor<repVariant,Number>()(mSets.at(I)), I);
+}
+
 } // hypro
