@@ -135,6 +135,17 @@ State<Number,Representation,Rargs...> State<Number,Representation,Rargs...>::app
 	return res;
 }
 
+template<typename Number, typename Representation, typename ...Rargs>
+State<Number,Representation,Rargs...> State<Number,Representation,Rargs...>::applyTransformation(const ConstraintSet<Number>& trafo ) const {
+	State<Number,Representation,Rargs...> res(*this);
+	TRACE("hypro.datastructures","Apply transformation of " << mSets.size() << " sets (" << trafo.size() << " transformations).");
+	assert(mSets.size() == 1);
+	for(std::size_t i = 0; i < mSets.size(); ++i) {
+		res.setSetDirect(boost::apply_visitor(genericAffineTransformationVisitor<repVariant, Number>(trafo.matrix(), trafo.vector()), mSets.at(i)), i);
+	}
+	return res;
+}
+
 
 template<typename Number, typename Representation, typename ...Rargs>
 State<Number,Representation,Rargs...> State<Number,Representation,Rargs...>::partiallyApplyTransformation(const std::vector<ConstraintSet<Number>>& trafos, const std::vector<std::size_t>& sets ) const {

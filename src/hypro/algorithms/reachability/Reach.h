@@ -139,7 +139,7 @@ private:
 
 	matrix_t<Number> computeTrafoMatrix( Location<Number>* _loc ) const;
 	boost::tuple<bool, State_t<Number>, matrix_t<Number>, vector_t<Number>> computeFirstSegment( const State_t<Number>& _state ) const;
-	bool intersectBadStates( const State_t<Number>& _state, const Representation& _segment ) const;
+	bool intersectBadStates( const State_t<Number>& _state, const State_t<Number>& _segment ) const;
 };
 
 }  // namespace reachability

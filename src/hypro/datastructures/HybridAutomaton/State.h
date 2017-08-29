@@ -311,6 +311,8 @@ class State
      */
     State<Number,Representation,Rargs...> applyTransformation(const std::vector<ConstraintSet<Number>>& trafos ) const;
 
+    State<Number,Representation,Rargs...> applyTransformation(const ConstraintSet<Number>& trafo ) const;
+
     /**
      * @brief      Meta-function, which applies an affine transformation to each set contained in the state and whose index is contained
      * in the second parameter.
@@ -327,6 +329,16 @@ class State
      * @return     A state where the i-th set has been transformed by the passed parameters.
      */
     State<Number,Representation,Rargs...> partiallyApplyTransformation(const ConstraintSet<Number>& trafo, std::size_t I ) const;
+
+
+    // TODO
+
+    State<Number,Representation,Rargs...> minkowskiSum(const State<Number,Representation,Rargs...>& rhs) const;
+
+    State<Number,Representation,Rargs...> partiallyMinkowskiSum(const State<Number,Representation,Rargs...>& rhs, std::size_t I ) const;
+
+    std::size_t getDimension(std::size_t I) const;
+    Number getSupremum(std::size_t I) const;
 
     /**
      * @brief      Outstream operator.

@@ -31,37 +31,36 @@ namespace reachability {
 						//DEBUG("hypro.reacher","Adding initial set " << boost::get<Box<Number>>(s.set));
 						break;
 					}
-
-					// TODO
 					case representation_name::polytope_h: {
-						s.set = tmpSet;
-						DEBUG("hypro.reacher","Adding initial set " << boost::get<HPolytope<Number>>(s.set));
+						s.setSet(Converter<Number>::toHPolytope(boost::get<ConstraintSet<Number>>(state.second.getSet())));
+						//DEBUG("hypro.reacher","Adding initial set " << boost::get<Box<Number>>(s.set));
 						break;
 					}
 					case representation_name::polytope_v: {
-						s.set = Converter<Number>::toVPolytope(tmpSet);
-						DEBUG("hypro.reacher","Adding initial set " << boost::get<VPolytope<Number>>(s.set));
-						break;
-					}
-					case representation_name::zonotope: {
-						s.set = Converter<Number>::toZonotope(tmpSet);
-						DEBUG("hypro.reacher","Adding initial set " << boost::get<Zonotope<Number>>(s.set));
+						s.setSet(Converter<Number>::toVPolytope(boost::get<ConstraintSet<Number>>(state.second.getSet())));
+						//DEBUG("hypro.reacher","Adding initial set " << boost::get<Box<Number>>(s.set));
 						break;
 					}
 					case representation_name::support_function: {
-						s.set = Converter<Number>::toSupportFunction(tmpSet);
-						DEBUG("hypro.reacher","Adding initial set " << boost::get<SupportFunction<Number>>(s.set));
+						s.setSet(Converter<Number>::toSupportFunction(boost::get<ConstraintSet<Number>>(state.second.getSet())));
+						//DEBUG("hypro.reacher","Adding initial set " << boost::get<Box<Number>>(s.set));
+						break;
+					}
+					case representation_name::zonotope: {
+						s.setSet(Converter<Number>::toZonotope(boost::get<ConstraintSet<Number>>(state.second.getSet())));
+						//DEBUG("hypro.reacher","Adding initial set " << boost::get<Box<Number>>(s.set));
 						break;
 					}
 					#ifdef HYPRO_USE_PPL
 					case representation_name::ppl_polytope: {
-						s.set = Representation(state.second.set.first, state.second.set.second);
-						DEBUG("hypro.reacher","Adding initial set " << boost::get<Polytope<Number>>(s.set));
+						s.setSet(Converter<Number>::toPolytope(boost::get<ConstraintSet<Number>>(state.second.getSet())));
+						//DEBUG("hypro.reacher","Adding initial set " << boost::get<Box<Number>>(s.set));
 						break;
 					}
 					#endif
+
 					default: {
-						s.set = Representation(state.second.set.first, state.second.set.second);
+						s.setSet(Converter<Number>::toBox(boost::get<ConstraintSet<Number>>(state.second.getSet())));
 					}
 				}
 				s.getTimestamp() = carl::Interval<Number>(0);
@@ -119,11 +118,11 @@ namespace reachability {
 			}
 
 			// insert first Segment into the empty flowpipe
-			Representation currentSegment;
+			State_t<Number> currentSegment;
 			if(noFlow) {
-				currentSegment = boost::get<Representation>(_state.set);
+				currentSegment = _state;
 			} else {
-				currentSegment = boost::get<Representation>(boost::get<1>(initialSetup).set);
+				currentSegment = boost::get<1>(initialSetup);
 			}
 			flowpipe.push_back( currentSegment );
 
@@ -137,17 +136,17 @@ namespace reachability {
 			}
 
 			// Set after linear transformation
-			Representation nextSegment;
+			State_t<Number> nextSegment;
 #ifdef USE_SYSTEM_SEPARATION
-			Representation autonomPart = currentSegment;
+			State_t<Number> autonomPart = currentSegment;
 #ifdef USE_ELLIPSOIDS
-			// Easy to addapt to any Representation use ellipsoid for the idea of my masterthesis here
+			// Easy to addapt to any State_t<Number> use ellipsoid for the idea of my masterthesis here
 			Ellipsoid<Number> nonautonomPart(mBloatingFactor, currentSegment.dimension());
 			Ellipsoid<Number> totalBloating = nonautonomPart;
 #else
 			Ellipsoid<Number> nonautonomPartAsEllispsoid(mBloatingFactor, currentSegment.dimension());
-			Representation nonautonomPart = Representation(nonautonomPartAsEllispsoid);
-			Representation totalBloating = nonautonomPart;
+			State_t<Number> nonautonomPart = State_t<Number>(nonautonomPartAsEllispsoid);
+			State_t<Number> totalBloating = nonautonomPart;
 #endif
 #endif
 #ifdef REACH_DEBUG
@@ -192,10 +191,10 @@ namespace reachability {
 				nonautonomPart = nonautonomPart.linearTransformation(boost::get<2>(initialSetup));
 				totalBloating = totalBloating.minkowskiSum(nonautonomPart);
 #else
-				nextSegment =  currentSegment.affineTransformation(boost::get<2>(initialSetup), boost::get<3>(initialSetup));
+				nextSegment =  currentSegment.applyTimestep(std::vector<std::pair<matrix_t<Number>, vector_t<Number>>>({  std::make_pair(boost::get<2>(initialSetup), boost::get<3>(initialSetup)) }));
 #endif
 				// extend flowpipe (only if still within Invariant of location)
-				std::pair<bool, Representation> newSegment = nextSegment.satisfiesHalfspaces( _state.getLocation()->invariant().mat, _state.getLocation()->invariant().vec );
+				std::pair<bool, State_t<Number>> newSegment = nextSegment.satisfies( Condition<Number>(_state.getLocation()->invariant().mat, _state.getLocation()->invariant().vec) );
 #ifdef REACH_DEBUG
 				std::cout << "Next Flowpipe Segment: " << newSegment.second << std::endl;
 				std::cout << "still within Invariant?: ";

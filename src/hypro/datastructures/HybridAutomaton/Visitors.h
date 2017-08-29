@@ -27,6 +27,28 @@ public:
 };
 
 template<typename T>
+class genericMinkowskiSumVisitor
+    : public boost::static_visitor<T>
+{
+public:
+
+	template<typename A, typename B>
+	inline T operator()(const A& lhs, const B&) const {
+		assert(false && "MinkowskiSum OF DIFFERENT TYPES.");
+		return lhs;
+	}
+
+	template<typename A>
+    inline T operator()(const A& lhs, const A& rhs) const {
+    	//auto tmpHPoly = Converter<Number>::toHPolytope(lhs);
+		//TRACE("hydra.datastructures","Union visitor lhs " << tmpHPoly);
+		//tmpHPoly = Converter<Number>::toHPolytope(rhs);
+		//TRACE("hydra.datastructures","Union visitor rhs " << tmpHPoly);
+ 		return lhs.minkowskiSum(rhs);
+    }
+};
+
+template<typename T>
 class genericIntersectVisitor
     : public boost::static_visitor<T>
 {
