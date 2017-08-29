@@ -12,7 +12,7 @@
 class  FormulaLexer : public antlr4::Lexer {
 public:
   enum {
-    T__0 = 1, T__1 = 2, T__2 = 3, IN = 4, COMMENT = 5, EQUALS = 6, BOOLRELATION = 7, 
+    T__0 = 1, T__1 = 2, T__2 = 3, IN = 4, COMMENT = 5, EQUALS = 6, BOOLRELATION = 7,
     PLUS = 8, TIMES = 9, NUMBER = 10, VARIABLE = 11, WS = 12
   };
 

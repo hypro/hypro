@@ -26,9 +26,9 @@ if(STATICLIB_SWITCH)
 	#message("hypro libraries static: " ${hypro_LIBRARIES_STATIC})
 	#message("hypro include dirs: " ${hypro_INCLUDE_DIRS})
 	#message("hypro sources: " ${sources})
-	target_link_libraries(${PROJECT_NAME}_static PUBLIC ${hypro_LIBRARIES_STATIC})
+	target_link_libraries(${PROJECT_NAME}_static PUBLIC ${${PROJECT_NAME}_LIBRARIES_STATIC})
 	target_include_directories(${PROJECT_NAME}_static
-		PRIVATE ${hypro_INCLUDE_DIRS} ${CMAKE_CURRENT_SOURCE_DIR}
+		PRIVATE ${${PROJECT_NAME}_INCLUDE_DIRS} ${CMAKE_CURRENT_SOURCE_DIR}
 		PUBLIC
 		$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
 		$<INSTALL_INTERFACE:include/${PROJECT_NAME}>
@@ -50,12 +50,13 @@ else()
 	)
 	#message(STATUS "antlr libs path: " ${ANTLR4CPP_LIBS})
 	#message(STATUS "antlr include dirs path: " ${ANTLR4CPP_INCLUDE_DIRS})
-	#message(STATUS "hypro libraries dynamic: " "${hypro_LIBRARIES_DYNAMIC}")
-	#message("hypro include dirs: " ${hypro_INCLUDE_DIRS})
+	message(STATUS "hypro libraries dynamic: " "${${PROJECT_NAME}_LIBRARIES_DYNAMIC}")
+	#message(STATUS "hypro interface include dir: ${CMAKE_CURRENT_SOURCE_DIR}")
+	message("hypro include dirs: " ${${PROJECT_NAME}_INCLUDE_DIRS})
 	#message("hypro sources: " ${sources})
-	target_link_libraries(${PROJECT_NAME} PUBLIC ${hypro_LIBRARIES_DYNAMIC} pthread)
+	target_link_libraries(${PROJECT_NAME} PUBLIC ${${PROJECT_NAME}_LIBRARIES_DYNAMIC} pthread)
 	target_include_directories(${PROJECT_NAME}
-		PRIVATE ${hypro_INCLUDE_DIRS} ${CMAKE_CURRENT_SOURCE_DIR}
+		PRIVATE ${${PROJECT_NAME}_INCLUDE_DIRS} ${CMAKE_CURRENT_SOURCE_DIR}
 		PUBLIC
 		$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
 		$<INSTALL_INTERFACE:include/${PROJECT_NAME}>

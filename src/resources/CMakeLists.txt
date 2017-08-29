@@ -22,17 +22,13 @@ else()
 	include(gtest.cmake)
 endif()
 
+include(glpk.cmake)
 
-#if(GLPK_FOUND)
-#	message("-- Use system version of GLPK")
-#else()
-	message("-- Use included version of GLPK")
-	include(glpk.cmake)
-#endif()
+message(STATUS "Intermediate include dirs: ${${PROJECT_NAME}_INCLUDE_DIRS}")
 
 
 #AntLR
-message("-- Use system version of AnTLR")
+message("-- Use included version of AnTLR")
 
 #set variable pointing to antlr tool
 set(ANTLR4CPP_JAR_LOCATION ${PROJECT_SOURCE_DIR}/src/resources/antlr-4.7-complete.jar)

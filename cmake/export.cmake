@@ -26,7 +26,7 @@ if(STATICLIB_SWITCH)
 	endif()
 else()
 	# export carl by invoking its find script
-	set(DEPENDENT_TARGETS "${${DEPENDENT_TARGETS}}find_package(carl)
+	set(DEPENDENT_TARGETS "${DEPENDENT_TARGETS}find_package(carl)
 include_directories(${carl_INCLUDE_DIR})")
 
 	#export_target(DEPENDENT_TARGETS carl_SHARED)
@@ -44,6 +44,7 @@ export_target(DEPENDENT_TARGETS GMP_SHARED)
 export_target(DEPENDENT_TARGETS GMP_STATIC)
 export_target(DEPENDENT_TARGETS GMPXX_SHARED)
 export_target(DEPENDENT_TARGETS GMPXX_STATIC GMP_STATIC)
+export_target(DEPENDENT_TARGETS ANTLR4_STATIC)
 
 include(CMakePackageConfigHelpers)
 

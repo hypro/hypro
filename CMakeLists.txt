@@ -154,26 +154,30 @@ endif()
 # C.1. Required libraries for core.
 # # # # # # # # # # # # # # # # # # # # # #
 
-load_library(hypro Boost 1.55.0)
+# initialize lists for include directories and library files
+set(${PROJECT_NAME}_INCLUDE_DIRS "" CACHE STRING "Include directories var")
+
+message(STATUS "Attempt to load boost")
+load_library(${PROJECT_NAME} Boost 1.55.0)
 set(Boost_USE_STATIC_LIBS        ON) # only find static libs
 set(Boost_USE_MULTITHREADED      ON)
 set(Boost_USE_STATIC_RUNTIME    OFF)
 
-load_library(hypro GTest 0)
-load_library(hypro carl 0)
+message(STATUS "Attempt to load gtest")
+load_library(${PROJECT_NAME} GTest 0)
+message(STATUS "Attempt to load carl to group ${PROJECT_NAME}")
+load_library(${PROJECT_NAME} carl 0)
+
+message(STATUS "include dirs before including resources: ${${PROJECT_NAME}_INCLUDE_DIRS}")
+
 add_subdirectory(src/resources)
+
+message(STATUS "include dirs after including resources: ${${PROJECT_NAME}_INCLUDE_DIRS}")
 
 #set(hypro_LIBRARIES_STATIC ${hypro_LIBRARIES_STATIC} ${ANTLR4CPP_LIBS} ) # TODO: What about glpk static?
 #set(hypro_LIBRARIES_DYNAMIC ${hypro_LIBRARIES_DYNAMIC} ${GLPK_LIBRARIES} )
-set(hypro_LIBRARIES_DYNAMIC ${hypro_LIBRARIES_DYNAMIC} ${GLPK_LIBRARIES} ${ANTLR4CPP_LIBS} )
-set(hypro_INCLUDE_DIRS ${hypro_INCLUDE_DIRS} ${GLPK_INCLUDE_DIR} ${ANTLR4CPP_INCLUDE_DIRS} )
-message(STATUS "antlr_include_dirs: ${ANTLR4CPP_INCLUDE_DIRS}")
-
-# This is needed in case carl was not installed
-if(NOT carl_FOUND)
-	set(hypro_LIBRARIES_DYNAMIC ${hypro_LIBRARIES_DYNAMIC} ${carl_LIBRARIES} )
-	set(hypro_INCLUDE_DIRS ${hypro_INCLUDE_DIRS} ${carl_INCLUDE_DIR} )
-endif()
+#set(hypro_LIBRARIES_DYNAMIC ${hypro_LIBRARIES_DYNAMIC} ${GLPK_LIBRARIES} ${ANTLR4CPP_LIBS} )
+#set(hypro_INCLUDE_DIRS ${hypro_INCLUDE_DIRS} ${GLPK_INCLUDE_DIR} ${ANTLR4CPP_INCLUDE_DIRS} )
 
 if(CLANG_TIDY)
 	set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
@@ -206,23 +210,23 @@ else()
 endif()
 
 if(HYPRO_USE_PPL)
-	load_library(hypro PPL 0)
+	load_library(${PROJECT_NAME} PPL 0)
 endif()
 
 if(HYPRO_USE_SMTRAT)
-	load_library(hypro smtrat 0)
+	load_library(${PROJECT_NAME} smtrat 0)
 endif()
 
 if(HYPRO_USE_Z3)
-	load_library(hypro z3 0)
+	load_library(${PROJECT_NAME} z3 0)
 endif()
 
 if(HYPRO_USE_SOPLEX)
-	load_library(hypro soplex 0)
+	load_library(${PROJECT_NAME} soplex 0)
 endif()
 
 if(HYPRO_USE_OPENMP)
-	load_library(hypro OpenMP 0)
+	load_library(${PROJECT_NAME} OpenMP 0)
 	if(OPENMP_FOUND)
 		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fopenmp")
 	endif()
@@ -252,5 +256,6 @@ add_subdirectory(examples EXCLUDE_FROM_ALL)
 # # # # # # # # # # # # # # # # # # # # # #
 # E. Export Compile Information.
 # # # # # # # # # # # # # # # # # # # # # #
+
 
 include(export)
