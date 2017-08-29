@@ -7,33 +7,32 @@ namespace reachability {
 	using clock = std::chrono::high_resolution_clock;
 	using timeunit = std::chrono::microseconds;
 
-	template<typename Number, typename Representation>
-	Reach<Number,Representation>::Reach( const HybridAutomaton<Number>& _automaton, const ReachabilitySettings<Number>& _settings)
+	template<typename Number>
+	Reach<Number>::Reach( const HybridAutomaton<Number>& _automaton, const ReachabilitySettings<Number>& _settings)
 		: mAutomaton( _automaton ), mSettings(_settings), mCurrentLevel(0), mIntersectedBadStates(false) {
 			//mAutomaton.addArtificialDimension();
 		}
 
 
-	template<typename Number, typename Representation>
-	std::vector<std::pair<unsigned, flowpipe_t<Representation>>> Reach<Number,Representation>::computeForwardReachability() {
+	template<typename Number>
+	std::vector<std::pair<unsigned, flowpipe_t<Number>>> Reach<Number>::computeForwardReachability() {
 		// set up working queue -> add initial states
 		// collect all computed reachable states
-		std::vector<std::pair<unsigned, flowpipe_t<Representation>>> collectedReachableStates;
+		std::vector<std::pair<unsigned, flowpipe_t<Number>>> collectedReachableStates;
 
 		for ( const auto& state : mAutomaton.initialStates() ) {
 			if(mCurrentLevel <= mSettings.jumpDepth){
 				// Convert representation in state from matrix and vector to used representation type.
-				State<Number> s;
-				s.location = state.second.location;
+				State_t<Number> s(state.second);
 
-				HPolytope<Number> tmpSet(state.second.set.first, state.second.set.second);
-				representation_name type = Representation::type();
-				switch(type){
+				switch(mType){
 					case representation_name::box: {
-						s.set = Converter<Number>::toBox(tmpSet);
-						DEBUG("hypro.reacher","Adding initial set " << boost::get<Box<Number>>(s.set));
+						s.setSet(Converter<Number>::toBox(boost::get<ConstraintSet<Number>>(state.second.getSet())));
+						//DEBUG("hypro.reacher","Adding initial set " << boost::get<Box<Number>>(s.set));
 						break;
 					}
+
+					// TODO
 					case representation_name::polytope_h: {
 						s.set = tmpSet;
 						DEBUG("hypro.reacher","Adding initial set " << boost::get<HPolytope<Number>>(s.set));
@@ -65,7 +64,7 @@ namespace reachability {
 						s.set = Representation(state.second.set.first, state.second.set.second);
 					}
 				}
-				s.timestamp = carl::Interval<Number>(0);
+				s.getTimestamp() = carl::Interval<Number>(0);
 				mWorkingQueue.emplace_back(initialSet<Number>(mCurrentLevel, s));
 			}
 		}
@@ -76,37 +75,37 @@ namespace reachability {
 
 			mCurrentLevel = boost::get<0>(nextInitialSet);
 			assert(mCurrentLevel <= mSettings.jumpDepth);
-			INFO("hypro.reacher","Depth " << mCurrentLevel << ", Location: " << boost::get<1>(nextInitialSet).location->id());
-			flowpipe_t<Representation> newFlowpipe = computeForwardTimeClosure(boost::get<1>(nextInitialSet));
+			INFO("hypro.reacher","Depth " << mCurrentLevel << ", Location: " << boost::get<1>(nextInitialSet).getLocation()->id());
+			flowpipe_t<Number> newFlowpipe = computeForwardTimeClosure(boost::get<1>(nextInitialSet));
 
-			collectedReachableStates.emplace_back(std::make_pair(boost::get<1>(nextInitialSet).location->id(), newFlowpipe));
+			collectedReachableStates.emplace_back(std::make_pair(boost::get<1>(nextInitialSet).getLocation()->id(), newFlowpipe));
 		}
 
 		return collectedReachableStates;
 	}
 
 
-	template<typename Number, typename Representation>
-	flowpipe_t<Representation> Reach<Number,Representation>::computeForwardTimeClosure( const State<Number>& _state ) {
-		assert(!_state.timestamp.isUnbounded());
+	template<typename Number>
+	flowpipe_t<Number> Reach<Number>::computeForwardTimeClosure( const State_t<Number>& _state ) {
+		assert(!_state.getTimestamp().isUnbounded());
 #ifdef REACH_DEBUG
-		std::cout << "Location: " << _state.location->id() << std::endl;
-		std::cout << "Location printed : " << *_state.location << std::endl;
+		std::cout << "Location: " << _state.getLocation()->id() << std::endl;
+		std::cout << "Location printed : " << *_state.getLocation() << std::endl;
 		std::cout << "Time step size: " << mSettings.timeStep << std::endl;
 		std::cout << "Initial valuation: " << std::endl;
 		std::cout << boost::get<Representation>(_state.set) << std::endl;
 #endif
 		// new empty Flowpipe
-		flowpipe_t<Representation> flowpipe;
-		std::vector<boost::tuple<Transition<Number>*, State<Number>>> nextInitialSets;
+		flowpipe_t<Number> flowpipe;
+		std::vector<boost::tuple<Transition<Number>*, State_t<Number>>> nextInitialSets;
 
-		boost::tuple<bool, State<Number>, matrix_t<Number>, vector_t<Number>> initialSetup = computeFirstSegment(_state);
+		boost::tuple<bool, State_t<Number>, matrix_t<Number>, vector_t<Number>> initialSetup = computeFirstSegment(_state);
 #ifdef REACH_DEBUG
 		std::cout << "Valuation fulfills Invariant?: ";
 		std::cout << boost::get<0>(initialSetup) << std::endl;
 #endif
 		if ( boost::get<0>(initialSetup) ) {
-			assert(!boost::get<1>(initialSetup).timestamp.isUnbounded());
+			assert(!boost::get<1>(initialSetup).getTimestamp().isUnbounded());
 			bool noFlow = false;
 
 			// if the location does not have dynamic behaviour, check guards and exit loop.
@@ -164,12 +163,12 @@ namespace reachability {
 				INFO("hypro.reacher","Time: " << std::setprecision(4) << std::setw(8) << fixed << carl::toDouble(currentLocalTime));
 				// Verify transitions on the current set.
 				if(mCurrentLevel <= mSettings.jumpDepth) {
-					State<Number> guardSatisfyingState;
-					State<Number> currentState = _state;
+					State_t<Number> guardSatisfyingState;
+					State_t<Number> currentState = _state;
 					currentState.set = currentSegment;
-					currentState.timestamp += carl::Interval<Number>(currentLocalTime-mSettings.timeStep,currentLocalTime);
-					currentState.timestamp = currentState.timestamp.intersect(carl::Interval<Number>(Number(0), mSettings.timeBound));
-					checkTransitions(currentState, currentState.timestamp, nextInitialSets);
+					currentState.getTimestamp() += carl::Interval<Number>(currentLocalTime-mSettings.timeStep,currentLocalTime);
+					currentState.getTimestamp() = currentState.getTimestamp().intersect(carl::Interval<Number>(Number(0), mSettings.timeBound));
+					checkTransitions(currentState, currentState.getTimestamp(), nextInitialSets);
 				}
 
 				// perform linear transformation on the last segment of the flowpipe
@@ -196,7 +195,7 @@ namespace reachability {
 				nextSegment =  currentSegment.affineTransformation(boost::get<2>(initialSetup), boost::get<3>(initialSetup));
 #endif
 				// extend flowpipe (only if still within Invariant of location)
-				std::pair<bool, Representation> newSegment = nextSegment.satisfiesHalfspaces( _state.location->invariant().mat, _state.location->invariant().vec );
+				std::pair<bool, Representation> newSegment = nextSegment.satisfiesHalfspaces( _state.getLocation()->invariant().mat, _state.getLocation()->invariant().vec );
 #ifdef REACH_DEBUG
 				std::cout << "Next Flowpipe Segment: " << newSegment.second << std::endl;
 				std::cout << "still within Invariant?: ";

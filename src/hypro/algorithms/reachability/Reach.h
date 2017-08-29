@@ -12,14 +12,10 @@
 
 #pragma once
 #include "util.h"
-//#include "Settings.h"
 #include "datastructures/HybridAutomaton/Settings.h"
 #include "datastructures/HybridAutomaton/HybridAutomaton.h"
 #include "datastructures/HybridAutomaton/State.h"
 #include "config.h"
-//#include "datastructures/hybridAutomata/HybridAutomaton.h"
-//#include "datastructures/hybridAutomata/State.h"
-//#include "datastructures/hybridAutomata/RawState.h"
 #include "util/Plotter.h"
 #include "representations/Ellipsoids/Ellipsoid.h"
 #include "representations/GeometricObject.h"
@@ -47,11 +43,14 @@ namespace hypro {
  */
 namespace reachability {
 
-template <typename Representation>
-using flowpipe_t = std::vector<Representation>;
+template<typename Number>
+using State_t = State<Number, Box<Number>, SupportFunction<Number>>;
 
 template<typename Number>
-using initialSet = boost::tuple<unsigned, State<Number>>;
+using initialSet = boost::tuple<unsigned, State_t<Number>>;
+
+template <typename Number>
+using flowpipe_t = std::vector<State_t<Number>>;
 
 /**
  * @brief      Class implementing a basic reachbility analysis algorithm for linear hybrid automata.
@@ -59,16 +58,17 @@ using initialSet = boost::tuple<unsigned, State<Number>>;
  * @tparam     Number          The used number type.
  * @tparam     Representation  The used state set representation type.
  */
-template <typename Number, typename Representation>
+template <typename Number>
 class Reach {
 private:
 	HybridAutomaton<Number> mAutomaton;
 	ReachabilitySettings<Number> mSettings;
 	std::size_t mCurrentLevel;
     Number mBloatingFactor = 0;
-	std::map<unsigned, std::vector<flowpipe_t<Representation>>> mReachableStates;
+	std::map<unsigned, std::vector<flowpipe_t<Number>>> mReachableStates;
 	std::list<initialSet<Number>> mWorkingQueue;
 	Plotter<Number>& plotter = Plotter<Number>::getInstance();
+	representation_name mType;
 
 	mutable bool mIntersectedBadStates;
 
@@ -86,7 +86,7 @@ public:
 	 * @details
 	 * @return The flowpipe as a result of this computation.
 	 */
-	std::vector<std::pair<unsigned, flowpipe_t<Representation>>> computeForwardReachability();
+	std::vector<std::pair<unsigned, flowpipe_t<Number>>> computeForwardReachability();
 
 	/**
 	 * @brief Computes the forward time closure (FTC) of the given valuation in the respective location.
@@ -97,7 +97,7 @@ public:
 	 *
 	 * @return The id of the computed flowpipe.
 	 */
-	flowpipe_t<Representation> computeForwardTimeClosure( const State<Number>& _state );
+	flowpipe_t<Number> computeForwardTimeClosure( const State_t<Number>& _state );
 
 
 	/**
@@ -114,7 +114,7 @@ public:
 	 * @param _init The initial valuations.
 	 * @return The resulting flowpipes.
 	 */
-	void processDiscreteBehaviour( const std::vector<boost::tuple<Transition<Number>*, State<Number>>>& _newInitialSets );
+	void processDiscreteBehaviour( const std::vector<boost::tuple<Transition<Number>*, State_t<Number>>>& _newInitialSets );
 
 	/**
 	 * @brief Checks, whether the passed transition is enabled by the passed valuation. Sets the result to be the intersection of the guard and the valuation.
@@ -125,18 +125,21 @@ public:
 	 * @param result At the end of the method this holds the result of the intersection of the guard and the valuation.
 	 * @return True, if the transition is enabled, false otherwise.
 	 */
-	bool intersectGuard( Transition<Number>* _trans, const State<Number>& _segment, State<Number>& result ) const;
+	bool intersectGuard( Transition<Number>* _trans, const State_t<Number>& _segment, State_t<Number>& result ) const;
 
-	bool checkTransitions(const State<Number>& _state, const carl::Interval<Number>& currentTime, std::vector<boost::tuple<Transition<Number>*, State<Number>>>& nextInitialSets) const;
+	bool checkTransitions(const State_t<Number>& _state, const carl::Interval<Number>& currentTime, std::vector<boost::tuple<Transition<Number>*, State_t<Number>>>& nextInitialSets) const;
 
 	const ReachabilitySettings<Number>& settings() const { return mSettings; }
 	void setSettings(const ReachabilitySettings<Number>& settings) { mSettings = settings; }
 
+	representation_name getRepresentationType() const { return mType; }
+	void setRepresentationType(const representation_name& type) { mType = type; }
+
 private:
 
 	matrix_t<Number> computeTrafoMatrix( Location<Number>* _loc ) const;
-	boost::tuple<bool, State<Number>, matrix_t<Number>, vector_t<Number>> computeFirstSegment( const State<Number>& _state ) const;
-	bool intersectBadStates( const State<Number>& _state, const Representation& _segment ) const;
+	boost::tuple<bool, State_t<Number>, matrix_t<Number>, vector_t<Number>> computeFirstSegment( const State_t<Number>& _state ) const;
+	bool intersectBadStates( const State_t<Number>& _state, const Representation& _segment ) const;
 };
 
 }  // namespace reachability
