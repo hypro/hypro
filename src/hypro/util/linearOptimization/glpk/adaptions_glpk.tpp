@@ -84,7 +84,7 @@ namespace hypro {
 			}
 			case GLP_UNBND: {
 				vector_t<Number> glpkModel(constraints.cols());
-				for(unsigned i=1; i <= constraints.cols(); ++i) {
+				for(int i=1; i <= constraints.cols(); ++i) {
 					glpkModel(i-1) = carl::rationalize<Number>(glp_get_col_prim( glpkProblem, i));
 				}
 				return EvaluationResult<Number>(1, glpkModel, SOLUTION::INFTY);

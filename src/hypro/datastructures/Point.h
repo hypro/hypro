@@ -552,7 +552,7 @@ class Point {
 	 */
 	friend std::ostream& operator<<( std::ostream& _ostr, const Point<Number>& _p ) {
 		_ostr << "( ";
-		for ( unsigned i = 0; i < _p.rawCoordinates().rows() - 1; ++i ) {
+		for ( int i = 0; i < _p.rawCoordinates().rows() - 1; ++i ) {
 			_ostr << _p.at( i ) << "[" << i  << "] , ";
 		}
 		_ostr << _p.at( unsigned(_p.rawCoordinates().rows()) - 1 ) << "[" << _p.rawCoordinates().rows() - 1 << "]";

@@ -11,7 +11,7 @@ namespace hypro {
 
 
 		// setup glpk
-		for ( unsigned i = 0; i < constraints.cols(); i++ ) {
+		for ( int i = 0; i < constraints.cols(); i++ ) {
 			glp_set_col_bnds( glpkProblem, i + 1, GLP_FR, 0.0, 0.0 );
 			glp_set_obj_coef( glpkProblem, i + 1, carl::toDouble( _direction( i ) ) );
 		}
@@ -31,7 +31,7 @@ namespace hypro {
 			case GLP_OPT:
 			case GLP_FEAS: {
 				vector_t<double> glpkModel(constraints.cols());
-				for(unsigned i=1; i <= constraints.cols(); ++i) {
+				for(int i=1; i <= constraints.cols(); ++i) {
 					glpkModel(i-1) = glp_get_col_prim( glpkProblem, i);
 				}
 
@@ -40,7 +40,7 @@ namespace hypro {
 			}
 			case GLP_UNBND: {
 				vector_t<double> glpkModel(constraints.cols());
-				for(unsigned i=1; i <= constraints.cols(); ++i) {
+				for(int i=1; i <= constraints.cols(); ++i) {
 					glpkModel(i-1) = glp_get_col_prim( glpkProblem, i);
 				}
 				return EvaluationResult<double>(1, glpkModel, SOLUTION::INFTY);
@@ -55,7 +55,7 @@ namespace hypro {
 	bool glpkCheckPoint(glp_prob* glpkProblem, const matrix_t<double>& constraints, const vector_t<double>& , const Point<double>& point) {
 		// set point
 		assert(constraints.cols() == point.rawCoordinates().rows());
-		for ( unsigned i = 0; i < constraints.cols(); ++i ) {
+		for ( int i = 0; i < constraints.cols(); ++i ) {
 			glp_set_col_bnds( glpkProblem, i + 1, GLP_FX, point.rawCoordinates()(i), 0.0 );
 			glp_set_obj_coef( glpkProblem, i + 1, 1.0 ); // not needed?
 		}
@@ -68,7 +68,7 @@ namespace hypro {
 		std::vector<std::size_t> res;
 
 		// TODO: ATTENTION: This relies upon that glpk maintains the order of the constraints!
-		for ( unsigned i = 0; i < constraints.cols(); ++i ) {
+		for ( int i = 0; i < constraints.cols(); ++i ) {
 			glp_set_col_bnds( glpkProblem, i + 1, GLP_FR, 0.0, 0.0 );
 			glp_set_obj_coef( glpkProblem, i + 1, 1.0 ); // not needed?
 		}

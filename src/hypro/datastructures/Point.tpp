@@ -447,7 +447,7 @@ std::vector<bool> Point<Number>::lesserDimensionPattern( const Point<Number> &_p
 	assert( _p1.dimension() == _p2.dimension() );
 	std::vector<bool> res;
 	res.resize( _p1.dimension() );
-	for ( unsigned pos = 0; pos < res.size(); ++pos ) {
+	for ( int pos = 0; pos < res.size(); ++pos ) {
 		res[pos] = _p1.at( pos ) < _p2.at( pos ) ? true : false;
 	}
 	return res;
@@ -456,7 +456,7 @@ std::vector<bool> Point<Number>::lesserDimensionPattern( const Point<Number> &_p
 template <typename Number>
 bool Point<Number>::haveEqualCoordinate( const Point<Number> &_p2 ) const {
 	if ( dimension() == _p2.dimension() ) {
-		for ( unsigned i = 0; i < mCoordinates.rows(); ++i ) {
+		for ( int i = 0; i < mCoordinates.rows(); ++i ) {
 			if ( mCoordinates( i ) == _p2.rawCoordinates()( i ) ) {
 				return true;
 			}
@@ -473,7 +473,7 @@ bool Point<Number>::haveSameDimensions( const Point<Number> &_p ) const {
 template <typename Number>
 Point<Number> &Point<Number>::operator+=( const Point<Number> &_rhs ) {
 	assert( this->dimension() == _rhs.dimension() );
-	for ( unsigned i = 0; i < mCoordinates.rows(); ++i ) {
+	for ( int i = 0; i < mCoordinates.rows(); ++i ) {
 		mCoordinates( i ) += _rhs.at( i );
 	}
 	mHash = 0;
@@ -483,7 +483,7 @@ Point<Number> &Point<Number>::operator+=( const Point<Number> &_rhs ) {
 template <typename Number>
 Point<Number> &Point<Number>::operator+=( const vector_t<Number> &_rhs ) {
 	assert( this->dimension() == _rhs.rows() );
-	for ( unsigned i = 0; i < mCoordinates.rows(); ++i ) {
+	for ( int i = 0; i < mCoordinates.rows(); ++i ) {
 		mCoordinates( i ) += _rhs( i );
 	}
 	mHash = 0;
@@ -493,7 +493,7 @@ Point<Number> &Point<Number>::operator+=( const vector_t<Number> &_rhs ) {
 template <typename Number>
 Point<Number> &Point<Number>::operator-=( const Point<Number> &_rhs ) {
 	assert( this->dimension() == _rhs.dimension() );
-	for ( unsigned i = 0; i < mCoordinates.rows(); ++i ) {
+	for ( int i = 0; i < mCoordinates.rows(); ++i ) {
 		mCoordinates( i ) -= _rhs.at( i );
 	}
 	mHash = 0;
@@ -503,7 +503,7 @@ Point<Number> &Point<Number>::operator-=( const Point<Number> &_rhs ) {
 template <typename Number>
 Point<Number> &Point<Number>::operator-=( const vector_t<Number> &_rhs ) {
 	assert( this->dimension() == _rhs.rows() );
-	for ( unsigned i = 0; i < mCoordinates.rows(); ++i ) {
+	for ( int i = 0; i < mCoordinates.rows(); ++i ) {
 		mCoordinates( i ) -= _rhs( i );
 	}
 	mHash = 0;
@@ -517,7 +517,7 @@ Point<Number> Point<Number>::operator-() const {
 
 template <typename Number>
 Point<Number> &Point<Number>::operator/=( unsigned _quotient ) {
-	for ( unsigned i = 0; i < mCoordinates.rows(); ++i ) {
+	for ( int i = 0; i < mCoordinates.rows(); ++i ) {
 		mCoordinates( i ) = mCoordinates( i ) / _quotient;
 	}
 	mHash = 0;
@@ -526,7 +526,7 @@ Point<Number> &Point<Number>::operator/=( unsigned _quotient ) {
 
 template <typename Number>
 Point<Number> &Point<Number>::operator*=( const Number _factor ) {
-	for ( unsigned i = 0; i < mCoordinates.rows(); ++i ) {
+	for ( int i = 0; i < mCoordinates.rows(); ++i ) {
 		mCoordinates( i ) = mCoordinates( i ) * _factor;
 	}
 	mHash = 0;
