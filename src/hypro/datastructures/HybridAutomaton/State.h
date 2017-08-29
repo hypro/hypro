@@ -28,7 +28,7 @@ class Location;
 template<typename Number, typename Representation, typename ...Rargs>
 class State
 {
-	private:
+	public:
 		using repVariant = boost::variant<Representation,Rargs...>; /// Boost variant type for all possible state set representations.
 
   protected:
