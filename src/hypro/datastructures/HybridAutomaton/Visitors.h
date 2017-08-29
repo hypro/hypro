@@ -142,7 +142,8 @@ class genericReductionVisitor
 public:
 
     inline T operator()(const T& lhs) const {
-    	// Do nothing if not support function.
+    	//Use removeRedundancy if not supportfunction
+    	lhs.removeRedundancy();
     	return lhs;
     }
 
@@ -220,6 +221,30 @@ public:
     inline std::ostream& operator()(const T& shape) const {
  		return out << shape;
     }
+};
+
+class genericDimensionVisitor
+	: public boost::static_visitor<std::size_t>
+{
+public:
+	genericDimensionVisitor()=delete;
+
+	template<typename T>
+	inline std::size_t operator()(const T& shape) const {
+		return shape.dimension();
+	}
+};
+
+template<typename T>
+class genericSupremumVisitor
+	: public boost::static_visitor<T>
+{
+	genericSupremumVisitor()=delete;
+
+	template<typename A>
+	inline T operator()(const A& shape) const {
+		return shape.supremum();
+	}
 };
 
 } // namespace
