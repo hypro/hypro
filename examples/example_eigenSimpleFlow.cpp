@@ -57,9 +57,11 @@ typedef struct Flowpipe_segment {
     std::vector<Vector> upper;
     std::vector<Vector> lower;
 } Flow_seg;
+void declare_structures(const int n, In_eq& in_eq1, Invar& invar, Ev_sol_f& ev_sol_f1, 
+        In_part_f& in_part_f, In_part_f& in_traj, Eval_e_funct& eval_e_funct1);
 
-void mark_x0isMin(Matrix& x_tr, int n);
-void swap_x0isMax(Matrix& x_tr, int n);
+void mark_x0isMin(Matrix& x_tr, const int n);
+void swap_x0isMax(Matrix& x_tr, const int n);
 void initialize (In_part_f& in_part_f, const DiagonalMatrix& D, Eval_e_funct& eval_e_funct1, 
         Flow_seg& safe_seg, const int n, const Matrix& V, std::size_t DIM_PLOT, bool ORIG_SYS_PLOT);
 void loop (std::vector<VPolytope<Number>>& flowpipe, const Ev_sol_f& ev_sol_f1, 
@@ -76,47 +78,32 @@ void addSegment(std::vector<VPolytope<Number>>& flowpipe, Flow_seg& safe_seg,
 int main()
 {
     Flags flag1;
+    In_eq in_eq1;               //input system
+    Invar invar;                //invariants
+    Ev_sol_f ev_sol_f1;         //input independent part of e-function
+    In_part_f in_part_f;        //input dependent part of e-function(values+xhom)
+    In_part_f in_traj;          //input dependent trajectory of e-function
+    Eval_e_funct eval_e_funct1; //evaluation of e-function for hull
+    Plotter<Number>& plotter = Plotter<Number>::getInstance();
+    Flow_seg safe_seg;          //plotting_segment
+    //*************** RESULT *******************
+    std::vector<VPolytope<Number>> safeflowpipe;
+    std::vector<VPolytope<Number>> exactflowpipe;
+    const int n = 2;                  //<---System/Matrix Dimension --->
+    Matrix V = Matrix(n,n);                             //backtransformation
+    Matrix Vinv = Matrix(n,n);                          //dumped after use
+    Vector b_tr = Vector(n);                            //transformed and dumped after use
+    
     flag1.HULLCONSTR = true;
     flag1.TRAJECTORY = false;
-    int n = 2;                  //<---System/Matrix Dimension --->
     flag1.DIM_PLOT = 0;        //0..n-1 for the plot
     flag1.ORIG_SYS_PLOT = true; //plotting in original system or transformed?
-    In_eq in_eq1;               //input system
-    in_eq1.A = Matrix(n,n);
-    in_eq1.b = Vector(n);
-    in_eq1.x0 = Vector(n);
-    in_eq1.x0_2 = Vector(n);
-    Invar invar;                //invariants
-    invar.iAV = Matrix(n,n);
-    invar.ib  = Vector(n);
-    Vector b_tr = Vector(n);                            //transformed and dumped after use
-    Ev_sol_f ev_sol_f1;         //input independent part of e-function
-    ev_sol_f1.xinhom = Vector(n); 
-	ev_sol_f1.D = DiagonalMatrix(2); //type Number size 2
     Number tend = 20;                                   //dumped after use
     ev_sol_f1.delta = 0.1;                              //segment stepping time
     //calculate number of discrete evaluation steps to compare time steps
     ev_sol_f1.deltalimit = std::ceil( (tend/ev_sol_f1.delta) );
-    In_part_f in_part_f;        //input dependent part of safe approximation of e-function
-    in_part_f.x_tr = Matrix::Zero(n,3);
-    in_part_f.x_tr.col(2).array() = 0;
-    in_part_f.xhom = Matrix::Zero(2,2);
-    In_part_f in_traj;          //input dependent trajectory of e-function
-    in_traj.x_tr = Matrix::Zero(n,2);
-    in_traj.xhom = Matrix::Zero(n,2);
-    Eval_e_funct eval_e_funct1; //evaluation of e-function for hull
-    eval_e_funct1.derivative = Matrix(n,2);
-    eval_e_funct1.direct     = BoolMatrix(n,2);
-    eval_e_funct1.direct.setConstant(0);
-    Plotter<Number>& plotter = Plotter<Number>::getInstance();
-    Flow_seg safe_seg;          //plotting_segment
-
+    declare_structures(n, in_eq1, invar, ev_sol_f1, in_part_f, in_traj, eval_e_funct1);
     std::size_t traj_scale = 1; //?needed?-> adapt step size
-    Matrix V = Matrix(n,n);                             //backtransformation
-    Matrix Vinv = Matrix(n,n);                          //dumped after use
-    //*************** RESULT *******************
-    std::vector<VPolytope<Number>> safeflowpipe;
-    std::vector<VPolytope<Number>> exactflowpipe;
     //######  d/dx = A*x + b  ######
 	in_eq1.A << 	0.001, 1,
 			        0.001, -0.002;
@@ -150,10 +137,9 @@ int main()
     std::cout << "x_transformed: " << std::endl << in_traj.x_tr << std::endl;
     //invar.iAV = invar.iAV*(1,0)*V;    //TODO fix
     std::cout << "Invariants: A*V="<<std::endl << invar.iAV;
-    //std::cout << "x_tr_bef_maxtrafo: "<< std::endl << x_tr << std::endl;
     mark_x0isMin(in_part_f.x_tr, n); 
     swap_x0isMax(in_part_f.x_tr, n);
-    //std::cout << "x_tr_after_maxtrafo: "<< std::endl << x_tr << std::endl;
+    //calculate constant values for e-function
     ev_sol_f1.xinhom = b_tr.array() / ev_sol_f1.D.diagonal().array();
     in_part_f.xhom.col(0) = ev_sol_f1.xinhom.array() + in_part_f.x_tr.col(0).array();
     in_part_f.xhom.col(1) = ev_sol_f1.xinhom.array() + in_part_f.x_tr.col(1).array();
@@ -163,7 +149,6 @@ int main()
     initialize (in_part_f, ev_sol_f1.D, eval_e_funct1, safe_seg, 
                 n, V, flag1.DIM_PLOT, flag1.ORIG_SYS_PLOT);
 
-    //traj_tr, traj_homconst, traj_scale
     if (flag1.TRAJECTORY) {
         trajectory_plot(exactflowpipe, ev_sol_f1, n, V, in_traj, 
             traj_scale, flag1.DIM_PLOT, flag1.ORIG_SYS_PLOT);
@@ -173,11 +158,13 @@ int main()
             flag1.DIM_PLOT, flag1.ORIG_SYS_PLOT);
     }
     //checking invariants for jump
-    //std::pair<bool,VPolytope> res = Segment.satisfiesHalfspace(AV,b_AV);
+    //for segment in Segments [std::vector<VPolytope>]
+    //std::pair<bool,VPolytope> res = VPolytope.satisfiesHalfspace(AV,b_AV);
+    //to check bool=false -> empty
+    //otherwise adjust upper+lower bounds of polytope
     plotter.plot2d();
     plotter.plotGen();
 
-    //std::cout << "tlimit: " << tlimit << std::endl; //better:rationals
 
     // /* compute points of exact solution ... E_points
     // #ifndef NDEBUG
@@ -197,6 +184,26 @@ int main()
     //plotter.plotTex();
     //plotter.plotEps();
 	return 0;
+}
+
+void declare_structures(const int n, In_eq& in_eq1, Invar& invar, Ev_sol_f& ev_sol_f1, 
+        In_part_f& in_part_f, In_part_f& in_traj, Eval_e_funct& eval_e_funct1) { 
+    in_eq1.A = Matrix(n,n);
+    in_eq1.b = Vector(n);
+    in_eq1.x0 = Vector(n);
+    in_eq1.x0_2 = Vector(n);
+    invar.iAV = Matrix(n,n);
+    invar.ib  = Vector(n);
+    ev_sol_f1.xinhom = Vector(n); 
+	ev_sol_f1.D = DiagonalMatrix(2); //type Number size 2
+    in_part_f.x_tr = Matrix::Zero(n,3);
+    in_part_f.x_tr.col(2).array() = 0;
+    in_part_f.xhom = Matrix::Zero(2,2);
+    in_traj.x_tr = Matrix::Zero(n,2);
+    in_traj.xhom = Matrix::Zero(n,2);
+    eval_e_funct1.derivative = Matrix(n,2);
+    eval_e_funct1.direct     = BoolMatrix(n,2);
+    eval_e_funct1.direct.setConstant(0);
 }
 
 //mark if in transformed system x0<x0_2 in 3rd column
