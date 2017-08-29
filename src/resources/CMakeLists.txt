@@ -24,9 +24,6 @@ endif()
 
 include(glpk.cmake)
 
-message(STATUS "Intermediate include dirs: ${${PROJECT_NAME}_INCLUDE_DIRS}")
-
-
 #AntLR
 message("-- Use included version of AnTLR")
 

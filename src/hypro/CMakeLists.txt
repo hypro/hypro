@@ -49,7 +49,7 @@ else()
 		LINKER_LANGUAGE CXX
 	)
 	#message(STATUS "antlr libs path: " ${ANTLR4CPP_LIBS})
-	#message(STATUS "antlr include dirs path: " ${ANTLR4CPP_INCLUDE_DIRS})
+	message(STATUS "antlr include dirs path: " ${ANTLR4CPP_INCLUDE_DIRS})
 	message(STATUS "hypro libraries dynamic: " "${${PROJECT_NAME}_LIBRARIES_DYNAMIC}")
 	#message(STATUS "hypro interface include dir: ${CMAKE_CURRENT_SOURCE_DIR}")
 	message("hypro include dirs: " ${${PROJECT_NAME}_INCLUDE_DIRS})
@@ -60,6 +60,8 @@ else()
 		PUBLIC
 		$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
 		$<INSTALL_INTERFACE:include/${PROJECT_NAME}>
+		INTERFACE
+		$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../resources/antlr_build/include/antlr4-runtime>
 	)
 endif()
 

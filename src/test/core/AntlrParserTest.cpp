@@ -1,13 +1,14 @@
-#include "../../hypro/parser/antlr4-flowstar/HybridAutomatonLexer.h"
-#include "../../hypro/parser/antlr4-flowstar/HybridAutomatonParser.h"
-#include "../../hypro/parser/antlr4-flowstar/HyproHAVisitor.h"
+//#include "../../hypro/parser/antlr4-flowstar/HybridAutomatonLexer.h"
+//#include "../../hypro/parser/antlr4-flowstar/HybridAutomatonParser.h"
+//#include "../../hypro/parser/antlr4-flowstar/HyproHAVisitor.h"
+#include "../../hypro/parser/antlr4-flowstar/ParserWrapper.h"
 #include "../../hypro/datastructures/HybridAutomaton/HybridAutomaton.h"
 //#include "../../hypro/datastructures/HybridAutomaton/Settings.h"
 #include <iostream>
 #include <fstream>
 #include "gtest/gtest.h"
 #include "../defines.h"
-#include <antlr4-runtime.h>
+//#include <antlr4-runtime.h>
 
 #include <unistd.h>		//getcwd()
 
@@ -33,6 +34,7 @@ class AntlrParserTest : public ::testing::Test {
 		}
 };
 
+/*
 ANTLRInputStream loadInput(std::string path){
 
 	std::fstream ifs(path);
@@ -58,9 +60,11 @@ ANTLRInputStream loadInput(std::string path){
 		std::cout << "ifs hasn't opened anything" << std::endl;
 		//FAIL();
 	}
-	std::cout << "input stream content:\n" << input.toString() << std::endl;		
+	std::cout << "input stream content:\n" << input.toString() << std::endl;
 	return input;
 }
+*/
+
 
 ///////////// Unit Tests - Do subvisitors work properly? //////////////
 /*
@@ -98,6 +102,7 @@ TYPED_TEST(AntlrParserTest, JustTesting){
 	//std::string path("../examples/input/bouncing_ball.model");
 	std::string path("../../../../examples/input/bouncing_ball.model");
 
+	/*
 	//Tell current path - /home/ptse/hiwi/hypro/build/src/test/core
 	this->cwd();
 
@@ -148,7 +153,9 @@ TYPED_TEST(AntlrParserTest, JustTesting){
 	std::cout << r << std::endl;
 
 	std::cout << "I RETURNED FROM VISITING" << std::endl;
+	*/
 
+	boost::tuple<hypro::HybridAutomaton<TypeParam>, hypro::ReachabilitySettings<TypeParam>> h = hypro::parseFlowstarFile<TypeParam>(path);
 	SUCCEED();
 
 }
