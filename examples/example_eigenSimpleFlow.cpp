@@ -37,7 +37,7 @@ typedef struct Invariants {
     //TODO: use std::vector<Matrix> and read from file etc
 } Invar;
 /***Independent_part_funct stores all independent parts from input
- *  All matrices contain n-column vector for max on column 0 and 
+ *  All matrices contain n-column vector for max on column 0 and
  *                      n-column vector for min on column 1
  *  x=xhom*exp(D*t)-xinhom, D containing eigenvalues lambda
  */
@@ -47,7 +47,7 @@ typedef struct Independent_part_funct {
     Number delta;
     std::size_t deltalimit;
 } Ind_f;
-typedef struct Dependent_part_funct { 
+typedef struct Dependent_part_funct {
     Matrix xhom;
     Matrix x_tr;
 } Dep_f;
@@ -58,27 +58,27 @@ typedef struct Eval_functions {
     Matrix deriv;
     BoolMatrix direct;
 } Eval_f;
-typedef struct Flowpipe_segment { 
+typedef struct Flowpipe_segment {
     std::vector<Vector> upper;
     std::vector<Vector> lower;
 } Flow_seg;
-void declare_structures(const int n, In_eq& in_eq1, Invar& invar, Ind_f& ind_f, 
+void declare_structures(const int n, In_eq& in_eq1, Invar& invar, Ind_f& ind_f,
         Dep_f& dep_f, Dep_f& in_traj, Eval_f& eval_f);
 //  x0 is column 0 of x_tr
 void mark_x0isMin(Matrix& x_tr, const int n);
 void swap_x0isMax(Matrix& x_tr, const int n);
-void initialize (Eval_f& eval_f, Flow_seg& safe_seg, Flow_seg& error_seg, 
-        std::size_t DIM_PLOT, bool ORIG_SYS_PLOT, const DiagonalMatrix& D,  
+void initialize (Eval_f& eval_f, Flow_seg& safe_seg, Flow_seg& error_seg,
+        std::size_t DIM_PLOT, bool ORIG_SYS_PLOT, const DiagonalMatrix& D,
         const int n, const Matrix& V, Dep_f& dep_f);
-void loop (std::vector<VPoly>& flow, std::vector<VPoly>& error_flow, 
-        const Flags& flag1, const Ind_f& ind_f, const int n, const Matrix& V, 
+void loop (std::vector<VPoly>& flow, std::vector<VPoly>& error_flow,
+        const Flags& flag1, const Ind_f& ind_f, const int n, const Matrix& V,
         Eval_f& eval_f, Dep_f& dep_f, Flow_seg& safe_seg, Flow_seg& error_seg);
 void trajectory_plot(std::vector<VPoly>& exactflow, std::size_t DIM_PLOT, bool ORIG_SYS_PLOT,
         const Ind_f& ind_f, const int n, const Matrix& V, const std::size_t traj_scale,
         Dep_f& in_traj);
-void plot_addTimeSegment(Flow_seg& safe_seg, std::size_t DIM_PLOT, bool ORIG_SYS_PLOT, 
+void plot_addTimeSegment(Flow_seg& safe_seg, std::size_t DIM_PLOT, bool ORIG_SYS_PLOT,
         const std::size_t traj_time, const Matrix& x_tr, const Matrix& V, const int n);
-void addSegment(std::vector<VPoly>& flow, Flow_seg& safe_seg, bool PLOT, 
+void addSegment(std::vector<VPoly>& flow, bool PLOT, Flow_seg& safe_seg,
         std::size_t colorUpper, std::size_t colorLower);
 
 int main()
@@ -101,9 +101,9 @@ int main()
     Matrix V = Matrix(n,n);                             //backtransformation
     Matrix Vinv = Matrix(n,n);                          //dumped after use
     Vector b_tr = Vector(n);                            //transformed and dumped after use
-    
+
     flag1.DIM_PLOT      = 0;        //0..n-1 for the plot
-    flag1.ORIG_SYS_PLOT = true; //plotting in original system or transformed?
+    flag1.ORIG_SYS_PLOT = false; //plotting in original system or transformed?
     flag1.HULLCONSTR    = true;
     flag1.HULL_PLOT     = false;
     flag1.ERROR_PLOT    = true;
@@ -147,7 +147,7 @@ int main()
     std::cout << "x_transformed: " << std::endl << in_traj.x_tr << std::endl;
     //invar.iAV = invar.iAV*(1,0)*V;    //TODO fix
     std::cout << "Invariants: A*V="<<std::endl << invar.iAV;
-    mark_x0isMin(dep_f.x_tr, n); 
+    mark_x0isMin(dep_f.x_tr, n);
     swap_x0isMax(dep_f.x_tr, n);
     //calculate constant values for e-function
     ind_f.xinhom = b_tr.array() / ind_f.D.diagonal().array();
@@ -157,9 +157,9 @@ int main()
     in_traj.xhom.col(1) = ind_f.xinhom.array() + in_traj.x_tr.col(1).array();
     std::cout << "xhom: "<< std::endl << dep_f.xhom;
     initialize (eval_f, safe_seg, error_seg,flag1.DIM_PLOT, flag1.ORIG_SYS_PLOT,
-        ind_f.D, n, V,  dep_f); 
+        ind_f.D, n, V,  dep_f);
     if (flag1.TRAJECTORY_PLOT) {
-        trajectory_plot(exactflow, flag1.DIM_PLOT, flag1.ORIG_SYS_PLOT, ind_f, n, V, 
+        trajectory_plot(exactflow, flag1.DIM_PLOT, flag1.ORIG_SYS_PLOT, ind_f, n, V,
             traj_scale, in_traj);
     }
     if (flag1.HULLCONSTR) {
@@ -193,15 +193,17 @@ int main()
     //plotter.plotEps();
 	return 0;
 }
-void declare_structures(const int n, In_eq& in_eq1, Invar& invar, Ind_f& ind_f, 
-        Dep_f& dep_f, Dep_f& in_traj, Eval_f& eval_f) { 
+
+
+void declare_structures(const int n, In_eq& in_eq1, Invar& invar, Ind_f& ind_f,
+        Dep_f& dep_f, Dep_f& in_traj, Eval_f& eval_f) {
     in_eq1.A = Matrix(n,n);
     in_eq1.b = Vector(n);
     in_eq1.x0 = Vector(n);
     in_eq1.x0_2 = Vector(n);
     invar.iAV = Matrix(n,n);
     invar.ib  = Vector(n);
-    ind_f.xinhom = Vector(n); 
+    ind_f.xinhom = Vector(n);
 	ind_f.D = DiagonalMatrix(2); //type Number size 2
     dep_f.x_tr = Matrix::Zero(n,3);
     dep_f.x_tr.col(2).array() = 0;
@@ -225,7 +227,7 @@ void swap_x0isMax(Matrix& x_tr, const int n) {
     //std::cout << "x_tr beforeback: "<< std::endl << x_tr << std::endl;
     Vector tmp = Vector(n);
     for(int i=0; i<n; ++i) {
-        if(x_tr(i,2) == 1) { 
+        if(x_tr(i,2) == 1) {
             tmp(i)    = x_tr(i,0);
             x_tr(i,0) = x_tr(i,1);
             x_tr(i,1) = tmp(i);
@@ -241,8 +243,8 @@ void swap_x0isMax(Matrix& x_tr, const int n) {
             //case2: -e^(-x)   --- etc
             //case3: -e^(x)    --- D>0, xhomconst<0
             //case4:  e^(-x)   --- etc
-void initialize (Eval_f& eval_f, Flow_seg& safe_seg, Flow_seg& error_seg, 
-        std::size_t DIM_PLOT, bool ORIG_SYS_PLOT, const DiagonalMatrix& D,  
+void initialize (Eval_f& eval_f, Flow_seg& safe_seg, Flow_seg& error_seg,
+        std::size_t DIM_PLOT, bool ORIG_SYS_PLOT, const DiagonalMatrix& D,
         const int n, const Matrix& V, Dep_f& dep_f) {
     Vector plot_vector = Vector(n);
     const Matrix x_tr_error = Matrix::Zero(n,2);
@@ -301,9 +303,9 @@ void initialize (Eval_f& eval_f, Flow_seg& safe_seg, Flow_seg& error_seg,
     }
 }
     //1.linear value + deriv OR direct value
-    //2.pushing,writing,deleting 
+    //2.pushing,writing,deleting
 void loop (std::vector<VPoly>& flow, std::vector<VPoly>& error_flow, const Flags& flag1,
-        const Ind_f& ind_f, const int n, const Matrix& V, Eval_f& eval_f, Dep_f& dep_f, 
+        const Ind_f& ind_f, const int n, const Matrix& V, Eval_f& eval_f, Dep_f& dep_f,
         Flow_seg& safe_seg, Flow_seg& error_seg) {
     Vector factor = Vector::Zero(n);
     Matrix x_tr_error = Matrix::Zero(n,3);
@@ -335,33 +337,33 @@ void loop (std::vector<VPoly>& flow, std::vector<VPoly>& error_flow, const Flags
         }
         if (flag1.ORIG_SYS_PLOT) {
             swap_x0isMax(dep_f.x_tr, n);
-            plot_addTimeSegment(safe_seg, flag1.DIM_PLOT, flag1.ORIG_SYS_PLOT, 
+            plot_addTimeSegment(safe_seg, flag1.DIM_PLOT, flag1.ORIG_SYS_PLOT,
                 j, dep_f.x_tr, V, n);
             swap_x0isMax(dep_f.x_tr, n);
         } else {
-            plot_addTimeSegment(safe_seg, flag1.DIM_PLOT, flag1.ORIG_SYS_PLOT, 
+            plot_addTimeSegment(safe_seg, flag1.DIM_PLOT, flag1.ORIG_SYS_PLOT,
                 j, dep_f.x_tr, V, n);
         }
         //fill flowpipe and on FLAG add Object to plotter
-        addSegment(flow, flag1.HULL_PLOT, safe_seg, plotting::colors[plotting::red], 
+        addSegment(flow, flag1.HULL_PLOT, safe_seg, plotting::colors[plotting::red],
             plotting::colors[plotting::blue]);
         if (flag1.ORIG_SYS_PLOT) {
             swap_x0isMax(x_tr_error, n);
-            plot_addTimeSegment(error_seg, flag1.DIM_PLOT, flag1.ORIG_SYS_PLOT, 
+            plot_addTimeSegment(error_seg, flag1.DIM_PLOT, flag1.ORIG_SYS_PLOT,
                 j, x_tr_error, V, n);
             swap_x0isMax(x_tr_error, n);
         } else {
-            plot_addTimeSegment(error_seg, flag1.DIM_PLOT, flag1.ORIG_SYS_PLOT, 
+            plot_addTimeSegment(error_seg, flag1.DIM_PLOT, flag1.ORIG_SYS_PLOT,
                 j, x_tr_error, V, n);
         }
-        //fill flowpipe and on FLAG add Object to plotter        
-        addSegment(error_flow, flag1.ERROR_PLOT, error_seg, plotting::colors[plotting::red], 
+        //fill flowpipe and on FLAG add Object to plotter
+        addSegment(error_flow, flag1.ERROR_PLOT, error_seg, plotting::colors[plotting::red],
             plotting::colors[plotting::blue]);
     }
 }
 
 void trajectory_plot(std::vector<VPoly>& exactflow, std::size_t DIM_PLOT, bool ORIG_SYS_PLOT,
-        const Ind_f& ind_f, const int n, const Matrix& V, const std::size_t traj_scale, 
+        const Ind_f& ind_f, const int n, const Matrix& V, const std::size_t traj_scale,
         Dep_f& traj_tr) {
     Flow_seg traj_flow_seg;
     Vector factor = Vector::Zero(n);
@@ -375,11 +377,11 @@ void trajectory_plot(std::vector<VPoly>& exactflow, std::size_t DIM_PLOT, bool O
         traj_tr.x_tr.col(0) = traj_tr.xhom.col(0).array()*factor.array()  - ind_f.xinhom.array();
         traj_tr.x_tr.col(1) = traj_tr.xhom.col(1).array()*factor.array()  - ind_f.xinhom.array();
         plot_addTimeSegment(traj_flow_seg, DIM_PLOT, ORIG_SYS_PLOT, traj_time, traj_tr.x_tr, V, n);
-        addSegment(exactflow, true, traj_flow_seg, plotting::colors[plotting::green], 
+        addSegment(exactflow, true, traj_flow_seg, plotting::colors[plotting::green],
             plotting::colors[plotting::green]);
     }
 }
-void plot_addTimeSegment(Flow_seg& flow_segment, std::size_t DIM_PLOT, bool ORIG_SYS_PLOT, 
+void plot_addTimeSegment(Flow_seg& flow_segment, std::size_t DIM_PLOT, bool ORIG_SYS_PLOT,
         std::size_t traj_time, const Matrix& x_tr, const Matrix& V, const int n) {
     Vector plot_vector = Vector(n);
     plot_vector(0) = traj_time;
@@ -394,8 +396,8 @@ void plot_addTimeSegment(Flow_seg& flow_segment, std::size_t DIM_PLOT, bool ORIG
     }
     flow_segment.lower.push_back(plot_vector);
 }
-void addSegment(Flow_seg& flow_segment, bool PLOT, std::vector<VPoly>& flow,  
-        std::size_t colorUpper, std::size_t colorLower) { 
+void addSegment(std::vector<VPoly>& flow, bool PLOT, Flow_seg& flow_segment,
+        std::size_t colorUpper, std::size_t colorLower) {
     Plotter<Number>& plotter = Plotter<Number>::getInstance();
     VPoly vpoly_upper = VPoly(flow_segment.upper);
     VPoly vpoly_lower = VPoly(flow_segment.lower);
