@@ -28,8 +28,8 @@ class Location;
 template<typename Number, typename Representation, typename ...Rargs>
 class State
 {
-	public:
-		using repVariant = boost::variant<Representation,Rargs...>; /// Boost variant type for all possible state set representations.
+  public:
+	using repVariant = boost::variant<Representation,Rargs...>; /// Boost variant type for all possible state set representations.
 
   protected:
     const Location<Number>* mLoc = nullptr; /// Location of the state.
@@ -218,8 +218,8 @@ class State
     	TRACE("hypro.datastructures","Attempt to set set type at pos " << I << ", mSets.size() = " << mSets.size());
     	assert(mSets.size() == mTypes.size());
 		while(I >= mSets.size()) {
-			mSets.push_back(ConstraintSet<Number>()); // some default set.
-			mTypes.push_back(representation_name::constraint_set); // some default set type.
+			mSets.emplace_back(Representation()); // some default set.
+			mTypes.push_back(Representation::type()); // some default set type.
 		}
 		mTypes[I] = type;
 	}
@@ -247,8 +247,8 @@ class State
 		TRACE("hypro.datastructures","Attempt to set set direct at pos " << I << ", mSets.size() = " << mSets.size());
 		assert(mSets.size() == mTypes.size());
 		while(I >= mSets.size()) {
-			mSets.push_back(ConstraintSet<Number>()); // some default set.
-			mTypes.push_back(representation_name::constraint_set); // some default set type.
+			mSets.emplace_back(Representation()); // some default set.
+			mTypes.push_back(Representation::type()); // some default set type.
 		}
 		mSets[I] = in;
 
@@ -351,8 +351,8 @@ class State
      * @param[in]  state  The state.
      * @return     A reference to the outstream.
      */
+    #ifdef HYPRO_LOGGING
     friend ostream& operator<<(ostream& out, const State<Number,Representation,Rargs...>& state) {
-		#ifdef HYPRO_LOGGING
     	out << "location: " << state.getLocation()->getName() << " at timestamp " << state.getTimestamp() << std::endl;
     	//out << "Set: " << convert<Number,double>(Converter<Number>::toBox(state.getSet())) << std::endl;
     	//out << "Set: " << boost::apply_visitor(genericConversionVisitor<repVariant,Number>(representation_name::box), state.getSet()) << std::endl;
@@ -364,7 +364,9 @@ class State
 	    	for(std::size_t i = 1; i <= sizeof...(Rargs); ++i)
 	    		out << state.getSet(i) << std::endl;
     	}
-		#endif
+    #else
+    friend ostream& operator<<(ostream& out, const State<Number,Representation,Rargs...>&) {
+    #endif
     	return out;
     }
 

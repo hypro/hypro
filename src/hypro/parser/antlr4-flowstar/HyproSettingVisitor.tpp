@@ -5,7 +5,7 @@ namespace hypro {
 	////////////// Constructor & Destructor
 
 	template<typename Number>
-	HyproSettingVisitor<Number>::HyproSettingVisitor(std::vector<std::string>& varVec) : 
+	HyproSettingVisitor<Number>::HyproSettingVisitor(std::vector<std::string>& varVec) :
 		vars(varVec)
 	{ }
 
@@ -42,10 +42,10 @@ namespace hypro {
 		}
 
 		//gnuplot octagon
-		std::vector<std::vector<unsigned>> plotDims;
+		std::vector<std::vector<std::size_t>> plotDims;
 		if(ctx->plotsetting().size() >= 1){
 			for(const auto& p : ctx->plotsetting()){
-				std::vector<unsigned> plotDimTupel = visit(p);
+				std::vector<std::size_t> plotDimTupel = visit(p);
 				plotDims.push_back(plotDimTupel);
 			}
 		} else {
@@ -140,23 +140,23 @@ namespace hypro {
   		misc::Interval inter(startIndex, endIndex);
   		CharStream* input = ctx->start->getInputStream();
   		std::string text = input->getText(inter);
-  		for(unsigned i=0; i < vars.size(); i++){
-  			unsigned pos = text.find(vars[i]);
+  		for(std::size_t i=0; i < vars.size(); i++){
+  			std::size_t pos = text.find(vars[i]);
   			if(pos != std::string::npos){
   				varCount[i]++;
   				text = text.erase(pos, vars[i].size());
   			}
   		}
-  		for(unsigned i=0; i < varCount.size(); i++){
+  		for(std::size_t i=0; i < varCount.size(); i++){
   			if(varCount[i] > 1){
   				std::cerr << "ERROR: Variable " << vars[i] << "has been mentioned multiple times in gnuplot octagon. Please mention every variable at most one time." << std::endl;
   			}
   		}
 
   		//2.Find variable indices, push their indices into a vector of unsigned
-  		std::vector<unsigned> res;
+  		std::vector<std::size_t> res;
   		for(const auto& maybeVar : ctx->VARIABLE()){
-  			for(unsigned i=0; i < vars.size(); i++){
+  			for(std::size_t i=0; i < vars.size(); i++){
   				if(maybeVar->getText() == vars[i]){
   					res.push_back(i);
   				}
@@ -177,7 +177,7 @@ namespace hypro {
   		//Only integers allowed
   		std::string numAsText = ctx->NUMBER()->getText();
   		std::cout << "---- num before: " << numAsText << std::endl;
-  		unsigned pos = numAsText.find(".");
+  		std::size_t pos = numAsText.find(".");
 		if(pos != std::string::npos){
 			numAsText = std::string(numAsText, 0, pos);
 		}

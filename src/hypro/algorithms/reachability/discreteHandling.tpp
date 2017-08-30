@@ -21,7 +21,7 @@ namespace reachability {
 			//	Plotter<Number>::getInstance().addObject( tmp );
 			//}
 
-			result.set = guardSatisfyingSet.second;
+			result.setSets(guardSatisfyingSet.second.getSets());
 			return true;
 		} else {
 			#ifdef REACH_DEBUG
@@ -40,7 +40,7 @@ namespace reachability {
 				// copy state - as there is no aggregation, the containing set and timestamp is already valid
 				State_t<Number> s = boost::get<1>(tuple);
 				assert(!s.getTimestamp().isUnbounded());
-				s.location = boost::get<0>(tuple)->getTarget();
+				s.setLocation(boost::get<0>(tuple)->getTarget());
 				bool duplicate = false;
 				for(const auto stateTuple : mWorkingQueue) {
 					if(boost::get<1>(stateTuple) == s){
@@ -66,7 +66,7 @@ namespace reachability {
 			assert(!aggregationPair.second.empty());
 			carl::Interval<Number> aggregatedTimestamp = aggregationPair.second.begin()->getTimestamp();
 			//std::cout << "Aggregated timestamp before aggregation " << aggregatedTimestamp << std::endl;
-			State_t<Number> collectedSets = aggregationPair.second.begin();
+			State_t<Number> collectedSets = *aggregationPair.second.begin();
 			for(auto stateIt = ++aggregationPair.second.begin(); stateIt != aggregationPair.second.end(); ++stateIt){
 				assert(!stateIt->getTimestamp().isUnbounded());
 				aggregatedTimestamp = aggregatedTimestamp.convexHull(stateIt->getTimestamp());
@@ -90,7 +90,7 @@ namespace reachability {
 			#ifdef USE_SMART_AGGREGATION
 			aggregationReduction(collectedSets, aggregationPair.first, mSettings.timeBound, mSettings.timeStep);
 			#endif
-			s.setSet(collectedSets);
+			s.setSets(collectedSets.getSets());
 
 			//unsigned colSetIndex = Plotter<Number>::getInstance().addObject(collectedSets.vertices());
 			//Plotter<Number>::getInstance().setObjectColor(colSetIndex, plotting::colors[plotting::red]);
@@ -102,11 +102,6 @@ namespace reachability {
 			//std::cout << "Aggregated timestamp: " << aggregatedTimestamp << std::endl;
 
 			// Perform resets.
-			typename Transition<Number>::Reset reset = aggregationPair.first->getReset();
-			#ifdef REACH_DEBUG
-			std::cout << "Apply resets." << std::endl;
-			std::cout << "Matrix: " << std::endl << aggregationPair.first->getReset().getMatrix() << std::endl << "Vector " << std::endl << aggregationPair.first->getReset().getVector() << std::endl;
-			#endif
 			State_t<Number> tmp = aggregationPair.first->getReset().applyReset(collectedSets);
 			//std::cout << "Vertices after reset: " << std::endl;
 			//for(const auto& vertex : tmp.vertices()) {
@@ -116,7 +111,7 @@ namespace reachability {
 			if(invariantSatisfyingSet.first){
 				//unsigned tmp = Plotter<Number>::getInstance().addObject(invariantSatisfyingSet.second.vertices());
 				//Plotter<Number>::getInstance().setObjectColor(tmp, colors[orange]);
-				s.setSet(invariantSatisfyingSet.second);
+				s.setSets(invariantSatisfyingSet.second.getSets());
 				//std::cout << "Transformed, collected set (intersected with invariant): " << invariantSatisfyingSet.second << std::endl;
 			} else {
 				continue;

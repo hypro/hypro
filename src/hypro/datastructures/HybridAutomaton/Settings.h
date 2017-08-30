@@ -12,7 +12,7 @@ struct ReachabilitySettings {
     Number timeStep;
     std::string fileName;
     unsigned long pplDenomimator;
-    std::vector<std::vector<unsigned>> plotDimensions;
+    std::vector<std::vector<std::size_t>> plotDimensions;
     bool uniformBloating = false;
 
     ReachabilitySettings<Number>() : timeBound(0), jumpDepth(0), timeStep(0), fileName("out"), pplDenomimator(0) {}

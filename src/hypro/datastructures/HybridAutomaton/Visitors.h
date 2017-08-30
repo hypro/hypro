@@ -102,23 +102,28 @@ public:
     inline T operator()(const B& lhs) const {
  		switch(toType){
  			case representation_name::box: {
- 				return Converter<Number>::toBox(lhs);
+ 				Box<Number> tmp = Converter<Number>::toBox(lhs);
+ 				return tmp;
  				break;
  			}
  			case representation_name::polytope_h: {
- 				return Converter<Number>::toHPolytope(lhs);
+ 				HPolytope<Number> tmp = Converter<Number>::toHPolytope(lhs);
+ 				return tmp;
  				break;
  			}
  			case representation_name::polytope_v: {
- 				return Converter<Number>::toVPolytope(lhs);
+ 				VPolytope<Number> tmp = Converter<Number>::toVPolytope(lhs);
+ 				return tmp;
  				break;
  			}
  			case representation_name::zonotope: {
- 				return Converter<Number>::toZonotope(lhs);
+ 				Zonotope<Number> tmp = Converter<Number>::toZonotope(lhs);
+ 				return tmp;
  				break;
  			}
  			case representation_name::support_function: {
- 				return Converter<Number>::toSupportFunction(lhs);
+ 				SupportFunction<Number> tmp = Converter<Number>::toSupportFunction(lhs);
+ 				return tmp;
  				break;
  			}
  			case representation_name::ppl_polytope: {
@@ -141,7 +146,8 @@ class genericReductionVisitor
 {
 public:
 
-    inline T operator()(const T& lhs) const {
+	template<typename A>
+    inline T operator()(A lhs) const {
     	//Use removeRedundancy if not supportfunction
     	lhs.removeRedundancy();
     	return lhs;
@@ -195,7 +201,7 @@ class genericCompareVisitor
 {
 public:
 	template<typename A, typename B>
-	inline bool operator()(const A& lhs, const B&) const {
+	inline bool operator()(const A&, const B&) const {
 		return false;
 	}
 
@@ -227,8 +233,6 @@ class genericDimensionVisitor
 	: public boost::static_visitor<std::size_t>
 {
 public:
-	genericDimensionVisitor()=delete;
-
 	template<typename T>
 	inline std::size_t operator()(const T& shape) const {
 		return shape.dimension();
@@ -239,8 +243,7 @@ template<typename T>
 class genericSupremumVisitor
 	: public boost::static_visitor<T>
 {
-	genericSupremumVisitor()=delete;
-
+public:
 	template<typename A>
 	inline T operator()(const A& shape) const {
 		return shape.supremum();

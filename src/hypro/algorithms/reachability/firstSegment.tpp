@@ -3,6 +3,7 @@
 namespace hypro {
 namespace reachability {
 
+	/*
 	template<typename Number, typename Representation, typename R = Representation, carl::DisableIf< std::is_same<R, Zonotope<Number>> > = carl::dummy >
 Representation bloatBox( const Representation& in, const Box<Number>& bloatBox ) {
 	return in.minkowskiSum(Representation(bloatBox.matrix(), bloatBox.vector()));
@@ -11,6 +12,39 @@ Representation bloatBox( const Representation& in, const Box<Number>& bloatBox )
 template<typename Number, typename Representation, typename R = Representation, carl::EnableIf< std::is_same<R, Zonotope<Number>> > = carl::dummy >
 Zonotope<Number> bloatBox( const Zonotope<Number>& in, const Box<Number>& bloatBox ) {
 	return in.minkowskiSum(Converter<Number>::toZonotope(bloatBox));
+}
+	*/
+
+	template<typename Number>
+State_t<Number> bloatBox( const State_t<Number>& in, const Box<Number>& bloatBox ) {
+	State_t<Number> bloatState;
+	switch(in.getSetType(0)) {
+		case representation_name::box: {
+			bloatState.setSet(Converter<Number>::toBox(bloatBox), 0);
+			break;
+		}
+		case representation_name::polytope_h: {
+			bloatState.setSet(Converter<Number>::toHPolytope(bloatBox), 0);
+			break;
+		}
+		case representation_name::polytope_v: {
+			bloatState.setSet(Converter<Number>::toVPolytope(bloatBox), 0);
+			break;
+		}
+		case representation_name::support_function: {
+			bloatState.setSet(Converter<Number>::toSupportFunction(bloatBox), 0);
+			break;
+		}
+		case representation_name::zonotope: {
+			bloatState.setSet(Converter<Number>::toZonotope(bloatBox), 0);
+			break;
+		}
+		default: {
+			bloatState.setSet(Converter<Number>::toBox(bloatBox), 0);
+			break;
+		}
+	}
+	return in.partiallyMinkowskiSum(bloatState, 0);
 }
 
 	template<typename Number>
@@ -42,7 +76,7 @@ Zonotope<Number> bloatBox( const Zonotope<Number>& in, const Box<Number>& bloatB
 			translation == vector_t<Number>::Zero(translation.rows()) ) {
 
 			std::pair<bool,State_t<Number>> fullSegment = _state.satisfies(_state.getLocation()->getInvariant());
-			validState.setSet(fullSegment.second);
+			validState.setSetDirect(fullSegment.second.getSet());
 			return boost::tuple<bool, State_t<Number>, matrix_t<Number>, vector_t<Number>>(fullSegment.first, validState, trafoMatrixResized, translation);
 		}
 
@@ -72,7 +106,7 @@ Zonotope<Number> bloatBox( const Zonotope<Number>& in, const Box<Number>& bloatB
 			#endif
 			// bloat hullPolytope (Hausdorff distance)
 			// TODO: This will not work, we need the hausdorf error.
-			Number radius = hausdorffError( Number( mSettings.timeStep ), _state.getLocation()->getFlow(), boost::get<Representation>(_state.set).supremum() );
+			Number radius = hausdorffError( Number( mSettings.timeStep ), _state.getLocation()->getFlow(), _state.getSupremum(0) );
 			#ifdef REACH_DEBUG
 			std::cout << "\n";
 			std::cout << "Hausdorff Approximation: ";
@@ -80,22 +114,49 @@ Zonotope<Number> bloatBox( const Zonotope<Number>& in, const Box<Number>& bloatB
 			#endif
 			firstSegment = unitePolytope;
 			if(radius > 0){
-				State_t<Number> hausPoly = computePolytope<Number>( unitePolytope.dimension(), radius );
+				State_t<Number> hausPoly;
+				switch(unitePolytope.getSetType(0)) {
+					case representation_name::box: {
+						hausPoly = computePolytope<Number,representation_name::box>( unitePolytope.getDimension(0), radius );
+						break;
+					}
+					case representation_name::polytope_h: {
+						hausPoly = computePolytope<Number,representation_name::polytope_h>( unitePolytope.getDimension(0), radius );
+						break;
+					}
+					case representation_name::polytope_v: {
+						hausPoly = computePolytope<Number,representation_name::polytope_v>( unitePolytope.getDimension(0), radius );
+						break;
+					}
+					case representation_name::support_function: {
+						hausPoly = computePolytope<Number,representation_name::support_function>( unitePolytope.getDimension(0), radius );
+						break;
+					}
+					case representation_name::zonotope: {
+						hausPoly = computePolytope<Number,representation_name::zonotope>( unitePolytope.getDimension(0), radius );
+						break;
+					}
+					default: {
+						hausPoly = computePolytope<Number,representation_name::box>( unitePolytope.getDimension(0), radius );
+						break;
+					}
+				}
+				//State_t<Number> hausPoly = computePolytope<Number,unitePolytope.getSetType(0)>( unitePolytope.getDimension(0), radius );
 				#ifdef REACH_DEBUG
 				std::cout << "Hausdorff Box: " << std::endl;
 				std::cout << hausPoly << std::endl;
 				#endif
 				// hullPolytope +_minkowski hausPoly
-				firstSegment = boost::apply_visitor(genericMinkowskiSumVisitor(),unitePolytope, hausPoly );
+				firstSegment = unitePolytope.minkowskiSum(hausPoly);
 			}
 		} else {
-			Box<Number> externalInput(std::make_pair(Point<Number>(vector_t<Number>::Zero(boost::get<Representation>(_state.set).dimension())), Point<Number>(vector_t<Number>::Zero(boost::get<Representation>(_state.set).dimension()))));
-			std::vector<Box<Number>> errorBoxVector = errorBoxes( Number(mSettings.timeStep), _state.getLocation()->flow(), boost::get<Representation>(_state.set), trafoMatrix, externalInput);
+			Box<Number> externalInput(std::make_pair(Point<Number>(vector_t<Number>::Zero(_state.getDimension(0))), Point<Number>(vector_t<Number>::Zero(_state.getDimension(0)))));
+			std::vector<Box<Number>> errorBoxVector = errorBoxes( Number(mSettings.timeStep), _state.getLocation()->getFlow(), _state, trafoMatrix, externalInput);
 
 			//Representation tmp = bloatBox<Number>(deltaValuation, errorBoxVector[1]);
 			//std::cout << "Errorbox1: " << convert<Number,double>(errorBoxVector[1]) << std::endl;
 
-			firstSegment = deltaValuation.unite(boost::get<Representation>(_state.set));
+			firstSegment = deltaValuation.aggregate(_state);
 			//Box<Number> differenceBox = errorBoxVector[2];
 			//differenceBox = Number(Number(1)/Number(4)) * differenceBox;
 
@@ -126,24 +187,24 @@ Zonotope<Number> bloatBox( const Zonotope<Number>& in, const Box<Number>& bloatB
 		firstSegment.removeRedundancy();
 
 		// set the last segment of the flowpipe. Note that intersection with the invariants cannot result in an empty set due to previous checks.
-		std::pair<bool, Representation> fullSegment = firstSegment.satisfiesHalfspaces( _state.getLocation()->invariant().mat, _state.getLocation()->invariant().vec );
+		std::pair<bool, State_t<Number>> fullSegment = firstSegment.satisfies( _state.getLocation()->getInvariant());
 		#ifdef REACH_DEBUG
 		std::cout << "Valuation fulfills Invariant?: ";
 		std::cout << fullSegment.first << std::endl;
 		#endif
 		if(fullSegment.first) {
-			validState.set = fullSegment.second;
-			validState.getTimestamp() = carl::Interval<Number>(Number(0),mSettings.timeStep);
+			validState.setSets(fullSegment.second.getSets());
+			validState.setTimestamp(carl::Interval<Number>(Number(0),mSettings.timeStep));
 			return boost::tuple<bool, State_t<Number>, matrix_t<Number>, vector_t<Number>>(true, validState, trafoMatrixResized, translation);
 		} else {
 			return boost::tuple<bool, State_t<Number>, matrix_t<Number>, vector_t<Number>>(false);
 		}
 	}
 
-	template<typename Number, typename Representation>
-	matrix_t<Number> Reach<Number>::computeTrafoMatrix( Location<Number>* _loc ) const {
-		matrix_t<Number> deltaMatrix( _loc->flow().rows(), _loc->flow().cols() );
-		deltaMatrix = _loc->flow() * mSettings.timeStep;
+	template<typename Number>
+	matrix_t<Number> Reach<Number>::computeTrafoMatrix( const Location<Number>* _loc ) const {
+		matrix_t<Number> deltaMatrix( _loc->getFlow().rows(), _loc->getFlow().cols() );
+		deltaMatrix = _loc->getFlow() * mSettings.timeStep;
 
 		#ifdef REACH_DEBUG
 		std::cout << "delta Matrix: " << std::endl;

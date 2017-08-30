@@ -32,8 +32,8 @@ public:
 	void setVector(const vector_t<Number>& in, std::size_t I = 0);
 	void setMatrix(const matrix_t<Number>& in, std::size_t I = 0);
 
-	template<typename Representation>
-	State<Number,Representation> applyReset(const State<Number,Representation>& inState) const;
+	template<typename Representation, typename ...Rargs>
+	State<Number,Representation,Rargs...> applyReset(const State<Number,Representation,Rargs...>& inState) const;
 
 #ifdef HYPRO_LOGGING
     friend std::ostream& operator<<(std::ostream& ostr, const Reset<Number>& a)

@@ -20,14 +20,16 @@ namespace reachability {
 		// collect all computed reachable states
 		std::vector<std::pair<unsigned, flowpipe_t<Number>>> collectedReachableStates;
 
-		for ( const auto& state : mAutomaton.initialStates() ) {
-			if(mCurrentLevel <= mSettings.jumpDepth){
+		for ( const auto& state : mAutomaton.getInitialStates() ) {
+			if(int(mCurrentLevel) <= mSettings.jumpDepth || mSettings.jumpDepth < 0){
 				// Convert representation in state from matrix and vector to used representation type.
-				State_t<Number> s(state.second);
+				State_t<Number> s;
+				s.setLocation(state.second.getLocation());
 
 				switch(mType){
 					case representation_name::box: {
-						s.setSet(Converter<Number>::toBox(boost::get<ConstraintSet<Number>>(state.second.getSet())));
+						Box<Number> tmp = Converter<Number>::toBox(boost::get<ConstraintSet<Number>>(state.second.getSet()));
+						s.setSet(tmp);
 						//DEBUG("hypro.reacher","Adding initial set " << boost::get<Box<Number>>(s.set));
 						break;
 					}
@@ -63,7 +65,7 @@ namespace reachability {
 						s.setSet(Converter<Number>::toBox(boost::get<ConstraintSet<Number>>(state.second.getSet())));
 					}
 				}
-				s.getTimestamp() = carl::Interval<Number>(0);
+				s.setTimestamp(carl::Interval<Number>(0));
 				mWorkingQueue.emplace_back(initialSet<Number>(mCurrentLevel, s));
 			}
 		}
@@ -77,7 +79,7 @@ namespace reachability {
 			INFO("hypro.reacher","Depth " << mCurrentLevel << ", Location: " << boost::get<1>(nextInitialSet).getLocation()->id());
 			flowpipe_t<Number> newFlowpipe = computeForwardTimeClosure(boost::get<1>(nextInitialSet));
 
-			collectedReachableStates.emplace_back(std::make_pair(boost::get<1>(nextInitialSet).getLocation()->id(), newFlowpipe));
+			collectedReachableStates.emplace_back(std::make_pair(boost::get<1>(nextInitialSet).getLocation()->getId(), newFlowpipe));
 		}
 
 		return collectedReachableStates;
@@ -112,7 +114,7 @@ namespace reachability {
 				boost::get<3>(initialSetup) == vector_t<Number>::Zero(boost::get<3>(initialSetup).rows())) {
 				noFlow = true;
 				// Collect potential new initial states from discrete behaviour.
-				if(mCurrentLevel < mSettings.jumpDepth) {
+				if(int(mCurrentLevel) <= mSettings.jumpDepth || mSettings.jumpDepth < 0) {
 					checkTransitions(_state, carl::Interval<Number>(Number(0),mSettings.timeBound), nextInitialSets);
 				}
 			}
@@ -127,7 +129,7 @@ namespace reachability {
 			flowpipe.push_back( currentSegment );
 
 			// Check for bad states intersection. The first segment is validated against the invariant, already.
-			if(intersectBadStates(_state, currentSegment)){
+			if(intersectBadStates(currentSegment)){
 				// clear queue to stop whole algorithm
 				while(!mWorkingQueue.empty()){
 					mWorkingQueue.pop_front();
@@ -161,12 +163,12 @@ namespace reachability {
 			while( !noFlow && currentLocalTime <= mSettings.timeBound ) {
 				INFO("hypro.reacher","Time: " << std::setprecision(4) << std::setw(8) << fixed << carl::toDouble(currentLocalTime));
 				// Verify transitions on the current set.
-				if(mCurrentLevel <= mSettings.jumpDepth) {
+				if(int(mCurrentLevel) <= mSettings.jumpDepth || mSettings.jumpDepth < 0) {
 					State_t<Number> guardSatisfyingState;
 					State_t<Number> currentState = _state;
-					currentState.set = currentSegment;
-					currentState.getTimestamp() += carl::Interval<Number>(currentLocalTime-mSettings.timeStep,currentLocalTime);
-					currentState.getTimestamp() = currentState.getTimestamp().intersect(carl::Interval<Number>(Number(0), mSettings.timeBound));
+					currentState.setSetDirect(currentSegment.getSet(0),0);
+					currentState.setTimestamp(currentState.getTimestamp() + carl::Interval<Number>(currentLocalTime-mSettings.timeStep,currentLocalTime));
+					currentState.setTimestamp(currentState.getTimestamp().intersect(carl::Interval<Number>(Number(0), mSettings.timeBound)));
 					checkTransitions(currentState, currentState.getTimestamp(), nextInitialSets);
 				}
 
@@ -191,10 +193,10 @@ namespace reachability {
 				nonautonomPart = nonautonomPart.linearTransformation(boost::get<2>(initialSetup));
 				totalBloating = totalBloating.minkowskiSum(nonautonomPart);
 #else
-				nextSegment =  currentSegment.applyTimestep(std::vector<std::pair<matrix_t<Number>, vector_t<Number>>>({  std::make_pair(boost::get<2>(initialSetup), boost::get<3>(initialSetup)) }));
+				nextSegment =  currentSegment.applyTransformation(std::vector<ConstraintSet<Number>>({  ConstraintSet<Number>(boost::get<2>(initialSetup), boost::get<3>(initialSetup)) }));
 #endif
 				// extend flowpipe (only if still within Invariant of location)
-				std::pair<bool, State_t<Number>> newSegment = nextSegment.satisfies( Condition<Number>(_state.getLocation()->invariant().mat, _state.getLocation()->invariant().vec) );
+				std::pair<bool, State_t<Number>> newSegment = nextSegment.satisfies( _state.getLocation()->getInvariant());
 #ifdef REACH_DEBUG
 				std::cout << "Next Flowpipe Segment: " << newSegment.second << std::endl;
 				std::cout << "still within Invariant?: ";
@@ -202,7 +204,7 @@ namespace reachability {
 #endif
 				if ( newSegment.first ) {
 					flowpipe.push_back( newSegment.second );
-					if(intersectBadStates(_state, newSegment.second)){
+					if(intersectBadStates(newSegment.second)){
 						// clear queue to stop whole algorithm
 						while(!mWorkingQueue.empty()){
 							mWorkingQueue.pop_front();
@@ -225,7 +227,7 @@ namespace reachability {
 			std::cout << "Process " << nextInitialSets.size() << " new initial sets." << std::endl;
 #endif
 			// The loop terminated correctly (i.e. no bad states were hit), process discrete behavior.
-			if(mCurrentLevel < mSettings.jumpDepth){
+			if(int(mCurrentLevel) <= mSettings.jumpDepth || mSettings.jumpDepth < 0){
 				processDiscreteBehaviour(nextInitialSets);
 			}
 			return flowpipe;

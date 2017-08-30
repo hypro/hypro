@@ -11,7 +11,6 @@
  */
 
 #pragma once
-#include "util.h"
 #include "datastructures/HybridAutomaton/Settings.h"
 #include "datastructures/HybridAutomaton/HybridAutomaton.h"
 #include "datastructures/HybridAutomaton/State.h"
@@ -44,13 +43,15 @@ namespace hypro {
 namespace reachability {
 
 template<typename Number>
-using State_t = State<Number, Box<Number>, SupportFunction<Number>>;
+using State_t = State<Number, Box<Number>, SupportFunction<Number>, Zonotope<Number>, HPolytope<Number>, VPolytope<Number>>;
 
 template<typename Number>
 using initialSet = boost::tuple<unsigned, State_t<Number>>;
 
 template <typename Number>
 using flowpipe_t = std::vector<State_t<Number>>;
+
+#include "util.h"
 
 /**
  * @brief      Class implementing a basic reachbility analysis algorithm for linear hybrid automata.
@@ -137,9 +138,9 @@ public:
 
 private:
 
-	matrix_t<Number> computeTrafoMatrix( Location<Number>* _loc ) const;
+	matrix_t<Number> computeTrafoMatrix( const Location<Number>* _loc ) const;
 	boost::tuple<bool, State_t<Number>, matrix_t<Number>, vector_t<Number>> computeFirstSegment( const State_t<Number>& _state ) const;
-	bool intersectBadStates( const State_t<Number>& _state, const State_t<Number>& _segment ) const;
+	bool intersectBadStates( const State_t<Number>& _state ) const;
 };
 
 }  // namespace reachability

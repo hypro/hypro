@@ -4,7 +4,7 @@ namespace hypro {
 
 	//Constructor & Destructor
 	template<typename Number>
-	HyproInitialSetVisitor<Number>::HyproInitialSetVisitor(std::vector<std::string>& varVec, std::set<Location<Number>*>& lSet) : 
+	HyproInitialSetVisitor<Number>::HyproInitialSetVisitor(std::vector<std::string>& varVec, std::set<Location<Number>*>& lSet) :
 		vars(varVec),
 		locSet(lSet)
 	{ }
@@ -71,8 +71,8 @@ namespace hypro {
   		misc::Interval inter(startIndex, endIndex);
   		CharStream* input = ctx->start->getInputStream();
   		std::string text = input->getText(inter);
-  		for(unsigned i=0; i < vars.size(); i++){
-  			unsigned pos = text.find(vars[i]);
+  		for(std::size_t i=0; i < vars.size(); i++){
+  			std::size_t pos = text.find(vars[i]);
   			if(pos != std::string::npos){
   				varCount[i]++;
   				text = text.erase(pos, vars[i].size());
