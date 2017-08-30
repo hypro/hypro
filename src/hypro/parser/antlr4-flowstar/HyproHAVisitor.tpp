@@ -34,6 +34,7 @@ namespace hypro {
 		//std::cout << "---- locSet is now: " << locSet << std::endl;		
 
 		//4.Later calls visit to get transitions
+		//NOTE: the transVisitor will modify locSet as every location has its own set of transitions that must be added here.
 		HyproTransitionVisitor<Number> transVisitor = HyproTransitionVisitor<Number>(varVec, rLocSet);
 		std::set<Transition<Number>*> transSet = transVisitor.visit(ctx->jumps()).antlrcpp::Any::as<std::set<Transition<Number>*>>();
 		std::cout << "-- transVisitor visited!" << std::endl;

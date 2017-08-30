@@ -76,7 +76,7 @@ namespace reachability {
 
 			mCurrentLevel = boost::get<0>(nextInitialSet);
 			assert(mCurrentLevel <= mSettings.jumpDepth);
-			INFO("hypro.reacher","Depth " << mCurrentLevel << ", Location: " << boost::get<1>(nextInitialSet).getLocation()->id());
+			INFO("hypro.reacher","Depth " << mCurrentLevel << ", Location: " << boost::get<1>(nextInitialSet).getLocation()->getId());
 			flowpipe_t<Number> newFlowpipe = computeForwardTimeClosure(boost::get<1>(nextInitialSet));
 
 			collectedReachableStates.emplace_back(std::make_pair(boost::get<1>(nextInitialSet).getLocation()->getId(), newFlowpipe));
@@ -90,11 +90,12 @@ namespace reachability {
 	flowpipe_t<Number> Reach<Number>::computeForwardTimeClosure( const State_t<Number>& _state ) {
 		assert(!_state.getTimestamp().isUnbounded());
 #ifdef REACH_DEBUG
-		std::cout << "Location: " << _state.getLocation()->id() << std::endl;
+		std::cout << "Location: " << _state.getLocation()->getId() << std::endl;
 		std::cout << "Location printed : " << *_state.getLocation() << std::endl;
 		std::cout << "Time step size: " << mSettings.timeStep << std::endl;
 		std::cout << "Initial valuation: " << std::endl;
-		std::cout << boost::get<Representation>(_state.set) << std::endl;
+		//std::cout << boost::get<State_t<Number>>(_state) << std::endl;
+		std::cout << _state << std::endl;
 #endif
 		// new empty Flowpipe
 		flowpipe_t<Number> flowpipe;
@@ -115,6 +116,7 @@ namespace reachability {
 				noFlow = true;
 				// Collect potential new initial states from discrete behaviour.
 				if(int(mCurrentLevel) <= mSettings.jumpDepth || mSettings.jumpDepth < 0) {
+					std::cout << "-- Checking Transitions from initial!" << std::endl;
 					checkTransitions(_state, carl::Interval<Number>(Number(0),mSettings.timeBound), nextInitialSets);
 				}
 			}
@@ -169,6 +171,7 @@ namespace reachability {
 					currentState.setSetDirect(currentSegment.getSet(0),0);
 					currentState.setTimestamp(currentState.getTimestamp() + carl::Interval<Number>(currentLocalTime-mSettings.timeStep,currentLocalTime));
 					currentState.setTimestamp(currentState.getTimestamp().intersect(carl::Interval<Number>(Number(0), mSettings.timeBound)));
+					std::cout << "-- Checking Transitions!" << std::endl;
 					checkTransitions(currentState, currentState.getTimestamp(), nextInitialSets);
 				}
 
@@ -225,9 +228,11 @@ namespace reachability {
 			}
 			std::cout << "flowpipe: " << flowpipe.size() << " Segments computed." << std::endl;
 			std::cout << "Process " << nextInitialSets.size() << " new initial sets." << std::endl;
+			std::cout << "current level: " << mCurrentLevel << std::endl;
 #endif
 			// The loop terminated correctly (i.e. no bad states were hit), process discrete behavior.
 			if(int(mCurrentLevel) <= mSettings.jumpDepth || mSettings.jumpDepth < 0){
+				std::cout << "Entered processDiscreteBehaviour!" << std::endl;
 				processDiscreteBehaviour(nextInitialSets);
 			}
 			return flowpipe;

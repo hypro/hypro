@@ -4,11 +4,16 @@ namespace reachability {
 	template<typename Number>
 	bool Reach<Number>::intersectGuard( Transition<Number>* _trans, const State_t<Number>& _state,
 							   State_t<Number>& result ) const {
-		assert(!_state.timestamp.isUnbounded());
+
+		assert(!_state.getTimestamp().isUnbounded());
 		result = _state;
+
+		std::cout << "------ start intersecting guard!" << std::endl;
 
 		// check for continuous set guard intersection
 		std::pair<bool, State_t<Number>> guardSatisfyingSet = _state.satisfies( _trans->getGuard() );
+
+		std::cout << "------ guard satisfied? " << guardSatisfyingSet.first << std::endl;
 
 		// check if the intersection is empty
 		if ( guardSatisfyingSet.first ) {
@@ -22,6 +27,7 @@ namespace reachability {
 			//}
 
 			result.setSets(guardSatisfyingSet.second.getSets());
+			std::cout << "------ end intersecting guard!" << std::endl;
 			return true;
 		} else {
 			#ifdef REACH_DEBUG
@@ -34,6 +40,8 @@ namespace reachability {
 	template<typename Number>
 	void Reach<Number>::processDiscreteBehaviour( const std::vector<boost::tuple<Transition<Number>*, State_t<Number>>>& _newInitialSets ) {
 		std::map<Transition<Number>*, std::vector<State_t<Number>>> toAggregate;
+
+		std::cout << "I am in processDiscreteBehaviour!" << std::endl;
 
 		for(const auto& tuple : _newInitialSets ) {
 			if(boost::get<0>(tuple)->getAggregation() == Aggregation::none){
@@ -50,6 +58,7 @@ namespace reachability {
 				}
 				if(!duplicate){
 					mWorkingQueue.emplace_back(mCurrentLevel+1, s);
+					std::cout << "-- No duplicate state tupel found! mWorkingQueue size is now: " << mWorkingQueue.size() << std::endl;
 				}
 			} else { // aggregate all
 				// TODO: Note that all sets are collected for one transition, i.e. currently, if we intersect the guard for one transition twice with
@@ -58,11 +67,18 @@ namespace reachability {
 					toAggregate[boost::get<0>(tuple)] = std::vector<State_t<Number>>();
 				}
 				toAggregate[boost::get<0>(tuple)].push_back(boost::get<1>(tuple));
+
 			}
 		}
 
+		std::cout << "-- Aggregating states. Size is now: " << toAggregate.size() << std::endl;
+		std::cout << "I've set the aggregation targets!" << std::endl;
+
 		// aggregation - TODO: add options for clustering.
 		for(const auto& aggregationPair : toAggregate){
+
+			std::cout << "-- Entered aggregation loop" << std::endl;
+
 			assert(!aggregationPair.second.empty());
 			carl::Interval<Number> aggregatedTimestamp = aggregationPair.second.begin()->getTimestamp();
 			//std::cout << "Aggregated timestamp before aggregation " << aggregatedTimestamp << std::endl;
@@ -132,16 +148,23 @@ namespace reachability {
 				mWorkingQueue.emplace_back(mCurrentLevel+1, s);
 			}
 		}
+
+		std::cout << "After aggregation loop" << std::endl;
 	}
 
 	template<typename Number>
 	bool Reach<Number>::checkTransitions(const State_t<Number>& state, const carl::Interval<Number>& , std::vector<boost::tuple<Transition<Number>*, State_t<Number>>>& nextInitialSets) const {
+
+		std::cout << "---- In checking transitions!" << std::endl;
+
 		State_t<Number> guardSatisfyingState;
 		bool transitionEnabled = false;
+		std::cout << "------ how many transitions do we have? " << state.getLocation()->getTransitions().size() << std::endl;
 		for( auto transition : state.getLocation()->getTransitions() ){
 			// handle time-triggered transitions
+			std::cout << "------ Do I get here?" << std::endl;
 			if(intersectGuard(transition, state, guardSatisfyingState)){
-				//std::cout << "hybrid transition enabled" << std::endl;
+				std::cout << "------hybrid transition enabled" << std::endl;
 				//std::cout << *transition << std::endl;
 				assert(guardSatisfyingState.getTimestamp() == state.getTimestamp());
 				// when a guard is satisfied here, as we do not have dynamic behaviour, avoid calculation of flowpipe
@@ -152,6 +175,8 @@ namespace reachability {
 				nextInitialSets.emplace_back(transition, guardSatisfyingState);
 			}
 		}
+
+		std::cout << "---- End checking transitions!" << std::endl;
 		return transitionEnabled;
 	}
 

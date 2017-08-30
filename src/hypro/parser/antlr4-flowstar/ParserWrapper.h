@@ -3,6 +3,8 @@
 #include "HyproHAVisitor.h"
 #include <boost/tuple/tuple.hpp>
 
+//#include <unistd.h>		//getcwd()
+
 namespace hypro {
 
 	template<typename Number>

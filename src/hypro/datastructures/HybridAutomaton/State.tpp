@@ -186,8 +186,8 @@ State<Number,Representation,Rargs...> State<Number,Representation,Rargs...>::min
 
 template<typename Number, typename Representation, typename ...Rargs>
 State<Number,Representation,Rargs...> State<Number,Representation,Rargs...>::partiallyMinkowskiSum(const State<Number,Representation,Rargs...>& rhs, std::size_t I ) const {
-	assert(i < mSets.size());
-	assert(i < rhs.getSets().size());
+	assert(I < mSets.size());
+	assert(I < rhs.getSets().size());
 	//If only one representation given: avoid boost visitor
 	//if(mTypes.size() == 1){
 	//	return boost::get<Representation>(mSets.at(0)).minkowskiSum(rhs);
@@ -200,7 +200,7 @@ State<Number,Representation,Rargs...> State<Number,Representation,Rargs...>::par
 
 template<typename Number, typename Representation, typename ...Rargs>
 std::size_t State<Number,Representation,Rargs...>::getDimension(std::size_t I) const {
-	assert(i < mSets.size());
+	assert(I < mSets.size());
 	//If only one representation given: avoid boost visitor
 	//if(mTypes.size() == 1){
 	//	return boost::get<Representation>(mSets.at(0)).dimension();
@@ -211,7 +211,7 @@ std::size_t State<Number,Representation,Rargs...>::getDimension(std::size_t I) c
 
 template<typename Number, typename Representation, typename ...Rargs>
 Number State<Number,Representation,Rargs...>::getSupremum(std::size_t I) const {
-	assert(i < mSets.size());
+	assert(I < mSets.size());
 	//If only one representation given: avoid boost visitor
 	//if(mTypes.size() == 1){
 	//	return boost::get<Representation>(mSets.at(0)).supremum();
@@ -235,7 +235,7 @@ void State<Number,Representation,Rargs...>::removeRedundancy(){
 
 template<typename Number, typename Representation, typename ...Rargs>
 void State<Number,Representation,Rargs...>::partiallyRemoveRedundancy(std::size_t I){
-	assert(i < mSets.size());
+	assert(I < mSets.size());
 	//If only one representation given: avoid boost visitor
 	//if(mTypes.size() == 1){
 	//	return boost::get<Representation>(mSets.at(0)).removeRedundancy();

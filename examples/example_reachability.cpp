@@ -23,10 +23,12 @@ static void computeReachableStates(const std::string& filename, const hypro::rep
 	clock::time_point start = clock::now();
 
 	boost::tuple<hypro::HybridAutomaton<Number>, hypro::ReachabilitySettings<Number>> ha = hypro::parseFlowstarFile<Number>(filename);
+	std::cout << "Parsed HybridAutomaton:\n" << boost::get<0>(ha) << "Parsed ReachabilitySettings:\n" << boost::get<1>(ha) << std::endl;
 	hypro::reachability::Reach<Number> reacher(boost::get<0>(ha), boost::get<1>(ha));
 	reacher.setRepresentationType(type);
 	std::cout << boost::get<1>(ha) << std::endl;
 	std::vector<std::pair<unsigned, hypro::reachability::flowpipe_t<Number>>> flowpipes = reacher.computeForwardReachability();
+
 	std::cout << "Finished computation of reachable states: " << std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000.0 << " ms" << std::endl;
 
 #ifdef PLOT_FLOWPIPE
@@ -133,7 +135,8 @@ int main(int argc, char** argv) {
 #ifdef USE_CLN_NUMBERS
 	using Number = cln::cl_RA;
 #else
-	using Number = mpq_class;
+	//using Number = mpq_class;
+	using Number = double;
 #endif
 
 	switch(rep){

@@ -34,16 +34,16 @@ namespace hypro {
 
 		//1.Get ConstraintSet, build State and return localStateMap
 		ConstraintSet<Number> conSet = visit(ctx->initstate());
-		std::cout << "---- Hab ein ConstraintSet mitgebracht!" << std::endl;
+		std::cout << "---- Initial constraints sind:" << std::endl;
 		std::cout << "---- matrix:\n" << conSet.matrix() << "and vector:\n" << conSet.vector() << std::endl;
 		State<Number,ConstraintSet<Number>> state;
-		std::cout << "---- state deklariert" << std::endl;
+		//std::cout << "---- state deklariert" << std::endl;
 		state.setLocation(initialLoc);
-		std::cout << "---- location gesettet" << std::endl;
+		//std::cout << "---- location gesettet" << std::endl;
 		//std::vector<boost::variant<ConstraintSet<Number>>> mSet;
-		std::cout << "---- Made a vecter of sets" << std::endl;
+		//std::cout << "---- Made a vecter of sets" << std::endl;
 		//mSet.push_back(conSet);
-		std::cout << "---- pushed conSet inside" << std::endl;
+		//std::cout << "---- pushed conSet inside" << std::endl;
 		state.setSet(conSet,0);
 		assert(state.getNumberSets() == 1);
 		std::cout << "---- State gebaut!" << std::endl;

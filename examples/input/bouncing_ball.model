@@ -34,7 +34,7 @@ hybrid reachability
   }
  }
 
- jumps
+ jumps 
  {
   l -> l
   guard { x = 0 v <= 0 }

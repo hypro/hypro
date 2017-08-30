@@ -23,10 +23,10 @@ namespace hypro {
 		if(ctx->transition().size() > 0){
 			std::set<Transition<Number>*> trSet;
 			for(auto tr : ctx->transition()){
-				trSet.insert(visit(tr).antlrcpp::Any::as<Transition<Number>*>());
-				//auto blub = visit(tr).antlrcpp::Any::as<Transition<Number>*>();
-				//std::cout << *blub << std::endl;
-				//trSet.insert(blub);
+				//trSet.insert(visit(tr).antlrcpp::Any::as<Transition<Number>*>());
+				Transition<Number>* t = visit(tr).antlrcpp::Any::as<Transition<Number>*>();
+				trSet.insert(t);
+				(t->getSource())->addTransition(t);
 			}
 			return trSet;
 		} else {
@@ -137,6 +137,8 @@ namespace hypro {
 		Condition<Number> inv;
 		inv.setMatrix(result.first);
 		inv.setVector(result.second);
+
+		std::cout << "---- Guard Matrix is:\n" << inv.getMatrix() << "and vector is:\n" << inv.getVector() << std::endl;
 
 		//3.Return condition
 		return inv;

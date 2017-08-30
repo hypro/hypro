@@ -92,8 +92,9 @@ public:
 	    //ostr << l.getInvariant().getDiscreteCondition() << std::endl;
 	    ostr << "Transitions: " << std::endl;
 	    for (auto transitionPtr : l.getTransitions()) {
-	        ostr << transitionPtr << std::endl;
+	        ostr << *transitionPtr << std::endl;
 	    }
+      ostr << "and transitions.size() is: " << l.getTransitions().size() << std::endl;
 	    ostr << std::endl << ")";
 	#endif
 	    return ostr;

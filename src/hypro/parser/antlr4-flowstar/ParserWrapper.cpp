@@ -3,8 +3,19 @@
 
 namespace hypro {
 
+	void cwd(){
+		char cwd[1024];
+	   	if (getcwd(cwd, sizeof(cwd)) != NULL)
+	       fprintf(stdout, "Current working dir: %s\n", cwd);
+	   	else
+	       std::cerr << "getcwd() error" << std::endl;
+	}
+
 	void openFile(const std::string& filename, ANTLRInputStream& input) {
+		
 		std::fstream ifs(filename);
+
+		cwd();
 
 		if(ifs.good()){
 			input = ANTLRInputStream(ifs);
