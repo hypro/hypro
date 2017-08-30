@@ -67,18 +67,18 @@ void declare_structures(const int n, In_eq& in_eq1, Invar& invar, Ind_f& ind_f,
 //  x0 is column 0 of x_tr
 void mark_x0isMin(Matrix& x_tr, const int n);
 void swap_x0isMax(Matrix& x_tr, const int n);
-void initialize (Dep_f& dep_f, const DiagonalMatrix& D, Eval_f& eval_f, 
-        Flow_seg& safe_seg, Flow_seg& error_seg, const int n, const Matrix& V, 
-        std::size_t DIM_PLOT, bool ORIG_SYS_PLOT);
+void initialize (Eval_f& eval_f, Flow_seg& safe_seg, Flow_seg& error_seg, 
+        std::size_t DIM_PLOT, bool ORIG_SYS_PLOT, const DiagonalMatrix& D,  
+        const int n, const Matrix& V, Dep_f& dep_f);
 void loop (std::vector<VPoly>& flow, std::vector<VPoly>& error_flow, 
-        const Flags& flag1, const Ind_f& ind_f, Eval_f& eval_f, Dep_f& dep_f, 
-        const int n, Flow_seg& safe_seg, Flow_seg& error_seg, const Matrix& V);
-void trajectory_plot(std::vector<VPoly>& exactflow, const Ind_f& ind_f, 
-        const int n, const Matrix& V, Dep_f& in_traj, const std::size_t traj_scale,
-        std::size_t DIM_PLOT, bool ORIG_SYS_PLOT);
-void plot_addTimeSegment(std::size_t traj_time, const Matrix& x_tr, const Matrix& V, 
-        const int n, Flow_seg& safe_seg, std::size_t DIM_PLOT, bool ORIG_SYS_PLOT);
-void addSegment(bool PLOT, std::vector<VPoly>& flow, Flow_seg& safe_seg, 
+        const Flags& flag1, const Ind_f& ind_f, const int n, const Matrix& V, 
+        Eval_f& eval_f, Dep_f& dep_f, Flow_seg& safe_seg, Flow_seg& error_seg);
+void trajectory_plot(std::vector<VPoly>& exactflow, std::size_t DIM_PLOT, bool ORIG_SYS_PLOT,
+        const Ind_f& ind_f, const int n, const Matrix& V, const std::size_t traj_scale,
+        Dep_f& in_traj);
+void plot_addTimeSegment(Flow_seg& safe_seg, std::size_t DIM_PLOT, bool ORIG_SYS_PLOT, 
+        const std::size_t traj_time, const Matrix& x_tr, const Matrix& V, const int n);
+void addSegment(std::vector<VPoly>& flow, Flow_seg& safe_seg, bool PLOT, 
         std::size_t colorUpper, std::size_t colorLower);
 
 int main()
@@ -103,7 +103,7 @@ int main()
     Vector b_tr = Vector(n);                            //transformed and dumped after use
     
     flag1.DIM_PLOT      = 0;        //0..n-1 for the plot
-    flag1.ORIG_SYS_PLOT = false; //plotting in original system or transformed?
+    flag1.ORIG_SYS_PLOT = true; //plotting in original system or transformed?
     flag1.HULLCONSTR    = true;
     flag1.HULL_PLOT     = false;
     flag1.ERROR_PLOT    = true;
@@ -156,15 +156,14 @@ int main()
     in_traj.xhom.col(0) = ind_f.xinhom.array() + in_traj.x_tr.col(0).array();
     in_traj.xhom.col(1) = ind_f.xinhom.array() + in_traj.x_tr.col(1).array();
     std::cout << "xhom: "<< std::endl << dep_f.xhom;
-    initialize (dep_f, ind_f.D, eval_f, safe_seg, error_seg,
-                n, V, flag1.DIM_PLOT, flag1.ORIG_SYS_PLOT);
-
+    initialize (eval_f, safe_seg, error_seg,flag1.DIM_PLOT, flag1.ORIG_SYS_PLOT,
+        ind_f.D, n, V,  dep_f); 
     if (flag1.TRAJECTORY_PLOT) {
-        trajectory_plot(exactflow, ind_f, n, V, in_traj, 
-            traj_scale, flag1.DIM_PLOT, flag1.ORIG_SYS_PLOT);
+        trajectory_plot(exactflow, flag1.DIM_PLOT, flag1.ORIG_SYS_PLOT, ind_f, n, V, 
+            traj_scale, in_traj);
     }
     if (flag1.HULLCONSTR) {
-    loop (safeflow, error_flow, flag1, ind_f, eval_f, dep_f, n, safe_seg, error_seg, V);
+        loop (safeflow, error_flow, flag1, ind_f, n, V, eval_f, dep_f, safe_seg, error_seg);
     }
     //checking invariants for jump
     //for segment in Segments [std::vector<VPoly>]
@@ -242,16 +241,16 @@ void swap_x0isMax(Matrix& x_tr, const int n) {
             //case2: -e^(-x)   --- etc
             //case3: -e^(x)    --- D>0, xhomconst<0
             //case4:  e^(-x)   --- etc
-void initialize (Dep_f& in_approx, const DiagonalMatrix& D, Eval_f& eval_f, 
-        Flow_seg& safe_seg, Flow_seg& error_seg, const int n, const Matrix& V, 
-        std::size_t DIM_PLOT, bool ORIG_SYS_PLOT) {
+void initialize (Eval_f& eval_f, Flow_seg& safe_seg, Flow_seg& error_seg, 
+        std::size_t DIM_PLOT, bool ORIG_SYS_PLOT, const DiagonalMatrix& D,  
+        const int n, const Matrix& V, Dep_f& dep_f) {
     Vector plot_vector = Vector(n);
     const Matrix x_tr_error = Matrix::Zero(n,2);
     for(int i=0; i<n; ++i) {
         if (D.diagonal()(i)>0) { //divergence
-            if (in_approx.xhom(i,0) >= 0) {  //
+            if (dep_f.xhom(i,0) >= 0) {  //
                 eval_f.direct(i,0) = true;      //xmax(i) directLine
-                if (in_approx.xhom(i,1) > 0) {
+                if (dep_f.xhom(i,1) > 0) {
                     //xmin(i) derivLine
                 } else {    //xmin: -e^x
                     eval_f.direct(i,1) = true;  //unusual!! xmin(i) directLine
@@ -259,7 +258,7 @@ void initialize (Dep_f& in_approx, const DiagonalMatrix& D, Eval_f& eval_f,
                 }
             } else {    //xmax: -e^x
                     //xmax(i) derivLine
-                if(in_approx.xhom(i,1) > 0) {
+                if(dep_f.xhom(i,1) > 0) {
                     std::cout<<"ERROR upwards and downwards"<<std::endl;
                     //ERROR upwards and downwards
                 } else {
@@ -268,9 +267,9 @@ void initialize (Dep_f& in_approx, const DiagonalMatrix& D, Eval_f& eval_f,
             }
         } else { //e^(-x) and -e^(-x) whereas -x fixed here
         //convergence
-            if (in_approx.xhom(i,0) <= 0) {  //xmax:-e^(-x)
+            if (dep_f.xhom(i,0) <= 0) {  //xmax:-e^(-x)
                 eval_f.direct(i,0) = true;      //xmax(i) directLine
-                if (in_approx.xhom(i,1) < 0) {
+                if (dep_f.xhom(i,1) < 0) {
                     //xmin(i) derivLine
                 } else {
                     eval_f.direct(i,1) = true;  //xmin(i) directLine
@@ -278,7 +277,7 @@ void initialize (Dep_f& in_approx, const DiagonalMatrix& D, Eval_f& eval_f,
                 }
             } else {    //xmax:e^(-x)
                 //xmax(i) derivLine
-                if (in_approx.xhom(i,1) >=0) {
+                if (dep_f.xhom(i,1) >=0) {
                     eval_f.direct(i,1) = true;   //xmin(i) directLine
                 } else {
                     //xmin(i) derivLine
@@ -289,23 +288,23 @@ void initialize (Dep_f& in_approx, const DiagonalMatrix& D, Eval_f& eval_f,
     }
     //std::cout<<"eval_f.direct:"<<std::endl<<eval_f.direct;
     //t=0 step calculation + inserting, e^0 = 1
-    eval_f.deriv.col(0) = in_approx.xhom.col(0).array()*D.diagonal().array();
-    eval_f.deriv.col(1) = in_approx.xhom.col(1).array()*D.diagonal().array();
+    eval_f.deriv.col(0) = dep_f.xhom.col(0).array()*D.diagonal().array();
+    eval_f.deriv.col(1) = dep_f.xhom.col(1).array()*D.diagonal().array();
     if (ORIG_SYS_PLOT) {
-        swap_x0isMax(in_approx.x_tr, n);
-        plot_addTimeSegment(0, in_approx.x_tr, V, n, safe_seg, DIM_PLOT, ORIG_SYS_PLOT);
-        plot_addTimeSegment(0, x_tr_error, V, n, error_seg, DIM_PLOT, ORIG_SYS_PLOT);
-        swap_x0isMax(in_approx.x_tr, n);
+        swap_x0isMax(dep_f.x_tr, n);
+        plot_addTimeSegment(safe_seg, DIM_PLOT, ORIG_SYS_PLOT, 0, dep_f.x_tr, V, n);
+        plot_addTimeSegment(error_seg, DIM_PLOT, ORIG_SYS_PLOT, 0, x_tr_error, V, n);
+        swap_x0isMax(dep_f.x_tr, n);
     } else {
-        plot_addTimeSegment(0, in_approx.x_tr, V, n, safe_seg, DIM_PLOT, ORIG_SYS_PLOT);
-        plot_addTimeSegment(0, x_tr_error, V, n, error_seg, DIM_PLOT, ORIG_SYS_PLOT);
+        plot_addTimeSegment(safe_seg, DIM_PLOT, ORIG_SYS_PLOT, 0, dep_f.x_tr, V, n);
+        plot_addTimeSegment(error_seg, DIM_PLOT, ORIG_SYS_PLOT, 0, x_tr_error, V, n);
     }
 }
     //1.linear value + deriv OR direct value
     //2.pushing,writing,deleting 
 void loop (std::vector<VPoly>& flow, std::vector<VPoly>& error_flow, const Flags& flag1,
-        const Ind_f& ind_f, Eval_f& eval_f, Dep_f& dep_f, 
-        const int n, Flow_seg& safe_seg, Flow_seg& error_seg, const Matrix& V) {
+        const Ind_f& ind_f, const int n, const Matrix& V, Eval_f& eval_f, Dep_f& dep_f, 
+        Flow_seg& safe_seg, Flow_seg& error_seg) {
     Vector factor = Vector::Zero(n);
     Matrix x_tr_error = Matrix::Zero(n,3);
     x_tr_error.col(2) = dep_f.x_tr.col(2).array();
@@ -336,37 +335,37 @@ void loop (std::vector<VPoly>& flow, std::vector<VPoly>& error_flow, const Flags
         }
         if (flag1.ORIG_SYS_PLOT) {
             swap_x0isMax(dep_f.x_tr, n);
-            plot_addTimeSegment(j, dep_f.x_tr, V, n, safe_seg, flag1.DIM_PLOT, 
-                flag1.ORIG_SYS_PLOT);
+            plot_addTimeSegment(safe_seg, flag1.DIM_PLOT, flag1.ORIG_SYS_PLOT, 
+                j, dep_f.x_tr, V, n);
             swap_x0isMax(dep_f.x_tr, n);
         } else {
-            plot_addTimeSegment(j, dep_f.x_tr, V, n, safe_seg, flag1.DIM_PLOT, 
-                flag1.ORIG_SYS_PLOT);
+            plot_addTimeSegment(safe_seg, flag1.DIM_PLOT, flag1.ORIG_SYS_PLOT, 
+                j, dep_f.x_tr, V, n);
         }
         //fill flowpipe and on FLAG add Object to plotter
-        addSegment(flag1.HULL_PLOT, flow, safe_seg, plotting::colors[plotting::red], 
+        addSegment(flow, flag1.HULL_PLOT, safe_seg, plotting::colors[plotting::red], 
             plotting::colors[plotting::blue]);
         if (flag1.ORIG_SYS_PLOT) {
-            swap_x0isMax(dep_f.x_tr, n);
-            plot_addTimeSegment(j, x_tr_error, V, n, error_seg, flag1.DIM_PLOT, 
-                flag1.ORIG_SYS_PLOT);
-            swap_x0isMax(dep_f.x_tr, n);
+            swap_x0isMax(x_tr_error, n);
+            plot_addTimeSegment(error_seg, flag1.DIM_PLOT, flag1.ORIG_SYS_PLOT, 
+                j, x_tr_error, V, n);
+            swap_x0isMax(x_tr_error, n);
         } else {
-            plot_addTimeSegment(j, x_tr_error, V, n, error_seg, flag1.DIM_PLOT, 
-                flag1.ORIG_SYS_PLOT);
+            plot_addTimeSegment(error_seg, flag1.DIM_PLOT, flag1.ORIG_SYS_PLOT, 
+                j, x_tr_error, V, n);
         }
         //fill flowpipe and on FLAG add Object to plotter        
-        addSegment(flag1.ERROR_PLOT, error_flow, error_seg, plotting::colors[plotting::red], 
+        addSegment(error_flow, flag1.ERROR_PLOT, error_seg, plotting::colors[plotting::red], 
             plotting::colors[plotting::blue]);
     }
 }
 
-void trajectory_plot(std::vector<VPoly>& exactflow, const Ind_f& ind_f, 
-        const int n, const Matrix& V, Dep_f& traj_tr, const std::size_t traj_scale, 
-        std::size_t DIM_PLOT, bool ORIG_SYS_PLOT) {
+void trajectory_plot(std::vector<VPoly>& exactflow, std::size_t DIM_PLOT, bool ORIG_SYS_PLOT,
+        const Ind_f& ind_f, const int n, const Matrix& V, const std::size_t traj_scale, 
+        Dep_f& traj_tr) {
     Flow_seg traj_flow_seg;
     Vector factor = Vector::Zero(n);
-    plot_addTimeSegment(0, traj_tr.x_tr, V, n, traj_flow_seg, DIM_PLOT, ORIG_SYS_PLOT);
+    plot_addTimeSegment(traj_flow_seg, DIM_PLOT, ORIG_SYS_PLOT, 0, traj_tr.x_tr, V, n);
     for(std::size_t traj_time = 1; traj_time<=traj_scale*ind_f.deltalimit; traj_time+=1) {
         for (int i=0; i<n; ++i) {
             factor(i) = std::exp(ind_f.D.diagonal()(i)*traj_time*ind_f.delta/traj_scale);
@@ -375,13 +374,13 @@ void trajectory_plot(std::vector<VPoly>& exactflow, const Ind_f& ind_f,
         //depends what we want to plot here
         traj_tr.x_tr.col(0) = traj_tr.xhom.col(0).array()*factor.array()  - ind_f.xinhom.array();
         traj_tr.x_tr.col(1) = traj_tr.xhom.col(1).array()*factor.array()  - ind_f.xinhom.array();
-        plot_addTimeSegment(traj_time, traj_tr.x_tr, V, n, traj_flow_seg, DIM_PLOT, ORIG_SYS_PLOT);
-        addSegment(true, exactflow, traj_flow_seg, plotting::colors[plotting::green], 
+        plot_addTimeSegment(traj_flow_seg, DIM_PLOT, ORIG_SYS_PLOT, traj_time, traj_tr.x_tr, V, n);
+        addSegment(exactflow, true, traj_flow_seg, plotting::colors[plotting::green], 
             plotting::colors[plotting::green]);
     }
 }
-void plot_addTimeSegment(std::size_t traj_time, const Matrix& x_tr, const Matrix& V, 
-        const int n, Flow_seg& flow_segment, std::size_t DIM_PLOT, bool ORIG_SYS_PLOT) {
+void plot_addTimeSegment(Flow_seg& flow_segment, std::size_t DIM_PLOT, bool ORIG_SYS_PLOT, 
+        std::size_t traj_time, const Matrix& x_tr, const Matrix& V, const int n) {
     Vector plot_vector = Vector(n);
     plot_vector(0) = traj_time;
     if(ORIG_SYS_PLOT) {
@@ -395,7 +394,7 @@ void plot_addTimeSegment(std::size_t traj_time, const Matrix& x_tr, const Matrix
     }
     flow_segment.lower.push_back(plot_vector);
 }
-void addSegment(bool PLOT, std::vector<VPoly>& flow, Flow_seg& flow_segment, 
+void addSegment(Flow_seg& flow_segment, bool PLOT, std::vector<VPoly>& flow,  
         std::size_t colorUpper, std::size_t colorLower) { 
     Plotter<Number>& plotter = Plotter<Number>::getInstance();
     VPoly vpoly_upper = VPoly(flow_segment.upper);
