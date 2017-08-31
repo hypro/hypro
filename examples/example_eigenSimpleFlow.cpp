@@ -1,7 +1,10 @@
 /**
  * Sandbox for the Eigendecomposition project.
  */
-
+#include "datastructures/hybridAutomata/HybridAutomaton.h"
+//#include "datastructures/hybridAutomata/LocationManager.h"
+#include "parser/flowstar/ParserWrapper.h"
+#include "algorithms/eigendecomposition/Transformation.h"
 #include "representations/GeometricObject.h"
 #include "util/Plotter.h"
 #include <Eigen/Eigenvalues>
@@ -15,6 +18,8 @@ using Vector = vector_t<Number>;
 using DiagonalMatrix = Eigen::DiagonalMatrix<Number,Eigen::Dynamic>;
 using BoolMatrix = matrix_t<bool>;
 using VPoly = VPolytope<Number>;
+using Representation = hypro::HPolytope<Number>;
+
 typedef struct Flags {
     //int n; //<--- DIMENSION ---> NEEDED ? CONST BETTER?
     std::size_t DIM_PLOT;      //0..n-1 for the plot
@@ -83,6 +88,15 @@ void addSegment(std::vector<VPoly>& flow, bool PLOT, Flow_seg& safe_seg,
 
 int main()
 {
+    Transformation<Number> trafo1;      //transformation class for Hybrid Automata
+    //use hybrid automaton from file
+    const std::string& filename = "../../examples/input/bouncing_ball.model";
+	boost::tuple<hypro::HybridAutomaton<Number>, hypro::reachability::ReachabilitySettings<Number>> ha = hypro::parseFlowstarFile<Number>(filename);
+    std::cout << boost::get<0>(ha);
+    //constructing transformation from hybrid automaton
+    //construct second hybrid automaton
+    //use friend class of transformation? to calculate flowpipe elements/evaluation
+    //adapt function accordingly!
     Flags flag1;
     In_eq in_eq1;               //input system
     Invar invar;                //invariants
@@ -101,6 +115,7 @@ int main()
     Matrix V = Matrix(n,n);                             //backtransformation
     Matrix Vinv = Matrix(n,n);                          //dumped after use
     Vector b_tr = Vector(n);                            //transformed and dumped after use
+    Vector tmp  = Vector(n);
 
     flag1.DIM_PLOT      = 0;        //0..n-1 for the plot
     flag1.ORIG_SYS_PLOT = false; //plotting in original system or transformed?
@@ -121,7 +136,8 @@ int main()
     in_eq1.x0<<    100, 0;        //we require in_eq1.x0 > .in_eq1.x0_2 elementwise
     in_eq1.x0_2 << 10, 0;          //else we swap values
     //###### INVARIANTS:    AVV^(-1)x leq b ######
-    //invar.iAV = in_eq1.A;
+    invar.iAV<<    -1, 0,
+                    0, 0;
     invar.ib.array() = 0;
 
 	std::cout << "d/dx = A*x+b, A:"<< std::endl << in_eq1.A<< std::endl;
@@ -129,7 +145,7 @@ int main()
     std::cout << "in_eq1.x0: "<< std::endl << in_eq1.x0 << std::endl;
     std::cout << "in_eq1.x0_2: "<< std::endl << in_eq1.x0_2 << std::endl;
 
-    Eigen::EigenSolver<Matrix> es(in_eq1.A);     //decompose matrix directly + constructor
+    Eigen::EigenSolver<Matrix> es(in_eq1.A);    //decompose matrix directly + constructor
     V << es.eigenvectors().real();
     ind_f.D.diagonal() << es.eigenvalues().real();
     Vinv = V.inverse();
@@ -145,7 +161,7 @@ int main()
     in_traj.x_tr.col(0) = dep_f.x_tr.col(0);
     in_traj.x_tr.col(1) = dep_f.x_tr.col(1);
     std::cout << "x_transformed: " << std::endl << in_traj.x_tr << std::endl;
-    //invar.iAV = invar.iAV*(1,0)*V;    //TODO fix
+    invar.iAV = invar.iAV*V;                    //transform invariant A(iA)
     std::cout << "Invariants: A*V="<<std::endl << invar.iAV;
     mark_x0isMin(dep_f.x_tr, n);
     swap_x0isMax(dep_f.x_tr, n);
@@ -335,6 +351,8 @@ void loop (std::vector<VPoly>& flow, std::vector<VPoly>& error_flow, const Flags
                 x_tr_error(i,1) = (dep_f.xhom(i,1)*factor(i) - ind_f.xinhom(i)) - dep_f.x_tr(i,1);
             }
         }
+        //check invariants in transformed system
+
         if (flag1.ORIG_SYS_PLOT) {
             swap_x0isMax(dep_f.x_tr, n);
             plot_addTimeSegment(safe_seg, flag1.DIM_PLOT, flag1.ORIG_SYS_PLOT,
