@@ -250,4 +250,14 @@ public:
 	}
 };
 
+class genericTypeVisitor
+	: public boost::static_visitor<representation_name>
+{
+public:
+	template<typename A>
+	inline representation_name operator()(const A& shape) const {
+		return A::type();
+	}
+};	
+
 } // namespace

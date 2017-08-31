@@ -38,6 +38,13 @@ class State
     carl::Interval<Number> mTimestamp = carl::Interval<Number>::unboundedInterval(); /// A timestamp.
     bool mIsEmpty = false; /// A flag which can be set to allow for a quick check for emptiness.
 
+  private:
+
+    /**
+     * @brief       Checks whether the type of all elements in mSets matches the type stored in mTypes.
+     */
+    bool checkConsistency() const;
+
   public:
   	/**
   	 * @brief      Default constructor.
@@ -215,7 +222,7 @@ class State
      * @param[in]  I     The position.
      */
     void setSetType(representation_name type, std::size_t I = 0) {
-    	TRACE("hypro.datastructures","Attempt to set set type at pos " << I << ", mSets.size() = " << mSets.size());
+    	TRACE("hypro.datastructures","Attempt to set set type at pos " << I << ", mSets.size() = " << mSets.size() << ", mTypes.size() = " << mTypes.size());
     	assert(mSets.size() == mTypes.size());
 		while(I >= mSets.size()) {
 			mSets.emplace_back(Representation()); // some default set.
@@ -231,10 +238,18 @@ class State
     void setTimestamp(carl::Interval<Number> t) { mTimestamp = t; }
 
     /**
-     * @brief      Sets the sets.
-     * @param[in]  sets  The sets.
+     * @brief       Sets the sets.
+     * @param[in]   sets  The sets.
      */
     void setSets(const std::vector<boost::variant<Representation,Rargs...>>& sets) { mSets = sets; }
+
+      /**
+     * @brief       Sets the sets.
+     * @details     A slower but safer version of setSets as it ensures that mTypes and mSets must be consistent
+     *              in terms of length and content when being set.
+     * @param[in]   sets    The sets to set.
+     */
+    void setSetsSave(const std::vector<boost::variant<Representation,Rargs...>>& sets);
 
     /**
 	 * @brief      Sets the set.
@@ -244,12 +259,14 @@ class State
 	 * @param[in]  I     The position in the sets vector.
 	 */
 	void setSetDirect(const repVariant& in, std::size_t I = 0) {
-		TRACE("hypro.datastructures","Attempt to set set direct at pos " << I << ", mSets.size() = " << mSets.size());
+		TRACE("hypro.datastructures","Attempt to set set direct at pos " << I << ", mSets.size() = " << mSets.size() << ", mTypes.size() = " << mTypes.size());
 		assert(mSets.size() == mTypes.size());
+        assert(checkConsistency());
 		while(I >= mSets.size()) {
 			mSets.emplace_back(Representation()); // some default set.
 			mTypes.push_back(Representation::type()); // some default set type.
 		}
+        assert(checkConsistency());
 		mSets[I] = in;
 
 	}
@@ -330,8 +347,7 @@ class State
      */
     State<Number,Representation,Rargs...> partiallyApplyTransformation(const ConstraintSet<Number>& trafo, std::size_t I ) const;
 
-
-    // TODO
+    //TODO: Documentation from here on
 
     State<Number,Representation,Rargs...> minkowskiSum(const State<Number,Representation,Rargs...>& rhs) const;
 

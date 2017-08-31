@@ -106,7 +106,7 @@ namespace reachability {
 			#ifdef USE_SMART_AGGREGATION
 			aggregationReduction(collectedSets, aggregationPair.first, mSettings.timeBound, mSettings.timeStep);
 			#endif
-			s.setSets(collectedSets.getSets());
+			s.setSetsSave(collectedSets.getSets());
 
 			//unsigned colSetIndex = Plotter<Number>::getInstance().addObject(collectedSets.vertices());
 			//Plotter<Number>::getInstance().setObjectColor(colSetIndex, plotting::colors[plotting::red]);
