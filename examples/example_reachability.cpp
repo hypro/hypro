@@ -3,8 +3,6 @@
  */
 
 #include "representations/GeometricObject.h"
-//#include "datastructures/hybridAutomata/HybridAutomaton.h"
-//#include "datastructures/hybridAutomata/LocationManager.h"
 #include "datastructures/HybridAutomaton/HybridAutomaton.h"
 #include "datastructures/HybridAutomaton/LocationManager.h"
 #include "algorithms/reachability/Reach.h"
@@ -135,26 +133,26 @@ int main(int argc, char** argv) {
 #ifdef USE_CLN_NUMBERS
 	using Number = cln::cl_RA;
 #else
-	//using Number = mpq_class;
-	using Number = double;
+	using Number = mpq_class;
+	//using Number = double;
 #endif
 
 	switch(rep){
-		/*
+		
 		case 5: {
 			using Representation = hypro::Zonotope<Number>;
 			std::cout << "Using a zonotope representation." << std::endl;
 			computeReachableStates<Number, Representation>(filename, hypro::representation_name::zonotope);
 			break;
 		}
-		*/
+		
 		case 4: {
 			using Representation = hypro::SupportFunction<Number>;
 			std::cout << "Using a support function representation." << std::endl;
 			computeReachableStates<Number, Representation>(filename, hypro::representation_name::support_function);
 			break;
 		}
-		/*
+		
 		case 3: {
 			using Representation = hypro::VPolytope<Number>;
 			std::cout << "Using a v-polytope representation." << std::endl;
@@ -167,7 +165,7 @@ int main(int argc, char** argv) {
 			computeReachableStates<Number, Representation>(filename, hypro::representation_name::polytope_h);
 			break;
 		}
-		*/
+		
 		case 1: {
 			using Representation = hypro::Box<Number>;
 			std::cout << "Using a box representation." << std::endl;

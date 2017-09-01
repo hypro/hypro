@@ -63,7 +63,7 @@ namespace hypro {
 
 		hypro::HybridAutomaton<mpq_class> h = (visitor.visit(tree)).antlrcpp::Any::as<hypro::HybridAutomaton<mpq_class>>();
 
-		return boost::tuple<HybridAutomaton<mpq_class>, ReachabilitySettings<mpq_class>>(h, visitor.getSettings());
+		return boost::tuple<HybridAutomaton<mpq_class>&, ReachabilitySettings<mpq_class>>(h, visitor.getSettings());
 	}
 
 	template<>

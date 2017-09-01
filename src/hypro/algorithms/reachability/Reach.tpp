@@ -75,7 +75,7 @@ namespace reachability {
 			mWorkingQueue.pop_front();
 
 			mCurrentLevel = boost::get<0>(nextInitialSet);
-			std::cout << "mCurrentLevel is: " << mCurrentLevel << " while maxjumpDepth is: " << std::endl;
+			std::cout << "mCurrentLevel is: " << mCurrentLevel << " while maxjumpDepth is: " << mSettings.jumpDepth << std::endl;
 			INFO("hypro.reacher","Depth " << mCurrentLevel << ", Location: " << boost::get<1>(nextInitialSet).getLocation()->getId());
 			assert(mCurrentLevel <= mSettings.jumpDepth);
 			flowpipe_t<Number> newFlowpipe = computeForwardTimeClosure(boost::get<1>(nextInitialSet));
@@ -166,13 +166,13 @@ namespace reachability {
 			while( !noFlow && currentLocalTime <= mSettings.timeBound ) {
 				INFO("hypro.reacher","Time: " << std::setprecision(4) << std::setw(8) << fixed << carl::toDouble(currentLocalTime));
 				// Verify transitions on the current set.
-				if(int(mCurrentLevel) <= mSettings.jumpDepth || mSettings.jumpDepth < 0) {
+				if(int(mCurrentLevel) < mSettings.jumpDepth || mSettings.jumpDepth < 0) {
 					State_t<Number> guardSatisfyingState;
 					State_t<Number> currentState = _state;
 					currentState.setSetDirect(currentSegment.getSet(0),0);
 					currentState.setTimestamp(currentState.getTimestamp() + carl::Interval<Number>(currentLocalTime-mSettings.timeStep,currentLocalTime));
 					currentState.setTimestamp(currentState.getTimestamp().intersect(carl::Interval<Number>(Number(0), mSettings.timeBound)));
-					std::cout << "-- Checking Transitions!" << std::endl;
+					//std::cout << "-- Checking Transitions!" << std::endl;
 					checkTransitions(currentState, currentState.getTimestamp(), nextInitialSets);
 				}
 
@@ -232,7 +232,8 @@ namespace reachability {
 			std::cout << "current level: " << mCurrentLevel << std::endl;
 #endif
 			// The loop terminated correctly (i.e. no bad states were hit), process discrete behavior.
-			if(int(mCurrentLevel) <= mSettings.jumpDepth || mSettings.jumpDepth < 0){
+			assert(nextInitialSets.empty() || (int(mCurrentLevel) < mSettings.jumpDepth || mSettings.jumpDepth < 0));
+			if(int(mCurrentLevel) < mSettings.jumpDepth || mSettings.jumpDepth < 0){
 				std::cout << "Entered processDiscreteBehaviour!" << std::endl;
 				processDiscreteBehaviour(nextInitialSets);
 			}

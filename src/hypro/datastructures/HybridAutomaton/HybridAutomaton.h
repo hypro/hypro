@@ -115,13 +115,13 @@ class HybridAutomaton
     			lhs.getGlobalBadStates() == rhs.getGlobalBadStates();
     }
 
-#ifdef HYPRO_USE_LOGGING
+#ifdef HYPRO_LOGGING
     friend std::ostream& operator<<(std::ostream& ostr, const HybridAutomaton<Number>& a)
 #else
     friend std::ostream& operator<<(std::ostream& ostr, const HybridAutomaton<Number>&)
 #endif
     {
-#ifdef HYPRO_USE_LOGGING
+#ifdef HYPRO_LOGGING
         /*_ostr << "initial states: " << std::endl;
         for ( auto initialIT = a.initialStates().begin(); initialIT != a.initialStates().end(); ++initialIT ) {
             ostr << ( *initialIT ).first->id() << ": " << ( *initialIT ).second.first

@@ -277,7 +277,7 @@ bool State<Number,Representation,Rargs...>::checkConsistency() const {
 template<typename Number, typename Representation, typename ...Rargs>
 void State<Number,Representation,Rargs...>::setSetsSave(const std::vector<boost::variant<Representation,Rargs...>>& sets){
 	assert(checkConsistency());
-	std::cout << "mSets.size(): " << mSets.size() << " mTypes.size(): " << mTypes.size() << " sets.size(): " << sets.size(); 
+	std::cout << "mSets.size(): " << mSets.size() << " mTypes.size(): " << mTypes.size() << " sets.size(): " << sets.size() << std::endl; 
 	for(std::size_t i=0; i < sets.size(); i++){
 		setSetType(boost::apply_visitor(genericTypeVisitor(), sets.at(i)), i);
 	}

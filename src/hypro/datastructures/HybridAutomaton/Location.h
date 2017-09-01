@@ -65,6 +65,7 @@ public:
   	Location() = delete;
     ~Location() {}
 
+    std::size_t getNumberFlow() const { return mFlows.size(); }
     matrix_t<Number> getFlow(std::size_t I = 0) const { return mFlows.at(I); }
     matrix_t<Number>& rGetFlow(std::size_t I = 0) { return mFlows[I]; }
     const Condition<Number>& getInvariant() const { return mInvariant; }

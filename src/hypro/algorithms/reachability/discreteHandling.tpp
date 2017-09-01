@@ -71,9 +71,6 @@ namespace reachability {
 			}
 		}
 
-		std::cout << "-- Aggregating states. Size is now: " << toAggregate.size() << std::endl;
-		std::cout << "I've set the aggregation targets!" << std::endl;
-
 		// aggregation - TODO: add options for clustering.
 		for(const auto& aggregationPair : toAggregate){
 
@@ -106,6 +103,8 @@ namespace reachability {
 			#ifdef USE_SMART_AGGREGATION
 			aggregationReduction(collectedSets, aggregationPair.first, mSettings.timeBound, mSettings.timeStep);
 			#endif
+
+			//TODO: Maybe use smth else or use setSetsSave in all functions
 			s.setSetsSave(collectedSets.getSets());
 
 			//unsigned colSetIndex = Plotter<Number>::getInstance().addObject(collectedSets.vertices());
@@ -127,7 +126,8 @@ namespace reachability {
 			if(invariantSatisfyingSet.first){
 				//unsigned tmp = Plotter<Number>::getInstance().addObject(invariantSatisfyingSet.second.vertices());
 				//Plotter<Number>::getInstance().setObjectColor(tmp, colors[orange]);
-				s.setSets(invariantSatisfyingSet.second.getSets());
+				//s.setSets(invariantSatisfyingSet.second.getSets());
+				s.setSetsSave(invariantSatisfyingSet.second.getSets());
 				//std::cout << "Transformed, collected set (intersected with invariant): " << invariantSatisfyingSet.second << std::endl;
 			} else {
 				continue;
@@ -159,13 +159,13 @@ namespace reachability {
 
 		State_t<Number> guardSatisfyingState;
 		bool transitionEnabled = false;
-		std::cout << "------ how many transitions do we have? " << state.getLocation()->getTransitions().size() << std::endl;
+		//std::cout << "------ how many transitions do we have? " << state.getLocation()->getTransitions().size() << std::endl;
 		for( auto transition : state.getLocation()->getTransitions() ){
 			// handle time-triggered transitions
 			std::cout << "------ Do I get here?" << std::endl;
 			if(intersectGuard(transition, state, guardSatisfyingState)){
-				std::cout << "------hybrid transition enabled" << std::endl;
-				//std::cout << *transition << std::endl;
+				//std::cout << "------hybrid transition enabled" << std::endl;
+				std::cout << *transition << std::endl;
 				assert(guardSatisfyingState.getTimestamp() == state.getTimestamp());
 				// when a guard is satisfied here, as we do not have dynamic behaviour, avoid calculation of flowpipe
 				assert(!guardSatisfyingState.getTimestamp().isUnbounded());
