@@ -90,9 +90,9 @@ int main()
 {
     Transformation<Number> trafo1;      //transformation class for Hybrid Automata
     //use hybrid automaton from file
-    const std::string& filename = "../../examples/input/bouncing_ball.model";
+    const std::string& filename = "../../examples/input/bouncing_ball_inhomogen.model";
 	boost::tuple<HybridAutomaton<Number>, reachability::ReachabilitySettings<Number>> ha = parseFlowstarFile<Number>(filename);
-    std::cout << boost::get<0>(ha);
+    //std::cout << boost::get<0>(ha);
     //2nd hybrid automaton for transformed ha
     //hypro::HybridAutomaton<Number> ha_transformed =  HybridAutomaton<Number>( boost::get<0>(ha) );
     //std::cout << ha_transformed;
@@ -101,7 +101,7 @@ int main()
     Transformation<Number> trafo;
     trafo.transform( transformed_ha );
     //remind last line is ALWAYS added by parser
-    std::cout << transformed_ha;
+    //std::cout << transformed_ha;
     //contructing second Hybrid Automaton with changed settings according to 
     //transformation class
     //construct second hybrid automaton

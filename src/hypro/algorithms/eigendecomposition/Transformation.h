@@ -7,6 +7,8 @@
 #include "datastructures/hybridAutomata/Location.h"
 #include "datastructures/hybridAutomata/RawState.h"
 #include "datastructures/hybridAutomata/Transition.h"
+#include <Eigen/Eigenvalues>
+#include <Eigen/Dense>
 /**
  * @brief      Class for transformation of Hybrid Automata.
  *
@@ -19,6 +21,8 @@ template <typename Number>
 class Transformation {
   public:
 
+    using Matrix = matrix_t<Number>;
+    using Vector = vector_t<Number>;
   	using locationSet = std::set<Location<Number>*>;
 	using transitionSet = std::set<Transition<Number>*>;
 	using locationStateMap = std::multimap<Location<Number>*, RawState<Number>, locPtrComp<Number>>;
