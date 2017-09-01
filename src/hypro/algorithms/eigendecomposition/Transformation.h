@@ -2,8 +2,11 @@
   * @file Transformation.h
   */
 #pragma once
-
+#include "algorithms/reachability/Settings.h"
 #include "datastructures/hybridAutomata/HybridAutomaton.h"
+#include "datastructures/hybridAutomata/Location.h"
+#include "datastructures/hybridAutomata/RawState.h"
+#include "datastructures/hybridAutomata/Transition.h"
 /**
  * @brief      Class for transformation of Hybrid Automata.
  *
@@ -22,6 +25,8 @@ class Transformation {
 	using setVector = std::vector<std::pair<matrix_t<Number>, vector_t<Number>>>;
   private:
 
+    //use structs here?
+
 	//locationSet mLocations;
 	//transitionSet mTransitions;
 	//locationStateMap mInitialStates;
@@ -34,6 +39,25 @@ class Transformation {
 	 * @brief      Default constructor.
 	 */
 	Transformation() {}
+	/**
+	 * @brief      Copy constructor.
+	 *
+	 * @param[in]  _hybrid  The original transformation for an hybrid automaton.
+	 */
+	Transformation( const Transformation& _trafo );
+
+//adding properties for pre-system analysis would make sense here
+    /**
+     * @brief      Constructor from hybrid automata to adjust automaton and transformation
+     *
+     * @param[in]  _hybrid  The original hybrid automaton.
+     */
+	//Transformation( HybridAutomaton<Number>& _hybrid );
+    void transform( HybridAutomaton<Number>& _hybrid );
+
+//  backtransformation(HybridAutomaton& _hybrid, const Transformation& _trafo );
+//  retransform reults
+
 
 };
 } //namespace hypro
