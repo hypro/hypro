@@ -6,25 +6,49 @@
 
 namespace hypro {
 
+	/**
+	 * @brief      Struct holding a path element, which can be a representative for a time step or a
+	 * representative for a discrete step.
+	 * @tparam     Number  The used number type.
+	 */
 	template <typename Number>
 	struct TPathElement {
-		Transition<Number>* transition = nullptr;
-		carl::Interval<Number> timeInterval = carl::Interval<Number>::unboundedInterval();
+		Transition<Number>* transition = nullptr; /// Pointer to a transition in case of a discrete step.
+		carl::Interval<Number> timeInterval = carl::Interval<Number>::unboundedInterval(); /// Time interval holding either the size of the time step or the local time in which the transition for the discrete step was enabled.
 
+		/**
+		 * @brief      Constructor for a discrete step element.
+		 * @param      t            The transition.
+		 * @param[in]  enabledTime  The enabled time.
+		 */
 		TPathElement(Transition<Number>* t, const carl::Interval<Number>& enabledTime)
 			: transition(t)
 			, timeInterval(enabledTime)
 		{}
 
+		/**
+		 * @brief      Constructor for a time step.
+		 * @param[in]  timeStep  The time step size.
+		 */
 		TPathElement(const carl::Interval<Number>& timeStep)
 			: transition(nullptr)
 			, timeInterval(timeStep)
 		{}
 
+		/**
+		 * @brief      Determines if the element represents a discrete step.
+		 * @return     True if discrete step, False otherwise.
+		 */
 		bool isDiscreteStep() const {
 			return (transition != nullptr);
 		}
 
+		/**
+		 * @brief      Outstream operator.
+		 * @param      out       The outstream.
+		 * @param[in]  pathElem  The path element.
+		 * @return     A reference to the outstream.
+		 */
 		friend std::ostream& operator<<(std::ostream& out, const TPathElement<Number>& pathElem) {
 #ifdef HYDRA_USE_LOGGING
 			if(pathElem.isDiscreteStep())
@@ -35,6 +59,12 @@ namespace hypro {
 			return out;
 		}
 
+		/**
+		 * @brief      Equality comparison operator.
+		 * @param[in]  lhs   The left hand side.
+		 * @param[in]  rhs   The right hand side.
+		 * @return     True if both elements are equal, False otherwise.
+		 */
 		friend bool operator==(const TPathElement<Number>& lhs, const TPathElement<Number>& rhs) {
 			if(lhs.isDiscreteStep() != rhs.isDiscreteStep()) {
 				return false;
@@ -48,6 +78,12 @@ namespace hypro {
 			return (lhs.timeInterval == rhs.timeInterval);
 		}
 
+		/**
+		 * @brief      Not-equal operator.
+		 * @param[in]  lhs   The left hand side.
+		 * @param[in]  rhs   The right hand side.
+		 * @return     True if both elements are not equal, False otherwise.
+		 */
 		friend bool operator!=(const TPathElement<Number>& lhs, const TPathElement<Number>& rhs) {
 			return !(lhs==rhs);
 		}
@@ -55,6 +91,7 @@ namespace hypro {
 
 	/**
 	 * @brief      Class to define a path in some hybrid automaton.
+	 * @tparam     Number  The used number type.
 	 */
 	template<typename Number>
 	class Path {
