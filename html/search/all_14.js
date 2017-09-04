@@ -1,11 +1,7 @@
 var searchData=
 [
-  ['_7eboxt',['~BoxT',['../classhypro_1_1BoxT.html#abfe1492130a8d8143bcc4ea0a45c028c',1,'hypro::BoxT::~BoxT()'],['../classhypro_1_1BoxT_3_01double_00_01Converter_01_4.html#a5939c3f521e1921b6cbc5417db6f2c56',1,'hypro::BoxT&lt; double, Converter &gt;::~BoxT()']]],
-  ['_7econstraintsett',['~ConstraintSetT',['../classhypro_1_1ConstraintSetT.html#a60e0ed75b7fa9a7f92715451958b2bee',1,'hypro::ConstraintSetT']]],
-  ['_7egeometricobject',['~GeometricObject',['../classhypro_1_1GeometricObject.html#a28cf65685f4fa5e04c3dbf428a9d97b0',1,'hypro::GeometricObject']]],
-  ['_7ehalfspace',['~Halfspace',['../classhypro_1_1Halfspace.html#acc71891d16a4412a37355ba896255be4',1,'hypro::Halfspace']]],
-  ['_7ehpolytopet',['~HPolytopeT',['../classhypro_1_1HPolytopeT.html#a48b632e18e0fdd8cba4a4989669a4982',1,'hypro::HPolytopeT']]],
-  ['_7eoptimizer',['~Optimizer',['../classhypro_1_1Optimizer.html#a992438299160290cb0f08e243ded782c',1,'hypro::Optimizer']]],
-  ['_7epoint',['~Point',['../classhypro_1_1Point.html#a37c7ca9da96913e24c9bb83dcc219499',1,'hypro::Point']]],
-  ['_7evpolytopet',['~VPolytopeT',['../classhypro_1_1VPolytopeT.html#ac8ef11edeefbb938a05c140ec72cfee5',1,'hypro::VPolytopeT']]]
+  ['zero',['Zero',['../classhypro_1_1Point.html#a125c251c8aaebc1674ae822640856117',1,'hypro::Point']]],
+  ['zonotope',['Zonotope',['../namespacehypro.html#ad96debd897a91531861debc2a348b9e4',1,'hypro']]],
+  ['zonotopet',['ZonotopeT',['../classhypro_1_1ZonotopeT.html#a7b15dfff92172589682e3c168de56227',1,'hypro::ZonotopeT::ZonotopeT(std::size_t dimension)'],['../classhypro_1_1ZonotopeT.html#a452408789fbc03b6b75e911f02cf62dd',1,'hypro::ZonotopeT::ZonotopeT(const vector_t&lt; Number &gt; &amp;center, const matrix_t&lt; Number &gt; &amp;generators)'],['../classhypro_1_1ZonotopeT.html#ada5e597eca2e8858d5acc42b182bd4e1',1,'hypro::ZonotopeT::ZonotopeT(const ZonotopeT&lt; Number, Converter &gt; &amp;other)=default'],['../classhypro_1_1ZonotopeT.html#a0f5fc0eed4dfff71dacd7280c0e23413',1,'hypro::ZonotopeT::ZonotopeT(const ZonotopeT&lt; Number, Converter &gt; &amp;other, unsigned d1, unsigned d2)']]],
+  ['zonotopet',['ZonotopeT',['../classhypro_1_1ZonotopeT.html',1,'hypro']]]
 ];

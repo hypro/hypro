@@ -1,5 +1,6 @@
 var NAVTREEINDEX8 =
 {
+"structhypro_1_1parser_1_1discreteConstraintParser.html#a911570dc0ecabbe7e7d3177ce4567627":[9,0,1,3,13,10],
 "structhypro_1_1parser_1_1discreteConstraintParser.html#aab1648a3b00748f5d4b86afc444ae9a5":[9,0,1,3,13,5],
 "structhypro_1_1parser_1_1discreteConstraintParser.html#ace10f11d6374dca5297c0231253a50b7":[9,0,1,3,13,2],
 "structhypro_1_1parser_1_1discreteConstraintParser.html#af853a7dfb88b75027a8668706f09b4cd":[9,0,1,3,13,3],
@@ -248,6 +249,5 @@ var NAVTREEINDEX8 =
 "structstd_1_1hash_3_01hypro_1_1Cacheable_3_01Content_01_4_01_4.html":[9,0,6,7],
 "structstd_1_1hash_3_01hypro_1_1Cacheable_3_01Content_01_4_01_4.html#aaf6c63de47b22a17271744011600ad81":[9,0,6,7,0],
 "structstd_1_1hash_3_01hypro_1_1Halfspace_3_01Number_01_4_01_4.html":[9,0,6,0],
-"structstd_1_1hash_3_01hypro_1_1Halfspace_3_01Number_01_4_01_4.html#a714c0f5d7c5072b37a1c02ce13c7753d":[9,0,6,0,0],
-"structstd_1_1hash_3_01hypro_1_1Point_3_01Number_01_4_01_4.html":[9,0,6,2]
+"structstd_1_1hash_3_01hypro_1_1Halfspace_3_01Number_01_4_01_4.html#a714c0f5d7c5072b37a1c02ce13c7753d":[9,0,6,0,0]
 };

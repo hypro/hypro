@@ -118,17 +118,22 @@ $(document).ready(function(){initNavTree('structhypro_1_1TPathElement.html','');
 <div class="title">hypro::TPathElement&lt; Number &gt; Struct Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>Struct holding a path element, which can be a representative for a time step or a representative for a discrete step.  
+ <a href="structhypro_1_1TPathElement.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="Path_8h_source.html">Path.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a0f2bcd88f5459de1a837c37233a7e730"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0f2bcd88f5459de1a837c37233a7e730"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>TPathElement</b> (<a class="el" href="classhypro_1_1Transition.html">Transition</a>&lt; Number &gt; *t, const carl::Interval&lt; Number &gt; &amp;enabledTime)</td></tr>
+<tr class="memitem:a0f2bcd88f5459de1a837c37233a7e730"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1TPathElement.html#a0f2bcd88f5459de1a837c37233a7e730">TPathElement</a> (<a class="el" href="classhypro_1_1Transition.html">Transition</a>&lt; Number &gt; *t, const carl::Interval&lt; Number &gt; &amp;enabledTime)</td></tr>
+<tr class="memdesc:a0f2bcd88f5459de1a837c37233a7e730"><td class="mdescLeft">&#160;</td><td class="mdescRight">Time interval holding either the size of the time step or the local time in which the transition for the discrete step was enabled.  <a href="#a0f2bcd88f5459de1a837c37233a7e730">More...</a><br/></td></tr>
 <tr class="separator:a0f2bcd88f5459de1a837c37233a7e730"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab73a782716c43eb6cfb12951bb3f6f60"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab73a782716c43eb6cfb12951bb3f6f60"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>TPathElement</b> (const carl::Interval&lt; Number &gt; &amp;timeStep)</td></tr>
+<tr class="memitem:ab73a782716c43eb6cfb12951bb3f6f60"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1TPathElement.html#ab73a782716c43eb6cfb12951bb3f6f60">TPathElement</a> (const carl::Interval&lt; Number &gt; &amp;timeStep)</td></tr>
+<tr class="memdesc:ab73a782716c43eb6cfb12951bb3f6f60"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor for a time step.  <a href="#ab73a782716c43eb6cfb12951bb3f6f60">More...</a><br/></td></tr>
 <tr class="separator:ab73a782716c43eb6cfb12951bb3f6f60"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac1074ac555d412c4a46cc189e21f1df3"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac1074ac555d412c4a46cc189e21f1df3"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>isDiscreteStep</b> () const </td></tr>
+<tr class="memitem:ac1074ac555d412c4a46cc189e21f1df3"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1TPathElement.html#ac1074ac555d412c4a46cc189e21f1df3">isDiscreteStep</a> () const </td></tr>
+<tr class="memdesc:ac1074ac555d412c4a46cc189e21f1df3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines if the element represents a discrete step.  <a href="#ac1074ac555d412c4a46cc189e21f1df3">More...</a><br/></td></tr>
 <tr class="separator:ac1074ac555d412c4a46cc189e21f1df3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
@@ -137,28 +142,297 @@ Public Attributes</h2></td></tr>
 <a class="el" href="classhypro_1_1Transition.html">Transition</a>&lt; Number &gt; *&#160;</td><td class="memItemRight" valign="bottom"><b>transition</b> = nullptr</td></tr>
 <tr class="separator:a97886377e0974ba032e0c91f63507c4e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a463d25853a9ce58487c47b4f9f309c53"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a463d25853a9ce58487c47b4f9f309c53"></a>
-carl::Interval&lt; Number &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>timeInterval</b> = carl::Interval&lt;Number&gt;::unboundedInterval()</td></tr>
+carl::Interval&lt; Number &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1TPathElement.html#a463d25853a9ce58487c47b4f9f309c53">timeInterval</a> = carl::Interval&lt;Number&gt;::unboundedInterval()</td></tr>
+<tr class="memdesc:a463d25853a9ce58487c47b4f9f309c53"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pointer to a transition in case of a discrete step. <br/></td></tr>
 <tr class="separator:a463d25853a9ce58487c47b4f9f309c53"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
 Friends</h2></td></tr>
-<tr class="memitem:a7503a052fd5232725b71abff8a3285e6"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7503a052fd5232725b71abff8a3285e6"></a>
-std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator&lt;&lt;</b> (std::ostream &amp;out, const <a class="el" href="structhypro_1_1TPathElement.html">TPathElement</a>&lt; Number &gt; &amp;pathElem)</td></tr>
+<tr class="memitem:a7503a052fd5232725b71abff8a3285e6"><td class="memItemLeft" align="right" valign="top">std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1TPathElement.html#a7503a052fd5232725b71abff8a3285e6">operator&lt;&lt;</a> (std::ostream &amp;out, const <a class="el" href="structhypro_1_1TPathElement.html">TPathElement</a>&lt; Number &gt; &amp;pathElem)</td></tr>
+<tr class="memdesc:a7503a052fd5232725b71abff8a3285e6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Outstream operator.  <a href="#a7503a052fd5232725b71abff8a3285e6">More...</a><br/></td></tr>
 <tr class="separator:a7503a052fd5232725b71abff8a3285e6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a549a928585cd84f0176884e15d7609fe"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a549a928585cd84f0176884e15d7609fe"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator==</b> (const <a class="el" href="structhypro_1_1TPathElement.html">TPathElement</a>&lt; Number &gt; &amp;lhs, const <a class="el" href="structhypro_1_1TPathElement.html">TPathElement</a>&lt; Number &gt; &amp;rhs)</td></tr>
+<tr class="memitem:a549a928585cd84f0176884e15d7609fe"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1TPathElement.html#a549a928585cd84f0176884e15d7609fe">operator==</a> (const <a class="el" href="structhypro_1_1TPathElement.html">TPathElement</a>&lt; Number &gt; &amp;lhs, const <a class="el" href="structhypro_1_1TPathElement.html">TPathElement</a>&lt; Number &gt; &amp;rhs)</td></tr>
+<tr class="memdesc:a549a928585cd84f0176884e15d7609fe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Equality comparison operator.  <a href="#a549a928585cd84f0176884e15d7609fe">More...</a><br/></td></tr>
 <tr class="separator:a549a928585cd84f0176884e15d7609fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac4d662591e514bc296f732e1532e693b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac4d662591e514bc296f732e1532e693b"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator!=</b> (const <a class="el" href="structhypro_1_1TPathElement.html">TPathElement</a>&lt; Number &gt; &amp;lhs, const <a class="el" href="structhypro_1_1TPathElement.html">TPathElement</a>&lt; Number &gt; &amp;rhs)</td></tr>
+<tr class="memitem:ac4d662591e514bc296f732e1532e693b"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1TPathElement.html#ac4d662591e514bc296f732e1532e693b">operator!=</a> (const <a class="el" href="structhypro_1_1TPathElement.html">TPathElement</a>&lt; Number &gt; &amp;lhs, const <a class="el" href="structhypro_1_1TPathElement.html">TPathElement</a>&lt; Number &gt; &amp;rhs)</td></tr>
+<tr class="memdesc:ac4d662591e514bc296f732e1532e693b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Not-equal operator.  <a href="#ac4d662591e514bc296f732e1532e693b">More...</a><br/></td></tr>
 <tr class="separator:ac4d662591e514bc296f732e1532e693b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><h3>template&lt;typename Number&gt;<br/>
 struct hypro::TPathElement&lt; Number &gt;</h3>
 
+<p>Struct holding a path element, which can be a representative for a time step or a representative for a discrete step. </p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">Number</td><td>The used number type. </td></tr>
+  </table>
+  </dd>
+</dl>
 
-<p>Definition at line <a class="el" href="Path_8h_source.html#l00010">10</a> of file <a class="el" href="Path_8h_source.html">Path.h</a>.</p>
-</div><hr/>The documentation for this struct was generated from the following file:<ul>
+<p>Definition at line <a class="el" href="Path_8h_source.html#l00015">15</a> of file <a class="el" href="Path_8h_source.html">Path.h</a>.</p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a class="anchor" id="a0f2bcd88f5459de1a837c37233a7e730"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structhypro_1_1TPathElement.html">hypro::TPathElement</a>&lt; Number &gt;::<a class="el" href="structhypro_1_1TPathElement.html">TPathElement</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classhypro_1_1Transition.html">Transition</a>&lt; Number &gt; *&#160;</td>
+          <td class="paramname"><em>t</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const carl::Interval&lt; Number &gt; &amp;&#160;</td>
+          <td class="paramname"><em>enabledTime</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Time interval holding either the size of the time step or the local time in which the transition for the discrete step was enabled. </p>
+<p>Constructor for a discrete step element. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir"></td><td class="paramname">t</td><td>The transition. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">enabledTime</td><td>The enabled time. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Definition at line <a class="el" href="Path_8h_source.html#l00024">24</a> of file <a class="el" href="Path_8h_source.html">Path.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ab73a782716c43eb6cfb12951bb3f6f60"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structhypro_1_1TPathElement.html">hypro::TPathElement</a>&lt; Number &gt;::<a class="el" href="structhypro_1_1TPathElement.html">TPathElement</a> </td>
+          <td>(</td>
+          <td class="paramtype">const carl::Interval&lt; Number &gt; &amp;&#160;</td>
+          <td class="paramname"><em>timeStep</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Constructor for a time step. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">timeStep</td><td>The time step size. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Definition at line <a class="el" href="Path_8h_source.html#l00033">33</a> of file <a class="el" href="Path_8h_source.html">Path.h</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a class="anchor" id="ac1074ac555d412c4a46cc189e21f1df3"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="structhypro_1_1TPathElement.html">hypro::TPathElement</a>&lt; Number &gt;::isDiscreteStep </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Determines if the element represents a discrete step. </p>
+<dl class="section return"><dt>Returns</dt><dd>True if discrete step, False otherwise. </dd></dl>
+
+<p>Definition at line <a class="el" href="Path_8h_source.html#l00042">42</a> of file <a class="el" href="Path_8h_source.html">Path.h</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Friends And Related Function Documentation</h2>
+<a class="anchor" id="ac4d662591e514bc296f732e1532e693b"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool operator!= </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structhypro_1_1TPathElement.html">TPathElement</a>&lt; Number &gt; &amp;&#160;</td>
+          <td class="paramname"><em>lhs</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structhypro_1_1TPathElement.html">TPathElement</a>&lt; Number &gt; &amp;&#160;</td>
+          <td class="paramname"><em>rhs</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">friend</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Not-equal operator. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">lhs</td><td>The left hand side. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">rhs</td><td>The right hand side. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True if both elements are not equal, False otherwise. </dd></dl>
+
+<p>Definition at line <a class="el" href="Path_8h_source.html#l00087">87</a> of file <a class="el" href="Path_8h_source.html">Path.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a7503a052fd5232725b71abff8a3285e6"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::ostream&amp; operator&lt;&lt; </td>
+          <td>(</td>
+          <td class="paramtype">std::ostream &amp;&#160;</td>
+          <td class="paramname"><em>out</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structhypro_1_1TPathElement.html">TPathElement</a>&lt; Number &gt; &amp;&#160;</td>
+          <td class="paramname"><em>pathElem</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">friend</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Outstream operator. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir"></td><td class="paramname">out</td><td>The outstream. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">pathElem</td><td>The path element. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A reference to the outstream. </dd></dl>
+
+<p>Definition at line <a class="el" href="Path_8h_source.html#l00052">52</a> of file <a class="el" href="Path_8h_source.html">Path.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a549a928585cd84f0176884e15d7609fe"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool operator== </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structhypro_1_1TPathElement.html">TPathElement</a>&lt; Number &gt; &amp;&#160;</td>
+          <td class="paramname"><em>lhs</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structhypro_1_1TPathElement.html">TPathElement</a>&lt; Number &gt; &amp;&#160;</td>
+          <td class="paramname"><em>rhs</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">friend</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Equality comparison operator. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">lhs</td><td>The left hand side. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">rhs</td><td>The right hand side. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True if both elements are equal, False otherwise. </dd></dl>
+
+<p>Definition at line <a class="el" href="Path_8h_source.html#l00068">68</a> of file <a class="el" href="Path_8h_source.html">Path.h</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this struct was generated from the following file:<ul>
 <li>/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/<a class="el" href="Path_8h_source.html">Path.h</a></li>
 </ul>
 </div><!-- contents -->

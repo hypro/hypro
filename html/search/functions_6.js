@@ -14,7 +14,6 @@ var searchData=
   ['getset',['getSet',['../classhypro_1_1State.html#ae99059873cf9cee50ea25f43905497ae',1,'hypro::State']]],
   ['getsets',['getSets',['../classhypro_1_1State.html#a3a201f27dd93043f4690aefe40b9d8cf',1,'hypro::State']]],
   ['getsettype',['getSetType',['../classhypro_1_1State.html#a3965ed577f394957ef076c8a86333c1a',1,'hypro::State']]],
-  ['getsource',['getSource',['../classhypro_1_1Transition.html#a350c7e35994cae3bd861240879d7aaf2',1,'hypro::Transition']]],
   ['gettimestamp',['getTimestamp',['../classhypro_1_1State.html#ab1c6ceaac40b2a33b36fa96ed2f6d1ea',1,'hypro::State']]],
   ['gettransitions',['getTransitions',['../classhypro_1_1HybridAutomaton.html#a1c744bdb5a0b9531c5ff871580d9b81a',1,'hypro::HybridAutomaton']]],
   ['gettypes',['getTypes',['../classhypro_1_1State.html#a45b310b941c444d30bb09baff76c95d3',1,'hypro::State']]],

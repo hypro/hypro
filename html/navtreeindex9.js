@@ -1,5 +1,6 @@
 var NAVTREEINDEX9 =
 {
+"structstd_1_1hash_3_01hypro_1_1Point_3_01Number_01_4_01_4.html":[9,0,6,2],
 "structstd_1_1hash_3_01hypro_1_1Point_3_01Number_01_4_01_4.html#a6b7d24a1757259fb4bdad132dfcf3d5c":[9,0,6,2,0],
 "structstd_1_1hash_3_01hypro_1_1Ridge_3_01Number_01_4_01_4.html":[9,0,6,3],
 "structstd_1_1hash_3_01hypro_1_1Ridge_3_01Number_01_4_01_4.html#a0e73e68b1a8ba609e6c6065756a04c63":[9,0,6,3,0],

@@ -34,13 +34,12 @@ var searchData=
   ['getset',['getSet',['../classhypro_1_1State.html#ae99059873cf9cee50ea25f43905497ae',1,'hypro::State']]],
   ['getsets',['getSets',['../classhypro_1_1State.html#a3a201f27dd93043f4690aefe40b9d8cf',1,'hypro::State']]],
   ['getsettype',['getSetType',['../classhypro_1_1State.html#a3965ed577f394957ef076c8a86333c1a',1,'hypro::State']]],
-  ['getsource',['getSource',['../classhypro_1_1Transition.html#a350c7e35994cae3bd861240879d7aaf2',1,'hypro::Transition']]],
   ['gettimestamp',['getTimestamp',['../classhypro_1_1State.html#ab1c6ceaac40b2a33b36fa96ed2f6d1ea',1,'hypro::State']]],
   ['gettransitions',['getTransitions',['../classhypro_1_1HybridAutomaton.html#a1c744bdb5a0b9531c5ff871580d9b81a',1,'hypro::HybridAutomaton']]],
   ['gettypes',['getTypes',['../classhypro_1_1State.html#a45b310b941c444d30bb09baff76c95d3',1,'hypro::State']]],
   ['global_20definitions_20and_20constants',['Global definitions and constants',['../group__globals.html',1,'']]],
   ['gnuplotsettings',['gnuplotSettings',['../structhypro_1_1plotting_1_1gnuplotSettings.html',1,'hypro::plotting']]],
-  ['grid',['Grid',['../classhypro_1_1Grid.html#ade7f4c1b9cd1f2fa92ca2a27024037b9',1,'hypro::Grid']]],
   ['grid',['Grid',['../classhypro_1_1Grid.html',1,'hypro']]],
+  ['grid',['Grid',['../classhypro_1_1Grid.html#ade7f4c1b9cd1f2fa92ca2a27024037b9',1,'hypro::Grid']]],
   ['getting_20started',['Getting started',['../md__home_travis_build_hypro_hypro_doc_markdown_gettingStarted.html',1,'']]]
 ];

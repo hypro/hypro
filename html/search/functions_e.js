@@ -2,6 +2,7 @@ var searchData=
 [
   ['rawcoordinates',['rawCoordinates',['../classhypro_1_1Point.html#a444e722bcad6e231fe24ec0dc55867df',1,'hypro::Point']]],
   ['reach',['Reach',['../classhypro_1_1reachability_1_1Reach.html#ae6813f11a094496a612f62d4bec38ca1',1,'hypro::reachability::Reach::Reach()'],['../classhypro_1_1reachability_1_1Reach_3_01Number_00_01SupportFunction_3_01Number_01_4_01_4.html#a7599c85900aeff88fdab93026510a577',1,'hypro::reachability::Reach&lt; Number, SupportFunction&lt; Number &gt; &gt;::Reach()']]],
+  ['reachabilitysettings',['ReachabilitySettings',['../structhypro_1_1ReachabilitySettings.html#a04729b80a64a2ad5278bf605cc1e09a2',1,'hypro::ReachabilitySettings']]],
   ['reachedbadstates',['reachedBadStates',['../classhypro_1_1reachability_1_1Reach.html#a63c7f82c08c215100b65e2df137baea8',1,'hypro::reachability::Reach::reachedBadStates()'],['../classhypro_1_1reachability_1_1Reach_3_01Number_00_01SupportFunction_3_01Number_01_4_01_4.html#a3e705cd79e473ed73bcfe93a67664527',1,'hypro::reachability::Reach&lt; Number, SupportFunction&lt; Number &gt; &gt;::reachedBadStates()']]],
   ['reduced',['reduced',['../classhypro_1_1VPolytopeT.html#a348a9485ad052d94057c694664c2e59e',1,'hypro::VPolytopeT']]],
   ['reducedimension',['reduceDimension',['../classhypro_1_1Point.html#ab5852c9fed54d03484bcec3a99a99484',1,'hypro::Point']]],

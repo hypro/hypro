@@ -17,6 +17,7 @@ var searchData=
   ['intervalhull',['intervalHull',['../classhypro_1_1ZonotopeT.html#ad3a9ff15e52702539ac249a7edc5099d',1,'hypro::ZonotopeT']]],
   ['invert',['invert',['../classhypro_1_1Halfspace.html#add63f3e4fa20331e03570eda43654558',1,'hypro::Halfspace']]],
   ['invertcolor',['invertColor',['../classhypro_1_1Vertex.html#aba2719a95c51fb51ea2e5b39ad6e85e1',1,'hypro::Vertex']]],
+  ['isdiscretestep',['isDiscreteStep',['../structhypro_1_1TPathElement.html#ac1074ac555d412c4a46cc189e21f1df3',1,'hypro::TPathElement']]],
   ['isempty',['isEmpty',['../classhypro_1_1State.html#a6d8393964e26834f386da63259bf7224',1,'hypro::State']]],
   ['isinboundary',['isInBoundary',['../classhypro_1_1Point.html#ae41a08b161b35220aef8893bb0639c63',1,'hypro::Point']]],
   ['isinteger',['isInteger',['../classhypro_1_1Halfspace.html#a901fdaca3f7e8742d613b7ee4c65c79b',1,'hypro::Halfspace']]],
