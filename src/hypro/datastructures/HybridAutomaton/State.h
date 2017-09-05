@@ -1,7 +1,6 @@
 
 #pragma once
 
-#include "functors.h"
 #include "Condition.h"
 #include "../../representations/types.h"
 #include "../../representations/GeometricObject.h"
