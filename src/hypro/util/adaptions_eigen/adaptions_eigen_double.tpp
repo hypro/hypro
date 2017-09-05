@@ -11,7 +11,7 @@ namespace Eigen {
 			return false;
 		}
 
-		for ( int dim = 0; dim < lhs.rows(); ++dim ) {
+		for ( Eigen::Index dim = 0; dim < lhs.rows(); ++dim ) {
 			if ( lhs( dim ) > rhs( dim ) ) {
 				return false;
 			} else if ( lhs( dim ) < rhs( dim ) ) {
@@ -27,7 +27,7 @@ namespace Eigen {
 			return false;
 		}
 
-		for ( int dim = 0; dim < lhs.rows(); ++dim ) {
+		for ( Eigen::Index dim = 0; dim < lhs.rows(); ++dim ) {
 			if ( lhs( dim ) > rhs( dim ) ) {
 				return false;
 			} else if ( lhs( dim ) <= rhs( dim ) ) {
@@ -49,7 +49,7 @@ namespace Eigen {
 			return false;
 		}
 
-		for ( int dim = 0; dim < lhs.rows(); ++dim ) {
+		for ( Eigen::Index dim = 0; dim < lhs.rows(); ++dim ) {
 			// compare with 128 ULPs
 			if ( !carl::AlmostEqual2sComplement(lhs( dim ), rhs( dim ), 128) ) {
 				return false;
@@ -69,8 +69,8 @@ namespace Eigen {
 			return false;
 		}
 
-		for ( int rowIndex = 0; rowIndex < lhs.rows(); ++rowIndex ) {
-			for ( int colIndex = 0; colIndex < lhs.cols(); ++colIndex ) {
+		for ( Eigen::Index rowIndex = 0; rowIndex < lhs.rows(); ++rowIndex ) {
+			for ( Eigen::Index colIndex = 0; colIndex < lhs.cols(); ++colIndex ) {
 				// compare with 128 ULPs
 				if ( !carl::AlmostEqual2sComplement(lhs(rowIndex, colIndex), rhs(rowIndex, colIndex), 128) ) {
 					return false;

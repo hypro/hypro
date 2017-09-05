@@ -205,7 +205,8 @@ namespace hypro {
 				dictionary.pivot(i,j);
 				assert(dictionary.isPrimalFeasible());
 				#ifndef NDEBUG
-				size_t tmpI,tmpJ;
+				//size_t tmpI,tmpJ;
+				Eigen::Index tmpI,tmpJ;
 				dictionary.selectBlandPivot(tmpI,tmpJ);
 				if(!(tmpI == i && tmpJ == j)) {
 					WARN("hypro.vertexEnumeration","Chosen pivot: " << tmpI << ", " << tmpJ << ", assumed was: " << i << ", " << j  << ", dict after pivot: ");

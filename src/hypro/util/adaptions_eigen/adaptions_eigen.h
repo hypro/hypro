@@ -23,7 +23,7 @@ namespace Eigen {
 		return false;
 	}
 
-	for ( int dim = 0; dim < lhs.rows(); ++dim ) {
+	for ( Eigen::Index dim = 0; dim < lhs.rows(); ++dim ) {
 		if ( lhs( dim ) > rhs( dim ) ) {
 			return false;
 		} else if ( lhs( dim ) < rhs( dim ) ) {
