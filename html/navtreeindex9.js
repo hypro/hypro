@@ -1,18 +1,5 @@
 var NAVTREEINDEX9 =
 {
-"structstd_1_1hash_3_01hypro_1_1Point_3_01Number_01_4_01_4.html":[9,0,6,2],
-"structstd_1_1hash_3_01hypro_1_1Point_3_01Number_01_4_01_4.html#a6b7d24a1757259fb4bdad132dfcf3d5c":[9,0,6,2,0],
-"structstd_1_1hash_3_01hypro_1_1Ridge_3_01Number_01_4_01_4.html":[9,0,6,3],
-"structstd_1_1hash_3_01hypro_1_1Ridge_3_01Number_01_4_01_4.html#a0e73e68b1a8ba609e6c6065756a04c63":[9,0,6,3,0],
-"structstd_1_1hash_3_01hypro_1_1VertexContainer_3_01Number_01_4_01_4.html":[9,0,6,5],
-"structstd_1_1hash_3_01hypro_1_1VertexContainer_3_01Number_01_4_01_4.html#a33211884b447ffbd0f2318d8fbd49655":[9,0,6,5,0],
-"structstd_1_1hash_3_01hypro_1_1Vertex_3_01Number_01_4_01_4.html":[9,0,6,4],
-"structstd_1_1hash_3_01hypro_1_1Vertex_3_01Number_01_4_01_4.html#aa94e1ae68aac89555c9de7e798274bd2":[9,0,6,4,0],
-"structstd_1_1hash_3_01hypro_1_1matrix__t_3_01Number_01_4_01_4.html":[9,0,6,9],
-"structstd_1_1hash_3_01hypro_1_1matrix__t_3_01Number_01_4_01_4.html#aa8f3c83fcc1a388a82f8a2ebf6da7235":[9,0,6,9,0],
-"structstd_1_1hash_3_01hypro_1_1vector__t_3_01Number_01_4_01_4.html":[9,0,6,8],
-"structstd_1_1hash_3_01hypro_1_1vector__t_3_01Number_01_4_01_4.html#aeb24a1a7ff9c2232c4ac1eeb17f98593":[9,0,6,8,0],
-"structstd_1_1hash_3_01set_3_01hypro_1_1Vertex_3_01Number_01_4_01_4_01_4.html":[9,0,6,6],
 "structstd_1_1hash_3_01set_3_01hypro_1_1Vertex_3_01Number_01_4_01_4_01_4.html#a84cd2d0a005c9ac3d8e6217d8f2c5f62":[9,0,6,6,0],
 "structstd_1_1hash_3_01std_1_1pair_3_01first_00_01second_01_4_01_4.html":[9,0,6,1],
 "structstd_1_1hash_3_01std_1_1pair_3_01first_00_01second_01_4_01_4.html#ae62947175df518ad6f395e8dec0576ef":[9,0,6,1,0],

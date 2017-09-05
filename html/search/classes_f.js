@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['satisfieshalfspaces_5ffunctor',['satisfiesHalfspaces_functor',['../structhypro_1_1satisfiesHalfspaces__functor.html',1,'hypro']]],
   ['scalecontent',['scaleContent',['../structhypro_1_1scaleContent.html',1,'hypro']]],
   ['scopedlock',['ScopedLock',['../classScopedLock.html',1,'']]],
   ['seq',['seq',['../structhypro_1_1detail_1_1seq.html',1,'hypro::detail']]],

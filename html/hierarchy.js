@@ -1,6 +1,5 @@
 var hierarchy =
 [
-    [ "hypro::affineTransformation_functor< Number >", "structhypro_1_1affineTransformation__functor.html", null ],
     [ "hypro::BallSupportFunction< Number >", "classhypro_1_1BallSupportFunction.html", null ],
     [ "hypro::Cacheable< Content >", "structhypro_1_1Cacheable.html", null ],
     [ "hypro::Condition< Number >", "classhypro_1_1Condition.html", null ],
@@ -113,7 +112,6 @@ var hierarchy =
     [ "hypro::Reset< Number >", "classhypro_1_1Reset.html", null ],
     [ "hypro::parser::ErrorHandler::result< typename >", "structhypro_1_1parser_1_1ErrorHandler_1_1result.html", null ],
     [ "hypro::Ridge< Number >", "classhypro_1_1Ridge.html", null ],
-    [ "hypro::satisfiesHalfspaces_functor< Number >", "structhypro_1_1satisfiesHalfspaces__functor.html", null ],
     [ "hypro::scaleContent< Number >", "structhypro_1_1scaleContent.html", null ],
     [ "ScopedLock< Lockable >", "classScopedLock.html", null ],
     [ "hypro::detail::seq< Is >", "structhypro_1_1detail_1_1seq.html", null ],
@@ -153,11 +151,10 @@ var hierarchy =
     [ "hypro::Transition< Number >", "classhypro_1_1Transition.html", null ],
     [ "hypro::typeName< T >", "structhypro_1_1typeName.html", null ],
     [ "hypro::hypro::typeName< T >", "structhypro_1_1hypro_1_1typeName.html", null ],
-    [ "hypro::hypro::typeName< double >", "structhypro_1_1hypro_1_1typeName_3_01double_01_4.html", null ],
     [ "hypro::typeName< double >", "structhypro_1_1typeName_3_01double_01_4.html", null ],
+    [ "hypro::hypro::typeName< double >", "structhypro_1_1hypro_1_1typeName_3_01double_01_4.html", null ],
     [ "hypro::typeName< mpq_class >", "structhypro_1_1typeName_3_01mpq__class_01_4.html", null ],
     [ "hypro::hypro::typeName< mpq_class >", "structhypro_1_1hypro_1_1typeName_3_01mpq__class_01_4.html", null ],
-    [ "hypro::union_functor", "structhypro_1_1union__functor.html", null ],
     [ "hypro::unionContent< Number >", "structhypro_1_1unionContent.html", null ],
     [ "hypro::Vertex< Number >", "classhypro_1_1Vertex.html", null ],
     [ "hypro::Vertex< std::size_t >", "classhypro_1_1Vertex.html", null ],
