@@ -2,7 +2,7 @@
 
 
 namespace hypro {
-
+/*
 	void cwd(){
 		char cwd[1024];
 	   	if (getcwd(cwd, sizeof(cwd)) != NULL)
@@ -10,12 +10,12 @@ namespace hypro {
 	   	else
 	       std::cerr << "getcwd() error" << std::endl;
 	}
-
+*/
 	void openFile(const std::string& filename, ANTLRInputStream& input) {
 		
 		std::fstream ifs(filename);
 
-		cwd();
+		//cwd();
 
 		if(ifs.good()){
 			input = ANTLRInputStream(ifs);
@@ -42,11 +42,15 @@ namespace hypro {
 	boost::tuple<HybridAutomaton<mpq_class>, ReachabilitySettings<mpq_class>> parseFlowstarFile<mpq_class>(const std::string& filename) {
 		//Create an AnTLRInputStream
 		ANTLRInputStream input;
-
 		openFile(filename,input);
+
+		//Create Error Listener
+		hypro::ErrorListener* errListener = new hypro::ErrorListener();
 
 		//Create a Lexer and feed it with the input
 		HybridAutomatonLexer lexer(&input);
+		lexer.removeErrorListeners();
+		lexer.addErrorListener(errListener);
 
 		//Create an empty TokenStream obj
 		CommonTokenStream tokens(&lexer);
@@ -56,12 +60,16 @@ namespace hypro {
 
 		//Create a parser
 		HybridAutomatonParser parser(&tokens);
+		parser.removeErrorListeners();
+		parser.addErrorListener(errListener);
 
 		tree::ParseTree* tree = parser.start();
 
 		hypro::HyproHAVisitor<mpq_class> visitor;
 
 		hypro::HybridAutomaton<mpq_class> h = (visitor.visit(tree)).antlrcpp::Any::as<hypro::HybridAutomaton<mpq_class>>();
+
+		delete errListener;
 
 		return boost::tuple<HybridAutomaton<mpq_class>&, ReachabilitySettings<mpq_class>>(h, visitor.getSettings());
 	}
@@ -70,11 +78,15 @@ namespace hypro {
 	boost::tuple<HybridAutomaton<double>, ReachabilitySettings<double>> parseFlowstarFile<double>(const std::string& filename) {
 		//Create an AnTLRInputStream
 		ANTLRInputStream input;
-
 		openFile(filename,input);
+
+		//Create Error Listener
+		ErrorListener* errListener = new ErrorListener();;
 
 		//Create a Lexer and feed it with the input
 		HybridAutomatonLexer lexer(&input);
+		lexer.removeErrorListeners();
+		lexer.addErrorListener(errListener);
 
 		//Create an empty TokenStream obj
 		CommonTokenStream tokens(&lexer);
@@ -84,12 +96,16 @@ namespace hypro {
 
 		//Create a parser
 		HybridAutomatonParser parser(&tokens);
+		parser.removeErrorListeners();
+		parser.addErrorListener(errListener);
 
 		tree::ParseTree* tree = parser.start();
 
 		hypro::HyproHAVisitor<double> visitor;
 
 		hypro::HybridAutomaton<double> h = (visitor.visit(tree)).antlrcpp::Any::as<hypro::HybridAutomaton<double>>();
+
+		delete errListener;
 
 		return boost::tuple<HybridAutomaton<double>, ReachabilitySettings<double>>(h, visitor.getSettings());
 	}

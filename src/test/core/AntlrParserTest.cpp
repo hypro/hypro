@@ -1,19 +1,13 @@
-//#include "../../hypro/parser/antlr4-flowstar/HybridAutomatonLexer.h"
-//#include "../../hypro/parser/antlr4-flowstar/HybridAutomatonParser.h"
-//#include "../../hypro/parser/antlr4-flowstar/HyproHAVisitor.h"
 #include "../../hypro/parser/antlr4-flowstar/ParserWrapper.h"
 #include "../../hypro/datastructures/HybridAutomaton/HybridAutomaton.h"
-//#include "../../hypro/datastructures/HybridAutomaton/Settings.h"
 #include <iostream>
 #include <fstream>
 #include "gtest/gtest.h"
 #include "../defines.h"
-//#include <antlr4-runtime.h>
 
 #include <unistd.h>		//getcwd()
 
 using namespace antlr4;
-//using namespace hypro;
 
 template<typename Number>
 class AntlrParserTest : public ::testing::Test {
@@ -33,37 +27,6 @@ class AntlrParserTest : public ::testing::Test {
 		       std::cerr << "getcwd() error" << std::endl;
 		}
 };
-
-/*
-ANTLRInputStream loadInput(std::string path){
-
-	std::fstream ifs(path);
-
-	//Create an AnTLRInputStream
-	ANTLRInputStream input;
-	if(ifs.good()){
-		input = ANTLRInputStream(ifs);
-	} else {
-		std::cerr << "InputStream was bad." << std::endl;
-		if(ifs.fail()){
-			std::cerr << "Failbit was set" << std::endl;
-		}
-		if(ifs.eof()){
-			std::cerr << "EOFbit was set" << std::endl;
-		}
-		if(ifs.bad()){
-			std::cerr << "Badbit was set" << std::endl;
-		}
-		//FAIL();
-	}
-	if(!ifs.is_open()){
-		std::cout << "ifs hasn't opened anything" << std::endl;
-		//FAIL();
-	}
-	std::cout << "input stream content:\n" << input.toString() << std::endl;
-	return input;
-}
-*/
 
 
 ///////////// Unit Tests - Do subvisitors work properly? //////////////
@@ -98,74 +61,24 @@ TYPED_TEST(AntlrParserTest, SettingVEmptySettings){
 
 TYPED_TEST(AntlrParserTest, JustTesting){
 
-	//std::string path("../../../../src/test/core/examples/example_init_parsing.txt");
 	//std::string path("../examples/input/bouncing_ball.model");
 	std::string path("../../../../examples/input/bouncing_ball.model");
-
-	/*
-	//Tell current path - /home/ptse/hiwi/hypro/build/src/test/core
-	this->cwd();
-
-	//std::fstream ifs("../../../../src/test/core/example_location_parsing.txt");
-	std::fstream ifs(path);
-
-	//Create an AnTLRInputStream
-	ANTLRInputStream input;
-	if(ifs.good()){
-		input = ANTLRInputStream(ifs);
-	} else {
-		std::cerr << "InputStream was bad." << std::endl;
-		if(ifs.fail()){
-			std::cerr << "Failbit was set" << std::endl;
-		}
-		if(ifs.eof()){
-			std::cerr << "EOFbit was set" << std::endl;
-		}
-		if(ifs.bad()){
-			std::cerr << "Badbit was set" << std::endl;
-		}
-		//FAIL();
-	}
-	if(!ifs.is_open()){
-		std::cout << "ifs hasn't opened anything" << std::endl;
-		//FAIL();
-	}
-	std::cout << "input stream content:\n" << input.toString() << std::endl;
-
-	//Create a Lexer and feed it with the input
-	HybridAutomatonLexer lexer(&input);
-
-	//Create an empty TokenStream obj
-	CommonTokenStream tokens(&lexer);
-
-	//Fill the TokenStream (and output it for demonstration)
-	tokens.fill();
-
-	//Create a parser
-	HybridAutomatonParser parser(&tokens);
-
-	tree::ParseTree* tree = parser.start();
-
-	hypro::HyproHAVisitor<TypeParam> visitor;
-
-	hypro::HybridAutomaton<TypeParam> h = (visitor.visit(tree)).antlrcpp::Any::as<hypro::HybridAutomaton<TypeParam>>();
-	hypro::ReachabilitySettings<TypeParam> r = visitor.getSettings();
-	std::cout << r << std::endl;
-
-	std::cout << "I RETURNED FROM VISITING" << std::endl;
-	*/
-
 	boost::tuple<hypro::HybridAutomaton<TypeParam>, hypro::ReachabilitySettings<TypeParam>> h = hypro::parseFlowstarFile<TypeParam>(path);
 	SUCCEED();
 
 }
 
-/*
 TYPED_TEST(AntlrParserTest, EmptyFile){
 
-	tree::ParseTree* tree = this->generateParseTree("../../../../src/test/core/examples/example_empty_file.txt");
-	this->visitor.visit(tree);
-	SUCCEED();
+	this->cwd();
+	std::string path("../../../../src/test/core/examples/example_empty_file.txt");
 
+	try{
+		boost::tuple<hypro::HybridAutomaton<TypeParam>, hypro::ReachabilitySettings<TypeParam>> h = hypro::parseFlowstarFile<TypeParam>(path);
+		FAIL();
+	} catch(const std::runtime_error& e){
+		std::cout << e.what() << std::endl;
+		SUCCEED();
+	} 
 }
-*/
+

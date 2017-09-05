@@ -1,6 +1,0 @@
-hybrid reachability {
-    state var
-    modes {}
-    jumps {}
-    #init {}
-}
