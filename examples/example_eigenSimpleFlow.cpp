@@ -88,20 +88,20 @@ void addSegment(std::vector<VPoly>& flow, bool PLOT, Flow_seg& safe_seg,
 
 int main()
 {
-    Transformation<Number> trafo1;      //transformation class for Hybrid Automata
     //use hybrid automaton from file
     const std::string& filename = "../../examples/input/bouncing_ball_inhomogen.model";
 	boost::tuple<HybridAutomaton<Number>, reachability::ReachabilitySettings<Number>> ha = parseFlowstarFile<Number>(filename);
     //std::cout << boost::get<0>(ha);
-    //2nd hybrid automaton for transformed ha
     //hypro::HybridAutomaton<Number> ha_transformed =  HybridAutomaton<Number>( boost::get<0>(ha) );
     //std::cout << ha_transformed;
     //TODO fixing map from A to Ax+b + adjusting output
-    HybridAutomaton<Number> transformed_ha = boost::get<0>(ha);
-    Transformation<Number> trafo;
-    trafo.transform( transformed_ha );
+    HybridAutomaton<Number> original_ha = boost::get<0>(ha);
+    HybridAutomaton<Number> transformed_ha = HybridAutomaton<Number>(original_ha);
+    Transformation<Number> trafo = Transformation<Number>(original_ha, transformed_ha);    
+    
+    //TODO clarify if we copy automata inside the transformation or if we assume transfo_ha ISCOPYOF orig_ha
     //remind last line is ALWAYS added by parser
-    //std::cout << transformed_ha;
+    std::cout << transformed_ha;
     //contructing second Hybrid Automaton with changed settings according to 
     //transformation class
     //construct second hybrid automaton
