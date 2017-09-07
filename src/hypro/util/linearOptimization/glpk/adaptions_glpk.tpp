@@ -43,7 +43,7 @@ namespace hypro {
 		*/
 
 		// setup glpk
-		for ( int i = 0; i < constraints.cols(); i++ ) {
+		for ( unsigned i = 0; i < constraints.cols(); i++ ) {
 			glp_set_col_bnds( glpkProblem, i + 1, GLP_FR, 0.0, 0.0 );
 			glp_set_obj_coef( glpkProblem, i + 1, carl::toDouble( _direction( i ) ) );
 		}
@@ -62,7 +62,7 @@ namespace hypro {
 				matrix_t<Number> exactSolutionMatrix = matrix_t<Number>::Zero(constraints.cols(), constraints.cols());
 				vector_t<Number> exactSolutionVector = vector_t<Number>::Zero(constraints.cols());
 				unsigned pos = 0;
-				for(int i = 1; i <= constraints.rows(); ++i) {
+				for(unsigned i = 1; i <= constraints.rows(); ++i) {
 					// we search for d non-basic variables at their upper bound, which define the optimal point.
 					int status = glp_get_row_stat( glpkProblem, i);
 					if( status == GLP_NU ) {
@@ -84,7 +84,7 @@ namespace hypro {
 			}
 			case GLP_UNBND: {
 				vector_t<Number> glpkModel(constraints.cols());
-				for(int i=1; i <= constraints.cols(); ++i) {
+				for(unsigned i=1; i <= constraints.cols(); ++i) {
 					glpkModel(i-1) = carl::rationalize<Number>(glp_get_col_prim( glpkProblem, i));
 				}
 				return EvaluationResult<Number>(1, glpkModel, SOLUTION::INFTY);
@@ -99,7 +99,7 @@ namespace hypro {
 	bool glpkCheckPoint(glp_prob* glpkProblem, const matrix_t<Number>& constraints, const vector_t<Number>& , const Point<Number>& point) {
 		// set point
 		assert(constraints.cols() == point.rawCoordinates().rows());
-		for ( int i = 0; i < constraints.cols(); ++i ) {
+		for ( unsigned i = 0; i < constraints.cols(); ++i ) {
 			glp_set_col_bnds( glpkProblem, i + 1, GLP_FX, carl::toDouble(point.rawCoordinates()(i)), 0.0 );
 			glp_set_obj_coef( glpkProblem, i + 1, 1.0 ); // not needed?
 		}
@@ -113,7 +113,7 @@ namespace hypro {
 		std::vector<std::size_t> res;
 
 		// TODO: ATTENTION: This relies upon that glpk maintains the order of the constraints!
-		for ( int i = 0; i < constraints.cols(); ++i ) {
+		for ( unsigned i = 0; i < constraints.cols(); ++i ) {
 			glp_set_col_bnds( glpkProblem, i + 1, GLP_FR, 0.0, 0.0 );
 			glp_set_obj_coef( glpkProblem, i + 1, 1.0 ); // not needed?
 		}

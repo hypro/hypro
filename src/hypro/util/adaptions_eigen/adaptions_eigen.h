@@ -23,7 +23,7 @@ namespace Eigen {
 		return false;
 	}
 
-	for ( Eigen::Index dim = 0; dim < lhs.rows(); ++dim ) {
+	for ( unsigned dim = 0; dim < lhs.rows(); ++dim ) {
 		if ( lhs( dim ) > rhs( dim ) ) {
 			return false;
 		} else if ( lhs( dim ) < rhs( dim ) ) {
@@ -64,7 +64,7 @@ namespace Eigen {
 	std::size_t VectorHashValue( const hypro::vector_t<Number>& pVector ) {
 		//std::cout << "VECTOR_HASH(" << pVector.transpose() << ")" << std::endl;
 		size_t seed = 0;
-		for (int i = 0; i < pVector.rows(); i++) {
+		for (unsigned i = 0; i < pVector.rows(); i++) {
 			std::size_t tmp = std::hash<Number>()(pVector(i));
 			//std::cout << __func__ << ": " << i << ", "<< pVector(i) << " -> " << tmp << std::endl;
 			carl::hash_add(seed, tmp);
@@ -81,8 +81,8 @@ namespace Eigen {
 	template <typename Number>
 	std::size_t MatrixHashValue( const hypro::matrix_t<Number>& pMatrix ) {
 		size_t seed = 0;
-		for (int i = 0; i < pMatrix.rows(); i++) {
-			for (int j = 0; j < pMatrix.cols(); j++) {
+		for (unsigned i = 0; i < pMatrix.rows(); i++) {
+			for (unsigned j = 0; j < pMatrix.cols(); j++) {
 				carl::hash_add(seed, pMatrix(i, j));
 			}
 		}
@@ -99,7 +99,7 @@ inline bool operator==( const hypro::vector_t<Number>& lhs, const hypro::vector_
 		return false;
 	}
 
-	for ( int dim = 0; dim < lhs.rows(); ++dim ) {
+	for ( unsigned dim = 0; dim < lhs.rows(); ++dim ) {
 		if (lhs( dim ) != rhs( dim )) {
 			return false;
 		}
@@ -121,8 +121,8 @@ inline bool operator==( const hypro::matrix_t<Number>& lhs, const hypro::matrix_
 		return false;
 	}
 
-	for ( int rowIndex = 0; rowIndex < lhs.rows(); ++rowIndex ) {
-		for ( int colIndex = 0; colIndex < lhs.cols(); ++colIndex ) {
+	for ( unsigned rowIndex = 0; rowIndex < lhs.rows(); ++rowIndex ) {
+		for ( unsigned colIndex = 0; colIndex < lhs.cols(); ++colIndex ) {
 			if ( lhs( rowIndex, colIndex ) != rhs( rowIndex, colIndex ) ) {
 				return false;
 			}
@@ -138,7 +138,7 @@ inline bool operator!=( const hypro::matrix_t<Number>& lhs, const hypro::matrix_
 
 template<typename Number>
 inline std::ostream& operator<<(std::ostream& _out, const hypro::vector_t<Number>& in) {
-	for(int rowIndex = 0; rowIndex < in.rows(); ++rowIndex) {
+	for(unsigned rowIndex = 0; rowIndex < in.rows(); ++rowIndex) {
 		_out << in(rowIndex) << std::endl;
 	}
 	return _out;
@@ -146,8 +146,8 @@ inline std::ostream& operator<<(std::ostream& _out, const hypro::vector_t<Number
 
 template<typename Number>
 inline std::ostream& operator<<(std::ostream& _out, const hypro::matrix_t<Number>& in) {
-	for(int rowIndex = 0; rowIndex < in.rows(); ++rowIndex) {
-		for(int colIndex = 0; colIndex < in.cols(); ++colIndex) {
+	for(unsigned rowIndex = 0; rowIndex < in.rows(); ++rowIndex) {
+		for(unsigned colIndex = 0; colIndex < in.cols(); ++colIndex) {
 			_out << in(rowIndex, colIndex) << " ";
 		}
 		_out << std::endl;
@@ -211,8 +211,8 @@ namespace hypro {
 	matrix_t<To> convert( const matrix_t<From>& _mat ) {
 		matrix_t<To> resultMat( _mat.rows(), _mat.cols() );
 
-		for ( int i = 0; i < _mat.rows(); ++i ) {
-			for ( int j = 0; j < _mat.cols(); ++j ) {
+		for ( unsigned i = 0; i < _mat.rows(); ++i ) {
+			for ( unsigned j = 0; j < _mat.cols(); ++j ) {
 				resultMat( i, j ) = carl::convert<From,To>(_mat( i, j ));
 			}
 		}
@@ -327,8 +327,8 @@ namespace hypro {
 		std::stringstream st;
 		st << "matrix_t<Number> matrix" << index << " = matrix_t<Number>(" << in.rows() << "," << in.cols() << ");\n";
 		st << "matrix" << index << " << ";
-		for(int rowIndex = 0; rowIndex < in.rows(); ++rowIndex) {
-			for(int colIndex = 0; colIndex < in.cols(); ++colIndex) {
+		for(unsigned rowIndex = 0; rowIndex < in.rows(); ++rowIndex) {
+			for(unsigned colIndex = 0; colIndex < in.cols(); ++colIndex) {
 				if(rowIndex == in.rows()-1 && colIndex == in.cols()-1) {
 					st << in(rowIndex,colIndex);
 				} else {
