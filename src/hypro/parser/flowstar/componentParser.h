@@ -125,8 +125,8 @@ namespace parser {
 				//g.discreteOffset = _dim;
 
 				if(mDiscreteGuards.size() > 0) {
-					matrix_t<Number> guardMatrix = matrix_t<Number>::Zero(mDiscreteGuards.size(),_discreteDim-_dim+1);
-					vector_t<Number> guardVector = vector_t<Number>::Zero(mDiscreteGuards.size());
+					matrix_t<Number> guardMatrix = matrix_t<Number>::Zero(Eigen::Index(mDiscreteGuards.size()),_discreteDim-_dim+1);
+					vector_t<Number> guardVector = vector_t<Number>::Zero(Eigen::Index(mDiscreteGuards.size()));
 					unsigned row = 0;
 					for(const auto& guardPair : mDiscreteGuards) {
 						matrix_t<Number> reducedGuard = matrix_t<Number>(1,_discreteDim-_dim+1);

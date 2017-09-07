@@ -222,6 +222,9 @@ namespace hypro {
 	};
 } // namespace hypro
 
+template<typename Number>
+bool hypro::Optimizer<Number>::warnInexact = false;
+
 #ifdef USE_CLN_NUMBERS
 #include <cln/cln.h>
 extern template class hypro::Optimizer<cln::cl_RA>;

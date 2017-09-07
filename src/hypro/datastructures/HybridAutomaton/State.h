@@ -126,8 +126,11 @@ class State
     	mSets.push_back(_rep);
     	mTypes.push_back(Representation::type());
     	// parameter pack expansion
+    	#pragma GCC diagnostic push
+		#pragma GCC diagnostic ignored "-Wzero-length-array"
     	int dummy[sizeof...(Rargs)] = { (mSets.push_back(sets), 0)... };
     	int dummy2[sizeof...(Rargs)] = { (mTypes.push_back(sets.type()), 0)... };
+    	#pragma GCC diagnostic pop
     	(void) dummy;
     	(void) dummy2;
     }
@@ -267,7 +270,7 @@ class State
      * @param[in]  in    The passed second state.
      * @return     A state which represents the closure of the union of both states.
      */
-    State<Number,Representation,Rargs...> aggregate(const State<Number,Representation,Rargs...>& in) const;
+    State<Number,Representation,Rargs...> unite(const State<Number,Representation,Rargs...>& in) const;
 
     /**
      * @brief      Meta-function to verify a state against a condition.
@@ -277,6 +280,7 @@ class State
      * @return     A pair of a Boolean and the resulting state. The Boolean is set to True, if the resulting state is not empty.
      */
     std::pair<bool,State<Number,Representation,Rargs...>> satisfies(const Condition<Number>& in) const;
+    std::pair<bool,State<Number,Representation,Rargs...>> satisfiesHalfspaces(const matrix_t<Number>& constraints, const vector_t<Number>& constants) const;
 
     /**
      * @brief      Meta-function to verify the i-th set of a state against the i-th component of a condition.
@@ -310,6 +314,8 @@ class State
      * @return     A state where each set has been transformed by the corresponding ConstraintSet.
      */
     State<Number,Representation,Rargs...> applyTransformation(const std::vector<ConstraintSet<Number>>& trafos ) const;
+    State<Number,Representation,Rargs...> linearTransformation(const matrix_t<Number>& matrix) const;
+    State<Number,Representation,Rargs...> affineTransformation(const matrix_t<Number>& matrix, const vector_t<Number>& vector) const;
 
     /**
      * @brief      Meta-function, which applies an affine transformation to each set contained in the state and whose index is contained

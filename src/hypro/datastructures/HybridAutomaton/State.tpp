@@ -48,7 +48,7 @@ void State<Number,Representation,Rargs...>::addTimeToClocks(Number t) {
 }
 
 template<typename Number, typename Representation, typename ...Rargs>
-State<Number,Representation,Rargs...> State<Number,Representation,Rargs...>::aggregate(const State<Number,Representation,Rargs...>& in) const {
+State<Number,Representation,Rargs...> State<Number,Representation,Rargs...>::unite(const State<Number,Representation,Rargs...>& in) const {
 	State<Number,Representation,Rargs...> res(*this);
 
 	TRACE("hypro.datastructures","Aggregation of " << res << " and " << in);
@@ -86,6 +86,11 @@ std::pair<bool,State<Number,Representation,Rargs...>> State<Number,Representatio
 	}
 
 	return std::make_pair(!empty, res);
+}
+
+template<typename Number, typename Representation, typename ...Rargs>
+std::pair<bool,State<Number,Representation,Rargs...>> State<Number,Representation,Rargs...>::satisfiesHalfspaces(const matrix_t<Number>& constraints, const vector_t<Number>& constants) const {
+	return partiallySatisfies(Condition<Number>(constraints,constants), 0);
 }
 
 template<typename Number, typename Representation, typename ...Rargs>
@@ -133,6 +138,16 @@ State<Number,Representation,Rargs...> State<Number,Representation,Rargs...>::app
 		res.setSetDirect(boost::apply_visitor(genericAffineTransformationVisitor<repVariant, Number>(trafos.at(i).matrix(), trafos.at(i).vector()), mSets.at(i)), i);
 	}
 	return res;
+}
+
+template<typename Number, typename Representation, typename ...Rargs>
+State<Number,Representation,Rargs...> State<Number,Representation,Rargs...>::linearTransformation(const matrix_t<Number>& matrix) const {
+	return partiallyApplyTransformation(ConstraintSet<Number>(matrix, vector_t<Number>::Zero(matrix.rows())), 0);
+}
+
+template<typename Number, typename Representation, typename ...Rargs>
+State<Number,Representation,Rargs...> State<Number,Representation,Rargs...>::affineTransformation(const matrix_t<Number>& matrix, const vector_t<Number>& vector) const {
+	return partiallyApplyTransformation(ConstraintSet<Number>(matrix, vector), 0);
 }
 
 
