@@ -71,7 +71,7 @@ TYPED_TEST(AntlrParserTest, JustTesting){
 TYPED_TEST(AntlrParserTest, EmptyFile){
 
 	this->cwd();
-	std::string path("../../../../src/test/core/examples/example_empty_file.txt");
+	std::string path("../../../../src/test/core/examples/test_empty_file.txt");
 
 	try{
 		boost::tuple<hypro::HybridAutomaton<TypeParam>, hypro::ReachabilitySettings<TypeParam>> h = hypro::parseFlowstarFile<TypeParam>(path);
@@ -80,5 +80,18 @@ TYPED_TEST(AntlrParserTest, EmptyFile){
 		std::cout << e.what() << std::endl;
 		SUCCEED();
 	} 
+}
+
+TYPED_TEST(AntlrParserTest, OnlyStart){
+
+	std::string path("../../../../src/test/core/examples/test_only_start.txt");
+	try{
+		boost::tuple<hypro::HybridAutomaton<TypeParam>, hypro::ReachabilitySettings<TypeParam>> h = hypro::parseFlowstarFile<TypeParam>(path);
+		FAIL();
+	} catch(const std::runtime_error& e){
+		std::cout << e.what() << std::endl;
+		SUCCEED();
+	}
+
 }
 
