@@ -8,12 +8,12 @@ namespace reachability {
 		assert(!_state.getTimestamp().isUnbounded());
 		result = _state;
 
-		std::cout << "------ start intersecting guard!" << std::endl;
+		//std::cout << "------ start intersecting guard!" << std::endl;
 
 		// check for continuous set guard intersection
 		std::pair<bool, State_t<Number>> guardSatisfyingSet = _state.satisfies( _trans->getGuard() );
 
-		std::cout << "------ guard satisfied? " << guardSatisfyingSet.first << std::endl;
+		//std::cout << "------ guard satisfied? " << guardSatisfyingSet.first << std::endl;
 
 		// check if the intersection is empty
 		if ( guardSatisfyingSet.first ) {
@@ -27,7 +27,7 @@ namespace reachability {
 			//}
 
 			result.setSets(guardSatisfyingSet.second.getSets());
-			std::cout << "------ end intersecting guard!" << std::endl;
+			//std::cout << "------ end intersecting guard!" << std::endl;
 			return true;
 		} else {
 			#ifdef REACH_DEBUG
@@ -58,7 +58,7 @@ namespace reachability {
 				}
 				if(!duplicate){
 					mWorkingQueue.emplace_back(mCurrentLevel+1, s);
-					std::cout << "-- No duplicate state tupel found! mWorkingQueue size is now: " << mWorkingQueue.size() << std::endl;
+					//std::cout << "-- No duplicate state tupel found! mWorkingQueue size is now: " << mWorkingQueue.size() << std::endl;
 				}
 			} else { // aggregate all
 				// TODO: Note that all sets are collected for one transition, i.e. currently, if we intersect the guard for one transition twice with
@@ -155,14 +155,11 @@ namespace reachability {
 	template<typename Number>
 	bool Reach<Number>::checkTransitions(const State_t<Number>& state, const carl::Interval<Number>& , std::vector<boost::tuple<Transition<Number>*, State_t<Number>>>& nextInitialSets) const {
 
-		std::cout << "---- In checking transitions!" << std::endl;
-
 		State_t<Number> guardSatisfyingState;
 		bool transitionEnabled = false;
 		//std::cout << "------ how many transitions do we have? " << state.getLocation()->getTransitions().size() << std::endl;
 		for( auto transition : state.getLocation()->getTransitions() ){
 			// handle time-triggered transitions
-			std::cout << "------ Do I get here?" << std::endl;
 			if(intersectGuard(transition, state, guardSatisfyingState)){
 				//std::cout << "------hybrid transition enabled" << std::endl;
 				std::cout << *transition << std::endl;
@@ -176,7 +173,6 @@ namespace reachability {
 			}
 		}
 
-		std::cout << "---- End checking transitions!" << std::endl;
 		return transitionEnabled;
 	}
 

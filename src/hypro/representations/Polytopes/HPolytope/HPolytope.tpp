@@ -72,11 +72,14 @@ HPolytopeT<Number, Converter>::HPolytopeT( const std::vector<Point<Number>>& poi
 	}
 	*/
 
+	std::cout << "STARTING CONVERTION OF LOWERED DIMENSION HPOLY" << std::endl;
+
 	// special case: 1 point - we can directly use box constraints.
 	if(points.size() == 1) {
 		assert( (*points.begin()).dimension() > 0 );
 		mDimension = points.begin()->dimension();
 		for(unsigned d = 0; d < points.begin()->dimension(); ++d) {
+			std::cout << "Do we get here?\n";
 			vector_t<Number> normal = vector_t<Number>::Zero(points.begin()->dimension());
 			normal(d) = 1;
 			mHPlanes.insert(mHPlanes.end(), Halfspace<Number>(normal, points.begin()->at(d)));
@@ -110,6 +113,7 @@ HPolytopeT<Number, Converter>::HPolytopeT( const std::vector<Point<Number>>& poi
 		//if ( points.size() <= mDimension ) {
 		if ( unsigned(effectiveDim) < mDimension ) {
 			std::cout << "Points size: " << points.size() << std::endl;
+			std::cout << "effectiveDim: " << effectiveDim << std::endl;
 			// get common plane
 			std::vector<vector_t<Number>> vectorsInPlane;
 			std::cout << "first point: " << *points.begin() << std::endl;
@@ -119,8 +123,40 @@ HPolytopeT<Number, Converter>::HPolytopeT( const std::vector<Point<Number>>& poi
 			vector_t<Number> planeNormal = Halfspace<Number>::computePlaneNormal(vectorsInPlane);
 			Number planeOffset = Halfspace<Number>::computePlaneOffset(planeNormal, points[0]);
 
+			std::cout << "done with first part!" << std::endl;
+
 			// project on lower dimension.
 			// TODO: Use dimensions with largest coordinate range for improved stability.
+			// So to say: Drop dimensions with minimal coordinate range
+			Point<Number> maxP = points[0];
+			Point<Number> minP = points[0];
+			for(const auto& point : points){
+				maxP = Point<Number>::coeffWiseMax(maxP,point);
+				minP = Point<Number>::coeffWiseMin(minP,point);
+			}
+			//Make all range values positive
+			Point<Number> dimRange = maxP - minP;
+			for(unsigned i=0; i < dimRange.dimension(); i++){
+				dimRange[i] = dimRange.at(i) < 0 ? Number(-1)*dimRange.at(i) : dimRange.at(i);
+			}
+			//Get dimension with smallest range
+			std::size_t smallest = 0;
+			for(std::size_t d=0; d < dimRange.dimension(); d++){
+				if(dimRange.at(d) < dimRange.at(smallest)){
+					smallest = d;
+				}
+			}
+			//projDimensions are those who are bigger than smallest.
+			std::vector<std::size_t> projectionDimensions;
+			std::vector<std::size_t> droppedDimensions;
+			for(std::size_t d=0; d < dimRange.dimension(); d++){
+				if(d != smallest){
+					projectionDimensions.push_back(d);
+				} else {
+					droppedDimensions.push_back(d);
+				}
+			}
+			/*
 			std::vector<std::size_t> projectionDimensions;
 			std::vector<std::size_t> droppedDimensions;
 			for(std::size_t d = 0; d < mDimension; ++d){
@@ -130,21 +166,31 @@ HPolytopeT<Number, Converter>::HPolytopeT( const std::vector<Point<Number>>& poi
 					droppedDimensions.push_back(d);
 				}
 			}
+			*/
+			std::cout << "done with second part!" << std::endl;
 
 			std::vector<Point<Number>> projectedPoints;
 			for(const auto& point : points){
 				projectedPoints.emplace_back(point.project(projectionDimensions));
 			}
 
+			std::cout << "done with third part!" << std::endl;
+			std::cout << "Projected points are:\n";
+			for(auto& point : projectedPoints){
+				std::cout << point << std::endl;
+			}
+
 			HPolytopeT<Number,Converter> projectedPoly(projectedPoints);
-			//std::cout << "Projected polytope: " << projectedPoly << std::endl;
+			std::cout << "Projected polytope: " << projectedPoly << std::endl;
 			projectedPoly.insertEmptyDimensions(projectionDimensions,droppedDimensions);
-			//std::cout << "After inserting empty dimensions: " << projectedPoly << std::endl;
-			//std::cout << "Poly dimension: " << projectedPoly.dimension() << " and plane dimension : " << planeNormal.rows() << std::endl;
+			std::cout << "After inserting empty dimensions: " << projectedPoly << std::endl;
+			std::cout << "Poly dimension: " << projectedPoly.dimension() << " and plane dimension : " << planeNormal.rows() << std::endl;
 			projectedPoly.insert(Halfspace<Number>(planeNormal,planeOffset));
 			projectedPoly.insert(Halfspace<Number>(-planeNormal,-planeOffset));
 
 			*this = projectedPoly;
+
+			std::cout << "done with projection!" << std::endl;
 
 			//PrincipalComponentAnalysis<Number> pca(points);
 			//std::vector<Halfspace<Number>> boxConstraints = pca.box();
