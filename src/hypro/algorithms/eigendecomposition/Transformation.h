@@ -16,6 +16,38 @@
  */
 
 namespace hypro {
+    template <typename Number>
+    using Matrix = matrix_t<Number>;
+    template <typename Number>
+    using Vector = vector_t<Number>;
+    template <typename Number>
+    using DiagonalMatrix= Eigen::DiagonalMatrix<Number,Eigen::Dynamic>;
+    using BoolMatrix = matrix_t<bool>;
+template <typename Number>
+struct STallValues {
+    struct STinputVectors {
+        Vector<Number> x0;
+        Vector<Number> x0_2;
+    };
+    struct STindependentFunct {
+      DiagonalMatrix<Number> D;
+      Matrix<Number> xinhom;
+      Number delta;
+      std::size_t deltalimit;
+    };
+    struct STdependentFunct {
+      Matrix<Number> xhom;
+      Matrix<Number> x_tr;
+    };
+    struct STevalFunctions {
+      Matrix<Number> deriv;
+      BoolMatrix direct;
+    };
+    struct STflowpipeSegment {
+      std::vector<Vector<Number>> upper;
+      std::vector<Vector<Number>> lower;
+    };
+};
 
 template <typename Number>
 class Transformation {
@@ -25,37 +57,18 @@ class Transformation {
 	using locationStateMap = std::multimap<Location<Number>*, RawState<Number>, locPtrComp<Number>>;
 	using setVector = std::vector<std::pair<matrix_t<Number>, vector_t<Number>>>;
     
-    using Matrix = matrix_t<Number>;
-    using Vector = vector_t<Number>;
-    using DiagonalMatrix = Eigen::DiagonalMatrix<Number,Eigen::Dynamic>;
-    using BoolMatrix = matrix_t<bool>;
-    
-    struct Independent_part_funct {
-        DiagonalMatrix D;
-        Matrix xinhom;
-        Number delta;
-        std::size_t deltalimit;
-    };
-    struct Dependent_part_funct {
-        Matrix xhom;
-        Matrix x_tr;
-    };
-    struct Eval_functions {
-        Matrix deriv;
-        BoolMatrix direct;
-    };
   private:
     std::map<locationSet, locationSet> maplLocations; //maps from original location to transformed organized as black/red tree
+    HybridAutomaton<Number> mTransformedHA;
+    //TODO std::map with struct for each location
+    //STinputVectors      mSTinputVectors;    //?? needed ?? models ??
+    //STflowpipeSegment   mSTflowpipeSegment;
     //std::map<ptr_originalHybAuto,ptr_transformedHybAuto>
-    
-    //use structs here?
-
-	//locationSet mLocations;
-	//transitionSet mTransitions;
-	//locationStateMap mInitialStates;
-	//locationStateMap mLocalBadStates;
-	//setVector mGlobalBadStates;
-	//reachability::ReachabilitySettings<Number> mReachabilitySettings;
+	//void declare_structures(const int n, 
+    //    STindependentFunct& mSTindependentFunct,
+    //    STdependentFunct  & mSTdependentFunct,
+    //    STevalFunctions   & mSTevalFunctions );
+    //reachability::ReachabilitySettings<Number> mReachabilitySettings;
 
   public:
     /**
@@ -76,7 +89,7 @@ class Transformation {
      * @param[in]  transformed_ha  The transformed hybrid automaton.
      */
 	//Transformation( HybridAutomaton<Number>& _hybrid );
-    Transformation<Number> (const HybridAutomaton<Number>& _hybrid, HybridAutomaton<Number>& transformed_ha);
+    Transformation<Number> (const HybridAutomaton<Number>& _hybrid);
 
 //  backtransformation(HybridAutomaton& _hybrid, const Transformation& _trafo );
 //  retransform reults

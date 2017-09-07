@@ -13,10 +13,10 @@
 //#include <Eigen/LU>
 using namespace hypro;
 using Number = double;
-using Matrix = matrix_t<Number>;
-using Vector = vector_t<Number>;
-using DiagonalMatrix = Eigen::DiagonalMatrix<Number,Eigen::Dynamic>;
-using BoolMatrix = matrix_t<bool>;
+//using Matrix<Number> = matrix_t<Number>;
+//using Vector<Number> = vector_t<Number>;
+//using DiagonalMatrix<Number> = Eigen::DiagonalMatrix<Number,Eigen::Dynamic>;
+//using BoolMatrix<Number> = matrix_t<bool>;
 using VPoly = VPolytope<Number>;
 using Representation = hypro::HPolytope<Number>;
 
@@ -31,15 +31,15 @@ typedef struct Flags {
 } Flags;
 //  d/dx = Ax+b, xupper=x0, xlower=x0_2
 typedef struct Input_equation {
-    Matrix A;
-    Vector x0;
-    Vector x0_2;
-    Vector b;
+    Matrix<Number> A;
+    Vector<Number> x0;
+    Vector<Number> x0_2;
+    Vector<Number> b;
 } In_eq;
 typedef struct Invariants {
-    Matrix iAV;
-    Vector ib;
-    //TODO: use std::vector<Matrix> and read from file etc
+    Matrix<Number> iAV;
+    Vector<Number> ib;
+    //TODO: use std::vector<Matrix<Number>> and read from file etc
 } Invar;
 /***Independent_part_funct stores all independent parts from input
  *  All matrices contain n-column vector for max on column 0 and
@@ -47,42 +47,42 @@ typedef struct Invariants {
  *  x=xhom*exp(D*t)-xinhom, D containing eigenvalues lambda
  */
 typedef struct Independent_part_funct {
-    DiagonalMatrix D;
-    Matrix xinhom;
+    DiagonalMatrix<Number> D;
+    Matrix<Number> xinhom;
     Number delta;
     std::size_t deltalimit;
 } Ind_f;
 typedef struct Dependent_part_funct {
-    Matrix xhom;
-    Matrix x_tr;
+    Matrix<Number> xhom;
+    Matrix<Number> x_tr;
 } Dep_f;
 /*** Evaluation of resulting functions e^x/-e^x/e^(-x)/-e^(-x)
  *   Evaluation of derivative to calculate safe approximation
  */
 typedef struct Eval_functions {
-    Matrix deriv;
+    Matrix<Number> deriv;
     BoolMatrix direct;
 } Eval_f;
 typedef struct Flowpipe_segment {
-    std::vector<Vector> upper;
-    std::vector<Vector> lower;
+    std::vector<Vector<Number>> upper;
+    std::vector<Vector<Number>> lower;
 } Flow_seg;
 void declare_structures(const int n, In_eq& in_eq1, Invar& invar, Ind_f& ind_f,
         Dep_f& dep_f, Dep_f& in_traj, Eval_f& eval_f);
 //  x0 is column 0 of x_tr
-void mark_x0isMin(Matrix& x_tr, const int n);
-void swap_x0isMax(Matrix& x_tr, const int n);
+void mark_x0isMin(Matrix<Number>& x_tr, const int n);
+void swap_x0isMax(Matrix<Number>& x_tr, const int n);
 void initialize (Eval_f& eval_f, Flow_seg& safe_seg, Flow_seg& error_seg,
-        std::size_t DIM_PLOT, bool ORIG_SYS_PLOT, const DiagonalMatrix& D,
-        const int n, const Matrix& V, Dep_f& dep_f);
+        std::size_t DIM_PLOT, bool ORIG_SYS_PLOT, const DiagonalMatrix<Number>& D,
+        const int n, const Matrix<Number>& V, Dep_f& dep_f);
 void loop (std::vector<VPoly>& flow, std::vector<VPoly>& error_flow,
-        const Flags& flag1, const Ind_f& ind_f, const int n, const Matrix& V,
+        const Flags& flag1, const Ind_f& ind_f, const int n, const Matrix<Number>& V,
         Eval_f& eval_f, Dep_f& dep_f, Flow_seg& safe_seg, Flow_seg& error_seg);
 void trajectory_plot(std::vector<VPoly>& exactflow, std::size_t DIM_PLOT, bool ORIG_SYS_PLOT,
-        const Ind_f& ind_f, const int n, const Matrix& V, const std::size_t traj_scale,
+        const Ind_f& ind_f, const int n, const Matrix<Number>& V, const std::size_t traj_scale,
         Dep_f& in_traj);
 void plot_addTimeSegment(Flow_seg& safe_seg, std::size_t DIM_PLOT, bool ORIG_SYS_PLOT,
-        const std::size_t traj_time, const Matrix& x_tr, const Matrix& V, const int n);
+        const std::size_t traj_time, const Matrix<Number>& x_tr, const Matrix<Number>& V, const int n);
 void addSegment(std::vector<VPoly>& flow, bool PLOT, Flow_seg& safe_seg,
         std::size_t colorUpper, std::size_t colorLower);
 
@@ -94,17 +94,14 @@ int main()
     //std::cout << boost::get<0>(ha);
     //hypro::HybridAutomaton<Number> ha_transformed =  HybridAutomaton<Number>( boost::get<0>(ha) );
     //std::cout << ha_transformed;
-    //TODO fixing map from A to Ax+b + adjusting output
     HybridAutomaton<Number> original_ha = boost::get<0>(ha);
-    HybridAutomaton<Number> transformed_ha = HybridAutomaton<Number>(original_ha);
-    Transformation<Number> trafo = Transformation<Number>(original_ha, transformed_ha);    
+    Transformation<Number> trafo = Transformation<Number>(original_ha);    
     
     //TODO clarify if we copy automata inside the transformation or if we assume transfo_ha ISCOPYOF orig_ha
+    //--> might be useful to later wrap another class for simple use around on condition number etc
+    //TODO initial state input clarifying
+
     //remind last line is ALWAYS added by parser
-    std::cout << transformed_ha;
-    //contructing second Hybrid Automaton with changed settings according to 
-    //transformation class
-    //construct second hybrid automaton
     //use friend class of transformation? to calculate flowpipe elements/evaluation
     //adapt function accordingly!
     Flags flag1;
@@ -122,10 +119,10 @@ int main()
     std::vector<VPoly> exactflow;
     std::vector<VPoly> error_flow;
     const int n = 2;                  //<---System/Matrix Dimension --->
-    Matrix V = Matrix(n,n);                             //backtransformation
-    Matrix Vinv = Matrix(n,n);                          //dumped after use
-    Vector b_tr = Vector(n);                            //transformed and dumped after use
-    Vector tmp  = Vector(n);
+    Matrix<Number> V = Matrix<Number>(n,n);                             //backtransformation
+    Matrix<Number> Vinv = Matrix<Number>(n,n);                          //dumped after use
+    Vector<Number> b_tr = Vector<Number>(n);                            //transformed and dumped after use
+    Vector<Number> tmp  = Vector<Number>(n);
 
     flag1.DIM_PLOT      = 0;        //0..n-1 for the plot
     flag1.ORIG_SYS_PLOT = false; //plotting in original system or transformed?
@@ -155,7 +152,7 @@ int main()
     std::cout << "in_eq1.x0: "<< std::endl << in_eq1.x0 << std::endl;
     std::cout << "in_eq1.x0_2: "<< std::endl << in_eq1.x0_2 << std::endl;
 
-    Eigen::EigenSolver<Matrix> es(in_eq1.A);    //decompose matrix directly + constructor
+    Eigen::EigenSolver<Matrix<Number>> es(in_eq1.A);    //decompose matrix directly + constructor
     V << es.eigenvectors().real();
     ind_f.D.diagonal() << es.eigenvalues().real();
     Vinv = V.inverse();
@@ -182,6 +179,7 @@ int main()
     in_traj.xhom.col(0) = ind_f.xinhom.array() + in_traj.x_tr.col(0).array();
     in_traj.xhom.col(1) = ind_f.xinhom.array() + in_traj.x_tr.col(1).array();
     std::cout << "xhom: "<< std::endl << dep_f.xhom;
+    // -----------------------   to another class ------------------------------
     initialize (eval_f, safe_seg, error_seg,flag1.DIM_PLOT, flag1.ORIG_SYS_PLOT,
         ind_f.D, n, V,  dep_f);
     if (flag1.TRAJECTORY_PLOT) {
@@ -223,25 +221,25 @@ int main()
 
 void declare_structures(const int n, In_eq& in_eq1, Invar& invar, Ind_f& ind_f,
         Dep_f& dep_f, Dep_f& in_traj, Eval_f& eval_f) {
-    in_eq1.A = Matrix(n,n);
-    in_eq1.b = Vector(n);
-    in_eq1.x0 = Vector(n);
-    in_eq1.x0_2 = Vector(n);
-    invar.iAV = Matrix(n,n);
-    invar.ib  = Vector(n);
-    ind_f.xinhom = Vector(n);
-	ind_f.D = DiagonalMatrix(2); //type Number size 2
-    dep_f.x_tr = Matrix::Zero(n,3);
+    in_eq1.A = Matrix<Number>(n,n);
+    in_eq1.b = Vector<Number>(n);
+    in_eq1.x0 = Vector<Number>(n);
+    in_eq1.x0_2 = Vector<Number>(n);
+    invar.iAV = Matrix<Number>(n,n);
+    invar.ib  = Vector<Number>(n);
+    ind_f.xinhom = Vector<Number>(n);
+	ind_f.D = DiagonalMatrix<Number>(2); //type Number size 2
+    dep_f.x_tr = Matrix<Number>::Zero(n,3);
     dep_f.x_tr.col(2).array() = 0;
-    dep_f.xhom = Matrix::Zero(2,2);
-    in_traj.x_tr = Matrix::Zero(n,2);
-    in_traj.xhom = Matrix::Zero(n,2);
-    eval_f.deriv = Matrix(n,2);
+    dep_f.xhom = Matrix<Number>::Zero(2,2);
+    in_traj.x_tr = Matrix<Number>::Zero(n,2);
+    in_traj.xhom = Matrix<Number>::Zero(n,2);
+    eval_f.deriv = Matrix<Number>(n,2);
     eval_f.direct     = BoolMatrix(n,2);
     eval_f.direct.setConstant(0);
 }
 //mark if in transformed system x0<x0_2 in 3rd column
-void mark_x0isMin(Matrix& x_tr, const int n) {
+void mark_x0isMin(Matrix<Number>& x_tr, const int n) {
     for(int i=0; i<n; ++i) {   //check if x0_tr >= x0_2_tr
         if(x_tr(i,0) < x_tr(i,1)) {
             x_tr(i,2) = 1; //mark second column to recognize later
@@ -249,9 +247,9 @@ void mark_x0isMin(Matrix& x_tr, const int n) {
     }
 }
 //check if in transformed system x0<x0_2 and swap if needed
-void swap_x0isMax(Matrix& x_tr, const int n) {
+void swap_x0isMax(Matrix<Number>& x_tr, const int n) {
     //std::cout << "x_tr beforeback: "<< std::endl << x_tr << std::endl;
-    Vector tmp = Vector(n);
+    Vector<Number> tmp = Vector<Number>(n);
     for(int i=0; i<n; ++i) {
         if(x_tr(i,2) == 1) {
             tmp(i)    = x_tr(i,0);
@@ -270,10 +268,10 @@ void swap_x0isMax(Matrix& x_tr, const int n) {
             //case3: -e^(x)    --- D>0, xhomconst<0
             //case4:  e^(-x)   --- etc
 void initialize (Eval_f& eval_f, Flow_seg& safe_seg, Flow_seg& error_seg,
-        std::size_t DIM_PLOT, bool ORIG_SYS_PLOT, const DiagonalMatrix& D,
-        const int n, const Matrix& V, Dep_f& dep_f) {
-    Vector plot_vector = Vector(n);
-    const Matrix x_tr_error = Matrix::Zero(n,2);
+        std::size_t DIM_PLOT, bool ORIG_SYS_PLOT, const DiagonalMatrix<Number>& D,
+        const int n, const Matrix<Number>& V, Dep_f& dep_f) {
+    Vector<Number> plot_vector = Vector<Number>(n);
+    const Matrix<Number> x_tr_error = Matrix<Number>::Zero(n,2);
     for(int i=0; i<n; ++i) {
         if (D.diagonal()(i)>0) { //divergence
             if (dep_f.xhom(i,0) >= 0) {  //
@@ -331,10 +329,10 @@ void initialize (Eval_f& eval_f, Flow_seg& safe_seg, Flow_seg& error_seg,
     //1.linear value + deriv OR direct value
     //2.pushing,writing,deleting
 void loop (std::vector<VPoly>& flow, std::vector<VPoly>& error_flow, const Flags& flag1,
-        const Ind_f& ind_f, const int n, const Matrix& V, Eval_f& eval_f, Dep_f& dep_f,
+        const Ind_f& ind_f, const int n, const Matrix<Number>& V, Eval_f& eval_f, Dep_f& dep_f,
         Flow_seg& safe_seg, Flow_seg& error_seg) {
-    Vector factor = Vector::Zero(n);
-    Matrix x_tr_error = Matrix::Zero(n,3);
+    Vector<Number> factor = Vector<Number>::Zero(n);
+    Matrix<Number> x_tr_error = Matrix<Number>::Zero(n,3);
     x_tr_error.col(2) = dep_f.x_tr.col(2).array();
     //WE ASSUME we always want to check 1 timestep
     for(std::size_t j = 1; j <= ind_f.deltalimit;  ++j) {
@@ -391,10 +389,10 @@ void loop (std::vector<VPoly>& flow, std::vector<VPoly>& error_flow, const Flags
 }
 
 void trajectory_plot(std::vector<VPoly>& exactflow, std::size_t DIM_PLOT, bool ORIG_SYS_PLOT,
-        const Ind_f& ind_f, const int n, const Matrix& V, const std::size_t traj_scale,
+        const Ind_f& ind_f, const int n, const Matrix<Number>& V, const std::size_t traj_scale,
         Dep_f& traj_tr) {
     Flow_seg traj_flow_seg;
-    Vector factor = Vector::Zero(n);
+    Vector<Number> factor = Vector<Number>::Zero(n);
     plot_addTimeSegment(traj_flow_seg, DIM_PLOT, ORIG_SYS_PLOT, 0, traj_tr.x_tr, V, n);
     for(std::size_t traj_time = 1; traj_time<=traj_scale*ind_f.deltalimit; traj_time+=1) {
         for (int i=0; i<n; ++i) {
@@ -410,8 +408,8 @@ void trajectory_plot(std::vector<VPoly>& exactflow, std::size_t DIM_PLOT, bool O
     }
 }
 void plot_addTimeSegment(Flow_seg& flow_segment, std::size_t DIM_PLOT, bool ORIG_SYS_PLOT,
-        std::size_t traj_time, const Matrix& x_tr, const Matrix& V, const int n) {
-    Vector plot_vector = Vector(n);
+        std::size_t traj_time, const Matrix<Number>& x_tr, const Matrix<Number>& V, const int n) {
+    Vector<Number> plot_vector = Vector<Number>(n);
     plot_vector(0) = traj_time;
     if(ORIG_SYS_PLOT) {
         plot_vector(1) = (V*x_tr.col(0))(DIM_PLOT);
