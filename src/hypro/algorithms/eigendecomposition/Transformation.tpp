@@ -14,6 +14,7 @@ Transformation<Number>::Transformation (const HybridAutomaton<Number>& _hybrid) 
     //STindependentFunct  mSTindependentFunct;
     //STdependentFunct    mSTdependentFunct;
     //STevalFunctions     mSTevalFunctions;
+    STallValues<Number> mSTallvalues;
     mTransformedHA = HybridAutomaton<Number>();
     //std::cout << _hybrid ;
     unsigned locID = 0;
@@ -23,6 +24,7 @@ Transformation<Number>::Transformation (const HybridAutomaton<Number>& _hybrid) 
         //ASSERTION SIZE >= 1 --> delete new locations/skip?
         //are old Matrices freed automatically on new initialization?
         m_size -= 1;
+        mSTallvalues<Number>.STinputVectors.x0 = Vector<Number>(m_size);
         //declare_structures(m_size,mSTindependentFunct,mSTdependentFunct,mSTevalFunctions );
         b_tr        = Vector<Number>(m_size);
         matrix_calc = Matrix<Number>(m_size,m_size);
