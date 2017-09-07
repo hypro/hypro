@@ -127,7 +127,7 @@ class State
     	mTypes.push_back(Representation::type());
     	// parameter pack expansion
     	#pragma GCC diagnostic push
-		#pragma GCC diagnostic ignored "-Wzero-length-array"
+		#pragma GCC diagnostic ignored "-Wpedantic"
     	int dummy[sizeof...(Rargs)] = { (mSets.push_back(sets), 0)... };
     	int dummy2[sizeof...(Rargs)] = { (mTypes.push_back(sets.type()), 0)... };
     	#pragma GCC diagnostic pop
