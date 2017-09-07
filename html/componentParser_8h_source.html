@@ -31,7 +31,7 @@
   <td id="projectlogo"><img alt="Logo" src="hypro_Logo.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">HyPro
-   &#160;<span id="projectnumber">1.0.0</span>
+   &#160;<span id="projectnumber">17.09.</span>
    </div>
    <div id="projectbrief">A Toolbox for the Reachability Analysis of Hybrid Systems using Geometric Approximations</div>
   </td>
@@ -237,8 +237,8 @@ $(document).ready(function(){initNavTree('componentParser_8h_source.html','');})
 <div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;                <span class="comment">//g.discreteOffset = _dim;</span></div>
 <div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;</div>
 <div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;                <span class="keywordflow">if</span>(mDiscreteGuards.size() &gt; 0) {</div>
-<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;                    <a class="code" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t&lt;Number&gt;</a> guardMatrix = <a class="code" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t&lt;Number&gt;::Zero</a>(mDiscreteGuards.size(),_discreteDim-_dim+1);</div>
-<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;                    <a class="code" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t&lt;Number&gt;</a> guardVector = <a class="code" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t&lt;Number&gt;::Zero</a>(mDiscreteGuards.size());</div>
+<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;                    <a class="code" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t&lt;Number&gt;</a> guardMatrix = <a class="code" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t&lt;Number&gt;::Zero</a>(Eigen::Index(mDiscreteGuards.size()),_discreteDim-_dim+1);</div>
+<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;                    <a class="code" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t&lt;Number&gt;</a> guardVector = <a class="code" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t&lt;Number&gt;::Zero</a>(Eigen::Index(mDiscreteGuards.size()));</div>
 <div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;                    <span class="keywordtype">unsigned</span> row = 0;</div>
 <div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;                    <span class="keywordflow">for</span>(<span class="keyword">const</span> <span class="keyword">auto</span>&amp; guardPair : mDiscreteGuards) {</div>
 <div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;                        <a class="code" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t&lt;Number&gt;</a> reducedGuard = <a class="code" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t&lt;Number&gt;</a>(1,_discreteDim-_dim+1);</div>

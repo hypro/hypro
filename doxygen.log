@@ -1096,6 +1096,9 @@ citelist:22: warning: Unexpected new line character
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Reset.h:53: warning: Member operator==(const Reset< Number > &lhs, const Reset< Number > &rhs) (friend) of class hypro::Reset is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Reset.h:66: warning: Member operator!=(const Reset< Number > &lhs, const Reset< Number > &rhs) (friend) of class hypro::Reset is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Settings.h:15: warning: Member timeBound (variable) of class hypro::ReachabilitySettings is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/State.h:283: warning: Member satisfiesHalfspaces(const matrix_t< Number > &constraints, const vector_t< Number > &constants) const  (function) of class hypro::State is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/State.h:317: warning: Member linearTransformation(const matrix_t< Number > &matrix) const  (function) of class hypro::State is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/State.h:318: warning: Member affineTransformation(const matrix_t< Number > &matrix, const vector_t< Number > &vector) const  (function) of class hypro::State is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Visitors.h:14: warning: Member operator()(const A &lhs, const B &) const  (function) of class hypro::genericUniteVisitor is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Visitors.h:20: warning: Member operator()(const A &lhs, const A &rhs) const  (function) of class hypro::genericUniteVisitor is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Visitors.h:35: warning: Member operator()(const A &lhs, const B &) const  (function) of class hypro::genericIntersectVisitor is not documented.
@@ -2744,5 +2747,5 @@ Patching output file 33/36
 Patching output file 34/36
 Patching output file 35/36
 Patching output file 36/36
-lookup cache used 5277/65536 hits=44995 misses=5979
+lookup cache used 5284/65536 hits=45062 misses=5986
 finished...

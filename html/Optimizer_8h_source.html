@@ -31,7 +31,7 @@
   <td id="projectlogo"><img alt="Logo" src="hypro_Logo.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">HyPro
-   &#160;<span id="projectnumber">1.0.0</span>
+   &#160;<span id="projectnumber">17.09.</span>
    </div>
    <div id="projectbrief">A Toolbox for the Reachability Analysis of Hybrid Systems using Geometric Approximations</div>
   </td>
@@ -258,16 +258,19 @@ $(document).ready(function(){initNavTree('Optimizer_8h_source.html','');});
 <div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160;    };</div>
 <div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160;} <span class="comment">// namespace hypro</span></div>
 <div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160;</div>
-<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160;<span class="preprocessor">#ifdef USE_CLN_NUMBERS</span></div>
-<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#include &lt;cln/cln.h&gt;</span></div>
-<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160;<span class="keyword">extern</span> <span class="keyword">template</span> <span class="keyword">class </span><a class="code" href="classhypro_1_1Optimizer.html">hypro::Optimizer&lt;cln::cl_RA&gt;</a>;</div>
-<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;<span class="preprocessor">#else</span></div>
-<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#include &lt;gmp.h&gt;</span></div>
-<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160;<span class="preprocessor">#include &lt;gmpxx.h&gt;</span></div>
-<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;<span class="keyword">extern</span> <span class="keyword">template</span> <span class="keyword">class </span><a class="code" href="classhypro_1_1Optimizer.html">hypro::Optimizer&lt;mpq_class&gt;</a>;</div>
-<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160;<span class="preprocessor"></span></div>
-<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;<span class="preprocessor">#include &quot;Optimizer.tpp&quot;</span></div>
+<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160;<span class="keyword">template</span>&lt;<span class="keyword">typename</span> Number&gt;</div>
+<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;<span class="keywordtype">bool</span> <a class="code" href="classhypro_1_1Optimizer.html">hypro::Optimizer&lt;Number&gt;::warnInexact</a> = <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160;</div>
+<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;<span class="preprocessor">#ifdef USE_CLN_NUMBERS</span></div>
+<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#include &lt;cln/cln.h&gt;</span></div>
+<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160;<span class="keyword">extern</span> <span class="keyword">template</span> <span class="keyword">class </span><a class="code" href="classhypro_1_1Optimizer.html">hypro::Optimizer&lt;cln::cl_RA&gt;</a>;</div>
+<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;<span class="preprocessor">#else</span></div>
+<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#include &lt;gmp.h&gt;</span></div>
+<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160;<span class="preprocessor">#include &lt;gmpxx.h&gt;</span></div>
+<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;<span class="keyword">extern</span> <span class="keyword">template</span> <span class="keyword">class </span><a class="code" href="classhypro_1_1Optimizer.html">hypro::Optimizer&lt;mpq_class&gt;</a>;</div>
+<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;<span class="preprocessor">#include &quot;Optimizer.tpp&quot;</span></div>
 <div class="ttc" id="classhypro_1_1Optimizer_html_a58cf754a2a364133b52f7dfae4d24e7d"><div class="ttname"><a href="classhypro_1_1Optimizer.html#a58cf754a2a364133b52f7dfae4d24e7d">hypro::Optimizer::operator=</a></div><div class="ttdeci">Optimizer&lt; Number &gt; &amp; operator=(const Optimizer&lt; Number &gt; &amp;orig)</div><div class="ttdoc">Comparison operator. </div></div>
 <div class="ttc" id="structhypro_1_1EvaluationResult_html"><div class="ttname"><a href="structhypro_1_1EvaluationResult.html">hypro::EvaluationResult</a></div><div class="ttdoc">Struct holding results obtained from the linear optimization engine. </div><div class="ttdef"><b>Definition:</b> <a href="EvaluationResult_8h_source.html#l00012">EvaluationResult.h:12</a></div></div>
 <div class="ttc" id="namespacehypro_html_a402d1e5727bcf52f5ee140924452c3cc"><div class="ttname"><a href="namespacehypro.html#a402d1e5727bcf52f5ee140924452c3cc">hypro::SOLUTION</a></div><div class="ttdeci">SOLUTION</div><div class="ttdoc">Enum of possible solution types for linear optimization. </div><div class="ttdef"><b>Definition:</b> <a href="types_8h_source.html#l00039">types.h:39</a></div></div>
