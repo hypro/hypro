@@ -254,7 +254,6 @@ class State
 			mTypes.push_back(representation_name::constraint_set); // some default set type.
 		}
 		mSets[I] = in;
-
 	}
 
 	/**

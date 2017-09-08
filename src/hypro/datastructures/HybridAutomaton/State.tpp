@@ -8,7 +8,6 @@ const boost::variant<Representation,Rargs...>& State<Number,Representation,Rargs
 	DEBUG("hypro.datastructures","Attempt to get set at pos " << i << ", mSets.size() = " << mSets.size());
 	assert(mTypes.size() == mSets.size());
 	assert(i < mSets.size());
-	TRACE("hypro.datastructures","Return set.");
 	return mSets.at(i);
 }
 
@@ -52,7 +51,7 @@ template<typename Number, typename Representation, typename ...Rargs>
 State<Number,Representation,Rargs...> State<Number,Representation,Rargs...>::unite(const State<Number,Representation,Rargs...>& in) const {
 	State<Number,Representation,Rargs...> res(*this);
 
-	TRACE("hypro.datastructures","Union of " << res << " and " << in << " with " << mSets.size() << " sets.");
+	TRACE("hypro.datastructures","Union with " << mSets.size() << " sets.");
 
 	// element-wise union.
 	assert(mSets.size() == in.getSets().size());
@@ -61,7 +60,7 @@ State<Number,Representation,Rargs...> State<Number,Representation,Rargs...>::uni
 		res.setSetDirect( boost::apply_visitor(genericUniteVisitor<repVariant>(), mSets.at(i), in.getSet(i)), i);
 	}
 
-	TRACE("hypro.datastructures","After continuous aggregation " << res );
+	TRACE("hypro.datastructures","Done union.");
 
 	res.setTimestamp(mTimestamp.convexHull(in.getTimestamp()));
 	return res;
