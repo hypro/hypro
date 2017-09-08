@@ -6,7 +6,7 @@ var structhypro_1_1ReachabilitySettings =
     [ "operator==", "structhypro_1_1ReachabilitySettings.html#ad2949f95a2c53697863ffc2b9149f344", null ],
     [ "fileName", "structhypro_1_1ReachabilitySettings.html#a60d7439b247075058d03977c4aecf430", null ],
     [ "jumpDepth", "structhypro_1_1ReachabilitySettings.html#aa56fb93c5944ebb125f6ce79a0789c2d", null ],
-    [ "plotDimensions", "structhypro_1_1ReachabilitySettings.html#a822c25cc5bc31a99af67a8fc5cf14f02", null ],
+    [ "plotDimensions", "structhypro_1_1ReachabilitySettings.html#ac61d7b39d06c4710c39efb3f4bbc6ce1", null ],
     [ "pplDenomimator", "structhypro_1_1ReachabilitySettings.html#a1e0b9b931be8c67123b150bdc8e19944", null ],
     [ "timeBound", "structhypro_1_1ReachabilitySettings.html#a7a767e72ac4d79624338edb20c6cb11f", null ],
     [ "timeStep", "structhypro_1_1ReachabilitySettings.html#a46dc42bf29cc6363a63d9ec34e1a0466", null ],

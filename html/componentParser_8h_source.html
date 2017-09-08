@@ -493,7 +493,7 @@ $(document).ready(function(){initNavTree('componentParser_8h_source.html','');})
 <div class="line"><a name="l00381"></a><span class="lineno">  381</span>&#160;        <span class="keywordtype">void</span> setTimeBound(<span class="keywordtype">double</span> _in){ mLocalSettings.timeBound = carl::rationalize&lt;Number&gt;(_in); }</div>
 <div class="line"><a name="l00382"></a><span class="lineno">  382</span>&#160;        <span class="keywordtype">void</span> setJumpDepth(<span class="keywordtype">int</span> _in){ mLocalSettings.jumpDepth = _in; }</div>
 <div class="line"><a name="l00383"></a><span class="lineno">  383</span>&#160;        <span class="keywordtype">void</span> setFileName(<span class="keyword">const</span> std::string&amp; _in){ mLocalSettings.fileName = _in; }</div>
-<div class="line"><a name="l00384"></a><span class="lineno">  384</span>&#160;        <span class="keywordtype">void</span> setPlotDimensions(<span class="keyword">const</span> std::vector&lt;unsigned&gt;&amp; _dimensions){</div>
+<div class="line"><a name="l00384"></a><span class="lineno">  384</span>&#160;        <span class="keywordtype">void</span> setPlotDimensions(<span class="keyword">const</span> std::vector&lt;std::size_t&gt;&amp; _dimensions){</div>
 <div class="line"><a name="l00385"></a><span class="lineno">  385</span>&#160;            assert(_dimensions.size() &lt;= 2);</div>
 <div class="line"><a name="l00386"></a><span class="lineno">  386</span>&#160;            mLocalSettings.plotDimensions.push_back(_dimensions);</div>
 <div class="line"><a name="l00387"></a><span class="lineno">  387</span>&#160;        }</div>
@@ -507,7 +507,7 @@ $(document).ready(function(){initNavTree('componentParser_8h_source.html','');})
 <div class="line"><a name="l00395"></a><span class="lineno">  395</span>&#160;        qi::rule&lt;Iterator, Skipper&gt; print;</div>
 <div class="line"><a name="l00396"></a><span class="lineno">  396</span>&#160;        qi::rule&lt;Iterator, qi::unused_type(symbol_table const&amp;), Skipper&gt; outBackend;</div>
 <div class="line"><a name="l00397"></a><span class="lineno">  397</span>&#160;        qi::rule&lt;Iterator, Skipper&gt; shape;</div>
-<div class="line"><a name="l00398"></a><span class="lineno">  398</span>&#160;        qi::rule&lt;Iterator, std::vector&lt;unsigned&gt;(symbol_table <span class="keyword">const</span>&amp;), <a class="code" href="structhypro_1_1parser_1_1fsSkipper.html">Skipper</a>&gt; outdimensions;</div>
+<div class="line"><a name="l00398"></a><span class="lineno">  398</span>&#160;        qi::rule&lt;Iterator, std::vector&lt;std::size_t&gt;(symbol_table <span class="keyword">const</span>&amp;), <a class="code" href="structhypro_1_1parser_1_1fsSkipper.html">Skipper</a>&gt; outdimensions;</div>
 <div class="line"><a name="l00399"></a><span class="lineno">  399</span>&#160;        qi::rule&lt;Iterator, Skipper&gt; remainder;</div>
 <div class="line"><a name="l00400"></a><span class="lineno">  400</span>&#160;        qi::rule&lt;Iterator, Skipper&gt; cutoff;</div>
 <div class="line"><a name="l00401"></a><span class="lineno">  401</span>&#160;        qi::rule&lt;Iterator, Skipper&gt; precision;</div>

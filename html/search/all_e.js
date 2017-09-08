@@ -10,7 +10,7 @@ var searchData=
   ['permutator',['Permutator',['../classhypro_1_1hypro_1_1Permutator.html',1,'hypro::hypro']]],
   ['pivot',['pivot',['../classhypro_1_1Dictionary.html#aa33d4272de177048425bb86842f1c027',1,'hypro::Dictionary']]],
   ['plot2d',['plot2d',['../classhypro_1_1Plotter.html#a020e89ed0c39a091bf49a0b400e511f8',1,'hypro::Plotter']]],
-  ['plotdimensions',['plotDimensions',['../structhypro_1_1ReachabilitySettings.html#a822c25cc5bc31a99af67a8fc5cf14f02',1,'hypro::ReachabilitySettings']]],
+  ['plotdimensions',['plotDimensions',['../structhypro_1_1ReachabilitySettings.html#ac61d7b39d06c4710c39efb3f4bbc6ce1',1,'hypro::ReachabilitySettings']]],
   ['ploteps',['plotEps',['../classhypro_1_1Plotter.html#a54b1944b908e221164588894ea4050dc',1,'hypro::Plotter']]],
   ['plotgen',['plotGen',['../classhypro_1_1Plotter.html#a04d0eec05e76743057fc6e2de615ce30',1,'hypro::Plotter']]],
   ['plotter',['Plotter',['../classhypro_1_1Plotter.html',1,'hypro']]],

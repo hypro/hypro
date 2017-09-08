@@ -2065,7 +2065,7 @@ Generating docs for compound hypro::NonLine/home/travis/build/hypro/hypro/src/hy
 /home/travis/build/hypro/hypro/src/hypro/util/Permutator.h:31: warning: Member operator()() (function) of class hypro::Permutator is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/Permutator.h:58: warning: Member end() const  (function) of class hypro::Permutator is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/Plotter.h:203: warning: Member clear() (function) of class hypro::Plotter is not documented.
-/home/travis/build/hypro/hypro/src/hypro/util/VariablePool.h:101: warning: Member carlVarByIndex(unsigned _index) (function) of class hypro::VariablePool is not documented.
+/home/travis/build/hypro/hypro/src/hypro/util/VariablePool.h:101: warning: Member carlVarByIndex(std::size_t _index) (function) of class hypro::VariablePool is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/VariablePool.h:125: warning: Member newCarlVariable(std::string _name="") (function) of class hypro::VariablePool is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/VariablePool.h:164: warning: Member hasDimension(const carl::Variable &_var) const  (function) of class hypro::VariablePool is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/VariablePool.h:189: warning: Member id(const carl::Variable &_var) const  (function) of class hypro::VariablePool is not documented.
@@ -2169,7 +2169,7 @@ Generating docs for compound hypro::NonLine/home/travis/build/hypro/hypro/src/hy
 /home/travis/build/hypro/hypro/src/hypro/parser/flowstar/componentParser.h:381: warning: Member setTimeBound(double _in) (function) of class hypro::parser::settingsParser is not documented.
 /home/travis/build/hypro/hypro/src/hypro/parser/flowstar/componentParser.h:382: warning: Member setJumpDepth(int _in) (function) of class hypro::parser::settingsParser is not documented.
 /home/travis/build/hypro/hypro/src/hypro/parser/flowstar/componentParser.h:383: warning: Member setFileName(const std::string &_in) (function) of class hypro::parser::settingsParser is not documented.
-/home/travis/build/hypro/hypro/src/hypro/parser/flowstar/componentParser.h:384: warning: Member setPlotDimensions(const std::vector< unsigned > &_dimensions) (function) of class hypro::parser::settingsParser is not documented.
+/home/travis/build/hypro/hypro/src/hypro/parser/flowstar/componentParser.h:384: warning: Member setPlotDimensions(const std::vector< std::size_t > &_dimensions) (function) of class hypro::parser::settingsParser is not documented.
 /home/travis/build/hypro/hypro/src/hypro/parser/flowstar/componentParser.h:338: warning: Member mLocalSettings (variable) of class hypro::parser::settingsParser is not documented.
 /home/travis/build/hypro/hypro/src/hypro/parser/flowstar/componentParser.h:339: warning: Member errorHandler (variable) of class hypro::parser::settingsParser is not documented.
 /home/travis/build/hypro/hypro/src/hypro/parser/flowstar/componentParser.h:389: warning: Member start (variable) of class hypro::parser::settingsParser is not documented.
@@ -2747,5 +2747,5 @@ Patching output file 33/36
 Patching output file 34/36
 Patching output file 35/36
 Patching output file 36/36
-lookup cache used 5284/65536 hits=45062 misses=5986
+lookup cache used 5280/65536 hits=44958 misses=5982
 finished...
