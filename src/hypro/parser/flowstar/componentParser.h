@@ -381,7 +381,7 @@ namespace parser {
  		void setTimeBound(double _in){ mLocalSettings.timeBound = carl::rationalize<Number>(_in); }
  		void setJumpDepth(int _in){ mLocalSettings.jumpDepth = _in; }
  		void setFileName(const std::string& _in){ mLocalSettings.fileName = _in; }
- 		void setPlotDimensions(const std::vector<unsigned>& _dimensions){
+ 		void setPlotDimensions(const std::vector<std::size_t>& _dimensions){
  			assert(_dimensions.size() <= 2);
  			mLocalSettings.plotDimensions.push_back(_dimensions);
  		}
@@ -395,7 +395,7 @@ namespace parser {
 		qi::rule<Iterator, Skipper> print;
 		qi::rule<Iterator, qi::unused_type(symbol_table const&), Skipper> outBackend;
 		qi::rule<Iterator, Skipper> shape;
-		qi::rule<Iterator, std::vector<unsigned>(symbol_table const&), Skipper> outdimensions;
+		qi::rule<Iterator, std::vector<std::size_t>(symbol_table const&), Skipper> outdimensions;
 		qi::rule<Iterator, Skipper> remainder;
 		qi::rule<Iterator, Skipper> cutoff;
 		qi::rule<Iterator, Skipper> precision;

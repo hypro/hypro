@@ -8,6 +8,7 @@ const boost::variant<Representation,Rargs...>& State<Number,Representation,Rargs
 	DEBUG("hypro.datastructures","Attempt to get set at pos " << i << ", mSets.size() = " << mSets.size());
 	assert(mTypes.size() == mSets.size());
 	assert(i < mSets.size());
+	TRACE("hypro.datastructures","Return set.");
 	return mSets.at(i);
 }
 
@@ -51,11 +52,12 @@ template<typename Number, typename Representation, typename ...Rargs>
 State<Number,Representation,Rargs...> State<Number,Representation,Rargs...>::unite(const State<Number,Representation,Rargs...>& in) const {
 	State<Number,Representation,Rargs...> res(*this);
 
-	TRACE("hypro.datastructures","Aggregation of " << res << " and " << in);
+	TRACE("hypro.datastructures","Union of " << res << " and " << in << " with " << mSets.size() << " sets.");
 
 	// element-wise union.
 	assert(mSets.size() == in.getSets().size());
 	for(std::size_t i = 0; i < mSets.size(); ++i) {
+		TRACE("hypro.datastructures","Apply unite vistor for set " << i);
 		res.setSetDirect( boost::apply_visitor(genericUniteVisitor<repVariant>(), mSets.at(i), in.getSet(i)), i);
 	}
 

@@ -17,7 +17,7 @@ struct ReachabilitySettings {
     Number timeStep; /// Time step size.
     std::string fileName; /// Name for the output file (plotting).
     unsigned long pplDenomimator; /// Common denominator for ppl-numbers (only relevant if ppl is used).
-    std::vector<std::vector<unsigned>> plotDimensions; /// A set of dimension pairs to plot.
+    std::vector<std::vector<std::size_t>> plotDimensions; /// A set of dimension pairs to plot.
     bool uniformBloating = false; /// Bloating settings.
 
     /**

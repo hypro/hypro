@@ -205,7 +205,7 @@ namespace hypro {
 				dictionary.pivot(i,j);
 				assert(dictionary.isPrimalFeasible());
 				#ifndef NDEBUG
-				size_t tmpI,tmpJ;
+				Eigen::Index tmpI,tmpJ;
 				dictionary.selectBlandPivot(tmpI,tmpJ);
 				if(!(tmpI == i && tmpJ == j)) {
 					WARN("hypro.vertexEnumeration","Chosen pivot: " << tmpI << ", " << tmpJ << ", assumed was: " << i << ", " << j  << ", dict after pivot: ");
@@ -293,7 +293,7 @@ namespace hypro {
 					dictionary.selectDualBlandPivot(i,j,basisAux);
 					DEBUG("hypro.vertexEnumeration","(Step up) Pivot " << basisAux[std::size_t(i)] << ", " << j << " is a valid pivot.");
 					assert(dictionary.selectDualBlandPivot(i,j,basisAux));
-					assert(i < basisAux.size());
+					assert(i < Eigen::Index(basisAux.size()));
 					dictionary.pivot(basisAux[i],j);
 					assert(dictionary.isDualFeasible());
 					//dictionary.printDictionary();

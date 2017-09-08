@@ -1119,6 +1119,7 @@ ZonotopeT<Number,Converter> ZonotopeT<Number,Converter>::unite( const ZonotopeT<
 			"Zonotopes must be of same "
 			"dimension in order to carry out "
 			"convex hull operations." );
+	TRACE("hypro.representations","Union.");
 	std::size_t numGenCurrent, numGenOther;
 	ZonotopeT<Number,Converter> temp;
 	numGenCurrent = this->size();
@@ -1157,6 +1158,7 @@ ZonotopeT<Number,Converter> ZonotopeT<Number,Converter>::unite( const ZonotopeT<
 		temp.addGenerators( ( c1 - c2 ) * Number(Number(1)/Number(2)) );
 		temp.addGenerators( ( R1 - R2 ) * Number(Number(1)/Number(2)) );
 	};
+	TRACE("hypro.representations","Number generators after union: " << temp.generators().cols());
 	return temp;
 }
 

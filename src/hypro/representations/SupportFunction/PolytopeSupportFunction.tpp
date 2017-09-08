@@ -259,13 +259,13 @@ EvaluationResult<Number> PolytopeSupportFunction<Number>::evaluate( const vector
 #if defined(HYPRO_USE_SMTRAT) || defined(HYPRO_USE_Z3) || defined(HYPRO_USE_SOPLEX)
 	assert(res.errorCode != SOLUTION::FEAS || this->contains(res.optimumValue));
 #endif
-	assert( l.rows() == mDimension );
+	assert( std::size_t(l.rows()) == mDimension );
 	return res;
 }
 
 template <typename Number>
 std::vector<EvaluationResult<Number>> PolytopeSupportFunction<Number>::multiEvaluate( const matrix_t<Number> &_A, bool useExact, bool ) const {
-	assert( _A.cols() == mDimension );
+	assert( std::size_t(_A.cols()) == mDimension );
 	std::vector<EvaluationResult<Number>> res;
 	//std::cout << "POLY SF, evaluate in directions " << convert<Number,double>(_A) << std::endl << "POLY SF IS " << *this << std::endl;
 
