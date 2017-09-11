@@ -46,6 +46,7 @@ namespace hypro {
 		//std::cout << "---- pushed conSet inside" << std::endl;
 		state.setSet(conSet,0);
 		assert(state.getNumberSets() == 1);
+		state.setTimestamp(carl::Interval<Number>(0));
 		std::cout << "---- State gebaut!" << std::endl;
 		std::cout << state << std::endl;
 		locationStateMap initialState;

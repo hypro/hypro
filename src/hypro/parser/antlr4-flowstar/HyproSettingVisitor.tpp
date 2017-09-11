@@ -26,7 +26,7 @@ namespace hypro {
 		if(ctx->fixedsteps().size() > 1){
 			std::cerr << "ERROR: fixed step in settings has been defined multiple times." << std::endl;
 		} else if(ctx->fixedsteps().size() == 1){
-			tStep = visit(ctx->fixedsteps()[0]).antlrcpp::Any::as<Number>();
+			tStep = visit(ctx->fixedsteps()[0]).template as<Number>();
 		} else {
 			std::cerr << "ERROR: fixed step size has not been defined" << std::endl;
 		}
@@ -36,7 +36,7 @@ namespace hypro {
 		if(ctx->time().size() > 1){
 			std::cerr << "ERROR: time in settings has been defined multiple times." << std::endl;
 		} else if(ctx->time().size() == 1){
-			tBound = visit(ctx->time()[0]).antlrcpp::Any::as<Number>();
+			tBound = visit(ctx->time()[0]).template as<Number>();
 		} else {
 			std::cerr << "ERROR: time has not been defined" << std::endl;
 		}
@@ -57,7 +57,7 @@ namespace hypro {
 		if(ctx->filename().size() > 1){
 			std::cerr << "ERROR: filename in settings has been defined multiple times." << std::endl;
 		} else if(ctx->filename().size() == 1){
-			name = visit(ctx->filename()[0]).antlrcpp::Any::as<std::string>();
+			name = visit(ctx->filename()[0]).template as<std::string>();
 		} else {
 			std::cerr << "ERROR: filename has not been defined" << std::endl;
 		}

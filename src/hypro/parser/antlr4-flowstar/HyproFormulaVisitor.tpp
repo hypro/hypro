@@ -44,7 +44,7 @@ namespace hypro {
 	//The last coefficient is a constant, so the one without a respective variable
 	template<typename Number>
 	vector_t<Number> HyproFormulaVisitor<Number>::getPolynomCoeff(HybridAutomatonParser::PolynomContext* ctx) const {
-		std::cout << "-- Bin bei getPolynomCoeff!" << std::endl;		
+		std::cout << "-- Bin bei getPolynomCoeff!" << std::endl;
 		vector_t<Number> coeffVec = vector_t<Number>::Zero(vars.size()+1);
 		//std::cout << "---- coeffVec inital is:\n" << coeffVec << std::endl;
 		for(const auto& mTerm : ctx->term()){
@@ -55,7 +55,7 @@ namespace hypro {
 				coeffVec(coeffVec.rows()-1) = multed;
 				//std::cout << "---- No variables, just numbers. coeffVec is then:\n" << coeffVec << std::endl;
 			} else if(mTerm->VARIABLE().size() == 1) {
-				//put into place according to place of variable in vars	
+				//put into place according to place of variable in vars
 				unsigned dest = 0;
 				auto tmpVar = mTerm->VARIABLE()[0]->getText();
 				for(unsigned i=0; i < vars.size(); i++){
@@ -77,7 +77,7 @@ namespace hypro {
 
 	template<typename Number>
 	antlrcpp::Any HyproFormulaVisitor<Number>::visitPolynom(HybridAutomatonParser::PolynomContext *ctx){
-		std::cout << "-- Bin bei visitPolynom!" << std::endl;		
+		std::cout << "-- Bin bei visitPolynom!" << std::endl;
 
 		//0.Syntax Check - Only legal variables in polynom?
 		bool allVarsFound = true;
@@ -107,10 +107,10 @@ namespace hypro {
 		//2.Return Vector
 		return tmpVec;
 	}
-	
+
 	template<typename Number>
 	antlrcpp::Any HyproFormulaVisitor<Number>::visitEquation(HybridAutomatonParser::EquationContext *ctx){
-		std::cout << "-- Bin bei visitEquation!" << std::endl;		
+		std::cout << "-- Bin bei visitEquation!" << std::endl;
 
 		//0.Syntax Check - Left side of equation legal?
 		bool found = false;
@@ -126,7 +126,7 @@ namespace hypro {
 		//1.Call visit(ctx->polynom()) to get vector and return it
 		return visit(ctx->polynom());
 	}
-	
+
 	template<typename Number>
 	antlrcpp::Any HyproFormulaVisitor<Number>::visitConstraint(HybridAutomatonParser::ConstraintContext *ctx){
 		std::cout << "-- Bin bei visitConstraint!" << std::endl;
@@ -135,7 +135,7 @@ namespace hypro {
 		if(ctx->BOOLRELATION() != NULL){
 			if(ctx->BOOLRELATION()->getText() == "<" || ctx->BOOLRELATION()->getText() == ">"){
 				std::cerr << "ERROR: Strict relations are not allowed in current build!";
-			}	
+			}
 		}
 
 		//1.Call visit(ctx->polynom()) for both sides to get 2 vectors
@@ -168,9 +168,9 @@ namespace hypro {
 
 				auto res = std::make_pair(poly2 - poly1, poly1Back - poly2Back);
 				//std::cout << "---- Found a >=, res is:\n" << res.first << "\t" << res.second << std::endl;
-				constraintVec.push_back(res);			
+				constraintVec.push_back(res);
 
-			}	
+			}
 		}
 		if(ctx->EQUALS() != NULL){
 			auto res1 = std::make_pair(poly1 - poly2, poly2Back - poly1Back);
@@ -184,7 +184,7 @@ namespace hypro {
 		//3.Return a vector of pairs of constraint vectors and constant Numbers
 		return constraintVec;
 	}
-	
+
 	template<typename Number>
 	antlrcpp::Any HyproFormulaVisitor<Number>::visitIntervalexpr(HybridAutomatonParser::IntervalexprContext *ctx){
 		std::cout << "-- Bin bei visitIntervalexpr!" << std::endl;
@@ -194,7 +194,7 @@ namespace hypro {
 		Number right = stringToNumber(ctx->interval()->NUMBER()[1]->getText());
 		if(left > right){
 			std::cerr << "ERROR: Interval left side with " << " is bigger than right side!" << std::endl;
-		}	
+		}
 		bool found = false;
 		for(const auto& var : vars){
 			if(ctx->VARIABLE()->getText() == var){
@@ -244,15 +244,15 @@ namespace hypro {
 
 			//Choose constraints until there are no more, then choose intervalexprs
 			if(i < ctx->constraint().size()){
-				values = visitor.visit(ctx->constraint().at(i)).antlrcpp::Any::as<std::vector<std::pair<vector_t<Number>,Number>>>();
+				values = (visitor.visit(ctx->constraint().at(i))).template as<std::vector<std::pair<vector_t<Number>,Number>>>();
 				//std::cout << "---- Have chosen the " << i << "-th constraint vector!" << std::endl;
 			} else {
 				unsigned posInIntervalExpr = i - ctx->constraint().size();
 				//std::cout << "---- Have chosen the " << posInIntervalExpr << "-th intervalexpr vector!" << std::endl;
 				//std::cout << "---- intervalexpr size: " << ctx->intervalexpr().size() << std::endl;
 				if(posInIntervalExpr < ctx->intervalexpr().size()){
-					values = visitor.visit(ctx->intervalexpr().at(posInIntervalExpr)).antlrcpp::Any::as<std::vector<std::pair<vector_t<Number>,Number>>>();					
-					//std::cout << "---- intervalexpr existed!" << std::endl;					
+					values = visitor.visit(ctx->intervalexpr().at(posInIntervalExpr)).template as<std::vector<std::pair<vector_t<Number>,Number>>>();
+					//std::cout << "---- intervalexpr existed!" << std::endl;
 				} else {
 					std::cerr << "ERROR: There is no " << posInIntervalExpr << "-th constraint parsed!" << std::endl;
 				}

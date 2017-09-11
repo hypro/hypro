@@ -24,7 +24,7 @@ namespace hypro {
 			std::set<Transition<Number>*> trSet;
 			for(auto tr : ctx->transition()){
 				//trSet.insert(visit(tr).antlrcpp::Any::as<Transition<Number>*>());
-				Transition<Number>* t = visit(tr).antlrcpp::Any::as<Transition<Number>*>();
+				Transition<Number>* t = visit(tr).template as<Transition<Number>*>();
 				trSet.insert(t);
 				(t->getSource())->addTransition(t);
 			}
@@ -33,7 +33,7 @@ namespace hypro {
 			std::cout << "-- No jumps found! Returning empty transition set." << std::endl;
 			return std::set<Transition<Number>*>();
 		}
-		
+
 	}
 
 	template<typename Number>
@@ -49,7 +49,7 @@ namespace hypro {
 		t->setSource(fromTo.first);
 		std::cout << "---- Set source!" << std::endl;
 		t->setTarget(fromTo.second);
-			
+
 		//2. Collect Urgency
 		if(ctx->urgent().size() > 1){
 			std::cout << "WARNING: Please refrain from entering 'urgent' multiple times. One time is sufficient->" << std::endl;
@@ -63,11 +63,11 @@ namespace hypro {
 		//3.Collect Guards
 		if(ctx->guard().size() > 1){
 			std::cout << "WARNING: Please refrain from entering multiple guard constraints via several guard spaces. Typing one guard space of the form 'guard { constraint1 constraint2 ... }' is sufficient->" << std::endl;
-		} 
+		}
 		if(ctx->guard().size() == 1){
 			Condition<Number> inv = visit(ctx->guard()[0]);
 			t->setGuard(inv);
-		} 
+		}
 		std::cout << "---- Checked guards!" << std::endl;
 
 		//4.Collect Resets
@@ -88,7 +88,7 @@ namespace hypro {
 			Aggregation agg = visit(ctx->aggregation()[0]);
 			t->setAggregation(agg);
 		}
-		std::cout << "---- Checked aggregation!" << std::endl;		
+		std::cout << "---- Checked aggregation!" << std::endl;
 
 		return t;
 	}
@@ -146,7 +146,7 @@ namespace hypro {
 
 	template<typename Number>
 	antlrcpp::Any HyproTransitionVisitor<Number>::visitAllocation(HybridAutomatonParser::AllocationContext *ctx){
-		
+
 		std::cout << "-- Bin bei visitAllocation!" << std::endl;
 
 		//0.Syntax Check - Check if left side is a var with '
@@ -166,7 +166,7 @@ namespace hypro {
 		vector_t<Number> tmpVector = vector_t<Number>::Zero(vars.size());
 		if(ctx->polynom() != NULL){
 			HyproFormulaVisitor<Number> visitor(vars);
-			tmpVector = visitor.visit(ctx->polynom());	
+			tmpVector = visitor.visit(ctx->polynom());
 		}
 		//NOTE: Intervals are parsed but not handled yet
 		if(ctx->interval() != NULL){
@@ -229,5 +229,5 @@ namespace hypro {
 	}
 
 }
-	
-	
+
+
