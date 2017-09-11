@@ -604,9 +604,10 @@ EvaluationResult<Number> SupportFunctionContent<Number>::evaluate( const vector_
 						// reduce evaluation to projection dimensions
 						int entryIndex = 0;
 						for(const auto& projectionDimension : cur->projectionParameters()->dimensions) {
-							if(projectionDimension < cur->dimension())
+							if(projectionDimension < cur->dimension()){
 								projectedDirection(entryIndex) = currentParam(projectionDimension);
-							++entryIndex;
+								++entryIndex;
+							}
 						}
 						currentParam = projectedDirection;
 						callStack.push_back(cur->projectionParameters()->origin);
@@ -955,13 +956,14 @@ std::vector<EvaluationResult<Number>> SupportFunctionContent<Number>::multiEvalu
 					}
 					case SF_TYPE::PROJECTION: {
 						matrix_t<Number> tmp = matrix_t<Number>::Zero(_directions.rows(), _directions.cols());
-						int entryIndex = 0;
+						Eigen::Index entryIndex = 0;
 						for(const auto& entry : cur->projectionParameters()->dimensions) {
-							if(entry < mDimension)
+							if(entry < mDimension){
 								tmp.col(entryIndex) = currentParam.col(entry);
-							++entryIndex;
+								++entryIndex;
+							}
 						}
-						assert(entryIndex == int(cur->projectionParameters()->dimensions.size()-1));
+						assert(entryIndex == Eigen::Index(cur->projectionParameters()->dimensions.size()));
 						currentParam = tmp;
 						callStack.push_back(cur->projectionParameters()->origin);
 						paramStack.push_back(currentParam);

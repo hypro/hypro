@@ -128,8 +128,8 @@ struct flowstarParser : qi::grammar<Iterator, Skipper>
 					unsigned dimension = constraintsNum > 0 ? unsigned(boost::get<ConstraintSet<Number>>(stateIt->getSet()).matrix().cols()) : unsigned((_constraint.begin()->cols())-1);
 					ConstraintSet<Number> set = constraintsNum > 0 ? boost::get<ConstraintSet<Number>>(stateIt->getSet()) : ConstraintSet<Number>();
 					TRACE("hypro.parser","Resize to " << constraintsNum+_constraint.size() << " x " << dimension);
-					set.rMatrix().conservativeResize(constraintsNum+_constraint.size(), dimension);
-					set.rVector().conservativeResize(constraintsNum+_constraint.size());
+					set.rMatrix().conservativeResize(constraintsNum+Eigen::Index(_constraint.size()), dimension);
+					set.rVector().conservativeResize(constraintsNum+Eigen::Index(_constraint.size()));
 					TRACE("hypro.parser","State already existing with " << constraintsNum << " rows.");
 					for(const auto& row : _constraint) {
 						assert(row.rows() == 1);
@@ -175,8 +175,8 @@ struct flowstarParser : qi::grammar<Iterator, Skipper>
 		for(auto stateIt = _states.rbegin(); stateIt != _states.rend(); ++stateIt) {
 			if(stateIt->getLocation() == mLocationManager.location(id)){
 				found = true;
-				vector_t<Number> lowerNormal = vector_t<Number>::Zero(mDiscreteVariableIds.size());
-				vector_t<Number> upperNormal = vector_t<Number>::Zero(mDiscreteVariableIds.size());
+				vector_t<Number> lowerNormal = vector_t<Number>::Zero(Eigen::Index(mDiscreteVariableIds.size()));
+				vector_t<Number> upperNormal = vector_t<Number>::Zero(Eigen::Index(mDiscreteVariableIds.size()));
 				lowerNormal(_initPair.first) = -1;
 				upperNormal(_initPair.first) = 1;
 
@@ -190,8 +190,8 @@ struct flowstarParser : qi::grammar<Iterator, Skipper>
 		}
 		if(!found){
 			State<Number,ConstraintSet<Number>> s(mLocationManager.location(id));
-			vector_t<Number> lowerNormal = vector_t<Number>::Zero(mDiscreteVariableIds.size());
-			vector_t<Number> upperNormal = vector_t<Number>::Zero(mDiscreteVariableIds.size());
+			vector_t<Number> lowerNormal = vector_t<Number>::Zero(Eigen::Index(mDiscreteVariableIds.size()));
+			vector_t<Number> upperNormal = vector_t<Number>::Zero(Eigen::Index(mDiscreteVariableIds.size()));
 			lowerNormal(_initPair.first) = -1;
 			upperNormal(_initPair.first) = 1;
 

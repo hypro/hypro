@@ -40,11 +40,11 @@ class ConstrainSet {
 			for(std::size_t i=0;i<baseIndices.size()-1;++i) {
 				if((index==Eigen::Index(constrainSet.size()+1)||baseIndices[i]-1<baseIndices[index]) && not(std::get<0>(std::get<0>(constrainSet[baseIndices[i]-1]))||
 							std::get<1>(std::get<0>(constrainSet[baseIndices[i]-1]))<=std::get<2>(constrainSet[baseIndices[i]-1]))) {
-					index = i;
+					index = Eigen::Index(i);
 					diff = std::get<1>(std::get<0>(constrainSet[baseIndices[i]-1]))-std::get<2>(constrainSet[baseIndices[i]-1]);
 				} else if((index==Eigen::Index(constrainSet.size()+1)||baseIndices[i]-1<baseIndices[index]) && not(std::get<0>(std::get<1>(constrainSet[baseIndices[i]-1]))||
 							std::get<1>(std::get<1>(constrainSet[baseIndices[i]-1]))>=std::get<2>(constrainSet[baseIndices[i]-1]))) {
-					index = i;
+					index = Eigen::Index(i);
 					diff = std::get<1>(std::get<1>(constrainSet[baseIndices[i]-1]))-std::get<2>(constrainSet[baseIndices[i]-1]);
 				}
 			}
@@ -58,10 +58,10 @@ class ConstrainSet {
 				if(pivot==Eigen::Index(constrainSet.size()+1) || cobaseIndices[i]<pivot) {
 					if(dictionary(index,i) * diff<0 && (std::get<0>(std::get<0>(constrainSet[cobaseIndices[i]-1]))
 								|| std::get<1>(std::get<0>(constrainSet[cobaseIndices[i]-1]))>std::get<2>(constrainSet[cobaseIndices[i]-1]))) {
-						pivot = i;
+						pivot = Eigen::Index(i);
 					} else if(dictionary(index,i)*diff>0 && (std::get<0>(std::get<1>(constrainSet[cobaseIndices[i]-1]))
 								|| std::get<1>(std::get<1>(constrainSet[cobaseIndices[i]-1]))<std::get<2>(constrainSet[cobaseIndices[i]-1]))) {
-						pivot = i;
+						pivot = Eigen::Index(i);
 					}
 				}
 			}

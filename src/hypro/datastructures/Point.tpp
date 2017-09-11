@@ -176,7 +176,7 @@ Number Point<Number>::coordinate( const carl::Variable &_var ) const {
 
 template <typename Number>
 Number Point<Number>::coordinate( std::size_t _dimension ) const {
-	assert( mCoordinates.size() > _dimension );
+	assert( std::size_t(mCoordinates.size()) > _dimension );
 	return mCoordinates( _dimension );
 }
 
@@ -429,7 +429,7 @@ bool Point<Number>::isInBoundary( const Point<Number> &_boundary ) const {
 
 template <typename Number>
 bool Point<Number>::hasDimension( const carl::Variable &_i ) const {
-	return ( mCoordinates.rows() > hypro::VariablePool::getInstance().id( _i ) );
+	return ( mCoordinates.rows() > Eigen::Index(hypro::VariablePool::getInstance().id( _i )) );
 }
 
 template <typename Number>
@@ -597,7 +597,7 @@ const Number& Point<Number>::at( const carl::Variable &_i ) const {
 
 template <typename Number>
 const Number& Point<Number>::at( std::size_t _index ) const {
-	assert( _index < mCoordinates.rows() );
+	assert( _index < std::size_t(mCoordinates.rows()) );
 	return mCoordinates( _index );
 }
 }  // namespace hypro

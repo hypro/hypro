@@ -20,38 +20,81 @@ enum Aggregation { none, boxAgg, parallelotopeAgg };
 template<typename Number>
 class Location;
 
+/**
+ * @brief      Class for transition.
+ * @tparam     Number  The used number type.
+ */
 template<typename Number>
 class Transition
 {
   private:
-    Location<Number>* mSource = nullptr;
-    Location<Number>* mTarget = nullptr;
-    Condition<Number> mGuard;
-    Reset<Number> mReset;
-    Aggregation mAggregationSetting = Aggregation::none;
-    bool mUrgent = false;
-    Number mTriggerTime = Number(-1);
+    Location<Number>* mSource = nullptr; /// Pointer to the source location.
+    Location<Number>* mTarget = nullptr; /// Pointer to the target location.
+    Condition<Number> mGuard; /// Guard condition enabling the transition if satisfied.
+    Reset<Number> mReset; /// Reset function.
+    Aggregation mAggregationSetting = Aggregation::none; /// Aggregation settings.
+    bool mUrgent = false; /// Flag if transition is urgent.
+    Number mTriggerTime = Number(-1); /// Trigger-time: if positive acts as an additional guard.
 
   public:
 
+  	/**
+  	 * @brief      Default constructor.
+  	 */
     Transition() = default;
+
+    /**
+     * @brief      Copy constructor.
+     * @param[in]  orig  The original.
+     */
     Transition(const Transition<Number>& orig) = default;
+
+    /**
+     * @brief      Move constructor.
+     * @param[in]  orig  The original.
+     */
     Transition(Transition<Number>&& orig) = default;
+
+    /**
+     * @brief      Copy assignment operator.
+     * @param[in]  orig  The original.
+     * @return     A copy of the passed transition.
+     */
     Transition& operator=(const Transition<Number>& orig) = default;
+
+    /**
+     * @brief      Move assignment operator.
+     * @param[in]  orig  The original.
+     * @return     Result.
+     */
     Transition& operator=(Transition<Number>&& orig) = default;
+
+    /**
+     * @brief      Destroys the object.
+     */
     ~Transition() {}
 
+    /**
+     * @brief      Constructor from source and target location.
+     * @param      source  The source
+     * @param      target  The target
+     */
     Transition(Location<Number>* source, Location<Number>* target)
         : mSource(source), mTarget(target), mGuard(), mReset(), mAggregationSetting(), mUrgent(false)
     {}
 
+    /**
+     * @brief      Full constructor for basic transition.
+     * @param      source  The source.
+     * @param      target  The target.
+     * @param[in]  guard   The guard.
+     * @param[in]  reset   The reset.
+     */
     Transition(Location<Number>* source, Location<Number>* target, const Condition<Number>& guard, const Reset<Number>& reset)
         : mSource(source), mTarget(target), mGuard(guard), mReset(reset), mAggregationSetting(), mUrgent(false)
     {}
 
-    /**
-     * Getter & Setter
-     */
+
     Location<Number>* getSource() const { assert( mSource != nullptr ); return mSource; }
     Location<Number>* getTarget() const { assert( mTarget != nullptr ); return mTarget; }
     const Condition<Number>& getGuard() const { return mGuard; }
@@ -69,6 +112,12 @@ class Transition
     void setUrgent(bool urgent = true) { mUrgent = urgent; }
     void setTriggerTime(Number t) { mTriggerTime = t; }
 
+    /**
+     * @brief      Outstream operator.
+     * @param      ostr  The outstream.
+     * @param[in]  t     The transition.
+     * @return     Reference to the outstream.
+     */
     friend std::ostream& operator<<(std::ostream& ostr, const Transition<Number>& t) {
 		#ifdef HYPRO_LOGGING
 	    ostr << "transition(" << std::endl
@@ -82,6 +131,12 @@ class Transition
 	    return ostr;
     }
 
+    /**
+     * @brief      Equality comparison operator.
+     * @param[in]  lhs   The left hand side.
+     * @param[in]  rhs   The right hand side.
+     * @return     True if both transitions are equal, false otherwise.
+     */
     friend bool operator==(const Transition<Number>& lhs, const Transition<Number>& rhs) {
     	if( (*lhs.mSource != *rhs.mSource) ||
 			(*lhs.mTarget != *rhs.mTarget) ||

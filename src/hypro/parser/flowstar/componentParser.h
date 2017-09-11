@@ -125,8 +125,8 @@ namespace parser {
 				//g.discreteOffset = _dim;
 
 				if(mDiscreteGuards.size() > 0) {
-					matrix_t<Number> guardMatrix = matrix_t<Number>::Zero(mDiscreteGuards.size(),_discreteDim-_dim+1);
-					vector_t<Number> guardVector = vector_t<Number>::Zero(mDiscreteGuards.size());
+					matrix_t<Number> guardMatrix = matrix_t<Number>::Zero(Eigen::Index(mDiscreteGuards.size()),_discreteDim-_dim+1);
+					vector_t<Number> guardVector = vector_t<Number>::Zero(Eigen::Index(mDiscreteGuards.size()));
 					unsigned row = 0;
 					for(const auto& guardPair : mDiscreteGuards) {
 						matrix_t<Number> reducedGuard = matrix_t<Number>(1,_discreteDim-_dim+1);
@@ -381,7 +381,7 @@ namespace parser {
  		void setTimeBound(double _in){ mLocalSettings.timeBound = carl::rationalize<Number>(_in); }
  		void setJumpDepth(int _in){ mLocalSettings.jumpDepth = _in; }
  		void setFileName(const std::string& _in){ mLocalSettings.fileName = _in; }
- 		void setPlotDimensions(const std::vector<unsigned>& _dimensions){
+ 		void setPlotDimensions(const std::vector<std::size_t>& _dimensions){
  			assert(_dimensions.size() <= 2);
  			mLocalSettings.plotDimensions.push_back(_dimensions);
  		}
@@ -395,7 +395,7 @@ namespace parser {
 		qi::rule<Iterator, Skipper> print;
 		qi::rule<Iterator, qi::unused_type(symbol_table const&), Skipper> outBackend;
 		qi::rule<Iterator, Skipper> shape;
-		qi::rule<Iterator, std::vector<unsigned>(symbol_table const&), Skipper> outdimensions;
+		qi::rule<Iterator, std::vector<std::size_t>(symbol_table const&), Skipper> outdimensions;
 		qi::rule<Iterator, Skipper> remainder;
 		qi::rule<Iterator, Skipper> cutoff;
 		qi::rule<Iterator, Skipper> precision;
