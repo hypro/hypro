@@ -77,7 +77,7 @@ HPolytopeT<Number, Converter>::HPolytopeT( const std::vector<Point<Number>>& poi
 		assert( (*points.begin()).dimension() > 0 );
 		mDimension = points.begin()->dimension();
 		for(unsigned d = 0; d < points.begin()->dimension(); ++d) {
-			std::cout << "Do we get here?\n";
+			//std::cout << "Do we get here?\n";
 			vector_t<Number> normal = vector_t<Number>::Zero(points.begin()->dimension());
 			normal(d) = 1;
 			mHPlanes.insert(mHPlanes.end(), Halfspace<Number>(normal, points.begin()->at(d)));
@@ -340,8 +340,8 @@ typename std::vector<Point<Number>> HPolytopeT<Number, Converter>::vertices( con
 				continue;
 			}
 			#ifdef HPOLY_DEBUG_MSG
-			std::cout << convert<Number,double>(A) << std::endl;
-			std::cout << convert<Number,double>(b) << std::endl;
+			//std::cout << convert<Number,double>(A) << std::endl;
+			//std::cout << convert<Number,double>(b) << std::endl;
 			#endif
 
 			vector_t<Number> res = lu_decomp.solve( b );
@@ -778,9 +778,9 @@ HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::intersectHalfspaces
 	for ( unsigned i = 0; i < _mat.rows(); ++i ) {
 		res.insert( Halfspace<Number>( _mat.row(i), _vec( i ) ) );
 	}
-	std::cout << "hpoly before removeRedundancy:\n" << res << std::endl;
+	//std::cout << "hpoly before removeRedundancy:\n" << res << std::endl;
 	//res.removeRedundancy();
-	std::cout << "hpoly after removeRedundancy:\n" << res << std::endl;
+	//std::cout << "hpoly after removeRedundancy:\n" << res << std::endl;
 	return res;
 }
 

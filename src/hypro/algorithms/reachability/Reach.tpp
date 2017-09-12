@@ -75,7 +75,7 @@ namespace reachability {
 			mWorkingQueue.pop_front();
 
 			mCurrentLevel = boost::get<0>(nextInitialSet);
-			std::cout << "mCurrentLevel is: " << mCurrentLevel << " while maxjumpDepth is: " << mSettings.jumpDepth << std::endl;
+			//std::cout << "mCurrentLevel is: " << mCurrentLevel << " while maxjumpDepth is: " << mSettings.jumpDepth << std::endl;
 			INFO("hypro.reacher","Depth " << mCurrentLevel << ", Location: " << boost::get<1>(nextInitialSet).getLocation()->getId());
 			assert(mCurrentLevel <= mSettings.jumpDepth);
 			flowpipe_t<Number> newFlowpipe = computeForwardTimeClosure(boost::get<1>(nextInitialSet));

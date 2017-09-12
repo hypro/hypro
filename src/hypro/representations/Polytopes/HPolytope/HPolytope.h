@@ -19,7 +19,7 @@
 #include <algorithm>
 #include <cassert>
 
-//#define REDUCE_NUMBERS
+#define REDUCE_NUMBERS
 #define AVOID_CONVERSION
 //#define HPOLY_DEBUG_MSG
 
@@ -332,6 +332,7 @@ public:
 				if(largest > (limit*limit)) {
 					#ifdef HPOLY_DEBUG_MSG
 					std::cout << "Actual reduction" << std::endl;
+					std::cout << "largest is: " << largest << " limit is: " << limit << " and limit^2 is: " << limit*limit << std::endl;
 					#endif
 					vector_t<Number> newNormal(mDimension);
 					for(unsigned i = 0; i < mDimension; ++i){
@@ -362,7 +363,7 @@ public:
 				#endif
 			}
 			#ifdef HPOLY_DEBUG_MSG
-			std::cout << "After Reduction: " << *this << std::endl;
+			//std::cout << "After Reduction: " << *this << std::endl;
 			#endif
 		}
 		#endif
