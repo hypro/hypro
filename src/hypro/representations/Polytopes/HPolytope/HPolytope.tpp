@@ -375,9 +375,6 @@ typename std::vector<Point<Number>> HPolytopeT<Number, Converter>::vertices( con
 					vertices.push_back(tmp);
 				}
 				TRACE("hypro.representations.HPolytope","Final vertex: " << (convert<Number,double>(res).transpose()));
-				if(vertices.back().at(0) >= 94.5 && vertices.back().at(0) <= 94.6) {
-					TRACE("hypro.representations.HPolytope","Created by planes " << permutation);
-				}
 			}
 		}
 	}
@@ -778,9 +775,7 @@ HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::intersectHalfspaces
 	for ( unsigned i = 0; i < _mat.rows(); ++i ) {
 		res.insert( Halfspace<Number>( _mat.row(i), _vec( i ) ) );
 	}
-	//std::cout << "hpoly before removeRedundancy:\n" << res << std::endl;
-	//res.removeRedundancy();
-	//std::cout << "hpoly after removeRedundancy:\n" << res << std::endl;
+	res.removeRedundancy();
 	return res;
 }
 

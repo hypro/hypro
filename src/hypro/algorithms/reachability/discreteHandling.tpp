@@ -120,7 +120,6 @@ namespace reachability {
 			//for(const auto& vertex : tmp.vertices()) {
 			//	std::cout << convert<Number,double>(vertex) << std::endl;
 			//}
-			std::cout << "State after reset: " << tmp << std::endl;
 
 			std::pair<bool, State_t<Number>> invariantSatisfyingSet = tmp.satisfies(aggregationPair.first->getTarget()->getInvariant());
 			if(invariantSatisfyingSet.first){
@@ -128,7 +127,7 @@ namespace reachability {
 				//Plotter<Number>::getInstance().setObjectColor(tmp, colors[orange]);
 				//s.setSets(invariantSatisfyingSet.second.getSets());
 				s.setSetsSave(invariantSatisfyingSet.second.getSets());
-				std::cout << "Transformed, collected set (intersected with invariant): " << invariantSatisfyingSet.second << std::endl;
+				//std::cout << "Transformed, collected set (intersected with invariant): " << invariantSatisfyingSet.second << std::endl;
 			} else {
 				continue;
 			}
