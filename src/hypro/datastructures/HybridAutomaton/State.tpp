@@ -77,6 +77,7 @@ std::pair<bool,State<Number,Representation,Rargs...>> State<Number,Representatio
 	//assert(mSetRepresentationName == in.getSetRepresentation());
 
 	DEBUG("hypro.datastructures","This size: " << mSets.size() << ", condition size: " << in.size());
+	TRACE("hypro.datastructures","Condition matrix: " << std::endl << in.getMatrix() << std::endl << "Vector: " << std::endl << in.getVector());
 	assert(in.size() == mSets.size());
 	assert(checkConsistency());
 	State<Number,Representation,Rargs...> res(*this);
@@ -87,6 +88,7 @@ std::pair<bool,State<Number,Representation,Rargs...>> State<Number,Representatio
 		res.setSetDirect(resultPair.second, i);
 
 		if(!resultPair.first) {
+			TRACE("hypro.datastructures","State set " << i << "(type " << mTypes.at(i) << ") failed the condition - return empty.");
 			empty = true;
 			break;
 		}

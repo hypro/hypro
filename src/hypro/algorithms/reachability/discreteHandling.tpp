@@ -18,7 +18,7 @@ namespace reachability {
 		// check if the intersection is empty
 		if ( guardSatisfyingSet.first ) {
 			#ifdef REACH_DEBUG
-			std::cout << "Transition enabled!" << std::endl;
+			INFO("hypro.reacher", "Transition enabled!");
 			#endif
 
 			//for(unsigned rowIndex = 0; rowIndex < _trans->guard().mat.rows(); ++rowIndex) {
@@ -31,7 +31,7 @@ namespace reachability {
 			return true;
 		} else {
 			#ifdef REACH_DEBUG
-			std::cout << "Continuous guard invalidated." << std::endl;
+			INFO("hypro.reacher", "Continuous guard invalidated.");
 			#endif
 			return false;
 		}
@@ -40,8 +40,6 @@ namespace reachability {
 	template<typename Number>
 	void Reach<Number>::processDiscreteBehaviour( const std::vector<boost::tuple<Transition<Number>*, State_t<Number>>>& _newInitialSets ) {
 		std::map<Transition<Number>*, std::vector<State_t<Number>>> toAggregate;
-
-		std::cout << "I am in processDiscreteBehaviour!" << std::endl;
 
 		for(const auto& tuple : _newInitialSets ) {
 			if(boost::get<0>(tuple)->getAggregation() == Aggregation::none){
@@ -74,7 +72,7 @@ namespace reachability {
 		// aggregation - TODO: add options for clustering.
 		for(const auto& aggregationPair : toAggregate){
 
-			std::cout << "-- Entered aggregation loop" << std::endl;
+			INFO("hypro.reacher", "-- Entered aggregation loop");
 
 			assert(!aggregationPair.second.empty());
 			carl::Interval<Number> aggregatedTimestamp = aggregationPair.second.begin()->getTimestamp();
@@ -84,11 +82,11 @@ namespace reachability {
 				assert(!stateIt->getTimestamp().isUnbounded());
 				aggregatedTimestamp = aggregatedTimestamp.convexHull(stateIt->getTimestamp());
 				//std::cout << "New timestamp: " << aggregatedTimestamp << std::endl;
-				collectedSets = collectedSets.aggregate(*stateIt);
+				collectedSets = collectedSets.unite(*stateIt);
 			}
 
 			#ifdef REACH_DEBUG
-			std::cout << "Unified " << aggregationPair.second.size() << " sets for aggregation:" << std::endl << collectedSets << std::endl;
+			INFO("hypro.reacher", "Unified " << aggregationPair.second.size() << " sets for aggregation.");
 			//std::cout << "CollectedSets vertices: " << std::endl;
 			//for(const auto& vertex : collectedSets.vertices()) {
 			//	std::cout << convert<Number,double>(vertex) << std::endl;
@@ -143,13 +141,13 @@ namespace reachability {
 			}
 			if(!duplicate){
 				#ifdef REACH_DEBUG
-				std::cout << "Enqueue " << s << " for level " << mCurrentLevel+1 << std::endl;
+				INFO("hypro.reacher", "Enqueue " << s << " for level " << mCurrentLevel+1);
 				#endif
 				mWorkingQueue.emplace_back(mCurrentLevel+1, s);
 			}
 		}
 
-		std::cout << "After aggregation loop" << std::endl;
+		INFO("hypro.reacher", "After aggregation loop");
 	}
 
 	template<typename Number>
@@ -161,8 +159,7 @@ namespace reachability {
 		for( auto transition : state.getLocation()->getTransitions() ){
 			// handle time-triggered transitions
 			if(intersectGuard(transition, state, guardSatisfyingState)){
-				//std::cout << "------hybrid transition enabled" << std::endl;
-				std::cout << *transition << std::endl;
+				INFO("hypro.reacher", "hybrid transition enabled");
 				assert(guardSatisfyingState.getTimestamp() == state.getTimestamp());
 				// when a guard is satisfied here, as we do not have dynamic behaviour, avoid calculation of flowpipe
 				assert(!guardSatisfyingState.getTimestamp().isUnbounded());
