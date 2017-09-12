@@ -848,8 +848,9 @@ std::vector<EvaluationResult<Number>> SupportFunctionContent<Number>::multiEvalu
 									(*resIt)[resultId].supportValue = 1;
 									accumulatedResult[resultId] = (*resIt)[resultId];
 								} else {
+									assert((*resIt)[resultId].errorCode == SOLUTION::FEAS);
 									accumulatedResult[resultId] = (*resIt)[resultId] > accumulatedResult[resultId] ? (*resIt)[resultId] : accumulatedResult[resultId];
-									assert(accumulatedResult[resultId].errorCode == SOLUTION::FEAS);
+									//assert(accumulatedResult[resultId].errorCode == SOLUTION::FEAS);
 								}
 							}
 
