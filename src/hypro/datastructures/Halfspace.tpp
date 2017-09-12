@@ -389,7 +389,7 @@ vector_t<Number> Halfspace<Number>::computePlaneNormal( const std::vector<vector
 				++pos;
 			}
 		}
-		assert( pos - 1 <= elements );
+		assert( pos - 1 <= int(elements) );
 
 		glp_load_matrix( normal, int(elements), ia, ja, ar );
 		glp_simplex( normal, NULL );

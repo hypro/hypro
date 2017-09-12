@@ -97,7 +97,7 @@ State_t<Number> bloatBox( const State_t<Number>& in, const Box<Number>& bloatBox
 		// different approaches towards bloating
 		if(mSettings.uniformBloating){ // GirardBloating
 			// R_0(X0) U R_delta(X0)
-			State_t<Number> unitePolytope = _state.aggregate( deltaValuation );
+			State_t<Number> unitePolytope = _state.unite( deltaValuation );
 			//assert(unitePolytope.contains(initialPair.second));
 			//assert(unitePolytope.contains(deltaValuation));
 			#ifdef REACH_DEBUG
@@ -156,7 +156,7 @@ State_t<Number> bloatBox( const State_t<Number>& in, const Box<Number>& bloatBox
 			//Representation tmp = bloatBox<Number>(deltaValuation, errorBoxVector[1]);
 			//std::cout << "Errorbox1: " << convert<Number,double>(errorBoxVector[1]) << std::endl;
 
-			firstSegment = deltaValuation.aggregate(_state);
+			firstSegment = deltaValuation.unite(_state);
 			//Box<Number> differenceBox = errorBoxVector[2];
 			//differenceBox = Number(Number(1)/Number(4)) * differenceBox;
 

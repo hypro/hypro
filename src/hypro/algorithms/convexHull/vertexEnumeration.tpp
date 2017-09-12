@@ -205,7 +205,6 @@ namespace hypro {
 				dictionary.pivot(i,j);
 				assert(dictionary.isPrimalFeasible());
 				#ifndef NDEBUG
-				//size_t tmpI,tmpJ;
 				Eigen::Index tmpI,tmpJ;
 				dictionary.selectBlandPivot(tmpI,tmpJ);
 				if(!(tmpI == i && tmpJ == j)) {
@@ -278,7 +277,7 @@ namespace hypro {
 			}
 			if(i<m){
 				assert(dictionary.isDualFeasible());
-				DEBUG("hypro.vertexEnumeration","(Step down) Pivot " << basisAux[i] << ", " << j << " is a valid reverse pivot.");
+				DEBUG("hypro.vertexEnumeration","(Step down) Pivot " << basisAux[std::size_t(i)] << ", " << j << " is a valid reverse pivot.");
 				dictionary.pivot(basisAux[i],j);
 				assert(dictionary.isDualFeasible());
 				//dictionary.printDictionary();
@@ -292,9 +291,9 @@ namespace hypro {
 				if(depth>0) {
 					assert(dictionary.isDualFeasible());
 					dictionary.selectDualBlandPivot(i,j,basisAux);
-					DEBUG("hypro.vertexEnumeration","(Step up) Pivot " << basisAux[i] << ", " << j << " is a valid pivot.");
+					DEBUG("hypro.vertexEnumeration","(Step up) Pivot " << basisAux[std::size_t(i)] << ", " << j << " is a valid pivot.");
 					assert(dictionary.selectDualBlandPivot(i,j,basisAux));
-					assert(i < basisAux.size());
+					assert(i < Eigen::Index(basisAux.size()));
 					dictionary.pivot(basisAux[i],j);
 					assert(dictionary.isDualFeasible());
 					//dictionary.printDictionary();
@@ -363,7 +362,7 @@ namespace hypro {
 		Eigen::Index back = basis.back();
 		basis.pop_back();
 
-		for(std::size_t index = n0+1;index<=mHsv.size();++index) {basis.push_back(Eigen::Index(index));}
+		for(std::size_t index = std::size_t(n0)+1;index<=mHsv.size();++index) {basis.push_back(Eigen::Index(index));}
 		basis.push_back(back);
 		ConstrainSet<Number> constrains;
 		for(Eigen::Index index=0; index<n0;++index) {
@@ -524,7 +523,7 @@ namespace hypro {
 			for(Eigen::Index i=1; i<constrainsCount-Eigen::Index(dimension)+1; ++i){
 				mB.push_back(i);
 			}
-			mB.push_back(std::size_t(constrainsCount+1));
+			mB.push_back(constrainsCount+1);
 			for(Eigen::Index i=constrainsCount-Eigen::Index(dimension)+1; i<constrainsCount+1; ++i){
 				mN.push_back(i);
 			}

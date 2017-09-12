@@ -20,7 +20,7 @@ std::vector<Point<Number>> computeBoundaryPointsExpensive (const SupportFunction
     //gets dimension in which is currently computed
     Eigen::Index dim = directions.cols();
     //only continue if directions and object match dimensionwise
-    assert (dim == sf.dimension());
+    assert (dim == Eigen::Index(sf.dimension()));
     //generates an empty PointVector for the return value
     std::vector<Point<Number>> res;
     //if the function has an object that is not yet certainly a singleton (i.e. dimension is greater than zero)
@@ -53,7 +53,7 @@ std::vector<Point<Number>> computeBoundaryPointsExpensive (const SupportFunction
             std::cout << "current face:" << std::endl;
             curFace.print();
             //only continue if face has still the same dimension as the source object (although it is technically now a dim-1 object at most)
-            assert(curFace.dimension() == dim);
+            assert(Eigen::Index(curFace.dimension()) == dim);
 
             //call of the recursive sub-function for the current face
             recursiveSolutions.push_back(computeBoundaryPointsExpensiveRecursive(curFace, directions, std::size_t(dim-1)));

@@ -5,7 +5,8 @@
 # Contact:                  #
 #	   Stefan Schupp stefan.schupp@cs.rwth-aachen.de      #
 #                                                             #
-# Author: Sebastian Junges, Stefan Schupp                     #
+# Author: Stefan Schupp
+# Credit: Sebastian Junges, Gereon Kremer
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
 
@@ -26,10 +27,9 @@ project(hypro CXX C)
 
 set(PROJECT_FULLNAME "HyPro")
 set(PROJECT_DESCRIPTION "A Toolbox for the Reachability Analysis of Hybrid Systems using Geometric Approximations")
-set(hypro_MAJORVERSION 1)
-set(hypro_MINORVERSION 0)
-set(hypro_MAINTENANCEVERSION 0)
-set(hypro_VERSION "${hypro_MAJORVERSION}.${hypro_MINORVERSION}.${hypro_MAINTENANCEVERSION}")
+set(hypro_MAJORVERSION 17)
+set(hypro_MINORVERSION 09)
+set(hypro_VERSION "${hypro_MAJORVERSION}.${hypro_MINORVERSION}")
 set(PROJECT_VERSION "${hypro_VERSION}")
 set(hypro_NAME "HyPro" )
 set(hypro_DESCRIPTION ${PROJECT_DESCRIPTION})
@@ -51,7 +51,7 @@ option(HYPRO_USE_PPL "Use PPl polytope wrapper." OFF)
 option(HYPRO_USE_SMTRAT "Use SMT-RAT for linear solving." OFF)
 option(HYPRO_USE_Z3 "Use Z3 for linear solving." OFF)
 option(HYPRO_USE_SOPLEX "Use Soplex for linear solving." OFF)
-option(HYPRO_LOGGING "Allow log4cplus logging." OFF)
+option(HYPRO_LOGGING "Allow logging." OFF)
 option(HYPRO_COVERAGE "Enable compiler flags for test coverage diagnostics." OFF)
 option(HYPRO_STATISTICS "Create a statistic file." OFF)
 option(CLANG_TIDY "Enable usage of clang-tidy" OFF )
@@ -139,7 +139,7 @@ else()
 endif()
 
 if(DEVELOPER)
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wswitch -Wno-deprecated-declarations -Wempty-body -Wconversion -Wreturn-type -Wparentheses -Wno-pointer-sign -Wno-format -Wuninitialized -Wunreachable-code -Wunused-function -Wunused-value -Wunused-variable")
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wswitch -Wno-deprecated-declarations -Wempty-body -Wconversion -Wreturn-type -Wparentheses -Wno-format -Wuninitialized -Wunreachable-code -Wunused-function -Wunused-value -Wunused-variable")
 endif()
 
 # # # # # # # # # # # # # # # # # # # # # #

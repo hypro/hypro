@@ -1,5 +1,4 @@
 #pragma once
-#include "functors.h"
 #include "../../representations/GeometricObject.h"
 #include "../../representations/types.h"
 #include <iostream>

@@ -51,20 +51,22 @@ void State<Number,Representation,Rargs...>::addTimeToClocks(Number t) {
 }
 
 template<typename Number, typename Representation, typename ...Rargs>
-State<Number,Representation,Rargs...> State<Number,Representation,Rargs...>::aggregate(const State<Number,Representation,Rargs...>& in) const {
+State<Number,Representation,Rargs...> State<Number,Representation,Rargs...>::unite(const State<Number,Representation,Rargs...>& in) const {
 	State<Number,Representation,Rargs...> res(*this);
 
-	TRACE("hypro.datastructures","Aggregation of " << res << " and " << in);
+	TRACE("hypro.datastructures","Union with " << mSets.size() << " sets.");
 
 	// element-wise union.
 	assert(mSets.size() == in.getSets().size());
 	assert(checkConsistency());
 	for(std::size_t i = 0; i < mSets.size(); ++i) {
+		TRACE("hypro.datastructures","Apply unite vistor for set " << i);
 		res.setSetDirect( boost::apply_visitor(genericUniteVisitor<repVariant>(), mSets.at(i), in.getSet(i)), i);
 	}
 
-	TRACE("hypro.datastructures","After continuous aggregation " << res );
 	assert(checkConsistency());
+	TRACE("hypro.datastructures","Done union.");
+
 	res.setTimestamp(mTimestamp.convexHull(in.getTimestamp()));
 	return res;
 }
@@ -75,6 +77,7 @@ std::pair<bool,State<Number,Representation,Rargs...>> State<Number,Representatio
 	//assert(mSetRepresentationName == in.getSetRepresentation());
 
 	DEBUG("hypro.datastructures","This size: " << mSets.size() << ", condition size: " << in.size());
+	TRACE("hypro.datastructures","Condition matrix: " << std::endl << in.getMatrix() << std::endl << "Vector: " << std::endl << in.getVector());
 	assert(in.size() == mSets.size());
 	assert(checkConsistency());
 	State<Number,Representation,Rargs...> res(*this);
@@ -85,12 +88,18 @@ std::pair<bool,State<Number,Representation,Rargs...>> State<Number,Representatio
 		res.setSetDirect(resultPair.second, i);
 
 		if(!resultPair.first) {
+			TRACE("hypro.datastructures","State set " << i << "(type " << mTypes.at(i) << ") failed the condition - return empty.");
 			empty = true;
 			break;
 		}
 	}
 
 	return std::make_pair(!empty, res);
+}
+
+template<typename Number, typename Representation, typename ...Rargs>
+std::pair<bool,State<Number,Representation,Rargs...>> State<Number,Representation,Rargs...>::satisfiesHalfspaces(const matrix_t<Number>& constraints, const vector_t<Number>& constants) const {
+	return partiallySatisfies(Condition<Number>(constraints,constants), 0);
 }
 
 template<typename Number, typename Representation, typename ...Rargs>
@@ -102,6 +111,8 @@ std::pair<bool,State<Number,Representation,Rargs...>> State<Number,Representatio
 
 	auto resultPair = boost::apply_visitor(genericSatisfiesHalfspacesVisitor<repVariant, Number>(in.getMatrix(), in.getVector()), mSets.at(I));
 	res.setSetDirect(resultPair.second, I);
+
+	TRACE("hypro.datastructures","Result empty: " << resultPair.first);
 
 	return std::make_pair(resultPair.first, res);
 }
@@ -154,6 +165,16 @@ State<Number,Representation,Rargs...> State<Number,Representation,Rargs...>::app
 		res.setSetDirect(boost::apply_visitor(genericAffineTransformationVisitor<repVariant, Number>(trafo.matrix(), trafo.vector()), mSets.at(i)), i);
 	}
 	return res;
+}
+
+template<typename Number, typename Representation, typename ...Rargs>
+State<Number,Representation,Rargs...> State<Number,Representation,Rargs...>::linearTransformation(const matrix_t<Number>& matrix) const {
+	return partiallyApplyTransformation(ConstraintSet<Number>(matrix, vector_t<Number>::Zero(matrix.rows())), 0);
+}
+
+template<typename Number, typename Representation, typename ...Rargs>
+State<Number,Representation,Rargs...> State<Number,Representation,Rargs...>::affineTransformation(const matrix_t<Number>& matrix, const vector_t<Number>& vector) const {
+	return partiallyApplyTransformation(ConstraintSet<Number>(matrix, vector), 0);
 }
 
 
@@ -277,7 +298,7 @@ bool State<Number,Representation,Rargs...>::checkConsistency() const {
 template<typename Number, typename Representation, typename ...Rargs>
 void State<Number,Representation,Rargs...>::setSetsSave(const std::vector<boost::variant<Representation,Rargs...>>& sets){
 	assert(checkConsistency());
-	std::cout << "mSets.size(): " << mSets.size() << " mTypes.size(): " << mTypes.size() << " sets.size(): " << sets.size() << std::endl; 
+	std::cout << "mSets.size(): " << mSets.size() << " mTypes.size(): " << mTypes.size() << " sets.size(): " << sets.size() << std::endl;
 	for(std::size_t i=0; i < sets.size(); i++){
 		setSetType(boost::apply_visitor(genericTypeVisitor(), sets.at(i)), i);
 	}

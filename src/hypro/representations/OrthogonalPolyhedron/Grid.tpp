@@ -590,11 +590,11 @@ std::pair<Point<std::size_t>, bool> Grid<Number>::calculateInduced( const Point<
 		// insert the index of the element one before the element found above
 		if ( inducedGridPoints[pos] <= point.at( dim ) ) {  // here the points coordinate is either equal or we reached
 															// the last element and it is larger
-			coordinates[dim] = pos;
+			coordinates[Eigen::Index(dim)] = pos;
 		} else {
 			// std::cout << "dim: " <<  dim << ", " << inducedGridPoints[pos] << " > "
 			// <<  point.at(dim) << std::endl;
-			coordinates[dim] = pos - 1;
+			coordinates[Eigen::Index(dim)] = pos - 1;
 			precise = false;
 		}
 	}

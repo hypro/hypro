@@ -15,33 +15,32 @@ namespace hypro {
 	antlrcpp::Any HyproHAVisitor<Number>::visitStart(HybridAutomatonParser::StartContext *ctx){
 		std::cout << "-- Bin bei visitStart!" << std::endl;
 
-		//1.Calls visit(ctx->vardeclaration()) to get vars vector 
-		vars = visit(ctx->vardeclaration()).antlrcpp::Any::as<std::vector<std::string>>();
+		//1.Calls visit(ctx->vardeclaration()) to get vars vector
+		vars = visit(ctx->vardeclaration()).template as<std::vector<std::string>>();
 		std::cout << "---- vars is now: " << vars << std::endl;
 		std::vector<std::string>& varVec = vars;
 
 		//2.Calls visit(ctx->setting()) to get reachability settings
-		//.antlrcpp::Any::as<ReachabilitySettings<Number>>();
 		HyproSettingVisitor<Number> settingVisitor = HyproSettingVisitor<Number>(varVec);
 		reachSettings = settingVisitor.visit(ctx->setting());
 		std::cout << "---- reachSettings is now: " << reachSettings << std::endl;
 
-		//3.Calls visit(ctx->modes()) to get locSet 
+		//3.Calls visit(ctx->modes()) to get locSet
 		HyproLocationVisitor<Number> locVisitor = HyproLocationVisitor<Number>(varVec);
-		std::set<Location<Number>*> locSet = locVisitor.visit(ctx->modes()).antlrcpp::Any::as<std::set<Location<Number>*>>();
+		std::set<Location<Number>*> locSet = locVisitor.visit(ctx->modes()).template as<std::set<Location<Number>*>>();
 		std::cout << "-- locVisitor visited!" << std::endl;
 		std::set<Location<Number>*>& rLocSet = locSet;
-		//std::cout << "---- locSet is now: " << locSet << std::endl;		
+		//std::cout << "---- locSet is now: " << locSet << std::endl;
 
 		//4.Later calls visit to get transitions
 		//NOTE: the transVisitor will modify locSet as every location has its own set of transitions that must be added here.
 		HyproTransitionVisitor<Number> transVisitor = HyproTransitionVisitor<Number>(varVec, rLocSet);
-		std::set<Transition<Number>*> transSet = transVisitor.visit(ctx->jumps()).antlrcpp::Any::as<std::set<Transition<Number>*>>();
+		std::set<Transition<Number>*> transSet = transVisitor.visit(ctx->jumps()).template as<std::set<Transition<Number>*>>();
 		std::cout << "-- transVisitor visited!" << std::endl;
 
 		//5.Later calls visit to get initial states
 		HyproInitialSetVisitor<Number> initVisitor = HyproInitialSetVisitor<Number>(varVec, rLocSet);
-		locationStateMap initSet = initVisitor.visit(ctx->init()).antlrcpp::Any::as<locationStateMap>();
+		locationStateMap initSet = initVisitor.visit(ctx->init()).template as<locationStateMap>();
 		std::cout << "-- initVisitor visited!" << std::endl;
 
 		//6.Build HybridAutomaton, return it

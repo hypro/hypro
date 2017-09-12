@@ -91,10 +91,10 @@ namespace reachability {
 	flowpipe_t<Number> Reach<Number>::computeForwardTimeClosure( const State_t<Number>& _state ) {
 		assert(!_state.getTimestamp().isUnbounded());
 #ifdef REACH_DEBUG
-		std::cout << "Location: " << _state.getLocation()->getId() << std::endl;
-		std::cout << "Location printed : " << *_state.getLocation() << std::endl;
-		std::cout << "Time step size: " << mSettings.timeStep << std::endl;
-		std::cout << "Initial valuation: " << std::endl;
+		INFO("hypro.reacher", "Location: " << _state.getLocation()->getId());
+		INFO("hypro.reacher", "Location printed : " << *_state.getLocation());
+		INFO("hypro.reacher", "Time step size: " << mSettings.timeStep);
+		INFO("hypro.reacher", "Initial valuation: ");
 		//std::cout << boost::get<State_t<Number>>(_state) << std::endl;
 		std::cout << _state << std::endl;
 #endif
@@ -104,8 +104,7 @@ namespace reachability {
 
 		boost::tuple<bool, State_t<Number>, matrix_t<Number>, vector_t<Number>> initialSetup = computeFirstSegment(_state);
 #ifdef REACH_DEBUG
-		std::cout << "Valuation fulfills Invariant?: ";
-		std::cout << boost::get<0>(initialSetup) << std::endl;
+		INFO("hypro.reacher", "Valuation fulfills Invariant?: " << boost::get<0>(initialSetup));
 #endif
 		if ( boost::get<0>(initialSetup) ) {
 			assert(!boost::get<1>(initialSetup).getTimestamp().isUnbounded());
@@ -117,7 +116,7 @@ namespace reachability {
 				noFlow = true;
 				// Collect potential new initial states from discrete behaviour.
 				if(int(mCurrentLevel) <= mSettings.jumpDepth || mSettings.jumpDepth < 0) {
-					std::cout << "-- Checking Transitions from initial!" << std::endl;
+					INFO("hypro.reacher", "-- Checking Transitions from initial!");
 					checkTransitions(_state, carl::Interval<Number>(Number(0),mSettings.timeBound), nextInitialSets);
 				}
 			}
@@ -156,7 +155,7 @@ namespace reachability {
 #endif
 #ifdef REACH_DEBUG
 			if(!noFlow){
-				std::cout << "--- Loop entered ---" << std::endl;
+				INFO("hypro.reacher", "--- Loop entered ---");
 			}
 #endif
 
@@ -201,10 +200,10 @@ namespace reachability {
 #endif
 				// extend flowpipe (only if still within Invariant of location)
 				std::pair<bool, State_t<Number>> newSegment = nextSegment.satisfies( _state.getLocation()->getInvariant());
+
 #ifdef REACH_DEBUG
-				std::cout << "Next Flowpipe Segment: " << newSegment.second << std::endl;
-				std::cout << "still within Invariant?: ";
-				std::cout << newSegment.first << std::endl;
+				INFO("hypro.reacher", "Next Flowpipe Segment: " << newSegment.second);
+				INFO("hypro.reacher", "still within Invariant?: " << newSegment.first);
 #endif
 				if ( newSegment.first ) {
 					flowpipe.push_back( newSegment.second );
@@ -225,16 +224,15 @@ namespace reachability {
 			}
 #ifdef REACH_DEBUG
 			if(!noFlow){
-				std::cout << "--- Loop left ---" << std::endl;
+				INFO("hypro.reacher", "--- Loop left ---");
 			}
-			std::cout << "flowpipe: " << flowpipe.size() << " Segments computed." << std::endl;
-			std::cout << "Process " << nextInitialSets.size() << " new initial sets." << std::endl;
-			std::cout << "current level: " << mCurrentLevel << std::endl;
+			INFO("hypro.reacher", "flowpipe: " << flowpipe.size() << " Segments computed.");
+			INFO("hypro.reacher", "Process " << nextInitialSets.size() << " new initial sets.");
+			INFO("hypro.reacher", "current level: " << mCurrentLevel);
 #endif
 			// The loop terminated correctly (i.e. no bad states were hit), process discrete behavior.
 			assert(nextInitialSets.empty() || (int(mCurrentLevel) < mSettings.jumpDepth || mSettings.jumpDepth < 0));
 			if(int(mCurrentLevel) < mSettings.jumpDepth || mSettings.jumpDepth < 0){
-				std::cout << "Entered processDiscreteBehaviour!" << std::endl;
 				processDiscreteBehaviour(nextInitialSets);
 			}
 			return flowpipe;

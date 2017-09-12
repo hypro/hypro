@@ -255,9 +255,9 @@ class genericTypeVisitor
 {
 public:
 	template<typename A>
-	inline representation_name operator()(const A& shape) const {
+	inline representation_name operator()(const A&) const {
 		return A::type();
 	}
-};	
+};
 
 } // namespace
