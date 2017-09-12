@@ -337,6 +337,7 @@ class SupportFunctionContent {
 	}
 
 	bool checkTreeValidity() const {
+		#ifndef NDEBUG
 		using Node = std::shared_ptr<SupportFunctionContent<Number>>;
 		using Res = bool;
 		std::vector<Node> callStack;
@@ -479,82 +480,12 @@ class SupportFunctionContent {
 			}
 		}
 
-		/*
-		assert(!pThis.expired());
-		assert(this == pThis.lock().get());
-		switch ( mType ) {
-			case SF_TYPE::TWO_BALL:
-			case SF_TYPE::INFTY_BALL:
-			case SF_TYPE::POLY:
-			case SF_TYPE::ELLIPSOID:
-			case SF_TYPE::BOX:
-			case SF_TYPE::ZONOTOPE:
-				//std::cout << __func__ << ": Reached bottom, return true." << std::endl;
-				return true;
-			case SF_TYPE::LINTRAFO: {
-				assert( linearTrafoParameters()->origin != nullptr);
-				assert( linearTrafoParameters()->origin->type() != SF_TYPE::NONE );
-				assert( linearTrafoParameters()->origin->checkTreeValidity());
-				//return mLinearTrafoParameters->origin->checkTreeValidity();
-				return true;
-			}
-			case SF_TYPE::SCALE: {
-				//assert(scaleParameters()->origin->checkTreeValidity());
-				assert(scaleParameters()->origin != nullptr);
-				assert(scaleParameters()->origin->type() != SF_TYPE::NONE );
-				return scaleParameters()->origin->checkTreeValidity();
-				//return true;
-			}
-			case SF_TYPE::PROJECTION: {
-				//assert(projectionParameters()->origin->checkTreeValidity());
-				assert(projectionParameters()->origin != nullptr);
-				assert(projectionParameters()->origin->type() != SF_TYPE::NONE);
-				return projectionParameters()->origin->checkTreeValidity();
-				//return true;
-			}
-			case SF_TYPE::SUM: {
-				//assert(summands()->lhs->checkTreeValidity());
-				//assert(summands()->rhs->checkTreeValidity());
-				assert(summands()->lhs != nullptr);
-				assert(summands()->rhs != nullptr);
-				assert(summands()->lhs->type() != SF_TYPE::NONE);
-				assert(summands()->rhs->type() != SF_TYPE::NONE);
-				return summands()->lhs->checkTreeValidity() && summands()->rhs->checkTreeValidity();
-				//return true;
-			}
-			case SF_TYPE::UNITE: {
-				assert(!unionParameters()->items.empty());
-				for(const auto& item : unionParameters()->items) {
-					//assert(item->checkTreeValidity());
-
-					if(!item->checkTreeValidity()){
-						std::cerr << __func__ << ": One UNION Content was not valid!" << std::endl << std::flush;
-						assert(false);
-						return false;
-					}
-				}
-				return true;
-			}
-			case SF_TYPE::INTERSECT: {
-				//assert(mIntersectionParameters->lhs->checkTreeValidity());
-				//assert(mIntersectionParameters->rhs->checkTreeValidity());
-				assert(intersectionParameters()->lhs != nullptr);
-				assert(intersectionParameters()->rhs != nullptr);
-				assert(intersectionParameters()->lhs->type() != SF_TYPE::NONE);
-				assert(intersectionParameters()->rhs->type() != SF_TYPE::NONE);
-				return intersectionParameters()->lhs->checkTreeValidity() && intersectionParameters()->rhs->checkTreeValidity();
-				return true;
-			}
-			default:
-				std::cerr << __func__ << ": Default case, SHOULD NOT HAPPEN!" << std::endl << std::flush;
-				assert(false);
-				return false;
-		}
-		*/
-
 		assert(false);
 		std::cout << "THIS SHOULD NOT HAPPEN." << std::endl;
 		return false;
+		#endif
+		// in case this function is not put into an assertion, always return true in productive code.
+		return true;
 	}
 
 	private:
