@@ -267,7 +267,7 @@ template <typename Number>
 std::vector<EvaluationResult<Number>> PolytopeSupportFunction<Number>::multiEvaluate( const matrix_t<Number> &_A, bool useExact, bool ) const {
 	assert( std::size_t(_A.cols()) == mDimension );
 	std::vector<EvaluationResult<Number>> res;
-	//std::cout << "POLY SF, evaluate in directions " << convert<Number,double>(_A) << std::endl << "POLY SF IS " << *this << std::endl;
+	TRACE("hypro.representations.supportFunction", "Evaluate in directions " << matrix_t<double>(convert<Number,double>(_A)) << std::endl << "POLY SF IS " << *this);
 
 	// catch half-space
 	if(mConstraints.rows() == 1) {

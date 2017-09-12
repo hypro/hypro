@@ -388,7 +388,7 @@ TYPED_TEST(SupportFunctionTest, intersectHalfspaces) {
 	offset << 2;
 
 	vector_t<TypeParam> normalVector = vector_t<TypeParam>::Zero(2);
-	normal << 1,1;
+	normalVector << 1,1;
 
 	SupportFunction<TypeParam> fullyContained = psf1.intersectHalfspaces(normal, offset);
 	SupportFunction<TypeParam> fullyContained2 = psf1.intersectHalfspace(Halfspace<TypeParam>(normalVector, 2));
