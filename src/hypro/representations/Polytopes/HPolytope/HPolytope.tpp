@@ -72,8 +72,6 @@ HPolytopeT<Number, Converter>::HPolytopeT( const std::vector<Point<Number>>& poi
 	}
 	*/
 
-	std::cout << "STARTING CONVERTION OF LOWERED DIMENSION HPOLY" << std::endl;
-
 	// special case: 1 point - we can directly use box constraints.
 	if(points.size() == 1) {
 		assert( (*points.begin()).dimension() > 0 );
@@ -112,21 +110,19 @@ HPolytopeT<Number, Converter>::HPolytopeT( const std::vector<Point<Number>>& poi
 		mEmpty = TRIBOOL::FALSE;
 		//if ( points.size() <= mDimension ) {
 		if ( unsigned(effectiveDim) < mDimension ) {
-			std::cout << "Points size: " << points.size() << std::endl;
-			std::cout << "effectiveDim: " << effectiveDim << std::endl;
+			//std::cout << "Points size: " << points.size() << std::endl;
+			//std::cout << "effectiveDim: " << effectiveDim << std::endl;
 			// get common plane
 			std::vector<vector_t<Number>> vectorsInPlane;
-			std::cout << "first point: " << *points.begin() << std::endl;
+			//std::cout << "first point: " << *points.begin() << std::endl;
 			for(unsigned i = 1; i < points.size(); ++i) {
 				vectorsInPlane.emplace_back(points[i].rawCoordinates() - points[0].rawCoordinates());
 			}
 			vector_t<Number> planeNormal = Halfspace<Number>::computePlaneNormal(vectorsInPlane);
 			Number planeOffset = Halfspace<Number>::computePlaneOffset(planeNormal, points[0]);
 
-			std::cout << "done with first part!" << std::endl;
-
 			// project on lower dimension.
-			// TODO: Use dimensions with largest coordinate range for improved stability.
+			// Use dimensions with largest coordinate range for improved stability.
 			// So to say: Drop dimensions with minimal coordinate range
 			Point<Number> maxP = points[0];
 			Point<Number> minP = points[0];
@@ -167,30 +163,25 @@ HPolytopeT<Number, Converter>::HPolytopeT( const std::vector<Point<Number>>& poi
 				}
 			}
 			*/
-			std::cout << "done with second part!" << std::endl;
-
 			std::vector<Point<Number>> projectedPoints;
 			for(const auto& point : points){
 				projectedPoints.emplace_back(point.project(projectionDimensions));
 			}
-
-			std::cout << "done with third part!" << std::endl;
+			/*
 			std::cout << "Projected points are:\n";
 			for(auto& point : projectedPoints){
 				std::cout << point << std::endl;
 			}
-
+			*/
 			HPolytopeT<Number,Converter> projectedPoly(projectedPoints);
-			std::cout << "Projected polytope: " << projectedPoly << std::endl;
+			//std::cout << "Projected polytope: " << projectedPoly << std::endl;
 			projectedPoly.insertEmptyDimensions(projectionDimensions,droppedDimensions);
-			std::cout << "After inserting empty dimensions: " << projectedPoly << std::endl;
-			std::cout << "Poly dimension: " << projectedPoly.dimension() << " and plane dimension : " << planeNormal.rows() << std::endl;
+			//std::cout << "After inserting empty dimensions: " << projectedPoly << std::endl;
+			//std::cout << "Poly dimension: " << projectedPoly.dimension() << " and plane dimension : " << planeNormal.rows() << std::endl;
 			projectedPoly.insert(Halfspace<Number>(planeNormal,planeOffset));
 			projectedPoly.insert(Halfspace<Number>(-planeNormal,-planeOffset));
 
 			*this = projectedPoly;
-
-			std::cout << "done with projection!" << std::endl;
 
 			//PrincipalComponentAnalysis<Number> pca(points);
 			//std::vector<Halfspace<Number>> boxConstraints = pca.box();
@@ -233,7 +224,7 @@ HPolytopeT<Number, Converter>::~HPolytopeT() {
 
 template <typename Number, typename Converter>
 bool HPolytopeT<Number, Converter>::empty() const {
-	TRACE("hypro.hPolytope",__func__);
+	//TRACE("hypro.hPolytope",__func__);
 	if(mEmpty == TRIBOOL::TRUE){
 		TRACE("hypro.hPolytope","Already set to true.");
 		return true;
@@ -787,7 +778,9 @@ HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::intersectHalfspaces
 	for ( unsigned i = 0; i < _mat.rows(); ++i ) {
 		res.insert( Halfspace<Number>( _mat.row(i), _vec( i ) ) );
 	}
-	res.removeRedundancy();
+	std::cout << "hpoly before removeRedundancy:\n" << res << std::endl;
+	//res.removeRedundancy();
+	std::cout << "hpoly after removeRedundancy:\n" << res << std::endl;
 	return res;
 }
 

@@ -41,7 +41,7 @@ namespace reachability {
 	void Reach<Number>::processDiscreteBehaviour( const std::vector<boost::tuple<Transition<Number>*, State_t<Number>>>& _newInitialSets ) {
 		std::map<Transition<Number>*, std::vector<State_t<Number>>> toAggregate;
 
-		std::cout << "I am in processDiscreteBehaviour!" << std::endl;
+		//std::cout << "I am in processDiscreteBehaviour!" << std::endl;
 
 		for(const auto& tuple : _newInitialSets ) {
 			if(boost::get<0>(tuple)->getAggregation() == Aggregation::none){
@@ -105,7 +105,7 @@ namespace reachability {
 			#endif
 
 			//TODO: Maybe use smth else or use setSetsSave in all functions
-			s.setSetsSave(collectedSets.getSets());
+			//s.setSetsSave(collectedSets.getSets());
 
 			//unsigned colSetIndex = Plotter<Number>::getInstance().addObject(collectedSets.vertices());
 			//Plotter<Number>::getInstance().setObjectColor(colSetIndex, plotting::colors[plotting::red]);
@@ -122,13 +122,15 @@ namespace reachability {
 			//for(const auto& vertex : tmp.vertices()) {
 			//	std::cout << convert<Number,double>(vertex) << std::endl;
 			//}
+			std::cout << "State after reset: " << tmp << std::endl;
+
 			std::pair<bool, State_t<Number>> invariantSatisfyingSet = tmp.satisfies(aggregationPair.first->getTarget()->getInvariant());
 			if(invariantSatisfyingSet.first){
 				//unsigned tmp = Plotter<Number>::getInstance().addObject(invariantSatisfyingSet.second.vertices());
 				//Plotter<Number>::getInstance().setObjectColor(tmp, colors[orange]);
 				//s.setSets(invariantSatisfyingSet.second.getSets());
 				s.setSetsSave(invariantSatisfyingSet.second.getSets());
-				//std::cout << "Transformed, collected set (intersected with invariant): " << invariantSatisfyingSet.second << std::endl;
+				std::cout << "Transformed, collected set (intersected with invariant): " << invariantSatisfyingSet.second << std::endl;
 			} else {
 				continue;
 			}

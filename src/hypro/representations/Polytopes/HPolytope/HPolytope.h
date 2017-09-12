@@ -19,7 +19,7 @@
 #include <algorithm>
 #include <cassert>
 
-#define REDUCE_NUMBERS
+//#define REDUCE_NUMBERS
 #define AVOID_CONVERSION
 //#define HPOLY_DEBUG_MSG
 
@@ -362,8 +362,8 @@ public:
 			#ifdef HPOLY_DEBUG_MSG
 			std::cout << "After Reduction: " << *this << std::endl;
 			#endif
-			#endif
 		}
+		#endif
 	}
 
 	template<typename N = Number, carl::EnableIf< std::is_same<N, double> > = carl::dummy>
