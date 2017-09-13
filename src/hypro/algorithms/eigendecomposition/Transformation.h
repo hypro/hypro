@@ -2,12 +2,12 @@
   * @file Transformation.h
   */
 #pragma once
-#include "algorithms/reachability/Settings.h"
-#include "datastructures/hybridAutomata/HybridAutomaton.h"
-#include "datastructures/hybridAutomata/Location.h"
-#include "datastructures/hybridAutomata/LocationManager.h"
-#include "datastructures/hybridAutomata/RawState.h"
-#include "datastructures/hybridAutomata/Transition.h"
+#include "../../datastructures/HybridAutomaton/Settings.h"
+#include "../../datastructures/HybridAutomaton/HybridAutomaton.h"
+//#include "../../datastructures/HybridAutomaton/Location.h"
+//#include "../../datastructures/HybridAutomaton/LocationManager.h"
+//#include "../../representations/ConstraintSet/ConstraintSet.h"
+//#include "../../datastructures/HybridAutomaton/Transition.h"
 #include <Eigen/Eigenvalues>
 #include <Eigen/Dense>
 /**
@@ -69,7 +69,7 @@ class Transformation {
   public:
   	using locationSet = std::set<Location<Number>*>;
 	using transitionSet = std::set<Transition<Number>*>;
-	using locationStateMap = std::multimap<Location<Number>*, RawState<Number>, locPtrComp<Number>>;
+	//using locationStateMap = std::multimap<Location<Number>*, RawState<Number>, locPtrComp<Number>>;
 	using setVector = std::vector<std::pair<matrix_t<Number>, vector_t<Number>>>;
     
   private:

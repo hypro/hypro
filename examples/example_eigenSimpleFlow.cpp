@@ -1,7 +1,7 @@
 /**
  * Sandbox for the Eigendecomposition project.
  */
-#include "datastructures/hybridAutomata/HybridAutomaton.h"
+#include "datastructures/HybridAutomaton/HybridAutomaton.h"
 //#include "datastructures/hybridAutomata/LocationManager.h"
 #include "parser/flowstar/ParserWrapper.h"
 #include "algorithms/eigendecomposition/Transformation.h"
@@ -90,7 +90,8 @@ int main()
 {
     //use hybrid automaton from file
     const std::string& filename = "../../examples/input/bouncing_ball_inhomogen.model";
-	boost::tuple<HybridAutomaton<Number>, reachability::ReachabilitySettings<Number>> ha = parseFlowstarFile<Number>(filename);
+	//boost::tuple<HybridAutomaton<Number>, reachability::ReachabilitySettings<Number>> ha = parseFlowstarFile<Number>(filename);
+	boost::tuple<HybridAutomaton<Number>, ReachabilitySettings<Number>> ha = parseFlowstarFile<Number>(filename);
     //std::cout << boost::get<0>(ha);
     //hypro::HybridAutomaton<Number> ha_transformed =  HybridAutomaton<Number>( boost::get<0>(ha) );
     //std::cout << ha_transformed;

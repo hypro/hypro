@@ -14,8 +14,8 @@ Transformation<Number>::Transformation (const HybridAutomaton<Number>& _hybrid) 
     locationSet locations;
     //std::cout<<"size mSTallValues: "<< sizeof(mSTallValues);
     mTransformedHA = HybridAutomaton<Number>();
-    for ( Location<Number>* LocPtr : _hybrid.locations() ) {
-        matrix_in_parser = LocPtr->flow();   //matrix was pased as reference
+    for ( Location<Number>* const &LocPtr : _hybrid.getLocations() ) {
+        matrix_in_parser = LocPtr->getFlow();   //copy matrix here to calculate
         m_size = matrix_in_parser.cols(); //rows
         //ASSERTION SIZE >= 1 --> delete new locations/skip?
         //are old Matrices freed automatically on new initialization?
