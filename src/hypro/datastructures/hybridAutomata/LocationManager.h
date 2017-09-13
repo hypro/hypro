@@ -3,7 +3,7 @@
  */
 
 #pragma once
-
+#include "../../util/logging/Logger.h"
 #include "Location.h"
 #include <carl/util/Singleton.h>
 
