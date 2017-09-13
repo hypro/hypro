@@ -31,10 +31,10 @@
 
 #include "config.h"
 #include "common.h"
-#include "algorithms/reachability/Settings.h"
-#include "datastructures/hybridAutomata/RawState.h"
-#include "datastructures/hybridAutomata/LocationManager.h"
-#include "datastructures/hybridAutomata/HybridAutomaton.h"
+#include "datastructures/HybridAutomaton/Settings.h"
+#include "datastructures/HybridAutomaton/State.h"
+#include "datastructures/HybridAutomaton/LocationManager.h"
+#include "datastructures/HybridAutomaton/HybridAutomaton.h"
 #include "util/logging/Logger.h"
 #include "util/VariablePool.h"
 #include "symbols.h"
@@ -61,12 +61,12 @@ struct flowstarParser : qi::grammar<Iterator, Skipper>
 	symbol_table mModes;
 	VariablePool& mVariablePool = VariablePool::getInstance();
 	std::set<Transition<Number>*> mTransitions;
-	std::vector<RawState<Number>> mInitialStates;
-	std::vector<RawState<Number>> mLocalBadStates;
+	std::vector<State<Number,ConstraintSet<Number>>> mInitialStates;
+	std::vector<State<Number,ConstraintSet<Number>>> mLocalBadStates;
 	std::vector<unsigned> mModeIds;
 	std::vector<unsigned> mVariableIds;
 	std::vector<unsigned> mDiscreteVariableIds;
-	hypro::reachability::ReachabilitySettings<Number> mSettings;
+	hypro::ReachabilitySettings<Number> mSettings;
 	unsigned mDimensionLimit;
 	unsigned mDiscreteDimensionLimit;
 
@@ -90,143 +90,145 @@ struct flowstarParser : qi::grammar<Iterator, Skipper>
 	void insertContinuousSymbols(const std::vector<std::string>& _in) {
 		for(const auto& varName : _in ) {
 			carl::Variable tmp = mVariablePool.newCarlVariable(varName);
-			//std::cout << "Mapped var " << varName << " to dimension " << mVariablePool.id(tmp) << std::endl;
+			TRACE("hypro.parser","Mapped var " << varName << " to dimension " << mVariablePool.id(tmp));
 			mVariableSymbolTable.add(varName, mVariablePool.id(tmp));
 			mVariableIds.push_back(mVariablePool.id(tmp));
 			++mDimensionLimit;
 			++mDiscreteDimensionLimit;
-			//std::cout << "New continuous dimension: " << mDimensionLimit << std::endl;
+			TRACE("hypro.parser","New continuous dimension: " << mDimensionLimit);
 		}
 	}
 
 	void insertDiscreteSymbols(const std::vector<std::string>& _in) {
 		for(const auto& varName : _in ) {
 			carl::Variable tmp = mVariablePool.newCarlVariable(varName);
-			//std::cout << "Mapped var " << varName << " to dimension " << mVariablePool.id(tmp) << std::endl;
+			TRACE("hypro.parser","Mapped var " << varName << " to dimension " << mVariablePool.id(tmp));
 			mDiscreteVariableSymbolTable.add(varName, mVariablePool.id(tmp));
 			mDiscreteVariableIds.push_back(mVariablePool.id(tmp));
 			++mDiscreteDimensionLimit;
-			//std::cout << "New discrete dimension: " << mDiscreteDimensionLimit << std::endl;
+			TRACE("hypro.parser","New discrete dimension: " << mDiscreteDimensionLimit);
 		}
 	}
 
-	void addContinuousState(const std::vector<matrix_t<Number>>& _constraint, unsigned id, std::vector<RawState<Number>>& _states) {
+	void addContinuousState(const std::vector<matrix_t<Number>>& _constraint, unsigned id, std::vector<State<Number,ConstraintSet<Number>>>& _states) {
+		TRACE("hypro.parser","Add new continuous state.");
 		if(_constraint.size() > 0) {
-			//std::cout << "Add continuous state for location " << id << std::endl;
+			TRACE("hypro.parser","Add continuous state for location " << id);
 			bool found = false;
 			// due to the creation of initial states, which uses this function as well and the occurrence of duplicates in the initial states, we need the last instance of a matching state.
 			for(auto stateIt = _states.rbegin(); stateIt != _states.rend(); ++stateIt) {
-				if(stateIt->location->id() == id){
-					//std::cout << "stateIt->already exists." << std::endl;
+				if(stateIt->getLocation()->getId() == id){
+					TRACE("hypro.parser","stateIt->already exists.");
 					found = true;
-					assert(stateIt->discreteAssignment.size() == mDiscreteVariableIds.size());
-					unsigned constraintsNum = stateIt->set.first.rows();
-					unsigned dimension = constraintsNum > 0 ? stateIt->set.first.cols() : (_constraint.begin()->cols())-1;
-					//std::cout << "current constraints: " << boost::get<cPair<Number>>(stateIt->set).first << std::endl;
-					cPair<Number> set = stateIt->set;
-					//std::cout << "Resize to " << constraintsNum+_constraint.size() << " x " << dimension << std::endl;
-					set.first.conservativeResize(constraintsNum+_constraint.size(), dimension);
-					set.second.conservativeResize(constraintsNum+_constraint.size());
-					//std::cout << "State already existing with " << constraintsNum << " rows." << std::endl;
+					unsigned constraintsNum = 0;
+					if(stateIt->getNumberSets() > 0) {
+						constraintsNum = unsigned(boost::get<ConstraintSet<Number>>(stateIt->getSet()).matrix().rows());
+						TRACE("hypro.parser","current constraints: " << boost::get<ConstraintSet<Number>>(stateIt->getSet()).matrix());
+					}
+					unsigned dimension = constraintsNum > 0 ? unsigned(boost::get<ConstraintSet<Number>>(stateIt->getSet()).matrix().cols()) : unsigned((_constraint.begin()->cols())-1);
+					ConstraintSet<Number> set = constraintsNum > 0 ? boost::get<ConstraintSet<Number>>(stateIt->getSet()) : ConstraintSet<Number>();
+					TRACE("hypro.parser","Resize to " << constraintsNum+_constraint.size() << " x " << dimension);
+					set.rMatrix().conservativeResize(constraintsNum+Eigen::Index(_constraint.size()), dimension);
+					set.rVector().conservativeResize(constraintsNum+Eigen::Index(_constraint.size()));
+					TRACE("hypro.parser","State already existing with " << constraintsNum << " rows.");
 					for(const auto& row : _constraint) {
 						assert(row.rows() == 1);
 						assert(row.cols() > 0);
-						//std::cout << "add row " << constraintsNum;
-						//std::cout << "row properties: " << row.rows() << " , " << row.cols() << std::endl;
-						//std::cout << "set properties: " << set.first.rows() << " , " << set.first.cols() << std::endl;
-						set.first.row(constraintsNum) = row.block(0,0,1,row.cols()-1);
-						//std::cout << " " << convert<Number,double>(set.first.row(constraintsNum)) << " <= ";
-						set.second(constraintsNum) = -row(0,row.cols()-1);
-						//std::cout << set.second(constraintsNum) << std::endl;
+						TRACE("hypro.parser","add row " << constraintsNum);
+						TRACE("hypro.parser","row properties: " << row.rows() << " , " << row.cols());
+						TRACE("hypro.parser","set properties: " << set.matrix().rows() << " , " << set.matrix().cols());
+						set.rMatrix().row(constraintsNum) = row.block(0,0,1,row.cols()-1);
+						//TRACE("hypro.parser"," " << set.matrix().row(constraintsNum) << " <= " );
+						set.rVector()(constraintsNum) = -row(0,row.cols()-1);
+						//TRACE("hypro.parser",set.vector()(constraintsNum));
 						++constraintsNum;
 					}
-					stateIt->set = set;
-					//std::cout << "New constraints: " << boost::get<cPair<Number>>(stateIt->set).first << std::endl;
+					stateIt->setSet(set);
+					TRACE("hypro.parser","New constraints: " << boost::get<ConstraintSet<Number>>(stateIt->getSet()).matrix());
 					break;
 				}
 			}
 			if(!found){
-				RawState<Number> s(mLocationManager.location(id));
-				std::pair<matrix_t<Number>, vector_t<Number>> set;
-				set.first = matrix_t<Number>(_constraint.size(), _constraint.begin()->cols()-1);
-				set.second = vector_t<Number>(_constraint.size());
+				State<Number,ConstraintSet<Number>> s(mLocationManager.location(id));
+				ConstraintSet<Number> set(matrix_t<Number>(_constraint.size(), _constraint.begin()->cols()-1), vector_t<Number>(_constraint.size()));
 				unsigned constraintsNum = 0;
-				//std::cout << "State newly created with " << _constraint.size() << " rows." << std::endl;
+				TRACE("hypro.parser","State newly created with " << _constraint.size() << " rows.");
 				for(const auto& row : _constraint) {
 					assert(row.rows() == 1);
-					//std::cout << "add row " << constraintsNum;
-					set.first.row(constraintsNum) = row.block(0,0,1,row.cols()-1);
-					//std::cout << " " << set.first.row(constraintsNum) << " <= ";
-					set.second(constraintsNum) = -row(0,row.cols()-1);
-					//std::cout << set.second(constraintsNum) << std::endl;
+					TRACE("hypro.parser","add row " << constraintsNum);
+					set.rMatrix().row(constraintsNum) = row.block(0,0,1,row.cols()-1);
+					//TRACE("hypro.parser"," " << set.matrix().row(constraintsNum) << " <= ");
+					set.rVector()(constraintsNum) = -row(0,row.cols()-1);
+					//TRACE("hypro.parser",set.vector()(constraintsNum));
 					++constraintsNum;
 				}
-				s.set = set;
-				// initial setup of the discrete assignment
-				for(const auto& id : mDiscreteVariableIds ){
-					s.discreteAssignment[VariablePool::getInstance().carlVarByIndex(id)] = carl::Interval<Number>::unboundedInterval();
-				}
+				s.setSet(set);
 				_states.emplace_back(s);
 			}
 		}
 	}
 
-	void addDiscreteState(const std::pair<unsigned, carl::Interval<Number>>& _initPair, unsigned id, std::vector<RawState<Number>>& _states) {
-		//std::cout << "Add discrete state for location " << id << std::endl;
+	void addDiscreteState(const std::pair<unsigned, carl::Interval<Number>>& _initPair, unsigned id, std::vector<State<Number,ConstraintSet<Number>>>& _states) {
+		TRACE("hypro.parser","Add discrete state for location " << id);
 		bool found = false;
 		// due to the creation of initial states, which uses this function as well and the occurrence of duplicates in the initial states, we need the last instance of a matching state.
 		for(auto stateIt = _states.rbegin(); stateIt != _states.rend(); ++stateIt) {
-			assert(stateIt->discreteAssignment.size() == mDiscreteVariableIds.size());
-			if(stateIt->location == mLocationManager.location(id)){
+			if(stateIt->getLocation() == mLocationManager.location(id)){
 				found = true;
-				stateIt->discreteAssignment[VariablePool::getInstance().carlVarByIndex(_initPair.first)] = _initPair.second;
+				vector_t<Number> lowerNormal = vector_t<Number>::Zero(Eigen::Index(mDiscreteVariableIds.size()));
+				vector_t<Number> upperNormal = vector_t<Number>::Zero(Eigen::Index(mDiscreteVariableIds.size()));
+				lowerNormal(_initPair.first) = -1;
+				upperNormal(_initPair.first) = 1;
+
+				ConstraintSet<Number> currentAssignment = boost::get<ConstraintSet<Number>>(stateIt->getSet(1));
+				currentAssignment.addConstraint(lowerNormal,-_initPair.second.lower());
+				currentAssignment.addConstraint(upperNormal,_initPair.second.upper());
+				//stateIt->discreteAssignment[VariablePool::getInstance().carlVarByIndex(_initPair.first)] = _initPair.second;
+				stateIt->setSet(currentAssignment,1);
 			}
-			assert(stateIt->discreteAssignment.size() == mDiscreteVariableIds.size());
 			break;
 		}
 		if(!found){
-			RawState<Number> s(mLocationManager.location(id));
-			// initialize all discrete assignments to unbounded, when a new state is created
-			for(const auto& id : mDiscreteVariableIds ){
-				if(id == _initPair.first){
-					s.discreteAssignment[VariablePool::getInstance().carlVarByIndex(_initPair.first)] = _initPair.second;
-				} else {
-					s.discreteAssignment[VariablePool::getInstance().carlVarByIndex(id)] = carl::Interval<Number>::unboundedInterval();
-				}
-			}
-			assert(s.discreteAssignment.size() == mDiscreteVariableIds.size());
+			State<Number,ConstraintSet<Number>> s(mLocationManager.location(id));
+			vector_t<Number> lowerNormal = vector_t<Number>::Zero(Eigen::Index(mDiscreteVariableIds.size()));
+			vector_t<Number> upperNormal = vector_t<Number>::Zero(Eigen::Index(mDiscreteVariableIds.size()));
+			lowerNormal(_initPair.first) = -1;
+			upperNormal(_initPair.first) = 1;
+
+			ConstraintSet<Number> currentAssignment;
+			currentAssignment.addConstraint(lowerNormal,-_initPair.second.lower());
+			currentAssignment.addConstraint(upperNormal,_initPair.second.upper());
+			//stateIt->discreteAssignment[VariablePool::getInstance().carlVarByIndex(_initPair.first)] = _initPair.second;
+			s.setSet(currentAssignment,1);
 			_states.emplace_back(s);
 		}
 	}
 
-	unsigned addInitState(unsigned _id, std::vector<RawState<Number>>& _states) {
-		RawState<Number> s(mLocationManager.location(_id));
-		// initial setup of the discrete assignment
-		for(const auto& id : mDiscreteVariableIds ){
-			s.discreteAssignment[VariablePool::getInstance().carlVarByIndex(id)] = carl::Interval<Number>::unboundedInterval();
-		}
-		assert(s.discreteAssignment.size() == mDiscreteVariableIds.size());
+	unsigned addInitState(unsigned _id, std::vector<State<Number,ConstraintSet<Number>>>& _states) {
+		TRACE("hypro.parser","Add initial state for location " << _id);
+		State<Number,ConstraintSet<Number>> s(mLocationManager.location(_id));
+		s.setTimestamp(carl::Interval<Number>(0));
 		_states.emplace_back(s);
 		return _id;
 	}
 
-	void insertSettings(const hypro::reachability::ReachabilitySettings<Number>& _in) {
+	void insertSettings(const hypro::ReachabilitySettings<Number>& _in) {
 		mSettings = _in;
 	}
 
 	void insertModes(const std::vector<std::pair<std::string, Location<Number>*>>& _in) {
 		for(const auto& modePair : _in) {
-			//std::cout << "Found mode " << modePair.first << " mapped to " << modePair.second->id() << std::endl;
-			//std::cout << "Mode: " << *modePair.second << std::endl;
+			TRACE("hypro.parser","Found mode " << modePair.first << " mapped to " << modePair.second->getId());
+			TRACE("hypro.parser","Mode: " << *modePair.second);
 
 			if(mModes.find(modePair.first) == nullptr) {
-				mModes.add(modePair.first, modePair.second->id());
-				mModeIds.push_back(modePair.second->id());
-				TRACE("hypro.parser","Add new mode " << modePair.first << " mapped to id " << modePair.second->id());
+				mModes.add(modePair.first, modePair.second->getId());
+				mModeIds.push_back(modePair.second->getId());
+				TRACE("hypro.parser","Add new mode " << modePair.first << " mapped to id " << modePair.second->getId());
 			} else {
-				TRACE("hypro.parser","Overwrite mode " << modePair.first << " mapped to id " << mModes.at(modePair.first) << " with mode mapped to id " << modePair.second->id());
+				TRACE("hypro.parser","Overwrite mode " << modePair.first << " mapped to id " << mModes.at(modePair.first) << " with mode mapped to id " << modePair.second->getId());
 				unsigned redundantId = mModes.at(modePair.first);
-				mModes.at(modePair.first) = modePair.second->id();
+				mModes.at(modePair.first) = modePair.second->getId();
 				mLocationManager.erase(redundantId);
 				// update mModeIds
 				auto modeIdIt = mModeIds.begin();
@@ -235,7 +237,7 @@ struct flowstarParser : qi::grammar<Iterator, Skipper>
 				if(modeIdIt != mModeIds.end()) {
 					mModeIds.erase(modeIdIt);
 				}
-				mModeIds.push_back(modePair.second->id());
+				mModeIds.push_back(modePair.second->getId());
 			}
 		}
 	}

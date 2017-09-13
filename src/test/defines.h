@@ -10,6 +10,7 @@
 
 #include "../hypro/config.h"
 #include "util.h"
+#include "gtest/gtest.h"
 
 typedef ::testing::Types<
 	#ifdef USE_MPFR_FLOAT
@@ -46,6 +47,7 @@ TYPED_TEST_CASE(Benchmark, allTypes);
 
 // Core
 TYPED_TEST_CASE(EigenAdaptionsTest, allTypes);
+TYPED_TEST_CASE(AntlrParserTest, allTypes);
 
 // Datastructure
 TYPED_TEST_CASE(HalfspaceTest, allTypes);

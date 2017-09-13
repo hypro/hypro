@@ -175,8 +175,8 @@ Number Point<Number>::coordinate( const carl::Variable &_var ) const {
 }
 
 template <typename Number>
-Number Point<Number>::coordinate( unsigned _dimension ) const {
-	assert( mCoordinates.size() > _dimension );
+Number Point<Number>::coordinate( std::size_t _dimension ) const {
+	assert( std::size_t(mCoordinates.size()) > _dimension );
 	return mCoordinates( _dimension );
 }
 
@@ -225,7 +225,8 @@ void Point<Number>::setCoordinates( const vector_t<Number> &vector ) {
 
 template <typename Number>
 unsigned Point<Number>::dimension() const {
-	return mCoordinates.rows();
+	assert(mCoordinates.rows() >= 0);
+	return unsigned(mCoordinates.rows());
 }
 
 template <typename Number>
@@ -339,7 +340,7 @@ Point<Number> Point<Number>::newEmpty() const {
 }
 
 template<typename Number>
-Point<Number> Point<Number>::project( const std::vector<unsigned>& dimensions ) const {
+Point<Number> Point<Number>::project( const std::vector<std::size_t>& dimensions ) const {
 	if(dimensions.empty()) {
 		return Point<Number>();
 	}
@@ -428,7 +429,7 @@ bool Point<Number>::isInBoundary( const Point<Number> &_boundary ) const {
 
 template <typename Number>
 bool Point<Number>::hasDimension( const carl::Variable &_i ) const {
-	return ( mCoordinates.rows() > hypro::VariablePool::getInstance().id( _i ) );
+	return ( mCoordinates.rows() > Eigen::Index(hypro::VariablePool::getInstance().id( _i )) );
 }
 
 template <typename Number>
@@ -595,8 +596,8 @@ const Number& Point<Number>::at( const carl::Variable &_i ) const {
 }
 
 template <typename Number>
-const Number& Point<Number>::at( unsigned _index ) const {
-	assert( _index < mCoordinates.rows() );
+const Number& Point<Number>::at( std::size_t _index ) const {
+	assert( _index < std::size_t(mCoordinates.rows()) );
 	return mCoordinates( _index );
 }
 }  // namespace hypro

@@ -185,7 +185,7 @@ class ZonotopeT : public GeometricObject<Number, ZonotopeT<Number,Converter>> {
 	*****************************************************************************/
 
 	ZonotopeT<Number,Converter> minkowskiSum( const ZonotopeT<Number,Converter>& rhs ) const;
-	ZonotopeT<Number,Converter> project( const std::vector<unsigned>& dimensions ) const;
+	ZonotopeT<Number,Converter> project( const std::vector<std::size_t>& dimensions ) const;
 	ZonotopeT<Number,Converter> linearTransformation( const matrix_t<Number>& A) const;
 	ZonotopeT<Number,Converter> affineTransformation( const matrix_t<Number>& A, const vector_t<Number>& b ) const;
 
@@ -202,7 +202,7 @@ class ZonotopeT : public GeometricObject<Number, ZonotopeT<Number,Converter>> {
 	 * internal points.
 	 * @return vector of points.
 	 */
-	std::vector<Point<Number>> vertices( const Location<Number>* = nullptr ) const;
+	std::vector<Point<Number>> vertices( const matrix_t<Number>& = matrix_t<Number>::Zero(0,0) ) const;
 
 	ZonotopeT<Number,Converter> intersectHalfspace( const Halfspace<Number>& rhs ) const;
 	ZonotopeT<Number,Converter> intersectHalfspaces( const matrix_t<Number>& mat, const vector_t<Number>& vec ) const;

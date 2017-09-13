@@ -5,7 +5,8 @@
 # Contact:                  #
 #	   Stefan Schupp stefan.schupp@cs.rwth-aachen.de      #
 #                                                             #
-# Author: Sebastian Junges, Stefan Schupp                     #
+# Author: Stefan Schupp
+# Credit: Sebastian Junges, Gereon Kremer
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
 
@@ -26,16 +27,17 @@ project(hypro CXX C)
 
 set(PROJECT_FULLNAME "HyPro")
 set(PROJECT_DESCRIPTION "A Toolbox for the Reachability Analysis of Hybrid Systems using Geometric Approximations")
-set(hypro_MAJORVERSION 1)
-set(hypro_MINORVERSION 0)
-set(hypro_MAINTENANCEVERSION 0)
-set(hypro_VERSION "${hypro_MAJORVERSION}.${hypro_MINORVERSION}.${hypro_MAINTENANCEVERSION}")
+set(hypro_MAJORVERSION 17)
+set(hypro_MINORVERSION 09)
+set(hypro_VERSION "${hypro_MAJORVERSION}.${hypro_MINORVERSION}")
 set(PROJECT_VERSION "${hypro_VERSION}")
 set(hypro_NAME "HyPro" )
 set(hypro_DESCRIPTION ${PROJECT_DESCRIPTION})
 
 # path to find own modules
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake" "${CMAKE_SOURCE_DIR}/cmake/Modules/")
+# Include own macros.
+include( hypromacros )
 
 # # # # # # # # # # # # # # # # # # # # # #
 # B. Options
@@ -43,23 +45,23 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
 
 # options
 option(STATICLIB_SWITCH "Compile a statically linked version of the library." OFF)
-option(FORCE_DOWNLOAD_RESOURCES "Explicitly download all external resources." OFF)
 option(HYPRO_USE_COTIRE "Use the COmpilation TIme REducer." OFF)
 option(HYPRO_USE_OPENMP "Use OpenMp for parallelization in Eigen3." OFF)
 option(HYPRO_USE_PPL "Use PPl polytope wrapper." OFF)
 option(HYPRO_USE_SMTRAT "Use SMT-RAT for linear solving." OFF)
 option(HYPRO_USE_Z3 "Use Z3 for linear solving." OFF)
 option(HYPRO_USE_SOPLEX "Use Soplex for linear solving." OFF)
-option(HYPRO_LOGGING "Allow log4cplus logging." OFF)
+option(HYPRO_LOGGING "Allow logging." OFF)
 option(HYPRO_COVERAGE "Enable compiler flags for test coverage diagnostics." OFF)
 option(HYPRO_STATISTICS "Create a statistic file." OFF)
 option(CLANG_TIDY "Enable usage of clang-tidy" OFF )
 option(CREATE_DOC "Allow creation of a doxygen documentation." OFF)
+option(DEVELOPER "Compile in developer mode, i.e. more warnings." OFF)
+option(EXPORT_TO_CMAKE "Export the project to CMake for easy inclusion" ON)
 mark_as_advanced(HYPRO_COVERAGE)
 mark_as_advanced(HYPRO_STATISTICS)
 mark_as_advanced(CLANG_TIDY)
-# Include own macros.
-include( hypromacros )
+mark_as_advanced(DEVELOPER)
 
 ###########################################################################################
 #### EXPORT SETTINGS
@@ -68,34 +70,49 @@ include( hypromacros )
 set(INCLUDE_INSTALL_DIR include/ CACHE PATH "Installation directory for header files" )
 set(LIB_INSTALL_DIR lib/ CACHE PATH "Installation directory for libraries")
 set(BIN_INSTALL_DIR lib/ CACHE PATH "Installation directory for executables")
+# path to put in the executables
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+
+if(WIN32 AND NOT CYGWIN)
+  set(DEF_INSTALL_CMAKE_DIR CMake)
+else()
+  set(DEF_INSTALL_CMAKE_DIR lib/cmake/${PROJECT_NAME})
+endif()
+set(CMAKE_INSTALL_DIR ${DEF_INSTALL_CMAKE_DIR} CACHE PATH "Installation directory for CMake files")
+
+foreach(p LIB BIN INCLUDE CMAKE)
+  set(var ${p}_INSTALL_DIR)
+  if(NOT IS_ABSOLUTE "${${var}}")
+    set(${var} "${CMAKE_INSTALL_PREFIX}/${${var}}")
+  endif()
+endforeach()
 
 ###########################################################################################
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14 -DGTEST_USE_OWN_TR1_TUPLE=1")
 
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
 	if (APPLE)
 		message("-- Using clang on apple")
 		set(CMAKE_MACOSX_RPATH 1)
-		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14 -stdlib=libc++")
+		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++")
 		if(${STATICLIB_SWITCH} STREQUAL "OFF")
 			set(CMAKE_MACOSX_RPATH 1)
 		endif()
 	else()
 		message("-- Using clang")
-		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
 	endif()
-	set(CMAKE_CXX_RELEASE_FLAGS "${CMAKE_CXX_RELEASE_FLAGS} -O3")
-	set(CMAKE_CXX_DEBUG_FLAGS "${CMAKE_CXX_DEBUG_FLAGS} -g -O0")
+	set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3")
+	set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g -O0")
 	set(USE_CLANG PARENT SCOPE)
 elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
 	message("-- Using g++")
-	#if (CMAKE_CXX_COMPILER_VERSION VERSION_LESS 4.9)
-#		message(FATAL_ERROR " g++ version must be at least 4.9!")
-	#endif()
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
 	if(NOT HYPRO_COVERAGE)
-		set(CMAKE_CXX_RELEASE_FLAGS "${CMAKE_CXX_RELEASE_FLAGS} -O3")
+		set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3")
 	else()
-		set(CMAKE_CXX_RELEASE_FLAGS "${CMAKE_CXX_RELEASE_FLAGS} -O0")
+		set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -g -O0 --coverage")
 	endif()
 	set(CMAKE_CXX_DEBUG_FLAGS "${CMAKE_CXX_DEBUG_FLAGS} -g -O1")
 	if(CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 4.9)
@@ -103,13 +120,13 @@ elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
 	endif()
 else()
 	message("-- Possibly unsupported compiler")
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
 endif()
 
 # general compiler and linker settings
 if(NOT CMAKE_BUILD_TYPE)
-	set(CMAKE_BUILD_TYPE Release CACHE STRING "Choose the type of build, options are: None Debug Release" FORCE)
+	set(CMAKE_BUILD_TYPE Release CACHE STRING "Choose the type of build, options are: Debug Release" FORCE)
 endif()
+set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release")
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -pedantic -fPIC -DBOOST_SPIRIT_USE_PHOENIX_V3=1 -ftemplate-backtrace-limit=0")
 if(STATICLIB_SWITCH)
@@ -121,26 +138,8 @@ else()
 	SET(BUILD_SHARED_LIBRARIES ON)
 endif()
 
-if(HYPRO_COVERAGE)
-	set(CMAKE_BUILD_TYPE Debug CACHE STRING "Choose the type of build, options are: None Debug Release" FORCE)
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -O0 --coverage")
-endif()
-
-# path to put in the executables
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DGTEST_USE_OWN_TR1_TUPLE=1")
-
-if(HYPRO_USE_COTIRE)
-	# We use cotire, simply include it
-	message(STATUS "using cotire")
-	include(cotire)
-else()
-	# We do not use cotire, create dummy function.
-	message(STATUS "not using cotire")
-	function(cotire)
-	endfunction(cotire)
+if(DEVELOPER)
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wswitch -Wno-deprecated-declarations -Wempty-body -Wconversion -Wreturn-type -Wparentheses -Wno-format -Wuninitialized -Wunreachable-code -Wunused-function -Wunused-value -Wunused-variable")
 endif()
 
 # # # # # # # # # # # # # # # # # # # # # #
@@ -159,6 +158,51 @@ load_library(hypro Boost 1.55.0)
 set(Boost_USE_STATIC_LIBS        ON) # only find static libs
 set(Boost_USE_MULTITHREADED      ON)
 set(Boost_USE_STATIC_RUNTIME    OFF)
+
+load_library(hypro GTest 0)
+load_library(hypro carl 0)
+add_subdirectory(src/resources)
+
+set(hypro_LIBRARIES_STATIC ${hypro_LIBRARIES_STATIC} ${ANTLR4CPP_LIBS} ) # TODO: What about glpk static?
+set(hypro_LIBRARIES_DYNAMIC ${hypro_LIBRARIES_DYNAMIC} ${GLPK_LIBRARIES} )
+#set(hypro_LIBRARIES_DYNAMIC ${hypro_LIBRARIES_DYNAMIC} ${GLPK_LIBRARIES} ${ANTLR4CPP_LIBS} )
+#set(hypro_INCLUDE_DIRS ${hypro_INCLUDE_DIRS} ${GLPK_INCLUDE_DIR} ${ANTLR4CPP_INCLUDE_DIRS} )
+
+# This is needed in case carl was not installed
+if(NOT carl_FOUND)
+	set(hypro_LIBRARIES_DYNAMIC ${hypro_LIBRARIES_DYNAMIC} ${carl_LIBRARIES} )
+	set(hypro_INCLUDE_DIRS ${hypro_INCLUDE_DIRS} ${carl_INCLUDE_DIR} )
+endif()
+
+if(CLANG_TIDY)
+	set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+	set(CLANG_TIDY_CHECKS "*")
+	set(CLANG_TIDY_CHECKS "${CLANG_TIDY_CHECKS},-llvm-header-guard")
+	#set(CLANG_TIDY_CHECKS "${CLANG_TIDY_CHECKS},-google-readability-namespace-comments,-llvm-namespace-comment")
+	#set(CLANG_TIDY_CHECKS "${CLANG_TIDY_CHECKS},-google-readability-braces-around-statements,-readability-braces-around-statements")
+	#set(CLANG_TIDY_CHECKS "${CLANG_TIDY_CHECKS},-readability-else-after-return")
+	#set(CLANG_TIDY_CHECKS "${CLANG_TIDY_CHECKS},-google-readability-todo")
+	#set(CLANG_TIDY_CHECKS "${CLANG_TIDY_CHECKS},-google-runtime-int")
+	#set(CLANG_TIDY_CHECKS "${CLANG_TIDY_CHECKS},-misc-macro-parentheses")
+	#set(CLANG_TIDY_CHECKS "${CLANG_TIDY_CHECKS},-clang-analyzer-alpha.core.CastToStruct")
+	set(CLANG_TIDY_CHECKS "-checks='${CLANG_TIDY_CHECKS}'")
+	message(STATUS "Enabled checks for clang-tidy: ${CLANG_TIDY_CHECKS}")
+endif()
+
+# # # # # # # # # # # # # # # # # # # # # #
+# C.2. Optional libraries
+# # # # # # # # # # # # # # # # # # # # # #
+
+if(HYPRO_USE_COTIRE)
+	# We use cotire, simply include it
+	message(STATUS "using cotire")
+	include(cotire)
+else()
+	# We do not use cotire, create dummy function.
+	message(STATUS "not using cotire")
+	function(cotire)
+	endfunction(cotire)
+endif()
 
 if(HYPRO_USE_PPL)
 	load_library(hypro PPL 0)
@@ -183,48 +227,6 @@ if(HYPRO_USE_OPENMP)
 	endif()
 endif()
 
-if(NOT FORCE_DOWNLOAD_RESOURCES)
-
-	load_library(hypro GTest 0)
-	#load_library(hypro GLPK 0)
-	load_library(hypro carl 0)
-	add_subdirectory(src/resources)
-
-	#if(NOT GLPK_FOUND)
-		set(hypro_LIBRARIES_DYNAMIC ${hypro_LIBRARIES_DYNAMIC} ${GLPK_LIBRARIES} )
-	#endif()
-	include_directories( ${GLPK_INCLUDE_DIR} )
-else()
-	add_subdirectory(src/resources)
-	#include_directories( ${GLPK_INCLUDE_DIR} )
-	#set(hypro_LIBRARIES_DYNAMIC ${hypro_LIBRARIES_DYNAMIC} ${GLPK_LIBRARIES} )
-endif()
-
-if(CLANG_TIDY)
-	set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-	set(CLANG_TIDY_CHECKS "*")
-	set(CLANG_TIDY_CHECKS "${CLANG_TIDY_CHECKS},-llvm-header-guard")
-	#set(CLANG_TIDY_CHECKS "${CLANG_TIDY_CHECKS},-google-readability-namespace-comments,-llvm-namespace-comment")
-	#set(CLANG_TIDY_CHECKS "${CLANG_TIDY_CHECKS},-google-readability-braces-around-statements,-readability-braces-around-statements")
-	#set(CLANG_TIDY_CHECKS "${CLANG_TIDY_CHECKS},-readability-else-after-return")
-	#set(CLANG_TIDY_CHECKS "${CLANG_TIDY_CHECKS},-google-readability-todo")
-	#set(CLANG_TIDY_CHECKS "${CLANG_TIDY_CHECKS},-google-runtime-int")
-	#set(CLANG_TIDY_CHECKS "${CLANG_TIDY_CHECKS},-misc-macro-parentheses")
-	#set(CLANG_TIDY_CHECKS "${CLANG_TIDY_CHECKS},-clang-analyzer-alpha.core.CastToStruct")
-	set(CLANG_TIDY_CHECKS "-checks='${CLANG_TIDY_CHECKS}'")
-	message(STATUS "Enabled checks for clang-tidy: ${CLANG_TIDY_CHECKS}")
-endif()
-
-include_directories( src/hypro )
-add_subdirectory(src)
-
-enable_testing()
-add_subdirectory(src/test)
-
-# # # # # # # # # # # # # # # # # # # # # #
-# C.2. required libraries
-# # # # # # # # # # # # # # # # # # # # # #
-
 # # # # # # # # # # # # # # # # # # # # # #
 # C.3. Development and debug libraries.
 # # # # # # # # # # # # # # # # # # # # # #
@@ -233,10 +235,14 @@ if(CREATE_DOC)
 	add_subdirectory(doc EXCLUDE_FROM_ALL)
 endif()
 
+enable_testing()
+
 # # # # # # # # # # # # # # # # # # # # # #
 # D. Invoke subdirectories.
 # # # # # # # # # # # # # # # # # # # # # #
 
+add_subdirectory(src)
+add_subdirectory(src/test)
 add_subdirectory(examples EXCLUDE_FROM_ALL)
 
 ##############################################################################
@@ -247,49 +253,3 @@ add_subdirectory(examples EXCLUDE_FROM_ALL)
 # # # # # # # # # # # # # # # # # # # # # #
 
 include(export)
-
-# Add all targets to the build-tree export set
-export(TARGETS ${HYPRO_TARGETS} FILE "${PROJECT_BINARY_DIR}/hyproTargets.cmake" EXPORT_LINK_INTERFACE_LIBRARIES)
-
-# Export the package for use from the build-tree
-# (this registers the build-tree with a global CMake-registry)
-if(STATICLIB_SWITCH)
-	export(PACKAGE ${PROJECT_NAME}_static)
-	set(TARGET ${PROJECT_NAME})
-else()
-	export(PACKAGE ${PROJECT_NAME})
-	set(TARGET ${PROJECT_NAME})
-endif()
-
-
-include(CMakePackageConfigHelpers)
-# Create the hyproConfig.cmake and hyproConfigVersion files
-file(RELATIVE_PATH REL_INCLUDE_DIR "${PROJECT_BINARY_DIR}" "${PROJECT_BINARY_DIR}")
-# ... for the build tree
-set(CONF_INCLUDE_DIRS "${PROJECT_SOURCE_DIR}/src") # TODO looks not correct, this would be hypro_INCLUDE_DIR
-set(CONF_INCLUDES ${INCLUDES})
-if(STATICLIB_SWITCH)
-	set(CONF_LINKER_LIBS ${hypro_STATIC_LIBRARIES})
-else ()
-	set(CONF_LINKER_LIBS ${hypro_DYNAMIC_LIBRARIES})
-endif()
-
-configure_package_config_file(cmake/Modules/hyproConfig.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/hyproConfig.cmake
-							  INSTALL_DESTINATION ${PROJECT_BINARY_DIR}
-							  PATH_VARS PROJECT_BINARY_DIR #SYSCONFIG_INSTALL_DIR
-							 )
-
-# ... for the install tree
-set(CONF_INCLUDE_DIRS "\${hypro_CMAKE_DIR}/${REL_INCLUDE_DIR}")
-configure_package_config_file(cmake/Modules/hyproConfig.cmake.in ${CMAKE_CURRENT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/hyproConfig.cmake
-							  INSTALL_DESTINATION ${PROJECT_BINARY_DIR}
-							  PATH_VARS PROJECT_BINARY_DIR #SYSCONFIG_INSTALL_DIR
-			 )
-write_basic_package_version_file(${CMAKE_CURRENT_BINARY_DIR}/hyproConfigVersion.cmake
-								 VERSION ${hypro_VERSION}
-								 COMPATIBILITY SameMajorVersion )
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/hyproConfig.cmake ${CMAKE_CURRENT_BINARY_DIR}/hyproConfigVersion.cmake
-		DESTINATION ${PROJECT_BINARY_DIR} )
-
-# Install the export set for use with the install-tree
-#install(EXPORT ${HYPRO_TARGETS} DESTINATION ${PROJECT_BINARY_DIR}) # COMPONENT dev)

@@ -53,7 +53,7 @@ public:
 
   private:
 	mutable HalfspaceVector mHPlanes;
-	unsigned mDimension;
+	std::size_t mDimension;
 
 	// State flags
 	mutable TRIBOOL mEmpty = TRIBOOL::NSET;
@@ -192,7 +192,7 @@ public:
 	 * @details Solves the vertex enumeration problem, i.e. converts the hyperplanar description into a vertex description.
 	 * @return A vector of points.
 	 */
-	std::vector<Point<Number>> vertices( const Location<Number>* = nullptr ) const;
+	std::vector<Point<Number>> vertices( const matrix_t<Number>& = matrix_t<Number>::Zero(0,0) ) const;
 
 	/**
 	 * @brief Getter for a number representing the supremum according to the infinity norm of the polytope.
@@ -244,7 +244,7 @@ public:
 
 	std::pair<bool, HPolytopeT> satisfiesHalfspace( const Halfspace<Number>& rhs ) const;
 	std::pair<bool, HPolytopeT> satisfiesHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const;
-	HPolytopeT project(const std::vector<unsigned>& dimensions) const;
+	HPolytopeT project(const std::vector<std::size_t>& dimensions) const;
 	HPolytopeT linearTransformation( const matrix_t<Number>& A ) const;
 	HPolytopeT affineTransformation( const matrix_t<Number>& A, const vector_t<Number>& b ) const;
 	HPolytopeT minkowskiSum( const HPolytopeT& rhs ) const;
@@ -287,7 +287,7 @@ public:
 	}
 
 	friend void swap( HPolytopeT<Number, Converter>& a, HPolytopeT<Number, Converter>& b ) {
-		unsigned tmpDim = a.mDimension;
+		std::size_t tmpDim = a.mDimension;
 		a.mDimension = b.mDimension;
 		b.mDimension = tmpDim;
 		swap( a.mHPlanes, b.mHPlanes );
@@ -401,7 +401,7 @@ public:
 	 * @param[in]  existingDimensions  The existing dimensions.
 	 * @param[in]  newDimensions       The new dimensions.
 	 */
-	void insertEmptyDimensions(const std::vector<unsigned>& existingDimensions, const std::vector<unsigned>& newDimensions);
+	void insertEmptyDimensions(const std::vector<std::size_t>& existingDimensions, const std::vector<std::size_t>& newDimensions);
 
 };
 /** @} */

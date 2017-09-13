@@ -241,7 +241,7 @@ static std::vector<std::shared_ptr<Facet<Number>>> shareRidge(const std::vector<
 template <typename Number>
 static void removeBorderFacets(std::vector<std::shared_ptr<Facet<Number>>>& facets, std::queue<std::shared_ptr<Facet<Number>>>& result) {
 	// std::cout << __func__ << std::endl;
-	for (unsigned i=facets.size(); i > 0; i--) {
+	for (std::size_t i=facets.size(); i > 0; i--) {
 		if (!facets.at(i-1)->getOutsideSet().empty()) {
 			result.push(facets.at(i-1));
 			facets.erase( facets.begin() + i-1 );
@@ -316,9 +316,9 @@ static bool includeFacet( std::shared_ptr<Facet<Number>> facet1, std::shared_ptr
 	}
 	else
 	{
-		int checkValue = (facet2->vertices().size()<facet1->vertices().size()) ? facet2->vertices().size(): facet1->vertices().size();
+		std::size_t checkValue = (facet2->vertices().size()<facet1->vertices().size()) ? facet2->vertices().size(): facet1->vertices().size();
 
-		int currentValue = 0;
+		std::size_t currentValue = 0;
 		for (auto vertex1: facet1->vertices()) {
 			for (auto vertex2: facet2->vertices()) {
 				if ( vertex1 == vertex2) {

@@ -17,7 +17,7 @@ namespace hypro {
 */
 #define PI 3.14159265359
 template<typename Number>
-static std::vector<vector_t<Number>> computeTemplate(unsigned dimension, unsigned numberDirections) {
+static std::vector<vector_t<Number>> computeTemplate(std::size_t dimension, std::size_t numberDirections) {
 	if(dimension == 1) {
 		std::vector<vector_t<Number>> directions;
 		vector_t<Number> v0 = vector_t<Number>::Zero(1);
@@ -96,7 +96,7 @@ static std::vector<vector_t<Number>> computeTemplate(unsigned dimension, unsigne
 
 	//copy directions2d into directions
 	Permutator permutator(dimension, 2);
-	std::vector<unsigned> permutation;
+	std::vector<std::size_t> permutation;
 	while(!permutator.end()) {
 		permutation = permutator();
 		for(vector_t<Number> vectorOfdirections2d: directions2d) {
@@ -115,7 +115,7 @@ static std::vector<vector_t<Number>> computeTemplate(unsigned dimension, unsigne
 }
 
 template<typename Number>
-static std::vector<vector_t<Number>> computeTemplate(std::vector<unsigned> dimensions, unsigned numberDirections, unsigned dim) {
+static std::vector<vector_t<Number>> computeTemplate(std::vector<std::size_t> dimensions, std::size_t numberDirections, std::size_t dim) {
 	std::vector<vector_t<Number>> directions, directions2d;
 
 	if(numberDirections == 4) {
@@ -185,7 +185,7 @@ static std::vector<vector_t<Number>> computeTemplate(std::vector<unsigned> dimen
 
 	//copy directions2d into directions
 	Permutator permutator(dimensions.size(), 2);
-	std::vector<unsigned> permutation;
+	std::vector<std::size_t> permutation;
 	while(!permutator.end()) {
 		permutation = permutator();
 		//std::cout << "Progress permutation " << permutation << std::endl;
@@ -194,8 +194,9 @@ static std::vector<vector_t<Number>> computeTemplate(std::vector<unsigned> dimen
 			//std::cout << "Process template direction " << vectorOfdirections2d << std::endl;
 
 			auto pos = dimensions.begin();
-			unsigned permPos = permutation.at(0);
+			std::size_t permPos = permutation.at(0);
 			//std::cout << "PermPos = " << permPos << std::endl;
+			// TODO: This does not make sense?
 			while(permPos > 0 ){
 				++pos;
 				--permPos;

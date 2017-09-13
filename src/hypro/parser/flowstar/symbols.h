@@ -2,7 +2,7 @@
 #ifndef BOOST_SPIRIT_USE_PHOENIX_V3
 #define BOOST_SPIRIT_USE_PHOENIX_V3
 #endif
-#include "../../datastructures/hybridAutomata/Transition.h"
+#include "../../datastructures/HybridAutomaton/Transition.h"
 
 namespace hypro {
 namespace parser {

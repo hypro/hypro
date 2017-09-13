@@ -179,9 +179,23 @@ TYPED_TEST(SupportFunctionTest, linearTransformation) {
 
 	SupportFunction<TypeParam> res = psf1.linearTransformation(rotation);
 
+	EXPECT_EQ(rotation, res.linearTrafoParameters()->parameters->matrix());
+	EXPECT_EQ(vector_t<TypeParam>::Zero(2), res.linearTrafoParameters()->parameters->vector());
+
 	EXPECT_LE(TypeParam(20), res.evaluate(v1Rot).supportValue);
 	EXPECT_LE(TypeParam(5), res.evaluate(v2Rot).supportValue);
 	EXPECT_TRUE(carl::AlmostEqual2sComplement(TypeParam(17), res.evaluate(v3Rot).supportValue) || TypeParam(17) <= res.evaluate(v3Rot).supportValue);
+
+	// execute many linear transformations to test reduction
+
+	for( std::size_t i = 1; i < std::size_t(pow(2,res.linearTrafoParameters()->parameters->power*2)); ++i) {
+		res = res.linearTransformation(rotation);
+	}
+	EXPECT_EQ(res.linearTrafoParameters()->currentExponent, unsigned(16));
+	EXPECT_EQ(res.linearTrafoParameters()->parameters->parameters.size(), std::size_t(1));
+	// reduction is only invoked when using the support function ->evaluate
+	res.evaluate(v2Rot);
+	EXPECT_EQ(res.linearTrafoParameters()->parameters->parameters.size(), std::size_t(3));
 }
 
 TYPED_TEST(SupportFunctionTest, scale) {
@@ -295,6 +309,121 @@ TYPED_TEST(SupportFunctionTest, intersect) {
 	EXPECT_EQ(result.evaluate(dir4).supportValue, TypeParam(1));
 }
 
+TYPED_TEST(SupportFunctionTest, satisfiesHalfspaces) {
+	matrix_t<TypeParam> constraints1 = matrix_t<TypeParam>::Zero(4,2);
+	constraints1 << 1,0,
+					-1,0,
+					0,1,
+					0,-1;
+	vector_t<TypeParam> constants1 = vector_t<TypeParam>::Zero(4);
+	constants1 << 1,1,1,1;
+
+	SupportFunction<TypeParam> psf1 = SupportFunction<TypeParam>(constraints1, constants1);
+
+	matrix_t<TypeParam> normal = matrix_t<TypeParam>::Zero(1,2);
+	normal << 1,1;
+	vector_t<TypeParam> normalVector = vector_t<TypeParam>::Zero(2);
+	normalVector << 1,1;
+	vector_t<TypeParam> offset = vector_t<TypeParam>::Zero(1);
+	offset << 2;
+
+	std::pair<bool,SupportFunction<TypeParam>> fullyContained = psf1.satisfiesHalfspaces(normal, offset);
+	std::pair<bool,SupportFunction<TypeParam>> fullyContained2 = psf1.satisfiesHalfspace(Halfspace<TypeParam>(normalVector, 2));
+	EXPECT_TRUE(fullyContained.first);
+	EXPECT_TRUE(fullyContained2.first);
+	vector_t<TypeParam> evalDir = normal.row(0);
+	EXPECT_TRUE(fullyContained.second.evaluate(evalDir).supportValue >= 1);
+	EXPECT_TRUE(fullyContained2.second.evaluate(evalDir).supportValue >= 1);
+
+	normal << 1,0;
+	normalVector << 1,0;
+	offset << 1;
+	std::pair<bool,SupportFunction<TypeParam>> onBorder = psf1.satisfiesHalfspaces(normal, offset);
+	std::pair<bool,SupportFunction<TypeParam>> onBorder2 = psf1.satisfiesHalfspace(Halfspace<TypeParam>(normalVector, 1));
+	EXPECT_TRUE(onBorder.first);
+	EXPECT_TRUE(onBorder2.first);
+	evalDir = normal.row(0);
+	EXPECT_TRUE(onBorder.second.evaluate(evalDir).supportValue == 1);
+	EXPECT_TRUE(onBorder2.second.evaluate(evalDir).supportValue == 1);
+
+	offset << 0;
+	std::pair<bool,SupportFunction<TypeParam>> cutHalf = psf1.satisfiesHalfspaces(normal, offset);
+	std::pair<bool,SupportFunction<TypeParam>> cutHalf2 = psf1.satisfiesHalfspace(Halfspace<TypeParam>(normalVector, 0));
+	EXPECT_TRUE(cutHalf.first);
+	EXPECT_TRUE(cutHalf.second.evaluate(evalDir).supportValue == 0);
+	EXPECT_TRUE(cutHalf2.first);
+	EXPECT_TRUE(cutHalf2.second.evaluate(evalDir).supportValue == 0);
+
+	offset << -1;
+	std::pair<bool,SupportFunction<TypeParam>> barelyContained = psf1.satisfiesHalfspaces(normal, offset);
+	std::pair<bool,SupportFunction<TypeParam>> barelyContained2 = psf1.satisfiesHalfspace(Halfspace<TypeParam>(normalVector, -1));
+	EXPECT_TRUE(barelyContained.first);
+	EXPECT_EQ(barelyContained.second.evaluate(evalDir).supportValue, -1);
+	EXPECT_TRUE(barelyContained2.first);
+	EXPECT_EQ(barelyContained2.second.evaluate(evalDir).supportValue, -1);
+
+	offset << -1.1;
+	std::pair<bool,SupportFunction<TypeParam>> notContained = psf1.satisfiesHalfspaces(normal, offset);
+	std::pair<bool,SupportFunction<TypeParam>> notContained2 = psf1.satisfiesHalfspace(Halfspace<TypeParam>(normalVector, -1.1));
+	EXPECT_FALSE(notContained.first);
+	EXPECT_TRUE(notContained.second.empty());
+	EXPECT_FALSE(notContained2.first);
+	EXPECT_TRUE(notContained2.second.empty());
+}
+
+TYPED_TEST(SupportFunctionTest, intersectHalfspaces) {
+	matrix_t<TypeParam> constraints1 = matrix_t<TypeParam>::Zero(4,2);
+	constraints1 << 1,0,
+					-1,0,
+					0,1,
+					0,-1;
+	vector_t<TypeParam> constants1 = vector_t<TypeParam>::Zero(4);
+	constants1 << 1,1,1,1;
+
+	SupportFunction<TypeParam> psf1 = SupportFunction<TypeParam>(constraints1, constants1);
+
+	matrix_t<TypeParam> normal = matrix_t<TypeParam>::Zero(1,2);
+	normal << 1,1;
+	vector_t<TypeParam> offset = vector_t<TypeParam>::Zero(1);
+	offset << 2;
+
+	vector_t<TypeParam> normalVector = vector_t<TypeParam>::Zero(2);
+	normal << 1,1;
+
+	SupportFunction<TypeParam> fullyContained = psf1.intersectHalfspaces(normal, offset);
+	SupportFunction<TypeParam> fullyContained2 = psf1.intersectHalfspace(Halfspace<TypeParam>(normalVector, 2));
+	vector_t<TypeParam> evalDir = normal.row(0);
+	EXPECT_TRUE(fullyContained.evaluate(evalDir).supportValue >= 1);
+	EXPECT_TRUE(fullyContained2.evaluate(evalDir).supportValue >= 1);
+
+	normal << 1,0;
+	normalVector << 1,0;
+	offset << 1;
+	SupportFunction<TypeParam> onBorder = psf1.intersectHalfspaces(normal, offset);
+	SupportFunction<TypeParam> onBorder2 = psf1.intersectHalfspace(Halfspace<TypeParam>(normalVector, 1));
+	evalDir = normal.row(0);
+	EXPECT_TRUE(onBorder.evaluate(evalDir).supportValue == 1);
+	EXPECT_TRUE(onBorder2.evaluate(evalDir).supportValue == 1);
+
+	offset << 0;
+	SupportFunction<TypeParam> cutHalf = psf1.intersectHalfspaces(normal, offset);
+	SupportFunction<TypeParam> cutHalf2 = psf1.intersectHalfspace(Halfspace<TypeParam>(normalVector, 0));
+	EXPECT_TRUE(cutHalf.evaluate(evalDir).supportValue == 0);
+	EXPECT_TRUE(cutHalf2.evaluate(evalDir).supportValue == 0);
+
+	offset << -1;
+	SupportFunction<TypeParam> barelyContained = psf1.intersectHalfspaces(normal, offset);
+	SupportFunction<TypeParam> barelyContained2 = psf1.intersectHalfspace(Halfspace<TypeParam>(normalVector, -1));
+	EXPECT_TRUE(barelyContained.evaluate(evalDir).supportValue == -1);
+	EXPECT_TRUE(barelyContained2.evaluate(evalDir).supportValue == -1);
+
+	offset << -1.1;
+	SupportFunction<TypeParam> notContained = psf1.intersectHalfspaces(normal, offset);
+	SupportFunction<TypeParam> notContained2 = psf1.intersectHalfspace(Halfspace<TypeParam>(normalVector, -1.1));
+	EXPECT_TRUE(notContained.empty());
+	EXPECT_TRUE(notContained2.empty());
+}
+
 TYPED_TEST(SupportFunctionTest, unite) {
 	matrix_t<TypeParam> constraints1 = matrix_t<TypeParam>(3,2);
 	matrix_t<TypeParam> constraints2 = matrix_t<TypeParam>(3,2);
@@ -380,14 +509,24 @@ TYPED_TEST(SupportFunctionTest, unite) {
 
 TYPED_TEST(SupportFunctionTest, contains) {
 	SupportFunction<TypeParam> psf1 = SupportFunction<TypeParam>(this->constraints, this->constants);
+	vector_t<TypeParam> p = vector_t<TypeParam>::Zero(2);
 	EXPECT_TRUE(psf1.contains(Point<TypeParam>({0,0})));
+	p << 0,0;
+	EXPECT_TRUE(psf1.contains(p));
 	EXPECT_TRUE(psf1.contains(Point<TypeParam>({-2,-2})));
+	p << -2,-2;
+	EXPECT_TRUE(psf1.contains(p));
 	EXPECT_TRUE(psf1.contains(Point<TypeParam>({3,3})));
+	p << 3,3;
+	EXPECT_TRUE(psf1.contains(p));
 
 	TypeParam xCoord = TypeParam(-12)/carl::rationalize<TypeParam>(4.5)-carl::rationalize<TypeParam>(0.0001);
 	TypeParam yCoord = TypeParam(4)*xCoord + TypeParam(17)-carl::rationalize<TypeParam>(0.0001);
 
 	EXPECT_TRUE(psf1.contains(Point<TypeParam>({xCoord,yCoord})));
+	p << xCoord, yCoord;
+	EXPECT_TRUE(psf1.contains(p));
+
 	EXPECT_FALSE(psf1.contains(Point<TypeParam>({xCoord+carl::rationalize<TypeParam>(0.001),yCoord+carl::rationalize<TypeParam>(0.001)})));
 
 	EXPECT_TRUE(this->sfChainComplete.contains(Point<TypeParam>({1,1})));
@@ -403,7 +542,7 @@ TYPED_TEST(SupportFunctionTest, contains) {
 
 TYPED_TEST(SupportFunctionTest, projection) {
 	SupportFunction<TypeParam> psf1 = SupportFunction<TypeParam>(this->constraints, this->constants);
-	std::vector<unsigned> dims;
+	std::vector<std::size_t> dims;
 	dims.push_back(0);
 
 	psf1 = psf1.project(dims);
@@ -430,10 +569,12 @@ TYPED_TEST(SupportFunctionTest, projection) {
 	EXPECT_EQ(projected.evaluate(vector_t<TypeParam>(dir2)).supportValue, this->sfChainComplete.evaluate(dir2).supportValue );
 
 	EXPECT_EQ(projected.collectProjections().size(), dims.size());
+
+	// Todo: Test projection where dimensions are exchanged, i.e. {1,0}
 }
 
 TYPED_TEST(SupportFunctionTest, plotting) {
-	std::vector<unsigned> projectionDimensions;
+	std::vector<std::size_t> projectionDimensions;
 	projectionDimensions.push_back(0);
 	projectionDimensions.push_back(1);
 

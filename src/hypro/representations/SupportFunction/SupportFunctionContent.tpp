@@ -105,7 +105,7 @@ SupportFunctionContent<Number>::SupportFunctionContent( const matrix_t<Number> &
 		case SF_TYPE::POLY: {
 			mPolytope = new PolytopeSupportFunction<Number>( _directions, _distances );
 			mType = SF_TYPE::POLY;
-			mDimension = _directions.cols();
+			mDimension = std::size_t(_directions.cols());
 			mDepth = 0;
 			mOperationCount = 0;
 			break;
@@ -260,7 +260,7 @@ SupportFunctionContent<Number>::SupportFunctionContent( const std::shared_ptr<Su
 }
 
 template<typename Number>
-SupportFunctionContent<Number>::SupportFunctionContent( const std::shared_ptr<SupportFunctionContent<Number>>& _origin, const std::vector<unsigned>& dimensions, SF_TYPE _type ) {
+SupportFunctionContent<Number>::SupportFunctionContent( const std::shared_ptr<SupportFunctionContent<Number>>& _origin, const std::vector<std::size_t>& dimensions, SF_TYPE _type ) {
 	assert(_origin->checkTreeValidity());
 	switch ( _type ) {
 		case SF_TYPE::PROJECTION: {
@@ -549,6 +549,7 @@ EvaluationResult<Number> SupportFunctionContent<Number>::evaluate( const vector_
 					case SF_TYPE::NONE: {
 						std::cout << __func__ << ": SF Type not properly initialized!" << std::endl;
 						assert(false);
+						break;
 					}
 					default:{
 						assert(false);
@@ -601,9 +602,12 @@ EvaluationResult<Number> SupportFunctionContent<Number>::evaluate( const vector_
 					case SF_TYPE::PROJECTION: {
 						vector_t<Number> projectedDirection = vector_t<Number>::Zero(mDimension);
 						// reduce evaluation to projection dimensions
+						int entryIndex = 0;
 						for(const auto& projectionDimension : cur->projectionParameters()->dimensions) {
-							if(projectionDimension < cur->dimension())
-								projectedDirection(projectionDimension) = currentParam(projectionDimension);
+							if(projectionDimension < cur->dimension()){
+								projectedDirection(entryIndex) = currentParam(projectionDimension);
+								++entryIndex;
+							}
 						}
 						currentParam = projectedDirection;
 						callStack.push_back(cur->projectionParameters()->origin);
@@ -650,6 +654,7 @@ EvaluationResult<Number> SupportFunctionContent<Number>::evaluate( const vector_
 					case SF_TYPE::NONE: {
 						std::cout << __func__ << ": SF Type not properly initialized!" << std::endl;
 						assert(false);
+						break;
 					}
 					default:{
 						assert(false);
@@ -658,134 +663,7 @@ EvaluationResult<Number> SupportFunctionContent<Number>::evaluate( const vector_
 				}
 			}
 		}
-
 	}
-
-
-	/*
-	switch ( mType ) {
-		case SF_TYPE::ELLIPSOID: {
-			return ellipsoid()->evaluate( _direction );
-		}
-		case SF_TYPE::INFTY_BALL:
-		case SF_TYPE::TWO_BALL: {
-			return ball()->evaluate( _direction );
-		}
-		case SF_TYPE::LINTRAFO: {
-			//TRACE("hypro.representations.supportFunction","Direction rows: " << _direction.rows());
-			std::pair<matrix_t<Number>, vector_t<Number>> parameterPair = linearTrafoParameters()->parameters->getParameterSet(linearTrafoParameters()->currentExponent);
-			#ifndef HYPRO_USE_VECTOR_CACHING
-			matrix_t<Number> tmp = parameterPair.first.transpose();
-			EvaluationResult<Number> res = linearTrafoParameters()->origin->evaluate( tmp * _direction, useExact);
-			//assert(parameterPair.first.transpose() * _direction == linearTrafoParameters()->parameters->getTransformedDirection(_direction, linearTrafoParameters()->currentExponent));
-			//EvaluationResult<Number> res = linearTrafoParameters()->origin->evaluate( linearTrafoParameters()->parameters->getTransformedDirection(_direction, linearTrafoParameters()->currentExponent), useExact);
-			#else
-			EvaluationResult<Number> res = linearTrafoParameters()->origin->evaluate( linearTrafoParameters()->parameters->getTransformedDirection(_direction, linearTrafoParameters()->currentExponent), useExact);
-			#endif
-			switch(res.errorCode){
-				case SOLUTION::INFTY:
-				case SOLUTION::INFEAS:{
-					return res;
-				}
-				default:{
-					//TRACE("hypro.representations.supportFunction","opt val rows: " << res.optimumValue.rows() << " and direction rows: " << _direction.rows());
-					assert(res.errorCode == SOLUTION::FEAS);
-					assert(res.optimumValue.rows() == _direction.rows());
-					res.optimumValue = parameterPair.first * res.optimumValue + parameterPair.second;
-					assert(res.optimumValue.rows() == _direction.rows());
-					// As we know, that the optimal vertex lies on the supporting hyperplane, we can obtain the distance by dot product.
-					res.supportValue = res.optimumValue.dot(_direction);
-					return res;
-				}
-			}
-		}
-		case SF_TYPE::POLY: {
-			return polytope()->evaluate( _direction, useExact);
-		}
-		case SF_TYPE::PROJECTION: {
-			vector_t<Number> projectedDirection = vector_t<Number>::Zero(mDimension);
-			// reduce evaluation to projection dimensions
-			for(const auto& projectionDimension : projectionParameters()->dimensions) {
-				if(projectionDimension < mDimension)
-					projectedDirection(projectionDimension) = _direction(projectionDimension);
-			}
-			// in case the result direction is zero (i.e. it has no influence at all) return INFTY.
-			if(projectedDirection.nonZeros() == 0) {
-				return EvaluationResult<Number>(0,projectedDirection, SOLUTION::INFTY);
-			}
-			return projectionParameters()->origin->evaluate(projectedDirection, useExact);
-		}
-		case SF_TYPE::SCALE: {
-			EvaluationResult<Number> res = scaleParameters()->origin->evaluate( _direction, useExact);
-			res.optimumValue *= scaleParameters()->factor;
-			res.supportValue *= scaleParameters()->factor;
-			return res;
-		}
-		case SF_TYPE::SUM: {
-			EvaluationResult<Number> resA = summands()->lhs->evaluate( _direction, useExact);
-			if(resA.errorCode == SOLUTION::INFEAS){
-				return resA;
-			}
-			EvaluationResult<Number> resB = summands()->rhs->evaluate( _direction, useExact);
-			resA.optimumValue += resB.optimumValue;
-			resA.supportValue += resB.supportValue;
-			return resA;
-		}
-		case SF_TYPE::UNITE: {
-			EvaluationResult<Number> res = (*unionParameters()->items.begin())->evaluate( _direction, useExact );
-			if(res.errorCode == SOLUTION::INFEAS) {
-				return res;
-			}
-			if(res.errorCode == SOLUTION::INFTY) {
-				res.supportValue = 1;
-				return res;
-			}
-			for(auto sfIt = (unionParameters()->items.begin()); sfIt != unionParameters()->items.end(); ++sfIt) {
-				EvaluationResult<Number> tmp = (*sfIt)->evaluate( _direction, useExact );
-				if(tmp.errorCode == SOLUTION::INFEAS) {
-					return tmp;
-				}
-				if(tmp.errorCode == SOLUTION::INFTY) {
-					tmp.supportValue = 1;
-					return tmp;
-				}
-				res = tmp > res ? tmp : res;
-			}
-			assert(res.errorCode == SOLUTION::FEAS);
-			return ( res );
-		}
-		case SF_TYPE::INTERSECT: {
-			// easy checks for infeasibility and unboundedness first
-			EvaluationResult<Number> resA = intersectionParameters()->lhs->evaluate( _direction, useExact);
-			if(resA.errorCode == SOLUTION::INFEAS){
-				return resA;
-			}
-			EvaluationResult<Number> resB = intersectionParameters()->rhs->evaluate( _direction, useExact);
-			if(resB.errorCode == SOLUTION::INFEAS){
-				return resB;
-			}
-			assert(resA.errorCode != SOLUTION::INFEAS && resB.errorCode != SOLUTION::INFEAS);
-			if(resA.errorCode == SOLUTION::INFTY){
-				return resB;
-			}
-			if(resB.errorCode == SOLUTION::INFTY){
-				return resA;
-			}
-			// complete checks -> real containment TODO!!
-			assert(resA.errorCode == SOLUTION::FEAS && resB.errorCode == SOLUTION::FEAS);
-			return ( resA.supportValue <= resB.supportValue ? resA : resB );
-		}
-		case SF_TYPE::NONE: {
-			std::cout << __func__ << ": SF Type not properly initialized!" << std::endl;
-			assert(false);
-		}
-		default:{
-			assert(false);
-			return EvaluationResult<Number>();
-		}
-	}
-	*/
-
 	assert(false);
 	std::cout << "THIS SHOULD NOT HAPPEN." << std::endl;
 	return EvaluationResult<Number>();
@@ -1023,6 +901,7 @@ std::vector<EvaluationResult<Number>> SupportFunctionContent<Number>::multiEvalu
 					case SF_TYPE::NONE: {
 						std::cout << __func__ << ": SF Type not properly initialized!" << std::endl;
 						assert(false);
+						break;
 					}
 					default:{
 						assert(false);
@@ -1077,10 +956,14 @@ std::vector<EvaluationResult<Number>> SupportFunctionContent<Number>::multiEvalu
 					}
 					case SF_TYPE::PROJECTION: {
 						matrix_t<Number> tmp = matrix_t<Number>::Zero(_directions.rows(), _directions.cols());
+						Eigen::Index entryIndex = 0;
 						for(const auto& entry : cur->projectionParameters()->dimensions) {
-							if(entry < mDimension)
-								tmp.col(entry) = currentParam.col(entry);
+							if(entry < mDimension){
+								tmp.col(entryIndex) = currentParam.col(entry);
+								++entryIndex;
+							}
 						}
+						assert(entryIndex == Eigen::Index(cur->projectionParameters()->dimensions.size()));
 						currentParam = tmp;
 						callStack.push_back(cur->projectionParameters()->origin);
 						paramStack.push_back(currentParam);
@@ -1126,6 +1009,7 @@ std::vector<EvaluationResult<Number>> SupportFunctionContent<Number>::multiEvalu
 					case SF_TYPE::NONE: {
 						std::cout << __func__ << ": SF Type not properly initialized!" << std::endl;
 						assert(false);
+						break;
 					}
 					default:{
 						assert(false);
@@ -1135,177 +1019,6 @@ std::vector<EvaluationResult<Number>> SupportFunctionContent<Number>::multiEvalu
 			}
 		}
 	}
-
-
-	/*
-	switch ( mType ) {
-		case SF_TYPE::ELLIPSOID: {
-			return ellipsoid()->multiEvaluate( _directions );
-		}
-		case SF_TYPE::INFTY_BALL:
-		case SF_TYPE::TWO_BALL: {
-			return ball()->multiEvaluate( _directions );
-		}
-		case SF_TYPE::LINTRAFO: {
-			// std::cout << "Directions " << convert<Number,double>(_directions) << std::endl << "A:" << convert<Number,double>(linearTrafoParameters()->a) << std::endl;
-			std::pair<matrix_t<Number>, vector_t<Number>> parameterPair = linearTrafoParameters()->parameters->getParameterSet(linearTrafoParameters()->currentExponent);
-			#ifndef HYPRO_USE_VECTOR_CACHING
-			std::vector<EvaluationResult<Number>> res = linearTrafoParameters()->origin->multiEvaluate( _directions * parameterPair.first, useExact );
-			#else
-			assert((_directions * parameterPair.first) == (linearTrafoParameters()->parameters->getTransformedDirections(_directions, linearTrafoParameters()->currentExponent)));
-			std::vector<EvaluationResult<Number>> res = linearTrafoParameters()->origin->multiEvaluate( linearTrafoParameters()->parameters->getTransformedDirections(_directions, linearTrafoParameters()->currentExponent), useExact );
-			#endif
-			if(res.begin()->errorCode != SOLUTION::INFEAS) {
-				unsigned directionCnt = 0;
-				for(auto& entry : res){
-					vector_t<Number> currentDir(_directions.row(directionCnt));
-					if(entry.errorCode == SOLUTION::INFTY) {
-						entry.optimumValue = entry.optimumValue;
-						entry.supportValue = 1;
-					} else {
-						entry.optimumValue = parameterPair.first * entry.optimumValue + parameterPair.second;
-						// As we know, that the optimal vertex lies on the supporting Halfspace, we can obtain the distance by dot product.
-						entry.supportValue = entry.optimumValue.dot(currentDir);
-					}
-					++directionCnt;
-					//std::cout << "Entry value: " << entry.supportValue << std::endl;
-				}
-			}
-			return res;
-		}
-		case SF_TYPE::POLY: {
-			return polytope()->multiEvaluate( _directions, useExact );
-		}
-		case SF_TYPE::PROJECTION: {
-			matrix_t<Number> tmp = matrix_t<Number>::Zero(_directions.rows(), _directions.cols());
-			for(const auto& entry : projectionParameters()->dimensions) {
-				if(entry < mDimension)
-					tmp.col(entry) = _directions.col(entry);
-			}
-			return projectionParameters()->origin->multiEvaluate(tmp, useExact);
-		}
-		case SF_TYPE::SCALE: {
-			std::vector<EvaluationResult<Number>> res = scaleParameters()->origin->multiEvaluate( _directions, useExact );
-			// if one result is infeasible, the others will be too -> do not process.
-			if(res.begin()->errorCode != SOLUTION::INFEAS){
-				for(auto& singleRes : res){
-					assert(singleRes.errorCode != SOLUTION::INFEAS);
-					if(singleRes.errorCode == SOLUTION::FEAS){
-						singleRes.supportValue *= scaleParameters()->factor;
-						singleRes.optimumValue *= scaleParameters()->factor;
-					}
-				}
-			}
-			return res;
-		}
-		case SF_TYPE::SUM: {
-			std::vector<EvaluationResult<Number>> resA = summands()->lhs->multiEvaluate( _directions, useExact );
-			std::vector<EvaluationResult<Number>> resB = summands()->rhs->multiEvaluate( _directions, useExact );
-			std::vector<EvaluationResult<Number>> res;
-			assert( resA.size() == std::size_t(_directions.rows()));
-			assert(resA.size() == resB.size());
-			// only process if both are feasible. If one result is infeasible, the others will be too, so stop processing.
-			if(resA.begin()->errorCode != SOLUTION::INFEAS && resB.begin()->errorCode != SOLUTION::INFEAS) {
-				for(unsigned index = 0; index < resA.size(); ++index){
-					assert(resA.at(index).errorCode != SOLUTION::INFEAS && resB.at(index).errorCode != SOLUTION::INFEAS);
-					EvaluationResult<Number> r;
-					if(resA[index].errorCode == SOLUTION::INFTY || resB[index].errorCode == SOLUTION::INFTY){
-						r.errorCode = SOLUTION::INFTY;
-						r.supportValue = 1;
-					} else {
-						r.errorCode = SOLUTION::FEAS;
-						r.supportValue = resA[index].supportValue + resB[index].supportValue;
-						r.optimumValue = resA[index].optimumValue + resB[index].optimumValue;
-					}
-					res.push_back(r);
-				}
-				assert( res.size() == std::size_t(_directions.rows()));
-			}
-			return ( res );
-		}
-		case SF_TYPE::UNITE: {
-			std::vector<EvaluationResult<Number>> res = (*unionParameters()->items.begin())->multiEvaluate( _directions, useExact );
-			for(const auto& result : res ) {
-				if(result.errorCode == SOLUTION::INFEAS) {
-					return res;
-				}
-				if(result.errorCode == SOLUTION::INFTY) {
-					return res;
-				}
-			}
-			for(auto sfIt = (unionParameters()->items.begin()); sfIt != unionParameters()->items.end(); ++sfIt) {
-				std::vector<EvaluationResult<Number>> tmp = (*sfIt)->multiEvaluate( _directions, useExact );
-				assert(tmp.size() == res.size());
-				for( unsigned resultId = 0; resultId < res.size(); ++resultId ) {
-					if(tmp[resultId].errorCode == SOLUTION::INFEAS) {
-						res[resultId] = tmp[resultId];
-						return tmp;
-					} else if(tmp[resultId].errorCode == SOLUTION::INFTY) {
-						tmp[resultId].supportValue = 1;
-						res[resultId] = tmp[resultId];
-					} else {
-						res[resultId] = tmp[resultId] > res[resultId] ? tmp[resultId] : res[resultId];
-						assert(res[resultId].errorCode == SOLUTION::FEAS);
-					}
-				}
-			}
-			return ( res );
-		}
-		case SF_TYPE::INTERSECT: {
-			std::vector<EvaluationResult<Number>> resA = intersectionParameters()->lhs->multiEvaluate( _directions, useExact );
-			std::vector<EvaluationResult<Number>> resB = intersectionParameters()->rhs->multiEvaluate( _directions, useExact );
-			assert( resA.size() == resB.size() );
-			// in case one of the results is infeasible (the set is empty), return this result.
-			if(resA.begin()->errorCode == SOLUTION::INFEAS){
-				return resA;
-			}
-			if(resB.begin()->errorCode == SOLUTION::INFEAS){
-				return resB;
-			}
-			std::vector<EvaluationResult<Number>> result;
- 			for ( unsigned i = 0; i < resA.size(); ++i ) {
- 				//std::cout << "Eval in direction " << convert<Number,double>(_directions.row(i)).transpose() << std::endl;
-				assert(resA[i].errorCode != SOLUTION::INFEAS && resB[i].errorCode != SOLUTION::INFEAS);
-				EvaluationResult<Number> res;
-				if (resA[i].errorCode == SOLUTION::INFTY) {
-					//std::cout << "resA infinite" << std::endl;
-					res.errorCode = resB[i].errorCode;
-					res.supportValue = resB[i].supportValue;
-					res.optimumValue = resB[i].optimumValue;
-				} else if (resB[i].errorCode == SOLUTION::INFTY) {
-					//std::cout << "resB infinite" << std::endl;
-					assert(resA[i].errorCode == SOLUTION::FEAS);
-					res.errorCode = resA[i].errorCode;
-					res.supportValue = resA[i].supportValue;
-					res.optimumValue = resA[i].optimumValue;
-				} else {
-					assert(resA[i].errorCode == SOLUTION::FEAS && resB[i].errorCode == SOLUTION::FEAS);
-					//std::cout << "Both finite: A " << resA[i].supportValue << " vs B " << resB[i].supportValue << std::endl;
-					res.errorCode = SOLUTION::FEAS;
-					if(resA[i].supportValue < resB[i].supportValue){
-						res.supportValue = resA[i].supportValue;
-						res.optimumValue = resA[i].optimumValue;
-					} else {
-						res.supportValue = resB[i].supportValue;
-						res.optimumValue = resB[i].optimumValue;
-					}
-				}
-				result.push_back(res);
-			}
-			assert(result.size() == std::size_t(_directions.rows()));
-			return result;
-		}
-		case SF_TYPE::NONE: {
-			std::cout << __func__ << ": SF Type not properly initialized!" << std::endl;
-			assert(false);
-		}
-		default:{
-			assert(false);
-			return std::vector<EvaluationResult<Number>>();
-		}
-	}
-	*/
-
 	assert(false);
 	std::cout << "THIS SHOULD NOT HAPPEN." << std::endl;
 	return std::vector<EvaluationResult<Number>>();
@@ -1339,7 +1052,7 @@ unsigned SupportFunctionContent<Number>::multiplicationsPerEvaluation() const {
 	using Node = std::shared_ptr<SupportFunctionContent<Number>>;
 	using Res = unsigned;
 	std::vector<Node> callStack;
-	std::vector<std::pair<int,std::vector<Res>>> resultStack; // The first value is an iterator to the calling frame
+	std::vector<std::pair<std::size_t,std::vector<Res>>> resultStack; // The first value is an iterator to the calling frame
 
 	callStack.push_back(getThis());
 	resultStack.push_back(std::make_pair(-1, std::vector<Res>()));
@@ -1350,7 +1063,7 @@ unsigned SupportFunctionContent<Number>::multiplicationsPerEvaluation() const {
 		if(cur->originCount() == 0) {
 			// Do computation and write results in case recursion ends.
 
-			std::pair<int,std::vector<Res>> currentResult = resultStack.back();
+			std::pair<std::size_t,std::vector<Res>> currentResult = resultStack.back();
 
 			// update result
 			// special case: When the node is a leaf, we directly return the result.
@@ -1632,6 +1345,7 @@ Point<Number> SupportFunctionContent<Number>::supremumPoint() const {
 		}
 		case SF_TYPE::NONE: {
 			std::cout << __func__ << ": SF Type not properly initialized!" << std::endl;
+			return Point<Number>();
 			assert(false);
 		}
 		default:
@@ -1641,162 +1355,9 @@ Point<Number> SupportFunctionContent<Number>::supremumPoint() const {
 }
 
 template<typename Number>
-std::vector<unsigned> SupportFunctionContent<Number>::collectProjections() const {
-	//checkTreeValidity();
-	//checkTreeValidity();
-	//std::cout << __func__  << " This adress: " << this << std::endl;
-	//std::cout << __func__ << ": Type: " << mType << std::endl;
-
-	return collectProjectionsIterative();
-
-	/*
-
-	switch ( mType ) {
-		case SF_TYPE::INFTY_BALL:
-		case SF_TYPE::TWO_BALL:
-		case SF_TYPE::POLY:
-		case SF_TYPE::ELLIPSOID: {
-			std::vector<unsigned> res;
-			DEBUG("hypro.representations.supportFunction","mDimension " << mDimension);
-			for(unsigned i = 0; i < mDimension; ++i){
-				DEBUG("hypro.representations.supportFunction","Added dimension " << i);
-				res.emplace_back(i);
-			}
-			//checkTreeValidity();
-			return res;
-		}
-		case SF_TYPE::LINTRAFO: {
-			//std::cout << __func__ << " Depth: " << this->depth() << std::endl;
-			//std::cout << __func__ << " origin type: " << linearTrafoParameters()->origin->type() << std::endl;
-			//assert(linearTrafoParameters()->origin->checkTreeValidity());
-			auto tmp = linearTrafoParameters()->origin->collectProjections();
-			//checkTreeValidity();
-			return tmp;
-		}
-		case SF_TYPE::PROJECTION: {
-			DEBUG("hypro.representations.supportFunction","Projection Object.");
-			std::vector<unsigned> tmp = projectionParameters()->origin->collectProjections();
-			std::vector<unsigned> res;
-			for(const auto& d : projectionParameters()->dimensions) {
-				res.push_back(d);
-			}
-			DEBUG("hypro.representations.supportFunction","Projection Object: got " << res.size() << " dimensions.");
-
-			for(auto resIt = res.begin(); resIt != res.end(); ){
-				if(std::find(tmp.begin(), tmp.end(), *resIt) == tmp.end()) {
-					DEBUG("hypro.representations.supportFunction","Delete dim " << *resIt);
-					resIt = res.erase(resIt);
-				} else {
-					DEBUG("hypro.representations.supportFunction","Keep dim " << *resIt);
-					++resIt;
-				}
-			}
-			//checkTreeValidity();
-			return res;
-		}
-		case SF_TYPE::SCALE: {
-			//checkTreeValidity();
-			return scaleParameters()->origin->collectProjections();
-		}
-		case SF_TYPE::SUM: {
-			//assert(summands()->lhs->checkTreeValidity());
-			std::cerr << __func__ << ": Lhs type: " << summands()->lhs->type() << std::endl;
-			std::vector<unsigned> lhsProjections = summands()->lhs->collectProjections();
-			std::vector<unsigned> rhsProjections = summands()->rhs->collectProjections();
-			std::vector<unsigned> res;
-			while(!lhsProjections.empty() && !rhsProjections.empty()){
-				if(lhsProjections.front() == rhsProjections.front()){
-					res.emplace_back(lhsProjections.front());
-					DEBUG("hypro.representations.supportFunction","Sum, add dimension " << res.back());
-					lhsProjections.erase(lhsProjections.begin());
-					rhsProjections.erase(rhsProjections.begin());
-				} else {
-					if(lhsProjections.front() < rhsProjections.front()){
-						DEBUG("hypro.representations.supportFunction","Sum, dimension " << lhsProjections.front() << " not part in rhs, drop.");
-						lhsProjections.erase(lhsProjections.begin());
-					} else {
-						DEBUG("hypro.representations.supportFunction","Sum, dimension " << rhsProjections.front() << " not part in lhs, drop.");
-						rhsProjections.erase(rhsProjections.begin());
-					}
-				}
-			}
-			//checkTreeValidity();
-			return res;
-		}
-		case SF_TYPE::UNITE: {
-			std::vector<std::vector<unsigned>> projections;
-			std::vector<unsigned> res;
-			bool allNotEmpty = true;
-			//std::cout << __func__ << " Union items size: " << unionParameters()->items.size() << std::endl;
-			for(const auto& set : unionParameters()->items) {
-				projections.push_back(set->collectProjections());
-				if(projections.back().empty()) {
-					allNotEmpty = false;
-				}
-			}
-			while(allNotEmpty) {
-				unsigned frontDimension = projections[0].front();
-				bool allHaveFrontDimensionInCommon = true;
-				for(const auto& row : projections) {
-					if(row.front() != frontDimension ) {
-						allHaveFrontDimensionInCommon = false;
-					}
-				}
-				if(allHaveFrontDimensionInCommon) {
-					res.push_back(frontDimension);
-				}
-				// in any case erase all fronts that are equal to the current front dimension
-				for(auto& row : projections) {
-					if(row.front() == frontDimension ) {
-						row.erase(row.begin());
-						if(row.empty()){
-							allNotEmpty = false;
-						}
-					}
-				}
-			}
-			//checkTreeValidity();
-			return res;
-		}
-		case SF_TYPE::INTERSECT: {
-			intersectionParameters()->lhs->checkTreeValidity();
-			std::vector<unsigned> lhsProjections = intersectionParameters()->lhs->collectProjections();
-			std::vector<unsigned> rhsProjections = intersectionParameters()->rhs->collectProjections();
-			std::vector<unsigned> res;
-			while(!lhsProjections.empty() && !rhsProjections.empty()){
-				if(lhsProjections.front() == rhsProjections.front()){
-					res.emplace_back(lhsProjections.front());
-					DEBUG("hypro.representations.supportFunction","Intersection, add dimension " << res.back());
-					lhsProjections.erase(lhsProjections.begin());
-					rhsProjections.erase(rhsProjections.begin());
-				} else {
-					if(lhsProjections.front() < rhsProjections.front()){
-						DEBUG("hypro.representations.supportFunction","Intersection, dimension " << lhsProjections.front() << " not part in rhs, drop.");
-						lhsProjections.erase(lhsProjections.begin());
-					} else {
-						DEBUG("hypro.representations.supportFunction","Intersection, dimension " << rhsProjections.front() << " not part in lhs, drop.");
-						rhsProjections.erase(rhsProjections.begin());
-					}
-				}
-			}
-			//checkTreeValidity();
-			return res;
-		}
-		case SF_TYPE::NONE: {
-			std::cout << __func__ << ": SF Type not properly initialized!" << std::endl;
-			assert(false);
-		}
-		default:
-			assert(false);
-			return std::vector<unsigned>();
-	}
-	*/
-}
-
-template<typename Number>
-std::vector<unsigned> SupportFunctionContent<Number>::collectProjectionsIterative() const {
+std::vector<std::size_t> SupportFunctionContent<Number>::collectProjections() const {
 	using Node = std::shared_ptr<SupportFunctionContent<Number>>;
-	using Res = std::vector<unsigned>;
+	using Res = std::vector<std::size_t>;
 
 	std::vector<Node> callStack;
 	//std::vector<vector_t<Number>> paramStack;
@@ -1822,7 +1383,7 @@ std::vector<unsigned> SupportFunctionContent<Number>::collectProjectionsIterativ
 			// update result
 			Res res;
 			//DEBUG("hypro.representations.supportFunction","mDimension " << mDimension);
-			for(unsigned i = 0; i < mDimension; ++i){
+			for(std::size_t i = 0; i < mDimension; ++i){
 				//DEBUG("hypro.representations.supportFunction","Added dimension " << i);
 				res.emplace_back(i);
 			}
@@ -1858,7 +1419,7 @@ std::vector<unsigned> SupportFunctionContent<Number>::collectProjectionsIterativ
 					// We need to filter, in case the element is a projection.
 					if(cur->type() == SF_TYPE::PROJECTION) {
 						assert(resultStack.back().second.size() == 1);
-						std::vector<unsigned> tmp = cur->projectionParameters()->dimensions;
+						std::vector<std::size_t> tmp = cur->projectionParameters()->dimensions;
 						for(auto dimIt = tmp.begin(); dimIt != tmp.end(); ) {
 							if(std::find(resultStack.back().second.front().begin(), resultStack.back().second.front().end(), *dimIt) == resultStack.back().second.front().end()) {
 								dimIt = tmp.erase(dimIt);
@@ -1881,7 +1442,7 @@ std::vector<unsigned> SupportFunctionContent<Number>::collectProjectionsIterativ
 					// result vectors, if the respective element is contained. Iterating over the first is sufficient, as elements
 					// not in the first vector will not be in the intersection anyways.
 					for(unsigned pos = 0; pos < resultStack.back().second.begin()->size(); ++pos){
-						unsigned element = resultStack.back().second.begin()->at(pos);
+						std::size_t element = resultStack.back().second.begin()->at(pos);
 						bool elementInAllVectors = true;
 						for(unsigned resIndex = 1; resIndex < resultStack.back().second.size(); ++resIndex) {
 							if(std::find(resultStack.back().second.at(resIndex).begin(), resultStack.back().second.at(resIndex).end(), element) == resultStack.back().second.at(resIndex).end()){
@@ -1918,7 +1479,7 @@ std::vector<unsigned> SupportFunctionContent<Number>::collectProjectionsIterativ
 				//std::cout << "intermediate node on way down." << std::endl;
 
 				// NEW RECURSIVE CALLS
-				std::size_t callingFrame = callStack.size() - 1 ;
+				int callingFrame = int(callStack.size()) - 1 ;
 
 				switch ( cur->type() ) {
 					case SF_TYPE::SUM: {
@@ -1975,7 +1536,7 @@ std::vector<unsigned> SupportFunctionContent<Number>::collectProjectionsIterativ
 	}
 	assert(false);
 	std::cout << "THIS SHOULD NOT HAPPEN." << std::endl;
-	return std::vector<unsigned>();
+	return std::vector<std::size_t>();
 }
 
 template <typename Number>
@@ -2034,7 +1595,7 @@ BallSupportFunction<Number> *SupportFunctionContent<Number>::ball() const {
 }
 
 template<typename Number>
-std::shared_ptr<SupportFunctionContent<Number>> SupportFunctionContent<Number>::project(const std::vector<unsigned>& dimensions) const {
+std::shared_ptr<SupportFunctionContent<Number>> SupportFunctionContent<Number>::project(const std::vector<std::size_t>& dimensions) const {
 	return create(getThis(),dimensions);
 }
 
@@ -2129,6 +1690,7 @@ bool SupportFunctionContent<Number>::contains( const vector_t<Number> &_point ) 
 		case SF_TYPE::NONE: {
 			std::cout << __func__ << ": SF Type not properly initialized!" << std::endl;
 			assert(false);
+			return false;
 		}
 		default:
 			DEBUG("hypro.representations.supportFunction","UNKNOWN, point: " << _point);
@@ -2213,6 +1775,7 @@ bool SupportFunctionContent<Number>::empty() const {
 		case SF_TYPE::NONE: {
 			std::cout << __func__ << ": SF Type not properly initialized!" << std::endl;
 			assert(false);
+			return false;
 		}
 		default:
 			assert( false );

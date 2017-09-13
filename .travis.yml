@@ -47,7 +47,6 @@ addons:
       - clang-3.7
       - clang-3.8
       - clang-3.9
-      - libglpk-dev
       - graphviz
       - pgf
       - texlive-latex-extra
@@ -61,7 +60,7 @@ matrix:
     - os: linux
       dist: trusty
       compiler: gcc
-      env: COMPILER=g++-5
+      env: COMPILER=g++-5 FLAGS=-DCREATE_DOC=ON
     - os: linux
       dist: trusty
       compiler: gcc
@@ -82,6 +81,18 @@ matrix:
       osx_image: xcode6.4
       compiler: clang
       env: COMPILER=clang++
+    - os: osx
+      osx_image: xcode7.3
+      compiler: clang
+      env: COMPILER=clang++
+    - os: osx
+      osx_image: xcode8
+      compiler: clang
+      env: COMPILER=clang++
+    - os: osx
+      osx_image: xcode8.3
+      compiler: clang
+      env: COMPILER=clang++
 
 before_install:
   - cd .travis/ && source setupTravis.sh && cd ../
@@ -96,10 +107,9 @@ script:
 
 # Generate and deploy documentation
 after_success:
-  - cmake -DCREATE_DOC=ON ..
-  - cd $TRAVIS_BUILD_DIR
-  - chmod +x createAndDeployDocumentation.sh
-  - ./createAndDeployDocumentation.sh
+  - cd ${TRAVIS_BUILD_DIR}
+  - chmod +x .travis/buildDoc.sh
+  - ./.travis/buildDoc.sh
   # coveralls
   - chmod +x processCoverage.sh
   - ./processCoverage.sh

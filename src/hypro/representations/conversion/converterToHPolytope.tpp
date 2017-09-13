@@ -18,6 +18,11 @@ typename Converter<Number>::HPolytope Converter<Number>::toHPolytope( const HPol
 }
 
 template<typename Number>
+typename Converter<Number>::HPolytope Converter<Number>::toHPolytope( const ConstraintSet& _source, const CONV_MODE ){
+    return HPolytopeT<Number,Converter>(_source.matrix(), _source.vector());
+}
+
+template<typename Number>
 typename Converter<Number>::HPolytope Converter<Number>::toHPolytope( const Ellipsoid& _source, const CONV_MODE ){
 	vector_t<Number> l(_source.dimension());
 	l.setZero();
@@ -85,14 +90,14 @@ typename Converter<Number>::HPolytope Converter<Number>::toHPolytope( const VPol
 template<typename Number>
 typename Converter<Number>::HPolytope Converter<Number>::toHPolytope( const Box& _source, const CONV_MODE ){
      //gets dimension of box
-     unsigned dim = _source.dimension();
+     std::size_t dim = _source.dimension();
      //only continue if dimension is at least 1
      assert( dim >= 1);
 
      //initialize normal matrix as zero matrix with 2*dim rows and dim columns
      matrix_t<Number> directions = matrix_t<Number>::Zero( 2 * dim, dim );
      //for every dimension:
-     for ( unsigned i = 0; i < dim; ++i ) {
+     for ( std::size_t i = 0; i < dim; ++i ) {
          //write fixed entries (because of box) into the normal matrix (2 each column)
            directions( 2 * i, i ) = Number(-1);
            directions( 2 * i + 1, i ) = Number(1);
@@ -104,7 +109,7 @@ typename Converter<Number>::HPolytope Converter<Number>::toHPolytope( const Box&
       //gets intervals of box
      std::vector<carl::Interval<Number>> intervals = _source.boundaries();
       //for every dimension:
-     for ( unsigned i = 0; i < dim; ++i ) {
+     for ( std::size_t i = 0; i < dim; ++i ) {
          //write inverted lower bound values and upper bound values into the distance vector
            distances( 2 * i ) = -intervals[i].lower();
            distances( 2 * i + 1 ) = intervals[i].upper();
@@ -128,11 +133,11 @@ typename Converter<Number>::HPolytope Converter<Number>::toHPolytope( const Zono
 
 // conversion from support function to H-Polytope (no differentiation between conversion modes - always OVER)
 template<typename Number>
-typename Converter<Number>::HPolytope Converter<Number>::toHPolytope( const SupportFunction& _source, const std::vector<vector_t<Number>>& additionalDirections, const CONV_MODE, unsigned numberOfDirections){
+typename Converter<Number>::HPolytope Converter<Number>::toHPolytope( const SupportFunction& _source, const std::vector<vector_t<Number>>& additionalDirections, const CONV_MODE, std::size_t numberOfDirections){
     //gets dimension of source object
-    unsigned dim = _source.dimension();
+    std::size_t dim = _source.dimension();
 
-    std::vector<unsigned> projections = _source.collectProjections();
+    std::vector<std::size_t> projections = _source.collectProjections();
     //std::cout << __func__ << ": collected " << projections.size() << " projections." << std::endl;
 	if( projections.size() == dim ){
 		//computes a vector of template directions based on the dimension and the requested number of directions which should get evaluated
@@ -147,7 +152,7 @@ typename Converter<Number>::HPolytope Converter<Number>::toHPolytope( const Supp
 	        templateDirectionMatrix.row(i) = templateDirections[i];
 	    }
 	    std::size_t pos = 0;
-	    for (unsigned adIndex = templateDirections.size(); adIndex < templateDirectionMatrix.rows(); ++adIndex) {
+	    for (Eigen::Index adIndex = Eigen::Index(templateDirections.size()); adIndex < templateDirectionMatrix.rows(); ++adIndex) {
 	        templateDirectionMatrix.row(adIndex) = additionalDirections.at(pos);
 	        ++pos;
 	    }
@@ -209,8 +214,8 @@ typename Converter<Number>::HPolytope Converter<Number>::toHPolytope( const Supp
 			templateDirectionMatrix.row(i) = templateDirections[i];
 		}
 		//std::cout << "TemplateDirectionMatrix: " << std::endl << templateDirectionMatrix << std::endl;
-		unsigned pos = 0;
-		for (unsigned adIndex = templateDirections.size(); adIndex < templateDirectionMatrix.rows(); ++adIndex) {
+		std::size_t pos = 0;
+		for (Eigen::Index adIndex = Eigen::Index(templateDirections.size()); adIndex < templateDirectionMatrix.rows(); ++adIndex) {
 			templateDirectionMatrix.row(adIndex) = additionalDirections.at(pos);
 			++pos;
 		}
@@ -221,11 +226,11 @@ typename Converter<Number>::HPolytope Converter<Number>::toHPolytope( const Supp
 
 		//std::cout << "Multi-Eval done, reduce to relevant dimensions" << std::endl;
 
-		unsigned newDim = projections.size();
+		std::size_t newDim = projections.size();
 		matrix_t<Number> constraints = matrix_t<Number>(offsets.size(), newDim);
 		vector_t<Number> constants = vector_t<Number>(offsets.size());
-		for(unsigned rowIndex = 0; rowIndex < offsets.size(); ++rowIndex) {
-			unsigned colPos = 0;
+		for(unsigned rowIndex = 0; rowIndex < Eigen::Index(offsets.size()); ++rowIndex) {
+			Eigen::Index colPos = 0;
 			for(auto projIt = projections.begin(); projIt != projections.end(); ++projIt, ++colPos) {
 				constraints(rowIndex,colPos) = templateDirectionMatrix(rowIndex, (*projIt));
 			}

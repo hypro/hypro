@@ -145,7 +145,7 @@ TYPED_TEST(HPolytopeTest, Insertion)
 
 	EXPECT_TRUE(hpt1.hasConstraint(p1));
 	EXPECT_FALSE(hpt1.empty());
-	EXPECT_EQ(hpt1.vertices().size(), 4);
+	EXPECT_EQ(hpt1.vertices().size(), std::size_t(4));
 
 	// halfspace containing parts of the box
 	Halfspace<TypeParam> p2({TypeParam(1),TypeParam(1)}, TypeParam(2));
@@ -153,7 +153,7 @@ TYPED_TEST(HPolytopeTest, Insertion)
 
 	EXPECT_TRUE(hpt1.hasConstraint(p2));
 	EXPECT_FALSE(hpt1.empty());
-	EXPECT_EQ(hpt1.vertices().size(), 5);
+	EXPECT_EQ(hpt1.vertices().size(), std::size_t(5));
 
 	// halfspace containing one point of the box
 	Halfspace<TypeParam> p3({TypeParam(1),TypeParam(1)}, TypeParam(-4));
@@ -161,7 +161,7 @@ TYPED_TEST(HPolytopeTest, Insertion)
 
 	EXPECT_TRUE(hpt1.hasConstraint(p3));
 	EXPECT_FALSE(hpt1.empty());
-	EXPECT_EQ(hpt1.vertices().size(), 1);
+	EXPECT_EQ(hpt1.vertices().size(), std::size_t(1));
 
 	// halfspace not containing the box
 	Halfspace<TypeParam> p4({TypeParam(1),TypeParam(1)}, TypeParam(-5));
@@ -169,7 +169,7 @@ TYPED_TEST(HPolytopeTest, Insertion)
 
 	EXPECT_TRUE(hpt1.hasConstraint(p4));
 	EXPECT_TRUE(hpt1.empty());
-	EXPECT_EQ(hpt1.vertices().size(), 0);
+	EXPECT_EQ(hpt1.vertices().size(), std::size_t(0));
 }
 
 

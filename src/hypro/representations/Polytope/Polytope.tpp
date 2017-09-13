@@ -116,7 +116,7 @@ void PolytopeT<Number,Converter>::updatePoints() const {
 }
 
 template <typename Number, typename Converter>
-std::vector<Point<Number>> PolytopeT<Number,Converter>::vertices( const Location<Number>* ) const {
+std::vector<Point<Number>> PolytopeT<Number,Converter>::vertices( const matrix_t<Number>& ) const {
 	if ( !mPointsUpToDate ) {
 		updatePoints();
 	}
@@ -348,7 +348,7 @@ PolytopeT<Number,Converter> PolytopeT<Number,Converter>::affineTransformation( c
 }
 
 template <typename Number, typename Converter>
-PolytopeT<Number,Converter> PolytopeT<Number,Converter>::project(const std::vector<unsigned>& dimensions) const {
+PolytopeT<Number,Converter> PolytopeT<Number,Converter>::project(const std::vector<std::size_t>& dimensions) const {
 	using namespace Parma_Polyhedra_Library;
 
 	// create inverse of dimensions to get the variables to unconstrain

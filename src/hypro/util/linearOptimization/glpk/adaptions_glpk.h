@@ -5,7 +5,7 @@
 #include "../EvaluationResult.h"
 #include "../../../datastructures/Point.h"
 #include "../../../config.h"
-#include <glpk.h>
+#include "../../../../resources/glpk-4.45/build/include/glpk.h"
 
 namespace hypro {
 	inline void printProblem(glp_prob* glpkProblem);

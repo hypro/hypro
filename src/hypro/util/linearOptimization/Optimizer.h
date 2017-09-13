@@ -29,7 +29,7 @@
 #include "../statistics/statistics.h"
 #include "../logging/Logger.h"
 
-#include <glpk.h>
+#include "../../../resources/glpk-4.45/build/include/glpk.h"
 
 namespace hypro {
 
@@ -48,7 +48,7 @@ namespace hypro {
 
 		mutable bool 				mConsistencyChecked;
 		mutable SOLUTION 			mLastConsistencyAnswer;
-		static bool			mWarnInexact;
+		static bool			warnInexact;
 
 		// dependent members, all mutable
 		#ifdef HYPRO_USE_SMTRAT
@@ -92,9 +92,9 @@ namespace hypro {
 			fileCounter = cnt;
 			#endif
 			#if !defined HYPRO_USE_SMTRAT && !defined HYPRO_USE_Z3 && !defined HYPRO_USE_SOPLEX
-			if(!mWarnInexact && carl::is_rational<Number>().value){
+			if(!Optimizer<Number>::warnInexact && carl::is_rational<Number>().value){
 				// only warn once
-				mWarnInexact = true;
+				Optimizer<Number>::warnInexact = true;
 				WARN("hypro.optimizer","Attention, using exact arithmetic with inexact linear optimization setup (glpk only, no exact backend).");
 			}
 			#endif
@@ -221,6 +221,9 @@ namespace hypro {
 
 	};
 } // namespace hypro
+
+template<typename Number>
+bool hypro::Optimizer<Number>::warnInexact = false;
 
 #ifdef USE_CLN_NUMBERS
 #include <cln/cln.h>

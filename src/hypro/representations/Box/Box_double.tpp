@@ -19,8 +19,8 @@ namespace hypro {
 			vector_t<double> lower = vector_t<double>(_intervals.size());
 			vector_t<double> upper = vector_t<double>(_intervals.size());
 			for (std::size_t dim = 0; dim < _intervals.size(); ++dim) {
-				lower(dim) = _intervals.at(dim).lower();
-				upper(dim) = _intervals.at(dim).upper();
+				lower(Eigen::Index(dim)) = _intervals.at(dim).lower();
+				upper(Eigen::Index(dim)) = _intervals.at(dim).upper();
 			}
 			mLimits = std::make_pair(Point<double>(lower), Point<double>(upper));
 		}
@@ -132,12 +132,12 @@ BoxT<double,Converter>::BoxT( const std::set<Point<double>> &_points ) {
 		vector_t<double> upper = _points.begin()->rawCoordinates();
 		for(const auto& point : _points) {
 			for(std::size_t d = 0; d < point.dimension(); ++d){
-				if(point.at(d) < lower(d)) {
-					lower(d) = point.at(d);
+				if(point.at(d) < lower(Eigen::Index(d))) {
+					lower(Eigen::Index(d)) = point.at(d);
 				}
 
-				if(point.at(d) > upper(d)) {
-					upper(d) = point.at(d);
+				if(point.at(d) > upper(Eigen::Index(d))) {
+					upper(Eigen::Index(d)) = point.at(d);
 				}
 			}
 		}
@@ -152,12 +152,12 @@ BoxT<double,Converter>::BoxT( const std::vector<Point<double>> &_points ) {
 		vector_t<double> upper = _points.begin()->rawCoordinates();
 		for(const auto& point : _points) {
 			for(std::size_t d = 0; d < point.dimension(); ++d){
-				if(point.at(d) < lower(d)) {
-					lower(d) = point.at(d);
+				if(point.at(d) < lower(Eigen::Index(d))) {
+					lower(Eigen::Index(d)) = point.at(d);
 				}
 
-				if(point.at(d) > upper(d)) {
-					upper(d) = point.at(d);
+				if(point.at(d) > upper(Eigen::Index(d))) {
+					upper(Eigen::Index(d)) = point.at(d);
 				}
 			}
 		}
@@ -204,10 +204,10 @@ std::vector<Halfspace<double>> BoxT<double,Converter>::constraints() const {
 		std::size_t dim = this->dimension();
 		res.reserve(2*dim);
 		for( std::size_t d = 0; d < dim; ++d) {
-			vector_t<double> low = vector_t<double>::Zero(dim);
-			low(d) = -1;
-			vector_t<double> up = vector_t<double>::Zero(dim);
-			up(d) = 1;
+			vector_t<double> low = vector_t<double>::Zero(Eigen::Index(dim));
+			low(Eigen::Index(d)) = -1;
+			vector_t<double> up = vector_t<double>::Zero(Eigen::Index(dim));
+			up(Eigen::Index(d)) = 1;
 			double lOff = -mLimits.first.at(d);
 			double uOff = mLimits.second.at(d);
 			res.emplace_back(low, lOff);
@@ -236,9 +236,9 @@ double BoxT<double,Converter>::supremum() const {
 }
 
 template<typename Converter>
-std::vector<Point<double>> BoxT<double,Converter>::vertices( const Location<double>* ) const {
+std::vector<Point<double>> BoxT<double,Converter>::vertices( const matrix_t<double>& ) const {
 	std::vector<Point<double>> result;
-	std::size_t limit = pow( 2, mLimits.first.dimension() );
+	std::size_t limit = std::size_t(pow( 2, mLimits.first.dimension() ));
 
 	for ( std::size_t bitCount = 0; bitCount < limit; ++bitCount ) {
 		vector_t<double> coord = vector_t<double>( dimension() );
@@ -340,7 +340,7 @@ std::pair<bool, BoxT<double,Converter>> BoxT<double,Converter>::satisfiesHalfspa
 	// at this point the box will be limited but not empty.
 	matrix_t<double> newPlanes = matrix_t<double>(limitingPlanes.size(), _mat.cols());
 	vector_t<double> newDistances = vector_t<double>(limitingPlanes.size());
-	int rowPos = newPlanes.rows()-1;
+	Eigen::Index rowPos = newPlanes.rows()-1;
 	while(!limitingPlanes.empty()){
 		assert(rowPos >= 0);
 		newPlanes.row(rowPos) = _mat.row(limitingPlanes.back());
@@ -350,13 +350,14 @@ std::pair<bool, BoxT<double,Converter>> BoxT<double,Converter>::satisfiesHalfspa
 	}
 	assert(newPlanes.rows() == newDistances.rows());
 	BoxT<double,Converter> tmpBox = this->intersectHalfspaces(newPlanes,newDistances);
-	assert(!tmpBox.empty());
+	// Todo-check: For rational numbers this assertion holds, what about native doubles?
+	//assert(!tmpBox.empty());
 	//std::cout << __func__ << " TRUE, " << convert<double,double>(tmpBox) << std::endl;
 	return std::make_pair(true, tmpBox);
 }
 
 template<typename Converter>
-BoxT<double,Converter> BoxT<double,Converter>::project(const std::vector<unsigned>& dimensions) const {
+BoxT<double,Converter> BoxT<double,Converter>::project(const std::vector<std::size_t>& dimensions) const {
 	if(dimensions.empty()) {
 		return Empty();
 	}
@@ -376,10 +377,10 @@ BoxT<double,Converter> BoxT<double,Converter>::linearTransformation( const matri
 	Point<double> min;
 	Point<double> max;
 
-	for (int k = 0; k < A.rows(); ++k) {
-		for (int j = 0; j < A.cols(); ++j) {
-			double a = mLimits.first.at(j)*A(k,j);
-			double b = mLimits.second.at(j)*A(k,j);
+	for (std::size_t k = 0; k < std::size_t(A.rows()); ++k) {
+		for (std::size_t j = 0; j < std::size_t(A.cols()); ++j) {
+			double a = mLimits.first.at(j)*A(Eigen::Index(k),Eigen::Index(j));
+			double b = mLimits.second.at(j)*A(Eigen::Index(k),Eigen::Index(j));
 			//std::cout << "Obtained values " << a << " and " << b << " for dimension " << k << " and colum " << j << std::endl;
 				if(a > b){
 					max[k] += a;
@@ -424,7 +425,7 @@ BoxT<double,Converter> BoxT<double,Converter>::minkowskiDecomposition( const Box
 template<typename Converter>
 BoxT<double,Converter> BoxT<double,Converter>::intersect( const BoxT<double,Converter> &rhs ) const {
 	std::size_t dim = rhs.dimension() < this->dimension() ? rhs.dimension() : this->dimension();
-	std::pair<Point<double>, Point<double>> limits(std::make_pair(Point<double>(vector_t<double>::Zero(dim)), Point<double>(vector_t<double>::Zero(dim))));
+	std::pair<Point<double>, Point<double>> limits(std::make_pair(Point<double>(vector_t<double>::Zero(Eigen::Index(dim))), Point<double>(vector_t<double>::Zero(Eigen::Index(dim)))));
 	std::pair<Point<double>, Point<double>> rhsLimits = rhs.limits();
 	for ( std::size_t i = 0; i < dim; ++i ) {
 		limits.first[i] = mLimits.first.at(i) > rhsLimits.first.at(i) ? mLimits.first.at(i) : rhsLimits.first.at(i);
@@ -468,22 +469,22 @@ BoxT<double,Converter> BoxT<double,Converter>::intersectHalfspace( const Halfspa
 		}
 
 		//std::cout << __func__ << " Min below: " << holdsMin << ", Max below: " << holdsMax << std::endl;
-		unsigned dim = this->dimension();
+		std::size_t dim = this->dimension();
 
 		// Phase 1: Find starting point (point outside) for phase 2 by depth-first search or use limit points, if applicable
 		Point<double> farestPointOutside = copyBox.limits().first;
 		Point<double> farestPointInside = copyBox.limits().first;
-		unsigned usedDimension = 0;
+		std::size_t usedDimension = 0;
 		// determine walk direction by using plane normal and variable order
 		for(; usedDimension < dim; ++usedDimension){
-			if(hspace.normal()(usedDimension) > 0){
+			if(hspace.normal()(Eigen::Index(usedDimension)) > 0){
 				if(farestPointOutside.at(usedDimension) != copyBox.limits().second.at(usedDimension)) {
 					farestPointOutside[usedDimension] = copyBox.limits().second.at(usedDimension);
 				}
 				if(farestPointInside.at(usedDimension) != copyBox.limits().first.at(usedDimension)) {
 					farestPointInside[usedDimension] = copyBox.limits().first.at(usedDimension);
 				}
-			} else if( hspace.normal()(usedDimension) < 0){
+			} else if( hspace.normal()(Eigen::Index(usedDimension)) < 0){
 				if( farestPointOutside.at(usedDimension) != copyBox.limits().first.at(usedDimension) ) {
 					farestPointOutside[usedDimension] = copyBox.limits().first.at(usedDimension);
 				}
@@ -636,7 +637,7 @@ BoxT<double,Converter> BoxT<double,Converter>::unite( const BoxT<double,Converte
 	assert( dimension() == rhs.dimension() );
 	std::size_t dim = this->dimension();
 
-	std::pair<Point<double>, Point<double>> limits(std::make_pair(Point<double>(vector_t<double>::Zero(dim)), Point<double>(vector_t<double>::Zero(dim))));
+	std::pair<Point<double>, Point<double>> limits(std::make_pair(Point<double>(vector_t<double>::Zero(Eigen::Index(dim))), Point<double>(vector_t<double>::Zero(Eigen::Index(dim)))));
 	std::pair<Point<double>, Point<double>> rhsLimits = rhs.limits();
 	for ( std::size_t i = 0; i < dim; ++i ) {
 		limits.first[i] = mLimits.first.at(i) < rhsLimits.first.at(i) ? mLimits.first.at(i) : rhsLimits.first.at(i);

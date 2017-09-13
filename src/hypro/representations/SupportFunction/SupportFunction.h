@@ -9,7 +9,6 @@
 #include "util.h"
 #include "SupportFunctionContent.h"
 #include "../../util/templateDirections.h"
-#include "../../datastructures/hybridAutomata/Location.h"
 
 namespace hypro {
 
@@ -69,9 +68,9 @@ public:
 
 	void removeRedundancy();
 	void reduceNumberRepresentation() {}
-	std::vector<Point<Number>> vertices( const Location<Number>* = nullptr ) const;
+	std::vector<Point<Number>> vertices( const matrix_t<Number>& = matrix_t<Number>::Zero(0,0) ) const;
 	Number supremum() const;
-	SupportFunctionT<Number,Converter> project(const std::vector<unsigned>& dimensions) const;
+	SupportFunctionT<Number,Converter> project(const std::vector<std::size_t>& dimensions) const;
 	SupportFunctionT<Number,Converter> linearTransformation( const matrix_t<Number>& A ) const;
 	SupportFunctionT<Number,Converter> affineTransformation( const matrix_t<Number>& A, const vector_t<Number>& b ) const;
 	SupportFunctionT<Number,Converter> minkowskiSum( const SupportFunctionT<Number,Converter>& _rhs ) const;
@@ -80,7 +79,7 @@ public:
 	SupportFunctionT<Number,Converter> intersectHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const;
 	bool contains( const Point<Number>& _point ) const;
 	bool contains( const vector_t<Number>& _point ) const;
-	bool contains( const SupportFunctionT<Number, Converter>& rhs, unsigned directions = defaultTemplateDirectionCount ) const;
+	bool contains( const SupportFunctionT<Number, Converter>& rhs, std::size_t directions = defaultTemplateDirectionCount ) const;
 	SupportFunctionT<Number,Converter> unite( const SupportFunctionT<Number,Converter>& _rhs ) const;
 	static SupportFunctionT<Number,Converter> unite( const std::vector<SupportFunctionT<Number,Converter>>& _rhs );
 	SupportFunctionT<Number,Converter> scale( const Number& _factor = 1 ) const;
@@ -113,7 +112,7 @@ public:
 		return lhs.content == rhs.content;
 	}
 
-	std::vector<unsigned> collectProjections() const;
+	std::vector<std::size_t> collectProjections() const;
 
 private:
 	void evaluateTemplate() const;

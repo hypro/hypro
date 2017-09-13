@@ -100,7 +100,7 @@ class VPolytopeT : public GeometricObject<Number, VPolytopeT<Number,Converter>> 
 	* General interface
 	**************************************************************************/
 
-	VPolytopeT project( const std::vector<unsigned>& dimensions ) const;
+	VPolytopeT project( const std::vector<std::size_t>& dimensions ) const;
 	VPolytopeT linearTransformation( const matrix_t<Number>& A ) const;
 	VPolytopeT affineTransformation( const matrix_t<Number>& A, const vector_t<Number>& b ) const;
 	VPolytopeT minkowskiSum( const VPolytopeT& rhs ) const;
@@ -268,7 +268,7 @@ class VPolytopeT : public GeometricObject<Number, VPolytopeT<Number,Converter>> 
 		return mVertices.insert( mVertices.end(), begin, end );
 	}
 
-	std::vector<Point<Number>> vertices( const Location<Number>* = nullptr ) const { return mVertices; };
+	std::vector<Point<Number>> vertices( const matrix_t<Number>& = matrix_t<Number>::Zero(0,0) ) const { return mVertices; };
 
 	bool hasVertex( const Point<Number>& vertex ) const {
 		for ( const auto point : mVertices ) {
@@ -287,18 +287,18 @@ class VPolytopeT : public GeometricObject<Number, VPolytopeT<Number,Converter>> 
 	void removeRedundancy();
 
 	template<typename N = Number, carl::DisableIf< carl::is_float<N> > = carl::dummy>
-	void reduceNumberRepresentation(unsigned limit = fReach_DENOMINATOR) const {
+	void reduceNumberRepresentation(std::size_t limit = fReach_DENOMINATOR) const {
 		if(!mVertices.empty()) {
 	 		// determine barycenter to set rounding directions
-			unsigned dimension = mVertices.begin()->rawCoordinates().rows();
+			std::size_t dimension = std::size_t(mVertices.begin()->rawCoordinates().rows());
 			vector_t<Number> barycenter = vector_t<Number>::Zero(dimension);
 			for(const auto& vertex : mVertices) {
-				barycenter = barycenter + (vertex.rawCoordinates()/ Number(unsigned(mVertices.size())));
+				barycenter = barycenter + (vertex.rawCoordinates()/ Number(mVertices.size()));
 			}
 			for(auto& vertex : mVertices) {
 				// distance vector to the barycenter - each component now determines its own rounding direction.
 				vector_t<Number> roundingDirections = vertex.rawCoordinates() - barycenter;
-				for(unsigned d = 0; d < dimension; ++d) {
+				for(std::size_t d = 0; d < dimension; ++d) {
 					assert(d < vertex.dimension());
 					// determine, which is larger: numerator or denominator
 					Number denom = carl::getDenom(vertex.at(d));
