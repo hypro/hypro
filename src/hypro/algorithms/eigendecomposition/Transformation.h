@@ -5,6 +5,7 @@
 #include "algorithms/reachability/Settings.h"
 #include "datastructures/hybridAutomata/HybridAutomaton.h"
 #include "datastructures/hybridAutomata/Location.h"
+#include "datastructures/hybridAutomata/LocationManager.h"
 #include "datastructures/hybridAutomata/RawState.h"
 #include "datastructures/hybridAutomata/Transition.h"
 #include <Eigen/Eigenvalues>
@@ -72,7 +73,7 @@ class Transformation {
 	using setVector = std::vector<std::pair<matrix_t<Number>, vector_t<Number>>>;
     
   private:
-    std::map<locationSet, locationSet> maplLocations; //maps from original location to transformed organized as black/red tree
+    std::map<Location<Number>*, Location<Number>*> mLocationPtrsMap; //maps from original location to transformed organized as black/red tree
     HybridAutomaton<Number> mTransformedHA;
     //TODO std::map with struct for each location
     //STinputVectors      mSTinputVectors;    //?? needed ?? models ??
@@ -84,6 +85,9 @@ class Transformation {
     //    STevalFunctions   & mSTevalFunctions );
     //reachability::ReachabilitySettings<Number> mReachabilitySettings;
 
+    void declare_structures(STallValues<Number> & mSTallValues, const int n);
+    void mark_x0isMin(Matrix<Number>& x_tr, const int n);       //TODO reformulate struct [when multiple points
+    void swap_x0isMax(Matrix<Number>& x_tr, const int n);       //TODO direct index call without vector swapping
   public:
     /**
 	 * @brief      Default constructor.
@@ -104,6 +108,8 @@ class Transformation {
      */
 	//Transformation( HybridAutomaton<Number>& _hybrid );
     Transformation<Number> (const HybridAutomaton<Number>& _hybrid);
+
+    void output_HybridAutomaton();
 
 //  backtransformation(HybridAutomaton& _hybrid, const Transformation& _trafo );
 //  retransform reults

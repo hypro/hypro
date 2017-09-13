@@ -95,8 +95,13 @@ int main()
     //hypro::HybridAutomaton<Number> ha_transformed =  HybridAutomaton<Number>( boost::get<0>(ha) );
     //std::cout << ha_transformed;
     HybridAutomaton<Number> original_ha = boost::get<0>(ha);
-    Transformation<Number> trafo = Transformation<Number>(original_ha);    
-    
+    Transformation<Number> trafo = Transformation<Number>(original_ha);
+    std::cout << "----------    END OF TRANSFORMATION   ------------" << std::endl;
+    std::cout << original_ha << std::endl;
+    std::cout << "----------    END OF ORIGINAL         ------------" << std::endl;
+    trafo.output_HybridAutomaton();
+    std::cout << std::endl;
+    //std::cout << trafo;
     //TODO clarify if we copy automata inside the transformation or if we assume transfo_ha ISCOPYOF orig_ha
     //--> might be useful to later wrap another class for simple use around on condition number etc
     //TODO initial state input clarifying
@@ -147,18 +152,18 @@ int main()
                     0, 0;
     invar.ib.array() = 0;
 
-	std::cout << "d/dx = A*x+b, A:"<< std::endl << in_eq1.A<< std::endl;
-	std::cout << "b: "<< std::endl << in_eq1.b << std::endl;
-    std::cout << "in_eq1.x0: "<< std::endl << in_eq1.x0 << std::endl;
-    std::cout << "in_eq1.x0_2: "<< std::endl << in_eq1.x0_2 << std::endl;
+	//std::cout << "d/dx = A*x+b, A:"<< std::endl << in_eq1.A<< std::endl;
+	//std::cout << "b: "<< std::endl << in_eq1.b << std::endl;
+    //std::cout << "in_eq1.x0: "<< std::endl << in_eq1.x0 << std::endl;
+    //std::cout << "in_eq1.x0_2: "<< std::endl << in_eq1.x0_2 << std::endl;
 
     Eigen::EigenSolver<Matrix<Number>> es(in_eq1.A);    //decompose matrix directly + constructor
     V << es.eigenvectors().real();
     ind_f.D.diagonal() << es.eigenvalues().real();
     Vinv = V.inverse();
-    std::cout << "Eigenvectors(V): "<< std::endl << V << std::endl;
-	std::cout << "Vinverse: "<< std::endl << Vinv << std::endl;
-	std::cout << "Eigenvalues: "<< std::endl << ind_f.D.diagonal() << std::endl;
+    //std::cout << "Eigenvectors(V): "<< std::endl << V << std::endl;
+	//std::cout << "Vinverse: "<< std::endl << Vinv << std::endl;
+	//std::cout << "Eigenvalues: "<< std::endl << ind_f.D.diagonal() << std::endl;
     //stop on bad conditioning ??
     //TODO checkups
     //invariants+transformed system
@@ -167,9 +172,9 @@ int main()
     dep_f.x_tr.col(1) = Vinv*in_eq1.x0_2;
     in_traj.x_tr.col(0) = dep_f.x_tr.col(0);
     in_traj.x_tr.col(1) = dep_f.x_tr.col(1);
-    std::cout << "x_transformed: " << std::endl << in_traj.x_tr << std::endl;
+    //std::cout << "x_transformed: " << std::endl << in_traj.x_tr << std::endl;
     invar.iAV = invar.iAV*V;                    //transform invariant A(iA)
-    std::cout << "Invariants: A*V="<<std::endl << invar.iAV;
+    //std::cout << "Invariants: A*V="<<std::endl << invar.iAV;
     mark_x0isMin(dep_f.x_tr, n);
     swap_x0isMax(dep_f.x_tr, n);
     //calculate constant values for e-function
@@ -178,7 +183,7 @@ int main()
     dep_f.xhom.col(1) = ind_f.xinhom.array() + dep_f.x_tr.col(1).array();
     in_traj.xhom.col(0) = ind_f.xinhom.array() + in_traj.x_tr.col(0).array();
     in_traj.xhom.col(1) = ind_f.xinhom.array() + in_traj.x_tr.col(1).array();
-    std::cout << "xhom: "<< std::endl << dep_f.xhom;
+    //std::cout << "xhom: "<< std::endl << dep_f.xhom;
     // -----------------------   to another class ------------------------------
     initialize (eval_f, safe_seg, error_seg,flag1.DIM_PLOT, flag1.ORIG_SYS_PLOT,
         ind_f.D, n, V,  dep_f);
