@@ -23,30 +23,44 @@ namespace hypro {
     template <typename Number>
     using DiagonalMatrix= Eigen::DiagonalMatrix<Number,Eigen::Dynamic>;
     using BoolMatrix = matrix_t<bool>;
+/*** STallValues as struct for all according value for a location of an hybrid automaton
+ *      structs of structs can somehow not inherit <Number> ??
+ *      reason for this use is to initialize all of them with 1 linetemplate <class Number>
+ */
+template <typename Number>
+struct STinputVectors {   
+    Vector<Number> x0;
+    Vector<Number> x0_2;
+};
+template <typename Number>
+struct STindependentFunct {
+  DiagonalMatrix<Number> D;
+  Matrix<Number> xinhom;
+  Number delta;
+  std::size_t deltalimit;
+};
+template <typename Number>
+struct STdependentFunct {
+  Matrix<Number> xhom;
+  Matrix<Number> x_tr;
+};
+template <typename Number>
+struct STevalFunctions {
+  Matrix<Number> deriv;
+  BoolMatrix direct;
+};
+template <typename Number>
+struct STflowpipeSegment {
+  std::vector<Vector<Number>> upper;
+  std::vector<Vector<Number>> lower;
+};
 template <typename Number>
 struct STallValues {
-    struct STinputVectors {
-        Vector<Number> x0;
-        Vector<Number> x0_2;
-    };
-    struct STindependentFunct {
-      DiagonalMatrix<Number> D;
-      Matrix<Number> xinhom;
-      Number delta;
-      std::size_t deltalimit;
-    };
-    struct STdependentFunct {
-      Matrix<Number> xhom;
-      Matrix<Number> x_tr;
-    };
-    struct STevalFunctions {
-      Matrix<Number> deriv;
-      BoolMatrix direct;
-    };
-    struct STflowpipeSegment {
-      std::vector<Vector<Number>> upper;
-      std::vector<Vector<Number>> lower;
-    };
+    STinputVectors      <Number> mSTinputVectors;
+    STindependentFunct  <Number> mSTindependentFunct;
+    STdependentFunct    <Number> mSTdependentFunct;
+    STevalFunctions     <Number> mSTevalFunctions;
+    STflowpipeSegment   <Number> mSTflowpipeSegment;
 };
 
 template <typename Number>
