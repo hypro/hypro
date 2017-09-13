@@ -1,6 +1,6 @@
 
 # Add all targets to the build-tree export set
-export(TARGETS ${HYPRO_TARGETS} FILE "${PROJECT_BINARY_DIR}/hyproTargets.cmake" EXPORT_LINK_INTERFACE_LIBRARIES)
+export(TARGETS ${HYPRO_TARGETS} FILE "${PROJECT_BINARY_DIR}/hyproTargets.cmake")
 
 # Export the package for use from the build-tree
 # (this registers the build-tree with a global CMake-registry)
@@ -16,26 +16,25 @@ else()
 endif()
 
 if(STATICLIB_SWITCH)
-	export_target(DEPENDENT_TARGETS carl_STATIC)
+	export_target(DEPENDENT_TARGETS lib_carl)
 	export_target(DEPENDENT_TARGETS GLPK_STATIC)
 	if (HYPRO_USE_Z3)
 		export_target(DEPENDENT_TARGETS z3_STATIC)
 	endif ()
 	if(HYPRO_USE_SMTRAT)
-	    export_target(DEPENDENT_TARGETS smtrat_STATIC)
+	    #export_target(DEPENDENT_TARGETS smtrat_STATIC)
 	endif()
 else()
-	# export carl by invoking its find script
-	set(DEPENDENT_TARGETS "${DEPENDENT_TARGETS}find_package(carl)
-include_directories(${carl_INCLUDE_DIR})")
+	#set(DEPENDENT_TARGETS "${DEPENDENT_TARGETS}find_package(carl)
+#include_directories(${carl_INCLUDE_DIR})")
 
-	#export_target(DEPENDENT_TARGETS carl_SHARED)
-	#export_target(DEPENDENT_TARGETS GLPK_SHARED)
+	export_target(DEPENDENT_TARGETS lib_carl)
+	export_target(DEPENDENT_TARGETS GLPK_STATIC)
 	if (HYPRO_USE_Z3)
 		export_target(DEPENDENT_TARGETS z3_SHARED)
 	endif ()
 	if(HYPRO_USE_SMTRAT)
-	    export_target(DEPENDENT_TARGETS smtrat_SHARED)
+	    export_target(DEPENDENT_TARGETS lib_smtrat)
 	endif()
 endif()
 
