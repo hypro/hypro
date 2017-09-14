@@ -10,10 +10,8 @@
 
 #pragma once
 
-#include <vector>
 #include <string>
 #include <memory>
-#include <antlr4-runtime.h>
 #include "HybridAutomatonLexer.h"
 #include "HybridAutomatonParser.h"
 #include "HybridAutomatonBaseVisitor.h"
@@ -36,12 +34,16 @@ template<typename Number>
 class HyproSettingVisitor;
 
 template<typename Number>
+class HyproBadStatesVisitor;
+
+template<typename Number>
 class HyproFormulaVisitor : public HybridAutomatonBaseVisitor {
 
 	friend class HyproLocationVisitor<Number>;
 	friend class HyproTransitionVisitor<Number>;
 	friend class HyproInitialSetVisitor<Number>;
 	friend class HyproSettingVisitor<Number>;
+	friend class HyproBadStatesVisitor<Number>;
 
 	private:
 

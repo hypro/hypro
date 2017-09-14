@@ -17,7 +17,6 @@
 #include "../../datastructures/HybridAutomaton/LocationManager.h"
 #include "../../datastructures/HybridAutomaton/Condition.h"
 
-
 using namespace antlr4;
 
 namespace hypro {

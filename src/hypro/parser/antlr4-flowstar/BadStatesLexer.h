@@ -1,5 +1,5 @@
 
-// Generated from Formula.g4 by ANTLR 4.7
+// Generated from BadStates.g4 by ANTLR 4.7
 
 #pragma once
 
@@ -9,15 +9,16 @@
 
 
 
-class  FormulaLexer : public antlr4::Lexer {
+class  BadStatesLexer : public antlr4::Lexer {
 public:
   enum {
-    T__0 = 1, T__1 = 2, T__2 = 3, IN = 4, COMMENT = 5, EQUALS = 6, BOOLRELATION = 7, 
-    PLUS = 8, TIMES = 9, NUMBER = 10, VARIABLE = 11, WS = 12
+    T__0 = 1, T__1 = 2, T__2 = 3, T__3 = 4, T__4 = 5, T__5 = 6, IN = 7, 
+    COMMENT = 8, EQUALS = 9, BOOLRELATION = 10, PLUS = 11, TIMES = 12, NUMBER = 13, 
+    VARIABLE = 14, WS = 15
   };
 
-  FormulaLexer(antlr4::CharStream *input);
-  ~FormulaLexer();
+  BadStatesLexer(antlr4::CharStream *input);
+  ~BadStatesLexer();
 
   virtual std::string getGrammarFileName() const override;
   virtual const std::vector<std::string>& getRuleNames() const override;

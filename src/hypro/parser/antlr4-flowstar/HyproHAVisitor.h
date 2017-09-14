@@ -12,8 +12,6 @@
 
 #include <string>
 #include <memory>
-#include <antlr4-runtime.h>
-#include "../../types.h"
 #include "HybridAutomatonLexer.h"
 #include "HybridAutomatonParser.h"
 #include "HybridAutomatonBaseVisitor.h"
@@ -21,6 +19,7 @@
 #include "HyproTransitionVisitor.h"
 #include "HyproInitialSetVisitor.h"
 #include "HyproSettingVisitor.h"
+#include "HyproBadStatesVisitor.h"
 #include "../../datastructures/HybridAutomaton/HybridAutomaton.h"
 #include "../../datastructures/HybridAutomaton/Settings.h"
 
@@ -48,6 +47,7 @@ class HyproHAVisitor : public HybridAutomatonBaseVisitor {
 
 		//Is first defined in HybridAutomaton.h
 		using locationStateMap = std::multimap<const Location<Number>*, State<Number,ConstraintSet<Number>>, locPtrComp<Number>>;
+		using locationConditionMap = std::map<const Location<Number>*, Condition<Number>, locPtrComp<Number>>; /// Map from location pointers to conditions.
 
 		//Constructor and Destructor
 		HyproHAVisitor();
@@ -60,24 +60,6 @@ class HyproHAVisitor : public HybridAutomatonBaseVisitor {
 		//Getter for settings
 		inline ReachabilitySettings<Number> getSettings() { return reachSettings; }		
 };
-
-template<typename Number>
-std::ostream& operator<<(std::ostream& ostr, HyproHAVisitor<Number> visitor){
-	ostr << "Location Names: " << std::endl;
-/*	for(auto loc : visitor.getLocSet()){
-		ostr << loc << std::endl;
-	}
-*/
-	ostr << "Variable Names: " << std::endl;
-/*
-	for(auto var : visitor.getVarNames()){
-		ostr << var << std::endl;
-	}
-*/
-	//ostr << "flowMatrix is:\n " << visitor.getFlow() << std::endl;
-	//ostr << "invMatrix is:\n " << visitor.getInvMat() << std::endl;
-	return ostr;
-}
 
 } //namespace hypro
 

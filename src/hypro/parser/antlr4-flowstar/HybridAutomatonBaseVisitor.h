@@ -155,6 +155,14 @@ public:
     return visitChildren(ctx);
   }
 
+  virtual antlrcpp::Any visitUnsafeset(HybridAutomatonParser::UnsafesetContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitBadstate(HybridAutomatonParser::BadstateContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
 
 };
 

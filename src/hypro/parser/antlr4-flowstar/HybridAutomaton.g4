@@ -9,11 +9,11 @@
  
 grammar HybridAutomaton;
 
-import Transition, Setting, Location, InitialSet;
+import Transition, Setting, Location, InitialSet, BadStates;
 
 ////// Parser Rules
  
-start               : 'hybrid reachability' '{' vardeclaration setting modes jumps init'}' ;
+start               : 'hybrid reachability' '{' vardeclaration setting modes jumps init '}' unsafeset? ;
  
 vardeclaration      : 'state var' VARIABLE ((',' VARIABLE)+)? ;
 

@@ -16,10 +16,10 @@ public:
     T__7 = 8, T__8 = 9, T__9 = 10, T__10 = 11, T__11 = 12, T__12 = 13, T__13 = 14, 
     T__14 = 15, T__15 = 16, T__16 = 17, T__17 = 18, T__18 = 19, T__19 = 20, 
     T__20 = 21, T__21 = 22, T__22 = 23, T__23 = 24, T__24 = 25, T__25 = 26, 
-    T__26 = 27, T__27 = 28, T__28 = 29, T__29 = 30, PARALLELOTOPE = 31, 
-    BOX = 32, JUMP = 33, DEFINE = 34, IN = 35, COMMENT = 36, EQUALS = 37, 
-    BOOLRELATION = 38, PLUS = 39, TIMES = 40, NUMBER = 41, VARIABLE = 42, 
-    WS = 43, EXPONENTIAL = 44
+    T__26 = 27, T__27 = 28, T__28 = 29, T__29 = 30, T__30 = 31, PARALLELOTOPE = 32, 
+    BOX = 33, JUMP = 34, DEFINE = 35, IN = 36, COMMENT = 37, EQUALS = 38, 
+    BOOLRELATION = 39, PLUS = 40, TIMES = 41, NUMBER = 42, VARIABLE = 43, 
+    WS = 44, EXPONENTIAL = 45
   };
 
   enum {
@@ -31,7 +31,7 @@ public:
     RuleFilename = 21, RuleMaxjumps = 22, RulePrint = 23, RuleRemainder = 24, 
     RuleIdentity = 25, RuleFixedorders = 26, RuleCutoff = 27, RulePrecision = 28, 
     RuleModes = 29, RuleLocation = 30, RuleActivities = 31, RuleInvariants = 32, 
-    RuleInit = 33, RuleInitstate = 34
+    RuleInit = 33, RuleInitstate = 34, RuleUnsafeset = 35, RuleBadstate = 36
   };
 
   HybridAutomatonParser(antlr4::TokenStream *input);
@@ -78,7 +78,9 @@ public:
   class ActivitiesContext;
   class InvariantsContext;
   class InitContext;
-  class InitstateContext; 
+  class InitstateContext;
+  class UnsafesetContext;
+  class BadstateContext; 
 
   class  StartContext : public antlr4::ParserRuleContext {
   public:
@@ -89,6 +91,7 @@ public:
     ModesContext *modes();
     JumpsContext *jumps();
     InitContext *init();
+    UnsafesetContext *unsafeset();
 
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
    
@@ -564,6 +567,32 @@ public:
   };
 
   InitstateContext* initstate();
+
+  class  UnsafesetContext : public antlr4::ParserRuleContext {
+  public:
+    UnsafesetContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    std::vector<BadstateContext *> badstate();
+    BadstateContext* badstate(size_t i);
+
+    virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+   
+  };
+
+  UnsafesetContext* unsafeset();
+
+  class  BadstateContext : public antlr4::ParserRuleContext {
+  public:
+    BadstateContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    antlr4::tree::TerminalNode *VARIABLE();
+    ConstrsetContext *constrset();
+
+    virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+   
+  };
+
+  BadstateContext* badstate();
 
 
 private:

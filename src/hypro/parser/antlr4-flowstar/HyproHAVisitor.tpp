@@ -43,11 +43,20 @@ namespace hypro {
 		locationStateMap initSet = initVisitor.visit(ctx->init()).template as<locationStateMap>();
 		std::cout << "-- initVisitor visited!" << std::endl;
 
-		//6.Build HybridAutomaton, return it
+		//6.Calls visit(ctx->unsafeset()) to get local badStates
+		HyproBadStatesVisitor<Number> bStateVisitor = HyproBadStatesVisitor<Number>(varVec, rLocSet);
+		//locationConditionMap badStates;
+		//if(ctx->unsafeset() != NULL){
+		locationConditionMap badStates = bStateVisitor.visit(ctx->unsafeset()).template as<locationConditionMap>();
+		//}
+		std::cout << "-- bStateVisitor visited!" << std::endl;
+
+		//7.Build HybridAutomaton, return it
 		HybridAutomaton<Number> ha;
 		ha.setLocations(locSet);
 		ha.setTransitions(transSet);
 		ha.setInitialStates(initSet);
+		ha.setLocalBadStates(badStates);
 		return std::move(ha);			//Move the ownership of ha to whoever uses ha then, i.e. the test suite
 	}
 

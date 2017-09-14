@@ -27,7 +27,7 @@ constrset	 		: (constraint | intervalexpr)*;
 //Always remember: Keywords first!
 IN 					: 'in' ;
 
-COMMENT				: '#' ~[\r\n] -> skip ;
+COMMENT				: '#' ~[\r\n]* -> skip ;
 
 EQUALS				: '=' ;
 BOOLRELATION		: '<=' | '>=' | '<' | '>' ;
