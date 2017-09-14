@@ -110,7 +110,7 @@ int main()
     //remind last line is ALWAYS added by parser
     //use friend class of transformation? to calculate flowpipe elements/evaluation
     //adapt function accordingly!
-    Flags flag1;
+    /*Flags flag1;
     In_eq in_eq1;               //input system
     Invar invar;                //invariants
     Ind_f ind_f;         //input independent part of e-function
@@ -221,6 +221,7 @@ int main()
     //Halfspace<Number> hsp = Halfspace<Number>({-1,1},0);
     //plotter.plotTex();
     //plotter.plotEps();
+    */
 	return 0;
 }
 

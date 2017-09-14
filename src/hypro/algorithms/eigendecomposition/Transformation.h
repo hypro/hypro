@@ -73,7 +73,7 @@ class Transformation {
 	using setVector = std::vector<std::pair<matrix_t<Number>, vector_t<Number>>>;
     
   private:
-    std::map<Location<Number>*, Location<Number>*> mLocationPtrsMap; //maps from original location to transformed organized as black/red tree
+    std::map< Location<Number>*,Location<Number>* > mLocationPtrsMap; //maps from original location to transformed organized as black/red tree
     HybridAutomaton<Number> mTransformedHA;
     //TODO std::map with struct for each location
     //STinputVectors      mSTinputVectors;    //?? needed ?? models ??
@@ -109,7 +109,7 @@ class Transformation {
 	//Transformation( HybridAutomaton<Number>& _hybrid );
     Transformation<Number> (const HybridAutomaton<Number>& _hybrid);
 
-    void output_HybridAutomaton();
+    void output_HybridAutomaton();    //TODO BROKEN? if invariants not set/empty
 
 //  backtransformation(HybridAutomaton& _hybrid, const Transformation& _trafo );
 //  retransform reults

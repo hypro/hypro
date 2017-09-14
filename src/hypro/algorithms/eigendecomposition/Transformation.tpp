@@ -12,16 +12,17 @@ Transformation<Number>::Transformation (const HybridAutomaton<Number>& _hybrid) 
     Vector<Number> b_tr;                          //transformed and dumped after use
     LocationManager<Number>& locationManager = LocationManager<Number>::getInstance();
     locationSet locations;
+    Location<Number>* PtrtoNewLoc;
     //std::cout<<"size mSTallValues: "<< sizeof(mSTallValues);
     mTransformedHA = HybridAutomaton<Number>();
-    for ( Location<Number>* const &LocPtr : _hybrid.getLocations() ) {
+    for (Location<Number>* LocPtr : _hybrid.getLocations() ) {
         matrix_in_parser = LocPtr->getFlow();   //copy matrix here to calculate
         m_size = matrix_in_parser.cols(); //rows
         //ASSERTION SIZE >= 1 --> delete new locations/skip?
         //are old Matrices freed automatically on new initialization?
         m_size -= 1;
         STallValues<Number> mSTallvalues;               //declare all values for Location
-        declare_structures(mSTallvalues, m_size);       //init
+        declare_structures(mSTallvalues, m_size);       //init --> TODO map including
         b_tr        = Vector<Number>(m_size);
         matrix_calc = Matrix<Number>(m_size,m_size);
         V           = Matrix<Number>(m_size,m_size);
@@ -45,12 +46,36 @@ Transformation<Number>::Transformation (const HybridAutomaton<Number>& _hybrid) 
         matrix_in_parser.topLeftCorner(m_size,m_size) =  matrix_calc;
         matrix_in_parser.topRightCorner(m_size,1) = b_tr;   //size
         //std::cout << matrix_in_parser;
-	    Location<Number>* PtrtoNewLoc = locationManager.create(matrix_in_parser);
+	    PtrtoNewLoc = locationManager.create(matrix_in_parser);
         locations.insert(PtrtoNewLoc);
-        mLocationPtrsMap.insert(std::make_pair(LocPtr, PtrtoNewLoc));
-    }
-    mTransformedHA.setLocations(locations);
+        mLocationPtrsMap.insert(std::make_pair(LocPtr, PtrtoNewLoc));   //cant use const type* const
+    //INVARIANTS(TYPE CONDITION)        [output stream broken with assertion without invariants!]
+        Condition<Number> mInvariant;
+        Condition<Number> mInvariantNEW;
+        //const Condition<Number>&
+        mInvariant = LocPtr->getInvariant();            //object for invariants
+        mInvariantNEW = PtrtoNewLoc->getInvariant();    //object for invariants
+        //std::cout << "Inv: " << mInvariant << std::endl;
+        //setTransitions(const transitionSet& trans);    <-
+        //for( std::size_t i = 1 : mInvariant.size() ) {    //TODO MODIFY Loop through invariants
+                                                            //missing addconstraint etc
+        mInvariantNEW.setMatrix(mInvariant.getMatrix()*matrix_calc);    //inv: A'= A*V
+        mInvariantNEW.setVector(mInvariant.getVector());
+        PtrtoNewLoc->setInvariant(mInvariantNEW);
+        
 
+    }
+    mTransformedHA.setLocations(locations); //add LocationSet to automata
+
+        //std::cout << "Location: " << *PtrtoNewLoc;   //?? tryout
+
+    //TODO
+    //mTransformedHA.setLocations(locations);
+    //at first we are using this
+    mTransformedHA.setTransitions    (_hybrid.getTransitions())    ;
+    mTransformedHA.setInitialStates  (_hybrid.getInitialStates())  ;
+    mTransformedHA.setLocalBadStates (_hybrid.getLocalBadStates()) ;
+    mTransformedHA.setGlobalBadStates(_hybrid.getGlobalBadStates());
     //INVARIANTS TRANSFORMATION
         //
         //PtrtoNewLoc -> setInvariant( const struct Location<Number>::Invariant& _inv );
