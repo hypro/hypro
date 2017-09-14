@@ -48,13 +48,25 @@ else()
 		ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}
 		LINKER_LANGUAGE CXX
 	)
+
+	get_target_property(IFL lib_carl INTERFACE_LINK_LIBRARIES)
+	message(STATUS "Carl interface link libraries: ${IFL}")
+
 	#message(STATUS "antlr libs path: " ${ANTLR4CPP_LIBS})
-	message(STATUS "antlr include dirs path: " ${ANTLR4CPP_INCLUDE_DIRS})
+	#message(STATUS "antlr include dirs path: " ${ANTLR4CPP_INCLUDE_DIRS})
 	message(STATUS "hypro libraries dynamic: " "${${PROJECT_NAME}_LIBRARIES_DYNAMIC}")
 	#message(STATUS "hypro interface include dir: ${CMAKE_CURRENT_SOURCE_DIR}")
 	message("hypro include dirs: " ${${PROJECT_NAME}_INCLUDE_DIRS})
 	#message("hypro sources: " ${sources})
+	target_link_libraries(${PROJECT_NAME} PUBLIC lib_carl)
 	target_link_libraries(${PROJECT_NAME} PUBLIC ${${PROJECT_NAME}_LIBRARIES_DYNAMIC} pthread)
+	#target_link_libraries(${PROJECT_NAME} PUBLIC glpk_STATIC)
+	#target_link_libraries(${PROJECT_NAME} PUBLIC ANTLR4_STATIC)
+	#target_link_libraries(${PROJECT_NAME} PUBLIC pthread)
+	if(HYPRO_USE_SMTRAT)
+		target_link_libraries(${PROJECT_NAME} PUBLIC lib_smtrat)
+	endif()
+
 	target_include_directories(${PROJECT_NAME}
 		PRIVATE ${${PROJECT_NAME}_INCLUDE_DIRS} ${CMAKE_CURRENT_SOURCE_DIR}
 		PUBLIC
