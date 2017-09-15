@@ -4,10 +4,10 @@
 #pragma once
 #include "../../datastructures/HybridAutomaton/Settings.h"
 #include "../../datastructures/HybridAutomaton/HybridAutomaton.h"
+#include "../../representations/conversion/Converter.h"
+//#include "../../datastructures/HybridAutomaton/Transition.h"
 //#include "../../datastructures/HybridAutomaton/Location.h"
 //#include "../../datastructures/HybridAutomaton/LocationManager.h"
-//#include "../../representations/ConstraintSet/ConstraintSet.h"
-//#include "../../datastructures/HybridAutomaton/Transition.h"
 #include <Eigen/Eigenvalues>
 #include <Eigen/Dense>
 /**
@@ -30,30 +30,31 @@ namespace hypro {
  */
 template <typename Number>
 struct STinputVectors {   
-    Vector<Number> x0;
-    Vector<Number> x0_2;
+    Vector<Number>              x0;
+    Vector<Number>              x0_2;
 };
 template <typename Number>
 struct STindependentFunct {
-  DiagonalMatrix<Number> D;
-  Matrix<Number> xinhom;
-  Number delta;
-  std::size_t deltalimit;
+  DiagonalMatrix<Number>        D;
+  Matrix<Number>                xinhom;
+  Number                        delta;
+  std::size_t                   deltalimit;
 };
 template <typename Number>
 struct STdependentFunct {
-  Matrix<Number> xhom;
-  Matrix<Number> x_tr;
+  Matrix<Number>                xhom;
+  Matrix<Number>                x_tr;
 };
 template <typename Number>
 struct STevalFunctions {
-  Matrix<Number> deriv;
-  BoolMatrix direct;
+  Matrix<Number>                deriv;
+  BoolMatrix                    direct;
 };
 template <typename Number>
 struct STflowpipeSegment {
-  std::vector<Vector<Number>> upper;
-  std::vector<Vector<Number>> lower;
+  Matrix<Number>                V;
+  std::vector<Vector<Number>>   upper;
+  std::vector<Vector<Number>>   lower;
 };
 template <typename Number>
 struct STallValues {
@@ -64,7 +65,7 @@ struct STallValues {
     STflowpipeSegment   <Number> mSTflowpipeSegment;
 };
 
-template <typename Number>
+template <typename Number, typename Representation>
 class Transformation {
   public:
   	using locationSet = std::set<Location<Number>*>;
@@ -73,7 +74,9 @@ class Transformation {
 	using setVector = std::vector<std::pair<matrix_t<Number>, vector_t<Number>>>;
     
   private:
-    std::map< Location<Number>*,Location<Number>* > mLocationPtrsMap; //maps from original location to transformed organized as black/red tree
+    //maps from original location to transformed organized as black/red tree
+    std::map< Location<Number>*,Location<Number>*, locPtrComp<Number> > mLocationPtrsMap;     
+    std::map< Location<Number>*,STallValues<Number>, locPtrComp<Number>> mLocPtrtoComputationvaluesMap;
     HybridAutomaton<Number> mTransformedHA;
     //TODO std::map with struct for each location
     //STinputVectors      mSTinputVectors;    //?? needed ?? models ??
@@ -98,7 +101,7 @@ class Transformation {
 	 *
 	 * @param[in]  _hybrid  The original transformation for an hybrid automaton.
 	 */
-	Transformation<Number> ( const Transformation& _trafo );
+	Transformation<Number,Representation> ( const Transformation& _trafo );
 
     /**
      * @brief      Constructor from hybrid automata to adjust automaton and transformation
@@ -107,13 +110,17 @@ class Transformation {
      * @param[in]  transformed_ha  The transformed hybrid automaton.
      */
 	//Transformation( HybridAutomaton<Number>& _hybrid );
-    Transformation<Number> (const HybridAutomaton<Number>& _hybrid);
+    Transformation<Number,Representation> (const HybridAutomaton<Number>& _hybrid);
 
     void output_HybridAutomaton();    //TODO BROKEN? if invariants not set/empty
 
 //  backtransformation(HybridAutomaton& _hybrid, const Transformation& _trafo );
 //  retransform reults
 
+//template<typename Number>
+//struct locPtrComp {
+//    bool operator()(const Location<Number>* lhs, const Location<Number>* rhs) const { return (*lhs < *rhs); }
+//};
 
 };
 } //namespace hypro

@@ -96,7 +96,7 @@ int main()
     //hypro::HybridAutomaton<Number> ha_transformed =  HybridAutomaton<Number>( boost::get<0>(ha) );
     //std::cout << ha_transformed;
     HybridAutomaton<Number> original_ha = boost::get<0>(ha);
-    Transformation<Number> trafo = Transformation<Number>(original_ha);
+    Transformation<Number,Representation> trafo = Transformation<Number,Representation>(original_ha);
     std::cout << "----------    END OF TRANSFORMATION   ------------" << std::endl;
     std::cout << original_ha << std::endl;
     std::cout << "----------    END OF ORIGINAL         ------------" << std::endl;
