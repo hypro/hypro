@@ -6,7 +6,7 @@ template <typename Number, typename Representation>
 Transformation<Number,Representation>::Transformation (const HybridAutomaton<Number>& _hybrid) {
     Matrix<Number> matrix_in_parser;
     Matrix<Number> matrix_calc;
-    size_t m_size;
+    size_t m_size, i;
     Matrix<Number> V;                             //backtransformation
     Matrix<Number> Vinv;                          //dumped after use
     Vector<Number> b_tr;                          //transformed and dumped after use
@@ -19,10 +19,9 @@ Transformation<Number,Representation>::Transformation (const HybridAutomaton<Num
         matrix_in_parser = LocPtr->getFlow();   //copy for calculation; TODO (getsize() missing) many flows
         m_size = matrix_in_parser.cols(); //rows
         //ASSERTION SIZE >= 1 --> delete new locations/skip?
-        //are old Matrices freed automatically on new initialization?
         m_size -= 1;
-        STallValues<Number> mSTallvalues;               //declare all values for Location
-        declare_structures(mSTallvalues, m_size);       //init --> TODO map including
+        STallValues<Number> mSTallvalues;
+        declare_structures(mSTallvalues, m_size);
         b_tr        = Vector<Number>(m_size);
         matrix_calc = Matrix<Number>(m_size,m_size);
         V           = Matrix<Number>(m_size,m_size);
@@ -50,17 +49,16 @@ Transformation<Number,Representation>::Transformation (const HybridAutomaton<Num
         locations.insert(PtrtoNewLoc);
         mLocationPtrsMap.insert(std::make_pair(LocPtr, PtrtoNewLoc));   //cant use const type* const
     //INVARIANTS(TYPE CONDITION)        [TODO output stream broken with assertion without invariants!]
-        Condition<Number> mInvariant;
-        Condition<Number> mInvariantNEW;
-        mInvariant = LocPtr->getInvariant();            //object for invariants
-        mInvariantNEW = PtrtoNewLoc->getInvariant();    //object for invariants
-        //for( std::size_t i = 0 : mInvariant.size()-1 ) {    //TODO MODIFY Loop through invariants
+        Condition<Number> invar1 = LocPtr->getInvariant();
+        Condition<Number> invar1NEW = PtrtoNewLoc->getInvariant();
         //inv: A'= A*V
-        //    mInvariantNEW.setMatrix(Converter.linearTransformation(mInvariant.getMatrix()*V);    
-        //}
-        mInvariantNEW.setMatrix(mInvariant.getMatrix()*V);    //inv: A'= A*V
-        mInvariantNEW.setVector(mInvariant.getVector());
-        PtrtoNewLoc->setInvariant(mInvariantNEW);
+        for( i=0; i<invar1.size(); ++i ) {
+            invar1NEW.setMatrix(invar1.getMatrix(i)*V,i);
+            invar1NEW.setVector(invar1.getVector(i)  ,i);    
+        }
+        //invar1.setMatrix(mInvariant.getMatrix()*V);    //inv: A'= A*V
+        //invar1NEW.setVector(mInvariant.getVector());
+        PtrtoNewLoc->setInvariant(invar1NEW);
     //SAVING STRUCT
         //mSTallvalues.mSTinputVectors.x0       //MOVE TO ALG
         //mSTallvalues.mSTinputVectors.x0_2     //MOVE TO ALG
@@ -82,21 +80,28 @@ Transformation<Number,Representation>::Transformation (const HybridAutomaton<Num
         Transition<Number>* NewTransPtr = new Transition<Number>(*TransPtr);  //TODO !!!!!!!!!!!!!!!!!!!!
         //transitions not freed or shared_ptr!!!
     //GUARD
-        Condition<Number> guard1;
-        Condition<Number> guard1NEW;
-        guard1 = TransPtr->getGuard();        //object for invariants
-        guard1NEW = NewTransPtr->getGuard();    //object for invariants
-        //for( std::size_t i = 0 : mInvariant.size()-1 ) {    //TODO MODIFY Loop through invariants
+        Condition<Number> guard1    = TransPtr->getGuard();
+        Condition<Number> guard1NEW = NewTransPtr->getGuard();
         //inv: A'= A*V
-        //    mInvariantNEW.setMatrix(Converter.linearTransformation(mInvariant.getMatrix()*V);    
-        //}
-        guard1NEW.setMatrix(guard1.getMatrix()*V);    //inv: A'= A*V
-        guard1NEW.setVector(guard1.getVector());
+        for( i=0; i<guard1.size(); ++i ) {
+            guard1NEW.setMatrix(guard1.getMatrix(i)*V,i);    
+            guard1NEW.setVector(guard1.getVector(i)  ,i);    
+        }
+        //guard1NEW.setMatrix(guard1.getMatrix()*V);    //inv: A'= A*V
+        //guard1NEW.setVector(guard1.getVector());
         NewTransPtr->setGuard(guard1NEW);
     //RESET
-        Reset<Number> reset1;
-        Reset<Number> reset1NEW;
+        Reset<Number> reset1    = TransPtr->getReset();
+        Reset<Number> reset1NEW = NewTransPtr->getReset();
+        //inv: A'= A*V
+        for( i=0; i<reset1.size(); ++i ) {
+            reset1NEW.setMatrix(reset1.getMatrix(i)*V,i);
+            reset1NEW.setVector(reset1.getVector(i)  ,i);
+    //CONSTRAINT SETS
+            //TODO waitforSetter
 
+        }
+        //TODO transform ConstraintSets
     //   transitions.insert( 
         // A transformation: A' = A*V <-- V.linearTransformation(A)
         //V.linearTransformation(mInvariant.getMatrix())
@@ -108,6 +113,8 @@ Transformation<Number,Representation>::Transformation (const HybridAutomaton<Num
     }
     mTransformedHA.setTransitions    (transitions);
     //WITHOUT OUTPUT
+    //INITIAL STATES
+
     mTransformedHA.setInitialStates  (_hybrid.getInitialStates())  ;
     mTransformedHA.setLocalBadStates (_hybrid.getLocalBadStates()) ;
     mTransformedHA.setGlobalBadStates(_hybrid.getGlobalBadStates());
