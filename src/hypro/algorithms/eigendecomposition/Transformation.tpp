@@ -79,28 +79,32 @@ Transformation<Number,Representation>::Transformation (const HybridAutomaton<Num
     //TRANSITIONS
     transitionSet transitions;
     for (Transition<Number>* TransPtr : _hybrid.getTransitions() ) {
-        //Transition<Number> t1 = Transition<Number>(*TransPtr);  //NOT NEEDED -> LOCATION MANAGER DOES OWN THIS
+        Transition<Number>* NewTransPtr = new Transition<Number>(*TransPtr);  //TODO !!!!!!!!!!!!!!!!!!!!
+        //transitions not freed or shared_ptr!!!
     //GUARD
-        Condition<Number> Guard;
-        Condition<Number> GuardNEW;
-        Guard = LocPtr->getInvariant();            //object for invariants
-        GuardNEW = PtrtoNewLoc->getInvariant();    //object for invariants
+        Condition<Number> guard1;
+        Condition<Number> guard1NEW;
+        guard1 = TransPtr->getGuard();        //object for invariants
+        guard1NEW = NewTransPtr->getGuard();    //object for invariants
         //for( std::size_t i = 0 : mInvariant.size()-1 ) {    //TODO MODIFY Loop through invariants
         //inv: A'= A*V
         //    mInvariantNEW.setMatrix(Converter.linearTransformation(mInvariant.getMatrix()*V);    
         //}
-        mInvariantNEW.setMatrix(mInvariant.getMatrix()*V);    //inv: A'= A*V
-        mInvariantNEW.setVector(mInvariant.getVector());
-        PtrtoNewLoc->setInvariant(mInvariantNEW);
+        guard1NEW.setMatrix(guard1.getMatrix()*V);    //inv: A'= A*V
+        guard1NEW.setVector(guard1.getVector());
+        NewTransPtr->setGuard(guard1NEW);
     //RESET
-        Reset<Number> Reset;
-        Reset<Number> ResetNEW;
+        Reset<Number> reset1;
+        Reset<Number> reset1NEW;
+
     //   transitions.insert( 
         // A transformation: A' = A*V <-- V.linearTransformation(A)
         //V.linearTransformation(mInvariant.getMatrix())
     //POINTER
-        t1.setSource(mLocationPtrsMap[TransPtr->getSource()]);
-        t1.setTarget(mLocationPtrsMap[TransPtr->getTarget()]);
+        NewTransPtr->setSource(mLocationPtrsMap[TransPtr->getSource()]);
+        NewTransPtr->setTarget(mLocationPtrsMap[TransPtr->getTarget()]);
+
+        transitions.insert(NewTransPtr);
     }
     mTransformedHA.setTransitions    (transitions);
     //WITHOUT OUTPUT
