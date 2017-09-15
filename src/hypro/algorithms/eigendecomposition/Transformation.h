@@ -53,6 +53,7 @@ struct STevalFunctions {
 template <typename Number>
 struct STflowpipeSegment {
   Matrix<Number>                V;
+  Matrix<Number>                Vinv;
   std::vector<Vector<Number>>   upper;
   std::vector<Vector<Number>>   lower;
 };
@@ -102,6 +103,13 @@ class Transformation {
 	 * @param[in]  _hybrid  The original transformation for an hybrid automaton.
 	 */
 	Transformation<Number,Representation> ( const Transformation& _trafo );
+
+    //copy Transition, modify and insert to set
+    //then insert to automaton
+    //State --> linearTransformation 
+    //Guards Condition
+    //Reset --> Vector von ConstraintSets [Hpolytope]
+    //Converter
 
     /**
      * @brief      Constructor from hybrid automata to adjust automaton and transformation

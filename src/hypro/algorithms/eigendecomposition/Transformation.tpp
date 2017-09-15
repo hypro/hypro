@@ -49,59 +49,59 @@ Transformation<Number,Representation>::Transformation (const HybridAutomaton<Num
 	    PtrtoNewLoc = locationManager.create(matrix_in_parser);
         locations.insert(PtrtoNewLoc);
         mLocationPtrsMap.insert(std::make_pair(LocPtr, PtrtoNewLoc));   //cant use const type* const
-    //INVARIANTS(TYPE CONDITION)        [output stream broken with assertion without invariants!]
+    //INVARIANTS(TYPE CONDITION)        [TODO output stream broken with assertion without invariants!]
         Condition<Number> mInvariant;
         Condition<Number> mInvariantNEW;
-        //const Condition<Number>&
         mInvariant = LocPtr->getInvariant();            //object for invariants
         mInvariantNEW = PtrtoNewLoc->getInvariant();    //object for invariants
-        //std::cout << "Inv: " << mInvariant << std::endl;
-        //setTransitions(const transitionSet& trans);    <-
         //for( std::size_t i = 0 : mInvariant.size()-1 ) {    //TODO MODIFY Loop through invariants
-        //    mInvariantNEW.setMatrix(Converter.linearTransformation(mInvariant.getMatrix()*V);    //inv: A'= A*V
-        //    
+        //inv: A'= A*V
+        //    mInvariantNEW.setMatrix(Converter.linearTransformation(mInvariant.getMatrix()*V);    
         //}
-        // A transformation: A' = A*V <-- V.linearTransformation(A)
-        //V.linearTransformation(mInvariant.getMatrix())
         mInvariantNEW.setMatrix(mInvariant.getMatrix()*V);    //inv: A'= A*V
         mInvariantNEW.setVector(mInvariant.getVector());
         PtrtoNewLoc->setInvariant(mInvariantNEW);
     //SAVING STRUCT
-        mSTallvalues.mSTinputVectors.x0     = //TODO THIS
-        mSTallvalues.mSTinputVectors.x0_2   = //TODO THIS
+        //mSTallvalues.mSTinputVectors.x0       //MOVE TO ALG
+        //mSTallvalues.mSTinputVectors.x0_2     //MOVE TO ALG
         //mSTallvalues.mSTindependentFunct.D = {.xin}   //already assigned
         mSTallvalues.mSTindependentFunct.xinhom    = b_tr.array() / mSTallvalues.mSTindependentFunct.D.diagonal().array();
         //mSTallvalues.mSTindependentFunct.delta      = //check if existing
         //mSTallvalues.mSTindependentFunct.deltalimit = //check if existing
-        mSTallvalues.mSTdependentFunct.x_tr.col(0) = Vinv*mSTallvalues.mSTinputVectors.x0  ;
-        mSTallvalues.mSTdependentFunct.x_tr.col(1) = Vinv*mSTallvalues.mSTinputVectors.x0_2;
-        mSTallvalues.mSTdependentFunct.xhom.col(0) = mSTallvalues.mSTindependentFunct.array()
-          + dep_f.x_tr.col(0).array();
-        mSTallvalues.mSTdependentFunct.xhom.col(1) = mSTallvalues.mSTindependentFunct.array()
-          + dep_f.x_tr.col(1).array();
+        //mSTallvalues.mSTdependentFunct.x_tr   //MOVE TO ALG
+        //mSTallvalues.mSTdependentFunct.xhom   //MOVE TO ALG
         //mSTallvalues.mSTevalFunctions                 //assigned in init
+        mSTallvalues.mSTflowpipeSegment.Vinv       = Vinv;
         mSTallvalues.mSTflowpipeSegment.V          = V; //rest of flow used only for plotting
-
-    //dep_f
-    //dep_f
-
         mLocPtrtoComputationvaluesMap.insert(std::make_pair(PtrtoNewLoc, mSTallvalues));
     }
     mTransformedHA.setLocations(locations); //add LocationSet to HybridAutomaton
     //TRANSITIONS
-        //std::cout << "Location: " << *PtrtoNewLoc;   //?? tryout
     transitionSet transitions;
-    //State --> linearTransformation 
-    //Guards Condition
-    //Reset --> Vector von ConstraintSets [Hpolytope]
-    //Converter
-
-    //for (Transition<Number>* TransPtr : _hybrid.getTransitions() ) {
+    for (Transition<Number>* TransPtr : _hybrid.getTransitions() ) {
+        //Transition<Number> t1 = Transition<Number>(*TransPtr);  //NOT NEEDED -> LOCATION MANAGER DOES OWN THIS
+    //GUARD
+        Condition<Number> Guard;
+        Condition<Number> GuardNEW;
+        Guard = LocPtr->getInvariant();            //object for invariants
+        GuardNEW = PtrtoNewLoc->getInvariant();    //object for invariants
+        //for( std::size_t i = 0 : mInvariant.size()-1 ) {    //TODO MODIFY Loop through invariants
+        //inv: A'= A*V
+        //    mInvariantNEW.setMatrix(Converter.linearTransformation(mInvariant.getMatrix()*V);    
+        //}
+        mInvariantNEW.setMatrix(mInvariant.getMatrix()*V);    //inv: A'= A*V
+        mInvariantNEW.setVector(mInvariant.getVector());
+        PtrtoNewLoc->setInvariant(mInvariantNEW);
+    //RESET
+        Reset<Number> Reset;
+        Reset<Number> ResetNEW;
     //   transitions.insert( 
-
-
-    //}
-    //TODO
+        // A transformation: A' = A*V <-- V.linearTransformation(A)
+        //V.linearTransformation(mInvariant.getMatrix())
+    //POINTER
+        t1.setSource(mLocationPtrsMap[TransPtr->getSource()]);
+        t1.setTarget(mLocationPtrsMap[TransPtr->getTarget()]);
+    }
     mTransformedHA.setTransitions    (transitions);
     //WITHOUT OUTPUT
     mTransformedHA.setInitialStates  (_hybrid.getInitialStates())  ;
@@ -114,8 +114,14 @@ Transformation<Number,Representation>::Transformation (const HybridAutomaton<Num
     //
 }
 //TODO inhomogen plot is only used directly after Constructor and uses that objects
-//in_traj.xhom.col(0) = ind_f.xinhom.array() + in_traj.x_tr.col(0).array();
-//in_traj.xhom.col(1) = ind_f.xinhom.array() + in_traj.x_tr.col(1).array();
+    //in_traj.xhom.col(0) = ind_f.xinhom.array() + in_traj.x_tr.col(0).array();
+    //in_traj.xhom.col(1) = ind_f.xinhom.array() + in_traj.x_tr.col(1).array();
+    //mSTallvalues.mSTdependentFunct.x_tr.col(0) = Vinv*mSTallvalues.mSTinputVectors.x0  ;  //MOVE TO ALG
+    //mSTallvalues.mSTdependentFunct.x_tr.col(1) = Vinv*mSTallvalues.mSTinputVectors.x0_2;  //MOVE TO ALG
+    //mSTallvalues.mSTdependentFunct.xhom.col(0) = mSTallvalues.mSTindependentFunct.array() //MOVE TO ALG
+    //  + dep_f.x_tr.col(0).array();
+    //mSTallvalues.mSTdependentFunct.xhom.col(1) = mSTallvalues.mSTindependentFunct.array() //MOVE TO ALG
+    //  + dep_f.x_tr.col(1).array();
 
 template <typename Number, typename Representation>
 void Transformation<Number,Representation>::declare_structures(STallValues<Number>& mSTallValues, const int n) {
@@ -133,7 +139,8 @@ void Transformation<Number,Representation>::declare_structures(STallValues<Numbe
     //[max,min] for direct [-max,-min] for indirect starting at !!1!!
     mSTallValues.mSTevalFunctions.direct     = BoolMatrix(n,2);
     mSTallValues.mSTevalFunctions.direct.setConstant(0);
-    mSTallValues.STflowpipeSegment.V = Matrix<Number>(n,n);
+    mSTallValues.mSTflowpipeSegment.V        = Matrix<Number>(n,n);
+    mSTallValues.mSTflowpipeSegment.Vinv     = Matrix<Number>(n,n);
     //delta, deltalimit of STindependentFunc missing
     //flowpipe only V for backtransformation into original system
 }
