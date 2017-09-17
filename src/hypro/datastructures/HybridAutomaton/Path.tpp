@@ -27,7 +27,7 @@ namespace hypro {
 
 	template<typename Number>
 	std::pair<Transition<Number>*, carl::Interval<Number>> Path<Number>::getTransitionToJumpDepth(unsigned depth) const {
-		TRACE("hypro.datastructures","Get transition for depth " << depth);
+		TRACE("hypro.datastructures","Get transition for depth " << depth << " in path " << *this);
 		if(depth == 0) {
 			return std::make_pair(nullptr, carl::Interval<Number>::unboundedInterval());
 		}
@@ -248,6 +248,18 @@ namespace hypro {
 	template<typename Number>
 	typename Path<Number>::TIterator Path<Number>::end() {
 		return mPath.end();
+	}
+
+	template<typename Number>
+	const TPathElement<Number>& Path<Number>::back() const {
+		assert(!mPath.empty());
+		return mPath.back();
+	}
+
+	template<typename Number>
+	const TPathElement<Number>& Path<Number>::front() const {
+		assert(!mPath.empty());
+		return mPath.front();
 	}
 
 } // namespace hydra

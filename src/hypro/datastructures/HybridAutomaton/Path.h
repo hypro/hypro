@@ -122,6 +122,8 @@ namespace hypro {
 			using TIterator = typename std::deque<TPathElement<Number>>::iterator;
 			TIterator begin ();
 			TIterator end();
+			const TPathElement<Number>& back() const;
+			const TPathElement<Number>& front() const;
 
 			// legacy operations - replace them
 			std::size_t size() const;
