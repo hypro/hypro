@@ -110,35 +110,72 @@ Transformation<Number,Representation>::Transformation (const HybridAutomaton<Num
         }
         NewTransPtr->setReset(reset1NEW);
         transitions.insert(NewTransPtr);
+    //LOCATION HAS TRANSITIONS
+        NewTargetLocPtr->addTransition(NewTransPtr);
     }
     mTransformedHA.setTransitions    (transitions);
 //INITIAL STATES
-    //multimap -> iterate through all states using correct LocPtr of State
     //State = Vinv*A and Vinv*b -> State.linearTransformation(Vinv)
     locationStateMap initialStates;
     State<Number,ConstraintSet<Number>> state1NEW;
     for(typename locationStateMap::const_iterator it=_hybrid.getInitialStates().begin(); 
       it!=_hybrid.getInitialStates().end(); ++it) {
-        //state1NEW = it->linearTransformation(const matrix_t<Number>& matrix);
-        //initialStates.insert(blubb);
         Location<Number>* NewLocPtr = mLocationPtrsMap[it->first];
         const Matrix<Number> & Vinv = 
           mLocPtrtoComputationvaluesMap[NewLocPtr].mSTflowpipeSegment.Vinv;
         state1NEW = it->second.linearTransformation(Vinv);
         state1NEW.setLocation(NewLocPtr);
-        //state1NEW = State<Number,ConstraintSet<Number>>(it->second);
         initialStates.insert(make_pair(NewLocPtr, state1NEW));
     }
     mTransformedHA.setInitialStates  (initialStates);
 //LOCAL BAD STATES (condition [matrix,vector] matrix=matrix*V
-    
-    mTransformedHA.setLocalBadStates (_hybrid.getLocalBadStates()) ;
+//typename locationConditionMap::const_iterator DOES NOT WORK
+    for (auto it = _hybrid.getLocalBadStates().begin();
+      it!=_hybrid.getLocalBadStates().end(); ++it ) {
+        Location<Number>* NewLocPtr = mLocationPtrsMap[it->first];
+        const Condition<Number> & badState = it->second;
+        Condition<Number> badStateNEW;
+        const Matrix<Number> & V = 
+          mLocPtrtoComputationvaluesMap[NewLocPtr].mSTflowpipeSegment.V;
+        for(i=0; i<badState.size(); ++i) {
+            badStateNEW.setMatrix(badState.getMatrix(i)*V, i);
+            badStateNEW.setVector(badState.getVector(i)  , i);
+        }
+        mTransformedHA.addLocalBadState(NewLocPtr, badStateNEW);
+    }
 //GLOBAL BAD STATES
-
-    mTransformedHA.setGlobalBadStates(_hybrid.getGlobalBadStates());
-
+    transformGlobalBadStates(_hybrid);
     //DEBUG??
 }
+template <typename Number, typename Representation>
+void Transformation<Number,Representation>::transformGlobalBadStates
+  (const HybridAutomaton<Number>& _hybrid) {
+    //check if transformation is according to hybrid automaton
+   // for(std::pair<locationSet::iterator, locationPtrMap> it= _hybrid.getLocations().begin(); 
+   //   it!=_hybrid.getLocations().end(); ++i) {
+   //     
+   //     if(
+
+   // }
+   // 
+   //// for (std::pair<intIter, dubIter> i(intVec.begin(), dubVec.begin());
+   ////   i.first != intVec.end() /* && i.second != dubVec.end() */;
+   ////   ++i.first, ++i.second) {
+   ////     result += (*i.first) * (*i.second);
+   //// }
+
+   // //check if there exists a transformation to this Hybrid automaton
+   // if(!globalBadStatesTransformed) {
+   //     for (Condition<Number> & globalBadStates: _hybrid.getGlobalBadStates()) {
+   //         
+   //     }
+
+   //     globalBadStatesTransformed = true;
+   // }
+//    mTransformedHA.setGlobalBadStates(_hybrid.getGlobalBadStates());
+}
+//TODO Set von global->local mapping
+//in transformed automata in local sets saving
 //NOT POSSIBLE DUE TO SIMPLE MATRIX/VECTOR:
         // A transformation: A' = A*V <-- V.linearTransformation(A)
         //V.linearTransformation(mInvariant.getMatrix())
