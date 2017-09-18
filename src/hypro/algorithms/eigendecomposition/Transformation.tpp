@@ -15,6 +15,7 @@ Transformation<Number,Representation>::Transformation (const HybridAutomaton<Num
     Location<Number>* PtrtoNewLoc;
     //std::cout<<"size mSTallValues: "<< sizeof(mSTallValues);
     mTransformedHA = HybridAutomaton<Number>();
+//LOCATIONS
     for (Location<Number>* LocPtr : _hybrid.getLocations() ) {
         matrix_in_parser = LocPtr->getFlow();   //copy for calculation; TODO (getsize() missing) many flows
         m_size = matrix_in_parser.cols(); //rows
@@ -49,8 +50,8 @@ Transformation<Number,Representation>::Transformation (const HybridAutomaton<Num
         locations.insert(PtrtoNewLoc);
         mLocationPtrsMap.insert(std::make_pair(LocPtr, PtrtoNewLoc));   //cant use const type* const
     //INVARIANTS(TYPE CONDITION)        [TODO output stream broken with assertion without invariants!]
-        Condition<Number> invar1 = LocPtr->getInvariant();
-        Condition<Number> invar1NEW = PtrtoNewLoc->getInvariant();
+        const Condition<Number>& invar1 = LocPtr->getInvariant();
+        Condition<Number> invar1NEW; // = PtrtoNewLoc->getInvariant();
         //inv: A'= A*V
         for( i=0; i<invar1.size(); ++i ) {
             invar1NEW.setMatrix(invar1.getMatrix(i)*V,i);
@@ -64,8 +65,8 @@ Transformation<Number,Representation>::Transformation (const HybridAutomaton<Num
         //mSTallvalues.mSTinputVectors.x0_2     //MOVE TO ALG
         //mSTallvalues.mSTindependentFunct.D = {.xin}   //already assigned
         mSTallvalues.mSTindependentFunct.xinhom    = b_tr.array() / mSTallvalues.mSTindependentFunct.D.diagonal().array();
-        //mSTallvalues.mSTindependentFunct.delta      = //check if existing
-        //mSTallvalues.mSTindependentFunct.deltalimit = //check if existing
+        //mSTallvalues.mSTindependentFunct.delta      = //TODO check if existing
+        //mSTallvalues.mSTindependentFunct.deltalimit = //TODO check if existing
         //mSTallvalues.mSTdependentFunct.x_tr   //MOVE TO ALG
         //mSTallvalues.mSTdependentFunct.xhom   //MOVE TO ALG
         //mSTallvalues.mSTevalFunctions                 //assigned in init
@@ -74,56 +75,73 @@ Transformation<Number,Representation>::Transformation (const HybridAutomaton<Num
         mLocPtrtoComputationvaluesMap.insert(std::make_pair(PtrtoNewLoc, mSTallvalues));
     }
     mTransformedHA.setLocations(locations); //add LocationSet to HybridAutomaton
-    //TRANSITIONS
+//TRANSITIONS
     transitionSet transitions;
     for (Transition<Number>* TransPtr : _hybrid.getTransitions() ) {
-        Transition<Number>* NewTransPtr = new Transition<Number>(*TransPtr);  //TODO !!!!!!!!!!!!!!!!!!!!
-        //transitions not freed or shared_ptr!!!
-    //GUARD
-        Condition<Number> guard1    = TransPtr->getGuard();
-        Condition<Number> guard1NEW = NewTransPtr->getGuard();
-        //inv: A'= A*V
+        Transition<Number>* NewTransPtr = new Transition<Number>(*TransPtr);  //! TODO !
+        //transitions not freed, shared_ptr too costly in multithreaded context
+    //POINTER
+        //we need ptr->source 4 times
+        Location<Number>*   NewSourceLocPtr = mLocationPtrsMap[TransPtr->getSource()];
+        Location<Number>*   NewTargetLocPtr = mLocationPtrsMap[TransPtr->getTarget()];
+        const Matrix<Number> & VSource = 
+          mLocPtrtoComputationvaluesMap[NewSourceLocPtr].mSTflowpipeSegment.V;
+        const Matrix<Number> & VinvTarget = 
+          mLocPtrtoComputationvaluesMap[NewTargetLocPtr].mSTflowpipeSegment.Vinv;
+
+        NewTransPtr->setSource(NewSourceLocPtr);
+        NewTransPtr->setTarget(NewTargetLocPtr);
+    //GUARD ( when transition can be made )
+        const Condition<Number>& guard1    = TransPtr->getGuard();
+        Condition<Number> guard1NEW; // = NewTransPtr->getGuard();
+        //inv: A'= A*V; get V from location!!
         for( i=0; i<guard1.size(); ++i ) {
-            guard1NEW.setMatrix(guard1.getMatrix(i)*V,i);    
-            guard1NEW.setVector(guard1.getVector(i)  ,i);    
+            guard1NEW.setMatrix(guard1.getMatrix(i)*VSource ,i);    
+            guard1NEW.setVector(guard1.getVector(i)         ,i);    
         }
-        //guard1NEW.setMatrix(guard1.getMatrix()*V);    //inv: A'= A*V
-        //guard1NEW.setVector(guard1.getVector());
         NewTransPtr->setGuard(guard1NEW);
-    //RESET
-        Reset<Number> reset1    = TransPtr->getReset();
-        Reset<Number> reset1NEW = NewTransPtr->getReset();
+    //RESET ( reset into new location )
+        const Reset<Number>& reset1    = TransPtr->getReset();
+        Reset<Number> reset1NEW;// = NewTransPtr->getReset();
         //inv: A'= A*V
         for( i=0; i<reset1.size(); ++i ) {
-            reset1NEW.setMatrix(reset1.getMatrix(i)*V,i);
-            reset1NEW.setVector(reset1.getVector(i)  ,i);
-    //CONSTRAINT SETS
-            //TODO waitforSetter
-
+            reset1NEW.setMatrix(VinvTarget * reset1.getMatrix(i),i);
+            reset1NEW.setVector(VinvTarget * reset1.getVector(i),i);
         }
-        //TODO transform ConstraintSets
-    //   transitions.insert( 
-        // A transformation: A' = A*V <-- V.linearTransformation(A)
-        //V.linearTransformation(mInvariant.getMatrix())
-    //POINTER
-        NewTransPtr->setSource(mLocationPtrsMap[TransPtr->getSource()]);
-        NewTransPtr->setTarget(mLocationPtrsMap[TransPtr->getTarget()]);
-
+        NewTransPtr->setReset(reset1NEW);
         transitions.insert(NewTransPtr);
     }
     mTransformedHA.setTransitions    (transitions);
-    //WITHOUT OUTPUT
-    //INITIAL STATES
-
-    mTransformedHA.setInitialStates  (_hybrid.getInitialStates())  ;
+//INITIAL STATES
+    //multimap -> iterate through all states using correct LocPtr of State
+    //State = Vinv*A and Vinv*b -> State.linearTransformation(Vinv)
+    locationStateMap initialStates;
+    State<Number,ConstraintSet<Number>> state1NEW;
+    for(typename locationStateMap::const_iterator it=_hybrid.getInitialStates().begin(); 
+      it!=_hybrid.getInitialStates().end(); ++it) {
+        //state1NEW = it->linearTransformation(const matrix_t<Number>& matrix);
+        //initialStates.insert(blubb);
+        Location<Number>* NewLocPtr = mLocationPtrsMap[it->first];
+        const Matrix<Number> & Vinv = 
+          mLocPtrtoComputationvaluesMap[NewLocPtr].mSTflowpipeSegment.Vinv;
+        state1NEW = it->second.linearTransformation(Vinv);
+        state1NEW.setLocation(NewLocPtr);
+        //state1NEW = State<Number,ConstraintSet<Number>>(it->second);
+        initialStates.insert(make_pair(NewLocPtr, state1NEW));
+    }
+    mTransformedHA.setInitialStates  (initialStates);
+//LOCAL BAD STATES (condition [matrix,vector] matrix=matrix*V
+    
     mTransformedHA.setLocalBadStates (_hybrid.getLocalBadStates()) ;
+//GLOBAL BAD STATES
+
     mTransformedHA.setGlobalBadStates(_hybrid.getGlobalBadStates());
-    //INVARIANTS TRANSFORMATION
-        //
-        //PtrtoNewLoc -> setInvariant( const struct Location<Number>::Invariant& _inv );
-    //TRANSITIONTS???
-    //
+
+    //DEBUG??
 }
+//NOT POSSIBLE DUE TO SIMPLE MATRIX/VECTOR:
+        // A transformation: A' = A*V <-- V.linearTransformation(A)
+        //V.linearTransformation(mInvariant.getMatrix())
 //TODO inhomogen plot is only used directly after Constructor and uses that objects
     //in_traj.xhom.col(0) = ind_f.xinhom.array() + in_traj.x_tr.col(0).array();
     //in_traj.xhom.col(1) = ind_f.xinhom.array() + in_traj.x_tr.col(1).array();

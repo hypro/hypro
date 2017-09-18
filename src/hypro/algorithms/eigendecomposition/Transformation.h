@@ -69,14 +69,17 @@ struct STallValues {
 template <typename Number, typename Representation>
 class Transformation {
   public:
+  //TODO recheck if constLocPtr or just LocPtr better in map+multimap
   	using locationSet = std::set<Location<Number>*>;
 	using transitionSet = std::set<Transition<Number>*>;
-	//using locationStateMap = std::multimap<Location<Number>*, RawState<Number>, locPtrComp<Number>>;
+    using locationStateMap = std::multimap<const Location<Number>*, State<Number,ConstraintSet<Number>>, locPtrComp<Number>>; /// Multi-map from location pointers to states.
+    using locationConditionMap = std::map<Location<Number>*, Condition<Number>, locPtrComp<Number>>;
+    using conditionVector = std::vector<Condition<Number>>; /// Vector of conditions.
 	using setVector = std::vector<std::pair<matrix_t<Number>, vector_t<Number>>>;
     
   private:
     //maps from original location to transformed organized as black/red tree
-    std::map< Location<Number>*,Location<Number>*, locPtrComp<Number> > mLocationPtrsMap;     
+    std::map<const Location<Number>*,Location<Number>*, locPtrComp<Number> > mLocationPtrsMap;     
     std::map< Location<Number>*,STallValues<Number>, locPtrComp<Number>> mLocPtrtoComputationvaluesMap;
     HybridAutomaton<Number> mTransformedHA;
     //TODO std::map with struct for each location
