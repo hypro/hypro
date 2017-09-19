@@ -102,6 +102,7 @@ int main()
     std::cout << "----------    END OF ORIGINAL         ------------" << std::endl;
     trafo.output_HybridAutomaton();
     std::cout << std::endl;
+    trafo.transformGlobalBadStates(original_ha);
     //std::cout << trafo;
     //TODO clarify if we copy automata inside the transformation or if we assume transfo_ha ISCOPYOF orig_ha
     //--> might be useful to later wrap another class for simple use around on condition number etc

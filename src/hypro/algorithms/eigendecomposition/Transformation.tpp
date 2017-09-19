@@ -144,35 +144,35 @@ Transformation<Number,Representation>::Transformation (const HybridAutomaton<Num
         mTransformedHA.addLocalBadState(NewLocPtr, badStateNEW);
     }
 //GLOBAL BAD STATES
-    transformGlobalBadStates(_hybrid);
     //DEBUG??
 }
 template <typename Number, typename Representation>
 void Transformation<Number,Representation>::transformGlobalBadStates
   (const HybridAutomaton<Number>& _hybrid) {
     //check if transformation is according to hybrid automaton
-   // for(std::pair<locationSet::iterator, locationPtrMap> it= _hybrid.getLocations().begin(); 
-   //   it!=_hybrid.getLocations().end(); ++i) {
-   //     
-   //     if(
-
-   // }
-   // 
-   //// for (std::pair<intIter, dubIter> i(intVec.begin(), dubVec.begin());
-   ////   i.first != intVec.end() /* && i.second != dubVec.end() */;
-   ////   ++i.first, ++i.second) {
-   ////     result += (*i.first) * (*i.second);
-   //// }
-
-   // //check if there exists a transformation to this Hybrid automaton
-   // if(!globalBadStatesTransformed) {
-   //     for (Condition<Number> & globalBadStates: _hybrid.getGlobalBadStates()) {
-   //         
-   //     }
-
-   //     globalBadStatesTransformed = true;
-   // }
+    assert( _hybrid.getLocations().size() == mLocationPtrsMap.size() );
+    typename locationPtrMap::const_iterator locIt = mLocationPtrsMap.begin();
+    typename locationPtrMap::const_iterator endLocIt = mLocationPtrsMap.end();
+    for (typename locationSet::iterator origIt=_hybrid.getLocations().begin();
+      origIt!=_hybrid.getLocations().end(); ++origIt) {
+        //locations is set -> value is ptrs to origLoc, in map key is ptrs to origLoc
+        assert( *origIt == locIt->first );
+        if(locIt != endLocIt)
+            ++locIt;
+    }
+    assert( locIt == endLocIt );
+    assert (!globalBadStatesTransformed);
+    for (const Condition<Number> & globalBadStates: _hybrid.getGlobalBadStates()) {
+        //transform each global badstate by setting of according localBadState
+        
+    }
+    globalBadStatesTransformed = true;
+    assert(globalBadStatesTransformed);
 //    mTransformedHA.setGlobalBadStates(_hybrid.getGlobalBadStates());
+}
+template <typename Number, typename Representation>
+bool Transformation<Number,Representation>::keyCompare(locationSet& lhs, locationPtrMap& rhs) {
+   return lhs.size() == rhs.size();
 }
 //TODO Set von global->local mapping
 //in transformed automata in local sets saving

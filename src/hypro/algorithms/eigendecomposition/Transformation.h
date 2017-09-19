@@ -80,16 +80,21 @@ class Transformation {
     
   private:
     //maps from original location to transformed organized as black/red tree
-    std::map<const Location<Number>*,Location<Number>*, locPtrComp<Number> > mLocationPtrsMap;
+    //std::map<const Location<Number>*,Location<Number>*, locPtrComp<Number> > mLocationPtrsMap;
+    locationPtrMap mLocationPtrsMap;
     std::map< Location<Number>*,STallValues<Number>, locPtrComp<Number>> mLocPtrtoComputationvaluesMap;
     HybridAutomaton<Number> mTransformedHA;
     bool globalBadStatesTransformed = false;
+
+
     //TODO std::map with struct for each location
     //STinputVectors      mSTinputVectors;    //?? needed ?? models ??
     //STflowpipeSegment   mSTflowpipeSegment;
     //std::map<ptr_originalHybAuto,ptr_transformedHybAuto>
     //reachability::ReachabilitySettings<Number> mReachabilitySettings;
-    
+
+//helper functions
+    bool keyCompare(locationSet& lhs, locationPtrMap& rhs);
     void declare_structures(STallValues<Number> & mSTallValues, const int n);
     void mark_x0isMin(Matrix<Number>& x_tr, const int n); //TODO reformulate struct [when multiple points
     void swap_x0isMax(Matrix<Number>& x_tr, const int n); //TODO direct index call without vector swapping
