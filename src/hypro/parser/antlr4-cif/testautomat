@@ -1,0 +1,7 @@
+automaton test:
+	cont t = 0;
+
+	location eins:
+	initial;
+	equation t strich = 1;
+end

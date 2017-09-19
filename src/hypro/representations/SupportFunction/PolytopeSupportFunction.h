@@ -19,6 +19,7 @@
 #include "../../util/convexHull.h"
 #include "../../util/adaptions_eigen/adaptions_eigen.h"
 #include "../../util/linearOptimization/Optimizer.h"
+#include "../../util/logging/Logger.h"
 #include "../../util/Permutator.h"
 #include <map>
 
@@ -109,7 +110,7 @@ class PolytopeSupportFunction {
     std::string createCode( unsigned index = 0 ) const;
 
     friend std::ostream& operator<<( std::ostream& lhs, const PolytopeSupportFunction<Number>& rhs ) {
-    	lhs << "[ ";
+    	lhs << "[";
     	for(unsigned rowIndex = 0; rowIndex < rhs.mConstraints.rows()-1; ++rowIndex) {
     		lhs << "  ";
     		for(unsigned d = 0; d < rhs.mConstraints.cols(); ++d) {

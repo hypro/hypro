@@ -1,19 +1,24 @@
 
 namespace hypro {
 namespace reachability {
-	template<typename Number, typename Representation>
-	bool Reach<Number,Representation>::intersectGuard( Transition<Number>* _trans, const State<Number>& _state,
-							   State<Number>& result ) const {
-		assert(!_state.timestamp.isUnbounded());
+	template<typename Number>
+	bool Reach<Number>::intersectGuard( Transition<Number>* _trans, const State_t<Number>& _state,
+							   State_t<Number>& result ) const {
+
+		assert(!_state.getTimestamp().isUnbounded());
 		result = _state;
 
+		//std::cout << "------ start intersecting guard!" << std::endl;
+
 		// check for continuous set guard intersection
-		std::pair<bool, Representation> guardSatisfyingSet = boost::get<Representation>(_state.set).satisfiesHalfspaces( _trans->guard().mat, _trans->guard().vec );
+		std::pair<bool, State_t<Number>> guardSatisfyingSet = _state.satisfies( _trans->getGuard() );
+
+		//std::cout << "------ guard satisfied? " << guardSatisfyingSet.first << std::endl;
 
 		// check if the intersection is empty
 		if ( guardSatisfyingSet.first ) {
 			#ifdef REACH_DEBUG
-			std::cout << "Transition enabled!" << std::endl;
+			INFO("hypro.reacher", "Transition enabled!");
 			#endif
 
 			//for(unsigned rowIndex = 0; rowIndex < _trans->guard().mat.rows(); ++rowIndex) {
@@ -21,26 +26,27 @@ namespace reachability {
 			//	Plotter<Number>::getInstance().addObject( tmp );
 			//}
 
-			result.set = guardSatisfyingSet.second;
+			result.setSets(guardSatisfyingSet.second.getSets());
+			//std::cout << "------ end intersecting guard!" << std::endl;
 			return true;
 		} else {
 			#ifdef REACH_DEBUG
-			std::cout << "Continuous guard invalidated." << std::endl;
+			INFO("hypro.reacher", "Continuous guard invalidated.");
 			#endif
 			return false;
 		}
 	}
 
-	template<typename Number, typename Representation>
-	void Reach<Number,Representation>::processDiscreteBehaviour( const std::vector<boost::tuple<Transition<Number>*, State<Number>>>& _newInitialSets ) {
-		std::map<Transition<Number>*, std::vector<State<Number>>> toAggregate;
+	template<typename Number>
+	void Reach<Number>::processDiscreteBehaviour( const std::vector<boost::tuple<Transition<Number>*, State_t<Number>>>& _newInitialSets ) {
+		std::map<Transition<Number>*, std::vector<State_t<Number>>> toAggregate;
 
 		for(const auto& tuple : _newInitialSets ) {
-			if(boost::get<0>(tuple)->aggregation() == Aggregation::none){
+			if(boost::get<0>(tuple)->getAggregation() == Aggregation::none){
 				// copy state - as there is no aggregation, the containing set and timestamp is already valid
-				State<Number> s = boost::get<1>(tuple);
-				assert(!s.timestamp.isUnbounded());
-				s.location = boost::get<0>(tuple)->target();
+				State_t<Number> s = boost::get<1>(tuple);
+				assert(!s.getTimestamp().isUnbounded());
+				s.setLocation(boost::get<0>(tuple)->getTarget());
 				bool duplicate = false;
 				for(const auto stateTuple : mWorkingQueue) {
 					if(boost::get<1>(stateTuple) == s){
@@ -50,73 +56,77 @@ namespace reachability {
 				}
 				if(!duplicate){
 					mWorkingQueue.emplace_back(mCurrentLevel+1, s);
+					//std::cout << "-- No duplicate state tupel found! mWorkingQueue size is now: " << mWorkingQueue.size() << std::endl;
 				}
 			} else { // aggregate all
 				// TODO: Note that all sets are collected for one transition, i.e. currently, if we intersect the guard for one transition twice with
 				// some sets in between not satisfying the guard, we still collect all guard satisfying sets for that transition.
 				if(toAggregate.find(boost::get<0>(tuple)) == toAggregate.end()){
-					toAggregate[boost::get<0>(tuple)] = std::vector<State<Number>>();
+					toAggregate[boost::get<0>(tuple)] = std::vector<State_t<Number>>();
 				}
 				toAggregate[boost::get<0>(tuple)].push_back(boost::get<1>(tuple));
+
 			}
 		}
 
 		// aggregation - TODO: add options for clustering.
 		for(const auto& aggregationPair : toAggregate){
+
+			INFO("hypro.reacher", "-- Entered aggregation loop");
+
 			assert(!aggregationPair.second.empty());
-			carl::Interval<Number> aggregatedTimestamp = aggregationPair.second.begin()->timestamp;
+			carl::Interval<Number> aggregatedTimestamp = aggregationPair.second.begin()->getTimestamp();
 			//std::cout << "Aggregated timestamp before aggregation " << aggregatedTimestamp << std::endl;
-			Representation collectedSets = boost::get<Representation>(aggregationPair.second.begin()->set);
+			State_t<Number> collectedSets = *aggregationPair.second.begin();
 			for(auto stateIt = ++aggregationPair.second.begin(); stateIt != aggregationPair.second.end(); ++stateIt){
-				assert(!stateIt->timestamp.isUnbounded());
-				aggregatedTimestamp = aggregatedTimestamp.convexHull(stateIt->timestamp);
+				assert(!stateIt->getTimestamp().isUnbounded());
+				aggregatedTimestamp = aggregatedTimestamp.convexHull(stateIt->getTimestamp());
 				//std::cout << "New timestamp: " << aggregatedTimestamp << std::endl;
-				collectedSets = collectedSets.unite(boost::get<Representation>(stateIt->set));
+				collectedSets = collectedSets.unite(*stateIt);
 			}
 
 			#ifdef REACH_DEBUG
-			std::cout << "Unified " << aggregationPair.second.size() << " sets for aggregation:" << std::endl << collectedSets << std::endl;
+			INFO("hypro.reacher", "Unified " << aggregationPair.second.size() << " sets for aggregation.");
 			//std::cout << "CollectedSets vertices: " << std::endl;
 			//for(const auto& vertex : collectedSets.vertices()) {
 			//	std::cout << convert<Number,double>(vertex) << std::endl;
 			//}
 			#endif
 
-			State<Number> s;
-			s.location = aggregationPair.first->target();
+			State_t<Number> s;
+			s.setLocation(aggregationPair.first->getTarget());
 
 			// reduce new initial sets.
 			//collectedSets.removeRedundancy();
 			#ifdef USE_SMART_AGGREGATION
 			aggregationReduction(collectedSets, aggregationPair.first, mSettings.timeBound, mSettings.timeStep);
 			#endif
-			s.set = collectedSets;
+
+			//TODO: Maybe use smth else or use setSetsSave in all functions
+			//s.setSetsSave(collectedSets.getSets());
 
 			//unsigned colSetIndex = Plotter<Number>::getInstance().addObject(collectedSets.vertices());
 			//Plotter<Number>::getInstance().setObjectColor(colSetIndex, plotting::colors[plotting::red]);
 
 
-			s.timestamp = aggregatedTimestamp;
+			s.setTimestamp(aggregatedTimestamp);
 			//std::cout << "Aggregate " << aggregationPair.second.size() << " sets." << std::endl;
 			//std::cout << "Aggregated representation: " << collectedSets << std::endl;
 			//std::cout << "Aggregated timestamp: " << aggregatedTimestamp << std::endl;
 
 			// Perform resets.
-			typename Transition<Number>::Reset reset = aggregationPair.first->reset();
-			#ifdef REACH_DEBUG
-			std::cout << "Apply resets." << std::endl;
-			std::cout << "Matrix: " << std::endl << aggregationPair.first->reset().mat << std::endl << "Vector " << std::endl << aggregationPair.first->reset().vec << std::endl;
-			#endif
-			Representation tmp = collectedSets.affineTransformation(aggregationPair.first->reset().mat,  aggregationPair.first->reset().vec);
+			State_t<Number> tmp = aggregationPair.first->getReset().applyReset(collectedSets);
 			//std::cout << "Vertices after reset: " << std::endl;
 			//for(const auto& vertex : tmp.vertices()) {
 			//	std::cout << convert<Number,double>(vertex) << std::endl;
 			//}
-			std::pair<bool, Representation> invariantSatisfyingSet = tmp.satisfiesHalfspaces(aggregationPair.first->target()->invariant().mat, aggregationPair.first->target()->invariant().vec);
+
+			std::pair<bool, State_t<Number>> invariantSatisfyingSet = tmp.satisfies(aggregationPair.first->getTarget()->getInvariant());
 			if(invariantSatisfyingSet.first){
 				//unsigned tmp = Plotter<Number>::getInstance().addObject(invariantSatisfyingSet.second.vertices());
 				//Plotter<Number>::getInstance().setObjectColor(tmp, colors[orange]);
-				s.set = invariantSatisfyingSet.second;
+				//s.setSets(invariantSatisfyingSet.second.getSets());
+				s.setSetsSave(invariantSatisfyingSet.second.getSets());
 				//std::cout << "Transformed, collected set (intersected with invariant): " << invariantSatisfyingSet.second << std::endl;
 			} else {
 				continue;
@@ -132,31 +142,35 @@ namespace reachability {
 			}
 			if(!duplicate){
 				#ifdef REACH_DEBUG
-				std::cout << "Enqueue " << s << " for level " << mCurrentLevel+1 << std::endl;
+				INFO("hypro.reacher", "Enqueue " << s << " for level " << mCurrentLevel+1);
 				#endif
 				mWorkingQueue.emplace_back(mCurrentLevel+1, s);
 			}
 		}
+
+		INFO("hypro.reacher", "After aggregation loop");
 	}
 
-	template<typename Number, typename Representation>
-	bool Reach<Number,Representation>::checkTransitions(const State<Number>& state, const carl::Interval<Number>& , std::vector<boost::tuple<Transition<Number>*, State<Number>>>& nextInitialSets) const {
-		State<Number> guardSatisfyingState;
+	template<typename Number>
+	bool Reach<Number>::checkTransitions(const State_t<Number>& state, const carl::Interval<Number>& , std::vector<boost::tuple<Transition<Number>*, State_t<Number>>>& nextInitialSets) const {
+
+		State_t<Number> guardSatisfyingState;
 		bool transitionEnabled = false;
-		for( auto transition : state.location->transitions() ){
+		//std::cout << "------ how many transitions do we have? " << state.getLocation()->getTransitions().size() << std::endl;
+		for( auto transition : state.getLocation()->getTransitions() ){
 			// handle time-triggered transitions
 			if(intersectGuard(transition, state, guardSatisfyingState)){
-				//std::cout << "hybrid transition enabled" << std::endl;
-				//std::cout << *transition << std::endl;
-				assert(guardSatisfyingState.timestamp == state.timestamp);
+				INFO("hypro.reacher", "hybrid transition enabled");
+				assert(guardSatisfyingState.getTimestamp() == state.getTimestamp());
 				// when a guard is satisfied here, as we do not have dynamic behaviour, avoid calculation of flowpipe
-				assert(!guardSatisfyingState.timestamp.isUnbounded());
+				assert(!guardSatisfyingState.getTimestamp().isUnbounded());
 				#ifdef USE_FORCE_REDUCTION
-				appylReduction(boost::get<Representation>(guardSatisfyingState.set));
+				applyReduction(guardSatisfyingState);
 				#endif
 				nextInitialSets.emplace_back(transition, guardSatisfyingState);
 			}
 		}
+
 		return transitionEnabled;
 	}
 

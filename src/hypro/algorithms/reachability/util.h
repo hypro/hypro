@@ -4,9 +4,6 @@
 #include "../../util/Plotter.h"
 #include <carl/util/SFINAE.h>
 
-namespace hypro {
-namespace reachability {
-
 template<typename Number, typename Representation, carl::DisableIf< std::is_same<Representation, SupportFunction<Number> > > = carl::dummy>
 void applyReduction( Representation& ) {
 }
@@ -67,8 +64,8 @@ Number hausdorffError( const Number& delta, const matrix_t<Number>& matrix, cons
 	return result;
 }
 
-template<typename Number, typename Representation>
-std::vector<Box<Number>> errorBoxes( const Number& delta, const matrix_t<Number>& flow, const Representation& initialSet, const matrix_t<Number>& trafoMatrix, const Box<Number>& ) {
+template<typename Number>
+std::vector<Box<Number>> errorBoxes( const Number& delta, const matrix_t<Number>& flow, const State_t<Number>& initialSet, const matrix_t<Number>& trafoMatrix, const Box<Number>& ) {
 	std::vector<Box<Number>> res;
 
 	unsigned dim = flow.cols();
@@ -88,8 +85,8 @@ std::vector<Box<Number>> errorBoxes( const Number& delta, const matrix_t<Number>
 	//std::cout << "Flow: " << flow << std::endl << "trafoMatrix: " << trafoMatrix << std::endl;
 	//std::cout << __func__ << " TmpMtrix: " << std::endl << tmpMatrix << std::endl;
 	//assert(tmpMatrix.row(dim-1).nonZeros() == 0);
-	Representation transformedInitialSet = initialSet.affineTransformation(matrix_t<Number>(tmpMatrix.block(0,0,dim-1,dim-1)), vector_t<Number>(tmpMatrix.block(0,dim-1,dim-1,1)));
-	auto b1 = Converter<Number>::toBox(transformedInitialSet);
+	State_t<Number> transformedInitialSet = initialSet.partiallyApplyTransformation(ConstraintSet<Number>(matrix_t<Number>(tmpMatrix.block(0,0,dim-1,dim-1)), vector_t<Number>(tmpMatrix.block(0,dim-1,dim-1,1))), 0 );
+	auto b1 = boost::get<Box<Number>>(boost::apply_visitor( genericConversionVisitor<typename State_t<Number>::repVariant,Number>(representation_name::box), transformedInitialSet.getSet(0)));
 	if(b1.empty()) { // indicates that the initial set is empty.
 	    //std::cout << "B1.empty()!" << std::endl;
 		return res;
@@ -115,9 +112,9 @@ std::vector<Box<Number>> errorBoxes( const Number& delta, const matrix_t<Number>
 	// the last row of this matrix should be zero in any case, such that we can decompose the linear transformation.
 	//std::cout << "TmpTrafo Matrix: " << std::endl << convert<Number,double>(tmpTrafo) << std::endl;
 	//std::cout << "TmpTrafo Vector: " << std::endl << convert<Number,double>(tmpTrans) << std::endl;
-	Representation tmp = initialSet.affineTransformation(tmpTrafo, tmpTrans);
+	State_t<Number> tmp = initialSet.partiallyApplyTransformation(ConstraintSet<Number>(tmpTrafo, tmpTrans), 0);
 	//Box<Number> b2 = Box<Number>(tmp.matrix(), tmp.vector());
-	auto b2 = Converter<Number>::toBox(tmp);
+	auto b2 = boost::get<Box<Number>>(boost::apply_visitor( genericConversionVisitor<typename State_t<Number>::repVariant,Number>(representation_name::box), tmp.getSet(0)));
 	if(b2.empty()) { // indicates that the initial set is empty.
 	    //std::cout << "B2.empty()!" << std::endl;
 		return res;
@@ -147,8 +144,8 @@ std::vector<Box<Number>> errorBoxes( const Number& delta, const matrix_t<Number>
 
 
 	// projection to remove augmented dimension.
-	std::vector<unsigned> projectionDimensions;
-	for(unsigned i = 0; i < errorBoxX0.dimension()-1; ++i){
+	std::vector<std::size_t> projectionDimensions;
+	for(std::size_t i = 0; i < errorBoxX0.dimension()-1; ++i){
 		projectionDimensions.push_back(i);
 	}
 
@@ -163,9 +160,10 @@ std::vector<Box<Number>> errorBoxes( const Number& delta, const matrix_t<Number>
  * based on the Hausdorff distance, constructs the box (also a polytope) that is used for bloating the initial
  * approximation
  */
-template <typename Number, typename Representation, carl::DisableIf< std::is_same<Representation, Zonotope<Number> > > = carl::dummy>
-Representation computePolytope( unsigned int _dim, Number _radius ) {
-	matrix_t<Number> mat = hypro::matrix_t<Number>::Zero( 2 * _dim, _dim );
+template <typename Number, representation_name Representation>
+State_t<Number> computePolytope( unsigned int _dim, Number _radius ) {
+	State_t<Number> res;
+	matrix_t<Number> mat = matrix_t<Number>::Zero( 2 * _dim, _dim );
 	vector_t<Number> vec( 2 * _dim, 1 );
 	int i = 0;
 	for ( unsigned z = 0; z < _dim; ++z ) {
@@ -177,25 +175,31 @@ Representation computePolytope( unsigned int _dim, Number _radius ) {
 
 		i = i + 2;
 	}
-	return Representation(mat,vec);
-}
-
-template <typename Number, typename Representation, carl::EnableIf< std::is_same<Representation, Zonotope<Number> > > = carl::dummy>
-Representation computePolytope( unsigned int _dim, Number _radius ) {
-	matrix_t<Number> mat = hypro::matrix_t<Number>::Zero( 2 * _dim, _dim );
-	vector_t<Number> vec( 2 * _dim, 1 );
-	int i = 0;
-	for ( unsigned z = 0; z < _dim; ++z ) {
-		vec( i ) = _radius;
-		vec( i + 1 ) = _radius;
-
-		mat( i, z ) = 1;
-		mat( i + 1, z ) = -1;
-
-		i = i + 2;
+	switch(Representation) {
+		case representation_name::box: {
+			res.setSet( Box<Number>( mat, vec ));
+			break;
+		}
+		case representation_name::polytope_h: {
+			res.setSet( HPolytope<Number>( mat, vec ));
+			break;
+		}
+		case representation_name::polytope_v: {
+			res.setSet( VPolytope<Number>( mat, vec ));
+			break;
+		}
+		case representation_name::support_function: {
+			res.setSet( SupportFunction<Number>( mat, vec ));
+			break;
+		}
+		case representation_name::zonotope: {
+			res.setSet(Converter<Number>::toZonotope(Box<Number>( mat, vec )));
+			break;
+		}
+		default: {
+			res.setSet( Box<Number>( mat, vec ));
+			break;
+		}
 	}
-	return Converter<Number>::toZonotope(Box<Number>( mat, vec ));
+	return res;
 }
-
-} // namespace reachability
-} // namespace hypro

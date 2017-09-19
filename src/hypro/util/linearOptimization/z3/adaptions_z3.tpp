@@ -204,6 +204,18 @@ namespace hypro {
 
 			z3Solver.push();
 			for(unsigned i = 0; i < formulas.size(); ++i){
+
+				//If a constraint has already been marked as redundant, we do not need to 
+				//to check satisfiability with that constraint in this current iteration.
+				bool ignore = false;
+				for(unsigned alreadyRedundant = 0; alreadyRedundant < res.size(); ++alreadyRedundant){
+					if(i == res[alreadyRedundant]){
+						ignore = true;
+					}
+				}
+				if(ignore) break;
+
+				//Add constraints 
 				if(i == constraintIndex) {
 					z3Solver.add(negatedConstraint);
 				} else {

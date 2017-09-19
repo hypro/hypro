@@ -48,9 +48,9 @@ option(STATICLIB_SWITCH "Compile a statically linked version of the library." OF
 option(HYPRO_USE_COTIRE "Use the COmpilation TIme REducer." OFF)
 option(HYPRO_USE_OPENMP "Use OpenMp for parallelization in Eigen3." OFF)
 option(HYPRO_USE_PPL "Use PPl polytope wrapper." OFF)
-option(HYPRO_USE_SMTRAT "Use SMT-RAT for linear solving." OFF)
-option(HYPRO_USE_Z3 "Use Z3 for linear solving." OFF)
-option(HYPRO_USE_SOPLEX "Use Soplex for linear solving." OFF)
+#option(HYPRO_USE_SMTRAT "Use SMT-RAT for linear solving." OFF)
+#option(HYPRO_USE_Z3 "Use Z3 for linear solving." OFF)
+#option(HYPRO_USE_SOPLEX "Use Soplex for linear solving." OFF)
 option(HYPRO_LOGGING "Allow logging." OFF)
 option(HYPRO_COVERAGE "Enable compiler flags for test coverage diagnostics." OFF)
 option(HYPRO_STATISTICS "Create a statistic file." OFF)
@@ -62,6 +62,24 @@ mark_as_advanced(HYPRO_COVERAGE)
 mark_as_advanced(HYPRO_STATISTICS)
 mark_as_advanced(CLANG_TIDY)
 mark_as_advanced(DEVELOPER)
+
+if(NOT CMAKE_BUILD_TYPE)
+	set(CMAKE_BUILD_TYPE Release CACHE STRING "Choose the type of build, options are: Debug Release" FORCE)
+endif()
+set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release")
+
+if(NOT SECONDARY_SOLVER_BACKEND)
+	set(SECONDARY_SOLVER_BACKEND "none" CACHE STRING "Secondary backend-solver used after invoking glpk. Options are: none, smtrat, z3, soplex")
+endif()
+set_property(CACHE SECONDARY_SOLVER_BACKEND PROPERTY STRINGS "none" "smtrat" "z3" "soplex")
+
+if(${SECONDARY_SOLVER_BACKEND} STREQUAL "smtrat")
+	set(HYPRO_USE_SMTRAT "ON")
+elseif(${SECONDARY_SOLVER_BACKEND} STREQUAL "z3")
+	set(HYPRO_USE_Z3 "ON")
+elseif(${SECONDARY_SOLVER_BACKEND} STREQUAL "soplex")
+	set(HYPRO_USE_SOPLEX "ON")
+endif()
 
 ###########################################################################################
 #### EXPORT SETTINGS
@@ -123,12 +141,8 @@ else()
 endif()
 
 # general compiler and linker settings
-if(NOT CMAKE_BUILD_TYPE)
-	set(CMAKE_BUILD_TYPE Release CACHE STRING "Choose the type of build, options are: Debug Release" FORCE)
-endif()
-set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release")
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -pedantic -fPIC -DBOOST_SPIRIT_USE_PHOENIX_V3=1 -ftemplate-backtrace-limit=0")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wno-attributes -pedantic -fPIC -DBOOST_SPIRIT_USE_PHOENIX_V3=1 -ftemplate-backtrace-limit=0")
 if(STATICLIB_SWITCH)
 	set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static -Wl,--whole-archive -lpthread -Wl,--no-whole-archive")
 	set(CMAKE_FIND_LIBRARY_SUFFIXES ".a")
@@ -154,25 +168,19 @@ endif()
 # C.1. Required libraries for core.
 # # # # # # # # # # # # # # # # # # # # # #
 
-load_library(hypro Boost 1.55.0)
+# initialize lists for include directories and library files
+set(${PROJECT_NAME}_INCLUDE_DIRS "" CACHE STRING "Include directories var")
+
+load_library(${PROJECT_NAME} Boost 1.55.0)
 set(Boost_USE_STATIC_LIBS        ON) # only find static libs
 set(Boost_USE_MULTITHREADED      ON)
 set(Boost_USE_STATIC_RUNTIME    OFF)
 
-load_library(hypro GTest 0)
-load_library(hypro carl 0)
+load_library(${PROJECT_NAME} GTest 0)
+find_package(carl)
+
 add_subdirectory(src/resources)
 
-set(hypro_LIBRARIES_STATIC ${hypro_LIBRARIES_STATIC} ${ANTLR4CPP_LIBS} ) # TODO: What about glpk static?
-set(hypro_LIBRARIES_DYNAMIC ${hypro_LIBRARIES_DYNAMIC} ${GLPK_LIBRARIES} )
-#set(hypro_LIBRARIES_DYNAMIC ${hypro_LIBRARIES_DYNAMIC} ${GLPK_LIBRARIES} ${ANTLR4CPP_LIBS} )
-#set(hypro_INCLUDE_DIRS ${hypro_INCLUDE_DIRS} ${GLPK_INCLUDE_DIR} ${ANTLR4CPP_INCLUDE_DIRS} )
-
-# This is needed in case carl was not installed
-if(NOT carl_FOUND)
-	set(hypro_LIBRARIES_DYNAMIC ${hypro_LIBRARIES_DYNAMIC} ${carl_LIBRARIES} )
-	set(hypro_INCLUDE_DIRS ${hypro_INCLUDE_DIRS} ${carl_INCLUDE_DIR} )
-endif()
 
 if(CLANG_TIDY)
 	set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
@@ -205,23 +213,24 @@ else()
 endif()
 
 if(HYPRO_USE_PPL)
-	load_library(hypro PPL 0)
+	load_library(${PROJECT_NAME} PPL 0)
 endif()
 
 if(HYPRO_USE_SMTRAT)
-	load_library(hypro smtrat 0)
+	find_package(smtrat)
+	#load_library(${PROJECT_NAME} smtrat 0)
 endif()
 
 if(HYPRO_USE_Z3)
-	load_library(hypro z3 0)
+	load_library(${PROJECT_NAME} z3 0)
 endif()
 
 if(HYPRO_USE_SOPLEX)
-	load_library(hypro soplex 0)
+	load_library(${PROJECT_NAME} soplex 0)
 endif()
 
 if(HYPRO_USE_OPENMP)
-	load_library(hypro OpenMP 0)
+	load_library(${PROJECT_NAME} OpenMP 0)
 	if(OPENMP_FOUND)
 		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fopenmp")
 	endif()
@@ -251,5 +260,6 @@ add_subdirectory(examples EXCLUDE_FROM_ALL)
 # # # # # # # # # # # # # # # # # # # # # #
 # E. Export Compile Information.
 # # # # # # # # # # # # # # # # # # # # # #
+
 
 include(export)

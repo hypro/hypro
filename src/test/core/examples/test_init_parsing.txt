@@ -1,0 +1,48 @@
+hybrid reachability
+{
+ state var x,v
+
+ modes
+ {
+  l
+  {
+   poly ode 1
+   {
+    x' = v
+    v' = -9.81
+   }
+
+   inv
+   {
+    x >= 0
+   }
+  }
+ }
+
+ jumps
+ {
+  l -> l
+  guard { x = 0 v <= 0 }
+  reset { v' := -0.75*v }
+  parallelotope aggregation {}
+ }
+
+ init
+ {
+  l
+  {
+   x in [10,10.2]
+   v in [0,0]
+  }
+ }
+
+}
+
+#unsafe set
+#{
+#  l
+#  {
+#   #x in [4,6]
+#   #v in [-2.5,0]
+#  }
+#}

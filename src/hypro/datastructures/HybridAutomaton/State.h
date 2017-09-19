@@ -27,8 +27,8 @@ class Location;
 template<typename Number, typename Representation, typename ...Rargs>
 class State
 {
-	private:
-		using repVariant = boost::variant<Representation,Rargs...>; /// Boost variant type for all possible state set representations.
+  public:
+	using repVariant = boost::variant<Representation,Rargs...>; /// Boost variant type for all possible state set representations.
 
   protected:
     const Location<Number>* mLoc = nullptr; /// Location of the state.
@@ -36,6 +36,13 @@ class State
     std::vector<representation_name> mTypes; /// A vector holding the actual types corresponding to the state sets.
     carl::Interval<Number> mTimestamp = carl::Interval<Number>::unboundedInterval(); /// A timestamp.
     bool mIsEmpty = false; /// A flag which can be set to allow for a quick check for emptiness.
+
+  private:
+
+    /**
+     * @brief       Checks whether the type of all elements in mSets matches the type stored in mTypes.
+     */
+    bool checkConsistency() const;
 
   public:
   	/**
@@ -217,11 +224,11 @@ class State
      * @param[in]  I     The position.
      */
     void setSetType(representation_name type, std::size_t I = 0) {
-    	TRACE("hypro.datastructures","Attempt to set set type at pos " << I << ", mSets.size() = " << mSets.size());
+    	TRACE("hypro.datastructures","Attempt to set set type at pos " << I << ", mSets.size() = " << mSets.size() << ", mTypes.size() = " << mTypes.size());
     	assert(mSets.size() == mTypes.size());
 		while(I >= mSets.size()) {
-			mSets.push_back(ConstraintSet<Number>()); // some default set.
-			mTypes.push_back(representation_name::constraint_set); // some default set type.
+			mSets.emplace_back(Representation()); // some default set.
+			mTypes.push_back(Representation::type()); // some default set type.
 		}
 		mTypes[I] = type;
 	}
@@ -233,11 +240,18 @@ class State
     void setTimestamp(carl::Interval<Number> t) { mTimestamp = t; }
 
     /**
-     * @brief      Sets the sets.
-     *
-     * @param[in]  sets  The sets.
+     * @brief       Sets the sets.
+     * @param[in]   sets  The sets.
      */
     void setSets(const std::vector<boost::variant<Representation,Rargs...>>& sets) { mSets = sets; }
+
+      /**
+     * @brief       Sets the sets.
+     * @details     A slower but safer version of setSets as it ensures that mTypes and mSets must be consistent
+     *              in terms of length and content when being set.
+     * @param[in]   sets    The sets to set.
+     */
+    void setSetsSave(const std::vector<boost::variant<Representation,Rargs...>>& sets);
 
     /**
 	 * @brief      Sets the set.
@@ -247,12 +261,14 @@ class State
 	 * @param[in]  I     The position in the sets vector.
 	 */
 	void setSetDirect(const repVariant& in, std::size_t I = 0) {
-		TRACE("hypro.datastructures","Attempt to set set direct at pos " << I << ", mSets.size() = " << mSets.size());
+		TRACE("hypro.datastructures","Attempt to set set direct at pos " << I << ", mSets.size() = " << mSets.size() << ", mTypes.size() = " << mTypes.size());
 		assert(mSets.size() == mTypes.size());
+        assert(checkConsistency());
 		while(I >= mSets.size()) {
-			mSets.push_back(ConstraintSet<Number>()); // some default set.
-			mTypes.push_back(representation_name::constraint_set); // some default set type.
+			mSets.emplace_back(Representation()); // some default set.
+			mTypes.push_back(Representation::type()); // some default set type.
 		}
+        assert(checkConsistency());
 		mSets[I] = in;
 	}
 
@@ -316,6 +332,8 @@ class State
     State<Number,Representation,Rargs...> linearTransformation(const matrix_t<Number>& matrix) const;
     State<Number,Representation,Rargs...> affineTransformation(const matrix_t<Number>& matrix, const vector_t<Number>& vector) const;
 
+    State<Number,Representation,Rargs...> applyTransformation(const ConstraintSet<Number>& trafo ) const;
+
     /**
      * @brief      Meta-function, which applies an affine transformation to each set contained in the state and whose index is contained
      * in the second parameter.
@@ -333,23 +351,42 @@ class State
      */
     State<Number,Representation,Rargs...> partiallyApplyTransformation(const ConstraintSet<Number>& trafo, std::size_t I ) const;
 
+    //TODO: Documentation from here on
+
+    State<Number,Representation,Rargs...> minkowskiSum(const State<Number,Representation,Rargs...>& rhs) const;
+
+    State<Number,Representation,Rargs...> partiallyMinkowskiSum(const State<Number,Representation,Rargs...>& rhs, std::size_t I ) const;
+
+    std::size_t getDimension(std::size_t I) const;
+
+    Number getSupremum(std::size_t I) const;
+
+    void removeRedundancy();
+
+    void partiallyRemoveRedundancy(std::size_t I);
+
     /**
      * @brief      Outstream operator.
      * @param      out    The outstream.
      * @param[in]  state  The state.
      * @return     A reference to the outstream.
      */
+    #ifdef HYPRO_LOGGING
     friend ostream& operator<<(ostream& out, const State<Number,Representation,Rargs...>& state) {
-		#ifdef HYPRO_LOGGING
     	out << "location: " << state.getLocation()->getName() << " at timestamp " << state.getTimestamp() << std::endl;
     	//out << "Set: " << convert<Number,double>(Converter<Number>::toBox(state.getSet())) << std::endl;
-    	out << "Set: " << boost::apply_visitor(genericConversionVisitor<repVariant,Number>(representation_name::box), state.getSet()) << std::endl;
+    	//out << "Set: " << boost::apply_visitor(genericConversionVisitor<repVariant,Number>(representation_name::box), state.getSet()) << std::endl;
+    	if(state.getNumberSets() > 0) {
+    	out << "Set: " << state.getSet(0) << std::endl;
+    	}
     	if(state.getNumberSets() > 1) {
     		out << "Other sets: " << std::endl;
 	    	for(std::size_t i = 1; i <= sizeof...(Rargs); ++i)
 	    		out << state.getSet(i) << std::endl;
     	}
-		#endif
+    #else
+    friend ostream& operator<<(ostream& out, const State<Number,Representation,Rargs...>&) {
+    #endif
     	return out;
     }
 

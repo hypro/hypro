@@ -83,4 +83,4 @@ void LocationManager<Number>::erase(unsigned _id) {
     }
 }
 
-}  // namespace hydra
+}  // namespace hypro

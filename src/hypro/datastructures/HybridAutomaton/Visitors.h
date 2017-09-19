@@ -27,6 +27,28 @@ public:
 };
 
 template<typename T>
+class genericMinkowskiSumVisitor
+    : public boost::static_visitor<T>
+{
+public:
+
+	template<typename A, typename B>
+	inline T operator()(const A& lhs, const B&) const {
+		assert(false && "MinkowskiSum OF DIFFERENT TYPES.");
+		return lhs;
+	}
+
+	template<typename A>
+    inline T operator()(const A& lhs, const A& rhs) const {
+    	//auto tmpHPoly = Converter<Number>::toHPolytope(lhs);
+		//TRACE("hydra.datastructures","Union visitor lhs " << tmpHPoly);
+		//tmpHPoly = Converter<Number>::toHPolytope(rhs);
+		//TRACE("hydra.datastructures","Union visitor rhs " << tmpHPoly);
+ 		return lhs.minkowskiSum(rhs);
+    }
+};
+
+template<typename T>
 class genericIntersectVisitor
     : public boost::static_visitor<T>
 {
@@ -80,23 +102,28 @@ public:
     inline T operator()(const B& lhs) const {
  		switch(toType){
  			case representation_name::box: {
- 				return Converter<Number>::toBox(lhs);
+ 				Box<Number> tmp = Converter<Number>::toBox(lhs);
+ 				return tmp;
  				break;
  			}
  			case representation_name::polytope_h: {
- 				return Converter<Number>::toHPolytope(lhs);
+ 				HPolytope<Number> tmp = Converter<Number>::toHPolytope(lhs);
+ 				return tmp;
  				break;
  			}
  			case representation_name::polytope_v: {
- 				return Converter<Number>::toVPolytope(lhs);
+ 				VPolytope<Number> tmp = Converter<Number>::toVPolytope(lhs);
+ 				return tmp;
  				break;
  			}
  			case representation_name::zonotope: {
- 				return Converter<Number>::toZonotope(lhs);
+ 				Zonotope<Number> tmp = Converter<Number>::toZonotope(lhs);
+ 				return tmp;
  				break;
  			}
  			case representation_name::support_function: {
- 				return Converter<Number>::toSupportFunction(lhs);
+ 				SupportFunction<Number> tmp = Converter<Number>::toSupportFunction(lhs);
+ 				return tmp;
  				break;
  			}
  			case representation_name::ppl_polytope: {
@@ -119,8 +146,10 @@ class genericReductionVisitor
 {
 public:
 
-    inline T operator()(const T& lhs) const {
-    	// Do nothing if not support function.
+	template<typename A>
+    inline T operator()(A lhs) const {
+    	//Use removeRedundancy if not supportfunction
+    	lhs.removeRedundancy();
     	return lhs;
     }
 
@@ -172,7 +201,7 @@ class genericCompareVisitor
 {
 public:
 	template<typename A, typename B>
-	inline bool operator()(const A& lhs, const B&) const {
+	inline bool operator()(const A&, const B&) const {
 		return false;
 	}
 
@@ -198,6 +227,37 @@ public:
     inline std::ostream& operator()(const T& shape) const {
  		return out << shape;
     }
+};
+
+class genericDimensionVisitor
+	: public boost::static_visitor<std::size_t>
+{
+public:
+	template<typename T>
+	inline std::size_t operator()(const T& shape) const {
+		return shape.dimension();
+	}
+};
+
+template<typename T>
+class genericSupremumVisitor
+	: public boost::static_visitor<T>
+{
+public:
+	template<typename A>
+	inline T operator()(const A& shape) const {
+		return shape.supremum();
+	}
+};
+
+class genericTypeVisitor
+	: public boost::static_visitor<representation_name>
+{
+public:
+	template<typename A>
+	inline representation_name operator()(const A&) const {
+		return A::type();
+	}
 };
 
 } // namespace

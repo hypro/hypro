@@ -26,7 +26,7 @@ HPolytopeT<Number, Converter>::HPolytopeT( const HalfspaceVector &planes )
 template <typename Number, typename Converter>
 HPolytopeT<Number, Converter>::HPolytopeT( const matrix_t<Number> &A, const vector_t<Number> &b )
 	: mHPlanes(), mDimension( A.cols() ), mEmpty(TRIBOOL::NSET), mNonRedundant(false) {
-	TRACE("hypro.hPolytope","construct from Ax <= b," << std::endl  << "A: " << A << "b: " <<b);
+	TRACE("hypro.representations.HPolytope","construct from Ax <= b," << std::endl  << "A: " << A << "b: " <<b);
 	assert( A.rows() == b.rows() );
 	for ( unsigned i = 0; i < A.rows(); ++i ) {
 		mHPlanes.emplace_back( A.row( i ), b( i ) );
@@ -49,10 +49,10 @@ HPolytopeT<Number, Converter>::HPolytopeT( const matrix_t<Number> &A )
 template <typename Number, typename Converter>
 HPolytopeT<Number, Converter>::HPolytopeT( const std::vector<Point<Number>>& points )
 	: mHPlanes(), mDimension( 0 ), mEmpty(TRIBOOL::NSET), mNonRedundant(true) {
-	TRACE("hypro.hPolytope","Construct from vertices: ");
+	TRACE("hypro.representations.HPolytope","Construct from vertices: ");
 	for(auto vertex : points) {
 		Point<double> tmp = convert<Number,double>(vertex);
-		TRACE("hypro.hPolytope",tmp);
+		TRACE("hypro.representations.HPolytope",tmp);
 	}
 	/*
 	if ( !points.empty() ) {
@@ -77,6 +77,7 @@ HPolytopeT<Number, Converter>::HPolytopeT( const std::vector<Point<Number>>& poi
 		assert( (*points.begin()).dimension() > 0 );
 		mDimension = points.begin()->dimension();
 		for(unsigned d = 0; d < points.begin()->dimension(); ++d) {
+			//std::cout << "Do we get here?\n";
 			vector_t<Number> normal = vector_t<Number>::Zero(points.begin()->dimension());
 			normal(d) = 1;
 			mHPlanes.insert(mHPlanes.end(), Halfspace<Number>(normal, points.begin()->at(d)));
@@ -109,10 +110,11 @@ HPolytopeT<Number, Converter>::HPolytopeT( const std::vector<Point<Number>>& poi
 		mEmpty = TRIBOOL::FALSE;
 		//if ( points.size() <= mDimension ) {
 		if ( unsigned(effectiveDim) < mDimension ) {
-			std::cout << "Points size: " << points.size() << std::endl;
+			//std::cout << "Points size: " << points.size() << std::endl;
+			//std::cout << "effectiveDim: " << effectiveDim << std::endl;
 			// get common plane
 			std::vector<vector_t<Number>> vectorsInPlane;
-			std::cout << "first point: " << *points.begin() << std::endl;
+			//std::cout << "first point: " << *points.begin() << std::endl;
 			for(unsigned i = 1; i < points.size(); ++i) {
 				vectorsInPlane.emplace_back(points[i].rawCoordinates() - points[0].rawCoordinates());
 			}
@@ -120,7 +122,37 @@ HPolytopeT<Number, Converter>::HPolytopeT( const std::vector<Point<Number>>& poi
 			Number planeOffset = Halfspace<Number>::computePlaneOffset(planeNormal, points[0]);
 
 			// project on lower dimension.
-			// TODO: Use dimensions with largest coordinate range for improved stability.
+			// Use dimensions with largest coordinate range for improved stability.
+			// So to say: Drop dimensions with minimal coordinate range
+			Point<Number> maxP = points[0];
+			Point<Number> minP = points[0];
+			for(const auto& point : points){
+				maxP = Point<Number>::coeffWiseMax(maxP,point);
+				minP = Point<Number>::coeffWiseMin(minP,point);
+			}
+			//Make all range values positive
+			Point<Number> dimRange = maxP - minP;
+			for(unsigned i=0; i < dimRange.dimension(); i++){
+				dimRange[i] = dimRange.at(i) < 0 ? Number(-1)*dimRange.at(i) : dimRange.at(i);
+			}
+			//Get dimension with smallest range
+			std::size_t smallest = 0;
+			for(std::size_t d=0; d < dimRange.dimension(); d++){
+				if(dimRange.at(d) < dimRange.at(smallest)){
+					smallest = d;
+				}
+			}
+			//projDimensions are those who are bigger than smallest.
+			std::vector<std::size_t> projectionDimensions;
+			std::vector<std::size_t> droppedDimensions;
+			for(std::size_t d=0; d < dimRange.dimension(); d++){
+				if(d != smallest){
+					projectionDimensions.push_back(d);
+				} else {
+					droppedDimensions.push_back(d);
+				}
+			}
+			/*
 			std::vector<std::size_t> projectionDimensions;
 			std::vector<std::size_t> droppedDimensions;
 			for(std::size_t d = 0; d < mDimension; ++d){
@@ -130,12 +162,17 @@ HPolytopeT<Number, Converter>::HPolytopeT( const std::vector<Point<Number>>& poi
 					droppedDimensions.push_back(d);
 				}
 			}
-
+			*/
 			std::vector<Point<Number>> projectedPoints;
 			for(const auto& point : points){
 				projectedPoints.emplace_back(point.project(projectionDimensions));
 			}
-
+			/*
+			std::cout << "Projected points are:\n";
+			for(auto& point : projectedPoints){
+				std::cout << point << std::endl;
+			}
+			*/
 			HPolytopeT<Number,Converter> projectedPoly(projectedPoints);
 			//std::cout << "Projected polytope: " << projectedPoly << std::endl;
 			projectedPoly.insertEmptyDimensions(projectionDimensions,droppedDimensions);
@@ -187,23 +224,23 @@ HPolytopeT<Number, Converter>::~HPolytopeT() {
 
 template <typename Number, typename Converter>
 bool HPolytopeT<Number, Converter>::empty() const {
-	TRACE("hypro.hPolytope",__func__);
+	TRACE("hypro.representations.HPolytope",__func__);
 	if(mEmpty == TRIBOOL::TRUE){
-		TRACE("hypro.hPolytope","Already set to true.");
+		TRACE("hypro.representations.HPolytope","Already set to true.");
 		return true;
 	}
 	if(mEmpty == TRIBOOL::FALSE){
-		TRACE("hypro.hPolytope","Already set to false.");
+		TRACE("hypro.representations.HPolytope","Already set to false.");
 		return false;
 	}
 
 	if(mHPlanes.empty()){
-		TRACE("hypro.hPolytope","Polytope is universe.");
+		TRACE("hypro.representations.HPolytope","Polytope is universe.");
 		mEmpty = TRIBOOL::FALSE;
 		return false;
 	}
 
-	TRACE("hypro.hPolytope","Call to Optimizer.");
+	TRACE("hypro.representations.HPolytope","Call to Optimizer.");
 
 	Optimizer<Number> opt;
 	opt.setMatrix(this->matrix());
@@ -211,7 +248,7 @@ bool HPolytopeT<Number, Converter>::empty() const {
 
 	bool res = !opt.checkConsistency();
 	mEmpty = (res == true ? TRIBOOL::TRUE : TRIBOOL::FALSE);
-	TRACE("hypro.hPolytope","Optimizer result: " << res);
+	TRACE("hypro.representations.HPolytope","Optimizer result: " << res);
 	return res;
 }
 
@@ -303,13 +340,13 @@ typename std::vector<Point<Number>> HPolytopeT<Number, Converter>::vertices( con
 				continue;
 			}
 			#ifdef HPOLY_DEBUG_MSG
-			std::cout << convert<Number,double>(A) << std::endl;
-			std::cout << convert<Number,double>(b) << std::endl;
+			//std::cout << convert<Number,double>(A) << std::endl;
+			//std::cout << convert<Number,double>(b) << std::endl;
 			#endif
 
 			vector_t<Number> res = lu_decomp.solve( b );
 
-			TRACE("hypro.hPolytope","Computed Vertex: " << (convert<Number,double>(res).transpose()));
+			TRACE("hypro.representations.HPolytope","Computed Vertex: " << (convert<Number,double>(res).transpose()));
 
 			// Check if the computed vertex is a real vertex
 			bool outside = false;
@@ -325,7 +362,7 @@ typename std::vector<Point<Number>> HPolytopeT<Number, Converter>::vertices( con
 
 				if(!skip) {
 					if( !carl::AlmostEqual2sComplement(mHPlanes.at(planePos).offset(), mHPlanes.at(planePos).normal().dot(res), default_double_comparison_ulps) && mHPlanes.at(planePos).offset() - mHPlanes.at(planePos).normal().dot(res) < 0 ) {
-						TRACE("hypro.hPolytope","Drop vertex: " << (convert<Number,double>(res).transpose()) << " because of plane " << planePos );
+						TRACE("hypro.representations.HPolytope","Drop vertex: " << (convert<Number,double>(res).transpose()) << " because of plane " << planePos );
 						outside = true;
 						break;
 					}
@@ -337,10 +374,7 @@ typename std::vector<Point<Number>> HPolytopeT<Number, Converter>::vertices( con
 				if(std::find(vertices.begin(), vertices.end(), tmp) == vertices.end()) {
 					vertices.push_back(tmp);
 				}
-				TRACE("hypro.hPolytope","Final vertex: " << (convert<Number,double>(res).transpose()));
-				if(vertices.back().at(0) >= 94.5 && vertices.back().at(0) <= 94.6) {
-					TRACE("hypro.hPolytope","Created by planes " << permutation);
-				}
+				TRACE("hypro.representations.HPolytope","Final vertex: " << (convert<Number,double>(res).transpose()));
 			}
 		}
 	}
@@ -571,7 +605,7 @@ EvaluationResult<Number> HPolytopeT<Number, Converter>::evaluate( const vector_t
 
 template<typename Number, typename Converter>
 std::pair<bool, HPolytopeT<Number, Converter>> HPolytopeT<Number, Converter>::satisfiesHalfspace( const Halfspace<Number>& rhs ) const {
-	TRACE("hypro.hPolytope","(P AND ex <= d) == emptyset?, e: " << rhs.normal() << "d: " << rhs.offset());
+	TRACE("hypro.representations.HPolytope","(P AND ex <= d) == emptyset?, e: " << rhs.normal() << "d: " << rhs.offset());
 	if(this->empty()) {
 		return std::make_pair(false, *this);
 	}
@@ -581,7 +615,7 @@ std::pair<bool, HPolytopeT<Number, Converter>> HPolytopeT<Number, Converter>::sa
 
 template<typename Number, typename Converter>
 std::pair<bool, HPolytopeT<Number, Converter>> HPolytopeT<Number, Converter>::satisfiesHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const {
-	TRACE("hypro.hPolytope","(P AND Ax <= b) == emptyset?, A: " << _mat << "b: " << _vec);
+	TRACE("hypro.representations.HPolytope","(P AND Ax <= b) == emptyset?, A: " << _mat << "b: " << _vec);
 	assert(_mat.rows() == _vec.rows());
 	if(this->empty()) {
 		return std::make_pair(false, *this);
@@ -596,7 +630,7 @@ std::pair<bool, HPolytopeT<Number, Converter>> HPolytopeT<Number, Converter>::sa
 
 template <typename Number, typename Converter>
 HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::project(const std::vector<std::size_t>& dimensions) const {
-	TRACE("hypro.hPolytope","on dimensions " << dimensions);
+	TRACE("hypro.representations.HPolytope","on dimensions " << dimensions);
 	if(dimensions.empty()) {
 		return Empty();
 	}
@@ -609,7 +643,7 @@ HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::project(const std::
 
 template <typename Number, typename Converter>
 HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::linearTransformation( const matrix_t<Number> &A ) const {
-	TRACE("hypro.hPolytope","P' = A*P, A:" << std::endl << A);
+	TRACE("hypro.representations.HPolytope","P' = A*P, A:" << std::endl << A);
 	if(A.nonZeros() == 0) {
 		return HPolytopeT<Number,Converter>::Empty();
 	}
@@ -617,12 +651,12 @@ HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::linearTransformatio
 		Eigen::FullPivLU<matrix_t<Number>> lu(A);
 		// if A has full rank, we can simply re-transform, otherwise use v-representation.
 		if(lu.rank() == A.rows()) {
-			TRACE("hypro.hPolytope","A has full rank - do not use v-conversion.");
+			TRACE("hypro.representations.HPolytope","A has full rank - do not use v-conversion.");
 			std::pair<matrix_t<Number>, vector_t<Number>> inequalities = this->inequalities();
 			assert( (HPolytopeT<Number, Converter>(inequalities.first*A.inverse(), inequalities.second).size() == this->size()) );
 			return HPolytopeT<Number, Converter>(inequalities.first*A.inverse(), inequalities.second);
 		} else {
-			TRACE("hypro.hPolytope","Use V-Conversion for linear transformation.");
+			TRACE("hypro.representations.HPolytope","Use V-Conversion for linear transformation.");
 			auto intermediate = Converter::toVPolytope( *this );
 			intermediate = intermediate.linearTransformation( A );
 			auto res = Converter::toHPolytope(intermediate);
@@ -638,7 +672,7 @@ HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::linearTransformatio
 template <typename Number, typename Converter>
 HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::affineTransformation( const matrix_t<Number> &A,
 														   const vector_t<Number> &b ) const {
-	TRACE("hypro.hPolytope","P' = A*P + b, A: " << std::endl << A << "b: " << std::endl << b);
+	TRACE("hypro.representations.HPolytope","P' = A*P + b, A: " << std::endl << A << "b: " << std::endl << b);
 	if(A.nonZeros() == 0) {
 		std::vector<Point<Number>> points;
 		points.emplace_back(b);
@@ -648,13 +682,13 @@ HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::affineTransformatio
 		Eigen::FullPivLU<matrix_t<Number>> lu(A);
 		// if A has full rank, we can simply re-transform, otherwise use v-representation.
 		if(lu.rank() == A.rows()) {
-			TRACE("hypro.hPolytope","A has full rank - do not use v-conversion.");
+			TRACE("hypro.representations.HPolytope","A has full rank - do not use v-conversion.");
 			std::pair<matrix_t<Number>, vector_t<Number>> inequalities = this->inequalities();
 			assert( (HPolytopeT<Number, Converter>(inequalities.first*A.inverse(), inequalities.first*A.inverse()*b + inequalities.second).size() == this->size()) );
 			assert( !(HPolytopeT<Number, Converter>(inequalities.first*A.inverse(), inequalities.first*A.inverse()*b + inequalities.second).empty()) );
 			return HPolytopeT<Number, Converter>(inequalities.first*A.inverse(), inequalities.first*A.inverse()*b + inequalities.second);
 		} else {
-			TRACE("hypro.hPolytope","Use V-Conversion for linear transformation.");
+			TRACE("hypro.representations.HPolytope","Use V-Conversion for linear transformation.");
 			auto intermediate = Converter::toVPolytope( *this );
 			intermediate = intermediate.affineTransformation( A, b );
 			auto res = Converter::toHPolytope(intermediate);
@@ -669,7 +703,7 @@ HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::affineTransformatio
 
 template <typename Number, typename Converter>
 HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::minkowskiSum( const HPolytopeT &rhs ) const {
-	TRACE("hypro.hPolytope","P' = P + " << rhs << std::endl);
+	TRACE("hypro.representations.HPolytope","P' = P + " << rhs << std::endl);
 	HPolytopeT<Number, Converter> res;
 	Number result;
 
@@ -705,7 +739,7 @@ HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::minkowskiSum( const
 
 template <typename Number, typename Converter>
 HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::intersect( const HPolytopeT &rhs ) const {
-	TRACE("hypro.hPolytope","with " << rhs << std::endl);
+	TRACE("hypro.representations.HPolytope","with " << rhs << std::endl);
 	if ( rhs.empty() || this->empty() ) {
 		return HPolytopeT<Number, Converter>::Empty();
 	} else {
@@ -723,7 +757,7 @@ HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::intersect( const HP
 
 template <typename Number, typename Converter>
 HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::intersectHalfspace( const Halfspace<Number> &rhs ) const {
-	TRACE("hypro.hPolytope","with " << rhs << std::endl);
+	TRACE("hypro.representations.HPolytope","with " << rhs << std::endl);
 	HPolytopeT<Number, Converter> res( *this );
 	// only insert the new Halfspace, if it is not already redundant.
 	if(res.evaluate(rhs.normal()).supportValue > rhs.offset())
@@ -735,7 +769,7 @@ HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::intersectHalfspace(
 template <typename Number, typename Converter>
 HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::intersectHalfspaces( const matrix_t<Number> &_mat,
 														   const vector_t<Number> &_vec ) const {
-	TRACE("hypro.hPolytope","P' = P AND Ax <= b,  A: " << std::endl << _mat << std::endl << "b: " << _vec);
+	TRACE("hypro.representations.HPolytope","P' = P AND Ax <= b,  A: " << std::endl << _mat << std::endl << "b: " << _vec);
 	assert( _mat.rows() == _vec.rows() );
 	HPolytopeT<Number, Converter> res( *this );
 	for ( unsigned i = 0; i < _mat.rows(); ++i ) {
@@ -747,7 +781,7 @@ HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::intersectHalfspaces
 
 template <typename Number, typename Converter>
 bool HPolytopeT<Number, Converter>::contains( const Point<Number> &point ) const {
-	TRACE("hypro.hPolytope",point);
+	TRACE("hypro.representations.HPolytope",point);
 	return this->contains( point.rawCoordinates() );
 }
 
@@ -790,7 +824,7 @@ bool HPolytopeT<Number, Converter>::contains( const HPolytopeT<Number, Converter
 
 template <typename Number, typename Converter>
 HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::unite( const HPolytopeT &_rhs ) const {
-	TRACE("hypro.hPolytope","with " << _rhs << std::endl);
+	TRACE("hypro.representations.HPolytope","with " << _rhs << std::endl);
 	if( this->empty() ) {
 		// if this is empty, the result is _rhs, even if _rhs is empty, too.
 		return _rhs;
@@ -802,7 +836,7 @@ HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::unite( const HPolyt
 	// at this point, none is empty.
 	#ifdef AVOID_CONVERSION
 	std::size_t numberOfDirections = 8;
-	TRACE("hypro.hPolytope","Unite using templated evaluation using " << numberOfDirections << " directions.");
+	TRACE("hypro.representations.HPolytope","Unite using templated evaluation using " << numberOfDirections << " directions.");
 	assert(this->dimension() == _rhs.dimension());
 	std::vector<vector_t<Number>> templateDirections = computeTemplate<Number>(this->dimension(), numberOfDirections);
 	// as the template directions are ordered, we assume the same order for the results.
@@ -824,7 +858,7 @@ HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::unite( const HPolyt
 	assert(newHalfspaces.size() <= templateDirections.size());
 	return HPolytopeT<Number,Converter>(newHalfspaces);
 	#else
-	TRACE("hypro.hPolytope","Unite using V-polytope representation.");
+	TRACE("hypro.representations.HPolytope","Unite using V-polytope representation.");
 	std::vector<Point<Number>> vertices = this->vertices();
 	std::vector<Point<Number>> rhsVertices = _rhs.vertices();
 	vertices.insert(vertices.end(), rhsVertices.begin(), rhsVertices.end());

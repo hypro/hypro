@@ -1,0 +1,45 @@
+hybrid reachability { state var x,v
+
+ modes
+ {
+  l
+  {
+   poly ode 1
+   {
+    x' = v
+    v' = -9.81
+   }
+
+   inv
+   {
+    x >= 0
+   }
+  }
+  chuppachups
+  {
+   poly ode 2
+   {
+    x' = -2*x + 7*v + -4
+    v' = 1
+   }
+   inv
+   {
+    2*x + 3*v <= 100
+    x + -1*v >= 0
+   }
+  }
+ }
+ jumps
+ {
+  l -> l
+  guard { x = 0 v <= 0 }
+  reset { v' := -0.75*v }
+  parallelotope aggregation {}
+
+  l -> chuppachups
+  guard { x >= 10.48 }
+  urgent
+  box aggregation {}
+  reset { x' := -3.5 v' := 99 }
+ }
+}

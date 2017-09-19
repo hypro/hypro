@@ -265,8 +265,8 @@ public:
 	 */
 	HPolytopeT& operator=( const HPolytopeT<Number, Converter>& rhs ) = default;
 
-	friend std::ostream& operator<<( std::ostream& lhs, const HPolytopeT<Number, Converter>& rhs ) {
 #ifdef HYPRO_LOGGING
+	friend std::ostream& operator<<( std::ostream& lhs, const HPolytopeT<Number, Converter>& rhs ) {
 		if ( rhs.constraints().size() > 0 ) {
 			lhs << "[ ";
 			for ( unsigned i = 0; i < rhs.constraints().size() - 1; ++i ) {
@@ -274,6 +274,8 @@ public:
 			}
 			lhs << convert<Number,double>(rhs.constraints()[rhs.constraints().size() - 1]) << " ]";
 		}
+#else
+	friend std::ostream& operator<<( std::ostream& lhs, const HPolytopeT<Number, Converter>& ) {
 #endif
 		return lhs;
 	}
@@ -360,10 +362,10 @@ public:
 				#endif
 			}
 			#ifdef HPOLY_DEBUG_MSG
-			std::cout << "After Reduction: " << *this << std::endl;
-			#endif
+			//std::cout << "After Reduction: " << *this << std::endl;
 			#endif
 		}
+		#endif
 	}
 
 	template<typename N = Number, carl::EnableIf< std::is_same<N, double> > = carl::dummy>

@@ -3,10 +3,11 @@
  */
 
 #include "representations/GeometricObject.h"
-#include "datastructures/hybridAutomata/HybridAutomaton.h"
-#include "datastructures/hybridAutomata/LocationManager.h"
+#include "datastructures/HybridAutomaton/HybridAutomaton.h"
+#include "datastructures/HybridAutomaton/LocationManager.h"
 #include "algorithms/reachability/Reach.h"
-#include "parser/flowstar/ParserWrapper.h"
+//#include "parser/flowstar/ParserWrapper.h"
+#include "parser/antlr4-flowstar/ParserWrapper.h"
 #include "util/statistics/statistics.h"
 #ifdef HYPRO_USE_LACE
 #include <lace.h>
@@ -19,17 +20,20 @@ static void computeReachableStates(const std::string& filename, const hypro::rep
 	using timeunit = std::chrono::microseconds;
 	clock::time_point start = clock::now();
 
-	boost::tuple<hypro::HybridAutomaton<Number>, hypro::reachability::ReachabilitySettings<Number>> ha = hypro::parseFlowstarFile<Number>(filename);
-	hypro::reachability::Reach<Number,Representation> reacher(boost::get<0>(ha), boost::get<1>(ha));
+	boost::tuple<hypro::HybridAutomaton<Number>, hypro::ReachabilitySettings<Number>> ha = hypro::parseFlowstarFile<Number>(filename);
+	std::cout << "Parsed HybridAutomaton:\n" << boost::get<0>(ha) << "Parsed ReachabilitySettings:\n" << boost::get<1>(ha) << std::endl;
+	hypro::reachability::Reach<Number> reacher(boost::get<0>(ha), boost::get<1>(ha));
+	reacher.setRepresentationType(type);
 	std::cout << boost::get<1>(ha) << std::endl;
-	std::vector<std::pair<unsigned, hypro::reachability::flowpipe_t<Representation>>> flowpipes = reacher.computeForwardReachability();
+	std::vector<std::pair<unsigned, hypro::reachability::flowpipe_t<Number>>> flowpipes = reacher.computeForwardReachability();
+
 	std::cout << "Finished computation of reachable states: " << std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000.0 << " ms" << std::endl;
 
 #ifdef PLOT_FLOWPIPE
 	clock::time_point startPlotting = clock::now();
 
 	hypro::Plotter<Number>& plotter = hypro::Plotter<Number>::getInstance();
-	std::string extendedFilename = boost::get<0>(ha).reachabilitySettings().fileName;
+	std::string extendedFilename = boost::get<1>(ha).fileName;
 	switch (Representation::type()) {
 		case hypro::representation_name::zonotope:{
 			extendedFilename += "_zonotope";
@@ -56,16 +60,16 @@ static void computeReachableStates(const std::string& filename, const hypro::rep
 	}
 	std::cout << "filename is " << extendedFilename << std::endl;
 	plotter.setFilename(extendedFilename);
-	std::vector<unsigned> plottingDimensions = boost::get<0>(ha).reachabilitySettings().plotDimensions;
+	std::vector<std::size_t> plottingDimensions = boost::get<1>(ha).plotDimensions.at(0);
 	plotter.rSettings().dimensions.first = plottingDimensions.front();
 	plotter.rSettings().dimensions.second = plottingDimensions.back();
 	plotter.rSettings().cummulative = false;
 
 
 	// bad states plotting
-	typename hypro::HybridAutomaton<Number>::locationStateMap badStateMapping = boost::get<0>(ha).localBadStates();
+	typename hypro::HybridAutomaton<Number>::locationConditionMap badStateMapping = boost::get<0>(ha).getLocalBadStates();
 	for(const auto& state : badStateMapping) {
-		unsigned bs = plotter.addObject(Representation(state.second.set.first, state.second.set.second).vertices());
+		unsigned bs = plotter.addObject(Representation(state.second.getMatrix(0), state.second.getVector(0)).vertices());
 		plotter.setObjectColor(bs, hypro::plotting::colors[hypro::plotting::red]);
 	}
 
@@ -75,29 +79,30 @@ static void computeReachableStates(const std::string& filename, const hypro::rep
 		unsigned cnt = 0;
 		for(const auto& segment : flowpipePair.second){
 			std::cout << "Plot segment " << cnt << "/" << flowpipePair.second.size() << std::endl;
+			Representation seg = boost::get<Representation>(segment.getSet(0));
 			switch (type) {
 				case hypro::representation_name::support_function:{
 					//unsigned tmp = plotter.addObject(segment.project(plottingDimensions).vertices(hypro::LocationManager<Number>::getInstance().location(flowpipePair.first)));
-					unsigned tmp = plotter.addObject(segment.project(plottingDimensions).vertices());
+					unsigned tmp = plotter.addObject(seg.project(plottingDimensions).vertices());
 					plotter.setObjectColor(tmp, hypro::plotting::colors[flowpipePair.first % (sizeof(hypro::plotting::colors)/sizeof(*hypro::plotting::colors))]);
 					break;
 				}
 				case hypro::representation_name::zonotope:{
-					unsigned tmp = plotter.addObject(segment.project(plottingDimensions).vertices());
+					unsigned tmp = plotter.addObject(seg.project(plottingDimensions).vertices());
 					plotter.setObjectColor(tmp, hypro::plotting::colors[flowpipePair.first % (sizeof(hypro::plotting::colors)/sizeof(*hypro::plotting::colors))]);
 					plotter.rSettings().dimensions.first = 0;
 					plotter.rSettings().dimensions.second = 1;
 					break;
 				}
 				case hypro::representation_name::box:{
-					unsigned tmp = plotter.addObject(segment.project(plottingDimensions).vertices());
+					unsigned tmp = plotter.addObject(seg.project(plottingDimensions).vertices());
 					plotter.setObjectColor(tmp, hypro::plotting::colors[flowpipePair.first % (sizeof(hypro::plotting::colors)/sizeof(*hypro::plotting::colors))]);
 					plotter.rSettings().dimensions.first = 0;
 					plotter.rSettings().dimensions.second = 1;
 					break;
 				}
 				default:
-					unsigned tmp = plotter.addObject(segment.vertices());
+					unsigned tmp = plotter.addObject(seg.vertices());
 					plotter.setObjectColor(tmp, hypro::plotting::colors[flowpipePair.first % (sizeof(hypro::plotting::colors)/sizeof(*hypro::plotting::colors))]);
 			}
 			++cnt;
@@ -127,23 +132,27 @@ int main(int argc, char** argv) {
 
 #ifdef USE_CLN_NUMBERS
 	using Number = cln::cl_RA;
-#else
-	using Number = mpq_class;
+#else																																														
+	//using Number = mpq_class;
+	using Number = double;
 #endif
 
 	switch(rep){
+		
 		case 5: {
 			using Representation = hypro::Zonotope<Number>;
 			std::cout << "Using a zonotope representation." << std::endl;
 			computeReachableStates<Number, Representation>(filename, hypro::representation_name::zonotope);
 			break;
 		}
+		
 		case 4: {
 			using Representation = hypro::SupportFunction<Number>;
 			std::cout << "Using a support function representation." << std::endl;
 			computeReachableStates<Number, Representation>(filename, hypro::representation_name::support_function);
 			break;
 		}
+		
 		case 3: {
 			using Representation = hypro::VPolytope<Number>;
 			std::cout << "Using a v-polytope representation." << std::endl;
@@ -156,6 +165,7 @@ int main(int argc, char** argv) {
 			computeReachableStates<Number, Representation>(filename, hypro::representation_name::polytope_h);
 			break;
 		}
+		
 		case 1: {
 			using Representation = hypro::Box<Number>;
 			std::cout << "Using a box representation." << std::endl;
