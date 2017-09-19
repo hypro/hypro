@@ -13,43 +13,38 @@ namespace hypro {
 
 	template<typename Number>
 	antlrcpp::Any HyproHAVisitor<Number>::visitStart(HybridAutomatonParser::StartContext *ctx){
-		std::cout << "-- Bin bei visitStart!" << std::endl;
 
 		//1.Calls visit(ctx->vardeclaration()) to get vars vector
 		vars = visit(ctx->vardeclaration()).template as<std::vector<std::string>>();
-		std::cout << "---- vars is now: " << vars << std::endl;
 		std::vector<std::string>& varVec = vars;
 
 		//2.Calls visit(ctx->setting()) to get reachability settings
 		HyproSettingVisitor<Number> settingVisitor = HyproSettingVisitor<Number>(varVec);
 		reachSettings = settingVisitor.visit(ctx->setting());
-		std::cout << "---- reachSettings is now: " << reachSettings << std::endl;
-
+		
 		//3.Calls visit(ctx->modes()) to get locSet
 		HyproLocationVisitor<Number> locVisitor = HyproLocationVisitor<Number>(varVec);
 		std::set<Location<Number>*> locSet = locVisitor.visit(ctx->modes()).template as<std::set<Location<Number>*>>();
-		std::cout << "-- locVisitor visited!" << std::endl;
 		std::set<Location<Number>*>& rLocSet = locSet;
-		//std::cout << "---- locSet is now: " << locSet << std::endl;
 
 		//4.Later calls visit to get transitions
 		//NOTE: the transVisitor will modify locSet as every location has its own set of transitions that must be added here.
 		HyproTransitionVisitor<Number> transVisitor = HyproTransitionVisitor<Number>(varVec, rLocSet);
 		std::set<Transition<Number>*> transSet = transVisitor.visit(ctx->jumps()).template as<std::set<Transition<Number>*>>();
-		std::cout << "-- transVisitor visited!" << std::endl;
 
 		//5.Later calls visit to get initial states
 		HyproInitialSetVisitor<Number> initVisitor = HyproInitialSetVisitor<Number>(varVec, rLocSet);
 		locationStateMap initSet = initVisitor.visit(ctx->init()).template as<locationStateMap>();
-		std::cout << "-- initVisitor visited!" << std::endl;
 
 		//6.Calls visit(ctx->unsafeset()) to get local badStates
 		HyproBadStatesVisitor<Number> bStateVisitor = HyproBadStatesVisitor<Number>(varVec, rLocSet);
-		//locationConditionMap badStates;
-		//if(ctx->unsafeset() != NULL){
 		locationConditionMap badStates = bStateVisitor.visit(ctx->unsafeset()).template as<locationConditionMap>();
-		//}
-		std::cout << "-- bStateVisitor visited!" << std::endl;
+
+#ifdef HYPRO_LOGGING
+		TRACE("hypro.parser","Parsed variables: " << vars);
+		TRACE("hypro.parser","Reachability settings: " << reachSettings)
+		//TODO: Print all the other parsed stuff
+#endif
 
 		//7.Build HybridAutomaton, return it
 		HybridAutomaton<Number> ha;
@@ -62,7 +57,6 @@ namespace hypro {
 
 	template<typename Number>
 	antlrcpp::Any HyproHAVisitor<Number>::visitVardeclaration(HybridAutomatonParser::VardeclarationContext *ctx){
-		std::cout << "-- Bin bei visitVardeclaration!" << std::endl;
 
 		//Get variable names and push them into vars vector
 		std::vector<std::string> varVec;
@@ -73,6 +67,7 @@ namespace hypro {
 		}
 		if(varVec.size() == 0){
 			std::cout << "ERROR: No variables were defined" << std::endl;
+			exit(0);
 		}
 		return varVec;
 	}

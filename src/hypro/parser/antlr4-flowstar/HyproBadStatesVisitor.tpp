@@ -16,8 +16,6 @@ namespace hypro {
 	template<typename Number>
 	antlrcpp::Any HyproBadStatesVisitor<Number>::visitUnsafeset(HybridAutomatonParser::UnsafesetContext *ctx){
 
-		std::cout << "Bin in visitUnsafeset!" << std::endl;
-
 		//0.Check if for each loc there is only one badstate? or maybe multiple?
 
 		//1.Collect badState information
@@ -33,8 +31,6 @@ namespace hypro {
 	template<typename Number>
 	antlrcpp::Any HyproBadStatesVisitor<Number>::visitBadstate(HybridAutomatonParser::BadstateContext *ctx){
 
-		std::cout << "Bin in visitBadstate!" << std::endl;
-
 		//0.Check if given loc name exists and get meant location where bad states can occur
 		bool found = false;
 		Location<Number>* badLoc;
@@ -46,6 +42,7 @@ namespace hypro {
 		}
 		if(!found){
 			std::cerr << "ERROR: Given location name in unsafe set does not exist." << std::endl;
+			exit(0);
 		}
 
 		//1.Get the conditions under which we enter a bad state
