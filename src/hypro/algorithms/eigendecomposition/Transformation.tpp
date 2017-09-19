@@ -163,8 +163,8 @@ void Transformation<Number,Representation>::transformGlobalBadStates
     assert( locIt == endLocIt );
     assert (!globalBadStatesTransformed);
     //TODO MEMORY ASSERTION?
-    int i;
-    for (typename conditionVector::iterator it = _hybrid.getGlobalBadStates().begin(); 
+    size_t i;
+    for (typename conditionVector::const_iterator it = _hybrid.getGlobalBadStates().begin(); 
       it!=_hybrid.getGlobalBadStates().end(); ++it) {
         //transform each global badstate by setting of according localBadState
        //1. loop through global states
@@ -173,18 +173,14 @@ void Transformation<Number,Representation>::transformGlobalBadStates
           locMapIt!=mLocationPtrsMap.end(); ++locMapIt) {
             Condition<Number> badStateNEW;
             const Matrix<Number> & V = mLocPtrtoComputationvaluesMap[locMapIt->second].mSTflowpipeSegment.V;
-            for(i=0; i<it->second.size(); ++i) {
-                badStateNEW.setMatrix(it->second.getMatrix(i)*V, i);
-                badStateNEW.setVector(it->second.getVector(i)  , i);
+            for(i=0; i<it->size(); ++i) {
+                badStateNEW.setMatrix(it->getMatrix(i)*V, i);
+                badStateNEW.setVector(it->getVector(i)  , i);
             }
             mTransformedHA.addLocalBadState(locMapIt->second, badStateNEW);
         }
     }
     globalBadStatesTransformed = true;
-}
-template <typename Number, typename Representation>
-bool Transformation<Number,Representation>::keyCompare(locationSet& lhs, locationPtrMap& rhs) {
-   return lhs.size() == rhs.size();
 }
 //TODO Set von global->local mapping
 //in transformed automata in local sets saving
