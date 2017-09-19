@@ -35,31 +35,21 @@ Transformation<Number,Representation>::Transformation (const HybridAutomaton<Num
         V << es.eigenvectors().real();
         mSTallvalues.mSTindependentFunct.D.diagonal() << es.eigenvalues().real();
         Vinv = V.inverse();
-        //ASSERTION CONDITION OF Vin --> define behavior
-        //TODO condition number Vinv
-        std::cout <<"Vinv: " << std::endl << Vinv;
+        //ASSERTION CONDITION TODO making this faster maybe
+        Eigen::JacobiSVD<Matrix<Number>> svd(Vinv);  
+        double cond = svd.singularValues()(0)  / svd.singularValues()(svd.singularValues().size()-1);
+        assert(cond < 100 && cond > -100);
+        std::cout <<"Vinv(condition): ("<< cond <<")\n" << Vinv;
         //std::cout <<"D: "    << std::endl << D;
         matrix_calc = Vinv*matrix_calc;
         b_tr        = Vinv*b_tr;
         std::cout<<"Vinv*A("<<m_size<<"x"<<m_size<<"),b_tr"<<std::endl;
-        //rows,cols in eigen
         matrix_in_parser.topLeftCorner(m_size,m_size) =  matrix_calc;
         matrix_in_parser.topRightCorner(m_size,1) = b_tr;   //size
         //std::cout << matrix_in_parser;
 	    PtrtoNewLoc = locationManager.create(matrix_in_parser);
         locations.insert(PtrtoNewLoc);
         mLocationPtrsMap.insert(std::make_pair(LocPtr, PtrtoNewLoc));   //cant use const type* const
-    //INVARIANTS(TYPE CONDITION)        [TODO output stream broken with assertion without invariants!]
-        const Condition<Number>& invar1 = LocPtr->getInvariant();
-        Condition<Number> invar1NEW; // = PtrtoNewLoc->getInvariant();
-        //inv: A'= A*V
-        for( i=0; i<invar1.size(); ++i ) {
-            invar1NEW.setMatrix(invar1.getMatrix(i)*V,i);
-            invar1NEW.setVector(invar1.getVector(i)  ,i);    
-        }
-        //invar1.setMatrix(mInvariant.getMatrix()*V);    //inv: A'= A*V
-        //invar1NEW.setVector(mInvariant.getVector());
-        PtrtoNewLoc->setInvariant(invar1NEW);
     //SAVING STRUCT
         //mSTallvalues.mSTinputVectors.x0       //MOVE TO ALG
         //mSTallvalues.mSTinputVectors.x0_2     //MOVE TO ALG
@@ -73,15 +63,24 @@ Transformation<Number,Representation>::Transformation (const HybridAutomaton<Num
         mSTallvalues.mSTflowpipeSegment.Vinv       = Vinv;
         mSTallvalues.mSTflowpipeSegment.V          = V; //rest of flow used only for plotting
         mLocPtrtoComputationvaluesMap.insert(std::make_pair(PtrtoNewLoc, mSTallvalues));
+    //INVARIANTS(TYPE CONDITION)        [TODO output stream broken with assertion without invariants!]
+        const Condition<Number>& invar1 = LocPtr->getInvariant();
+        Condition<Number> invar1NEW; // = PtrtoNewLoc->getInvariant();
+        //inv: A'= A*V
+        for( i=0; i<invar1.size(); ++i ) {
+            invar1NEW.setMatrix(invar1.getMatrix(i)*V,i);
+            invar1NEW.setVector(invar1.getVector(i)  ,i);    
+        }
+        //invar1.setMatrix(mInvariant.getMatrix()*V);    //inv: A'= A*V
+        PtrtoNewLoc->setInvariant(invar1NEW);
     }
-    mTransformedHA.setLocations(locations); //add LocationSet to HybridAutomaton
-//TRANSITIONS
+    mTransformedHA.setLocations(locations); 
+    //TRANSITIONS
     transitionSet transitions;
     for (Transition<Number>* TransPtr : _hybrid.getTransitions() ) {
         Transition<Number>* NewTransPtr = new Transition<Number>(*TransPtr);  //! TODO !
         //transitions not freed, shared_ptr too costly in multithreaded context
     //POINTER
-        //we need ptr->source 4 times
         Location<Number>*   NewSourceLocPtr = mLocationPtrsMap[TransPtr->getSource()];
         Location<Number>*   NewTargetLocPtr = mLocationPtrsMap[TransPtr->getTarget()];
         const Matrix<Number> & VSource = 
@@ -143,8 +142,6 @@ Transformation<Number,Representation>::Transformation (const HybridAutomaton<Num
         }
         mTransformedHA.addLocalBadState(NewLocPtr, badStateNEW);
     }
-//GLOBAL BAD STATES
-    //DEBUG??
 }
 template <typename Number, typename Representation>
 void Transformation<Number,Representation>::transformGlobalBadStates
@@ -182,11 +179,6 @@ void Transformation<Number,Representation>::transformGlobalBadStates
     }
     globalBadStatesTransformed = true;
 }
-//TODO Set von global->local mapping
-//in transformed automata in local sets saving
-//NOT POSSIBLE DUE TO SIMPLE MATRIX/VECTOR:
-        // A transformation: A' = A*V <-- V.linearTransformation(A)
-        //V.linearTransformation(mInvariant.getMatrix())
 //TODO inhomogen plot is only used directly after Constructor and uses that objects
     //in_traj.xhom.col(0) = ind_f.xinhom.array() + in_traj.x_tr.col(0).array();
     //in_traj.xhom.col(1) = ind_f.xinhom.array() + in_traj.x_tr.col(1).array();
@@ -241,13 +233,8 @@ void Transformation<Number,Representation>::swap_x0isMax(Matrix<Number>& x_tr, c
     }
     //std::cout << "x_tr afterback: "<< std::endl << x_tr << std::endl;
 }
-//locationSet& locations() const;
-//transitionSet& transitions() const;
-//locationStateMap& initialStates() const;
-//locationStateMap& localBadStates() const;
-//setVector& globalBadStates()
 template <typename Number, typename Representation>
 void Transformation<Number,Representation>::output_HybridAutomaton() {
-    std::cout << mTransformedHA << std::endl << "-------------- ENDOFAUTOMATA ------------------" << std::endl;
+    std::cout << mTransformedHA << "\n-------------- ENDOFAUTOMATA ------------------" << std::endl;
 }
 } //namespace hypro

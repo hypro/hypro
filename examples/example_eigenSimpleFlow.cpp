@@ -2,21 +2,15 @@
  * Sandbox for the Eigendecomposition project.
  */
 #include "datastructures/HybridAutomaton/HybridAutomaton.h"
-//#include "datastructures/hybridAutomata/LocationManager.h"
-#include "parser/flowstar/ParserWrapper.h"
+#include "parser/antlr4-flowstar/ParserWrapper.h"
 #include "algorithms/eigendecomposition/Transformation.h"
 #include "representations/GeometricObject.h"
 #include "util/Plotter.h"
 #include <Eigen/Eigenvalues>
 #include <Eigen/Dense>
-//#define PTS_DEBUG          //NO USE
 //#include <Eigen/LU>
 using namespace hypro;
 using Number = double;
-//using Matrix<Number> = matrix_t<Number>;
-//using Vector<Number> = vector_t<Number>;
-//using DiagonalMatrix<Number> = Eigen::DiagonalMatrix<Number,Eigen::Dynamic>;
-//using BoolMatrix<Number> = matrix_t<bool>;
 using VPoly = VPolytope<Number>;
 using Representation = hypro::HPolytope<Number>;
 
@@ -88,13 +82,8 @@ void addSegment(std::vector<VPoly>& flow, bool PLOT, Flow_seg& safe_seg,
 
 int main()
 {
-    //use hybrid automaton from file
     const std::string& filename = "../../examples/input/bouncing_ball_inhomogen.model";
-	//boost::tuple<HybridAutomaton<Number>, reachability::ReachabilitySettings<Number>> ha = parseFlowstarFile<Number>(filename);
 	boost::tuple<HybridAutomaton<Number>, ReachabilitySettings<Number>> ha = parseFlowstarFile<Number>(filename);
-    //std::cout << boost::get<0>(ha);
-    //hypro::HybridAutomaton<Number> ha_transformed =  HybridAutomaton<Number>( boost::get<0>(ha) );
-    //std::cout << ha_transformed;
     HybridAutomaton<Number> original_ha = boost::get<0>(ha);
     Transformation<Number,Representation> trafo = Transformation<Number,Representation>(original_ha);
     std::cout << "----------    END OF TRANSFORMATION   ------------" << std::endl;
@@ -103,14 +92,7 @@ int main()
     trafo.output_HybridAutomaton();
     std::cout << std::endl;
     trafo.transformGlobalBadStates(original_ha);
-    //std::cout << trafo;
-    //TODO clarify if we copy automata inside the transformation or if we assume transfo_ha ISCOPYOF orig_ha
-    //--> might be useful to later wrap another class for simple use around on condition number etc
-    //TODO initial state input clarifying
 
-    //remind last line is ALWAYS added by parser
-    //use friend class of transformation? to calculate flowpipe elements/evaluation
-    //adapt function accordingly!
     /*Flags flag1;
     In_eq in_eq1;               //input system
     Invar invar;                //invariants
@@ -121,7 +103,7 @@ int main()
     Plotter<Number>& plotter = Plotter<Number>::getInstance();
     Flow_seg safe_seg;          //plotting_segment
     Flow_seg error_seg;         //error_segment
-    //*************** RESULT *******************
+    // *************** RESULT *******************
     std::vector<VPoly> safeflow;
     std::vector<VPoly> exactflow;
     std::vector<VPoly> error_flow;
@@ -205,7 +187,7 @@ int main()
     plotter.plotGen();
 
 
-    // /* compute points of exact solution ... E_points
+    ////compute points of exact solution ... E_points
     // #ifndef NDEBUG
     // for( const auto& p : ePoints) {
     // 		bool contained = false;

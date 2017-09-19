@@ -5,11 +5,14 @@
 #include "../../datastructures/HybridAutomaton/Settings.h"
 #include "../../datastructures/HybridAutomaton/HybridAutomaton.h"
 #include "../../representations/conversion/Converter.h"
+//#include "parser/antlr4-flowstar/ParserWrapper.h"
 //#include "../../datastructures/HybridAutomaton/Transition.h"
 //#include "../../datastructures/HybridAutomaton/Location.h"
 //#include "../../datastructures/HybridAutomaton/LocationManager.h"
 #include <Eigen/Eigenvalues>
 #include <Eigen/Dense>
+#include <Eigen/SVD>
+#include <Eigen/Core>
 /**
  * @brief      Class for transformation of Hybrid Automata.
  *
@@ -69,20 +72,21 @@ struct STallValues {
 template <typename Number, typename Representation>
 class Transformation {
   public:
-  //TODO recheck if constLocPtr or just LocPtr better in map+multimap
+//naming like in HybridAutomata
   	using locationSet = std::set<Location<Number>*>;
 	using transitionSet = std::set<Transition<Number>*>;
-    using locationStateMap = std::multimap<const Location<Number>*, State<Number,ConstraintSet<Number>>, locPtrComp<Number>>; /// Multi-map from location pointers to states.
+    using locationStateMap = std::multimap<const Location<Number>*, State<Number,ConstraintSet<Number>>, locPtrComp<Number>>;
     using locationConditionMap = std::map<Location<Number>*, Condition<Number>, locPtrComp<Number>>;
     using conditionVector = std::vector<Condition<Number>>; /// Vector of conditions.
 	using setVector = std::vector<std::pair<matrix_t<Number>, vector_t<Number>>>;
+//new naming for lookup of locations and structs
     using locationPtrMap = std::map<const Location<Number>*,Location<Number>*, locPtrComp<Number> >;
-    
+    using locationComputationSTMap = std::map< Location<Number>*,STallValues<Number>, locPtrComp<Number>>;
   private:
     //maps from original location to transformed organized as black/red tree
     //std::map<const Location<Number>*,Location<Number>*, locPtrComp<Number> > mLocationPtrsMap;
     locationPtrMap mLocationPtrsMap;
-    std::map< Location<Number>*,STallValues<Number>, locPtrComp<Number>> mLocPtrtoComputationvaluesMap;
+    locationComputationSTMap mLocPtrtoComputationvaluesMap;
     HybridAutomaton<Number> mTransformedHA;
     bool globalBadStatesTransformed = false;
 
@@ -137,10 +141,6 @@ class Transformation {
 //  backtransformation(HybridAutomaton& _hybrid, const Transformation& _trafo );
 //  retransform reults
 
-//template<typename Number>
-//struct locPtrComp {
-//    bool operator()(const Location<Number>* lhs, const Location<Number>* rhs) const { return (*lhs < *rhs); }
-//};
 
 };
 } //namespace hypro
