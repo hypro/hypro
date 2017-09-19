@@ -48,6 +48,7 @@ addons:
       - clang-3.8
       - clang-3.9
       - graphviz
+      - uuid-dev
       - pgf
       - texlive-latex-extra
       - texlive-latex-recommended

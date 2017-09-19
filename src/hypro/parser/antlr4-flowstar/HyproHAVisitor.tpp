@@ -37,8 +37,13 @@ namespace hypro {
 		locationStateMap initSet = initVisitor.visit(ctx->init()).template as<locationStateMap>();
 
 		//6.Calls visit(ctx->unsafeset()) to get local badStates
-		HyproBadStatesVisitor<Number> bStateVisitor = HyproBadStatesVisitor<Number>(varVec, rLocSet);
-		locationConditionMap badStates = bStateVisitor.visit(ctx->unsafeset()).template as<locationConditionMap>();
+		locationConditionMap badStates;
+		if(ctx->unsafeset() != NULL && ctx->unsafeset()->badstate().size() > 1){
+			std::cout << "---- badstate size: " << ctx->unsafeset()->badstate().size() << std::endl;
+			std::cout << "---- badstate content: " << ctx->unsafeset()->badstate()[0]->getText() << std::endl;
+			HyproBadStatesVisitor<Number> bStateVisitor = HyproBadStatesVisitor<Number>(varVec, rLocSet);
+			badStates = bStateVisitor.visit(ctx->unsafeset()).template as<locationConditionMap>();	
+		}
 
 #ifdef HYPRO_LOGGING
 		TRACE("hypro.parser","Parsed variables: " << vars);
@@ -51,7 +56,9 @@ namespace hypro {
 		ha.setLocations(locSet);
 		ha.setTransitions(transSet);
 		ha.setInitialStates(initSet);
-		ha.setLocalBadStates(badStates);
+		if(ctx->unsafeset() != NULL && ctx->unsafeset()->badstate().size() > 1){
+			ha.setLocalBadStates(badStates);
+		}
 		return std::move(ha);			//Move the ownership of ha to whoever uses ha then, i.e. the test suite
 	}
 

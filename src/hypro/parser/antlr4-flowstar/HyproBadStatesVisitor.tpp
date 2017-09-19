@@ -20,10 +20,12 @@ namespace hypro {
 
 		//1.Collect badState information
 		locationConditionMap lcMap;
-		for(auto& bState : ctx->badstate()){
-			std::pair<Location<Number>*,Condition<Number>> badStateInfo = visit(bState).template as<std::pair<Location<Number>*,Condition<Number>>>();
-			lcMap.insert(badStateInfo);
-			std::cout << "-- bad state location:\n" << *(badStateInfo.first) << "and condition matrix:\n" << badStateInfo.second.getMatrix() << "and vector:\n" << badStateInfo.second.getVector() << std::endl;
+		if(ctx->badstate().size() > 0){
+			for(auto& bState : ctx->badstate()){
+				std::pair<Location<Number>*,Condition<Number>> badStateInfo = visit(bState).template as<std::pair<Location<Number>*,Condition<Number>>>();
+				lcMap.insert(badStateInfo);
+				std::cout << "-- bad state location:\n" << *(badStateInfo.first) << "and condition matrix:\n" << badStateInfo.second.getMatrix() << "and vector:\n" << badStateInfo.second.getVector() << std::endl;
+			}	
 		}
 		return lcMap;
 	}
