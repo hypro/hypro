@@ -40,4 +40,3 @@ fi
 
 export PATH="$PREFIX/bin:$PATH"
 
-cmake --version#
