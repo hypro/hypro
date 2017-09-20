@@ -14,6 +14,7 @@ var classhypro_1_1Location =
     [ "getId", "classhypro_1_1Location.html#a00d1e50edc314d7228eb8673f975cc85", null ],
     [ "getInvariant", "classhypro_1_1Location.html#acf2a88e7cce8962765ae1f2468934952", null ],
     [ "getName", "classhypro_1_1Location.html#ad029947136449288ec724ab36a483036", null ],
+    [ "getNumberFlow", "classhypro_1_1Location.html#a7d8a180b8b08d3cd7abdd95d0bec5dde", null ],
     [ "getTransitions", "classhypro_1_1Location.html#a5df716358559a72d9a66644c6594bcce", null ],
     [ "operator!=", "classhypro_1_1Location.html#a7ec7a51dc8ec407509089a585b583f4b", null ],
     [ "operator<", "classhypro_1_1Location.html#a8f33a74a18d96cf7bd207ad4491ee815", null ],

@@ -65,6 +65,6 @@ var classhypro_1_1HPolytopeT =
     [ "vector", "classhypro_1_1HPolytopeT.html#ac5422e940bafc97069f453837100e4ef", null ],
     [ "vertexEnumeration", "classhypro_1_1HPolytopeT.html#a6954b5f275c5556cbd7c91f934a2da00", null ],
     [ "vertices", "classhypro_1_1HPolytopeT.html#a897e9a51988a1807fdf3ee7c161b9925", null ],
-    [ "operator<<", "classhypro_1_1HPolytopeT.html#a5884f4f86940ce952a4a8bfbbf70c751", null ],
+    [ "operator<<", "classhypro_1_1HPolytopeT.html#a47407ef674f2c5e9c43012a47fa7b193", null ],
     [ "swap", "classhypro_1_1HPolytopeT.html#a4b9cab5a8a39df186fa727463c617811", null ]
 ];

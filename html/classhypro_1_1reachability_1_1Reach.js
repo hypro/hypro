@@ -1,12 +1,14 @@
 var classhypro_1_1reachability_1_1Reach =
 [
-    [ "Reach", "classhypro_1_1reachability_1_1Reach.html#ae6813f11a094496a612f62d4bec38ca1", null ],
-    [ "checkTransitions", "classhypro_1_1reachability_1_1Reach.html#a564b496f261a7ba04e7c304b2245d74d", null ],
-    [ "computeForwardReachability", "classhypro_1_1reachability_1_1Reach.html#ae22a56e3114b8d421785f9768f12c06b", null ],
-    [ "computeForwardTimeClosure", "classhypro_1_1reachability_1_1Reach.html#a2a0ef73c38c4a8e42a9bab6c29be18f2", null ],
-    [ "intersectGuard", "classhypro_1_1reachability_1_1Reach.html#a2f92ab5f0738475814d5d326a0848ea4", null ],
-    [ "processDiscreteBehaviour", "classhypro_1_1reachability_1_1Reach.html#a93d276a5bb5ea709516c77e849a6925c", null ],
-    [ "reachedBadStates", "classhypro_1_1reachability_1_1Reach.html#a63c7f82c08c215100b65e2df137baea8", null ],
-    [ "setSettings", "classhypro_1_1reachability_1_1Reach.html#a1910d04ad5790dc928d40016dc15a0cd", null ],
-    [ "settings", "classhypro_1_1reachability_1_1Reach.html#ac5b290eded214530934a135329cf4cc3", null ]
+    [ "Reach", "classhypro_1_1reachability_1_1Reach.html#a53dda21613340d0a5c722e22b461ea52", null ],
+    [ "checkTransitions", "classhypro_1_1reachability_1_1Reach.html#a22e11fea2d7b4b51a0707acd7229c10e", null ],
+    [ "computeForwardReachability", "classhypro_1_1reachability_1_1Reach.html#aed1d333aa28ed68bf8dbbe13a546435f", null ],
+    [ "computeForwardTimeClosure", "classhypro_1_1reachability_1_1Reach.html#a43a6993275910e73d5fee2c507ee61b6", null ],
+    [ "getRepresentationType", "classhypro_1_1reachability_1_1Reach.html#abbdd011a98747ba0318968e68ed7d9c1", null ],
+    [ "intersectGuard", "classhypro_1_1reachability_1_1Reach.html#afdc68ba57b69b91c725a53cae55c55ba", null ],
+    [ "processDiscreteBehaviour", "classhypro_1_1reachability_1_1Reach.html#aca3c8d56625869b3ac6234b97f3ab09d", null ],
+    [ "reachedBadStates", "classhypro_1_1reachability_1_1Reach.html#a08032fdfa127897d4407693c6537e97a", null ],
+    [ "setRepresentationType", "classhypro_1_1reachability_1_1Reach.html#a3badafec27577ca125bdcaab5d82d7ce", null ],
+    [ "setSettings", "classhypro_1_1reachability_1_1Reach.html#a6b3aac0af3c6b295e4465c4386779ce2", null ],
+    [ "settings", "classhypro_1_1reachability_1_1Reach.html#af663106bcf2d919cd2aa8fd51d848194", null ]
 ];

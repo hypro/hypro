@@ -1,6 +1,12 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node2" href="$structEigen_1_1NumTraits_3_01carl_1_1Interval_3_01Number_01_4_01_4.html" title="Eigen::NumTraits\&lt; carl\l::Interval\&lt; Number \&gt; \&gt;" alt="" coords="197,5,355,46"/>
-<area shape="rect" id="node3" href="$structEigen_1_1NumTraits_3_01mpq__class_01_4.html" title="Eigen::NumTraits\&lt; mpq\l_class \&gt;" alt="" coords="195,70,357,111"/>
-<area shape="rect" id="node4" href="$structhypro_1_1Eigen_1_1NumTraits_3_01carl_1_1Interval_3_01Number_01_4_01_4.html" title="hypro::Eigen::NumTraits\l\&lt; carl::Interval\&lt; Number \&gt; \&gt;" alt="" coords="182,135,370,177"/>
-<area shape="rect" id="node5" href="$structhypro_1_1Eigen_1_1NumTraits_3_01mpq__class_01_4.html" title="hypro::Eigen::NumTraits\l\&lt; mpq_class \&gt;" alt="" coords="194,201,358,242"/>
+<area shape="rect" id="node2" href="$classBadStatesParser.html" title="BadStatesParser" alt="" coords="135,5,257,32"/>
+<area shape="rect" id="node3" href="$classExpressionsParser.html" title="ExpressionsParser" alt="" coords="130,56,262,83"/>
+<area shape="rect" id="node4" href="$classFormulaParser.html" title="FormulaParser" alt="" coords="143,107,249,133"/>
+<area shape="rect" id="node5" href="$classHybridAutomatonParser.html" title="HybridAutomatonParser" alt="" coords="115,157,277,184"/>
+<area shape="rect" id="node6" href="$classHybridSystemParser.html" title="HybridSystemParser" alt="" coords="125,208,267,235"/>
+<area shape="rect" id="node7" href="$classInitialSetParser.html" title="InitialSetParser" alt="" coords="141,259,251,285"/>
+<area shape="rect" id="node8" href="$classInputOutputParser.html" title="InputOutputParser" alt="" coords="132,309,260,336"/>
+<area shape="rect" id="node9" href="$classLocationParser.html" title="LocationParser" alt="" coords="141,360,251,387"/>
+<area shape="rect" id="node10" href="$classSettingParser.html" title="SettingParser" alt="" coords="145,411,247,437"/>
+<area shape="rect" id="node11" href="$classTransitionParser.html" title="TransitionParser" alt="" coords="137,461,255,488"/>
 </map>

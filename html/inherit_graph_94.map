@@ -1,3 +1,4 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$structstd_1_1hash_3_01hypro_1_1Halfspace_3_01Number_01_4_01_4.html" title="Hash operator for halfspaces. " alt="" coords="5,5,192,46"/>
+<area shape="rect" id="node1" href="$classhypro_1_1reachability_1_1hypro_1_1GeometricObject.html" title="hypro::reachability\l::hypro::GeometricObject\l\&lt; Number, BoxT\&lt; Number,\l Converter \&gt; \&gt;" alt="" coords="5,5,187,75"/>
+<area shape="rect" id="node2" href="$classhypro_1_1reachability_1_1hypro_1_1BoxT.html" title="The class which represents a box. " alt="" coords="235,12,397,68"/>
 </map>

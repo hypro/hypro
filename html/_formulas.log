@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=latex 2017.9.9)  9 SEP 2017 13:34
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=latex 2017.9.20)  20 SEP 2017 13:53
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -392,7 +392,7 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 [36] (./_formulas.aux) ) 
 Here is how much of TeX's memory you used:
  9467 strings out of 495029
- 178296 string characters out of 6181524
+ 178296 string characters out of 6181523
  219972 words of memory out of 5000000
  12515 multiletter control sequences out of 15000+600000
  6383 words of font info for 25 fonts, out of 8000000 for 9000

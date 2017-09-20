@@ -1,3 +1,4 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$classhypro_1_1hypro_1_1Permutator.html" title="hypro::hypro::Permutator" alt="" coords="6,5,173,32"/>
+<area shape="rect" id="node1" href="$classhypro_1_1GeometricObject.html" title="hypro::GeometricObject\l\&lt; Number, VPolytopeT\&lt;\l Number, Converter \&gt; \&gt;" alt="" coords="6,4,170,60"/>
+<area shape="rect" id="node2" href="$classhypro_1_1VPolytopeT.html" title="The class implementing the vertex representation of a convex polytope. " alt="" coords="219,11,368,53"/>
 </map>
