@@ -105,6 +105,8 @@ install:
 script:
   - cd ${TRAVIS_BUILD_DIR}
   - mkdir build && cd build && cmake $FLAGS -DCMAKE_CXX_COMPILER=$COMPILER .. && make resources && make
+  - cat /home/travis/build/hypro/hypro/src/resources/antlr_build/src/antlr4cpp-stamp/antlr4cpp-configure-out.log
+  - cat /home/travis/build/hypro/hypro/src/resources/antlr_build/src/antlr4cpp-stamp/antlr4cpp-configure-err.log
   - make test
 
 # Generate and deploy documentation
