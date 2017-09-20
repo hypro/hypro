@@ -47,7 +47,7 @@ namespace hypro {
 		state.setSet(conSet,0);
 		assert(state.getNumberSets() == 1);
 		state.setTimestamp(carl::Interval<Number>(0));
-		std::cout << "---- State gebaut!" << std::endl;
+		std::cout << "---- Initialtate gebaut:" << std::endl;
 		std::cout << state << std::endl;
 		locationStateMap initialState;
 		initialState.insert(std::make_pair(initialLoc, state));

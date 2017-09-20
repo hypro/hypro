@@ -38,16 +38,28 @@ namespace hypro {
 
 		//6.Calls visit(ctx->unsafeset()) to get local badStates
 		locationConditionMap badStates;
-		if(ctx->unsafeset() != NULL && ctx->unsafeset()->badstate().size() > 1){
-			std::cout << "---- badstate size: " << ctx->unsafeset()->badstate().size() << std::endl;
-			std::cout << "---- badstate content: " << ctx->unsafeset()->badstate()[0]->getText() << std::endl;
+		if(ctx->unsafeset() != NULL && ctx->unsafeset()->badstate().size() > 0){
+			//std::cout << "-- size of badstates: " << ctx->unsafeset()->badstate().size() << std::endl;
 			HyproBadStatesVisitor<Number> bStateVisitor = HyproBadStatesVisitor<Number>(varVec, rLocSet);
 			badStates = bStateVisitor.visit(ctx->unsafeset()).template as<locationConditionMap>();	
-		}
+		} 
 
-#ifdef HYPRO_LOGGING
+#ifdef HYPRO_LOGGING		
 		TRACE("hypro.parser","Parsed variables: " << vars);
-		TRACE("hypro.parser","Reachability settings: " << reachSettings)
+		TRACE("hypro.parser","Reachability settings:\n" << reachSettings);
+		TRACE("hypro.parser","All locations:\n");
+		for(auto it = rLocSet.begin(); it != rLocSet.end(); ++it){
+			COUT(**it);
+		}
+		TRACE("hypro.parser","All Transitions:\n");
+		for(auto it = transSet.begin(); it != transSet.end(); ++it){
+			COUT(**it);
+		}
+		//TRACE("hypro.parser","Initial state:\n");
+
+		//for(auto it = initSet.begin(); it != initSet.end(); ++it){
+		//	COUT("Initial Location: " << **it);
+		//}
 		//TODO: Print all the other parsed stuff
 #endif
 
@@ -56,9 +68,7 @@ namespace hypro {
 		ha.setLocations(locSet);
 		ha.setTransitions(transSet);
 		ha.setInitialStates(initSet);
-		if(ctx->unsafeset() != NULL && ctx->unsafeset()->badstate().size() > 1){
-			ha.setLocalBadStates(badStates);
-		}
+		ha.setLocalBadStates(badStates);
 		return std::move(ha);			//Move the ownership of ha to whoever uses ha then, i.e. the test suite
 	}
 
@@ -70,7 +80,6 @@ namespace hypro {
 		for(tree::TerminalNode* variable : ctx->VARIABLE()){
 			//NOTE: the respective position in the vars vector is the assigned id to the variable!
 			varVec.push_back(variable->getText());
-			//matrix_t<Number>tmpMatrix = matrix_t<Number>::Zero(vars.size()+1, vars.size()+1);
 		}
 		if(varVec.size() == 0){
 			std::cout << "ERROR: No variables were defined" << std::endl;

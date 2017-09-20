@@ -15,4 +15,4 @@ import Formula;
 
 unsafeset 			: 'unsafe set' '{' badstate* '}' ;
 
-badstate 			: VARIABLE '{' constrset '}' ;
+badstate 			: VARIABLE '{' constrset? '}' ;
