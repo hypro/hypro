@@ -49,6 +49,7 @@ addons:
       - clang-3.9
       - graphviz
       - uuid-dev
+      - openjdk-9-jre
       - pgf
       - texlive-latex-extra
       - texlive-latex-recommended
