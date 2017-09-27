@@ -112,10 +112,11 @@ endforeach()
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14 -DGTEST_USE_OWN_TR1_TUPLE=1")
 
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+	#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libstdc++")
 	if (APPLE)
 		message("-- Using clang on apple")
 		set(CMAKE_MACOSX_RPATH 1)
-		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++")
+
 		if(${STATICLIB_SWITCH} STREQUAL "OFF")
 			set(CMAKE_MACOSX_RPATH 1)
 		endif()

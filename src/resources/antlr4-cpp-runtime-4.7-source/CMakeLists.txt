@@ -60,16 +60,16 @@ endif(WITH_DEMO)
 set(MY_CXX_WARNING_FLAGS "  -Wall -pedantic -W")
 
 # Initialize CXXFLAGS.
-if("${CMAKE_VERSION}" VERSION_GREATER 3.1.0)
-  set(CMAKE_CXX_STANDARD 11)
-  set(CMAKE_CXX_STANDARD_REQUIRED ON)
-else()
-  set(CMAKE_CXX_FLAGS                "${CMAKE_CXX_FLAGS} -std=c++11")
-  set(CMAKE_CXX_FLAGS_DEBUG          "${CMAKE_CXX_FLAGS_DEBUG} -std=c++11")
-  set(CMAKE_CXX_FLAGS_MINSIZEREL     "${CMAKE_CXX_FLAGS_MINSIZEREL} -std=c++11")
-  set(CMAKE_CXX_FLAGS_RELEASE        "${CMAKE_CXX_FLAGS_RELEASE} -std=c++11")
-  set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO} -std=c++11")
-endif()
+#if("${CMAKE_VERSION}" VERSION_GREATER 3.1.0)
+#  set(CMAKE_CXX_STANDARD 11)
+#  set(CMAKE_CXX_STANDARD_REQUIRED ON)
+#else()
+#  set(CMAKE_CXX_FLAGS                "${CMAKE_CXX_FLAGS} -std=c++11")
+#  set(CMAKE_CXX_FLAGS_DEBUG          "${CMAKE_CXX_FLAGS_DEBUG} -std=c++11")
+#  set(CMAKE_CXX_FLAGS_MINSIZEREL     "${CMAKE_CXX_FLAGS_MINSIZEREL} -std=c++11")
+#  set(CMAKE_CXX_FLAGS_RELEASE        "${CMAKE_CXX_FLAGS_RELEASE} -std=c++11")
+#  set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO} -std=c++11")
+#endif()
 
 set(CMAKE_CXX_FLAGS                "${CMAKE_CXX_FLAGS} -Wall ${MY_CXX_WARNING_FLAGS}")
 set(CMAKE_CXX_FLAGS_DEBUG          "${CMAKE_CXX_FLAGS_DEBUG} -O0 -g ${MY_CXX_WARNING_FLAGS}")
@@ -110,10 +110,10 @@ endif(WITH_DEMO)
 if( EXISTS LICENSE.txt)
 install(FILES LICENSE.txt
         DESTINATION "share/doc/libantlr4")
-elseif(EXISTS ../../LICENSE.txt) 
+elseif(EXISTS ../../LICENSE.txt)
 install(FILES ../../LICENSE.txt
     DESTINATION "share/doc/libantlr4")
 endif()
 
-install(FILES README.md VERSION 
+install(FILES README.md VERSION
     DESTINATION "share/doc/libantlr4")
