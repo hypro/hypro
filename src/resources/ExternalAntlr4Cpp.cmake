@@ -148,8 +148,6 @@ ExternalProject_ADD(
   # INSTALL_COMMAND    ""
 )
 
-message(STATUS "cxx flags: ${CMAKE_CXX_FLAGS}")
-
 ExternalProject_Get_Property(antlr4cpp INSTALL_DIR)
 
 list(APPEND ANTLR4CPP_INCLUDE_DIRS ${INSTALL_DIR}/include/antlr4-runtime)
