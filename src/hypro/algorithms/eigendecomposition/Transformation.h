@@ -69,18 +69,18 @@ struct STallValues {
     STflowpipeSegment   <Number> mSTflowpipeSegment;
 };
 
-template <typename Number, typename Representation>
+template <typename Number>
 class Transformation {
   public:
-//naming like in HybridAutomata
   	using locationSet = std::set<Location<Number>*>;
 	using transitionSet = std::set<Transition<Number>*>;
     using locationStateMap = std::multimap<const Location<Number>*, State<Number,ConstraintSet<Number>>, locPtrComp<Number>>;
     using locationConditionMap = std::map<Location<Number>*, Condition<Number>, locPtrComp<Number>>;
     using conditionVector = std::vector<Condition<Number>>; /// Vector of conditions.
 	using setVector = std::vector<std::pair<matrix_t<Number>, vector_t<Number>>>;
-//new naming for lookup of locations and structs
+//Map of old location to new location 
     using locationPtrMap = std::map<const Location<Number>*,Location<Number>*, locPtrComp<Number> >;
+//Location<Number>* points to locations of transformed Hybrid Automaton
     using locationComputationSTMap = std::map< Location<Number>*,STallValues<Number>, locPtrComp<Number>>;
   private:
     //maps from original location to transformed organized as black/red tree
@@ -89,13 +89,6 @@ class Transformation {
     locationComputationSTMap mLocPtrtoComputationvaluesMap;
     HybridAutomaton<Number> mTransformedHA;
     bool globalBadStatesTransformed = false;
-
-
-    //TODO std::map with struct for each location
-    //STinputVectors      mSTinputVectors;    //?? needed ?? models ??
-    //STflowpipeSegment   mSTflowpipeSegment;
-    //std::map<ptr_originalHybAuto,ptr_transformedHybAuto>
-    //reachability::ReachabilitySettings<Number> mReachabilitySettings;
 
 //helper functions
     bool keyCompare(locationSet& lhs, locationPtrMap& rhs);
@@ -112,7 +105,7 @@ class Transformation {
 	 *
 	 * @param[in]  _hybrid  The original transformation for an hybrid automaton.
 	 */
-	Transformation<Number,Representation> ( const Transformation& _trafo );
+	Transformation<Number> ( const Transformation& _trafo );
 
     //copy Transition, modify and insert to set
     //then insert to automaton
@@ -128,7 +121,9 @@ class Transformation {
      * @param[in]  transformed_ha  The transformed hybrid automaton.
      */
 	//Transformation( HybridAutomaton<Number>& _hybrid );
-    Transformation<Number,Representation> (const HybridAutomaton<Number>& _hybrid);
+    Transformation<Number> (const HybridAutomaton<Number>& _hybrid);
+
+    //TODO clean up locations and transitions on desctructor
 
     void output_HybridAutomaton();    //TODO BROKEN? if invariants not set/empty
 
@@ -138,9 +133,16 @@ class Transformation {
      * due to count(location)*sizeof(BadStates) instead of sizeof(Badstead) storage requirement
      */
     void transformGlobalBadStates(const HybridAutomaton<Number>& _hybrid);
+
+    HybridAutomaton<Number>& getTransformedHybridAutomaton() { return mTransformedHA; }
+    //Map from newLoc to struct
+    const locationComputationSTMap & getLocationComputationSTMap() { return mLocPtrtoComputationvaluesMap; }
+
 //  backtransformation(HybridAutomaton& _hybrid, const Transformation& _trafo );
 //  retransform reults
 
+    //compute Flow in Location
+//    void Transformation<Number,Representation>::computeFlowinLocation(Location* LocPtr);
 
 };
 } //namespace hypro

@@ -12,7 +12,7 @@
 using namespace hypro;
 using Number = double;
 using VPoly = VPolytope<Number>;
-using Representation = hypro::HPolytope<Number>;
+//using Representation = hypro::HPolytope<Number>;
 
 typedef struct Flags {
     //int n; //<--- DIMENSION ---> NEEDED ? CONST BETTER?
@@ -85,7 +85,7 @@ int main()
     const std::string& filename = "../../examples/input/bouncing_ball_inhomogen.model";
 	boost::tuple<HybridAutomaton<Number>, ReachabilitySettings<Number>> ha = parseFlowstarFile<Number>(filename);
     HybridAutomaton<Number> original_ha = boost::get<0>(ha);
-    Transformation<Number,Representation> trafo = Transformation<Number,Representation>(original_ha);
+    Transformation<Number> trafo = Transformation<Number>(original_ha);
     std::cout << "----------    END OF TRANSFORMATION   ------------" << std::endl;
     std::cout << original_ha << std::endl;
     std::cout << "----------    END OF ORIGINAL         ------------" << std::endl;

@@ -2,8 +2,8 @@
 
 namespace hypro {
 
-template <typename Number, typename Representation>
-Transformation<Number,Representation>::Transformation (const HybridAutomaton<Number>& _hybrid) {
+template <typename Number>
+Transformation<Number>::Transformation (const HybridAutomaton<Number>& _hybrid) {
     Matrix<Number> matrix_in_parser;
     Matrix<Number> matrix_calc;
     size_t m_size, i;
@@ -102,7 +102,7 @@ Transformation<Number,Representation>::Transformation (const HybridAutomaton<Num
     //RESET ( reset into new location )
         const Reset<Number>& reset1    = TransPtr->getReset();
         Reset<Number> reset1NEW;// = NewTransPtr->getReset();
-        //inv: A'= A*V
+        //inv: A'= V^(-1)*A
         for( i=0; i<reset1.size(); ++i ) {
             reset1NEW.setMatrix(VinvTarget * reset1.getMatrix(i),i);
             reset1NEW.setVector(VinvTarget * reset1.getVector(i),i);
@@ -143,10 +143,10 @@ Transformation<Number,Representation>::Transformation (const HybridAutomaton<Num
         mTransformedHA.addLocalBadState(NewLocPtr, badStateNEW);
     }
 }
-template <typename Number, typename Representation>
-void Transformation<Number,Representation>::transformGlobalBadStates
+template <typename Number>
+void Transformation<Number>::transformGlobalBadStates
   (const HybridAutomaton<Number>& _hybrid) {
-    //check if transformation is according to hybrid automaton
+    //check if transformation is according to hybrid automaton by checking LocPtrs
     assert( _hybrid.getLocations().size() == mLocationPtrsMap.size() );
     typename locationPtrMap::const_iterator locIt = mLocationPtrsMap.begin();
     typename locationPtrMap::const_iterator endLocIt = mLocationPtrsMap.end();
@@ -179,6 +179,36 @@ void Transformation<Number,Representation>::transformGlobalBadStates
     }
     globalBadStatesTransformed = true;
 }
+//TODO method to compute flow (depending on this object+NewLocPtr INPUT ?!
+//template <typename Number, typename Representation>
+//void Transformation<Number,Representation>::computeFlowinLocation
+//  (Location* LocPtr) {
+//    //TODO create properties by location (initial input value thus function)
+//    //WHERE IS MATRIX EXPONENTIAL USED??
+//    
+//    //TODO looping
+//
+//    //TODO plot by transforming into original system (using V*x) or plot in transformed system
+//
+//}
+
+//REACHABILITY WORKER
+//PROCESS TASK -> computeForwardTimeClojure
+//task bekommen, transformieren
+//transitionen berechnen
+
+//TODO change SettingsProvider -> transformation of HybridAutomaton 
+// -> save in global scope the transformation values
+// -> use location values
+
+//REACHABILITY WORKER INHERITS from IWorker and MAutomaton(automaton)
+
+//method processTask
+//TASK given as shared ptr: is struct of shared_ptr, tBacktrackingInfo
+//tBacktrackingInfo has hypro::Path + btLevel + currentBTPosition
+
+
+
 //TODO inhomogen plot is only used directly after Constructor and uses that objects
     //in_traj.xhom.col(0) = ind_f.xinhom.array() + in_traj.x_tr.col(0).array();
     //in_traj.xhom.col(1) = ind_f.xinhom.array() + in_traj.x_tr.col(1).array();
@@ -189,8 +219,8 @@ void Transformation<Number,Representation>::transformGlobalBadStates
     //mSTallvalues.mSTdependentFunct.xhom.col(1) = mSTallvalues.mSTindependentFunct.array() //MOVE TO ALG
     //  + dep_f.x_tr.col(1).array();
 
-template <typename Number, typename Representation>
-void Transformation<Number,Representation>::declare_structures(STallValues<Number>& mSTallValues, const int n) {
+template <typename Number>
+void Transformation<Number>::declare_structures(STallValues<Number>& mSTallValues, const int n) {
     mSTallValues.mSTindependentFunct.xinhom  = Matrix<Number>(n,n);
     mSTallValues.mSTinputVectors.x0          = Vector<Number>(n);
     mSTallValues.mSTinputVectors.x0_2        = Vector<Number>(n);
@@ -211,8 +241,8 @@ void Transformation<Number,Representation>::declare_structures(STallValues<Numbe
     //flowpipe only V for backtransformation into original system
 }
 //mark if in transformed system x0<x0_2 in 3rd column
-template <typename Number, typename Representation>
-void Transformation<Number,Representation>::mark_x0isMin(Matrix<Number>& x_tr, const int n) {
+template <typename Number>
+void Transformation<Number>::mark_x0isMin(Matrix<Number>& x_tr, const int n) {
     for(int i=0; i<n; ++i) {   //check if x0_tr >= x0_2_tr
         if(x_tr(i,0) < x_tr(i,1)) {
             x_tr(i,2) = 1; //mark second column to recognize later
@@ -220,8 +250,8 @@ void Transformation<Number,Representation>::mark_x0isMin(Matrix<Number>& x_tr, c
     }
 }
 //x0<x0_2 will never change, so we can simply swap to transform systems
-template <typename Number, typename Representation>
-void Transformation<Number,Representation>::swap_x0isMax(Matrix<Number>& x_tr, const int n) {
+template <typename Number>
+void Transformation<Number>::swap_x0isMax(Matrix<Number>& x_tr, const int n) {
     //std::cout << "x_tr beforeback: "<< std::endl << x_tr << std::endl;
     Vector<Number> tmp = Vector<Number>(n);
     for(int i=0; i<n; ++i) {
@@ -233,8 +263,8 @@ void Transformation<Number,Representation>::swap_x0isMax(Matrix<Number>& x_tr, c
     }
     //std::cout << "x_tr afterback: "<< std::endl << x_tr << std::endl;
 }
-template <typename Number, typename Representation>
-void Transformation<Number,Representation>::output_HybridAutomaton() {
+template <typename Number>
+void Transformation<Number>::output_HybridAutomaton() {
     std::cout << mTransformedHA << "\n-------------- ENDOFAUTOMATA ------------------" << std::endl;
 }
 } //namespace hypro
