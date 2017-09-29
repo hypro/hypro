@@ -63,6 +63,8 @@ Transformation<Number>::Transformation (const HybridAutomaton<Number>& _hybrid) 
         mSTallvalues.mSTflowpipeSegment.Vinv       = Vinv;
         mSTallvalues.mSTflowpipeSegment.V          = V; //rest of flow used only for plotting
         mLocPtrtoComputationvaluesMap.insert(std::make_pair(PtrtoNewLoc, mSTallvalues));
+        std::cout << "old loc: "<<LocPtr<<"\n";
+        std::cout << "new loc: "<<PtrtoNewLoc<<"\n";
     //INVARIANTS(TYPE CONDITION)        [TODO output stream broken with assertion without invariants!]
         const Condition<Number>& invar1 = LocPtr->getInvariant();
         Condition<Number> invar1NEW; // = PtrtoNewLoc->getInvariant();
@@ -120,9 +122,9 @@ Transformation<Number>::Transformation (const HybridAutomaton<Number>& _hybrid) 
     for(typename locationStateMap::const_iterator it=_hybrid.getInitialStates().begin(); 
       it!=_hybrid.getInitialStates().end(); ++it) {
         Location<Number>* NewLocPtr = mLocationPtrsMap[it->first];
-        const Matrix<Number> & Vinv = 
-          mLocPtrtoComputationvaluesMap[NewLocPtr].mSTflowpipeSegment.Vinv;
-        state1NEW = it->second.linearTransformation(Vinv);
+//        const Matrix<Number> & Vinv = 
+//          mLocPtrtoComputationvaluesMap[NewLocPtr].mSTflowpipeSegment.Vinv;
+//        state1NEW = it->second.linearTransformation(Vinv);
         state1NEW.setLocation(NewLocPtr);
         initialStates.insert(make_pair(NewLocPtr, state1NEW));
     }
