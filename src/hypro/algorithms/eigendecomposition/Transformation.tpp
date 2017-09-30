@@ -116,15 +116,15 @@ Transformation<Number>::Transformation (const HybridAutomaton<Number>& _hybrid) 
     }
     mTransformedHA.setTransitions    (transitions);
 //INITIAL STATES
-    //State = Vinv*A and Vinv*b -> State.linearTransformation(Vinv)
     locationStateMap initialStates;
-    State<Number,ConstraintSet<Number>> state1NEW;
     for(typename locationStateMap::const_iterator it=_hybrid.getInitialStates().begin(); 
       it!=_hybrid.getInitialStates().end(); ++it) {
         Location<Number>* NewLocPtr = mLocationPtrsMap[it->first];
+        State<Number,ConstraintSet<Number>> state1NEW = State<Number,ConstraintSet<Number>>(it->second);
 //        const Matrix<Number> & Vinv = 
 //          mLocPtrtoComputationvaluesMap[NewLocPtr].mSTflowpipeSegment.Vinv;
 //        state1NEW = it->second.linearTransformation(Vinv);
+        state1NEW.setTimestamp(carl::Interval<Number>(0) );  //do we need to set this?
         state1NEW.setLocation(NewLocPtr);
         initialStates.insert(make_pair(NewLocPtr, state1NEW));
     }
