@@ -18,8 +18,6 @@ namespace hypro {
 	template<typename Number>
 	antlrcpp::Any HyproTransitionVisitor<Number>::visitJumps(HybridAutomatonParser::JumpsContext *ctx){
 
-		std::cout << "-- Bin bei visitJumps!" << std::endl;
-
 		if(ctx->transition().size() > 0){
 			std::set<Transition<Number>*> trSet;
 			for(auto tr : ctx->transition()){
@@ -30,7 +28,6 @@ namespace hypro {
 			}
 			return trSet;
 		} else {
-			std::cout << "-- No jumps found! Returning empty transition set." << std::endl;
 			return std::set<Transition<Number>*>();
 		}
 
@@ -39,15 +36,11 @@ namespace hypro {
 	template<typename Number>
 	antlrcpp::Any HyproTransitionVisitor<Number>::visitTransition(HybridAutomatonParser::TransitionContext *ctx){
 
-		std::cout << "-- Bin bei visitTransition!" << std::endl;
-
 		Transition<Number>* t = new Transition<Number>();
 
 		//1.Collect start/destination location from visitFromTo
 		std::pair<Location<Number>*,Location<Number>*> fromTo = visit(ctx->fromto());
-		std::cout << "---- Checked source/target location!" << std::endl;
 		t->setSource(fromTo.first);
-		std::cout << "---- Set source!" << std::endl;
 		t->setTarget(fromTo.second);
 
 		//2. Collect Urgency
@@ -58,8 +51,7 @@ namespace hypro {
 		} else {
 			t->setUrgent(false);
 		}
-		std::cout << "---- Checked urgency!" << std::endl;
-
+		
 		//3.Collect Guards
 		if(ctx->guard().size() > 1){
 			std::cout << "WARNING: Please refrain from entering multiple guard constraints via several guard spaces. Typing one guard space of the form 'guard { constraint1 constraint2 ... }' is sufficient->" << std::endl;
@@ -68,8 +60,7 @@ namespace hypro {
 			Condition<Number> inv = visit(ctx->guard()[0]);
 			t->setGuard(inv);
 		}
-		std::cout << "---- Checked guards!" << std::endl;
-
+		
 		//4.Collect Resets
 		if(ctx->resetfct().size() > 1){
 			std::cout << "WARNING: Please refrain from entering multiple reset allocations via several reset spaces. Typing one reset space of the form 'reset { allocation1 allocation2 ... }' is sufficient->" << std::endl;
@@ -78,8 +69,7 @@ namespace hypro {
 			Reset<Number> reset = visit(ctx->resetfct()[0]);
 			t->setReset(reset);
 		}
-		std::cout << "---- Checked resets!" << std::endl;
-
+		
 		//5.Collect Aggregation
 		if(ctx->aggregation().size() > 1){
 			std::cerr << "ERROR: Multiple aggregation types specified for one transition." << std::endl;
@@ -88,15 +78,12 @@ namespace hypro {
 			Aggregation agg = visit(ctx->aggregation()[0]);
 			t->setAggregation(agg);
 		}
-		std::cout << "---- Checked aggregation!" << std::endl;
-
+		
 		return t;
 	}
 
 	template<typename Number>
 	antlrcpp::Any HyproTransitionVisitor<Number>::visitFromto(HybridAutomatonParser::FromtoContext *ctx){
-
-		std::cout << "-- Bin bei visitFromto!" << std::endl;
 
 		//0.Syntax check - are both given names really location names?
 		//1.While doing syntax check, also fill fromTo (defined below) so we can return it.
@@ -104,16 +91,14 @@ namespace hypro {
 		bool foundRight = false;
 		std::pair<Location<Number>*,Location<Number>*> fromTo;
 		for(auto& loc : locSet){
-			std::cout << "---- Name of loc: " << loc->getName() << " name of variable 0: " << ctx->VARIABLE()[0]->getText() << " name of variable 1: " << ctx->VARIABLE()[1]->getText() << std::endl;
+			//std::cout << "---- Name of loc: " << loc->getName() << " name of variable 0: " << ctx->VARIABLE()[0]->getText() << " name of variable 1: " << ctx->VARIABLE()[1]->getText() << std::endl;
 			if(loc->getName() == ctx->VARIABLE()[0]->getText()){
 				foundLeft = true;
 				fromTo.first = loc;
-				std::cout << "------ Found a match with variable " << ctx->VARIABLE()[0]->getText() << std::endl;
 			}
 			if(loc->getName() == ctx->VARIABLE()[1]->getText()){
 				foundRight = true;
 				fromTo.second = loc;
-				std::cout << "------ Found a match with variable " << ctx->VARIABLE()[1]->getText() << std::endl;
 			}
 		}
 		if(!foundLeft || !foundRight){
@@ -127,8 +112,6 @@ namespace hypro {
 	template<typename Number>
 	antlrcpp::Any HyproTransitionVisitor<Number>::visitGuard(HybridAutomatonParser::GuardContext *ctx){
 
-		std::cout << "-- Bin bei visitGuard!" << std::endl;
-
 		//1.Call HyproFormulaVisitor and get pair of matrix and vector
 		HyproFormulaVisitor<Number> visitor(vars);
 		std::pair<matrix_t<Number>,vector_t<Number>> result = visitor.visit(ctx->constrset());
@@ -138,7 +121,7 @@ namespace hypro {
 		inv.setMatrix(result.first);
 		inv.setVector(result.second);
 
-		std::cout << "---- Guard Matrix is:\n" << inv.getMatrix() << "and vector is:\n" << inv.getVector() << std::endl;
+		//std::cout << "---- Guard Matrix is:\n" << inv.getMatrix() << "and vector is:\n" << inv.getVector() << std::endl;
 
 		//3.Return condition
 		return inv;
@@ -146,8 +129,6 @@ namespace hypro {
 
 	template<typename Number>
 	antlrcpp::Any HyproTransitionVisitor<Number>::visitAllocation(HybridAutomatonParser::AllocationContext *ctx){
-
-		std::cout << "-- Bin bei visitAllocation!" << std::endl;
 
 		//0.Syntax Check - Check if left side is a var with '
 		bool found = false;
@@ -180,8 +161,6 @@ namespace hypro {
 	template<typename Number>
 	antlrcpp::Any HyproTransitionVisitor<Number>::visitResetfct(HybridAutomatonParser::ResetfctContext *ctx){
 
-		std::cout << "-- Bin bei visitResetfct!" << std::endl;
-
 		//0.Check if there are not too much resets
 		if(ctx->allocation().size() > vars.size()){
 			std::cerr << "ERROR: Too many resets for this amount of variables. Only one reset per transition per variable allowed." << std::endl;
@@ -202,7 +181,7 @@ namespace hypro {
 		if(resetMatrix == matrix_t<Number>::Zero(vars.size(), vars.size())){
 			resetMatrix = matrix_t<Number>::Identity(vars.size(), vars.size());
 		}
-		std::cout << "---- resetMatrix:\n" << resetMatrix << "\n and resetVector:\n" << resetVector << std::endl;
+		//std::cout << "---- resetMatrix:\n" << resetMatrix << "\n and resetVector:\n" << resetVector << std::endl;
 
 		//2.return a Reset - 0 in the setter arguments is for the position within the vector of ConstraintSets
 		Reset<Number> r;
@@ -213,8 +192,6 @@ namespace hypro {
 
 	template<typename Number>
 	antlrcpp::Any HyproTransitionVisitor<Number>::visitAggregation(HybridAutomatonParser::AggregationContext *ctx){
-
-		std::cout << "-- Bin bei visitAggregation!" << std::endl;
 
 		if(ctx->PARALLELOTOPE() != NULL){
 			std::cout << "---- Aggregation is parallelotope" << std::endl;

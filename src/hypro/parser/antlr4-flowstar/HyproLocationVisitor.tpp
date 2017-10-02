@@ -16,8 +16,7 @@ namespace hypro {
 
 	template<typename Number>
 	antlrcpp::Any HyproLocationVisitor<Number>::visitModes(HybridAutomatonParser::ModesContext *ctx){
-		std::cout << "-- Bin bei visitModes!" << std::endl;
-
+		
 		//Calls visit(ctx->location()) to get location, name it, put into locSet, return locSet
 		unsigned i = 0;
 		std::set<Location<Number>*> locSet;
@@ -32,7 +31,6 @@ namespace hypro {
 
 			Location<Number>* loc = visit(ctx->location().at(i));
 			loc->setName(ctx->location().at(i)->VARIABLE()->getText());
-			std::cout << "---- Visited location " << loc->getName() << std::endl;
 			locSet.insert(loc);
 			i++;
 		}
@@ -41,16 +39,14 @@ namespace hypro {
 
 	template<typename Number>
 	antlrcpp::Any HyproLocationVisitor<Number>::visitLocation(HybridAutomatonParser::LocationContext *ctx){
-		std::cout << "-- Bin bei visitLocation!" << std::endl;
-
-
+	
 		//1.Calls visit(ctx->activities()) to get matrix
 		matrix_t<Number> tmpMatrix = visit(ctx->activities());
-		std::cout << "---- Flow matrix is:\n" << tmpMatrix << std::endl;
+		//std::cout << "---- Flow matrix is:\n" << tmpMatrix << std::endl;
 
 		//2.Calls visit(ctx->invariant()) to get Condition
 		Condition<Number> inv = visit(ctx->invariants());
-		std::cout << "---- inv is:\n" << inv.getMatrix() << "and\n" << inv.getVector() << std::endl;
+		//std::cout << "---- inv is:\n" << inv.getMatrix() << "and\n" << inv.getVector() << std::endl;
 
 		//3.Returns a location
 		LocationManager<Number>& manager = LocationManager<Number>::getInstance();
@@ -62,7 +58,6 @@ namespace hypro {
 
 	template<typename Number>
 	antlrcpp::Any HyproLocationVisitor<Number>::visitActivities(HybridAutomatonParser::ActivitiesContext *ctx){
-		std::cout << "-- Bin bei visitActivities!" << std::endl;
 
 		//0.Syntax check - Are there vars.size() equations?
 		if(vars.size() != ctx->equation().size()){
@@ -91,8 +86,7 @@ namespace hypro {
 
 	template<typename Number>
 	antlrcpp::Any HyproLocationVisitor<Number>::visitInvariants(HybridAutomatonParser::InvariantsContext *ctx){
-		std::cout << "-- Bin bei visitInvariants!" << std::endl;
-
+		
 		//2.Call HyproFormulaVisitor and get pair of matrix and vector
 		HyproFormulaVisitor<Number> visitor(vars);
 		std::pair<matrix_t<Number>,vector_t<Number>> result = visitor.visit(ctx->constrset());

@@ -17,8 +17,6 @@ namespace hypro {
 	template<typename Number>
 	antlrcpp::Any HyproSettingVisitor<Number>::visitSetting(HybridAutomatonParser::SettingContext *ctx){
 
-		std::cout << "-- Bin bei visitSetting!" << std::endl;
-
 		//1.Go through all settings, collect data
 
 		//fixed steps
@@ -93,8 +91,6 @@ namespace hypro {
 	template<typename Number>
   	antlrcpp::Any HyproSettingVisitor<Number>::visitFixedsteps(HybridAutomatonParser::FixedstepsContext *ctx){
 
-  		std::cout << "-- Bin bei visitFixedsteps!" << std::endl;
-
   		//Nur Zahlen >0 erlaubt
   		HyproFormulaVisitor<Number> h(vars);
   		Number converted = h.stringToNumber(ctx->NUMBER()->getText());
@@ -113,8 +109,6 @@ namespace hypro {
 
   	template<typename Number>
   	antlrcpp::Any HyproSettingVisitor<Number>::visitPlotsetting(HybridAutomatonParser::PlotsettingContext *ctx){
-
-  		std::cout << "-- Bin bei visitPlotsetting!" << std::endl;
 
   		//0.Syntax Check - only declared variables?
   		bool found = false;
@@ -167,21 +161,20 @@ namespace hypro {
 
   	template<typename Number>
   	antlrcpp::Any HyproSettingVisitor<Number>::visitFilename(HybridAutomatonParser::FilenameContext *ctx){
-  		std::cout << "-- Bin bei visitFilename!" << std::endl;
   		return ctx->VARIABLE()->getText();
   	}
 
   	template<typename Number>
   	antlrcpp::Any HyproSettingVisitor<Number>::visitMaxjumps(HybridAutomatonParser::MaxjumpsContext *ctx){
-  		std::cout << "-- Bin bei visitMaxjumps!" << std::endl;
+
   		//Only integers allowed
   		std::string numAsText = ctx->NUMBER()->getText();
-  		std::cout << "---- num before: " << numAsText << std::endl;
+  		//std::cout << "---- num before: " << numAsText << std::endl;
   		std::size_t pos = numAsText.find(".");
 		if(pos != std::string::npos){
 			numAsText = std::string(numAsText, 0, pos);
 		}
-		std::cout << "---- num after: " << numAsText << std::endl;
+		//std::cout << "---- num after: " << numAsText << std::endl;
 		return std::stoi(numAsText);
   	}
 /*

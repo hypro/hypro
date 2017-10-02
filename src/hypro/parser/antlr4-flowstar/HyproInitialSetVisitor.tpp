@@ -16,8 +16,6 @@ namespace hypro {
 	template<typename Number>
 	antlrcpp::Any HyproInitialSetVisitor<Number>::visitInit(HybridAutomatonParser::InitContext *ctx){
 
-		std::cout << "-- Bin bei visitInitial!" << std::endl;
-
 		//0.Syntax Check - given variable name really a location name?
 		//If it is, save the location pointer for the localStateMap
 		bool found = false;
@@ -34,21 +32,13 @@ namespace hypro {
 
 		//1.Get ConstraintSet, build State and return localStateMap
 		ConstraintSet<Number> conSet = visit(ctx->initstate());
-		std::cout << "---- Initial constraints sind:" << std::endl;
-		std::cout << "---- matrix:\n" << conSet.matrix() << "and vector:\n" << conSet.vector() << std::endl;
+		//std::cout << "---- Initial constraints sind:" << std::endl;
+		//std::cout << "---- matrix:\n" << conSet.matrix() << "and vector:\n" << conSet.vector() << std::endl;
 		State<Number,ConstraintSet<Number>> state;
-		//std::cout << "---- state deklariert" << std::endl;
 		state.setLocation(initialLoc);
-		//std::cout << "---- location gesettet" << std::endl;
-		//std::vector<boost::variant<ConstraintSet<Number>>> mSet;
-		//std::cout << "---- Made a vecter of sets" << std::endl;
-		//mSet.push_back(conSet);
-		//std::cout << "---- pushed conSet inside" << std::endl;
 		state.setSet(conSet,0);
 		assert(state.getNumberSets() == 1);
 		state.setTimestamp(carl::Interval<Number>(0));
-		std::cout << "---- Initialtate gebaut:" << std::endl;
-		std::cout << state << std::endl;
 		locationStateMap initialState;
 		initialState.insert(std::make_pair(initialLoc, state));
 		return initialState;
@@ -56,8 +46,6 @@ namespace hypro {
 
 	template<typename Number>
   	antlrcpp::Any HyproInitialSetVisitor<Number>::visitInitstate(HybridAutomatonParser::InitstateContext *ctx){
-
-  		std::cout << "-- Bin bei visitInitstate!" << std::endl;
 
   		//0.Check if there is a constraint for every stated variable
   		//We get the the assigned text via the start and stop indices given by ctx.

@@ -16,7 +16,7 @@ namespace hypro {
 	template<typename Number>
 	antlrcpp::Any HyproBadStatesVisitor<Number>::visitUnsafeset(HybridAutomatonParser::UnsafesetContext *ctx){
 
-		std::cout << "-- Bin bei visitUnsafeset!" << std::endl;
+		//std::cout << "-- Bin bei visitUnsafeset!" << std::endl;
 
 		//1.Collect badState information. NOTE: There can be multiple denoted badstates for one location.
 		locationConditionMap lcMap;
@@ -37,7 +37,7 @@ namespace hypro {
 	template<typename Number>
 	antlrcpp::Any HyproBadStatesVisitor<Number>::visitBadstate(HybridAutomatonParser::BadstateContext *ctx){
 
-		std::cout << "-- Bin bei visitBadstate!" << std::endl;
+		//std::cout << "-- Bin bei visitBadstate!" << std::endl;
 
 		//0.Check if given loc name exists and get meant location where bad states can occur
 		bool found = false;

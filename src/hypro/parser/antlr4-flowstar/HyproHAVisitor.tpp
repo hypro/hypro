@@ -55,12 +55,14 @@ namespace hypro {
 		for(auto it = transSet.begin(); it != transSet.end(); ++it){
 			COUT(**it);
 		}
-		//TRACE("hypro.parser","Initial state:\n");
-
-		//for(auto it = initSet.begin(); it != initSet.end(); ++it){
-		//	COUT("Initial Location: " << **it);
-		//}
-		//TODO: Print all the other parsed stuff
+		TRACE("hypro.parser","Initial state:\n");
+		for(auto it = initSet.begin(); it != initSet.end(); ++it){
+			COUT("Initial Location: " << it->first->getName() << " and initial state: " << it->second);
+		}
+		TRACE("hypro.parser","Bad states:\n");
+		for(auto it = badStates.begin(); it != badStates.end(); ++it){
+			COUT("Initial Location: " << it->first->getName() << " and initial state: " << it->second);
+		}
 #endif
 
 		//7.Build HybridAutomaton, return it
