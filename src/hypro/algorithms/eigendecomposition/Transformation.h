@@ -1,5 +1,6 @@
  /**
   * @file Transformation.h
+  * @author Jan Philipp Hafer
   */
 #pragma once
 #include "../../datastructures/HybridAutomaton/Settings.h"
@@ -14,7 +15,7 @@
 #include <Eigen/SVD>
 #include <Eigen/Core>
 /**
- * @brief      Class for transformation of Hybrid Automata.
+ * @brief      Class for transformation of Hybrid Automata for eigendecomposition reachability.
  *
  * @tparam     Number  The used number type.
  */
@@ -27,45 +28,49 @@ namespace hypro {
     template <typename Number>
     using DiagonalMatrix= Eigen::DiagonalMatrix<Number,Eigen::Dynamic>;
     using BoolMatrix = matrix_t<bool>;
-/*** STallValues as struct for all according value for a location of an hybrid automaton
- *      structs of structs can somehow not inherit <Number> ??
- *      reason for this use is to initialize all of them with 1 linetemplate <class Number>
- */
-template <typename Number>
-struct STinputVectors {   
-    Vector<Number>              x0;
-    Vector<Number>              x0_2;
-};
+    using BoolVector = vector_t<bool>;
+//template <typename Number>
+//struct STinputVectors {   
+//    Vector<Number>              x0;
+//    Vector<Number>              x0_2;
+//};
 template <typename Number>
 struct STindependentFunct {
   DiagonalMatrix<Number>        D;
   Matrix<Number>                xinhom;
-  Number                        delta;
-  std::size_t                   deltalimit;
+  BoolVector                    convergent;
+//  Number                        delta;
+//  std::size_t                   deltalimit;
 };
-template <typename Number>
-struct STdependentFunct {
-  Matrix<Number>                xhom;
-  Matrix<Number>                x_tr;
-};
-template <typename Number>
-struct STevalFunctions {
-  Matrix<Number>                deriv;
-  BoolMatrix                    direct;
-};
+//template <typename Number>
+//struct STdependentFunct {
+//  Matrix<Number>                xhom;
+//  Matrix<Number>                x_tr;
+//};
+//template <typename Number>
+//struct STevalFunctions {
+//  Matrix<Number>                deriv;
+//  BoolMatrix                    direct;
+//};
 template <typename Number>
 struct STflowpipeSegment {
   Matrix<Number>                V;
   Matrix<Number>                Vinv;
-  std::vector<Vector<Number>>   upper;
-  std::vector<Vector<Number>>   lower;
+//  std::vector<Vector<Number>>   upper;
+//  std::vector<Vector<Number>>   lower;
 };
+/** 
+ * @brief   STallValues as struct for all according values 
+ *          for a location of an hybrid automaton 
+ * NOTE     will be later used for setting dynamically values according to input
+ *          input has to be representable as points for evaluation
+ */
 template <typename Number>
 struct STallValues {
-    STinputVectors      <Number> mSTinputVectors;
+    //STinputVectors      <Number> mSTinputVectors;
     STindependentFunct  <Number> mSTindependentFunct;
-    STdependentFunct    <Number> mSTdependentFunct;
-    STevalFunctions     <Number> mSTevalFunctions;
+//    STdependentFunct    <Number> mSTdependentFunct;
+//    STevalFunctions     <Number> mSTevalFunctions;
     STflowpipeSegment   <Number> mSTflowpipeSegment;
 };
 
@@ -80,7 +85,7 @@ class Transformation {
 	using setVector = std::vector<std::pair<matrix_t<Number>, vector_t<Number>>>;
 //Map of old location to new location 
     using locationPtrMap = std::map<const Location<Number>*,Location<Number>*, locPtrComp<Number> >;
-//Location<Number>* points to locations of transformed Hybrid Automaton
+//Location<Number>* points to locations of transformed Hybrid Automaton, struct for computation
     using locationComputationSTMap = std::map< Location<Number>*,STallValues<Number>, locPtrComp<Number>>;
   private:
     //maps from original location to transformed organized as black/red tree
@@ -101,42 +106,55 @@ class Transformation {
 	 */
 	Transformation() = delete;
     /**
+     * @brief      Constructor from hybrid automata to adjust automaton and transformation
+     *             All static properties  relating to the Hybrid Automaton 
+     *             are stored in this class.
+     *        TODO adding properties for pre-system analysis would make sense here
+     * @param[in]  _hybrid  The original hybrid automaton.
+     */
+	//Transformation( HybridAutomaton<Number>& _hybrid );
+    Transformation<Number> (const HybridAutomaton<Number>& _hybrid);
+    /**
 	 * @brief      Copy constructor.
 	 *
 	 * @param[in]  _hybrid  The original transformation for an hybrid automaton.
 	 */
-	Transformation<Number> ( const Transformation& _trafo );
-
-    //copy Transition, modify and insert to set
-    //then insert to automaton
-    //State --> linearTransformation 
-    //Guards Condition
-    //Reset --> Vector von ConstraintSets [Hpolytope]
-    //Converter
-
+//TODO implement?
+	Transformation<Number> (const Transformation<Number>& _trafo);
+    
     /**
-     * @brief      Constructor from hybrid automata to adjust automaton and transformation
-     *             adding properties for pre-system analysis would make sense here
-     * @param[in]  _hybrid  The original hybrid automaton.
-     * @param[in]  transformed_ha  The transformed hybrid automaton.
+     * @brief       Analyzing Exponential Function and writing values accordingly to struct
      */
-	//Transformation( HybridAutomaton<Number>& _hybrid );
-    Transformation<Number> (const HybridAutomaton<Number>& _hybrid);
+    void analyzeExponentialFunctions();
+    /*
+     * @brief       Analyzing State and create according vertices with boxes
+     */
+    //analyzeInput();
+
+    //computeFirstSegment();
+
+    //computeFlow();
 
     //TODO clean up locations and transitions on desctructor
 
     void output_HybridAutomaton();    //TODO BROKEN? if invariants not set/empty
 
     /* 
-     * adding transformedBadGlobalStates to transformedLocalBadStates
-     * optional call only by setting according flag to reachability analysis
+     * @brief       adding transformedBadGlobalStates to transformedLocalBadStates
+     *   [optional] call only by setting according flag to reachability analysis
+     * TODO storage requirement setting/analysis
      * due to count(location)*sizeof(BadStates) instead of sizeof(Badstead) storage requirement
+     *
+     * @param[in] _hybrid the original Hybrid Automaton (to check location ptrs against)
      */
     void transformGlobalBadStates(const HybridAutomaton<Number>& _hybrid);
 
+
+    //Getter for handling Automaton in Analysis TODO why not const?
     HybridAutomaton<Number>& getTransformedHybridAutomaton() { return mTransformedHA; }
-    //Map from newLoc to struct
+    //Map from newLoc to struct for evaluating location during time
     const locationComputationSTMap & getLocationComputationSTMap() { return mLocPtrtoComputationvaluesMap; }
+
 
 //  backtransformation(HybridAutomaton& _hybrid, const Transformation& _trafo );
 //  retransform reults

@@ -92,7 +92,7 @@ int main()
     trafo.output_HybridAutomaton();
     std::cout << std::endl;
     trafo.transformGlobalBadStates(original_ha);
-
+    trafo.analyzeExponentialFunctions();
     /*Flags flag1;
     In_eq in_eq1;               //input system
     Invar invar;                //invariants

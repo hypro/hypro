@@ -4,6 +4,7 @@ namespace hypro {
 
 template <typename Number>
 Transformation<Number>::Transformation (const HybridAutomaton<Number>& _hybrid) {
+    const size_t CONDITION_LIMIT = 100;
     Matrix<Number> matrix_in_parser;
     Matrix<Number> matrix_calc;
     size_t m_size, i;
@@ -13,13 +14,12 @@ Transformation<Number>::Transformation (const HybridAutomaton<Number>& _hybrid) 
     LocationManager<Number>& locationManager = LocationManager<Number>::getInstance();
     locationSet locations;
     Location<Number>* PtrtoNewLoc;
-    //std::cout<<"size mSTallValues: "<< sizeof(mSTallValues);
     mTransformedHA = HybridAutomaton<Number>();
 //LOCATIONS
     for (Location<Number>* LocPtr : _hybrid.getLocations() ) {
         matrix_in_parser = LocPtr->getFlow();   //copy for calculation; TODO (getsize() missing) many flows
         m_size = matrix_in_parser.cols(); //rows
-        //ASSERTION SIZE >= 1 --> delete new locations/skip?
+        assert(m_size>=1);  //exit if location size <1-> underflow error
         m_size -= 1;
         STallValues<Number> mSTallvalues;
         declare_structures(mSTallvalues, m_size);
@@ -27,18 +27,20 @@ Transformation<Number>::Transformation (const HybridAutomaton<Number>& _hybrid) 
         matrix_calc = Matrix<Number>(m_size,m_size);
         V           = Matrix<Number>(m_size,m_size);
         Vinv        = Matrix<Number>(m_size,m_size);
-        b_tr        = matrix_in_parser.topRightCorner(m_size,1);//map?
-        matrix_calc = matrix_in_parser.topLeftCorner(m_size,m_size);        
+        b_tr        = matrix_in_parser.topRightCorner(m_size,1);
+        matrix_calc = matrix_in_parser.topLeftCorner(m_size,m_size);
         std::cout<<"A: "<<std::endl<<matrix_calc;
     //LOCATION TRANSFORMATION
         Eigen::EigenSolver<Matrix<Number>> es(matrix_calc);    //decompose matrix
         V << es.eigenvectors().real();
         mSTallvalues.mSTindependentFunct.D.diagonal() << es.eigenvalues().real();
         Vinv = V.inverse();
-        //ASSERTION CONDITION TODO making this faster maybe
+        //ASSERTION CONDITION TODO making this faster for big/sparse matrices
         Eigen::JacobiSVD<Matrix<Number>> svd(Vinv);  
         double cond = svd.singularValues()(0)  / svd.singularValues()(svd.singularValues().size()-1);
-        assert(cond < 100 && cond > -100);
+        if(std::abs(cond) > CONDITION_LIMIT) {
+            FATAL("hypro.eigendecomposition","condition is higher than CONDITION_LIMIT");
+        }
         std::cout <<"Vinv(condition): ("<< cond <<")\n" << Vinv;
         //std::cout <<"D: "    << std::endl << D;
         matrix_calc = Vinv*matrix_calc;
@@ -63,8 +65,8 @@ Transformation<Number>::Transformation (const HybridAutomaton<Number>& _hybrid) 
         mSTallvalues.mSTflowpipeSegment.Vinv       = Vinv;
         mSTallvalues.mSTflowpipeSegment.V          = V; //rest of flow used only for plotting
         mLocPtrtoComputationvaluesMap.insert(std::make_pair(PtrtoNewLoc, mSTallvalues));
-        std::cout << "old loc: "<<LocPtr<<"\n";
-        std::cout << "new loc: "<<PtrtoNewLoc<<"\n";
+        //std::cout << "old loc: "<<LocPtr<<"\n";
+        //std::cout << "new loc: "<<PtrtoNewLoc<<"\n";
     //INVARIANTS(TYPE CONDITION)        [TODO output stream broken with assertion without invariants!]
         const Condition<Number>& invar1 = LocPtr->getInvariant();
         Condition<Number> invar1NEW; // = PtrtoNewLoc->getInvariant();
@@ -181,6 +183,19 @@ void Transformation<Number>::transformGlobalBadStates
     }
     globalBadStatesTransformed = true;
 }
+template <typename Number>
+void Transformation<Number>::analyzeExponentialFunctions() {
+    for ( auto &structObject : mLocPtrtoComputationvaluesMap) {
+        const size_t dimension = structObject.second.mSTflowpipeSegment.V.rows();
+        structObject.second.mSTindependentFunct.convergent = BoolVector(dimension);
+        for(size_t i=0; i<dimension; ++i) {
+            //1. divergence D>0, 2. convergence D<=0
+            structObject.second.mSTindependentFunct.convergent(i) = 
+              structObject.second.mSTindependentFunct.D.diagonal()(i)>0 ? false : true;
+        }
+    }
+
+}
 //TODO method to compute flow (depending on this object+NewLocPtr INPUT ?!
 //template <typename Number, typename Representation>
 //void Transformation<Number,Representation>::computeFlowinLocation
@@ -224,19 +239,19 @@ void Transformation<Number>::transformGlobalBadStates
 template <typename Number>
 void Transformation<Number>::declare_structures(STallValues<Number>& mSTallValues, const int n) {
     mSTallValues.mSTindependentFunct.xinhom  = Matrix<Number>(n,n);
-    mSTallValues.mSTinputVectors.x0          = Vector<Number>(n);
-    mSTallValues.mSTinputVectors.x0_2        = Vector<Number>(n);
+    //mSTallValues.mSTinputVectors.x0          = Vector<Number>(n);
+    //mSTallValues.mSTinputVectors.x0_2        = Vector<Number>(n);
     mSTallValues.mSTindependentFunct.D       = DiagonalMatrix<Number>(n);
     mSTallValues.mSTindependentFunct.xinhom  = Matrix<Number>(n,n);
-    mSTallValues.mSTdependentFunct.xhom      = Matrix<Number>(n,n);
+    //mSTallValues.mSTdependentFunct.xhom      = Matrix<Number>(n,n);
     //TODO change to multiple values, last column for transformation maxmin
-    mSTallValues.mSTdependentFunct.x_tr      = Matrix<Number>::Zero(n,3);    
-    mSTallValues.mSTdependentFunct.x_tr.col(2).array() = 0;
-    mSTallValues.mSTevalFunctions.deriv      = Matrix<Number>(n,n);
+    //mSTallValues.mSTdependentFunct.x_tr      = Matrix<Number>::Zero(n,3);    
+    //mSTallValues.mSTdependentFunct.x_tr.col(2).array() = 0;
+    //mSTallValues.mSTevalFunctions.deriv      = Matrix<Number>(n,n);
     //TODO CHANGE 2 to number of points ?! or use 2 column with numbers: 
     //[max,min] for direct [-max,-min] for indirect starting at !!1!!
-    mSTallValues.mSTevalFunctions.direct     = BoolMatrix(n,2);
-    mSTallValues.mSTevalFunctions.direct.setConstant(0);
+    //mSTallValues.mSTevalFunctions.direct     = BoolMatrix(n,2);
+    //mSTallValues.mSTevalFunctions.direct.setConstant(0);
     mSTallValues.mSTflowpipeSegment.V        = Matrix<Number>(n,n);
     mSTallValues.mSTflowpipeSegment.Vinv     = Matrix<Number>(n,n);
     //delta, deltalimit of STindependentFunc missing
