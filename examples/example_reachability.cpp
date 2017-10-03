@@ -21,7 +21,9 @@ static void computeReachableStates(const std::string& filename, const hypro::rep
 	clock::time_point start = clock::now();
 
 	boost::tuple<hypro::HybridAutomaton<Number>, hypro::ReachabilitySettings<Number>> ha = hypro::parseFlowstarFile<Number>(filename);
+#ifdef HYPRO_LOGGING
 	std::cout << "Parsed HybridAutomaton:\n" << boost::get<0>(ha) << "Parsed ReachabilitySettings:\n" << boost::get<1>(ha) << std::endl;
+#endif
 	hypro::reachability::Reach<Number> reacher(boost::get<0>(ha), boost::get<1>(ha));
 	reacher.setRepresentationType(type);
 	std::cout << boost::get<1>(ha) << std::endl;

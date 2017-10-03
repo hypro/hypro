@@ -28,6 +28,7 @@ namespace hypro {
 		}
 		if(!found){
 			std::cerr << "ERROR: Given location name in init does not exist." << std::endl;
+			exit(0);
 		}
 
 		//1.Get ConstraintSet, build State and return localStateMap
@@ -70,6 +71,7 @@ namespace hypro {
   		for(unsigned i=0; i < varCount.size(); i++){
   			if(varCount[i] == 0){
   				std::cerr << "ERROR: For variable " << vars[i] << " no initial constraint has been set." << std::endl;
+  				exit(0);
   			}
   		}
 

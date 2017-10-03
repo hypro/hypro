@@ -73,6 +73,7 @@ namespace hypro {
 		//5.Collect Aggregation
 		if(ctx->aggregation().size() > 1){
 			std::cerr << "ERROR: Multiple aggregation types specified for one transition." << std::endl;
+			exit(0);
 		}
 		if(ctx->aggregation().size() == 1){
 			Aggregation agg = visit(ctx->aggregation()[0]);
@@ -103,6 +104,7 @@ namespace hypro {
 		}
 		if(!foundLeft || !foundRight){
 			std::cerr << "ERROR: Location names in a jump do not exist." << std::endl;
+			exit(0);
 		}
 
 		//1.Return pair of location pointers to both given location names
@@ -141,6 +143,7 @@ namespace hypro {
 		}
 		if(!found){
 			std::cerr << "An allocation in the reset part has a not defined variable." << std::endl;
+			exit(0);
 		}
 
 		//1.Call HyproFormulaVisitor::visitPolynom()
@@ -164,6 +167,7 @@ namespace hypro {
 		//0.Check if there are not too much resets
 		if(ctx->allocation().size() > vars.size()){
 			std::cerr << "ERROR: Too many resets for this amount of variables. Only one reset per transition per variable allowed." << std::endl;
+			exit(0);
 		}
 
 		//1.Iteratively call visit(allocation) to get a values for the row of resetMatrix and a value for resetVector
@@ -173,6 +177,7 @@ namespace hypro {
 			std::pair<vector_t<Number>,unsigned> valuesNPos = visit(ctx->allocation()[i]);
 			if(static_cast<unsigned>(valuesNPos.first.rows()) != vars.size()+1){
 				std::cerr << "ERROR: Visiting Allocation brought forth vec of size: " << valuesNPos.first.rows() << " but we need: " << vars.size() << std::endl;
+				exit(0);
 			}
 			//1.2.Find out into which row according to vars we have to place the row
 			resetMatrix.row(valuesNPos.second) = valuesNPos.first.head(vars.size());
@@ -194,13 +199,13 @@ namespace hypro {
 	antlrcpp::Any HyproTransitionVisitor<Number>::visitAggregation(HybridAutomatonParser::AggregationContext *ctx){
 
 		if(ctx->PARALLELOTOPE() != NULL){
-			std::cout << "---- Aggregation is parallelotope" << std::endl;
+			//std::cout << "---- Aggregation is parallelotope" << std::endl;
 			return Aggregation::parallelotopeAgg;
 		} else if(ctx->BOX() != NULL){
-			std::cout << "---- Aggregation is box" << std::endl;
+			//std::cout << "---- Aggregation is box" << std::endl;
 			return Aggregation::boxAgg;
 		} else {
-			std::cout << "---- Aggregation is none" << std::endl;
+			//std::cout << "---- Aggregation is none" << std::endl;
 			return Aggregation::none;
 		}
 	}

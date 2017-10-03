@@ -50,7 +50,7 @@ namespace hypro {
 
 				mCurrentLevel = boost::get<0>(nextInitialSet);
 				assert(mCurrentLevel <= mSettings.jumpDepth);
-				std::cout << "Depth " << mCurrentLevel << ", Location: " << boost::get<1>(nextInitialSet).location->id() << std::endl;
+				//std::cout << "Depth " << mCurrentLevel << ", Location: " << boost::get<1>(nextInitialSet).location->id() << std::endl;
 				flowpipe_t<SupportFunction<Number>> newFlowpipe = computeForwardTimeClosure(boost::get<1>(nextInitialSet));
 
 				/*

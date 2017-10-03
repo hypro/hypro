@@ -84,7 +84,7 @@ namespace hypro {
 			varVec.push_back(variable->getText());
 		}
 		if(varVec.size() == 0){
-			std::cout << "ERROR: No variables were defined" << std::endl;
+			std::cerr << "ERROR: No variables were defined" << std::endl;
 			exit(0);
 		}
 		return varVec;

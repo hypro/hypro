@@ -26,6 +26,7 @@ namespace hypro {
 			for(auto& loc : locSet){
 				if(loc->getName() == ctx->location().at(i)->VARIABLE()->getText()){
 					std::cerr << "ERROR: Location " << loc->getName() << " has already been parsed." << std::endl;
+					exit(0);
 				}
 			}
 
@@ -62,6 +63,7 @@ namespace hypro {
 		//0.Syntax check - Are there vars.size() equations?
 		if(vars.size() != ctx->equation().size()){
 			std::cerr << "ERROR: Wrong amount of activites for current location!" << std::endl;
+			exit(0);
 		}
 
 		//1.Calls iteratively visit(ctx->equation()) to get vector, store them
@@ -78,6 +80,7 @@ namespace hypro {
 		if(vector_t<Number>(tmpMatrix.row(tmpMatrix.rows()-1)) != vector_t<Number>::Zero(tmpMatrix.cols())){
 			//std::cout << "Last row of tmpMatrix is:\n " << tmpMatrix.row(tmpMatrix.rows()-1) << std::endl;
 			std::cerr << "ERROR: Last row of tmpMatrix was not completely zero!" << std::endl;
+			exit(0);
 		}
 
 		//4.Returns a matrix
