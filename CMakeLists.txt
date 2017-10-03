@@ -177,6 +177,14 @@ set(Boost_USE_STATIC_LIBS        ON) # only find static libs
 set(Boost_USE_MULTITHREADED      ON)
 set(Boost_USE_STATIC_RUNTIME    OFF)
 
+#set(Boost_USE_STATIC_LIBS        ON) # only find static libs
+#set(Boost_USE_MULTITHREADED      ON)
+#set(Boost_USE_STATIC_RUNTIME    OFF)
+#find_package(Boost 1.55.0 COMPONENTS system chrono)
+#if(Boost_FOUND)
+#	load_library(${PROJECT_NAME} Boost 1.55.0)
+#endif()
+
 load_library(${PROJECT_NAME} GTest 0)
 find_package(carl)
 
