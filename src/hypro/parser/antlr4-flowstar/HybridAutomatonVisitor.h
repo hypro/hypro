@@ -39,13 +39,13 @@ public:
 
     virtual antlrcpp::Any visitAggregation(HybridAutomatonParser::AggregationContext *context) = 0;
 
+    virtual antlrcpp::Any visitConnector(HybridAutomatonParser::ConnectorContext *context) = 0;
+
     virtual antlrcpp::Any visitTerm(HybridAutomatonParser::TermContext *context) = 0;
 
     virtual antlrcpp::Any visitPolynom(HybridAutomatonParser::PolynomContext *context) = 0;
 
     virtual antlrcpp::Any visitInterval(HybridAutomatonParser::IntervalContext *context) = 0;
-
-    virtual antlrcpp::Any visitConnector(HybridAutomatonParser::ConnectorContext *context) = 0;
 
     virtual antlrcpp::Any visitEquation(HybridAutomatonParser::EquationContext *context) = 0;
 

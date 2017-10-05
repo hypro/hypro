@@ -23,7 +23,7 @@ public:
     RuleSetting = 0, RuleFixedsteps = 1, RuleTime = 2, RulePlotsetting = 3, 
     RuleFilename = 4, RuleMaxjumps = 5, RulePrint = 6, RuleRemainder = 7, 
     RuleIdentity = 8, RuleFixedorders = 9, RuleCutoff = 10, RulePrecision = 11, 
-    RuleTerm = 12, RulePolynom = 13, RuleInterval = 14, RuleConnector = 15, 
+    RuleConnector = 12, RuleTerm = 13, RulePolynom = 14, RuleInterval = 15, 
     RuleEquation = 16, RuleConstraint = 17, RuleIntervalexpr = 18, RuleConstrset = 19
   };
 
@@ -49,10 +49,10 @@ public:
   class FixedordersContext;
   class CutoffContext;
   class PrecisionContext;
+  class ConnectorContext;
   class TermContext;
   class PolynomContext;
   class IntervalContext;
-  class ConnectorContext;
   class EquationContext;
   class ConstraintContext;
   class IntervalexprContext;
@@ -211,6 +211,18 @@ public:
 
   PrecisionContext* precision();
 
+  class  ConnectorContext : public antlr4::ParserRuleContext {
+  public:
+    ConnectorContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    antlr4::tree::TerminalNode *PLUS();
+    antlr4::tree::TerminalNode *MINUS();
+
+   
+  };
+
+  ConnectorContext* connector();
+
   class  TermContext : public antlr4::ParserRuleContext {
   public:
     TermContext(antlr4::ParserRuleContext *parent, size_t invokingState);
@@ -221,6 +233,8 @@ public:
     antlr4::tree::TerminalNode* VARIABLE(size_t i);
     std::vector<antlr4::tree::TerminalNode *> TIMES();
     antlr4::tree::TerminalNode* TIMES(size_t i);
+    std::vector<ConnectorContext *> connector();
+    ConnectorContext* connector(size_t i);
 
    
   };
@@ -252,18 +266,6 @@ public:
   };
 
   IntervalContext* interval();
-
-  class  ConnectorContext : public antlr4::ParserRuleContext {
-  public:
-    ConnectorContext(antlr4::ParserRuleContext *parent, size_t invokingState);
-    virtual size_t getRuleIndex() const override;
-    antlr4::tree::TerminalNode *PLUS();
-    antlr4::tree::TerminalNode *MINUS();
-
-   
-  };
-
-  ConnectorContext* connector();
 
   class  EquationContext : public antlr4::ParserRuleContext {
   public:

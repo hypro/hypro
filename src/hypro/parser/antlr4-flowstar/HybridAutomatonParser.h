@@ -25,8 +25,8 @@ public:
   enum {
     RuleStart = 0, RuleVardeclaration = 1, RuleJumps = 2, RuleTransition = 3, 
     RuleFromto = 4, RuleUrgent = 5, RuleGuard = 6, RuleAllocation = 7, RuleResetfct = 8, 
-    RuleAggregation = 9, RuleTerm = 10, RulePolynom = 11, RuleInterval = 12, 
-    RuleConnector = 13, RuleEquation = 14, RuleConstraint = 15, RuleIntervalexpr = 16, 
+    RuleAggregation = 9, RuleConnector = 10, RuleTerm = 11, RulePolynom = 12, 
+    RuleInterval = 13, RuleEquation = 14, RuleConstraint = 15, RuleIntervalexpr = 16, 
     RuleConstrset = 17, RuleSetting = 18, RuleFixedsteps = 19, RuleTime = 20, 
     RulePlotsetting = 21, RuleFilename = 22, RuleMaxjumps = 23, RulePrint = 24, 
     RuleRemainder = 25, RuleIdentity = 26, RuleFixedorders = 27, RuleCutoff = 28, 
@@ -55,10 +55,10 @@ public:
   class AllocationContext;
   class ResetfctContext;
   class AggregationContext;
+  class ConnectorContext;
   class TermContext;
   class PolynomContext;
   class IntervalContext;
-  class ConnectorContext;
   class EquationContext;
   class ConstraintContext;
   class IntervalexprContext;
@@ -226,6 +226,19 @@ public:
 
   AggregationContext* aggregation();
 
+  class  ConnectorContext : public antlr4::ParserRuleContext {
+  public:
+    ConnectorContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    antlr4::tree::TerminalNode *PLUS();
+    antlr4::tree::TerminalNode *MINUS();
+
+    virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+   
+  };
+
+  ConnectorContext* connector();
+
   class  TermContext : public antlr4::ParserRuleContext {
   public:
     TermContext(antlr4::ParserRuleContext *parent, size_t invokingState);
@@ -236,6 +249,8 @@ public:
     antlr4::tree::TerminalNode* VARIABLE(size_t i);
     std::vector<antlr4::tree::TerminalNode *> TIMES();
     antlr4::tree::TerminalNode* TIMES(size_t i);
+    std::vector<ConnectorContext *> connector();
+    ConnectorContext* connector(size_t i);
 
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
    
@@ -270,19 +285,6 @@ public:
   };
 
   IntervalContext* interval();
-
-  class  ConnectorContext : public antlr4::ParserRuleContext {
-  public:
-    ConnectorContext(antlr4::ParserRuleContext *parent, size_t invokingState);
-    virtual size_t getRuleIndex() const override;
-    antlr4::tree::TerminalNode *PLUS();
-    antlr4::tree::TerminalNode *MINUS();
-
-    virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
-   
-  };
-
-  ConnectorContext* connector();
 
   class  EquationContext : public antlr4::ParserRuleContext {
   public:

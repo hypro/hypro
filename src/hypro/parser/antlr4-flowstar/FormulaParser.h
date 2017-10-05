@@ -17,7 +17,7 @@ public:
   };
 
   enum {
-    RuleTerm = 0, RulePolynom = 1, RuleInterval = 2, RuleConnector = 3, 
+    RuleConnector = 0, RuleTerm = 1, RulePolynom = 2, RuleInterval = 3, 
     RuleEquation = 4, RuleConstraint = 5, RuleIntervalexpr = 6, RuleConstrset = 7
   };
 
@@ -31,14 +31,26 @@ public:
   virtual antlr4::dfa::Vocabulary& getVocabulary() const override;
 
 
+  class ConnectorContext;
   class TermContext;
   class PolynomContext;
   class IntervalContext;
-  class ConnectorContext;
   class EquationContext;
   class ConstraintContext;
   class IntervalexprContext;
   class ConstrsetContext; 
+
+  class  ConnectorContext : public antlr4::ParserRuleContext {
+  public:
+    ConnectorContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    antlr4::tree::TerminalNode *PLUS();
+    antlr4::tree::TerminalNode *MINUS();
+
+   
+  };
+
+  ConnectorContext* connector();
 
   class  TermContext : public antlr4::ParserRuleContext {
   public:
@@ -50,6 +62,8 @@ public:
     antlr4::tree::TerminalNode* VARIABLE(size_t i);
     std::vector<antlr4::tree::TerminalNode *> TIMES();
     antlr4::tree::TerminalNode* TIMES(size_t i);
+    std::vector<ConnectorContext *> connector();
+    ConnectorContext* connector(size_t i);
 
    
   };
@@ -81,18 +95,6 @@ public:
   };
 
   IntervalContext* interval();
-
-  class  ConnectorContext : public antlr4::ParserRuleContext {
-  public:
-    ConnectorContext(antlr4::ParserRuleContext *parent, size_t invokingState);
-    virtual size_t getRuleIndex() const override;
-    antlr4::tree::TerminalNode *PLUS();
-    antlr4::tree::TerminalNode *MINUS();
-
-   
-  };
-
-  ConnectorContext* connector();
 
   class  EquationContext : public antlr4::ParserRuleContext {
   public:

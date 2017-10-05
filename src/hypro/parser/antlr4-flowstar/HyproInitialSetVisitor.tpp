@@ -68,7 +68,7 @@ namespace hypro {
   		std::string text = input->getText(inter);
   		for(std::size_t i=0; i < vars.size(); i++){
   			//std::string currText = text;
-  			std::size_t pos = text.find(vars[i] + " ");
+  			std::size_t pos = text.find(vars[i] + " ");		//What is with x1, x10 and only x10=...?
   			if(pos != std::string::npos){
   				varCount[i]++;
   				//currText = currText.erase(pos, vars[i].size());
