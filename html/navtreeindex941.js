@@ -1,5 +1,9 @@
 var NAVTREEINDEX941 =
 {
+"classhypro_1_1BoxT.html#af1360a0b7ee8a326a20f98428a84ec1b":[9,0,1,52,23],
+"classhypro_1_1BoxT.html#af35f1698abaa543841cb8133167ca1a8":[9,0,1,52,27],
+"classhypro_1_1BoxT.html#af39c247ab0962b231f75485e17e85c40":[9,0,1,52,32],
+"classhypro_1_1BoxT.html#af7340bba357e6f3b815192a642cdd941":[9,0,1,52,50],
 "classhypro_1_1BoxT.html#af73b8298a461e6b1a7f83245eb3fb5a9":[9,0,1,52,44],
 "classhypro_1_1BoxT.html#afca844f1277679ba2ae14490be4c2383":[9,0,1,52,4],
 "classhypro_1_1BoxT.html#afcbe41fc59a5f31048f610fb07a30b00":[9,0,1,52,2],
@@ -245,9 +249,5 @@ var NAVTREEINDEX941 =
 "classhypro_1_1EllipsoidSupportFunction.html#a412286f19773510b40250fd50e59e8bd":[9,0,1,69,2],
 "classhypro_1_1EllipsoidSupportFunction.html#a56afa108f18097bcd97af5d7e10a4498":[9,0,1,69,3],
 "classhypro_1_1EllipsoidSupportFunction.html#a5b6b6acb9182e2cd5205506cce865e19":[9,0,1,69,6],
-"classhypro_1_1EllipsoidSupportFunction.html#a622757f58b0b2a7e223609c868138d92":[9,0,1,69,4],
-"classhypro_1_1EllipsoidSupportFunction.html#a75b07358df92f14d7070bdf6d7afb23b":[9,0,1,69,5],
-"classhypro_1_1EllipsoidSupportFunction.html#aae1d8a34744daf77f2c8656a351c71f3":[9,0,1,69,8],
-"classhypro_1_1EllipsoidSupportFunction.html#aae1d8a34744daf77f2c8656a351c71f3":[9,0,1,69,7],
-"classhypro_1_1EllipsoidSupportFunction.html#aafd5aa9372ea951c906fefd900333cdf":[9,0,1,69,9]
+"classhypro_1_1EllipsoidSupportFunction.html#a622757f58b0b2a7e223609c868138d92":[9,0,1,69,4]
 };

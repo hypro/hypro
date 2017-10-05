@@ -1,5 +1,9 @@
 var NAVTREEINDEX943 =
 {
+"classhypro_1_1Halfspace.html#a751c7e58d55b313f6b1886e5524cfa77":[9,0,1,14,10],
+"classhypro_1_1Halfspace.html#a901fdaca3f7e8742d613b7ee4c65c79b":[9,0,1,14,19],
+"classhypro_1_1Halfspace.html#a94426bbcc8dc06ce969b821e010d30f0":[9,0,1,14,32],
+"classhypro_1_1Halfspace.html#aa4a6ba034a64df0e75be1821707ae21d":[9,0,1,14,29],
 "classhypro_1_1Halfspace.html#aa93bb0bba3e6ae942ed15867a7d19f2a":[9,0,1,14,20],
 "classhypro_1_1Halfspace.html#aab70d617cb946cda88d97ca12591ffbd":[9,0,1,14,25],
 "classhypro_1_1Halfspace.html#ab32438fc68ad58ab5932737abeefa884":[9,0,1,14,13],
@@ -245,9 +249,5 @@ var NAVTREEINDEX943 =
 "classhypro_1_1OrthogonalPolyhedronT.html#adfb21aeac88c0f1f0e68f4120d5727ad":[9,0,1,61,34],
 "classhypro_1_1OrthogonalPolyhedronT.html#ae2f72b97a0306e7f2321dc4817a40c29":[9,0,1,61,23],
 "classhypro_1_1OrthogonalPolyhedronT.html#ae798ac5b369d3f0db428614e0dbff6b2":[9,0,1,61,28],
-"classhypro_1_1OrthogonalPolyhedronT.html#aed6fa454b4eb5aefed930618dc6c9fb2":[9,0,1,61,7],
-"classhypro_1_1OrthogonalPolyhedronT.html#af4ab3e60fe5c897c0dfe8bc0f1f4abc5":[9,0,1,61,2],
-"classhypro_1_1Path.html":[9,0,1,22],
-"classhypro_1_1Path.html#a0a3b91b415b09adb5ccb67877218efac":[9,0,1,22,9],
-"classhypro_1_1Path.html#a1019cdad12ebe2b59b79db32ee3afed8":[9,0,1,22,8]
+"classhypro_1_1OrthogonalPolyhedronT.html#aed6fa454b4eb5aefed930618dc6c9fb2":[9,0,1,61,7]
 };

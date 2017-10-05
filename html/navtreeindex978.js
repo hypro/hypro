@@ -1,5 +1,10 @@
 var NAVTREEINDEX978 =
 {
+"functions_p.html":[9,3,0,14],
+"functions_r.html":[9,3,0,15],
+"functions_rela.html":[9,3,4],
+"functions_s.html":[9,3,0,16],
+"functions_t.html":[9,3,0,17],
 "functions_type.html":[9,3,3],
 "functions_u.html":[9,3,0,18],
 "functions_v.html":[9,3,0,19],
@@ -21,10 +26,10 @@ var NAVTREEINDEX978 =
 "md__home_travis_build_hypro_hypro_doc_markdown_stateSets.html":[4],
 "md__home_travis_build_hypro_hypro_doc_markdown_utilityFunctions.html":[5],
 "modules.html":[7],
-"namespacehypro.html":[8,0,0],
 "namespacehypro.html":[9,0,1],
-"namespacehypro_1_1hypro.html":[8,0,0,0],
+"namespacehypro.html":[8,0,0],
 "namespacehypro_1_1hypro.html":[9,0,1,2],
+"namespacehypro_1_1hypro.html":[8,0,0,0],
 "namespacehypro_1_1reachability_1_1Eigen.html":[9,0,1,5,0],
 "namespacehypro_1_1reachability_1_1Eigen.html":[8,0,0,1,0],
 "namespacehypro_1_1reachability_1_1ZUtility.html":[8,0,0,1,2],
@@ -60,8 +65,8 @@ var NAVTREEINDEX978 =
 "namespacereachability.html":[9,0,4],
 "namespacereachability.html":[8,0,3],
 "namespaces.html":[8,0],
-"namespacestatistics.html":[9,0,5],
 "namespacestatistics.html":[8,0,4],
+"namespacestatistics.html":[9,0,5],
 "pages.html":[],
 "pca_8h.html":[10,0,1,0,4,8],
 "pca_8h_source.html":[10,0,1,0,4,8],
@@ -244,10 +249,5 @@ var NAVTREEINDEX978 =
 "structhypro_1_1parser_1_1discreteConstraintParser.html#aab1648a3b00748f5d4b86afc444ae9a5":[9,0,1,3,13,5],
 "structhypro_1_1parser_1_1discreteConstraintParser.html#ace10f11d6374dca5297c0231253a50b7":[9,0,1,3,13,2],
 "structhypro_1_1parser_1_1discreteConstraintParser.html#af853a7dfb88b75027a8668706f09b4cd":[9,0,1,3,13,3],
-"structhypro_1_1parser_1_1flowstarParser.html":[9,0,1,3,5],
-"structhypro_1_1parser_1_1flowstarParser.html#a07a4b7d40ab12e92db28b1d6199ee255":[9,0,1,3,5,30],
-"structhypro_1_1parser_1_1flowstarParser.html#a082aacf296e4e07ebe88c57bccd692c4":[9,0,1,3,5,35],
-"structhypro_1_1parser_1_1flowstarParser.html#a0cc180219eb4a82a92e0f265cc04a7a1":[9,0,1,3,5,23],
-"structhypro_1_1parser_1_1flowstarParser.html#a11519eb801b95700d3543f45555b696d":[9,0,1,3,5,6],
-"structhypro_1_1parser_1_1flowstarParser.html#a122043cb99d39ce80f295cace450ade6":[9,0,1,3,5,28]
+"structhypro_1_1parser_1_1flowstarParser.html":[9,0,1,3,5]
 };

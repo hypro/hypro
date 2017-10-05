@@ -22,6 +22,7 @@ var classhypro_1_1Path =
     [ "operator>", "classhypro_1_1Path.html#a4fb5b22b7eaedafcf036272c76e8b3cb", null ],
     [ "pop_front", "classhypro_1_1Path.html#af5c8eba4a6c460ae048bc39883d8a75d", null ],
     [ "push_front", "classhypro_1_1Path.html#a59c9c1148402be046e6d98ddd102b2a1", null ],
+    [ "removeSharedPrefix", "classhypro_1_1Path.html#a54a34b312b92293211fdadf98de33439", null ],
     [ "sharedPrefix", "classhypro_1_1Path.html#a7e3c90b21aa790131234dd3b4abb3a3c", null ],
     [ "sharesPrefix", "classhypro_1_1Path.html#ab49179b0a2bb35fda83ff9b59ae1aaa7", null ],
     [ "size", "classhypro_1_1Path.html#ae66386283ee4cf263c645c7902a1bf29", null ],
