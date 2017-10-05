@@ -55,8 +55,8 @@ namespace hypro {
 
 				//Count the amount of '-'-connectors that are before the term. Connectors cannot occur within the term due to the grammar, only before.
 				std::size_t mTermStartIndex = mTerm->start->getStartIndex();
+				unsigned minusCount = 0;
 				for(const auto& mConnector : ctx->connector()){
-					unsigned minusCount = 0;
 					std::size_t connectorStartIndex = mConnector->start->getStartIndex();
 					if(lastTermStartIndex < connectorStartIndex && connectorStartIndex < mTermStartIndex && mConnector->getText() == "-"){
 						minusCount++;
