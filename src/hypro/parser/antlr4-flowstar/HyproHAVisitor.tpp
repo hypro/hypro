@@ -27,14 +27,18 @@ namespace hypro {
 		std::set<Location<Number>*> locSet = locVisitor.visit(ctx->modes()).template as<std::set<Location<Number>*>>();
 		std::set<Location<Number>*>& rLocSet = locSet;
 
-		//4.Later calls visit to get transitions
+		//4.Calls visit to get transitions
 		//NOTE: the transVisitor will modify locSet as every location has its own set of transitions that must be added here.
 		HyproTransitionVisitor<Number> transVisitor = HyproTransitionVisitor<Number>(varVec, rLocSet);
 		std::set<Transition<Number>*> transSet = transVisitor.visit(ctx->jumps()).template as<std::set<Transition<Number>*>>();
 
-		//5.Later calls visit to get initial states
+		//5.Calls visit to get all initial states
+		locationStateMap initSet;
 		HyproInitialSetVisitor<Number> initVisitor = HyproInitialSetVisitor<Number>(varVec, rLocSet);
-		locationStateMap initSet = initVisitor.visit(ctx->init()).template as<locationStateMap>();
+		for(auto& initState : ctx->init()){
+			locationStateMap oneInitialState = initVisitor.visit(initState).template as<locationStateMap>();
+			initSet.insert(oneInitialState.begin(), oneInitialState.end());
+		}
 
 		//6.Calls visit(ctx->unsafeset()) to get local badStates
 		locationConditionMap badStates;
@@ -45,23 +49,24 @@ namespace hypro {
 		} 
 
 #ifdef HYPRO_LOGGING		
-		TRACE("hypro.parser","Parsed variables: " << vars);
-		TRACE("hypro.parser","Reachability settings:\n" << reachSettings);
-		TRACE("hypro.parser","All locations:\n");
+		COUT("Parsed variables: " << vars << std::endl);
+		COUT("Reachability settings:\n" << reachSettings);
+		COUT("All locations:\n");
 		for(auto it = rLocSet.begin(); it != rLocSet.end(); ++it){
 			COUT(**it);
 		}
-		TRACE("hypro.parser","All Transitions:\n");
+		COUT("All Transitions:\n");
 		for(auto it = transSet.begin(); it != transSet.end(); ++it){
 			COUT(**it);
 		}
-		TRACE("hypro.parser","Initial state:\n");
+		COUT("Initial state:\n");
 		for(auto it = initSet.begin(); it != initSet.end(); ++it){
 			COUT("Initial Location: " << it->first->getName() << " and initial state: " << it->second);
 		}
-		TRACE("hypro.parser","Bad states:\n");
+		COUT("Bad states:\n");
+		std::cout << "badStates.size" << badStates.size() << std::endl;
 		for(auto it = badStates.begin(); it != badStates.end(); ++it){
-			COUT("Initial Location: " << it->first->getName() << " and initial state: " << it->second);
+			COUT("Bad Location: " << it->first->getName() << " and bad state: " << it->second);
 		}
 #endif
 

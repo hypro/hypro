@@ -16,32 +16,37 @@ namespace hypro {
 	template<typename Number>
 	antlrcpp::Any HyproInitialSetVisitor<Number>::visitInit(HybridAutomatonParser::InitContext *ctx){
 
-		//0.Syntax Check - given variable name really a location name?
-		//If it is, save the location pointer for the localStateMap
-		bool found = false;
-		Location<Number>* initialLoc;
-		for(const auto& loc : locSet){
-			if(ctx->initstate()->VARIABLE()->getText() == loc->getName()){
-				found = true;
-				initialLoc = loc;
+		locationStateMap initialState;
+
+		//For all initialstates - there must be at least one according to grammar
+		for(auto initStateCtx : ctx->initstate()){
+
+			//0.Syntax Check - all given variable names really a location name?
+			//If it is, save the location pointers for the localStateMap
+			bool found = false;		
+			Location<Number>* initialLoc = NULL;
+			for(const auto& loc : locSet){
+				if(initStateCtx->VARIABLE()->getText() == loc->getName()){
+					found = true;
+					initialLoc = loc;	
+				}
 			}
-		}
-		if(!found){
-			std::cerr << "ERROR: Given location name in init does not exist." << std::endl;
-			exit(0);
+			if(!found){
+				std::cerr << "ERROR: Given location name " << initStateCtx->VARIABLE()->getText() << " in init does not exist." << std::endl;
+				exit(0);
+			}
+
+			//1.Get ConstraintSet, build State and add to localStateMap		
+			ConstraintSet<Number> conSet = visit(initStateCtx);
+			State<Number,ConstraintSet<Number>> state;
+			assert(initialLoc != NULL);
+			state.setLocation(initialLoc);
+			state.setSet(conSet,0);
+			assert(state.getNumberSets() == 1);
+			state.setTimestamp(carl::Interval<Number>(0));
+			initialState.insert(std::make_pair(initialLoc, state));	
 		}
 
-		//1.Get ConstraintSet, build State and return localStateMap
-		ConstraintSet<Number> conSet = visit(ctx->initstate());
-		//std::cout << "---- Initial constraints sind:" << std::endl;
-		//std::cout << "---- matrix:\n" << conSet.matrix() << "and vector:\n" << conSet.vector() << std::endl;
-		State<Number,ConstraintSet<Number>> state;
-		state.setLocation(initialLoc);
-		state.setSet(conSet,0);
-		assert(state.getNumberSets() == 1);
-		state.setTimestamp(carl::Interval<Number>(0));
-		locationStateMap initialState;
-		initialState.insert(std::make_pair(initialLoc, state));
 		return initialState;
 	}
 

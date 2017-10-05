@@ -64,7 +64,8 @@ public:
     virtual size_t getRuleIndex() const override;
     antlr4::tree::TerminalNode *VARIABLE();
     ActivitiesContext *activities();
-    InvariantsContext *invariants();
+    std::vector<InvariantsContext *> invariants();
+    InvariantsContext* invariants(size_t i);
 
    
   };

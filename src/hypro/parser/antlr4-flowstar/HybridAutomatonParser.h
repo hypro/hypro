@@ -90,7 +90,8 @@ public:
     SettingContext *setting();
     ModesContext *modes();
     JumpsContext *jumps();
-    InitContext *init();
+    std::vector<InitContext *> init();
+    InitContext* init(size_t i);
     UnsafesetContext *unsafeset();
 
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
@@ -510,7 +511,8 @@ public:
     virtual size_t getRuleIndex() const override;
     antlr4::tree::TerminalNode *VARIABLE();
     ActivitiesContext *activities();
-    InvariantsContext *invariants();
+    std::vector<InvariantsContext *> invariants();
+    InvariantsContext* invariants(size_t i);
 
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
    
@@ -547,7 +549,8 @@ public:
   public:
     InitContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
-    InitstateContext *initstate();
+    std::vector<InitstateContext *> initstate();
+    InitstateContext* initstate(size_t i);
 
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
    

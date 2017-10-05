@@ -31,7 +31,6 @@ namespace hypro {
 			}
 
 			Location<Number>* loc = visit(ctx->location().at(i));
-			loc->setName(ctx->location().at(i)->VARIABLE()->getText());
 			locSet.insert(loc);
 			i++;
 		}
@@ -45,13 +44,50 @@ namespace hypro {
 		matrix_t<Number> tmpMatrix = visit(ctx->activities());
 		//std::cout << "---- Flow matrix is:\n" << tmpMatrix << std::endl;
 
-		//2.Calls visit(ctx->invariant()) to get Condition
-		Condition<Number> inv = visit(ctx->invariants());
-		//std::cout << "---- inv is:\n" << inv.getMatrix() << "and\n" << inv.getVector() << std::endl;
+		//2.Iteratively Calls visit(ctx->invariant()) to get all conditions and collect them in one big condition
+		Condition<Number> inv;
+		if(ctx->invariants().size() > 0){
+			bool firstTime = true;
+			for(auto& currInvCtx : ctx->invariants()){
+
+				Condition<Number> currInv = visit(currInvCtx);
+
+				if(currInv != Condition<Number>() && !firstTime){
+
+					//Extend inv.matrix with currInv.matrix
+					matrix_t<Number> newMat = inv.getMatrix();
+					matrix_t<Number> currInvMat = currInv.getMatrix();
+					assert(newMat.cols() == currInvMat.cols());
+					std::size_t newMatRowsBefore = newMat.rows();
+					newMat.conservativeResize(newMat.rows()+currInvMat.rows(),newMat.cols());
+					for(int i = newMat.rows()-currInvMat.rows(); i < newMat.rows(); i++){
+						newMat.row(i) = currInvMat.row(i-newMatRowsBefore);
+					}
+
+					//Extend inv.vector with currInv.vector
+					vector_t<Number> newVec = inv.getVector();
+					vector_t<Number> currInvVec = currInv.getVector();
+					newVec.conservativeResize(newVec.rows()+currInvVec.rows());
+					for(int i = newVec.rows()-currInvVec.rows(); i < newVec.rows(); i++){
+						newVec(i) = currInvVec(i-newMatRowsBefore);
+					}
+
+					inv = Condition<Number>(newMat, newVec); 
+
+				}
+
+				if(firstTime){
+					inv = currInv;
+					firstTime = false;
+				}
+				//std::cout << "---- inv is:\n" << inv.getMatrix() << "and\n" << inv.getVector() << std::endl;
+			}
+		}
 
 		//3.Returns a location
 		LocationManager<Number>& manager = LocationManager<Number>::getInstance();
 		Location<Number>* loc = manager.create();
+		loc->setName(ctx->VARIABLE()->getText());
 		loc->setFlow(tmpMatrix);
 		loc->setInvariant(inv);
 		return loc;
@@ -90,16 +126,23 @@ namespace hypro {
 	template<typename Number>
 	antlrcpp::Any HyproLocationVisitor<Number>::visitInvariants(HybridAutomatonParser::InvariantsContext *ctx){
 		
-		//2.Call HyproFormulaVisitor and get pair of matrix and vector
-		HyproFormulaVisitor<Number> visitor(vars);
-		std::pair<matrix_t<Number>,vector_t<Number>> result = visitor.visit(ctx->constrset());
+		if(ctx->constrset() != NULL){
 
-		//3.Build condition out of them
-		Condition<Number> inv;
-		inv.setMatrix(result.first);
-		inv.setVector(result.second);
+			//1.Call HyproFormulaVisitor and get pair of matrix and vector
+			HyproFormulaVisitor<Number> visitor(vars);
+			std::pair<matrix_t<Number>,vector_t<Number>> result = visitor.visit(ctx->constrset());
+	
+			//2.Build condition out of them
+			Condition<Number> inv;
+			inv.setMatrix(result.first);
+			inv.setVector(result.second);
+	
+			//3.Return condition
+			return inv;
 
-		//4.Return condition
-		return inv;
+		}
+
+		return Condition<Number>();
+		
 	}
 }

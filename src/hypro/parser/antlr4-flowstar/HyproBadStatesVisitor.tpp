@@ -2,7 +2,8 @@
 
 namespace hypro {
 
-	//Constructor & Destructor
+	//////////////// Constructor & Destructor
+
 	template<typename Number>
 	HyproBadStatesVisitor<Number>::HyproBadStatesVisitor(std::vector<std::string>& varVec, std::set<Location<Number>*>& lSet) :
 		vars(varVec),
@@ -12,22 +13,48 @@ namespace hypro {
 	template<typename Number>
 	HyproBadStatesVisitor<Number>::~HyproBadStatesVisitor() { }
 
-	//Inherited from HybridAutomatonBaseVisitor	
+	/////////////// Inherited from HybridAutomatonBaseVisitor	
+
 	template<typename Number>
 	antlrcpp::Any HyproBadStatesVisitor<Number>::visitUnsafeset(HybridAutomatonParser::UnsafesetContext *ctx){
-
-		//std::cout << "-- Bin bei visitUnsafeset!" << std::endl;
 
 		//1.Collect badState information. NOTE: There can be multiple denoted badstates for one location.
 		locationConditionMap lcMap;
 		if(ctx->badstate().size() > 0){
-			for(auto& bState : ctx->badstate()){	
+			for(auto bState : ctx->badstate()){	
 				if(bState->constrset() != NULL && bState->constrset()->getText() != ""){
 					std::pair<Location<Number>*,Condition<Number>> badStateInfo = visit(bState).template as<std::pair<Location<Number>*,Condition<Number>>>();
+					std::size_t lcMapSize = lcMap.size();
 					lcMap.insert(badStateInfo);
-					//std::cout << "-- bad state location:\n" << *(badStateInfo.first) << "and condition matrix:\n" << badStateInfo.second.getMatrix() << "and vector:\n" << badStateInfo.second.getVector() << std::endl;
-				//} else {
-					//std::cout << "---- constrset does not exist!" << std::endl;	
+					//Case that nothing has been inserted as location already existed in map: 
+					//Extend condition matrix and vector of condition that is already in map
+					if(lcMapSize == lcMap.size()){
+
+						auto it = lcMap.find(badStateInfo.first);
+						assert(it != lcMap.end());
+						
+						//Extend inMapCondition.matrix with badStateInfo.matrix
+						matrix_t<Number> newMat = it->second.getMatrix();
+						std::size_t newMatRowsBefore = newMat.rows();
+						matrix_t<Number> currbStateMat = badStateInfo.second.getMatrix();
+						assert(newMat.cols() == currbStateMat.cols());
+						newMat.conservativeResize((newMat.rows()+currbStateMat.rows()),newMat.cols());
+						for(int i = newMat.rows()-currbStateMat.rows(); i < newMat.rows(); i++){
+							newMat.row(i) = currbStateMat.row((i-newMatRowsBefore));
+						}
+
+						//Extend inMapCondition.vector with badStateInfo.vector
+						vector_t<Number> newVec = it->second.getVector();
+						vector_t<Number> currbStateVec = badStateInfo.second.getVector();
+						newVec.conservativeResize(newVec.rows()+currbStateVec.rows());
+						for(int i = newVec.rows()-currbStateVec.rows(); i < newVec.rows(); i++){
+							newVec(i) = currbStateVec(i-newMatRowsBefore);
+						}
+
+						it->second.setMatrix(newMat);
+						it->second.setVector(newVec);
+
+					}
 				}
 			}	
 		}
@@ -36,8 +63,6 @@ namespace hypro {
 	
 	template<typename Number>
 	antlrcpp::Any HyproBadStatesVisitor<Number>::visitBadstate(HybridAutomatonParser::BadstateContext *ctx){
-
-		//std::cout << "-- Bin bei visitBadstate!" << std::endl;
 
 		//0.Check if given loc name exists and get meant location where bad states can occur
 		bool found = false;
