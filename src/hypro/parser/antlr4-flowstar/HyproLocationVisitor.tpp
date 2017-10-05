@@ -106,10 +106,14 @@ namespace hypro {
 		matrix_t<Number> tmpMatrix = matrix_t<Number>::Zero(vars.size()+1, vars.size()+1);
 		HyproFormulaVisitor<Number> visitor(vars);
 		for(unsigned i=0; i < ctx->equation().size(); i++){
+			
+			//insert into row according to state var order
 			vector_t<Number> tmpRow = visitor.visit(ctx->equation()[i]);
-			//std::cout << "---- From equation " << i << " we got tmpRow:\n" << tmpRow << std::endl;
-			tmpMatrix.row(i) = tmpRow;
-			//std::cout << "---- After insertion tmpMatrix is now:\n" << tmpMatrix << std::endl;
+			for(unsigned j=0; j < vars.size(); j++){
+				if(ctx->equation()[i]->VARIABLE()->getText() == (vars[j] + "'")){
+					tmpMatrix.row(j) = tmpRow;
+				}
+			}
 		}
 
 		//3.Syntax check - Last row completely 0's?

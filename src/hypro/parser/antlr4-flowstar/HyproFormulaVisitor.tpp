@@ -27,7 +27,6 @@ namespace hypro {
 		//Turn -2*3*4*-5*x ... into 120*x
 		Number multed = 1;
 		if(ctx->NUMBER().size() > 1){
-			//Multiply numbers
 			for(const auto& ctxNum : ctx->NUMBER()){
 				std::string num = ctxNum->getText();
 				Number numInNumber = stringToNumber(num);
@@ -37,33 +36,24 @@ namespace hypro {
 			std::string num = ctx->NUMBER()[0]->getText();
 			multed = stringToNumber(num);
 		}
-		//std::cout << "### MULTTOGETHER START ###" << std::endl;
-		//std::cout << "multed after multing is: " << multed << std::endl;
 
 		if(ctx->connector().size() > 0){
 			//Take minus count into account
-			//std::cout << "term ctx connector size: " << ctx->connector().size() << std::endl;
 			unsigned minusCount = 0;
 			std::size_t startIndex = ctx->start->getStartIndex();
 			std::size_t endIndex = ctx->stop->getStopIndex();
 			for(const auto& ctxCon : ctx->connector()){
 				std::size_t conIndex = ctxCon->start->getStartIndex();
-				//std::cout << "startIndex: " << startIndex << " conIndex: " << conIndex << " endIndex: " << endIndex << std::endl;
 				if(startIndex <= conIndex && conIndex <= endIndex && ctxCon->getText() == "-"){
 					minusCount++;
-					//std::cout << "minusCount goes up to: " << minusCount << std::endl;
 				}
 			}
 
 			//make multed negative/posivite depending on its minusCount
 			if(minusCount % 2 == 1){
-				//std::cout << "since we have minusCount: " << minusCount << " multed will be: ";
 				multed = Number(-1)*multed;	
-				//std::cout << multed << std::endl;
 			}	
 		}
-		//std::cout << "multed after multTogether is: " << multed << std::endl;
-		//std::cout << "### MULTTOGETHER END ###" << std::endl;
 		return multed;
 	}
 
@@ -75,8 +65,6 @@ namespace hypro {
 		vector_t<Number> coeffVec = vector_t<Number>::Zero(vars.size()+1);
 		std::size_t lastTermEndIndex = 0;
 
-		//std::cout << "### GETPOLYCOEFF START ###" << std::endl;
-
 		for(const auto& mTerm : ctx->term()){
 
 			//Multiply numbers and handle connectors within term
@@ -87,62 +75,32 @@ namespace hypro {
 			unsigned minusCount = 0;
 			for(const auto& mConnector : ctx->connector()){
 				std::size_t connectorStartIndex = mConnector->start->getStartIndex();
-				//std::cout << "lTermEndIndex: " << lastTermEndIndex << " connectorStartIndex: " << connectorStartIndex << " mTermStartIndex: " << mTermStartIndex << std::endl;
 				if(lastTermEndIndex < connectorStartIndex && connectorStartIndex < mTermStartIndex && mConnector->getText() == "-"){
 					minusCount++;
-					//std::cout << "minusCount goes up to: " << minusCount << std::endl;
 				}
 			}
 
+			//put into place according to place of variable in vars
+			unsigned dest = 0;
 			if(mTerm->VARIABLE().size() == 0){
-
-				//std::cout << "no variables!" << std::endl;
-
-				//put negative/positive coeff into last place of coeffVec depending on the coeff itself and the amount of minuses
-				if(minusCount % 2 == 1){
-					coeffVec(coeffVec.rows()-1) = Number(-1)*multed;	
-					//std::cout << "Since multed is: " << multed << " and minusCount is: " << minusCount << " multed will be negated." << std::endl;
-				} else {
-					//std::cout << "Since multed is: " << multed << " and minusCount is: " << minusCount << " multed will not be negated." << std::endl;
-					coeffVec(coeffVec.rows()-1) = multed;
-				}
-				
-				//std::cout << "No variables, just numbers. coeffVec is then:\n" << coeffVec << std::endl;
-
-			} else if(mTerm->VARIABLE().size() == 1) {
-
-				//std::cout << "variables found!" << std::endl;
-				//put into place according to place of variable in vars
-				unsigned dest = 0;
-				auto tmpVar = mTerm->VARIABLE()[0]->getText();
+				dest = coeffVec.rows()-1;
+			} else if(mTerm->VARIABLE().size() == 1){
+				auto tmpVar = mTerm->VARIABLE()[0]->getText();	
 				for(unsigned i=0; i < vars.size(); i++){
 					if(vars[i] == tmpVar){
 						dest = i;
 						break;
 					}
 				}
-
-				//put negative/positive coeff into last place of coeffVec depending on the coeff itself and the amount of minuses
-				if(minusCount % 2 == 1){
-					coeffVec(dest) = Number(-1)*multed;	
-					//std::cout << "Since multed is: " << multed << " and minusCount is: " << minusCount << " multed will be negated." << std::endl;
-				} else {
-					//std::cout << "Since multed is: " << multed << " and minusCount is: " << minusCount << " multed will not be negated." << std::endl;
-					coeffVec(dest) = multed;
-				}
-
-				//std::cout << "Variable was: " << tmpVar << ". coeffVec is now:\n" << coeffVec << std::endl;
-
 			} else {
 				std::cout << "ERROR: multiplication of several variables not allowed!" << std::endl;
 				exit(0);
 			}
+			coeffVec(dest) = (minusCount % 2 == 1) ? Number(-1)*multed : multed;
 
 			lastTermEndIndex = mTerm->stop->getStopIndex();
-			//std::cout << "lTermEndIndex is set to: " << lastTermEndIndex << std::endl;
 
 		}
-		//std::cout << "### GETPOLYCOEFF END ###" << std::endl;
 		return coeffVec;
 	}
 
