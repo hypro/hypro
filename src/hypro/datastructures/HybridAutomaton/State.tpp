@@ -108,6 +108,7 @@ std::pair<bool,State<Number,Representation,Rargs...>> State<Number,Representatio
 	assert(in.size() == mSets.size());
 	assert(checkConsistency());
 	State<Number,Representation,Rargs...> res(*this);
+	assert(res.getTimestamp() == this->getTimestamp());
 
 	auto resultPair = boost::apply_visitor(genericSatisfiesHalfspacesVisitor<repVariant, Number>(in.getMatrix(), in.getVector()), mSets.at(I));
 	res.setSetDirect(resultPair.second, I);

@@ -16,13 +16,13 @@ namespace hypro {
 	template<typename Number>
 	void Path<Number>::addTransition(Transition<Number>* t, const carl::Interval<Number>& enabledTime) {
 		mPath.push_back(TPathElement<Number>(t,enabledTime));
-		//TRACE("hydra.datastructures","Add transition " << t << " with timestamp " << enabledTime << " to path.");
+		TRACE("hypro.datastructures","Add transition " << t << " with timestamp " << enabledTime << " to path.");
 	}
 
 	template<typename Number>
 	void Path<Number>::addTimeStep(const carl::Interval<Number>& timeStep) {
 		mPath.push_back(TPathElement<Number>(timeStep));
-		//TRACE("hydra.datastructures","Add timestamp " << timeStep << " to path.");
+		TRACE("hypro.datastructures","Add timestep " << timeStep << " to path.");
 	}
 
 	template<typename Number>
@@ -44,7 +44,7 @@ namespace hypro {
 		}
 		if(pos == mPath.size()) {
 			TRACE("hypro.datastructures","Did not find appropriate transition.");
-			return std::make_pair(nullptr, carl::Interval<Number>::unboundedInterval());
+			return std::make_pair(nullptr, carl::Interval<Number>::emptyInterval());
 		}
 		return std::make_pair(mPath.at(pos).transition, mPath.at(pos).timeInterval);
 	}
@@ -70,6 +70,18 @@ namespace hypro {
 			}
 		}
 		return prefix;
+	}
+
+	template<typename Number>
+	Path<Number> Path<Number>::removeSharedPrefix(const Path<Number>& rhs) const {
+		Path<Number> res(*this);
+		TRACE("hydra.hypro.datastructures","Shared prefix of " << *this << " and " << rhs << ": " << this->sharedPrefix(rhs));
+		std::size_t prefixLength = this->sharedPrefix(rhs).size();
+		while(prefixLength > 0){
+			res.pop_front();
+			--prefixLength;
+		}
+		return res;
 	}
 
 	template<typename Number>
@@ -262,6 +274,6 @@ namespace hypro {
 		return mPath.front();
 	}
 
-} // namespace hydra
+} // namespace hypro
 
 
