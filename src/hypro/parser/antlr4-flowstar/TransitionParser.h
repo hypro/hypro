@@ -14,15 +14,15 @@ public:
   enum {
     T__0 = 1, T__1 = 2, T__2 = 3, T__3 = 4, T__4 = 5, T__5 = 6, T__6 = 7, 
     T__7 = 8, T__8 = 9, PARALLELOTOPE = 10, BOX = 11, JUMP = 12, DEFINE = 13, 
-    IN = 14, COMMENT = 15, EQUALS = 16, BOOLRELATION = 17, PLUS = 18, TIMES = 19, 
-    NUMBER = 20, VARIABLE = 21, WS = 22
+    IN = 14, COMMENT = 15, EQUALS = 16, BOOLRELATION = 17, PLUS = 18, MINUS = 19, 
+    TIMES = 20, NUMBER = 21, VARIABLE = 22, WS = 23
   };
 
   enum {
     RuleJumps = 0, RuleTransition = 1, RuleFromto = 2, RuleUrgent = 3, RuleGuard = 4, 
     RuleAllocation = 5, RuleResetfct = 6, RuleAggregation = 7, RuleTerm = 8, 
-    RulePolynom = 9, RuleInterval = 10, RuleEquation = 11, RuleConstraint = 12, 
-    RuleIntervalexpr = 13, RuleConstrset = 14
+    RulePolynom = 9, RuleInterval = 10, RuleConnector = 11, RuleEquation = 12, 
+    RuleConstraint = 13, RuleIntervalexpr = 14, RuleConstrset = 15
   };
 
   TransitionParser(antlr4::TokenStream *input);
@@ -46,6 +46,7 @@ public:
   class TermContext;
   class PolynomContext;
   class IntervalContext;
+  class ConnectorContext;
   class EquationContext;
   class ConstraintContext;
   class IntervalexprContext;
@@ -176,8 +177,8 @@ public:
     virtual size_t getRuleIndex() const override;
     std::vector<TermContext *> term();
     TermContext* term(size_t i);
-    std::vector<antlr4::tree::TerminalNode *> PLUS();
-    antlr4::tree::TerminalNode* PLUS(size_t i);
+    std::vector<ConnectorContext *> connector();
+    ConnectorContext* connector(size_t i);
 
    
   };
@@ -195,6 +196,18 @@ public:
   };
 
   IntervalContext* interval();
+
+  class  ConnectorContext : public antlr4::ParserRuleContext {
+  public:
+    ConnectorContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    antlr4::tree::TerminalNode *PLUS();
+    antlr4::tree::TerminalNode *MINUS();
+
+   
+  };
+
+  ConnectorContext* connector();
 
   class  EquationContext : public antlr4::ParserRuleContext {
   public:

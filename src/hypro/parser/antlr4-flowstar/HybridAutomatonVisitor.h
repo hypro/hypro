@@ -45,6 +45,8 @@ public:
 
     virtual antlrcpp::Any visitInterval(HybridAutomatonParser::IntervalContext *context) = 0;
 
+    virtual antlrcpp::Any visitConnector(HybridAutomatonParser::ConnectorContext *context) = 0;
+
     virtual antlrcpp::Any visitEquation(HybridAutomatonParser::EquationContext *context) = 0;
 
     virtual antlrcpp::Any visitConstraint(HybridAutomatonParser::ConstraintContext *context) = 0;

@@ -13,8 +13,9 @@ grammar Formula;
 
 //1. Maybe add MONOM 
 
-term 				: (NUMBER | VARIABLE) (TIMES (NUMBER | VARIABLE))* ;
-polynom				: term (PLUS term)* ;
+connector 			: PLUS | MINUS ; 
+term 				: (NUMBER | VARIABLE) (TIMES connector* (NUMBER | VARIABLE))* ;
+polynom				: connector* term (connector+ term)* ;
 interval 			: '[' NUMBER ',' NUMBER ']' ;
 
 equation 			: VARIABLE EQUALS polynom ;
@@ -32,6 +33,7 @@ COMMENT				: '#' ~[\r\n]* -> skip ;
 EQUALS				: '=' ;
 BOOLRELATION		: '<=' | '>=' | '<' | '>' ;
 PLUS				: '+' ;
+MINUS 				: '-' ;
 TIMES				: '*' ;
 
 fragment UPPERCASE	: [A-Z] ;

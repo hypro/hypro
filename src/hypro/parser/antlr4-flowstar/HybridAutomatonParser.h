@@ -18,20 +18,21 @@ public:
     T__20 = 21, T__21 = 22, T__22 = 23, T__23 = 24, T__24 = 25, T__25 = 26, 
     T__26 = 27, T__27 = 28, T__28 = 29, T__29 = 30, T__30 = 31, PARALLELOTOPE = 32, 
     BOX = 33, JUMP = 34, DEFINE = 35, IN = 36, COMMENT = 37, EQUALS = 38, 
-    BOOLRELATION = 39, PLUS = 40, TIMES = 41, NUMBER = 42, VARIABLE = 43, 
-    WS = 44, EXPONENTIAL = 45
+    BOOLRELATION = 39, PLUS = 40, MINUS = 41, TIMES = 42, NUMBER = 43, VARIABLE = 44, 
+    WS = 45, EXPONENTIAL = 46
   };
 
   enum {
     RuleStart = 0, RuleVardeclaration = 1, RuleJumps = 2, RuleTransition = 3, 
     RuleFromto = 4, RuleUrgent = 5, RuleGuard = 6, RuleAllocation = 7, RuleResetfct = 8, 
     RuleAggregation = 9, RuleTerm = 10, RulePolynom = 11, RuleInterval = 12, 
-    RuleEquation = 13, RuleConstraint = 14, RuleIntervalexpr = 15, RuleConstrset = 16, 
-    RuleSetting = 17, RuleFixedsteps = 18, RuleTime = 19, RulePlotsetting = 20, 
-    RuleFilename = 21, RuleMaxjumps = 22, RulePrint = 23, RuleRemainder = 24, 
-    RuleIdentity = 25, RuleFixedorders = 26, RuleCutoff = 27, RulePrecision = 28, 
-    RuleModes = 29, RuleLocation = 30, RuleActivities = 31, RuleInvariants = 32, 
-    RuleInit = 33, RuleInitstate = 34, RuleUnsafeset = 35, RuleBadstate = 36
+    RuleConnector = 13, RuleEquation = 14, RuleConstraint = 15, RuleIntervalexpr = 16, 
+    RuleConstrset = 17, RuleSetting = 18, RuleFixedsteps = 19, RuleTime = 20, 
+    RulePlotsetting = 21, RuleFilename = 22, RuleMaxjumps = 23, RulePrint = 24, 
+    RuleRemainder = 25, RuleIdentity = 26, RuleFixedorders = 27, RuleCutoff = 28, 
+    RulePrecision = 29, RuleModes = 30, RuleLocation = 31, RuleActivities = 32, 
+    RuleInvariants = 33, RuleInit = 34, RuleInitstate = 35, RuleUnsafeset = 36, 
+    RuleBadstate = 37
   };
 
   HybridAutomatonParser(antlr4::TokenStream *input);
@@ -57,6 +58,7 @@ public:
   class TermContext;
   class PolynomContext;
   class IntervalContext;
+  class ConnectorContext;
   class EquationContext;
   class ConstraintContext;
   class IntervalexprContext;
@@ -247,8 +249,8 @@ public:
     virtual size_t getRuleIndex() const override;
     std::vector<TermContext *> term();
     TermContext* term(size_t i);
-    std::vector<antlr4::tree::TerminalNode *> PLUS();
-    antlr4::tree::TerminalNode* PLUS(size_t i);
+    std::vector<ConnectorContext *> connector();
+    ConnectorContext* connector(size_t i);
 
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
    
@@ -268,6 +270,19 @@ public:
   };
 
   IntervalContext* interval();
+
+  class  ConnectorContext : public antlr4::ParserRuleContext {
+  public:
+    ConnectorContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    antlr4::tree::TerminalNode *PLUS();
+    antlr4::tree::TerminalNode *MINUS();
+
+    virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+   
+  };
+
+  ConnectorContext* connector();
 
   class  EquationContext : public antlr4::ParserRuleContext {
   public:

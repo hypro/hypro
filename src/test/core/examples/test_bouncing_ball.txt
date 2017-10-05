@@ -23,8 +23,8 @@ hybrid reachability
   {
    poly ode 1
    {
-    x' = v
-    v' = -9.81
+    x' = 3*-v
+    #v' = --9.81 + --v*42*-3
    }
 
    inv

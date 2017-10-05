@@ -24,7 +24,7 @@ namespace hypro {
 	template<typename Number>
 	Number HyproFormulaVisitor<Number>::multTogether(HybridAutomatonParser::TermContext* ctx) const {
 
-		//Turn 2*3*4*5*x ... into 120*x
+		//Turn -2*3*4*-5*x ... into 120*x
 		Number multed = 1;
 		if(ctx->NUMBER().size() > 1){
 			for(const auto& ctxNum : ctx->NUMBER()){
@@ -46,13 +46,35 @@ namespace hypro {
 	vector_t<Number> HyproFormulaVisitor<Number>::getPolynomCoeff(HybridAutomatonParser::PolynomContext* ctx) const {
 		
 		vector_t<Number> coeffVec = vector_t<Number>::Zero(vars.size()+1);
-		//std::cout << "---- coeffVec inital is:\n" << coeffVec << std::endl;
+
+		std::size_t lastTermStartIndex = 0;
 		for(const auto& mTerm : ctx->term()){
 			Number multed = multTogether(mTerm);
 			//std::cout << "---- Amount of variables in this term: " << mTerm->VARIABLE().size() << std::endl;
 			if(mTerm->VARIABLE().size() == 0){
+
+				//Count the amount of '-'-connectors that are before the term. Connectors cannot occur within the term due to the grammar, only before.
+				std::size_t mTermStartIndex = mTerm->start->getStartIndex();
+				for(const auto& mConnector : ctx->connector()){
+					unsigned minusCount = 0;
+					std::size_t connectorStartIndex = mConnector->start->getStartIndex();
+					if(lastTermStartIndex < connectorStartIndex && connectorStartIndex < mTermStartIndex && mConnector->getText() == "-"){
+						minusCount++;
+					}
+				}
+
+				//put negative/positive coeff into last place of coeffVec depending on the coeff itself and the amount of minuses
+				if((multed < 0 && minusCount % 2 == 0) || (multed > 0 && minusCount % 2 == 1)){
+					coeffVec(coeffVec.rows()-1) = Number(-1)*multed;	
+				} else if((multed <= 0 && minusCount % 2 == 1) || (multed >= 0 && minusCount % 2 == 0)){
+					coeffVec(coeffVec.rows()-1) = multed;
+				}
+
+
+				lastTermStartIndex = mTerm->stop->getStopIndex();
+
 				//put into last place of coeffVec
-				coeffVec(coeffVec.rows()-1) = multed;
+				//coeffVec(coeffVec.rows()-1) = multed;
 				//std::cout << "---- No variables, just numbers. coeffVec is then:\n" << coeffVec << std::endl;
 			} else if(mTerm->VARIABLE().size() == 1) {
 				//put into place according to place of variable in vars
