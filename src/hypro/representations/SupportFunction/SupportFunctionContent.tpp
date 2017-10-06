@@ -963,8 +963,9 @@ std::vector<EvaluationResult<Number>> SupportFunctionContent<Number>::multiEvalu
 						matrix_t<Number> projectedParameters = matrix_t<Number>::Zero(_directions.rows(), _directions.cols());
 						Eigen::Index entryIndex = 0;
 						for(const auto& entry : cur->projectionParameters()->dimensions) {
+							TRACE("hypro.representations.supportFunction","Entry: " << entry)
 							if(entry < mDimension){
-								projectedParameters.col(entryIndex) = currentParam.col(entry);
+								projectedParameters.col(entry) = currentParam.col(entry);
 								++entryIndex;
 							}
 						}
