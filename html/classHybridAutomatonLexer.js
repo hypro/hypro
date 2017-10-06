@@ -40,6 +40,7 @@ var classHybridAutomatonLexer =
     [ "EQUALS", "classHybridAutomatonLexer.html#a43805231ebb438b644c09ee5dba93215a21536f15290b3513c50a71d5c8725cd1", null ],
     [ "BOOLRELATION", "classHybridAutomatonLexer.html#a43805231ebb438b644c09ee5dba93215af800b454cd4f4425bc6b25a203270b54", null ],
     [ "PLUS", "classHybridAutomatonLexer.html#a43805231ebb438b644c09ee5dba93215af697edd3ea51ef6ef857054cefb49f5c", null ],
+    [ "MINUS", "classHybridAutomatonLexer.html#a43805231ebb438b644c09ee5dba93215ad5a38448a7e6102dd4221caa58c10193", null ],
     [ "TIMES", "classHybridAutomatonLexer.html#a43805231ebb438b644c09ee5dba93215a94211bdd752e258c298b976a73e82908", null ],
     [ "NUMBER", "classHybridAutomatonLexer.html#a43805231ebb438b644c09ee5dba93215a46f1b6137d12466bf52abd29840bbd96", null ],
     [ "VARIABLE", "classHybridAutomatonLexer.html#a43805231ebb438b644c09ee5dba93215a9822678a980d72761f550d983004a5b9", null ],

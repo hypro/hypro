@@ -1,5 +1,6 @@
 var classSettingParser =
 [
+    [ "ConnectorContext", "classSettingParser_1_1ConnectorContext.html", "classSettingParser_1_1ConnectorContext" ],
     [ "ConstraintContext", "classSettingParser_1_1ConstraintContext.html", "classSettingParser_1_1ConstraintContext" ],
     [ "ConstrsetContext", "classSettingParser_1_1ConstrsetContext.html", "classSettingParser_1_1ConstrsetContext" ],
     [ "CutoffContext", "classSettingParser_1_1CutoffContext.html", "classSettingParser_1_1CutoffContext" ],
@@ -42,6 +43,7 @@ var classSettingParser =
     [ "EQUALS", "classSettingParser.html#a0d9deb9d4591e8a823e49a4c1319085ca1616c08e48c2b478e75be511766648f7", null ],
     [ "BOOLRELATION", "classSettingParser.html#a0d9deb9d4591e8a823e49a4c1319085ca4a9925e033fa3d9af9bed7218f231fa6", null ],
     [ "PLUS", "classSettingParser.html#a0d9deb9d4591e8a823e49a4c1319085cab479229dfe3e832abfbd0c968c733a43", null ],
+    [ "MINUS", "classSettingParser.html#a0d9deb9d4591e8a823e49a4c1319085cae3eec28b1b52d621a01b57a4629d8b4a", null ],
     [ "TIMES", "classSettingParser.html#a0d9deb9d4591e8a823e49a4c1319085cabbff26243fb61648259a46c91a4a8551", null ],
     [ "NUMBER", "classSettingParser.html#a0d9deb9d4591e8a823e49a4c1319085ca3fb1b031009f65faef03d05e7ed67385", null ],
     [ "VARIABLE", "classSettingParser.html#a0d9deb9d4591e8a823e49a4c1319085ca15719d69b06fd7db525570face32255d", null ],
@@ -58,6 +60,7 @@ var classSettingParser =
     [ "RuleFixedorders", "classSettingParser.html#a295c580ccbd5c64e4551dfb2116e75f1a48c0e2796e0fcf3b354497b3a33ca795", null ],
     [ "RuleCutoff", "classSettingParser.html#a295c580ccbd5c64e4551dfb2116e75f1a56acdd6f1b46b5c2f6ebdf9c4875466c", null ],
     [ "RulePrecision", "classSettingParser.html#a295c580ccbd5c64e4551dfb2116e75f1ab163e9fbca26e9c8baf3c5a7cda5c586", null ],
+    [ "RuleConnector", "classSettingParser.html#a295c580ccbd5c64e4551dfb2116e75f1ae8da5281b6692ae6bbe8622e987a8f26", null ],
     [ "RuleTerm", "classSettingParser.html#a295c580ccbd5c64e4551dfb2116e75f1ae0f470918b41f692f9bdcc54150293d5", null ],
     [ "RulePolynom", "classSettingParser.html#a295c580ccbd5c64e4551dfb2116e75f1a09951e56939fd30db445f08d36a7fefe", null ],
     [ "RuleInterval", "classSettingParser.html#a295c580ccbd5c64e4551dfb2116e75f1a01100a19bb914cbd00831d0989daa631", null ],
@@ -67,6 +70,7 @@ var classSettingParser =
     [ "RuleConstrset", "classSettingParser.html#a295c580ccbd5c64e4551dfb2116e75f1a9af7078aa80ba465a957a95340eb739d", null ],
     [ "SettingParser", "classSettingParser.html#a3f1b538aff033c22e501da7232c355d6", null ],
     [ "~SettingParser", "classSettingParser.html#a545fba1f4a7396fae02040880f0e986a", null ],
+    [ "connector", "classSettingParser.html#aa8065bbdadbd87ce37489281b81ca173", null ],
     [ "constraint", "classSettingParser.html#a0edbeb3baca9c64ea4e578f5615dc8af", null ],
     [ "constrset", "classSettingParser.html#a770862868fbb68420a89ca2a56363c2a", null ],
     [ "cutoff", "classSettingParser.html#a3ba6e9b4ff97659cfbe43676ca87d96c", null ],

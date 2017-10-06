@@ -4,6 +4,7 @@ var classHybridAutomatonVisitor =
     [ "visitAggregation", "classHybridAutomatonVisitor.html#abb4c0f68c0f1fced599f09be434e3723", null ],
     [ "visitAllocation", "classHybridAutomatonVisitor.html#aa00d94b8a2b80c945117fc2031fdffea", null ],
     [ "visitBadstate", "classHybridAutomatonVisitor.html#a249abdab1ca9491b16b5e04b8b919bfb", null ],
+    [ "visitConnector", "classHybridAutomatonVisitor.html#a0b6c733893f747851f5a5a2a78b616b3", null ],
     [ "visitConstraint", "classHybridAutomatonVisitor.html#ab219dbf24675cfefbd48f2b6313034de", null ],
     [ "visitConstrset", "classHybridAutomatonVisitor.html#a91f42826428b70b4251aaae911efe896", null ],
     [ "visitCutoff", "classHybridAutomatonVisitor.html#a0d9823d37e545b8d4f35db9e13dc5294", null ],

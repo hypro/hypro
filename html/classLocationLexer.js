@@ -16,6 +16,7 @@ var classLocationLexer =
     [ "EQUALS", "classLocationLexer.html#a7c4499b82f3088c720de3e16169491b4aa3fe8744263b68c892fb59d1ec3bd598", null ],
     [ "BOOLRELATION", "classLocationLexer.html#a7c4499b82f3088c720de3e16169491b4ab617a58923bee1e859812e0287a4fa6a", null ],
     [ "PLUS", "classLocationLexer.html#a7c4499b82f3088c720de3e16169491b4aca4749ae65d5b080a3f1f9c1488b3998", null ],
+    [ "MINUS", "classLocationLexer.html#a7c4499b82f3088c720de3e16169491b4a9fbcdddfa44221abc39f823c9cfb02e7", null ],
     [ "TIMES", "classLocationLexer.html#a7c4499b82f3088c720de3e16169491b4a65785f749717a28266f056692f535e49", null ],
     [ "NUMBER", "classLocationLexer.html#a7c4499b82f3088c720de3e16169491b4ad8abde4181c8a9f59243bafddcd2f31c", null ],
     [ "VARIABLE", "classLocationLexer.html#a7c4499b82f3088c720de3e16169491b4ad926c1052f5743464f40e6706743f35f", null ],

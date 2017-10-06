@@ -8,6 +8,7 @@ var classFormulaLexer =
     [ "EQUALS", "classFormulaLexer.html#a7d4c4518ff625941e0836d8a2e6049c0adf012811a63775fdbd82d23965e348b3", null ],
     [ "BOOLRELATION", "classFormulaLexer.html#a7d4c4518ff625941e0836d8a2e6049c0a3a54bfa31079eeceef3c493caebdb1e8", null ],
     [ "PLUS", "classFormulaLexer.html#a7d4c4518ff625941e0836d8a2e6049c0a530fa340a4b57af282b2fcc172095085", null ],
+    [ "MINUS", "classFormulaLexer.html#a7d4c4518ff625941e0836d8a2e6049c0ae72f77be65b36758bbe949ce5692f0ce", null ],
     [ "TIMES", "classFormulaLexer.html#a7d4c4518ff625941e0836d8a2e6049c0a890c07ee6d8388861d47ef265cec6a4a", null ],
     [ "NUMBER", "classFormulaLexer.html#a7d4c4518ff625941e0836d8a2e6049c0af4515c7e36ee84d807e0f812b27f8db8", null ],
     [ "VARIABLE", "classFormulaLexer.html#a7d4c4518ff625941e0836d8a2e6049c0a71692a007ae4bffe1d80afa6160dbae1", null ],

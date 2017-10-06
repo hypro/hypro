@@ -121,6 +121,8 @@ $(document).ready(function(){initNavTree('classFormulaParser.html','');});
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFormulaParser_1_1ConnectorContext.html">ConnectorContext</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFormulaParser_1_1ConstraintContext.html">ConstraintContext</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFormulaParser_1_1ConstrsetContext.html">ConstrsetContext</a></td></tr>
@@ -149,22 +151,25 @@ Public Types</h2></td></tr>
 <b>BOOLRELATION</b> = 7, 
 <b>PLUS</b> = 8, 
 <br/>
-&#160;&#160;<b>TIMES</b> = 9, 
-<b>NUMBER</b> = 10, 
-<b>VARIABLE</b> = 11, 
-<b>WS</b> = 12
+&#160;&#160;<b>MINUS</b> = 9, 
+<b>TIMES</b> = 10, 
+<b>NUMBER</b> = 11, 
+<b>VARIABLE</b> = 12, 
+<br/>
+&#160;&#160;<b>WS</b> = 13
 <br/>
  }</td></tr>
 <tr class="separator:aa15280a37d164eb9956fe0813767ef69"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aeec39dac96dcd8cd893ddb5edd96eed7"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom">{ <br/>
-&#160;&#160;<b>RuleTerm</b> = 0, 
-<b>RulePolynom</b> = 1, 
-<b>RuleInterval</b> = 2, 
-<b>RuleEquation</b> = 3, 
+&#160;&#160;<b>RuleConnector</b> = 0, 
+<b>RuleTerm</b> = 1, 
+<b>RulePolynom</b> = 2, 
+<b>RuleInterval</b> = 3, 
 <br/>
-&#160;&#160;<b>RuleConstraint</b> = 4, 
-<b>RuleIntervalexpr</b> = 5, 
-<b>RuleConstrset</b> = 6
+&#160;&#160;<b>RuleEquation</b> = 4, 
+<b>RuleConstraint</b> = 5, 
+<b>RuleIntervalexpr</b> = 6, 
+<b>RuleConstrset</b> = 7
 <br/>
  }</td></tr>
 <tr class="separator:aeec39dac96dcd8cd893ddb5edd96eed7"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -191,6 +196,9 @@ virtual const std::vector<br class="typebreak"/>
 <tr class="memitem:a1136ef4e9b5d74e8c8b8c5dabfd0a942"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1136ef4e9b5d74e8c8b8c5dabfd0a942"></a>
 virtual antlr4::dfa::Vocabulary &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getVocabulary</b> () const override</td></tr>
 <tr class="separator:a1136ef4e9b5d74e8c8b8c5dabfd0a942"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a92f3b7e04197b3efcddede61436d67b3"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a92f3b7e04197b3efcddede61436d67b3"></a>
+<a class="el" href="classFormulaParser_1_1ConnectorContext.html">ConnectorContext</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>connector</b> ()</td></tr>
+<tr class="separator:a92f3b7e04197b3efcddede61436d67b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5a32de8f97348773ef227371968e2353"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5a32de8f97348773ef227371968e2353"></a>
 <a class="el" href="classFormulaParser_1_1TermContext.html">TermContext</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>term</b> ()</td></tr>
 <tr class="separator:a5a32de8f97348773ef227371968e2353"><td class="memSeparator" colspan="2">&#160;</td></tr>

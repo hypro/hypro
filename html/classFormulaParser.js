@@ -1,5 +1,6 @@
 var classFormulaParser =
 [
+    [ "ConnectorContext", "classFormulaParser_1_1ConnectorContext.html", "classFormulaParser_1_1ConnectorContext" ],
     [ "ConstraintContext", "classFormulaParser_1_1ConstraintContext.html", "classFormulaParser_1_1ConstraintContext" ],
     [ "ConstrsetContext", "classFormulaParser_1_1ConstrsetContext.html", "classFormulaParser_1_1ConstrsetContext" ],
     [ "EquationContext", "classFormulaParser_1_1EquationContext.html", "classFormulaParser_1_1EquationContext" ],
@@ -15,10 +16,12 @@ var classFormulaParser =
     [ "EQUALS", "classFormulaParser.html#aa15280a37d164eb9956fe0813767ef69a291a6287463032c86b429db02ef3be32", null ],
     [ "BOOLRELATION", "classFormulaParser.html#aa15280a37d164eb9956fe0813767ef69a20f0cc944072ae4234334e30e57af011", null ],
     [ "PLUS", "classFormulaParser.html#aa15280a37d164eb9956fe0813767ef69ad473c3a2fe5e360386e27a63d395bbf5", null ],
+    [ "MINUS", "classFormulaParser.html#aa15280a37d164eb9956fe0813767ef69a89beaa6cc0b7aa66c8875c97ee142fe0", null ],
     [ "TIMES", "classFormulaParser.html#aa15280a37d164eb9956fe0813767ef69a43588a248dbdd134142d3964067132ce", null ],
     [ "NUMBER", "classFormulaParser.html#aa15280a37d164eb9956fe0813767ef69aa274016abf813415111a2ea978fa56ce", null ],
     [ "VARIABLE", "classFormulaParser.html#aa15280a37d164eb9956fe0813767ef69a39f49da718cecb2aaadbc17642dfe849", null ],
     [ "WS", "classFormulaParser.html#aa15280a37d164eb9956fe0813767ef69a1a2edd473add06d2e4e713bb58455829", null ],
+    [ "RuleConnector", "classFormulaParser.html#aeec39dac96dcd8cd893ddb5edd96eed7afb35a293eeb4f94e13eada141a69011d", null ],
     [ "RuleTerm", "classFormulaParser.html#aeec39dac96dcd8cd893ddb5edd96eed7abd3f207baf219d162791dd331420d0ac", null ],
     [ "RulePolynom", "classFormulaParser.html#aeec39dac96dcd8cd893ddb5edd96eed7ab08276254a4c9c7b141844c6abd17d55", null ],
     [ "RuleInterval", "classFormulaParser.html#aeec39dac96dcd8cd893ddb5edd96eed7ae9678015e1070d0c3effe57bef84c297", null ],
@@ -28,6 +31,7 @@ var classFormulaParser =
     [ "RuleConstrset", "classFormulaParser.html#aeec39dac96dcd8cd893ddb5edd96eed7a3dcf01cc1e3678c60f76db3a41a1f8a0", null ],
     [ "FormulaParser", "classFormulaParser.html#a42c74a7d27900bfdbfe26507ac96d445", null ],
     [ "~FormulaParser", "classFormulaParser.html#abbab9ed64b9b661e9e26c926e644ba7a", null ],
+    [ "connector", "classFormulaParser.html#a92f3b7e04197b3efcddede61436d67b3", null ],
     [ "constraint", "classFormulaParser.html#a1def5cebdf63d4961ebb3fb705778f71", null ],
     [ "constrset", "classFormulaParser.html#a5db1edad8c7ece1f67aa3c25944cc351", null ],
     [ "equation", "classFormulaParser.html#a7315edb55239a6be974c2efe1b5a6c50", null ],

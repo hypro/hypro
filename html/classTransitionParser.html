@@ -125,6 +125,8 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTransitionParser_1_1AllocationContext.html">AllocationContext</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTransitionParser_1_1ConnectorContext.html">ConnectorContext</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTransitionParser_1_1ConstraintContext.html">ConstraintContext</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTransitionParser_1_1ConstrsetContext.html">ConstrsetContext</a></td></tr>
@@ -177,11 +179,12 @@ Public Types</h2></td></tr>
 <br/>
 &#160;&#160;<b>BOOLRELATION</b> = 17, 
 <b>PLUS</b> = 18, 
-<b>TIMES</b> = 19, 
-<b>NUMBER</b> = 20, 
+<b>MINUS</b> = 19, 
+<b>TIMES</b> = 20, 
 <br/>
-&#160;&#160;<b>VARIABLE</b> = 21, 
-<b>WS</b> = 22
+&#160;&#160;<b>NUMBER</b> = 21, 
+<b>VARIABLE</b> = 22, 
+<b>WS</b> = 23
 <br/>
  }</td></tr>
 <tr class="separator:a735fc784dd2b2bbdedc8c3201874f4d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -196,14 +199,15 @@ Public Types</h2></td></tr>
 <b>RuleResetfct</b> = 6, 
 <b>RuleAggregation</b> = 7, 
 <br/>
-&#160;&#160;<b>RuleTerm</b> = 8, 
-<b>RulePolynom</b> = 9, 
-<b>RuleInterval</b> = 10, 
-<b>RuleEquation</b> = 11, 
+&#160;&#160;<b>RuleConnector</b> = 8, 
+<b>RuleTerm</b> = 9, 
+<b>RulePolynom</b> = 10, 
+<b>RuleInterval</b> = 11, 
 <br/>
-&#160;&#160;<b>RuleConstraint</b> = 12, 
-<b>RuleIntervalexpr</b> = 13, 
-<b>RuleConstrset</b> = 14
+&#160;&#160;<b>RuleEquation</b> = 12, 
+<b>RuleConstraint</b> = 13, 
+<b>RuleIntervalexpr</b> = 14, 
+<b>RuleConstrset</b> = 15
 <br/>
  }</td></tr>
 <tr class="separator:a27910c31d737ad0c7aa222124c2e276b"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -254,6 +258,9 @@ virtual antlr4::dfa::Vocabulary &amp;&#160;</td><td class="memItemRight" valign=
 <tr class="memitem:af10756fb5c2d87f097fe45fca6931e3a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af10756fb5c2d87f097fe45fca6931e3a"></a>
 <a class="el" href="classTransitionParser_1_1AggregationContext.html">AggregationContext</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>aggregation</b> ()</td></tr>
 <tr class="separator:af10756fb5c2d87f097fe45fca6931e3a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0539130b959559825f4493553c0603e1"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0539130b959559825f4493553c0603e1"></a>
+<a class="el" href="classTransitionParser_1_1ConnectorContext.html">ConnectorContext</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>connector</b> ()</td></tr>
+<tr class="separator:a0539130b959559825f4493553c0603e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9f3a3ad01a4201f856dd955392e6fb92"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9f3a3ad01a4201f856dd955392e6fb92"></a>
 <a class="el" href="classTransitionParser_1_1TermContext.html">TermContext</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>term</b> ()</td></tr>
 <tr class="separator:a9f3a3ad01a4201f856dd955392e6fb92"><td class="memSeparator" colspan="2">&#160;</td></tr>

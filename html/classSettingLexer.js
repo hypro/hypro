@@ -23,6 +23,7 @@ var classSettingLexer =
     [ "EQUALS", "classSettingLexer.html#a4c97b3a93486f64eea35e55f0e68f2b9ab86efe7bdd445cc8379562c8e1b0e791", null ],
     [ "BOOLRELATION", "classSettingLexer.html#a4c97b3a93486f64eea35e55f0e68f2b9a5947e132c48bc0dcca88558943b19a27", null ],
     [ "PLUS", "classSettingLexer.html#a4c97b3a93486f64eea35e55f0e68f2b9ae80e4270e760f291c1685c35a4251766", null ],
+    [ "MINUS", "classSettingLexer.html#a4c97b3a93486f64eea35e55f0e68f2b9a9b572ddb6273e5896ff948c951d51d37", null ],
     [ "TIMES", "classSettingLexer.html#a4c97b3a93486f64eea35e55f0e68f2b9afe0c0997ebbf3f70386688d0cee95a63", null ],
     [ "NUMBER", "classSettingLexer.html#a4c97b3a93486f64eea35e55f0e68f2b9a303ba5211d077fa618d4cf61bc2344a7", null ],
     [ "VARIABLE", "classSettingLexer.html#a4c97b3a93486f64eea35e55f0e68f2b9a957ec7f3c33e6545fcfaa478a104e239", null ],

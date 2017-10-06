@@ -121,6 +121,8 @@ $(document).ready(function(){initNavTree('classInitialSetParser.html','');});
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInitialSetParser_1_1ConnectorContext.html">ConnectorContext</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInitialSetParser_1_1ConstraintContext.html">ConstraintContext</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classInitialSetParser_1_1ConstrsetContext.html">ConstrsetContext</a></td></tr>
@@ -156,26 +158,28 @@ Public Types</h2></td></tr>
 &#160;&#160;<b>EQUALS</b> = 9, 
 <b>BOOLRELATION</b> = 10, 
 <b>PLUS</b> = 11, 
-<b>TIMES</b> = 12, 
+<b>MINUS</b> = 12, 
 <br/>
-&#160;&#160;<b>NUMBER</b> = 13, 
-<b>VARIABLE</b> = 14, 
-<b>WS</b> = 15
+&#160;&#160;<b>TIMES</b> = 13, 
+<b>NUMBER</b> = 14, 
+<b>VARIABLE</b> = 15, 
+<b>WS</b> = 16
 <br/>
  }</td></tr>
 <tr class="separator:a5a71cab5d2653aa9d1ebec628f710aae"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a18c7a5aa15db90a94becaddfbf341a33"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom">{ <br/>
 &#160;&#160;<b>RuleInit</b> = 0, 
 <b>RuleInitstate</b> = 1, 
-<b>RuleTerm</b> = 2, 
-<b>RulePolynom</b> = 3, 
+<b>RuleConnector</b> = 2, 
+<b>RuleTerm</b> = 3, 
 <br/>
-&#160;&#160;<b>RuleInterval</b> = 4, 
-<b>RuleEquation</b> = 5, 
-<b>RuleConstraint</b> = 6, 
-<b>RuleIntervalexpr</b> = 7, 
+&#160;&#160;<b>RulePolynom</b> = 4, 
+<b>RuleInterval</b> = 5, 
+<b>RuleEquation</b> = 6, 
+<b>RuleConstraint</b> = 7, 
 <br/>
-&#160;&#160;<b>RuleConstrset</b> = 8
+&#160;&#160;<b>RuleIntervalexpr</b> = 8, 
+<b>RuleConstrset</b> = 9
 <br/>
  }</td></tr>
 <tr class="separator:a18c7a5aa15db90a94becaddfbf341a33"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -208,6 +212,9 @@ virtual antlr4::dfa::Vocabulary &amp;&#160;</td><td class="memItemRight" valign=
 <tr class="memitem:a6529cbc6e541480690d86233b4e424c0"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6529cbc6e541480690d86233b4e424c0"></a>
 <a class="el" href="classInitialSetParser_1_1InitstateContext.html">InitstateContext</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>initstate</b> ()</td></tr>
 <tr class="separator:a6529cbc6e541480690d86233b4e424c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a35fb9e44245446e3cedbab60d4eab17a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a35fb9e44245446e3cedbab60d4eab17a"></a>
+<a class="el" href="classInitialSetParser_1_1ConnectorContext.html">ConnectorContext</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>connector</b> ()</td></tr>
+<tr class="separator:a35fb9e44245446e3cedbab60d4eab17a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1828525c3729d3b62df8151721532fb2"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1828525c3729d3b62df8151721532fb2"></a>
 <a class="el" href="classInitialSetParser_1_1TermContext.html">TermContext</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>term</b> ()</td></tr>
 <tr class="separator:a1828525c3729d3b62df8151721532fb2"><td class="memSeparator" colspan="2">&#160;</td></tr>

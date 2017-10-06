@@ -18,6 +18,7 @@ var classTransitionLexer =
     [ "EQUALS", "classTransitionLexer.html#aa5e91ca70f0dc4efc5e0af966c0c4fdfa1337cd0901aaa8cd1d0fd825bad72f47", null ],
     [ "BOOLRELATION", "classTransitionLexer.html#aa5e91ca70f0dc4efc5e0af966c0c4fdfa56977fe55f9c6bcd071a48ed953cea1b", null ],
     [ "PLUS", "classTransitionLexer.html#aa5e91ca70f0dc4efc5e0af966c0c4fdfaedc04e0c37f41b7718d13b02479a34f0", null ],
+    [ "MINUS", "classTransitionLexer.html#aa5e91ca70f0dc4efc5e0af966c0c4fdfa62c8b5720fb5ebeee69023c00a81f1bd", null ],
     [ "TIMES", "classTransitionLexer.html#aa5e91ca70f0dc4efc5e0af966c0c4fdfa305695b55605c05f81b871e7599aa066", null ],
     [ "NUMBER", "classTransitionLexer.html#aa5e91ca70f0dc4efc5e0af966c0c4fdfae18b65c90f247369d16d54b2ecdfd8d6", null ],
     [ "VARIABLE", "classTransitionLexer.html#aa5e91ca70f0dc4efc5e0af966c0c4fdfab400532f54797b05f97a2c54ff7b5c1e", null ],

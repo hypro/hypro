@@ -1,6 +1,7 @@
 var classLocationParser =
 [
     [ "ActivitiesContext", "classLocationParser_1_1ActivitiesContext.html", "classLocationParser_1_1ActivitiesContext" ],
+    [ "ConnectorContext", "classLocationParser_1_1ConnectorContext.html", "classLocationParser_1_1ConnectorContext" ],
     [ "ConstraintContext", "classLocationParser_1_1ConstraintContext.html", "classLocationParser_1_1ConstraintContext" ],
     [ "ConstrsetContext", "classLocationParser_1_1ConstrsetContext.html", "classLocationParser_1_1ConstrsetContext" ],
     [ "EquationContext", "classLocationParser_1_1EquationContext.html", "classLocationParser_1_1EquationContext" ],
@@ -27,6 +28,7 @@ var classLocationParser =
     [ "EQUALS", "classLocationParser.html#aaea2688e0141b94dc1c497e2d086639ba858314531ffb867a5a462ee35974bc11", null ],
     [ "BOOLRELATION", "classLocationParser.html#aaea2688e0141b94dc1c497e2d086639ba0d458068bf757fef013fbccf50efed1d", null ],
     [ "PLUS", "classLocationParser.html#aaea2688e0141b94dc1c497e2d086639ba7a53e9ebf0e33d60d9fdce456c2f5dbe", null ],
+    [ "MINUS", "classLocationParser.html#aaea2688e0141b94dc1c497e2d086639bab7b64ac21ab38e83314fbfe79492aeb3", null ],
     [ "TIMES", "classLocationParser.html#aaea2688e0141b94dc1c497e2d086639ba723d75c53b209bf8911bad0a1481fc2d", null ],
     [ "NUMBER", "classLocationParser.html#aaea2688e0141b94dc1c497e2d086639bafb320ae587559957426ba7313a40564e", null ],
     [ "VARIABLE", "classLocationParser.html#aaea2688e0141b94dc1c497e2d086639ba222c5dd8394dac357e57542b5ced9400", null ],
@@ -35,6 +37,7 @@ var classLocationParser =
     [ "RuleLocation", "classLocationParser.html#a331a8c61cde9f06efc4553d3e1608ca5a55b3bacc924ccf975c80ec9b63cb594c", null ],
     [ "RuleActivities", "classLocationParser.html#a331a8c61cde9f06efc4553d3e1608ca5a04876e2a64a0247974d253f8c85baea6", null ],
     [ "RuleInvariants", "classLocationParser.html#a331a8c61cde9f06efc4553d3e1608ca5af1555020dbc91674bf885de915250e52", null ],
+    [ "RuleConnector", "classLocationParser.html#a331a8c61cde9f06efc4553d3e1608ca5a5fe138f04c043903163d5d2d04488bf5", null ],
     [ "RuleTerm", "classLocationParser.html#a331a8c61cde9f06efc4553d3e1608ca5a126a2e068eccbe3ae1719ba6a0c816cc", null ],
     [ "RulePolynom", "classLocationParser.html#a331a8c61cde9f06efc4553d3e1608ca5a59efefd800ec41d4c629b2696180d5b2", null ],
     [ "RuleInterval", "classLocationParser.html#a331a8c61cde9f06efc4553d3e1608ca5a3f165fa598db42a32ba21b86e289168a", null ],
@@ -45,6 +48,7 @@ var classLocationParser =
     [ "LocationParser", "classLocationParser.html#ac4d6f2d606b38625ea6f99dfba485b1b", null ],
     [ "~LocationParser", "classLocationParser.html#a72607a1532382fb8acd2920fe7f9c884", null ],
     [ "activities", "classLocationParser.html#af6eac38a6e51d7ff6c88cdd9c05b362b", null ],
+    [ "connector", "classLocationParser.html#a4c190e91053f79d78672d0a47847160a", null ],
     [ "constraint", "classLocationParser.html#a677981c585d54af817bd1328e48e2f70", null ],
     [ "constrset", "classLocationParser.html#a18a830c4bc116478b0cfaa6ff39348ce", null ],
     [ "equation", "classLocationParser.html#aadf701a8e07d07247ad09db340cd01e9", null ],

@@ -1,6 +1,8 @@
 var classLocationParser_1_1TermContext =
 [
     [ "TermContext", "classLocationParser_1_1TermContext.html#a5aff72224ba1423b56de0fc7e5436ba2", null ],
+    [ "connector", "classLocationParser_1_1TermContext.html#a9456cb0db6abf6c53bb00aba48368cae", null ],
+    [ "connector", "classLocationParser_1_1TermContext.html#a738f0c2716efefb8cced02f5adc5d88d", null ],
     [ "getRuleIndex", "classLocationParser_1_1TermContext.html#a23db5caf54528ea4bba92cecf84bdb67", null ],
     [ "NUMBER", "classLocationParser_1_1TermContext.html#ac168e31b4f804c1ba81e5cdbba9e7123", null ],
     [ "NUMBER", "classLocationParser_1_1TermContext.html#a1408acb59742bd21c03beb740533e867", null ],

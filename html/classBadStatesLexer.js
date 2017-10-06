@@ -11,6 +11,7 @@ var classBadStatesLexer =
     [ "EQUALS", "classBadStatesLexer.html#a450892c3e2e2578128abd42c6bb5826ba71dc40ad98270c6a8c7b2e8c72d0e200", null ],
     [ "BOOLRELATION", "classBadStatesLexer.html#a450892c3e2e2578128abd42c6bb5826ba55b232aee04f5dbdcbcb1252b146db87", null ],
     [ "PLUS", "classBadStatesLexer.html#a450892c3e2e2578128abd42c6bb5826ba9553aeadb3c2328779349a1c0d20b6f3", null ],
+    [ "MINUS", "classBadStatesLexer.html#a450892c3e2e2578128abd42c6bb5826baa77e746b9c384da17da8249f8454e13e", null ],
     [ "TIMES", "classBadStatesLexer.html#a450892c3e2e2578128abd42c6bb5826ba2b160bd8e88046ee3db82a53a9b6022a", null ],
     [ "NUMBER", "classBadStatesLexer.html#a450892c3e2e2578128abd42c6bb5826ba7d7a6f651566c2d480fdbd3a7f1bc730", null ],
     [ "VARIABLE", "classBadStatesLexer.html#a450892c3e2e2578128abd42c6bb5826ba67e0ceab90bc086a6d84f459f2eb225d", null ],

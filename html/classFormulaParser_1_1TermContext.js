@@ -1,6 +1,8 @@
 var classFormulaParser_1_1TermContext =
 [
     [ "TermContext", "classFormulaParser_1_1TermContext.html#a5d68a2e4898b719dd25ec9259b16c042", null ],
+    [ "connector", "classFormulaParser_1_1TermContext.html#a43eb97950210f32fa352cb0d65830ccb", null ],
+    [ "connector", "classFormulaParser_1_1TermContext.html#a6b0a92e582021b28332b73e036f39898", null ],
     [ "getRuleIndex", "classFormulaParser_1_1TermContext.html#a51fa0d5aaee5ec22e2f6a7fef59b9fc7", null ],
     [ "NUMBER", "classFormulaParser_1_1TermContext.html#a2fc4e289fdd1c8687fa5becf8d114365", null ],
     [ "NUMBER", "classFormulaParser_1_1TermContext.html#a62dbac6ba14386e24ae887d989c73fa3", null ],
