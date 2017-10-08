@@ -37,7 +37,7 @@ namespace hypro {
 template <typename Number>
 struct STindependentFunct {
   DiagonalMatrix<Number>        D;
-  Matrix<Number>                xinhom;
+  Vector<Number>                xinhom;
   BoolVector                    convergent;
 //  Number                        delta;
 //  std::size_t                   deltalimit;

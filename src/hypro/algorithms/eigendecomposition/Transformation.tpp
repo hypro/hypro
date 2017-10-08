@@ -123,6 +123,7 @@ Transformation<Number>::Transformation (const HybridAutomaton<Number>& _hybrid) 
       it!=_hybrid.getInitialStates().end(); ++it) {
         Location<Number>* NewLocPtr = mLocationPtrsMap[it->first];
         State<Number,ConstraintSet<Number>> state1NEW = State<Number,ConstraintSet<Number>>(it->second);
+        //TODO CHECK if conversion might make sense here, because of ReachTree difficulties in transformation in HyDRA!!!
 //        const Matrix<Number> & Vinv = 
 //          mLocPtrtoComputationvaluesMap[NewLocPtr].mSTflowpipeSegment.Vinv;
 //        state1NEW = it->second.linearTransformation(Vinv);
@@ -238,11 +239,10 @@ void Transformation<Number>::analyzeExponentialFunctions() {
 
 template <typename Number>
 void Transformation<Number>::declare_structures(STallValues<Number>& mSTallValues, const int n) {
-    mSTallValues.mSTindependentFunct.xinhom  = Matrix<Number>(n,n);
     //mSTallValues.mSTinputVectors.x0          = Vector<Number>(n);
     //mSTallValues.mSTinputVectors.x0_2        = Vector<Number>(n);
     mSTallValues.mSTindependentFunct.D       = DiagonalMatrix<Number>(n);
-    mSTallValues.mSTindependentFunct.xinhom  = Matrix<Number>(n,n);
+    mSTallValues.mSTindependentFunct.xinhom  = Vector<Number>(n);
     //mSTallValues.mSTdependentFunct.xhom      = Matrix<Number>(n,n);
     //TODO change to multiple values, last column for transformation maxmin
     //mSTallValues.mSTdependentFunct.x_tr      = Matrix<Number>::Zero(n,3);    
