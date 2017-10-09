@@ -2088,7 +2088,7 @@ Public Types</h2></td></tr>
 <br/>
  }</td></tr>
 <tr class="separator:ad2f1cb637838ab9845f22568cda3f589"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a67dab6b47003b39afd6235dd8009016a"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom">{ <br/>
+<tr class="memitem:ac471ae5d53dd18f998fa6c380460ff27"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom">{ <br/>
 &#160;&#160;<b>IsInteger</b> = 0, 
 <b>IsSigned</b> = 1, 
 <b>IsComplex</b> = 0, 
@@ -2099,8 +2099,8 @@ Public Types</h2></td></tr>
 <b>MulCost</b> = 100
 <br/>
  }</td></tr>
-<tr class="separator:a67dab6b47003b39afd6235dd8009016a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7077ca02021bce3282345561af2525b8"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom">{ <br/>
+<tr class="separator:ac471ae5d53dd18f998fa6c380460ff27"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad5391349f01e569b02e3fee7116df535"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom">{ <br/>
 &#160;&#160;<b>IsInteger</b> = 0, 
 <b>IsSigned</b> = 1, 
 <b>IsComplex</b> = 0, 
@@ -2111,7 +2111,7 @@ Public Types</h2></td></tr>
 <b>MulCost</b> = 100
 <br/>
  }</td></tr>
-<tr class="separator:a7077ca02021bce3282345561af2525b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="separator:ad5391349f01e569b02e3fee7116df535"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad4743bc9c94d95e3af7284601c5a7d40"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom">{ <br/>
 &#160;&#160;<b>IsInteger</b> = 0, 
 <b>IsSigned</b> = 1, 
@@ -2232,6 +2232,18 @@ Public Types</h2></td></tr>
 <br/>
  }</td></tr>
 <tr class="separator:ac3d93fc96b57591cfb2d343a8b80a6d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a76886b6987ee3000f15aa89cd678f7e9"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom">{ <br/>
+&#160;&#160;<b>IsInteger</b> = 0, 
+<b>IsSigned</b> = 1, 
+<b>IsComplex</b> = 0, 
+<b>RequireInitialization</b> = 1, 
+<br/>
+&#160;&#160;<b>ReadCost</b> = 6, 
+<b>AddCost</b> = 150, 
+<b>MulCost</b> = 100
+<br/>
+ }</td></tr>
+<tr class="separator:a76886b6987ee3000f15aa89cd678f7e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ade15027462cc05e2f39df0847d611686"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom">{ <br/>
 &#160;&#160;<b>IsInteger</b> = 0, 
 <b>IsSigned</b> = 1, 
@@ -2244,18 +2256,6 @@ Public Types</h2></td></tr>
 <br/>
  }</td></tr>
 <tr class="separator:ade15027462cc05e2f39df0847d611686"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a19fed139ab61971358d7a4d0df9b1f24"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom">{ <br/>
-&#160;&#160;<b>IsInteger</b> = 0, 
-<b>IsSigned</b> = 1, 
-<b>IsComplex</b> = 0, 
-<b>RequireInitialization</b> = 1, 
-<br/>
-&#160;&#160;<b>ReadCost</b> = 6, 
-<b>AddCost</b> = 150, 
-<b>MulCost</b> = 100
-<br/>
- }</td></tr>
-<tr class="separator:a19fed139ab61971358d7a4d0df9b1f24"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6603cc3e0ea1ffe08a7df6f88ff8c189"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom">{ <br/>
 &#160;&#160;<b>IsInteger</b> = 0, 
 <b>IsSigned</b> = 1, 
@@ -2292,6 +2292,48 @@ Public Types</h2></td></tr>
 <br/>
  }</td></tr>
 <tr class="separator:af81cd886f9213fbe84f7228a821628b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a21b8b5adb9f73446cf32da33b4602545"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom">{ <br/>
+&#160;&#160;<b>IsInteger</b> = 0, 
+<b>IsSigned</b> = 1, 
+<b>IsComplex</b> = 0, 
+<b>RequireInitialization</b> = 1, 
+<br/>
+&#160;&#160;<b>ReadCost</b> = 6, 
+<b>AddCost</b> = 150, 
+<b>MulCost</b> = 100
+<br/>
+ }</td></tr>
+<tr class="separator:a21b8b5adb9f73446cf32da33b4602545"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8948b2c93b0c43f232323c71f3d2e65b"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom">{ <br/>
+&#160;&#160;<b>IsInteger</b> = 0, 
+<b>IsSigned</b> = 1, 
+<b>IsComplex</b> = 0, 
+<b>RequireInitialization</b> = 1, 
+<br/>
+&#160;&#160;<b>ReadCost</b> = 6, 
+<b>AddCost</b> = 150, 
+<b>MulCost</b> = 100
+<br/>
+ }</td></tr>
+<tr class="separator:a8948b2c93b0c43f232323c71f3d2e65b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad464339571b64be83c575dbdda087664"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad464339571b64be83c575dbdda087664"></a>
+typedef mpq_class&#160;</td><td class="memItemRight" valign="bottom"><b>Real</b></td></tr>
+<tr class="separator:ad464339571b64be83c575dbdda087664"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad549e24813df6f6b6c22c5a6d78f593c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad549e24813df6f6b6c22c5a6d78f593c"></a>
+typedef mpq_class&#160;</td><td class="memItemRight" valign="bottom"><b>NonInteger</b></td></tr>
+<tr class="separator:ad549e24813df6f6b6c22c5a6d78f593c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad3bd33d49cb4c4b935956e4ab7d8d215"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad3bd33d49cb4c4b935956e4ab7d8d215"></a>
+typedef mpq_class&#160;</td><td class="memItemRight" valign="bottom"><b>Nested</b></td></tr>
+<tr class="separator:ad3bd33d49cb4c4b935956e4ab7d8d215"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad464339571b64be83c575dbdda087664"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad464339571b64be83c575dbdda087664"></a>
+typedef mpq_class&#160;</td><td class="memItemRight" valign="bottom"><b>Real</b></td></tr>
+<tr class="separator:ad464339571b64be83c575dbdda087664"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad549e24813df6f6b6c22c5a6d78f593c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad549e24813df6f6b6c22c5a6d78f593c"></a>
+typedef mpq_class&#160;</td><td class="memItemRight" valign="bottom"><b>NonInteger</b></td></tr>
+<tr class="separator:ad549e24813df6f6b6c22c5a6d78f593c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad3bd33d49cb4c4b935956e4ab7d8d215"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad3bd33d49cb4c4b935956e4ab7d8d215"></a>
+typedef mpq_class&#160;</td><td class="memItemRight" valign="bottom"><b>Nested</b></td></tr>
+<tr class="separator:ad3bd33d49cb4c4b935956e4ab7d8d215"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad464339571b64be83c575dbdda087664"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad464339571b64be83c575dbdda087664"></a>
 typedef mpq_class&#160;</td><td class="memItemRight" valign="bottom"><b>Real</b></td></tr>
 <tr class="separator:ad464339571b64be83c575dbdda087664"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -3924,6 +3966,24 @@ typedef mpq_class&#160;</td><td class="memItemRight" valign="bottom"><b>Nested</
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
+<tr class="memitem:a578f8580a232d7c7032d9bfc7fd13d85"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a578f8580a232d7c7032d9bfc7fd13d85"></a>
+static Real&#160;</td><td class="memItemRight" valign="bottom"><b>epsilon</b> ()</td></tr>
+<tr class="separator:a578f8580a232d7c7032d9bfc7fd13d85"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9923f7984cca67edf507b165d747cce3"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9923f7984cca67edf507b165d747cce3"></a>
+static Real&#160;</td><td class="memItemRight" valign="bottom"><b>dummy_precision</b> ()</td></tr>
+<tr class="separator:a9923f7984cca67edf507b165d747cce3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abc87b67adaba1c9c5670cc52b8957975"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="abc87b67adaba1c9c5670cc52b8957975"></a>
+static Real&#160;</td><td class="memItemRight" valign="bottom"><b>digits10</b> ()</td></tr>
+<tr class="separator:abc87b67adaba1c9c5670cc52b8957975"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a578f8580a232d7c7032d9bfc7fd13d85"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a578f8580a232d7c7032d9bfc7fd13d85"></a>
+static Real&#160;</td><td class="memItemRight" valign="bottom"><b>epsilon</b> ()</td></tr>
+<tr class="separator:a578f8580a232d7c7032d9bfc7fd13d85"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9923f7984cca67edf507b165d747cce3"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9923f7984cca67edf507b165d747cce3"></a>
+static Real&#160;</td><td class="memItemRight" valign="bottom"><b>dummy_precision</b> ()</td></tr>
+<tr class="separator:a9923f7984cca67edf507b165d747cce3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abc87b67adaba1c9c5670cc52b8957975"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="abc87b67adaba1c9c5670cc52b8957975"></a>
+static Real&#160;</td><td class="memItemRight" valign="bottom"><b>digits10</b> ()</td></tr>
+<tr class="separator:abc87b67adaba1c9c5670cc52b8957975"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a578f8580a232d7c7032d9bfc7fd13d85"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a578f8580a232d7c7032d9bfc7fd13d85"></a>
 static Real&#160;</td><td class="memItemRight" valign="bottom"><b>epsilon</b> ()</td></tr>
 <tr class="separator:a578f8580a232d7c7032d9bfc7fd13d85"><td class="memSeparator" colspan="2">&#160;</td></tr>

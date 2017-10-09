@@ -253,6 +253,25 @@ Searching for files in directory /home/travis/build/hypro/home/travis/build/hypr
 /home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:14: warning: include file functional not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:15: warning: include file iostream not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:16: warning: include file limits not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/util/convenienceOperators.h:4: warning: include file iostream not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/util/convenienceOperators.h:5: warning: include file map not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/util/convenienceOperators.h:6: warning: include file set not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/util/convenienceOperators.h:7: warning: include file utility not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/util/convenienceOperators.h:8: warning: include file vector not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/util/logging/Logger.h:4: warning: include file iostream not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/types.h:3: warning: include file iostream not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/types.h:5: warning: include file carl/numbers/numbers.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/types.h:6: warning: include file carl/interval/Interval.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/types.h:7: warning: include file carl/core/Variable.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/types.h:8: warning: include file carl/util/hash.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/types.h:9: warning: include file eigen3/Eigen/Dense not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/types.h:10: warning: include file eigen3/unsupported/Eigen/src/MatrixFunctions/MatrixExponential.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/types.h:11: warning: include file eigen3/Eigen/Core not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/types.h:12: warning: include file boost/operators.hpp not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:13: warning: include file carl/numbers/numbers.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:14: warning: include file functional not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:15: warning: include file iostream not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:16: warning: include file limits not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/types.h:3: warning: include file iostream not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/types.h:5: warning: include file carl/numbers/numbers.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/types.h:6: warning: include file carl/interval/Interval.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
@@ -374,11 +393,11 @@ Searching for files in directory /home/travis/build/hypro/home/travis/build/hypr
 /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.h:232: warning: include file gmp.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.h:233: warning: include file gmpxx.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/logging/Logger.h:4: warning: include file iostream not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/representations/Box/Box.h:17: warning: include file carl/interval/Interval.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/representations/Box/Box.h:18: warning: include file cassert not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/representations/Box/Box.h:19: warning: include file map not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/representations/Box/Box.h:20: warning: include file set not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/representations/Box/Box.h:21: warning: include file vector not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/representations/Box/Box.h:18: warning: include file carl/interval/Interval.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/representations/Box/Box.h:19: warning: include file cassert not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/representations/Box/Box.h:20: warning: include file map not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/representations/Box/Box.h:21: warning: include file set not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/representations/Box/Box.h:22: warning: include file vector not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/types.h:3: warning: include file iostream not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/types.h:5: warning: include file carl/numbers/numbers.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/types.h:6: warning: include file carl/interval/Interval.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
@@ -820,6 +839,25 @@ Searching for files in directory /home/travis/build/hypro/home/travis/build/hypr
 /home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:14: warning: include file functional not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:15: warning: include file iostream not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:16: warning: include file limits not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/util/convenienceOperators.h:4: warning: include file iostream not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/util/convenienceOperators.h:5: warning: include file map not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/util/convenienceOperators.h:6: warning: include file set not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/util/convenienceOperators.h:7: warning: include file utility not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/util/convenienceOperators.h:8: warning: include file vector not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/util/logging/Logger.h:4: warning: include file iostream not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/types.h:3: warning: include file iostream not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/types.h:5: warning: include file carl/numbers/numbers.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/types.h:6: warning: include file carl/interval/Interval.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/types.h:7: warning: include file carl/core/Variable.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/types.h:8: warning: include file carl/util/hash.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/types.h:9: warning: include file eigen3/Eigen/Dense not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/types.h:10: warning: include file eigen3/unsupported/Eigen/src/MatrixFunctions/MatrixExponential.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/types.h:11: warning: include file eigen3/Eigen/Core not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/types.h:12: warning: include file boost/operators.hpp not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:13: warning: include file carl/numbers/numbers.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:14: warning: include file functional not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:15: warning: include file iostream not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:16: warning: include file limits not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/types.h:3: warning: include file iostream not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/types.h:5: warning: include file carl/numbers/numbers.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/types.h:6: warning: include file carl/interval/Interval.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
@@ -941,11 +979,11 @@ Searching for files in directory /home/travis/build/hypro/home/travis/build/hypr
 /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.h:232: warning: include file gmp.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.h:233: warning: include file gmpxx.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/logging/Logger.h:4: warning: include file iostream not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/representations/Box/Box.h:17: warning: include file carl/interval/Interval.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/representations/Box/Box.h:18: warning: include file cassert not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/representations/Box/Box.h:19: warning: include file map not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/representations/Box/Box.h:20: warning: include file set not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/representations/Box/Box.h:21: warning: include file vector not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/representations/Box/Box.h:18: warning: include file carl/interval/Interval.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/representations/Box/Box.h:19: warning: include file cassert not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/representations/Box/Box.h:20: warning: include file map not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/representations/Box/Box.h:21: warning: include file set not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/representations/Box/Box.h:22: warning: include file vector not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Vertex.h:15: warning: include file list not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/types.h:3: warning: include file iostream not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/types.h:5: warning: include file carl/numbers/numbers.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
@@ -4385,11 +4423,13 @@ Preprocessing /home/travis/build/hypro/hypro/examples/example_linearTransfor/hom
    /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/util.h
 Please use a more specific name by including a (larger) part of the path!
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.tpp:4: warning: the name `Halfspace.tpp' supplied as the second argument in the \file statement is not an input file
+/home/travis/build/hypro/hypro/src/hypro/util/templateDirections.h:4: warning: the name `helperFunctions.h' supplied as the second argument in the \file statement is not an input file
 /home/travis/build/hypro/hypro/src/hypro/representations/Box/Box.tpp:5: warning: the name `Box.tpp' supplied as the second argument in the \file statement is not an input file
 /home/travis/build/hypro/hypro/src/hypro/representations/Box/Box_double.tpp:5: warning: the name `Box.tpp' supplied as the second argument in the \file statement is not an input file
 /home/travis/build/hypro/hypro/src/hypro/representations/Ellipsoids/Ellipsoid.h:3: warning: the name `EllipsoidT.h' supplied as the second argument in the \file statement is not an input file
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.tpp:4: warning: the name `Halfspace.tpp' supplied as the second argument in the \file statement is not an input file
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.tpp:4: warning: the name `Halfspace.tpp' supplied as the second argument in the \file statement is not an input file
+/home/travis/build/hypro/hypro/src/hypro/util/templateDirections.h:4: warning: the name `helperFunctions.h' supplied as the second argument in the \file statement is not an input file
 /home/travis/build/hypro/hypro/src/hypro/representations/Box/Box.tpp:5: warning: the name `Box.tpp' supplied as the second argument in the \file statement is not an input file
 /home/travis/build/hypro/hypro/src/hypro/representations/Box/Box_double.tpp:5: warning: the name `Box.tpp' supplied as the second argument in the \file statement is not an input file
 /home/travis/build/hypro/hypro/src/hypro/representations/OrthogonalPolyhedron/Grid.tpp:3: warning: the name `Grid.tpp' supplied as the second argument in the \file statement is not an input file
@@ -4504,6 +4544,8 @@ Please use a more specific name by including a (larger) part of the path!
 /home/travis/build/hypro/hypro/src/resources/glpk-4.45/build/include/glpk.h:90: warning: Compound hypro::reachability::glp_bfcp is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/EllipsoidSupportFunction.h:25: warning: Compound hypro::EllipsoidSupportFunction is not documented.
 /home/travis/build/hypro/hypro/src/hypro/parser/antlr4-cif/HybridSystemParser.h:512: warning: Compound HybridSystemParser::OptElseFuncStatContext is not documented.
+/home/travis/build/hypro/hypro/src/hypro/util/convenienceOperators.h:87: warning: Compound hypro::reachability::hypro::typeName< mpq_class > is not documented.
+/home/travis/build/hypro/hypro/src/hypro/util/convenienceOperators.h:87: warning: Compound hypro::reachability::hypro::typeName< mpq_class > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/convenienceOperators.h:87: warning: Compound hypro::reachability::hypro::typeName< mpq_class > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/convenienceOperators.h:87: warning: Compound hypro::reachability::hypro::typeName< mpq_class > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/convenienceOperators.h:87: warning: Compound hypro::reachability::hypro::typeName< mpq_class > is not documented.
@@ -4909,6 +4951,8 @@ Please use a more specific name by including a (larger) part of the path!
 /home/travis/build/hypro/hypro/src/hypro/util/convenienceOperators.h:73: warning: Compound hypro::reachability::hypro::typeName is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/convenienceOperators.h:73: warning: Compound hypro::reachability::hypro::typeName is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/convenienceOperators.h:73: warning: Compound hypro::reachability::hypro::typeName is not documented.
+/home/travis/build/hypro/hypro/src/hypro/util/convenienceOperators.h:73: warning: Compound hypro::reachability::hypro::typeName is not documented.
+/home/travis/build/hypro/hypro/src/hypro/util/convenienceOperators.h:73: warning: Compound hypro::reachability::hypro::typeName is not documented.
 /home/travis/build/hypro/hypro/src/hypro/parser/antlr4-cif/ExpressionsParser.h:240: warning: Compound ExpressionsParser::NonEmptySetExpressionContext is not documented.
 /home/travis/build/hypro/hypro/src/hypro/parser/antlr4-flowstar/HybridAutomatonParser.h:87: warning: Compound HybridAutomatonParser::StartContext is not documented.
 /home/travis/build/hypro/hypro/src/hypro/parser/antlr4-cif/HybridSystemParser.h:367: warning: Compound HybridSystemParser::ConstantDefsContext is not documented.
@@ -4919,12 +4963,12 @@ Please use a more specific name by including a (larger) part of the path!
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Vertex.h:21: warning: Compound hypro::reachability::hypro::Vertex is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Vertex.h:36: warning: Compound hypro::reachability::hypro::Vertex is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Vertex.h:21: warning: Compound hypro::reachability::hypro::Vertex is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/Box/Box.h:26: warning: Compound hypro::reachability::hypro::Vertex is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/Box/Box.h:30: warning: Compound hypro::reachability::hypro::Vertex is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Vertex.h:36: warning: Compound hypro::reachability::hypro::Vertex is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Vertex.h:21: warning: Compound hypro::reachability::hypro::Vertex is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Vertex.h:36: warning: Compound hypro::reachability::hypro::Vertex is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Vertex.h:21: warning: Compound hypro::reachability::hypro::Vertex is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/Box/Box.h:26: warning: Compound hypro::reachability::hypro::Vertex is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/Box/Box.h:30: warning: Compound hypro::reachability::hypro::Vertex is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/convenienceOperators.h:73: warning: Compound hypro::hypro::typeName is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:372: warning: Compound hypro::std::hash< hypro::matrix_t< Number > > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/parser/antlr4-cif/InputOutputParser.h:250: warning: Compound InputOutputParser::SvgInContext is not documented.
@@ -5050,6 +5094,8 @@ Please use a more specific name by including a (larger) part of the path!
 /home/travis/build/hypro/hypro/src/hypro/util/Permutator.h:14: warning: Compound hypro::reachability::hypro::hypro::Permutator is not documented.
 /home/travis/build/hypro/hypro/src/hypro/parser/antlr4-flowstar/LocationParser.h:50: warning: Compound LocationParser::ModesContext is not documented.
 /home/travis/build/hypro/hypro/src/hypro/parser/antlr4-flowstar/ErrorListener.h:21: warning: Compound hypro::ErrorListener is not documented.
+/home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:372: warning: Compound hypro::reachability::std::hash< hypro::matrix_t< Number > > is not documented.
+/home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:372: warning: Compound hypro::reachability::std::hash< hypro::matrix_t< Number > > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:372: warning: Compound hypro::reachability::std::hash< hypro::matrix_t< Number > > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:372: warning: Compound hypro::reachability::std::hash< hypro::matrix_t< Number > > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:372: warning: Compound hypro::reachability::std::hash< hypro::matrix_t< Number > > is not documented.
@@ -5447,6 +5493,8 @@ Please use a more specific name by including a (larger) part of the path!
 /home/travis/build/hypro/hypro/src/hypro/types.h:92: warning: Compound hypro::reachability::Eigen::NumTraits< carl::Interval< Number > > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/types.h:92: warning: Compound hypro::reachability::Eigen::NumTraits< carl::Interval< Number > > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/types.h:92: warning: Compound hypro::reachability::Eigen::NumTraits< carl::Interval< Number > > is not documented.
+/home/travis/build/hypro/hypro/src/hypro/types.h:92: warning: Compound hypro::reachability::Eigen::NumTraits< carl::Interval< Number > > is not documented.
+/home/travis/build/hypro/hypro/src/hypro/types.h:92: warning: Compound hypro::reachability::Eigen::NumTraits< carl::Interval< Number > > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/parser/antlr4-cif/InputOutputLexer.h:12: warning: Compound InputOutputLexer is not documented.
 /home/travis/build/hypro/hypro/src/hypro/parser/antlr4-flowstar/LocationLexer.h:12: warning: Compound LocationLexer is not documented.
 /home/travis/build/hypro/hypro/src/resources/glpk-4.45/build/include/glpk.h:926: warning: Compound hypro::reachability::_glp_arc is not documented.
@@ -5462,6 +5510,8 @@ Please use a more specific name by including a (larger) part of the path!
 /home/travis/build/hypro/hypro/src/hypro/parser/antlr4-cif/HybridSystemParser.h:234: warning: Compound HybridSystemParser::OptGroupDeclsContext is not documented.
 /home/travis/build/hypro/hypro/src/hypro/parser/antlr4-flowstar/TransitionParser.h:158: warning: Compound TransitionParser::ConnectorContext is not documented.
 /home/travis/build/hypro/hypro/src/hypro/parser/antlr4-cif/HybridSystemParser.h:286: warning: Compound HybridSystemParser::AutDeclContext is not documented.
+/home/travis/build/hypro/hypro/src/hypro/types.h:46: warning: Compound hypro::reachability::Eigen::NumTraits< carl::FLOAT_T< Number > > is not documented.
+/home/travis/build/hypro/hypro/src/hypro/types.h:46: warning: Compound hypro::reachability::Eigen::NumTraits< carl::FLOAT_T< Number > > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/types.h:46: warning: Compound hypro::reachability::Eigen::NumTraits< carl::FLOAT_T< Number > > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/types.h:46: warning: Compound hypro::reachability::Eigen::NumTraits< carl::FLOAT_T< Number > > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/types.h:46: warning: Compound hypro::reachability::Eigen::NumTraits< carl::FLOAT_T< Number > > is not documented.
@@ -5744,7 +5794,7 @@ Please use a more specific name by including a (larger) part of the path!
 /home/travis/build/hypro/hypro/src/hypro/parser/antlr4-cif/HybridSystemParser.h:339: warning: Compound HybridSystemParser::TypeDefsContext is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunctionContent.h:141: warning: Compound hypro::reachability::hypro::projectionContent is not documented.
 /home/travis/build/hypro/hypro/src/hypro/parser/antlr4-cif/InputOutputParser.h:264: warning: Compound InputOutputParser::SvgInEventContext is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/Box/Box.h:26: warning: Compound hypro::Vertex is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/Box/Box.h:30: warning: Compound hypro::Vertex is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Vertex.h:36: warning: Compound hypro::Vertex is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Vertex.h:21: warning: Compound hypro::Vertex is not documented.
 /home/travis/build/hypro/hypro/src/hypro/parser/antlr4-flowstar/HybridAutomatonParser.h:289: warning: Compound HybridAutomatonParser::EquationContext is not documented.
@@ -5795,6 +5845,8 @@ Please use a more specific name by including a (larger) part of the path!
 /home/travis/build/hypro/hypro/src/hypro/parser/antlr4-cif/HybridSystemParser.h:1232: warning: Compound HybridSystemParser::SwitchBodyContext is not documented.
 /home/travis/build/hypro/hypro/src/hypro/parser/antlr4-flowstar/HybridAutomatonParser.h:151: warning: Compound HybridAutomatonParser::FromtoContext is not documented.
 /home/travis/build/hypro/hypro/src/hypro/parser/antlr4-flowstar/HybridAutomatonParser.h:380: warning: Compound HybridAutomatonParser::FixedstepsContext is not documented.
+/home/travis/build/hypro/hypro/src/hypro/util/Permutator.h:14: warning: Compound hypro::reachability::hypro::Permutator is not documented.
+/home/travis/build/hypro/hypro/src/hypro/util/Permutator.h:14: warning: Compound hypro::reachability::hypro::Permutator is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/Permutator.h:14: warning: Compound hypro::reachability::hypro::Permutator is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/Permutator.h:14: warning: Compound hypro::reachability::hypro::Permutator is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/Permutator.h:14: warning: Compound hypro::reachability::hypro::Permutator is not documented.
@@ -6032,7 +6084,11 @@ Please use a more specific name by including a (larger) part of the path!
 /home/travis/build/hypro/hypro/src/hypro/types.h:72: warning: Compound hypro::reachability::Eigen::NumTraits< mpq_class > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/types.h:72: warning: Compound hypro::reachability::Eigen::NumTraits< mpq_class > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/types.h:72: warning: Compound hypro::reachability::Eigen::NumTraits< mpq_class > is not documented.
+/home/travis/build/hypro/hypro/src/hypro/types.h:72: warning: Compound hypro::reachability::Eigen::NumTraits< mpq_class > is not documented.
+/home/travis/build/hypro/hypro/src/hypro/types.h:72: warning: Compound hypro::reachability::Eigen::NumTraits< mpq_class > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/parser/antlr4-cif/InputOutputParser.h:486: warning: Compound InputOutputParser::AddExpressionContext is not documented.
+/home/travis/build/hypro/hypro/src/hypro/util/convenienceOperators.h:80: warning: Compound hypro::reachability::hypro::typeName< double > is not documented.
+/home/travis/build/hypro/hypro/src/hypro/util/convenienceOperators.h:80: warning: Compound hypro::reachability::hypro::typeName< double > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/convenienceOperators.h:80: warning: Compound hypro::reachability::hypro::typeName< double > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/convenienceOperators.h:80: warning: Compound hypro::reachability::hypro::typeName< double > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/convenienceOperators.h:80: warning: Compound hypro::reachability::hypro::typeName< double > is not documented.
@@ -6357,6 +6413,8 @@ Please use a more specific name by including a (larger) part of the path!
 /home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:364: warning: Compound hypro::reachability::std::hash< hypro::vector_t< Number > > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:364: warning: Compound hypro::reachability::std::hash< hypro::vector_t< Number > > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:364: warning: Compound hypro::reachability::std::hash< hypro::vector_t< Number > > is not documented.
+/home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:364: warning: Compound hypro::reachability::std::hash< hypro::vector_t< Number > > is not documented.
+/home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:364: warning: Compound hypro::reachability::std::hash< hypro::vector_t< Number > > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/parser/flowstar/polynomialParser.h:33: warning: Compound hypro::parser::monomialParser is not documented.
 /home/travis/build/hypro/hypro/src/hypro/parser/antlr4-cif/HybridSystemParser.h:1402: warning: Compound HybridSystemParser::StdLibFunctionContext is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/pca.h:19: warning: Compound hypro::PrincipalComponentAnalysis is not documented.
@@ -6449,6 +6507,7 @@ Searching for member function doc/home/travis/build/hypro/hypro/src/hypro/types.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Point.h:626: warning: member operator* belongs to two different groups. The second one found here will be ignored.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Point.h:634: warning: member operator* belongs to two different groups. The second one found here will be ignored.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Point.h:642: warning: member operator* belongs to two different groups. The second one found here will be ignored.
+/home/travis/build/hypro/hypro/src/hypro/types.h:30: warning: documented symbol `typedef hypro::reachability::hypro::std::set< vector_t< Number >> vectorSet' was not declared or defined.
 /home/travis/build/hypro/hypro/src/hypro/types.h:30: warning: documented symbol `typedef hypro::reachability::hypro::std::set< vector_t< Number >> vectorSet' was not declared or defined.
 /home/travis/build/hypro/hypro/src/hypro/types.h:30: warning: documented symbol `typedef hypro::reachability::hypro::std::set< vector_t< Number >> vectorSet' was not declared or defined.
 /home/travis/build/hypro/hypro/src/hypro/types.h:30: warning: documented symbol `typedef hypro::reachability::hypro::std::set< vector_t< Number >> vectorSet' was not declared or defined.
@@ -6564,6 +6623,7 @@ Searching for member function doc/home/travis/build/hypro/hypro/src/hypro/types.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Point.h:626: warning: member operator* belongs to two different groups. The second one found here will be ignored.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Point.h:634: warning: member operator* belongs to two different groups. The second one found here will be ignored.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Point.h:642: warning: member operator* belongs to two different groups. The second one found here will be ignored.
+/home/travis/build/hypro/hypro/src/hypro/types.h:30: warning: documented symbol `typedef hypro::reachability::hypro::std::set< vector_t< Number >> vectorSet' was not declared or defined.
 /home/travis/build/hypro/hypro/src/hypro/types.h:30: warning: documented symbol `typedef hypro::reachability::hypro::std::set< vector_t< Number >> vectorSet' was not declared or defined.
 /home/travis/build/hypro/hypro/src/hypro/types.h:30: warning: documented symbol `typedef hypro::reachability::hypro::std::set< vector_t< Number >> vectorSet' was not declared or defined.
 /home/travis/build/hypro/hypro/src/hypro/types.h:30: warning: documented symbol `typedef hypro::reachability::hypro::std::set< vector_t< Number >> vectorSet' was not declared or defined.
@@ -11721,17 +11781,17 @@ Generating docs for compound hyp/home/travis/build/hypro/hypro/src/hypro/parser/
 /home/travis/build/hypro/hypro/src/hypro/parser/antlr4-flowstar/HybridAutomatonBaseVisitor.h:158: warning: Member visitInitstate(HybridAutomatonParser::InitstateContext *ctx) override (function) of class HybridAutomatonBaseVisitor is not documented.
 /home/travis/build/hypro/hypro/src/hypro/parser/antlr4-flowstar/HybridAutomatonBaseVisitor.h:162: warning: Member visitUnsafeset(HybridAutomatonParser::UnsafesetContext *ctx) override (function) of class HybridAutomatonBaseVisitor is not documented.
 /home/travis/build/hypro/hypro/src/hypro/parser/antlr4-flowstar/HybridAutomatonBaseVisitor.h:166: warning: Member visitBadstate(HybridAutomatonParser::BadstateContext *ctx) override (function) of class HybridAutomatonBaseVisitor is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/Box/Box.h:160: warning: Member matrix() const  (function) of class hypro::BoxT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/Box/Box.h:161: warning: Member vector() const  (function) of class hypro::BoxT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/Box/Box.h:369: warning: Member satisfiesHalfspace(const Halfspace< Number > &rhs) const  (function) of class hypro::BoxT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/Box/Box.h:374: warning: Member minkowskiSum(const BoxT< Number, Converter > &rhs) const  (function) of class hypro::BoxT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/Box/Box.h:390: warning: Member intersectHalfspace(const Halfspace< Number > &hspace) const  (function) of class hypro::BoxT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/Box/Box.h:392: warning: Member contains(const Point< Number > &point) const  (function) of class hypro::BoxT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/Box/Box.h:349: warning: Member type() (function) of class hypro::BoxT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/Box/Box.h:188: warning: argument 'd' of command @param is not found in the argument list of hypro::BoxT< Number, Converter >::at(std::size_t _index) const
-/home/travis/build/hypro/hypro/src/hypro/representations/Box/Box.h:188: warning: The following parameters of hypro::BoxT::at(std::size_t _index) const are not documented:
+/home/travis/build/hypro/hypro/src/hypro/representations/Box/Box.h:164: warning: Member matrix() const  (function) of class hypro::BoxT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/Box/Box.h:165: warning: Member vector() const  (function) of class hypro::BoxT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/Box/Box.h:373: warning: Member satisfiesHalfspace(const Halfspace< Number > &rhs) const  (function) of class hypro::BoxT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/Box/Box.h:378: warning: Member minkowskiSum(const BoxT< Number, Converter > &rhs) const  (function) of class hypro::BoxT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/Box/Box.h:394: warning: Member intersectHalfspace(const Halfspace< Number > &hspace) const  (function) of class hypro::BoxT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/Box/Box.h:396: warning: Member contains(const Point< Number > &point) const  (function) of class hypro::BoxT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/Box/Box.h:353: warning: Member type() (function) of class hypro::BoxT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/Box/Box.h:192: warning: argument 'd' of command @param is not found in the argument list of hypro::BoxT< Number, Converter >::at(std::size_t _index) const
+/home/travis/build/hypro/hypro/src/hypro/representations/Box/Box.h:192: warning: The following parameters of hypro::BoxT::at(std::size_t _index) const are not documented:
   parameter '_index'
-/home/travis/build/hypro/hypro/src/hypro/representations/Box/Box.h:304: warning: argument 'b' of command @param is not found in the argument list of hypro::BoxT< Number, Converter >::operator<<(std::ostream &ostr, const BoxT< Number, Converter > &)
+/home/travis/build/hypro/hypro/src/hypro/representations/Box/Box.h:308: warning: argument 'b' of command @param is not found in the argument list of hypro::BoxT< Number, Converter >::operator<<(std::ostream &ostr, const BoxT< Number, Converter > &)
 /home/travis/build/hypro/hypro/src/hypro/representations/Box/Box_double.h:140: warning: Member matrix() const  (function) of class hypro::BoxT< double, Converter > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/Box/Box_double.h:141: warning: Member vector() const  (function) of class hypro::BoxT< double, Converter > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/Box/Box_double.h:324: warning: Member type() (function) of class hypro::BoxT< double, Converter > is not documented.
@@ -13499,6 +13559,12 @@ Generating docs for compound hypro::parser/home/travis/build/hypro/hypro/src/hyp
 /home/travis/build/hypro/hypro/src/hypro/types.h:57: warning: Member Real (typedef) of class hypro::reachability::Eigen::NumTraits< carl::FLOAT_T< Number > > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/types.h:58: warning: Member NonInteger (typedef) of class hypro::reachability::Eigen::NumTraits< carl::FLOAT_T< Number > > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/types.h:59: warning: Member Nested (typedef) of class hypro::reachability::Eigen::NumTraits< carl::FLOAT_T< Number > > is not documented.
+/home/travis/build/hypro/hypro/src/hypro/types.h:57: warning: Member Real (typedef) of class hypro::reachability::Eigen::NumTraits< carl::FLOAT_T< Number > > is not documented.
+/home/travis/build/hypro/hypro/src/hypro/types.h:58: warning: Member NonInteger (typedef) of class hypro::reachability::Eigen::NumTraits< carl::FLOAT_T< Number > > is not documented.
+/home/travis/build/hypro/hypro/src/hypro/types.h:59: warning: Member Nested (typedef) of class hypro::reachability::Eigen::NumTraits< carl::FLOAT_T< Number > > is not documented.
+/home/travis/build/hypro/hypro/src/hypro/types.h:57: warning: Member Real (typedef) of class hypro::reachability::Eigen::NumTraits< carl::FLOAT_T< Number > > is not documented.
+/home/travis/build/hypro/hypro/src/hypro/types.h:58: warning: Member NonInteger (typedef) of class hypro::reachability::Eigen::NumTraits< carl::FLOAT_T< Number > > is not documented.
+/home/travis/build/hypro/hypro/src/hypro/types.h:59: warning: Member Nested (typedef) of class hypro::reachability::Eigen::NumTraits< carl::FLOAT_T< Number > > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/types.h:61: warning: Member epsilon() (function) of class hypro::reachability::Eigen::NumTraits< carl::FLOAT_T< Number > > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/types.h:62: warning: Member dummy_precision() (function) of class hypro::reachability::Eigen::NumTraits< carl::FLOAT_T< Number > > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/types.h:66: warning: Member highest() (function) of class hypro::reachability::Eigen::NumTraits< carl::FLOAT_T< Number > > is not documented.
@@ -14223,6 +14289,20 @@ Generating docs for compound hypro::parser/home/travis/build/hypro/hypro/src/hyp
 /home/travis/build/hypro/hypro/src/hypro/types.h:62: warning: Member dummy_precision() (function) of class hypro::reachability::Eigen::NumTraits< carl::FLOAT_T< Number > > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/types.h:66: warning: Member highest() (function) of class hypro::reachability::Eigen::NumTraits< carl::FLOAT_T< Number > > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/types.h:67: warning: Member lowest() (function) of class hypro::reachability::Eigen::NumTraits< carl::FLOAT_T< Number > > is not documented.
+/home/travis/build/hypro/hypro/src/hypro/types.h:61: warning: Member epsilon() (function) of class hypro::reachability::Eigen::NumTraits< carl::FLOAT_T< Number > > is not documented.
+/home/travis/build/hypro/hypro/src/hypro/types.h:62: warning: Member dummy_precision() (function) of class hypro::reachability::Eigen::NumTraits< carl::FLOAT_T< Number > > is not documented.
+/home/travis/build/hypro/hypro/src/hypro/types.h:66: warning: Member highest() (function) of class hypro::reachability::Eigen::NumTraits< carl::FLOAT_T< Number > > is not documented.
+/home/travis/build/hypro/hypro/src/hypro/types.h:67: warning: Member lowest() (function) of class hypro::reachability::Eigen::NumTraits< carl::FLOAT_T< Number > > is not documented.
+/home/travis/build/hypro/hypro/src/hypro/types.h:61: warning: Member epsilon() (function) of class hypro::reachability::Eigen::NumTraits< carl::FLOAT_T< Number > > is not documented.
+/home/travis/build/hypro/hypro/src/hypro/types.h:62: warning: Member dummy_precision() (function) of class hypro::reachability::Eigen::NumTraits< carl::FLOAT_T< Number > > is not documented.
+/home/travis/build/hypro/hypro/src/hypro/types.h:66: warning: Member highest() (function) of class hypro::reachability::Eigen::NumTraits< carl::FLOAT_T< Number > > is not documented.
+/home/travis/build/hypro/hypro/src/hypro/types.h:67: warning: Member lowest() (function) of class hypro::reachability::Eigen::NumTraits< carl::FLOAT_T< Number > > is not documented.
+/home/travis/build/hypro/hypro/src/hypro/types.h:73: warning: Member Real (typedef) of class hypro::reachability::Eigen::NumTraits< mpq_class > is not documented.
+/home/travis/build/hypro/hypro/src/hypro/types.h:74: warning: Member NonInteger (typedef) of class hypro::reachability::Eigen::NumTraits< mpq_class > is not documented.
+/home/travis/build/hypro/hypro/src/hypro/types.h:75: warning: Member Nested (typedef) of class hypro::reachability::Eigen::NumTraits< mpq_class > is not documented.
+/home/travis/build/hypro/hypro/src/hypro/types.h:73: warning: Member Real (typedef) of class hypro::reachability::Eigen::NumTraits< mpq_class > is not documented.
+/home/travis/build/hypro/hypro/src/hypro/types.h:74: warning: Member NonInteger (typedef) of class hypro::reachability::Eigen::NumTraits< mpq_class > is not documented.
+/home/travis/build/hypro/hypro/src/hypro/types.h:75: warning: Member Nested (typedef) of class hypro::reachability::Eigen::NumTraits< mpq_class > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/types.h:73: warning: Member Real (typedef) of class hypro::reachability::Eigen::NumTraits< mpq_class > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/types.h:74: warning: Member NonInteger (typedef) of class hypro::reachability::Eigen::NumTraits< mpq_class > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/types.h:75: warning: Member Nested (typedef) of class hypro::reachability::Eigen::NumTraits< mpq_class > is not documented.
@@ -14766,6 +14846,12 @@ Generating docs for compound hypro::parser/home/travis/build/hypro/hypro/src/hyp
 /home/travis/build/hypro/hypro/src/hypro/types.h:73: warning: Member Real (typedef) of class hypro::reachability::Eigen::NumTraits< mpq_class > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/types.h:74: warning: Member NonInteger (typedef) of class hypro::reachability::Eigen::NumTraits< mpq_class > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/types.h:75: warning: Member Nested (typedef) of class hypro::reachability::Eigen::NumTraits< mpq_class > is not documented.
+/home/travis/build/hypro/hypro/src/hypro/types.h:76: warning: Member epsilon() (function) of class hypro::reachability::Eigen::NumTraits< mpq_class > is not documented.
+/home/travis/build/hypro/hypro/src/hypro/types.h:77: warning: Member dummy_precision() (function) of class hypro::reachability::Eigen::NumTraits< mpq_class > is not documented.
+/home/travis/build/hypro/hypro/src/hypro/types.h:78: warning: Member digits10() (function) of class hypro::reachability::Eigen::NumTraits< mpq_class > is not documented.
+/home/travis/build/hypro/hypro/src/hypro/types.h:76: warning: Member epsilon() (function) of class hypro::reachability::Eigen::NumTraits< mpq_class > is not documented.
+/home/travis/build/hypro/hypro/src/hypro/types.h:77: warning: Member dummy_precision() (function) of class hypro::reachability::Eigen::NumTraits< mpq_class > is not documented.
+/home/travis/build/hypro/hypro/src/hypro/types.h:78: warning: Member digits10() (function) of class hypro::reachability::Eigen::NumTraits< mpq_class > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/types.h:76: warning: Member epsilon() (function) of class hypro::reachability::Eigen::NumTraits< mpq_class > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/types.h:77: warning: Member dummy_precision() (function) of class hypro::reachability::Eigen::NumTraits< mpq_class > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/types.h:78: warning: Member digits10() (function) of class hypro::reachability::Eigen::NumTraits< mpq_class > is not documented.
@@ -15309,6 +15395,12 @@ Generating docs for compound hypro::parser/home/travis/build/hypro/hypro/src/hyp
 /home/travis/build/hypro/hypro/src/hypro/types.h:76: warning: Member epsilon() (function) of class hypro::reachability::Eigen::NumTraits< mpq_class > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/types.h:77: warning: Member dummy_precision() (function) of class hypro::reachability::Eigen::NumTraits< mpq_class > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/types.h:78: warning: Member digits10() (function) of class hypro::reachability::Eigen::NumTraits< mpq_class > is not documented.
+/home/travis/build/hypro/hypro/src/hypro/types.h:93: warning: Member Real (typedef) of class hypro::reachability::Eigen::NumTraits< carl::Interval< Number > > is not documented.
+/home/travis/build/hypro/hypro/src/hypro/types.h:94: warning: Member NonInteger (typedef) of class hypro::reachability::Eigen::NumTraits< carl::Interval< Number > > is not documented.
+/home/travis/build/hypro/hypro/src/hypro/types.h:95: warning: Member Nested (typedef) of class hypro::reachability::Eigen::NumTraits< carl::Interval< Number > > is not documented.
+/home/travis/build/hypro/hypro/src/hypro/types.h:93: warning: Member Real (typedef) of class hypro::reachability::Eigen::NumTraits< carl::Interval< Number > > is not documented.
+/home/travis/build/hypro/hypro/src/hypro/types.h:94: warning: Member NonInteger (typedef) of class hypro::reachability::Eigen::NumTraits< carl::Interval< Number > > is not documented.
+/home/travis/build/hypro/hypro/src/hypro/types.h:95: warning: Member Nested (typedef) of class hypro::reachability::Eigen::NumTraits< carl::Interval< Number > > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/types.h:93: warning: Member Real (typedef) of class hypro::reachability::Eigen::NumTraits< carl::Interval< Number > > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/types.h:94: warning: Member NonInteger (typedef) of class hypro::reachability::Eigen::NumTraits< carl::Interval< Number > > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/types.h:95: warning: Member Nested (typedef) of class hypro::reachability::Eigen::NumTraits< carl::Interval< Number > > is not documented.
@@ -15852,6 +15944,12 @@ Generating docs for compound hypro::parser/home/travis/build/hypro/hypro/src/hyp
 /home/travis/build/hypro/hypro/src/hypro/types.h:93: warning: Member Real (typedef) of class hypro::reachability::Eigen::NumTraits< carl::Interval< Number > > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/types.h:94: warning: Member NonInteger (typedef) of class hypro::reachability::Eigen::NumTraits< carl::Interval< Number > > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/types.h:95: warning: Member Nested (typedef) of class hypro::reachability::Eigen::NumTraits< carl::Interval< Number > > is not documented.
+/home/travis/build/hypro/hypro/src/hypro/types.h:96: warning: Member epsilon() (function) of class hypro::reachability::Eigen::NumTraits< carl::Interval< Number > > is not documented.
+/home/travis/build/hypro/hypro/src/hypro/types.h:97: warning: Member dummy_precision() (function) of class hypro::reachability::Eigen::NumTraits< carl::Interval< Number > > is not documented.
+/home/travis/build/hypro/hypro/src/hypro/types.h:98: warning: Member digits10() (function) of class hypro::reachability::Eigen::NumTraits< carl::Interval< Number > > is not documented.
+/home/travis/build/hypro/hypro/src/hypro/types.h:96: warning: Member epsilon() (function) of class hypro::reachability::Eigen::NumTraits< carl::Interval< Number > > is not documented.
+/home/travis/build/hypro/hypro/src/hypro/types.h:97: warning: Member dummy_precision() (function) of class hypro::reachability::Eigen::NumTraits< carl::Interval< Number > > is not documented.
+/home/travis/build/hypro/hypro/src/hypro/types.h:98: warning: Member digits10() (function) of class hypro::reachability::Eigen::NumTraits< carl::Interval< Number > > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/types.h:96: warning: Member epsilon() (function) of class hypro::reachability::Eigen::NumTraits< carl::Interval< Number > > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/types.h:97: warning: Member dummy_precision() (function) of class hypro::reachability::Eigen::NumTraits< carl::Interval< Number > > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/types.h:98: warning: Member digits10() (function) of class hypro::reachability::Eigen::NumTraits< carl::Interval< Number > > is not documented.
@@ -16566,6 +16664,8 @@ Generating docs for compound hypro::parser/home/travis/build/hypro/hypro/src/hyp
 /home/travis/build/hypro/hypro/src/hypro/util/convenienceOperators.h:74: warning: Member get() (function) of class hypro::reachability::hypro::typeName is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/convenienceOperators.h:74: warning: Member get() (function) of class hypro::reachability::hypro::typeName is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/convenienceOperators.h:74: warning: Member get() (function) of class hypro::reachability::hypro::typeName is not documented.
+/home/travis/build/hypro/hypro/src/hypro/util/convenienceOperators.h:74: warning: Member get() (function) of class hypro::reachability::hypro::typeName is not documented.
+/home/travis/build/hypro/hypro/src/hypro/util/convenienceOperators.h:74: warning: Member get() (function) of class hypro::reachability::hypro::typeName is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/convenienceOperators.h:81: warning: Member get() (function) of class hypro::reachability::hypro::typeName< double > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/convenienceOperators.h:81: warning: Member get() (function) of class hypro::reachability::hypro::typeName< double > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/convenienceOperators.h:81: warning: Member get() (function) of class hypro::reachability::hypro::typeName< double > is not documented.
@@ -16662,6 +16762,10 @@ Generating docs for compound hypro::parser/home/travis/build/hypro/hypro/src/hyp
 /home/travis/build/hypro/hypro/src/hypro/util/convenienceOperators.h:81: warning: Member get() (function) of class hypro::reachability::hypro::typeName< double > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/convenienceOperators.h:81: warning: Member get() (function) of class hypro::reachability::hypro::typeName< double > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/convenienceOperators.h:81: warning: Member get() (function) of class hypro::reachability::hypro::typeName< double > is not documented.
+/home/travis/build/hypro/hypro/src/hypro/util/convenienceOperators.h:81: warning: Member get() (function) of class hypro::reachability::hypro::typeName< double > is not documented.
+/home/travis/build/hypro/hypro/src/hypro/util/convenienceOperators.h:81: warning: Member get() (function) of class hypro::reachability::hypro::typeName< double > is not documented.
+/home/travis/build/hypro/hypro/src/hypro/util/convenienceOperators.h:88: warning: Member get() (function) of class hypro::reachability::hypro::typeName< mpq_class > is not documented.
+/home/travis/build/hypro/hypro/src/hypro/util/convenienceOperators.h:88: warning: Member get() (function) of class hypro::reachability::hypro::typeName< mpq_class > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/convenienceOperators.h:88: warning: Member get() (function) of class hypro::reachability::hypro::typeName< mpq_class > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/convenienceOperators.h:88: warning: Member get() (function) of class hypro::reachability::hypro::typeName< mpq_class > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/convenienceOperators.h:88: warning: Member get() (function) of class hypro::reachability::hypro::typeName< mpq_class > is not documented.
@@ -20523,6 +20627,12 @@ Generating docs for compound hypro::parser/home/travis/build/hypro/hypro/src/hyp
 /home/travis/build/hypro/hypro/src/hypro/util/Permutator.h:22: warning: Member Permutator(std::size_t totalSize, std::size_t d) (function) of class hypro::reachability::hypro::Permutator is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/Permutator.h:31: warning: Member operator()() (function) of class hypro::reachability::hypro::Permutator is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/Permutator.h:58: warning: Member end() const  (function) of class hypro::reachability::hypro::Permutator is not documented.
+/home/travis/build/hypro/hypro/src/hypro/util/Permutator.h:22: warning: Member Permutator(std::size_t totalSize, std::size_t d) (function) of class hypro::reachability::hypro::Permutator is not documented.
+/home/travis/build/hypro/hypro/src/hypro/util/Permutator.h:31: warning: Member operator()() (function) of class hypro::reachability::hypro::Permutator is not documented.
+/home/travis/build/hypro/hypro/src/hypro/util/Permutator.h:58: warning: Member end() const  (function) of class hypro::reachability::hypro::Permutator is not documented.
+/home/travis/build/hypro/hypro/src/hypro/util/Permutator.h:22: warning: Member Permutator(std::size_t totalSize, std::size_t d) (function) of class hypro::reachability::hypro::Permutator is not documented.
+/home/travis/build/hypro/hypro/src/hypro/util/Permutator.h:31: warning: Member operator()() (function) of class hypro::reachability::hypro::Permutator is not documented.
+/home/travis/build/hypro/hypro/src/hypro/util/Permutator.h:58: warning: Member end() const  (function) of class hypro::reachability::hypro::Permutator is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/EvaluationResult.h:20: warning: Member EvaluationResult(SOLUTION err) (function) of class hypro::reachability::hypro::EvaluationResult is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/EvaluationResult.h:23: warning: Member EvaluationResult(const Number &val, SOLUTION err) (function) of class hypro::reachability::hypro::EvaluationResult is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/EvaluationResult.h:26: warning: Member EvaluationResult(const vector_t< Number > &val, SOLUTION err) (function) of class hypro::reachability::hypro::EvaluationResult is not documented.
@@ -20734,20 +20844,20 @@ Generating docs for compound hypro::parser/home/travis/build/hypro/hypro/src/hyp
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Vertex.h:209: warning: The following parameters of hypro::reachability::hypro::Vertex::operator>(const Vertex< Number > &_v1, const Vertex< Number > &_v2) are not documented:
   parameter '_v1'
   parameter '_v2'
-/home/travis/build/hypro/hypro/src/hypro/representations/Box/Box.h:160: warning: Member matrix() const  (function) of class hypro::reachability::hypro::BoxT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/Box/Box.h:161: warning: Member vector() const  (function) of class hypro::reachability::hypro::BoxT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/Box/Box.h:160: warning: Member matrix() const  (function) of class hypro::reachability::hypro::BoxT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/Box/Box.h:161: warning: Member vector() const  (function) of class hypro::reachability::hypro::BoxT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/Box/Box.h:349: warning: Member type() (function) of class hypro::reachability::hypro::BoxT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/Box/Box.h:349: warning: Member type() (function) of class hypro::reachability::hypro::BoxT is not documented.
-/home/travis/build/hypro/hypro/src/hypro/representations/Box/Box.h:188: warning: argument 'd' of command @param is not found in the argument list of hypro::reachability::hypro::BoxT< Number, Converter >::at(std::size_t _index) const
-/home/travis/build/hypro/hypro/src/hypro/representations/Box/Box.h:188: warning: The following parameters of hypro::reachability::hypro::BoxT::at(std::size_t _index) const are not documented:
+/home/travis/build/hypro/hypro/src/hypro/representations/Box/Box.h:164: warning: Member matrix() const  (function) of class hypro::reachability::hypro::BoxT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/Box/Box.h:165: warning: Member vector() const  (function) of class hypro::reachability::hypro::BoxT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/Box/Box.h:164: warning: Member matrix() const  (function) of class hypro::reachability::hypro::BoxT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/Box/Box.h:165: warning: Member vector() const  (function) of class hypro::reachability::hypro::BoxT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/Box/Box.h:353: warning: Member type() (function) of class hypro::reachability::hypro::BoxT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/Box/Box.h:353: warning: Member type() (function) of class hypro::reachability::hypro::BoxT is not documented.
+/home/travis/build/hypro/hypro/src/hypro/representations/Box/Box.h:192: warning: argument 'd' of command @param is not found in the argument list of hypro::reachability::hypro::BoxT< Number, Converter >::at(std::size_t _index) const
+/home/travis/build/hypro/hypro/src/hypro/representations/Box/Box.h:192: warning: The following parameters of hypro::reachability::hypro::BoxT::at(std::size_t _index) const are not documented:
   parameter '_index'
-/home/travis/build/hypro/hypro/src/hypro/representations/Box/Box.h:188: warning: argument 'd' of command @param is not found in the argument list of hypro::reachability::hypro::BoxT< Number, Converter >::at(std::size_t _index) const
-/home/travis/build/hypro/hypro/src/hypro/representations/Box/Box.h:188: warning: The following parameters of hypro::reachability::hypro::BoxT::at(std::size_t _index) const are not documented:
+/home/travis/build/hypro/hypro/src/hypro/representations/Box/Box.h:192: warning: argument 'd' of command @param is not found in the argument list of hypro::reachability::hypro::BoxT< Number, Converter >::at(std::size_t _index) const
+/home/travis/build/hypro/hypro/src/hypro/representations/Box/Box.h:192: warning: The following parameters of hypro::reachability::hypro::BoxT::at(std::size_t _index) const are not documented:
   parameter '_index'
-/home/travis/build/hypro/hypro/src/hypro/representations/Box/Box.h:304: warning: argument 'b' of command @param is not found in the argument list of hypro::reachability::hypro::BoxT< Number, Converter >::operator<<(std::ostream &ostr, const BoxT< Number, Converter > &)
-/home/travis/build/hypro/hypro/src/hypro/representations/Box/Box.h:304: warning: argument 'b' of command @param is not found in the argument list of hypro::reachability::hypro::BoxT< Number, Converter >::operator<<(std::ostream &ostr, const BoxT< Number, Converter > &)
+/home/travis/build/hypro/hypro/src/hypro/representations/Box/Box.h:308: warning: argument 'b' of command @param is not found in the argument list of hypro::reachability::hypro::BoxT< Number, Converter >::operator<<(std::ostream &ostr, const BoxT< Number, Converter > &)
+/home/travis/build/hypro/hypro/src/hypro/representations/Box/Box.h:308: warning: argument 'b' of command @param is not found in the argument list of hypro::reachability::hypro::BoxT< Number, Converter >::operator<<(std::ostream &ostr, const BoxT< Number, Converter > &)
 /home/travis/build/hypro/hypro/src/hypro/representations/Box/Box_double.h:141: warning: Member matrix() const  (function) of class hypro::reachability::hypro::BoxT< double, Converter > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/Box/Box_double.h:142: warning: Member vector() const  (function) of class hypro::reachability::hypro::BoxT< double, Converter > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/Box/Box_double.h:141: warning: Member matrix() const  (function) of class hypro::reachability::hypro::BoxT< double, Converter > is not documented.
@@ -21988,6 +22098,10 @@ Generating docs for compound hypro::reachability::hypro::VertexEnumerat/home/tra
 /home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:365: warning: Member operator()(hypro::vector_t< Number > const &vector) const  (function) of class hypro::reachability::std::hash< hypro::vector_t< Number > > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:365: warning: Member operator()(hypro::vector_t< Number > const &vector) const  (function) of class hypro::reachability::std::hash< hypro::vector_t< Number > > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:365: warning: Member operator()(hypro::vector_t< Number > const &vector) const  (function) of class hypro::reachability::std::hash< hypro::vector_t< Number > > is not documented.
+/home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:365: warning: Member operator()(hypro::vector_t< Number > const &vector) const  (function) of class hypro::reachability::std::hash< hypro::vector_t< Number > > is not documented.
+/home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:365: warning: Member operator()(hypro::vector_t< Number > const &vector) const  (function) of class hypro::reachability::std::hash< hypro::vector_t< Number > > is not documented.
+/home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:373: warning: Member operator()(hypro::matrix_t< Number > const &matrix) const  (function) of class hypro::reachability::std::hash< hypro::matrix_t< Number > > is not documented.
+/home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:373: warning: Member operator()(hypro::matrix_t< Number > const &matrix) const  (function) of class hypro::reachability::std::hash< hypro::matrix_t< Number > > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:373: warning: Member operator()(hypro::matrix_t< Number > const &matrix) const  (function) of class hypro::reachability::std::hash< hypro::matrix_t< Number > > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:373: warning: Member operator()(hypro::matrix_t< Number > const &matrix) const  (function) of class hypro::reachability::std::hash< hypro::matrix_t< Number > > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:373: warning: Member operator()(hypro::matrix_t< Number > const &matrix) const  (function) of class hypro::reachability::std::hash< hypro::matrix_t< Number > > is not documented.
@@ -22813,5 +22927,5 @@ Patching output file 35/38
 Patching output file 36/38
 Patching output file 37/38
 Patching output file 38/38
-lookup cache used 21554/65536 hits=442751 misses=22842
+lookup cache used 21556/65536 hits=443739 misses=22843
 finished...
