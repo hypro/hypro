@@ -619,7 +619,6 @@ BoxT<double,Converter> BoxT<double,Converter>::intersectHalfspaces( const matrix
 
 	// the template has one non-Zero index per row
 	for(Eigen::Index rowIndex = 0; rowIndex < boxDirections.rows(); ++rowIndex) {
-		assert(boxDirections.row(rowIndex).nonZeros() == Eigen::Index(1));
 		for(Eigen::Index colIndex = 0; colIndex < boxDirections.cols(); ++colIndex) {
 			if(boxDirections(rowIndex,colIndex) > 0) {
 				boxDistances(rowIndex) = mLimits.second.at(colIndex);
@@ -651,7 +650,7 @@ BoxT<double,Converter> BoxT<double,Converter>::intersectHalfspaces( const matrix
 	// re-construct box from results.
 	std::pair<Point<double>,Point<double>> newLimits = std::make_pair(Point<double>(vector_t<double>::Zero(this->dimension())), Point<double>(vector_t<double>::Zero(this->dimension())));
 	for(Eigen::Index rowIndex = 0; rowIndex < boxDirections.rows(); ++rowIndex) {
-		assert(boxDirections.row(rowIndex).nonZeros() == Eigen::Index(1));
+		//assert(boxDirections.row(rowIndex).nonZeros() == Eigen::Index(1));
 		for(Eigen::Index colIndex = 0; colIndex < boxDirections.cols(); ++colIndex) {
 			if(boxDirections(rowIndex,colIndex) > 0) {
 				newLimits.second[colIndex] = results[rowIndex].supportValue;
