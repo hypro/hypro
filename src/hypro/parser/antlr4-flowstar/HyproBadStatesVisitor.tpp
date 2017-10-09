@@ -80,10 +80,14 @@ namespace hypro {
 		}
 
 		//1.Get the conditions under which we enter a bad state.
-		HyproFormulaVisitor<Number> visitor(vars);
-		std::pair<matrix_t<Number>,vector_t<Number>> badStatePair = visitor.visit(ctx->constrset()).template as<std::pair<matrix_t<Number>,vector_t<Number>>>();
-		Condition<Number> badStateConditions(badStatePair.first, badStatePair.second);	
-		return std::make_pair(badLoc, badStateConditions);
+		if(ctx->constrset() != NULL){
+			HyproFormulaVisitor<Number> visitor(vars);
+			std::pair<matrix_t<Number>,vector_t<Number>> badStatePair = visitor.visit(ctx->constrset()).template as<std::pair<matrix_t<Number>,vector_t<Number>>>();
+			Condition<Number> badStateConditions(badStatePair.first, badStatePair.second);	
+			return std::make_pair(badLoc, badStateConditions);	
+		} else {
+			return std::make_pair(badLoc, Condition<Number>());
+		}
 		
 	}
 
