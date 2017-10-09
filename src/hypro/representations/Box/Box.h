@@ -12,6 +12,7 @@
 #include "../../datastructures/Halfspace.h"
 #include "../../datastructures/Point.h"
 #include "../../util/Permutator.h"
+#include "../../util/templateDirections.h"
 #include "../../util/linearOptimization/Optimizer.h"
 #include "../../util/logging/Logger.h"
 #include <carl/interval/Interval.h>
@@ -19,6 +20,9 @@
 #include <map>
 #include <set>
 #include <vector>
+
+// used in case we do not have a thread-safe optimizer. Slow for high dimensions.
+// #define HYPRO_BOX_AVOID_LINEAR_OPTIMIZATION
 
 namespace hypro {
 

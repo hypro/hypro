@@ -655,8 +655,10 @@ BoxT<Number,Converter> BoxT<Number,Converter>::intersectHalfspace( const Halfspa
 
 template<typename Number, typename Converter>
 BoxT<Number,Converter> BoxT<Number,Converter>::intersectHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const {
-	//std::cout << __func__ << ": " << _mat << ", " << _vec << std::endl;
 	assert(_mat.rows() == _vec.rows());
+	assert(_mat.cols() == this->dimension());
+	#ifdef HYPRO_BOX_AVOID_LINEAR_OPTIMIZATION
+
 	if(_mat.rows() == 0) {
 		return *this;
 	}
@@ -672,6 +674,67 @@ BoxT<Number,Converter> BoxT<Number,Converter>::intersectHalfspaces( const matrix
 		return result;
 	}
 	return Empty(this->dimension());
+	#else
+
+	// convert box to a set of constraints, add other halfspaces and evaluate in box main directions to get new intervals.
+	std::vector<vector_t<Number>> tpl = computeTemplate<Number>(this->dimension(), 4);
+	matrix_t<Number> boxDirections = matrix_t<Number>::Zero(tpl.size(), this->dimension());
+	vector_t<Number> boxDistances = vector_t<Number>::Zero(boxDirections.rows());
+
+	// set up matrix.
+	// Todo: Can be combined with next loop.
+	Eigen::Index i = 0;
+	for(const auto& row : tpl) {
+		boxDirections.row(i) = row;
+		++i;
+	}
+
+	// the template has one non-Zero index per row
+	for(Eigen::Index rowIndex = 0; rowIndex < boxDirections.rows(); ++rowIndex) {
+		assert(boxDirections.row(rowIndex).nonZeros() == Eigen::Index(1));
+		for(Eigen::Index colIndex = 0; colIndex < boxDirections.cols(); ++colIndex) {
+			if(boxDirections(rowIndex,colIndex) > 0) {
+				boxDistances(rowIndex) = mLimits.second.at(colIndex);
+				break;
+			} else if (boxDirections(rowIndex,colIndex) < 0) {
+				boxDistances(rowIndex) = -mLimits.first.at(colIndex);
+				break;
+			}
+		}
+	}
+
+	// At this point the constraints for the box are created as a matrix-vector pair.
+	// Now add the halfspace constraints in a fresh matrix (we re-use the box template later).
+	matrix_t<Number> constraints = matrix_t<Number>(boxDirections.rows() + _mat.rows(), _mat.cols());
+	vector_t<Number> constants = vector_t<Number>(boxDistances.rows() + _mat.rows());
+	constraints.block(0,0,boxDirections.rows(), boxDirections.cols()) = boxDirections;
+	constraints.block(boxDirections.rows(), 0, _mat.rows(), _mat.cols()) = _mat;
+	constants.block(0,0,boxDirections.rows(),1) = boxDistances;
+	constants.block(boxDirections.rows(),0,_vec.rows(),1) = _vec;
+
+	// evaluate in box directions.
+	Optimizer<Number> opt(constraints,constants);
+	std::vector<EvaluationResult<Number>> results;
+	for(Eigen::Index rowIndex = 0; rowIndex < boxDirections.rows(); ++rowIndex) {
+		results.emplace_back(opt.evaluate(boxDirections.row(rowIndex), false));
+	}
+	assert(results.size() == boxDirections.rows());
+
+	// re-construct box from results.
+	std::pair<Point<Number>,Point<Number>> newLimits = std::make_pair(Point<Number>(vector_t<Number>::Zero(this->dimension())), Point<Number>(vector_t<Number>::Zero(this->dimension())));
+	for(Eigen::Index rowIndex = 0; rowIndex < boxDirections.rows(); ++rowIndex) {
+		assert(boxDirections.row(rowIndex).nonZeros() == Eigen::Index(1));
+		for(Eigen::Index colIndex = 0; colIndex < boxDirections.cols(); ++colIndex) {
+			if(boxDirections(rowIndex,colIndex) > 0) {
+				newLimits.second[colIndex] = results[rowIndex].supportValue;
+			} else if (boxDirections(rowIndex,colIndex) < 0) {
+				newLimits.first[colIndex] = -results[rowIndex].supportValue;
+			}
+		}
+	}
+	return BoxT<Number,Converter>(newLimits);
+
+	#endif
 }
 
 template<typename Number, typename Converter>
