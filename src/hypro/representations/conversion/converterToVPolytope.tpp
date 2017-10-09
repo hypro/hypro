@@ -47,10 +47,10 @@ std::vector<Point<Number>> computeBoundaryPointsExpensive (const SupportFunction
 
             //intersects the current support function with the Halfspace
             SupportFunctionT<Number,Converter> curPlaneSup = SupportFunctionT<Number,Converter>(curPlaneVector);
-            std::cout << "current supportplane:" << std::endl;
+            //std::cout << "current supportplane:" << std::endl;
             curPlaneSup.print();
             SupportFunctionT<Number,Converter> curFace = sf.intersect(curPlaneSup);
-            std::cout << "current face:" << std::endl;
+            //std::cout << "current face:" << std::endl;
             curFace.print();
             //only continue if face has still the same dimension as the source object (although it is technically now a dim-1 object at most)
             assert(Eigen::Index(curFace.dimension()) == dim);
@@ -108,10 +108,10 @@ Point<Number> computeBoundaryPointsExpensiveRecursive (const SupportFunctionT<Nu
 
             //intersects the current support function with the Halfspace
             SupportFunctionT<Number,Converter> curPlaneSup = SupportFunctionT<Number,Converter>(curPlaneVector);
-            std::cout << "current supportplane:" << std::endl;
+            //std::cout << "current supportplane:" << std::endl;
             curPlaneSup.print();
             SupportFunctionT<Number,Converter> curFace = sf.intersect(curPlaneSup);
-            std::cout << "current face:" << std::endl;
+            //std::cout << "current face:" << std::endl;
             curFace.print();
             //only continue if face has still the same dimension as the source object (although it is technically now a dim-1 object at most)
             assert(curFace.dimension() == unsigned(directions.cols()));
@@ -127,7 +127,7 @@ Point<Number> computeBoundaryPointsExpensiveRecursive (const SupportFunctionT<Nu
 
         //computes the arithmetic mean as an approximation of the centroid
         res = Point<Number>(computeArithmeticMeanPoint(recursiveSolutions));
-        std::cout << "merged point:" << res << std::endl;
+        //std::cout << "merged point:" << res << std::endl;
    //call has only a point as source object (deepest recursion layer)
    } else { // curDim == 0
         //evaluates the object in the first direction (any direction produces the same result)
@@ -136,7 +136,7 @@ Point<Number> computeBoundaryPointsExpensiveRecursive (const SupportFunctionT<Nu
         assert(point.errorCode != INFEAS && point.errorCode != UNKNOWN);
         res = Point<Number>(point.optimumValue);
         assert(sf.contains(point.optimumValue));
-        std::cout << "deepest floor point:" << point.optimumValue << std::endl;
+        //std::cout << "deepest floor point:" << point.optimumValue << std::endl;
    }
    return res;
 }

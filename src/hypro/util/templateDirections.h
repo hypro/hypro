@@ -39,8 +39,8 @@ static std::vector<vector_t<Number>> computeTemplate(std::size_t dimension, std:
 		vector_t<Number> v3 = vector_t<Number>::Zero(2);
 
 		v0 << 1,0;
-		v1 << 0,1;
 		v2 << -1,0;
+		v1 << 0,1;
 		v3 << 0,-1;
 
 		directions2d.push_back(v0);
