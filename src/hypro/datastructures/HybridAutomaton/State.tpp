@@ -80,6 +80,11 @@ std::pair<bool,State<Number,Representation,Rargs...>> State<Number,Representatio
 	TRACE("hypro.datastructures","Condition matrix: " << std::endl << in.getMatrix() << std::endl << "Vector: " << std::endl << in.getVector());
 	assert(in.size() == mSets.size());
 	assert(checkConsistency());
+
+	if(in.constraints().empty()) {
+		return std::make_pair(true,*this);
+	}
+
 	State<Number,Representation,Rargs...> res(*this);
 	bool empty = false;
 
@@ -107,6 +112,11 @@ std::pair<bool,State<Number,Representation,Rargs...>> State<Number,Representatio
 	TRACE("hypro.datastructures","Check Condition of size " << in.size() << " against set at pos " << I);
 	assert(in.size() == mSets.size());
 	assert(checkConsistency());
+
+	if(in.constraints().empty()) {
+		return std::make_pair(true,*this);
+	}
+
 	State<Number,Representation,Rargs...> res(*this);
 	assert(res.getTimestamp() == this->getTimestamp());
 
