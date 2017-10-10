@@ -202,11 +202,11 @@ namespace hypro {
 			auto transitionIt = transitionSequence.begin();
 			// std::cout << "Reset: " << (*transitionIt)->getReset() << std::endl;
 			// std::cout << "Dimension: " << (*transitionIt)->getReset().getContinuousResetMatrix().cols() << std::endl;
-			hypro::matrix_t<Number> resetMatrix = (*transitionIt)->getReset().getContinuousResetMatrix();
+			hypro::matrix_t<Number> resetMatrix = (*transitionIt)->getReset().getMatrix();
 			++transitionIt;
 			for( ; transitionIt != transitionSequence.end(); ++transitionIt) {
 				// std::cout << "Reset: " << (*transitionIt)->getReset() << std::endl;
-				resetMatrix = (*transitionIt)->getReset().getContinuousResetMatrix() * resetMatrix;
+				resetMatrix = (*transitionIt)->getReset().getMatrix() * resetMatrix;
 			}
 			//std:cout << __func__ << ": Resulting reset matrix: " << resetMatrix << std::endl;
 			if(resetMatrix == hypro::matrix_t<Number>::Identity(resetMatrix.rows(), resetMatrix.cols())) {
