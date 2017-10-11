@@ -977,9 +977,9 @@ ZonotopeT<Number,Converter> ZonotopeT<Number,Converter>::intersectHalfspaces( co
 }
 
 template<typename Number, typename Converter>
-std::pair<bool,ZonotopeT<Number,Converter>> ZonotopeT<Number,Converter>::satisfiesHalfspace( const Halfspace<Number>& rhs ) const {
+std::pair<CONTAINMENT,ZonotopeT<Number,Converter>> ZonotopeT<Number,Converter>::satisfiesHalfspace( const Halfspace<Number>& rhs ) const {
 	if(this->empty()) {
-		return std::make_pair(false,*this);
+		return std::make_pair(CONTAINMENT::NO,*this);
 	}
 	ZonotopeT<Number,Converter> result;
 	/* zs holds the 1-norm (Manhattan-Norm) of the direction projected onto the
@@ -992,6 +992,7 @@ std::pair<bool,ZonotopeT<Number,Converter>> ZonotopeT<Number,Converter>::satisfi
 	Number zs = ( rhs.normal().transpose() * this->mGenerators ).array().abs().sum();
 	// projection of normal on center -> offset induced by the center vector.
 	Number dc = rhs.normal().dot( this->mCenter );
+	bool limited = false;
 	// qu holds the maximal value one can go into direction of the Halfspace ->
 	// if this is less than the scalar, the
 	// zonotope is fully contained
@@ -1006,6 +1007,7 @@ std::pair<bool,ZonotopeT<Number,Converter>> ZonotopeT<Number,Converter>::satisfi
 		} else {  // partly contained
 			// sigma is half the distance between the Halfspace and the "lowest"
 			// point of the zonotope.
+			limited = true;
 			Number sigma = ( rhs.offset() - qd ) / 2, d = ( qd + rhs.offset() ) / 2;  // d holds ?
 			matrix_t<Number> HHT = this->mGenerators * this->mGenerators.transpose();
 			vector_t<Number> lambda = HHT * rhs.normal() / ( ( rhs.normal().transpose() * HHT * rhs.normal() )(0,0) + sigma * sigma );
@@ -1017,21 +1019,29 @@ std::pair<bool,ZonotopeT<Number,Converter>> ZonotopeT<Number,Converter>::satisfi
 			result.addGenerators( sigma * lambda );
 		}
 		result.reduceOrder();
-		return std::make_pair(true,result);
+		if(limited) {
+			return std::make_pair(CONTAINMENT::PARTIAL, std::move(result));
+		} else {
+			return std::make_pair(CONTAINMENT::FULL, std::move(result));
+		}
 	}
-	return std::make_pair(false,result);
+	return std::make_pair(CONTAINMENT::NO, std::move(result));
 }
 
 template<typename Number, typename Converter>
-std::pair<bool,ZonotopeT<Number,Converter>> ZonotopeT<Number,Converter>::satisfiesHalfspaces( const matrix_t<Number>& mat, const vector_t<Number>& vec ) const {
+std::pair<CONTAINMENT,ZonotopeT<Number,Converter>> ZonotopeT<Number,Converter>::satisfiesHalfspaces( const matrix_t<Number>& mat, const vector_t<Number>& vec ) const {
 	if(this->empty()) {
-		return std::make_pair(false,*this);
+		return std::make_pair(CONTAINMENT::NO,*this);
 	}
 	assert(mat.rows() == vec.rows());
-	std::pair<bool, ZonotopeT<Number,Converter>> resultPair = std::make_pair(true, *this);
+	std::pair<CONTAINMENT, ZonotopeT<Number,Converter>> resultPair = std::make_pair(CONTAINMENT::NO, *this);
 
 	resultPair.second = resultPair.second.intersectHalfspaces(mat, vec);
-	resultPair.first = !resultPair.second.empty();
+	if(!resultPair.second.empty()) {
+		resultPair.first = CONTAINMENT::YES;
+	} else {
+		resultPair.first = CONTAINMENT::NO;
+	}
 
 	/*
 	for(unsigned constraintIndex = 0; constraintIndex < mat.rows(); ++constraintIndex) {

@@ -358,7 +358,7 @@ BoxT<Number,Converter> BoxT<Number,Converter>::makeSymmetric() const {
 }
 
 template<typename Number, typename Converter>
-std::pair<bool, BoxT<Number,Converter>> BoxT<Number,Converter>::satisfiesHalfspace( const Halfspace<Number>& rhs ) const {
+std::pair<CONTAINMENT, BoxT<Number,Converter>> BoxT<Number,Converter>::satisfiesHalfspace( const Halfspace<Number>& rhs ) const {
 	std::vector<Point<Number>> vertices = this->vertices();
 	bool allVerticesContained = true;
 	unsigned outsideVertexCnt = 0;
@@ -369,20 +369,20 @@ std::pair<bool, BoxT<Number,Converter>> BoxT<Number,Converter>::satisfiesHalfspa
 		}
 	}
 	if(allVerticesContained) {
-		return std::make_pair(true, *this);
+		return std::make_pair(CONTAINMENT::FULL, *this);
 	}
 
 	if(outsideVertexCnt == vertices.size()) {
-		return std::make_pair(false, Empty());
+		return std::make_pair(CONTAINMENT::NO, Empty());
 	}
 
-	return std::make_pair(true, this->intersectHalfspace(rhs));
+	return std::make_pair(CONTAINMENT::PARTIAL, this->intersectHalfspace(rhs));
 }
 
 template<typename Number, typename Converter>
-std::pair<bool, BoxT<Number,Converter>> BoxT<Number,Converter>::satisfiesHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const {
+std::pair<CONTAINMENT, BoxT<Number,Converter>> BoxT<Number,Converter>::satisfiesHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const {
 	if(_mat.rows() == 0) {
-		return std::make_pair(true, *this);
+		return std::make_pair(CONTAINMENT::FULL, *this);
 	}
 	//std::cout << __func__ << " This: " << convert<Number,double>(*this) << std::endl;
 	//std::cout << __func__ << ": input matrix: " << convert<Number,double>(_mat) << std::endl << "input vector: " << convert<Number,double>(_vec) << std::endl;
@@ -401,7 +401,7 @@ std::pair<bool, BoxT<Number,Converter>> BoxT<Number,Converter>::satisfiesHalfspa
 		//std::cout << __func__ << " Distance: " << carl::convert<Number,double>(_vec(rowIndex)) << std::endl;
 
 		if(evaluatedBox.lower() > _vec(rowIndex)){
-			return std::make_pair(false,Empty());
+			return std::make_pair(CONTAINMENT::NO,Empty());
 		}
 
 		if(evaluatedBox.upper() > _vec(rowIndex)){
@@ -411,7 +411,7 @@ std::pair<bool, BoxT<Number,Converter>> BoxT<Number,Converter>::satisfiesHalfspa
 
 	// at this point the box cannot be empty.
 	if(limitingPlanes.empty()){
-		return std::make_pair(true, *this);
+		return std::make_pair(CONTAINMENT::FULL, *this);
 	}
 
 	// at this point the box will be limited but not empty.
@@ -426,7 +426,7 @@ std::pair<bool, BoxT<Number,Converter>> BoxT<Number,Converter>::satisfiesHalfspa
 		limitingPlanes.pop_back();
 	}
 	assert(newPlanes.rows() == newDistances.rows());
-	return std::make_pair(true, this->intersectHalfspaces(newPlanes,newDistances));
+	return std::make_pair(CONTAINMENT::PARTIAL, this->intersectHalfspaces(newPlanes,newDistances));
 }
 
 template<typename Number, typename Converter>

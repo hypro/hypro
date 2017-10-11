@@ -207,8 +207,8 @@ class ZonotopeT : public GeometricObject<Number, ZonotopeT<Number,Converter>> {
 	ZonotopeT<Number,Converter> intersectHalfspace( const Halfspace<Number>& rhs ) const;
 	ZonotopeT<Number,Converter> intersectHalfspaces( const matrix_t<Number>& mat, const vector_t<Number>& vec ) const;
 
-	std::pair<bool,ZonotopeT<Number,Converter>> satisfiesHalfspace( const Halfspace<Number>& rhs ) const;
-	std::pair<bool,ZonotopeT<Number,Converter>> satisfiesHalfspaces( const matrix_t<Number>& mat, const vector_t<Number>& vec ) const;
+	std::pair<CONTAINMENT,ZonotopeT<Number,Converter>> satisfiesHalfspace( const Halfspace<Number>& rhs ) const;
+	std::pair<CONTAINMENT,ZonotopeT<Number,Converter>> satisfiesHalfspaces( const matrix_t<Number>& mat, const vector_t<Number>& vec ) const;
 
 	#ifdef HYPRO_USE_PPL
 	/**

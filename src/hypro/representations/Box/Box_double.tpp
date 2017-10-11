@@ -274,7 +274,7 @@ BoxT<double,Converter> BoxT<double,Converter>::makeSymmetric() const {
 }
 
 template<typename Converter>
-std::pair<bool, BoxT<double,Converter>> BoxT<double,Converter>::satisfiesHalfspace( const Halfspace<double>& rhs ) const {
+std::pair<CONTAINMENT, BoxT<double,Converter>> BoxT<double,Converter>::satisfiesHalfspace( const Halfspace<double>& rhs ) const {
 	std::vector<Point<double>> vertices = this->vertices();
 	bool allVerticesContained = true;
 	unsigned outsideVertexCnt = 0;
@@ -285,24 +285,24 @@ std::pair<bool, BoxT<double,Converter>> BoxT<double,Converter>::satisfiesHalfspa
 		}
 	}
 	if(allVerticesContained) {
-		return std::make_pair(true, *this);
+		return std::make_pair(CONTAINMENT::FULL, *this);
 	}
 
 	if(outsideVertexCnt == vertices.size()) {
-		return std::make_pair(false, Empty());
+		return std::make_pair(CONTAINMENT::NO, Empty());
 	}
 
-	return std::make_pair(true, this->intersectHalfspace(rhs));
+	return std::make_pair(CONTAINMENT::PARTIAL, this->intersectHalfspace(rhs));
 }
 
 template<typename Converter>
-std::pair<bool, BoxT<double,Converter>> BoxT<double,Converter>::satisfiesHalfspaces( const matrix_t<double>& _mat, const vector_t<double>& _vec ) const {
+std::pair<CONTAINMENT, BoxT<double,Converter>> BoxT<double,Converter>::satisfiesHalfspaces( const matrix_t<double>& _mat, const vector_t<double>& _vec ) const {
 	if(_mat.rows() == 0) {
-		return std::make_pair(true, *this);
+		return std::make_pair(CONTAINMENT::FULL, *this);
 	}
 
 	if(this->empty()) {
-		return std::make_pair(false, *this);
+		return std::make_pair(CONTAINMENT::NO, *this);
 	}
 
 	//std::cout << __func__ << " This: " << convert<double,double>(*this) << std::endl;
@@ -324,7 +324,7 @@ std::pair<bool, BoxT<double,Converter>> BoxT<double,Converter>::satisfiesHalfspa
 
 		//if( !carl::AlmostEqual2sComplement(evaluatedBox.lower(), _vec(rowIndex), 128) && evaluatedBox.lower() > _vec(rowIndex)){
 		if( evaluatedBox.lower() > _vec(rowIndex)){
-			return std::make_pair(false,Empty());
+			return std::make_pair(CONTAINMENT::NO,Empty());
 		}
 
 		if(evaluatedBox.upper() > _vec(rowIndex)){
@@ -334,7 +334,7 @@ std::pair<bool, BoxT<double,Converter>> BoxT<double,Converter>::satisfiesHalfspa
 
 	// at this point the box cannot be empty.
 	if(limitingPlanes.empty()){
-		return std::make_pair(true, *this);
+		return std::make_pair(CONTAINMENT::FULL, *this);
 	}
 
 	// at this point the box will be limited but not empty.
@@ -353,7 +353,7 @@ std::pair<bool, BoxT<double,Converter>> BoxT<double,Converter>::satisfiesHalfspa
 	// Todo-check: For rational numbers this assertion holds, what about native doubles?
 	//assert(!tmpBox.empty());
 	//std::cout << __func__ << " TRUE, " << convert<double,double>(tmpBox) << std::endl;
-	return std::make_pair(true, tmpBox);
+	return std::make_pair(CONTAINMENT::PARTIAL, tmpBox);
 }
 
 template<typename Converter>

@@ -38,6 +38,13 @@ namespace hypro {
      */
     enum SOLUTION { FEAS = 0, INFEAS, INFTY, UNKNOWN };
 
+    /**
+     * @brief      Enum for set containment results. If known, we can make a statement
+     * about full or partial containment, otherwise fall back to YES/NO. Note: implicit conversion to bool still gives
+     * correct results (NO = 0).
+     */
+    enum CONTAINMENT{ NO = 0, FULL, PARTIAL, YES };
+
 } // namespace hypro
 
 namespace Eigen {

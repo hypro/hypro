@@ -604,28 +604,46 @@ EvaluationResult<Number> HPolytopeT<Number, Converter>::evaluate( const vector_t
  */
 
 template<typename Number, typename Converter>
-std::pair<bool, HPolytopeT<Number, Converter>> HPolytopeT<Number, Converter>::satisfiesHalfspace( const Halfspace<Number>& rhs ) const {
+std::pair<CONTAINMENT, HPolytopeT<Number, Converter>> HPolytopeT<Number, Converter>::satisfiesHalfspace( const Halfspace<Number>& rhs ) const {
 	TRACE("hypro.representations.HPolytope","(P AND ex <= d) == emptyset?, e: " << rhs.normal() << "d: " << rhs.offset());
 	if(this->empty()) {
-		return std::make_pair(false, *this);
+		return std::make_pair(CONTAINMENT::NO, *this);
 	}
 	HPolytopeT<Number,Converter> tmp = this->intersectHalfspace(rhs);
-	return std::make_pair(!(tmp).empty(), tmp);
+	if(tmp.hasConstraint(rhs)){
+		if(tmp.empty()){
+			return std::make_pair(CONTAINMENT::NO, std::move(tmp));
+		} else {
+			return std::make_pair(CONTAINMENT::PARTIAL, std::move(tmp));
+		}
+	}
+	assert(!tmp.empty());
+	return std::make_pair(CONTAINMENT::FULL, std::move(tmp));
 }
 
 template<typename Number, typename Converter>
-std::pair<bool, HPolytopeT<Number, Converter>> HPolytopeT<Number, Converter>::satisfiesHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const {
+std::pair<CONTAINMENT, HPolytopeT<Number, Converter>> HPolytopeT<Number, Converter>::satisfiesHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const {
 	TRACE("hypro.representations.HPolytope","(P AND Ax <= b) == emptyset?, A: " << _mat << "b: " << _vec);
 	assert(_mat.rows() == _vec.rows());
 	if(this->empty()) {
-		return std::make_pair(false, *this);
+		return std::make_pair(CONTAINMENT::NO, *this);
 	}
 
 	if(_mat.rows() == 0) {
-		return std::make_pair(true, *this);
+		return std::make_pair(CONTAINMENT::FULL, *this);
 	}
 	HPolytopeT<Number,Converter> tmp = this->intersectHalfspaces(_mat, _vec);
-	return std::make_pair(!(tmp).empty(),tmp);
+	if(tmp.empty()) {
+		return std::make_pair(CONTAINMENT::NO, std::move(tmp));
+	}
+
+	for(Eigen::Index rowI = 0; rowI < _mat.rows(); ++rowI) {
+		if(tmp.hasConstraint(Halfspace<Number>(_mat.row(rowI), _vec(rowI)))) {
+			return std::make_pair(CONTAINMENT::PARTIAL, std::move(tmp));
+		}
+	}
+	assert(!tmp.empty());
+	return std::make_pair(CONTAINMENT::FULL,tmp);
 }
 
 template <typename Number, typename Converter>

@@ -543,22 +543,22 @@ TYPED_TEST(BoxTest, SatisfiesHalfspace)
 	hypro::Halfspace<TypeParam> hsp2({1},0);
 	hypro::Halfspace<TypeParam> hsp3({1},1);
 
-	EXPECT_TRUE(box.satisfiesHalfspace(hsp1).first);
-	EXPECT_FALSE(box.satisfiesHalfspace(hsp2).first);
-	EXPECT_TRUE(box.satisfiesHalfspace(hsp3).first);
+	EXPECT_EQ(box.satisfiesHalfspace(hsp1).first, hypro::CONTAINMENT::FULL);
+	EXPECT_EQ(box.satisfiesHalfspace(hsp2).first, hypro::CONTAINMENT::NO);
+	EXPECT_EQ(box.satisfiesHalfspace(hsp3).first, hypro::CONTAINMENT::PARTIAL);
 	EXPECT_TRUE(box.satisfiesHalfspaces(hypro::matrix_t<TypeParam>(), hypro::vector_t<TypeParam>()).first);
 	hypro::matrix_t<TypeParam> mat = hypro::matrix_t<TypeParam>(2,1);
 	mat << 1,-1;
 	hypro::vector_t<TypeParam> vec = hypro::vector_t<TypeParam>(2);
 	vec << 2,-2;
 
-	EXPECT_TRUE(box.satisfiesHalfspaces(mat,vec).first);
+	EXPECT_EQ(box.satisfiesHalfspaces(mat,vec).first, hypro::CONTAINMENT::PARTIAL);
 	EXPECT_EQ(box.satisfiesHalfspaces(mat,vec).second, hypro::Box<TypeParam>( std::make_pair(hypro::Point<TypeParam>({2}), hypro::Point<TypeParam>({2}))));
 	vec << 3,-4;
-	EXPECT_FALSE(box.satisfiesHalfspaces(mat,vec).first);
+	EXPECT_EQ(box.satisfiesHalfspaces(mat,vec).first, hypro::CONTAINMENT::NO);
 	EXPECT_TRUE(box.satisfiesHalfspaces(mat,vec).second.empty());
 	vec << 3,1;
-	EXPECT_TRUE(box.satisfiesHalfspaces(mat,vec).first);
+	EXPECT_EQ(box.satisfiesHalfspaces(mat,vec).first, hypro::CONTAINMENT::FULL);
 	EXPECT_EQ(box.satisfiesHalfspaces(mat,vec).second, box);
 }
 

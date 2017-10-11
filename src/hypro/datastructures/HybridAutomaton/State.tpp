@@ -72,7 +72,7 @@ State<Number,Representation,Rargs...> State<Number,Representation,Rargs...>::uni
 }
 
 template<typename Number, typename Representation, typename ...Rargs>
-std::pair<bool,State<Number,Representation,Rargs...>> State<Number,Representation,Rargs...>::satisfies(const Condition<Number>& in) const {
+std::pair<CONTAINMENT,State<Number,Representation,Rargs...>> State<Number,Representation,Rargs...>::satisfies(const Condition<Number>& in) const {
 	//DEBUG("hypro.datastructures","this rep name: " << mSetRepresentationName << " vs " << in.getSetRepresentation());
 	//assert(mSetRepresentationName == in.getSetRepresentation());
 
@@ -82,39 +82,44 @@ std::pair<bool,State<Number,Representation,Rargs...>> State<Number,Representatio
 	assert(checkConsistency());
 
 	if(in.constraints().empty()) {
-		return std::make_pair(true,*this);
+		return std::make_pair(CONTAINMENT::FULL,*this);
 	}
 
 	State<Number,Representation,Rargs...> res(*this);
-	bool empty = false;
+
+	CONTAINMENT strictestContainment = CONTAINMENT::FULL;
 
 	for(std::size_t i = 0; i < mSets.size(); ++i) {
 		auto resultPair = boost::apply_visitor(genericSatisfiesHalfspacesVisitor<repVariant, Number>(in.getMatrix(), in.getVector()), mSets.at(i));
+		assert(resultPair.first != CONTAINMENT::YES); // assert that we have detailed information on the invariant intersection.
+
 		res.setSetDirect(resultPair.second, i);
 
 		if(!resultPair.first) {
 			TRACE("hypro.datastructures","State set " << i << "(type " << mTypes.at(i) << ") failed the condition - return empty.");
-			empty = true;
+			strictestContainment = resultPair.first;
 			break;
+		} else if(resultPair.first == CONTAINMENT::PARTIAL) {
+			strictestContainment = resultPair.first;
 		}
 	}
 
-	return std::make_pair(!empty, res);
+	return std::make_pair(strictestContainment, res);
 }
 
 template<typename Number, typename Representation, typename ...Rargs>
-std::pair<bool,State<Number,Representation,Rargs...>> State<Number,Representation,Rargs...>::satisfiesHalfspaces(const matrix_t<Number>& constraints, const vector_t<Number>& constants) const {
+std::pair<CONTAINMENT,State<Number,Representation,Rargs...>> State<Number,Representation,Rargs...>::satisfiesHalfspaces(const matrix_t<Number>& constraints, const vector_t<Number>& constants) const {
 	return partiallySatisfies(Condition<Number>(constraints,constants), 0);
 }
 
 template<typename Number, typename Representation, typename ...Rargs>
-std::pair<bool,State<Number,Representation,Rargs...>> State<Number,Representation,Rargs...>::partiallySatisfies(const Condition<Number>& in, std::size_t I) const {
+std::pair<CONTAINMENT,State<Number,Representation,Rargs...>> State<Number,Representation,Rargs...>::partiallySatisfies(const Condition<Number>& in, std::size_t I) const {
 	TRACE("hypro.datastructures","Check Condition of size " << in.size() << " against set at pos " << I);
 	assert(in.size() == mSets.size());
 	assert(checkConsistency());
 
 	if(in.constraints().empty()) {
-		return std::make_pair(true,*this);
+		return std::make_pair(CONTAINMENT::FULL,*this);
 	}
 
 	State<Number,Representation,Rargs...> res(*this);
