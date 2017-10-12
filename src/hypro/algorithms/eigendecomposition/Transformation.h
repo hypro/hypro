@@ -6,6 +6,7 @@
 #include "../../datastructures/HybridAutomaton/Settings.h"
 #include "../../datastructures/HybridAutomaton/HybridAutomaton.h"
 #include "../../representations/conversion/Converter.h"
+//#include "../../util/adaptions_eigen/adaptions_eigen.h"
 //#include "parser/antlr4-flowstar/ParserWrapper.h"
 //#include "../../datastructures/HybridAutomaton/Transition.h"
 //#include "../../datastructures/HybridAutomaton/Location.h"
@@ -27,6 +28,7 @@ namespace hypro {
     using Vector = vector_t<Number>;
     template <typename Number>
     using DiagonalMatrix= Eigen::DiagonalMatrix<Number,Eigen::Dynamic>;
+    using DiagonalMatrixdouble = Eigen::DiagonalMatrix<double, Eigen::Dynamic>;
     using BoolMatrix = matrix_t<bool>;
     using BoolVector = vector_t<bool>;
 //template <typename Number>

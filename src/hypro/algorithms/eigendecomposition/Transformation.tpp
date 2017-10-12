@@ -8,8 +8,11 @@ Transformation<Number>::Transformation (const HybridAutomaton<Number>& _hybrid) 
     Matrix<Number> matrix_in_parser;
     Matrix<Number> matrix_calc;
     size_t m_size, i;
+    DiagonalMatrixdouble Ddouble;
+    Matrix<double> Vdouble;
+    Matrix<double> Vinvdouble;
     Matrix<Number> V;                             //backtransformation
-    Matrix<Number> Vinv;                          //dumped after use
+    Matrix<Number> Vinv;                          //transformation
     Vector<Number> b_tr;                          //transformed and dumped after use
     LocationManager<Number>& locationManager = LocationManager<Number>::getInstance();
     locationSet locations;
@@ -25,6 +28,10 @@ Transformation<Number>::Transformation (const HybridAutomaton<Number>& _hybrid) 
         declare_structures(mSTallvalues, m_size);
         b_tr        = Vector<Number>(m_size);
         matrix_calc = Matrix<Number>(m_size,m_size);
+//TODO TESTING
+        Ddouble     = DiagonalMatrixdouble(m_size); //formulation in .h
+        Vdouble     = Matrix<double>(m_size,m_size);
+        Vinvdouble  = Matrix<double>(m_size,m_size);
         V           = Matrix<Number>(m_size,m_size);
         Vinv        = Matrix<Number>(m_size,m_size);
         b_tr        = matrix_in_parser.topRightCorner(m_size,1);
@@ -32,16 +39,23 @@ Transformation<Number>::Transformation (const HybridAutomaton<Number>& _hybrid) 
         std::cout<<"A: "<<std::endl<<matrix_calc;
     //LOCATION TRANSFORMATION
         Eigen::EigenSolver<Matrix<Number>> es(matrix_calc);    //decompose matrix
-        V << es.eigenvectors().real();
-        mSTallvalues.mSTindependentFunct.D.diagonal() << es.eigenvalues().real();
-        Vinv = V.inverse();
+//TODO TESTING
+        Vdouble << es.eigenvectors().real();
+        Ddouble.diagonal() << es.eigenvalues().real();
+        Vinvdouble = Vdouble.inverse();
+        //mSTallvalues.mSTindependentFunct.D.diagonal() << es.eigenvalues().real();
+        //Vinv = V.inverse();
         //ASSERTION CONDITION TODO making this faster for big/sparse matrices
-        Eigen::JacobiSVD<Matrix<Number>> svd(Vinv);  
+        Eigen::JacobiSVD<Matrix<Number>> svd(Vinvdouble);  
         double cond = svd.singularValues()(0)  / svd.singularValues()(svd.singularValues().size()-1);
         if(std::abs(cond) > CONDITION_LIMIT) {
             FATAL("hypro.eigendecomposition","condition is higher than CONDITION_LIMIT");
         }
         std::cout <<"Vinv(condition): ("<< cond <<")\n" << Vinv;
+//TODO TESTING CONVERSION TO RATIONAL
+        V = convert<double,Number>(Vdouble);
+        Vinv = convert<double,Number>(Vinvdouble);
+        mSTallvalues.mSTindependentFunct.D = convert<double,Number>(Ddouble);   //TODO TESTING IF CORRECT/ASSERTION FAILING
         //std::cout <<"D: "    << std::endl << D;
         matrix_calc = Vinv*matrix_calc;
         b_tr        = Vinv*b_tr;
@@ -62,6 +76,8 @@ Transformation<Number>::Transformation (const HybridAutomaton<Number>& _hybrid) 
         //mSTallvalues.mSTdependentFunct.x_tr   //MOVE TO ALG
         //mSTallvalues.mSTdependentFunct.xhom   //MOVE TO ALG
         //mSTallvalues.mSTevalFunctions                 //assigned in init
+
+//TODO TESTING
         mSTallvalues.mSTflowpipeSegment.Vinv       = Vinv;
         mSTallvalues.mSTflowpipeSegment.V          = V; //rest of flow used only for plotting
         mLocPtrtoComputationvaluesMap.insert(std::make_pair(PtrtoNewLoc, mSTallvalues));
