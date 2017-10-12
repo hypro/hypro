@@ -97,6 +97,7 @@ public:
 	    }
       ostr << "and transitions.size() is: " << l.getTransitions().size() << std::endl;
 	    ostr << std::endl << ")";
+      ostr <<  "and invariants " << l.getInvariant() << std::endl;
 	#endif
 	    return ostr;
     }

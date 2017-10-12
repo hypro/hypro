@@ -83,7 +83,7 @@ Transformation<Number>::Transformation (const HybridAutomaton<Number>& _hybrid) 
         mLocPtrtoComputationvaluesMap.insert(std::make_pair(PtrtoNewLoc, mSTallvalues));
         //std::cout << "old loc: "<<LocPtr<<"\n";
         //std::cout << "new loc: "<<PtrtoNewLoc<<"\n";
-    //INVARIANTS(TYPE CONDITION)        [TODO output stream broken with assertion without invariants!]
+    //INVARIANTS(TYPE CONDITION) [TODO check why assertion to Invariants fails]
         const Condition<Number>& invar1 = LocPtr->getInvariant();
         Condition<Number> invar1NEW; // = PtrtoNewLoc->getInvariant();
         //inv: A'= A*V
