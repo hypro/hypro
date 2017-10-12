@@ -227,7 +227,7 @@ namespace hypro {
 		Eigen::DiagonalMatrix<To,Eigen::Dynamic> resultMat( _mat.rows() );
 
 		for ( unsigned i = 0; i < _mat.rows(); ++i ) {
-            resultMat.diagonal()[ i ] = carl::convert<From,To>(_mat.diagonal()[ i ]);
+            resultMat.diagonal()(i)  = carl::convert<From,To>( _mat.diagonal()(i) );
 		}
 		assert(resultMat.rows() == _mat.rows() );
 		return resultMat;
