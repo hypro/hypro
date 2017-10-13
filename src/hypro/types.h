@@ -41,9 +41,9 @@ namespace hypro {
     /**
      * @brief      Enum for set containment results. If known, we can make a statement
      * about full or partial containment, otherwise fall back to YES/NO. Note: implicit conversion to bool still gives
-     * correct results (NO = 0).
+     * correct results (NO = 0). BOT is used for UNKNOWN.
      */
-    enum CONTAINMENT{ NO = 0, FULL, PARTIAL, YES };
+    enum CONTAINMENT{ NO = 0, FULL, PARTIAL, YES, BOT };
 
 } // namespace hypro
 
@@ -165,6 +165,38 @@ namespace std {
     		}
     		case hypro::SOLUTION::UNKNOWN: {
     			_out << "UNKNOWN";
+    			break;
+    		}
+    	}
+		return _out;
+	}
+
+	/**
+	 * @brief      Outstream operator for the CONTAINMENT enum.
+	 * @param      _out  The outstream reference.
+	 * @param[in]  _in   The enum type.
+	 * @return     A reference to the outstream.
+	 */
+	inline std::ostream& operator<<(std::ostream& _out, const hypro::CONTAINMENT& _in) {
+    	switch(_in){
+    		case hypro::CONTAINMENT::NO: {
+    			_out << "N";
+    			break;
+    		}
+    		case hypro::CONTAINMENT::YES: {
+    			_out << "Y";
+    			break;
+    		}
+    		case hypro::CONTAINMENT::FULL: {
+    			_out << "F";
+    			break;
+    		}
+    		case hypro::CONTAINMENT::PARTIAL: {
+    			_out << "P";
+    			break;
+    		}
+    		case hypro::CONTAINMENT::BOT: {
+    			_out << "B";
     			break;
     		}
     	}
