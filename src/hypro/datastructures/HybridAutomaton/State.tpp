@@ -100,7 +100,7 @@ std::pair<CONTAINMENT,State<Number,Representation,Rargs...>> State<Number,Repres
 			strictestContainment = resultPair.first;
 			break;
 		} else if(resultPair.first == CONTAINMENT::PARTIAL) {
-			strictestContainment = resultPair.first;
+			strictestContainment = CONTAINMENT::PARTIAL;
 		}
 	}
 
