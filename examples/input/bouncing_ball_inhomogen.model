@@ -37,7 +37,7 @@ hybrid reachability
  jumps
  {
   l -> l
-  guard { x = 0 v <= 0 }
+  guard { x <= 0.001 v <= 0 }
   reset { v' := -0.75*v }
   parallelotope aggregation {}
  }
