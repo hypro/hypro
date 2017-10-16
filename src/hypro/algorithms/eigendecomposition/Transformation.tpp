@@ -38,7 +38,7 @@ Transformation<Number>::Transformation (const HybridAutomaton<Number>& _hybrid) 
         matrix_calc = matrix_in_parser.topLeftCorner(m_size,m_size);
         std::cout<<"A: "<<std::endl<<matrix_calc;
     //LOCATION TRANSFORMATION
-        Eigen::EigenSolver<Matrix<Number>> es(matrix_calc);    //decompose matrix
+        Eigen::EigenSolver<Matrix<double>> es(matrix_calc);    //decompose matrix
 //TODO TESTING
         Vdouble << es.eigenvectors().real();
         Ddouble.diagonal() << es.eigenvalues().real();
@@ -46,7 +46,7 @@ Transformation<Number>::Transformation (const HybridAutomaton<Number>& _hybrid) 
         //mSTallvalues.mSTindependentFunct.D.diagonal() << es.eigenvalues().real();
         //Vinv = V.inverse();
         //ASSERTION CONDITION TODO making this faster for big/sparse matrices
-        Eigen::JacobiSVD<Matrix<Number>> svd(Vinvdouble);  
+        Eigen::JacobiSVD<Matrix<double>> svd(Vinvdouble);  
         double cond = svd.singularValues()(0)  / svd.singularValues()(svd.singularValues().size()-1);
         if(std::abs(cond) > CONDITION_LIMIT) {
             FATAL("hypro.eigendecomposition","condition is higher than CONDITION_LIMIT");
