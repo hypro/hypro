@@ -52,9 +52,11 @@ Transformation<Number>::Transformation (const HybridAutomaton<Number>& _hybrid) 
             FATAL("hypro.eigendecomposition","condition is higher than CONDITION_LIMIT");
         }
         std::cout <<"Vinv(condition): ("<< cond <<")\n" << Vinv;
-//TODO TESTING CONVERSION TO RATIONAL
+//TODO TESTING CONVERSION TO RATIONAL (TRACE)
         V = convert<double,Number>(Vdouble);
         Vinv = convert<double,Number>(Vinvdouble);
+        TRACE("hypro.eigendecomposition","V\n" << V);
+        TRACE("hypro.eigendecompositoin","Vinv\n" << Vinv);
         mSTallvalues.mSTindependentFunct.D = convert<double,Number>(Ddouble);   //TODO TESTING IF CORRECT/ASSERTION FAILING
         //std::cout <<"D: "    << std::endl << D;
         matrix_calc = Vinv*matrix_calc;
