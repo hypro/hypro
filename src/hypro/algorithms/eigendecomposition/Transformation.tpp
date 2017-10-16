@@ -11,6 +11,7 @@ Transformation<Number>::Transformation (const HybridAutomaton<Number>& _hybrid) 
     DiagonalMatrixdouble Ddouble;
     Matrix<double> Vdouble;
     Matrix<double> Vinvdouble;
+    Matrix<double> matrixCalcDouble;
     Matrix<Number> V;                             //backtransformation
     Matrix<Number> Vinv;                          //transformation
     Vector<Number> b_tr;                          //transformed and dumped after use
@@ -32,20 +33,22 @@ Transformation<Number>::Transformation (const HybridAutomaton<Number>& _hybrid) 
         Ddouble     = DiagonalMatrixdouble(m_size); //formulation in .h
         Vdouble     = Matrix<double>(m_size,m_size);
         Vinvdouble  = Matrix<double>(m_size,m_size);
+        matrixCalcDouble = Matrix<double>(m_size,m_size);
         V           = Matrix<Number>(m_size,m_size);
         Vinv        = Matrix<Number>(m_size,m_size);
         b_tr        = matrix_in_parser.topRightCorner(m_size,1);
         matrix_calc = matrix_in_parser.topLeftCorner(m_size,m_size);
         std::cout<<"A: "<<std::endl<<matrix_calc;
+        matrixCalcDouble = convert<Number,double> (matrix_calc);
     //LOCATION TRANSFORMATION
-        Eigen::EigenSolver<Matrix<double>> es(matrix_calc);    //decompose matrix
+        Eigen::EigenSolver<Matrix<double>> es(matrixCalcDouble);
 //TODO TESTING
         Vdouble << es.eigenvectors().real();
         Ddouble.diagonal() << es.eigenvalues().real();
         Vinvdouble = Vdouble.inverse();
         //mSTallvalues.mSTindependentFunct.D.diagonal() << es.eigenvalues().real();
         //Vinv = V.inverse();
-        //ASSERTION CONDITION TODO making this faster for big/sparse matrices
+    //ASSERTION CONDITION TODO making this faster for big/sparse matrices
         Eigen::JacobiSVD<Matrix<double>> svd(Vinvdouble);  
         double cond = svd.singularValues()(0)  / svd.singularValues()(svd.singularValues().size()-1);
         if(std::abs(cond) > CONDITION_LIMIT) {
@@ -57,7 +60,7 @@ Transformation<Number>::Transformation (const HybridAutomaton<Number>& _hybrid) 
         Vinv = convert<double,Number>(Vinvdouble);
         TRACE("hypro.eigendecomposition","V\n" << V);
         TRACE("hypro.eigendecompositoin","Vinv\n" << Vinv);
-        mSTallvalues.mSTindependentFunct.D = convert<double,Number>(Ddouble);   //TODO TESTING IF CORRECT/ASSERTION FAILING
+        mSTallvalues.mSTindependentFunct.D = convert<double,Number>(Ddouble);
         //std::cout <<"D: "    << std::endl << D;
         matrix_calc = Vinv*matrix_calc;
         b_tr        = Vinv*b_tr;
