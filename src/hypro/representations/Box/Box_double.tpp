@@ -393,13 +393,18 @@ BoxT<double,Converter> BoxT<double,Converter>::linearTransformation( const matri
 		}
 	}
 	//std::cout << __func__ << ": Min: " << min << ", Max: " << max << std::endl;
-	return BoxT<double,Converter>( std::make_pair(min, max) );
+	BoxT<double,Converter> res = BoxT<double,Converter>( std::make_pair(min, max) );
+	//assert(res.contains(Point<double>(A*mLimits.first.rawCoordinates())));
+	//assert(res.contains(Point<double>(A*mLimits.second.rawCoordinates())));
+	return res;
 }
 
 template<typename Converter>
 BoxT<double,Converter> BoxT<double,Converter>::affineTransformation( const matrix_t<double> &A, const vector_t<double> &b ) const {
 	if(!this->empty()){
+		TRACE("hypro.representations.box","This: " << *this << ", A: " << A << "b: " << b);
 		BoxT<double,Converter> res = this->linearTransformation(A);
+		TRACE("hypro.representations.box","Result of linear trafo: " << res);
 		return BoxT<double,Converter>( std::make_pair(res.min()+b, res.max()+b) );
 	}
 	return *this;
@@ -416,6 +421,7 @@ BoxT<double,Converter> BoxT<double,Converter>::minkowskiDecomposition( const Box
 	if(rhs.empty()) {
 		return *this;
 	}
+	TRACE("hypro.representations.box","This: " << *this << ", Rhs: " << rhs);
 	assert( dimension() == rhs.dimension() );
 	// assert( std::mismatch(this->boundaries().begin(), this->boundaries.end(), rhs.boundaries().begin(), rhs.boundaries.end(), [&](a,b) -> bool {return a.diameter() >= b.diameter()}  ) ); // TODO: wait for c++14 support
 	// assert( (BoxT<double,Converter>(std::make_pair(mLimits.first - rhs.min(), mLimits.second - rhs.max())).minkowskiSum(rhs) == *this) );
