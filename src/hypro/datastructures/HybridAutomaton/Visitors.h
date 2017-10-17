@@ -1,6 +1,7 @@
 #pragma once
 #include "../../representations/GeometricObject.h"
 #include "../../representations/types.h"
+#include "../../types.h"
 
 namespace hypro {
 
@@ -177,7 +178,7 @@ public:
 
 template<typename T, typename Number>
 class genericSatisfiesHalfspacesVisitor
-    : public boost::static_visitor<std::pair<bool,T>>
+    : public boost::static_visitor<std::pair<CONTAINMENT,T>>
 {
 protected:
 	const matrix_t<Number>& constraints;
@@ -191,7 +192,7 @@ public:
 	{}
 
 	template<typename B>
-    inline std::pair<bool,T> operator()(const B& lhs) const {
+    inline std::pair<CONTAINMENT,T> operator()(const B& lhs) const {
  		return lhs.satisfiesHalfspaces(constraints, constants);
     }
 };

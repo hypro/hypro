@@ -635,18 +635,24 @@ PolytopeT<Number,Converter> PolytopeT<Number,Converter>::intersectHalfspaces( co
 }
 
 template <typename Number, typename Converter>
-std::pair<bool, PolytopeT<Number,Converter>> PolytopeT<Number,Converter>::satisfiesHalfspace( const Halfspace<Number> &rhs ) const {
+std::pair<CONTAINMENT, PolytopeT<Number,Converter>> PolytopeT<Number,Converter>::satisfiesHalfspace( const Halfspace<Number> &rhs ) const {
 	TRACE("hypro.pplPolytope",*this << " and halfspace " << rhs);
 	PolytopeT<Number,Converter> res = this->intersectHalfspace(rhs);
-	return std::make_pair(!res.empty(), res);
+	if(!res.empty())
+		return std::make_pair(CONTAINMENT::YES, res);
+	else
+		return std::make_pair(CONTAINMENT::NO, res);
 }
 
 template <typename Number, typename Converter>
-std::pair<bool, PolytopeT<Number,Converter>> PolytopeT<Number,Converter>::satisfiesHalfspaces( const matrix_t<Number> &_mat,
+std::pair<CONTAINMENT, PolytopeT<Number,Converter>> PolytopeT<Number,Converter>::satisfiesHalfspaces( const matrix_t<Number> &_mat,
 														 const vector_t<Number> &_vec ) const {
 	TRACE("hypro.pplPolytope",*this << " and halfspaces " << _mat << " <= " << _vec);
 	PolytopeT<Number,Converter> res = this->intersectHalfspaces(_mat,_vec);
-	return std::make_pair(!res.empty(), res);
+	if(!res.empty())
+		return std::make_pair(CONTAINMENT::YES, res);
+	else
+		return std::make_pair(CONTAINMENT::NO, res);
 }
 
 template <typename Number, typename Converter>

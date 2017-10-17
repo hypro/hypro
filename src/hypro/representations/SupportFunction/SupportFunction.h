@@ -83,8 +83,8 @@ public:
 	SupportFunctionT<Number,Converter> unite( const SupportFunctionT<Number,Converter>& _rhs ) const;
 	static SupportFunctionT<Number,Converter> unite( const std::vector<SupportFunctionT<Number,Converter>>& _rhs );
 	SupportFunctionT<Number,Converter> scale( const Number& _factor = 1 ) const;
-	std::pair<bool, SupportFunctionT> satisfiesHalfspace( const Halfspace<Number>& rhs ) const;
-	std::pair<bool, SupportFunctionT> satisfiesHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const;
+	std::pair<CONTAINMENT, SupportFunctionT> satisfiesHalfspace( const Halfspace<Number>& rhs ) const;
+	std::pair<CONTAINMENT, SupportFunctionT> satisfiesHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const;
 	bool empty() const;
 	void print() const;
     void swap(SupportFunctionT<Number,Converter>& first, SupportFunctionT<Number,Converter>& second);

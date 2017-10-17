@@ -12,7 +12,7 @@ namespace hypro
  */
 template <typename Number>
 struct ReachabilitySettings {
-    Number timeBound; /// The global time horizon.
+    Number timeBound; /// The local time horizon.
     int jumpDepth; /// The maximal number of jumps, i.e. the depth of the search tree.
     Number timeStep; /// Time step size.
     std::string fileName; /// Name for the output file (plotting).

@@ -147,8 +147,8 @@ namespace hypro
 		PolytopeT<Number,Converter> intersect(const PolytopeT<Number,Converter>& rhs) const;
 		PolytopeT<Number,Converter> intersectHalfspace(const Halfspace<Number>& rhs) const;
 		PolytopeT<Number,Converter> intersectHalfspaces(const matrix_t<Number>& _mat, const vector_t<Number>& _vec) const;
-		std::pair<bool, PolytopeT<Number,Converter>> satisfiesHalfspace(const Halfspace<Number>& rhs) const;
-		std::pair<bool, PolytopeT<Number,Converter>> satisfiesHalfspaces(const matrix_t<Number>& _mat, const vector_t<Number>& _vec) const;
+		std::pair<CONTAINMENT, PolytopeT<Number,Converter>> satisfiesHalfspace(const Halfspace<Number>& rhs) const;
+		std::pair<CONTAINMENT, PolytopeT<Number,Converter>> satisfiesHalfspaces(const matrix_t<Number>& _mat, const vector_t<Number>& _vec) const;
 		PolytopeT<Number,Converter> hull() const;
 		bool contains(const Point<Number>& point) const;
 		bool contains(const PolytopeT<Number,Converter>& poly) const;

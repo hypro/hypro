@@ -242,8 +242,8 @@ public:
 	 * General interface
 	 */
 
-	std::pair<bool, HPolytopeT> satisfiesHalfspace( const Halfspace<Number>& rhs ) const;
-	std::pair<bool, HPolytopeT> satisfiesHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const;
+	std::pair<CONTAINMENT, HPolytopeT> satisfiesHalfspace( const Halfspace<Number>& rhs ) const;
+	std::pair<CONTAINMENT, HPolytopeT> satisfiesHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const;
 	HPolytopeT project(const std::vector<std::size_t>& dimensions) const;
 	HPolytopeT linearTransformation( const matrix_t<Number>& A ) const;
 	HPolytopeT affineTransformation( const matrix_t<Number>& A, const vector_t<Number>& b ) const;
