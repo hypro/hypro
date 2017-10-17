@@ -19,6 +19,7 @@ struct ReachabilitySettings {
     unsigned long pplDenomimator; /// Common denominator for ppl-numbers (only relevant if ppl is used).
     std::vector<std::vector<std::size_t>> plotDimensions; /// A set of dimension pairs to plot.
     bool uniformBloating = false; /// Bloating settings.
+    int clustering = -1; /// -1 = off, 0 = all (aggregation), i = maximal number of segments to unify
 
     /**
      * @brief      Default constructor.
@@ -30,17 +31,7 @@ struct ReachabilitySettings {
      * @param[in]  _rhs  The right hand side.
      * @return     A reference to this object.
      */
-    ReachabilitySettings<Number>& operator=(const ReachabilitySettings<Number>& _rhs)
-    {
-        timeBound = _rhs.timeBound;
-        jumpDepth = _rhs.jumpDepth;
-        timeStep = _rhs.timeStep;
-        fileName = _rhs.fileName;
-        pplDenomimator = _rhs.pplDenomimator;
-        plotDimensions = _rhs.plotDimensions;
-        uniformBloating = _rhs.uniformBloating;
-        return *this;
-    }
+    ReachabilitySettings<Number>& operator=(const ReachabilitySettings<Number>& _rhs) = default;
 
     /**
      * @brief      Equality comparison operator.
@@ -56,7 +47,8 @@ struct ReachabilitySettings {
     		lhs.fileName== rhs.fileName &&
     		lhs.pplDenomimator == rhs.pplDenomimator &&
     		lhs.plotDimensions == rhs.plotDimensions &&
-    		lhs.uniformBloating == rhs.uniformBloating
+    		lhs.uniformBloating == rhs.uniformBloating &&
+    		lhs.clustering == rhs.clustering
     		);
     }
 
@@ -71,6 +63,7 @@ struct ReachabilitySettings {
         ostr << "Local time-horizon: " << carl::toDouble(rhs.timeBound) << std::endl;
         ostr << "Time-step size: " << carl::toDouble(rhs.timeStep) << std::endl;
         ostr << "Jump-depth: " << rhs.jumpDepth << std::endl;
+        ostr << "Clustering: " << rhs.clustering << std::endl;
         return ostr;
     }
 };

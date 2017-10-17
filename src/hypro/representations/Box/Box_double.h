@@ -7,6 +7,7 @@
 #pragma once
 
 #include "Box.h"
+#include "../../util/logging/Logger.h"
 
 namespace hypro {
 

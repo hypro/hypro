@@ -111,6 +111,7 @@ namespace hypro {
 
 			std::size_t getNumberDiscreteJumps() const;
 			std::vector<Transition<Number>*> getTransitionSequence(typename std::deque<TPathElement<Number>>::const_iterator start, typename std::deque<TPathElement<Number>>::const_iterator end) const;
+			std::vector<Transition<Number>*> getTransitionSequence() const { return this->getTransitionSequence(mPath.begin(), mPath.end()); }
 			bool hasChatteringZeno() const;
 
 			// comparison - read as "is longer than"
@@ -119,8 +120,11 @@ namespace hypro {
 
 			// Iterator
 			using TIterator = typename std::deque<TPathElement<Number>>::iterator;
+			using TIterator_const = typename std::deque<TPathElement<Number>>::const_iterator;
 			TIterator begin ();
 			TIterator end();
+			TIterator_const begin () const;
+			TIterator_const end() const;
 			const TPathElement<Number>& back() const;
 			const TPathElement<Number>& front() const;
 

@@ -263,6 +263,16 @@ namespace hypro {
 	}
 
 	template<typename Number>
+	typename Path<Number>::TIterator_const Path<Number>::begin () const {
+		return mPath.begin();
+	}
+
+	template<typename Number>
+	typename Path<Number>::TIterator_const Path<Number>::end() const {
+		return mPath.end();
+	}
+
+	template<typename Number>
 	const TPathElement<Number>& Path<Number>::back() const {
 		assert(!mPath.empty());
 		return mPath.back();
