@@ -35,10 +35,9 @@ public:
     T__119 = 120, T__120 = 121, T__121 = 122, T__122 = 123, T__123 = 124, 
     T__124 = 125, T__125 = 126, T__126 = 127, T__127 = 128, T__128 = 129, 
     T__129 = 130, T__130 = 131, T__131 = 132, T__132 = 133, T__133 = 134, 
-    T__134 = 135, T__135 = 136, T__136 = 137, T__137 = 138, T__138 = 139, 
-    T__139 = 140, T__140 = 141, T__141 = 142, T__142 = 143, T__143 = 144, 
-    NUMBER = 145, REALNUBER = 146, STRING = 147, IDENTIFIER = 148, RELATIVENAME = 149, 
-    ABSOLUTENAME = 150, ROOTNAME = 151, WS = 152
+    T__134 = 135, T__135 = 136, MULOP = 137, ADDOP = 138, COMPOP = 139, 
+    NUMBER = 140, REALNUMBER = 141, STRING = 142, IDENTIFIER = 143, RELATIVENAME = 144, 
+    ABSOLUTENAME = 145, ROOTNAME = 146, WS = 147
   };
 
   HybridSystemLexer(antlr4::CharStream *input);

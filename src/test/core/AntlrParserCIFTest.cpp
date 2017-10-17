@@ -66,7 +66,6 @@ TYPED_TEST(AntlrParserCIFTest, ParseVariables){
 		FAIL();
 	}
 */
-	std::cout << "input stream content:\n" << input.toString() << std::endl;
 
 	//Create a Lexer and feed it with the input
 	HybridSystemLexer lexer(&input);
