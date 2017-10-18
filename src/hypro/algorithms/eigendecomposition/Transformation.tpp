@@ -166,7 +166,12 @@ Transformation<Number>::Transformation (const HybridAutomaton<Number>& _hybrid) 
             badStateNEW.setMatrix(badState.getMatrix(i)*V, i);
             badStateNEW.setVector(badState.getVector(i)  , i);
         }
+        TRACE("hypro.eigendecomposition","transformed localBadState: " << badStateNEW);
         mTransformedHA.addLocalBadState(NewLocPtr, badStateNEW);
+    }
+    for (const auto & locBadState : mTransformedHA.getLocalBadStates() ) {
+        TRACE("hypro.eigendecomposition","in location: " << locBadState.first)
+        TRACE("hypro.eigendecomposition","after trafo State:" << locBadState.second);
     }
 }
 template <typename Number>
@@ -205,6 +210,7 @@ void Transformation<Number>::transformGlobalBadStates
     }
     globalBadStatesTransformed = true;
 }
+//TODO check every going to be used
 template <typename Number>
 void Transformation<Number>::analyzeExponentialFunctions() {
     for ( auto &structObject : mLocPtrtoComputationvaluesMap) {
@@ -218,27 +224,6 @@ void Transformation<Number>::analyzeExponentialFunctions() {
     }
 
 }
-//TODO method to compute flow (depending on this object+NewLocPtr INPUT ?!
-//template <typename Number, typename Representation>
-//void Transformation<Number,Representation>::computeFlowinLocation
-//  (Location* LocPtr) {
-//    //TODO create properties by location (initial input value thus function)
-//    //WHERE IS MATRIX EXPONENTIAL USED??
-//    
-//    //TODO looping
-//
-//    //TODO plot by transforming into original system (using V*x) or plot in transformed system
-//
-//}
-
-//REACHABILITY WORKER
-//PROCESS TASK -> computeForwardTimeClojure
-//task bekommen, transformieren
-//transitionen berechnen
-
-//TODO change SettingsProvider -> transformation of HybridAutomaton 
-// -> save in global scope the transformation values
-// -> use location values
 
 //REACHABILITY WORKER INHERITS from IWorker and MAutomaton(automaton)
 
@@ -278,6 +263,7 @@ void Transformation<Number>::declare_structures(STallValues<Number>& mSTallValue
     //delta, deltalimit of STindependentFunc missing
     //flowpipe only V for backtransformation into original system
 }
+/*
 //mark if in transformed system x0<x0_2 in 3rd column
 template <typename Number>
 void Transformation<Number>::mark_x0isMin(Matrix<Number>& x_tr, const int n) {
@@ -301,6 +287,7 @@ void Transformation<Number>::swap_x0isMax(Matrix<Number>& x_tr, const int n) {
     }
     //std::cout << "x_tr afterback: "<< std::endl << x_tr << std::endl;
 }
+*/
 template <typename Number>
 void Transformation<Number>::output_HybridAutomaton() {
     std::cout << mTransformedHA << "\n-------------- ENDOFAUTOMATA ------------------" << std::endl;
