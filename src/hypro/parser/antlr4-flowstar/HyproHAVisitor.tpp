@@ -48,34 +48,45 @@ namespace hypro {
 			badStates = bStateVisitor.visit(ctx->unsafeset()).template as<locationConditionMap>();	
 		} 
 
-#ifdef HYPRO_LOGGING		
-		COUT("Parsed variables: " << vars << std::endl);
-		COUT("Reachability settings:\n" << reachSettings);
-		COUT("All locations:\n");
+#ifdef HYPRO_LOGGING
+		TRACE("hypro.parser","================================\n");
+		TRACE("hypro.parser","From the parser\n");	
+		TRACE("hypro.parser","================================\n");	
+		TRACE("hypro.parser","Parsed variables: " << vars << std::endl);
+		TRACE("hypro.parser","Reachability settings:\n" << reachSettings);
+		TRACE("hypro.parser","All locations:\n");
 		for(auto it = rLocSet.begin(); it != rLocSet.end(); ++it){
-			COUT(**it);
+			TRACE("hypro.parser",**it);
 		}
-		COUT("All Transitions:\n");
+		TRACE("hypro.parser","All Transitions:\n");
 		for(auto it = transSet.begin(); it != transSet.end(); ++it){
-			COUT(**it);
+			TRACE("hypro.parser",**it);
 		}
-		COUT("Initial state:\n");
+		TRACE("hypro.parser","Initial state:\n");
 		for(auto it = initSet.begin(); it != initSet.end(); ++it){
-			COUT("Initial Location: " << it->first->getName() << " and initial state: " << it->second);
+			TRACE("hypro.parser","Initial Location: " << it->first->getName() << " and initial state: " << it->second);
 		}
-		COUT("Bad states:\n");
+		TRACE("hypro.parser","Bad states:\n");
 		std::cout << "badStates.size" << badStates.size() << std::endl;
 		for(auto it = badStates.begin(); it != badStates.end(); ++it){
-			COUT("Bad Location: " << it->first->getName() << " and bad state: " << it->second);
+			TRACE("hypro.parser","Bad Location: " << it->first->getName() << " and bad state: " << it->second);
 		}
+		
 #endif
-
 		//7.Build HybridAutomaton, return it
 		HybridAutomaton<Number> ha;
 		ha.setLocations(locSet);
 		ha.setTransitions(transSet);
 		ha.setInitialStates(initSet);
 		ha.setLocalBadStates(badStates);
+
+#ifdef HYPRO_LOGGING
+		TRACE("hypro.parser","================================\n");
+		TRACE("hypro.parser","From the automaton before moving\n");	
+		TRACE("hypro.parser","================================\n");	
+		TRACE("hypro.parser",ha << std::endl);
+#endif
+		
 		return std::move(ha);			//Move the ownership of ha to whoever uses ha then, i.e. the test suite
 	}
 
