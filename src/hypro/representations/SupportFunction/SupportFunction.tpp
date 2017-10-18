@@ -402,11 +402,8 @@ namespace hypro{
     }
 
     template<typename Number, typename Converter>
-    std::pair<bool, SupportFunctionT<Number,Converter>> SupportFunctionT<Number,Converter>::satisfiesHalfspace( const Halfspace<Number>& rhs ) const {
+    std::pair<CONTAINMENT, SupportFunctionT<Number,Converter>> SupportFunctionT<Number,Converter>::satisfiesHalfspace( const Halfspace<Number>& rhs ) const {
         //std::cout << __func__ << ": " << _mat << std::endl << " <= " << _vec <<  std::endl;
-		if(rhs.normal().nonZeros() == 0) {
-			return std::make_pair(true, *this);
-		}
 
 		bool limiting = false;
     	EvaluationResult<Number> planeEvalRes = content->evaluate(rhs.normal(), false);
@@ -414,7 +411,7 @@ namespace hypro{
 			//std::cout << "Is infeasible (should not happen)." << std::endl;
 			//std::cout << "Set is (Hpoly): " << std::endl << Converter::toHPolytope(*this) << std::endl;
 			assert(Converter::toHPolytope(*this).empty());
-    		return std::make_pair(false, *this);
+    		return std::make_pair(CONTAINMENT::NO, *this);
     	} else if(planeEvalRes.supportValue > rhs.offset()){
 			//std::cout << "Object will be limited. " << std::endl;
     		// the actual object will be limited by the new plane
@@ -424,22 +421,22 @@ namespace hypro{
             if(content->evaluate(-(rhs.normal()), false ).supportValue < -(rhs.offset())){
 				//std::cout << "fullyOutside" << std::endl;
                 // the object lies fully outside one of the planes -> return false
-                return std::make_pair(false, this->intersectHalfspace(rhs) );
+                return std::make_pair(CONTAINMENT::NO, this->intersectHalfspace(rhs) );
             }
     	}
 
     	if(limiting){
-        	return std::make_pair(true, this->intersectHalfspace(rhs));
+        	return std::make_pair(CONTAINMENT::PARTIAL, this->intersectHalfspace(rhs));
     	} else {
-    		return std::make_pair(true, *this);
+    		return std::make_pair(CONTAINMENT::FULL, *this);
     	}
     }
 
     template<typename Number, typename Converter>
-    std::pair<bool, SupportFunctionT<Number,Converter>> SupportFunctionT<Number,Converter>::satisfiesHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const {
+    std::pair<CONTAINMENT, SupportFunctionT<Number,Converter>> SupportFunctionT<Number,Converter>::satisfiesHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const {
         TRACE("hypro.representations.supportFunction","Matrix: " << _mat << std::endl << " <= " << _vec );
 		if(_mat.rows() == 0) {
-			return std::make_pair(true, *this);
+			return std::make_pair(CONTAINMENT::FULL, *this);
 		}
 		assert(_mat.rows() == _vec.rows());
         std::vector<unsigned> limitingPlanes;
@@ -449,7 +446,7 @@ namespace hypro{
         	if(planeEvalRes.errorCode == SOLUTION::INFEAS){
 				TRACE("hypro.representations.supportFunction", "Is infeasible (should not happen)." );
 				TRACE("hypro.representations.supportFunction", "Set is (Hpoly): " << std::endl << Converter::toHPolytope(*this) );
-        		return std::make_pair(false, *this);
+        		return std::make_pair(CONTAINMENT::NO, *this);
         	//} else if(!carl::AlmostEqual2sComplement(planeEvalRes.supportValue, _vec(rowI), 2) && planeEvalRes.supportValue > _vec(rowI)){
         	} else if(planeEvalRes.supportValue > _vec(rowI)){
 				TRACE("hypro.representations.supportFunction", "Object will be limited, as " << planeEvalRes.supportValue << " > " << _vec(rowI));
@@ -469,14 +466,14 @@ namespace hypro{
 	            			if(secndNegEval.supportValue < -(_vec(rowI))) {
 	            				TRACE("hypro.representations.supportFunction", "fullyOutside" );
 				                // the object lies fully outside one of the planes -> return false
-				                return std::make_pair(false, this->intersectHalfspaces(_mat,_vec) );
+				                return std::make_pair(CONTAINMENT::NO, this->intersectHalfspaces(_mat,_vec) );
 	            			}
 	            		}
 	            	} else {
 	            		// the values are far enough away from each other to make this result a false negative.
 	            		TRACE("hypro.representations.supportFunction", "fullyOutside, as " << invDirVal << " >= " << -(_vec(rowI)) );
 		                // the object lies fully outside one of the planes -> return false
-		                return std::make_pair(false, this->intersectHalfspaces(_mat,_vec) );
+		                return std::make_pair(CONTAINMENT::NO, this->intersectHalfspaces(_mat,_vec) );
 	            	}
 	            }
         	}
@@ -484,7 +481,7 @@ namespace hypro{
     	if(limitingPlanes.size() < unsigned(_mat.rows())){
     		if(limitingPlanes.size() == 0 ){
     			TRACE("hypro.representations.supportFunction", " Object will stay the same");
-    			return std::make_pair(true, *this);
+    			return std::make_pair(CONTAINMENT::FULL, *this);
     		}
     		TRACE("hypro.representations.supportFunction", " Object will be limited but not empty (" << limitingPlanes.size() << " planes)");
     		// if the result is not fullyOutside, only add planes, which affect the object
@@ -498,12 +495,12 @@ namespace hypro{
         	}
 			assert(limitingPlanes.empty());
         	TRACE("hypro.representations.supportFunction", "Intersect with " << planes << ", " << distances);
-        	return std::make_pair(true, this->intersectHalfspaces(planes,distances));
+        	return std::make_pair(CONTAINMENT::PARTIAL, this->intersectHalfspaces(planes,distances));
     	} else {
     		TRACE("hypro.representations.supportFunction", " Object will be fully limited but not empty");
     		assert(limitingPlanes.size() == unsigned(_mat.rows()));
     		TRACE("hypro.representations.supportFunction", "Intersect with " << _mat << ", " << _vec);
-    		return std::make_pair(true, this->intersectHalfspaces(_mat,_vec));
+    		return std::make_pair(CONTAINMENT::PARTIAL, this->intersectHalfspaces(_mat,_vec));
     	}
     }
 

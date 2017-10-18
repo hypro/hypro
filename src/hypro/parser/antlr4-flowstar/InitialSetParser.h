@@ -13,13 +13,14 @@ class  InitialSetParser : public antlr4::Parser {
 public:
   enum {
     T__0 = 1, T__1 = 2, T__2 = 3, T__3 = 4, T__4 = 5, T__5 = 6, IN = 7, 
-    COMMENT = 8, EQUALS = 9, BOOLRELATION = 10, PLUS = 11, TIMES = 12, NUMBER = 13, 
-    VARIABLE = 14, WS = 15
+    COMMENT = 8, EQUALS = 9, BOOLRELATION = 10, PLUS = 11, MINUS = 12, TIMES = 13, 
+    NUMBER = 14, VARIABLE = 15, WS = 16
   };
 
   enum {
-    RuleInit = 0, RuleInitstate = 1, RuleTerm = 2, RulePolynom = 3, RuleInterval = 4, 
-    RuleEquation = 5, RuleConstraint = 6, RuleIntervalexpr = 7, RuleConstrset = 8
+    RuleInit = 0, RuleInitstate = 1, RuleConnector = 2, RuleTerm = 3, RulePolynom = 4, 
+    RuleInterval = 5, RuleEquation = 6, RuleConstraint = 7, RuleIntervalexpr = 8, 
+    RuleConstrset = 9
   };
 
   InitialSetParser(antlr4::TokenStream *input);
@@ -34,6 +35,7 @@ public:
 
   class InitContext;
   class InitstateContext;
+  class ConnectorContext;
   class TermContext;
   class PolynomContext;
   class IntervalContext;
@@ -46,7 +48,8 @@ public:
   public:
     InitContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
-    InitstateContext *initstate();
+    std::vector<InitstateContext *> initstate();
+    InitstateContext* initstate(size_t i);
 
    
   };
@@ -65,6 +68,18 @@ public:
 
   InitstateContext* initstate();
 
+  class  ConnectorContext : public antlr4::ParserRuleContext {
+  public:
+    ConnectorContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    antlr4::tree::TerminalNode *PLUS();
+    antlr4::tree::TerminalNode *MINUS();
+
+   
+  };
+
+  ConnectorContext* connector();
+
   class  TermContext : public antlr4::ParserRuleContext {
   public:
     TermContext(antlr4::ParserRuleContext *parent, size_t invokingState);
@@ -75,6 +90,8 @@ public:
     antlr4::tree::TerminalNode* VARIABLE(size_t i);
     std::vector<antlr4::tree::TerminalNode *> TIMES();
     antlr4::tree::TerminalNode* TIMES(size_t i);
+    std::vector<ConnectorContext *> connector();
+    ConnectorContext* connector(size_t i);
 
    
   };
@@ -87,8 +104,8 @@ public:
     virtual size_t getRuleIndex() const override;
     std::vector<TermContext *> term();
     TermContext* term(size_t i);
-    std::vector<antlr4::tree::TerminalNode *> PLUS();
-    antlr4::tree::TerminalNode* PLUS(size_t i);
+    std::vector<ConnectorContext *> connector();
+    ConnectorContext* connector(size_t i);
 
    
   };

@@ -50,12 +50,10 @@ namespace hypro {
 		 * @return     A reference to the outstream.
 		 */
 		friend std::ostream& operator<<(std::ostream& out, const TPathElement<Number>& pathElem) {
-#ifdef HYDRA_USE_LOGGING
 			if(pathElem.isDiscreteStep())
 				out << pathElem.transition->getSource()->getId() << " -> " << pathElem.transition->getTarget()->getId() << " " << pathElem.timeInterval;
 			else
 				out << pathElem.timeInterval;
-#endif
 			return out;
 		}
 
@@ -107,11 +105,13 @@ namespace hypro {
 			static bool sharePrefix(const Path<Number>& lhs, const Path<Number>& rhs);
 			bool sharesPrefix(const Path<Number>& rhs) const;
 			Path sharedPrefix(const Path<Number>& rhs) const;
+			Path removeSharedPrefix(const Path<Number>& rhs) const;
 			bool isEmpty() const { return (mPath.size() == 0); }
 			Number maximalTimeSpan(typename std::deque<TPathElement<Number>>::const_iterator start, typename std::deque<TPathElement<Number>>::const_iterator end) const;
 
 			std::size_t getNumberDiscreteJumps() const;
 			std::vector<Transition<Number>*> getTransitionSequence(typename std::deque<TPathElement<Number>>::const_iterator start, typename std::deque<TPathElement<Number>>::const_iterator end) const;
+			std::vector<Transition<Number>*> getTransitionSequence() const { return this->getTransitionSequence(mPath.begin(), mPath.end()); }
 			bool hasChatteringZeno() const;
 
 			// comparison - read as "is longer than"
@@ -120,8 +120,11 @@ namespace hypro {
 
 			// Iterator
 			using TIterator = typename std::deque<TPathElement<Number>>::iterator;
+			using TIterator_const = typename std::deque<TPathElement<Number>>::const_iterator;
 			TIterator begin ();
 			TIterator end();
+			TIterator_const begin () const;
+			TIterator_const end() const;
 			const TPathElement<Number>& back() const;
 			const TPathElement<Number>& front() const;
 
@@ -132,14 +135,12 @@ namespace hypro {
 			void push_front(const TPathElement<Number>& elem);
 
 			friend std::ostream& operator<<(std::ostream& _out, const Path<Number>& path) {
-#ifdef HYDRA_USE_LOGGING
 				if(!path.isEmpty()) {
 					_out << path.at(0);
 					for(std::size_t i = 1; i < path.size(); ++i) {
 						_out << ", " << path.at(i);
 					}
 				}
-#endif
 				return _out;
 			}
 

@@ -13,7 +13,7 @@ import Transition, Setting, Location, InitialSet, BadStates;
 
 ////// Parser Rules
  
-start               : 'hybrid reachability' '{' vardeclaration setting modes jumps init '}' unsafeset? ;
+start               : 'hybrid reachability' '{' vardeclaration setting modes jumps init+ '}' unsafeset? ; 
  
 vardeclaration      : 'state var' VARIABLE ((',' VARIABLE)+)? ;
 

@@ -112,10 +112,11 @@ endforeach()
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14 -DGTEST_USE_OWN_TR1_TUPLE=1")
 
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+	#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libstdc++")
 	if (APPLE)
 		message("-- Using clang on apple")
 		set(CMAKE_MACOSX_RPATH 1)
-		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++")
+
 		if(${STATICLIB_SWITCH} STREQUAL "OFF")
 			set(CMAKE_MACOSX_RPATH 1)
 		endif()
@@ -171,7 +172,7 @@ endif()
 # initialize lists for include directories and library files
 set(${PROJECT_NAME}_INCLUDE_DIRS "" CACHE STRING "Include directories var")
 
-load_library(${PROJECT_NAME} Boost 1.55.0)
+load_library(${PROJECT_NAME} Boost 1.55.0 COMPONENTS system)
 set(Boost_USE_STATIC_LIBS        ON) # only find static libs
 set(Boost_USE_MULTITHREADED      ON)
 set(Boost_USE_STATIC_RUNTIME    OFF)

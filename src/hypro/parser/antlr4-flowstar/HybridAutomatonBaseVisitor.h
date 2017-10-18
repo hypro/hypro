@@ -55,6 +55,10 @@ public:
     return visitChildren(ctx);
   }
 
+  virtual antlrcpp::Any visitConnector(HybridAutomatonParser::ConnectorContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
   virtual antlrcpp::Any visitTerm(HybridAutomatonParser::TermContext *ctx) override {
     return visitChildren(ctx);
   }

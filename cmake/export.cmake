@@ -38,12 +38,14 @@ else()
 	endif()
 endif()
 
+export_target(DEPENDENT_TARGETS Boost_SHARED)
 export_target(DEPENDENT_TARGETS EIGEN3)
 export_target(DEPENDENT_TARGETS GMP_SHARED)
 export_target(DEPENDENT_TARGETS GMP_STATIC)
 export_target(DEPENDENT_TARGETS GMPXX_SHARED)
 export_target(DEPENDENT_TARGETS GMPXX_STATIC GMP_STATIC)
 export_target(DEPENDENT_TARGETS ANTLR4_STATIC)
+
 
 include(CMakePackageConfigHelpers)
 

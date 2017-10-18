@@ -294,8 +294,8 @@ class State
      * @param[in]  in    The passed condition.
      * @return     A pair of a Boolean and the resulting state. The Boolean is set to True, if the resulting state is not empty.
      */
-    std::pair<bool,State<Number,Representation,Rargs...>> satisfies(const Condition<Number>& in) const;
-    std::pair<bool,State<Number,Representation,Rargs...>> satisfiesHalfspaces(const matrix_t<Number>& constraints, const vector_t<Number>& constants) const;
+    std::pair<CONTAINMENT,State<Number,Representation,Rargs...>> satisfies(const Condition<Number>& in) const;
+    std::pair<CONTAINMENT,State<Number,Representation,Rargs...>> satisfiesHalfspaces(const matrix_t<Number>& constraints, const vector_t<Number>& constants) const;
 
     /**
      * @brief      Meta-function to verify the i-th set of a state against the i-th component of a condition.
@@ -303,7 +303,7 @@ class State
      * @param[in]  I	 The set index.
      * @return     A pair of a Boolean and the resulting state. The Boolean is set to True, if the resulting state is not empty.
      */
-    std::pair<bool,State<Number,Representation,Rargs...>> partiallySatisfies(const Condition<Number>& in, std::size_t I) const;
+    std::pair<CONTAINMENT,State<Number,Representation,Rargs...>> partiallySatisfies(const Condition<Number>& in, std::size_t I) const;
 
     /**
      * @brief      Meta-function which can be used to transform all contained sets at once with the passed parameters and adjust the

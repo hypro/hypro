@@ -224,35 +224,35 @@ VPolytopeT<Number, Converter> VPolytopeT<Number, Converter>::intersectHalfspaces
 }
 
 template<typename Number, typename Converter>
-std::pair<bool, VPolytopeT<Number, Converter>> VPolytopeT<Number, Converter>::satisfiesHalfspace( const Halfspace<Number>& rhs ) const {
+std::pair<CONTAINMENT, VPolytopeT<Number, Converter>> VPolytopeT<Number, Converter>::satisfiesHalfspace( const Halfspace<Number>& rhs ) const {
 	auto intermediate = Converter::toHPolytope(*this);
 	auto resultPair = intermediate.satisfiesHalfspace(rhs);
-	if(resultPair.first){
+	if(resultPair.first != CONTAINMENT::NO){
 		//resultPair.second.removeRedundancy();
 		VPolytopeT<Number, Converter> res(Converter::toVPolytope(resultPair.second));
-		return std::make_pair(true, res);
+		return std::make_pair(resultPair.first, std::move(res));
 	}
-	return std::make_pair(false, VPolytopeT<Number,Converter>::Empty());
+	return std::make_pair(resultPair.first, std::move(VPolytopeT<Number,Converter>::Empty()));
 }
 
 template<typename Number, typename Converter>
-std::pair<bool, VPolytopeT<Number, Converter>> VPolytopeT<Number, Converter>::satisfiesHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const {
+std::pair<CONTAINMENT, VPolytopeT<Number, Converter>> VPolytopeT<Number, Converter>::satisfiesHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const {
 	//std::cout << typeid(*this).name() << "::" << __func__ << ": Matrix: " << _mat << " and vector: " << _vec << std::endl;
 	//std::cout << "This VPolytope: " << *this << std::endl;
 	auto intermediate = Converter::toHPolytope(*this);
 	intermediate.reduceNumberRepresentation(mVertices);
 	//std::cout << typeid(*this).name() << "::" << __func__ << ": Intermediate hpoly: " << intermediate << std::endl;
 	auto resultPair = intermediate.satisfiesHalfspaces(_mat, _vec);
-	if(resultPair.first){
+	if(resultPair.first != CONTAINMENT::NO){
 		//resultPair.second.removeRedundancy();
 		assert(!resultPair.second.empty());
 		TRACE("hypro.representations.vpolytope",": Intermediate hpoly convert back: " << resultPair.second);
 		VPolytopeT<Number, Converter> res(Converter::toVPolytope(resultPair.second));
 		TRACE("hypro.representations.vpolytope","Re-Converted v-poly: " << res);
 		assert(!res.empty());
-		return std::make_pair(true, res);
+		return std::make_pair(resultPair.first, std::move(res));
 	}
-	return std::make_pair(false, VPolytopeT<Number,Converter>::Empty());
+	return std::make_pair(resultPair.first, std::move(VPolytopeT<Number,Converter>::Empty()));
 }
 
 

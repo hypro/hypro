@@ -1,6 +1,6 @@
 # Documentation
 
-* <a href="https://hypro.github.io/hypro/html/" target="_blank">Doxygen documentation</a>
+* <a href="https://hypro.github.io/hypro/html/index.html" target="_blank">Doxygen documentation</a>
 * [Pdf manual](https://ths.rwth-aachen.de/wp-content/uploads/sites/4/research/HyPro/manual.pdf)
 
 # Project homepage (with benchmark collection)

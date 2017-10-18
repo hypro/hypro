@@ -13,8 +13,8 @@ class  InitialSetLexer : public antlr4::Lexer {
 public:
   enum {
     T__0 = 1, T__1 = 2, T__2 = 3, T__3 = 4, T__4 = 5, T__5 = 6, IN = 7, 
-    COMMENT = 8, EQUALS = 9, BOOLRELATION = 10, PLUS = 11, TIMES = 12, NUMBER = 13, 
-    VARIABLE = 14, WS = 15
+    COMMENT = 8, EQUALS = 9, BOOLRELATION = 10, PLUS = 11, MINUS = 12, TIMES = 13, 
+    NUMBER = 14, VARIABLE = 15, WS = 16
   };
 
   InitialSetLexer(antlr4::CharStream *input);

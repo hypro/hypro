@@ -14,8 +14,8 @@ public:
   enum {
     T__0 = 1, T__1 = 2, T__2 = 3, T__3 = 4, T__4 = 5, T__5 = 6, T__6 = 7, 
     T__7 = 8, T__8 = 9, T__9 = 10, T__10 = 11, IN = 12, COMMENT = 13, EQUALS = 14, 
-    BOOLRELATION = 15, PLUS = 16, TIMES = 17, NUMBER = 18, VARIABLE = 19, 
-    WS = 20
+    BOOLRELATION = 15, PLUS = 16, MINUS = 17, TIMES = 18, NUMBER = 19, VARIABLE = 20, 
+    WS = 21
   };
 
   LocationLexer(antlr4::CharStream *input);

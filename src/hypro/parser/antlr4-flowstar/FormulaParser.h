@@ -13,12 +13,12 @@ class  FormulaParser : public antlr4::Parser {
 public:
   enum {
     T__0 = 1, T__1 = 2, T__2 = 3, IN = 4, COMMENT = 5, EQUALS = 6, BOOLRELATION = 7, 
-    PLUS = 8, TIMES = 9, NUMBER = 10, VARIABLE = 11, WS = 12
+    PLUS = 8, MINUS = 9, TIMES = 10, NUMBER = 11, VARIABLE = 12, WS = 13
   };
 
   enum {
-    RuleTerm = 0, RulePolynom = 1, RuleInterval = 2, RuleEquation = 3, RuleConstraint = 4, 
-    RuleIntervalexpr = 5, RuleConstrset = 6
+    RuleConnector = 0, RuleTerm = 1, RulePolynom = 2, RuleInterval = 3, 
+    RuleEquation = 4, RuleConstraint = 5, RuleIntervalexpr = 6, RuleConstrset = 7
   };
 
   FormulaParser(antlr4::TokenStream *input);
@@ -31,6 +31,7 @@ public:
   virtual antlr4::dfa::Vocabulary& getVocabulary() const override;
 
 
+  class ConnectorContext;
   class TermContext;
   class PolynomContext;
   class IntervalContext;
@@ -38,6 +39,18 @@ public:
   class ConstraintContext;
   class IntervalexprContext;
   class ConstrsetContext; 
+
+  class  ConnectorContext : public antlr4::ParserRuleContext {
+  public:
+    ConnectorContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    antlr4::tree::TerminalNode *PLUS();
+    antlr4::tree::TerminalNode *MINUS();
+
+   
+  };
+
+  ConnectorContext* connector();
 
   class  TermContext : public antlr4::ParserRuleContext {
   public:
@@ -49,6 +62,8 @@ public:
     antlr4::tree::TerminalNode* VARIABLE(size_t i);
     std::vector<antlr4::tree::TerminalNode *> TIMES();
     antlr4::tree::TerminalNode* TIMES(size_t i);
+    std::vector<ConnectorContext *> connector();
+    ConnectorContext* connector(size_t i);
 
    
   };
@@ -61,8 +76,8 @@ public:
     virtual size_t getRuleIndex() const override;
     std::vector<TermContext *> term();
     TermContext* term(size_t i);
-    std::vector<antlr4::tree::TerminalNode *> PLUS();
-    antlr4::tree::TerminalNode* PLUS(size_t i);
+    std::vector<ConnectorContext *> connector();
+    ConnectorContext* connector(size_t i);
 
    
   };

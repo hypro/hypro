@@ -274,7 +274,7 @@ BoxT<double,Converter> BoxT<double,Converter>::makeSymmetric() const {
 }
 
 template<typename Converter>
-std::pair<bool, BoxT<double,Converter>> BoxT<double,Converter>::satisfiesHalfspace( const Halfspace<double>& rhs ) const {
+std::pair<CONTAINMENT, BoxT<double,Converter>> BoxT<double,Converter>::satisfiesHalfspace( const Halfspace<double>& rhs ) const {
 	std::vector<Point<double>> vertices = this->vertices();
 	bool allVerticesContained = true;
 	unsigned outsideVertexCnt = 0;
@@ -285,24 +285,24 @@ std::pair<bool, BoxT<double,Converter>> BoxT<double,Converter>::satisfiesHalfspa
 		}
 	}
 	if(allVerticesContained) {
-		return std::make_pair(true, *this);
+		return std::make_pair(CONTAINMENT::FULL, *this);
 	}
 
 	if(outsideVertexCnt == vertices.size()) {
-		return std::make_pair(false, Empty());
+		return std::make_pair(CONTAINMENT::NO, Empty());
 	}
 
-	return std::make_pair(true, this->intersectHalfspace(rhs));
+	return std::make_pair(CONTAINMENT::PARTIAL, this->intersectHalfspace(rhs));
 }
 
 template<typename Converter>
-std::pair<bool, BoxT<double,Converter>> BoxT<double,Converter>::satisfiesHalfspaces( const matrix_t<double>& _mat, const vector_t<double>& _vec ) const {
+std::pair<CONTAINMENT, BoxT<double,Converter>> BoxT<double,Converter>::satisfiesHalfspaces( const matrix_t<double>& _mat, const vector_t<double>& _vec ) const {
 	if(_mat.rows() == 0) {
-		return std::make_pair(true, *this);
+		return std::make_pair(CONTAINMENT::FULL, *this);
 	}
 
 	if(this->empty()) {
-		return std::make_pair(false, *this);
+		return std::make_pair(CONTAINMENT::NO, *this);
 	}
 
 	//std::cout << __func__ << " This: " << convert<double,double>(*this) << std::endl;
@@ -324,7 +324,7 @@ std::pair<bool, BoxT<double,Converter>> BoxT<double,Converter>::satisfiesHalfspa
 
 		//if( !carl::AlmostEqual2sComplement(evaluatedBox.lower(), _vec(rowIndex), 128) && evaluatedBox.lower() > _vec(rowIndex)){
 		if( evaluatedBox.lower() > _vec(rowIndex)){
-			return std::make_pair(false,Empty());
+			return std::make_pair(CONTAINMENT::NO,Empty());
 		}
 
 		if(evaluatedBox.upper() > _vec(rowIndex)){
@@ -334,7 +334,7 @@ std::pair<bool, BoxT<double,Converter>> BoxT<double,Converter>::satisfiesHalfspa
 
 	// at this point the box cannot be empty.
 	if(limitingPlanes.empty()){
-		return std::make_pair(true, *this);
+		return std::make_pair(CONTAINMENT::FULL, *this);
 	}
 
 	// at this point the box will be limited but not empty.
@@ -353,7 +353,7 @@ std::pair<bool, BoxT<double,Converter>> BoxT<double,Converter>::satisfiesHalfspa
 	// Todo-check: For rational numbers this assertion holds, what about native doubles?
 	//assert(!tmpBox.empty());
 	//std::cout << __func__ << " TRUE, " << convert<double,double>(tmpBox) << std::endl;
-	return std::make_pair(true, tmpBox);
+	return std::make_pair(CONTAINMENT::PARTIAL, tmpBox);
 }
 
 template<typename Converter>
@@ -393,13 +393,18 @@ BoxT<double,Converter> BoxT<double,Converter>::linearTransformation( const matri
 		}
 	}
 	//std::cout << __func__ << ": Min: " << min << ", Max: " << max << std::endl;
-	return BoxT<double,Converter>( std::make_pair(min, max) );
+	BoxT<double,Converter> res = BoxT<double,Converter>( std::make_pair(min, max) );
+	//assert(res.contains(Point<double>(A*mLimits.first.rawCoordinates())));
+	//assert(res.contains(Point<double>(A*mLimits.second.rawCoordinates())));
+	return res;
 }
 
 template<typename Converter>
 BoxT<double,Converter> BoxT<double,Converter>::affineTransformation( const matrix_t<double> &A, const vector_t<double> &b ) const {
 	if(!this->empty()){
+		TRACE("hypro.representations.box","This: " << *this << ", A: " << A << "b: " << b);
 		BoxT<double,Converter> res = this->linearTransformation(A);
+		TRACE("hypro.representations.box","Result of linear trafo: " << res);
 		return BoxT<double,Converter>( std::make_pair(res.min()+b, res.max()+b) );
 	}
 	return *this;
@@ -416,6 +421,7 @@ BoxT<double,Converter> BoxT<double,Converter>::minkowskiDecomposition( const Box
 	if(rhs.empty()) {
 		return *this;
 	}
+	TRACE("hypro.representations.box","This: " << *this << ", Rhs: " << rhs);
 	assert( dimension() == rhs.dimension() );
 	// assert( std::mismatch(this->boundaries().begin(), this->boundaries.end(), rhs.boundaries().begin(), rhs.boundaries.end(), [&](a,b) -> bool {return a.diameter() >= b.diameter()}  ) ); // TODO: wait for c++14 support
 	// assert( (BoxT<double,Converter>(std::make_pair(mLimits.first - rhs.min(), mLimits.second - rhs.max())).minkowskiSum(rhs) == *this) );
@@ -583,8 +589,10 @@ BoxT<double,Converter> BoxT<double,Converter>::intersectHalfspace( const Halfspa
 
 template<typename Converter>
 BoxT<double,Converter> BoxT<double,Converter>::intersectHalfspaces( const matrix_t<double>& _mat, const vector_t<double>& _vec ) const {
-	//std::cout << __func__ << ": " << _mat << ", " << _vec << std::endl;
 	assert(_mat.rows() == _vec.rows());
+	assert(_mat.cols() == this->dimension());
+	#ifdef HYPRO_BOX_AVOID_LINEAR_OPTIMIZATION
+
 	if(_mat.rows() == 0) {
 		return *this;
 	}
@@ -600,6 +608,66 @@ BoxT<double,Converter> BoxT<double,Converter>::intersectHalfspaces( const matrix
 		return result;
 	}
 	return Empty(this->dimension());
+	#else
+
+	// convert box to a set of constraints, add other halfspaces and evaluate in box main directions to get new intervals.
+	std::vector<vector_t<double>> tpl = computeTemplate<double>(this->dimension(), 4);
+	matrix_t<double> boxDirections = matrix_t<double>::Zero(tpl.size(), this->dimension());
+	vector_t<double> boxDistances = vector_t<double>::Zero(boxDirections.rows());
+
+	// set up matrix.
+	// Todo: Can be combined with next loop.
+	Eigen::Index i = 0;
+	for(const auto& row : tpl) {
+		boxDirections.row(i) = row;
+		++i;
+	}
+
+	// the template has one non-Zero index per row
+	for(Eigen::Index rowIndex = 0; rowIndex < boxDirections.rows(); ++rowIndex) {
+		for(Eigen::Index colIndex = 0; colIndex < boxDirections.cols(); ++colIndex) {
+			if(boxDirections(rowIndex,colIndex) > 0) {
+				boxDistances(rowIndex) = mLimits.second.at(colIndex);
+				break;
+			} else if (boxDirections(rowIndex,colIndex) < 0) {
+				boxDistances(rowIndex) = -mLimits.first.at(colIndex);
+				break;
+			}
+		}
+	}
+
+	// At this point the constraints for the box are created as a matrix-vector pair.
+	// Now add the halfspace constraints in a fresh matrix (we re-use the box template later).
+	matrix_t<double> constraints = matrix_t<double>(boxDirections.rows() + _mat.rows(), _mat.cols());
+	vector_t<double> constants = vector_t<double>(boxDistances.rows() + _mat.rows());
+	constraints.block(0,0,boxDirections.rows(), boxDirections.cols()) = boxDirections;
+	constraints.block(boxDirections.rows(), 0, _mat.rows(), _mat.cols()) = _mat;
+	constants.block(0,0,boxDirections.rows(),1) = boxDistances;
+	constants.block(boxDirections.rows(),0,_vec.rows(),1) = _vec;
+
+	// evaluate in box directions.
+	Optimizer<double> opt(constraints,constants);
+	std::vector<EvaluationResult<double>> results;
+	for(Eigen::Index rowIndex = 0; rowIndex < boxDirections.rows(); ++rowIndex) {
+		results.emplace_back(opt.evaluate(boxDirections.row(rowIndex), false));
+	}
+	assert(results.size() == boxDirections.rows());
+
+	// re-construct box from results.
+	std::pair<Point<double>,Point<double>> newLimits = std::make_pair(Point<double>(vector_t<double>::Zero(this->dimension())), Point<double>(vector_t<double>::Zero(this->dimension())));
+	for(Eigen::Index rowIndex = 0; rowIndex < boxDirections.rows(); ++rowIndex) {
+		//assert(boxDirections.row(rowIndex).nonZeros() == Eigen::Index(1));
+		for(Eigen::Index colIndex = 0; colIndex < boxDirections.cols(); ++colIndex) {
+			if(boxDirections(rowIndex,colIndex) > 0) {
+				newLimits.second[colIndex] = results[rowIndex].supportValue;
+			} else if (boxDirections(rowIndex,colIndex) < 0) {
+				newLimits.first[colIndex] = -results[rowIndex].supportValue;
+			}
+		}
+	}
+	return BoxT<double,Converter>(newLimits);
+
+	#endif
 }
 
 template<typename Converter>

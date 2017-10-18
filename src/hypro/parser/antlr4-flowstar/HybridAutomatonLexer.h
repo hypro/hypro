@@ -18,8 +18,8 @@ public:
     T__20 = 21, T__21 = 22, T__22 = 23, T__23 = 24, T__24 = 25, T__25 = 26, 
     T__26 = 27, T__27 = 28, T__28 = 29, T__29 = 30, T__30 = 31, PARALLELOTOPE = 32, 
     BOX = 33, JUMP = 34, DEFINE = 35, IN = 36, COMMENT = 37, EQUALS = 38, 
-    BOOLRELATION = 39, PLUS = 40, TIMES = 41, NUMBER = 42, VARIABLE = 43, 
-    WS = 44, EXPONENTIAL = 45
+    BOOLRELATION = 39, PLUS = 40, MINUS = 41, TIMES = 42, NUMBER = 43, VARIABLE = 44, 
+    WS = 45, EXPONENTIAL = 46
   };
 
   HybridAutomatonLexer(antlr4::CharStream *input);

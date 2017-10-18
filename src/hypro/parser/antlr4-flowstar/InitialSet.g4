@@ -13,6 +13,6 @@ import Formula;
 
 //////// Parser Rules
 
-init 	 		: 'init' '{' initstate '}' ;
+init 	 		: 'init' '{' initstate+ '}' ;	
 
 initstate 		: VARIABLE '{' constrset '}' ;

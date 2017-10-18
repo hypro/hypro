@@ -14,8 +14,8 @@ public:
   enum {
     T__0 = 1, T__1 = 2, T__2 = 3, T__3 = 4, T__4 = 5, T__5 = 6, T__6 = 7, 
     T__7 = 8, T__8 = 9, PARALLELOTOPE = 10, BOX = 11, JUMP = 12, DEFINE = 13, 
-    IN = 14, COMMENT = 15, EQUALS = 16, BOOLRELATION = 17, PLUS = 18, TIMES = 19, 
-    NUMBER = 20, VARIABLE = 21, WS = 22
+    IN = 14, COMMENT = 15, EQUALS = 16, BOOLRELATION = 17, PLUS = 18, MINUS = 19, 
+    TIMES = 20, NUMBER = 21, VARIABLE = 22, WS = 23
   };
 
   TransitionLexer(antlr4::CharStream *input);

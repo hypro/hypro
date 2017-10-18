@@ -12,6 +12,7 @@
 #include "../../datastructures/Halfspace.h"
 #include "../../datastructures/Point.h"
 #include "../../util/Permutator.h"
+#include "../../util/templateDirections.h"
 #include "../../util/linearOptimization/Optimizer.h"
 #include "../../util/logging/Logger.h"
 #include <carl/interval/Interval.h>
@@ -19,6 +20,9 @@
 #include <map>
 #include <set>
 #include <vector>
+
+// used in case we do not have a thread-safe optimizer. Slow for high dimensions.
+// #define HYPRO_BOX_AVOID_LINEAR_OPTIMIZATION
 
 namespace hypro {
 
@@ -366,8 +370,8 @@ class BoxT : public GeometricObject<Number, BoxT<Number,Converter>> {
 	BoxT<Number,Converter> makeSymmetric() const;
 
 
-	std::pair<bool, BoxT> satisfiesHalfspace( const Halfspace<Number>& rhs ) const;
-	std::pair<bool, BoxT> satisfiesHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const;
+	std::pair<CONTAINMENT, BoxT> satisfiesHalfspace( const Halfspace<Number>& rhs ) const;
+	std::pair<CONTAINMENT, BoxT> satisfiesHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const;
 	BoxT<Number,Converter> project(const std::vector<std::size_t>& dimensions) const;
 	BoxT<Number,Converter> linearTransformation( const matrix_t<Number>& A ) const;
 	BoxT<Number,Converter> affineTransformation( const matrix_t<Number>& A, const vector_t<Number>& b ) const;

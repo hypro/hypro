@@ -7,6 +7,7 @@
 #pragma once
 
 #include "Box.h"
+#include "../../util/logging/Logger.h"
 
 namespace hypro {
 
@@ -353,9 +354,9 @@ class BoxT<double,Converter> : public GeometricObject<double, BoxT<double,Conver
 	 * @details    This function combines the intersection with a given halfspace along with the emptiness test on the result, which is
 	 * often faster than the sequential execution of both commands.
 	 * @param[in]  rhs  The halfspace.
-	 * @return     A pair of a Boolean value and a box. The Boolean is true in case the resulting box is not empty and false otherwise.
+	 * @return     A pair of a CONTAINMENT value and a box. The Boolean is true in case the resulting box is not empty and false otherwise.
 	 */
-	std::pair<bool, BoxT> satisfiesHalfspace( const Halfspace<double>& rhs ) const;
+	std::pair<CONTAINMENT, BoxT> satisfiesHalfspace( const Halfspace<double>& rhs ) const;
 
 	/**
 	 * @brief      Checks, if the box lies inside the given set of halfspaces.
@@ -363,9 +364,9 @@ class BoxT<double,Converter> : public GeometricObject<double, BoxT<double,Conver
 	 * often faster than the sequential execution of both commands.
 	 * @param[in]  _mat  The normals of the halfspaces.
 	 * @param[in]  _vec  The offsets of the halfspaces.
-	 * @return     A pair of a Boolean value and a box. The Boolean is true in case the resulting box is not empty and false otherwise.
+	 * @return     A pair of a CONTAINMENT value and a box. The Boolean is true in case the resulting box is not empty and false otherwise.
 	 */
-	std::pair<bool, BoxT> satisfiesHalfspaces( const matrix_t<double>& _mat, const vector_t<double>& _vec ) const;
+	std::pair<CONTAINMENT, BoxT> satisfiesHalfspaces( const matrix_t<double>& _mat, const vector_t<double>& _vec ) const;
 
 	/**
 	 * @brief      Projects the box onto the given dimensions.

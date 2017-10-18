@@ -33,7 +33,6 @@ addons:
         key_url: 'http://apt.llvm.org/llvm-snapshot.gpg.key'
       - ubuntu-toolchain-r-test
     packages:
-      - cmake
       - cmake-data
       - doxygen
       - lcov
@@ -43,12 +42,14 @@ addons:
       - libgtest-dev
       - g++-5
       - g++-6
+      - libc++-dev
       - clang-3.6
       - clang-3.7
       - clang-3.8
       - clang-3.9
       - graphviz
       - uuid-dev
+      - openjdk-9-jre
       - pgf
       - texlive-latex-extra
       - texlive-latex-recommended
@@ -78,10 +79,10 @@ matrix:
       dist: trusty
       compiler: clang
       env: COMPILER=clang++-3.8
-    - os: osx
-      osx_image: xcode6.4
-      compiler: clang
-      env: COMPILER=clang++
+    #- os: osx
+    #  osx_image: xcode6.4
+    #  compiler: clang
+    #  env: COMPILER=clang++
     - os: osx
       osx_image: xcode7.3
       compiler: clang
@@ -103,7 +104,9 @@ install:
 
 script:
   - cd ${TRAVIS_BUILD_DIR}
-  - mkdir build && cd build && cmake $FLAGS -DCMAKE_CXX_COMPILER=$COMPILER .. && make resources && make
+  - mkdir build && cd build && cmake $FLAGS -DCMAKE_CXX_COMPILER=$COMPILER .. && make resources && make VERBOSE=1
+  #- cat /home/travis/build/hypro/hypro/src/resources/antlr_build/src/antlr4cpp-stamp/antlr4cpp-build-out.log
+  #- cat /home/travis/build/hypro/hypro/src/resources/antlr_build/src/antlr4cpp-stamp/antlr4cpp-build-err.log
   - make test
 
 # Generate and deploy documentation

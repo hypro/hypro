@@ -62,9 +62,9 @@ public:
 	 * @brief      Method combining the intersection of the set with a halfspace and a test for emptiness of the resulting set.
 	 * @param[in]  rhs   The halfspace. Note that this check is at least as fast as
 	 * 			   performing the intersection and testing for emptiness, but in general we encourage to use this method instead.
-	 * @return     A pair of a Boolean stating whether the resulting set is empty and the resulting set.
+	 * @return     A pair of a CONTAINMENT type stating whether the resulting set is empty and the resulting set.
 	 */
-	virtual std::pair<bool, DerivedShape> satisfiesHalfspace( const Halfspace<Number>& rhs ) const = 0;
+	virtual std::pair<CONTAINMENT, DerivedShape> satisfiesHalfspace( const Halfspace<Number>& rhs ) const = 0;
 
 	/**
 	 * @brief      Method combining the intersection of the set with a set of halfspaces and a test for emptiness of the resulting set.
@@ -73,9 +73,9 @@ public:
 	 * 			   performing the intersection and testing for emptiness, but in general we encourage to use this method instead.
 	 * @param[in]  _mat  The matrix.
 	 * @param[in]  _vec  The vector.
-	 * @return     A pair of a Boolean stating whether the resulting set is empty and the resulting set.
+	 * @return     A pair of a CONTAINMENT type stating whether the resulting set is empty and the resulting set.
 	 */
-	virtual std::pair<bool, DerivedShape> satisfiesHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const = 0;
+	virtual std::pair<CONTAINMENT, DerivedShape> satisfiesHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const = 0;
 
 	/**
 	 * @brief      Projects the set on the ordered set of given dimensions.

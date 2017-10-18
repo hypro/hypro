@@ -62,7 +62,7 @@ TYPED_TEST(AntlrParserTest, SettingVEmptySettings){
 TYPED_TEST(AntlrParserTest, JustTesting){
 
 	//std::string path("../examples/input/bouncing_ball.model");
-	std::string path("../../../../examples/input/bouncing_ball.model");
+	std::string path("../../../../src/test/core/examples/test_bouncing_ball.txt");
 	boost::tuple<hypro::HybridAutomaton<TypeParam>, hypro::ReachabilitySettings<TypeParam>> h = hypro::parseFlowstarFile<TypeParam>(path);
 	SUCCEED();
 

@@ -16,8 +16,7 @@ namespace hypro {
 
 	template<typename Number>
 	antlrcpp::Any HyproLocationVisitor<Number>::visitModes(HybridAutomatonParser::ModesContext *ctx){
-		std::cout << "-- Bin bei visitModes!" << std::endl;
-
+		
 		//Calls visit(ctx->location()) to get location, name it, put into locSet, return locSet
 		unsigned i = 0;
 		std::set<Location<Number>*> locSet;
@@ -27,12 +26,11 @@ namespace hypro {
 			for(auto& loc : locSet){
 				if(loc->getName() == ctx->location().at(i)->VARIABLE()->getText()){
 					std::cerr << "ERROR: Location " << loc->getName() << " has already been parsed." << std::endl;
+					exit(0);
 				}
 			}
 
 			Location<Number>* loc = visit(ctx->location().at(i));
-			loc->setName(ctx->location().at(i)->VARIABLE()->getText());
-			std::cout << "---- Visited location " << loc->getName() << std::endl;
 			locSet.insert(loc);
 			i++;
 		}
@@ -41,20 +39,55 @@ namespace hypro {
 
 	template<typename Number>
 	antlrcpp::Any HyproLocationVisitor<Number>::visitLocation(HybridAutomatonParser::LocationContext *ctx){
-		std::cout << "-- Bin bei visitLocation!" << std::endl;
-
-
+	
 		//1.Calls visit(ctx->activities()) to get matrix
 		matrix_t<Number> tmpMatrix = visit(ctx->activities());
-		std::cout << "---- Flow matrix is:\n" << tmpMatrix << std::endl;
+		//std::cout << "---- Flow matrix is:\n" << tmpMatrix << std::endl;
 
-		//2.Calls visit(ctx->invariant()) to get Condition
-		Condition<Number> inv = visit(ctx->invariants());
-		std::cout << "---- inv is:\n" << inv.getMatrix() << "and\n" << inv.getVector() << std::endl;
+		//2.Iteratively Calls visit(ctx->invariant()) to get all conditions and collect them in one big condition
+		Condition<Number> inv;
+		if(ctx->invariants().size() > 0){
+			bool firstTime = true;
+			for(auto& currInvCtx : ctx->invariants()){
+
+				Condition<Number> currInv = visit(currInvCtx);
+
+				if(currInv != Condition<Number>() && !firstTime){
+
+					//Extend inv.matrix with currInv.matrix
+					matrix_t<Number> newMat = inv.getMatrix();
+					matrix_t<Number> currInvMat = currInv.getMatrix();
+					assert(newMat.cols() == currInvMat.cols());
+					std::size_t newMatRowsBefore = newMat.rows();
+					newMat.conservativeResize(newMat.rows()+currInvMat.rows(),newMat.cols());
+					for(int i = newMat.rows()-currInvMat.rows(); i < newMat.rows(); i++){
+						newMat.row(i) = currInvMat.row(i-newMatRowsBefore);
+					}
+
+					//Extend inv.vector with currInv.vector
+					vector_t<Number> newVec = inv.getVector();
+					vector_t<Number> currInvVec = currInv.getVector();
+					newVec.conservativeResize(newVec.rows()+currInvVec.rows());
+					for(int i = newVec.rows()-currInvVec.rows(); i < newVec.rows(); i++){
+						newVec(i) = currInvVec(i-newMatRowsBefore);
+					}
+
+					inv = Condition<Number>(newMat, newVec); 
+
+				}
+
+				if(firstTime){
+					inv = currInv;
+					firstTime = false;
+				}
+				//std::cout << "---- inv is:\n" << inv.getMatrix() << "and\n" << inv.getVector() << std::endl;
+			}
+		}
 
 		//3.Returns a location
 		LocationManager<Number>& manager = LocationManager<Number>::getInstance();
 		Location<Number>* loc = manager.create();
+		loc->setName(ctx->VARIABLE()->getText());
 		loc->setFlow(tmpMatrix);
 		loc->setInvariant(inv);
 		return loc;
@@ -62,27 +95,32 @@ namespace hypro {
 
 	template<typename Number>
 	antlrcpp::Any HyproLocationVisitor<Number>::visitActivities(HybridAutomatonParser::ActivitiesContext *ctx){
-		std::cout << "-- Bin bei visitActivities!" << std::endl;
 
 		//0.Syntax check - Are there vars.size() equations?
 		if(vars.size() != ctx->equation().size()){
 			std::cerr << "ERROR: Wrong amount of activites for current location!" << std::endl;
+			exit(0);
 		}
 
 		//1.Calls iteratively visit(ctx->equation()) to get vector, store them
 		matrix_t<Number> tmpMatrix = matrix_t<Number>::Zero(vars.size()+1, vars.size()+1);
 		HyproFormulaVisitor<Number> visitor(vars);
 		for(unsigned i=0; i < ctx->equation().size(); i++){
+			
+			//insert into row according to state var order
 			vector_t<Number> tmpRow = visitor.visit(ctx->equation()[i]);
-			//std::cout << "---- From equation " << i << " we got tmpRow:\n" << tmpRow << std::endl;
-			tmpMatrix.row(i) = tmpRow;
-			//std::cout << "---- After insertion tmpMatrix is now:\n" << tmpMatrix << std::endl;
+			for(unsigned j=0; j < vars.size(); j++){
+				if(ctx->equation()[i]->VARIABLE()->getText() == (vars[j] + "'")){
+					tmpMatrix.row(j) = tmpRow;
+				}
+			}
 		}
 
 		//3.Syntax check - Last row completely 0's?
 		if(vector_t<Number>(tmpMatrix.row(tmpMatrix.rows()-1)) != vector_t<Number>::Zero(tmpMatrix.cols())){
 			//std::cout << "Last row of tmpMatrix is:\n " << tmpMatrix.row(tmpMatrix.rows()-1) << std::endl;
 			std::cerr << "ERROR: Last row of tmpMatrix was not completely zero!" << std::endl;
+			exit(0);
 		}
 
 		//4.Returns a matrix
@@ -91,18 +129,24 @@ namespace hypro {
 
 	template<typename Number>
 	antlrcpp::Any HyproLocationVisitor<Number>::visitInvariants(HybridAutomatonParser::InvariantsContext *ctx){
-		std::cout << "-- Bin bei visitInvariants!" << std::endl;
+		
+		if(ctx->constrset() != NULL){
 
-		//2.Call HyproFormulaVisitor and get pair of matrix and vector
-		HyproFormulaVisitor<Number> visitor(vars);
-		std::pair<matrix_t<Number>,vector_t<Number>> result = visitor.visit(ctx->constrset());
+			//1.Call HyproFormulaVisitor and get pair of matrix and vector
+			HyproFormulaVisitor<Number> visitor(vars);
+			std::pair<matrix_t<Number>,vector_t<Number>> result = visitor.visit(ctx->constrset());
+	
+			//2.Build condition out of them
+			Condition<Number> inv;
+			inv.setMatrix(result.first);
+			inv.setVector(result.second);
+	
+			//3.Return condition
+			return inv;
 
-		//3.Build condition out of them
-		Condition<Number> inv;
-		inv.setMatrix(result.first);
-		inv.setVector(result.second);
+		}
 
-		//4.Return condition
-		return inv;
+		return Condition<Number>();
+		
 	}
 }

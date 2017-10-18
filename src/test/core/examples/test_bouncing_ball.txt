@@ -23,13 +23,21 @@ hybrid reachability
   {
    poly ode 1
    {
-    x' = v
-    v' = -9.81
+    v' = --9.81 + --v*42*-3
+    x' = +++3*-+--v
    }
 
    inv
    {
     x >= 0
+   }
+   
+   inv{}
+
+   inv
+   {
+    x >= 2
+    v <= 123
    }
   }
  }
@@ -49,9 +57,36 @@ hybrid reachability
    x in [10,10.2]
    v in [0,1]
   }
+  l
+  {
+   x in [1,1.2]
+   v in [0,1]
+  }
+  
  }
+ 
+ init 
+ {
+  l
+  {
+   x in [3,5]
+   v in [0,0]
+  }
+ }
+
 }
 
+unsafe set 
+{
+ l 
+  {
+   x in [4,6]
+  }
+ l 
+  {
+   v in [-2.5,0]
+  }
+}
 
 #unsafe set
 #{

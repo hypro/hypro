@@ -24,7 +24,7 @@ namespace hypro {
 	template<typename Number>
 	Number HyproFormulaVisitor<Number>::multTogether(HybridAutomatonParser::TermContext* ctx) const {
 
-		//Turn 2*3*4*5*x ... into 120*x
+		//Turn -2*3*4*-5*x ... into 120*x
 		Number multed = 1;
 		if(ctx->NUMBER().size() > 1){
 			for(const auto& ctxNum : ctx->NUMBER()){
@@ -36,7 +36,24 @@ namespace hypro {
 			std::string num = ctx->NUMBER()[0]->getText();
 			multed = stringToNumber(num);
 		}
-		//std::cout << "Multiplied constants to " << multed << std::endl;
+
+		if(ctx->connector().size() > 0){
+			//Take minus count into account
+			unsigned minusCount = 0;
+			std::size_t startIndex = ctx->start->getStartIndex();
+			std::size_t endIndex = ctx->stop->getStopIndex();
+			for(const auto& ctxCon : ctx->connector()){
+				std::size_t conIndex = ctxCon->start->getStartIndex();
+				if(startIndex <= conIndex && conIndex <= endIndex && ctxCon->getText() == "-"){
+					minusCount++;
+				}
+			}
+
+			//make multed negative/posivite depending on its minusCount
+			if(minusCount % 2 == 1){
+				multed = Number(-1)*multed;	
+			}	
+		}
 		return multed;
 	}
 
@@ -44,32 +61,45 @@ namespace hypro {
 	//The last coefficient is a constant, so the one without a respective variable
 	template<typename Number>
 	vector_t<Number> HyproFormulaVisitor<Number>::getPolynomCoeff(HybridAutomatonParser::PolynomContext* ctx) const {
-		
+
 		vector_t<Number> coeffVec = vector_t<Number>::Zero(vars.size()+1);
-		//std::cout << "---- coeffVec inital is:\n" << coeffVec << std::endl;
+		std::size_t lastTermEndIndex = 0;
+
 		for(const auto& mTerm : ctx->term()){
+
+			//Multiply numbers and handle connectors within term
 			Number multed = multTogether(mTerm);
-			//std::cout << "---- Amount of variables in this term: " << mTerm->VARIABLE().size() << std::endl;
+
+			//Count the amount of '-'-connectors that are before the term.
+			std::size_t mTermStartIndex = mTerm->start->getStartIndex();
+			unsigned minusCount = 0;
+			for(const auto& mConnector : ctx->connector()){
+				std::size_t connectorStartIndex = mConnector->start->getStartIndex();
+				if(lastTermEndIndex < connectorStartIndex && connectorStartIndex < mTermStartIndex && mConnector->getText() == "-"){
+					minusCount++;
+				}
+			}
+
+			//put into place according to place of variable in vars
+			unsigned dest = 0;
 			if(mTerm->VARIABLE().size() == 0){
-				//put into last place of coeffVec
-				coeffVec(coeffVec.rows()-1) = multed;
-				//std::cout << "---- No variables, just numbers. coeffVec is then:\n" << coeffVec << std::endl;
-			} else if(mTerm->VARIABLE().size() == 1) {
-				//put into place according to place of variable in vars
-				unsigned dest = 0;
-				auto tmpVar = mTerm->VARIABLE()[0]->getText();
+				dest = coeffVec.rows()-1;
+			} else if(mTerm->VARIABLE().size() == 1){
+				auto tmpVar = mTerm->VARIABLE()[0]->getText();	
 				for(unsigned i=0; i < vars.size(); i++){
 					if(vars[i] == tmpVar){
 						dest = i;
 						break;
 					}
 				}
-				coeffVec(dest) = multed;
-				//std::cout << "---- Variable was: " << tmpVar << ". coeffVec is now:\n" << coeffVec << std::endl;
 			} else {
 				std::cout << "ERROR: multiplication of several variables not allowed!" << std::endl;
 				exit(0);
 			}
+			coeffVec(dest) = (minusCount % 2 == 1) ? Number(-1)*multed : multed;
+
+			lastTermEndIndex = mTerm->stop->getStopIndex();
+
 		}
 		return coeffVec;
 	}
