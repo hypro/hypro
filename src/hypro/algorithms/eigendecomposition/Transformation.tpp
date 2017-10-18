@@ -155,7 +155,7 @@ Transformation<Number>::Transformation (const HybridAutomaton<Number>& _hybrid) 
     mTransformedHA.setInitialStates  (initialStates);
 //LOCAL BAD STATES (condition [matrix,vector] matrix=matrix*V
 //typename locationConditionMap::const_iterator DOES NOT WORK
-    for (typename locationConditionMap::const_iterator it = _hybrid.getLocalBadStates().begin();
+    for (typename HybridAutomaton<Number>::locationConditionMap::const_iterator it = _hybrid.getLocalBadStates().begin();
       it!=_hybrid.getLocalBadStates().end(); ++it ) {
         Location<Number>* NewLocPtr = mLocationPtrsMap[it->first];
         TRACE("hypro.eigendecomposition","OldLocPtr" << it->first);
