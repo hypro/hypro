@@ -91,7 +91,7 @@ int main()
     std::cout << "----------    END OF ORIGINAL         ------------" << std::endl;
     trafo.output_HybridAutomaton();
     std::cout << std::endl;
-    trafo.transformGlobalBadStates(original_ha);
+    trafo.addGlobalBadStates(original_ha,1);
     trafo.analyzeExponentialFunctions();
     /*Flags flag1;
     In_eq in_eq1;               //input system

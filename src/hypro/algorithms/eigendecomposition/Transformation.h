@@ -149,7 +149,7 @@ class Transformation {
      *
      * @param[in] _hybrid the original Hybrid Automaton (to check location ptrs against)
      */
-    void transformGlobalBadStates(const HybridAutomaton<Number>& _hybrid);
+    void addGlobalBadStates(const HybridAutomaton<Number>& _hybrid, const bool transform);
 
 
     //Getter for handling Automaton in Analysis TODO why not const?

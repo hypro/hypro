@@ -178,9 +178,10 @@ Transformation<Number>::Transformation (const HybridAutomaton<Number>& _hybrid) 
     }
 }
 template <typename Number>
-void Transformation<Number>::transformGlobalBadStates
-  (const HybridAutomaton<Number>& _hybrid) {
-    //check if transformation is according to hybrid automaton by checking LocPtrs
+void Transformation<Number>::addGlobalBadStates
+  (const HybridAutomaton<Number>& _hybrid, const bool transform) {
+
+//CHECK MATCH OF LOCATION PTRS
     assert( _hybrid.getLocations().size() == mLocationPtrsMap.size() );
     typename locationPtrMap::const_iterator locIt = mLocationPtrsMap.begin();
     typename locationPtrMap::const_iterator endLocIt = mLocationPtrsMap.end();
@@ -192,26 +193,46 @@ void Transformation<Number>::transformGlobalBadStates
             ++locIt;
     }
     assert( locIt == endLocIt );
-    assert (!globalBadStatesTransformed);
-    //TODO MEMORY ASSERTION?
-    size_t i;
-    for (typename conditionVector::const_iterator it = _hybrid.getGlobalBadStates().begin(); 
-      it!=_hybrid.getGlobalBadStates().end(); ++it) {
-        //transform each global badstate by setting of according localBadState
-       //1. loop through global states
-       //2. loop through ptr to location map and create new localBadState
-        for (typename locationPtrMap::iterator locMapIt = mLocationPtrsMap.begin(); 
-          locMapIt!=mLocationPtrsMap.end(); ++locMapIt) {
-            Condition<Number> badStateNEW;
-            const Matrix<Number> & V = mLocPtrtoComputationvaluesMap[locMapIt->second].mSTflowpipeSegment.V;
-            for(i=0; i<it->size(); ++i) {
-                badStateNEW.setMatrix(it->getMatrix(i)*V, i);
-                badStateNEW.setVector(it->getVector(i)  , i);
+//TRANSFORMATION -> add to localBadStates
+    if (transform) {
+        assert (!globalBadStatesTransformed);
+        //TODO MEMORY ASSERTION?
+        size_t i;
+        for (typename conditionVector::const_iterator it = _hybrid.getGlobalBadStates().begin(); 
+          it!=_hybrid.getGlobalBadStates().end(); ++it) {
+            //transform each global badstate by setting of according localBadState
+           //1. loop through global states
+           //2. loop through ptr to location map and create new localBadState
+            for (typename locationPtrMap::iterator locMapIt = mLocationPtrsMap.begin(); 
+              locMapIt!=mLocationPtrsMap.end(); ++locMapIt) {
+                Condition<Number> badStateNEW;
+                const Matrix<Number> & V = mLocPtrtoComputationvaluesMap[locMapIt->second].mSTflowpipeSegment.V;
+                for(i=0; i<it->size(); ++i) {
+                    badStateNEW.setMatrix(it->getMatrix(i)*V, i);
+                    badStateNEW.setVector(it->getVector(i)  , i);
+                }
+                mTransformedHA.addLocalBadState(locMapIt->second, badStateNEW);
             }
-            mTransformedHA.addLocalBadState(locMapIt->second, badStateNEW);
+        }
+    globalBadStatesTransformed = true;
+    } else {
+//NO TRANSFORMATION -> add to globalBadStates
+        size_t i;
+        for (typename conditionVector::const_iterator it = _hybrid.getGlobalBadStates().begin(); 
+          it!=_hybrid.getGlobalBadStates().end(); ++it) {
+            //transform each global badstate by setting of according localBadState
+           //1. loop through global states + copy to other HybridAutomaton
+            for (typename locationPtrMap::iterator locMapIt = mLocationPtrsMap.begin(); 
+              locMapIt!=mLocationPtrsMap.end(); ++locMapIt) {
+                Condition<Number> globalbadStateNEW;
+                for(i=0; i<it->size(); ++i) {
+                    globalbadStateNEW.setMatrix(it->getMatrix(i), i);
+                    globalbadStateNEW.setVector(it->getVector(i), i);
+                }
+                mTransformedHA.addGlobalBadState(globalbadStateNEW);
+            }
         }
     }
-    globalBadStatesTransformed = true;
 }
 //TODO check every going to be used
 template <typename Number>
