@@ -20,7 +20,7 @@
 #include <cassert>
 
 #define REDUCE_NUMBERS
-#define AVOID_CONVERSION
+//#define AVOID_CONVERSION
 //#define HPOLY_DEBUG_MSG
 
 namespace hypro {

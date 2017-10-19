@@ -528,9 +528,22 @@ BoxT<Number,Converter> BoxT<Number,Converter>::linearTransformation( const matri
 	assert(res.contains(Point<Number>(A*mLimits.second.rawCoordinates())));
 	#ifndef NDEBUG
 	std::vector<Point<Number>> vertices = this->vertices();
+	Point<Number> manualMin = Point<Number>(A*(vertices.begin()->rawCoordinates()));
+	Point<Number> manualMax = Point<Number>(A*(vertices.begin()->rawCoordinates()));
 	for(const auto& v : vertices) {
-		assert(res.contains(Point<Number>(A*v.rawCoordinates())));
+		Point<Number> t = Point<Number>(A*v.rawCoordinates());
+		assert(res.contains(t));
+		for(Eigen::Index d = 0; d < this->dimension(); ++d) {
+			if(manualMin.at(d) > t.at(d)) {
+				manualMin[d] = t[d];
+			}
+			if(manualMax.at(d) < t.at(d)) {
+				manualMax[d] = t[d];
+			}
+		}
 	}
+	assert(manualMin == res.min());
+	assert(manualMax == res.max());
 	#endif
 	return res;
 }
