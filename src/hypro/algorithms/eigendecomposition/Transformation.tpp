@@ -42,7 +42,6 @@ Transformation<Number>::Transformation (const HybridAutomaton<Number>& _hybrid) 
         matrixCalcDouble = convert<Number,double> (matrix_calc);
     //LOCATION TRANSFORMATION
         Eigen::EigenSolver<Matrix<double>> es(matrixCalcDouble);
-//TODO TESTING
         Vdouble << es.eigenvectors().real();
         Ddouble.diagonal() << es.eigenvalues().real();
         Vinvdouble = Vdouble.inverse();
@@ -54,6 +53,7 @@ Transformation<Number>::Transformation (const HybridAutomaton<Number>& _hybrid) 
         if(std::abs(cond) > CONDITION_LIMIT) {
             FATAL("hypro.eigendecomposition","condition is higher than CONDITION_LIMIT");
         }
+    //TODO make assertions about V D and V^-1 and in addition to A and b if needed
         std::cout <<"Vinv(condition): ("<< cond <<")\n" << Vinv;
 //TODO TESTING CONVERSION TO RATIONAL (TRACE)
         V = convert<double,Number>(Vdouble);
@@ -72,9 +72,9 @@ Transformation<Number>::Transformation (const HybridAutomaton<Number>& _hybrid) 
         locations.insert(PtrtoNewLoc);
         mLocationPtrsMap.insert(std::make_pair(LocPtr, PtrtoNewLoc));   //cant use const type* const
     //SAVING STRUCT
-        //mSTallvalues.mSTinputVectors.x0       //MOVE TO ALG
-        //mSTallvalues.mSTinputVectors.x0_2     //MOVE TO ALG
-        //mSTallvalues.mSTindependentFunct.D = {.xin}   //already assigned
+        TRACE("hypro.eigendecomposition", "D exact:\n" << mSTallvalues.mSTindependentFunct.D.diagonal() );
+        TRACE("hypro.eigendecomposition", "D approx:\n" << Ddouble.diagonal() );
+        TRACE("hypro.eigendecomposition", "b_tr :\n" << b_tr );
         mSTallvalues.mSTindependentFunct.xinhom    = b_tr.array() / mSTallvalues.mSTindependentFunct.D.diagonal().array();
         //mSTallvalues.mSTindependentFunct.delta      = //TODO check if existing
         //mSTallvalues.mSTindependentFunct.deltalimit = //TODO check if existing
@@ -172,10 +172,11 @@ Transformation<Number>::Transformation (const HybridAutomaton<Number>& _hybrid) 
         TRACE("hypro.eigendecomposition","transformed localBadState: " << badStateNEW);
         mTransformedHA.addLocalBadState(NewLocPtr, badStateNEW);
     }
-    for (const auto & locBadState : mTransformedHA.getLocalBadStates() ) {
-        TRACE("hypro.eigendecomposition","in location: " << locBadState.first)
-        TRACE("hypro.eigendecomposition","after trafo State:" << locBadState.second);
-    }
+    analyzeExponentialFunctions();
+    //for (const auto & locBadState : mTransformedHA.getLocalBadStates() ) {
+    //    TRACE("hypro.eigendecomposition","in location: " << locBadState.first)
+    //    TRACE("hypro.eigendecomposition","after trafo State:" << locBadState.second);
+    //}
 }
 template <typename Number>
 void Transformation<Number>::addGlobalBadStates
@@ -234,19 +235,27 @@ void Transformation<Number>::addGlobalBadStates
         }
     }
 }
-//TODO check every going to be used
 template <typename Number>
 void Transformation<Number>::analyzeExponentialFunctions() {
+//TODO Location multiple flows and states (map of states to flows)
     for ( auto &structObject : mLocPtrtoComputationvaluesMap) {
         const size_t dimension = structObject.second.mSTflowpipeSegment.V.rows();
-        structObject.second.mSTindependentFunct.convergent = BoolVector(dimension);
+        structObject.second.mSTindependentFunct.expFunctionType.reserve(dimension);
+        //structObject.second.mSTindependentFunct.convergent = BoolVector(dimension);
         for(size_t i=0; i<dimension; ++i) {
-            //1. divergence D>0, 2. convergence D<=0
-            structObject.second.mSTindependentFunct.convergent(i) = 
-              structObject.second.mSTindependentFunct.D.diagonal()(i)>0 ? false : true;
+            //1. divergence D>0, 2. convergence D<0, 3. linear D=0
+            //4. const [never used yet since we can then not use decomposition]
+        //TODO close to 0
+            if(structObject.second.mSTindependentFunct.D.diagonal()(i) == 0) {
+                structObject.second.mSTindependentFunct.expFunctionType[i] = EXP_FUNCT_TYPE::LINEAR;
+            } else {
+                if(structObject.second.mSTindependentFunct.D.diagonal()(i) < 0)
+                    structObject.second.mSTindependentFunct.expFunctionType[i] = EXP_FUNCT_TYPE::CONVERGENT;
+                else
+                    structObject.second.mSTindependentFunct.expFunctionType[i] = EXP_FUNCT_TYPE::DIVERGENT;
+            }
         }
     }
-
 }
 
 //REACHABILITY WORKER INHERITS from IWorker and MAutomaton(automaton)
@@ -254,18 +263,6 @@ void Transformation<Number>::analyzeExponentialFunctions() {
 //method processTask
 //TASK given as shared ptr: is struct of shared_ptr, tBacktrackingInfo
 //tBacktrackingInfo has hypro::Path + btLevel + currentBTPosition
-
-
-
-//TODO inhomogen plot is only used directly after Constructor and uses that objects
-    //in_traj.xhom.col(0) = ind_f.xinhom.array() + in_traj.x_tr.col(0).array();
-    //in_traj.xhom.col(1) = ind_f.xinhom.array() + in_traj.x_tr.col(1).array();
-    //mSTallvalues.mSTdependentFunct.x_tr.col(0) = Vinv*mSTallvalues.mSTinputVectors.x0  ;  //MOVE TO ALG
-    //mSTallvalues.mSTdependentFunct.x_tr.col(1) = Vinv*mSTallvalues.mSTinputVectors.x0_2;  //MOVE TO ALG
-    //mSTallvalues.mSTdependentFunct.xhom.col(0) = mSTallvalues.mSTindependentFunct.array() //MOVE TO ALG
-    //  + dep_f.x_tr.col(0).array();
-    //mSTallvalues.mSTdependentFunct.xhom.col(1) = mSTallvalues.mSTindependentFunct.array() //MOVE TO ALG
-    //  + dep_f.x_tr.col(1).array();
 
 template <typename Number>
 void Transformation<Number>::declare_structures(STallValues<Number>& mSTallValues, const int n) {

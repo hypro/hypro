@@ -22,6 +22,8 @@
  */
 
 namespace hypro {
+    enum EXP_FUNCT_TYPE { CONVERGENT, DIVERGENT, LINEAR, CONSTANT };
+
     template <typename Number>
     using Matrix = matrix_t<Number>;
     template <typename Number>
@@ -29,8 +31,10 @@ namespace hypro {
     template <typename Number>
     using DiagonalMatrix= Eigen::DiagonalMatrix<Number,Eigen::Dynamic>;
     using DiagonalMatrixdouble = Eigen::DiagonalMatrix<double, Eigen::Dynamic>;
-    using BoolMatrix = matrix_t<bool>;
-    using BoolVector = vector_t<bool>;
+    using BoolMatrix = matrix_t<bool>;  //TODO remove and remove according functions
+    //using BoolVector = vector_t<bool>;
+    using ExpFunctionTypeStdVector = std::vector<EXP_FUNCT_TYPE>;
+
 //template <typename Number>
 //struct STinputVectors {   
 //    Vector<Number>              x0;
@@ -40,7 +44,8 @@ template <typename Number>
 struct STindependentFunct {
   DiagonalMatrix<Number>        D;
   Vector<Number>                xinhom;
-  BoolVector                    convergent;
+  //BoolVector                    convergent;
+  ExpFunctionTypeStdVector      expFunctionType;
 //  Number                        delta;
 //  std::size_t                   deltalimit;
 };
