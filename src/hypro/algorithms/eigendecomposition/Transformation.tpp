@@ -75,14 +75,16 @@ Transformation<Number>::Transformation (const HybridAutomaton<Number>& _hybrid) 
         TRACE("hypro.eigendecomposition", "D exact:\n" << mSTallvalues.mSTindependentFunct.D.diagonal() );
         TRACE("hypro.eigendecomposition", "D approx:\n" << Ddouble.diagonal() );
         TRACE("hypro.eigendecomposition", "b_tr :\n" << b_tr );
-        mSTallvalues.mSTindependentFunct.xinhom    = b_tr.array() / mSTallvalues.mSTindependentFunct.D.diagonal().array();
-        //mSTallvalues.mSTindependentFunct.delta      = //TODO check if existing
-        //mSTallvalues.mSTindependentFunct.deltalimit = //TODO check if existing
-        //mSTallvalues.mSTdependentFunct.x_tr   //MOVE TO ALG
-        //mSTallvalues.mSTdependentFunct.xhom   //MOVE TO ALG
-        //mSTallvalues.mSTevalFunctions                 //assigned in init
-
-//TODO TESTING
+        for( i=0; i<m_size; ++i) {
+    //LINEAR BEHAVIOUR IFF D=0
+    //TODO COMPARISON ALMOST EQUAL 0 [else div by 0]
+            if ( mSTallvalues.mSTindependentFunct.D.diagonal()(i) == 0 ) {
+                mSTallvalues.mSTindependentFunct.xinhom(i)    = b_tr(i);
+            } else {
+                mSTallvalues.mSTindependentFunct.xinhom(i)    = b_tr(i) / mSTallvalues.mSTindependentFunct.D.diagonal()(i);
+            }
+        }
+    //assign values
         mSTallvalues.mSTflowpipeSegment.Vinv       = Vinv;
         mSTallvalues.mSTflowpipeSegment.V          = V; //rest of flow used only for plotting
         mLocPtrtoComputationvaluesMap.insert(std::make_pair(PtrtoNewLoc, mSTallvalues));
