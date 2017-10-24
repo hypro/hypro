@@ -11,55 +11,48 @@
  */ 
 
 //For Polytope and Polytope/util.h
-static const struct PolytopeSetting {
-	bool fukuda_DEBUG = false;
-}
-
-//HPolytopes
-static const struct HPolySetting {
-	bool REDUCE_NUMBERS = true;
-	bool AVOID_CONVERSION = true;
-	bool HPOLY_DEBUG_MSG = false;
-}
+struct PolytopeSetting {
+	static constexpr bool fukuda_DEBUG = false;
+};
 
 //BoxSupportFunctions 
-static const struct BoxSupportFunctionSetting {
-	bool SUPPORTFUNCTION_VERBOSE = false;		
-    bool BOXSUPPORTFUNCTION_VERBOSE = false;     
+struct BoxSupportFunctionSetting {
+	static constexpr bool SUPPORTFUNCTION_VERBOSE = false;		
+    static constexpr bool BOXSUPPORTFUNCTION_VERBOSE = false;     
 };
 
 //NonLineaerOmegaOSupportFunction
-static const struct NonLineaerOmegaOSupportFunctionSetting {
-	bool SUPPORTFUNCTION_VERBOSE = false;
-	bool BOXOPERATOR_VERBOSE = false;
-	bool CALCEPSILON_VERBOSE = false;
-	bool CALCVALUES_VERBOSE = false;
-	bool TEST_ = false;
+struct NonLineaerOmegaOSupportFunctionSetting {
+	static constexpr bool SUPPORTFUNCTION_VERBOSE = false;
+	static constexpr bool BOXOPERATOR_VERBOSE = false;
+	static constexpr bool CALCEPSILON_VERBOSE = false;
+	static constexpr bool CALCVALUES_VERBOSE = false;
+	static constexpr bool TEST_ = false;
 };
 
 //PolytopeSupportFunctions
-static const struct PolytopeSupportFunctionSetting {
-	bool PPOLYTOPESUPPORTFUNCTION_VERBOSE = false;
-	bool PPOLYTOPESUPPORTFUNCTION_VERIFY = false;
+struct PolytopeSupportFunctionSetting {
+	static constexpr bool PPOLYTOPESUPPORTFUNCTION_VERBOSE = false;
+	static constexpr bool PPOLYTOPESUPPORTFUNCTION_VERIFY = false;
 };
 
 //SupportFunctionContent
-static const struct SupportFunctionContentSetting {
-	bool SUPPORTFUNCTION_VERBOSE = false;
-	bool MULTIPLICATIONSUPPORTFUNCTION_VERBOSE = false;
-	bool USE_LIN_TRANS_REDUCTION = true;
+struct SupportFunctionContentSetting {
+	static constexpr bool SUPPORTFUNCTION_VERBOSE = false;
+	static constexpr bool MULTIPLICATIONSUPPORTFUNCTION_VERBOSE = false;
+	static constexpr bool USE_LIN_TRANS_REDUCTION = true;
 };
 
 //helperMethods have a define but no class, so no templating for them.
 
 //SupportFunction/util: Cachable and linTrafoParameters
-static const struct UtilSetting {
-	bool HYPRO_USE_VECTOR_CACHING = false;
+struct UtilSetting {
+	static constexpr bool HYPRO_USE_VECTOR_CACHING = false;
 };
 
 //TaylorModel/continous
 //TODO: 
-static const struct UtilSetting {
-	unsigned MAX_ITER_NUM = 50		
-	float STOP_RATIO = 0.99f
+struct UtilSetting {
+	static constexpr unsigned MAX_ITER_NUM = 50		
+	static constexpr float STOP_RATIO = 0.99f
 };

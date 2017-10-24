@@ -32,7 +32,7 @@ class Converter {
 		using Box = BoxT<Number,Converter,BoxSetting>;
 		using ConstraintSet = ConstraintSetT<Number,Converter>;
 		using Ellipsoid = EllipsoidT<Number,Converter>;
-		using HPolytope = HPolytopeT<Number,Converter>;
+		using HPolytope = HPolytopeT<Number,Converter,HPolytopeSetting>;
 		using OrthogonalPolyhedron = OrthogonalPolyhedronT<Number,Converter>;
 		using VPolytope = VPolytopeT<Number,Converter>;
 		#ifdef HYPRO_USE_PPL

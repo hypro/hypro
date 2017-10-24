@@ -36,8 +36,8 @@ protected:
 	{
 	}
 
-	typename HPolytopeT<Number,Converter<Number>>::HalfspaceVector planes1;
-	typename HPolytopeT<Number,Converter<Number>>::HalfspaceVector planes2;
+	typename HPolytopeT<Number,Converter<Number>,HPolytopeSetting>::HalfspaceVector planes1;
+	typename HPolytopeT<Number,Converter<Number>,HPolytopeSetting>::HalfspaceVector planes2;
 };
 
 TYPED_TEST(HPolytopeTest, Constructor)
