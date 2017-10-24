@@ -10,11 +10,6 @@
  *
  */ 
 
-//For box and box_double
-static const struct BoxSetting {
-	bool HYPRO_BOX_AVOID_LINEAR_OPTIMIZATION = false;
-};
-
 //For Polytope and Polytope/util.h
 static const struct PolytopeSetting {
 	bool fukuda_DEBUG = false;

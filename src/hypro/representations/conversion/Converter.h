@@ -29,7 +29,7 @@ enum CONV_MODE {
 template<typename Number>
 class Converter {
 	public:
-		using Box = BoxT<Number,Converter>;
+		using Box = BoxT<Number,Converter,BoxSetting>;
 		using ConstraintSet = ConstraintSetT<Number,Converter>;
 		using Ellipsoid = EllipsoidT<Number,Converter>;
 		using HPolytope = HPolytopeT<Number,Converter>;

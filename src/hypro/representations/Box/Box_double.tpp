@@ -12,8 +12,8 @@
 
 namespace hypro {
 
-	template<typename Converter>
-	BoxT<double,Converter>::BoxT( const std::vector<carl::Interval<double>>& _intervals )
+	template<typename Converter, class Setting>
+	BoxT<double,Converter,Setting>::BoxT( const std::vector<carl::Interval<double>>& _intervals )
 	{
 		if(!_intervals.empty()) {
 			vector_t<double> lower = vector_t<double>(_intervals.size());
@@ -26,8 +26,8 @@ namespace hypro {
 		}
 	}
 
-	template<typename Converter>
-	BoxT<double,Converter>::BoxT( const matrix_t<double>& _constraints, const vector_t<double>& _constants )
+	template<typename Converter, class Setting>
+	BoxT<double,Converter,Setting>::BoxT( const matrix_t<double>& _constraints, const vector_t<double>& _constants )
 	{
 		assert(_constraints.rows() == _constants.rows());
 		if(_constraints.rows() == 0) {
@@ -106,7 +106,7 @@ namespace hypro {
 		// finish initialization
 		if(possibleVertices.empty()) {
 			assert(false);
-			*this = BoxT<double,Converter>::Empty();
+			*this = BoxT<double,Converter,Setting>::Empty();
 		} else {
 			vector_t<double> min = *possibleVertices.begin();
 			vector_t<double> max = *possibleVertices.begin();
@@ -125,8 +125,8 @@ namespace hypro {
 		*/
 	}
 
-template<typename Converter>
-BoxT<double,Converter>::BoxT( const std::set<Point<double>> &_points ) {
+template<typename Converter, class Setting>
+BoxT<double,Converter,Setting>::BoxT( const std::set<Point<double>> &_points ) {
 	if ( !_points.empty() ) {
 		vector_t<double> lower = _points.begin()->rawCoordinates();
 		vector_t<double> upper = _points.begin()->rawCoordinates();
@@ -145,8 +145,8 @@ BoxT<double,Converter>::BoxT( const std::set<Point<double>> &_points ) {
 	}
 }
 
-template<typename Converter>
-BoxT<double,Converter>::BoxT( const std::vector<Point<double>> &_points ) {
+template<typename Converter, class Setting>
+BoxT<double,Converter,Setting>::BoxT( const std::vector<Point<double>> &_points ) {
 	if ( !_points.empty() ) {
 		vector_t<double> lower = _points.begin()->rawCoordinates();
 		vector_t<double> upper = _points.begin()->rawCoordinates();
@@ -165,8 +165,8 @@ BoxT<double,Converter>::BoxT( const std::vector<Point<double>> &_points ) {
 	}
 }
 
-template<typename Converter>
-std::vector<carl::Interval<double>> BoxT<double,Converter>::boundaries() const {
+template<typename Converter, class Setting>
+std::vector<carl::Interval<double>> BoxT<double,Converter,Setting>::boundaries() const {
 	std::vector<carl::Interval<double>> result;
 	result.reserve(this->dimension());
 
@@ -177,8 +177,8 @@ std::vector<carl::Interval<double>> BoxT<double,Converter>::boundaries() const {
 	return result;
 }
 
-template<typename Converter>
-matrix_t<double> BoxT<double, Converter>::matrix() const {
+template<typename Converter, class Setting>
+matrix_t<double> BoxT<double,Converter,Setting>::matrix() const {
 	matrix_t<double> res = matrix_t<double>::Zero(2*mLimits.first.dimension(), mLimits.first.dimension());
 	for(unsigned i = 0; i < mLimits.first.dimension(); ++i) {
 		res(2*i,i) = 1;
@@ -187,8 +187,8 @@ matrix_t<double> BoxT<double, Converter>::matrix() const {
 	return res;
 }
 
-template<typename Converter>
-vector_t<double> BoxT<double, Converter>::vector() const {
+template<typename Converter, class Setting>
+vector_t<double> BoxT<double,Converter,Setting>::vector() const {
 	vector_t<double> res = vector_t<double>::Zero(2*mLimits.first.dimension());
 	for(unsigned i = 0; i < mLimits.first.dimension(); ++i) {
 		res(2*i) = mLimits.second.at(i);
@@ -197,8 +197,8 @@ vector_t<double> BoxT<double, Converter>::vector() const {
 	return res;
 }
 
-template<typename Converter>
-std::vector<Halfspace<double>> BoxT<double,Converter>::constraints() const {
+template<typename Converter, class Setting>
+std::vector<Halfspace<double>> BoxT<double,Converter,Setting>::constraints() const {
 	std::vector<Halfspace<double>> res;
 	if(this->dimension() != 0) {
 		std::size_t dim = this->dimension();
@@ -217,16 +217,16 @@ std::vector<Halfspace<double>> BoxT<double,Converter>::constraints() const {
 	return res;
 }
 
-template<typename Converter>
-carl::Interval<double> BoxT<double,Converter>::interval( std::size_t d ) const {
+template<typename Converter, class Setting>
+carl::Interval<double> BoxT<double,Converter,Setting>::interval( std::size_t d ) const {
 	if ( d >= mLimits.first.dimension() ) {
 		return carl::Interval<double>::emptyInterval();
 	}
 	return carl::Interval<double>(mLimits.first.at(d), mLimits.second.at(d));
 }
 
-template<typename Converter>
-double BoxT<double,Converter>::supremum() const {
+template<typename Converter, class Setting>
+double BoxT<double,Converter,Setting>::supremum() const {
 	double max = 0;
 	for ( auto &point : this->vertices() ) {
 		double inftyNorm = Point<double>::inftyNorm( point );
@@ -235,8 +235,8 @@ double BoxT<double,Converter>::supremum() const {
 	return max;
 }
 
-template<typename Converter>
-std::vector<Point<double>> BoxT<double,Converter>::vertices( const matrix_t<double>& ) const {
+template<typename Converter, class Setting>
+std::vector<Point<double>> BoxT<double,Converter,Setting>::vertices( const matrix_t<double>& ) const {
 	std::vector<Point<double>> result;
 	std::size_t limit = std::size_t(pow( 2, mLimits.first.dimension() ));
 
@@ -255,8 +255,8 @@ std::vector<Point<double>> BoxT<double,Converter>::vertices( const matrix_t<doub
 	return result;
 }
 
-template<typename Converter>
-std::size_t BoxT<double,Converter>::size() const {
+template<typename Converter, class Setting>
+std::size_t BoxT<double,Converter,Setting>::size() const {
 	if(this->empty()) {
 		return 0;
 	}
@@ -264,17 +264,17 @@ std::size_t BoxT<double,Converter>::size() const {
 	return 2;
 }
 
-template<typename Converter>
-BoxT<double,Converter> BoxT<double,Converter>::makeSymmetric() const {
+template<typename Converter, class Setting>
+BoxT<double,Converter,Setting> BoxT<double,Converter,Setting>::makeSymmetric() const {
 	Point<double> limit = mLimits.first;
 	for(unsigned d = 0; d < mLimits.first.dimension(); ++d) {
 		limit[d] = carl::abs(mLimits.first.at(d)) >= carl::abs(mLimits.second.at(d)) ? carl::abs(mLimits.first.at(d)) : carl::abs(mLimits.second.at(d));
 	}
-	return BoxT<double,Converter>(std::make_pair(-limit, limit));
+	return BoxT<double,Converter,Setting>(std::make_pair(-limit, limit));
 }
 
-template<typename Converter>
-std::pair<CONTAINMENT, BoxT<double,Converter>> BoxT<double,Converter>::satisfiesHalfspace( const Halfspace<double>& rhs ) const {
+template<typename Converter, class Setting>
+std::pair<CONTAINMENT, BoxT<double,Converter,Setting>> BoxT<double,Converter,Setting>::satisfiesHalfspace( const Halfspace<double>& rhs ) const {
 	std::vector<Point<double>> vertices = this->vertices();
 	bool allVerticesContained = true;
 	unsigned outsideVertexCnt = 0;
@@ -295,8 +295,8 @@ std::pair<CONTAINMENT, BoxT<double,Converter>> BoxT<double,Converter>::satisfies
 	return std::make_pair(CONTAINMENT::PARTIAL, this->intersectHalfspace(rhs));
 }
 
-template<typename Converter>
-std::pair<CONTAINMENT, BoxT<double,Converter>> BoxT<double,Converter>::satisfiesHalfspaces( const matrix_t<double>& _mat, const vector_t<double>& _vec ) const {
+template<typename Converter, class Setting>
+std::pair<CONTAINMENT, BoxT<double,Converter,Setting>> BoxT<double,Converter,Setting>::satisfiesHalfspaces( const matrix_t<double>& _mat, const vector_t<double>& _vec ) const {
 	if(_mat.rows() == 0) {
 		return std::make_pair(CONTAINMENT::FULL, *this);
 	}
@@ -349,23 +349,23 @@ std::pair<CONTAINMENT, BoxT<double,Converter>> BoxT<double,Converter>::satisfies
 		limitingPlanes.pop_back();
 	}
 	assert(newPlanes.rows() == newDistances.rows());
-	BoxT<double,Converter> tmpBox = this->intersectHalfspaces(newPlanes,newDistances);
+	BoxT<double,Converter,Setting> tmpBox = this->intersectHalfspaces(newPlanes,newDistances);
 	// Todo-check: For rational numbers this assertion holds, what about native doubles?
 	//assert(!tmpBox.empty());
 	//std::cout << __func__ << " TRUE, " << convert<double,double>(tmpBox) << std::endl;
 	return std::make_pair(CONTAINMENT::PARTIAL, tmpBox);
 }
 
-template<typename Converter>
-BoxT<double,Converter> BoxT<double,Converter>::project(const std::vector<std::size_t>& dimensions) const {
+template<typename Converter, class Setting>
+BoxT<double,Converter,Setting> BoxT<double,Converter,Setting>::project(const std::vector<std::size_t>& dimensions) const {
 	if(dimensions.empty()) {
 		return Empty();
 	}
-	return BoxT<double,Converter>(std::make_pair(mLimits.first.project(dimensions), mLimits.second.project(dimensions)));
+	return BoxT<double,Converter,Setting>(std::make_pair(mLimits.first.project(dimensions), mLimits.second.project(dimensions)));
 }
 
-template<typename Converter>
-BoxT<double,Converter> BoxT<double,Converter>::linearTransformation( const matrix_t<double> &A ) const {
+template<typename Converter, class Setting>
+BoxT<double,Converter,Setting> BoxT<double,Converter,Setting>::linearTransformation( const matrix_t<double> &A ) const {
 	if(this->empty()) {
 		return *this;
 	}
@@ -393,43 +393,43 @@ BoxT<double,Converter> BoxT<double,Converter>::linearTransformation( const matri
 		}
 	}
 	//std::cout << __func__ << ": Min: " << min << ", Max: " << max << std::endl;
-	BoxT<double,Converter> res = BoxT<double,Converter>( std::make_pair(min, max) );
+	BoxT<double,Converter,Setting> res = BoxT<double,Converter,Setting>( std::make_pair(min, max) );
 	//assert(res.contains(Point<double>(A*mLimits.first.rawCoordinates())));
 	//assert(res.contains(Point<double>(A*mLimits.second.rawCoordinates())));
 	return res;
 }
 
-template<typename Converter>
-BoxT<double,Converter> BoxT<double,Converter>::affineTransformation( const matrix_t<double> &A, const vector_t<double> &b ) const {
+template<typename Converter, class Setting>
+BoxT<double,Converter,Setting> BoxT<double,Converter,Setting>::affineTransformation( const matrix_t<double> &A, const vector_t<double> &b ) const {
 	if(!this->empty()){
 		TRACE("hypro.representations.box","This: " << *this << ", A: " << A << "b: " << b);
-		BoxT<double,Converter> res = this->linearTransformation(A);
+		BoxT<double,Converter,Setting> res = this->linearTransformation(A);
 		TRACE("hypro.representations.box","Result of linear trafo: " << res);
-		return BoxT<double,Converter>( std::make_pair(res.min()+b, res.max()+b) );
+		return BoxT<double,Converter,Setting>( std::make_pair(res.min()+b, res.max()+b) );
 	}
 	return *this;
 }
 
-template<typename Converter>
-BoxT<double,Converter> BoxT<double,Converter>::minkowskiSum( const BoxT<double,Converter> &rhs ) const {
+template<typename Converter, class Setting>
+BoxT<double,Converter,Setting> BoxT<double,Converter,Setting>::minkowskiSum( const BoxT<double,Converter,Setting> &rhs ) const {
 	assert( dimension() == rhs.dimension() );
-	return BoxT<double,Converter>(std::make_pair(mLimits.first + rhs.min(), mLimits.second + rhs.max()));
+	return BoxT<double,Converter,Setting>(std::make_pair(mLimits.first + rhs.min(), mLimits.second + rhs.max()));
 }
 
-template<typename Converter>
-BoxT<double,Converter> BoxT<double,Converter>::minkowskiDecomposition( const BoxT<double,Converter>& rhs ) const {
+template<typename Converter, class Setting>
+BoxT<double,Converter,Setting> BoxT<double,Converter,Setting>::minkowskiDecomposition( const BoxT<double,Converter,Setting>& rhs ) const {
 	if(rhs.empty()) {
 		return *this;
 	}
 	TRACE("hypro.representations.box","This: " << *this << ", Rhs: " << rhs);
 	assert( dimension() == rhs.dimension() );
 	// assert( std::mismatch(this->boundaries().begin(), this->boundaries.end(), rhs.boundaries().begin(), rhs.boundaries.end(), [&](a,b) -> bool {return a.diameter() >= b.diameter()}  ) ); // TODO: wait for c++14 support
-	// assert( (BoxT<double,Converter>(std::make_pair(mLimits.first - rhs.min(), mLimits.second - rhs.max())).minkowskiSum(rhs) == *this) );
-	return BoxT<double,Converter>(std::make_pair(mLimits.first - rhs.min(), mLimits.second - rhs.max()));
+	// assert( (BoxT<double,Converter,Setting>(std::make_pair(mLimits.first - rhs.min(), mLimits.second - rhs.max())).minkowskiSum(rhs) == *this) );
+	return BoxT<double,Converter,Setting>(std::make_pair(mLimits.first - rhs.min(), mLimits.second - rhs.max()));
 }
 
-template<typename Converter>
-BoxT<double,Converter> BoxT<double,Converter>::intersect( const BoxT<double,Converter> &rhs ) const {
+template<typename Converter, class Setting>
+BoxT<double,Converter,Setting> BoxT<double,Converter,Setting>::intersect( const BoxT<double,Converter,Setting> &rhs ) const {
 	std::size_t dim = rhs.dimension() < this->dimension() ? rhs.dimension() : this->dimension();
 	std::pair<Point<double>, Point<double>> limits(std::make_pair(Point<double>(vector_t<double>::Zero(Eigen::Index(dim))), Point<double>(vector_t<double>::Zero(Eigen::Index(dim)))));
 	std::pair<Point<double>, Point<double>> rhsLimits = rhs.limits();
@@ -437,14 +437,14 @@ BoxT<double,Converter> BoxT<double,Converter>::intersect( const BoxT<double,Conv
 		limits.first[i] = mLimits.first.at(i) > rhsLimits.first.at(i) ? mLimits.first.at(i) : rhsLimits.first.at(i);
 		limits.second[i] = mLimits.second.at(i) < rhsLimits.second.at(i) ? mLimits.second.at(i) : rhsLimits.second.at(i);
 	}
-	return BoxT<double,Converter>(limits);
+	return BoxT<double,Converter,Setting>(limits);
 }
 
-template<typename Converter>
-BoxT<double,Converter> BoxT<double,Converter>::intersectHalfspace( const Halfspace<double>& hspace ) const {
+template<typename Converter, class Setting>
+BoxT<double,Converter,Setting> BoxT<double,Converter,Setting>::intersectHalfspace( const Halfspace<double>& hspace ) const {
 	//std::cout << __func__ << " of " << *this << " and " << hspace << std::endl;
 	if(!this->empty()) {
-		BoxT<double,Converter> copyBox(*this);
+		BoxT<double,Converter,Setting> copyBox(*this);
 		// Preprocessing: If any two points opposite to each other are contained, the box stays the same - test limit points
 		bool holdsMin = hspace.contains(mLimits.first.rawCoordinates());
 		bool holdsMax = hspace.contains(mLimits.second.rawCoordinates());
@@ -506,7 +506,7 @@ BoxT<double,Converter> BoxT<double,Converter>::intersectHalfspace( const Halfspa
 		}
 		if(!hspace.contains(farestPointInside.rawCoordinates())) {
 			//std::cout << __func__ << " Farest point inside is  NOT contained - return EMPTY box." << std::endl;
-			return BoxT<double,Converter>::Empty();
+			return BoxT<double,Converter,Setting>::Empty();
 		}
 
 		//std::cout << __func__ << " Farest point outside: " << convert<double,double>(farestPointOutside.rawCoordinates()).transpose() << std::endl;
@@ -570,7 +570,7 @@ BoxT<double,Converter> BoxT<double,Converter>::intersectHalfspace( const Halfspa
 
 		// at this point we know that either min or max or both are outside but not both inside.
 		if(!holdsMin && !holdsMax) {
-			return BoxT<double,Converter>(intersectionPoints);
+			return BoxT<double,Converter,Setting>(intersectionPoints);
 		} else {
 			if(holdsMin){
 				intersectionPoints.push_back(copyBox.limits().first);
@@ -581,14 +581,14 @@ BoxT<double,Converter> BoxT<double,Converter>::intersectHalfspace( const Halfspa
 			//for(const auto& point : intersectionPoints) {
 			//	std::cout << convert<double,double>(point.rawCoordinates()).transpose() << std::endl;
 			//}
-			return BoxT<double,Converter>(intersectionPoints);
+			return BoxT<double,Converter,Setting>(intersectionPoints);
 		}
 	}
 	return Empty(this->dimension());
 }
 
-template<typename Converter>
-BoxT<double,Converter> BoxT<double,Converter>::intersectHalfspaces( const matrix_t<double>& _mat, const vector_t<double>& _vec ) const {
+template<typename Converter, class Setting>
+BoxT<double,Converter,Setting> BoxT<double,Converter,Setting>::intersectHalfspaces( const matrix_t<double>& _mat, const vector_t<double>& _vec ) const {
 	assert(_mat.rows() == _vec.rows());
 	assert(_mat.cols() == this->dimension());
 	#ifdef HYPRO_BOX_AVOID_LINEAR_OPTIMIZATION
@@ -597,7 +597,7 @@ BoxT<double,Converter> BoxT<double,Converter>::intersectHalfspaces( const matrix
 		return *this;
 	}
 	if(!this->empty()) {
-		BoxT<double,Converter> result = *this;
+		BoxT<double,Converter,Setting> result = *this;
 		// Todo: This is a first draft using the function for single halfspaces - maybe we can check more than one plane at the same time.
 		for(unsigned planeIndex = 0; planeIndex < _mat.rows(); ++planeIndex) {
 			result = result.intersectHalfspace(Halfspace<double>(_mat.row(planeIndex), _vec(planeIndex)));
@@ -665,13 +665,13 @@ BoxT<double,Converter> BoxT<double,Converter>::intersectHalfspaces( const matrix
 			}
 		}
 	}
-	return BoxT<double,Converter>(newLimits);
+	return BoxT<double,Converter,Setting>(newLimits);
 
 	#endif
 }
 
-template<typename Converter>
-bool BoxT<double,Converter>::contains( const Point<double> &point ) const {
+template<typename Converter, class Setting>
+bool BoxT<double,Converter,Setting>::contains( const Point<double> &point ) const {
 	if ( this->dimension() > point.dimension() ) {
 		return false;
 	}
@@ -685,8 +685,8 @@ bool BoxT<double,Converter>::contains( const Point<double> &point ) const {
 	return true;
 }
 
-template<typename Converter>
-bool BoxT<double,Converter>::contains( const BoxT<double,Converter> &box ) const {
+template<typename Converter, class Setting>
+bool BoxT<double,Converter,Setting>::contains( const BoxT<double,Converter,Setting> &box ) const {
 	if ( this->dimension() != box.dimension() ) {
 		return false;
 	}
@@ -700,8 +700,8 @@ bool BoxT<double,Converter>::contains( const BoxT<double,Converter> &box ) const
 	return true;
 }
 
-template<typename Converter>
-BoxT<double,Converter> BoxT<double,Converter>::unite( const BoxT<double,Converter> &rhs ) const {
+template<typename Converter, class Setting>
+BoxT<double,Converter,Setting> BoxT<double,Converter,Setting>::unite( const BoxT<double,Converter,Setting> &rhs ) const {
 	assert( dimension() == rhs.dimension() );
 	std::size_t dim = this->dimension();
 
@@ -711,13 +711,13 @@ BoxT<double,Converter> BoxT<double,Converter>::unite( const BoxT<double,Converte
 		limits.first[i] = mLimits.first.at(i) < rhsLimits.first.at(i) ? mLimits.first.at(i) : rhsLimits.first.at(i);
 		limits.second[i] = mLimits.second.at(i) > rhsLimits.second.at(i) ? mLimits.second.at(i) : rhsLimits.second.at(i);
 	}
-	return BoxT<double,Converter>(limits);
+	return BoxT<double,Converter,Setting>(limits);
 }
 
-template<typename Converter>
-BoxT<double,Converter> BoxT<double,Converter>::unite( const std::vector<BoxT<double,Converter>>& boxes ) {
+template<typename Converter, class Setting>
+BoxT<double,Converter,Setting> BoxT<double,Converter,Setting>::unite( const std::vector<BoxT<double,Converter,Setting>>& boxes ) {
 	if(boxes.empty()) {
-		return BoxT<double,Converter>::Empty();
+		return BoxT<double,Converter,Setting>::Empty();
 	}
 
 	std::pair<Point<double>, Point<double>> newLimits = boxes.begin()->limits();
@@ -725,16 +725,16 @@ BoxT<double,Converter> BoxT<double,Converter>::unite( const std::vector<BoxT<dou
 		newLimits.first = coeffWiseMin(newLimits.first, box.limits().first);
 		newLimits.second = coeffWiseMax(newLimits.first, box.limits().second);
 	}
-	return BoxT<double,Converter>(newLimits);
+	return BoxT<double,Converter,Setting>(newLimits);
 }
 
-template<typename Converter>
-void BoxT<double,Converter>::clear() {
-	*this = BoxT<double,Converter>::Empty(0);
+template<typename Converter, class Setting>
+void BoxT<double,Converter,Setting>::clear() {
+	*this = BoxT<double,Converter,Setting>::Empty(0);
 }
 
-template<typename Converter>
-void BoxT<double,Converter>::print() const {
+template<typename Converter, class Setting>
+void BoxT<double,Converter,Setting>::print() const {
 	std::cout << *this << std::endl;
 }
 

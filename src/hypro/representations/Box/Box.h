@@ -15,13 +15,14 @@
 #include "../../util/templateDirections.h"
 #include "../../util/linearOptimization/Optimizer.h"
 #include "../../util/logging/Logger.h"
+#include "BoxSetting.h"
 #include <carl/interval/Interval.h>
 #include <cassert>
 #include <map>
 #include <set>
 #include <vector>
 
-// used in case we do not have a thread-safe optimizer. Slow for high dimensions.
+
 // #define HYPRO_BOX_AVOID_LINEAR_OPTIMIZATION
 
 namespace hypro {
@@ -39,14 +40,15 @@ class Location;
  * @tparam     Converter  The used converter.
  * \ingroup geoState @{
  */
-template <typename Number, typename Converter>
-class BoxT : public GeometricObject<Number, BoxT<Number,Converter>> {
+template <typename Number, typename Converter, class Setting>
+class BoxT : public GeometricObject<Number, BoxT<Number,Converter,Setting>> {
   private:
   public:
 	/***************************************************************************
 	 * Members
 	 **************************************************************************/
   protected:
+
     std::pair<Point<Number>, Point<Number>> mLimits; /*!< Pair of points describing the minimal and the maximal point of the box.*/
 
   public:
@@ -138,8 +140,8 @@ class BoxT : public GeometricObject<Number, BoxT<Number,Converter>> {
 	  * @param dimension Required dimension.
 	  * @return Empty box.
 	  */
-	static BoxT<Number,Converter> Empty(std::size_t dimension = 1) {
-		return BoxT<Number,Converter>(std::make_pair(Point<Number>(vector_t<Number>::Ones(dimension)), Point<Number>(vector_t<Number>::Zero(dimension))));
+	static BoxT<Number,Converter,Setting> Empty(std::size_t dimension = 1) {
+		return BoxT<Number,Converter,Setting>(std::make_pair(Point<Number>(vector_t<Number>::Ones(dimension)), Point<Number>(vector_t<Number>::Zero(dimension))));
 	}
 
 	/**
@@ -270,7 +272,7 @@ class BoxT : public GeometricObject<Number, BoxT<Number,Converter>> {
 	 * @param b2 Contains the second box.
 	 * @return True, if they are equal.
 	 */
-	friend bool operator==( const BoxT<Number,Converter>& b1, const BoxT<Number,Converter>& b2 ) {
+	friend bool operator==( const BoxT<Number,Converter,Setting>& b1, const BoxT<Number,Converter,Setting>& b2 ) {
 		if ( b1.dimension() != b2.dimension() ) {
 			return false;
 		}
@@ -283,26 +285,26 @@ class BoxT : public GeometricObject<Number, BoxT<Number,Converter>> {
 	 * @param b2 A box.
 	 * @return False, if both boxes are equal.
 	 */
-	friend bool operator!=( const BoxT<Number,Converter>& b1, const BoxT<Number,Converter>& b2 ) { return !( b1 == b2 ); }
+	friend bool operator!=( const BoxT<Number,Converter,Setting>& b1, const BoxT<Number,Converter,Setting>& b2 ) { return !( b1 == b2 ); }
 
 	/**
 	 * @brief Assignment operator.
 	 * @param rhs A box.
 	 */
-	BoxT<Number,Converter>& operator=( const BoxT<Number,Converter>& rhs ) = default;
+	BoxT<Number,Converter,Setting>& operator=( const BoxT<Number,Converter,Setting>& rhs ) = default;
 
 	/**
 	 * @brief Move assignment operator.
 	 * @param rhs A box.
 	 */
-	BoxT<Number,Converter>& operator=(BoxT<Number,Converter>&& rhs) = default;
+	BoxT<Number,Converter,Setting>& operator=(BoxT<Number,Converter,Setting>&& rhs) = default;
 
 	/**
 	 * @brief      Scaling operator.
 	 * @param[in]  factor  The scaling factor.
 	 * @return     The scaled box.
 	 */
-	BoxT<Number,Converter> operator*(const Number& factor) const { return BoxT<Number,Converter>(std::make_pair(factor*mLimits.first, factor*mLimits.second));}
+	BoxT<Number,Converter,Setting> operator*(const Number& factor) const { return BoxT<Number,Converter,Setting>(std::make_pair(factor*mLimits.first, factor*mLimits.second));}
 
 	/**
 	 * @brief Outstream operator.
@@ -310,14 +312,14 @@ class BoxT : public GeometricObject<Number, BoxT<Number,Converter>> {
 	 * @param b A box.
 	 */
 #ifdef HYPRO_LOGGING
-	friend std::ostream& operator<<( std::ostream& ostr, const BoxT<Number,Converter>& b ) {
+	friend std::ostream& operator<<( std::ostream& ostr, const BoxT<Number,Converter,Setting>& b ) {
 		ostr << "{ ";
 		if(!b.empty()) {
 			ostr << b.min() << "; " << b.max() << std::endl;
 		}
 		ostr << " }";
 #else
-	friend std::ostream& operator<<( std::ostream& ostr, const BoxT<Number,Converter>& ) {
+	friend std::ostream& operator<<( std::ostream& ostr, const BoxT<Number,Converter,Setting>& ) {
 #endif
 		return ostr;
 	}
@@ -359,7 +361,7 @@ class BoxT : public GeometricObject<Number, BoxT<Number,Converter>> {
 	 *
 	 * @param[in]  limit      The limit
 	 */
-	const BoxT<Number,Converter>& reduceNumberRepresentation(unsigned limit = fReach_DENOMINATOR);
+	const BoxT<Number,Converter,Setting>& reduceNumberRepresentation(unsigned limit = fReach_DENOMINATOR);
 
 	/**
 	 * @brief      Makes a symmetric box from the current box.
@@ -367,32 +369,32 @@ class BoxT : public GeometricObject<Number, BoxT<Number,Converter>> {
 	 * are the maximal absolute values of the original boundaries mirrored positive and negative.
 	 * @return     The resulting symmetric box.
 	 */
-	BoxT<Number,Converter> makeSymmetric() const;
+	BoxT<Number,Converter,Setting> makeSymmetric() const;
 
 
 	std::pair<CONTAINMENT, BoxT> satisfiesHalfspace( const Halfspace<Number>& rhs ) const;
 	std::pair<CONTAINMENT, BoxT> satisfiesHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const;
-	BoxT<Number,Converter> project(const std::vector<std::size_t>& dimensions) const;
-	BoxT<Number,Converter> linearTransformation( const matrix_t<Number>& A ) const;
-	BoxT<Number,Converter> affineTransformation( const matrix_t<Number>& A, const vector_t<Number>& b ) const;
-	BoxT<Number,Converter> minkowskiSum( const BoxT<Number,Converter>& rhs ) const;
+	BoxT<Number,Converter,Setting> project(const std::vector<std::size_t>& dimensions) const;
+	BoxT<Number,Converter,Setting> linearTransformation( const matrix_t<Number>& A ) const;
+	BoxT<Number,Converter,Setting> affineTransformation( const matrix_t<Number>& A, const vector_t<Number>& b ) const;
+	BoxT<Number,Converter,Setting> minkowskiSum( const BoxT<Number,Converter,Setting>& rhs ) const;
 
 	/**
 	 * @brief      Computes the Minkowski decomposition of the current box by the given box.
 	 * @param[in]  rhs   The right hand side box.
 	 * @return     The resulting box.
 	 */
-	BoxT<Number,Converter> minkowskiDecomposition( const BoxT<Number,Converter>& rhs ) const;
+	BoxT<Number,Converter,Setting> minkowskiDecomposition( const BoxT<Number,Converter,Setting>& rhs ) const;
 
 	/**
 	 * @brief      Computes the intersection of two boxes.
 	 * @param[in]  rhs   The right hand side box.
 	 * @return     The resulting box.
 	 */
-	BoxT<Number,Converter> intersect( const BoxT<Number,Converter>& rhs ) const;
+	BoxT<Number,Converter,Setting> intersect( const BoxT<Number,Converter,Setting>& rhs ) const;
 
-	BoxT<Number,Converter> intersectHalfspace( const Halfspace<Number>& hspace ) const;
-	BoxT<Number,Converter> intersectHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const;
+	BoxT<Number,Converter,Setting> intersectHalfspace( const Halfspace<Number>& hspace ) const;
+	BoxT<Number,Converter,Setting> intersectHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const;
 	bool contains( const Point<Number>& point ) const;
 
 	/**
@@ -400,21 +402,21 @@ class BoxT : public GeometricObject<Number, BoxT<Number,Converter>> {
 	 * @param[in]  box   The box.
 	 * @return     True, if the given box is contained in the current box, false otherwise.
 	 */
-	bool contains( const BoxT<Number,Converter>& box ) const;
+	bool contains( const BoxT<Number,Converter,Setting>& box ) const;
 
 	/**
 	 * @brief      Computes the union of two boxes.
 	 * @param[in]  rhs   The right hand side box.
 	 * @return     The resulting box.
 	 */
-	BoxT<Number,Converter> unite( const BoxT<Number,Converter>& rhs ) const;
+	BoxT<Number,Converter,Setting> unite( const BoxT<Number,Converter,Setting>& rhs ) const;
 
 	/**
 	 * @brief      Computes the union of the current box with a set of boxes.
 	 * @param[in]  boxes  The boxes.
 	 * @return     The resulting box.
 	 */
-	static BoxT<Number,Converter> unite( const std::vector<BoxT<Number,Converter>>& boxes );
+	static BoxT<Number,Converter,Setting> unite( const std::vector<BoxT<Number,Converter,Setting>>& boxes );
 
 	/**
 	 * @brief      Makes this box the empty box.
@@ -437,8 +439,8 @@ class BoxT : public GeometricObject<Number, BoxT<Number,Converter>> {
  * @tparam     Converter  The passed representation converter.
  * @return     The resulting box.
  */
-template<typename Number,typename Converter>
-BoxT<Number,Converter> operator*(Number factor, const BoxT<Number,Converter>& in) {
+template<typename Number,typename Converter, class Setting>
+BoxT<Number,Converter,Setting> operator*(Number factor, const BoxT<Number,Converter,Setting>& in) {
 	if(in.empty()) {
 		return in;
 	}
@@ -453,10 +455,10 @@ BoxT<Number,Converter> operator*(Number factor, const BoxT<Number,Converter>& in
  * @tparam     Converter  The passed representation converter.
  * @return     The resulting box.
  */
-template<typename From, typename To, typename Converter>
-BoxT<To,Converter> convert(const BoxT<From,Converter>& in) {
+template<typename From, typename To, typename Converter, class Setting>
+BoxT<To,Converter,Setting> convert(const BoxT<From,Converter,Setting>& in) {
 	std::pair<Point<From>, Point<From>> limits = in.limits();
-	return BoxT<To,Converter>(std::make_pair(Point<To>(convert<From,To>(limits.first.rawCoordinates())), Point<To>(convert<From,To>(limits.second.rawCoordinates()))));
+	return BoxT<To,Converter,Setting>(std::make_pair(Point<To>(convert<From,To>(limits.first.rawCoordinates())), Point<To>(convert<From,To>(limits.second.rawCoordinates()))));
 }
 
 } // namespace hypro
