@@ -216,18 +216,21 @@ Rargs...&gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="
 Rargs...&gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1State.html#a11f2e0d160c5592010fb6f23f51d005d">unite</a> (const <a class="el" href="classhypro_1_1State.html">State</a>&lt; Number, Representation, Rargs...&gt; &amp;in) const </td></tr>
 <tr class="memdesc:a11f2e0d160c5592010fb6f23f51d005d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Meta-function to aggregate two states.  <a href="#a11f2e0d160c5592010fb6f23f51d005d">More...</a><br/></td></tr>
 <tr class="separator:a11f2e0d160c5592010fb6f23f51d005d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5fb00395d6a7b8353b57dabc71bf2521"><td class="memItemLeft" align="right" valign="top">std::pair&lt; bool, <a class="el" href="classhypro_1_1State.html">State</a>&lt; Number, <br class="typebreak"/>
-Representation, Rargs...&gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1State.html#a5fb00395d6a7b8353b57dabc71bf2521">satisfies</a> (const <a class="el" href="classhypro_1_1Condition.html">Condition</a>&lt; Number &gt; &amp;in) const </td></tr>
-<tr class="memdesc:a5fb00395d6a7b8353b57dabc71bf2521"><td class="mdescLeft">&#160;</td><td class="mdescRight">Meta-function to verify a state against a condition.  <a href="#a5fb00395d6a7b8353b57dabc71bf2521">More...</a><br/></td></tr>
-<tr class="separator:a5fb00395d6a7b8353b57dabc71bf2521"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8383ddc2a5429cfa4c0102919d506195"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8383ddc2a5429cfa4c0102919d506195"></a>
-std::pair&lt; bool, <a class="el" href="classhypro_1_1State.html">State</a>&lt; Number, <br class="typebreak"/>
-Representation, Rargs...&gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>satisfiesHalfspaces</b> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;constraints, const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;constants) const </td></tr>
-<tr class="separator:a8383ddc2a5429cfa4c0102919d506195"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1afe57c7f7b90a7bf04b8abd676cf646"><td class="memItemLeft" align="right" valign="top">std::pair&lt; bool, <a class="el" href="classhypro_1_1State.html">State</a>&lt; Number, <br class="typebreak"/>
-Representation, Rargs...&gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1State.html#a1afe57c7f7b90a7bf04b8abd676cf646">partiallySatisfies</a> (const <a class="el" href="classhypro_1_1Condition.html">Condition</a>&lt; Number &gt; &amp;in, std::size_t I) const </td></tr>
-<tr class="memdesc:a1afe57c7f7b90a7bf04b8abd676cf646"><td class="mdescLeft">&#160;</td><td class="mdescRight">Meta-function to verify the i-th set of a state against the i-th component of a condition.  <a href="#a1afe57c7f7b90a7bf04b8abd676cf646">More...</a><br/></td></tr>
-<tr class="separator:a1afe57c7f7b90a7bf04b8abd676cf646"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a49a10c7c16c13976f44461a54a91f349"><td class="memItemLeft" align="right" valign="top">std::pair&lt; <a class="el" href="namespacehypro.html#ab7a1dbbbe2d40e57ecab2c9b64b3615d">CONTAINMENT</a>, <a class="el" href="classhypro_1_1State.html">State</a><br class="typebreak"/>
+&lt; Number, Representation, <br class="typebreak"/>
+Rargs...&gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1State.html#a49a10c7c16c13976f44461a54a91f349">satisfies</a> (const <a class="el" href="classhypro_1_1Condition.html">Condition</a>&lt; Number &gt; &amp;in) const </td></tr>
+<tr class="memdesc:a49a10c7c16c13976f44461a54a91f349"><td class="mdescLeft">&#160;</td><td class="mdescRight">Meta-function to verify a state against a condition.  <a href="#a49a10c7c16c13976f44461a54a91f349">More...</a><br/></td></tr>
+<tr class="separator:a49a10c7c16c13976f44461a54a91f349"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad2921140a3df6afa6f3602d86dea85ff"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad2921140a3df6afa6f3602d86dea85ff"></a>
+std::pair&lt; <a class="el" href="namespacehypro.html#ab7a1dbbbe2d40e57ecab2c9b64b3615d">CONTAINMENT</a>, <a class="el" href="classhypro_1_1State.html">State</a><br class="typebreak"/>
+&lt; Number, Representation, <br class="typebreak"/>
+Rargs...&gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>satisfiesHalfspaces</b> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;constraints, const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;constants) const </td></tr>
+<tr class="separator:ad2921140a3df6afa6f3602d86dea85ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac9bce631e4f10622ab1cd39c62b4ea1b"><td class="memItemLeft" align="right" valign="top">std::pair&lt; <a class="el" href="namespacehypro.html#ab7a1dbbbe2d40e57ecab2c9b64b3615d">CONTAINMENT</a>, <a class="el" href="classhypro_1_1State.html">State</a><br class="typebreak"/>
+&lt; Number, Representation, <br class="typebreak"/>
+Rargs...&gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1State.html#ac9bce631e4f10622ab1cd39c62b4ea1b">partiallySatisfies</a> (const <a class="el" href="classhypro_1_1Condition.html">Condition</a>&lt; Number &gt; &amp;in, std::size_t I) const </td></tr>
+<tr class="memdesc:ac9bce631e4f10622ab1cd39c62b4ea1b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Meta-function to verify the i-th set of a state against the i-th component of a condition.  <a href="#ac9bce631e4f10622ab1cd39c62b4ea1b">More...</a><br/></td></tr>
+<tr class="separator:ac9bce631e4f10622ab1cd39c62b4ea1b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aaf47d85c87649793b7903066944f9609"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1State.html">State</a>&lt; Number, Representation, <br class="typebreak"/>
 Rargs...&gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1State.html#aaf47d85c87649793b7903066944f9609">applyTimeStep</a> (const std::vector&lt; std::pair&lt; const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;, const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp; &gt;&gt; &amp;flows, Number timeStepSize) const </td></tr>
 <tr class="memdesc:aaf47d85c87649793b7903066944f9609"><td class="mdescLeft">&#160;</td><td class="mdescRight">Meta-function which can be used to transform all contained sets at once with the passed parameters and adjust the timestamp as well.  <a href="#aaf47d85c87649793b7903066944f9609">More...</a><br/></td></tr>
@@ -1044,14 +1047,14 @@ template&lt;typename Number, typename Representation, typename... Rargs&gt; </di
 
 </div>
 </div>
-<a class="anchor" id="a1afe57c7f7b90a7bf04b8abd676cf646"></a>
+<a class="anchor" id="ac9bce631e4f10622ab1cd39c62b4ea1b"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
 template&lt;typename Number, typename Representation, typename... Rargs&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">std::pair&lt;bool,<a class="el" href="classhypro_1_1State.html">State</a>&lt;Number,Representation,Rargs...&gt; &gt; <a class="el" href="classhypro_1_1State.html">hypro::State</a>&lt; Number, Representation, Rargs &gt;::partiallySatisfies </td>
+          <td class="memname">std::pair&lt;<a class="el" href="namespacehypro.html#ab7a1dbbbe2d40e57ecab2c9b64b3615d">CONTAINMENT</a>,<a class="el" href="classhypro_1_1State.html">State</a>&lt;Number,Representation,Rargs...&gt; &gt; <a class="el" href="classhypro_1_1State.html">hypro::State</a>&lt; Number, Representation, Rargs &gt;::partiallySatisfies </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="classhypro_1_1Condition.html">Condition</a>&lt; Number &gt; &amp;&#160;</td>
           <td class="paramname"><em>in</em>, </td>
@@ -1109,14 +1112,14 @@ template&lt;typename Number, typename Representation, typename... Rargs&gt; </di
 
 </div>
 </div>
-<a class="anchor" id="a5fb00395d6a7b8353b57dabc71bf2521"></a>
+<a class="anchor" id="a49a10c7c16c13976f44461a54a91f349"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
 template&lt;typename Number, typename Representation, typename... Rargs&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">std::pair&lt;bool,<a class="el" href="classhypro_1_1State.html">State</a>&lt;Number,Representation,Rargs...&gt; &gt; <a class="el" href="classhypro_1_1State.html">hypro::State</a>&lt; Number, Representation, Rargs &gt;::satisfies </td>
+          <td class="memname">std::pair&lt;<a class="el" href="namespacehypro.html#ab7a1dbbbe2d40e57ecab2c9b64b3615d">CONTAINMENT</a>,<a class="el" href="classhypro_1_1State.html">State</a>&lt;Number,Representation,Rargs...&gt; &gt; <a class="el" href="classhypro_1_1State.html">hypro::State</a>&lt; Number, Representation, Rargs &gt;::satisfies </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="classhypro_1_1Condition.html">Condition</a>&lt; Number &gt; &amp;&#160;</td>
           <td class="paramname"><em>in</em></td><td>)</td>

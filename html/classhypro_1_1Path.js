@@ -1,6 +1,7 @@
 var classhypro_1_1Path =
 [
     [ "TIterator", "classhypro_1_1Path.html#aff80e569a003f458646dbd97b39c3a43", null ],
+    [ "TIterator_const", "classhypro_1_1Path.html#a444067b6a6793f6a57759e1e5ec38283", null ],
     [ "Path", "classhypro_1_1Path.html#af30bbb5d6b94b89971b8289b69b12888", null ],
     [ "add", "classhypro_1_1Path.html#af92107e154b140d17804d1ea8baa7c57", null ],
     [ "addTimeStep", "classhypro_1_1Path.html#a13110f8e3c1c2eee45b68f5a8bc6f04e", null ],
@@ -8,10 +9,13 @@ var classhypro_1_1Path =
     [ "at", "classhypro_1_1Path.html#a976b205be62152eb474313d5287f8b12", null ],
     [ "back", "classhypro_1_1Path.html#a8d4d539b6666228e1a21223cabc77318", null ],
     [ "begin", "classhypro_1_1Path.html#ab034645d296f1eb66022e45ff2a9432b", null ],
+    [ "begin", "classhypro_1_1Path.html#ae8a33b77a23f9aa8f9b7162e87ed1068", null ],
     [ "end", "classhypro_1_1Path.html#a1019cdad12ebe2b59b79db32ee3afed8", null ],
+    [ "end", "classhypro_1_1Path.html#ad8a457b46cff2e7b6b4d4741b15b5672", null ],
     [ "front", "classhypro_1_1Path.html#a0a3b91b415b09adb5ccb67877218efac", null ],
     [ "getNumberDiscreteJumps", "classhypro_1_1Path.html#ac6817277944dc364a6fc47cea63ee59a", null ],
     [ "getTransitionSequence", "classhypro_1_1Path.html#a801a6d5ca43b9b4ef74f61974bad3523", null ],
+    [ "getTransitionSequence", "classhypro_1_1Path.html#a2b7c39e2a224e03c8a82cabb7c540fc5", null ],
     [ "getTransitionToJumpDepth", "classhypro_1_1Path.html#a361c89024f76824e0f8625cc1a77f8e0", null ],
     [ "hasChatteringZeno", "classhypro_1_1Path.html#a50b0c3d2f19db4407c31feceaf10e20b", null ],
     [ "isEmpty", "classhypro_1_1Path.html#aed947daa0ef7c4a5c5a944d2bb9c889e", null ],

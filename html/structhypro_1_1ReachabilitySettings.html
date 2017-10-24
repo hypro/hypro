@@ -127,11 +127,11 @@ $(document).ready(function(){initNavTree('structhypro_1_1ReachabilitySettings.ht
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a04729b80a64a2ad5278bf605cc1e09a2"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1ReachabilitySettings.html#a04729b80a64a2ad5278bf605cc1e09a2">ReachabilitySettings</a> ()</td></tr>
-<tr class="memdesc:a04729b80a64a2ad5278bf605cc1e09a2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Bloating settings.  <a href="#a04729b80a64a2ad5278bf605cc1e09a2">More...</a><br/></td></tr>
+<tr class="memdesc:a04729b80a64a2ad5278bf605cc1e09a2"><td class="mdescLeft">&#160;</td><td class="mdescRight">-1 = off, 0 = all (aggregation), i = maximal number of segments to unify  <a href="#a04729b80a64a2ad5278bf605cc1e09a2">More...</a><br/></td></tr>
 <tr class="separator:a04729b80a64a2ad5278bf605cc1e09a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a61e47d5f03b26e54add2b14a52af582f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structhypro_1_1ReachabilitySettings.html">ReachabilitySettings</a>&lt; Number &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1ReachabilitySettings.html#a61e47d5f03b26e54add2b14a52af582f">operator=</a> (const <a class="el" href="structhypro_1_1ReachabilitySettings.html">ReachabilitySettings</a>&lt; Number &gt; &amp;_rhs)</td></tr>
-<tr class="memdesc:a61e47d5f03b26e54add2b14a52af582f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Assignment operator.  <a href="#a61e47d5f03b26e54add2b14a52af582f">More...</a><br/></td></tr>
-<tr class="separator:a61e47d5f03b26e54add2b14a52af582f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab35472fd4779bd56e2acb7bb76425879"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structhypro_1_1ReachabilitySettings.html">ReachabilitySettings</a>&lt; Number &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1ReachabilitySettings.html#ab35472fd4779bd56e2acb7bb76425879">operator=</a> (const <a class="el" href="structhypro_1_1ReachabilitySettings.html">ReachabilitySettings</a>&lt; Number &gt; &amp;_rhs)=default</td></tr>
+<tr class="memdesc:ab35472fd4779bd56e2acb7bb76425879"><td class="mdescLeft">&#160;</td><td class="mdescRight">Assignment operator.  <a href="#ab35472fd4779bd56e2acb7bb76425879">More...</a><br/></td></tr>
+<tr class="separator:ab35472fd4779bd56e2acb7bb76425879"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -140,7 +140,7 @@ Number&#160;</td><td class="memItemRight" valign="bottom"><b>timeBound</b></td><
 <tr class="separator:a7a767e72ac4d79624338edb20c6cb11f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa56fb93c5944ebb125f6ce79a0789c2d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa56fb93c5944ebb125f6ce79a0789c2d"></a>
 int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1ReachabilitySettings.html#aa56fb93c5944ebb125f6ce79a0789c2d">jumpDepth</a></td></tr>
-<tr class="memdesc:aa56fb93c5944ebb125f6ce79a0789c2d"><td class="mdescLeft">&#160;</td><td class="mdescRight">The global time horizon. <br/></td></tr>
+<tr class="memdesc:aa56fb93c5944ebb125f6ce79a0789c2d"><td class="mdescLeft">&#160;</td><td class="mdescRight">The local time horizon. <br/></td></tr>
 <tr class="separator:aa56fb93c5944ebb125f6ce79a0789c2d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a46dc42bf29cc6363a63d9ec34e1a0466"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a46dc42bf29cc6363a63d9ec34e1a0466"></a>
 Number&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1ReachabilitySettings.html#a46dc42bf29cc6363a63d9ec34e1a0466">timeStep</a></td></tr>
@@ -163,6 +163,10 @@ std::vector&lt; std::vector<br class="typebreak"/>
 bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1ReachabilitySettings.html#a62c82689a5a6425fcca8aa89813faeee">uniformBloating</a> = false</td></tr>
 <tr class="memdesc:a62c82689a5a6425fcca8aa89813faeee"><td class="mdescLeft">&#160;</td><td class="mdescRight">A set of dimension pairs to plot. <br/></td></tr>
 <tr class="separator:a62c82689a5a6425fcca8aa89813faeee"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6908aa66729a133fb74180a4d6a50533"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6908aa66729a133fb74180a4d6a50533"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1ReachabilitySettings.html#a6908aa66729a133fb74180a4d6a50533">clustering</a> = -1</td></tr>
+<tr class="memdesc:a6908aa66729a133fb74180a4d6a50533"><td class="mdescLeft">&#160;</td><td class="mdescRight">Bloating settings. <br/></td></tr>
+<tr class="separator:a6908aa66729a133fb74180a4d6a50533"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
 Friends</h2></td></tr>
@@ -210,15 +214,15 @@ template&lt;typename Number&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Bloating settings. </p>
+<p>-1 = off, 0 = all (aggregation), i = maximal number of segments to unify </p>
 <p>Default constructor. </p>
 
-<p>Definition at line <a class="el" href="Settings_8h_source.html#l00026">26</a> of file <a class="el" href="Settings_8h_source.html">Settings.h</a>.</p>
+<p>Definition at line <a class="el" href="Settings_8h_source.html#l00027">27</a> of file <a class="el" href="Settings_8h_source.html">Settings.h</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="a61e47d5f03b26e54add2b14a52af582f"></a>
+<a class="anchor" id="ab35472fd4779bd56e2acb7bb76425879"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
@@ -237,7 +241,7 @@ template&lt;typename Number&gt; </div>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+<span class="mlabels"><span class="mlabel">default</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -250,10 +254,6 @@ template&lt;typename Number&gt; </div>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A reference to this object. </dd></dl>
-
-<p>Definition at line <a class="el" href="Settings_8h_source.html#l00033">33</a> of file <a class="el" href="Settings_8h_source.html">Settings.h</a>.</p>
-
-<p>References <a class="el" href="Settings_8h_source.html#l00018">hypro::ReachabilitySettings&lt; Number &gt;::fileName</a>, <a class="el" href="Settings_8h_source.html#l00016">hypro::ReachabilitySettings&lt; Number &gt;::jumpDepth</a>, <a class="el" href="Settings_8h_source.html#l00020">hypro::ReachabilitySettings&lt; Number &gt;::plotDimensions</a>, <a class="el" href="Settings_8h_source.html#l00019">hypro::ReachabilitySettings&lt; Number &gt;::pplDenomimator</a>, <a class="el" href="Settings_8h_source.html#l00017">hypro::ReachabilitySettings&lt; Number &gt;::timeStep</a>, and <a class="el" href="Settings_8h_source.html#l00021">hypro::ReachabilitySettings&lt; Number &gt;::uniformBloating</a>.</p>
 
 </div>
 </div>
@@ -302,7 +302,7 @@ template&lt;typename Number&gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Reference to the outstream. </dd></dl>
 
-<p>Definition at line <a class="el" href="Settings_8h_source.html#l00069">69</a> of file <a class="el" href="Settings_8h_source.html">Settings.h</a>.</p>
+<p>Definition at line <a class="el" href="Settings_8h_source.html#l00061">61</a> of file <a class="el" href="Settings_8h_source.html">Settings.h</a>.</p>
 
 </div>
 </div>
@@ -350,7 +350,7 @@ template&lt;typename Number&gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True if both settings are equal, false otherwise. </dd></dl>
 
-<p>Definition at line <a class="el" href="Settings_8h_source.html#l00051">51</a> of file <a class="el" href="Settings_8h_source.html">Settings.h</a>.</p>
+<p>Definition at line <a class="el" href="Settings_8h_source.html#l00042">42</a> of file <a class="el" href="Settings_8h_source.html">Settings.h</a>.</p>
 
 </div>
 </div>

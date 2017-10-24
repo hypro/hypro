@@ -139,14 +139,14 @@ virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="c
 &lt; Number &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1GeometricObject.html#ada1c4dd741b73792ada09f17ac2894c4">vertices</a> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;=<a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt;::Zero(0, 0)) const =0</td></tr>
 <tr class="memdesc:ada1c4dd741b73792ada09f17ac2894c4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the set of extreme vertices, whose convex hull is the smallest convex set containing this set.  <a href="#ada1c4dd741b73792ada09f17ac2894c4">More...</a><br/></td></tr>
 <tr class="separator:ada1c4dd741b73792ada09f17ac2894c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a45218953a280ddc544176842774346c8"><td class="memItemLeft" align="right" valign="top">virtual std::pair&lt; bool, <br class="typebreak"/>
-DerivedShape &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1GeometricObject.html#a45218953a280ddc544176842774346c8">satisfiesHalfspace</a> (const <a class="el" href="classhypro_1_1Halfspace.html">Halfspace</a>&lt; Number &gt; &amp;rhs) const =0</td></tr>
-<tr class="memdesc:a45218953a280ddc544176842774346c8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Method combining the intersection of the set with a halfspace and a test for emptiness of the resulting set.  <a href="#a45218953a280ddc544176842774346c8">More...</a><br/></td></tr>
-<tr class="separator:a45218953a280ddc544176842774346c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acddc7fbfe0fde344fa0c66c155bdc6a2"><td class="memItemLeft" align="right" valign="top">virtual std::pair&lt; bool, <br class="typebreak"/>
-DerivedShape &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1GeometricObject.html#acddc7fbfe0fde344fa0c66c155bdc6a2">satisfiesHalfspaces</a> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;_mat, const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;_vec) const =0</td></tr>
-<tr class="memdesc:acddc7fbfe0fde344fa0c66c155bdc6a2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Method combining the intersection of the set with a set of halfspaces and a test for emptiness of the resulting set.  <a href="#acddc7fbfe0fde344fa0c66c155bdc6a2">More...</a><br/></td></tr>
-<tr class="separator:acddc7fbfe0fde344fa0c66c155bdc6a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae2a85775d748e9a7d9489439f85afd12"><td class="memItemLeft" align="right" valign="top">virtual std::pair&lt; <a class="el" href="namespacehypro.html#ab7a1dbbbe2d40e57ecab2c9b64b3615d">CONTAINMENT</a>, <br class="typebreak"/>
+DerivedShape &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1GeometricObject.html#ae2a85775d748e9a7d9489439f85afd12">satisfiesHalfspace</a> (const <a class="el" href="classhypro_1_1Halfspace.html">Halfspace</a>&lt; Number &gt; &amp;rhs) const =0</td></tr>
+<tr class="memdesc:ae2a85775d748e9a7d9489439f85afd12"><td class="mdescLeft">&#160;</td><td class="mdescRight">Method combining the intersection of the set with a halfspace and a test for emptiness of the resulting set.  <a href="#ae2a85775d748e9a7d9489439f85afd12">More...</a><br/></td></tr>
+<tr class="separator:ae2a85775d748e9a7d9489439f85afd12"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acdbbcb6aff4f47be2bc8ce67f0c8fc60"><td class="memItemLeft" align="right" valign="top">virtual std::pair&lt; <a class="el" href="namespacehypro.html#ab7a1dbbbe2d40e57ecab2c9b64b3615d">CONTAINMENT</a>, <br class="typebreak"/>
+DerivedShape &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1GeometricObject.html#acdbbcb6aff4f47be2bc8ce67f0c8fc60">satisfiesHalfspaces</a> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;_mat, const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;_vec) const =0</td></tr>
+<tr class="memdesc:acdbbcb6aff4f47be2bc8ce67f0c8fc60"><td class="mdescLeft">&#160;</td><td class="mdescRight">Method combining the intersection of the set with a set of halfspaces and a test for emptiness of the resulting set.  <a href="#acdbbcb6aff4f47be2bc8ce67f0c8fc60">More...</a><br/></td></tr>
+<tr class="separator:acdbbcb6aff4f47be2bc8ce67f0c8fc60"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac59bf7420c712b4895c0a171e2e6e388"><td class="memItemLeft" align="right" valign="top">virtual DerivedShape&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1GeometricObject.html#ac59bf7420c712b4895c0a171e2e6e388">project</a> (const std::vector&lt; std::size_t &gt; &amp;dimensions) const =0</td></tr>
 <tr class="memdesc:ac59bf7420c712b4895c0a171e2e6e388"><td class="mdescLeft">&#160;</td><td class="mdescRight">Projects the set on the ordered set of given dimensions.  <a href="#ac59bf7420c712b4895c0a171e2e6e388">More...</a><br/></td></tr>
 <tr class="separator:ac59bf7420c712b4895c0a171e2e6e388"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -532,11 +532,11 @@ template&lt;typename Number, typename DerivedShape&gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The resulting set. </dd></dl>
 
-<p>Implemented in <a class="el" href="classhypro_1_1BoxT.html#ae967bb0981c2cb1783b32ba48f4e9877">hypro::BoxT&lt; Number, Converter &gt;</a>, <a class="el" href="classhypro_1_1BoxT_3_01double_00_01Converter_01_4.html#add9b624de2eb3511afe89b1e8e61320f">hypro::BoxT&lt; double, Converter &gt;</a>, <a class="el" href="classhypro_1_1BoxT.html#ae967bb0981c2cb1783b32ba48f4e9877">hypro::BoxT&lt; Number, hypro::Converter &gt;</a>, <a class="el" href="classhypro_1_1HPolytopeT.html#a4cca0fac19554916f9892e23fe7af124">hypro::HPolytopeT&lt; Number, Converter &gt;</a>, <a class="el" href="classhypro_1_1ConstraintSetT.html#a00e2100437a2866aed31ae18174f408b">hypro::ConstraintSetT&lt; Number, Converter &gt;</a>, <a class="el" href="classhypro_1_1ZonotopeT.html#a1592af5f65088470bc7a0cb0cd6adc63">hypro::ZonotopeT&lt; Number, Converter &gt;</a>, <a class="el" href="classhypro_1_1VPolytopeT.html#ae2110ae4fb6737d531fb68aa6f97c5aa">hypro::VPolytopeT&lt; Number, Converter &gt;</a>, and <a class="el" href="classhypro_1_1SupportFunctionT.html#af8c980e117c30cf8a44adf86d6e60843">hypro::SupportFunctionT&lt; Number, Converter &gt;</a>.</p>
+<p>Implemented in <a class="el" href="classhypro_1_1BoxT_3_01double_00_01Converter_01_4.html#add9b624de2eb3511afe89b1e8e61320f">hypro::BoxT&lt; double, Converter &gt;</a>, <a class="el" href="classhypro_1_1BoxT.html#ae967bb0981c2cb1783b32ba48f4e9877">hypro::BoxT&lt; Number, Converter &gt;</a>, <a class="el" href="classhypro_1_1BoxT.html#ae967bb0981c2cb1783b32ba48f4e9877">hypro::BoxT&lt; Number, hypro::Converter &gt;</a>, <a class="el" href="classhypro_1_1HPolytopeT.html#a4cca0fac19554916f9892e23fe7af124">hypro::HPolytopeT&lt; Number, Converter &gt;</a>, <a class="el" href="classhypro_1_1ConstraintSetT.html#a00e2100437a2866aed31ae18174f408b">hypro::ConstraintSetT&lt; Number, Converter &gt;</a>, <a class="el" href="classhypro_1_1ZonotopeT.html#a1592af5f65088470bc7a0cb0cd6adc63">hypro::ZonotopeT&lt; Number, Converter &gt;</a>, <a class="el" href="classhypro_1_1VPolytopeT.html#ae2110ae4fb6737d531fb68aa6f97c5aa">hypro::VPolytopeT&lt; Number, Converter &gt;</a>, and <a class="el" href="classhypro_1_1SupportFunctionT.html#af8c980e117c30cf8a44adf86d6e60843">hypro::SupportFunctionT&lt; Number, Converter &gt;</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a45218953a280ddc544176842774346c8"></a>
+<a class="anchor" id="ae2a85775d748e9a7d9489439f85afd12"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
@@ -546,7 +546,7 @@ template&lt;typename Number, typename DerivedShape&gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual std::pair&lt;bool, DerivedShape&gt; <a class="el" href="classhypro_1_1GeometricObject.html">hypro::GeometricObject</a>&lt; Number, DerivedShape &gt;::satisfiesHalfspace </td>
+          <td class="memname">virtual std::pair&lt;<a class="el" href="namespacehypro.html#ab7a1dbbbe2d40e57ecab2c9b64b3615d">CONTAINMENT</a>, DerivedShape&gt; <a class="el" href="classhypro_1_1GeometricObject.html">hypro::GeometricObject</a>&lt; Number, DerivedShape &gt;::satisfiesHalfspace </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="classhypro_1_1Halfspace.html">Halfspace</a>&lt; Number &gt; &amp;&#160;</td>
           <td class="paramname"><em>rhs</em></td><td>)</td>
@@ -567,13 +567,13 @@ template&lt;typename Number, typename DerivedShape&gt; </div>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>A pair of a Boolean stating whether the resulting set is empty and the resulting set. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>A pair of a CONTAINMENT type stating whether the resulting set is empty and the resulting set. </dd></dl>
 
-<p>Implemented in <a class="el" href="classhypro_1_1ZonotopeT.html#aa404e99ce86f2661f7d746b70e513847">hypro::ZonotopeT&lt; Number, Converter &gt;</a>.</p>
+<p>Implemented in <a class="el" href="classhypro_1_1ZonotopeT.html#a82b5ca22a781f965e56bc24003539660">hypro::ZonotopeT&lt; Number, Converter &gt;</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="acddc7fbfe0fde344fa0c66c155bdc6a2"></a>
+<a class="anchor" id="acdbbcb6aff4f47be2bc8ce67f0c8fc60"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
@@ -583,7 +583,7 @@ template&lt;typename Number, typename DerivedShape&gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual std::pair&lt;bool, DerivedShape&gt; <a class="el" href="classhypro_1_1GeometricObject.html">hypro::GeometricObject</a>&lt; Number, DerivedShape &gt;::satisfiesHalfspaces </td>
+          <td class="memname">virtual std::pair&lt;<a class="el" href="namespacehypro.html#ab7a1dbbbe2d40e57ecab2c9b64b3615d">CONTAINMENT</a>, DerivedShape&gt; <a class="el" href="classhypro_1_1GeometricObject.html">hypro::GeometricObject</a>&lt; Number, DerivedShape &gt;::satisfiesHalfspaces </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;&#160;</td>
           <td class="paramname"><em>_mat</em>, </td>
@@ -616,9 +616,9 @@ template&lt;typename Number, typename DerivedShape&gt; </div>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>A pair of a Boolean stating whether the resulting set is empty and the resulting set. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>A pair of a CONTAINMENT type stating whether the resulting set is empty and the resulting set. </dd></dl>
 
-<p>Implemented in <a class="el" href="classhypro_1_1BoxT.html#ac0f00b8aa88247e162dc4f91c120ae3f">hypro::BoxT&lt; Number, Converter &gt;</a>, <a class="el" href="classhypro_1_1BoxT.html#ac0f00b8aa88247e162dc4f91c120ae3f">hypro::BoxT&lt; Number, hypro::Converter &gt;</a>, <a class="el" href="classhypro_1_1BoxT_3_01double_00_01Converter_01_4.html#a580f0591119fce3e2873366a17b4905a">hypro::BoxT&lt; double, Converter &gt;</a>, <a class="el" href="classhypro_1_1HPolytopeT.html#a0082b7e6e8ec4309cd82771763e646d3">hypro::HPolytopeT&lt; Number, Converter &gt;</a>, <a class="el" href="classhypro_1_1ZonotopeT.html#afda398f956c0dd150bf3a53a143fd788">hypro::ZonotopeT&lt; Number, Converter &gt;</a>, <a class="el" href="classhypro_1_1ConstraintSetT.html#a3fe0a8c79d17eede53ff557f63ed81f1">hypro::ConstraintSetT&lt; Number, Converter &gt;</a>, <a class="el" href="classhypro_1_1VPolytopeT.html#a7c5b51da3a68d057492701cc0149f672">hypro::VPolytopeT&lt; Number, Converter &gt;</a>, and <a class="el" href="classhypro_1_1SupportFunctionT.html#a6d24295a6282c89ab4392dbcb79f1ed7">hypro::SupportFunctionT&lt; Number, Converter &gt;</a>.</p>
+<p>Implemented in <a class="el" href="classhypro_1_1BoxT.html#aa5988a8cd5a9e129945062ba9fc73236">hypro::BoxT&lt; Number, Converter &gt;</a>, <a class="el" href="classhypro_1_1BoxT.html#aa5988a8cd5a9e129945062ba9fc73236">hypro::BoxT&lt; Number, hypro::Converter &gt;</a>, <a class="el" href="classhypro_1_1BoxT_3_01double_00_01Converter_01_4.html#abb8189902f1a2a10b792032f7e2ee709">hypro::BoxT&lt; double, Converter &gt;</a>, <a class="el" href="classhypro_1_1HPolytopeT.html#afc972cdfc16e95974a5dca734fc602d4">hypro::HPolytopeT&lt; Number, Converter &gt;</a>, <a class="el" href="classhypro_1_1ZonotopeT.html#a97cec8901e57f2715adf6ce18a20c5fc">hypro::ZonotopeT&lt; Number, Converter &gt;</a>, <a class="el" href="classhypro_1_1ConstraintSetT.html#a24d51d331cf1e54f77c813c6c9479722">hypro::ConstraintSetT&lt; Number, Converter &gt;</a>, <a class="el" href="classhypro_1_1VPolytopeT.html#a6e98edfbfd3594ef1765792b653220fd">hypro::VPolytopeT&lt; Number, Converter &gt;</a>, and <a class="el" href="classhypro_1_1SupportFunctionT.html#a1edb8c6ef55729dd4af950bb77f3649e">hypro::SupportFunctionT&lt; Number, Converter &gt;</a>.</p>
 
 </div>
 </div>

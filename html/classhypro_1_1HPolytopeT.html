@@ -254,12 +254,14 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>isExtremePoint</b> (c
 <tr class="memitem:a6954b5f275c5556cbd7c91f934a2da00"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6954b5f275c5556cbd7c91f934a2da00"></a>
 std::vector&lt; <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; Number &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>vertexEnumeration</b> () const </td></tr>
 <tr class="separator:a6954b5f275c5556cbd7c91f934a2da00"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a563820a00e337e8372fbc01de8518233"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a563820a00e337e8372fbc01de8518233"></a>
-std::pair&lt; bool, <a class="el" href="classhypro_1_1HPolytopeT.html">HPolytopeT</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>satisfiesHalfspace</b> (const <a class="el" href="classhypro_1_1Halfspace.html">Halfspace</a>&lt; Number &gt; &amp;rhs) const </td></tr>
-<tr class="separator:a563820a00e337e8372fbc01de8518233"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0082b7e6e8ec4309cd82771763e646d3"><td class="memItemLeft" align="right" valign="top">std::pair&lt; bool, <a class="el" href="classhypro_1_1HPolytopeT.html">HPolytopeT</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HPolytopeT.html#a0082b7e6e8ec4309cd82771763e646d3">satisfiesHalfspaces</a> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;_mat, const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;_vec) const </td></tr>
-<tr class="memdesc:a0082b7e6e8ec4309cd82771763e646d3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Method combining the intersection of the set with a set of halfspaces and a test for emptiness of the resulting set.  <a href="#a0082b7e6e8ec4309cd82771763e646d3">More...</a><br/></td></tr>
-<tr class="separator:a0082b7e6e8ec4309cd82771763e646d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a52efe825a505c67affe1bf1fcd44d173"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a52efe825a505c67affe1bf1fcd44d173"></a>
+std::pair&lt; <a class="el" href="namespacehypro.html#ab7a1dbbbe2d40e57ecab2c9b64b3615d">CONTAINMENT</a>, <br class="typebreak"/>
+<a class="el" href="classhypro_1_1HPolytopeT.html">HPolytopeT</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>satisfiesHalfspace</b> (const <a class="el" href="classhypro_1_1Halfspace.html">Halfspace</a>&lt; Number &gt; &amp;rhs) const </td></tr>
+<tr class="separator:a52efe825a505c67affe1bf1fcd44d173"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afc972cdfc16e95974a5dca734fc602d4"><td class="memItemLeft" align="right" valign="top">std::pair&lt; <a class="el" href="namespacehypro.html#ab7a1dbbbe2d40e57ecab2c9b64b3615d">CONTAINMENT</a>, <br class="typebreak"/>
+<a class="el" href="classhypro_1_1HPolytopeT.html">HPolytopeT</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HPolytopeT.html#afc972cdfc16e95974a5dca734fc602d4">satisfiesHalfspaces</a> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;_mat, const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;_vec) const </td></tr>
+<tr class="memdesc:afc972cdfc16e95974a5dca734fc602d4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Method combining the intersection of the set with a set of halfspaces and a test for emptiness of the resulting set.  <a href="#afc972cdfc16e95974a5dca734fc602d4">More...</a><br/></td></tr>
+<tr class="separator:afc972cdfc16e95974a5dca734fc602d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4cca0fac19554916f9892e23fe7af124"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1HPolytopeT.html">HPolytopeT</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HPolytopeT.html#a4cca0fac19554916f9892e23fe7af124">project</a> (const std::vector&lt; std::size_t &gt; &amp;dimensions) const </td></tr>
 <tr class="memdesc:a4cca0fac19554916f9892e23fe7af124"><td class="mdescLeft">&#160;</td><td class="mdescRight">Projects the set on the ordered set of given dimensions.  <a href="#a4cca0fac19554916f9892e23fe7af124">More...</a><br/></td></tr>
 <tr class="separator:a4cca0fac19554916f9892e23fe7af124"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -318,10 +320,10 @@ template&lt;typename N  = Number, carl::EnableIf&lt; std::is_same&lt; N, double 
 virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1GeometricObject.html#a28cf65685f4fa5e04c3dbf428a9d97b0">~GeometricObject</a> ()</td></tr>
 <tr class="memdesc:a28cf65685f4fa5e04c3dbf428a9d97b0 inherit pub_methods_classhypro_1_1GeometricObject"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destroys the object. <br/></td></tr>
 <tr class="separator:a28cf65685f4fa5e04c3dbf428a9d97b0 inherit pub_methods_classhypro_1_1GeometricObject"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a45218953a280ddc544176842774346c8 inherit pub_methods_classhypro_1_1GeometricObject"><td class="memItemLeft" align="right" valign="top">virtual std::pair&lt; bool, <br class="typebreak"/>
-<a class="el" href="classhypro_1_1reachability_1_1hypro_1_1HPolytopeT.html">HPolytopeT</a>&lt; Number, <a class="el" href="classhypro_1_1reachability_1_1hypro_1_1Converter.html">Converter</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1GeometricObject.html#a45218953a280ddc544176842774346c8">satisfiesHalfspace</a> (const <a class="el" href="classhypro_1_1reachability_1_1hypro_1_1Halfspace.html">Halfspace</a>&lt; Number &gt; &amp;rhs) const =0</td></tr>
-<tr class="memdesc:a45218953a280ddc544176842774346c8 inherit pub_methods_classhypro_1_1GeometricObject"><td class="mdescLeft">&#160;</td><td class="mdescRight">Method combining the intersection of the set with a halfspace and a test for emptiness of the resulting set.  <a href="#a45218953a280ddc544176842774346c8">More...</a><br/></td></tr>
-<tr class="separator:a45218953a280ddc544176842774346c8 inherit pub_methods_classhypro_1_1GeometricObject"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae2a85775d748e9a7d9489439f85afd12 inherit pub_methods_classhypro_1_1GeometricObject"><td class="memItemLeft" align="right" valign="top">virtual std::pair&lt; <a class="el" href="namespacehypro.html#ab7a1dbbbe2d40e57ecab2c9b64b3615d">CONTAINMENT</a>, <br class="typebreak"/>
+<a class="el" href="classhypro_1_1reachability_1_1hypro_1_1HPolytopeT.html">HPolytopeT</a>&lt; Number, <a class="el" href="classhypro_1_1reachability_1_1hypro_1_1Converter.html">Converter</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1GeometricObject.html#ae2a85775d748e9a7d9489439f85afd12">satisfiesHalfspace</a> (const <a class="el" href="classhypro_1_1reachability_1_1hypro_1_1Halfspace.html">Halfspace</a>&lt; Number &gt; &amp;rhs) const =0</td></tr>
+<tr class="memdesc:ae2a85775d748e9a7d9489439f85afd12 inherit pub_methods_classhypro_1_1GeometricObject"><td class="mdescLeft">&#160;</td><td class="mdescRight">Method combining the intersection of the set with a halfspace and a test for emptiness of the resulting set.  <a href="#ae2a85775d748e9a7d9489439f85afd12">More...</a><br/></td></tr>
+<tr class="separator:ae2a85775d748e9a7d9489439f85afd12 inherit pub_methods_classhypro_1_1GeometricObject"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6d5b4a8d675cbe9da63408a5beab8460 inherit pub_methods_classhypro_1_1GeometricObject"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classhypro_1_1reachability_1_1hypro_1_1HPolytopeT.html">HPolytopeT</a>&lt; Number, <br class="typebreak"/>
 <a class="el" href="classhypro_1_1reachability_1_1hypro_1_1Converter.html">Converter</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1GeometricObject.html#a6d5b4a8d675cbe9da63408a5beab8460">minkowskiSum</a> (const <a class="el" href="classhypro_1_1reachability_1_1hypro_1_1HPolytopeT.html">HPolytopeT</a>&lt; Number, <a class="el" href="classhypro_1_1reachability_1_1hypro_1_1Converter.html">Converter</a> &gt; &amp;rhs) const =0</td></tr>
 <tr class="memdesc:a6d5b4a8d675cbe9da63408a5beab8460 inherit pub_methods_classhypro_1_1GeometricObject"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes Minkowski's sum of the current set and the passed set.  <a href="#a6d5b4a8d675cbe9da63408a5beab8460">More...</a><br/></td></tr>
@@ -953,7 +955,7 @@ template&lt;typename Number, typename Converter&gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="a0082b7e6e8ec4309cd82771763e646d3"></a>
+<a class="anchor" id="afc972cdfc16e95974a5dca734fc602d4"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
@@ -963,7 +965,7 @@ template&lt;typename Number, typename Converter&gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::pair&lt;bool, <a class="el" href="classhypro_1_1HPolytopeT.html">HPolytopeT</a>&gt; <a class="el" href="classhypro_1_1HPolytopeT.html">hypro::HPolytopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt;::satisfiesHalfspaces </td>
+          <td class="memname">std::pair&lt;<a class="el" href="namespacehypro.html#ab7a1dbbbe2d40e57ecab2c9b64b3615d">CONTAINMENT</a>, <a class="el" href="classhypro_1_1HPolytopeT.html">HPolytopeT</a>&gt; <a class="el" href="classhypro_1_1HPolytopeT.html">hypro::HPolytopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt;::satisfiesHalfspaces </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;&#160;</td>
           <td class="paramname"><em>_mat</em>, </td>
@@ -996,9 +998,9 @@ template&lt;typename Number, typename Converter&gt; </div>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>A pair of a Boolean stating whether the resulting set is empty and the resulting set. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>A pair of a CONTAINMENT type stating whether the resulting set is empty and the resulting set. </dd></dl>
 
-<p>Implements <a class="el" href="classhypro_1_1GeometricObject.html#acddc7fbfe0fde344fa0c66c155bdc6a2">hypro::GeometricObject&lt; Number, HPolytopeT&lt; Number, Converter &gt; &gt;</a>.</p>
+<p>Implements <a class="el" href="classhypro_1_1GeometricObject.html#acdbbcb6aff4f47be2bc8ce67f0c8fc60">hypro::GeometricObject&lt; Number, HPolytopeT&lt; Number, Converter &gt; &gt;</a>.</p>
 
 </div>
 </div>

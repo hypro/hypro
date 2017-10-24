@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['filename',['fileName',['../structhypro_1_1ReachabilitySettings.html#a60d7439b247075058d03977c4aecf430',1,'hypro::ReachabilitySettings']]]
+  ['clustering',['clustering',['../structhypro_1_1ReachabilitySettings.html#a6908aa66729a133fb74180a4d6a50533',1,'hypro::ReachabilitySettings']]]
 ];

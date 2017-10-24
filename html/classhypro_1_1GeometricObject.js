@@ -10,8 +10,8 @@ var classhypro_1_1GeometricObject =
     [ "linearTransformation", "classhypro_1_1GeometricObject.html#aa8ba3e6ef5dd89dec24c4876b9b85d55", null ],
     [ "minkowskiSum", "classhypro_1_1GeometricObject.html#a6d5b4a8d675cbe9da63408a5beab8460", null ],
     [ "project", "classhypro_1_1GeometricObject.html#ac59bf7420c712b4895c0a171e2e6e388", null ],
-    [ "satisfiesHalfspace", "classhypro_1_1GeometricObject.html#a45218953a280ddc544176842774346c8", null ],
-    [ "satisfiesHalfspaces", "classhypro_1_1GeometricObject.html#acddc7fbfe0fde344fa0c66c155bdc6a2", null ],
+    [ "satisfiesHalfspace", "classhypro_1_1GeometricObject.html#ae2a85775d748e9a7d9489439f85afd12", null ],
+    [ "satisfiesHalfspaces", "classhypro_1_1GeometricObject.html#acdbbcb6aff4f47be2bc8ce67f0c8fc60", null ],
     [ "unite", "classhypro_1_1GeometricObject.html#a3ed4020101437144b34b62cc01d5bf01", null ],
     [ "vertices", "classhypro_1_1GeometricObject.html#ada1c4dd741b73792ada09f17ac2894c4", null ],
     [ "operator<<", "classhypro_1_1GeometricObject.html#aeec96cc4ca50fdc639b1ffab4b7b0c69", null ]

@@ -10,8 +10,8 @@ var classhypro_1_1reachability_1_1hypro_1_1GeometricObject =
     [ "linearTransformation", "classhypro_1_1reachability_1_1hypro_1_1GeometricObject.html#a1efab841f4531c0a56fc2c5ab5d6756f", null ],
     [ "minkowskiSum", "classhypro_1_1reachability_1_1hypro_1_1GeometricObject.html#ab525d7c75ca889482299a4ae7d3e2fdf", null ],
     [ "project", "classhypro_1_1reachability_1_1hypro_1_1GeometricObject.html#ac750774a9f159dad586d1cdc924d1925", null ],
-    [ "satisfiesHalfspace", "classhypro_1_1reachability_1_1hypro_1_1GeometricObject.html#a426c956c0c01c527cec5d6c9eb0e22d3", null ],
-    [ "satisfiesHalfspaces", "classhypro_1_1reachability_1_1hypro_1_1GeometricObject.html#a92dc127adadd202539aa7fb796d8940e", null ],
+    [ "satisfiesHalfspace", "classhypro_1_1reachability_1_1hypro_1_1GeometricObject.html#a84ee02377db8199ca81b8c6165bb0478", null ],
+    [ "satisfiesHalfspaces", "classhypro_1_1reachability_1_1hypro_1_1GeometricObject.html#aa35f3f90727e303d6b6115ca1df86b3e", null ],
     [ "unite", "classhypro_1_1reachability_1_1hypro_1_1GeometricObject.html#af4fcb5419474beadb600345ab342d669", null ],
     [ "vertices", "classhypro_1_1reachability_1_1hypro_1_1GeometricObject.html#a0eb064cd7a7822679ee5a393b10c5412", null ],
     [ "operator<<", "classhypro_1_1reachability_1_1hypro_1_1GeometricObject.html#aeec96cc4ca50fdc639b1ffab4b7b0c69", null ]
