@@ -14,6 +14,7 @@
 #include "../Polytopes/VPolytope/VPolytope.h"
 #include "../SupportFunction/SupportFunction.h"
 #include "../Zonotope/Zonotope.h"
+#include "../DifferenceBounds/DifferenceBounds.h"
 #include "../../util/pca.h"
 
 namespace hypro {
@@ -35,6 +36,7 @@ class Converter {
 		using HPolytope = HPolytopeT<Number,Converter,HPolytopeSetting>;
 		using OrthogonalPolyhedron = OrthogonalPolyhedronT<Number,Converter,BoxLinearOptimizationOn>;
 		using VPolytope = VPolytopeT<Number,Converter>;
+		using DifferenceBounds = DifferenceBoundsT<Number,Converter>;
 		#ifdef HYPRO_USE_PPL
 		using Polytope = PolytopeT<Number,Converter,PolytopeSetting>;
 		#endif
@@ -136,6 +138,12 @@ using SupportFunction = typename Converter<Number>::SupportFunction;
  */
 template<typename Number>
 using Zonotope = typename Converter<Number>::Zonotope;
+
+/**
+ * Typedef for DifferenceBoundsT
+ */
+template<typename Number>
+using DifferenceBounds = typename Converter<Number>::DifferenceBounds;
 
 #include "converterToBox.tpp"
 #include "converterToConstraintSet.tpp"
