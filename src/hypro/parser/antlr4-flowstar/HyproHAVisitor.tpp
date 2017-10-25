@@ -21,7 +21,7 @@ namespace hypro {
 		//2.Calls visit(ctx->setting()) to get reachability settings
 		HyproSettingVisitor<Number> settingVisitor = HyproSettingVisitor<Number>(varVec);
 		reachSettings = settingVisitor.visit(ctx->setting());
-		
+
 		//3.Calls visit(ctx->modes()) to get locSet
 		HyproLocationVisitor<Number> locVisitor = HyproLocationVisitor<Number>(varVec);
 		std::set<Location<Number>*> locSet = locVisitor.visit(ctx->modes()).template as<std::set<Location<Number>*>>();
@@ -33,22 +33,22 @@ namespace hypro {
 		std::set<Transition<Number>*> transSet = transVisitor.visit(ctx->jumps()).template as<std::set<Transition<Number>*>>();
 
 		//5.Calls visit to get all initial states
-		locationStateMap initSet;
+		typename hypro::HybridAutomaton<Number>::locationStateMap initSet;
 		HyproInitialSetVisitor<Number> initVisitor = HyproInitialSetVisitor<Number>(varVec, rLocSet);
 		for(auto& initState : ctx->init()){
-			locationStateMap oneInitialState = initVisitor.visit(initState).template as<locationStateMap>();
+			typename hypro::HybridAutomaton<Number>::locationStateMap oneInitialState = initVisitor.visit(initState).template as<typename hypro::HybridAutomaton<Number>::locationStateMap>();
 			initSet.insert(oneInitialState.begin(), oneInitialState.end());
 		}
 
 		//6.Calls visit(ctx->unsafeset()) to get local badStates
-		locationConditionMap badStates;
+		typename hypro::HybridAutomaton<Number>::locationConditionMap badStates;
 		if(ctx->unsafeset() != NULL && ctx->unsafeset()->badstate().size() > 0){
 			//std::cout << "-- size of badstates: " << ctx->unsafeset()->badstate().size() << std::endl;
 			HyproBadStatesVisitor<Number> bStateVisitor = HyproBadStatesVisitor<Number>(varVec, rLocSet);
-			badStates = bStateVisitor.visit(ctx->unsafeset()).template as<locationConditionMap>();	
-		} 
+			badStates = bStateVisitor.visit(ctx->unsafeset()).template as<typename hypro::HybridAutomaton<Number>::locationConditionMap>();
+		}
 
-#ifdef HYPRO_LOGGING		
+#ifdef HYPRO_LOGGING
 		COUT("Parsed variables: " << vars << std::endl);
 		COUT("Reachability settings:\n" << reachSettings);
 		COUT("All locations:\n");
