@@ -1,6 +1,6 @@
 /*exported from CIF3 Sytax*/
 grammar HybridSystem;
-import Expressions, InputOutput;
+import Expressions, CIFLocation, InputOutput;
 
 specification: 			groupBody;
 
@@ -84,45 +84,6 @@ optElseFuncStat: 		'else' funcStatements;
 
 events: 			name (',' name)*;
 
-coreEdge: 			edgeEvents optEdgeGuard optEdgeUrgent optEdgeUpdate
-				| 'when' expressions optEdgeUrgent optEdgeUpdate
-				| 'now' optEdgeUpdate
-				| 'do' updates;
-
-optEdgeGuard: 			('when' expressions)?;
-
-optEdgeUrgent: 			'now'?;
-
-optEdgeUpdate: 			('do' updates)?;
-
-edgeEvents: 			edgeEvent (',' edgeEvent)*;
-
-edgeEvent: 			'tau'
-				| name
-				| name '!'
-				| name '!' expression
-				| name '?';
-
-locations:			location+; 
-
-location: 			'location' ';' 					# loc
-				| 'location' identifier ';'			# locId
-				| 'location' ':' locationElements		# locElem
-				| 'location' identifier ':' locationElements	# locIdElem
-				;
-
-locationElements: 		locationElement+;
-
-locationElement: 		'initial' ';'
-				| 'initial' expressions ';'
-				| invariantDecls
-				| 'equation' equations ';'
-				| 'marked' ';'
-				| 'marked' expressions ';'
-				| 'urgent' ';'
-				| 'edge' coreEdge 'goto' identifier ';'
-				| 'edge' coreEdge ';' ;
-
 actualParms: 			'(' ')' | '(' expressions ')';
 
 formalParms: 			'(' ')' | '(' formalDecls ')';
@@ -150,41 +111,6 @@ contDecl: 			identifier optDerivate
 				| identifier '=' expression optDerivate;
 
 optDerivate: 			('der' expression)?;
-
-equations: 			equation (',' equation)*;
-
-equation: 			identifier '\'' '=' expression
-				| identifier '=' expression;
-
-invariantDecls: 		optSupKind 'invariant' invariants ';'
-				| supKind invariants ';' ;
-
-invariants: 			invariant (',' invariant)*;
-
-invariant: 			expression
-				| name 'needs' expression
-				| nonEmptySetExpression 'needs' expression
-				| expression 'disables' name
-				| expression 'disables' nameSet ;
-
-updates: 			update (',' update)*;
-
-update: 			adressable ':=' expression
-				| 'if' expressions ':' updates optElifUpdates optElseUpdate 'end';
-
-adressables: 			adressable (',' adressable)*;
-
-adressable: 			identifier
-				| identifier projections
-				| '(' adressable ',' adressable ')';
-
-projections: 			projection*;
-
-projection: 			'[' expression ']';
-
-optElifUpdates: 		('elif' expressions ':' updates)*;
-
-optElseUpdate: 			('else' update)?;
 
 optControllability: 		controllability?;
 

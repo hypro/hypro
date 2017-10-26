@@ -1,5 +1,5 @@
 
-// Generated from Expressions.g4 by ANTLR 4.7
+// Generated from CIFLocation.g4 by ANTLR 4.7
 
 #pragma once
 
@@ -9,7 +9,7 @@
 
 
 
-class  ExpressionsLexer : public antlr4::Lexer {
+class  CIFLocationLexer : public antlr4::Lexer {
 public:
   enum {
     T__0 = 1, T__1 = 2, T__2 = 3, T__3 = 4, T__4 = 5, T__5 = 6, T__6 = 7, 
@@ -24,13 +24,16 @@ public:
     T__56 = 57, T__57 = 58, T__58 = 59, T__59 = 60, T__60 = 61, T__61 = 62, 
     T__62 = 63, T__63 = 64, T__64 = 65, T__65 = 66, T__66 = 67, T__67 = 68, 
     T__68 = 69, T__69 = 70, T__70 = 71, T__71 = 72, T__72 = 73, T__73 = 74, 
-    T__74 = 75, T__75 = 76, T__76 = 77, MULOP = 78, ADDOP = 79, COMPOP = 80, 
-    NUMBER = 81, REALNUMBER = 82, STRING = 83, IDENTIFIER = 84, RELATIVENAME = 85, 
-    ABSOLUTENAME = 86, ROOTNAME = 87, WS = 88
+    T__74 = 75, T__75 = 76, T__76 = 77, T__77 = 78, T__78 = 79, T__79 = 80, 
+    T__80 = 81, T__81 = 82, T__82 = 83, T__83 = 84, T__84 = 85, T__85 = 86, 
+    T__86 = 87, T__87 = 88, T__88 = 89, T__89 = 90, T__90 = 91, T__91 = 92, 
+    T__92 = 93, T__93 = 94, MULOP = 95, ADDOP = 96, COMPOP = 97, NUMBER = 98, 
+    REALNUMBER = 99, STRING = 100, IDENTIFIER = 101, RELATIVENAME = 102, 
+    ABSOLUTENAME = 103, ROOTNAME = 104, WS = 105
   };
 
-  ExpressionsLexer(antlr4::CharStream *input);
-  ~ExpressionsLexer();
+  CIFLocationLexer(antlr4::CharStream *input);
+  ~CIFLocationLexer();
 
   virtual std::string getGrammarFileName() const override;
   virtual const std::vector<std::string>& getRuleNames() const override;

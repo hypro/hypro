@@ -4,6 +4,7 @@
 #include "antlr4-runtime.h"
 #include "HybridSystemVisitor.h"
 #include "HybridSystemBaseVisitor.h"
+#include "CIFLocVisitor.h"
 #include "../../types.h"
 #include "../../datastructures/HybridAutomaton/Location.h"
 #include "../../datastructures/HybridAutomaton/LocationManager.h"
@@ -23,6 +24,8 @@ class HybridCIFVisitor : public HybridSystemBaseVisitor {
 		//A vector of all variables which are defined
 		std::vector<std::string> vars;
 		int numberOfLocationsWithoutAName = 0;
+		std::set<Location<Number>*> locSet;
+		std::set<Transition<Number>*> transitionSet;
 
 		antlrcpp::Any visitDiscDecl(HybridSystemParser::DiscDeclContext *ctx) override;
 		antlrcpp::Any visitAutomatonBody(HybridSystemParser::AutomatonBodyContext *ctx) override;
@@ -32,10 +35,6 @@ class HybridCIFVisitor : public HybridSystemBaseVisitor {
 		antlrcpp::Any visitEvents(HybridSystemParser::EventsContext *ctx) override;
 		antlrcpp::Any visitEdgeEvent(HybridSystemParser::EdgeEventContext *ctx) override;
 		antlrcpp::Any visitIoDecls(HybridSystemParser::IoDeclsContext *ctx) override;
-		antlrcpp::Any visitCoreEdge(HybridSystemParser::CoreEdgeContext *ctx) override;
-		antlrcpp::Any visitLocIdElem(HybridSystemParser::LocIdElemContext *ctx) override;
-		antlrcpp::Any visitLocElem(HybridSystemParser::LocElemContext *ctx) override;
-		antlrcpp::Any visitLocations(HybridSystemParser::LocationsContext *ctx) override;
 		
 	public:
 
