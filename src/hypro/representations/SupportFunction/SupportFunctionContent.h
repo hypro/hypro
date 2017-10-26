@@ -14,14 +14,11 @@
 
 #include "../../config.h"
 #include "util.h"
+#include "SupportFunctionSetting.h"
 #include "PolytopeSupportFunction.h"
 #include "BallSupportFunction.h"
 #include "EllipsoidSupportFunction.h"
 #include "../../util/templateDirections.h"
-
-//#define SUPPORTFUNCTION_VERBOSE
-//#define MULTIPLICATIONSUPPORTFUNCTION_VERBOSE
-#define USE_LIN_TRANS_REDUCTION
 
 namespace hypro {
 template <typename Number>
@@ -38,7 +35,7 @@ struct sumContent {
 	std::size_t originCount() const { return 2; }
 };
 
-template <typename Number>
+template <typename Number, class Setting>
 struct trafoContent {
 	std::shared_ptr<SupportFunctionContent<Number>> origin;
 	std::shared_ptr<const lintrafoParameters<Number>> parameters;
@@ -52,32 +49,32 @@ struct trafoContent {
 		parameters = std::make_shared<const lintrafoParameters<Number>>(A,b);
 		// in case this transformation has already been performed, parameters will be updated.
 		_origin->hasTrafo(parameters, A, b);
-#ifdef USE_LIN_TRANS_REDUCTION
-		// best points for reduction are powers of 2 thus we only use these points for possible reduction points
-		bool reduced;
-		do {
-			reduced = false;
-			if ( (origin->type() == SF_TYPE::LINTRAFO) && (*origin->linearTrafoParameters()->parameters == *parameters) && origin->linearTrafoParameters()->currentExponent == currentExponent ) {
-				successiveTransformations = origin->linearTrafoParameters()->successiveTransformations +1 ;
-			} else {
-				successiveTransformations = 0;
-			}
-			//std::cout << "successiveTransformations with exponent " << currentExponent << ": " << successiveTransformations << std::endl;
-			if (successiveTransformations == unsigned(carl::pow(2,parameters->power)-1)) {
-				reduced = true;
-				currentExponent = currentExponent*(carl::pow(2,parameters->power));
-				for(std::size_t i = 0; i < unsigned(carl::pow(2,parameters->power)-1); i++ ){
-					origin = origin->linearTrafoParameters()->origin;
+		if(Setting::USE_LIN_TRANS_REDUCTION){
+			// best points for reduction are powers of 2 thus we only use these points for possible reduction points
+			bool reduced;
+			do {
+				reduced = false;
+				if ( (origin->type() == SF_TYPE::LINTRAFO) && (*origin->linearTrafoParameters()->parameters == *parameters) && origin->linearTrafoParameters()->currentExponent == currentExponent ) {
+					successiveTransformations = origin->linearTrafoParameters()->successiveTransformations +1 ;
+				} else {
+					successiveTransformations = 0;
 				}
-				// Note: The following assertion does not hold in combination with the current reduction techniques.
-				//assert(origin->type() != SF_TYPE::LINTRAFO || (origin->linearTrafoParameters()->parameters == this->parameters && origin->linearTrafoParameters()->currentExponent >= currentExponent) );
-			}
-		} while (reduced == true);
-		assert(origin->checkTreeValidity());
-#endif
+				//std::cout << "successiveTransformations with exponent " << currentExponent << ": " << successiveTransformations << std::endl;
+				if (successiveTransformations == unsigned(carl::pow(2,parameters->power)-1)) {
+					reduced = true;
+					currentExponent = currentExponent*(carl::pow(2,parameters->power));
+					for(std::size_t i = 0; i < unsigned(carl::pow(2,parameters->power)-1); i++ ){
+						origin = origin->linearTrafoParameters()->origin;
+					}
+					// Note: The following assertion does not hold in combination with the current reduction techniques.
+					//assert(origin->type() != SF_TYPE::LINTRAFO || (origin->linearTrafoParameters()->parameters == this->parameters && origin->linearTrafoParameters()->currentExponent >= currentExponent) );
+				}
+			} while (reduced == true);
+			assert(origin->checkTreeValidity());	
+		}
 	}
 
-	trafoContent( const trafoContent<Number>& _origin ) : origin( _origin.origin ), parameters(_origin.parameters), currentExponent(_origin.currentExponent), successiveTransformations( _origin.successiveTransformations )
+	trafoContent( const trafoContent<Number,Setting>& _origin ) : origin( _origin.origin ), parameters(_origin.parameters), currentExponent(_origin.currentExponent), successiveTransformations( _origin.successiveTransformations )
 	{}
 
 	std::size_t originCount() const { return 1; }
@@ -154,7 +151,7 @@ struct projectionContent {
  */
 template <typename Number>
 class SupportFunctionContent {
-	friend trafoContent<Number>;
+	friend trafoContent<Number,SupportFunctionContentSetting>;
 
   private:
 	SF_TYPE mType = SF_TYPE::NONE;
@@ -164,12 +161,12 @@ class SupportFunctionContent {
 	bool mContainsProjection;
 	union {
 		sumContent<Number>* mSummands;
-		trafoContent<Number>* mLinearTrafoParameters;
+		trafoContent<Number,SupportFunctionContentSetting>* mLinearTrafoParameters;
 		scaleContent<Number>* mScaleParameters;
 		unionContent<Number>* mUnionParameters;
 		intersectionContent<Number>* mIntersectionParameters;
 		projectionContent<Number>* mProjectionParameters;
-		PolytopeSupportFunction<Number>* mPolytope;
+		PolytopeSupportFunction<Number,PolytopeSupportFunctionSetting>* mPolytope;
 		BallSupportFunction<Number>* mBall;
 		EllipsoidSupportFunction<Number>* mEllipsoid;
 	};
@@ -300,11 +297,11 @@ class SupportFunctionContent {
 	// getter for the union types
 	sumContent<Number>* summands() const;
 	scaleContent<Number>* scaleParameters() const;
-	trafoContent<Number>* linearTrafoParameters() const;
+	trafoContent<Number,SupportFunctionContentSetting>* linearTrafoParameters() const;
 	unionContent<Number>* unionParameters() const;
 	intersectionContent<Number>* intersectionParameters() const;
 	projectionContent<Number>* projectionParameters() const;
-	PolytopeSupportFunction<Number>* polytope() const;
+	PolytopeSupportFunction<Number,PolytopeSupportFunctionSetting>* polytope() const;
 	BallSupportFunction<Number>* ball() const;
 	EllipsoidSupportFunction<Number>* ellipsoid() const;
 

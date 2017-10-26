@@ -13,6 +13,7 @@
 #pragma once
 
 #include "util.h"
+#include "SupportFunctionSetting.h"
 #include "../../config.h"
 #include "../../datastructures/Point.h"
 #include "../../datastructures/Halfspace.h"
@@ -32,7 +33,7 @@ namespace hypro {
 * This class defines a support Function object representing a polytope (might not be closed)
 * SupportFunctions can be evaluated in a specified direction l and return a correspondent EvaluationResult
 */
-template <typename Number>
+template <typename Number, class Setting>
 class PolytopeSupportFunction {
   private:
 
@@ -46,10 +47,10 @@ class PolytopeSupportFunction {
 	PolytopeSupportFunction( matrix_t<Number> constraints, vector_t<Number> constraintConstants );
 	PolytopeSupportFunction( const std::vector<Halfspace<Number>>& _planes );
 	PolytopeSupportFunction( const std::vector<Point<Number>>& _points );
-	PolytopeSupportFunction( const PolytopeSupportFunction<Number>& _origin );
+	PolytopeSupportFunction( const PolytopeSupportFunction<Number,Setting>& _origin );
 	~PolytopeSupportFunction();
 
-    PolytopeSupportFunction<Number>& operator=(const PolytopeSupportFunction& _orig);
+    PolytopeSupportFunction<Number,Setting>& operator=(const PolytopeSupportFunction& _orig);
 
 	/**
 	 * Returns the dimension of the object.
@@ -109,7 +110,7 @@ class PolytopeSupportFunction {
 
     std::string createCode( unsigned index = 0 ) const;
 
-    friend std::ostream& operator<<( std::ostream& lhs, const PolytopeSupportFunction<Number>& rhs ) {
+    friend std::ostream& operator<<( std::ostream& lhs, const PolytopeSupportFunction<Number,Setting>& rhs ) {
     	lhs << "[";
     	for(unsigned rowIndex = 0; rowIndex < rhs.mConstraints.rows()-1; ++rowIndex) {
     		lhs << "  ";

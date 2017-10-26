@@ -136,7 +136,7 @@ namespace hypro{
     }
 
     template<typename Number, typename Converter>
-    trafoContent<Number> *SupportFunctionT<Number,Converter>::linearTrafoParameters() const {
+    trafoContent<Number,SupportFunctionContentSetting> *SupportFunctionT<Number,Converter>::linearTrafoParameters() const {
         return content->linearTrafoParameters();
     }
 
@@ -156,7 +156,7 @@ namespace hypro{
     }
 
     template<typename Number, typename Converter>
-    PolytopeSupportFunction<Number> *SupportFunctionT<Number,Converter>::polytope() const {
+    PolytopeSupportFunction<Number,PolytopeSupportFunctionSetting> *SupportFunctionT<Number,Converter>::polytope() const {
         return content->polytope();
     }
 
