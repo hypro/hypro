@@ -9,29 +9,29 @@ namespace hypro {
 		vars(varVec),
 		locSet(lSet)
 	{ }
-	
+
 	template<typename Number>
 	HyproBadStatesVisitor<Number>::~HyproBadStatesVisitor() { }
 
-	/////////////// Inherited from HybridAutomatonBaseVisitor	
+	/////////////// Inherited from HybridAutomatonBaseVisitor
 
 	template<typename Number>
 	antlrcpp::Any HyproBadStatesVisitor<Number>::visitUnsafeset(HybridAutomatonParser::UnsafesetContext *ctx){
 
 		//1.Collect badState information. NOTE: There can be multiple denoted badstates for one location.
-		locationConditionMap lcMap;
+		typename hypro::HybridAutomaton<Number>::locationConditionMap lcMap;
 		if(ctx->badstate().size() > 0){
-			for(auto bState : ctx->badstate()){	
+			for(auto bState : ctx->badstate()){
 				std::pair<Location<Number>*,Condition<Number>> badStateInfo = visit(bState).template as<std::pair<Location<Number>*,Condition<Number>>>();
 				std::size_t lcMapSize = lcMap.size();
 				lcMap.insert(badStateInfo);
-				//Case that nothing has been inserted as location already existed in map: 
+				//Case that nothing has been inserted as location already existed in map:
 				//Extend condition matrix and vector of condition that is already in map
 				if(lcMapSize == lcMap.size()){
 
 					auto it = lcMap.find(badStateInfo.first);
 					assert(it != lcMap.end());
-						
+
 					//Extend inMapCondition.matrix with badStateInfo.matrix
 					matrix_t<Number> newMat = it->second.getMatrix();
 					std::size_t newMatRowsBefore = newMat.rows();
@@ -54,11 +54,11 @@ namespace hypro {
 					it->second.setVector(newVec);
 
 				}
-			}	
+			}
 		}
 		return lcMap;
 	}
-	
+
 	template<typename Number>
 	antlrcpp::Any HyproBadStatesVisitor<Number>::visitBadstate(HybridAutomatonParser::BadstateContext *ctx){
 
@@ -81,12 +81,12 @@ namespace hypro {
 		if(ctx->constrset() != NULL && ctx->constrset()->getText() != ""){
 			HyproFormulaVisitor<Number> visitor(vars);
 			std::pair<matrix_t<Number>,vector_t<Number>> badStatePair = visitor.visit(ctx->constrset()).template as<std::pair<matrix_t<Number>,vector_t<Number>>>();
-			Condition<Number> badStateConditions(badStatePair.first, badStatePair.second);	
-			return std::make_pair(badLoc, badStateConditions);	
+			Condition<Number> badStateConditions(badStatePair.first, badStatePair.second);
+			return std::make_pair(badLoc, badStateConditions);
 		} else {
 			return std::make_pair(badLoc, Condition<Number>(matrix_t<Number>::Zero(vars.size(), vars.size()),vector_t<Number>::Zero(vars.size())));
 		}
-		
+
 	}
 
 } //namespace hypro
