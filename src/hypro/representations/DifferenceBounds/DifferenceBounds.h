@@ -30,7 +30,7 @@ public:
     DifferenceBoundsT (matrix_t<std::pair<Number, BOUND_TYPE >>);
 
     matrix_t<std::pair<Number, BOUND_TYPE>> getDBM() const;
-    void setDBM(matrix_t<std::pair<Number,Converter>> dbm);
+    void setDBM(matrix_t<std::pair<Number,BOUND_TYPE>> dbm);
 
     std::size_t dimension() const;
     std::size_t size() const;
