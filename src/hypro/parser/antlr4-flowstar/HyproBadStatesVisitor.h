@@ -26,7 +26,7 @@ class HyproBadStatesVisitor : public HybridAutomatonBaseVisitor {
 	friend class HyproHAVisitor<Number>;
 
 	//From HybridAutomaton.h, for local bad states
-	using locationConditionMap = std::map<const Location<Number>*, Condition<Number>, locPtrComp<Number>>; /// Map from location pointers to conditions.
+	//using locationConditionMap = std::map<const Location<Number>*, Condition<Number>, locPtrComp<Number>>; /// Map from location pointers to conditions.
 
 	//TODO: Maybe implement global bad states
 
@@ -46,7 +46,7 @@ class HyproBadStatesVisitor : public HybridAutomatonBaseVisitor {
 
 		//Inherited from HybridAutomatonBaseVisitor
 		antlrcpp::Any visitUnsafeset(HybridAutomatonParser::UnsafesetContext *ctx) override;
-		antlrcpp::Any visitBadstate(HybridAutomatonParser::BadstateContext *ctx) override; 
+		antlrcpp::Any visitBadstate(HybridAutomatonParser::BadstateContext *ctx) override;
 
 };
 

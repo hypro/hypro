@@ -39,8 +39,8 @@ TYPED_TEST(AntlrParserCIFTest, ParseVariables){
 	//Open examples.txt
 	this->cwd();
 
-	std::fstream ifs("../../../../src/test/core/ciftestautomat.txt");
-	
+	std::fstream ifs("../src/test/core/ciftestautomat.txt");
+
 	//Create an AnTLRInputStream
 	ANTLRInputStream input;
 	input = ANTLRInputStream(ifs);

@@ -16,19 +16,19 @@ namespace hypro {
 	template<typename Number>
 	antlrcpp::Any HyproInitialSetVisitor<Number>::visitInit(HybridAutomatonParser::InitContext *ctx){
 
-		locationStateMap initialState;
+		typename hypro::HybridAutomaton<Number>::locationStateMap initialState;
 
 		//For all initialstates - there must be at least one according to grammar
 		for(auto initStateCtx : ctx->initstate()){
 
 			//0.Syntax Check - all given variable names really a location name?
 			//If it is, save the location pointers for the localStateMap
-			bool found = false;		
+			bool found = false;
 			Location<Number>* initialLoc = NULL;
 			for(const auto& loc : locSet){
 				if(initStateCtx->VARIABLE()->getText() == loc->getName()){
 					found = true;
-					initialLoc = loc;	
+					initialLoc = loc;
 				}
 			}
 			if(!found){
@@ -36,7 +36,7 @@ namespace hypro {
 				exit(0);
 			}
 
-			//1.Get ConstraintSet, build State and add to localStateMap		
+			//1.Get ConstraintSet, build State and add to localStateMap
 			ConstraintSet<Number> conSet = visit(initStateCtx);
 			State<Number,ConstraintSet<Number>> state;
 			assert(initialLoc != NULL);
@@ -44,7 +44,7 @@ namespace hypro {
 			state.setSet(conSet,0);
 			assert(state.getNumberSets() == 1);
 			state.setTimestamp(carl::Interval<Number>(0));
-			initialState.insert(std::make_pair(initialLoc, state));	
+			initialState.insert(std::make_pair(initialLoc, state));
 		}
 
 		return initialState;
