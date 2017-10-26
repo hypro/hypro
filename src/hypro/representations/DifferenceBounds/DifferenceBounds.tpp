@@ -19,10 +19,9 @@ namespace hypro {
     }
 
     template <typename Number, typename Converter>
-    void DifferenceBoundsT<Number, Converter>::setDBM(matrix_t<std::pair<Number,Converter>> dbm){
-        // TODO
+    void DifferenceBoundsT<Number, Converter>::setDBM(matrix_t<std::pair<Number,DifferenceBoundsT<Number, Converter>::BOUND_TYPE>> dbm) {
+        m_dbm = dbm;
     }
-
     template <typename Number, typename Converter>
     std::size_t DifferenceBoundsT<Number, Converter>::dimension() const{
         // TODO
@@ -43,8 +42,52 @@ namespace hypro {
 
     template <typename Number, typename Converter>
     std::vector<Point<Number>> DifferenceBoundsT<Number, Converter>::vertices( const matrix_t<Number>& ) const{
-        // TODO
-        return vector<Point<Number>>(2);
+        /*
+         * Convert the Difference Bound Matrix into a polytope and then compute the vertices on it
+         * TODO move the conversion process into a converter
+         */
+        //std::cout << "Starting to calculate vertices on DBM: " << *this << "\n";
+        int numclocks = m_dbm.cols()-1;
+        //std::cout << "Number of clocks: " << numclocks << "\n";
+        int numconstraints = (m_dbm.cols()*m_dbm.cols())-m_dbm.cols(); //all entries of the DBM (except the diagonal) defines a constraint
+
+        //constraints of the polytope
+        hypro::matrix_t<Number> HPolyConstraints = hypro::matrix_t<Number>::Zero(numconstraints,numclocks);
+        hypro::vector_t<Number> HPolyConstants = hypro::vector_t<Number>::Zero(numconstraints);
+
+        int counter = 0; // counter for indexing constraints
+        for(int i = 0; i < m_dbm.rows();i++){
+            for(int j = 0; j < m_dbm.cols();j++){
+                //std::cout<< "Process entry at: (" <<i<<","<<j<<")\n";
+                // do not consider diagonals
+                if(! (i == j)){
+                    // the constraint to add
+                    matrix_t<Number> constraintVars = matrix_t<Number>::Zero(1,numclocks);
+                    if (i == 0){
+                        // constraint of the form 0-x_j <= c_ij
+                        constraintVars(0,j-1) = -1.0; // j-1 because we don't consider static clock 0
+                    }
+                    else if (j==0){
+                        // constraint of the form x_i - 0  <= c_ij
+                        constraintVars(0,i-1) = 1.0; // i-1 because we don't consider static clock 0
+                    }
+                    else{
+                        // constraint of the form x_i - x_j  <= c_ij
+                        constraintVars(0,i-1) = 1.0; // i-1 because we don't consider static clock 0
+                        constraintVars(0,j-1) = -1.0; // j-1 because we don't consider static clock 0
+                    }
+                    //std::cout << "Constraint variable vector: " << constraintVars <<"\n";
+                    HPolyConstraints.row(counter) = constraintVars;
+                    //std::cout << "New constraint matrix: " << HPolyConstraints << "\n";
+                    HPolyConstants(counter,0) = m_dbm(i,j).first;
+                    //std::cout << "New constant vector: " << HPolyConstants << "\n";
+                    counter++;
+                }
+            }
+        }
+        std::cout << "Generated polytope: \n Matrix: \n" << HPolyConstraints << "\n Vector: \n" << HPolyConstants <<"\n";
+        hypro::HPolytopeT<Number,Converter> poly(HPolyConstraints,HPolyConstants);
+        return poly.vertices();
     }
 
     template <typename Number, typename Converter>
