@@ -36,7 +36,7 @@ class Converter {
 		using OrthogonalPolyhedron = OrthogonalPolyhedronT<Number,Converter>;
 		using VPolytope = VPolytopeT<Number,Converter>;
 		#ifdef HYPRO_USE_PPL
-		using Polytope = PolytopeT<Number,Converter>;
+		using Polytope = PolytopeT<Number,Converter,PolytopeSetting>;
 		#endif
 		using SupportFunction = SupportFunctionT<Number,Converter>;
 		using Zonotope = ZonotopeT<Number,Converter>;

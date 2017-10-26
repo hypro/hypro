@@ -10,10 +10,9 @@
  *
  */ 
 
-//For Polytope and Polytope/util.h
-struct PolytopeSetting {
-	static constexpr bool fukuda_DEBUG = false;
-};
+//Box and Orthogonal polyhedron
+
+//Polytope.h must be tested - maybe get ppl library and test
 
 //BoxSupportFunctions 
 struct BoxSupportFunctionSetting {
