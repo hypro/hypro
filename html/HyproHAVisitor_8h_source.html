@@ -145,12 +145,12 @@ $(document).ready(function(){initNavTree('HyproHAVisitor_8h_source.html','');});
 <div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;</div>
 <div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;    <span class="keyword">private</span>:</div>
 <div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;        <span class="comment">//A vector of all variables that are defined. </span></div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;        <span class="comment">//A vector of all variables that are defined.</span></div>
 <div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;        <span class="comment">//This must be passed onto all the underlying visitors as they need to have</span></div>
 <div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;        <span class="comment">//access to the variable names stated in the variable declaration</span></div>
 <div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;        std::vector&lt;std::string&gt; vars;</div>
 <div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;        <span class="comment">//Stores the parsed reachability settings </span></div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;        <span class="comment">//Stores the parsed reachability settings</span></div>
 <div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;        ReachabilitySettings&lt;Number&gt; reachSettings;</div>
 <div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;</div>
 <div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;        <span class="comment">//Inherited from HybridAutomatonBaseVisitor which is generated from AnTLR</span></div>
@@ -159,8 +159,8 @@ $(document).ready(function(){initNavTree('HyproHAVisitor_8h_source.html','');});
 <div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    <span class="keyword">public</span>:</div>
 <div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;</div>
 <div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;        <span class="comment">//Is first defined in HybridAutomaton.h</span></div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;        <span class="keyword">using</span> locationStateMap = std::multimap&lt;const Location&lt;Number&gt;*, State&lt;Number,ConstraintSet&lt;Number&gt;&gt;, locPtrComp&lt;Number&gt;&gt;;</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;        <span class="keyword">using</span> locationConditionMap = std::map&lt;const Location&lt;Number&gt;*, Condition&lt;Number&gt;, locPtrComp&lt;Number&gt;&gt;; </div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;        <span class="comment">//using locationStateMap = std::multimap&lt;const Location&lt;Number&gt;*, State&lt;Number,ConstraintSet&lt;Number&gt;&gt;, locPtrComp&lt;Number&gt;&gt;;</span></div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;        <span class="comment">//using locationConditionMap = std::map&lt;const Location&lt;Number&gt;*, Condition&lt;Number&gt;, locPtrComp&lt;Number&gt;&gt;; /// Map from location pointers to conditions.</span></div>
 <div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;</div>
 <div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;        <span class="comment">//Constructor and Destructor</span></div>
 <div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;        HyproHAVisitor();</div>
@@ -171,7 +171,7 @@ $(document).ready(function(){initNavTree('HyproHAVisitor_8h_source.html','');});
 <div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;        antlrcpp::Any visitStart(<a class="code" href="classHybridAutomatonParser_1_1StartContext.html">HybridAutomatonParser::StartContext</a> *ctx) <span class="keyword">override</span>;</div>
 <div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;</div>
 <div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;        <span class="comment">//Getter for settings</span></div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;        <span class="keyword">inline</span> ReachabilitySettings&lt;Number&gt; getSettings() { <span class="keywordflow">return</span> reachSettings; }     </div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;        <span class="keyword">inline</span> ReachabilitySettings&lt;Number&gt; getSettings() { <span class="keywordflow">return</span> reachSettings; }</div>
 <div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;};</div>
 <div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;</div>
 <div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;} <span class="comment">//namespace hypro</span></div>

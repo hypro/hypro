@@ -147,15 +147,15 @@ $(document).ready(function(){initNavTree('HyproInitialSetVisitor_8h_source.html'
 <div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;        <span class="comment">//A vector of all variables that are defined</span></div>
 <div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;        std::vector&lt;std::string&gt;&amp; vars;</div>
 <div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;        <span class="comment">//The set of possible locations </span></div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;        <span class="comment">//The set of possible locations</span></div>
 <div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;        std::set&lt;Location&lt;Number&gt;*&gt;&amp; locSet;</div>
 <div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;        <span class="comment">//Inherited </span></div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;        <span class="comment">//Inherited</span></div>
 <div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;        antlrcpp::Any visitInitstate(<a class="code" href="classHybridAutomatonParser_1_1InitstateContext.html">HybridAutomatonParser::InitstateContext</a> *ctx) <span class="keyword">override</span>;</div>
 <div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;</div>
 <div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    <span class="keyword">public</span>:</div>
 <div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;        <span class="keyword">using</span> locationStateMap = std::multimap&lt;const Location&lt;Number&gt;*, State&lt;Number,ConstraintSet&lt;Number&gt;&gt;, locPtrComp&lt;Number&gt;&gt;;</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;        <span class="comment">//using locationStateMap = std::multimap&lt;const Location&lt;Number&gt;*, State&lt;Number,ConstraintSet&lt;Number&gt;&gt;, locPtrComp&lt;Number&gt;&gt;;</span></div>
 <div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;</div>
 <div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;        <span class="comment">//Constructor &amp; Destructor</span></div>
 <div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;        HyproInitialSetVisitor(std::vector&lt;std::string&gt;&amp; varVec, std::set&lt;Location&lt;Number&gt;*&gt;&amp; lSet);</div>
@@ -163,7 +163,7 @@ $(document).ready(function(){initNavTree('HyproInitialSetVisitor_8h_source.html'
 <div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;</div>
 <div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;        <span class="comment">//Inherited - stays public for testing/debugging</span></div>
 <div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;        antlrcpp::Any visitInit(<a class="code" href="classHybridAutomatonParser_1_1InitContext.html">HybridAutomatonParser::InitContext</a> *ctx) <span class="keyword">override</span>;</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;        </div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;</div>
 <div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;</div>
 <div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;};</div>
 <div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;</div>

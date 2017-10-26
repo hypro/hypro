@@ -1,4 +1,5 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$classhypro_1_1reachability_1_1hypro_1_1GeometricObject.html" title="hypro::reachability\l::hypro::GeometricObject\l\&lt; Number, HPolytopeT\&lt; Number,\l Converter \&gt; \&gt;" alt="" coords="5,5,224,75"/>
-<area shape="rect" id="node2" href="$classhypro_1_1reachability_1_1hypro_1_1HPolytopeT.html" title="Class for a H&#45;polytope. " alt="" coords="272,12,429,68"/>
+<area shape="rect" id="node1" href="$classhypro_1_1reachability_1_1hypro_1_1GeometricObject.html" title="Purely virtual class defining a common interface for geometric objects. " alt="" coords="6,45,189,101"/>
+<area shape="rect" id="node2" href="$classhypro_1_1reachability_1_1hypro_1_1ConstraintSetT.html" title="A class representing a plain constraint set. " alt="" coords="238,5,397,61"/>
+<area shape="rect" id="node3" href="$classhypro_1_1reachability_1_1hypro_1_1ZonotopeT.html" title="Class for Zonotopes. " alt="" coords="243,85,392,141"/>
 </map>
