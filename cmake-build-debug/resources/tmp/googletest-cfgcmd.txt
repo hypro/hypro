@@ -1,0 +1,1 @@
+cmd='/home/justin/Documents/Masterarbeit/repo/clion-2017.2.3/bin/cmake/bin/cmake;-GCodeBlocks - Unix Makefiles;<SOURCE_DIR><SOURCE_SUBDIR>'
