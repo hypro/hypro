@@ -205,20 +205,56 @@ namespace hypro {
 
     template <typename Number, typename Converter>
     DifferenceBoundsT<Number,Converter> DifferenceBoundsT<Number, Converter>::rewind() const{
-        // TODO
-        return DifferenceBoundsT<Number,Converter>();
+        hypro::matrix_t<std::pair<Number, BOUND_TYPE >> mat =  hypro::matrix_t<std::pair<Number, BOUND_TYPE >>(m_dbm);
+        for(int i = 1; i < m_dbm.rows(); i++){
+            mat(0,i).first = 0.0;
+            mat(0,i).second = BOUND_TYPE::SMALLER_EQ;
+            for (int j = 1; j < m_dbm.rows(); j++){
+                // if the diagonal intersects the clock axis later than 0, it is tighter than the 0 constraint
+                if(m_dbm(j,i) < m_dbm(0,i)){
+                    mat(0,i).first = m_dbm(j,i).first;
+                    mat(0,i).second = m_dbm(j,i).second;
+                }
+            }
+        }
+        hypro::DifferenceBoundsT<Number,Converter> res = hypro::DifferenceBoundsT<Number,Converter>();
+        res.setDBM(mat);
+        return res;
     }
 
     template <typename Number, typename Converter>
-    DifferenceBoundsT<Number,Converter> DifferenceBoundsT<Number, Converter>::free(int i) const{
-        // TODO
-        return DifferenceBoundsT<Number,Converter>();
+    DifferenceBoundsT<Number,Converter> DifferenceBoundsT<Number, Converter>::free(int x) const{
+        hypro::matrix_t<std::pair<Number, BOUND_TYPE >> mat =  hypro::matrix_t<std::pair<Number, BOUND_TYPE >>(m_dbm);
+        for(int i = 0; i < m_dbm.rows(); i++){
+            if (i != x){
+                // d_xi = inf
+                mat(x,i).second = BOUND_TYPE::INFTY;
+
+                // d_ix = d_i0
+                mat(i,x).first = m_dbm(i,0).first;
+                mat(i,x).second = m_dbm(i,0).second;
+            }
+        }
+        hypro::DifferenceBoundsT<Number,Converter> res = hypro::DifferenceBoundsT<Number,Converter>();
+        res.setDBM(mat);
+        return res;
     }
 
     template <typename Number, typename Converter>
-    DifferenceBoundsT<Number,Converter> DifferenceBoundsT<Number, Converter>::reset(int i, Number value) const{
-        // TODO
-        return DifferenceBoundsT<Number,Converter>();
+    DifferenceBoundsT<Number,Converter> DifferenceBoundsT<Number, Converter>::reset(int x, Number value) const{
+        hypro::matrix_t<std::pair<Number, BOUND_TYPE >> mat =  hypro::matrix_t<std::pair<Number, BOUND_TYPE >>(m_dbm);
+        for (int i = 0; i < m_dbm.rows();i++){
+            // d_xi = (value,<=)+d_0i
+            mat(x,i).first = value+m_dbm(0,i).first;
+            mat(x,i).second = BOUND_TYPE::SMALLER_EQ;
+
+            // d_ix = d_i0 + (-value, <=)
+            mat(i,x).first = m_dbm(i,0).first-value;
+            mat(i,x).second = BOUND_TYPE::SMALLER_EQ;
+        }
+        hypro::DifferenceBoundsT<Number,Converter> res = hypro::DifferenceBoundsT<Number,Converter>();
+        res.setDBM(mat);
+        return res;
     }
 
     template <typename Number, typename Converter>
@@ -228,7 +264,7 @@ namespace hypro {
     }
 
     template <typename Number, typename Converter>
-    DifferenceBoundsT<Number,Converter> DifferenceBoundsT<Number, Converter>::shift(int i, Number offset) const{
+    DifferenceBoundsT<Number,Converter> DifferenceBoundsT<Number, Converter>::shift(int x, Number offset) const{
         // TODO
         return DifferenceBoundsT<Number,Converter>();
     }
