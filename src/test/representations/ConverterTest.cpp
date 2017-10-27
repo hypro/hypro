@@ -26,7 +26,7 @@ protected:
 		std::vector<carl::Interval<Number>> boundaries;
 		boundaries.push_back(carl::Interval<Number>(2,6));
 		boundaries.push_back(carl::Interval<Number>(1,3));
-		box = Box<Number>(boundaries);
+		box = hypro::Box<Number>(boundaries);
 
 		// first support function
 		matrix = matrix_t<Number>(3,2);
@@ -150,7 +150,7 @@ protected:
     SupportFunction<Number> support;
     SupportFunction<Number> support2;
 
-    Box<Number> box;
+    hypro::Box<Number> box;
 
     VPolytope<Number> vpolytope;
     VPolytope<Number> vpolytope2;

@@ -16,14 +16,9 @@
 #include "../../config.h"
 
 namespace ZUtility {
+
 // Options for checking for intersect
 enum IntersectionMethod_t { ALAMO = 1, NDPROJECTION = 2, DICHOTOMIC2D = 3 };
-
-// Structure for Options used in running reachability analysis
-struct Options {
-	IntersectionMethod_t intersectMethod;
-	int testCase;
-};
 
 template <typename Number>
 bool compareVectors( const hypro::vector_t<Number>& v1, const hypro::vector_t<Number>& v2 ) {

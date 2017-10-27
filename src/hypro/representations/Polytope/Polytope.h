@@ -154,7 +154,7 @@ namespace hypro
 		bool contains(const Point<Number>& point) const;
 		bool contains(const PolytopeT<Number,Converter,Setting>& poly) const;
 		PolytopeT<Number,Converter,Setting> unite(const PolytopeT<Number,Converter,Setting>& rhs) const;
-		static PolytopeT<Number,Converter,Setting> unite(const PolytopeT<Number,Converter,Setting>& polytopes);
+		//static PolytopeT<Number,Converter,Setting> unite(const PolytopeT<Number,Converter,Setting>& polytopes);
 	  //  static std::vector<Facet<Number>> convexHull(const std::vector<Point<Number>> points);
 
 

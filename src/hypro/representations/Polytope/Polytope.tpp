@@ -729,7 +729,7 @@ PolytopeT<Number,Converter,Setting> PolytopeT<Number,Converter,Setting>::unite( 
 	PolytopeT<Number,Converter,Setting> result = PolytopeT<Number,Converter,Setting>(res);
 	return result;
 }
-
+/*
 template <typename Number, typename Converter, class Setting>
 PolytopeT<Number,Converter,Setting> PolytopeT<Number,Converter,Setting>::unite(const PolytopeT<Number,Converter,Setting>& polytopes) {
 	if(polytopes.empty()) {
@@ -745,7 +745,7 @@ PolytopeT<Number,Converter,Setting> PolytopeT<Number,Converter,Setting>::unite(c
 	PolytopeT<Number,Converter,Setting> result = PolytopeT<Number,Converter,Setting>(res);
 	return result;
 }
-
+*/
 template <typename Number, typename Converter, class Setting>
 Number PolytopeT<Number,Converter,Setting>::supremum() const {
 	Number max = 0;
