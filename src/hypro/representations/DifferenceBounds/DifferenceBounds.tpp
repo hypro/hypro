@@ -2,10 +2,12 @@
 
 namespace hypro {
 
+
     template <typename Number, typename Converter>
     DifferenceBoundsT<Number, Converter>::DifferenceBoundsT(){
         m_dbm = matrix_t<std::pair<Number,DifferenceBoundsT<Number, Converter>:: BOUND_TYPE>>(1,1);
         m_dbm << std::pair<Number,DifferenceBoundsT<Number, Converter>::BOUND_TYPE>(0,DifferenceBoundsT<Number, Converter>::BOUND_TYPE::SMALLER);
+        m_timeHorizon = 0.0;
     }
 
     template <typename Number, typename Converter>
@@ -22,6 +24,17 @@ namespace hypro {
     void DifferenceBoundsT<Number, Converter>::setDBM(matrix_t<std::pair<Number,DifferenceBoundsT<Number, Converter>::BOUND_TYPE>> dbm) {
         m_dbm = dbm;
     }
+
+    template <typename Number, typename Converter>
+    Number DifferenceBoundsT<Number, Converter>::getTimeHorizion() const{
+        return m_timeHorizon;
+    }
+
+    template <typename Number, typename Converter>
+    void DifferenceBoundsT<Number, Converter>::setTimeHorizon(Number horizon) {
+        m_timeHorizon = horizon;
+    }
+
     template <typename Number, typename Converter>
     std::size_t DifferenceBoundsT<Number, Converter>::dimension() const{
         // TODO
@@ -49,7 +62,16 @@ namespace hypro {
         //std::cout << "Starting to calculate vertices on DBM: " << *this << "\n";
         int numclocks = m_dbm.cols()-1;
         //std::cout << "Number of clocks: " << numclocks << "\n";
-        int numconstraints = (m_dbm.cols()*m_dbm.cols())-m_dbm.cols(); //all entries of the DBM (except the diagonal) defines a constraint
+        int numconstraints = 0; //all entries of the DBM (except the diagonal and inifinities) define a constraint
+        for(int i = 0; i < m_dbm.rows(); i++){
+            for(int j=0; j < m_dbm.rows();j++){
+                if(!(i == j) && !(m_dbm(i,j).second ==  BOUND_TYPE::INFTY)){
+                    numconstraints++;
+                }
+            }
+        }
+        // TODO enhace plotting for inifinite polytopes
+        numconstraints += numclocks; // we need numclocks additional constraints for the timehorizon to  plot infinite polytopes
 
         //constraints of the polytope
         hypro::matrix_t<Number> HPolyConstraints = hypro::matrix_t<Number>::Zero(numconstraints,numclocks);
@@ -60,7 +82,7 @@ namespace hypro {
             for(int j = 0; j < m_dbm.cols();j++){
                 //std::cout<< "Process entry at: (" <<i<<","<<j<<")\n";
                 // do not consider diagonals
-                if(! (i == j)){
+                if(! (i == j) && !(m_dbm(i,j).second == BOUND_TYPE::INFTY)){
                     // the constraint to add
                     matrix_t<Number> constraintVars = matrix_t<Number>::Zero(1,numclocks);
                     if (i == 0){
@@ -84,6 +106,18 @@ namespace hypro {
                     counter++;
                 }
             }
+        }
+        // TODO enhace plotting for inifinite polytopes
+        for(int i=0; i < numclocks; i++){
+            // for each clock at a timehorizon constraint so the polytope to plot is finite
+            matrix_t<Number> constraintVars = matrix_t<Number>::Zero(1,numclocks);
+            constraintVars(0,i) = 1.0;
+            std::cout << "Constraint variable vector: " << constraintVars <<"\n";
+            HPolyConstraints.row(counter) = constraintVars;
+            std::cout << "New constraint matrix: " << HPolyConstraints << "\n";
+            HPolyConstants(counter,0) = getTimeHorizion();
+            std::cout << "New constant vector: " << HPolyConstants << "\n";
+            counter++;
         }
         std::cout << "Generated polytope: \n Matrix: \n" << HPolyConstraints << "\n Vector: \n" << HPolyConstants <<"\n";
         hypro::HPolytopeT<Number,Converter> poly(HPolyConstraints,HPolyConstants);
@@ -152,6 +186,49 @@ namespace hypro {
 
     template <typename Number, typename Converter>
     DifferenceBoundsT<Number,Converter> DifferenceBoundsT<Number, Converter>::unite( const DifferenceBoundsT<Number,Converter>& _rhs ) const{
+        // TODO
+        return DifferenceBoundsT<Number,Converter>();
+    }
+
+
+    template <typename Number, typename Converter>
+    DifferenceBoundsT<Number,Converter> DifferenceBoundsT<Number, Converter>::elapse() const{
+        hypro::matrix_t<std::pair<Number, BOUND_TYPE >> mat =  hypro::matrix_t<std::pair<Number, BOUND_TYPE >>(m_dbm);
+        for(int i = 1; i < m_dbm.rows(); i++){
+            mat(i,0).second = BOUND_TYPE::INFTY;
+        }
+        hypro::DifferenceBoundsT<Number,Converter> res = hypro::DifferenceBoundsT<Number,Converter>();
+        res.setDBM(mat);
+        return res;
+    }
+
+
+    template <typename Number, typename Converter>
+    DifferenceBoundsT<Number,Converter> DifferenceBoundsT<Number, Converter>::rewind() const{
+        // TODO
+        return DifferenceBoundsT<Number,Converter>();
+    }
+
+    template <typename Number, typename Converter>
+    DifferenceBoundsT<Number,Converter> DifferenceBoundsT<Number, Converter>::free(int i) const{
+        // TODO
+        return DifferenceBoundsT<Number,Converter>();
+    }
+
+    template <typename Number, typename Converter>
+    DifferenceBoundsT<Number,Converter> DifferenceBoundsT<Number, Converter>::reset(int i, Number value) const{
+        // TODO
+        return DifferenceBoundsT<Number,Converter>();
+    }
+
+    template <typename Number, typename Converter>
+    DifferenceBoundsT<Number,Converter> DifferenceBoundsT<Number, Converter>::copy(int src, int dest) const{
+        // TODO
+        return DifferenceBoundsT<Number,Converter>();
+    }
+
+    template <typename Number, typename Converter>
+    DifferenceBoundsT<Number,Converter> DifferenceBoundsT<Number, Converter>::shift(int i, Number offset) const{
         // TODO
         return DifferenceBoundsT<Number,Converter>();
     }
