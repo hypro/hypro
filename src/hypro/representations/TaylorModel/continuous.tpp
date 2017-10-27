@@ -78,6 +78,7 @@ void Flowpipe<Number>::composition( TaylorModelVec<Number> &result, Domain<Numbe
 }
 
 template <typename Number>
+template <class Setting>
 int Flowpipe<Number>::next_picard( Flowpipe<Number> &result, const PolynomialODE<Number> &ode, const carl::Variable &t,
 								   const double stepsize, const exponent order, const Range<Number> &estimation ) {
 	// evaluate the the local initial set Xl
@@ -207,7 +208,7 @@ int Flowpipe<Number>::next_picard( Flowpipe<Number> &result, const PolynomialODE
 	// refine the remainder interval by Picard iteration
 	bool bfinish = false;
 
-	for ( int steps = 0; !bfinish && steps <= MAX_ITER_NUM; ++steps ) {
+	for ( int steps = 0; !bfinish && steps <= Setting::MAX_ITER_NUM; ++steps ) {
 		bfinish = true;
 
 		tmvTemp = x.Picard( x0, ode, localInitial, t, intStep, order );
@@ -219,7 +220,7 @@ int Flowpipe<Number>::next_picard( Flowpipe<Number> &result, const PolynomialODE
 			Number w1 = iter_x->second.remainder.diameter();
 			Number w2 = iter_xp->second.remainder.diameter();
 
-			if ( bfinish && w2 / w1 < Number( STOP_RATIO ) ) {
+			if ( bfinish && w2 / w1 < Number( Setting::STOP_RATIO ) ) {
 				bfinish = false;
 			}
 
@@ -293,7 +294,7 @@ int ContinuousSystem<Number>::reach_picard( std::list<Flowpipe<Number>> &result,
 
 	for ( double t_pass = 0.0; t_pass < time; ) {
 		Flowpipe<Number> new_flowpipe;
-		int res = flowpipe.next_picard( new_flowpipe, ode, t, stepsize, order, estimation );
+		int res = flowpipe.next_picard<ContinuousSetting>( new_flowpipe, ode, t, stepsize, order, estimation );
 
 		if ( res == 1 ) {
 			result.push_back( new_flowpipe );
