@@ -73,19 +73,19 @@ public:
     DifferenceBoundsT<Number,Converter> rewind() const;
 
     /**
-     * Frees a clock i, i.e. removes all bounding constraints for that clock
-     * @param i index of the clock
-     * @return DBM with clock i freed
+     * Frees a clock x, i.e. removes all bounding constraints for that clock
+     * @param x index of the clock
+     * @return DBM with clock x freed
      */
-    DifferenceBoundsT<Number,Converter> free(int i) const;
+    DifferenceBoundsT<Number,Converter> free(int x) const;
 
     /**
-     * Resets clock i to given Number value.
-     * @param i index of the clock
+     * Resets clock x to given Number value.
+     * @param x index of the clock
      * @param value reset value of the clock
-     * @return DBM with clock i reset to value
+     * @return DBM with clock x reset to value
      */
-    DifferenceBoundsT<Number,Converter> reset(int i, Number value) const;
+    DifferenceBoundsT<Number,Converter> reset(int x, Number value) const;
 
     /**
      * Copies a the value of clock src to clock dest, i.e. resets the value of
@@ -97,12 +97,12 @@ public:
     DifferenceBoundsT<Number,Converter> copy(int src, int dest) const;
 
     /**
-     * Shifts the valuation of clock i by the given offset
-     * @param i index of the clock
+     * Shifts the valuation of clock x by the given offset
+     * @param x index of the clock
      * @param offset offset to be applied
-     * @return DBM with clock i shifted by offset
+     * @return DBM with clock x shifted by offset
      */
-    DifferenceBoundsT<Number,Converter> shift(int i, Number offset) const;
+    DifferenceBoundsT<Number,Converter> shift(int x, Number offset) const;
 
 
     friend std::ostream& operator<<( std::ostream& ostr, const DifferenceBoundsT<Number,Converter>& db ) {

@@ -13,12 +13,18 @@ hypro::DifferenceBounds <Number> testDBM;
 void createTestDBM();
 void testVertices();
 void testElapse();
+void testRewind();
+void testFree();
+void testReset();
 void testPrint();
 
 int main() {
     createTestDBM();
     testVertices();
-    testElapse();
+    //testElapse();
+    //testRewind();
+    //testFree();
+    testReset();
     testPrint();
     return 0;
 }
@@ -74,6 +80,65 @@ void testElapse(){
     hypro::Plotter<Number>::getInstance().plot2d();
 }
 
+void testRewind(){
+    // compute vertices
+    std::cout<< "Test rewind: \n";
+
+    hypro::DifferenceBounds <Number> rewind = testDBM.rewind();
+    rewind.setTimeHorizon(20.0);
+    std::cout<< rewind;
+    std::vector<hypro::Point<Number>> verts = rewind.vertices();
+    std::cout<< verts;
+
+    //plot to pdf
+    hypro::Plotter<Number>::getInstance().clear();
+    unsigned obj2 = hypro::Plotter<Number>::getInstance().addObject(verts);
+    hypro::Plotter<Number>::getInstance().setObjectColor(obj2, hypro::plotting::colors[hypro::plotting::green]);
+
+    // create a *.plt file (gnuplot).
+    hypro::Plotter<Number>::getInstance().setFilename("rewindTest");
+    hypro::Plotter<Number>::getInstance().plot2d();
+}
+
+void testFree(){
+    // compute vertices
+    std::cout<< "Test free: \n";
+
+    hypro::DifferenceBounds <Number> freed = testDBM.free(2);//free y
+    freed.setTimeHorizon(20.0);
+    std::cout<< freed;
+    std::vector<hypro::Point<Number>> verts = freed.vertices();
+    std::cout<< verts;
+
+    //plot to pdf
+    hypro::Plotter<Number>::getInstance().clear();
+    unsigned obj2 = hypro::Plotter<Number>::getInstance().addObject(verts);
+    hypro::Plotter<Number>::getInstance().setObjectColor(obj2, hypro::plotting::colors[hypro::plotting::green]);
+
+    // create a *.plt file (gnuplot).
+    hypro::Plotter<Number>::getInstance().setFilename("freeTest");
+    hypro::Plotter<Number>::getInstance().plot2d();
+}
+
+void testReset(){
+    // compute vertices
+    std::cout<< "Test reset: \n";
+
+    hypro::DifferenceBounds <Number> reset = testDBM.reset(1,0.0);//reset x
+    reset.setTimeHorizon(20.0);
+    std::cout<< reset;
+    std::vector<hypro::Point<Number>> verts = reset.vertices();
+    std::cout<< verts;
+
+    //plot to pdf
+    hypro::Plotter<Number>::getInstance().clear();
+    unsigned obj2 = hypro::Plotter<Number>::getInstance().addObject(verts);
+    hypro::Plotter<Number>::getInstance().setObjectColor(obj2, hypro::plotting::colors[hypro::plotting::green]);
+
+    // create a *.plt file (gnuplot).
+    hypro::Plotter<Number>::getInstance().setFilename("resetTest");
+    hypro::Plotter<Number>::getInstance().plot2d();
+}
 
 void testPrint(){
     std::cout<< "Test instance DBM: \n";
