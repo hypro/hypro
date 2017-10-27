@@ -12,11 +12,13 @@ typedef double Number;
 hypro::DifferenceBounds <Number> testDBM;
 void createTestDBM();
 void testVertices();
+void testElapse();
 void testPrint();
 
 int main() {
     createTestDBM();
     testVertices();
+    testElapse();
     testPrint();
     return 0;
 }
@@ -43,6 +45,7 @@ void testVertices(){
     std::cout<< verts;
 
     //plot to pdf
+    hypro::Plotter<Number>::getInstance().clear();
     unsigned obj2 = hypro::Plotter<Number>::getInstance().addObject(verts);
     hypro::Plotter<Number>::getInstance().setObjectColor(obj2, hypro::plotting::colors[hypro::plotting::green]);
 
@@ -50,6 +53,28 @@ void testVertices(){
     hypro::Plotter<Number>::getInstance().setFilename("verticesTest");
     hypro::Plotter<Number>::getInstance().plot2d();
 }
+
+void testElapse(){
+    // compute vertices
+    std::cout<< "Test elapse: \n";
+
+    hypro::DifferenceBounds <Number> elapsed = testDBM.elapse();
+    elapsed.setTimeHorizon(20.0);
+    std::cout<< elapsed;
+    std::vector<hypro::Point<Number>> verts = elapsed.vertices();
+    std::cout<< verts;
+
+    //plot to pdf
+    hypro::Plotter<Number>::getInstance().clear();
+    unsigned obj2 = hypro::Plotter<Number>::getInstance().addObject(verts);
+    hypro::Plotter<Number>::getInstance().setObjectColor(obj2, hypro::plotting::colors[hypro::plotting::green]);
+
+    // create a *.plt file (gnuplot).
+    hypro::Plotter<Number>::getInstance().setFilename("elapseTest");
+    hypro::Plotter<Number>::getInstance().plot2d();
+}
+
+
 void testPrint(){
     std::cout<< "Test instance DBM: \n";
     std::cout<<testDBM;
