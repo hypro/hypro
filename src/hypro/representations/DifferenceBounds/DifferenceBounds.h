@@ -22,17 +22,69 @@ public:
         SMALLER_EQ,
         INFTY,
     };
+
+    class DBMEntry : std::pair<Number, BOUND_TYPE>{
+    public:
+        using std::pair<Number, BOUND_TYPE>::first;
+        using std::pair<Number, BOUND_TYPE>::second;
+        DBMEntry();
+        DBMEntry(Number number, BOUND_TYPE boundType);
+
+        static DBMEntry max(const DBMEntry& lhs, const DBMEntry& rhs)  { return lhs < rhs ? rhs : lhs;}
+        static DBMEntry min(const DBMEntry& lhs, const DBMEntry& rhs)  { return lhs < rhs ? lhs : rhs;}
+
+        bool operator<(const DBMEntry rhs){
+            if(this->second == BOUND_TYPE::INFTY){
+                // TODO correct?
+                return false;
+            }
+            // (n, </<=) < infty
+            if(rhs.second == BOUND_TYPE::INFTY) {
+                return true;
+            }
+            // (n_1, </<=) < (n_2, </<=) if n_1 < n_2
+            if(this->first < rhs.first){
+                return true;
+            }
+            // (n, <) < (n,<=)
+            if(this->first == rhs.first && this->second == BOUND_TYPE::SMALLER && rhs.second == BOUND_TYPE::SMALLER_EQ){
+                return true;
+            }
+            return false;
+        }
+
+        DBMEntry operator+(const DBMEntry rhs){
+            // adding infinity yields infinity;
+            if(this->second == BOUND_TYPE::INFTY || rhs.second == BOUND_TYPE::INFTY){
+                return DBMEntry(0.0, BOUND_TYPE::INFTY);
+            }
+            // (m,<=)+(n,<=) = (m+n,<=)
+            if(this->second == BOUND_TYPE::SMALLER_EQ && rhs.second == BOUND_TYPE::SMALLER_EQ){
+                return DBMEntry(this->first+rhs.first, BOUND_TYPE::SMALLER_EQ);
+            }
+            // (m,<)+(n,</<=) = (m+n,<)
+            return DBMEntry(this->first+rhs.first, BOUND_TYPE::SMALLER);
+        }
+
+        friend std::ostream& operator<<( std::ostream& ostr, const DBMEntry entry ) {
+            ostr << "( ";
+            ostr << entry.first;
+            ostr << ", ";
+            ostr << entry.second;
+            ostr << " )";
+            return ostr;
+        }
+    };
 private:
-    mutable matrix_t<std::pair<Number, BOUND_TYPE>> m_dbm;
+    mutable matrix_t<DBMEntry> m_dbm;
     Number m_timeHorizon;
 
 public:
     DifferenceBoundsT ();
     DifferenceBoundsT (const DifferenceBoundsT& orig) = default;
-    DifferenceBoundsT (matrix_t<std::pair<Number, BOUND_TYPE >>);
 
-    matrix_t<std::pair<Number, BOUND_TYPE>> getDBM() const;
-    void setDBM(matrix_t<std::pair<Number,BOUND_TYPE>> dbm);
+    matrix_t<DBMEntry> getDBM() const;
+    void setDBM(matrix_t<DBMEntry> dbm);
 
     Number getTimeHorizion() const;
     void setTimeHorizon(Number horizon);
@@ -105,22 +157,26 @@ public:
     DifferenceBoundsT<Number,Converter> shift(int x, Number offset) const;
 
 
+    /**
+     * checks whether _rhs is contained in the left hand side
+     * @param _rhs
+     * @return true is lhs contains rhs
+     */
+    bool contains( const DifferenceBoundsT<Number,Converter>& _rhs ) const;
+
+
     friend std::ostream& operator<<( std::ostream& ostr, const DifferenceBoundsT<Number,Converter>& db ) {
         long rows = db.getDBM().rows();
         long cols = db.getDBM().cols();
         if(rows > 0 && cols > 0){
             for(int i = 0; i < rows; i++){
                 for(int j = 0; j < cols; j++){
-                    std::pair<Number, BOUND_TYPE> p = db.getDBM()(i,j);
-                    ostr << "( ";
-                    ostr << p.first;
-                    ostr << ", ";
-                    ostr << p.second;
-                    ostr << " )";
+                    ostr <<  db.getDBM()(i,j);
                 }
                 ostr << "\n";
             }
         }
+        return ostr;
     }
 
     friend std::ostream& operator<<(std::ostream& ostr, const BOUND_TYPE value){
@@ -130,6 +186,7 @@ public:
             case INFTY : ostr << "inf"; break;
             default: ostr << "undef"; break;
         }
+        return ostr;
     }
 };
 }
