@@ -143,7 +143,7 @@ namespace hypro {
 		for(Eigen::Index rowIndex = 0; rowIndex < boxDirections.rows(); ++rowIndex) {
 			results.emplace_back(opt.evaluate(boxDirections.row(rowIndex), false));
 		}
-		assert(results.size() == boxDirections.rows());
+		assert(Eigen::Index(results.size()) == boxDirections.rows());
 
 		// re-construct box from results.
 		mLimits = std::make_pair(Point<Number>(vector_t<Number>::Zero(_constraints.cols())), Point<Number>(vector_t<Number>::Zero(_constraints.cols())));
@@ -533,7 +533,7 @@ BoxT<Number,Converter> BoxT<Number,Converter>::linearTransformation( const matri
 	for(const auto& v : vertices) {
 		Point<Number> t = Point<Number>(A*v.rawCoordinates());
 		assert(res.contains(t));
-		for(Eigen::Index d = 0; d < this->dimension(); ++d) {
+		for(std::size_t d = 0; d < this->dimension(); ++d) {
 			if(manualMin.at(d) > t.at(d)) {
 				manualMin[d] = t[d];
 			}
@@ -735,7 +735,7 @@ BoxT<Number,Converter> BoxT<Number,Converter>::intersectHalfspace( const Halfspa
 template<typename Number, typename Converter>
 BoxT<Number,Converter> BoxT<Number,Converter>::intersectHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const {
 	assert(_mat.rows() == _vec.rows());
-	assert(_mat.cols() == this->dimension());
+	assert(_mat.cols() == Eigen::Index(this->dimension()));
 	#ifdef HYPRO_BOX_AVOID_LINEAR_OPTIMIZATION
 
 	if(_mat.rows() == 0) {
@@ -796,7 +796,7 @@ BoxT<Number,Converter> BoxT<Number,Converter>::intersectHalfspaces( const matrix
 	for(Eigen::Index rowIndex = 0; rowIndex < boxDirections.rows(); ++rowIndex) {
 		results.emplace_back(opt.evaluate(boxDirections.row(rowIndex), false));
 	}
-	assert(results.size() == boxDirections.rows());
+	assert(Eigen::Index(results.size()) == boxDirections.rows());
 
 	// re-construct box from results.
 	std::pair<Point<Number>,Point<Number>> newLimits = std::make_pair(Point<Number>(vector_t<Number>::Zero(this->dimension())), Point<Number>(vector_t<Number>::Zero(this->dimension())));
