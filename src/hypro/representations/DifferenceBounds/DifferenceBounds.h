@@ -23,7 +23,7 @@ public:
         INFTY,
     };
 
-    class DBMEntry : std::pair<Number, BOUND_TYPE>{
+    class DBMEntry : public std::pair<Number, BOUND_TYPE>{
     public:
         using std::pair<Number, BOUND_TYPE>::first;
         using std::pair<Number, BOUND_TYPE>::second;
@@ -51,6 +51,21 @@ public:
                 return true;
             }
             return false;
+        }
+
+        bool operator==(const DBMEntry rhs){
+            if(this->second == BOUND_TYPE::INFTY && rhs.second == BOUND_TYPE::INFTY) {
+                return true;
+            }
+            // (n_1, </<=) == (n_2, </<=) if n_1 == n_2 and </<=_1 == </<=_2
+            if(this->first == rhs.first && this->second == rhs.second){
+                return true;
+            }
+            return false;
+        }
+
+        bool operator<=(const DBMEntry rhs){
+            return (*this < rhs) || (*this == rhs);
         }
 
         DBMEntry operator+(const DBMEntry rhs){
@@ -159,11 +174,25 @@ public:
 
     /**
      * checks whether _rhs is contained in the left hand side
+     *
+     * A DBM X contains a DBM Y if the lower bounds of Y are greater or equal than the lower bounds of X
+     * and the upper bounds of Y are smaller or equal than the upper bounds of X.
+     *
+     * This is the case if for every entry i,j in Y d_ij is lower or equal than the corresponding d_ij in X
      * @param _rhs
      * @return true is lhs contains rhs
      */
     bool contains( const DifferenceBoundsT<Number,Converter>& _rhs ) const;
 
+    /**
+     * intersects the DBM with the bound given by index x, y and bound value bound
+     * i.e. x-y <= bound
+     * @param i
+     * @param j
+     * @param bound
+     * @return the intersection of the DBM with constraint x-y bound
+     */
+    DifferenceBoundsT<Number,Converter> intersectConstraint( const int x, const int y, const DBMEntry& bound ) const;
 
     friend std::ostream& operator<<( std::ostream& ostr, const DifferenceBoundsT<Number,Converter>& db ) {
         long rows = db.getDBM().rows();
