@@ -10,7 +10,9 @@
 
 typedef double Number;
 hypro::DifferenceBounds <Number> testDBM;
+hypro::DifferenceBounds <Number> testDBM2;
 void createTestDBM();
+void createTestDBM2();
 void testComparison();
 void testPlus();
 void testVertices();
@@ -21,10 +23,13 @@ void testReset();
 void testCopy();
 void testShift();
 void testEmpty();
+void testContains();
+void testIntersectConstraint();
 void testPrint();
 
 int main() {
     createTestDBM();
+    createTestDBM2();
     //testComparison();
     //testPlus();
     //testVertices();
@@ -33,9 +38,11 @@ int main() {
     //testFree();
     //testReset();
     //testCopy();
-    testShift();
-    testEmpty();
-    testPrint();
+    //testShift();
+    //testEmpty();
+    //testContains();
+    testIntersectConstraint();
+    //testPrint();
     return 0;
 }
 
@@ -53,6 +60,22 @@ void createTestDBM(){
     testDBM = hypro::DifferenceBounds<Number>();
     testDBM.setDBM(mat);
     testDBM.setTimeHorizon(20.0);
+}
+
+void createTestDBM2(){
+    hypro::matrix_t<hypro::DifferenceBounds<Number>::DBMEntry> mat = hypro::matrix_t<hypro::DifferenceBounds<Number>::DBMEntry>(3,3);
+    mat << hypro::DifferenceBounds<Number>::DBMEntry(0,hypro::DifferenceBounds<Number>::BOUND_TYPE::SMALLER_EQ),
+            hypro::DifferenceBounds<Number>::DBMEntry(-4.0,hypro::DifferenceBounds<Number>::BOUND_TYPE::SMALLER_EQ),
+            hypro::DifferenceBounds<Number>::DBMEntry(-4.0,hypro::DifferenceBounds<Number>::BOUND_TYPE::SMALLER_EQ),
+            hypro::DifferenceBounds<Number>::DBMEntry(9.0,hypro::DifferenceBounds<Number>::BOUND_TYPE::SMALLER_EQ),
+            hypro::DifferenceBounds<Number>::DBMEntry(0.0,hypro::DifferenceBounds<Number>::BOUND_TYPE::SMALLER_EQ),
+            hypro::DifferenceBounds<Number>::DBMEntry(0.0, hypro::DifferenceBounds<Number>::BOUND_TYPE::SMALLER_EQ),
+            hypro::DifferenceBounds<Number>::DBMEntry(10.0,hypro::DifferenceBounds<Number>::BOUND_TYPE::SMALLER_EQ),
+            hypro::DifferenceBounds<Number>::DBMEntry(1.0,hypro::DifferenceBounds<Number>::BOUND_TYPE::SMALLER_EQ),
+            hypro::DifferenceBounds<Number>::DBMEntry(0.0,hypro::DifferenceBounds<Number>::BOUND_TYPE::SMALLER_EQ);
+    testDBM2 = hypro::DifferenceBounds<Number>();
+    testDBM2.setDBM(mat);
+    testDBM2.setTimeHorizon(20.0);
 }
 
 
@@ -114,14 +137,20 @@ void testPlus(){
 
 void testVertices(){
     // compute vertices
-    std::cout<< "Test instance vertices: \n";
-    std::vector<hypro::Point<Number>> verts = testDBM.vertices();
-    std::cout<< verts;
+    std::cout<< "Test instance vertices for DBM1: \n";
+    std::vector<hypro::Point<Number>> verts1 = testDBM.vertices();
+    std::cout<< verts1;
+
+    std::cout<< "Test instance vertices for DBM2: \n";
+    std::vector<hypro::Point<Number>> verts2 = testDBM2.vertices();
+    std::cout<< verts2;
 
     //plot to pdf
     hypro::Plotter<Number>::getInstance().clear();
-    unsigned obj2 = hypro::Plotter<Number>::getInstance().addObject(verts);
+    unsigned obj2 = hypro::Plotter<Number>::getInstance().addObject(verts1);
+    unsigned obj3 = hypro::Plotter<Number>::getInstance().addObject(verts2);
     hypro::Plotter<Number>::getInstance().setObjectColor(obj2, hypro::plotting::colors[hypro::plotting::green]);
+    hypro::Plotter<Number>::getInstance().setObjectColor(obj3, hypro::plotting::colors[hypro::plotting::red]);
 
     // create a *.plt file (gnuplot).
     hypro::Plotter<Number>::getInstance().setFilename("verticesTest");
@@ -239,6 +268,30 @@ void testShift(){
 void testEmpty(){
     bool isEmpty = testDBM.empty();
     std::cout << "DBM is empty: " << isEmpty << "\n";
+}
+
+void testContains(){
+    bool contains = testDBM.contains(testDBM2);
+    std::cout << "DBM1 contains DBM2: " << contains << "\n";
+}
+
+void testIntersectConstraint(){
+    std::cout<< "Test intersection with constraint: \n";
+
+    // intersect with x-0 <= 8.0
+    hypro::DifferenceBounds <Number> intersection = testDBM.intersectConstraint(1,0,hypro::DifferenceBounds<Number>::DBMEntry(8.0,hypro::DifferenceBounds<Number>::BOUND_TYPE::SMALLER_EQ));
+    std::cout<< intersection;
+    std::vector<hypro::Point<Number>> verts = intersection.vertices();
+    std::cout<< verts;
+
+    //plot to pdf
+    hypro::Plotter<Number>::getInstance().clear();
+    unsigned obj2 = hypro::Plotter<Number>::getInstance().addObject(verts);
+    hypro::Plotter<Number>::getInstance().setObjectColor(obj2, hypro::plotting::colors[hypro::plotting::green]);
+
+    // create a *.plt file (gnuplot).
+    hypro::Plotter<Number>::getInstance().setFilename("intersectionTest");
+    hypro::Plotter<Number>::getInstance().plot2d();
 }
 
 void testPrint(){

@@ -41,14 +41,14 @@ namespace hypro {
 
     template <typename Number, typename Converter>
     std::size_t DifferenceBoundsT<Number, Converter>::dimension() const{
-        // TODO
-        return 0;
+        // TODO this should always be the number of clocks
+        return this->getDBM().cols();
     }
 
     template <typename Number, typename Converter>
     std::size_t DifferenceBoundsT<Number, Converter>::size() const{
-        // TODO
-        return 0;
+        // TODO number of dbm entries?
+        return this->getDBM().cols()*this->getDBM().rows();
     }
 
     template <typename Number, typename Converter>
@@ -131,37 +131,46 @@ namespace hypro {
 
     template <typename Number, typename Converter>
     std::pair<CONTAINMENT, DifferenceBoundsT<Number, Converter>> DifferenceBoundsT<Number, Converter>::satisfiesHalfspace( const Halfspace<Number>& rhs ) const{
-        // TODO
-        return std::pair<CONTAINMENT, DifferenceBoundsT<Number, Converter>>();
+        return std::make_pair(CONTAINMENT::FULL,DifferenceBoundsT<Number,Converter>());
     }
 
     template <typename Number, typename Converter>
     std::pair<CONTAINMENT, DifferenceBoundsT<Number, Converter>> DifferenceBoundsT<Number, Converter>::satisfiesHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const{
-        // TODO
-        return std::pair<CONTAINMENT, DifferenceBoundsT<Number, Converter>>();
+        return std::make_pair(CONTAINMENT::FULL,DifferenceBoundsT<Number,Converter>());
     }
 
     template <typename Number, typename Converter>
     DifferenceBoundsT<Number,Converter> DifferenceBoundsT<Number, Converter>::project(const std::vector<std::size_t>& dimensions) const{
-        // TODO
-        return DifferenceBoundsT<Number,Converter>();
+        // TODO i assume that the projection vector does not consider the 0 clock. Hence dimension will never contain 0, given that dimension contains a list of dimension to project to, i.e. {1,3,4}
+        hypro::matrix_t<DBMEntry> mat =  hypro::matrix_t<DBMEntry>(m_dbm);
+        for(int i=0; i < mat.rows(); i++){
+            for(int j=0; j < mat.cols();j++){
+                if(std::find(dimensions.begin(), dimensions.end(), i) == dimensions.end() || std::find(dimensions.begin(), dimensions.end(), j) == dimensions.end()){
+                    // either i or j is not in the projection dimension, replace the current entry with (0, <=)
+                    mat(i,j) = DBMEntry(0.0, BOUND_TYPE::SMALLER_EQ);
+                }
+            }
+        }
+        hypro::DifferenceBoundsT<Number,Converter> res = hypro::DifferenceBoundsT<Number,Converter>(*this);
+        res.setDBM(mat);
+        return res;
     }
 
     template <typename Number, typename Converter>
     DifferenceBoundsT<Number,Converter> DifferenceBoundsT<Number, Converter>::linearTransformation( const matrix_t<Number>& A ) const{
-        // TODO
+        // TODO we need backwards conversion hpoly to dbm for this
         return DifferenceBoundsT<Number,Converter>();
     }
 
     template <typename Number, typename Converter>
     DifferenceBoundsT<Number,Converter> DifferenceBoundsT<Number, Converter>::affineTransformation( const matrix_t<Number>& A, const vector_t<Number>& b ) const{
-        // TODO
+        // TODO we need backwards conversion hpoly to dbm for this
         return DifferenceBoundsT<Number,Converter>();
     }
 
     template <typename Number, typename Converter>
     DifferenceBoundsT<Number,Converter> DifferenceBoundsT<Number, Converter>::minkowskiSum( const DifferenceBoundsT<Number,Converter>& _rhs ) const{
-        // TODO
+        // TODO we need backwards conversion hpoly to dbm for this
         return DifferenceBoundsT<Number,Converter>();
     }
 
@@ -173,7 +182,6 @@ namespace hypro {
 
     template <typename Number, typename Converter>
     DifferenceBoundsT<Number,Converter> DifferenceBoundsT<Number, Converter>::intersectHalfspace( const Halfspace<Number>& hs ) const{
-        // TODO
         return DifferenceBoundsT<Number,Converter>();
     }
 
@@ -303,7 +311,51 @@ namespace hypro {
 
     template <typename Number, typename Converter>
     bool DifferenceBoundsT<Number, Converter>::contains( const DifferenceBoundsT<Number,Converter>& _rhs ) const{
-        return true;
+        // we assert that both DBM constraint the same clocks. Note that a DBM that would describe a projection
+        // to some subset of clocks can be given by setting the entries of the other clocks in the DBM to 0.
+        // Hence a DBM should always be as large as the number of clocks in the automaton.
+        assert(this->getDBM().cols() == _rhs.getDBM().cols());
+        bool contains = true;
+        for(int i=0; i < this->getDBM().rows();i++){
+            for(int j=0; j < this->getDBM().cols();j++){
+                if(i != j) {
+                    contains = contains && (_rhs.getDBM()(i, j) <= this->getDBM()(i, j));
+                }
+            }
+        }
+        return contains;
     }
+
+    template <typename Number, typename Converter>
+    DifferenceBoundsT<Number,Converter> DifferenceBoundsT<Number, Converter>::intersectConstraint( const int x, const int y, const DBMEntry& bound ) const{
+        hypro::matrix_t<DBMEntry> mat = hypro::matrix_t<DBMEntry>(m_dbm);
+
+        // d_yx+bound < 0
+        if(mat(y,x)+bound < DBMEntry(0.0, BOUND_TYPE::SMALLER_EQ)){
+            //invalid dbm because upper bound became negative
+            mat(0,0).first = -1.0;
+        }
+        // bound < d_xy
+        else if (bound < mat(x,y)){
+            mat(x,y) = bound;
+            // cutting off parts of the dbm can yield to other constrainst not being tight anymore
+            // we correct this because other operations depend on this assumption
+            for(int i=0; i < mat.rows();i++){
+                for(int j=0; j < mat.cols();j++){
+                    if(mat(i,x)+mat(x,j) < mat(i,j)){
+                        mat(i,j) = mat(i,x)+mat(x,j);
+                    }
+                    if(mat(i,y) + mat(y,j)< mat(i,j)){
+                        mat(i,j) = mat(i,y)+mat(y,j);
+                    }
+                }
+            }
+        }
+
+        hypro::DifferenceBoundsT<Number, Converter> res = hypro::DifferenceBoundsT<Number, Converter>(*this);
+        res.setDBM(mat);
+        return res;
+    }
+
 }
 
