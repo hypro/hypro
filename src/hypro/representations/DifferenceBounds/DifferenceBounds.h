@@ -86,7 +86,7 @@ public:
     matrix_t<DBMEntry> getDBM() const;
     void setDBM(matrix_t<DBMEntry> dbm);
 
-    Number getTimeHorizion() const;
+    Number getTimeHorizon() const;
     void setTimeHorizon(Number horizon);
 
     // geometric object

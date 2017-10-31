@@ -30,7 +30,7 @@ namespace hypro {
     }
 
     template <typename Number, typename Converter>
-    Number DifferenceBoundsT<Number, Converter>::getTimeHorizion() const{
+    Number DifferenceBoundsT<Number, Converter>::getTimeHorizon() const{
         return m_timeHorizon;
     }
 
@@ -73,7 +73,7 @@ namespace hypro {
          *  save future emptiness checks.
          *
          */
-        /*if(m_dbm(0,0).first == -1.0){
+        if(m_dbm(0,0).first == -1.0){
             // d_00 is -1 so we already found out that the dbm is empty
             return true;
         }
@@ -81,94 +81,51 @@ namespace hypro {
         for(int i=0; i< m_dbm.rows();i++){
             // lower half (i > j)
             for(int j = 0; j < i; j++){
-                std::cout << "( " << i << ", " << j << ") : " <<  m_dbm(i,j).first << " is smaller than " << "( " << j << ", " << i << ") : " <<  m_dbm(j,i).first << "\n";
-                // if lower bound is infty, we know the dbm must be invalid (even if upper bound if infty as well)
-                if(m_dbm(j,i).second == BOUND_TYPE::INFTY) {
-                    m_dbm(0,0).first = -1.0;
-                    return true;
-                }
                 // if the upper bound is lower than the corresponding lower bound we know the dbm is invalid
-                if(m_dbm(i,j).second != BOUND_TYPE::INFTY && m_dbm(i,j).first <  m_dbm(j,i).first){
+                if(m_dbm(i,j) <  m_dbm(j,i)){
                      m_dbm(0,0).first = -1.0;
                     return true;
                 }
 
             }
-        }*/
+        }
         return false;
     }
 
     template <typename Number, typename Converter>
     std::vector<Point<Number>> DifferenceBoundsT<Number, Converter>::vertices( const matrix_t<Number>& ) const {
-        /*
-         * Convert the Difference Bound Matrix into a polytope and then compute the vertices on it
-         * TODO move the conversion process into a converter
-         */
-        //std::cout << "Starting to calculate vertices on DBM: " << *this << "\n";
-        int numclocks = m_dbm.cols() - 1;
-        //std::cout << "Number of clocks: " << numclocks << "\n";
-        int numconstraints = 0; //all entries of the DBM (except the diagonal and inifinities) define a constraint
-        for (int i = 0; i < m_dbm.rows(); i++) {
-            for (int j = 0; j < m_dbm.rows(); j++) {
-                if (i != j && !(m_dbm(i, j).second == BOUND_TYPE::INFTY)) {
-                    numconstraints++;
-                }
-            }
-        }
+        hypro::HPolytopeT<Number,Converter> poly = Converter::toHPolytope(*this);
         // TODO enhace plotting for inifinite polytopes
-        numconstraints += numclocks; // we need numclocks additional constraints for the timehorizon to  plot infinite polytopes
+        if (getTimeHorizon() != 0.0) {
+            // we need an additional timeHorizon constraint for each clock (except 0 clock)
+            int numclocks = getDBM().cols()-1;
+            //constraints of the polytope
+            hypro::matrix_t<Number> HPolyConstraints = poly.matrix();
+            hypro::vector_t<Number> HPolyConstants = poly.vector();
+            std::cout << "Old matrix: " << HPolyConstraints <<"\n";
+            std::cout << "Old constants: " << HPolyConstants <<"\n";
+            int numconstraints = HPolyConstraints.rows();
+            HPolyConstraints.conservativeResize(numconstraints+numclocks, HPolyConstraints.cols());
+            HPolyConstants.conservativeResize(numconstraints+numclocks, HPolyConstraints.cols());
 
-        //constraints of the polytope
-        hypro::matrix_t<Number> HPolyConstraints = hypro::matrix_t<Number>::Zero(numconstraints, numclocks);
-        hypro::vector_t<Number> HPolyConstants = hypro::vector_t<Number>::Zero(numconstraints);
-
-        int counter = 0; // counter for indexing constraints
-        for (int i = 0; i < m_dbm.rows(); i++) {
-            for (int j = 0; j < m_dbm.cols(); j++) {
-                //std::cout<< "Process entry at: (" <<i<<","<<j<<")\n";
-                // do not consider diagonals
-                if (i != j && !(m_dbm(i, j).second == BOUND_TYPE::INFTY)) {
-                    // the constraint to add
-                    matrix_t<Number> constraintVars = matrix_t<Number>::Zero(1, numclocks);
-                    if (i == 0) {
-                        // constraint of the form 0-x_j <= c_ij
-                        constraintVars(0, j - 1) = -1.0; // j-1 because we don't consider static clock 0
-                    } else if (j == 0) {
-                        // constraint of the form x_i - 0  <= c_ij
-                        constraintVars(0, i - 1) = 1.0; // i-1 because we don't consider static clock 0
-                    } else {
-                        // constraint of the form x_i - x_j  <= c_ij
-                        constraintVars(0, i - 1) = 1.0; // i-1 because we don't consider static clock 0
-                        constraintVars(0, j - 1) = -1.0; // j-1 because we don't consider static clock 0
-                    }
-                    //std::cout << "Constraint variable vector: " << constraintVars <<"\n";
-                    HPolyConstraints.row(counter) = constraintVars;
-                    //std::cout << "New constraint matrix: " << HPolyConstraints << "\n";
-                    HPolyConstants(counter, 0) = m_dbm(i, j).first;
-                    //std::cout << "New constant vector: " << HPolyConstants << "\n";
-                    counter++;
-                }
-            }
-        }
-        // TODO enhace plotting for inifinite polytopes
-        if (getTimeHorizion() != 0.0) {
+            int counter = numconstraints;//start at next row
             for (int i = 0; i < numclocks; i++) {
                 // for each clock at a timehorizon constraint so the polytope to plot is finite
                 matrix_t<Number> constraintVars = matrix_t<Number>::Zero(1, numclocks);
                 constraintVars(0, i) = 1.0;
-                //std::cout << "Constraint variable vector: " << constraintVars <<"\n";
+                std::cout << "Constraint variable vector: " << constraintVars <<"\n";
                 HPolyConstraints.row(counter) = constraintVars;
-                //std::cout << "New constraint matrix: " << HPolyConstraints << "\n";
-                HPolyConstants(counter, 0) = getTimeHorizion();
-                //std::cout << "New constant vector: " << HPolyConstants << "\n";
+                std::cout << "New constraint matrix: " << HPolyConstraints << "\n";
+                HPolyConstants(counter, 0) = getTimeHorizon();
+                std::cout << "New constant vector: " << HPolyConstants << "\n";
                 counter++;
             }
+            hypro::HPolytopeT<Number,Converter> polyNew(HPolyConstraints,HPolyConstants);
+            return polyNew.vertices();
         }
         else{
-            std::cout << "Warning: TimeHorizon may not be configured correctly.";
+            std::cout << "Warning: TimeHorizon may not be configured correctly. Converting potentially unbounded polytope to vertices.";
         }
-        std::cout << "Generated polytope: \n Matrix: \n" << HPolyConstraints << "\n Vector: \n" << HPolyConstants <<"\n";
-        hypro::HPolytopeT<Number,Converter> poly(HPolyConstraints,HPolyConstants);
         return poly.vertices();
     }
 
