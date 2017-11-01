@@ -41,13 +41,13 @@ namespace hypro {
 
     template <typename Number, typename Converter>
     std::size_t DifferenceBoundsT<Number, Converter>::dimension() const{
-        // TODO this should always be the number of clocks
+        // number of clocks
         return this->getDBM().cols();
     }
 
     template <typename Number, typename Converter>
     std::size_t DifferenceBoundsT<Number, Converter>::size() const{
-        // TODO number of dbm entries?
+        // number of dbm entries
         return this->getDBM().cols()*this->getDBM().rows();
     }
 
@@ -58,8 +58,6 @@ namespace hypro {
          *
          *  Let i>j, i.e. d_ij defines an upper bound. Then its value must be larger
          *  or equal to the corresponding lower bound d_ji.
-         *
-         *  TODO i assume that the dbm is also invalid if both bounds are infinity (correct???)
          *
          *  Consequently it suffices to traverse the lower half of the dbm matrix
          *  (i.e. where i is larger than j) to check emptiness.
@@ -102,8 +100,8 @@ namespace hypro {
             //constraints of the polytope
             hypro::matrix_t<Number> HPolyConstraints = poly.matrix();
             hypro::vector_t<Number> HPolyConstants = poly.vector();
-            std::cout << "Old matrix: " << HPolyConstraints <<"\n";
-            std::cout << "Old constants: " << HPolyConstants <<"\n";
+            //std::cout << "Old matrix: " << HPolyConstraints <<"\n";
+            //std::cout << "Old constants: " << HPolyConstants <<"\n";
             int numconstraints = HPolyConstraints.rows();
             HPolyConstraints.conservativeResize(numconstraints+numclocks, HPolyConstraints.cols());
             HPolyConstants.conservativeResize(numconstraints+numclocks, HPolyConstraints.cols());
@@ -113,11 +111,11 @@ namespace hypro {
                 // for each clock at a timehorizon constraint so the polytope to plot is finite
                 matrix_t<Number> constraintVars = matrix_t<Number>::Zero(1, numclocks);
                 constraintVars(0, i) = 1.0;
-                std::cout << "Constraint variable vector: " << constraintVars <<"\n";
+                //std::cout << "Constraint variable vector: " << constraintVars <<"\n";
                 HPolyConstraints.row(counter) = constraintVars;
-                std::cout << "New constraint matrix: " << HPolyConstraints << "\n";
+                //std::cout << "New constraint matrix: " << HPolyConstraints << "\n";
                 HPolyConstants(counter, 0) = getTimeHorizon();
-                std::cout << "New constant vector: " << HPolyConstants << "\n";
+                //std::cout << "New constant vector: " << HPolyConstants << "\n";
                 counter++;
             }
             hypro::HPolytopeT<Number,Converter> polyNew(HPolyConstraints,HPolyConstants);
@@ -131,11 +129,13 @@ namespace hypro {
 
     template <typename Number, typename Converter>
     std::pair<CONTAINMENT, DifferenceBoundsT<Number, Converter>> DifferenceBoundsT<Number, Converter>::satisfiesHalfspace( const Halfspace<Number>& rhs ) const{
+        // TODO we need conversion polytopy-> dbm
         return std::make_pair(CONTAINMENT::FULL,DifferenceBoundsT<Number,Converter>());
     }
 
     template <typename Number, typename Converter>
     std::pair<CONTAINMENT, DifferenceBoundsT<Number, Converter>> DifferenceBoundsT<Number, Converter>::satisfiesHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const{
+        // TODO we need conversion polytopy-> dbm
         return std::make_pair(CONTAINMENT::FULL,DifferenceBoundsT<Number,Converter>());
     }
 
@@ -176,31 +176,77 @@ namespace hypro {
 
     template <typename Number, typename Converter>
     DifferenceBoundsT<Number,Converter> DifferenceBoundsT<Number, Converter>::intersect( const DifferenceBoundsT<Number,Converter>& _rhs ) const{
-        // TODO
-        return DifferenceBoundsT<Number,Converter>();
+        hypro::DifferenceBoundsT<Number,Converter> retDBM = hypro::DifferenceBoundsT<Number,Converter>(*this);
+        //std::cout << "Initial DBM:" << retDBM << "\n";
+        // for each entry in the other dbm, intersect that entry with this dbm
+        for(int i = 0; i < _rhs.getDBM().rows(); i++){
+            for(int j = 0; j < _rhs.getDBM().cols();j++){
+                if(i!=j) {
+                    retDBM = retDBM.intersectConstraint(i,j,_rhs.getDBM()(i,j));
+                    //std::cout << "DBM after intersection with ("<<i<<","<<j<<")="<<_rhs.getDBM()(i,j).first<<" yields: \n"<< retDBM << "\n";
+                }
+            }
+        }
+        //std::cout << "Final DBM:" << retDBM << "\n";
+        return retDBM;
     }
 
     template <typename Number, typename Converter>
     DifferenceBoundsT<Number,Converter> DifferenceBoundsT<Number, Converter>::intersectHalfspace( const Halfspace<Number>& hs ) const{
+        // TODO we need conversion polytopy-> dbm
         return DifferenceBoundsT<Number,Converter>();
     }
 
     template <typename Number, typename Converter>
     DifferenceBoundsT<Number,Converter> DifferenceBoundsT<Number, Converter>::intersectHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const{
-        // TODO
+        // TODO we need conversion polytopy-> dbm
         return DifferenceBoundsT<Number,Converter>();
     }
 
     template <typename Number, typename Converter>
     bool DifferenceBoundsT<Number, Converter>::contains( const Point<Number>& _point ) const{
-        // TODO
-        return true;
+        // describe point as dbm
+        vector_t<Number> coordinates = _point.rawCoordinates();
+        hypro::matrix_t<DBMEntry> mat =  hypro::matrix_t<DBMEntry>(m_dbm.rows(),m_dbm.cols());
+        for(int i=0; i < mat.rows(); i++){
+            for(int j=0; j < mat.cols();j++){
+                if(i==j){
+                    // diagonals are zero
+                    mat(i,j)= DBMEntry(0.0, BOUND_TYPE::SMALLER_EQ);
+                }
+                else if(i == 0){
+                    // constraint of the form 0-x_j-1<=b <=> x_j-1 >=-b
+                    mat(i,j) = DBMEntry(-1.0*coordinates(j-1), BOUND_TYPE::SMALLER_EQ);
+                }
+                else if(j == 0){
+                    // constraint of the form x_i-1-0 <= b
+                    mat(i,j) = DBMEntry(coordinates(i-1), BOUND_TYPE::SMALLER_EQ);
+                }
+                else{
+                    // constaint of the form x_i-1-x_j-1<=b
+                    mat(i,j) = DBMEntry(coordinates(i-1)-coordinates(j-1), BOUND_TYPE::SMALLER_EQ);
+                }
+            }
+        }
+        hypro::DifferenceBoundsT<Number,Converter> pDBM = hypro::DifferenceBoundsT<Number,Converter>(*this);
+        pDBM.setDBM(mat);
+        return this->contains(pDBM);
     }
 
     template <typename Number, typename Converter>
     DifferenceBoundsT<Number,Converter> DifferenceBoundsT<Number, Converter>::unite( const DifferenceBoundsT<Number,Converter>& _rhs ) const{
-        // TODO
-        return DifferenceBoundsT<Number,Converter>();
+        hypro::matrix_t<DBMEntry> mat =  hypro::matrix_t<DBMEntry>(m_dbm);
+        for(int i=0; i < mat.rows(); i++){
+            for(int j=0; j < mat.cols();j++) {
+                if(i!=j){
+                    // replace the entry with the maximum of lhs(ij) and rhs(ij)
+                    mat(i,j) = DBMEntry::max(mat(i,j), _rhs.getDBM()(i,j));
+                }
+            }
+        }
+        hypro::DifferenceBoundsT<Number,Converter> res = hypro::DifferenceBoundsT<Number,Converter>(*this);
+        res.setDBM(mat);
+        return res;
     }
 
 

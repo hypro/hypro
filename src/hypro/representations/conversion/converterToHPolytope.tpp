@@ -292,6 +292,6 @@ typename Converter<Number>::HPolytope Converter<Number>::toHPolytope(const Diffe
                 }
             }
         }
-        std::cout << "Generated polytope: \n Matrix: \n" << HPolyConstraints << "\n Vector: \n" << HPolyConstants <<"\n";
+        //std::cout << "Generated polytope: \n Matrix: \n" << HPolyConstraints << "\n Vector: \n" << HPolyConstants <<"\n";
         return HPolytope(HPolyConstraints, HPolyConstants);
 }

@@ -11,8 +11,10 @@
 typedef double Number;
 hypro::DifferenceBounds <Number> testDBM;
 hypro::DifferenceBounds <Number> testDBM2;
+hypro::DifferenceBounds <Number> testDBM3;
 void createTestDBM();
 void createTestDBM2();
+void createTestDBM3();
 void testComparison();
 void testPlus();
 void testVertices();
@@ -25,11 +27,15 @@ void testShift();
 void testEmpty();
 void testContains();
 void testIntersectConstraint();
+void testContainsPoint();
+void testIntersectDBM();
+void testUnion();
 void testPrint();
 
 int main() {
     createTestDBM();
     createTestDBM2();
+    createTestDBM3();
     //testComparison();
     //testPlus();
     //testVertices();
@@ -41,7 +47,10 @@ int main() {
     //testShift();
     //testEmpty();
     //testContains();
-    testIntersectConstraint();
+    //testIntersectConstraint();
+    //testContainsPoint();
+    //testIntersectDBM();
+    testUnion();
     //testPrint();
     return 0;
 }
@@ -76,6 +85,12 @@ void createTestDBM2(){
     testDBM2 = hypro::DifferenceBounds<Number>();
     testDBM2.setDBM(mat);
     testDBM2.setTimeHorizon(20.0);
+}
+
+void createTestDBM3(){
+    // shift dbm 0.5 to the right and 1 down
+    testDBM3 = testDBM.shift(1,0.5);
+    testDBM3 = testDBM3.shift(2, -1.0);
 }
 
 
@@ -293,6 +308,66 @@ void testIntersectConstraint(){
     hypro::Plotter<Number>::getInstance().setFilename("intersectionTest");
     hypro::Plotter<Number>::getInstance().plot2d();
 }
+
+void testContainsPoint(){
+    hypro::vector_t<Number> coordinates(2);
+    coordinates << 10,11.1;
+    hypro::Point<Number> point = hypro::Point<Number>(coordinates);
+    bool contains = testDBM.contains(point);
+    std::cout << "DBM1 contains Point" << point <<" : " << contains << "\n";
+}
+
+
+void testIntersectDBM(){
+    std::cout<< "Test intersection with dbm: \n";
+
+    hypro::DifferenceBounds <Number> intersection = testDBM.intersect(testDBM3);
+    std::cout<< intersection;
+    std::vector<hypro::Point<Number>> intersectVerts = intersection.vertices();
+    std::cout<< intersectVerts;
+
+    //plot to pdf
+    hypro::Plotter<Number>::getInstance().clear();
+
+    unsigned obj3 = hypro::Plotter<Number>::getInstance().addObject(testDBM.vertices());
+    hypro::Plotter<Number>::getInstance().setObjectColor(obj3, hypro::plotting::colors[hypro::plotting::blue]);
+
+    unsigned obj4 = hypro::Plotter<Number>::getInstance().addObject(testDBM3.vertices());
+    hypro::Plotter<Number>::getInstance().setObjectColor(obj4, hypro::plotting::colors[hypro::plotting::green]);
+
+    unsigned obj2 = hypro::Plotter<Number>::getInstance().addObject(intersectVerts);
+    hypro::Plotter<Number>::getInstance().setObjectColor(obj2, hypro::plotting::colors[hypro::plotting::red]);
+
+    // create a *.plt file (gnuplot).
+    hypro::Plotter<Number>::getInstance().setFilename("intersectionDBMTest");
+    hypro::Plotter<Number>::getInstance().plot2d();
+}
+
+void testUnion(){
+    std::cout<< "Test union with dbm: \n";
+
+    hypro::DifferenceBounds <Number> unioned = testDBM.unite(testDBM3);
+    std::cout<< unioned;
+    std::vector<hypro::Point<Number>> unionVerts = unioned.vertices();
+    std::cout<< unionVerts;
+
+    //plot to pdf
+    hypro::Plotter<Number>::getInstance().clear();
+
+    unsigned obj3 = hypro::Plotter<Number>::getInstance().addObject(testDBM.vertices());
+    hypro::Plotter<Number>::getInstance().setObjectColor(obj3, hypro::plotting::colors[hypro::plotting::blue]);
+
+    unsigned obj4 = hypro::Plotter<Number>::getInstance().addObject(testDBM3.vertices());
+    hypro::Plotter<Number>::getInstance().setObjectColor(obj4, hypro::plotting::colors[hypro::plotting::green]);
+
+    unsigned obj2 = hypro::Plotter<Number>::getInstance().addObject(unionVerts);
+    hypro::Plotter<Number>::getInstance().setObjectColor(obj2, hypro::plotting::colors[hypro::plotting::red]);
+
+    // create a *.plt file (gnuplot).
+    hypro::Plotter<Number>::getInstance().setFilename("unionDBMTest");
+    hypro::Plotter<Number>::getInstance().plot2d();
+}
+
 
 void testPrint(){
     std::cout<< "Test instance DBM: \n";
