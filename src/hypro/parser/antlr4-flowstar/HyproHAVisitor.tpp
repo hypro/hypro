@@ -41,35 +41,40 @@ namespace hypro {
 		}
 
 		//6.Calls visit(ctx->unsafeset()) to get local badStates
-		typename hypro::HybridAutomaton<Number>::locationConditionMap badStates;
-		if(ctx->unsafeset() != NULL && ctx->unsafeset()->badstate().size() > 0){
+		typename hypro::HybridAutomaton<Number>::locationConditionMap lBadStates;
+		std::vector<Condition<Number>> gBadStates;
+		if(ctx->unsafeset() != NULL && (ctx->unsafeset()->lbadstate().size() > 0 || ctx->unsafeset()->gbadstate().size() > 0)){
 			//std::cout << "-- size of badstates: " << ctx->unsafeset()->badstate().size() << std::endl;
 			HyproBadStatesVisitor<Number> bStateVisitor = HyproBadStatesVisitor<Number>(varVec, rLocSet);
-			badStates = bStateVisitor.visit(ctx->unsafeset()).template as<typename hypro::HybridAutomaton<Number>::locationConditionMap>();
+			lBadStates = bStateVisitor.visit(ctx->unsafeset()).template as<typename hypro::HybridAutomaton<Number>::locationConditionMap>();
+			gBadStates = bStateVisitor.getGlobalBadStates();
 		}
 
 #ifdef HYPRO_LOGGING
-		TRACE("hypro.parser","================================\n");
-		TRACE("hypro.parser","From the parser\n");	
-		TRACE("hypro.parser","================================\n");	
-		TRACE("hypro.parser","Parsed variables: " << vars << std::endl);
-		TRACE("hypro.parser","Reachability settings:\n" << reachSettings);
-		TRACE("hypro.parser","All locations:\n");
+		COUT("================================\n");
+		COUT("From the parser\n");	
+		COUT("================================\n");	
+		COUT("Parsed variables: " << vars << std::endl);
+		COUT("Reachability settings:\n" << reachSettings);
+		COUT("All locations:\n");
 		for(auto it = rLocSet.begin(); it != rLocSet.end(); ++it){
-			TRACE("hypro.parser",**it);
+			COUT(**it);
 		}
-		TRACE("hypro.parser","All Transitions:\n");
+		COUT("All Transitions:\n");
 		for(auto it = transSet.begin(); it != transSet.end(); ++it){
-			TRACE("hypro.parser",**it);
+			COUT(**it);
 		}
-		TRACE("hypro.parser","Initial state:\n");
+		COUT("Initial state:\n");
 		for(auto it = initSet.begin(); it != initSet.end(); ++it){
-			TRACE("hypro.parser","Initial Location: " << it->first->getName() << " and initial state: " << it->second);
+			COUT("Initial Location: " << it->first->getName() << " and initial state: " << it->second);
 		}
-		TRACE("hypro.parser","Bad states:\n");
-		std::cout << "badStates.size" << badStates.size() << std::endl;
-		for(auto it = badStates.begin(); it != badStates.end(); ++it){
-			TRACE("hypro.parser","Bad Location: " << it->first->getName() << " and bad state: " << it->second);
+		COUT("Local Bad states:\n");
+		for(auto it = lBadStates.begin(); it != lBadStates.end(); ++it){
+			COUT("Bad Location: " << it->first->getName() << " and bad state: " << it->second);
+		}
+		COUT("Global Bad states:\n");
+		for(const auto& g : gBadStates){
+			COUT("Global Bad condition: " << g);
 		}
 		
 #endif
@@ -78,7 +83,8 @@ namespace hypro {
 		ha.setLocations(locSet);
 		ha.setTransitions(transSet);
 		ha.setInitialStates(initSet);
-		ha.setLocalBadStates(badStates);
+		ha.setLocalBadStates(lBadStates);
+		ha.setGlobalBadStates(gBadStates);
 
 		return std::move(ha);			//Move the ownership of ha to whoever uses ha then, i.e. the test suite
 	}

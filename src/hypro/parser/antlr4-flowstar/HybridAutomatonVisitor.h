@@ -93,7 +93,9 @@ public:
 
     virtual antlrcpp::Any visitUnsafeset(HybridAutomatonParser::UnsafesetContext *context) = 0;
 
-    virtual antlrcpp::Any visitBadstate(HybridAutomatonParser::BadstateContext *context) = 0;
+    virtual antlrcpp::Any visitLbadstate(HybridAutomatonParser::LbadstateContext *context) = 0;
+
+    virtual antlrcpp::Any visitGbadstate(HybridAutomatonParser::GbadstateContext *context) = 0;
 
 
 };

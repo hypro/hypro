@@ -13,6 +13,8 @@ import Formula;
 
 /////////// Parser Rules
 
-unsafeset 			: 'unsafe set' '{' badstate* '}' ;
+unsafeset 			: 'unsafe set' '{' (gbadstate | lbadstate)* '}' ;
 
-badstate 			: VARIABLE '{' constrset? '}' ;
+lbadstate 			: VARIABLE '{' constrset? '}' ;
+
+gbadstate			: constrset ;

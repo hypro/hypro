@@ -210,9 +210,27 @@ namespace hypro {
 	template<typename Number>
 	antlrcpp::Any HyproFormulaVisitor<Number>::visitIntervalexpr(HybridAutomatonParser::IntervalexprContext *ctx){
 
-		//0.Syntax Check - Check if interval is legal
-		Number left = stringToNumber(ctx->interval()->NUMBER()[0]->getText());
-		Number right = stringToNumber(ctx->interval()->NUMBER()[1]->getText());
+		//1.Attach the possible minuses to the numbers
+		std::string leftString;
+		std::string rightString;
+		if(ctx->interval()->MINUS().size() > 0){
+			std::size_t leftIndex = ctx->interval()->NUMBER(0)->getSymbol()->getStartIndex();
+			std::size_t rightIndex = ctx->interval()->NUMBER(1)->getSymbol()->getStartIndex();
+			for(const auto& m : ctx->interval()->MINUS()){
+				std::size_t minusIndex = m->getSymbol()->getStartIndex();
+				if(minusIndex < leftIndex){
+					leftString = ctx->interval()->MINUS(0)->getText();
+				} else {
+					rightString = ctx->interval()->MINUS(1)->getText();
+				}
+			}
+		}
+		leftString += ctx->interval()->NUMBER()[0]->getText();
+		rightString += ctx->interval()->NUMBER()[1]->getText();
+		Number left = stringToNumber(leftString);
+		Number right = stringToNumber(rightString);
+
+		//2.Syntax Check - Check if interval is legal
 		if(left > right){
 			std::cerr << "ERROR: Interval left side with " << " is bigger than right side!" << std::endl;
 			exit(0);
@@ -228,7 +246,7 @@ namespace hypro {
 			exit(0);
 		}
 
-		//1.Make constraint vectors
+		//3.Make constraint vectors
 		std::vector<std::pair<vector_t<Number>,Number>> constraintVec;
 		vector_t<Number> firstConstraint = vector_t<Number>::Zero(vars.size());
 		vector_t<Number> secondConstraint = vector_t<Number>::Zero(vars.size());
@@ -248,7 +266,7 @@ namespace hypro {
 		constraintVec.push_back(firstPair);
 		constraintVec.push_back(secondPair);
 
-		//2.Return vector of pairs of constraint vectors and constant Numbers!
+		//4.Return vector of pairs of constraint vectors and constant Numbers!
 		return constraintVec;
 	}
 
