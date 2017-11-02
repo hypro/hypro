@@ -384,7 +384,7 @@ void Plotter<Number>::writeGnuplot() const {
 					} else {
 						mOutfile << "f_" << index << "(x) = " << carl::toDouble(Number(-normal(0)/normal(1))) << "*x";
 						double off = carl::toDouble(Number(plane.offset()/normal(1)));
-						if(off > 0)
+						if(off >= 0)
 							mOutfile << "+";
 
 						mOutfile << off << "\n";
