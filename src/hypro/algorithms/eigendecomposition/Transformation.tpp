@@ -29,7 +29,7 @@ Transformation<Number>::Transformation (const HybridAutomaton<Number>& _hybrid) 
         declare_structures(mSTallvalues, m_size);
         b_tr        = Vector<Number>(m_size);
         matrix_calc = Matrix<Number>(m_size,m_size);
-//TODO TESTING
+//double for rational converting here
         Ddouble     = DiagonalMatrixdouble(m_size); //formulation in .h
         Vdouble     = Matrix<double>(m_size,m_size);
         Vinvdouble  = Matrix<double>(m_size,m_size);
@@ -70,7 +70,7 @@ Transformation<Number>::Transformation (const HybridAutomaton<Number>& _hybrid) 
         //std::cout << matrix_in_parser;
 	    PtrtoNewLoc = locationManager.create(matrix_in_parser);
         locations.insert(PtrtoNewLoc);
-        mLocationPtrsMap.insert(std::make_pair(LocPtr, PtrtoNewLoc));   //cant use const type* const
+        mLocationPtrsMap.insert(std::make_pair(LocPtr, PtrtoNewLoc));
     //SAVING STRUCT
         TRACE("hypro.eigendecomposition", "D exact:\n" << mSTallvalues.mSTindependentFunct.D.diagonal() );
         TRACE("hypro.eigendecomposition", "D approx:\n" << Ddouble.diagonal() );
@@ -86,19 +86,18 @@ Transformation<Number>::Transformation (const HybridAutomaton<Number>& _hybrid) 
         }
     //assign values
         mSTallvalues.mSTflowpipeSegment.Vinv       = Vinv;
-        mSTallvalues.mSTflowpipeSegment.V          = V; //rest of flow used only for plotting
+        mSTallvalues.mSTflowpipeSegment.V          = V;
         mLocPtrtoComputationvaluesMap.insert(std::make_pair(PtrtoNewLoc, mSTallvalues));
         //std::cout << "old loc: "<<LocPtr<<"\n";
         //std::cout << "new loc: "<<PtrtoNewLoc<<"\n";
     //INVARIANTS(TYPE CONDITION) [TODO check why assertion to Invariants fails]
         const Condition<Number>& invar1 = LocPtr->getInvariant();
-        Condition<Number> invar1NEW; // = PtrtoNewLoc->getInvariant();
+        Condition<Number> invar1NEW;
         //inv: A'= A*V
         for( i=0; i<invar1.size(); ++i ) {
             invar1NEW.setMatrix(invar1.getMatrix(i)*V,i);
             invar1NEW.setVector(invar1.getVector(i)  ,i);    
         }
-        //invar1.setMatrix(mInvariant.getMatrix()*V);    //inv: A'= A*V
         PtrtoNewLoc->setInvariant(invar1NEW);
     }
     mTransformedHA.setLocations(locations); 
@@ -146,15 +145,12 @@ Transformation<Number>::Transformation (const HybridAutomaton<Number>& _hybrid) 
       it!=_hybrid.getInitialStates().end(); ++it) {
         Location<Number>* NewLocPtr = mLocationPtrsMap[it->first];
         State<Number,ConstraintSet<Number>> state1NEW = State<Number,ConstraintSet<Number>>(it->second);
-        //TODO CHECK if conversion might make sense here, because of ReachTree difficulties in transformation in HyDRA!!!
-//        const Matrix<Number> & Vinv = 
-//          mLocPtrtoComputationvaluesMap[NewLocPtr].mSTflowpipeSegment.Vinv;
-//        state1NEW = it->second.linearTransformation(Vinv);
-        state1NEW.setTimestamp(carl::Interval<Number>(0) );  //do we need to set this?
+        state1NEW.setTimestamp(carl::Interval<Number>(0) );
         state1NEW.setLocation(NewLocPtr);
-        initialStates.insert(make_pair(NewLocPtr, state1NEW));
+//        initialStates.insert(make_pair(NewLocPtr, state1NEW));
+        mTransformedHA.addInitialState(state1NEW);
     }
-    mTransformedHA.setInitialStates  (initialStates);
+//    mTransformedHA.setInitialStates  (initialStates);
 //LOCAL BAD STATES (condition [matrix,vector] matrix=matrix*V
 //typename locationConditionMap::const_iterator DOES NOT WORK
     for (typename HybridAutomaton<Number>::locationConditionMap::const_iterator it = _hybrid.getLocalBadStates().begin();
@@ -223,8 +219,7 @@ void Transformation<Number>::addGlobalBadStates
         size_t i;
         for (typename conditionVector::const_iterator it = _hybrid.getGlobalBadStates().begin(); 
           it!=_hybrid.getGlobalBadStates().end(); ++it) {
-            //transform each global badstate by setting of according localBadState
-           //1. loop through global states + copy to other HybridAutomaton
+           //loop through global states + copy to other HybridAutomaton
             for (typename locationPtrMap::iterator locMapIt = mLocationPtrsMap.begin(); 
               locMapIt!=mLocationPtrsMap.end(); ++locMapIt) {
                 Condition<Number> globalbadStateNEW;
@@ -243,7 +238,6 @@ void Transformation<Number>::analyzeExponentialFunctions() {
     for ( auto &structObject : mLocPtrtoComputationvaluesMap) {
         const size_t dimension = structObject.second.mSTflowpipeSegment.V.rows();
         structObject.second.mSTindependentFunct.expFunctionType.reserve(dimension);
-        //structObject.second.mSTindependentFunct.convergent = BoolVector(dimension);
         for(size_t i=0; i<dimension; ++i) {
             //1. divergence D>0, 2. convergence D<0, 3. linear D=0
             //4. const [never used yet since we can then not use decomposition]
