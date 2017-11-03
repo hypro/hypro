@@ -31,8 +31,8 @@ class HybridAutomaton
   public:
     using locationSet = std::set<Location<Number>*>; /// Set of location pointers.
     using transitionSet = std::set<Transition<Number>*>; /// Set of transition pointers.
-    using locationStateMap = std::multimap<const Location<Number>*, State<Number,ConstraintSet<Number>>, locPtrComp<Number>>; /// Multi-map from location pointers to states.
-    using locationConditionMap = std::map<const Location<Number>*, Condition<Number>, locPtrComp<Number>>; /// Map from location pointers to conditions.
+    using locationStateMap = std::multimap<const Location<Number>*, State<Number,ConstraintSet<Number>>>; /// Multi-map from location pointers to states.
+    using locationConditionMap = std::map<const Location<Number>*, Condition<Number>>; /// Map from location pointers to conditions.
     using conditionVector = std::vector<Condition<Number>>; /// Vector of conditions.
 
   private:
@@ -43,12 +43,27 @@ class HybridAutomaton
     conditionVector mGlobalBadStates; 		/// The set of bad states which are not bound to any location.
 
   public:
+  	/**
+  	 * @brief      Default constructor.
+  	 */
     HybridAutomaton() {}
+
+    /**
+     * @brief      Copy constructor.
+     *
+     * @param[in]  hybrid  The original hybrid automaton.
+     */
     HybridAutomaton(const HybridAutomaton<Number>& hybrid) = default;
+
+    /**
+     * @brief      Move constructor.
+     *
+     * @param[in]  hybrid  The original hybrid automaton.
+     */
     HybridAutomaton(HybridAutomaton<Number>&& hybrid) = default;
     HybridAutomaton(const locationSet& locs, const transitionSet& trans, const locationStateMap& initialStates);
     virtual ~HybridAutomaton() {
-/*  Without this we have a memory leak from HyproTransitionVisitor. 
+/*  Without this we have a memory leak from HyproTransitionVisitor.
     The leak will be patched later by using only references.
         std::cout << "I DESTROY" << std::endl;
         for(auto tPointer : mTransitions) {

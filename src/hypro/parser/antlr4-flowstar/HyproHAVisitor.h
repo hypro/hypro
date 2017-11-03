@@ -33,12 +33,12 @@ class HyproHAVisitor : public HybridAutomatonBaseVisitor {
 
 	private:
 
-		//A vector of all variables that are defined. 
+		//A vector of all variables that are defined.
 		//This must be passed onto all the underlying visitors as they need to have
 		//access to the variable names stated in the variable declaration
 		std::vector<std::string> vars;
 
-		//Stores the parsed reachability settings 
+		//Stores the parsed reachability settings
 		ReachabilitySettings<Number> reachSettings;
 
 		//Inherited from HybridAutomatonBaseVisitor which is generated from AnTLR
@@ -47,8 +47,8 @@ class HyproHAVisitor : public HybridAutomatonBaseVisitor {
 	public:
 
 		//Is first defined in HybridAutomaton.h
-		using locationStateMap = std::multimap<const Location<Number>*, State<Number,ConstraintSet<Number>>, locPtrComp<Number>>;
-		using locationConditionMap = std::map<const Location<Number>*, Condition<Number>, locPtrComp<Number>>; /// Map from location pointers to conditions.
+		//using locationStateMap = std::multimap<const Location<Number>*, State<Number,ConstraintSet<Number>>, locPtrComp<Number>>;
+		//using locationConditionMap = std::map<const Location<Number>*, Condition<Number>, locPtrComp<Number>>; /// Map from location pointers to conditions.
 
 		//Constructor and Destructor
 		HyproHAVisitor();
@@ -59,7 +59,7 @@ class HyproHAVisitor : public HybridAutomatonBaseVisitor {
 		antlrcpp::Any visitStart(HybridAutomatonParser::StartContext *ctx) override;
 
 		//Getter for settings
-		inline ReachabilitySettings<Number> getSettings() { return reachSettings; }		
+		inline ReachabilitySettings<Number> getSettings() { return reachSettings; }
 };
 
 } //namespace hypro

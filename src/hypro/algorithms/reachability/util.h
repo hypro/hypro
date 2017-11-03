@@ -4,6 +4,8 @@
 #include "../../util/Plotter.h"
 #include <carl/util/SFINAE.h>
 
+namespace hypro {
+
 template<typename Number, typename Representation, carl::DisableIf< std::is_same<Representation, SupportFunction<Number> > > = carl::dummy>
 void applyReduction( Representation& ) {
 }
@@ -13,6 +15,7 @@ void applyReduction( Representation& _in) {
 	_in.forceLinTransReduction();
 }
 
+/*
 template<typename Number, typename Representation, carl::DisableIf< std::is_same<Representation, SupportFunction<Number>> > = carl::dummy>
 void aggregationReduction( Representation&, Transition<Number>* , Number , Number  ) {
 }
@@ -31,6 +34,7 @@ void aggregationReduction( Representation& _in, Transition<Number>* transition, 
 		_in = newSet;
 	}
 }
+*/
 
 template<typename Representation>
 void printFlowpipe( const std::vector<Representation>& _flowpipe ) {
@@ -64,104 +68,104 @@ Number hausdorffError( const Number& delta, const matrix_t<Number>& matrix, cons
 	return result;
 }
 
-template<typename Number>
-std::vector<Box<Number>> errorBoxes( const Number& delta, const matrix_t<Number>& flow, const State_t<Number>& initialSet, const matrix_t<Number>& trafoMatrix, const Box<Number>& ) {
-	std::vector<Box<Number>> res;
+template <typename Number, typename State>
+std::vector<hypro::Box<Number>> errorBoxes(const Number& delta, const hypro::matrix_t<Number>& flow, const State& initialSet,
+                                           const hypro::matrix_t<Number>& trafoMatrix, const hypro::Box<Number>& externalInput)
+{
+    (void) externalInput;
+    std::vector<hypro::Box<Number>> res;
+    unsigned dim = flow.cols();
+    //std::cout << "Dim: " << dim << std::endl;
+    //std::cout << "Delta: " << delta << std::endl;
+    hypro::matrix_t<Number> matrixBlock = hypro::matrix_t<Number>::Zero(3 * dim, 3 * dim);
+    matrixBlock.block(0, 0, dim, dim) = abs(flow);
+    matrixBlock.block(0, dim, dim, dim) = hypro::matrix_t<Number>::Identity(dim, dim);
+    matrixBlock.block(dim, 2 * dim, dim, dim) = hypro::matrix_t<Number>::Identity(dim, dim);
+    //std::cout << "MatrixBlock: " << matrixBlock << std::endl;
+    matrixBlock = delta * matrixBlock;
+    //std::cout << "delta*MatrixBlock: " << matrixBlock << std::endl;
+    hypro::matrix_t<double> convertedBlock = hypro::convert<Number, double>(matrixBlock);
+    // std::cout << "MatrixBlock: " << std::endl << convertedBlock << std::endl;
+    convertedBlock = convertedBlock.exp();
+    // std::cout << "exp(MatrixBlock): " << std::endl << convertedBlock << std::endl;
+    matrixBlock = hypro::convert<double, Number>(convertedBlock);
 
-	unsigned dim = flow.cols();
-	matrix_t<Number> matrixBlock = matrix_t<Number>::Zero(3*dim, 3*dim);
-	matrixBlock.block(0,0,dim,dim) = abs(flow);
-	matrixBlock.block(0,dim,dim,dim) = matrix_t<Number>::Identity(dim,dim);
-	matrixBlock.block(dim,2*dim,dim,dim) = matrix_t<Number>::Identity(dim,dim);
-	matrixBlock = delta*matrixBlock;
-	matrix_t<double> convertedBlock = convert<Number,double>(matrixBlock);
-	//std::cout << "MatrixBlock: " << std::endl << convertedBlock << std::endl;
-	convertedBlock = convertedBlock.exp();
-	//std::cout << "exp(MatrixBlock): " << std::endl << convertedBlock << std::endl;
-	matrixBlock = convert<double,Number>(convertedBlock);
+    // TODO: Introduce better variable naming!
+    hypro::matrix_t<Number> tmpMatrix = flow * (hypro::matrix_t<Number>::Identity(dim, dim) - trafoMatrix);
+    // std::cout << "Flow: " << flow << std::endl << "trafoMatrix: " << trafoMatrix << std::endl;
+    // std::cout << __func__ << " TmpMtrix: " << std::endl << tmpMatrix << std::endl;
+    // assert(tmpMatrix.row(dim-1).nonZeros() == 0);
+    State transformedInitialSet =
+          initialSet.affineTransformation(hypro::matrix_t<Number>(tmpMatrix.block(0, 0, dim - 1, dim - 1)),
+                                                                               hypro::vector_t<Number>(tmpMatrix.block(0, dim - 1, dim - 1, 1)));
+    auto b1 = boost::get<Box<Number>>( boost::apply_visitor( genericConversionVisitor<typename State::repVariant,Number>(representation_name::box), transformedInitialSet.getSet(0)));
+    // augment b1 by a dimension for the constant parts.
+    hypro::vector_t<Number> augmentedUpperLimit = hypro::vector_t<Number>::Ones(b1.max().dimension() + 1);
+    augmentedUpperLimit.block(0, 0, dim - 1, 1) = b1.max().rawCoordinates();
+    hypro::vector_t<Number> augmentedLowerLimit = hypro::vector_t<Number>::Ones(b1.min().dimension() + 1);
+    augmentedLowerLimit.block(0, 0, dim - 1, 1) = b1.min().rawCoordinates();
+    b1 = hypro::Box<Number>(std::make_pair(hypro::Point<Number>(augmentedLowerLimit), hypro::Point<Number>(augmentedUpperLimit)));
 
-	// TODO: Introduce better variable naming!
-	matrix_t<Number> tmpMatrix = flow*(matrix_t<Number>::Identity(dim,dim) - trafoMatrix);
-	//std::cout << "Flow: " << flow << std::endl << "trafoMatrix: " << trafoMatrix << std::endl;
-	//std::cout << __func__ << " TmpMtrix: " << std::endl << tmpMatrix << std::endl;
-	//assert(tmpMatrix.row(dim-1).nonZeros() == 0);
-	State_t<Number> transformedInitialSet = initialSet.partiallyApplyTransformation(ConstraintSet<Number>(matrix_t<Number>(tmpMatrix.block(0,0,dim-1,dim-1)), vector_t<Number>(tmpMatrix.block(0,dim-1,dim-1,1))), 0 );
-	auto b1 = boost::get<Box<Number>>(boost::apply_visitor( genericConversionVisitor<typename State_t<Number>::repVariant,Number>(representation_name::box), transformedInitialSet.getSet(0)));
-	if(b1.empty()) { // indicates that the initial set is empty.
-	    //std::cout << "B1.empty()!" << std::endl;
-		return res;
-	}
+    b1 = b1.makeSymmetric();
+    assert(b1.isSymmetric());
+    b1 = b1.linearTransformation(matrixBlock.block(0, dim, dim, dim));
+    // std::cout << "B1: " << std::endl << b1 << std::endl;
 
-	// augment b1 by a dimension for the constant parts.
-	vector_t<Number> augmentedUpperLimit = vector_t<Number>::Ones(b1.max().dimension()+1);
-	//std::cout << "Matrix: " << std::endl << augmentedUpperLimit << std::endl << " vector " << b1.max().rawCoordinates() << std::endl;
-	augmentedUpperLimit.block(0,0,dim-1,1) = b1.max().rawCoordinates();
-	vector_t<Number> augmentedLowerLimit = vector_t<Number>::Ones(b1.min().dimension()+1);
-	augmentedLowerLimit.block(0,0,dim-1,1) = b1.min().rawCoordinates();
-	b1 = Box<Number>(std::make_pair(Point<Number>(augmentedLowerLimit), Point<Number>(augmentedUpperLimit)));
+    hypro::matrix_t<Number> fullTransformationMatrix = (flow * flow * trafoMatrix);
+    // assert(fullTransformationMatrix.row(dim-1).nonZeros() == 0);
+    hypro::matrix_t<Number> tmpTrafo = fullTransformationMatrix.block(0, 0, dim - 1, dim - 1);
+    hypro::vector_t<Number> tmpTrans = fullTransformationMatrix.block(0, dim - 1, dim - 1, 1);
+    // the last row of this matrix should be zero in any case, such that we can decompose the linear transformation.
+    // std::cout << "TmpTrafo Matrix: " << std::endl << tmpTrafo << std::endl;
+    State tmp = initialSet.affineTransformation(tmpTrafo, tmpTrans);
+    // Box<Number> b2 = Box<Number>(tmp.matrix(), tmp.vector());
+    auto b2 = boost::get<Box<Number>>( boost::apply_visitor( genericConversionVisitor<typename State::repVariant,Number>(representation_name::box), tmp.getSet(0)));
+    augmentedUpperLimit.block(0, 0, dim - 1, 1) = b2.max().rawCoordinates();
+    augmentedLowerLimit.block(0, 0, dim - 1, 1) = b2.min().rawCoordinates();
+    b2 = hypro::Box<Number>(std::make_pair(hypro::Point<Number>(augmentedLowerLimit), hypro::Point<Number>(augmentedUpperLimit)));
 
-	b1 = b1.makeSymmetric();
-	assert(b1.isSymmetric());
-	b1 = b1.linearTransformation(matrixBlock.block(0,dim,dim,dim));
-	//std::cout << "B1: " << std::endl << b1 << std::endl;
+    b2 = b2.makeSymmetric();
+    assert(b2.isSymmetric());
+    b2 = b2.linearTransformation(matrixBlock.block(0, 2 * dim, dim, dim));
+    // std::cout << "B2: " << std::endl << b2 << std::endl;
 
-	matrix_t<Number> fullTransformationMatrix = (flow*flow*trafoMatrix);
-	//assert(fullTransformationMatrix.row(dim-1).nonZeros() == 0);
-	matrix_t<Number> tmpTrafo = fullTransformationMatrix.block(0,0,dim-1,dim-1);
-	vector_t<Number> tmpTrans = fullTransformationMatrix.block(0,dim-1,dim-1,1);
-	// the last row of this matrix should be zero in any case, such that we can decompose the linear transformation.
-	//std::cout << "TmpTrafo Matrix: " << std::endl << convert<Number,double>(tmpTrafo) << std::endl;
-	//std::cout << "TmpTrafo Vector: " << std::endl << convert<Number,double>(tmpTrans) << std::endl;
-	State_t<Number> tmp = initialSet.partiallyApplyTransformation(ConstraintSet<Number>(tmpTrafo, tmpTrans), 0);
-	//Box<Number> b2 = Box<Number>(tmp.matrix(), tmp.vector());
-	auto b2 = boost::get<Box<Number>>(boost::apply_visitor( genericConversionVisitor<typename State_t<Number>::repVariant,Number>(representation_name::box), tmp.getSet(0)));
-	if(b2.empty()) { // indicates that the initial set is empty.
-	    //std::cout << "B2.empty()!" << std::endl;
-		return res;
-	}
-
-	augmentedUpperLimit.block(0,0,dim-1,1) = b2.max().rawCoordinates();
-	augmentedLowerLimit.block(0,0,dim-1,1) = b2.min().rawCoordinates();
-	b2 = Box<Number>(std::make_pair(Point<Number>(augmentedLowerLimit), Point<Number>(augmentedUpperLimit)));
-
-	b2 = b2.makeSymmetric();
-	assert(b2.isSymmetric());
-	b2 = b2.linearTransformation(matrixBlock.block(0,2*dim,dim,dim));
-	//std::cout << "B2: " << std::endl << b2 << std::endl;
-
-	Box<Number> errorBoxX0 = b1.minkowskiSum(b2);
-
-	/*
-	// std::cout << "External Input: " << externalInput << std::endl;
-	Box<Number> errorBoxExternalInput = externalInput.affineTransformation(flow.block(0,0,dim-1,dim-1), vector_t<Number>(flow.block(0,dim-1,dim-1,1)));
-	//std::cout << "Errorbox first linear transformation: " << convert<Number,double>(matrix_t<Number>(flow.block(0,0,dim-1,dim-1))) << " and b: " << convert<Number,double>(vector_t<Number>(flow.block(0,dim-1,dim-1,1))) << std::endl;
-	errorBoxExternalInput.makeSymmetric();
-	errorBoxExternalInput = errorBoxExternalInput.linearTransformation(matrix_t<Number>(matrixBlock.block(0,2*dim,dim-1,dim-1)));
-
-	Box<Number> differenceBox(errorBoxX0.minkowskiDecomposition(errorBoxExternalInput));
-	assert(!externalInput.empty() || errorBoxX0 == differenceBox);
-	*/
+    hypro::Box<Number> errorBoxX0 = b1.minkowskiSum(b2);
 
 
-	// projection to remove augmented dimension.
-	std::vector<std::size_t> projectionDimensions;
-	for(std::size_t i = 0; i < errorBoxX0.dimension()-1; ++i){
-		projectionDimensions.push_back(i);
-	}
+    //std::cout << "External Input: " << externalInput << std::endl;
+    //hypro::Box<Number> errorBoxExternalInput = externalInput.affineTransformation(flow.block(0,0,dim-1,dim-1), hypro::vector_t<Number>(flow.block(0,dim-1,dim-1,1)));
+    hypro::Box<Number> errorBoxExternalInput = externalInput.linearTransformation(flow.block(0,0,dim,dim));
+    //std::cout << "Errorbox first linear transformation: " << convert<Number,double>(matrix_t<Number>(flow.block(0,0,dim-1,dim-1))) << " and b: " <<
+    //convert<Number,double>(vector_t<Number>(flow.block(0,dim-1,dim-1,1))) << std::endl;
+    errorBoxExternalInput.makeSymmetric();
+    //errorBoxExternalInput = errorBoxExternalInput.linearTransformation(hypro::matrix_t<Number>(matrixBlock.block(0,2*dim,dim-1,dim-1)));
+    errorBoxExternalInput = errorBoxExternalInput.linearTransformation(hypro::matrix_t<Number>(matrixBlock.block(0,2*dim,dim,dim)));
 
-	res.emplace_back(errorBoxX0.project(projectionDimensions));
-	//res.emplace_back(errorBoxExternalInput.project(projectionDimensions));
-	//res.emplace_back(differenceBox.project(projectionDimensions));
+    hypro::Box<Number> differenceBox(errorBoxX0.minkowskiDecomposition(errorBoxExternalInput));
+    assert(!externalInput.empty() || errorBoxX0 == differenceBox);
 
-	return res;
+
+    // projection to remove augmented dimension.
+    std::vector<std::size_t> projectionDimensions;
+    for (std::size_t i = 0; i < errorBoxX0.dimension() - 1; ++i) {
+        projectionDimensions.push_back(i);
+    }
+
+    res.emplace_back(errorBoxX0.project(projectionDimensions));
+    res.emplace_back(errorBoxExternalInput.project(projectionDimensions));
+    res.emplace_back(differenceBox.project(projectionDimensions));
+
+    return res;
 }
+
 
 /**
  * based on the Hausdorff distance, constructs the box (also a polytope) that is used for bloating the initial
  * approximation
  */
+/*
 template <typename Number, representation_name Representation>
-State_t<Number> computePolytope( unsigned int _dim, Number _radius ) {
+State<Number> computePolytope( unsigned int _dim, Number _radius ) {
 	State_t<Number> res;
 	matrix_t<Number> mat = matrix_t<Number>::Zero( 2 * _dim, _dim );
 	vector_t<Number> vec( 2 * _dim, 1 );
@@ -203,3 +207,5 @@ State_t<Number> computePolytope( unsigned int _dim, Number _radius ) {
 	}
 	return res;
 }
+*/
+} // namespace hypro

@@ -13,3 +13,7 @@ Current TravisCi build state:
 Current Coveralls state:
 
 [![Coverage Status](https://coveralls.io/repos/github/hypro/hypro/badge.svg)](https://coveralls.io/github/hypro/hypro)
+
+Docker Image:
+
+https://hub.docker.com/r/hypro/hypro/

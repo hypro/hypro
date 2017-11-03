@@ -65,7 +65,9 @@ namespace hypro {
 	Path<Number> Path<Number>::sharedPrefix(const Path<Number>& lhs) const {
 		Path<Number> prefix;
 		for(unsigned pos = 0; pos < mPath.size() && pos < lhs.size(); ++pos) {
+			TRACE("hypro.datastructures","Compare path elements " << mPath.at(pos) << " and " << lhs.at(pos));
 			if( mPath.at(pos) == lhs.at(pos)) {
+				TRACE("hypro.datastructures","Add to shared prefix.");
 				prefix.add(mPath.at(pos));
 			}
 		}

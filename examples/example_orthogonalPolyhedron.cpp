@@ -92,16 +92,20 @@ int main() {
 		std::cout << vertex << std::endl;
 	}
 
-	/* TODO: Fix plotter to allow direct object adding.
+	// TODO: Fix plotter to allow direct object adding.
 	//unsigned test2Id = plotter.addObject(test2.preparePlot(0,1), false);
-	unsigned testId = plotter.addObject(test.preparePlot(0,1), false);
-	unsigned intersectionObject = plotter.addObject(intersection.preparePlot(0,1), false);
+	//unsigned testId = plotter.addObject(test.preparePlot(0,1), false);
+	for(const auto& set : intersection.preparePlot(0,1)){
+		unsigned intersectionObject = plotter.addObject(set);
+		plotter.setObjectColor(intersectionObject, plotting::colors[plotting::orange]);
+	}
+
 	// unsigned unionObject = plotter.addObject(united.preparePlot(0,1), false);
 
-	plotter.setObjectColor(intersectionObject, plotting::colors[plotting::orange]);
+
 	//plotter.setObjectColor(unionObject, plotting::colors[plotting::orange]);
 
 	plotter.plot2d();
-	*/
+
 	return 0;
 }
