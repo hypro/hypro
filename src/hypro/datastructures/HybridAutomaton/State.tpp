@@ -249,6 +249,11 @@ State<Number,Representation,Rargs...> State<Number,Representation,Rargs...>::par
 }
 
 template<typename Number, typename Representation, typename ...Rargs>
+std::vector<Point<Number>> State<Number,Representation,Rargs...>::vertices(std::size_t I) const {
+	return boost::apply_visitor(genericVerticesVisitor<Number>(), mSets.at(I));
+}
+
+template<typename Number, typename Representation, typename ...Rargs>
 std::size_t State<Number,Representation,Rargs...>::getDimension(std::size_t I) const {
 	assert(I < mSets.size());
 	assert(checkConsistency());
@@ -314,7 +319,7 @@ bool State<Number,Representation,Rargs...>::checkConsistency() const {
 template<typename Number, typename Representation, typename ...Rargs>
 void State<Number,Representation,Rargs...>::setSetsSave(const std::vector<boost::variant<Representation,Rargs...>>& sets){
 	assert(checkConsistency());
-	std::cout << "mSets.size(): " << mSets.size() << " mTypes.size(): " << mTypes.size() << " sets.size(): " << sets.size() << std::endl;
+	//std::cout << "mSets.size(): " << mSets.size() << " mTypes.size(): " << mTypes.size() << " sets.size(): " << sets.size() << std::endl;
 	for(std::size_t i=0; i < sets.size(); i++){
 		setSetType(boost::apply_visitor(genericTypeVisitor(), sets.at(i)), i);
 	}

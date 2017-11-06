@@ -357,6 +357,8 @@ class State
 
     State<Number,Representation,Rargs...> partiallyMinkowskiSum(const State<Number,Representation,Rargs...>& rhs, std::size_t I ) const;
 
+    std::vector<Point<Number>> vertices(std::size_t I = 0) const;
+
     std::size_t getDimension(std::size_t I) const;
 
     Number getSupremum(std::size_t I) const;

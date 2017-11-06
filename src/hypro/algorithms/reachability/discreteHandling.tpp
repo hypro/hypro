@@ -99,7 +99,8 @@ namespace reachability {
 			// reduce new initial sets.
 			//collectedSets.removeRedundancy();
 			#ifdef USE_SMART_AGGREGATION
-			aggregationReduction(collectedSets, aggregationPair.first, mSettings.timeBound, mSettings.timeStep);
+			collectedSets.removeRedundancy();
+			//aggregationReduction(collectedSets, aggregationPair.first, mSettings.timeBound, mSettings.timeStep);
 			#endif
 
 			//TODO: Maybe use smth else or use setSetsSave in all functions

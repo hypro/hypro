@@ -1,4 +1,5 @@
 #pragma once
+#include "../../datastructures/Point.h"
 #include "../../representations/GeometricObject.h"
 #include "../../representations/types.h"
 #include "../../types.h"
@@ -259,6 +260,17 @@ public:
 	inline representation_name operator()(const A&) const {
 		return A::type();
 	}
+};
+
+template<typename Number>
+class genericVerticesVisitor
+    : public boost::static_visitor<std::vector<Point<Number>>>
+{
+public:
+	template<typename B>
+    inline std::vector<Point<Number>> operator()(const B& lhs) const {
+ 		return lhs.vertices();
+    }
 };
 
 } // namespace

@@ -102,7 +102,7 @@ namespace reachability {
 		flowpipe_t<Number> flowpipe;
 		std::vector<boost::tuple<Transition<Number>*, State_t<Number>>> nextInitialSets;
 
-		boost::tuple<bool, State_t<Number>, matrix_t<Number>, vector_t<Number>> initialSetup = computeFirstSegment(_state);
+		boost::tuple<bool, State_t<Number>, matrix_t<Number>, vector_t<Number>> initialSetup = computeFirstSegment(_state, mSettings.timeStep);
 #ifdef REACH_DEBUG
 		INFO("hypro.reacher", "Valuation fulfills Invariant?: " << boost::get<0>(initialSetup));
 #endif

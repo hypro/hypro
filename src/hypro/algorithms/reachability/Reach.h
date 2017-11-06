@@ -11,6 +11,7 @@
  */
 
 #pragma once
+#include "FirstSegment.h"
 #include "datastructures/HybridAutomaton/Settings.h"
 #include "datastructures/HybridAutomaton/HybridAutomaton.h"
 #include "datastructures/HybridAutomaton/State.h"
@@ -139,7 +140,7 @@ public:
 private:
 
 	matrix_t<Number> computeTrafoMatrix( const Location<Number>* _loc ) const;
-	boost::tuple<bool, State_t<Number>, matrix_t<Number>, vector_t<Number>> computeFirstSegment( const State_t<Number>& _state ) const;
+	//boost::tuple<bool, State_t<Number>, matrix_t<Number>, vector_t<Number>> computeFirstSegment( const State_t<Number>& _state ) const;
 	bool intersectBadStates( const State_t<Number>& _state ) const;
 };
 
@@ -148,7 +149,6 @@ private:
 
 #include "Reach.tpp"
 #include "discreteHandling.tpp"
-#include "firstSegment.tpp"
 #include "terminationHandling.tpp"
 
 //#include "Reach_SF.h"
