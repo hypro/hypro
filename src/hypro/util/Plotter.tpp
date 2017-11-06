@@ -43,8 +43,7 @@ void Plotter<Number>::plot2d() const {
 
 		writeGnuplot();
 	}
-
-	std::cout << std::endl << "Plotted to " << mFilename << "_pdf.plt" << std::endl;
+	std::cout <<"Plotted to " << mFilename << "_pdf.plt" << std::endl;
 	mOutfile.close();
 }
 
