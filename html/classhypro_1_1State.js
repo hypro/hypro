@@ -43,6 +43,7 @@ var classhypro_1_1State =
     [ "setSetType", "classhypro_1_1State.html#ad09f4d08fd29ffb18803f776ccd839dd", null ],
     [ "setTimestamp", "classhypro_1_1State.html#a15175d62905ccd0a3e14aff4b4c07cf9", null ],
     [ "unite", "classhypro_1_1State.html#a11f2e0d160c5592010fb6f23f51d005d", null ],
+    [ "vertices", "classhypro_1_1State.html#a2227b83d939ac7272f369ab1d1a53fcf", null ],
     [ "operator!=", "classhypro_1_1State.html#a0ec35bff84e449b41f0a91df3561933f", null ],
     [ "operator<<", "classhypro_1_1State.html#aaffdf868554416cdab27ef93d001fc7f", null ],
     [ "operator==", "classhypro_1_1State.html#aeea849d151daa827d6453221723cb4de", null ],

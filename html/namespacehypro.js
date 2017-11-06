@@ -97,6 +97,7 @@ var namespacehypro =
     [ "genericDimensionVisitor", "classhypro_1_1genericDimensionVisitor.html", "classhypro_1_1genericDimensionVisitor" ],
     [ "genericSupremumVisitor", "classhypro_1_1genericSupremumVisitor.html", "classhypro_1_1genericSupremumVisitor" ],
     [ "genericTypeVisitor", "classhypro_1_1genericTypeVisitor.html", "classhypro_1_1genericTypeVisitor" ],
+    [ "genericVerticesVisitor", "classhypro_1_1genericVerticesVisitor.html", "classhypro_1_1genericVerticesVisitor" ],
     [ "LRUCache", "classhypro_1_1LRUCache.html", "classhypro_1_1LRUCache" ],
     [ "Point", "classhypro_1_1Point.html", "classhypro_1_1Point" ],
     [ "Ridge", "classhypro_1_1Ridge.html", "classhypro_1_1Ridge" ],
