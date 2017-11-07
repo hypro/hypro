@@ -50,9 +50,9 @@ addons:
       - graphviz
       - uuid-dev
       - openjdk-9-jre
-      - pgf
-      - texlive-latex-extra
-      - texlive-latex-recommended
+      #- pgf
+      #- texlive-latex-extra
+      #- texlive-latex-recommended
 
 matrix:
   include:
