@@ -7285,6 +7285,8 @@ Possible candidates:
 /home/travis/build/hypro/hypro/src/hypro/types.h:29: warning: documented symbol `typedef hypro::std::set< vector_t< Number >> vectorSet' was not declared or defined.
 /home/travis/build/hypro/hypro/src/hypro/util/Plotter.h:70: warning: documented symbol `Singleton< Plotter< Number > >' was not declared or defined.
 /home/travis/build/hypro/hypro/src/hypro/util/VariablePool.h:28: warning: documented symbol `Singleton< VariablePool >' was not declared or defined.
+error opening bib20390.bbl: No such file or directory
+bibtex command failed: No such file or directory
 .
 Preprocessing /home/travis/build/hypro/hypro/examples/INCOMPLETE_example_benchmarks.cpp...
 Parsing file /home/travis/build/hypro/hypro/examples/INCOMPLETE_example_benchmarks.cpp...
@@ -8056,9 +8058,6 @@ Generating code for file /home/travis/build/hypro/hypro/src/hypro/util/linearOpt
 /home/travis/build/hypro/hypro/doc/markdown/utilityFunctions/plot.md:4: warning: unable to resolve reference to `hypro::Point<Number>' for \ref command
 deprecated:2: warning: unable to resolve link to `#VOCABULARY' for \link command
 deprecated:4: warning: unable to resolve link to `#VOCABULARY' for \link command
-citelist:11: warning: Unexpected new line character
-citelist:21: warning: Unexpected new line character
-citelist:22: warning: Unexpected new line character
 ...
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/z3/z3Context.h...
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/z3/z3Convenience.h...
@@ -23080,102 +23079,10 @@ Generating dependency graph for directory /home/travis/build/hypro/hypro/src/hyp
 Generating dependency graph for directory /home/travis/build/hypro/hypro/src/hypro/datastructures
 Generating dependency graph for directory /home/travis/build/hypro/hypro/src/hypro/representations/Ellipsoids
 Generating dependency graph for directory /home/travis/build/hypro/hypro/examples
-Generating dependThis is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian)
- restricted \write18 enabled.
-entering extended mode
-(./_formulas.tex
-LaTeX2e <2011/06/27>
-Babel <3.9h> and hyphenation patterns for 2 languages loaded.
-(/usr/share/texlive/texmf-dist/tex/latex/base/article.cls
-Document Class: article 2007/10/19 v1.4h Standard LaTeX document class
-(/usr/share/texlive/texmf-dist/tex/latex/base/size10.clo))
-(/usr/share/texlive/texmf-dist/tex/latex/graphics/epsfig.sty
-(/usr/share/texlive/texmf-dist/tex/latex/graphics/graphicx.sty
-(/usr/share/texlive/texmf-dist/tex/latex/graphics/keyval.sty)
-(/usr/share/texlive/texmf-dist/tex/latex/graphics/graphics.sty
-(/usr/share/texlive/texmf-dist/tex/latex/graphics/trig.sty)
-(/usr/share/texlive/texmf-dist/tex/latex/latexconfig/graphics.cfg)
-(/usr/share/texlive/texmf-dist/tex/latex/graphics/dvips.def))))
-(/usr/share/texlive/texmf-dist/tex/latex/amsfonts/amsfonts.sty)
-(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsmath.sty
-For additional information on amsmath, use the `?' option.
-(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amstext.sty
-(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsgen.sty))
-(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsbsy.sty)
-(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsopn.sty))
-(/usr/share/texmf/tex/latex/pgf/frontendlayer/tikz.sty
-(/usr/share/texmf/tex/latex/pgf/basiclayer/pgf.sty
-(/usr/share/texmf/tex/latex/pgf/utilities/pgfrcs.sty
-(/usr/share/texmf/tex/generic/pgf/utilities/pgfutil-common.tex)
-(/usr/share/texmf/tex/generic/pgf/utilities/pgfutil-latex.def
-(/usr/share/texlive/texmf-dist/tex/latex/ms/everyshi.sty))
-(/usr/share/texmf/tex/generic/pgf/utilities/pgfrcs.code.tex))
-(/usr/share/texmf/tex/latex/pgf/basiclayer/pgfcore.sty
-(/usr/share/texmf/tex/latex/pgf/systemlayer/pgfsys.sty
-(/usr/share/texmf/tex/generic/pgf/systemlayer/pgfsys.code.tex
-(/usr/share/texmf/tex/generic/pgf/utilities/pgfkeys.code.tex
-(/usr/share/texmf/tex/generic/pgf/utilities/pgfkeysfiltered.code.tex))
-(/usr/share/texmf/tex/generic/pgf/systemlayer/pgf.cfg)
-(/usr/share/texmf/tex/generic/pgf/systemlayer/pgfsys-dvips.def
-(/usr/share/texmf/tex/generic/pgf/systemlayer/pgfsys-common-postscript.def)))
-(/usr/share/texmf/tex/generic/pgf/systemlayer/pgfsyssoftpath.code.tex)
-(/usr/share/texmf/tex/generic/pgf/systemlayer/pgfsysprotocol.code.tex))
-(/usr/share/texmf/tex/latex/xcolor/xcolor.sty
-(/usr/share/texlive/texmf-dist/tex/latex/latexconfig/color.cfg))
-(/usr/share/texmf/tex/generic/pgf/basiclayer/pgfcore.code.tex
-(/usr/share/texmf/tex/generic/pgf/math/pgfmath.code.tex
-(/usr/share/texmf/tex/generic/pgf/math/pgfmathcalc.code.tex
-(/usr/share/texmf/tex/generic/pgf/math/pgfmathutil.code.tex)
-(/usr/share/texmf/tex/generic/pgf/math/pgfmathparser.code.tex)
-(/usr/share/texmf/tex/generic/pgf/math/pgfmathfunctions.code.tex
-(/usr/share/texmf/tex/generic/pgf/math/pgfmathfunctions.basic.code.tex)
-(/usr/share/texmf/tex/generic/pgf/math/pgfmathfunctions.trigonometric.code.tex)
-(/usr/share/texmf/tex/generic/pgf/math/pgfmathfunctions.random.code.tex)
-(/usr/share/texmf/tex/generic/pgf/math/pgfmathfunctions.comparison.code.tex)
-(/usr/share/texmf/tex/generic/pgf/math/pgfmathfunctions.base.code.tex)
-(/usr/share/texmf/tex/generic/pgf/math/pgfmathfunctions.round.code.tex)
-(/usr/share/texmf/tex/generic/pgf/math/pgfmathfunctions.misc.code.tex)))
-(/usr/share/texmf/tex/generic/pgf/math/pgfmathfloat.code.tex))
-(/usr/share/texmf/tex/generic/pgf/basiclayer/pgfcorepoints.code.tex)
-(/usr/share/texmf/tex/generic/pgf/basiclayer/pgfcorepathconstruct.code.tex)
-(/usr/share/texmf/tex/generic/pgf/basiclayer/pgfcorepathusage.code.tex)
-(/usr/share/texmf/tex/generic/pgf/basiclayer/pgfcorescopes.code.tex)
-(/usr/share/texmf/tex/generic/pgf/basiclayer/pgfcoregraphicstate.code.tex)
-(/usr/share/texmf/tex/generic/pgf/basiclayer/pgfcoretransformations.code.tex)
-(/usr/share/texmf/tex/generic/pgf/basiclayer/pgfcorequick.code.tex)
-(/usr/share/texmf/tex/generic/pgf/basiclayer/pgfcoreobjects.code.tex)
-(/usr/share/texmf/tex/generic/pgf/basiclayer/pgfcorepathprocessing.code.tex)
-(/usr/share/texmf/tex/generic/pgf/basiclayer/pgfcorearrows.code.tex)
-(/usr/share/texmf/tex/generic/pgf/basiclayer/pgfcoreshade.code.tex)
-(/usr/share/texmf/tex/generic/pgf/basiclayer/pgfcoreimage.code.tex
-(/usr/share/texmf/tex/generic/pgf/basiclayer/pgfcoreexternal.code.tex))
-(/usr/share/texmf/tex/generic/pgf/basiclayer/pgfcorelayers.code.tex)
-(/usr/share/texmf/tex/generic/pgf/basiclayer/pgfcoretransparency.code.tex)
-(/usr/share/texmf/tex/generic/pgf/basiclayer/pgfcorepatterns.code.tex)))
-(/usr/share/texmf/tex/generic/pgf/modules/pgfmoduleshapes.code.tex)
-(/usr/share/texmf/tex/generic/pgf/modules/pgfmoduleplot.code.tex)
-(/usr/share/texmf/tex/latex/pgf/compatibility/pgfcomp-version-0-65.sty)
-(/usr/share/texmf/tex/latex/pgf/compatibility/pgfcomp-version-1-18.sty))
-(/usr/share/texmf/tex/latex/pgf/utilities/pgffor.sty
-(/usr/share/texmf/tex/latex/pgf/utilities/pgfkeys.sty
-(/usr/share/texmf/tex/generic/pgf/utilities/pgfkeys.code.tex))
-(/usr/share/texmf/tex/generic/pgf/utilities/pgffor.code.tex))
-(/usr/share/texmf/tex/generic/pgf/frontendlayer/tikz/tikz.code.tex
-(/usr/share/texmf/tex/generic/pgf/libraries/pgflibraryplothandlers.code.tex)
-(/usr/share/texmf/tex/generic/pgf/modules/pgfmodulematrix.code.tex)
-(/usr/share/texmf/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibrarytopat
-hs.code.tex)))
-No file _formulas.aux.
-ABD: EveryShipout initializing macros
-(/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd)
-(/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd) [1] [2] [3] [4]
-[5] [6] [7] [8] [9] [10] [11] [12] [13] [14] [15] [16] [17] [18] [19] [20]
-[21] [22] [23] [24] [25] [26] [27] [28] [29] [30] [31] [32] [33] [34] [35]
-[36] (./_formulas.aux) )
-Output written on _formulas.dvi (36 pages, 12508 bytes).
-Transcript written on _formulas.log.
-sh: 1: gs: not found
-error: Problem running ghostscript gs -q -g520x66 -r384x384x -sDEVICE=ppmraw -sOutputFile=_form0.pnm -dNOPAUSE -dBATCH -- _form0.ps. Check your installation!
+Generating dependsh: 1: latex: not found
+error: Problems running latex. Check your installation or look for typos in _formulas.tex and check _formulas.log!
+sh: 1: dvips: not found
+error: Problems running dvips. Check your installation!
 /home/travis/build/hypro/hypro/doc/markdown/hypro.md:6: warning: unable to resolve reference to `gettingStarted' for \ref command
 /home/travis/build/hypro/hypro/doc/markdown/hypro.md:8: warning: unable to resolve reference to `stateSets' for \ref command
 /home/travis/build/hypro/hypro/doc/markdown/hypro.md:10: warning: unable to resolve reference to `utilFunc' for \ref command
