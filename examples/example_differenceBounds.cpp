@@ -12,9 +12,11 @@ typedef double Number;
 hypro::DifferenceBounds <Number> testDBM;
 hypro::DifferenceBounds <Number> testDBM2;
 hypro::DifferenceBounds <Number> testDBM3;
+hypro::HPolytope <Number> testHPolytope;
 void createTestDBM();
 void createTestDBM2();
 void createTestDBM3();
+void createTestHPolytope();
 void testComparison();
 void testPlus();
 void testVertices();
@@ -30,12 +32,15 @@ void testIntersectConstraint();
 void testContainsPoint();
 void testIntersectDBM();
 void testUnion();
+void testConversionDifferenceBoundsToDifferenceBounds();
+void testConversionHPolyToDBM();
 void testPrint();
 
 int main() {
     createTestDBM();
     createTestDBM2();
     createTestDBM3();
+    createTestHPolytope();
     //testComparison();
     //testPlus();
     //testVertices();
@@ -50,7 +55,9 @@ int main() {
     //testIntersectConstraint();
     //testContainsPoint();
     //testIntersectDBM();
-    testUnion();
+    //testUnion();
+    //testConversionDifferenceBoundsToDifferenceBounds();
+    testConversionHPolyToDBM();
     //testPrint();
     return 0;
 }
@@ -93,6 +100,31 @@ void createTestDBM3(){
     testDBM3 = testDBM3.shift(2, -1.0);
 }
 
+void createTestHPolytope(){
+    std::vector<hypro::Point<Number>> vec;
+    std::vector<Number> coord1;
+    coord1.push_back(2);
+    coord1.push_back(4);
+
+    std::vector<Number> coord2;
+    coord2.push_back(4);
+    coord2.push_back(4);
+
+    std::vector<Number> coord3;
+    coord3.push_back(3);
+    coord3.push_back(4.5);
+
+    std::vector<Number> coord4;
+    coord4.push_back(3);
+    coord4.push_back(3.5);
+
+    vec.push_back(hypro::Point<Number>(coord1));
+    vec.push_back(hypro::Point<Number>(coord2));
+    vec.push_back(hypro::Point<Number>(coord3));
+    vec.push_back(hypro::Point<Number>(coord4));
+
+    testHPolytope = hypro::HPolytope<Number>(vec);
+}
 
 void testComparison(){
     hypro::DifferenceBounds<Number>::DBMEntry infty = hypro::DifferenceBounds<Number>::DBMEntry(0,hypro::DifferenceBounds<Number>::BOUND_TYPE::INFTY);
@@ -368,6 +400,42 @@ void testUnion(){
     hypro::Plotter<Number>::getInstance().plot2d();
 }
 
+void testConversionDifferenceBoundsToDifferenceBounds(){
+    std::cout<< "Test conversion from DBM to DBM: \n";
+    hypro::DifferenceBounds <Number> conversion = hypro::Converter<Number>::toDifferenceBounds(testDBM);
+    std::cout<< conversion;
+    std::vector<hypro::Point<Number>> conversionVerts = conversion.vertices();
+    std::cout<< conversionVerts;
+
+    //plot to pdf
+    hypro::Plotter<Number>::getInstance().clear();
+
+    unsigned obj2 = hypro::Plotter<Number>::getInstance().addObject(conversionVerts);
+    hypro::Plotter<Number>::getInstance().setObjectColor(obj2, hypro::plotting::colors[hypro::plotting::red]);
+
+    // create a *.plt file (gnuplot).
+    hypro::Plotter<Number>::getInstance().setFilename("conversionDBMDBMTest");
+    hypro::Plotter<Number>::getInstance().plot2d();
+}
+
+void testConversionHPolyToDBM(){
+    std::cout<< "Test conversion from HPoly to DBM: \n";
+
+    //plot to pdf
+    hypro::Plotter<Number>::getInstance().clear();
+    hypro::DifferenceBounds <Number> conversion = hypro::Converter<Number>::toDifferenceBounds(testHPolytope);
+    unsigned obj2 = hypro::Plotter<Number>::getInstance().addObject(testHPolytope.vertices());
+    std::cout << "HPolytope vertices:" << testHPolytope.vertices() << "\n";
+    hypro::Plotter<Number>::getInstance().setObjectColor(obj2, hypro::plotting::colors[hypro::plotting::red]);
+
+    unsigned obj3 = hypro::Plotter<Number>::getInstance().addObject(conversion.vertices());
+    std::cout << "Conversion vertices:" << conversion.vertices() << "\n";
+    hypro::Plotter<Number>::getInstance().setObjectColor(obj3, hypro::plotting::colors[hypro::plotting::green]);
+
+    // create a *.plt file (gnuplot).
+    hypro::Plotter<Number>::getInstance().setFilename("conversionHPolyToDBMTest");
+    hypro::Plotter<Number>::getInstance().plot2d();
+}
 
 void testPrint(){
     std::cout<< "Test instance DBM: \n";
