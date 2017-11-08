@@ -97,6 +97,15 @@ class Converter {
 		static Zonotope toZonotope(const VPolytope& source, const CONV_MODE = CONV_MODE::OVER);
 		static Zonotope toZonotope(const SupportFunction& source, const CONV_MODE = CONV_MODE::OVER, std::size_t numberOfDirections = defaultTemplateDirectionCount );
 		static Zonotope toZonotope(const Zonotope& source, const CONV_MODE = CONV_MODE::EXACT);
+
+		static DifferenceBounds toDifferenceBounds(const Box& source, const CONV_MODE = CONV_MODE::EXACT);
+		static DifferenceBounds toDifferenceBounds(const ConstraintSet& source, const CONV_MODE = CONV_MODE::EXACT);
+		static DifferenceBounds toDifferenceBounds(const Ellipsoid& source, const CONV_MODE = CONV_MODE::EXACT);
+		static DifferenceBounds toDifferenceBounds(const HPolytope& source, const CONV_MODE = CONV_MODE::EXACT);
+		static DifferenceBounds toDifferenceBounds(const VPolytope& source, const CONV_MODE = CONV_MODE::EXACT);
+		static DifferenceBounds toDifferenceBounds(const SupportFunction& source, const std::vector<vector_t<Number>>& additionalDirections = std::vector<vector_t<Number>>(), const CONV_MODE = CONV_MODE::OVER, std::size_t numberOfDirections = defaultTemplateDirectionCount );
+		static DifferenceBounds toDifferenceBounds(const Zonotope& source, const CONV_MODE = CONV_MODE::EXACT);
+		static DifferenceBounds toDifferenceBounds(const DifferenceBounds& source, const CONV_MODE = CONV_MODE::EXACT);
 };
 
 template<typename Number>
@@ -152,6 +161,7 @@ using DifferenceBounds = typename Converter<Number>::DifferenceBounds;
 #include "converterToVPolytope.tpp"
 #include "converterToSupportFunction.tpp"
 #include "converterToZonotope.tpp"
+#include "converterToDifferenceBounds.tpp"
 
 } // namespace hypro
 
