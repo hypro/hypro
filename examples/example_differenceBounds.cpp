@@ -34,6 +34,14 @@ void testIntersectDBM();
 void testUnion();
 void testConversionDifferenceBoundsToDifferenceBounds();
 void testConversionHPolyToDBM();
+void testConversionBoxToDBM();
+void testSatisfiesHalfspace();
+void testSatisfiesHalfspaces();
+void testIntersectHalfspace();
+void testIntersectHalfspaces();
+void testLinearTransformation();
+void testAffineTransformation();
+void testMinkowskiSum();
 void testPrint();
 
 int main() {
@@ -57,7 +65,15 @@ int main() {
     //testIntersectDBM();
     //testUnion();
     //testConversionDifferenceBoundsToDifferenceBounds();
-    testConversionHPolyToDBM();
+    //testConversionHPolyToDBM();
+    //testConversionBoxToDBM();
+    //testSatisfiesHalfspace();
+    //testSatisfiesHalfspaces();
+    //testIntersectHalfspace();
+    //testIntersectHalfspaces();
+    //testLinearTransformation();
+    //testAffineTransformation();
+    testMinkowskiSum();
     //testPrint();
     return 0;
 }
@@ -437,6 +453,229 @@ void testConversionHPolyToDBM(){
     hypro::Plotter<Number>::getInstance().plot2d();
 }
 
+void testConversionBoxToDBM(){
+    std::cout<< "Test conversion from Box to DBM: \n";
+    std::vector<carl::Interval<Number> > boundaries;
+    boundaries.push_back(carl::Interval<Number>(2,4));
+    boundaries.push_back(carl::Interval<Number>(2,4));
+
+    hypro::Box<Number> box = hypro::Box<Number>(boundaries);
+
+    //plot to pdf
+    hypro::Plotter<Number>::getInstance().clear();
+    unsigned obj3 = hypro::Plotter<Number>::getInstance().addObject(box.vertices());
+    std::cout << "Box vertices:" << box.vertices() << "\n";
+    hypro::Plotter<Number>::getInstance().setObjectColor(obj3, hypro::plotting::colors[hypro::plotting::red]);
+
+    hypro::DifferenceBounds <Number> conversion = hypro::Converter<Number>::toDifferenceBounds(box);
+    unsigned obj2 = hypro::Plotter<Number>::getInstance().addObject(conversion.vertices());
+    std::cout << "Conversion vertices:" << conversion.vertices() << "\n";
+    hypro::Plotter<Number>::getInstance().setObjectColor(obj2, hypro::plotting::colors[hypro::plotting::green]);
+    // create a *.plt file (gnuplot).
+    hypro::Plotter<Number>::getInstance().setFilename("conversionBoxToDBMTest");
+    hypro::Plotter<Number>::getInstance().plot2d();
+}
+
+void testSatisfiesHalfspace(){
+    std::cout<< "Test satisfies halfspace: \n";
+    hypro::Halfspace<Number> hp1({Number(1),Number(1)},Number(16));
+    std::pair<hypro::CONTAINMENT, hypro::DifferenceBounds<Number>> res = testDBM.satisfiesHalfspace(hp1);
+
+    std::cout << "Containment is: " << res.first;
+    //plot to pdf
+    hypro::Plotter<Number>::getInstance().clear();
+    unsigned obj1 = hypro::Plotter<Number>::getInstance().addObject(testDBM.vertices());
+    std::cout << "DBM vertices:" << testDBM.vertices() << "\n";
+    hypro::Plotter<Number>::getInstance().setObjectColor(obj1, hypro::plotting::colors[hypro::plotting::red]);
+
+    unsigned obj2 = hypro::Plotter<Number>::getInstance().addObject(res.second.vertices());
+    std::cout << "DBM vertices:" << res.second.vertices() << "\n";
+    hypro::Plotter<Number>::getInstance().setObjectColor(obj2, hypro::plotting::colors[hypro::plotting::green]);
+
+    unsigned obj3 = hypro::Plotter<Number>::getInstance().addObject(hp1);
+    hypro::Plotter<Number>::getInstance().setObjectColor(obj3, hypro::plotting::colors[hypro::plotting::blue]);
+
+    // create a *.plt file (gnuplot).
+    hypro::Plotter<Number>::getInstance().setFilename("satisfiesHalfspaceTest");
+    hypro::Plotter<Number>::getInstance().plot2d();
+}
+
+void testSatisfiesHalfspaces(){
+    std::cout<< "Test satisfies halfspaces: \n";
+    hypro::Halfspace<Number> hp1({Number(1),Number(1)},Number(16));
+    hypro::Halfspace<Number> hp2({Number(1),Number(0)},Number(7.5));
+
+    hypro::matrix_t<Number> mat = hypro::matrix_t<Number>(2,2);
+    mat << 1,1,1,0;
+
+    hypro::vector_t<Number> vec = hypro::vector_t<Number>(2);
+    vec << 16,7.5;
+
+    std::pair<hypro::CONTAINMENT, hypro::DifferenceBounds<Number>> res = testDBM.satisfiesHalfspaces(mat,vec);
+
+    std::cout << "Containment is: " << res.first;
+    //plot to pdf
+    hypro::Plotter<Number>::getInstance().clear();
+    unsigned obj1 = hypro::Plotter<Number>::getInstance().addObject(testDBM.vertices());
+    std::cout << "DBM vertices:" << testDBM.vertices() << "\n";
+    hypro::Plotter<Number>::getInstance().setObjectColor(obj1, hypro::plotting::colors[hypro::plotting::red]);
+
+    unsigned obj2 = hypro::Plotter<Number>::getInstance().addObject(res.second.vertices());
+    std::cout << "DBM vertices:" << res.second.vertices() << "\n";
+    hypro::Plotter<Number>::getInstance().setObjectColor(obj2, hypro::plotting::colors[hypro::plotting::green]);
+
+    unsigned obj3 = hypro::Plotter<Number>::getInstance().addObject(hp1);
+    hypro::Plotter<Number>::getInstance().setObjectColor(obj3, hypro::plotting::colors[hypro::plotting::blue]);
+
+    unsigned obj4 = hypro::Plotter<Number>::getInstance().addObject(hp2);
+    hypro::Plotter<Number>::getInstance().setObjectColor(obj4, hypro::plotting::colors[hypro::plotting::blue]);
+
+    // create a *.plt file (gnuplot).
+    hypro::Plotter<Number>::getInstance().setFilename("satisfiesHalfspacesTest");
+    hypro::Plotter<Number>::getInstance().plot2d();
+}
+
+void testIntersectHalfspace(){
+    std::cout<< "Test intersect halfspace: \n";
+    hypro::Halfspace<Number> hp1({Number(1),Number(1)},Number(16));
+    hypro::DifferenceBounds<Number> res = testDBM.intersectHalfspace(hp1);
+    //plot to pdf
+    hypro::Plotter<Number>::getInstance().clear();
+    unsigned obj1 = hypro::Plotter<Number>::getInstance().addObject(testDBM.vertices());
+    std::cout << "DBM vertices:" << testDBM.vertices() << "\n";
+    hypro::Plotter<Number>::getInstance().setObjectColor(obj1, hypro::plotting::colors[hypro::plotting::red]);
+
+    unsigned obj2 = hypro::Plotter<Number>::getInstance().addObject(res.vertices());
+    std::cout << "DBM vertices:" << res.vertices() << "\n";
+    hypro::Plotter<Number>::getInstance().setObjectColor(obj2, hypro::plotting::colors[hypro::plotting::green]);
+
+    unsigned obj3 = hypro::Plotter<Number>::getInstance().addObject(hp1);
+    hypro::Plotter<Number>::getInstance().setObjectColor(obj3, hypro::plotting::colors[hypro::plotting::blue]);
+
+    // create a *.plt file (gnuplot).
+    hypro::Plotter<Number>::getInstance().setFilename("intersectHalfspaceTest");
+    hypro::Plotter<Number>::getInstance().plot2d();
+}
+void testIntersectHalfspaces(){
+
+    std::cout<< "Test intersect halfspaces: \n";
+    hypro::Halfspace<Number> hp1({Number(1),Number(1)},Number(16));
+    hypro::Halfspace<Number> hp2({Number(1),Number(0)},Number(7.5));
+
+    hypro::matrix_t<Number> mat = hypro::matrix_t<Number>(2,2);
+    mat << 1,1,1,0;
+
+    hypro::vector_t<Number> vec = hypro::vector_t<Number>(2);
+    vec << 16,7.5;
+
+    hypro::DifferenceBounds<Number> res = testDBM.intersectHalfspaces(mat,vec);
+
+    //plot to pdf
+    hypro::Plotter<Number>::getInstance().clear();
+    unsigned obj1 = hypro::Plotter<Number>::getInstance().addObject(testDBM.vertices());
+    std::cout << "DBM vertices:" << testDBM.vertices() << "\n";
+    hypro::Plotter<Number>::getInstance().setObjectColor(obj1, hypro::plotting::colors[hypro::plotting::red]);
+
+    unsigned obj2 = hypro::Plotter<Number>::getInstance().addObject(res.vertices());
+    std::cout << "DBM vertices:" << res.vertices() << "\n";
+    hypro::Plotter<Number>::getInstance().setObjectColor(obj2, hypro::plotting::colors[hypro::plotting::green]);
+
+    unsigned obj3 = hypro::Plotter<Number>::getInstance().addObject(hp1);
+    hypro::Plotter<Number>::getInstance().setObjectColor(obj3, hypro::plotting::colors[hypro::plotting::blue]);
+
+    unsigned obj4 = hypro::Plotter<Number>::getInstance().addObject(hp2);
+    hypro::Plotter<Number>::getInstance().setObjectColor(obj4, hypro::plotting::colors[hypro::plotting::blue]);
+
+    // create a *.plt file (gnuplot).
+    hypro::Plotter<Number>::getInstance().setFilename("intersectHalfspacesTest");
+    hypro::Plotter<Number>::getInstance().plot2d();
+}
+
+void testLinearTransformation(){
+    hypro::matrix_t<Number> A(2,2);
+    A(0,0) = 1;
+    A(0,1) = 2;
+    A(1,0) = 3;
+    A(1,1) = 4;
+
+    hypro::DifferenceBounds <Number> res = testDBM.linearTransformation(A);
+    hypro::HPolytope <Number> controlPolytope=hypro::Converter<Number>::toHPolytope(testDBM).linearTransformation(A);
+
+    hypro::Plotter<Number>::getInstance().clear();
+    unsigned obj1 = hypro::Plotter<Number>::getInstance().addObject(testDBM.vertices());
+    std::cout << "DBM vertices:" << testDBM.vertices() << "\n";
+    hypro::Plotter<Number>::getInstance().setObjectColor(obj1, hypro::plotting::colors[hypro::plotting::red]);
+
+    unsigned obj2 = hypro::Plotter<Number>::getInstance().addObject(res.vertices());
+    std::cout << "DBM vertices:" << res.vertices() << "\n";
+    hypro::Plotter<Number>::getInstance().setObjectColor(obj2, hypro::plotting::colors[hypro::plotting::green]);
+
+    unsigned obj3 = hypro::Plotter<Number>::getInstance().addObject(controlPolytope.vertices());
+    std::cout << "Control Polytope vertices:" << controlPolytope.vertices() << "\n";
+    hypro::Plotter<Number>::getInstance().setObjectColor(obj3, hypro::plotting::colors[hypro::plotting::blue]);
+
+    // create a *.plt file (gnuplot).
+    hypro::Plotter<Number>::getInstance().setFilename("linearTransformationTest");
+    hypro::Plotter<Number>::getInstance().plot2d();
+}
+
+void testAffineTransformation(){
+    hypro::matrix_t<Number> A(2,2);
+    A(0,0) = 1;
+    A(0,1) = 2;
+    A(1,0) = 3;
+    A(1,1) = 4;
+
+    hypro::vector_t<Number> b(2);
+    b(0)=1;
+    b(1)=1;
+
+    hypro::DifferenceBounds <Number> res = testDBM.affineTransformation(A,b);
+    hypro::HPolytope <Number> controlPolytope=hypro::Converter<Number>::toHPolytope(testDBM).affineTransformation(A,b);
+
+    hypro::Plotter<Number>::getInstance().clear();
+    unsigned obj1 = hypro::Plotter<Number>::getInstance().addObject(testDBM.vertices());
+    std::cout << "DBM vertices:" << testDBM.vertices() << "\n";
+    hypro::Plotter<Number>::getInstance().setObjectColor(obj1, hypro::plotting::colors[hypro::plotting::red]);
+
+    unsigned obj2 = hypro::Plotter<Number>::getInstance().addObject(res.vertices());
+    std::cout << "DBM vertices:" << res.vertices() << "\n";
+    hypro::Plotter<Number>::getInstance().setObjectColor(obj2, hypro::plotting::colors[hypro::plotting::green]);
+
+    unsigned obj3 = hypro::Plotter<Number>::getInstance().addObject(controlPolytope.vertices());
+    std::cout << "Control Polytope vertices:" << controlPolytope.vertices() << "\n";
+    hypro::Plotter<Number>::getInstance().setObjectColor(obj3, hypro::plotting::colors[hypro::plotting::blue]);
+
+    // create a *.plt file (gnuplot).
+    hypro::Plotter<Number>::getInstance().setFilename("affineTransformationTest");
+    hypro::Plotter<Number>::getInstance().plot2d();
+}
+
+void testMinkowskiSum(){
+    hypro::DifferenceBounds <Number> res = testDBM.minkowskiSum(testDBM2);
+    hypro::HPolytope <Number> controlPolytope=hypro::Converter<Number>::toHPolytope(testDBM).minkowskiSum(hypro::Converter<Number>::toHPolytope(testDBM2));
+
+    hypro::Plotter<Number>::getInstance().clear();
+    unsigned obj1 = hypro::Plotter<Number>::getInstance().addObject(testDBM.vertices());
+    std::cout << "DBM vertices:" << testDBM.vertices() << "\n";
+    hypro::Plotter<Number>::getInstance().setObjectColor(obj1, hypro::plotting::colors[hypro::plotting::red]);
+
+    unsigned obj2 = hypro::Plotter<Number>::getInstance().addObject(testDBM2.vertices());
+    std::cout << "DBM vertices:" << testDBM2.vertices() << "\n";
+    hypro::Plotter<Number>::getInstance().setObjectColor(obj2, hypro::plotting::colors[hypro::plotting::blue]);
+
+    unsigned obj3 = hypro::Plotter<Number>::getInstance().addObject(res.vertices());
+    std::cout << "Result  vertices:" << res.vertices() << "\n";
+    hypro::Plotter<Number>::getInstance().setObjectColor(obj3, hypro::plotting::colors[hypro::plotting::green]);
+
+    unsigned obj4 = hypro::Plotter<Number>::getInstance().addObject(controlPolytope.vertices());
+    std::cout << "Result  vertices:" << controlPolytope.vertices() << "\n";
+    hypro::Plotter<Number>::getInstance().setObjectColor(obj4, hypro::plotting::colors[hypro::plotting::orange]);
+
+    // create a *.plt file (gnuplot).
+    hypro::Plotter<Number>::getInstance().setFilename("minkowskiSumTest");
+    hypro::Plotter<Number>::getInstance().plot2d();
+}
 void testPrint(){
     std::cout<< "Test instance DBM: \n";
     std::cout<<testDBM;

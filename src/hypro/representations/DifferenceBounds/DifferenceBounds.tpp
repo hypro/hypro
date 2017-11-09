@@ -129,14 +129,16 @@ namespace hypro {
 
     template <typename Number, typename Converter>
     std::pair<CONTAINMENT, DifferenceBoundsT<Number, Converter>> DifferenceBoundsT<Number, Converter>::satisfiesHalfspace( const Halfspace<Number>& rhs ) const{
-        // TODO we need conversion polytopy-> dbm
-        return std::make_pair(CONTAINMENT::FULL,DifferenceBoundsT<Number,Converter>());
+        hypro::HPolytopeT<Number, Converter> tmp = Converter::toHPolytope(*this);
+        std::pair<CONTAINMENT, HPolytopeT<Number, Converter>> res = tmp.satisfiesHalfspace(rhs);
+        return std::make_pair(res.first,Converter::toDifferenceBounds(res.second));
     }
 
     template <typename Number, typename Converter>
     std::pair<CONTAINMENT, DifferenceBoundsT<Number, Converter>> DifferenceBoundsT<Number, Converter>::satisfiesHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const{
-        // TODO we need conversion polytopy-> dbm
-        return std::make_pair(CONTAINMENT::FULL,DifferenceBoundsT<Number,Converter>());
+        hypro::HPolytopeT<Number, Converter> tmp = Converter::toHPolytope(*this);
+        std::pair<CONTAINMENT, HPolytopeT<Number, Converter>> res = tmp.satisfiesHalfspaces(_mat,_vec);
+        return std::make_pair(res.first,Converter::toDifferenceBounds(res.second));
     }
 
     template <typename Number, typename Converter>
@@ -158,20 +160,21 @@ namespace hypro {
 
     template <typename Number, typename Converter>
     DifferenceBoundsT<Number,Converter> DifferenceBoundsT<Number, Converter>::linearTransformation( const matrix_t<Number>& A ) const{
-        // TODO we need backwards conversion hpoly to dbm for this
-        return DifferenceBoundsT<Number,Converter>();
+        hypro::HPolytopeT<Number, Converter> tmp = Converter::toHPolytope(*this);
+        return Converter::toDifferenceBounds(tmp.linearTransformation(A));
     }
 
     template <typename Number, typename Converter>
     DifferenceBoundsT<Number,Converter> DifferenceBoundsT<Number, Converter>::affineTransformation( const matrix_t<Number>& A, const vector_t<Number>& b ) const{
-        // TODO we need backwards conversion hpoly to dbm for this
-        return DifferenceBoundsT<Number,Converter>();
+        hypro::HPolytopeT<Number, Converter> tmp = Converter::toHPolytope(*this);
+        return Converter::toDifferenceBounds(tmp.affineTransformation(A,b));
     }
 
     template <typename Number, typename Converter>
     DifferenceBoundsT<Number,Converter> DifferenceBoundsT<Number, Converter>::minkowskiSum( const DifferenceBoundsT<Number,Converter>& _rhs ) const{
-        // TODO we need backwards conversion hpoly to dbm for this
-        return DifferenceBoundsT<Number,Converter>();
+        hypro::HPolytopeT<Number, Converter> tmp1 = Converter::toHPolytope(*this);
+        hypro::HPolytopeT<Number, Converter> tmp2 = Converter::toHPolytope(_rhs);
+        return Converter::toDifferenceBounds(tmp1.minkowskiSum(tmp2));
     }
 
     template <typename Number, typename Converter>
@@ -193,14 +196,14 @@ namespace hypro {
 
     template <typename Number, typename Converter>
     DifferenceBoundsT<Number,Converter> DifferenceBoundsT<Number, Converter>::intersectHalfspace( const Halfspace<Number>& hs ) const{
-        // TODO we need conversion polytopy-> dbm
-        return DifferenceBoundsT<Number,Converter>();
+        hypro::HPolytopeT<Number, Converter> tmp = Converter::toHPolytope(*this);
+        return Converter::toDifferenceBounds(tmp.intersectHalfspace(hs));
     }
 
     template <typename Number, typename Converter>
     DifferenceBoundsT<Number,Converter> DifferenceBoundsT<Number, Converter>::intersectHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const{
-        // TODO we need conversion polytopy-> dbm
-        return DifferenceBoundsT<Number,Converter>();
+        hypro::HPolytopeT<Number, Converter> tmp = Converter::toHPolytope(*this);
+        return Converter::toDifferenceBounds(tmp.intersectHalfspaces(_mat,_vec));
     }
 
     template <typename Number, typename Converter>
