@@ -12,10 +12,12 @@ typedef double Number;
 hypro::DifferenceBounds <Number> testDBM;
 hypro::DifferenceBounds <Number> testDBM2;
 hypro::DifferenceBounds <Number> testDBM3;
+hypro::DifferenceBounds <Number> testDBMExtra;
 hypro::HPolytope <Number> testHPolytope;
 void createTestDBM();
 void createTestDBM2();
 void createTestDBM3();
+void createTestDBMExtra();
 void createTestHPolytope();
 void testComparison();
 void testPlus();
@@ -42,12 +44,17 @@ void testIntersectHalfspaces();
 void testLinearTransformation();
 void testAffineTransformation();
 void testMinkowskiSum();
+void testExtraM();
+void testExtraMPlus();
+void testExtraLU();
+void testExtraLUPlus();
 void testPrint();
 
 int main() {
     createTestDBM();
     createTestDBM2();
     createTestDBM3();
+    createTestDBMExtra();
     createTestHPolytope();
     //testComparison();
     //testPlus();
@@ -73,7 +80,11 @@ int main() {
     //testIntersectHalfspaces();
     //testLinearTransformation();
     //testAffineTransformation();
-    testMinkowskiSum();
+    //testMinkowskiSum();
+    //testExtraM();
+    testExtraMPlus();
+    //testExtraLU();
+    //testExtraLUPlus();
     //testPrint();
     return 0;
 }
@@ -114,6 +125,23 @@ void createTestDBM3(){
     // shift dbm 0.5 to the right and 1 down
     testDBM3 = testDBM.shift(1,0.5);
     testDBM3 = testDBM3.shift(2, -1.0);
+}
+
+
+void createTestDBMExtra(){
+    hypro::matrix_t<hypro::DifferenceBounds<Number>::DBMEntry> mat = hypro::matrix_t<hypro::DifferenceBounds<Number>::DBMEntry>(3,3);
+    mat << hypro::DifferenceBounds<Number>::DBMEntry(0,hypro::DifferenceBounds<Number>::BOUND_TYPE::SMALLER_EQ),
+            hypro::DifferenceBounds<Number>::DBMEntry(-4.0,hypro::DifferenceBounds<Number>::BOUND_TYPE::SMALLER_EQ),
+            hypro::DifferenceBounds<Number>::DBMEntry(-4.0,hypro::DifferenceBounds<Number>::BOUND_TYPE::SMALLER_EQ),
+            hypro::DifferenceBounds<Number>::DBMEntry(9.0,hypro::DifferenceBounds<Number>::BOUND_TYPE::SMALLER_EQ),
+            hypro::DifferenceBounds<Number>::DBMEntry(0.0,hypro::DifferenceBounds<Number>::BOUND_TYPE::SMALLER_EQ),
+            hypro::DifferenceBounds<Number>::DBMEntry(0.0, hypro::DifferenceBounds<Number>::BOUND_TYPE::SMALLER_EQ),
+            hypro::DifferenceBounds<Number>::DBMEntry(11.0,hypro::DifferenceBounds<Number>::BOUND_TYPE::SMALLER_EQ),
+            hypro::DifferenceBounds<Number>::DBMEntry(2.0,hypro::DifferenceBounds<Number>::BOUND_TYPE::SMALLER_EQ),
+            hypro::DifferenceBounds<Number>::DBMEntry(0.0,hypro::DifferenceBounds<Number>::BOUND_TYPE::SMALLER_EQ);
+    testDBMExtra = hypro::DifferenceBounds<Number>();
+    testDBMExtra.setDBM(mat);
+    testDBMExtra.setTimeHorizon(20.0);
 }
 
 void createTestHPolytope(){
@@ -676,6 +704,137 @@ void testMinkowskiSum(){
     hypro::Plotter<Number>::getInstance().setFilename("minkowskiSumTest");
     hypro::Plotter<Number>::getInstance().plot2d();
 }
+
+
+void testExtraM(){
+    std::cout<< "Test ExtraM: \n";
+    hypro::vector_t<hypro::DifferenceBounds<Number>::DBMEntry> MBounds(3); //+1 for 0 clock
+    /*
+     * MBounds(x_0)=0
+     * MBounds(x_1)=3
+     * MBounds(x_2)=13
+     */
+    MBounds << hypro::DifferenceBounds<Number>::DBMEntry(0,hypro::DifferenceBounds<Number>::BOUND_TYPE::SMALLER_EQ),
+    hypro::DifferenceBounds<Number>::DBMEntry(3.0,hypro::DifferenceBounds<Number>::BOUND_TYPE::SMALLER_EQ),
+    hypro::DifferenceBounds<Number>::DBMEntry(13,hypro::DifferenceBounds<Number>::BOUND_TYPE::SMALLER_EQ);
+
+    std::cout << "Original DBM: \n" << testDBMExtra << "\n";
+    std::cout << "Extrapolated DBM: \n" << testDBMExtra.extraM(MBounds) << "\n";
+    //plot to pdf
+    hypro::Plotter<Number>::getInstance().clear();
+    unsigned obj1 = hypro::Plotter<Number>::getInstance().addObject(testDBMExtra.vertices());
+    std::cout << "Original DBM vertices:" << testDBMExtra.vertices() << "\n";
+    hypro::Plotter<Number>::getInstance().setObjectColor(obj1, hypro::plotting::colors[hypro::plotting::blue]);
+
+    unsigned obj2 = hypro::Plotter<Number>::getInstance().addObject(testDBMExtra.extraM(MBounds).vertices());
+    std::cout << "Extrapolated DBM vertices:" << testDBMExtra.extraM(MBounds).vertices() << "\n";
+    hypro::Plotter<Number>::getInstance().setObjectColor(obj2, hypro::plotting::colors[hypro::plotting::red]);
+
+    // create a *.plt file (gnuplot).
+    hypro::Plotter<Number>::getInstance().setFilename("extraMTest");
+    hypro::Plotter<Number>::getInstance().plot2d();
+}
+
+void testExtraMPlus(){
+    // TODO this is the only one that does not look like the pic in the paper, but works correct.??
+    // TODO Maybe my example is just bad.
+    std::cout<< "Test ExtraMPlus: \n";
+    hypro::vector_t<hypro::DifferenceBounds<Number>::DBMEntry> MBounds(3); //+1 for 0 clock
+    /*
+     * MBounds(x_0)=0
+     * MBounds(x_1)=3
+     * MBounds(x_2)=13
+     */
+    MBounds << hypro::DifferenceBounds<Number>::DBMEntry(0,hypro::DifferenceBounds<Number>::BOUND_TYPE::SMALLER_EQ),
+            hypro::DifferenceBounds<Number>::DBMEntry(3.0,hypro::DifferenceBounds<Number>::BOUND_TYPE::SMALLER_EQ),
+            hypro::DifferenceBounds<Number>::DBMEntry(13,hypro::DifferenceBounds<Number>::BOUND_TYPE::SMALLER_EQ);
+
+    std::cout << "Original DBM: \n" << testDBMExtra << "\n";
+    std::cout << "Extrapolated DBM: \n" << testDBMExtra.extraMPlus(MBounds) << "\n";
+    //plot to pdf
+    hypro::Plotter<Number>::getInstance().clear();
+    unsigned obj1 = hypro::Plotter<Number>::getInstance().addObject(testDBMExtra.vertices());
+    std::cout << "Original DBM vertices:" << testDBMExtra.vertices() << "\n";
+    hypro::Plotter<Number>::getInstance().setObjectColor(obj1, hypro::plotting::colors[hypro::plotting::blue]);
+
+    unsigned obj2 = hypro::Plotter<Number>::getInstance().addObject(testDBMExtra.extraMPlus(MBounds).vertices());
+    std::cout << "Extrapolated DBM vertices:" << testDBMExtra.extraMPlus(MBounds).vertices() << "\n";
+    hypro::Plotter<Number>::getInstance().setObjectColor(obj2, hypro::plotting::colors[hypro::plotting::red]);
+
+    // create a *.plt file (gnuplot).
+    hypro::Plotter<Number>::getInstance().setFilename("extraMPlusTest");
+    hypro::Plotter<Number>::getInstance().plot2d();
+}
+
+void testExtraLU(){
+    std::cout<< "Test ExtraLU: \n";
+    hypro::vector_t<hypro::DifferenceBounds<Number>::DBMEntry> LBounds(3); //+1 for 0 clock
+    hypro::vector_t<hypro::DifferenceBounds<Number>::DBMEntry> UBounds(3); //+1 for 0 clock
+    /*
+     * LBounds(x_0)=0
+     * LBounds(x_1)=3
+     * LBounds(x_2)=13
+     */
+    LBounds << hypro::DifferenceBounds<Number>::DBMEntry(0,hypro::DifferenceBounds<Number>::BOUND_TYPE::SMALLER_EQ),
+            hypro::DifferenceBounds<Number>::DBMEntry(3.0,hypro::DifferenceBounds<Number>::BOUND_TYPE::SMALLER_EQ),
+            hypro::DifferenceBounds<Number>::DBMEntry(1.0,hypro::DifferenceBounds<Number>::BOUND_TYPE::SMALLER_EQ);
+
+    UBounds << hypro::DifferenceBounds<Number>::DBMEntry(0,hypro::DifferenceBounds<Number>::BOUND_TYPE::SMALLER_EQ),
+            hypro::DifferenceBounds<Number>::DBMEntry(3.0,hypro::DifferenceBounds<Number>::BOUND_TYPE::SMALLER_EQ),
+            hypro::DifferenceBounds<Number>::DBMEntry(13,hypro::DifferenceBounds<Number>::BOUND_TYPE::SMALLER_EQ);
+
+
+    std::cout << "Original DBM: \n" << testDBMExtra << "\n";
+    std::cout << "Extrapolated DBM: \n" << testDBMExtra.extraLU(LBounds,UBounds) << "\n";
+    //plot to pdf
+    hypro::Plotter<Number>::getInstance().clear();
+    unsigned obj1 = hypro::Plotter<Number>::getInstance().addObject(testDBMExtra.vertices());
+    std::cout << "Original DBM vertices:" << testDBMExtra.vertices() << "\n";
+    hypro::Plotter<Number>::getInstance().setObjectColor(obj1, hypro::plotting::colors[hypro::plotting::blue]);
+
+    unsigned obj2 = hypro::Plotter<Number>::getInstance().addObject(testDBMExtra.extraLU(LBounds,UBounds).vertices());
+    std::cout << "Extrapolated DBM vertices:" << testDBMExtra.extraLU(LBounds,UBounds).vertices() << "\n";
+    hypro::Plotter<Number>::getInstance().setObjectColor(obj2, hypro::plotting::colors[hypro::plotting::red]);
+
+    // create a *.plt file (gnuplot).
+    hypro::Plotter<Number>::getInstance().setFilename("extraLUTest");
+    hypro::Plotter<Number>::getInstance().plot2d();
+}
+void testExtraLUPlus(){
+    std::cout<< "Test ExtraLU: \n";
+    hypro::vector_t<hypro::DifferenceBounds<Number>::DBMEntry> LBounds(3); //+1 for 0 clock
+    hypro::vector_t<hypro::DifferenceBounds<Number>::DBMEntry> UBounds(3); //+1 for 0 clock
+    /*
+     * LBounds(x_0)=0
+     * LBounds(x_1)=3
+     * LBounds(x_2)=13
+     */
+    LBounds << hypro::DifferenceBounds<Number>::DBMEntry(0,hypro::DifferenceBounds<Number>::BOUND_TYPE::SMALLER_EQ),
+            hypro::DifferenceBounds<Number>::DBMEntry(3.0,hypro::DifferenceBounds<Number>::BOUND_TYPE::SMALLER_EQ),
+            hypro::DifferenceBounds<Number>::DBMEntry(1.0,hypro::DifferenceBounds<Number>::BOUND_TYPE::SMALLER_EQ);
+
+    UBounds << hypro::DifferenceBounds<Number>::DBMEntry(0,hypro::DifferenceBounds<Number>::BOUND_TYPE::SMALLER_EQ),
+            hypro::DifferenceBounds<Number>::DBMEntry(3.0,hypro::DifferenceBounds<Number>::BOUND_TYPE::SMALLER_EQ),
+            hypro::DifferenceBounds<Number>::DBMEntry(13,hypro::DifferenceBounds<Number>::BOUND_TYPE::SMALLER_EQ);
+
+
+    std::cout << "Original DBM: \n" << testDBMExtra << "\n";
+    std::cout << "Extrapolated DBM: \n" << testDBMExtra.extraLUPlus(LBounds,UBounds) << "\n";
+    //plot to pdf
+    hypro::Plotter<Number>::getInstance().clear();
+    unsigned obj1 = hypro::Plotter<Number>::getInstance().addObject(testDBMExtra.vertices());
+    std::cout << "Original DBM vertices:" << testDBMExtra.vertices() << "\n";
+    hypro::Plotter<Number>::getInstance().setObjectColor(obj1, hypro::plotting::colors[hypro::plotting::blue]);
+
+    unsigned obj2 = hypro::Plotter<Number>::getInstance().addObject(testDBMExtra.extraLUPlus(LBounds,UBounds).vertices());
+    std::cout << "Extrapolated DBM vertices:" << testDBMExtra.extraLUPlus(LBounds,UBounds).vertices() << "\n";
+    hypro::Plotter<Number>::getInstance().setObjectColor(obj2, hypro::plotting::colors[hypro::plotting::red]);
+
+    // create a *.plt file (gnuplot).
+    hypro::Plotter<Number>::getInstance().setFilename("extraLUPlusTest");
+    hypro::Plotter<Number>::getInstance().plot2d();
+}
+
 void testPrint(){
     std::cout<< "Test instance DBM: \n";
     std::cout<<testDBM;
