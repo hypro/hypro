@@ -18,20 +18,23 @@ typename Converter<Number>::DifferenceBounds Converter<Number>::toDifferenceBoun
 
 template<typename Number>
 typename Converter<Number>::DifferenceBounds Converter<Number>::toDifferenceBounds(const Box& source, const CONV_MODE mode){
-    //TODO
-    return DifferenceBounds();
+    // TODO make better, this is just the cheap solution
+    HPolytope tmp = toHPolytope(source);
+    return toDifferenceBounds(tmp);
 }
 
 template<typename Number>
 typename Converter<Number>::DifferenceBounds Converter<Number>::toDifferenceBounds(const ConstraintSet& source, const CONV_MODE mode){
-    //TODO
-    return DifferenceBounds();
+    // TODO make better, this is just the cheap solution
+    HPolytope tmp = toHPolytope(source);
+    return toDifferenceBounds(tmp);
 }
 
 template<typename Number>
 typename Converter<Number>::DifferenceBounds Converter<Number>::toDifferenceBounds(const Ellipsoid& source, const CONV_MODE mode){
-    //TODO
-    return DifferenceBounds();
+    // TODO make better, this is just the cheap solution
+    HPolytope tmp = toHPolytope(source);
+    return toDifferenceBounds(tmp);
 }
 
 template<typename Number>
@@ -91,18 +94,21 @@ typename Converter<Number>::DifferenceBounds Converter<Number>::toDifferenceBoun
 
 template<typename Number>
 typename Converter<Number>::DifferenceBounds Converter<Number>::toDifferenceBounds(const VPolytope& source, const CONV_MODE mode){
-    //TODO
-    return DifferenceBounds();
+    // TODO make better, this is just the cheap solution
+    HPolytope tmp = toHPolytope(source);
+    return toDifferenceBounds(tmp);
 }
 
 template<typename Number>
 typename Converter<Number>::DifferenceBounds Converter<Number>::toDifferenceBounds(const SupportFunction& _source, const std::vector<vector_t<Number>>& additionalDirections, const CONV_MODE, std::size_t numberOfDirections){
-    //TODO
-    return DifferenceBounds();
+    // TODO make better, this is just the cheap solution
+    HPolytope tmp = toHPolytope(_source);
+    return toDifferenceBounds(tmp);
 }
 
 template<typename Number>
 typename Converter<Number>::DifferenceBounds Converter<Number>::toDifferenceBounds(const Zonotope& source, const CONV_MODE mode){
-    //TODO
-    return DifferenceBounds();
+    // TODO make better, this is just the cheap solution
+    HPolytope tmp = toHPolytope(source);
+    return toDifferenceBounds(tmp);
 }
