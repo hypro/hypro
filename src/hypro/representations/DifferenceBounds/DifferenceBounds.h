@@ -194,6 +194,50 @@ public:
      */
     DifferenceBoundsT<Number,Converter> intersectConstraint( const int x, const int y, const DBMEntry& bound ) const;
 
+    /**
+     * extrapolates the current DBM by using the ExtraM Method. A description
+     * can be found in: Behrman, Bouyer "Lower and Upper Bounds in Zone Based Abstractions of Timed Automata"
+     * @param MBounds List of DBMEntries describing the maximal Bounds for each variable i.e. the largest constant the variable is compared against. Note that the BOUND_TYPE has no effect unless it is infinity which denotes that the variable is not compared against any constant (i.e. is interpreted as -INFTY). The Bound for the 0 clock is 0.
+     * @return The extrapolated DBM
+     */
+    DifferenceBoundsT<Number,Converter> extraM(const vector_t<DBMEntry>& MBounds) const;
+
+    /**
+     * extrapolates the current DBM by using the ExtraM+ Method. A description
+     * can be found in: Behrman, Bouyer "Lower and Upper Bounds in Zone Based Abstractions of Timed Automata"
+     * @param MBounds List of DBMEntries describing the maximal Bounds for each variable i.e. the largest constant the variable is compared against. Note that the BOUND_TYPE has no effect unless it is infinity which denotes that the variable is not compared against any constant (i.e. is interpreted as -INFTY) The Bound for the 0 clock is 0.
+     * @return The extrapolated DBM
+     */
+    DifferenceBoundsT<Number,Converter> extraMPlus(const vector_t<DBMEntry>&  MBounds) const;
+
+    /**
+     * extrapolates the current DBM by using the ExtraLU Method. A description
+     * can be found in: Behrman, Bouyer "Lower and Upper Bounds in Zone Based Abstractions of Timed Automata"
+     *
+     * Lower and upper bounds are defined as follows:
+     * The maximal lower bound denoted L(x) (resp. maximal upper bound U(x)) of clock x is the maximal
+     * constant k such that there exists a constraint x>k or x>=k (resp x<k or x<=k) in a guard
+     * of some transition or in an invariant of some location of the automaton. If such a constant
+     * does not exist we set L(x) (resp. U(x)) to -INFTY. (Here: DBMEntry with BOUNDTYPE::INFTY)
+     *
+     * @param LBounds List of DBMEntries describing the maximal lower Bound for each variable i.e. the largest constant the variable is compared against. Note that the BOUND_TYPE has no effect unless it is infinity which denotes that the variable is not compared against any constant (i.e. is interpreted as -INFTY) The Bound for the 0 clock is 0.
+     * @param UBounds List of DBMEntries describing the maximal upper Bound for each variable i.e. the largest constant the variable is compared against. Note that the BOUND_TYPE has no effect unless it is infinity which denotes that the variable is not compared against any constant (i.e. is interpreted as -INFTY) The Bound for the 0 clock is 0.
+     * @return The extrapolated DBM
+     */
+    DifferenceBoundsT<Number,Converter> extraLU(const vector_t<DBMEntry>&  LBounds, const vector_t<DBMEntry>&  UBounds) const;
+
+    /**
+     * extrapolates the current DBM by using the ExtraLU+ Method. A description
+     * can be found in: Behrman, Bouyer "Lower and Upper Bounds in Zone Based Abstractions of Timed Automata"
+     *
+     * see extraLU(LBounds,UBounds) for a definition of lower and upper bounds in this context.
+     *
+     * @param LBounds List of DBMEntries describing the maximal lower Bound for each variable i.e. the largest constant the variable is compared against. Note that the BOUND_TYPE has no effect unless it is infinity which denotes that the variable is not compared against any constant (i.e. is interpreted as -INFTY) The Bound for the 0 clock is 0.
+     * @param UBounds List of DBMEntries describing the maximal upper Bound for each variable i.e. the largest constant the variable is compared against. Note that the BOUND_TYPE has no effect unless it is infinity which denotes that the variable is not compared against any constant (i.e. is interpreted as -INFTY) The Bound for the 0 clock is 0.
+     * @return The extrapolated DBM
+     */
+    DifferenceBoundsT<Number,Converter> extraLUPlus(const vector_t<DBMEntry>&  LBounds, const vector_t<DBMEntry>&  UBounds) const;
+
     friend std::ostream& operator<<( std::ostream& ostr, const DifferenceBoundsT<Number,Converter>& db ) {
         long rows = db.getDBM().rows();
         long cols = db.getDBM().cols();

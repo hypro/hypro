@@ -95,7 +95,7 @@ namespace hypro {
         hypro::HPolytopeT<Number,Converter> poly = Converter::toHPolytope(*this);
         // TODO enhace plotting for inifinite polytopes
         if (getTimeHorizon() != 0.0) {
-            // we need an additional timeHorizon constraint for each clock (except 0 clock)
+            // we need 2 additional timeHorizon constraint for each clock (except 0 clock)
             int numclocks = getDBM().cols()-1;
             //constraints of the polytope
             hypro::matrix_t<Number> HPolyConstraints = poly.matrix();
@@ -103,18 +103,29 @@ namespace hypro {
             //std::cout << "Old matrix: " << HPolyConstraints <<"\n";
             //std::cout << "Old constants: " << HPolyConstants <<"\n";
             int numconstraints = HPolyConstraints.rows();
-            HPolyConstraints.conservativeResize(numconstraints+numclocks, HPolyConstraints.cols());
-            HPolyConstants.conservativeResize(numconstraints+numclocks, HPolyConstraints.cols());
+            HPolyConstraints.conservativeResize(numconstraints+2*numclocks, HPolyConstraints.cols());
+            HPolyConstants.conservativeResize(numconstraints+2*numclocks, HPolyConstraints.cols());
 
             int counter = numconstraints;//start at next row
             for (int i = 0; i < numclocks; i++) {
-                // for each clock at a timehorizon constraint so the polytope to plot is finite
+                // for each clock add a timehorizon so the polytope to plot is finite in plus direction
                 matrix_t<Number> constraintVars = matrix_t<Number>::Zero(1, numclocks);
                 constraintVars(0, i) = 1.0;
                 //std::cout << "Constraint variable vector: " << constraintVars <<"\n";
                 HPolyConstraints.row(counter) = constraintVars;
                 //std::cout << "New constraint matrix: " << HPolyConstraints << "\n";
                 HPolyConstants(counter, 0) = getTimeHorizon();
+                //std::cout << "New constant vector: " << HPolyConstants << "\n";
+                counter++;
+                // for each clock add a greater than 0 constraint so the polytope to plot is finity in
+                // in negative direction
+                // TODO this can also be -Timehorizon, however clocks should be positive
+                matrix_t<Number> constraintVars2 = matrix_t<Number>::Zero(1, numclocks);
+                constraintVars2(0, i) = -1.0;
+                //std::cout << "Constraint variable vector: " << constraintVars2 <<"\n";
+                HPolyConstraints.row(counter) = constraintVars2;
+                //std::cout << "New constraint matrix: " << HPolyConstraints << "\n";
+                HPolyConstants(counter, 0) = 0.0;
                 //std::cout << "New constant vector: " << HPolyConstants << "\n";
                 counter++;
             }
@@ -405,6 +416,137 @@ namespace hypro {
         res.setDBM(mat);
         return res;
     }
+
+    template <typename Number, typename Converter>
+    DifferenceBoundsT<Number,Converter> DifferenceBoundsT<Number, Converter>::extraM(const vector_t<DBMEntry>& MBounds) const{
+        hypro::matrix_t<DBMEntry> mat = hypro::matrix_t<DBMEntry>(m_dbm);
+        for(int i=0; i < mat.rows();i++){
+            for(int j=0; j<mat.cols();j++){
+                if(i!=j) {
+                    // INFTY if c_ij > M(x_i)
+                    if (m_dbm(i, j).first > MBounds(i).first || MBounds(i).second == BOUND_TYPE::INFTY) {
+                        mat(i, j) = DBMEntry(0.0, BOUND_TYPE::INFTY);
+                    }
+                        // (-M(x_j), <) if -c_ij > M(x_j)
+                    else if ((-1.0 * m_dbm(i, j).first) > MBounds(j).first || MBounds(j).second == BOUND_TYPE::INFTY) {
+                        if (MBounds(j).second == BOUND_TYPE::INFTY) {
+                            // -c_ij > -INFTY >= c_ij' = (-M(x_j), <) = INFTY
+                            mat(i, j) = DBMEntry(0.0, BOUND_TYPE::INFTY);
+                        } else {
+                            mat(i, j) = DBMEntry(-1.0 * MBounds(j).first, BOUND_TYPE::SMALLER);
+                        }
+                    }
+                }
+                // (c_ij, </<=/INFTY) otherwise (i.e. copy) -> no op
+            }
+        }
+        hypro::DifferenceBoundsT<Number, Converter> res = hypro::DifferenceBoundsT<Number, Converter>(*this);
+        res.setDBM(mat);
+        return res;
+    }
+
+    template <typename Number, typename Converter>
+    DifferenceBoundsT<Number,Converter> DifferenceBoundsT<Number, Converter>::extraMPlus(const vector_t<DBMEntry>& MBounds) const{
+        hypro::matrix_t<DBMEntry> mat = hypro::matrix_t<DBMEntry>(m_dbm);
+        for(int i=0; i < mat.rows();i++){
+            for(int j=0; j<mat.cols();j++){
+                if(i!=j) {
+                    // INFTY if c_ij > M(x_i)
+                    if(m_dbm(i,j).first > MBounds(i).first || MBounds(i).second == BOUND_TYPE::INFTY) {
+                        mat(i, j) = DBMEntry(0.0, BOUND_TYPE::INFTY);
+                    }
+                        // INFTY if  -c_0i > M(x_i)
+                    else if(-1.0*m_dbm(0,i).first > MBounds(i).first){
+                        mat(i,j) = DBMEntry(0.0, BOUND_TYPE::INFTY);
+                    }
+                        // INFTY if -c_0j > M(x_j), i!=0
+                    else if((-1.0*m_dbm(0,j).first > MBounds(j).first || MBounds(j).second==BOUND_TYPE::INFTY) && i != 0){
+                        mat(i,j) = DBMEntry(0.0, BOUND_TYPE::INFTY);
+                    }
+                        // (-M(x_j), <) if -c_ij > M(x_j)
+                    else if(((-1.0*m_dbm(i,j).first) > MBounds(j).first || MBounds(j).second==BOUND_TYPE::INFTY) && i==0){
+                        if (MBounds(j).second == BOUND_TYPE::INFTY) {
+                            // -c_ij > -INFTY >= c_ij' = (-M(x_j), <) = INFTY
+                            mat(i, j) = DBMEntry(0.0, BOUND_TYPE::INFTY);
+                        } else {
+                            mat(i, j) = DBMEntry(-1.0 * MBounds(j).first, BOUND_TYPE::SMALLER);
+                        }
+                    }
+                    // (c_ij, </<=/INFTY) otherwise (i.e. copy) -> no op
+                }
+            }
+        }
+        hypro::DifferenceBoundsT<Number, Converter> res = hypro::DifferenceBoundsT<Number, Converter>(*this);
+        res.setDBM(mat);
+        return res;
+    }
+
+    template <typename Number, typename Converter>
+    DifferenceBoundsT<Number,Converter> DifferenceBoundsT<Number, Converter>::extraLU(const vector_t<DBMEntry>& LBounds, const vector_t<DBMEntry>& UBounds) const{
+        hypro::matrix_t<DBMEntry> mat = hypro::matrix_t<DBMEntry>(m_dbm);
+        for(int i=0; i < mat.rows();i++){
+            for(int j=0; j<mat.cols();j++){
+                if(i!=j) {
+                    // INFTY if c_ij > L(x_i)
+                    if (m_dbm(i, j).first > LBounds(i).first || LBounds(i).second == BOUND_TYPE::INFTY) {
+                        mat(i, j) = DBMEntry(0.0, BOUND_TYPE::INFTY);
+                    }
+                        // (-U(x_j),<) if -c_ij > U(x_j)
+                    else if (-1.0 * m_dbm(i, j).first > UBounds(j).first || UBounds(j).second == BOUND_TYPE::INFTY) {
+                        if (UBounds(j).second == BOUND_TYPE::INFTY) {
+                            // -c_ij > -INFTY >= c_ij' = (-U(x_j), <) = INFTY
+                            mat(i, j) = DBMEntry(0.0, BOUND_TYPE::INFTY);
+                        } else {
+                            mat(i, j) = DBMEntry(-1.0 * UBounds(j).first, BOUND_TYPE::SMALLER);
+                        }
+                    }
+                    // (c_ij, </<=/INFTY) otherwise (i.e. copy) -> no op
+                }
+            }
+        }
+        hypro::DifferenceBoundsT<Number, Converter> res = hypro::DifferenceBoundsT<Number, Converter>(*this);
+        res.setDBM(mat);
+        return res;
+    }
+
+    template <typename Number, typename Converter>
+    DifferenceBoundsT<Number,Converter> DifferenceBoundsT<Number, Converter>::extraLUPlus(const vector_t<DBMEntry>& LBounds, const vector_t<DBMEntry>& UBounds) const{
+        hypro::matrix_t<DBMEntry> mat = hypro::matrix_t<DBMEntry>(m_dbm);
+        for(int i=0; i < mat.rows();i++){
+            for(int j=0; j<mat.cols();j++){
+                if(i!=j) {
+                    // INFTY if c_ij > L(x_i)
+                    if (m_dbm(i, j).first > LBounds(i).first || LBounds(i).second == BOUND_TYPE::INFTY) {
+                        mat(i, j) = DBMEntry(0.0, BOUND_TYPE::INFTY);
+                    }
+                        // INFTY if -c_0i > L(x_i)
+                    else if (-1.0 * m_dbm(0, i).first > LBounds(i).first) {
+                        mat(i, j) = DBMEntry(0.0, BOUND_TYPE::INFTY);
+                    }
+                        // INFTY if -c_0j>U(x_j), i!=0
+                    else if ((-1.0 * m_dbm(0, j).first > UBounds(j).first || UBounds(j).second == BOUND_TYPE::INFTY) &&
+                             i != 0) {
+                        mat(i, j) = DBMEntry(0.0, BOUND_TYPE::INFTY);
+                    }
+                        // (-U(x_j),<) if -c_0j > U(x_j), i==0
+                    else if ((-1.0 * m_dbm(0, j).first > UBounds(j).first || UBounds(j).second == BOUND_TYPE::INFTY) &&
+                             i == 0) {
+                        if (UBounds(j).second == BOUND_TYPE::INFTY) {
+                            // -c_ij > -INFTY >= c_ij' = (-U(x_j), <) = INFTY
+                            mat(i, j) = DBMEntry(0.0, BOUND_TYPE::INFTY);
+                        } else {
+                            mat(i, j) = DBMEntry(-1.0 * UBounds(j).first, BOUND_TYPE::SMALLER);
+                        }
+                    }
+                    // (c_ij, </<=/INFTY) otherwise (i.e. copy) -> no op
+                }
+            }
+        }
+        hypro::DifferenceBoundsT<Number, Converter> res = hypro::DifferenceBoundsT<Number, Converter>(*this);
+        res.setDBM(mat);
+        return res;
+    }
+
 
 }
 
