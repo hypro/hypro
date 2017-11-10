@@ -8,6 +8,7 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
 		add_executable(runRepresentationTests
 			BoxTest.cpp
 			ConverterTest.cpp
+			DifferenceBoundsTest.cpp
 			GridTest.cpp
 			HPolytopeTest.cpp
 			NeighborhoodContainerTest.cpp
@@ -24,6 +25,7 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
 		add_executable(runRepresentationTests
 			BoxTest.cpp
 			ConverterTest.cpp
+			DifferenceBoundsTest.cpp
 			GridTest.cpp
 			HPolytopeTest.cpp
 			NeighborhoodContainerTest.cpp

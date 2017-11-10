@@ -81,10 +81,10 @@ int main() {
     //testLinearTransformation();
     //testAffineTransformation();
     //testMinkowskiSum();
-    //testExtraM();
+    testExtraM();
     testExtraMPlus();
-    //testExtraLU();
-    //testExtraLUPlus();
+    testExtraLU();
+    testExtraLUPlus();
     //testPrint();
     return 0;
 }
@@ -94,7 +94,7 @@ void createTestDBM(){
     mat << hypro::DifferenceBounds<Number>::DBMEntry(0,hypro::DifferenceBounds<Number>::BOUND_TYPE::SMALLER_EQ),
             hypro::DifferenceBounds<Number>::DBMEntry(-4.0,hypro::DifferenceBounds<Number>::BOUND_TYPE::SMALLER_EQ),
             hypro::DifferenceBounds<Number>::DBMEntry(-4.0,hypro::DifferenceBounds<Number>::BOUND_TYPE::SMALLER_EQ),
-            hypro::DifferenceBounds<Number>::DBMEntry(10.0,hypro::DifferenceBounds<Number>::BOUND_TYPE::SMALLER_EQ),
+            hypro::DifferenceBounds<Number>::DBMEntry(9.0,hypro::DifferenceBounds<Number>::BOUND_TYPE::SMALLER_EQ),
             hypro::DifferenceBounds<Number>::DBMEntry(0.0,hypro::DifferenceBounds<Number>::BOUND_TYPE::SMALLER_EQ),
             hypro::DifferenceBounds<Number>::DBMEntry(0.0, hypro::DifferenceBounds<Number>::BOUND_TYPE::SMALLER_EQ),
             hypro::DifferenceBounds<Number>::DBMEntry(11.0,hypro::DifferenceBounds<Number>::BOUND_TYPE::SMALLER_EQ),
@@ -123,7 +123,7 @@ void createTestDBM2(){
 
 void createTestDBM3(){
     // shift dbm 0.5 to the right and 1 down
-    testDBM3 = testDBM.shift(1,0.5);
+    testDBM3 = testDBM.shift(1,1);
     testDBM3 = testDBM3.shift(2, -1.0);
 }
 
@@ -147,20 +147,20 @@ void createTestDBMExtra(){
 void createTestHPolytope(){
     std::vector<hypro::Point<Number>> vec;
     std::vector<Number> coord1;
-    coord1.push_back(2);
+    coord1.push_back(1);
     coord1.push_back(4);
 
     std::vector<Number> coord2;
-    coord2.push_back(4);
+    coord2.push_back(5);
     coord2.push_back(4);
 
     std::vector<Number> coord3;
     coord3.push_back(3);
-    coord3.push_back(4.5);
+    coord3.push_back(5);
 
     std::vector<Number> coord4;
     coord4.push_back(3);
-    coord4.push_back(3.5);
+    coord4.push_back(3);
 
     vec.push_back(hypro::Point<Number>(coord1));
     vec.push_back(hypro::Point<Number>(coord2));
@@ -468,6 +468,7 @@ void testConversionHPolyToDBM(){
     //plot to pdf
     hypro::Plotter<Number>::getInstance().clear();
     hypro::DifferenceBounds <Number> conversion = hypro::Converter<Number>::toDifferenceBounds(testHPolytope);
+    std::cout << conversion;
     unsigned obj2 = hypro::Plotter<Number>::getInstance().addObject(testHPolytope.vertices());
     std::cout << "HPolytope vertices:" << testHPolytope.vertices() << "\n";
     hypro::Plotter<Number>::getInstance().setObjectColor(obj2, hypro::plotting::colors[hypro::plotting::red]);
@@ -770,11 +771,7 @@ void testExtraLU(){
     std::cout<< "Test ExtraLU: \n";
     hypro::vector_t<hypro::DifferenceBounds<Number>::DBMEntry> LBounds(3); //+1 for 0 clock
     hypro::vector_t<hypro::DifferenceBounds<Number>::DBMEntry> UBounds(3); //+1 for 0 clock
-    /*
-     * LBounds(x_0)=0
-     * LBounds(x_1)=3
-     * LBounds(x_2)=13
-     */
+
     LBounds << hypro::DifferenceBounds<Number>::DBMEntry(0,hypro::DifferenceBounds<Number>::BOUND_TYPE::SMALLER_EQ),
             hypro::DifferenceBounds<Number>::DBMEntry(3.0,hypro::DifferenceBounds<Number>::BOUND_TYPE::SMALLER_EQ),
             hypro::DifferenceBounds<Number>::DBMEntry(1.0,hypro::DifferenceBounds<Number>::BOUND_TYPE::SMALLER_EQ);
@@ -804,11 +801,7 @@ void testExtraLUPlus(){
     std::cout<< "Test ExtraLU: \n";
     hypro::vector_t<hypro::DifferenceBounds<Number>::DBMEntry> LBounds(3); //+1 for 0 clock
     hypro::vector_t<hypro::DifferenceBounds<Number>::DBMEntry> UBounds(3); //+1 for 0 clock
-    /*
-     * LBounds(x_0)=0
-     * LBounds(x_1)=3
-     * LBounds(x_2)=13
-     */
+
     LBounds << hypro::DifferenceBounds<Number>::DBMEntry(0,hypro::DifferenceBounds<Number>::BOUND_TYPE::SMALLER_EQ),
             hypro::DifferenceBounds<Number>::DBMEntry(3.0,hypro::DifferenceBounds<Number>::BOUND_TYPE::SMALLER_EQ),
             hypro::DifferenceBounds<Number>::DBMEntry(1.0,hypro::DifferenceBounds<Number>::BOUND_TYPE::SMALLER_EQ);
