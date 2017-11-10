@@ -249,6 +249,7 @@ typename Converter<Number>::HPolytope Converter<Number>::toHPolytope( const Supp
 // conversion from difference bounds to H-Polytope (no differentiation between conversion modes - always EXACT)
 template<typename Number>
 typename Converter<Number>::HPolytope Converter<Number>::toHPolytope(const DifferenceBounds& _source, const CONV_MODE){
+        assert(_source.getDBM().rows() == _source.getDBM().cols());
         //std::cout << "Starting to calculate vertices on DBM: " << *this << "\n";
         int numclocks = _source.getDBM().cols() - 1;
         //std::cout << "Number of clocks: " << numclocks << "\n";
