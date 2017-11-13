@@ -359,6 +359,8 @@ class State
 
     std::vector<Point<Number>> vertices(std::size_t I = 0) const;
 
+    State<Number,Representation,Rargs...> project(const std::vector<std::size_t>& dimensions, std::size_t I = 0) const;
+
     std::size_t getDimension(std::size_t I) const;
 
     Number getSupremum(std::size_t I) const;

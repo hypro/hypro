@@ -26,37 +26,32 @@ namespace reachability {
 				State_t<Number> s;
 				s.setLocation(state.second.getLocation());
 
+				DEBUG("hypro.reacher","Adding initial set of type " << mType);
 				switch(mType){
 					case representation_name::box: {
 						Box<Number> tmp = Converter<Number>::toBox(boost::get<ConstraintSet<Number>>(state.second.getSet()));
 						s.setSet(tmp);
-						//DEBUG("hypro.reacher","Adding initial set " << boost::get<Box<Number>>(s.set));
 						break;
 					}
 					case representation_name::polytope_h: {
 						s.setSet(Converter<Number>::toHPolytope(boost::get<ConstraintSet<Number>>(state.second.getSet())));
-						//DEBUG("hypro.reacher","Adding initial set " << boost::get<Box<Number>>(s.set));
 						break;
 					}
 					case representation_name::polytope_v: {
 						s.setSet(Converter<Number>::toVPolytope(boost::get<ConstraintSet<Number>>(state.second.getSet())));
-						//DEBUG("hypro.reacher","Adding initial set " << boost::get<Box<Number>>(s.set));
 						break;
 					}
 					case representation_name::support_function: {
 						s.setSet(Converter<Number>::toSupportFunction(boost::get<ConstraintSet<Number>>(state.second.getSet())));
-						//DEBUG("hypro.reacher","Adding initial set " << boost::get<Box<Number>>(s.set));
 						break;
 					}
 					case representation_name::zonotope: {
 						s.setSet(Converter<Number>::toZonotope(boost::get<ConstraintSet<Number>>(state.second.getSet())));
-						//DEBUG("hypro.reacher","Adding initial set " << boost::get<Box<Number>>(s.set));
 						break;
 					}
 					#ifdef HYPRO_USE_PPL
 					case representation_name::ppl_polytope: {
 						s.setSet(Converter<Number>::toPolytope(boost::get<ConstraintSet<Number>>(state.second.getSet())));
-						//DEBUG("hypro.reacher","Adding initial set " << boost::get<Box<Number>>(s.set));
 						break;
 					}
 					#endif

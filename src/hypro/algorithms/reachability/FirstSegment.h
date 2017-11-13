@@ -219,6 +219,8 @@ boost::tuple<CONTAINMENT, State, matrix_t<Number>, vector_t<Number>> computeFirs
 	        //TRACE("hypro.reachability","First segment: " << tmp);
 	        #endif
 
+        	assert(fullSegment.second.getLocation() != nullptr);
+
             return boost::tuple<CONTAINMENT, State, matrix_t<Number>, vector_t<Number>>(fullSegment.first, fullSegment.second, trafoMatrixResized,
                                                                                                        translation);
         } else {

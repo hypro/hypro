@@ -43,6 +43,10 @@ namespace hypro {
 			return (transition != nullptr);
 		}
 
+		const carl::Interval<Number>& getTimestamp() const {
+			return timeInterval;
+		}
+
 		/**
 		 * @brief      Outstream operator.
 		 * @param      out       The outstream.
@@ -95,7 +99,12 @@ namespace hypro {
 	class Path {
 		public:
 
-			Path() = default;
+			Path(){};
+			~Path(){
+				while(!mPath.empty()){
+					mPath.erase(mPath.begin());
+				}
+			};
 
 			void add(const TPathElement<Number>& elem);
 			void addTransition(Transition<Number>* t, const carl::Interval<Number>& enabledTime);

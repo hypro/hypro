@@ -254,6 +254,13 @@ std::vector<Point<Number>> State<Number,Representation,Rargs...>::vertices(std::
 }
 
 template<typename Number, typename Representation, typename ...Rargs>
+State<Number,Representation,Rargs...> State<Number,Representation,Rargs...>::project(const std::vector<std::size_t>& dimensions, std::size_t I) const {
+	State res(*this);
+	res.setSetDirect(boost::apply_visitor(genericProjectionVisitor<repVariant>(dimensions), mSets.at(I)));
+	return res;
+}
+
+template<typename Number, typename Representation, typename ...Rargs>
 std::size_t State<Number,Representation,Rargs...>::getDimension(std::size_t I) const {
 	assert(I < mSets.size());
 	assert(checkConsistency());

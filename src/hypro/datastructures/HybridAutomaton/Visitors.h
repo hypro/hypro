@@ -273,4 +273,21 @@ public:
     }
 };
 
+template<typename T>
+class genericProjectionVisitor
+    : public boost::static_visitor<T>
+{
+protected:
+	std::vector<std::size_t> mDimensions;
+
+public:
+	genericProjectionVisitor() = delete;
+	genericProjectionVisitor(const std::vector<std::size_t>& dim) : mDimensions(dim) {}
+
+	template<typename A>
+    inline T operator()(const A& lhs) const {
+ 		return lhs.project(mDimensions);
+    }
+};
+
 } // namespace
