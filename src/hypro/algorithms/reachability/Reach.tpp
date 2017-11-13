@@ -161,7 +161,6 @@ namespace reachability {
 				INFO("hypro.reacher","Time: " << std::setprecision(4) << std::setw(8) << fixed << carl::toDouble(currentLocalTime));
 				// Verify transitions on the current set.
 				if(int(mCurrentLevel) < mSettings.jumpDepth || mSettings.jumpDepth < 0) {
-					State_t<Number> guardSatisfyingState;
 					State_t<Number> currentState = _state;
 					currentState.setSetDirect(currentSegment.getSet(0),0);
 					currentState.setTimestamp(currentState.getTimestamp() + carl::Interval<Number>(currentLocalTime-mSettings.timeStep,currentLocalTime));

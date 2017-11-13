@@ -65,7 +65,7 @@ class Reach {
 private:
 	HybridAutomaton<Number> mAutomaton;
 	ReachabilitySettings<Number> mSettings;
-	std::size_t mCurrentLevel;
+	std::size_t mCurrentLevel = 0;
     Number mBloatingFactor = 0;
 	std::map<unsigned, std::vector<flowpipe_t<Number>>> mReachableStates;
 	std::list<initialSet<Number>> mWorkingQueue;

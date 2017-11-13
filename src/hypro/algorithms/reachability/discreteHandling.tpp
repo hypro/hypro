@@ -159,6 +159,7 @@ namespace reachability {
 		bool transitionEnabled = false;
 		//std::cout << "------ how many transitions do we have? " << state.getLocation()->getTransitions().size() << std::endl;
 		for( auto transition : state.getLocation()->getTransitions() ){
+			DEBUG("hypro.reacher","Check transition " << transition->getSource()->getName() << " -> " << transition->getTarget()->getName() << " (@ "<< transition << ")." );
 			// handle time-triggered transitions
 			if(intersectGuard(transition, state, guardSatisfyingState)){
 				INFO("hypro.reacher", "hybrid transition enabled");
