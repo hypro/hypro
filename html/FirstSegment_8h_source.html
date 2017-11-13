@@ -331,19 +331,21 @@ $(document).ready(function(){initNavTree('FirstSegment_8h_source.html','');});
 <div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160;            <span class="comment">//TRACE(&quot;hypro.reachability&quot;,&quot;First segment: &quot; &lt;&lt; tmp);</span></div>
 <div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160;<span class="preprocessor">            #endif</span></div>
 <div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160;<span class="preprocessor"></span></div>
-<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160;            <span class="keywordflow">return</span> boost::tuple&lt;CONTAINMENT, State, matrix_t&lt;Number&gt;, vector_t&lt;Number&gt;&gt;(fullSegment.first, fullSegment.second, trafoMatrixResized,</div>
-<div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160;                                                                                                       translation);</div>
-<div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160;        } <span class="keywordflow">else</span> {</div>
-<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160;            <span class="keywordflow">return</span> boost::tuple&lt;CONTAINMENT, State, matrix_t&lt;Number&gt;, vector_t&lt;Number&gt;&gt;(CONTAINMENT::NO);</div>
-<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;        }</div>
-<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160;    }  <span class="comment">// if set does not satisfy the invariant, return false</span></div>
-<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;    <span class="keywordflow">else</span> {</div>
-<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;        <span class="keywordflow">return</span> boost::tuple&lt;CONTAINMENT, State, matrix_t&lt;Number&gt;, vector_t&lt;Number&gt;&gt;(CONTAINMENT::NO);</div>
-<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160;    }</div>
-<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;}</div>
-<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160;</div>
-<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160;}  <span class="comment">// namespace reachability</span></div>
-<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;}  <span class="comment">// namespace hypro</span></div>
+<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160;            assert(fullSegment.second.getLocation() != <span class="keyword">nullptr</span>);</div>
+<div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160;</div>
+<div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160;            <span class="keywordflow">return</span> boost::tuple&lt;CONTAINMENT, State, matrix_t&lt;Number&gt;, vector_t&lt;Number&gt;&gt;(fullSegment.first, fullSegment.second, trafoMatrixResized,</div>
+<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160;                                                                                                       translation);</div>
+<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;        } <span class="keywordflow">else</span> {</div>
+<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160;            <span class="keywordflow">return</span> boost::tuple&lt;CONTAINMENT, State, matrix_t&lt;Number&gt;, vector_t&lt;Number&gt;&gt;(CONTAINMENT::NO);</div>
+<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;        }</div>
+<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;    }  <span class="comment">// if set does not satisfy the invariant, return false</span></div>
+<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160;    <span class="keywordflow">else</span> {</div>
+<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;        <span class="keywordflow">return</span> boost::tuple&lt;CONTAINMENT, State, matrix_t&lt;Number&gt;, vector_t&lt;Number&gt;&gt;(CONTAINMENT::NO);</div>
+<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160;    }</div>
+<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160;}</div>
+<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;</div>
+<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160;}  <span class="comment">// namespace reachability</span></div>
+<div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160;}  <span class="comment">// namespace hypro</span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- HTML footer for doxygen 1.8.12-->

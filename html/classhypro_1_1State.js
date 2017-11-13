@@ -31,6 +31,7 @@ var classhypro_1_1State =
     [ "partiallyMinkowskiSum", "classhypro_1_1State.html#a5441c57c80c6b711515661398ea9ab20", null ],
     [ "partiallyRemoveRedundancy", "classhypro_1_1State.html#abf09636f0b1053a0965c35a2455c7d8d", null ],
     [ "partiallySatisfies", "classhypro_1_1State.html#ac9bce631e4f10622ab1cd39c62b4ea1b", null ],
+    [ "project", "classhypro_1_1State.html#a0e2aed62d41d4308fe61a0bec03278ca", null ],
     [ "removeRedundancy", "classhypro_1_1State.html#aac3add3cfe713dc844f7302d41dadf4f", null ],
     [ "rGetSet", "classhypro_1_1State.html#a4902f9963dca670e2972ac8f9fb1c65f", null ],
     [ "satisfies", "classhypro_1_1State.html#a49a10c7c16c13976f44461a54a91f349", null ],

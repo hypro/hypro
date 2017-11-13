@@ -2,7 +2,8 @@ var classhypro_1_1Path =
 [
     [ "TIterator", "classhypro_1_1Path.html#aff80e569a003f458646dbd97b39c3a43", null ],
     [ "TIterator_const", "classhypro_1_1Path.html#a444067b6a6793f6a57759e1e5ec38283", null ],
-    [ "Path", "classhypro_1_1Path.html#af30bbb5d6b94b89971b8289b69b12888", null ],
+    [ "Path", "classhypro_1_1Path.html#abfb40468e047705b334305340e1db22e", null ],
+    [ "~Path", "classhypro_1_1Path.html#a917db8833fc99172cf590afd7edd6f8b", null ],
     [ "add", "classhypro_1_1Path.html#af92107e154b140d17804d1ea8baa7c57", null ],
     [ "addTimeStep", "classhypro_1_1Path.html#a13110f8e3c1c2eee45b68f5a8bc6f04e", null ],
     [ "addTransition", "classhypro_1_1Path.html#afe3a68a397b696908d104f8e6dc2ca47", null ],

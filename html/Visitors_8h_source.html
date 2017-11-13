@@ -385,7 +385,24 @@ $(document).ready(function(){initNavTree('Visitors_8h_source.html','');});
 <div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160;    }</div>
 <div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;};</div>
 <div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;</div>
-<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;} <span class="comment">// namespace</span></div>
+<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;<span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a name="l00277"></a><span class="lineno"><a class="line" href="classhypro_1_1genericProjectionVisitor.html">  277</a></span>&#160;<span class="keyword">class </span><a class="code" href="classhypro_1_1genericProjectionVisitor.html">genericProjectionVisitor</a></div>
+<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;    : <span class="keyword">public</span> boost::static_visitor&lt;T&gt;</div>
+<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;{</div>
+<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;<span class="keyword">protected</span>:</div>
+<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;    std::vector&lt;std::size_t&gt; mDimensions;</div>
+<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;</div>
+<div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160;    <a class="code" href="classhypro_1_1genericProjectionVisitor.html">genericProjectionVisitor</a>() = <span class="keyword">delete</span>;</div>
+<div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160;    <a class="code" href="classhypro_1_1genericProjectionVisitor.html">genericProjectionVisitor</a>(<span class="keyword">const</span> std::vector&lt;std::size_t&gt;&amp; dim) : mDimensions(dim) {}</div>
+<div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160;</div>
+<div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> A&gt;</div>
+<div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160;    <span class="keyword">inline</span> T operator()(<span class="keyword">const</span> A&amp; lhs)<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160;        <span class="keywordflow">return</span> lhs.project(mDimensions);</div>
+<div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160;    }</div>
+<div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160;};</div>
+<div class="line"><a name="l00292"></a><span class="lineno">  292</span>&#160;</div>
+<div class="line"><a name="l00293"></a><span class="lineno">  293</span>&#160;} <span class="comment">// namespace</span></div>
 <div class="ttc" id="namespacehypro_html_aada824f660cac25bb643be870cdc0a86"><div class="ttname"><a href="namespacehypro.html#aada824f660cac25bb643be870cdc0a86">hypro::representation_name</a></div><div class="ttdeci">representation_name</div><div class="ttdoc">Enum encapsulating all provided state set representations to be able to determine a type...</div><div class="ttdef"><b>Definition:</b> <a href="representations_2types_8h_source.html#l00009">types.h:9</a></div></div>
 <div class="ttc" id="classhypro_1_1genericVerticesVisitor_html"><div class="ttname"><a href="classhypro_1_1genericVerticesVisitor.html">hypro::genericVerticesVisitor</a></div><div class="ttdef"><b>Definition:</b> <a href="Visitors_8h_source.html#l00266">Visitors.h:266</a></div></div>
 <div class="ttc" id="namespacehypro_html_a52a4896e811a0710bcfc5a410a780034"><div class="ttname"><a href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">hypro::matrix_t</a></div><div class="ttdeci">Eigen::Matrix&lt; Number, Eigen::Dynamic, Eigen::Dynamic &gt; matrix_t</div><div class="ttdef"><b>Definition:</b> <a href="types_8h_source.html#l00026">types.h:26</a></div></div>
@@ -397,6 +414,7 @@ $(document).ready(function(){initNavTree('Visitors_8h_source.html','');});
 <div class="ttc" id="classhypro_1_1genericTypeVisitor_html"><div class="ttname"><a href="classhypro_1_1genericTypeVisitor.html">hypro::genericTypeVisitor</a></div><div class="ttdef"><b>Definition:</b> <a href="Visitors_8h_source.html#l00255">Visitors.h:255</a></div></div>
 <div class="ttc" id="classhypro_1_1genericCompareVisitor_html"><div class="ttname"><a href="classhypro_1_1genericCompareVisitor.html">hypro::genericCompareVisitor</a></div><div class="ttdef"><b>Definition:</b> <a href="Visitors_8h_source.html#l00201">Visitors.h:201</a></div></div>
 <div class="ttc" id="namespacehypro_html_a47344b22ce93940da4599cf2f2987321"><div class="ttname"><a href="namespacehypro.html#a47344b22ce93940da4599cf2f2987321">hypro::SupportFunction</a></div><div class="ttdeci">typename Converter&lt; Number &gt;::SupportFunction SupportFunction</div><div class="ttdef"><b>Definition:</b> <a href="Converter_8h_source.html#l00132">Converter.h:132</a></div></div>
+<div class="ttc" id="classhypro_1_1genericProjectionVisitor_html"><div class="ttname"><a href="classhypro_1_1genericProjectionVisitor.html">hypro::genericProjectionVisitor</a></div><div class="ttdef"><b>Definition:</b> <a href="Visitors_8h_source.html#l00277">Visitors.h:277</a></div></div>
 <div class="ttc" id="classhypro_1_1genericConversionVisitor_html"><div class="ttname"><a href="classhypro_1_1genericConversionVisitor.html">hypro::genericConversionVisitor</a></div><div class="ttdef"><b>Definition:</b> <a href="Visitors_8h_source.html#l00091">Visitors.h:91</a></div></div>
 <div class="ttc" id="classhypro_1_1Converter_html"><div class="ttname"><a href="classhypro_1_1Converter.html">hypro::Converter</a></div><div class="ttdef"><b>Definition:</b> <a href="Converter_8h_source.html#l00030">Converter.h:30</a></div></div>
 <div class="ttc" id="classhypro_1_1genericSupremumVisitor_html"><div class="ttname"><a href="classhypro_1_1genericSupremumVisitor.html">hypro::genericSupremumVisitor</a></div><div class="ttdef"><b>Definition:</b> <a href="Visitors_8h_source.html#l00245">Visitors.h:245</a></div></div>

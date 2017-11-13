@@ -158,13 +158,13 @@ $(document).ready(function(){initNavTree('HybridAutomaton_8h_source.html','');})
 <div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    <a class="code" href="classhypro_1_1HybridAutomaton.html#ae3631199cb6dde7b79c69ac63c9ca274">HybridAutomaton</a>(<a class="code" href="classhypro_1_1HybridAutomaton.html">HybridAutomaton&lt;Number&gt;</a>&amp;&amp; hybrid) = <span class="keywordflow">default</span>;</div>
 <div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    <a class="code" href="classhypro_1_1HybridAutomaton.html#ae3631199cb6dde7b79c69ac63c9ca274">HybridAutomaton</a>(<span class="keyword">const</span> locationSet&amp; locs, <span class="keyword">const</span> <a class="code" href="classhypro_1_1HybridAutomaton.html#a5e051e1193fd31e5fa1a0569a6760e75">transitionSet</a>&amp; trans, <span class="keyword">const</span> <a class="code" href="classhypro_1_1HybridAutomaton.html#a2dc816c4c85259f7b016eca4b0cda76c">locationStateMap</a>&amp; initialStates);</div>
 <div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    <span class="keyword">virtual</span> ~<a class="code" href="classhypro_1_1HybridAutomaton.html">HybridAutomaton</a>() {</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;<span class="comment">/*  Without this we have a memory leak from HyproTransitionVisitor.</span></div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;<span class="comment">    The leak will be patched later by using only references.</span></div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;<span class="comment">        std::cout &lt;&lt; &quot;I DESTROY&quot; &lt;&lt; std::endl;</span></div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;<span class="comment">        for(auto tPointer : mTransitions) {</span></div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;<span class="comment">            delete tPointer;</span></div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;<span class="comment">        }</span></div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;<span class="comment">*/</span></div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;        <span class="comment">// Without this we have a memory leak from HyproTransitionVisitor.</span></div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;        <span class="comment">// The leak will be patched later by using only references.</span></div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;        <span class="comment">//while(!mTransitions.empty()) {</span></div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;        <span class="comment">//  auto toDelete = *mTransitions.begin();</span></div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;        <span class="comment">//    mTransitions.erase(mTransitions.begin());</span></div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;        <span class="comment">//    delete toDelete;</span></div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;        <span class="comment">//}</span></div>
 <div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;    }</div>
 <div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;</div>
 <div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;    <span class="comment">//* @return The set of locations. */</span></div>
