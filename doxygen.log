@@ -7286,7 +7286,7 @@ Possible candidates:
 /home/travis/build/hypro/hypro/src/hypro/types.h:29: warning: documented symbol `typedef hypro::std::set< vector_t< Number >> vectorSet' was not declared or defined.
 /home/travis/build/hypro/hypro/src/hypro/util/Plotter.h:70: warning: documented symbol `Singleton< Plotter< Number > >' was not declared or defined.
 /home/travis/build/hypro/hypro/src/hypro/util/VariablePool.h:28: warning: documented symbol `Singleton< VariablePool >' was not declared or defined.
-error opening bib20474.bbl: No such file or directory
+error opening bib20423.bbl: No such file or directory
 bibtex command failed: No such file or directory
 .
 Preprocessing /home/travis/build/hypro/hypro/examples/INCOMPLETE_example_benchmarks.cpp...
@@ -23405,5 +23405,5 @@ Patching output file 35/38
 Patching output file 36/38
 Patching output file 37/38
 Patching output file 38/38
-lookup cache used 23001/65536 hits=458953 misses=24686
+lookup cache used 23001/65536 hits=458952 misses=24686
 finished...
