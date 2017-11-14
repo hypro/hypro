@@ -1,5 +1,7 @@
 var NAVTREEINDEX1639 =
 {
+"classhypro_1_1VPolytopeT.html#adeaaee4cb5afce3d8b627c3585506e0a":[10,0,1,68,4],
+"classhypro_1_1VPolytopeT.html#adf37ba8952a5597971904c445d0f99c9":[10,0,1,68,25],
 "classhypro_1_1VPolytopeT.html#ae2110ae4fb6737d531fb68aa6f97c5aa":[10,0,1,68,36],
 "classhypro_1_1VPolytopeT.html#ae3699a33022faceb6943a87b2e281d78":[10,0,1,68,46],
 "classhypro_1_1VPolytopeT.html#ae59462aa5d326c0734e485d257fe19c8":[10,0,1,68,2],
@@ -247,7 +249,5 @@ var NAVTREEINDEX1639 =
 "classhypro_1_1reachability_1_1hypro_1_1BallSupportFunction.html#a9e7ebb2d7a6c93bfb47214a92e0a2366":[10,0,1,5,1,39,8],
 "classhypro_1_1reachability_1_1hypro_1_1BallSupportFunction.html#a9f781227db3f16cb67aa05606c99b1d2":[10,0,1,5,1,39,0],
 "classhypro_1_1reachability_1_1hypro_1_1BallSupportFunction.html#aabe373d1a6dfc589584c7042368afabf":[10,0,1,5,1,39,3],
-"classhypro_1_1reachability_1_1hypro_1_1BallSupportFunction.html#ab240b61c07fece664499411fc7b49163":[10,0,1,5,1,39,7],
-"classhypro_1_1reachability_1_1hypro_1_1BallSupportFunction.html#ab5ef3ca7796c509b4c50959b061ff344":[10,0,1,5,1,39,12],
-"classhypro_1_1reachability_1_1hypro_1_1BallSupportFunction.html#acd7ed2b88e1b5f878f71ff1bdd6b493c":[10,0,1,5,1,39,6]
+"classhypro_1_1reachability_1_1hypro_1_1BallSupportFunction.html#ab240b61c07fece664499411fc7b49163":[10,0,1,5,1,39,7]
 };

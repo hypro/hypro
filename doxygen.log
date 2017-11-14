@@ -7286,7 +7286,7 @@ Possible candidates:
 /home/travis/build/hypro/hypro/src/hypro/types.h:29: warning: documented symbol `typedef hypro::std::set< vector_t< Number >> vectorSet' was not declared or defined.
 /home/travis/build/hypro/hypro/src/hypro/util/Plotter.h:70: warning: documented symbol `Singleton< Plotter< Number > >' was not declared or defined.
 /home/travis/build/hypro/hypro/src/hypro/util/VariablePool.h:28: warning: documented symbol `Singleton< VariablePool >' was not declared or defined.
-error opening bib20423.bbl: No such file or directory
+error opening bib20408.bbl: No such file or directory
 bibtex command failed: No such file or directory
 .
 Preprocessing /home/travis/build/hypro/hypro/examples/INCOMPLETE_example_benchmarks.cpp...
@@ -11751,14 +11751,15 @@ Gene/home/travis/build/hypro/hypro/src/hypro/parser/antlr4-flowstar/TransitionPa
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Condition.h:19: warning: Member operator=(const Condition &orig)=default (function) of class hypro::Condition is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Condition.h:20: warning: Member operator=(Condition &&orig)=default (function) of class hypro::Condition is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Condition.h:24: warning: Member size() const  (function) of class hypro::Condition is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Condition.h:26: warning: Member getMatrix(std::size_t I=0) const  (function) of class hypro::Condition is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Condition.h:27: warning: Member getVector(std::size_t I=0) const  (function) of class hypro::Condition is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Condition.h:29: warning: Member setMatrix(const matrix_t< Number > &m, std::size_t I=0) (function) of class hypro::Condition is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Condition.h:30: warning: Member setVector(const vector_t< Number > &v, std::size_t I=0) (function) of class hypro::Condition is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Condition.h:32: warning: Member constraints() const  (function) of class hypro::Condition is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Condition.h:38: warning: Member operator==(const Condition &lhs, const Condition &rhs) (friend) of class hypro::Condition is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Condition.h:51: warning: Member operator!=(const Condition &lhs, const Condition &rhs) (friend) of class hypro::Condition is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Condition.h:55: warning: Member operator<<(std::ostream &out, const Condition &in) (friend) of class hypro::Condition is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Condition.h:25: warning: Member empty() const  (function) of class hypro::Condition is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Condition.h:27: warning: Member getMatrix(std::size_t I=0) const  (function) of class hypro::Condition is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Condition.h:28: warning: Member getVector(std::size_t I=0) const  (function) of class hypro::Condition is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Condition.h:30: warning: Member setMatrix(const matrix_t< Number > &m, std::size_t I=0) (function) of class hypro::Condition is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Condition.h:31: warning: Member setVector(const vector_t< Number > &v, std::size_t I=0) (function) of class hypro::Condition is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Condition.h:33: warning: Member constraints() const  (function) of class hypro::Condition is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Condition.h:39: warning: Member operator==(const Condition &lhs, const Condition &rhs) (friend) of class hypro::Condition is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Condition.h:52: warning: Member operator!=(const Condition &lhs, const Condition &rhs) (friend) of class hypro::Condition is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Condition.h:56: warning: Member operator<<(std::ostream &out, const Condition &in) (friend) of class hypro::Condition is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/HybridAutomaton.h:32: warning: Member locationSet (typedef) of class hypro::HybridAutomaton is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/HybridAutomaton.h:64: warning: Member HybridAutomaton(const locationSet &locs, const transitionSet &trans, const locationStateMap &initialStates) (function) of class hypro::HybridAutomaton is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/HybridAutomaton.h:116: warning: Member operator=(const HybridAutomaton< Number > &rhs)=default (function) of class hypro::HybridAutomaton is not documented.
@@ -11857,21 +11858,22 @@ Gene/home/travis/build/hypro/hypro/src/hypro/parser/antlr4-flowstar/TransitionPa
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Reset.h:16: warning: Member Reset(Reset &&orig)=default (function) of class hypro::Reset is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Reset.h:17: warning: Member operator=(const Reset< Number > &orig)=default (function) of class hypro::Reset is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Reset.h:18: warning: Member operator=(Reset< Number > &&orig)=default (function) of class hypro::Reset is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Reset.h:21: warning: Member size() const  (function) of class hypro::Reset is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Reset.h:23: warning: Member getVector(std::size_t I=0) const  (function) of class hypro::Reset is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Reset.h:24: warning: Member getMatrix(std::size_t I=0) const  (function) of class hypro::Reset is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Reset.h:25: warning: Member rGetMatrix(std::size_t I=0) const  (function) of class hypro::Reset is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Reset.h:26: warning: Member rGetVector(std::size_t I=0) const  (function) of class hypro::Reset is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Reset.h:28: warning: Member getReset(std::size_t I=0) const  (function) of class hypro::Reset is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Reset.h:29: warning: Member rGetReset(std::size_t I=0) const  (function) of class hypro::Reset is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Reset.h:30: warning: Member getResetTransformations() const  (function) of class hypro::Reset is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Reset.h:32: warning: Member setVector(const vector_t< Number > &in, std::size_t I=0) (function) of class hypro::Reset is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Reset.h:33: warning: Member setMatrix(const matrix_t< Number > &in, std::size_t I=0) (function) of class hypro::Reset is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Reset.h:36: warning: Member applyReset(const State< Number, Representation, Rargs...> &inState) const  (function) of class hypro::Reset is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Reset.h:21: warning: Member empty() const  (function) of class hypro::Reset is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Reset.h:22: warning: Member size() const  (function) of class hypro::Reset is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Reset.h:24: warning: Member getVector(std::size_t I=0) const  (function) of class hypro::Reset is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Reset.h:25: warning: Member getMatrix(std::size_t I=0) const  (function) of class hypro::Reset is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Reset.h:26: warning: Member rGetMatrix(std::size_t I=0) const  (function) of class hypro::Reset is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Reset.h:27: warning: Member rGetVector(std::size_t I=0) const  (function) of class hypro::Reset is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Reset.h:29: warning: Member getReset(std::size_t I=0) const  (function) of class hypro::Reset is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Reset.h:30: warning: Member rGetReset(std::size_t I=0) const  (function) of class hypro::Reset is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Reset.h:31: warning: Member getResetTransformations() const  (function) of class hypro::Reset is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Reset.h:33: warning: Member setVector(const vector_t< Number > &in, std::size_t I=0) (function) of class hypro::Reset is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Reset.h:34: warning: Member setMatrix(const matrix_t< Number > &in, std::size_t I=0) (function) of class hypro::Reset is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Reset.h:37: warning: Member applyReset(const State< Number, Representation, Rargs...> &inState) const  (function) of class hypro::Reset is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Reset.h:11: warning: Member mResets (variable) of class hypro::Reset is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Reset.h:41: warning: Member operator<<(std::ostream &ostr, const Reset< Number > &) (friend) of class hypro::Reset is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Reset.h:53: warning: Member operator==(const Reset< Number > &lhs, const Reset< Number > &rhs) (friend) of class hypro::Reset is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Reset.h:66: warning: Member operator!=(const Reset< Number > &lhs, const Reset< Number > &rhs) (friend) of class hypro::Reset is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Reset.h:42: warning: Member operator<<(std::ostream &ostr, const Reset< Number > &) (friend) of class hypro::Reset is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Reset.h:54: warning: Member operator==(const Reset< Number > &lhs, const Reset< Number > &rhs) (friend) of class hypro::Reset is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Reset.h:67: warning: Member operator!=(const Reset< Number > &lhs, const Reset< Number > &rhs) (friend) of class hypro::Reset is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Settings.h:15: warning: Member timeBound (variable) of class hypro::ReachabilitySettings is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/State.h:31: warning: Member repVariant (typedef) of class hypro::State is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/State.h:298: warning: Member satisfiesHalfspaces(const matrix_t< Number > &constraints, const vector_t< Number > &constants) const  (function) of class hypro::State is not documented.
@@ -23405,5 +23407,5 @@ Patching output file 35/38
 Patching output file 36/38
 Patching output file 37/38
 Patching output file 38/38
-lookup cache used 23001/65536 hits=458952 misses=24686
+lookup cache used 23003/65536 hits=458966 misses=24688
 finished...

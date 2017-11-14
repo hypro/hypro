@@ -5,6 +5,7 @@ var classhypro_1_1Reset =
     [ "Reset", "classhypro_1_1Reset.html#acef8e459cbb0edaa9c7ee0e366184ea2", null ],
     [ "~Reset", "classhypro_1_1Reset.html#ac4a186f60ff147bb7eeedc9f5525df36", null ],
     [ "applyReset", "classhypro_1_1Reset.html#ac8ea83d07a84cc1746d1f380e6f630c2", null ],
+    [ "empty", "classhypro_1_1Reset.html#ad0a7b55e6cbe9eb0dacf55c6801a3a1b", null ],
     [ "getMatrix", "classhypro_1_1Reset.html#a337fd542460dfbaad78bee16628976c1", null ],
     [ "getReset", "classhypro_1_1Reset.html#a4e33151e4c211ae3e6cc7266feeb05ce", null ],
     [ "getResetTransformations", "classhypro_1_1Reset.html#a03d77603db6c671b81f69562767825a3", null ],

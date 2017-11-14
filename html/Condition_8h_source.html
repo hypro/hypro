@@ -134,51 +134,52 @@ $(document).ready(function(){initNavTree('Condition_8h_source.html','');});
 <div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;</div>
 <div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;    <span class="comment">// Access</span></div>
 <div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;    std::size_t size()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> mConstraints.size(); }</div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;    <span class="keyword">const</span> <a class="code" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t&lt;Number&gt;</a>&amp; getMatrix(std::size_t I = 0)<span class="keyword"> const </span>{ assert(mConstraints.size()&gt;I); <span class="keywordflow">return</span> mConstraints.at(I).matrix(); }</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;    <span class="keyword">const</span> <a class="code" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t&lt;Number&gt;</a>&amp; getVector(std::size_t I = 0)<span class="keyword"> const </span>{ assert(mConstraints.size()&gt;I); <span class="keywordflow">return</span> mConstraints.at(I).vector(); }</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;    <span class="keywordtype">void</span> setMatrix(<span class="keyword">const</span> <a class="code" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t&lt;Number&gt;</a>&amp; m, std::size_t I = 0);</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;    <span class="keywordtype">void</span> setVector(<span class="keyword">const</span> <a class="code" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t&lt;Number&gt;</a>&amp; v, std::size_t I = 0);</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;    <span class="keyword">const</span> std::vector&lt;ConstraintSet&lt;Number&gt;&gt;&amp; constraints()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> mConstraints; }</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;    <span class="comment">// helper methods</span></div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    <span class="comment">//template&lt;typename Representation, typename ...Rargs&gt;</span></div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    <span class="comment">//std::pair&lt;bool,State&lt;Number,Representation, Rargs...&gt;&gt; isSatisfiedBy(const State&lt;Number,Representation, Rargs...&gt;&amp; inState) const;</span></div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    <span class="keyword">friend</span> <span class="keywordtype">bool</span> operator==(<span class="keyword">const</span> <a class="code" href="classhypro_1_1Condition.html">Condition</a>&amp; lhs, <span class="keyword">const</span> <a class="code" href="classhypro_1_1Condition.html">Condition</a>&amp; rhs) {</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;        <span class="keywordflow">if</span> (lhs.size() != rhs.size()) {</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;            <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;        }</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;        <span class="keywordflow">for</span>(std::size_t i = 0; i &lt; lhs.size(); ++i) {</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;            <span class="keywordflow">if</span> ((lhs.getVector(i) != rhs.getVector(i)) || (lhs.getMatrix(i) != rhs.getMatrix(i))) {</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;                <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;            }</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;        }</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    }</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    <span class="keyword">friend</span> <span class="keywordtype">bool</span> operator!=(<span class="keyword">const</span> <a class="code" href="classhypro_1_1Condition.html">Condition</a>&amp; lhs, <span class="keyword">const</span> <a class="code" href="classhypro_1_1Condition.html">Condition</a>&amp; rhs) {</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;        <span class="keywordflow">return</span> !(lhs == rhs);</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    }</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    <span class="keyword">friend</span> std::ostream&amp; operator&lt;&lt;(std::ostream&amp; out, <span class="keyword">const</span> <a class="code" href="classhypro_1_1Condition.html">Condition</a>&amp; in) {</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;<span class="preprocessor">#ifdef HYPRO_LOGGING</span></div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;<span class="preprocessor"></span>        std::size_t i = 0;</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;        <span class="keywordflow">for</span>(<span class="keyword">const</span> <span class="keyword">auto</span>&amp; pair : in.constraints()) {</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;            out &lt;&lt; <span class="stringliteral">&quot;Constraint &quot;</span> &lt;&lt; i &lt;&lt; <span class="stringliteral">&quot;: &quot;</span> &lt;&lt; pair.matrix() &lt;&lt; <span class="stringliteral">&quot; constants: &quot;</span> &lt;&lt; pair.vector() &lt;&lt; std::endl;</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;            ++i;</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;        }</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;<span class="preprocessor"></span>        <span class="keywordflow">return</span> out;</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    }</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;};</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;} <span class="comment">// namespace</span></div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;<span class="preprocessor">#include &quot;Condition.tpp&quot;</span></div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;    <span class="keywordtype">bool</span> empty()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> mConstraints.empty(); }</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;    <span class="keyword">const</span> <a class="code" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t&lt;Number&gt;</a>&amp; getMatrix(std::size_t I = 0)<span class="keyword"> const </span>{ assert(mConstraints.size()&gt;I); <span class="keywordflow">return</span> mConstraints.at(I).matrix(); }</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;    <span class="keyword">const</span> <a class="code" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t&lt;Number&gt;</a>&amp; getVector(std::size_t I = 0)<span class="keyword"> const </span>{ assert(mConstraints.size()&gt;I); <span class="keywordflow">return</span> mConstraints.at(I).vector(); }</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;    <span class="keywordtype">void</span> setMatrix(<span class="keyword">const</span> <a class="code" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t&lt;Number&gt;</a>&amp; m, std::size_t I = 0);</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;    <span class="keywordtype">void</span> setVector(<span class="keyword">const</span> <a class="code" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t&lt;Number&gt;</a>&amp; v, std::size_t I = 0);</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;    <span class="keyword">const</span> std::vector&lt;ConstraintSet&lt;Number&gt;&gt;&amp; constraints()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> mConstraints; }</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    <span class="comment">// helper methods</span></div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    <span class="comment">//template&lt;typename Representation, typename ...Rargs&gt;</span></div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    <span class="comment">//std::pair&lt;bool,State&lt;Number,Representation, Rargs...&gt;&gt; isSatisfiedBy(const State&lt;Number,Representation, Rargs...&gt;&amp; inState) const;</span></div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    <span class="keyword">friend</span> <span class="keywordtype">bool</span> operator==(<span class="keyword">const</span> <a class="code" href="classhypro_1_1Condition.html">Condition</a>&amp; lhs, <span class="keyword">const</span> <a class="code" href="classhypro_1_1Condition.html">Condition</a>&amp; rhs) {</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;        <span class="keywordflow">if</span> (lhs.size() != rhs.size()) {</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;            <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;        }</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;        <span class="keywordflow">for</span>(std::size_t i = 0; i &lt; lhs.size(); ++i) {</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;            <span class="keywordflow">if</span> ((lhs.getVector(i) != rhs.getVector(i)) || (lhs.getMatrix(i) != rhs.getMatrix(i))) {</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;                <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;            }</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;        }</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    }</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    <span class="keyword">friend</span> <span class="keywordtype">bool</span> operator!=(<span class="keyword">const</span> <a class="code" href="classhypro_1_1Condition.html">Condition</a>&amp; lhs, <span class="keyword">const</span> <a class="code" href="classhypro_1_1Condition.html">Condition</a>&amp; rhs) {</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;        <span class="keywordflow">return</span> !(lhs == rhs);</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    }</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    <span class="keyword">friend</span> std::ostream&amp; operator&lt;&lt;(std::ostream&amp; out, <span class="keyword">const</span> <a class="code" href="classhypro_1_1Condition.html">Condition</a>&amp; in) {</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;<span class="preprocessor">#ifdef HYPRO_LOGGING</span></div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;<span class="preprocessor"></span>        std::size_t i = 0;</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;        <span class="keywordflow">for</span>(<span class="keyword">const</span> <span class="keyword">auto</span>&amp; pair : in.constraints()) {</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;            out &lt;&lt; <span class="stringliteral">&quot;Constraint &quot;</span> &lt;&lt; i &lt;&lt; <span class="stringliteral">&quot;: &quot;</span> &lt;&lt; pair.matrix() &lt;&lt; <span class="stringliteral">&quot; constants: &quot;</span> &lt;&lt; pair.vector() &lt;&lt; std::endl;</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;            ++i;</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;        }</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;<span class="preprocessor"></span>        <span class="keywordflow">return</span> out;</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    }</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;};</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;} <span class="comment">// namespace</span></div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;<span class="preprocessor">#include &quot;Condition.tpp&quot;</span></div>
 <div class="ttc" id="namespacehypro_html_a52a4896e811a0710bcfc5a410a780034"><div class="ttname"><a href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">hypro::matrix_t</a></div><div class="ttdeci">Eigen::Matrix&lt; Number, Eigen::Dynamic, Eigen::Dynamic &gt; matrix_t</div><div class="ttdef"><b>Definition:</b> <a href="types_8h_source.html#l00026">types.h:26</a></div></div>
 <div class="ttc" id="classhypro_1_1Condition_html"><div class="ttname"><a href="classhypro_1_1Condition.html">hypro::Condition</a></div><div class="ttdef"><b>Definition:</b> <a href="Condition_8h_source.html#l00010">Condition.h:10</a></div></div>
 <div class="ttc" id="namespacehypro_html_aa70b7a97ac898c2b28a2af61f4607e3a"><div class="ttname"><a href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">hypro::vector_t</a></div><div class="ttdeci">Eigen::Matrix&lt; Number, Eigen::Dynamic, 1 &gt; vector_t</div><div class="ttdef"><b>Definition:</b> <a href="types_8h_source.html#l00020">types.h:20</a></div></div>
