@@ -22,6 +22,7 @@ public:
 
 	// Access
 	std::size_t size() const { return mConstraints.size(); }
+	bool empty() const { return mConstraints.empty(); }
 
 	const matrix_t<Number>& getMatrix(std::size_t I = 0) const { assert(mConstraints.size()>I); return mConstraints.at(I).matrix(); }
 	const vector_t<Number>& getVector(std::size_t I = 0) const { assert(mConstraints.size()>I); return mConstraints.at(I).vector(); }

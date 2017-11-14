@@ -109,6 +109,9 @@ std::pair<CONTAINMENT,State<Number,Representation,Rargs...>> State<Number,Repres
 
 template<typename Number, typename Representation, typename ...Rargs>
 std::pair<CONTAINMENT,State<Number,Representation,Rargs...>> State<Number,Representation,Rargs...>::satisfiesHalfspaces(const matrix_t<Number>& constraints, const vector_t<Number>& constants) const {
+	if(constraints.rows() == 0) {
+		return std::make_pair(CONTAINMENT::FULL,*this);
+	}
 	return partiallySatisfies(Condition<Number>(constraints,constants), 0);
 }
 

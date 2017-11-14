@@ -18,6 +18,7 @@ public:
 	Reset& operator=(Reset<Number>&& orig) = default;
 	~Reset() {}
 
+	bool empty() const { return mResets.empty(); }
 	std::size_t size() const { return mResets.size(); }
 
 	vector_t<Number> getVector(std::size_t I = 0) const { return mResets.at(I).vector(); }
