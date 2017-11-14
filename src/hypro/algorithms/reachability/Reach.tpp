@@ -161,17 +161,15 @@ namespace reachability {
 				INFO("hypro.reacher","Time: " << std::setprecision(4) << std::setw(8) << fixed << carl::toDouble(currentLocalTime));
 				// Verify transitions on the current set.
 				if(int(mCurrentLevel) < mSettings.jumpDepth || mSettings.jumpDepth < 0) {
-					State_t<Number> currentState = _state;
-					currentState.setSetDirect(currentSegment.getSet(0),0);
-					currentState.setTimestamp(currentState.getTimestamp() + carl::Interval<Number>(currentLocalTime-mSettings.timeStep,currentLocalTime));
-					currentState.setTimestamp(currentState.getTimestamp().intersect(carl::Interval<Number>(Number(0), mSettings.timeBound)));
+					//State_t<Number> currentState = _state;
+					State_t<Number> currentState = currentSegment;
 					//std::cout << "-- Checking Transitions!" << std::endl;
 					checkTransitions(currentState, currentState.getTimestamp(), nextInitialSets);
 				}
 
 				// perform linear transformation on the last segment of the flowpipe
 #ifdef USE_SYSTEM_SEPARATION
-				autonomPart = autonomPart.linearTransformation( boost::get<2>(initialSetup), boost::get<3>(initialSetup) );
+				autonomPart = autonomPart.partiallyApplyTimeStep( ConstraintSet<Number>(boost::get<2>(initialSetup), boost::get<3>(initialSetup)), mSettings.timeStep, 0 );
 #ifdef USE_ELLIPSOIDS
 				if (mBloatingFactor != 0){
 					Representation temp = Representation(totalBloating);
@@ -190,7 +188,7 @@ namespace reachability {
 				nonautonomPart = nonautonomPart.linearTransformation(boost::get<2>(initialSetup));
 				totalBloating = totalBloating.minkowskiSum(nonautonomPart);
 #else
-				nextSegment =  currentSegment.applyTransformation(std::vector<ConstraintSet<Number>>({  ConstraintSet<Number>(boost::get<2>(initialSetup), boost::get<3>(initialSetup)) }));
+				nextSegment =  currentSegment.partiallyApplyTimeStep(ConstraintSet<Number>(boost::get<2>(initialSetup), boost::get<3>(initialSetup)), mSettings.timeStep, 0);
 #endif
 				// extend flowpipe (only if still within Invariant of location)
 				std::pair<bool, State_t<Number>> newSegment = nextSegment.satisfies( _state.getLocation()->getInvariant());
