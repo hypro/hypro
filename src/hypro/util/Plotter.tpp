@@ -278,7 +278,7 @@ void Plotter<Number>::writeGnuplot() const {
 			if(rangeExt != 0){
 				ranges[d] = carl::Interval<double>(carl::toDouble(min( d )) - rangeExt, carl::toDouble(max( d )) + rangeExt );
 			} else{
-				rangeExt = carl::toDouble(carl::toDouble(min( d ))* 0.1);
+				rangeExt = min(d) == 0 ? 0.1 : carl::toDouble(carl::toDouble(min( d ))* 0.1);
 				ranges[d] = carl::Interval<double>(carl::toDouble(min( d )) - rangeExt, carl::toDouble(max( d )) + rangeExt );
 			}
 		}
