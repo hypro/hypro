@@ -27,6 +27,9 @@ if(STATICLIB_SWITCH)
 	#message("hypro include dirs: " ${hypro_INCLUDE_DIRS})
 	#message("hypro sources: " ${sources})
 	target_link_libraries(${PROJECT_NAME}_static PUBLIC ${${PROJECT_NAME}_LIBRARIES_STATIC})
+	target_link_libraries(${PROJECT_NAME}_static PUBLIC lib_carl)
+	target_link_libraries(${PROJECT_NAME}_static PUBLIC EIGEN3)
+	target_link_libraries(${PROJECT_NAME}_static PUBLIC Boost_STATIC)
 	target_include_directories(${PROJECT_NAME}_static
 		PRIVATE ${${PROJECT_NAME}_INCLUDE_DIRS} ${CMAKE_CURRENT_SOURCE_DIR}
 		PUBLIC
@@ -51,7 +54,7 @@ else()
 
 	get_target_property(IFL lib_carl INTERFACE_LINK_LIBRARIES)
 	#message(STATUS "Carl interface link libraries: ${IFL}")
-
+	#message("hypro include dirs: " ${hypro_INCLUDE_DIRS})
 	#message(STATUS "antlr libs path: " ${ANTLR4CPP_LIBS})
 	#message(STATUS "antlr include dirs path: " ${ANTLR4CPP_INCLUDE_DIRS})
 	#message(STATUS "hypro libraries dynamic: " "${${PROJECT_NAME}_LIBRARIES_DYNAMIC}")
