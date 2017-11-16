@@ -4,7 +4,7 @@ ExternalProject_Add(
 	glpk
 	#URL ftp://ftp.gnu.org/gnu/glpk/glpk-${glpk_version}.tar.gz
 	SOURCE_DIR "${CMAKE_SOURCE_DIR}/src/resources/glpk-${glpk_version}"
-    CONFIGURE_COMMAND ./configure --prefix=${CMAKE_SOURCE_DIR}/src/resources/glpk-${glpk_version}/build --with-gmp --with-pic CPPFLAGS=-fPIC --disable-shared --enable-static
+    CONFIGURE_COMMAND ./configure --prefix=${CMAKE_SOURCE_DIR}/src/resources/glpk-${glpk_version}/build --with-gmp --with-pic CPPFLAGS=-fPIC --disable-shared --disable-dl --enable-static
 	PREFIX ${CMAKE_SOURCE_DIR}/src/resources/glpk-${glpk_version}/build
             #BUILD_COMMAND make
             BUILD_IN_SOURCE 1
