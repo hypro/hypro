@@ -98,6 +98,7 @@ matrix:
 
 before_install:
   - cd .travis/ && source setupTravis.sh && cd ../
+  - sudo motion update || echo 'up to date'
 
 install:
   - git clone https://github.com/smtrat/carl.git && cd carl && mkdir build && cd build && cmake -DCMAKE_CXX_COMPILER=$COMPILER -DCMAKE_BUILD_TYPE=Release .. && make resources && make lib_carl VERBOSE=1
