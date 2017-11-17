@@ -46,7 +46,7 @@ typename Converter<Number>::DifferenceBounds Converter<Number>::toDifferenceBoun
     mat = mat*-1.0;
     hypro::vector_t<Number> vec = hypro::vector_t<Number>::Zero(numclocks);
     if(source.satisfiesHalfspaces(mat,vec).first != hypro::CONTAINMENT::FULL){
-        std::cout << "HPolytope \n " << source << " is not entirely positie. Calculations may be imprecise.";
+        std::cout << "HPolytope \n " << source << " is not entirely positive. Calculations may be imprecise.";
     }
     //std::cout<< "Hpolytope has " << numclocks << " clocks.\n";
     // 1. introduce a zero clock (numclocks+1)

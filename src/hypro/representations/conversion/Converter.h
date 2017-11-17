@@ -53,6 +53,7 @@ class Converter {
 		#endif
 		static Box toBox(const SupportFunction& source, const CONV_MODE = CONV_MODE::OVER);
 		static Box toBox(const Zonotope& source, const CONV_MODE = CONV_MODE::OVER);
+		static Box toBox(const DifferenceBounds& source, const CONV_MODE = CONV_MODE::OVER);
 
 		static ConstraintSet toConstraintSet(const Box& source, const CONV_MODE = CONV_MODE::EXACT);
 		static ConstraintSet toConstraintSet(const ConstraintSet& source, const CONV_MODE = CONV_MODE::EXACT);
@@ -64,6 +65,7 @@ class Converter {
 		#endif
 		static ConstraintSet toConstraintSet(const SupportFunction& source, const CONV_MODE = CONV_MODE::OVER);
 		static ConstraintSet toConstraintSet(const Zonotope& source, const CONV_MODE = CONV_MODE::OVER);
+	    static ConstraintSet toConstraintSet(const DifferenceBounds& source, const CONV_MODE = CONV_MODE::OVER);
 
 		static HPolytope toHPolytope(const Box& source, const CONV_MODE = CONV_MODE::EXACT);
 		static HPolytope toHPolytope(const ConstraintSet& source, const CONV_MODE = CONV_MODE::EXACT);
@@ -81,6 +83,7 @@ class Converter {
 		static VPolytope toVPolytope(const VPolytope& source, const CONV_MODE = CONV_MODE::EXACT);
 		static VPolytope toVPolytope(const SupportFunction& source, const CONV_MODE = CONV_MODE::UNDER, std::size_t numberOfDirections = defaultTemplateDirectionCount );
 		static VPolytope toVPolytope(const Zonotope& source, const CONV_MODE = CONV_MODE::EXACT);
+		static VPolytope toVPolytope(const DifferenceBounds& source, const CONV_MODE = CONV_MODE::EXACT);
 
 		static SupportFunction toSupportFunction(const Box& source, const CONV_MODE = CONV_MODE::EXACT);
 		static SupportFunction toSupportFunction(const ConstraintSet& source, const CONV_MODE = CONV_MODE::EXACT);
@@ -89,6 +92,7 @@ class Converter {
 		static SupportFunction toSupportFunction(const VPolytope& source, const CONV_MODE = CONV_MODE::EXACT);
 		static SupportFunction toSupportFunction(const SupportFunction& source, const CONV_MODE = CONV_MODE::EXACT);
 		static SupportFunction toSupportFunction(const Zonotope& source, const CONV_MODE = CONV_MODE::EXACT);
+	    static SupportFunction toSupportFunction(const DifferenceBounds& source, const CONV_MODE = CONV_MODE::EXACT);
 
 		static Zonotope toZonotope(const Box& source, const CONV_MODE = CONV_MODE::EXACT);
 		static Zonotope toZonotope(const ConstraintSet& source, const CONV_MODE = CONV_MODE::EXACT);
@@ -97,6 +101,8 @@ class Converter {
 		static Zonotope toZonotope(const VPolytope& source, const CONV_MODE = CONV_MODE::OVER);
 		static Zonotope toZonotope(const SupportFunction& source, const CONV_MODE = CONV_MODE::OVER, std::size_t numberOfDirections = defaultTemplateDirectionCount );
 		static Zonotope toZonotope(const Zonotope& source, const CONV_MODE = CONV_MODE::EXACT);
+		static Zonotope toZonotope(const DifferenceBounds& source, const CONV_MODE = CONV_MODE::OVER);
+
 
 		static DifferenceBounds toDifferenceBounds(const Box& source, const CONV_MODE = CONV_MODE::EXACT);
 		static DifferenceBounds toDifferenceBounds(const ConstraintSet& source, const CONV_MODE = CONV_MODE::EXACT);

@@ -121,7 +121,7 @@ public:
     DifferenceBoundsT<Number,Converter> intersectHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const;
     bool contains( const Point<Number>& _point ) const;
     DifferenceBoundsT<Number,Converter> unite( const DifferenceBoundsT<Number,Converter>& _rhs ) const;
-
+    const DifferenceBoundsT<Number,Converter>& removeRedundancy();
     // difference bounds specific
 
     /**
@@ -260,6 +260,20 @@ public:
             default: ostr << "undef"; break;
         }
         return ostr;
+    }
+
+    friend bool operator==(const DifferenceBoundsT<Number,Converter>& lhs, const DifferenceBoundsT<Number,Converter>& rhs){
+        if(lhs.getDBM().cols() != rhs.getDBM().cols() || lhs.getDBM().rows() != rhs.getDBM().rows()){
+            return false;
+        }
+        for(int i=0; i < lhs.getDBM().rows();i++){
+            for(int j=0; j < lhs.getDBM().rows();j++){
+                if(lhs.getDBM()(i,j) != rhs.getDBM()(i,j)){
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 };
 }
