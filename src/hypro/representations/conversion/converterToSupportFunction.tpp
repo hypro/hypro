@@ -76,3 +76,8 @@ typename Converter<Number>::SupportFunction Converter<Number>::toSupportFunction
 
     return SupportFunction( temp.constraints() );
 }
+
+template<typename Number>
+typename Converter<Number>::SupportFunction Converter<Number>::toSupportFunction( const DifferenceBounds& _source, const CONV_MODE mode ) {
+    return toSupportFunction(toHPolytope(_source, mode));
+}

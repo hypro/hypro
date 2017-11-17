@@ -235,6 +235,12 @@ typename Converter<Number>::Box Converter<Number>::toBox( const Zonotope& _sourc
 	return BoxT<Number,Converter,BoxLinearOptimizationOn>( std::make_pair(minima, maxima) );                                                 //creates a box with the computed intervals
 }
 
+//conversion from difference bounds to box (no differentiation between conversion modes - always OVER)
+template<typename Number>
+typename Converter<Number>::Box Converter<Number>::toBox( const DifferenceBounds& _source, const CONV_MODE mode ) {
+	return toBox(toHPolytope(_source, mode));
+}
+
 
 //conversion from Polytope to box (different data structure)
 //template<typename Number>

@@ -318,3 +318,10 @@ typename Converter<Number>::VPolytope Converter<Number>::toVPolytope( const Supp
     }
 	return target;
 }
+
+
+template<typename Number>
+typename Converter<Number>::VPolytope Converter<Number>::toVPolytope( const DifferenceBounds& _source, const CONV_MODE mode ) {
+    return toVPolytope(toHPolytope(_source, mode));
+}
+

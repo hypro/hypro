@@ -547,6 +547,10 @@ namespace hypro {
         return res;
     }
 
-
+    template <typename Number, typename Converter>
+    const DifferenceBoundsT<Number,Converter>& DifferenceBoundsT<Number, Converter>::removeRedundancy() {
+        // we intend to always have a canonized dbm, so this should always be redundancy free
+        return *this;
+    }
 }
 
