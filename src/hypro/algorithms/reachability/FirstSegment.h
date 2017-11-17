@@ -128,6 +128,12 @@ boost::tuple<CONTAINMENT, State, matrix_t<Number>, vector_t<Number>> computeFirs
 
         State firstSegment(_state.getLocation());
         unsigned dimension = initialPair.second.getDimension(0);
+        // vector_t<Number> lower = vector_t<Number>::Zero(dimension+1);
+        // vector_t<Number> upper = vector_t<Number>::Zero(dimension+1);
+        // lower.block(0,0,dimension,1) = _state.getLocation()->getExternalInput().min().rawCoordinates();
+        // upper.block(0,0,dimension,1) = _state.getLocation()->getExternalInput().max().rawCoordinates();
+		// Box<Number> externalInput(std::make_pair(Point<Number>(lower), Point<Number>(upper)));
+
         Box<Number> externalInput(std::make_pair(Point<Number>(vector_t<Number>::Zero(dimension+1)),
                                                         Point<Number>(vector_t<Number>::Zero(dimension+1))));
         std::vector<Box<Number>> errorBoxVector =
