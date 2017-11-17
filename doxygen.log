@@ -7286,7 +7286,7 @@ Possible candidates:
 /home/travis/build/hypro/hypro/src/hypro/types.h:29: warning: documented symbol `typedef hypro::std::set< vector_t< Number >> vectorSet' was not declared or defined.
 /home/travis/build/hypro/hypro/src/hypro/util/Plotter.h:70: warning: documented symbol `Singleton< Plotter< Number > >' was not declared or defined.
 /home/travis/build/hypro/hypro/src/hypro/util/VariablePool.h:28: warning: documented symbol `Singleton< VariablePool >' was not declared or defined.
-error opening bib20440.bbl: No such file or directory
+error opening bib20685.bbl: No such file or directory
 bibtex command failed: No such file or directory
 .
 Preprocessing /home/travis/build/hypro/hypro/examples/INCOMPLETE_example_benchmarks.cpp...
@@ -11880,15 +11880,15 @@ Gene/home/travis/build/hypro/hypro/src/hypro/parser/antlr4-flowstar/TransitionPa
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/State.h:332: warning: Member linearTransformation(const matrix_t< Number > &matrix) const  (function) of class hypro::State is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/State.h:333: warning: Member affineTransformation(const matrix_t< Number > &matrix, const vector_t< Number > &vector) const  (function) of class hypro::State is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/State.h:335: warning: Member applyTransformation(const ConstraintSet< Number > &trafo) const  (function) of class hypro::State is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/State.h:356: warning: Member minkowskiSum(const State< Number, Representation, Rargs...> &rhs) const  (function) of class hypro::State is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/State.h:358: warning: Member partiallyMinkowskiSum(const State< Number, Representation, Rargs...> &rhs, std::size_t I) const  (function) of class hypro::State is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/State.h:356: warning: Member minkowskiSum(const State< Number, tNumber, Representation, Rargs...> &rhs) const  (function) of class hypro::State is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/State.h:358: warning: Member partiallyMinkowskiSum(const State< Number, tNumber, Representation, Rargs...> &rhs, std::size_t I) const  (function) of class hypro::State is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/State.h:360: warning: Member vertices(std::size_t I=0) const  (function) of class hypro::State is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/State.h:362: warning: Member project(const std::vector< std::size_t > &dimensions, std::size_t I=0) const  (function) of class hypro::State is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/State.h:364: warning: Member getDimension(std::size_t I) const  (function) of class hypro::State is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/State.h:366: warning: Member getSupremum(std::size_t I) const  (function) of class hypro::State is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/State.h:368: warning: Member removeRedundancy() (function) of class hypro::State is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/State.h:370: warning: Member partiallyRemoveRedundancy(std::size_t I) (function) of class hypro::State is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/State.h:373: warning: argument 'state' of command @param is not found in the argument list of hypro::State< Number, Representation, Rargs >::operator<<(ostream &out, const State< Number, Representation, Rargs...> &)
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/State.h:373: warning: argument 'state' of command @param is not found in the argument list of hypro::State< Number, tNumber, Representation, Rargs >::operator<<(ostream &out, const State< Number, tNumber, Representation, Rargs...> &)
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Visitors.h:16: warning: Member operator()(const A &lhs, const B &) const  (function) of class hypro::genericUniteVisitor is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Visitors.h:22: warning: Member operator()(const A &lhs, const A &rhs) const  (function) of class hypro::genericUniteVisitor is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Visitors.h:38: warning: Member operator()(const A &lhs, const B &) const  (function) of class hypro::genericMinkowskiSumVisitor is not documented.
@@ -23407,5 +23407,5 @@ Patching output file 35/38
 Patching output file 36/38
 Patching output file 37/38
 Patching output file 38/38
-lookup cache used 23003/65536 hits=458968 misses=24688
+lookup cache used 23003/65536 hits=458967 misses=24688
 finished...

@@ -1056,7 +1056,7 @@ var hierarchy =
       [ "hypro::reachability::hypro::VariablePool", "classhypro_1_1reachability_1_1hypro_1_1VariablePool.html", null ],
       [ "hypro::VariablePool", "classhypro_1_1VariablePool.html", null ]
     ] ],
-    [ "hypro::State< Number, Representation, Rargs >", "classhypro_1_1State.html", null ],
+    [ "hypro::State< Number, tNumber, Representation, Rargs >", "classhypro_1_1State.html", null ],
     [ "hypro::State< Number, ConstraintSet< Number > >", "classhypro_1_1State.html", null ],
     [ "static_visitor", null, [
       [ "hypro::genericAffineTransformationVisitor< T, Number >", "classhypro_1_1genericAffineTransformationVisitor.html", null ],
