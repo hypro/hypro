@@ -107,7 +107,7 @@ TYPED_TEST(DifferenceBoundsTest, Vertices)
 
     //( 4[0] , 4[1]), ( 4[0] , 6[1]), ( 9[0] , 9[1]), ( 9[0] , 11[1])/
     std::vector<Point<TypeParam>> vertices  = dbm.vertices();
-    EXPECT_EQ(vertices.size(), 4);
+    EXPECT_EQ(vertices.size(), std::size_t(4));
 
     std::vector<TypeParam> coord0;
     coord0.push_back(TypeParam(4));
