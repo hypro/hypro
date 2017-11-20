@@ -12,33 +12,33 @@
 
 //conversion from DifferenceBounds to DifferenceBounds (no differentiation between conversion modes - always EXACT)
 template<typename Number>
-typename Converter<Number>::DifferenceBounds Converter<Number>::toDifferenceBounds(const DifferenceBounds& source, const CONV_MODE mode){
+typename Converter<Number>::DifferenceBounds Converter<Number>::toDifferenceBounds(const DifferenceBounds& source, const CONV_MODE ){
     return source;
 }
 
 template<typename Number>
-typename Converter<Number>::DifferenceBounds Converter<Number>::toDifferenceBounds(const Box& source, const CONV_MODE mode){
+typename Converter<Number>::DifferenceBounds Converter<Number>::toDifferenceBounds(const Box& source, const CONV_MODE ){
     // TODO make better, this is just the cheap solution
     HPolytope tmp = toHPolytope(source);
     return toDifferenceBounds(tmp);
 }
 
 template<typename Number>
-typename Converter<Number>::DifferenceBounds Converter<Number>::toDifferenceBounds(const ConstraintSet& source, const CONV_MODE mode){
+typename Converter<Number>::DifferenceBounds Converter<Number>::toDifferenceBounds(const ConstraintSet& source, const CONV_MODE ){
     // TODO make better, this is just the cheap solution
     HPolytope tmp = toHPolytope(source);
     return toDifferenceBounds(tmp);
 }
 
 template<typename Number>
-typename Converter<Number>::DifferenceBounds Converter<Number>::toDifferenceBounds(const Ellipsoid& source, const CONV_MODE mode){
+typename Converter<Number>::DifferenceBounds Converter<Number>::toDifferenceBounds(const Ellipsoid& source, const CONV_MODE ){
     // TODO make better, this is just the cheap solution
     HPolytope tmp = toHPolytope(source);
     return toDifferenceBounds(tmp);
 }
 
 template<typename Number>
-typename Converter<Number>::DifferenceBounds Converter<Number>::toDifferenceBounds(const HPolytope& source, const CONV_MODE mode){
+typename Converter<Number>::DifferenceBounds Converter<Number>::toDifferenceBounds(const HPolytope& source, const CONV_MODE ){
 
     size_t numclocks = source.dimension();
     // check wether the entire polytope is positive, because we expect clocks
@@ -54,8 +54,8 @@ typename Converter<Number>::DifferenceBounds Converter<Number>::toDifferenceBoun
     hypro::matrix_t<typename Converter<Number>::DifferenceBounds::DBMEntry> dbm = hypro::matrix_t<typename Converter<Number>::DifferenceBounds::DBMEntry>(numclocks, numclocks);
 
     //  for each pair of variables i,j
-    for(int i = 0; i < numclocks; i++) {
-        for(int j=0; j < numclocks; j++) {
+    for(size_t i = 0; i < numclocks; i++) {
+        for(size_t j=0; j < numclocks; j++) {
             //      if i!=j (do not consider diagonal entries)
             if(i!=j) {
                 vector_t<Number> direction = vector_t<Number>::Zero(numclocks-1);
@@ -93,7 +93,7 @@ typename Converter<Number>::DifferenceBounds Converter<Number>::toDifferenceBoun
 }
 
 template<typename Number>
-typename Converter<Number>::DifferenceBounds Converter<Number>::toDifferenceBounds(const VPolytope& source, const CONV_MODE mode){
+typename Converter<Number>::DifferenceBounds Converter<Number>::toDifferenceBounds(const VPolytope& source, const CONV_MODE ){
     // TODO make better, this is just the cheap solution
     HPolytope tmp = toHPolytope(source);
     return toDifferenceBounds(tmp);
@@ -107,7 +107,7 @@ typename Converter<Number>::DifferenceBounds Converter<Number>::toDifferenceBoun
 }
 
 template<typename Number>
-typename Converter<Number>::DifferenceBounds Converter<Number>::toDifferenceBounds(const Zonotope& source, const CONV_MODE mode){
+typename Converter<Number>::DifferenceBounds Converter<Number>::toDifferenceBounds(const Zonotope& source, const CONV_MODE ){
     // TODO make better, this is just the cheap solution
     HPolytope tmp = toHPolytope(source);
     return toDifferenceBounds(tmp);
