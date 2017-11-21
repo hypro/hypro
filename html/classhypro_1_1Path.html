@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.6"/>
-<title>HyPro: hypro::Path&lt; Number &gt; Class Template Reference</title>
+<title>HyPro: hypro::Path&lt; Number, tNumber &gt; Class Template Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -116,7 +116,7 @@ $(document).ready(function(){initNavTree('classhypro_1_1Path.html','');});
 <a href="#friends">Friends</a> &#124;
 <a href="classhypro_1_1Path-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">hypro::Path&lt; Number &gt; Class Template Reference</div>  </div>
+<div class="title">hypro::Path&lt; Number, tNumber &gt; Class Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 
@@ -127,115 +127,117 @@ $(document).ready(function(){initNavTree('classhypro_1_1Path.html','');});
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
-<tr class="memitem:aff80e569a003f458646dbd97b39c3a43"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aff80e569a003f458646dbd97b39c3a43"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>TIterator</b> = typename std::deque&lt; <a class="el" href="structhypro_1_1TPathElement.html">TPathElement</a>&lt; Number &gt;&gt;::iterator</td></tr>
-<tr class="separator:aff80e569a003f458646dbd97b39c3a43"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a444067b6a6793f6a57759e1e5ec38283"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a444067b6a6793f6a57759e1e5ec38283"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>TIterator_const</b> = typename std::deque&lt; <a class="el" href="structhypro_1_1TPathElement.html">TPathElement</a>&lt; Number &gt;&gt;::const_iterator</td></tr>
-<tr class="separator:a444067b6a6793f6a57759e1e5ec38283"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a10fd505bf8db529c874cf6d00ffca3f4"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a10fd505bf8db529c874cf6d00ffca3f4"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>TIterator</b> = typename std::deque&lt; <a class="el" href="structhypro_1_1TPathElement.html">TPathElement</a>&lt; Number, tNumber &gt;&gt;::iterator</td></tr>
+<tr class="separator:a10fd505bf8db529c874cf6d00ffca3f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a01a0b17f0fe75c38dcec584196535c27"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a01a0b17f0fe75c38dcec584196535c27"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>TIterator_const</b> = typename std::deque&lt; <a class="el" href="structhypro_1_1TPathElement.html">TPathElement</a>&lt; Number, tNumber &gt;&gt;::const_iterator</td></tr>
+<tr class="separator:a01a0b17f0fe75c38dcec584196535c27"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:af92107e154b140d17804d1ea8baa7c57"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af92107e154b140d17804d1ea8baa7c57"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>add</b> (const <a class="el" href="structhypro_1_1TPathElement.html">TPathElement</a>&lt; Number &gt; &amp;elem)</td></tr>
-<tr class="separator:af92107e154b140d17804d1ea8baa7c57"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afe3a68a397b696908d104f8e6dc2ca47"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="afe3a68a397b696908d104f8e6dc2ca47"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>addTransition</b> (<a class="el" href="classhypro_1_1Transition.html">Transition</a>&lt; Number &gt; *t, const carl::Interval&lt; Number &gt; &amp;enabledTime)</td></tr>
-<tr class="separator:afe3a68a397b696908d104f8e6dc2ca47"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a13110f8e3c1c2eee45b68f5a8bc6f04e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a13110f8e3c1c2eee45b68f5a8bc6f04e"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>addTimeStep</b> (const carl::Interval&lt; Number &gt; &amp;timeStep)</td></tr>
-<tr class="separator:a13110f8e3c1c2eee45b68f5a8bc6f04e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a361c89024f76824e0f8625cc1a77f8e0"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a361c89024f76824e0f8625cc1a77f8e0"></a>
+<tr class="memitem:a638bfb0372adc5336181c386dd4d2a7c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a638bfb0372adc5336181c386dd4d2a7c"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>add</b> (const <a class="el" href="structhypro_1_1TPathElement.html">TPathElement</a>&lt; Number, tNumber &gt; &amp;elem)</td></tr>
+<tr class="separator:a638bfb0372adc5336181c386dd4d2a7c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a391e302fe17175b1083528a1d1f70cb1"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a391e302fe17175b1083528a1d1f70cb1"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>addTransition</b> (<a class="el" href="classhypro_1_1Transition.html">Transition</a>&lt; Number &gt; *t, const carl::Interval&lt; tNumber &gt; &amp;enabledTime)</td></tr>
+<tr class="separator:a391e302fe17175b1083528a1d1f70cb1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a01ee87d5ef9cb76c5a807aa0cecdddec"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a01ee87d5ef9cb76c5a807aa0cecdddec"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>addTimeStep</b> (const carl::Interval&lt; tNumber &gt; &amp;timeStep)</td></tr>
+<tr class="separator:a01ee87d5ef9cb76c5a807aa0cecdddec"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a204059f1637694ac5aefede27aeac9bb"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a204059f1637694ac5aefede27aeac9bb"></a>
 std::pair&lt; <a class="el" href="classhypro_1_1Transition.html">Transition</a>&lt; Number &gt;<br class="typebreak"/>
- *, carl::Interval&lt; Number &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getTransitionToJumpDepth</b> (unsigned depth) const </td></tr>
-<tr class="separator:a361c89024f76824e0f8625cc1a77f8e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab49179b0a2bb35fda83ff9b59ae1aaa7"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab49179b0a2bb35fda83ff9b59ae1aaa7"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>sharesPrefix</b> (const <a class="el" href="classhypro_1_1Path.html">Path</a>&lt; Number &gt; &amp;rhs) const </td></tr>
-<tr class="separator:ab49179b0a2bb35fda83ff9b59ae1aaa7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7e3c90b21aa790131234dd3b4abb3a3c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7e3c90b21aa790131234dd3b4abb3a3c"></a>
-<a class="el" href="classhypro_1_1Path.html">Path</a>&#160;</td><td class="memItemRight" valign="bottom"><b>sharedPrefix</b> (const <a class="el" href="classhypro_1_1Path.html">Path</a>&lt; Number &gt; &amp;rhs) const </td></tr>
-<tr class="separator:a7e3c90b21aa790131234dd3b4abb3a3c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a54a34b312b92293211fdadf98de33439"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a54a34b312b92293211fdadf98de33439"></a>
-<a class="el" href="classhypro_1_1Path.html">Path</a>&#160;</td><td class="memItemRight" valign="bottom"><b>removeSharedPrefix</b> (const <a class="el" href="classhypro_1_1Path.html">Path</a>&lt; Number &gt; &amp;rhs) const </td></tr>
-<tr class="separator:a54a34b312b92293211fdadf98de33439"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aed947daa0ef7c4a5c5a944d2bb9c889e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aed947daa0ef7c4a5c5a944d2bb9c889e"></a>
+ *, carl::Interval&lt; tNumber &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getTransitionToJumpDepth</b> (unsigned depth) const </td></tr>
+<tr class="separator:a204059f1637694ac5aefede27aeac9bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adc455bc9c3902b36a77df4aae94d50d2"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="adc455bc9c3902b36a77df4aae94d50d2"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>sharesPrefix</b> (const <a class="el" href="classhypro_1_1Path.html">Path</a>&lt; Number, tNumber &gt; &amp;rhs) const </td></tr>
+<tr class="separator:adc455bc9c3902b36a77df4aae94d50d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aedb7b1e110b4a5fbdae6789af7a70932"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aedb7b1e110b4a5fbdae6789af7a70932"></a>
+<a class="el" href="classhypro_1_1Path.html">Path</a>&#160;</td><td class="memItemRight" valign="bottom"><b>sharedPrefix</b> (const <a class="el" href="classhypro_1_1Path.html">Path</a>&lt; Number, tNumber &gt; &amp;rhs) const </td></tr>
+<tr class="separator:aedb7b1e110b4a5fbdae6789af7a70932"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac626c1b57e1dce829cb925f74725e53b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac626c1b57e1dce829cb925f74725e53b"></a>
+<a class="el" href="classhypro_1_1Path.html">Path</a>&#160;</td><td class="memItemRight" valign="bottom"><b>removeSharedPrefix</b> (const <a class="el" href="classhypro_1_1Path.html">Path</a>&lt; Number, tNumber &gt; &amp;rhs) const </td></tr>
+<tr class="separator:ac626c1b57e1dce829cb925f74725e53b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a26b444d6da4aa35eeca2753ee898156d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a26b444d6da4aa35eeca2753ee898156d"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>isEmpty</b> () const </td></tr>
-<tr class="separator:aed947daa0ef7c4a5c5a944d2bb9c889e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae3f48aa7ca191545fcb7d07bf5728a4b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae3f48aa7ca191545fcb7d07bf5728a4b"></a>
-Number&#160;</td><td class="memItemRight" valign="bottom"><b>maximalTimeSpan</b> (typename std::deque&lt; <a class="el" href="structhypro_1_1TPathElement.html">TPathElement</a>&lt; Number &gt;&gt;::const_iterator start, typename std::deque&lt; <a class="el" href="structhypro_1_1TPathElement.html">TPathElement</a>&lt; Number &gt;&gt;::const_iterator end) const </td></tr>
-<tr class="separator:ae3f48aa7ca191545fcb7d07bf5728a4b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac6817277944dc364a6fc47cea63ee59a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac6817277944dc364a6fc47cea63ee59a"></a>
+<tr class="separator:a26b444d6da4aa35eeca2753ee898156d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab4776f7da0f2fcff92fa6659e8783099"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab4776f7da0f2fcff92fa6659e8783099"></a>
+tNumber&#160;</td><td class="memItemRight" valign="bottom"><b>maximalTimeSpan</b> (typename std::deque&lt; <a class="el" href="structhypro_1_1TPathElement.html">TPathElement</a>&lt; Number, tNumber &gt;&gt;::const_iterator start, typename std::deque&lt; <a class="el" href="structhypro_1_1TPathElement.html">TPathElement</a>&lt; Number, tNumber &gt;&gt;::const_iterator end) const </td></tr>
+<tr class="separator:ab4776f7da0f2fcff92fa6659e8783099"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a06c233ad267e52f0f19f8686493c9098"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a06c233ad267e52f0f19f8686493c9098"></a>
 std::size_t&#160;</td><td class="memItemRight" valign="bottom"><b>getNumberDiscreteJumps</b> () const </td></tr>
-<tr class="separator:ac6817277944dc364a6fc47cea63ee59a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a801a6d5ca43b9b4ef74f61974bad3523"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a801a6d5ca43b9b4ef74f61974bad3523"></a>
+<tr class="separator:a06c233ad267e52f0f19f8686493c9098"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7721ae712efb3e4b884b67564e5aa7f3"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7721ae712efb3e4b884b67564e5aa7f3"></a>
 std::vector&lt; <a class="el" href="classhypro_1_1Transition.html">Transition</a><br class="typebreak"/>
-&lt; Number &gt; * &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getTransitionSequence</b> (typename std::deque&lt; <a class="el" href="structhypro_1_1TPathElement.html">TPathElement</a>&lt; Number &gt;&gt;::const_iterator start, typename std::deque&lt; <a class="el" href="structhypro_1_1TPathElement.html">TPathElement</a>&lt; Number &gt;&gt;::const_iterator end) const </td></tr>
-<tr class="separator:a801a6d5ca43b9b4ef74f61974bad3523"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2b7c39e2a224e03c8a82cabb7c540fc5"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2b7c39e2a224e03c8a82cabb7c540fc5"></a>
+&lt; Number &gt; * &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getTransitionSequence</b> (typename std::deque&lt; <a class="el" href="structhypro_1_1TPathElement.html">TPathElement</a>&lt; Number, tNumber &gt;&gt;::const_iterator start, typename std::deque&lt; <a class="el" href="structhypro_1_1TPathElement.html">TPathElement</a>&lt; Number, tNumber &gt;&gt;::const_iterator end) const </td></tr>
+<tr class="separator:a7721ae712efb3e4b884b67564e5aa7f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa104896a2160ba3f6e79a8a6d6af9981"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa104896a2160ba3f6e79a8a6d6af9981"></a>
 std::vector&lt; <a class="el" href="classhypro_1_1Transition.html">Transition</a><br class="typebreak"/>
 &lt; Number &gt; * &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getTransitionSequence</b> () const </td></tr>
-<tr class="separator:a2b7c39e2a224e03c8a82cabb7c540fc5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a50b0c3d2f19db4407c31feceaf10e20b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a50b0c3d2f19db4407c31feceaf10e20b"></a>
+<tr class="separator:aa104896a2160ba3f6e79a8a6d6af9981"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4b665f2ee633bab17dd7e7e35d5dcbbf"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4b665f2ee633bab17dd7e7e35d5dcbbf"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>hasChatteringZeno</b> () const </td></tr>
-<tr class="separator:a50b0c3d2f19db4407c31feceaf10e20b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa94ec08c23940d6626190e87fa33bf1a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa94ec08c23940d6626190e87fa33bf1a"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator&gt;</b> (const <a class="el" href="classhypro_1_1Path.html">Path</a>&lt; Number &gt; &amp;r) const </td></tr>
-<tr class="separator:aa94ec08c23940d6626190e87fa33bf1a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4fb5b22b7eaedafcf036272c76e8b3cb"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4fb5b22b7eaedafcf036272c76e8b3cb"></a>
+<tr class="separator:a4b665f2ee633bab17dd7e7e35d5dcbbf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9ab9a5c853e1057ead6b157ad08a369c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9ab9a5c853e1057ead6b157ad08a369c"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator&gt;</b> (const <a class="el" href="classhypro_1_1Path.html">Path</a>&lt; Number, tNumber &gt; &amp;r) const </td></tr>
+<tr class="separator:a9ab9a5c853e1057ead6b157ad08a369c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a75ca754169282da0dcfa3dde9fe7ee0a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a75ca754169282da0dcfa3dde9fe7ee0a"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator&gt;</b> (unsigned r) const </td></tr>
-<tr class="separator:a4fb5b22b7eaedafcf036272c76e8b3cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab034645d296f1eb66022e45ff2a9432b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab034645d296f1eb66022e45ff2a9432b"></a>
+<tr class="separator:a75ca754169282da0dcfa3dde9fe7ee0a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab9bac26117c3c335a73b94ac4167f7d5"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab9bac26117c3c335a73b94ac4167f7d5"></a>
 TIterator&#160;</td><td class="memItemRight" valign="bottom"><b>begin</b> ()</td></tr>
-<tr class="separator:ab034645d296f1eb66022e45ff2a9432b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1019cdad12ebe2b59b79db32ee3afed8"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1019cdad12ebe2b59b79db32ee3afed8"></a>
+<tr class="separator:ab9bac26117c3c335a73b94ac4167f7d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a54d0870173eafad4a1c3e9414fbe2f09"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a54d0870173eafad4a1c3e9414fbe2f09"></a>
 TIterator&#160;</td><td class="memItemRight" valign="bottom"><b>end</b> ()</td></tr>
-<tr class="separator:a1019cdad12ebe2b59b79db32ee3afed8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae8a33b77a23f9aa8f9b7162e87ed1068"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae8a33b77a23f9aa8f9b7162e87ed1068"></a>
+<tr class="separator:a54d0870173eafad4a1c3e9414fbe2f09"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a03c3ffb7955c296e7553c8d0d87ec036"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a03c3ffb7955c296e7553c8d0d87ec036"></a>
 TIterator_const&#160;</td><td class="memItemRight" valign="bottom"><b>begin</b> () const </td></tr>
-<tr class="separator:ae8a33b77a23f9aa8f9b7162e87ed1068"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad8a457b46cff2e7b6b4d4741b15b5672"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad8a457b46cff2e7b6b4d4741b15b5672"></a>
+<tr class="separator:a03c3ffb7955c296e7553c8d0d87ec036"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af52324f7e39ae142d55cbce5a21be92a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af52324f7e39ae142d55cbce5a21be92a"></a>
 TIterator_const&#160;</td><td class="memItemRight" valign="bottom"><b>end</b> () const </td></tr>
-<tr class="separator:ad8a457b46cff2e7b6b4d4741b15b5672"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8d4d539b6666228e1a21223cabc77318"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8d4d539b6666228e1a21223cabc77318"></a>
-const <a class="el" href="structhypro_1_1TPathElement.html">TPathElement</a>&lt; Number &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>back</b> () const </td></tr>
-<tr class="separator:a8d4d539b6666228e1a21223cabc77318"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0a3b91b415b09adb5ccb67877218efac"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0a3b91b415b09adb5ccb67877218efac"></a>
-const <a class="el" href="structhypro_1_1TPathElement.html">TPathElement</a>&lt; Number &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>front</b> () const </td></tr>
-<tr class="separator:a0a3b91b415b09adb5ccb67877218efac"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae66386283ee4cf263c645c7902a1bf29"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae66386283ee4cf263c645c7902a1bf29"></a>
+<tr class="separator:af52324f7e39ae142d55cbce5a21be92a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a58a9564ee8a509660f642f2ea0568d03"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a58a9564ee8a509660f642f2ea0568d03"></a>
+const <a class="el" href="structhypro_1_1TPathElement.html">TPathElement</a>&lt; Number, <br class="typebreak"/>
+tNumber &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>back</b> () const </td></tr>
+<tr class="separator:a58a9564ee8a509660f642f2ea0568d03"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3c84d7b9c8c40ba820c09eacdc8dcc0f"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3c84d7b9c8c40ba820c09eacdc8dcc0f"></a>
+const <a class="el" href="structhypro_1_1TPathElement.html">TPathElement</a>&lt; Number, <br class="typebreak"/>
+tNumber &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>front</b> () const </td></tr>
+<tr class="separator:a3c84d7b9c8c40ba820c09eacdc8dcc0f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa1b47ff49192164d8bf24107503e0cd7"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa1b47ff49192164d8bf24107503e0cd7"></a>
 std::size_t&#160;</td><td class="memItemRight" valign="bottom"><b>size</b> () const </td></tr>
-<tr class="separator:ae66386283ee4cf263c645c7902a1bf29"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a976b205be62152eb474313d5287f8b12"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a976b205be62152eb474313d5287f8b12"></a>
-<a class="el" href="structhypro_1_1TPathElement.html">TPathElement</a>&lt; Number &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>at</b> (int index) const </td></tr>
-<tr class="separator:a976b205be62152eb474313d5287f8b12"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af5c8eba4a6c460ae048bc39883d8a75d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af5c8eba4a6c460ae048bc39883d8a75d"></a>
+<tr class="separator:aa1b47ff49192164d8bf24107503e0cd7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2b0d0472df349fb02afc1604f6c1ba66"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2b0d0472df349fb02afc1604f6c1ba66"></a>
+<a class="el" href="structhypro_1_1TPathElement.html">TPathElement</a>&lt; Number, tNumber &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>at</b> (int index) const </td></tr>
+<tr class="separator:a2b0d0472df349fb02afc1604f6c1ba66"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8e382cee2027a1d06bb110432c865521"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8e382cee2027a1d06bb110432c865521"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>pop_front</b> ()</td></tr>
-<tr class="separator:af5c8eba4a6c460ae048bc39883d8a75d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a59c9c1148402be046e6d98ddd102b2a1"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a59c9c1148402be046e6d98ddd102b2a1"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>push_front</b> (const <a class="el" href="structhypro_1_1TPathElement.html">TPathElement</a>&lt; Number &gt; &amp;elem)</td></tr>
-<tr class="separator:a59c9c1148402be046e6d98ddd102b2a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3b9e337e3e73ac5695eab44640a985ee"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3b9e337e3e73ac5695eab44640a985ee"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator==</b> (const <a class="el" href="classhypro_1_1Path.html">Path</a>&lt; Number &gt; &amp;rhs) const </td></tr>
-<tr class="separator:a3b9e337e3e73ac5695eab44640a985ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa7b1118996e3fe7f6f9840d1cdad7477"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa7b1118996e3fe7f6f9840d1cdad7477"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator!=</b> (const <a class="el" href="classhypro_1_1Path.html">Path</a>&lt; Number &gt; &amp;rhs) const </td></tr>
-<tr class="separator:aa7b1118996e3fe7f6f9840d1cdad7477"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="separator:a8e382cee2027a1d06bb110432c865521"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a436af08ea7722c0a7bdfe812201ab7fc"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a436af08ea7722c0a7bdfe812201ab7fc"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>push_front</b> (const <a class="el" href="structhypro_1_1TPathElement.html">TPathElement</a>&lt; Number, tNumber &gt; &amp;elem)</td></tr>
+<tr class="separator:a436af08ea7722c0a7bdfe812201ab7fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a59a0bae6ac98f1e903d46a8eac5371c7"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a59a0bae6ac98f1e903d46a8eac5371c7"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator==</b> (const <a class="el" href="classhypro_1_1Path.html">Path</a>&lt; Number, tNumber &gt; &amp;rhs) const </td></tr>
+<tr class="separator:a59a0bae6ac98f1e903d46a8eac5371c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac795ff5e25a594f1a774c9875c6d479f"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac795ff5e25a594f1a774c9875c6d479f"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator!=</b> (const <a class="el" href="classhypro_1_1Path.html">Path</a>&lt; Number, tNumber &gt; &amp;rhs) const </td></tr>
+<tr class="separator:ac795ff5e25a594f1a774c9875c6d479f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:ab6e92d57fe0498de4cb261d7574dbbc2"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab6e92d57fe0498de4cb261d7574dbbc2"></a>
-static bool&#160;</td><td class="memItemRight" valign="bottom"><b>sharePrefix</b> (const <a class="el" href="classhypro_1_1Path.html">Path</a>&lt; Number &gt; &amp;lhs, const <a class="el" href="classhypro_1_1Path.html">Path</a>&lt; Number &gt; &amp;rhs)</td></tr>
-<tr class="separator:ab6e92d57fe0498de4cb261d7574dbbc2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae2447b2d6686c0f967bc8244dc56fee4"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae2447b2d6686c0f967bc8244dc56fee4"></a>
+static bool&#160;</td><td class="memItemRight" valign="bottom"><b>sharePrefix</b> (const <a class="el" href="classhypro_1_1Path.html">Path</a>&lt; Number, tNumber &gt; &amp;lhs, const <a class="el" href="classhypro_1_1Path.html">Path</a>&lt; Number, tNumber &gt; &amp;rhs)</td></tr>
+<tr class="separator:ae2447b2d6686c0f967bc8244dc56fee4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
 Friends</h2></td></tr>
-<tr class="memitem:ab15d71010d947397240e24d90edd77a0"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab15d71010d947397240e24d90edd77a0"></a>
-std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator&lt;&lt;</b> (std::ostream &amp;_out, const <a class="el" href="classhypro_1_1Path.html">Path</a>&lt; Number &gt; &amp;path)</td></tr>
-<tr class="separator:ab15d71010d947397240e24d90edd77a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeb0efe753dd97d35fdb2dd90143c913c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aeb0efe753dd97d35fdb2dd90143c913c"></a>
+std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator&lt;&lt;</b> (std::ostream &amp;_out, const <a class="el" href="classhypro_1_1Path.html">Path</a>&lt; Number, tNumber &gt; &amp;path)</td></tr>
+<tr class="separator:aeb0efe753dd97d35fdb2dd90143c913c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><h3>template&lt;typename Number&gt;<br/>
-class hypro::Path&lt; Number &gt;</h3>
+<div class="textblock"><h3>template&lt;typename Number, typename tNumber = Number&gt;<br/>
+class hypro::Path&lt; Number, tNumber &gt;</h3>
 
 <p>Class to define a path in some hybrid automaton. </p>
 <dl class="tparams"><dt>Template Parameters</dt><dd>

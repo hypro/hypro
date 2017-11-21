@@ -931,7 +931,7 @@ var hierarchy =
       [ "TransitionParser::TransitionContext", "classTransitionParser_1_1TransitionContext.html", null ],
       [ "TransitionParser::UrgentContext", "classTransitionParser_1_1UrgentContext.html", null ]
     ] ],
-    [ "hypro::Path< Number >", "classhypro_1_1Path.html", null ],
+    [ "hypro::Path< Number, tNumber >", "classhypro_1_1Path.html", null ],
     [ "hypro::hypro::Permutator", "classhypro_1_1hypro_1_1Permutator.html", null ],
     [ "hypro::reachability::hypro::Permutator", "classhypro_1_1reachability_1_1hypro_1_1Permutator.html", null ],
     [ "hypro::Permutator", "classhypro_1_1Permutator.html", null ],
@@ -1086,7 +1086,7 @@ var hierarchy =
     ] ],
     [ "hypro::TaylorModel< Number >", "classhypro_1_1TaylorModel.html", null ],
     [ "hypro::TaylorModelVec< Number >", "classhypro_1_1TaylorModelVec.html", null ],
-    [ "hypro::TPathElement< Number >", "structhypro_1_1TPathElement.html", null ],
+    [ "hypro::TPathElement< Number, tNumber >", "structhypro_1_1TPathElement.html", null ],
     [ "hypro::reachability::hypro::trafoContent< Number >", "structhypro_1_1reachability_1_1hypro_1_1trafoContent.html", null ],
     [ "hypro::trafoContent< Number >", "structhypro_1_1trafoContent.html", null ],
     [ "hypro::reachability::hypro::TrafoParameters< Number >", "classhypro_1_1reachability_1_1hypro_1_1TrafoParameters.html", null ],

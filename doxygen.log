@@ -7286,7 +7286,7 @@ Possible candidates:
 /home/travis/build/hypro/hypro/src/hypro/types.h:29: warning: documented symbol `typedef hypro::std::set< vector_t< Number >> vectorSet' was not declared or defined.
 /home/travis/build/hypro/hypro/src/hypro/util/Plotter.h:70: warning: documented symbol `Singleton< Plotter< Number > >' was not declared or defined.
 /home/travis/build/hypro/hypro/src/hypro/util/VariablePool.h:28: warning: documented symbol `Singleton< VariablePool >' was not declared or defined.
-error opening bib20685.bbl: No such file or directory
+error opening bib20630.bbl: No such file or directory
 bibtex command failed: No such file or directory
 .
 Preprocessing /home/travis/build/hypro/hypro/examples/INCOMPLETE_example_benchmarks.cpp...
@@ -11825,20 +11825,20 @@ Gene/home/travis/build/hypro/hypro/src/hypro/parser/antlr4-flowstar/TransitionPa
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Path.h:16: warning: Member transition (variable) of class hypro::TPathElement is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Path.h:131: warning: Member TIterator (typedef) of class hypro::Path is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Path.h:132: warning: Member TIterator_const (typedef) of class hypro::Path is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Path.h:109: warning: Member add(const TPathElement< Number > &elem) (function) of class hypro::Path is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Path.h:110: warning: Member addTransition(Transition< Number > *t, const carl::Interval< Number > &enabledTime) (function) of class hypro::Path is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Path.h:111: warning: Member addTimeStep(const carl::Interval< Number > &timeStep) (function) of class hypro::Path is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Path.h:109: warning: Member add(const TPathElement< Number, tNumber > &elem) (function) of class hypro::Path is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Path.h:110: warning: Member addTransition(Transition< Number > *t, const carl::Interval< tNumber > &enabledTime) (function) of class hypro::Path is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Path.h:111: warning: Member addTimeStep(const carl::Interval< tNumber > &timeStep) (function) of class hypro::Path is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Path.h:112: warning: Member getTransitionToJumpDepth(unsigned depth) const  (function) of class hypro::Path is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Path.h:115: warning: Member sharesPrefix(const Path< Number > &rhs) const  (function) of class hypro::Path is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Path.h:116: warning: Member sharedPrefix(const Path< Number > &rhs) const  (function) of class hypro::Path is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Path.h:117: warning: Member removeSharedPrefix(const Path< Number > &rhs) const  (function) of class hypro::Path is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Path.h:115: warning: Member sharesPrefix(const Path< Number, tNumber > &rhs) const  (function) of class hypro::Path is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Path.h:116: warning: Member sharedPrefix(const Path< Number, tNumber > &rhs) const  (function) of class hypro::Path is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Path.h:117: warning: Member removeSharedPrefix(const Path< Number, tNumber > &rhs) const  (function) of class hypro::Path is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Path.h:118: warning: Member isEmpty() const  (function) of class hypro::Path is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Path.h:119: warning: Member maximalTimeSpan(typename std::deque< TPathElement< Number >>::const_iterator start, typename std::deque< TPathElement< Number >>::const_iterator end) const  (function) of class hypro::Path is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Path.h:119: warning: Member maximalTimeSpan(typename std::deque< TPathElement< Number, tNumber >>::const_iterator start, typename std::deque< TPathElement< Number, tNumber >>::const_iterator end) const  (function) of class hypro::Path is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Path.h:121: warning: Member getNumberDiscreteJumps() const  (function) of class hypro::Path is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Path.h:122: warning: Member getTransitionSequence(typename std::deque< TPathElement< Number >>::const_iterator start, typename std::deque< TPathElement< Number >>::const_iterator end) const  (function) of class hypro::Path is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Path.h:122: warning: Member getTransitionSequence(typename std::deque< TPathElement< Number, tNumber >>::const_iterator start, typename std::deque< TPathElement< Number, tNumber >>::const_iterator end) const  (function) of class hypro::Path is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Path.h:123: warning: Member getTransitionSequence() const  (function) of class hypro::Path is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Path.h:124: warning: Member hasChatteringZeno() const  (function) of class hypro::Path is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Path.h:127: warning: Member operator>(const Path< Number > &r) const  (function) of class hypro::Path is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Path.h:127: warning: Member operator>(const Path< Number, tNumber > &r) const  (function) of class hypro::Path is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Path.h:128: warning: Member operator>(unsigned r) const  (function) of class hypro::Path is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Path.h:133: warning: Member begin() (function) of class hypro::Path is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Path.h:134: warning: Member end() (function) of class hypro::Path is not documented.
@@ -11849,11 +11849,11 @@ Gene/home/travis/build/hypro/hypro/src/hypro/parser/antlr4-flowstar/TransitionPa
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Path.h:141: warning: Member size() const  (function) of class hypro::Path is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Path.h:142: warning: Member at(int index) const  (function) of class hypro::Path is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Path.h:143: warning: Member pop_front() (function) of class hypro::Path is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Path.h:144: warning: Member push_front(const TPathElement< Number > &elem) (function) of class hypro::Path is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Path.h:156: warning: Member operator==(const Path< Number > &rhs) const  (function) of class hypro::Path is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Path.h:168: warning: Member operator!=(const Path< Number > &rhs) const  (function) of class hypro::Path is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Path.h:114: warning: Member sharePrefix(const Path< Number > &lhs, const Path< Number > &rhs) (function) of class hypro::Path is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Path.h:146: warning: Member operator<<(std::ostream &_out, const Path< Number > &path) (friend) of class hypro::Path is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Path.h:144: warning: Member push_front(const TPathElement< Number, tNumber > &elem) (function) of class hypro::Path is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Path.h:156: warning: Member operator==(const Path< Number, tNumber > &rhs) const  (function) of class hypro::Path is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Path.h:168: warning: Member operator!=(const Path< Number, tNumber > &rhs) const  (function) of class hypro::Path is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Path.h:114: warning: Member sharePrefix(const Path< Number, tNumber > &lhs, const Path< Number, tNumber > &rhs) (function) of class hypro::Path is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Path.h:146: warning: Member operator<<(std::ostream &_out, const Path< Number, tNumber > &path) (friend) of class hypro::Path is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Reset.h:15: warning: Member Reset(const Reset &orig)=default (function) of class hypro::Reset is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Reset.h:16: warning: Member Reset(Reset &&orig)=default (function) of class hypro::Reset is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Reset.h:17: warning: Member operator=(const Reset< Number > &orig)=default (function) of class hypro::Reset is not documented.
@@ -11874,6 +11874,7 @@ Gene/home/travis/build/hypro/hypro/src/hypro/parser/antlr4-flowstar/TransitionPa
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Reset.h:42: warning: Member operator<<(std::ostream &ostr, const Reset< Number > &) (friend) of class hypro::Reset is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Reset.h:54: warning: Member operator==(const Reset< Number > &lhs, const Reset< Number > &rhs) (friend) of class hypro::Reset is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Reset.h:67: warning: Member operator!=(const Reset< Number > &lhs, const Reset< Number > &rhs) (friend) of class hypro::Reset is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Settings.h:22: warning: Member ReachabilitySettings(const ReachabilitySettings< T > &orig) (function) of class hypro::ReachabilitySettings is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Settings.h:15: warning: Member timeBound (variable) of class hypro::ReachabilitySettings is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/State.h:31: warning: Member repVariant (typedef) of class hypro::State is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/State.h:298: warning: Member satisfiesHalfspaces(const matrix_t< Number > &constraints, const vector_t< Number > &constants) const  (function) of class hypro::State is not documented.
@@ -23407,5 +23408,5 @@ Patching output file 35/38
 Patching output file 36/38
 Patching output file 37/38
 Patching output file 38/38
-lookup cache used 23003/65536 hits=458967 misses=24688
+lookup cache used 23006/65536 hits=458968 misses=24692
 finished...
