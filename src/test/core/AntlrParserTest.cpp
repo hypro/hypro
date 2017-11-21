@@ -71,10 +71,47 @@ TYPED_TEST(AntlrParserTest, JustTesting){
 	}
 	SUCCEED();
 }
+/*
+TYPED_TEST(AntlrParserTest, FileStructure){
+
+	//Empty file
+	this->cwd();
+	std::string path("../../../../src/test/core/examples/test_empty_file.txt");	
+	try{
+		boost::tuple<hypro::HybridAutomaton<TypeParam>, hypro::ReachabilitySettings<TypeParam>> h = hypro::parseFlowstarFile<TypeParam>(path);
+		FAIL();
+	} catch(const std::runtime_error& e){
+		std::cout << "blub " << e.what() << std::endl;
+	}
+
+	//Create file where only start is denoted	
+	std::cout << "trying to open file" << std::endl;
+	std::ofstream input;
+	input.open(path);
+	if(input.good()){
+		input << "start{		}";
+		input.close();	
+	} else {
+		std::cout << "1. Error when opening file" << std::endl;
+		FAIL();
+	}
+
+	//Only Start test
+	try{
+		boost::tuple<hypro::HybridAutomaton<TypeParam>, hypro::ReachabilitySettings<TypeParam>> h = hypro::parseFlowstarFile<TypeParam>(path);
+		FAIL();
+	} catch(const std::runtime_error& e){
+		std::cout << e.what() << std::endl;
+	}	
+
+	SUCCEED();
+
+}
+*/
+
 
 TYPED_TEST(AntlrParserTest, EmptyFile){
 
-	this->cwd();
 	std::string path("../../../../src/test/core/examples/test_empty_file.txt");
 
 	try{

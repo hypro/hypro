@@ -215,7 +215,6 @@ namespace hypro {
 		std::string rightString;
 		if(ctx->interval()->MINUS().size() > 0){
 			std::size_t leftIndex = ctx->interval()->NUMBER(0)->getSymbol()->getStartIndex();
-			std::size_t rightIndex = ctx->interval()->NUMBER(1)->getSymbol()->getStartIndex();
 			for(const auto& m : ctx->interval()->MINUS()){
 				std::size_t minusIndex = m->getSymbol()->getStartIndex();
 				if(minusIndex < leftIndex){
