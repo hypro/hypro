@@ -44,10 +44,20 @@ class BoxT<double,Converter,Setting> : public GeometricObject<double, BoxT<doubl
 	BoxT( const BoxT& orig ) = default;
 
 	/**
+	 * @brief      Copy constructor for different settings. NOTE: it is not an actual copy constructor as it is templated.
+	 * @param[in]  orig  The original.
+	 */
+	template<typename SettingRhs, carl::DisableIf< std::is_same<Setting, SettingRhs> > = carl::dummy>
+	BoxT(const BoxT<double,Converter,SettingRhs>& orig) : mLimits(orig.limits())
+	{ }
+
+	/**
 	 * @brief      Move constructor.
 	 * @param[in]  orig  The move-copyable original.
 	 */
 	BoxT( BoxT&& orig ) = default;
+
+
 
 	 /**
 	  * @brief      Box constructor from one interval, results in a one-dimensional box.
@@ -248,7 +258,8 @@ class BoxT<double,Converter,Setting> : public GeometricObject<double, BoxT<doubl
 	 * @param b2 Contains the second box.
 	 * @return True, if they are equal.
 	 */
-	friend bool operator==( const BoxT<double,Converter,Setting>& b1, const BoxT<double,Converter,Setting>& b2 ) {
+	template<class SettingRhs>
+	friend bool operator==( const BoxT<double,Converter,Setting>& b1, const BoxT<double,Converter,SettingRhs>& b2 ) {
 		if ( b1.dimension() != b2.dimension() ) {
 			return false;
 		}

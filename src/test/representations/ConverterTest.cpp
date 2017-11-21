@@ -218,21 +218,13 @@ TYPED_TEST(ConverterTest, toSupportFunction)
 TYPED_TEST(ConverterTest, toVPolytope)
 {
     auto result =  Converter<TypeParam>::toVPolytope(this->vpolytope);
-    std::cout << "1" << std::endl;
     auto result2 = Converter<TypeParam>::toVPolytope(this->support, OVER);
-    std::cout << "2" << std::endl;
     auto result3 = Converter<TypeParam>::toVPolytope(this->support2, OVER);
-    std::cout << "3" << std::endl;
     auto result4 = Converter<TypeParam>::toVPolytope(this->zonotope);
-    std::cout << "4" << std::endl;
     auto result5 = Converter<TypeParam>::toVPolytope(this->zonotope2);
-    std::cout << "5" << std::endl;
     auto result6 = Converter<TypeParam>::toVPolytope(this->hpolytope, OVER);
-    std::cout << "6" << std::endl;
     auto result7 = Converter<TypeParam>::toVPolytope(this->hpolytope2, OVER);
-    std::cout << "7" << std::endl;
     auto result8 = Converter<TypeParam>::toVPolytope(this->box);
-    std::cout << "8" << std::endl;
 	SUCCEED();
 }
 

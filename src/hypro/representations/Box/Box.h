@@ -22,9 +22,6 @@
 #include <set>
 #include <vector>
 
-
-// #define HYPRO_BOX_AVOID_LINEAR_OPTIMIZATION
-
 namespace hypro {
 
 template <typename Number>
@@ -67,6 +64,14 @@ class BoxT : public GeometricObject<Number, BoxT<Number,Converter,Setting>> {
 	 * @param[in]  orig  The original.
 	 */
 	BoxT( const BoxT& orig ) = default;
+
+	/**
+	 * @brief      Copy constructor. NOTE: it is not an actual copy constructor as it is templated.
+	 * @param[in]  orig  The original.
+	 */
+	template<typename SettingRhs, carl::DisableIf< std::is_same<Setting, SettingRhs> > = carl::dummy>
+	BoxT(const BoxT<Number,Converter,SettingRhs>& orig) : mLimits(orig.limits())
+	{ }
 
 	/**
 	 * @brief      Move constructor.
@@ -272,7 +277,8 @@ class BoxT : public GeometricObject<Number, BoxT<Number,Converter,Setting>> {
 	 * @param b2 Contains the second box.
 	 * @return True, if they are equal.
 	 */
-	friend bool operator==( const BoxT<Number,Converter,Setting>& b1, const BoxT<Number,Converter,Setting>& b2 ) {
+	template<class SettingRhs>
+	friend bool operator==( const BoxT<Number,Converter,Setting>& b1, const BoxT<Number,Converter,SettingRhs>& b2 ) {
 		if ( b1.dimension() != b2.dimension() ) {
 			return false;
 		}
@@ -286,7 +292,10 @@ class BoxT : public GeometricObject<Number, BoxT<Number,Converter,Setting>> {
 	 * @return False, if both boxes are equal.
 	 */
 	friend bool operator!=( const BoxT<Number,Converter,Setting>& b1, const BoxT<Number,Converter,Setting>& b2 ) { return !( b1 == b2 ); }
-
+/*
+	template<typename SettingRhs, carl::DisableIf< std::is_same<Setting, SettingRhs> > = carl::dummy>
+	friend bool operator!=( const BoxT<Number,Converter,Setting>& b1, const BoxT<Number,Converter,SettingRhs>& b2 ) { return !( b1 == b2 ); }
+*/
 	/**
 	 * @brief Assignment operator.
 	 * @param rhs A box.
@@ -460,6 +469,7 @@ BoxT<To,Converter,Setting> convert(const BoxT<From,Converter,Setting>& in) {
 	std::pair<Point<From>, Point<From>> limits = in.limits();
 	return BoxT<To,Converter,Setting>(std::make_pair(Point<To>(convert<From,To>(limits.first.rawCoordinates())), Point<To>(convert<From,To>(limits.second.rawCoordinates()))));
 }
+
 
 } // namespace hypro
 

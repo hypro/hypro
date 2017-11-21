@@ -576,3 +576,15 @@ TYPED_TEST(BoxTest, Projection)
 	EXPECT_EQ(box.project(dims), hypro::Box<TypeParam>( std::make_pair(hypro::Point<TypeParam>({1}), hypro::Point<TypeParam>({2}))));
 	EXPECT_EQ(box.project(std::vector<std::size_t>()), hypro::Box<TypeParam>::Empty());
 }
+
+TYPED_TEST(BoxTest, SettingsConversion){
+
+	hypro::Point<TypeParam> p1({1,1});
+	hypro::Point<TypeParam> p2({2,2});
+	hypro::BoxT<TypeParam, hypro::Converter<TypeParam>, hypro::BoxLinearOptimizationOn> box1(std::make_pair(p1,p2));
+	hypro::BoxT<TypeParam, hypro::Converter<TypeParam>, hypro::BoxLinearOptimizationOff> box2(box1);
+	EXPECT_EQ(box2.limits().first, p1);
+	EXPECT_EQ(box2.limits().second, p2);
+	EXPECT_EQ(box1, box2);
+
+}
