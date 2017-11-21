@@ -40,7 +40,7 @@ namespace hypro {
 			initSet.insert(oneInitialState.begin(), oneInitialState.end());
 		}
 
-		//6.Calls visit(ctx->unsafeset()) to get local badStates
+		//6.Calls visit(ctx->unsafeset()) to get local and global badStates
 		typename hypro::HybridAutomaton<Number>::locationConditionMap lBadStates;
 		std::vector<Condition<Number>> gBadStates;
 		if(ctx->unsafeset() != NULL && (ctx->unsafeset()->lbadstate().size() > 0 || ctx->unsafeset()->gbadstate().size() > 0)){

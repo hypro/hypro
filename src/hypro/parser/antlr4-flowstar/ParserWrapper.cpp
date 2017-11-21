@@ -14,7 +14,6 @@ namespace hypro {
 	void openFile(const std::string& filename, ANTLRInputStream& input) {
 		
 		std::fstream ifs(filename);
-
 		//cwd();
 
 		if(ifs.good()){
@@ -30,16 +29,15 @@ namespace hypro {
 			if(ifs.bad()){
 				std::cerr << "Badbit was set" << std::endl;
 			}
-			//FAIL();
 		}
 		if(!ifs.is_open()){
 			std::cout << "ifs hasn't opened anything" << std::endl;
-			//FAIL();
 		}
 	}
 
 	template<>
 	boost::tuple<HybridAutomaton<mpq_class>, ReachabilitySettings<mpq_class>> parseFlowstarFile<mpq_class>(const std::string& filename) {
+
 		//Create an AnTLRInputStream
 		ANTLRInputStream input;
 		openFile(filename,input);
@@ -76,12 +74,13 @@ namespace hypro {
 
 	template<>
 	boost::tuple<HybridAutomaton<double>, ReachabilitySettings<double>> parseFlowstarFile<double>(const std::string& filename) {
+	
 		//Create an AnTLRInputStream
 		ANTLRInputStream input;
 		openFile(filename,input);
 
 		//Create Error Listener
-		ErrorListener* errListener = new ErrorListener();;
+		ErrorListener* errListener = new ErrorListener();
 
 		//Create a Lexer and feed it with the input
 		HybridAutomatonLexer lexer(&input);

@@ -25,8 +25,8 @@ class ErrorListener : public antlr4::BaseErrorListener {
 		ErrorListener(){ }
 		~ErrorListener(){ }
 
-		//Recognizer* recognizer, Token* offendingSymbol, , std::exception_ptr e
-		void syntaxError(size_t line, size_t charPositionInLine, const std::string &msg);
+		//The parameters Recognizer*, Token* and std::exception_ptr must stay as this is a function inherited from BaseErrorListener
+		void syntaxError(Recognizer* , Token* , size_t line, size_t charPositionInLine, const std::string &msg, std::exception_ptr);
 
 };
 

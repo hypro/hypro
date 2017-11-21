@@ -60,9 +60,11 @@ TYPED_TEST(AntlrParserTest, SettingVEmptySettings){
 */
 TYPED_TEST(AntlrParserTest, JustTesting){
 
-	//std::string path("../examples/input/bouncing_ball.model");
 	std::string path("../../../../src/test/core/examples/test_bouncing_ball.txt");
-	this->cwd();
+	//std::string path("../../src/test/core/examples/test_bouncing_ball.txt");
+	//std::string path("../examples/input/boucing_ball.model");
+
+	//this->cwd();
 	try{
 		boost::tuple<hypro::HybridAutomaton<TypeParam>, hypro::ReachabilitySettings<TypeParam>> h = hypro::parseFlowstarFile<TypeParam>(path);
 	}catch (const std::runtime_error& e){
@@ -113,6 +115,7 @@ TYPED_TEST(AntlrParserTest, FileStructure){
 TYPED_TEST(AntlrParserTest, EmptyFile){
 
 	std::string path("../../../../src/test/core/examples/test_empty_file.txt");
+	//std::string path("../../src/test/core/examples/test_empty_file.txt");
 
 	try{
 		boost::tuple<hypro::HybridAutomaton<TypeParam>, hypro::ReachabilitySettings<TypeParam>> h = hypro::parseFlowstarFile<TypeParam>(path);
@@ -126,6 +129,7 @@ TYPED_TEST(AntlrParserTest, EmptyFile){
 TYPED_TEST(AntlrParserTest, OnlyStart){
 
 	std::string path("../../../../src/test/core/examples/test_only_start.txt");
+	//std::string path("../../src/test/core/examples/test_only_start.txt");
 	try{
 		boost::tuple<hypro::HybridAutomaton<TypeParam>, hypro::ReachabilitySettings<TypeParam>> h = hypro::parseFlowstarFile<TypeParam>(path);
 		FAIL();
