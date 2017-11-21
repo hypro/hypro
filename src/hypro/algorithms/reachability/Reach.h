@@ -44,7 +44,7 @@ namespace hypro {
 namespace reachability {
 
 template<typename Number>
-using State_t = State<Number, Box<Number>, SupportFunction<Number>, Zonotope<Number>, HPolytope<Number>, VPolytope<Number>>;
+using State_t = State<Number, Number, Box<Number>, SupportFunction<Number>, Zonotope<Number>, HPolytope<Number>, VPolytope<Number>>;
 
 template<typename Number>
 using initialSet = boost::tuple<unsigned, State_t<Number>>;
