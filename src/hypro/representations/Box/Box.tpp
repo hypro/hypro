@@ -542,8 +542,8 @@ BoxT<Number,Converter> BoxT<Number,Converter>::linearTransformation( const matri
 			}
 		}
 	}
-	assert(manualMin == res.min());
-	assert(manualMax == res.max());
+	//assert(manualMin == res.min());
+	//assert(manualMax == res.max());
 	#endif
 	return res;
 }

@@ -34,7 +34,7 @@ class State
     const Location<Number>* mLoc = nullptr; /// Location of the state.
     std::vector<repVariant> mSets; /// The state sets wrapped in boost variant (repVariant).
     std::vector<representation_name> mTypes; /// A vector holding the actual types corresponding to the state sets.
-    carl::Interval<tNumber> mTimestamp = carl::Interval<Number>::unboundedInterval(); /// A timestamp.
+    carl::Interval<tNumber> mTimestamp = carl::Interval<tNumber>::unboundedInterval(); /// A timestamp.
     bool mIsEmpty = false; /// A flag which can be set to allow for a quick check for emptiness.
 
   private:
@@ -112,7 +112,7 @@ class State
     	: mLoc(_loc),
     	mSets(),
     	mTypes(),
-    	mTimestamp(carl::Interval<Number>::unboundedInterval())
+    	mTimestamp(carl::Interval<tNumber>::unboundedInterval())
     { assert(mLoc != nullptr); }
 
     /**
@@ -125,7 +125,7 @@ class State
     State(const Location<Number>* _loc,
     		const Representation& _rep,
     		const Rargs... sets,
-    		const carl::Interval<Number>& _timestamp = carl::Interval<Number>::unboundedInterval())
+    		const carl::Interval<tNumber>& _timestamp = carl::Interval<tNumber>::unboundedInterval())
     	: mLoc(_loc)
     	, mTimestamp(_timestamp)
     {
