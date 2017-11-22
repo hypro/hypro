@@ -18,9 +18,10 @@ term 				: (NUMBER | VARIABLE) (TIMES connector* (NUMBER | VARIABLE))* ;
 polynom				: connector* term (connector+ term)* ;
 interval 			: '[' MINUS? NUMBER ',' MINUS? NUMBER ']' ;
 
-equation 			: VARIABLE EQUALS polynom ;
+//equationwinterval	: VARIABLE EQUALS polynom connector interval;
+equation 			: VARIABLE EQUALS polynom (connector interval)?;
 constraint			: polynom (BOOLRELATION | EQUALS) polynom; 
-intervalexpr		: VARIABLE IN interval;  
+intervalexpr		: VARIABLE IN interval; 
 constrset	 		: (constraint | intervalexpr)+;
 
 ////// Lexer Rules
