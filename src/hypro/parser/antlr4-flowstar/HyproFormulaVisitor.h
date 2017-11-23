@@ -15,6 +15,7 @@
 #include "HybridAutomatonLexer.h"
 #include "HybridAutomatonParser.h"
 #include "HybridAutomatonBaseVisitor.h"
+#include <carl/interval/Interval.h>
 #include "../../types.h"
 
 using namespace antlr4;
@@ -63,6 +64,7 @@ class HyproFormulaVisitor : public HybridAutomatonBaseVisitor {
 		antlrcpp::Any visitPolynom(HybridAutomatonParser::PolynomContext *ctx) override;
 		antlrcpp::Any visitEquation(HybridAutomatonParser::EquationContext *ctx) override;
 		antlrcpp::Any visitConstraint(HybridAutomatonParser::ConstraintContext *ctx) override;
+		antlrcpp::Any visitInterval(HybridAutomatonParser::IntervalContext *ctx) override;
 		antlrcpp::Any visitIntervalexpr(HybridAutomatonParser::IntervalexprContext *ctx) override;
 		antlrcpp::Any visitConstrset(HybridAutomatonParser::ConstrsetContext *ctx) override;		
 };
