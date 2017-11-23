@@ -160,6 +160,7 @@ namespace hypro {
 		
 		reduceNumberRepresentation();
 	}
+}
 
 template<typename Number, typename Converter, class Setting>
 BoxT<Number,Converter,Setting>::BoxT( const std::set<Point<Number>> &_points ) {
