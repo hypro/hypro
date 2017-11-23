@@ -218,7 +218,7 @@ boost::tuple<CONTAINMENT, State, matrix_t<Number>, vector_t<Number>> computeFirs
         std::pair<CONTAINMENT, State> fullSegment = firstSegment.satisfies(_state.getLocation()->getInvariant());
         TRACE("hypro.reachability","Check invariant - done.");
         if (fullSegment.first) {
-        	fullSegment.second.setTimestamp(carl::Interval<tNumber>(tNumber(0), timeStep));
+        	//fullSegment.second.setTimestamp(carl::Interval<tNumber>(fullSegment.second.getTimestamp().lower(),fullSegment.second.getTimestamp().upper() + timeStep));
         	#ifdef HYPRO_LOGGING
         	// DBG
 	        //Box<Number> tmp = Converter<Number>::toBox(boost::get<Box<Number>>(boost::apply_visitor(genericConversionVisitor<typename State::repVariant,Number>(representation_name::box),fullSegment.second.getSet())));
