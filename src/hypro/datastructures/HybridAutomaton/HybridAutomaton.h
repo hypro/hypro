@@ -31,7 +31,7 @@ class HybridAutomaton
   public:
     using locationSet = std::set<Location<Number>*>; /// Set of location pointers.
     using transitionSet = std::set<Transition<Number>*>; /// Set of transition pointers.
-    using locationStateMap = std::multimap<const Location<Number>*, State<Number,ConstraintSet<Number>>>; /// Multi-map from location pointers to states.
+    using locationStateMap = std::multimap<const Location<Number>*, State<Number,Number,ConstraintSet<Number>>>; /// Multi-map from location pointers to states.
     using locationConditionMap = std::map<const Location<Number>*, Condition<Number>>; /// Map from location pointers to conditions.
     using conditionVector = std::vector<Condition<Number>>; /// Vector of conditions.
 
@@ -63,13 +63,13 @@ class HybridAutomaton
     HybridAutomaton(HybridAutomaton<Number>&& hybrid) = default;
     HybridAutomaton(const locationSet& locs, const transitionSet& trans, const locationStateMap& initialStates);
     virtual ~HybridAutomaton() {
-/*  Without this we have a memory leak from HyproTransitionVisitor.
-    The leak will be patched later by using only references.
-        std::cout << "I DESTROY" << std::endl;
-        for(auto tPointer : mTransitions) {
-            delete tPointer;
-        }
-*/
+		// Without this we have a memory leak from HyproTransitionVisitor.
+		// The leak will be patched later by using only references.
+        //while(!mTransitions.empty()) {
+        //	auto toDelete = *mTransitions.begin();
+        //    mTransitions.erase(mTransitions.begin());
+        //    delete toDelete;
+        //}
     }
 
     /**
@@ -107,7 +107,7 @@ class HybridAutomaton
     ///@{
     void addLocation(Location<Number>* location) { mLocations.insert(location); }
     void addTransition(Transition<Number>* transition) { mTransitions.insert(transition); }
-    void addInitialState(const State<Number,ConstraintSet<Number>>& state) { mInitialStates.insert(std::make_pair(state.getLocation(),state)); }
+    void addInitialState(const State<Number,Number,ConstraintSet<Number>>& state) { mInitialStates.insert(std::make_pair(state.getLocation(),state)); }
     void addLocalBadState(const Location<Number>* loc, const Condition<Number>& condition) { mLocalBadStates.insert(std::make_pair(loc,condition)); }
     void addGlobalBadState(const Condition<Number>& state) { mGlobalBadStates.push_back(state); }
     ///@}

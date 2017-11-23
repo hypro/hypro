@@ -590,7 +590,7 @@ BoxT<double,Converter,Setting> BoxT<double,Converter,Setting>::intersectHalfspac
 template<typename Converter, class Setting>
 BoxT<double,Converter,Setting> BoxT<double,Converter,Setting>::intersectHalfspaces( const matrix_t<double>& _mat, const vector_t<double>& _vec ) const {
 	assert(_mat.rows() == _vec.rows());
-	assert(_mat.cols() == this->dimension());
+	assert(_mat.cols() == Eigen::Index(this->dimension()));
 	#ifdef HYPRO_BOX_AVOID_LINEAR_OPTIMIZATION
 
 	if(_mat.rows() == 0) {
@@ -651,7 +651,7 @@ BoxT<double,Converter,Setting> BoxT<double,Converter,Setting>::intersectHalfspac
 	for(Eigen::Index rowIndex = 0; rowIndex < boxDirections.rows(); ++rowIndex) {
 		results.emplace_back(opt.evaluate(boxDirections.row(rowIndex), false));
 	}
-	assert(results.size() == boxDirections.rows());
+	assert(Eigen::Index(results.size()) == boxDirections.rows());
 
 	// re-construct box from results.
 	std::pair<Point<double>,Point<double>> newLimits = std::make_pair(Point<double>(vector_t<double>::Zero(this->dimension())), Point<double>(vector_t<double>::Zero(this->dimension())));

@@ -20,8 +20,11 @@ namespace hypro {
 	template<typename Number>
 	template<typename Representation, typename ...Rargs>
 	State<Number,Representation, Rargs...> Reset<Number>::applyReset(const State<Number,Representation,Rargs...>& inState) const {
-		//TRACE("hydra.datastructures","Apply reset on " << inState);
-		assert(inState.getNumberSets() == this->size());
+		TRACE("hydra.datastructures","inState #sets: " << inState.getNumberSets() << " and #resets: " << this->size());
+		assert(this->empty() || inState.getNumberSets() == this->size());
+		if(this->empty()) {
+			return inState;
+		}
 		return inState.applyTransformation(mResets);
 	}
 

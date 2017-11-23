@@ -120,9 +120,9 @@ namespace hypro {
 		 * @brief      Destroys the object.
 		 */
 		~Optimizer() {
-			//if(mInitialized) {
-			//	glp_delete_prob(lp);
-			//}
+			if(mInitialized) {
+				glp_delete_prob(lp);
+			}
 			deleteArrays();
 		}
 

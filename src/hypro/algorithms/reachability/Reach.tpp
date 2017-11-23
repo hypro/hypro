@@ -26,37 +26,32 @@ namespace reachability {
 				State_t<Number> s;
 				s.setLocation(state.second.getLocation());
 
+				DEBUG("hypro.reacher","Adding initial set of type " << mType);
 				switch(mType){
 					case representation_name::box: {
 						Box<Number> tmp = Converter<Number>::toBox(boost::get<ConstraintSet<Number>>(state.second.getSet()));
 						s.setSet(tmp);
-						//DEBUG("hypro.reacher","Adding initial set " << boost::get<Box<Number>>(s.set));
 						break;
 					}
 					case representation_name::polytope_h: {
 						s.setSet(Converter<Number>::toHPolytope(boost::get<ConstraintSet<Number>>(state.second.getSet())));
-						//DEBUG("hypro.reacher","Adding initial set " << boost::get<Box<Number>>(s.set));
 						break;
 					}
 					case representation_name::polytope_v: {
 						s.setSet(Converter<Number>::toVPolytope(boost::get<ConstraintSet<Number>>(state.second.getSet())));
-						//DEBUG("hypro.reacher","Adding initial set " << boost::get<Box<Number>>(s.set));
 						break;
 					}
 					case representation_name::support_function: {
 						s.setSet(Converter<Number>::toSupportFunction(boost::get<ConstraintSet<Number>>(state.second.getSet())));
-						//DEBUG("hypro.reacher","Adding initial set " << boost::get<Box<Number>>(s.set));
 						break;
 					}
 					case representation_name::zonotope: {
 						s.setSet(Converter<Number>::toZonotope(boost::get<ConstraintSet<Number>>(state.second.getSet())));
-						//DEBUG("hypro.reacher","Adding initial set " << boost::get<Box<Number>>(s.set));
 						break;
 					}
 					#ifdef HYPRO_USE_PPL
 					case representation_name::ppl_polytope: {
 						s.setSet(Converter<Number>::toPolytope(boost::get<ConstraintSet<Number>>(state.second.getSet())));
-						//DEBUG("hypro.reacher","Adding initial set " << boost::get<Box<Number>>(s.set));
 						break;
 					}
 					#endif
@@ -77,7 +72,7 @@ namespace reachability {
 			mCurrentLevel = boost::get<0>(nextInitialSet);
 			//std::cout << "mCurrentLevel is: " << mCurrentLevel << " while maxjumpDepth is: " << mSettings.jumpDepth << std::endl;
 			INFO("hypro.reacher","Depth " << mCurrentLevel << ", Location: " << boost::get<1>(nextInitialSet).getLocation()->getId());
-			assert(mCurrentLevel <= mSettings.jumpDepth);
+			assert(int(mCurrentLevel) <= mSettings.jumpDepth);
 			flowpipe_t<Number> newFlowpipe = computeForwardTimeClosure(boost::get<1>(nextInitialSet));
 
 			collectedReachableStates.emplace_back(std::make_pair(boost::get<1>(nextInitialSet).getLocation()->getId(), newFlowpipe));
@@ -102,7 +97,7 @@ namespace reachability {
 		flowpipe_t<Number> flowpipe;
 		std::vector<boost::tuple<Transition<Number>*, State_t<Number>>> nextInitialSets;
 
-		boost::tuple<bool, State_t<Number>, matrix_t<Number>, vector_t<Number>> initialSetup = computeFirstSegment(_state);
+		boost::tuple<bool, State_t<Number>, matrix_t<Number>, vector_t<Number>> initialSetup = computeFirstSegment<Number,Number,State_t<Number>>(_state, mSettings.timeStep);
 #ifdef REACH_DEBUG
 		INFO("hypro.reacher", "Valuation fulfills Invariant?: " << boost::get<0>(initialSetup));
 #endif
@@ -166,18 +161,15 @@ namespace reachability {
 				INFO("hypro.reacher","Time: " << std::setprecision(4) << std::setw(8) << fixed << carl::toDouble(currentLocalTime));
 				// Verify transitions on the current set.
 				if(int(mCurrentLevel) < mSettings.jumpDepth || mSettings.jumpDepth < 0) {
-					State_t<Number> guardSatisfyingState;
-					State_t<Number> currentState = _state;
-					currentState.setSetDirect(currentSegment.getSet(0),0);
-					currentState.setTimestamp(currentState.getTimestamp() + carl::Interval<Number>(currentLocalTime-mSettings.timeStep,currentLocalTime));
-					currentState.setTimestamp(currentState.getTimestamp().intersect(carl::Interval<Number>(Number(0), mSettings.timeBound)));
+					//State_t<Number> currentState = _state;
+					State_t<Number> currentState = currentSegment;
 					//std::cout << "-- Checking Transitions!" << std::endl;
 					checkTransitions(currentState, currentState.getTimestamp(), nextInitialSets);
 				}
 
 				// perform linear transformation on the last segment of the flowpipe
 #ifdef USE_SYSTEM_SEPARATION
-				autonomPart = autonomPart.linearTransformation( boost::get<2>(initialSetup), boost::get<3>(initialSetup) );
+				autonomPart = autonomPart.partiallyApplyTimeStep( ConstraintSet<Number>(boost::get<2>(initialSetup), boost::get<3>(initialSetup)), mSettings.timeStep, 0 );
 #ifdef USE_ELLIPSOIDS
 				if (mBloatingFactor != 0){
 					Representation temp = Representation(totalBloating);
@@ -196,7 +188,7 @@ namespace reachability {
 				nonautonomPart = nonautonomPart.linearTransformation(boost::get<2>(initialSetup));
 				totalBloating = totalBloating.minkowskiSum(nonautonomPart);
 #else
-				nextSegment =  currentSegment.applyTransformation(std::vector<ConstraintSet<Number>>({  ConstraintSet<Number>(boost::get<2>(initialSetup), boost::get<3>(initialSetup)) }));
+				nextSegment =  currentSegment.partiallyApplyTimeStep(ConstraintSet<Number>(boost::get<2>(initialSetup), boost::get<3>(initialSetup)), mSettings.timeStep, 0);
 #endif
 				// extend flowpipe (only if still within Invariant of location)
 				std::pair<bool, State_t<Number>> newSegment = nextSegment.satisfies( _state.getLocation()->getInvariant());

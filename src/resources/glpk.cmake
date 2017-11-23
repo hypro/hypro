@@ -4,7 +4,7 @@ ExternalProject_Add(
 	glpk
 	#URL ftp://ftp.gnu.org/gnu/glpk/glpk-${glpk_version}.tar.gz
 	SOURCE_DIR "${CMAKE_SOURCE_DIR}/src/resources/glpk-${glpk_version}"
-    CONFIGURE_COMMAND ./configure --prefix=${CMAKE_SOURCE_DIR}/src/resources/glpk-${glpk_version}/build --with-gmp --with-pic CPPFLAGS=-fPIC --disable-shared --enable-static
+    CONFIGURE_COMMAND ./configure --prefix=${CMAKE_SOURCE_DIR}/src/resources/glpk-${glpk_version}/build --with-gmp --with-pic CPPFLAGS=-fPIC --disable-shared --disable-dl --enable-static
 	PREFIX ${CMAKE_SOURCE_DIR}/src/resources/glpk-${glpk_version}/build
             #BUILD_COMMAND make
             BUILD_IN_SOURCE 1
@@ -21,7 +21,7 @@ set( GLPK_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/src/resources/glpk-${glpk_version}/bu
 set( GLPK_LIBRARIES "${CMAKE_SOURCE_DIR}/src/resources/glpk-${glpk_version}/build/lib/${CMAKE_FIND_LIBRARY_PREFIXES}glpk${CMAKE_STATIC_LIBRARY_SUFFIX}" )
 
 add_imported_library(GLPK STATIC "${GLPK_LIBRARIES}" "${GLPK_INCLUDE_DIR}")
-#list(APPEND ${PROJECT_NAME}_LIBRARIES_STATIC ${GLPK_LIBRARIES})
+list(APPEND ${PROJECT_NAME}_LIBRARIES_STATIC ${GLPK_LIBRARIES})
 list(APPEND ${PROJECT_NAME}_LIBRARIES_DYNAMIC ${GLPK_LIBRARIES})
 #list(APPEND ${PROJECT_NAME}_INCLUDE_DIRS ${GLPK_INCLUDE_DIR})
 #set(${PROJECT_NAME}_INCLUDE_DIRS ${${PROJECT_NAME}_INCLUDE_DIRS} PARENT_SCOPE)

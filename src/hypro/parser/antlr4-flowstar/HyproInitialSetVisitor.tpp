@@ -38,7 +38,7 @@ namespace hypro {
 
 			//1.Get ConstraintSet, build State and add to localStateMap
 			ConstraintSet<Number> conSet = visit(initStateCtx);
-			State<Number,ConstraintSet<Number>> state;
+			State<Number,Number,ConstraintSet<Number>> state;
 			assert(initialLoc != NULL);
 			state.setLocation(initialLoc);
 			state.setSet(conSet,0);

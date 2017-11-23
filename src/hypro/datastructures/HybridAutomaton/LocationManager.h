@@ -27,7 +27,14 @@ class LocationManager : public carl::Singleton<LocationManager<Number>>
     LocationManager() : mId(0) {}
   public:
     //LocationManager() : mId(0) {}
-    ~LocationManager() {}
+    ~LocationManager() {
+    	while(!mLocations.empty()) {
+    		Location<Number>* toDelete = mLocations.begin()->second;
+    		mLocations.erase(mLocations.begin());
+    		delete toDelete;
+    	}
+    }
+
     Location<Number>* create();
     Location<Number>* create(const Location<Number>* _loc);
     Location<Number>* create(const matrix_t<Number> _mat);

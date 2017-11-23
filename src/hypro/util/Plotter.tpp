@@ -43,8 +43,7 @@ void Plotter<Number>::plot2d() const {
 
 		writeGnuplot();
 	}
-
-	std::cout << std::endl << "Plotted to " << mFilename << "_pdf.plt" << std::endl;
+	std::cout <<"Plotted to " << mFilename << "_pdf.plt" << std::endl;
 	mOutfile.close();
 }
 
@@ -279,7 +278,7 @@ void Plotter<Number>::writeGnuplot() const {
 			if(rangeExt != 0){
 				ranges[d] = carl::Interval<double>(carl::toDouble(min( d )) - rangeExt, carl::toDouble(max( d )) + rangeExt );
 			} else{
-				rangeExt = carl::toDouble(carl::toDouble(min( d ))* 0.1);
+				rangeExt = min(d) == 0 ? 0.1 : carl::toDouble(carl::toDouble(min( d ))* 0.1);
 				ranges[d] = carl::Interval<double>(carl::toDouble(min( d )) - rangeExt, carl::toDouble(max( d )) + rangeExt );
 			}
 		}
@@ -384,7 +383,7 @@ void Plotter<Number>::writeGnuplot() const {
 					} else {
 						mOutfile << "f_" << index << "(x) = " << carl::toDouble(Number(-normal(0)/normal(1))) << "*x";
 						double off = carl::toDouble(Number(plane.offset()/normal(1)));
-						if(off > 0)
+						if(off >= 0)
 							mOutfile << "+";
 
 						mOutfile << off << "\n";

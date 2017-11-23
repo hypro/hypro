@@ -8,28 +8,28 @@
 
 namespace hypro {
 
-	template<typename Number>
-	void Path<Number>::add(const TPathElement<Number>& elem) {
+	template<typename Number, typename tNumber>
+	void Path<Number,tNumber>::add(const TPathElement<Number,tNumber>& elem) {
 		mPath.push_back(elem);
 	}
 
-	template<typename Number>
-	void Path<Number>::addTransition(Transition<Number>* t, const carl::Interval<Number>& enabledTime) {
-		mPath.push_back(TPathElement<Number>(t,enabledTime));
+	template<typename Number, typename tNumber>
+	void Path<Number,tNumber>::addTransition(Transition<Number>* t, const carl::Interval<tNumber>& enabledTime) {
+		mPath.push_back(TPathElement<Number,tNumber>(t,enabledTime));
 		TRACE("hypro.datastructures","Add transition " << t << " with timestamp " << enabledTime << " to path.");
 	}
 
-	template<typename Number>
-	void Path<Number>::addTimeStep(const carl::Interval<Number>& timeStep) {
-		mPath.push_back(TPathElement<Number>(timeStep));
+	template<typename Number, typename tNumber>
+	void Path<Number,tNumber>::addTimeStep(const carl::Interval<tNumber>& timeStep) {
+		mPath.push_back(TPathElement<Number,tNumber>(timeStep));
 		TRACE("hypro.datastructures","Add timestep " << timeStep << " to path.");
 	}
 
-	template<typename Number>
-	std::pair<Transition<Number>*, carl::Interval<Number>> Path<Number>::getTransitionToJumpDepth(unsigned depth) const {
+	template<typename Number, typename tNumber>
+	std::pair<Transition<Number>*, carl::Interval<tNumber>> Path<Number,tNumber>::getTransitionToJumpDepth(unsigned depth) const {
 		TRACE("hypro.datastructures","Get transition for depth " << depth << " in path " << *this);
 		if(depth == 0) {
-			return std::make_pair(nullptr, carl::Interval<Number>::unboundedInterval());
+			return std::make_pair(nullptr, carl::Interval<tNumber>::unboundedInterval());
 		}
 
 		unsigned pos = 0;
@@ -44,13 +44,13 @@ namespace hypro {
 		}
 		if(pos == mPath.size()) {
 			TRACE("hypro.datastructures","Did not find appropriate transition.");
-			return std::make_pair(nullptr, carl::Interval<Number>::emptyInterval());
+			return std::make_pair(nullptr, carl::Interval<tNumber>::emptyInterval());
 		}
 		return std::make_pair(mPath.at(pos).transition, mPath.at(pos).timeInterval);
 	}
 
-	template<typename Number>
-	bool Path<Number>::sharePrefix(const Path<Number>& lhs, const Path<Number>& rhs) {
+	template<typename Number, typename tNumber>
+	bool Path<Number,tNumber>::sharePrefix(const Path<Number,tNumber>& lhs, const Path<Number,tNumber>& rhs) {
         for (auto lhsIt = lhs.mPath.begin(); lhsIt != lhs.mPath.end(); ++lhsIt) {
             for (auto rhsIt = rhs.mPath.begin(); rhsIt != rhs.mPath.end(); ++rhsIt) {
                 if (*lhsIt == *rhsIt) {
@@ -61,9 +61,9 @@ namespace hypro {
         return false;
 	}
 
-	template<typename Number>
-	Path<Number> Path<Number>::sharedPrefix(const Path<Number>& lhs) const {
-		Path<Number> prefix;
+	template<typename Number, typename tNumber>
+	Path<Number,tNumber> Path<Number,tNumber>::sharedPrefix(const Path<Number,tNumber>& lhs) const {
+		Path<Number,tNumber> prefix;
 		for(unsigned pos = 0; pos < mPath.size() && pos < lhs.size(); ++pos) {
 			TRACE("hypro.datastructures","Compare path elements " << mPath.at(pos) << " and " << lhs.at(pos));
 			if( mPath.at(pos) == lhs.at(pos)) {
@@ -74,9 +74,9 @@ namespace hypro {
 		return prefix;
 	}
 
-	template<typename Number>
-	Path<Number> Path<Number>::removeSharedPrefix(const Path<Number>& rhs) const {
-		Path<Number> res(*this);
+	template<typename Number, typename tNumber>
+	Path<Number,tNumber> Path<Number,tNumber>::removeSharedPrefix(const Path<Number,tNumber>& rhs) const {
+		Path<Number,tNumber> res(*this);
 		TRACE("hydra.hypro.datastructures","Shared prefix of " << *this << " and " << rhs << ": " << this->sharedPrefix(rhs));
 		std::size_t prefixLength = this->sharedPrefix(rhs).size();
 		while(prefixLength > 0){
@@ -86,9 +86,9 @@ namespace hypro {
 		return res;
 	}
 
-	template<typename Number>
-	Number Path<Number>::maximalTimeSpan(typename std::deque<TPathElement<Number>>::const_iterator start, typename std::deque<TPathElement<Number>>::const_iterator end) const {
-		Number timespan = 0;
+	template<typename Number, typename tNumber>
+	tNumber Path<Number,tNumber>::maximalTimeSpan(typename std::deque<TPathElement<Number,tNumber>>::const_iterator start, typename std::deque<TPathElement<Number,tNumber>>::const_iterator end) const {
+		tNumber timespan = 0;
 		bool validPath = true;
 		auto currentPos = start;
 		//std::cout << __func__ << ": start loop." << std::endl;
@@ -120,8 +120,8 @@ namespace hypro {
 		return timespan;
 	}
 
-	template<typename Number>
-	std::size_t Path<Number>::getNumberDiscreteJumps() const {
+	template<typename Number, typename tNumber>
+	std::size_t Path<Number,tNumber>::getNumberDiscreteJumps() const {
 		std::size_t res = 0;
 		for(const auto& pathElem : mPath) {
 			if(pathElem.isDiscreteStep()) {
@@ -131,8 +131,8 @@ namespace hypro {
 		return res;
 	}
 
-	template<typename Number>
-	std::vector<Transition<Number>*> Path<Number>::getTransitionSequence(typename std::deque<TPathElement<Number>>::const_iterator start, typename std::deque<TPathElement<Number>>::const_iterator end) const {
+	template<typename Number, typename tNumber>
+	std::vector<Transition<Number>*> Path<Number,tNumber>::getTransitionSequence(typename std::deque<TPathElement<Number,tNumber>>::const_iterator start, typename std::deque<TPathElement<Number,tNumber>>::const_iterator end) const {
 		auto currentPos = start;
 		std::vector<Transition<Number>*> res;
 		while(currentPos != mPath.end() && currentPos != end) {
@@ -148,8 +148,8 @@ namespace hypro {
 		return res;
 	}
 
-	template<typename Number>
-	bool Path<Number>::hasChatteringZeno() const {
+	template<typename Number, typename tNumber>
+	bool Path<Number,tNumber>::hasChatteringZeno() const {
 		// find all cycles first and store potential cycles
 		// std::cout << __func__ << ": checking path: " << *this << std::endl;
 		std::vector<std::vector<Transition<Number>*>> potentialCycles;
@@ -219,69 +219,69 @@ namespace hypro {
 		return false;
 	}
 
-	template<typename Number>
-	bool Path<Number>::operator>(const Path<Number>& r) const {
+	template<typename Number, typename tNumber>
+	bool Path<Number,tNumber>::operator>(const Path<Number,tNumber>& r) const {
 		return mPath.size() > r.mPath.size();
 	}
 
-	template<typename Number>
-	bool Path<Number>::operator>(unsigned r) const {
+	template<typename Number, typename tNumber>
+	bool Path<Number,tNumber>::operator>(unsigned r) const {
 		return mPath.size() > r;
 	}
 
-	template<typename Number>
-	std::size_t Path<Number>::size() const {
+	template<typename Number, typename tNumber>
+	std::size_t Path<Number,tNumber>::size() const {
 		return mPath.size();
 	}
 
-	template<typename Number>
-	TPathElement<Number> Path<Number>::at(int index) const {
+	template<typename Number, typename tNumber>
+	TPathElement<Number,tNumber> Path<Number,tNumber>::at(int index) const {
 		return mPath.at(index);
 	}
 
-	template<typename Number>
-	void Path<Number>::pop_front() {
+	template<typename Number, typename tNumber>
+	void Path<Number,tNumber>::pop_front() {
 		mPath.pop_front();
 	}
 
-	template<typename Number>
-	void Path<Number>::push_front(const TPathElement<Number>& elem) {
+	template<typename Number, typename tNumber>
+	void Path<Number,tNumber>::push_front(const TPathElement<Number,tNumber>& elem) {
 		mPath.push_front(elem);
 	}
 
-	template<typename Number>
-	bool Path<Number>::sharesPrefix(const Path<Number>& rhs) const {
+	template<typename Number, typename tNumber>
+	bool Path<Number,tNumber>::sharesPrefix(const Path<Number,tNumber>& rhs) const {
 		return sharePrefix(*this, rhs);
 	}
 
-	template<typename Number>
-	typename Path<Number>::TIterator Path<Number>::begin () {
+	template<typename Number, typename tNumber>
+	typename Path<Number,tNumber>::TIterator Path<Number,tNumber>::begin () {
 		return mPath.begin();
 	}
 
-	template<typename Number>
-	typename Path<Number>::TIterator Path<Number>::end() {
+	template<typename Number, typename tNumber>
+	typename Path<Number,tNumber>::TIterator Path<Number,tNumber>::end() {
 		return mPath.end();
 	}
 
-	template<typename Number>
-	typename Path<Number>::TIterator_const Path<Number>::begin () const {
+	template<typename Number, typename tNumber>
+	typename Path<Number,tNumber>::TIterator_const Path<Number,tNumber>::begin () const {
 		return mPath.begin();
 	}
 
-	template<typename Number>
-	typename Path<Number>::TIterator_const Path<Number>::end() const {
+	template<typename Number, typename tNumber>
+	typename Path<Number,tNumber>::TIterator_const Path<Number,tNumber>::end() const {
 		return mPath.end();
 	}
 
-	template<typename Number>
-	const TPathElement<Number>& Path<Number>::back() const {
+	template<typename Number, typename tNumber>
+	const TPathElement<Number,tNumber>& Path<Number,tNumber>::back() const {
 		assert(!mPath.empty());
 		return mPath.back();
 	}
 
-	template<typename Number>
-	const TPathElement<Number>& Path<Number>::front() const {
+	template<typename Number, typename tNumber>
+	const TPathElement<Number,tNumber>& Path<Number,tNumber>::front() const {
 		assert(!mPath.empty());
 		return mPath.front();
 	}

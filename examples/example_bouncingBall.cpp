@@ -5,9 +5,9 @@
  */
 
 #include "config.h"
-#include "datastructures/hybridAutomata/LocationManager.h"
-#include "datastructures/hybridAutomata/Transition.h"
-#include "datastructures/hybridAutomata/HybridAutomaton.h"
+#include "datastructures/HybridAutomaton/LocationManager.h"
+#include "datastructures/HybridAutomaton/Transition.h"
+#include "datastructures/HybridAutomaton/HybridAutomaton.h"
 #include "datastructures/Point.h"
 #include "representations/GeometricObject.h"
 #include "algorithms/reachability/Reach.h"
@@ -37,14 +37,15 @@ int main()
 	// creation of the invariant.
 	matrix_t<Number> invariantMat = matrix_t<Number>(1,2);
 	vector_t<Number> invariantVec = vector_t<Number>(1);
-	struct Location<Number>::Invariant inv;
 
 	invariantVec(0) = Number(0);
 
 	invariantMat(0,0) = Number(-1);
 	invariantMat(0,1) = Number(0);
 
-	loc1->setInvariant(invariantMat,invariantVec);
+	Condition<Number> inv(invariantMat,invariantVec);
+
+	loc1->setInvariant(inv);
 
 	// setup flow matrix (3x3, we add an artificial dimension to cope with constants).
 	flowMatrix(0,0) = Number(0);
@@ -61,7 +62,7 @@ int main()
 
 	// setup of the transition.
 	// guard
-	typename Transition<Number>::Guard guard;
+	Condition<Number> guard;
 	matrix_t<Number> guardMat = matrix_t<Number>(3,2);
 	vector_t<Number> guardVec = vector_t<Number>(3);
 
@@ -76,11 +77,11 @@ int main()
 	guardMat(2,0) = Number(0);
 	guardMat(2,1) = Number(1);
 
-	guard.mat = guardMat;
-	guard.vec = guardVec;
+	guard.setMatrix(guardMat);
+	guard.setVector(guardVec);
 
 	// reset function
-	typename Transition<Number>::Reset reset;
+	Reset<Number> reset;
 	vector_t<Number> constantReset = vector_t<Number>(2,1);
 	matrix_t<Number> linearReset = matrix_t<Number>(2,2);
 
@@ -92,8 +93,8 @@ int main()
 	linearReset(1,0) = Number(0);
 	linearReset(1,1) = Number(carl::rationalize<Number>(-0.9));
 
-	reset.vec = constantReset;
-	reset.mat = linearReset;
+	reset.setVector(constantReset);
+	reset.setMatrix(linearReset);
 
 	// setup transition
 	trans->setAggregation(Aggregation::parallelotopeAgg);
@@ -127,31 +128,33 @@ int main()
 	boxMat(3,1) = Number(-1);
 
 	// create initial state.
-	RawState<Number> initialState(loc1, std::make_pair(boxMat, boxVec));
+	hypro::State<Number,hypro::ConstraintSet<Number>> initialState;
+	initialState.setLocation(loc1);
+	initialState.setSet(ConstraintSet<Number>(boxMat, boxVec));
 	bBallAutomaton.addInitialState(initialState);
 
 	// vector of sets to collect flowpipes (which are again a vector of sets).
 	std::vector<std::vector<Representation>> flowpipes;
 
 	// instanciate reachability analysis algorithm.
-	hypro::reachability::Reach<Number, Representation> reacher(bBallAutomaton);
-	hypro::reachability::ReachabilitySettings<Number> settings = reacher.settings();
+	hypro::reachability::Reach<Number> reacher(bBallAutomaton);
+	hypro::ReachabilitySettings<Number> settings = reacher.settings();
 	settings.timeStep = carl::convert<double,Number>(0.01);
 	settings.timeBound = Number(3);
 	settings.jumpDepth = 3;
 	reacher.setSettings(settings);
 
 	// perform reachability analysis.
-	std::vector<std::pair<unsigned, reachability::flowpipe_t<Representation>>> flowpipeIndices = reacher.computeForwardReachability();
+	std::vector<std::pair<unsigned, reachability::flowpipe_t<Number>>> flowpipeIndices = reacher.computeForwardReachability();
 
 	// plot flowpipes.
 	Plotter<Number>& plotter = Plotter<Number>::getInstance();
 	plotter.setFilename("bouncingBall");
 	for(auto& indexPair : flowpipeIndices){
-		std::vector<Representation> flowpipe = indexPair.second;
+		std::vector<hypro::reachability::State_t<Number>> flowpipe = indexPair.second;
 		// Plot single flowpipe
-		for(auto& poly : flowpipe) {
-			std::vector<Point<Number>> points = poly.vertices();
+		for(auto& set : flowpipe) {
+			std::vector<Point<Number>> points = set.vertices();
 			if(!points.empty() && points.size() > 2) {
 				for(auto& point : points) {
 					point.reduceDimension(2);

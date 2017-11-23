@@ -23,10 +23,15 @@ if(STATICLIB_SWITCH)
 		ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}
 		LINKER_LANGUAGE CXX
 	)
-	#message("hypro libraries static: " ${hypro_LIBRARIES_STATIC})
+	message("hypro libraries static: " ${hypro_LIBRARIES_STATIC})
 	#message("hypro include dirs: " ${hypro_INCLUDE_DIRS})
 	#message("hypro sources: " ${sources})
 	target_link_libraries(${PROJECT_NAME}_static PUBLIC ${${PROJECT_NAME}_LIBRARIES_STATIC})
+	target_link_libraries(${PROJECT_NAME}_static PUBLIC lib_carl_static)
+	target_link_libraries(${PROJECT_NAME}_static PUBLIC EIGEN3)
+	target_link_libraries(${PROJECT_NAME}_static PUBLIC Boost_STATIC)
+	target_link_libraries(${PROJECT_NAME}_static PUBLIC GMP_STATIC)
+	target_link_libraries(${PROJECT_NAME}_static PUBLIC GMPXX_STATIC)
 	target_include_directories(${PROJECT_NAME}_static
 		PRIVATE ${${PROJECT_NAME}_INCLUDE_DIRS} ${CMAKE_CURRENT_SOURCE_DIR}
 		PUBLIC
@@ -51,7 +56,7 @@ else()
 
 	get_target_property(IFL lib_carl INTERFACE_LINK_LIBRARIES)
 	#message(STATUS "Carl interface link libraries: ${IFL}")
-
+	#message("hypro include dirs: " ${hypro_INCLUDE_DIRS})
 	#message(STATUS "antlr libs path: " ${ANTLR4CPP_LIBS})
 	#message(STATUS "antlr include dirs path: " ${ANTLR4CPP_INCLUDE_DIRS})
 	#message(STATUS "hypro libraries dynamic: " "${${PROJECT_NAME}_LIBRARIES_DYNAMIC}")
@@ -75,7 +80,7 @@ else()
 		$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
 		$<INSTALL_INTERFACE:include/${PROJECT_NAME}>
 		INTERFACE
-		$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../resources/antlr_build/include/antlr4-runtime>
+		$<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/resources/antlr_build/include/antlr4-runtime>
 	)
 endif()
 
