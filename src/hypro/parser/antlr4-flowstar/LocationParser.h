@@ -161,6 +161,8 @@ public:
     antlr4::tree::TerminalNode *VARIABLE();
     antlr4::tree::TerminalNode *EQUALS();
     PolynomContext *polynom();
+    ConnectorContext *connector();
+    IntervalContext *interval();
 
    
   };

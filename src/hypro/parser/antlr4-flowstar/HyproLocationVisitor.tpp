@@ -40,9 +40,10 @@ namespace hypro {
 	template<typename Number>
 	antlrcpp::Any HyproLocationVisitor<Number>::visitLocation(HybridAutomatonParser::LocationContext *ctx){
 	
-		//1.Calls visit(ctx->activities()) to get matrix
-		matrix_t<Number> tmpMatrix = visit(ctx->activities());
-		//std::cout << "---- Flow matrix is:\n" << tmpMatrix << std::endl;
+		//1.Calls visit(ctx->activities()) to get flowmatrix and externalInputBox
+		std::pair<matrix_t<Number>,Box<Number>> flowAndExtInput = visit(ctx->activities());
+		//std::cout << "---- Flow matrix is:\n" << flowAndExtInput.first << std::endl;
+		//std::cout << "---- externalInputBox is:\n" << flowAndExtInput.second << std::endl;
 
 		//2.Iteratively Calls visit(ctx->invariant()) to get all conditions and collect them in one big condition
 		Condition<Number> inv;
@@ -88,8 +89,9 @@ namespace hypro {
 		LocationManager<Number>& manager = LocationManager<Number>::getInstance();
 		Location<Number>* loc = manager.create();
 		loc->setName(ctx->VARIABLE()->getText());
-		loc->setFlow(tmpMatrix);
+		loc->setFlow(flowAndExtInput.first);
 		loc->setInvariant(inv);
+		loc->setExtInput(flowAndExtInput.second);
 		return loc;
 	}
 
@@ -104,6 +106,8 @@ namespace hypro {
 
 		//1.Calls iteratively visit(ctx->equation()) to get vector, store them
 		matrix_t<Number> tmpMatrix = matrix_t<Number>::Zero(vars.size()+1, vars.size()+1);
+		std::vector<carl::Interval<Number>> extInputVec(vars.size(), carl::Interval<Number>());
+		//std::cout << "extInputVec has been made!\n"; 
 		HyproFormulaVisitor<Number> visitor(vars);
 		for(unsigned i=0; i < ctx->equation().size(); i++){
 			
@@ -111,7 +115,13 @@ namespace hypro {
 			vector_t<Number> tmpRow = visitor.visit(ctx->equation()[i]);
 			for(unsigned j=0; j < vars.size(); j++){
 				if(ctx->equation()[i]->VARIABLE()->getText() == (vars[j] + "'")){
-					tmpMatrix.row(j) = tmpRow;
+					tmpMatrix.row(j) = tmpRow;	
+					if(ctx->equation(i)->interval() != NULL){
+						carl::Interval<Number> intervalValues = visitor.visit(ctx->equation(i)->interval());
+						extInputVec[j] = intervalValues;
+						//std::cout << "internalValues are: " << intervalValues << std::endl;
+					} 
+					//std::cout << "extInputVec is at pos " << j << "is now:\n" << extInputVec[j] << std::endl;
 				}
 			}
 		}
@@ -123,8 +133,8 @@ namespace hypro {
 			exit(0);
 		}
 
-		//4.Returns a matrix
-		return tmpMatrix;
+		//4.Returns a flowmatrix and a externalInputBox
+		return std::pair<matrix_t<Number>,Box<Number>>(tmpMatrix, Box<Number>(extInputVec));
 	}
 
 	template<typename Number>

@@ -16,6 +16,7 @@
 #include "../../types.h"
 #include "../../datastructures/HybridAutomaton/LocationManager.h"
 #include "../../datastructures/HybridAutomaton/Condition.h"
+#include "../../representations/Box/Box.h"
 
 using namespace antlr4;
 
