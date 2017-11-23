@@ -65,32 +65,6 @@ public:
 
     virtual antlrcpp::Any visitEvents(HybridSystemParser::EventsContext *context) = 0;
 
-    virtual antlrcpp::Any visitCoreEdge(HybridSystemParser::CoreEdgeContext *context) = 0;
-
-    virtual antlrcpp::Any visitOptEdgeGuard(HybridSystemParser::OptEdgeGuardContext *context) = 0;
-
-    virtual antlrcpp::Any visitOptEdgeUrgent(HybridSystemParser::OptEdgeUrgentContext *context) = 0;
-
-    virtual antlrcpp::Any visitOptEdgeUpdate(HybridSystemParser::OptEdgeUpdateContext *context) = 0;
-
-    virtual antlrcpp::Any visitEdgeEvents(HybridSystemParser::EdgeEventsContext *context) = 0;
-
-    virtual antlrcpp::Any visitEdgeEvent(HybridSystemParser::EdgeEventContext *context) = 0;
-
-    virtual antlrcpp::Any visitLocations(HybridSystemParser::LocationsContext *context) = 0;
-
-    virtual antlrcpp::Any visitLoc(HybridSystemParser::LocContext *context) = 0;
-
-    virtual antlrcpp::Any visitLocId(HybridSystemParser::LocIdContext *context) = 0;
-
-    virtual antlrcpp::Any visitLocElem(HybridSystemParser::LocElemContext *context) = 0;
-
-    virtual antlrcpp::Any visitLocIdElem(HybridSystemParser::LocIdElemContext *context) = 0;
-
-    virtual antlrcpp::Any visitLocationElements(HybridSystemParser::LocationElementsContext *context) = 0;
-
-    virtual antlrcpp::Any visitLocationElement(HybridSystemParser::LocationElementContext *context) = 0;
-
     virtual antlrcpp::Any visitActualParms(HybridSystemParser::ActualParmsContext *context) = 0;
 
     virtual antlrcpp::Any visitFormalParms(HybridSystemParser::FormalParmsContext *context) = 0;
@@ -109,32 +83,6 @@ public:
 
     virtual antlrcpp::Any visitOptDerivate(HybridSystemParser::OptDerivateContext *context) = 0;
 
-    virtual antlrcpp::Any visitEquations(HybridSystemParser::EquationsContext *context) = 0;
-
-    virtual antlrcpp::Any visitEquation(HybridSystemParser::EquationContext *context) = 0;
-
-    virtual antlrcpp::Any visitInvariantDecls(HybridSystemParser::InvariantDeclsContext *context) = 0;
-
-    virtual antlrcpp::Any visitInvariants(HybridSystemParser::InvariantsContext *context) = 0;
-
-    virtual antlrcpp::Any visitInvariant(HybridSystemParser::InvariantContext *context) = 0;
-
-    virtual antlrcpp::Any visitUpdates(HybridSystemParser::UpdatesContext *context) = 0;
-
-    virtual antlrcpp::Any visitUpdate(HybridSystemParser::UpdateContext *context) = 0;
-
-    virtual antlrcpp::Any visitAdressables(HybridSystemParser::AdressablesContext *context) = 0;
-
-    virtual antlrcpp::Any visitAdressable(HybridSystemParser::AdressableContext *context) = 0;
-
-    virtual antlrcpp::Any visitProjections(HybridSystemParser::ProjectionsContext *context) = 0;
-
-    virtual antlrcpp::Any visitProjection(HybridSystemParser::ProjectionContext *context) = 0;
-
-    virtual antlrcpp::Any visitOptElifUpdates(HybridSystemParser::OptElifUpdatesContext *context) = 0;
-
-    virtual antlrcpp::Any visitOptElseUpdate(HybridSystemParser::OptElseUpdateContext *context) = 0;
-
     virtual antlrcpp::Any visitOptControllability(HybridSystemParser::OptControllabilityContext *context) = 0;
 
     virtual antlrcpp::Any visitControllability(HybridSystemParser::ControllabilityContext *context) = 0;
@@ -147,6 +95,12 @@ public:
 
     virtual antlrcpp::Any visitExpression(HybridSystemParser::ExpressionContext *context) = 0;
 
+    virtual antlrcpp::Any visitEquations(HybridSystemParser::EquationsContext *context) = 0;
+
+    virtual antlrcpp::Any visitEquationDerivate(HybridSystemParser::EquationDerivateContext *context) = 0;
+
+    virtual antlrcpp::Any visitEquationNonDerivate(HybridSystemParser::EquationNonDerivateContext *context) = 0;
+
     virtual antlrcpp::Any visitOrExpression(HybridSystemParser::OrExpressionContext *context) = 0;
 
     virtual antlrcpp::Any visitAndExpression(HybridSystemParser::AndExpressionContext *context) = 0;
@@ -157,11 +111,23 @@ public:
 
     virtual antlrcpp::Any visitMulExpression(HybridSystemParser::MulExpressionContext *context) = 0;
 
-    virtual antlrcpp::Any visitUnaryExpression(HybridSystemParser::UnaryExpressionContext *context) = 0;
+    virtual antlrcpp::Any visitUnaryExprFunc(HybridSystemParser::UnaryExprFuncContext *context) = 0;
+
+    virtual antlrcpp::Any visitUnaryExprMinus(HybridSystemParser::UnaryExprMinusContext *context) = 0;
+
+    virtual antlrcpp::Any visitUnaryExprPlus(HybridSystemParser::UnaryExprPlusContext *context) = 0;
+
+    virtual antlrcpp::Any visitUnaryExpr(HybridSystemParser::UnaryExprContext *context) = 0;
 
     virtual antlrcpp::Any visitFuncExpression(HybridSystemParser::FuncExpressionContext *context) = 0;
 
-    virtual antlrcpp::Any visitExpressionFactor(HybridSystemParser::ExpressionFactorContext *context) = 0;
+    virtual antlrcpp::Any visitExprFact(HybridSystemParser::ExprFactContext *context) = 0;
+
+    virtual antlrcpp::Any visitExprFactNumber(HybridSystemParser::ExprFactNumberContext *context) = 0;
+
+    virtual antlrcpp::Any visitExprFactRealNumber(HybridSystemParser::ExprFactRealNumberContext *context) = 0;
+
+    virtual antlrcpp::Any visitExprFactName(HybridSystemParser::ExprFactNameContext *context) = 0;
 
     virtual antlrcpp::Any visitNonEmptySetExpression(HybridSystemParser::NonEmptySetExpressionContext *context) = 0;
 
@@ -196,6 +162,84 @@ public:
     virtual antlrcpp::Any visitStringToken(HybridSystemParser::StringTokenContext *context) = 0;
 
     virtual antlrcpp::Any visitStdLibFunction(HybridSystemParser::StdLibFunctionContext *context) = 0;
+
+    virtual antlrcpp::Any visitLocations(HybridSystemParser::LocationsContext *context) = 0;
+
+    virtual antlrcpp::Any visitLoc(HybridSystemParser::LocContext *context) = 0;
+
+    virtual antlrcpp::Any visitLocId(HybridSystemParser::LocIdContext *context) = 0;
+
+    virtual antlrcpp::Any visitLocElem(HybridSystemParser::LocElemContext *context) = 0;
+
+    virtual antlrcpp::Any visitLocIdElem(HybridSystemParser::LocIdElemContext *context) = 0;
+
+    virtual antlrcpp::Any visitLocationElements(HybridSystemParser::LocationElementsContext *context) = 0;
+
+    virtual antlrcpp::Any visitLocElemInitialFlag(HybridSystemParser::LocElemInitialFlagContext *context) = 0;
+
+    virtual antlrcpp::Any visitLocElemInitialFlagExpr(HybridSystemParser::LocElemInitialFlagExprContext *context) = 0;
+
+    virtual antlrcpp::Any visitLocElemInv(HybridSystemParser::LocElemInvContext *context) = 0;
+
+    virtual antlrcpp::Any visitLocElemEqs(HybridSystemParser::LocElemEqsContext *context) = 0;
+
+    virtual antlrcpp::Any visitLocElemMarked(HybridSystemParser::LocElemMarkedContext *context) = 0;
+
+    virtual antlrcpp::Any visitLocElemMarkedExpr(HybridSystemParser::LocElemMarkedExprContext *context) = 0;
+
+    virtual antlrcpp::Any visitLocElemUrgent(HybridSystemParser::LocElemUrgentContext *context) = 0;
+
+    virtual antlrcpp::Any visitLocElemEdgeTo(HybridSystemParser::LocElemEdgeToContext *context) = 0;
+
+    virtual antlrcpp::Any visitLocElemLoop(HybridSystemParser::LocElemLoopContext *context) = 0;
+
+    virtual antlrcpp::Any visitCoreEdge(HybridSystemParser::CoreEdgeContext *context) = 0;
+
+    virtual antlrcpp::Any visitOptEdgeGuard(HybridSystemParser::OptEdgeGuardContext *context) = 0;
+
+    virtual antlrcpp::Any visitOptEdgeUrgent(HybridSystemParser::OptEdgeUrgentContext *context) = 0;
+
+    virtual antlrcpp::Any visitOptEdgeUpdate(HybridSystemParser::OptEdgeUpdateContext *context) = 0;
+
+    virtual antlrcpp::Any visitEdgeEvents(HybridSystemParser::EdgeEventsContext *context) = 0;
+
+    virtual antlrcpp::Any visitEdgeEvent(HybridSystemParser::EdgeEventContext *context) = 0;
+
+    virtual antlrcpp::Any visitInvariantDecls(HybridSystemParser::InvariantDeclsContext *context) = 0;
+
+    virtual antlrcpp::Any visitInvariants(HybridSystemParser::InvariantsContext *context) = 0;
+
+    virtual antlrcpp::Any visitInvExpr(HybridSystemParser::InvExprContext *context) = 0;
+
+    virtual antlrcpp::Any visitInvNeeds(HybridSystemParser::InvNeedsContext *context) = 0;
+
+    virtual antlrcpp::Any visitInvNeedsSet(HybridSystemParser::InvNeedsSetContext *context) = 0;
+
+    virtual antlrcpp::Any visitInvDisables(HybridSystemParser::InvDisablesContext *context) = 0;
+
+    virtual antlrcpp::Any visitInvDisablesSet(HybridSystemParser::InvDisablesSetContext *context) = 0;
+
+    virtual antlrcpp::Any visitUpdates(HybridSystemParser::UpdatesContext *context) = 0;
+
+    virtual antlrcpp::Any visitUpdateNonIf(HybridSystemParser::UpdateNonIfContext *context) = 0;
+
+    virtual antlrcpp::Any visitUpdateIf(HybridSystemParser::UpdateIfContext *context) = 0;
+
+    virtual antlrcpp::Any visitOptElifUpdates(HybridSystemParser::OptElifUpdatesContext *context) = 0;
+
+    virtual antlrcpp::Any visitOptElseUpdate(HybridSystemParser::OptElseUpdateContext *context) = 0;
+
+    virtual antlrcpp::Any visitAdressables(HybridSystemParser::AdressablesContext *context) = 0;
+
+    virtual antlrcpp::Any visitAdressableId(HybridSystemParser::AdressableIdContext *context) = 0;
+
+    virtual antlrcpp::Any visitAdressableProj(HybridSystemParser::AdressableProjContext *context) = 0;
+
+    virtual antlrcpp::Any visitAdressablePair(HybridSystemParser::AdressablePairContext *context) = 0;
+
+    virtual antlrcpp::Any visitProjections(HybridSystemParser::ProjectionsContext *context) = 0;
+
+    virtual antlrcpp::Any visitProjection(HybridSystemParser::ProjectionContext *context) = 0;
 
     virtual antlrcpp::Any visitOptIoDecls(HybridSystemParser::OptIoDeclsContext *context) = 0;
 

@@ -11,39 +11,39 @@
 #include "OrthogonalPolyhedron.h"
 
 namespace hypro {
-template <typename Number, typename Converter, ORTHO_TYPE Type>
-OrthogonalPolyhedronT<Number, Converter, Type>::OrthogonalPolyhedronT()
+template <typename Number, typename Converter, class Setting, ORTHO_TYPE Type>
+OrthogonalPolyhedronT<Number, Converter, Setting, Type>::OrthogonalPolyhedronT()
 	: mGrid(), mBoundaryBox(), mBoxUpToDate( false ) {
 }
 
-template <typename Number, typename Converter, ORTHO_TYPE Type>
-OrthogonalPolyhedronT<Number, Converter, Type>::OrthogonalPolyhedronT( const Vertex<Number> &_vertex )
+template <typename Number, typename Converter, class Setting, ORTHO_TYPE Type>
+OrthogonalPolyhedronT<Number, Converter, Setting, Type>::OrthogonalPolyhedronT( const Vertex<Number> &_vertex )
 	: mGrid(), mBoundaryBox(), mBoxUpToDate( false ) {
 	mGrid.insert( _vertex.point(), _vertex.color() );
 }
 
-template <typename Number, typename Converter, ORTHO_TYPE Type>
-OrthogonalPolyhedronT<Number, Converter, Type>::OrthogonalPolyhedronT( const VertexContainer<Number> &_vertices )
+template <typename Number, typename Converter, class Setting, ORTHO_TYPE Type>
+OrthogonalPolyhedronT<Number, Converter, Setting, Type>::OrthogonalPolyhedronT( const VertexContainer<Number> &_vertices )
 	: mGrid( _vertices.vertices() ), mBoundaryBox(), mBoxUpToDate( false ) {
 }
 
-template <typename Number, typename Converter, ORTHO_TYPE Type>
-OrthogonalPolyhedronT<Number, Converter, Type>::OrthogonalPolyhedronT( const std::set<Vertex<Number>> &_vertices )
+template <typename Number, typename Converter, class Setting, ORTHO_TYPE Type>
+OrthogonalPolyhedronT<Number, Converter, Setting, Type>::OrthogonalPolyhedronT( const std::set<Vertex<Number>> &_vertices )
 	: mGrid( _vertices ), mBoundaryBox(), mBoxUpToDate( false ) {
 }
 
-template <typename Number, typename Converter, ORTHO_TYPE Type>
-OrthogonalPolyhedronT<Number, Converter, Type>::OrthogonalPolyhedronT( const std::vector<Vertex<Number>> &_vertices )
+template <typename Number, typename Converter, class Setting, ORTHO_TYPE Type>
+OrthogonalPolyhedronT<Number, Converter, Setting, Type>::OrthogonalPolyhedronT( const std::vector<Vertex<Number>> &_vertices )
 	: mGrid( _vertices ), mBoundaryBox(), mBoxUpToDate( false ) {
 }
 
-template <typename Number, typename Converter, ORTHO_TYPE Type>
-OrthogonalPolyhedronT<Number, Converter, Type>::OrthogonalPolyhedronT( const OrthogonalPolyhedronT<Number, Converter, Type> &copy )
+template <typename Number, typename Converter, class Setting, ORTHO_TYPE Type>
+OrthogonalPolyhedronT<Number, Converter, Setting, Type>::OrthogonalPolyhedronT( const OrthogonalPolyhedronT<Number, Converter, Setting, Type> &copy )
 	: mGrid( copy.vertices() ), mBoundaryBox(), mBoxUpToDate( false ) {
 }
 
-template <typename Number, typename Converter, ORTHO_TYPE Type>
-OrthogonalPolyhedronT<Number, Converter, Type>::OrthogonalPolyhedronT( const OrthogonalPolyhedronT<Number, Converter, Type> &&move )
+template <typename Number, typename Converter, class Setting, ORTHO_TYPE Type>
+OrthogonalPolyhedronT<Number, Converter, Setting, Type>::OrthogonalPolyhedronT( const OrthogonalPolyhedronT<Number, Converter, Setting, Type> &&move )
 	: mGrid( std::move( move.mGrid ) ), mBoundaryBox(), mBoxUpToDate( false ) {
 }
 
@@ -54,72 +54,72 @@ OrthogonalPolyhedronT<Number, Converter, Type>::OrthogonalPolyhedronT( const Ort
 /**
  * Returns the list of variables of this polyhedron
  */
-template <typename Number, typename Converter, ORTHO_TYPE Type>
-std::vector<carl::Variable> OrthogonalPolyhedronT<Number, Converter, Type>::variables() const {
+template <typename Number, typename Converter, class Setting, ORTHO_TYPE Type>
+std::vector<carl::Variable> OrthogonalPolyhedronT<Number, Converter, Setting, Type>::variables() const {
 	return mGrid.variables();
 }
 
-template <typename Number, typename Converter, ORTHO_TYPE Type>
-std::vector<Vertex<Number>> OrthogonalPolyhedronT<Number, Converter, Type>::vertices() const {
+template <typename Number, typename Converter, class Setting, ORTHO_TYPE Type>
+std::vector<Vertex<Number>> OrthogonalPolyhedronT<Number, Converter, Setting, Type>::vertices() const {
 	return mGrid.vertices();
 }
 
 /**
  * Returns and if necessary calculates the boundary box.
  */
-template <typename Number, typename Converter, ORTHO_TYPE Type>
-BoxT<Number,Converter> OrthogonalPolyhedronT<Number, Converter, Type>::boundaryBox() const {
+template <typename Number, typename Converter, class Setting, ORTHO_TYPE Type>
+BoxT<Number,Converter,Setting> OrthogonalPolyhedronT<Number, Converter, Setting, Type>::boundaryBox() const {
 	if ( !mBoxUpToDate ) {
 		updateBoundaryBox();
 	}
 	return mBoundaryBox;
 }
 
-template <typename Number, typename Converter, ORTHO_TYPE Type>
-const Grid<Number> &OrthogonalPolyhedronT<Number, Converter, Type>::grid() const {
+template <typename Number, typename Converter, class Setting, ORTHO_TYPE Type>
+const Grid<Number> &OrthogonalPolyhedronT<Number, Converter, Setting, Type>::grid() const {
 	return mGrid;
 }
 
-template <typename Number, typename Converter, ORTHO_TYPE Type>
-void OrthogonalPolyhedronT<Number, Converter, Type>::addVertex( const Vertex<Number> &_vertex ) {
+template <typename Number, typename Converter, class Setting, ORTHO_TYPE Type>
+void OrthogonalPolyhedronT<Number, Converter, Setting, Type>::addVertex( const Vertex<Number> &_vertex ) {
 	mGrid.insert( _vertex );
 }
 
-template <typename Number, typename Converter, ORTHO_TYPE Type>
-void OrthogonalPolyhedronT<Number, Converter, Type>::addVertices( const std::vector<Vertex<Number>> &_vertices ) {
+template <typename Number, typename Converter, class Setting, ORTHO_TYPE Type>
+void OrthogonalPolyhedronT<Number, Converter, Setting, Type>::addVertices( const std::vector<Vertex<Number>> &_vertices ) {
 	for ( const auto &vertex : _vertices ) mGrid.insert( vertex );
 }
 
-template <typename Number, typename Converter, ORTHO_TYPE Type>
-bool OrthogonalPolyhedronT<Number, Converter, Type>::empty() const {
+template <typename Number, typename Converter, class Setting, ORTHO_TYPE Type>
+bool OrthogonalPolyhedronT<Number, Converter, Setting, Type>::empty() const {
 	return mGrid.empty();
 }
 
-template <typename Number, typename Converter, ORTHO_TYPE Type>
-std::size_t OrthogonalPolyhedronT<Number, Converter, Type>::size() const {
+template <typename Number, typename Converter, class Setting, ORTHO_TYPE Type>
+std::size_t OrthogonalPolyhedronT<Number, Converter, Setting, Type>::size() const {
 	return mGrid.size();
 }
 
-template <typename Number, typename Converter, ORTHO_TYPE Type>
-std::size_t OrthogonalPolyhedronT<Number, Converter, Type>::dimension() const {
+template <typename Number, typename Converter, class Setting, ORTHO_TYPE Type>
+std::size_t OrthogonalPolyhedronT<Number, Converter, Setting, Type>::dimension() const {
 	return mGrid.dimension();
 }
 
-template <typename Number, typename Converter, ORTHO_TYPE Type>
-Number OrthogonalPolyhedronT<Number, Converter, Type>::supremum() const {
+template <typename Number, typename Converter, class Setting, ORTHO_TYPE Type>
+Number OrthogonalPolyhedronT<Number, Converter, Setting, Type>::supremum() const {
 	// TODO
 }
 
-template <typename Number, typename Converter, ORTHO_TYPE Type>
-bool OrthogonalPolyhedronT<Number, Converter, Type>::isVertex( const Point<Number> &_point ) const {
+template <typename Number, typename Converter, class Setting, ORTHO_TYPE Type>
+bool OrthogonalPolyhedronT<Number, Converter, Setting, Type>::isVertex( const Point<Number> &_point ) const {
 	for ( unsigned dimension : this->dimension() ) {
 		if ( !isOnIEdge( _point, dimension ) ) return false;
 	}
 	return true;
 }
 
-template <typename Number, typename Converter, ORTHO_TYPE Type>
-bool OrthogonalPolyhedronT<Number, Converter, Type>::isOnIEdge( const Point<Number> &_point, unsigned i ) const {
+template <typename Number, typename Converter, class Setting, ORTHO_TYPE Type>
+bool OrthogonalPolyhedronT<Number, Converter, Setting, Type>::isOnIEdge( const Point<Number> &_point, unsigned i ) const {
 	std::vector<Point<Number>> iNeighbors = mGrid.iNeighborhood( _point, i );
 	for ( const auto &neighbor : iNeighbors ) {
 		if ( mGrid.colorAt( neighbor ) != mGrid.colorAt( mGrid.iPredecessor( neighbor, i ) ) ) return true;
@@ -127,46 +127,46 @@ bool OrthogonalPolyhedronT<Number, Converter, Type>::isOnIEdge( const Point<Numb
 	return false;
 }
 
-template <typename Number, typename Converter, ORTHO_TYPE Type>
-bool OrthogonalPolyhedronT<Number, Converter, Type>::isInternal( const Point<Number> &_point ) const {
+template <typename Number, typename Converter, class Setting, ORTHO_TYPE Type>
+bool OrthogonalPolyhedronT<Number, Converter, Setting, Type>::isInternal( const Point<Number> &_point ) const {
 	return ( mGrid.colorAt( _point ) == true );
 }
 
-template <typename Number, typename Converter, ORTHO_TYPE Type>
-bool OrthogonalPolyhedronT<Number, Converter, Type>::isExternal( const Point<Number> &_point ) const {
+template <typename Number, typename Converter, class Setting, ORTHO_TYPE Type>
+bool OrthogonalPolyhedronT<Number, Converter, Setting, Type>::isExternal( const Point<Number> &_point ) const {
 	return !isInternal( _point );
 }
 
-template <typename Number, typename Converter, ORTHO_TYPE Type>
-bool OrthogonalPolyhedronT<Number, Converter, Type>::color( const Point<Number> &_point ) const {
+template <typename Number, typename Converter, class Setting, ORTHO_TYPE Type>
+bool OrthogonalPolyhedronT<Number, Converter, Setting, Type>::color( const Point<Number> &_point ) const {
 	return mGrid.colorAt( _point );
 }
 
-template <typename Number, typename Converter, ORTHO_TYPE Type>
-std::vector<Point<Number>> OrthogonalPolyhedronT<Number, Converter, Type>::iNeighborhood( const Point<Number> &_point,
+template <typename Number, typename Converter, class Setting, ORTHO_TYPE Type>
+std::vector<Point<Number>> OrthogonalPolyhedronT<Number, Converter, Setting, Type>::iNeighborhood( const Point<Number> &_point,
 																			  unsigned i ) const {
 	return mGrid.iNeighborhood( _point, i );
 }
 
-template <typename Number, typename Converter, ORTHO_TYPE Type>
-std::vector<Point<Number>> OrthogonalPolyhedronT<Number, Converter, Type>::iNegNeighborhood( const Point<Number> &_point,
+template <typename Number, typename Converter, class Setting, ORTHO_TYPE Type>
+std::vector<Point<Number>> OrthogonalPolyhedronT<Number, Converter, Setting, Type>::iNegNeighborhood( const Point<Number> &_point,
 																				 unsigned i ) const {
 	return mGrid.iNeighborhood( mGrid.iPredecessor( _point, i ), i );
 }
 
-template <typename Number, typename Converter, ORTHO_TYPE Type>
-std::vector<Point<Number>> OrthogonalPolyhedronT<Number, Converter, Type>::neighborhood( const Point<Number> &_point ) const {
+template <typename Number, typename Converter, class Setting, ORTHO_TYPE Type>
+std::vector<Point<Number>> OrthogonalPolyhedronT<Number, Converter, Setting, Type>::neighborhood( const Point<Number> &_point ) const {
 	return std::move( mGrid.neighborhood( _point ) );
 }
 
-template <typename Number, typename Converter, ORTHO_TYPE Type>
-std::vector<Point<Number>> OrthogonalPolyhedronT<Number, Converter, Type>::iSlice( unsigned i, Number pos ) const {
+template <typename Number, typename Converter, class Setting, ORTHO_TYPE Type>
+std::vector<Point<Number>> OrthogonalPolyhedronT<Number, Converter, Setting, Type>::iSlice( unsigned i, Number pos ) const {
 	// TODO: ATTENTION, this is the induced version, transform!
 	return std::move( mGrid.iSlice( i, pos ) );
 }
 
-template <typename Number, typename Converter, ORTHO_TYPE Type>
-OrthogonalPolyhedronT<Number, Converter, Type> OrthogonalPolyhedronT<Number, Converter, Type>::iProjection( unsigned i ) const {
+template <typename Number, typename Converter, class Setting, ORTHO_TYPE Type>
+OrthogonalPolyhedronT<Number, Converter, Setting, Type> OrthogonalPolyhedronT<Number, Converter, Setting, Type>::iProjection( unsigned i ) const {
 	// TODO: Required for dimension reduction and more sophisticated containment
 	// methods.
 }
@@ -175,38 +175,38 @@ OrthogonalPolyhedronT<Number, Converter, Type> OrthogonalPolyhedronT<Number, Con
  * Geometric Object functions
  **********************************/
 
-template <typename Number, typename Converter, ORTHO_TYPE Type>
-OrthogonalPolyhedronT<Number, Converter, Type> OrthogonalPolyhedronT<Number, Converter, Type>::linearTransformation(
+template <typename Number, typename Converter, class Setting, ORTHO_TYPE Type>
+OrthogonalPolyhedronT<Number, Converter, Setting, Type> OrthogonalPolyhedronT<Number, Converter, Setting, Type>::linearTransformation(
 	  const matrix_t<Number> &A, const vector_t<Number> &b ) const {
 	/*
 	VertexContainer<Number> newVertices(mVertices);
 	newVertices.linearTransformation(A, b);
-	OrthogonalPolyhedronT<Number, Converter, Type> result = OrthogonalPolyhedronT<Number,
+	OrthogonalPolyhedronT<Number, Converter, Setting, Type> result = OrthogonalPolyhedronT<Number,
 	Type>(newVertices);
 	// TODO: undefined behavior, does not update colors of vertices nor fix the
 	non-parallel edges
 	return result;
 	*/
-	OrthogonalPolyhedronT<Number, Converter, Type> result;
+	OrthogonalPolyhedronT<Number, Converter, Setting, Type> result;
 	return result;
 }
 
-template <typename Number, typename Converter, ORTHO_TYPE Type>
-OrthogonalPolyhedronT<Number, Converter, Type> OrthogonalPolyhedronT<Number, Converter, Type>::minkowskiSum(
-	  const OrthogonalPolyhedronT<Number, Converter, Type> &rhs ) const {
+template <typename Number, typename Converter, class Setting, ORTHO_TYPE Type>
+OrthogonalPolyhedronT<Number, Converter, Setting, Type> OrthogonalPolyhedronT<Number, Converter, Setting, Type>::minkowskiSum(
+	  const OrthogonalPolyhedronT<Number, Converter, Setting, Type> &rhs ) const {
 	// TODO
 	// Definition: A+B = { a + b | a ∈ A, b ∈ B}
 	// Idea: put one polyhedron on all the vertices of the other one
 	// Problem: Which vertices to connect, which to remove?
 	// Thoughts: do two vertices belong to former neighbors?
 	//           store the "color" of a moved polyhedron
-	OrthogonalPolyhedronT<Number, Converter, Type> result;
+	OrthogonalPolyhedronT<Number, Converter, Setting, Type> result;
 	return result;
 }
 
-template <typename Number, typename Converter, ORTHO_TYPE Type>
-OrthogonalPolyhedronT<Number, Converter, Type> OrthogonalPolyhedronT<Number, Converter, Type>::intersect(
-	  const OrthogonalPolyhedronT<Number, Converter, Type> &rhs ) const {
+template <typename Number, typename Converter, class Setting, ORTHO_TYPE Type>
+OrthogonalPolyhedronT<Number, Converter, Setting, Type> OrthogonalPolyhedronT<Number, Converter, Setting, Type>::intersect(
+	  const OrthogonalPolyhedronT<Number, Converter, Setting, Type> &rhs ) const {
 	std::vector<Vertex<Number>> potentialVertices;
 	std::vector<Vertex<Number>> v1 = this->vertices();
 	std::vector<Vertex<Number>> v2 = rhs.vertices();
@@ -271,11 +271,11 @@ OrthogonalPolyhedronT<Number, Converter, Type> OrthogonalPolyhedronT<Number, Con
 	//	std::cout << v << std::endl;
 	//}
 
-	return ( OrthogonalPolyhedronT<Number, Converter, Type>( std::move( resVertices ) ) );
+	return ( OrthogonalPolyhedronT<Number, Converter, Setting, Type>( std::move( resVertices ) ) );
 }
 
-template <typename Number, typename Converter, ORTHO_TYPE Type>
-OrthogonalPolyhedronT<Number, Converter, Type> OrthogonalPolyhedronT<Number, Converter, Type>::hull() const {
+template <typename Number, typename Converter, class Setting, ORTHO_TYPE Type>
+OrthogonalPolyhedronT<Number, Converter, Setting, Type> OrthogonalPolyhedronT<Number, Converter, Setting, Type>::hull() const {
 	if ( !mBoxUpToDate ) {
 		updateBoundaryBox();
 	}
@@ -297,30 +297,30 @@ OrthogonalPolyhedronT<Number, Converter, Type> OrthogonalPolyhedronT<Number, Con
 		vertex.setColor( vertexNr == 0 );
 		container.insert( vertex );
 	}
-	OrthogonalPolyhedronT<Number, Converter, Type> result = OrthogonalPolyhedronT<Number, Converter, Type>( container );
+	OrthogonalPolyhedronT<Number, Converter, Setting, Type> result = OrthogonalPolyhedronT<Number, Converter, Setting, Type>( container );
 
 	return result;
 }
 
-template <typename Number, typename Converter, ORTHO_TYPE Type>
-bool OrthogonalPolyhedronT<Number, Converter, Type>::contains( const Point<Number> &point ) const {
+template <typename Number, typename Converter, class Setting, ORTHO_TYPE Type>
+bool OrthogonalPolyhedronT<Number, Converter, Setting, Type>::contains( const Point<Number> &point ) const {
 	bool color = mGrid.colorAt( point );
 	// std::cout << __func__ << " Point " << point << ": color " << color <<
 	// std::endl;
 	return ( color || ( !color && mGrid.isOnFacet( point ) ) );
 }
 
-template <typename Number, typename Converter, ORTHO_TYPE Type>
-bool OrthogonalPolyhedronT<Number, Converter, Type>::contains( const OrthogonalPolyhedronT<Number, Converter, Type> &_other ) const {
+template <typename Number, typename Converter, class Setting, ORTHO_TYPE Type>
+bool OrthogonalPolyhedronT<Number, Converter, Setting, Type>::contains( const OrthogonalPolyhedronT<Number, Converter, Setting, Type> &_other ) const {
 	for ( const auto &vertex : _other.vertices() ) {
 		if ( !contains( vertex.point() ) ) return false;
 	}
 	return true;
 }
 
-template <typename Number, typename Converter, ORTHO_TYPE Type>
-OrthogonalPolyhedronT<Number, Converter, Type> OrthogonalPolyhedronT<Number, Converter, Type>::unite(
-	  const OrthogonalPolyhedronT<Number, Converter, Type> &rhs ) const {
+template <typename Number, typename Converter, class Setting, ORTHO_TYPE Type>
+OrthogonalPolyhedronT<Number, Converter, Setting, Type> OrthogonalPolyhedronT<Number, Converter, Setting, Type>::unite(
+	  const OrthogonalPolyhedronT<Number, Converter, Setting, Type> &rhs ) const {
 	/* Algorithm: create combined grids each, for each potential vertex determine
 	 * vertex condition, black dominates,
 	 * same as for intersection, just inverted:
@@ -386,15 +386,15 @@ OrthogonalPolyhedronT<Number, Converter, Type> OrthogonalPolyhedronT<Number, Con
 		}
 	}
 
-	return ( OrthogonalPolyhedronT<Number, Converter, Type>( std::move( resVertices ) ) );
+	return ( OrthogonalPolyhedronT<Number, Converter, Setting, Type>( std::move( resVertices ) ) );
 }
 
 /**********************************
  * Other functions
  **********************************/
 
-template <typename Number, typename Converter, ORTHO_TYPE Type>
-std::vector<std::vector<Point<Number>>> OrthogonalPolyhedronT<Number, Converter, Type>::preparePlot( unsigned _xDim,
+template <typename Number, typename Converter, class Setting, ORTHO_TYPE Type>
+std::vector<std::vector<Point<Number>>> OrthogonalPolyhedronT<Number, Converter, Setting, Type>::preparePlot( unsigned _xDim,
 																						 unsigned _yDim ) const {
 	std::vector<std::vector<Point<Number>>> result;
 
@@ -426,8 +426,8 @@ std::vector<std::vector<Point<Number>>> OrthogonalPolyhedronT<Number, Converter,
 /**
  * Updates the boundary box
  */
-template <typename Number, typename Converter, ORTHO_TYPE Type>
-void OrthogonalPolyhedronT<Number, Converter, Type>::updateBoundaryBox() const {
+template <typename Number, typename Converter, class Setting, ORTHO_TYPE Type>
+void OrthogonalPolyhedronT<Number, Converter, Setting, Type>::updateBoundaryBox() const {
 	// If there are no vertices, the box is empty
 	if ( mGrid.empty() ) {
 		mBoundaryBox.clear();
@@ -437,7 +437,7 @@ void OrthogonalPolyhedronT<Number, Converter, Type>::updateBoundaryBox() const {
 	std::vector<Point<Number>> points;
 	std::for_each(vertices.begin(), vertices.end(), [&](const Vertex<Number>& v){points.push_back(Point<Number>(v.rawCoordinates()));});
 
-	mBoundaryBox = BoxT<Number,Converter>( points );
+	mBoundaryBox = BoxT<Number,Converter,Setting>( points );
 
 	mBoxUpToDate = true;
 }

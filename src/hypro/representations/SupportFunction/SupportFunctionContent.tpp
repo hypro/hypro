@@ -31,11 +31,11 @@ SupportFunctionContent<Number>::SupportFunctionContent( const SupportFunctionCon
 			break;
 		}
 		case SF_TYPE::LINTRAFO: {
-			mLinearTrafoParameters = new trafoContent<Number>(*_orig.linearTrafoParameters());
+			mLinearTrafoParameters = new trafoContent<Number,SupportFunctionContentSetting>(*_orig.linearTrafoParameters());
 			break;
 		}
 		case SF_TYPE::POLY: {
-			mPolytope = new PolytopeSupportFunction<Number>(*_orig.polytope());
+			mPolytope = new PolytopeSupportFunction<Number,PolytopeSupportFunctionSetting>(*_orig.polytope());
 			break;
 		}
 		case SF_TYPE::PROJECTION: {
@@ -103,7 +103,7 @@ SupportFunctionContent<Number>::SupportFunctionContent( const matrix_t<Number> &
 										  SF_TYPE _type ) {
 	switch ( _type ) {
 		case SF_TYPE::POLY: {
-			mPolytope = new PolytopeSupportFunction<Number>( _directions, _distances );
+			mPolytope = new PolytopeSupportFunction<Number,PolytopeSupportFunctionSetting>( _directions, _distances );
 			mType = SF_TYPE::POLY;
 			mDimension = std::size_t(_directions.cols());
 			mDepth = 0;
@@ -119,7 +119,7 @@ template <typename Number>
 SupportFunctionContent<Number>::SupportFunctionContent( const std::vector<Halfspace<Number>>& _planes, SF_TYPE _type ) {
 	switch ( _type ) {
 		case SF_TYPE::POLY: {
-			mPolytope = new PolytopeSupportFunction<Number>( _planes );
+			mPolytope = new PolytopeSupportFunction<Number,PolytopeSupportFunctionSetting>( _planes );
 			mType = SF_TYPE::POLY;
 			mDimension = polytope()->dimension();
 			mDepth = 0;
@@ -135,7 +135,7 @@ template<typename Number>
 SupportFunctionContent<Number>::SupportFunctionContent( const std::vector<Point<Number>>& _points, SF_TYPE _type ) {
 	switch ( _type ) {
 		case SF_TYPE::POLY: {
-			mPolytope = new PolytopeSupportFunction<Number>( _points );
+			mPolytope = new PolytopeSupportFunction<Number,PolytopeSupportFunctionSetting>( _points );
 			mType = SF_TYPE::POLY;
 			mDimension = polytope()->dimension();
 			mDepth = 0;
@@ -229,7 +229,7 @@ SupportFunctionContent<Number>::SupportFunctionContent( const std::shared_ptr<Su
 	assert(_origin->checkTreeValidity());
 	switch ( _type ) {
 		case SF_TYPE::LINTRAFO: {
-			mLinearTrafoParameters = new trafoContent<Number>( _origin, A, b );
+			mLinearTrafoParameters = new trafoContent<Number,SupportFunctionContentSetting>( _origin, A, b );
 			mType = SF_TYPE::LINTRAFO;
 			mDimension = _origin->dimension();
 			mDepth = linearTrafoParameters()->origin->depth() +1;
@@ -333,11 +333,11 @@ std::shared_ptr<SupportFunctionContent<Number>>& SupportFunctionContent<Number>:
 			mBall = new BallSupportFunction<Number>(*_other->ball());
 			break;
 		case SF_TYPE::LINTRAFO:
-			mLinearTrafoParameters = new trafoContent<Number>(*_other->linearTrafoParameters());
+			mLinearTrafoParameters = new trafoContent<Number,SupportFunctionContentSetting>(*_other->linearTrafoParameters());
 			break;
 		case SF_TYPE::POLY:
 			// explicitly invoke copy constructor to avoid pointer copy
-			mPolytope = new PolytopeSupportFunction<Number>(*_other->polytope());
+			mPolytope = new PolytopeSupportFunction<Number,PolytopeSupportFunctionSetting>(*_other->polytope());
 			break;
 		case SF_TYPE::PROJECTION:
 			mProjectionParameters = new projectionContent<Number>(*_other->projectionParameters());
@@ -1221,7 +1221,7 @@ void SupportFunctionContent<Number>::forceLinTransReduction(){
             }
 			mDepth = origin->depth() + 1;
 			mOperationCount = origin->operationCount() +1;
-            mLinearTrafoParameters = new trafoContent<Number>( origin, std::make_shared<lintrafoParameters<Number>>(parameterPair.first, parameterPair.second) );
+            mLinearTrafoParameters = new trafoContent<Number,SupportFunctionContentSetting>( origin, std::make_shared<lintrafoParameters<Number>>(parameterPair.first, parameterPair.second) );
             break;
         }
         case SF_TYPE::SUM: {
@@ -1551,7 +1551,7 @@ sumContent<Number> *SupportFunctionContent<Number>::summands() const {
 }
 
 template <typename Number>
-trafoContent<Number> *SupportFunctionContent<Number>::linearTrafoParameters() const {
+trafoContent<Number,SupportFunctionContentSetting> *SupportFunctionContent<Number>::linearTrafoParameters() const {
 	assert(mType == SF_TYPE::LINTRAFO);
 	return mLinearTrafoParameters;
 }
@@ -1582,7 +1582,7 @@ projectionContent<Number>* SupportFunctionContent<Number>::projectionParameters(
 }
 
 template <typename Number>
-PolytopeSupportFunction<Number> *SupportFunctionContent<Number>::polytope() const {
+PolytopeSupportFunction<Number,PolytopeSupportFunctionSetting> *SupportFunctionContent<Number>::polytope() const {
 	assert( mType == SF_TYPE::POLY );
 	return mPolytope;
 }

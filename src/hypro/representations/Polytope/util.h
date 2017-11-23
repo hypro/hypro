@@ -205,15 +205,15 @@ Point<Number> computePoint( Point<Number>& _point, vector_t<Number>& _edge, bool
  * the Adjacency Oracle as per Fukuda's paper
  * computes one adjacent vertex in the sum polytope, given a specific direction (indirectly by the counter)
  */
-template <typename Number>
+template <typename Number, class DebugSetting>
 bool adjOracle( Point<Number>& result, Point<Number>& _vertex, std::pair<int, int>& _counter ) {
 // retrieve the edge that is defined by the counter (j,i)
 // first get both source & target vertex (dependent on the counter param.)
-#ifdef fukuda_DEBUG
-	std::cout << "-------------------------" << std::endl;
-	std::cout << "AdjOracle for vertex: " << _vertex << std::endl;
-	std::cout << "-------------------------" << std::endl;
-#endif
+	if(DebugSetting::fukuda_DEBUG){
+		std::cout << "-------------------------" << std::endl;
+		std::cout << "AdjOracle for vertex: " << _vertex << std::endl;
+		std::cout << "-------------------------" << std::endl;
+	}
 
 	std::vector<Point<Number>> vertexComposition = _vertex.composedOf();
 	Point<Number> sourceVertex;
@@ -224,12 +224,12 @@ bool adjOracle( Point<Number>& result, Point<Number>& _vertex, std::pair<int, in
 	}
 	std::vector<Point<Number>> neighbors = sourceVertex.neighbors();
 	if ( neighbors.size() < _counter.second ) {
-// this neighbor does not exist for this vertex
-#ifdef fukuda_DEBUG
-		std::cout << "-------------------------" << std::endl;
-		std::cout << "AdjOracle result: no neighbor in this direction" << std::endl;
-		std::cout << "-------------------------" << std::endl;
-#endif
+	// this neighbor does not exist for this vertex
+		if(DebugSetting::fukuda_DEBUG){
+			std::cout << "-------------------------" << std::endl;
+			std::cout << "AdjOracle result: no neighbor in this direction" << std::endl;
+			std::cout << "-------------------------" << std::endl;
+		}
 		return false;
 	} else {
 		targetVertex = neighbors[_counter.second - 1];
@@ -272,19 +272,19 @@ bool adjOracle( Point<Number>& result, Point<Number>& _vertex, std::pair<int, in
 		dotProduct = std::round( dotProduct.toDouble() * 1000000 );
 		normFactor = std::round( normFactor.toDouble() * 1000000 );
 
-#ifdef fukuda_DEBUG
-		std::cout << "Dot Product: " << dotProduct << std::endl;
-		std::cout << "Norm Factor: " << normFactor << std::endl;
-		std::cout << "Parallelism Factor: " << dotProduct / normFactor << std::endl;
-		std::cout << "Value of the if condition: " << ( dotProduct / normFactor == 1 ) << std::endl;
-#endif
+		if(DebugSetting::fukuda_DEBUG){
+			std::cout << "Dot Product: " << dotProduct << std::endl;
+			std::cout << "Norm Factor: " << normFactor << std::endl;
+			std::cout << "Parallelism Factor: " << dotProduct / normFactor << std::endl;
+			std::cout << "Value of the if condition: " << ( dotProduct / normFactor == 1 ) << std::endl;
+		}
 
 		if ( ( dotProduct / normFactor == 1 + EPSILON ) || ( dotProduct / normFactor == 1 - EPSILON ) ||
 			 ( dotProduct / normFactor == -1 + EPSILON ) || ( dotProduct / normFactor == -1 - EPSILON ) ||
 			 ( dotProduct / normFactor == -1 ) || ( dotProduct / normFactor == 1 ) ) {
-#ifdef fukuda_DEBUG
-			std::cout << "Parallel Edge detected" << std::endl;
-#endif
+			if(DebugSetting::fukuda_DEBUG){
+				std::cout << "Parallel Edge detected" << std::endl;
+			}
 			parallelEdge = tempEdge;
 			parallelFlag = true;
 		} else {
@@ -337,12 +337,12 @@ bool adjOracle( Point<Number>& result, Point<Number>& _vertex, std::pair<int, in
 
 	// setup the matrix coefficients
 	unsigned elements = ( nonParallelEdges.size() + 1 ) * ( edge.rows() );
-#ifdef fukuda_DEBUG
-	std::cout << "source Vertex: " << sourceVertex << std::endl;
-	std::cout << "target Vertex: " << targetVertex << std::endl;
-	std::cout << "other source Vertex: " << otherSource << std::endl;
-	std::cout << "considered Edge: " << edge << std::endl;
-#endif
+	if(DebugSetting::fukuda_DEBUG){
+		std::cout << "source Vertex: " << sourceVertex << std::endl;
+		std::cout << "target Vertex: " << targetVertex << std::endl;
+		std::cout << "other source Vertex: " << otherSource << std::endl;
+		std::cout << "considered Edge: " << edge << std::endl;
+	}
 	int* ia = new int[1 + elements];
 	int* ja = new int[1 + elements];
 	double* ar = new double[1 + elements];
@@ -358,9 +358,9 @@ bool adjOracle( Point<Number>& result, Point<Number>& _vertex, std::pair<int, in
 		ia[pos] = 1;
 		ja[pos] = j;
 		ar[pos] = edge( j - 1 ).toDouble();
-#ifdef fukuda_DEBUG
-		std::cout << "Coeff. at (1," << j << "): " << ar[pos] << std::endl;
-#endif
+		if(DebugSetting::fukuda_DEBUG){
+			std::cout << "Coeff. at (1," << j << "): " << ar[pos] << std::endl;
+		}
 		++pos;
 	}
 
@@ -371,9 +371,9 @@ bool adjOracle( Point<Number>& result, Point<Number>& _vertex, std::pair<int, in
 			ja[pos] = j;
 			vector_t<Number> tmpVec = nonParallelEdges.at( i - 2 );
 			ar[pos] = tmpVec( j - 1 ).toDouble();
-#ifdef fukuda_DEBUG
-			std::cout << "Coeff. at (" << i << "," << j << "): " << ar[pos] << std::endl;
-#endif
+			if(DebugSetting::fukuda_DEBUG){
+				std::cout << "Coeff. at (" << i << "," << j << "): " << ar[pos] << std::endl;
+			}
 			++pos;
 		}
 	}
@@ -382,17 +382,17 @@ bool adjOracle( Point<Number>& result, Point<Number>& _vertex, std::pair<int, in
 	glp_load_matrix( feasibility, elements, ia, ja, ar );
 	glp_simplex( feasibility, NULL );
 
-#ifdef fukuda_DEBUG
-	std::cout << "Parallel Flag: " << parallelFlag << std::endl;
-#endif
+	if(DebugSetting::fukuda_DEBUG){
+		std::cout << "Parallel Flag: " << parallelFlag << std::endl;
+	}
 
 	// check if a feasible solution exists
 	if ( glp_get_status( feasibility ) == GLP_NOFEAS ) {
-#ifdef fukuda_DEBUG
-		std::cout << "-------------------------" << std::endl;
-		std::cout << "AdjOracle result: no feasible solution" << std::endl;
-		std::cout << "-------------------------" << std::endl;
-#endif
+		if(DebugSetting::fukuda_DEBUG){
+			std::cout << "-------------------------" << std::endl;
+			std::cout << "AdjOracle result: no feasible solution" << std::endl;
+			std::cout << "-------------------------" << std::endl;
+		}
 		return false;
 	} else {
 		// since there is a feasible solution, our edge determines an edge direction of P=P1+P2
@@ -408,10 +408,10 @@ bool adjOracle( Point<Number>& result, Point<Number>& _vertex, std::pair<int, in
 		} else {
 			// if there was a parallel edge: v_new = a1(v1,i1) + a2(v2,i2)
 			Point<Number> otherTargetVertex = computePoint( otherSource, parallelEdge, true );
-#ifdef fukuda_DEBUG
-			std::cout << "parallel Edge: " << parallelEdge << std::endl;
-			std::cout << "Other Target Vertex: " << otherTargetVertex << std::endl;
-#endif
+			if(DebugSetting::fukuda_DEBUG){
+				std::cout << "parallel Edge: " << parallelEdge << std::endl;
+				std::cout << "Other Target Vertex: " << otherTargetVertex << std::endl;
+			}
 			result = targetVertex.extAdd( otherTargetVertex );
 
 			result.addToComposition( targetVertex );
@@ -421,11 +421,11 @@ bool adjOracle( Point<Number>& result, Point<Number>& _vertex, std::pair<int, in
 
 	glp_delete_prob( feasibility );
 
-#ifdef fukuda_DEBUG
-	std::cout << "-------------------------" << std::endl;
-	std::cout << "AdjOracle result: " << result << std::endl;
-	std::cout << "-------------------------" << std::endl;
-#endif
+	if(DebugSetting::fukuda_DEBUG){
+		std::cout << "-------------------------" << std::endl;
+		std::cout << "AdjOracle result: " << result << std::endl;
+		std::cout << "-------------------------" << std::endl;
+	}
 
 	return true;
 }
@@ -433,16 +433,16 @@ bool adjOracle( Point<Number>& result, Point<Number>& _vertex, std::pair<int, in
 /**
  * computes the unique maximizer vector for a given vertex (and also the target point of this vector)
  */
-template <typename Number>
+template <typename Number, class DebugSetting>
 vector_t<Number> computeMaximizerVector( Point<Number>& _targetVertex, Point<Number>& _vertex ) {
 	// to prepare the LP, compute all incident edges of v1 & v2 for v=v1+v2
 	std::vector<Point<Number>> vertexComposition = _vertex.composedOf();
 	Point<Number> sourceVertex1 = vertexComposition[0];
 	Point<Number> sourceVertex2 = vertexComposition[1];
 
-#ifdef fukuda_DEBUG
-	std::cout << "Decomposition: " << sourceVertex1 << ", " << sourceVertex2 << std::endl;
-#endif
+	if(DebugSetting::fukuda_DEBUG){
+		std::cout << "Decomposition: " << sourceVertex1 << ", " << sourceVertex2 << std::endl;
+	}
 
 	std::vector<Point<Number>> neighbors1 = sourceVertex1.neighbors();
 	std::vector<Point<Number>> neighbors2 = sourceVertex2.neighbors();
@@ -472,9 +472,9 @@ vector_t<Number> computeMaximizerVector( Point<Number>& _targetVertex, Point<Num
 		}
 	}
 
-#ifdef fukuda_DEBUG
-	std::cout << "Bool Vector: " << degeneracyCheck << std::endl;
-#endif
+	if(DebugSetting::fukuda_DEBUG){
+		std::cout << "Bool Vector: " << degeneracyCheck << std::endl;
+	}
 
 	/*
 	 * Setup LP with GLPK
@@ -525,9 +525,9 @@ vector_t<Number> computeMaximizerVector( Point<Number>& _targetVertex, Point<Num
 			ja[pos] = j;
 			vector_t<Number> tmpVec = edges.at( i - 1 );
 			ar[pos] = tmpVec( j - 1 ).toDouble();
-#ifdef fukuda_DEBUG
-			std::cout << "Coeff. at (" << i << "," << j << "): " << ar[pos] << std::endl;
-#endif
+			if(DebugSetting::fukuda_DEBUG){
+				std::cout << "Coeff. at (" << i << "," << j << "): " << ar[pos] << std::endl;
+			}
 			++pos;
 		}
 
@@ -535,9 +535,9 @@ vector_t<Number> computeMaximizerVector( Point<Number>& _targetVertex, Point<Num
 		ia[pos] = i;
 		ja[pos] = tmpEdge.rows() + 1;
 		ar[pos] = 1;
-#ifdef fukuda_DEBUG
-		std::cout << "Coeff. at (" << i << "," << tmpEdge.rows() + 1 << "): " << ar[pos] << std::endl;
-#endif
+		if(DebugSetting::fukuda_DEBUG){
+			std::cout << "Coeff. at (" << i << "," << tmpEdge.rows() + 1 << "): " << ar[pos] << std::endl;
+		}
 		++pos;
 	}
 
@@ -558,11 +558,11 @@ vector_t<Number> computeMaximizerVector( Point<Number>& _targetVertex, Point<Num
 
 	glp_delete_prob( maximizer );
 
-#ifdef fukuda_DEBUG
-	std::cout << "-------------------------" << std::endl;
-	std::cout << "Computed MaximizerVector: " << result << std::endl;
-	std::cout << "-------------------------" << std::endl;
-#endif
+	if(DebugSetting::fukuda_DEBUG){
+		std::cout << "-------------------------" << std::endl;
+		std::cout << "Computed MaximizerVector: " << result << std::endl;
+		std::cout << "-------------------------" << std::endl;
+	}
 
 	return result;
 }
@@ -570,7 +570,7 @@ vector_t<Number> computeMaximizerVector( Point<Number>& _targetVertex, Point<Num
 /**
  * computes one of dimension-1 vectors that contribute to the normal cone of a vertex
  */
-template <typename Number>
+template <typename Number, class DebugSetting>
 vector_t<Number> computeNormalConeVector( std::vector<vector_t<Number>>& _edgeSet,
 										  vector_t<Number>& _maximizerVector ) {
 	/*
@@ -622,9 +622,9 @@ vector_t<Number> computeNormalConeVector( std::vector<vector_t<Number>>& _edgeSe
 			ja[pos] = j;
 			vector_t<Number> tmpVec = _edgeSet.at( i - 1 );
 			ar[pos] = tmpVec( j - 1 ).toDouble();
-#ifdef fukuda_DEBUG
-			std::cout << "Coeff. at (" << i << "," << j << "): " << ar[pos] << std::endl;
-#endif
+			if(DebugSetting::fukuda_DEBUG){
+				std::cout << "Coeff. at (" << i << "," << j << "): " << ar[pos] << std::endl;
+			}
 			++pos;
 		}
 	}
@@ -679,7 +679,7 @@ std::vector<vector_t<Number>> computeEdgeSet( Point<Number>& _vertex ) {
 /**
  * computes the normal cone for a given vertex
  */
-template <typename Number>
+template <typename Number, class DebugSetting>
 Cone<Number>* computeCone( Point<Number>& _vertex, vector_t<Number>& _maximizerVector ) {
 	std::vector<vector_t<Number>> edges = computeEdgeSet( _vertex );
 
@@ -688,9 +688,9 @@ Cone<Number>* computeCone( Point<Number>& _vertex, vector_t<Number>& _maximizerV
 	vector_t<Number> tmpVector;
 	std::vector<vector_t<Number>> resultVectorSet;
 
-#ifdef fukuda_DEBUG
-	std::cout << "Edges: " << edges << std::endl;
-#endif
+	if(DebugSetting::fukuda_DEBUG){
+		std::cout << "Edges: " << edges << std::endl;
+	}
 
 	// dimension-1 edges define one (edge) vector of our cone
 	for ( unsigned i = 0; i <= edges.size() - dimension + 1; ++i ) {
@@ -700,9 +700,9 @@ Cone<Number>* computeCone( Point<Number>& _vertex, vector_t<Number>& _maximizerV
 			tmpEdges.push_back( edges.at( i + j ) );
 		}
 		tmpVector = polytope::computeNormalConeVector<Number>( tmpEdges, _maximizerVector );
-#ifdef fukuda_DEBUG
-		std::cout << "Normal Cone Vector: " << tmpVector << std::endl;
-#endif
+		if(DebugSetting::fukuda_DEBUG){
+			std::cout << "Normal Cone Vector: " << tmpVector << std::endl;
+		}
 		resultVectorSet.push_back( tmpVector );
 	}
 
@@ -722,9 +722,9 @@ Cone<Number>* computeCone( Point<Number>& _vertex, vector_t<Number>& _maximizerV
 		// convert Point<Number> to Vector by explicit cast
 		Halfspace<Number>* plane = new Halfspace<Number>( vector_t<Number>( _vertex ), vectorTuple );
 		cone->add( plane );
-#ifdef fukuda_DEBUG
-		std::cout << "Plane added to the cone" << std::endl;
-#endif
+		if(DebugSetting::fukuda_DEBUG){
+			std::cout << "Plane added to the cone" << std::endl;
+		}
 		vectorTuple.clear();
 	}
 

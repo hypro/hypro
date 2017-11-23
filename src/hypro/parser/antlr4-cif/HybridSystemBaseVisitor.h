@@ -107,58 +107,6 @@ public:
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitCoreEdge(HybridSystemParser::CoreEdgeContext *ctx) override {
-    return visitChildren(ctx);
-  }
-
-  virtual antlrcpp::Any visitOptEdgeGuard(HybridSystemParser::OptEdgeGuardContext *ctx) override {
-    return visitChildren(ctx);
-  }
-
-  virtual antlrcpp::Any visitOptEdgeUrgent(HybridSystemParser::OptEdgeUrgentContext *ctx) override {
-    return visitChildren(ctx);
-  }
-
-  virtual antlrcpp::Any visitOptEdgeUpdate(HybridSystemParser::OptEdgeUpdateContext *ctx) override {
-    return visitChildren(ctx);
-  }
-
-  virtual antlrcpp::Any visitEdgeEvents(HybridSystemParser::EdgeEventsContext *ctx) override {
-    return visitChildren(ctx);
-  }
-
-  virtual antlrcpp::Any visitEdgeEvent(HybridSystemParser::EdgeEventContext *ctx) override {
-    return visitChildren(ctx);
-  }
-
-  virtual antlrcpp::Any visitLocations(HybridSystemParser::LocationsContext *ctx) override {
-    return visitChildren(ctx);
-  }
-
-  virtual antlrcpp::Any visitLoc(HybridSystemParser::LocContext *ctx) override {
-    return visitChildren(ctx);
-  }
-
-  virtual antlrcpp::Any visitLocId(HybridSystemParser::LocIdContext *ctx) override {
-    return visitChildren(ctx);
-  }
-
-  virtual antlrcpp::Any visitLocElem(HybridSystemParser::LocElemContext *ctx) override {
-    return visitChildren(ctx);
-  }
-
-  virtual antlrcpp::Any visitLocIdElem(HybridSystemParser::LocIdElemContext *ctx) override {
-    return visitChildren(ctx);
-  }
-
-  virtual antlrcpp::Any visitLocationElements(HybridSystemParser::LocationElementsContext *ctx) override {
-    return visitChildren(ctx);
-  }
-
-  virtual antlrcpp::Any visitLocationElement(HybridSystemParser::LocationElementContext *ctx) override {
-    return visitChildren(ctx);
-  }
-
   virtual antlrcpp::Any visitActualParms(HybridSystemParser::ActualParmsContext *ctx) override {
     return visitChildren(ctx);
   }
@@ -195,58 +143,6 @@ public:
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitEquations(HybridSystemParser::EquationsContext *ctx) override {
-    return visitChildren(ctx);
-  }
-
-  virtual antlrcpp::Any visitEquation(HybridSystemParser::EquationContext *ctx) override {
-    return visitChildren(ctx);
-  }
-
-  virtual antlrcpp::Any visitInvariantDecls(HybridSystemParser::InvariantDeclsContext *ctx) override {
-    return visitChildren(ctx);
-  }
-
-  virtual antlrcpp::Any visitInvariants(HybridSystemParser::InvariantsContext *ctx) override {
-    return visitChildren(ctx);
-  }
-
-  virtual antlrcpp::Any visitInvariant(HybridSystemParser::InvariantContext *ctx) override {
-    return visitChildren(ctx);
-  }
-
-  virtual antlrcpp::Any visitUpdates(HybridSystemParser::UpdatesContext *ctx) override {
-    return visitChildren(ctx);
-  }
-
-  virtual antlrcpp::Any visitUpdate(HybridSystemParser::UpdateContext *ctx) override {
-    return visitChildren(ctx);
-  }
-
-  virtual antlrcpp::Any visitAdressables(HybridSystemParser::AdressablesContext *ctx) override {
-    return visitChildren(ctx);
-  }
-
-  virtual antlrcpp::Any visitAdressable(HybridSystemParser::AdressableContext *ctx) override {
-    return visitChildren(ctx);
-  }
-
-  virtual antlrcpp::Any visitProjections(HybridSystemParser::ProjectionsContext *ctx) override {
-    return visitChildren(ctx);
-  }
-
-  virtual antlrcpp::Any visitProjection(HybridSystemParser::ProjectionContext *ctx) override {
-    return visitChildren(ctx);
-  }
-
-  virtual antlrcpp::Any visitOptElifUpdates(HybridSystemParser::OptElifUpdatesContext *ctx) override {
-    return visitChildren(ctx);
-  }
-
-  virtual antlrcpp::Any visitOptElseUpdate(HybridSystemParser::OptElseUpdateContext *ctx) override {
-    return visitChildren(ctx);
-  }
-
   virtual antlrcpp::Any visitOptControllability(HybridSystemParser::OptControllabilityContext *ctx) override {
     return visitChildren(ctx);
   }
@@ -271,6 +167,18 @@ public:
     return visitChildren(ctx);
   }
 
+  virtual antlrcpp::Any visitEquations(HybridSystemParser::EquationsContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitEquationDerivate(HybridSystemParser::EquationDerivateContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitEquationNonDerivate(HybridSystemParser::EquationNonDerivateContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
   virtual antlrcpp::Any visitOrExpression(HybridSystemParser::OrExpressionContext *ctx) override {
     return visitChildren(ctx);
   }
@@ -291,7 +199,19 @@ public:
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitUnaryExpression(HybridSystemParser::UnaryExpressionContext *ctx) override {
+  virtual antlrcpp::Any visitUnaryExprFunc(HybridSystemParser::UnaryExprFuncContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitUnaryExprMinus(HybridSystemParser::UnaryExprMinusContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitUnaryExprPlus(HybridSystemParser::UnaryExprPlusContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitUnaryExpr(HybridSystemParser::UnaryExprContext *ctx) override {
     return visitChildren(ctx);
   }
 
@@ -299,7 +219,19 @@ public:
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitExpressionFactor(HybridSystemParser::ExpressionFactorContext *ctx) override {
+  virtual antlrcpp::Any visitExprFact(HybridSystemParser::ExprFactContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitExprFactNumber(HybridSystemParser::ExprFactNumberContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitExprFactRealNumber(HybridSystemParser::ExprFactRealNumberContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitExprFactName(HybridSystemParser::ExprFactNameContext *ctx) override {
     return visitChildren(ctx);
   }
 
@@ -368,6 +300,162 @@ public:
   }
 
   virtual antlrcpp::Any visitStdLibFunction(HybridSystemParser::StdLibFunctionContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitLocations(HybridSystemParser::LocationsContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitLoc(HybridSystemParser::LocContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitLocId(HybridSystemParser::LocIdContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitLocElem(HybridSystemParser::LocElemContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitLocIdElem(HybridSystemParser::LocIdElemContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitLocationElements(HybridSystemParser::LocationElementsContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitLocElemInitialFlag(HybridSystemParser::LocElemInitialFlagContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitLocElemInitialFlagExpr(HybridSystemParser::LocElemInitialFlagExprContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitLocElemInv(HybridSystemParser::LocElemInvContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitLocElemEqs(HybridSystemParser::LocElemEqsContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitLocElemMarked(HybridSystemParser::LocElemMarkedContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitLocElemMarkedExpr(HybridSystemParser::LocElemMarkedExprContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitLocElemUrgent(HybridSystemParser::LocElemUrgentContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitLocElemEdgeTo(HybridSystemParser::LocElemEdgeToContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitLocElemLoop(HybridSystemParser::LocElemLoopContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitCoreEdge(HybridSystemParser::CoreEdgeContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitOptEdgeGuard(HybridSystemParser::OptEdgeGuardContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitOptEdgeUrgent(HybridSystemParser::OptEdgeUrgentContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitOptEdgeUpdate(HybridSystemParser::OptEdgeUpdateContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitEdgeEvents(HybridSystemParser::EdgeEventsContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitEdgeEvent(HybridSystemParser::EdgeEventContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitInvariantDecls(HybridSystemParser::InvariantDeclsContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitInvariants(HybridSystemParser::InvariantsContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitInvExpr(HybridSystemParser::InvExprContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitInvNeeds(HybridSystemParser::InvNeedsContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitInvNeedsSet(HybridSystemParser::InvNeedsSetContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitInvDisables(HybridSystemParser::InvDisablesContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitInvDisablesSet(HybridSystemParser::InvDisablesSetContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitUpdates(HybridSystemParser::UpdatesContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitUpdateNonIf(HybridSystemParser::UpdateNonIfContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitUpdateIf(HybridSystemParser::UpdateIfContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitOptElifUpdates(HybridSystemParser::OptElifUpdatesContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitOptElseUpdate(HybridSystemParser::OptElseUpdateContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitAdressables(HybridSystemParser::AdressablesContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitAdressableId(HybridSystemParser::AdressableIdContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitAdressableProj(HybridSystemParser::AdressableProjContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitAdressablePair(HybridSystemParser::AdressablePairContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitProjections(HybridSystemParser::ProjectionsContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitProjection(HybridSystemParser::ProjectionContext *ctx) override {
     return visitChildren(ctx);
   }
 

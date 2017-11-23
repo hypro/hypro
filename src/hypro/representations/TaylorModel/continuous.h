@@ -8,11 +8,9 @@
 #pragma once
 
 #include "TaylorModel.h"
+#include "ContinuousSetting.h"
 
 namespace hypro {
-
-#define MAX_ITER_NUM 50
-#define STOP_RATIO 0.99
 
 template <typename Number>
 class Flowpipe {
@@ -33,6 +31,7 @@ class Flowpipe {
 
 	void composition( TaylorModelVec<Number>& result, Domain<Number>& fp_domain, const exponent order );
 
+	template<class Setting>
 	int next_picard( Flowpipe<Number>& result, const PolynomialODE<Number>& ode, const carl::Variable& t,
 					 const double stepsize, const exponent order, const Range<Number>& estimation );
 

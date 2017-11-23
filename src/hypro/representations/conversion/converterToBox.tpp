@@ -20,7 +20,7 @@ typename Converter<Number>::Box Converter<Number>::toBox( const Box& _source, co
 
 template<typename Number>
 typename Converter<Number>::Box Converter<Number>::toBox(const ConstraintSet& source, const CONV_MODE) {
-	return BoxT<Number,Converter>(source.matrix(), source.vector());
+	return BoxT<Number,Converter,BoxLinearOptimizationOn>(source.matrix(), source.vector());
 }
 
 template<typename Number>
@@ -36,7 +36,7 @@ typename Converter<Number>::Box Converter<Number>::toBox( const Ellipsoid& _sour
 	    intervals.at(i).setUpper(-evaluation(i));
 	    l(i) = 0;
 	}
-	return BoxT<Number,Converter>(intervals);
+	return BoxT<Number,Converter,BoxLinearOptimizationOn>(intervals);
 }
 
 // conversion from support function to box (no differentiation between conversion modes - always OVER)
@@ -76,7 +76,7 @@ typename Converter<Number>::Box Converter<Number>::toBox( const SupportFunction&
     //     }
     // }
 
-	return BoxT<Number,Converter>( intervals );
+	return BoxT<Number,Converter,BoxLinearOptimizationOn>( intervals );
 }
 
 //conversion from V-Polytope to box (no differentiation between conversion modes - always OVER)
@@ -111,9 +111,9 @@ typename Converter<Number>::Box Converter<Number>::toBox( const VPolytope& _sour
 	    //     }
 	    // }
 
-		return BoxT<Number,Converter>( intervals );                                          //creates a box with the computed intervals
+		return BoxT<Number,Converter,BoxLinearOptimizationOn>( intervals );                                          //creates a box with the computed intervals
 	}
-	return BoxT<Number,Converter>();
+	return BoxT<Number,Converter,BoxLinearOptimizationOn>();
 }
 
 //conversion from H-Polytope to box (OVER or ALTERNATIVE)
@@ -121,7 +121,7 @@ typename Converter<Number>::Box Converter<Number>::toBox( const VPolytope& _sour
 //ALTERNATIVE is nearly always faster with same precision => use it
 template<typename Number>
 typename Converter<Number>::Box Converter<Number>::toBox( const HPolytope& _source, const CONV_MODE mode ) {
-        BoxT<Number,Converter> result;
+        BoxT<Number,Converter,BoxLinearOptimizationOn> result;
         if (mode == OVER){
                 std::vector<Point<Number>> vertices = _source.vertices();                                  //gets vertices as a vector from the source object (is actually a conversion from H-Polytope to V-Polytope)
                 if(!vertices.empty()){
@@ -141,7 +141,7 @@ typename Converter<Number>::Box Converter<Number>::toBox( const HPolytope& _sour
 	                        intervals.push_back( carl::Interval<Number>( minima( i ), maxima( i ) ) );              //create one interval per dimension with the corresponding minimal and maximal values
 	                }
 
-	                result = BoxT<Number,Converter>(intervals); //creates a box with the computed intervals
+	                result = BoxT<Number,Converter,BoxLinearOptimizationOn>(intervals); //creates a box with the computed intervals
                 }
          }
 
@@ -174,7 +174,7 @@ typename Converter<Number>::Box Converter<Number>::toBox( const HPolytope& _sour
                }
 		       intervals.push_back( carl::Interval<Number>( -distances[2*i].supportValue, lowerBound, distances[2*i+1].supportValue, upperBound ) );   //create one interval with the corresponding left and right end points (inverted lower interval end points)
 		    }
-            result = BoxT<Number,Converter>(intervals);
+            result = BoxT<Number,Converter,BoxLinearOptimizationOn>(intervals);
         }
     // if(mode == EXACT){                                                                              //checks if conversion was exact
     //     bool foundEqual;
@@ -193,7 +193,7 @@ typename Converter<Number>::Box Converter<Number>::toBox( const HPolytope& _sour
 #ifdef HYPRO_USE_PPL
 template<typename Number>
 typename Converter<Number>::Box Converter<Number>::toBox( const Polytope& _source, const CONV_MODE  ) {
-	return BoxT<Number,Converter>( _source.vertices() );
+	return BoxT<Number,Converter,BoxLinearOptimizationOn>( _source.vertices() );
 }
 #endif
 
@@ -202,7 +202,7 @@ template<typename Number>
 typename Converter<Number>::Box Converter<Number>::toBox( const Zonotope& _source, const CONV_MODE ) {
     typename std::vector<Point<Number>> vertices = _source.vertices();                                   //computes vertices from source object
     if(vertices.empty()){
-    	return BoxT<Number,Converter>();
+    	return BoxT<Number,Converter,BoxLinearOptimizationOn>();
     }
 	assert( !vertices.empty() );                                                                            //only continue if any actual vertices were received at all
 	Point<Number> minima = vertices[0];                                                                  //creates a vector_t with the first vertex of the source object
@@ -232,7 +232,7 @@ typename Converter<Number>::Box Converter<Number>::toBox( const Zonotope& _sourc
     //     }
     // }
 
-	return BoxT<Number,Converter>( std::make_pair(minima, maxima) );                                                 //creates a box with the computed intervals
+	return BoxT<Number,Converter,BoxLinearOptimizationOn>( std::make_pair(minima, maxima) );                                                 //creates a box with the computed intervals
 }
 
 
@@ -274,5 +274,5 @@ typename Converter<Number>::Box Converter<Number>::toBox( const Zonotope& _sourc
 //    //     }
 //    // }
 //
-//	return std::move(BoxT<Number,Converter>( intervals ));
+//	return std::move(BoxT<Number,Converter,BoxLinearOptimizationOn>( intervals ));
 //}

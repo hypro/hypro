@@ -1,13 +1,13 @@
 #include "HPolytope.h"
 
 namespace hypro {
-template <typename Number, typename Converter>
-HPolytopeT<Number, Converter>::HPolytopeT()
+template <typename Number, typename Converter, class Setting>
+HPolytopeT<Number, Converter, Setting>::HPolytopeT()
 	: mHPlanes(), mDimension( 0 ), mEmpty(TRIBOOL::NSET), mNonRedundant(true) {
 }
 
-template <typename Number, typename Converter>
-HPolytopeT<Number, Converter>::HPolytopeT( const HalfspaceVector &planes )
+template <typename Number, typename Converter, class Setting>
+HPolytopeT<Number, Converter, Setting>::HPolytopeT( const HalfspaceVector &planes )
 	: mHPlanes(), mDimension( 0 ), mEmpty(TRIBOOL::NSET), mNonRedundant(false) {
 	//std::cout << __func__ << ": construct from planes." << std::endl;
 	if ( !planes.empty() ) {
@@ -23,8 +23,8 @@ HPolytopeT<Number, Converter>::HPolytopeT( const HalfspaceVector &planes )
 	}
 }
 
-template <typename Number, typename Converter>
-HPolytopeT<Number, Converter>::HPolytopeT( const matrix_t<Number> &A, const vector_t<Number> &b )
+template <typename Number, typename Converter, class Setting>
+HPolytopeT<Number, Converter, Setting>::HPolytopeT( const matrix_t<Number> &A, const vector_t<Number> &b )
 	: mHPlanes(), mDimension( A.cols() ), mEmpty(TRIBOOL::NSET), mNonRedundant(false) {
 	TRACE("hypro.representations.HPolytope","construct from Ax <= b," << std::endl  << "A: " << A << "b: " <<b);
 	assert( A.rows() == b.rows() );
@@ -38,16 +38,16 @@ HPolytopeT<Number, Converter>::HPolytopeT( const matrix_t<Number> &A, const vect
 	assert( empty == this->empty() );
 }
 
-template <typename Number, typename Converter>
-HPolytopeT<Number, Converter>::HPolytopeT( const matrix_t<Number> &A )
+template <typename Number, typename Converter, class Setting>
+HPolytopeT<Number, Converter, Setting>::HPolytopeT( const matrix_t<Number> &A )
 	: mHPlanes(), mDimension( A.cols() ), mEmpty(TRIBOOL::NSET), mNonRedundant(false) {
 	for ( unsigned i = 0; i < A.rows(); ++i ) {
 		mHPlanes.push_back( Halfspace<Number>( A.row( i ), Number( 0 ) ) );
 	}
 }
 
-template <typename Number, typename Converter>
-HPolytopeT<Number, Converter>::HPolytopeT( const std::vector<Point<Number>>& points )
+template <typename Number, typename Converter, class Setting>
+HPolytopeT<Number, Converter, Setting>::HPolytopeT( const std::vector<Point<Number>>& points )
 	: mHPlanes(), mDimension( 0 ), mEmpty(TRIBOOL::NSET), mNonRedundant(true) {
 	TRACE("hypro.representations.HPolytope","Construct from vertices: ");
 	for(auto vertex : points) {
@@ -101,7 +101,7 @@ HPolytopeT<Number, Converter>::HPolytopeT( const std::vector<Point<Number>>& poi
 		//std::cout << "effectiveDimension: " << effectiveDim << std::endl;
 		//if(effectiveDim < mDimension){
 		//	std::vector<Halfspace<Number>> boxConstraints = computeOrientedBox(points);
-		//	HPolytopeT<Number,Converter> tmp(boxConstraints);
+		//	HPolytopeT<Number,Converter,Setting> tmp(boxConstraints);
 		//	std::cout << "Theoretical oriented Box: " << tmp << std::endl;
 		//}
 
@@ -173,7 +173,7 @@ HPolytopeT<Number, Converter>::HPolytopeT( const std::vector<Point<Number>>& poi
 				std::cout << point << std::endl;
 			}
 			*/
-			HPolytopeT<Number,Converter> projectedPoly(projectedPoints);
+			HPolytopeT<Number,Converter,Setting> projectedPoly(projectedPoints);
 			//std::cout << "Projected polytope: " << projectedPoly << std::endl;
 			projectedPoly.insertEmptyDimensions(projectionDimensions,droppedDimensions);
 			//std::cout << "After inserting empty dimensions: " << projectedPoly << std::endl;
@@ -214,16 +214,16 @@ HPolytopeT<Number, Converter>::HPolytopeT( const std::vector<Point<Number>>& poi
 
 }
 
-template <typename Number, typename Converter>
-HPolytopeT<Number, Converter>::~HPolytopeT() {
+template <typename Number, typename Converter, class Setting>
+HPolytopeT<Number, Converter, Setting>::~HPolytopeT() {
 }
 
 /*
  * Getters and setters
  */
 
-template <typename Number, typename Converter>
-bool HPolytopeT<Number, Converter>::empty() const {
+template <typename Number, typename Converter, class Setting>
+bool HPolytopeT<Number, Converter, Setting>::empty() const {
 	TRACE("hypro.representations.HPolytope",__func__);
 	if(mEmpty == TRIBOOL::TRUE){
 		TRACE("hypro.representations.HPolytope","Already set to true.");
@@ -252,32 +252,32 @@ bool HPolytopeT<Number, Converter>::empty() const {
 	return res;
 }
 
-template <typename Number, typename Converter>
-HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::Empty(){
+template <typename Number, typename Converter, class Setting>
+HPolytopeT<Number, Converter, Setting> HPolytopeT<Number, Converter, Setting>::Empty(){
 	Halfspace<Number> a({Number(1)},Number(-1));
 	Halfspace<Number> b({Number(-1)},Number(-1));
 	HalfspaceVector v;
 	v.emplace_back(a);
 	v.emplace_back(b);
-	HPolytopeT<Number, Converter> res(v);
+	HPolytopeT<Number, Converter, Setting> res(v);
 	res.mEmpty=TRIBOOL::TRUE;
 	res.mNonRedundant=true;
 	return res;
 }
 
-template <typename Number, typename Converter>
-std::size_t HPolytopeT<Number, Converter>::dimension() const {
+template <typename Number, typename Converter, class Setting>
+std::size_t HPolytopeT<Number, Converter, Setting>::dimension() const {
 	if(mHPlanes.empty()) return 0;
 	return mDimension;
 }
 
-template <typename Number, typename Converter>
-std::size_t HPolytopeT<Number, Converter>::size() const {
+template <typename Number, typename Converter, class Setting>
+std::size_t HPolytopeT<Number, Converter, Setting>::size() const {
 	return mHPlanes.size();
 }
 
-template <typename Number, typename Converter>
-matrix_t<Number> HPolytopeT<Number, Converter>::matrix() const {
+template <typename Number, typename Converter, class Setting>
+matrix_t<Number> HPolytopeT<Number, Converter, Setting>::matrix() const {
 	matrix_t<Number> res( mHPlanes.size(), dimension() );
 	for ( unsigned planeIndex = 0; planeIndex < mHPlanes.size(); ++planeIndex ) {
 		//std::cout << "Plane normal: " << mHPlanes.at( planeIndex ).normal() << " and dimension: " << dimension() << std::endl;
@@ -288,8 +288,8 @@ matrix_t<Number> HPolytopeT<Number, Converter>::matrix() const {
 	return res;
 }
 
-template <typename Number, typename Converter>
-vector_t<Number> HPolytopeT<Number, Converter>::vector() const {
+template <typename Number, typename Converter, class Setting>
+vector_t<Number> HPolytopeT<Number, Converter, Setting>::vector() const {
 	vector_t<Number> res( mHPlanes.size() );
 	for ( unsigned planeIndex = 0; planeIndex < mHPlanes.size(); ++planeIndex ) {
 		res( planeIndex ) = mHPlanes.at( planeIndex ).offset();
@@ -297,8 +297,8 @@ vector_t<Number> HPolytopeT<Number, Converter>::vector() const {
 	return res;
 }
 
-template <typename Number, typename Converter>
-std::pair<matrix_t<Number>, vector_t<Number>> HPolytopeT<Number, Converter>::inequalities() const {
+template <typename Number, typename Converter, class Setting>
+std::pair<matrix_t<Number>, vector_t<Number>> HPolytopeT<Number, Converter, Setting>::inequalities() const {
 	matrix_t<Number> A( mHPlanes.size(), dimension() );
 	vector_t<Number> b( mHPlanes.size() );
 	for ( unsigned planeIndex = 0; planeIndex < mHPlanes.size(); ++planeIndex ) {
@@ -308,8 +308,8 @@ std::pair<matrix_t<Number>, vector_t<Number>> HPolytopeT<Number, Converter>::ine
 	return std::make_pair( A, b );
 }
 
-template <typename Number, typename Converter>
-typename std::vector<Point<Number>> HPolytopeT<Number, Converter>::vertices( const matrix_t<Number>& ) const {
+template <typename Number, typename Converter, class Setting>
+typename std::vector<Point<Number>> HPolytopeT<Number, Converter, Setting>::vertices( const matrix_t<Number>& ) const {
 	typename std::vector<Point<Number>> vertices;
 	if(!mHPlanes.empty() && mHPlanes.size() >= this->dimension() && !this->empty()) {
 		std::size_t dim = this->dimension();
@@ -411,8 +411,8 @@ typename std::vector<Point<Number>> HPolytopeT<Number, Converter>::vertices( con
 */
 }
 
-template <typename Number, typename Converter>
-Number HPolytopeT<Number, Converter>::supremum() const {
+template <typename Number, typename Converter, class Setting>
+Number HPolytopeT<Number, Converter, Setting>::supremum() const {
 	Number max = 0;
 	assert(!this->empty());
 	assert(!this->vertices().empty());
@@ -423,8 +423,8 @@ Number HPolytopeT<Number, Converter>::supremum() const {
 	return max;
 }
 
-//template <typename Number, typename Converter>
-//void HPolytopeT<Number, Converter>::calculateFan() const {
+//template <typename Number, typename Converter, class Setting>
+//void HPolytopeT<Number, Converter, Setting>::calculateFan() const {
 //	std::vector<std::shared_ptr<Facet<Number>>> facets = convexHull( vertices() ).first;
 //	std::set<Point<Number>> preresult;
 //	for ( unsigned i = 0; i < facets.size(); i++ ) {
@@ -478,8 +478,8 @@ Number HPolytopeT<Number, Converter>::supremum() const {
 //	mFan = fan;
 //}
 
-template <typename Number, typename Converter>
-void HPolytopeT<Number, Converter>::insert( const Halfspace<Number> &plane ) {
+template <typename Number, typename Converter, class Setting>
+void HPolytopeT<Number, Converter, Setting>::insert( const Halfspace<Number> &plane ) {
 	assert( mDimension == 0 || mDimension == plane.dimension() );
 	if ( mDimension == 0 ) {
 		mDimension = plane.dimension();
@@ -502,8 +502,8 @@ void HPolytopeT<Number, Converter>::insert( const Halfspace<Number> &plane ) {
 	}
 }
 
-template <typename Number, typename Converter>
-void HPolytopeT<Number, Converter>::insert( const typename HalfspaceVector::iterator begin,
+template <typename Number, typename Converter, class Setting>
+void HPolytopeT<Number, Converter, Setting>::insert( const typename HalfspaceVector::iterator begin,
 								const typename HalfspaceVector::iterator end ) {
 	auto it = begin;
 	while ( it != end ) {
@@ -512,8 +512,8 @@ void HPolytopeT<Number, Converter>::insert( const typename HalfspaceVector::iter
 	}
 }
 
-template <typename Number, typename Converter>
-void HPolytopeT<Number, Converter>::erase( const unsigned index ) {
+template <typename Number, typename Converter, class Setting>
+void HPolytopeT<Number, Converter, Setting>::erase( const unsigned index ) {
 	assert(index < mHPlanes.size());
 	mHPlanes.erase(mHPlanes.begin()+index);
 	if(mEmpty == TRIBOOL::TRUE) {
@@ -521,21 +521,21 @@ void HPolytopeT<Number, Converter>::erase( const unsigned index ) {
 	}
 }
 
-template <typename Number, typename Converter>
-const typename HPolytopeT<Number, Converter>::HalfspaceVector &HPolytopeT<Number, Converter>::constraints() const {
+template <typename Number, typename Converter, class Setting>
+const typename HPolytopeT<Number, Converter, Setting>::HalfspaceVector &HPolytopeT<Number, Converter, Setting>::constraints() const {
 	return mHPlanes;
 }
 
-template <typename Number, typename Converter>
-bool HPolytopeT<Number, Converter>::hasConstraint( const Halfspace<Number> &hplane ) const {
+template <typename Number, typename Converter, class Setting>
+bool HPolytopeT<Number, Converter, Setting>::hasConstraint( const Halfspace<Number> &hplane ) const {
 	for ( const auto &plane : mHPlanes ) {
 		if ( hplane == plane ) return true;
 	}
 	return false;
 }
 
-template <typename Number, typename Converter>
-const HPolytopeT<Number,Converter>& HPolytopeT<Number, Converter>::removeRedundancy() {
+template <typename Number, typename Converter, class Setting>
+const HPolytopeT<Number,Converter,Setting>& HPolytopeT<Number, Converter, Setting>::removeRedundancy() {
 	//std::cout << __func__ << std::endl;
 	if(!mNonRedundant && mHPlanes.size() > 1){
 		Optimizer<Number> opt;
@@ -565,8 +565,8 @@ const HPolytopeT<Number,Converter>& HPolytopeT<Number, Converter>::removeRedunda
 	return *this;
 }
 
-template <typename Number, typename Converter>
-bool HPolytopeT<Number, Converter>::isExtremePoint( const vector_t<Number>& point ) const {
+template <typename Number, typename Converter, class Setting>
+bool HPolytopeT<Number, Converter, Setting>::isExtremePoint( const vector_t<Number>& point ) const {
 	unsigned cnt = 0;
 	for ( const auto &plane : mHPlanes ) {
 		Number val = plane.evaluate( point );
@@ -579,13 +579,13 @@ bool HPolytopeT<Number, Converter>::isExtremePoint( const vector_t<Number>& poin
 	return (cnt >= mDimension);
 }
 
-template <typename Number, typename Converter>
-bool HPolytopeT<Number, Converter>::isExtremePoint( const Point<Number> &point ) const {
+template <typename Number, typename Converter, class Setting>
+bool HPolytopeT<Number, Converter, Setting>::isExtremePoint( const Point<Number> &point ) const {
 	return isExtremePoint( point.rawCoordinates() );
 }
 
-template <typename Number, typename Converter>
-EvaluationResult<Number> HPolytopeT<Number, Converter>::evaluate( const vector_t<Number> &_direction ) const {
+template <typename Number, typename Converter, class Setting>
+EvaluationResult<Number> HPolytopeT<Number, Converter, Setting>::evaluate( const vector_t<Number> &_direction ) const {
 	if(mHPlanes.empty()) {
 		return EvaluationResult<Number>( Number(1), INFTY );
 	}
@@ -603,13 +603,13 @@ EvaluationResult<Number> HPolytopeT<Number, Converter>::evaluate( const vector_t
  * General interface
  */
 
-template<typename Number, typename Converter>
-std::pair<CONTAINMENT, HPolytopeT<Number, Converter>> HPolytopeT<Number, Converter>::satisfiesHalfspace( const Halfspace<Number>& rhs ) const {
+template<typename Number, typename Converter, class Setting>
+std::pair<CONTAINMENT, HPolytopeT<Number, Converter, Setting>> HPolytopeT<Number, Converter, Setting>::satisfiesHalfspace( const Halfspace<Number>& rhs ) const {
 	TRACE("hypro.representations.HPolytope","(P AND ex <= d) == emptyset?, e: " << rhs.normal() << "d: " << rhs.offset());
 	if(this->empty()) {
 		return std::make_pair(CONTAINMENT::NO, *this);
 	}
-	HPolytopeT<Number,Converter> tmp = this->intersectHalfspace(rhs);
+	HPolytopeT<Number,Converter,Setting> tmp = this->intersectHalfspace(rhs);
 	if(tmp.hasConstraint(rhs)){
 		if(tmp.empty()){
 			return std::make_pair(CONTAINMENT::NO, std::move(tmp));
@@ -621,8 +621,8 @@ std::pair<CONTAINMENT, HPolytopeT<Number, Converter>> HPolytopeT<Number, Convert
 	return std::make_pair(CONTAINMENT::FULL, std::move(tmp));
 }
 
-template<typename Number, typename Converter>
-std::pair<CONTAINMENT, HPolytopeT<Number, Converter>> HPolytopeT<Number, Converter>::satisfiesHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const {
+template<typename Number, typename Converter, class Setting>
+std::pair<CONTAINMENT, HPolytopeT<Number, Converter, Setting>> HPolytopeT<Number, Converter, Setting>::satisfiesHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const {
 	TRACE("hypro.representations.HPolytope","(P AND Ax <= b) == emptyset?, A: " << _mat << "b: " << _vec);
 	assert(_mat.rows() == _vec.rows());
 	if(this->empty()) {
@@ -632,7 +632,7 @@ std::pair<CONTAINMENT, HPolytopeT<Number, Converter>> HPolytopeT<Number, Convert
 	if(_mat.rows() == 0) {
 		return std::make_pair(CONTAINMENT::FULL, *this);
 	}
-	HPolytopeT<Number,Converter> tmp = this->intersectHalfspaces(_mat, _vec);
+	HPolytopeT<Number,Converter,Setting> tmp = this->intersectHalfspaces(_mat, _vec);
 	if(tmp.empty()) {
 		return std::make_pair(CONTAINMENT::NO, std::move(tmp));
 	}
@@ -646,8 +646,8 @@ std::pair<CONTAINMENT, HPolytopeT<Number, Converter>> HPolytopeT<Number, Convert
 	return std::make_pair(CONTAINMENT::FULL,tmp);
 }
 
-template <typename Number, typename Converter>
-HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::project(const std::vector<std::size_t>& dimensions) const {
+template <typename Number, typename Converter, class Setting>
+HPolytopeT<Number, Converter, Setting> HPolytopeT<Number, Converter, Setting>::project(const std::vector<std::size_t>& dimensions) const {
 	TRACE("hypro.representations.HPolytope","on dimensions " << dimensions);
 	if(dimensions.empty()) {
 		return Empty();
@@ -659,11 +659,11 @@ HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::project(const std::
 	return Converter::toHPolytope(vpoly);
 }
 
-template <typename Number, typename Converter>
-HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::linearTransformation( const matrix_t<Number> &A ) const {
+template <typename Number, typename Converter, class Setting>
+HPolytopeT<Number, Converter, Setting> HPolytopeT<Number, Converter, Setting>::linearTransformation( const matrix_t<Number> &A ) const {
 	TRACE("hypro.representations.HPolytope","P' = A*P, A:" << std::endl << A);
 	if(A.nonZeros() == 0) {
-		return HPolytopeT<Number,Converter>::Empty();
+		return HPolytopeT<Number,Converter,Setting>::Empty();
 	}
 	if(!this->empty() && !mHPlanes.empty()) {
 		Eigen::FullPivLU<matrix_t<Number>> lu(A);
@@ -671,8 +671,8 @@ HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::linearTransformatio
 		if(lu.rank() == A.rows()) {
 			TRACE("hypro.representations.HPolytope","A has full rank - do not use v-conversion.");
 			std::pair<matrix_t<Number>, vector_t<Number>> inequalities = this->inequalities();
-			assert( (HPolytopeT<Number, Converter>(inequalities.first*A.inverse(), inequalities.second).size() == this->size()) );
-			return HPolytopeT<Number, Converter>(inequalities.first*A.inverse(), inequalities.second);
+			assert( (HPolytopeT<Number, Converter, Setting>(inequalities.first*A.inverse(), inequalities.second).size() == this->size()) );
+			return HPolytopeT<Number, Converter, Setting>(inequalities.first*A.inverse(), inequalities.second);
 		} else {
 			TRACE("hypro.representations.HPolytope","Use V-Conversion for linear transformation.");
 			auto intermediate = Converter::toVPolytope( *this );
@@ -687,14 +687,14 @@ HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::linearTransformatio
 	}
 }
 
-template <typename Number, typename Converter>
-HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::affineTransformation( const matrix_t<Number> &A,
+template <typename Number, typename Converter, class Setting>
+HPolytopeT<Number, Converter, Setting> HPolytopeT<Number, Converter, Setting>::affineTransformation( const matrix_t<Number> &A,
 														   const vector_t<Number> &b ) const {
 	TRACE("hypro.representations.HPolytope","P' = A*P + b, A: " << std::endl << A << "b: " << std::endl << b);
 	if(A.nonZeros() == 0) {
 		std::vector<Point<Number>> points;
 		points.emplace_back(b);
-		return HPolytopeT<Number,Converter>(points);
+		return HPolytopeT<Number,Converter,Setting>(points);
 	}
 	if(!this->empty() && !mHPlanes.empty()) {
 		Eigen::FullPivLU<matrix_t<Number>> lu(A);
@@ -702,9 +702,9 @@ HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::affineTransformatio
 		if(lu.rank() == A.rows()) {
 			TRACE("hypro.representations.HPolytope","A has full rank - do not use v-conversion.");
 			std::pair<matrix_t<Number>, vector_t<Number>> inequalities = this->inequalities();
-			assert( (HPolytopeT<Number, Converter>(inequalities.first*A.inverse(), inequalities.first*A.inverse()*b + inequalities.second).size() == this->size()) );
-			assert( !(HPolytopeT<Number, Converter>(inequalities.first*A.inverse(), inequalities.first*A.inverse()*b + inequalities.second).empty()) );
-			return HPolytopeT<Number, Converter>(inequalities.first*A.inverse(), inequalities.first*A.inverse()*b + inequalities.second);
+			assert( (HPolytopeT<Number, Converter, Setting>(inequalities.first*A.inverse(), inequalities.first*A.inverse()*b + inequalities.second).size() == this->size()) );
+			assert( !(HPolytopeT<Number, Converter, Setting>(inequalities.first*A.inverse(), inequalities.first*A.inverse()*b + inequalities.second).empty()) );
+			return HPolytopeT<Number, Converter, Setting>(inequalities.first*A.inverse(), inequalities.first*A.inverse()*b + inequalities.second);
 		} else {
 			TRACE("hypro.representations.HPolytope","Use V-Conversion for linear transformation.");
 			auto intermediate = Converter::toVPolytope( *this );
@@ -719,10 +719,10 @@ HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::affineTransformatio
 	}
 }
 
-template <typename Number, typename Converter>
-HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::minkowskiSum( const HPolytopeT &rhs ) const {
+template <typename Number, typename Converter, class Setting>
+HPolytopeT<Number, Converter, Setting> HPolytopeT<Number, Converter, Setting>::minkowskiSum( const HPolytopeT &rhs ) const {
 	TRACE("hypro.representations.HPolytope","P' = P + " << rhs << std::endl);
-	HPolytopeT<Number, Converter> res;
+	HPolytopeT<Number, Converter, Setting> res;
 	Number result;
 
 	// evaluation of rhs in directions of lhs
@@ -755,13 +755,13 @@ HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::minkowskiSum( const
 	return res;
 }
 
-template <typename Number, typename Converter>
-HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::intersect( const HPolytopeT &rhs ) const {
+template <typename Number, typename Converter, class Setting>
+HPolytopeT<Number, Converter, Setting> HPolytopeT<Number, Converter, Setting>::intersect( const HPolytopeT &rhs ) const {
 	TRACE("hypro.representations.HPolytope","with " << rhs << std::endl);
 	if ( rhs.empty() || this->empty() ) {
-		return HPolytopeT<Number, Converter>::Empty();
+		return HPolytopeT<Number, Converter, Setting>::Empty();
 	} else {
-		HPolytopeT<Number, Converter> res;
+		HPolytopeT<Number, Converter, Setting> res;
 		for ( const auto &plane : mHPlanes ) {
 			res.insert( plane );
 		}
@@ -773,10 +773,10 @@ HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::intersect( const HP
 	}
 }
 
-template <typename Number, typename Converter>
-HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::intersectHalfspace( const Halfspace<Number> &rhs ) const {
+template <typename Number, typename Converter, class Setting>
+HPolytopeT<Number, Converter, Setting> HPolytopeT<Number, Converter, Setting>::intersectHalfspace( const Halfspace<Number> &rhs ) const {
 	TRACE("hypro.representations.HPolytope","with " << rhs << std::endl);
-	HPolytopeT<Number, Converter> res( *this );
+	HPolytopeT<Number, Converter, Setting> res( *this );
 	// only insert the new Halfspace, if it is not already redundant.
 	if(res.evaluate(rhs.normal()).supportValue > rhs.offset())
 		res.insert( Halfspace<Number>( rhs ) );
@@ -784,12 +784,12 @@ HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::intersectHalfspace(
 	return res;
 }
 
-template <typename Number, typename Converter>
-HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::intersectHalfspaces( const matrix_t<Number> &_mat,
+template <typename Number, typename Converter, class Setting>
+HPolytopeT<Number, Converter, Setting> HPolytopeT<Number, Converter, Setting>::intersectHalfspaces( const matrix_t<Number> &_mat,
 														   const vector_t<Number> &_vec ) const {
 	TRACE("hypro.representations.HPolytope","P' = P AND Ax <= b,  A: " << std::endl << _mat << std::endl << "b: " << _vec);
 	assert( _mat.rows() == _vec.rows() );
-	HPolytopeT<Number, Converter> res( *this );
+	HPolytopeT<Number, Converter, Setting> res( *this );
 	for ( unsigned i = 0; i < _mat.rows(); ++i ) {
 		res.insert( Halfspace<Number>( _mat.row(i), _vec( i ) ) );
 	}
@@ -797,14 +797,14 @@ HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::intersectHalfspaces
 	return res;
 }
 
-template <typename Number, typename Converter>
-bool HPolytopeT<Number, Converter>::contains( const Point<Number> &point ) const {
+template <typename Number, typename Converter, class Setting>
+bool HPolytopeT<Number, Converter, Setting>::contains( const Point<Number> &point ) const {
 	TRACE("hypro.representations.HPolytope",point);
 	return this->contains( point.rawCoordinates() );
 }
 
-template <typename Number, typename Converter>
-bool HPolytopeT<Number, Converter>::contains( const vector_t<Number> &vec ) const {
+template <typename Number, typename Converter, class Setting>
+bool HPolytopeT<Number, Converter, Setting>::contains( const vector_t<Number> &vec ) const {
 	//std::cout << __func__ << ": point: " << vec << std::endl;
 	for ( const auto &plane : mHPlanes ) {
 		// The 2's complement check for equality is required to ensure double compatibility.
@@ -817,8 +817,8 @@ bool HPolytopeT<Number, Converter>::contains( const vector_t<Number> &vec ) cons
 	return true;
 }
 
-template <typename Number, typename Converter>
-bool HPolytopeT<Number, Converter>::contains( const HPolytopeT<Number, Converter> &rhs ) const {
+template <typename Number, typename Converter, class Setting>
+bool HPolytopeT<Number, Converter, Setting>::contains( const HPolytopeT<Number, Converter, Setting> &rhs ) const {
 	if(this->empty()){
 		return false;
 	}
@@ -840,8 +840,8 @@ bool HPolytopeT<Number, Converter>::contains( const HPolytopeT<Number, Converter
 	return true;
 }
 
-template <typename Number, typename Converter>
-HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::unite( const HPolytopeT &_rhs ) const {
+template <typename Number, typename Converter, class Setting>
+HPolytopeT<Number, Converter, Setting> HPolytopeT<Number, Converter, Setting>::unite( const HPolytopeT &_rhs ) const {
 	TRACE("hypro.representations.HPolytope","with " << _rhs << std::endl);
 	if( this->empty() ) {
 		// if this is empty, the result is _rhs, even if _rhs is empty, too.
@@ -852,82 +852,82 @@ HPolytopeT<Number, Converter> HPolytopeT<Number, Converter>::unite( const HPolyt
 		return *this;
 	}
 	// at this point, none is empty.
-	#ifdef AVOID_CONVERSION
-	std::size_t numberOfDirections = 8;
-	TRACE("hypro.representations.HPolytope","Unite using templated evaluation using " << numberOfDirections << " directions.");
-	assert(this->dimension() == _rhs.dimension());
-	std::vector<vector_t<Number>> templateDirections = computeTemplate<Number>(this->dimension(), numberOfDirections);
-	// as the template directions are ordered, we assume the same order for the results.
-	HalfspaceVector newHalfspaces;
-	for(const auto& direction : templateDirections) {
-		EvaluationResult<Number> thisResult = this->evaluate(direction);
-		EvaluationResult<Number> rhsResult = _rhs.evaluate(direction);
-		assert(thisResult.errorCode != SOLUTION::INFEAS);
-		assert(rhsResult.errorCode != SOLUTION::INFEAS);
-		// if one of the polytopes is unbounded, do not add this halfspace -> keep the unboundedness.
-		if(thisResult.errorCode == SOLUTION::FEAS && rhsResult.errorCode == SOLUTION::FEAS) {
-			if(thisResult.supportValue > rhsResult.supportValue) {
-				newHalfspaces.emplace_back(direction, thisResult.supportValue);
-			} else {
-				newHalfspaces.emplace_back(direction, rhsResult.supportValue);
+	if(Setting::AVOID_CONVERSION == true){
+		std::size_t numberOfDirections = 8;
+		TRACE("hypro.representations.HPolytope","Unite using templated evaluation using " << numberOfDirections << " directions.");
+		assert(this->dimension() == _rhs.dimension());
+		std::vector<vector_t<Number>> templateDirections = computeTemplate<Number>(this->dimension(), numberOfDirections);
+		// as the template directions are ordered, we assume the same order for the results.
+		HalfspaceVector newHalfspaces;
+		for(const auto& direction : templateDirections) {
+			EvaluationResult<Number> thisResult = this->evaluate(direction);
+			EvaluationResult<Number> rhsResult = _rhs.evaluate(direction);
+			assert(thisResult.errorCode != SOLUTION::INFEAS);
+			assert(rhsResult.errorCode != SOLUTION::INFEAS);
+			// if one of the polytopes is unbounded, do not add this halfspace -> keep the unboundedness.
+			if(thisResult.errorCode == SOLUTION::FEAS && rhsResult.errorCode == SOLUTION::FEAS) {
+				if(thisResult.supportValue > rhsResult.supportValue) {
+					newHalfspaces.emplace_back(direction, thisResult.supportValue);
+				} else {
+					newHalfspaces.emplace_back(direction, rhsResult.supportValue);
+				}
 			}
 		}
+		assert(newHalfspaces.size() <= templateDirections.size());
+		return HPolytopeT<Number,Converter,Setting>(newHalfspaces);
+	} else {
+		TRACE("hypro.representations.HPolytope","Unite using V-polytope representation.");
+		std::vector<Point<Number>> vertices = this->vertices();
+		std::vector<Point<Number>> rhsVertices = _rhs.vertices();
+		vertices.insert(vertices.end(), rhsVertices.begin(), rhsVertices.end());
+		HPolytopeT<Number,Converter,Setting> result(vertices);
+
+		/*
+		auto lhs = Converter::toVPolytope( *this );
+		std::cout << "this as vpoly: " << lhs << std::endl;
+		auto tmpRes = lhs.unite( Converter::toVPolytope( _rhs ) );
+		std::cout << "rhs as vpoly : " << Converter::toVPolytope( _rhs ) << std::endl;
+		HPolytopeT<Number,Converter,Setting> result = Converter::toHPolytope( tmpRes );
+		*/
+
+		//std::cout << "size after union: " << result.size() << std::endl;
+	
+		//assert(result.contains(*this));
+		//assert(result.contains(_rhs));
+		//std::cout << __func__ << " : tmpres " << tmpRes << std::endl;
+		
+		/*
+		std::cout << __func__ << " BEGIN." << std::endl;
+		std::vector<Point<Number>> unitedVertices(this->vertices());
+		for(const auto& vertex : _rhs.vertices()) {
+			unitedVertices.emplace_back(vertex);
+		}
+	
+	
+		for(const auto vertex : unitedVertices) {
+			std::cout << "Vertex to unite: " << vertex << std::endl;
+		}
+	
+	
+		ConvexHull<Number> ch = ConvexHull<Number>(unitedVertices);
+		ch.convexHullVertices();
+		HPolytopeT<Number,Converter,Setting> result = HPolytopeT<Number,Converter,Setting>(ch.getHsv());
+		assert(ch.getCone().empty());
+		assert(ch.getLinealtySpace().empty());
+		*/
+		/*
+		for(const auto& vertex : owenTmpRes.vertices()) {
+			std::cout << "Result vertex " << convert<Number,double>(vertex.rawCoordinates()).transpose() << std::endl;
+			//assert(std::find(unitedVertices.begin(), unitedVertices.end(), vertex) != unitedVertices.end());
+		}
+		std::cout << __func__ << " END." << std::endl;
+		*/
+		return result;
 	}
-	assert(newHalfspaces.size() <= templateDirections.size());
-	return HPolytopeT<Number,Converter>(newHalfspaces);
-	#else
-	TRACE("hypro.representations.HPolytope","Unite using V-polytope representation.");
-	std::vector<Point<Number>> vertices = this->vertices();
-	std::vector<Point<Number>> rhsVertices = _rhs.vertices();
-	vertices.insert(vertices.end(), rhsVertices.begin(), rhsVertices.end());
-	HPolytopeT<Number,Converter> result(vertices);
-
-	/*
-	auto lhs = Converter::toVPolytope( *this );
-	std::cout << "this as vpoly: " << lhs << std::endl;
-	auto tmpRes = lhs.unite( Converter::toVPolytope( _rhs ) );
-	std::cout << "rhs as vpoly : " << Converter::toVPolytope( _rhs ) << std::endl;
-	HPolytopeT<Number,Converter> result = Converter::toHPolytope( tmpRes );
-	*/
-
-	//std::cout << "size after union: " << result.size() << std::endl;
-
-	//assert(result.contains(*this));
-	//assert(result.contains(_rhs));
-	//std::cout << __func__ << " : tmpres " << tmpRes << std::endl;
-
-	/*
-	std::cout << __func__ << " BEGIN." << std::endl;
-	std::vector<Point<Number>> unitedVertices(this->vertices());
-	for(const auto& vertex : _rhs.vertices()) {
-		unitedVertices.emplace_back(vertex);
-	}
-
-
-	for(const auto vertex : unitedVertices) {
-		std::cout << "Vertex to unite: " << vertex << std::endl;
-	}
-
-
-	ConvexHull<Number> ch = ConvexHull<Number>(unitedVertices);
-	ch.convexHullVertices();
-	HPolytopeT<Number,Converter> result = HPolytopeT<Number,Converter>(ch.getHsv());
-	assert(ch.getCone().empty());
-	assert(ch.getLinealtySpace().empty());
-	*/
-	/*
-	for(const auto& vertex : owenTmpRes.vertices()) {
-		std::cout << "Result vertex " << convert<Number,double>(vertex.rawCoordinates()).transpose() << std::endl;
-		//assert(std::find(unitedVertices.begin(), unitedVertices.end(), vertex) != unitedVertices.end());
-	}
-	std::cout << __func__ << " END." << std::endl;
-	*/
-	return result;
-	#endif
 }
 
-template<typename Number, typename Converter>
-HPolytopeT<Number,Converter> HPolytopeT<Number,Converter>::unite( const std::vector<HPolytopeT>& rhs ) {
+template<typename Number, typename Converter, class Setting>
+HPolytopeT<Number,Converter,Setting> HPolytopeT<Number,Converter,Setting>::unite( const std::vector<HPolytopeT>& rhs ) {
 	// Todo: Implement alternative avoiding conversion.
 	// Idea: Use templated evaluation.
 	std::vector<Point<Number>> vertices;
@@ -937,16 +937,16 @@ HPolytopeT<Number,Converter> HPolytopeT<Number,Converter>::unite( const std::vec
 	return HPolytopeT(vertices);
 }
 
-template <typename Number, typename Converter>
-void HPolytopeT<Number, Converter>::clear() {
+template <typename Number, typename Converter, class Setting>
+void HPolytopeT<Number, Converter, Setting>::clear() {
 	mHPlanes.clear();
 	mDimension = 0;
 	mEmpty = FALSE;
 	mNonRedundant = true;
 }
 
-template <typename Number, typename Converter>
-void HPolytopeT<Number, Converter>::print() const {
+template <typename Number, typename Converter, class Setting>
+void HPolytopeT<Number, Converter, Setting>::print() const {
 	//std::cout << *this << std::endl;
 }
 
@@ -955,10 +955,10 @@ void HPolytopeT<Number, Converter>::print() const {
  */
 
 
-template <typename Number, typename Converter>
-typename HPolytopeT<Number, Converter>::HalfspaceVector HPolytopeT<Number, Converter>::computeConstraintsForDegeneratedPolytope(std::vector<Point<Number>>& points, unsigned degeneratedDimensions) const {
+template <typename Number, typename Converter, class Setting>
+typename HPolytopeT<Number, Converter, Setting>::HalfspaceVector HPolytopeT<Number, Converter, Setting>::computeConstraintsForDegeneratedPolytope(std::vector<Point<Number>>& points, unsigned degeneratedDimensions) const {
 	if(degeneratedDimensions == 0) {
-		return std::move(HPolytopeT<Number, Converter>(points).mHPlanes);
+		return std::move(HPolytopeT<Number, Converter, Setting>(points).mHPlanes);
 	}
 	assert(!points.empty());
 	Halfspace<Number> h; // TODO set h to some hyperplane holding all points, i.e., a*p=b for all points p
@@ -972,8 +972,8 @@ typename HPolytopeT<Number, Converter>::HalfspaceVector HPolytopeT<Number, Conve
 	return result;
 }
 
-template<typename Number, typename Converter>
-void HPolytopeT<Number, Converter>::insertEmptyDimensions(const std::vector<std::size_t>& existingDimensions, const std::vector<std::size_t>& newDimensions) {
+template<typename Number, typename Converter, class Setting>
+void HPolytopeT<Number, Converter, Setting>::insertEmptyDimensions(const std::vector<std::size_t>& existingDimensions, const std::vector<std::size_t>& newDimensions) {
 	assert(mDimension == existingDimensions.size());
 
 	//std::cout << __func__ << "Existing dimensions: " << existingDimensions << " and new dimensions: " << newDimensions << std::endl;

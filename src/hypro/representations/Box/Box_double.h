@@ -16,8 +16,8 @@ namespace hypro {
  *
  * @tparam     Converter  The used converter.
  */
-template <typename Converter>
-class BoxT<double,Converter> : public GeometricObject<double, BoxT<double,Converter>> {
+template <typename Converter, class Setting>
+class BoxT<double,Converter,Setting> : public GeometricObject<double, BoxT<double,Converter,Setting>> {
   private:
   public:
 	/***************************************************************************
@@ -44,10 +44,20 @@ class BoxT<double,Converter> : public GeometricObject<double, BoxT<double,Conver
 	BoxT( const BoxT& orig ) = default;
 
 	/**
+	 * @brief      Copy constructor for different settings. NOTE: it is not an actual copy constructor as it is templated.
+	 * @param[in]  orig  The original.
+	 */
+	template<typename SettingRhs, carl::DisableIf< std::is_same<Setting, SettingRhs> > = carl::dummy>
+	BoxT(const BoxT<double,Converter,SettingRhs>& orig) : mLimits(orig.limits())
+	{ }
+
+	/**
 	 * @brief      Move constructor.
 	 * @param[in]  orig  The move-copyable original.
 	 */
 	BoxT( BoxT&& orig ) = default;
+
+
 
 	 /**
 	  * @brief      Box constructor from one interval, results in a one-dimensional box.
@@ -115,8 +125,8 @@ class BoxT<double,Converter> : public GeometricObject<double, BoxT<double,Conver
 	  * @param dimension Required dimension.
 	  * @return Empty box.
 	  */
-	static BoxT<double,Converter> Empty(std::size_t dimension = 0) {
-		return BoxT<double,Converter>(std::make_pair(Point<double>(vector_t<double>::Ones(dimension)), Point<double>(vector_t<double>::Zero(dimension))));
+	static BoxT<double,Converter,Setting> Empty(std::size_t dimension = 0) {
+		return BoxT<double,Converter,Setting>(std::make_pair(Point<double>(vector_t<double>::Ones(dimension)), Point<double>(vector_t<double>::Zero(dimension))));
 	}
 
 	/**
@@ -248,7 +258,8 @@ class BoxT<double,Converter> : public GeometricObject<double, BoxT<double,Conver
 	 * @param b2 Contains the second box.
 	 * @return True, if they are equal.
 	 */
-	friend bool operator==( const BoxT<double,Converter>& b1, const BoxT<double,Converter>& b2 ) {
+	template<class SettingRhs>
+	friend bool operator==( const BoxT<double,Converter,Setting>& b1, const BoxT<double,Converter,SettingRhs>& b2 ) {
 		if ( b1.dimension() != b2.dimension() ) {
 			return false;
 		}
@@ -261,30 +272,30 @@ class BoxT<double,Converter> : public GeometricObject<double, BoxT<double,Conver
 	 * @param b2 A box.
 	 * @return False, if both boxes are equal.
 	 */
-	friend bool operator!=( const BoxT<double,Converter>& b1, const BoxT<double,Converter>& b2 ) { return !( b1 == b2 ); }
+	friend bool operator!=( const BoxT<double,Converter,Setting>& b1, const BoxT<double,Converter,Setting>& b2 ) { return !( b1 == b2 ); }
 
 	/**
 	 * @brief Assignment operator.
 	 * @param rhs A box.
 	 */
-	BoxT<double,Converter>& operator=( const BoxT<double,Converter>& rhs ) = default;
+	BoxT<double,Converter,Setting>& operator=( const BoxT<double,Converter,Setting>& rhs ) = default;
 
 	/**
 	 * @brief Move assignment operator.
 	 * @param rhs A box.
 	 */
-	BoxT<double,Converter>& operator=(BoxT<double,Converter>&& rhs) = default;
+	BoxT<double,Converter,Setting>& operator=(BoxT<double,Converter,Setting>&& rhs) = default;
 
 	/**
 	 * @brief      Scaling operator.
 	 * @param[in]  factor  The scaling factor.
 	 * @return     The scaled box.
 	 */
-	BoxT<double,Converter> operator*(const double& factor) const {
+	BoxT<double,Converter,Setting> operator*(const double& factor) const {
 		if(this->empty()){
 			return *this;
 		}
-		return BoxT<double,Converter>(std::make_pair(factor*mLimits.first, factor*mLimits.second));
+		return BoxT<double,Converter,Setting>(std::make_pair(factor*mLimits.first, factor*mLimits.second));
 	}
 
 	/**
@@ -293,14 +304,14 @@ class BoxT<double,Converter> : public GeometricObject<double, BoxT<double,Conver
 	 * @param b A box.
 	 */
 #ifdef HYPRO_LOGGING
-	friend std::ostream& operator<<( std::ostream& ostr, const BoxT<double,Converter>& b ) {
+	friend std::ostream& operator<<( std::ostream& ostr, const BoxT<double,Converter,Setting>& b ) {
 		ostr << "{ ";
 		if(!b.empty()){
 			ostr << b.min() << "; " << b.max() << std::endl;
 		}
 		ostr << " }";
 #else
-	friend std::ostream& operator<<( std::ostream& ostr, const BoxT<double,Converter>& ) {
+	friend std::ostream& operator<<( std::ostream& ostr, const BoxT<double,Converter,Setting>& ) {
 #endif
 		return ostr;
 	}
@@ -339,7 +350,7 @@ class BoxT<double,Converter> : public GeometricObject<double, BoxT<double,Conver
 	 * @brief Empty function for number size reduction, which is omitted when using native double numbers.
 	 * @param limit Parameter for a length estimation.
 	 */
-	const BoxT<double,Converter>& reduceNumberRepresentation(unsigned = fReach_DENOMINATOR) { return *this; }
+	const BoxT<double,Converter,Setting>& reduceNumberRepresentation(unsigned = fReach_DENOMINATOR) { return *this; }
 
 	/**
 	 * @brief      Makes a symmetric box from the current box.
@@ -347,7 +358,7 @@ class BoxT<double,Converter> : public GeometricObject<double, BoxT<double,Conver
 	 * are the maximal absolute values of the original boundaries mirrored positive and negative.
 	 * @return     The resulting symmetric box.
 	 */
-	BoxT<double,Converter> makeSymmetric() const;
+	BoxT<double,Converter,Setting> makeSymmetric() const;
 
 	/**
 	 * @brief      Checks, if the box lies inside the given halfspace.
@@ -373,7 +384,7 @@ class BoxT<double,Converter> : public GeometricObject<double, BoxT<double,Conver
 	 * @param[in]  dimensions  The dimensions.
 	 * @return     The projected box.
 	 */
-	BoxT<double,Converter> project(const std::vector<std::size_t>& dimensions) const;
+	BoxT<double,Converter,Setting> project(const std::vector<std::size_t>& dimensions) const;
 
 	/**
 	 * @brief      Applies a linear transformation to the box.
@@ -381,7 +392,7 @@ class BoxT<double,Converter> : public GeometricObject<double, BoxT<double,Conver
 	 * @param[in]  A     A matrix for the linear transformation.
 	 * @return     The resulting box.
 	 */
-	BoxT<double,Converter> linearTransformation( const matrix_t<double>& A ) const;
+	BoxT<double,Converter,Setting> linearTransformation( const matrix_t<double>& A ) const;
 
 	/**
 	 * @brief      Applies an affine transformation to the box.
@@ -390,35 +401,35 @@ class BoxT<double,Converter> : public GeometricObject<double, BoxT<double,Conver
 	 * @param[in]  b     A vector for the offset.
 	 * @return     The resulting box.
 	 */
-	BoxT<double,Converter> affineTransformation( const matrix_t<double>& A, const vector_t<double>& b ) const;
+	BoxT<double,Converter,Setting> affineTransformation( const matrix_t<double>& A, const vector_t<double>& b ) const;
 
 	/**
 	 * @brief      Computes the Minkowski sum of two boxes.
 	 * @param[in]  rhs   The right hand side box.
 	 * @return     The resulting box.
 	 */
-	BoxT<double,Converter> minkowskiSum( const BoxT<double,Converter>& rhs ) const;
+	BoxT<double,Converter,Setting> minkowskiSum( const BoxT<double,Converter,Setting>& rhs ) const;
 
 	/**
 	 * @brief      Computes the Minkowski decomposition of the current box by the given box.
 	 * @param[in]  rhs   The right hand side box.
 	 * @return     The resulting box.
 	 */
-	BoxT<double,Converter> minkowskiDecomposition( const BoxT<double,Converter>& rhs ) const;
+	BoxT<double,Converter,Setting> minkowskiDecomposition( const BoxT<double,Converter,Setting>& rhs ) const;
 
 	/**
 	 * @brief      Computes the intersection of two boxes.
 	 * @param[in]  rhs   The right hand side box.
 	 * @return     The resulting box.
 	 */
-	BoxT<double,Converter> intersect( const BoxT<double,Converter>& rhs ) const;
+	BoxT<double,Converter,Setting> intersect( const BoxT<double,Converter,Setting>& rhs ) const;
 
 	/**
 	 * @brief      Computes the intersection of the current box with a given halfspace.
 	 * @param[in]  hspace  The halfspace.
 	 * @return     The resulting box.
 	 */
-	BoxT<double,Converter> intersectHalfspace( const Halfspace<double>& hspace ) const;
+	BoxT<double,Converter,Setting> intersectHalfspace( const Halfspace<double>& hspace ) const;
 
 	/**
 	 * @brief      Computes the intersection of the current box with a set of halfspaces.
@@ -426,7 +437,7 @@ class BoxT<double,Converter> : public GeometricObject<double, BoxT<double,Conver
 	 * @param[in]  _vec  The vector representing the offsets.
 	 * @return     The resulting box.
 	 */
-	BoxT<double,Converter> intersectHalfspaces( const matrix_t<double>& _mat, const vector_t<double>& _vec ) const;
+	BoxT<double,Converter,Setting> intersectHalfspaces( const matrix_t<double>& _mat, const vector_t<double>& _vec ) const;
 
 	/**
 	 * @brief      Containment check for a point.
@@ -440,21 +451,21 @@ class BoxT<double,Converter> : public GeometricObject<double, BoxT<double,Conver
 	 * @param[in]  box   The box.
 	 * @return     True, if the given box is contained in the current box, false otherwise.
 	 */
-	bool contains( const BoxT<double,Converter>& box ) const;
+	bool contains( const BoxT<double,Converter,Setting>& box ) const;
 
 	/**
 	 * @brief      Computes the union of two boxes.
 	 * @param[in]  rhs   The right hand side box.
 	 * @return     The resulting box.
 	 */
-	BoxT<double,Converter> unite( const BoxT<double,Converter>& rhs ) const;
+	BoxT<double,Converter,Setting> unite( const BoxT<double,Converter,Setting>& rhs ) const;
 
 	/**
 	 * @brief      Computes the union of the current box with a set of boxes.
 	 * @param[in]  boxes  The boxes.
 	 * @return     The resulting box.
 	 */
-	static BoxT<double,Converter> unite( const std::vector<BoxT<double,Converter>>& boxes );
+	static BoxT<double,Converter,Setting> unite( const std::vector<BoxT<double,Converter,Setting>>& boxes );
 
 	/**
 	 * @brief      Makes this box the empty box.

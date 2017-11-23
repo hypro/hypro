@@ -163,7 +163,11 @@ public:
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitBadstate(HybridAutomatonParser::BadstateContext *ctx) override {
+  virtual antlrcpp::Any visitLbadstate(HybridAutomatonParser::LbadstateContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitGbadstate(HybridAutomatonParser::GbadstateContext *ctx) override {
     return visitChildren(ctx);
   }
 

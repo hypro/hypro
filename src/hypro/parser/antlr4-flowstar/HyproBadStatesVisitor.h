@@ -1,7 +1,7 @@
 /*
  * HyproBadStatesVisitor.h
  *
- * A visitor that builds the bad states and returns it to the HyproHAVisitor.h
+ * A visitor that builds the local and global bad states and returns it to the HyproHAVisitor.h.
  *
  * @author Phillip Tse
  * @date 14.9.2017
@@ -25,11 +25,6 @@ class HyproBadStatesVisitor : public HybridAutomatonBaseVisitor {
 
 	friend class HyproHAVisitor<Number>;
 
-	//From HybridAutomaton.h, for local bad states
-	//using locationConditionMap = std::map<const Location<Number>*, Condition<Number>, locPtrComp<Number>>; /// Map from location pointers to conditions.
-
-	//TODO: Maybe implement global bad states
-
 	private:
 
 		//Vector of declared state variables
@@ -38,15 +33,22 @@ class HyproBadStatesVisitor : public HybridAutomatonBaseVisitor {
 		//Set of parsed locations
 		std::set<Location<Number>*>& locSet;
 
+		//Auxiliary variable since this visitor returns local and global badstates
+		std::vector<Condition<Number>> gBadStates;
+
 		//Constructor
 		HyproBadStatesVisitor(std::vector<std::string>& varVec, std::set<Location<Number>*>& lSet);
 		~HyproBadStatesVisitor();
 
 	public:
 
+		//Getter for global badstates
+		std::vector<Condition<Number>> getGlobalBadStates(){ return gBadStates; }
+
 		//Inherited from HybridAutomatonBaseVisitor
 		antlrcpp::Any visitUnsafeset(HybridAutomatonParser::UnsafesetContext *ctx) override;
-		antlrcpp::Any visitBadstate(HybridAutomatonParser::BadstateContext *ctx) override;
+		antlrcpp::Any visitLbadstate(HybridAutomatonParser::LbadstateContext *ctx) override;
+		antlrcpp::Any visitGbadstate(HybridAutomatonParser::GbadstateContext *ctx) override;
 
 };
 
