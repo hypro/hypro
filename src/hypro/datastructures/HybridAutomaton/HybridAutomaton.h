@@ -78,6 +78,8 @@ class HybridAutomaton
     ///@{
     //* @return The set of locations. */
     const locationSet& getLocations() const { return mLocations; }
+    const Location<Number>* getLocation(std::size_t id) const;
+    const Location<Number>* getLocation(std::string name) const;
     //* @return The set of transitions. */
     const transitionSet& getTransitions() const { return mTransitions; }
     //* @return The set of initial states. */
