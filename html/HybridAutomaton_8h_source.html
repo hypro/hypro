@@ -232,13 +232,15 @@ $(document).ready(function(){initNavTree('HybridAutomaton_8h_source.html','');})
 <div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;        }</div>
 <div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;        ostr &lt;&lt; <span class="stringliteral">&quot;local bad states: &quot;</span> &lt;&lt; std::endl;</div>
 <div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;        <span class="keywordflow">for</span>(<span class="keyword">auto</span> badStateIt = a.getLocalBadStates().begin(); badStateIt != a.getLocalBadStates().end(); ++badStateIt){</div>
-<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;            ostr &lt;&lt; *((*badStateIt).first) &lt;&lt; <span class="stringliteral">&quot;: &quot;</span> &lt;&lt; (*badStateIt).second &lt;&lt; std::endl;   </div>
+<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;            ostr &lt;&lt; *((*badStateIt).first) &lt;&lt; <span class="stringliteral">&quot;: &quot;</span> &lt;&lt; (*badStateIt).second &lt;&lt; std::endl;</div>
 <div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;        }</div>
 <div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;<span class="preprocessor">#endif</span></div>
 <div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;<span class="preprocessor"></span>        <span class="keywordflow">return</span> ostr;</div>
 <div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;    }</div>
 <div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;};</div>
-<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;}</div>
+<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;} <span class="comment">// namespace hypro</span></div>
+<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;</div>
+<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;<span class="preprocessor">#include &quot;HybridAutomaton.tpp&quot;</span></div>
 <div class="ttc" id="classhypro_1_1HybridAutomaton_html_a6632540e5be17538997aeb51347ee0a1"><div class="ttname"><a href="classhypro_1_1HybridAutomaton.html#a6632540e5be17538997aeb51347ee0a1">hypro::HybridAutomaton::getLocation</a></div><div class="ttdeci">const Location&lt; Number &gt; * getLocation(std::size_t id) const </div><div class="ttdoc">Getter function. </div></div>
 <div class="ttc" id="classhypro_1_1HybridAutomaton_html_ac6843a84f2aadf5b61316ac02e825fb5"><div class="ttname"><a href="classhypro_1_1HybridAutomaton.html#ac6843a84f2aadf5b61316ac02e825fb5">hypro::HybridAutomaton::addInitialState</a></div><div class="ttdeci">void addInitialState(const State&lt; Number, Number, ConstraintSet&lt; Number &gt;&gt; &amp;state)</div><div class="ttdoc">Extension function. </div><div class="ttdef"><b>Definition:</b> <a href="HybridAutomaton_8h_source.html#l00112">HybridAutomaton.h:112</a></div></div>
 <div class="ttc" id="classhypro_1_1HybridAutomaton_html_a4b0f453ca49d85d8b1ada88af4f3aae3"><div class="ttname"><a href="classhypro_1_1HybridAutomaton.html#a4b0f453ca49d85d8b1ada88af4f3aae3">hypro::HybridAutomaton::setGlobalBadStates</a></div><div class="ttdeci">void setGlobalBadStates(const conditionVector &amp;states)</div><div class="ttdoc">Setter function. </div><div class="ttdef"><b>Definition:</b> <a href="HybridAutomaton_8h_source.html#l00103">HybridAutomaton.h:103</a></div></div>
