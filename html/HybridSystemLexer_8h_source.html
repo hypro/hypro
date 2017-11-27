@@ -147,51 +147,50 @@ $(document).ready(function(){initNavTree('HybridSystemLexer_8h_source.html','');
 <div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    T__119 = 120, T__120 = 121, T__121 = 122, T__122 = 123, T__123 = 124, </div>
 <div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    T__124 = 125, T__125 = 126, T__126 = 127, T__127 = 128, T__128 = 129, </div>
 <div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    T__129 = 130, T__130 = 131, T__131 = 132, T__132 = 133, T__133 = 134, </div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    T__134 = 135, T__135 = 136, T__136 = 137, T__137 = 138, T__138 = 139, </div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    T__139 = 140, T__140 = 141, T__141 = 142, T__142 = 143, T__143 = 144, </div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    NUMBER = 145, REALNUBER = 146, STRING = 147, IDENTIFIER = 148, RELATIVENAME = 149, </div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    ABSOLUTENAME = 150, ROOTNAME = 151, WS = 152</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;  };</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;  <a class="code" href="classHybridSystemLexer.html">HybridSystemLexer</a>(antlr4::CharStream *input);</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;  ~<a class="code" href="classHybridSystemLexer.html">HybridSystemLexer</a>();</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;  <span class="keyword">virtual</span> std::string getGrammarFileName() <span class="keyword">const override</span>;</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;  <span class="keyword">virtual</span> <span class="keyword">const</span> std::vector&lt;std::string&gt;&amp; getRuleNames() <span class="keyword">const override</span>;</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;  <span class="keyword">virtual</span> <span class="keyword">const</span> std::vector&lt;std::string&gt;&amp; getChannelNames() <span class="keyword">const override</span>;</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;  <span class="keyword">virtual</span> <span class="keyword">const</span> std::vector&lt;std::string&gt;&amp; getModeNames() <span class="keyword">const override</span>;</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;  <span class="keyword">virtual</span> <span class="keyword">const</span> std::vector&lt;std::string&gt;&amp; getTokenNames() <span class="keyword">const override</span>; <span class="comment">// deprecated, use vocabulary instead</span></div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;  <span class="keyword">virtual</span> antlr4::dfa::Vocabulary&amp; getVocabulary() <span class="keyword">const override</span>;</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;  <span class="keyword">virtual</span> <span class="keyword">const</span> std::vector&lt;uint16_t&gt; getSerializedATN() <span class="keyword">const override</span>;</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;  <span class="keyword">virtual</span> <span class="keyword">const</span> antlr4::atn::ATN&amp; getATN() <span class="keyword">const override</span>;</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;  <span class="keyword">static</span> std::vector&lt;antlr4::dfa::DFA&gt; _decisionToDFA;</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;  <span class="keyword">static</span> antlr4::atn::PredictionContextCache _sharedContextCache;</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;  <span class="keyword">static</span> std::vector&lt;std::string&gt; _ruleNames;</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;  <span class="keyword">static</span> std::vector&lt;std::string&gt; _tokenNames;</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;  <span class="keyword">static</span> std::vector&lt;std::string&gt; _channelNames;</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;  <span class="keyword">static</span> std::vector&lt;std::string&gt; _modeNames;</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;  <span class="keyword">static</span> std::vector&lt;std::string&gt; _literalNames;</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;  <span class="keyword">static</span> std::vector&lt;std::string&gt; _symbolicNames;</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;  <span class="keyword">static</span> antlr4::dfa::Vocabulary _vocabulary;</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;  <span class="keyword">static</span> antlr4::atn::ATN _atn;</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;  <span class="keyword">static</span> std::vector&lt;uint16_t&gt; _serializedATN;</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    T__134 = 135, T__135 = 136, MULOP = 137, ADDOP = 138, COMPOP = 139, </div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    NUMBER = 140, REALNUMBER = 141, STRING = 142, IDENTIFIER = 143, RELATIVENAME = 144, </div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    ABSOLUTENAME = 145, ROOTNAME = 146, WS = 147</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;  };</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;  <a class="code" href="classHybridSystemLexer.html">HybridSystemLexer</a>(antlr4::CharStream *input);</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;  ~<a class="code" href="classHybridSystemLexer.html">HybridSystemLexer</a>();</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;  <span class="keyword">virtual</span> std::string getGrammarFileName() <span class="keyword">const override</span>;</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;  <span class="keyword">virtual</span> <span class="keyword">const</span> std::vector&lt;std::string&gt;&amp; getRuleNames() <span class="keyword">const override</span>;</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;  <span class="keyword">virtual</span> <span class="keyword">const</span> std::vector&lt;std::string&gt;&amp; getChannelNames() <span class="keyword">const override</span>;</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;  <span class="keyword">virtual</span> <span class="keyword">const</span> std::vector&lt;std::string&gt;&amp; getModeNames() <span class="keyword">const override</span>;</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;  <span class="keyword">virtual</span> <span class="keyword">const</span> std::vector&lt;std::string&gt;&amp; getTokenNames() <span class="keyword">const override</span>; <span class="comment">// deprecated, use vocabulary instead</span></div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;  <span class="keyword">virtual</span> antlr4::dfa::Vocabulary&amp; getVocabulary() <span class="keyword">const override</span>;</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;  <span class="keyword">virtual</span> <span class="keyword">const</span> std::vector&lt;uint16_t&gt; getSerializedATN() <span class="keyword">const override</span>;</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;  <span class="keyword">virtual</span> <span class="keyword">const</span> antlr4::atn::ATN&amp; getATN() <span class="keyword">const override</span>;</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;  <span class="keyword">static</span> std::vector&lt;antlr4::dfa::DFA&gt; _decisionToDFA;</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;  <span class="keyword">static</span> antlr4::atn::PredictionContextCache _sharedContextCache;</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;  <span class="keyword">static</span> std::vector&lt;std::string&gt; _ruleNames;</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;  <span class="keyword">static</span> std::vector&lt;std::string&gt; _tokenNames;</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;  <span class="keyword">static</span> std::vector&lt;std::string&gt; _channelNames;</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;  <span class="keyword">static</span> std::vector&lt;std::string&gt; _modeNames;</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;  <span class="keyword">static</span> std::vector&lt;std::string&gt; _literalNames;</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;  <span class="keyword">static</span> std::vector&lt;std::string&gt; _symbolicNames;</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;  <span class="keyword">static</span> antlr4::dfa::Vocabulary _vocabulary;</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;  <span class="keyword">static</span> antlr4::atn::ATN _atn;</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;  <span class="keyword">static</span> std::vector&lt;uint16_t&gt; _serializedATN;</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;</div>
 <div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;  <span class="comment">// Individual action functions triggered by action() above.</span></div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;  <span class="comment">// Individual semantic predicate functions triggered by sempred() above.</span></div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;  <span class="keyword">struct </span>Initializer {</div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;    Initializer();</div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;  };</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;  <span class="keyword">static</span> Initializer _init;</div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;};</div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;  <span class="comment">// Individual action functions triggered by action() above.</span></div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;  <span class="comment">// Individual semantic predicate functions triggered by sempred() above.</span></div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;  <span class="keyword">struct </span>Initializer {</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;    Initializer();</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;  };</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;  <span class="keyword">static</span> Initializer _init;</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;};</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;</div>
 <div class="ttc" id="classHybridSystemLexer_html"><div class="ttname"><a href="classHybridSystemLexer.html">HybridSystemLexer</a></div><div class="ttdef"><b>Definition:</b> <a href="HybridSystemLexer_8h_source.html#l00012">HybridSystemLexer.h:12</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->

@@ -317,101 +317,105 @@ $(document).ready(function(){initNavTree('TransitionParser_8h_source.html','');}
 <div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">size_t</span> getRuleIndex() <span class="keyword">const override</span>;</div>
 <div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;    std::vector&lt;antlr4::tree::TerminalNode *&gt; NUMBER();</div>
 <div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;    antlr4::tree::TerminalNode* NUMBER(<span class="keywordtype">size_t</span> i);</div>
-<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;</div>
-<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;   </div>
-<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;  };</div>
-<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;</div>
-<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;  <a class="code" href="classTransitionParser_1_1IntervalContext.html">IntervalContext</a>* interval();</div>
+<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;    std::vector&lt;antlr4::tree::TerminalNode *&gt; MINUS();</div>
+<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;    antlr4::tree::TerminalNode* MINUS(<span class="keywordtype">size_t</span> i);</div>
+<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;</div>
+<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;   </div>
+<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;  };</div>
 <div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160;</div>
-<div class="line"><a name="l00214"></a><span class="lineno"><a class="line" href="classTransitionParser_1_1EquationContext.html">  214</a></span>&#160;  <span class="keyword">class  </span><a class="code" href="classTransitionParser_1_1EquationContext.html">EquationContext</a> : <span class="keyword">public</span> antlr4::ParserRuleContext {</div>
-<div class="line"><a name="l00215"></a><span class="lineno">  215</span>&#160;  <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00216"></a><span class="lineno">  216</span>&#160;    <a class="code" href="classTransitionParser_1_1EquationContext.html">EquationContext</a>(antlr4::ParserRuleContext *parent, <span class="keywordtype">size_t</span> invokingState);</div>
-<div class="line"><a name="l00217"></a><span class="lineno">  217</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">size_t</span> getRuleIndex() <span class="keyword">const override</span>;</div>
-<div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160;    antlr4::tree::TerminalNode *VARIABLE();</div>
-<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160;    antlr4::tree::TerminalNode *EQUALS();</div>
-<div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160;    <a class="code" href="classTransitionParser_1_1PolynomContext.html">PolynomContext</a> *polynom();</div>
-<div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160;</div>
-<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160;   </div>
-<div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160;  };</div>
-<div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160;</div>
-<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160;  <a class="code" href="classTransitionParser_1_1EquationContext.html">EquationContext</a>* equation();</div>
-<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;</div>
-<div class="line"><a name="l00227"></a><span class="lineno"><a class="line" href="classTransitionParser_1_1ConstraintContext.html">  227</a></span>&#160;  <span class="keyword">class  </span><a class="code" href="classTransitionParser_1_1ConstraintContext.html">ConstraintContext</a> : <span class="keyword">public</span> antlr4::ParserRuleContext {</div>
-<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;  <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;    <a class="code" href="classTransitionParser_1_1ConstraintContext.html">ConstraintContext</a>(antlr4::ParserRuleContext *parent, <span class="keywordtype">size_t</span> invokingState);</div>
-<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">size_t</span> getRuleIndex() <span class="keyword">const override</span>;</div>
-<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;    std::vector&lt;PolynomContext *&gt; polynom();</div>
-<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160;    <a class="code" href="classTransitionParser_1_1PolynomContext.html">PolynomContext</a>* polynom(<span class="keywordtype">size_t</span> i);</div>
-<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160;    antlr4::tree::TerminalNode *BOOLRELATION();</div>
-<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;    antlr4::tree::TerminalNode *EQUALS();</div>
-<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160;</div>
-<div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160;   </div>
-<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;  };</div>
-<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;</div>
-<div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160;  <a class="code" href="classTransitionParser_1_1ConstraintContext.html">ConstraintContext</a>* constraint();</div>
-<div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160;</div>
-<div class="line"><a name="l00241"></a><span class="lineno"><a class="line" href="classTransitionParser_1_1IntervalexprContext.html">  241</a></span>&#160;  <span class="keyword">class  </span><a class="code" href="classTransitionParser_1_1IntervalexprContext.html">IntervalexprContext</a> : <span class="keyword">public</span> antlr4::ParserRuleContext {</div>
-<div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160;  <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160;    <a class="code" href="classTransitionParser_1_1IntervalexprContext.html">IntervalexprContext</a>(antlr4::ParserRuleContext *parent, <span class="keywordtype">size_t</span> invokingState);</div>
-<div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">size_t</span> getRuleIndex() <span class="keyword">const override</span>;</div>
-<div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160;    antlr4::tree::TerminalNode *VARIABLE();</div>
-<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;    antlr4::tree::TerminalNode *IN();</div>
-<div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160;    <a class="code" href="classTransitionParser_1_1IntervalContext.html">IntervalContext</a> *interval();</div>
-<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160;</div>
-<div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160;   </div>
-<div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160;  };</div>
-<div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;</div>
-<div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160;  <a class="code" href="classTransitionParser_1_1IntervalexprContext.html">IntervalexprContext</a>* intervalexpr();</div>
-<div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160;</div>
-<div class="line"><a name="l00254"></a><span class="lineno"><a class="line" href="classTransitionParser_1_1ConstrsetContext.html">  254</a></span>&#160;  <span class="keyword">class  </span><a class="code" href="classTransitionParser_1_1ConstrsetContext.html">ConstrsetContext</a> : <span class="keyword">public</span> antlr4::ParserRuleContext {</div>
-<div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160;  <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160;    <a class="code" href="classTransitionParser_1_1ConstrsetContext.html">ConstrsetContext</a>(antlr4::ParserRuleContext *parent, <span class="keywordtype">size_t</span> invokingState);</div>
-<div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">size_t</span> getRuleIndex() <span class="keyword">const override</span>;</div>
-<div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160;    std::vector&lt;ConstraintContext *&gt; constraint();</div>
-<div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160;    <a class="code" href="classTransitionParser_1_1ConstraintContext.html">ConstraintContext</a>* constraint(<span class="keywordtype">size_t</span> i);</div>
-<div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160;    std::vector&lt;IntervalexprContext *&gt; intervalexpr();</div>
-<div class="line"><a name="l00261"></a><span class="lineno">  261</span>&#160;    <a class="code" href="classTransitionParser_1_1IntervalexprContext.html">IntervalexprContext</a>* intervalexpr(<span class="keywordtype">size_t</span> i);</div>
-<div class="line"><a name="l00262"></a><span class="lineno">  262</span>&#160;</div>
-<div class="line"><a name="l00263"></a><span class="lineno">  263</span>&#160;   </div>
-<div class="line"><a name="l00264"></a><span class="lineno">  264</span>&#160;  };</div>
-<div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160;</div>
-<div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160;  <a class="code" href="classTransitionParser_1_1ConstrsetContext.html">ConstrsetContext</a>* constrset();</div>
-<div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160;</div>
-<div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160;</div>
-<div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160;  <span class="keyword">static</span> std::vector&lt;antlr4::dfa::DFA&gt; _decisionToDFA;</div>
-<div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160;  <span class="keyword">static</span> antlr4::atn::PredictionContextCache _sharedContextCache;</div>
-<div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160;  <span class="keyword">static</span> std::vector&lt;std::string&gt; _ruleNames;</div>
-<div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160;  <span class="keyword">static</span> std::vector&lt;std::string&gt; _tokenNames;</div>
-<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;</div>
-<div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;  <span class="keyword">static</span> std::vector&lt;std::string&gt; _literalNames;</div>
-<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;  <span class="keyword">static</span> std::vector&lt;std::string&gt; _symbolicNames;</div>
-<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;  <span class="keyword">static</span> antlr4::dfa::Vocabulary _vocabulary;</div>
-<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;  <span class="keyword">static</span> antlr4::atn::ATN _atn;</div>
-<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;  <span class="keyword">static</span> std::vector&lt;uint16_t&gt; _serializedATN;</div>
-<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;</div>
-<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;</div>
-<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;  <span class="keyword">struct </span>Initializer {</div>
-<div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160;    Initializer();</div>
-<div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160;  };</div>
-<div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160;  <span class="keyword">static</span> Initializer _init;</div>
-<div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160;};</div>
-<div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;</div>
+<div class="line"><a name="l00214"></a><span class="lineno">  214</span>&#160;  <a class="code" href="classTransitionParser_1_1IntervalContext.html">IntervalContext</a>* interval();</div>
+<div class="line"><a name="l00215"></a><span class="lineno">  215</span>&#160;</div>
+<div class="line"><a name="l00216"></a><span class="lineno"><a class="line" href="classTransitionParser_1_1EquationContext.html">  216</a></span>&#160;  <span class="keyword">class  </span><a class="code" href="classTransitionParser_1_1EquationContext.html">EquationContext</a> : <span class="keyword">public</span> antlr4::ParserRuleContext {</div>
+<div class="line"><a name="l00217"></a><span class="lineno">  217</span>&#160;  <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160;    <a class="code" href="classTransitionParser_1_1EquationContext.html">EquationContext</a>(antlr4::ParserRuleContext *parent, <span class="keywordtype">size_t</span> invokingState);</div>
+<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">size_t</span> getRuleIndex() <span class="keyword">const override</span>;</div>
+<div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160;    antlr4::tree::TerminalNode *VARIABLE();</div>
+<div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160;    antlr4::tree::TerminalNode *EQUALS();</div>
+<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160;    <a class="code" href="classTransitionParser_1_1PolynomContext.html">PolynomContext</a> *polynom();</div>
+<div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160;    <a class="code" href="classTransitionParser_1_1ConnectorContext.html">ConnectorContext</a> *connector();</div>
+<div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160;    <a class="code" href="classTransitionParser_1_1IntervalContext.html">IntervalContext</a> *interval();</div>
+<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160;</div>
+<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;   </div>
+<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160;  };</div>
+<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;</div>
+<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;  <a class="code" href="classTransitionParser_1_1EquationContext.html">EquationContext</a>* equation();</div>
+<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160;</div>
+<div class="line"><a name="l00231"></a><span class="lineno"><a class="line" href="classTransitionParser_1_1ConstraintContext.html">  231</a></span>&#160;  <span class="keyword">class  </span><a class="code" href="classTransitionParser_1_1ConstraintContext.html">ConstraintContext</a> : <span class="keyword">public</span> antlr4::ParserRuleContext {</div>
+<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160;  <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160;    <a class="code" href="classTransitionParser_1_1ConstraintContext.html">ConstraintContext</a>(antlr4::ParserRuleContext *parent, <span class="keywordtype">size_t</span> invokingState);</div>
+<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">size_t</span> getRuleIndex() <span class="keyword">const override</span>;</div>
+<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160;    std::vector&lt;PolynomContext *&gt; polynom();</div>
+<div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160;    <a class="code" href="classTransitionParser_1_1PolynomContext.html">PolynomContext</a>* polynom(<span class="keywordtype">size_t</span> i);</div>
+<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;    antlr4::tree::TerminalNode *BOOLRELATION();</div>
+<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;    antlr4::tree::TerminalNode *EQUALS();</div>
+<div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160;</div>
+<div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160;   </div>
+<div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160;  };</div>
+<div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160;</div>
+<div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160;  <a class="code" href="classTransitionParser_1_1ConstraintContext.html">ConstraintContext</a>* constraint();</div>
+<div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;</div>
+<div class="line"><a name="l00245"></a><span class="lineno"><a class="line" href="classTransitionParser_1_1IntervalexprContext.html">  245</a></span>&#160;  <span class="keyword">class  </span><a class="code" href="classTransitionParser_1_1IntervalexprContext.html">IntervalexprContext</a> : <span class="keyword">public</span> antlr4::ParserRuleContext {</div>
+<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;  <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160;    <a class="code" href="classTransitionParser_1_1IntervalexprContext.html">IntervalexprContext</a>(antlr4::ParserRuleContext *parent, <span class="keywordtype">size_t</span> invokingState);</div>
+<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">size_t</span> getRuleIndex() <span class="keyword">const override</span>;</div>
+<div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160;    antlr4::tree::TerminalNode *VARIABLE();</div>
+<div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160;    antlr4::tree::TerminalNode *IN();</div>
+<div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;    <a class="code" href="classTransitionParser_1_1IntervalContext.html">IntervalContext</a> *interval();</div>
+<div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160;</div>
+<div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160;   </div>
+<div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160;  };</div>
+<div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160;</div>
+<div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160;  <a class="code" href="classTransitionParser_1_1IntervalexprContext.html">IntervalexprContext</a>* intervalexpr();</div>
+<div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160;</div>
+<div class="line"><a name="l00258"></a><span class="lineno"><a class="line" href="classTransitionParser_1_1ConstrsetContext.html">  258</a></span>&#160;  <span class="keyword">class  </span><a class="code" href="classTransitionParser_1_1ConstrsetContext.html">ConstrsetContext</a> : <span class="keyword">public</span> antlr4::ParserRuleContext {</div>
+<div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160;  <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160;    <a class="code" href="classTransitionParser_1_1ConstrsetContext.html">ConstrsetContext</a>(antlr4::ParserRuleContext *parent, <span class="keywordtype">size_t</span> invokingState);</div>
+<div class="line"><a name="l00261"></a><span class="lineno">  261</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">size_t</span> getRuleIndex() <span class="keyword">const override</span>;</div>
+<div class="line"><a name="l00262"></a><span class="lineno">  262</span>&#160;    std::vector&lt;ConstraintContext *&gt; constraint();</div>
+<div class="line"><a name="l00263"></a><span class="lineno">  263</span>&#160;    <a class="code" href="classTransitionParser_1_1ConstraintContext.html">ConstraintContext</a>* constraint(<span class="keywordtype">size_t</span> i);</div>
+<div class="line"><a name="l00264"></a><span class="lineno">  264</span>&#160;    std::vector&lt;IntervalexprContext *&gt; intervalexpr();</div>
+<div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160;    <a class="code" href="classTransitionParser_1_1IntervalexprContext.html">IntervalexprContext</a>* intervalexpr(<span class="keywordtype">size_t</span> i);</div>
+<div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160;</div>
+<div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160;   </div>
+<div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160;  };</div>
+<div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160;</div>
+<div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160;  <a class="code" href="classTransitionParser_1_1ConstrsetContext.html">ConstrsetContext</a>* constrset();</div>
+<div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160;</div>
+<div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160;</div>
+<div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;  <span class="keyword">static</span> std::vector&lt;antlr4::dfa::DFA&gt; _decisionToDFA;</div>
+<div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;  <span class="keyword">static</span> antlr4::atn::PredictionContextCache _sharedContextCache;</div>
+<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;  <span class="keyword">static</span> std::vector&lt;std::string&gt; _ruleNames;</div>
+<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;  <span class="keyword">static</span> std::vector&lt;std::string&gt; _tokenNames;</div>
+<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;</div>
+<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;  <span class="keyword">static</span> std::vector&lt;std::string&gt; _literalNames;</div>
+<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;  <span class="keyword">static</span> std::vector&lt;std::string&gt; _symbolicNames;</div>
+<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;  <span class="keyword">static</span> antlr4::dfa::Vocabulary _vocabulary;</div>
+<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;  <span class="keyword">static</span> antlr4::atn::ATN _atn;</div>
+<div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160;  <span class="keyword">static</span> std::vector&lt;uint16_t&gt; _serializedATN;</div>
+<div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160;</div>
+<div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160;</div>
+<div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160;  <span class="keyword">struct </span>Initializer {</div>
+<div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;    Initializer();</div>
+<div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160;  };</div>
+<div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160;  <span class="keyword">static</span> Initializer _init;</div>
+<div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160;};</div>
+<div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160;</div>
 <div class="ttc" id="classTransitionParser_1_1GuardContext_html"><div class="ttname"><a href="classTransitionParser_1_1GuardContext.html">TransitionParser::GuardContext</a></div><div class="ttdef"><b>Definition:</b> <a href="TransitionParser_8h_source.html#l00109">TransitionParser.h:109</a></div></div>
 <div class="ttc" id="classTransitionParser_1_1IntervalContext_html"><div class="ttname"><a href="classTransitionParser_1_1IntervalContext.html">TransitionParser::IntervalContext</a></div><div class="ttdef"><b>Definition:</b> <a href="TransitionParser_8h_source.html#l00202">TransitionParser.h:202</a></div></div>
-<div class="ttc" id="classTransitionParser_1_1IntervalexprContext_html"><div class="ttname"><a href="classTransitionParser_1_1IntervalexprContext.html">TransitionParser::IntervalexprContext</a></div><div class="ttdef"><b>Definition:</b> <a href="TransitionParser_8h_source.html#l00241">TransitionParser.h:241</a></div></div>
+<div class="ttc" id="classTransitionParser_1_1IntervalexprContext_html"><div class="ttname"><a href="classTransitionParser_1_1IntervalexprContext.html">TransitionParser::IntervalexprContext</a></div><div class="ttdef"><b>Definition:</b> <a href="TransitionParser_8h_source.html#l00245">TransitionParser.h:245</a></div></div>
 <div class="ttc" id="classTransitionParser_1_1TransitionContext_html"><div class="ttname"><a href="classTransitionParser_1_1TransitionContext.html">TransitionParser::TransitionContext</a></div><div class="ttdef"><b>Definition:</b> <a href="TransitionParser_8h_source.html#l00067">TransitionParser.h:67</a></div></div>
-<div class="ttc" id="classTransitionParser_1_1ConstrsetContext_html"><div class="ttname"><a href="classTransitionParser_1_1ConstrsetContext.html">TransitionParser::ConstrsetContext</a></div><div class="ttdef"><b>Definition:</b> <a href="TransitionParser_8h_source.html#l00254">TransitionParser.h:254</a></div></div>
+<div class="ttc" id="classTransitionParser_1_1ConstrsetContext_html"><div class="ttname"><a href="classTransitionParser_1_1ConstrsetContext.html">TransitionParser::ConstrsetContext</a></div><div class="ttdef"><b>Definition:</b> <a href="TransitionParser_8h_source.html#l00258">TransitionParser.h:258</a></div></div>
 <div class="ttc" id="classTransitionParser_1_1ConnectorContext_html"><div class="ttname"><a href="classTransitionParser_1_1ConnectorContext.html">TransitionParser::ConnectorContext</a></div><div class="ttdef"><b>Definition:</b> <a href="TransitionParser_8h_source.html#l00158">TransitionParser.h:158</a></div></div>
 <div class="ttc" id="classTransitionParser_html"><div class="ttname"><a href="classTransitionParser.html">TransitionParser</a></div><div class="ttdef"><b>Definition:</b> <a href="TransitionParser_8h_source.html#l00012">TransitionParser.h:12</a></div></div>
 <div class="ttc" id="classTransitionParser_1_1JumpsContext_html"><div class="ttname"><a href="classTransitionParser_1_1JumpsContext.html">TransitionParser::JumpsContext</a></div><div class="ttdef"><b>Definition:</b> <a href="TransitionParser_8h_source.html#l00055">TransitionParser.h:55</a></div></div>
 <div class="ttc" id="classTransitionParser_1_1ResetfctContext_html"><div class="ttname"><a href="classTransitionParser_1_1ResetfctContext.html">TransitionParser::ResetfctContext</a></div><div class="ttdef"><b>Definition:</b> <a href="TransitionParser_8h_source.html#l00134">TransitionParser.h:134</a></div></div>
 <div class="ttc" id="classTransitionParser_1_1PolynomContext_html"><div class="ttname"><a href="classTransitionParser_1_1PolynomContext.html">TransitionParser::PolynomContext</a></div><div class="ttdef"><b>Definition:</b> <a href="TransitionParser_8h_source.html#l00188">TransitionParser.h:188</a></div></div>
 <div class="ttc" id="classTransitionParser_1_1AggregationContext_html"><div class="ttname"><a href="classTransitionParser_1_1AggregationContext.html">TransitionParser::AggregationContext</a></div><div class="ttdef"><b>Definition:</b> <a href="TransitionParser_8h_source.html#l00146">TransitionParser.h:146</a></div></div>
-<div class="ttc" id="classTransitionParser_1_1ConstraintContext_html"><div class="ttname"><a href="classTransitionParser_1_1ConstraintContext.html">TransitionParser::ConstraintContext</a></div><div class="ttdef"><b>Definition:</b> <a href="TransitionParser_8h_source.html#l00227">TransitionParser.h:227</a></div></div>
+<div class="ttc" id="classTransitionParser_1_1ConstraintContext_html"><div class="ttname"><a href="classTransitionParser_1_1ConstraintContext.html">TransitionParser::ConstraintContext</a></div><div class="ttdef"><b>Definition:</b> <a href="TransitionParser_8h_source.html#l00231">TransitionParser.h:231</a></div></div>
 <div class="ttc" id="classTransitionParser_1_1FromtoContext_html"><div class="ttname"><a href="classTransitionParser_1_1FromtoContext.html">TransitionParser::FromtoContext</a></div><div class="ttdef"><b>Definition:</b> <a href="TransitionParser_8h_source.html#l00086">TransitionParser.h:86</a></div></div>
 <div class="ttc" id="classTransitionParser_1_1AllocationContext_html"><div class="ttname"><a href="classTransitionParser_1_1AllocationContext.html">TransitionParser::AllocationContext</a></div><div class="ttdef"><b>Definition:</b> <a href="TransitionParser_8h_source.html#l00120">TransitionParser.h:120</a></div></div>
-<div class="ttc" id="classTransitionParser_1_1EquationContext_html"><div class="ttname"><a href="classTransitionParser_1_1EquationContext.html">TransitionParser::EquationContext</a></div><div class="ttdef"><b>Definition:</b> <a href="TransitionParser_8h_source.html#l00214">TransitionParser.h:214</a></div></div>
+<div class="ttc" id="classTransitionParser_1_1EquationContext_html"><div class="ttname"><a href="classTransitionParser_1_1EquationContext.html">TransitionParser::EquationContext</a></div><div class="ttdef"><b>Definition:</b> <a href="TransitionParser_8h_source.html#l00216">TransitionParser.h:216</a></div></div>
 <div class="ttc" id="classTransitionParser_1_1UrgentContext_html"><div class="ttname"><a href="classTransitionParser_1_1UrgentContext.html">TransitionParser::UrgentContext</a></div><div class="ttdef"><b>Definition:</b> <a href="TransitionParser_8h_source.html#l00099">TransitionParser.h:99</a></div></div>
 <div class="ttc" id="classTransitionParser_1_1TermContext_html"><div class="ttname"><a href="classTransitionParser_1_1TermContext.html">TransitionParser::TermContext</a></div><div class="ttdef"><b>Definition:</b> <a href="TransitionParser_8h_source.html#l00170">TransitionParser.h:170</a></div></div>
 </div><!-- fragment --></div><!-- contents -->

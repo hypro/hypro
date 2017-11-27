@@ -19,6 +19,8 @@ var classhypro_1_1HybridAutomaton =
     [ "getGlobalBadStates", "classhypro_1_1HybridAutomaton.html#a2b31e1b3a0a8674f187c7905d08ba5b6", null ],
     [ "getInitialStates", "classhypro_1_1HybridAutomaton.html#a8a14256ee2e7b593e8b8a061cfeba600", null ],
     [ "getLocalBadStates", "classhypro_1_1HybridAutomaton.html#a42cce9a2f6cc60afcf0be056c4161e9a", null ],
+    [ "getLocation", "classhypro_1_1HybridAutomaton.html#a6632540e5be17538997aeb51347ee0a1", null ],
+    [ "getLocation", "classhypro_1_1HybridAutomaton.html#a9837dbed40abb7b8e2cc0c3fa4619ec6", null ],
     [ "getLocations", "classhypro_1_1HybridAutomaton.html#a484f45bd1aaa69538242f0f2b43a9993", null ],
     [ "getTransitions", "classhypro_1_1HybridAutomaton.html#a1c744bdb5a0b9531c5ff871580d9b81a", null ],
     [ "operator=", "classhypro_1_1HybridAutomaton.html#ae56c592234464e3e32ad36eca18512ae", null ],

@@ -29,7 +29,7 @@ var classhypro_1_1ZonotopeT =
     [ "print", "classhypro_1_1ZonotopeT.html#a3fbdc732239de04196e4e3bb20c22ed5", null ],
     [ "project", "classhypro_1_1ZonotopeT.html#a1592af5f65088470bc7a0cb0cd6adc63", null ],
     [ "reduceNumberRepresentation", "classhypro_1_1ZonotopeT.html#a1ddbca399b101c39ee7cd76c4ad0ed26", null ],
-    [ "reduceOrder", "classhypro_1_1ZonotopeT.html#a5ef608db294efbd0ecc38e7041d329ad", null ],
+    [ "reduceOrder", "classhypro_1_1ZonotopeT.html#a9af3202afe8dfa9e7ba7691185b0373a", null ],
     [ "removeEmptyGenerators", "classhypro_1_1ZonotopeT.html#a8a724a58e36b633e0bf4d1a33374da9c", null ],
     [ "removeRedundancy", "classhypro_1_1ZonotopeT.html#a0f050870de0ee66d18f696b4ce38be51", null ],
     [ "satisfiesHalfspace", "classhypro_1_1ZonotopeT.html#a82b5ca22a781f965e56bc24003539660", null ],

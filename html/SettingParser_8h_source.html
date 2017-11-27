@@ -373,90 +373,94 @@ $(document).ready(function(){initNavTree('SettingParser_8h_source.html','');});
 <div class="line"><a name="l00261"></a><span class="lineno">  261</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">size_t</span> getRuleIndex() <span class="keyword">const override</span>;</div>
 <div class="line"><a name="l00262"></a><span class="lineno">  262</span>&#160;    std::vector&lt;antlr4::tree::TerminalNode *&gt; NUMBER();</div>
 <div class="line"><a name="l00263"></a><span class="lineno">  263</span>&#160;    antlr4::tree::TerminalNode* NUMBER(<span class="keywordtype">size_t</span> i);</div>
-<div class="line"><a name="l00264"></a><span class="lineno">  264</span>&#160;</div>
-<div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160;   </div>
-<div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160;  };</div>
-<div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160;</div>
-<div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160;  <a class="code" href="classSettingParser_1_1IntervalContext.html">IntervalContext</a>* interval();</div>
+<div class="line"><a name="l00264"></a><span class="lineno">  264</span>&#160;    std::vector&lt;antlr4::tree::TerminalNode *&gt; MINUS();</div>
+<div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160;    antlr4::tree::TerminalNode* MINUS(<span class="keywordtype">size_t</span> i);</div>
+<div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160;</div>
+<div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160;   </div>
+<div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160;  };</div>
 <div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160;</div>
-<div class="line"><a name="l00270"></a><span class="lineno"><a class="line" href="classSettingParser_1_1EquationContext.html">  270</a></span>&#160;  <span class="keyword">class  </span><a class="code" href="classSettingParser_1_1EquationContext.html">EquationContext</a> : <span class="keyword">public</span> antlr4::ParserRuleContext {</div>
-<div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160;  <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160;    <a class="code" href="classSettingParser_1_1EquationContext.html">EquationContext</a>(antlr4::ParserRuleContext *parent, <span class="keywordtype">size_t</span> invokingState);</div>
-<div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">size_t</span> getRuleIndex() <span class="keyword">const override</span>;</div>
-<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;    antlr4::tree::TerminalNode *VARIABLE();</div>
-<div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;    antlr4::tree::TerminalNode *EQUALS();</div>
-<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;    <a class="code" href="classSettingParser_1_1PolynomContext.html">PolynomContext</a> *polynom();</div>
-<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;</div>
-<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;   </div>
-<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;  };</div>
-<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;</div>
-<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;  <a class="code" href="classSettingParser_1_1EquationContext.html">EquationContext</a>* equation();</div>
-<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;</div>
-<div class="line"><a name="l00283"></a><span class="lineno"><a class="line" href="classSettingParser_1_1ConstraintContext.html">  283</a></span>&#160;  <span class="keyword">class  </span><a class="code" href="classSettingParser_1_1ConstraintContext.html">ConstraintContext</a> : <span class="keyword">public</span> antlr4::ParserRuleContext {</div>
-<div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160;  <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160;    <a class="code" href="classSettingParser_1_1ConstraintContext.html">ConstraintContext</a>(antlr4::ParserRuleContext *parent, <span class="keywordtype">size_t</span> invokingState);</div>
-<div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">size_t</span> getRuleIndex() <span class="keyword">const override</span>;</div>
-<div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;    std::vector&lt;PolynomContext *&gt; polynom();</div>
-<div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160;    <a class="code" href="classSettingParser_1_1PolynomContext.html">PolynomContext</a>* polynom(<span class="keywordtype">size_t</span> i);</div>
-<div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160;    antlr4::tree::TerminalNode *BOOLRELATION();</div>
-<div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160;    antlr4::tree::TerminalNode *EQUALS();</div>
-<div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160;</div>
-<div class="line"><a name="l00292"></a><span class="lineno">  292</span>&#160;   </div>
-<div class="line"><a name="l00293"></a><span class="lineno">  293</span>&#160;  };</div>
-<div class="line"><a name="l00294"></a><span class="lineno">  294</span>&#160;</div>
-<div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160;  <a class="code" href="classSettingParser_1_1ConstraintContext.html">ConstraintContext</a>* constraint();</div>
-<div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160;</div>
-<div class="line"><a name="l00297"></a><span class="lineno"><a class="line" href="classSettingParser_1_1IntervalexprContext.html">  297</a></span>&#160;  <span class="keyword">class  </span><a class="code" href="classSettingParser_1_1IntervalexprContext.html">IntervalexprContext</a> : <span class="keyword">public</span> antlr4::ParserRuleContext {</div>
-<div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160;  <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;    <a class="code" href="classSettingParser_1_1IntervalexprContext.html">IntervalexprContext</a>(antlr4::ParserRuleContext *parent, <span class="keywordtype">size_t</span> invokingState);</div>
-<div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">size_t</span> getRuleIndex() <span class="keyword">const override</span>;</div>
-<div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160;    antlr4::tree::TerminalNode *VARIABLE();</div>
-<div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160;    antlr4::tree::TerminalNode *IN();</div>
-<div class="line"><a name="l00303"></a><span class="lineno">  303</span>&#160;    <a class="code" href="classSettingParser_1_1IntervalContext.html">IntervalContext</a> *interval();</div>
-<div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160;</div>
-<div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160;   </div>
-<div class="line"><a name="l00306"></a><span class="lineno">  306</span>&#160;  };</div>
-<div class="line"><a name="l00307"></a><span class="lineno">  307</span>&#160;</div>
-<div class="line"><a name="l00308"></a><span class="lineno">  308</span>&#160;  <a class="code" href="classSettingParser_1_1IntervalexprContext.html">IntervalexprContext</a>* intervalexpr();</div>
-<div class="line"><a name="l00309"></a><span class="lineno">  309</span>&#160;</div>
-<div class="line"><a name="l00310"></a><span class="lineno"><a class="line" href="classSettingParser_1_1ConstrsetContext.html">  310</a></span>&#160;  <span class="keyword">class  </span><a class="code" href="classSettingParser_1_1ConstrsetContext.html">ConstrsetContext</a> : <span class="keyword">public</span> antlr4::ParserRuleContext {</div>
-<div class="line"><a name="l00311"></a><span class="lineno">  311</span>&#160;  <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00312"></a><span class="lineno">  312</span>&#160;    <a class="code" href="classSettingParser_1_1ConstrsetContext.html">ConstrsetContext</a>(antlr4::ParserRuleContext *parent, <span class="keywordtype">size_t</span> invokingState);</div>
-<div class="line"><a name="l00313"></a><span class="lineno">  313</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">size_t</span> getRuleIndex() <span class="keyword">const override</span>;</div>
-<div class="line"><a name="l00314"></a><span class="lineno">  314</span>&#160;    std::vector&lt;ConstraintContext *&gt; constraint();</div>
-<div class="line"><a name="l00315"></a><span class="lineno">  315</span>&#160;    <a class="code" href="classSettingParser_1_1ConstraintContext.html">ConstraintContext</a>* constraint(<span class="keywordtype">size_t</span> i);</div>
-<div class="line"><a name="l00316"></a><span class="lineno">  316</span>&#160;    std::vector&lt;IntervalexprContext *&gt; intervalexpr();</div>
-<div class="line"><a name="l00317"></a><span class="lineno">  317</span>&#160;    <a class="code" href="classSettingParser_1_1IntervalexprContext.html">IntervalexprContext</a>* intervalexpr(<span class="keywordtype">size_t</span> i);</div>
-<div class="line"><a name="l00318"></a><span class="lineno">  318</span>&#160;</div>
-<div class="line"><a name="l00319"></a><span class="lineno">  319</span>&#160;   </div>
-<div class="line"><a name="l00320"></a><span class="lineno">  320</span>&#160;  };</div>
-<div class="line"><a name="l00321"></a><span class="lineno">  321</span>&#160;</div>
-<div class="line"><a name="l00322"></a><span class="lineno">  322</span>&#160;  <a class="code" href="classSettingParser_1_1ConstrsetContext.html">ConstrsetContext</a>* constrset();</div>
-<div class="line"><a name="l00323"></a><span class="lineno">  323</span>&#160;</div>
-<div class="line"><a name="l00324"></a><span class="lineno">  324</span>&#160;</div>
-<div class="line"><a name="l00325"></a><span class="lineno">  325</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00326"></a><span class="lineno">  326</span>&#160;  <span class="keyword">static</span> std::vector&lt;antlr4::dfa::DFA&gt; _decisionToDFA;</div>
-<div class="line"><a name="l00327"></a><span class="lineno">  327</span>&#160;  <span class="keyword">static</span> antlr4::atn::PredictionContextCache _sharedContextCache;</div>
-<div class="line"><a name="l00328"></a><span class="lineno">  328</span>&#160;  <span class="keyword">static</span> std::vector&lt;std::string&gt; _ruleNames;</div>
-<div class="line"><a name="l00329"></a><span class="lineno">  329</span>&#160;  <span class="keyword">static</span> std::vector&lt;std::string&gt; _tokenNames;</div>
-<div class="line"><a name="l00330"></a><span class="lineno">  330</span>&#160;</div>
-<div class="line"><a name="l00331"></a><span class="lineno">  331</span>&#160;  <span class="keyword">static</span> std::vector&lt;std::string&gt; _literalNames;</div>
-<div class="line"><a name="l00332"></a><span class="lineno">  332</span>&#160;  <span class="keyword">static</span> std::vector&lt;std::string&gt; _symbolicNames;</div>
-<div class="line"><a name="l00333"></a><span class="lineno">  333</span>&#160;  <span class="keyword">static</span> antlr4::dfa::Vocabulary _vocabulary;</div>
-<div class="line"><a name="l00334"></a><span class="lineno">  334</span>&#160;  <span class="keyword">static</span> antlr4::atn::ATN _atn;</div>
-<div class="line"><a name="l00335"></a><span class="lineno">  335</span>&#160;  <span class="keyword">static</span> std::vector&lt;uint16_t&gt; _serializedATN;</div>
-<div class="line"><a name="l00336"></a><span class="lineno">  336</span>&#160;</div>
-<div class="line"><a name="l00337"></a><span class="lineno">  337</span>&#160;</div>
-<div class="line"><a name="l00338"></a><span class="lineno">  338</span>&#160;  <span class="keyword">struct </span>Initializer {</div>
-<div class="line"><a name="l00339"></a><span class="lineno">  339</span>&#160;    Initializer();</div>
-<div class="line"><a name="l00340"></a><span class="lineno">  340</span>&#160;  };</div>
-<div class="line"><a name="l00341"></a><span class="lineno">  341</span>&#160;  <span class="keyword">static</span> Initializer _init;</div>
-<div class="line"><a name="l00342"></a><span class="lineno">  342</span>&#160;};</div>
-<div class="line"><a name="l00343"></a><span class="lineno">  343</span>&#160;</div>
+<div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160;  <a class="code" href="classSettingParser_1_1IntervalContext.html">IntervalContext</a>* interval();</div>
+<div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160;</div>
+<div class="line"><a name="l00272"></a><span class="lineno"><a class="line" href="classSettingParser_1_1EquationContext.html">  272</a></span>&#160;  <span class="keyword">class  </span><a class="code" href="classSettingParser_1_1EquationContext.html">EquationContext</a> : <span class="keyword">public</span> antlr4::ParserRuleContext {</div>
+<div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160;  <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;    <a class="code" href="classSettingParser_1_1EquationContext.html">EquationContext</a>(antlr4::ParserRuleContext *parent, <span class="keywordtype">size_t</span> invokingState);</div>
+<div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">size_t</span> getRuleIndex() <span class="keyword">const override</span>;</div>
+<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;    antlr4::tree::TerminalNode *VARIABLE();</div>
+<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;    antlr4::tree::TerminalNode *EQUALS();</div>
+<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;    <a class="code" href="classSettingParser_1_1PolynomContext.html">PolynomContext</a> *polynom();</div>
+<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;    <a class="code" href="classSettingParser_1_1ConnectorContext.html">ConnectorContext</a> *connector();</div>
+<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;    <a class="code" href="classSettingParser_1_1IntervalContext.html">IntervalContext</a> *interval();</div>
+<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;</div>
+<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;   </div>
+<div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160;  };</div>
+<div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160;</div>
+<div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160;  <a class="code" href="classSettingParser_1_1EquationContext.html">EquationContext</a>* equation();</div>
+<div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160;</div>
+<div class="line"><a name="l00287"></a><span class="lineno"><a class="line" href="classSettingParser_1_1ConstraintContext.html">  287</a></span>&#160;  <span class="keyword">class  </span><a class="code" href="classSettingParser_1_1ConstraintContext.html">ConstraintContext</a> : <span class="keyword">public</span> antlr4::ParserRuleContext {</div>
+<div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160;  <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160;    <a class="code" href="classSettingParser_1_1ConstraintContext.html">ConstraintContext</a>(antlr4::ParserRuleContext *parent, <span class="keywordtype">size_t</span> invokingState);</div>
+<div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">size_t</span> getRuleIndex() <span class="keyword">const override</span>;</div>
+<div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160;    std::vector&lt;PolynomContext *&gt; polynom();</div>
+<div class="line"><a name="l00292"></a><span class="lineno">  292</span>&#160;    <a class="code" href="classSettingParser_1_1PolynomContext.html">PolynomContext</a>* polynom(<span class="keywordtype">size_t</span> i);</div>
+<div class="line"><a name="l00293"></a><span class="lineno">  293</span>&#160;    antlr4::tree::TerminalNode *BOOLRELATION();</div>
+<div class="line"><a name="l00294"></a><span class="lineno">  294</span>&#160;    antlr4::tree::TerminalNode *EQUALS();</div>
+<div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160;</div>
+<div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160;   </div>
+<div class="line"><a name="l00297"></a><span class="lineno">  297</span>&#160;  };</div>
+<div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160;</div>
+<div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;  <a class="code" href="classSettingParser_1_1ConstraintContext.html">ConstraintContext</a>* constraint();</div>
+<div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160;</div>
+<div class="line"><a name="l00301"></a><span class="lineno"><a class="line" href="classSettingParser_1_1IntervalexprContext.html">  301</a></span>&#160;  <span class="keyword">class  </span><a class="code" href="classSettingParser_1_1IntervalexprContext.html">IntervalexprContext</a> : <span class="keyword">public</span> antlr4::ParserRuleContext {</div>
+<div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160;  <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00303"></a><span class="lineno">  303</span>&#160;    <a class="code" href="classSettingParser_1_1IntervalexprContext.html">IntervalexprContext</a>(antlr4::ParserRuleContext *parent, <span class="keywordtype">size_t</span> invokingState);</div>
+<div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">size_t</span> getRuleIndex() <span class="keyword">const override</span>;</div>
+<div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160;    antlr4::tree::TerminalNode *VARIABLE();</div>
+<div class="line"><a name="l00306"></a><span class="lineno">  306</span>&#160;    antlr4::tree::TerminalNode *IN();</div>
+<div class="line"><a name="l00307"></a><span class="lineno">  307</span>&#160;    <a class="code" href="classSettingParser_1_1IntervalContext.html">IntervalContext</a> *interval();</div>
+<div class="line"><a name="l00308"></a><span class="lineno">  308</span>&#160;</div>
+<div class="line"><a name="l00309"></a><span class="lineno">  309</span>&#160;   </div>
+<div class="line"><a name="l00310"></a><span class="lineno">  310</span>&#160;  };</div>
+<div class="line"><a name="l00311"></a><span class="lineno">  311</span>&#160;</div>
+<div class="line"><a name="l00312"></a><span class="lineno">  312</span>&#160;  <a class="code" href="classSettingParser_1_1IntervalexprContext.html">IntervalexprContext</a>* intervalexpr();</div>
+<div class="line"><a name="l00313"></a><span class="lineno">  313</span>&#160;</div>
+<div class="line"><a name="l00314"></a><span class="lineno"><a class="line" href="classSettingParser_1_1ConstrsetContext.html">  314</a></span>&#160;  <span class="keyword">class  </span><a class="code" href="classSettingParser_1_1ConstrsetContext.html">ConstrsetContext</a> : <span class="keyword">public</span> antlr4::ParserRuleContext {</div>
+<div class="line"><a name="l00315"></a><span class="lineno">  315</span>&#160;  <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00316"></a><span class="lineno">  316</span>&#160;    <a class="code" href="classSettingParser_1_1ConstrsetContext.html">ConstrsetContext</a>(antlr4::ParserRuleContext *parent, <span class="keywordtype">size_t</span> invokingState);</div>
+<div class="line"><a name="l00317"></a><span class="lineno">  317</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">size_t</span> getRuleIndex() <span class="keyword">const override</span>;</div>
+<div class="line"><a name="l00318"></a><span class="lineno">  318</span>&#160;    std::vector&lt;ConstraintContext *&gt; constraint();</div>
+<div class="line"><a name="l00319"></a><span class="lineno">  319</span>&#160;    <a class="code" href="classSettingParser_1_1ConstraintContext.html">ConstraintContext</a>* constraint(<span class="keywordtype">size_t</span> i);</div>
+<div class="line"><a name="l00320"></a><span class="lineno">  320</span>&#160;    std::vector&lt;IntervalexprContext *&gt; intervalexpr();</div>
+<div class="line"><a name="l00321"></a><span class="lineno">  321</span>&#160;    <a class="code" href="classSettingParser_1_1IntervalexprContext.html">IntervalexprContext</a>* intervalexpr(<span class="keywordtype">size_t</span> i);</div>
+<div class="line"><a name="l00322"></a><span class="lineno">  322</span>&#160;</div>
+<div class="line"><a name="l00323"></a><span class="lineno">  323</span>&#160;   </div>
+<div class="line"><a name="l00324"></a><span class="lineno">  324</span>&#160;  };</div>
+<div class="line"><a name="l00325"></a><span class="lineno">  325</span>&#160;</div>
+<div class="line"><a name="l00326"></a><span class="lineno">  326</span>&#160;  <a class="code" href="classSettingParser_1_1ConstrsetContext.html">ConstrsetContext</a>* constrset();</div>
+<div class="line"><a name="l00327"></a><span class="lineno">  327</span>&#160;</div>
+<div class="line"><a name="l00328"></a><span class="lineno">  328</span>&#160;</div>
+<div class="line"><a name="l00329"></a><span class="lineno">  329</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00330"></a><span class="lineno">  330</span>&#160;  <span class="keyword">static</span> std::vector&lt;antlr4::dfa::DFA&gt; _decisionToDFA;</div>
+<div class="line"><a name="l00331"></a><span class="lineno">  331</span>&#160;  <span class="keyword">static</span> antlr4::atn::PredictionContextCache _sharedContextCache;</div>
+<div class="line"><a name="l00332"></a><span class="lineno">  332</span>&#160;  <span class="keyword">static</span> std::vector&lt;std::string&gt; _ruleNames;</div>
+<div class="line"><a name="l00333"></a><span class="lineno">  333</span>&#160;  <span class="keyword">static</span> std::vector&lt;std::string&gt; _tokenNames;</div>
+<div class="line"><a name="l00334"></a><span class="lineno">  334</span>&#160;</div>
+<div class="line"><a name="l00335"></a><span class="lineno">  335</span>&#160;  <span class="keyword">static</span> std::vector&lt;std::string&gt; _literalNames;</div>
+<div class="line"><a name="l00336"></a><span class="lineno">  336</span>&#160;  <span class="keyword">static</span> std::vector&lt;std::string&gt; _symbolicNames;</div>
+<div class="line"><a name="l00337"></a><span class="lineno">  337</span>&#160;  <span class="keyword">static</span> antlr4::dfa::Vocabulary _vocabulary;</div>
+<div class="line"><a name="l00338"></a><span class="lineno">  338</span>&#160;  <span class="keyword">static</span> antlr4::atn::ATN _atn;</div>
+<div class="line"><a name="l00339"></a><span class="lineno">  339</span>&#160;  <span class="keyword">static</span> std::vector&lt;uint16_t&gt; _serializedATN;</div>
+<div class="line"><a name="l00340"></a><span class="lineno">  340</span>&#160;</div>
+<div class="line"><a name="l00341"></a><span class="lineno">  341</span>&#160;</div>
+<div class="line"><a name="l00342"></a><span class="lineno">  342</span>&#160;  <span class="keyword">struct </span>Initializer {</div>
+<div class="line"><a name="l00343"></a><span class="lineno">  343</span>&#160;    Initializer();</div>
+<div class="line"><a name="l00344"></a><span class="lineno">  344</span>&#160;  };</div>
+<div class="line"><a name="l00345"></a><span class="lineno">  345</span>&#160;  <span class="keyword">static</span> Initializer _init;</div>
+<div class="line"><a name="l00346"></a><span class="lineno">  346</span>&#160;};</div>
+<div class="line"><a name="l00347"></a><span class="lineno">  347</span>&#160;</div>
 <div class="ttc" id="classSettingParser_1_1TermContext_html"><div class="ttname"><a href="classSettingParser_1_1TermContext.html">SettingParser::TermContext</a></div><div class="ttdef"><b>Definition:</b> <a href="SettingParser_8h_source.html#l00226">SettingParser.h:226</a></div></div>
 <div class="ttc" id="classSettingParser_1_1SettingContext_html"><div class="ttname"><a href="classSettingParser_1_1SettingContext.html">SettingParser::SettingContext</a></div><div class="ttdef"><b>Definition:</b> <a href="SettingParser_8h_source.html#l00061">SettingParser.h:61</a></div></div>
 <div class="ttc" id="classSettingParser_1_1CutoffContext_html"><div class="ttname"><a href="classSettingParser_1_1CutoffContext.html">SettingParser::CutoffContext</a></div><div class="ttdef"><b>Definition:</b> <a href="SettingParser_8h_source.html#l00192">SettingParser.h:192</a></div></div>
-<div class="ttc" id="classSettingParser_1_1IntervalexprContext_html"><div class="ttname"><a href="classSettingParser_1_1IntervalexprContext.html">SettingParser::IntervalexprContext</a></div><div class="ttdef"><b>Definition:</b> <a href="SettingParser_8h_source.html#l00297">SettingParser.h:297</a></div></div>
+<div class="ttc" id="classSettingParser_1_1IntervalexprContext_html"><div class="ttname"><a href="classSettingParser_1_1IntervalexprContext.html">SettingParser::IntervalexprContext</a></div><div class="ttdef"><b>Definition:</b> <a href="SettingParser_8h_source.html#l00301">SettingParser.h:301</a></div></div>
 <div class="ttc" id="classSettingParser_1_1PrintContext_html"><div class="ttname"><a href="classSettingParser_1_1PrintContext.html">SettingParser::PrintContext</a></div><div class="ttdef"><b>Definition:</b> <a href="SettingParser_8h_source.html#l00149">SettingParser.h:149</a></div></div>
 <div class="ttc" id="classSettingParser_1_1FilenameContext_html"><div class="ttname"><a href="classSettingParser_1_1FilenameContext.html">SettingParser::FilenameContext</a></div><div class="ttdef"><b>Definition:</b> <a href="SettingParser_8h_source.html#l00127">SettingParser.h:127</a></div></div>
 <div class="ttc" id="classSettingParser_1_1FixedordersContext_html"><div class="ttname"><a href="classSettingParser_1_1FixedordersContext.html">SettingParser::FixedordersContext</a></div><div class="ttdef"><b>Definition:</b> <a href="SettingParser_8h_source.html#l00181">SettingParser.h:181</a></div></div>
@@ -465,12 +469,12 @@ $(document).ready(function(){initNavTree('SettingParser_8h_source.html','');});
 <div class="ttc" id="classSettingParser_1_1TimeContext_html"><div class="ttname"><a href="classSettingParser_1_1TimeContext.html">SettingParser::TimeContext</a></div><div class="ttdef"><b>Definition:</b> <a href="SettingParser_8h_source.html#l00104">SettingParser.h:104</a></div></div>
 <div class="ttc" id="classSettingParser_html"><div class="ttname"><a href="classSettingParser.html">SettingParser</a></div><div class="ttdef"><b>Definition:</b> <a href="SettingParser_8h_source.html#l00012">SettingParser.h:12</a></div></div>
 <div class="ttc" id="classSettingParser_1_1ConnectorContext_html"><div class="ttname"><a href="classSettingParser_1_1ConnectorContext.html">SettingParser::ConnectorContext</a></div><div class="ttdef"><b>Definition:</b> <a href="SettingParser_8h_source.html#l00214">SettingParser.h:214</a></div></div>
-<div class="ttc" id="classSettingParser_1_1EquationContext_html"><div class="ttname"><a href="classSettingParser_1_1EquationContext.html">SettingParser::EquationContext</a></div><div class="ttdef"><b>Definition:</b> <a href="SettingParser_8h_source.html#l00270">SettingParser.h:270</a></div></div>
-<div class="ttc" id="classSettingParser_1_1ConstrsetContext_html"><div class="ttname"><a href="classSettingParser_1_1ConstrsetContext.html">SettingParser::ConstrsetContext</a></div><div class="ttdef"><b>Definition:</b> <a href="SettingParser_8h_source.html#l00310">SettingParser.h:310</a></div></div>
+<div class="ttc" id="classSettingParser_1_1EquationContext_html"><div class="ttname"><a href="classSettingParser_1_1EquationContext.html">SettingParser::EquationContext</a></div><div class="ttdef"><b>Definition:</b> <a href="SettingParser_8h_source.html#l00272">SettingParser.h:272</a></div></div>
+<div class="ttc" id="classSettingParser_1_1ConstrsetContext_html"><div class="ttname"><a href="classSettingParser_1_1ConstrsetContext.html">SettingParser::ConstrsetContext</a></div><div class="ttdef"><b>Definition:</b> <a href="SettingParser_8h_source.html#l00314">SettingParser.h:314</a></div></div>
 <div class="ttc" id="classSettingParser_1_1PrecisionContext_html"><div class="ttname"><a href="classSettingParser_1_1PrecisionContext.html">SettingParser::PrecisionContext</a></div><div class="ttdef"><b>Definition:</b> <a href="SettingParser_8h_source.html#l00203">SettingParser.h:203</a></div></div>
 <div class="ttc" id="classSettingParser_1_1IdentityContext_html"><div class="ttname"><a href="classSettingParser_1_1IdentityContext.html">SettingParser::IdentityContext</a></div><div class="ttdef"><b>Definition:</b> <a href="SettingParser_8h_source.html#l00171">SettingParser.h:171</a></div></div>
 <div class="ttc" id="classSettingParser_1_1IntervalContext_html"><div class="ttname"><a href="classSettingParser_1_1IntervalContext.html">SettingParser::IntervalContext</a></div><div class="ttdef"><b>Definition:</b> <a href="SettingParser_8h_source.html#l00258">SettingParser.h:258</a></div></div>
-<div class="ttc" id="classSettingParser_1_1ConstraintContext_html"><div class="ttname"><a href="classSettingParser_1_1ConstraintContext.html">SettingParser::ConstraintContext</a></div><div class="ttdef"><b>Definition:</b> <a href="SettingParser_8h_source.html#l00283">SettingParser.h:283</a></div></div>
+<div class="ttc" id="classSettingParser_1_1ConstraintContext_html"><div class="ttname"><a href="classSettingParser_1_1ConstraintContext.html">SettingParser::ConstraintContext</a></div><div class="ttdef"><b>Definition:</b> <a href="SettingParser_8h_source.html#l00287">SettingParser.h:287</a></div></div>
 <div class="ttc" id="classSettingParser_1_1PolynomContext_html"><div class="ttname"><a href="classSettingParser_1_1PolynomContext.html">SettingParser::PolynomContext</a></div><div class="ttdef"><b>Definition:</b> <a href="SettingParser_8h_source.html#l00244">SettingParser.h:244</a></div></div>
 <div class="ttc" id="classSettingParser_1_1FixedstepsContext_html"><div class="ttname"><a href="classSettingParser_1_1FixedstepsContext.html">SettingParser::FixedstepsContext</a></div><div class="ttdef"><b>Definition:</b> <a href="SettingParser_8h_source.html#l00093">SettingParser.h:93</a></div></div>
 <div class="ttc" id="classSettingParser_1_1PlotsettingContext_html"><div class="ttname"><a href="classSettingParser_1_1PlotsettingContext.html">SettingParser::PlotsettingContext</a></div><div class="ttdef"><b>Definition:</b> <a href="SettingParser_8h_source.html#l00115">SettingParser.h:115</a></div></div>

@@ -8,5 +8,6 @@ var dir_5cc8785239517cfd59e944398d6252f9 =
     [ "PolytopeSupportFunction.h", "PolytopeSupportFunction_8h_source.html", null ],
     [ "SupportFunction.h", "SupportFunction_8h_source.html", null ],
     [ "SupportFunctionContent.h", "SupportFunctionContent_8h_source.html", null ],
+    [ "SupportFunctionSetting.h", "SupportFunctionSetting_8h_source.html", null ],
     [ "util.h", "representations_2SupportFunction_2util_8h_source.html", null ]
 ];

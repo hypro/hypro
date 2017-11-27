@@ -4,9 +4,15 @@ var classExpressionsVisitor =
     [ "visitAndExpression", "classExpressionsVisitor.html#a11b8a55914ac9f7e43ac8a8ec55d3751", null ],
     [ "visitCompareExpression", "classExpressionsVisitor.html#af18d501d7ad03b00e9664622c5365828", null ],
     [ "visitDictPairs", "classExpressionsVisitor.html#a8688936dc35d084d9986b4fd651e406d", null ],
+    [ "visitEquationDerivate", "classExpressionsVisitor.html#a09dad128090999161c73d575d28e752b", null ],
+    [ "visitEquationNonDerivate", "classExpressionsVisitor.html#ac38c635cd9ebdca0736ae7b0812dbcb6", null ],
+    [ "visitEquations", "classExpressionsVisitor.html#ac8e024b8a2de4b57e60439e2d190afc2", null ],
     [ "visitExpression", "classExpressionsVisitor.html#ada40c4e444a534e446224f26515042b2", null ],
-    [ "visitExpressionFactor", "classExpressionsVisitor.html#a4921bbda79d38b7d4bfcdabaa1a5d752", null ],
     [ "visitExpressions", "classExpressionsVisitor.html#a86f0ac43f0260f3ed629d4891e5db319", null ],
+    [ "visitExprFact", "classExpressionsVisitor.html#a1371e6756d9b05ff88e3b4eb73433ae9", null ],
+    [ "visitExprFactName", "classExpressionsVisitor.html#a757e8fecc5765a08eb4f1d265acc28b3", null ],
+    [ "visitExprFactNumber", "classExpressionsVisitor.html#a3259c5e8c01caef084ad445dd3698bb6", null ],
+    [ "visitExprFactRealNumber", "classExpressionsVisitor.html#a0adc736388e1bf38e207636426cd609e", null ],
     [ "visitField", "classExpressionsVisitor.html#a4bd15d71b00e9b9c0ece16d2ae239760", null ],
     [ "visitFields", "classExpressionsVisitor.html#a24b72e1ce987c5206f2c62cff8b6daf2", null ],
     [ "visitFuncExpression", "classExpressionsVisitor.html#ab4c9ebb689cf487109d172ccd2bf9aaf", null ],
@@ -27,5 +33,8 @@ var classExpressionsVisitor =
     [ "visitSwitchCases", "classExpressionsVisitor.html#a2a31b00d918fe3d1580c064efde62185", null ],
     [ "visitType", "classExpressionsVisitor.html#aa938a345cf21616fda6725a4458ba465", null ],
     [ "visitTypes", "classExpressionsVisitor.html#a2edb77cd4c784a6b3a7f49cf2dbf4f73", null ],
-    [ "visitUnaryExpression", "classExpressionsVisitor.html#ad5d681bcb1c3cf64d2ba99010c8b12f6", null ]
+    [ "visitUnaryExpr", "classExpressionsVisitor.html#a3edadac4d3c71997d894bef90d0f8ce9", null ],
+    [ "visitUnaryExprFunc", "classExpressionsVisitor.html#af054b9190f4f1d1a1cb6f97567af25fc", null ],
+    [ "visitUnaryExprMinus", "classExpressionsVisitor.html#a955b5f087f3710a34def60a8e26f2cc3", null ],
+    [ "visitUnaryExprPlus", "classExpressionsVisitor.html#aab4a3339125721335252d086ca12404f", null ]
 ];

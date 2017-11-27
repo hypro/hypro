@@ -116,68 +116,63 @@ $(document).ready(function(){initNavTree('HybridCIFVisitor_8h_source.html','');}
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="preprocessor">#include &quot;antlr4-runtime.h&quot;</span></div>
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="preprocessor">#include &quot;HybridSystemVisitor.h&quot;</span></div>
 <div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="preprocessor">#include &quot;HybridSystemBaseVisitor.h&quot;</span></div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="preprocessor">#include &quot;../../types.h&quot;</span></div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="preprocessor">#include &quot;../../datastructures/HybridAutomaton/Location.h&quot;</span></div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">#include &quot;../../datastructures/HybridAutomaton/LocationManager.h&quot;</span></div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="comment">/*#include &quot;../../datastructures/HybridAutomaton/HybridAutomaton.h&quot;</span></div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="comment"></span></div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="comment">#include &quot;../../datastructures/HybridAutomaton/Condition.h&quot;*/</span></div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;</div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="keyword">using namespace </span>antlr4;</div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;</div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="keyword">namespace </span>hypro {</div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;</div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="keyword">template</span>&lt;<span class="keyword">typename</span> Number&gt;</div>
-<div class="line"><a name="l00019"></a><span class="lineno"><a class="line" href="classhypro_1_1HybridCIFVisitor.html">   19</a></span>&#160;<span class="keyword">class </span><a class="code" href="classhypro_1_1HybridCIFVisitor.html">HybridCIFVisitor</a> : <span class="keyword">public</span> <a class="code" href="classHybridSystemBaseVisitor.html">HybridSystemBaseVisitor</a> {</div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;</div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;    <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;        <span class="comment">//A vector of all variables which are defined</span></div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;        std::vector&lt;std::string&gt; vars;</div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;        <span class="keywordtype">int</span> numberOfLocationsWithoutAName = 0;</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;        antlrcpp::Any visitDiscDecl(<a class="code" href="classHybridSystemParser_1_1DiscDeclContext.html">HybridSystemParser::DiscDeclContext</a> *ctx) <span class="keyword">override</span>;</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;        antlrcpp::Any visitAutomatonBody(<a class="code" href="classHybridSystemParser_1_1AutomatonBodyContext.html">HybridSystemParser::AutomatonBodyContext</a> *ctx) <span class="keyword">override</span>;</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;        antlrcpp::Any visitStdLibFunction(<a class="code" href="classHybridSystemParser_1_1StdLibFunctionContext.html">HybridSystemParser::StdLibFunctionContext</a> *ctx) <span class="keyword">override</span>;</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;        antlrcpp::Any visitControllability(<a class="code" href="classHybridSystemParser_1_1ControllabilityContext.html">HybridSystemParser::ControllabilityContext</a> *ctx) <span class="keyword">override</span>;</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;        antlrcpp::Any visitOptControllability(<a class="code" href="classHybridSystemParser_1_1OptControllabilityContext.html">HybridSystemParser::OptControllabilityContext</a> *ctx) <span class="keyword">override</span>;</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;        antlrcpp::Any visitEvents(<a class="code" href="classHybridSystemParser_1_1EventsContext.html">HybridSystemParser::EventsContext</a> *ctx) <span class="keyword">override</span>;</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;        antlrcpp::Any visitEdgeEvent(<a class="code" href="classHybridSystemParser_1_1EdgeEventContext.html">HybridSystemParser::EdgeEventContext</a> *ctx) <span class="keyword">override</span>;</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;        antlrcpp::Any visitIoDecls(<a class="code" href="classHybridSystemParser_1_1IoDeclsContext.html">HybridSystemParser::IoDeclsContext</a> *ctx) <span class="keyword">override</span>;</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;        antlrcpp::Any visitCoreEdge(<a class="code" href="classHybridSystemParser_1_1CoreEdgeContext.html">HybridSystemParser::CoreEdgeContext</a> *ctx) <span class="keyword">override</span>;</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;        antlrcpp::Any visitLocIdElem(<a class="code" href="classHybridSystemParser_1_1LocIdElemContext.html">HybridSystemParser::LocIdElemContext</a> *ctx) <span class="keyword">override</span>;</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;        antlrcpp::Any visitLocElem(<a class="code" href="classHybridSystemParser_1_1LocElemContext.html">HybridSystemParser::LocElemContext</a> *ctx) <span class="keyword">override</span>;</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;        antlrcpp::Any visitLocations(<a class="code" href="classHybridSystemParser_1_1LocationsContext.html">HybridSystemParser::LocationsContext</a> *ctx) <span class="keyword">override</span>;</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;        </div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;        <a class="code" href="classhypro_1_1HybridCIFVisitor.html">HybridCIFVisitor</a>();</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;        ~<a class="code" href="classhypro_1_1HybridCIFVisitor.html">HybridCIFVisitor</a>();</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;        antlrcpp::Any visitSpecification(<a class="code" href="classHybridSystemParser_1_1SpecificationContext.html">HybridSystemParser::SpecificationContext</a> *ctx) <span class="keyword">override</span>;</div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="preprocessor">#include &quot;CIFLocVisitor.h&quot;</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="preprocessor">#include &quot;../../types.h&quot;</span></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">#include &quot;../../datastructures/HybridAutomaton/Location.h&quot;</span></div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="preprocessor">#include &quot;../../datastructures/HybridAutomaton/LocationManager.h&quot;</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="comment">/*#include &quot;../../datastructures/HybridAutomaton/HybridAutomaton.h&quot;</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="comment"></span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="comment">#include &quot;../../datastructures/HybridAutomaton/Condition.h&quot;*/</span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;</div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="keyword">using namespace </span>antlr4;</div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;</div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="keyword">namespace </span>hypro {</div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;</div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="keyword">template</span>&lt;<span class="keyword">typename</span> Number&gt;</div>
+<div class="line"><a name="l00020"></a><span class="lineno"><a class="line" href="classhypro_1_1HybridCIFVisitor.html">   20</a></span>&#160;<span class="keyword">class </span><a class="code" href="classhypro_1_1HybridCIFVisitor.html">HybridCIFVisitor</a> : <span class="keyword">public</span> <a class="code" href="classHybridSystemBaseVisitor.html">HybridSystemBaseVisitor</a> {</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;        <span class="comment">//A vector of all variables which are defined</span></div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;        std::vector&lt;std::string&gt; vars;</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;        <span class="keywordtype">int</span> numberOfLocationsWithoutAName = 0;</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;        std::set&lt;Location&lt;Number&gt;*&gt; locSet;</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;        std::set&lt;Transition&lt;Number&gt;*&gt; transitionSet;</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;        antlrcpp::Any visitDiscDecl(<a class="code" href="classHybridSystemParser_1_1DiscDeclContext.html">HybridSystemParser::DiscDeclContext</a> *ctx) <span class="keyword">override</span>;</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;        antlrcpp::Any visitAutomatonBody(<a class="code" href="classHybridSystemParser_1_1AutomatonBodyContext.html">HybridSystemParser::AutomatonBodyContext</a> *ctx) <span class="keyword">override</span>;</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;        antlrcpp::Any visitStdLibFunction(<a class="code" href="classHybridSystemParser_1_1StdLibFunctionContext.html">HybridSystemParser::StdLibFunctionContext</a> *ctx) <span class="keyword">override</span>;</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;        antlrcpp::Any visitControllability(<a class="code" href="classHybridSystemParser_1_1ControllabilityContext.html">HybridSystemParser::ControllabilityContext</a> *ctx) <span class="keyword">override</span>;</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;        antlrcpp::Any visitOptControllability(<a class="code" href="classHybridSystemParser_1_1OptControllabilityContext.html">HybridSystemParser::OptControllabilityContext</a> *ctx) <span class="keyword">override</span>;</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;        antlrcpp::Any visitEvents(<a class="code" href="classHybridSystemParser_1_1EventsContext.html">HybridSystemParser::EventsContext</a> *ctx) <span class="keyword">override</span>;</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;        antlrcpp::Any visitEdgeEvent(<a class="code" href="classHybridSystemParser_1_1EdgeEventContext.html">HybridSystemParser::EdgeEventContext</a> *ctx) <span class="keyword">override</span>;</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;        antlrcpp::Any visitIoDecls(<a class="code" href="classHybridSystemParser_1_1IoDeclsContext.html">HybridSystemParser::IoDeclsContext</a> *ctx) <span class="keyword">override</span>;</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;        </div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;        <a class="code" href="classhypro_1_1HybridCIFVisitor.html">HybridCIFVisitor</a>();</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;        ~<a class="code" href="classhypro_1_1HybridCIFVisitor.html">HybridCIFVisitor</a>();</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;        antlrcpp::Any visitSpecification(<a class="code" href="classHybridSystemParser_1_1SpecificationContext.html">HybridSystemParser::SpecificationContext</a> *ctx) <span class="keyword">override</span>;</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;</div>
 <div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;};</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;};</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;</div>
 <div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;} <span class="comment">//namespace hypro</span></div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;<span class="preprocessor">#include &quot;HybridCIFVisitor.tpp&quot;</span></div>
-<div class="ttc" id="classHybridSystemParser_1_1CoreEdgeContext_html"><div class="ttname"><a href="classHybridSystemParser_1_1CoreEdgeContext.html">HybridSystemParser::CoreEdgeContext</a></div><div class="ttdef"><b>Definition:</b> <a href="HybridSystemParser_8h_source.html#l00537">HybridSystemParser.h:537</a></div></div>
-<div class="ttc" id="classHybridSystemParser_1_1EdgeEventContext_html"><div class="ttname"><a href="classHybridSystemParser_1_1EdgeEventContext.html">HybridSystemParser::EdgeEventContext</a></div><div class="ttdef"><b>Definition:</b> <a href="HybridSystemParser_8h_source.html#l00602">HybridSystemParser.h:602</a></div></div>
-<div class="ttc" id="classHybridSystemParser_1_1StdLibFunctionContext_html"><div class="ttname"><a href="classHybridSystemParser_1_1StdLibFunctionContext.html">HybridSystemParser::StdLibFunctionContext</a></div><div class="ttdef"><b>Definition:</b> <a href="HybridSystemParser_8h_source.html#l01402">HybridSystemParser.h:1402</a></div></div>
-<div class="ttc" id="classHybridSystemParser_1_1LocIdElemContext_html"><div class="ttname"><a href="classHybridSystemParser_1_1LocIdElemContext.html">HybridSystemParser::LocIdElemContext</a></div><div class="ttdef"><b>Definition:</b> <a href="HybridSystemParser_8h_source.html#l00656">HybridSystemParser.h:656</a></div></div>
-<div class="ttc" id="classHybridSystemParser_1_1OptControllabilityContext_html"><div class="ttname"><a href="classHybridSystemParser_1_1OptControllabilityContext.html">HybridSystemParser::OptControllabilityContext</a></div><div class="ttdef"><b>Definition:</b> <a href="HybridSystemParser_8h_source.html#l01002">HybridSystemParser.h:1002</a></div></div>
-<div class="ttc" id="classHybridSystemParser_1_1AutomatonBodyContext_html"><div class="ttname"><a href="classHybridSystemParser_1_1AutomatonBodyContext.html">HybridSystemParser::AutomatonBodyContext</a></div><div class="ttdef"><b>Definition:</b> <a href="HybridSystemParser_8h_source.html#l00220">HybridSystemParser.h:220</a></div></div>
-<div class="ttc" id="classHybridSystemParser_1_1IoDeclsContext_html"><div class="ttname"><a href="classHybridSystemParser_1_1IoDeclsContext.html">HybridSystemParser::IoDeclsContext</a></div><div class="ttdef"><b>Definition:</b> <a href="HybridSystemParser_8h_source.html#l01426">HybridSystemParser.h:1426</a></div></div>
-<div class="ttc" id="classHybridSystemParser_1_1DiscDeclContext_html"><div class="ttname"><a href="classHybridSystemParser_1_1DiscDeclContext.html">HybridSystemParser::DiscDeclContext</a></div><div class="ttdef"><b>Definition:</b> <a href="HybridSystemParser_8h_source.html#l00771">HybridSystemParser.h:771</a></div></div>
-<div class="ttc" id="classhypro_1_1HybridCIFVisitor_html"><div class="ttname"><a href="classhypro_1_1HybridCIFVisitor.html">hypro::HybridCIFVisitor</a></div><div class="ttdef"><b>Definition:</b> <a href="HybridCIFVisitor_8h_source.html#l00019">HybridCIFVisitor.h:19</a></div></div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;} <span class="comment">//namespace hypro</span></div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;<span class="preprocessor">#include &quot;HybridCIFVisitor.tpp&quot;</span></div>
+<div class="ttc" id="classHybridSystemParser_1_1EdgeEventContext_html"><div class="ttname"><a href="classHybridSystemParser_1_1EdgeEventContext.html">HybridSystemParser::EdgeEventContext</a></div><div class="ttdef"><b>Definition:</b> <a href="HybridSystemParser_8h_source.html#l01408">HybridSystemParser.h:1408</a></div></div>
+<div class="ttc" id="classHybridSystemParser_1_1StdLibFunctionContext_html"><div class="ttname"><a href="classHybridSystemParser_1_1StdLibFunctionContext.html">HybridSystemParser::StdLibFunctionContext</a></div><div class="ttdef"><b>Definition:</b> <a href="HybridSystemParser_8h_source.html#l01174">HybridSystemParser.h:1174</a></div></div>
+<div class="ttc" id="classHybridSystemParser_1_1OptControllabilityContext_html"><div class="ttname"><a href="classHybridSystemParser_1_1OptControllabilityContext.html">HybridSystemParser::OptControllabilityContext</a></div><div class="ttdef"><b>Definition:</b> <a href="HybridSystemParser_8h_source.html#l00655">HybridSystemParser.h:655</a></div></div>
+<div class="ttc" id="classHybridSystemParser_1_1AutomatonBodyContext_html"><div class="ttname"><a href="classHybridSystemParser_1_1AutomatonBodyContext.html">HybridSystemParser::AutomatonBodyContext</a></div><div class="ttdef"><b>Definition:</b> <a href="HybridSystemParser_8h_source.html#l00218">HybridSystemParser.h:218</a></div></div>
+<div class="ttc" id="classHybridSystemParser_1_1IoDeclsContext_html"><div class="ttname"><a href="classHybridSystemParser_1_1IoDeclsContext.html">HybridSystemParser::IoDeclsContext</a></div><div class="ttdef"><b>Definition:</b> <a href="HybridSystemParser_8h_source.html#l01674">HybridSystemParser.h:1674</a></div></div>
+<div class="ttc" id="classHybridSystemParser_1_1DiscDeclContext_html"><div class="ttname"><a href="classHybridSystemParser_1_1DiscDeclContext.html">HybridSystemParser::DiscDeclContext</a></div><div class="ttdef"><b>Definition:</b> <a href="HybridSystemParser_8h_source.html#l00602">HybridSystemParser.h:602</a></div></div>
+<div class="ttc" id="classhypro_1_1HybridCIFVisitor_html"><div class="ttname"><a href="classhypro_1_1HybridCIFVisitor.html">hypro::HybridCIFVisitor</a></div><div class="ttdef"><b>Definition:</b> <a href="HybridCIFVisitor_8h_source.html#l00020">HybridCIFVisitor.h:20</a></div></div>
 <div class="ttc" id="classHybridSystemBaseVisitor_html"><div class="ttname"><a href="classHybridSystemBaseVisitor.html">HybridSystemBaseVisitor</a></div><div class="ttdef"><b>Definition:</b> <a href="HybridSystemBaseVisitor_8h_source.html#l00015">HybridSystemBaseVisitor.h:15</a></div></div>
-<div class="ttc" id="classHybridSystemParser_1_1EventsContext_html"><div class="ttname"><a href="classHybridSystemParser_1_1EventsContext.html">HybridSystemParser::EventsContext</a></div><div class="ttdef"><b>Definition:</b> <a href="HybridSystemParser_8h_source.html#l00524">HybridSystemParser.h:524</a></div></div>
-<div class="ttc" id="classHybridSystemParser_1_1SpecificationContext_html"><div class="ttname"><a href="classHybridSystemParser_1_1SpecificationContext.html">HybridSystemParser::SpecificationContext</a></div><div class="ttdef"><b>Definition:</b> <a href="HybridSystemParser_8h_source.html#l00196">HybridSystemParser.h:196</a></div></div>
-<div class="ttc" id="classHybridSystemParser_1_1LocationsContext_html"><div class="ttname"><a href="classHybridSystemParser_1_1LocationsContext.html">HybridSystemParser::LocationsContext</a></div><div class="ttdef"><b>Definition:</b> <a href="HybridSystemParser_8h_source.html#l00615">HybridSystemParser.h:615</a></div></div>
-<div class="ttc" id="classHybridSystemParser_1_1ControllabilityContext_html"><div class="ttname"><a href="classHybridSystemParser_1_1ControllabilityContext.html">HybridSystemParser::ControllabilityContext</a></div><div class="ttdef"><b>Definition:</b> <a href="HybridSystemParser_8h_source.html#l01014">HybridSystemParser.h:1014</a></div></div>
-<div class="ttc" id="classHybridSystemParser_1_1LocElemContext_html"><div class="ttname"><a href="classHybridSystemParser_1_1LocElemContext.html">HybridSystemParser::LocElemContext</a></div><div class="ttdef"><b>Definition:</b> <a href="HybridSystemParser_8h_source.html#l00641">HybridSystemParser.h:641</a></div></div>
+<div class="ttc" id="classHybridSystemParser_1_1EventsContext_html"><div class="ttname"><a href="classHybridSystemParser_1_1EventsContext.html">HybridSystemParser::EventsContext</a></div><div class="ttdef"><b>Definition:</b> <a href="HybridSystemParser_8h_source.html#l00522">HybridSystemParser.h:522</a></div></div>
+<div class="ttc" id="classHybridSystemParser_1_1SpecificationContext_html"><div class="ttname"><a href="classHybridSystemParser_1_1SpecificationContext.html">HybridSystemParser::SpecificationContext</a></div><div class="ttdef"><b>Definition:</b> <a href="HybridSystemParser_8h_source.html#l00194">HybridSystemParser.h:194</a></div></div>
+<div class="ttc" id="classHybridSystemParser_1_1ControllabilityContext_html"><div class="ttname"><a href="classHybridSystemParser_1_1ControllabilityContext.html">HybridSystemParser::ControllabilityContext</a></div><div class="ttdef"><b>Definition:</b> <a href="HybridSystemParser_8h_source.html#l00667">HybridSystemParser.h:667</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- HTML footer for doxygen 1.8.12-->

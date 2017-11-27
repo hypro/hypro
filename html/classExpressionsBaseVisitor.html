@@ -129,6 +129,15 @@ virtual antlrcpp::Any&#160;</td><td class="memItemRight" valign="bottom"><b>visi
 <tr class="memitem:ae4d19444fa46adaa84275101ca0d72dd"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae4d19444fa46adaa84275101ca0d72dd"></a>
 virtual antlrcpp::Any&#160;</td><td class="memItemRight" valign="bottom"><b>visitExpression</b> (<a class="el" href="classExpressionsParser_1_1ExpressionContext.html">ExpressionsParser::ExpressionContext</a> *ctx) override</td></tr>
 <tr class="separator:ae4d19444fa46adaa84275101ca0d72dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1f7ae57cce0d45e264ef4a0f272246cd"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1f7ae57cce0d45e264ef4a0f272246cd"></a>
+virtual antlrcpp::Any&#160;</td><td class="memItemRight" valign="bottom"><b>visitEquations</b> (<a class="el" href="classExpressionsParser_1_1EquationsContext.html">ExpressionsParser::EquationsContext</a> *ctx) override</td></tr>
+<tr class="separator:a1f7ae57cce0d45e264ef4a0f272246cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae6244d8d34f3ecabd981bea321a138ee"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae6244d8d34f3ecabd981bea321a138ee"></a>
+virtual antlrcpp::Any&#160;</td><td class="memItemRight" valign="bottom"><b>visitEquationDerivate</b> (<a class="el" href="classExpressionsParser_1_1EquationDerivateContext.html">ExpressionsParser::EquationDerivateContext</a> *ctx) override</td></tr>
+<tr class="separator:ae6244d8d34f3ecabd981bea321a138ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3347b143621260078e66caa2a8dd1702"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3347b143621260078e66caa2a8dd1702"></a>
+virtual antlrcpp::Any&#160;</td><td class="memItemRight" valign="bottom"><b>visitEquationNonDerivate</b> (<a class="el" href="classExpressionsParser_1_1EquationNonDerivateContext.html">ExpressionsParser::EquationNonDerivateContext</a> *ctx) override</td></tr>
+<tr class="separator:a3347b143621260078e66caa2a8dd1702"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af1bc3b071ad40e6bc773094a7c905715"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af1bc3b071ad40e6bc773094a7c905715"></a>
 virtual antlrcpp::Any&#160;</td><td class="memItemRight" valign="bottom"><b>visitOrExpression</b> (<a class="el" href="classExpressionsParser_1_1OrExpressionContext.html">ExpressionsParser::OrExpressionContext</a> *ctx) override</td></tr>
 <tr class="separator:af1bc3b071ad40e6bc773094a7c905715"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -144,15 +153,33 @@ virtual antlrcpp::Any&#160;</td><td class="memItemRight" valign="bottom"><b>visi
 <tr class="memitem:aa984ae54c2dd4931fabec695b5ebfb88"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa984ae54c2dd4931fabec695b5ebfb88"></a>
 virtual antlrcpp::Any&#160;</td><td class="memItemRight" valign="bottom"><b>visitMulExpression</b> (<a class="el" href="classExpressionsParser_1_1MulExpressionContext.html">ExpressionsParser::MulExpressionContext</a> *ctx) override</td></tr>
 <tr class="separator:aa984ae54c2dd4931fabec695b5ebfb88"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5ce194d54d5477822517aaea9b3662ed"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5ce194d54d5477822517aaea9b3662ed"></a>
-virtual antlrcpp::Any&#160;</td><td class="memItemRight" valign="bottom"><b>visitUnaryExpression</b> (<a class="el" href="classExpressionsParser_1_1UnaryExpressionContext.html">ExpressionsParser::UnaryExpressionContext</a> *ctx) override</td></tr>
-<tr class="separator:a5ce194d54d5477822517aaea9b3662ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a47a6535e02804b7dcf8aa324513fc574"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a47a6535e02804b7dcf8aa324513fc574"></a>
+virtual antlrcpp::Any&#160;</td><td class="memItemRight" valign="bottom"><b>visitUnaryExprFunc</b> (<a class="el" href="classExpressionsParser_1_1UnaryExprFuncContext.html">ExpressionsParser::UnaryExprFuncContext</a> *ctx) override</td></tr>
+<tr class="separator:a47a6535e02804b7dcf8aa324513fc574"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab6c2207e242ea60f3e6687fcffa748b0"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab6c2207e242ea60f3e6687fcffa748b0"></a>
+virtual antlrcpp::Any&#160;</td><td class="memItemRight" valign="bottom"><b>visitUnaryExprMinus</b> (<a class="el" href="classExpressionsParser_1_1UnaryExprMinusContext.html">ExpressionsParser::UnaryExprMinusContext</a> *ctx) override</td></tr>
+<tr class="separator:ab6c2207e242ea60f3e6687fcffa748b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0acfde0869f0e496e76c4fcc166a540e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0acfde0869f0e496e76c4fcc166a540e"></a>
+virtual antlrcpp::Any&#160;</td><td class="memItemRight" valign="bottom"><b>visitUnaryExprPlus</b> (<a class="el" href="classExpressionsParser_1_1UnaryExprPlusContext.html">ExpressionsParser::UnaryExprPlusContext</a> *ctx) override</td></tr>
+<tr class="separator:a0acfde0869f0e496e76c4fcc166a540e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2c7d4407ae7c1c800880998ddcaacbe2"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2c7d4407ae7c1c800880998ddcaacbe2"></a>
+virtual antlrcpp::Any&#160;</td><td class="memItemRight" valign="bottom"><b>visitUnaryExpr</b> (<a class="el" href="classExpressionsParser_1_1UnaryExprContext.html">ExpressionsParser::UnaryExprContext</a> *ctx) override</td></tr>
+<tr class="separator:a2c7d4407ae7c1c800880998ddcaacbe2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abd4d013cf91bed9bbc1a6b61156aede5"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="abd4d013cf91bed9bbc1a6b61156aede5"></a>
 virtual antlrcpp::Any&#160;</td><td class="memItemRight" valign="bottom"><b>visitFuncExpression</b> (<a class="el" href="classExpressionsParser_1_1FuncExpressionContext.html">ExpressionsParser::FuncExpressionContext</a> *ctx) override</td></tr>
 <tr class="separator:abd4d013cf91bed9bbc1a6b61156aede5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab08851806f1d9637fe7ac34d3bf6ab0c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab08851806f1d9637fe7ac34d3bf6ab0c"></a>
-virtual antlrcpp::Any&#160;</td><td class="memItemRight" valign="bottom"><b>visitExpressionFactor</b> (<a class="el" href="classExpressionsParser_1_1ExpressionFactorContext.html">ExpressionsParser::ExpressionFactorContext</a> *ctx) override</td></tr>
-<tr class="separator:ab08851806f1d9637fe7ac34d3bf6ab0c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0a93f1d0d43cf346471a95559ce3cb20"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0a93f1d0d43cf346471a95559ce3cb20"></a>
+virtual antlrcpp::Any&#160;</td><td class="memItemRight" valign="bottom"><b>visitExprFact</b> (<a class="el" href="classExpressionsParser_1_1ExprFactContext.html">ExpressionsParser::ExprFactContext</a> *ctx) override</td></tr>
+<tr class="separator:a0a93f1d0d43cf346471a95559ce3cb20"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aec7415af2302c36d904123f12d2a6e21"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aec7415af2302c36d904123f12d2a6e21"></a>
+virtual antlrcpp::Any&#160;</td><td class="memItemRight" valign="bottom"><b>visitExprFactNumber</b> (<a class="el" href="classExpressionsParser_1_1ExprFactNumberContext.html">ExpressionsParser::ExprFactNumberContext</a> *ctx) override</td></tr>
+<tr class="separator:aec7415af2302c36d904123f12d2a6e21"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abe6fca57d047e16b48bae437032dc388"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="abe6fca57d047e16b48bae437032dc388"></a>
+virtual antlrcpp::Any&#160;</td><td class="memItemRight" valign="bottom"><b>visitExprFactRealNumber</b> (<a class="el" href="classExpressionsParser_1_1ExprFactRealNumberContext.html">ExpressionsParser::ExprFactRealNumberContext</a> *ctx) override</td></tr>
+<tr class="separator:abe6fca57d047e16b48bae437032dc388"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af2618eaaea3fb6c4dd68f10b11d022a1"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af2618eaaea3fb6c4dd68f10b11d022a1"></a>
+virtual antlrcpp::Any&#160;</td><td class="memItemRight" valign="bottom"><b>visitExprFactName</b> (<a class="el" href="classExpressionsParser_1_1ExprFactNameContext.html">ExpressionsParser::ExprFactNameContext</a> *ctx) override</td></tr>
+<tr class="separator:af2618eaaea3fb6c4dd68f10b11d022a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a69eaafa230c1aab84c45149ac8d56048"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a69eaafa230c1aab84c45149ac8d56048"></a>
 virtual antlrcpp::Any&#160;</td><td class="memItemRight" valign="bottom"><b>visitNonEmptySetExpression</b> (<a class="el" href="classExpressionsParser_1_1NonEmptySetExpressionContext.html">ExpressionsParser::NonEmptySetExpressionContext</a> *ctx) override</td></tr>
 <tr class="separator:a69eaafa230c1aab84c45149ac8d56048"><td class="memSeparator" colspan="2">&#160;</td></tr>

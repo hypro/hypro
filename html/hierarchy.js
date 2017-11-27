@@ -4,6 +4,9 @@ var hierarchy =
     [ "hypro::reachability::_glp_graph", "structhypro_1_1reachability_1_1__glp__graph.html", null ],
     [ "hypro::reachability::_glp_vertex", "structhypro_1_1reachability_1_1__glp__vertex.html", null ],
     [ "AbstractParseTreeVisitor", null, [
+      [ "CIFLocationVisitor", "classCIFLocationVisitor.html", [
+        [ "CIFLocationBaseVisitor", "classCIFLocationBaseVisitor.html", null ]
+      ] ],
       [ "ExpressionsVisitor", "classExpressionsVisitor.html", [
         [ "ExpressionsBaseVisitor", "classExpressionsBaseVisitor.html", null ]
       ] ],
@@ -20,6 +23,8 @@ var hierarchy =
       ] ],
       [ "HybridSystemVisitor", "classHybridSystemVisitor.html", [
         [ "HybridSystemBaseVisitor", "classHybridSystemBaseVisitor.html", [
+          [ "hypro::CIFExprVisitor< Number >", "classhypro_1_1CIFExprVisitor.html", null ],
+          [ "hypro::CIFLocVisitor< Number >", "classhypro_1_1CIFLocVisitor.html", null ],
           [ "hypro::HybridCIFVisitor< Number >", "classhypro_1_1HybridCIFVisitor.html", null ]
         ] ]
       ] ],
@@ -32,6 +37,10 @@ var hierarchy =
     [ "BaseErrorListener", null, [
       [ "hypro::ErrorListener", "classhypro_1_1ErrorListener.html", null ]
     ] ],
+    [ "hypro::reachability::hypro::BoxLinearOptimizationOff", "structhypro_1_1reachability_1_1hypro_1_1BoxLinearOptimizationOff.html", null ],
+    [ "hypro::BoxLinearOptimizationOff", "structhypro_1_1BoxLinearOptimizationOff.html", null ],
+    [ "hypro::reachability::hypro::BoxLinearOptimizationOn", "structhypro_1_1reachability_1_1hypro_1_1BoxLinearOptimizationOn.html", null ],
+    [ "hypro::BoxLinearOptimizationOn", "structhypro_1_1BoxLinearOptimizationOn.html", null ],
     [ "hypro::reachability::hypro::Cacheable< Content >", "structhypro_1_1reachability_1_1hypro_1_1Cacheable.html", null ],
     [ "hypro::Cacheable< Content >", "structhypro_1_1Cacheable.html", null ],
     [ "hypro::Condition< Number >", "classhypro_1_1Condition.html", null ],
@@ -50,8 +59,8 @@ var hierarchy =
     [ "hypro::Domain< Number >", "classhypro_1_1Domain.html", null ],
     [ "hypro::EllipsoidSupportFunction< Number >", "classhypro_1_1EllipsoidSupportFunction.html", null ],
     [ "hypro::reachability::hypro::EllipsoidSupportFunction< Number >", "classhypro_1_1reachability_1_1hypro_1_1EllipsoidSupportFunction.html", null ],
-    [ "hypro::EllipsoidT< Number, Converter >", "classhypro_1_1EllipsoidT.html", null ],
     [ "hypro::reachability::hypro::EllipsoidT< Number, Converter >", "classhypro_1_1reachability_1_1hypro_1_1EllipsoidT.html", null ],
+    [ "hypro::EllipsoidT< Number, Converter >", "classhypro_1_1EllipsoidT.html", null ],
     [ "hypro::parser::ErrorHandler", "structhypro_1_1parser_1_1ErrorHandler.html", null ],
     [ "hypro::reachability::hypro::EvaluationResult< Number >", "structhypro_1_1reachability_1_1hypro_1_1EvaluationResult.html", null ],
     [ "hypro::EvaluationResult< Number >", "structhypro_1_1EvaluationResult.html", null ],
@@ -434,56 +443,58 @@ var hierarchy =
       [ "hypro::reachability::hypro::Eigen::NumTraits< carl::Interval< Number > >", "structhypro_1_1reachability_1_1hypro_1_1Eigen_1_1NumTraits_3_01carl_1_1Interval_3_01Number_01_4_01_4.html", null ],
       [ "hypro::reachability::hypro::Eigen::NumTraits< mpq_class >", "structhypro_1_1reachability_1_1hypro_1_1Eigen_1_1NumTraits_3_01mpq__class_01_4.html", null ]
     ] ],
-    [ "hypro::reachability::hypro::GeometricObject< Number, DerivedShape >", "classhypro_1_1reachability_1_1hypro_1_1GeometricObject.html", [
-      [ "hypro::reachability::hypro::ConstraintSetT< Number, Converter >", "classhypro_1_1reachability_1_1hypro_1_1ConstraintSetT.html", null ],
-      [ "hypro::reachability::hypro::ZonotopeT< Number, Converter >", "classhypro_1_1reachability_1_1hypro_1_1ZonotopeT.html", null ]
+    [ "hypro::reachability::hypro::GeometricObject< Number, DerivedShape >", "classhypro_1_1reachability_1_1hypro_1_1GeometricObject.html", null ],
+    [ "hypro::GeometricObject< Number, DerivedShape >", "classhypro_1_1GeometricObject.html", null ],
+    [ "hypro::reachability::hypro::GeometricObject< double, BoxT< double, Converter, Setting > >", "classhypro_1_1reachability_1_1hypro_1_1GeometricObject.html", [
+      [ "hypro::reachability::hypro::BoxT< double, Converter, Setting >", "classhypro_1_1reachability_1_1hypro_1_1BoxT_3_01double_00_01Converter_00_01Setting_01_4.html", null ],
+      [ "hypro::reachability::hypro::BoxT< double, Converter, Setting >", "classhypro_1_1reachability_1_1hypro_1_1BoxT_3_01double_00_01Converter_00_01Setting_01_4.html", null ]
     ] ],
-    [ "hypro::GeometricObject< Number, DerivedShape >", "classhypro_1_1GeometricObject.html", [
-      [ "hypro::BoxT< Number, Converter >", "classhypro_1_1BoxT.html", null ],
-      [ "hypro::HPolytopeT< Number, Converter >", "classhypro_1_1HPolytopeT.html", null ]
+    [ "hypro::GeometricObject< double, BoxT< double, Converter, Setting > >", "classhypro_1_1GeometricObject.html", [
+      [ "hypro::BoxT< double, Converter, Setting >", "classhypro_1_1BoxT_3_01double_00_01Converter_00_01Setting_01_4.html", null ]
     ] ],
-    [ "hypro::GeometricObject< double, BoxT< double, Converter > >", "classhypro_1_1GeometricObject.html", [
-      [ "hypro::BoxT< double, Converter >", "classhypro_1_1BoxT_3_01double_00_01Converter_01_4.html", null ]
+    [ "hypro::reachability::hypro::GeometricObject< Number, BoxT< Number, Converter, Setting > >", "classhypro_1_1reachability_1_1hypro_1_1GeometricObject.html", [
+      [ "hypro::reachability::hypro::BoxT< Number, Converter, Setting >", "classhypro_1_1reachability_1_1hypro_1_1BoxT.html", null ],
+      [ "hypro::reachability::hypro::BoxT< Number, Converter, Setting >", "classhypro_1_1reachability_1_1hypro_1_1BoxT.html", null ]
     ] ],
-    [ "hypro::reachability::hypro::GeometricObject< double, BoxT< double, Converter > >", "classhypro_1_1reachability_1_1hypro_1_1GeometricObject.html", [
-      [ "hypro::reachability::hypro::BoxT< double, Converter >", "classhypro_1_1reachability_1_1hypro_1_1BoxT_3_01double_00_01Converter_01_4.html", null ],
-      [ "hypro::reachability::hypro::BoxT< double, Converter >", "classhypro_1_1reachability_1_1hypro_1_1BoxT_3_01double_00_01Converter_01_4.html", null ]
+    [ "hypro::GeometricObject< Number, BoxT< Number, Converter, Setting > >", "classhypro_1_1GeometricObject.html", [
+      [ "hypro::BoxT< Number, Converter, Setting >", "classhypro_1_1BoxT.html", null ]
     ] ],
-    [ "hypro::reachability::hypro::GeometricObject< Number, BoxT< Number, Converter > >", "classhypro_1_1reachability_1_1hypro_1_1GeometricObject.html", [
-      [ "hypro::reachability::hypro::BoxT< Number, Converter >", "classhypro_1_1reachability_1_1hypro_1_1BoxT.html", null ],
-      [ "hypro::reachability::hypro::BoxT< Number, Converter >", "classhypro_1_1reachability_1_1hypro_1_1BoxT.html", null ]
+    [ "hypro::GeometricObject< Number, BoxT< Number, hypro::Converter, Setting > >", "classhypro_1_1GeometricObject.html", [
+      [ "hypro::BoxT< Number, hypro::Converter, Setting >", "classhypro_1_1BoxT.html", null ]
     ] ],
-    [ "hypro::GeometricObject< Number, BoxT< Number, Converter > >", "classhypro_1_1GeometricObject.html", null ],
-    [ "hypro::GeometricObject< Number, BoxT< Number, hypro::Converter > >", "classhypro_1_1GeometricObject.html", [
-      [ "hypro::BoxT< Number, hypro::Converter >", "classhypro_1_1BoxT.html", null ]
-    ] ],
-    [ "hypro::reachability::hypro::GeometricObject< Number, BoxT< Number, hypro::reachability::hypro::Converter > >", "classhypro_1_1reachability_1_1hypro_1_1GeometricObject.html", [
-      [ "hypro::reachability::hypro::BoxT< Number, hypro::reachability::hypro::Converter >", "classhypro_1_1reachability_1_1hypro_1_1BoxT.html", null ],
-      [ "hypro::reachability::hypro::BoxT< Number, hypro::reachability::hypro::Converter >", "classhypro_1_1reachability_1_1hypro_1_1BoxT.html", null ]
+    [ "hypro::reachability::hypro::GeometricObject< Number, BoxT< Number, hypro::reachability::hypro::Converter, Setting > >", "classhypro_1_1reachability_1_1hypro_1_1GeometricObject.html", [
+      [ "hypro::reachability::hypro::BoxT< Number, hypro::reachability::hypro::Converter, Setting >", "classhypro_1_1reachability_1_1hypro_1_1BoxT.html", null ],
+      [ "hypro::reachability::hypro::BoxT< Number, hypro::reachability::hypro::Converter, Setting >", "classhypro_1_1reachability_1_1hypro_1_1BoxT.html", null ]
     ] ],
     [ "hypro::GeometricObject< Number, ConstraintSetT< Number, Converter > >", "classhypro_1_1GeometricObject.html", [
       [ "hypro::ConstraintSetT< Number, Converter >", "classhypro_1_1ConstraintSetT.html", null ]
     ] ],
-    [ "hypro::reachability::hypro::GeometricObject< Number, ConstraintSetT< Number, Converter > >", "classhypro_1_1reachability_1_1hypro_1_1GeometricObject.html", null ],
-    [ "hypro::reachability::hypro::GeometricObject< Number, HPolytopeT< Number, Converter > >", "classhypro_1_1reachability_1_1hypro_1_1GeometricObject.html", [
-      [ "hypro::reachability::hypro::HPolytopeT< Number, Converter >", "classhypro_1_1reachability_1_1hypro_1_1HPolytopeT.html", null ]
+    [ "hypro::reachability::hypro::GeometricObject< Number, ConstraintSetT< Number, Converter > >", "classhypro_1_1reachability_1_1hypro_1_1GeometricObject.html", [
+      [ "hypro::reachability::hypro::ConstraintSetT< Number, Converter >", "classhypro_1_1reachability_1_1hypro_1_1ConstraintSetT.html", null ]
     ] ],
-    [ "hypro::GeometricObject< Number, HPolytopeT< Number, Converter > >", "classhypro_1_1GeometricObject.html", null ],
+    [ "hypro::reachability::hypro::GeometricObject< Number, HPolytopeT< Number, Converter, Setting > >", "classhypro_1_1reachability_1_1hypro_1_1GeometricObject.html", [
+      [ "hypro::reachability::hypro::HPolytopeT< Number, Converter, Setting >", "classhypro_1_1reachability_1_1hypro_1_1HPolytopeT.html", null ]
+    ] ],
+    [ "hypro::GeometricObject< Number, HPolytopeT< Number, Converter, Setting > >", "classhypro_1_1GeometricObject.html", [
+      [ "hypro::HPolytopeT< Number, Converter, Setting >", "classhypro_1_1HPolytopeT.html", null ]
+    ] ],
     [ "hypro::GeometricObject< Number, SupportFunctionT< Number, Converter > >", "classhypro_1_1GeometricObject.html", [
       [ "hypro::SupportFunctionT< Number, Converter >", "classhypro_1_1SupportFunctionT.html", null ]
     ] ],
     [ "hypro::reachability::hypro::GeometricObject< Number, SupportFunctionT< Number, Converter > >", "classhypro_1_1reachability_1_1hypro_1_1GeometricObject.html", [
       [ "hypro::reachability::hypro::SupportFunctionT< Number, Converter >", "classhypro_1_1reachability_1_1hypro_1_1SupportFunctionT.html", null ]
     ] ],
-    [ "hypro::GeometricObject< Number, VPolytopeT< Number, Converter > >", "classhypro_1_1GeometricObject.html", [
-      [ "hypro::VPolytopeT< Number, Converter >", "classhypro_1_1VPolytopeT.html", null ]
-    ] ],
     [ "hypro::reachability::hypro::GeometricObject< Number, VPolytopeT< Number, Converter > >", "classhypro_1_1reachability_1_1hypro_1_1GeometricObject.html", [
       [ "hypro::reachability::hypro::VPolytopeT< Number, Converter >", "classhypro_1_1reachability_1_1hypro_1_1VPolytopeT.html", null ]
     ] ],
-    [ "hypro::reachability::hypro::GeometricObject< Number, ZonotopeT< Number, Converter > >", "classhypro_1_1reachability_1_1hypro_1_1GeometricObject.html", null ],
+    [ "hypro::GeometricObject< Number, VPolytopeT< Number, Converter > >", "classhypro_1_1GeometricObject.html", [
+      [ "hypro::VPolytopeT< Number, Converter >", "classhypro_1_1VPolytopeT.html", null ]
+    ] ],
     [ "hypro::GeometricObject< Number, ZonotopeT< Number, Converter > >", "classhypro_1_1GeometricObject.html", [
       [ "hypro::ZonotopeT< Number, Converter >", "classhypro_1_1ZonotopeT.html", null ]
+    ] ],
+    [ "hypro::reachability::hypro::GeometricObject< Number, ZonotopeT< Number, Converter > >", "classhypro_1_1reachability_1_1hypro_1_1GeometricObject.html", [
+      [ "hypro::reachability::hypro::ZonotopeT< Number, Converter >", "classhypro_1_1reachability_1_1hypro_1_1ZonotopeT.html", null ]
     ] ],
     [ "hypro::reachability::glp_attr", "structhypro_1_1reachability_1_1glp__attr.html", null ],
     [ "hypro::reachability::glp_bfcp", "structhypro_1_1reachability_1_1glp__bfcp.html", null ],
@@ -509,8 +520,8 @@ var hierarchy =
       [ "hypro::parser::transitionParser< Iterator, Number >", "structhypro_1_1parser_1_1transitionParser.html", null ],
       [ "hypro::parser::variableParser< Iterator >", "structhypro_1_1parser_1_1variableParser.html", null ]
     ] ],
-    [ "hypro::Grid< Number >", "classhypro_1_1Grid.html", null ],
     [ "hypro::reachability::hypro::Grid< Number >", "classhypro_1_1reachability_1_1hypro_1_1Grid.html", null ],
+    [ "hypro::Grid< Number >", "classhypro_1_1Grid.html", null ],
     [ "hypro::reachability::hypro::Halfspace< Number >", "classhypro_1_1reachability_1_1hypro_1_1Halfspace.html", null ],
     [ "hypro::Halfspace< Number >", "classhypro_1_1Halfspace.html", null ],
     [ "hypro::reachability::std::hash< hypro::Cacheable< Content > >", "structhypro_1_1reachability_1_1std_1_1hash_3_01hypro_1_1Cacheable_3_01Content_01_4_01_4.html", null ],
@@ -525,10 +536,10 @@ var hierarchy =
     [ "hypro::reachability::std::hash< hypro::Point< Number > >", "structhypro_1_1reachability_1_1std_1_1hash_3_01hypro_1_1Point_3_01Number_01_4_01_4.html", null ],
     [ "std::hash< hypro::Ridge< Number > >", "structstd_1_1hash_3_01hypro_1_1Ridge_3_01Number_01_4_01_4.html", null ],
     [ "hypro::reachability::std::hash< hypro::Ridge< Number > >", "structhypro_1_1reachability_1_1std_1_1hash_3_01hypro_1_1Ridge_3_01Number_01_4_01_4.html", null ],
+    [ "hypro::reachability::hypro::std::hash< hypro::vector_t< Number > >", "structhypro_1_1reachability_1_1hypro_1_1std_1_1hash_3_01hypro_1_1vector__t_3_01Number_01_4_01_4.html", null ],
     [ "hypro::reachability::std::hash< hypro::vector_t< Number > >", "structhypro_1_1reachability_1_1std_1_1hash_3_01hypro_1_1vector__t_3_01Number_01_4_01_4.html", null ],
     [ "hypro::std::hash< hypro::vector_t< Number > >", "structhypro_1_1std_1_1hash_3_01hypro_1_1vector__t_3_01Number_01_4_01_4.html", null ],
     [ "std::hash< hypro::vector_t< Number > >", "structstd_1_1hash_3_01hypro_1_1vector__t_3_01Number_01_4_01_4.html", null ],
-    [ "hypro::reachability::hypro::std::hash< hypro::vector_t< Number > >", "structhypro_1_1reachability_1_1hypro_1_1std_1_1hash_3_01hypro_1_1vector__t_3_01Number_01_4_01_4.html", null ],
     [ "std::hash< hypro::Vertex< Number > >", "structstd_1_1hash_3_01hypro_1_1Vertex_3_01Number_01_4_01_4.html", null ],
     [ "hypro::reachability::std::hash< hypro::Vertex< Number > >", "structhypro_1_1reachability_1_1std_1_1hash_3_01hypro_1_1Vertex_3_01Number_01_4_01_4.html", null ],
     [ "std::hash< hypro::VertexContainer< Number > >", "structstd_1_1hash_3_01hypro_1_1VertexContainer_3_01Number_01_4_01_4.html", null ],
@@ -536,14 +547,16 @@ var hierarchy =
     [ "std::hash< set< hypro::Vertex< Number > > >", "structstd_1_1hash_3_01set_3_01hypro_1_1Vertex_3_01Number_01_4_01_4_01_4.html", null ],
     [ "hypro::reachability::std::hash< set< hypro::Vertex< Number > > >", "structhypro_1_1reachability_1_1std_1_1hash_3_01set_3_01hypro_1_1Vertex_3_01Number_01_4_01_4_01_4.html", null ],
     [ "std::hash< std::pair< first, second > >", "structstd_1_1hash_3_01std_1_1pair_3_01first_00_01second_01_4_01_4.html", null ],
+    [ "hypro::reachability::hypro::HPolytopeSetting", "structhypro_1_1reachability_1_1hypro_1_1HPolytopeSetting.html", null ],
+    [ "hypro::HPolytopeSetting", "structhypro_1_1HPolytopeSetting.html", null ],
     [ "hypro::HybridAutomaton< Number >", "classhypro_1_1HybridAutomaton.html", null ],
     [ "hypro::intersectionContent< Number >", "structhypro_1_1intersectionContent.html", null ],
     [ "hypro::reachability::hypro::intersectionContent< Number >", "structhypro_1_1reachability_1_1hypro_1_1intersectionContent.html", null ],
     [ "Lexer", null, [
       [ "BadStatesLexer", "classBadStatesLexer.html", null ],
+      [ "CIFLocationLexer", "classCIFLocationLexer.html", null ],
       [ "ExpressionsLexer", "classExpressionsLexer.html", null ],
       [ "FormulaLexer", "classFormulaLexer.html", null ],
-      [ "HybridAutomatonLexer", "classHybridAutomatonLexer.html", null ],
       [ "HybridAutomatonLexer", "classHybridAutomatonLexer.html", null ],
       [ "HybridSystemLexer", "classHybridSystemLexer.html", null ],
       [ "InitialSetLexer", "classInitialSetLexer.html", null ],
@@ -552,10 +565,10 @@ var hierarchy =
       [ "SettingLexer", "classSettingLexer.html", null ],
       [ "TransitionLexer", "classTransitionLexer.html", null ]
     ] ],
-    [ "ZUtility::Line_t< Number >", "structZUtility_1_1Line__t.html", null ],
     [ "hypro::reachability::ZUtility::Line_t< Number >", "structhypro_1_1reachability_1_1ZUtility_1_1Line__t.html", null ],
-    [ "hypro::lintrafoParameters< Number >", "structhypro_1_1lintrafoParameters.html", null ],
+    [ "ZUtility::Line_t< Number >", "structZUtility_1_1Line__t.html", null ],
     [ "hypro::reachability::hypro::lintrafoParameters< Number >", "structhypro_1_1reachability_1_1hypro_1_1lintrafoParameters.html", null ],
+    [ "hypro::lintrafoParameters< Number >", "structhypro_1_1lintrafoParameters.html", null ],
     [ "hypro::reachability::hypro::Location< Number >", "classhypro_1_1reachability_1_1hypro_1_1Location.html", null ],
     [ "hypro::Location< Number >", "classhypro_1_1Location.html", null ],
     [ "hypro::locPtrComp< Number >", "structhypro_1_1locPtrComp.html", null ],
@@ -564,21 +577,19 @@ var hierarchy =
     [ "hypro::reachability::hypro::NeighborhoodContainer", "classhypro_1_1reachability_1_1hypro_1_1NeighborhoodContainer.html", null ],
     [ "hypro::NeighborhoodContainer", "classhypro_1_1NeighborhoodContainer.html", null ],
     [ "hypro::reachability::Eigen::NumTraits< carl::FLOAT_T< Number > >", "structhypro_1_1reachability_1_1Eigen_1_1NumTraits_3_01carl_1_1FLOAT__T_3_01Number_01_4_01_4.html", null ],
-    [ "Eigen::NumTraits< carl::FLOAT_T< Number > >", "structEigen_1_1NumTraits_3_01carl_1_1FLOAT__T_3_01Number_01_4_01_4.html", null ],
     [ "hypro::Eigen::NumTraits< carl::FLOAT_T< Number > >", "structhypro_1_1Eigen_1_1NumTraits_3_01carl_1_1FLOAT__T_3_01Number_01_4_01_4.html", null ],
+    [ "Eigen::NumTraits< carl::FLOAT_T< Number > >", "structEigen_1_1NumTraits_3_01carl_1_1FLOAT__T_3_01Number_01_4_01_4.html", null ],
     [ "hypro::reachability::hypro::Eigen::NumTraits< carl::FLOAT_T< Number > >", "structhypro_1_1reachability_1_1hypro_1_1Eigen_1_1NumTraits_3_01carl_1_1FLOAT__T_3_01Number_01_4_01_4.html", null ],
-    [ "hypro::Optimizer< Number >", "classhypro_1_1Optimizer.html", null ],
     [ "hypro::reachability::hypro::Optimizer< Number >", "classhypro_1_1reachability_1_1hypro_1_1Optimizer.html", null ],
-    [ "hypro::reachability::ZUtility::Options", "structhypro_1_1reachability_1_1ZUtility_1_1Options.html", null ],
-    [ "ZUtility::Options", "structZUtility_1_1Options.html", null ],
+    [ "hypro::Optimizer< Number >", "classhypro_1_1Optimizer.html", null ],
     [ "hypro::OrthogonalPolyhedron< Number, NEIGHBORHOOD >", "classhypro_1_1OrthogonalPolyhedron.html", null ],
-    [ "hypro::OrthogonalPolyhedronT< Number, Converter, Type >", "classhypro_1_1OrthogonalPolyhedronT.html", null ],
-    [ "hypro::reachability::hypro::OrthogonalPolyhedronT< Number, Converter, Type >", "classhypro_1_1reachability_1_1hypro_1_1OrthogonalPolyhedronT.html", null ],
+    [ "hypro::OrthogonalPolyhedronT< Number, Converter, Setting, Type >", "classhypro_1_1OrthogonalPolyhedronT.html", null ],
+    [ "hypro::reachability::hypro::OrthogonalPolyhedronT< Number, Converter, Setting, Type >", "classhypro_1_1reachability_1_1hypro_1_1OrthogonalPolyhedronT.html", null ],
     [ "Parser", null, [
       [ "BadStatesParser", "classBadStatesParser.html", null ],
+      [ "CIFLocationParser", "classCIFLocationParser.html", null ],
       [ "ExpressionsParser", "classExpressionsParser.html", null ],
       [ "FormulaParser", "classFormulaParser.html", null ],
-      [ "HybridAutomatonParser", "classHybridAutomatonParser.html", null ],
       [ "HybridAutomatonParser", "classHybridAutomatonParser.html", null ],
       [ "HybridSystemParser", "classHybridSystemParser.html", null ],
       [ "InitialSetParser", "classInitialSetParser.html", null ],
@@ -588,22 +599,125 @@ var hierarchy =
       [ "TransitionParser", "classTransitionParser.html", null ]
     ] ],
     [ "ParserRuleContext", null, [
-      [ "BadStatesParser::BadstateContext", "classBadStatesParser_1_1BadstateContext.html", null ],
       [ "BadStatesParser::ConnectorContext", "classBadStatesParser_1_1ConnectorContext.html", null ],
       [ "BadStatesParser::ConstraintContext", "classBadStatesParser_1_1ConstraintContext.html", null ],
       [ "BadStatesParser::ConstrsetContext", "classBadStatesParser_1_1ConstrsetContext.html", null ],
       [ "BadStatesParser::EquationContext", "classBadStatesParser_1_1EquationContext.html", null ],
+      [ "BadStatesParser::GbadstateContext", "classBadStatesParser_1_1GbadstateContext.html", null ],
       [ "BadStatesParser::IntervalContext", "classBadStatesParser_1_1IntervalContext.html", null ],
       [ "BadStatesParser::IntervalexprContext", "classBadStatesParser_1_1IntervalexprContext.html", null ],
+      [ "BadStatesParser::LbadstateContext", "classBadStatesParser_1_1LbadstateContext.html", null ],
       [ "BadStatesParser::PolynomContext", "classBadStatesParser_1_1PolynomContext.html", null ],
       [ "BadStatesParser::TermContext", "classBadStatesParser_1_1TermContext.html", null ],
       [ "BadStatesParser::UnsafesetContext", "classBadStatesParser_1_1UnsafesetContext.html", null ],
+      [ "CIFLocationParser::AddExpressionContext", "classCIFLocationParser_1_1AddExpressionContext.html", null ],
+      [ "CIFLocationParser::AdressableContext", "classCIFLocationParser_1_1AdressableContext.html", [
+        [ "CIFLocationParser::AdressableIdContext", "classCIFLocationParser_1_1AdressableIdContext.html", null ],
+        [ "CIFLocationParser::AdressablePairContext", "classCIFLocationParser_1_1AdressablePairContext.html", null ],
+        [ "CIFLocationParser::AdressableProjContext", "classCIFLocationParser_1_1AdressableProjContext.html", null ]
+      ] ],
+      [ "CIFLocationParser::AdressablesContext", "classCIFLocationParser_1_1AdressablesContext.html", null ],
+      [ "CIFLocationParser::AndExpressionContext", "classCIFLocationParser_1_1AndExpressionContext.html", null ],
+      [ "CIFLocationParser::CompareExpressionContext", "classCIFLocationParser_1_1CompareExpressionContext.html", null ],
+      [ "CIFLocationParser::CoreEdgeContext", "classCIFLocationParser_1_1CoreEdgeContext.html", null ],
+      [ "CIFLocationParser::DictPairsContext", "classCIFLocationParser_1_1DictPairsContext.html", null ],
+      [ "CIFLocationParser::EdgeEventContext", "classCIFLocationParser_1_1EdgeEventContext.html", null ],
+      [ "CIFLocationParser::EdgeEventsContext", "classCIFLocationParser_1_1EdgeEventsContext.html", null ],
+      [ "CIFLocationParser::EquationContext", "classCIFLocationParser_1_1EquationContext.html", [
+        [ "CIFLocationParser::EquationDerivateContext", "classCIFLocationParser_1_1EquationDerivateContext.html", null ],
+        [ "CIFLocationParser::EquationNonDerivateContext", "classCIFLocationParser_1_1EquationNonDerivateContext.html", null ]
+      ] ],
+      [ "CIFLocationParser::EquationsContext", "classCIFLocationParser_1_1EquationsContext.html", null ],
+      [ "CIFLocationParser::ExpressionContext", "classCIFLocationParser_1_1ExpressionContext.html", null ],
+      [ "CIFLocationParser::ExpressionFactorContext", "classCIFLocationParser_1_1ExpressionFactorContext.html", [
+        [ "CIFLocationParser::ExprFactContext", "classCIFLocationParser_1_1ExprFactContext.html", null ],
+        [ "CIFLocationParser::ExprFactNameContext", "classCIFLocationParser_1_1ExprFactNameContext.html", null ],
+        [ "CIFLocationParser::ExprFactNumberContext", "classCIFLocationParser_1_1ExprFactNumberContext.html", null ],
+        [ "CIFLocationParser::ExprFactRealNumberContext", "classCIFLocationParser_1_1ExprFactRealNumberContext.html", null ]
+      ] ],
+      [ "CIFLocationParser::ExpressionsContext", "classCIFLocationParser_1_1ExpressionsContext.html", null ],
+      [ "CIFLocationParser::FieldContext", "classCIFLocationParser_1_1FieldContext.html", null ],
+      [ "CIFLocationParser::FieldsContext", "classCIFLocationParser_1_1FieldsContext.html", null ],
+      [ "CIFLocationParser::FuncExpressionContext", "classCIFLocationParser_1_1FuncExpressionContext.html", null ],
+      [ "CIFLocationParser::IdentifierContext", "classCIFLocationParser_1_1IdentifierContext.html", null ],
+      [ "CIFLocationParser::InvariantContext", "classCIFLocationParser_1_1InvariantContext.html", [
+        [ "CIFLocationParser::InvDisablesContext", "classCIFLocationParser_1_1InvDisablesContext.html", null ],
+        [ "CIFLocationParser::InvDisablesSetContext", "classCIFLocationParser_1_1InvDisablesSetContext.html", null ],
+        [ "CIFLocationParser::InvExprContext", "classCIFLocationParser_1_1InvExprContext.html", null ],
+        [ "CIFLocationParser::InvNeedsContext", "classCIFLocationParser_1_1InvNeedsContext.html", null ],
+        [ "CIFLocationParser::InvNeedsSetContext", "classCIFLocationParser_1_1InvNeedsSetContext.html", null ]
+      ] ],
+      [ "CIFLocationParser::InvariantDeclsContext", "classCIFLocationParser_1_1InvariantDeclsContext.html", null ],
+      [ "CIFLocationParser::InvariantsContext", "classCIFLocationParser_1_1InvariantsContext.html", null ],
+      [ "CIFLocationParser::LocationContext", "classCIFLocationParser_1_1LocationContext.html", [
+        [ "CIFLocationParser::LocContext", "classCIFLocationParser_1_1LocContext.html", null ],
+        [ "CIFLocationParser::LocElemContext", "classCIFLocationParser_1_1LocElemContext.html", null ],
+        [ "CIFLocationParser::LocIdContext", "classCIFLocationParser_1_1LocIdContext.html", null ],
+        [ "CIFLocationParser::LocIdElemContext", "classCIFLocationParser_1_1LocIdElemContext.html", null ]
+      ] ],
+      [ "CIFLocationParser::LocationElementContext", "classCIFLocationParser_1_1LocationElementContext.html", [
+        [ "CIFLocationParser::LocElemEdgeToContext", "classCIFLocationParser_1_1LocElemEdgeToContext.html", null ],
+        [ "CIFLocationParser::LocElemEqsContext", "classCIFLocationParser_1_1LocElemEqsContext.html", null ],
+        [ "CIFLocationParser::LocElemInitialFlagContext", "classCIFLocationParser_1_1LocElemInitialFlagContext.html", null ],
+        [ "CIFLocationParser::LocElemInitialFlagExprContext", "classCIFLocationParser_1_1LocElemInitialFlagExprContext.html", null ],
+        [ "CIFLocationParser::LocElemInvContext", "classCIFLocationParser_1_1LocElemInvContext.html", null ],
+        [ "CIFLocationParser::LocElemLoopContext", "classCIFLocationParser_1_1LocElemLoopContext.html", null ],
+        [ "CIFLocationParser::LocElemMarkedContext", "classCIFLocationParser_1_1LocElemMarkedContext.html", null ],
+        [ "CIFLocationParser::LocElemMarkedExprContext", "classCIFLocationParser_1_1LocElemMarkedExprContext.html", null ],
+        [ "CIFLocationParser::LocElemUrgentContext", "classCIFLocationParser_1_1LocElemUrgentContext.html", null ]
+      ] ],
+      [ "CIFLocationParser::LocationElementsContext", "classCIFLocationParser_1_1LocationElementsContext.html", null ],
+      [ "CIFLocationParser::LocationsContext", "classCIFLocationParser_1_1LocationsContext.html", null ],
+      [ "CIFLocationParser::MulExpressionContext", "classCIFLocationParser_1_1MulExpressionContext.html", null ],
+      [ "CIFLocationParser::NameContext", "classCIFLocationParser_1_1NameContext.html", null ],
+      [ "CIFLocationParser::NamesContext", "classCIFLocationParser_1_1NamesContext.html", null ],
+      [ "CIFLocationParser::NameSetContext", "classCIFLocationParser_1_1NameSetContext.html", null ],
+      [ "CIFLocationParser::NonEmptySetExpressionContext", "classCIFLocationParser_1_1NonEmptySetExpressionContext.html", null ],
+      [ "CIFLocationParser::OptEdgeGuardContext", "classCIFLocationParser_1_1OptEdgeGuardContext.html", null ],
+      [ "CIFLocationParser::OptEdgeUpdateContext", "classCIFLocationParser_1_1OptEdgeUpdateContext.html", null ],
+      [ "CIFLocationParser::OptEdgeUrgentContext", "classCIFLocationParser_1_1OptEdgeUrgentContext.html", null ],
+      [ "CIFLocationParser::OptElifExprsContext", "classCIFLocationParser_1_1OptElifExprsContext.html", null ],
+      [ "CIFLocationParser::OptElifUpdatesContext", "classCIFLocationParser_1_1OptElifUpdatesContext.html", null ],
+      [ "CIFLocationParser::OptElseUpdateContext", "classCIFLocationParser_1_1OptElseUpdateContext.html", null ],
+      [ "CIFLocationParser::OptExpressionContext", "classCIFLocationParser_1_1OptExpressionContext.html", null ],
+      [ "CIFLocationParser::OptSupKindContext", "classCIFLocationParser_1_1OptSupKindContext.html", null ],
+      [ "CIFLocationParser::OrExpressionContext", "classCIFLocationParser_1_1OrExpressionContext.html", null ],
+      [ "CIFLocationParser::ProjectionContext", "classCIFLocationParser_1_1ProjectionContext.html", null ],
+      [ "CIFLocationParser::ProjectionsContext", "classCIFLocationParser_1_1ProjectionsContext.html", null ],
+      [ "CIFLocationParser::StdLibFunctionContext", "classCIFLocationParser_1_1StdLibFunctionContext.html", null ],
+      [ "CIFLocationParser::StringTokenContext", "classCIFLocationParser_1_1StringTokenContext.html", null ],
+      [ "CIFLocationParser::SupKindContext", "classCIFLocationParser_1_1SupKindContext.html", null ],
+      [ "CIFLocationParser::SwitchBodyContext", "classCIFLocationParser_1_1SwitchBodyContext.html", null ],
+      [ "CIFLocationParser::SwitchCasesContext", "classCIFLocationParser_1_1SwitchCasesContext.html", null ],
+      [ "CIFLocationParser::TypeContext", "classCIFLocationParser_1_1TypeContext.html", null ],
+      [ "CIFLocationParser::TypesContext", "classCIFLocationParser_1_1TypesContext.html", null ],
+      [ "CIFLocationParser::UnaryExpressionContext", "classCIFLocationParser_1_1UnaryExpressionContext.html", [
+        [ "CIFLocationParser::UnaryExprContext", "classCIFLocationParser_1_1UnaryExprContext.html", null ],
+        [ "CIFLocationParser::UnaryExprFuncContext", "classCIFLocationParser_1_1UnaryExprFuncContext.html", null ],
+        [ "CIFLocationParser::UnaryExprMinusContext", "classCIFLocationParser_1_1UnaryExprMinusContext.html", null ],
+        [ "CIFLocationParser::UnaryExprPlusContext", "classCIFLocationParser_1_1UnaryExprPlusContext.html", null ]
+      ] ],
+      [ "CIFLocationParser::UpdateContext", "classCIFLocationParser_1_1UpdateContext.html", [
+        [ "CIFLocationParser::UpdateIfContext", "classCIFLocationParser_1_1UpdateIfContext.html", null ],
+        [ "CIFLocationParser::UpdateNonIfContext", "classCIFLocationParser_1_1UpdateNonIfContext.html", null ]
+      ] ],
+      [ "CIFLocationParser::UpdatesContext", "classCIFLocationParser_1_1UpdatesContext.html", null ],
       [ "ExpressionsParser::AddExpressionContext", "classExpressionsParser_1_1AddExpressionContext.html", null ],
       [ "ExpressionsParser::AndExpressionContext", "classExpressionsParser_1_1AndExpressionContext.html", null ],
       [ "ExpressionsParser::CompareExpressionContext", "classExpressionsParser_1_1CompareExpressionContext.html", null ],
       [ "ExpressionsParser::DictPairsContext", "classExpressionsParser_1_1DictPairsContext.html", null ],
+      [ "ExpressionsParser::EquationContext", "classExpressionsParser_1_1EquationContext.html", [
+        [ "ExpressionsParser::EquationDerivateContext", "classExpressionsParser_1_1EquationDerivateContext.html", null ],
+        [ "ExpressionsParser::EquationNonDerivateContext", "classExpressionsParser_1_1EquationNonDerivateContext.html", null ]
+      ] ],
+      [ "ExpressionsParser::EquationsContext", "classExpressionsParser_1_1EquationsContext.html", null ],
       [ "ExpressionsParser::ExpressionContext", "classExpressionsParser_1_1ExpressionContext.html", null ],
-      [ "ExpressionsParser::ExpressionFactorContext", "classExpressionsParser_1_1ExpressionFactorContext.html", null ],
+      [ "ExpressionsParser::ExpressionFactorContext", "classExpressionsParser_1_1ExpressionFactorContext.html", [
+        [ "ExpressionsParser::ExprFactContext", "classExpressionsParser_1_1ExprFactContext.html", null ],
+        [ "ExpressionsParser::ExprFactNameContext", "classExpressionsParser_1_1ExprFactNameContext.html", null ],
+        [ "ExpressionsParser::ExprFactNumberContext", "classExpressionsParser_1_1ExprFactNumberContext.html", null ],
+        [ "ExpressionsParser::ExprFactRealNumberContext", "classExpressionsParser_1_1ExprFactRealNumberContext.html", null ]
+      ] ],
       [ "ExpressionsParser::ExpressionsContext", "classExpressionsParser_1_1ExpressionsContext.html", null ],
       [ "ExpressionsParser::FieldContext", "classExpressionsParser_1_1FieldContext.html", null ],
       [ "ExpressionsParser::FieldsContext", "classExpressionsParser_1_1FieldsContext.html", null ],
@@ -625,7 +739,12 @@ var hierarchy =
       [ "ExpressionsParser::SwitchCasesContext", "classExpressionsParser_1_1SwitchCasesContext.html", null ],
       [ "ExpressionsParser::TypeContext", "classExpressionsParser_1_1TypeContext.html", null ],
       [ "ExpressionsParser::TypesContext", "classExpressionsParser_1_1TypesContext.html", null ],
-      [ "ExpressionsParser::UnaryExpressionContext", "classExpressionsParser_1_1UnaryExpressionContext.html", null ],
+      [ "ExpressionsParser::UnaryExpressionContext", "classExpressionsParser_1_1UnaryExpressionContext.html", [
+        [ "ExpressionsParser::UnaryExprContext", "classExpressionsParser_1_1UnaryExprContext.html", null ],
+        [ "ExpressionsParser::UnaryExprFuncContext", "classExpressionsParser_1_1UnaryExprFuncContext.html", null ],
+        [ "ExpressionsParser::UnaryExprMinusContext", "classExpressionsParser_1_1UnaryExprMinusContext.html", null ],
+        [ "ExpressionsParser::UnaryExprPlusContext", "classExpressionsParser_1_1UnaryExprPlusContext.html", null ]
+      ] ],
       [ "FormulaParser::ConnectorContext", "classFormulaParser_1_1ConnectorContext.html", null ],
       [ "FormulaParser::ConstraintContext", "classFormulaParser_1_1ConstraintContext.html", null ],
       [ "FormulaParser::ConstrsetContext", "classFormulaParser_1_1ConstrsetContext.html", null ],
@@ -635,83 +754,51 @@ var hierarchy =
       [ "FormulaParser::PolynomContext", "classFormulaParser_1_1PolynomContext.html", null ],
       [ "FormulaParser::TermContext", "classFormulaParser_1_1TermContext.html", null ],
       [ "HybridAutomatonParser::ActivitiesContext", "classHybridAutomatonParser_1_1ActivitiesContext.html", null ],
-      [ "HybridAutomatonParser::ActivitiesContext", "classHybridAutomatonParser_1_1ActivitiesContext.html", null ],
-      [ "HybridAutomatonParser::AggregationContext", "classHybridAutomatonParser_1_1AggregationContext.html", null ],
       [ "HybridAutomatonParser::AggregationContext", "classHybridAutomatonParser_1_1AggregationContext.html", null ],
       [ "HybridAutomatonParser::AllocationContext", "classHybridAutomatonParser_1_1AllocationContext.html", null ],
-      [ "HybridAutomatonParser::AllocationContext", "classHybridAutomatonParser_1_1AllocationContext.html", null ],
-      [ "HybridAutomatonParser::BadstateContext", "classHybridAutomatonParser_1_1BadstateContext.html", null ],
-      [ "HybridAutomatonParser::BadstateContext", "classHybridAutomatonParser_1_1BadstateContext.html", null ],
       [ "HybridAutomatonParser::ConnectorContext", "classHybridAutomatonParser_1_1ConnectorContext.html", null ],
       [ "HybridAutomatonParser::ConstraintContext", "classHybridAutomatonParser_1_1ConstraintContext.html", null ],
-      [ "HybridAutomatonParser::ConstraintContext", "classHybridAutomatonParser_1_1ConstraintContext.html", null ],
-      [ "HybridAutomatonParser::ConstrsetContext", "classHybridAutomatonParser_1_1ConstrsetContext.html", null ],
       [ "HybridAutomatonParser::ConstrsetContext", "classHybridAutomatonParser_1_1ConstrsetContext.html", null ],
       [ "HybridAutomatonParser::CutoffContext", "classHybridAutomatonParser_1_1CutoffContext.html", null ],
-      [ "HybridAutomatonParser::CutoffContext", "classHybridAutomatonParser_1_1CutoffContext.html", null ],
-      [ "HybridAutomatonParser::EquationContext", "classHybridAutomatonParser_1_1EquationContext.html", null ],
       [ "HybridAutomatonParser::EquationContext", "classHybridAutomatonParser_1_1EquationContext.html", null ],
       [ "HybridAutomatonParser::FilenameContext", "classHybridAutomatonParser_1_1FilenameContext.html", null ],
-      [ "HybridAutomatonParser::FilenameContext", "classHybridAutomatonParser_1_1FilenameContext.html", null ],
-      [ "HybridAutomatonParser::FixedordersContext", "classHybridAutomatonParser_1_1FixedordersContext.html", null ],
       [ "HybridAutomatonParser::FixedordersContext", "classHybridAutomatonParser_1_1FixedordersContext.html", null ],
       [ "HybridAutomatonParser::FixedstepsContext", "classHybridAutomatonParser_1_1FixedstepsContext.html", null ],
-      [ "HybridAutomatonParser::FixedstepsContext", "classHybridAutomatonParser_1_1FixedstepsContext.html", null ],
       [ "HybridAutomatonParser::FromtoContext", "classHybridAutomatonParser_1_1FromtoContext.html", null ],
-      [ "HybridAutomatonParser::FromtoContext", "classHybridAutomatonParser_1_1FromtoContext.html", null ],
-      [ "HybridAutomatonParser::GuardContext", "classHybridAutomatonParser_1_1GuardContext.html", null ],
+      [ "HybridAutomatonParser::GbadstateContext", "classHybridAutomatonParser_1_1GbadstateContext.html", null ],
       [ "HybridAutomatonParser::GuardContext", "classHybridAutomatonParser_1_1GuardContext.html", null ],
       [ "HybridAutomatonParser::IdentityContext", "classHybridAutomatonParser_1_1IdentityContext.html", null ],
-      [ "HybridAutomatonParser::IdentityContext", "classHybridAutomatonParser_1_1IdentityContext.html", null ],
-      [ "HybridAutomatonParser::InitContext", "classHybridAutomatonParser_1_1InitContext.html", null ],
       [ "HybridAutomatonParser::InitContext", "classHybridAutomatonParser_1_1InitContext.html", null ],
       [ "HybridAutomatonParser::InitstateContext", "classHybridAutomatonParser_1_1InitstateContext.html", null ],
-      [ "HybridAutomatonParser::InitstateContext", "classHybridAutomatonParser_1_1InitstateContext.html", null ],
-      [ "HybridAutomatonParser::IntervalContext", "classHybridAutomatonParser_1_1IntervalContext.html", null ],
       [ "HybridAutomatonParser::IntervalContext", "classHybridAutomatonParser_1_1IntervalContext.html", null ],
       [ "HybridAutomatonParser::IntervalexprContext", "classHybridAutomatonParser_1_1IntervalexprContext.html", null ],
-      [ "HybridAutomatonParser::IntervalexprContext", "classHybridAutomatonParser_1_1IntervalexprContext.html", null ],
-      [ "HybridAutomatonParser::InvariantsContext", "classHybridAutomatonParser_1_1InvariantsContext.html", null ],
       [ "HybridAutomatonParser::InvariantsContext", "classHybridAutomatonParser_1_1InvariantsContext.html", null ],
       [ "HybridAutomatonParser::JumpsContext", "classHybridAutomatonParser_1_1JumpsContext.html", null ],
-      [ "HybridAutomatonParser::JumpsContext", "classHybridAutomatonParser_1_1JumpsContext.html", null ],
-      [ "HybridAutomatonParser::LocationContext", "classHybridAutomatonParser_1_1LocationContext.html", null ],
+      [ "HybridAutomatonParser::LbadstateContext", "classHybridAutomatonParser_1_1LbadstateContext.html", null ],
       [ "HybridAutomatonParser::LocationContext", "classHybridAutomatonParser_1_1LocationContext.html", null ],
       [ "HybridAutomatonParser::MaxjumpsContext", "classHybridAutomatonParser_1_1MaxjumpsContext.html", null ],
-      [ "HybridAutomatonParser::MaxjumpsContext", "classHybridAutomatonParser_1_1MaxjumpsContext.html", null ],
-      [ "HybridAutomatonParser::ModesContext", "classHybridAutomatonParser_1_1ModesContext.html", null ],
       [ "HybridAutomatonParser::ModesContext", "classHybridAutomatonParser_1_1ModesContext.html", null ],
       [ "HybridAutomatonParser::PlotsettingContext", "classHybridAutomatonParser_1_1PlotsettingContext.html", null ],
-      [ "HybridAutomatonParser::PlotsettingContext", "classHybridAutomatonParser_1_1PlotsettingContext.html", null ],
-      [ "HybridAutomatonParser::PolynomContext", "classHybridAutomatonParser_1_1PolynomContext.html", null ],
       [ "HybridAutomatonParser::PolynomContext", "classHybridAutomatonParser_1_1PolynomContext.html", null ],
       [ "HybridAutomatonParser::PrecisionContext", "classHybridAutomatonParser_1_1PrecisionContext.html", null ],
-      [ "HybridAutomatonParser::PrecisionContext", "classHybridAutomatonParser_1_1PrecisionContext.html", null ],
-      [ "HybridAutomatonParser::PrintContext", "classHybridAutomatonParser_1_1PrintContext.html", null ],
       [ "HybridAutomatonParser::PrintContext", "classHybridAutomatonParser_1_1PrintContext.html", null ],
       [ "HybridAutomatonParser::RemainderContext", "classHybridAutomatonParser_1_1RemainderContext.html", null ],
-      [ "HybridAutomatonParser::RemainderContext", "classHybridAutomatonParser_1_1RemainderContext.html", null ],
-      [ "HybridAutomatonParser::ResetfctContext", "classHybridAutomatonParser_1_1ResetfctContext.html", null ],
       [ "HybridAutomatonParser::ResetfctContext", "classHybridAutomatonParser_1_1ResetfctContext.html", null ],
       [ "HybridAutomatonParser::SettingContext", "classHybridAutomatonParser_1_1SettingContext.html", null ],
-      [ "HybridAutomatonParser::SettingContext", "classHybridAutomatonParser_1_1SettingContext.html", null ],
-      [ "HybridAutomatonParser::StartContext", "classHybridAutomatonParser_1_1StartContext.html", null ],
       [ "HybridAutomatonParser::StartContext", "classHybridAutomatonParser_1_1StartContext.html", null ],
       [ "HybridAutomatonParser::TermContext", "classHybridAutomatonParser_1_1TermContext.html", null ],
-      [ "HybridAutomatonParser::TermContext", "classHybridAutomatonParser_1_1TermContext.html", null ],
-      [ "HybridAutomatonParser::TimeContext", "classHybridAutomatonParser_1_1TimeContext.html", null ],
       [ "HybridAutomatonParser::TimeContext", "classHybridAutomatonParser_1_1TimeContext.html", null ],
       [ "HybridAutomatonParser::TransitionContext", "classHybridAutomatonParser_1_1TransitionContext.html", null ],
-      [ "HybridAutomatonParser::TransitionContext", "classHybridAutomatonParser_1_1TransitionContext.html", null ],
-      [ "HybridAutomatonParser::UnsafesetContext", "classHybridAutomatonParser_1_1UnsafesetContext.html", null ],
       [ "HybridAutomatonParser::UnsafesetContext", "classHybridAutomatonParser_1_1UnsafesetContext.html", null ],
       [ "HybridAutomatonParser::UrgentContext", "classHybridAutomatonParser_1_1UrgentContext.html", null ],
-      [ "HybridAutomatonParser::UrgentContext", "classHybridAutomatonParser_1_1UrgentContext.html", null ],
-      [ "HybridAutomatonParser::VardeclarationContext", "classHybridAutomatonParser_1_1VardeclarationContext.html", null ],
       [ "HybridAutomatonParser::VardeclarationContext", "classHybridAutomatonParser_1_1VardeclarationContext.html", null ],
       [ "HybridSystemParser::ActualParmsContext", "classHybridSystemParser_1_1ActualParmsContext.html", null ],
       [ "HybridSystemParser::AddExpressionContext", "classHybridSystemParser_1_1AddExpressionContext.html", null ],
-      [ "HybridSystemParser::AdressableContext", "classHybridSystemParser_1_1AdressableContext.html", null ],
+      [ "HybridSystemParser::AdressableContext", "classHybridSystemParser_1_1AdressableContext.html", [
+        [ "HybridSystemParser::AdressableIdContext", "classHybridSystemParser_1_1AdressableIdContext.html", null ],
+        [ "HybridSystemParser::AdressablePairContext", "classHybridSystemParser_1_1AdressablePairContext.html", null ],
+        [ "HybridSystemParser::AdressableProjContext", "classHybridSystemParser_1_1AdressableProjContext.html", null ]
+      ] ],
       [ "HybridSystemParser::AdressablesContext", "classHybridSystemParser_1_1AdressablesContext.html", null ],
       [ "HybridSystemParser::AlgVarsDefsContext", "classHybridSystemParser_1_1AlgVarsDefsContext.html", null ],
       [ "HybridSystemParser::AndExpressionContext", "classHybridSystemParser_1_1AndExpressionContext.html", null ],
@@ -730,12 +817,20 @@ var hierarchy =
       [ "HybridSystemParser::EdgeEventContext", "classHybridSystemParser_1_1EdgeEventContext.html", null ],
       [ "HybridSystemParser::EdgeEventsContext", "classHybridSystemParser_1_1EdgeEventsContext.html", null ],
       [ "HybridSystemParser::EnumDefsContext", "classHybridSystemParser_1_1EnumDefsContext.html", null ],
-      [ "HybridSystemParser::EquationContext", "classHybridSystemParser_1_1EquationContext.html", null ],
+      [ "HybridSystemParser::EquationContext", "classHybridSystemParser_1_1EquationContext.html", [
+        [ "HybridSystemParser::EquationDerivateContext", "classHybridSystemParser_1_1EquationDerivateContext.html", null ],
+        [ "HybridSystemParser::EquationNonDerivateContext", "classHybridSystemParser_1_1EquationNonDerivateContext.html", null ]
+      ] ],
       [ "HybridSystemParser::EquationsContext", "classHybridSystemParser_1_1EquationsContext.html", null ],
       [ "HybridSystemParser::EventsContext", "classHybridSystemParser_1_1EventsContext.html", null ],
       [ "HybridSystemParser::EventTypeContext", "classHybridSystemParser_1_1EventTypeContext.html", null ],
       [ "HybridSystemParser::ExpressionContext", "classHybridSystemParser_1_1ExpressionContext.html", null ],
-      [ "HybridSystemParser::ExpressionFactorContext", "classHybridSystemParser_1_1ExpressionFactorContext.html", null ],
+      [ "HybridSystemParser::ExpressionFactorContext", "classHybridSystemParser_1_1ExpressionFactorContext.html", [
+        [ "HybridSystemParser::ExprFactContext", "classHybridSystemParser_1_1ExprFactContext.html", null ],
+        [ "HybridSystemParser::ExprFactNameContext", "classHybridSystemParser_1_1ExprFactNameContext.html", null ],
+        [ "HybridSystemParser::ExprFactNumberContext", "classHybridSystemParser_1_1ExprFactNumberContext.html", null ],
+        [ "HybridSystemParser::ExprFactRealNumberContext", "classHybridSystemParser_1_1ExprFactRealNumberContext.html", null ]
+      ] ],
       [ "HybridSystemParser::ExpressionsContext", "classHybridSystemParser_1_1ExpressionsContext.html", null ],
       [ "HybridSystemParser::FieldContext", "classHybridSystemParser_1_1FieldContext.html", null ],
       [ "HybridSystemParser::FieldsContext", "classHybridSystemParser_1_1FieldsContext.html", null ],
@@ -754,7 +849,13 @@ var hierarchy =
       [ "HybridSystemParser::GroupDeclContext", "classHybridSystemParser_1_1GroupDeclContext.html", null ],
       [ "HybridSystemParser::IdentifierContext", "classHybridSystemParser_1_1IdentifierContext.html", null ],
       [ "HybridSystemParser::ImportsContext", "classHybridSystemParser_1_1ImportsContext.html", null ],
-      [ "HybridSystemParser::InvariantContext", "classHybridSystemParser_1_1InvariantContext.html", null ],
+      [ "HybridSystemParser::InvariantContext", "classHybridSystemParser_1_1InvariantContext.html", [
+        [ "HybridSystemParser::InvDisablesContext", "classHybridSystemParser_1_1InvDisablesContext.html", null ],
+        [ "HybridSystemParser::InvDisablesSetContext", "classHybridSystemParser_1_1InvDisablesSetContext.html", null ],
+        [ "HybridSystemParser::InvExprContext", "classHybridSystemParser_1_1InvExprContext.html", null ],
+        [ "HybridSystemParser::InvNeedsContext", "classHybridSystemParser_1_1InvNeedsContext.html", null ],
+        [ "HybridSystemParser::InvNeedsSetContext", "classHybridSystemParser_1_1InvNeedsSetContext.html", null ]
+      ] ],
       [ "HybridSystemParser::InvariantDeclsContext", "classHybridSystemParser_1_1InvariantDeclsContext.html", null ],
       [ "HybridSystemParser::InvariantsContext", "classHybridSystemParser_1_1InvariantsContext.html", null ],
       [ "HybridSystemParser::IoDeclsContext", "classHybridSystemParser_1_1IoDeclsContext.html", null ],
@@ -764,7 +865,17 @@ var hierarchy =
         [ "HybridSystemParser::LocIdContext", "classHybridSystemParser_1_1LocIdContext.html", null ],
         [ "HybridSystemParser::LocIdElemContext", "classHybridSystemParser_1_1LocIdElemContext.html", null ]
       ] ],
-      [ "HybridSystemParser::LocationElementContext", "classHybridSystemParser_1_1LocationElementContext.html", null ],
+      [ "HybridSystemParser::LocationElementContext", "classHybridSystemParser_1_1LocationElementContext.html", [
+        [ "HybridSystemParser::LocElemEdgeToContext", "classHybridSystemParser_1_1LocElemEdgeToContext.html", null ],
+        [ "HybridSystemParser::LocElemEqsContext", "classHybridSystemParser_1_1LocElemEqsContext.html", null ],
+        [ "HybridSystemParser::LocElemInitialFlagContext", "classHybridSystemParser_1_1LocElemInitialFlagContext.html", null ],
+        [ "HybridSystemParser::LocElemInitialFlagExprContext", "classHybridSystemParser_1_1LocElemInitialFlagExprContext.html", null ],
+        [ "HybridSystemParser::LocElemInvContext", "classHybridSystemParser_1_1LocElemInvContext.html", null ],
+        [ "HybridSystemParser::LocElemLoopContext", "classHybridSystemParser_1_1LocElemLoopContext.html", null ],
+        [ "HybridSystemParser::LocElemMarkedContext", "classHybridSystemParser_1_1LocElemMarkedContext.html", null ],
+        [ "HybridSystemParser::LocElemMarkedExprContext", "classHybridSystemParser_1_1LocElemMarkedExprContext.html", null ],
+        [ "HybridSystemParser::LocElemUrgentContext", "classHybridSystemParser_1_1LocElemUrgentContext.html", null ]
+      ] ],
       [ "HybridSystemParser::LocationElementsContext", "classHybridSystemParser_1_1LocationElementsContext.html", null ],
       [ "HybridSystemParser::LocationsContext", "classHybridSystemParser_1_1LocationsContext.html", null ],
       [ "HybridSystemParser::MulExpressionContext", "classHybridSystemParser_1_1MulExpressionContext.html", null ],
@@ -819,8 +930,16 @@ var hierarchy =
       [ "HybridSystemParser::TypeContext", "classHybridSystemParser_1_1TypeContext.html", null ],
       [ "HybridSystemParser::TypeDefsContext", "classHybridSystemParser_1_1TypeDefsContext.html", null ],
       [ "HybridSystemParser::TypesContext", "classHybridSystemParser_1_1TypesContext.html", null ],
-      [ "HybridSystemParser::UnaryExpressionContext", "classHybridSystemParser_1_1UnaryExpressionContext.html", null ],
-      [ "HybridSystemParser::UpdateContext", "classHybridSystemParser_1_1UpdateContext.html", null ],
+      [ "HybridSystemParser::UnaryExpressionContext", "classHybridSystemParser_1_1UnaryExpressionContext.html", [
+        [ "HybridSystemParser::UnaryExprContext", "classHybridSystemParser_1_1UnaryExprContext.html", null ],
+        [ "HybridSystemParser::UnaryExprFuncContext", "classHybridSystemParser_1_1UnaryExprFuncContext.html", null ],
+        [ "HybridSystemParser::UnaryExprMinusContext", "classHybridSystemParser_1_1UnaryExprMinusContext.html", null ],
+        [ "HybridSystemParser::UnaryExprPlusContext", "classHybridSystemParser_1_1UnaryExprPlusContext.html", null ]
+      ] ],
+      [ "HybridSystemParser::UpdateContext", "classHybridSystemParser_1_1UpdateContext.html", [
+        [ "HybridSystemParser::UpdateIfContext", "classHybridSystemParser_1_1UpdateIfContext.html", null ],
+        [ "HybridSystemParser::UpdateNonIfContext", "classHybridSystemParser_1_1UpdateNonIfContext.html", null ]
+      ] ],
       [ "HybridSystemParser::UpdatesContext", "classHybridSystemParser_1_1UpdatesContext.html", null ],
       [ "InitialSetParser::ConnectorContext", "classInitialSetParser_1_1ConnectorContext.html", null ],
       [ "InitialSetParser::ConstraintContext", "classInitialSetParser_1_1ConstraintContext.html", null ],
@@ -932,21 +1051,24 @@ var hierarchy =
       [ "TransitionParser::UrgentContext", "classTransitionParser_1_1UrgentContext.html", null ]
     ] ],
     [ "hypro::Path< Number, tNumber >", "classhypro_1_1Path.html", null ],
-    [ "hypro::hypro::Permutator", "classhypro_1_1hypro_1_1Permutator.html", null ],
+    [ "hypro::reachability::hypro::hypro::Permutator", "classhypro_1_1reachability_1_1hypro_1_1hypro_1_1Permutator.html", null ],
     [ "hypro::reachability::hypro::Permutator", "classhypro_1_1reachability_1_1hypro_1_1Permutator.html", null ],
     [ "hypro::Permutator", "classhypro_1_1Permutator.html", null ],
-    [ "hypro::reachability::hypro::hypro::Permutator", "classhypro_1_1reachability_1_1hypro_1_1hypro_1_1Permutator.html", null ],
+    [ "hypro::hypro::Permutator", "classhypro_1_1hypro_1_1Permutator.html", null ],
     [ "hypro::Point< Number >", "classhypro_1_1Point.html", null ],
     [ "hypro::reachability::hypro::Point< Number >", "classhypro_1_1reachability_1_1hypro_1_1Point.html", null ],
-    [ "hypro::reachability::hypro::Point< int >", "classhypro_1_1reachability_1_1hypro_1_1Point.html", null ],
     [ "hypro::Point< int >", "classhypro_1_1Point.html", null ],
-    [ "hypro::reachability::hypro::Point< std::size_t >", "classhypro_1_1reachability_1_1hypro_1_1Point.html", null ],
+    [ "hypro::reachability::hypro::Point< int >", "classhypro_1_1reachability_1_1hypro_1_1Point.html", null ],
     [ "hypro::Point< std::size_t >", "classhypro_1_1Point.html", null ],
+    [ "hypro::reachability::hypro::Point< std::size_t >", "classhypro_1_1reachability_1_1hypro_1_1Point.html", null ],
     [ "hypro::pointIt< Number >", "structhypro_1_1pointIt.html", null ],
     [ "hypro::reachability::hypro::pointIt< Number >", "structhypro_1_1reachability_1_1hypro_1_1pointIt.html", null ],
     [ "hypro::PolynomialODE< Number >", "classhypro_1_1PolynomialODE.html", null ],
-    [ "hypro::PolytopeSupportFunction< Number >", "classhypro_1_1PolytopeSupportFunction.html", null ],
-    [ "hypro::reachability::hypro::PolytopeSupportFunction< Number >", "classhypro_1_1reachability_1_1hypro_1_1PolytopeSupportFunction.html", null ],
+    [ "hypro::PolytopeSetting", "structhypro_1_1PolytopeSetting.html", null ],
+    [ "hypro::reachability::hypro::PolytopeSupportFunction< Number, Setting >", "classhypro_1_1reachability_1_1hypro_1_1PolytopeSupportFunction.html", null ],
+    [ "hypro::PolytopeSupportFunction< Number, Setting >", "classhypro_1_1PolytopeSupportFunction.html", null ],
+    [ "hypro::PolytopeSupportFunction< Number, hypro::PolytopeSupportFunctionSetting >", "classhypro_1_1PolytopeSupportFunction.html", null ],
+    [ "hypro::reachability::hypro::PolytopeSupportFunction< Number, hypro::reachability::hypro::PolytopeSupportFunctionSetting >", "classhypro_1_1reachability_1_1hypro_1_1PolytopeSupportFunction.html", null ],
     [ "hypro::PrincipalComponentAnalysis< Number >", "classhypro_1_1PrincipalComponentAnalysis.html", null ],
     [ "hypro::reachability::hypro::PrincipalComponentAnalysis< Number >", "classhypro_1_1reachability_1_1hypro_1_1PrincipalComponentAnalysis.html", null ],
     [ "hypro::reachability::hypro::projectionContent< Number >", "structhypro_1_1reachability_1_1hypro_1_1projectionContent.html", null ],
@@ -1076,10 +1198,28 @@ var hierarchy =
     ] ],
     [ "hypro::sumContent< Number >", "structhypro_1_1sumContent.html", null ],
     [ "hypro::reachability::hypro::sumContent< Number >", "structhypro_1_1reachability_1_1hypro_1_1sumContent.html", null ],
-    [ "hypro::reachability::hypro::SupportFunctionContent< Number >", "classhypro_1_1reachability_1_1hypro_1_1SupportFunctionContent.html", null ],
     [ "hypro::SupportFunctionContent< Number >", "classhypro_1_1SupportFunctionContent.html", [
-      [ "hypro::NonLinearOmega0Supportfunction", "classhypro_1_1NonLinearOmega0Supportfunction.html", null ],
-      [ "hypro::SymmetricCenteredBoxSupportFunction", "classhypro_1_1SymmetricCenteredBoxSupportFunction.html", null ]
+      [ "hypro::NonLinearOmega0Supportfunction< Setting >", "classhypro_1_1NonLinearOmega0Supportfunction.html", null ],
+      [ "hypro::SymmetricCenteredBoxSupportFunction< Setting >", "classhypro_1_1SymmetricCenteredBoxSupportFunction.html", null ]
+    ] ],
+    [ "hypro::reachability::hypro::SupportFunctionContent< Number >", "classhypro_1_1reachability_1_1hypro_1_1SupportFunctionContent.html", null ],
+    [ "hypro::reachability::hypro::SupportFunctionContentSetting", "structhypro_1_1reachability_1_1hypro_1_1SupportFunctionContentSetting.html", null ],
+    [ "hypro::SupportFunctionContentSetting", "structhypro_1_1SupportFunctionContentSetting.html", null ],
+    [ "hypro::SupportFunctionSetting", "structhypro_1_1SupportFunctionSetting.html", [
+      [ "hypro::BoxSupportFunctionSetting", "structhypro_1_1BoxSupportFunctionSetting.html", null ],
+      [ "hypro::NonLineaerOmegaOSupportFunctionSetting", "structhypro_1_1NonLineaerOmegaOSupportFunctionSetting.html", null ],
+      [ "hypro::PolytopeSupportFunctionSetting", "structhypro_1_1PolytopeSupportFunctionSetting.html", null ]
+    ] ],
+    [ "hypro::reachability::hypro::SupportFunctionSetting", "structhypro_1_1reachability_1_1hypro_1_1SupportFunctionSetting.html", [
+      [ "hypro::reachability::hypro::BoxSupportFunctionSetting", "structhypro_1_1reachability_1_1hypro_1_1BoxSupportFunctionSetting.html", null ],
+      [ "hypro::reachability::hypro::BoxSupportFunctionSetting", "structhypro_1_1reachability_1_1hypro_1_1BoxSupportFunctionSetting.html", null ],
+      [ "hypro::reachability::hypro::BoxSupportFunctionSetting", "structhypro_1_1reachability_1_1hypro_1_1BoxSupportFunctionSetting.html", null ],
+      [ "hypro::reachability::hypro::NonLineaerOmegaOSupportFunctionSetting", "structhypro_1_1reachability_1_1hypro_1_1NonLineaerOmegaOSupportFunctionSetting.html", null ],
+      [ "hypro::reachability::hypro::NonLineaerOmegaOSupportFunctionSetting", "structhypro_1_1reachability_1_1hypro_1_1NonLineaerOmegaOSupportFunctionSetting.html", null ],
+      [ "hypro::reachability::hypro::NonLineaerOmegaOSupportFunctionSetting", "structhypro_1_1reachability_1_1hypro_1_1NonLineaerOmegaOSupportFunctionSetting.html", null ],
+      [ "hypro::reachability::hypro::PolytopeSupportFunctionSetting", "structhypro_1_1reachability_1_1hypro_1_1PolytopeSupportFunctionSetting.html", null ],
+      [ "hypro::reachability::hypro::PolytopeSupportFunctionSetting", "structhypro_1_1reachability_1_1hypro_1_1PolytopeSupportFunctionSetting.html", null ],
+      [ "hypro::reachability::hypro::PolytopeSupportFunctionSetting", "structhypro_1_1reachability_1_1hypro_1_1PolytopeSupportFunctionSetting.html", null ]
     ] ],
     [ "symbols", null, [
       [ "hypro::parser::aggregation_", "structhypro_1_1parser_1_1aggregation__.html", null ]
@@ -1087,36 +1227,36 @@ var hierarchy =
     [ "hypro::TaylorModel< Number >", "classhypro_1_1TaylorModel.html", null ],
     [ "hypro::TaylorModelVec< Number >", "classhypro_1_1TaylorModelVec.html", null ],
     [ "hypro::TPathElement< Number, tNumber >", "structhypro_1_1TPathElement.html", null ],
-    [ "hypro::reachability::hypro::trafoContent< Number >", "structhypro_1_1reachability_1_1hypro_1_1trafoContent.html", null ],
-    [ "hypro::trafoContent< Number >", "structhypro_1_1trafoContent.html", null ],
-    [ "hypro::reachability::hypro::TrafoParameters< Number >", "classhypro_1_1reachability_1_1hypro_1_1TrafoParameters.html", null ],
+    [ "hypro::reachability::hypro::trafoContent< Number, Setting >", "structhypro_1_1reachability_1_1hypro_1_1trafoContent.html", null ],
+    [ "hypro::trafoContent< Number, Setting >", "structhypro_1_1trafoContent.html", null ],
+    [ "hypro::reachability::hypro::trafoContent< Number, hypro::reachability::hypro::SupportFunctionContentSetting >", "structhypro_1_1reachability_1_1hypro_1_1trafoContent.html", null ],
+    [ "hypro::trafoContent< Number, hypro::SupportFunctionContentSetting >", "structhypro_1_1trafoContent.html", null ],
     [ "hypro::TrafoParameters< Number >", "classhypro_1_1TrafoParameters.html", null ],
+    [ "hypro::reachability::hypro::TrafoParameters< Number >", "classhypro_1_1reachability_1_1hypro_1_1TrafoParameters.html", null ],
     [ "hypro::Transition< Number >", "classhypro_1_1Transition.html", null ],
-    [ "hypro::reachability::hypro::typeName< T >", "structhypro_1_1reachability_1_1hypro_1_1typeName.html", null ],
     [ "hypro::reachability::hypro::hypro::typeName< T >", "structhypro_1_1reachability_1_1hypro_1_1hypro_1_1typeName.html", null ],
-    [ "hypro::hypro::typeName< T >", "structhypro_1_1hypro_1_1typeName.html", null ],
     [ "hypro::typeName< T >", "structhypro_1_1typeName.html", null ],
-    [ "hypro::hypro::typeName< double >", "structhypro_1_1hypro_1_1typeName_3_01double_01_4.html", null ],
+    [ "hypro::reachability::hypro::typeName< T >", "structhypro_1_1reachability_1_1hypro_1_1typeName.html", null ],
+    [ "hypro::hypro::typeName< T >", "structhypro_1_1hypro_1_1typeName.html", null ],
     [ "hypro::reachability::hypro::typeName< double >", "structhypro_1_1reachability_1_1hypro_1_1typeName_3_01double_01_4.html", null ],
-    [ "hypro::reachability::hypro::hypro::typeName< double >", "structhypro_1_1reachability_1_1hypro_1_1hypro_1_1typeName_3_01double_01_4.html", null ],
     [ "hypro::typeName< double >", "structhypro_1_1typeName_3_01double_01_4.html", null ],
-    [ "hypro::reachability::hypro::typeName< mpq_class >", "structhypro_1_1reachability_1_1hypro_1_1typeName_3_01mpq__class_01_4.html", null ],
-    [ "hypro::hypro::typeName< mpq_class >", "structhypro_1_1hypro_1_1typeName_3_01mpq__class_01_4.html", null ],
+    [ "hypro::hypro::typeName< double >", "structhypro_1_1hypro_1_1typeName_3_01double_01_4.html", null ],
+    [ "hypro::reachability::hypro::hypro::typeName< double >", "structhypro_1_1reachability_1_1hypro_1_1hypro_1_1typeName_3_01double_01_4.html", null ],
     [ "hypro::reachability::hypro::hypro::typeName< mpq_class >", "structhypro_1_1reachability_1_1hypro_1_1hypro_1_1typeName_3_01mpq__class_01_4.html", null ],
+    [ "hypro::reachability::hypro::typeName< mpq_class >", "structhypro_1_1reachability_1_1hypro_1_1typeName_3_01mpq__class_01_4.html", null ],
     [ "hypro::typeName< mpq_class >", "structhypro_1_1typeName_3_01mpq__class_01_4.html", null ],
+    [ "hypro::hypro::typeName< mpq_class >", "structhypro_1_1hypro_1_1typeName_3_01mpq__class_01_4.html", null ],
     [ "hypro::unionContent< Number >", "structhypro_1_1unionContent.html", null ],
     [ "hypro::reachability::hypro::unionContent< Number >", "structhypro_1_1reachability_1_1hypro_1_1unionContent.html", null ],
+    [ "hypro::UtilSetting", "structhypro_1_1UtilSetting.html", null ],
     [ "hypro::reachability::hypro::Vertex< Number >", "classhypro_1_1reachability_1_1hypro_1_1Vertex.html", null ],
     [ "hypro::Vertex< Number >", "classhypro_1_1Vertex.html", null ],
-    [ "hypro::reachability::hypro::Vertex< std::size_t >", "classhypro_1_1reachability_1_1hypro_1_1Vertex.html", null ],
     [ "hypro::Vertex< std::size_t >", "classhypro_1_1Vertex.html", null ],
-    [ "hypro::reachability::hypro::VertexContainer< Number >", "classhypro_1_1reachability_1_1hypro_1_1VertexContainer.html", null ],
+    [ "hypro::reachability::hypro::Vertex< std::size_t >", "classhypro_1_1reachability_1_1hypro_1_1Vertex.html", null ],
     [ "hypro::VertexContainer< Number >", "classhypro_1_1VertexContainer.html", null ],
+    [ "hypro::reachability::hypro::VertexContainer< Number >", "classhypro_1_1reachability_1_1hypro_1_1VertexContainer.html", null ],
     [ "hypro::reachability::hypro::VertexEnumeration< Number >", "classhypro_1_1reachability_1_1hypro_1_1VertexEnumeration.html", null ],
     [ "hypro::VertexEnumeration< Number >", "classhypro_1_1VertexEnumeration.html", null ],
-    [ "ParseTreeListener", null, [
-      [ "HybridAutomatonListener", "interfaceHybridAutomatonListener.html", [
-        [ "HybridAutomatonBaseListener", "classHybridAutomatonBaseListener.html", null ]
-      ] ]
-    ] ]
+    [ "hypro::reachability::hypro::ZonotopeSetting", "structhypro_1_1reachability_1_1hypro_1_1ZonotopeSetting.html", null ],
+    [ "hypro::ZonotopeSetting", "structhypro_1_1ZonotopeSetting.html", null ]
 ];

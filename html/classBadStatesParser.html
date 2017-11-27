@@ -121,8 +121,6 @@ $(document).ready(function(){initNavTree('classBadStatesParser.html','');});
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBadStatesParser_1_1BadstateContext.html">BadstateContext</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBadStatesParser_1_1ConnectorContext.html">ConnectorContext</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBadStatesParser_1_1ConstraintContext.html">ConstraintContext</a></td></tr>
@@ -131,9 +129,13 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBadStatesParser_1_1EquationContext.html">EquationContext</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBadStatesParser_1_1GbadstateContext.html">GbadstateContext</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBadStatesParser_1_1IntervalContext.html">IntervalContext</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBadStatesParser_1_1IntervalexprContext.html">IntervalexprContext</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBadStatesParser_1_1LbadstateContext.html">LbadstateContext</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBadStatesParser_1_1PolynomContext.html">PolynomContext</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -144,7 +146,7 @@ Classes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
-<tr class="memitem:ab1f5c9c05b5c480b08fae68659905317"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom">{ <br/>
+<tr class="memitem:a120b5c065e6689d3074e4532134b153b"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom">{ <br/>
 &#160;&#160;<b>T__0</b> = 1, 
 <b>T__1</b> = 2, 
 <b>T__2</b> = 3, 
@@ -166,23 +168,24 @@ Public Types</h2></td></tr>
 <b>WS</b> = 16
 <br/>
  }</td></tr>
-<tr class="separator:ab1f5c9c05b5c480b08fae68659905317"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abe5a6a83f52685bf24dade72fb0b39a0"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom">{ <br/>
+<tr class="separator:a120b5c065e6689d3074e4532134b153b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4bf166878e7e74f202f148ae24a71a62"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom">{ <br/>
 &#160;&#160;<b>RuleUnsafeset</b> = 0, 
-<b>RuleBadstate</b> = 1, 
-<b>RuleConnector</b> = 2, 
-<b>RuleTerm</b> = 3, 
+<b>RuleLbadstate</b> = 1, 
+<b>RuleGbadstate</b> = 2, 
+<b>RuleConnector</b> = 3, 
 <br/>
-&#160;&#160;<b>RulePolynom</b> = 4, 
-<b>RuleInterval</b> = 5, 
-<b>RuleEquation</b> = 6, 
-<b>RuleConstraint</b> = 7, 
+&#160;&#160;<b>RuleTerm</b> = 4, 
+<b>RulePolynom</b> = 5, 
+<b>RuleInterval</b> = 6, 
+<b>RuleEquation</b> = 7, 
 <br/>
-&#160;&#160;<b>RuleIntervalexpr</b> = 8, 
-<b>RuleConstrset</b> = 9
+&#160;&#160;<b>RuleConstraint</b> = 8, 
+<b>RuleIntervalexpr</b> = 9, 
+<b>RuleConstrset</b> = 10
 <br/>
  }</td></tr>
-<tr class="separator:abe5a6a83f52685bf24dade72fb0b39a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="separator:a4bf166878e7e74f202f148ae24a71a62"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -209,9 +212,12 @@ virtual antlr4::dfa::Vocabulary &amp;&#160;</td><td class="memItemRight" valign=
 <tr class="memitem:a991e995f4bbbfc92501cddf1c6008acc"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a991e995f4bbbfc92501cddf1c6008acc"></a>
 <a class="el" href="classBadStatesParser_1_1UnsafesetContext.html">UnsafesetContext</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>unsafeset</b> ()</td></tr>
 <tr class="separator:a991e995f4bbbfc92501cddf1c6008acc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8462904a1cdf51ff1d53ffc5bc90002a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8462904a1cdf51ff1d53ffc5bc90002a"></a>
-<a class="el" href="classBadStatesParser_1_1BadstateContext.html">BadstateContext</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>badstate</b> ()</td></tr>
-<tr class="separator:a8462904a1cdf51ff1d53ffc5bc90002a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a96dbe48f1c58dcbf1bdc0fa5c004f7bf"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a96dbe48f1c58dcbf1bdc0fa5c004f7bf"></a>
+<a class="el" href="classBadStatesParser_1_1LbadstateContext.html">LbadstateContext</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>lbadstate</b> ()</td></tr>
+<tr class="separator:a96dbe48f1c58dcbf1bdc0fa5c004f7bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a624b0def79d3e4f9e0733d8966c11cd6"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a624b0def79d3e4f9e0733d8966c11cd6"></a>
+<a class="el" href="classBadStatesParser_1_1GbadstateContext.html">GbadstateContext</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>gbadstate</b> ()</td></tr>
+<tr class="separator:a624b0def79d3e4f9e0733d8966c11cd6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a13a475fa59d40b57f50e057be4d56f66"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a13a475fa59d40b57f50e057be4d56f66"></a>
 <a class="el" href="classBadStatesParser_1_1ConnectorContext.html">ConnectorContext</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>connector</b> ()</td></tr>
 <tr class="separator:a13a475fa59d40b57f50e057be4d56f66"><td class="memSeparator" colspan="2">&#160;</td></tr>

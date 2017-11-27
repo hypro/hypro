@@ -175,14 +175,15 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator==</b> (const
 <tr class="memitem:a5a7c24a989b64fd0068be68d7b3db4e2"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5a7c24a989b64fd0068be68d7b3db4e2"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>removeRedundancy</b> () const </td></tr>
 <tr class="separator:a5a7c24a989b64fd0068be68d7b3db4e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab62b290723fb62f4435d0403dfbd4e59"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab62b290723fb62f4435d0403dfbd4e59"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>reduceOrder</b> (Number limit=Number(ZONOTOPE_ORDERLIMIT))</td></tr>
-<tr class="separator:ab62b290723fb62f4435d0403dfbd4e59"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a89bc6bcfb4ffefffeb28950687c7d675"><td class="memTemplParams" colspan="2"><a class="anchor" id="a89bc6bcfb4ffefffeb28950687c7d675"></a>
+template&lt;class Setting &gt; </td></tr>
+<tr class="memitem:a89bc6bcfb4ffefffeb28950687c7d675"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>reduceOrder</b> (Number limit=Number(Setting::ZONOTOPE_ORDERLIMIT))</td></tr>
+<tr class="separator:a89bc6bcfb4ffefffeb28950687c7d675"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8f12e99126579e5f5b40b9b9576fafcb"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8f12e99126579e5f5b40b9b9576fafcb"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>reduceNumberRepresentation</b> ()</td></tr>
 <tr class="separator:a8f12e99126579e5f5b40b9b9576fafcb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6bab4ef25a017f258d264a2b3f87aec8"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6bab4ef25a017f258d264a2b3f87aec8"></a>
-<a class="el" href="classhypro_1_1reachability_1_1hypro_1_1ZonotopeT.html">ZonotopeT</a>&lt; Number, <a class="el" href="classhypro_1_1reachability_1_1hypro_1_1Converter.html">Converter</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>minkowskiSum</b> (const <a class="el" href="classhypro_1_1reachability_1_1hypro_1_1ZonotopeT.html">ZonotopeT</a>&lt; Number, <a class="el" href="classhypro_1_1reachability_1_1hypro_1_1Converter.html">Converter</a> &gt; &amp;rhs) const </td></tr>
+<tr class="memitem:a6bab4ef25a017f258d264a2b3f87aec8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1reachability_1_1hypro_1_1ZonotopeT.html">ZonotopeT</a>&lt; Number, <a class="el" href="classhypro_1_1reachability_1_1hypro_1_1Converter.html">Converter</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1reachability_1_1hypro_1_1ZonotopeT.html#a6bab4ef25a017f258d264a2b3f87aec8">minkowskiSum</a> (const <a class="el" href="classhypro_1_1reachability_1_1hypro_1_1ZonotopeT.html">ZonotopeT</a>&lt; Number, <a class="el" href="classhypro_1_1reachability_1_1hypro_1_1Converter.html">Converter</a> &gt; &amp;rhs) const </td></tr>
+<tr class="memdesc:a6bab4ef25a017f258d264a2b3f87aec8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes Minkowski's sum of the current set and the passed set.  <a href="#a6bab4ef25a017f258d264a2b3f87aec8">More...</a><br/></td></tr>
 <tr class="separator:a6bab4ef25a017f258d264a2b3f87aec8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af1aefc56a9f2642e28094208eaa06f14"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1reachability_1_1hypro_1_1ZonotopeT.html">ZonotopeT</a>&lt; Number, <a class="el" href="classhypro_1_1reachability_1_1hypro_1_1Converter.html">Converter</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1reachability_1_1hypro_1_1ZonotopeT.html#af1aefc56a9f2642e28094208eaa06f14">project</a> (const std::vector&lt; std::size_t &gt; &amp;dimensions) const </td></tr>
 <tr class="memdesc:af1aefc56a9f2642e28094208eaa06f14"><td class="mdescLeft">&#160;</td><td class="mdescRight">Projects the set on the ordered set of given dimensions.  <a href="#af1aefc56a9f2642e28094208eaa06f14">More...</a><br/></td></tr>
@@ -218,25 +219,19 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>reduceNumberRepresent
 <tr class="separator:aad11eb880e6a107a00bac2b5392949ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a39d7bf13cf12f8ef9e16bae207e99a10"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1reachability_1_1hypro_1_1ZonotopeT.html">ZonotopeT</a>&lt; Number, <a class="el" href="classhypro_1_1reachability_1_1hypro_1_1Converter.html">Converter</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1reachability_1_1hypro_1_1ZonotopeT.html#a39d7bf13cf12f8ef9e16bae207e99a10">intersect</a> (const <a class="el" href="classhypro_1_1reachability_1_1hypro_1_1Halfspace.html">Halfspace</a>&lt; Number &gt; &amp;rhs, <a class="el" href="namespacehypro_1_1reachability_1_1hypro.html#aba25d57908acd832a2f43dc0382a4bc6">matrix_t</a>&lt; Number &gt; &amp;minMaxOfLine, int method)</td></tr>
 <tr class="separator:a39d7bf13cf12f8ef9e16bae207e99a10"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa0efe70a37a7b77443639224e07e5429"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa0efe70a37a7b77443639224e07e5429"></a>
-<a class="el" href="classhypro_1_1reachability_1_1hypro_1_1ZonotopeT.html">ZonotopeT</a>&lt; Number, <a class="el" href="classhypro_1_1reachability_1_1hypro_1_1Converter.html">Converter</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>unite</b> (const <a class="el" href="classhypro_1_1reachability_1_1hypro_1_1ZonotopeT.html">ZonotopeT</a>&lt; Number, <a class="el" href="classhypro_1_1reachability_1_1hypro_1_1Converter.html">Converter</a> &gt; &amp;other) const </td></tr>
+<tr class="memitem:aa0efe70a37a7b77443639224e07e5429"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1reachability_1_1hypro_1_1ZonotopeT.html">ZonotopeT</a>&lt; Number, <a class="el" href="classhypro_1_1reachability_1_1hypro_1_1Converter.html">Converter</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1reachability_1_1hypro_1_1ZonotopeT.html#aa0efe70a37a7b77443639224e07e5429">unite</a> (const <a class="el" href="classhypro_1_1reachability_1_1hypro_1_1ZonotopeT.html">ZonotopeT</a>&lt; Number, <a class="el" href="classhypro_1_1reachability_1_1hypro_1_1Converter.html">Converter</a> &gt; &amp;other) const </td></tr>
+<tr class="memdesc:aa0efe70a37a7b77443639224e07e5429"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the convex hull of the union of the set and the passed set.  <a href="#aa0efe70a37a7b77443639224e07e5429">More...</a><br/></td></tr>
 <tr class="separator:aa0efe70a37a7b77443639224e07e5429"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a253ad55d11e12c3cde72ef1513d6ae06"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1reachability_1_1hypro_1_1ZonotopeT.html">ZonotopeT</a>&lt; Number, <a class="el" href="classhypro_1_1reachability_1_1hypro_1_1Converter.html">Converter</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1reachability_1_1hypro_1_1ZonotopeT.html#a253ad55d11e12c3cde72ef1513d6ae06">intervalHull</a> () const </td></tr>
 <tr class="separator:a253ad55d11e12c3cde72ef1513d6ae06"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7242c42b889b442a226efcad51c3d551"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1reachability_1_1hypro_1_1ZonotopeT.html#a7242c42b889b442a226efcad51c3d551">contains</a> (const <a class="el" href="classhypro_1_1reachability_1_1hypro_1_1Point.html">Point</a>&lt; Number &gt; &amp;point) const </td></tr>
 <tr class="memdesc:a7242c42b889b442a226efcad51c3d551"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks, whether the set contains the passed point.  <a href="#a7242c42b889b442a226efcad51c3d551">More...</a><br/></td></tr>
 <tr class="separator:a7242c42b889b442a226efcad51c3d551"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pub_methods_classhypro_1_1reachability_1_1hypro_1_1GeometricObject"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classhypro_1_1reachability_1_1hypro_1_1GeometricObject')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classhypro_1_1reachability_1_1hypro_1_1GeometricObject.html">hypro::reachability::hypro::GeometricObject&lt; Number, DerivedShape &gt;</a></td></tr>
+<tr class="inherit_header pub_methods_classhypro_1_1reachability_1_1hypro_1_1GeometricObject"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classhypro_1_1reachability_1_1hypro_1_1GeometricObject')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classhypro_1_1reachability_1_1hypro_1_1GeometricObject.html">hypro::reachability::hypro::GeometricObject&lt; Number, ZonotopeT&lt; Number, Converter &gt; &gt;</a></td></tr>
 <tr class="memitem:ae02e1779044a1c71d3299c130949b776 inherit pub_methods_classhypro_1_1reachability_1_1hypro_1_1GeometricObject"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae02e1779044a1c71d3299c130949b776"></a>
 virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1reachability_1_1hypro_1_1GeometricObject.html#ae02e1779044a1c71d3299c130949b776">~GeometricObject</a> ()</td></tr>
 <tr class="memdesc:ae02e1779044a1c71d3299c130949b776 inherit pub_methods_classhypro_1_1reachability_1_1hypro_1_1GeometricObject"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destroys the object. <br/></td></tr>
 <tr class="separator:ae02e1779044a1c71d3299c130949b776 inherit pub_methods_classhypro_1_1reachability_1_1hypro_1_1GeometricObject"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab525d7c75ca889482299a4ae7d3e2fdf inherit pub_methods_classhypro_1_1reachability_1_1hypro_1_1GeometricObject"><td class="memItemLeft" align="right" valign="top">virtual DerivedShape&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1reachability_1_1hypro_1_1GeometricObject.html#ab525d7c75ca889482299a4ae7d3e2fdf">minkowskiSum</a> (const DerivedShape &amp;rhs) const =0</td></tr>
-<tr class="memdesc:ab525d7c75ca889482299a4ae7d3e2fdf inherit pub_methods_classhypro_1_1reachability_1_1hypro_1_1GeometricObject"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes Minkowski's sum of the current set and the passed set.  <a href="#ab525d7c75ca889482299a4ae7d3e2fdf">More...</a><br/></td></tr>
-<tr class="separator:ab525d7c75ca889482299a4ae7d3e2fdf inherit pub_methods_classhypro_1_1reachability_1_1hypro_1_1GeometricObject"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af4fcb5419474beadb600345ab342d669 inherit pub_methods_classhypro_1_1reachability_1_1hypro_1_1GeometricObject"><td class="memItemLeft" align="right" valign="top">virtual DerivedShape&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1reachability_1_1hypro_1_1GeometricObject.html#af4fcb5419474beadb600345ab342d669">unite</a> (const DerivedShape &amp;rhs) const =0</td></tr>
-<tr class="memdesc:af4fcb5419474beadb600345ab342d669 inherit pub_methods_classhypro_1_1reachability_1_1hypro_1_1GeometricObject"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the convex hull of the union of the set and the passed set.  <a href="#af4fcb5419474beadb600345ab342d669">More...</a><br/></td></tr>
-<tr class="separator:af4fcb5419474beadb600345ab342d669 inherit pub_methods_classhypro_1_1reachability_1_1hypro_1_1GeometricObject"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
@@ -265,7 +260,7 @@ class hypro::reachability::hypro::ZonotopeT&lt; Number, Converter &gt;</h3>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="Reach_8h_source.html#l00040">40</a> of file <a class="el" href="Reach_8h_source.html">Reach.h</a>.</p>
+<p>Definition at line <a class="el" href="Reach_8h_source.html#l00039">39</a> of file <a class="el" href="Reach_8h_source.html">Reach.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="aa2fa4c649f4629f37e6db5a641a444ac"></a>
 <div class="memitem">
@@ -492,9 +487,9 @@ template&lt;typename Number , typename Converter &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The resulting set. </dd></dl>
 
-<p>Implements <a class="el" href="classhypro_1_1reachability_1_1hypro_1_1GeometricObject.html#a5dbe3b2370b963053104286f81863b6c">hypro::reachability::hypro::GeometricObject&lt; Number, DerivedShape &gt;</a>.</p>
+<p>Implements <a class="el" href="classhypro_1_1reachability_1_1hypro_1_1GeometricObject.html#a5dbe3b2370b963053104286f81863b6c">hypro::reachability::hypro::GeometricObject&lt; Number, ZonotopeT&lt; Number, Converter &gt; &gt;</a>.</p>
 
-<p>Definition at line <a class="el" href="Reach_8h_source.html#l00413">413</a> of file <a class="el" href="Reach_8h_source.html">Reach.h</a>.</p>
+<p>Definition at line <a class="el" href="Reach_8h_source.html#l00414">414</a> of file <a class="el" href="Reach_8h_source.html">Reach.h</a>.</p>
 
 </div>
 </div>
@@ -563,7 +558,7 @@ template&lt;typename Number , typename Converter &gt; </div>
 <p>Compute boundaries of zonotopeT </p>
 <dl class="section return"><dt>Returns</dt><dd>array of points represented as vectors </dd></dl>
 
-<p>Definition at line <a class="el" href="Reach_8h_source.html#l00430">430</a> of file <a class="el" href="Reach_8h_source.html">Reach.h</a>.</p>
+<p>Definition at line <a class="el" href="Reach_8h_source.html#l00431">431</a> of file <a class="el" href="Reach_8h_source.html">Reach.h</a>.</p>
 
 </div>
 </div>
@@ -600,9 +595,9 @@ template&lt;typename Number , typename Converter &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True, if the point lies inside the set, false otherwise. </dd></dl>
 
-<p>Implements <a class="el" href="classhypro_1_1reachability_1_1hypro_1_1GeometricObject.html#a33efd99b5943012cb8bb0b0dbccca230">hypro::reachability::hypro::GeometricObject&lt; Number, DerivedShape &gt;</a>.</p>
+<p>Implements <a class="el" href="classhypro_1_1reachability_1_1hypro_1_1GeometricObject.html#a33efd99b5943012cb8bb0b0dbccca230">hypro::reachability::hypro::GeometricObject&lt; Number, ZonotopeT&lt; Number, Converter &gt; &gt;</a>.</p>
 
-<p>Definition at line <a class="el" href="Reach_8h_source.html#l01206">1206</a> of file <a class="el" href="Reach_8h_source.html">Reach.h</a>.</p>
+<p>Definition at line <a class="el" href="Reach_8h_source.html#l01207">1207</a> of file <a class="el" href="Reach_8h_source.html">Reach.h</a>.</p>
 
 </div>
 </div>
@@ -631,7 +626,7 @@ template&lt;typename Number , typename Converter &gt; </div>
 <p>Dimensionality of <a class="el" href="classhypro_1_1reachability_1_1hypro_1_1ZonotopeT.html" title="Class for Zonotopes. ">ZonotopeT</a> </p>
 <dl class="section return"><dt>Returns</dt><dd>the dimension </dd></dl>
 
-<p>Implements <a class="el" href="classhypro_1_1reachability_1_1hypro_1_1GeometricObject.html#a7ffbfff0e83d0b48b0ddf4b54413e586">hypro::reachability::hypro::GeometricObject&lt; Number, DerivedShape &gt;</a>.</p>
+<p>Implements <a class="el" href="classhypro_1_1reachability_1_1hypro_1_1GeometricObject.html#a7ffbfff0e83d0b48b0ddf4b54413e586">hypro::reachability::hypro::GeometricObject&lt; Number, ZonotopeT&lt; Number, Converter &gt; &gt;</a>.</p>
 
 <p>Definition at line <a class="el" href="Reach_8h_source.html#l00128">128</a> of file <a class="el" href="Reach_8h_source.html">Reach.h</a>.</p>
 
@@ -662,7 +657,7 @@ template&lt;typename Number , typename Converter &gt; </div>
 <p>Returns, whether the zonotopeT is empty. </p>
 <dl class="section return"><dt>Returns</dt><dd></dd></dl>
 
-<p>Implements <a class="el" href="classhypro_1_1reachability_1_1hypro_1_1GeometricObject.html#a6c1555237a1651a6fcde849be0ab97c0">hypro::reachability::hypro::GeometricObject&lt; Number, DerivedShape &gt;</a>.</p>
+<p>Implements <a class="el" href="classhypro_1_1reachability_1_1hypro_1_1GeometricObject.html#a6c1555237a1651a6fcde849be0ab97c0">hypro::reachability::hypro::GeometricObject&lt; Number, ZonotopeT&lt; Number, Converter &gt; &gt;</a>.</p>
 
 <p>Definition at line <a class="el" href="Reach_8h_source.html#l00147">147</a> of file <a class="el" href="Reach_8h_source.html">Reach.h</a>.</p>
 
@@ -703,7 +698,7 @@ template&lt;typename Number , typename Converter &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True if intersect is found </dd></dl>
 
-<p>Definition at line <a class="el" href="Reach_8h_source.html#l00827">827</a> of file <a class="el" href="Reach_8h_source.html">Reach.h</a>.</p>
+<p>Definition at line <a class="el" href="Reach_8h_source.html#l00828">828</a> of file <a class="el" href="Reach_8h_source.html">Reach.h</a>.</p>
 
 </div>
 </div>
@@ -749,7 +744,7 @@ template&lt;typename Number , typename Converter &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True if intersect is found. </dd></dl>
 
-<p>Definition at line <a class="el" href="Reach_8h_source.html#l00833">833</a> of file <a class="el" href="Reach_8h_source.html">Reach.h</a>.</p>
+<p>Definition at line <a class="el" href="Reach_8h_source.html#l00834">834</a> of file <a class="el" href="Reach_8h_source.html">Reach.h</a>.</p>
 
 </div>
 </div>
@@ -786,9 +781,9 @@ template&lt;typename Number , typename Converter &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The resulting set. </dd></dl>
 
-<p>Implements <a class="el" href="classhypro_1_1reachability_1_1hypro_1_1GeometricObject.html#a9b18c36206d2b74b34a7d4b505e1a5de">hypro::reachability::hypro::GeometricObject&lt; Number, DerivedShape &gt;</a>.</p>
+<p>Implements <a class="el" href="classhypro_1_1reachability_1_1hypro_1_1GeometricObject.html#a9b18c36206d2b74b34a7d4b505e1a5de">hypro::reachability::hypro::GeometricObject&lt; Number, ZonotopeT&lt; Number, Converter &gt; &gt;</a>.</p>
 
-<p>Definition at line <a class="el" href="Reach_8h_source.html#l00892">892</a> of file <a class="el" href="Reach_8h_source.html">Reach.h</a>.</p>
+<p>Definition at line <a class="el" href="Reach_8h_source.html#l00893">893</a> of file <a class="el" href="Reach_8h_source.html">Reach.h</a>.</p>
 
 </div>
 </div>
@@ -837,9 +832,9 @@ template&lt;typename Number , typename Converter &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The resulting set. </dd></dl>
 
-<p>Implements <a class="el" href="classhypro_1_1reachability_1_1hypro_1_1GeometricObject.html#aa92c17cd0d409c1c0fc0f7af516ea1bb">hypro::reachability::hypro::GeometricObject&lt; Number, DerivedShape &gt;</a>.</p>
+<p>Implements <a class="el" href="classhypro_1_1reachability_1_1hypro_1_1GeometricObject.html#aa92c17cd0d409c1c0fc0f7af516ea1bb">hypro::reachability::hypro::GeometricObject&lt; Number, ZonotopeT&lt; Number, Converter &gt; &gt;</a>.</p>
 
-<p>Definition at line <a class="el" href="Reach_8h_source.html#l00937">937</a> of file <a class="el" href="Reach_8h_source.html">Reach.h</a>.</p>
+<p>Definition at line <a class="el" href="Reach_8h_source.html#l00938">938</a> of file <a class="el" href="Reach_8h_source.html">Reach.h</a>.</p>
 
 </div>
 </div>
@@ -909,7 +904,7 @@ template&lt;typename Number , typename Converter &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true for all cases </dd></dl>
 
-<p>Definition at line <a class="el" href="Reach_8h_source.html#l01186">1186</a> of file <a class="el" href="Reach_8h_source.html">Reach.h</a>.</p>
+<p>Definition at line <a class="el" href="Reach_8h_source.html#l01187">1187</a> of file <a class="el" href="Reach_8h_source.html">Reach.h</a>.</p>
 
 </div>
 </div>
@@ -947,9 +942,48 @@ template&lt;typename Number , typename Converter &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The resulting set. </dd></dl>
 
-<p>Implements <a class="el" href="classhypro_1_1reachability_1_1hypro_1_1GeometricObject.html#a1efab841f4531c0a56fc2c5ab5d6756f">hypro::reachability::hypro::GeometricObject&lt; Number, DerivedShape &gt;</a>.</p>
+<p>Implements <a class="el" href="classhypro_1_1reachability_1_1hypro_1_1GeometricObject.html#a1efab841f4531c0a56fc2c5ab5d6756f">hypro::reachability::hypro::GeometricObject&lt; Number, ZonotopeT&lt; Number, Converter &gt; &gt;</a>.</p>
 
-<p>Definition at line <a class="el" href="Reach_8h_source.html#l00397">397</a> of file <a class="el" href="Reach_8h_source.html">Reach.h</a>.</p>
+<p>Definition at line <a class="el" href="Reach_8h_source.html#l00398">398</a> of file <a class="el" href="Reach_8h_source.html">Reach.h</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a6bab4ef25a017f258d264a2b3f87aec8"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number , typename Converter &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhypro_1_1reachability_1_1hypro_1_1ZonotopeT.html">ZonotopeT</a>&lt; Number, <a class="el" href="classhypro_1_1reachability_1_1hypro_1_1Converter.html">Converter</a> &gt; <a class="el" href="classhypro_1_1reachability_1_1hypro_1_1ZonotopeT.html">hypro::reachability::hypro::ZonotopeT</a>&lt; Number, <a class="el" href="classhypro_1_1reachability_1_1hypro_1_1Converter.html">Converter</a> &gt;::minkowskiSum </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classhypro_1_1reachability_1_1hypro_1_1ZonotopeT.html">ZonotopeT</a>&lt; Number, <a class="el" href="classhypro_1_1reachability_1_1hypro_1_1Converter.html">Converter</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>rhs</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Computes Minkowski's sum of the current set and the passed set. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">rhs</td><td>The other passed set. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The resulting set. </dd></dl>
+
+<p>Implements <a class="el" href="classhypro_1_1reachability_1_1hypro_1_1GeometricObject.html#ab525d7c75ca889482299a4ae7d3e2fdf">hypro::reachability::hypro::GeometricObject&lt; Number, ZonotopeT&lt; Number, Converter &gt; &gt;</a>.</p>
+
+<p>Definition at line <a class="el" href="Reach_8h_source.html#l00362">362</a> of file <a class="el" href="Reach_8h_source.html">Reach.h</a>.</p>
 
 </div>
 </div>
@@ -986,9 +1020,9 @@ template&lt;typename Number , typename Converter &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The resulting set. </dd></dl>
 
-<p>Implements <a class="el" href="classhypro_1_1reachability_1_1hypro_1_1GeometricObject.html#ac750774a9f159dad586d1cdc924d1925">hypro::reachability::hypro::GeometricObject&lt; Number, DerivedShape &gt;</a>.</p>
+<p>Implements <a class="el" href="classhypro_1_1reachability_1_1hypro_1_1GeometricObject.html#ac750774a9f159dad586d1cdc924d1925">hypro::reachability::hypro::GeometricObject&lt; Number, ZonotopeT&lt; Number, Converter &gt; &gt;</a>.</p>
 
-<p>Definition at line <a class="el" href="Reach_8h_source.html#l00376">376</a> of file <a class="el" href="Reach_8h_source.html">Reach.h</a>.</p>
+<p>Definition at line <a class="el" href="Reach_8h_source.html#l00377">377</a> of file <a class="el" href="Reach_8h_source.html">Reach.h</a>.</p>
 
 </div>
 </div>
@@ -1045,9 +1079,9 @@ template&lt;typename Number , typename Converter &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A pair of a CONTAINMENT type stating whether the resulting set is empty and the resulting set. </dd></dl>
 
-<p>Implements <a class="el" href="classhypro_1_1reachability_1_1hypro_1_1GeometricObject.html#a84ee02377db8199ca81b8c6165bb0478">hypro::reachability::hypro::GeometricObject&lt; Number, DerivedShape &gt;</a>.</p>
+<p>Implements <a class="el" href="classhypro_1_1reachability_1_1hypro_1_1GeometricObject.html#a84ee02377db8199ca81b8c6165bb0478">hypro::reachability::hypro::GeometricObject&lt; Number, ZonotopeT&lt; Number, Converter &gt; &gt;</a>.</p>
 
-<p>Definition at line <a class="el" href="Reach_8h_source.html#l00981">981</a> of file <a class="el" href="Reach_8h_source.html">Reach.h</a>.</p>
+<p>Definition at line <a class="el" href="Reach_8h_source.html#l00982">982</a> of file <a class="el" href="Reach_8h_source.html">Reach.h</a>.</p>
 
 </div>
 </div>
@@ -1096,9 +1130,9 @@ template&lt;typename Number , typename Converter &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A pair of a CONTAINMENT type stating whether the resulting set is empty and the resulting set. </dd></dl>
 
-<p>Implements <a class="el" href="classhypro_1_1reachability_1_1hypro_1_1GeometricObject.html#aa35f3f90727e303d6b6115ca1df86b3e">hypro::reachability::hypro::GeometricObject&lt; Number, DerivedShape &gt;</a>.</p>
+<p>Implements <a class="el" href="classhypro_1_1reachability_1_1hypro_1_1GeometricObject.html#aa35f3f90727e303d6b6115ca1df86b3e">hypro::reachability::hypro::GeometricObject&lt; Number, ZonotopeT&lt; Number, Converter &gt; &gt;</a>.</p>
 
-<p>Definition at line <a class="el" href="Reach_8h_source.html#l01033">1033</a> of file <a class="el" href="Reach_8h_source.html">Reach.h</a>.</p>
+<p>Definition at line <a class="el" href="Reach_8h_source.html#l01034">1034</a> of file <a class="el" href="Reach_8h_source.html">Reach.h</a>.</p>
 
 </div>
 </div>
@@ -1177,6 +1211,45 @@ template&lt;typename Number , typename Converter &gt; </div>
 
 </div>
 </div>
+<a class="anchor" id="aa0efe70a37a7b77443639224e07e5429"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number , typename Converter &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhypro_1_1reachability_1_1hypro_1_1ZonotopeT.html">ZonotopeT</a>&lt; Number, <a class="el" href="classhypro_1_1reachability_1_1hypro_1_1Converter.html">Converter</a> &gt; <a class="el" href="classhypro_1_1reachability_1_1hypro_1_1ZonotopeT.html">hypro::reachability::hypro::ZonotopeT</a>&lt; Number, <a class="el" href="classhypro_1_1reachability_1_1hypro_1_1Converter.html">Converter</a> &gt;::unite </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classhypro_1_1reachability_1_1hypro_1_1ZonotopeT.html">ZonotopeT</a>&lt; Number, <a class="el" href="classhypro_1_1reachability_1_1hypro_1_1Converter.html">Converter</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>rhs</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Computes the convex hull of the union of the set and the passed set. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">rhs</td><td>The passed set. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The resulting set. </dd></dl>
+
+<p>Implements <a class="el" href="classhypro_1_1reachability_1_1hypro_1_1GeometricObject.html#af4fcb5419474beadb600345ab342d669">hypro::reachability::hypro::GeometricObject&lt; Number, ZonotopeT&lt; Number, Converter &gt; &gt;</a>.</p>
+
+<p>Definition at line <a class="el" href="Reach_8h_source.html#l01129">1129</a> of file <a class="el" href="Reach_8h_source.html">Reach.h</a>.</p>
+
+</div>
+</div>
 <a class="anchor" id="a3d73fa61402b377fdb935351b0ac2378"></a>
 <div class="memitem">
 <div class="memproto">
@@ -1205,9 +1278,9 @@ template&lt;typename Number , typename Converter &gt; </div>
 <p>Compute all possible extreme points of a zonotopeT by considering all combinations of generators. This gives a set of points, which contains also the real extreme points but also some internal points. </p>
 <dl class="section return"><dt>Returns</dt><dd>vector of points. </dd></dl>
 
-<p>Implements <a class="el" href="classhypro_1_1reachability_1_1hypro_1_1GeometricObject.html#a0eb064cd7a7822679ee5a393b10c5412">hypro::reachability::hypro::GeometricObject&lt; Number, DerivedShape &gt;</a>.</p>
+<p>Implements <a class="el" href="classhypro_1_1reachability_1_1hypro_1_1GeometricObject.html#a0eb064cd7a7822679ee5a393b10c5412">hypro::reachability::hypro::GeometricObject&lt; Number, ZonotopeT&lt; Number, Converter &gt; &gt;</a>.</p>
 
-<p>Definition at line <a class="el" href="Reach_8h_source.html#l00472">472</a> of file <a class="el" href="Reach_8h_source.html">Reach.h</a>.</p>
+<p>Definition at line <a class="el" href="Reach_8h_source.html#l00473">473</a> of file <a class="el" href="Reach_8h_source.html">Reach.h</a>.</p>
 
 </div>
 </div>

@@ -120,6 +120,7 @@ $(document).ready(function(){initNavTree('Box_8h.html','');});
 <code>#include &quot;../../util/templateDirections.h&quot;</code><br/>
 <code>#include &quot;../../util/linearOptimization/Optimizer.h&quot;</code><br/>
 <code>#include &quot;../../util/logging/Logger.h&quot;</code><br/>
+<code>#include &quot;BoxSetting.h&quot;</code><br/>
 <code>#include &lt;carl/interval/Interval.h&gt;</code><br/>
 <code>#include &lt;cassert&gt;</code><br/>
 <code>#include &lt;map&gt;</code><br/>
@@ -137,7 +138,7 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Location.html">hypro::Location&lt; Number &gt;</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Class for location.  <a href="classhypro_1_1Location.html#details">More...</a><br/></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1BoxT.html">hypro::BoxT&lt; Number, Converter &gt;</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1BoxT.html">hypro::BoxT&lt; Number, Converter, Setting &gt;</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">The class which represents a box.  <a href="classhypro_1_1BoxT.html#details">More...</a><br/></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -149,14 +150,14 @@ Namespaces</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:abe9ece6bbbfc0fc82678e831d4d30f42"><td class="memTemplParams" colspan="2">template&lt;typename Number , typename Converter &gt; </td></tr>
-<tr class="memitem:abe9ece6bbbfc0fc82678e831d4d30f42"><td class="memTemplItemLeft" align="right" valign="top">BoxT&lt; Number, Converter &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacehypro.html#abe9ece6bbbfc0fc82678e831d4d30f42">hypro::operator*</a> (Number factor, const BoxT&lt; Number, Converter &gt; &amp;in)</td></tr>
-<tr class="memdesc:abe9ece6bbbfc0fc82678e831d4d30f42"><td class="mdescLeft">&#160;</td><td class="mdescRight">Operator for scaling a box.  <a href="#abe9ece6bbbfc0fc82678e831d4d30f42">More...</a><br/></td></tr>
-<tr class="separator:abe9ece6bbbfc0fc82678e831d4d30f42"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0fda7ff06e94f42bca9d3ec8f3056277"><td class="memTemplParams" colspan="2">template&lt;typename From , typename To , typename Converter &gt; </td></tr>
-<tr class="memitem:a0fda7ff06e94f42bca9d3ec8f3056277"><td class="memTemplItemLeft" align="right" valign="top">BoxT&lt; To, Converter &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacehypro.html#a0fda7ff06e94f42bca9d3ec8f3056277">hypro::convert</a> (const BoxT&lt; From, Converter &gt; &amp;in)</td></tr>
-<tr class="memdesc:a0fda7ff06e94f42bca9d3ec8f3056277"><td class="mdescLeft">&#160;</td><td class="mdescRight">Conversion function for different number types.  <a href="#a0fda7ff06e94f42bca9d3ec8f3056277">More...</a><br/></td></tr>
-<tr class="separator:a0fda7ff06e94f42bca9d3ec8f3056277"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa78d21b35ed555d7bb6cf29c782b63f8"><td class="memTemplParams" colspan="2">template&lt;typename Number , typename Converter , class Setting &gt; </td></tr>
+<tr class="memitem:aa78d21b35ed555d7bb6cf29c782b63f8"><td class="memTemplItemLeft" align="right" valign="top">BoxT&lt; Number, Converter, Setting &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacehypro.html#aa78d21b35ed555d7bb6cf29c782b63f8">hypro::operator*</a> (Number factor, const BoxT&lt; Number, Converter, Setting &gt; &amp;in)</td></tr>
+<tr class="memdesc:aa78d21b35ed555d7bb6cf29c782b63f8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Operator for scaling a box.  <a href="#aa78d21b35ed555d7bb6cf29c782b63f8">More...</a><br/></td></tr>
+<tr class="separator:aa78d21b35ed555d7bb6cf29c782b63f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa9de495215c4e14a55d1f389a06e3bc9"><td class="memTemplParams" colspan="2">template&lt;typename From , typename To , typename Converter , class Setting &gt; </td></tr>
+<tr class="memitem:aa9de495215c4e14a55d1f389a06e3bc9"><td class="memTemplItemLeft" align="right" valign="top">BoxT&lt; To, Converter, Setting &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacehypro.html#aa9de495215c4e14a55d1f389a06e3bc9">hypro::convert</a> (const BoxT&lt; From, Converter, Setting &gt; &amp;in)</td></tr>
+<tr class="memdesc:aa9de495215c4e14a55d1f389a06e3bc9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Conversion function for different number types.  <a href="#aa9de495215c4e14a55d1f389a06e3bc9">More...</a><br/></td></tr>
+<tr class="separator:aa9de495215c4e14a55d1f389a06e3bc9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 </div><!-- contents -->
 </div><!-- doc-content -->

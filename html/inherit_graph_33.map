@@ -1,5 +1,4 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$classhypro_1_1GeometricObject.html" title="Purely virtual class defining a common interface for geometric objects. " alt="" coords="6,38,189,79"/>
-<area shape="rect" id="node2" href="$classhypro_1_1BoxT.html" title="The class which represents a box. " alt="" coords="237,5,392,46"/>
-<area shape="rect" id="node3" href="$classhypro_1_1HPolytopeT.html" title="Class for a H&#45;polytope. " alt="" coords="240,70,389,111"/>
+<area shape="rect" id="node1" href="$classhypro_1_1GeometricObject.html" title="hypro::GeometricObject\l\&lt; Number, ConstraintSetT\l\&lt; Number, Converter \&gt; \&gt;" alt="" coords="5,4,181,60"/>
+<area shape="rect" id="node2" href="$classhypro_1_1ConstraintSetT.html" title="A class representing a plain constraint set. " alt="" coords="229,11,387,53"/>
 </map>

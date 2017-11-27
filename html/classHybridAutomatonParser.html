@@ -113,8 +113,6 @@ $(document).ready(function(){initNavTree('classHybridAutomatonParser.html','');}
 <a href="#nested-classes">Classes</a> &#124;
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pub-static-attribs">Static Public Attributes</a> &#124;
-<a href="#pro-static-attribs">Static Protected Attributes</a> &#124;
 <a href="classHybridAutomatonParser-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">HybridAutomatonParser Class Reference</div>  </div>
@@ -128,8 +126,6 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classHybridAutomatonParser_1_1AggregationContext.html">AggregationContext</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classHybridAutomatonParser_1_1AllocationContext.html">AllocationContext</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classHybridAutomatonParser_1_1BadstateContext.html">BadstateContext</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classHybridAutomatonParser_1_1ConnectorContext.html">ConnectorContext</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -149,6 +145,8 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classHybridAutomatonParser_1_1FromtoContext.html">FromtoContext</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classHybridAutomatonParser_1_1GbadstateContext.html">GbadstateContext</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classHybridAutomatonParser_1_1GuardContext.html">GuardContext</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classHybridAutomatonParser_1_1IdentityContext.html">IdentityContext</a></td></tr>
@@ -164,6 +162,8 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classHybridAutomatonParser_1_1InvariantsContext.html">InvariantsContext</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classHybridAutomatonParser_1_1JumpsContext.html">JumpsContext</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classHybridAutomatonParser_1_1LbadstateContext.html">LbadstateContext</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classHybridAutomatonParser_1_1LocationContext.html">LocationContext</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -202,7 +202,7 @@ Classes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
-<tr class="memitem:a9be20bae7d72d155c872c90a79ca265d"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom">{ <br/>
+<tr class="memitem:ab039b1a5dff383e3e2b421fa3a83d8c5"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom">{ <br/>
 &#160;&#160;<b>T__0</b> = 1, 
 <b>T__1</b> = 2, 
 <b>T__2</b> = 3, 
@@ -262,8 +262,8 @@ Public Types</h2></td></tr>
 <b>EXPONENTIAL</b> = 46
 <br/>
  }</td></tr>
-<tr class="separator:a9be20bae7d72d155c872c90a79ca265d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5232eb47fb993ac205bf7b7e9f1c6842"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom">{ <br/>
+<tr class="separator:ab039b1a5dff383e3e2b421fa3a83d8c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a74f1d3da161a461e655282ea2b50bd6f"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom">{ <br/>
 &#160;&#160;<b>RuleStart</b> = 0, 
 <b>RuleVardeclaration</b> = 1, 
 <b>RuleJumps</b> = 2, 
@@ -310,10 +310,11 @@ Public Types</h2></td></tr>
 <b>RuleInitstate</b> = 35, 
 <br/>
 &#160;&#160;<b>RuleUnsafeset</b> = 36, 
-<b>RuleBadstate</b> = 37
+<b>RuleLbadstate</b> = 37, 
+<b>RuleGbadstate</b> = 38
 <br/>
  }</td></tr>
-<tr class="separator:a5232eb47fb993ac205bf7b7e9f1c6842"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="separator:a74f1d3da161a461e655282ea2b50bd6f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -448,279 +449,18 @@ virtual antlr4::dfa::Vocabulary &amp;&#160;</td><td class="memItemRight" valign=
 <tr class="memitem:a870f8513b9cd6045a14c8a6c6882b741"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a870f8513b9cd6045a14c8a6c6882b741"></a>
 <a class="el" href="classHybridAutomatonParser_1_1UnsafesetContext.html">UnsafesetContext</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>unsafeset</b> ()</td></tr>
 <tr class="separator:a870f8513b9cd6045a14c8a6c6882b741"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a880f4a4f394a8bcec60f42989cfc1ac6"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a880f4a4f394a8bcec60f42989cfc1ac6"></a>
-<a class="el" href="classHybridAutomatonParser_1_1BadstateContext.html">BadstateContext</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>badstate</b> ()</td></tr>
-<tr class="separator:a880f4a4f394a8bcec60f42989cfc1ac6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a61a696f54065f175dc2ce80356fd9375"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a61a696f54065f175dc2ce80356fd9375"></a>
-String[]&#160;</td><td class="memItemRight" valign="bottom"><b>getTokenNames</b> ()</td></tr>
-<tr class="separator:a61a696f54065f175dc2ce80356fd9375"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8a96284d5f20870f82c8da58877055d0"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8a96284d5f20870f82c8da58877055d0"></a>
-Vocabulary&#160;</td><td class="memItemRight" valign="bottom"><b>getVocabulary</b> ()</td></tr>
-<tr class="separator:a8a96284d5f20870f82c8da58877055d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aba27db0bb4799ced24518b3b66491f5c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aba27db0bb4799ced24518b3b66491f5c"></a>
-String&#160;</td><td class="memItemRight" valign="bottom"><b>getGrammarFileName</b> ()</td></tr>
-<tr class="separator:aba27db0bb4799ced24518b3b66491f5c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a400aa127113e1c05a036fcb784a055e9"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a400aa127113e1c05a036fcb784a055e9"></a>
-String[]&#160;</td><td class="memItemRight" valign="bottom"><b>getRuleNames</b> ()</td></tr>
-<tr class="separator:a400aa127113e1c05a036fcb784a055e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a83e68d46e1e2d3fe1331e1359405a37d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a83e68d46e1e2d3fe1331e1359405a37d"></a>
-String&#160;</td><td class="memItemRight" valign="bottom"><b>getSerializedATN</b> ()</td></tr>
-<tr class="separator:a83e68d46e1e2d3fe1331e1359405a37d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae45c536d3c66edc9187ba264bd1764fd"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae45c536d3c66edc9187ba264bd1764fd"></a>
-ATN&#160;</td><td class="memItemRight" valign="bottom"><b>getATN</b> ()</td></tr>
-<tr class="separator:ae45c536d3c66edc9187ba264bd1764fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae9983035038ec789b13216151649ef6a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae9983035038ec789b13216151649ef6a"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>HybridAutomatonParser</b> (TokenStream input)</td></tr>
-<tr class="separator:ae9983035038ec789b13216151649ef6a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0e2fc38f200b3e5d3bf299150b83be53"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0e2fc38f200b3e5d3bf299150b83be53"></a>
-final <a class="el" href="classHybridAutomatonParser_1_1StartContext.html">StartContext</a>&#160;</td><td class="memItemRight" valign="bottom"><b>start</b> ()  throws RecognitionException </td></tr>
-<tr class="separator:a0e2fc38f200b3e5d3bf299150b83be53"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a858f13dd12b8f8ce264e26d5c3f36658"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a858f13dd12b8f8ce264e26d5c3f36658"></a>
-final <a class="el" href="classHybridAutomatonParser_1_1VardeclarationContext.html">VardeclarationContext</a>&#160;</td><td class="memItemRight" valign="bottom"><b>vardeclaration</b> ()  throws RecognitionException </td></tr>
-<tr class="separator:a858f13dd12b8f8ce264e26d5c3f36658"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7feea4731503e0620d71d98b511b0902"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7feea4731503e0620d71d98b511b0902"></a>
-final <a class="el" href="classHybridAutomatonParser_1_1JumpsContext.html">JumpsContext</a>&#160;</td><td class="memItemRight" valign="bottom"><b>jumps</b> ()  throws RecognitionException </td></tr>
-<tr class="separator:a7feea4731503e0620d71d98b511b0902"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8fa0b542e4d0c8b8177e08476be1b15a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8fa0b542e4d0c8b8177e08476be1b15a"></a>
-final <a class="el" href="classHybridAutomatonParser_1_1TransitionContext.html">TransitionContext</a>&#160;</td><td class="memItemRight" valign="bottom"><b>transition</b> ()  throws RecognitionException </td></tr>
-<tr class="separator:a8fa0b542e4d0c8b8177e08476be1b15a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9805040dc74fa444ae208c8f01834726"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9805040dc74fa444ae208c8f01834726"></a>
-final <a class="el" href="classHybridAutomatonParser_1_1FromtoContext.html">FromtoContext</a>&#160;</td><td class="memItemRight" valign="bottom"><b>fromto</b> ()  throws RecognitionException </td></tr>
-<tr class="separator:a9805040dc74fa444ae208c8f01834726"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a256ca3d74047957dbebf85bf4019aed8"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a256ca3d74047957dbebf85bf4019aed8"></a>
-final <a class="el" href="classHybridAutomatonParser_1_1UrgentContext.html">UrgentContext</a>&#160;</td><td class="memItemRight" valign="bottom"><b>urgent</b> ()  throws RecognitionException </td></tr>
-<tr class="separator:a256ca3d74047957dbebf85bf4019aed8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9d0992dd86101c27e784c85ef283f9f9"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9d0992dd86101c27e784c85ef283f9f9"></a>
-final <a class="el" href="classHybridAutomatonParser_1_1GuardContext.html">GuardContext</a>&#160;</td><td class="memItemRight" valign="bottom"><b>guard</b> ()  throws RecognitionException </td></tr>
-<tr class="separator:a9d0992dd86101c27e784c85ef283f9f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aad88a0a2e7e727e1a9a32b476a046697"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aad88a0a2e7e727e1a9a32b476a046697"></a>
-final <a class="el" href="classHybridAutomatonParser_1_1AllocationContext.html">AllocationContext</a>&#160;</td><td class="memItemRight" valign="bottom"><b>allocation</b> ()  throws RecognitionException </td></tr>
-<tr class="separator:aad88a0a2e7e727e1a9a32b476a046697"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aaaef5962265b8178956991c6af1a3b72"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aaaef5962265b8178956991c6af1a3b72"></a>
-final <a class="el" href="classHybridAutomatonParser_1_1ResetfctContext.html">ResetfctContext</a>&#160;</td><td class="memItemRight" valign="bottom"><b>resetfct</b> ()  throws RecognitionException </td></tr>
-<tr class="separator:aaaef5962265b8178956991c6af1a3b72"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5a5464a89c6566d7c8f938ebaced1781"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5a5464a89c6566d7c8f938ebaced1781"></a>
-final <a class="el" href="classHybridAutomatonParser_1_1AggregationContext.html">AggregationContext</a>&#160;</td><td class="memItemRight" valign="bottom"><b>aggregation</b> ()  throws RecognitionException </td></tr>
-<tr class="separator:a5a5464a89c6566d7c8f938ebaced1781"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5e14c7941094cb925b62841584cdaeb8"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5e14c7941094cb925b62841584cdaeb8"></a>
-final <a class="el" href="classHybridAutomatonParser_1_1TermContext.html">TermContext</a>&#160;</td><td class="memItemRight" valign="bottom"><b>term</b> ()  throws RecognitionException </td></tr>
-<tr class="separator:a5e14c7941094cb925b62841584cdaeb8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a35b98b377def1a47dedb3f6a9aa3d68e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a35b98b377def1a47dedb3f6a9aa3d68e"></a>
-final <a class="el" href="classHybridAutomatonParser_1_1PolynomContext.html">PolynomContext</a>&#160;</td><td class="memItemRight" valign="bottom"><b>polynom</b> ()  throws RecognitionException </td></tr>
-<tr class="separator:a35b98b377def1a47dedb3f6a9aa3d68e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aaff38e87a9e0d136792b664e6ef09438"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aaff38e87a9e0d136792b664e6ef09438"></a>
-final <a class="el" href="classHybridAutomatonParser_1_1IntervalContext.html">IntervalContext</a>&#160;</td><td class="memItemRight" valign="bottom"><b>interval</b> ()  throws RecognitionException </td></tr>
-<tr class="separator:aaff38e87a9e0d136792b664e6ef09438"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5dcd152e719901e72f75c58cc0888246"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5dcd152e719901e72f75c58cc0888246"></a>
-final <a class="el" href="classHybridAutomatonParser_1_1EquationContext.html">EquationContext</a>&#160;</td><td class="memItemRight" valign="bottom"><b>equation</b> ()  throws RecognitionException </td></tr>
-<tr class="separator:a5dcd152e719901e72f75c58cc0888246"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9dc9ec48b981fbf049e5acc90da43ab8"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9dc9ec48b981fbf049e5acc90da43ab8"></a>
-final <a class="el" href="classHybridAutomatonParser_1_1ConstraintContext.html">ConstraintContext</a>&#160;</td><td class="memItemRight" valign="bottom"><b>constraint</b> ()  throws RecognitionException </td></tr>
-<tr class="separator:a9dc9ec48b981fbf049e5acc90da43ab8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aef583313989b6765d3497dc563426417"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aef583313989b6765d3497dc563426417"></a>
-final <a class="el" href="classHybridAutomatonParser_1_1IntervalexprContext.html">IntervalexprContext</a>&#160;</td><td class="memItemRight" valign="bottom"><b>intervalexpr</b> ()  throws RecognitionException </td></tr>
-<tr class="separator:aef583313989b6765d3497dc563426417"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a21b184c0e81565785bfe3bf255304f64"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a21b184c0e81565785bfe3bf255304f64"></a>
-final <a class="el" href="classHybridAutomatonParser_1_1ConstrsetContext.html">ConstrsetContext</a>&#160;</td><td class="memItemRight" valign="bottom"><b>constrset</b> ()  throws RecognitionException </td></tr>
-<tr class="separator:a21b184c0e81565785bfe3bf255304f64"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1c659323a008a76d3f4e6811b7c9c752"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1c659323a008a76d3f4e6811b7c9c752"></a>
-final <a class="el" href="classHybridAutomatonParser_1_1SettingContext.html">SettingContext</a>&#160;</td><td class="memItemRight" valign="bottom"><b>setting</b> ()  throws RecognitionException </td></tr>
-<tr class="separator:a1c659323a008a76d3f4e6811b7c9c752"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2cc8e2f4348b2a4dcac27ade98d8153d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2cc8e2f4348b2a4dcac27ade98d8153d"></a>
-final <a class="el" href="classHybridAutomatonParser_1_1FixedstepsContext.html">FixedstepsContext</a>&#160;</td><td class="memItemRight" valign="bottom"><b>fixedsteps</b> ()  throws RecognitionException </td></tr>
-<tr class="separator:a2cc8e2f4348b2a4dcac27ade98d8153d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7dcf355d47acf4006d589503474f1519"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7dcf355d47acf4006d589503474f1519"></a>
-final <a class="el" href="classHybridAutomatonParser_1_1TimeContext.html">TimeContext</a>&#160;</td><td class="memItemRight" valign="bottom"><b>time</b> ()  throws RecognitionException </td></tr>
-<tr class="separator:a7dcf355d47acf4006d589503474f1519"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aea79eea72e128a7489fbeb7a309f10f1"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aea79eea72e128a7489fbeb7a309f10f1"></a>
-final <a class="el" href="classHybridAutomatonParser_1_1PlotsettingContext.html">PlotsettingContext</a>&#160;</td><td class="memItemRight" valign="bottom"><b>plotsetting</b> ()  throws RecognitionException </td></tr>
-<tr class="separator:aea79eea72e128a7489fbeb7a309f10f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3f67c1207a04d84572bf77867adede19"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3f67c1207a04d84572bf77867adede19"></a>
-final <a class="el" href="classHybridAutomatonParser_1_1FilenameContext.html">FilenameContext</a>&#160;</td><td class="memItemRight" valign="bottom"><b>filename</b> ()  throws RecognitionException </td></tr>
-<tr class="separator:a3f67c1207a04d84572bf77867adede19"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abc9cf17bc1a11126b84c5509a830342d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="abc9cf17bc1a11126b84c5509a830342d"></a>
-final <a class="el" href="classHybridAutomatonParser_1_1MaxjumpsContext.html">MaxjumpsContext</a>&#160;</td><td class="memItemRight" valign="bottom"><b>maxjumps</b> ()  throws RecognitionException </td></tr>
-<tr class="separator:abc9cf17bc1a11126b84c5509a830342d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2b081474ec0ad13aea7baa897a2ee523"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2b081474ec0ad13aea7baa897a2ee523"></a>
-final <a class="el" href="classHybridAutomatonParser_1_1PrintContext.html">PrintContext</a>&#160;</td><td class="memItemRight" valign="bottom"><b>print</b> ()  throws RecognitionException </td></tr>
-<tr class="separator:a2b081474ec0ad13aea7baa897a2ee523"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a45e9fad65a5cca13365a4b1c37ca5f73"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a45e9fad65a5cca13365a4b1c37ca5f73"></a>
-final <a class="el" href="classHybridAutomatonParser_1_1RemainderContext.html">RemainderContext</a>&#160;</td><td class="memItemRight" valign="bottom"><b>remainder</b> ()  throws RecognitionException </td></tr>
-<tr class="separator:a45e9fad65a5cca13365a4b1c37ca5f73"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0c5127ec33118326210af43f28b0d709"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0c5127ec33118326210af43f28b0d709"></a>
-final <a class="el" href="classHybridAutomatonParser_1_1IdentityContext.html">IdentityContext</a>&#160;</td><td class="memItemRight" valign="bottom"><b>identity</b> ()  throws RecognitionException </td></tr>
-<tr class="separator:a0c5127ec33118326210af43f28b0d709"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5c7be20766f2f49309436b36bcef11e8"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5c7be20766f2f49309436b36bcef11e8"></a>
-final <a class="el" href="classHybridAutomatonParser_1_1FixedordersContext.html">FixedordersContext</a>&#160;</td><td class="memItemRight" valign="bottom"><b>fixedorders</b> ()  throws RecognitionException </td></tr>
-<tr class="separator:a5c7be20766f2f49309436b36bcef11e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a69c6a8f84ed105fa1ba00a337f79a72f"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a69c6a8f84ed105fa1ba00a337f79a72f"></a>
-final <a class="el" href="classHybridAutomatonParser_1_1CutoffContext.html">CutoffContext</a>&#160;</td><td class="memItemRight" valign="bottom"><b>cutoff</b> ()  throws RecognitionException </td></tr>
-<tr class="separator:a69c6a8f84ed105fa1ba00a337f79a72f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6ccedf5e4551baf12334b697b18923ea"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6ccedf5e4551baf12334b697b18923ea"></a>
-final <a class="el" href="classHybridAutomatonParser_1_1PrecisionContext.html">PrecisionContext</a>&#160;</td><td class="memItemRight" valign="bottom"><b>precision</b> ()  throws RecognitionException </td></tr>
-<tr class="separator:a6ccedf5e4551baf12334b697b18923ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac775fa1341ee49ec7ae870a5f48d156f"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac775fa1341ee49ec7ae870a5f48d156f"></a>
-final <a class="el" href="classHybridAutomatonParser_1_1ModesContext.html">ModesContext</a>&#160;</td><td class="memItemRight" valign="bottom"><b>modes</b> ()  throws RecognitionException </td></tr>
-<tr class="separator:ac775fa1341ee49ec7ae870a5f48d156f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3c511a6dc54d012d3ea268e34bdb0e73"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3c511a6dc54d012d3ea268e34bdb0e73"></a>
-final <a class="el" href="classHybridAutomatonParser_1_1LocationContext.html">LocationContext</a>&#160;</td><td class="memItemRight" valign="bottom"><b>location</b> ()  throws RecognitionException </td></tr>
-<tr class="separator:a3c511a6dc54d012d3ea268e34bdb0e73"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ace87e4680e43f3fa97ee6d1b6060b82f"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ace87e4680e43f3fa97ee6d1b6060b82f"></a>
-final <a class="el" href="classHybridAutomatonParser_1_1ActivitiesContext.html">ActivitiesContext</a>&#160;</td><td class="memItemRight" valign="bottom"><b>activities</b> ()  throws RecognitionException </td></tr>
-<tr class="separator:ace87e4680e43f3fa97ee6d1b6060b82f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6c5e1c481696f5f3c7f7bb4ef5545160"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6c5e1c481696f5f3c7f7bb4ef5545160"></a>
-final <a class="el" href="classHybridAutomatonParser_1_1InvariantsContext.html">InvariantsContext</a>&#160;</td><td class="memItemRight" valign="bottom"><b>invariants</b> ()  throws RecognitionException </td></tr>
-<tr class="separator:a6c5e1c481696f5f3c7f7bb4ef5545160"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a833e06626cf9c7740279d808894d7fb9"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a833e06626cf9c7740279d808894d7fb9"></a>
-final <a class="el" href="classHybridAutomatonParser_1_1InitContext.html">InitContext</a>&#160;</td><td class="memItemRight" valign="bottom"><b>init</b> ()  throws RecognitionException </td></tr>
-<tr class="separator:a833e06626cf9c7740279d808894d7fb9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2c47250a8e98f97c6fc771a0625bdc1d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2c47250a8e98f97c6fc771a0625bdc1d"></a>
-final <a class="el" href="classHybridAutomatonParser_1_1InitstateContext.html">InitstateContext</a>&#160;</td><td class="memItemRight" valign="bottom"><b>initstate</b> ()  throws RecognitionException </td></tr>
-<tr class="separator:a2c47250a8e98f97c6fc771a0625bdc1d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1dce23626e2c487046f300cd9cee00ad"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1dce23626e2c487046f300cd9cee00ad"></a>
-final <a class="el" href="classHybridAutomatonParser_1_1UnsafesetContext.html">UnsafesetContext</a>&#160;</td><td class="memItemRight" valign="bottom"><b>unsafeset</b> ()  throws RecognitionException </td></tr>
-<tr class="separator:a1dce23626e2c487046f300cd9cee00ad"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac08ad1bfb28308ed4a1f8726dfe05453"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac08ad1bfb28308ed4a1f8726dfe05453"></a>
-final <a class="el" href="classHybridAutomatonParser_1_1BadstateContext.html">BadstateContext</a>&#160;</td><td class="memItemRight" valign="bottom"><b>badstate</b> ()  throws RecognitionException </td></tr>
-<tr class="separator:ac08ad1bfb28308ed4a1f8726dfe05453"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
-Static Public Attributes</h2></td></tr>
-<tr class="memitem:a32757422936b8df93da172a6fedabeeb"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a32757422936b8df93da172a6fedabeeb"></a>
-static final int&#160;</td><td class="memItemRight" valign="bottom"><b>T__0</b> =1</td></tr>
-<tr class="separator:a32757422936b8df93da172a6fedabeeb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a63c6992830941708ed167c6827fb745a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a63c6992830941708ed167c6827fb745a"></a>
-static final int&#160;</td><td class="memItemRight" valign="bottom"><b>RULE_start</b> = 0</td></tr>
-<tr class="separator:a63c6992830941708ed167c6827fb745a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab7193e397164a3a4945adeb3aa2eb745"><td class="memItemLeft" align="right" valign="top">static final String[]&#160;</td><td class="memItemRight" valign="bottom"><b>ruleNames</b></td></tr>
-<tr class="separator:ab7193e397164a3a4945adeb3aa2eb745"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5ded52acee509bd4fa5767f7247ff2ea"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5ded52acee509bd4fa5767f7247ff2ea"></a>
-static final Vocabulary&#160;</td><td class="memItemRight" valign="bottom"><b>VOCABULARY</b> = new VocabularyImpl(_LITERAL_NAMES, _SYMBOLIC_NAMES)</td></tr>
-<tr class="separator:a5ded52acee509bd4fa5767f7247ff2ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1218a9f65cd5c4f4f02f2c5033091e68"><td class="memItemLeft" align="right" valign="top">static final String[]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classHybridAutomatonParser.html#a1218a9f65cd5c4f4f02f2c5033091e68">tokenNames</a></td></tr>
-<tr class="separator:a1218a9f65cd5c4f4f02f2c5033091e68"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2572f8556f10c1653ae1538b61e5288c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2572f8556f10c1653ae1538b61e5288c"></a>
-static final String&#160;</td><td class="memItemRight" valign="bottom"><b>_serializedATN</b></td></tr>
-<tr class="separator:a2572f8556f10c1653ae1538b61e5288c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a52593edbbf14a4ec423009939814f58a"><td class="memItemLeft" align="right" valign="top">static final ATN&#160;</td><td class="memItemRight" valign="bottom"><b>_ATN</b></td></tr>
-<tr class="separator:a52593edbbf14a4ec423009939814f58a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-static-attribs"></a>
-Static Protected Attributes</h2></td></tr>
-<tr class="memitem:a2c2709d1c30ba5664fd4593e3b11013b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2c2709d1c30ba5664fd4593e3b11013b"></a>
-static final DFA[]&#160;</td><td class="memItemRight" valign="bottom"><b>_decisionToDFA</b></td></tr>
-<tr class="separator:a2c2709d1c30ba5664fd4593e3b11013b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a307e537410e06785cd920c602b9b5292"><td class="memItemLeft" align="right" valign="top">static final PredictionContextCache&#160;</td><td class="memItemRight" valign="bottom"><b>_sharedContextCache</b></td></tr>
-<tr class="separator:a307e537410e06785cd920c602b9b5292"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7c4fd7a47848637785fdedfc9f54bf5b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7c4fd7a47848637785fdedfc9f54bf5b"></a>
+<a class="el" href="classHybridAutomatonParser_1_1LbadstateContext.html">LbadstateContext</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>lbadstate</b> ()</td></tr>
+<tr class="separator:a7c4fd7a47848637785fdedfc9f54bf5b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a140a4fc9179f5b7d866c6d404385cf07"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a140a4fc9179f5b7d866c6d404385cf07"></a>
+<a class="el" href="classHybridAutomatonParser_1_1GbadstateContext.html">GbadstateContext</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>gbadstate</b> ()</td></tr>
+<tr class="separator:a140a4fc9179f5b7d866c6d404385cf07"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock">
 <p>Definition at line <a class="el" href="HybridAutomatonParser_8h_source.html#l00012">12</a> of file <a class="el" href="HybridAutomatonParser_8h_source.html">HybridAutomatonParser.h</a>.</p>
-</div><h2 class="groupheader">Member Data Documentation</h2>
-<a class="anchor" id="a52593edbbf14a4ec423009939814f58a"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">final ATN HybridAutomatonParser._ATN</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<b>Initial value:</b><div class="fragment"><div class="line">=</div>
-<div class="line">        <span class="keyword">new</span> ATNDeserializer().deserialize(_serializedATN.toCharArray())</div>
-</div><!-- fragment -->
-<p>Definition at line <a class="el" href="HybridAutomatonParser_8java_source.html#l02330">2330</a> of file <a class="el" href="HybridAutomatonParser_8java_source.html">HybridAutomatonParser.java</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a307e537410e06785cd920c602b9b5292"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">final PredictionContextCache HybridAutomatonParser._sharedContextCache</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<b>Initial value:</b><div class="fragment"><div class="line">=</div>
-<div class="line">        <span class="keyword">new</span> PredictionContextCache()</div>
-</div><!-- fragment -->
-<p>Definition at line <a class="el" href="HybridAutomatonParser_8java_source.html#l00016">16</a> of file <a class="el" href="HybridAutomatonParser_8java_source.html">HybridAutomatonParser.java</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="ab7193e397164a3a4945adeb3aa2eb745"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">final String [] HybridAutomatonParser.ruleNames</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<b>Initial value:</b><div class="fragment"><div class="line">= {</div>
-<div class="line">        <span class="stringliteral">&quot;start&quot;</span>, <span class="stringliteral">&quot;vardeclaration&quot;</span>, <span class="stringliteral">&quot;jumps&quot;</span>, <span class="stringliteral">&quot;transition&quot;</span>, <span class="stringliteral">&quot;fromto&quot;</span>, <span class="stringliteral">&quot;urgent&quot;</span>, </div>
-<div class="line">        <span class="stringliteral">&quot;guard&quot;</span>, <span class="stringliteral">&quot;allocation&quot;</span>, <span class="stringliteral">&quot;resetfct&quot;</span>, <span class="stringliteral">&quot;aggregation&quot;</span>, <span class="stringliteral">&quot;term&quot;</span>, <span class="stringliteral">&quot;polynom&quot;</span>, <span class="stringliteral">&quot;interval&quot;</span>, </div>
-<div class="line">        <span class="stringliteral">&quot;equation&quot;</span>, <span class="stringliteral">&quot;constraint&quot;</span>, <span class="stringliteral">&quot;intervalexpr&quot;</span>, <span class="stringliteral">&quot;constrset&quot;</span>, <span class="stringliteral">&quot;setting&quot;</span>, <span class="stringliteral">&quot;fixedsteps&quot;</span>, </div>
-<div class="line">        <span class="stringliteral">&quot;time&quot;</span>, <span class="stringliteral">&quot;plotsetting&quot;</span>, <span class="stringliteral">&quot;filename&quot;</span>, <span class="stringliteral">&quot;maxjumps&quot;</span>, <span class="stringliteral">&quot;print&quot;</span>, <span class="stringliteral">&quot;remainder&quot;</span>, <span class="stringliteral">&quot;identity&quot;</span>, </div>
-<div class="line">        <span class="stringliteral">&quot;fixedorders&quot;</span>, <span class="stringliteral">&quot;cutoff&quot;</span>, <span class="stringliteral">&quot;precision&quot;</span>, <span class="stringliteral">&quot;modes&quot;</span>, <span class="stringliteral">&quot;location&quot;</span>, <span class="stringliteral">&quot;activities&quot;</span>, </div>
-<div class="line">        <span class="stringliteral">&quot;invariants&quot;</span>, <span class="stringliteral">&quot;init&quot;</span>, <span class="stringliteral">&quot;initstate&quot;</span>, <span class="stringliteral">&quot;unsafeset&quot;</span>, <span class="stringliteral">&quot;badstate&quot;</span></div>
-<div class="line">    }</div>
-</div><!-- fragment -->
-<p>Definition at line <a class="el" href="HybridAutomatonParser_8java_source.html#l00036">36</a> of file <a class="el" href="HybridAutomatonParser_8java_source.html">HybridAutomatonParser.java</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="a1218a9f65cd5c4f4f02f2c5033091e68"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">final String [] HybridAutomatonParser.tokenNames</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000002">Deprecated:</a></b></dt><dd>Use <a class="el" href="">VOCABULARY</a> instead. </dd></dl>
-
-<p>Definition at line <a class="el" href="HybridAutomatonParser_8java_source.html#l00067">67</a> of file <a class="el" href="HybridAutomatonParser_8java_source.html">HybridAutomatonParser.java</a>.</p>
-
-</div>
-</div>
-<hr/>The documentation for this class was generated from the following files:<ul>
+</div><hr/>The documentation for this class was generated from the following files:<ul>
 <li>/home/travis/build/hypro/hypro/src/hypro/parser/antlr4-flowstar/<a class="el" href="HybridAutomatonParser_8h_source.html">HybridAutomatonParser.h</a></li>
-<li>/home/travis/build/hypro/hypro/src/hypro/parser/antlr4-flowstar/<a class="el" href="HybridAutomatonParser_8java_source.html">HybridAutomatonParser.java</a></li>
 <li>/home/travis/build/hypro/hypro/src/hypro/parser/antlr4-flowstar/<a class="el" href="HybridAutomatonParser_8cpp_source.html">HybridAutomatonParser.cpp</a></li>
 </ul>
 </div><!-- contents -->
