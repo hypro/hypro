@@ -18,9 +18,9 @@ public:
   };
 
   enum {
-    RuleUnsafeset = 0, RuleBadstate = 1, RuleConnector = 2, RuleTerm = 3, 
-    RulePolynom = 4, RuleInterval = 5, RuleEquation = 6, RuleConstraint = 7, 
-    RuleIntervalexpr = 8, RuleConstrset = 9
+    RuleUnsafeset = 0, RuleLbadstate = 1, RuleGbadstate = 2, RuleConnector = 3, 
+    RuleTerm = 4, RulePolynom = 5, RuleInterval = 6, RuleEquation = 7, RuleConstraint = 8, 
+    RuleIntervalexpr = 9, RuleConstrset = 10
   };
 
   BadStatesParser(antlr4::TokenStream *input);
@@ -34,7 +34,8 @@ public:
 
 
   class UnsafesetContext;
-  class BadstateContext;
+  class LbadstateContext;
+  class GbadstateContext;
   class ConnectorContext;
   class TermContext;
   class PolynomContext;
@@ -48,17 +49,19 @@ public:
   public:
     UnsafesetContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
-    std::vector<BadstateContext *> badstate();
-    BadstateContext* badstate(size_t i);
+    std::vector<GbadstateContext *> gbadstate();
+    GbadstateContext* gbadstate(size_t i);
+    std::vector<LbadstateContext *> lbadstate();
+    LbadstateContext* lbadstate(size_t i);
 
    
   };
 
   UnsafesetContext* unsafeset();
 
-  class  BadstateContext : public antlr4::ParserRuleContext {
+  class  LbadstateContext : public antlr4::ParserRuleContext {
   public:
-    BadstateContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    LbadstateContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
     antlr4::tree::TerminalNode *VARIABLE();
     ConstrsetContext *constrset();
@@ -66,7 +69,18 @@ public:
    
   };
 
-  BadstateContext* badstate();
+  LbadstateContext* lbadstate();
+
+  class  GbadstateContext : public antlr4::ParserRuleContext {
+  public:
+    GbadstateContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    ConstrsetContext *constrset();
+
+   
+  };
+
+  GbadstateContext* gbadstate();
 
   class  ConnectorContext : public antlr4::ParserRuleContext {
   public:
@@ -118,6 +132,8 @@ public:
     virtual size_t getRuleIndex() const override;
     std::vector<antlr4::tree::TerminalNode *> NUMBER();
     antlr4::tree::TerminalNode* NUMBER(size_t i);
+    std::vector<antlr4::tree::TerminalNode *> MINUS();
+    antlr4::tree::TerminalNode* MINUS(size_t i);
 
    
   };
@@ -131,6 +147,8 @@ public:
     antlr4::tree::TerminalNode *VARIABLE();
     antlr4::tree::TerminalNode *EQUALS();
     PolynomContext *polynom();
+    ConnectorContext *connector();
+    IntervalContext *interval();
 
    
   };

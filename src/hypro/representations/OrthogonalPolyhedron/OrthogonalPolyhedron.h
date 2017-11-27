@@ -37,12 +37,12 @@ enum ORTHO_TYPE { VERTEX, NEIGHBORHOOD, EXTREME_VERTEX };
  * @tparam     Converter  The used converter.
  * @tparam     Type       The internal representation type.
  */
-template <typename Number, typename Converter, ORTHO_TYPE Type = ORTHO_TYPE::VERTEX>
+template <typename Number, typename Converter, class Setting, ORTHO_TYPE Type = ORTHO_TYPE::VERTEX>
 class OrthogonalPolyhedronT {
   private:
 	// VertexContainer<Number> mVertices; // the container of all vertices
 	Grid<Number> mGrid;				   // the grid the polyhedron is defined on
-	mutable BoxT<Number,Converter> mBoundaryBox;  // the cached boundary box (mutable to allow performance optimization)
+	mutable BoxT<Number,Converter,Setting> mBoundaryBox;  // the cached boundary box (mutable to allow performance optimization)
 	mutable bool mBoxUpToDate = false;
 
   public:
@@ -55,8 +55,13 @@ class OrthogonalPolyhedronT {
 	OrthogonalPolyhedronT( const VertexContainer<Number>& vertices );
 	OrthogonalPolyhedronT( const std::set<Vertex<Number>>& points );
 	OrthogonalPolyhedronT( const std::vector<Vertex<Number>>& points );
-	OrthogonalPolyhedronT( const OrthogonalPolyhedronT<Number, Converter, Type>& copy );
-	OrthogonalPolyhedronT( const OrthogonalPolyhedronT<Number, Converter, Type>&& move );
+	OrthogonalPolyhedronT( const OrthogonalPolyhedronT<Number, Converter, Setting, Type>& copy );
+	OrthogonalPolyhedronT( const OrthogonalPolyhedronT<Number, Converter, Setting, Type>&& move );
+
+	template<class SettingRhs, carl::DisableIf< std::is_same<Setting, SettingRhs> > = carl::dummy>
+	OrthogonalPolyhedronT( const OrthogonalPolyhedronT<Number, Converter, SettingRhs, Type>& copy)
+		: mGrid( copy.vertices() ), mBoundaryBox(), mBoxUpToDate( false ) {	
+	}
 
 	/***********************************************************************
 	 * Getter, Setter
@@ -64,7 +69,7 @@ class OrthogonalPolyhedronT {
 
 	std::vector<carl::Variable> variables() const;
 	std::vector<Vertex<Number>> vertices() const;
-	BoxT<Number,Converter> boundaryBox() const;
+	BoxT<Number,Converter,Setting> boundaryBox() const;
 	const Grid<Number>& grid() const;
 	void addVertex( const Vertex<Number>& _vertex );
 	void addVertices( const std::vector<Vertex<Number>>& _vertices );
@@ -84,19 +89,19 @@ class OrthogonalPolyhedronT {
 	std::vector<Point<Number>> neighborhood( const Point<Number>& _point ) const;
 
 	std::vector<Point<Number>> iSlice( unsigned i, Number pos ) const;
-	OrthogonalPolyhedronT<Number, Converter, Type> iProjection( unsigned i ) const;
+	OrthogonalPolyhedronT<Number, Converter, Setting, Type> iProjection( unsigned i ) const;
 
 	/***********************************************************************
 	 * Geometric Object functions
 	 ***********************************************************************/
-	OrthogonalPolyhedronT<Number, Converter, Type> linearTransformation( const matrix_t<Number>& A,
+	OrthogonalPolyhedronT<Number, Converter, Setting, Type> linearTransformation( const matrix_t<Number>& A,
 															 const vector_t<Number>& b ) const;
-	OrthogonalPolyhedronT<Number, Converter, Type> minkowskiSum( const OrthogonalPolyhedronT<Number, Converter, Type>& rhs ) const;
-	OrthogonalPolyhedronT<Number, Converter, Type> intersect( const OrthogonalPolyhedronT<Number, Converter, Type>& rhs ) const;
-	OrthogonalPolyhedronT<Number, Converter, Type> hull() const;
+	OrthogonalPolyhedronT<Number, Converter, Setting, Type> minkowskiSum( const OrthogonalPolyhedronT<Number, Converter, Setting, Type>& rhs ) const;
+	OrthogonalPolyhedronT<Number, Converter, Setting, Type> intersect( const OrthogonalPolyhedronT<Number, Converter, Setting, Type>& rhs ) const;
+	OrthogonalPolyhedronT<Number, Converter, Setting, Type> hull() const;
 	bool contains( const Point<Number>& point ) const;
-	bool contains( const OrthogonalPolyhedronT<Number, Converter, Type>& _other ) const;
-	OrthogonalPolyhedronT<Number, Converter, Type> unite( const OrthogonalPolyhedronT<Number, Converter, Type>& rhs ) const;
+	bool contains( const OrthogonalPolyhedronT<Number, Converter, Setting, Type>& _other ) const;
+	OrthogonalPolyhedronT<Number, Converter, Setting, Type> unite( const OrthogonalPolyhedronT<Number, Converter, Setting, Type>& rhs ) const;
 
 	/***********************************************************************
 	 * Auxiliary functions
@@ -107,20 +112,24 @@ class OrthogonalPolyhedronT {
 	 * Operators
 	 ***********************************************************************/
 
-	OrthogonalPolyhedronT<Number, Converter, Type>& operator=( const OrthogonalPolyhedronT<Number, Converter, Type>& _in ) = default;
-	OrthogonalPolyhedronT<Number, Converter, Type>& operator=( OrthogonalPolyhedronT<Number, Converter, Type>&& ) = default;
+	OrthogonalPolyhedronT<Number, Converter, Setting, Type>& operator=( const OrthogonalPolyhedronT<Number, Converter, Setting, Type>& _in ) = default;
+	OrthogonalPolyhedronT<Number, Converter, Setting, Type>& operator=( OrthogonalPolyhedronT<Number, Converter, Setting, Type>&& ) = default;
 
-	friend bool operator==( const OrthogonalPolyhedronT<Number, Converter, Type>& op1,
-							const OrthogonalPolyhedronT<Number, Converter, Type>& op2 ) {
-		return op1.mGrid == op2.mGrid;
+	template<typename SettingRhs>
+	friend bool operator==( const OrthogonalPolyhedronT<Number, Converter, Setting, Type>& op1,
+							const OrthogonalPolyhedronT<Number, Converter, SettingRhs, Type>& op2 ) {
+		//return op1.mGrid == op2.mGrid;
+		return op1.grid() == op2.grid();
 	}
 
-	friend bool operator!=( const OrthogonalPolyhedronT<Number, Converter, Type>& op1,
-							const OrthogonalPolyhedronT<Number, Converter, Type>& op2 ) {
-		return op1.mGrid != op2.mGrid;
+	template<typename SettingRhs>
+	friend bool operator!=( const OrthogonalPolyhedronT<Number, Converter, Setting, Type>& op1,
+							const OrthogonalPolyhedronT<Number, Converter, Setting, Type>& op2 ) {
+		//return op1.mGrid != op2.mGrid;
+		return op1.grid() != op2.grid();
 	}
 
-	friend std::ostream& operator<<( std::ostream& ostr, const OrthogonalPolyhedronT<Number, Converter, Type>& p ) {
+	friend std::ostream& operator<<( std::ostream& ostr, const OrthogonalPolyhedronT<Number, Converter, Setting, Type>& p ) {
 		ostr << "(";
 		for ( const auto& vertex : p.mGrid.vertices() ) ostr << vertex << ", ";
 		ostr << ")";

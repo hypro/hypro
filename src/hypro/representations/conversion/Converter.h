@@ -29,14 +29,14 @@ enum CONV_MODE {
 template<typename Number>
 class Converter {
 	public:
-		using Box = BoxT<Number,Converter>;
+		using Box = BoxT<Number,Converter,BoxLinearOptimizationOn>;
 		using ConstraintSet = ConstraintSetT<Number,Converter>;
 		using Ellipsoid = EllipsoidT<Number,Converter>;
-		using HPolytope = HPolytopeT<Number,Converter>;
-		using OrthogonalPolyhedron = OrthogonalPolyhedronT<Number,Converter>;
+		using HPolytope = HPolytopeT<Number,Converter,HPolytopeSetting>;
+		using OrthogonalPolyhedron = OrthogonalPolyhedronT<Number,Converter,BoxLinearOptimizationOn>;
 		using VPolytope = VPolytopeT<Number,Converter>;
 		#ifdef HYPRO_USE_PPL
-		using Polytope = PolytopeT<Number,Converter>;
+		using Polytope = PolytopeT<Number,Converter,PolytopeSetting>;
 		#endif
 		using SupportFunction = SupportFunctionT<Number,Converter>;
 		using Zonotope = ZonotopeT<Number,Converter>;

@@ -205,6 +205,8 @@ public:
     virtual size_t getRuleIndex() const override;
     std::vector<antlr4::tree::TerminalNode *> NUMBER();
     antlr4::tree::TerminalNode* NUMBER(size_t i);
+    std::vector<antlr4::tree::TerminalNode *> MINUS();
+    antlr4::tree::TerminalNode* MINUS(size_t i);
 
    
   };
@@ -218,6 +220,8 @@ public:
     antlr4::tree::TerminalNode *VARIABLE();
     antlr4::tree::TerminalNode *EQUALS();
     PolynomContext *polynom();
+    ConnectorContext *connector();
+    IntervalContext *interval();
 
    
   };

@@ -91,6 +91,7 @@ public:
 	    //tmp << l.getInvariant().getMatrix(), l.getInvariant().getVector();
 	    ostr << "location " << l.getName() << " (id: " << l.getId() << ")"<< std::endl << "\t Flow: " << std::endl << l.getFlow() << std::endl << "\t Inv: " << std::endl << l.getInvariant();
 	    //ostr << l.getInvariant().getDiscreteCondition() << std::endl;
+      ostr << "ExternalInput:\n" << l.getExternalInput() << std::endl;
 	    ostr << "Transitions: " << std::endl;
 	    for (auto transitionPtr : l.getTransitions()) {
 	        ostr << *transitionPtr << std::endl;

@@ -19,7 +19,7 @@ typename Converter<Number>::HPolytope Converter<Number>::toHPolytope( const HPol
 
 template<typename Number>
 typename Converter<Number>::HPolytope Converter<Number>::toHPolytope( const ConstraintSet& _source, const CONV_MODE ){
-    return HPolytopeT<Number,Converter>(_source.matrix(), _source.vector());
+    return HPolytopeT<Number,Converter,HPolytopeSetting>(_source.matrix(), _source.vector());
 }
 
 template<typename Number>
@@ -61,7 +61,7 @@ typename Converter<Number>::HPolytope Converter<Number>::toHPolytope( const Elli
 	for (std::size_t i = 0; i < constraints.size(); i++){
 	    constraintMatrix.row(i) = constraints.at(i);
 	}
-	return HPolytopeT<Number,Converter>(constraintMatrix, b);
+	return HPolytopeT<Number,Converter,HPolytopeSetting>(constraintMatrix, b);
 }
 
 //conversion from V-Polytope to H-Polytope (EXACT or OVER)
@@ -124,7 +124,7 @@ typename Converter<Number>::HPolytope Converter<Number>::toHPolytope( const Zono
     //computes vertices from source object
     typename std::vector<Point<Number>> vertices = _source.vertices();
     if(vertices.empty()){
-    	return HPolytopeT<Number,Converter>();
+    	return HPolytopeT<Number,Converter,HPolytopeSetting>();
     }
     VPolytope vpoly = VPolytope(vertices);
 

@@ -315,3 +315,10 @@ TYPED_TEST(OrthogonalPolyhedronTest, Unite) {
 
 	EXPECT_EQ(expected, result);
 }
+
+TYPED_TEST(OrthogonalPolyhedronTest, SettingsConversion){
+
+	hypro::OrthogonalPolyhedronT<TypeParam, hypro::Converter<TypeParam>, hypro::BoxLinearOptimizationOff> newOP(this->p1);
+	EXPECT_EQ(newOP, this->p1);
+
+}

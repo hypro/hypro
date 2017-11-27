@@ -27,6 +27,18 @@ public:
     return visitChildren(ctx);
   }
 
+  virtual antlrcpp::Any visitEquations(ExpressionsParser::EquationsContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitEquationDerivate(ExpressionsParser::EquationDerivateContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitEquationNonDerivate(ExpressionsParser::EquationNonDerivateContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
   virtual antlrcpp::Any visitOrExpression(ExpressionsParser::OrExpressionContext *ctx) override {
     return visitChildren(ctx);
   }
@@ -47,7 +59,19 @@ public:
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitUnaryExpression(ExpressionsParser::UnaryExpressionContext *ctx) override {
+  virtual antlrcpp::Any visitUnaryExprFunc(ExpressionsParser::UnaryExprFuncContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitUnaryExprMinus(ExpressionsParser::UnaryExprMinusContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitUnaryExprPlus(ExpressionsParser::UnaryExprPlusContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitUnaryExpr(ExpressionsParser::UnaryExprContext *ctx) override {
     return visitChildren(ctx);
   }
 
@@ -55,7 +79,19 @@ public:
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitExpressionFactor(ExpressionsParser::ExpressionFactorContext *ctx) override {
+  virtual antlrcpp::Any visitExprFact(ExpressionsParser::ExprFactContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitExprFactNumber(ExpressionsParser::ExprFactNumberContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitExprFactRealNumber(ExpressionsParser::ExprFactRealNumberContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitExprFactName(ExpressionsParser::ExprFactNameContext *ctx) override {
     return visitChildren(ctx);
   }
 

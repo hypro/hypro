@@ -16,6 +16,7 @@
 #endif
 
 #include "ZUtility.h"
+#include "ZonotopeSetting.h"
 #include "../../datastructures/Halfspace.h"
 #include "../../util/pca.h"
 #include "../../util/adaptions_eigen/adaptions_eigen.h"
@@ -27,8 +28,6 @@
 #include <valarray>
 
 namespace hypro {
-
-static const unsigned ZONOTOPE_ORDERLIMIT = 4;
 
 /**
  * @brief      Class for Zonotopes.
@@ -174,7 +173,8 @@ class ZonotopeT : public GeometricObject<Number, ZonotopeT<Number,Converter>> {
 
     void removeRedundancy() const {}
 
-    void reduceOrder( Number limit = Number(ZONOTOPE_ORDERLIMIT) );
+    template<class Setting>
+    void reduceOrder( Number limit = Number(Setting::ZONOTOPE_ORDERLIMIT) );
 
     void reduceNumberRepresentation();
 

@@ -12,19 +12,18 @@
  */
 
 #include "PolytopeSupportFunction.h"
-//#define PPOLYTOPESUPPORTFUNCTION_VERBOSE
 
 namespace hypro {
 
-template <typename Number>
-PolytopeSupportFunction<Number>::PolytopeSupportFunction( matrix_t<Number> constraints,
+template <typename Number, class Setting>
+PolytopeSupportFunction<Number,Setting>::PolytopeSupportFunction( matrix_t<Number> constraints,
 														  vector_t<Number> constraintConstants )
 	: mConstraints( constraints ), mConstraintConstants( constraintConstants ), mOpt(constraints,constraintConstants), mDimension(mConstraints.cols()) {
 	//this->removeRedundancy();
 }
 
-template <typename Number>
-PolytopeSupportFunction<Number>::PolytopeSupportFunction( const std::vector<Halfspace<Number>> &_planes ) {
+template <typename Number, class Setting>
+PolytopeSupportFunction<Number,Setting>::PolytopeSupportFunction( const std::vector<Halfspace<Number>> &_planes ) {
 	assert( !_planes.empty() );
 	mConstraints = matrix_t<Number>( _planes.size(), _planes[0].dimension() );
 	mConstraintConstants = vector_t<Number>( _planes.size() );
@@ -40,8 +39,8 @@ PolytopeSupportFunction<Number>::PolytopeSupportFunction( const std::vector<Half
 	//this->removeRedundancy();
 }
 
-template<typename Number>
-PolytopeSupportFunction<Number>::PolytopeSupportFunction( const std::vector<Point<Number>>& _points ) {
+template<typename Number, class Setting>
+PolytopeSupportFunction<Number,Setting>::PolytopeSupportFunction( const std::vector<Point<Number>>& _points ) {
 	//std::cout << __func__ << std::endl;
 	if ( !_points.empty() ) {
 		//std::cout << "Points not empty" << std::endl;
@@ -89,17 +88,17 @@ PolytopeSupportFunction<Number>::PolytopeSupportFunction( const std::vector<Poin
 	mOpt = Optimizer<Number>(mConstraints,mConstraintConstants);
 }
 
-template <typename Number>
-PolytopeSupportFunction<Number>::PolytopeSupportFunction( const PolytopeSupportFunction<Number> &_origin )
+template <typename Number, class Setting>
+PolytopeSupportFunction<Number,Setting>::PolytopeSupportFunction( const PolytopeSupportFunction<Number,Setting> &_origin )
 	: mConstraints( _origin.constraints() ), mConstraintConstants( _origin.constants()), mOpt(mConstraints,mConstraintConstants), mDimension(mConstraints.cols() ) {
 }
 
-template <typename Number>
-PolytopeSupportFunction<Number>::~PolytopeSupportFunction() {
+template <typename Number, class Setting>
+PolytopeSupportFunction<Number,Setting>::~PolytopeSupportFunction() {
 }
 
-template <typename Number>
-PolytopeSupportFunction<Number>& PolytopeSupportFunction<Number>::operator=(const PolytopeSupportFunction<Number>& _orig){
+template <typename Number, class Setting>
+PolytopeSupportFunction<Number,Setting>& PolytopeSupportFunction<Number,Setting>::operator=(const PolytopeSupportFunction<Number,Setting>& _orig){
 	std::cout << __func__ << std::endl;
     this->mConstraints = _orig.mConstraints;
     this->mConstraintConstants = _orig.mConstraintConstants;
@@ -107,28 +106,28 @@ PolytopeSupportFunction<Number>& PolytopeSupportFunction<Number>::operator=(cons
     this->mDimension = _orig.mDimension;
 }
 
-template <typename Number>
-std::size_t PolytopeSupportFunction<Number>::dimension() const {
+template <typename Number, class Setting>
+std::size_t PolytopeSupportFunction<Number,Setting>::dimension() const {
 	return mDimension;
 }
 
-template <typename Number>
-SF_TYPE PolytopeSupportFunction<Number>::type() const {
+template <typename Number, class Setting>
+SF_TYPE PolytopeSupportFunction<Number,Setting>::type() const {
 	return SF_TYPE::POLY;
 }
 
-template <typename Number>
-matrix_t<Number> PolytopeSupportFunction<Number>::constraints() const {
+template <typename Number, class Setting>
+matrix_t<Number> PolytopeSupportFunction<Number,Setting>::constraints() const {
 	return mConstraints;
 }
 
-template <typename Number>
-vector_t<Number> PolytopeSupportFunction<Number>::constants() const {
+template <typename Number, class Setting>
+vector_t<Number> PolytopeSupportFunction<Number,Setting>::constants() const {
 	return mConstraintConstants;
 }
 
-template<typename Number>
-std::vector<Point<Number>> PolytopeSupportFunction<Number>::vertices() const {
+template<typename Number, class Setting>
+std::vector<Point<Number>> PolytopeSupportFunction<Number,Setting>::vertices() const {
 	typename std::vector<Point<Number>> vertices;
 	if(mConstraints.rows() != 0) {
 		unsigned dim = this->dimension();
@@ -189,8 +188,8 @@ std::vector<Point<Number>> PolytopeSupportFunction<Number>::vertices() const {
 	return vertices;
 }
 
-template<typename Number>
-Point<Number> PolytopeSupportFunction<Number>::supremumPoint() const {
+template<typename Number, class Setting>
+Point<Number> PolytopeSupportFunction<Number,Setting>::supremumPoint() const {
 	assert(!this->empty());
 	EvaluationResult<Number> sup;
 	sup.errorCode = SOLUTION::UNKNOWN;
@@ -226,8 +225,8 @@ Point<Number> PolytopeSupportFunction<Number>::supremumPoint() const {
 	return Point<Number>(sup.optimumValue);
 }
 
-template <typename Number>
-EvaluationResult<Number> PolytopeSupportFunction<Number>::evaluate( const vector_t<Number> &l, bool useExact ) const {
+template <typename Number, class Setting>
+EvaluationResult<Number> PolytopeSupportFunction<Number,Setting>::evaluate( const vector_t<Number> &l, bool useExact ) const {
 	// catch half-space
 	if(mConstraints.rows() == 1) {
 		//std::cout << "only one constraint! -> we evaluate against a plane!" << std::endl;
@@ -253,18 +252,19 @@ EvaluationResult<Number> PolytopeSupportFunction<Number>::evaluate( const vector
 	}
 
 	EvaluationResult<Number> res(mOpt.evaluate(l, useExact));
-#ifdef PPOLYTOPESUPPORTFUNCTION_VERBOSE
-	std::cout << __func__ << ": " << *this << " evaluated in direction " << convert<Number,double>(l) << " results in " << res << std::endl;
-#endif
+	if(Setting::PPOLYTOPESUPPORTFUNCTION_VERBOSE){
+		std::cout << __func__ << ": " << *this << " evaluated in direction " << convert<Number,double>(l) << " results in " << res << std::endl;
+	}
 #if defined(HYPRO_USE_SMTRAT) || defined(HYPRO_USE_Z3) || defined(HYPRO_USE_SOPLEX)
 	assert(res.errorCode != SOLUTION::FEAS || this->contains(res.optimumValue));
 #endif
-	assert( std::size_t(l.rows()) == mDimension );
+	//assert( std::size_t(l.rows()) == mDimension );
+	//assert( l.rows() == mDimension );
 	return res;
 }
 
-template <typename Number>
-std::vector<EvaluationResult<Number>> PolytopeSupportFunction<Number>::multiEvaluate( const matrix_t<Number> &_A, bool useExact, bool ) const {
+template <typename Number, class Setting>
+std::vector<EvaluationResult<Number>> PolytopeSupportFunction<Number,Setting>::multiEvaluate( const matrix_t<Number> &_A, bool useExact, bool ) const {
 	assert( std::size_t(_A.cols()) == mDimension );
 	std::vector<EvaluationResult<Number>> res;
 	TRACE("hypro.representations.supportFunction", "Evaluate in directions " << matrix_t<double>(convert<Number,double>(_A)) << std::endl << "POLY SF IS " << *this);
@@ -300,13 +300,13 @@ std::vector<EvaluationResult<Number>> PolytopeSupportFunction<Number>::multiEval
 	return res;
 }
 
-template <typename Number>
-bool PolytopeSupportFunction<Number>::contains( const Point<Number> &_point ) const {
+template <typename Number, class Setting>
+bool PolytopeSupportFunction<Number,Setting>::contains( const Point<Number> &_point ) const {
 	return this->contains( _point.rawCoordinates() );
 }
 
-template <typename Number>
-bool PolytopeSupportFunction<Number>::contains( const vector_t<Number> &_point ) const {
+template <typename Number, class Setting>
+bool PolytopeSupportFunction<Number,Setting>::contains( const vector_t<Number> &_point ) const {
 	assert(mConstraints.rows() == mConstraintConstants.rows());
 	assert(mConstraints.cols() == _point.rows());
 	//std::cout << "Matrix " << mConstraints << " contains " << _point << std::endl;
@@ -319,19 +319,19 @@ bool PolytopeSupportFunction<Number>::contains( const vector_t<Number> &_point )
 	return true;
 }
 
-template <typename Number>
-bool PolytopeSupportFunction<Number>::empty() const {
+template <typename Number, class Setting>
+bool PolytopeSupportFunction<Number,Setting>::empty() const {
 	return !mOpt.checkConsistency();
 }
 
-template <typename Number>
-void PolytopeSupportFunction<Number>::print() const{
+template <typename Number, class Setting>
+void PolytopeSupportFunction<Number,Setting>::print() const{
     std::cout << convert<Number,double>(mConstraints) << std::endl;
     std::cout << convert<Number,double>(mConstraintConstants) << std::endl;
 }
 
-template<typename Number>
-std::string PolytopeSupportFunction<Number>::createCode(unsigned index) const {
+template<typename Number, class Setting>
+std::string PolytopeSupportFunction<Number,Setting>::createCode(unsigned index) const {
 	std::stringstream res;
 	std::string tmp = createCode(mConstraints);
 	std::string tmp2 = createCode(mConstraintConstants, index);
@@ -341,8 +341,8 @@ std::string PolytopeSupportFunction<Number>::createCode(unsigned index) const {
 
 }
 
-template<typename Number>
-void PolytopeSupportFunction<Number>::removeRedundancy() {
+template<typename Number, class Setting>
+void PolytopeSupportFunction<Number,Setting>::removeRedundancy() {
 	if(mConstraints.rows() > 1){
 
 		std::vector<std::size_t> redundant = mOpt.redundantConstraints();

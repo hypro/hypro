@@ -2,8 +2,7 @@
 
 namespace hypro {
 
-	void ErrorListener::syntaxError(Recognizer* recognizer, Token* offendingSymbol, size_t line, size_t charPositionInLine, 
-			const std::string &msg, std::exception_ptr e){
+	void ErrorListener::syntaxError(Recognizer* , Token* , size_t line, size_t charPositionInLine, const std::string &msg, std::exception_ptr ){
 
 		std::string message("ERROR: line: ");
 		message += std::to_string(line);

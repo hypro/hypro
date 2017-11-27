@@ -144,6 +144,10 @@ class HybridAutomaton
             ostr << ( *initialIT ).first->id() << ": " << ( *initialIT ).second.first
                   << " <= " << ( *initialIT ).second.second << std::endl;
         }*/  // TODO
+        ostr << "initial states: " << std::endl;
+        for(auto initialIt = a.getInitialStates().begin(); initialIt != a.getInitialStates().end(); ++initialIt){
+            ostr << *((*initialIt).first) << ": " << (*initialIt).second << std::endl;
+        }
         ostr << "locations: " << std::endl;
         for (auto locationIT = a.getLocations().begin(); locationIT != a.getLocations().end(); ++locationIT) {
             ostr << **locationIT << std::endl;
@@ -151,6 +155,10 @@ class HybridAutomaton
         ostr << "transitions: " << std::endl;
         for (const auto& transition : a.getTransitions()) {
             ostr << *transition << std::endl;
+        }
+        ostr << "local bad states: " << std::endl;
+        for(auto badStateIt = a.getLocalBadStates().begin(); badStateIt != a.getLocalBadStates().end(); ++badStateIt){
+            ostr << *((*badStateIt).first) << ": " << (*badStateIt).second << std::endl;   
         }
 #endif
         return ostr;

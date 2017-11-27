@@ -45,4 +45,4 @@ precision 		: 'precision' NUMBER ;
 
 //////// Lexer Rules
 
-EXPONENTIAL 	: NUMBER 'e' NUMBER ;
+EXPONENTIAL 	: MINUS? NUMBER 'e' MINUS? NUMBER ;
