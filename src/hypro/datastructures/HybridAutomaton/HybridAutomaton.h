@@ -158,10 +158,12 @@ class HybridAutomaton
         }
         ostr << "local bad states: " << std::endl;
         for(auto badStateIt = a.getLocalBadStates().begin(); badStateIt != a.getLocalBadStates().end(); ++badStateIt){
-            ostr << *((*badStateIt).first) << ": " << (*badStateIt).second << std::endl;   
+            ostr << *((*badStateIt).first) << ": " << (*badStateIt).second << std::endl;
         }
 #endif
         return ostr;
     }
 };
-}
+} // namespace hypro
+
+#include "HybridAutomaton.tpp"

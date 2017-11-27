@@ -2,11 +2,6 @@
 
 namespace hypro
 {
-template<typename Number>
-HybridAutomaton<Number>::HybridAutomaton(const locationSet& _locs, const transitionSet& _trans, const locationStateMap& _initialStates)
-    : mLocations(_locs), mTransitions(_trans), mInitialStates(_initialStates)
-{
-}
 
 template<typename Number>
 const Location<Number>* HybridAutomaton<Number>::getLocation(std::size_t id) const {
@@ -28,7 +23,8 @@ const Location<Number>* HybridAutomaton<Number>::getLocation(std::string name) c
 	return nullptr;
 }
 
-unsigned HybridAutomaton::dimension() const
+template<typename Number>
+unsigned HybridAutomaton<Number>::dimension() const
 {
     if (mInitialStates.empty()) return 0;
 
