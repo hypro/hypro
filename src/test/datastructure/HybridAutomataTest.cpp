@@ -47,11 +47,13 @@ protected:
 		invariantMat(1,1) = 3;
 
 		loc1->setInvariant(Condition<Number>(invariantMat,invariantVec));
+		loc1->setName("Location1");
 
 		inv.setMatrix(invariantMat);
 		inv.setVector(invariantVec);
 
 		loc2->setInvariant(inv);
+		loc2->setName("Location2");
 
 		locationMat(0,0) = 2;
 		locationMat(0,1) = 0;
@@ -237,6 +239,11 @@ TYPED_TEST(HybridAutomataTest, HybridAutomatonTest)
 
 	EXPECT_TRUE(std::find(h1.getLocations().begin(), h1.getLocations().end(), this->loc1) != h1.getLocations().end());
 	EXPECT_TRUE(std::find(h1.getLocations().begin(), h1.getLocations().end(), this->loc2) != h1.getLocations().end());
+
+	EXPECT_TRUE(h1.getLocation("Location1") == this->loc1);
+	EXPECT_TRUE(h1.getLocation(this->loc1->getId()) == this->loc1);
+	EXPECT_TRUE(h1.getLocation("Location2") == this->loc2);
+	EXPECT_TRUE(h1.getLocation(this->loc2->getId()) == this->loc2);
 
 	h1.addTransition(this->trans);
 	EXPECT_TRUE(std::find(h1.getTransitions().begin(), h1.getTransitions().end(), this->trans) != h1.getTransitions().end());
