@@ -13,6 +13,7 @@ var classhypro_1_1Optimizer =
     [ "matrix", "classhypro_1_1Optimizer.html#abce506a254bbcd7b47a8cdd149fb3c6d", null ],
     [ "operator=", "classhypro_1_1Optimizer.html#a58cf754a2a364133b52f7dfae4d24e7d", null ],
     [ "redundantConstraints", "classhypro_1_1Optimizer.html#a37a12c32ebf96ff35b1218c7eb936084", null ],
+    [ "refresh", "classhypro_1_1Optimizer.html#a73ab95768a4e0769e542d229a9ee08a4", null ],
     [ "setMatrix", "classhypro_1_1Optimizer.html#a3af3093ab6949ce7448109036feacaa2", null ],
     [ "setVector", "classhypro_1_1Optimizer.html#a9a40a723d2553a38a480e4ba18ad02db", null ],
     [ "vector", "classhypro_1_1Optimizer.html#af794665f4c5ec520cdfed3a9aeb7bfb2", null ]

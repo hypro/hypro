@@ -1,5 +1,6 @@
 var NAVTREEINDEX1640 =
 {
+"classhypro_1_1OrthogonalPolyhedron.html#a9de868e715f7eed27918865d88650c44":[9,0,1,68,7],
 "classhypro_1_1OrthogonalPolyhedron.html#aa2f6cfcff6179d8b18937a5bd6384e03":[9,0,1,68,30],
 "classhypro_1_1OrthogonalPolyhedron.html#ab2766c48a54f1f9847e441482d098b3c":[9,0,1,68,20],
 "classhypro_1_1OrthogonalPolyhedron.html#ab49118d193b13e0f75dcd5cd040108a0":[9,0,1,68,33],
@@ -248,6 +249,5 @@ var NAVTREEINDEX1640 =
 "classhypro_1_1Reset.html#a4e33151e4c211ae3e6cc7266feeb05ce":[9,0,1,23,7],
 "classhypro_1_1Reset.html#a519225333c976d3c64fd91cda40e6bfe":[9,0,1,23,18],
 "classhypro_1_1Reset.html#a710d843b4628d1ec4605793b6d0bce4c":[9,0,1,23,20],
-"classhypro_1_1Reset.html#a77bc6233604980910f6162442605c7e0":[9,0,1,23,19],
-"classhypro_1_1Reset.html#a84013f2180c0929a6f09ba623c4cd3a9":[9,0,1,23,14]
+"classhypro_1_1Reset.html#a77bc6233604980910f6162442605c7e0":[9,0,1,23,19]
 };
