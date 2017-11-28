@@ -21,6 +21,7 @@
 #include "glpk/adaptions_glpk.h"
 #include <carl/util/Singleton.h>
 #include <mutex>
+#include <thread>
 
 #ifdef VERIFY_RESULT
 #include <sys/stat.h>
@@ -66,6 +67,7 @@ namespace hypro {
 		mutable int* ia;
 		mutable int* ja;
 		mutable double* ar;
+		mutable std::thread::id creatingThreadId;
 
 	public:
 
@@ -120,10 +122,12 @@ namespace hypro {
 		 * @brief      Destroys the object.
 		 */
 		~Optimizer() {
+			/*
 			if(mInitialized) {
 				glp_delete_prob(lp);
 			}
 			deleteArrays();
+			*/
 		}
 
 	public:
@@ -196,6 +200,11 @@ namespace hypro {
 		 * @return     A vector of row-indices which represent redundant constraints.
 		 */
 		std::vector<std::size_t> redundantConstraints() const;
+
+		/**
+		 * @brief      Method to refresh glpk-related datastructures in a multithreaded environment.
+		 */
+		void refresh() const;
 
 	private:
 		/**
