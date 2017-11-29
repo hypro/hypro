@@ -238,17 +238,25 @@ void Transformation<Number>::analyzeExponentialFunctions() {
     for ( auto &structObject : mLocPtrtoComputationvaluesMap) {
         const size_t dimension = structObject.second.mSTflowpipeSegment.V.rows();
         structObject.second.mSTindependentFunct.expFunctionType.reserve(dimension);
+        TRACE("hypro.eigendecomposition","looping through " << (structObject.first));//ptr-adress of location
+        //TRACE("hypro.eigendecomposition","Loc: " << V);
         for(size_t i=0; i<dimension; ++i) {
             //1. divergence D>0, 2. convergence D<0, 3. linear D=0
             //4. const [never used yet since we can then not use decomposition]
         //TODO close to 0
             if(structObject.second.mSTindependentFunct.D.diagonal()(i) == 0) {
                 structObject.second.mSTindependentFunct.expFunctionType[i] = EXP_FUNCT_TYPE::LINEAR;
+                //TRACE("hypro.eigendecomposition","linear behaviour of " << i);
             } else {
-                if(structObject.second.mSTindependentFunct.D.diagonal()(i) < 0)
+                if(structObject.second.mSTindependentFunct.D.diagonal()(i) < 0) {
                     structObject.second.mSTindependentFunct.expFunctionType[i] = EXP_FUNCT_TYPE::CONVERGENT;
-                else
+                    //TRACE("hypro.eigendecomposition","V\n" << V);
+                    //TRACE("hypro.eigendecomposition","V\n" << V);
+                } else {
                     structObject.second.mSTindependentFunct.expFunctionType[i] = EXP_FUNCT_TYPE::DIVERGENT;
+                    //TRACE("hypro.eigendecomposition","V\n" << V);
+                    //TRACE("hypro.eigendecomposition","V\n" << V);
+                }
             }
         }
     }

@@ -82,6 +82,10 @@ void addSegment(std::vector<VPoly>& flow, bool PLOT, Flow_seg& safe_seg,
 
 int main()
 {
+    //const std::string& filename = "../../examples/input/bouncing_ball_inhomogen.model";
+    //const std::string& filename = "../../examples/input/rod_reactor.model";
+    //bouncing_ball_inhomogen.model  rod_reactor.model switching_5.model
+    //filtered_oscillator_4.model bouncing_ball_inhomogen.model missing: GearBox ARCH17, Comp3
     const std::string& filename = "../../examples/input/bouncing_ball_inhomogen.model";
 	boost::tuple<HybridAutomaton<Number>, ReachabilitySettings<Number>> ha = parseFlowstarFile<Number>(filename);
     HybridAutomaton<Number> original_ha = boost::get<0>(ha);

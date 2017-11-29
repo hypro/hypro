@@ -1,5 +1,5 @@
 /**
- * Sandbox for the Eigendecomposition project.
+ * Overapproximation tryout with 2 points.
  */
 
 
