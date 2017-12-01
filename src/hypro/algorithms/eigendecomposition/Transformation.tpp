@@ -8,10 +8,12 @@ Transformation<Number>::Transformation (const HybridAutomaton<Number>& _hybrid) 
     Matrix<Number> matrix_in_parser;
     Matrix<Number> matrix_calc;
     size_t m_size, i;
+//START REMOVE
     DiagonalMatrixdouble Ddouble;
     Matrix<double> Vdouble;
     Matrix<double> Vinvdouble;
     Matrix<double> matrixCalcDouble;
+//END REMOVE
     Matrix<Number> V;                             //backtransformation
     Matrix<Number> Vinv;                          //transformation
     Vector<Number> b_tr;                          //transformed and dumped after use
@@ -27,46 +29,50 @@ Transformation<Number>::Transformation (const HybridAutomaton<Number>& _hybrid) 
         m_size -= 1;
         STallValues<Number> mSTallvalues;
         declare_structures(mSTallvalues, m_size);
+    //PLAN: store only GMP/double matrices here => remove double matrices
         b_tr        = Vector<Number>(m_size);
         matrix_calc = Matrix<Number>(m_size,m_size);
 //double for rational converting here
+    //START REMOVE
         Ddouble     = DiagonalMatrixdouble(m_size); //formulation in .h
         Vdouble     = Matrix<double>(m_size,m_size);
         Vinvdouble  = Matrix<double>(m_size,m_size);
         matrixCalcDouble = Matrix<double>(m_size,m_size);
+    //END REMOVE
         V           = Matrix<Number>(m_size,m_size);
         Vinv        = Matrix<Number>(m_size,m_size);
         b_tr        = matrix_in_parser.topRightCorner(m_size,1);
         matrix_calc = matrix_in_parser.topLeftCorner(m_size,m_size);
         std::cout<<"A: "<<std::endl<<matrix_calc;
+    //START (RE)MOVE
         matrixCalcDouble = convert<Number,double> (matrix_calc);
     //LOCATION TRANSFORMATION
         Eigen::EigenSolver<Matrix<double>> es(matrixCalcDouble);
         Vdouble << es.eigenvectors().real();
         Ddouble.diagonal() << es.eigenvalues().real();
         Vinvdouble = Vdouble.inverse();
-        //mSTallvalues.mSTindependentFunct.D.diagonal() << es.eigenvalues().real();
-        //Vinv = V.inverse();
-    //ASSERTION CONDITION TODO making this faster for big/sparse matrices
+        //ASSERTION CONDITION TODO making this faster for big/sparse matrices
         Eigen::JacobiSVD<Matrix<double>> svd(Vinvdouble);  
         double cond = svd.singularValues()(0)  / svd.singularValues()(svd.singularValues().size()-1);
         if(std::abs(cond) > CONDITION_LIMIT) {
             FATAL("hypro.eigendecomposition","condition is higher than CONDITION_LIMIT");
         }
-    //TODO make assertions about V D and V^-1 and in addition to A and b if needed
+        //Assertions about V, D, V^-1, A, b needed? TODO
         std::cout <<"Vinv(condition): ("<< cond <<")\n" << Vinv;
-//TODO TESTING CONVERSION TO RATIONAL (TRACE)
+        //CONVERSION TO RATIONAL
         V = convert<double,Number>(Vdouble);
         Vinv = convert<double,Number>(Vinvdouble);
         TRACE("hypro.eigendecomposition","V\n" << V);
         TRACE("hypro.eigendecompositoin","Vinv\n" << Vinv);
         mSTallvalues.mSTindependentFunct.D = convert<double,Number>(Ddouble);
-        //std::cout <<"D: "    << std::endl << D;
+    //END REMOVE
         matrix_calc = Vinv*matrix_calc;
         b_tr        = Vinv*b_tr;
         std::cout<<"Vinv*A("<<m_size<<"x"<<m_size<<"),b_tr"<<std::endl;
+    //USELESS??
         matrix_in_parser.topLeftCorner(m_size,m_size) =  matrix_calc;
         matrix_in_parser.topRightCorner(m_size,1) = b_tr;   //size
+    //END USELESS
         //std::cout << matrix_in_parser;
 	    PtrtoNewLoc = locationManager.create(matrix_in_parser);
         locations.insert(PtrtoNewLoc);
@@ -76,7 +82,7 @@ Transformation<Number>::Transformation (const HybridAutomaton<Number>& _hybrid) 
         TRACE("hypro.eigendecomposition", "D approx:\n" << Ddouble.diagonal() );
         TRACE("hypro.eigendecomposition", "b_tr :\n" << b_tr );
         for( i=0; i<m_size; ++i) {
-    //LINEAR BEHAVIOUR IFF D=0
+    //START MOVE
     //TODO COMPARISON ALMOST EQUAL 0 [else div by 0]
             if ( mSTallvalues.mSTindependentFunct.D.diagonal()(i) == 0 ) {
                 mSTallvalues.mSTindependentFunct.xinhom(i)    = b_tr(i);
@@ -84,10 +90,11 @@ Transformation<Number>::Transformation (const HybridAutomaton<Number>& _hybrid) 
                 mSTallvalues.mSTindependentFunct.xinhom(i)    = b_tr(i) / mSTallvalues.mSTindependentFunct.D.diagonal()(i);
             }
         }
-    //assign values
+    //TODO INSERT HERE MODIFICATION of Vinv
         mSTallvalues.mSTflowpipeSegment.Vinv       = Vinv;
         mSTallvalues.mSTflowpipeSegment.V          = V;
         mLocPtrtoComputationvaluesMap.insert(std::make_pair(PtrtoNewLoc, mSTallvalues));
+    //END MOVE
         //std::cout << "old loc: "<<LocPtr<<"\n";
         //std::cout << "new loc: "<<PtrtoNewLoc<<"\n";
     //INVARIANTS(TYPE CONDITION) [TODO check why assertion to Invariants fails]
@@ -170,7 +177,7 @@ Transformation<Number>::Transformation (const HybridAutomaton<Number>& _hybrid) 
         TRACE("hypro.eigendecomposition","transformed localBadState: " << badStateNEW);
         mTransformedHA.addLocalBadState(NewLocPtr, badStateNEW);
     }
-    analyzeExponentialFunctions();
+    //analyzeExponentialFunctions(); TODO REMOVE/MODIFY before!
     //for (const auto & locBadState : mTransformedHA.getLocalBadStates() ) {
     //    TRACE("hypro.eigendecomposition","in location: " << locBadState.first)
     //    TRACE("hypro.eigendecomposition","after trafo State:" << locBadState.second);
@@ -232,62 +239,171 @@ void Transformation<Number>::addGlobalBadStates
         }
     }
 }
-template <typename Number>
-void Transformation<Number>::analyzeExponentialFunctions() {
-//TODO Location multiple flows and states (map of states to flows)
-    for ( auto &structObject : mLocPtrtoComputationvaluesMap) {
-        const size_t dimension = structObject.second.mSTflowpipeSegment.V.rows();
-        structObject.second.mSTindependentFunct.expFunctionType.reserve(dimension);
-        TRACE("hypro.eigendecomposition","looping through " << (structObject.first));//ptr-adress of location
-        //TRACE("hypro.eigendecomposition","Loc: " << V);
-        for(size_t i=0; i<dimension; ++i) {
-            //1. divergence D>0, 2. convergence D<0, 3. linear D=0
-            //4. const [never used yet since we can then not use decomposition]
-        //TODO close to 0
-            if(structObject.second.mSTindependentFunct.D.diagonal()(i) == 0) {
-                structObject.second.mSTindependentFunct.expFunctionType[i] = EXP_FUNCT_TYPE::LINEAR;
-                //TRACE("hypro.eigendecomposition","linear behaviour of " << i);
-            } else {
-                if(structObject.second.mSTindependentFunct.D.diagonal()(i) < 0) {
-                    structObject.second.mSTindependentFunct.expFunctionType[i] = EXP_FUNCT_TYPE::CONVERGENT;
-                    //TRACE("hypro.eigendecomposition","V\n" << V);
-                    //TRACE("hypro.eigendecomposition","V\n" << V);
-                } else {
-                    structObject.second.mSTindependentFunct.expFunctionType[i] = EXP_FUNCT_TYPE::DIVERGENT;
-                    //TRACE("hypro.eigendecomposition","V\n" << V);
-                    //TRACE("hypro.eigendecomposition","V\n" << V);
-                }
-            }
-        }
-    }
-}
-
-//REACHABILITY WORKER INHERITS from IWorker and MAutomaton(automaton)
-
-//method processTask
-//TASK given as shared ptr: is struct of shared_ptr, tBacktrackingInfo
-//tBacktrackingInfo has hypro::Path + btLevel + currentBTPosition
+//template <typename Number>
+//void Transformation<Number>::analyzeExponentialFunctions() {
+////TODO Location multiple flows and states (map of states to flows)
+//    for ( auto &structObject : mLocPtrtoComputationvaluesMap) {
+//        const size_t dimension = structObject.second.mSTflowpipeSegment.V.rows();
+//        structObject.second.mSTindependentFunct.expFunctionType.reserve(dimension);
+//        TRACE("hypro.eigendecomposition","looping through " << (structObject.first));//ptr-adress of location
+//        //TRACE("hypro.eigendecomposition","Loc: " << V);
+//        for(size_t i=0; i<dimension; ++i) {
+//            //1. divergence D>0, 2. convergence D<0, 3. linear D=0
+//            //4. const [never used yet since we can then not use decomposition]
+//        //TODO close to 0
+//            if(structObject.second.mSTindependentFunct.D.diagonal()(i) == 0) {
+//                structObject.second.mSTindependentFunct.expFunctionType[i] = EXP_FUNCT_TYPE::LINEAR;
+//                //TRACE("hypro.eigendecomposition","linear behaviour of " << i);
+//            } else {
+//                if(structObject.second.mSTindependentFunct.D.diagonal()(i) < 0) {
+//                    structObject.second.mSTindependentFunct.expFunctionType[i] = EXP_FUNCT_TYPE::CONVERGENT;
+//                    //TRACE("hypro.eigendecomposition","V\n" << V);
+//                    //TRACE("hypro.eigendecomposition","V\n" << V);
+//                } else {
+//                    structObject.second.mSTindependentFunct.expFunctionType[i] = EXP_FUNCT_TYPE::DIVERGENT;
+//                    //TRACE("hypro.eigendecomposition","V\n" << V);
+//                    //TRACE("hypro.eigendecomposition","V\n" << V);
+//                }
+//            }
+//        }
+//    }
+//}
 
 template <typename Number>
 void Transformation<Number>::declare_structures(STallValues<Number>& mSTallValues, const int n) {
-    //mSTallValues.mSTinputVectors.x0          = Vector<Number>(n);
-    //mSTallValues.mSTinputVectors.x0_2        = Vector<Number>(n);
     mSTallValues.mSTindependentFunct.D       = DiagonalMatrix<Number>(n);
     mSTallValues.mSTindependentFunct.xinhom  = Vector<Number>(n);
-    //mSTallValues.mSTdependentFunct.xhom      = Matrix<Number>(n,n);
-    //TODO change to multiple values, last column for transformation maxmin
-    //mSTallValues.mSTdependentFunct.x_tr      = Matrix<Number>::Zero(n,3);    
-    //mSTallValues.mSTdependentFunct.x_tr.col(2).array() = 0;
-    //mSTallValues.mSTevalFunctions.deriv      = Matrix<Number>(n,n);
-    //TODO CHANGE 2 to number of points ?! or use 2 column with numbers: 
-    //[max,min] for direct [-max,-min] for indirect starting at !!1!!
-    //mSTallValues.mSTevalFunctions.direct     = BoolMatrix(n,2);
-    //mSTallValues.mSTevalFunctions.direct.setConstant(0);
     mSTallValues.mSTflowpipeSegment.V        = Matrix<Number>(n,n);
     mSTallValues.mSTflowpipeSegment.Vinv     = Matrix<Number>(n,n);
-    //delta, deltalimit of STindependentFunc missing
-    //flowpipe only V for backtransformation into original system
 }
+//removeLinear components (and return number of removed components)
+template <typename Number>
+size_t countLinearAndRemember(const Matrix<Number>& A_in, const Vector<Number>& b_in, 
+        const size_t dimension, STallValues<Number>& mSTallvalues) {
+    //dimension = dimension of A_in
+    //move to main
+    mSTallvalues.STindependentFunct.expFunctionType.reserve(dimension); 
+    std::generate(  mSTallvalues.STindependentFunct.expFunctionType.begin(), 
+                    mSTallvalues.STindependentFunct.expFunctionType.end(), 
+                                                EXP_FUNCT_TYPE::INITIALIZED);
+    //end move
+    size_t count_linearVariables = 0;
+    size_t nrow;
+    for(nrow=0; nrow<dimension; ++nrow) {
+        if(A_in.row(nrow).array() == 0) {
+            ++count_linearVariables;
+            mSTallvalues.STindependentFunct.expFunctionType[nrow] = EXP_FUNCT_TYPE::LINEAR;
+        }
+    }
+    return count_linearVariables;
+}
+template <typename Number>
+void removeLinearAndClassify(const Matrix<Number>& A_in, const Vector<Number>& b_in, const size_t dimension,
+        Matrix<Number>& A_nonlinear, STallValues<Number>& mSTallvalues) {
+    //dimension of A_in
+    //assign only needed values to matrix A_nonlinear (b will be changed after transformation)
+    size_t ncol, nrow;
+    size_t count_linVar_col, count_linVar_row;
+//CHECK if according vector contains linear behavior -> skip columns
+//for rows: count the according occurences to access correct element
+    for (ncol=0; ncol<dimension; ++ncol) {
+        if(mSTallvalues.STindependentFunct.expFunctionType[ncol] == EXP_FUNCT_TYPE::LINEAR) {
+            ++count_linVar_col;
+            continue;
+        }
+        count_linVar_row = 0;
+        for(nrow=0; nrow<dimension; ++nrow) {
+            if(mSTallvalues.STindependentFunct.expFunctionType[nrow] == EXP_FUNCT_TYPE::LINEAR)
+                ++count_linVar_row;
+            else
+                A_nonlinear(nrow-count_linVar_row,ncol-count_linVar_col) = A_in(nrow,ncol);
+        }
+    }
+    for (ncol=0; ncol<dimension; ++ncol) {
+        if(b_in(ncol) == 0) {
+            mSTallvalues.STindependentFunct.expFunctionType[ncol] = EXP_FUNCT_TYPE::CONSTANT;
+        }
+    }
+    std::cout << "A_nonlinear\n"<< A_nonlinear;
+    //TODO TESTING column-wise or row-wise? looping?
+}
+template <typename Number>
+void EigenvalueDecomposition(const Matrix<Number>& A_nonlinear, const size_t dimension, 
+        const size_t CONDITION_LIMIT, Matrix<Number>& V_EVD, DiagonalMatrix<Number>& D_EVD, 
+        Matrix<Number>& Vinv_EVD) {
+    //const size_t CONDITION_LIMIT = 100; //TEMP remove later
+    //dimension of A_nonlinear
+    assert(A_nonlinear.asDiagonal().array() != 0); //any element = 0 => ERROR/not diagonizable
+    DiagonalMatrixdouble Ddouble    = DiagonalMatrixdouble(dimension); //formulation in .h
+    Matrix<double> Vdouble          = Matrix<double>(dimension,dimension);
+    Matrix<double> Vinvdouble       = Matrix<double>(dimension,dimension);
+    Matrix<double> matrixCalcDouble = Matrix<double>(dimension,dimension);
+    //Ddouble     = DiagonalMatrixdouble(dimension); //formulation in .h
+    //Vdouble     = Matrix<double>(dimension,dimension);
+    //Vinvdouble  = Matrix<double>(dimension,dimension);
+    //matrixCalcDouble = Matrix<double>(dimension,dimension);
+    matrixCalcDouble = convert<Number,double> (A_nonlinear);
+    Eigen::EigenSolver<Matrix<double>> es(matrixCalcDouble);
+    Vdouble << es.eigenvectors().real();
+    Ddouble.diagonal() << es.eigenvalues().real();
+    Vinvdouble = Vdouble.inverse();
+//ASSERTION CONDITION TODO making this faster for big/sparse matrices
+    Eigen::JacobiSVD<Matrix<double>> svd(Vinvdouble);  
+    double cond = svd.singularValues()(0)  / svd.singularValues()(svd.singularValues().size()-1);
+    if(std::abs(cond) > CONDITION_LIMIT) {
+        FATAL("hypro.eigendecomposition","condition is higher than CONDITION_LIMIT");
+    }
+//Assertions about V, D, V^-1, A, b if needed? TODO
+    std::cout <<"Vinv(condition): ("<< cond <<")\n" << Vinv_EVD;
+//CONVERSION TO RATIONAL
+    V_EVD = convert<double,Number>(Vdouble);
+    D_EVD = convert<double,Number>(Ddouble);
+    Vinv_EVD = convert<double,Number>(Vinvdouble);
+    TRACE("hypro.eigendecomposition","V\n" << V_EVD);
+    TRACE("hypro.eigendecompositoin","Vinv\n" << Vinv_EVD);
+//TODO TESTING
+}
+template <typename Number>
+void adjustLinearAndEVDcomponents(const Matrix<Number>& V_EVD, const Matrix<Number>& D_EVD, 
+        const Matrix<Number>& Vinv_EVD, const Vector<Number>& A_in, const Vector<Number>& b_in, 
+        const size_t dimension, Matrix<Number>& V, Matrix<Number>& D, Matrix<Number>& Vinv, 
+        Vector<Number>& b_tr, STallValues<Number>& mSTallvalues) {
+    //dimension of b_in/A_in
+    //Vevd,D,Vinv..,ExpFuncType, b_in, VDVinv, v_tr, mSTallValues,
+    size_t nrow, ncol;
+    size_t count=0;
+//ADJUSTING b
+//IFF it is needed!!! -> else branch in main: set b_tr = Vinv*btr;
+    //TODO TESTING!!!!!!
+    for(nrow=0; nrow<dimension; ++nrow) {
+        if(mSTallvalues.STindependentFunct.expFunctionType[nrow] == EXP_FUNCT_TYPE::LINEAR) {
+            for(ncol=0; ncol<dimension; ++ncol) {
+                b_tr(ncol) += A_in(nrow,ncol)*b_in(nrow);
+            }
+        }
+    }
+//ADJUSTING V,D,V^(-1)
+//IFF it is needed!!!
+//initialization with 0s
+//Idea: going column-wise add V accordingly, V^(-1)
+//if row=linear -> check column: iff linear:
+//set V(row,col)=V^(-1)=1 and D(..)=0
+//
+//else
+//          if column linear:
+//          skip + count number of occurences
+//
+//
+
+//adapt b(CHECK if correct[before or after transformation to Eigenspace])
+    //TODO testing
+}
+
+
+//2.Transform b
+
+//3.Analyze D
+//void analyzeConvergenceDivergence();
 /*
 //mark if in transformed system x0<x0_2 in 3rd column
 template <typename Number>

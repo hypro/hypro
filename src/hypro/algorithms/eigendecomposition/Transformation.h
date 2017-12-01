@@ -22,7 +22,7 @@
  */
 
 namespace hypro {
-    enum EXP_FUNCT_TYPE { CONVERGENT, DIVERGENT, LINEAR, CONSTANT };
+    enum EXP_FUNCT_TYPE { CONVERGENT, DIVERGENT, LINEAR, CONSTANT, UNDEFINED, INITIALIZED };
 
     template <typename Number>
     using Matrix = matrix_t<Number>;
@@ -31,53 +31,29 @@ namespace hypro {
     template <typename Number>
     using DiagonalMatrix= Eigen::DiagonalMatrix<Number,Eigen::Dynamic>;
     using DiagonalMatrixdouble = Eigen::DiagonalMatrix<double, Eigen::Dynamic>;
-    using BoolMatrix = matrix_t<bool>;  //TODO remove and remove according functions
+    using BoolMatrix = matrix_t<bool>;
     //using BoolVector = vector_t<bool>;
     using ExpFunctionTypeStdVector = std::vector<EXP_FUNCT_TYPE>;
+    //std::generate(vec.begin(), vec.end(), EXP_FUNCT_TYPE::INITIALIZED)
 
-//template <typename Number>
-//struct STinputVectors {   
-//    Vector<Number>              x0;
-//    Vector<Number>              x0_2;
-//};
 template <typename Number>
 struct STindependentFunct {
   DiagonalMatrix<Number>        D;
   Vector<Number>                xinhom;
-  //BoolVector                    convergent;
   ExpFunctionTypeStdVector      expFunctionType;
-//  Number                        delta;
-//  std::size_t                   deltalimit;
 };
-//template <typename Number>
-//struct STdependentFunct {
-//  Matrix<Number>                xhom;
-//  Matrix<Number>                x_tr;
-//};
-//template <typename Number>
-//struct STevalFunctions {
-//  Matrix<Number>                deriv;
-//  BoolMatrix                    direct;
-//};
 template <typename Number>
 struct STflowpipeSegment {
   Matrix<Number>                V;
   Matrix<Number>                Vinv;
-//  std::vector<Vector<Number>>   upper;
-//  std::vector<Vector<Number>>   lower;
 };
 /** 
- * @brief   STallValues as struct for all according values 
- *          for a location of an hybrid automaton 
- * NOTE     will be later used for setting dynamically values according to input
+ * @brief   STallValues as struct for all static EVD values for constant flow of location
  *          input has to be representable as points for evaluation
  */
 template <typename Number>
 struct STallValues {
-    //STinputVectors      <Number> mSTinputVectors;
     STindependentFunct  <Number> mSTindependentFunct;
-//    STdependentFunct    <Number> mSTdependentFunct;
-//    STevalFunctions     <Number> mSTevalFunctions;
     STflowpipeSegment   <Number> mSTflowpipeSegment;
 };
 
@@ -102,11 +78,23 @@ class Transformation {
     HybridAutomaton<Number> mTransformedHA;
     bool globalBadStatesTransformed = false;
 
-//helper functions
-    bool keyCompare(locationSet& lhs, locationPtrMap& rhs);
     void declare_structures(STallValues<Number> & mSTallValues, const int n);
-    void mark_x0isMin(Matrix<Number>& x_tr, const int n); //TODO reformulate struct [when multiple points
-    void swap_x0isMax(Matrix<Number>& x_tr, const int n); //TODO direct index call without vector swapping
+
+    size_t countLinearAndRemember(const Matrix<Number>& A_in, const Vector<Number>& b_in, 
+        const size_t dimension, STallValues<Number>& mSTallvalues);
+    void removeLinearAndClassify(const Matrix<Number>& A_in, const Vector<Number>& b_in, 
+        const size_t dimension, Matrix<Number>& A_nonlinear, STallValues<Number>& mSTallvalues);
+    void EigenvalueDecomposition(const Matrix<Number>& A_nonlinear, const size_t dimension, 
+        const size_t CONDITION_LIMIT, Matrix<Number>& V_EVD, DiagonalMatrix<Number>& D_EVD, 
+        Matrix<Number>& Vinv_EVD);
+//Adjust EVD-results and b using b_in, b_nonlinear
+    void adjustLinearAndEVDcomponents(const Matrix<Number>& V_EVD, const Matrix<Number>& D_EVD, 
+        const Matrix<Number>& Vinv_EVD, const Vector<Number>& A_in, const Vector<Number>& b_in, 
+        const size_t dimension, Matrix<Number>& V, Matrix<Number>& D, Matrix<Number>& Vinv, 
+        Vector<Number>& b_tr, STallValues<Number>& mSTallvalues);
+    
+    //void mark_x0isMin(Matrix<Number>& x_tr, const int n); //pair-wise comparing only
+    //void swap_x0isMax(Matrix<Number>& x_tr, const int n); //pair-wise comparing only
   public:
     /**
 	 * @brief      Default constructor.
@@ -114,9 +102,8 @@ class Transformation {
 	Transformation() = delete;
     /**
      * @brief      Constructor from hybrid automata to adjust automaton and transformation
-     *             All static properties  relating to the Hybrid Automaton 
+     *             All static properties relating to the Hybrid Automaton 
      *             are stored in this class.
-     *        TODO adding properties for pre-system analysis would make sense here
      * @param[in]  _hybrid  The original hybrid automaton.
      */
 	//Transformation( HybridAutomaton<Number>& _hybrid );
@@ -126,21 +113,9 @@ class Transformation {
 	 *
 	 * @param[in]  _hybrid  The original transformation for an hybrid automaton.
 	 */
-//TODO implement?
+    //TODO implement?
 	Transformation<Number> (const Transformation<Number>& _trafo);
     
-    /**
-     * @brief       Analyzing Exponential Function and writing values accordingly to struct
-     */
-    void analyzeExponentialFunctions();
-    /*
-     * @brief       Analyzing State and create according vertices with boxes
-     */
-    //analyzeInput();
-
-    //computeFirstSegment();
-
-    //computeFlow();
 
     //TODO clean up locations and transitions on desctructor
 
@@ -150,24 +125,16 @@ class Transformation {
      * @brief       adding transformedBadGlobalStates to transformedLocalBadStates
      *   [optional] call only by setting according flag to reachability analysis
      * TODO storage requirement setting/analysis
-     * due to count(location)*sizeof(BadStates) instead of sizeof(Badstead) storage requirement
+     * due to count(location)*sizeof(BadStates) instead of sizeof(BadState) storage requirement
      *
      * @param[in] _hybrid the original Hybrid Automaton (to check location ptrs against)
      */
     void addGlobalBadStates(const HybridAutomaton<Number>& _hybrid, const bool transform);
 
-
-    //Getter for handling Automaton in Analysis TODO why not const?
+    //Getter for handling Automaton in Analysis non-const due to GlobalBadStates transformation
     HybridAutomaton<Number>& getTransformedHybridAutomaton() { return mTransformedHA; }
     //Map from newLoc to struct for evaluating location during time
     const locationComputationSTMap & getLocationComputationSTMap() { return mLocPtrtoComputationvaluesMap; }
-
-
-//  backtransformation(HybridAutomaton& _hybrid, const Transformation& _trafo );
-//  retransform reults
-
-    //compute Flow in Location
-//    void Transformation<Number,Representation>::computeFlowinLocation(Location* LocPtr);
 
 };
 } //namespace hypro
