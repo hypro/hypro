@@ -80,17 +80,18 @@ class Transformation {
 
     void declare_structures(STallValues<Number> & mSTallValues, const int n);
 
-    size_t countLinearAndRemember(const Matrix<Number>& A_in, const Vector<Number>& b_in, 
-        const size_t dimension, STallValues<Number>& mSTallvalues);
-    void removeLinearAndClassify(const Matrix<Number>& A_in, const Vector<Number>& b_in, 
-        const size_t dimension, Matrix<Number>& A_nonlinear, STallValues<Number>& mSTallvalues);
-    void EigenvalueDecomposition(const Matrix<Number>& A_nonlinear, const size_t dimension, 
+    size_t countLinearAndRemember(const Matrix<Number>& A_in, const size_t dimension, 
+        STallValues<Number>& mSTallvalues);
+    void insertNonLinearAndClassify(const Matrix<Number>& A_in, const Vector<Number>& b_in, const size_t dimension, 
+        Matrix<Number>& A_nonlinear, Vector<Number>& b_nonlinear, STallValues<Number>& mSTallvalues);
+    void EigenvalueDecomposition(const Matrix<Number>& A_nonlinear, const size_t dimensionNonLinear, 
         const size_t CONDITION_LIMIT, Matrix<Number>& V_EVD, DiagonalMatrix<Number>& D_EVD, 
         Matrix<Number>& Vinv_EVD);
 //Adjust EVD-results and b using b_in, b_nonlinear
-    void adjustLinearAndEVDcomponents(const Matrix<Number>& V_EVD, const Matrix<Number>& D_EVD, 
-        const Matrix<Number>& Vinv_EVD, const Vector<Number>& A_in, const Vector<Number>& b_in, 
-        const size_t dimension, Matrix<Number>& V, Matrix<Number>& D, Matrix<Number>& Vinv, 
+    void adjustLinearAndEVDcomponents(
+        const Matrix<Number>& V_EVD, const DiagonalMatrix<Number>& D_EVD, const Matrix<Number>& Vinv_EVD, 
+        const Matrix<Number>& A_in, const Vector<Number>& b_nonlinear, const size_t dimension, 
+        Matrix<Number>& V, Matrix<Number>& Vinv, 
         Vector<Number>& b_tr, STallValues<Number>& mSTallvalues);
     
     //void mark_x0isMin(Matrix<Number>& x_tr, const int n); //pair-wise comparing only

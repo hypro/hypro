@@ -82,11 +82,13 @@ void addSegment(std::vector<VPoly>& flow, bool PLOT, Flow_seg& safe_seg,
 
 int main()
 {
+    //wont work: bouncing_ball.model
     //const std::string& filename = "../../examples/input/bouncing_ball_inhomogen.model";
     //const std::string& filename = "../../examples/input/rod_reactor.model";
     //bouncing_ball_inhomogen.model  rod_reactor.model switching_5.model
     //filtered_oscillator_4.model bouncing_ball_inhomogen.model missing: GearBox ARCH17, Comp3
-    const std::string& filename = "../../examples/input/bouncing_ball_inhomogen.model";
+    //const std::string& filename = "../../examples/input/bouncing_ball_inhomogen.model";
+    const std::string& filename = "../../examples/input/rod_reactor.model";
 	boost::tuple<HybridAutomaton<Number>, ReachabilitySettings<Number>> ha = parseFlowstarFile<Number>(filename);
     HybridAutomaton<Number> original_ha = boost::get<0>(ha);
     Transformation<Number> trafo = Transformation<Number>(original_ha);
@@ -94,8 +96,9 @@ int main()
     std::cout << original_ha << std::endl;
     std::cout << "----------    END OF ORIGINAL         ------------" << std::endl;
     trafo.output_HybridAutomaton();
+    std::cout << "----------    END OF TRAFO OUTPUT     ------------" << std::endl;
     std::cout << std::endl;
-    trafo.addGlobalBadStates(original_ha,1);
+    //trafo.addGlobalBadStates(original_ha,1);
     //DEPRECATED:
         //trafo.analyzeExponentialFunctions();
     /*Flags flag1;

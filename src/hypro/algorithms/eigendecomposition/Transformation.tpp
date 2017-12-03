@@ -6,17 +6,16 @@ template <typename Number>
 Transformation<Number>::Transformation (const HybridAutomaton<Number>& _hybrid) {
     const size_t CONDITION_LIMIT = 100;
     Matrix<Number> matrix_in_parser;
-    Matrix<Number> matrix_calc;
     size_t m_size, i;
-//START REMOVE
-    DiagonalMatrixdouble Ddouble;
-    Matrix<double> Vdouble;
-    Matrix<double> Vinvdouble;
-    Matrix<double> matrixCalcDouble;
-//END REMOVE
+    Matrix<Number> V_EVD;
+    DiagonalMatrix<Number> D_EVD;
+    Matrix<Number> Vinv_EVD;
     Matrix<Number> V;                             //backtransformation
     Matrix<Number> Vinv;                          //transformation
-    Vector<Number> b_tr;                          //transformed and dumped after use
+    Matrix<Number> A_in;
+    Vector<Number> b_tr;                          //later transformed b
+    Matrix<Number> A_nonlinear;
+    Vector<Number> b_nonlinear;
     LocationManager<Number>& locationManager = LocationManager<Number>::getInstance();
     locationSet locations;
     Location<Number>* PtrtoNewLoc;
@@ -28,49 +27,60 @@ Transformation<Number>::Transformation (const HybridAutomaton<Number>& _hybrid) 
         assert(m_size>=1);  //exit if location size <1-> underflow error
         m_size -= 1;
         STallValues<Number> mSTallvalues;
+        mSTallvalues.mSTindependentFunct.expFunctionType.reserve(m_size);
+        for (i=0; i<m_size; ++i) {
+            mSTallvalues.mSTindependentFunct.expFunctionType[i] = EXP_FUNCT_TYPE::INITIALIZED;
+        }
+//        std::generate(  mSTallvalues.mSTindependentFunct.expFunctionType.begin(), 
+//                        mSTallvalues.mSTindependentFunct.expFunctionType.end() 
+//                                                    EXP_FUNCT_TYPE::INITIALIZED);
         declare_structures(mSTallvalues, m_size);
-    //PLAN: store only GMP/double matrices here => remove double matrices
         b_tr        = Vector<Number>(m_size);
-        matrix_calc = Matrix<Number>(m_size,m_size);
-//double for rational converting here
-    //START REMOVE
-        Ddouble     = DiagonalMatrixdouble(m_size); //formulation in .h
-        Vdouble     = Matrix<double>(m_size,m_size);
-        Vinvdouble  = Matrix<double>(m_size,m_size);
-        matrixCalcDouble = Matrix<double>(m_size,m_size);
-    //END REMOVE
-        V           = Matrix<Number>(m_size,m_size);
+        A_in        = Matrix<Number>(m_size,m_size);
+        V           = Matrix<Number>(m_size,m_size);                //NOTE this is as copy already in mSTallvalues
         Vinv        = Matrix<Number>(m_size,m_size);
         b_tr        = matrix_in_parser.topRightCorner(m_size,1);
-        matrix_calc = matrix_in_parser.topLeftCorner(m_size,m_size);
-        std::cout<<"A: "<<std::endl<<matrix_calc;
-    //START (RE)MOVE
-        matrixCalcDouble = convert<Number,double> (matrix_calc);
-    //LOCATION TRANSFORMATION
-        Eigen::EigenSolver<Matrix<double>> es(matrixCalcDouble);
-        Vdouble << es.eigenvectors().real();
-        Ddouble.diagonal() << es.eigenvalues().real();
-        Vinvdouble = Vdouble.inverse();
-        //ASSERTION CONDITION TODO making this faster for big/sparse matrices
-        Eigen::JacobiSVD<Matrix<double>> svd(Vinvdouble);  
-        double cond = svd.singularValues()(0)  / svd.singularValues()(svd.singularValues().size()-1);
-        if(std::abs(cond) > CONDITION_LIMIT) {
-            FATAL("hypro.eigendecomposition","condition is higher than CONDITION_LIMIT");
+        A_in        = matrix_in_parser.topLeftCorner(m_size,m_size);
+        std::cout<<"A: "<<std::endl<<A_in;
+        size_t numberLinear = countLinearAndRemember(A_in, m_size, mSTallvalues);
+        //std::cout << "Number of Linear Terms: " << numberLinear <<"\n";
+    //NOFLOW 
+        if(numberLinear  == m_size) {
+            std::cout << "no FLOW\n";
+            Vinv.setIdentity(m_size,m_size);
+            V.setIdentity(m_size,m_size);
+            mSTallvalues.mSTindependentFunct.D.diagonal().setZero(m_size);
+        } else {
+    //SOME FLOW
+        //if there exists linear terms, adapt size to do EVD accordingly
+           if(numberLinear > 0) {
+            //size adjusting
+                std::cout << "flow with linear terms\n";
+                size_t nonLinearsize = m_size - numberLinear;
+                //adapt size and insert nonlinear
+                A_nonlinear = Matrix<Number>(nonLinearsize,nonLinearsize);
+                b_nonlinear = Vector<Number>(nonLinearsize);
+                V_EVD       = Matrix<Number>(nonLinearsize,nonLinearsize);
+                D_EVD       = DiagonalMatrix<Number>(nonLinearsize);
+                Vinv_EVD    = Matrix<Number>(nonLinearsize,nonLinearsize);
+                std::cout << "nonLinearsize: " << nonLinearsize << "\n";
+                std::cout << "A_nonlinear\n" << A_nonlinear;
+                insertNonLinearAndClassify(A_in, b_tr, m_size, A_nonlinear, b_nonlinear, mSTallvalues);
+                EigenvalueDecomposition(A_nonlinear, nonLinearsize, CONDITION_LIMIT, V_EVD, D_EVD, Vinv_EVD);
+                A_nonlinear = Vinv_EVD*A_nonlinear;
+                b_nonlinear = Vinv_EVD*b_nonlinear;
+            //3 things
+                adjustLinearAndEVDcomponents(V_EVD, D_EVD, Vinv_EVD, A_in, b_nonlinear, m_size, V, Vinv, b_tr, mSTallvalues);
+           } else {
+    //NO LINEAR TERMS
+                std::cout << "no linear terms\n";
+                EigenvalueDecomposition(A_in, m_size, CONDITION_LIMIT, V, mSTallvalues.mSTindependentFunct.D, Vinv);
+            //adjusting A,b
+                A_in = Vinv*A_in;
+                b_tr = Vinv*b_tr;
+           }
         }
-        //Assertions about V, D, V^-1, A, b needed? TODO
-        std::cout <<"Vinv(condition): ("<< cond <<")\n" << Vinv;
-        //CONVERSION TO RATIONAL
-        V = convert<double,Number>(Vdouble);
-        Vinv = convert<double,Number>(Vinvdouble);
-        TRACE("hypro.eigendecomposition","V\n" << V);
-        TRACE("hypro.eigendecompositoin","Vinv\n" << Vinv);
-        mSTallvalues.mSTindependentFunct.D = convert<double,Number>(Ddouble);
-    //END REMOVE
-        matrix_calc = Vinv*matrix_calc;
-        b_tr        = Vinv*b_tr;
-        std::cout<<"Vinv*A("<<m_size<<"x"<<m_size<<"),b_tr"<<std::endl;
-    //USELESS??
-        matrix_in_parser.topLeftCorner(m_size,m_size) =  matrix_calc;
+        matrix_in_parser.topLeftCorner(m_size,m_size) =  A_in;
         matrix_in_parser.topRightCorner(m_size,1) = b_tr;   //size
     //END USELESS
         //std::cout << matrix_in_parser;
@@ -79,7 +89,7 @@ Transformation<Number>::Transformation (const HybridAutomaton<Number>& _hybrid) 
         mLocationPtrsMap.insert(std::make_pair(LocPtr, PtrtoNewLoc));
     //SAVING STRUCT
         TRACE("hypro.eigendecomposition", "D exact:\n" << mSTallvalues.mSTindependentFunct.D.diagonal() );
-        TRACE("hypro.eigendecomposition", "D approx:\n" << Ddouble.diagonal() );
+        //TRACE("hypro.eigendecomposition", "D approx:\n" << Ddouble.diagonal() );
         TRACE("hypro.eigendecomposition", "b_tr :\n" << b_tr );
         for( i=0; i<m_size; ++i) {
     //START MOVE
@@ -97,7 +107,7 @@ Transformation<Number>::Transformation (const HybridAutomaton<Number>& _hybrid) 
     //END MOVE
         //std::cout << "old loc: "<<LocPtr<<"\n";
         //std::cout << "new loc: "<<PtrtoNewLoc<<"\n";
-    //INVARIANTS(TYPE CONDITION) [TODO check why assertion to Invariants fails]
+    //INVARIANTS(TYPE CONDITION)
         const Condition<Number>& invar1 = LocPtr->getInvariant();
         Condition<Number> invar1NEW;
         //inv: A'= A*V
@@ -154,10 +164,8 @@ Transformation<Number>::Transformation (const HybridAutomaton<Number>& _hybrid) 
         State<Number,ConstraintSet<Number>> state1NEW = State<Number,ConstraintSet<Number>>(it->second);
         state1NEW.setTimestamp(carl::Interval<Number>(0) );
         state1NEW.setLocation(NewLocPtr);
-//        initialStates.insert(make_pair(NewLocPtr, state1NEW));
         mTransformedHA.addInitialState(state1NEW);
     }
-//    mTransformedHA.setInitialStates  (initialStates);
 //LOCAL BAD STATES (condition [matrix,vector] matrix=matrix*V
 //typename locationConditionMap::const_iterator DOES NOT WORK
     for (typename HybridAutomaton<Number>::locationConditionMap::const_iterator it = _hybrid.getLocalBadStates().begin();
@@ -276,72 +284,93 @@ void Transformation<Number>::declare_structures(STallValues<Number>& mSTallValue
     mSTallValues.mSTflowpipeSegment.V        = Matrix<Number>(n,n);
     mSTallValues.mSTflowpipeSegment.Vinv     = Matrix<Number>(n,n);
 }
-//removeLinear components (and return number of removed components)
+//count linear and remember in according std::vector
 template <typename Number>
-size_t countLinearAndRemember(const Matrix<Number>& A_in, const Vector<Number>& b_in, 
+size_t Transformation<Number>::countLinearAndRemember(const Matrix<Number>& A_in, 
         const size_t dimension, STallValues<Number>& mSTallvalues) {
+    std::cout << "starting linear counting\n";
     //dimension = dimension of A_in
-    //move to main
-    mSTallvalues.STindependentFunct.expFunctionType.reserve(dimension); 
-    std::generate(  mSTallvalues.STindependentFunct.expFunctionType.begin(), 
-                    mSTallvalues.STindependentFunct.expFunctionType.end(), 
-                                                EXP_FUNCT_TYPE::INITIALIZED);
-    //end move
     size_t count_linearVariables = 0;
-    size_t nrow;
+    size_t nrow, ncol;
+    bool linear;
     for(nrow=0; nrow<dimension; ++nrow) {
-        if(A_in.row(nrow).array() == 0) {
+        linear = true;
+        //if(A_in.row(nrow).array() == 0) //TODO ISSUE FIXING?
+        for(ncol=0; ncol<dimension; ++ncol) {
+            if(A_in(nrow,ncol) != 0) {
+                linear = false;
+                break;
+            }
+        }
+        if(linear == true) {
             ++count_linearVariables;
-            mSTallvalues.STindependentFunct.expFunctionType[nrow] = EXP_FUNCT_TYPE::LINEAR;
+            mSTallvalues.mSTindependentFunct.expFunctionType[nrow] = EXP_FUNCT_TYPE::LINEAR;
+        } else {
+            assert( A_in(nrow,nrow != 0) ); //diagonal of nonlinear-term has to be defined
         }
     }
     return count_linearVariables;
 }
+//having linear terms, we grep nonlinear terms to calculate with
 template <typename Number>
-void removeLinearAndClassify(const Matrix<Number>& A_in, const Vector<Number>& b_in, const size_t dimension,
-        Matrix<Number>& A_nonlinear, STallValues<Number>& mSTallvalues) {
+void Transformation<Number>::insertNonLinearAndClassify(const Matrix<Number>& A_in, const Vector<Number>& b_in, 
+        const size_t dimension, Matrix<Number>& A_nonlinear, Vector<Number>& b_nonlinear, STallValues<Number>& mSTallvalues) {
+    //std::cout << "starting Nonlinear building\n";
     //dimension of A_in
-    //assign only needed values to matrix A_nonlinear (b will be changed after transformation)
     size_t ncol, nrow;
-    size_t count_linVar_col, count_linVar_row;
+    size_t count_linVar_row = 0;
+    size_t count_linVar_col = 0;
 //CHECK if according vector contains linear behavior -> skip columns
 //for rows: count the according occurences to access correct element
     for (ncol=0; ncol<dimension; ++ncol) {
-        if(mSTallvalues.STindependentFunct.expFunctionType[ncol] == EXP_FUNCT_TYPE::LINEAR) {
+        if(mSTallvalues.mSTindependentFunct.expFunctionType[ncol] == EXP_FUNCT_TYPE::LINEAR) {
             ++count_linVar_col;
             continue;
         }
         count_linVar_row = 0;
         for(nrow=0; nrow<dimension; ++nrow) {
-            if(mSTallvalues.STindependentFunct.expFunctionType[nrow] == EXP_FUNCT_TYPE::LINEAR)
+            if(mSTallvalues.mSTindependentFunct.expFunctionType[nrow] == EXP_FUNCT_TYPE::LINEAR) {
                 ++count_linVar_row;
-            else
+            } else {
+                //std::cout << "nrow,countLin:" <<nrow<<","<<count_linVar_row<<" ncol,countLin:" << ncol <<","<<count_linVar_col << "\n";
+                //std::cout << "A_nonlinear: \n" << A_nonlinear << "\n";
                 A_nonlinear(nrow-count_linVar_row,ncol-count_linVar_col) = A_in(nrow,ncol);
+                //std::cout << "A_nonlinear: \n" << A_nonlinear << "\n";
+            }
         }
     }
+    count_linVar_col = 0;
     for (ncol=0; ncol<dimension; ++ncol) {
-        if(b_in(ncol) == 0) {
-            mSTallvalues.STindependentFunct.expFunctionType[ncol] = EXP_FUNCT_TYPE::CONSTANT;
+        if(mSTallvalues.mSTindependentFunct.expFunctionType[ncol] == EXP_FUNCT_TYPE::LINEAR) {
+            ++count_linVar_col;
+            if(b_in(ncol) == 0) {
+                mSTallvalues.mSTindependentFunct.expFunctionType[ncol] = EXP_FUNCT_TYPE::CONSTANT;
+            }
+        } else {
+            b_nonlinear(ncol-count_linVar_col) = b_in(ncol);
+
         }
     }
-    std::cout << "A_nonlinear\n"<< A_nonlinear;
-    //TODO TESTING column-wise or row-wise? looping?
+    std::cout << "A_nonlinear after reduction\n"<< A_nonlinear;
 }
 template <typename Number>
-void EigenvalueDecomposition(const Matrix<Number>& A_nonlinear, const size_t dimension, 
-        const size_t CONDITION_LIMIT, Matrix<Number>& V_EVD, DiagonalMatrix<Number>& D_EVD, 
-        Matrix<Number>& Vinv_EVD) {
-    //const size_t CONDITION_LIMIT = 100; //TEMP remove later
-    //dimension of A_nonlinear
-    assert(A_nonlinear.asDiagonal().array() != 0); //any element = 0 => ERROR/not diagonizable
-    DiagonalMatrixdouble Ddouble    = DiagonalMatrixdouble(dimension); //formulation in .h
-    Matrix<double> Vdouble          = Matrix<double>(dimension,dimension);
-    Matrix<double> Vinvdouble       = Matrix<double>(dimension,dimension);
-    Matrix<double> matrixCalcDouble = Matrix<double>(dimension,dimension);
-    //Ddouble     = DiagonalMatrixdouble(dimension); //formulation in .h
-    //Vdouble     = Matrix<double>(dimension,dimension);
-    //Vinvdouble  = Matrix<double>(dimension,dimension);
-    //matrixCalcDouble = Matrix<double>(dimension,dimension);
+void Transformation<Number>::EigenvalueDecomposition(const Matrix<Number>& A_nonlinear, 
+        const size_t dimensionNonLinear, const size_t CONDITION_LIMIT, Matrix<Number>& V_EVD, 
+        DiagonalMatrix<Number>& D_EVD, Matrix<Number>& Vinv_EVD) {
+    //std::cout << "starting EVD\n";
+//EVD returns bad results on one dimension TODO verify results
+//TODO (if needed) make circularity checks of components
+    if(dimensionNonLinear == 1) {
+        V_EVD         (0,0) = 1;
+        Vinv_EVD      (0,0) = 1;
+        D_EVD.diagonal()(0) = A_nonlinear(0,0);
+        return;
+    }
+    //assert(A_nonlinear.asDiagonal().array() != 0); //any element = 0 => ERROR/not diagonizable
+    DiagonalMatrixdouble Ddouble    = DiagonalMatrixdouble(dimensionNonLinear); //formulation in .h
+    Matrix<double> Vdouble          = Matrix<double>(dimensionNonLinear,dimensionNonLinear);
+    Matrix<double> Vinvdouble       = Matrix<double>(dimensionNonLinear,dimensionNonLinear);
+    Matrix<double> matrixCalcDouble = Matrix<double>(dimensionNonLinear,dimensionNonLinear);
     matrixCalcDouble = convert<Number,double> (A_nonlinear);
     Eigen::EigenSolver<Matrix<double>> es(matrixCalcDouble);
     Vdouble << es.eigenvectors().real();
@@ -353,84 +382,79 @@ void EigenvalueDecomposition(const Matrix<Number>& A_nonlinear, const size_t dim
     if(std::abs(cond) > CONDITION_LIMIT) {
         FATAL("hypro.eigendecomposition","condition is higher than CONDITION_LIMIT");
     }
-//Assertions about V, D, V^-1, A, b if needed? TODO
-    std::cout <<"Vinv(condition): ("<< cond <<")\n" << Vinv_EVD;
+    std::cout <<"A_nonlinear\n" << A_nonlinear;
+    std::cout <<"Vinv_EVD(condition): ("<< cond <<")\n" << Vinv_EVD;
 //CONVERSION TO RATIONAL
     V_EVD = convert<double,Number>(Vdouble);
     D_EVD = convert<double,Number>(Ddouble);
     Vinv_EVD = convert<double,Number>(Vinvdouble);
     TRACE("hypro.eigendecomposition","V\n" << V_EVD);
     TRACE("hypro.eigendecompositoin","Vinv\n" << Vinv_EVD);
-//TODO TESTING
 }
 template <typename Number>
-void adjustLinearAndEVDcomponents(const Matrix<Number>& V_EVD, const Matrix<Number>& D_EVD, 
-        const Matrix<Number>& Vinv_EVD, const Vector<Number>& A_in, const Vector<Number>& b_in, 
-        const size_t dimension, Matrix<Number>& V, Matrix<Number>& D, Matrix<Number>& Vinv, 
+void Transformation<Number>::adjustLinearAndEVDcomponents(
+        const Matrix<Number>& V_EVD, const DiagonalMatrix<Number>& D_EVD, const Matrix<Number>& Vinv_EVD, 
+        const Matrix<Number>& A_in, const Vector<Number>& b_nonlinear, const size_t dimension, 
+        Matrix<Number>& V, Matrix<Number>& Vinv, 
         Vector<Number>& b_tr, STallValues<Number>& mSTallvalues) {
-    //dimension of b_in/A_in
-    //Vevd,D,Vinv..,ExpFuncType, b_in, VDVinv, v_tr, mSTallValues,
+//1.setting V,Vinv,D,b_tr accordingly
+    V.setIdentity   (dimension,dimension);
+    Vinv.setIdentity(dimension,dimension);
+    mSTallvalues.mSTindependentFunct.D.diagonal().setZero(dimension);
     size_t nrow, ncol;
-    size_t count=0;
-//ADJUSTING b
-//IFF it is needed!!! -> else branch in main: set b_tr = Vinv*btr;
-    //TODO TESTING!!!!!!
+    size_t count_linVar_row = 0;
+    size_t count_linVar_col = 0;
+    for (ncol=0; ncol<dimension; ++ncol) {
+        if(mSTallvalues.mSTindependentFunct.expFunctionType[ncol] == EXP_FUNCT_TYPE::LINEAR) {
+            ++count_linVar_col;
+            continue;
+        }
+        count_linVar_row = 0;
+        for(nrow=0; nrow<dimension; ++nrow) {
+            if(mSTallvalues.mSTindependentFunct.expFunctionType[nrow] == EXP_FUNCT_TYPE::LINEAR) {
+                ++count_linVar_row;
+                continue;
+            } else {
+                V    (nrow,ncol) = V_EVD   (nrow-count_linVar_row,ncol-count_linVar_col);
+                Vinv (nrow,ncol) = Vinv_EVD(nrow-count_linVar_row,ncol-count_linVar_col);
+                mSTallvalues.mSTindependentFunct.D.diagonal()(ncol) = D_EVD.diagonal()(ncol-count_linVar_col);
+            }
+        }
+    //ASSIGN b_tr
+        b_tr(ncol) = b_nonlinear(ncol-count_linVar_col);
+    }
+    mSTallvalues.mSTflowpipeSegment.V = V;
+    mSTallvalues.mSTflowpipeSegment.Vinv = Vinv;
+
+//2.ADJUSTING b_tr (b_nonlinear was assigned)
+    std::cout << "A_in\n" << A_in;
+    std::cout << b_tr;
     for(nrow=0; nrow<dimension; ++nrow) {
-        if(mSTallvalues.STindependentFunct.expFunctionType[nrow] == EXP_FUNCT_TYPE::LINEAR) {
+        if(mSTallvalues.mSTindependentFunct.expFunctionType[nrow] == EXP_FUNCT_TYPE::LINEAR) {
             for(ncol=0; ncol<dimension; ++ncol) {
-                b_tr(ncol) += A_in(nrow,ncol)*b_in(nrow);
+                b_tr(ncol) += A_in(nrow,ncol)*b_tr(nrow);
             }
         }
     }
-//ADJUSTING V,D,V^(-1)
-//IFF it is needed!!!
-//initialization with 0s
-//Idea: going column-wise add V accordingly, V^(-1)
-//if row=linear -> check column: iff linear:
-//set V(row,col)=V^(-1)=1 and D(..)=0
-//
-//else
-//          if column linear:
-//          skip + count number of occurences
-//
-//
-
-//adapt b(CHECK if correct[before or after transformation to Eigenspace])
-    //TODO testing
-}
-
-
-//2.Transform b
-
-//3.Analyze D
-//void analyzeConvergenceDivergence();
-/*
-//mark if in transformed system x0<x0_2 in 3rd column
-template <typename Number>
-void Transformation<Number>::mark_x0isMin(Matrix<Number>& x_tr, const int n) {
-    for(int i=0; i<n; ++i) {   //check if x0_tr >= x0_2_tr
-        if(x_tr(i,0) < x_tr(i,1)) {
-            x_tr(i,2) = 1; //mark second column to recognize later
+    std::cout << "A_in\n" << A_in;
+    std::cout << b_tr << "\n";
+//3.ANALYZING D
+    for(nrow=0; nrow<dimension; ++nrow) {
+        if(mSTallvalues.mSTindependentFunct.expFunctionType[nrow] == INITIALIZED) {
+            assert (mSTallvalues.mSTindependentFunct.D.diagonal()(ncol) != 0);
+            //TODO ASSERTION fails, DiagonalMatrix OUTOFBOUNDS !!!
+            if(mSTallvalues.mSTindependentFunct.D.diagonal()(ncol) > 0) {
+                mSTallvalues.mSTindependentFunct.expFunctionType[nrow] = CONVERGENT;
+            } else {
+                mSTallvalues.mSTindependentFunct.expFunctionType[nrow] = DIVERGENT;
+            }
         }
     }
 }
-//x0<x0_2 will never change, so we can simply swap to transform systems
-template <typename Number>
-void Transformation<Number>::swap_x0isMax(Matrix<Number>& x_tr, const int n) {
-    //std::cout << "x_tr beforeback: "<< std::endl << x_tr << std::endl;
-    Vector<Number> tmp = Vector<Number>(n);
-    for(int i=0; i<n; ++i) {
-        if(x_tr(i,2) == 1) {
-            tmp(i)    = x_tr(i,0);
-            x_tr(i,0) = x_tr(i,1);
-            x_tr(i,1) = tmp(i);
-        }
-    }
-    //std::cout << "x_tr afterback: "<< std::endl << x_tr << std::endl;
-}
-*/
+
 template <typename Number>
 void Transformation<Number>::output_HybridAutomaton() {
     std::cout << mTransformedHA << "\n-------------- ENDOFAUTOMATA ------------------" << std::endl;
 }
+
 } //namespace hypro
