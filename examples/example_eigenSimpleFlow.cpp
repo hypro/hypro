@@ -83,6 +83,8 @@ void addSegment(std::vector<VPoly>& flow, bool PLOT, Flow_seg& safe_seg,
 int main()
 {
     //wont work: bouncing_ball.model
+    //hypo working: bouncin_ball_inhomogen rod_reactor
+    //hypro not working switching_5 (to fix)
     //const std::string& filename = "../../examples/input/bouncing_ball_inhomogen.model";
     //const std::string& filename = "../../examples/input/rod_reactor.model";
     //bouncing_ball_inhomogen.model  rod_reactor.model switching_5.model

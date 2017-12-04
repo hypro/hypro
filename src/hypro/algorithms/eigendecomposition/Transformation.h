@@ -93,6 +93,8 @@ class Transformation {
         const Matrix<Number>& A_in, const Vector<Number>& b_nonlinear, const size_t dimension, 
         Matrix<Number>& V, Matrix<Number>& Vinv, 
         Vector<Number>& b_tr, STallValues<Number>& mSTallvalues);
+    void analyzeExponentialTerms(const size_t dimension, STallValues<Number>& mSTallvalues);
+
     
     //void mark_x0isMin(Matrix<Number>& x_tr, const int n); //pair-wise comparing only
     //void swap_x0isMax(Matrix<Number>& x_tr, const int n); //pair-wise comparing only

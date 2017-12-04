@@ -27,21 +27,21 @@ Transformation<Number>::Transformation (const HybridAutomaton<Number>& _hybrid) 
         assert(m_size>=1);  //exit if location size <1-> underflow error
         m_size -= 1;
         STallValues<Number> mSTallvalues;
-        mSTallvalues.mSTindependentFunct.expFunctionType.reserve(m_size);
+        mSTallvalues.mSTindependentFunct.expFunctionType.resize(m_size);
         for (i=0; i<m_size; ++i) {
             mSTallvalues.mSTindependentFunct.expFunctionType[i] = EXP_FUNCT_TYPE::INITIALIZED;
+            assert(mSTallvalues.mSTindependentFunct.expFunctionType[i] == EXP_FUNCT_TYPE::INITIALIZED);
         }
-//        std::generate(  mSTallvalues.mSTindependentFunct.expFunctionType.begin(), 
-//                        mSTallvalues.mSTindependentFunct.expFunctionType.end() 
-//                                                    EXP_FUNCT_TYPE::INITIALIZED);
+        assert( mSTallvalues.mSTindependentFunct.expFunctionType.capacity() ==
+                mSTallvalues.mSTindependentFunct.expFunctionType.size() );
         declare_structures(mSTallvalues, m_size);
         b_tr        = Vector<Number>(m_size);
-        A_in        = Matrix<Number>(m_size,m_size);
-        V           = Matrix<Number>(m_size,m_size);                //NOTE this is as copy already in mSTallvalues
+        A_in        = Matrix<Number>(m_size,m_size);                //no change due to being lookup
+        V           = Matrix<Number>(m_size,m_size);                //mSTallvalues gets V as well
         Vinv        = Matrix<Number>(m_size,m_size);
         b_tr        = matrix_in_parser.topRightCorner(m_size,1);
         A_in        = matrix_in_parser.topLeftCorner(m_size,m_size);
-        std::cout<<"A: "<<std::endl<<A_in;
+        std::cout<<"inital A:\n" << A_in;
         size_t numberLinear = countLinearAndRemember(A_in, m_size, mSTallvalues);
         //std::cout << "Number of Linear Terms: " << numberLinear <<"\n";
     //NOFLOW 
@@ -50,61 +50,69 @@ Transformation<Number>::Transformation (const HybridAutomaton<Number>& _hybrid) 
             Vinv.setIdentity(m_size,m_size);
             V.setIdentity(m_size,m_size);
             mSTallvalues.mSTindependentFunct.D.diagonal().setZero(m_size);
+            mSTallvalues.mSTflowpipeSegment.Vinv       = Vinv;
+            mSTallvalues.mSTflowpipeSegment.V          = V;
+            for(i=0; i<m_size; ++i) {
+                mSTallvalues.mSTindependentFunct.expFunctionType[i] = EXP_FUNCT_TYPE::CONSTANT;
+            }
         } else {
-    //SOME FLOW
-        //if there exists linear terms, adapt size to do EVD accordingly
+    //LINEAR TERMS INSIDE matrix A -> size adaption for transformation
            if(numberLinear > 0) {
-            //size adjusting
-                std::cout << "flow with linear terms\n";
+                std::cout << "flow has linear terms\n";
                 size_t nonLinearsize = m_size - numberLinear;
-                //adapt size and insert nonlinear
                 A_nonlinear = Matrix<Number>(nonLinearsize,nonLinearsize);
                 b_nonlinear = Vector<Number>(nonLinearsize);
                 V_EVD       = Matrix<Number>(nonLinearsize,nonLinearsize);
                 D_EVD       = DiagonalMatrix<Number>(nonLinearsize);
                 Vinv_EVD    = Matrix<Number>(nonLinearsize,nonLinearsize);
                 std::cout << "nonLinearsize: " << nonLinearsize << "\n";
-                std::cout << "A_nonlinear\n" << A_nonlinear;
+            //ADAPTION of size and remember linear terms(in mSTallvalues)
                 insertNonLinearAndClassify(A_in, b_tr, m_size, A_nonlinear, b_nonlinear, mSTallvalues);
+                std::cout << "A_nonlinear\n" << A_nonlinear;
                 EigenvalueDecomposition(A_nonlinear, nonLinearsize, CONDITION_LIMIT, V_EVD, D_EVD, Vinv_EVD);
-                A_nonlinear = Vinv_EVD*A_nonlinear;
-                b_nonlinear = Vinv_EVD*b_nonlinear;
-            //3 things
+            //convert the linear terms to change convergence point
                 adjustLinearAndEVDcomponents(V_EVD, D_EVD, Vinv_EVD, A_in, b_nonlinear, m_size, V, Vinv, b_tr, mSTallvalues);
+            //A_in as lookup for linear terms <<<--------------------->>>
            } else {
     //NO LINEAR TERMS
                 std::cout << "no linear terms\n";
                 EigenvalueDecomposition(A_in, m_size, CONDITION_LIMIT, V, mSTallvalues.mSTindependentFunct.D, Vinv);
-            //adjusting A,b
-                A_in = Vinv*A_in;
-                b_tr = Vinv*b_tr;
-           }
+                mSTallvalues.mSTflowpipeSegment.Vinv       = Vinv;
+                mSTallvalues.mSTflowpipeSegment.V          = V;
+           } 
+        //TRAFO of b_tr to Eigenspace
+            b_tr = Vinv*b_tr;
+            analyzeExponentialTerms(m_size, mSTallvalues);
         }
-        matrix_in_parser.topLeftCorner(m_size,m_size) =  A_in;
-        matrix_in_parser.topRightCorner(m_size,1) = b_tr;   //size
-    //END USELESS
+        //no need to write back A_in since it is not changed
+        //matrix_in_parser.topLeftCorner(m_size,m_size) =  A_in;
+        //matrix_in_parser.topRightCorner(m_size,1) = b_tr;   //size
         //std::cout << matrix_in_parser;
 	    PtrtoNewLoc = locationManager.create(matrix_in_parser);
         locations.insert(PtrtoNewLoc);
         mLocationPtrsMap.insert(std::make_pair(LocPtr, PtrtoNewLoc));
     //SAVING STRUCT
         TRACE("hypro.eigendecomposition", "D exact:\n" << mSTallvalues.mSTindependentFunct.D.diagonal() );
-        //TRACE("hypro.eigendecomposition", "D approx:\n" << Ddouble.diagonal() );
         TRACE("hypro.eigendecomposition", "b_tr :\n" << b_tr );
         for( i=0; i<m_size; ++i) {
-    //START MOVE
-    //TODO COMPARISON ALMOST EQUAL 0 [else div by 0]
-            if ( mSTallvalues.mSTindependentFunct.D.diagonal()(i) == 0 ) {
-                mSTallvalues.mSTindependentFunct.xinhom(i)    = b_tr(i);
-            } else {
+        //SCALING dependents of linear terms
+            if( (mSTallvalues.mSTindependentFunct.expFunctionType[i] == EXP_FUNCT_TYPE::CONVERGENT) ||
+                (mSTallvalues.mSTindependentFunct.expFunctionType[i] == EXP_FUNCT_TYPE::DIVERGENT )    ) {
                 mSTallvalues.mSTindependentFunct.xinhom(i)    = b_tr(i) / mSTallvalues.mSTindependentFunct.D.diagonal()(i);
+                continue;
             }
+            if( mSTallvalues.mSTindependentFunct.expFunctionType[i] == EXP_FUNCT_TYPE::LINEAR ) {
+                mSTallvalues.mSTindependentFunct.xinhom(i)    = b_tr(i);
+                continue;
+            }
+            if( mSTallvalues.mSTindependentFunct.expFunctionType[i] == EXP_FUNCT_TYPE::CONSTANT ) {
+                mSTallvalues.mSTindependentFunct.xinhom(i)    = 0;
+                continue;
+            }
+            FATAL("hypro.eigendecomposition","INVALID FUNCTION TYPE RECOGNIZED");
+            std::exit(EXIT_FAILURE);
         }
-    //TODO INSERT HERE MODIFICATION of Vinv
-        mSTallvalues.mSTflowpipeSegment.Vinv       = Vinv;
-        mSTallvalues.mSTflowpipeSegment.V          = V;
         mLocPtrtoComputationvaluesMap.insert(std::make_pair(PtrtoNewLoc, mSTallvalues));
-    //END MOVE
         //std::cout << "old loc: "<<LocPtr<<"\n";
         //std::cout << "new loc: "<<PtrtoNewLoc<<"\n";
     //INVARIANTS(TYPE CONDITION)
@@ -185,7 +193,6 @@ Transformation<Number>::Transformation (const HybridAutomaton<Number>& _hybrid) 
         TRACE("hypro.eigendecomposition","transformed localBadState: " << badStateNEW);
         mTransformedHA.addLocalBadState(NewLocPtr, badStateNEW);
     }
-    //analyzeExponentialFunctions(); TODO REMOVE/MODIFY before!
     //for (const auto & locBadState : mTransformedHA.getLocalBadStates() ) {
     //    TRACE("hypro.eigendecomposition","in location: " << locBadState.first)
     //    TRACE("hypro.eigendecomposition","after trafo State:" << locBadState.second);
@@ -194,7 +201,6 @@ Transformation<Number>::Transformation (const HybridAutomaton<Number>& _hybrid) 
 template <typename Number>
 void Transformation<Number>::addGlobalBadStates
   (const HybridAutomaton<Number>& _hybrid, const bool transform) {
-
 //CHECK MATCH OF LOCATION PTRS
     assert( _hybrid.getLocations().size() == mLocationPtrsMap.size() );
     typename locationPtrMap::const_iterator locIt = mLocationPtrsMap.begin();
@@ -247,35 +253,6 @@ void Transformation<Number>::addGlobalBadStates
         }
     }
 }
-//template <typename Number>
-//void Transformation<Number>::analyzeExponentialFunctions() {
-////TODO Location multiple flows and states (map of states to flows)
-//    for ( auto &structObject : mLocPtrtoComputationvaluesMap) {
-//        const size_t dimension = structObject.second.mSTflowpipeSegment.V.rows();
-//        structObject.second.mSTindependentFunct.expFunctionType.reserve(dimension);
-//        TRACE("hypro.eigendecomposition","looping through " << (structObject.first));//ptr-adress of location
-//        //TRACE("hypro.eigendecomposition","Loc: " << V);
-//        for(size_t i=0; i<dimension; ++i) {
-//            //1. divergence D>0, 2. convergence D<0, 3. linear D=0
-//            //4. const [never used yet since we can then not use decomposition]
-//        //TODO close to 0
-//            if(structObject.second.mSTindependentFunct.D.diagonal()(i) == 0) {
-//                structObject.second.mSTindependentFunct.expFunctionType[i] = EXP_FUNCT_TYPE::LINEAR;
-//                //TRACE("hypro.eigendecomposition","linear behaviour of " << i);
-//            } else {
-//                if(structObject.second.mSTindependentFunct.D.diagonal()(i) < 0) {
-//                    structObject.second.mSTindependentFunct.expFunctionType[i] = EXP_FUNCT_TYPE::CONVERGENT;
-//                    //TRACE("hypro.eigendecomposition","V\n" << V);
-//                    //TRACE("hypro.eigendecomposition","V\n" << V);
-//                } else {
-//                    structObject.second.mSTindependentFunct.expFunctionType[i] = EXP_FUNCT_TYPE::DIVERGENT;
-//                    //TRACE("hypro.eigendecomposition","V\n" << V);
-//                    //TRACE("hypro.eigendecomposition","V\n" << V);
-//                }
-//            }
-//        }
-//    }
-//}
 
 template <typename Number>
 void Transformation<Number>::declare_structures(STallValues<Number>& mSTallValues, const int n) {
@@ -306,7 +283,7 @@ size_t Transformation<Number>::countLinearAndRemember(const Matrix<Number>& A_in
             ++count_linearVariables;
             mSTallvalues.mSTindependentFunct.expFunctionType[nrow] = EXP_FUNCT_TYPE::LINEAR;
         } else {
-            assert( A_in(nrow,nrow != 0) ); //diagonal of nonlinear-term has to be defined
+            assert( A_in(nrow,nrow) != 0) ; //diagonal of nonlinear-term has to be defined
         }
     }
     return count_linearVariables;
@@ -315,13 +292,11 @@ size_t Transformation<Number>::countLinearAndRemember(const Matrix<Number>& A_in
 template <typename Number>
 void Transformation<Number>::insertNonLinearAndClassify(const Matrix<Number>& A_in, const Vector<Number>& b_in, 
         const size_t dimension, Matrix<Number>& A_nonlinear, Vector<Number>& b_nonlinear, STallValues<Number>& mSTallvalues) {
-    //std::cout << "starting Nonlinear building\n";
-    //dimension of A_in
     size_t ncol, nrow;
     size_t count_linVar_row = 0;
     size_t count_linVar_col = 0;
 //CHECK if according vector contains linear behavior -> skip columns
-//for rows: count the according occurences to access correct element
+//for rows: count the according occurences of linear terms to access correct element
     for (ncol=0; ncol<dimension; ++ncol) {
         if(mSTallvalues.mSTindependentFunct.expFunctionType[ncol] == EXP_FUNCT_TYPE::LINEAR) {
             ++count_linVar_col;
@@ -332,7 +307,6 @@ void Transformation<Number>::insertNonLinearAndClassify(const Matrix<Number>& A_
             if(mSTallvalues.mSTindependentFunct.expFunctionType[nrow] == EXP_FUNCT_TYPE::LINEAR) {
                 ++count_linVar_row;
             } else {
-                //std::cout << "nrow,countLin:" <<nrow<<","<<count_linVar_row<<" ncol,countLin:" << ncol <<","<<count_linVar_col << "\n";
                 //std::cout << "A_nonlinear: \n" << A_nonlinear << "\n";
                 A_nonlinear(nrow-count_linVar_row,ncol-count_linVar_col) = A_in(nrow,ncol);
                 //std::cout << "A_nonlinear: \n" << A_nonlinear << "\n";
@@ -357,16 +331,15 @@ template <typename Number>
 void Transformation<Number>::EigenvalueDecomposition(const Matrix<Number>& A_nonlinear, 
         const size_t dimensionNonLinear, const size_t CONDITION_LIMIT, Matrix<Number>& V_EVD, 
         DiagonalMatrix<Number>& D_EVD, Matrix<Number>& Vinv_EVD) {
-    //std::cout << "starting EVD\n";
-//EVD returns bad results on one dimension TODO verify results
-//TODO (if needed) make circularity checks of components
+//ONE DIMENSION -> set values(to save time)
     if(dimensionNonLinear == 1) {
+        std::cout << "dimension == 1\n";
         V_EVD         (0,0) = 1;
         Vinv_EVD      (0,0) = 1;
         D_EVD.diagonal()(0) = A_nonlinear(0,0);
+        std::cout << "D_EVD:\n" << A_nonlinear << "\n";
         return;
     }
-    //assert(A_nonlinear.asDiagonal().array() != 0); //any element = 0 => ERROR/not diagonizable
     DiagonalMatrixdouble Ddouble    = DiagonalMatrixdouble(dimensionNonLinear); //formulation in .h
     Matrix<double> Vdouble          = Matrix<double>(dimensionNonLinear,dimensionNonLinear);
     Matrix<double> Vinvdouble       = Matrix<double>(dimensionNonLinear,dimensionNonLinear);
@@ -383,11 +356,13 @@ void Transformation<Number>::EigenvalueDecomposition(const Matrix<Number>& A_non
         FATAL("hypro.eigendecomposition","condition is higher than CONDITION_LIMIT");
     }
     std::cout <<"A_nonlinear\n" << A_nonlinear;
-    std::cout <<"Vinv_EVD(condition): ("<< cond <<")\n" << Vinv_EVD;
 //CONVERSION TO RATIONAL
     V_EVD = convert<double,Number>(Vdouble);
     D_EVD = convert<double,Number>(Ddouble);
     Vinv_EVD = convert<double,Number>(Vinvdouble);
+    std::cout <<"Vinv_EVD(condition): ("<< cond <<")\n" << Vinv_EVD;
+    std::cout << "V_EVD:\n" << V_EVD;
+    std::cout << "D_EVD:\n" << D_EVD.diagonal();
     TRACE("hypro.eigendecomposition","V\n" << V_EVD);
     TRACE("hypro.eigendecompositoin","Vinv\n" << Vinv_EVD);
 }
@@ -425,7 +400,6 @@ void Transformation<Number>::adjustLinearAndEVDcomponents(
     }
     mSTallvalues.mSTflowpipeSegment.V = V;
     mSTallvalues.mSTflowpipeSegment.Vinv = Vinv;
-
 //2.ADJUSTING b_tr (b_nonlinear was assigned)
     std::cout << "A_in\n" << A_in;
     std::cout << b_tr;
@@ -436,22 +410,33 @@ void Transformation<Number>::adjustLinearAndEVDcomponents(
             }
         }
     }
-    std::cout << "A_in\n" << A_in;
-    std::cout << b_tr << "\n";
-//3.ANALYZING D
+    //std::cout << "D[" << nrow <<"]: " << mSTallvalues.mSTindependentFunct.D.diagonal()(nrow) << "\n";
+    DEBUG("hypro.eigendecomposition", "A_in\n" << A_in);
+    DEBUG("hypro.eigendecomposition", "b_tr\n" << b_tr);
+    DEBUG("hypro.eigendecomposition", "Vinv\n" << Vinv);
+    DEBUG("hypro.eigendecomposition", "V\n" << V);
+    DEBUG("hypro.eigendecomposition", "D\n" << mSTallvalues.mSTindependentFunct.D.diagonal() );
+    //std::cout << b_tr << "\n";
+    //std::cout << "Vinv:\n" << Vinv;
+    //std::cout << "V:\n" << V;
+    //std::cout << "D:\n" << mSTallvalues.mSTindependentFunct.D.diagonal();
+}
+template <typename Number>
+void Transformation<Number>::analyzeExponentialTerms(const size_t dimension, STallValues<Number>& mSTallvalues) {
+    size_t nrow;
+    //TODO COMPARISON ALMOST EQUAL 0 [else div by 0] (D=0 theoretically possible)
     for(nrow=0; nrow<dimension; ++nrow) {
-        if(mSTallvalues.mSTindependentFunct.expFunctionType[nrow] == INITIALIZED) {
-            assert (mSTallvalues.mSTindependentFunct.D.diagonal()(ncol) != 0);
-            //TODO ASSERTION fails, DiagonalMatrix OUTOFBOUNDS !!!
-            if(mSTallvalues.mSTindependentFunct.D.diagonal()(ncol) > 0) {
+        if(mSTallvalues.mSTindependentFunct.expFunctionType[nrow] == EXP_FUNCT_TYPE::INITIALIZED) {
+            assert (mSTallvalues.mSTindependentFunct.D.diagonal()(nrow) != 0);
+            if(mSTallvalues.mSTindependentFunct.D.diagonal()(nrow) > 0) {
                 mSTallvalues.mSTindependentFunct.expFunctionType[nrow] = CONVERGENT;
             } else {
                 mSTallvalues.mSTindependentFunct.expFunctionType[nrow] = DIVERGENT;
             }
         }
+        assert( mSTallvalues.mSTindependentFunct.expFunctionType[nrow] != EXP_FUNCT_TYPE::INITIALIZED );
     }
 }
-
 template <typename Number>
 void Transformation<Number>::output_HybridAutomaton() {
     std::cout << mTransformedHA << "\n-------------- ENDOFAUTOMATA ------------------" << std::endl;
