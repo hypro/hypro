@@ -375,7 +375,7 @@ void Plotter<Number>::writeGnuplot() const {
 			mOutfile << "# plotting Halfspaces\n";
 			for( const auto& planePair : mPlanes ) {
 				for( const auto& plane : planePair.second ) {
-					std::cout << "Plot plane " << plane << std::endl;
+					//std::cout << "Plot plane " << plane << std::endl;
 					assert(plane.dimension() == 2);
 					vector_t<Number> normal = plane.normal();
 					if(normal(1) == Number(0)){

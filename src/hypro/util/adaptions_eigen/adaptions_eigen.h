@@ -292,7 +292,6 @@ namespace hypro {
 
 	template<typename Number, carl::DisableIf< std::is_same< Number, double> > = carl::dummy >
 	vector_t<Number> reduceNumberRepresentation(const vector_t<Number>& in) {
-		std::cout << "Input: " << in << std::endl;
 		vector_t<Number> res = in;
 		if(in.rows() > 1) {
 			// collect common denominator to obtain integer vector
@@ -303,15 +302,12 @@ namespace hypro {
 			// make the vector integer
 			res *= commonDenominator;
 
-			std::cout << "Vector as integer: " << res << std::endl;
-
 			// find gcd for the numerators
 			Number gcd = carl::gcd(res(0), res(1));
 			for(unsigned i = 2; i < res.rows(); ++i) {
 				gcd = carl::gcd(gcd, res(i));
 			}
 			assert(gcd != Number(0));
-			std::cout << "GCD: " << gcd << std::endl;
 			res = res / gcd;
 		}
 		return res;

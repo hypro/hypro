@@ -54,10 +54,12 @@ namespace hypro {
 		 * @return     A reference to the outstream.
 		 */
 		friend std::ostream& operator<<(std::ostream& out, const TPathElement<Number,tNumber>& pathElem) {
-			if(pathElem.isDiscreteStep())
-				out << pathElem.transition->getSource()->getId() << " -> " << pathElem.transition->getTarget()->getId() << " " << pathElem.timeInterval;
-			else
-				out << pathElem.timeInterval;
+			carl::Interval<double> tmp(carl::convert<tNumber,double>(pathElem.timeInterval.lower()), carl::convert<tNumber,double>(pathElem.timeInterval.upper()));
+			if(pathElem.isDiscreteStep()){
+				out << pathElem.transition->getSource()->getId() << " -> " << pathElem.transition->getTarget()->getId() << " " << tmp;
+			} else {
+				out << tmp;
+			}
 			return out;
 		}
 
@@ -110,6 +112,10 @@ namespace hypro {
 			void addTransition(Transition<Number>* t, const carl::Interval<tNumber>& enabledTime);
 			void addTimeStep(const carl::Interval<tNumber>& timeStep);
 			std::pair<Transition<Number>*, carl::Interval<tNumber>> getTransitionToJumpDepth(unsigned depth) const;
+
+			Path& deleteAfterPos(std::size_t cutpos);
+			Path& deleteBeforePos(std::size_t cutpos);
+			Path& clear();
 
 			static bool sharePrefix(const Path<Number,tNumber>& lhs, const Path<Number,tNumber>& rhs);
 			bool sharesPrefix(const Path<Number,tNumber>& rhs) const;
