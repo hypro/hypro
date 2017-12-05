@@ -430,6 +430,11 @@ class State
 
 };
 
+template<typename Number, typename tNumber = Number>
+using State_t = State<Number, tNumber, Box<Number>, ConstraintSet<Number>, SupportFunction<Number>, Zonotope<Number>, HPolytope<Number>, VPolytope<Number>>;
+
 } // namespace
 
 #include "State.tpp"
+
+

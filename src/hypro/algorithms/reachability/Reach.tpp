@@ -8,7 +8,7 @@ namespace reachability {
 	using timeunit = std::chrono::microseconds;
 
 	template<typename Number>
-	Reach<Number>::Reach( const HybridAutomaton<Number>& _automaton, const ReachabilitySettings<Number>& _settings)
+	Reach<Number>::Reach( const HybridAutomaton<Number, State_t<Number,Number>>& _automaton, const ReachabilitySettings<Number>& _settings)
 		: mAutomaton( _automaton ), mSettings(_settings), mCurrentLevel(0), mIntersectedBadStates(false) {
 			//mAutomaton.addArtificialDimension();
 		}
@@ -26,40 +26,51 @@ namespace reachability {
 				State_t<Number> s;
 				s.setLocation(state.second.getLocation());
 
-				DEBUG("hypro.reacher","Adding initial set of type " << mType);
-				switch(mType){
-					case representation_name::box: {
-						Box<Number> tmp = Converter<Number>::toBox(boost::get<ConstraintSet<Number>>(state.second.getSet()));
-						s.setSet(tmp);
-						break;
-					}
-					case representation_name::polytope_h: {
-						s.setSet(Converter<Number>::toHPolytope(boost::get<ConstraintSet<Number>>(state.second.getSet())));
-						break;
-					}
-					case representation_name::polytope_v: {
-						s.setSet(Converter<Number>::toVPolytope(boost::get<ConstraintSet<Number>>(state.second.getSet())));
-						break;
-					}
-					case representation_name::support_function: {
-						s.setSet(Converter<Number>::toSupportFunction(boost::get<ConstraintSet<Number>>(state.second.getSet())));
-						break;
-					}
-					case representation_name::zonotope: {
-						s.setSet(Converter<Number>::toZonotope(boost::get<ConstraintSet<Number>>(state.second.getSet())));
-						break;
-					}
-					#ifdef HYPRO_USE_PPL
-					case representation_name::ppl_polytope: {
-						s.setSet(Converter<Number>::toPolytope(boost::get<ConstraintSet<Number>>(state.second.getSet())));
-						break;
-					}
-					#endif
+				if(state.second.getSetType(0) != mType) {
+					switch(state.second.getSetType(0)){
+						case representation_name::box: {
+							s.setSet(boost::get<Box<Number>>(state.second.getSet()));
+							break;
+						}
+						case representation_name::polytope_h: {
+							s.setSet(boost::get<HPolytope<Number>>(state.second.getSet()));
+							break;
+						}
+						case representation_name::polytope_v: {
+							s.setSet(boost::get<VPolytope<Number>>(state.second.getSet()));
+							break;
+						}
+						case representation_name::support_function: {
+							s.setSet(boost::get<SupportFunction<Number>>(state.second.getSet()));
+							break;
+						}
+						case representation_name::zonotope: {
+							s.setSet(boost::get<Zonotope<Number>>(state.second.getSet()));
+							break;
+						}
+						case representation_name::constraint_set: {
+							s.setSet(boost::get<ConstraintSet<Number>>(state.second.getSet()));
+							break;
+						}
+						#ifdef HYPRO_USE_PPL
+						case representation_name::ppl_polytope: {
+							s.setSet(boost::get<Polytope<Number>>(state.second.getSet()));
+							break;
+						}
+						#endif
 
-					default: {
-						s.setSet(Converter<Number>::toBox(boost::get<ConstraintSet<Number>>(state.second.getSet())));
+						default: {
+							assert(false);
+						}
 					}
+					s.setSetDirect(boost::apply_visitor(genericConversionVisitor<typename State_t<Number>::repVariant, Number>(mType), s.getSet()));
+					s.setSetType(mType);
+				} else {
+					s.setSetDirect(state.second.getSet());
 				}
+
+				DEBUG("hypro.reacher","Adding initial set of type " << mType);
+
 				s.setTimestamp(carl::Interval<Number>(0));
 				mWorkingQueue.emplace_back(initialSet<Number>(mCurrentLevel, s));
 			}
@@ -89,7 +100,7 @@ namespace reachability {
 		INFO("hypro.reacher", "Location: " << _state.getLocation()->getId());
 		INFO("hypro.reacher", "Location printed : " << *_state.getLocation());
 		INFO("hypro.reacher", "Time step size: " << mSettings.timeStep);
-		INFO("hypro.reacher", "Initial valuation: " _state);
+		INFO("hypro.reacher", "Initial valuation: " << _state);
 		//std::cout << boost::get<State_t<Number>>(_state) << std::endl;
 		//std::cout << _state << std::endl;
 #endif

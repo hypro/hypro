@@ -3,8 +3,8 @@
 namespace hypro
 {
 
-template<typename Number>
-const Location<Number>* HybridAutomaton<Number>::getLocation(std::size_t id) const {
+template<typename Number, typename State>
+const Location<Number>* HybridAutomaton<Number,State>::getLocation(std::size_t id) const {
 	for(const auto loc : mLocations) {
 		if(loc->getId() == id) {
 			return loc;
@@ -13,8 +13,8 @@ const Location<Number>* HybridAutomaton<Number>::getLocation(std::size_t id) con
 	return nullptr;
 }
 
-template<typename Number>
-const Location<Number>* HybridAutomaton<Number>::getLocation(std::string name) const {
+template<typename Number, typename State>
+const Location<Number>* HybridAutomaton<Number,State>::getLocation(std::string name) const {
 	for(const auto loc : mLocations) {
 		if(loc->getName() == name) {
 			return loc;
@@ -23,8 +23,8 @@ const Location<Number>* HybridAutomaton<Number>::getLocation(std::string name) c
 	return nullptr;
 }
 
-template<typename Number>
-unsigned HybridAutomaton<Number>::dimension() const
+template<typename Number, typename State>
+unsigned HybridAutomaton<Number,State>::dimension() const
 {
     if (mInitialStates.empty()) return 0;
 

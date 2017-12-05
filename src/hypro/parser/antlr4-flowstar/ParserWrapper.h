@@ -9,6 +9,6 @@
 namespace hypro {
 
 	template<typename Number>
-	boost::tuple<HybridAutomaton<Number>, ReachabilitySettings<Number>> parseFlowstarFile(const std::string& filename);
+	boost::tuple<HybridAutomaton<Number,State_t<Number,Number>>, ReachabilitySettings<Number>> parseFlowstarFile(const std::string& filename);
 
 } // namespace
