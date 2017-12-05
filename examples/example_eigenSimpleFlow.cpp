@@ -80,25 +80,46 @@ void plot_addTimeSegment(Flow_seg& safe_seg, std::size_t DIM_PLOT, bool ORIG_SYS
 void addSegment(std::vector<VPoly>& flow, bool PLOT, Flow_seg& safe_seg,
         std::size_t colorUpper, std::size_t colorLower);
 
-int main()
+int main(int argc, char** argv)
 {
-    //wont work: bouncing_ball.model
+    std::string filename1 = "../../examples/input/bouncing_ball_inhomogen.model";
+    std::string filename2 = "../../examples/input/rod_reactor.model";
+    std::string filename3 = "../../examples/input/switching_5.model";
+    std::string filename;
+    long sl;
+	if(argc == 2) {
+		char* p;
+		sl = strtol(argv[1], &p, 10);
+	}
+    switch (sl) {
+        case 3:
+            filename  = filename3;
+        break;
+        case 2:
+            filename = filename2;
+        break;
+        case 1:
+            filename = filename1;
+        break;
+        default:
+            std::cout << "wrong example chosen, choose 1 bounding_ball, 2 rod_reactor, 3 switching_5\n";
+            std::exit(EXIT_FAILURE);
+        break;
+    }
+    //wont work: bouncing_ball.model filtered_oscillator_4.model
     //hypo working: bouncin_ball_inhomogen rod_reactor
-    //hypro not working switching_5 (to fix)
-    //const std::string& filename = "../../examples/input/bouncing_ball_inhomogen.model";
-    //const std::string& filename = "../../examples/input/rod_reactor.model";
+    //hypro not working switching_5 (to fix!!!)
+    //HyDRA not working: rod_reactor 
     //bouncing_ball_inhomogen.model  rod_reactor.model switching_5.model
     //filtered_oscillator_4.model bouncing_ball_inhomogen.model missing: GearBox ARCH17, Comp3
-    //const std::string& filename = "../../examples/input/bouncing_ball_inhomogen.model";
-    const std::string& filename = "../../examples/input/rod_reactor.model";
 	boost::tuple<HybridAutomaton<Number>, ReachabilitySettings<Number>> ha = parseFlowstarFile<Number>(filename);
     HybridAutomaton<Number> original_ha = boost::get<0>(ha);
     Transformation<Number> trafo = Transformation<Number>(original_ha);
-    std::cout << "----------    END OF TRANSFORMATION   ------------" << std::endl;
+    std::cout << "----------    END OF TRANSFORMATION   ------------\n";
     std::cout << original_ha << std::endl;
-    std::cout << "----------    END OF ORIGINAL         ------------" << std::endl;
+    std::cout << "----------    END OF ORIGINAL         ------------\n";
     trafo.output_HybridAutomaton();
-    std::cout << "----------    END OF TRAFO OUTPUT     ------------" << std::endl;
+    std::cout << "----------    END OF TRAFO OUTPUT     ------------\n";
     std::cout << std::endl;
     //trafo.addGlobalBadStates(original_ha,1);
     //DEPRECATED:

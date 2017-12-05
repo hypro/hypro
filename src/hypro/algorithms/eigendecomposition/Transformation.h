@@ -46,6 +46,7 @@ template <typename Number>
 struct STflowpipeSegment {
   Matrix<Number>                V;
   Matrix<Number>                Vinv;
+  Matrix<Number>                trafoInput;
 };
 /** 
  * @brief   STallValues as struct for all static EVD values for constant flow of location
