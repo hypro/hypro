@@ -1,6 +1,5 @@
 var NAVTREEINDEX1615 =
 {
-"classBadStatesLexer.html#a5ae241d6f44a4162284b270ec52d344fa81614f092efbba6e8d7b65501a581fb3":[9,0,8,2],
 "classBadStatesLexer.html#a5ae241d6f44a4162284b270ec52d344fa90cfb05fc25d19e37e52416da3b56dd9":[9,0,8,15],
 "classBadStatesLexer.html#a5ae241d6f44a4162284b270ec52d344fa9553aeadb3c2328779349a1c0d20b6f3":[9,0,8,10],
 "classBadStatesLexer.html#a5ae241d6f44a4162284b270ec52d344faa77e746b9c384da17da8249f8454e13e":[9,0,8,11],
@@ -249,5 +248,6 @@ var NAVTREEINDEX1615 =
 "classCIFLocationLexer.html#a5b4e5ebff2244d76f53814aaa5260eada42a3849e91fec2e60f6a0ffce514fb53":[9,0,11,59],
 "classCIFLocationLexer.html#a5b4e5ebff2244d76f53814aaa5260eada4355179f34d40d0902f06df1f8ab3abc":[9,0,11,51],
 "classCIFLocationLexer.html#a5b4e5ebff2244d76f53814aaa5260eada44274b1a59491a2aeb21b1b54e76ab2d":[9,0,11,29],
-"classCIFLocationLexer.html#a5b4e5ebff2244d76f53814aaa5260eada464c97f85f03aa738a56e82a3e109c6a":[9,0,11,94]
+"classCIFLocationLexer.html#a5b4e5ebff2244d76f53814aaa5260eada464c97f85f03aa738a56e82a3e109c6a":[9,0,11,94],
+"classCIFLocationLexer.html#a5b4e5ebff2244d76f53814aaa5260eada468b6223204c54031be5ff7aab4bef74":[9,0,11,98]
 };

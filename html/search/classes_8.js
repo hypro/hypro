@@ -30,6 +30,8 @@ var searchData=
   ['hpolytopet',['HPolytopeT',['../classhypro_1_1reachability_1_1hypro_1_1HPolytopeT.html',1,'hypro::reachability::hypro']]],
   ['hpolytopet',['HPolytopeT',['../classhypro_1_1HPolytopeT.html',1,'hypro']]],
   ['hybridautomaton',['HybridAutomaton',['../classhypro_1_1HybridAutomaton.html',1,'hypro']]],
+  ['hybridautomaton_3c_20number_20_3e',['HybridAutomaton&lt; Number &gt;',['../classhypro_1_1HybridAutomaton.html',1,'hypro']]],
+  ['hybridautomaton_3c_20number_2c_20hypro_3a_3astate_3c_20number_2c_20number_20_3e_20_3e',['HybridAutomaton&lt; Number, hypro::State&lt; Number, Number &gt; &gt;',['../classhypro_1_1HybridAutomaton.html',1,'hypro']]],
   ['hybridautomatonbasevisitor',['HybridAutomatonBaseVisitor',['../classHybridAutomatonBaseVisitor.html',1,'']]],
   ['hybridautomatonlexer',['HybridAutomatonLexer',['../classHybridAutomatonLexer.html',1,'']]],
   ['hybridautomatonparser',['HybridAutomatonParser',['../classHybridAutomatonParser.html',1,'']]],

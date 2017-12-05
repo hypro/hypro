@@ -1,6 +1,5 @@
 var NAVTREEINDEX1637 =
 {
-"classhypro_1_1BoxT.html#a2b6a3c60693707b94c19df735aff621d":[9,0,1,56,6],
 "classhypro_1_1BoxT.html#a2cc93b59dafe01bdfcb2a93e36a4799a":[9,0,1,56,19],
 "classhypro_1_1BoxT.html#a357a1136da3318bd51a6c85cdbfa6ed2":[9,0,1,56,24],
 "classhypro_1_1BoxT.html#a3865d53139a9e3dc115aa6cb542d9cc5":[9,0,1,56,45],
@@ -249,5 +248,6 @@ var NAVTREEINDEX1637 =
 "classhypro_1_1Dictionary.html#a253f033e04084926ba46d144c63e283e":[9,0,1,10,10],
 "classhypro_1_1Dictionary.html#a2ac0e068c6e99b0ff8d6d1804c7e8e6a":[9,0,1,10,30],
 "classhypro_1_1Dictionary.html#a2ecbd190ac1fe89502c50abc3521d83f":[9,0,1,10,34],
-"classhypro_1_1Dictionary.html#a3374eb13618d1f2f6676b8f834e3a08c":[9,0,1,10,31]
+"classhypro_1_1Dictionary.html#a3374eb13618d1f2f6676b8f834e3a08c":[9,0,1,10,31],
+"classhypro_1_1Dictionary.html#a3753a042537be9286a28bc7fedadeb1e":[9,0,1,10,2]
 };

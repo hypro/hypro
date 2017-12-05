@@ -1,3 +1,5 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$classhypro_1_1TaylorModel.html" title="hypro::TaylorModel\l\&lt; Number \&gt;" alt="" coords="5,5,139,46"/>
+<area shape="rect" id="node1" href="$classhypro_1_1SupportFunctionContent.html" title="Class for support function content. " alt="" coords="5,38,208,79"/>
+<area shape="rect" id="node2" href="$classhypro_1_1NonLinearOmega0Supportfunction.html" title="hypro::NonLinearOmega0Supportfunction\l\&lt; Setting \&gt;" alt="" coords="256,5,517,46"/>
+<area shape="rect" id="node3" href="$classhypro_1_1SymmetricCenteredBoxSupportFunction.html" title="hypro::SymmetricCentered\lBoxSupportFunction\&lt; Setting \&gt;" alt="" coords="284,70,489,111"/>
 </map>

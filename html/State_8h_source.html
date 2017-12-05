@@ -348,9 +348,14 @@ $(document).ready(function(){initNavTree('State_8h_source.html','');});
 <div class="line"><a name="l00430"></a><span class="lineno">  430</span>&#160;</div>
 <div class="line"><a name="l00431"></a><span class="lineno">  431</span>&#160;};</div>
 <div class="line"><a name="l00432"></a><span class="lineno">  432</span>&#160;</div>
-<div class="line"><a name="l00433"></a><span class="lineno">  433</span>&#160;} <span class="comment">// namespace</span></div>
-<div class="line"><a name="l00434"></a><span class="lineno">  434</span>&#160;</div>
-<div class="line"><a name="l00435"></a><span class="lineno">  435</span>&#160;<span class="preprocessor">#include &quot;State.tpp&quot;</span></div>
+<div class="line"><a name="l00433"></a><span class="lineno">  433</span>&#160;<span class="keyword">template</span>&lt;<span class="keyword">typename</span> Number, <span class="keyword">typename</span> tNumber = Number&gt;</div>
+<div class="line"><a name="l00434"></a><span class="lineno">  434</span>&#160;<span class="keyword">using</span> State_t = State&lt;Number, tNumber, Box&lt;Number&gt;, ConstraintSet&lt;Number&gt;, SupportFunction&lt;Number&gt;, Zonotope&lt;Number&gt;, HPolytope&lt;Number&gt;, VPolytope&lt;Number&gt;&gt;;</div>
+<div class="line"><a name="l00435"></a><span class="lineno">  435</span>&#160;</div>
+<div class="line"><a name="l00436"></a><span class="lineno">  436</span>&#160;} <span class="comment">// namespace</span></div>
+<div class="line"><a name="l00437"></a><span class="lineno">  437</span>&#160;</div>
+<div class="line"><a name="l00438"></a><span class="lineno">  438</span>&#160;<span class="preprocessor">#include &quot;State.tpp&quot;</span></div>
+<div class="line"><a name="l00439"></a><span class="lineno">  439</span>&#160;</div>
+<div class="line"><a name="l00440"></a><span class="lineno">  440</span>&#160;</div>
 <div class="ttc" id="namespacehypro_html_aada824f660cac25bb643be870cdc0a86"><div class="ttname"><a href="namespacehypro.html#aada824f660cac25bb643be870cdc0a86">hypro::representation_name</a></div><div class="ttdeci">representation_name</div><div class="ttdoc">Enum encapsulating all provided state set representations to be able to determine a type...</div><div class="ttdef"><b>Definition:</b> <a href="representations_2types_8h_source.html#l00009">types.h:9</a></div></div>
 <div class="ttc" id="classhypro_1_1State_html_aa2bd0b33691afad6b4f083dc269fe046"><div class="ttname"><a href="classhypro_1_1State.html#aa2bd0b33691afad6b4f083dc269fe046">hypro::State::operator!=</a></div><div class="ttdeci">friend bool operator!=(const State&lt; Number, tNumber, Representation, Rargs...&gt; &amp;lhs, const State&lt; Number, tNumber, Representation, Rargs...&gt; &amp;rhs)</div><div class="ttdoc">Operator for unequal. </div><div class="ttdef"><b>Definition:</b> <a href="State_8h_source.html#l00427">State.h:427</a></div></div>
 <div class="ttc" id="classhypro_1_1State_html_a394186e5b0e7d9680a9c69afbfd9539e"><div class="ttname"><a href="classhypro_1_1State.html#a394186e5b0e7d9680a9c69afbfd9539e">hypro::State::mTypes</a></div><div class="ttdeci">std::vector&lt; representation_name &gt; mTypes</div><div class="ttdoc">The state sets wrapped in boost variant (repVariant). </div><div class="ttdef"><b>Definition:</b> <a href="State_8h_source.html#l00036">State.h:36</a></div></div>

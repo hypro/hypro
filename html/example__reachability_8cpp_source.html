@@ -178,7 +178,7 @@ $(document).ready(function(){initNavTree('example__reachability_8cpp_source.html
 <div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;</div>
 <div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;</div>
 <div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    <span class="comment">// bad states plotting</span></div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;    <span class="keyword">typename</span> <a class="code" href="classhypro_1_1HybridAutomaton.html#ae7cc04ac0592d9b8e4a2bf4d933b4a80">hypro::HybridAutomaton&lt;Number&gt;::locationConditionMap</a> badStateMapping = boost::get&lt;0&gt;(ha).getLocalBadStates();</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;    <span class="keyword">typename</span> <a class="code" href="classhypro_1_1HybridAutomaton.html#a22b5e659a44eef9036cab88ec91b49b0">hypro::HybridAutomaton&lt;Number&gt;::locationConditionMap</a> badStateMapping = boost::get&lt;0&gt;(ha).getLocalBadStates();</div>
 <div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;    <span class="keywordflow">for</span>(<span class="keyword">const</span> <span class="keyword">auto</span>&amp; state : badStateMapping) {</div>
 <div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;        <span class="keywordtype">unsigned</span> bs = plotter.<a class="code" href="classhypro_1_1Plotter.html#a5993c1c7ece6f9f3c2c03b61a58d60ce">addObject</a>(Representation(state.second.getMatrix(0), state.second.getVector(0)).vertices());</div>
 <div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;        plotter.<a class="code" href="classhypro_1_1Plotter.html#a1fca511abc240a333e905d4431627119">setObjectColor</a>(bs, hypro::plotting::colors[hypro::plotting::red]);</div>
@@ -243,27 +243,27 @@ $(document).ready(function(){initNavTree('example__reachability_8cpp_source.html
 <div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;</div>
 <div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;<span class="preprocessor">#ifdef USE_CLN_NUMBERS</span></div>
 <div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;<span class="preprocessor"></span>    <span class="keyword">using</span> Number = cln::cl_RA;</div>
-<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;<span class="preprocessor">#else                                                                                                                                                                                       </span></div>
+<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;<span class="preprocessor">#else</span></div>
 <div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;<span class="preprocessor"></span>    <span class="comment">//using Number = mpq_class;</span></div>
 <div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;    <span class="keyword">using</span> Number = double;</div>
 <div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;<span class="preprocessor">#endif</span></div>
 <div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;<span class="preprocessor"></span></div>
 <div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;    <span class="keywordflow">switch</span>(rep){</div>
-<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;        </div>
+<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;</div>
 <div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;        <span class="keywordflow">case</span> 5: {</div>
 <div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;            <span class="keyword">using</span> Representation = <a class="code" href="namespacehypro.html#ad96debd897a91531861debc2a348b9e4">hypro::Zonotope&lt;Number&gt;</a>;</div>
 <div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;            std::cout &lt;&lt; <span class="stringliteral">&quot;Using a zonotope representation.&quot;</span> &lt;&lt; std::endl;</div>
 <div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;            computeReachableStates&lt;Number, Representation&gt;(filename, hypro::representation_name::zonotope);</div>
 <div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;            <span class="keywordflow">break</span>;</div>
 <div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;        }</div>
-<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;        </div>
+<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;</div>
 <div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;        <span class="keywordflow">case</span> 4: {</div>
 <div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;            <span class="keyword">using</span> Representation = <a class="code" href="namespacehypro.html#a47344b22ce93940da4599cf2f2987321">hypro::SupportFunction&lt;Number&gt;</a>;</div>
 <div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;            std::cout &lt;&lt; <span class="stringliteral">&quot;Using a support function representation.&quot;</span> &lt;&lt; std::endl;</div>
 <div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;            computeReachableStates&lt;Number, Representation&gt;(filename, hypro::representation_name::support_function);</div>
 <div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;            <span class="keywordflow">break</span>;</div>
 <div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;        }</div>
-<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;        </div>
+<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;</div>
 <div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;        <span class="keywordflow">case</span> 3: {</div>
 <div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;            <span class="keyword">using</span> Representation = <a class="code" href="namespacehypro.html#a39e49ed88fa9599f8b04b6758a3103a2">hypro::VPolytope&lt;Number&gt;</a>;</div>
 <div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;            std::cout &lt;&lt; <span class="stringliteral">&quot;Using a v-polytope representation.&quot;</span> &lt;&lt; std::endl;</div>
@@ -276,7 +276,7 @@ $(document).ready(function(){initNavTree('example__reachability_8cpp_source.html
 <div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;            computeReachableStates&lt;Number, Representation&gt;(filename, hypro::representation_name::polytope_h);</div>
 <div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;            <span class="keywordflow">break</span>;</div>
 <div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;        }</div>
-<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;        </div>
+<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;</div>
 <div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;        <span class="keywordflow">case</span> 1: {</div>
 <div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;            <span class="keyword">using</span> Representation = hypro::Box&lt;Number&gt;;</div>
 <div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;            std::cout &lt;&lt; <span class="stringliteral">&quot;Using a box representation.&quot;</span> &lt;&lt; std::endl;</div>
@@ -300,13 +300,13 @@ $(document).ready(function(){initNavTree('example__reachability_8cpp_source.html
 <div class="ttc" id="namespacehypro_html_ad96debd897a91531861debc2a348b9e4"><div class="ttname"><a href="namespacehypro.html#ad96debd897a91531861debc2a348b9e4">hypro::Zonotope</a></div><div class="ttdeci">typename Converter&lt; Number &gt;::Zonotope Zonotope</div><div class="ttdef"><b>Definition:</b> <a href="Converter_8h_source.html#l00138">Converter.h:138</a></div></div>
 <div class="ttc" id="classhypro_1_1Plotter_html"><div class="ttname"><a href="classhypro_1_1Plotter.html">hypro::Plotter</a></div><div class="ttdoc">Class implementing a plotter. The plotter is implemented using carl::Singleton. </div><div class="ttdef"><b>Definition:</b> <a href="Plotter_8h_source.html#l00069">Plotter.h:69</a></div></div>
 <div class="ttc" id="namespacehypro_html_a39e49ed88fa9599f8b04b6758a3103a2"><div class="ttname"><a href="namespacehypro.html#a39e49ed88fa9599f8b04b6758a3103a2">hypro::VPolytope</a></div><div class="ttdeci">typename Converter&lt; Number &gt;::VPolytope VPolytope</div><div class="ttdef"><b>Definition:</b> <a href="Converter_8h_source.html#l00121">Converter.h:121</a></div></div>
-<div class="ttc" id="classhypro_1_1HybridAutomaton_html_ae7cc04ac0592d9b8e4a2bf4d933b4a80"><div class="ttname"><a href="classhypro_1_1HybridAutomaton.html#ae7cc04ac0592d9b8e4a2bf4d933b4a80">hypro::HybridAutomaton::locationConditionMap</a></div><div class="ttdeci">std::map&lt; const Location&lt; Number &gt; *, Condition&lt; Number &gt;&gt; locationConditionMap</div><div class="ttdoc">Multi-map from location pointers to states. </div><div class="ttdef"><b>Definition:</b> <a href="HybridAutomaton_8h_source.html#l00035">HybridAutomaton.h:35</a></div></div>
 <div class="ttc" id="classhypro_1_1Plotter_html_a5993c1c7ece6f9f3c2c03b61a58d60ce"><div class="ttname"><a href="classhypro_1_1Plotter.html#a5993c1c7ece6f9f3c2c03b61a58d60ce">hypro::Plotter::addObject</a></div><div class="ttdeci">unsigned addObject(const std::vector&lt; Point&lt; Number &gt;&gt; &amp;_points)</div><div class="ttdoc">Adds an object represented as a vector of points. Duplicates and points inside will be removed by the...</div></div>
+<div class="ttc" id="classhypro_1_1HybridAutomaton_html_a22b5e659a44eef9036cab88ec91b49b0"><div class="ttname"><a href="classhypro_1_1HybridAutomaton.html#a22b5e659a44eef9036cab88ec91b49b0">hypro::HybridAutomaton::locationConditionMap</a></div><div class="ttdeci">std::map&lt; const Location&lt; Number &gt; *, Condition&lt; Number &gt;&gt; locationConditionMap</div><div class="ttdoc">Multi-map from location pointers to states. </div><div class="ttdef"><b>Definition:</b> <a href="HybridAutomaton_8h_source.html#l00035">HybridAutomaton.h:35</a></div></div>
 <div class="ttc" id="namespacehypro_html_a47344b22ce93940da4599cf2f2987321"><div class="ttname"><a href="namespacehypro.html#a47344b22ce93940da4599cf2f2987321">hypro::SupportFunction</a></div><div class="ttdeci">typename Converter&lt; Number &gt;::SupportFunction SupportFunction</div><div class="ttdef"><b>Definition:</b> <a href="Converter_8h_source.html#l00132">Converter.h:132</a></div></div>
 <div class="ttc" id="classhypro_1_1Plotter_html_a52ef9dfe2f19bc99090df94327f206fd"><div class="ttname"><a href="classhypro_1_1Plotter.html#a52ef9dfe2f19bc99090df94327f206fd">hypro::Plotter::setFilename</a></div><div class="ttdeci">void setFilename(const std::string &amp;_filename=&quot;out&quot;)</div><div class="ttdoc">Sets the filename. </div></div>
 <div class="ttc" id="Reach_8h_html"><div class="ttname"><a href="Reach_8h.html">Reach.h</a></div></div>
 <div class="ttc" id="namespacehypro_html_afd0bc8dcc54953e4b477a5aaf7065439"><div class="ttname"><a href="namespacehypro.html#afd0bc8dcc54953e4b477a5aaf7065439">hypro::HPolytope</a></div><div class="ttdeci">typename Converter&lt; Number &gt;::HPolytope HPolytope</div><div class="ttdef"><b>Definition:</b> <a href="Converter_8h_source.html#l00112">Converter.h:112</a></div></div>
-<div class="ttc" id="classhypro_1_1reachability_1_1Reach_html"><div class="ttname"><a href="classhypro_1_1reachability_1_1Reach.html">hypro::reachability::Reach</a></div><div class="ttdoc">Class implementing a basic reachbility analysis algorithm for linear hybrid automata. </div><div class="ttdef"><b>Definition:</b> <a href="Reach_8h_source.html#l00064">Reach.h:64</a></div></div>
+<div class="ttc" id="classhypro_1_1reachability_1_1Reach_html"><div class="ttname"><a href="classhypro_1_1reachability_1_1Reach.html">hypro::reachability::Reach</a></div><div class="ttdoc">Class implementing a basic reachbility analysis algorithm for linear hybrid automata. </div><div class="ttdef"><b>Definition:</b> <a href="Reach_8h_source.html#l00061">Reach.h:61</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- HTML footer for doxygen 1.8.12-->

@@ -1,6 +1,5 @@
 var NAVTREEINDEX1618 =
 {
-"classCIFLocationParser_1_1LocContext.html":[9,0,12,39],
 "classCIFLocationParser_1_1LocContext.html#a57b404649e857c4a5709687dc80d9c80":[9,0,12,39,1],
 "classCIFLocationParser_1_1LocContext.html#adbaa198d8d224ffec13d6b563f85cccc":[9,0,12,39,0],
 "classCIFLocationParser_1_1LocElemContext.html":[9,0,12,40],
@@ -249,5 +248,6 @@ var NAVTREEINDEX1618 =
 "classCIFLocationParser_1_1UpdatesContext.html#a67717db358fd3e16bef20e7a16c3f858":[9,0,12,83,1],
 "classCIFLocationParser_1_1UpdatesContext.html#a694bdcccf0ecbd1ef36c04e8c89b11b3":[9,0,12,83,3],
 "classCIFLocationParser_1_1UpdatesContext.html#a7a7a6c742574361352fe040aefd706ab":[9,0,12,83,4],
-"classCIFLocationParser_1_1UpdatesContext.html#abcc3131fe406a53493b96ae5a2a45faf":[9,0,12,83,0]
+"classCIFLocationParser_1_1UpdatesContext.html#abcc3131fe406a53493b96ae5a2a45faf":[9,0,12,83,0],
+"classCIFLocationVisitor.html":[9,0,13]
 };

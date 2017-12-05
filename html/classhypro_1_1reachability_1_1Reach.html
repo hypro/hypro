@@ -124,9 +124,9 @@ $(document).ready(function(){initNavTree('classhypro_1_1reachability_1_1Reach.ht
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a53dda21613340d0a5c722e22b461ea52"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1reachability_1_1Reach.html#a53dda21613340d0a5c722e22b461ea52">Reach</a> (const <a class="el" href="classhypro_1_1HybridAutomaton.html">HybridAutomaton</a>&lt; Number &gt; &amp;_automaton, const <a class="el" href="structhypro_1_1ReachabilitySettings.html">ReachabilitySettings</a>&lt; Number &gt; &amp;_settings=<a class="el" href="structhypro_1_1ReachabilitySettings.html">ReachabilitySettings</a>&lt; Number &gt;())</td></tr>
-<tr class="memdesc:a53dda21613340d0a5c722e22b461ea52"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor for a basic reachability analysis algorithm for linear hybrid automata.  <a href="#a53dda21613340d0a5c722e22b461ea52">More...</a><br/></td></tr>
-<tr class="separator:a53dda21613340d0a5c722e22b461ea52"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac32179c10b6f5d053bd133ae048d0805"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1reachability_1_1Reach.html#ac32179c10b6f5d053bd133ae048d0805">Reach</a> (const <a class="el" href="classhypro_1_1HybridAutomaton.html">HybridAutomaton</a>&lt; Number, <a class="el" href="classhypro_1_1State.html">State_t</a>&lt; Number, Number &gt;&gt; &amp;_automaton, const <a class="el" href="structhypro_1_1ReachabilitySettings.html">ReachabilitySettings</a>&lt; Number &gt; &amp;_settings=<a class="el" href="structhypro_1_1ReachabilitySettings.html">ReachabilitySettings</a>&lt; Number &gt;())</td></tr>
+<tr class="memdesc:ac32179c10b6f5d053bd133ae048d0805"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor for a basic reachability analysis algorithm for linear hybrid automata.  <a href="#ac32179c10b6f5d053bd133ae048d0805">More...</a><br/></td></tr>
+<tr class="separator:ac32179c10b6f5d053bd133ae048d0805"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aed1d333aa28ed68bf8dbbe13a546435f"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::pair<br class="typebreak"/>
 &lt; unsigned, flowpipe_t&lt; Number &gt; &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1reachability_1_1Reach.html#aed1d333aa28ed68bf8dbbe13a546435f">computeForwardReachability</a> ()</td></tr>
 <tr class="memdesc:aed1d333aa28ed68bf8dbbe13a546435f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the forward reachability of the given automaton.  <a href="#aed1d333aa28ed68bf8dbbe13a546435f">More...</a><br/></td></tr>
@@ -174,9 +174,9 @@ class hypro::reachability::Reach&lt; Number &gt;</h3>
 </dl>
 <dl><dt><b>Examples: </b></dt><dd><a class="el" href="example_benchmark_8cpp-example.html#_a0">example_benchmark.cpp</a>, and <a class="el" href="example_bouncingBall_8cpp-example.html#_a8">example_bouncingBall.cpp</a>.</dd>
 </dl>
-<p>Definition at line <a class="el" href="Reach_8h_source.html#l00064">64</a> of file <a class="el" href="Reach_8h_source.html">Reach.h</a>.</p>
+<p>Definition at line <a class="el" href="Reach_8h_source.html#l00061">61</a> of file <a class="el" href="Reach_8h_source.html">Reach.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a class="anchor" id="a53dda21613340d0a5c722e22b461ea52"></a>
+<a class="anchor" id="ac32179c10b6f5d053bd133ae048d0805"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
@@ -185,7 +185,7 @@ template&lt;typename Number&gt; </div>
         <tr>
           <td class="memname"><a class="el" href="classhypro_1_1reachability_1_1Reach.html">hypro::reachability::Reach</a>&lt; Number &gt;::<a class="el" href="classhypro_1_1reachability_1_1Reach.html">Reach</a> </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="classhypro_1_1HybridAutomaton.html">HybridAutomaton</a>&lt; Number &gt; &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="classhypro_1_1HybridAutomaton.html">HybridAutomaton</a>&lt; Number, <a class="el" href="classhypro_1_1State.html">State_t</a>&lt; Number, Number &gt;&gt; &amp;&#160;</td>
           <td class="paramname"><em>_automaton</em>, </td>
         </tr>
         <tr>
@@ -364,7 +364,7 @@ template&lt;typename Number&gt; </div>
 <p>[long description] </p>
 <dl class="section return"><dt>Returns</dt><dd>true, if the bad states were reachable. </dd></dl>
 
-<p>Definition at line <a class="el" href="Reach_8h_source.html#l00110">110</a> of file <a class="el" href="Reach_8h_source.html">Reach.h</a>.</p>
+<p>Definition at line <a class="el" href="Reach_8h_source.html#l00107">107</a> of file <a class="el" href="Reach_8h_source.html">Reach.h</a>.</p>
 
 </div>
 </div>

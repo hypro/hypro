@@ -1,6 +1,5 @@
 var NAVTREEINDEX1638 =
 {
-"classhypro_1_1Dictionary.html#a3753a042537be9286a28bc7fedadeb1e":[9,0,1,10,2],
 "classhypro_1_1Dictionary.html#a39c2b62084cdfc59d56e277db0484f88":[9,0,1,10,6],
 "classhypro_1_1Dictionary.html#a3b0e82bbf03a5af6e36f84a48411531f":[9,0,1,10,37],
 "classhypro_1_1Dictionary.html#a40f6b112fa5fc8e729f1d78357fb6f8a":[9,0,1,10,19],
@@ -49,8 +48,8 @@ var NAVTREEINDEX1638 =
 "classhypro_1_1EllipsoidSupportFunction.html#a5b6b6acb9182e2cd5205506cce865e19":[9,0,1,77,6],
 "classhypro_1_1EllipsoidSupportFunction.html#a622757f58b0b2a7e223609c868138d92":[9,0,1,77,4],
 "classhypro_1_1EllipsoidSupportFunction.html#a75b07358df92f14d7070bdf6d7afb23b":[9,0,1,77,5],
-"classhypro_1_1EllipsoidSupportFunction.html#aae1d8a34744daf77f2c8656a351c71f3":[9,0,1,77,8],
 "classhypro_1_1EllipsoidSupportFunction.html#aae1d8a34744daf77f2c8656a351c71f3":[9,0,1,77,7],
+"classhypro_1_1EllipsoidSupportFunction.html#aae1d8a34744daf77f2c8656a351c71f3":[9,0,1,77,8],
 "classhypro_1_1EllipsoidSupportFunction.html#aafd5aa9372ea951c906fefd900333cdf":[9,0,1,77,9],
 "classhypro_1_1EllipsoidSupportFunction.html#aba27832ec002e8ebeaffc4de25e103f0":[9,0,1,77,11],
 "classhypro_1_1EllipsoidSupportFunction.html#af71f93ec43507bf60e0471e44490072f":[9,0,1,77,0],
@@ -249,5 +248,6 @@ var NAVTREEINDEX1638 =
 "classhypro_1_1HPolytopeT.html#a64cf5622e40a3ac7955e07bf1dae9981":[9,0,1,72,48],
 "classhypro_1_1HPolytopeT.html#a6a14381d1ea46faea6731e544d5ea69b":[9,0,1,72,39],
 "classhypro_1_1HPolytopeT.html#a6a257eac7e7e701cbdaec1dd04e5d0ca":[9,0,1,72,34],
-"classhypro_1_1HPolytopeT.html#a6ee070b0531864a636d2c609eb622f34":[9,0,1,72,54]
+"classhypro_1_1HPolytopeT.html#a6ee070b0531864a636d2c609eb622f34":[9,0,1,72,54],
+"classhypro_1_1HPolytopeT.html#a7644f352a7f3ebe0e0d9dcf3f2ca35c3":[9,0,1,72,8]
 };

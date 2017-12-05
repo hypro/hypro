@@ -373,6 +373,10 @@ Classes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
 Typedefs</h2></td></tr>
+<tr class="memitem:a53f4b13464c8a8acb0173a8f11dc29ef"><td class="memTemplParams" colspan="2"><a class="anchor" id="a53f4b13464c8a8acb0173a8f11dc29ef"></a>
+template&lt;typename Number , typename tNumber  = Number&gt; </td></tr>
+<tr class="memitem:a53f4b13464c8a8acb0173a8f11dc29ef"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><b>State_t</b> = <a class="el" href="classhypro_1_1State.html">State</a>&lt; Number, tNumber, Box&lt; Number &gt;, ConstraintSet&lt; Number &gt;, <a class="el" href="namespacehypro.html#a47344b22ce93940da4599cf2f2987321">SupportFunction</a>&lt; Number &gt;, <a class="el" href="namespacehypro.html#ad96debd897a91531861debc2a348b9e4">Zonotope</a>&lt; Number &gt;, <a class="el" href="namespacehypro.html#afd0bc8dcc54953e4b477a5aaf7065439">HPolytope</a>&lt; Number &gt;, <a class="el" href="namespacehypro.html#a39e49ed88fa9599f8b04b6758a3103a2">VPolytope</a>&lt; Number &gt;&gt;</td></tr>
+<tr class="separator:a53f4b13464c8a8acb0173a8f11dc29ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac81ca159915e8d3f271cd914efa31145"><td class="memTemplParams" colspan="2"><a class="anchor" id="ac81ca159915e8d3f271cd914efa31145"></a>
 template&lt;typename Number &gt; </td></tr>
 <tr class="memitem:ac81ca159915e8d3f271cd914efa31145"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><b>vVec</b> = typename std::vector&lt; <a class="el" href="classhypro_1_1Vertex.html">Vertex</a>&lt; Number &gt;&gt;</td></tr>
@@ -587,25 +591,30 @@ template&lt;typename Number &gt; </td></tr>
 <tr class="memitem:a62b0b40853ad5aa4ba457961ebbd0fea"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a62b0b40853ad5aa4ba457961ebbd0fea"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>openFile</b> (const std::string &amp;filename, ANTLRInputStream &amp;input)</td></tr>
 <tr class="separator:a62b0b40853ad5aa4ba457961ebbd0fea"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a49a33d63b7b33113086ca73926a83d40"><td class="memTemplParams" colspan="2"><a class="anchor" id="a49a33d63b7b33113086ca73926a83d40"></a>
+<tr class="memitem:a93e9720e7632ccb74e0c9e7d95c32c65"><td class="memTemplParams" colspan="2"><a class="anchor" id="a93e9720e7632ccb74e0c9e7d95c32c65"></a>
 template&lt;&gt; </td></tr>
-<tr class="memitem:a49a33d63b7b33113086ca73926a83d40"><td class="memTemplItemLeft" align="right" valign="top">boost::tuple&lt; <a class="el" href="classhypro_1_1HybridAutomaton.html">HybridAutomaton</a><br class="typebreak"/>
-&lt; mpq_class &gt;<br class="typebreak"/>
-, <a class="el" href="structhypro_1_1ReachabilitySettings.html">ReachabilitySettings</a><br class="typebreak"/>
+<tr class="memitem:a93e9720e7632ccb74e0c9e7d95c32c65"><td class="memTemplItemLeft" align="right" valign="top">boost::tuple&lt; <a class="el" href="classhypro_1_1HybridAutomaton.html">HybridAutomaton</a><br class="typebreak"/>
+&lt; mpq_class, <a class="el" href="classhypro_1_1State.html">State_t</a><br class="typebreak"/>
+&lt; mpq_class, mpq_class &gt;<br class="typebreak"/>
+ &gt;, <a class="el" href="structhypro_1_1ReachabilitySettings.html">ReachabilitySettings</a><br class="typebreak"/>
 &lt; mpq_class &gt; &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>parseFlowstarFile&lt; mpq_class &gt;</b> (const std::string &amp;filename)</td></tr>
-<tr class="separator:a49a33d63b7b33113086ca73926a83d40"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae319fbe03f5c2bb357ca55e871021291"><td class="memTemplParams" colspan="2"><a class="anchor" id="ae319fbe03f5c2bb357ca55e871021291"></a>
+<tr class="separator:a93e9720e7632ccb74e0c9e7d95c32c65"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9f85f2c3e172a1a1f6b32db8684cdb09"><td class="memTemplParams" colspan="2"><a class="anchor" id="a9f85f2c3e172a1a1f6b32db8684cdb09"></a>
 template&lt;&gt; </td></tr>
-<tr class="memitem:ae319fbe03f5c2bb357ca55e871021291"><td class="memTemplItemLeft" align="right" valign="top">boost::tuple&lt; <a class="el" href="classhypro_1_1HybridAutomaton.html">HybridAutomaton</a><br class="typebreak"/>
-&lt; double &gt;<br class="typebreak"/>
-, <a class="el" href="structhypro_1_1ReachabilitySettings.html">ReachabilitySettings</a>&lt; double &gt; &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>parseFlowstarFile&lt; double &gt;</b> (const std::string &amp;filename)</td></tr>
-<tr class="separator:ae319fbe03f5c2bb357ca55e871021291"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a90e46e27137cc2d32c238f5c4226884a"><td class="memTemplParams" colspan="2"><a class="anchor" id="a90e46e27137cc2d32c238f5c4226884a"></a>
+<tr class="memitem:a9f85f2c3e172a1a1f6b32db8684cdb09"><td class="memTemplItemLeft" align="right" valign="top">boost::tuple&lt; <a class="el" href="classhypro_1_1HybridAutomaton.html">HybridAutomaton</a><br class="typebreak"/>
+&lt; double, <a class="el" href="classhypro_1_1State.html">State_t</a>&lt; double, <br class="typebreak"/>
+double &gt;<br class="typebreak"/>
+ &gt;, <a class="el" href="structhypro_1_1ReachabilitySettings.html">ReachabilitySettings</a><br class="typebreak"/>
+&lt; double &gt; &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>parseFlowstarFile&lt; double &gt;</b> (const std::string &amp;filename)</td></tr>
+<tr class="separator:a9f85f2c3e172a1a1f6b32db8684cdb09"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a28f33682e495c8e51ee5a7c9ac359953"><td class="memTemplParams" colspan="2"><a class="anchor" id="a28f33682e495c8e51ee5a7c9ac359953"></a>
 template&lt;typename Number &gt; </td></tr>
-<tr class="memitem:a90e46e27137cc2d32c238f5c4226884a"><td class="memTemplItemLeft" align="right" valign="top">boost::tuple&lt; <a class="el" href="classhypro_1_1HybridAutomaton.html">HybridAutomaton</a><br class="typebreak"/>
-&lt; Number &gt;<br class="typebreak"/>
-, <a class="el" href="structhypro_1_1ReachabilitySettings.html">ReachabilitySettings</a>&lt; Number &gt; &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>parseFlowstarFile</b> (const std::string &amp;filename)</td></tr>
-<tr class="separator:a90e46e27137cc2d32c238f5c4226884a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a28f33682e495c8e51ee5a7c9ac359953"><td class="memTemplItemLeft" align="right" valign="top">boost::tuple&lt; <a class="el" href="classhypro_1_1HybridAutomaton.html">HybridAutomaton</a><br class="typebreak"/>
+&lt; Number, <a class="el" href="classhypro_1_1State.html">State_t</a>&lt; Number, <br class="typebreak"/>
+Number &gt;<br class="typebreak"/>
+ &gt;, <a class="el" href="structhypro_1_1ReachabilitySettings.html">ReachabilitySettings</a><br class="typebreak"/>
+&lt; Number &gt; &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>parseFlowstarFile</b> (const std::string &amp;filename)</td></tr>
+<tr class="separator:a28f33682e495c8e51ee5a7c9ac359953"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa78d21b35ed555d7bb6cf29c782b63f8"><td class="memTemplParams" colspan="2">template&lt;typename Number , typename Converter , class Setting &gt; </td></tr>
 <tr class="memitem:aa78d21b35ed555d7bb6cf29c782b63f8"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1BoxT.html">BoxT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacehypro.html#aa78d21b35ed555d7bb6cf29c782b63f8">operator*</a> (Number factor, const <a class="el" href="classhypro_1_1BoxT.html">BoxT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt; &amp;in)</td></tr>
 <tr class="memdesc:aa78d21b35ed555d7bb6cf29c782b63f8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Operator for scaling a box.  <a href="#aa78d21b35ed555d7bb6cf29c782b63f8">More...</a><br/></td></tr>
