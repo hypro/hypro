@@ -61,6 +61,11 @@ namespace hypro {
 		parser.removeErrorListeners();
 		parser.addErrorListener(errListener);
 
+		//Create TokenStreamRewriter, needed for constants if defined
+		if(parser.getConstants().size() > 0){
+			TokenStreamRewriter rewriter(&tokens);	
+		}
+
 		tree::ParseTree* tree = parser.start();
 
 		hypro::HyproHAVisitor<mpq_class> visitor;

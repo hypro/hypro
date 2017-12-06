@@ -9,7 +9,9 @@
 
 grammar Transition;
 
-import Formula;
+options { tokenVocab = FormulaLexer; }
+
+import FormulaParser;
 
 //////// Parser Rules
 

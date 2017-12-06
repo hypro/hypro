@@ -9,7 +9,9 @@
 
 grammar Location;
 
-import Formula;
+options { tokenVocab = FormulaLexer; }
+
+import FormulaParser;
 
 ////// Parser Rules
 
@@ -21,6 +23,5 @@ activities		: ('poly ode 1' | 'poly ode 2' | 'poly ode 3' | 'linear ode') '{' eq
 
 invariants		: 'inv' '{' constrset? '}' ;
 
-////// Lexer Rules
 
 

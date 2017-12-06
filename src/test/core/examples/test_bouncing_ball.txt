@@ -1,7 +1,12 @@
-hybrid reachability
-{
- state var x,v
-
+hybrid reachability { 
+ 
+ state var x,v 
+ 
+ par {
+  gabunga = -9.81
+  c = 1
+ }
+}
  setting
  {
   fixed steps 0.01
@@ -23,9 +28,10 @@ hybrid reachability
   {
    poly ode 1
    {
-    v' = --9.81 + -+-v*42*-3
+    #v' = --9.81 + -+-v*42*-3
     #x' = +++3*-+--v
     x' = 3*v + [-1,4]
+    v' = g + c*v
    }
 
    inv
