@@ -146,7 +146,7 @@ class State
      * @brief      Gets the location.
      * @return     The location.
      */
-    const Location<Number>* getLocation() const { assert(mLoc != nullptr); return mLoc; }
+    const Location<Number>* getLocation() const { return mLoc; }
 
     /**
      * @brief      Gets the number of contained sets.
@@ -207,7 +207,7 @@ class State
      * @brief      Sets the location.
      * @param[in]  l     The location.
      */
-    void setLocation(const Location<Number>* l) { assert(l != nullptr); mLoc = l; }
+    void setLocation(const Location<Number>* l) { mLoc = l; }
 
     /**
      * @brief      Sets the set at position i.
@@ -430,6 +430,11 @@ class State
 
 };
 
+template<typename Number, typename tNumber = Number>
+using State_t = State<Number, tNumber, Box<Number>, ConstraintSet<Number>, SupportFunction<Number>, Zonotope<Number>, HPolytope<Number>, VPolytope<Number>>;
+
 } // namespace
 
 #include "State.tpp"
+
+

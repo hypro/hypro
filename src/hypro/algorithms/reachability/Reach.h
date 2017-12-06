@@ -44,9 +44,6 @@ namespace hypro {
 namespace reachability {
 
 template<typename Number>
-using State_t = State<Number, Number, Box<Number>, SupportFunction<Number>, Zonotope<Number>, HPolytope<Number>, VPolytope<Number>>;
-
-template<typename Number>
 using initialSet = boost::tuple<unsigned, State_t<Number>>;
 
 template <typename Number>
@@ -63,7 +60,7 @@ using flowpipe_t = std::vector<State_t<Number>>;
 template <typename Number>
 class Reach {
 private:
-	HybridAutomaton<Number> mAutomaton;
+	HybridAutomaton<Number, State_t<Number,Number>> mAutomaton;
 	ReachabilitySettings<Number> mSettings;
 	std::size_t mCurrentLevel = 0;
     Number mBloatingFactor = 0;
@@ -81,7 +78,7 @@ public:
 	 * @param _automaton The analyzed automaton.
 	 * @param _settings The reachability analysis settings.
 	 */
-	Reach( const HybridAutomaton<Number>& _automaton, const ReachabilitySettings<Number>& _settings = ReachabilitySettings<Number>());
+	Reach( const HybridAutomaton<Number, State_t<Number,Number>>& _automaton, const ReachabilitySettings<Number>& _settings = ReachabilitySettings<Number>());
 
 	/**
 	 * @brief Computes the forward reachability of the given automaton.

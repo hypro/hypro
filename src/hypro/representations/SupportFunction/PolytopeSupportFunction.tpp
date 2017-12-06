@@ -99,7 +99,7 @@ PolytopeSupportFunction<Number,Setting>::~PolytopeSupportFunction() {
 
 template <typename Number, class Setting>
 PolytopeSupportFunction<Number,Setting>& PolytopeSupportFunction<Number,Setting>::operator=(const PolytopeSupportFunction<Number,Setting>& _orig){
-	std::cout << __func__ << std::endl;
+	//std::cout << __func__ << std::endl;
     this->mConstraints = _orig.mConstraints;
     this->mConstraintConstants = _orig.mConstraintConstants;
     this->mOpt = Optimizer<Number>(mConstraints,mConstraintConstants);

@@ -24,7 +24,6 @@ template<typename Number>
 Location<Number> *LocationManager<Number>::create(const matrix_t<Number> _mat)
 {
     Location<Number> *loc = new Location<Number>(mId++, _mat);
-    std::cout << "Created location with id " << mId << std::endl;
     mLocations[mId - 1] = loc;
     mIds[loc] = mId - 1;
     return loc;

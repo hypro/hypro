@@ -38,6 +38,7 @@ if(STATICLIB_SWITCH)
 		$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
 		$<INSTALL_INTERFACE:include/${PROJECT_NAME}>
 	)
+	add_dependencies(${PROJECT_NAME}_static resources)
 else()
 	message(STATUS "linking dynamic")
 	add_library(${PROJECT_NAME} SHARED ${sources})
@@ -82,6 +83,7 @@ else()
 		INTERFACE
 		$<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/resources/antlr_build/include/antlr4-runtime>
 	)
+	add_dependencies(${PROJECT_NAME} resources)
 endif()
 
 if(STATICLIB_SWITCH)

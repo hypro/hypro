@@ -50,6 +50,46 @@ namespace hypro {
 	}
 
 	template<typename Number, typename tNumber>
+	Path<Number,tNumber>& Path<Number,tNumber>::deleteAfterPos(std::size_t cutpos) {
+		if(cutpos >= this->size()) {
+			return *this;
+		}
+		auto pathIt = mPath.begin();
+		while(cutpos > 0) {
+			++pathIt;
+			--cutpos;
+		}
+		++pathIt;
+		while(pathIt != mPath.end()) {
+			pathIt = mPath.erase(pathIt);
+		}
+		return *this;
+	}
+
+	template<typename Number, typename tNumber>
+	Path<Number,tNumber>& Path<Number,tNumber>::deleteBeforePos(std::size_t cutpos) {
+		if(cutpos >= this->size()) {
+			this->clear();
+			return *this;
+		}
+		auto pathIt = mPath.begin();
+		while(cutpos > 0) {
+			pathIt = mPath.erase(pathIt);
+			--cutpos;
+		}
+		return *this;
+	}
+
+	template<typename Number, typename tNumber>
+	Path<Number,tNumber>& Path<Number,tNumber>::clear() {
+		auto pathIt = mPath.begin();
+		while(!mPath.empty()) {
+			pathIt = mPath.erase(pathIt);
+		}
+		return *this;
+	}
+
+	template<typename Number, typename tNumber>
 	bool Path<Number,tNumber>::sharePrefix(const Path<Number,tNumber>& lhs, const Path<Number,tNumber>& rhs) {
         for (auto lhsIt = lhs.mPath.begin(); lhsIt != lhs.mPath.end(); ++lhsIt) {
             for (auto rhsIt = rhs.mPath.begin(); rhsIt != rhs.mPath.end(); ++rhsIt) {

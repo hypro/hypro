@@ -144,7 +144,7 @@ namespace hypro {
 			for(Eigen::Index rowIndex = 0; rowIndex < boxDirections.rows(); ++rowIndex) {
 				results.emplace_back(opt.evaluate(boxDirections.row(rowIndex), false));
 			}
-			assert(results.size() == boxDirections.rows());
+			assert(Eigen::Index(results.size()) == boxDirections.rows());
 
 			// re-construct box from results.
 			mLimits = std::make_pair(Point<Number>(vector_t<Number>::Zero(_constraints.cols())), Point<Number>(vector_t<Number>::Zero(_constraints.cols())));
@@ -154,31 +154,13 @@ namespace hypro {
 						mLimits.second[colIndex] = results[rowIndex].supportValue;
 					} else if (boxDirections(rowIndex,colIndex) < 0) {
 						mLimits.first[colIndex] = -results[rowIndex].supportValue;
-					}
-/*
-		// evaluate in box directions.
-		Optimizer<Number> opt(_constraints,_constants);
-		std::vector<EvaluationResult<Number>> results;
-		for(Eigen::Index rowIndex = 0; rowIndex < boxDirections.rows(); ++rowIndex) {
-			results.emplace_back(opt.evaluate(boxDirections.row(rowIndex), false));
-		}
-		assert(Eigen::Index(results.size()) == boxDirections.rows());
-
-		// re-construct box from results.
-		mLimits = std::make_pair(Point<Number>(vector_t<Number>::Zero(_constraints.cols())), Point<Number>(vector_t<Number>::Zero(_constraints.cols())));
-		for(Eigen::Index rowIndex = 0; rowIndex < boxDirections.rows(); ++rowIndex) {
-			for(Eigen::Index colIndex = 0; colIndex < boxDirections.cols(); ++colIndex) {
-				if(boxDirections(rowIndex,colIndex) > 0) {
-					mLimits.second[colIndex] = results[rowIndex].supportValue;
-				} else if (boxDirections(rowIndex,colIndex) < 0) {
-					mLimits.first[colIndex] = -results[rowIndex].supportValue;
-*/
 				}
 			}
 		}
 		
 		reduceNumberRepresentation();
 	}
+}
 
 template<typename Number, typename Converter, class Setting>
 BoxT<Number,Converter,Setting>::BoxT( const std::set<Point<Number>> &_points ) {
