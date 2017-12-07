@@ -293,6 +293,7 @@ void ZonotopeT<Number,Converter>::clear() {
 }
 
 template<typename Number, typename Converter>
+template<class Setting>
 void ZonotopeT<Number,Converter>::reduceOrder( Number limit ) {
 	//std::cout << __func__ << ": Current order: " << this->order() << std::endl;
 	while(this->order() > limit) {
@@ -367,7 +368,7 @@ ZonotopeT<Number,Converter> ZonotopeT<Number,Converter>::minkowskiSum( const Zon
 	result.setGenerators( tmp );
     result.uniteEqualVectors();
 	result.removeEmptyGenerators();
-	result.reduceOrder();
+	result.reduceOrder<ZonotopeSetting>();
 	return result;
 }
 
@@ -387,7 +388,7 @@ ZonotopeT<Number,Converter> ZonotopeT<Number,Converter>::project(const std::vect
 		}
 	}
 	ZonotopeT<Number,Converter> res = ZonotopeT<Number,Converter>(hypro::project(mCenter,dimensions), projectedGenerators);
-	res.reduceOrder();
+	res.reduceOrder<ZonotopeSetting>();
 
 	return res;
 }
@@ -928,7 +929,7 @@ ZonotopeT<Number,Converter> ZonotopeT<Number,Converter>::intersectHalfspace( con
 			result.addGenerators( sigma * lambda );
 		}
 	}
-	result.reduceOrder();
+	result.reduceOrder<ZonotopeSetting>();
 	return result;
 }
 
@@ -1018,7 +1019,7 @@ std::pair<CONTAINMENT,ZonotopeT<Number,Converter>> ZonotopeT<Number,Converter>::
 			result.setGenerators( ( identity - lambda * rhs.normal().transpose() ) * this->mGenerators );
 			result.addGenerators( sigma * lambda );
 		}
-		result.reduceOrder();
+		result.reduceOrder<ZonotopeSetting>();
 		if(limited) {
 			return std::make_pair(CONTAINMENT::PARTIAL, std::move(result));
 		} else {

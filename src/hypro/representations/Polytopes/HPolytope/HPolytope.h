@@ -15,13 +15,9 @@
 #include "../../../util/templateDirections.h"
 #include "../../../util/linearOptimization/Optimizer.h"
 #include "../../../algorithms/convexHull/ConvexHull.h"
-
+#include "HPolytopeSetting.h"
 #include <algorithm>
 #include <cassert>
-
-#define REDUCE_NUMBERS
-//#define AVOID_CONVERSION
-//#define HPOLY_DEBUG_MSG
 
 namespace hypro {
 
@@ -34,8 +30,8 @@ class Location;
  * @tparam     Converter  The used converter.
  * \ingroup geoState @{
  */
-template <typename Number, typename Converter>
-class HPolytopeT : public GeometricObject<Number, HPolytopeT<Number,Converter>> {
+template <typename Number, typename Converter, class Setting>
+class HPolytopeT : public GeometricObject<Number, HPolytopeT<Number,Converter,Setting>> {
 public:
   	enum REDUCTION_STRATEGY {
                               DROP = 0,
@@ -133,7 +129,7 @@ public:
 	 * @details An empty H-polytope is constructed by creating two hyperplanes which falsify each other.
 	 * @return An empty polytope.
 	 */
-	static HPolytopeT<Number, Converter> Empty();
+	static HPolytopeT<Number,Converter,Setting> Empty();
 
 	/**
 	 * @brief Getter for the dimension of the polytope.
@@ -222,11 +218,11 @@ public:
 
 	const HalfspaceVector& constraints() const;
 	bool hasConstraint( const Halfspace<Number>& hplane ) const;
-	const HPolytopeT<Number,Converter>& removeRedundancy();
+	const HPolytopeT<Number,Converter,Setting>& removeRedundancy();
 
-	HPolytopeT<Number, Converter> heuristic() const;
-	HPolytopeT<Number, Converter> reduce(unsigned facet=1, unsigned facet2=0, REDUCTION_STRATEGY strat = REDUCTION_STRATEGY::DROP) const;
-	HPolytopeT<Number, Converter> reduce_directed(std::vector<vector_t<Number>> directions, REDUCTION_STRATEGY strat = REDUCTION_STRATEGY::DIRECTED_SMALL) const;
+	HPolytopeT<Number,Converter,Setting> heuristic() const;
+	HPolytopeT<Number,Converter,Setting> reduce(unsigned facet=1, unsigned facet2=0, REDUCTION_STRATEGY strat = REDUCTION_STRATEGY::DROP) const;
+	HPolytopeT<Number,Converter,Setting> reduce_directed(std::vector<vector_t<Number>> directions, REDUCTION_STRATEGY strat = REDUCTION_STRATEGY::DIRECTED_SMALL) const;
 	void reduceAssign(unsigned _steps = 1, REDUCTION_STRATEGY strat = REDUCTION_STRATEGY::DROP);
 
 	bool isBounded(std::vector<vector_t<Number>>) const;
@@ -253,7 +249,7 @@ public:
 	HPolytopeT intersectHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const;
 	bool contains( const Point<Number>& point ) const;
 	bool contains( const vector_t<Number>& vec ) const;
-	bool contains( const HPolytopeT<Number, Converter>& rhs ) const;
+	bool contains( const HPolytopeT<Number,Converter,Setting>& rhs ) const;
 	HPolytopeT unite( const HPolytopeT& rhs ) const;
 	static HPolytopeT unite( const std::vector<HPolytopeT>& rhs );
 
@@ -263,10 +259,10 @@ public:
 	/*
 	 * Operators
 	 */
-	HPolytopeT& operator=( const HPolytopeT<Number, Converter>& rhs ) = default;
+	HPolytopeT& operator=( const HPolytopeT<Number,Converter,Setting>& rhs ) = default;
 
 #ifdef HYPRO_LOGGING
-	friend std::ostream& operator<<( std::ostream& lhs, const HPolytopeT<Number, Converter>& rhs ) {
+	friend std::ostream& operator<<( std::ostream& lhs, const HPolytopeT<Number,Converter,Setting>& rhs ) {
 		if ( rhs.constraints().size() > 0 ) {
 			lhs << "[ ";
 			for ( unsigned i = 0; i < rhs.constraints().size() - 1; ++i ) {
@@ -275,12 +271,12 @@ public:
 			lhs << convert<Number,double>(rhs.constraints()[rhs.constraints().size() - 1]) << " ]";
 		}
 #else
-	friend std::ostream& operator<<( std::ostream& lhs, const HPolytopeT<Number, Converter>& ) {
+	friend std::ostream& operator<<( std::ostream& lhs, const HPolytopeT<Number,Converter,Setting>& ) {
 #endif
 		return lhs;
 	}
 
-	bool operator==(const HPolytopeT<Number,Converter>& rhs) const {
+	bool operator==(const HPolytopeT<Number,Converter,Setting>& rhs) const {
 		if(this->dimension() != rhs.dimension()) {
 			return false;
 		}
@@ -288,7 +284,7 @@ public:
 		return this->constraints() == rhs.constraints();
 	}
 
-	friend void swap( HPolytopeT<Number, Converter>& a, HPolytopeT<Number, Converter>& b ) {
+	friend void swap( HPolytopeT<Number,Converter,Setting>& a, HPolytopeT<Number,Converter,Setting>& b ) {
 		std::size_t tmpDim = a.mDimension;
 		a.mDimension = b.mDimension;
 		b.mDimension = tmpDim;
@@ -297,75 +293,77 @@ public:
 
 	template<typename N = Number, carl::DisableIf< std::is_same<N, double> > = carl::dummy>
 	void reduceNumberRepresentation(const std::vector<Point<Number>>& _vertices = std::vector<Point<Number>>(), unsigned limit = fReach_DENOMINATOR) const {
-		#ifdef REDUCE_NUMBERS
-		TRACE("hypro.hPolytope","Attempt to reduce numbers.");
-		std::vector<Point<Number>> originalVertices;
-		if(_vertices.empty()) {
-			TRACE("hypro.hPolytope","No passed vertices, computed vertices.");
-			originalVertices = this->vertices();
-		} else {
-			TRACE("hypro.hPolytope","Use passed vertices.");
-			originalVertices = _vertices;
-		}
-		TRACE("hypro.hPolytope","Vertices empty: " << originalVertices.empty());
-
-		if(!this->empty()){
-			// normal reduction
-			for(unsigned planeIndex = 0; planeIndex < mHPlanes.size(); ++planeIndex){
-				#ifdef HPOLY_DEBUG_MSG
-				std::cout << "Original: " << mHPlanes.at(planeIndex) << std::endl;
-				#endif
-				// find maximal value
-				Number largest = Number(0);
-				mHPlanes.at(planeIndex).makeInteger();
-				#ifdef HPOLY_DEBUG_MSG
-				std::cout << "As Integer: " << mHPlanes.at(planeIndex) << std::endl;
-				#endif
-				largest = carl::abs(mHPlanes.at(planeIndex).offset());
-				for(unsigned i = 0; i < mDimension; ++i){
-					if(carl::abs(mHPlanes.at(planeIndex).normal()(i)) > largest){
-						largest = carl::abs(mHPlanes.at(planeIndex).normal()(i));
-					}
-				}
-
-				// reduce, if reduction is required
-				if(largest > (limit*limit)) {
-					#ifdef HPOLY_DEBUG_MSG
-					std::cout << "Actual reduction" << std::endl;
-					#endif
-					vector_t<Number> newNormal(mDimension);
-					for(unsigned i = 0; i < mDimension; ++i){
-						newNormal(i) = carl::floor(Number((mHPlanes.at(planeIndex).normal()(i)/largest)*Number(limit)));
-						assert(carl::abs(Number(mHPlanes.at(planeIndex).normal()(i)/largest)) <= Number(1));
-						assert(carl::isInteger(newNormal(i)));
-						assert(newNormal(i) <= Number(limit));
-					}
-					mHPlanes.at(planeIndex).setNormal(newNormal);
-					Number newOffset = mHPlanes.at(planeIndex).offset();
-					newOffset = carl::ceil(Number((newOffset/largest)*Number(limit)));
-					for(const auto& vertex : originalVertices) {
-						Number tmp = newNormal.dot(vertex.rawCoordinates());
-						if(tmp > newOffset){
-							newOffset = newOffset + (tmp-newOffset);
-							assert(newNormal.dot(vertex.rawCoordinates()) <= newOffset);
-						}
-						assert(Halfspace<Number>(newNormal,newOffset).contains(vertex));
-					}
-					newOffset = carl::ceil(newOffset);
-					#ifdef HPOLY_DEBUG_MSG
-					std::cout << "Reduced to " << convert<Number,double>(newNormal).transpose() << " <= " << carl::toDouble(newOffset) << std::endl;
-					#endif
-					mHPlanes.at(planeIndex).setOffset(newOffset);
-				}
-				#ifdef HPOLY_DEBUG_MSG
-				std::cout << "Reduced: " << mHPlanes.at(planeIndex) << std::endl;
-				#endif
+		//#ifdef REDUCE_NUMBERS
+		if(Setting::REDUCE_NUMBERS == true){
+			TRACE("hypro.hPolytope","Attempt to reduce numbers.");
+			std::vector<Point<Number>> originalVertices;
+			if(_vertices.empty()) {
+				TRACE("hypro.hPolytope","No passed vertices, computed vertices.");
+				originalVertices = this->vertices();
+			} else {
+				TRACE("hypro.hPolytope","Use passed vertices.");
+				originalVertices = _vertices;
 			}
-			#ifdef HPOLY_DEBUG_MSG
-			//std::cout << "After Reduction: " << *this << std::endl;
-			#endif
+			TRACE("hypro.hPolytope","Vertices empty: " << originalVertices.empty());
+
+			if(!this->empty()){
+				// normal reduction
+				for(unsigned planeIndex = 0; planeIndex < mHPlanes.size(); ++planeIndex){
+					#ifdef HPOLY_DEBUG_MSG
+					std::cout << "Original: " << mHPlanes.at(planeIndex) << std::endl;
+					#endif
+					// find maximal value
+					Number largest = Number(0);
+					mHPlanes.at(planeIndex).makeInteger();
+					#ifdef HPOLY_DEBUG_MSG
+					std::cout << "As Integer: " << mHPlanes.at(planeIndex) << std::endl;
+					#endif
+					largest = carl::abs(mHPlanes.at(planeIndex).offset());
+					for(unsigned i = 0; i < mDimension; ++i){
+						if(carl::abs(mHPlanes.at(planeIndex).normal()(i)) > largest){
+							largest = carl::abs(mHPlanes.at(planeIndex).normal()(i));
+						}
+					}
+
+					// reduce, if reduction is required
+					if(largest > (limit*limit)) {
+						#ifdef HPOLY_DEBUG_MSG
+						std::cout << "Actual reduction" << std::endl;
+						#endif
+						vector_t<Number> newNormal(mDimension);
+						for(unsigned i = 0; i < mDimension; ++i){
+							newNormal(i) = carl::floor(Number((mHPlanes.at(planeIndex).normal()(i)/largest)*Number(limit)));
+							assert(carl::abs(Number(mHPlanes.at(planeIndex).normal()(i)/largest)) <= Number(1));
+							assert(carl::isInteger(newNormal(i)));
+							assert(newNormal(i) <= Number(limit));
+						}
+						mHPlanes.at(planeIndex).setNormal(newNormal);
+						Number newOffset = mHPlanes.at(planeIndex).offset();
+						newOffset = carl::ceil(Number((newOffset/largest)*Number(limit)));
+						for(const auto& vertex : originalVertices) {
+							Number tmp = newNormal.dot(vertex.rawCoordinates());
+							if(tmp > newOffset){
+								newOffset = newOffset + (tmp-newOffset);
+								assert(newNormal.dot(vertex.rawCoordinates()) <= newOffset);
+							}
+							assert(Halfspace<Number>(newNormal,newOffset).contains(vertex));
+						}
+						newOffset = carl::ceil(newOffset);
+						#ifdef HPOLY_DEBUG_MSG
+						std::cout << "Reduced to " << convert<Number,double>(newNormal).transpose() << " <= " << carl::toDouble(newOffset) << std::endl;
+						#endif
+						mHPlanes.at(planeIndex).setOffset(newOffset);
+					}
+					#ifdef HPOLY_DEBUG_MSG
+					std::cout << "Reduced: " << mHPlanes.at(planeIndex) << std::endl;
+					#endif
+				}
+				#ifdef HPOLY_DEBUG_MSG
+				//std::cout << "After Reduction: " << *this << std::endl;
+				#endif
+			}	
 		}
-		#endif
+		//#endif
 	}
 
 	template<typename N = Number, carl::EnableIf< std::is_same<N, double> > = carl::dummy>
@@ -408,9 +406,9 @@ public:
 };
 /** @} */
 
-template<typename From, typename To, typename Converter>
-HPolytopeT<To,Converter> convert(const HPolytopeT<From,Converter>& in) {
-	return HPolytopeT<To,Converter>(convert<From,To>(in.matrix()), convert<From,To>(in.vector()));
+template<typename From, typename To, typename Converter, class Setting>
+HPolytopeT<To,Converter,Setting> convert(const HPolytopeT<From,Converter,Setting>& in) {
+	return HPolytopeT<To,Converter,Setting>(convert<From,To>(in.matrix()), convert<From,To>(in.vector()));
 }
 
 }  // namespace hypro

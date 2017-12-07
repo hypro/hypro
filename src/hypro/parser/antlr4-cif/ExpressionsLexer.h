@@ -24,10 +24,9 @@ public:
     T__56 = 57, T__57 = 58, T__58 = 59, T__59 = 60, T__60 = 61, T__61 = 62, 
     T__62 = 63, T__63 = 64, T__64 = 65, T__65 = 66, T__66 = 67, T__67 = 68, 
     T__68 = 69, T__69 = 70, T__70 = 71, T__71 = 72, T__72 = 73, T__73 = 74, 
-    T__74 = 75, T__75 = 76, T__76 = 77, T__77 = 78, T__78 = 79, T__79 = 80, 
-    T__80 = 81, T__81 = 82, T__82 = 83, T__83 = 84, T__84 = 85, T__85 = 86, 
-    NUMBER = 87, REALNUBER = 88, STRING = 89, IDENTIFIER = 90, RELATIVENAME = 91, 
-    ABSOLUTENAME = 92, ROOTNAME = 93, WS = 94
+    T__74 = 75, T__75 = 76, T__76 = 77, MULOP = 78, ADDOP = 79, COMPOP = 80, 
+    NUMBER = 81, REALNUMBER = 82, STRING = 83, IDENTIFIER = 84, RELATIVENAME = 85, 
+    ABSOLUTENAME = 86, ROOTNAME = 87, WS = 88
   };
 
   ExpressionsLexer(antlr4::CharStream *input);

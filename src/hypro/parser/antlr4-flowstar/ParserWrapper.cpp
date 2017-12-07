@@ -12,9 +12,8 @@ namespace hypro {
 	}
 */
 	void openFile(const std::string& filename, ANTLRInputStream& input) {
-		
-		std::fstream ifs(filename);
 
+		std::fstream ifs(filename);
 		//cwd();
 
 		if(ifs.good()){
@@ -30,16 +29,15 @@ namespace hypro {
 			if(ifs.bad()){
 				std::cerr << "Badbit was set" << std::endl;
 			}
-			//FAIL();
 		}
 		if(!ifs.is_open()){
 			std::cout << "ifs hasn't opened anything" << std::endl;
-			//FAIL();
 		}
 	}
 
 	template<>
-	boost::tuple<HybridAutomaton<mpq_class>, ReachabilitySettings<mpq_class>> parseFlowstarFile<mpq_class>(const std::string& filename) {
+	boost::tuple<HybridAutomaton<mpq_class, State_t<mpq_class,mpq_class>>, ReachabilitySettings<mpq_class>> parseFlowstarFile<mpq_class>(const std::string& filename) {
+
 		//Create an AnTLRInputStream
 		ANTLRInputStream input;
 		openFile(filename,input);
@@ -67,21 +65,22 @@ namespace hypro {
 
 		hypro::HyproHAVisitor<mpq_class> visitor;
 
-		hypro::HybridAutomaton<mpq_class> h = (visitor.visit(tree)).antlrcpp::Any::as<hypro::HybridAutomaton<mpq_class>>();
+		hypro::HybridAutomaton<mpq_class, State_t<mpq_class,mpq_class>> h = (visitor.visit(tree)).antlrcpp::Any::as<hypro::HybridAutomaton<mpq_class, State_t<mpq_class,mpq_class>>>();
 
 		delete errListener;
 
-		return boost::tuple<HybridAutomaton<mpq_class>&, ReachabilitySettings<mpq_class>>(h, visitor.getSettings());
+		return boost::tuple<HybridAutomaton<mpq_class, State_t<mpq_class,mpq_class>>&, ReachabilitySettings<mpq_class>>(h, visitor.getSettings());
 	}
 
 	template<>
-	boost::tuple<HybridAutomaton<double>, ReachabilitySettings<double>> parseFlowstarFile<double>(const std::string& filename) {
+	boost::tuple<HybridAutomaton<double,State_t<double,double>>, ReachabilitySettings<double>> parseFlowstarFile<double>(const std::string& filename) {
+
 		//Create an AnTLRInputStream
 		ANTLRInputStream input;
 		openFile(filename,input);
 
 		//Create Error Listener
-		ErrorListener* errListener = new ErrorListener();;
+		ErrorListener* errListener = new ErrorListener();
 
 		//Create a Lexer and feed it with the input
 		HybridAutomatonLexer lexer(&input);
@@ -103,11 +102,11 @@ namespace hypro {
 
 		hypro::HyproHAVisitor<double> visitor;
 
-		hypro::HybridAutomaton<double> h = (visitor.visit(tree)).antlrcpp::Any::as<hypro::HybridAutomaton<double>>();
+		hypro::HybridAutomaton<double,State_t<double,double>> h = (visitor.visit(tree)).antlrcpp::Any::as<hypro::HybridAutomaton<double,State_t<double,double>>>();
 
 		delete errListener;
 
-		return boost::tuple<HybridAutomaton<double>, ReachabilitySettings<double>>(h, visitor.getSettings());
+		return boost::tuple<HybridAutomaton<double,State_t<double,double>>, ReachabilitySettings<double>>(h, visitor.getSettings());
 	}
 
 } // namespace

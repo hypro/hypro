@@ -14,6 +14,7 @@ namespace hypro {
 * This class defines a support Function object representing a polytope (might not be closed)
 * SupportFunctions can be evaluated in a specified direction l and return a correspondent evaluationResult
 */
+template<class Setting>
 class SymmetricCenteredBoxSupportFunction : public SupportFunctionContent {
   private:
 	matrix_t<double> e;
@@ -24,13 +25,12 @@ class SymmetricCenteredBoxSupportFunction : public SupportFunctionContent {
 	 * This method computes the evaluation result for a specified direction l
 	 */
 	evaluationResult specificEvaluation( matrix_t<double> l ) {
-#ifdef SUPPORTFUNCTION_VERBOSE
-#ifdef BOXSUPPORTFUNCTION_VERBOSE
-		std::cout << "SymmetricCenteredBoxSupportFunction: evaluate" << '\n';
-		std::cout << "e_t: " << e_t << '\n';
-		std::cout << "abs(l): " << ( l.array().abs() ).matrix() << '\n';
-#endif
-#endif
+
+		if(Setting::SUPPORTFUNCTION_VERBOSE && Setting::BOXSUPPORTFUNCTION_VERBOSE){
+			TRACE("hypro.BoxSF","SymmetricCenteredBoxSupportFunction: evaluate" << '\n');
+			TRACE("hypro.BoxSF","e_t: " << e_t << '\n');
+			TRACE("hypro.BoxSF","abs(l): " << ( l.array().abs() ).matrix() << '\n');
+		}
 
 		evaluationResult result;
 		result.errorCode = 1;
@@ -40,11 +40,9 @@ class SymmetricCenteredBoxSupportFunction : public SupportFunctionContent {
 		result.supportValue = temp( 0 );
 		result.optimumValue = l * temp;
 
-#ifdef SUPPORTFUNCTION_VERBOSE
-#ifdef BOXSUPPORTFUNCTION_VERBOSE
-		std::cout << "supportvalue: " << result.supportValue << '\n';
-#endif
-#endif
+		if(Setting::SUPPORTFUNCTION_VERBOSE && Setting::BOXSUPPORTFUNCTION_VERBOSE){
+			TRACE("hypro.BoxSF","supportvalue: " << result.supportValue << '\n');
+		}
 
 		return result;
 	}
@@ -60,11 +58,11 @@ class SymmetricCenteredBoxSupportFunction : public SupportFunctionContent {
 
 	SymmetricCenteredBoxSupportFunction( matrix_t<double> e, artificialDirections* aD )
 		: SupportFunctionContent( SupportFunctionType::Box_Type, aD ) {
-#ifdef SUPPORTFUNCTION_VERBOSE
-#ifdef BOXSUPPORTFUNCTION_VERBOSE
-		std::cout << "SymmetricCenteredBoxSupportFunction: constructor" << '\n';
-#endif
-#endif
+
+		if(Setting::SUPPORTFUNCTION_VERBOSE && Setting::BOXSUPPORTFUNCTION_VERBOSE){
+			TRACE("hypro.BoxSF","SymmetricCenteredBoxSupportFunction: constructor" << '\n');
+		}
+
 		this->e = e;
 		this->e_t = e.transpose();
 	}

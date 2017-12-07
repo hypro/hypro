@@ -11,17 +11,17 @@ namespace hypro {
 	 * representative for a discrete step.
 	 * @tparam     Number  The used number type.
 	 */
-	template <typename Number>
+	template <typename Number, typename tNumber = Number>
 	struct TPathElement {
 		Transition<Number>* transition = nullptr; /// Pointer to a transition in case of a discrete step.
-		carl::Interval<Number> timeInterval = carl::Interval<Number>::unboundedInterval(); /// Time interval holding either the size of the time step or the local time in which the transition for the discrete step was enabled.
+		carl::Interval<tNumber> timeInterval = carl::Interval<tNumber>::unboundedInterval(); /// Time interval holding either the size of the time step or the local time in which the transition for the discrete step was enabled.
 
 		/**
 		 * @brief      Constructor for a discrete step element.
 		 * @param      t            The transition.
 		 * @param[in]  enabledTime  The enabled time.
 		 */
-		TPathElement(Transition<Number>* t, const carl::Interval<Number>& enabledTime)
+		TPathElement(Transition<Number>* t, const carl::Interval<tNumber>& enabledTime)
 			: transition(t)
 			, timeInterval(enabledTime)
 		{}
@@ -30,7 +30,7 @@ namespace hypro {
 		 * @brief      Constructor for a time step.
 		 * @param[in]  timeStep  The time step size.
 		 */
-		TPathElement(const carl::Interval<Number>& timeStep)
+		TPathElement(const carl::Interval<tNumber>& timeStep)
 			: transition(nullptr)
 			, timeInterval(timeStep)
 		{}
@@ -43,17 +43,23 @@ namespace hypro {
 			return (transition != nullptr);
 		}
 
+		const carl::Interval<tNumber>& getTimestamp() const {
+			return timeInterval;
+		}
+
 		/**
 		 * @brief      Outstream operator.
 		 * @param      out       The outstream.
 		 * @param[in]  pathElem  The path element.
 		 * @return     A reference to the outstream.
 		 */
-		friend std::ostream& operator<<(std::ostream& out, const TPathElement<Number>& pathElem) {
-			if(pathElem.isDiscreteStep())
-				out << pathElem.transition->getSource()->getId() << " -> " << pathElem.transition->getTarget()->getId() << " " << pathElem.timeInterval;
-			else
-				out << pathElem.timeInterval;
+		friend std::ostream& operator<<(std::ostream& out, const TPathElement<Number,tNumber>& pathElem) {
+			carl::Interval<double> tmp(carl::convert<tNumber,double>(pathElem.timeInterval.lower()), carl::convert<tNumber,double>(pathElem.timeInterval.upper()));
+			if(pathElem.isDiscreteStep()){
+				out << pathElem.transition->getSource()->getId() << " -> " << pathElem.transition->getTarget()->getId() << " " << tmp;
+			} else {
+				out << tmp;
+			}
 			return out;
 		}
 
@@ -63,7 +69,7 @@ namespace hypro {
 		 * @param[in]  rhs   The right hand side.
 		 * @return     True if both elements are equal, False otherwise.
 		 */
-		friend bool operator==(const TPathElement<Number>& lhs, const TPathElement<Number>& rhs) {
+		friend bool operator==(const TPathElement<Number,tNumber>& lhs, const TPathElement<Number,tNumber>& rhs) {
 			if(lhs.isDiscreteStep() != rhs.isDiscreteStep()) {
 				return false;
 			}
@@ -82,7 +88,7 @@ namespace hypro {
 		 * @param[in]  rhs   The right hand side.
 		 * @return     True if both elements are not equal, False otherwise.
 		 */
-		friend bool operator!=(const TPathElement<Number>& lhs, const TPathElement<Number>& rhs) {
+		friend bool operator!=(const TPathElement<Number,tNumber>& lhs, const TPathElement<Number,tNumber>& rhs) {
 			return !(lhs==rhs);
 		}
 	};
@@ -91,50 +97,59 @@ namespace hypro {
 	 * @brief      Class to define a path in some hybrid automaton.
 	 * @tparam     Number  The used number type.
 	 */
-	template<typename Number>
+	template<typename Number, typename tNumber = Number>
 	class Path {
 		public:
 
-			Path() = default;
+			Path(){};
+			~Path(){
+				while(!mPath.empty()){
+					mPath.erase(mPath.begin());
+				}
+			};
 
-			void add(const TPathElement<Number>& elem);
-			void addTransition(Transition<Number>* t, const carl::Interval<Number>& enabledTime);
-			void addTimeStep(const carl::Interval<Number>& timeStep);
-			std::pair<Transition<Number>*, carl::Interval<Number>> getTransitionToJumpDepth(unsigned depth) const;
+			void add(const TPathElement<Number,tNumber>& elem);
+			void addTransition(Transition<Number>* t, const carl::Interval<tNumber>& enabledTime);
+			void addTimeStep(const carl::Interval<tNumber>& timeStep);
+			std::pair<Transition<Number>*, carl::Interval<tNumber>> getTransitionToJumpDepth(unsigned depth) const;
 
-			static bool sharePrefix(const Path<Number>& lhs, const Path<Number>& rhs);
-			bool sharesPrefix(const Path<Number>& rhs) const;
-			Path sharedPrefix(const Path<Number>& rhs) const;
-			Path removeSharedPrefix(const Path<Number>& rhs) const;
+			Path& deleteAfterPos(std::size_t cutpos);
+			Path& deleteBeforePos(std::size_t cutpos);
+			Path& clear();
+
+			static bool sharePrefix(const Path<Number,tNumber>& lhs, const Path<Number,tNumber>& rhs);
+			bool sharesPrefix(const Path<Number,tNumber>& rhs) const;
+			Path sharedPrefix(const Path<Number,tNumber>& rhs) const;
+			Path removeSharedPrefix(const Path<Number,tNumber>& rhs) const;
 			bool isEmpty() const { return (mPath.size() == 0); }
-			Number maximalTimeSpan(typename std::deque<TPathElement<Number>>::const_iterator start, typename std::deque<TPathElement<Number>>::const_iterator end) const;
+			tNumber maximalTimeSpan(typename std::deque<TPathElement<Number,tNumber>>::const_iterator start, typename std::deque<TPathElement<Number,tNumber>>::const_iterator end) const;
 
 			std::size_t getNumberDiscreteJumps() const;
-			std::vector<Transition<Number>*> getTransitionSequence(typename std::deque<TPathElement<Number>>::const_iterator start, typename std::deque<TPathElement<Number>>::const_iterator end) const;
+			std::vector<Transition<Number>*> getTransitionSequence(typename std::deque<TPathElement<Number,tNumber>>::const_iterator start, typename std::deque<TPathElement<Number,tNumber>>::const_iterator end) const;
 			std::vector<Transition<Number>*> getTransitionSequence() const { return this->getTransitionSequence(mPath.begin(), mPath.end()); }
 			bool hasChatteringZeno() const;
 
 			// comparison - read as "is longer than"
-			bool operator>(const Path<Number>& r) const;
+			bool operator>(const Path<Number,tNumber>& r) const;
 			bool operator>(unsigned r) const;
 
 			// Iterator
-			using TIterator = typename std::deque<TPathElement<Number>>::iterator;
-			using TIterator_const = typename std::deque<TPathElement<Number>>::const_iterator;
+			using TIterator = typename std::deque<TPathElement<Number,tNumber>>::iterator;
+			using TIterator_const = typename std::deque<TPathElement<Number,tNumber>>::const_iterator;
 			TIterator begin ();
 			TIterator end();
 			TIterator_const begin () const;
 			TIterator_const end() const;
-			const TPathElement<Number>& back() const;
-			const TPathElement<Number>& front() const;
+			const TPathElement<Number,tNumber>& back() const;
+			const TPathElement<Number,tNumber>& front() const;
 
 			// legacy operations - replace them
 			std::size_t size() const;
-			TPathElement<Number> at(int index) const;
+			TPathElement<Number,tNumber> at(int index) const;
 			void pop_front();
-			void push_front(const TPathElement<Number>& elem);
+			void push_front(const TPathElement<Number,tNumber>& elem);
 
-			friend std::ostream& operator<<(std::ostream& _out, const Path<Number>& path) {
+			friend std::ostream& operator<<(std::ostream& _out, const Path<Number,tNumber>& path) {
 				if(!path.isEmpty()) {
 					_out << path.at(0);
 					for(std::size_t i = 1; i < path.size(); ++i) {
@@ -144,7 +159,7 @@ namespace hypro {
 				return _out;
 			}
 
-			bool operator==(const Path<Number>& rhs) const {
+			bool operator==(const Path<Number,tNumber>& rhs) const {
 				if(this->size() != rhs.size()) {
 					return false;
 				}
@@ -156,12 +171,12 @@ namespace hypro {
 				return true;
 			}
 
-			bool operator!=(const Path<Number>& rhs) const {
+			bool operator!=(const Path<Number,tNumber>& rhs) const {
 				return !(*this == rhs);
 			}
 
 		private:
-			std::deque<TPathElement<Number>> mPath; // why is this a deque? - shouldn't it be more of a double-linked list?
+			std::deque<TPathElement<Number,tNumber>> mPath; // why is this a deque? - shouldn't it be more of a double-linked list?
 			// or even better: define this recursively. A path is empty or a subpath
 			// Stefan: This is historic :).
 			bool chatteringZeno = false;

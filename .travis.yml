@@ -50,9 +50,9 @@ addons:
       - graphviz
       - uuid-dev
       - openjdk-9-jre
-      - pgf
-      - texlive-latex-extra
-      - texlive-latex-recommended
+      #- pgf
+      #- texlive-latex-extra
+      #- texlive-latex-recommended
 
 matrix:
   include:
@@ -92,12 +92,13 @@ matrix:
       compiler: clang
       env: COMPILER=clang++
     - os: osx
-      osx_image: xcode8.3
+      osx_image: xcode8.2
       compiler: clang
       env: COMPILER=clang++
 
 before_install:
   - cd .travis/ && source setupTravis.sh && cd ../
+  - sudo motion update || echo 'up to date'
 
 install:
   - git clone https://github.com/smtrat/carl.git && cd carl && mkdir build && cd build && cmake -DCMAKE_CXX_COMPILER=$COMPILER -DCMAKE_BUILD_TYPE=Release .. && make resources && make lib_carl VERBOSE=1

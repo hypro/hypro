@@ -9,21 +9,28 @@ expression: 		orExpression
 			| orExpression '=>' orExpression
 			| orExpression '<=>' orExpression;
 
+equations: 		equation (',' equation)*;
+
+equation: 		identifier '\'' '=' expression							# EquationDerivate
+			| identifier '=' expression							# EquationNonDerivate
+			;
+
 orExpression: 		andExpression ('or' andExpression)*;
 
 andExpression: 		compareExpression ('and' compareExpression)*;
 
-compareExpression: 	addExpression ( ( '<' | '<=' | '=' | '!=' | '>=' | '>' | 'in' | 'sub') addExpression)* ;
+compareExpression: 	addExpression (COMPOP addExpression)* ;
 
-addExpression: 		mulExpression (('+' | '-') mulExpression)*;
+addExpression: 		mulExpression (ADDOP mulExpression)*;
 
-mulExpression: 		unaryExpression (('*' | '/' | 'div' | 'mod') unaryExpression)*;
+mulExpression: 		unaryExpression (MULOP unaryExpression)*;
 
-unaryExpression: 	funcExpression
-			| '-' unaryExpression
-			| '+' unaryExpression
-			| 'not' unaryExpression
-			| 'sample' unaryExpression;
+unaryExpression: 	funcExpression									# unaryExprFunc
+			| '-' unaryExpression								# unaryExprMinus
+			| '+' unaryExpression								# unaryExprPlus
+			| 'not' unaryExpression								# unaryExpr
+			| 'sample' unaryExpression							# unaryExpr
+			;
 
 funcExpression: 	( expressionFactor 
 				| stdLibFunction '(' ')' 
@@ -33,26 +40,27 @@ funcExpression: 	( expressionFactor
 				| '(' ')'
 				| '(' expressions ')' )* ;
 
-expressionFactor: 		'true' 
-				| 'false' 
-				| NUMBER 
-				| REALNUBER
-				| stringToken 
-				| 'time' 
-				| '[' ']'
-				| '[' expressions ']'
-				| '{' '}'
-				| nonEmptySetExpression
-				| '{' dictPairs '}'
-				| '(' expression ',' expression ')'
-				| '<' type '>' expressionFactor
-				| 'if' expressions ':' expression optElifExprs 'else' expression 'end'
-				| 'switch' expression ':' switchBody 'end'
-				| '(' expression ')'
-				| name
-				| name '\''
-				| '?'
-				| 'self';
+expressionFactor: 		 'true'									# ExprFact
+				| 'false' 								# ExprFact
+				| NUMBER 								# ExprFactNumber
+				| REALNUMBER								# ExprFactRealNumber
+				| name									# ExprFactName
+				| stringToken 								# ExprFact
+				| 'time' 								# ExprFact
+				| '[' ']'								# ExprFact
+				| '[' expressions ']'							# ExprFact
+				| '{' '}'								# ExprFact
+				| nonEmptySetExpression							# ExprFact
+				| '{' dictPairs '}'							# ExprFact
+				| '(' expression ',' expression ')'					# ExprFact
+				| '<' type '>' expressionFactor						# ExprFact
+				| 'if' expressions ':' expression optElifExprs 'else' expression 'end'	# ExprFact
+				| 'switch' expression ':' switchBody 'end'				# ExprFact
+				| '(' expression ')'							# ExprFact
+				| name '\''								# ExprFact
+				| '?'									# ExprFact
+				| 'self'								# ExprFact
+				;
 
 nonEmptySetExpression: 		'{' expressions '}';
 
@@ -112,10 +120,16 @@ stdLibFunction: 'acosh' |'acos'|'asinh'|'asin'|'atanh'|'cosh'|'cos'|'sinh'
 |'round'|'scale'|'sign'|'size'|'sqrt'|'bernoulli'|'beta';
 
 
+//Operators
+MULOP: '*' | '/' | 'div' | 'mod';
+ADDOP: '+' | '-' ;
+COMPOP: '<' | '<=' | '=' | '!=' | '>=' | '>' | 'in' | 'sub' ;
+
+
 fragment DIGIT: [0-9];
 fragment LETTER: [A-Za-z];
 NUMBER: '0' | [1-9] DIGIT*;
-REALNUBER: NUMBER '.' (DIGIT+); //TODO e
+REALNUMBER: NUMBER '.' (DIGIT+); //TODO e
 STRING: '"' LETTER* '"';
 IDENTIFIER: (LETTER | '_') (LETTER|DIGIT|'_')*;
 RELATIVENAME: IDENTIFIER ('.' IDENTIFIER)+;

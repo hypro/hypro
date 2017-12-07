@@ -12,9 +12,9 @@ namespace hypro {
    * @input unsigned facet
    * @return std::vector<Number> res contains all indices of neighbors, sorted
    */
-  template<typename Number, typename Converter>
-  std::vector<std::vector<unsigned>> HPolytopeT<Number,Converter>::getMembersOfVertices(std::vector<Point<Number>> vertices) const {
-	HPolytopeT<Number,Converter> hpolytope = *this;
+  template<typename Number, typename Converter, class Setting>
+  std::vector<std::vector<unsigned>> HPolytopeT<Number,Converter,Setting>::getMembersOfVertices(std::vector<Point<Number>> vertices) const {
+	HPolytopeT<Number,Converter,Setting> hpolytope = *this;
 	std::vector<std::vector<unsigned>> res;
 
 	for(Point<Number> vertex: vertices) {
@@ -40,8 +40,8 @@ namespace hypro {
    * @input unsigned facet, membersOfvertices
    * @return std::vector<unsigned> res contains all indices of neighbors, sorted
    */
-  template<typename Number, typename Converter>
-  std::vector<unsigned> HPolytopeT<Number,Converter>::getNeighborsOfIndex(unsigned facet, std::vector<std::vector<unsigned>> membersOfvertices) const {
+  template<typename Number, typename Converter, class Setting>
+  std::vector<unsigned> HPolytopeT<Number,Converter,Setting>::getNeighborsOfIndex(unsigned facet, std::vector<std::vector<unsigned>> membersOfvertices) const {
 	std::vector<unsigned> res;
 
 	for(std::vector<unsigned> membersOfvertex: membersOfvertices) {
@@ -62,8 +62,8 @@ namespace hypro {
    * @input unsigned facet a, vertices, membersOfvertices
    * @return std::vector<Point<Number>> res contains all vertices which have a as member
    */
-  template<typename Number, typename Converter>
-  std::vector<Point<Number>> HPolytopeT<Number,Converter>::getVerticesOfIndex(unsigned a, std::vector<Point<Number>> vertices, std::vector<std::vector<unsigned>> membersOfvertices) const {
+  template<typename Number, typename Converter, class Setting>
+  std::vector<Point<Number>> HPolytopeT<Number,Converter,Setting>::getVerticesOfIndex(unsigned a, std::vector<Point<Number>> vertices, std::vector<std::vector<unsigned>> membersOfvertices) const {
 	std::vector<Point<Number>> res;
 
 	for(unsigned i=0; i<vertices.size(); i++) {
@@ -80,8 +80,8 @@ namespace hypro {
    * @input unsigned facet a, b, vertices, membersOfvertices
    * @return std::vector<Point<Number>> res contains all vertices which have a, b as members
    */
-  template<typename Number, typename Converter>
-  std::vector<Point<Number>> HPolytopeT<Number,Converter>::getVerticesOf2Indices(unsigned a, unsigned b, std::vector<Point<Number>> vertices, std::vector<std::vector<unsigned>> membersOfvertices) const {
+  template<typename Number, typename Converter, class Setting>
+  std::vector<Point<Number>> HPolytopeT<Number,Converter,Setting>::getVerticesOf2Indices(unsigned a, unsigned b, std::vector<Point<Number>> vertices, std::vector<std::vector<unsigned>> membersOfvertices) const {
 	std::vector<Point<Number>> res;
 
 	for(unsigned i=0; i<vertices.size(); i++) {
@@ -99,8 +99,8 @@ namespace hypro {
    * @input unsigned facet a, b, vertices, membersOfvertices
    * @return std::vector<Point<Number>> res contains all vertices which have only one of a, b as members
    */
-  template<typename Number, typename Converter>
-  std::vector<Point<Number>> HPolytopeT<Number,Converter>::getVerticesOf2IndicesAround(unsigned a, unsigned b, std::vector<Point<Number>> vertices, std::vector<std::vector<unsigned>> membersOfvertices) const {
+  template<typename Number, typename Converter, class Setting>
+  std::vector<Point<Number>> HPolytopeT<Number,Converter,Setting>::getVerticesOf2IndicesAround(unsigned a, unsigned b, std::vector<Point<Number>> vertices, std::vector<std::vector<unsigned>> membersOfvertices) const {
 	std::vector<Point<Number>> res;
 
 	for(unsigned i=0; i<vertices.size(); i++) {
@@ -119,9 +119,9 @@ namespace hypro {
    * @input unsigned facet a, b, vertices
    * @return std::vector<std::vector<Point<Number>>> permutations
    */
-  template<typename Number, typename Converter>
-  std::vector<std::vector<vector_t<Number>>> HPolytopeT<Number,Converter>::getVerticesPermutationForFacet(unsigned a, unsigned b, std::vector<Point<Number>> vertices) const {
-	HPolytopeT<Number,Converter> hpolytope = *this;
+  template<typename Number, typename Converter, class Setting>
+  std::vector<std::vector<vector_t<Number>>> HPolytopeT<Number,Converter,Setting>::getVerticesPermutationForFacet(unsigned a, unsigned b, std::vector<Point<Number>> vertices) const {
+	HPolytopeT<Number,Converter,Setting> hpolytope = *this;
 	std::vector<std::vector<vector_t<Number>>> res;
 	std::vector<Point<Number>> cutPointsAround_a_b = getVerticesOf2IndicesAround(a, b, vertices, getMembersOfVertices(vertices));
 
@@ -152,8 +152,8 @@ namespace hypro {
    * @input vertices, test vector a, test vector b
    * @return vector_t<Number> normal vector
    */
-  template<typename Number, typename Converter>
-  vector_t<Number> HPolytopeT<Number,Converter>::computeNormal(std::vector<vector_t<Number>> vertices, vector_t<Number> check) const {
+  template<typename Number, typename Converter, class Setting>
+  vector_t<Number> HPolytopeT<Number,Converter,Setting>::computeNormal(std::vector<vector_t<Number>> vertices, vector_t<Number> check) const {
 	unsigned dimension = vertices.at(0).size();
 	std::vector<vector_t<Number>> baseVectors;
 	for(unsigned i=1; i<vertices.size(); i++){
@@ -200,8 +200,8 @@ namespace hypro {
    * @input vertices, vector
    * @return Point<Number> vertex for the vector
    */
-  template<typename Number, typename Converter>
-  Point<Number> HPolytopeT<Number,Converter>::getVertexForVector(vector_t<Number> vector, std::vector<Point<Number>> vertices) const {
+  template<typename Number, typename Converter, class Setting>
+  Point<Number> HPolytopeT<Number,Converter,Setting>::getVertexForVector(vector_t<Number> vector, std::vector<Point<Number>> vertices) const {
 	assert(!vertices.empty());
 	if(vertices.size() == 1)
 		return *vertices.begin();
@@ -225,9 +225,9 @@ namespace hypro {
    * @input unsigned facet to be droped
    * @return bool isBounded or not
    */
-  template<typename Number, typename Converter>
-  bool HPolytopeT<Number,Converter>::isBounded(std::vector<vector_t<Number>> evaluations) const {
-	HPolytopeT<Number,Converter> hpolytope = *this;
+  template<typename Number, typename Converter, class Setting>
+  bool HPolytopeT<Number,Converter,Setting>::isBounded(std::vector<vector_t<Number>> evaluations) const {
+	HPolytopeT<Number,Converter,Setting> hpolytope = *this;
 
 	for(vector_t<Number> evaluation: evaluations){
 		EvaluationResult<Number> evaluation_result = hpolytope.evaluate(evaluation);
@@ -243,8 +243,8 @@ namespace hypro {
 	* @Input a H-polytope
 	* @return the reduced polytope or if the result would be unbounded the inital polytope
 	*/
-   template<typename Number, typename Converter>
-   HPolytopeT<Number,Converter> HPolytopeT<Number,Converter>::heuristic() const {
+   template<typename Number, typename Converter, class Setting>
+   HPolytopeT<Number,Converter,Setting> HPolytopeT<Number,Converter,Setting>::heuristic() const {
 
 	 // 2D
 	 std::vector<Point<Number>> vertices = this->vertices();
@@ -472,11 +472,11 @@ namespace hypro {
    * @Input unsigned strat for the strategy, unsigned a for the facet (Drop, drop_smooth) and first facet for (unite, unite_...), unsigned b for the seconde facet
    * @return the reduced polytope or if the result would be unbounded the inital polytope
    */
-  template<typename Number, typename Converter>
-  HPolytopeT<Number,Converter> HPolytopeT<Number,Converter>::reduce( unsigned a, unsigned b, REDUCTION_STRATEGY strat) const { // REDUCTION_STRATEGY
+  template<typename Number, typename Converter, class Setting>
+  HPolytopeT<Number,Converter,Setting> HPolytopeT<Number,Converter,Setting>::reduce( unsigned a, unsigned b, REDUCTION_STRATEGY strat) const { // REDUCTION_STRATEGY
 
 	// init
-	HPolytopeT<Number,Converter> res = *this;
+	HPolytopeT<Number,Converter,Setting> res = *this;
 
 	std::vector<vector_t<Number>> evaluations;
 	std::vector<Point<Number>> vertices;
@@ -739,10 +739,10 @@ namespace hypro {
    * @Input vector_t<Number> directed is the vector in which direction we would like to reduce
    * @return the reduced polytope or if the result would be unbounded the inital polytope
    */
-  template<typename Number, typename Converter>
-  HPolytopeT<Number,Converter> HPolytopeT<Number,Converter>::reduce_directed(std::vector<vector_t<Number>> directions, REDUCTION_STRATEGY strat) const{
+  template<typename Number, typename Converter, class Setting>
+  HPolytopeT<Number,Converter,Setting> HPolytopeT<Number,Converter,Setting>::reduce_directed(std::vector<vector_t<Number>> directions, REDUCTION_STRATEGY strat) const{
 	// init
-	HPolytopeT<Number,Converter> res = *this;
+	HPolytopeT<Number,Converter,Setting> res = *this;
 
 	// break if the amount of directions is greater than the actual size of the polytope TODO decide if used or not?
 	//if(res.size()<directions.size()){

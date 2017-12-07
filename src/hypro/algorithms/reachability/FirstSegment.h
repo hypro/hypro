@@ -79,8 +79,8 @@ void bloatBox(State& in, const Box<Number>& bloatBox) {
 	}
 }
 
-template <typename Number, typename State>
-boost::tuple<CONTAINMENT, State, matrix_t<Number>, vector_t<Number>> computeFirstSegment(const State& _state, Number timeStep)
+template <typename Number, typename tNumber, typename State>
+boost::tuple<CONTAINMENT, State, matrix_t<Number>, vector_t<Number>> computeFirstSegment(const State& _state, tNumber timeStep)
 {
     assert(!_state.getTimestamp().isEmpty());
     // check if initial Valuation fulfills Invariant
@@ -104,7 +104,7 @@ boost::tuple<CONTAINMENT, State, matrix_t<Number>, vector_t<Number>> computeFirs
 
         // approximate R_[0,delta](X0)
         // R_0(X0) is just the initial Polytope X0, since t=0 -> At is zero matrix -> e^(At) is unit matrix.
-        matrix_t<Number> trafoMatrix = computeTrafoMatrix(_state.getLocation(), timeStep);
+        matrix_t<Number> trafoMatrix = computeTrafoMatrix(_state.getLocation(), carl::convert<tNumber,Number>(timeStep));
 
         #ifdef HYPRO_LOGGING
         TRACE("hypro.reachability", "e^(deltaMatrix): " << std::endl);
@@ -128,10 +128,16 @@ boost::tuple<CONTAINMENT, State, matrix_t<Number>, vector_t<Number>> computeFirs
 
         State firstSegment(_state.getLocation());
         unsigned dimension = initialPair.second.getDimension(0);
+        // vector_t<Number> lower = vector_t<Number>::Zero(dimension+1);
+        // vector_t<Number> upper = vector_t<Number>::Zero(dimension+1);
+        // lower.block(0,0,dimension,1) = _state.getLocation()->getExternalInput().min().rawCoordinates();
+        // upper.block(0,0,dimension,1) = _state.getLocation()->getExternalInput().max().rawCoordinates();
+		// Box<Number> externalInput(std::make_pair(Point<Number>(lower), Point<Number>(upper)));
+
         Box<Number> externalInput(std::make_pair(Point<Number>(vector_t<Number>::Zero(dimension+1)),
                                                         Point<Number>(vector_t<Number>::Zero(dimension+1))));
         std::vector<Box<Number>> errorBoxVector =
-              errorBoxes(Number(timeStep), _state.getLocation()->getFlow(), initialPair.second, trafoMatrix, externalInput);
+              errorBoxes(carl::convert<tNumber,Number>(timeStep), _state.getLocation()->getFlow(), initialPair.second, trafoMatrix, externalInput);
 
         firstSegment = deltaValuation.unite(initialPair.second);
 
@@ -212,12 +218,14 @@ boost::tuple<CONTAINMENT, State, matrix_t<Number>, vector_t<Number>> computeFirs
         std::pair<CONTAINMENT, State> fullSegment = firstSegment.satisfies(_state.getLocation()->getInvariant());
         TRACE("hypro.reachability","Check invariant - done.");
         if (fullSegment.first) {
-        	fullSegment.second.setTimestamp(carl::Interval<Number>(Number(0), timeStep));
+        	//fullSegment.second.setTimestamp(carl::Interval<tNumber>(fullSegment.second.getTimestamp().lower(),fullSegment.second.getTimestamp().upper() + timeStep));
         	#ifdef HYPRO_LOGGING
         	// DBG
 	        //Box<Number> tmp = Converter<Number>::toBox(boost::get<Box<Number>>(boost::apply_visitor(genericConversionVisitor<typename State::repVariant,Number>(representation_name::box),fullSegment.second.getSet())));
 	        //TRACE("hypro.reachability","First segment: " << tmp);
 	        #endif
+
+        	assert(fullSegment.second.getLocation() != nullptr);
 
             return boost::tuple<CONTAINMENT, State, matrix_t<Number>, vector_t<Number>>(fullSegment.first, fullSegment.second, trafoMatrixResized,
                                                                                                        translation);

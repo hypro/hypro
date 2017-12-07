@@ -11,7 +11,6 @@ namespace hypro {
 	/*
 	template<typename T>
 	bool operator ==(const std::vector<T>& lhs, const std::vector<T>& rhs) {
-		std::cout << "Ping." << std::endl;
 		if(lhs.size() != rhs.size()){
 			return false;
 		}

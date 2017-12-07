@@ -43,8 +43,7 @@ void Plotter<Number>::plot2d() const {
 
 		writeGnuplot();
 	}
-
-	std::cout << std::endl << "Plotted to " << mFilename << "_pdf.plt" << std::endl;
+	std::cout <<"Plotted to " << mFilename << "_pdf.plt" << std::endl;
 	mOutfile.close();
 }
 
@@ -279,7 +278,7 @@ void Plotter<Number>::writeGnuplot() const {
 			if(rangeExt != 0){
 				ranges[d] = carl::Interval<double>(carl::toDouble(min( d )) - rangeExt, carl::toDouble(max( d )) + rangeExt );
 			} else{
-				rangeExt = carl::toDouble(carl::toDouble(min( d ))* 0.1);
+				rangeExt = min(d) == 0 ? 0.1 : carl::toDouble(carl::toDouble(min( d ))* 0.1);
 				ranges[d] = carl::Interval<double>(carl::toDouble(min( d )) - rangeExt, carl::toDouble(max( d )) + rangeExt );
 			}
 		}
@@ -376,7 +375,7 @@ void Plotter<Number>::writeGnuplot() const {
 			mOutfile << "# plotting Halfspaces\n";
 			for( const auto& planePair : mPlanes ) {
 				for( const auto& plane : planePair.second ) {
-					std::cout << "Plot plane " << plane << std::endl;
+					//std::cout << "Plot plane " << plane << std::endl;
 					assert(plane.dimension() == 2);
 					vector_t<Number> normal = plane.normal();
 					if(normal(1) == Number(0)){

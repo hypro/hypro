@@ -25,6 +25,12 @@ public:
 
     virtual antlrcpp::Any visitExpression(ExpressionsParser::ExpressionContext *context) = 0;
 
+    virtual antlrcpp::Any visitEquations(ExpressionsParser::EquationsContext *context) = 0;
+
+    virtual antlrcpp::Any visitEquationDerivate(ExpressionsParser::EquationDerivateContext *context) = 0;
+
+    virtual antlrcpp::Any visitEquationNonDerivate(ExpressionsParser::EquationNonDerivateContext *context) = 0;
+
     virtual antlrcpp::Any visitOrExpression(ExpressionsParser::OrExpressionContext *context) = 0;
 
     virtual antlrcpp::Any visitAndExpression(ExpressionsParser::AndExpressionContext *context) = 0;
@@ -35,11 +41,23 @@ public:
 
     virtual antlrcpp::Any visitMulExpression(ExpressionsParser::MulExpressionContext *context) = 0;
 
-    virtual antlrcpp::Any visitUnaryExpression(ExpressionsParser::UnaryExpressionContext *context) = 0;
+    virtual antlrcpp::Any visitUnaryExprFunc(ExpressionsParser::UnaryExprFuncContext *context) = 0;
+
+    virtual antlrcpp::Any visitUnaryExprMinus(ExpressionsParser::UnaryExprMinusContext *context) = 0;
+
+    virtual antlrcpp::Any visitUnaryExprPlus(ExpressionsParser::UnaryExprPlusContext *context) = 0;
+
+    virtual antlrcpp::Any visitUnaryExpr(ExpressionsParser::UnaryExprContext *context) = 0;
 
     virtual antlrcpp::Any visitFuncExpression(ExpressionsParser::FuncExpressionContext *context) = 0;
 
-    virtual antlrcpp::Any visitExpressionFactor(ExpressionsParser::ExpressionFactorContext *context) = 0;
+    virtual antlrcpp::Any visitExprFact(ExpressionsParser::ExprFactContext *context) = 0;
+
+    virtual antlrcpp::Any visitExprFactNumber(ExpressionsParser::ExprFactNumberContext *context) = 0;
+
+    virtual antlrcpp::Any visitExprFactRealNumber(ExpressionsParser::ExprFactRealNumberContext *context) = 0;
+
+    virtual antlrcpp::Any visitExprFactName(ExpressionsParser::ExprFactNameContext *context) = 0;
 
     virtual antlrcpp::Any visitNonEmptySetExpression(ExpressionsParser::NonEmptySetExpressionContext *context) = 0;
 

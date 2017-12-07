@@ -7,7 +7,8 @@ namespace hypro {
 	template<typename Number>
 	HyproBadStatesVisitor<Number>::HyproBadStatesVisitor(std::vector<std::string>& varVec, std::set<Location<Number>*>& lSet) :
 		vars(varVec),
-		locSet(lSet)
+		locSet(lSet),
+		gBadStates()
 	{ }
 
 	template<typename Number>
@@ -19,9 +20,9 @@ namespace hypro {
 	antlrcpp::Any HyproBadStatesVisitor<Number>::visitUnsafeset(HybridAutomatonParser::UnsafesetContext *ctx){
 
 		//1.Collect badState information. NOTE: There can be multiple denoted badstates for one location.
-		typename hypro::HybridAutomaton<Number>::locationConditionMap lcMap;
-		if(ctx->badstate().size() > 0){
-			for(auto bState : ctx->badstate()){
+		typename hypro::HybridAutomaton<Number, State_t<Number,Number>>::locationConditionMap lcMap;
+		if(ctx->lbadstate().size() > 0){
+			for(auto bState : ctx->lbadstate()){
 				std::pair<Location<Number>*,Condition<Number>> badStateInfo = visit(bState).template as<std::pair<Location<Number>*,Condition<Number>>>();
 				std::size_t lcMapSize = lcMap.size();
 				lcMap.insert(badStateInfo);
@@ -56,11 +57,19 @@ namespace hypro {
 				}
 			}
 		}
+		if(ctx->gbadstate().size() > 0){
+			std::vector<Condition<Number>> allGlobalBadStates;
+			for(const auto& g : ctx->gbadstate()){
+				Condition<Number> gBadStateInfo = visit(g).template as<Condition<Number>>();
+				allGlobalBadStates.push_back(gBadStateInfo);
+			}
+			gBadStates = allGlobalBadStates;
+		}
 		return lcMap;
 	}
 
 	template<typename Number>
-	antlrcpp::Any HyproBadStatesVisitor<Number>::visitBadstate(HybridAutomatonParser::BadstateContext *ctx){
+	antlrcpp::Any HyproBadStatesVisitor<Number>::visitLbadstate(HybridAutomatonParser::LbadstateContext *ctx){
 
 		//0.Check if given loc name exists and get meant location where bad states can occur
 		bool found = false;
@@ -87,6 +96,13 @@ namespace hypro {
 			return std::make_pair(badLoc, Condition<Number>(matrix_t<Number>::Zero(vars.size(), vars.size()),vector_t<Number>::Zero(vars.size())));
 		}
 
+	}
+
+	template<typename Number>
+	antlrcpp::Any HyproBadStatesVisitor<Number>::visitGbadstate(HybridAutomatonParser::GbadstateContext *ctx){
+		HyproFormulaVisitor<Number> visitor(vars);
+		std::pair<matrix_t<Number>,vector_t<Number>> gBadStatePair = visitor.visit(ctx->constrset()).template as<std::pair<matrix_t<Number>,vector_t<Number>>>();
+		return Condition<Number>(gBadStatePair.first, gBadStatePair.second);
 	}
 
 } //namespace hypro

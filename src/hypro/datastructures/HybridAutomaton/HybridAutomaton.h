@@ -25,13 +25,13 @@ namespace hypro
  * @brief      Class for linear hybrid automata.
  * @tparam     Number  Number type.
  */
-template <typename Number>
+template <typename Number, typename State = State_t<Number,Number>>
 class HybridAutomaton
 {
   public:
     using locationSet = std::set<Location<Number>*>; /// Set of location pointers.
     using transitionSet = std::set<Transition<Number>*>; /// Set of transition pointers.
-    using locationStateMap = std::multimap<const Location<Number>*, State<Number,ConstraintSet<Number>>>; /// Multi-map from location pointers to states.
+    using locationStateMap = std::multimap<const Location<Number>*, State>; /// Multi-map from location pointers to states.
     using locationConditionMap = std::map<const Location<Number>*, Condition<Number>>; /// Map from location pointers to conditions.
     using conditionVector = std::vector<Condition<Number>>; /// Vector of conditions.
 
@@ -53,23 +53,23 @@ class HybridAutomaton
      *
      * @param[in]  hybrid  The original hybrid automaton.
      */
-    HybridAutomaton(const HybridAutomaton<Number>& hybrid) = default;
+    HybridAutomaton(const HybridAutomaton<Number,State>& hybrid) = default;
 
     /**
      * @brief      Move constructor.
      *
      * @param[in]  hybrid  The original hybrid automaton.
      */
-    HybridAutomaton(HybridAutomaton<Number>&& hybrid) = default;
+    HybridAutomaton(HybridAutomaton<Number,State>&& hybrid) = default;
     HybridAutomaton(const locationSet& locs, const transitionSet& trans, const locationStateMap& initialStates);
     virtual ~HybridAutomaton() {
-/*  Without this we have a memory leak from HyproTransitionVisitor.
-    The leak will be patched later by using only references.
-        std::cout << "I DESTROY" << std::endl;
-        for(auto tPointer : mTransitions) {
-            delete tPointer;
-        }
-*/
+		// Without this we have a memory leak from HyproTransitionVisitor.
+		// The leak will be patched later by using only references.
+        //while(!mTransitions.empty()) {
+        //	auto toDelete = *mTransitions.begin();
+        //    mTransitions.erase(mTransitions.begin());
+        //    delete toDelete;
+        //}
     }
 
     /**
@@ -78,6 +78,8 @@ class HybridAutomaton
     ///@{
     //* @return The set of locations. */
     const locationSet& getLocations() const { return mLocations; }
+    const Location<Number>* getLocation(std::size_t id) const;
+    const Location<Number>* getLocation(std::string name) const;
     //* @return The set of transitions. */
     const transitionSet& getTransitions() const { return mTransitions; }
     //* @return The set of initial states. */
@@ -107,14 +109,14 @@ class HybridAutomaton
     ///@{
     void addLocation(Location<Number>* location) { mLocations.insert(location); }
     void addTransition(Transition<Number>* transition) { mTransitions.insert(transition); }
-    void addInitialState(const State<Number,ConstraintSet<Number>>& state) { mInitialStates.insert(std::make_pair(state.getLocation(),state)); }
+    //void addInitialState(const State& state) { mInitialStates.insert(std::make_pair(state.getLocation(),state)); }
     void addLocalBadState(const Location<Number>* loc, const Condition<Number>& condition) { mLocalBadStates.insert(std::make_pair(loc,condition)); }
     void addGlobalBadState(const Condition<Number>& state) { mGlobalBadStates.push_back(state); }
     ///@}
 
     // copy assignment operator, TODO: implement via swap
-    inline HybridAutomaton& operator=(const HybridAutomaton<Number>& rhs) = default;
-    inline HybridAutomaton& operator=(HybridAutomaton<Number>&& rhs) = default;
+    inline HybridAutomaton& operator=(const HybridAutomaton<Number,State>& rhs) = default;
+    inline HybridAutomaton& operator=(HybridAutomaton<Number,State>&& rhs) = default;
 
     /**
      * @brief      Comparison for equality operator.
@@ -122,7 +124,7 @@ class HybridAutomaton
      * @param[in]  rhs   The right hand side.
      * @return     True, if both automata are equal, false otherwise.
      */
-    friend bool operator==( const HybridAutomaton<Number>& lhs, const HybridAutomaton<Number>& rhs ) {
+    friend bool operator==( const HybridAutomaton<Number,State>& lhs, const HybridAutomaton<Number,State>& rhs ) {
     	return lhs.getLocations() == rhs.getLocations() &&
     			lhs.getTransitions() == rhs.getTransitions() &&
     			lhs.getInitialStates() == rhs.getInitialStates() &&
@@ -131,9 +133,9 @@ class HybridAutomaton
     }
 
 #ifdef HYPRO_LOGGING
-    friend std::ostream& operator<<(std::ostream& ostr, const HybridAutomaton<Number>& a)
+    friend std::ostream& operator<<(std::ostream& ostr, const HybridAutomaton<Number,State>& a)
 #else
-    friend std::ostream& operator<<(std::ostream& ostr, const HybridAutomaton<Number>&)
+    friend std::ostream& operator<<(std::ostream& ostr, const HybridAutomaton<Number,State>&)
 #endif
     {
 #ifdef HYPRO_LOGGING
@@ -142,6 +144,10 @@ class HybridAutomaton
             ostr << ( *initialIT ).first->id() << ": " << ( *initialIT ).second.first
                   << " <= " << ( *initialIT ).second.second << std::endl;
         }*/  // TODO
+        ostr << "initial states: " << std::endl;
+        for(auto initialIt = a.getInitialStates().begin(); initialIt != a.getInitialStates().end(); ++initialIt){
+            ostr << *((*initialIt).first) << ": " << (*initialIt).second << std::endl;
+        }
         ostr << "locations: " << std::endl;
         for (auto locationIT = a.getLocations().begin(); locationIT != a.getLocations().end(); ++locationIT) {
             ostr << **locationIT << std::endl;
@@ -150,8 +156,14 @@ class HybridAutomaton
         for (const auto& transition : a.getTransitions()) {
             ostr << *transition << std::endl;
         }
+        ostr << "local bad states: " << std::endl;
+        for(auto badStateIt = a.getLocalBadStates().begin(); badStateIt != a.getLocalBadStates().end(); ++badStateIt){
+            ostr << *((*badStateIt).first) << ": " << (*badStateIt).second << std::endl;
+        }
 #endif
         return ostr;
     }
 };
-}
+} // namespace hypro
+
+#include "HybridAutomaton.tpp"

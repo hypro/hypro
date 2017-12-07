@@ -16,12 +16,13 @@ grammar Formula;
 connector 			: PLUS | MINUS ; 
 term 				: (NUMBER | VARIABLE) (TIMES connector* (NUMBER | VARIABLE))* ;
 polynom				: connector* term (connector+ term)* ;
-interval 			: '[' NUMBER ',' NUMBER ']' ;
+interval 			: '[' MINUS? NUMBER ',' MINUS? NUMBER ']' ;
 
-equation 			: VARIABLE EQUALS polynom ;
+//equationwinterval	: VARIABLE EQUALS polynom connector interval;
+equation 			: VARIABLE EQUALS polynom (connector interval)?;
 constraint			: polynom (BOOLRELATION | EQUALS) polynom; 
-intervalexpr		: VARIABLE IN interval;  
-constrset	 		: (constraint | intervalexpr)*;
+intervalexpr		: VARIABLE IN interval; 
+constrset	 		: (constraint | intervalexpr)+;
 
 ////// Lexer Rules
 
@@ -41,7 +42,9 @@ fragment LOWERCASE	: [a-z] ;
 fragment DIGIT		: [0-9] ;
 fragment SPECIALCHAR: '_' | '\'' ;
 
-NUMBER				: '-'? DIGIT+ ('.' DIGIT+)? ;
+//NUMBER				: '-'? DIGIT+ ('.' DIGIT+)? ;
+//BEWARE! Numbers itself can now only be positive. A negative number has an odd number of MINUS connectors in front.
+NUMBER				: DIGIT+ ('.' DIGIT+)? ;
 VARIABLE			: (UPPERCASE | LOWERCASE)(UPPERCASE | LOWERCASE | DIGIT | SPECIALCHAR)*  ;
 WS					: (' ' | '\t' | '\n' | '\r' )+ -> skip ;
 

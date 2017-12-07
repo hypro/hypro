@@ -11,6 +11,7 @@
  */
 
 #pragma once
+#include "FirstSegment.h"
 #include "datastructures/HybridAutomaton/Settings.h"
 #include "datastructures/HybridAutomaton/HybridAutomaton.h"
 #include "datastructures/HybridAutomaton/State.h"
@@ -25,7 +26,7 @@ CLANG_WARNING_DISABLE("-Wdeprecated-register")
 CLANG_WARNING_RESET
 
 // Debug Flag, TODO: Add more debug levels.
-//#define REACH_DEBUG
+#define REACH_DEBUG
 #define USE_REDUCTION
 //#define USE_SYSTEM_SEPARATION
 // Needs system separation to affect the computation
@@ -41,9 +42,6 @@ namespace hypro {
  * \brief Namespace for all reachabiltiy analysis algorithm related code.
  */
 namespace reachability {
-
-template<typename Number>
-using State_t = State<Number, Box<Number>, SupportFunction<Number>, Zonotope<Number>, HPolytope<Number>, VPolytope<Number>>;
 
 template<typename Number>
 using initialSet = boost::tuple<unsigned, State_t<Number>>;
@@ -62,9 +60,9 @@ using flowpipe_t = std::vector<State_t<Number>>;
 template <typename Number>
 class Reach {
 private:
-	HybridAutomaton<Number> mAutomaton;
+	HybridAutomaton<Number, State_t<Number,Number>> mAutomaton;
 	ReachabilitySettings<Number> mSettings;
-	std::size_t mCurrentLevel;
+	std::size_t mCurrentLevel = 0;
     Number mBloatingFactor = 0;
 	std::map<unsigned, std::vector<flowpipe_t<Number>>> mReachableStates;
 	std::list<initialSet<Number>> mWorkingQueue;
@@ -80,7 +78,7 @@ public:
 	 * @param _automaton The analyzed automaton.
 	 * @param _settings The reachability analysis settings.
 	 */
-	Reach( const HybridAutomaton<Number>& _automaton, const ReachabilitySettings<Number>& _settings = ReachabilitySettings<Number>());
+	Reach( const HybridAutomaton<Number, State_t<Number,Number>>& _automaton, const ReachabilitySettings<Number>& _settings = ReachabilitySettings<Number>());
 
 	/**
 	 * @brief Computes the forward reachability of the given automaton.
@@ -139,7 +137,7 @@ public:
 private:
 
 	matrix_t<Number> computeTrafoMatrix( const Location<Number>* _loc ) const;
-	boost::tuple<bool, State_t<Number>, matrix_t<Number>, vector_t<Number>> computeFirstSegment( const State_t<Number>& _state ) const;
+	//boost::tuple<bool, State_t<Number>, matrix_t<Number>, vector_t<Number>> computeFirstSegment( const State_t<Number>& _state ) const;
 	bool intersectBadStates( const State_t<Number>& _state ) const;
 };
 
@@ -148,7 +146,6 @@ private:
 
 #include "Reach.tpp"
 #include "discreteHandling.tpp"
-#include "firstSegment.tpp"
 #include "terminationHandling.tpp"
 
 //#include "Reach_SF.h"

@@ -41,12 +41,14 @@ protected:
 };
 
 TYPED_TEST(PolytopeSupportFunctionTest, constructor) {
-	PolytopeSupportFunction<TypeParam> psf1 = PolytopeSupportFunction<TypeParam>(this->constraints, this->constants);
+	PolytopeSupportFunction<TypeParam,PolytopeSupportFunctionSetting> psf1 
+		= PolytopeSupportFunction<TypeParam,PolytopeSupportFunctionSetting>(this->constraints, this->constants);
 	SUCCEED();
 }
 
 TYPED_TEST(PolytopeSupportFunctionTest, evaluation) {
-	PolytopeSupportFunction<TypeParam> psf1 = PolytopeSupportFunction<TypeParam>(this->constraints, this->constants);
+	PolytopeSupportFunction<TypeParam,PolytopeSupportFunctionSetting> psf1 
+		= PolytopeSupportFunction<TypeParam,PolytopeSupportFunctionSetting>(this->constraints, this->constants);
 	vector_t<TypeParam> vec1 = vector_t<TypeParam>(2,1);
 	vector_t<TypeParam> vec2 = vector_t<TypeParam>(2,1);
 	vector_t<TypeParam> vec3 = vector_t<TypeParam>(2,1);
@@ -70,7 +72,8 @@ TYPED_TEST(PolytopeSupportFunctionTest, evaluation) {
 }
 
 TYPED_TEST(PolytopeSupportFunctionTest, multiEvaluation) {
-	PolytopeSupportFunction<TypeParam> psf1 = PolytopeSupportFunction<TypeParam>(this->constraints, this->constants);
+	PolytopeSupportFunction<TypeParam,PolytopeSupportFunctionSetting> psf1 
+		= PolytopeSupportFunction<TypeParam,PolytopeSupportFunctionSetting>(this->constraints, this->constants);
 	matrix_t<TypeParam> directions = matrix_t<TypeParam>(3,2);
 	directions(0,0) = TypeParam(2);
 	directions(0,1) = TypeParam(4);
@@ -86,7 +89,8 @@ TYPED_TEST(PolytopeSupportFunctionTest, multiEvaluation) {
 }
 
 TYPED_TEST(PolytopeSupportFunctionTest, contains) {
-	PolytopeSupportFunction<TypeParam> psf1 = PolytopeSupportFunction<TypeParam>(this->constraints, this->constants);
+	PolytopeSupportFunction<TypeParam,PolytopeSupportFunctionSetting> psf1 
+		= PolytopeSupportFunction<TypeParam,PolytopeSupportFunctionSetting>(this->constraints, this->constants);
 
 	EXPECT_TRUE(psf1.contains(Point<TypeParam>({0,0})));
 	EXPECT_TRUE(psf1.contains(Point<TypeParam>({-2,-2})));
@@ -100,7 +104,8 @@ TYPED_TEST(PolytopeSupportFunctionTest, contains) {
 }
 
 TYPED_TEST(PolytopeSupportFunctionTest, createCode) {
-	PolytopeSupportFunction<TypeParam> psf1 = PolytopeSupportFunction<TypeParam>(this->constraints, this->constants);
+	PolytopeSupportFunction<TypeParam,PolytopeSupportFunctionSetting> psf1 
+		= PolytopeSupportFunction<TypeParam,PolytopeSupportFunctionSetting>(this->constraints, this->constants);
 	//std::string res = psf1.createCode();
 
 	//std::cout << res << std::endl;

@@ -24,21 +24,20 @@ public:
     T__56 = 57, T__57 = 58, T__58 = 59, T__59 = 60, T__60 = 61, T__61 = 62, 
     T__62 = 63, T__63 = 64, T__64 = 65, T__65 = 66, T__66 = 67, T__67 = 68, 
     T__68 = 69, T__69 = 70, T__70 = 71, T__71 = 72, T__72 = 73, T__73 = 74, 
-    T__74 = 75, T__75 = 76, T__76 = 77, T__77 = 78, T__78 = 79, T__79 = 80, 
-    T__80 = 81, T__81 = 82, T__82 = 83, T__83 = 84, T__84 = 85, T__85 = 86, 
-    NUMBER = 87, REALNUBER = 88, STRING = 89, IDENTIFIER = 90, RELATIVENAME = 91, 
-    ABSOLUTENAME = 92, ROOTNAME = 93, WS = 94
+    T__74 = 75, T__75 = 76, T__76 = 77, MULOP = 78, ADDOP = 79, COMPOP = 80, 
+    NUMBER = 81, REALNUMBER = 82, STRING = 83, IDENTIFIER = 84, RELATIVENAME = 85, 
+    ABSOLUTENAME = 86, ROOTNAME = 87, WS = 88
   };
 
   enum {
-    RuleExpressions = 0, RuleOptExpression = 1, RuleExpression = 2, RuleOrExpression = 3, 
-    RuleAndExpression = 4, RuleCompareExpression = 5, RuleAddExpression = 6, 
-    RuleMulExpression = 7, RuleUnaryExpression = 8, RuleFuncExpression = 9, 
-    RuleExpressionFactor = 10, RuleNonEmptySetExpression = 11, RuleDictPairs = 12, 
-    RuleOptElifExprs = 13, RuleSwitchBody = 14, RuleSwitchCases = 15, RuleTypes = 16, 
-    RuleType = 17, RuleFields = 18, RuleField = 19, RuleNameSet = 20, RuleNames = 21, 
-    RuleName = 22, RuleOptSupKind = 23, RuleSupKind = 24, RuleIdentifier = 25, 
-    RuleStringToken = 26, RuleStdLibFunction = 27
+    RuleExpressions = 0, RuleOptExpression = 1, RuleExpression = 2, RuleEquations = 3, 
+    RuleEquation = 4, RuleOrExpression = 5, RuleAndExpression = 6, RuleCompareExpression = 7, 
+    RuleAddExpression = 8, RuleMulExpression = 9, RuleUnaryExpression = 10, 
+    RuleFuncExpression = 11, RuleExpressionFactor = 12, RuleNonEmptySetExpression = 13, 
+    RuleDictPairs = 14, RuleOptElifExprs = 15, RuleSwitchBody = 16, RuleSwitchCases = 17, 
+    RuleTypes = 18, RuleType = 19, RuleFields = 20, RuleField = 21, RuleNameSet = 22, 
+    RuleNames = 23, RuleName = 24, RuleOptSupKind = 25, RuleSupKind = 26, 
+    RuleIdentifier = 27, RuleStringToken = 28, RuleStdLibFunction = 29
   };
 
   ExpressionsParser(antlr4::TokenStream *input);
@@ -54,6 +53,8 @@ public:
   class ExpressionsContext;
   class OptExpressionContext;
   class ExpressionContext;
+  class EquationsContext;
+  class EquationContext;
   class OrExpressionContext;
   class AndExpressionContext;
   class CompareExpressionContext;
@@ -118,6 +119,52 @@ public:
 
   ExpressionContext* expression();
 
+  class  EquationsContext : public antlr4::ParserRuleContext {
+  public:
+    EquationsContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    std::vector<EquationContext *> equation();
+    EquationContext* equation(size_t i);
+
+    virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+   
+  };
+
+  EquationsContext* equations();
+
+  class  EquationContext : public antlr4::ParserRuleContext {
+  public:
+    EquationContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+   
+    EquationContext() : antlr4::ParserRuleContext() { }
+    void copyFrom(EquationContext *context);
+    using antlr4::ParserRuleContext::copyFrom;
+
+    virtual size_t getRuleIndex() const override;
+
+   
+  };
+
+  class  EquationDerivateContext : public EquationContext {
+  public:
+    EquationDerivateContext(EquationContext *ctx);
+
+    IdentifierContext *identifier();
+    ExpressionContext *expression();
+    virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+  };
+
+  class  EquationNonDerivateContext : public EquationContext {
+  public:
+    EquationNonDerivateContext(EquationContext *ctx);
+
+    IdentifierContext *identifier();
+    ExpressionContext *expression();
+    virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+  };
+
+  EquationContext* equation();
+
   class  OrExpressionContext : public antlr4::ParserRuleContext {
   public:
     OrExpressionContext(antlr4::ParserRuleContext *parent, size_t invokingState);
@@ -150,6 +197,8 @@ public:
     virtual size_t getRuleIndex() const override;
     std::vector<AddExpressionContext *> addExpression();
     AddExpressionContext* addExpression(size_t i);
+    std::vector<antlr4::tree::TerminalNode *> COMPOP();
+    antlr4::tree::TerminalNode* COMPOP(size_t i);
 
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
    
@@ -163,6 +212,8 @@ public:
     virtual size_t getRuleIndex() const override;
     std::vector<MulExpressionContext *> mulExpression();
     MulExpressionContext* mulExpression(size_t i);
+    std::vector<antlr4::tree::TerminalNode *> ADDOP();
+    antlr4::tree::TerminalNode* ADDOP(size_t i);
 
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
    
@@ -176,6 +227,8 @@ public:
     virtual size_t getRuleIndex() const override;
     std::vector<UnaryExpressionContext *> unaryExpression();
     UnaryExpressionContext* unaryExpression(size_t i);
+    std::vector<antlr4::tree::TerminalNode *> MULOP();
+    antlr4::tree::TerminalNode* MULOP(size_t i);
 
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
    
@@ -186,12 +239,46 @@ public:
   class  UnaryExpressionContext : public antlr4::ParserRuleContext {
   public:
     UnaryExpressionContext(antlr4::ParserRuleContext *parent, size_t invokingState);
-    virtual size_t getRuleIndex() const override;
-    FuncExpressionContext *funcExpression();
-    UnaryExpressionContext *unaryExpression();
-
-    virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
    
+    UnaryExpressionContext() : antlr4::ParserRuleContext() { }
+    void copyFrom(UnaryExpressionContext *context);
+    using antlr4::ParserRuleContext::copyFrom;
+
+    virtual size_t getRuleIndex() const override;
+
+   
+  };
+
+  class  UnaryExprContext : public UnaryExpressionContext {
+  public:
+    UnaryExprContext(UnaryExpressionContext *ctx);
+
+    UnaryExpressionContext *unaryExpression();
+    virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+  };
+
+  class  UnaryExprFuncContext : public UnaryExpressionContext {
+  public:
+    UnaryExprFuncContext(UnaryExpressionContext *ctx);
+
+    FuncExpressionContext *funcExpression();
+    virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+  };
+
+  class  UnaryExprMinusContext : public UnaryExpressionContext {
+  public:
+    UnaryExprMinusContext(UnaryExpressionContext *ctx);
+
+    UnaryExpressionContext *unaryExpression();
+    virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+  };
+
+  class  UnaryExprPlusContext : public UnaryExpressionContext {
+  public:
+    UnaryExprPlusContext(UnaryExpressionContext *ctx);
+
+    UnaryExpressionContext *unaryExpression();
+    virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
   };
 
   UnaryExpressionContext* unaryExpression();
@@ -216,9 +303,28 @@ public:
   class  ExpressionFactorContext : public antlr4::ParserRuleContext {
   public:
     ExpressionFactorContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+   
+    ExpressionFactorContext() : antlr4::ParserRuleContext() { }
+    void copyFrom(ExpressionFactorContext *context);
+    using antlr4::ParserRuleContext::copyFrom;
+
     virtual size_t getRuleIndex() const override;
+
+   
+  };
+
+  class  ExprFactNumberContext : public ExpressionFactorContext {
+  public:
+    ExprFactNumberContext(ExpressionFactorContext *ctx);
+
     antlr4::tree::TerminalNode *NUMBER();
-    antlr4::tree::TerminalNode *REALNUBER();
+    virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+  };
+
+  class  ExprFactContext : public ExpressionFactorContext {
+  public:
+    ExprFactContext(ExpressionFactorContext *ctx);
+
     StringTokenContext *stringToken();
     ExpressionsContext *expressions();
     NonEmptySetExpressionContext *nonEmptySetExpression();
@@ -230,9 +336,23 @@ public:
     OptElifExprsContext *optElifExprs();
     SwitchBodyContext *switchBody();
     NameContext *name();
-
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
-   
+  };
+
+  class  ExprFactRealNumberContext : public ExpressionFactorContext {
+  public:
+    ExprFactRealNumberContext(ExpressionFactorContext *ctx);
+
+    antlr4::tree::TerminalNode *REALNUMBER();
+    virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+  };
+
+  class  ExprFactNameContext : public ExpressionFactorContext {
+  public:
+    ExprFactNameContext(ExpressionFactorContext *ctx);
+
+    NameContext *name();
+    virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
   };
 
   ExpressionFactorContext* expressionFactor();

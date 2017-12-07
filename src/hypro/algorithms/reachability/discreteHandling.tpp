@@ -18,7 +18,7 @@ namespace reachability {
 		// check if the intersection is empty
 		if ( guardSatisfyingSet.first ) {
 			#ifdef REACH_DEBUG
-			INFO("hypro.reacher", "Transition enabled!");
+			INFO("hypro.reacher", "Transition enabled at timestamp " << _state.getTimestamp() << "!");
 			#endif
 
 			//for(unsigned rowIndex = 0; rowIndex < _trans->guard().mat.rows(); ++rowIndex) {
@@ -43,6 +43,7 @@ namespace reachability {
 
 		for(const auto& tuple : _newInitialSets ) {
 			if(boost::get<0>(tuple)->getAggregation() == Aggregation::none){
+				TRACE("hypro.reacher","No aggregation.");
 				// copy state - as there is no aggregation, the containing set and timestamp is already valid
 				State_t<Number> s = boost::get<1>(tuple);
 				assert(!s.getTimestamp().isUnbounded());
@@ -55,8 +56,12 @@ namespace reachability {
 					}
 				}
 				if(!duplicate){
-					mWorkingQueue.emplace_back(mCurrentLevel+1, s);
-					//std::cout << "-- No duplicate state tupel found! mWorkingQueue size is now: " << mWorkingQueue.size() << std::endl;
+
+					s = boost::get<0>(tuple)->getReset().applyReset(s);
+					std::pair<bool,State_t<Number>> invariantPair = s.satisfies(boost::get<0>(tuple)->getTarget()->getInvariant());
+					if(invariantPair.first){
+						mWorkingQueue.emplace_back(mCurrentLevel+1, invariantPair.second);
+					}
 				}
 			} else { // aggregate all
 				// TODO: Note that all sets are collected for one transition, i.e. currently, if we intersect the guard for one transition twice with
@@ -99,7 +104,8 @@ namespace reachability {
 			// reduce new initial sets.
 			//collectedSets.removeRedundancy();
 			#ifdef USE_SMART_AGGREGATION
-			aggregationReduction(collectedSets, aggregationPair.first, mSettings.timeBound, mSettings.timeStep);
+			collectedSets.removeRedundancy();
+			//aggregationReduction(collectedSets, aggregationPair.first, mSettings.timeBound, mSettings.timeStep);
 			#endif
 
 			//TODO: Maybe use smth else or use setSetsSave in all functions
@@ -158,6 +164,7 @@ namespace reachability {
 		bool transitionEnabled = false;
 		//std::cout << "------ how many transitions do we have? " << state.getLocation()->getTransitions().size() << std::endl;
 		for( auto transition : state.getLocation()->getTransitions() ){
+			DEBUG("hypro.reacher","Check transition " << transition->getSource()->getName() << " -> " << transition->getTarget()->getName() << " (@ "<< transition << ")." );
 			// handle time-triggered transitions
 			if(intersectGuard(transition, state, guardSatisfyingState)){
 				INFO("hypro.reacher", "hybrid transition enabled");
@@ -168,6 +175,7 @@ namespace reachability {
 				applyReduction(guardSatisfyingState);
 				#endif
 				nextInitialSets.emplace_back(transition, guardSatisfyingState);
+				transitionEnabled = true;
 			}
 		}
 

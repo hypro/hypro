@@ -57,6 +57,7 @@ namespace hypro {
 
 	template<typename Number>
 	EvaluationResult<Number> Optimizer<Number>::evaluate(const vector_t<Number>& _direction, bool useExactGlpk) const {
+		this->refresh();
 		if(!mConstraintsSet) {
 			updateConstraints();
 		}
@@ -178,6 +179,7 @@ namespace hypro {
 
 	template<typename Number>
 	bool Optimizer<Number>::checkConsistency() const {
+		this->refresh();
 		if(!mConstraintsSet) {
 			updateConstraints();
 		}
@@ -214,6 +216,7 @@ namespace hypro {
 
 	template<typename Number>
 	bool Optimizer<Number>::checkPoint(const Point<Number>& _point) const {
+		this->refresh();
 		if(!mConstraintsSet) {
 			updateConstraints();
 		}
@@ -235,6 +238,7 @@ namespace hypro {
 
 	template<typename Number>
 	EvaluationResult<Number> Optimizer<Number>::getInternalPoint() const {
+		this->refresh();
 		if(!mConstraintsSet) {
 			updateConstraints();
 		}
@@ -265,6 +269,7 @@ namespace hypro {
 
 	template<typename Number>
 	std::vector<std::size_t> Optimizer<Number>::redundantConstraints() const {
+		this->refresh();
 		std::vector<std::size_t> res;
 		if(!mConstraintsSet) {
 			updateConstraints();
@@ -287,11 +292,23 @@ namespace hypro {
 	}
 
 	template<typename Number>
+	void Optimizer<Number>::refresh() const {
+		if(std::this_thread::get_id() != creatingThreadId) {
+			//std::cout << "Refresh thread content from " << creatingThreadId << " to " << std::this_thread::get_id() << std::endl;
+			mInitialized = false;
+			mConstraintsSet = false;
+			updateConstraints();
+			assert(std::this_thread::get_id() == creatingThreadId);
+		}
+	}
+
+	template<typename Number>
 	void Optimizer<Number>::initialize() const {
 		glp_term_out( GLP_OFF );
 		if(!mInitialized) {
 			/* create glpk problem */
 			lp = glp_create_prob();
+			creatingThreadId = std::this_thread::get_id();
 			glp_set_obj_dir( lp, GLP_MAX );
 			glp_term_out( GLP_OFF );
 			//#ifdef HYPRO_USE_SMTRAT
@@ -320,6 +337,7 @@ namespace hypro {
 
 				glp_delete_prob(lp);
 				lp = glp_create_prob();
+				creatingThreadId = std::this_thread::get_id();
 
 				glp_set_obj_dir( lp, GLP_MAX );
 				glp_term_out( GLP_OFF );

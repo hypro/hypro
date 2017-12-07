@@ -208,15 +208,40 @@ namespace hypro {
 	}
 
 	template<typename Number>
-	antlrcpp::Any HyproFormulaVisitor<Number>::visitIntervalexpr(HybridAutomatonParser::IntervalexprContext *ctx){
+	antlrcpp::Any HyproFormulaVisitor<Number>::visitInterval(HybridAutomatonParser::IntervalContext *ctx){
 
-		//0.Syntax Check - Check if interval is legal
-		Number left = stringToNumber(ctx->interval()->NUMBER()[0]->getText());
-		Number right = stringToNumber(ctx->interval()->NUMBER()[1]->getText());
+		//1.Attach the possible minuses to the numbers
+		std::string leftString;
+		std::string rightString;
+		if(ctx->MINUS().size() > 0){
+			std::size_t leftIndex = ctx->NUMBER(0)->getSymbol()->getStartIndex();
+			for(const auto& m : ctx->MINUS()){
+				std::size_t minusIndex = m->getSymbol()->getStartIndex();
+				if(minusIndex < leftIndex){
+					leftString = ctx->MINUS(0)->getText();
+				} else {
+					rightString = ctx->MINUS(1)->getText();
+				}
+			}
+		}
+		leftString += ctx->NUMBER()[0]->getText();
+		rightString += ctx->NUMBER()[1]->getText();
+		Number left = stringToNumber(leftString);
+		Number right = stringToNumber(rightString);
+
+		//2.Syntax Check - Check if interval is legal
 		if(left > right){
-			std::cerr << "ERROR: Interval left side with " << " is bigger than right side!" << std::endl;
+			std::cerr << "ERROR: Interval left side with " << left << " is bigger than right side with " << right << "!" << std::endl;
 			exit(0);
 		}
+
+		return carl::Interval<Number>(left,right);
+	}
+
+	template<typename Number>
+	antlrcpp::Any HyproFormulaVisitor<Number>::visitIntervalexpr(HybridAutomatonParser::IntervalexprContext *ctx){
+
+		//0.Syntax Check
 		bool found = false;
 		for(const auto& var : vars){
 			if(ctx->VARIABLE()->getText() == var){
@@ -228,7 +253,10 @@ namespace hypro {
 			exit(0);
 		}
 
-		//1.Make constraint vectors
+		//1.Get inverval
+		carl::Interval<Number> intervalValues = visit(ctx->interval());
+
+		//2.Make constraint vectors
 		std::vector<std::pair<vector_t<Number>,Number>> constraintVec;
 		vector_t<Number> firstConstraint = vector_t<Number>::Zero(vars.size());
 		vector_t<Number> secondConstraint = vector_t<Number>::Zero(vars.size());
@@ -241,14 +269,14 @@ namespace hypro {
 		}
 		firstConstraint(dest) = Number(-1);
 		secondConstraint(dest) = Number(1);
-		Number firstConstant = Number(-1) * left;
-		Number secondConstant = right;
+		Number firstConstant = Number(-1) * intervalValues.lower();
+		Number secondConstant = intervalValues.upper();
 		auto firstPair = std::make_pair(firstConstraint, firstConstant);
 		auto secondPair = std::make_pair(secondConstraint, secondConstant);
 		constraintVec.push_back(firstPair);
 		constraintVec.push_back(secondPair);
 
-		//2.Return vector of pairs of constraint vectors and constant Numbers!
+		//3.Return vector of pairs of constraint vectors and constant Numbers!
 		return constraintVec;
 	}
 

@@ -23,8 +23,9 @@ hybrid reachability
   {
    poly ode 1
    {
-    v' = --9.81 + --v*42*-3
-    x' = +++3*-+--v
+    v' = --9.81 + -+-v*42*-3 + [2,5]
+    #x' = +++3*-+--v
+    x' = 3*v + [-1,4]
    }
 
    inv
@@ -86,6 +87,11 @@ unsafe set
   {
    v in [-2.5,0]
   }
+ x >= 15
+ v+2 >= -v+23
+ v-7+8*x >= 33-12*x	
+ #-v+2 >= 23 		#Problem: -v connects to polynom in constraint before, more generally: if connector is first symbol of left side in 
+ 			#	in constraint, it will connect to polynom before.
 }
 
 #unsafe set

@@ -7,6 +7,7 @@
 
 #include "../../config.h"
 #include "util.h"
+#include "SupportFunctionSetting.h"
 #include "SupportFunctionContent.h"
 #include "../../util/templateDirections.h"
 
@@ -56,10 +57,10 @@ public:
 	// getter for the union types
 	sumContent<Number>* summands() const;
 	scaleContent<Number>* scaleParameters() const;
-	trafoContent<Number>* linearTrafoParameters() const;
+	trafoContent<Number,SupportFunctionContentSetting>* linearTrafoParameters() const;
 	unionContent<Number>* unionParameters() const;
 	intersectionContent<Number>* intersectionParameters() const;
-	PolytopeSupportFunction<Number>* polytope() const;
+	PolytopeSupportFunction<Number,PolytopeSupportFunctionSetting>* polytope() const;
 	BallSupportFunction<Number>* ball() const;
 	EllipsoidSupportFunction<Number>* ellipsoid() const;
 
