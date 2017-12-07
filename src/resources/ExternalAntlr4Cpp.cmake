@@ -60,7 +60,7 @@ FIND_PACKAGE(Java COMPONENTS Runtime REQUIRED)
 
 set(ANTLR4CPP_LOCAL_REPO ${PROJECT_SOURCE_DIR}/src/resources/antlr4-cpp-runtime-4.7-source)
 #set(ANTLR4CPP_BUILD_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/src/resources/antlr_build)
-message(STATUS "Current binary dir: ${CMAKE_BINARY_DIR}")
+#message(STATUS "Current binary dir: ${CMAKE_BINARY_DIR}")
 set(ANTLR4CPP_BUILD_INCLUDE_DIR ${CMAKE_BINARY_DIR}/resources/antlr_build)
 
 if(NOT EXISTS "${ANTLR4CPP_JAR_LOCATION}")
@@ -219,7 +219,7 @@ set(ANTLR4CPP_INCLUDE_DIRS ${ANTLR4CPP_INCLUDE_DIRS})
 #
 #endmacro()
 
-message(STATUS "Antlr: Include dirs: ${ANTLR4CPP_INCLUDE_DIRS}")
+#message(STATUS "Antlr: Include dirs: ${ANTLR4CPP_INCLUDE_DIRS}")
 
 add_imported_library(ANTLR4 STATIC ${ANTLR4CPP_LIBS} ${ANTLR4CPP_INCLUDE_DIRS})
 list(APPEND ${PROJECT_NAME}_LIBRARIES_STATIC ${ANTLR4CPP_LIBS})

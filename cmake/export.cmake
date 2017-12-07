@@ -34,7 +34,7 @@ else()
 		export_target(DEPENDENT_TARGETS z3_SHARED)
 	endif ()
 	if(HYPRO_USE_SMTRAT)
-	    export_target(DEPENDENT_TARGETS smtrat_SHARED)
+	    export_target(DEPENDENT_TARGETS lib_smtrat)
 	endif()
 endif()
 
