@@ -1,4 +1,4 @@
-FROM fefrei/carl:17.10
+FROM fefrei/carl:17.12
 COPY / /root/hypro/
 RUN apt-get update \
 && apt-get install -y \
