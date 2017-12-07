@@ -216,7 +216,7 @@ endif()
 
 if(HYPRO_USE_SMTRAT)
 	find_package(smtrat)
-	#load_library(${PROJECT_NAME} smtrat 0)
+	load_library(${PROJECT_NAME} smtrat 0)
 endif()
 
 if(HYPRO_USE_Z3)
