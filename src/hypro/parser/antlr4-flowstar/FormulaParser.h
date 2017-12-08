@@ -1,5 +1,5 @@
 
-// Generated from BadStates.g4 by ANTLR 4.7
+// Generated from Formula.g4 by ANTLR 4.7
 
 #pragma once
 
@@ -13,25 +13,24 @@
 
 
 
-class  BadStatesParser : public antlr4::Parser {
+class  FormulaParser : public antlr4::Parser {
 public:
   enum {
-    T__0 = 1, IN = 2, PAR = 3, JUMPS = 4, URGENT = 5, GUARD = 6, RESET = 7, 
-    PARALLELOTOPE = 8, BOX = 9, JUMP = 10, DEFINE = 11, COMMENT = 12, EQUALS = 13, 
-    BOOLRELATION = 14, PLUS = 15, MINUS = 16, TIMES = 17, SBOPEN = 18, SBCLOSE = 19, 
-    CBOPEN = 20, CBCLOSE = 21, COMMA = 22, NUMBER = 23, CONSTANT = 24, VARIABLE = 25, 
-    WS = 26
+    IN = 1, PAR = 2, JUMPS = 3, URGENT = 4, GUARD = 5, RESET = 6, PARALLELOTOPE = 7, 
+    BOX = 8, JUMP = 9, DEFINE = 10, COMMENT = 11, EQUALS = 12, BOOLRELATION = 13, 
+    PLUS = 14, MINUS = 15, TIMES = 16, SBOPEN = 17, SBCLOSE = 18, CBOPEN = 19, 
+    CBCLOSE = 20, COMMA = 21, NUMBER = 22, CONSTANT = 23, VARIABLE = 24, 
+    WS = 25
   };
 
   enum {
-    RuleUnsafeset = 0, RuleLbadstate = 1, RuleGbadstate = 2, RuleReplacedexpr = 3, 
-    RuleConstantexpr = 4, RuleConnector = 5, RuleTerm = 6, RulePolynom = 7, 
-    RuleInterval = 8, RuleEquation = 9, RuleConstraint = 10, RuleIntervalexpr = 11, 
-    RuleConstrset = 12
+    RuleReplacedexpr = 0, RuleConstantexpr = 1, RuleConnector = 2, RuleTerm = 3, 
+    RulePolynom = 4, RuleInterval = 5, RuleEquation = 6, RuleConstraint = 7, 
+    RuleIntervalexpr = 8, RuleConstrset = 9
   };
 
-  BadStatesParser(antlr4::TokenStream *input);
-  ~BadStatesParser();
+  FormulaParser(antlr4::TokenStream *input);
+  ~FormulaParser();
 
   virtual std::string getGrammarFileName() const override;
   virtual const antlr4::atn::ATN& getATN() const override { return _atn; };
@@ -43,9 +42,6 @@ public:
   	inline const std::map<std::string, std::string>& getConstants() const { return constants; }
 
 
-  class UnsafesetContext;
-  class LbadstateContext;
-  class GbadstateContext;
   class ReplacedexprContext;
   class ConstantexprContext;
   class ConnectorContext;
@@ -56,43 +52,6 @@ public:
   class ConstraintContext;
   class IntervalexprContext;
   class ConstrsetContext; 
-
-  class  UnsafesetContext : public antlr4::ParserRuleContext {
-  public:
-    UnsafesetContext(antlr4::ParserRuleContext *parent, size_t invokingState);
-    virtual size_t getRuleIndex() const override;
-    std::vector<GbadstateContext *> gbadstate();
-    GbadstateContext* gbadstate(size_t i);
-    std::vector<LbadstateContext *> lbadstate();
-    LbadstateContext* lbadstate(size_t i);
-
-   
-  };
-
-  UnsafesetContext* unsafeset();
-
-  class  LbadstateContext : public antlr4::ParserRuleContext {
-  public:
-    LbadstateContext(antlr4::ParserRuleContext *parent, size_t invokingState);
-    virtual size_t getRuleIndex() const override;
-    antlr4::tree::TerminalNode *VARIABLE();
-    ConstrsetContext *constrset();
-
-   
-  };
-
-  LbadstateContext* lbadstate();
-
-  class  GbadstateContext : public antlr4::ParserRuleContext {
-  public:
-    GbadstateContext(antlr4::ParserRuleContext *parent, size_t invokingState);
-    virtual size_t getRuleIndex() const override;
-    ConstrsetContext *constrset();
-
-   
-  };
-
-  GbadstateContext* gbadstate();
 
   class  ReplacedexprContext : public antlr4::ParserRuleContext {
   public:

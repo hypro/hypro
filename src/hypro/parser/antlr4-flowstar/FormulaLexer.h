@@ -1,5 +1,5 @@
 
-// Generated from Location.g4 by ANTLR 4.7
+// Generated from Formula.g4 by ANTLR 4.7
 
 #pragma once
 
@@ -9,19 +9,18 @@
 
 
 
-class  LocationLexer : public antlr4::Lexer {
+class  FormulaLexer : public antlr4::Lexer {
 public:
   enum {
-    T__0 = 1, T__1 = 2, T__2 = 3, T__3 = 4, T__4 = 5, T__5 = 6, IN = 7, 
-    PAR = 8, JUMPS = 9, URGENT = 10, GUARD = 11, RESET = 12, PARALLELOTOPE = 13, 
-    BOX = 14, JUMP = 15, DEFINE = 16, COMMENT = 17, EQUALS = 18, BOOLRELATION = 19, 
-    PLUS = 20, MINUS = 21, TIMES = 22, SBOPEN = 23, SBCLOSE = 24, CBOPEN = 25, 
-    CBCLOSE = 26, COMMA = 27, NUMBER = 28, CONSTANT = 29, VARIABLE = 30, 
-    WS = 31
+    IN = 1, PAR = 2, JUMPS = 3, URGENT = 4, GUARD = 5, RESET = 6, PARALLELOTOPE = 7, 
+    BOX = 8, JUMP = 9, DEFINE = 10, COMMENT = 11, EQUALS = 12, BOOLRELATION = 13, 
+    PLUS = 14, MINUS = 15, TIMES = 16, SBOPEN = 17, SBCLOSE = 18, CBOPEN = 19, 
+    CBCLOSE = 20, COMMA = 21, NUMBER = 22, CONSTANT = 23, VARIABLE = 24, 
+    WS = 25
   };
 
-  LocationLexer(antlr4::CharStream *input);
-  ~LocationLexer();
+  FormulaLexer(antlr4::CharStream *input);
+  ~FormulaLexer();
 
 
   	bool parsingConstants = false;	

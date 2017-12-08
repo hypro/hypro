@@ -9,9 +9,7 @@
 
 grammar InitialSet;
 
-options { tokenVocab = FormulaLexer; }
-
-import FormulaParser;
+import Formula;
 
 //////// Parser Rules
 

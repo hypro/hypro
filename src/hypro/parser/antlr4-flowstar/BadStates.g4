@@ -9,9 +9,7 @@
 
 grammar BadStates;
 
-options { tokenVocab = FormulaLexer; }
-
-import FormulaParser;
+import Formula;
 
 /////////// Parser Rules
 

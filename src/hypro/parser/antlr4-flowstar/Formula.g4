@@ -10,60 +10,62 @@
 grammar Formula;
 
 /////////////////// C++ FOR USAGE ///////////////////////
-//
-//@lexer::declaration {
-//	private: 
-//		bool parsingConstants = false;
-//	protected:	
-//}
-//
-//@parser::postinclude {
-//	#include <map>
-//	#include <string>
-//}
-//
-//@parser::declarations {
-//	private: 
-//		std::map<std::string, std::string> constants;
-//	public: 
-//		inline const std::map<std::string&, std::string&>& getConstants() const { return constants; }
-//}
-//
-//constantexpr		: CONSTANT EQUALS MINUS? NUMBER {
-//	if($MINUS.text != ""){
-//		constants.insert({$CONSTANT.text, $MINUS.text.append($NUMBER.text)});
-//		std::cout << "Constant " << $CONSTANT.text << " with value " << $MINUS.text.append($NUMBER.text) << " was put in map!\n";
-//	} else {
-//		constants.insert({$CONSTANT.text, $NUMBER.text});
-//		std::cout << "Constant " << $CONSTANT.text << " with value " << $NUMBER.text << " was put in map!\n";
-//	}	
-//};
-
-/////////////////// JAVA FOR TESTING //////////////////
 
 @lexer::members {
-	private boolean parsingConstants = false;
+	bool parsingConstants = false;	
 }
 
-@parser::header {
-	import java.util.HashMap;
-	import java.lang.String;
+@parser::postinclude {
+	#include <map>
+	#include <string>
+}
+
+@parser::declarations {
+	std::map<std::string, std::string> constants;
 }
 
 @parser::members {
-	public HashMap<String,String> constants = new HashMap<String,String>();
-	public HashMap<String,String> getConstants() { return constants; }
+	inline const std::map<std::string, std::string>& getConstants() const { return constants; }
 }
 
+replacedexpr		: MINUS? NUMBER EQUALS MINUS? NUMBER ;
+
 constantexpr		: CONSTANT EQUALS MINUS? NUMBER {
-	if($MINUS.text != null){
-		constants.put($CONSTANT.text, ($MINUS.text + $NUMBER.text));
-		System.out.println("1.Constant " + $CONSTANT.text + " with value " + $MINUS.text + $NUMBER.text + " was put in map!");
+	std::cout << "In constantexpr! MINUS text is: " << $MINUS.text << std::endl;
+	if($MINUS.text != ""){
+		constants.insert({$CONSTANT.text, $MINUS.text.append($NUMBER.text)});
+		std::cout << "Constant " << $CONSTANT.text << " with value " << $MINUS.text.append($NUMBER.text) << " was put in map!\n";
 	} else {
-		constants.put($CONSTANT.text, $NUMBER.text);
-		System.out.println("2.Constant " + $CONSTANT.text + " with value " + $NUMBER.text + " was put in map!");
+		constants.insert({$CONSTANT.text, $NUMBER.text});
+		std::cout << "Constant " << $CONSTANT.text << " with value " << $NUMBER.text << " was put in map!\n";
 	}
 };
+
+/////////////////// JAVA FOR TESTING //////////////////
+
+//@lexer::members {
+//	private boolean parsingConstants = false;
+//}
+//
+//@parser::header {
+//	import java.util.HashMap;
+//	import java.lang.String;
+//}
+//
+//@parser::members {
+//	public HashMap<String,String> constants = new HashMap<String,String>();
+//	public HashMap<String,String> getConstants() { return constants; }
+//}
+//
+//constantexpr		: CONSTANT EQUALS MINUS? NUMBER {
+//	if($MINUS.text != null){
+//		constants.put($CONSTANT.text, ($MINUS.text + $NUMBER.text));
+//		System.out.println("1.Constant " + $CONSTANT.text + " with value " + $MINUS.text + $NUMBER.text + " was put in map!");
+//	} else {
+//		constants.put($CONSTANT.text, $NUMBER.text);
+//		System.out.println("2.Constant " + $CONSTANT.text + " with value " + $NUMBER.text + " was put in map!");
+//	}
+//};
 
 /////////////////// Parser Rules /////////////////////
 
@@ -84,6 +86,15 @@ constrset	 		: (constraint | intervalexpr)+ ;
 //Always remember: Keywords first!
 IN 					: 'in' ;
 PAR 		 		: 'par' { parsingConstants = true; } ;
+
+JUMPS 				: 'jumps' ;
+URGENT 				: 'urgent' ;
+GUARD 				: 'guard' ;
+RESET 				: 'reset' ;
+PARALLELOTOPE 		: 'parallelotope aggregation' ;
+BOX 				: 'box aggregation' ;
+JUMP				: '->' ;
+DEFINE 				: ':=' ;
 
 COMMENT				: '#' ~[\r\n]* -> skip ;
 
@@ -108,7 +119,7 @@ NUMBER				: DIGIT+ ('.' DIGIT+)? ;
 CONSTANT 			: (UPPERCASE | LOWERCASE) { if(!parsingConstants) { setType(VARIABLE); } };
 VARIABLE			: (UPPERCASE | LOWERCASE)(UPPERCASE | LOWERCASE | DIGIT | SPECIALCHAR)* { if(parsingConstants){ setType(CONSTANT); } };
 
-WS					: (' ' | '\t' | '\n' | '\r' )+ -> skip ;
+WS					: (' ' | '\t' | '\n' | '\r' )+ -> channel(HIDDEN) ;
 
 
 

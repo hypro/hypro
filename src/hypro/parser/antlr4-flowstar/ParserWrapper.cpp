@@ -35,6 +35,18 @@ namespace hypro {
 		}
 	}
 
+	std::string replaceConstantsWithValues(TokenStreamRewriter& rewriter, std::map<std::string, std::string> constants){
+	
+		for(int i=0; i < rewriter.getTokenStream()->size(); i++){
+			auto it = constants.find(rewriter.getTokenStream()->get(i)->getText());
+			if(it != constants.end()){
+				rewriter.replace(i, i, constants.at(it->first));
+			}			
+		}
+		std::cout << "======== ALTERED VERSION =========\n" << rewriter.getText() << std::endl;
+		return rewriter.getText();
+	}
+
 	template<>
 	boost::tuple<HybridAutomaton<mpq_class, State_t<mpq_class,mpq_class>>, ReachabilitySettings<mpq_class>> parseFlowstarFile<mpq_class>(const std::string& filename) {
 
@@ -60,27 +72,62 @@ namespace hypro {
 		HybridAutomatonParser parser(&tokens);
 		parser.removeErrorListeners();
 		parser.addErrorListener(errListener);
-
-		//Create TokenStreamRewriter, needed for constants if defined
-		if(parser.getConstants().size() > 0){
-			TokenStreamRewriter rewriter(&tokens);	
-		}
-
 		tree::ParseTree* tree = parser.start();
 
-		hypro::HyproHAVisitor<mpq_class> visitor;
+		//Create TokenStreamRewriter, needed for constants if defined
 
-		hypro::HybridAutomaton<mpq_class, State_t<mpq_class,mpq_class>> h = (visitor.visit(tree)).antlrcpp::Any::as<hypro::HybridAutomaton<mpq_class, State_t<mpq_class,mpq_class>>>();
+		std::cout << "Size of constant map: " << parser.getConstants().size() << std::endl;
+		for(auto entry : parser.getConstants()){
+			std::cout << "Constant name: " << entry.first << " constant value " << entry.second << std::endl;
+		}
 
-		delete errListener;
+		if(parser.getConstants().size() > 0){
+			std::cout << "Replacing..." << std::endl;
+			TokenStreamRewriter rewriter(&tokens);
+			std::string modified = replaceConstantsWithValues(rewriter, parser.getConstants());
+			ANTLRInputStream inputMod(modified);
+			HybridAutomatonLexer lexerMod(&inputMod);
+			lexerMod.removeErrorListeners();
+			lexerMod.addErrorListener(errListener);
+	
+			//Create an empty TokenStream obj
+			CommonTokenStream tokensMod(&lexerMod);
+	
+			//Fill the TokenStream (and output it for demonstration)
+			tokensMod.fill();
+	
+			//Create a parser
+			HybridAutomatonParser parserMod(&tokensMod);
+			parserMod.removeErrorListeners();
+			parserMod.addErrorListener(errListener);			
+			tree::ParseTree* tree = parserMod.start();
 
-		return boost::tuple<HybridAutomaton<mpq_class, State_t<mpq_class,mpq_class>>&, ReachabilitySettings<mpq_class>>(h, visitor.getSettings());
+			hypro::HyproHAVisitor<mpq_class> visitor;
+
+			hypro::HybridAutomaton<mpq_class, State_t<mpq_class,mpq_class>> h = (visitor.visit(tree)).antlrcpp::Any::as<hypro::HybridAutomaton<mpq_class, State_t<mpq_class,mpq_class>>>();
+
+			delete errListener;
+
+			return boost::tuple<HybridAutomaton<mpq_class, State_t<mpq_class,mpq_class>>&, ReachabilitySettings<mpq_class>>(h, visitor.getSettings());	
+
+		} else {
+
+			std::cout << "Do not replace!" << std::endl;
+
+			hypro::HyproHAVisitor<mpq_class> visitor;
+
+			hypro::HybridAutomaton<mpq_class, State_t<mpq_class,mpq_class>> h = (visitor.visit(tree)).antlrcpp::Any::as<hypro::HybridAutomaton<mpq_class, State_t<mpq_class,mpq_class>>>();
+
+			delete errListener;
+
+			return boost::tuple<HybridAutomaton<mpq_class, State_t<mpq_class,mpq_class>>&, ReachabilitySettings<mpq_class>>(h, visitor.getSettings());	
+		}
 	}
 
 	template<>
 	boost::tuple<HybridAutomaton<double,State_t<double,double>>, ReachabilitySettings<double>> parseFlowstarFile<double>(const std::string& filename) {
 
-		//Create an AnTLRInputStream
+		//Create an ANTLRInputStream
 		ANTLRInputStream input;
 		openFile(filename,input);
 
@@ -102,16 +149,55 @@ namespace hypro {
 		HybridAutomatonParser parser(&tokens);
 		parser.removeErrorListeners();
 		parser.addErrorListener(errListener);
-
 		tree::ParseTree* tree = parser.start();
 
-		hypro::HyproHAVisitor<double> visitor;
+		std::cout << "Size of constant map: " << parser.getConstants().size() << std::endl;
+		for(auto entry : parser.getConstants()){
+			std::cout << "Constant name: " << entry.first << " constant value " << entry.second << std::endl;
+		}
 
-		hypro::HybridAutomaton<double,State_t<double,double>> h = (visitor.visit(tree)).antlrcpp::Any::as<hypro::HybridAutomaton<double,State_t<double,double>>>();
+		//Create TokenStreamRewriter, needed for constants if defined
+		if(parser.getConstants().size() > 0){
+			std::cout << "Replacing..." << std::endl;
+			TokenStreamRewriter rewriter(&tokens);
+			std::string modified = replaceConstantsWithValues(rewriter, parser.getConstants());
+			ANTLRInputStream inputMod(modified);
+			HybridAutomatonLexer lexerMod(&inputMod);
+			lexerMod.removeErrorListeners();
+			lexerMod.addErrorListener(errListener);
+	
+			//Create an empty TokenStream obj
+			CommonTokenStream tokensMod(&lexerMod);
+	
+			//Fill the TokenStream (and output it for demonstration)
+			tokensMod.fill();
+	
+			//Create a parser
+			HybridAutomatonParser parserMod(&tokensMod);
+			parserMod.removeErrorListeners();
+			parserMod.addErrorListener(errListener);			
+			tree::ParseTree* tree = parserMod.start();
 
-		delete errListener;
+			hypro::HyproHAVisitor<double> visitor;
 
-		return boost::tuple<HybridAutomaton<double,State_t<double,double>>, ReachabilitySettings<double>>(h, visitor.getSettings());
+			hypro::HybridAutomaton<double, State_t<double,double>> h = (visitor.visit(tree)).antlrcpp::Any::as<hypro::HybridAutomaton<double, State_t<double,double>>>();
+
+			delete errListener;
+
+			return boost::tuple<HybridAutomaton<double, State_t<double,double>>&, ReachabilitySettings<double>>(h, visitor.getSettings());	
+			
+		} else {
+
+			std::cout << "Do not replace!" << std::endl;
+
+			hypro::HyproHAVisitor<double> visitor;
+
+			hypro::HybridAutomaton<double, State_t<double,double>> h = (visitor.visit(tree)).antlrcpp::Any::as<hypro::HybridAutomaton<double, State_t<double,double>>>();
+
+			delete errListener;
+
+			return boost::tuple<HybridAutomaton<double, State_t<double,double>>&, ReachabilitySettings<double>>(h, visitor.getSettings());	
+		}
 	}
 
 } // namespace

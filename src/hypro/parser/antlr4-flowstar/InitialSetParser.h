@@ -7,20 +7,26 @@
 #include "antlr4-runtime.h"
 
 
+	#include <map>
+	#include <string>
+
+
 
 
 class  InitialSetParser : public antlr4::Parser {
 public:
   enum {
-    T__0 = 1, T__1 = 2, T__2 = 3, T__3 = 4, T__4 = 5, T__5 = 6, IN = 7, 
-    COMMENT = 8, EQUALS = 9, BOOLRELATION = 10, PLUS = 11, MINUS = 12, TIMES = 13, 
-    NUMBER = 14, VARIABLE = 15, WS = 16
+    T__0 = 1, IN = 2, PAR = 3, JUMPS = 4, URGENT = 5, GUARD = 6, RESET = 7, 
+    PARALLELOTOPE = 8, BOX = 9, JUMP = 10, DEFINE = 11, COMMENT = 12, EQUALS = 13, 
+    BOOLRELATION = 14, PLUS = 15, MINUS = 16, TIMES = 17, SBOPEN = 18, SBCLOSE = 19, 
+    CBOPEN = 20, CBCLOSE = 21, COMMA = 22, NUMBER = 23, CONSTANT = 24, VARIABLE = 25, 
+    WS = 26
   };
 
   enum {
-    RuleInit = 0, RuleInitstate = 1, RuleConnector = 2, RuleTerm = 3, RulePolynom = 4, 
-    RuleInterval = 5, RuleEquation = 6, RuleConstraint = 7, RuleIntervalexpr = 8, 
-    RuleConstrset = 9
+    RuleInit = 0, RuleInitstate = 1, RuleReplacedexpr = 2, RuleConstantexpr = 3, 
+    RuleConnector = 4, RuleTerm = 5, RulePolynom = 6, RuleInterval = 7, 
+    RuleEquation = 8, RuleConstraint = 9, RuleIntervalexpr = 10, RuleConstrset = 11
   };
 
   InitialSetParser(antlr4::TokenStream *input);
@@ -33,8 +39,13 @@ public:
   virtual antlr4::dfa::Vocabulary& getVocabulary() const override;
 
 
+  	inline const std::map<std::string, std::string>& getConstants() const { return constants; }
+
+
   class InitContext;
   class InitstateContext;
+  class ReplacedexprContext;
+  class ConstantexprContext;
   class ConnectorContext;
   class TermContext;
   class PolynomContext;
@@ -67,6 +78,38 @@ public:
   };
 
   InitstateContext* initstate();
+
+  class  ReplacedexprContext : public antlr4::ParserRuleContext {
+  public:
+    ReplacedexprContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    std::vector<antlr4::tree::TerminalNode *> NUMBER();
+    antlr4::tree::TerminalNode* NUMBER(size_t i);
+    antlr4::tree::TerminalNode *EQUALS();
+    std::vector<antlr4::tree::TerminalNode *> MINUS();
+    antlr4::tree::TerminalNode* MINUS(size_t i);
+
+   
+  };
+
+  ReplacedexprContext* replacedexpr();
+
+  class  ConstantexprContext : public antlr4::ParserRuleContext {
+  public:
+    antlr4::Token *constantToken = nullptr;;
+    antlr4::Token *minusToken = nullptr;;
+    antlr4::Token *numberToken = nullptr;;
+    ConstantexprContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    antlr4::tree::TerminalNode *CONSTANT();
+    antlr4::tree::TerminalNode *EQUALS();
+    antlr4::tree::TerminalNode *NUMBER();
+    antlr4::tree::TerminalNode *MINUS();
+
+   
+  };
+
+  ConstantexprContext* constantexpr();
 
   class  ConnectorContext : public antlr4::ParserRuleContext {
   public:
@@ -194,6 +237,9 @@ private:
   static antlr4::dfa::Vocabulary _vocabulary;
   static antlr4::atn::ATN _atn;
   static std::vector<uint16_t> _serializedATN;
+
+
+  	std::map<std::string, std::string> constants;
 
 
   struct Initializer {

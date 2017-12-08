@@ -1,5 +1,5 @@
 /*
- * Location.g4
+ * Transition.g4
  *
  * @author Phillip Tse
  * @date 20.6.2017
@@ -9,9 +9,7 @@
 
 grammar Transition;
 
-options { tokenVocab = FormulaLexer; }
-
-import FormulaParser;
+import Formula;
 
 //////// Parser Rules
 
@@ -43,3 +41,20 @@ BOX 			: 'box aggregation' ;
 JUMP			: '->' ;
 
 DEFINE 			: ':=' ;
+
+
+//jumps		: JUMPS CBOPEN transition* CBCLOSE ;
+//
+//transition 	: fromto (urgent | guard | resetfct | aggregation)* ;
+//
+//fromto		: VARIABLE JUMP VARIABLE ;
+//
+//urgent		: URGENT ;
+//
+//guard		: GUARD CBOPEN constrset CBCLOSE ;
+//
+//allocation	: VARIABLE DEFINE (polynom | interval) ;
+//
+//resetfct	: GUARD CBOPEN allocation* CBCLOSE ;
+//
+//aggregation	: (PARALLELOTOPE | BOX) CBOPEN CBCLOSE ;

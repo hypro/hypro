@@ -7,24 +7,31 @@
 #include "antlr4-runtime.h"
 
 
+	#include <map>
+	#include <string>
+
+
 
 
 class  SettingParser : public antlr4::Parser {
 public:
   enum {
     T__0 = 1, T__1 = 2, T__2 = 3, T__3 = 4, T__4 = 5, T__5 = 6, T__6 = 7, 
-    T__7 = 8, T__8 = 9, T__9 = 10, T__10 = 11, T__11 = 12, T__12 = 13, T__13 = 14, 
-    T__14 = 15, T__15 = 16, T__16 = 17, EXPONENTIAL = 18, IN = 19, COMMENT = 20, 
-    EQUALS = 21, BOOLRELATION = 22, PLUS = 23, MINUS = 24, TIMES = 25, NUMBER = 26, 
-    VARIABLE = 27, WS = 28
+    T__7 = 8, T__8 = 9, T__9 = 10, T__10 = 11, T__11 = 12, EXPONENTIAL = 13, 
+    IN = 14, PAR = 15, JUMPS = 16, URGENT = 17, GUARD = 18, RESET = 19, 
+    PARALLELOTOPE = 20, BOX = 21, JUMP = 22, DEFINE = 23, COMMENT = 24, 
+    EQUALS = 25, BOOLRELATION = 26, PLUS = 27, MINUS = 28, TIMES = 29, SBOPEN = 30, 
+    SBCLOSE = 31, CBOPEN = 32, CBCLOSE = 33, COMMA = 34, NUMBER = 35, CONSTANT = 36, 
+    VARIABLE = 37, WS = 38
   };
 
   enum {
     RuleSetting = 0, RuleFixedsteps = 1, RuleTime = 2, RulePlotsetting = 3, 
     RuleFilename = 4, RuleMaxjumps = 5, RulePrint = 6, RuleRemainder = 7, 
     RuleIdentity = 8, RuleFixedorders = 9, RuleCutoff = 10, RulePrecision = 11, 
-    RuleConnector = 12, RuleTerm = 13, RulePolynom = 14, RuleInterval = 15, 
-    RuleEquation = 16, RuleConstraint = 17, RuleIntervalexpr = 18, RuleConstrset = 19
+    RuleReplacedexpr = 12, RuleConstantexpr = 13, RuleConnector = 14, RuleTerm = 15, 
+    RulePolynom = 16, RuleInterval = 17, RuleEquation = 18, RuleConstraint = 19, 
+    RuleIntervalexpr = 20, RuleConstrset = 21
   };
 
   SettingParser(antlr4::TokenStream *input);
@@ -35,6 +42,9 @@ public:
   virtual const std::vector<std::string>& getTokenNames() const override { return _tokenNames; }; // deprecated: use vocabulary instead.
   virtual const std::vector<std::string>& getRuleNames() const override;
   virtual antlr4::dfa::Vocabulary& getVocabulary() const override;
+
+
+  	inline const std::map<std::string, std::string>& getConstants() const { return constants; }
 
 
   class SettingContext;
@@ -49,6 +59,8 @@ public:
   class FixedordersContext;
   class CutoffContext;
   class PrecisionContext;
+  class ReplacedexprContext;
+  class ConstantexprContext;
   class ConnectorContext;
   class TermContext;
   class PolynomContext;
@@ -211,6 +223,38 @@ public:
 
   PrecisionContext* precision();
 
+  class  ReplacedexprContext : public antlr4::ParserRuleContext {
+  public:
+    ReplacedexprContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    std::vector<antlr4::tree::TerminalNode *> NUMBER();
+    antlr4::tree::TerminalNode* NUMBER(size_t i);
+    antlr4::tree::TerminalNode *EQUALS();
+    std::vector<antlr4::tree::TerminalNode *> MINUS();
+    antlr4::tree::TerminalNode* MINUS(size_t i);
+
+   
+  };
+
+  ReplacedexprContext* replacedexpr();
+
+  class  ConstantexprContext : public antlr4::ParserRuleContext {
+  public:
+    antlr4::Token *constantToken = nullptr;;
+    antlr4::Token *minusToken = nullptr;;
+    antlr4::Token *numberToken = nullptr;;
+    ConstantexprContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    antlr4::tree::TerminalNode *CONSTANT();
+    antlr4::tree::TerminalNode *EQUALS();
+    antlr4::tree::TerminalNode *NUMBER();
+    antlr4::tree::TerminalNode *MINUS();
+
+   
+  };
+
+  ConstantexprContext* constantexpr();
+
   class  ConnectorContext : public antlr4::ParserRuleContext {
   public:
     ConnectorContext(antlr4::ParserRuleContext *parent, size_t invokingState);
@@ -337,6 +381,9 @@ private:
   static antlr4::dfa::Vocabulary _vocabulary;
   static antlr4::atn::ATN _atn;
   static std::vector<uint16_t> _serializedATN;
+
+
+  	std::map<std::string, std::string> constants;
 
 
   struct Initializer {

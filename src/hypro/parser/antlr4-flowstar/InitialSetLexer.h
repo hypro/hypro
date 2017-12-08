@@ -12,13 +12,18 @@
 class  InitialSetLexer : public antlr4::Lexer {
 public:
   enum {
-    T__0 = 1, T__1 = 2, T__2 = 3, T__3 = 4, T__4 = 5, T__5 = 6, IN = 7, 
-    COMMENT = 8, EQUALS = 9, BOOLRELATION = 10, PLUS = 11, MINUS = 12, TIMES = 13, 
-    NUMBER = 14, VARIABLE = 15, WS = 16
+    T__0 = 1, IN = 2, PAR = 3, JUMPS = 4, URGENT = 5, GUARD = 6, RESET = 7, 
+    PARALLELOTOPE = 8, BOX = 9, JUMP = 10, DEFINE = 11, COMMENT = 12, EQUALS = 13, 
+    BOOLRELATION = 14, PLUS = 15, MINUS = 16, TIMES = 17, SBOPEN = 18, SBCLOSE = 19, 
+    CBOPEN = 20, CBCLOSE = 21, COMMA = 22, NUMBER = 23, CONSTANT = 24, VARIABLE = 25, 
+    WS = 26
   };
 
   InitialSetLexer(antlr4::CharStream *input);
   ~InitialSetLexer();
+
+
+  	bool parsingConstants = false;	
 
   virtual std::string getGrammarFileName() const override;
   virtual const std::vector<std::string>& getRuleNames() const override;
@@ -31,6 +36,7 @@ public:
   virtual const std::vector<uint16_t> getSerializedATN() const override;
   virtual const antlr4::atn::ATN& getATN() const override;
 
+  virtual void action(antlr4::RuleContext *context, size_t ruleIndex, size_t actionIndex) override;
 private:
   static std::vector<antlr4::dfa::DFA> _decisionToDFA;
   static antlr4::atn::PredictionContextCache _sharedContextCache;
@@ -47,6 +53,10 @@ private:
 
 
   // Individual action functions triggered by action() above.
+  void PARAction(antlr4::RuleContext *context, size_t actionIndex);
+  void CBCLOSEAction(antlr4::RuleContext *context, size_t actionIndex);
+  void CONSTANTAction(antlr4::RuleContext *context, size_t actionIndex);
+  void VARIABLEAction(antlr4::RuleContext *context, size_t actionIndex);
 
   // Individual semantic predicate functions triggered by sempred() above.
 

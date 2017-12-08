@@ -9,14 +9,12 @@
 
 grammar Setting;
 
-options { tokenVocab = FormulaLexer; }
-
-import FormulaParser;
+import Formula;
 
 //////// Parser Rules
 
-//setting 		: 'setting' '{' (fixedsteps | time | remainder | identity | plotsetting | fixedorders | cutoff | precision | filename | maxjumps | print)* '}' ;
-setting 		: 'setting' '{' (fixedsteps | time | identity | plotsetting | fixedorders | precision | filename | maxjumps | print)* '}' ;
+setting 		: 'setting' '{' (fixedsteps | time | remainder | identity | plotsetting | fixedorders | cutoff | precision | filename | maxjumps | print)* '}' ;
+//setting 		: 'setting' '{' (fixedsteps | time | identity | plotsetting | fixedorders | precision | filename | maxjumps | print)* '}' ;
 
 //// Important Parser Rules
 
@@ -34,16 +32,16 @@ print 			: 'print' VARIABLE ;
 
 //// Unimportant Parser Rules
 
-//remainder 		: 'remainder estimation' EXPONENTIAL ; 
+remainder 		: 'remainder estimation' EXPONENTIAL ; 
 
 identity 		: 'identity precondition' ;
 
 fixedorders 	: 'fixed orders' NUMBER ;
 
-//cutoff 			: 'cutoff' EXPONENTIAL ;
+cutoff 			: 'cutoff' EXPONENTIAL ;
 
 precision 		: 'precision' NUMBER ;
 
 //////// Lexer Rules
 
-//EXPONENTIAL 	: MINUS? NUMBER 'e' MINUS? NUMBER ;
+EXPONENTIAL 	: MINUS? NUMBER 'e' MINUS? NUMBER ;

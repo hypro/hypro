@@ -6,7 +6,7 @@ hybrid reachability {
   gabunga = -9.81
   c = 1
  }
-}
+
  setting
  {
   fixed steps 0.01
@@ -31,7 +31,7 @@ hybrid reachability {
     #v' = --9.81 + -+-v*42*-3 + [2,5]
     #x' = +++3*-+--v
     x' = 3*v + [-1,4]
-    v' = g + c*v
+    v' = gabunga + c*v
    }
 
    inv
@@ -61,6 +61,7 @@ hybrid reachability {
  {
   l
   {
+   #x in [gabunga,10.2]
    x in [10,10.2]
    v in [0,1]
   }
@@ -93,8 +94,8 @@ unsafe set
   {
    v in [-2.5,0]
   }
- x >= 15
- v+2 >= -v+23
+ x >= 15+gabunga
+ v+2+c >= -v+23
  v-7+8*x >= 33-12*x	
  #-v+2 >= 23 		#Problem: -v connects to polynom in constraint before, more generally: if connector is first symbol of left side in 
  			#	in constraint, it will connect to polynom before.

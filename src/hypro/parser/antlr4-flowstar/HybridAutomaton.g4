@@ -9,19 +9,13 @@
  
 grammar HybridAutomaton;
 
-//import Transition, Setting, Location, InitialSet, BadStates;
-
-import Formula;
+import Location, InitialSet, BadStates, Transition, Setting;
 
 ///////////// Parser Rules //////////////
- 
-//start               : 'hybrid reachability' '{' vardeclaration constantdeclaration? '}' ;// setting modes jumps init+ '}' unsafeset? ; 
-//vardeclaration      : 'state var' VARIABLE ((',' VARIABLE)+)? ;
 
-
-start 				: 'hybrid reachability' CBOPEN vardeclaration constantdeclaration? CBCLOSE ;
+start 				: 'hybrid reachability' CBOPEN vardeclaration constantdeclaration? setting modes jumps init+ CBCLOSE unsafeset? ;
 
 vardeclaration      : 'state var' VARIABLE ((COMMA VARIABLE)+)? ;
 
-constantdeclaration : PAR CBOPEN constantexpr* CBCLOSE ;
+constantdeclaration : PAR CBOPEN (constantexpr | replacedexpr)* CBCLOSE ;
 

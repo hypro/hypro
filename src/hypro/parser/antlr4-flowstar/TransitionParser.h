@@ -7,22 +7,28 @@
 #include "antlr4-runtime.h"
 
 
+	#include <map>
+	#include <string>
+
+
 
 
 class  TransitionParser : public antlr4::Parser {
 public:
   enum {
-    T__0 = 1, T__1 = 2, T__2 = 3, T__3 = 4, T__4 = 5, T__5 = 6, T__6 = 7, 
-    T__7 = 8, T__8 = 9, PARALLELOTOPE = 10, BOX = 11, JUMP = 12, DEFINE = 13, 
-    IN = 14, COMMENT = 15, EQUALS = 16, BOOLRELATION = 17, PLUS = 18, MINUS = 19, 
-    TIMES = 20, NUMBER = 21, VARIABLE = 22, WS = 23
+    PARALLELOTOPE = 1, BOX = 2, JUMP = 3, DEFINE = 4, IN = 5, PAR = 6, JUMPS = 7, 
+    URGENT = 8, GUARD = 9, RESET = 10, COMMENT = 11, EQUALS = 12, BOOLRELATION = 13, 
+    PLUS = 14, MINUS = 15, TIMES = 16, SBOPEN = 17, SBCLOSE = 18, CBOPEN = 19, 
+    CBCLOSE = 20, COMMA = 21, NUMBER = 22, CONSTANT = 23, VARIABLE = 24, 
+    WS = 25
   };
 
   enum {
     RuleJumps = 0, RuleTransition = 1, RuleFromto = 2, RuleUrgent = 3, RuleGuard = 4, 
-    RuleAllocation = 5, RuleResetfct = 6, RuleAggregation = 7, RuleConnector = 8, 
-    RuleTerm = 9, RulePolynom = 10, RuleInterval = 11, RuleEquation = 12, 
-    RuleConstraint = 13, RuleIntervalexpr = 14, RuleConstrset = 15
+    RuleAllocation = 5, RuleResetfct = 6, RuleAggregation = 7, RuleReplacedexpr = 8, 
+    RuleConstantexpr = 9, RuleConnector = 10, RuleTerm = 11, RulePolynom = 12, 
+    RuleInterval = 13, RuleEquation = 14, RuleConstraint = 15, RuleIntervalexpr = 16, 
+    RuleConstrset = 17
   };
 
   TransitionParser(antlr4::TokenStream *input);
@@ -35,6 +41,9 @@ public:
   virtual antlr4::dfa::Vocabulary& getVocabulary() const override;
 
 
+  	inline const std::map<std::string, std::string>& getConstants() const { return constants; }
+
+
   class JumpsContext;
   class TransitionContext;
   class FromtoContext;
@@ -43,6 +52,8 @@ public:
   class AllocationContext;
   class ResetfctContext;
   class AggregationContext;
+  class ReplacedexprContext;
+  class ConstantexprContext;
   class ConnectorContext;
   class TermContext;
   class PolynomContext;
@@ -154,6 +165,38 @@ public:
   };
 
   AggregationContext* aggregation();
+
+  class  ReplacedexprContext : public antlr4::ParserRuleContext {
+  public:
+    ReplacedexprContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    std::vector<antlr4::tree::TerminalNode *> NUMBER();
+    antlr4::tree::TerminalNode* NUMBER(size_t i);
+    antlr4::tree::TerminalNode *EQUALS();
+    std::vector<antlr4::tree::TerminalNode *> MINUS();
+    antlr4::tree::TerminalNode* MINUS(size_t i);
+
+   
+  };
+
+  ReplacedexprContext* replacedexpr();
+
+  class  ConstantexprContext : public antlr4::ParserRuleContext {
+  public:
+    antlr4::Token *constantToken = nullptr;;
+    antlr4::Token *minusToken = nullptr;;
+    antlr4::Token *numberToken = nullptr;;
+    ConstantexprContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    antlr4::tree::TerminalNode *CONSTANT();
+    antlr4::tree::TerminalNode *EQUALS();
+    antlr4::tree::TerminalNode *NUMBER();
+    antlr4::tree::TerminalNode *MINUS();
+
+   
+  };
+
+  ConstantexprContext* constantexpr();
 
   class  ConnectorContext : public antlr4::ParserRuleContext {
   public:
@@ -281,6 +324,9 @@ private:
   static antlr4::dfa::Vocabulary _vocabulary;
   static antlr4::atn::ATN _atn;
   static std::vector<uint16_t> _serializedATN;
+
+
+  	std::map<std::string, std::string> constants;
 
 
   struct Initializer {
