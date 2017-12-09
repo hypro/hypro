@@ -39,7 +39,7 @@ class PolytopeSupportFunction {
 
 	matrix_t<Number> mConstraints;
 	vector_t<Number> mConstraintConstants;
-	Optimizer<Number> mOpt;
+	mutable std::map<thread::id, Optimizer<Number>> mOpt;
 	std::size_t mDimension;
 	std::map<vector_t<Number>, Number> mCache;
 

@@ -18,8 +18,8 @@ namespace hypro {
 template <typename Number, class Setting>
 PolytopeSupportFunction<Number,Setting>::PolytopeSupportFunction( matrix_t<Number> constraints,
 														  vector_t<Number> constraintConstants )
-	: mConstraints( constraints ), mConstraintConstants( constraintConstants ), mOpt(constraints,constraintConstants), mDimension(mConstraints.cols()) {
-	//this->removeRedundancy();
+	: mConstraints( constraints ), mConstraintConstants( constraintConstants ), mOpt(), mDimension(mConstraints.cols()) {
+	mOpt[std::this_thread::get_id()] = Optimizer<Number>(constraints,constraintConstants);
 }
 
 template <typename Number, class Setting>
@@ -35,7 +35,7 @@ PolytopeSupportFunction<Number,Setting>::PolytopeSupportFunction( const std::vec
 		mConstraintConstants( pos ) = plane.offset();
 		++pos;
 	}
-	mOpt = Optimizer<Number>(mConstraints,mConstraintConstants);
+	mOpt[std::this_thread::get_id()] = Optimizer<Number>(mConstraints,mConstraintConstants);
 	//this->removeRedundancy();
 }
 
@@ -85,12 +85,13 @@ PolytopeSupportFunction<Number,Setting>::PolytopeSupportFunction( const std::vec
 			facets.clear();
 		}
 	}
-	mOpt = Optimizer<Number>(mConstraints,mConstraintConstants);
+	mOpt[std::this_thread::get_id()] = Optimizer<Number>(mConstraints,mConstraintConstants);
 }
 
 template <typename Number, class Setting>
 PolytopeSupportFunction<Number,Setting>::PolytopeSupportFunction( const PolytopeSupportFunction<Number,Setting> &_origin )
-	: mConstraints( _origin.constraints() ), mConstraintConstants( _origin.constants()), mOpt(mConstraints,mConstraintConstants), mDimension(mConstraints.cols() ) {
+	: mConstraints( _origin.constraints() ), mConstraintConstants( _origin.constants()), mOpt(), mDimension(mConstraints.cols() ) {
+	mOpt[std::this_thread::get_id()] = Optimizer<Number>(mConstraints,mConstraintConstants);
 }
 
 template <typename Number, class Setting>
@@ -102,7 +103,7 @@ PolytopeSupportFunction<Number,Setting>& PolytopeSupportFunction<Number,Setting>
 	//std::cout << __func__ << std::endl;
     this->mConstraints = _orig.mConstraints;
     this->mConstraintConstants = _orig.mConstraintConstants;
-    this->mOpt = Optimizer<Number>(mConstraints,mConstraintConstants);
+    this->mOpt[std::this_thread::get_id()] = Optimizer<Number>(mConstraints,mConstraintConstants);
     this->mDimension = _orig.mDimension;
 }
 
@@ -251,7 +252,7 @@ EvaluationResult<Number> PolytopeSupportFunction<Number,Setting>::evaluate( cons
 		}
 	}
 
-	EvaluationResult<Number> res(mOpt.evaluate(l, useExact));
+	EvaluationResult<Number> res(mOpt.at(std::this_thread::get_id()).evaluate(l, useExact));
 	if(Setting::PPOLYTOPESUPPORTFUNCTION_VERBOSE){
 		std::cout << __func__ << ": " << *this << " evaluated in direction " << convert<Number,double>(l) << " results in " << res << std::endl;
 	}
@@ -293,8 +294,12 @@ std::vector<EvaluationResult<Number>> PolytopeSupportFunction<Number,Setting>::m
 		return res;
 	}
 
+	if(mOpt.find(std::this_thread::get_id()) == mOpt.end()) {
+		mOpt[std::this_thread::get_id()] = Optimizer<Number>(mConstraints,mConstraintConstants);
+	}
+
 	for ( unsigned index = 0; index < _A.rows(); ++index ) {
-		res.emplace_back(mOpt.evaluate( _A.row( index ), useExact ));
+		res.emplace_back(mOpt.at(std::this_thread::get_id()).evaluate( _A.row( index ), useExact ));
 	}
 	assert(res.size() == std::size_t(_A.rows()));
 	return res;
@@ -321,7 +326,10 @@ bool PolytopeSupportFunction<Number,Setting>::contains( const vector_t<Number> &
 
 template <typename Number, class Setting>
 bool PolytopeSupportFunction<Number,Setting>::empty() const {
-	return !mOpt.checkConsistency();
+	if(mOpt.find(std::this_thread::get_id()) == mOpt.end()) {
+		mOpt[std::this_thread::get_id()] = Optimizer<Number>(mConstraints,mConstraintConstants);
+	}
+	return !mOpt.at(std::this_thread::get_id()).checkConsistency();
 }
 
 template <typename Number, class Setting>
@@ -344,7 +352,9 @@ std::string PolytopeSupportFunction<Number,Setting>::createCode(unsigned index) 
 template<typename Number, class Setting>
 void PolytopeSupportFunction<Number,Setting>::removeRedundancy() {
 	if(mConstraints.rows() > 1){
-
+		if(mOpt.find(std::this_thread::get_id()) == mOpt.end()) {
+			mOpt[std::this_thread::get_id()] = Optimizer<Number>(mConstraints,mConstraintConstants);
+		}
 		std::vector<std::size_t> redundant = mOpt.redundantConstraints();
 		//std::cout << __func__ << ": found " << redundant.size() << " redundant constraints." << std::endl;
 
@@ -364,7 +374,7 @@ void PolytopeSupportFunction<Number,Setting>::removeRedundancy() {
 			assert(insertionIndex == -1);
 			mConstraints = newConstraints;
 			mConstraintConstants = newConstants;
-			mOpt = Optimizer<Number>(mConstraints,mConstraintConstants);
+			mOpt[std::this_thread::get_id()] = Optimizer<Number>(mConstraints,mConstraintConstants);
 		}
 		assert(redundant.empty());
 	}
