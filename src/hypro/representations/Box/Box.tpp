@@ -144,6 +144,7 @@ namespace hypro {
 			for(Eigen::Index rowIndex = 0; rowIndex < boxDirections.rows(); ++rowIndex) {
 				results.emplace_back(opt.evaluate(boxDirections.row(rowIndex), false));
 			}
+			opt.cleanGLPInstance();
 			assert(Eigen::Index(results.size()) == boxDirections.rows());
 
 			// re-construct box from results.
@@ -157,7 +158,7 @@ namespace hypro {
 				}
 			}
 		}
-		
+
 		reduceNumberRepresentation();
 	}
 }
@@ -416,7 +417,7 @@ std::pair<CONTAINMENT, BoxT<Number,Converter,Setting>> BoxT<Number,Converter,Set
 	bool allVerticesContained = true;
 	unsigned outsideVertexCnt = 0;
 	for(const auto& vertex : vertices) {
-		
+
 		if(vertex.rawCoordinates().dot(rhs.normal()) > rhs.offset()){
 			allVerticesContained = false;
 			outsideVertexCnt++;
@@ -797,6 +798,7 @@ BoxT<Number,Converter,Setting> BoxT<Number,Converter,Setting>::intersectHalfspac
 	for(Eigen::Index rowIndex = 0; rowIndex < boxDirections.rows(); ++rowIndex) {
 		results.emplace_back(opt.evaluate(boxDirections.row(rowIndex), false));
 	}
+	opt.cleanGLPInstance();
 	assert(Eigen::Index(results.size()) == boxDirections.rows());
 
 	// re-construct box from results.

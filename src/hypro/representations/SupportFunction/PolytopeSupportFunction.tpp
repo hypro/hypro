@@ -18,12 +18,13 @@ namespace hypro {
 template <typename Number, class Setting>
 PolytopeSupportFunction<Number,Setting>::PolytopeSupportFunction( matrix_t<Number> constraints,
 														  vector_t<Number> constraintConstants )
-	: mConstraints( constraints ), mConstraintConstants( constraintConstants ), mOpt(), mDimension(mConstraints.cols()) {
-	mOpt[std::this_thread::get_id()] = Optimizer<Number>(constraints,constraintConstants);
+	: mConstraints( constraints ), mConstraintConstants( constraintConstants ), mOpt(constraints,constraintConstants), mDimension(mConstraints.cols()) {
+		TRACE("hypro.representations.supportFunction", "");
 }
 
 template <typename Number, class Setting>
 PolytopeSupportFunction<Number,Setting>::PolytopeSupportFunction( const std::vector<Halfspace<Number>> &_planes ) {
+	TRACE("hypro.representations.supportFunction", "");
 	assert( !_planes.empty() );
 	mConstraints = matrix_t<Number>( _planes.size(), _planes[0].dimension() );
 	mConstraintConstants = vector_t<Number>( _planes.size() );
@@ -35,12 +36,13 @@ PolytopeSupportFunction<Number,Setting>::PolytopeSupportFunction( const std::vec
 		mConstraintConstants( pos ) = plane.offset();
 		++pos;
 	}
-	mOpt[std::this_thread::get_id()] = Optimizer<Number>(mConstraints,mConstraintConstants);
+	mOpt = Optimizer<Number>(mConstraints,mConstraintConstants);
 	//this->removeRedundancy();
 }
 
 template<typename Number, class Setting>
 PolytopeSupportFunction<Number,Setting>::PolytopeSupportFunction( const std::vector<Point<Number>>& _points ) {
+	TRACE("hypro.representations.supportFunction", "");
 	//std::cout << __func__ << std::endl;
 	if ( !_points.empty() ) {
 		//std::cout << "Points not empty" << std::endl;
@@ -85,25 +87,28 @@ PolytopeSupportFunction<Number,Setting>::PolytopeSupportFunction( const std::vec
 			facets.clear();
 		}
 	}
-	mOpt[std::this_thread::get_id()] = Optimizer<Number>(mConstraints,mConstraintConstants);
+	mOpt = Optimizer<Number>(mConstraints,mConstraintConstants);
 }
 
 template <typename Number, class Setting>
 PolytopeSupportFunction<Number,Setting>::PolytopeSupportFunction( const PolytopeSupportFunction<Number,Setting> &_origin )
-	: mConstraints( _origin.constraints() ), mConstraintConstants( _origin.constants()), mOpt(), mDimension(mConstraints.cols() ) {
-	mOpt[std::this_thread::get_id()] = Optimizer<Number>(mConstraints,mConstraintConstants);
+	: mConstraints( _origin.constraints() ), mConstraintConstants( _origin.constants()), mOpt(mConstraints,mConstraintConstants), mDimension(mConstraints.cols() ) {
+		TRACE("hypro.representations.supportFunction", "");
 }
 
 template <typename Number, class Setting>
 PolytopeSupportFunction<Number,Setting>::~PolytopeSupportFunction() {
+	TRACE("hypro.representations.supportFunction", "");
+	mOpt.cleanGLPInstance();
 }
 
 template <typename Number, class Setting>
 PolytopeSupportFunction<Number,Setting>& PolytopeSupportFunction<Number,Setting>::operator=(const PolytopeSupportFunction<Number,Setting>& _orig){
-	//std::cout << __func__ << std::endl;
+	TRACE("hypro.representations.supportFunction", "");
     this->mConstraints = _orig.mConstraints;
     this->mConstraintConstants = _orig.mConstraintConstants;
-    this->mOpt[std::this_thread::get_id()] = Optimizer<Number>(mConstraints,mConstraintConstants);
+    this->mOpt.cleanGLPInstance();
+    this->mOpt = Optimizer<Number>(mConstraints,mConstraintConstants);
     this->mDimension = _orig.mDimension;
 }
 
@@ -228,6 +233,7 @@ Point<Number> PolytopeSupportFunction<Number,Setting>::supremumPoint() const {
 
 template <typename Number, class Setting>
 EvaluationResult<Number> PolytopeSupportFunction<Number,Setting>::evaluate( const vector_t<Number> &l, bool useExact ) const {
+	TRACE("hypro.representations.supportFunction", "");
 	// catch half-space
 	if(mConstraints.rows() == 1) {
 		//std::cout << "only one constraint! -> we evaluate against a plane!" << std::endl;
@@ -252,7 +258,7 @@ EvaluationResult<Number> PolytopeSupportFunction<Number,Setting>::evaluate( cons
 		}
 	}
 
-	EvaluationResult<Number> res(mOpt.at(std::this_thread::get_id()).evaluate(l, useExact));
+	EvaluationResult<Number> res(mOpt.evaluate(l, useExact));
 	if(Setting::PPOLYTOPESUPPORTFUNCTION_VERBOSE){
 		std::cout << __func__ << ": " << *this << " evaluated in direction " << convert<Number,double>(l) << " results in " << res << std::endl;
 	}
@@ -294,12 +300,8 @@ std::vector<EvaluationResult<Number>> PolytopeSupportFunction<Number,Setting>::m
 		return res;
 	}
 
-	if(mOpt.find(std::this_thread::get_id()) == mOpt.end()) {
-		mOpt[std::this_thread::get_id()] = Optimizer<Number>(mConstraints,mConstraintConstants);
-	}
-
 	for ( unsigned index = 0; index < _A.rows(); ++index ) {
-		res.emplace_back(mOpt.at(std::this_thread::get_id()).evaluate( _A.row( index ), useExact ));
+		res.emplace_back(mOpt.evaluate( _A.row( index ), useExact ));
 	}
 	assert(res.size() == std::size_t(_A.rows()));
 	return res;
@@ -326,10 +328,14 @@ bool PolytopeSupportFunction<Number,Setting>::contains( const vector_t<Number> &
 
 template <typename Number, class Setting>
 bool PolytopeSupportFunction<Number,Setting>::empty() const {
-	if(mOpt.find(std::this_thread::get_id()) == mOpt.end()) {
-		mOpt[std::this_thread::get_id()] = Optimizer<Number>(mConstraints,mConstraintConstants);
-	}
-	return !mOpt.at(std::this_thread::get_id()).checkConsistency();
+	TRACE("hypro.representations.supportFunction", "");
+	return !mOpt.checkConsistency();
+}
+
+template <typename Number, class Setting>
+void PolytopeSupportFunction<Number,Setting>::cleanUp() {
+	TRACE("hypro.representations.supportFunction", "");
+	mOpt.cleanGLPInstance();
 }
 
 template <typename Number, class Setting>
@@ -351,10 +357,8 @@ std::string PolytopeSupportFunction<Number,Setting>::createCode(unsigned index) 
 
 template<typename Number, class Setting>
 void PolytopeSupportFunction<Number,Setting>::removeRedundancy() {
+	TRACE("hypro.representations.supportFunction", "");
 	if(mConstraints.rows() > 1){
-		if(mOpt.find(std::this_thread::get_id()) == mOpt.end()) {
-			mOpt[std::this_thread::get_id()] = Optimizer<Number>(mConstraints,mConstraintConstants);
-		}
 		std::vector<std::size_t> redundant = mOpt.redundantConstraints();
 		//std::cout << __func__ << ": found " << redundant.size() << " redundant constraints." << std::endl;
 
@@ -374,7 +378,8 @@ void PolytopeSupportFunction<Number,Setting>::removeRedundancy() {
 			assert(insertionIndex == -1);
 			mConstraints = newConstraints;
 			mConstraintConstants = newConstants;
-			mOpt[std::this_thread::get_id()] = Optimizer<Number>(mConstraints,mConstraintConstants);
+			mOpt.cleanGLPInstance();
+			mOpt = Optimizer<Number>(mConstraints,mConstraintConstants);
 		}
 		assert(redundant.empty());
 	}

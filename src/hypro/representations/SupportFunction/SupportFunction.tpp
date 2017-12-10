@@ -125,6 +125,11 @@ namespace hypro{
         return content->multiplicationsPerEvaluation();
     }
 
+	template<typename Number, typename Converter>
+    void SupportFunctionT<Number,Converter>::cleanUp() {
+    	content->cleanUp();
+    }
+
     template<typename Number, typename Converter>
     unsigned SupportFunctionT<Number,Converter>::operationCount() const {
         return content->operationCount();

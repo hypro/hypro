@@ -70,7 +70,7 @@ struct trafoContent {
 					//assert(origin->type() != SF_TYPE::LINTRAFO || (origin->linearTrafoParameters()->parameters == this->parameters && origin->linearTrafoParameters()->currentExponent >= currentExponent) );
 				}
 			} while (reduced == true);
-			assert(origin->checkTreeValidity());	
+			assert(origin->checkTreeValidity());
 		}
 	}
 
@@ -316,6 +316,8 @@ class SupportFunctionContent {
 	std::shared_ptr<SupportFunctionContent<Number>> scale( const Number& _factor = 1 ) const;
 
 	bool empty() const;
+
+	void cleanUp();
 
 	void print() const;
 	friend std::ostream& operator<<( std::ostream& lhs, const std::shared_ptr<SupportFunctionContent<Number>>& rhs ) {

@@ -39,7 +39,7 @@ class PolytopeSupportFunction {
 
 	matrix_t<Number> mConstraints;
 	vector_t<Number> mConstraintConstants;
-	mutable std::map<thread::id, Optimizer<Number>> mOpt;
+	Optimizer<Number> mOpt;
 	std::size_t mDimension;
 	std::map<vector_t<Number>, Number> mCache;
 
@@ -105,6 +105,8 @@ class PolytopeSupportFunction {
 	bool contains( const vector_t<Number>& _point ) const;
 
 	bool empty() const;
+
+	void cleanUp();
 
     void print() const;
 

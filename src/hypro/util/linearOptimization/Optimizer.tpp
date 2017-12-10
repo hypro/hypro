@@ -3,12 +3,24 @@
 namespace hypro {
 
 	template<typename Number>
+	void Optimizer<Number>::cleanGLPInstance() {
+		TRACE("hypro.optimizer", "Thread " << std::this_thread::get_id() << " attempts to erase its glp instance. (@" << this << ")");
+		TRACE("hypro.optimizer", "Thread " << std::this_thread::get_id() << " glp instances left: " << mGlpkContext.size());
+		auto ctxtIt = mGlpkContext.find(std::this_thread::get_id());
+		if( ctxtIt != mGlpkContext.end()) {
+			TRACE("hypro.optimizer", "Thread " << std::this_thread::get_id() << " erases its glp instance. (@" << this << ")");
+			ctxtIt->second.deleteLPInstance();
+			ctxtIt->second.mInitialized = false;
+			ctxtIt->second.mConstraintsSet = false;
+			mGlpkContext.erase(ctxtIt);
+		}
+	}
+
+	template<typename Number>
 	Optimizer<Number>& Optimizer<Number>::operator=(const Optimizer<Number>& orig) {
 		mConstraintMatrix = orig.matrix();
 		mConstraintVector = orig.vector();
 		mConsistencyChecked = false;
-		mConstraintsSet = false;
-		mInitialized = false;
 		return *this;
 	}
 
@@ -25,7 +37,9 @@ namespace hypro {
 	template<typename Number>
 	void Optimizer<Number>::setMatrix(const matrix_t<Number>& _matrix) {
 		if(mConstraintMatrix != _matrix){
-			mConstraintsSet = false;
+			for(auto& idContextPair : mGlpkContext) {
+				idContextPair.second.mConstraintsSet = false;
+			}
 			mConsistencyChecked = false;
 			mConstraintMatrix = _matrix;
 		}
@@ -34,7 +48,9 @@ namespace hypro {
 	template<typename Number>
 	void Optimizer<Number>::setVector(const vector_t<Number>& _vector) {
 		if(mConstraintVector != _vector){
-			mConstraintsSet = false;
+			for(auto& idContextPair : mGlpkContext) {
+				idContextPair.second.mConstraintsSet = false;
+			}
 			mConsistencyChecked = false;
 			mConstraintVector = _vector;
 		}
@@ -48,17 +64,16 @@ namespace hypro {
 		//if(lp != nullptr)
 		//	mSmtratSolver.clear();
 		//#endif
-		glp_delete_prob(lp);
-		deleteArrays();
+		while(!mGlpkContext.empty()) {
+			mGlpkContext.erase(mGlpkContext.begin());
+		}
 		mConsistencyChecked = false;
-		mConstraintsSet = false;
-		mInitialized = false;
 	}
 
 	template<typename Number>
 	EvaluationResult<Number> Optimizer<Number>::evaluate(const vector_t<Number>& _direction, bool useExactGlpk) const {
-		this->refresh();
-		if(!mConstraintsSet) {
+		if(!mGlpkContext[std::this_thread::get_id()].mConstraintsSet) {
+			TRACE("hypro.optimizer", "Requires update (!mConstraintsSet) (@" << this << ")." );
 			updateConstraints();
 		}
 		//TRACE("hypro.optimizer","Direction: " << _direction);
@@ -85,9 +100,9 @@ namespace hypro {
 
 		//COUNT("glpk");
 		#if defined(HYPRO_USE_SMTRAT) || defined(HYPRO_USE_Z3) || defined(HYPRO_USE_SOPLEX)
-		res = glpkOptimizeLinear(lp,_direction,mConstraintMatrix,mConstraintVector,useExactGlpk);
+		res = glpkOptimizeLinear(mGlpkContext[std::this_thread::get_id()].lp,_direction,mConstraintMatrix,mConstraintVector,useExactGlpk);
 		#else
-		return glpkOptimizeLinear(lp,_direction,mConstraintMatrix,mConstraintVector,useExactGlpk);
+		return glpkOptimizeLinear(mGlpkContext[std::this_thread::get_id()].lp,_direction,mConstraintMatrix,mConstraintVector,useExactGlpk);
 		#endif
 
 		#if defined(HYPRO_USE_SMTRAT) || defined(HYPRO_USE_Z3) || defined(HYPRO_USE_SOPLEX)
@@ -179,8 +194,7 @@ namespace hypro {
 
 	template<typename Number>
 	bool Optimizer<Number>::checkConsistency() const {
-		this->refresh();
-		if(!mConstraintsSet) {
+		if(!mGlpkContext[std::this_thread::get_id()].mConstraintsSet) {
 			updateConstraints();
 		}
 
@@ -204,9 +218,9 @@ namespace hypro {
 		#else // use glpk
 		if(!mConsistencyChecked){
 			//TRACE("hypro.optimizer","Use glpk for consistency check.");
-			glp_simplex( lp, NULL);
-			glp_exact( lp, NULL );
-			mLastConsistencyAnswer = glp_get_status(lp) == GLP_NOFEAS ? SOLUTION::INFEAS : SOLUTION::FEAS;
+			glp_simplex( mGlpkContext[std::this_thread::get_id()].lp, NULL);
+			glp_exact( mGlpkContext[std::this_thread::get_id()].lp, NULL );
+			mLastConsistencyAnswer = glp_get_status(mGlpkContext[std::this_thread::get_id()].lp) == GLP_NOFEAS ? SOLUTION::INFEAS : SOLUTION::FEAS;
 			mConsistencyChecked = true;
 		}
 		#endif
@@ -216,8 +230,7 @@ namespace hypro {
 
 	template<typename Number>
 	bool Optimizer<Number>::checkPoint(const Point<Number>& _point) const {
-		this->refresh();
-		if(!mConstraintsSet) {
+		if(!mGlpkContext[std::this_thread::get_id()].mConstraintsSet) {
 			updateConstraints();
 		}
 		if(mConstraintMatrix.rows() == 0) {
@@ -232,14 +245,13 @@ namespace hypro {
 		#elif defined(HYPRO_USE_SOPLEX)
 		return soplexCheckPoint(mConstraintMatrix, mConstraintVector, _point);
 		#else
-		return glpkCheckPoint(lp, mConstraintMatrix, mConstraintVector, _point);
+		return glpkCheckPoint(mGlpkContext[std::this_thread::get_id()].lp, mConstraintMatrix, mConstraintVector, _point);
 		#endif
 	}
 
 	template<typename Number>
 	EvaluationResult<Number> Optimizer<Number>::getInternalPoint() const {
-		this->refresh();
-		if(!mConstraintsSet) {
+		if(!mGlpkContext[std::this_thread::get_id()].mConstraintsSet) {
 			updateConstraints();
 		}
 
@@ -258,8 +270,8 @@ namespace hypro {
 		#else
 
 		// TODO: Avoid re-call here too!
-		glp_simplex( lp, NULL);
-		glp_exact( lp, NULL );
+		glp_simplex( mGlpkContext[std::this_thread::get_id()].lp, NULL);
+		glp_exact( mGlpkContext[std::this_thread::get_id()].lp, NULL );
 		//return (glp_get_status(lp) != GLP_NOFEAS);
 
 		//TODO: Undone!
@@ -269,9 +281,8 @@ namespace hypro {
 
 	template<typename Number>
 	std::vector<std::size_t> Optimizer<Number>::redundantConstraints() const {
-		this->refresh();
 		std::vector<std::size_t> res;
-		if(!mConstraintsSet) {
+		if(!mGlpkContext[std::this_thread::get_id()].mConstraintsSet) {
 			updateConstraints();
 		}
 		if(mConstraintMatrix.rows() <= 1) {
@@ -283,7 +294,7 @@ namespace hypro {
 		#elif defined(HYPRO_USE_SMTRAT) // else if HYPRO_USE_SMTRAT
 		res = smtratRedundantConstraints(mConstraintMatrix, mConstraintVector);
 		#else
-		res = glpkRedundantConstraints(lp, mConstraintMatrix, mConstraintVector);
+		res = glpkRedundantConstraints( mGlpkContext[std::this_thread::get_id()].lp, mConstraintMatrix, mConstraintVector);
 		#endif
 
 		std::sort(res.begin(), res.end());
@@ -292,54 +303,46 @@ namespace hypro {
 	}
 
 	template<typename Number>
-	void Optimizer<Number>::refresh() const {
-		if(std::this_thread::get_id() != creatingThreadId) {
-			//std::cout << "Refresh thread content from " << creatingThreadId << " to " << std::this_thread::get_id() << std::endl;
-			mInitialized = false;
-			mConstraintsSet = false;
-			updateConstraints();
-			assert(std::this_thread::get_id() == creatingThreadId);
-		}
-	}
-
-	template<typename Number>
 	void Optimizer<Number>::initialize() const {
 		glp_term_out( GLP_OFF );
-		if(!mInitialized) {
+		if(!mGlpkContext[std::this_thread::get_id()].mInitialized) {
 			/* create glpk problem */
-			lp = glp_create_prob();
-			creatingThreadId = std::this_thread::get_id();
-			glp_set_obj_dir( lp, GLP_MAX );
+			TRACE("hypro.optimizer", "Thread " << std::this_thread::get_id() << " creates its glp instance. (@" << this << ")");
+			assert(mGlpkContext[std::this_thread::get_id()].lp == nullptr);
+			mGlpkContext[std::this_thread::get_id()].lp = glp_create_prob();
+			glp_set_obj_dir( mGlpkContext[std::this_thread::get_id()].lp, GLP_MAX );
 			glp_term_out( GLP_OFF );
 			//#ifdef HYPRO_USE_SMTRAT
 			//#ifndef RECREATE_SOLVER
 			//mSmtratSolver.push();
 			//#endif
 			//#endif
-			mInitialized = true;
+			mGlpkContext[std::this_thread::get_id()].mInitialized = true;
 		}
 	}
 
 	template<typename Number>
 	void Optimizer<Number>::updateConstraints() const {
-		assert(!mConsistencyChecked || mConstraintsSet);
-		bool alreadyInitialized = mInitialized;
-		if(!mInitialized){
+		assert(!mConsistencyChecked || mGlpkContext[std::this_thread::get_id()].mConstraintsSet);
+		bool alreadyInitialized = mGlpkContext[std::this_thread::get_id()].mInitialized;
+		if(!mGlpkContext[std::this_thread::get_id()].mInitialized){
+			TRACE("hypro.optimizer", "Thread " << std::this_thread::get_id() << " requires initialization of glp instance. (@" << this << ")");
 			initialize();
 		}
 
-		if(!mConstraintsSet){
+		if(!mGlpkContext[std::this_thread::get_id()].mConstraintsSet){
 			//std::cout << "!mConstraintsSet" << std::endl;
 
 			if(alreadyInitialized) { // clean up old setup.
 				//std::cout << "alreadyInitialized - Cleanup" << std::endl;
 				deleteArrays();
 
-				glp_delete_prob(lp);
-				lp = glp_create_prob();
-				creatingThreadId = std::this_thread::get_id();
+				TRACE("hypro.optimizer", "Thread " << std::this_thread::get_id() << " refreshes its glp instance. (@" << this << ")");
 
-				glp_set_obj_dir( lp, GLP_MAX );
+				glp_delete_prob(mGlpkContext[std::this_thread::get_id()].lp);
+				mGlpkContext[std::this_thread::get_id()].lp = glp_create_prob();
+
+				glp_set_obj_dir( mGlpkContext[std::this_thread::get_id()].lp, GLP_MAX );
 				glp_term_out( GLP_OFF );
 
 				#ifdef HYPRO_USE_SMTRAT
@@ -365,37 +368,37 @@ namespace hypro {
 			int numberOfConstraints = int(mConstraintMatrix.rows());
 			if(numberOfConstraints > 0) {
 				// convert constraint constants
-				glp_add_rows( lp, numberOfConstraints );
+				glp_add_rows( mGlpkContext[std::this_thread::get_id()].lp, numberOfConstraints );
 				for ( int i = 0; i < numberOfConstraints; i++ ) {
-					glp_set_row_bnds( lp, i + 1, GLP_UP, 0.0, carl::toDouble( mConstraintVector(i) ) );
+					glp_set_row_bnds( mGlpkContext[std::this_thread::get_id()].lp, i + 1, GLP_UP, 0.0, carl::toDouble( mConstraintVector(i) ) );
 				}
 				// add cols here
 				int cols = int(mConstraintMatrix.cols());
-				glp_add_cols( lp, cols );
+				glp_add_cols( mGlpkContext[std::this_thread::get_id()].lp, cols );
 				createArrays( unsigned(numberOfConstraints * cols) );
 
 				// convert constraint matrix
-				ia[0] = 0;
-				ja[0] = 0;
-				ar[0] = 0;
+				mGlpkContext[std::this_thread::get_id()].ia[0] = 0;
+				mGlpkContext[std::this_thread::get_id()].ja[0] = 0;
+				mGlpkContext[std::this_thread::get_id()].ar[0] = 0;
 				assert(mConstraintMatrix.size() == numberOfConstraints * cols);
 				for ( int i = 0; i < numberOfConstraints * cols; ++i ) {
-					ia[i + 1] = ( int( i / cols ) ) + 1;
+					mGlpkContext[std::this_thread::get_id()].ia[i + 1] = ( int( i / cols ) ) + 1;
 					// std::cout << __func__ << " set ia[" << i+1 << "]= " << ia[i+1];
-					ja[i + 1] = ( int( i % cols ) ) + 1;
+					mGlpkContext[std::this_thread::get_id()].ja[i + 1] = ( int( i % cols ) ) + 1;
 					// std::cout << ", ja[" << i+1 << "]= " << ja[i+1];
-					ar[i + 1] = carl::toDouble( mConstraintMatrix.row(ia[i + 1] - 1)( ja[i + 1] - 1 ) );
+					mGlpkContext[std::this_thread::get_id()].ar[i + 1] = carl::toDouble( mConstraintMatrix.row(mGlpkContext[std::this_thread::get_id()].ia[i + 1] - 1)( mGlpkContext[std::this_thread::get_id()].ja[i + 1] - 1 ) );
 					// TODO:: Assuming ColMajor storage alignment.
 					//assert(*(mConstraintMatrix.data()+(ja[i+1]*numberOfConstraints) - ia[i+1]) ==  mConstraintMatrix.row(ia[i + 1] - 1)( ja[i + 1] - 1 ));
 					//std::cout << ", ar[" << i+1 << "]=" << ar[i+1] << std::endl;
 					//std::cout << "Came from: " << mConstraintMatrix.row(ia[i + 1] - 1)( ja[i + 1] - 1 ) << std::endl;
 				}
 
-				glp_load_matrix( lp, numberOfConstraints * cols, ia, ja, ar );
+				glp_load_matrix( mGlpkContext[std::this_thread::get_id()].lp, numberOfConstraints * cols, mGlpkContext[std::this_thread::get_id()].ia, mGlpkContext[std::this_thread::get_id()].ja, mGlpkContext[std::this_thread::get_id()].ar );
 				glp_term_out(GLP_OFF);
 				for ( int i = 0; i < cols; ++i ) {
-					glp_set_col_bnds( lp, i + 1, GLP_FR, 0.0, 0.0 );
-					glp_set_obj_coef( lp, i + 1, 1.0 ); // not needed?
+					glp_set_col_bnds( mGlpkContext[std::this_thread::get_id()].lp, i + 1, GLP_FR, 0.0, 0.0 );
+					glp_set_obj_coef( mGlpkContext[std::this_thread::get_id()].lp, i + 1, 1.0 ); // not needed?
 				}
 
 				#ifdef HYPRO_USE_SMTRAT
@@ -416,28 +419,28 @@ namespace hypro {
 				#endif
 			}
 
-			mConstraintsSet = true;
+			mGlpkContext[std::this_thread::get_id()].mConstraintsSet = true;
 		}
 	}
 
 	template <typename Number>
 	void Optimizer<Number>::createArrays( unsigned size ) const {
-		if(arraysCreated) {
+		if(mGlpkContext[std::this_thread::get_id()].arraysCreated) {
 			deleteArrays();
 		}
-		ia = new int[size + 1];
-		ja = new int[size + 1];
-		ar = new double[size + 1];
-		arraysCreated = true;
+		mGlpkContext[std::this_thread::get_id()].ia = new int[size + 1];
+		mGlpkContext[std::this_thread::get_id()].ja = new int[size + 1];
+		mGlpkContext[std::this_thread::get_id()].ar = new double[size + 1];
+		mGlpkContext[std::this_thread::get_id()].arraysCreated = true;
 	}
 
 	template <typename Number>
 	void Optimizer<Number>::deleteArrays() const {
-		if(arraysCreated) {
-			delete[] ia;
-			delete[] ja;
-			delete[] ar;
+		if(mGlpkContext[std::this_thread::get_id()].arraysCreated) {
+			delete[] mGlpkContext[std::this_thread::get_id()].ia;
+			delete[] mGlpkContext[std::this_thread::get_id()].ja;
+			delete[] mGlpkContext[std::this_thread::get_id()].ar;
 		}
-		arraysCreated = false;
+		mGlpkContext[std::this_thread::get_id()].arraysCreated = false;
 	}
 } // namespace hypro
