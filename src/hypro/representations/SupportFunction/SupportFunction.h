@@ -102,6 +102,12 @@ public:
      */
     unsigned multiplicationsPerEvaluation() const;
 
+    /**
+     * @brief      Cleans up optimizer context data when joining threads in a multithreaded environment.
+     * Used to avoid memory leaks when threads which created the support function are joined.
+     */
+    void cleanUp();
+
     friend std::ostream& operator<<( std::ostream& lhs, const SupportFunctionT<Number, Converter>& rhs ) {
 #ifdef HYPRO_LOGGING
     	lhs << rhs.content << std::endl;

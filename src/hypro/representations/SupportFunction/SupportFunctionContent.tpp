@@ -1789,6 +1789,80 @@ bool SupportFunctionContent<Number>::empty() const {
 }
 
 template <typename Number>
+void SupportFunctionContent<Number>::cleanUp() {
+	using Node = std::shared_ptr<SupportFunctionContent<Number>>;
+	std::vector<Node> callStack;
+
+	callStack.push_back(getThis());
+
+	while(!callStack.empty()) {
+		Node cur = callStack.back();
+		callStack.pop_back();
+
+		if(cur->originCount() == 0) {
+			switch(cur->type()) {
+				case SF_TYPE::POLY: {
+					polytope()->cleanUp();
+					break;
+				}
+				case SF_TYPE::INFTY_BALL:
+				case SF_TYPE::TWO_BALL:
+				case SF_TYPE::ELLIPSOID: {
+		            break;
+		        }
+		        default:
+		        	assert(false);
+			}
+
+		} else {
+			// this is the branch for calling recursively
+			switch ( cur->type() ) {
+		        case SF_TYPE::SUM: {
+					callStack.push_back(cur->summands()->rhs);
+					callStack.push_back(cur->summands()->lhs);
+					break;
+				}
+				case SF_TYPE::INTERSECT: {
+					callStack.push_back(cur->intersectionParameters()->rhs);
+					callStack.push_back(cur->intersectionParameters()->lhs);
+					break;
+				}
+				case SF_TYPE::LINTRAFO: {
+					callStack.push_back(cur->linearTrafoParameters()->origin);
+					break;
+				}
+				case SF_TYPE::SCALE: {
+					callStack.push_back(cur->scaleParameters()->origin);
+					break;
+				}
+				case SF_TYPE::UNITE: {
+					for(unsigned i = 0; i < cur->unionParameters()->items.size(); ++i){
+						callStack.push_back(cur->unionParameters()->items.at(i));
+					}
+					break;
+				}
+				case SF_TYPE::POLY:
+				case SF_TYPE::INFTY_BALL:
+				case SF_TYPE::TWO_BALL:
+				case SF_TYPE::ELLIPSOID:
+				case SF_TYPE::BOX:
+				case SF_TYPE::ZONOTOPE: {
+					assert(false);
+					break;
+				}
+				case SF_TYPE::PROJECTION: {
+					callStack.push_back(cur->projectionParameters()->origin);
+					break;
+				}
+				case SF_TYPE::NONE:
+				default:
+					assert(false);
+		    }
+		}
+	}
+}
+
+template <typename Number>
 void SupportFunctionContent<Number>::print() const {
 	switch ( mType ) {
 		case SF_TYPE::ELLIPSOID: {

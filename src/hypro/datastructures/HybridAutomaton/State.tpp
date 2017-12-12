@@ -76,14 +76,15 @@ std::pair<CONTAINMENT,State<Number,tNumber,Representation,Rargs...>> State<Numbe
 	//DEBUG("hypro.datastructures","this rep name: " << mSetRepresentationName << " vs " << in.getSetRepresentation());
 	//assert(mSetRepresentationName == in.getSetRepresentation());
 
-	DEBUG("hypro.datastructures","This size: " << mSets.size() << ", condition size: " << in.size());
-	TRACE("hypro.datastructures","Condition matrix: " << std::endl << in.getMatrix() << std::endl << "Vector: " << std::endl << in.getVector());
-	assert(in.size() == mSets.size());
 	assert(checkConsistency());
 
 	if(in.constraints().empty()) {
 		return std::make_pair(CONTAINMENT::FULL,*this);
 	}
+
+	DEBUG("hypro.datastructures","This size: " << mSets.size() << ", condition size: " << in.size());
+	TRACE("hypro.datastructures","Condition matrix: " << std::endl << in.getMatrix() << std::endl << "Vector: " << std::endl << in.getVector());
+	assert(in.size() == mSets.size());
 
 	State<Number,tNumber,Representation,Rargs...> res(*this);
 
@@ -118,12 +119,12 @@ std::pair<CONTAINMENT,State<Number,tNumber,Representation,Rargs...>> State<Numbe
 template<typename Number, typename tNumber, typename Representation, typename ...Rargs>
 std::pair<CONTAINMENT,State<Number,tNumber,Representation,Rargs...>> State<Number,tNumber,Representation,Rargs...>::partiallySatisfies(const Condition<Number>& in, std::size_t I) const {
 	TRACE("hypro.datastructures","Check Condition of size " << in.size() << " against set at pos " << I);
-	assert(in.size() == mSets.size());
 	assert(checkConsistency());
 
-	if(in.constraints().empty()) {
+	if(in.size() == 0 || in.constraints().empty()) {
 		return std::make_pair(CONTAINMENT::FULL,*this);
 	}
+	assert(in.size() == mSets.size());
 
 	State<Number,tNumber,Representation,Rargs...> res(*this);
 	assert(res.getTimestamp() == this->getTimestamp());
