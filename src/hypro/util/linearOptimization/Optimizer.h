@@ -94,7 +94,8 @@ namespace hypro {
 		Optimizer() :
 			mConstraintMatrix(),
 			mConstraintVector(),
-			mConsistencyChecked(false)
+			mConsistencyChecked(false),
+			mGlpkContext()
 		{
 			#ifdef VERIFY_RESULT
 			struct stat buffer;
@@ -128,7 +129,8 @@ namespace hypro {
 		Optimizer(const matrix_t<Number>& constraints, const vector_t<Number>& constants) :
 			mConstraintMatrix(constraints),
 			mConstraintVector(constants),
-			mConsistencyChecked(false)
+			mConsistencyChecked(false),
+			mGlpkContext()
 		{	}
 
 		/**

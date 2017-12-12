@@ -5,9 +5,9 @@ namespace hypro {
 	template<typename Number>
 	void Optimizer<Number>::cleanGLPInstance() {
 		TRACE("hypro.optimizer", "Thread " << std::this_thread::get_id() << " attempts to erase its glp instance. (@" << this << ")");
-		TRACE("hypro.optimizer", "Thread " << std::this_thread::get_id() << " glp instances left: " << mGlpkContext.size());
 		auto ctxtIt = mGlpkContext.find(std::this_thread::get_id());
 		if( ctxtIt != mGlpkContext.end()) {
+			TRACE("hypro.optimizer", "Thread " << std::this_thread::get_id() << " glp instances left (before erase): " << mGlpkContext.size());
 			TRACE("hypro.optimizer", "Thread " << std::this_thread::get_id() << " erases its glp instance. (@" << this << ")");
 			ctxtIt->second.deleteLPInstance();
 			ctxtIt->second.mInitialized = false;
@@ -21,6 +21,8 @@ namespace hypro {
 		mConstraintMatrix = orig.matrix();
 		mConstraintVector = orig.vector();
 		mConsistencyChecked = false;
+		cleanGLPInstance();
+		mGlpkContext = std::map<std::thread::id, glpk_context>();
 		return *this;
 	}
 
@@ -64,6 +66,7 @@ namespace hypro {
 		//if(lp != nullptr)
 		//	mSmtratSolver.clear();
 		//#endif
+		assert(false);
 		while(!mGlpkContext.empty()) {
 			mGlpkContext.erase(mGlpkContext.begin());
 		}
@@ -72,7 +75,7 @@ namespace hypro {
 
 	template<typename Number>
 	EvaluationResult<Number> Optimizer<Number>::evaluate(const vector_t<Number>& _direction, bool useExactGlpk) const {
-		if(!mGlpkContext[std::this_thread::get_id()].mConstraintsSet) {
+		if(mGlpkContext.find(std::this_thread::get_id()) == mGlpkContext.end() || !mGlpkContext[std::this_thread::get_id()].mConstraintsSet) {
 			TRACE("hypro.optimizer", "Requires update (!mConstraintsSet) (@" << this << ")." );
 			updateConstraints();
 		}
@@ -194,7 +197,7 @@ namespace hypro {
 
 	template<typename Number>
 	bool Optimizer<Number>::checkConsistency() const {
-		if(!mGlpkContext[std::this_thread::get_id()].mConstraintsSet) {
+		if(mGlpkContext.find(std::this_thread::get_id()) == mGlpkContext.end() || !mGlpkContext[std::this_thread::get_id()].mConstraintsSet) {
 			updateConstraints();
 		}
 
@@ -230,7 +233,7 @@ namespace hypro {
 
 	template<typename Number>
 	bool Optimizer<Number>::checkPoint(const Point<Number>& _point) const {
-		if(!mGlpkContext[std::this_thread::get_id()].mConstraintsSet) {
+		if(mGlpkContext.find(std::this_thread::get_id()) == mGlpkContext.end() || !mGlpkContext[std::this_thread::get_id()].mConstraintsSet) {
 			updateConstraints();
 		}
 		if(mConstraintMatrix.rows() == 0) {
@@ -251,7 +254,7 @@ namespace hypro {
 
 	template<typename Number>
 	EvaluationResult<Number> Optimizer<Number>::getInternalPoint() const {
-		if(!mGlpkContext[std::this_thread::get_id()].mConstraintsSet) {
+		if(mGlpkContext.find(std::this_thread::get_id()) == mGlpkContext.end() || !mGlpkContext[std::this_thread::get_id()].mConstraintsSet) {
 			updateConstraints();
 		}
 
@@ -282,7 +285,7 @@ namespace hypro {
 	template<typename Number>
 	std::vector<std::size_t> Optimizer<Number>::redundantConstraints() const {
 		std::vector<std::size_t> res;
-		if(!mGlpkContext[std::this_thread::get_id()].mConstraintsSet) {
+		if(mGlpkContext.find(std::this_thread::get_id()) == mGlpkContext.end() || !mGlpkContext[std::this_thread::get_id()].mConstraintsSet) {
 			updateConstraints();
 		}
 		if(mConstraintMatrix.rows() <= 1) {
@@ -305,6 +308,10 @@ namespace hypro {
 	template<typename Number>
 	void Optimizer<Number>::initialize() const {
 		glp_term_out( GLP_OFF );
+		if(mGlpkContext.find(std::this_thread::get_id()) == mGlpkContext.end()){
+			mGlpkContext[std::this_thread::get_id()] = glpk_context();
+		}
+
 		if(!mGlpkContext[std::this_thread::get_id()].mInitialized) {
 			/* create glpk problem */
 			TRACE("hypro.optimizer", "Thread " << std::this_thread::get_id() << " creates its glp instance. (@" << this << ")");
@@ -324,8 +331,8 @@ namespace hypro {
 	template<typename Number>
 	void Optimizer<Number>::updateConstraints() const {
 		assert(!mConsistencyChecked || mGlpkContext[std::this_thread::get_id()].mConstraintsSet);
-		bool alreadyInitialized = mGlpkContext[std::this_thread::get_id()].mInitialized;
-		if(!mGlpkContext[std::this_thread::get_id()].mInitialized){
+		bool alreadyInitialized = mGlpkContext.find(std::this_thread::get_id()) != mGlpkContext.end() && mGlpkContext[std::this_thread::get_id()].mInitialized;
+		if(!alreadyInitialized){
 			TRACE("hypro.optimizer", "Thread " << std::this_thread::get_id() << " requires initialization of glp instance. (@" << this << ")");
 			initialize();
 		}
