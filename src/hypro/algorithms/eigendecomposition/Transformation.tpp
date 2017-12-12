@@ -25,7 +25,7 @@ Transformation<Number>::Transformation (const HybridAutomaton<Number>& _hybrid) 
         matrix_in_parser = LocPtr->getFlow();   //copy for calculation; TODO (getsize() missing) many flows
         m_size = matrix_in_parser.cols(); //rows
         assert(m_size>=1);  //exit if location size < 1  ==>> underflow error
-        m_size -= 1;
+        m_size -= 1;        //Due to parsing: for representation zero row is added for constant coefficients we do not need
         STallValues<Number> mSTallvalues;
         mSTallvalues.mSTindependentFunct.expFunctionType.resize(m_size);
         for (i=0; i<m_size; ++i) {
@@ -163,12 +163,12 @@ Transformation<Number>::Transformation (const HybridAutomaton<Number>& _hybrid) 
         NewTargetLocPtr->addTransition(NewTransPtr);
     }
     mTransformedHA.setTransitions    (transitions);
-//INITIAL STATES (transformed later)
+//INITIAL STATES (transformed into Eigenspace later on reachability analysis)
     locationStateMap initialStates;
     for(typename locationStateMap::const_iterator it=_hybrid.getInitialStates().begin(); 
       it!=_hybrid.getInitialStates().end(); ++it) {
         Location<Number>* NewLocPtr = mLocationPtrsMap[it->first];
-        State<Number,ConstraintSet<Number>> state1NEW = State<Number,ConstraintSet<Number>>(it->second);
+        State_t<Number> state1NEW = State_t<Number>(it->second);
         state1NEW.setTimestamp(carl::Interval<Number>(0) );
         state1NEW.setLocation(NewLocPtr);
         mTransformedHA.addInitialState(state1NEW);
@@ -272,7 +272,7 @@ size_t Transformation<Number>::countLinearAndRemember(const Matrix<Number>& A_in
     bool linear;
     for(nrow=0; nrow<dimension; ++nrow) {
         linear = true;
-        //if(A_in.row(nrow).array() == 0) //TODO ISSUE FIXING?
+        //if(A_in.row(nrow).array() == 0) //eigen does not accept this statement
         for(ncol=0; ncol<dimension; ++ncol) {
             if(A_in(nrow,ncol) != 0) {
                 linear = false;
@@ -288,7 +288,7 @@ size_t Transformation<Number>::countLinearAndRemember(const Matrix<Number>& A_in
     }
     return count_linearVariables;
 }
-//having linear terms, we grep nonlinear terms to calculate with
+//having linear terms, we grep nonlinear terms to apply EVD on
 template <typename Number>
 void Transformation<Number>::insertNonLinearAndClassify(const Matrix<Number>& A_in, const Vector<Number>& b_in, 
         const size_t dimension, Matrix<Number>& A_nonlinear, Vector<Number>& b_nonlinear, STallValues<Number>& mSTallvalues) {
@@ -451,7 +451,8 @@ void Transformation<Number>::analyzeExponentialTerms(const size_t dimension, STa
 }
 template <typename Number>
 void Transformation<Number>::output_HybridAutomaton() {
-    std::cout << mTransformedHA << "\n-------------- ENDOFAUTOMATA ------------------" << std::endl;
+    std::cout << "\n-------------- STARTOF transformed AUTOMATA ------------------" << std::endl;
+    std::cout << mTransformedHA << "\n-------------- ENDOF transformed AUTOMATA ------------------" << std::endl;
 }
 
 } //namespace hypro
