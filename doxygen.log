@@ -391,8 +391,8 @@ Searching for files in directory /home/travis/build/hypro/home/travis/build/hypr
 /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.h:24: warning: include file thread not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/statistics/statistics.h:4: warning: include file carl/util/Singleton.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/logging/Logger.h:4: warning: include file iostream not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.h:241: warning: include file gmp.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.h:242: warning: include file gmpxx.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.h:247: warning: include file gmp.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.h:248: warning: include file gmpxx.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/logging/Logger.h:4: warning: include file iostream not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/representations/Box/Box.h:19: warning: include file carl/interval/Interval.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/representations/Box/Box.h:20: warning: include file cassert not found, perhaps you forgot to add its directory to INCLUDE_PATH?
@@ -532,8 +532,8 @@ Searching for files in directory /home/travis/build/hypro/home/travis/build/hypr
 /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.h:24: warning: include file thread not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/statistics/statistics.h:4: warning: include file carl/util/Singleton.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/logging/Logger.h:4: warning: include file iostream not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.h:241: warning: include file gmp.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.h:242: warning: include file gmpxx.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.h:247: warning: include file gmp.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.h:248: warning: include file gmpxx.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/representations/Ellipsoids/Ellipsoid.h:8: warning: include file map not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/representations/Ellipsoids/Ellipsoid.h:9: warning: include file cassert not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/types.h:3: warning: include file iostream not found, perhaps you forgot to add its directory to INCLUDE_PATH?
@@ -980,8 +980,8 @@ Searching for files in directory /home/travis/build/hypro/home/travis/build/hypr
 /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.h:24: warning: include file thread not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/statistics/statistics.h:4: warning: include file carl/util/Singleton.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/logging/Logger.h:4: warning: include file iostream not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.h:241: warning: include file gmp.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.h:242: warning: include file gmpxx.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.h:247: warning: include file gmp.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.h:248: warning: include file gmpxx.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/logging/Logger.h:4: warning: include file iostream not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/representations/Box/Box.h:19: warning: include file carl/interval/Interval.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/representations/Box/Box.h:20: warning: include file cassert not found, perhaps you forgot to add its directory to INCLUDE_PATH?
@@ -1639,8 +1639,8 @@ Searching for files in directory /home/travis/build/hypro/home/travis/build/hypr
 /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.h:24: warning: include file thread not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/statistics/statistics.h:4: warning: include file carl/util/Singleton.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/logging/Logger.h:4: warning: include file iostream not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.h:241: warning: include file gmp.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.h:242: warning: include file gmpxx.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.h:247: warning: include file gmp.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.h:248: warning: include file gmpxx.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/types.h:3: warning: include file iostream not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/types.h:5: warning: include file carl/numbers/numbers.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/types.h:6: warning: include file carl/interval/Interval.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
@@ -2573,8 +2573,8 @@ Searching for files in directory /home/travis/build/hypro/home/travis/build/hypr
 /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.h:24: warning: include file thread not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/statistics/statistics.h:4: warning: include file carl/util/Singleton.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/logging/Logger.h:4: warning: include file iostream not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.h:241: warning: include file gmp.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.h:242: warning: include file gmpxx.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.h:247: warning: include file gmp.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.h:248: warning: include file gmpxx.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/types.h:3: warning: include file iostream not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/types.h:5: warning: include file carl/numbers/numbers.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/types.h:6: warning: include file carl/interval/Interval.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
@@ -3391,8 +3391,8 @@ Searching for files in directory /home/travis/build/hypro/home/travis/build/hypr
 /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.h:24: warning: include file thread not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/statistics/statistics.h:4: warning: include file carl/util/Singleton.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/logging/Logger.h:4: warning: include file iostream not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.h:241: warning: include file gmp.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.h:242: warning: include file gmpxx.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.h:247: warning: include file gmp.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.h:248: warning: include file gmpxx.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/logging/Logger.h:4: warning: include file iostream not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/types.h:3: warning: include file iostream not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/types.h:5: warning: include file carl/numbers/numbers.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
@@ -5202,7 +5202,7 @@ Possible candidates:
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Point.h:642: warning: member operator* belongs to two different groups. The second one found here will be ignored.
 /home/travis/build/hypro/hypro/src/hypro/types.h:30: warning: documented symbol `typedef hypro::reachability::hypro::std::set< vector_t< Number >> vectorSet' was not declared or defined.
 /home/travis/build/hypro/hypro/src/hypro/types.h:30: warning: documented symbol `typedef hypro::reachability::hypro::std::set< vector_t< Number >> vectorSet' was not declared or defined.
-/home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/PolytopeSupportFunction.tpp:102: warning: no uniquely matching class member found for 
+/home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/PolytopeSupportFunction.tpp:107: warning: no uniquely matching class member found for 
   template < Number, Setting >
   PolytopeSupportFunction< Number, Setting > & hypro::reachability::hypro::PolytopeSupportFunction< Number, Setting >::operator=(const hypro::reachability::hypro::PolytopeSupportFunction< double, Setting > &_orig)
 Possible candidates:
@@ -5395,7 +5395,7 @@ Adding source references...
 Adding xrefitems...
 Sorting member lists...
 Computing dependencies between directories...
-Generatingerror opening bib20719.bbl: No such file or directory
+Generatingerror opening bib20739.bbl: No such file or directory
 bibtex command failed: No such file or directory
  citations page...
 Counting data structures...
@@ -6247,6 +6247,7 @@ Generating docs for compound hypro::typeName...
 Generating docs for compound hypro::typeName< double >...
 Generating docs for compound hypro::typeName< mpq_class >...
 Generating docs for compound hypro::EvaluationResult...
+Generating docs for compound hypro::glpk_context...
 Generating docs for compound hypro::Optimizer...
 Generating docs for compound hypro::PrincipalComponentAnalysis...
 Generating docs for compound hypro::Permutator...
@@ -6311,6 +6312,7 @@ Generating docs for compound hypro::reachability::hypro::GeometricObject...
 Generating docs for compound hypro::reachability::hypro::VariablePool...
 Generating docs for compound hypro::reachability::hypro::Permutator...
 Generating docs for compound hypro::reachability::hypro::EvaluationResult...
+Generating docs for compound hypro::reachability::hypro::glpk_context...
 Generating docs for compound hypro::reachability::hypro::Optimizer...
 Generating docs for compound hypro::reachability::hypro::BoxLinearOptimizationOn...
 Generating docs for compound hypro::reachability::hypro::BoxLinearOptimizationOff...
@@ -6421,13 +6423,13 @@ Generating dependency graph for directory /home/travis/build/hypro/hypro/src/hyp
 Generating dependency graph for directory /home/travis/build/hypro/hypro/src/hypro/representations/Polytope
 Generating dependency graph for directory /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes
 Generating dependency graph for directory /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability
-Generating dependency graph for directory /home/travis/build/hypro/hypro/src/hypro/representations/OrthogonalPolyhedron/representations
-Generating dependency graph for directory /home/travis/build/hypro/hypro/src/hypro/representations
-Generash: 1: latex: not found
+Generating dependency graph for directory /home/travis/build/hypro/hypro/src/hypro/representations/OrthogonalPolyhedsh: 1: latex: not found
 error: Problems running latex. Check your installation or look for typos in _formulas.tex and check _formulas.log!
 sh: 1: dvips: not found
 error: Problems running dvips. Check your installation!
-ting dependency graph for directory /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/smtrat
+ron/representations
+Generating dependency graph for directory /home/travis/build/hypro/hypro/src/hypro/representations
+Generating dependency graph for directory /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/smtrat
 Generating dependency graph for directory /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/soplex
 Generating dependency graph for directory /home/travis/build/hypro/hypro/src
 Generating dependency graph for directory /home/travis/build/hypro/hypro/src/hypro/util/statistics
@@ -6456,254 +6458,256 @@ Generating example index...
 finalizing index lists...
 Running dot...
 Generating dot graphs using 3 parallel threads...
-Running dot for graph 1/248
-Running dot for graph 2/248
-Running dot for graph 3/248
-Running dot for graph 4/248
-Running dot for graph 5/248
-Running dot for graph 6/248
-Running dot for graph 7/248
-Running dot for graph 8/248
-Running dot for graph 9/248
-Running dot for graph 10/248
-Running dot for graph 11/248
-Running dot for graph 12/248
-Running dot for graph 13/248
-Running dot for graph 14/248
-Running dot for graph 15/248
-Running dot for graph 16/248
-Running dot for graph 17/248
-Running dot for graph 18/248
-Running dot for graph 19/248
-Running dot for graph 20/248
-Running dot for graph 21/248
-Running dot for graph 22/248
-Running dot for graph 23/248
-Running dot for graph 24/248
-Running dot for graph 25/248
-Running dot for graph 26/248
-Running dot for graph 27/248
-Running dot for graph 28/248
-Running dot for graph 29/248
-Running dot for graph 30/248
-Running dot for graph 31/248
-Running dot for graph 32/248
-Running dot for graph 33/248
-Running dot for graph 34/248
-Running dot for graph 35/248
-Running dot for graph 36/248
-Running dot for graph 37/248
-Running dot for graph 38/248
-Running dot for graph 39/248
-Running dot for graph 40/248
-Running dot for graph 41/248
-Running dot for graph 42/248
-Running dot for graph 43/248
-Running dot for graph 44/248
-Running dot for graph 45/248
-Running dot for graph 46/248
-Running dot for graph 47/248
-Running dot for graph 48/248
-Running dot for graph 49/248
-Running dot for graph 50/248
-Running dot for graph 51/248
-Running dot for graph 52/248
-Running dot for graph 53/248
-Running dot for graph 54/248
-Running dot for graph 55/248
-Running dot for graph 56/248
-Running dot for graph 57/248
-Running dot for graph 58/248
-Running dot for graph 59/248
-Running dot for graph 60/248
-Running dot for graph 61/248
-Running dot for graph 62/248
-Running dot for graph 63/248
-Running dot for graph 64/248
-Running dot for graph 65/248
-Running dot for graph 66/248
-Running dot for graph 67/248
-Running dot for graph 68/248
-Running dot for graph 69/248
-Running dot for graph 70/248
-Running dot for graph 71/248
-Running dot for graph 72/248
-Running dot for graph 73/248
-Running dot for graph 74/248
-Running dot for graph 75/248
-Running dot for graph 76/248
-Running dot for graph 77/248
-Running dot for graph 78/248
-Running dot for graph 79/248
-Running dot for graph 80/248
-Running dot for graph 81/248
-Running dot for graph 82/248
-Running dot for graph 83/248
-Running dot for graph 84/248
-Running dot for graph 85/248
-Running dot for graph 86/248
-Running dot for graph 87/248
-Running dot for graph 88/248
-Running dot for graph 89/248
-Running dot for graph 90/248
-Running dot for graph 91/248
-Running dot for graph 92/248
-Running dot for graph 93/248
-Running dot for graph 94/248
-Running dot for graph 95/248
-Running dot for graph 96/248
-Running dot for graph 97/248
-Running dot for graph 98/248
-Running dot for graph 99/248
-Running dot for graph 100/248
-Running dot for graph 101/248
-Running dot for graph 102/248
-Running dot for graph 103/248
-Running dot for graph 104/248
-Running dot for graph 105/248
-Running dot for graph 106/248
-Running dot for graph 107/248
-Running dot for graph 108/248
-Running dot for graph 109/248
-Running dot for graph 110/248
-Running dot for graph 111/248
-Running dot for graph 112/248
-Running dot for graph 113/248
-Running dot for graph 114/248
-Running dot for graph 115/248
-Running dot for graph 116/248
-Running dot for graph 117/248
-Running dot for graph 118/248
-Running dot for graph 119/248
-Running dot for graph 120/248
-Running dot for graph 121/248
-Running dot for graph 122/248
-Running dot for graph 123/248
-Running dot for graph 124/248
-Running dot for graph 125/248
-Running dot for graph 126/248
-Running dot for graph 127/248
-Running dot for graph 128/248
-Running dot for graph 129/248
-Running dot for graph 130/248
-Running dot for graph 131/248
-Running dot for graph 132/248
-Running dot for graph 133/248
-Running dot for graph 134/248
-Running dot for graph 135/248
-Running dot for graph 136/248
-Running dot for graph 137/248
-Running dot for graph 138/248
-Running dot for graph 139/248
-Running dot for graph 140/248
-Running dot for graph 141/248
-Running dot for graph 142/248
-Running dot for graph 143/248
-Running dot for graph 144/248
-Running dot for graph 145/248
-Running dot for graph 146/248
-Running dot for graph 147/248
-Running dot for graph 148/248
-Running dot for graph 149/248
-Running dot for graph 150/248
-Running dot for graph 151/248
-Running dot for graph 152/248
-Running dot for graph 153/248
-Running dot for graph 154/248
-Running dot for graph 155/248
-Running dot for graph 156/248
-Running dot for graph 157/248
-Running dot for graph 158/248
-Running dot for graph 159/248
-Running dot for graph 160/248
-Running dot for graph 161/248
-Running dot for graph 162/248
-Running dot for graph 163/248
-Running dot for graph 164/248
-Running dot for graph 165/248
-Running dot for graph 166/248
-Running dot for graph 167/248
-Running dot for graph 168/248
-Running dot for graph 169/248
-Running dot for graph 170/248
-Running dot for graph 171/248
-Running dot for graph 172/248
-Running dot for graph 173/248
-Running dot for graph 174/248
-Running dot for graph 175/248
-Running dot for graph 176/248
-Running dot for graph 177/248
-Running dot for graph 178/248
-Running dot for graph 179/248
-Running dot for graph 180/248
-Running dot for graph 181/248
-Running dot for graph 182/248
-Running dot for graph 183/248
-Running dot for graph 184/248
-Running dot for graph 185/248
-Running dot for graph 186/248
-Running dot for graph 187/248
-Running dot for graph 188/248
-Running dot for graph 189/248
-Running dot for graph 190/248
-Running dot for graph 191/248
-Running dot for graph 192/248
-Running dot for graph 193/248
-Running dot for graph 194/248
-Running dot for graph 195/248
-Running dot for graph 196/248
-Running dot for graph 197/248
-Running dot for graph 198/248
-Running dot for graph 199/248
-Running dot for graph 200/248
-Running dot for graph 201/248
-Running dot for graph 202/248
-Running dot for graph 203/248
-Running dot for graph 204/248
-Running dot for graph 205/248
-Running dot for graph 206/248
-Running dot for graph 207/248
-Running dot for graph 208/248
-Running dot for graph 209/248
-Running dot for graph 210/248
-Running dot for graph 211/248
-Running dot for graph 212/248
-Running dot for graph 213/248
-Running dot for graph 214/248
-Running dot for graph 215/248
-Running dot for graph 216/248
-Running dot for graph 217/248
-Running dot for graph 218/248
-Running dot for graph 219/248
-Running dot for graph 220/248
-Running dot for graph 221/248
-Running dot for graph 222/248
-Running dot for graph 223/248
-Running dot for graph 224/248
-Running dot for graph 225/248
-Running dot for graph 226/248
-Running dot for graph 227/248
-Running dot for graph 228/248
-Running dot for graph 229/248
-Running dot for graph 230/248
-Running dot for graph 231/248
-Running dot for graph 232/248
-Running dot for graph 233/248
-Running dot for graph 234/248
-Running dot for graph 235/248
-Running dot for graph 236/248
-Running dot for graph 237/248
-Running dot for graph 238/248
-Running dot for graph 239/248
-Running dot for graph 240/248
-Running dot for graph 241/248
-Running dot for graph 242/248
-Running dot for graph 243/248
-Running dot for graph 244/248
-Running dot for graph 245/248
-Running dot for graph 246/248
-Running dot for graph 247/248
-Running dot for graph 248/248
+Running dot for graph 1/250
+Running dot for graph 2/250
+Running dot for graph 3/250
+Running dot for graph 4/250
+Running dot for graph 5/250
+Running dot for graph 6/250
+Running dot for graph 7/250
+Running dot for graph 8/250
+Running dot for graph 9/250
+Running dot for graph 10/250
+Running dot for graph 11/250
+Running dot for graph 12/250
+Running dot for graph 13/250
+Running dot for graph 14/250
+Running dot for graph 15/250
+Running dot for graph 16/250
+Running dot for graph 17/250
+Running dot for graph 18/250
+Running dot for graph 19/250
+Running dot for graph 20/250
+Running dot for graph 21/250
+Running dot for graph 22/250
+Running dot for graph 23/250
+Running dot for graph 24/250
+Running dot for graph 25/250
+Running dot for graph 26/250
+Running dot for graph 27/250
+Running dot for graph 28/250
+Running dot for graph 29/250
+Running dot for graph 30/250
+Running dot for graph 31/250
+Running dot for graph 32/250
+Running dot for graph 33/250
+Running dot for graph 34/250
+Running dot for graph 35/250
+Running dot for graph 36/250
+Running dot for graph 37/250
+Running dot for graph 38/250
+Running dot for graph 39/250
+Running dot for graph 40/250
+Running dot for graph 41/250
+Running dot for graph 42/250
+Running dot for graph 43/250
+Running dot for graph 44/250
+Running dot for graph 45/250
+Running dot for graph 46/250
+Running dot for graph 47/250
+Running dot for graph 48/250
+Running dot for graph 49/250
+Running dot for graph 50/250
+Running dot for graph 51/250
+Running dot for graph 52/250
+Running dot for graph 53/250
+Running dot for graph 54/250
+Running dot for graph 55/250
+Running dot for graph 56/250
+Running dot for graph 57/250
+Running dot for graph 58/250
+Running dot for graph 59/250
+Running dot for graph 60/250
+Running dot for graph 61/250
+Running dot for graph 62/250
+Running dot for graph 63/250
+Running dot for graph 64/250
+Running dot for graph 65/250
+Running dot for graph 66/250
+Running dot for graph 67/250
+Running dot for graph 68/250
+Running dot for graph 69/250
+Running dot for graph 70/250
+Running dot for graph 71/250
+Running dot for graph 72/250
+Running dot for graph 73/250
+Running dot for graph 74/250
+Running dot for graph 75/250
+Running dot for graph 76/250
+Running dot for graph 77/250
+Running dot for graph 78/250
+Running dot for graph 79/250
+Running dot for graph 80/250
+Running dot for graph 81/250
+Running dot for graph 82/250
+Running dot for graph 83/250
+Running dot for graph 84/250
+Running dot for graph 85/250
+Running dot for graph 86/250
+Running dot for graph 87/250
+Running dot for graph 88/250
+Running dot for graph 89/250
+Running dot for graph 90/250
+Running dot for graph 91/250
+Running dot for graph 92/250
+Running dot for graph 93/250
+Running dot for graph 94/250
+Running dot for graph 95/250
+Running dot for graph 96/250
+Running dot for graph 97/250
+Running dot for graph 98/250
+Running dot for graph 99/250
+Running dot for graph 100/250
+Running dot for graph 101/250
+Running dot for graph 102/250
+Running dot for graph 103/250
+Running dot for graph 104/250
+Running dot for graph 105/250
+Running dot for graph 106/250
+Running dot for graph 107/250
+Running dot for graph 108/250
+Running dot for graph 109/250
+Running dot for graph 110/250
+Running dot for graph 111/250
+Running dot for graph 112/250
+Running dot for graph 113/250
+Running dot for graph 114/250
+Running dot for graph 115/250
+Running dot for graph 116/250
+Running dot for graph 117/250
+Running dot for graph 118/250
+Running dot for graph 119/250
+Running dot for graph 120/250
+Running dot for graph 121/250
+Running dot for graph 122/250
+Running dot for graph 123/250
+Running dot for graph 124/250
+Running dot for graph 125/250
+Running dot for graph 126/250
+Running dot for graph 127/250
+Running dot for graph 128/250
+Running dot for graph 129/250
+Running dot for graph 130/250
+Running dot for graph 131/250
+Running dot for graph 132/250
+Running dot for graph 133/250
+Running dot for graph 134/250
+Running dot for graph 135/250
+Running dot for graph 136/250
+Running dot for graph 137/250
+Running dot for graph 138/250
+Running dot for graph 139/250
+Running dot for graph 140/250
+Running dot for graph 141/250
+Running dot for graph 142/250
+Running dot for graph 143/250
+Running dot for graph 144/250
+Running dot for graph 145/250
+Running dot for graph 146/250
+Running dot for graph 147/250
+Running dot for graph 148/250
+Running dot for graph 149/250
+Running dot for graph 150/250
+Running dot for graph 151/250
+Running dot for graph 152/250
+Running dot for graph 153/250
+Running dot for graph 154/250
+Running dot for graph 155/250
+Running dot for graph 156/250
+Running dot for graph 157/250
+Running dot for graph 158/250
+Running dot for graph 159/250
+Running dot for graph 160/250
+Running dot for graph 161/250
+Running dot for graph 162/250
+Running dot for graph 163/250
+Running dot for graph 164/250
+Running dot for graph 165/250
+Running dot for graph 166/250
+Running dot for graph 167/250
+Running dot for graph 168/250
+Running dot for graph 169/250
+Running dot for graph 170/250
+Running dot for graph 171/250
+Running dot for graph 172/250
+Running dot for graph 173/250
+Running dot for graph 174/250
+Running dot for graph 175/250
+Running dot for graph 176/250
+Running dot for graph 177/250
+Running dot for graph 178/250
+Running dot for graph 179/250
+Running dot for graph 180/250
+Running dot for graph 181/250
+Running dot for graph 182/250
+Running dot for graph 183/250
+Running dot for graph 184/250
+Running dot for graph 185/250
+Running dot for graph 186/250
+Running dot for graph 187/250
+Running dot for graph 188/250
+Running dot for graph 189/250
+Running dot for graph 190/250
+Running dot for graph 191/250
+Running dot for graph 192/250
+Running dot for graph 193/250
+Running dot for graph 194/250
+Running dot for graph 195/250
+Running dot for graph 196/250
+Running dot for graph 197/250
+Running dot for graph 198/250
+Running dot for graph 199/250
+Running dot for graph 200/250
+Running dot for graph 201/250
+Running dot for graph 202/250
+Running dot for graph 203/250
+Running dot for graph 204/250
+Running dot for graph 205/250
+Running dot for graph 206/250
+Running dot for graph 207/250
+Running dot for graph 208/250
+Running dot for graph 209/250
+Running dot for graph 210/250
+Running dot for graph 211/250
+Running dot for graph 212/250
+Running dot for graph 213/250
+Running dot for graph 214/250
+Running dot for graph 215/250
+Running dot for graph 216/250
+Running dot for graph 217/250
+Running dot for graph 218/250
+Running dot for graph 219/250
+Running dot for graph 220/250
+Running dot for graph 221/250
+Running dot for graph 222/250
+Running dot for graph 223/250
+Running dot for graph 224/250
+Running dot for graph 225/250
+Running dot for graph 226/250
+Running dot for graph 227/250
+Running dot for graph 228/250
+Running dot for graph 229/250
+Running dot for graph 230/250
+Running dot for graph 231/250
+Running dot for graph 232/250
+Running dot for graph 233/250
+Running dot for graph 234/250
+Running dot for graph 235/250
+Running dot for graph 236/250
+Running dot for graph 237/250
+Running dot for graph 238/250
+Running dot for graph 239/250
+Running dot for graph 240/250
+Running dot for graph 241/250
+Running dot for graph 242/250
+Running dot for graph 243/250
+Running dot for graph 244/250
+Running dot for graph 245/250
+Running dot for graph 246/250
+Running dot for graph 247/250
+Running dot for graph 248/250
+Running dot for graph 249/250
+Running dot for graph 250/250
 Patching output file 1/38
 Patching output file 2/38
 Patching output file 3/38
@@ -6742,5 +6746,5 @@ Patching output file 35/38
 Patching output file 36/38
 Patching output file 37/38
 Patching output file 38/38
-lookup cache used 25728/65536 hits=550136 misses=27194
+lookup cache used 25745/65536 hits=550250 misses=27230
 finished...

@@ -26,6 +26,7 @@ var namespacehypro_1_1reachability_1_1hypro =
     [ "VariablePool", "classhypro_1_1reachability_1_1hypro_1_1VariablePool.html", "classhypro_1_1reachability_1_1hypro_1_1VariablePool" ],
     [ "Permutator", "classhypro_1_1reachability_1_1hypro_1_1Permutator.html", "classhypro_1_1reachability_1_1hypro_1_1Permutator" ],
     [ "EvaluationResult", "structhypro_1_1reachability_1_1hypro_1_1EvaluationResult.html", "structhypro_1_1reachability_1_1hypro_1_1EvaluationResult" ],
+    [ "glpk_context", "structhypro_1_1reachability_1_1hypro_1_1glpk__context.html", "structhypro_1_1reachability_1_1hypro_1_1glpk__context" ],
     [ "Optimizer", "classhypro_1_1reachability_1_1hypro_1_1Optimizer.html", "classhypro_1_1reachability_1_1hypro_1_1Optimizer" ],
     [ "BoxLinearOptimizationOn", "structhypro_1_1reachability_1_1hypro_1_1BoxLinearOptimizationOn.html", null ],
     [ "BoxLinearOptimizationOff", "structhypro_1_1reachability_1_1hypro_1_1BoxLinearOptimizationOff.html", null ],

@@ -5,6 +5,7 @@ var classhypro_1_1reachability_1_1hypro_1_1PolytopeSupportFunction =
     [ "PolytopeSupportFunction", "classhypro_1_1reachability_1_1hypro_1_1PolytopeSupportFunction.html#ac9ac562215db70ee0041bd8d89a10821", null ],
     [ "PolytopeSupportFunction", "classhypro_1_1reachability_1_1hypro_1_1PolytopeSupportFunction.html#af7068f8cb2d188bf315eddeb9c1d625d", null ],
     [ "~PolytopeSupportFunction", "classhypro_1_1reachability_1_1hypro_1_1PolytopeSupportFunction.html#af17cdb8a6fb64d15a7490ec3048c3a14", null ],
+    [ "cleanUp", "classhypro_1_1reachability_1_1hypro_1_1PolytopeSupportFunction.html#ac5b592b47e6fd272eaecd62fd62b10cb", null ],
     [ "constants", "classhypro_1_1reachability_1_1hypro_1_1PolytopeSupportFunction.html#af7050b3e2d74b8ac9efd528d34196ed3", null ],
     [ "constraints", "classhypro_1_1reachability_1_1hypro_1_1PolytopeSupportFunction.html#a06921b9ea9481264e53a8a93a7b8b366", null ],
     [ "contains", "classhypro_1_1reachability_1_1hypro_1_1PolytopeSupportFunction.html#af27677c230ae91dc3dfce9f32f12efbc", null ],

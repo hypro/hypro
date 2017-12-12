@@ -5,6 +5,7 @@ var classhypro_1_1PolytopeSupportFunction =
     [ "PolytopeSupportFunction", "classhypro_1_1PolytopeSupportFunction.html#a7fe2c2c9b0957725cd560ec0ac7f8ce9", null ],
     [ "PolytopeSupportFunction", "classhypro_1_1PolytopeSupportFunction.html#ad03683abeb5625c6a67d38aa83ef6a48", null ],
     [ "~PolytopeSupportFunction", "classhypro_1_1PolytopeSupportFunction.html#a9df5a84ec3ae085fa433dc1b3f803bd6", null ],
+    [ "cleanUp", "classhypro_1_1PolytopeSupportFunction.html#a91c9273cc00abb65665e87e65a1f2d01", null ],
     [ "constants", "classhypro_1_1PolytopeSupportFunction.html#ad3b9bdd05977b2be62dc23c7904a14f2", null ],
     [ "constraints", "classhypro_1_1PolytopeSupportFunction.html#a380a24bb7c21f0d9309905cad0e80eb9", null ],
     [ "contains", "classhypro_1_1PolytopeSupportFunction.html#a9c236c2df249f7046a700c247033f8d4", null ],

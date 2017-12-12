@@ -11,6 +11,7 @@ var classhypro_1_1reachability_1_1hypro_1_1SupportFunctionT =
     [ "~SupportFunctionT", "classhypro_1_1reachability_1_1hypro_1_1SupportFunctionT.html#afe51b608ede16e9c86fd8c155557265d", null ],
     [ "affineTransformation", "classhypro_1_1reachability_1_1hypro_1_1SupportFunctionT.html#a8d188f2dfd9272c549aa0d84873b6a95", null ],
     [ "ball", "classhypro_1_1reachability_1_1hypro_1_1SupportFunctionT.html#a68d163626763c0469f65cf51ae126807", null ],
+    [ "cleanUp", "classhypro_1_1reachability_1_1hypro_1_1SupportFunctionT.html#a5700b1732bcd741dd816e0f0e203c49c", null ],
     [ "collectProjections", "classhypro_1_1reachability_1_1hypro_1_1SupportFunctionT.html#a529a4d0b1aefb9449b1665859db4f772", null ],
     [ "contains", "classhypro_1_1reachability_1_1hypro_1_1SupportFunctionT.html#acfa93f5340dc1ba83e7036328e5b1766", null ],
     [ "contains", "classhypro_1_1reachability_1_1hypro_1_1SupportFunctionT.html#aec8af5688bedfbf7bc42b14566d66850", null ],

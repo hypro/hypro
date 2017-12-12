@@ -168,6 +168,7 @@ var namespacehypro =
     [ "typeName< double >", "structhypro_1_1typeName_3_01double_01_4.html", "structhypro_1_1typeName_3_01double_01_4" ],
     [ "typeName< mpq_class >", "structhypro_1_1typeName_3_01mpq__class_01_4.html", "structhypro_1_1typeName_3_01mpq__class_01_4" ],
     [ "EvaluationResult", "structhypro_1_1EvaluationResult.html", "structhypro_1_1EvaluationResult" ],
+    [ "glpk_context", "structhypro_1_1glpk__context.html", "structhypro_1_1glpk__context" ],
     [ "Optimizer", "classhypro_1_1Optimizer.html", "classhypro_1_1Optimizer" ],
     [ "PrincipalComponentAnalysis", "classhypro_1_1PrincipalComponentAnalysis.html", "classhypro_1_1PrincipalComponentAnalysis" ],
     [ "Permutator", "classhypro_1_1Permutator.html", "classhypro_1_1Permutator" ],

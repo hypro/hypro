@@ -4,6 +4,7 @@ var classhypro_1_1reachability_1_1hypro_1_1SupportFunctionContent =
     [ "affineTransformation", "classhypro_1_1reachability_1_1hypro_1_1SupportFunctionContent.html#a1951752c4fecb179558447a377302ab0", null ],
     [ "ball", "classhypro_1_1reachability_1_1hypro_1_1SupportFunctionContent.html#affb9c47d72fa6f777d58bcd418444229", null ],
     [ "checkTreeValidity", "classhypro_1_1reachability_1_1hypro_1_1SupportFunctionContent.html#acd8b9f8fbf9d849cdb52ad51adfe78f5", null ],
+    [ "cleanUp", "classhypro_1_1reachability_1_1hypro_1_1SupportFunctionContent.html#abc854dadf1b7c2519dcb23c4815ef098", null ],
     [ "collectProjections", "classhypro_1_1reachability_1_1hypro_1_1SupportFunctionContent.html#aedbbbf0036a7da88322e282cbc806457", null ],
     [ "collectProjectionsIterative", "classhypro_1_1reachability_1_1hypro_1_1SupportFunctionContent.html#a11aa16db16fa607c623fb8ff3983444a", null ],
     [ "contains", "classhypro_1_1reachability_1_1hypro_1_1SupportFunctionContent.html#a66b9d22f0ececf89bff796d124e63b55", null ],

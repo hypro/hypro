@@ -186,38 +186,40 @@ $(document).ready(function(){initNavTree('PolytopeSupportFunction_8h_source.html
 <div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;</div>
 <div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;    <span class="keywordtype">bool</span> empty() <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;</div>
-<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;    <span class="keywordtype">void</span> print() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;    <span class="keywordtype">void</span> cleanUp();</div>
 <div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;</div>
-<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;    std::string createCode( <span class="keywordtype">unsigned</span> index = 0 ) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;    <span class="keywordtype">void</span> print() <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;</div>
-<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;    <span class="keyword">friend</span> std::ostream&amp; operator&lt;&lt;( std::ostream&amp; lhs, const PolytopeSupportFunction&lt;Number,Setting&gt;&amp; rhs ) {</div>
-<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;        lhs &lt;&lt; <span class="stringliteral">&quot;[&quot;</span>;</div>
-<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;        <span class="keywordflow">for</span>(<span class="keywordtype">unsigned</span> rowIndex = 0; rowIndex &lt; rhs.mConstraints.rows()-1; ++rowIndex) {</div>
-<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;            lhs &lt;&lt; <span class="stringliteral">&quot;  &quot;</span>;</div>
-<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;            <span class="keywordflow">for</span>(<span class="keywordtype">unsigned</span> d = 0; d &lt; rhs.mConstraints.cols(); ++d) {</div>
-<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;                lhs &lt;&lt; carl::toDouble(rhs.mConstraints(rowIndex,d)) &lt;&lt; <span class="stringliteral">&quot; &quot;</span>;</div>
-<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;            }</div>
-<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;            lhs &lt;&lt; <span class="stringliteral">&quot;&lt;= &quot;</span> &lt;&lt; carl::toDouble(rhs.mConstraintConstants(rowIndex)) &lt;&lt; std::endl;</div>
-<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;        }</div>
-<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;        lhs &lt;&lt; <span class="stringliteral">&quot;  &quot;</span>;</div>
-<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;        <span class="keywordflow">for</span>(<span class="keywordtype">unsigned</span> d = 0; d &lt; rhs.mConstraints.cols(); ++d) {</div>
-<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;                lhs &lt;&lt; carl::toDouble(rhs.mConstraints(rhs.mConstraints.rows()-1,d)) &lt;&lt; <span class="stringliteral">&quot; &quot;</span>;</div>
-<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;        }</div>
-<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;        lhs &lt;&lt; <span class="stringliteral">&quot;&lt;= &quot;</span> &lt;&lt; carl::toDouble(rhs.mConstraintConstants(rhs.mConstraints.rows()-1)) &lt;&lt; <span class="stringliteral">&quot; ]&quot;</span> &lt;&lt; std::endl;</div>
-<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;        <span class="keywordflow">return</span> lhs;</div>
-<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;    }</div>
-<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;</div>
-<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;    <span class="keywordtype">void</span> removeRedundancy();</div>
-<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;};</div>
-<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;}  <span class="comment">// namespace</span></div>
-<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;<span class="preprocessor">#include &quot;PolytopeSupportFunction.tpp&quot;</span></div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;    std::string createCode( <span class="keywordtype">unsigned</span> index = 0 ) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;</div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;    <span class="keyword">friend</span> std::ostream&amp; operator&lt;&lt;( std::ostream&amp; lhs, const PolytopeSupportFunction&lt;Number,Setting&gt;&amp; rhs ) {</div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;        lhs &lt;&lt; <span class="stringliteral">&quot;[&quot;</span>;</div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;        <span class="keywordflow">for</span>(<span class="keywordtype">unsigned</span> rowIndex = 0; rowIndex &lt; rhs.mConstraints.rows()-1; ++rowIndex) {</div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;            lhs &lt;&lt; <span class="stringliteral">&quot;  &quot;</span>;</div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;            <span class="keywordflow">for</span>(<span class="keywordtype">unsigned</span> d = 0; d &lt; rhs.mConstraints.cols(); ++d) {</div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;                lhs &lt;&lt; carl::toDouble(rhs.mConstraints(rowIndex,d)) &lt;&lt; <span class="stringliteral">&quot; &quot;</span>;</div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;            }</div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;            lhs &lt;&lt; <span class="stringliteral">&quot;&lt;= &quot;</span> &lt;&lt; carl::toDouble(rhs.mConstraintConstants(rowIndex)) &lt;&lt; std::endl;</div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;        }</div>
+<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;        lhs &lt;&lt; <span class="stringliteral">&quot;  &quot;</span>;</div>
+<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;        <span class="keywordflow">for</span>(<span class="keywordtype">unsigned</span> d = 0; d &lt; rhs.mConstraints.cols(); ++d) {</div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;                lhs &lt;&lt; carl::toDouble(rhs.mConstraints(rhs.mConstraints.rows()-1,d)) &lt;&lt; <span class="stringliteral">&quot; &quot;</span>;</div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;        }</div>
+<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;        lhs &lt;&lt; <span class="stringliteral">&quot;&lt;= &quot;</span> &lt;&lt; carl::toDouble(rhs.mConstraintConstants(rhs.mConstraints.rows()-1)) &lt;&lt; <span class="stringliteral">&quot; ]&quot;</span> &lt;&lt; std::endl;</div>
+<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;        <span class="keywordflow">return</span> lhs;</div>
+<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;    }</div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;</div>
+<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;    <span class="keywordtype">void</span> removeRedundancy();</div>
+<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;};</div>
+<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;}  <span class="comment">// namespace</span></div>
+<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;<span class="preprocessor">#include &quot;PolytopeSupportFunction.tpp&quot;</span></div>
 <div class="ttc" id="structhypro_1_1EvaluationResult_html"><div class="ttname"><a href="structhypro_1_1EvaluationResult.html">hypro::EvaluationResult</a></div><div class="ttdoc">Struct holding results obtained from the linear optimization engine. </div><div class="ttdef"><b>Definition:</b> <a href="EvaluationResult_8h_source.html#l00012">EvaluationResult.h:12</a></div></div>
 <div class="ttc" id="classhypro_1_1Point_html"><div class="ttname"><a href="classhypro_1_1Point.html">hypro::Point</a></div><div class="ttdoc">Class for a point. </div><div class="ttdef"><b>Definition:</b> <a href="Point_8h_source.html#l00025">Point.h:25</a></div></div>
 <div class="ttc" id="namespacehypro_html_a52a4896e811a0710bcfc5a410a780034"><div class="ttname"><a href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">hypro::matrix_t</a></div><div class="ttdeci">Eigen::Matrix&lt; Number, Eigen::Dynamic, Eigen::Dynamic &gt; matrix_t</div><div class="ttdef"><b>Definition:</b> <a href="types_8h_source.html#l00026">types.h:26</a></div></div>
 <div class="ttc" id="classhypro_1_1PolytopeSupportFunction_html"><div class="ttname"><a href="classhypro_1_1PolytopeSupportFunction.html">hypro::PolytopeSupportFunction</a></div><div class="ttdef"><b>Definition:</b> <a href="PolytopeSupportFunction_8h_source.html#l00037">PolytopeSupportFunction.h:37</a></div></div>
 <div class="ttc" id="namespacehypro_html_a862b0cdf77254036feeb8ad6fb6da2b7"><div class="ttname"><a href="namespacehypro.html#a862b0cdf77254036feeb8ad6fb6da2b7">hypro::SF_TYPE</a></div><div class="ttdeci">SF_TYPE</div><div class="ttdef"><b>Definition:</b> <a href="representations_2SupportFunction_2util_8h_source.html#l00019">util.h:19</a></div></div>
-<div class="ttc" id="classhypro_1_1Optimizer_html"><div class="ttname"><a href="classhypro_1_1Optimizer.html">hypro::Optimizer</a></div><div class="ttdoc">Wrapper class for linear optimization. </div><div class="ttdef"><b>Definition:</b> <a href="Optimizer_8h_source.html#l00042">Optimizer.h:42</a></div></div>
+<div class="ttc" id="classhypro_1_1Optimizer_html"><div class="ttname"><a href="classhypro_1_1Optimizer.html">hypro::Optimizer</a></div><div class="ttdoc">Wrapper class for linear optimization. </div><div class="ttdef"><b>Definition:</b> <a href="Optimizer_8h_source.html#l00066">Optimizer.h:66</a></div></div>
 <div class="ttc" id="classhypro_1_1Halfspace_html"><div class="ttname"><a href="classhypro_1_1Halfspace.html">hypro::Halfspace</a></div><div class="ttdef"><b>Definition:</b> <a href="Halfspace_8h_source.html#l00023">Halfspace.h:23</a></div></div>
 <div class="ttc" id="classhypro_1_1PolytopeSupportFunction_html_a1da6919a0000fab7b3b7f9f220de5b02"><div class="ttname"><a href="classhypro_1_1PolytopeSupportFunction.html#a1da6919a0000fab7b3b7f9f220de5b02">hypro::PolytopeSupportFunction::evaluate</a></div><div class="ttdeci">EvaluationResult&lt; Number &gt; evaluate(const vector_t&lt; Number &gt; &amp;l, bool useExact) const </div></div>
 <div class="ttc" id="classhypro_1_1PolytopeSupportFunction_html_a529e87d4b2a345cba2f99d78c03eabda"><div class="ttname"><a href="classhypro_1_1PolytopeSupportFunction.html#a529e87d4b2a345cba2f99d78c03eabda">hypro::PolytopeSupportFunction::multiEvaluate</a></div><div class="ttdeci">std::vector&lt; EvaluationResult&lt; Number &gt; &gt; multiEvaluate(const matrix_t&lt; Number &gt; &amp;_A, bool useExact, bool setTemplate=false) const </div><div class="ttdoc">Evaluates the support function in the directions given in the passed matrix. </div></div>

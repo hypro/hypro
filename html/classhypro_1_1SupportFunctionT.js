@@ -11,6 +11,7 @@ var classhypro_1_1SupportFunctionT =
     [ "~SupportFunctionT", "classhypro_1_1SupportFunctionT.html#a0631f1efbc838a5ea0348de9dbc7cec6", null ],
     [ "affineTransformation", "classhypro_1_1SupportFunctionT.html#a7728df10d18edc42f578a2c1a4e910b2", null ],
     [ "ball", "classhypro_1_1SupportFunctionT.html#a973976ca7f0a93c99e588c8b04776cee", null ],
+    [ "cleanUp", "classhypro_1_1SupportFunctionT.html#a6c948698fef31489ce0a654b7c35274d", null ],
     [ "collectProjections", "classhypro_1_1SupportFunctionT.html#af3f02c69ac2c8ad03a317251c3fed6eb", null ],
     [ "contains", "classhypro_1_1SupportFunctionT.html#a2c64b19107b4c7971c795cb8110d868c", null ],
     [ "contains", "classhypro_1_1SupportFunctionT.html#a5e5b983a6ab89e0670b668aae8bf36b6", null ],

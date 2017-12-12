@@ -4,6 +4,7 @@ var classhypro_1_1SupportFunctionContent =
     [ "affineTransformation", "classhypro_1_1SupportFunctionContent.html#a7e4b16003fc17536bbabca4104636789", null ],
     [ "ball", "classhypro_1_1SupportFunctionContent.html#a6cd4c36298734ae1b3c38bf8884e0d99", null ],
     [ "checkTreeValidity", "classhypro_1_1SupportFunctionContent.html#a78e2d88de1bf34f7946d265650dc00ae", null ],
+    [ "cleanUp", "classhypro_1_1SupportFunctionContent.html#af38b4e4b100a51243b283f6bbd6545c5", null ],
     [ "collectProjections", "classhypro_1_1SupportFunctionContent.html#afb031be57f1f4ddd1410f8c567531823", null ],
     [ "collectProjectionsIterative", "classhypro_1_1SupportFunctionContent.html#a8f529842461cdbeadd3c3503a6eed8aa", null ],
     [ "contains", "classhypro_1_1SupportFunctionContent.html#ab4f185008a1ec23a3cd6d5865e27c61a", null ],
