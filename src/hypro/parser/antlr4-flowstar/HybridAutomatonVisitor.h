@@ -33,8 +33,6 @@ public:
 
     virtual antlrcpp::Any visitInvariants(HybridAutomatonParser::InvariantsContext *context) = 0;
 
-    virtual antlrcpp::Any visitReplacedexpr(HybridAutomatonParser::ReplacedexprContext *context) = 0;
-
     virtual antlrcpp::Any visitConstantexpr(HybridAutomatonParser::ConstantexprContext *context) = 0;
 
     virtual antlrcpp::Any visitConnector(HybridAutomatonParser::ConnectorContext *context) = 0;
@@ -52,6 +50,8 @@ public:
     virtual antlrcpp::Any visitIntervalexpr(HybridAutomatonParser::IntervalexprContext *context) = 0;
 
     virtual antlrcpp::Any visitConstrset(HybridAutomatonParser::ConstrsetContext *context) = 0;
+
+    virtual antlrcpp::Any visitReplacedexpr(HybridAutomatonParser::ReplacedexprContext *context) = 0;
 
     virtual antlrcpp::Any visitInit(HybridAutomatonParser::InitContext *context) = 0;
 

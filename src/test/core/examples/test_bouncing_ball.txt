@@ -37,6 +37,7 @@ hybrid reachability {
    inv
    {
     x >= 0
+    v <= c + gabunga
    }
    
    inv{}
@@ -53,7 +54,8 @@ hybrid reachability {
  {
   l -> l
   guard { x = 0 v <= 0 }
-  reset { v' := -0.75*v }
+  #reset { v' := -0.75*v }
+  reset { v' := gabunga*0.1 }
   parallelotope aggregation {}
  }
 
@@ -61,8 +63,8 @@ hybrid reachability {
  {
   l
   {
-   #x in [gabunga,10.2]
-   x in [10,10.2]
+   x in [gabunga,10.2]
+   #x in [10,10.2]
    v in [0,1]
   }
   l
@@ -70,7 +72,6 @@ hybrid reachability {
    x in [1,1.2]
    v in [0,1]
   }
-  
  }
  
  init 

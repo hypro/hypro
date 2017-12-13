@@ -69,7 +69,7 @@ namespace hypro {
 
 			//Multiply numbers and handle connectors within term
 			Number multed = multTogether(mTerm);
-
+		
 			//Count the amount of '-'-connectors that are before the term.
 			std::size_t mTermStartIndex = mTerm->start->getStartIndex();
 			unsigned minusCount = 0;
@@ -79,7 +79,7 @@ namespace hypro {
 					minusCount++;
 				}
 			}
-
+			
 			//put into place according to place of variable in vars
 			unsigned dest = 0;
 			if(mTerm->VARIABLE().size() == 0){
@@ -96,7 +96,12 @@ namespace hypro {
 				std::cout << "ERROR: multiplication of several variables not allowed!" << std::endl;
 				exit(0);
 			}
-			coeffVec(dest) = (minusCount % 2 == 1) ? Number(-1)*multed : multed;
+
+			if(minusCount % 2 == 1){
+				coeffVec(dest) += Number(-1)*multed;
+			} else {
+				coeffVec(dest) += multed;
+			}
 
 			lastTermEndIndex = mTerm->stop->getStopIndex();
 
@@ -176,10 +181,8 @@ namespace hypro {
 		//2.Shorten both vectors by one, save last coeff and save everything in pair
 		Number poly1Back = poly1(poly1.size()-1);
 		poly1.conservativeResize(poly1.size()-1, Eigen::NoChange_t::NoChange);
-		//std::cout << "---- After shortening poly1 is:\n" << poly1 << " and poly1Back is: " << poly1Back << std::endl;
 		Number poly2Back = poly2(poly2.size()-1);
 		poly2.conservativeResize(poly2.size()-1, Eigen::NoChange_t::NoChange);
-		//std::cout << "---- After shortening poly2 is:\n" << poly2 << " and poly2Back is: " << poly2Back << std::endl;
 
 		//2.Use them to calculate constraint vector
 		std::vector<std::pair<vector_t<Number>,Number>> constraintVec;
@@ -209,6 +212,12 @@ namespace hypro {
 
 	template<typename Number>
 	antlrcpp::Any HyproFormulaVisitor<Number>::visitInterval(HybridAutomatonParser::IntervalContext *ctx){
+
+		//0.Make sure no constants in interval anymore, as they should all be replaced by their values before.
+		if(ctx->VARIABLE().size() != 0){
+			std::cerr << "ERROR: cannot have variable " << ctx->VARIABLE(0)->getText() << " in an interval!" << std::endl;
+			exit(0);
+		}
 
 		//1.Attach the possible minuses to the numbers
 		std::string leftString;
@@ -312,7 +321,7 @@ namespace hypro {
 			//	std::cout << v.first << "and \n" << v.second << "\n" << std::endl;
 			//}
 
-			//Resize tmpMatrix and tmpVector and initialise them with 0, then write values inside
+			//Resize tmpMatrix and tmpVector and directly write values inside
 			tmpMatrix.conservativeResize(tmpMatrix.rows()+values.size()-1, Eigen::NoChange_t::NoChange);
 			tmpVector.conservativeResize(tmpVector.rows()+values.size()-1, Eigen::NoChange_t::NoChange);
 			for(int k=rowToFill; k < tmpMatrix.rows(); k++){
