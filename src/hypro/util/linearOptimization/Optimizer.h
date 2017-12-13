@@ -34,6 +34,30 @@
 
 namespace hypro {
 
+	struct glpk_context{
+		glp_prob* lp = nullptr;
+		int* ia = nullptr;
+		int* ja = nullptr;
+		double* ar = nullptr;
+		bool arraysCreated = false;
+		mutable bool mInitialized = false;
+		mutable bool mConstraintsSet = false;
+
+		void deleteLPInstance() {
+			glp_delete_prob(lp);
+		}
+
+		~glpk_context(){
+			//glp_delete_prob(lp);
+			// assume that all fields are set at once so just check one.
+			if(ia != nullptr){
+				delete[] ia;
+				delete[] ja;
+				delete[] ar;
+			}
+		}
+	};
+
 	/**
 	 * @brief      Wrapper class for linear optimization.
 	 * @tparam     Number  The used number type.
@@ -44,8 +68,6 @@ namespace hypro {
 	private:
 		matrix_t<Number>	mConstraintMatrix;
 		vector_t<Number> 	mConstraintVector;
-		mutable bool		mInitialized;
-		mutable bool		mConstraintsSet;
 
 		mutable bool 				mConsistencyChecked;
 		mutable SOLUTION 			mLastConsistencyAnswer;
@@ -62,12 +84,7 @@ namespace hypro {
 		#endif
 		#endif
 		// Glpk as a presolver
-		mutable bool arraysCreated=false;
-		mutable glp_prob* lp;
-		mutable int* ia;
-		mutable int* ja;
-		mutable double* ar;
-		mutable std::thread::id creatingThreadId;
+		mutable std::map<std::thread::id, glpk_context> mGlpkContext;
 
 	public:
 
@@ -77,9 +94,8 @@ namespace hypro {
 		Optimizer() :
 			mConstraintMatrix(),
 			mConstraintVector(),
-			mInitialized(false),
-			mConstraintsSet(false),
-			mConsistencyChecked(false)
+			mConsistencyChecked(false),
+			mGlpkContext()
 		{
 			#ifdef VERIFY_RESULT
 			struct stat buffer;
@@ -113,22 +129,19 @@ namespace hypro {
 		Optimizer(const matrix_t<Number>& constraints, const vector_t<Number>& constants) :
 			mConstraintMatrix(constraints),
 			mConstraintVector(constants),
-			mInitialized(false),
-			mConstraintsSet(false),
-			mConsistencyChecked(false)
+			mConsistencyChecked(false),
+			mGlpkContext()
 		{	}
 
 		/**
 		 * @brief      Destroys the object.
 		 */
 		~Optimizer() {
-			/*
-			if(mInitialized) {
-				glp_delete_prob(lp);
-			}
-			deleteArrays();
-			*/
+			assert(mGlpkContext.size() <= 1);
+			this->cleanGLPInstance();
 		}
+
+		void cleanGLPInstance();
 
 	public:
 		/**
@@ -200,11 +213,6 @@ namespace hypro {
 		 * @return     A vector of row-indices which represent redundant constraints.
 		 */
 		std::vector<std::size_t> redundantConstraints() const;
-
-		/**
-		 * @brief      Method to refresh glpk-related datastructures in a multithreaded environment.
-		 */
-		void refresh() const;
 
 	private:
 		/**

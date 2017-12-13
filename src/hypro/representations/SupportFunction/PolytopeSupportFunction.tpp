@@ -19,11 +19,12 @@ template <typename Number, class Setting>
 PolytopeSupportFunction<Number,Setting>::PolytopeSupportFunction( matrix_t<Number> constraints,
 														  vector_t<Number> constraintConstants )
 	: mConstraints( constraints ), mConstraintConstants( constraintConstants ), mOpt(constraints,constraintConstants), mDimension(mConstraints.cols()) {
-	//this->removeRedundancy();
+		TRACE("hypro.representations.supportFunction", "");
 }
 
 template <typename Number, class Setting>
 PolytopeSupportFunction<Number,Setting>::PolytopeSupportFunction( const std::vector<Halfspace<Number>> &_planes ) {
+	TRACE("hypro.representations.supportFunction", "");
 	assert( !_planes.empty() );
 	mConstraints = matrix_t<Number>( _planes.size(), _planes[0].dimension() );
 	mConstraintConstants = vector_t<Number>( _planes.size() );
@@ -41,6 +42,7 @@ PolytopeSupportFunction<Number,Setting>::PolytopeSupportFunction( const std::vec
 
 template<typename Number, class Setting>
 PolytopeSupportFunction<Number,Setting>::PolytopeSupportFunction( const std::vector<Point<Number>>& _points ) {
+	TRACE("hypro.representations.supportFunction", "");
 	//std::cout << __func__ << std::endl;
 	if ( !_points.empty() ) {
 		//std::cout << "Points not empty" << std::endl;
@@ -91,17 +93,21 @@ PolytopeSupportFunction<Number,Setting>::PolytopeSupportFunction( const std::vec
 template <typename Number, class Setting>
 PolytopeSupportFunction<Number,Setting>::PolytopeSupportFunction( const PolytopeSupportFunction<Number,Setting> &_origin )
 	: mConstraints( _origin.constraints() ), mConstraintConstants( _origin.constants()), mOpt(mConstraints,mConstraintConstants), mDimension(mConstraints.cols() ) {
+		TRACE("hypro.representations.supportFunction", "");
 }
 
 template <typename Number, class Setting>
 PolytopeSupportFunction<Number,Setting>::~PolytopeSupportFunction() {
+	TRACE("hypro.representations.supportFunction", "");
+	mOpt.cleanGLPInstance();
 }
 
 template <typename Number, class Setting>
 PolytopeSupportFunction<Number,Setting>& PolytopeSupportFunction<Number,Setting>::operator=(const PolytopeSupportFunction<Number,Setting>& _orig){
-	//std::cout << __func__ << std::endl;
+	TRACE("hypro.representations.supportFunction", "");
     this->mConstraints = _orig.mConstraints;
     this->mConstraintConstants = _orig.mConstraintConstants;
+    this->mOpt.cleanGLPInstance();
     this->mOpt = Optimizer<Number>(mConstraints,mConstraintConstants);
     this->mDimension = _orig.mDimension;
 }
@@ -227,6 +233,7 @@ Point<Number> PolytopeSupportFunction<Number,Setting>::supremumPoint() const {
 
 template <typename Number, class Setting>
 EvaluationResult<Number> PolytopeSupportFunction<Number,Setting>::evaluate( const vector_t<Number> &l, bool useExact ) const {
+	TRACE("hypro.representations.supportFunction", "");
 	// catch half-space
 	if(mConstraints.rows() == 1) {
 		//std::cout << "only one constraint! -> we evaluate against a plane!" << std::endl;
@@ -321,7 +328,14 @@ bool PolytopeSupportFunction<Number,Setting>::contains( const vector_t<Number> &
 
 template <typename Number, class Setting>
 bool PolytopeSupportFunction<Number,Setting>::empty() const {
+	TRACE("hypro.representations.supportFunction", "");
 	return !mOpt.checkConsistency();
+}
+
+template <typename Number, class Setting>
+void PolytopeSupportFunction<Number,Setting>::cleanUp() {
+	TRACE("hypro.representations.supportFunction", "");
+	mOpt.cleanGLPInstance();
 }
 
 template <typename Number, class Setting>
@@ -343,8 +357,8 @@ std::string PolytopeSupportFunction<Number,Setting>::createCode(unsigned index) 
 
 template<typename Number, class Setting>
 void PolytopeSupportFunction<Number,Setting>::removeRedundancy() {
+	TRACE("hypro.representations.supportFunction", "");
 	if(mConstraints.rows() > 1){
-
 		std::vector<std::size_t> redundant = mOpt.redundantConstraints();
 		//std::cout << __func__ << ": found " << redundant.size() << " redundant constraints." << std::endl;
 
@@ -364,6 +378,7 @@ void PolytopeSupportFunction<Number,Setting>::removeRedundancy() {
 			assert(insertionIndex == -1);
 			mConstraints = newConstraints;
 			mConstraintConstants = newConstants;
+			mOpt.cleanGLPInstance();
 			mOpt = Optimizer<Number>(mConstraints,mConstraintConstants);
 		}
 		assert(redundant.empty());

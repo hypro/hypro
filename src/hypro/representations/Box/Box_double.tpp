@@ -43,6 +43,8 @@ namespace hypro {
 		EvaluationResult<double> posPoint = opt.evaluate(posDir, false);
 		EvaluationResult<double> negPoint = opt.evaluate(-posDir, false);
 
+		opt.cleanGLPInstance();
+
 		if(posPoint.errorCode == SOLUTION::INFEAS) {
 			*this = Empty(_constraints.cols());
 		}
@@ -589,6 +591,7 @@ BoxT<double,Converter,Setting> BoxT<double,Converter,Setting>::intersectHalfspac
 
 template<typename Converter, class Setting>
 BoxT<double,Converter,Setting> BoxT<double,Converter,Setting>::intersectHalfspaces( const matrix_t<double>& _mat, const vector_t<double>& _vec ) const {
+	TRACE("hypro.representations", "Halfspaces: " << _mat << " and vector: " << _vec );
 	assert(_mat.rows() == _vec.rows());
 	assert(_mat.cols() == Eigen::Index(this->dimension()));
 	#ifdef HYPRO_BOX_AVOID_LINEAR_OPTIMIZATION
@@ -652,6 +655,7 @@ BoxT<double,Converter,Setting> BoxT<double,Converter,Setting>::intersectHalfspac
 		results.emplace_back(opt.evaluate(boxDirections.row(rowIndex), false));
 	}
 	assert(Eigen::Index(results.size()) == boxDirections.rows());
+	opt.cleanGLPInstance();
 
 	// re-construct box from results.
 	std::pair<Point<double>,Point<double>> newLimits = std::make_pair(Point<double>(vector_t<double>::Zero(this->dimension())), Point<double>(vector_t<double>::Zero(this->dimension())));

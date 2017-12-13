@@ -106,6 +106,8 @@ class PolytopeSupportFunction {
 
 	bool empty() const;
 
+	void cleanUp();
+
     void print() const;
 
     std::string createCode( unsigned index = 0 ) const;
