@@ -41,13 +41,13 @@ protected:
 };
 
 TYPED_TEST(PolytopeSupportFunctionTest, constructor) {
-	PolytopeSupportFunction<TypeParam,PolytopeSupportFunctionSetting> psf1 
+	PolytopeSupportFunction<TypeParam,PolytopeSupportFunctionSetting> psf1
 		= PolytopeSupportFunction<TypeParam,PolytopeSupportFunctionSetting>(this->constraints, this->constants);
 	SUCCEED();
 }
 
 TYPED_TEST(PolytopeSupportFunctionTest, evaluation) {
-	PolytopeSupportFunction<TypeParam,PolytopeSupportFunctionSetting> psf1 
+	PolytopeSupportFunction<TypeParam,PolytopeSupportFunctionSetting> psf1
 		= PolytopeSupportFunction<TypeParam,PolytopeSupportFunctionSetting>(this->constraints, this->constants);
 	vector_t<TypeParam> vec1 = vector_t<TypeParam>(2,1);
 	vector_t<TypeParam> vec2 = vector_t<TypeParam>(2,1);
@@ -72,7 +72,7 @@ TYPED_TEST(PolytopeSupportFunctionTest, evaluation) {
 }
 
 TYPED_TEST(PolytopeSupportFunctionTest, multiEvaluation) {
-	PolytopeSupportFunction<TypeParam,PolytopeSupportFunctionSetting> psf1 
+	PolytopeSupportFunction<TypeParam,PolytopeSupportFunctionSetting> psf1
 		= PolytopeSupportFunction<TypeParam,PolytopeSupportFunctionSetting>(this->constraints, this->constants);
 	matrix_t<TypeParam> directions = matrix_t<TypeParam>(3,2);
 	directions(0,0) = TypeParam(2);
@@ -86,10 +86,12 @@ TYPED_TEST(PolytopeSupportFunctionTest, multiEvaluation) {
 	EXPECT_LE(TypeParam(20), res[0].supportValue);
 	EXPECT_LE(TypeParam(5), res[1].supportValue);
 	EXPECT_TRUE(carl::AlmostEqual2sComplement(TypeParam(17),res[2].supportValue) || TypeParam(17) <= res[2].supportValue);
+
+	psf1.cleanUp();
 }
 
 TYPED_TEST(PolytopeSupportFunctionTest, contains) {
-	PolytopeSupportFunction<TypeParam,PolytopeSupportFunctionSetting> psf1 
+	PolytopeSupportFunction<TypeParam,PolytopeSupportFunctionSetting> psf1
 		= PolytopeSupportFunction<TypeParam,PolytopeSupportFunctionSetting>(this->constraints, this->constants);
 
 	EXPECT_TRUE(psf1.contains(Point<TypeParam>({0,0})));
@@ -104,7 +106,7 @@ TYPED_TEST(PolytopeSupportFunctionTest, contains) {
 }
 
 TYPED_TEST(PolytopeSupportFunctionTest, createCode) {
-	PolytopeSupportFunction<TypeParam,PolytopeSupportFunctionSetting> psf1 
+	PolytopeSupportFunction<TypeParam,PolytopeSupportFunctionSetting> psf1
 		= PolytopeSupportFunction<TypeParam,PolytopeSupportFunctionSetting>(this->constraints, this->constants);
 	//std::string res = psf1.createCode();
 
