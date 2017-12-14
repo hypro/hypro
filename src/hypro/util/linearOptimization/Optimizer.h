@@ -58,9 +58,9 @@ namespace hypro {
 			// deleteLPInstance();
 			// assume that all fields are set at once so just check one.
 			if(arraysCreated){
-				//delete[] ia;
-				//delete[] ja;
-				//delete[] ar;
+				delete[] ia;
+				delete[] ja;
+				delete[] ar;
 			}
 		}
 	};
