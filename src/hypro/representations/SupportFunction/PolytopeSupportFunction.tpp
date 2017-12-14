@@ -344,6 +344,17 @@ void PolytopeSupportFunction<Number,Setting>::print() const{
     std::cout << convert<Number,double>(mConstraintConstants) << std::endl;
 }
 
+template <typename Number, class Setting>
+std::string PolytopeSupportFunction<Number,Setting>::getDotRepresentation() const {
+	std::stringstream s;
+	s << "<TR><TD>";
+	for(auto idCTXPair : mOpt.getGLPContexts()) {
+		s << idCTXPair.first << "<BR>";
+	}
+	s << "</TD></TR>";
+	return s.str();
+}
+
 template<typename Number, class Setting>
 std::string PolytopeSupportFunction<Number,Setting>::createCode(unsigned index) const {
 	std::stringstream res;

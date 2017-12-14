@@ -110,6 +110,8 @@ class PolytopeSupportFunction {
 
     void print() const;
 
+    std::string getDotRepresentation() const;
+
     std::string createCode( unsigned index = 0 ) const;
 
     friend std::ostream& operator<<( std::ostream& lhs, const PolytopeSupportFunction<Number,Setting>& rhs ) {

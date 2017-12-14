@@ -131,6 +131,16 @@ namespace hypro{
     }
 
     template<typename Number, typename Converter>
+    std::string SupportFunctionT<Number,Converter>::getDotRepresentation() const {
+    	std::string nodes = "digraph structs \n { node [shape=record];\n";
+    	std::string transitions = "";
+
+    	content->getDotRepresentation(0,nodes,transitions);
+
+    	return nodes + transitions + "}\n";
+    }
+
+    template<typename Number, typename Converter>
     unsigned SupportFunctionT<Number,Converter>::operationCount() const {
         return content->operationCount();
     }

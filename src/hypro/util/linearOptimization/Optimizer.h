@@ -39,21 +39,28 @@ namespace hypro {
 		int* ia = nullptr;
 		int* ja = nullptr;
 		double* ar = nullptr;
-		bool arraysCreated = false;
-		mutable bool mInitialized = false;
-		mutable bool mConstraintsSet = false;
+		bool arraysCreated = false; 			// true if array variables have been created.
+		mutable bool mInitialized = false;		// true if lp instance has been created.
+		mutable bool mConstraintsSet = false;	// true if lp instance exists, arrays have been set and the lp instance is set up with the current constraints.
 
 		void deleteLPInstance() {
-			glp_delete_prob(lp);
+			TRACE("hypro.optimizer","Start." << " instance @" << this);
+			if(mInitialized){
+				glp_delete_prob(lp);
+				mInitialized = false;
+				mConstraintsSet = false;
+			}
+			TRACE("hypro.optimizer","Done." << " instance @" << this);
 		}
 
 		~glpk_context(){
-			//glp_delete_prob(lp);
+			TRACE("hypro.optimizer","Arrays created: " << arraysCreated << " instance @" << this);
+			// deleteLPInstance();
 			// assume that all fields are set at once so just check one.
-			if(ia != nullptr){
-				delete[] ia;
-				delete[] ja;
-				delete[] ar;
+			if(arraysCreated){
+				//delete[] ia;
+				//delete[] ja;
+				//delete[] ar;
 			}
 		}
 	};
@@ -143,6 +150,10 @@ namespace hypro {
 
 		void cleanGLPInstance();
 
+		inline const std::map<std::thread::id, glpk_context>& getGLPContexts() const {
+			return mGlpkContext;
+		}
+
 	public:
 		/**
 		 * @brief      Comparison operator.
@@ -215,6 +226,9 @@ namespace hypro {
 		std::vector<std::size_t> redundantConstraints() const;
 
 	private:
+		bool isSane() const;
+
+
 		/**
 		 * @brief      Calls required initialization methods.
 		 */

@@ -487,6 +487,141 @@ class SupportFunctionContent {
 		return true;
 	}
 
+	std::size_t getDotRepresentation(std::size_t startIndex, std::string& nodes, std::string& transitions) const {
+		std::stringstream s;
+		s << "node" << startIndex << " [label=<<TABLE BORDER=\"0\" CELLBORDER=\"1\" CELLSPACING=\"0\">";
+		// add common info
+		std::size_t colspan = 1;
+		s << "<TR><TD COLSPAN=\""<< colspan << "\">@" << this << "<BR/>"<< this->mType << "</TD></TR>";
+		switch ( mType ) {
+			case SF_TYPE::BOX: {
+
+				break;
+			}
+			case SF_TYPE::ELLIPSOID: {
+
+				break;
+			}
+			case SF_TYPE::INFTY_BALL: {
+
+				break;
+			}
+			case SF_TYPE::TWO_BALL: {
+
+				break;
+			}
+			case SF_TYPE::LINTRAFO: {
+
+				break;
+			}
+			case SF_TYPE::POLY: {
+				s << polytope()->getDotRepresentation();
+				break;
+			}
+			case SF_TYPE::PROJECTION: {
+
+				break;
+			}
+			case SF_TYPE::SCALE: {
+
+				break;
+			}
+			case SF_TYPE::SUM: {
+
+				break;
+			}
+			case SF_TYPE::UNITE: {
+
+				break;
+			}
+			case SF_TYPE::INTERSECT: {
+
+				break;
+			}
+			case SF_TYPE::ZONOTOPE: {
+
+				break;
+			}
+			default:
+				break;
+		}
+		s << "</TABLE>>];" << std::endl;
+		nodes += s.str();
+		std::size_t offset = ++startIndex;
+		switch ( mType ) {
+			case SF_TYPE::BOX: {
+				break;
+			}
+			case SF_TYPE::ELLIPSOID: {
+				break;
+			}
+			case SF_TYPE::INFTY_BALL: {
+				break;
+			}
+			case SF_TYPE::TWO_BALL: {
+				break;
+			}
+			case SF_TYPE::LINTRAFO: {
+				std::stringstream t;
+				t << "node" << (startIndex-1) << " -> node" << offset << std::endl;
+				transitions += t.str();;
+				offset = linearTrafoParameters()->origin->getDotRepresentation(offset,nodes,transitions);
+				break;
+			}
+			case SF_TYPE::POLY: {
+				break;
+			}
+			case SF_TYPE::PROJECTION: {
+				std::stringstream t;
+				t << "node" << (startIndex-1) << " -> node" << offset << std::endl;
+				transitions += t.str();;
+				offset = projectionParameters()->origin->getDotRepresentation(offset,nodes,transitions);
+				break;
+			}
+			case SF_TYPE::SCALE: {
+				std::stringstream t;
+				t << "node" << (startIndex-1) << " -> node" << offset << std::endl;
+				transitions += t.str();;
+				offset = scaleParameters()->origin->getDotRepresentation(offset,nodes,transitions);
+				break;
+			}
+			case SF_TYPE::SUM: {
+				std::stringstream t;
+				t << "node" << (startIndex-1) << " -> node" << offset << std::endl;
+				offset = summands()->lhs->getDotRepresentation(offset,nodes,transitions);
+				t << "node" << (startIndex-1) << " -> node" << offset << std::endl;
+				offset = summands()->rhs->getDotRepresentation(offset,nodes,transitions);
+				transitions += t.str();;
+				break;
+			}
+			case SF_TYPE::UNITE: {
+				std::stringstream t;
+				for(auto i : unionParameters()->items) {
+					t << "node" << (startIndex-1) << " -> node" << offset << std::endl;
+					offset = i->getDotRepresentation(offset,nodes,transitions);
+				}
+
+				transitions += t.str();;
+				break;
+			}
+			case SF_TYPE::INTERSECT: {
+				std::stringstream t;
+				t << "node" << (startIndex-1) << " -> node" << offset << std::endl;
+				offset = intersectionParameters()->lhs->getDotRepresentation(offset,nodes,transitions);
+				t << "node" << (startIndex-1) << " -> node" << offset << std::endl;
+				offset = intersectionParameters()->rhs->getDotRepresentation(offset,nodes,transitions);
+				transitions += t.str();;
+				break;
+			}
+			case SF_TYPE::ZONOTOPE: {
+				break;
+			}
+			default:
+				break;
+		}
+		return offset;
+	}
+
 	private:
 
 	std::size_t originCount() const {

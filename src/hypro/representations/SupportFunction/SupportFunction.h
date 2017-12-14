@@ -108,6 +108,8 @@ public:
      */
     void cleanUp();
 
+    std::string getDotRepresentation() const;
+
     friend std::ostream& operator<<( std::ostream& lhs, const SupportFunctionT<Number, Converter>& rhs ) {
 #ifdef HYPRO_LOGGING
     	lhs << rhs.content << std::endl;
