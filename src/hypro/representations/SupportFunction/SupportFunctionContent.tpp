@@ -1802,6 +1802,7 @@ void SupportFunctionContent<Number>::cleanUp() {
 		if(cur->originCount() == 0) {
 			switch(cur->type()) {
 				case SF_TYPE::POLY: {
+					std::cout << cur->type() << std::endl;
 					polytope()->cleanUp();
 					break;
 				}
