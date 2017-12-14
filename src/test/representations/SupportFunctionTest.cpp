@@ -586,5 +586,5 @@ TYPED_TEST(SupportFunctionTest, dotRep) {
 	matrix_t<TypeParam> vec1 = matrix_t<TypeParam>(2,1);
 	vec1 << 1,0;
 	psf1Assigned.evaluate(vec1);
-	std::cout << psf1Assigned.getDotRepresentation();
+	//std::cout << psf1Assigned.getDotRepresentation();
 }

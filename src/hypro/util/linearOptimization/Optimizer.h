@@ -43,9 +43,22 @@ namespace hypro {
 		mutable bool mInitialized = false;		// true if lp instance has been created.
 		mutable bool mConstraintsSet = false;	// true if lp instance exists, arrays have been set and the lp instance is set up with the current constraints.
 
+		glpk_context()
+			: lp(nullptr)
+			, ia(nullptr)
+			, ja(nullptr)
+			, ar(nullptr)
+			, arraysCreated(false)
+			, mInitialized(false)
+			, mConstraintsSet(false)
+		{
+			TRACE("hypro.optimizer","Create glpk_context " << this);
+		}
+
 		void deleteLPInstance() {
 			TRACE("hypro.optimizer","Start." << " instance @" << this);
 			if(mInitialized){
+				assert(lp != nullptr);
 				glp_delete_prob(lp);
 				mInitialized = false;
 				mConstraintsSet = false;
@@ -55,7 +68,7 @@ namespace hypro {
 
 		~glpk_context(){
 			TRACE("hypro.optimizer","Arrays created: " << arraysCreated << " instance @" << this);
-			// deleteLPInstance();
+			deleteLPInstance();
 			// assume that all fields are set at once so just check one.
 			if(arraysCreated){
 				delete[] ia;

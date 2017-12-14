@@ -349,7 +349,7 @@ std::string PolytopeSupportFunction<Number,Setting>::getDotRepresentation() cons
 	std::stringstream s;
 	s << "<TR><TD>";
 	for(auto idCTXPair : mOpt.getGLPContexts()) {
-		s << idCTXPair.first << "<BR>";
+		s << &idCTXPair.second << "<BR>";
 	}
 	s << "</TD></TR>";
 	return s.str();
