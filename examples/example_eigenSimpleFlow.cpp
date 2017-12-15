@@ -85,13 +85,16 @@ int main(int argc, char** argv)
     std::string filename1 = "../../examples/input/bouncing_ball_inhomogen.model";
     std::string filename2 = "../../examples/input/rod_reactor.model";
     std::string filename3 = "../../examples/input/switching_5.model";
+    std::string filenamegeneral = "../../examples/input/";
     std::string filename;
     long sl;
-	if(argc == 2) {
+	if(argc == 2 || argc == 3) {
 		char* p;
 		sl = strtol(argv[1], &p, 10);
 	}
     switch (sl) {
+        case 4:
+            filename = filenamegeneral.append(argv[2]);
         case 3:
             filename  = filename3;
         break;
@@ -102,7 +105,7 @@ int main(int argc, char** argv)
             filename = filename1;
         break;
         default:
-            std::cout << "wrong example chosen, choose 1 bounding_ball, 2 rod_reactor, 3 switching_5\n";
+            std::cout << "wrong example chosen, choose 1 bounding_ball, 2 rod_reactor, 3 switching_5, 4 [from examples/input/ choose ] modelname for general input\n";
             std::exit(EXIT_FAILURE);
         break;
     }

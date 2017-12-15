@@ -1,7 +1,7 @@
- /**
-  * @file Transformation.h
-  * @author Jan Philipp Hafer
-  */
+/**
+ * @file Transformation.h
+ * @author Jan Philipp Hafer
+ */
 #pragma once
 #include "../../datastructures/HybridAutomaton/Settings.h"
 #include "../../datastructures/HybridAutomaton/HybridAutomaton.h"
@@ -10,11 +10,7 @@
 #include <Eigen/Dense>
 #include <Eigen/SVD>
 #include <Eigen/Core>
-/**
- * @brief      Class for transformation of Hybrid Automata for Eigenvalue Decomposition(EVD) forward reachability analysis.
- *
- * @tparam     Number  The used number type.
- */
+
 namespace hypro {
     //EVD possible values of Euler functions
     enum EXP_FUNCT_TYPE { CONVERGENT, DIVERGENT, LINEAR, CONSTANT, UNDEFINED, INITIALIZED };
@@ -51,7 +47,10 @@ struct STallValues {
     STindependentFunct  <Number> mSTindependentFunct;
     STflowpipeSegment   <Number> mSTflowpipeSegment;
 };
-
+/**
+ * @brief      Class for transformation of Hybrid Automata for Eigenvalue Decomposition(EVD) forward reachability analysis.
+ * @tparam     Number  The used number type.
+ */
 template <typename Number>
 class Transformation {
   public:
@@ -61,7 +60,7 @@ class Transformation {
     using locationConditionMap = std::map<Location<Number>*, Condition<Number>, locPtrComp<Number>>;
     using conditionVector = std::vector<Condition<Number>>; /// Vector of conditions.
 	using setVector = std::vector<std::pair<matrix_t<Number>, vector_t<Number>>>;
-//Map from old location to new location 
+//Map from old location to new location transformed into the Eigenspace
     using locationPtrMap = std::map<const Location<Number>*,Location<Number>*, locPtrComp<Number> >;
 //Location<Number>* points to locations of transformed Hybrid Automaton with according values
     using locationComputationSTMap = std::map< Location<Number>*,STallValues<Number>, locPtrComp<Number>>;

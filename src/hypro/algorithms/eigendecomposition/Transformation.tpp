@@ -1,3 +1,7 @@
+/**
+ * @file Transformation.h
+ * @author Jan Philipp Hafer
+ */
 #include "Transformation.h"
 
 namespace hypro {
@@ -10,8 +14,8 @@ Transformation<Number>::Transformation (const HybridAutomaton<Number>& _hybrid) 
     Matrix<Number> V_EVD;
     DiagonalMatrix<Number> D_EVD;
     Matrix<Number> Vinv_EVD;
-    Matrix<Number> V;                             //backtransformation
-    Matrix<Number> Vinv;                          //transformation
+    Matrix<Number> V;
+    Matrix<Number> Vinv;
     Matrix<Number> A_in;
     Vector<Number> b_tr;                          //later transformed (b + taking linear terms into account)
     Matrix<Number> A_nonlinear;
@@ -22,7 +26,7 @@ Transformation<Number>::Transformation (const HybridAutomaton<Number>& _hybrid) 
     mTransformedHA = HybridAutomaton<Number>();
 //LOCATIONS
     for (Location<Number>* LocPtr : _hybrid.getLocations() ) {
-        matrix_in_parser = LocPtr->getFlow();   //copy for calculation; TODO (getsize() missing) many flows
+        matrix_in_parser = LocPtr->getFlow();   //copy for calculation; TODO many flows? -> lots of duplicate code/management
         m_size = matrix_in_parser.cols(); //rows
         assert(m_size>=1);  //exit if location size < 1  ==>> underflow error
         m_size -= 1;        //Due to parsing: for representation zero row is added for constant coefficients we do not need
@@ -126,8 +130,8 @@ Transformation<Number>::Transformation (const HybridAutomaton<Number>& _hybrid) 
     //TRANSITIONS
     transitionSet transitions;
     for (Transition<Number>* TransPtr : _hybrid.getTransitions() ) {
-        Transition<Number>* NewTransPtr = new Transition<Number>(*TransPtr);  //! TODO !
-        //transitions not freed, shared_ptr too costly in multithreaded context
+        Transition<Number>* NewTransPtr = new Transition<Number>(*TransPtr);
+        //TODO transitionManager? transitions not freed, shared_ptr too costly in multithreaded context
     //POINTER
         Location<Number>*   NewSourceLocPtr = mLocationPtrsMap[TransPtr->getSource()];
         Location<Number>*   NewTargetLocPtr = mLocationPtrsMap[TransPtr->getTarget()];
@@ -196,6 +200,24 @@ Transformation<Number>::Transformation (const HybridAutomaton<Number>& _hybrid) 
     //    TRACE("hypro.eigendecomposition","in location: " << locBadState.first)
     //    TRACE("hypro.eigendecomposition","after trafo State:" << locBadState.second);
     //}
+//eigen decompositions from eigen with complex eigenvalues seem to result in wrong results (V even not invertible)
+//LOOP through all locations checking V,D,Vinv for NaN, Inf, -Inf (implicitly also sNan, qNaN)
+    bool outOfRange = false;
+    for (typename locationSet::const_iterator locIt=mTransformedHA.getLocations().begin();
+      locIt!=mTransformedHA.getLocations().end(); ++locIt) {
+        STflowpipeSegment<Number>& segmentinfo   = mLocPtrtoComputationvaluesMap[*locIt].mSTflowpipeSegment;
+        STindependentFunct<Number>& indepentinfo = mLocPtrtoComputationvaluesMap[*locIt].mSTindependentFunct;
+        if( (segmentinfo.Vinv.array().isNaN() == 1).any() || (segmentinfo.Vinv.array().isNaN() == 1).any() )
+            outOfRange = true;
+        if( (segmentinfo.V.array().isNaN() == 1).any()  || (segmentinfo.V.array().isNaN() == 1).any() )
+            outOfRange = true;
+        if( (indepentinfo.D.diagonal().array().isNaN() == 1).any() || (indepentinfo.D.diagonal().array().isNaN() == 1).any() )
+            outOfRange = true;
+    }
+    if (outOfRange) {
+        FATAL("hypro.eigendecomposition","OUT OF BOUNDS on EVD computation, please check the results in DEBUG mode");
+        std::exit(EXIT_FAILURE);
+    }
 }
 template <typename Number>
 void Transformation<Number>::addGlobalBadStates
@@ -212,16 +234,15 @@ void Transformation<Number>::addGlobalBadStates
             ++locIt;
     }
     assert( locIt == endLocIt );
-//TRANSFORMATION -> add to localBadStates
+//TRANSFORMATION -> for each globalBadState : set localBadState A*Vx <= b for according V of location
+//1. loop through global states
+//2. loop through ptr to location map and create new localBadState
     if (transform) {
         assert (!globalBadStatesTransformed);
         //TODO MEMORY ASSERTION?
         size_t i;
         for (typename conditionVector::const_iterator it = _hybrid.getGlobalBadStates().begin(); 
           it!=_hybrid.getGlobalBadStates().end(); ++it) {
-            //transform each global badstate by setting of according localBadState
-           //1. loop through global states
-           //2. loop through ptr to location map and create new localBadState
             for (typename locationPtrMap::iterator locMapIt = mLocationPtrsMap.begin(); 
               locMapIt!=mLocationPtrsMap.end(); ++locMapIt) {
                 Condition<Number> badStateNEW;
@@ -272,7 +293,6 @@ size_t Transformation<Number>::countLinearAndRemember(const Matrix<Number>& A_in
     bool linear;
     for(nrow=0; nrow<dimension; ++nrow) {
         linear = true;
-        //if(A_in.row(nrow).array() == 0) //eigen does not accept this statement
         for(ncol=0; ncol<dimension; ++ncol) {
             if(A_in(nrow,ncol) != 0) {
                 linear = false;
@@ -349,7 +369,6 @@ void Transformation<Number>::EigenvalueDecomposition(const Matrix<Number>& A_non
     Vdouble << es.eigenvectors().real();
     Ddouble.diagonal() << es.eigenvalues().real();
     Vinvdouble = Vdouble.inverse();
-//TODO fix NaN,inf,-inf and other invalid number types for condition to terminate immediatly
 //ASSERTION CONDITION TODO making this faster for big/sparse matrices
     Eigen::JacobiSVD<Matrix<double>> svd(Vinvdouble);  
     double cond = svd.singularValues()(0)  / svd.singularValues()(svd.singularValues().size()-1);
@@ -428,10 +447,6 @@ void Transformation<Number>::adjustLinearAndEVDcomponents(
     DEBUG("hypro.eigendecomposition", "V\n" << V);
     DEBUG("hypro.eigendecomposition", "D\n" << mSTallvalues.mSTindependentFunct.D.diagonal() );
     DEBUG("hypro.eigendecomposition", "trafoInput\n" << mSTallvalues.mSTflowpipeSegment.trafoInput );
-    //std::cout << b_tr << "\n";
-    //std::cout << "Vinv:\n" << Vinv;
-    //std::cout << "V:\n" << V;
-    //std::cout << "D:\n" << mSTallvalues.mSTindependentFunct.D.diagonal();
 }
 template <typename Number>
 void Transformation<Number>::analyzeExponentialTerms(const size_t dimension, STallValues<Number>& mSTallvalues) {
