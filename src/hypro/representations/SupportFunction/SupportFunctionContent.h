@@ -317,7 +317,7 @@ class SupportFunctionContent {
 
 	bool empty() const;
 
-	void cleanUp();
+	void cleanUp() const;
 
 	void print() const;
 	friend std::ostream& operator<<( std::ostream& lhs, const std::shared_ptr<SupportFunctionContent<Number>>& rhs ) {

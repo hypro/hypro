@@ -651,10 +651,13 @@ BoxT<double,Converter,Setting> BoxT<double,Converter,Setting>::intersectHalfspac
 	// evaluate in box directions.
 	Optimizer<double> opt(constraints,constants);
 	std::vector<EvaluationResult<double>> results;
+	TRACE("hypro.representations.box","Multiple calls to evaluate.");
 	for(Eigen::Index rowIndex = 0; rowIndex < boxDirections.rows(); ++rowIndex) {
 		results.emplace_back(opt.evaluate(boxDirections.row(rowIndex), false));
 	}
+	TRACE("hypro.representations.box","Multiple calls to evaluate - Done.");
 	assert(Eigen::Index(results.size()) == boxDirections.rows());
+	TRACE("hypro.representations.box","Call to clean opt.");
 	opt.cleanGLPInstance();
 
 	// re-construct box from results.

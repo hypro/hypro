@@ -99,7 +99,7 @@ PolytopeSupportFunction<Number,Setting>::PolytopeSupportFunction( const Polytope
 template <typename Number, class Setting>
 PolytopeSupportFunction<Number,Setting>::~PolytopeSupportFunction() {
 	TRACE("hypro.representations.supportFunction", "");
-	mOpt.cleanGLPInstance();
+	//mOpt.cleanGLPInstance();
 }
 
 template <typename Number, class Setting>
@@ -333,7 +333,7 @@ bool PolytopeSupportFunction<Number,Setting>::empty() const {
 }
 
 template <typename Number, class Setting>
-void PolytopeSupportFunction<Number,Setting>::cleanUp() {
+void PolytopeSupportFunction<Number,Setting>::cleanUp() const {
 	TRACE("hypro.representations.supportFunction", "Thread " << std::this_thread::get_id() << " attempts to clean its glp env.");
 	mOpt.cleanGLPInstance();
 }

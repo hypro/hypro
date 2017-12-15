@@ -55,6 +55,38 @@ namespace hypro {
 			TRACE("hypro.optimizer","Create glpk_context " << this);
 		}
 
+		void createArrays( unsigned size ) {
+			TRACE("hypro.optimizer","");
+			if(arraysCreated) {
+				deleteArrays();
+			}
+			ia = new int[size + 1];
+			ja = new int[size + 1];
+			ar = new double[size + 1];
+			arraysCreated = true;
+		}
+
+		void deleteArrays() {
+			TRACE("hypro.optimizer","");
+			if(arraysCreated) {
+				delete[] ia;
+				delete[] ja;
+				delete[] ar;
+				arraysCreated = false;
+			}
+		}
+
+		void createLPInstance() {
+			if(!mInitialized) {
+				lp = glp_create_prob();
+				glp_set_obj_dir( lp, GLP_MAX );
+				glp_term_out( GLP_OFF );
+				TRACE("hypro.optimizer", "Thread " << std::this_thread::get_id() << " creates its glp instance. (@" << this << ")");
+				mInitialized = true;
+				mConstraintsSet = false;
+			}
+		}
+
 		void deleteLPInstance() {
 			TRACE("hypro.optimizer","Start." << " instance @" << this);
 			if(mInitialized){
@@ -62,6 +94,7 @@ namespace hypro {
 				glp_delete_prob(lp);
 				mInitialized = false;
 				mConstraintsSet = false;
+				lp = nullptr;
 			}
 			TRACE("hypro.optimizer","Done." << " instance @" << this);
 		}
@@ -70,11 +103,7 @@ namespace hypro {
 			TRACE("hypro.optimizer","Arrays created: " << arraysCreated << " instance @" << this);
 			deleteLPInstance();
 			// assume that all fields are set at once so just check one.
-			if(arraysCreated){
-				delete[] ia;
-				delete[] ja;
-				delete[] ar;
-			}
+			deleteArrays();
 		}
 	};
 
@@ -157,7 +186,7 @@ namespace hypro {
 		 * @brief      Destroys the object.
 		 */
 		~Optimizer() {
-			assert(mGlpkContext.size() <= 1);
+			TRACE("hypro.optimizer","Have " << mGlpkContext.size() << " instances left.");
 			this->cleanGLPInstance();
 		}
 
@@ -251,18 +280,6 @@ namespace hypro {
 		 * @brief      Updates problem instances.
 		 */
 		void updateConstraints() const;
-
-		/**
-		 * @brief      Creates the required arrays for glpk.
-		 * @param[in]  size  The size.
-		 */
-		void createArrays( unsigned size ) const;
-
-		/**
-		 * @brief      Deletes the previously created arrays for glpk.
-		 */
-		void deleteArrays() const;
-
 	};
 } // namespace hypro
 

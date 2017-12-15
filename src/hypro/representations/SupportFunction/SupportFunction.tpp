@@ -126,7 +126,7 @@ namespace hypro{
     }
 
 	template<typename Number, typename Converter>
-    void SupportFunctionT<Number,Converter>::cleanUp() {
+    void SupportFunctionT<Number,Converter>::cleanUp() const {
     	content->cleanUp();
     }
 
