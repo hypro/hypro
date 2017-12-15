@@ -43,9 +43,7 @@ namespace hypro {
 				rewriter.replace(i, i, constants.at(it->first));
 			}			
 		}
-		#ifdef HYPRO_LOGGING
-		std::cout << "======== ALTERED VERSION =========\n" << rewriter.getText() << std::endl;
-		#endif
+		//std::cout << "======== ALTERED VERSION =========\n" << rewriter.getText() << std::endl;
 		return rewriter.getText();
 	}
 

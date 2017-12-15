@@ -106,7 +106,7 @@ interval 			: '[' MINUS? (NUMBER | VARIABLE) ',' MINUS? (NUMBER | VARIABLE) ']' 
 equation 			: VARIABLE EQUALS polynom (connector interval)?;
 constraint			: polynom (BOOLRELATION | EQUALS) polynom; 
 intervalexpr		: VARIABLE IN interval; 
-constrset	 		: (constraint | intervalexpr)+ ;
+constrset	 		: (constraint | intervalexpr)+ | TRUE | FALSE ;
 replacedexpr		: MINUS? NUMBER EQUALS MINUS? NUMBER ;
 
 //constantexpr is above in C++ or in Java
@@ -115,16 +115,9 @@ replacedexpr		: MINUS? NUMBER EQUALS MINUS? NUMBER ;
 
 //Always remember: Keywords first!
 IN 					: 'in' ;
+TRUE 				: 'true' ;
+FALSE 				: 'false' ;
 PAR 		 		: 'par' { parsingConstants = true; } ;
-
-JUMPS 				: 'jumps' ;
-URGENT 				: 'urgent' ;
-GUARD 				: 'guard' ;
-RESET 				: 'reset' ;
-PARALLELOTOPE 		: 'parallelotope aggregation' ;
-BOX 				: 'box aggregation' ;
-JUMP				: '->' ;
-DEFINE 				: ':=' ;
 
 COMMENT				: '#' ~[\r\n]* -> skip ;
 

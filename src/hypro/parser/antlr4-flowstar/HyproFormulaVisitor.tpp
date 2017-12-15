@@ -109,7 +109,7 @@ namespace hypro {
 		return coeffVec;
 	}
 
-	///////////// Functions inherited by FormulaBaseVisitor
+	///////////// Functions inherited by HybridAutomatonBaseVisitor
 
 	template<typename Number>
 	antlrcpp::Any HyproFormulaVisitor<Number>::visitPolynom(HybridAutomatonParser::PolynomContext *ctx){
@@ -292,53 +292,78 @@ namespace hypro {
 	template<typename Number>
 	antlrcpp::Any HyproFormulaVisitor<Number>::visitConstrset(HybridAutomatonParser::ConstrsetContext *ctx){
 
-		//1.Iteratively call visit(ctx->constraint()) to get vector of pairs of constraint vectors and constant Numbers
-		unsigned size = ctx->constraint().size() + ctx->intervalexpr().size();
-		matrix_t<Number> tmpMatrix = matrix_t<Number>::Zero(size, vars.size());
-		vector_t<Number> tmpVector = vector_t<Number>::Zero(size);
-		unsigned i = 0;
-		int rowToFill = 0;
-		std::vector<std::pair<vector_t<Number>,Number>> values;
-		HyproFormulaVisitor<Number> visitor(vars);
-		while(i < size){
+		//0. Check if our constraint set contains TRUE or FALSE and return a fitting pair of matrix and vector in that case. 
+		if(ctx->TRUE() != NULL && ctx->FALSE() == NULL){
 
-			//Choose constraints until there are no more, then choose intervalexprs
-			if(i < ctx->constraint().size()){
-				values = (visitor.visit(ctx->constraint().at(i))).template as<std::vector<std::pair<vector_t<Number>,Number>>>();
-			} else {
-				unsigned posInIntervalExpr = i - ctx->constraint().size();
-				if(posInIntervalExpr < ctx->intervalexpr().size()){
-					values = visitor.visit(ctx->intervalexpr().at(posInIntervalExpr)).template as<std::vector<std::pair<vector_t<Number>,Number>>>();
+			matrix_t<Number> tmpMatrix = matrix_t<Number>::Zero(1,vars.size());
+			vector_t<Number> tmpVector = vector_t<Number>::Zero(1);
+			return std::make_pair(tmpMatrix, tmpVector);
+
+		} else if (ctx->TRUE() == NULL && ctx->FALSE() != NULL) {
+			
+			matrix_t<Number> tmpMatrix = matrix_t<Number>::Zero(1,vars.size());
+			vector_t<Number> one = vector_t<Number>(1);
+			one(0) = Number(1);
+			return std::make_pair(tmpMatrix, one);
+
+		} else if (ctx->TRUE() != NULL && ctx->FALSE() != NULL) {
+			
+			std::cerr << "ERROR: It should not be possible to have true and false in a constraint set." << std::endl;
+			exit(0);
+
+		} else {
+
+			//1.Iteratively call visit(ctx->constraint()) to get vector of pairs of constraint vectors and constant Numbers
+			unsigned size = ctx->constraint().size() + ctx->intervalexpr().size();
+			matrix_t<Number> tmpMatrix = matrix_t<Number>::Zero(size, vars.size());
+			vector_t<Number> tmpVector = vector_t<Number>::Zero(size);
+			unsigned i = 0;
+			int rowToFill = 0;
+			std::vector<std::pair<vector_t<Number>,Number>> values;
+			HyproFormulaVisitor<Number> visitor(vars);
+
+			while(i < size){
+
+				//Choose constraints until there are no more, then choose intervalexprs
+				if(i < ctx->constraint().size()){
+					values = (visitor.visit(ctx->constraint().at(i))).template as<std::vector<std::pair<vector_t<Number>,Number>>>();
 				} else {
-					std::cerr << "ERROR: There is no " << posInIntervalExpr << "-th constraint parsed!" << std::endl;
-					exit(0);
+					unsigned posInIntervalExpr = i - ctx->constraint().size();
+					if(posInIntervalExpr < ctx->intervalexpr().size()){
+						values = visitor.visit(ctx->intervalexpr().at(posInIntervalExpr)).template as<std::vector<std::pair<vector_t<Number>,Number>>>();
+					} else {
+						std::cerr << "ERROR: There is no " << posInIntervalExpr << "-th constraint parsed!" << std::endl;
+						exit(0);
+					}
 				}
+
+				//Print stuff
+				//std::cout << "---- Received following constraint Vec:" << std::endl;
+				//for(auto v : values){
+				//	std::cout << v.first << "and \n" << v.second << "\n" << std::endl;
+				//}
+
+				//Resize tmpMatrix and tmpVector and directly write values inside
+				tmpMatrix.conservativeResize(tmpMatrix.rows()+values.size()-1, Eigen::NoChange_t::NoChange);
+				tmpVector.conservativeResize(tmpVector.rows()+values.size()-1, Eigen::NoChange_t::NoChange);
+				for(int k=rowToFill; k < tmpMatrix.rows(); k++){
+					tmpMatrix.row(k) = vector_t<Number>::Zero(tmpMatrix.cols());
+					tmpVector(k) = Number(0);
+				}
+				for(unsigned k=0; k < values.size(); k++){
+					tmpMatrix.row(rowToFill+k) = values[k].first;
+					tmpVector(rowToFill+k) = values[k].second;
+				}
+
+				//Increment rowToFill by our added size
+				rowToFill += values.size();
+				i++;
 			}
 
-			//Print stuff
-			//std::cout << "---- Received following constraint Vec:" << std::endl;
-			//for(auto v : values){
-			//	std::cout << v.first << "and \n" << v.second << "\n" << std::endl;
-			//}
-
-			//Resize tmpMatrix and tmpVector and directly write values inside
-			tmpMatrix.conservativeResize(tmpMatrix.rows()+values.size()-1, Eigen::NoChange_t::NoChange);
-			tmpVector.conservativeResize(tmpVector.rows()+values.size()-1, Eigen::NoChange_t::NoChange);
-			for(int k=rowToFill; k < tmpMatrix.rows(); k++){
-				tmpMatrix.row(k) = vector_t<Number>::Zero(tmpMatrix.cols());
-				tmpVector(k) = Number(0);
-			}
-			for(unsigned k=0; k < values.size(); k++){
-				tmpMatrix.row(rowToFill+k) = values[k].first;
-				tmpVector(rowToFill+k) = values[k].second;
-			}
-
-			//Increment rowToFill by our added size
-			rowToFill += values.size();
-			i++;
+			return std::make_pair(tmpMatrix, tmpVector);
+	
 		}
-
-		return std::make_pair(tmpMatrix, tmpVector);
+		
 	}
 
 }
