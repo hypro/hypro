@@ -202,22 +202,22 @@ Transformation<Number>::Transformation (const HybridAutomaton<Number>& _hybrid) 
     //}
 //eigen decompositions from eigen with complex eigenvalues seem to result in wrong results (V even not invertible)
 //LOOP through all locations checking V,D,Vinv for NaN, Inf, -Inf (implicitly also sNan, qNaN)
-    bool outOfRange = false;
-    for (typename locationSet::const_iterator locIt=mTransformedHA.getLocations().begin();
-      locIt!=mTransformedHA.getLocations().end(); ++locIt) {
-        STflowpipeSegment<Number>& segmentinfo   = mLocPtrtoComputationvaluesMap[*locIt].mSTflowpipeSegment;
-        STindependentFunct<Number>& indepentinfo = mLocPtrtoComputationvaluesMap[*locIt].mSTindependentFunct;
-        if( (segmentinfo.Vinv.array().isNaN() == 1).any() || (segmentinfo.Vinv.array().isNaN() == 1).any() )
-            outOfRange = true;
-        if( (segmentinfo.V.array().isNaN() == 1).any()  || (segmentinfo.V.array().isNaN() == 1).any() )
-            outOfRange = true;
-        if( (indepentinfo.D.diagonal().array().isNaN() == 1).any() || (indepentinfo.D.diagonal().array().isNaN() == 1).any() )
-            outOfRange = true;
-    }
-    if (outOfRange) {
-        FATAL("hypro.eigendecomposition","OUT OF BOUNDS on EVD computation, please check the results in DEBUG mode");
-        std::exit(EXIT_FAILURE);
-    }
+    //bool outOfRange = false;
+    //for (typename locationSet::const_iterator locIt=mTransformedHA.getLocations().begin();
+    //  locIt!=mTransformedHA.getLocations().end(); ++locIt) {
+    //    STflowpipeSegment<Number>& segmentinfo   = mLocPtrtoComputationvaluesMap[*locIt].mSTflowpipeSegment;
+    //    STindependentFunct<Number>& indepentinfo = mLocPtrtoComputationvaluesMap[*locIt].mSTindependentFunct;
+    //    if( (segmentinfo.Vinv.array().isNaN() == 1).any() || (segmentinfo.Vinv.array().isNaN() == 1).any() )
+    //        outOfRange = true;
+    //    if( (segmentinfo.V.array().isNaN() == 1).any()  || (segmentinfo.V.array().isNaN() == 1).any() )
+    //        outOfRange = true;
+    //    if( (indepentinfo.D.diagonal().array().isNaN() == 1).any() || (indepentinfo.D.diagonal().array().isNaN() == 1).any() )
+    //        outOfRange = true;
+    //}
+    //if (outOfRange) {
+    //    FATAL("hypro.eigendecomposition","OUT OF BOUNDS on EVD computation, please check the results in DEBUG mode");
+    //    std::exit(EXIT_FAILURE);
+    //}
 }
 template <typename Number>
 void Transformation<Number>::addGlobalBadStates
@@ -376,6 +376,14 @@ void Transformation<Number>::EigenvalueDecomposition(const Matrix<Number>& A_non
         FATAL("hypro.eigendecomposition","condition is higher than CONDITION_LIMIT");
     }
     std::cout <<"A_nonlinear\n" << A_nonlinear;
+//CHECKUP for invalid results
+    bool outOfRange = false;
+    if( (Vinvdouble.array().isNaN() == 1).any() || (Vinvdouble.array().isInf() == 1).any() )
+        outOfRange = true;
+    if( (Vdouble.array().isNaN() == 1).any()  || (Vdouble.array().isInf() == 1).any() )
+        outOfRange = true;
+    if( (Ddouble.diagonal().array().isNaN() == 1).any() || (Ddouble.diagonal().array().isInf() == 1).any() )
+        outOfRange = true;
 //CONVERSION TO RATIONAL
     V_EVD = convert<double,Number>(Vdouble);
     D_EVD = convert<double,Number>(Ddouble);
@@ -385,6 +393,11 @@ void Transformation<Number>::EigenvalueDecomposition(const Matrix<Number>& A_non
     std::cout << "D_EVD:\n" << D_EVD.diagonal();
     TRACE("hypro.eigendecomposition","V\n" << V_EVD);
     TRACE("hypro.eigendecompositoin","Vinv\n" << Vinv_EVD);
+//exit after output of EVD for quick feedback
+    if (outOfRange) {
+        FATAL("hypro.eigendecomposition","OUT OF BOUNDS on EVD computation, please check the results in DEBUG mode");
+        std::exit(EXIT_FAILURE);
+    }
 }
 template <typename Number>
 void Transformation<Number>::adjustLinearAndEVDcomponents(
