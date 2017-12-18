@@ -1,4 +1,4 @@
-.idea # CLion IDE files
+.idea
 CMakeFiles
 nbproject
 .project
