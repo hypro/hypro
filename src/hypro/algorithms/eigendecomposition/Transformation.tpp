@@ -1,5 +1,5 @@
 /**
- * @file Transformation.h
+ * @file Transformation.tpp
  * @author Jan Philipp Hafer
  */
 #include "Transformation.h"
