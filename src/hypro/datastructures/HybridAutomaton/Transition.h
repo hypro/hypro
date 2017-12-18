@@ -12,6 +12,7 @@
 #include "Location.h"
 #include "Reset.h"
 #include <carl/interval/Interval.h>
+#include "Label.h"
 
 namespace hypro
 {
@@ -35,6 +36,7 @@ class Transition
     Aggregation mAggregationSetting = Aggregation::none; /// Aggregation settings.
     bool mUrgent = false; /// Flag if transition is urgent.
     Number mTriggerTime = Number(-1); /// Trigger-time: if positive acts as an additional guard.
+    std::set<Label<Number>> mLabels;
 
   public:
 
@@ -103,6 +105,7 @@ class Transition
     Number getTriggerTime() const { return mTriggerTime; }
     bool isUrgent() const { return mUrgent; }
     bool isTimeTriggered() const { return mTriggerTime >= 0; }
+    std::set<Label<Number>> getLabels() const { return mLabels; };
 
     void setSource(Location<Number>* source) { mSource = source; }
     void setTarget(Location<Number>* target) { mTarget = target; }
@@ -111,6 +114,7 @@ class Transition
     void setAggregation(Aggregation agg) { mAggregationSetting = agg; }
     void setUrgent(bool urgent = true) { mUrgent = urgent; }
     void setTriggerTime(Number t) { mTriggerTime = t; }
+    void setLabels(const std::set<Label<Number>>& labels) { mLabels = labels; }
 
     /**
      * @brief      Outstream operator.
@@ -126,6 +130,7 @@ class Transition
 	          << "\t urgent = " << t.isUrgent() << std::endl
 	          << "\t Guard = " << t.getGuard() << std::endl
 	          << "\t Reset = " << t.getReset() << std::endl
+	          << "\t Label = " << t.getLabels() << std::endl
 	          << ")";
 		#endif
 	    return ostr;
@@ -142,7 +147,8 @@ class Transition
 			(*lhs.mTarget != *rhs.mTarget) ||
 			(lhs.mUrgent != rhs.mUrgent) ||
 			(lhs.mGuard != rhs.mGuard) ||
-			(lhs.mReset != rhs.mReset) ) {
+			(lhs.mReset != rhs.mReset) ||
+      (lhs.mLabels != rhs.mLabels)) {
 			return false;
 		}
 
