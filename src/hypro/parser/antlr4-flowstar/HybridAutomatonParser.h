@@ -20,10 +20,11 @@ public:
     T__7 = 8, T__8 = 9, T__9 = 10, T__10 = 11, T__11 = 12, T__12 = 13, T__13 = 14, 
     T__14 = 15, T__15 = 16, T__16 = 17, T__17 = 18, T__18 = 19, T__19 = 20, 
     T__20 = 21, T__21 = 22, T__22 = 23, T__23 = 24, T__24 = 25, T__25 = 26, 
-    IN = 27, TRUE = 28, FALSE = 29, PAR = 30, COMMENT = 31, EQUALS = 32, 
-    BOOLRELATION = 33, PLUS = 34, MINUS = 35, TIMES = 36, SBOPEN = 37, SBCLOSE = 38, 
-    CBOPEN = 39, CBCLOSE = 40, COMMA = 41, NUMBER = 42, CONSTANT = 43, VARIABLE = 44, 
-    WS = 45, PARALLELOTOPE = 46, BOX = 47, JUMP = 48, DEFINE = 49, EXPONENTIAL = 50
+    T__26 = 27, IN = 28, TRUE = 29, FALSE = 30, PAR = 31, COMMENT = 32, 
+    EQUALS = 33, BOOLRELATION = 34, PLUS = 35, MINUS = 36, TIMES = 37, SBOPEN = 38, 
+    SBCLOSE = 39, CBOPEN = 40, CBCLOSE = 41, COMMA = 42, NUMBER = 43, CONSTANT = 44, 
+    VARIABLE = 45, WS = 46, PARALLELOTOPE = 47, BOX = 48, JUMP = 49, DEFINE = 50, 
+    EXPONENTIAL = 51
   };
 
   enum {
@@ -34,10 +35,11 @@ public:
     RuleConstrset = 15, RuleReplacedexpr = 16, RuleInit = 17, RuleInitstate = 18, 
     RuleUnsafeset = 19, RuleLbadstate = 20, RuleGbadstate = 21, RuleJumps = 22, 
     RuleTransition = 23, RuleFromto = 24, RuleUrgent = 25, RuleGuard = 26, 
-    RuleAllocation = 27, RuleResetfct = 28, RuleAggregation = 29, RuleSetting = 30, 
-    RuleFixedsteps = 31, RuleTime = 32, RulePlotsetting = 33, RuleFilename = 34, 
-    RuleMaxjumps = 35, RulePrint = 36, RuleRemainder = 37, RuleIdentity = 38, 
-    RuleFixedorders = 39, RuleCutoff = 40, RulePrecision = 41
+    RuleAllocation = 27, RuleResetfct = 28, RuleAggregation = 29, RuleLabels = 30, 
+    RuleLabel = 31, RuleSetting = 32, RuleFixedsteps = 33, RuleTime = 34, 
+    RulePlotsetting = 35, RuleFilename = 36, RuleMaxjumps = 37, RulePrint = 38, 
+    RuleRemainder = 39, RuleIdentity = 40, RuleFixedorders = 41, RuleCutoff = 42, 
+    RulePrecision = 43
   };
 
   HybridAutomatonParser(antlr4::TokenStream *input);
@@ -83,6 +85,8 @@ public:
   class AllocationContext;
   class ResetfctContext;
   class AggregationContext;
+  class LabelsContext;
+  class LabelContext;
   class SettingContext;
   class FixedstepsContext;
   class TimeContext;
@@ -455,6 +459,8 @@ public:
     ResetfctContext* resetfct(size_t i);
     std::vector<AggregationContext *> aggregation();
     AggregationContext* aggregation(size_t i);
+    std::vector<LabelsContext *> labels();
+    LabelsContext* labels(size_t i);
 
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
    
@@ -539,6 +545,31 @@ public:
   };
 
   AggregationContext* aggregation();
+
+  class  LabelsContext : public antlr4::ParserRuleContext {
+  public:
+    LabelsContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    std::vector<LabelContext *> label();
+    LabelContext* label(size_t i);
+
+    virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+   
+  };
+
+  LabelsContext* labels();
+
+  class  LabelContext : public antlr4::ParserRuleContext {
+  public:
+    LabelContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    antlr4::tree::TerminalNode *VARIABLE();
+
+    virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+   
+  };
+
+  LabelContext* label();
 
   class  SettingContext : public antlr4::ParserRuleContext {
   public:

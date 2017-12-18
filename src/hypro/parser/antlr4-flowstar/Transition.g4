@@ -18,7 +18,7 @@ import Formula;
 
 jumps		: 'jumps' '{' transition* '}' ;
 
-transition 	: fromto (urgent | guard | resetfct | aggregation)* ;
+transition 	: fromto (urgent | guard | resetfct | aggregation | labels)* ;
 
 fromto		: VARIABLE JUMP VARIABLE ;
 
@@ -31,6 +31,10 @@ allocation	: VARIABLE DEFINE (polynom | interval) ;
 resetfct	: 'reset' '{' allocation* '}' ;
 
 aggregation	: (PARALLELOTOPE | BOX) '{' '}' ;
+
+labels      : 'label' '{' label* '}' ;
+
+label       : VARIABLE ;
 
 //////// Lexer Rules
 

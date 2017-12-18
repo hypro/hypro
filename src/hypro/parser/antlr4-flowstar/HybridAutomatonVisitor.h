@@ -79,6 +79,10 @@ public:
 
     virtual antlrcpp::Any visitAggregation(HybridAutomatonParser::AggregationContext *context) = 0;
 
+    virtual antlrcpp::Any visitLabels(HybridAutomatonParser::LabelsContext *context) = 0;
+
+    virtual antlrcpp::Any visitLabel(HybridAutomatonParser::LabelContext *context) = 0;
+
     virtual antlrcpp::Any visitSetting(HybridAutomatonParser::SettingContext *context) = 0;
 
     virtual antlrcpp::Any visitFixedsteps(HybridAutomatonParser::FixedstepsContext *context) = 0;
