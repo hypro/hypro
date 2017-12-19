@@ -218,11 +218,11 @@ namespace hypro {
 
 	template<typename Number>
 	antlrcpp::Any HyproTransitionVisitor<Number>::visitLabels(HybridAutomatonParser::LabelsContext * ctx){
-		std::set<Label<Number>> ls;
+		std::set<Label> ls;
 
 		unsigned i = 0;
 		while(i < ctx->label().size()){
-			Label<Number> l = visit(ctx->label().at(i));
+			Label l = visit(ctx->label().at(i));
 			ls.insert(l);
 			i++;
 		}
@@ -233,7 +233,7 @@ namespace hypro {
 
 	template<typename Number>
 	antlrcpp::Any HyproTransitionVisitor<Number>::visitLabel(HybridAutomatonParser::LabelContext * ctx){
-		Label<Number> l;
+		Label l;
 		l.setName(ctx->getText());
 		return l;
 	}

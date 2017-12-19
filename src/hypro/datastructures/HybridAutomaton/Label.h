@@ -10,7 +10,6 @@
 
 namespace hypro {
 
-template<typename Number>
 class Label {
   private:
     std::string mName;
@@ -26,16 +25,16 @@ class Label {
 
     void setName(const std::string &name) { mName = name; }
 
-    friend bool operator==(const Label<Number> lhs, const Label<Number> rhs) {
+    friend bool operator==(const Label lhs, const Label rhs) {
       return lhs.getName() == rhs.getName();
     }
 
-    friend bool operator!=(const Label<Number> lhs, const Label<Number> rhs) {
+    friend bool operator!=(const Label lhs, const Label rhs) {
       return !(lhs == rhs);
     }
 
-    friend bool operator<(const Label<Number> lhs, const Label<Number> rhs) {
-      return lhs != rhs;
+    friend bool operator<(const Label lhs, const Label rhs) {
+      return lhs.getName() < rhs.getName();
     }
 };
 
