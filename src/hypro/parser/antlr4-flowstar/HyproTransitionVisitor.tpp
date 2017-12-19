@@ -83,6 +83,10 @@ namespace hypro {
 			Aggregation agg = visit(ctx->aggregation()[0]);
 			t->setAggregation(agg);
 		}
+
+		//6. Collect Labels
+		visit(ctx->labels()[0]);
+		//t->setLabels(labels);
 		
 		return t;
 	}
@@ -210,6 +214,28 @@ namespace hypro {
 			//std::cout << "---- Aggregation is none" << std::endl;
 			return Aggregation::none;
 		}
+	}
+
+	template<typename Number>
+	antlrcpp::Any HyproTransitionVisitor<Number>::visitLabels(HybridAutomatonParser::LabelsContext * ctx){
+		std::set<Label<Number>> ls;
+
+		unsigned i = 0;
+		while(i < ctx->label().size()){
+			Label<Number> l = visit(ctx->label().at(i));
+			ls.insert(l);
+			i++;
+		}
+
+		return ls;
+	}
+
+
+	template<typename Number>
+	antlrcpp::Any HyproTransitionVisitor<Number>::visitLabel(HybridAutomatonParser::LabelContext * ctx){
+		Label<Number> l;
+		l.setName(ctx->getText());
+		return l;
 	}
 
 }
