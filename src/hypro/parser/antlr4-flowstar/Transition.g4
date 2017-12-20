@@ -30,11 +30,13 @@ allocation	: VARIABLE DEFINE (polynom | interval) ;
 
 resetfct	: 'reset' '{' allocation* '}' ;
 
-aggregation	: (PARALLELOTOPE | BOX) '{' '}' ;
+aggregation	: (PARALLELOTOPE | BOX | INTERVALAGG) '{' '}' ;
 
 //////// Lexer Rules
 
 PARALLELOTOPE 	: 'parallelotope aggregation' ;
+
+INTERVALAGG 	: 'interval aggregation' ; 
 
 BOX 			: 'box aggregation' ;
 
