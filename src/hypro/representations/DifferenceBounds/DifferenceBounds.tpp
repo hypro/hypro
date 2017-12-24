@@ -42,7 +42,7 @@ namespace hypro {
     template <typename Number, typename Converter>
     std::size_t DifferenceBoundsT<Number, Converter>::dimension() const{
         // number of clocks
-        return this->getDBM().cols();
+        return this->getDBM().cols()-1;
     }
 
     template <typename Number, typename Converter>
@@ -154,18 +154,15 @@ namespace hypro {
 
     template <typename Number, typename Converter>
     DifferenceBoundsT<Number,Converter> DifferenceBoundsT<Number, Converter>::project(const std::vector<std::size_t>& dimensions) const{
-        // TODO i assume that the projection vector does not consider the 0 clock. Hence dimension will never contain 0, given that dimension contains a list of dimension to project to, i.e. {1,3,4}
-        hypro::matrix_t<DBMEntry> mat =  hypro::matrix_t<DBMEntry>(m_dbm);
-        for(int i=0; i < mat.rows(); i++){
-            for(int j=0; j < mat.cols();j++){
-                if(std::find(dimensions.begin(), dimensions.end(), i) == dimensions.end() || std::find(dimensions.begin(), dimensions.end(), j) == dimensions.end()){
-                    // either i or j is not in the projection dimension, replace the current entry with (0, <=)
-                    mat(i,j) = DBMEntry(0.0, BOUND_TYPE::SMALLER_EQ);
-                }
-            }
+        
+        if((unsigned) dimensions.size()+1 == m_dbm.rows()){
+            // if the dimensions to plot to are as large as our dbm, we are already done
+            return hypro::DifferenceBoundsT<Number,Converter>(*this);
         }
-        hypro::DifferenceBoundsT<Number,Converter> res = hypro::DifferenceBoundsT<Number,Converter>(*this);
-        res.setDBM(mat);
+        // TODO can this be done better? especially for higher dimensions?
+        hypro::HPolytopeT<Number, Converter> tmp = Converter::toHPolytope(*this);
+        hypro::HPolytopeT<Number, Converter> projected = tmp.project(dimensions);
+        hypro::DifferenceBoundsT<Number,Converter> res = Converter::toDifferenceBounds(projected);
         return res;
     }
 
@@ -389,14 +386,13 @@ namespace hypro {
     template <typename Number, typename Converter>
     DifferenceBoundsT<Number,Converter> DifferenceBoundsT<Number, Converter>::intersectConstraint( const int x, const int y, const DBMEntry& bound ) const{
         hypro::matrix_t<DBMEntry> mat = hypro::matrix_t<DBMEntry>(m_dbm);
-
         // d_yx+bound < 0
         if(mat(y,x)+bound < DBMEntry(0.0, BOUND_TYPE::SMALLER_EQ)){
             //invalid dbm because upper bound became negative
             mat(0,0).first = -1.0;
         }
         // bound < d_xy
-        else if (bound < mat(x,y)){
+        else if ((bound < mat(x,y))){
             mat(x,y) = bound;
             // cutting off parts of the dbm can yield to other constrainst not being tight anymore
             // we correct this because other operations depend on this assumption
@@ -411,7 +407,6 @@ namespace hypro {
                 }
             }
         }
-
         hypro::DifferenceBoundsT<Number, Converter> res = hypro::DifferenceBoundsT<Number, Converter>(*this);
         res.setDBM(mat);
         return res;

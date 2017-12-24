@@ -32,15 +32,15 @@ if(NOT DEFINED CMAKE_INSTALL_SO_NO_EXE)
   set(CMAKE_INSTALL_SO_NO_EXE "1")
 endif()
 
-if("${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
+if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include" TYPE DIRECTORY FILES "/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro" FILES_MATCHING REGEX "/[^/]*\\.h$")
 endif()
 
-if("${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
+if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include" TYPE DIRECTORY FILES "/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro" FILES_MATCHING REGEX "/[^/]*\\.tpp$")
 endif()
 
-if("${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
+if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
   foreach(file
       "$ENV{DESTDIR}/usr/local/lib/libhypro.so.17.09"
       "$ENV{DESTDIR}/usr/local/lib/libhypro.so"
@@ -72,7 +72,7 @@ file(INSTALL DESTINATION "/usr/local/lib" TYPE SHARED_LIBRARY FILES
        NOT IS_SYMLINK "${file}")
       file(RPATH_CHANGE
            FILE "${file}"
-           OLD_RPATH "/home/justin/Documents/Masterarbeit/repo/carl/build:"
+           OLD_RPATH "/home/justin/Documents/clean_build_test/carl/build:"
            NEW_RPATH "")
       if(CMAKE_INSTALL_DO_STRIP)
         execute_process(COMMAND "/usr/bin/strip" "${file}")

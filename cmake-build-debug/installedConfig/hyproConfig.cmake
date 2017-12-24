@@ -5,8 +5,8 @@ get_filename_component(hypro_CMAKE_DIR "${CMAKE_CURRENT_LIST_FILE}" PATH)
 
 if(NOT TARGET lib_carl)
   add_library(lib_carl SHARED IMPORTED)
-  set_target_properties(lib_carl PROPERTIES IMPORTED_LOCATION "/home/justin/Documents/Masterarbeit/repo/carl/build/libcarl.so.17.08")
-  set_target_properties(lib_carl PROPERTIES INTERFACE_INCLUDE_DIRECTORIES "/home/justin/Documents/Masterarbeit/repo/carl/src")
+  set_target_properties(lib_carl PROPERTIES IMPORTED_LOCATION "/home/justin/Documents/clean_build_test/carl/build/libcarl.so.17.10")
+  set_target_properties(lib_carl PROPERTIES INTERFACE_INCLUDE_DIRECTORIES "/home/justin/Documents/clean_build_test/carl/src")
 endif()
 
 if(NOT TARGET GLPK_STATIC)
@@ -16,14 +16,18 @@ if(NOT TARGET GLPK_STATIC)
 endif()
 
 if(NOT TARGET Boost_SHARED)
-  add_library(Boost_SHARED SHARED IMPORTED)
-  set_target_properties(Boost_SHARED PROPERTIES IMPORTED_LOCATION "/usr/lib/x86_64-linux-gnu/libboost_system.so")
+  add_library(Boost_SHARED INTERFACE IMPORTED)
   set_target_properties(Boost_SHARED PROPERTIES INTERFACE_INCLUDE_DIRECTORIES "/usr/include")
+endif()
+
+if(NOT TARGET Boost_STATIC)
+  add_library(Boost_STATIC INTERFACE IMPORTED)
+  set_target_properties(Boost_STATIC PROPERTIES INTERFACE_INCLUDE_DIRECTORIES "/usr/include")
 endif()
 
 if(NOT TARGET EIGEN3)
   add_library(EIGEN3 INTERFACE IMPORTED)
-  set_target_properties(EIGEN3 PROPERTIES INTERFACE_INCLUDE_DIRECTORIES "/home/justin/Documents/Masterarbeit/repo/carl/build/resources/include")
+  set_target_properties(EIGEN3 PROPERTIES INTERFACE_INCLUDE_DIRECTORIES "/home/justin/Documents/clean_build_test/carl/build/resources/include")
 endif()
 
 if(NOT TARGET GMP_SHARED)
@@ -53,8 +57,8 @@ set_target_properties(GMPXX_STATIC PROPERTIES IMPORTED_LINK_INTERFACE_LIBRARIES 
 
 if(NOT TARGET ANTLR4_STATIC)
   add_library(ANTLR4_STATIC STATIC IMPORTED)
-  set_target_properties(ANTLR4_STATIC PROPERTIES IMPORTED_LOCATION "/home/justin/Documents/Masterarbeit/repo/hypro/src/resources/antlr_build/lib/libantlr4-runtime.a")
-  set_target_properties(ANTLR4_STATIC PROPERTIES INTERFACE_INCLUDE_DIRECTORIES "/home/justin/Documents/Masterarbeit/repo/hypro/src/resources/antlr_build/include/antlr4-runtime")
+  set_target_properties(ANTLR4_STATIC PROPERTIES IMPORTED_LOCATION "/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/resources/antlr_build/lib/libantlr4-runtime.a")
+  set_target_properties(ANTLR4_STATIC PROPERTIES INTERFACE_INCLUDE_DIRECTORIES "/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/resources/antlr_build/include/antlr4-runtime")
 endif()
 
 
@@ -90,7 +94,7 @@ endmacro()
 ####################################################################################
 
 set(hypro_INCLUDE_DIR "${hypro_CMAKE_DIR}/../../../include")
-set(hypro_INCLUDE_DIRS "")
+set(hypro_INCLUDE_DIRS "" "/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/resources/antlr_build/include/antlr4-runtime")
 set(hypro_INCLUDES "")
 set(hypro_LINKER_LIBS "")
 set(hypro_LIBRARIES hypro)
