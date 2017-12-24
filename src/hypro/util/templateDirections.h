@@ -30,24 +30,19 @@ static std::vector<vector_t<Number>> computeTemplate(std::size_t dimension, std:
 	}
 
 	double degree = (360/ (double) numberDirections)* PI / 180.0;
-	std::vector<vector_t<Number>> directions, directions2d;
+	std::vector<vector_t<Number>> directions;
 
 	if(numberDirections == 4) {
-		vector_t<Number> v0 = vector_t<Number>::Zero(2);
-		vector_t<Number> v1 = vector_t<Number>::Zero(2);
-		vector_t<Number> v2 = vector_t<Number>::Zero(2);
-		vector_t<Number> v3 = vector_t<Number>::Zero(2);
-
-		v0 << 1,0;
-		v2 << -1,0;
-		v1 << 0,1;
-		v3 << 0,-1;
-
-		directions2d.push_back(v0);
-		directions2d.push_back(v1);
-		directions2d.push_back(v2);
-		directions2d.push_back(v3);
+		for(std::size_t i = 0; i < dimension; ++i) {
+			vector_t<Number> dir = vector_t<Number>::Zero(dimension);
+			dir(i) = 1;
+			directions.push_back(dir);
+			dir(i) = -1;
+			directions.push_back(dir);
+		}
+		return directions;
 	} else if (numberDirections == 8) {
+		/*
 		vector_t<Number> v0 = vector_t<Number>::Zero(2);
 		vector_t<Number> v1 = vector_t<Number>::Zero(2);
 		vector_t<Number> v2 = vector_t<Number>::Zero(2);
@@ -74,7 +69,38 @@ static std::vector<vector_t<Number>> computeTemplate(std::size_t dimension, std:
 		directions2d.push_back(v5);
 		directions2d.push_back(v6);
 		directions2d.push_back(v7);
+		*/
+		// first create box template, then add combinations.
+		for(std::size_t i = 0; i < dimension; ++i) {
+			vector_t<Number> dir = vector_t<Number>::Zero(dimension);
+			dir(i) = 1;
+			directions.push_back(dir);
+			dir(i) = -1;
+			directions.push_back(dir);
+		}
+
+		// create the diagonal directions
+		Permutator permutator(dimension, 2);
+		std::vector<std::size_t> permutation;
+		while(!permutator.end()) {
+			permutation = permutator();
+			vector_t<Number> dir = vector_t<Number>::Zero(dimension);
+			dir(permutation[0]) = 1;
+			dir(permutation[1]) = 1;
+			directions.push_back(dir);
+			dir(permutation[0]) = -1;
+			dir(permutation[1]) = -1;
+			directions.push_back(dir);
+			dir(permutation[0]) = -1;
+			dir(permutation[1]) = 1;
+			directions.push_back(dir);
+			dir(permutation[0]) = 1;
+			dir(permutation[1]) = -1;
+			directions.push_back(dir);
+		}
+		return directions;
 	} else {
+		std::vector<vector_t<Number>> directions2d;
 		//create directions2d
 		vector_t<Number> templateVector2d = vector_t<Number>::Zero(2); // init templateVector2d
 		templateVector2d(0) = 1;
@@ -92,75 +118,71 @@ static std::vector<vector_t<Number>> computeTemplate(std::size_t dimension, std:
 			templateVector2d = m * templateVector2d;
 			directions2d.push_back(templateVector2d);
 		}
-	}
+		//copy directions2d into directions
+		Permutator permutator(dimension, 2);
+		std::vector<std::size_t> permutation;
+		while(!permutator.end()) {
+			permutation = permutator();
+			for(vector_t<Number> vectorOfdirections2d: directions2d) {
+				vector_t<Number> templateVector = vector_t<Number>::Zero(dimension); // init templateVector
 
-	//copy directions2d into directions
-	Permutator permutator(dimension, 2);
-	std::vector<std::size_t> permutation;
-	while(!permutator.end()) {
-		permutation = permutator();
-		for(vector_t<Number> vectorOfdirections2d: directions2d) {
-			vector_t<Number> templateVector = vector_t<Number>::Zero(dimension); // init templateVector
+				templateVector(permutation.at(0)) = vectorOfdirections2d(0);
+				templateVector(permutation.at(1)) = vectorOfdirections2d(1);
 
-			templateVector(permutation.at(0)) = vectorOfdirections2d(0);
-			templateVector(permutation.at(1)) = vectorOfdirections2d(1);
-
-			if(std::find(directions.begin(), directions.end(), templateVector)== directions.end()){
-				directions.push_back(templateVector);
+				if(std::find(directions.begin(), directions.end(), templateVector)== directions.end()){
+					directions.push_back(templateVector);
+				}
 			}
 		}
-	}
 
-	return directions;
+		return directions;
+	}
 }
 
 template<typename Number>
 static std::vector<vector_t<Number>> computeTemplate(std::vector<std::size_t> dimensions, std::size_t numberDirections, std::size_t dim) {
-	std::vector<vector_t<Number>> directions, directions2d;
+	std::vector<vector_t<Number>> directions;
 
 	if(numberDirections == 4) {
-		vector_t<Number> v0 = vector_t<Number>::Zero(2);
-		vector_t<Number> v1 = vector_t<Number>::Zero(2);
-		vector_t<Number> v2 = vector_t<Number>::Zero(2);
-		vector_t<Number> v3 = vector_t<Number>::Zero(2);
-
-		v0 << 1,0;
-		v1 << 0,1;
-		v2 << -1,0;
-		v3 << 0,-1;
-
-		directions2d.push_back(v0);
-		directions2d.push_back(v1);
-		directions2d.push_back(v2);
-		directions2d.push_back(v3);
+		for(auto i : dimensions) {
+			vector_t<Number> dir = vector_t<Number>::Zero(dim);
+			dir(i) = 1;
+			directions.push_back(dir);
+			dir(i) = -1;
+			directions.push_back(dir);
+		}
+		return directions;
 	} else if (numberDirections == 8) {
-		vector_t<Number> v0 = vector_t<Number>::Zero(2);
-		vector_t<Number> v1 = vector_t<Number>::Zero(2);
-		vector_t<Number> v2 = vector_t<Number>::Zero(2);
-		vector_t<Number> v3 = vector_t<Number>::Zero(2);
-		vector_t<Number> v4 = vector_t<Number>::Zero(2);
-		vector_t<Number> v5 = vector_t<Number>::Zero(2);
-		vector_t<Number> v6 = vector_t<Number>::Zero(2);
-		vector_t<Number> v7 = vector_t<Number>::Zero(2);
+		for(auto i : dimensions) {
+			vector_t<Number> dir = vector_t<Number>::Zero(dim);
+			dir(i) = 1;
+			directions.push_back(dir);
+			dir(i) = -1;
+			directions.push_back(dir);
+		}
 
-		v0 << 1,0;
-		v1 << 1,1;
-		v2 << 0,1;
-		v3 << -1,1;
-		v4 << -1,0;
-		v5 << -1,-1;
-		v6 << 0,-1;
-		v7 << 1,-1;
-
-		directions2d.push_back(v0);
-		directions2d.push_back(v1);
-		directions2d.push_back(v2);
-		directions2d.push_back(v3);
-		directions2d.push_back(v4);
-		directions2d.push_back(v5);
-		directions2d.push_back(v6);
-		directions2d.push_back(v7);
+		// create the diagonal directions
+		Permutator permutator(dimensions.size(), 2);
+		std::vector<std::size_t> permutation;
+		while(!permutator.end()) {
+			permutation = permutator();
+			vector_t<Number> dir = vector_t<Number>::Zero(dim);
+			dir(dimensions[permutation[0]]) = 1;
+			dir(dimensions[permutation[1]]) = 1;
+			directions.push_back(dir);
+			dir(dimensions[permutation[0]]) = -1;
+			dir(dimensions[permutation[1]]) = -1;
+			directions.push_back(dir);
+			dir(dimensions[permutation[0]]) = -1;
+			dir(dimensions[permutation[1]]) = 1;
+			directions.push_back(dir);
+			dir(dimensions[permutation[0]]) = 1;
+			dir(dimensions[permutation[1]]) = -1;
+			directions.push_back(dir);
+		}
+		return directions;
 	} else {
+		std::vector<vector_t<Number>> directions2d;
 		double degree = (360/ (double) numberDirections)* PI / 180.0;
 		//create directions2d
 		vector_t<Number> templateVector2d = vector_t<Number>::Zero(2); // init templateVector2d
@@ -179,52 +201,51 @@ static std::vector<vector_t<Number>> computeTemplate(std::vector<std::size_t> di
 			templateVector2d = m * templateVector2d;
 			directions2d.push_back(templateVector2d);
 		}
-	}
 
-	//std::cout << "Call to permutator with " << dimensions.size() << " choices and a set size of 2." << std::endl;
+		//std::cout << "Call to permutator with " << dimensions.size() << " choices and a set size of 2." << std::endl;
 
-	//copy directions2d into directions
-	Permutator permutator(dimensions.size(), 2);
-	std::vector<std::size_t> permutation;
-	while(!permutator.end()) {
-		permutation = permutator();
-		//std::cout << "Progress permutation " << permutation << std::endl;
-		for(vector_t<Number> vectorOfdirections2d: directions2d) {
-			vector_t<Number> templateVector = vector_t<Number>::Zero(dim); // init templateVector
-			//std::cout << "Process template direction " << vectorOfdirections2d << std::endl;
+		//copy directions2d into directions
+		Permutator permutator(dimensions.size(), 2);
+		std::vector<std::size_t> permutation;
+		while(!permutator.end()) {
+			permutation = permutator();
+			//std::cout << "Progress permutation " << permutation << std::endl;
+			for(vector_t<Number> vectorOfdirections2d: directions2d) {
+				vector_t<Number> templateVector = vector_t<Number>::Zero(dim); // init templateVector
+				//std::cout << "Process template direction " << vectorOfdirections2d << std::endl;
 
-			auto pos = dimensions.begin();
-			std::size_t permPos = permutation.at(0);
-			//std::cout << "PermPos = " << permPos << std::endl;
-			// TODO: This does not make sense?
-			while(permPos > 0 ){
-				++pos;
-				--permPos;
-			}
-			//std::cout << "Real pos: " << *pos << std::endl;
+				auto pos = dimensions.begin();
+				std::size_t permPos = permutation.at(0);
+				//std::cout << "PermPos = " << permPos << std::endl;
+				// TODO: This does not make sense?
+				while(permPos > 0 ){
+					++pos;
+					--permPos;
+				}
+				//std::cout << "Real pos: " << *pos << std::endl;
 
-			templateVector(*pos) = vectorOfdirections2d(0);
+				templateVector(*pos) = vectorOfdirections2d(0);
 
-			pos = dimensions.begin();
-			permPos = permutation.at(1);
-			//std::cout << "PermPos = " << permPos << std::endl;
-			while(permPos > 0 ){
-				++pos;
-				--permPos;
-			}
-			//std::cout << "Real pos: " << *pos << std::endl;
+				pos = dimensions.begin();
+				permPos = permutation.at(1);
+				//std::cout << "PermPos = " << permPos << std::endl;
+				while(permPos > 0 ){
+					++pos;
+					--permPos;
+				}
+				//std::cout << "Real pos: " << *pos << std::endl;
 
-			templateVector(*pos) = vectorOfdirections2d(1);
+				templateVector(*pos) = vectorOfdirections2d(1);
 
-			//std::cout << "New template vector: " << templateVector << std::endl;
+				//std::cout << "New template vector: " << templateVector << std::endl;
 
-			if(std::find(directions.begin(), directions.end(), templateVector)== directions.end()){
-				directions.push_back(templateVector);
+				if(std::find(directions.begin(), directions.end(), templateVector)== directions.end()){
+					directions.push_back(templateVector);
+				}
 			}
 		}
+		return directions;
 	}
-
-	return directions;
 }
 
 } // namespace hypro
