@@ -32,7 +32,7 @@ if(NOT DEFINED CMAKE_INSTALL_SO_NO_EXE)
   set(CMAKE_INSTALL_SO_NO_EXE "1")
 endif()
 
-if("${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
+if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
   list(APPEND CMAKE_ABSOLUTE_DESTINATION_FILES
    "/usr/local/lib/cmake/hypro/hyproConfig.cmake;/usr/local/lib/cmake/hypro/hyproConfigVersion.cmake")
   if(CMAKE_WARN_ON_ABSOLUTE_INSTALL_DESTINATION)
@@ -47,7 +47,7 @@ file(INSTALL DESTINATION "/usr/local/lib/cmake/hypro" TYPE FILE FILES
     )
 endif()
 
-if("${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
+if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
   if(EXISTS "$ENV{DESTDIR}/usr/local/lib/cmake/hypro/hyproTargets.cmake")
     file(DIFFERENT EXPORT_FILE_CHANGED FILES
          "$ENV{DESTDIR}/usr/local/lib/cmake/hypro/hyproTargets.cmake"

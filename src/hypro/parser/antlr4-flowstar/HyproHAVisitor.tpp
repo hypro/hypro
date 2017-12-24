@@ -56,7 +56,7 @@ namespace hypro {
 		COUT("================================\n");
 		COUT("Parsed variables: " << vars << std::endl);
 		COUT("Reachability settings:\n" << reachSettings);
-		COUT("All locations:\n");
+		COUT("All locations:\n");COUT("Size:"); COUT(rLocSet.size());
 		for(auto it = rLocSet.begin(); it != rLocSet.end(); ++it){
 			COUT(**it);
 		}

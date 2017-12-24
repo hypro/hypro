@@ -75,7 +75,7 @@ if(error_code OR is_remote_ref OR NOT ("${tag_sha}" STREQUAL "${head_sha}"))
     # perform git pull --rebase
     if(need_stash)
       execute_process(
-        COMMAND "/usr/bin/git" stash save --all;--quiet
+        COMMAND "/usr/bin/git" stash save --quiet
         WORKING_DIRECTORY "/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/resources/src/googletest"
         RESULT_VARIABLE error_code
         )
@@ -149,7 +149,7 @@ if(error_code OR is_remote_ref OR NOT ("${tag_sha}" STREQUAL "${head_sha}"))
   endif()
 
   execute_process(
-    COMMAND "/usr/bin/git" submodule update --recursive --init 
+    COMMAND "/usr/bin/git" submodule update --recursive 
     WORKING_DIRECTORY "/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/resources/src/googletest/"
     RESULT_VARIABLE error_code
     )

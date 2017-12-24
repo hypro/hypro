@@ -29,11 +29,42 @@ public:
         using std::pair<Number, BOUND_TYPE>::second;
         DBMEntry();
         DBMEntry(Number number, BOUND_TYPE boundType);
+        DBMEntry(const DBMEntry &other) = default;
+        ~DBMEntry() = default;
+
+        DBMEntry& operator=(const DBMEntry& other){
+
+            if(this != &other){
+                this->first = other.first;
+                this->second = other.second;
+            }
+            return *this;
+        }
 
         static DBMEntry max(const DBMEntry& lhs, const DBMEntry& rhs)  { return lhs < rhs ? rhs : lhs;}
         static DBMEntry min(const DBMEntry& lhs, const DBMEntry& rhs)  { return lhs < rhs ? lhs : rhs;}
 
         bool operator<(const DBMEntry rhs){
+            if(this->second == BOUND_TYPE::INFTY){
+                // TODO correct?
+                return false;
+            }
+            // (n, </<=) < infty
+            if(rhs.second == BOUND_TYPE::INFTY) {
+                return true;
+            }
+            // (n_1, </<=) < (n_2, </<=) if n_1 < n_2
+            if(this->first < rhs.first){
+                return true;
+            }
+            // (n, <) < (n,<=)
+            if(this->first == rhs.first && this->second == BOUND_TYPE::SMALLER && rhs.second == BOUND_TYPE::SMALLER_EQ){
+                return true;
+            }
+            return false;
+        }
+
+         bool operator<(const DBMEntry rhs) const{
             if(this->second == BOUND_TYPE::INFTY){
                 // TODO correct?
                 return false;
