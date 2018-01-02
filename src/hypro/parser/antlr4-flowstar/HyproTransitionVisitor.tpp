@@ -85,7 +85,10 @@ namespace hypro {
 		}
 
 		//6. Collect Labels
-		visit(ctx->labels()[0]);
+		if(ctx->labels().size() >= 1) {
+			//visit(ctx->labels()[0]);
+			//t->setLabels(labels);
+		}
 		//t->setLabels(labels);
 		
 		return t;

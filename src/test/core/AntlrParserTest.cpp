@@ -60,7 +60,7 @@ TYPED_TEST(AntlrParserTest, SettingVEmptySettings){
 */
 TYPED_TEST(AntlrParserTest, JustTesting){
 
-	std::string path("../../../../src/test/core/examples/test_bouncing_ball.txt");
+	std::string path("/home/tobias/RWTH/8_WS2017/BA/hypro/src/test/core/examples/test_bouncing_ball.txt");
 	//std::string path("../../src/test/core/examples/test_bouncing_ball.txt");
 	//std::string path("../examples/input/boucing_ball.model");
 
@@ -114,7 +114,7 @@ TYPED_TEST(AntlrParserTest, FileStructure){
 
 TYPED_TEST(AntlrParserTest, EmptyFile){
 
-	std::string path("../../../../src/test/core/examples/test_empty_file.txt");
+	std::string path("/home/tobias/RWTH/8_WS2017/BA/hypro/src/test/core/examples/test_empty_file.txt");
 	//std::string path("../../src/test/core/examples/test_empty_file.txt");
 
 	try{
@@ -128,7 +128,7 @@ TYPED_TEST(AntlrParserTest, EmptyFile){
 
 TYPED_TEST(AntlrParserTest, OnlyStart){
 
-	std::string path("../../../../src/test/core/examples/test_only_start.txt");
+	std::string path("/home/tobias/RWTH/8_WS2017/BA/hypro/src/test/core/examples/test_only_start.txt");
 	//std::string path("../../src/test/core/examples/test_only_start.txt");
 	try{
 		boost::tuple<hypro::HybridAutomaton<TypeParam,hypro::State_t<TypeParam,TypeParam>>, hypro::ReachabilitySettings<TypeParam>> h = hypro::parseFlowstarFile<TypeParam>(path);
@@ -138,4 +138,29 @@ TYPED_TEST(AntlrParserTest, OnlyStart){
 		SUCCEED();
 	}
 
+}
+
+
+TYPED_TEST(AntlrParserTest, bouncing_ball_with_label){
+	std::string path("/home/tobias/RWTH/8_WS2017/BA/examples/bouncing_ball_with_label.model");
+
+	try{
+		boost::tuple<hypro::HybridAutomaton<TypeParam,hypro::State_t<TypeParam,TypeParam>>, hypro::ReachabilitySettings<TypeParam>> h = hypro::parseFlowstarFile<TypeParam>(path);
+		SUCCEED();
+	} catch(const std::runtime_error& e){
+		std::cout << e.what() << std::endl;
+		FAIL();
+	}
+}
+
+TYPED_TEST(AntlrParserTest, railraod_crossing){
+	std::string path("/home/tobias/RWTH/8_WS2017/BA/examples/railraod_crossing.model");
+
+	try{
+		boost::tuple<hypro::HybridAutomatonComp<TypeParam,hypro::State_t<TypeParam,TypeParam>>, hypro::ReachabilitySettings<TypeParam>> h = hypro::parseFlowstarCompFile<TypeParam>(path);
+		SUCCEED();
+	} catch(const std::runtime_error& e){
+		std::cout << e.what() << std::endl;
+		FAIL();
+	}
 }

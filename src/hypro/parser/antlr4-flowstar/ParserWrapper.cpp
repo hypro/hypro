@@ -106,7 +106,7 @@ namespace hypro {
 
 			delete errListener;
 
-			return boost::tuple<HybridAutomaton<mpq_class, State_t<mpq_class,mpq_class>>&, ReachabilitySettings<mpq_class>>(h, visitor.getSettings());	
+			return boost::tuple<HybridAutomaton<mpq_class, State_t<mpq_class,mpq_class>>&, ReachabilitySettings<mpq_class>>(h, visitor.getSettings());
 
 		} else {
 
@@ -116,7 +116,7 @@ namespace hypro {
 
 			delete errListener;
 
-			return boost::tuple<HybridAutomaton<mpq_class, State_t<mpq_class,mpq_class>>&, ReachabilitySettings<mpq_class>>(h, visitor.getSettings());	
+			return boost::tuple<HybridAutomaton<mpq_class, State_t<mpq_class,mpq_class>>&, ReachabilitySettings<mpq_class>>(h, visitor.getSettings());
 		}
 	}
 
@@ -190,6 +190,152 @@ namespace hypro {
 			delete errListener;
 
 			return boost::tuple<HybridAutomaton<double, State_t<double,double>>&, ReachabilitySettings<double>>(h, visitor.getSettings());	
+		}
+	}
+
+	template<>
+	boost::tuple<HybridAutomatonComp<mpq_class, State_t<mpq_class,mpq_class>>, ReachabilitySettings<mpq_class>> parseFlowstarCompFile<mpq_class>(const std::string& filename) {
+
+		//Create an AnTLRInputStream
+		ANTLRInputStream input;
+		openFile(filename,input);
+
+		//Create Error Listener
+		hypro::ErrorListener* errListener = new hypro::ErrorListener();
+
+		//Create a Lexer and feed it with the input
+		HybridAutomatonLexer lexer(&input);
+		lexer.removeErrorListeners();
+		lexer.addErrorListener(errListener);
+
+		//Create an empty TokenStream obj
+		CommonTokenStream tokens(&lexer);
+
+		//Fill the TokenStream (and output it for demonstration)
+		tokens.fill();
+
+		//Create a parser
+		HybridAutomatonParser parser(&tokens);
+		parser.removeErrorListeners();
+		parser.addErrorListener(errListener);
+		tree::ParseTree* tree = parser.start();
+
+		//Create TokenStreamRewriter, needed for constants if defined
+		if(parser.getConstants().size() > 0){
+			TokenStreamRewriter rewriter(&tokens);
+			std::string modified = replaceConstantsWithValues(rewriter, parser.getConstants());
+			ANTLRInputStream inputMod(modified);
+			HybridAutomatonLexer lexerMod(&inputMod);
+			lexerMod.removeErrorListeners();
+			lexerMod.addErrorListener(errListener);
+
+			//Create an empty TokenStream obj
+			CommonTokenStream tokensMod(&lexerMod);
+
+			//Fill the TokenStream (and output it for demonstration)
+			tokensMod.fill();
+
+			//std::vector<Token*> toks = tokensMod.getTokens();
+			//for(auto t : toks){
+			//	std::cout << t->getText() << ", " << lexerMod.getVocabulary().getSymbolicName(t->getType()) << std::endl;
+			//}
+
+			//Create a parser
+			HybridAutomatonParser parserMod(&tokensMod);
+			parserMod.removeErrorListeners();
+			parserMod.addErrorListener(errListener);
+			tree::ParseTree* tree = parserMod.start();
+
+			hypro::HyproHAVisitor<mpq_class> visitor;
+
+			hypro::HybridAutomatonComp<mpq_class, State_t<mpq_class,mpq_class>> h = (visitor.visit(tree)).antlrcpp::Any::as<hypro::HybridAutomatonComp<mpq_class, State_t<mpq_class,mpq_class>>>();
+
+			delete errListener;
+
+			return boost::tuple<HybridAutomatonComp<mpq_class, State_t<mpq_class,mpq_class>>&, ReachabilitySettings<mpq_class>>(h, visitor.getSettings());
+
+		} else {
+
+			hypro::HyproHAVisitor<mpq_class> visitor;
+
+			hypro::HybridAutomatonComp<mpq_class, State_t<mpq_class,mpq_class>> h = (visitor.visit(tree)).antlrcpp::Any::as<hypro::HybridAutomatonComp<mpq_class, State_t<mpq_class,mpq_class>>>();
+
+			delete errListener;
+
+			return boost::tuple<HybridAutomatonComp<mpq_class, State_t<mpq_class,mpq_class>>&, ReachabilitySettings<mpq_class>>(h, visitor.getSettings());
+		}
+	}
+
+	template<>
+	boost::tuple<HybridAutomatonComp<double,State_t<double,double>>, ReachabilitySettings<double>> parseFlowstarCompFile<double>(const std::string& filename) {
+
+		//Create an ANTLRInputStream
+		ANTLRInputStream input;
+		openFile(filename,input);
+
+		//Create Error Listener
+		ErrorListener* errListener = new ErrorListener();
+
+		//Create a Lexer and feed it with the input
+		HybridAutomatonLexer lexer(&input);
+		lexer.removeErrorListeners();
+		lexer.addErrorListener(errListener);
+
+		//Create an empty TokenStream obj
+		CommonTokenStream tokens(&lexer);
+
+		//Fill the TokenStream (and output it for demonstration)
+		tokens.fill();
+
+		//Create a parser
+		HybridAutomatonParser parser(&tokens);
+		parser.removeErrorListeners();
+		parser.addErrorListener(errListener);
+		tree::ParseTree* tree = parser.start();
+
+		//Create TokenStreamRewriter, needed for constants if defined
+		if(parser.getConstants().size() > 0){
+			TokenStreamRewriter rewriter(&tokens);
+			std::string modified = replaceConstantsWithValues(rewriter, parser.getConstants());
+			ANTLRInputStream inputMod(modified);
+			HybridAutomatonLexer lexerMod(&inputMod);
+			lexerMod.removeErrorListeners();
+			lexerMod.addErrorListener(errListener);
+
+			//Create an empty TokenStream obj
+			CommonTokenStream tokensMod(&lexerMod);
+
+			//Fill the TokenStream (and output it for demonstration)
+			tokensMod.fill();
+
+			//std::vector<Token*> toks = tokensMod.getTokens();
+			//for(auto t : toks){
+			//	std::cout << t->getText() << ", " << lexerMod.getVocabulary().getSymbolicName(t->getType()) << std::endl;
+			//}
+
+			//Create a parser
+			HybridAutomatonParser parserMod(&tokensMod);
+			parserMod.removeErrorListeners();
+			parserMod.addErrorListener(errListener);
+			tree::ParseTree* tree = parserMod.start();
+
+			hypro::HyproHAVisitor<double> visitor;
+
+			hypro::HybridAutomatonComp<double, State_t<double,double>> h = (visitor.visit(tree)).antlrcpp::Any::as<hypro::HybridAutomatonComp<double, State_t<double,double>>>();
+
+			delete errListener;
+
+			return boost::tuple<HybridAutomatonComp<double, State_t<double,double>>&, ReachabilitySettings<double>>(h, visitor.getSettings());
+
+		} else {
+
+			hypro::HyproHAVisitor<double> visitor;
+
+			hypro::HybridAutomatonComp<double, State_t<double,double>> h = (visitor.visit(tree)).antlrcpp::Any::as<hypro::HybridAutomatonComp<double, State_t<double,double>>>();
+
+			delete errListener;
+
+			return boost::tuple<HybridAutomatonComp<double, State_t<double,double>>&, ReachabilitySettings<double>>(h, visitor.getSettings());
 		}
 	}
 

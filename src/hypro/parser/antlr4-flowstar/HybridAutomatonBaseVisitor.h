@@ -19,11 +19,31 @@ public:
     return visitChildren(ctx);
   }
 
+  virtual antlrcpp::Any visitOld(HybridAutomatonParser::OldContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitAutomaton(HybridAutomatonParser::AutomatonContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitComp(HybridAutomatonParser::CompContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
   virtual antlrcpp::Any visitVardeclaration(HybridAutomatonParser::VardeclarationContext *ctx) override {
     return visitChildren(ctx);
   }
 
   virtual antlrcpp::Any visitConstantdeclaration(HybridAutomatonParser::ConstantdeclarationContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitGlobalvardeclaration(HybridAutomatonParser::GlobalvardeclarationContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitComponent(HybridAutomatonParser::ComponentContext *ctx) override {
     return visitChildren(ctx);
   }
 

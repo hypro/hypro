@@ -23,6 +23,7 @@
 #include "../../datastructures/HybridAutomaton/HybridAutomaton.h"
 #include "../../datastructures/HybridAutomaton/Settings.h"
 #include "../../util/logging/Logger.h"
+#include "../../datastructures/HybridAutomaton/HybridAutomatonComp.h"
 
 using namespace antlr4;
 
@@ -43,6 +44,9 @@ class HyproHAVisitor : public HybridAutomatonBaseVisitor {
 
 		//Inherited from HybridAutomatonBaseVisitor which is generated from AnTLR
 		antlrcpp::Any visitVardeclaration(HybridAutomatonParser::VardeclarationContext *ctx) override;
+    antlrcpp::Any visitAutomaton(HybridAutomatonParser::AutomatonContext *ctx) override;
+    antlrcpp::Any visitComp(HybridAutomatonParser::CompContext *ctx) override;
+    //antlrcpp::Any visitComponent(HybridAutomatonParser::ComponentContext *ctx) override;
 
 	public:
 

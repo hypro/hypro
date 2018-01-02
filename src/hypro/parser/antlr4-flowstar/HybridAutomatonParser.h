@@ -20,26 +20,27 @@ public:
     T__7 = 8, T__8 = 9, T__9 = 10, T__10 = 11, T__11 = 12, T__12 = 13, T__13 = 14, 
     T__14 = 15, T__15 = 16, T__16 = 17, T__17 = 18, T__18 = 19, T__19 = 20, 
     T__20 = 21, T__21 = 22, T__22 = 23, T__23 = 24, T__24 = 25, T__25 = 26, 
-    T__26 = 27, IN = 28, TRUE = 29, FALSE = 30, PAR = 31, COMMENT = 32, 
-    EQUALS = 33, BOOLRELATION = 34, PLUS = 35, MINUS = 36, TIMES = 37, SBOPEN = 38, 
-    SBCLOSE = 39, CBOPEN = 40, CBCLOSE = 41, COMMA = 42, NUMBER = 43, CONSTANT = 44, 
-    VARIABLE = 45, WS = 46, PARALLELOTOPE = 47, BOX = 48, JUMP = 49, DEFINE = 50, 
-    EXPONENTIAL = 51
+    T__26 = 27, T__27 = 28, T__28 = 29, IN = 30, TRUE = 31, FALSE = 32, 
+    PAR = 33, COMMENT = 34, EQUALS = 35, BOOLRELATION = 36, PLUS = 37, MINUS = 38, 
+    TIMES = 39, SBOPEN = 40, SBCLOSE = 41, CBOPEN = 42, CBCLOSE = 43, COMMA = 44, 
+    NUMBER = 45, CONSTANT = 46, VARIABLE = 47, WS = 48, PARALLELOTOPE = 49, 
+    BOX = 50, JUMP = 51, DEFINE = 52, EXPONENTIAL = 53
   };
 
   enum {
-    RuleStart = 0, RuleVardeclaration = 1, RuleConstantdeclaration = 2, 
-    RuleModes = 3, RuleLocation = 4, RuleActivities = 5, RuleInvariants = 6, 
-    RuleConstantexpr = 7, RuleConnector = 8, RuleTerm = 9, RulePolynom = 10, 
-    RuleInterval = 11, RuleEquation = 12, RuleConstraint = 13, RuleIntervalexpr = 14, 
-    RuleConstrset = 15, RuleReplacedexpr = 16, RuleInit = 17, RuleInitstate = 18, 
-    RuleUnsafeset = 19, RuleLbadstate = 20, RuleGbadstate = 21, RuleJumps = 22, 
-    RuleTransition = 23, RuleFromto = 24, RuleUrgent = 25, RuleGuard = 26, 
-    RuleAllocation = 27, RuleResetfct = 28, RuleAggregation = 29, RuleLabels = 30, 
-    RuleLabel = 31, RuleSetting = 32, RuleFixedsteps = 33, RuleTime = 34, 
-    RulePlotsetting = 35, RuleFilename = 36, RuleMaxjumps = 37, RulePrint = 38, 
-    RuleRemainder = 39, RuleIdentity = 40, RuleFixedorders = 41, RuleCutoff = 42, 
-    RulePrecision = 43
+    RuleStart = 0, RuleOld = 1, RuleAutomaton = 2, RuleComp = 3, RuleVardeclaration = 4, 
+    RuleConstantdeclaration = 5, RuleGlobalvardeclaration = 6, RuleComponent = 7, 
+    RuleModes = 8, RuleLocation = 9, RuleActivities = 10, RuleInvariants = 11, 
+    RuleConstantexpr = 12, RuleConnector = 13, RuleTerm = 14, RulePolynom = 15, 
+    RuleInterval = 16, RuleEquation = 17, RuleConstraint = 18, RuleIntervalexpr = 19, 
+    RuleConstrset = 20, RuleReplacedexpr = 21, RuleInit = 22, RuleInitstate = 23, 
+    RuleUnsafeset = 24, RuleLbadstate = 25, RuleGbadstate = 26, RuleJumps = 27, 
+    RuleTransition = 28, RuleFromto = 29, RuleUrgent = 30, RuleGuard = 31, 
+    RuleAllocation = 32, RuleResetfct = 33, RuleAggregation = 34, RuleLabels = 35, 
+    RuleLabel = 36, RuleSetting = 37, RuleFixedsteps = 38, RuleTime = 39, 
+    RulePlotsetting = 40, RuleFilename = 41, RuleMaxjumps = 42, RulePrint = 43, 
+    RuleRemainder = 44, RuleIdentity = 45, RuleFixedorders = 46, RuleCutoff = 47, 
+    RulePrecision = 48
   };
 
   HybridAutomatonParser(antlr4::TokenStream *input);
@@ -56,8 +57,13 @@ public:
 
 
   class StartContext;
+  class OldContext;
+  class AutomatonContext;
+  class CompContext;
   class VardeclarationContext;
   class ConstantdeclarationContext;
+  class GlobalvardeclarationContext;
+  class ComponentContext;
   class ModesContext;
   class LocationContext;
   class ActivitiesContext;
@@ -104,22 +110,66 @@ public:
   public:
     StartContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
-    antlr4::tree::TerminalNode *CBOPEN();
-    VardeclarationContext *vardeclaration();
-    SettingContext *setting();
-    ModesContext *modes();
-    JumpsContext *jumps();
-    antlr4::tree::TerminalNode *CBCLOSE();
-    ConstantdeclarationContext *constantdeclaration();
-    std::vector<InitContext *> init();
-    InitContext* init(size_t i);
-    UnsafesetContext *unsafeset();
+    OldContext *old();
+    CompContext *comp();
 
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
    
   };
 
   StartContext* start();
+
+  class  OldContext : public antlr4::ParserRuleContext {
+  public:
+    OldContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    antlr4::tree::TerminalNode *CBOPEN();
+    AutomatonContext *automaton();
+    antlr4::tree::TerminalNode *CBCLOSE();
+    UnsafesetContext *unsafeset();
+
+    virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+   
+  };
+
+  OldContext* old();
+
+  class  AutomatonContext : public antlr4::ParserRuleContext {
+  public:
+    AutomatonContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    VardeclarationContext *vardeclaration();
+    ModesContext *modes();
+    JumpsContext *jumps();
+    ConstantdeclarationContext *constantdeclaration();
+    SettingContext *setting();
+    std::vector<InitContext *> init();
+    InitContext* init(size_t i);
+
+    virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+   
+  };
+
+  AutomatonContext* automaton();
+
+  class  CompContext : public antlr4::ParserRuleContext {
+  public:
+    CompContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    SettingContext *setting();
+    std::vector<antlr4::tree::TerminalNode *> CBOPEN();
+    antlr4::tree::TerminalNode* CBOPEN(size_t i);
+    GlobalvardeclarationContext *globalvardeclaration();
+    std::vector<antlr4::tree::TerminalNode *> CBCLOSE();
+    antlr4::tree::TerminalNode* CBCLOSE(size_t i);
+    std::vector<ComponentContext *> component();
+    ComponentContext* component(size_t i);
+
+    virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+   
+  };
+
+  CompContext* comp();
 
   class  VardeclarationContext : public antlr4::ParserRuleContext {
   public:
@@ -153,6 +203,36 @@ public:
   };
 
   ConstantdeclarationContext* constantdeclaration();
+
+  class  GlobalvardeclarationContext : public antlr4::ParserRuleContext {
+  public:
+    GlobalvardeclarationContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    std::vector<antlr4::tree::TerminalNode *> VARIABLE();
+    antlr4::tree::TerminalNode* VARIABLE(size_t i);
+    std::vector<antlr4::tree::TerminalNode *> COMMA();
+    antlr4::tree::TerminalNode* COMMA(size_t i);
+
+    virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+   
+  };
+
+  GlobalvardeclarationContext* globalvardeclaration();
+
+  class  ComponentContext : public antlr4::ParserRuleContext {
+  public:
+    ComponentContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    antlr4::tree::TerminalNode *VARIABLE();
+    antlr4::tree::TerminalNode *CBOPEN();
+    AutomatonContext *automaton();
+    antlr4::tree::TerminalNode *CBCLOSE();
+
+    virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+   
+  };
+
+  ComponentContext* component();
 
   class  ModesContext : public antlr4::ParserRuleContext {
   public:

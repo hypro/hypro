@@ -21,9 +21,19 @@ public:
    */
     virtual antlrcpp::Any visitStart(HybridAutomatonParser::StartContext *context) = 0;
 
+    virtual antlrcpp::Any visitOld(HybridAutomatonParser::OldContext *context) = 0;
+
+    virtual antlrcpp::Any visitAutomaton(HybridAutomatonParser::AutomatonContext *context) = 0;
+
+    virtual antlrcpp::Any visitComp(HybridAutomatonParser::CompContext *context) = 0;
+
     virtual antlrcpp::Any visitVardeclaration(HybridAutomatonParser::VardeclarationContext *context) = 0;
 
     virtual antlrcpp::Any visitConstantdeclaration(HybridAutomatonParser::ConstantdeclarationContext *context) = 0;
+
+    virtual antlrcpp::Any visitGlobalvardeclaration(HybridAutomatonParser::GlobalvardeclarationContext *context) = 0;
+
+    virtual antlrcpp::Any visitComponent(HybridAutomatonParser::ComponentContext *context) = 0;
 
     virtual antlrcpp::Any visitModes(HybridAutomatonParser::ModesContext *context) = 0;
 

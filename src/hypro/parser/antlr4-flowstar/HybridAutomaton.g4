@@ -13,9 +13,18 @@ import Location, InitialSet, BadStates, Transition, Setting;
 
 ///////////// Parser Rules //////////////
 
-start 				: 'hybrid reachability' CBOPEN vardeclaration constantdeclaration? setting modes jumps init+ CBCLOSE unsafeset? ;
+start 				: old | comp ;
+
+old                 : 'hybrid reachability' CBOPEN automaton CBCLOSE unsafeset? ;
+
+automaton           : vardeclaration constantdeclaration? setting? modes jumps init+ ;
+
+comp                : setting 'hybrid reachability' CBOPEN globalvardeclaration 'components' CBOPEN component+ CBCLOSE CBCLOSE ;
 
 vardeclaration      : 'state var' VARIABLE ((COMMA VARIABLE)+)? ;
 
 constantdeclaration : PAR CBOPEN (constantexpr | replacedexpr)* CBCLOSE ;
 
+globalvardeclaration : 'global state var' VARIABLE ((COMMA VARIABLE)+)? ;
+
+component            : VARIABLE CBOPEN automaton CBCLOSE ;
