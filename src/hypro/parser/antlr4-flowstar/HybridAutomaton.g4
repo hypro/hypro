@@ -19,7 +19,7 @@ old                 : 'hybrid reachability' CBOPEN automaton CBCLOSE unsafeset? 
 
 automaton           : vardeclaration constantdeclaration? setting? modes jumps init+ ;
 
-comp                : setting 'hybrid reachability' CBOPEN globalvardeclaration 'components' CBOPEN component+ CBCLOSE CBCLOSE ;
+comp                : setting 'hybrid reachability' CBOPEN globalvardeclaration? 'components' CBOPEN component+ CBCLOSE CBCLOSE ;
 
 vardeclaration      : 'state var' VARIABLE ((COMMA VARIABLE)+)? ;
 

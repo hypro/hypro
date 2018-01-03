@@ -159,9 +159,9 @@ public:
     SettingContext *setting();
     std::vector<antlr4::tree::TerminalNode *> CBOPEN();
     antlr4::tree::TerminalNode* CBOPEN(size_t i);
-    GlobalvardeclarationContext *globalvardeclaration();
     std::vector<antlr4::tree::TerminalNode *> CBCLOSE();
     antlr4::tree::TerminalNode* CBCLOSE(size_t i);
+    GlobalvardeclarationContext *globalvardeclaration();
     std::vector<ComponentContext *> component();
     ComponentContext* component(size_t i);
 
