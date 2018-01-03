@@ -93,15 +93,13 @@ namespace hypro {
     template <typename Number, typename Converter>
     std::vector<Point<Number>> DifferenceBoundsT<Number, Converter>::vertices( const matrix_t<Number>& ) const {
         hypro::HPolytopeT<Number,Converter> poly = Converter::toHPolytope(*this);
-        // TODO enhace plotting for inifinite polytopes
+        // A time Horizon can be defined that avoids plotting of potentially infinite polytopes
         if (getTimeHorizon() != 0.0) {
             // we need 2 additional timeHorizon constraint for each clock (except 0 clock)
             int numclocks = getDBM().cols()-1;
             //constraints of the polytope
             hypro::matrix_t<Number> HPolyConstraints = poly.matrix();
             hypro::vector_t<Number> HPolyConstants = poly.vector();
-            //std::cout << "Old matrix: " << HPolyConstraints <<"\n";
-            //std::cout << "Old constants: " << HPolyConstants <<"\n";
             int numconstraints = HPolyConstraints.rows();
             HPolyConstraints.conservativeResize(numconstraints+2*numclocks, HPolyConstraints.cols());
             HPolyConstants.conservativeResize(numconstraints+2*numclocks, HPolyConstraints.cols());
@@ -111,29 +109,19 @@ namespace hypro {
                 // for each clock add a timehorizon so the polytope to plot is finite in plus direction
                 matrix_t<Number> constraintVars = matrix_t<Number>::Zero(1, numclocks);
                 constraintVars(0, i) = 1.0;
-                //std::cout << "Constraint variable vector: " << constraintVars <<"\n";
                 HPolyConstraints.row(counter) = constraintVars;
-                //std::cout << "New constraint matrix: " << HPolyConstraints << "\n";
                 HPolyConstants(counter, 0) = getTimeHorizon();
-                //std::cout << "New constant vector: " << HPolyConstants << "\n";
                 counter++;
                 // for each clock add a greater than 0 constraint so the polytope to plot is finity in
                 // in negative direction
-                // TODO this can also be -Timehorizon, however clocks should be positive
                 matrix_t<Number> constraintVars2 = matrix_t<Number>::Zero(1, numclocks);
                 constraintVars2(0, i) = -1.0;
-                //std::cout << "Constraint variable vector: " << constraintVars2 <<"\n";
                 HPolyConstraints.row(counter) = constraintVars2;
-                //std::cout << "New constraint matrix: " << HPolyConstraints << "\n";
                 HPolyConstants(counter, 0) = 0.0;
-                //std::cout << "New constant vector: " << HPolyConstants << "\n";
                 counter++;
             }
             hypro::HPolytopeT<Number,Converter> polyNew(HPolyConstraints,HPolyConstants);
             return polyNew.vertices();
-        }
-        else{
-            std::cout << "Warning: TimeHorizon may not be configured correctly. Converting potentially unbounded polytope to vertices.";
         }
         return poly.vertices();
     }
@@ -188,17 +176,14 @@ namespace hypro {
     template <typename Number, typename Converter>
     DifferenceBoundsT<Number,Converter> DifferenceBoundsT<Number, Converter>::intersect( const DifferenceBoundsT<Number,Converter>& _rhs ) const{
         hypro::DifferenceBoundsT<Number,Converter> retDBM = hypro::DifferenceBoundsT<Number,Converter>(*this);
-        //std::cout << "Initial DBM:" << retDBM << "\n";
         // for each entry in the other dbm, intersect that entry with this dbm
         for(int i = 0; i < _rhs.getDBM().rows(); i++){
             for(int j = 0; j < _rhs.getDBM().cols();j++){
                 if(i!=j) {
                     retDBM = retDBM.intersectConstraint(i,j,_rhs.getDBM()(i,j));
-                    //std::cout << "DBM after intersection with ("<<i<<","<<j<<")="<<_rhs.getDBM()(i,j).first<<" yields: \n"<< retDBM << "\n";
                 }
             }
         }
-        //std::cout << "Final DBM:" << retDBM << "\n";
         return retDBM;
     }
 

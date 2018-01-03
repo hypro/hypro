@@ -250,9 +250,7 @@ typename Converter<Number>::HPolytope Converter<Number>::toHPolytope( const Supp
 template<typename Number>
 typename Converter<Number>::HPolytope Converter<Number>::toHPolytope(const DifferenceBounds& _source, const CONV_MODE){
         assert(_source.getDBM().rows() == _source.getDBM().cols());
-        //std::cout << "Starting to calculate vertices on DBM: " << *this << "\n";
         int numclocks = _source.getDBM().cols() - 1;
-        //std::cout << "Number of clocks: " << numclocks << "\n";
         int numconstraints = 0; //all entries of the DBM (except the diagonal and inifinities) define a constraint
         for (int i = 0; i < _source.getDBM().rows(); i++) {
             for (int j = 0; j < _source.getDBM().rows(); j++) {
@@ -268,7 +266,6 @@ typename Converter<Number>::HPolytope Converter<Number>::toHPolytope(const Diffe
         int counter = 0; // counter for indexing constraints
         for (int i = 0; i < _source.getDBM().rows(); i++) {
             for (int j = 0; j < _source.getDBM().cols(); j++) {
-                //std::cout<< "Process entry at: (" <<i<<","<<j<<")\n";
                 // do not consider diagonals
                 if (i != j && !(_source.getDBM()(i, j).second == DifferenceBoundsT<Number,Converter>::BOUND_TYPE::INFTY)) {
                     // the constraint to add
@@ -284,15 +281,11 @@ typename Converter<Number>::HPolytope Converter<Number>::toHPolytope(const Diffe
                         constraintVars(0, i - 1) = 1.0; // i-1 because we don't consider static clock 0
                         constraintVars(0, j - 1) = -1.0; // j-1 because we don't consider static clock 0
                     }
-                    //std::cout << "Constraint variable vector: " << constraintVars <<"\n";
                     HPolyConstraints.row(counter) = constraintVars;
-                    //std::cout << "New constraint matrix: " << HPolyConstraints << "\n";
                     HPolyConstants(counter, 0) = _source.getDBM()(i, j).first;
-                    //std::cout << "New constant vector: " << HPolyConstants << "\n";
                     counter++;
                 }
             }
         }
-        //std::cout << "Generated polytope: \n Matrix: \n" << HPolyConstraints << "\n Vector: \n" << HPolyConstants <<"\n";
         return HPolytope(HPolyConstraints, HPolyConstants);
 }
