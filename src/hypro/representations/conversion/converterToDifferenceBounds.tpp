@@ -41,14 +41,6 @@ template<typename Number>
 typename Converter<Number>::DifferenceBounds Converter<Number>::toDifferenceBounds(const HPolytope& source, const CONV_MODE ){
 
     size_t numclocks = source.dimension();
-    // check wether the entire polytope is positive, because we expect clocks
-    hypro::matrix_t<Number> mat = hypro::matrix_t<Number>::Identity(numclocks,numclocks);
-    mat = mat*-1.0;
-    hypro::vector_t<Number> vec = hypro::vector_t<Number>::Zero(numclocks);
-    if(source.satisfiesHalfspaces(mat,vec).first != hypro::CONTAINMENT::FULL){
-        std::cout << "HPolytope \n " << source << " is not entirely positive. Calculations may be imprecise.";
-    }
-    //std::cout<< "Hpolytope has " << numclocks << " clocks.\n";
     // 1. introduce a zero clock (numclocks+1)
     numclocks++;
     hypro::matrix_t<typename Converter<Number>::DifferenceBounds::DBMEntry> dbm = hypro::matrix_t<typename Converter<Number>::DifferenceBounds::DBMEntry>(numclocks, numclocks);
@@ -77,7 +69,6 @@ typename Converter<Number>::DifferenceBounds Converter<Number>::toDifferenceBoun
                     dbm(i, j) = typename Converter<Number>::DifferenceBounds::DBMEntry(0.0, DifferenceBounds::BOUND_TYPE::INFTY);
                 }
                 else {
-                    //std::cout << "Query direction vector " << direction << " yields result: " << res.supportValue << "\n";
                     dbm(i, j) = typename Converter<Number>::DifferenceBounds::DBMEntry(res.supportValue, DifferenceBounds::BOUND_TYPE::SMALLER_EQ);
                 }
             }
@@ -88,7 +79,6 @@ typename Converter<Number>::DifferenceBounds Converter<Number>::toDifferenceBoun
     }
     DifferenceBounds result = DifferenceBounds();
     result.setDBM(dbm);
-    //std::cout << "Resulting DBM: \n" << result << "\n";
     return result;
 }
 
