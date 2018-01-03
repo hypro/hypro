@@ -86,10 +86,13 @@ namespace hypro {
 
 		//6. Collect Labels
 		if(ctx->labels().size() >= 1) {
-			//visit(ctx->labels()[0]);
-			//t->setLabels(labels);
+			std::set<Label> ls;
+			for(const auto& ctxlabel: ctx->labels()) {
+				Label l = visit(ctxlabel);
+				ls.insert(l);
+			}
+			t->setLabels(ls);
 		}
-		//t->setLabels(labels);
 		
 		return t;
 	}
@@ -221,21 +224,6 @@ namespace hypro {
 
 	template<typename Number>
 	antlrcpp::Any HyproTransitionVisitor<Number>::visitLabels(HybridAutomatonParser::LabelsContext * ctx){
-		std::set<Label> ls;
-
-		unsigned i = 0;
-		while(i < ctx->label().size()){
-			Label l = visit(ctx->label().at(i));
-			ls.insert(l);
-			i++;
-		}
-
-		return ls;
-	}
-
-
-	template<typename Number>
-	antlrcpp::Any HyproTransitionVisitor<Number>::visitLabel(HybridAutomatonParser::LabelContext * ctx){
 		Label l;
 		l.setName(ctx->getText());
 		return l;

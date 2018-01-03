@@ -44,7 +44,6 @@ class HyproTransitionVisitor : public HybridAutomatonBaseVisitor{
 		antlrcpp::Any visitResetfct(HybridAutomatonParser::ResetfctContext *ctx) override;
 		antlrcpp::Any visitAggregation(HybridAutomatonParser::AggregationContext *ctx) override;
 		antlrcpp::Any visitLabels(HybridAutomatonParser::LabelsContext *ctx) override;
-		antlrcpp::Any visitLabel(HybridAutomatonParser::LabelContext *ctx) override;
 
 	public:
 
