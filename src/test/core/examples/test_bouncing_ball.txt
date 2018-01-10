@@ -29,7 +29,7 @@ hybrid reachability {
    poly ode 1
    {
     #v' = --9.81 + -+-v*42*-3 + [2,5]
-    #x' = +++3*-+--v
+    #x' = +++4*-+--v
     x' = 3*v + [-1,4]
     v' = gabunga + c*v
    }
@@ -59,7 +59,7 @@ hybrid reachability {
   parallelotope aggregation {}
 
   l -> l
-  guard { true }
+  guard { false }
   reset { }
   interval aggregation { }
  }

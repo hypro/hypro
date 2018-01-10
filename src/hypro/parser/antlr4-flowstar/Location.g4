@@ -17,7 +17,7 @@ modes			: 'modes' '{' location* '}' ;
 
 location 		: VARIABLE '{' activities invariants* '}' ;	
 
-activities		: ('poly ode 1' | 'poly ode 2' | 'poly ode 3' | 'linear ode') '{' equation* '}' ; 
+activities		: ('poly ode 1' | 'poly ode 2' | 'poly ode 3' | 'linear ode') '{' equation+ '}' ; 
 
 invariants		: 'inv' '{' constrset? '}' ;
 
