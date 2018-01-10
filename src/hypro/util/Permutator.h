@@ -11,6 +11,11 @@
 
 namespace hypro {
 
+/**
+ * @brief      Class for a permutator.
+ * @details    This functor returns a sequence of d-tuples where the maximal element is totalsize-1. All permutations
+ * 				are without considering order of the items and each item only occurs once.
+ */
 class Permutator {
 private:
 	std::vector<std::size_t> mCurrent;
