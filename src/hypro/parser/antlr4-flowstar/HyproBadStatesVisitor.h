@@ -9,8 +9,6 @@
 
 #pragma once
 
-#include "BadStatesLexer.h"
-#include "BadStatesParser.h"
 #include "HybridAutomatonBaseVisitor.h"
 #include "datastructures/HybridAutomaton/Location.h" 	//For locPtrComp
 #include "datastructures/HybridAutomaton/Condition.h" 	//For Condition class

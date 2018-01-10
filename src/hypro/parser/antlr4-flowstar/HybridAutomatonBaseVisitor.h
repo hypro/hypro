@@ -23,35 +23,27 @@ public:
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitJumps(HybridAutomatonParser::JumpsContext *ctx) override {
+  virtual antlrcpp::Any visitConstantdeclaration(HybridAutomatonParser::ConstantdeclarationContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitTransition(HybridAutomatonParser::TransitionContext *ctx) override {
+  virtual antlrcpp::Any visitModes(HybridAutomatonParser::ModesContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitFromto(HybridAutomatonParser::FromtoContext *ctx) override {
+  virtual antlrcpp::Any visitLocation(HybridAutomatonParser::LocationContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitUrgent(HybridAutomatonParser::UrgentContext *ctx) override {
+  virtual antlrcpp::Any visitActivities(HybridAutomatonParser::ActivitiesContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitGuard(HybridAutomatonParser::GuardContext *ctx) override {
+  virtual antlrcpp::Any visitInvariants(HybridAutomatonParser::InvariantsContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitAllocation(HybridAutomatonParser::AllocationContext *ctx) override {
-    return visitChildren(ctx);
-  }
-
-  virtual antlrcpp::Any visitResetfct(HybridAutomatonParser::ResetfctContext *ctx) override {
-    return visitChildren(ctx);
-  }
-
-  virtual antlrcpp::Any visitAggregation(HybridAutomatonParser::AggregationContext *ctx) override {
+  virtual antlrcpp::Any visitConstantexpr(HybridAutomatonParser::ConstantexprContext *ctx) override {
     return visitChildren(ctx);
   }
 
@@ -84,6 +76,62 @@ public:
   }
 
   virtual antlrcpp::Any visitConstrset(HybridAutomatonParser::ConstrsetContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitReplacedexpr(HybridAutomatonParser::ReplacedexprContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitInit(HybridAutomatonParser::InitContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitInitstate(HybridAutomatonParser::InitstateContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitUnsafeset(HybridAutomatonParser::UnsafesetContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitLbadstate(HybridAutomatonParser::LbadstateContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitGbadstate(HybridAutomatonParser::GbadstateContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitJumps(HybridAutomatonParser::JumpsContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitTransition(HybridAutomatonParser::TransitionContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitFromto(HybridAutomatonParser::FromtoContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitUrgent(HybridAutomatonParser::UrgentContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitGuard(HybridAutomatonParser::GuardContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitAllocation(HybridAutomatonParser::AllocationContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitResetfct(HybridAutomatonParser::ResetfctContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitAggregation(HybridAutomatonParser::AggregationContext *ctx) override {
     return visitChildren(ctx);
   }
 
@@ -132,42 +180,6 @@ public:
   }
 
   virtual antlrcpp::Any visitPrecision(HybridAutomatonParser::PrecisionContext *ctx) override {
-    return visitChildren(ctx);
-  }
-
-  virtual antlrcpp::Any visitModes(HybridAutomatonParser::ModesContext *ctx) override {
-    return visitChildren(ctx);
-  }
-
-  virtual antlrcpp::Any visitLocation(HybridAutomatonParser::LocationContext *ctx) override {
-    return visitChildren(ctx);
-  }
-
-  virtual antlrcpp::Any visitActivities(HybridAutomatonParser::ActivitiesContext *ctx) override {
-    return visitChildren(ctx);
-  }
-
-  virtual antlrcpp::Any visitInvariants(HybridAutomatonParser::InvariantsContext *ctx) override {
-    return visitChildren(ctx);
-  }
-
-  virtual antlrcpp::Any visitInit(HybridAutomatonParser::InitContext *ctx) override {
-    return visitChildren(ctx);
-  }
-
-  virtual antlrcpp::Any visitInitstate(HybridAutomatonParser::InitstateContext *ctx) override {
-    return visitChildren(ctx);
-  }
-
-  virtual antlrcpp::Any visitUnsafeset(HybridAutomatonParser::UnsafesetContext *ctx) override {
-    return visitChildren(ctx);
-  }
-
-  virtual antlrcpp::Any visitLbadstate(HybridAutomatonParser::LbadstateContext *ctx) override {
-    return visitChildren(ctx);
-  }
-
-  virtual antlrcpp::Any visitGbadstate(HybridAutomatonParser::GbadstateContext *ctx) override {
     return visitChildren(ctx);
   }
 

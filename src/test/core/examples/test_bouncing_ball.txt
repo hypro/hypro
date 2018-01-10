@@ -1,6 +1,11 @@
-hybrid reachability
-{
- state var x,v
+hybrid reachability { 
+ 
+ state var x,v 
+ 
+ par {
+  gabunga = -9.81
+  c = 1
+ }
 
  setting
  {
@@ -23,14 +28,16 @@ hybrid reachability
   {
    poly ode 1
    {
-    v' = --9.81 + -+-v*42*-3 + [2,5]
-    #x' = +++3*-+--v
+    #v' = --9.81 + -+-v*42*-3 + [2,5]
+    #x' = +++4*-+--v
     x' = 3*v + [-1,4]
+    v' = gabunga + c*v
    }
 
    inv
    {
     x >= 0
+    v <= c + gabunga
    }
    
    inv{}
@@ -47,15 +54,22 @@ hybrid reachability
  {
   l -> l
   guard { x = 0 v <= 0 }
-  reset { v' := -0.75*v }
+  #reset { v' := -0.75*v }
+  reset { v' := gabunga*0.1 }
   parallelotope aggregation {}
+
+  l -> l
+  guard { false }
+  reset { }
+  interval aggregation { }
  }
 
  init
  {
   l
   {
-   x in [10,10.2]
+   x in [gabunga,10.2]
+   #x in [10,10.2]
    v in [0,1]
   }
   l
@@ -63,7 +77,6 @@ hybrid reachability
    x in [1,1.2]
    v in [0,1]
   }
-  
  }
  
  init 
@@ -87,8 +100,8 @@ unsafe set
   {
    v in [-2.5,0]
   }
- x >= 15
- v+2 >= -v+23
+ x >= 15+gabunga
+ v+2+c >= -v+23
  v-7+8*x >= 33-12*x	
  #-v+2 >= 23 		#Problem: -v connects to polynom in constraint before, more generally: if connector is first symbol of left side in 
  			#	in constraint, it will connect to polynom before.
