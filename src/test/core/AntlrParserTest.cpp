@@ -81,7 +81,7 @@ TYPED_TEST(AntlrParserTest, JustTesting){
 		std::cout << e.what() << std::endl;
 		FAIL();
 	}
-	
+
 }
 
 TYPED_TEST(AntlrParserTest, EmptyFile){
@@ -114,7 +114,7 @@ TYPED_TEST(AntlrParserTest, MinimalAcceptedFile){
 	} catch(const std::runtime_error& e){
 		std::cout << e.what() << std::endl;
 		FAIL();
-	}	
+	}
 
 	//Test if Settings were right
 	hypro::ReachabilitySettings<TypeParam> controlSettings;
@@ -153,29 +153,29 @@ TYPED_TEST(AntlrParserTest, MinimalAcceptedFile){
 	hypro::HybridAutomaton<TypeParam,hypro::State_t<TypeParam,TypeParam>> controlHA;
 	controlHA.setLocations(locSet);
 	controlHA.setInitialStates(lsMap);
-	
+
 	//Test if parsed HybridAutomaton has the same content as HA
 	//NOTE: We cannot check for equality via operator== yet as locations differ in their id
 	//EXPECT_EQ(boost::get<0>(h), controlHA);
 
 	//Check location - this hybrid automaton should only have one location
 	HybridAutomaton<TypeParam, hypro::State_t<TypeParam,TypeParam>>& parsedHA = boost::get<0>(h);
-	EXPECT_EQ(parsedHA.getLocations().size(), 1);
+	EXPECT_EQ(parsedHA.getLocations().size(), std::size_t(1));
 	EXPECT_TRUE(this->equals(parsedHA.getLocation(name), controlHA.getLocation(name)));
 	//Check Transitions - this automaton has no transitions
-	EXPECT_EQ(parsedHA.getTransitions().size(), 0);
-	EXPECT_EQ(controlHA.getTransitions().size(), 0);
+	EXPECT_EQ(parsedHA.getTransitions().size(), std::size_t(0));
+	EXPECT_EQ(controlHA.getTransitions().size(), std::size_t(0));
 	//Check Initialstates - one init state with one state
-	EXPECT_EQ(parsedHA.getInitialStates().size(), 1);
-	EXPECT_EQ(controlHA.getInitialStates().size(), 1);
+	EXPECT_EQ(parsedHA.getInitialStates().size(), std::size_t(1));
+	EXPECT_EQ(controlHA.getInitialStates().size(), std::size_t(1));
 	EXPECT_NE(parsedHA.getInitialStates().find(parsedHA.getLocation(name)), parsedHA.getInitialStates().end());
 	EXPECT_NE(controlHA.getInitialStates().find(controlHA.getLocation(name)), controlHA.getInitialStates().end());
 	EXPECT_TRUE(this->equals(parsedHA.getInitialStates().begin()->first, parsedHA.getInitialStates().begin()->first));
 	EXPECT_TRUE(this->equals(parsedHA.getInitialStates().begin()->second, parsedHA.getInitialStates().begin()->second));
 	//Check local badstates - none
-	EXPECT_EQ(parsedHA.getLocalBadStates().size(), 0);
+	EXPECT_EQ(parsedHA.getLocalBadStates().size(), std::size_t(0));
 	//Check global badstates - none
-	EXPECT_EQ(parsedHA.getGlobalBadStates().size(), 0);
+	EXPECT_EQ(parsedHA.getGlobalBadStates().size(), std::size_t(0));
 
 }
 
