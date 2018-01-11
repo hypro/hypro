@@ -11,8 +11,6 @@
 #pragma once
 
 #include "../../types.h"
-#include "HybridAutomatonLexer.h"
-#include "HybridAutomatonParser.h"
 #include "HybridAutomatonBaseVisitor.h"
 #include "HyproFormulaVisitor.h"
 #include "../../datastructures/HybridAutomaton/HybridAutomaton.h"

@@ -9,6 +9,7 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
 		PointTest.cpp
 		VertexTest.cpp
 		VertexContainerTest.cpp
+		StateTest.cpp
 		#HybridAutomataTest.cpp
 	)
 

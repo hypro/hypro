@@ -1789,7 +1789,7 @@ bool SupportFunctionContent<Number>::empty() const {
 }
 
 template <typename Number>
-void SupportFunctionContent<Number>::cleanUp() {
+void SupportFunctionContent<Number>::cleanUp() const {
 	using Node = std::shared_ptr<SupportFunctionContent<Number>>;
 	std::vector<Node> callStack;
 
@@ -1802,7 +1802,7 @@ void SupportFunctionContent<Number>::cleanUp() {
 		if(cur->originCount() == 0) {
 			switch(cur->type()) {
 				case SF_TYPE::POLY: {
-					polytope()->cleanUp();
+					cur->polytope()->cleanUp();
 					break;
 				}
 				case SF_TYPE::INFTY_BALL:

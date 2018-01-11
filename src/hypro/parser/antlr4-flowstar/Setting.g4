@@ -9,8 +9,6 @@
 
 grammar Setting;
 
-//options { tokenVocab = AllLexerRules; }
-
 import Formula;
 
 //////// Parser Rules
@@ -29,9 +27,9 @@ filename 		: 'output' VARIABLE ;
 
 maxjumps 		: 'max jumps' NUMBER ;
 
-print 			: 'print' VARIABLE ; 
-
 //// Unimportant Parser Rules
+
+print 			: 'print' VARIABLE ; 
 
 remainder 		: 'remainder estimation' EXPONENTIAL ; 
 

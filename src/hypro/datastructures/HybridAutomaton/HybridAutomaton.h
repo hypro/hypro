@@ -65,11 +65,11 @@ class HybridAutomaton
     virtual ~HybridAutomaton() {
 		// Without this we have a memory leak from HyproTransitionVisitor.
 		// The leak will be patched later by using only references.
-        //while(!mTransitions.empty()) {
-        //	auto toDelete = *mTransitions.begin();
-        //    mTransitions.erase(mTransitions.begin());
-        //    delete toDelete;
-        //}
+        while(!mTransitions.empty()) {
+        	//auto toDelete = *mTransitions.begin();
+            mTransitions.erase(mTransitions.begin());
+            //delete toDelete;
+        }
     }
 
     /**

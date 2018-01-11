@@ -16,14 +16,18 @@ public:
     T__7 = 8, T__8 = 9, T__9 = 10, T__10 = 11, T__11 = 12, T__12 = 13, T__13 = 14, 
     T__14 = 15, T__15 = 16, T__16 = 17, T__17 = 18, T__18 = 19, T__19 = 20, 
     T__20 = 21, T__21 = 22, T__22 = 23, T__23 = 24, T__24 = 25, T__25 = 26, 
-    T__26 = 27, T__27 = 28, T__28 = 29, T__29 = 30, T__30 = 31, PARALLELOTOPE = 32, 
-    BOX = 33, JUMP = 34, DEFINE = 35, IN = 36, COMMENT = 37, EQUALS = 38, 
-    BOOLRELATION = 39, PLUS = 40, MINUS = 41, TIMES = 42, NUMBER = 43, VARIABLE = 44, 
-    WS = 45, EXPONENTIAL = 46
+    IN = 27, TRUE = 28, FALSE = 29, PAR = 30, COMMENT = 31, EQUALS = 32, 
+    BOOLRELATION = 33, PLUS = 34, MINUS = 35, TIMES = 36, SBOPEN = 37, SBCLOSE = 38, 
+    CBOPEN = 39, CBCLOSE = 40, COMMA = 41, NUMBER = 42, CONSTANT = 43, VARIABLE = 44, 
+    WS = 45, PARALLELOTOPE = 46, INTERVALAGG = 47, BOX = 48, JUMP = 49, 
+    DEFINE = 50, EXPONENTIAL = 51
   };
 
   HybridAutomatonLexer(antlr4::CharStream *input);
   ~HybridAutomatonLexer();
+
+
+  	bool parsingConstants = false;	
 
   virtual std::string getGrammarFileName() const override;
   virtual const std::vector<std::string>& getRuleNames() const override;
@@ -36,6 +40,7 @@ public:
   virtual const std::vector<uint16_t> getSerializedATN() const override;
   virtual const antlr4::atn::ATN& getATN() const override;
 
+  virtual void action(antlr4::RuleContext *context, size_t ruleIndex, size_t actionIndex) override;
 private:
   static std::vector<antlr4::dfa::DFA> _decisionToDFA;
   static antlr4::atn::PredictionContextCache _sharedContextCache;
@@ -52,6 +57,10 @@ private:
 
 
   // Individual action functions triggered by action() above.
+  void PARAction(antlr4::RuleContext *context, size_t actionIndex);
+  void CBCLOSEAction(antlr4::RuleContext *context, size_t actionIndex);
+  void CONSTANTAction(antlr4::RuleContext *context, size_t actionIndex);
+  void VARIABLEAction(antlr4::RuleContext *context, size_t actionIndex);
 
   // Individual semantic predicate functions triggered by sempred() above.
 

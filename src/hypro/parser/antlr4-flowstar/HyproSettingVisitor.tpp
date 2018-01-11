@@ -23,24 +23,24 @@ namespace hypro {
 		Number tStep = Number(1);
 		if(ctx->fixedsteps().size() > 1){
 			std::cerr << "ERROR: fixed step in settings has been defined multiple times." << std::endl;
-      exit(0);
+      		exit(0);
 		} else if(ctx->fixedsteps().size() == 1){
 			tStep = visit(ctx->fixedsteps()[0]).template as<Number>();
 		} else {
 			std::cerr << "ERROR: fixed step size has not been defined" << std::endl;
-      exit(0);
+      		exit(0);
 		}
 
 		//time
 		Number tBound = Number(0);
 		if(ctx->time().size() > 1){
 			std::cerr << "ERROR: time in settings has been defined multiple times." << std::endl;
-      exit(0);
+      		exit(0);
 		} else if(ctx->time().size() == 1){
 			tBound = visit(ctx->time()[0]).template as<Number>();
 		} else {
 			std::cerr << "ERROR: time has not been defined" << std::endl;
-      exit(0);
+      		exit(0);
 		}
 
 		//gnuplot octagon
@@ -52,31 +52,31 @@ namespace hypro {
 			}
 		} else {
 			std::cerr << "ERROR: gnuplot octagon has not been defined" << std::endl;
-      exit(0);
+      		exit(0);
 		}
 
 		//filename
 		std::string name;
 		if(ctx->filename().size() > 1){
 			std::cerr << "ERROR: filename in settings has been defined multiple times." << std::endl;
-      exit(0);
+      		exit(0);
 		} else if(ctx->filename().size() == 1){
 			name = visit(ctx->filename()[0]).template as<std::string>();
 		} else {
 			std::cerr << "ERROR: filename has not been defined" << std::endl;
-      exit(0);
+      		exit(0);
 		}
 
 		//maxjumps
 		int jumps = 0;
 		if(ctx->maxjumps().size() > 1){
 			std::cerr << "ERROR: max jumps in settings has been defined multiple times." << std::endl;
-      exit(0);
+      		exit(0);
 		} else if(ctx->maxjumps().size() == 1){
 			jumps = visit(ctx->maxjumps()[0]);
 		} else {
 			std::cerr << "ERROR: max jumps has not been defined" << std::endl;
-      exit(0);
+      		exit(0);
 		}
 
 		//remainder
@@ -104,7 +104,7 @@ namespace hypro {
   		Number converted = h.stringToNumber(ctx->NUMBER()->getText());
   		if(converted <= Number(0)){
   			std::cerr << "ERROR: No numbers below or equal 0 are allowed when defining fixed steps." << std::endl;
-        exit(0);
+        	exit(0);
   		}
   		return converted;
   	}
@@ -130,7 +130,7 @@ namespace hypro {
   			}
   			if(!found){
   				std::cerr << "ERROR: variable " << culprit << " in gnuplot octagon has not been defined in state var." << std::endl;
-          exit(0);
+          		exit(0);
   			}
   		}
 
@@ -154,7 +154,7 @@ namespace hypro {
   		for(std::size_t i=0; i < varCount.size(); i++){
   			if(varCount[i] > 1){
   				std::cerr << "ERROR: Variable " << vars[i] << "has been mentioned multiple times in gnuplot octagon. Please mention every variable at most one time." << std::endl;
-          exit(0);
+          		exit(0);
   			}
   		}
 

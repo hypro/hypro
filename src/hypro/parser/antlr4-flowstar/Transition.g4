@@ -1,5 +1,5 @@
 /*
- * Location.g4
+ * Transition.g4
  *
  * @author Phillip Tse
  * @date 20.6.2017
@@ -24,17 +24,19 @@ fromto		: VARIABLE JUMP VARIABLE ;
 
 urgent		: 'urgent' ;
 
-guard		: 'guard' '{' constrset '}' ;
+guard		: 'guard' '{' constrset? '}' ;
 
 allocation	: VARIABLE DEFINE (polynom | interval) ;
 
 resetfct	: 'reset' '{' allocation* '}' ;
 
-aggregation	: (PARALLELOTOPE | BOX) '{' '}' ;
+aggregation	: (PARALLELOTOPE | BOX | INTERVALAGG) '{' '}' ;
 
 //////// Lexer Rules
 
 PARALLELOTOPE 	: 'parallelotope aggregation' ;
+
+INTERVALAGG 	: 'interval aggregation' ; 
 
 BOX 			: 'box aggregation' ;
 
