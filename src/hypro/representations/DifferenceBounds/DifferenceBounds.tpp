@@ -3,56 +3,56 @@
 namespace hypro {
 
 
-    template <typename Number, typename Converter>
-    DifferenceBoundsT<Number, Converter>::DifferenceBoundsT(){
+    template <typename Number, typename Converter, class Setting>
+    DifferenceBoundsT<Number, Converter, Setting>::DifferenceBoundsT(){
         m_dbm = matrix_t<DBMEntry>(1,1);
-        m_dbm << DBMEntry(0,DifferenceBoundsT<Number, Converter>::BOUND_TYPE::SMALLER);
+        m_dbm << DBMEntry(0,DifferenceBoundsT<Number, Converter, Setting>::BOUND_TYPE::SMALLER);
         m_timeHorizon = 0.0;
     }
 
-    template <typename Number, typename Converter>
-    DifferenceBoundsT<Number, Converter>::DBMEntry::DBMEntry(Number number, BOUND_TYPE boundType) : std::pair<Number, BOUND_TYPE>(number, boundType) {
+    template <typename Number, typename Converter, class Setting>
+    DifferenceBoundsT<Number, Converter, Setting>::DBMEntry::DBMEntry(Number number, BOUND_TYPE boundType) : std::pair<Number, BOUND_TYPE>(number, boundType) {
         //nop
     }
 
-    template <typename Number, typename Converter>
-    DifferenceBoundsT<Number, Converter>::DBMEntry::DBMEntry() : std::pair<Number, BOUND_TYPE>() {
+    template <typename Number, typename Converter, class Setting>
+    DifferenceBoundsT<Number, Converter, Setting>::DBMEntry::DBMEntry() : std::pair<Number, BOUND_TYPE>() {
         //nop
     }
 
-    template <typename Number, typename Converter>
-    matrix_t<typename DifferenceBoundsT<Number, Converter>::DBMEntry> DifferenceBoundsT<Number, Converter>::getDBM() const{
+    template <typename Number, typename Converter, class Setting>
+    matrix_t<typename DifferenceBoundsT<Number, Converter, Setting>::DBMEntry> DifferenceBoundsT<Number, Converter, Setting>::getDBM() const{
         return m_dbm;
     }
-    template <typename Number, typename Converter>
-    void DifferenceBoundsT<Number, Converter>::setDBM(matrix_t<DifferenceBoundsT<Number, Converter>::DBMEntry> dbm) {
+    template <typename Number, typename Converter, class Setting>
+    void DifferenceBoundsT<Number, Converter, Setting>::setDBM(matrix_t<DifferenceBoundsT<Number, Converter, Setting>::DBMEntry> dbm) {
         m_dbm = dbm;
     }
 
-    template <typename Number, typename Converter>
-    Number DifferenceBoundsT<Number, Converter>::getTimeHorizon() const{
+    template <typename Number, typename Converter, class Setting>
+    Number DifferenceBoundsT<Number, Converter, Setting>::getTimeHorizon() const{
         return m_timeHorizon;
     }
 
-    template <typename Number, typename Converter>
-    void DifferenceBoundsT<Number, Converter>::setTimeHorizon(Number horizon) {
+    template <typename Number, typename Converter, class Setting>
+    void DifferenceBoundsT<Number, Converter, Setting>::setTimeHorizon(Number horizon) {
         m_timeHorizon = horizon;
     }
 
-    template <typename Number, typename Converter>
-    std::size_t DifferenceBoundsT<Number, Converter>::dimension() const{
+    template <typename Number, typename Converter, class Setting>
+    std::size_t DifferenceBoundsT<Number, Converter, Setting>::dimension() const{
         // number of clocks
         return this->getDBM().cols()-1;
     }
 
-    template <typename Number, typename Converter>
-    std::size_t DifferenceBoundsT<Number, Converter>::size() const{
+    template <typename Number, typename Converter, class Setting>
+    std::size_t DifferenceBoundsT<Number, Converter, Setting>::size() const{
         // number of dbm entries
         return this->getDBM().cols()*this->getDBM().rows();
     }
 
-    template <typename Number, typename Converter>
-    bool DifferenceBoundsT<Number, Converter>::empty() const{
+    template <typename Number, typename Converter, class Setting>
+    bool DifferenceBoundsT<Number, Converter, Setting>::empty() const{
         /*
          *  A DBM is empty if the following holds for a position i,j in a dbm matrix
          *
@@ -90,9 +90,9 @@ namespace hypro {
         return false;
     }
 
-    template <typename Number, typename Converter>
-    std::vector<Point<Number>> DifferenceBoundsT<Number, Converter>::vertices( const matrix_t<Number>& ) const {
-        hypro::HPolytopeT<Number,Converter> poly = Converter::toHPolytope(*this);
+    template <typename Number, typename Converter, class Setting>
+    std::vector<Point<Number>> DifferenceBoundsT<Number, Converter, Setting>::vertices( const matrix_t<Number>& ) const {
+        hypro::HPolytopeT<Number,Converter, HPolytopeSetting> poly = Converter::toHPolytope(*this);
         // A time Horizon can be defined that avoids plotting of potentially infinite polytopes
         if (getTimeHorizon() != 0.0) {
             // we need 2 additional timeHorizon constraint for each clock (except 0 clock)
@@ -120,62 +120,62 @@ namespace hypro {
                 HPolyConstants(counter, 0) = 0.0;
                 counter++;
             }
-            hypro::HPolytopeT<Number,Converter> polyNew(HPolyConstraints,HPolyConstants);
+            hypro::HPolytopeT<Number,Converter, HPolytopeSetting> polyNew(HPolyConstraints,HPolyConstants);
             return polyNew.vertices();
         }
         return poly.vertices();
     }
 
-    template <typename Number, typename Converter>
-    std::pair<CONTAINMENT, DifferenceBoundsT<Number, Converter>> DifferenceBoundsT<Number, Converter>::satisfiesHalfspace( const Halfspace<Number>& rhs ) const{
-        hypro::HPolytopeT<Number, Converter> tmp = Converter::toHPolytope(*this);
-        std::pair<CONTAINMENT, HPolytopeT<Number, Converter>> res = tmp.satisfiesHalfspace(rhs);
+    template <typename Number, typename Converter, class Setting>
+    std::pair<CONTAINMENT, DifferenceBoundsT<Number, Converter, Setting>> DifferenceBoundsT<Number, Converter, Setting>::satisfiesHalfspace( const Halfspace<Number>& rhs ) const{
+        hypro::HPolytopeT<Number, Converter, HPolytopeSetting> tmp = Converter::toHPolytope(*this);
+        std::pair<CONTAINMENT, HPolytopeT<Number, Converter, HPolytopeSetting>> res = tmp.satisfiesHalfspace(rhs);
         return std::make_pair(res.first,Converter::toDifferenceBounds(res.second));
     }
 
-    template <typename Number, typename Converter>
-    std::pair<CONTAINMENT, DifferenceBoundsT<Number, Converter>> DifferenceBoundsT<Number, Converter>::satisfiesHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const{
-        hypro::HPolytopeT<Number, Converter> tmp = Converter::toHPolytope(*this);
-        std::pair<CONTAINMENT, HPolytopeT<Number, Converter>> res = tmp.satisfiesHalfspaces(_mat,_vec);
+    template <typename Number, typename Converter, class Setting>
+    std::pair<CONTAINMENT, DifferenceBoundsT<Number, Converter, Setting>> DifferenceBoundsT<Number, Converter, Setting>::satisfiesHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const{
+        hypro::HPolytopeT<Number, Converter, HPolytopeSetting> tmp = Converter::toHPolytope(*this);
+        std::pair<CONTAINMENT, HPolytopeT<Number, Converter, HPolytopeSetting>> res = tmp.satisfiesHalfspaces(_mat,_vec);
         return std::make_pair(res.first,Converter::toDifferenceBounds(res.second));
     }
 
-    template <typename Number, typename Converter>
-    DifferenceBoundsT<Number,Converter> DifferenceBoundsT<Number, Converter>::project(const std::vector<std::size_t>& dimensions) const{
+    template <typename Number, typename Converter, class Setting>
+    DifferenceBoundsT<Number,Converter, Setting> DifferenceBoundsT<Number, Converter, Setting>::project(const std::vector<std::size_t>& dimensions) const{
         
         if((unsigned) dimensions.size()+1 == m_dbm.rows()){
             // if the dimensions to plot to are as large as our dbm, we are already done
-            return hypro::DifferenceBoundsT<Number,Converter>(*this);
+            return hypro::DifferenceBoundsT<Number,Converter, Setting>(*this);
         }
         // TODO can this be done better? especially for higher dimensions?
-        hypro::HPolytopeT<Number, Converter> tmp = Converter::toHPolytope(*this);
-        hypro::HPolytopeT<Number, Converter> projected = tmp.project(dimensions);
-        hypro::DifferenceBoundsT<Number,Converter> res = Converter::toDifferenceBounds(projected);
+        hypro::HPolytopeT<Number, Converter, HPolytopeSetting> tmp = Converter::toHPolytope(*this);
+        hypro::HPolytopeT<Number, Converter, HPolytopeSetting> projected = tmp.project(dimensions);
+        hypro::DifferenceBoundsT<Number,Converter, Setting> res = Converter::toDifferenceBounds(projected);
         return res;
     }
 
-    template <typename Number, typename Converter>
-    DifferenceBoundsT<Number,Converter> DifferenceBoundsT<Number, Converter>::linearTransformation( const matrix_t<Number>& A ) const{
-        hypro::HPolytopeT<Number, Converter> tmp = Converter::toHPolytope(*this);
+    template <typename Number, typename Converter, class Setting>
+    DifferenceBoundsT<Number,Converter, Setting> DifferenceBoundsT<Number, Converter, Setting>::linearTransformation( const matrix_t<Number>& A ) const{
+        hypro::HPolytopeT<Number, Converter, HPolytopeSetting> tmp = Converter::toHPolytope(*this);
         return Converter::toDifferenceBounds(tmp.linearTransformation(A));
     }
 
-    template <typename Number, typename Converter>
-    DifferenceBoundsT<Number,Converter> DifferenceBoundsT<Number, Converter>::affineTransformation( const matrix_t<Number>& A, const vector_t<Number>& b ) const{
-        hypro::HPolytopeT<Number, Converter> tmp = Converter::toHPolytope(*this);
+    template <typename Number, typename Converter, class Setting>
+    DifferenceBoundsT<Number,Converter, Setting> DifferenceBoundsT<Number, Converter, Setting>::affineTransformation( const matrix_t<Number>& A, const vector_t<Number>& b ) const{
+        hypro::HPolytopeT<Number, Converter, HPolytopeSetting> tmp = Converter::toHPolytope(*this);
         return Converter::toDifferenceBounds(tmp.affineTransformation(A,b));
     }
 
-    template <typename Number, typename Converter>
-    DifferenceBoundsT<Number,Converter> DifferenceBoundsT<Number, Converter>::minkowskiSum( const DifferenceBoundsT<Number,Converter>& _rhs ) const{
-        hypro::HPolytopeT<Number, Converter> tmp1 = Converter::toHPolytope(*this);
-        hypro::HPolytopeT<Number, Converter> tmp2 = Converter::toHPolytope(_rhs);
+    template <typename Number, typename Converter, class Setting>
+    DifferenceBoundsT<Number,Converter, Setting> DifferenceBoundsT<Number, Converter, Setting>::minkowskiSum( const DifferenceBoundsT<Number,Converter, Setting>& _rhs ) const{
+        hypro::HPolytopeT<Number, Converter, HPolytopeSetting> tmp1 = Converter::toHPolytope(*this);
+        hypro::HPolytopeT<Number, Converter, HPolytopeSetting> tmp2 = Converter::toHPolytope(_rhs);
         return Converter::toDifferenceBounds(tmp1.minkowskiSum(tmp2));
     }
 
-    template <typename Number, typename Converter>
-    DifferenceBoundsT<Number,Converter> DifferenceBoundsT<Number, Converter>::intersect( const DifferenceBoundsT<Number,Converter>& _rhs ) const{
-        hypro::DifferenceBoundsT<Number,Converter> retDBM = hypro::DifferenceBoundsT<Number,Converter>(*this);
+    template <typename Number, typename Converter, class Setting>
+    DifferenceBoundsT<Number,Converter, Setting> DifferenceBoundsT<Number, Converter, Setting>::intersect( const DifferenceBoundsT<Number,Converter, Setting>& _rhs ) const{
+        hypro::DifferenceBoundsT<Number,Converter, Setting> retDBM = hypro::DifferenceBoundsT<Number,Converter, Setting>(*this);
         // for each entry in the other dbm, intersect that entry with this dbm
         for(int i = 0; i < _rhs.getDBM().rows(); i++){
             for(int j = 0; j < _rhs.getDBM().cols();j++){
@@ -187,20 +187,20 @@ namespace hypro {
         return retDBM;
     }
 
-    template <typename Number, typename Converter>
-    DifferenceBoundsT<Number,Converter> DifferenceBoundsT<Number, Converter>::intersectHalfspace( const Halfspace<Number>& hs ) const{
-        hypro::HPolytopeT<Number, Converter> tmp = Converter::toHPolytope(*this);
+    template <typename Number, typename Converter, class Setting>
+    DifferenceBoundsT<Number,Converter, Setting> DifferenceBoundsT<Number, Converter, Setting>::intersectHalfspace( const Halfspace<Number>& hs ) const{
+        hypro::HPolytopeT<Number, Converter, HPolytopeSetting> tmp = Converter::toHPolytope(*this);
         return Converter::toDifferenceBounds(tmp.intersectHalfspace(hs));
     }
 
-    template <typename Number, typename Converter>
-    DifferenceBoundsT<Number,Converter> DifferenceBoundsT<Number, Converter>::intersectHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const{
-        hypro::HPolytopeT<Number, Converter> tmp = Converter::toHPolytope(*this);
+    template <typename Number, typename Converter, class Setting>
+    DifferenceBoundsT<Number,Converter, Setting> DifferenceBoundsT<Number, Converter, Setting>::intersectHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const{
+        hypro::HPolytopeT<Number, Converter, HPolytopeSetting> tmp = Converter::toHPolytope(*this);
         return Converter::toDifferenceBounds(tmp.intersectHalfspaces(_mat,_vec));
     }
 
-    template <typename Number, typename Converter>
-    bool DifferenceBoundsT<Number, Converter>::contains( const Point<Number>& _point ) const{
+    template <typename Number, typename Converter, class Setting>
+    bool DifferenceBoundsT<Number, Converter, Setting>::contains( const Point<Number>& _point ) const{
         // describe point as dbm
         vector_t<Number> coordinates = _point.rawCoordinates();
         hypro::matrix_t<DBMEntry> mat =  hypro::matrix_t<DBMEntry>(m_dbm.rows(),m_dbm.cols());
@@ -224,13 +224,13 @@ namespace hypro {
                 }
             }
         }
-        hypro::DifferenceBoundsT<Number,Converter> pDBM = hypro::DifferenceBoundsT<Number,Converter>(*this);
+        hypro::DifferenceBoundsT<Number,Converter, Setting> pDBM = hypro::DifferenceBoundsT<Number,Converter, Setting>(*this);
         pDBM.setDBM(mat);
         return this->contains(pDBM);
     }
 
-    template <typename Number, typename Converter>
-    DifferenceBoundsT<Number,Converter> DifferenceBoundsT<Number, Converter>::unite( const DifferenceBoundsT<Number,Converter>& _rhs ) const{
+    template <typename Number, typename Converter, class Setting>
+    DifferenceBoundsT<Number,Converter, Setting> DifferenceBoundsT<Number, Converter, Setting>::unite( const DifferenceBoundsT<Number,Converter, Setting>& _rhs ) const{
         hypro::matrix_t<DBMEntry> mat =  hypro::matrix_t<DBMEntry>(m_dbm);
         for(int i=0; i < mat.rows(); i++){
             for(int j=0; j < mat.cols();j++) {
@@ -240,26 +240,26 @@ namespace hypro {
                 }
             }
         }
-        hypro::DifferenceBoundsT<Number,Converter> res = hypro::DifferenceBoundsT<Number,Converter>(*this);
+        hypro::DifferenceBoundsT<Number,Converter, Setting> res = hypro::DifferenceBoundsT<Number,Converter, Setting>(*this);
         res.setDBM(mat);
         return res;
     }
 
 
-    template <typename Number, typename Converter>
-    DifferenceBoundsT<Number,Converter> DifferenceBoundsT<Number, Converter>::elapse() const{
+    template <typename Number, typename Converter, class Setting>
+    DifferenceBoundsT<Number,Converter, Setting> DifferenceBoundsT<Number, Converter, Setting>::elapse() const{
         hypro::matrix_t<DBMEntry> mat =  hypro::matrix_t<DBMEntry>(m_dbm);
         for(int i = 1; i < m_dbm.rows(); i++){
             mat(i,0) = DBMEntry(0.0, BOUND_TYPE::INFTY);
         }
-        hypro::DifferenceBoundsT<Number,Converter> res = hypro::DifferenceBoundsT<Number,Converter>(*this);
+        hypro::DifferenceBoundsT<Number,Converter, Setting> res = hypro::DifferenceBoundsT<Number,Converter, Setting>(*this);
         res.setDBM(mat);
         return res;
     }
 
 
-    template <typename Number, typename Converter>
-    DifferenceBoundsT<Number,Converter> DifferenceBoundsT<Number, Converter>::rewind() const{
+    template <typename Number, typename Converter, class Setting>
+    DifferenceBoundsT<Number,Converter, Setting> DifferenceBoundsT<Number, Converter, Setting>::rewind() const{
         hypro::matrix_t<DBMEntry> mat =  hypro::matrix_t<DBMEntry>(m_dbm);
         for(int i = 1; i < m_dbm.rows(); i++){
             mat(0,i) = DBMEntry(0.0, BOUND_TYPE::SMALLER_EQ);
@@ -270,13 +270,13 @@ namespace hypro {
                 }
             }
         }
-        hypro::DifferenceBoundsT<Number,Converter> res = hypro::DifferenceBoundsT<Number,Converter>(*this);
+        hypro::DifferenceBoundsT<Number,Converter, Setting> res = hypro::DifferenceBoundsT<Number,Converter, Setting>(*this);
         res.setDBM(mat);
         return res;
     }
 
-    template <typename Number, typename Converter>
-    DifferenceBoundsT<Number,Converter> DifferenceBoundsT<Number, Converter>::free(int x) const{
+    template <typename Number, typename Converter, class Setting>
+    DifferenceBoundsT<Number,Converter, Setting> DifferenceBoundsT<Number, Converter, Setting>::free(int x) const{
         hypro::matrix_t<DBMEntry> mat =  hypro::matrix_t<DBMEntry>(m_dbm);
         for(int i = 0; i < m_dbm.rows(); i++){
             if (i != x){
@@ -287,13 +287,13 @@ namespace hypro {
                 mat(i,x) = DBMEntry(m_dbm(i,0).first, m_dbm(i,0).second);
             }
         }
-        hypro::DifferenceBoundsT<Number,Converter> res = hypro::DifferenceBoundsT<Number,Converter>(*this);
+        hypro::DifferenceBoundsT<Number,Converter, Setting> res = hypro::DifferenceBoundsT<Number,Converter, Setting>(*this);
         res.setDBM(mat);
         return res;
     }
 
-    template <typename Number, typename Converter>
-    DifferenceBoundsT<Number,Converter> DifferenceBoundsT<Number, Converter>::reset(int x, Number value) const{
+    template <typename Number, typename Converter, class Setting>
+    DifferenceBoundsT<Number,Converter, Setting> DifferenceBoundsT<Number, Converter, Setting>::reset(int x, Number value) const{
         hypro::matrix_t<DBMEntry> mat =  hypro::matrix_t<DBMEntry>(m_dbm);
         for (int i = 0; i < m_dbm.rows();i++){
             // d_xi = (value,<=)+d_0i
@@ -302,13 +302,13 @@ namespace hypro {
             // d_ix = d_i0 + (-value, <=)
             mat(i,x) = m_dbm(i,0)+ DBMEntry(-value,BOUND_TYPE::SMALLER_EQ);
         }
-        hypro::DifferenceBoundsT<Number,Converter> res = hypro::DifferenceBoundsT<Number,Converter>(*this);
+        hypro::DifferenceBoundsT<Number,Converter, Setting> res = hypro::DifferenceBoundsT<Number,Converter, Setting>(*this);
         res.setDBM(mat);
         return res;
     }
 
-    template <typename Number, typename Converter>
-    DifferenceBoundsT<Number,Converter> DifferenceBoundsT<Number, Converter>::copy(int src, int dest) const{
+    template <typename Number, typename Converter, class Setting>
+    DifferenceBoundsT<Number,Converter, Setting> DifferenceBoundsT<Number, Converter, Setting>::copy(int src, int dest) const{
         hypro::matrix_t<DBMEntry> mat =  hypro::matrix_t<DBMEntry>(m_dbm);
         for(int i = 0; i < m_dbm.rows(); i++){
             if (i != dest){
@@ -323,13 +323,13 @@ namespace hypro {
         // d_srcdest = (0,<=)
         mat(src,dest) = DBMEntry(0.0,BOUND_TYPE::SMALLER_EQ);
 
-        hypro::DifferenceBoundsT<Number,Converter> res = hypro::DifferenceBoundsT<Number,Converter>(*this);
+        hypro::DifferenceBoundsT<Number,Converter, Setting> res = hypro::DifferenceBoundsT<Number,Converter, Setting>(*this);
         res.setDBM(mat);
         return res;
     }
 
-    template <typename Number, typename Converter>
-    DifferenceBoundsT<Number,Converter> DifferenceBoundsT<Number, Converter>::shift(int x, Number offset) const {
+    template <typename Number, typename Converter, class Setting>
+    DifferenceBoundsT<Number,Converter, Setting> DifferenceBoundsT<Number, Converter, Setting>::shift(int x, Number offset) const {
         hypro::matrix_t<DBMEntry> mat = hypro::matrix_t<DBMEntry>(m_dbm);
 
         for (int i = 0; i < m_dbm.rows(); i++) {
@@ -346,13 +346,13 @@ namespace hypro {
         //d_0x = min(d_0x, (0, <=))
         mat(0, x) = DBMEntry::min(mat(0,x), DBMEntry(0, BOUND_TYPE::SMALLER_EQ));
 
-        hypro::DifferenceBoundsT<Number, Converter> res = hypro::DifferenceBoundsT<Number, Converter>(*this);
+        hypro::DifferenceBoundsT<Number, Converter, Setting> res = hypro::DifferenceBoundsT<Number, Converter, Setting>(*this);
         res.setDBM(mat);
         return res;
     }
 
-    template <typename Number, typename Converter>
-    bool DifferenceBoundsT<Number, Converter>::contains( const DifferenceBoundsT<Number,Converter>& _rhs ) const{
+    template <typename Number, typename Converter, class Setting>
+    bool DifferenceBoundsT<Number, Converter, Setting>::contains( const DifferenceBoundsT<Number,Converter, Setting>& _rhs ) const{
         // we assert that both DBM constraint the same clocks. Note that a DBM that would describe a projection
         // to some subset of clocks can be given by setting the entries of the other clocks in the DBM to 0.
         // Hence a DBM should always be as large as the number of clocks in the automaton.
@@ -368,8 +368,8 @@ namespace hypro {
         return contains;
     }
 
-    template <typename Number, typename Converter>
-    DifferenceBoundsT<Number,Converter> DifferenceBoundsT<Number, Converter>::intersectConstraint( const int x, const int y, const DBMEntry& bound ) const{
+    template <typename Number, typename Converter, class Setting>
+    DifferenceBoundsT<Number,Converter, Setting> DifferenceBoundsT<Number, Converter, Setting>::intersectConstraint( const int x, const int y, const DBMEntry& bound ) const{
         hypro::matrix_t<DBMEntry> mat = hypro::matrix_t<DBMEntry>(m_dbm);
         // d_yx+bound < 0
         if(mat(y,x)+bound < DBMEntry(0.0, BOUND_TYPE::SMALLER_EQ)){
@@ -392,13 +392,13 @@ namespace hypro {
                 }
             }
         }
-        hypro::DifferenceBoundsT<Number, Converter> res = hypro::DifferenceBoundsT<Number, Converter>(*this);
+        hypro::DifferenceBoundsT<Number, Converter, Setting> res = hypro::DifferenceBoundsT<Number, Converter, Setting>(*this);
         res.setDBM(mat);
         return res;
     }
 
-    template <typename Number, typename Converter>
-    DifferenceBoundsT<Number,Converter> DifferenceBoundsT<Number, Converter>::extraM(const vector_t<DBMEntry>& MBounds) const{
+    template <typename Number, typename Converter, class Setting>
+    DifferenceBoundsT<Number,Converter, Setting> DifferenceBoundsT<Number, Converter, Setting>::extraM(const vector_t<DBMEntry>& MBounds) const{
         hypro::matrix_t<DBMEntry> mat = hypro::matrix_t<DBMEntry>(m_dbm);
         for(int i=0; i < mat.rows();i++){
             for(int j=0; j<mat.cols();j++){
@@ -420,13 +420,13 @@ namespace hypro {
                 // (c_ij, </<=/INFTY) otherwise (i.e. copy) -> no op
             }
         }
-        hypro::DifferenceBoundsT<Number, Converter> res = hypro::DifferenceBoundsT<Number, Converter>(*this);
+        hypro::DifferenceBoundsT<Number, Converter, Setting> res = hypro::DifferenceBoundsT<Number, Converter, Setting>(*this);
         res.setDBM(mat);
         return res;
     }
 
-    template <typename Number, typename Converter>
-    DifferenceBoundsT<Number,Converter> DifferenceBoundsT<Number, Converter>::extraMPlus(const vector_t<DBMEntry>& MBounds) const{
+    template <typename Number, typename Converter, class Setting>
+    DifferenceBoundsT<Number,Converter, Setting> DifferenceBoundsT<Number, Converter, Setting>::extraMPlus(const vector_t<DBMEntry>& MBounds) const{
         hypro::matrix_t<DBMEntry> mat = hypro::matrix_t<DBMEntry>(m_dbm);
         for(int i=0; i < mat.rows();i++){
             for(int j=0; j<mat.cols();j++){
@@ -456,13 +456,13 @@ namespace hypro {
                 }
             }
         }
-        hypro::DifferenceBoundsT<Number, Converter> res = hypro::DifferenceBoundsT<Number, Converter>(*this);
+        hypro::DifferenceBoundsT<Number, Converter, Setting> res = hypro::DifferenceBoundsT<Number, Converter, Setting>(*this);
         res.setDBM(mat);
         return res;
     }
 
-    template <typename Number, typename Converter>
-    DifferenceBoundsT<Number,Converter> DifferenceBoundsT<Number, Converter>::extraLU(const vector_t<DBMEntry>& LBounds, const vector_t<DBMEntry>& UBounds) const{
+    template <typename Number, typename Converter, class Setting>
+    DifferenceBoundsT<Number,Converter, Setting> DifferenceBoundsT<Number, Converter, Setting>::extraLU(const vector_t<DBMEntry>& LBounds, const vector_t<DBMEntry>& UBounds) const{
         hypro::matrix_t<DBMEntry> mat = hypro::matrix_t<DBMEntry>(m_dbm);
         for(int i=0; i < mat.rows();i++){
             for(int j=0; j<mat.cols();j++){
@@ -484,13 +484,13 @@ namespace hypro {
                 }
             }
         }
-        hypro::DifferenceBoundsT<Number, Converter> res = hypro::DifferenceBoundsT<Number, Converter>(*this);
+        hypro::DifferenceBoundsT<Number, Converter, Setting> res = hypro::DifferenceBoundsT<Number, Converter, Setting>(*this);
         res.setDBM(mat);
         return res;
     }
 
-    template <typename Number, typename Converter>
-    DifferenceBoundsT<Number,Converter> DifferenceBoundsT<Number, Converter>::extraLUPlus(const vector_t<DBMEntry>& LBounds, const vector_t<DBMEntry>& UBounds) const{
+    template <typename Number, typename Converter, class Setting>
+    DifferenceBoundsT<Number,Converter, Setting> DifferenceBoundsT<Number, Converter, Setting>::extraLUPlus(const vector_t<DBMEntry>& LBounds, const vector_t<DBMEntry>& UBounds) const{
         hypro::matrix_t<DBMEntry> mat = hypro::matrix_t<DBMEntry>(m_dbm);
         for(int i=0; i < mat.rows();i++){
             for(int j=0; j<mat.cols();j++){
@@ -522,13 +522,13 @@ namespace hypro {
                 }
             }
         }
-        hypro::DifferenceBoundsT<Number, Converter> res = hypro::DifferenceBoundsT<Number, Converter>(*this);
+        hypro::DifferenceBoundsT<Number, Converter, Setting> res = hypro::DifferenceBoundsT<Number, Converter, Setting>(*this);
         res.setDBM(mat);
         return res;
     }
 
-    template <typename Number, typename Converter>
-    const DifferenceBoundsT<Number,Converter>& DifferenceBoundsT<Number, Converter>::removeRedundancy() {
+    template <typename Number, typename Converter, class Setting>
+    const DifferenceBoundsT<Number,Converter, Setting>& DifferenceBoundsT<Number, Converter, Setting>::removeRedundancy() {
         // we intend to always have a canonized dbm, so this should always be redundancy free
         return *this;
     }

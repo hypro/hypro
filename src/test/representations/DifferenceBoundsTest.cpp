@@ -8,30 +8,30 @@ using namespace hypro;
 template<typename Number>
 class DifferenceBoundsTest : public ::testing::Test {
 protected:
-    matrix_t<typename DifferenceBoundsT<Number,Converter<Number>>::DBMEntry> mat;
-    matrix_t<typename DifferenceBoundsT<Number,Converter<Number>>::DBMEntry> mat2;
+    matrix_t<typename DifferenceBoundsT<Number,Converter<Number>, DifferenceBoundsSetting>::DBMEntry> mat;
+    matrix_t<typename DifferenceBoundsT<Number,Converter<Number>, DifferenceBoundsSetting>::DBMEntry> mat2;
     virtual void SetUp() {
-    mat = matrix_t<typename DifferenceBoundsT<Number,Converter<Number>>::DBMEntry>(3,3);
-    mat << typename DifferenceBoundsT<Number,Converter<Number>>::DBMEntry(Number(0),DifferenceBoundsT<Number,Converter<Number>>::BOUND_TYPE::SMALLER_EQ),
-           typename DifferenceBoundsT<Number,Converter<Number>>::DBMEntry(Number(-4),DifferenceBoundsT<Number,Converter<Number>>::BOUND_TYPE::SMALLER_EQ),
-           typename DifferenceBoundsT<Number,Converter<Number>>::DBMEntry(Number(-4),DifferenceBoundsT<Number,Converter<Number>>::BOUND_TYPE::SMALLER_EQ),
-           typename DifferenceBoundsT<Number,Converter<Number>>::DBMEntry(Number(9),DifferenceBoundsT<Number,Converter<Number>>::BOUND_TYPE::SMALLER_EQ),
-           typename DifferenceBoundsT<Number,Converter<Number>>::DBMEntry(Number(0),DifferenceBoundsT<Number,Converter<Number>>::BOUND_TYPE::SMALLER_EQ),
-           typename DifferenceBoundsT<Number,Converter<Number>>::DBMEntry(Number(0),DifferenceBoundsT<Number,Converter<Number>>::BOUND_TYPE::SMALLER_EQ),
-           typename DifferenceBoundsT<Number,Converter<Number>>::DBMEntry(Number(11),DifferenceBoundsT<Number,Converter<Number>>::BOUND_TYPE::SMALLER_EQ),
-           typename DifferenceBoundsT<Number,Converter<Number>>::DBMEntry(Number(2),DifferenceBoundsT<Number,Converter<Number>>::BOUND_TYPE::SMALLER_EQ),
-           typename DifferenceBoundsT<Number,Converter<Number>>::DBMEntry(Number(0),DifferenceBoundsT<Number,Converter<Number>>::BOUND_TYPE::SMALLER_EQ);
+    mat = matrix_t<typename DifferenceBoundsT<Number,Converter<Number>, DifferenceBoundsSetting>::DBMEntry>(3,3);
+    mat << typename DifferenceBoundsT<Number,Converter<Number>, DifferenceBoundsSetting>::DBMEntry(Number(0),DifferenceBoundsT<Number,Converter<Number>, DifferenceBoundsSetting>::BOUND_TYPE::SMALLER_EQ),
+           typename DifferenceBoundsT<Number,Converter<Number>, DifferenceBoundsSetting>::DBMEntry(Number(-4),DifferenceBoundsT<Number,Converter<Number>, DifferenceBoundsSetting>::BOUND_TYPE::SMALLER_EQ),
+           typename DifferenceBoundsT<Number,Converter<Number>, DifferenceBoundsSetting>::DBMEntry(Number(-4),DifferenceBoundsT<Number,Converter<Number>, DifferenceBoundsSetting>::BOUND_TYPE::SMALLER_EQ),
+           typename DifferenceBoundsT<Number,Converter<Number>, DifferenceBoundsSetting>::DBMEntry(Number(9),DifferenceBoundsT<Number,Converter<Number>, DifferenceBoundsSetting>::BOUND_TYPE::SMALLER_EQ),
+           typename DifferenceBoundsT<Number,Converter<Number>, DifferenceBoundsSetting>::DBMEntry(Number(0),DifferenceBoundsT<Number,Converter<Number>, DifferenceBoundsSetting>::BOUND_TYPE::SMALLER_EQ),
+           typename DifferenceBoundsT<Number,Converter<Number>, DifferenceBoundsSetting>::DBMEntry(Number(0),DifferenceBoundsT<Number,Converter<Number>, DifferenceBoundsSetting>::BOUND_TYPE::SMALLER_EQ),
+           typename DifferenceBoundsT<Number,Converter<Number>, DifferenceBoundsSetting>::DBMEntry(Number(11),DifferenceBoundsT<Number,Converter<Number>, DifferenceBoundsSetting>::BOUND_TYPE::SMALLER_EQ),
+           typename DifferenceBoundsT<Number,Converter<Number>, DifferenceBoundsSetting>::DBMEntry(Number(2),DifferenceBoundsT<Number,Converter<Number>, DifferenceBoundsSetting>::BOUND_TYPE::SMALLER_EQ),
+           typename DifferenceBoundsT<Number,Converter<Number>, DifferenceBoundsSetting>::DBMEntry(Number(0),DifferenceBoundsT<Number,Converter<Number>, DifferenceBoundsSetting>::BOUND_TYPE::SMALLER_EQ);
 
-    mat2 = matrix_t<typename DifferenceBoundsT<Number,Converter<Number>>::DBMEntry>(3,3);
-    mat2 << typename DifferenceBoundsT<Number,Converter<Number>>::DBMEntry(Number(0),DifferenceBoundsT<Number,Converter<Number>>::BOUND_TYPE::SMALLER_EQ),
-           typename DifferenceBoundsT<Number,Converter<Number>>::DBMEntry(Number(-4),DifferenceBoundsT<Number,Converter<Number>>::BOUND_TYPE::SMALLER_EQ),
-           typename DifferenceBoundsT<Number,Converter<Number>>::DBMEntry(Number(-4),DifferenceBoundsT<Number,Converter<Number>>::BOUND_TYPE::SMALLER_EQ),
-           typename DifferenceBoundsT<Number,Converter<Number>>::DBMEntry(Number(9),DifferenceBoundsT<Number,Converter<Number>>::BOUND_TYPE::SMALLER_EQ),
-           typename DifferenceBoundsT<Number,Converter<Number>>::DBMEntry(Number(0),DifferenceBoundsT<Number,Converter<Number>>::BOUND_TYPE::SMALLER_EQ),
-           typename DifferenceBoundsT<Number,Converter<Number>>::DBMEntry(Number(0),DifferenceBoundsT<Number,Converter<Number>>::BOUND_TYPE::SMALLER_EQ),
-           typename DifferenceBoundsT<Number,Converter<Number>>::DBMEntry(Number(10),DifferenceBoundsT<Number,Converter<Number>>::BOUND_TYPE::SMALLER_EQ),
-           typename DifferenceBoundsT<Number,Converter<Number>>::DBMEntry(Number(1),DifferenceBoundsT<Number,Converter<Number>>::BOUND_TYPE::SMALLER_EQ),
-           typename DifferenceBoundsT<Number,Converter<Number>>::DBMEntry(Number(0),DifferenceBoundsT<Number,Converter<Number>>::BOUND_TYPE::SMALLER_EQ);
+    mat2 = matrix_t<typename DifferenceBoundsT<Number,Converter<Number>, DifferenceBoundsSetting>::DBMEntry>(3,3);
+    mat2 << typename DifferenceBoundsT<Number,Converter<Number>, DifferenceBoundsSetting>::DBMEntry(Number(0),DifferenceBoundsT<Number,Converter<Number>, DifferenceBoundsSetting>::BOUND_TYPE::SMALLER_EQ),
+           typename DifferenceBoundsT<Number,Converter<Number>, DifferenceBoundsSetting>::DBMEntry(Number(-4),DifferenceBoundsT<Number,Converter<Number>, DifferenceBoundsSetting>::BOUND_TYPE::SMALLER_EQ),
+           typename DifferenceBoundsT<Number,Converter<Number>, DifferenceBoundsSetting>::DBMEntry(Number(-4),DifferenceBoundsT<Number,Converter<Number>, DifferenceBoundsSetting>::BOUND_TYPE::SMALLER_EQ),
+           typename DifferenceBoundsT<Number,Converter<Number>, DifferenceBoundsSetting>::DBMEntry(Number(9),DifferenceBoundsT<Number,Converter<Number>, DifferenceBoundsSetting>::BOUND_TYPE::SMALLER_EQ),
+           typename DifferenceBoundsT<Number,Converter<Number>, DifferenceBoundsSetting>::DBMEntry(Number(0),DifferenceBoundsT<Number,Converter<Number>, DifferenceBoundsSetting>::BOUND_TYPE::SMALLER_EQ),
+           typename DifferenceBoundsT<Number,Converter<Number>, DifferenceBoundsSetting>::DBMEntry(Number(0),DifferenceBoundsT<Number,Converter<Number>, DifferenceBoundsSetting>::BOUND_TYPE::SMALLER_EQ),
+           typename DifferenceBoundsT<Number,Converter<Number>, DifferenceBoundsSetting>::DBMEntry(Number(10),DifferenceBoundsT<Number,Converter<Number>, DifferenceBoundsSetting>::BOUND_TYPE::SMALLER_EQ),
+           typename DifferenceBoundsT<Number,Converter<Number>, DifferenceBoundsSetting>::DBMEntry(Number(1),DifferenceBoundsT<Number,Converter<Number>, DifferenceBoundsSetting>::BOUND_TYPE::SMALLER_EQ),
+           typename DifferenceBoundsT<Number,Converter<Number>, DifferenceBoundsSetting>::DBMEntry(Number(0),DifferenceBoundsT<Number,Converter<Number>, DifferenceBoundsSetting>::BOUND_TYPE::SMALLER_EQ);
     }
 
     virtual void TearDown() {

@@ -234,6 +234,33 @@ PointTest.cpp.s:
 	cd /home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug && $(MAKE) -f src/test/datastructure/CMakeFiles/runDatastructureTests.dir/build.make src/test/datastructure/CMakeFiles/runDatastructureTests.dir/PointTest.cpp.s
 .PHONY : PointTest.cpp.s
 
+StateTest.o: StateTest.cpp.o
+
+.PHONY : StateTest.o
+
+# target to build an object file
+StateTest.cpp.o:
+	cd /home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug && $(MAKE) -f src/test/datastructure/CMakeFiles/runDatastructureTests.dir/build.make src/test/datastructure/CMakeFiles/runDatastructureTests.dir/StateTest.cpp.o
+.PHONY : StateTest.cpp.o
+
+StateTest.i: StateTest.cpp.i
+
+.PHONY : StateTest.i
+
+# target to preprocess a source file
+StateTest.cpp.i:
+	cd /home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug && $(MAKE) -f src/test/datastructure/CMakeFiles/runDatastructureTests.dir/build.make src/test/datastructure/CMakeFiles/runDatastructureTests.dir/StateTest.cpp.i
+.PHONY : StateTest.cpp.i
+
+StateTest.s: StateTest.cpp.s
+
+.PHONY : StateTest.s
+
+# target to generate assembly for a file
+StateTest.cpp.s:
+	cd /home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug && $(MAKE) -f src/test/datastructure/CMakeFiles/runDatastructureTests.dir/build.make src/test/datastructure/CMakeFiles/runDatastructureTests.dir/StateTest.cpp.s
+.PHONY : StateTest.cpp.s
+
 VertexContainerTest.o: VertexContainerTest.cpp.o
 
 .PHONY : VertexContainerTest.o
@@ -308,6 +335,9 @@ help:
 	@echo "... PointTest.o"
 	@echo "... PointTest.i"
 	@echo "... PointTest.s"
+	@echo "... StateTest.o"
+	@echo "... StateTest.i"
+	@echo "... StateTest.s"
 	@echo "... VertexContainerTest.o"
 	@echo "... VertexContainerTest.i"
 	@echo "... VertexContainerTest.s"

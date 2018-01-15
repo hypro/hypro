@@ -254,7 +254,7 @@ typename Converter<Number>::HPolytope Converter<Number>::toHPolytope(const Diffe
         int numconstraints = 0; //all entries of the DBM (except the diagonal and inifinities) define a constraint
         for (int i = 0; i < _source.getDBM().rows(); i++) {
             for (int j = 0; j < _source.getDBM().rows(); j++) {
-                if (i != j && !(_source.getDBM()(i, j).second == DifferenceBoundsT<Number,Converter>::BOUND_TYPE::INFTY)) {
+                if (i != j && !(_source.getDBM()(i, j).second == DifferenceBoundsT<Number,Converter,DifferenceBoundsSetting>::BOUND_TYPE::INFTY)) {
                     numconstraints++;
                 }
             }
@@ -267,7 +267,7 @@ typename Converter<Number>::HPolytope Converter<Number>::toHPolytope(const Diffe
         for (int i = 0; i < _source.getDBM().rows(); i++) {
             for (int j = 0; j < _source.getDBM().cols(); j++) {
                 // do not consider diagonals
-                if (i != j && !(_source.getDBM()(i, j).second == DifferenceBoundsT<Number,Converter>::BOUND_TYPE::INFTY)) {
+                if (i != j && !(_source.getDBM()(i, j).second == DifferenceBoundsT<Number,Converter,DifferenceBoundsSetting>::BOUND_TYPE::INFTY)) {
                     // the constraint to add
                     matrix_t<Number> constraintVars = matrix_t<Number>::Zero(1, numclocks);
                     if (i == 0) {
