@@ -86,10 +86,15 @@ public:
     inline bool operator!=(const Location<Number>& rhs) const { return (mId != rhs.getId()); }
 
     friend std::ostream& operator<<(std::ostream& ostr, const Location<Number>& l) {
-  #ifdef HYPRO_LOGGING
+//<<<<<<< HEAD
+//	    matrix_t<Number> tmp = matrix_t<Number>(l.getInvariant().getMatrix().rows(), l.getInvariant().getMatrix().cols() + 1);
+//	    tmp << l.getInvariant().getMatrix(), l.getInvariant().getVector();
+//	    ostr << "location " << l.getName() << " ptr "<< &l  << " (id: " << l.getId() << ")"<< std::endl << "\t Flow: " << std::endl << l.getFlow() << std::endl << "\t Invariant: " << std::endl << tmp;
+//=======
+    #ifdef HYPRO_LOGGING
 	    //matrix_t<Number> tmp = matrix_t<Number>(l.getInvariant().getMatrix().rows(), l.getInvariant().getMatrix().cols() + 1);
 	    //tmp << l.getInvariant().getMatrix(), l.getInvariant().getVector();
-	    ostr << "location " << l.getName() << " (id: " << l.getId() << ")"<< std::endl << "\t Flow: " << std::endl << l.getFlow() << std::endl << "\t Inv: " << std::endl << l.getInvariant();
+	    ostr << "location " << l.getName() << " ptr "<< &l  << " (id: " << l.getId() << ")"<< std::endl << "\t Flow: " << std::endl << l.getFlow() << std::endl << "\t Inv: " << std::endl << l.getInvariant();
 	    //ostr << l.getInvariant().getDiscreteCondition() << std::endl;
       ostr << "ExternalInput:\n" << l.getExternalInput() << std::endl;
 	    ostr << "Transitions: " << std::endl;

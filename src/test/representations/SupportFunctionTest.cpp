@@ -580,3 +580,11 @@ TYPED_TEST(SupportFunctionTest, plotting) {
 
 	Plotter<TypeParam>::getInstance().addObject(this->sfChainComplete.project(projectionDimensions).vertices());
 }
+
+TYPED_TEST(SupportFunctionTest, dotRep) {
+	SupportFunction<TypeParam> psf1Assigned = this->sfChainComplete;
+	matrix_t<TypeParam> vec1 = matrix_t<TypeParam>(2,1);
+	vec1 << 1,0;
+	psf1Assigned.evaluate(vec1);
+	//std::cout << psf1Assigned.getDotRepresentation();
+}

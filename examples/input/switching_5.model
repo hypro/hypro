@@ -109,23 +109,19 @@ hybrid reachability
  {
   l1 -> l2
   guard { x1 = 3 }
-  reset { }
-  interval aggregation
+  parallelotope aggregation {}
 
   l2 -> l3
   guard { x1 = 2 }
-  reset { }
-  interval aggregation
+  parallelotope aggregation {}
 
   l3 -> l4
   guard { x1 = 1 }
-  reset { }
-  interval aggregation
+  parallelotope aggregation {}
 
   l4 -> l5
   guard { x1 = 0 }
-  reset { }
-  interval aggregation
+  parallelotope aggregation {}
  }
 
  init

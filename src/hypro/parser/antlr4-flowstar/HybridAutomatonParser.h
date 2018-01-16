@@ -24,7 +24,7 @@ public:
     PAR = 33, COMMENT = 34, EQUALS = 35, BOOLRELATION = 36, PLUS = 37, MINUS = 38, 
     TIMES = 39, SBOPEN = 40, SBCLOSE = 41, CBOPEN = 42, CBCLOSE = 43, COMMA = 44, 
     NUMBER = 45, CONSTANT = 46, VARIABLE = 47, WS = 48, PARALLELOTOPE = 49, 
-    BOX = 50, JUMP = 51, DEFINE = 52, EXPONENTIAL = 53
+    INTERVALAGG = 50, BOX = 51, JUMP = 52, DEFINE = 53, EXPONENTIAL = 54
   };
 
   enum {
@@ -619,6 +619,7 @@ public:
     virtual size_t getRuleIndex() const override;
     antlr4::tree::TerminalNode *PARALLELOTOPE();
     antlr4::tree::TerminalNode *BOX();
+    antlr4::tree::TerminalNode *INTERVALAGG();
 
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
    

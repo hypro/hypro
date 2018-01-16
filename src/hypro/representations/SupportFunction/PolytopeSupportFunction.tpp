@@ -99,7 +99,7 @@ PolytopeSupportFunction<Number,Setting>::PolytopeSupportFunction( const Polytope
 template <typename Number, class Setting>
 PolytopeSupportFunction<Number,Setting>::~PolytopeSupportFunction() {
 	TRACE("hypro.representations.supportFunction", "");
-	mOpt.cleanGLPInstance();
+	//mOpt.cleanGLPInstance();
 }
 
 template <typename Number, class Setting>
@@ -333,8 +333,8 @@ bool PolytopeSupportFunction<Number,Setting>::empty() const {
 }
 
 template <typename Number, class Setting>
-void PolytopeSupportFunction<Number,Setting>::cleanUp() {
-	TRACE("hypro.representations.supportFunction", "");
+void PolytopeSupportFunction<Number,Setting>::cleanUp() const {
+	TRACE("hypro.representations.supportFunction", "Thread " << std::this_thread::get_id() << " attempts to clean its glp env.");
 	mOpt.cleanGLPInstance();
 }
 
@@ -342,6 +342,17 @@ template <typename Number, class Setting>
 void PolytopeSupportFunction<Number,Setting>::print() const{
     std::cout << convert<Number,double>(mConstraints) << std::endl;
     std::cout << convert<Number,double>(mConstraintConstants) << std::endl;
+}
+
+template <typename Number, class Setting>
+std::string PolytopeSupportFunction<Number,Setting>::getDotRepresentation() const {
+	std::stringstream s;
+	s << "<TR><TD>";
+	for(auto idCTXPair : mOpt.getGLPContexts()) {
+		s << &idCTXPair.second << "<BR>";
+	}
+	s << "</TD></TR>";
+	return s.str();
 }
 
 template<typename Number, class Setting>

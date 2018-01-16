@@ -65,11 +65,11 @@ class HybridAutomaton
     virtual ~HybridAutomaton() {
 		// Without this we have a memory leak from HyproTransitionVisitor.
 		// The leak will be patched later by using only references.
-        //while(!mTransitions.empty()) {
-        //	auto toDelete = *mTransitions.begin();
-        //    mTransitions.erase(mTransitions.begin());
-        //    delete toDelete;
-        //}
+        while(!mTransitions.empty()) {
+        	//auto toDelete = *mTransitions.begin();
+            mTransitions.erase(mTransitions.begin());
+            //delete toDelete;
+        }
     }
 
     /**
@@ -109,7 +109,7 @@ class HybridAutomaton
     ///@{
     void addLocation(Location<Number>* location) { mLocations.insert(location); }
     void addTransition(Transition<Number>* transition) { mTransitions.insert(transition); }
-    //void addInitialState(const State& state) { mInitialStates.insert(std::make_pair(state.getLocation(),state)); }
+    void addInitialState(const State& state) { mInitialStates.insert(std::make_pair(state.getLocation(),state)); }
     void addLocalBadState(const Location<Number>* loc, const Condition<Number>& condition) { mLocalBadStates.insert(std::make_pair(loc,condition)); }
     void addGlobalBadState(const Condition<Number>& state) { mGlobalBadStates.push_back(state); }
     ///@}

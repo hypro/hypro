@@ -302,9 +302,9 @@ namespace hypro {
 		} else if (ctx->TRUE() == NULL && ctx->FALSE() != NULL) {
 			
 			matrix_t<Number> tmpMatrix = matrix_t<Number>::Zero(1,vars.size());
-			vector_t<Number> one = vector_t<Number>(1);
-			one(0) = Number(1);
-			return std::make_pair(tmpMatrix, one);
+			vector_t<Number> minusOne = vector_t<Number>(1);
+			minusOne(0) = Number(-1);
+			return std::make_pair(tmpMatrix, minusOne);
 
 		} else if (ctx->TRUE() != NULL && ctx->FALSE() != NULL) {
 			
