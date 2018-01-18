@@ -10,6 +10,7 @@ var classhypro_1_1Optimizer =
     [ "cleanGLPInstance", "classhypro_1_1Optimizer.html#a8969f92db7227730e56031f1dbc9f0a0", null ],
     [ "clear", "classhypro_1_1Optimizer.html#a57d9aea697e3087a60b776d70a942baa", null ],
     [ "evaluate", "classhypro_1_1Optimizer.html#ad6092f75a76c246fedc19806bd2baa7d", null ],
+    [ "getGLPContexts", "classhypro_1_1Optimizer.html#ab9552429ff7bfb36b5bdb641c93f7ca1", null ],
     [ "getInternalPoint", "classhypro_1_1Optimizer.html#a30e10c735ed9c4fce9184f62625aaeb7", null ],
     [ "matrix", "classhypro_1_1Optimizer.html#abce506a254bbcd7b47a8cdd149fb3c6d", null ],
     [ "operator=", "classhypro_1_1Optimizer.html#a58cf754a2a364133b52f7dfae4d24e7d", null ],

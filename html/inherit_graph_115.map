@@ -1,3 +1,4 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$structhypro_1_1reachability_1_1hypro_1_1HPolytopeSetting.html" title="hypro::reachability\l::hypro::HPolytopeSetting" alt="" coords="6,5,178,46"/>
+<area shape="rect" id="node1" href="$classhypro_1_1reachability_1_1hypro_1_1GeometricObject.html" title="hypro::reachability\l::hypro::GeometricObject\l\&lt; Number, ZonotopeT\&lt; Number,\l Converter \&gt; \&gt;" alt="" coords="6,5,218,75"/>
+<area shape="rect" id="node2" href="$classhypro_1_1reachability_1_1hypro_1_1ZonotopeT.html" title="Class for Zonotopes. " alt="" coords="267,12,416,68"/>
 </map>

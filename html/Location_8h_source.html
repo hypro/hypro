@@ -182,37 +182,42 @@ $(document).ready(function(){initNavTree('Location_8h_source.html','');});
 <div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;    <span class="keyword">inline</span> <span class="keywordtype">bool</span> operator!=(<span class="keyword">const</span> <a class="code" href="classhypro_1_1Location.html">Location&lt;Number&gt;</a>&amp; rhs)<span class="keyword"> const </span>{ <span class="keywordflow">return</span> (mId != rhs.getId()); }</div>
 <div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;</div>
 <div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;    <span class="keyword">friend</span> std::ostream&amp; operator&lt;&lt;(std::ostream&amp; ostr, const Location&lt;Number&gt;&amp; l) {</div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;<span class="preprocessor">  #ifdef HYPRO_LOGGING</span></div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;<span class="preprocessor"></span>        <span class="comment">//matrix_t&lt;Number&gt; tmp = matrix_t&lt;Number&gt;(l.getInvariant().getMatrix().rows(), l.getInvariant().getMatrix().cols() + 1);</span></div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;        <span class="comment">//tmp &lt;&lt; l.getInvariant().getMatrix(), l.getInvariant().getVector();</span></div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;        ostr &lt;&lt; <span class="stringliteral">&quot;location &quot;</span> &lt;&lt; l.getName() &lt;&lt; <span class="stringliteral">&quot; (id: &quot;</span> &lt;&lt; l.getId() &lt;&lt; <span class="stringliteral">&quot;)&quot;</span>&lt;&lt; std::endl &lt;&lt; <span class="stringliteral">&quot;\t Flow: &quot;</span> &lt;&lt; std::endl &lt;&lt; l.getFlow() &lt;&lt; std::endl &lt;&lt; <span class="stringliteral">&quot;\t Inv: &quot;</span> &lt;&lt; std::endl &lt;&lt; l.getInvariant();</div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;        <span class="comment">//ostr &lt;&lt; l.getInvariant().getDiscreteCondition() &lt;&lt; std::endl;</span></div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;      ostr &lt;&lt; <span class="stringliteral">&quot;ExternalInput:\n&quot;</span> &lt;&lt; l.getExternalInput() &lt;&lt; std::endl;</div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;        ostr &lt;&lt; <span class="stringliteral">&quot;Transitions: &quot;</span> &lt;&lt; std::endl;</div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;        <span class="keywordflow">for</span> (<span class="keyword">auto</span> transitionPtr : l.getTransitions()) {</div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;            ostr &lt;&lt; *transitionPtr &lt;&lt; std::endl;</div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;        }</div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;      ostr &lt;&lt; <span class="stringliteral">&quot;and transitions.size() is: &quot;</span> &lt;&lt; l.getTransitions().size() &lt;&lt; std::endl;</div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;        ostr &lt;&lt; std::endl &lt;&lt; <span class="stringliteral">&quot;)&quot;</span>;</div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;<span class="preprocessor">    #endif</span></div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;<span class="preprocessor"></span>        <span class="keywordflow">return</span> ostr;</div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;    }</div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;};</div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;</div>
-<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;<span class="keyword">template</span>&lt;<span class="keyword">typename</span> Number&gt;</div>
-<div class="line"><a name="l00107"></a><span class="lineno"><a class="line" href="structhypro_1_1locPtrComp.html">  107</a></span>&#160;<span class="keyword">struct </span><a class="code" href="structhypro_1_1locPtrComp.html">locPtrComp</a> {</div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;    <span class="keywordtype">bool</span> operator()(<span class="keyword">const</span> <a class="code" href="classhypro_1_1Location.html">Location&lt;Number&gt;</a>* lhs, <span class="keyword">const</span> <a class="code" href="classhypro_1_1Location.html">Location&lt;Number&gt;</a>* rhs)<span class="keyword"> const </span>{ <span class="keywordflow">return</span> (*lhs &lt; *rhs); }</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;<span class="comment">//&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD</span></div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;<span class="comment">//      matrix_t&lt;Number&gt; tmp = matrix_t&lt;Number&gt;(l.getInvariant().getMatrix().rows(), l.getInvariant().getMatrix().cols() + 1);</span></div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;<span class="comment">//      tmp &lt;&lt; l.getInvariant().getMatrix(), l.getInvariant().getVector();</span></div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;<span class="comment">//      ostr &lt;&lt; &quot;location &quot; &lt;&lt; l.getName() &lt;&lt; &quot; ptr &quot;&lt;&lt; &amp;l  &lt;&lt; &quot; (id: &quot; &lt;&lt; l.getId() &lt;&lt; &quot;)&quot;&lt;&lt; std::endl &lt;&lt; &quot;\t Flow: &quot; &lt;&lt; std::endl &lt;&lt; l.getFlow() &lt;&lt; std::endl &lt;&lt; &quot;\t Invariant: &quot; &lt;&lt; std::endl &lt;&lt; tmp;</span></div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;<span class="comment">//=======</span></div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;<span class="preprocessor">    #ifdef HYPRO_LOGGING</span></div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;<span class="preprocessor"></span>        <span class="comment">//matrix_t&lt;Number&gt; tmp = matrix_t&lt;Number&gt;(l.getInvariant().getMatrix().rows(), l.getInvariant().getMatrix().cols() + 1);</span></div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;        <span class="comment">//tmp &lt;&lt; l.getInvariant().getMatrix(), l.getInvariant().getVector();</span></div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;        ostr &lt;&lt; <span class="stringliteral">&quot;location &quot;</span> &lt;&lt; l.getName() &lt;&lt; <span class="stringliteral">&quot; ptr &quot;</span>&lt;&lt; &amp;l  &lt;&lt; <span class="stringliteral">&quot; (id: &quot;</span> &lt;&lt; l.getId() &lt;&lt; <span class="stringliteral">&quot;)&quot;</span>&lt;&lt; std::endl &lt;&lt; <span class="stringliteral">&quot;\t Flow: &quot;</span> &lt;&lt; std::endl &lt;&lt; l.getFlow() &lt;&lt; std::endl &lt;&lt; <span class="stringliteral">&quot;\t Inv: &quot;</span> &lt;&lt; std::endl &lt;&lt; l.getInvariant();</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;        <span class="comment">//ostr &lt;&lt; l.getInvariant().getDiscreteCondition() &lt;&lt; std::endl;</span></div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;      ostr &lt;&lt; <span class="stringliteral">&quot;ExternalInput:\n&quot;</span> &lt;&lt; l.getExternalInput() &lt;&lt; std::endl;</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;        ostr &lt;&lt; <span class="stringliteral">&quot;Transitions: &quot;</span> &lt;&lt; std::endl;</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;        <span class="keywordflow">for</span> (<span class="keyword">auto</span> transitionPtr : l.getTransitions()) {</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;            ostr &lt;&lt; *transitionPtr &lt;&lt; std::endl;</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;        }</div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;      ostr &lt;&lt; <span class="stringliteral">&quot;and transitions.size() is: &quot;</span> &lt;&lt; l.getTransitions().size() &lt;&lt; std::endl;</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;        ostr &lt;&lt; std::endl &lt;&lt; <span class="stringliteral">&quot;)&quot;</span>;</div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;<span class="preprocessor">    #endif</span></div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;<span class="preprocessor"></span>        <span class="keywordflow">return</span> ostr;</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;    }</div>
 <div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;};</div>
 <div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;</div>
-<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;}  <span class="comment">// namespace hypro</span></div>
-<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;</div>
-<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;<span class="preprocessor">#include &quot;Location.tpp&quot;</span></div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;<span class="keyword">template</span>&lt;<span class="keyword">typename</span> Number&gt;</div>
+<div class="line"><a name="l00112"></a><span class="lineno"><a class="line" href="structhypro_1_1locPtrComp.html">  112</a></span>&#160;<span class="keyword">struct </span><a class="code" href="structhypro_1_1locPtrComp.html">locPtrComp</a> {</div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;    <span class="keywordtype">bool</span> operator()(<span class="keyword">const</span> <a class="code" href="classhypro_1_1Location.html">Location&lt;Number&gt;</a>* lhs, <span class="keyword">const</span> <a class="code" href="classhypro_1_1Location.html">Location&lt;Number&gt;</a>* rhs)<span class="keyword"> const </span>{ <span class="keywordflow">return</span> (*lhs &lt; *rhs); }</div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;};</div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;</div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;}  <span class="comment">// namespace hypro</span></div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;</div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;<span class="preprocessor">#include &quot;Location.tpp&quot;</span></div>
 <div class="ttc" id="classhypro_1_1Location_html"><div class="ttname"><a href="classhypro_1_1Location.html">hypro::Location</a></div><div class="ttdoc">Class for location. </div><div class="ttdef"><b>Definition:</b> <a href="Location_8h_source.html#l00030">Location.h:30</a></div></div>
 <div class="ttc" id="namespacehypro_html_a52a4896e811a0710bcfc5a410a780034"><div class="ttname"><a href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">hypro::matrix_t</a></div><div class="ttdeci">Eigen::Matrix&lt; Number, Eigen::Dynamic, Eigen::Dynamic &gt; matrix_t</div><div class="ttdef"><b>Definition:</b> <a href="types_8h_source.html#l00026">types.h:26</a></div></div>
 <div class="ttc" id="classhypro_1_1LocationManager_html"><div class="ttname"><a href="classhypro_1_1LocationManager.html">hypro::LocationManager</a></div><div class="ttdef"><b>Definition:</b> <a href="Location_8h_source.html#l00023">Location.h:23</a></div></div>
 <div class="ttc" id="classhypro_1_1Transition_html"><div class="ttname"><a href="classhypro_1_1Transition.html">hypro::Transition</a></div><div class="ttdoc">Class for transition. </div><div class="ttdef"><b>Definition:</b> <a href="Location_8h_source.html#l00020">Location.h:20</a></div></div>
 <div class="ttc" id="classhypro_1_1Condition_html"><div class="ttname"><a href="classhypro_1_1Condition.html">hypro::Condition</a></div><div class="ttdef"><b>Definition:</b> <a href="Condition_8h_source.html#l00010">Condition.h:10</a></div></div>
-<div class="ttc" id="structhypro_1_1locPtrComp_html"><div class="ttname"><a href="structhypro_1_1locPtrComp.html">hypro::locPtrComp</a></div><div class="ttdef"><b>Definition:</b> <a href="Location_8h_source.html#l00107">Location.h:107</a></div></div>
+<div class="ttc" id="structhypro_1_1locPtrComp_html"><div class="ttname"><a href="structhypro_1_1locPtrComp.html">hypro::locPtrComp</a></div><div class="ttdef"><b>Definition:</b> <a href="Location_8h_source.html#l00112">Location.h:112</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- HTML footer for doxygen 1.8.12-->
