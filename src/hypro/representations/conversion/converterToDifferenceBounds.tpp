@@ -39,11 +39,6 @@ typename Converter<Number>::DifferenceBounds Converter<Number>::toDifferenceBoun
 
 template<typename Number>
 typename Converter<Number>::DifferenceBounds Converter<Number>::toDifferenceBounds(const HPolytope& source, const CONV_MODE ){
-    std::cout << "Input H-Polytop for conversion: " << source << "\n";
-    std::cout << "Input H-Polytop vertices for conversion: " << "\n";
-    for(int i = 0; i < source.vertices().size(); i++){
-         std::cout << source.vertices()[i] << "\n";
-    }
     size_t numclocks = source.dimension();
     // 1. introduce a zero clock (numclocks+1)
     numclocks++;
