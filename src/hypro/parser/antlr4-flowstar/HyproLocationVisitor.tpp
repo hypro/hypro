@@ -16,6 +16,8 @@ namespace hypro {
 
 	template<typename Number>
 	antlrcpp::Any HyproLocationVisitor<Number>::visitModes(HybridAutomatonParser::ModesContext *ctx){
+
+		std::cout << vars << std::endl;
 		
 		//Calls visit(ctx->location()) to get location, name it, put into locSet, return locSet
 		unsigned i = 0;

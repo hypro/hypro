@@ -4,7 +4,7 @@ namespace hypro
 {
 
 template<typename Number, typename State>
-const Location<Number>* HybridAutomaton<Number,State>::getLocation(std::size_t id) const {
+Location<Number>* HybridAutomaton<Number,State>::getLocation(std::size_t id) const {
 	for(const auto loc : mLocations) {
 		if(loc->getId() == id) {
 			return loc;
@@ -14,7 +14,7 @@ const Location<Number>* HybridAutomaton<Number,State>::getLocation(std::size_t i
 }
 
 template<typename Number, typename State>
-const Location<Number>* HybridAutomaton<Number,State>::getLocation(std::string name) const {
+Location<Number>* HybridAutomaton<Number,State>::getLocation(std::string name) const {
 	for(const auto loc : mLocations) {
 		if(loc->getName() == name) {
 			return loc;

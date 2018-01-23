@@ -16,6 +16,8 @@
 #include "Condition.h"
 #include "../../types.h"
 #include "../../representations/GeometricObject.h"
+#include "../../util/adaptions_eigen/adaptions_eigen.h"
+
 #include <map>
 
 namespace hypro
@@ -34,6 +36,7 @@ class HybridAutomaton
     using locationStateMap = std::multimap<const Location<Number>*, State>; /// Multi-map from location pointers to states.
     using locationConditionMap = std::map<const Location<Number>*, Condition<Number>>; /// Map from location pointers to conditions.
     using conditionVector = std::vector<Condition<Number>>; /// Vector of conditions.
+    using variableVector = std::vector<std::string>; /// Vector of variables
 
   private:
     locationSet mLocations; 				/// The locations of the hybrid automaton.
@@ -41,6 +44,7 @@ class HybridAutomaton
     locationStateMap mInitialStates; 		/// The set of initial states.
     locationConditionMap mLocalBadStates; 	/// The set of bad states which are bound to locations.
     conditionVector mGlobalBadStates; 		/// The set of bad states which are not bound to any location.
+    variableVector mVariables; 
 
   public:
   	/**
@@ -78,8 +82,8 @@ class HybridAutomaton
     ///@{
     //* @return The set of locations. */
     const locationSet& getLocations() const { return mLocations; }
-    const Location<Number>* getLocation(std::size_t id) const;
-    const Location<Number>* getLocation(std::string name) const;
+    Location<Number>* getLocation(std::size_t id) const;
+    Location<Number>* getLocation(std::string name) const;
     //* @return The set of transitions. */
     const transitionSet& getTransitions() const { return mTransitions; }
     //* @return The set of initial states. */
@@ -90,6 +94,8 @@ class HybridAutomaton
     const conditionVector& getGlobalBadStates() const { return mGlobalBadStates; }
     //* @return The state space dimension. */
     unsigned dimension() const;
+    //* @return The vector of variables. */
+    const variableVector& getVariables() const { return mVariables; }
     ///@}
 
     /**
@@ -101,6 +107,7 @@ class HybridAutomaton
     void setInitialStates(const locationStateMap& states) { mInitialStates = states; }
     void setLocalBadStates(const locationConditionMap& states) { mLocalBadStates = states; }
     void setGlobalBadStates(const conditionVector& states) { mGlobalBadStates = states; }
+    void setVariables(const variableVector& variables) { mVariables = variables; }
     ///@}
 
     /**
@@ -130,7 +137,185 @@ class HybridAutomaton
     			lhs.getInitialStates() == rhs.getInitialStates() &&
     			lhs.getLocalBadStates() == rhs.getLocalBadStates() &&
     			lhs.getGlobalBadStates() == rhs.getGlobalBadStates();
+    }  
+
+    /**
+     * @brief      Parallel Composition Operator.
+     * @param[in]  lhs   The left hand side.
+     * @param[in]  rhs   The right hand side.
+     * @return     Return parallel composition of two Automata.
+     */
+    friend HybridAutomaton operator||(const HybridAutomaton<Number, State>& lhs, const HybridAutomaton<Number, State>& rhs) {
+      std::cout << "||" << std::endl;
+
+      HybridAutomaton<Number, State> ha;
+
+      const variableVector& lhsVar = lhs.getVariables();
+      const variableVector& rhsVar = rhs.getVariables();
+      variableVector haVar;
+      variableVector::size_type  i=0, j=0;
+      while(i < lhsVar.size() and j < rhsVar.size()) {
+        if (lhsVar.at(i) == rhsVar.at(j)) {
+          haVar.push_back(lhsVar[i]);
+          i++; j++;
+          continue;
+        }
+        if (lhsVar.at(i) < rhsVar.at(j)) {
+          haVar.push_back(lhsVar[i]);
+          i++;
+          continue;
+        }
+        if (lhsVar.at(i) > rhsVar.at(j)) {
+          haVar.push_back(rhsVar[j]);
+          j++;
+          continue;
+        }
+      }
+      for(; i < lhsVar.size(); i++) {
+        haVar.push_back(lhsVar[i]);
+      }
+      for(; j < lhsVar.size(); j++) {
+        haVar.push_back(lhsVar[j]);
+      }
+      ha.setVariables(haVar);
+
+
+      std::cout << "locations & transisitons" << std::endl;
+      LocationManager<Number>& manager = LocationManager<Number>::getInstance();
+
+      for(const Location<Number>* locLhs: lhs.getLocations()) {
+        for(const Location<Number>* locRhs: rhs.getLocations()) {
+          Location<Number>* loc = manager.create();          
+
+          //set name
+          loc->setName(locLhs->getName()+","+locRhs->getName());
+
+          //set flow
+          matrix_t<Number> haFlow = combineMatrix( locLhs->getFlow(), locRhs->getFlow(), haVar, lhsVar, rhsVar);
+          loc->setFlow(haFlow);
+          
+          //set invariant
+          Condition<Number> inv = Condition<Number>::combine(locLhs->getInvariant(), locRhs->getInvariant(), haVar, lhsVar, rhsVar);
+          loc->setInvariant(inv);
+
+
+          //std::cout << "setExtInput" << std::endl;
+          //set extinput
+          //loc->setExtInput(flowAndExtInput.second);
+
+
+          ha.addLocation(loc);
+          
+        }
+      }
+
+      //build transisitons
+      for(const auto lhsT: lhs.getTransitions()) {
+        for(const auto rhsT: rhs.getTransitions()) {
+
+          Transition<Number>* t = new Transition<Number>();
+
+          // build label or skip transision.
+          if (lhsT->getLabels() == rhsT->getLabels()) {
+            t->setLabels(lhsT->getLabels());
+          } else {
+            continue;
+          }
+
+            /*
+
+          //6. Collect Labels
+          if(ctx->labels().size() >= 1) {
+            std::set<Label> ls;
+            for(const auto& ctxlabel: ctx->labels()) {
+              Label l = visit(ctxlabel);
+              ls.insert(l);
+            }
+            t->setLabels(ls);
+          }*/
+
+
+          //1.Collect start/destination location from visitFromTo
+          Location<Number>* source = ha.getLocation(lhsT->getSource()->getName()+','+rhsT->getSource()->getName());
+          t->setSource(source);
+
+          Location<Number>* target = ha.getLocation(lhsT->getTarget()->getName()+','+rhsT->getTarget()->getName());
+          t->setTarget(target);
+
+          // set urgent
+          t->setUrgent(lhsT->isUrgent() && rhsT->isUrgent());
+
+          //set guard
+          Condition<Number> haGuard = Condition<Number>::combine(lhsT->getGuard(), rhsT->getGuard(), haVar, lhsVar, rhsVar);
+          t->setGuard(haGuard);
+
+          /*
+          //4.Collect Resets
+          if(ctx->resetfct().size() > 1){
+            std::cout << "WARNING: Please refrain from entering multiple reset allocations via several reset spaces.\n"; 
+            std::cout << "Typing one reset space of the form 'reset { allocation1 allocation2 ... }' is sufficient.\n";
+            std::cout << "The resets have not been parsed.\n";
+          }
+          if(ctx->resetfct().size() == 1){
+            Reset<Number> reset = visit(ctx->resetfct()[0]);
+            t->setReset(reset);
+          }
+          
+          //5.Collect Aggregation
+          if(ctx->aggregation().size() > 1){
+            std::cerr << "ERROR: Multiple aggregation types specified for one transition." << std::endl;
+            exit(0);
+          }
+          if(ctx->aggregation().size() == 1){
+            Aggregation agg = visit(ctx->aggregation()[0]);
+            t->setAggregation(agg);
+          }
+
+          */
+        }
+      }
+
+
+
+      // set initial states (//std:multimap<const Location<Number>*, State>;)
+      std::cout << "set initial states" << std::endl;
+      locationStateMap initialStates;
+      for(const auto initialStateLhs: lhs.getInitialStates()) {
+        for(const auto initialStateRhs: rhs.getInitialStates()) {
+          
+          auto name = initialStateLhs.first->getName()+","+initialStateRhs.first->getName();
+
+          ConstraintSet<Number> lhsConstraintSet = boost::get<ConstraintSet<Number>>(initialStateLhs.second.getSet(0)); // TODO: can there be more than one?
+          ConstraintSet<Number> rhsConstraintSet = boost::get<ConstraintSet<Number>>(initialStateRhs.second.getSet(0));
+
+          matrix_t<Number> lhsMatrix = lhsConstraintSet.matrix();
+          matrix_t<Number> rhsMatrix = rhsConstraintSet.matrix();
+          vector_t<Number> lhsVector = lhsConstraintSet.vector();
+          vector_t<Number> rhsVector = rhsConstraintSet.vector();
+
+          auto newMatrix = combineMatrix(lhsMatrix, rhsMatrix, haVar, lhsVar, rhsVar);
+          auto newVector = combineVector(lhsVector, rhsVector);
+
+
+          auto location = ha.getLocation(name);
+          assert(location != NULL);
+          State_t<Number, Number> state;
+          state.setLocation(location);
+          auto consSet = ConstraintSet<Number>(newMatrix, newVector);
+          state.setSet(consSet ,0);
+          state.setTimestamp(carl::Interval<Number>(0));
+          initialStates.insert(std::pair<const Location<Number>*, State>(location, state));
+
+        }
+      }
+
+      //localBadstates
+      //globalBAdstates
+
+      return ha; //std::move???
     }
+
+
 
 #ifdef HYPRO_LOGGING
     friend std::ostream& operator<<(std::ostream& ostr, const HybridAutomaton<Number,State>& a)

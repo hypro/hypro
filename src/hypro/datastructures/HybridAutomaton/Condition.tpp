@@ -28,6 +28,21 @@ void Condition<Number>::setVector(const vector_t<Number>& v, std::size_t I) {
 	DEBUG("hypro.datastructures","Set vector at pos " << I << ", mConstraints.size() = " << mConstraints.size());
 }
 
+template<typename Number>
+Condition<Number> Condition<Number>::combine(
+	const Condition<Number>& lhs, const Condition<Number>& rhs,
+	const std::vector<std::string> haVar, const std::vector<std::string> lhsVar, const std::vector<std::string> rhsVar) {
+
+	matrix_t<Number> newMat = combineMatrix(lhs.getMatrix(), rhs.getMatrix(), haVar, lhsVar, rhsVar);
+	vector_t<Number> newVec = combineVector(lhs.getVector(), rhs.getVector());
+
+	/*vector_t<Number>::Zero(lhsInv.getVector().size()+rhsInv.getVector().size());
+	newVec.head(lhsInv.getVector().size()) = lhsInv.getVector();
+	newVec.tail(rhsInv.getVector().size()) = rhsInv.getVector();*/
+
+	return Condition<Number>(newMat, newVec);
+}
+
 //template<typename Number>
 //template<typename Representation, typename ...Rargs>
 //std::pair<bool,State<Number,Representation, Rargs...>> Condition<Number>::isSatisfiedBy(const State<Number,Representation, Rargs...>& inState) const {

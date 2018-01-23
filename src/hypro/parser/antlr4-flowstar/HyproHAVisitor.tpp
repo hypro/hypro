@@ -45,7 +45,10 @@ namespace hypro {
 
 		//1.Calls visit(ctx->vardeclaration()) to get vars vector
 		vars = visit(ctx->vardeclaration()).template as<std::vector<std::string>>();
+		std::sort(vars.begin(), vars.end());
 		std::vector<std::string>& varVec = vars;
+
+		std::cout << vars << std::endl;
 
 		//2.Calls visit(ctx->setting()) to get reachability settings
 		HyproSettingVisitor<Number> settingVisitor = HyproSettingVisitor<Number>(varVec);
@@ -111,6 +114,7 @@ namespace hypro {
 #endif
 		//7.Build HybridAutomaton, return it
 		HybridAutomaton<Number,State_t<Number,Number>> ha;
+		ha.setVariables(varVec);
 		ha.setLocations(locSet);
 		ha.setTransitions(transSet);
 		ha.setInitialStates(initSet);

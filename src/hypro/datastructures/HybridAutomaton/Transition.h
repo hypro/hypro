@@ -105,7 +105,7 @@ class Transition
     Number getTriggerTime() const { return mTriggerTime; }
     bool isUrgent() const { return mUrgent; }
     bool isTimeTriggered() const { return mTriggerTime >= 0; }
-    std::set<Label> getLabels() const { return mLabels; };
+    std::set<Label> getLabels() const { return mLabels; }
 
     void setSource(Location<Number>* source) { mSource = source; }
     void setTarget(Location<Number>* target) { mTarget = target; }
