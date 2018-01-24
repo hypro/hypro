@@ -14,6 +14,7 @@
 #include "State.h"
 #include "Transition.h"
 #include "Condition.h"
+#include "HybridAutomatonComp.h"
 #include "../../types.h"
 #include "../../representations/GeometricObject.h"
 #include "../../util/adaptions_eigen/adaptions_eigen.h"
@@ -145,7 +146,7 @@ class HybridAutomaton
      * @param[in]  rhs   The right hand side.
      * @return     Return parallel composition of two Automata.
      */
-    friend HybridAutomaton operator||(const HybridAutomaton<Number, State>& lhs, const HybridAutomaton<Number, State>& rhs) {
+    friend HybridAutomaton<Number, State> operator||(const HybridAutomaton<Number, State>& lhs, const HybridAutomaton<Number, State>& rhs) {
       std::cout << "||" << std::endl;
 
       HybridAutomaton<Number, State> ha;
@@ -315,7 +316,18 @@ class HybridAutomaton
       return ha; //std::move???
     }
 
-
+    /**
+     * @brief      Combination Operator.
+     * @param[in]  lhs   The left hand side.
+     * @param[in]  rhs   The right hand side.
+     * @return     Return compositional Automata of two Automata.
+     */
+    friend HybridAutomatonComp<Number, State> operator+(const HybridAutomaton<Number, State>& lhs, const HybridAutomaton<Number, State>& rhs) {
+      HybridAutomatonComp<Number, State> hac;
+      hac.addAutomata(lhs);
+      hac.addAutomata(rhs);
+      return hac;
+    }
 
 #ifdef HYPRO_LOGGING
     friend std::ostream& operator<<(std::ostream& ostr, const HybridAutomaton<Number,State>& a)

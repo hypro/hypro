@@ -34,7 +34,7 @@ namespace hypro {
 
     for(auto& ctxComp: ctx->component()) {
       HybridAutomaton<Number, State_t<Number, Number>> ha = visit(ctxComp->automaton());
-      hac.addAutomata(&ha);
+      //hac.addAutomata(&ha);
     }
 
     return std::move(hac);

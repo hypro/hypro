@@ -9,8 +9,13 @@
 #pragma once
 
 #include "HybridAutomaton.h"
+#include "../../types.h"
+
 
 namespace hypro {
+
+  template <typename Number, typename State>
+  class HybridAutomaton;
 
   /**
     * @brief      Class for linear hybrid automata with components.
@@ -18,17 +23,15 @@ namespace hypro {
   */
   template <typename Number, typename State = State_t<Number,Number>>
   class HybridAutomatonComp {
-    public:
-      using automataSet = std::set<HybridAutomaton<Number, State_t<Number, Number>>*>;
     private:
-      automataSet mAutomatas;
+      std::set<HybridAutomaton<Number, State>*> mAutomatas;
 
     public:
       HybridAutomatonComp() {};
 
       ~HybridAutomatonComp() {};
 
-      void addAutomata(HybridAutomaton<Number, State_t<Number, Number>>* automata) { mAutomatas.insert(automata); }
+      void addAutomata(HybridAutomaton<Number, State>* automata) { mAutomatas.insert(automata); }
   };
 }
 
