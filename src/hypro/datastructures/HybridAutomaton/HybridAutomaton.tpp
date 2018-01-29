@@ -14,7 +14,7 @@ const Location<Number>* HybridAutomaton<Number,State>::getLocation(std::size_t i
 }
 
 template<typename Number, typename State>
-const Location<Number>* HybridAutomaton<Number,State>::getLocation(std::string name) const {
+const Location<Number>* HybridAutomaton<Number,State>::getLocation(const std::string& name) const {
 	for(const auto loc : mLocations) {
 		if(loc->getName() == name) {
 			return loc;
@@ -28,7 +28,7 @@ unsigned HybridAutomaton<Number,State>::dimension() const
 {
     if (mInitialStates.empty()) return 0;
 
-    return (mInitialStates.begin()->first->getFlow().cols());
+    return (mInitialStates.begin()->first->getFlow().cols()-1);
 }
 
 }  // namespace hydra
