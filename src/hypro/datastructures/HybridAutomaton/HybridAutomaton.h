@@ -192,7 +192,7 @@ class HybridAutomaton
           loc->setName(locLhs->getName()+","+locRhs->getName());
 
           //set flow
-          matrix_t<Number> haFlow = combineMatrix( locLhs->getFlow(), locRhs->getFlow(), haVar, lhsVar, rhsVar);
+          matrix_t<Number> haFlow = combineMatrix(locLhs->getFlow(), locRhs->getFlow(), haVar, lhsVar, rhsVar);
           loc->setFlow(haFlow);
           
           //set invariant
@@ -250,18 +250,11 @@ class HybridAutomaton
           Condition<Number> haGuard = Condition<Number>::combine(lhsT->getGuard(), rhsT->getGuard(), haVar, lhsVar, rhsVar);
           t->setGuard(haGuard);
 
-          /*
-          //4.Collect Resets
-          if(ctx->resetfct().size() > 1){
-            std::cout << "WARNING: Please refrain from entering multiple reset allocations via several reset spaces.\n"; 
-            std::cout << "Typing one reset space of the form 'reset { allocation1 allocation2 ... }' is sufficient.\n";
-            std::cout << "The resets have not been parsed.\n";
-          }
-          if(ctx->resetfct().size() == 1){
-            Reset<Number> reset = visit(ctx->resetfct()[0]);
-            t->setReset(reset);
-          }
+          //set reset
+          Reset<Number> haReset = Reset<Number>::combine(lhsT->getReset(), rhsT->getReset(), haVar, lhsVar, rhsVar);
+          t->setReset(haReset);
           
+          /*
           //5.Collect Aggregation
           if(ctx->aggregation().size() > 1){
             std::cerr << "ERROR: Multiple aggregation types specified for one transition." << std::endl;

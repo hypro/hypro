@@ -67,6 +67,10 @@ public:
     friend bool operator!=(const Reset<Number>& lhs, const Reset<Number>& rhs) {
     	return !(lhs == rhs);
     }
+
+    static Reset<Number> combine(
+        const Reset<Number>& lhs, const Reset<Number>& rhs,
+        const std::vector<std::string> haVar, const std::vector<std::string> lhsVar, const std::vector<std::string> rhsVar);
 };
 
 } // namespace
