@@ -31,5 +31,18 @@ unsigned HybridAutomaton<Number,State>::dimension() const
     return (mInitialStates.begin()->first->getFlow().cols());
 }
 
+template<typename Number, typename State>
+const std::set<Label> HybridAutomaton<Number,State>::getLabels() const {
+
+	//TODO:
+	std::set<Label> labels;
+	for(const auto tra: mTransitions) {
+		for(const auto lab: tra->getLabels()) {
+			labels.insert(lab);
+		}
+	}
+	return labels;
+}
+
 }  // namespace hydra
 

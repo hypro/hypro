@@ -97,6 +97,8 @@ class HybridAutomaton
     unsigned dimension() const;
     //* @return The vector of variables. */
     const variableVector& getVariables() const { return mVariables; }
+    //* @return The set of all labels. */
+    const std::set<Label> getLabels() const;
     ///@}
 
     /**
@@ -191,62 +193,17 @@ class HybridAutomaton
         }
       }
 
+      std::cout << "trans" << std::endl;
       //build transisitons
+      std::set<Label> lhsLabels = lhs.getLabels();
+      std::set<Label> rhsLabels = rhs.getLabels();
       for(const auto lhsT: lhs.getTransitions()) {
         for(const auto rhsT: rhs.getTransitions()) {
-
-          Transition<Number>* t = new Transition<Number>();
-
-          // build label or skip transision.
-          if (lhsT->getLabels() == rhsT->getLabels()) {
-            t->setLabels(lhsT->getLabels());
-          } else {
-            continue;
+          Transition<Number>* t = parallelCompose(lhsT, rhsT, lhsVar, rhsVar, haVar, ha, lhsLabels, rhsLabels);
+          if(t) {
+            ha.addTransition(t);
+            (t->getSource())->addTransition(t);
           }
-
-            /*
-
-          //6. Collect Labels
-          if(ctx->labels().size() >= 1) {
-            std::set<Label> ls;
-            for(const auto& ctxlabel: ctx->labels()) {
-              Label l = visit(ctxlabel);
-              ls.insert(l);
-            }
-            t->setLabels(ls);
-          }*/
-
-
-          //1.Collect start/destination location from visitFromTo
-          Location<Number>* source = ha.getLocation(lhsT->getSource()->getName()+','+rhsT->getSource()->getName());
-          t->setSource(source);
-
-          Location<Number>* target = ha.getLocation(lhsT->getTarget()->getName()+','+rhsT->getTarget()->getName());
-          t->setTarget(target);
-
-          // set urgent
-          t->setUrgent(lhsT->isUrgent() && rhsT->isUrgent());
-
-          //set guard
-          Condition<Number> haGuard = Condition<Number>::combine(lhsT->getGuard(), rhsT->getGuard(), haVar, lhsVar, rhsVar);
-          t->setGuard(haGuard);
-
-          //set reset
-          Reset<Number> haReset = Reset<Number>::combine(lhsT->getReset(), rhsT->getReset(), haVar, lhsVar, rhsVar);
-          t->setReset(haReset);
-
-          /*
-          //5.Collect Aggregation
-          if(ctx->aggregation().size() > 1){
-            std::cerr << "ERROR: Multiple aggregation types specified for one transition." << std::endl;
-            exit(0);
-          }
-          if(ctx->aggregation().size() == 1){
-            Aggregation agg = visit(ctx->aggregation()[0]);
-            t->setAggregation(agg);
-          }
-
-          */
         }
       }
 

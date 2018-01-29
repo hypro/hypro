@@ -13,6 +13,7 @@
 #include "Reset.h"
 #include <carl/interval/Interval.h>
 #include "Label.h"
+#include "HybridAutomaton.h"
 
 namespace hypro
 {
@@ -154,4 +155,57 @@ class Transition
 		return true;
     }
 };
+
+template<typename Number, typename State>
+Transition<Number>* parallelCompose(const Transition<Number>* lhsT
+                                , const Transition<Number>* rhsT
+                                , const std::vector<std::string>& lhsVar
+                                , const std::vector<std::string>& rhsVar
+                                , const std::vector<std::string>& haVar
+                                , const HybridAutomaton<Number, State> ha
+                                , const std::set<Label> lhsLabels
+                                , const std::set<Label> rhsLabels) {
+
+    assert(haVar.size() >= (lhsVar.size() + rhsVar.size()));
+
+    Transition<Number>* t = new Transition<Number>();
+
+    //set label
+    if (lhsT->getLabels() == rhsT->getLabels()) {
+        std::cout << "a" << std::endl;
+        t->setLabels(lhsT->getLabels());
+    } else if(!(lhsT->getLabels().empty()) and rhsLabels.set::count(*(lhsT->getLabels().begin()))==0 and rhsT->getLabels().empty()) {
+        std::cout << "b" << std::endl;
+        t->setLabels(lhsT->getLabels());
+    } else if(!(rhsT->getLabels().empty()) and lhsLabels.set::count(*(rhsT->getLabels().begin()))==0 and lhsT->getLabels().empty()) {
+        std::cout << "c" << std::endl;
+        t->setLabels(rhsT->getLabels());
+    } else {
+        std::cout << "d" << std::endl;
+        return nullptr;
+    }
+
+    //set target and source
+    Location<Number>* source = ha.getLocation(lhsT->getSource()->getName()+'_'+rhsT->getSource()->getName());
+    Location<Number>* target = ha.getLocation(lhsT->getTarget()->getName()+'_'+rhsT->getTarget()->getName());
+    t->setTarget(target);
+    t->setSource(source);
+
+    //set urgent
+    t->setUrgent(lhsT->isUrgent() && rhsT->isUrgent());
+
+    //set guard
+    Condition<Number> haGuard = Condition<Number>::combine(lhsT->getGuard(), rhsT->getGuard(), haVar, lhsVar, rhsVar);
+    t->setGuard(haGuard);
+
+    //set reset
+    Reset<Number> haReset = Reset<Number>::combine(lhsT->getReset(), rhsT->getReset(), haVar, lhsVar, rhsVar);
+    t->setReset(haReset);
+
+    //set aggregation
+    t->setAggregation(lhsT->getAggregation());
+
+    return t;
+};
+
 }  // namespace hypro
