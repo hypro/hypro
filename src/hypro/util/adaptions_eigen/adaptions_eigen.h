@@ -14,8 +14,8 @@
 #include <functional>
 #include <iostream>
 #include <limits>
-#include <Eigen/Eigenvalues>
-#include <Eigen/Dense>
+#include <eigen3/Eigen/Eigenvalues>
+#include <eigen3/Eigen/Dense>
 
 namespace Eigen {
 
@@ -413,8 +413,8 @@ namespace hypro {
 
 		return newVec;
 	}
-	
-	
+
+
 } // namespace hypro
 
 namespace std {
