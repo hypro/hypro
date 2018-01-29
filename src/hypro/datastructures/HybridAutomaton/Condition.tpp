@@ -29,12 +29,12 @@ void Condition<Number>::setVector(const vector_t<Number>& v, std::size_t I) {
 }
 
 template<typename Number>
-Condition<Number> Condition<Number>::combine(
+Condition<Number> combine(
 	const Condition<Number>& lhs, const Condition<Number>& rhs,
 	const std::vector<std::string> haVar, const std::vector<std::string> lhsVar, const std::vector<std::string> rhsVar) {
 
-	matrix_t<Number> newMat = combineMatrix(lhs.getMatrix(), rhs.getMatrix(), haVar, lhsVar, rhsVar);
-	vector_t<Number> newVec = combineVector(lhs.getVector(), rhs.getVector());
+	matrix_t<Number> newMat = combine(lhs.getMatrix(), rhs.getMatrix(), haVar, lhsVar, rhsVar);
+	vector_t<Number> newVec = combine(lhs.getVector(), rhs.getVector());
 
 	/*vector_t<Number>::Zero(lhsInv.getVector().size()+rhsInv.getVector().size());
 	newVec.head(lhsInv.getVector().size()) = lhsInv.getVector();

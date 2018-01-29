@@ -195,11 +195,11 @@ Transition<Number>* parallelCompose(const Transition<Number>* lhsT
     t->setUrgent(lhsT->isUrgent() && rhsT->isUrgent());
 
     //set guard
-    Condition<Number> haGuard = Condition<Number>::combine(lhsT->getGuard(), rhsT->getGuard(), haVar, lhsVar, rhsVar);
+    Condition<Number> haGuard = combine(lhsT->getGuard(), rhsT->getGuard(), haVar, lhsVar, rhsVar);
     t->setGuard(haGuard);
 
     //set reset
-    Reset<Number> haReset = Reset<Number>::combine(lhsT->getReset(), rhsT->getReset(), haVar, lhsVar, rhsVar);
+    Reset<Number> haReset = combine(lhsT->getReset(), rhsT->getReset(), haVar, lhsVar, rhsVar);
     t->setReset(haReset);
 
     //set aggregation

@@ -366,7 +366,7 @@ namespace hypro {
 	}
 
 	template<typename Number>
-	static matrix_t<Number> combineMatrix(
+	static matrix_t<Number> combine(
 		const matrix_t<Number> lhsMatrix, const matrix_t<Number> rhsMatrix,
 		const std::vector<std::string> haVar, const std::vector<std::string> lhsVar, const std::vector<std::string> rhsVar) {
 
@@ -406,7 +406,7 @@ namespace hypro {
 	}
 
 	template<typename Number>
-	static vector_t<Number> combineVector(const vector_t<Number>& lhs, const vector_t<Number>& rhs){
+	static vector_t<Number> combine(const vector_t<Number>& lhs, const vector_t<Number>& rhs){
 		vector_t<Number> newVec = vector_t<Number>::Zero(lhs.size()+rhs.size());
 		newVec.head(lhs.size()) = lhs;
 		newVec.tail(rhs.size()) = rhs;
