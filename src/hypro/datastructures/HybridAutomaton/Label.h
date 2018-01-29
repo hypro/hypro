@@ -17,7 +17,7 @@ class Label {
   public:
     Label() = default;
 
-    Label(const std::string name) { mName = name; };
+    Label(const std::string& name) { mName = name; };
 
     ~Label() {};
 
@@ -25,15 +25,15 @@ class Label {
 
     void setName(const std::string &name) { mName = name; }
 
-    friend bool operator==(const Label lhs, const Label rhs) {
+    friend bool operator==(const Label& lhs, const Label& rhs) {
       return lhs.getName() == rhs.getName();
     }
 
-    friend bool operator!=(const Label lhs, const Label rhs) {
+    friend bool operator!=(const Label& lhs, const Label& rhs) {
       return !(lhs == rhs);
     }
 
-    friend bool operator<(const Label lhs, const Label rhs) {
+    friend bool operator<(const Label& lhs, const Label& rhs) {
       return lhs.getName() < rhs.getName();
     }
 };
