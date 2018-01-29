@@ -10,7 +10,7 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
 		VertexTest.cpp
 		VertexContainerTest.cpp
 		StateTest.cpp
-		#HybridAutomataTest.cpp
+		HybridAutomataTest.cpp
 	)
 
 	add_dependencies(runDatastructureTests googletest)
