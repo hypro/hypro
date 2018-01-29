@@ -225,8 +225,8 @@ class HybridAutomaton
           vector_t<Number> lhsVector = lhsConstraintSet.vector();
           vector_t<Number> rhsVector = rhsConstraintSet.vector();
 
-          auto newMatrix = combineMatrix(lhsMatrix, rhsMatrix, haVar, lhsVar, rhsVar);
-          auto newVector = combineVector(lhsVector, rhsVector);
+          auto newMatrix = combine(lhsMatrix, rhsMatrix, haVar, lhsVar, rhsVar);
+          auto newVector = combine(lhsVector, rhsVector);
 
 
           auto location = ha.getLocation(name);
