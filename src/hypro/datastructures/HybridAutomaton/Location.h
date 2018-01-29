@@ -8,6 +8,7 @@
 #pragma once
 
 #include "Condition.h"
+#include "LocationManager.h"
 //#include "lib/utils/types.h"
 //#include <hypro/types.h>
 #include "../../types.h"
@@ -112,6 +113,81 @@ template<typename Number>
 struct locPtrComp {
     bool operator()(const Location<Number>* lhs, const Location<Number>* rhs) const { return (*lhs < *rhs); }
 };
+
+template<typename Number>
+Location<Number>* parallelCompose(const Location<Number>* lhs
+								, const Location<Number>* rhs
+								, const std::vector<std::string>& lhsVar
+								, const std::vector<std::string>& rhsVar
+								, const std::vector<std::string>& haVar)
+{
+	assert(haVar.size() >= (lhsVar.size() + rhsVar.size()));
+
+	//compute flow
+	matrix_t<Number> haFlow = matrix_t<Number>::Zero(haVar.size() +1, haVar.size() +1);
+
+	std::size_t lhsIR, lhsIC, rhsIR, rhsIC = 0;
+	bool admissible = true; // flag used to denote a non-admissible flow, i.e. shared variables with different flow.
+	// iterate over all rows
+	for( auto rowI = 0; rowI != haVar.size(); ++rowI ) {
+		if(lhsVar[lhsIR] == haVar[rowI]) {
+			// iterate over all columns
+			lhsIC = 0;
+			for( auto colI = 0; colI != haVar.size(); ++colI) {
+				if(lhsVar[lhsIC] == haVar[colI]) {
+					haFlow(rowI,colI) = lhs->getFlow()(lhsIR,lhsIC);
+					++lhsIC;
+					if(lhsIC == lhsVar.size()) {
+						break;
+					}
+				}
+			}
+			++lhsIR;
+		}
+		if(rhsVar[rhsIR] == haVar[rowI]) {
+			// iterate over all columns
+			rhsIC = 0;
+			for( auto colI = 0; colI != haVar.size(); ++colI) {
+				if(rhsVar[rhsIC] == haVar[colI]) {
+					// TODO: the check is not entirely correct, since the flow can be non-admissible but set to 0 in lhs and something != 0 in rhs.
+					if(haFlow(rowI,colI) != 0 && rhs->getFlow()(rhsIR,rhsIC) != haFlow(rowI,colI)) {
+						admissible = false;
+						break;
+					}
+					haFlow(rowI,colI) = rhs->getFlow()(rhsIR,rhsIC);
+					++rhsIC;
+					if(rhsIC == rhsVar.size()) {
+						break;
+					}
+				}
+			}
+			++rhsIR;
+		}
+		if(!admissible)
+			break;
+	}
+	if(!admissible) {
+		return nullptr;
+	}
+
+	Location<Number>* res = LocationManager<Number>::getInstance().create();
+
+	//set name
+	res->setName(lhs->getName()+"_"+rhs->getName());
+
+
+	res->setFlow(haFlow);
+
+	//set invariant
+	Condition<Number> inv = Condition<Number>::combine(lhs->getInvariant(), rhs->getInvariant(), haVar, lhsVar, rhsVar);
+	res->setInvariant(inv);
+
+
+	//std::cout << "setExtInput" << std::endl;
+	//set extinput
+	//loc->setExtInput(flowAndExtInput.second);
+	return res;
+}
 
 }  // namespace hypro
 

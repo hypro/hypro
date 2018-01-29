@@ -192,6 +192,28 @@ TYPED_TEST(HybridAutomataTest, LocationTest)
 	EXPECT_TRUE(locPtrComp<TypeParam>()(this->loc1, this->loc2));
 }
 
+TYPED_TEST(HybridAutomataTest, LocationParallelcompositionTest)
+{
+	Location<TypeParam>* l1 = this->locMan.create();
+	Location<TypeParam>* l2 = this->locMan.create();
+
+	HybridAutomaton<TypeParam>::variableVector l1Vars{"a","b"};
+	HybridAutomaton<TypeParam>::variableVector l2Vars{"x","b"};
+	HybridAutomaton<TypeParam>::variableVector haVars{"a","x","b"};
+
+	matrix_t<TypeParam> l1Flow = matrix_t<TypeParam>::Zero(2,2);
+	l1Flow << 1,2,3,4;
+	matrix_t<TypeParam> l2Flow = matrix_t<TypeParam>::Zero(2,2);
+	l2Flow << 1,2,3,4;
+
+	l1->setFlow(l1Flow);
+	l2->setFlow(l2Flow);
+
+	Location<TypeParam>* res = parallelCompose(l1,l2,l1Vars,l2Vars,haVars);
+
+	std::cout << "Res: " << res << std::endl;
+}
+
 /**
  * Transition Test
  */

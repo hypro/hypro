@@ -45,7 +45,7 @@ class HybridAutomaton
     locationStateMap mInitialStates; 		/// The set of initial states.
     locationConditionMap mLocalBadStates; 	/// The set of bad states which are bound to locations.
     conditionVector mGlobalBadStates; 		/// The set of bad states which are not bound to any location.
-    variableVector mVariables; 
+    variableVector mVariables;
 
   public:
   	/**
@@ -138,7 +138,7 @@ class HybridAutomaton
     			lhs.getInitialStates() == rhs.getInitialStates() &&
     			lhs.getLocalBadStates() == rhs.getLocalBadStates() &&
     			lhs.getGlobalBadStates() == rhs.getGlobalBadStates();
-    }  
+    }
 
     /**
      * @brief      Parallel Composition Operator.
@@ -184,29 +184,10 @@ class HybridAutomaton
       std::cout << "locations & transisitons" << std::endl;
       LocationManager<Number>& manager = LocationManager<Number>::getInstance();
 
-      for(const Location<Number>* locLhs: lhs.getLocations()) {
-        for(const Location<Number>* locRhs: rhs.getLocations()) {
-          Location<Number>* loc = manager.create();          
-
-          //set name
-          loc->setName(locLhs->getName()+","+locRhs->getName());
-
-          //set flow
-          matrix_t<Number> haFlow = combineMatrix(locLhs->getFlow(), locRhs->getFlow(), haVar, lhsVar, rhsVar);
-          loc->setFlow(haFlow);
-          
-          //set invariant
-          Condition<Number> inv = Condition<Number>::combine(locLhs->getInvariant(), locRhs->getInvariant(), haVar, lhsVar, rhsVar);
-          loc->setInvariant(inv);
-
-
-          //std::cout << "setExtInput" << std::endl;
-          //set extinput
-          //loc->setExtInput(flowAndExtInput.second);
-
-
+      for(const Location<Number>* locLhs : lhs.getLocations()) {
+        for(const Location<Number>* locRhs : rhs.getLocations()) {
+          Location<Number>* loc = parallelCompose(locLhs,locRhs,lhsVar,rhsVar,haVar);
           ha.addLocation(loc);
-          
         }
       }
 
@@ -253,7 +234,7 @@ class HybridAutomaton
           //set reset
           Reset<Number> haReset = Reset<Number>::combine(lhsT->getReset(), rhsT->getReset(), haVar, lhsVar, rhsVar);
           t->setReset(haReset);
-          
+
           /*
           //5.Collect Aggregation
           if(ctx->aggregation().size() > 1){
@@ -276,7 +257,7 @@ class HybridAutomaton
       locationStateMap initialStates;
       for(const auto initialStateLhs: lhs.getInitialStates()) {
         for(const auto initialStateRhs: rhs.getInitialStates()) {
-          
+
           auto name = initialStateLhs.first->getName()+","+initialStateRhs.first->getName();
 
           ConstraintSet<Number> lhsConstraintSet = boost::get<ConstraintSet<Number>>(initialStateLhs.second.getSet(0)); // TODO: can there be more than one?
