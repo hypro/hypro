@@ -98,7 +98,8 @@ protected:
 
 		hybrid.setLocations(locSet);
 		for(auto loc : initLocSet) {
-			State<Number,ConstraintSet<Number>> initState(loc, ConstraintSet<Number>(hpoly.matrix(), hpoly.vector()));
+			State_t<Number> initState(loc);
+			initState.setSet(ConstraintSet<Number>(hpoly.matrix(), hpoly.vector()));
 			hybrid.addInitialState(initState);
 		}
 
@@ -197,9 +198,9 @@ TYPED_TEST(HybridAutomataTest, LocationParallelcompositionTest)
 	Location<TypeParam>* l1 = this->locMan.create();
 	Location<TypeParam>* l2 = this->locMan.create();
 
-	HybridAutomaton<TypeParam>::variableVector l1Vars{"a","b"};
-	HybridAutomaton<TypeParam>::variableVector l2Vars{"x","b"};
-	HybridAutomaton<TypeParam>::variableVector haVars{"a","x","b"};
+	typename HybridAutomaton<TypeParam>::variableVector l1Vars{"a","b"};
+	typename HybridAutomaton<TypeParam>::variableVector l2Vars{"x","b"};
+	typename HybridAutomaton<TypeParam>::variableVector haVars{"a","x","b"};
 
 	matrix_t<TypeParam> l1Flow = matrix_t<TypeParam>::Zero(2,2);
 	l1Flow << 1,2,3,4;
@@ -274,7 +275,7 @@ TYPED_TEST(HybridAutomataTest, HybridAutomatonTest)
 	vector_t<TypeParam> vec = vector_t<TypeParam>(2);
 	vec << 1,2;
 
-	h1.addInitialState(State<TypeParam,ConstraintSet<TypeParam>>(this->loc1, ConstraintSet<TypeParam>(matr, vec)));
+	h1.addInitialState(State_t<TypeParam>(this->loc1, ConstraintSet<TypeParam>(matr, vec)));
 
 	// copy assignment operator
 	HybridAutomaton<TypeParam> h2 = h1;
@@ -294,12 +295,12 @@ TYPED_TEST(HybridAutomataTest, LocationManagerTest)
 
 TYPED_TEST(HybridAutomataTest, State) {
 	// Constructors
-	State<TypeParam, ConstraintSet<TypeParam>> s1(this->loc1);
+	State_t<TypeParam> s1(this->loc1);
 
 	matrix_t<TypeParam> matr = matrix_t<TypeParam>::Identity(2,2);
 	vector_t<TypeParam> vec = vector_t<TypeParam>(2);
 	vec << 1,2;
-	State<TypeParam, ConstraintSet<TypeParam>> s2(this->loc1, ConstraintSet<TypeParam>(matr, vec));
+	State_t<TypeParam> s2(this->loc1, ConstraintSet<TypeParam>(matr, vec));
 
 	EXPECT_EQ(s1.getLocation()->getId(), this->loc1->getId());
 	EXPECT_EQ(s2.getLocation()->getId(), this->loc1->getId());
