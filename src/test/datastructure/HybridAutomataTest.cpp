@@ -210,9 +210,13 @@ TYPED_TEST(HybridAutomataTest, LocationParallelcompositionTest)
 	l1->setFlow(l1Flow);
 	l2->setFlow(l2Flow);
 
-	Location<TypeParam>* res = parallelCompose(l1,l2,l1Vars,l2Vars,haVars);
+	Location<TypeParam>* res1 = parallelCompose(l1,l2,l1Vars,l2Vars,haVars);
 
-	std::cout << "Res: " << res << std::endl;
+
+	l1Vars = {"a","b"};
+	l2Vars = {"c","d"};
+	haVars = {"a","b","c","d"};
+	Location<TypeParam>* res2 = parallelCompose(l1,l2,l1Vars,l2Vars,haVars);
 }
 
 /**

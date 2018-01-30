@@ -122,7 +122,7 @@ Location<Number>* parallelCompose(const Location<Number>* lhs
 								, const std::vector<std::string>& haVar)
 {
 	//compute flow
-	matrix_t<Number> haFlow = matrix_t<Number>::Zero(haVar.size() +1, haVar.size() +1);
+	matrix_t<Number> haFlow = matrix_t<Number>::Zero(haVar.size(), haVar.size());
 
 	std::size_t lhsIR = 0, lhsIC = 0, rhsIR = 0, rhsIC = 0;
 	bool admissible = true; // flag used to denote a non-admissible flow, i.e. shared variables with different flow.
@@ -131,11 +131,14 @@ Location<Number>* parallelCompose(const Location<Number>* lhs
 		std::cout << "Consider composed row " << rowI << " for var " << haVar[rowI] << std::endl;
 		std::cout << "lhsIR: " << lhsIR << std::endl;
 		std::cout << "rhsIR: " << rhsIR << std::endl;
-		assert(lhsIR < lhsVar.size());
-		if(lhsVar[lhsIR] == haVar[rowI]) {
+		std::cout << "Now left hand side." << std::endl;
+		if(lhsIR < lhsVar.size() && lhsVar[lhsIR] == haVar[rowI]) {
 			// iterate over all columns
 			lhsIC = 0;
 			for( auto colI = 0; colI != haVar.size(); ++colI) {
+				std::cout << "Consider composed col " << colI << " for var " << haVar[colI] << std::endl;
+				std::cout << "lhsIC: " << lhsIC << std::endl;
+				std::cout << "rhsIC: " << rhsIC << std::endl;
 				if(lhsVar[lhsIC] == haVar[colI]) {
 					haFlow(rowI,colI) = lhs->getFlow()(lhsIR,lhsIC);
 					++lhsIC;
@@ -145,16 +148,17 @@ Location<Number>* parallelCompose(const Location<Number>* lhs
 				}
 			}
 			++lhsIR;
-			if(lhsIR == lhsVar.size()) {
-				break;
-			}
 		}
 		std::cout << "lhsIR: " << lhsIR << std::endl;
-		assert(rhsIR < rhsVar.size());
-		if(rhsVar[rhsIR] == haVar[rowI]) {
+		std::cout << "intermediate result: " << haFlow << std::endl;
+		std::cout << "Now right hand side." << std::endl;
+		if(rhsIR < rhsVar.size() && rhsVar[rhsIR] == haVar[rowI]) {
 			// iterate over all columns
 			rhsIC = 0;
 			for( auto colI = 0; colI != haVar.size(); ++colI) {
+				std::cout << "Consider composed col " << colI << " for var " << haVar[colI] << std::endl;
+				std::cout << "lhsIC: " << lhsIC << std::endl;
+				std::cout << "rhsIC: " << rhsIC << std::endl;
 				if(rhsVar[rhsIC] == haVar[colI]) {
 					// TODO: the check is not entirely correct, since the flow can be non-admissible but set to 0 in lhs and something != 0 in rhs.
 					if(haFlow(rowI,colI) != 0 && rhs->getFlow()(rhsIR,rhsIC) != haFlow(rowI,colI)) {
@@ -169,9 +173,6 @@ Location<Number>* parallelCompose(const Location<Number>* lhs
 				}
 			}
 			++rhsIR;
-			if(rhsIR == rhsVar.size()) {
-				break;
-			}
 		}
 		std::cout << "rhsIR: " << rhsIR << std::endl;
 		if(!admissible)
@@ -186,12 +187,13 @@ Location<Number>* parallelCompose(const Location<Number>* lhs
 	//set name
 	res->setName(lhs->getName()+"_"+rhs->getName());
 
+	std::cout << "Created flow: " << haFlow;
 
 	res->setFlow(haFlow);
 
 	//set invariant
-	Condition<Number> inv = combine(lhs->getInvariant(), rhs->getInvariant(), haVar, lhsVar, rhsVar);
-	res->setInvariant(inv);
+	//Condition<Number> inv = combine(lhs->getInvariant(), rhs->getInvariant(), haVar, lhsVar, rhsVar);
+	//res->setInvariant(inv);
 
 
 	//std::cout << "setExtInput" << std::endl;
