@@ -11,6 +11,8 @@
 
 namespace hypro
 {
+template <typename Number, typename State>
+class HybridAutomaton;
 
 template<typename Number>
 class Location;
@@ -429,6 +431,42 @@ class State
     }
 
 };
+
+template<typename Number, typename State>
+State parallelCompose(
+    const State& lhsInitState, const State& rhsInitState,
+    const std::vector<std::string> lhsVar, const std::vector<std::string> rhsVar, const std::vector<std::string> haVar,
+    const HybridAutomaton<Number, State> ha) {
+
+    State haInitState;
+
+    // set location
+    std::string name = lhsInitState.getLocation()->getName()+","+rhsInitState.getLocation()->getName();
+    auto location = ha.getLocation(name);
+    assert(location != NULL);
+    haInitState.setLocation(location);
+
+    // set constraint
+    // TODO: Move this.
+    ConstraintSet<Number> lhsConstraintSet = boost::get<ConstraintSet<Number>>(lhsInitState.getSet(0));
+    ConstraintSet<Number> rhsConstraintSet = boost::get<ConstraintSet<Number>>(rhsInitState.getSet(0));
+    matrix_t<Number> lhsMatrix = lhsConstraintSet.matrix();
+    matrix_t<Number> rhsMatrix = rhsConstraintSet.matrix();
+    vector_t<Number> lhsVector = lhsConstraintSet.vector();
+    vector_t<Number> rhsVector = rhsConstraintSet.vector();
+    matrix_t<Number> newMatrix = combine(lhsMatrix, rhsMatrix, haVar, lhsVar, rhsVar);
+    matrix_t<Number> newVector = combine(lhsVector, rhsVector);
+    ConstraintSet<Number> haConstraintSet = ConstraintSet<Number>(newMatrix, newVector);
+
+    //ConstraintSet<Number> haConstraintSet = combine(lhsConstraintSet, rhsConstraintSet, lhsVar, rhsVar, haVar);
+    haInitState.setSet(haConstraintSet ,0);
+
+    // set timestamp
+    haInitState.setTimestamp(carl::Interval<Number>(0));
+
+    // return state
+    return haInitState;
+}
 
 template<typename Number, typename tNumber = Number>
 using State_t = State<Number, tNumber, Box<Number>, ConstraintSet<Number>, SupportFunction<Number>, Zonotope<Number>, HPolytope<Number>, VPolytope<Number>>;

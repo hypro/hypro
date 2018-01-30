@@ -211,33 +211,10 @@ class HybridAutomaton
 
       // set initial states (//std:multimap<const Location<Number>*, State>;)
       std::cout << "set initial states" << std::endl;
-      locationStateMap initialStates;
       for(const auto initialStateLhs: lhs.getInitialStates()) {
         for(const auto initialStateRhs: rhs.getInitialStates()) {
-
-          auto name = initialStateLhs.first->getName()+","+initialStateRhs.first->getName();
-
-          ConstraintSet<Number> lhsConstraintSet = boost::get<ConstraintSet<Number>>(initialStateLhs.second.getSet(0)); // TODO: can there be more than one?
-          ConstraintSet<Number> rhsConstraintSet = boost::get<ConstraintSet<Number>>(initialStateRhs.second.getSet(0));
-
-          matrix_t<Number> lhsMatrix = lhsConstraintSet.matrix();
-          matrix_t<Number> rhsMatrix = rhsConstraintSet.matrix();
-          vector_t<Number> lhsVector = lhsConstraintSet.vector();
-          vector_t<Number> rhsVector = rhsConstraintSet.vector();
-
-          auto newMatrix = combine(lhsMatrix, rhsMatrix, haVar, lhsVar, rhsVar);
-          auto newVector = combine(lhsVector, rhsVector);
-
-
-          auto location = ha.getLocation(name);
-          assert(location != NULL);
-          State_t<Number, Number> state;
-          state.setLocation(location);
-          auto consSet = ConstraintSet<Number>(newMatrix, newVector);
-          state.setSet(consSet ,0);
-          state.setTimestamp(carl::Interval<Number>(0));
-          initialStates.insert(std::pair<const Location<Number>*, State>(location, state));
-
+          State state = parallelCompose(initialStateLhs.second,  initialStateRhs.second, lhsVar, rhsVar, haVar, ha);
+          ha.addInitialState(state);
         }
       }
 
