@@ -184,7 +184,6 @@ class HybridAutomaton
 
 
       std::cout << "locations & transisitons" << std::endl;
-      LocationManager<Number>& manager = LocationManager<Number>::getInstance();
 
       for(const Location<Number>* locLhs : lhs.getLocations()) {
         for(const Location<Number>* locRhs : rhs.getLocations()) {

@@ -206,6 +206,6 @@ Transition<Number>* parallelCompose(const Transition<Number>* lhsT
     t->setAggregation(lhsT->getAggregation());
 
     return t;
-};
+}
 
 }  // namespace hypro
