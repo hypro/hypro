@@ -33,15 +33,26 @@ Condition<Number> combine(
 	const Condition<Number>& lhs, const Condition<Number>& rhs,
 	const std::vector<std::string> haVar, const std::vector<std::string> lhsVar, const std::vector<std::string> rhsVar) {
 
-	if(lhs.size() == 0) {
-		return rhs;
+	if (lhs.size() == 0 and rhs.size() == 0) {
+		return Condition<Number>();
+	}	
+
+	matrix_t<Number> lhsMatrix = matrix_t<Number>::Zero(0, lhsVar.size());
+	matrix_t<Number> rhsMatrix = matrix_t<Number>::Zero(0, rhsVar.size());;
+	vector_t<Number> lhsVector = vector_t<Number>::Zero(0);
+	vector_t<Number> rhsVector = vector_t<Number>::Zero(0);;
+
+	if (lhs.size() != 0) {
+		lhsMatrix = lhs.getMatrix();
+		lhsVector = lhs.getVector();
 	}
-	if(rhs.size() == 0) {
-		return lhs;
+	if (rhs.size() != 0) {
+		rhsMatrix = rhs.getMatrix();
+		rhsVector = rhs.getVector();
 	}
 
-	matrix_t<Number> newMat = combine(lhs.getMatrix(), rhs.getMatrix(), haVar, lhsVar, rhsVar);
-	vector_t<Number> newVec = combine(lhs.getVector(), rhs.getVector());
+	matrix_t<Number> newMat = combine(lhsMatrix, rhsMatrix, haVar, lhsVar, rhsVar);
+	vector_t<Number> newVec = combine(lhsVector, rhsVector);
 
 	/*vector_t<Number>::Zero(lhsInv.getVector().size()+rhsInv.getVector().size());
 	newVec.head(lhsInv.getVector().size()) = lhsInv.getVector();
