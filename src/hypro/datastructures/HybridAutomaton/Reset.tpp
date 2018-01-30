@@ -1,6 +1,12 @@
 #include "Reset.h"
 
 namespace hypro {
+
+	template<typename Number>
+	Reset<Number>::Reset(const matrix_t<Number>& mat, const vector_t<Number>& vec) {
+		mResets.emplace_back(mat,vec);
+	}
+
 	template<typename Number>
 	void Reset<Number>::setVector(const vector_t<Number>& in, std::size_t I) {
 		while (mResets.size() < I+1) {
@@ -32,6 +38,13 @@ namespace hypro {
 	Reset<Number> combine(
 		const Reset<Number>& lhs, const Reset<Number>& rhs,
 		const std::vector<std::string> haVar, const std::vector<std::string> lhsVar, const std::vector<std::string> rhsVar) {
+
+		if(lhs.size() == 0) {
+			return rhs;
+		}
+		if(rhs.size() == 0) {
+			return lhs;
+		}
 
 		matrix_t<Number> newMat = combine(lhs.getMatrix(), rhs.getMatrix(), haVar, lhsVar, rhsVar);
 		vector_t<Number> newVec = combine(lhs.getVector(), rhs.getVector());

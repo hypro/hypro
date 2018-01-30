@@ -16,6 +16,7 @@ public:
 	Reset(Reset&& orig) = default;
 	Reset& operator=(const Reset<Number>& orig) = default;
 	Reset& operator=(Reset<Number>&& orig) = default;
+	Reset(const matrix_t<Number>& mat, const vector_t<Number>& vec);
 	~Reset() {}
 
 	bool empty() const { return mResets.empty(); }
