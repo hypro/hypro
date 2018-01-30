@@ -275,7 +275,10 @@ TYPED_TEST(HybridAutomataTest, HybridAutomatonTest)
 	vector_t<TypeParam> vec = vector_t<TypeParam>(2);
 	vec << 1,2;
 
-	h1.addInitialState(State_t<TypeParam>(this->loc1, ConstraintSet<TypeParam>(matr, vec)));
+	State_t<TypeParam> s(this->loc1);
+	s.setSet(ConstraintSet<TypeParam>(matr, vec));
+
+	h1.addInitialState(s);
 
 	// copy assignment operator
 	HybridAutomaton<TypeParam> h2 = h1;
@@ -300,7 +303,8 @@ TYPED_TEST(HybridAutomataTest, State) {
 	matrix_t<TypeParam> matr = matrix_t<TypeParam>::Identity(2,2);
 	vector_t<TypeParam> vec = vector_t<TypeParam>(2);
 	vec << 1,2;
-	State_t<TypeParam> s2(this->loc1, ConstraintSet<TypeParam>(matr, vec));
+	State_t<TypeParam> s2(this->loc1);
+	s2.setSet(ConstraintSet<TypeParam>(matr, vec));
 
 	EXPECT_EQ(s1.getLocation()->getId(), this->loc1->getId());
 	EXPECT_EQ(s2.getLocation()->getId(), this->loc1->getId());

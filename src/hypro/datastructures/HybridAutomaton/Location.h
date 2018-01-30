@@ -121,15 +121,17 @@ Location<Number>* parallelCompose(const Location<Number>* lhs
 								, const std::vector<std::string>& rhsVar
 								, const std::vector<std::string>& haVar)
 {
-	assert(haVar.size() >= (lhsVar.size() + rhsVar.size()));
-
 	//compute flow
 	matrix_t<Number> haFlow = matrix_t<Number>::Zero(haVar.size() +1, haVar.size() +1);
 
-	std::size_t lhsIR, lhsIC, rhsIR, rhsIC = 0;
+	std::size_t lhsIR = 0, lhsIC = 0, rhsIR = 0, rhsIC = 0;
 	bool admissible = true; // flag used to denote a non-admissible flow, i.e. shared variables with different flow.
 	// iterate over all rows
 	for( auto rowI = 0; rowI != haVar.size(); ++rowI ) {
+		std::cout << "Consider composed row " << rowI << " for var " << haVar[rowI] << std::endl;
+		std::cout << "lhsIR: " << lhsIR << std::endl;
+		std::cout << "rhsIR: " << rhsIR << std::endl;
+		assert(lhsIR < lhsVar.size());
 		if(lhsVar[lhsIR] == haVar[rowI]) {
 			// iterate over all columns
 			lhsIC = 0;
@@ -143,7 +145,12 @@ Location<Number>* parallelCompose(const Location<Number>* lhs
 				}
 			}
 			++lhsIR;
+			if(lhsIR == lhsVar.size()) {
+				break;
+			}
 		}
+		std::cout << "lhsIR: " << lhsIR << std::endl;
+		assert(rhsIR < rhsVar.size());
 		if(rhsVar[rhsIR] == haVar[rowI]) {
 			// iterate over all columns
 			rhsIC = 0;
@@ -162,7 +169,11 @@ Location<Number>* parallelCompose(const Location<Number>* lhs
 				}
 			}
 			++rhsIR;
+			if(rhsIR == rhsVar.size()) {
+				break;
+			}
 		}
+		std::cout << "rhsIR: " << rhsIR << std::endl;
 		if(!admissible)
 			break;
 	}
