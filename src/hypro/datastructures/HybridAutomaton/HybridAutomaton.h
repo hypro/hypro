@@ -155,6 +155,13 @@ class HybridAutomaton
 
       const variableVector& lhsVar = lhs.getVariables();
       const variableVector& rhsVar = rhs.getVariables();
+      std::cout << "lhs variables: ";
+      for(auto a : lhsVar) { std::cout << a << " "; }
+      std::cout << std::endl;
+      std::cout << "rhs variables: ";
+      for(auto a : rhsVar) { std::cout << a << " "; }
+      std::cout << std::endl;
+
       variableVector haVar;
       variableVector::size_type  i=0, j=0;
       while(i < lhsVar.size() and j < rhsVar.size()) {
@@ -177,12 +184,13 @@ class HybridAutomaton
       for(; i < lhsVar.size(); i++) {
         haVar.push_back(lhsVar[i]);
       }
-      for(; j < lhsVar.size(); j++) {
-        haVar.push_back(lhsVar[j]);
+      for(; j < rhsVar.size(); j++) {
+        haVar.push_back(rhsVar[j]);
       }
       ha.setVariables(haVar);
 
-
+      std::cout << "Variables: ";
+      for(auto a : haVar) { std::cout << a << " "; }
       std::cout << "locations & transisitons" << std::endl;
 
       for(const Location<Number>* locLhs : lhs.getLocations()) {
