@@ -29,12 +29,12 @@ namespace hypro {
 	}
 
 	template<typename Number>
-	Reset<Number> Reset<Number>::combine(
+	Reset<Number> combine(
 		const Reset<Number>& lhs, const Reset<Number>& rhs,
 		const std::vector<std::string> haVar, const std::vector<std::string> lhsVar, const std::vector<std::string> rhsVar) {
 
-		matrix_t<Number> newMat = combineMatrix(lhs.getMatrix(), rhs.getMatrix(), haVar, lhsVar, rhsVar);
-		vector_t<Number> newVec = combineVector(lhs.getVector(), rhs.getVector());
+		matrix_t<Number> newMat = combine(lhs.getMatrix(), rhs.getMatrix(), haVar, lhsVar, rhsVar);
+		vector_t<Number> newVec = combine(lhs.getVector(), rhs.getVector());
 
 		Reset<Number> re;
 		re.setMatrix(newMat);

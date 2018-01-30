@@ -53,9 +53,6 @@ public:
 		return !(lhs == rhs);
 	}
 
-	static Condition<Number> combine(const Condition<Number>& lhs, const Condition<Number>& rhs,
-	const std::vector<std::string> haVar, const std::vector<std::string> lhsVar, const std::vector<std::string> rhsVar);
-
 	friend std::ostream& operator<<(std::ostream& out, const Condition& in) {
 #ifdef HYPRO_LOGGING
 		std::size_t i = 0;
@@ -67,6 +64,11 @@ public:
 		return out;
 	}
 };
+
+template<typename Number>
+Condition<Number> combine(
+	const Condition<Number>& lhs, const Condition<Number>& rhs,
+    const std::vector<std::string> haVar, const std::vector<std::string> lhsVar, const std::vector<std::string> rhsVar);
 
 } // namespace
 
