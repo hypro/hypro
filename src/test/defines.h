@@ -56,6 +56,7 @@ TYPED_TEST_CASE(PointTest, rationalTypes);
 TYPED_TEST_CASE(HybridAutomataTest, allTypes);
 TYPED_TEST_CASE(VertexContainerTest, allTypes);
 TYPED_TEST_CASE(VertexTest, allTypes);
+TYPED_TEST_CASE(HybridAutomataParallelCompositionTest, allTypes);
 
 // Representations
 TYPED_TEST_CASE(BoxTest, allTypes);

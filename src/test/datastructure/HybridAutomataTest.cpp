@@ -11,6 +11,8 @@
 #include "datastructures/HybridAutomaton/State.h"
 #include "representations/GeometricObject.h"
 #include "carl/core/VariablePool.h"
+#include "datastructures/HybridAutomaton/Condition.h"
+
 
 using namespace hypro;
 using namespace carl;
