@@ -192,8 +192,8 @@ Location<Number>* parallelCompose(const Location<Number>* lhs
 	res->setFlow(haFlow);
 
 	//set invariant
-	//Condition<Number> inv = combine(lhs->getInvariant(), rhs->getInvariant(), haVar, lhsVar, rhsVar);
-	//res->setInvariant(inv);
+	Condition<Number> inv = combine(lhs->getInvariant(), rhs->getInvariant(), haVar, lhsVar, rhsVar);
+	res->setInvariant(inv);
 
 
 	//std::cout << "setExtInput" << std::endl;

@@ -33,6 +33,13 @@ Condition<Number> combine(
 	const Condition<Number>& lhs, const Condition<Number>& rhs,
 	const std::vector<std::string> haVar, const std::vector<std::string> lhsVar, const std::vector<std::string> rhsVar) {
 
+	if(lhs.size() == 0) {
+		return rhs;
+	}
+	if(rhs.size() == 0) {
+		return lhs;
+	}
+
 	matrix_t<Number> newMat = combine(lhs.getMatrix(), rhs.getMatrix(), haVar, lhsVar, rhsVar);
 	vector_t<Number> newVec = combine(lhs.getVector(), rhs.getVector());
 
