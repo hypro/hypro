@@ -24,6 +24,7 @@ HybridAutomaton<Number> createComponent1(unsigned i) {
 	st << "x_" << i;
 	vars.push_back(st.str());
 	vars.push_back("z"); // z is the shared variable
+	//vars.push_back("c"); // c are the constants
 	res.setVariables(vars);
 	st.str(std::string());
 	unsigned dim = vars.size();
@@ -53,7 +54,7 @@ HybridAutomaton<Number> createComponent1(unsigned i) {
 	M adaptFlow = M::Zero(dim+1,dim+1);
 	adapt->setFlow(adaptFlow);
 
-	M adaptInvariant = M::Ones(2,dim);
+	M adaptInvariant = M::Zero(2,dim);
 	adaptInvariant(0,0) = 1;
 	adaptInvariant(1,0) = -1;
 	V adaptInvConsts = V::Zero(2);
@@ -69,7 +70,7 @@ HybridAutomaton<Number> createComponent1(unsigned i) {
 	M flashFlow = M::Zero(dim+1,dim+1);
 	flash->setFlow(flashFlow);
 
-	M flashInvariant = M::Ones(2,dim);
+	M flashInvariant = M::Zero(2,dim);
 	flashInvariant(0,0) = 1;
 	flashInvariant(1,0) = -1;
 	V flashInvConsts = V::Zero(2);
@@ -85,7 +86,7 @@ HybridAutomaton<Number> createComponent1(unsigned i) {
 	M execFlashFlow = M::Zero(dim+1,dim+1);
 	execFlash->setFlow(execFlashFlow);
 
-	M execFlashInvariant = M::Ones(2,dim);
+	M execFlashInvariant = M::Zero(2,dim);
 	execFlashInvariant(0,0) = 1;
 	execFlashInvariant(1,0) = -1;
 	V execFlashInvConsts = V::Zero(2);
