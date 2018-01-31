@@ -8,76 +8,178 @@ static const double alpha = 0.1;
 
 template<typename Number>
 HybridAutomaton<Number> createComponent1(unsigned i) {
-	HybridAutomaton<Number> res;
+	using HA = HybridAutomaton<Number>;
+	using M = matrix_t<Number>;
+	using V = vector_t<Number>;
+	using Lpt = Location<Number>*;
+	using Tpt = Transition<Number>*;
+	LocationManager<Number>& manager = LocationManager<Number>::getInstance();
 	std::stringstream st;
+
+	// result automaton
+	HA res;
+
+	// set up variables
 	typename HybridAutomaton<Number>::variableVector vars;
 	st << "x_" << i;
 	vars.push_back(st.str());
+	vars.push_back("z"); // z is the shared variable
 	res.setVariables(vars);
 	st.str(std::string());
-	LocationManager<Number>& manager = LocationManager<Number>::getInstance();
+	unsigned dim = vars.size();
 
 	// wait
 
 	st << "wait_" << i;
-	Location<Number>* wait = manager.create();
+	Lpt wait = manager.create();
 	wait->setName(st.str());
-	matrix_t<Number> waitFlow = matrix_t<Number>::Ones(1,1);
+	M waitFlow = M::Zero(dim+1,dim+1);
+	waitFlow(0,0) = 1;
 	wait->setFlow(waitFlow);
 
-	matrix_t<Number> waitInvariant = matrix_t<Number>::Ones(1,1);
-	vector_t<Number> waitInvConsts = vector_t<Number>::Zero(1);
+	M waitInvariant = M::Zero(1,dim);
+	waitInvariant << 1,0;
+	V waitInvConsts = V::Zero(1);
 	waitInvConsts << Number(firingThreshold);
 	wait->setInvariant(Condition<Number>{waitInvariant, waitInvConsts});
 	res.addLocation(wait);
 
 	// adapt
-	Location<Number>* adapt = manager.create();
+	Lpt adapt = manager.create();
 	st.str(std::string());
 	st << "adapt_" << i;
 	adapt->setName(st.str());
 
-	matrix_t<Number> adaptFlow = matrix_t<Number>::Zero(1,1);
+	M adaptFlow = M::Zero(dim+1,dim+1);
 	adapt->setFlow(adaptFlow);
 
-	matrix_t<Number> adaptInvariant = matrix_t<Number>::Ones(2,1);
-	adaptInvariant << 1,-1;
-	vector_t<Number> adaptInvConsts = vector_t<Number>::Zero(2);
-	adaptInvConsts << 0,0;
+	M adaptInvariant = M::Ones(2,dim);
+	adaptInvariant(0,0) = 1;
+	adaptInvariant(1,0) = -1;
+	V adaptInvConsts = V::Zero(2);
 	adapt->setInvariant(Condition<Number>{adaptInvariant, adaptInvConsts});
 	res.addLocation(adapt);
 
+	// flash
+	Lpt flash = manager.create();
+	st.str(std::string());
+	st << "flash_" << i;
+	flash->setName(st.str());
+
+	M flashFlow = M::Zero(dim+1,dim+1);
+	flash->setFlow(flashFlow);
+
+	M flashInvariant = M::Ones(2,dim);
+	flashInvariant(0,0) = 1;
+	flashInvariant(1,0) = -1;
+	V flashInvConsts = V::Zero(2);
+	flash->setInvariant(Condition<Number>{flashInvariant, flashInvConsts});
+	res.addLocation(flash);
+
+	// execFlash
+	Lpt execFlash = manager.create();
+	st.str(std::string());
+	st << "execFlash_" << i;
+	execFlash->setName(st.str());
+
+	M execFlashFlow = M::Zero(dim+1,dim+1);
+	execFlash->setFlow(execFlashFlow);
+
+	M execFlashInvariant = M::Ones(2,dim);
+	execFlashInvariant(0,0) = 1;
+	execFlashInvariant(1,0) = -1;
+	V execFlashInvConsts = V::Zero(2);
+	execFlash->setInvariant(Condition<Number>{execFlashInvariant, execFlashInvConsts});
+	res.addLocation(execFlash);
+
 	// transitions
-	// self-loop
-	Transition<Number>* loop = new Transition<Number>(wait,wait);
-	matrix_t<Number> guardConstraints = matrix_t<Number>::Ones(2,1);
-	vector_t<Number> guardConstants = vector_t<Number>::Zero(2);
-	guardConstraints << 1,-1;
+	// to flash
+	Tpt toFlash = new Transition<Number>(wait,flash);
+	M guardConstraints = M::Zero(2,dim);
+	guardConstraints(0,0) = 1;
+	guardConstraints(1,0) = -1;
+	V guardConstants = V::Zero(2);
 	guardConstants << Number(firingThreshold), Number(-firingThreshold);
-	loop->setGuard(Condition<Number>{guardConstraints,guardConstants});
+	toFlash->setGuard(Condition<Number>{guardConstraints,guardConstants});
 
-	matrix_t<Number> resetMat = matrix_t<Number>::Zero(1,1);
-	vector_t<Number> resetVec = vector_t<Number>::Zero(1);
-	loop->setReset(Reset<Number>(resetMat,resetVec));
+	M resetMat = M::Zero(dim,dim);
+	V resetVec = V::Zero(dim);
+	resetVec(1) = 1;
+	toFlash->setReset(Reset<Number>(resetMat,resetVec));
 
-	wait->addTransition(loop);
-	res.addTransition(loop);
+	wait->addTransition(toFlash);
+	res.addTransition(toFlash);
+
+	// to execFlash
+	Tpt toExecFlash = new Transition<Number>(flash,execFlash);
+	guardConstraints = M::Zero(2,dim);
+	guardConstraints(0,1) = 1;
+	guardConstraints(1,1) = -1;
+	guardConstants = V::Zero(2);
+	guardConstants << 1,-1;
+	toExecFlash->setGuard(Condition<Number>{guardConstraints,guardConstants});
+
+	resetMat = M::Zero(dim,dim);
+	resetVec = V::Zero(dim);
+	resetVec(1) = 1;
+	toExecFlash->setReset(Reset<Number>(resetMat,resetVec));
+	toExecFlash->setUrgent();
+	toExecFlash->addLabel(Label{"flash"});
+
+	wait->addTransition(toExecFlash);
+	res.addTransition(toExecFlash);
+
+	// back to flash
+	Tpt reFlash = new Transition<Number>(execFlash,flash);
+	guardConstraints = M::Zero(2,dim);
+	guardConstraints(0,1) = 1;
+	guardConstraints(1,1) = -1;
+	guardConstants = V::Zero(2);
+	guardConstants << 1,-1;
+	reFlash->setGuard(Condition<Number>{guardConstraints,guardConstants});
+
+	resetMat = M::Zero(dim,dim);
+	resetVec = V::Zero(dim);
+	resetVec(1) = 0;
+	reFlash->setReset(Reset<Number>(resetMat,resetVec));
+	reFlash->setUrgent();
+
+	wait->addTransition(reFlash);
+	res.addTransition(reFlash);
+
+	// back to wait
+	Tpt reWait = new Transition<Number>(flash,wait);
+	resetMat = M::Identity(dim,dim);
+	resetVec = V::Zero(dim);
+	reWait->setReset(Reset<Number>(resetMat,resetVec));
+	reWait->setUrgent();
+
+	wait->addTransition(reWait);
+	res.addTransition(reWait);
 
 	// to adapt
-	Transition<Number>* toAdapt = new Transition<Number>(wait,adapt);
-
-	resetMat = matrix_t<Number>::Zero(1,1);
-	resetMat << Number(alpha);
-	resetVec = vector_t<Number>::Zero(1);
+	Tpt toAdapt = new Transition<Number>(wait,adapt);
+	guardConstraints = M::Zero(3,dim);
+	guardConstraints(0,1) = 1;
+	guardConstraints(1,1) = -1;
+	guardConstraints(2,0) = 1;
+	guardConstants = V::Zero(3);
+	guardConstants << 1,-1,Number(firingThreshold);
+	reFlash->setGuard(Condition<Number>{guardConstraints,guardConstants});
+	resetMat = M::Identity(dim,dim);
+	resetMat(0,0) = Number(alpha);
+	resetVec = V::Zero(dim);
 	toAdapt->setReset(Reset<Number>(resetMat,resetVec));
+	toAdapt->addLabel({"flash"});
 
 	wait->addTransition(toAdapt);
 	res.addTransition(toAdapt);
 
 	// from adapt, regular
-	Transition<Number>* fromAdaptRegular = new Transition<Number>(adapt,wait);
-	guardConstraints = matrix_t<Number>::Ones(1,1);
-	guardConstants = vector_t<Number>::Zero(1);
+	Tpt fromAdaptRegular = new Transition<Number>(adapt,wait);
+	guardConstraints = M::Zero(1,dim);
+	guardConstraints(0,0) = 1;
+	guardConstants = V::Zero(1);
 	guardConstants << Number(firingThreshold);
 	fromAdaptRegular->setGuard(Condition<Number>{guardConstraints,guardConstants});
 
@@ -85,15 +187,16 @@ HybridAutomaton<Number> createComponent1(unsigned i) {
 	res.addTransition(fromAdaptRegular);
 
 	// from adapt, scale
-	Transition<Number>* fromAdaptScale = new Transition<Number>(adapt,wait);
-	guardConstraints = matrix_t<Number>::Ones(1,1);
-	guardConstants = vector_t<Number>::Zero(1);
-	guardConstraints << -1;
-	guardConstants << Number(firingThreshold);
+	Tpt fromAdaptScale = new Transition<Number>(adapt,flash);
+	guardConstraints = M::Zero(1,dim);
+	guardConstraints(0,0) = -1;
+	guardConstants = V::Zero(1);
+	guardConstants << Number(-firingThreshold);
 	fromAdaptScale->setGuard(Condition<Number>{guardConstraints,guardConstants});
 
-	resetMat = matrix_t<Number>::Zero(1,1);
-	resetVec = vector_t<Number>::Zero(1);
+	resetMat = M::Identity(dim,dim);
+	resetMat(0,0) = 0;
+	resetVec = V::Zero(dim);
 	fromAdaptScale->setReset(Reset<Number>(resetMat,resetVec));
 
 	adapt->addTransition(fromAdaptScale);
