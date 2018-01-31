@@ -116,6 +116,7 @@ class Transition
     void setUrgent(bool urgent = true) { mUrgent = urgent; }
     void setTriggerTime(Number t) { mTriggerTime = t; }
     void setLabels(const std::set<Label>& labels) { mLabels = labels; }
+    void addLabel(const Label& lab) { mLabels.insert(lab); }
 
     /**
      * @brief      Outstream operator.
@@ -129,7 +130,10 @@ class Transition
 	          << "\t Source = " << t.getSource()->getId() << std::endl
 	          << "\t Target = " << t.getTarget()->getId() << std::endl
 	          << "\t urgent = " << t.isUrgent() << std::endl
-	          << "\t Guard = " << t.getGuard() << std::endl
+	          << "\t Labels = ";
+	    for(const auto& label : t.getLabels()) ostr << label;
+	    ostr << std::endl;
+	    ostr  << "\t Guard = " << t.getGuard() << std::endl
 	          << "\t Reset = " << t.getReset() << std::endl
 	          << ")";
 		#endif
@@ -166,7 +170,8 @@ Transition<Number>* parallelCompose(const Transition<Number>* lhsT
                                 , const std::set<Label> lhsLabels
                                 , const std::set<Label> rhsLabels) {
 
-    assert(haVar.size() >= (lhsVar.size() + rhsVar.size()));
+    assert(haVar.size() >= lhsVar.size());
+    assert(haVar.size() >= rhsVar.size());
 
     Transition<Number>* t = new Transition<Number>();
 

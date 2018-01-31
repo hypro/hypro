@@ -36,6 +36,11 @@ class Label {
     friend bool operator<(const Label& lhs, const Label& rhs) {
       return lhs.getName() < rhs.getName();
     }
+
+    friend ostream& operator<<(ostream& ostr, const Label& l) {
+    	ostr << l.getName();
+    	return ostr;
+    }
 };
 
 }
