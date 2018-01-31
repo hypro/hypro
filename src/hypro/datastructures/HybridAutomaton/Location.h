@@ -124,6 +124,8 @@ Location<Number>* parallelCompose(const Location<Number>* lhs
 	//compute flow
 	matrix_t<Number> haFlow = matrix_t<Number>::Zero(haVar.size(), haVar.size());
 
+	std::cout << "combine Locations " << lhs->getName() << " and " << rhs->getName() << std::endl;
+
 	std::size_t lhsIR = 0, lhsIC = 0, rhsIR = 0, rhsIC = 0;
 	bool admissible = true; // flag used to denote a non-admissible flow, i.e. shared variables with different flow.
 	// iterate over all rows
@@ -187,13 +189,15 @@ Location<Number>* parallelCompose(const Location<Number>* lhs
 	//set name
 	res->setName(lhs->getName()+"_"+rhs->getName());
 
-	std::cout << "Created flow: " << haFlow << "for location " << res->getName();
+	std::cout << "Created flow: " << haFlow << " for location " << res->getName();
 
 	res->setFlow(haFlow);
 
 	//set invariant
 	Condition<Number> inv = combine(lhs->getInvariant(), rhs->getInvariant(), haVar, lhsVar, rhsVar);
 	res->setInvariant(inv);
+
+	std::cout << "Created invariant: " << inv << " for location " << res->getName();
 
 
 	//std::cout << "setExtInput" << std::endl;

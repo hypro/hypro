@@ -133,6 +133,9 @@ class HybridAutomaton
      */
     void reduce();
 
+    std::string getDotRepresentation() const;
+    std::size_t getDotRepresentation(std::size_t startIndex, std::string& nodes, std::string& transitions, std::vector<unsigned>& levels);
+
     /**
      * @brief      Comparison for equality operator.
      * @param[in]  lhs   The left hand side.

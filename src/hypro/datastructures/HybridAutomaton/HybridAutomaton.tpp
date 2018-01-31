@@ -45,7 +45,19 @@ const std::set<Label> HybridAutomaton<Number,State>::getLabels() const {
 }
 
 template<typename Number, typename State>
-void reduce() {
+void HybridAutomaton<Number,State>::reduce() {
+
+}
+
+template<typename Number, typename State>
+std::string HybridAutomaton<Number,State>::getDotRepresentation() const {
+	std::string res = "";
+
+	return res;
+}
+
+template<typename Number, typename State>
+std::size_t HybridAutomaton<Number,State>::getDotRepresentation(std::size_t startIndex, std::string& nodes, std::string& transitions, std::vector<unsigned>& levels) {
 
 }
 
