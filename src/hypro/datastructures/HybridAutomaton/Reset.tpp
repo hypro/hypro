@@ -39,15 +39,23 @@ namespace hypro {
 		const Reset<Number>& lhs, const Reset<Number>& rhs,
 		const std::vector<std::string> haVar, const std::vector<std::string> lhsVar, const std::vector<std::string> rhsVar) {
 
-		if(lhs.size() == 0) {
-			return rhs;
-		}
-		if(rhs.size() == 0) {
-			return lhs;
-		}
+		matrix_t<Number> newMat;
+		vector_t<Number> newVec;
 
-		matrix_t<Number> newMat = combine(lhs.getMatrix(), rhs.getMatrix(), haVar, lhsVar, rhsVar);
-		vector_t<Number> newVec = combine(lhs.getVector(), rhs.getVector());
+		if(lhs.size() == 0 && rhs.size() != 0) {
+			newMat = combine(matrix_t<Number>(0,0), rhs.getMatrix(), haVar, lhsVar, rhsVar);
+			newVec = combine(vector_t<Number>(0), rhs.getVector());
+		} else if(lhs.size() != 0 && rhs.size() == 0) {
+			newMat = combine(lhs.getMatrix(), matrix_t<Number>(0,0), haVar, lhsVar, rhsVar);
+			newVec = combine(lhs.getVector(), vector_t<Number>(0));
+		} else if(lhs.size() == 0 && rhs.size() == 0) {
+			return Reset<Number>();
+		} else {
+			assert(lhs.size() != 0);
+			assert(rhs.size() != 0);
+			newMat = combine(lhs.getMatrix(), rhs.getMatrix(), haVar, lhsVar, rhsVar);
+			newVec = combine(lhs.getVector(), rhs.getVector());
+		}
 
 		Reset<Number> re;
 		re.setMatrix(newMat);

@@ -44,5 +44,10 @@ const std::set<Label> HybridAutomaton<Number,State>::getLabels() const {
 	return labels;
 }
 
+template<typename Number, typename State>
+void reduce() {
+
+}
+
 }  // namespace hydra
 

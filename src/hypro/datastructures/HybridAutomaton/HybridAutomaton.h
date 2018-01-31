@@ -129,6 +129,11 @@ class HybridAutomaton
     inline HybridAutomaton& operator=(HybridAutomaton<Number,State>&& rhs) = default;
 
     /**
+     * @brief      Reduces the automaton, i.e. removes Locations which are not connected to the automaton by transitions.
+     */
+    void reduce();
+
+    /**
      * @brief      Comparison for equality operator.
      * @param[in]  lhs   The left hand side.
      * @param[in]  rhs   The right hand side.
