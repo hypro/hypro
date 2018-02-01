@@ -22,8 +22,8 @@ public:
 	bool empty() const { return mResets.empty(); }
 	std::size_t size() const { return mResets.size(); }
 
-	vector_t<Number> getVector(std::size_t I = 0) const { return mResets.at(I).vector(); }
-	matrix_t<Number> getMatrix(std::size_t I = 0) const { return mResets.at(I).matrix(); }
+	const vector_t<Number>& getVector(std::size_t I = 0) const { return mResets.at(I).vector(); }
+	const matrix_t<Number>& getMatrix(std::size_t I = 0) const { return mResets.at(I).matrix(); }
 	matrix_t<Number>& rGetMatrix(std::size_t I = 0) const { return mResets[I].rMatrix(); }
 	vector_t<Number>& rGetVector(std::size_t I = 0) const { return mResets[I].rVector(); }
 

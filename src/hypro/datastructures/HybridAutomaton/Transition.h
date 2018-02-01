@@ -204,6 +204,8 @@ Transition<Number>* parallelCompose(const Transition<Number>* lhsT
     assert(haVar.size() >= lhsVar.size());
     assert(haVar.size() >= rhsVar.size());
 
+    std::cout << "Parallel composition of transitions " << lhsT->getSource()->getName() << " -> " << lhsT->getTarget()->getName() << " and " << rhsT->getSource()->getName() << " -> " << rhsT->getTarget()->getName() << std::endl;
+
     Transition<Number>* t = new Transition<Number>();
 
     //set label
@@ -218,7 +220,34 @@ Transition<Number>* parallelCompose(const Transition<Number>* lhsT
         t->setLabels(rhsT->getLabels());
     } else {
         std::cout << "d" << std::endl;
+        delete t;
         return nullptr;
+    }
+
+    // quick test for shared resets - should be equal, otherwise do not parallel compose.
+    // mapping from resultIndex to pair lhsIndex, rhsIndex of the shared variables.
+    std::map<unsigned, std::pair<unsigned,unsigned>> sharedVars;
+    unsigned idx = 0;
+    for(const auto& var : haVar) {
+    	// identify a shared variable dimension.
+    	if(std::find(lhsVar.begin(), lhsVar.end(), var) != lhsVar.end() && std::find(rhsVar.begin(), rhsVar.end(), var) != rhsVar.end()) {
+    		unsigned lhsIdx = 0;
+    		unsigned rhsIdx = 0;
+    		while(lhsVar[lhsIdx] != var) ++ lhsIdx;
+    		while(rhsVar[rhsIdx] != var) ++ rhsIdx;
+    		sharedVars[idx] = std::make_pair(lhsIdx,rhsIdx);
+    		std::cout << "Shared variable " << var << " at pos " << idx << " with original positions " << lhsIdx << ", " << rhsIdx << std::endl;
+    	}
+    	++idx;
+    }
+    for(const auto& varTuple : sharedVars) {
+    	for(const auto& other : sharedVars) {
+    		if(lhsT->getReset().getMatrix()(varTuple.second.first,other.second.first) != rhsT->getReset().getMatrix()(varTuple.second.second,other.second.second)
+    			|| lhsT->getReset().getVector()(varTuple.second.first) != rhsT->getReset().getVector()(varTuple.second.second) ) {
+    			delete t;
+    			return nullptr;
+    		}
+    	}
     }
 
     //set target and source
@@ -235,7 +264,11 @@ Transition<Number>* parallelCompose(const Transition<Number>* lhsT
     t->setGuard(haGuard);
 
     //set reset
+    std::cout << "Reset, combine matrices: " << std::endl;
     Reset<Number> haReset = combine(lhsT->getReset(), rhsT->getReset(), haVar, lhsVar, rhsVar);
+    std::cout << "New reset function: " << haReset << std::endl;
+
+
     t->setReset(haReset);
 
     //set aggregation
