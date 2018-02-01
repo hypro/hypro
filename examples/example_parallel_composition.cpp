@@ -223,5 +223,9 @@ int main(int argc, char** argv) {
 
 	std::cout << "Result: " << std::endl << composed << std::endl;
 
+	LockedFileWriter out{"parallelHa.dot"};
+	out.clearFile();
+	out << composed.getDotRepresentation();
+
 	return 0;
 }
