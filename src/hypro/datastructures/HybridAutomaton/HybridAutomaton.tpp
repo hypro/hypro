@@ -51,14 +51,20 @@ void HybridAutomaton<Number,State>::reduce() {
 
 template<typename Number, typename State>
 std::string HybridAutomaton<Number,State>::getDotRepresentation() const {
-	std::string res = "";
+	std::string res = "digraph {\n";
+
+	std::map<unsigned, Location<Number>*> locIds;
+	for(const auto loc : mLocations) {
+		res += loc->getDotRepresentation(mVariables);
+	}
+
+	for(const auto tra : mTransitions) {
+		res += tra->getDotRepresentation(mVariables);
+	}
+
+	res += "}\n";
 
 	return res;
-}
-
-template<typename Number, typename State>
-std::size_t HybridAutomaton<Number,State>::getDotRepresentation(std::size_t startIndex, std::string& nodes, std::string& transitions, std::vector<unsigned>& levels) {
-
 }
 
 }  // namespace hydra

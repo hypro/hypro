@@ -118,6 +118,37 @@ class Transition
     void setLabels(const std::set<Label>& labels) { mLabels = labels; }
     void addLabel(const Label& lab) { mLabels.insert(lab); }
 
+    std::string getDotRepresentation(const std::vector<std::string>& vars) const {
+    	std::stringstream o;
+    	o << this->getSource()->getId() << " -> " << this->getTarget()->getId();
+    	o << "[label=< <TABLE>";
+    	// guard
+		o << mGuard.getDotRepresentation(vars);
+		// reset
+		if(mReset.size() > 0) {
+			const matrix_t<Number>& reset = mReset.getMatrix();
+			std::cout << "Reset matrix: " << reset << std::endl;
+			o << "<TR><TD ROWSPAN=\"" << reset.rows() << "\">";
+			for(unsigned i = 0; i < reset.rows(); ++i) {
+				o << vars[i] << "' = ";
+				bool allZero = true;
+				for(unsigned j = 0; j < reset.cols(); ++j) {
+					if(reset(i,j) != 0) {
+						o << reset(i,j) << "*" << vars[j] << " + ";
+						allZero = false;
+					}
+				}
+				if(mReset.getVector()(i) != 0) o << " + " << mReset.getVector()(i);
+				if(i < reset.rows() -1)
+					o << "<BR/>";
+			}
+			o << "</TD>";
+			o << "</TR>";
+		}
+    	o << "</TABLE>>];\n";
+    	return o.str();
+    }
+
     /**
      * @brief      Outstream operator.
      * @param      ostr  The outstream.

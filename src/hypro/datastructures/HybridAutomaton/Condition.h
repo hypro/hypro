@@ -32,6 +32,8 @@ public:
 
 	const std::vector<ConstraintSet<Number>>& constraints() const { return mConstraints; }
 
+	std::string getDotRepresentation(const std::vector<std::string>& vars) const;
+
 	// helper methods
 	//template<typename Representation, typename ...Rargs>
 	//std::pair<bool,State<Number,Representation, Rargs...>> isSatisfiedBy(const State<Number,Representation, Rargs...>& inState) const;

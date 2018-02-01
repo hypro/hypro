@@ -82,6 +82,8 @@ public:
     void addTransition(Transition<Number>* trans) { mTransitions.insert(trans); }
     void setExtInput(const Box<Number>& b) { mExternalInput = b; }
 
+    std::string getDotRepresentation(const std::vector<std::string>& vars) const;
+
     inline bool operator<(const Location<Number>& rhs) const { return (mId < rhs.getId()); }
     inline bool operator==(const Location<Number>& rhs) const { return (mId == rhs.getId()); }
     inline bool operator!=(const Location<Number>& rhs) const { return (mId != rhs.getId()); }

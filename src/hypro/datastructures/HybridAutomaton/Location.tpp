@@ -42,4 +42,36 @@ void Location<Number>::setFlow(const matrix_t<Number>& mat, std::size_t I) {
 	mFlows.push_back(mat);
 }
 
+template<typename Number>
+std::string Location<Number>::getDotRepresentation(const std::vector<std::string>& vars) const {
+	std::stringstream o;
+	o << this->getId() << " [shape=none, margin=0, label=<";
+	o << "<TABLE>";
+	o << "<TR><TD>" << this->getName() << " (" << this->getId() << ") </TD></TR>";
+	// flow
+	matrix_t<Number>& flow = *mFlows.begin();
+	o << "<TR><TD ROWSPAN=\"" << flow.rows() << "\">";
+	for(unsigned i = 0; i < flow.rows(); ++i) {
+		o << vars[i] << "' = ";
+		bool allZero = true;
+		for(unsigned j = 0; j < flow.cols() -1; ++j) {
+			if(flow(i,j) != 0) {
+				o << flow(i,j) << "*" << vars[j] << " + ";
+				allZero = false;
+			}
+		}
+		if(flow(i,flow.cols()-1) != 0 || allZero) o << flow(i,flow.cols()-1);
+		if(i < flow.rows() -1)
+			o << "<BR/>";
+	}
+	o << "</TD>";
+	o << "</TR>";
+	// invariant
+	o << mInvariant.getDotRepresentation(vars);
+	o << "</TABLE>";
+	o << ">];\n";
+
+	return o.str();
+}
+
 }  // namespace hydra

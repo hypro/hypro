@@ -1,4 +1,5 @@
 #include "datastructures/HybridAutomaton/HybridAutomaton.h"
+#include "util/multithreading/Filewriter.h"
 #include <iostream>
 
 using namespace hypro;
