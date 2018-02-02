@@ -11,6 +11,7 @@
 #include "representations/GeometricObject.h"
 #include "carl/core/VariablePool.h"
 #include "datastructures/HybridAutomaton/Condition.h"
+#include "datastructures/HybridAutomaton/Reset.h"
 
 
 using namespace hypro;
@@ -174,3 +175,158 @@ TYPED_TEST(HybridAutomataParallelCompositionTest, combineCondition)
 
 }
 
+/**
+ * combine reset test
+ */
+TYPED_TEST(HybridAutomataParallelCompositionTest, combineRest1)
+{
+	std::vector<std::string> haVar;
+	std::vector<std::string> lhsVar;
+	std::vector<std::string> rhsVar;
+	Reset<TypeParam> firstReset;
+	Reset<TypeParam> secondReset;
+	Reset<TypeParam> resultReset;
+	matrix_t<TypeParam> firstMatrix;
+	vector_t<TypeParam> firstConsts;
+	matrix_t<TypeParam> secondMatrix;
+	vector_t<TypeParam> secondConst;
+	matrix_t<TypeParam> resultMatrix;
+	vector_t<TypeParam> resultConsts;
+
+	// no shared variables
+	haVar = {"a","b","c","d"};
+	lhsVar = {"a", "c"};
+	rhsVar = {"b","d"};
+
+	// two empty resets
+	//EXPECT_EQ(Reset<TypeParam>(), combine(Reset<TypeParam>(), Reset<TypeParam>(), haVar, lhsVar, rhsVar)); 
+
+	// two non-empty resets
+	firstMatrix = matrix_t<TypeParam>(2, 2);
+	firstMatrix << 1, 2,
+                   3, 4;
+	firstConsts = vector_t<TypeParam>(2);
+    firstConsts << 5,
+                   6;
+	secondMatrix = matrix_t<TypeParam>(2, 2);
+	secondMatrix << 3, 1,
+                    4, 2;
+	secondConst = vector_t<TypeParam>(2);
+    secondConst << 6,
+                   7;
+	resultMatrix = matrix_t<TypeParam>(4, 4);
+    resultMatrix << 1, 0, 2, 0,
+                    0, 3, 0, 1,
+                    3, 0, 4, 0,
+                    0, 4, 0, 2;
+	resultConsts = vector_t<TypeParam>(4);
+    resultConsts << 5,
+                    6,
+                    6,
+                    7;
+	EXPECT_EQ(Reset<TypeParam>(resultMatrix, resultConsts),
+		      combine(Reset<TypeParam>(firstMatrix, firstConsts), Reset<TypeParam>(secondMatrix, secondConst), haVar, lhsVar, rhsVar)); 
+}
+
+TYPED_TEST(HybridAutomataParallelCompositionTest, combineRest2)
+{
+	std::vector<std::string> haVar;
+	std::vector<std::string> lhsVar;
+	std::vector<std::string> rhsVar;
+	Reset<TypeParam> firstReset;
+	Reset<TypeParam> secondReset;
+	Reset<TypeParam> resultReset;
+	matrix_t<TypeParam> firstMatrix;
+	vector_t<TypeParam> firstConsts;
+	matrix_t<TypeParam> secondMatrix;
+	vector_t<TypeParam> secondConst;
+	matrix_t<TypeParam> resultMatrix;
+	vector_t<TypeParam> resultConsts;
+
+	// shared and non-shared variables
+	haVar = {"a","b","c"};
+	lhsVar = {"a", "b"};
+	rhsVar = {"b","c"};
+
+	// same reset for shared variable
+	firstMatrix = matrix_t<TypeParam>(2, 2);
+	firstMatrix << 1, 0,
+                   0, 2;
+	firstConsts = vector_t<TypeParam>(2);
+    firstConsts << 3,
+                   4;
+	secondMatrix = matrix_t<TypeParam>(2, 2);
+	secondMatrix << 2, 0,
+                    0, 3;
+	secondConst = vector_t<TypeParam>(2);
+    secondConst << 4,
+                   5;
+	resultMatrix = matrix_t<TypeParam>(3, 3);
+    resultMatrix << 1, 0, 0,
+                    0, 2, 0,
+                    0, 0, 3;
+	resultConsts = vector_t<TypeParam>(3);
+    resultConsts << 3,
+                    4,
+                    5;
+	EXPECT_EQ(Reset<TypeParam>(resultMatrix, resultConsts),
+		      combine(Reset<TypeParam>(firstMatrix, firstConsts), Reset<TypeParam>(secondMatrix, secondConst), haVar, lhsVar, rhsVar)); 
+}
+
+TYPED_TEST(HybridAutomataParallelCompositionTest, combineRest3)
+{
+	std::vector<std::string> haVar;
+	std::vector<std::string> lhsVar;
+	std::vector<std::string> rhsVar;
+	Reset<TypeParam> firstReset;
+	Reset<TypeParam> secondReset;
+	matrix_t<TypeParam> firstMatrix;
+	vector_t<TypeParam> firstConsts;
+	matrix_t<TypeParam> secondMatrix;
+	vector_t<TypeParam> secondConst;
+	
+	// invalid
+	// shared and non-shared variables
+	haVar = {"a","b","c"};
+	lhsVar = {"a", "b"};
+	rhsVar = {"b","c"};
+
+	// contradicting reset for shared variable
+	firstMatrix = matrix_t<TypeParam>(2, 2);
+	firstMatrix << 1, 0,
+                   0, 3;
+	firstConsts = vector_t<TypeParam>(2);
+    firstConsts << 3,
+                   4;
+	secondMatrix = matrix_t<TypeParam>(2, 2);
+	secondMatrix << 2, 0,
+                    0, 3;
+	secondConst = vector_t<TypeParam>(2);
+    secondConst << 4,
+                   5;
+	ASSERT_NO_FATAL_FAILURE(combine(Reset<TypeParam>(firstMatrix, firstConsts), Reset<TypeParam>(secondMatrix, secondConst), haVar, lhsVar, rhsVar)); 
+}
+
+TYPED_TEST(HybridAutomataParallelCompositionTest, combineRest4)
+{
+	std::vector<std::string> haVar;
+	std::vector<std::string> lhsVar;
+	std::vector<std::string> rhsVar;
+	Reset<TypeParam> firstReset;
+	Reset<TypeParam> secondReset;
+	matrix_t<TypeParam> firstMatrix;
+	vector_t<TypeParam> firstConsts;
+	matrix_t<TypeParam> secondMatrix;
+	vector_t<TypeParam> secondConst;
+
+	// contradicting reset for shared variable
+	firstMatrix = matrix_t<TypeParam>(1, 1);
+	firstMatrix << 1;
+	firstConsts = vector_t<TypeParam>(1);
+    firstConsts << 3;
+	secondMatrix = matrix_t<TypeParam>(1, 1);
+	secondMatrix << 1;
+	secondConst = vector_t<TypeParam>(1);
+    secondConst << 4;
+	ASSERT_NO_FATAL_FAILURE(combine(Reset<TypeParam>(firstMatrix, firstConsts), Reset<TypeParam>(secondMatrix, secondConst), haVar, lhsVar, rhsVar)); 
+}
