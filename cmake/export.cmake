@@ -40,6 +40,8 @@ endif()
 
 export_target(DEPENDENT_TARGETS Boost_SHARED)
 export_target(DEPENDENT_TARGETS Boost_STATIC)
+export_target(DEPENDENT_TARGETS Boost_program_options_SHARED)
+export_target(DEPENDENT_TARGETS Boost_program_options_STATIC)
 export_target(DEPENDENT_TARGETS EIGEN3)
 export_target(DEPENDENT_TARGETS GMP_SHARED)
 export_target(DEPENDENT_TARGETS GMP_STATIC)

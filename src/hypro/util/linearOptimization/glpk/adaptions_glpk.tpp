@@ -24,11 +24,13 @@ namespace hypro {
 					std::cout << "0\t";
 				}
 			}
+			/*
 			if( glp_get_row_type(glpkProblem,i) == GLP_UP ) {
 				//std::cout << " <= " << glp_get_row_ub(glpkProblem,i) << std::endl;
 			} else if ( glp_get_row_type(glpkProblem,i) == GLP_FR ) {
 				//std::cout << " <= +INF" << std::endl;
 			}
+			*/
 		}
 		delete[] ind;
 		delete[] val;

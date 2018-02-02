@@ -17,7 +17,7 @@
 
 namespace hypro
 {
-enum Aggregation { none, boxAgg, parallelotopeAgg };
+enum Aggregation { none=0, boxAgg, parallelotopeAgg };
 
 template<typename Number>
 class Location;

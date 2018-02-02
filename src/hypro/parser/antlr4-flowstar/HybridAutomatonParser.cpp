@@ -2,7 +2,7 @@
 // Generated from HybridAutomaton.g4 by ANTLR 4.7
 
 
-#include "HybridAutomatonVisitor.h"
+#include "HybridAutomatonListener.h"
 
 #include "HybridAutomatonParser.h"
 
@@ -54,11 +54,16 @@ size_t HybridAutomatonParser::StartContext::getRuleIndex() const {
   return HybridAutomatonParser::RuleStart;
 }
 
-antlrcpp::Any HybridAutomatonParser::StartContext::accept(tree::ParseTreeVisitor *visitor) {
-  if (auto parserVisitor = dynamic_cast<HybridAutomatonVisitor*>(visitor))
-    return parserVisitor->visitStart(this);
-  else
-    return visitor->visitChildren(this);
+void HybridAutomatonParser::StartContext::enterRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<HybridAutomatonListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->enterStart(this);
+}
+
+void HybridAutomatonParser::StartContext::exitRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<HybridAutomatonListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->exitStart(this);
 }
 
 HybridAutomatonParser::StartContext* HybridAutomatonParser::start() {
@@ -127,11 +132,16 @@ size_t HybridAutomatonParser::OldContext::getRuleIndex() const {
   return HybridAutomatonParser::RuleOld;
 }
 
-antlrcpp::Any HybridAutomatonParser::OldContext::accept(tree::ParseTreeVisitor *visitor) {
-  if (auto parserVisitor = dynamic_cast<HybridAutomatonVisitor*>(visitor))
-    return parserVisitor->visitOld(this);
-  else
-    return visitor->visitChildren(this);
+void HybridAutomatonParser::OldContext::enterRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<HybridAutomatonListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->enterOld(this);
+}
+
+void HybridAutomatonParser::OldContext::exitRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<HybridAutomatonListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->exitOld(this);
 }
 
 HybridAutomatonParser::OldContext* HybridAutomatonParser::old() {
@@ -210,11 +220,16 @@ size_t HybridAutomatonParser::AutomatonContext::getRuleIndex() const {
   return HybridAutomatonParser::RuleAutomaton;
 }
 
-antlrcpp::Any HybridAutomatonParser::AutomatonContext::accept(tree::ParseTreeVisitor *visitor) {
-  if (auto parserVisitor = dynamic_cast<HybridAutomatonVisitor*>(visitor))
-    return parserVisitor->visitAutomaton(this);
-  else
-    return visitor->visitChildren(this);
+void HybridAutomatonParser::AutomatonContext::enterRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<HybridAutomatonListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->enterAutomaton(this);
+}
+
+void HybridAutomatonParser::AutomatonContext::exitRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<HybridAutomatonListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->exitAutomaton(this);
 }
 
 HybridAutomatonParser::AutomatonContext* HybridAutomatonParser::automaton() {
@@ -313,11 +328,16 @@ size_t HybridAutomatonParser::CompContext::getRuleIndex() const {
   return HybridAutomatonParser::RuleComp;
 }
 
-antlrcpp::Any HybridAutomatonParser::CompContext::accept(tree::ParseTreeVisitor *visitor) {
-  if (auto parserVisitor = dynamic_cast<HybridAutomatonVisitor*>(visitor))
-    return parserVisitor->visitComp(this);
-  else
-    return visitor->visitChildren(this);
+void HybridAutomatonParser::CompContext::enterRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<HybridAutomatonListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->enterComp(this);
+}
+
+void HybridAutomatonParser::CompContext::exitRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<HybridAutomatonListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->exitComp(this);
 }
 
 HybridAutomatonParser::CompContext* HybridAutomatonParser::comp() {
@@ -400,11 +420,16 @@ size_t HybridAutomatonParser::VardeclarationContext::getRuleIndex() const {
   return HybridAutomatonParser::RuleVardeclaration;
 }
 
-antlrcpp::Any HybridAutomatonParser::VardeclarationContext::accept(tree::ParseTreeVisitor *visitor) {
-  if (auto parserVisitor = dynamic_cast<HybridAutomatonVisitor*>(visitor))
-    return parserVisitor->visitVardeclaration(this);
-  else
-    return visitor->visitChildren(this);
+void HybridAutomatonParser::VardeclarationContext::enterRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<HybridAutomatonListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->enterVardeclaration(this);
+}
+
+void HybridAutomatonParser::VardeclarationContext::exitRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<HybridAutomatonListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->exitVardeclaration(this);
 }
 
 HybridAutomatonParser::VardeclarationContext* HybridAutomatonParser::vardeclaration() {
@@ -489,11 +514,16 @@ size_t HybridAutomatonParser::ConstantdeclarationContext::getRuleIndex() const {
   return HybridAutomatonParser::RuleConstantdeclaration;
 }
 
-antlrcpp::Any HybridAutomatonParser::ConstantdeclarationContext::accept(tree::ParseTreeVisitor *visitor) {
-  if (auto parserVisitor = dynamic_cast<HybridAutomatonVisitor*>(visitor))
-    return parserVisitor->visitConstantdeclaration(this);
-  else
-    return visitor->visitChildren(this);
+void HybridAutomatonParser::ConstantdeclarationContext::enterRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<HybridAutomatonListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->enterConstantdeclaration(this);
+}
+
+void HybridAutomatonParser::ConstantdeclarationContext::exitRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<HybridAutomatonListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->exitConstantdeclaration(this);
 }
 
 HybridAutomatonParser::ConstantdeclarationContext* HybridAutomatonParser::constantdeclaration() {
@@ -580,11 +610,16 @@ size_t HybridAutomatonParser::GlobalvardeclarationContext::getRuleIndex() const 
   return HybridAutomatonParser::RuleGlobalvardeclaration;
 }
 
-antlrcpp::Any HybridAutomatonParser::GlobalvardeclarationContext::accept(tree::ParseTreeVisitor *visitor) {
-  if (auto parserVisitor = dynamic_cast<HybridAutomatonVisitor*>(visitor))
-    return parserVisitor->visitGlobalvardeclaration(this);
-  else
-    return visitor->visitChildren(this);
+void HybridAutomatonParser::GlobalvardeclarationContext::enterRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<HybridAutomatonListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->enterGlobalvardeclaration(this);
+}
+
+void HybridAutomatonParser::GlobalvardeclarationContext::exitRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<HybridAutomatonListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->exitGlobalvardeclaration(this);
 }
 
 HybridAutomatonParser::GlobalvardeclarationContext* HybridAutomatonParser::globalvardeclaration() {
@@ -657,11 +692,16 @@ size_t HybridAutomatonParser::ComponentContext::getRuleIndex() const {
   return HybridAutomatonParser::RuleComponent;
 }
 
-antlrcpp::Any HybridAutomatonParser::ComponentContext::accept(tree::ParseTreeVisitor *visitor) {
-  if (auto parserVisitor = dynamic_cast<HybridAutomatonVisitor*>(visitor))
-    return parserVisitor->visitComponent(this);
-  else
-    return visitor->visitChildren(this);
+void HybridAutomatonParser::ComponentContext::enterRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<HybridAutomatonListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->enterComponent(this);
+}
+
+void HybridAutomatonParser::ComponentContext::exitRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<HybridAutomatonListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->exitComponent(this);
 }
 
 HybridAutomatonParser::ComponentContext* HybridAutomatonParser::component() {
@@ -711,11 +751,16 @@ size_t HybridAutomatonParser::ModesContext::getRuleIndex() const {
   return HybridAutomatonParser::RuleModes;
 }
 
-antlrcpp::Any HybridAutomatonParser::ModesContext::accept(tree::ParseTreeVisitor *visitor) {
-  if (auto parserVisitor = dynamic_cast<HybridAutomatonVisitor*>(visitor))
-    return parserVisitor->visitModes(this);
-  else
-    return visitor->visitChildren(this);
+void HybridAutomatonParser::ModesContext::enterRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<HybridAutomatonListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->enterModes(this);
+}
+
+void HybridAutomatonParser::ModesContext::exitRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<HybridAutomatonListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->exitModes(this);
 }
 
 HybridAutomatonParser::ModesContext* HybridAutomatonParser::modes() {
@@ -782,11 +827,16 @@ size_t HybridAutomatonParser::LocationContext::getRuleIndex() const {
   return HybridAutomatonParser::RuleLocation;
 }
 
-antlrcpp::Any HybridAutomatonParser::LocationContext::accept(tree::ParseTreeVisitor *visitor) {
-  if (auto parserVisitor = dynamic_cast<HybridAutomatonVisitor*>(visitor))
-    return parserVisitor->visitLocation(this);
-  else
-    return visitor->visitChildren(this);
+void HybridAutomatonParser::LocationContext::enterRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<HybridAutomatonListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->enterLocation(this);
+}
+
+void HybridAutomatonParser::LocationContext::exitRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<HybridAutomatonListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->exitLocation(this);
 }
 
 HybridAutomatonParser::LocationContext* HybridAutomatonParser::location() {
@@ -847,11 +897,16 @@ size_t HybridAutomatonParser::ActivitiesContext::getRuleIndex() const {
   return HybridAutomatonParser::RuleActivities;
 }
 
-antlrcpp::Any HybridAutomatonParser::ActivitiesContext::accept(tree::ParseTreeVisitor *visitor) {
-  if (auto parserVisitor = dynamic_cast<HybridAutomatonVisitor*>(visitor))
-    return parserVisitor->visitActivities(this);
-  else
-    return visitor->visitChildren(this);
+void HybridAutomatonParser::ActivitiesContext::enterRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<HybridAutomatonListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->enterActivities(this);
+}
+
+void HybridAutomatonParser::ActivitiesContext::exitRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<HybridAutomatonListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->exitActivities(this);
 }
 
 HybridAutomatonParser::ActivitiesContext* HybridAutomatonParser::activities() {
@@ -917,11 +972,16 @@ size_t HybridAutomatonParser::InvariantsContext::getRuleIndex() const {
   return HybridAutomatonParser::RuleInvariants;
 }
 
-antlrcpp::Any HybridAutomatonParser::InvariantsContext::accept(tree::ParseTreeVisitor *visitor) {
-  if (auto parserVisitor = dynamic_cast<HybridAutomatonVisitor*>(visitor))
-    return parserVisitor->visitInvariants(this);
-  else
-    return visitor->visitChildren(this);
+void HybridAutomatonParser::InvariantsContext::enterRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<HybridAutomatonListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->enterInvariants(this);
+}
+
+void HybridAutomatonParser::InvariantsContext::exitRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<HybridAutomatonListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->exitInvariants(this);
 }
 
 HybridAutomatonParser::InvariantsContext* HybridAutomatonParser::invariants() {
@@ -992,11 +1052,16 @@ size_t HybridAutomatonParser::ConstantexprContext::getRuleIndex() const {
   return HybridAutomatonParser::RuleConstantexpr;
 }
 
-antlrcpp::Any HybridAutomatonParser::ConstantexprContext::accept(tree::ParseTreeVisitor *visitor) {
-  if (auto parserVisitor = dynamic_cast<HybridAutomatonVisitor*>(visitor))
-    return parserVisitor->visitConstantexpr(this);
-  else
-    return visitor->visitChildren(this);
+void HybridAutomatonParser::ConstantexprContext::enterRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<HybridAutomatonListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->enterConstantexpr(this);
+}
+
+void HybridAutomatonParser::ConstantexprContext::exitRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<HybridAutomatonListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->exitConstantexpr(this);
 }
 
 HybridAutomatonParser::ConstantexprContext* HybridAutomatonParser::constantexpr() {
@@ -1063,11 +1128,16 @@ size_t HybridAutomatonParser::ConnectorContext::getRuleIndex() const {
   return HybridAutomatonParser::RuleConnector;
 }
 
-antlrcpp::Any HybridAutomatonParser::ConnectorContext::accept(tree::ParseTreeVisitor *visitor) {
-  if (auto parserVisitor = dynamic_cast<HybridAutomatonVisitor*>(visitor))
-    return parserVisitor->visitConnector(this);
-  else
-    return visitor->visitChildren(this);
+void HybridAutomatonParser::ConnectorContext::enterRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<HybridAutomatonListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->enterConnector(this);
+}
+
+void HybridAutomatonParser::ConnectorContext::exitRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<HybridAutomatonListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->exitConnector(this);
 }
 
 HybridAutomatonParser::ConnectorContext* HybridAutomatonParser::connector() {
@@ -1145,11 +1215,16 @@ size_t HybridAutomatonParser::TermContext::getRuleIndex() const {
   return HybridAutomatonParser::RuleTerm;
 }
 
-antlrcpp::Any HybridAutomatonParser::TermContext::accept(tree::ParseTreeVisitor *visitor) {
-  if (auto parserVisitor = dynamic_cast<HybridAutomatonVisitor*>(visitor))
-    return parserVisitor->visitTerm(this);
-  else
-    return visitor->visitChildren(this);
+void HybridAutomatonParser::TermContext::enterRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<HybridAutomatonListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->enterTerm(this);
+}
+
+void HybridAutomatonParser::TermContext::exitRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<HybridAutomatonListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->exitTerm(this);
 }
 
 HybridAutomatonParser::TermContext* HybridAutomatonParser::term() {
@@ -1244,11 +1319,16 @@ size_t HybridAutomatonParser::PolynomContext::getRuleIndex() const {
   return HybridAutomatonParser::RulePolynom;
 }
 
-antlrcpp::Any HybridAutomatonParser::PolynomContext::accept(tree::ParseTreeVisitor *visitor) {
-  if (auto parserVisitor = dynamic_cast<HybridAutomatonVisitor*>(visitor))
-    return parserVisitor->visitPolynom(this);
-  else
-    return visitor->visitChildren(this);
+void HybridAutomatonParser::PolynomContext::enterRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<HybridAutomatonListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->enterPolynom(this);
+}
+
+void HybridAutomatonParser::PolynomContext::exitRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<HybridAutomatonListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->exitPolynom(this);
 }
 
 HybridAutomatonParser::PolynomContext* HybridAutomatonParser::polynom() {
@@ -1346,11 +1426,16 @@ size_t HybridAutomatonParser::IntervalContext::getRuleIndex() const {
   return HybridAutomatonParser::RuleInterval;
 }
 
-antlrcpp::Any HybridAutomatonParser::IntervalContext::accept(tree::ParseTreeVisitor *visitor) {
-  if (auto parserVisitor = dynamic_cast<HybridAutomatonVisitor*>(visitor))
-    return parserVisitor->visitInterval(this);
-  else
-    return visitor->visitChildren(this);
+void HybridAutomatonParser::IntervalContext::enterRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<HybridAutomatonListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->enterInterval(this);
+}
+
+void HybridAutomatonParser::IntervalContext::exitRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<HybridAutomatonListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->exitInterval(this);
 }
 
 HybridAutomatonParser::IntervalContext* HybridAutomatonParser::interval() {
@@ -1449,11 +1534,16 @@ size_t HybridAutomatonParser::EquationContext::getRuleIndex() const {
   return HybridAutomatonParser::RuleEquation;
 }
 
-antlrcpp::Any HybridAutomatonParser::EquationContext::accept(tree::ParseTreeVisitor *visitor) {
-  if (auto parserVisitor = dynamic_cast<HybridAutomatonVisitor*>(visitor))
-    return parserVisitor->visitEquation(this);
-  else
-    return visitor->visitChildren(this);
+void HybridAutomatonParser::EquationContext::enterRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<HybridAutomatonListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->enterEquation(this);
+}
+
+void HybridAutomatonParser::EquationContext::exitRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<HybridAutomatonListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->exitEquation(this);
 }
 
 HybridAutomatonParser::EquationContext* HybridAutomatonParser::equation() {
@@ -1522,11 +1612,16 @@ size_t HybridAutomatonParser::ConstraintContext::getRuleIndex() const {
   return HybridAutomatonParser::RuleConstraint;
 }
 
-antlrcpp::Any HybridAutomatonParser::ConstraintContext::accept(tree::ParseTreeVisitor *visitor) {
-  if (auto parserVisitor = dynamic_cast<HybridAutomatonVisitor*>(visitor))
-    return parserVisitor->visitConstraint(this);
-  else
-    return visitor->visitChildren(this);
+void HybridAutomatonParser::ConstraintContext::enterRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<HybridAutomatonListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->enterConstraint(this);
+}
+
+void HybridAutomatonParser::ConstraintContext::exitRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<HybridAutomatonListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->exitConstraint(this);
 }
 
 HybridAutomatonParser::ConstraintContext* HybridAutomatonParser::constraint() {
@@ -1588,11 +1683,16 @@ size_t HybridAutomatonParser::IntervalexprContext::getRuleIndex() const {
   return HybridAutomatonParser::RuleIntervalexpr;
 }
 
-antlrcpp::Any HybridAutomatonParser::IntervalexprContext::accept(tree::ParseTreeVisitor *visitor) {
-  if (auto parserVisitor = dynamic_cast<HybridAutomatonVisitor*>(visitor))
-    return parserVisitor->visitIntervalexpr(this);
-  else
-    return visitor->visitChildren(this);
+void HybridAutomatonParser::IntervalexprContext::enterRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<HybridAutomatonListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->enterIntervalexpr(this);
+}
+
+void HybridAutomatonParser::IntervalexprContext::exitRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<HybridAutomatonListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->exitIntervalexpr(this);
 }
 
 HybridAutomatonParser::IntervalexprContext* HybridAutomatonParser::intervalexpr() {
@@ -1656,11 +1756,16 @@ size_t HybridAutomatonParser::ConstrsetContext::getRuleIndex() const {
   return HybridAutomatonParser::RuleConstrset;
 }
 
-antlrcpp::Any HybridAutomatonParser::ConstrsetContext::accept(tree::ParseTreeVisitor *visitor) {
-  if (auto parserVisitor = dynamic_cast<HybridAutomatonVisitor*>(visitor))
-    return parserVisitor->visitConstrset(this);
-  else
-    return visitor->visitChildren(this);
+void HybridAutomatonParser::ConstrsetContext::enterRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<HybridAutomatonListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->enterConstrset(this);
+}
+
+void HybridAutomatonParser::ConstrsetContext::exitRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<HybridAutomatonListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->exitConstrset(this);
 }
 
 HybridAutomatonParser::ConstrsetContext* HybridAutomatonParser::constrset() {
@@ -1774,11 +1879,16 @@ size_t HybridAutomatonParser::ReplacedexprContext::getRuleIndex() const {
   return HybridAutomatonParser::RuleReplacedexpr;
 }
 
-antlrcpp::Any HybridAutomatonParser::ReplacedexprContext::accept(tree::ParseTreeVisitor *visitor) {
-  if (auto parserVisitor = dynamic_cast<HybridAutomatonVisitor*>(visitor))
-    return parserVisitor->visitReplacedexpr(this);
-  else
-    return visitor->visitChildren(this);
+void HybridAutomatonParser::ReplacedexprContext::enterRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<HybridAutomatonListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->enterReplacedexpr(this);
+}
+
+void HybridAutomatonParser::ReplacedexprContext::exitRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<HybridAutomatonListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->exitReplacedexpr(this);
 }
 
 HybridAutomatonParser::ReplacedexprContext* HybridAutomatonParser::replacedexpr() {
@@ -1843,11 +1953,16 @@ size_t HybridAutomatonParser::InitContext::getRuleIndex() const {
   return HybridAutomatonParser::RuleInit;
 }
 
-antlrcpp::Any HybridAutomatonParser::InitContext::accept(tree::ParseTreeVisitor *visitor) {
-  if (auto parserVisitor = dynamic_cast<HybridAutomatonVisitor*>(visitor))
-    return parserVisitor->visitInit(this);
-  else
-    return visitor->visitChildren(this);
+void HybridAutomatonParser::InitContext::enterRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<HybridAutomatonListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->enterInit(this);
+}
+
+void HybridAutomatonParser::InitContext::exitRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<HybridAutomatonListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->exitInit(this);
 }
 
 HybridAutomatonParser::InitContext* HybridAutomatonParser::init() {
@@ -1906,11 +2021,16 @@ size_t HybridAutomatonParser::InitstateContext::getRuleIndex() const {
   return HybridAutomatonParser::RuleInitstate;
 }
 
-antlrcpp::Any HybridAutomatonParser::InitstateContext::accept(tree::ParseTreeVisitor *visitor) {
-  if (auto parserVisitor = dynamic_cast<HybridAutomatonVisitor*>(visitor))
-    return parserVisitor->visitInitstate(this);
-  else
-    return visitor->visitChildren(this);
+void HybridAutomatonParser::InitstateContext::enterRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<HybridAutomatonListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->enterInitstate(this);
+}
+
+void HybridAutomatonParser::InitstateContext::exitRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<HybridAutomatonListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->exitInitstate(this);
 }
 
 HybridAutomatonParser::InitstateContext* HybridAutomatonParser::initstate() {
@@ -1968,11 +2088,16 @@ size_t HybridAutomatonParser::UnsafesetContext::getRuleIndex() const {
   return HybridAutomatonParser::RuleUnsafeset;
 }
 
-antlrcpp::Any HybridAutomatonParser::UnsafesetContext::accept(tree::ParseTreeVisitor *visitor) {
-  if (auto parserVisitor = dynamic_cast<HybridAutomatonVisitor*>(visitor))
-    return parserVisitor->visitUnsafeset(this);
-  else
-    return visitor->visitChildren(this);
+void HybridAutomatonParser::UnsafesetContext::enterRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<HybridAutomatonListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->enterUnsafeset(this);
+}
+
+void HybridAutomatonParser::UnsafesetContext::exitRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<HybridAutomatonListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->exitUnsafeset(this);
 }
 
 HybridAutomatonParser::UnsafesetContext* HybridAutomatonParser::unsafeset() {
@@ -2051,11 +2176,16 @@ size_t HybridAutomatonParser::LbadstateContext::getRuleIndex() const {
   return HybridAutomatonParser::RuleLbadstate;
 }
 
-antlrcpp::Any HybridAutomatonParser::LbadstateContext::accept(tree::ParseTreeVisitor *visitor) {
-  if (auto parserVisitor = dynamic_cast<HybridAutomatonVisitor*>(visitor))
-    return parserVisitor->visitLbadstate(this);
-  else
-    return visitor->visitChildren(this);
+void HybridAutomatonParser::LbadstateContext::enterRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<HybridAutomatonListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->enterLbadstate(this);
+}
+
+void HybridAutomatonParser::LbadstateContext::exitRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<HybridAutomatonListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->exitLbadstate(this);
 }
 
 HybridAutomatonParser::LbadstateContext* HybridAutomatonParser::lbadstate() {
@@ -2114,11 +2244,16 @@ size_t HybridAutomatonParser::GbadstateContext::getRuleIndex() const {
   return HybridAutomatonParser::RuleGbadstate;
 }
 
-antlrcpp::Any HybridAutomatonParser::GbadstateContext::accept(tree::ParseTreeVisitor *visitor) {
-  if (auto parserVisitor = dynamic_cast<HybridAutomatonVisitor*>(visitor))
-    return parserVisitor->visitGbadstate(this);
-  else
-    return visitor->visitChildren(this);
+void HybridAutomatonParser::GbadstateContext::enterRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<HybridAutomatonListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->enterGbadstate(this);
+}
+
+void HybridAutomatonParser::GbadstateContext::exitRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<HybridAutomatonListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->exitGbadstate(this);
 }
 
 HybridAutomatonParser::GbadstateContext* HybridAutomatonParser::gbadstate() {
@@ -2162,11 +2297,16 @@ size_t HybridAutomatonParser::JumpsContext::getRuleIndex() const {
   return HybridAutomatonParser::RuleJumps;
 }
 
-antlrcpp::Any HybridAutomatonParser::JumpsContext::accept(tree::ParseTreeVisitor *visitor) {
-  if (auto parserVisitor = dynamic_cast<HybridAutomatonVisitor*>(visitor))
-    return parserVisitor->visitJumps(this);
-  else
-    return visitor->visitChildren(this);
+void HybridAutomatonParser::JumpsContext::enterRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<HybridAutomatonListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->enterJumps(this);
+}
+
+void HybridAutomatonParser::JumpsContext::exitRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<HybridAutomatonListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->exitJumps(this);
 }
 
 HybridAutomatonParser::JumpsContext* HybridAutomatonParser::jumps() {
@@ -2261,11 +2401,16 @@ size_t HybridAutomatonParser::TransitionContext::getRuleIndex() const {
   return HybridAutomatonParser::RuleTransition;
 }
 
-antlrcpp::Any HybridAutomatonParser::TransitionContext::accept(tree::ParseTreeVisitor *visitor) {
-  if (auto parserVisitor = dynamic_cast<HybridAutomatonVisitor*>(visitor))
-    return parserVisitor->visitTransition(this);
-  else
-    return visitor->visitChildren(this);
+void HybridAutomatonParser::TransitionContext::enterRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<HybridAutomatonListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->enterTransition(this);
+}
+
+void HybridAutomatonParser::TransitionContext::exitRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<HybridAutomatonListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->exitTransition(this);
 }
 
 HybridAutomatonParser::TransitionContext* HybridAutomatonParser::transition() {
@@ -2367,11 +2512,16 @@ size_t HybridAutomatonParser::FromtoContext::getRuleIndex() const {
   return HybridAutomatonParser::RuleFromto;
 }
 
-antlrcpp::Any HybridAutomatonParser::FromtoContext::accept(tree::ParseTreeVisitor *visitor) {
-  if (auto parserVisitor = dynamic_cast<HybridAutomatonVisitor*>(visitor))
-    return parserVisitor->visitFromto(this);
-  else
-    return visitor->visitChildren(this);
+void HybridAutomatonParser::FromtoContext::enterRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<HybridAutomatonListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->enterFromto(this);
+}
+
+void HybridAutomatonParser::FromtoContext::exitRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<HybridAutomatonListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->exitFromto(this);
 }
 
 HybridAutomatonParser::FromtoContext* HybridAutomatonParser::fromto() {
@@ -2411,11 +2561,16 @@ size_t HybridAutomatonParser::UrgentContext::getRuleIndex() const {
   return HybridAutomatonParser::RuleUrgent;
 }
 
-antlrcpp::Any HybridAutomatonParser::UrgentContext::accept(tree::ParseTreeVisitor *visitor) {
-  if (auto parserVisitor = dynamic_cast<HybridAutomatonVisitor*>(visitor))
-    return parserVisitor->visitUrgent(this);
-  else
-    return visitor->visitChildren(this);
+void HybridAutomatonParser::UrgentContext::enterRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<HybridAutomatonListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->enterUrgent(this);
+}
+
+void HybridAutomatonParser::UrgentContext::exitRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<HybridAutomatonListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->exitUrgent(this);
 }
 
 HybridAutomatonParser::UrgentContext* HybridAutomatonParser::urgent() {
@@ -2455,11 +2610,16 @@ size_t HybridAutomatonParser::GuardContext::getRuleIndex() const {
   return HybridAutomatonParser::RuleGuard;
 }
 
-antlrcpp::Any HybridAutomatonParser::GuardContext::accept(tree::ParseTreeVisitor *visitor) {
-  if (auto parserVisitor = dynamic_cast<HybridAutomatonVisitor*>(visitor))
-    return parserVisitor->visitGuard(this);
-  else
-    return visitor->visitChildren(this);
+void HybridAutomatonParser::GuardContext::enterRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<HybridAutomatonListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->enterGuard(this);
+}
+
+void HybridAutomatonParser::GuardContext::exitRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<HybridAutomatonListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->exitGuard(this);
 }
 
 HybridAutomatonParser::GuardContext* HybridAutomatonParser::guard() {
@@ -2530,11 +2690,16 @@ size_t HybridAutomatonParser::AllocationContext::getRuleIndex() const {
   return HybridAutomatonParser::RuleAllocation;
 }
 
-antlrcpp::Any HybridAutomatonParser::AllocationContext::accept(tree::ParseTreeVisitor *visitor) {
-  if (auto parserVisitor = dynamic_cast<HybridAutomatonVisitor*>(visitor))
-    return parserVisitor->visitAllocation(this);
-  else
-    return visitor->visitChildren(this);
+void HybridAutomatonParser::AllocationContext::enterRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<HybridAutomatonListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->enterAllocation(this);
+}
+
+void HybridAutomatonParser::AllocationContext::exitRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<HybridAutomatonListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->exitAllocation(this);
 }
 
 HybridAutomatonParser::AllocationContext* HybridAutomatonParser::allocation() {
@@ -2601,11 +2766,16 @@ size_t HybridAutomatonParser::ResetfctContext::getRuleIndex() const {
   return HybridAutomatonParser::RuleResetfct;
 }
 
-antlrcpp::Any HybridAutomatonParser::ResetfctContext::accept(tree::ParseTreeVisitor *visitor) {
-  if (auto parserVisitor = dynamic_cast<HybridAutomatonVisitor*>(visitor))
-    return parserVisitor->visitResetfct(this);
-  else
-    return visitor->visitChildren(this);
+void HybridAutomatonParser::ResetfctContext::enterRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<HybridAutomatonListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->enterResetfct(this);
+}
+
+void HybridAutomatonParser::ResetfctContext::exitRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<HybridAutomatonListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->exitResetfct(this);
 }
 
 HybridAutomatonParser::ResetfctContext* HybridAutomatonParser::resetfct() {
@@ -2668,11 +2838,16 @@ size_t HybridAutomatonParser::AggregationContext::getRuleIndex() const {
   return HybridAutomatonParser::RuleAggregation;
 }
 
-antlrcpp::Any HybridAutomatonParser::AggregationContext::accept(tree::ParseTreeVisitor *visitor) {
-  if (auto parserVisitor = dynamic_cast<HybridAutomatonVisitor*>(visitor))
-    return parserVisitor->visitAggregation(this);
-  else
-    return visitor->visitChildren(this);
+void HybridAutomatonParser::AggregationContext::enterRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<HybridAutomatonListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->enterAggregation(this);
+}
+
+void HybridAutomatonParser::AggregationContext::exitRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<HybridAutomatonListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->exitAggregation(this);
 }
 
 HybridAutomatonParser::AggregationContext* HybridAutomatonParser::aggregation() {
@@ -2731,11 +2906,16 @@ size_t HybridAutomatonParser::LabelsContext::getRuleIndex() const {
   return HybridAutomatonParser::RuleLabels;
 }
 
-antlrcpp::Any HybridAutomatonParser::LabelsContext::accept(tree::ParseTreeVisitor *visitor) {
-  if (auto parserVisitor = dynamic_cast<HybridAutomatonVisitor*>(visitor))
-    return parserVisitor->visitLabels(this);
-  else
-    return visitor->visitChildren(this);
+void HybridAutomatonParser::LabelsContext::enterRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<HybridAutomatonListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->enterLabels(this);
+}
+
+void HybridAutomatonParser::LabelsContext::exitRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<HybridAutomatonListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->exitLabels(this);
 }
 
 HybridAutomatonParser::LabelsContext* HybridAutomatonParser::labels() {
@@ -2790,11 +2970,16 @@ size_t HybridAutomatonParser::LabelContext::getRuleIndex() const {
   return HybridAutomatonParser::RuleLabel;
 }
 
-antlrcpp::Any HybridAutomatonParser::LabelContext::accept(tree::ParseTreeVisitor *visitor) {
-  if (auto parserVisitor = dynamic_cast<HybridAutomatonVisitor*>(visitor))
-    return parserVisitor->visitLabel(this);
-  else
-    return visitor->visitChildren(this);
+void HybridAutomatonParser::LabelContext::enterRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<HybridAutomatonListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->enterLabel(this);
+}
+
+void HybridAutomatonParser::LabelContext::exitRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<HybridAutomatonListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->exitLabel(this);
 }
 
 HybridAutomatonParser::LabelContext* HybridAutomatonParser::label() {
@@ -2918,11 +3103,16 @@ size_t HybridAutomatonParser::SettingContext::getRuleIndex() const {
   return HybridAutomatonParser::RuleSetting;
 }
 
-antlrcpp::Any HybridAutomatonParser::SettingContext::accept(tree::ParseTreeVisitor *visitor) {
-  if (auto parserVisitor = dynamic_cast<HybridAutomatonVisitor*>(visitor))
-    return parserVisitor->visitSetting(this);
-  else
-    return visitor->visitChildren(this);
+void HybridAutomatonParser::SettingContext::enterRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<HybridAutomatonListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->enterSetting(this);
+}
+
+void HybridAutomatonParser::SettingContext::exitRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<HybridAutomatonListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->exitSetting(this);
 }
 
 HybridAutomatonParser::SettingContext* HybridAutomatonParser::setting() {
@@ -3058,11 +3248,16 @@ size_t HybridAutomatonParser::FixedstepsContext::getRuleIndex() const {
   return HybridAutomatonParser::RuleFixedsteps;
 }
 
-antlrcpp::Any HybridAutomatonParser::FixedstepsContext::accept(tree::ParseTreeVisitor *visitor) {
-  if (auto parserVisitor = dynamic_cast<HybridAutomatonVisitor*>(visitor))
-    return parserVisitor->visitFixedsteps(this);
-  else
-    return visitor->visitChildren(this);
+void HybridAutomatonParser::FixedstepsContext::enterRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<HybridAutomatonListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->enterFixedsteps(this);
+}
+
+void HybridAutomatonParser::FixedstepsContext::exitRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<HybridAutomatonListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->exitFixedsteps(this);
 }
 
 HybridAutomatonParser::FixedstepsContext* HybridAutomatonParser::fixedsteps() {
@@ -3104,11 +3299,16 @@ size_t HybridAutomatonParser::TimeContext::getRuleIndex() const {
   return HybridAutomatonParser::RuleTime;
 }
 
-antlrcpp::Any HybridAutomatonParser::TimeContext::accept(tree::ParseTreeVisitor *visitor) {
-  if (auto parserVisitor = dynamic_cast<HybridAutomatonVisitor*>(visitor))
-    return parserVisitor->visitTime(this);
-  else
-    return visitor->visitChildren(this);
+void HybridAutomatonParser::TimeContext::enterRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<HybridAutomatonListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->enterTime(this);
+}
+
+void HybridAutomatonParser::TimeContext::exitRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<HybridAutomatonListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->exitTime(this);
 }
 
 HybridAutomatonParser::TimeContext* HybridAutomatonParser::time() {
@@ -3154,11 +3354,16 @@ size_t HybridAutomatonParser::PlotsettingContext::getRuleIndex() const {
   return HybridAutomatonParser::RulePlotsetting;
 }
 
-antlrcpp::Any HybridAutomatonParser::PlotsettingContext::accept(tree::ParseTreeVisitor *visitor) {
-  if (auto parserVisitor = dynamic_cast<HybridAutomatonVisitor*>(visitor))
-    return parserVisitor->visitPlotsetting(this);
-  else
-    return visitor->visitChildren(this);
+void HybridAutomatonParser::PlotsettingContext::enterRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<HybridAutomatonListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->enterPlotsetting(this);
+}
+
+void HybridAutomatonParser::PlotsettingContext::exitRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<HybridAutomatonListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->exitPlotsetting(this);
 }
 
 HybridAutomatonParser::PlotsettingContext* HybridAutomatonParser::plotsetting() {
@@ -3219,11 +3424,16 @@ size_t HybridAutomatonParser::FilenameContext::getRuleIndex() const {
   return HybridAutomatonParser::RuleFilename;
 }
 
-antlrcpp::Any HybridAutomatonParser::FilenameContext::accept(tree::ParseTreeVisitor *visitor) {
-  if (auto parserVisitor = dynamic_cast<HybridAutomatonVisitor*>(visitor))
-    return parserVisitor->visitFilename(this);
-  else
-    return visitor->visitChildren(this);
+void HybridAutomatonParser::FilenameContext::enterRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<HybridAutomatonListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->enterFilename(this);
+}
+
+void HybridAutomatonParser::FilenameContext::exitRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<HybridAutomatonListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->exitFilename(this);
 }
 
 HybridAutomatonParser::FilenameContext* HybridAutomatonParser::filename() {
@@ -3265,11 +3475,16 @@ size_t HybridAutomatonParser::MaxjumpsContext::getRuleIndex() const {
   return HybridAutomatonParser::RuleMaxjumps;
 }
 
-antlrcpp::Any HybridAutomatonParser::MaxjumpsContext::accept(tree::ParseTreeVisitor *visitor) {
-  if (auto parserVisitor = dynamic_cast<HybridAutomatonVisitor*>(visitor))
-    return parserVisitor->visitMaxjumps(this);
-  else
-    return visitor->visitChildren(this);
+void HybridAutomatonParser::MaxjumpsContext::enterRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<HybridAutomatonListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->enterMaxjumps(this);
+}
+
+void HybridAutomatonParser::MaxjumpsContext::exitRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<HybridAutomatonListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->exitMaxjumps(this);
 }
 
 HybridAutomatonParser::MaxjumpsContext* HybridAutomatonParser::maxjumps() {
@@ -3311,11 +3526,16 @@ size_t HybridAutomatonParser::PrintContext::getRuleIndex() const {
   return HybridAutomatonParser::RulePrint;
 }
 
-antlrcpp::Any HybridAutomatonParser::PrintContext::accept(tree::ParseTreeVisitor *visitor) {
-  if (auto parserVisitor = dynamic_cast<HybridAutomatonVisitor*>(visitor))
-    return parserVisitor->visitPrint(this);
-  else
-    return visitor->visitChildren(this);
+void HybridAutomatonParser::PrintContext::enterRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<HybridAutomatonListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->enterPrint(this);
+}
+
+void HybridAutomatonParser::PrintContext::exitRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<HybridAutomatonListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->exitPrint(this);
 }
 
 HybridAutomatonParser::PrintContext* HybridAutomatonParser::print() {
@@ -3357,11 +3577,16 @@ size_t HybridAutomatonParser::RemainderContext::getRuleIndex() const {
   return HybridAutomatonParser::RuleRemainder;
 }
 
-antlrcpp::Any HybridAutomatonParser::RemainderContext::accept(tree::ParseTreeVisitor *visitor) {
-  if (auto parserVisitor = dynamic_cast<HybridAutomatonVisitor*>(visitor))
-    return parserVisitor->visitRemainder(this);
-  else
-    return visitor->visitChildren(this);
+void HybridAutomatonParser::RemainderContext::enterRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<HybridAutomatonListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->enterRemainder(this);
+}
+
+void HybridAutomatonParser::RemainderContext::exitRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<HybridAutomatonListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->exitRemainder(this);
 }
 
 HybridAutomatonParser::RemainderContext* HybridAutomatonParser::remainder() {
@@ -3399,11 +3624,16 @@ size_t HybridAutomatonParser::IdentityContext::getRuleIndex() const {
   return HybridAutomatonParser::RuleIdentity;
 }
 
-antlrcpp::Any HybridAutomatonParser::IdentityContext::accept(tree::ParseTreeVisitor *visitor) {
-  if (auto parserVisitor = dynamic_cast<HybridAutomatonVisitor*>(visitor))
-    return parserVisitor->visitIdentity(this);
-  else
-    return visitor->visitChildren(this);
+void HybridAutomatonParser::IdentityContext::enterRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<HybridAutomatonListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->enterIdentity(this);
+}
+
+void HybridAutomatonParser::IdentityContext::exitRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<HybridAutomatonListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->exitIdentity(this);
 }
 
 HybridAutomatonParser::IdentityContext* HybridAutomatonParser::identity() {
@@ -3443,11 +3673,16 @@ size_t HybridAutomatonParser::FixedordersContext::getRuleIndex() const {
   return HybridAutomatonParser::RuleFixedorders;
 }
 
-antlrcpp::Any HybridAutomatonParser::FixedordersContext::accept(tree::ParseTreeVisitor *visitor) {
-  if (auto parserVisitor = dynamic_cast<HybridAutomatonVisitor*>(visitor))
-    return parserVisitor->visitFixedorders(this);
-  else
-    return visitor->visitChildren(this);
+void HybridAutomatonParser::FixedordersContext::enterRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<HybridAutomatonListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->enterFixedorders(this);
+}
+
+void HybridAutomatonParser::FixedordersContext::exitRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<HybridAutomatonListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->exitFixedorders(this);
 }
 
 HybridAutomatonParser::FixedordersContext* HybridAutomatonParser::fixedorders() {
@@ -3489,11 +3724,16 @@ size_t HybridAutomatonParser::CutoffContext::getRuleIndex() const {
   return HybridAutomatonParser::RuleCutoff;
 }
 
-antlrcpp::Any HybridAutomatonParser::CutoffContext::accept(tree::ParseTreeVisitor *visitor) {
-  if (auto parserVisitor = dynamic_cast<HybridAutomatonVisitor*>(visitor))
-    return parserVisitor->visitCutoff(this);
-  else
-    return visitor->visitChildren(this);
+void HybridAutomatonParser::CutoffContext::enterRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<HybridAutomatonListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->enterCutoff(this);
+}
+
+void HybridAutomatonParser::CutoffContext::exitRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<HybridAutomatonListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->exitCutoff(this);
 }
 
 HybridAutomatonParser::CutoffContext* HybridAutomatonParser::cutoff() {
@@ -3535,11 +3775,16 @@ size_t HybridAutomatonParser::PrecisionContext::getRuleIndex() const {
   return HybridAutomatonParser::RulePrecision;
 }
 
-antlrcpp::Any HybridAutomatonParser::PrecisionContext::accept(tree::ParseTreeVisitor *visitor) {
-  if (auto parserVisitor = dynamic_cast<HybridAutomatonVisitor*>(visitor))
-    return parserVisitor->visitPrecision(this);
-  else
-    return visitor->visitChildren(this);
+void HybridAutomatonParser::PrecisionContext::enterRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<HybridAutomatonListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->enterPrecision(this);
+}
+
+void HybridAutomatonParser::PrecisionContext::exitRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<HybridAutomatonListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->exitPrecision(this);
 }
 
 HybridAutomatonParser::PrecisionContext* HybridAutomatonParser::precision() {

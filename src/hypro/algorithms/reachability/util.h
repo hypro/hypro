@@ -72,6 +72,9 @@ template <typename Number, typename State>
 std::vector<Box<Number>> errorBoxes(const Number& delta, const matrix_t<Number>& flow, const State& initialSet,
                                            const matrix_t<Number>& trafoMatrix, const Box<Number>& externalInput)
 {
+	if(initialSet.isEmpty()) {
+		return std::vector<Box<Number>>{};
+	}
     (void) externalInput;
     std::vector<Box<Number>> res;
     unsigned dim = flow.cols();
@@ -85,21 +88,26 @@ std::vector<Box<Number>> errorBoxes(const Number& delta, const matrix_t<Number>&
     matrixBlock = delta * matrixBlock;
     //std::cout << "delta*MatrixBlock: " << matrixBlock << std::endl;
     matrix_t<double> convertedBlock = convert<Number, double>(matrixBlock);
-    // std::cout << "MatrixBlock: " << std::endl << convertedBlock << std::endl;
+    //std::cout << "MatrixBlock: " << std::endl << convertedBlock << std::endl;
     convertedBlock = convertedBlock.exp();
-    // std::cout << "exp(MatrixBlock): " << std::endl << convertedBlock << std::endl;
+    //std::cout << "exp(MatrixBlock): " << std::endl << convertedBlock << std::endl;
     matrixBlock = convert<double, Number>(convertedBlock);
 
     // TODO: Introduce better variable naming!
     matrix_t<Number> tmpMatrix = flow * (matrix_t<Number>::Identity(dim, dim) - trafoMatrix);
     // std::cout << "Flow: " << flow << std::endl << "trafoMatrix: " << trafoMatrix << std::endl;
-    // std::cout << __func__ << " TmpMtrix: " << std::endl << tmpMatrix << std::endl;
+    //std::cout << __func__ << " TmpMtrix: " << std::endl << tmpMatrix << std::endl;
     // assert(tmpMatrix.row(dim-1).nonZeros() == 0);
     State transformedInitialSet =
           initialSet.affineTransformation(matrix_t<Number>(tmpMatrix.block(0, 0, dim - 1, dim - 1)),
                                                                                vector_t<Number>(tmpMatrix.block(0, dim - 1, dim - 1, 1)));
     auto b1 = boost::get<Box<Number>>( boost::apply_visitor( genericConversionVisitor<typename State::repVariant,Number>(representation_name::box), transformedInitialSet.getSet(0)));
+    if(b1.empty()) {
+    	return std::vector<Box<Number>>{};
+    }
+
     // augment b1 by a dimension for the constant parts.
+    //std::cout << "B1: " << b1 << std::endl;
     vector_t<Number> augmentedUpperLimit = vector_t<Number>::Ones(b1.max().dimension() + 1);
     augmentedUpperLimit.block(0, 0, dim - 1, 1) = b1.max().rawCoordinates();
     vector_t<Number> augmentedLowerLimit = vector_t<Number>::Ones(b1.min().dimension() + 1);

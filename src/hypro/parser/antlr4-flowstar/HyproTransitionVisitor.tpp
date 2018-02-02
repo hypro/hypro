@@ -51,10 +51,10 @@ namespace hypro {
 		} else {
 			t->setUrgent(false);
 		}
-		
+
 		//3.Collect Guards
 		if(ctx->guard().size() > 1){
-			std::cout << "WARNING: Please refrain from entering multiple guard constraints via several guard spaces.\n"; 
+			std::cout << "WARNING: Please refrain from entering multiple guard constraints via several guard spaces.\n";
 			std::cout << "Typing one guard space of the form 'guard { constraint1 constraint2 ... }' is sufficient.\n";
 			std::cout << "The guards have not been parsed.\n";
 		}
@@ -62,10 +62,10 @@ namespace hypro {
 			Condition<Number> inv = visit(ctx->guard()[0]);
 			t->setGuard(inv);
 		}
-		
+
 		//4.Collect Resets
 		if(ctx->resetfct().size() > 1){
-			std::cout << "WARNING: Please refrain from entering multiple reset allocations via several reset spaces.\n"; 
+			std::cout << "WARNING: Please refrain from entering multiple reset allocations via several reset spaces.\n";
 			std::cout << "Typing one reset space of the form 'reset { allocation1 allocation2 ... }' is sufficient.\n";
 			std::cout << "The resets have not been parsed.\n";
 		}
@@ -73,7 +73,7 @@ namespace hypro {
 			Reset<Number> reset = visit(ctx->resetfct()[0]);
 			t->setReset(reset);
 		}
-		
+
 		//5.Collect Aggregation
 		if(ctx->aggregation().size() > 1){
 			std::cerr << "ERROR: Multiple aggregation types specified for one transition." << std::endl;
@@ -93,7 +93,7 @@ namespace hypro {
 			}
 			t->setLabels(ls);
 		}
-		
+
 		return t;
 	}
 
@@ -131,7 +131,7 @@ namespace hypro {
 		//1.Call HyproFormulaVisitor and get pair of matrix and vector if constrset exists
 		if(ctx->constrset() != NULL){
 			HyproFormulaVisitor<Number> visitor(vars);
-			std::pair<matrix_t<Number>,vector_t<Number>> result = visitor.visit(ctx->constrset());	
+			std::pair<matrix_t<Number>,vector_t<Number>> result = visitor.visit(ctx->constrset());
 			Condition<Number> inv;
 			inv.setMatrix(result.first);
 			inv.setVector(result.second);
@@ -195,9 +195,9 @@ namespace hypro {
 			resetMatrix.row(valuesNPos.second) = valuesNPos.first.head(vars.size());
 			resetVector(valuesNPos.second) = valuesNPos.first(valuesNPos.first.rows()-1);
 		}
-		if(resetMatrix == matrix_t<Number>::Zero(vars.size(), vars.size())){
-			resetMatrix = matrix_t<Number>::Identity(vars.size(), vars.size());
-		}
+		//if(resetMatrix == matrix_t<Number>::Zero(vars.size(), vars.size())){
+		//	resetMatrix = matrix_t<Number>::Identity(vars.size(), vars.size());
+		//}
 		//std::cout << "---- resetMatrix:\n" << resetMatrix << "\n and resetVector:\n" << resetVector << std::endl;
 
 		//2.return a Reset - 0 in the setter arguments is for the position within the vector of ConstraintSets
