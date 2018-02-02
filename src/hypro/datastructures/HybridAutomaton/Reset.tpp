@@ -4,6 +4,7 @@ namespace hypro {
 
 	template<typename Number>
 	Reset<Number>::Reset(const matrix_t<Number>& mat, const vector_t<Number>& vec) {
+		assert(mat.rows() == mat.cols());
 		mResets.emplace_back(mat,vec);
 	}
 
@@ -17,6 +18,7 @@ namespace hypro {
 
 	template<typename Number>
 	void Reset<Number>::setMatrix(const matrix_t<Number>& in, std::size_t I) {
+		assert(in.rows() == in.cols());
 		while (mResets.size() < I+1) {
 			mResets.push_back(ConstraintSet<Number>());
 		}
@@ -32,6 +34,17 @@ namespace hypro {
 			return inState;
 		}
 		return inState.applyTransformation(mResets);
+	}
+
+	template<typename Number>
+	bool Reset<Number>::isIdentity() const {
+		for(const auto& cset : mResets) {
+			if( cset.matrix() != matrix_t<Number>::Identity(cset.matrix().rows(),cset.matrix().rows())
+				|| cset.vector() != vector_t<Number>::Zero(cset.vector().rows()) ) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 	template<typename Number>

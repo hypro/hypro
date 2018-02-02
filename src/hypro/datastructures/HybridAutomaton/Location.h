@@ -124,7 +124,7 @@ Location<Number>* parallelCompose(const Location<Number>* lhs
 								, const std::vector<std::string>& haVar)
 {
 	//compute flow
-	matrix_t<Number> haFlow = matrix_t<Number>::Zero(haVar.size(), haVar.size());
+	matrix_t<Number> haFlow = matrix_t<Number>::Zero(haVar.size()+1, haVar.size()+1);
 
 	std::cout << "combine Locations " << lhs->getName() << " and " << rhs->getName() << std::endl;
 

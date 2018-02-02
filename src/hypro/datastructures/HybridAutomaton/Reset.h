@@ -37,6 +37,8 @@ public:
 	template<typename Representation, typename ...Rargs>
 	State<Number,Representation,Rargs...> applyReset(const State<Number,Representation,Rargs...>& inState) const;
 
+	bool isIdentity() const;
+
 #ifdef HYPRO_LOGGING
     friend std::ostream& operator<<(std::ostream& ostr, const Reset<Number>& a)
 #else

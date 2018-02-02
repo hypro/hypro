@@ -221,6 +221,15 @@ class HybridAutomaton
         }
       }
 
+      // non-synchronizing transitions in each component
+      for(const auto lhsT: lhs.getTransitions()) {
+      		if(lhsT->getLabels().empty()) {
+      			for(const auto loc : rhs.getLocations()) {
+      				Transition<Number>* tmp = new Transition<Number>(loc,loc);
+      			}
+      		}
+      }
+
 
 
       // set initial states (//std:multimap<const Location<Number>*, State>;)
@@ -235,7 +244,7 @@ class HybridAutomaton
       //localBadstates
       //globalBAdstates
 
-      return ha; //std::move???
+      return ha; //std::move??? -> no, prevents copy-elision!
     }
 
     /**

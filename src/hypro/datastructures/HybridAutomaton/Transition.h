@@ -106,6 +106,7 @@ class Transition
     Number getTriggerTime() const { return mTriggerTime; }
     bool isUrgent() const { return mUrgent; }
     bool isTimeTriggered() const { return mTriggerTime >= 0; }
+    bool hasIdentityReset() const { return mReset.isIdentity(); }
     std::set<Label> getLabels() const { return mLabels; }
 
     void setSource(Location<Number>* source) { mSource = source; }
@@ -121,31 +122,37 @@ class Transition
     std::string getDotRepresentation(const std::vector<std::string>& vars) const {
     	std::stringstream o;
     	o << this->getSource()->getId() << " -> " << this->getTarget()->getId();
-    	o << "[label=< <TABLE>";
-    	// guard
-		o << mGuard.getDotRepresentation(vars);
-		// reset
-		if(mReset.size() > 0) {
-			const matrix_t<Number>& reset = mReset.getMatrix();
-			std::cout << "Reset matrix: " << reset << std::endl;
-			o << "<TR><TD ROWSPAN=\"" << reset.rows() << "\">";
-			for(unsigned i = 0; i < reset.rows(); ++i) {
-				o << vars[i] << "' = ";
-				bool allZero = true;
-				for(unsigned j = 0; j < reset.cols(); ++j) {
-					if(reset(i,j) != 0) {
-						o << reset(i,j) << "*" << vars[j] << " + ";
-						allZero = false;
+    	if(getLabels().size() != 0 || (mReset.size() > 0 && !mReset.isIdentity()) || mGuard.size() != 0) {
+    		o << "[label=< <TABLE>";
+	    	// sync labels
+	    	for(const auto& l : getLabels()) {
+	    		o << "<TR><TD>" << l << "</TD></TR>";
+	    	}
+	    	// guard
+			o << mGuard.getDotRepresentation(vars);
+			// reset
+			if(mReset.size() > 0 && !mReset.isIdentity()) {
+				const matrix_t<Number>& reset = mReset.getMatrix();
+				o << "<TR><TD ROWSPAN=\"" << reset.rows() << "\">";
+				for(unsigned i = 0; i < reset.rows(); ++i) {
+					o << vars[i] << "' = ";
+					bool allZero = true;
+					for(unsigned j = 0; j < reset.cols(); ++j) {
+						if(reset(i,j) != 0) {
+							o << reset(i,j) << "*" << vars[j] << " + ";
+							allZero = false;
+						}
 					}
+					if(mReset.getVector()(i) != 0 || allZero) o << " + " << mReset.getVector()(i);
+					if(i < reset.rows() -1)
+						o << "<BR/>";
 				}
-				if(mReset.getVector()(i) != 0) o << " + " << mReset.getVector()(i);
-				if(i < reset.rows() -1)
-					o << "<BR/>";
+				o << "</TD>";
+				o << "</TR>";
 			}
-			o << "</TD>";
-			o << "</TR>";
-		}
-    	o << "</TABLE>>];\n";
+	    	o << "</TABLE>>];";
+    	}
+    	o << "\n";
     	return o.str();
     }
 
@@ -242,6 +249,8 @@ Transition<Number>* parallelCompose(const Transition<Number>* lhsT
     }
     for(const auto& varTuple : sharedVars) {
     	for(const auto& other : sharedVars) {
+    		assert(lhsT->getReset().size() != 0);
+    		assert(rhsT->getReset().size() != 0);
     		if(lhsT->getReset().getMatrix()(varTuple.second.first,other.second.first) != rhsT->getReset().getMatrix()(varTuple.second.second,other.second.second)
     			|| lhsT->getReset().getVector()(varTuple.second.first) != rhsT->getReset().getVector()(varTuple.second.second) ) {
     			delete t;

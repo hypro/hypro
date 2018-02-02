@@ -5,7 +5,7 @@
 using namespace hypro;
 
 static const int firingThreshold = 1;
-static const double alpha = 0.1;
+static const double alpha = 1.1;
 
 template<typename Number>
 HybridAutomaton<Number> createComponent1(unsigned i) {
@@ -55,11 +55,11 @@ HybridAutomaton<Number> createComponent1(unsigned i) {
 	M adaptFlow = M::Zero(dim+1,dim+1);
 	adapt->setFlow(adaptFlow);
 
-	M adaptInvariant = M::Zero(2,dim);
-	adaptInvariant(0,0) = 1;
-	adaptInvariant(1,0) = -1;
-	V adaptInvConsts = V::Zero(2);
-	adapt->setInvariant(Condition<Number>{adaptInvariant, adaptInvConsts});
+	//M adaptInvariant = M::Zero(2,dim);
+	//adaptInvariant(0,0) = 1;
+	//adaptInvariant(1,0) = -1;
+	//V adaptInvConsts = V::Zero(2);
+	//adapt->setInvariant(Condition<Number>{adaptInvariant, adaptInvConsts});
 	res.addLocation(adapt);
 
 	// flash
@@ -79,6 +79,7 @@ HybridAutomaton<Number> createComponent1(unsigned i) {
 	res.addLocation(flash);
 
 	// execFlash
+	/*
 	Lpt execFlash = manager.create();
 	st.str(std::string());
 	st << "execFlash_" << i;
@@ -93,6 +94,7 @@ HybridAutomaton<Number> createComponent1(unsigned i) {
 	V execFlashInvConsts = V::Zero(2);
 	execFlash->setInvariant(Condition<Number>{execFlashInvariant, execFlashInvConsts});
 	res.addLocation(execFlash);
+	*/
 
 	// transitions
 	// to flash
@@ -113,41 +115,46 @@ HybridAutomaton<Number> createComponent1(unsigned i) {
 	res.addTransition(toFlash);
 
 	// to execFlash
-	Tpt toExecFlash = new Transition<Number>(flash,execFlash);
+	Tpt flashLoop = new Transition<Number>(flash,flash);
 	guardConstraints = M::Zero(2,dim);
 	guardConstraints(0,1) = 1;
 	guardConstraints(1,1) = -1;
 	guardConstants = V::Zero(2);
 	guardConstants << 1,-1;
-	toExecFlash->setGuard(Condition<Number>{guardConstraints,guardConstants});
+	flashLoop->setGuard(Condition<Number>{guardConstraints,guardConstants});
 
-	resetMat = M::Zero(dim,dim);
+	resetMat = M::Identity(dim,dim);
+	resetMat(1,1) = 0;
 	resetVec = V::Zero(dim);
-	resetVec(1) = 1;
-	toExecFlash->setReset(Reset<Number>(resetMat,resetVec));
-	toExecFlash->setUrgent();
-	toExecFlash->addLabel(Label{"flash"});
+	flashLoop->setReset(Reset<Number>(resetMat,resetVec));
+	flashLoop->setUrgent();
+	//flashLoop->addLabel(Label{"flash"});
 
-	wait->addTransition(toExecFlash);
-	res.addTransition(toExecFlash);
+	flash->addTransition(flashLoop);
+	res.addTransition(flashLoop);
 
 	// back to flash
+	/*
 	Tpt reFlash = new Transition<Number>(execFlash,flash);
-	guardConstraints = M::Zero(2,dim);
-	guardConstraints(0,1) = 1;
-	guardConstraints(1,1) = -1;
-	guardConstants = V::Zero(2);
-	guardConstants << 1,-1;
-	reFlash->setGuard(Condition<Number>{guardConstraints,guardConstants});
 
-	resetMat = M::Zero(dim,dim);
+	resetMat = M::Identity(dim,dim);
 	resetVec = V::Zero(dim);
-	resetVec(1) = 0;
 	reFlash->setReset(Reset<Number>(resetMat,resetVec));
 	reFlash->setUrgent();
 
-	wait->addTransition(reFlash);
+	execFlash->addTransition(reFlash);
 	res.addTransition(reFlash);
+	*/
+
+	// waitLoop
+	Tpt waitLoop = new Transition<Number>(wait,wait);
+	resetMat = M::Identity(dim,dim);
+	resetVec = V::Zero(dim);
+	waitLoop->setReset(Reset<Number>(resetMat,resetVec));
+	waitLoop->setUrgent();
+
+	wait->addTransition(waitLoop);
+	res.addTransition(waitLoop);
 
 	// back to wait
 	Tpt reWait = new Transition<Number>(flash,wait);
@@ -156,7 +163,7 @@ HybridAutomaton<Number> createComponent1(unsigned i) {
 	reWait->setReset(Reset<Number>(resetMat,resetVec));
 	reWait->setUrgent();
 
-	wait->addTransition(reWait);
+	flash->addTransition(reWait);
 	res.addTransition(reWait);
 
 	// to adapt
@@ -167,12 +174,12 @@ HybridAutomaton<Number> createComponent1(unsigned i) {
 	guardConstraints(2,0) = 1;
 	guardConstants = V::Zero(3);
 	guardConstants << 1,-1,Number(firingThreshold);
-	reFlash->setGuard(Condition<Number>{guardConstraints,guardConstants});
+	toAdapt->setGuard(Condition<Number>{guardConstraints,guardConstants});
 	resetMat = M::Identity(dim,dim);
 	resetMat(0,0) = Number(alpha);
 	resetVec = V::Zero(dim);
 	toAdapt->setReset(Reset<Number>(resetMat,resetVec));
-	toAdapt->addLabel({"flash"});
+	//toAdapt->addLabel({"flash"});
 
 	wait->addTransition(toAdapt);
 	res.addTransition(toAdapt);
@@ -184,6 +191,10 @@ HybridAutomaton<Number> createComponent1(unsigned i) {
 	guardConstants = V::Zero(1);
 	guardConstants << Number(firingThreshold);
 	fromAdaptRegular->setGuard(Condition<Number>{guardConstraints,guardConstants});
+	resetMat = M::Identity(dim,dim);
+	resetVec = V::Zero(dim);
+	fromAdaptRegular->setReset(Reset<Number>(resetMat,resetVec));
+	//fromAdaptRegular->addLabel(Label{"flash"});
 
 	adapt->addTransition(fromAdaptRegular);
 	res.addTransition(fromAdaptRegular);
@@ -195,6 +206,7 @@ HybridAutomaton<Number> createComponent1(unsigned i) {
 	guardConstants = V::Zero(1);
 	guardConstants << Number(-firingThreshold);
 	fromAdaptScale->setGuard(Condition<Number>{guardConstraints,guardConstants});
+	//fromAdaptScale->addLabel(Label{"flash"});
 
 	resetMat = M::Identity(dim,dim);
 	resetMat(0,0) = 0;
@@ -226,6 +238,10 @@ int main(int argc, char** argv) {
 	LockedFileWriter out{"parallelHa.dot"};
 	out.clearFile();
 	out << composed.getDotRepresentation();
+
+	LockedFileWriter out2{"singleHa.dot"};
+	out2.clearFile();
+	out2 << ha1.getDotRepresentation();
 
 	return 0;
 }

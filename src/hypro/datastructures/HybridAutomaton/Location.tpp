@@ -51,7 +51,7 @@ std::string Location<Number>::getDotRepresentation(const std::vector<std::string
 	// flow
 	matrix_t<Number>& flow = *mFlows.begin();
 	o << "<TR><TD ROWSPAN=\"" << flow.rows() << "\">";
-	for(unsigned i = 0; i < flow.rows(); ++i) {
+	for(unsigned i = 0; i < flow.rows()-1; ++i) {
 		o << vars[i] << "' = ";
 		bool allZero = true;
 		for(unsigned j = 0; j < flow.cols() -1; ++j) {
