@@ -128,7 +128,7 @@ HybridAutomaton<Number> createComponent1(unsigned i) {
 	resetVec = V::Zero(dim);
 	flashLoop->setReset(Reset<Number>(resetMat,resetVec));
 	flashLoop->setUrgent();
-	//flashLoop->addLabel(Label{"flash"});
+	flashLoop->addLabel(Label{"flash"});
 
 	flash->addTransition(flashLoop);
 	res.addTransition(flashLoop);
@@ -146,20 +146,16 @@ HybridAutomaton<Number> createComponent1(unsigned i) {
 	res.addTransition(reFlash);
 	*/
 
-	// waitLoop
-	Tpt waitLoop = new Transition<Number>(wait,wait);
-	resetMat = M::Identity(dim,dim);
-	resetVec = V::Zero(dim);
-	waitLoop->setReset(Reset<Number>(resetMat,resetVec));
-	waitLoop->setUrgent();
-
-	wait->addTransition(waitLoop);
-	res.addTransition(waitLoop);
-
 	// back to wait
 	Tpt reWait = new Transition<Number>(flash,wait);
+	guardConstraints = M::Zero(2,dim);
+	guardConstraints(0,1) = 1;
+	guardConstraints(1,1) = -1;
+	guardConstants = V::Zero(2);
+	reWait->setGuard(Condition<Number>{guardConstraints,guardConstants});
 	resetMat = M::Identity(dim,dim);
 	resetVec = V::Zero(dim);
+	reWait->addLabel({"return"});
 	reWait->setReset(Reset<Number>(resetMat,resetVec));
 	reWait->setUrgent();
 
@@ -179,7 +175,7 @@ HybridAutomaton<Number> createComponent1(unsigned i) {
 	resetMat(0,0) = Number(alpha);
 	resetVec = V::Zero(dim);
 	toAdapt->setReset(Reset<Number>(resetMat,resetVec));
-	//toAdapt->addLabel({"flash"});
+	toAdapt->addLabel({"flash"});
 
 	wait->addTransition(toAdapt);
 	res.addTransition(toAdapt);
@@ -194,7 +190,7 @@ HybridAutomaton<Number> createComponent1(unsigned i) {
 	resetMat = M::Identity(dim,dim);
 	resetVec = V::Zero(dim);
 	fromAdaptRegular->setReset(Reset<Number>(resetMat,resetVec));
-	//fromAdaptRegular->addLabel(Label{"flash"});
+	fromAdaptRegular->addLabel(Label{"return"});
 
 	adapt->addTransition(fromAdaptRegular);
 	res.addTransition(fromAdaptRegular);

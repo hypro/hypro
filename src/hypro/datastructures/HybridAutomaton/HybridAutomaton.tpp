@@ -15,6 +15,7 @@ Location<Number>* HybridAutomaton<Number,State>::getLocation(std::size_t id) con
 
 template<typename Number, typename State>
 Location<Number>* HybridAutomaton<Number,State>::getLocation(const std::string& name) const {
+	std::cout << "Try to get location \"" << name << "\"." << std::endl;
 	for(const auto loc : mLocations) {
 		if(loc->getName() == name) {
 			return loc;
@@ -46,7 +47,37 @@ const std::set<Label> HybridAutomaton<Number,State>::getLabels() const {
 
 template<typename Number, typename State>
 void HybridAutomaton<Number,State>::reduce() {
-
+	bool changed = true;
+	while(changed) {
+		changed = false;
+		for(auto locIt = mLocations.begin(); locIt != mLocations.end(); ) {
+			// non-initial locations
+			if(mInitialStates.find(*locIt) == mInitialStates.end()) {
+				// check for being a target
+				bool isTarget = false;
+				for(auto t : mTransitions) {
+					if(t->getTarget() == *locIt) {
+						isTarget = true;
+						break;
+					}
+				}
+				// the location is discretely not reachable -> remove all outgoing transitions and then the location itself.
+				if(!isTarget) {
+					changed = true;
+					for(auto t = mTransitions.begin(); t != mTransitions.end(); ) {
+						if((*t)->getSource() == *locIt) {
+							t = mTransitions.erase(t);
+						} else {
+							++t;
+						}
+					}
+					locIt = mLocations.erase(locIt);
+				} else {
+					++locIt;
+				}
+			}
+		}
+	}
 }
 
 template<typename Number, typename State>

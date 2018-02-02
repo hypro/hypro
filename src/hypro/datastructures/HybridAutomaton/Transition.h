@@ -262,6 +262,8 @@ Transition<Number>* parallelCompose(const Transition<Number>* lhsT
     //set target and source
     Location<Number>* source = ha.getLocation(lhsT->getSource()->getName()+'_'+rhsT->getSource()->getName());
     Location<Number>* target = ha.getLocation(lhsT->getTarget()->getName()+'_'+rhsT->getTarget()->getName());
+    assert(source != nullptr);
+    assert(target != nullptr);
     t->setTarget(target);
     t->setSource(source);
 
