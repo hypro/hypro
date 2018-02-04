@@ -173,6 +173,7 @@ HybridAutomaton<Number> createComponent1(unsigned i) {
 	toAdapt->setGuard(Condition<Number>{guardConstraints,guardConstants});
 	resetMat = M::Identity(dim,dim);
 	resetMat(0,0) = Number(alpha);
+	resetMat(1,1) = 0;
 	resetVec = V::Zero(dim);
 	toAdapt->setReset(Reset<Number>(resetMat,resetVec));
 	toAdapt->addLabel({"flash"});
@@ -229,6 +230,7 @@ int main(int argc, char** argv) {
 	HybridAutomaton<Number> ha2 = createComponent1<Number>(2);
 	HybridAutomaton<Number> composed = ha1||ha2;
 
+	std::cout << "################################################" << std::endl;
 	std::cout << "Result: " << std::endl << composed << std::endl;
 
 	LockedFileWriter out{"parallelHa.dot"};

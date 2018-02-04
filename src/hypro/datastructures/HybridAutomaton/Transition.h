@@ -253,6 +253,7 @@ Transition<Number>* parallelCompose(const Transition<Number>* lhsT
     		assert(rhsT->getReset().size() != 0);
     		if(lhsT->getReset().getMatrix()(varTuple.second.first,other.second.first) != rhsT->getReset().getMatrix()(varTuple.second.second,other.second.second)
     			|| lhsT->getReset().getVector()(varTuple.second.first) != rhsT->getReset().getVector()(varTuple.second.second) ) {
+    			std::cout << "Delete." << std::endl;
     			delete t;
     			return nullptr;
     		}

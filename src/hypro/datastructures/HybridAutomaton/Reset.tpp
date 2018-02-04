@@ -66,8 +66,8 @@ namespace hypro {
 		} else {
 			assert(lhs.size() != 0);
 			assert(rhs.size() != 0);
-			std::cout << "Default." << std::endl;
-			std::cout << "Combine: " << lhs.getMatrix() << " and " << rhs.getMatrix() << std::endl;
+			//std::cout << "Default." << std::endl;
+			//std::cout << "Combine: " << lhs.getMatrix() << " and " << rhs.getMatrix() << std::endl;
 			// Todo: This is a corrected, yet ineffective method. Improve!
 			newMat = matrix_t<Number>::Zero(haVar.size(), haVar.size());
 			newVec = vector_t<Number>::Zero(haVar.size());
@@ -75,18 +75,18 @@ namespace hypro {
 			bool admissible = true; // flag used to denote a non-admissible flow, i.e. shared variables with different flow.
 			// iterate over all rows
 			for( std::size_t rowI = 0; rowI != haVar.size(); ++rowI ) {
-				std::cout << "Consider composed row " << rowI << " for var " << haVar[rowI] << std::endl;
-				std::cout << "lhsIR: " << lhsIR << std::endl;
-				std::cout << "rhsIR: " << rhsIR << std::endl;
-				std::cout << "Now left hand side." << std::endl;
+				//std::cout << "Consider composed row " << rowI << " for var " << haVar[rowI] << std::endl;
+				//std::cout << "lhsIR: " << lhsIR << std::endl;
+				//std::cout << "rhsIR: " << rhsIR << std::endl;
+				//std::cout << "Now left hand side." << std::endl;
 				if(lhsIR < lhsVar.size() && lhsVar[lhsIR] == haVar[rowI]) {
 					newVec(rowI) = lhs.getVector()(lhsIR);
 					// iterate over all columns
 					lhsIC = 0;
 					for( std::size_t colI = 0; colI != haVar.size(); ++colI) {
-						std::cout << "Consider composed col " << colI << " for var " << haVar[colI] << std::endl;
-						std::cout << "lhsIC: " << lhsIC << std::endl;
-						std::cout << "rhsIC: " << rhsIC << std::endl;
+						//std::cout << "Consider composed col " << colI << " for var " << haVar[colI] << std::endl;
+						//std::cout << "lhsIC: " << lhsIC << std::endl;
+						//std::cout << "rhsIC: " << rhsIC << std::endl;
 						if(lhsVar[lhsIC] == haVar[colI]) {
 							newMat(rowI,colI) = lhs.getMatrix()(lhsIR,lhsIC);
 							++lhsIC;
@@ -97,21 +97,21 @@ namespace hypro {
 					}
 					++lhsIR;
 				}
-				std::cout << "lhsIR: " << lhsIR << std::endl;
-				std::cout << "intermediate result: " << newMat << std::endl;
-				std::cout << "Now right hand side." << std::endl;
+				//std::cout << "lhsIR: " << lhsIR << std::endl;
+				//std::cout << "intermediate result: " << newMat << std::endl;
+				//std::cout << "Now right hand side." << std::endl;
 				if(rhsIR < rhsVar.size() && rhsVar[rhsIR] == haVar[rowI]) {
 					newVec(rowI) = rhs.getVector()(rhsIR);
 					// iterate over all columns
 					rhsIC = 0;
 					for( std::size_t colI = 0; colI != haVar.size(); ++colI) {
-						std::cout << "Consider composed col " << colI << " for var " << haVar[colI] << std::endl;
-						std::cout << "lhsIC: " << lhsIC << std::endl;
-						std::cout << "rhsIC: " << rhsIC << std::endl;
+						//std::cout << "Consider composed col " << colI << " for var " << haVar[colI] << std::endl;
+						//std::cout << "lhsIC: " << lhsIC << std::endl;
+						//std::cout << "rhsIC: " << rhsIC << std::endl;
 						if(rhsVar[rhsIC] == haVar[colI]) {
 							// TODO: the check is not entirely correct, since the flow can be non-admissible but set to 0 in lhs and something != 0 in rhs.
 							if(newMat(rowI,colI) != 0 && rhs.getMatrix()(rhsIR,rhsIC) != newMat(rowI,colI)) {
-								std::cout << "Attention, try to set " << rowI << "," << colI << " to " << rhs.getMatrix()(rhsIR,rhsIC) << " which already is set to " << newMat(rowI,colI);
+								//std::cout << "Attention, try to set " << rowI << "," << colI << " to " << rhs.getMatrix()(rhsIR,rhsIC) << " which already is set to " << newMat(rowI,colI);
 								admissible = false;
 								break;
 							}
@@ -124,7 +124,7 @@ namespace hypro {
 					}
 					++rhsIR;
 				}
-				std::cout << "rhsIR: " << rhsIR << std::endl;
+				//std::cout << "rhsIR: " << rhsIR << std::endl;
 				if(!admissible)
 					break;
 			}

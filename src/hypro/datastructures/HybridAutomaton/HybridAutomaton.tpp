@@ -15,7 +15,6 @@ Location<Number>* HybridAutomaton<Number,State>::getLocation(std::size_t id) con
 
 template<typename Number, typename State>
 Location<Number>* HybridAutomaton<Number,State>::getLocation(const std::string& name) const {
-	std::cout << "Try to get location \"" << name << "\"." << std::endl;
 	for(const auto loc : mLocations) {
 		if(loc->getName() == name) {
 			return loc;
@@ -66,11 +65,13 @@ void HybridAutomaton<Number,State>::reduce() {
 					changed = true;
 					for(auto t = mTransitions.begin(); t != mTransitions.end(); ) {
 						if((*t)->getSource() == *locIt) {
+							std::cout << __func__ << ": remove transition " << (*t)->getSource()->getName() << " -> " << (*t)->getTarget()->getName() << std::endl;
 							t = mTransitions.erase(t);
 						} else {
 							++t;
 						}
 					}
+					std::cout << __func__ << ": remove unreachable location " << (*locIt)->getName() << std::endl;
 					locIt = mLocations.erase(locIt);
 				} else {
 					++locIt;
