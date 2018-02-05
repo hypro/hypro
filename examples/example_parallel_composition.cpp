@@ -1,4 +1,5 @@
 #include "datastructures/HybridAutomaton/HybridAutomaton.h"
+#include "datastructures/HybridAutomaton/output/Flowstar.h"
 #include "util/multithreading/Filewriter.h"
 #include <iostream>
 
@@ -240,6 +241,10 @@ int main(int argc, char** argv) {
 	LockedFileWriter out2{"singleHa.dot"};
 	out2.clearFile();
 	out2 << ha1.getDotRepresentation();
+
+	LockedFileWriter flowstar("composed.model");
+	out.clearFile();
+	out << toFlowstarFormat(composed);
 
 	return 0;
 }
