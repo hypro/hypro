@@ -370,7 +370,7 @@ namespace hypro {
 		const matrix_t<Number> lhsMatrix, const matrix_t<Number> rhsMatrix,
 		const std::vector<std::string> haVar, const std::vector<std::string> lhsVar, const std::vector<std::string> rhsVar) {
 
-		std::cout << "Combine " << lhsMatrix << " and " << rhsMatrix << std::endl;
+		//std::cout << "Combine " << lhsMatrix << " and " << rhsMatrix << std::endl;
 
 		size_t lhsRows = lhsMatrix.rows();
 		size_t rhsRows = rhsMatrix.rows();
@@ -404,7 +404,7 @@ namespace hypro {
 			}
 		  }
 
-		std::cout << "Result: " << tmpMatrix << std::endl;
+		//std::cout << "Result: " << tmpMatrix << std::endl;
 		return tmpMatrix;
 	}
 
