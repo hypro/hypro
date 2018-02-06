@@ -11,7 +11,7 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
 		VertexContainerTest.cpp
 		StateTest.cpp
 		HybridAutomataTest.cpp
-		HybridAutomataParallelCompositionTest.cpp
+		#HybridAutomataParallelCompositionTest.cpp
 	)
 
 	add_dependencies(runDatastructureTests googletest)
