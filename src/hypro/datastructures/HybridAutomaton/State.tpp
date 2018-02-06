@@ -321,10 +321,12 @@ void State<Number,tNumber,Representation,Rargs...>::partiallyRemoveRedundancy(st
 template<typename Number, typename tNumber, typename Representation, typename ...Rargs>
 bool State<Number,tNumber,Representation,Rargs...>::checkConsistency() const {
 	if(mSets.size() != mTypes.size()){
+		std::cout << "Inconsistent size!" << std::endl;
 		return false;
 	}
 	for(std::size_t i=0; i < mSets.size(); i++){
 		if(mTypes.at(i) != boost::apply_visitor(genericTypeVisitor(), mSets.at(i))){
+			std::cout << "Types do not match (expected: " << mTypes.at(i) << ", is: " << boost::apply_visitor(genericTypeVisitor(), mSets.at(i)) << ")" << std::endl;
 			return false;
 		}
 	}
