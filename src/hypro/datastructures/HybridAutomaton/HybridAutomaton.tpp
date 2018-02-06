@@ -76,6 +76,8 @@ void HybridAutomaton<Number,State>::reduce() {
 				} else {
 					++locIt;
 				}
+			} else {
+				++locIt;
 			}
 		}
 	}

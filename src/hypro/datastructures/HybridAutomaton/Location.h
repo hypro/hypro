@@ -182,6 +182,57 @@ Location<Number>* parallelCompose(const Location<Number>* lhs
 		if(!admissible)
 			break;
 	}
+
+	// constant parts - TODO: integrate into loop above?
+	for(unsigned rowI = 0; rowI < haFlow.rows()-1; ++rowI) {
+		std::cout << "Constant part for var " << haVar[rowI] << std::endl;
+		unsigned lhsPos = 0;
+		unsigned rhsPos = 0;
+		bool leftFound = false;
+		bool rightFound = false;
+		while(lhsPos != lhsVar.size()) {
+			if(lhsVar[lhsPos] == haVar[rowI]) {
+				leftFound = true;
+				std::cout << "Found in lhs at pos " << lhsPos << std::endl;
+				break;
+			}
+			++lhsPos;
+		}
+
+		while(rhsPos != rhsVar.size()) {
+			if(rhsVar[rhsPos] == haVar[rowI]) {
+				std::cout << "Found in rhs at pos " << lhsPos << std::endl;
+				rightFound = true;
+				break;
+			}
+			++rhsPos;
+		}
+		if(leftFound) {
+			// if is shared variable
+			if(rightFound) {
+				if(lhs->getFlow()(lhsPos, lhs->getFlow().cols()-1) != rhs->getFlow()(rhsPos, rhs->getFlow().cols()-1)) {
+					admissible = false;
+					break;
+				} else {
+					haFlow(rowI,haFlow.cols()-1) = lhs->getFlow()(lhsPos, lhs->getFlow().cols()-1);
+					std::cout << "Set to " << haFlow(rowI,haFlow.cols()-1) << std::endl;
+				}
+			} else {
+				haFlow(rowI,haFlow.cols()-1) = lhs->getFlow()(lhsPos, lhs->getFlow().cols()-1);
+				std::cout << "Set to " << haFlow(rowI,haFlow.cols()-1) << std::endl;
+			}
+		} else {
+			if(rightFound) {
+				haFlow(rowI,haFlow.cols()-1) = rhs->getFlow()(rhsPos, rhs->getFlow().cols()-1);
+				std::cout << "Set to " << haFlow(rowI,haFlow.cols()-1) << std::endl;
+			} else {
+				std::cout << "Variable is neither part of lhs or rhs!" << std::endl;
+				assert(false);
+				admissible = false;
+			}
+		}
+	}
+
 	if(!admissible) {
 		return nullptr;
 	}

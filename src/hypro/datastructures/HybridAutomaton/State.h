@@ -443,7 +443,7 @@ State parallelCompose(
     State haInitState;
 
     // set location
-    std::string name = lhsInitState.getLocation()->getName()+","+rhsInitState.getLocation()->getName();
+    std::string name = lhsInitState.getLocation()->getName()+"_"+rhsInitState.getLocation()->getName();
     auto location = ha.getLocation(name);
     assert(location != NULL);
     haInitState.setLocation(location);

@@ -11,27 +11,29 @@ namespace hypro {
 								const std::string& prefix)
 	{
 		std::stringstream res;
-		for(Eigen::Index rowI = 0; rowI < in.getMatrix().rows(); ++rowI) {
-			res << prefix;
-			bool first = true;
-			for(Eigen::Index colI = 0; colI < in.getMatrix().cols(); ++colI) {
-				if(in.getMatrix()(rowI,colI) > 0) {
-					if(!first){
-						res << " +";
-					} else {
-						first = false;
+		if(in.size() > 0) {
+			for(Eigen::Index rowI = 0; rowI < in.getMatrix().rows(); ++rowI) {
+				res << prefix;
+				bool first = true;
+				for(Eigen::Index colI = 0; colI < in.getMatrix().cols(); ++colI) {
+					if(in.getMatrix()(rowI,colI) > 0) {
+						if(!first){
+							res << " +";
+						} else {
+							first = false;
+						}
+						if(in.getMatrix()(rowI,colI) != 1) {
+							res << in.getMatrix()(rowI,colI) << "*";
+						}
+					} else if(in.getMatrix()(rowI,colI) < 0) {
+						res << " " << in.getMatrix()(rowI,colI) << "*";
 					}
-					if(in.getMatrix()(rowI,colI) != 1) {
-						res << in.getMatrix()(rowI,colI) << "*";
+					if(in.getMatrix()(rowI,colI) != 0 && colI != in.getMatrix().cols() && varNameMap.size() > colI) {
+						res << varNameMap.at(colI);
 					}
-				} else if(in.getMatrix()(rowI,colI) < 0) {
-					res << " " << in.getMatrix()(rowI,colI) << "*";
 				}
-				if(in.getMatrix()(rowI,colI) != 0 && colI != in.getMatrix().cols() && varNameMap.size() > colI) {
-					res << varNameMap.at(colI);
-				}
+				res << " <= " << in.getVector()(rowI);
 			}
-			res << " <= " << in.getVector()(rowI);
 		}
 		return res.str();
 	}
@@ -72,6 +74,17 @@ namespace hypro {
 			if(in(0,colI) != 0 && colI != in.cols()-1) {
 				res << varNameMap.at(colI);
 			}
+			// const part
+			if(colI == in.cols()-1) {
+				if(first){
+					res << in(0,colI);
+				} else {
+					if(in(0,colI) < 0)
+						res << in(0,colI);
+					else
+						res << " + " << in(0,colI);
+				}
+			}
 		}
 		return res.str();
 	}
@@ -82,9 +95,11 @@ namespace hypro {
 								const std::string& prefix) {
 		std::stringstream out;
 		// location name
-		out << loc->getName();
+		out << prefix <<loc->getName();
 		out << prefix << "{";
 		if(varNameMap.size() > 0) {
+			std::cout << "Variables: " << varNameMap.size() << ", and flow rows: " << loc->getFlow().rows() << std::endl;
+			assert(varNameMap.size() == loc->getFlow().rows()-1);
 			// flow
 			out << prefix << "\tpoly ode 1";
 			out << prefix << "\t{";
@@ -119,13 +134,14 @@ namespace hypro {
 				// variables (note: the last dimension is for constants)
 				res << "\tstate var x_0";
 				vars[0] = "x_0";
-				for(std::size_t cnt = 1; cnt < in.dimension()-1; ++cnt) {
+				for(std::size_t cnt = 1; cnt < in.dimension(); ++cnt) {
 					res << ", x_" << cnt;
 					std::stringstream tmp;
 					tmp << "x_" << cnt;
 					vars[cnt] = tmp.str();
 				}
 				res << "\n";
+				std::cout << "Has " << vars.size() << " variables." << std::endl;
 			}
 
 			// Todo: add out-commented exemplary settings
@@ -159,6 +175,7 @@ namespace hypro {
 					if(transPtr->getAggregation()) {
 						res << "\n\t\tparallelotope aggregation {}";
 					}
+					res << "\n";
 				}
 				res << "\n\t}\n";
 			}
@@ -166,14 +183,14 @@ namespace hypro {
 			// initial states
 			res << "\tinit\n\t{";
 			for(const auto& s : in.getInitialStates() ) {
-				res << "\t\t" << s.first->getName();
+				res << "\n\t\t" << s.first->getName();
 				res << "\n\t\t{";
 				auto tmpConstraintSet = boost::get<ConstraintSet<Number>>(boost::apply_visitor(genericConversionVisitor<typename State_t<Number>::repVariant, Number>(representation_name::constraint_set), s.second.getSet()));
 				res << toFlowstarFormat(std::move(Condition<Number>(tmpConstraintSet.matrix(), tmpConstraintSet.vector())), vars, "\n\t\t\t" );
 				res << "\n\t\t}";
 			}
 
-			res << "\t}\n";
+			res << "\n\t}\n";
 
 			// bad states
 			res << "\tunsafe set\n\t{";
