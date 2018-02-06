@@ -126,7 +126,7 @@ Location<Number>* parallelCompose(const Location<Number>* lhs
 	//compute flow
 	matrix_t<Number> haFlow = matrix_t<Number>::Zero(haVar.size()+1, haVar.size()+1);
 
-	std::cout << "combine Locations " << lhs->getName() << " and " << rhs->getName() << std::endl;
+	//std::cout << "combine Locations " << lhs->getName() << " and " << rhs->getName() << std::endl;
 
 	std::size_t lhsIR = 0, lhsIC = 0, rhsIR = 0, rhsIC = 0;
 	bool admissible = true; // flag used to denote a non-admissible flow, i.e. shared variables with different flow.
@@ -185,7 +185,7 @@ Location<Number>* parallelCompose(const Location<Number>* lhs
 
 	// constant parts - TODO: integrate into loop above?
 	for(unsigned rowI = 0; rowI < haFlow.rows()-1; ++rowI) {
-		std::cout << "Constant part for var " << haVar[rowI] << std::endl;
+		//std::cout << "Constant part for var " << haVar[rowI] << std::endl;
 		unsigned lhsPos = 0;
 		unsigned rhsPos = 0;
 		bool leftFound = false;
@@ -193,7 +193,7 @@ Location<Number>* parallelCompose(const Location<Number>* lhs
 		while(lhsPos != lhsVar.size()) {
 			if(lhsVar[lhsPos] == haVar[rowI]) {
 				leftFound = true;
-				std::cout << "Found in lhs at pos " << lhsPos << std::endl;
+				//std::cout << "Found in lhs at pos " << lhsPos << std::endl;
 				break;
 			}
 			++lhsPos;
@@ -201,7 +201,7 @@ Location<Number>* parallelCompose(const Location<Number>* lhs
 
 		while(rhsPos != rhsVar.size()) {
 			if(rhsVar[rhsPos] == haVar[rowI]) {
-				std::cout << "Found in rhs at pos " << lhsPos << std::endl;
+				//std::cout << "Found in rhs at pos " << lhsPos << std::endl;
 				rightFound = true;
 				break;
 			}
@@ -215,18 +215,18 @@ Location<Number>* parallelCompose(const Location<Number>* lhs
 					break;
 				} else {
 					haFlow(rowI,haFlow.cols()-1) = lhs->getFlow()(lhsPos, lhs->getFlow().cols()-1);
-					std::cout << "Set to " << haFlow(rowI,haFlow.cols()-1) << std::endl;
+					//std::cout << "Set to " << haFlow(rowI,haFlow.cols()-1) << std::endl;
 				}
 			} else {
 				haFlow(rowI,haFlow.cols()-1) = lhs->getFlow()(lhsPos, lhs->getFlow().cols()-1);
-				std::cout << "Set to " << haFlow(rowI,haFlow.cols()-1) << std::endl;
+				//std::cout << "Set to " << haFlow(rowI,haFlow.cols()-1) << std::endl;
 			}
 		} else {
 			if(rightFound) {
 				haFlow(rowI,haFlow.cols()-1) = rhs->getFlow()(rhsPos, rhs->getFlow().cols()-1);
-				std::cout << "Set to " << haFlow(rowI,haFlow.cols()-1) << std::endl;
+				//std::cout << "Set to " << haFlow(rowI,haFlow.cols()-1) << std::endl;
 			} else {
-				std::cout << "Variable is neither part of lhs or rhs!" << std::endl;
+				//std::cout << "Variable is neither part of lhs or rhs!" << std::endl;
 				assert(false);
 				admissible = false;
 			}
@@ -242,7 +242,7 @@ Location<Number>* parallelCompose(const Location<Number>* lhs
 	//set name
 	res->setName(lhs->getName()+"_"+rhs->getName());
 
-	std::cout << "Created flow: " << haFlow << " for location " << res->getName();
+	//std::cout << "Created flow: " << haFlow << " for location " << res->getName();
 
 	res->setFlow(haFlow);
 
@@ -250,7 +250,7 @@ Location<Number>* parallelCompose(const Location<Number>* lhs
 	Condition<Number> inv = combine(lhs->getInvariant(), rhs->getInvariant(), haVar, lhsVar, rhsVar);
 	res->setInvariant(inv);
 
-	std::cout << "Created invariant: " << inv << " for location " << res->getName();
+	//std::cout << "Created invariant: " << inv << " for location " << res->getName();
 
 
 	//std::cout << "setExtInput" << std::endl;

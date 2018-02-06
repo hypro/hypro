@@ -65,13 +65,13 @@ void HybridAutomaton<Number,State>::reduce() {
 					changed = true;
 					for(auto t = mTransitions.begin(); t != mTransitions.end(); ) {
 						if((*t)->getSource() == *locIt) {
-							std::cout << __func__ << ": remove transition " << (*t)->getSource()->getName() << " -> " << (*t)->getTarget()->getName() << std::endl;
+							//std::cout << __func__ << ": remove transition " << (*t)->getSource()->getName() << " -> " << (*t)->getTarget()->getName() << std::endl;
 							t = mTransitions.erase(t);
 						} else {
 							++t;
 						}
 					}
-					std::cout << __func__ << ": remove unreachable location " << (*locIt)->getName() << std::endl;
+					//std::cout << __func__ << ": remove unreachable location " << (*locIt)->getName() << std::endl;
 					locIt = mLocations.erase(locIt);
 				} else {
 					++locIt;

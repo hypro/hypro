@@ -156,18 +156,18 @@ class HybridAutomaton
      * @return     Return parallel composition of two Automata.
      */
     friend HybridAutomaton<Number, State> operator||(const HybridAutomaton<Number, State>& lhs, const HybridAutomaton<Number, State>& rhs) {
-      std::cout << "||" << std::endl;
+      //std::cout << "||" << std::endl;
 
       HybridAutomaton<Number, State> ha;
 
       const variableVector& lhsVar = lhs.getVariables();
       const variableVector& rhsVar = rhs.getVariables();
-      std::cout << "lhs variables: ";
-      for(auto a : lhsVar) { std::cout << a << " "; }
-      std::cout << std::endl;
-      std::cout << "rhs variables: ";
-      for(auto a : rhsVar) { std::cout << a << " "; }
-      std::cout << std::endl;
+      //std::cout << "lhs variables: ";
+      //for(auto a : lhsVar) { std::cout << a << " "; }
+      //std::cout << std::endl;
+      //std::cout << "rhs variables: ";
+      //for(auto a : rhsVar) { std::cout << a << " "; }
+      //std::cout << std::endl;
 
       variableVector haVar;
       variableVector::size_type  i=0, j=0;
@@ -196,9 +196,9 @@ class HybridAutomaton
       }
       ha.setVariables(haVar);
 
-      std::cout << "Variables: ";
-      for(auto a : haVar) { std::cout << a << " "; }
-      std::cout << "locations & transisitons" << std::endl;
+      //std::cout << "Variables: ";
+      //for(auto a : haVar) { std::cout << a << " "; }
+      //std::cout << "locations & transisitons" << std::endl;
 
       for(const Location<Number>* locLhs : lhs.getLocations()) {
         for(const Location<Number>* locRhs : rhs.getLocations()) {
@@ -207,7 +207,7 @@ class HybridAutomaton
         }
       }
 
-      std::cout << "trans" << std::endl;
+      //std::cout << "trans" << std::endl;
       //build transisitons
       std::set<Label> lhsLabels = lhs.getLabels();
       std::set<Label> rhsLabels = rhs.getLabels();
@@ -225,15 +225,16 @@ class HybridAutomaton
       for(const auto lhsT: lhs.getTransitions()) {
       		if(lhsT->getLabels().empty()) {
       			for(const auto loc : rhs.getLocations()) {
-      				std::cout << "Potential transition " << lhsT->getSource()->getName() << "_" << loc->getName() << " -> " << lhsT->getTarget()->getName() << "_" << loc->getName() << std::endl;
+      				//std::cout << "Potential transition " << lhsT->getSource()->getName() << "_" << loc->getName() << " -> " << lhsT->getTarget()->getName() << "_" << loc->getName() << std::endl;
       				Transition<Number>* tmp = new Transition<Number>(loc,loc);
       				// TODO: temporary test -> fix!
       				//tmp->setReset(Reset<Number>(matrix_t<Number>::Identity(rhsVar.size(), rhsVar.size()), vector_t<Number>(rhsVar.size())));
       				tmp->setReset(lhsT->getReset());
+      				tmp->setAggregation(lhsT->getAggregation());
 
       				Transition<Number>* t = parallelCompose(lhsT, tmp, lhsVar, rhsVar, haVar, ha, lhsLabels, rhsLabels);
 			      	if(t) {
-			      		std::cout << "Add." << std::endl;
+			      		//std::cout << "Add." << std::endl;
 			            ha.addTransition(t);
 			            (t->getSource())->addTransition(t);
 			        }
@@ -243,15 +244,16 @@ class HybridAutomaton
       for(const auto rhsT: rhs.getTransitions()) {
       		if(rhsT->getLabels().empty()) {
       			for(const auto loc : lhs.getLocations()) {
-      				std::cout << "Potential transition " << loc->getName()<< "_" << rhsT->getSource()->getName() << " -> " << loc->getName() << "_" << rhsT->getTarget()->getName() << std::endl;
+      				//std::cout << "Potential transition " << loc->getName()<< "_" << rhsT->getSource()->getName() << " -> " << loc->getName() << "_" << rhsT->getTarget()->getName() << std::endl;
       				Transition<Number>* tmp = new Transition<Number>(loc,loc);
       				// TODO: temporary test -> fix!
       				//tmp->setReset(Reset<Number>(matrix_t<Number>::Identitiy(lhsVar.size(), lhsVar.size()), vector_t<Number>(lhsVar.size())));
       				tmp->setReset(rhsT->getReset());
+      				tmp->setAggregation(rhsT->getAggregation());
 
       				Transition<Number>* t = parallelCompose(tmp, rhsT, lhsVar, rhsVar, haVar, ha, lhsLabels, rhsLabels);
       				if(t) {
-      					std::cout << "Add." << std::endl;
+      					//std::cout << "Add." << std::endl;
 			            ha.addTransition(t);
 			            (t->getSource())->addTransition(t);
 			        }
@@ -262,7 +264,7 @@ class HybridAutomaton
 
 
       // set initial states (//std:multimap<const Location<Number>*, State>;)
-      std::cout << "set initial states" << std::endl;
+      //std::cout << "set initial states" << std::endl;
       for(const auto initialStateLhs: lhs.getInitialStates()) {
         for(const auto initialStateRhs: rhs.getInitialStates()) {
           State state = parallelCompose(initialStateLhs.second,  initialStateRhs.second, lhsVar, rhsVar, haVar, ha);

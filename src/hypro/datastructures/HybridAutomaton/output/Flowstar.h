@@ -98,7 +98,6 @@ namespace hypro {
 		out << prefix <<loc->getName();
 		out << prefix << "{";
 		if(varNameMap.size() > 0) {
-			std::cout << "Variables: " << varNameMap.size() << ", and flow rows: " << loc->getFlow().rows() << std::endl;
 			assert(varNameMap.size() == loc->getFlow().rows()-1);
 			// flow
 			out << prefix << "\tpoly ode 1";
@@ -141,7 +140,6 @@ namespace hypro {
 					vars[cnt] = tmp.str();
 				}
 				res << "\n";
-				std::cout << "Has " << vars.size() << " variables." << std::endl;
 			}
 
 			// Todo: add out-commented exemplary settings

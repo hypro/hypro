@@ -211,22 +211,22 @@ Transition<Number>* parallelCompose(const Transition<Number>* lhsT
     assert(haVar.size() >= lhsVar.size());
     assert(haVar.size() >= rhsVar.size());
 
-    std::cout << "Parallel composition of transitions " << lhsT->getSource()->getName() << " -> " << lhsT->getTarget()->getName() << " and " << rhsT->getSource()->getName() << " -> " << rhsT->getTarget()->getName() << std::endl;
+    //std::cout << "Parallel composition of transitions " << lhsT->getSource()->getName() << " -> " << lhsT->getTarget()->getName() << " and " << rhsT->getSource()->getName() << " -> " << rhsT->getTarget()->getName() << std::endl;
 
     Transition<Number>* t = new Transition<Number>();
 
     //set label
     if (lhsT->getLabels() == rhsT->getLabels()) {
-        std::cout << "a" << std::endl;
+        //std::cout << "a" << std::endl;
         t->setLabels(lhsT->getLabels());
     } else if(!(lhsT->getLabels().empty()) and rhsLabels.set::count(*(lhsT->getLabels().begin()))==0 and rhsT->getLabels().empty()) {
-        std::cout << "b" << std::endl;
+        //std::cout << "b" << std::endl;
         t->setLabels(lhsT->getLabels());
     } else if(!(rhsT->getLabels().empty()) and lhsLabels.set::count(*(rhsT->getLabels().begin()))==0 and lhsT->getLabels().empty()) {
-        std::cout << "c" << std::endl;
+        //std::cout << "c" << std::endl;
         t->setLabels(rhsT->getLabels());
     } else {
-        std::cout << "d" << std::endl;
+        //std::cout << "d" << std::endl;
         delete t;
         return nullptr;
     }
@@ -243,7 +243,7 @@ Transition<Number>* parallelCompose(const Transition<Number>* lhsT
     		while(lhsVar[lhsIdx] != var) ++ lhsIdx;
     		while(rhsVar[rhsIdx] != var) ++ rhsIdx;
     		sharedVars[idx] = std::make_pair(lhsIdx,rhsIdx);
-    		std::cout << "Shared variable " << var << " at pos " << idx << " with original positions " << lhsIdx << ", " << rhsIdx << std::endl;
+    		//std::cout << "Shared variable " << var << " at pos " << idx << " with original positions " << lhsIdx << ", " << rhsIdx << std::endl;
     	}
     	++idx;
     }
@@ -253,7 +253,7 @@ Transition<Number>* parallelCompose(const Transition<Number>* lhsT
     		assert(rhsT->getReset().size() != 0);
     		if(lhsT->getReset().getMatrix()(varTuple.second.first,other.second.first) != rhsT->getReset().getMatrix()(varTuple.second.second,other.second.second)
     			|| lhsT->getReset().getVector()(varTuple.second.first) != rhsT->getReset().getVector()(varTuple.second.second) ) {
-    			std::cout << "Delete." << std::endl;
+    			//std::cout << "Delete." << std::endl;
     			delete t;
     			return nullptr;
     		}
@@ -276,9 +276,9 @@ Transition<Number>* parallelCompose(const Transition<Number>* lhsT
     t->setGuard(haGuard);
 
     //set reset
-    std::cout << "Reset, combine matrices: " << std::endl;
+    //std::cout << "Reset, combine matrices: " << std::endl;
     Reset<Number> haReset = combine(lhsT->getReset(), rhsT->getReset(), haVar, lhsVar, rhsVar);
-    std::cout << "New reset function: " << haReset << std::endl;
+    //std::cout << "New reset function: " << haReset << std::endl;
 
 
     t->setReset(haReset);
