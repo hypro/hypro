@@ -132,8 +132,11 @@ public:
  				assert(false && "CONVERSION TO PPL POLYTOPE NOT YET IMPLEMENTED.");
  				break;
  			}
- 			case representation_name::constraint_set:
- 				assert(false && "CANNOT CONVERT TO TYPE ConstraintSet<Number>.");
+ 			case representation_name::constraint_set: {
+ 				ConstraintSet<Number> tmp = Converter<Number>::toConstraintSet(lhs);
+ 				return tmp;
+ 				break;
+ 			}
  			case representation_name::taylor_model:
  				assert(false && "CANNOT CONVERT TO TYPE TAYLOR MODEL.");
  		}
