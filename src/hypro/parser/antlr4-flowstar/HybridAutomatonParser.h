@@ -16,30 +16,30 @@
 class  HybridAutomatonParser : public antlr4::Parser {
 public:
   enum {
-    T__0 = 1, T__1 = 2, T__2 = 3, T__3 = 4, T__4 = 5, T__5 = 6, T__6 = 7, 
-    T__7 = 8, T__8 = 9, T__9 = 10, T__10 = 11, T__11 = 12, T__12 = 13, T__13 = 14, 
-    T__14 = 15, T__15 = 16, T__16 = 17, T__17 = 18, T__18 = 19, T__19 = 20, 
-    T__20 = 21, T__21 = 22, T__22 = 23, T__23 = 24, T__24 = 25, T__25 = 26, 
-    T__26 = 27, T__27 = 28, T__28 = 29, IN = 30, TRUE = 31, FALSE = 32, 
-    PAR = 33, COMMENT = 34, EQUALS = 35, BOOLRELATION = 36, PLUS = 37, MINUS = 38, 
-    TIMES = 39, SBOPEN = 40, SBCLOSE = 41, CBOPEN = 42, CBCLOSE = 43, COMMA = 44, 
-    NUMBER = 45, CONSTANT = 46, VARIABLE = 47, WS = 48, PARALLELOTOPE = 49, 
+    T__0 = 1, T__1 = 2, T__2 = 3, T__3 = 4, T__4 = 5, T__5 = 6, T__6 = 7,
+    T__7 = 8, T__8 = 9, T__9 = 10, T__10 = 11, T__11 = 12, T__12 = 13, T__13 = 14,
+    T__14 = 15, T__15 = 16, T__16 = 17, T__17 = 18, T__18 = 19, T__19 = 20,
+    T__20 = 21, T__21 = 22, T__22 = 23, T__23 = 24, T__24 = 25, T__25 = 26,
+    T__26 = 27, T__27 = 28, T__28 = 29, IN = 30, TRUE = 31, FALSE = 32,
+    PAR = 33, COMMENT = 34, EQUALS = 35, BOOLRELATION = 36, PLUS = 37, MINUS = 38,
+    TIMES = 39, SBOPEN = 40, SBCLOSE = 41, CBOPEN = 42, CBCLOSE = 43, COMMA = 44,
+    NUMBER = 45, CONSTANT = 46, VARIABLE = 47, WS = 48, PARALLELOTOPE = 49,
     INTERVALAGG = 50, BOX = 51, JUMP = 52, DEFINE = 53, EXPONENTIAL = 54
   };
 
   enum {
-    RuleStart = 0, RuleOld = 1, RuleAutomaton = 2, RuleComp = 3, RuleVardeclaration = 4, 
-    RuleConstantdeclaration = 5, RuleGlobalvardeclaration = 6, RuleComponent = 7, 
-    RuleModes = 8, RuleLocation = 9, RuleActivities = 10, RuleInvariants = 11, 
-    RuleConstantexpr = 12, RuleConnector = 13, RuleTerm = 14, RulePolynom = 15, 
-    RuleInterval = 16, RuleEquation = 17, RuleConstraint = 18, RuleIntervalexpr = 19, 
-    RuleConstrset = 20, RuleReplacedexpr = 21, RuleInit = 22, RuleInitstate = 23, 
-    RuleUnsafeset = 24, RuleLbadstate = 25, RuleGbadstate = 26, RuleJumps = 27, 
-    RuleTransition = 28, RuleFromto = 29, RuleUrgent = 30, RuleGuard = 31, 
-    RuleAllocation = 32, RuleResetfct = 33, RuleAggregation = 34, RuleLabels = 35, 
-    RuleLabel = 36, RuleSetting = 37, RuleFixedsteps = 38, RuleTime = 39, 
-    RulePlotsetting = 40, RuleFilename = 41, RuleMaxjumps = 42, RulePrint = 43, 
-    RuleRemainder = 44, RuleIdentity = 45, RuleFixedorders = 46, RuleCutoff = 47, 
+    RuleStart = 0, RuleOld = 1, RuleAutomaton = 2, RuleComp = 3, RuleVardeclaration = 4,
+    RuleConstantdeclaration = 5, RuleGlobalvardeclaration = 6, RuleComponent = 7,
+    RuleModes = 8, RuleLocation = 9, RuleActivities = 10, RuleInvariants = 11,
+    RuleConstantexpr = 12, RuleConnector = 13, RuleTerm = 14, RulePolynom = 15,
+    RuleInterval = 16, RuleEquation = 17, RuleConstraint = 18, RuleIntervalexpr = 19,
+    RuleConstrset = 20, RuleReplacedexpr = 21, RuleInit = 22, RuleInitstate = 23,
+    RuleUnsafeset = 24, RuleLbadstate = 25, RuleGbadstate = 26, RuleJumps = 27,
+    RuleTransition = 28, RuleFromto = 29, RuleUrgent = 30, RuleGuard = 31,
+    RuleAllocation = 32, RuleResetfct = 33, RuleAggregation = 34, RuleLabels = 35,
+    RuleLabel = 36, RuleSetting = 37, RuleFixedsteps = 38, RuleTime = 39,
+    RulePlotsetting = 40, RuleFilename = 41, RuleMaxjumps = 42, RulePrint = 43,
+    RuleRemainder = 44, RuleIdentity = 45, RuleFixedorders = 46, RuleCutoff = 47,
     RulePrecision = 48
   };
 
@@ -104,7 +104,7 @@ public:
   class IdentityContext;
   class FixedordersContext;
   class CutoffContext;
-  class PrecisionContext; 
+  class PrecisionContext;
 
   class  StartContext : public antlr4::ParserRuleContext {
   public:
@@ -115,7 +115,7 @@ public:
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
-   
+
   };
 
   StartContext* start();
@@ -131,7 +131,7 @@ public:
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
-   
+
   };
 
   OldContext* old();
@@ -150,7 +150,7 @@ public:
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
-   
+
   };
 
   AutomatonContext* automaton();
@@ -170,7 +170,7 @@ public:
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
-   
+
   };
 
   CompContext* comp();
@@ -186,7 +186,7 @@ public:
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
-   
+
   };
 
   VardeclarationContext* vardeclaration();
@@ -205,7 +205,7 @@ public:
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
-   
+
   };
 
   ConstantdeclarationContext* constantdeclaration();
@@ -221,7 +221,7 @@ public:
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
-   
+
   };
 
   GlobalvardeclarationContext* globalvardeclaration();
@@ -237,7 +237,7 @@ public:
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
-   
+
   };
 
   ComponentContext* component();
@@ -251,7 +251,7 @@ public:
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
-   
+
   };
 
   ModesContext* modes();
@@ -267,7 +267,7 @@ public:
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
-   
+
   };
 
   LocationContext* location();
@@ -281,7 +281,7 @@ public:
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
-   
+
   };
 
   ActivitiesContext* activities();
@@ -294,16 +294,16 @@ public:
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
-   
+
   };
 
   InvariantsContext* invariants();
 
   class  ConstantexprContext : public antlr4::ParserRuleContext {
   public:
-    antlr4::Token *constantToken = nullptr;;
-    antlr4::Token *minusToken = nullptr;;
-    antlr4::Token *numberToken = nullptr;;
+    antlr4::Token *constantToken = nullptr;
+    antlr4::Token *minusToken = nullptr;
+    antlr4::Token *numberToken = nullptr;
     ConstantexprContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
     antlr4::tree::TerminalNode *CONSTANT();
@@ -313,7 +313,7 @@ public:
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
-   
+
   };
 
   ConstantexprContext* constantexpr();
@@ -327,7 +327,7 @@ public:
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
-   
+
   };
 
   ConnectorContext* connector();
@@ -347,7 +347,7 @@ public:
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
-   
+
   };
 
   TermContext* term();
@@ -363,7 +363,7 @@ public:
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
-   
+
   };
 
   PolynomContext* polynom();
@@ -381,7 +381,7 @@ public:
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
-   
+
   };
 
   IntervalContext* interval();
@@ -398,7 +398,7 @@ public:
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
-   
+
   };
 
   EquationContext* equation();
@@ -414,7 +414,7 @@ public:
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
-   
+
   };
 
   ConstraintContext* constraint();
@@ -429,7 +429,7 @@ public:
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
-   
+
   };
 
   IntervalexprContext* intervalexpr();
@@ -447,7 +447,7 @@ public:
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
-   
+
   };
 
   ConstrsetContext* constrset();
@@ -464,7 +464,7 @@ public:
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
-   
+
   };
 
   ReplacedexprContext* replacedexpr();
@@ -478,7 +478,7 @@ public:
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
-   
+
   };
 
   InitContext* init();
@@ -492,7 +492,7 @@ public:
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
-   
+
   };
 
   InitstateContext* initstate();
@@ -508,7 +508,7 @@ public:
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
-   
+
   };
 
   UnsafesetContext* unsafeset();
@@ -522,7 +522,7 @@ public:
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
-   
+
   };
 
   LbadstateContext* lbadstate();
@@ -535,7 +535,7 @@ public:
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
-   
+
   };
 
   GbadstateContext* gbadstate();
@@ -549,7 +549,7 @@ public:
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
-   
+
   };
 
   JumpsContext* jumps();
@@ -572,7 +572,7 @@ public:
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
-   
+
   };
 
   TransitionContext* transition();
@@ -587,7 +587,7 @@ public:
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
-   
+
   };
 
   FromtoContext* fromto();
@@ -599,7 +599,7 @@ public:
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
-   
+
   };
 
   UrgentContext* urgent();
@@ -612,7 +612,7 @@ public:
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
-   
+
   };
 
   GuardContext* guard();
@@ -628,7 +628,7 @@ public:
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
-   
+
   };
 
   AllocationContext* allocation();
@@ -642,7 +642,7 @@ public:
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
-   
+
   };
 
   ResetfctContext* resetfct();
@@ -657,7 +657,7 @@ public:
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
-   
+
   };
 
   AggregationContext* aggregation();
@@ -671,7 +671,7 @@ public:
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
-   
+
   };
 
   LabelsContext* labels();
@@ -684,7 +684,7 @@ public:
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
-   
+
   };
 
   LabelContext* label();
@@ -718,7 +718,7 @@ public:
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
-   
+
   };
 
   SettingContext* setting();
@@ -731,7 +731,7 @@ public:
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
-   
+
   };
 
   FixedstepsContext* fixedsteps();
@@ -744,7 +744,7 @@ public:
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
-   
+
   };
 
   TimeContext* time();
@@ -758,7 +758,7 @@ public:
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
-   
+
   };
 
   PlotsettingContext* plotsetting();
@@ -771,7 +771,7 @@ public:
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
-   
+
   };
 
   FilenameContext* filename();
@@ -784,7 +784,7 @@ public:
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
-   
+
   };
 
   MaxjumpsContext* maxjumps();
@@ -797,7 +797,7 @@ public:
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
-   
+
   };
 
   PrintContext* print();
@@ -810,7 +810,7 @@ public:
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
-   
+
   };
 
   RemainderContext* remainder();
@@ -822,7 +822,7 @@ public:
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
-   
+
   };
 
   IdentityContext* identity();
@@ -835,7 +835,7 @@ public:
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
-   
+
   };
 
   FixedordersContext* fixedorders();
@@ -848,7 +848,7 @@ public:
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
-   
+
   };
 
   CutoffContext* cutoff();
@@ -861,7 +861,7 @@ public:
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
-   
+
   };
 
   PrecisionContext* precision();
