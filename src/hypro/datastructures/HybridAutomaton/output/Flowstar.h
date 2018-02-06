@@ -146,7 +146,6 @@ namespace hypro {
 
 			// locations
 			res << "\tmodes\n\t{\n";
-			std::size_t lCnt = 0;
 			for(Location<Number>* locPtr : in.getLocations()) {
 				res << toFlowstarFormat(locPtr, vars, "\n\t\t");
 			}
@@ -191,9 +190,12 @@ namespace hypro {
 			res << "\n\t}\n";
 
 			// bad states
-			res << "\tunsafe set\n\t{";
+			if(in.getLocalBadStates().size() > 0) {
+				res << "\n\tunsafe set\n\t{";
 
-			res << "\t}\n";
+				res << "\n\t}\n";
+			}
+
 
 		}
 

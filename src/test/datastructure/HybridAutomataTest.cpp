@@ -6,12 +6,8 @@
 #include "gtest/gtest.h"
 #include "../defines.h"
 #include "datastructures/HybridAutomaton/LocationManager.h"
-#include "datastructures/HybridAutomaton/Transition.h"
 #include "datastructures/HybridAutomaton/HybridAutomaton.h"
-#include "datastructures/HybridAutomaton/State.h"
 #include "representations/GeometricObject.h"
-#include "carl/core/VariablePool.h"
-#include "datastructures/HybridAutomaton/Condition.h"
 
 
 using namespace hypro;
@@ -204,10 +200,14 @@ TYPED_TEST(HybridAutomataTest, LocationParallelcompositionTest)
 	typename HybridAutomaton<TypeParam>::variableVector l2Vars{"x","b"};
 	typename HybridAutomaton<TypeParam>::variableVector haVars{"a","x","b"};
 
-	matrix_t<TypeParam> l1Flow = matrix_t<TypeParam>::Zero(2,2);
-	l1Flow << 1,2,3,4;
-	matrix_t<TypeParam> l2Flow = matrix_t<TypeParam>::Zero(2,2);
-	l2Flow << 1,2,3,4;
+	matrix_t<TypeParam> l1Flow = matrix_t<TypeParam>::Zero(3,3);
+	l1Flow << 1,2,0,
+				3,4,0,
+				0,0,0;
+	matrix_t<TypeParam> l2Flow = matrix_t<TypeParam>::Zero(3,3);
+	l2Flow << 1,2,0,
+				3,4,0,
+				0,0,0;
 
 	l1->setFlow(l1Flow);
 	l2->setFlow(l2Flow);
