@@ -38,7 +38,7 @@ HybridAutomaton<Number> createComponent1(unsigned i) {
 	Lpt wait = manager.create();
 	wait->setName(st.str());
 	M waitFlow = M::Zero(dim+1,dim+1);
-	waitFlow(0,0) = 1;
+	waitFlow(0,dim) = 1;
 	wait->setFlow(waitFlow);
 
 	M initConstraints = M::Zero(4,2);
@@ -122,6 +122,7 @@ HybridAutomaton<Number> createComponent1(unsigned i) {
 	V resetVec = V::Zero(dim);
 	resetVec(1) = 1;
 	toFlash->setReset(Reset<Number>(resetMat,resetVec));
+	toFlash->setAggregation(Aggregation::parallelotopeAgg);
 
 	wait->addTransition(toFlash);
 	res.addTransition(toFlash);
@@ -141,6 +142,7 @@ HybridAutomaton<Number> createComponent1(unsigned i) {
 	flashLoop->setReset(Reset<Number>(resetMat,resetVec));
 	flashLoop->setUrgent();
 	flashLoop->addLabel(Label{"flash"});
+	flashLoop->setAggregation(Aggregation::parallelotopeAgg);
 
 	flash->addTransition(flashLoop);
 	res.addTransition(flashLoop);
@@ -170,6 +172,7 @@ HybridAutomaton<Number> createComponent1(unsigned i) {
 	reWait->addLabel({"return"});
 	reWait->setReset(Reset<Number>(resetMat,resetVec));
 	reWait->setUrgent();
+	reWait->setAggregation(Aggregation::parallelotopeAgg);
 
 	flash->addTransition(reWait);
 	res.addTransition(reWait);
@@ -189,6 +192,7 @@ HybridAutomaton<Number> createComponent1(unsigned i) {
 	resetVec = V::Zero(dim);
 	toAdapt->setReset(Reset<Number>(resetMat,resetVec));
 	toAdapt->addLabel({"flash"});
+	toAdapt->setAggregation(Aggregation::parallelotopeAgg);
 
 	wait->addTransition(toAdapt);
 	res.addTransition(toAdapt);
@@ -204,6 +208,7 @@ HybridAutomaton<Number> createComponent1(unsigned i) {
 	resetVec = V::Zero(dim);
 	fromAdaptRegular->setReset(Reset<Number>(resetMat,resetVec));
 	fromAdaptRegular->addLabel(Label{"return"});
+	fromAdaptRegular->setAggregation(Aggregation::parallelotopeAgg);
 
 	adapt->addTransition(fromAdaptRegular);
 	res.addTransition(fromAdaptRegular);
@@ -216,6 +221,7 @@ HybridAutomaton<Number> createComponent1(unsigned i) {
 	guardConstants << Number(-firingThreshold);
 	fromAdaptScale->setGuard(Condition<Number>{guardConstraints,guardConstants});
 	//fromAdaptScale->addLabel(Label{"flash"});
+	fromAdaptScale->setAggregation(Aggregation::parallelotopeAgg);
 
 	resetMat = M::Identity(dim,dim);
 	resetMat(0,0) = 0;
