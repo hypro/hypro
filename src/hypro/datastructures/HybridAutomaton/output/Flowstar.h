@@ -27,7 +27,7 @@ namespace hypro {
 				} else if(in.getMatrix()(rowI,colI) < 0) {
 					res << " " << in.getMatrix()(rowI,colI) << "*";
 				}
-				if(in.getMatrix()(rowI,colI) != 0 && colI != in.getMatrix().cols()) {
+				if(in.getMatrix()(rowI,colI) != 0 && colI != in.getMatrix().cols() && varNameMap.size() > colI) {
 					res << varNameMap.at(colI);
 				}
 			}
@@ -77,6 +77,37 @@ namespace hypro {
 	}
 
 	template<typename Number>
+	std::string toFlowstarFormat(const Location<Number>* loc,
+								const std::map<Eigen::Index, std::string>& varNameMap,
+								const std::string& prefix) {
+		std::stringstream out;
+		// location name
+		out << loc->getName();
+		out << prefix << "{";
+		if(varNameMap.size() > 0) {
+			// flow
+			out << prefix << "\tpoly ode 1";
+			out << prefix << "\t{";
+			for(Eigen::Index rowI = 0; rowI < loc->getFlow().rows()-1; ++rowI) {
+				std::stringstream tmp;
+				tmp << prefix << "\t\t" << varNameMap.at(rowI) << "' = ";
+				out << toFlowstarFormat(matrix_t<Number>(loc->getFlow().row(rowI)), varNameMap, tmp.str());
+			}
+			out << prefix << "\t}";
+			// invariant
+			out << prefix << "\tinv";
+			out << prefix << "\t{";
+			std::stringstream invPrefix;
+			invPrefix << prefix << "\t\t";
+			out << toFlowstarFormat(loc->getInvariant(), varNameMap, invPrefix.str());
+			out << prefix << "\t}";
+		}
+		out << "\n\t\t}";
+		return out.str();
+	}
+
+
+	template<typename Number>
 	std::string toFlowstarFormat(const HybridAutomaton<Number>& in) {
 		std::stringstream res;
 		std::map<Eigen::Index, std::string> vars;
@@ -102,31 +133,8 @@ namespace hypro {
 			// locations
 			res << "\tmodes\n\t{\n";
 			std::size_t lCnt = 0;
-			for(const auto locPtr : in.getLocations()) {
-				// location name
-				if(locPtr->getName() == "") {
-					res << "\t\tl_" << lCnt++;
-				} else {
-					res << "\t\t" << locPtr->getName();
-				}
-				res << "\n\t\t{";
-				if(in.dimension() > 0) {
-					// flow
-					res << "\n\t\t\tpoly ode 1";
-					res << "\n\t\t\t{";
-					for(Eigen::Index rowI = 0; rowI < locPtr->getFlow().rows()-1; ++rowI) {
-						std::stringstream tmp;
-						tmp << "\n\t\t\t\t" << vars[rowI] << "' = ";
-						res << toFlowstarFormat(matrix_t<Number>(locPtr->getFlow().row(rowI)), vars, tmp.str());
-					}
-					res << "\n\t\t\t}";
-					// invariant
-					res << "\n\t\t\tinv";
-					res << "\n\t\t\t{";
-					res << toFlowstarFormat(locPtr->getInvariant(), vars, "\n\t\t\t\t");
-					res << "\n\t\t\t}";
-				}
-				res << "\n\t\t}";
+			for(Location<Number>* locPtr : in.getLocations()) {
+				res << toFlowstarFormat(locPtr, vars, "\n\t\t");
 			}
 			res << "\n\t}\n";
 
@@ -160,7 +168,8 @@ namespace hypro {
 			for(const auto& s : in.getInitialStates() ) {
 				res << "\t\t" << s.first->getName();
 				res << "\n\t\t{";
-				res << toFlowstarFormat(boost::apply_visitor(genericConversionVisitor<typename State_t<Number>::repVariant, Number>(representation_name::constraint_set), s.getSet()), vars, "\n\t\t\t" );
+				auto tmpConstraintSet = boost::get<ConstraintSet<Number>>(boost::apply_visitor(genericConversionVisitor<typename State_t<Number>::repVariant, Number>(representation_name::constraint_set), s.second.getSet()));
+				res << toFlowstarFormat(std::move(Condition<Number>(tmpConstraintSet.matrix(), tmpConstraintSet.vector())), vars, "\n\t\t\t" );
 				res << "\n\t\t}";
 			}
 

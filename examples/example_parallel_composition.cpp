@@ -15,6 +15,7 @@ HybridAutomaton<Number> createComponent1(unsigned i) {
 	using V = vector_t<Number>;
 	using Lpt = Location<Number>*;
 	using Tpt = Transition<Number>*;
+	using S = State_t<Number>;
 	LocationManager<Number>& manager = LocationManager<Number>::getInstance();
 	std::stringstream st;
 
@@ -39,6 +40,16 @@ HybridAutomaton<Number> createComponent1(unsigned i) {
 	M waitFlow = M::Zero(dim+1,dim+1);
 	waitFlow(0,0) = 1;
 	wait->setFlow(waitFlow);
+
+	M initConstraints = M::Zero(4,2);
+	initConstraints << 1,0,-1,0,0,1,0,-1;
+	V initConstants = V::Zero(4);
+	initConstants << 0,0,0,0;
+
+	S initialState;
+	initialState.setLocation(wait);
+	initialState.setSet(ConstraintSet<Number>(initConstraints,initConstants));
+	res.addInitialState(initialState);
 
 	M waitInvariant = M::Zero(1,dim);
 	waitInvariant << 1,0;
@@ -243,8 +254,8 @@ int main(int argc, char** argv) {
 	out2 << ha1.getDotRepresentation();
 
 	LockedFileWriter flowstar("composed.model");
-	out.clearFile();
-	out << toFlowstarFormat(composed);
+	flowstar.clearFile();
+	flowstar << toFlowstarFormat(composed);
 
 	return 0;
 }
