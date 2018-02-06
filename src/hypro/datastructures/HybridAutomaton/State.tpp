@@ -35,6 +35,7 @@ void State<Number,tNumber,Representation,Rargs...>::setSet(const R& s, std::size
 	mTypes[i] = R::type();
 	DEBUG("hypro.datastructures","Set set at pos " << i << ", mSets.size() = " << mSets.size());
 	assert(mSets.size() > i);
+	assert(checkConsistency());
 }
 
 
@@ -47,6 +48,7 @@ void State<Number,tNumber,Representation,Rargs...>::addTimeToClocks(tNumber t) {
 	//	clockShift = clockShift * t;
 	//	mClockAssignment = mClockAssignment.affineTransformation(identity,clockShift);
 	//}
+	assert(checkConsistency());
 	mTimestamp += t;
 }
 
@@ -64,7 +66,6 @@ State<Number,tNumber,Representation,Rargs...> State<Number,tNumber,Representatio
 		res.setSetDirect( boost::apply_visitor(genericUniteVisitor<repVariant>(), mSets.at(i), in.getSet(i)), i);
 	}
 
-	assert(checkConsistency());
 	TRACE("hypro.datastructures","Done union.");
 
 	res.setTimestamp(mTimestamp.convexHull(in.getTimestamp()));
@@ -104,7 +105,6 @@ std::pair<CONTAINMENT,State<Number,tNumber,Representation,Rargs...>> State<Numbe
 			strictestContainment = CONTAINMENT::PARTIAL;
 		}
 	}
-
 	return std::make_pair(strictestContainment, res);
 }
 
@@ -113,6 +113,7 @@ std::pair<CONTAINMENT,State<Number,tNumber,Representation,Rargs...>> State<Numbe
 	if(constraints.rows() == 0) {
 		return std::make_pair(CONTAINMENT::FULL,*this);
 	}
+	assert(checkConsistency());
 	return partiallySatisfies(Condition<Number>(constraints,constants), 0);
 }
 
@@ -189,11 +190,13 @@ State<Number,tNumber,Representation,Rargs...> State<Number,tNumber,Representatio
 
 template<typename Number, typename tNumber, typename Representation, typename ...Rargs>
 State<Number,tNumber,Representation,Rargs...> State<Number,tNumber,Representation,Rargs...>::linearTransformation(const matrix_t<Number>& matrix) const {
+	assert(checkConsistency());
 	return partiallyApplyTransformation(ConstraintSet<Number>(matrix, vector_t<Number>::Zero(matrix.rows())), 0);
 }
 
 template<typename Number, typename tNumber, typename Representation, typename ...Rargs>
 State<Number,tNumber,Representation,Rargs...> State<Number,tNumber,Representation,Rargs...>::affineTransformation(const matrix_t<Number>& matrix, const vector_t<Number>& vector) const {
+	assert(checkConsistency());
 	return partiallyApplyTransformation(ConstraintSet<Number>(matrix, vector), 0);
 }
 
@@ -254,6 +257,7 @@ State<Number,tNumber,Representation,Rargs...> State<Number,tNumber,Representatio
 
 template<typename Number, typename tNumber, typename Representation, typename ...Rargs>
 std::vector<Point<Number>> State<Number,tNumber,Representation,Rargs...>::vertices(std::size_t I) const {
+	assert(checkConsistency());
 	return boost::apply_visitor(genericVerticesVisitor<Number>(), mSets.at(I));
 }
 
@@ -335,6 +339,7 @@ void State<Number,tNumber,Representation,Rargs...>::setSetsSave(const std::vecto
 		setSetType(boost::apply_visitor(genericTypeVisitor(), sets.at(i)), i);
 	}
 	mSets = sets;
+	assert(checkConsistency());
 }
 
 } // hypro

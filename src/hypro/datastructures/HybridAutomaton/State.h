@@ -178,6 +178,7 @@ class State
     representation_name getSetType(std::size_t i = 0) const {
     	TRACE("hypro.datastructures","Attempt to get set type at pos " << i << ", mTypes.size() = " << mTypes.size());
     	assert(mSets.size() == mTypes.size());
+    	assert(checkConsistency());
     	return mTypes.at(i);
     }
 
@@ -233,6 +234,7 @@ class State
 			mTypes.push_back(Representation::type()); // some default set type.
 		}
 		mTypes[I] = type;
+		assert(checkConsistency());
 	}
 
 	/**
@@ -363,7 +365,7 @@ class State
 
     State<Number,tNumber,Representation,Rargs...> project(const std::vector<std::size_t>& dimensions, std::size_t I = 0) const;
 
-    std::size_t getDimension(std::size_t I) const;
+    std::size_t getDimension(std::size_t I = 0) const;
 
     Number getSupremum(std::size_t I) const;
 
