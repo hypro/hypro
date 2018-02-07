@@ -143,6 +143,20 @@ namespace hypro {
 			}
 
 			// Todo: add out-commented exemplary settings
+			res << "setting\n\
+ {\n\
+  fixed steps 0.01\n\
+  time 3\n\
+  remainder estimation 1e-5\n\
+  identity precondition\n\
+  gnuplot octagon x_0,x_1\n\
+  fixed orders 5\n\
+  cutoff 1e-15\n\
+  precision 128\n\
+  output out\n\
+  max jumps 1\n\
+  print on\n\
+ }\n";
 
 			// locations
 			res << "\tmodes\n\t{\n";

@@ -19,31 +19,11 @@ public:
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitOld(HybridAutomatonParser::OldContext *ctx) override {
-    return visitChildren(ctx);
-  }
-
-  virtual antlrcpp::Any visitAutomaton(HybridAutomatonParser::AutomatonContext *ctx) override {
-    return visitChildren(ctx);
-  }
-
-  virtual antlrcpp::Any visitComp(HybridAutomatonParser::CompContext *ctx) override {
-    return visitChildren(ctx);
-  }
-
   virtual antlrcpp::Any visitVardeclaration(HybridAutomatonParser::VardeclarationContext *ctx) override {
     return visitChildren(ctx);
   }
 
   virtual antlrcpp::Any visitConstantdeclaration(HybridAutomatonParser::ConstantdeclarationContext *ctx) override {
-    return visitChildren(ctx);
-  }
-
-  virtual antlrcpp::Any visitGlobalvardeclaration(HybridAutomatonParser::GlobalvardeclarationContext *ctx) override {
-    return visitChildren(ctx);
-  }
-
-  virtual antlrcpp::Any visitComponent(HybridAutomatonParser::ComponentContext *ctx) override {
     return visitChildren(ctx);
   }
 
@@ -60,6 +40,10 @@ public:
   }
 
   virtual antlrcpp::Any visitInvariants(HybridAutomatonParser::InvariantsContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitReplacedexpr(HybridAutomatonParser::ReplacedexprContext *ctx) override {
     return visitChildren(ctx);
   }
 
@@ -96,10 +80,6 @@ public:
   }
 
   virtual antlrcpp::Any visitConstrset(HybridAutomatonParser::ConstrsetContext *ctx) override {
-    return visitChildren(ctx);
-  }
-
-  virtual antlrcpp::Any visitReplacedexpr(HybridAutomatonParser::ReplacedexprContext *ctx) override {
     return visitChildren(ctx);
   }
 
@@ -152,14 +132,6 @@ public:
   }
 
   virtual antlrcpp::Any visitAggregation(HybridAutomatonParser::AggregationContext *ctx) override {
-    return visitChildren(ctx);
-  }
-
-  virtual antlrcpp::Any visitLabels(HybridAutomatonParser::LabelsContext *ctx) override {
-    return visitChildren(ctx);
-  }
-
-  virtual antlrcpp::Any visitLabel(HybridAutomatonParser::LabelContext *ctx) override {
     return visitChildren(ctx);
   }
 

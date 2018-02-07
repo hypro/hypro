@@ -1,6 +1,7 @@
 #include "datastructures/HybridAutomaton/HybridAutomaton.h"
 #include "datastructures/HybridAutomaton/output/Flowstar.h"
 #include "util/multithreading/Filewriter.h"
+#include "parser/antlr4-flowstar/ParserWrapper.h"
 #include <iostream>
 
 using namespace hypro;
@@ -248,8 +249,8 @@ int main(int argc, char** argv) {
 	HybridAutomaton<Number> ha2 = createComponent1<Number>(2);
 	HybridAutomaton<Number> composed = ha1||ha2;
 
-	std::cout << "################################################" << std::endl;
-	std::cout << "Result: " << std::endl << composed << std::endl;
+	//std::cout << "################################################" << std::endl;
+	//std::cout << "Result: " << std::endl << composed << std::endl;
 
 	LockedFileWriter out{"parallelHa.dot"};
 	out.clearFile();
@@ -262,6 +263,9 @@ int main(int argc, char** argv) {
 	LockedFileWriter flowstar("composed.model");
 	flowstar.clearFile();
 	flowstar << toFlowstarFormat(composed);
+
+	// for testing
+	auto haTuple = parseFlowstarFile<double>(std::string("composed.model"));
 
 	return 0;
 }

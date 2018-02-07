@@ -12,43 +12,11 @@ namespace hypro {
 	HyproHAVisitor<Number>::~HyproHAVisitor(){ }
 
 	template<typename Number>
-	antlrcpp::Any HyproHAVisitor<Number>::visitStart(HybridAutomatonParser::StartContext *ctx) {
-
-    if (ctx->old() != NULL) {
-      HybridAutomaton<Number, State_t<Number, Number>> ha = visit(ctx->old()->automaton());
-      return std::move(ha);
-    } else {
-      HybridAutomatonComp<Number, State_t<Number, Number>> hac = visit(ctx->comp());
-      return std::move(hac);
-    }
-  }
-
-  template<typename Number>
-  antlrcpp::Any HyproHAVisitor<Number>::visitComp(HybridAutomatonParser::CompContext *ctx){
-    HybridAutomatonComp<Number, State_t<Number, Number>> hac;
-
-    std::vector<std::string> vars = {};
-    std::vector<std::string>& varVec = vars;
-    HyproSettingVisitor<Number> settingVisitor = HyproSettingVisitor<Number>(varVec);
-    reachSettings = settingVisitor.visit(ctx->setting());
-
-    for(auto& ctxComp: ctx->component()) {
-      HybridAutomaton<Number, State_t<Number, Number>> ha = visit(ctxComp->automaton());
-      //hac.addAutomata(&ha);
-    }
-
-    return std::move(hac);
-  }
-
-	template<typename Number>
-	antlrcpp::Any HyproHAVisitor<Number>::visitAutomaton(HybridAutomatonParser::AutomatonContext *ctx) {
+	antlrcpp::Any HyproHAVisitor<Number>::visitStart(HybridAutomatonParser::StartContext *ctx){
 
 		//1.Calls visit(ctx->vardeclaration()) to get vars vector
 		vars = visit(ctx->vardeclaration()).template as<std::vector<std::string>>();
-		std::sort(vars.begin(), vars.end());
 		std::vector<std::string>& varVec = vars;
-
-		std::cout << vars << std::endl;
 
 		//2.Calls visit(ctx->setting()) to get reachability settings
 		HyproSettingVisitor<Number> settingVisitor = HyproSettingVisitor<Number>(varVec);
@@ -72,7 +40,6 @@ namespace hypro {
 			initSet.insert(oneInitialState.begin(), oneInitialState.end());
 		}
 
-    /*
 		//6.Calls visit(ctx->unsafeset()) to get local and global badStates
 		typename hypro::HybridAutomaton<Number,State_t<Number,Number>>::locationConditionMap lBadStates;
 		std::vector<Condition<Number>> gBadStates;
@@ -82,7 +49,6 @@ namespace hypro {
 			lBadStates = bStateVisitor.visit(ctx->unsafeset()).template as<typename hypro::HybridAutomaton<Number, State_t<Number,Number>>::locationConditionMap>();
 			gBadStates = bStateVisitor.getGlobalBadStates();
 		}
-     */
 
 #ifdef HYPRO_LOGGING
 		COUT("================================\n");
@@ -102,24 +68,23 @@ namespace hypro {
 		for(auto it = initSet.begin(); it != initSet.end(); ++it){
 			COUT("Initial Location: " << it->first->getName() << " and initial state: " << it->second);
 		}
-		/*COUT("Local Bad states:\n");
+		COUT("Local Bad states:\n");
 		for(auto it = lBadStates.begin(); it != lBadStates.end(); ++it){
 			COUT("Bad Location: " << it->first->getName() << " and bad state: " << it->second);
 		}
 		COUT("Global Bad states:\n");
 		for(const auto& g : gBadStates){
 			COUT("Global Bad condition: " << g);
-		}*/
+		}
 
 #endif
 		//7.Build HybridAutomaton, return it
 		HybridAutomaton<Number,State_t<Number,Number>> ha;
-		ha.setVariables(varVec);
 		ha.setLocations(locSet);
 		ha.setTransitions(transSet);
 		ha.setInitialStates(initSet);
-		//ha.setLocalBadStates(lBadStates);
-		//ha.setGlobalBadStates(gBadStates);
+		ha.setLocalBadStates(lBadStates);
+		ha.setGlobalBadStates(gBadStates);
 
 		return std::move(ha);			//Move the ownership of ha to whoever uses ha then, i.e. the test suite
 	}

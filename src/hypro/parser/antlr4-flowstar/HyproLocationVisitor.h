@@ -10,6 +10,8 @@
 #pragma once
 
 #include <antlr4-runtime.h>
+#include "HybridAutomatonLexer.h"
+#include "HybridAutomatonParser.h"
 #include "HyproFormulaVisitor.h"
 #include "../../types.h"
 #include "../../datastructures/HybridAutomaton/LocationManager.h"
