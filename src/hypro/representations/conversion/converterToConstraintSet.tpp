@@ -28,7 +28,7 @@ typename Converter<Number>::ConstraintSet Converter<Number>::toConstraintSet( co
 }
 
 template<typename Number>
-typename Converter<Number>::ConstraintSet Converter<Number>::toConstraintSet( const HPolytope& _source, const CONV_MODE mode ) {
+typename Converter<Number>::ConstraintSet Converter<Number>::toConstraintSet( const HPolytope& _source, const CONV_MODE  ) {
 	return ConstraintSetT<Number,Converter>(_source.matrix(), _source.vector());
 }
 
@@ -40,7 +40,7 @@ typename Converter<Number>::ConstraintSet Converter<Number>::toConstraintSet( co
 #endif
 
 template<typename Number>
-typename Converter<Number>::ConstraintSet Converter<Number>::toConstraintSet( const Zonotope& _source, const CONV_MODE ) {
+typename Converter<Number>::ConstraintSet Converter<Number>::toConstraintSet( const Zonotope& , const CONV_MODE ) {
 	assert(false && "NotImplemented.");
     return ConstraintSetT<Number,Converter>();
 }

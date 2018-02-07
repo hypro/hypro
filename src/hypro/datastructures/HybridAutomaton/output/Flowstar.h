@@ -28,7 +28,7 @@ namespace hypro {
 					} else if(in.getMatrix()(rowI,colI) < 0) {
 						res << " " << in.getMatrix()(rowI,colI) << "*";
 					}
-					if(in.getMatrix()(rowI,colI) != 0 && colI != in.getMatrix().cols() && varNameMap.size() > colI) {
+					if(in.getMatrix()(rowI,colI) != 0 && colI != in.getMatrix().cols() && varNameMap.size() > std::size_t(colI)) {
 						res << varNameMap.at(colI);
 					}
 				}
@@ -98,7 +98,7 @@ namespace hypro {
 		out << prefix <<loc->getName();
 		out << prefix << "{";
 		if(varNameMap.size() > 0) {
-			assert(varNameMap.size() == loc->getFlow().rows()-1);
+			assert(varNameMap.size() == std::size_t(loc->getFlow().rows()-1));
 			// flow
 			out << prefix << "\tpoly ode 1";
 			out << prefix << "\t{";
