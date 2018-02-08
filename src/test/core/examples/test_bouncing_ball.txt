@@ -1,7 +1,7 @@
-hybrid reachability { 
- 
- state var x,v 
- 
+hybrid reachability {
+
+ state var x,v
+
  par {
   gabunga = -9.81
   c = 1
@@ -39,7 +39,7 @@ hybrid reachability {
     x >= 0
     v <= c + gabunga
    }
-   
+
    inv{}
 
    inv
@@ -50,7 +50,7 @@ hybrid reachability {
   }
  }
 
- jumps 
+ jumps
  {
   l -> l
   guard { x = 0 v <= 0 }
@@ -59,7 +59,7 @@ hybrid reachability {
   parallelotope aggregation {}
 
   l -> l
-  guard { false }
+  guard { x = 0 }
   reset { }
   interval aggregation { }
  }
@@ -78,8 +78,8 @@ hybrid reachability {
    v in [0,1]
   }
  }
- 
- init 
+
+ init
  {
   l
   {
@@ -90,20 +90,20 @@ hybrid reachability {
 
 }
 
-unsafe set 
+unsafe set
 {
- l 
+ l
   {
    x in [4,6]
   }
- l 
+ l
   {
    v in [-2.5,0]
   }
  x >= 15+gabunga
  v+2+c >= -v+23
- v-7+8*x >= 33-12*x	
- #-v+2 >= 23 		#Problem: -v connects to polynom in constraint before, more generally: if connector is first symbol of left side in 
+ v-7+8*x >= 33-12*x
+ #-v+2 >= 23 		#Problem: -v connects to polynom in constraint before, more generally: if connector is first symbol of left side in
  			#	in constraint, it will connect to polynom before.
 }
 
