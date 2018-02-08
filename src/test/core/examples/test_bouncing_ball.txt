@@ -61,7 +61,7 @@ hybrid reachability {
   l -> l
   guard { x = 0 }
   reset { }
-  interval aggregation { }
+  box aggregation { }
  }
 
  init
