@@ -251,6 +251,8 @@ Transition<Number>* parallelCompose(const Transition<Number>* lhsT
     	for(const auto& other : sharedVars) {
     		assert(lhsT->getReset().size() != 0);
     		assert(rhsT->getReset().size() != 0);
+    		//std::cout << "Compare resets: " << lhsT->getReset().getMatrix() << " and " << rhsT->getReset().getMatrix() << std::endl;
+    		//std::cout << "Compare resets: " << lhsT->getReset().getVector() << " and " << rhsT->getReset().getVector() << std::endl;
     		if(lhsT->getReset().getMatrix()(varTuple.second.first,other.second.first) != rhsT->getReset().getMatrix()(varTuple.second.second,other.second.second)
     			|| lhsT->getReset().getVector()(varTuple.second.first) != rhsT->getReset().getVector()(varTuple.second.second) ) {
     			//std::cout << "Delete." << std::endl;
@@ -269,7 +271,8 @@ Transition<Number>* parallelCompose(const Transition<Number>* lhsT
     t->setSource(source);
 
     //set urgent
-    t->setUrgent(lhsT->isUrgent() && rhsT->isUrgent());
+    // Todo: is it not the case that a composed transition is urgent as soon as one of its participating transitions is urgent?
+    t->setUrgent(lhsT->isUrgent() || rhsT->isUrgent());
 
     //set guard
     Condition<Number> haGuard = combine(lhsT->getGuard(), rhsT->getGuard(), haVar, lhsVar, rhsVar);
@@ -279,7 +282,6 @@ Transition<Number>* parallelCompose(const Transition<Number>* lhsT
     //std::cout << "Reset, combine matrices: " << std::endl;
     Reset<Number> haReset = combine(lhsT->getReset(), rhsT->getReset(), haVar, lhsVar, rhsVar);
     //std::cout << "New reset function: " << haReset << std::endl;
-
 
     t->setReset(haReset);
 

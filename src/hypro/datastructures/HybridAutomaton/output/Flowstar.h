@@ -169,11 +169,15 @@ namespace hypro {
 				// transitions
 				res << "\tjumps\n\t{";
 				for(const auto transPtr : in.getTransitions()) {
+					//std::cout << "output transition " << transPtr->getSource()->getName() << " -> " << transPtr->getTarget()->getName() << std::endl;
 					res << "\n\t\t" << transPtr->getSource()->getName() << " -> " << transPtr->getTarget()->getName();
+					if(transPtr->isUrgent())
+						res << "\n\t\turgent";
 					res << "\n\t\tguard {";
 					res << toFlowstarFormat(transPtr->getGuard(), vars, " ");
 					res << " }";
 					res << "\n\t\treset {";
+					//std::cout << "output reset " << transPtr->getReset().getMatrix() << std::endl;
 					for(Eigen::Index rowI = 0; rowI < transPtr->getReset().getMatrix().rows(); ++rowI) {
 						std::stringstream tmp;
 						tmp << " " << vars[rowI] << "' := ";
