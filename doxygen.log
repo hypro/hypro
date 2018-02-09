@@ -24,6 +24,7 @@ Searching for files in directory /home/travis/build/hypro/hypro/src/hypro/algori
 Searching for files in directory /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability
 Searching for files in directory /home/travis/build/hypro/hypro/src/hypro/datastructures
 Searching for files in directory /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton
+Searching for files in directory /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/output
 Searching for files in directory /home/travis/build/hypro/hypro/src/hypro/parser
 Searching for files in directory /home/travis/build/hypro/hypro/src/hypro/parser/antlr4-cif
 Searching for files in directory /home/travis/build/hypro/hypro/src/hypro/parser/antlr4-flowstar
@@ -53,8 +54,7 @@ Searching for files in directory /home/travis/build/hypro/hypro/src/hypro/util/l
 Searching for files in directory /home/travis/build/hypro/hypro/src/hypro/util/multithreading
 Searching for files in directory /home/travis/build/hypro/hypro/src/hypro/util/statistics
 Searching for files in directory /home/travis/build/hypro/hypro/src/hypro/util/tuple_expansion
-Searching for files in directory /home/travis/build/hypro/hypro/doc/markdown
-Searching for files in directory /home/travis/home/travis/build/hypro/hypro/src/hypro/types.h:3: warning: include file iostream not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+Searching /home/travis/build/hypro/hypro/src/hypro/types.h:3: warning: include file iostream not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/types.h:5: warning: include file carl/numbers/numbers.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/types.h:6: warning: include file carl/interval/Interval.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/types.h:7: warning: include file carl/core/Variable.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
@@ -4636,7 +4636,8 @@ Searching for files in directory /home/travis/home/travis/build/hypro/hypro/src/
 /home/travis/build/hypro/hypro/src/hypro/util/Plotter.h:17: warning: include file string not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/Plotter.h:18: warning: include file stack not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/util.h:5: warning: include file carl/util/SFINAE.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/build/hypro/hypro/doc/markdown/gettingStarted
+for files in directory /home/travis/build/hypro/hypro/doc/markdown
+Searching for files in directory /home/travis/build/hypro/hypro/doc/markdown/gettingStarted
 Searching for files in directory /home/travis/build/hypro/hypro/doc/markdown/stateSetRepresentations
 Searching for files in directory /home/travis/build/hypro/hypro/doc/markdown/utilityFunctions
 Searching for files in directory /home/travis/build/hypro/hypro/examples
@@ -4657,8 +4658,6 @@ Preprocessing /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/F
 Parsing file /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/FirstSegment.h...
 Preprocessing /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/Reach.h...
 Parsing file /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/Reach.h...
-Preprocessing /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/Reach_SF.h...
-Parsing file /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/Reach_SF.h...
 Preprocessing /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/TrafoParameters.h...
 Parsing file /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/TrafoParameters.h...
 Preprocessing /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/util.h...
@@ -4675,10 +4674,16 @@ Preprocessing /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAuto
 Parsing file /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Condition.h...
 Preprocessing /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/HybridAutomaton.h...
 Parsing file /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/HybridAutomaton.h...
+Preprocessing /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/HybridAutomatonComp.h...
+Parsing file /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/HybridAutomatonComp.h...
+Preprocessing /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Label.h...
+Parsing file /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Label.h...
 Preprocessing /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Location.h...
 Parsing file /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Location.h...
 Preprocessing /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/LocationManager.h...
 Parsing file /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/LocationManager.h...
+Preprocessing /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/output/Flowstar.h...
+Parsing file /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/output/Flowstar.h...
 Preprocessing /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Path.h...
 Parsing file /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Path.h...
 Preprocessing /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Reset.h...
@@ -4802,13 +4807,7 @@ Parsing file /home/travis/build/hypro/hypro/src/hypro/parser/antlr4-flowstar/Hyp
 Preprocessing /home/travis/build/hypro/hypro/src/hypro/parser/antlr4-flowstar/HyproHAVisitor.h...
 Parsing file /home/travis/build/hypro/hypro/src/hypro/parser/antlr4-flowstar/HyproHAVisitor.h...
 Preprocessing /home/travis/build/hypro/hypro/src/hypro/parser/antlr4-flowstar/HyproInitialSetVisitor.h...
-Parsing file /home/travis/build/hypro/hypro/src/hypro/parser/antlr4-flowstar/HyproInitialSetVisitor.h...
-Preprocessing /home/travis/build/hypro/hypro/src/hypro/parser/antlr4-flowstar/HyproLocationVisitor.h...
-Parsing file /home/travis/build/hypro/hypro/src/hypro/parser/antlr4-flowstar/HyproLocationVisitor.h...
-Preprocessing /home/travis/build/hypro/hypro/src/hypro/parser/antlr4-flowstar/HyproSettingVisitor.h...
-Parsing file /home/travis/build/hypro/hypro/src/hypro/parser/antlr4-flowstar/HyproSettingVisitor.h...
-Preprocessing /home/travis/build/hypro/hypro/src/hypro/parser/antlr4-flowstar/HyproTransitionVisitor.h...
-Parsing file/home/travis/build/hypro/hypro/src/hypro/types.h:3: warning: include file iostream not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+Parsing file /home/travis/build/hypro/hypro/src/hypro/parser/antlr4-flowstar/Hypr/home/travis/build/hypro/hypro/src/hypro/types.h:3: warning: include file iostream not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/types.h:5: warning: include file carl/numbers/numbers.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/types.h:6: warning: include file carl/interval/Interval.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/types.h:7: warning: include file carl/core/Variable.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
@@ -4830,7 +4829,13 @@ Parsing file/home/travis/build/hypro/hypro/src/hypro/types.h:3: warning: include
 /home/travis/build/hypro/hypro/src/hypro/util/convenienceOperators.h:8: warning: include file vector not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/logging/Logger.h:4: warning: include file iostream not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/logging/Logger.h:5: warning: include file thread not found, perhaps you forgot to add its directory to INCLUDE_PATH?
- /home/travis/build/hypro/hypro/src/hypro/parser/antlr4-flowstar/HyproTransitionVisitor.h...
+oInitialSetVisitor.h...
+Preprocessing /home/travis/build/hypro/hypro/src/hypro/parser/antlr4-flowstar/HyproLocationVisitor.h...
+Parsing file /home/travis/build/hypro/hypro/src/hypro/parser/antlr4-flowstar/HyproLocationVisitor.h...
+Preprocessing /home/travis/build/hypro/hypro/src/hypro/parser/antlr4-flowstar/HyproSettingVisitor.h...
+Parsing file /home/travis/build/hypro/hypro/src/hypro/parser/antlr4-flowstar/HyproSettingVisitor.h...
+Preprocessing /home/travis/build/hypro/hypro/src/hypro/parser/antlr4-flowstar/HyproTransitionVisitor.h...
+Parsing file /home/travis/build/hypro/hypro/src/hypro/parser/antlr4-flowstar/HyproTransitionVisitor.h...
 Preprocessing /home/travis/build/hypro/hypro/src/hypro/parser/antlr4-flowstar/ParserWrapper.cpp...
 Parsing file /home/travis/build/hypro/hypro/src/hypro/parser/antlr4-flowstar/ParserWrapper.cpp...
 Preprocessing /home/travis/build/hypro/hypro/src/hypro/parser/antlr4-flowstar/ParserWrapper.h...
@@ -4977,6 +4982,12 @@ Preprocessing /home/travis/build/hypro/hypro/src/hypro/util/logging/Logger.cpp..
 Parsing file /home/travis/build/hypro/hypro/src/hypro/util/logging/Logger.cpp...
 Preprocessing /home/travis/build/hypro/hypro/src/hypro/util/logging/Logger.h...
 Parsing file /home/travis/build/hypro/hypro/src/hypro/util/logging/Logger.h...
+Preprocessing /home/travis/build/hypro/hypro/src/hypro/util/multithreading/Filewriter.h...
+Parsing file /home/travis/build/hypro/hypro/src/hypro/util/multithreading/Filewriter.h...
+Preprocessing /home/travis/build/hypro/hypro/src/hypro/util/multithreading/LockableBase.h...
+Parsing file /home/travis/build/hypro/hypro/src/hypro/util/multithreading/LockableBase.h...
+Preprocessing /home/travis/build/hypro/hypro/src/hypro/util/multithreading/LockableObjectWrapper.h...
+Parsing file /home/travis/build/hypro/hypro/src/hypro/util/multithreading/LockableObjectWrapper.h...
 Preprocessing /home/travis/build/hypro/hypro/src/hypro/util/multithreading/ScopedLock.h...
 Parsing file /home/travis/build/hypro/hypro/src/hypro/util/multithreading/ScopedLock.h...
 Preprocessing /home/travis/build/hypro/hypro/src/hypro/util/pca.h...
@@ -5049,7 +5060,42 @@ Parsing file /home/travis/build/hypro/hypro/examples/example_logger.cpp...
 Preprocessing /home/travis/build/hypro/hypro/examples/example_massif.cpp...
 Parsing file /home/travis/build/hypro/hypro/examples/example_massif.cpp...
 Preprocessing /home/travis/build/hypro/hypro/examples/example_matrixPolyhedra.cpp...
-Parsing file /home/travis/build/h/home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/util.h:3: warning: the name `util.h' supplied as the second argument in the \file statement matches the following input files:
+Parsing file /home/travis/build/hypro/hypro/examples/example_matrixPolyhedra.cpp...
+Preprocessing /home/travis/build/hypro/hypro/examples/example_numberReduction.cpp...
+Parsing file /home/travis/build/hypro/hypro/examples/example_numberReduction.cpp...
+Preprocessing /home/travis/build/hypro/hypro/examples/example_optimizer.cpp...
+Parsing file /home/travis/build/hypro/hypro/examples/example_optimizer.cpp...
+Preprocessing /home/travis/build/hypro/hypro/examples/example_orthogonalPolyhedron.cpp...
+Parsing file /home/travis/build/hypro/hypro/examples/example_orthogonalPolyhedron.cpp...
+Preprocessing /home/travis/build/hypro/hypro/examples/example_parallel_composition.cpp...
+Parsing file /home/travis/build/hypro/hypro/examples/example_parallel_composition.cpp...
+Preprocessing /home/travis/build/hypro/hypro/examples/example_pca.cpp...
+Parsing file /home/travis/build/hypro/hypro/examples/example_pca.cpp...
+Preprocessing /home/travis/build/hypro/hypro/examples/example_plot.cpp...
+Parsing file /home/travis/build/hypro/hypro/examples/example_plot.cpp...
+Preprocessing /home/travis/build/hypro/hypro/examples/example_polytope.cpp...
+Parsing file /home/travis/build/hypro/hypro/examples/example_polytope.cpp...
+Preprocessing /home/travis/build/hypro/hypro/examples/example_ppl_nncPolyhedra.cpp...
+Parsing file /home/travis/build/hypro/hypro/examples/example_ppl_nncPolyhedra.cpp...
+Preprocessing /home/travis/build/hypro/hypro/examples/example_reachability.cpp...
+Parsing file /home/travis/build/hypro/hypro/examples/example_reachability.cpp...
+Preprocessing /home/travis/build/hypro/hypro/examples/example_reduction.cpp...
+Parsing file /home/travis/build/hypro/hypro/examples/example_reduction.cpp...
+Preprocessing /home/travis/build/hypro/hypro/examples/example_redundantConstraints.cpp...
+Parsing file /home/travis/build/hypro/hypro/examples/example_redundantConstraints.cpp...
+Preprocessing /home/travis/build/hypro/hypro/examples/example_sfIntersection.cpp...
+Parsing file /home/travis/build/hypro/hypro/examples/example_sfIntersection.cpp...
+Preprocessing /home/travis/build/hypro/hypro/examples/example_supportFunction.cpp...
+Parsing file /home/travis/build/hypro/hypro/examples/example_supportFunction.cpp...
+Preprocessing /home/travis/build/hypro/hypro/examples/example_vertexEnumeration.cpp...
+Parsing file /home/travis/build/hypro/hypro/examples/example_vertexEnumeration.cpp...
+Preprocessing /home/travis/build/hypro/hypro/examples/example_zonotope.cpp...
+Parsing file /home/travis/build/hypro/hypro/examples/example_zonotope.cpp...
+Preprocessing /home/travis/build/hypro/hypro/examples/INCOMPLETE_example_benchmarks.cpp...
+Parsing file /home/travis/build/hypro/hypro/examples/INCOMPLETE_example_benchmarks.cpp...
+Preprocessing /home/travis/build/hypro/hypro/examples/INCOMPLETE_example_bouncingBall_Plotter.cpp...
+Parsing file /home/travis/build/hypro/hypro/examples/INCOMPLETE_example_bouncingBall_Plotter.cpp...
+Preprocessing /home/travis/build/hypro/hypro/examples/INCOMPLETE_example_fa/home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/util.h:3: warning: the name `util.h' supplied as the second argument in the \file statement matches the following input files:
    /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/util.h
    /home/travis/build/hypro/hypro/src/hypro/representations/Polytope/util.h
    /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/util.h
@@ -5892,7 +5938,6 @@ Possible candidates:
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Point.h:642: warning: member operator* belongs to two different groups. The second one found here will be ignored.
 /home/travis/build/hypro/hypro/src/hypro/util/VariablePool.h:28: warning: documented symbol `Singleton< VariablePool >' was not declared or defined.
 /home/travis/build/hypro/hypro/src/hypro/util/Plotter.h:70: warning: documented symbol `Singleton< Plotter< Number > >' was not declared or defined.
-/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/Reach_SF.h:14: warning: documented symbol `typedef hypro::reachability::boost::tuple< unsigned, State< Number >> initialSet' was not declared or defined.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/LocationManager.h:16: warning: documented symbol `Singleton< LocationManager< Number > >' was not declared or defined.
 /home/travis/build/hypro/hypro/src/hypro/parser/flowstar/componentsAdapt.h:7: warning: member with no name found.
 /home/travis/build/hypro/hypro/src/hypro/parser/flowstar/componentsAdapt.h:11: warning: member with no name found.
@@ -5901,40 +5946,9 @@ Possible candidates:
 /home/travis/build/hypro/hypro/src/hypro/types.h:29: warning: documented symbol `typedef hypro::std::set< vector_t< Number >> vectorSet' was not declared or defined.
 /home/travis/build/hypro/hypro/src/hypro/util/Plotter.h:70: warning: documented symbol `Singleton< Plotter< Number > >' was not declared or defined.
 /home/travis/build/hypro/hypro/src/hypro/util/VariablePool.h:28: warning: documented symbol `Singleton< VariablePool >' was not declared or defined.
-ypro/hypro/examples/example_matrixPolyhedra.cpp...
-Preprocessing /home/travis/build/hypro/hypro/examples/example_numberReduction.cpp...
-Parsing file /home/travis/build/hypro/hypro/examples/example_numberReduction.cpp...
-Preprocessing /home/travis/build/hypro/hypro/examples/example_optimizer.cpp...
-Parsing file /home/travis/build/hypro/hypro/examples/example_optimizer.cpp...
-Preprocessing /home/travis/build/hypro/hypro/examples/example_orthogonalPolyhedron.cpp...
-Parsing file /home/travis/build/hypro/hypro/examples/example_orthogonalPolyhedron.cpp...
-Preprocessing /home/travis/build/hypro/hypro/examples/example_pca.cpp...
-Parsing file /home/travis/build/hypro/hypro/examples/example_pca.cpp...
-Preprocessing /home/travis/build/hypro/hypro/examples/example_plot.cpp...
-Parsing file /home/travis/build/hypro/hypro/examples/example_plot.cpp...
-Preprocessing /home/travis/build/hypro/hypro/examples/example_polytope.cpp...
-Parsing file /home/travis/build/hypro/hypro/examples/example_polytope.cpp...
-Preprocessing /home/travis/build/hypro/hypro/examples/example_ppl_nncPolyhedra.cpp...
-Parsing file /home/travis/build/hypro/hypro/examples/example_ppl_nncPolyhedra.cpp...
-Preprocessing /home/travis/build/hypro/hypro/examples/example_reachability.cpp...
-Parsing file /home/travis/build/hypro/hypro/examples/example_reachability.cpp...
-Preprocessing /home/travis/build/hypro/hypro/examples/example_reduction.cpp...
-Parsing file /home/travis/build/hypro/hypro/examples/example_reduction.cpp...
-Preprocessing /home/travis/build/hypro/hypro/examples/example_redundantConstraints.cpp...
-Parsing file /home/travis/build/hypro/hypro/examples/example_redundantConstraints.cpp...
-Preprocessing /home/travis/build/hypro/hypro/examples/example_sfIntersection.cpp...
-Parsing file /home/travis/build/hypro/hypro/examples/example_sfIntersection.cpp...
-Preprocessing /home/travis/build/hypro/hypro/examples/example_supportFunction.cpp...
-Parsing file /home/travis/build/hypro/hypro/examples/example_supportFunction.cpp...
-Preprocessing /home/travis/build/hypro/hypro/examples/example_vertexEnumeration.cpp...
-Parsing file /home/travis/build/hypro/hypro/examples/example_vertexEnumeration.cpp...
-Preprocessing /home/travis/build/hypro/hypro/examples/example_zonotope.cpp...
-Parsing file /home/travis/build/hypro/hypro/examples/example_zonotope.cpp...
-Preprocessing /home/travis/build/hypro/hypro/examples/INCOMPLETE_example_benchmarks.cpp...
-Parsing file /home/travis/build/hypro/hypro/examples/INCOMPLETE_example_benchmarks.cpp...
-Preprocessing /home/travis/build/hypro/hypro/examples/INCOMPLETE_example_bouncingBall_Plotter.cpp...
-Parsing file /home/travis/build/hypro/hypro/examples/INCOMPLETE_example_bouncingBall_Plotter.cpp...
-Preprocessing /home/travis/build/hypro/hypro/examples/INCOMPLETE_example_facetEnumeration.cpp...
+error opening bib20258.bbl: No such file or directory
+bibtex command failed: No such file or directory
+cetEnumeration.cpp...
 Parsing file /home/travis/build/hypro/hypro/examples/INCOMPLETE_example_facetEnumeration.cpp...
 Building group list...
 Building directory list...
@@ -5971,9 +5985,7 @@ Computing member relations...
 Building full member lists recursively...
 Adding members to member groups.
 Distributing member group documentation.
-Computing meerror opening bib20135.bbl: No such file or directory
-bibtex command failed: No such file or directory
-mber references...
+Computing member references...
 Inheriting documentation...
 Generating disk names...
 Adding source references...
@@ -6028,6 +6040,7 @@ Generating code for file /home/travis/build/hypro/hypro/examples/example_matrixP
 Generating code for file /home/travis/build/hypro/hypro/examples/example_numberReduction.cpp...
 Generating code for file /home/travis/build/hypro/hypro/examples/example_optimizer.cpp...
 Generating code for file /home/travis/build/hypro/hypro/examples/example_orthogonalPolyhedron.cpp...
+Generating code for file /home/travis/build/hypro/hypro/examples/example_parallel_composition.cpp...
 Generating code for file /home/travis/build/hypro/hypro/examples/example_pca.cpp...
 Generating code for file /home/travis/build/hypro/hypro/examples/example_plot.cpp...
 Generating code for file /home/travis/build/hypro/hypro/examples/example_polytope.cpp...
@@ -6049,7 +6062,6 @@ Generating code for file /home/travis/build/hypro/hypro/src/hypro/algorithms/con
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/algorithms/eigendecomposition/Transformation.h...
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/FirstSegment.h...
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/Reach.h...
-Generating code for file /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/Reach_SF.h...
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/TrafoParameters.h...
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/util.h...
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/representations/Polytope/util.h...
@@ -6060,8 +6072,11 @@ Generating code for file /home/travis/build/hypro/hypro/src/hypro/datastructures
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h...
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Condition.h...
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/HybridAutomaton.h...
+Generating code for file /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/HybridAutomatonComp.h...
+Generating code for file /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Label.h...
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Location.h...
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/LocationManager.h...
+Generating code for file /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/output/Flowstar.h...
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Path.h...
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Reset.h...
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Settings.h...
@@ -6198,6 +6213,9 @@ Generating code for file /home/travis/build/hypro/hypro/src/hypro/util/linearOpt
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/z3/z3Convenience.h...
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/util/logging/Logger.cpp...
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/util/logging/Logger.h...
+Generating code for file /home/travis/build/hypro/hypro/src/hypro/util/multithreading/Filewriter.h...
+Generating code for file /home/travis/build/hypro/hypro/src/hypro/util/multithreading/LockableBase.h...
+Generating code for file /home/travis/build/hypro/hypro/src/hypro/util/multithreading/LockableObjectWrapper.h...
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/util/multithreading/ScopedLock.h...
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/util/pca.h...
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/util/Permutator.h...
@@ -6644,6 +6662,8 @@ Generating docs for compound hypro::Facet...
 Generating docs for compound hypro::Halfspace...
 Generating docs for compound hypro::Condition...
 Generating docs for compound hypro::HybridAutomaton...
+Generating docs for compound hypro::HybridAutomatonComp...
+Generating docs for compound hypro::Label...
 Generating docs for compound hypro::Transition...
 Generating docs for compound hypro::LocationManager...
 Generating docs for compound hypro::Location...
@@ -6738,6 +6758,9 @@ Generating docs for compound hypro::typeName< mpq_class >...
 Generating docs for compound hypro::EvaluationResult...
 Generating docs for compound hypro::glpk_context...
 Generating docs for compound hypro::Optimizer...
+Generating docs for compound hypro::LockedFileWriter...
+Generating docs for compound hypro::LockableBase...
+Generating docs for compound hypro::LockableObjectWrapper...
 Generating docs for compound hypro::PrincipalComponentAnalysis...
 Generating docs for compound hypro::Permutator...
 Generating docs for compound hypro::Plotter...
@@ -6782,7 +6805,6 @@ Generating docs for compound hypro::reachability::_glp_vertex...
 Generating docs for compound hypro::reachability::_glp_arc...
 Generating docs for compound hypro::reachability::LPXKKT...
 Generating docs for compound hypro::reachability::Reach...
-Generating docs for compound hypro::reachability::Reach< Number, SupportFunction< Number > >...
 Generating docs for namespace hypro::reachability::Eigen
 Generating docs for compound hypro::reachability::Eigen::NumTraits< carl::FLOAT_T< Number > >...
 Generating docs for compound hypro::reachability::Eigen::NumTraits< mpq_class >...
@@ -6903,16 +6925,13 @@ Generating dependency graph for directory /home/travis/build/hypro/hypro/example
 Generating dependency graph for directory /home/travis/build/hypro/hypro/src/hypro/parser/flowstar
 Generating dependency graph for directory /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/glpk
 Generating dependency graph for directory /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope
-Generating dependency graph for directosh: 1: latex: not found
-error: Problems running latex. Check your installation or look for typos in _formulas.tex and check _formulas.log!
-sh: 1: dvips: not found
-error: Problems running dvips. Check your installation!
-ry /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton
+Generating dependency graph for directory /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton
 Generating dependency graph for directory /home/travis/build/hypro/hypro/src/hypro
 Generating dependency graph for directory /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization
 Generating dependency graph for directory /home/travis/build/hypro/hypro/src/hypro/util/logging
 Generating dependency graph for directory /home/travis/build/hypro/hypro/src/hypro/util/multithreading
 Generating dependency graph for directory /home/travis/build/hypro/hypro/src/hypro/representations/OrthogonalPolyhedron
+Generating dependency graph for directory /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/output
 Generating dependency graph for directory /home/travis/build/hypro/hypro/src/hypro/parser
 Generating dependency graph for directory /home/travis/build/hypro/hypro/src/hypro/representations/Polytope
 Generating dependency graph for directory /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes
@@ -6924,7 +6943,11 @@ Generating dependency graph for directory /home/travis/build/hypro/hypro/src/hyp
 Generating dependency graph for directory /home/travis/build/hypro/hypro/src
 Generating dependency graph for directory /home/travis/build/hypro/hypro/src/hypro/util/statistics
 Generating dependency graph for directory /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction
-Generating dependency graph for directory /home/travis/build/hypro/hypro/src/hypro/representations/TaylorModel
+Generating dependency graph for directory /home/travis/build/hypro/hypro/src/hypsh: 1: latex: not found
+error: Problems running latex. Check your installation or look for typos in _formulas.tex and check _formulas.log!
+sh: 1: dvips: not found
+error: Problems running dvips. Check your installation!
+ro/representations/TaylorModel
 Generating dependency graph for directory /home/travis/build/hypro/hypro/src/hypro/util/tuple_expansion
 Generating dependency graph for directory /home/travis/build/hypro/hypro/src/hypro/util
 Generating dependency graph for directory /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope
@@ -6948,306 +6971,312 @@ Generating example index...
 finalizing index lists...
 Running dot...
 Generating dot graphs using 3 parallel threads...
-Running dot for graph 1/262
-Running dot for graph 2/262
-Running dot for graph 3/262
-Running dot for graph 4/262
-Running dot for graph 5/262
-Running dot for graph 6/262
-Running dot for graph 7/262
-Running dot for graph 8/262
-Running dot for graph 9/262
-Running dot for graph 10/262
-Running dot for graph 11/262
-Running dot for graph 12/262
-Running dot for graph 13/262
-Running dot for graph 14/262
-Running dot for graph 15/262
-Running dot for graph 16/262
-Running dot for graph 17/262
-Running dot for graph 18/262
-Running dot for graph 19/262
-Running dot for graph 20/262
-Running dot for graph 21/262
-Running dot for graph 22/262
-Running dot for graph 23/262
-Running dot for graph 24/262
-Running dot for graph 25/262
-Running dot for graph 26/262
-Running dot for graph 27/262
-Running dot for graph 28/262
-Running dot for graph 29/262
-Running dot for graph 30/262
-Running dot for graph 31/262
-Running dot for graph 32/262
-Running dot for graph 33/262
-Running dot for graph 34/262
-Running dot for graph 35/262
-Running dot for graph 36/262
-Running dot for graph 37/262
-Running dot for graph 38/262
-Running dot for graph 39/262
-Running dot for graph 40/262
-Running dot for graph 41/262
-Running dot for graph 42/262
-Running dot for graph 43/262
-Running dot for graph 44/262
-Running dot for graph 45/262
-Running dot for graph 46/262
-Running dot for graph 47/262
-Running dot for graph 48/262
-Running dot for graph 49/262
-Running dot for graph 50/262
-Running dot for graph 51/262
-Running dot for graph 52/262
-Running dot for graph 53/262
-Running dot for graph 54/262
-Running dot for graph 55/262
-Running dot for graph 56/262
-Running dot for graph 57/262
-Running dot for graph 58/262
-Running dot for graph 59/262
-Running dot for graph 60/262
-Running dot for graph 61/262
-Running dot for graph 62/262
-Running dot for graph 63/262
-Running dot for graph 64/262
-Running dot for graph 65/262
-Running dot for graph 66/262
-Running dot for graph 67/262
-Running dot for graph 68/262
-Running dot for graph 69/262
-Running dot for graph 70/262
-Running dot for graph 71/262
-Running dot for graph 72/262
-Running dot for graph 73/262
-Running dot for graph 74/262
-Running dot for graph 75/262
-Running dot for graph 76/262
-Running dot for graph 77/262
-Running dot for graph 78/262
-Running dot for graph 79/262
-Running dot for graph 80/262
-Running dot for graph 81/262
-Running dot for graph 82/262
-Running dot for graph 83/262
-Running dot for graph 84/262
-Running dot for graph 85/262
-Running dot for graph 86/262
-Running dot for graph 87/262
-Running dot for graph 88/262
-Running dot for graph 89/262
-Running dot for graph 90/262
-Running dot for graph 91/262
-Running dot for graph 92/262
-Running dot for graph 93/262
-Running dot for graph 94/262
-Running dot for graph 95/262
-Running dot for graph 96/262
-Running dot for graph 97/262
-Running dot for graph 98/262
-Running dot for graph 99/262
-Running dot for graph 100/262
-Running dot for graph 101/262
-Running dot for graph 102/262
-Running dot for graph 103/262
-Running dot for graph 104/262
-Running dot for graph 105/262
-Running dot for graph 106/262
-Running dot for graph 107/262
-Running dot for graph 108/262
-Running dot for graph 109/262
-Running dot for graph 110/262
-Running dot for graph 111/262
-Running dot for graph 112/262
-Running dot for graph 113/262
-Running dot for graph 114/262
-Running dot for graph 115/262
-Running dot for graph 116/262
-Running dot for graph 117/262
-Running dot for graph 118/262
-Running dot for graph 119/262
-Running dot for graph 120/262
-Running dot for graph 121/262
-Running dot for graph 122/262
-Running dot for graph 123/262
-Running dot for graph 124/262
-Running dot for graph 125/262
-Running dot for graph 126/262
-Running dot for graph 127/262
-Running dot for graph 128/262
-Running dot for graph 129/262
-Running dot for graph 130/262
-Running dot for graph 131/262
-Running dot for graph 132/262
-Running dot for graph 133/262
-Running dot for graph 134/262
-Running dot for graph 135/262
-Running dot for graph 136/262
-Running dot for graph 137/262
-Running dot for graph 138/262
-Running dot for graph 139/262
-Running dot for graph 140/262
-Running dot for graph 141/262
-Running dot for graph 142/262
-Running dot for graph 143/262
-Running dot for graph 144/262
-Running dot for graph 145/262
-Running dot for graph 146/262
-Running dot for graph 147/262
-Running dot for graph 148/262
-Running dot for graph 149/262
-Running dot for graph 150/262
-Running dot for graph 151/262
-Running dot for graph 152/262
-Running dot for graph 153/262
-Running dot for graph 154/262
-Running dot for graph 155/262
-Running dot for graph 156/262
-Running dot for graph 157/262
-Running dot for graph 158/262
-Running dot for graph 159/262
-Running dot for graph 160/262
-Running dot for graph 161/262
-Running dot for graph 162/262
-Running dot for graph 163/262
-Running dot for graph 164/262
-Running dot for graph 165/262
-Running dot for graph 166/262
-Running dot for graph 167/262
-Running dot for graph 168/262
-Running dot for graph 169/262
-Running dot for graph 170/262
-Running dot for graph 171/262
-Running dot for graph 172/262
-Running dot for graph 173/262
-Running dot for graph 174/262
-Running dot for graph 175/262
-Running dot for graph 176/262
-Running dot for graph 177/262
-Running dot for graph 178/262
-Running dot for graph 179/262
-Running dot for graph 180/262
-Running dot for graph 181/262
-Running dot for graph 182/262
-Running dot for graph 183/262
-Running dot for graph 184/262
-Running dot for graph 185/262
-Running dot for graph 186/262
-Running dot for graph 187/262
-Running dot for graph 188/262
-Running dot for graph 189/262
-Running dot for graph 190/262
-Running dot for graph 191/262
-Running dot for graph 192/262
-Running dot for graph 193/262
-Running dot for graph 194/262
-Running dot for graph 195/262
-Running dot for graph 196/262
-Running dot for graph 197/262
-Running dot for graph 198/262
-Running dot for graph 199/262
-Running dot for graph 200/262
-Running dot for graph 201/262
-Running dot for graph 202/262
-Running dot for graph 203/262
-Running dot for graph 204/262
-Running dot for graph 205/262
-Running dot for graph 206/262
-Running dot for graph 207/262
-Running dot for graph 208/262
-Running dot for graph 209/262
-Running dot for graph 210/262
-Running dot for graph 211/262
-Running dot for graph 212/262
-Running dot for graph 213/262
-Running dot for graph 214/262
-Running dot for graph 215/262
-Running dot for graph 216/262
-Running dot for graph 217/262
-Running dot for graph 218/262
-Running dot for graph 219/262
-Running dot for graph 220/262
-Running dot for graph 221/262
-Running dot for graph 222/262
-Running dot for graph 223/262
-Running dot for graph 224/262
-Running dot for graph 225/262
-Running dot for graph 226/262
-Running dot for graph 227/262
-Running dot for graph 228/262
-Running dot for graph 229/262
-Running dot for graph 230/262
-Running dot for graph 231/262
-Running dot for graph 232/262
-Running dot for graph 233/262
-Running dot for graph 234/262
-Running dot for graph 235/262
-Running dot for graph 236/262
-Running dot for graph 237/262
-Running dot for graph 238/262
-Running dot for graph 239/262
-Running dot for graph 240/262
-Running dot for graph 241/262
-Running dot for graph 242/262
-Running dot for graph 243/262
-Running dot for graph 244/262
-Running dot for graph 245/262
-Running dot for graph 246/262
-Running dot for graph 247/262
-Running dot for graph 248/262
-Running dot for graph 249/262
-Running dot for graph 250/262
-Running dot for graph 251/262
-Running dot for graph 252/262
-Running dot for graph 253/262
-Running dot for graph 254/262
-Running dot for graph 255/262
-Running dot for graph 256/262
-Running dot for graph 257/262
-Running dot for graph 258/262
-Running dot for graph 259/262
-Running dot for graph 260/262
-Running dot for graph 261/262
-Running dot for graph 262/262
-Patching output file 1/39
-Patching output file 2/39
-Patching output file 3/39
-Patching output file 4/39
-Patching output file 5/39
-Patching output file 6/39
-Patching output file 7/39
-Patching output file 8/39
-Patching output file 9/39
-Patching output file 10/39
-Patching output file 11/39
-Patching output file 12/39
-Patching output file 13/39
-Patching output file 14/39
-Patching output file 15/39
-Patching output file 16/39
-Patching output file 17/39
-Patching output file 18/39
-Patching output file 19/39
-Patching output file 20/39
-Patching output file 21/39
-Patching output file 22/39
-Patching output file 23/39
-Patching output file 24/39
-Patching output file 25/39
-Patching output file 26/39
-Patching output file 27/39
-Patching output file 28/39
-Patching output file 29/39
-Patching output file 30/39
-Patching output file 31/39
-Patching output file 32/39
-Patching output file 33/39
-Patching output file 34/39
-Patching output file 35/39
-Patching output file 36/39
-Patching output file 37/39
-Patching output file 38/39
-Patching output file 39/39
-lookup cache used 22459/65536 hits=506219 misses=23911
+Running dot for graph 1/267
+Running dot for graph 2/267
+Running dot for graph 3/267
+Running dot for graph 4/267
+Running dot for graph 5/267
+Running dot for graph 6/267
+Running dot for graph 7/267
+Running dot for graph 8/267
+Running dot for graph 9/267
+Running dot for graph 10/267
+Running dot for graph 11/267
+Running dot for graph 12/267
+Running dot for graph 13/267
+Running dot for graph 14/267
+Running dot for graph 15/267
+Running dot for graph 16/267
+Running dot for graph 17/267
+Running dot for graph 18/267
+Running dot for graph 19/267
+Running dot for graph 20/267
+Running dot for graph 21/267
+Running dot for graph 22/267
+Running dot for graph 23/267
+Running dot for graph 24/267
+Running dot for graph 25/267
+Running dot for graph 26/267
+Running dot for graph 27/267
+Running dot for graph 28/267
+Running dot for graph 29/267
+Running dot for graph 30/267
+Running dot for graph 31/267
+Running dot for graph 32/267
+Running dot for graph 33/267
+Running dot for graph 34/267
+Running dot for graph 35/267
+Running dot for graph 36/267
+Running dot for graph 37/267
+Running dot for graph 38/267
+Running dot for graph 39/267
+Running dot for graph 40/267
+Running dot for graph 41/267
+Running dot for graph 42/267
+Running dot for graph 43/267
+Running dot for graph 44/267
+Running dot for graph 45/267
+Running dot for graph 46/267
+Running dot for graph 47/267
+Running dot for graph 48/267
+Running dot for graph 49/267
+Running dot for graph 50/267
+Running dot for graph 51/267
+Running dot for graph 52/267
+Running dot for graph 53/267
+Running dot for graph 54/267
+Running dot for graph 55/267
+Running dot for graph 56/267
+Running dot for graph 57/267
+Running dot for graph 58/267
+Running dot for graph 59/267
+Running dot for graph 60/267
+Running dot for graph 61/267
+Running dot for graph 62/267
+Running dot for graph 63/267
+Running dot for graph 64/267
+Running dot for graph 65/267
+Running dot for graph 66/267
+Running dot for graph 67/267
+Running dot for graph 68/267
+Running dot for graph 69/267
+Running dot for graph 70/267
+Running dot for graph 71/267
+Running dot for graph 72/267
+Running dot for graph 73/267
+Running dot for graph 74/267
+Running dot for graph 75/267
+Running dot for graph 76/267
+Running dot for graph 77/267
+Running dot for graph 78/267
+Running dot for graph 79/267
+Running dot for graph 80/267
+Running dot for graph 81/267
+Running dot for graph 82/267
+Running dot for graph 83/267
+Running dot for graph 84/267
+Running dot for graph 85/267
+Running dot for graph 86/267
+Running dot for graph 87/267
+Running dot for graph 88/267
+Running dot for graph 89/267
+Running dot for graph 90/267
+Running dot for graph 91/267
+Running dot for graph 92/267
+Running dot for graph 93/267
+Running dot for graph 94/267
+Running dot for graph 95/267
+Running dot for graph 96/267
+Running dot for graph 97/267
+Running dot for graph 98/267
+Running dot for graph 99/267
+Running dot for graph 100/267
+Running dot for graph 101/267
+Running dot for graph 102/267
+Running dot for graph 103/267
+Running dot for graph 104/267
+Running dot for graph 105/267
+Running dot for graph 106/267
+Running dot for graph 107/267
+Running dot for graph 108/267
+Running dot for graph 109/267
+Running dot for graph 110/267
+Running dot for graph 111/267
+Running dot for graph 112/267
+Running dot for graph 113/267
+Running dot for graph 114/267
+Running dot for graph 115/267
+Running dot for graph 116/267
+Running dot for graph 117/267
+Running dot for graph 118/267
+Running dot for graph 119/267
+Running dot for graph 120/267
+Running dot for graph 121/267
+Running dot for graph 122/267
+Running dot for graph 123/267
+Running dot for graph 124/267
+Running dot for graph 125/267
+Running dot for graph 126/267
+Running dot for graph 127/267
+Running dot for graph 128/267
+Running dot for graph 129/267
+Running dot for graph 130/267
+Running dot for graph 131/267
+Running dot for graph 132/267
+Running dot for graph 133/267
+Running dot for graph 134/267
+Running dot for graph 135/267
+Running dot for graph 136/267
+Running dot for graph 137/267
+Running dot for graph 138/267
+Running dot for graph 139/267
+Running dot for graph 140/267
+Running dot for graph 141/267
+Running dot for graph 142/267
+Running dot for graph 143/267
+Running dot for graph 144/267
+Running dot for graph 145/267
+Running dot for graph 146/267
+Running dot for graph 147/267
+Running dot for graph 148/267
+Running dot for graph 149/267
+Running dot for graph 150/267
+Running dot for graph 151/267
+Running dot for graph 152/267
+Running dot for graph 153/267
+Running dot for graph 154/267
+Running dot for graph 155/267
+Running dot for graph 156/267
+Running dot for graph 157/267
+Running dot for graph 158/267
+Running dot for graph 159/267
+Running dot for graph 160/267
+Running dot for graph 161/267
+Running dot for graph 162/267
+Running dot for graph 163/267
+Running dot for graph 164/267
+Running dot for graph 165/267
+Running dot for graph 166/267
+Running dot for graph 167/267
+Running dot for graph 168/267
+Running dot for graph 169/267
+Running dot for graph 170/267
+Running dot for graph 171/267
+Running dot for graph 172/267
+Running dot for graph 173/267
+Running dot for graph 174/267
+Running dot for graph 175/267
+Running dot for graph 176/267
+Running dot for graph 177/267
+Running dot for graph 178/267
+Running dot for graph 179/267
+Running dot for graph 180/267
+Running dot for graph 181/267
+Running dot for graph 182/267
+Running dot for graph 183/267
+Running dot for graph 184/267
+Running dot for graph 185/267
+Running dot for graph 186/267
+Running dot for graph 187/267
+Running dot for graph 188/267
+Running dot for graph 189/267
+Running dot for graph 190/267
+Running dot for graph 191/267
+Running dot for graph 192/267
+Running dot for graph 193/267
+Running dot for graph 194/267
+Running dot for graph 195/267
+Running dot for graph 196/267
+Running dot for graph 197/267
+Running dot for graph 198/267
+Running dot for graph 199/267
+Running dot for graph 200/267
+Running dot for graph 201/267
+Running dot for graph 202/267
+Running dot for graph 203/267
+Running dot for graph 204/267
+Running dot for graph 205/267
+Running dot for graph 206/267
+Running dot for graph 207/267
+Running dot for graph 208/267
+Running dot for graph 209/267
+Running dot for graph 210/267
+Running dot for graph 211/267
+Running dot for graph 212/267
+Running dot for graph 213/267
+Running dot for graph 214/267
+Running dot for graph 215/267
+Running dot for graph 216/267
+Running dot for graph 217/267
+Running dot for graph 218/267
+Running dot for graph 219/267
+Running dot for graph 220/267
+Running dot for graph 221/267
+Running dot for graph 222/267
+Running dot for graph 223/267
+Running dot for graph 224/267
+Running dot for graph 225/267
+Running dot for graph 226/267
+Running dot for graph 227/267
+Running dot for graph 228/267
+Running dot for graph 229/267
+Running dot for graph 230/267
+Running dot for graph 231/267
+Running dot for graph 232/267
+Running dot for graph 233/267
+Running dot for graph 234/267
+Running dot for graph 235/267
+Running dot for graph 236/267
+Running dot for graph 237/267
+Running dot for graph 238/267
+Running dot for graph 239/267
+Running dot for graph 240/267
+Running dot for graph 241/267
+Running dot for graph 242/267
+Running dot for graph 243/267
+Running dot for graph 244/267
+Running dot for graph 245/267
+Running dot for graph 246/267
+Running dot for graph 247/267
+Running dot for graph 248/267
+Running dot for graph 249/267
+Running dot for graph 250/267
+Running dot for graph 251/267
+Running dot for graph 252/267
+Running dot for graph 253/267
+Running dot for graph 254/267
+Running dot for graph 255/267
+Running dot for graph 256/267
+Running dot for graph 257/267
+Running dot for graph 258/267
+Running dot for graph 259/267
+Running dot for graph 260/267
+Running dot for graph 261/267
+Running dot for graph 262/267
+Running dot for graph 263/267
+Running dot for graph 264/267
+Running dot for graph 265/267
+Running dot for graph 266/267
+Running dot for graph 267/267
+Patching output file 1/40
+Patching output file 2/40
+Patching output file 3/40
+Patching output file 4/40
+Patching output file 5/40
+Patching output file 6/40
+Patching output file 7/40
+Patching output file 8/40
+Patching output file 9/40
+Patching output file 10/40
+Patching output file 11/40
+Patching output file 12/40
+Patching output file 13/40
+Patching output file 14/40
+Patching output file 15/40
+Patching output file 16/40
+Patching output file 17/40
+Patching output file 18/40
+Patching output file 19/40
+Patching output file 20/40
+Patching output file 21/40
+Patching output file 22/40
+Patching output file 23/40
+Patching output file 24/40
+Patching output file 25/40
+Patching output file 26/40
+Patching output file 27/40
+Patching output file 28/40
+Patching output file 29/40
+Patching output file 30/40
+Patching output file 31/40
+Patching output file 32/40
+Patching output file 33/40
+Patching output file 34/40
+Patching output file 35/40
+Patching output file 36/40
+Patching output file 37/40
+Patching output file 38/40
+Patching output file 39/40
+Patching output file 40/40
+lookup cache used 22590/65536 hits=517207 misses=24064
 finished...

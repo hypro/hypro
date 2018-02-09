@@ -22,6 +22,7 @@ var dir_d28a4824dc47e487b107a5db32ef43c4 =
     [ "example_numberReduction.cpp", "example__numberReduction_8cpp_source.html", null ],
     [ "example_optimizer.cpp", "example__optimizer_8cpp_source.html", null ],
     [ "example_orthogonalPolyhedron.cpp", "example__orthogonalPolyhedron_8cpp_source.html", null ],
+    [ "example_parallel_composition.cpp", "example__parallel__composition_8cpp_source.html", null ],
     [ "example_pca.cpp", "example__pca_8cpp_source.html", null ],
     [ "example_plot.cpp", "example__plot_8cpp.html", "example__plot_8cpp" ],
     [ "example_polytope.cpp", "example__polytope_8cpp_source.html", null ],

@@ -1,4 +1,4 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$classhypro_1_1reachability_1_1hypro_1_1GeometricObject.html" title="hypro::reachability\l::hypro::GeometricObject\l\&lt; Number, HPolytopeT\&lt; Number,\l Converter, Setting \&gt; \&gt;" alt="" coords="5,5,224,75"/>
-<area shape="rect" id="node2" href="$classhypro_1_1reachability_1_1hypro_1_1HPolytopeT.html" title="Class for a H&#45;polytope. " alt="" coords="272,5,421,75"/>
+<area shape="rect" id="node1" href="$classhypro_1_1reachability_1_1hypro_1_1GeometricObject.html" title="hypro::reachability\l::hypro::GeometricObject\l\&lt; double, BoxT\&lt; double,\l Converter, Setting \&gt; \&gt;" alt="" coords="5,5,173,75"/>
+<area shape="rect" id="node2" href="$classhypro_1_1reachability_1_1hypro_1_1BoxT_3_01double_00_01Converter_00_01Setting_01_4.html" title="Class holding a specialization of the generic BoxT type with double numbers. " alt="" coords="221,12,376,68"/>
 </map>

@@ -9,6 +9,7 @@ var classhypro_1_1Location =
     [ "Location", "classhypro_1_1Location.html#a217d157ae357a1efb2c071af0c66fe15", null ],
     [ "~Location", "classhypro_1_1Location.html#ac6bc63470680fc9f68e250e74557d8d0", null ],
     [ "addTransition", "classhypro_1_1Location.html#afca89b8e15d30121aaff7b2224af45cc", null ],
+    [ "getDotRepresentation", "classhypro_1_1Location.html#a00e08686c4582cda2df4c2084dcabf9a", null ],
     [ "getExternalInput", "classhypro_1_1Location.html#aa127f386bd41c47279839ec9d224861d", null ],
     [ "getFlow", "classhypro_1_1Location.html#ab137cbf1e1d715dbef8c984408bdb498", null ],
     [ "getId", "classhypro_1_1Location.html#a00d1e50edc314d7228eb8673f975cc85", null ],

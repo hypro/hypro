@@ -236,42 +236,38 @@ Public Types</h2></td></tr>
 <br/>
 &#160;&#160;<b>T__20</b> = 21, 
 <b>T__21</b> = 22, 
-<b>T__22</b> = 23, 
-<b>T__23</b> = 24, 
+<b>IN</b> = 23, 
+<b>PAR</b> = 24, 
 <br/>
-&#160;&#160;<b>T__24</b> = 25, 
-<b>T__25</b> = 26, 
-<b>IN</b> = 27, 
-<b>TRUE</b> = 28, 
+&#160;&#160;<b>JUMPS</b> = 25, 
+<b>URGENT</b> = 26, 
+<b>GUARD</b> = 27, 
+<b>RESET</b> = 28, 
 <br/>
-&#160;&#160;<b>FALSE</b> = 29, 
-<b>PAR</b> = 30, 
-<b>COMMENT</b> = 31, 
-<b>EQUALS</b> = 32, 
+&#160;&#160;<b>PARALLELOTOPE</b> = 29, 
+<b>BOX</b> = 30, 
+<b>JUMP</b> = 31, 
+<b>DEFINE</b> = 32, 
 <br/>
-&#160;&#160;<b>BOOLRELATION</b> = 33, 
-<b>PLUS</b> = 34, 
-<b>MINUS</b> = 35, 
-<b>TIMES</b> = 36, 
+&#160;&#160;<b>COMMENT</b> = 33, 
+<b>EQUALS</b> = 34, 
+<b>BOOLRELATION</b> = 35, 
+<b>PLUS</b> = 36, 
 <br/>
-&#160;&#160;<b>SBOPEN</b> = 37, 
-<b>SBCLOSE</b> = 38, 
-<b>CBOPEN</b> = 39, 
-<b>CBCLOSE</b> = 40, 
+&#160;&#160;<b>MINUS</b> = 37, 
+<b>TIMES</b> = 38, 
+<b>SBOPEN</b> = 39, 
+<b>SBCLOSE</b> = 40, 
 <br/>
-&#160;&#160;<b>COMMA</b> = 41, 
-<b>NUMBER</b> = 42, 
-<b>CONSTANT</b> = 43, 
-<b>VARIABLE</b> = 44, 
+&#160;&#160;<b>CBOPEN</b> = 41, 
+<b>CBCLOSE</b> = 42, 
+<b>COMMA</b> = 43, 
+<b>NUMBER</b> = 44, 
 <br/>
-&#160;&#160;<b>WS</b> = 45, 
-<b>PARALLELOTOPE</b> = 46, 
-<b>INTERVALAGG</b> = 47, 
-<b>BOX</b> = 48, 
-<br/>
-&#160;&#160;<b>JUMP</b> = 49, 
-<b>DEFINE</b> = 50, 
-<b>EXPONENTIAL</b> = 51
+&#160;&#160;<b>CONSTANT</b> = 45, 
+<b>VARIABLE</b> = 46, 
+<b>WS</b> = 47, 
+<b>EXPONENTIAL</b> = 48
 <br/>
  }</td></tr>
 <tr class="separator:ae07ebdd7ac1893b0958d45437bbffb07"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -284,19 +280,19 @@ Public Types</h2></td></tr>
 &#160;&#160;<b>RuleLocation</b> = 4, 
 <b>RuleActivities</b> = 5, 
 <b>RuleInvariants</b> = 6, 
-<b>RuleConstantexpr</b> = 7, 
+<b>RuleReplacedexpr</b> = 7, 
 <br/>
-&#160;&#160;<b>RuleConnector</b> = 8, 
-<b>RuleTerm</b> = 9, 
-<b>RulePolynom</b> = 10, 
-<b>RuleInterval</b> = 11, 
+&#160;&#160;<b>RuleConstantexpr</b> = 8, 
+<b>RuleConnector</b> = 9, 
+<b>RuleTerm</b> = 10, 
+<b>RulePolynom</b> = 11, 
 <br/>
-&#160;&#160;<b>RuleEquation</b> = 12, 
-<b>RuleConstraint</b> = 13, 
-<b>RuleIntervalexpr</b> = 14, 
-<b>RuleConstrset</b> = 15, 
+&#160;&#160;<b>RuleInterval</b> = 12, 
+<b>RuleEquation</b> = 13, 
+<b>RuleConstraint</b> = 14, 
+<b>RuleIntervalexpr</b> = 15, 
 <br/>
-&#160;&#160;<b>RuleReplacedexpr</b> = 16, 
+&#160;&#160;<b>RuleConstrset</b> = 16, 
 <b>RuleInit</b> = 17, 
 <b>RuleInitstate</b> = 18, 
 <b>RuleUnsafeset</b> = 19, 
@@ -379,6 +375,9 @@ std::string &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>get
 <tr class="memitem:a3c8649729f3476336db37ef3a428b8ba"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3c8649729f3476336db37ef3a428b8ba"></a>
 <a class="el" href="classHybridAutomatonParser_1_1InvariantsContext.html">InvariantsContext</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>invariants</b> ()</td></tr>
 <tr class="separator:a3c8649729f3476336db37ef3a428b8ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2753d3ba030f7dddaac7db527e387898"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2753d3ba030f7dddaac7db527e387898"></a>
+<a class="el" href="classHybridAutomatonParser_1_1ReplacedexprContext.html">ReplacedexprContext</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>replacedexpr</b> ()</td></tr>
+<tr class="separator:a2753d3ba030f7dddaac7db527e387898"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afc93cdd92a5547a7ba247d140656e7d7"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="afc93cdd92a5547a7ba247d140656e7d7"></a>
 <a class="el" href="classHybridAutomatonParser_1_1ConstantexprContext.html">ConstantexprContext</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>constantexpr</b> ()</td></tr>
 <tr class="separator:afc93cdd92a5547a7ba247d140656e7d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -406,9 +405,6 @@ std::string &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>get
 <tr class="memitem:a5171db8cac2562a7d036baa2f383efef"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5171db8cac2562a7d036baa2f383efef"></a>
 <a class="el" href="classHybridAutomatonParser_1_1ConstrsetContext.html">ConstrsetContext</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>constrset</b> ()</td></tr>
 <tr class="separator:a5171db8cac2562a7d036baa2f383efef"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2753d3ba030f7dddaac7db527e387898"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2753d3ba030f7dddaac7db527e387898"></a>
-<a class="el" href="classHybridAutomatonParser_1_1ReplacedexprContext.html">ReplacedexprContext</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>replacedexpr</b> ()</td></tr>
-<tr class="separator:a2753d3ba030f7dddaac7db527e387898"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a20823d1da7f52f50a43ba9c4e2c138a3"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a20823d1da7f52f50a43ba9c4e2c138a3"></a>
 <a class="el" href="classHybridAutomatonParser_1_1InitContext.html">InitContext</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>init</b> ()</td></tr>
 <tr class="separator:a20823d1da7f52f50a43ba9c4e2c138a3"><td class="memSeparator" colspan="2">&#160;</td></tr>

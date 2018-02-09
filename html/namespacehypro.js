@@ -57,8 +57,7 @@ var namespacehypro =
       [ "_glp_vertex", "structhypro_1_1reachability_1_1__glp__vertex.html", "structhypro_1_1reachability_1_1__glp__vertex" ],
       [ "_glp_arc", "structhypro_1_1reachability_1_1__glp__arc.html", "structhypro_1_1reachability_1_1__glp__arc" ],
       [ "LPXKKT", "structhypro_1_1reachability_1_1LPXKKT.html", "structhypro_1_1reachability_1_1LPXKKT" ],
-      [ "Reach", "classhypro_1_1reachability_1_1Reach.html", "classhypro_1_1reachability_1_1Reach" ],
-      [ "Reach< Number, SupportFunction< Number > >", "classhypro_1_1reachability_1_1Reach_3_01Number_00_01SupportFunction_3_01Number_01_4_01_4.html", "classhypro_1_1reachability_1_1Reach_3_01Number_00_01SupportFunction_3_01Number_01_4_01_4" ]
+      [ "Reach", "classhypro_1_1reachability_1_1Reach.html", "classhypro_1_1reachability_1_1Reach" ]
     ] ],
     [ "statistics", null, [
       [ "CounterRepository", "classhypro_1_1statistics_1_1CounterRepository.html", "classhypro_1_1statistics_1_1CounterRepository" ]
@@ -80,6 +79,8 @@ var namespacehypro =
     [ "Halfspace", "classhypro_1_1Halfspace.html", "classhypro_1_1Halfspace" ],
     [ "Condition", "classhypro_1_1Condition.html", "classhypro_1_1Condition" ],
     [ "HybridAutomaton", "classhypro_1_1HybridAutomaton.html", "classhypro_1_1HybridAutomaton" ],
+    [ "HybridAutomatonComp", "classhypro_1_1HybridAutomatonComp.html", "classhypro_1_1HybridAutomatonComp" ],
+    [ "Label", "classhypro_1_1Label.html", "classhypro_1_1Label" ],
     [ "Transition", "classhypro_1_1Transition.html", "classhypro_1_1Transition" ],
     [ "LocationManager", "classhypro_1_1LocationManager.html", "classhypro_1_1LocationManager" ],
     [ "Location", "classhypro_1_1Location.html", "classhypro_1_1Location" ],
@@ -174,6 +175,9 @@ var namespacehypro =
     [ "EvaluationResult", "structhypro_1_1EvaluationResult.html", "structhypro_1_1EvaluationResult" ],
     [ "glpk_context", "structhypro_1_1glpk__context.html", "structhypro_1_1glpk__context" ],
     [ "Optimizer", "classhypro_1_1Optimizer.html", "classhypro_1_1Optimizer" ],
+    [ "LockedFileWriter", "classhypro_1_1LockedFileWriter.html", "classhypro_1_1LockedFileWriter" ],
+    [ "LockableBase", "classhypro_1_1LockableBase.html", "classhypro_1_1LockableBase" ],
+    [ "LockableObjectWrapper", "classhypro_1_1LockableObjectWrapper.html", "classhypro_1_1LockableObjectWrapper" ],
     [ "PrincipalComponentAnalysis", "classhypro_1_1PrincipalComponentAnalysis.html", "classhypro_1_1PrincipalComponentAnalysis" ],
     [ "Permutator", "classhypro_1_1Permutator.html", "classhypro_1_1Permutator" ],
     [ "Plotter", "classhypro_1_1Plotter.html", "classhypro_1_1Plotter" ],

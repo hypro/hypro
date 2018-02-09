@@ -7,6 +7,7 @@ var classhypro_1_1Condition =
     [ "~Condition", "classhypro_1_1Condition.html#a5d865330f46ae7b557433a3d7e5bc7d3", null ],
     [ "constraints", "classhypro_1_1Condition.html#a59628db4a605aa5c1079d9c428f81c83", null ],
     [ "empty", "classhypro_1_1Condition.html#ae574dfd55005c91db60cf6fc62a92b52", null ],
+    [ "getDotRepresentation", "classhypro_1_1Condition.html#ac8c61e0b29eab31dd389aeaa0593dbe0", null ],
     [ "getMatrix", "classhypro_1_1Condition.html#a861f7b465c1207f6e8e61a349be8d3ca", null ],
     [ "getVector", "classhypro_1_1Condition.html#af6009b037f81cf5db5ecd5066feb0706", null ],
     [ "operator=", "classhypro_1_1Condition.html#a35c491a0a81a332ce494621742342e12", null ],
