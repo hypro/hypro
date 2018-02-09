@@ -21,19 +21,9 @@ public:
    */
     virtual antlrcpp::Any visitStart(HybridAutomatonParser::StartContext *context) = 0;
 
-    virtual antlrcpp::Any visitOld(HybridAutomatonParser::OldContext *context) = 0;
-
-    virtual antlrcpp::Any visitAutomaton(HybridAutomatonParser::AutomatonContext *context) = 0;
-
-    virtual antlrcpp::Any visitComp(HybridAutomatonParser::CompContext *context) = 0;
-
     virtual antlrcpp::Any visitVardeclaration(HybridAutomatonParser::VardeclarationContext *context) = 0;
 
     virtual antlrcpp::Any visitConstantdeclaration(HybridAutomatonParser::ConstantdeclarationContext *context) = 0;
-
-    virtual antlrcpp::Any visitGlobalvardeclaration(HybridAutomatonParser::GlobalvardeclarationContext *context) = 0;
-
-    virtual antlrcpp::Any visitComponent(HybridAutomatonParser::ComponentContext *context) = 0;
 
     virtual antlrcpp::Any visitModes(HybridAutomatonParser::ModesContext *context) = 0;
 
@@ -42,6 +32,8 @@ public:
     virtual antlrcpp::Any visitActivities(HybridAutomatonParser::ActivitiesContext *context) = 0;
 
     virtual antlrcpp::Any visitInvariants(HybridAutomatonParser::InvariantsContext *context) = 0;
+
+    virtual antlrcpp::Any visitReplacedexpr(HybridAutomatonParser::ReplacedexprContext *context) = 0;
 
     virtual antlrcpp::Any visitConstantexpr(HybridAutomatonParser::ConstantexprContext *context) = 0;
 
@@ -60,8 +52,6 @@ public:
     virtual antlrcpp::Any visitIntervalexpr(HybridAutomatonParser::IntervalexprContext *context) = 0;
 
     virtual antlrcpp::Any visitConstrset(HybridAutomatonParser::ConstrsetContext *context) = 0;
-
-    virtual antlrcpp::Any visitReplacedexpr(HybridAutomatonParser::ReplacedexprContext *context) = 0;
 
     virtual antlrcpp::Any visitInit(HybridAutomatonParser::InitContext *context) = 0;
 
@@ -88,10 +78,6 @@ public:
     virtual antlrcpp::Any visitResetfct(HybridAutomatonParser::ResetfctContext *context) = 0;
 
     virtual antlrcpp::Any visitAggregation(HybridAutomatonParser::AggregationContext *context) = 0;
-
-    virtual antlrcpp::Any visitLabels(HybridAutomatonParser::LabelsContext *context) = 0;
-
-    virtual antlrcpp::Any visitLabel(HybridAutomatonParser::LabelContext *context) = 0;
 
     virtual antlrcpp::Any visitSetting(HybridAutomatonParser::SettingContext *context) = 0;
 

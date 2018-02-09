@@ -1,5 +1,5 @@
 
-// Generated from HybridAutomaton.g4 by ANTLR 4.7
+// Generated from Location.g4 by ANTLR 4.7
 
 #pragma once
 
@@ -9,21 +9,19 @@
 
 
 
-class  HybridAutomatonLexer : public antlr4::Lexer {
+class  LocationLexer : public antlr4::Lexer {
 public:
   enum {
-    T__0 = 1, T__1 = 2, T__2 = 3, T__3 = 4, T__4 = 5, T__5 = 6, T__6 = 7, 
-    T__7 = 8, T__8 = 9, T__9 = 10, T__10 = 11, T__11 = 12, T__12 = 13, T__13 = 14, 
-    T__14 = 15, T__15 = 16, T__16 = 17, T__17 = 18, T__18 = 19, T__19 = 20, 
-    T__20 = 21, T__21 = 22, IN = 23, PAR = 24, JUMPS = 25, URGENT = 26, 
-    GUARD = 27, RESET = 28, PARALLELOTOPE = 29, BOX = 30, JUMP = 31, DEFINE = 32, 
-    COMMENT = 33, EQUALS = 34, BOOLRELATION = 35, PLUS = 36, MINUS = 37, 
-    TIMES = 38, SBOPEN = 39, SBCLOSE = 40, CBOPEN = 41, CBCLOSE = 42, COMMA = 43, 
-    NUMBER = 44, CONSTANT = 45, VARIABLE = 46, WS = 47, EXPONENTIAL = 48
+    T__0 = 1, T__1 = 2, T__2 = 3, T__3 = 4, T__4 = 5, T__5 = 6, IN = 7, 
+    PAR = 8, JUMPS = 9, URGENT = 10, GUARD = 11, RESET = 12, PARALLELOTOPE = 13, 
+    BOX = 14, JUMP = 15, DEFINE = 16, COMMENT = 17, EQUALS = 18, BOOLRELATION = 19, 
+    PLUS = 20, MINUS = 21, TIMES = 22, SBOPEN = 23, SBCLOSE = 24, CBOPEN = 25, 
+    CBCLOSE = 26, COMMA = 27, NUMBER = 28, CONSTANT = 29, VARIABLE = 30, 
+    WS = 31
   };
 
-  HybridAutomatonLexer(antlr4::CharStream *input);
-  ~HybridAutomatonLexer();
+  LocationLexer(antlr4::CharStream *input);
+  ~LocationLexer();
 
 
   	bool parsingConstants = false;	

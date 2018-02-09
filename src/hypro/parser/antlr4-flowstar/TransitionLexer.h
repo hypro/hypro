@@ -1,5 +1,5 @@
 
-// Generated from HybridAutomaton.g4 by ANTLR 4.7
+// Generated from Transition.g4 by ANTLR 4.7
 
 #pragma once
 
@@ -9,21 +9,18 @@
 
 
 
-class  HybridAutomatonLexer : public antlr4::Lexer {
+class  TransitionLexer : public antlr4::Lexer {
 public:
   enum {
-    T__0 = 1, T__1 = 2, T__2 = 3, T__3 = 4, T__4 = 5, T__5 = 6, T__6 = 7, 
-    T__7 = 8, T__8 = 9, T__9 = 10, T__10 = 11, T__11 = 12, T__12 = 13, T__13 = 14, 
-    T__14 = 15, T__15 = 16, T__16 = 17, T__17 = 18, T__18 = 19, T__19 = 20, 
-    T__20 = 21, T__21 = 22, IN = 23, PAR = 24, JUMPS = 25, URGENT = 26, 
-    GUARD = 27, RESET = 28, PARALLELOTOPE = 29, BOX = 30, JUMP = 31, DEFINE = 32, 
-    COMMENT = 33, EQUALS = 34, BOOLRELATION = 35, PLUS = 36, MINUS = 37, 
-    TIMES = 38, SBOPEN = 39, SBCLOSE = 40, CBOPEN = 41, CBCLOSE = 42, COMMA = 43, 
-    NUMBER = 44, CONSTANT = 45, VARIABLE = 46, WS = 47, EXPONENTIAL = 48
+    PARALLELOTOPE = 1, BOX = 2, JUMP = 3, DEFINE = 4, IN = 5, PAR = 6, JUMPS = 7, 
+    URGENT = 8, GUARD = 9, RESET = 10, COMMENT = 11, EQUALS = 12, BOOLRELATION = 13, 
+    PLUS = 14, MINUS = 15, TIMES = 16, SBOPEN = 17, SBCLOSE = 18, CBOPEN = 19, 
+    CBCLOSE = 20, COMMA = 21, NUMBER = 22, CONSTANT = 23, VARIABLE = 24, 
+    WS = 25
   };
 
-  HybridAutomatonLexer(antlr4::CharStream *input);
-  ~HybridAutomatonLexer();
+  TransitionLexer(antlr4::CharStream *input);
+  ~TransitionLexer();
 
 
   	bool parsingConstants = false;	

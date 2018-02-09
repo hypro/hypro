@@ -162,6 +162,8 @@ class HybridAutomaton
 
       const variableVector& lhsVar = lhs.getVariables();
       const variableVector& rhsVar = rhs.getVariables();
+      std::map<unsigned, std::pair<unsigned,unsigned>> sharedVars;
+
       //std::cout << "lhs variables: ";
       //for(auto a : lhsVar) { std::cout << a << " "; }
       //std::cout << std::endl;
@@ -173,25 +175,30 @@ class HybridAutomaton
       variableVector::size_type  i=0, j=0;
       while(i < lhsVar.size() and j < rhsVar.size()) {
         if (lhsVar.at(i) == rhsVar.at(j)) {
+        	//std::cout << "same var, add " << lhsVar[i] << std::endl;
           haVar.push_back(lhsVar[i]);
           i++; j++;
           continue;
         }
         if (lhsVar.at(i) < rhsVar.at(j)) {
+        	//std::cout << "push left first " << lhsVar.at(i) << std::endl;
           haVar.push_back(lhsVar[i]);
           i++;
           continue;
         }
         if (lhsVar.at(i) > rhsVar.at(j)) {
+        	//std::cout << "push right first " << rhsVar.at(j) << std::endl;
           haVar.push_back(rhsVar[j]);
           j++;
           continue;
         }
       }
       for(; i < lhsVar.size(); i++) {
+      	//std::cout << "fill left: " << lhsVar[i] << std::endl;
         haVar.push_back(lhsVar[i]);
       }
       for(; j < rhsVar.size(); j++) {
+      	//std::cout << "fill right: " << rhsVar[j] << std::endl;
         haVar.push_back(rhsVar[j]);
       }
       ha.setVariables(haVar);
@@ -199,6 +206,34 @@ class HybridAutomaton
       //std::cout << "Variables: ";
       //for(auto a : haVar) { std::cout << a << " "; }
       //std::cout << "locations & transisitons" << std::endl;
+
+
+      // find shared variables
+      for(std::size_t i = 0; i != haVar.size(); ++i) {
+      	bool left = false;
+      	bool right = false;
+      	std::size_t l = 0;
+      	std::size_t r = 0;
+      	while(l != lhsVar.size()) {
+      		if(lhsVar[l] == haVar[i]){
+      			left = true;
+      			break;
+      		}
+      		++l;
+      	}
+      	while(r != rhsVar.size()) {
+      		if(rhsVar[r] == haVar[i]){
+      			right = true;
+      			break;
+      		}
+      		++r;
+      	}
+      	if(left && right) {
+      		//std::cout << "Shared var at " << i << " corresponds to (" << l << "," << r << ")" << std::endl;
+      		sharedVars[i] = std::make_pair(l,r);
+      	}
+      }
+      //std::cout << "Detected " << sharedVars.size() << " shared variables." << std::endl;
 
       for(const Location<Number>* locLhs : lhs.getLocations()) {
         for(const Location<Number>* locRhs : rhs.getLocations()) {
@@ -222,14 +257,30 @@ class HybridAutomaton
       }
 
       // non-synchronizing transitions in each component
+      // fix rhs first
       for(const auto lhsT: lhs.getTransitions()) {
       		if(lhsT->getLabels().empty()) {
       			for(const auto loc : rhs.getLocations()) {
       				//std::cout << "Potential transition " << lhsT->getSource()->getName() << "_" << loc->getName() << " -> " << lhsT->getTarget()->getName() << "_" << loc->getName() << std::endl;
       				Transition<Number>* tmp = new Transition<Number>(loc,loc);
       				// TODO: temporary test -> fix!
-      				//tmp->setReset(Reset<Number>(matrix_t<Number>::Identity(rhsVar.size(), rhsVar.size()), vector_t<Number>(rhsVar.size())));
-      				tmp->setReset(lhsT->getReset());
+      				//tmp->setReset();
+      				Reset<Number> tmpReset = Reset<Number>(matrix_t<Number>::Identity(rhsVar.size(), rhsVar.size()), vector_t<Number>::Zero(rhsVar.size()));
+      				if(!sharedVars.empty()) {
+      					// Attention: This is a temporary solution. Naturally, we would need to replicate the reset on the shared variables to create
+      					// an admissible combined reset.
+      					//std::cout << "Have " << sharedVars.size() << " shared variables." << std::endl;
+      					for(auto shdIt = sharedVars.begin(); shdIt != sharedVars.end(); ++shdIt) {
+      						//std::cout << "update row " << shdIt->second.second << std::endl;
+      						tmpReset.rGetMatrix().row(shdIt->second.second) = lhsT->getReset().getMatrix().row(shdIt->second.first);
+      						tmpReset.rGetVector()(shdIt->second.second) = lhsT->getReset().getVector()(shdIt->second.first);
+      					}
+      				}
+
+      				//std::cout << "tmpreset after update: " << tmpReset << std::endl;
+
+      				//tmp->setReset(combine(lhsT->getReset(),tmpReset,haVar,lhsVar,rhsVar));
+      				tmp->setReset(tmpReset);
       				tmp->setAggregation(lhsT->getAggregation());
 
       				Transition<Number>* t = parallelCompose(lhsT, tmp, lhsVar, rhsVar, haVar, ha, lhsLabels, rhsLabels);
@@ -241,14 +292,25 @@ class HybridAutomaton
       			}
       		}
       }
+      // fix lhs
       for(const auto rhsT: rhs.getTransitions()) {
       		if(rhsT->getLabels().empty()) {
       			for(const auto loc : lhs.getLocations()) {
       				//std::cout << "Potential transition " << loc->getName()<< "_" << rhsT->getSource()->getName() << " -> " << loc->getName() << "_" << rhsT->getTarget()->getName() << std::endl;
       				Transition<Number>* tmp = new Transition<Number>(loc,loc);
       				// TODO: temporary test -> fix!
-      				//tmp->setReset(Reset<Number>(matrix_t<Number>::Identitiy(lhsVar.size(), lhsVar.size()), vector_t<Number>(lhsVar.size())));
-      				tmp->setReset(rhsT->getReset());
+      				Reset<Number> tmpReset = Reset<Number>(matrix_t<Number>::Identity(lhsVar.size(), lhsVar.size()), vector_t<Number>::Zero(lhsVar.size()));
+      				if(!sharedVars.empty()) {
+      					// Attention: This is a temporary solution. Naturally, we would need to replicate the reset on the shared variables to create
+      					// an admissible combined reset.
+      					for(auto shdIt = sharedVars.begin(); shdIt != sharedVars.end(); ++shdIt) {
+      						//std::cout << "update row " << shdIt->first << std::endl;
+      						tmpReset.rGetMatrix().row(shdIt->second.first) = rhsT->getReset().getMatrix().row(shdIt->second.second);
+      						tmpReset.rGetVector()(shdIt->second.first) = rhsT->getReset().getVector()(shdIt->second.second);
+      					}
+      				}
+
+      				tmp->setReset(combine(rhsT->getReset(),tmpReset,haVar,lhsVar,rhsVar));
       				tmp->setAggregation(rhsT->getAggregation());
 
       				Transition<Number>* t = parallelCompose(tmp, rhsT, lhsVar, rhsVar, haVar, ha, lhsLabels, rhsLabels);

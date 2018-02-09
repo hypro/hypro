@@ -18,32 +18,43 @@ import Formula;
 
 jumps		: 'jumps' '{' transition* '}' ;
 
-transition 	: fromto (urgent | guard | resetfct | aggregation | labels)* ;
+transition 	: fromto (urgent | guard | resetfct | aggregation)* ;
 
 fromto		: VARIABLE JUMP VARIABLE ;
 
 urgent		: 'urgent' ;
 
-guard		: 'guard' '{' constrset? '}' ;
+guard		: 'guard' '{' constrset '}' ;
 
 allocation	: VARIABLE DEFINE (polynom | interval) ;
 
 resetfct	: 'reset' '{' allocation* '}' ;
 
-aggregation	: (PARALLELOTOPE | BOX | INTERVALAGG) '{' '}' ;
-
-labels      : 'label' '{' label* '}' ;
-
-label       : VARIABLE ;
+aggregation	: (PARALLELOTOPE | BOX) '{' '}' ;
 
 //////// Lexer Rules
 
 PARALLELOTOPE 	: 'parallelotope aggregation' ;
-
-INTERVALAGG 	: 'interval aggregation' ; 
 
 BOX 			: 'box aggregation' ;
 
 JUMP			: '->' ;
 
 DEFINE 			: ':=' ;
+
+
+//jumps		: JUMPS CBOPEN transition* CBCLOSE ;
+//
+//transition 	: fromto (urgent | guard | resetfct | aggregation)* ;
+//
+//fromto		: VARIABLE JUMP VARIABLE ;
+//
+//urgent		: URGENT ;
+//
+//guard		: GUARD CBOPEN constrset CBCLOSE ;
+//
+//allocation	: VARIABLE DEFINE (polynom | interval) ;
+//
+//resetfct	: GUARD CBOPEN allocation* CBCLOSE ;
+//
+//aggregation	: (PARALLELOTOPE | BOX) CBOPEN CBCLOSE ;

@@ -28,7 +28,7 @@ namespace hypro {
 					} else if(in.getMatrix()(rowI,colI) < 0) {
 						res << " " << in.getMatrix()(rowI,colI) << "*";
 					}
-					if(in.getMatrix()(rowI,colI) != 0 && colI != in.getMatrix().cols() && varNameMap.size() > colI) {
+					if(in.getMatrix()(rowI,colI) != 0 && colI != in.getMatrix().cols() && varNameMap.size() > std::size_t(colI)) {
 						res << varNameMap.at(colI);
 					}
 				}
@@ -98,7 +98,7 @@ namespace hypro {
 		out << prefix <<loc->getName();
 		out << prefix << "{";
 		if(varNameMap.size() > 0) {
-			assert(varNameMap.size() == loc->getFlow().rows()-1);
+			assert(varNameMap.size() == std::size_t(loc->getFlow().rows()-1));
 			// flow
 			out << prefix << "\tpoly ode 1";
 			out << prefix << "\t{";
@@ -143,6 +143,20 @@ namespace hypro {
 			}
 
 			// Todo: add out-commented exemplary settings
+			res << "setting\n\
+ {\n\
+  fixed steps 0.01\n\
+  time 3\n\
+  remainder estimation 1e-5\n\
+  identity precondition\n\
+  gnuplot octagon x_0,x_1\n\
+  fixed orders 5\n\
+  cutoff 1e-15\n\
+  precision 128\n\
+  output out\n\
+  max jumps 1\n\
+  print on\n\
+ }\n";
 
 			// locations
 			res << "\tmodes\n\t{\n";
@@ -155,11 +169,15 @@ namespace hypro {
 				// transitions
 				res << "\tjumps\n\t{";
 				for(const auto transPtr : in.getTransitions()) {
+					//std::cout << "output transition " << transPtr->getSource()->getName() << " -> " << transPtr->getTarget()->getName() << std::endl;
 					res << "\n\t\t" << transPtr->getSource()->getName() << " -> " << transPtr->getTarget()->getName();
+					if(transPtr->isUrgent())
+						res << "\n\t\turgent";
 					res << "\n\t\tguard {";
 					res << toFlowstarFormat(transPtr->getGuard(), vars, " ");
 					res << " }";
 					res << "\n\t\treset {";
+					//std::cout << "output reset " << transPtr->getReset().getMatrix() << std::endl;
 					for(Eigen::Index rowI = 0; rowI < transPtr->getReset().getMatrix().rows(); ++rowI) {
 						std::stringstream tmp;
 						tmp << " " << vars[rowI] << "' := ";

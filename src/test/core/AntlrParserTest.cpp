@@ -69,11 +69,11 @@ class AntlrParserTest : public ::testing::Test {
 
 TYPED_TEST(AntlrParserTest, JustTesting){
 
-	//std::string path("../../../../src/test/core/examples/test_bouncing_ball.txt");
+	std::string path("../../../../src/test/core/examples/test_bouncing_ball.txt");
 	//std::string path("../../src/test/core/examples/test_bouncing_ball.txt");
-	std::string path("/home/tobias/RWTH/8_WS2017/BA/hypro/src/test/core/examples/test_bouncing_ball.txt");
+	//std::string path("/home/tobias/RWTH/8_WS2017/BA/hypro/src/test/core/examples/test_bouncing_ball.txt");
 
-	//this->cwd();
+	this->cwd();
 	try{
 		boost::tuple<hypro::HybridAutomaton<TypeParam,hypro::State_t<TypeParam,TypeParam>>, hypro::ReachabilitySettings<TypeParam>> h = hypro::parseFlowstarFile<TypeParam>(path);
 		SUCCEED();
@@ -86,8 +86,8 @@ TYPED_TEST(AntlrParserTest, JustTesting){
 
 TYPED_TEST(AntlrParserTest, EmptyFile){
 
-	//std::string path("../../../../src/test/core/examples/test_empty_file.txt");
-	std::string path("/home/tobias/RWTH/8_WS2017/BA/hypro/src/test/core/examples/test_empty_file.txt");
+	std::string path("../../../../src/test/core/examples/test_empty_file.txt");
+	//std::string path("/home/tobias/RWTH/8_WS2017/BA/hypro/src/test/core/examples/test_empty_file.txt");
 
 	try{
 		boost::tuple<hypro::HybridAutomaton<TypeParam,hypro::State_t<TypeParam,TypeParam>>, hypro::ReachabilitySettings<TypeParam>> h = hypro::parseFlowstarFile<TypeParam>(path);
@@ -108,8 +108,8 @@ TYPED_TEST(AntlrParserTest, MinimalAcceptedFile){
 	 */
 
 
-	//std::string path("../../../../src/test/core/examples/test_minimal_accepted_file.txt");
-	std::string path("/home/tobias/RWTH/8_WS2017/BA/hypro/src/test/core/examples/test_minimal_accepted_file.txt");
+	std::string path("../../../../src/test/core/examples/test_minimal_accepted_file.txt");
+	//std::string path("/home/tobias/RWTH/8_WS2017/BA/hypro/src/test/core/examples/test_minimal_accepted_file.txt");
 	boost::tuple<hypro::HybridAutomaton<TypeParam,hypro::State_t<TypeParam,TypeParam>>, hypro::ReachabilitySettings<TypeParam>> h;
 	try{
 		h = hypro::parseFlowstarFile<TypeParam>(path);
@@ -181,6 +181,7 @@ TYPED_TEST(AntlrParserTest, MinimalAcceptedFile){
 
 }
 
+/*
 TYPED_TEST(AntlrParserTest, parallelComposition){
 	std::string pathA("/home/tobias/RWTH/8_WS2017/BA/examples/A.model");
 	std::string pathB("/home/tobias/RWTH/8_WS2017/BA/examples/B.model");
@@ -228,6 +229,7 @@ TYPED_TEST(AntlrParserTest, railraod_crossing){
 		FAIL();
 	}
 }
+*/
 
 //TYPED_TEST(AntlrParserTest, VarNamesPrefixesOfEachOther){ } 	//x, x1, x10, x101 ...
 //TYPED_TEST(AntlrParserTest, SettingsTest){}					//smth like maxjumps 0, maxjumps 1e-10...

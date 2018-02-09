@@ -127,6 +127,7 @@ Location<Number>* parallelCompose(const Location<Number>* lhs
 	matrix_t<Number> haFlow = matrix_t<Number>::Zero(haVar.size()+1, haVar.size()+1);
 
 	//std::cout << "combine Locations " << lhs->getName() << " and " << rhs->getName() << std::endl;
+	//std::cout << "With flows " << lhs->getFlow() << " and " << rhs->getFlow() << std::endl;
 
 	std::size_t lhsIR = 0, lhsIC = 0, rhsIR = 0, rhsIC = 0;
 	bool admissible = true; // flag used to denote a non-admissible flow, i.e. shared variables with different flow.

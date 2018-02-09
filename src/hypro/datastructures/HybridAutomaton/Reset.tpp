@@ -56,12 +56,15 @@ namespace hypro {
 		vector_t<Number> newVec;
 
 		if(lhs.size() == 0 && rhs.size() != 0) {
+			////std::cout << "take rhs" << std::endl;
 			newMat = combine(matrix_t<Number>(0,0), rhs.getMatrix(), haVar, lhsVar, rhsVar);
 			newVec = combine(vector_t<Number>(0), rhs.getVector());
 		} else if(lhs.size() != 0 && rhs.size() == 0) {
+			////std::cout << "take lhs" << std::endl;
 			newMat = combine(lhs.getMatrix(), matrix_t<Number>(0,0), haVar, lhsVar, rhsVar);
 			newVec = combine(lhs.getVector(), vector_t<Number>(0));
 		} else if(lhs.size() == 0 && rhs.size() == 0) {
+			////std::cout << "both empty" << std::endl;
 			return Reset<Number>();
 		} else {
 			assert(lhs.size() != 0);

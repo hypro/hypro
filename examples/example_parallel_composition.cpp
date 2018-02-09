@@ -1,6 +1,7 @@
 #include "datastructures/HybridAutomaton/HybridAutomaton.h"
 #include "datastructures/HybridAutomaton/output/Flowstar.h"
 #include "util/multithreading/Filewriter.h"
+#include "parser/antlr4-flowstar/ParserWrapper.h"
 #include <iostream>
 
 using namespace hypro;
@@ -26,8 +27,8 @@ HybridAutomaton<Number> createComponent1(unsigned i) {
 	typename HybridAutomaton<Number>::variableVector vars;
 	st << "x_" << i;
 	vars.push_back(st.str());
+	vars.push_back("x_t"); // t is the global clock for plotting
 	vars.push_back("z"); // z is the shared variable
-	//vars.push_back("c"); // c are the constants
 	res.setVariables(vars);
 	st.str(std::string());
 	unsigned dim = vars.size();
@@ -39,12 +40,13 @@ HybridAutomaton<Number> createComponent1(unsigned i) {
 	wait->setName(st.str());
 	M waitFlow = M::Zero(dim+1,dim+1);
 	waitFlow(0,dim) = 1;
+	waitFlow(1,dim) = 1; // time always advances at rate 1
 	wait->setFlow(waitFlow);
 
-	M initConstraints = M::Zero(4,2);
-	initConstraints << 1,0,-1,0,0,1,0,-1;
-	V initConstants = V::Zero(4);
-	initConstants << 0,0,0,0;
+	M initConstraints = M::Zero(6,3);
+	initConstraints << 1,0,0,-1,0,0,0,1,0,0,-1,0,0,0,1,0,0,-1;
+	V initConstants = V::Zero(6);
+	initConstants << 0,0,0,0,0,0;
 
 	S initialState;
 	initialState.setLocation(wait);
@@ -52,7 +54,7 @@ HybridAutomaton<Number> createComponent1(unsigned i) {
 	res.addInitialState(initialState);
 
 	M waitInvariant = M::Zero(1,dim);
-	waitInvariant << 1,0;
+	waitInvariant << 1,0,0;
 	V waitInvConsts = V::Zero(1);
 	waitInvConsts << Number(firingThreshold);
 	wait->setInvariant(Condition<Number>{waitInvariant, waitInvConsts});
@@ -65,6 +67,7 @@ HybridAutomaton<Number> createComponent1(unsigned i) {
 	adapt->setName(st.str());
 
 	M adaptFlow = M::Zero(dim+1,dim+1);
+	adaptFlow(1,dim) = 1; // time always advances at rate 1
 	adapt->setFlow(adaptFlow);
 
 	//M adaptInvariant = M::Zero(2,dim);
@@ -81,6 +84,7 @@ HybridAutomaton<Number> createComponent1(unsigned i) {
 	flash->setName(st.str());
 
 	M flashFlow = M::Zero(dim+1,dim+1);
+	flashFlow(1,dim) = 1; // time always advances at rate 1
 	flash->setFlow(flashFlow);
 
 	M flashInvariant = M::Zero(2,dim);
@@ -118,11 +122,14 @@ HybridAutomaton<Number> createComponent1(unsigned i) {
 	guardConstants << Number(firingThreshold), Number(-firingThreshold);
 	toFlash->setGuard(Condition<Number>{guardConstraints,guardConstants});
 
-	M resetMat = M::Zero(dim,dim);
+	M resetMat = M::Identity(dim,dim);
 	V resetVec = V::Zero(dim);
-	resetVec(1) = 1;
+	resetMat(0,0) = 0;
+	resetMat(2,2) = 0;
+	resetVec(2) = 1;
 	toFlash->setReset(Reset<Number>(resetMat,resetVec));
 	toFlash->setAggregation(Aggregation::parallelotopeAgg);
+	toFlash->setUrgent();
 
 	wait->addTransition(toFlash);
 	res.addTransition(toFlash);
@@ -130,19 +137,20 @@ HybridAutomaton<Number> createComponent1(unsigned i) {
 	// to execFlash
 	Tpt flashLoop = new Transition<Number>(flash,flash);
 	guardConstraints = M::Zero(2,dim);
-	guardConstraints(0,1) = 1;
-	guardConstraints(1,1) = -1;
+	guardConstraints(0,2) = 1;
+	guardConstraints(1,2) = -1;
 	guardConstants = V::Zero(2);
 	guardConstants << 1,-1;
 	flashLoop->setGuard(Condition<Number>{guardConstraints,guardConstants});
 
 	resetMat = M::Identity(dim,dim);
-	resetMat(1,1) = 0;
+	resetMat(2,2) = 0;
 	resetVec = V::Zero(dim);
 	flashLoop->setReset(Reset<Number>(resetMat,resetVec));
 	flashLoop->setUrgent();
 	flashLoop->addLabel(Label{"flash"});
 	flashLoop->setAggregation(Aggregation::parallelotopeAgg);
+	flashLoop->setUrgent();
 
 	flash->addTransition(flashLoop);
 	res.addTransition(flashLoop);
@@ -163,8 +171,8 @@ HybridAutomaton<Number> createComponent1(unsigned i) {
 	// back to wait
 	Tpt reWait = new Transition<Number>(flash,wait);
 	guardConstraints = M::Zero(2,dim);
-	guardConstraints(0,1) = 1;
-	guardConstraints(1,1) = -1;
+	guardConstraints(0,2) = 1;
+	guardConstraints(1,2) = -1;
 	guardConstants = V::Zero(2);
 	reWait->setGuard(Condition<Number>{guardConstraints,guardConstants});
 	resetMat = M::Identity(dim,dim);
@@ -180,19 +188,20 @@ HybridAutomaton<Number> createComponent1(unsigned i) {
 	// to adapt
 	Tpt toAdapt = new Transition<Number>(wait,adapt);
 	guardConstraints = M::Zero(3,dim);
-	guardConstraints(0,1) = 1;
-	guardConstraints(1,1) = -1;
+	guardConstraints(0,2) = 1;
+	guardConstraints(1,2) = -1;
 	guardConstraints(2,0) = 1;
 	guardConstants = V::Zero(3);
 	guardConstants << 1,-1,Number(firingThreshold);
 	toAdapt->setGuard(Condition<Number>{guardConstraints,guardConstants});
 	resetMat = M::Identity(dim,dim);
 	resetMat(0,0) = Number(alpha);
-	resetMat(1,1) = 0;
+	resetMat(2,2) = 0;
 	resetVec = V::Zero(dim);
 	toAdapt->setReset(Reset<Number>(resetMat,resetVec));
 	toAdapt->addLabel({"flash"});
 	toAdapt->setAggregation(Aggregation::parallelotopeAgg);
+	toAdapt->setUrgent();
 
 	wait->addTransition(toAdapt);
 	res.addTransition(toAdapt);
@@ -209,6 +218,7 @@ HybridAutomaton<Number> createComponent1(unsigned i) {
 	fromAdaptRegular->setReset(Reset<Number>(resetMat,resetVec));
 	fromAdaptRegular->addLabel(Label{"return"});
 	fromAdaptRegular->setAggregation(Aggregation::parallelotopeAgg);
+	fromAdaptRegular->setUrgent();
 
 	adapt->addTransition(fromAdaptRegular);
 	res.addTransition(fromAdaptRegular);
@@ -222,6 +232,7 @@ HybridAutomaton<Number> createComponent1(unsigned i) {
 	fromAdaptScale->setGuard(Condition<Number>{guardConstraints,guardConstants});
 	//fromAdaptScale->addLabel(Label{"flash"});
 	fromAdaptScale->setAggregation(Aggregation::parallelotopeAgg);
+	fromAdaptScale->setUrgent();
 
 	resetMat = M::Identity(dim,dim);
 	resetMat(0,0) = 0;
@@ -248,8 +259,8 @@ int main(int argc, char** argv) {
 	HybridAutomaton<Number> ha2 = createComponent1<Number>(2);
 	HybridAutomaton<Number> composed = ha1||ha2;
 
-	std::cout << "################################################" << std::endl;
-	std::cout << "Result: " << std::endl << composed << std::endl;
+	//std::cout << "################################################" << std::endl;
+	//std::cout << "Result: " << std::endl << composed << std::endl;
 
 	LockedFileWriter out{"parallelHa.dot"};
 	out.clearFile();
@@ -262,6 +273,9 @@ int main(int argc, char** argv) {
 	LockedFileWriter flowstar("composed.model");
 	flowstar.clearFile();
 	flowstar << toFlowstarFormat(composed);
+
+	// for testing
+	auto haTuple = parseFlowstarFile<double>(std::string("composed.model"));
 
 	return 0;
 }
