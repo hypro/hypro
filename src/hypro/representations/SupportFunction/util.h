@@ -30,7 +30,7 @@ struct Cacheable {
 		return mHash;
 	}
 
-	Cacheable(const std::pair<unsigned, Content>& i) : item(i) {}
+	explicit Cacheable(const std::pair<unsigned, Content>& i) : item(i) {}
 	Cacheable(unsigned exp, const Content& cont) : item(std::make_pair(exp,cont)) {}
 
 	friend bool operator==(const Cacheable<Content>& lhs, const Cacheable<Content>& rhs) {

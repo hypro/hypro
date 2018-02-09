@@ -367,8 +367,8 @@ namespace hypro {
 
 	template<typename Number>
 	static matrix_t<Number> combine(
-		const matrix_t<Number> lhsMatrix, const matrix_t<Number> rhsMatrix,
-		const std::vector<std::string> haVar, const std::vector<std::string> lhsVar, const std::vector<std::string> rhsVar) {
+		const matrix_t<Number>& lhsMatrix, const matrix_t<Number>& rhsMatrix,
+		const std::vector<std::string>& haVar, const std::vector<std::string>& lhsVar, const std::vector<std::string>& rhsVar) {
 
 		//std::cout << "Combine " << lhsMatrix << " and " << rhsMatrix << std::endl;
 
