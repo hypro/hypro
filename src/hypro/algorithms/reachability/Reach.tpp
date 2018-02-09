@@ -27,6 +27,7 @@ namespace reachability {
 				s.setLocation(state.second.getLocation());
 
 				if(state.second.getSetType(0) != mType) {
+					TRACE("hypro.reacher.preprocessing","Type is: " << state.second.getSetType(0) << ", requested type is: " << mType);
 					switch(state.second.getSetType(0)){
 						case representation_name::box: {
 							s.setSet(boost::get<Box<Number>>(state.second.getSet()));
@@ -63,27 +64,35 @@ namespace reachability {
 							assert(false);
 						}
 					}
+					TRACE("hypro.reacher.preprocessing","convert.");
 					s.setSetDirect(boost::apply_visitor(genericConversionVisitor<typename State_t<Number>::repVariant, Number>(mType), s.getSet()));
 					s.setSetType(mType);
+					TRACE("hypro.reacher.preprocessing","Type after conversion is " << s.getSetType(0));
 				} else {
+					TRACE("hypro.reacher.preprocessing","Types match, do nothing.");
+					assert(boost::apply_visitor(genericTypeVisitor(), state.second.getSet()) == mType);
 					s.setSetDirect(state.second.getSet());
+					s.setSetType(boost::apply_visitor(genericTypeVisitor(), state.second.getSet()));
 				}
 
-				DEBUG("hypro.reacher","Adding initial set of type " << mType);
+				DEBUG("hypro.reacher","Adding initial set of type " << mType << ", current queue size (before) is " << mWorkingQueue.size());
+				assert(mType == s.getSetType());
 
 				s.setTimestamp(carl::Interval<Number>(0));
-				mWorkingQueue.emplace_back(initialSet<Number>(mCurrentLevel, s));
+				mWorkingQueue.push_back(initialSet<Number>(mCurrentLevel, s));
 			}
 		}
 
+		TRACE("hypro.reacher","working queue size: " << mWorkingQueue.size());
 		while ( !mWorkingQueue.empty() ) {
 			initialSet<Number> nextInitialSet = mWorkingQueue.front();
 			mWorkingQueue.pop_front();
+			TRACE("hypro.reacher","working queue after pop: " << mWorkingQueue.size());
 
 			mCurrentLevel = boost::get<0>(nextInitialSet);
-			//std::cout << "mCurrentLevel is: " << mCurrentLevel << " while maxjumpDepth is: " << mSettings.jumpDepth << std::endl;
 			INFO("hypro.reacher","Depth " << mCurrentLevel << ", Location: " << boost::get<1>(nextInitialSet).getLocation()->getId());
 			assert(int(mCurrentLevel) <= mSettings.jumpDepth);
+			TRACE("hypro.reacher","Obtained set of type " << boost::get<1>(nextInitialSet).getSetType() << ", requested type is " << mType);
 			flowpipe_t<Number> newFlowpipe = computeForwardTimeClosure(boost::get<1>(nextInitialSet));
 
 			collectedReachableStates.emplace_back(std::make_pair(boost::get<1>(nextInitialSet).getLocation()->getId(), newFlowpipe));
