@@ -1,3 +1,12 @@
+env:
+  global:
+   # The next declaration is the encrypted COVERITY_SCAN_TOKEN, created
+   #   via the "travis encrypt" command using the project repo's public key
+   - secure: "VrgSZAgTRTdH1rq0OHXHtArOA5SyLsJX9YA9O5c+PSXI/drMjc3pGsTIK3NA7xcyGaEIT+DjzV36yxvAz/3uurYkFtiz/sl1suziy6nSNBqvQSE01lBU9GnqHpkPg6/alnijG0Bf3KvXTdw5MmRaK+f9corNJAa+s1sP0rP7WMQ="
+
+before_install:
+  - echo -n | openssl s_client -connect https://scan.coverity.com:443 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' | sudo tee -a /etc/ssl/certs/ca-
+
 language: cpp
 branches:
   only:
@@ -9,6 +18,9 @@ env:
     - GH_REPO_NAME: hypro
     - DOXYFILE: $TRAVIS_BUILD_DIR/build/doc/Doxygen
     - GH_REPO_REF: github.com/hypro/hypro.git
+    # The next declaration is the encrypted COVERITY_SCAN_TOKEN, created
+    #   via the "travis encrypt" command using the project repo's public key
+    - secure: "VrgSZAgTRTdH1rq0OHXHtArOA5SyLsJX9YA9O5c+PSXI/drMjc3pGsTIK3NA7xcyGaEIT+DjzV36yxvAz/3uurYkFtiz/sl1suziy6nSNBqvQSE01lBU9GnqHpkPg6/alnijG0Bf3KvXTdw5MmRaK+f9corNJAa+s1sP0rP7WMQ="
 
 notifications:
   email:
@@ -53,6 +65,14 @@ addons:
       #- pgf
       #- texlive-latex-extra
       #- texlive-latex-recommended
+  coverity_scan:
+    project:
+      name: "hypro/hypro"
+      description: "<Your project description here>"
+      notification_email: stefan.schupp@cs.rwth-aachen.de
+      build_command_prepend: "mkdir build && cd build && cmake .."
+      build_command: "make"
+      branch_pattern: coverity_scan
 
 matrix:
   include:
@@ -99,6 +119,7 @@ matrix:
 before_install:
   - cd .travis/ && source setupTravis.sh && cd ../
   - sudo motion update || echo 'up to date'
+  - echo -n | openssl s_client -connect https://scan.coverity.com:443 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' | sudo tee -a /etc/ssl/certs/ca-
 
 install:
   - git clone https://github.com/smtrat/carl.git && cd carl && mkdir build && cd build && cmake -DCMAKE_CXX_COMPILER=$COMPILER -DCMAKE_BUILD_TYPE=Release .. && make resources && make lib_carl VERBOSE=1
