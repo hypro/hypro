@@ -58,24 +58,30 @@ namespace hypro {
 		hypro::ErrorListener* errListener = new hypro::ErrorListener();
 
 		//Create a Lexer and feed it with the input
+		std::cout << "Before lexer\n";
 		HybridAutomatonLexer lexer(&input);
 		lexer.removeErrorListeners();
 		lexer.addErrorListener(errListener);
+		std::cout << "After lexer\n";
 
 		//Create an empty TokenStream obj
 		CommonTokenStream tokens(&lexer);
+		std::cout << "After CTokenStream\n";
 
 		//Fill the TokenStream (and output it for demonstration)
 		tokens.fill();
+		std::cout << "after filling\n";
+		std::cout << "TEXT IN TOKENSTREAM:\n" << tokens.getText() << std::endl;
 
 		//Create a parser
 		HybridAutomatonParser parser(&tokens);
 		parser.removeErrorListeners();
 		parser.addErrorListener(errListener);
-		tree::ParseTree* tree = parser.start();
+		std::cout << "After parser creation\n";
+		tree::ParseTree* tree = parser.start();	
+		std::cout << "After parsing\n";
 
 		//Create TokenStreamRewriter, needed for constants if defined
-
 		std::cout << "Size of constant map: " << parser.getConstants().size() << std::endl;
 		for(auto entry : parser.getConstants()){
 			std::cout << "Constant name: " << entry.first << " constant value " << entry.second << std::endl;
