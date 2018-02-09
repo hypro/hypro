@@ -42,7 +42,7 @@ constantexpr		: CONSTANT EQUALS MINUS? NUMBER {
 };
 
 /////////////////// JAVA FOR TESTING //////////////////
-
+//
 //@lexer::members {
 //	private boolean parsingConstants = false;
 //}
@@ -56,6 +56,8 @@ constantexpr		: CONSTANT EQUALS MINUS? NUMBER {
 //	public HashMap<String,String> constants = new HashMap<String,String>();
 //	public HashMap<String,String> getConstants() { return constants; }
 //}
+//
+//replacedexpr		: MINUS? NUMBER EQUALS MINUS? NUMBER ;
 //
 //constantexpr		: CONSTANT EQUALS MINUS? NUMBER {
 //	if($MINUS.text != null){
@@ -72,7 +74,7 @@ constantexpr		: CONSTANT EQUALS MINUS? NUMBER {
 connector 			: PLUS | MINUS ; 
 term 				: (NUMBER | VARIABLE) (TIMES connector* (NUMBER | VARIABLE))* ;
 polynom				: connector* term (connector+ term)* ;
-interval 			: '[' MINUS? NUMBER ',' MINUS? NUMBER ']' ;
+interval 			: '[' MINUS? (NUMBER | VARIABLE) ',' MINUS? (NUMBER | VARIABLE) ']' ;
 
 equation 			: VARIABLE EQUALS polynom (connector interval)?;
 constraint			: polynom (BOOLRELATION | EQUALS) polynom; 
