@@ -15,7 +15,7 @@ else()
 endif()
 
 if(GTEST_FOUND)
-	#set(GTEST_LIBRARIES ${GTEST_LIBRARY} ${GTEST_MAIN_LIBRARY} PARENT_SCOPE)
+	set(GTEST_LIBRARIES ${GTEST_LIBRARY} ${GTEST_MAIN_LIBRARY} PARENT_SCOPE)
 	message("-- Use system version of GTest")
 else()
 	message("-- Download version of GTest")

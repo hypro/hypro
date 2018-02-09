@@ -15,7 +15,7 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
 		#HybridAutomataParallelCompositionTest.cpp
 	)
 
-	add_dependencies(runDatastructureTests googletest)
+	add_dependencies(runDatastructureTests resources)
 	target_include_directories(runDatastructureTests PRIVATE ${GTEST_INCLUDE_DIR})
 
 	target_link_libraries(runDatastructureTests
