@@ -61,7 +61,9 @@ class State
     	mSets(orig.getSets()),
     	mTypes(orig.getTypes()),
     	mTimestamp(orig.getTimestamp())
-    {}
+    {
+    	assert(checkConsistency());
+    }
 
     /**
      * @brief Move constructor.
@@ -72,7 +74,9 @@ class State
     	mSets(orig.getSets()),
     	mTypes(orig.getTypes()),
     	mTimestamp(orig.getTimestamp())
-    {}
+    {
+    	assert(checkConsistency());
+    }
 
     /**
      * @brief      Copy assignment operator.
@@ -90,6 +94,7 @@ class State
     	assert(mSets.size() == orig.getNumberSets());
     	mTimestamp = orig.getTimestamp();
     	TRACE("hypro.datastructures","Assignment operator created state with " << mSets.size() << " sets.");
+    	assert(checkConsistency());
     	return *this;
     }
 
@@ -103,6 +108,7 @@ class State
     	mSets = orig.getSets();
     	mTypes = orig.getTypes();
     	mTimestamp = orig.getTimestamp();
+    	assert(checkConsistency());
     	return *this;
     }
 
@@ -115,7 +121,10 @@ class State
     	mSets(),
     	mTypes(),
     	mTimestamp(carl::Interval<tNumber>::unboundedInterval())
-    { assert(mLoc != nullptr); }
+    {
+    	assert(mLoc != nullptr);
+    	assert(checkConsistency());
+    }
 
     /**
      * @brief      Constructor.
@@ -142,6 +151,7 @@ class State
     	#pragma GCC diagnostic pop
     	(void) dummy;
     	(void) dummy2;
+    	assert(checkConsistency());
     }
 
     /**
@@ -177,6 +187,8 @@ class State
      */
     representation_name getSetType(std::size_t i = 0) const {
     	TRACE("hypro.datastructures","Attempt to get set type at pos " << i << ", mTypes.size() = " << mTypes.size());
+    	assert(i < mTypes.size());
+    	TRACE("hypro.datastructures","Type is " << mTypes.at(i));
     	assert(mSets.size() == mTypes.size());
     	assert(checkConsistency());
     	return mTypes.at(i);
@@ -227,12 +239,13 @@ class State
      * @param[in]  I     The position.
      */
     void setSetType(representation_name type, std::size_t I = 0) {
-    	TRACE("hypro.datastructures","Attempt to set set type at pos " << I << ", mSets.size() = " << mSets.size() << ", mTypes.size() = " << mTypes.size());
+    	TRACE("hypro.datastructures","Attempt to set set type at pos " << I << " to type " << type << ", mSets.size() = " << mSets.size() << ", mTypes.size() = " << mTypes.size());
     	assert(mSets.size() == mTypes.size());
 		while(I >= mSets.size()) {
 			mSets.emplace_back(Representation()); // some default set.
 			mTypes.push_back(Representation::type()); // some default set type.
 		}
+		TRACE("hypro.datastructures","Set set type at pos " << I << " to type " << type);
 		mTypes[I] = type;
 		assert(checkConsistency());
 	}
