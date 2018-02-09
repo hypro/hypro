@@ -16,21 +16,21 @@
 class  SettingParser : public antlr4::Parser {
 public:
   enum {
-    T__0 = 1, T__1 = 2, T__2 = 3, T__3 = 4, T__4 = 5, T__5 = 6, T__6 = 7, 
-    T__7 = 8, T__8 = 9, T__9 = 10, T__10 = 11, T__11 = 12, EXPONENTIAL = 13, 
-    IN = 14, PAR = 15, JUMPS = 16, URGENT = 17, GUARD = 18, RESET = 19, 
-    PARALLELOTOPE = 20, BOX = 21, JUMP = 22, DEFINE = 23, COMMENT = 24, 
-    EQUALS = 25, BOOLRELATION = 26, PLUS = 27, MINUS = 28, TIMES = 29, SBOPEN = 30, 
-    SBCLOSE = 31, CBOPEN = 32, CBCLOSE = 33, COMMA = 34, NUMBER = 35, CONSTANT = 36, 
+    T__0 = 1, T__1 = 2, T__2 = 3, T__3 = 4, T__4 = 5, T__5 = 6, T__6 = 7,
+    T__7 = 8, T__8 = 9, T__9 = 10, T__10 = 11, T__11 = 12, EXPONENTIAL = 13,
+    IN = 14, PAR = 15, JUMPS = 16, URGENT = 17, GUARD = 18, RESET = 19,
+    PARALLELOTOPE = 20, BOX = 21, JUMP = 22, DEFINE = 23, COMMENT = 24,
+    EQUALS = 25, BOOLRELATION = 26, PLUS = 27, MINUS = 28, TIMES = 29, SBOPEN = 30,
+    SBCLOSE = 31, CBOPEN = 32, CBCLOSE = 33, COMMA = 34, NUMBER = 35, CONSTANT = 36,
     VARIABLE = 37, WS = 38
   };
 
   enum {
-    RuleSetting = 0, RuleFixedsteps = 1, RuleTime = 2, RulePlotsetting = 3, 
-    RuleFilename = 4, RuleMaxjumps = 5, RulePrint = 6, RuleRemainder = 7, 
-    RuleIdentity = 8, RuleFixedorders = 9, RuleCutoff = 10, RulePrecision = 11, 
-    RuleReplacedexpr = 12, RuleConstantexpr = 13, RuleConnector = 14, RuleTerm = 15, 
-    RulePolynom = 16, RuleInterval = 17, RuleEquation = 18, RuleConstraint = 19, 
+    RuleSetting = 0, RuleFixedsteps = 1, RuleTime = 2, RulePlotsetting = 3,
+    RuleFilename = 4, RuleMaxjumps = 5, RulePrint = 6, RuleRemainder = 7,
+    RuleIdentity = 8, RuleFixedorders = 9, RuleCutoff = 10, RulePrecision = 11,
+    RuleReplacedexpr = 12, RuleConstantexpr = 13, RuleConnector = 14, RuleTerm = 15,
+    RulePolynom = 16, RuleInterval = 17, RuleEquation = 18, RuleConstraint = 19,
     RuleIntervalexpr = 20, RuleConstrset = 21
   };
 
@@ -68,7 +68,7 @@ public:
   class EquationContext;
   class ConstraintContext;
   class IntervalexprContext;
-  class ConstrsetContext; 
+  class ConstrsetContext;
 
   class  SettingContext : public antlr4::ParserRuleContext {
   public:
@@ -97,7 +97,7 @@ public:
     std::vector<PrintContext *> print();
     PrintContext* print(size_t i);
 
-   
+
   };
 
   SettingContext* setting();
@@ -108,7 +108,7 @@ public:
     virtual size_t getRuleIndex() const override;
     antlr4::tree::TerminalNode *NUMBER();
 
-   
+
   };
 
   FixedstepsContext* fixedsteps();
@@ -119,7 +119,7 @@ public:
     virtual size_t getRuleIndex() const override;
     antlr4::tree::TerminalNode *NUMBER();
 
-   
+
   };
 
   TimeContext* time();
@@ -131,7 +131,7 @@ public:
     std::vector<antlr4::tree::TerminalNode *> VARIABLE();
     antlr4::tree::TerminalNode* VARIABLE(size_t i);
 
-   
+
   };
 
   PlotsettingContext* plotsetting();
@@ -142,7 +142,7 @@ public:
     virtual size_t getRuleIndex() const override;
     antlr4::tree::TerminalNode *VARIABLE();
 
-   
+
   };
 
   FilenameContext* filename();
@@ -153,7 +153,7 @@ public:
     virtual size_t getRuleIndex() const override;
     antlr4::tree::TerminalNode *NUMBER();
 
-   
+
   };
 
   MaxjumpsContext* maxjumps();
@@ -164,7 +164,7 @@ public:
     virtual size_t getRuleIndex() const override;
     antlr4::tree::TerminalNode *VARIABLE();
 
-   
+
   };
 
   PrintContext* print();
@@ -175,7 +175,7 @@ public:
     virtual size_t getRuleIndex() const override;
     antlr4::tree::TerminalNode *EXPONENTIAL();
 
-   
+
   };
 
   RemainderContext* remainder();
@@ -185,7 +185,7 @@ public:
     IdentityContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
 
-   
+
   };
 
   IdentityContext* identity();
@@ -196,7 +196,7 @@ public:
     virtual size_t getRuleIndex() const override;
     antlr4::tree::TerminalNode *NUMBER();
 
-   
+
   };
 
   FixedordersContext* fixedorders();
@@ -207,7 +207,7 @@ public:
     virtual size_t getRuleIndex() const override;
     antlr4::tree::TerminalNode *EXPONENTIAL();
 
-   
+
   };
 
   CutoffContext* cutoff();
@@ -218,7 +218,7 @@ public:
     virtual size_t getRuleIndex() const override;
     antlr4::tree::TerminalNode *NUMBER();
 
-   
+
   };
 
   PrecisionContext* precision();
@@ -233,16 +233,16 @@ public:
     std::vector<antlr4::tree::TerminalNode *> MINUS();
     antlr4::tree::TerminalNode* MINUS(size_t i);
 
-   
+
   };
 
   ReplacedexprContext* replacedexpr();
 
   class  ConstantexprContext : public antlr4::ParserRuleContext {
   public:
-    antlr4::Token *constantToken = nullptr;;
-    antlr4::Token *minusToken = nullptr;;
-    antlr4::Token *numberToken = nullptr;;
+    antlr4::Token *constantToken = nullptr;
+    antlr4::Token *minusToken = nullptr;
+    antlr4::Token *numberToken = nullptr;
     ConstantexprContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
     antlr4::tree::TerminalNode *CONSTANT();
@@ -250,7 +250,7 @@ public:
     antlr4::tree::TerminalNode *NUMBER();
     antlr4::tree::TerminalNode *MINUS();
 
-   
+
   };
 
   ConstantexprContext* constantexpr();
@@ -262,7 +262,7 @@ public:
     antlr4::tree::TerminalNode *PLUS();
     antlr4::tree::TerminalNode *MINUS();
 
-   
+
   };
 
   ConnectorContext* connector();
@@ -280,7 +280,7 @@ public:
     std::vector<ConnectorContext *> connector();
     ConnectorContext* connector(size_t i);
 
-   
+
   };
 
   TermContext* term();
@@ -294,7 +294,7 @@ public:
     std::vector<ConnectorContext *> connector();
     ConnectorContext* connector(size_t i);
 
-   
+
   };
 
   PolynomContext* polynom();
@@ -308,7 +308,7 @@ public:
     std::vector<antlr4::tree::TerminalNode *> MINUS();
     antlr4::tree::TerminalNode* MINUS(size_t i);
 
-   
+
   };
 
   IntervalContext* interval();
@@ -323,7 +323,7 @@ public:
     ConnectorContext *connector();
     IntervalContext *interval();
 
-   
+
   };
 
   EquationContext* equation();
@@ -337,7 +337,7 @@ public:
     antlr4::tree::TerminalNode *BOOLRELATION();
     antlr4::tree::TerminalNode *EQUALS();
 
-   
+
   };
 
   ConstraintContext* constraint();
@@ -350,7 +350,7 @@ public:
     antlr4::tree::TerminalNode *IN();
     IntervalContext *interval();
 
-   
+
   };
 
   IntervalexprContext* intervalexpr();
@@ -364,7 +364,7 @@ public:
     std::vector<IntervalexprContext *> intervalexpr();
     IntervalexprContext* intervalexpr(size_t i);
 
-   
+
   };
 
   ConstrsetContext* constrset();
