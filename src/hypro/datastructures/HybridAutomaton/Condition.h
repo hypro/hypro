@@ -32,6 +32,12 @@ public:
 
 	const std::vector<ConstraintSet<Number>>& constraints() const { return mConstraints; }
 
+
+    /**
+    * decomposes constraint set of this condition
+    */
+    void decompose(std::vector<std::vector<size_t>> decomposition);
+
 	// helper methods
 	//template<typename Representation, typename ...Rargs>
 	//std::pair<bool,State<Number,Representation, Rargs...>> isSatisfiedBy(const State<Number,Representation, Rargs...>& inState) const;

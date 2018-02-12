@@ -112,6 +112,14 @@ class Transition
     void setUrgent(bool urgent = true) { mUrgent = urgent; }
     void setTriggerTime(Number t) { mTriggerTime = t; }
 
+     /**
+    * decomposes guard  and reset of this transition.
+    */
+    void decompose(std::vector<std::vector<size_t>> decomposition){
+        mGuard.decompose(decomposition);
+        mReset.decompose(decomposition);
+    }
+
     /**
      * @brief      Outstream operator.
      * @param      ostr  The outstream.

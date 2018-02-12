@@ -81,6 +81,11 @@ public:
     void addTransition(Transition<Number>* trans) { mTransitions.insert(trans); }
     void setExtInput(const Box<Number>& b) { mExternalInput = b; }
 
+    /**
+    * decomposes flow and invariant of this location.
+    */
+    void decompose(std::vector<std::vector<size_t>> decomposition);
+
     inline bool operator<(const Location<Number>& rhs) const { return (mId < rhs.getId()); }
     inline bool operator==(const Location<Number>& rhs) const { return (mId == rhs.getId()); }
     inline bool operator!=(const Location<Number>& rhs) const { return (mId != rhs.getId()); }
