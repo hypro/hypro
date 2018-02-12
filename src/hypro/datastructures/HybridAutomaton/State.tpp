@@ -92,7 +92,8 @@ std::pair<CONTAINMENT,State<Number,tNumber,Representation,Rargs...>> State<Numbe
 	CONTAINMENT strictestContainment = CONTAINMENT::FULL;
 
 	for(std::size_t i = 0; i < mSets.size(); ++i) {
-		auto resultPair = boost::apply_visitor(genericSatisfiesHalfspacesVisitor<repVariant, Number>(in.getMatrix(), in.getVector()), mSets.at(i));
+		// check each substateset agains its invariant subset
+		auto resultPair = boost::apply_visitor(genericSatisfiesHalfspacesVisitor<repVariant, Number>(in.getMatrix(i), in.getVector(i)), mSets.at(i));
 		assert(resultPair.first != CONTAINMENT::YES); // assert that we have detailed information on the invariant intersection.
 
 		res.setSetDirect(resultPair.second, i);
@@ -354,6 +355,31 @@ void State<Number,tNumber,Representation,Rargs...>::setSetsSave(const std::vecto
 	}
 	mSets = sets;
 	assert(checkConsistency());
+}
+
+template<typename Number, typename tNumber, typename Representation, typename ...Rargs>
+void State<Number,tNumber,Representation,Rargs...>::decompose(std::vector<std::vector<size_t>> decomposition){
+	if(decomposition.size() == 1 || mSets.size() != 1){
+		// no decomposition/already decomposed
+	}
+
+	std::vector<repVariant> newSets;
+
+	repVariant initSet = hypro::Converter<Number>::toHPolytope(boost::get<hypro::ConstraintSet<Number>>(mSets.at(0)));
+	DEBUG("hypro.datastructures", "State before decomposition: "  << *this);
+	for(auto set : decomposition){
+		DEBUG("hypro.datastructures", "Trying to project set: \n " << mSets.at(0) << "\n to dimensions: " );
+		DEBUG("hypro.datastructures", "{");
+		for(auto entry : set){
+			DEBUG("hypro.datastructures","" <<  entry << ", ");
+		}
+		DEBUG("hypro.datastructures", "}");
+		repVariant tmp = boost::apply_visitor(genericProjectionVisitor<repVariant>(set), initSet);
+		newSets.push_back(hypro::Converter<Number>::toConstraintSet(boost::get<hypro::HPolytope<Number>>(tmp)));
+	}
+
+	setSetsSave(newSets);
+	DEBUG("hypro.datastructures", "State after decomposition: "  << *this);
 }
 
 } // hypro

@@ -38,6 +38,10 @@ public:
 	State<Number,Representation,Rargs...> applyReset(const State<Number,Representation,Rargs...>& inState) const;
 
 	bool isIdentity() const;
+     /**
+    * decomposes reset
+    */
+    void decompose(std::vector<std::vector<size_t>> decomposition);
 
 #ifdef HYPRO_LOGGING
     friend std::ostream& operator<<(std::ostream& ostr, const Reset<Number>& a)
