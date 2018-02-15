@@ -257,7 +257,11 @@ int main(int argc, char** argv) {
 
 	HybridAutomaton<Number> ha1 = createComponent1<Number>(1);
 	HybridAutomaton<Number> ha2 = createComponent1<Number>(2);
+	HybridAutomaton<Number> ha3 = createComponent1<Number>(3);
+	HybridAutomaton<Number> ha4 = createComponent1<Number>(4);
 	HybridAutomaton<Number> composed = ha1||ha2;
+	composed = composed||ha3;
+	composed = composed||ha4;
 
 	//std::cout << "################################################" << std::endl;
 	//std::cout << "Result: " << std::endl << composed << std::endl;
