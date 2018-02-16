@@ -11,6 +11,15 @@ namespace hypro {
     }
 
     template <typename Number, typename Converter, class Setting>
+    DifferenceBoundsT<Number, Converter, Setting>::DifferenceBoundsT(matrix_t<Number> matrix, vector_t<Number> vector){
+        hypro::HPolytopeT<Number,Converter, HPolytopeSetting> poly(matrix,vector);
+        hypro::DifferenceBoundsT<Number,Converter, Setting> dbm = Converter::toDifferenceBounds(poly);
+        m_dbm = dbm.getDBM();
+        m_timeHorizon = 0.0;
+    }
+
+
+    template <typename Number, typename Converter, class Setting>
     DifferenceBoundsT<Number, Converter, Setting>::DBMEntry::DBMEntry(Number number, BOUND_TYPE boundType) : std::pair<Number, BOUND_TYPE>(number, boundType) {
         //nop
     }
