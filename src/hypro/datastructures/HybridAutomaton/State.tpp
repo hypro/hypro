@@ -130,7 +130,7 @@ std::pair<CONTAINMENT,State<Number,tNumber,Representation,Rargs...>> State<Numbe
 	State<Number,tNumber,Representation,Rargs...> res(*this);
 	assert(res.getTimestamp() == this->getTimestamp());
 
-	auto resultPair = boost::apply_visitor(genericSatisfiesHalfspacesVisitor<repVariant, Number>(in.getMatrix(), in.getVector()), mSets.at(I));
+	auto resultPair = boost::apply_visitor(genericSatisfiesHalfspacesVisitor<repVariant, Number>(in.getMatrix(I), in.getVector(I)), mSets.at(I));
 	res.setSetDirect(resultPair.second, I);
 
 	TRACE("hypro.datastructures","Result empty: " << resultPair.first);

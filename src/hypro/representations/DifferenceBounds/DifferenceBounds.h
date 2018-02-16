@@ -129,6 +129,7 @@ private:
 public:
     DifferenceBoundsT ();
     DifferenceBoundsT (const DifferenceBoundsT& orig) = default;
+    DifferenceBoundsT (matrix_t<Number> matrix, vector_t<Number> vector);
 
     matrix_t<DBMEntry> getDBM() const;
     void setDBM(matrix_t<DBMEntry> dbm);
