@@ -156,6 +156,56 @@ class Transition
     	return o.str();
     }
 
+    bool isComposedOf(const Transition<Number>& rhs, const std::vector<std::string>& rhsVars, const std::vector<std::string>& thisVars) const {
+    	// compare source and target location
+    	if(this->getSource()->getName().find(rhs.getSource()->getName()) == std::string::npos ||
+    		this->getTarget()->getName().find(rhs.getTarget()->getName()) == std::string::npos) {
+    		std::cout << "source or target did not match." << std::endl;
+    		return false;
+    	}
+
+    	// compare guard
+    	if(rhs.getGuard().size() != 0 ) {
+			if(this->getGuard().size() == 0 ) {
+				//std::cout << "guards do not match." << std::endl;
+				return false;
+			}
+			//std::cout << "Compare guards " << rhs.getGuard().getMatrix() << " <= " << rhs.getGuard().getVector() << " and " << this->getInvariant().getMatrix() << " <= " << this->getInvariant().getVector() << std::endl;
+			for(Eigen::Index rowI = 0; rowI != rhs.getGuard().getMatrix().rows(); ++rowI) {
+				//std::cout << "original row " << rowI << std::endl;
+				bool foundConstraint = false;
+				for(Eigen::Index rowPos = 0; rowPos != this->getGuard().getMatrix().rows(); ++rowPos) {
+					bool allMatched = true;
+					for(Eigen::Index colI = 0; colI != rhs.getGuard().getMatrix().cols(); ++colI) {
+						//std::cout << "original col " << colI << std::endl;
+						// find corresponding positions in the current flow matrix
+						Eigen::Index colPos = 0;
+						while(thisVars[colPos] != rhsVars[colI]) ++colPos;
+						//std::cout << "matching col " << colPos << std::endl;
+						if(this->getGuard().getMatrix()(rowPos,colPos) != rhs.getGuard().getMatrix()(rowI,colI)) {
+							allMatched = false;
+							break;
+						}
+					}
+					if(allMatched) {
+						if(this->getGuard().getVector()(rowPos) == rhs.getGuard().getVector()(rowI)) {
+							//std::cout << "matched row " << rowPos << std::endl;
+							foundConstraint = true;
+							break;
+						}
+					}
+				}
+				if(!foundConstraint) {
+					//std::cout << "Cound not find invariant constraint." << std::endl;
+					return false;
+	 			}
+			}
+		}
+
+    	// compare reset function
+    	return true;
+    }
+
     /**
      * @brief      Outstream operator.
      * @param      ostr  The outstream.

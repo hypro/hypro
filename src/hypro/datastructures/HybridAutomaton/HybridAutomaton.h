@@ -133,6 +133,15 @@ class HybridAutomaton
      */
     void reduce();
 
+    /**
+     * @brief Function which tests whether this can be the result of a parallel composition with rhs.
+     * @details Used to verify the result of operator|| for hybrid automata.
+     *
+     * @param rhs Automaton which can be a component of this.
+     * @return True, if this is composed of rhs and some (possibly empty) rest.
+     */
+    bool isComposedOf(const HybridAutomaton<Number,State>& rhs) const;
+
     std::string getDotRepresentation() const;
 
     /**
@@ -164,47 +173,47 @@ class HybridAutomaton
       const variableVector& rhsVar = rhs.getVariables();
       std::map<unsigned, std::pair<unsigned,unsigned>> sharedVars;
 
-      //std::cout << "lhs variables: ";
-      //for(auto a : lhsVar) { std::cout << a << " "; }
-      //std::cout << std::endl;
-      //std::cout << "rhs variables: ";
-      //for(auto a : rhsVar) { std::cout << a << " "; }
-      //std::cout << std::endl;
+      std::cout << "lhs variables: ";
+      for(auto a : lhsVar) { std::cout << a << " "; }
+      std::cout << std::endl;
+      std::cout << "rhs variables: ";
+      for(auto a : rhsVar) { std::cout << a << " "; }
+      std::cout << std::endl;
 
       variableVector haVar;
       variableVector::size_type  i=0, j=0;
       while(i < lhsVar.size() and j < rhsVar.size()) {
         if (lhsVar.at(i) == rhsVar.at(j)) {
-        	//std::cout << "same var, add " << lhsVar[i] << std::endl;
+        	std::cout << "same var, add " << lhsVar[i] << std::endl;
           haVar.push_back(lhsVar[i]);
           i++; j++;
           continue;
         }
         if (lhsVar.at(i) < rhsVar.at(j)) {
-        	//std::cout << "push left first " << lhsVar.at(i) << std::endl;
+        	std::cout << "push left first " << lhsVar.at(i) << std::endl;
           haVar.push_back(lhsVar[i]);
           i++;
           continue;
         }
         if (lhsVar.at(i) > rhsVar.at(j)) {
-        	//std::cout << "push right first " << rhsVar.at(j) << std::endl;
+        	std::cout << "push right first " << rhsVar.at(j) << std::endl;
           haVar.push_back(rhsVar[j]);
           j++;
           continue;
         }
       }
       for(; i < lhsVar.size(); i++) {
-      	//std::cout << "fill left: " << lhsVar[i] << std::endl;
+      	std::cout << "fill left: " << lhsVar[i] << std::endl;
         haVar.push_back(lhsVar[i]);
       }
       for(; j < rhsVar.size(); j++) {
-      	//std::cout << "fill right: " << rhsVar[j] << std::endl;
+      	std::cout << "fill right: " << rhsVar[j] << std::endl;
         haVar.push_back(rhsVar[j]);
       }
       ha.setVariables(haVar);
 
-      //std::cout << "Variables: ";
-      //for(auto a : haVar) { std::cout << a << " "; }
+      std::cout << "Variables: ";
+      for(auto a : haVar) { std::cout << a << " "; }
       //std::cout << "locations & transisitons" << std::endl;
 
 
@@ -229,11 +238,11 @@ class HybridAutomaton
       		++r;
       	}
       	if(left && right) {
-      		//std::cout << "Shared var at " << i << " corresponds to (" << l << "," << r << ")" << std::endl;
+      		std::cout << "Shared var at " << i << " corresponds to (" << l << "," << r << ")" << std::endl;
       		sharedVars[i] = std::make_pair(l,r);
       	}
       }
-      //std::cout << "Detected " << sharedVars.size() << " shared variables." << std::endl;
+      std::cout << "Detected " << sharedVars.size() << " shared variables." << std::endl;
 
       for(const Location<Number>* locLhs : lhs.getLocations()) {
         for(const Location<Number>* locRhs : rhs.getLocations()) {
@@ -261,7 +270,8 @@ class HybridAutomaton
       for(const auto lhsT: lhs.getTransitions()) {
       		if(lhsT->getLabels().empty()) {
       			for(const auto loc : rhs.getLocations()) {
-      				//std::cout << "Potential transition " << lhsT->getSource()->getName() << "_" << loc->getName() << " -> " << lhsT->getTarget()->getName() << "_" << loc->getName() << std::endl;
+      				std::cout << "Potential transition " << lhsT->getSource()->getName() << "_" << loc->getName() << " -> " << lhsT->getTarget()->getName() << "_" << loc->getName() << std::endl;
+      				std::cout << "Original reset: " << lhsT->getReset().getMatrix() << " and " << lhsT->getReset().getVector() << std::endl;
       				Transition<Number>* tmp = new Transition<Number>(loc,loc);
       				// TODO: temporary test -> fix!
       				//tmp->setReset();
@@ -269,15 +279,19 @@ class HybridAutomaton
       				if(!sharedVars.empty()) {
       					// Attention: This is a temporary solution. Naturally, we would need to replicate the reset on the shared variables to create
       					// an admissible combined reset.
-      					//std::cout << "Have " << sharedVars.size() << " shared variables." << std::endl;
+      					// Todo: iterate over rows, then over cols (only the ones which correspond to shared vars) and set the resets accordingly.
+
+      					std::cout << "Have " << sharedVars.size() << " shared variables." << std::endl;
       					for(auto shdIt = sharedVars.begin(); shdIt != sharedVars.end(); ++shdIt) {
-      						//std::cout << "update row " << shdIt->second.second << std::endl;
-      						tmpReset.rGetMatrix().row(shdIt->second.second) = lhsT->getReset().getMatrix().row(shdIt->second.first);
+      						std::cout << "update row " << shdIt->second.second << std::endl;
+      						for(auto colIt = sharedVars.begin(); colIt != sharedVars.end(); ++colIt) {
+      							tmpReset.rGetMatrix()(shdIt->second.second, colIt->second.second) = lhsT->getReset().getMatrix()(shdIt->second.first,colIt->second.first);
+      						}
       						tmpReset.rGetVector()(shdIt->second.second) = lhsT->getReset().getVector()(shdIt->second.first);
       					}
       				}
 
-      				//std::cout << "tmpreset after update: " << tmpReset << std::endl;
+      				std::cout << "tmpreset after update: " << tmpReset << std::endl;
 
       				//tmp->setReset(combine(lhsT->getReset(),tmpReset,haVar,lhsVar,rhsVar));
       				tmp->setReset(tmpReset);
@@ -285,7 +299,7 @@ class HybridAutomaton
 
       				Transition<Number>* t = parallelCompose(lhsT, tmp, lhsVar, rhsVar, haVar, ha, lhsLabels, rhsLabels);
 			      	if(t) {
-			      		//std::cout << "Add." << std::endl;
+			      		std::cout << "Add." << std::endl;
 			            ha.addTransition(t);
 			            (t->getSource())->addTransition(t);
 			        }
@@ -304,13 +318,15 @@ class HybridAutomaton
       					// Attention: This is a temporary solution. Naturally, we would need to replicate the reset on the shared variables to create
       					// an admissible combined reset.
       					for(auto shdIt = sharedVars.begin(); shdIt != sharedVars.end(); ++shdIt) {
-      						//std::cout << "update row " << shdIt->first << std::endl;
-      						tmpReset.rGetMatrix().row(shdIt->second.first) = rhsT->getReset().getMatrix().row(shdIt->second.second);
+      						//std::cout << "update row " << shdIt->second.second << std::endl;
+      						for(auto colIt = sharedVars.begin(); colIt != sharedVars.end(); ++colIt) {
+      							tmpReset.rGetMatrix()(shdIt->second.first, colIt->second.first) = rhsT->getReset().getMatrix()(shdIt->second.second,colIt->second.second);
+      						}
       						tmpReset.rGetVector()(shdIt->second.first) = rhsT->getReset().getVector()(shdIt->second.second);
       					}
       				}
 
-      				tmp->setReset(combine(rhsT->getReset(),tmpReset,haVar,lhsVar,rhsVar));
+      				tmp->setReset(combine(rhsT->getReset(),tmpReset,haVar,rhsVar,lhsVar));
       				tmp->setAggregation(rhsT->getAggregation());
 
       				Transition<Number>* t = parallelCompose(tmp, rhsT, lhsVar, rhsVar, haVar, ha, lhsLabels, rhsLabels);
@@ -388,6 +404,7 @@ class HybridAutomaton
         return ostr;
     }
 };
+
 } // namespace hypro
 
 #include "HybridAutomaton.tpp"

@@ -74,4 +74,86 @@ std::string Location<Number>::getDotRepresentation(const std::vector<std::string
 	return o.str();
 }
 
+template<typename Number>
+bool Location<Number>::isComposedOf(const Location<Number>& rhs, const std::vector<std::string>& rhsVars, const std::vector<std::string>& thisVars) const {
+	// verify name (future work: we need some stronger criterion)
+	if(mName.find(rhs.getName()) == std::string::npos) {
+		//std::cout << "Name does not match." << std::endl;
+		return false;
+	}
+
+	// check variables
+	for(const auto& v : rhsVars) {
+		if(std::find(thisVars.begin(), thisVars.end(), v) == thisVars.end() ) {
+			//std::cout << "Variables do not match." << std::endl;
+			return false;
+		}
+	}
+
+	// verify flow
+	//std::cout << "compare flows " << mFlows[0] << " and " << rhs.getFlow() << std::endl;
+	for(Eigen::Index rowI = 0; rowI != rhs.getFlow().rows(); ++rowI) {
+		Eigen::Index rowPos = 0;
+		while(thisVars[rowPos] != rhsVars[rowI]) ++rowPos;
+		for(Eigen::Index colI = 0; colI != rhs.getFlow().cols(); ++colI) {
+			if(colI != rhs.getFlow().cols()-1) {
+				// find corresponding positions in the current flow matrix
+				Eigen::Index colPos = 0;
+				while(thisVars[colPos] != rhsVars[colI]) ++colPos;
+				//std::cout << "rowPos " << rowPos << ", rowI " << rowI << ", colPos " << colPos << ", colI " << colI << std::endl;
+				if(mFlows[0](rowPos,colPos) != rhs.getFlow()(rowI,colI)) {
+					//std::cout << "flows do not match." << std::endl;
+					return false;
+				}
+			} else {
+				if(mFlows[0](rowPos, mFlows[0].cols()-1) != rhs.getFlow()(rowI,colI)) {
+					//std::cout << "constant parts of flow does not match." << std::endl;
+					return false;
+				}
+			}
+
+		}
+	}
+
+	// verify invariant
+	if(rhs.getInvariant().size() != 0 ) {
+		if(this->getInvariant().size() == 0 ) {
+			//std::cout << "invariants do not match." << std::endl;
+			return false;
+		}
+		//std::cout << "Compare invariants " << rhs.getInvariant().getMatrix() << " <= " << rhs.getInvariant().getVector() << " and " << this->getInvariant().getMatrix() << " <= " << this->getInvariant().getVector() << std::endl;
+		for(Eigen::Index rowI = 0; rowI != rhs.getInvariant().getMatrix().rows(); ++rowI) {
+			//std::cout << "original row " << rowI << std::endl;
+			bool foundConstraint = false;
+			for(Eigen::Index rowPos = 0; rowPos != this->getInvariant().getMatrix().rows(); ++rowPos) {
+				bool allMatched = true;
+				for(Eigen::Index colI = 0; colI != rhs.getInvariant().getMatrix().cols(); ++colI) {
+					//std::cout << "original col " << colI << std::endl;
+					// find corresponding positions in the current flow matrix
+					Eigen::Index colPos = 0;
+					while(thisVars[colPos] != rhsVars[colI]) ++colPos;
+					//std::cout << "matching col " << colPos << std::endl;
+					if(this->getInvariant().getMatrix()(rowPos,colPos) != rhs.getInvariant().getMatrix()(rowI,colI)) {
+						allMatched = false;
+						break;
+					}
+				}
+				if(allMatched) {
+					if(this->getInvariant().getVector()(rowPos) == rhs.getInvariant().getVector()(rowI)) {
+						//std::cout << "matched row " << rowPos << std::endl;
+						foundConstraint = true;
+						break;
+					}
+				}
+			}
+			if(!foundConstraint) {
+				//std::cout << "Cound not find invariant constraint." << std::endl;
+				return false;
+ 			}
+		}
+	}
+
+	return true;
+}
+
 }  // namespace hydra

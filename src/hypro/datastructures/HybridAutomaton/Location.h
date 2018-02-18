@@ -82,6 +82,7 @@ public:
     void addTransition(Transition<Number>* trans) { mTransitions.insert(trans); }
     void setExtInput(const Box<Number>& b) { mExternalInput = b; }
 
+    bool isComposedOf(const Location<Number>& rhs, const std::vector<std::string>& rhsVars, const std::vector<std::string>& thisVars) const;
     std::string getDotRepresentation(const std::vector<std::string>& vars) const;
 
     inline bool operator<(const Location<Number>& rhs) const { return (mId < rhs.getId()); }
