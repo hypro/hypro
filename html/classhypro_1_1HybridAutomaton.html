@@ -175,6 +175,9 @@ Public Member Functions</h2></td></tr>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HybridAutomaton.html#a4397305ae7dd5c9bb26faf09d14673f6">reduce</a> ()</td></tr>
 <tr class="memdesc:a4397305ae7dd5c9bb26faf09d14673f6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reduces the automaton, i.e. removes Locations which are not connected to the automaton by transitions. <br/></td></tr>
 <tr class="separator:a4397305ae7dd5c9bb26faf09d14673f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abd8563c0e4c73bd3dc21b6476ee1c11d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HybridAutomaton.html#abd8563c0e4c73bd3dc21b6476ee1c11d">isComposedOf</a> (const <a class="el" href="classhypro_1_1HybridAutomaton.html">HybridAutomaton</a>&lt; Number, <a class="el" href="classhypro_1_1State.html">State</a> &gt; &amp;rhs) const </td></tr>
+<tr class="memdesc:abd8563c0e4c73bd3dc21b6476ee1c11d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function which tests whether this can be the result of a parallel composition with rhs.  <a href="#abd8563c0e4c73bd3dc21b6476ee1c11d">More...</a><br/></td></tr>
+<tr class="separator:abd8563c0e4c73bd3dc21b6476ee1c11d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8589cb6524da0fcfea7e45991edd940e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8589cb6524da0fcfea7e45991edd940e"></a>
 std::string&#160;</td><td class="memItemRight" valign="bottom"><b>getDotRepresentation</b> () const </td></tr>
 <tr class="separator:a8589cb6524da0fcfea7e45991edd940e"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -364,6 +367,35 @@ template&lt;typename Number, typename State = State_t&lt;Number,Number&gt;&gt; <
 
 </div>
 </div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a class="anchor" id="abd8563c0e4c73bd3dc21b6476ee1c11d"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number, typename State = State_t&lt;Number,Number&gt;&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classhypro_1_1HybridAutomaton.html">hypro::HybridAutomaton</a>&lt; Number, <a class="el" href="classhypro_1_1State.html">State</a> &gt;::isComposedOf </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classhypro_1_1HybridAutomaton.html">HybridAutomaton</a>&lt; Number, <a class="el" href="classhypro_1_1State.html">State</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>rhs</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Function which tests whether this can be the result of a parallel composition with rhs. </p>
+<p>Used to verify the result of operator|| for hybrid automata.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">rhs</td><td>Automaton which can be a component of this. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True, if this is composed of rhs and some (possibly empty) rest. </dd></dl>
+
+</div>
+</div>
 <h2 class="groupheader">Friends And Related Function Documentation</h2>
 <a class="anchor" id="aef58ea3dc3ea919018dc20c9eac83a57"></a>
 <div class="memitem">
@@ -409,7 +441,7 @@ template&lt;typename Number, typename State = State_t&lt;Number,Number&gt;&gt; <
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Return compositional Automata of two Automata. </dd></dl>
 
-<p>Definition at line <a class="el" href="HybridAutomaton_8h_source.html#l00352">352</a> of file <a class="el" href="HybridAutomaton_8h_source.html">HybridAutomaton.h</a>.</p>
+<p>Definition at line <a class="el" href="HybridAutomaton_8h_source.html#l00368">368</a> of file <a class="el" href="HybridAutomaton_8h_source.html">HybridAutomaton.h</a>.</p>
 
 </div>
 </div>
@@ -457,7 +489,7 @@ template&lt;typename Number, typename State = State_t&lt;Number,Number&gt;&gt; <
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True, if both automata are equal, false otherwise. </dd></dl>
 
-<p>Definition at line <a class="el" href="HybridAutomaton_8h_source.html#l00144">144</a> of file <a class="el" href="HybridAutomaton_8h_source.html">HybridAutomaton.h</a>.</p>
+<p>Definition at line <a class="el" href="HybridAutomaton_8h_source.html#l00153">153</a> of file <a class="el" href="HybridAutomaton_8h_source.html">HybridAutomaton.h</a>.</p>
 
 </div>
 </div>
@@ -505,7 +537,7 @@ template&lt;typename Number, typename State = State_t&lt;Number,Number&gt;&gt; <
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Return parallel composition of two Automata. </dd></dl>
 
-<p>Definition at line <a class="el" href="HybridAutomaton_8h_source.html#l00158">158</a> of file <a class="el" href="HybridAutomaton_8h_source.html">HybridAutomaton.h</a>.</p>
+<p>Definition at line <a class="el" href="HybridAutomaton_8h_source.html#l00167">167</a> of file <a class="el" href="HybridAutomaton_8h_source.html">HybridAutomaton.h</a>.</p>
 
 </div>
 </div>

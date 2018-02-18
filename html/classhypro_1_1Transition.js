@@ -16,6 +16,7 @@ var classhypro_1_1Transition =
     [ "getTarget", "classhypro_1_1Transition.html#ad81ad5bf5e9c123c1817ce8f216f5c6d", null ],
     [ "getTriggerTime", "classhypro_1_1Transition.html#a1ab6d811848170fe19a3b1ad28621918", null ],
     [ "hasIdentityReset", "classhypro_1_1Transition.html#a413143bd515a0c890aa701404a1e590c", null ],
+    [ "isComposedOf", "classhypro_1_1Transition.html#ad296fd8807a81c377e20d499056277db", null ],
     [ "isTimeTriggered", "classhypro_1_1Transition.html#aea4ba4c26a920e4b5528799e74098b2f", null ],
     [ "isUrgent", "classhypro_1_1Transition.html#abca76443bc8e53537ba2c6cec0f4f1c9", null ],
     [ "operator=", "classhypro_1_1Transition.html#abdb77bd0b27d3961ba441c7310004f29", null ],

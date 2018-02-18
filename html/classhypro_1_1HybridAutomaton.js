@@ -27,6 +27,7 @@ var classhypro_1_1HybridAutomaton =
     [ "getLocations", "classhypro_1_1HybridAutomaton.html#a1299b1614fc4cb819e07ea845bf45f9f", null ],
     [ "getTransitions", "classhypro_1_1HybridAutomaton.html#a6b41ee4d816b0334f2ea402a7685ccf5", null ],
     [ "getVariables", "classhypro_1_1HybridAutomaton.html#a0047bf0bcc068bb6d30156fa985c28e2", null ],
+    [ "isComposedOf", "classhypro_1_1HybridAutomaton.html#abd8563c0e4c73bd3dc21b6476ee1c11d", null ],
     [ "operator=", "classhypro_1_1HybridAutomaton.html#a48e877084879da4f0d2c22c11db5cfb7", null ],
     [ "operator=", "classhypro_1_1HybridAutomaton.html#ac91c80c3285ac1ce6fd02d45922e9fc5", null ],
     [ "reduce", "classhypro_1_1HybridAutomaton.html#a4397305ae7dd5c9bb26faf09d14673f6", null ],
