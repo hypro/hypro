@@ -156,21 +156,34 @@ class Transition
     	return o.str();
     }
 
+	/**
+	 * @brief      Determines if this composed of rhs and a potential rest.
+	 * @details    Checks whether this transition can be the result of a parallel composition where rhs was part of one composite.
+	 *
+	 * @param[in]  rhs       The right hand side
+	 * @param[in]  rhsVars   The right hand side variables
+	 * @param[in]  thisVars  The variables of this
+	 *
+	 * @return     True if composed of, False otherwise.
+	 */
     bool isComposedOf(const Transition<Number>& rhs, const std::vector<std::string>& rhsVars, const std::vector<std::string>& thisVars) const {
     	// compare source and target location
     	if(this->getSource()->getName().find(rhs.getSource()->getName()) == std::string::npos ||
     		this->getTarget()->getName().find(rhs.getTarget()->getName()) == std::string::npos) {
-    		std::cout << "source or target did not match." << std::endl;
+    		//std::cout << "source or target did not match." << std::endl;
     		return false;
     	}
 
-    	// compare guard
+    	// compare guard constraints. As the order is not fixed, we consider each row, one by one and try to match rows (outer two loops).
+    	// This is similar to the invariant comparison in Location.tpp
     	if(rhs.getGuard().size() != 0 ) {
 			if(this->getGuard().size() == 0 ) {
 				//std::cout << "guards do not match." << std::endl;
 				return false;
 			}
 			//std::cout << "Compare guards " << rhs.getGuard().getMatrix() << " <= " << rhs.getGuard().getVector() << " and " << this->getGuard().getMatrix() << " <= " << this->getInvariant().getVector() << std::endl;
+
+			// try to find matching rows.
 			for(Eigen::Index rowI = 0; rowI != rhs.getGuard().getMatrix().rows(); ++rowI) {
 				//std::cout << "original row " << rowI << std::endl;
 				bool foundConstraint = false;
@@ -187,6 +200,7 @@ class Transition
 							break;
 						}
 					}
+					// also compare constants.
 					if(allMatched) {
 						if(this->getGuard().getVector()(rowPos) == rhs.getGuard().getVector()(rowI)) {
 							//std::cout << "matched row " << rowPos << std::endl;
@@ -202,7 +216,8 @@ class Transition
 			}
 		}
 
-    	// compare reset function
+    	// compare reset function:
+    	// Find corresponding rows, then compare relevant entries.
 		for(Eigen::Index rowI = 0; rowI != rhs.getReset().getMatrix().rows(); ++rowI) {
 			Eigen::Index rowPos = 0;
 			//std::cout << "Search for: " << rhsVars[rowI] << std::endl;

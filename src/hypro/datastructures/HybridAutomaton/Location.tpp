@@ -76,13 +76,13 @@ std::string Location<Number>::getDotRepresentation(const std::vector<std::string
 
 template<typename Number>
 bool Location<Number>::isComposedOf(const Location<Number>& rhs, const std::vector<std::string>& rhsVars, const std::vector<std::string>& thisVars) const {
-	// verify name (future work: we need some stronger criterion)
+	// verify name (future work: we need some stronger criterion, also to speed-up the look-up)
 	if(mName.find(rhs.getName()) == std::string::npos) {
 		//std::cout << "Name does not match." << std::endl;
 		return false;
 	}
 
-	// check variables
+	// check variable sets (this is checked beforehand, but this function now is also stand-alone).
 	for(const auto& v : rhsVars) {
 		if(std::find(thisVars.begin(), thisVars.end(), v) == thisVars.end() ) {
 			//std::cout << "Variables do not match." << std::endl;
@@ -90,19 +90,24 @@ bool Location<Number>::isComposedOf(const Location<Number>& rhs, const std::vect
 		}
 	}
 
-	// verify flow
-	//std::cout << "compare flows " << mFlows[0] << " and " << rhs.getFlow() << std::endl;
+	// verify flow:
 	// Note: We assume the last row is zero and do not explicitly check this property here.
+	// The check searches for matching variables - the *I indices refer to the rhs-related indices
+	// while the *Pos indices refer to this.
+
+	//std::cout << "compare flows " << mFlows[0] << " and " << rhs.getFlow() << std::endl;
 	for(Eigen::Index rowI = 0; rowI != rhs.getFlow().rows()-1; ++rowI) {
+		// find according row in this.
 		Eigen::Index rowPos = 0;
-		std::cout << "Search for: " << rhsVars[rowI] << std::endl;
+		//std::cout << "Search for: " << rhsVars[rowI] << std::endl;
 		while(thisVars[rowPos] != rhsVars[rowI]) {
-			std::cout << "Consider: " << thisVars[rowPos] << std::endl;
+			//std::cout << "Consider: " << thisVars[rowPos] << std::endl;
 			++rowPos;
 			if(rowPos == thisVars.size()) {
-				std::cout << "Reached end." << std::endl;
+				//std::cout << "Reached end." << std::endl;
 			}
 		}
+		// for the row now search all relevant columns. Note that the last column does not have a matching variable (constants), handle separately.
 		for(Eigen::Index colI = 0; colI != rhs.getFlow().cols(); ++colI) {
 			if(colI != rhs.getFlow().cols()-1) {
 				// find corresponding positions in the current flow matrix
@@ -123,21 +128,26 @@ bool Location<Number>::isComposedOf(const Location<Number>& rhs, const std::vect
 		}
 	}
 
-	// verify invariant
+	// verify invariant constraints. Note that the invariant can also be empty, so verify sizes first.
+	//
 	if(rhs.getInvariant().size() != 0 ) {
 		if(this->getInvariant().size() == 0 ) {
 			//std::cout << "invariants do not match." << std::endl;
 			return false;
 		}
 		//std::cout << "Compare invariants " << rhs.getInvariant().getMatrix() << " <= " << rhs.getInvariant().getVector() << " and " << this->getInvariant().getMatrix() << " <= " << this->getInvariant().getVector() << std::endl;
+
+		// As the order of constraints does not matter, try to find matching rows one by one.
 		for(Eigen::Index rowI = 0; rowI != rhs.getInvariant().getMatrix().rows(); ++rowI) {
 			//std::cout << "original row " << rowI << std::endl;
 			bool foundConstraint = false;
+			// compare invariant constraint in this to the row in rhs.
 			for(Eigen::Index rowPos = 0; rowPos != this->getInvariant().getMatrix().rows(); ++rowPos) {
 				bool allMatched = true;
+				// if all entries match we found the correct row - check column-wise.
 				for(Eigen::Index colI = 0; colI != rhs.getInvariant().getMatrix().cols(); ++colI) {
 					//std::cout << "original col " << colI << std::endl;
-					// find corresponding positions in the current flow matrix
+					// find corresponding positions in the current invariant matrix
 					Eigen::Index colPos = 0;
 					while(thisVars[colPos] != rhsVars[colI]) ++colPos;
 					//std::cout << "matching col " << colPos << std::endl;
@@ -146,6 +156,7 @@ bool Location<Number>::isComposedOf(const Location<Number>& rhs, const std::vect
 						break;
 					}
 				}
+				// if the assumed correct row has been found, also check the constant part.
 				if(allMatched) {
 					if(this->getInvariant().getVector()(rowPos) == rhs.getInvariant().getVector()(rowI)) {
 						//std::cout << "matched row " << rowPos << std::endl;

@@ -82,6 +82,16 @@ public:
     void addTransition(Transition<Number>* trans) { mTransitions.insert(trans); }
     void setExtInput(const Box<Number>& b) { mExternalInput = b; }
 
+    /**
+     * @brief      Determines if this composed of rhs and some potential rest.
+     * @details    Checks whether this location can be the result of a parallel composition where rhs is involved as a composite.
+     *
+     * @param[in]  rhs       The right hand side
+     * @param[in]  rhsVars   The right hand side variables
+     * @param[in]  thisVars  The variables of this location
+     *
+     * @return     True if composed of, False otherwise.
+     */
     bool isComposedOf(const Location<Number>& rhs, const std::vector<std::string>& rhsVars, const std::vector<std::string>& thisVars) const;
     std::string getDotRepresentation(const std::vector<std::string>& vars) const;
 

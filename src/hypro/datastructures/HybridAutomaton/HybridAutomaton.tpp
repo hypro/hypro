@@ -88,35 +88,37 @@ bool HybridAutomaton<Number,State>::isComposedOf(const HybridAutomaton<Number,St
 	// trivial case.
 	if(*this == rhs) return true;
 
-	// check variables
+	// check variable sets
 	for(const auto& v : rhs.getVariables()) {
 		if(std::find(mVariables.begin(), mVariables.end(), v) == mVariables.end()) {
-			std::cout << "Variable " << v << " not contained in this, return false" << std::endl;
+			//std::cout << "Variable " << v << " not contained in this, return false" << std::endl;
 			return false;
 		}
 	}
 
-	// check locations
+	// check locations:
+	// try to find *exactly* one location, which matches - matching is defined by name, flow and invariant.
 	for(auto locPtr : this->mLocations) {
 		bool foundOne = false;
-		std::cout << "Try to find a matching location for " << locPtr->getName() << std::endl;
+		//std::cout << "Try to find a matching location for " << locPtr->getName() << std::endl;
 		for(auto rhsLocPtr : rhs.getLocations()) {
-			std::cout << "Consider " << rhsLocPtr->getName() << std::endl;
+			//std::cout << "Consider " << rhsLocPtr->getName() << std::endl;
 			if(locPtr->isComposedOf(*rhsLocPtr, rhs.getVariables(), this->getVariables())) {
 				if(foundOne) {
-					std::cout << "composed from more than one loc - return false." << std::endl;
+					//std::cout << "composed from more than one loc - return false." << std::endl;
 					return false;
 				}
 				foundOne = true;
 			}
 		}
 		if(!foundOne) {
-			std::cout << "could not find a matching location in rhs." << std::endl;
+			//std::cout << "could not find a matching location in rhs." << std::endl;
 			return false;
 		}
 	}
 
-	// check transitions
+	// check transitions:
+	// try to find a matching transition. Also take loops (no-op loops) into account for the check.
 	for(auto transPtr : this->mTransitions) {
 		bool foundOne = false;
 		std::cout << "Try to find transition for " << transPtr->getSource()->getName() << " -> " << transPtr->getTarget()->getName() << std::endl;
