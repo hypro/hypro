@@ -211,8 +211,8 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>addLabel</b> (const <
 <tr class="memitem:a57bf912b402b15cf55b062e3779c59b0"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a57bf912b402b15cf55b062e3779c59b0"></a>
 std::string&#160;</td><td class="memItemRight" valign="bottom"><b>getDotRepresentation</b> (const std::vector&lt; std::string &gt; &amp;vars) const </td></tr>
 <tr class="separator:a57bf912b402b15cf55b062e3779c59b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad296fd8807a81c377e20d499056277db"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad296fd8807a81c377e20d499056277db"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>isComposedOf</b> (const <a class="el" href="classhypro_1_1Transition.html">Transition</a>&lt; Number &gt; &amp;rhs, const std::vector&lt; std::string &gt; &amp;rhsVars, const std::vector&lt; std::string &gt; &amp;thisVars) const </td></tr>
+<tr class="memitem:ad296fd8807a81c377e20d499056277db"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Transition.html#ad296fd8807a81c377e20d499056277db">isComposedOf</a> (const <a class="el" href="classhypro_1_1Transition.html">Transition</a>&lt; Number &gt; &amp;rhs, const std::vector&lt; std::string &gt; &amp;rhsVars, const std::vector&lt; std::string &gt; &amp;thisVars) const </td></tr>
+<tr class="memdesc:ad296fd8807a81c377e20d499056277db"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines if this composed of rhs and a potential rest.  <a href="#ad296fd8807a81c377e20d499056277db">More...</a><br/></td></tr>
 <tr class="separator:ad296fd8807a81c377e20d499056277db"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
@@ -416,6 +416,62 @@ template&lt;typename Number&gt; </div>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a class="anchor" id="ad296fd8807a81c377e20d499056277db"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classhypro_1_1Transition.html">hypro::Transition</a>&lt; Number &gt;::isComposedOf </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classhypro_1_1Transition.html">Transition</a>&lt; Number &gt; &amp;&#160;</td>
+          <td class="paramname"><em>rhs</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::vector&lt; std::string &gt; &amp;&#160;</td>
+          <td class="paramname"><em>rhsVars</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::vector&lt; std::string &gt; &amp;&#160;</td>
+          <td class="paramname"><em>thisVars</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Determines if this composed of rhs and a potential rest. </p>
+<p>Checks whether this transition can be the result of a parallel composition where rhs was part of one composite.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">rhs</td><td>The right hand side </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">rhsVars</td><td>The right hand side variables </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">thisVars</td><td>The variables of this</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True if composed of, False otherwise. </dd></dl>
+
+<p>Definition at line <a class="el" href="Transition_8h_source.html#l00169">169</a> of file <a class="el" href="Transition_8h_source.html">Transition.h</a>.</p>
+
+</div>
+</div>
 <a class="anchor" id="abdb77bd0b27d3961ba441c7310004f29"></a>
 <div class="memitem">
 <div class="memproto">
@@ -531,7 +587,7 @@ template&lt;typename Number&gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Reference to the outstream. </dd></dl>
 
-<p>Definition at line <a class="el" href="Transition_8h_source.html#l00237">237</a> of file <a class="el" href="Transition_8h_source.html">Transition.h</a>.</p>
+<p>Definition at line <a class="el" href="Transition_8h_source.html#l00252">252</a> of file <a class="el" href="Transition_8h_source.html">Transition.h</a>.</p>
 
 </div>
 </div>
@@ -579,7 +635,7 @@ template&lt;typename Number&gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True if both transitions are equal, false otherwise. </dd></dl>
 
-<p>Definition at line <a class="el" href="Transition_8h_source.html#l00259">259</a> of file <a class="el" href="Transition_8h_source.html">Transition.h</a>.</p>
+<p>Definition at line <a class="el" href="Transition_8h_source.html#l00274">274</a> of file <a class="el" href="Transition_8h_source.html">Transition.h</a>.</p>
 
 </div>
 </div>
