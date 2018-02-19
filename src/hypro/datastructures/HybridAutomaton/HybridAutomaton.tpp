@@ -121,15 +121,15 @@ bool HybridAutomaton<Number,State>::isComposedOf(const HybridAutomaton<Number,St
 	// try to find a matching transition. Also take loops (no-op loops) into account for the check.
 	for(auto transPtr : this->mTransitions) {
 		bool foundOne = false;
-		std::cout << "Try to find transition for " << transPtr->getSource()->getName() << " -> " << transPtr->getTarget()->getName() << std::endl;
+		//std::cout << "Try to find transition for " << transPtr->getSource()->getName() << " -> " << transPtr->getTarget()->getName() << std::endl;
 		// first try to find no-op transitions (where the control stays in the same mode for that component)
 		bool loop = false;
 		for(auto locPtr : rhs.getLocations()) {
-			std::cout << "Find name " << locPtr->getName() << std::endl;
+			//std::cout << "Find name " << locPtr->getName() << std::endl;
 			if(transPtr->getSource()->getName().find(locPtr->getName()) != std::string::npos && transPtr->getTarget()->getName().find(locPtr->getName()) != std::string::npos) {
-				std::cout << "Found loop: " << transPtr->getSource()->getName() << " -> " << transPtr->getTarget()->getName() << std::endl;
+				//std::cout << "Found loop: " << transPtr->getSource()->getName() << " -> " << transPtr->getTarget()->getName() << std::endl;
 				if(loop) {
-					std::cout << "Two loops - return false" << std::endl;
+					//std::cout << "Two loops - return false" << std::endl;
 					return false;
 				}
 				loop = true;
@@ -137,10 +137,10 @@ bool HybridAutomaton<Number,State>::isComposedOf(const HybridAutomaton<Number,St
 		}
 		if(!loop) {
 			for(auto rhsTransPtr : rhs.getTransitions()) {
-				std::cout << "consider " << rhsTransPtr->getSource()->getName() << " -> " << rhsTransPtr->getTarget()->getName() << std::endl;
+				//std::cout << "consider " << rhsTransPtr->getSource()->getName() << " -> " << rhsTransPtr->getTarget()->getName() << std::endl;
 				if(transPtr->isComposedOf(*rhsTransPtr, rhs.getVariables(), this->getVariables())) {
 					if(foundOne) {
-						std::cout << "found two matching transitions - return false" << std::endl;
+						//std::cout << "found two matching transitions - return false" << std::endl;
 						return false;
 					}
 					foundOne = true;
@@ -149,7 +149,7 @@ bool HybridAutomaton<Number,State>::isComposedOf(const HybridAutomaton<Number,St
 		}
 
 		if(!foundOne && !loop) {
-			std::cout << "Did not find matching transition - return false." << std::endl;
+			//std::cout << "Did not find matching transition - return false." << std::endl;
 			return false;
 		}
 	}

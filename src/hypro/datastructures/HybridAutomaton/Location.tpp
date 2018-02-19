@@ -103,7 +103,7 @@ bool Location<Number>::isComposedOf(const Location<Number>& rhs, const std::vect
 		while(thisVars[rowPos] != rhsVars[rowI]) {
 			//std::cout << "Consider: " << thisVars[rowPos] << std::endl;
 			++rowPos;
-			if(rowPos == thisVars.size()) {
+			if(rowPos == Eigen::Index(thisVars.size())) {
 				//std::cout << "Reached end." << std::endl;
 			}
 		}
