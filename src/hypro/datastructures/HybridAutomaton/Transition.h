@@ -170,7 +170,7 @@ class Transition
 				//std::cout << "guards do not match." << std::endl;
 				return false;
 			}
-			//std::cout << "Compare guards " << rhs.getGuard().getMatrix() << " <= " << rhs.getGuard().getVector() << " and " << this->getInvariant().getMatrix() << " <= " << this->getInvariant().getVector() << std::endl;
+			//std::cout << "Compare guards " << rhs.getGuard().getMatrix() << " <= " << rhs.getGuard().getVector() << " and " << this->getGuard().getMatrix() << " <= " << this->getInvariant().getVector() << std::endl;
 			for(Eigen::Index rowI = 0; rowI != rhs.getGuard().getMatrix().rows(); ++rowI) {
 				//std::cout << "original row " << rowI << std::endl;
 				bool foundConstraint = false;
@@ -203,6 +203,28 @@ class Transition
 		}
 
     	// compare reset function
+		for(Eigen::Index rowI = 0; rowI != rhs.getReset().getMatrix().rows(); ++rowI) {
+			Eigen::Index rowPos = 0;
+			//std::cout << "Search for: " << rhsVars[rowI] << std::endl;
+			while(thisVars[rowPos] != rhsVars[rowI]) ++rowPos;
+			for(Eigen::Index colI = 0; colI != rhs.getReset().getMatrix().cols(); ++colI) {
+				// find corresponding positions in the current reset matrix
+				Eigen::Index colPos = 0;
+				while(thisVars[colPos] != rhsVars[colI]) ++colPos;
+				//std::cout << "rowPos " << rowPos << ", rowI " << rowI << ", colPos " << colPos << ", colI " << colI << std::endl;
+				if(this->getReset().getMatrix()(rowPos,colPos) != rhs.getReset().getMatrix()(rowI,colI)) {
+					//std::cout << "reset matrix entries do not match." << std::endl;
+					return false;
+				}
+			}
+
+			// compare constant part (b)
+			if(this->getReset().getVector()(rowPos) != rhs.getReset().getVector()(rowI)) {
+				//std::cout << "constant parts do not match." << std::endl;
+				return false;
+			}
+		}
+
     	return true;
     }
 

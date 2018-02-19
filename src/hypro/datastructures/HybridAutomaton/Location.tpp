@@ -92,9 +92,17 @@ bool Location<Number>::isComposedOf(const Location<Number>& rhs, const std::vect
 
 	// verify flow
 	//std::cout << "compare flows " << mFlows[0] << " and " << rhs.getFlow() << std::endl;
-	for(Eigen::Index rowI = 0; rowI != rhs.getFlow().rows(); ++rowI) {
+	// Note: We assume the last row is zero and do not explicitly check this property here.
+	for(Eigen::Index rowI = 0; rowI != rhs.getFlow().rows()-1; ++rowI) {
 		Eigen::Index rowPos = 0;
-		while(thisVars[rowPos] != rhsVars[rowI]) ++rowPos;
+		std::cout << "Search for: " << rhsVars[rowI] << std::endl;
+		while(thisVars[rowPos] != rhsVars[rowI]) {
+			std::cout << "Consider: " << thisVars[rowPos] << std::endl;
+			++rowPos;
+			if(rowPos == thisVars.size()) {
+				std::cout << "Reached end." << std::endl;
+			}
+		}
 		for(Eigen::Index colI = 0; colI != rhs.getFlow().cols(); ++colI) {
 			if(colI != rhs.getFlow().cols()-1) {
 				// find corresponding positions in the current flow matrix

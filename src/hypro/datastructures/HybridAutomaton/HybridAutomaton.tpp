@@ -123,7 +123,9 @@ bool HybridAutomaton<Number,State>::isComposedOf(const HybridAutomaton<Number,St
 		// first try to find no-op transitions (where the control stays in the same mode for that component)
 		bool loop = false;
 		for(auto locPtr : rhs.getLocations()) {
-			if(transPtr->getSource()->getName().find(locPtr->getName()) && transPtr->getTarget()->getName().find(locPtr->getName())) {
+			std::cout << "Find name " << locPtr->getName() << std::endl;
+			if(transPtr->getSource()->getName().find(locPtr->getName()) != std::string::npos && transPtr->getTarget()->getName().find(locPtr->getName()) != std::string::npos) {
+				std::cout << "Found loop: " << transPtr->getSource()->getName() << " -> " << transPtr->getTarget()->getName() << std::endl;
 				if(loop) {
 					std::cout << "Two loops - return false" << std::endl;
 					return false;
