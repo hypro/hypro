@@ -327,7 +327,10 @@ class HybridAutomaton
 							}
 						}
 
-						tmp->setReset(combine(rhsT->getReset(),tmpReset,haVar,rhsVar,lhsVar));
+						std::cout << "tmpreset after update: " << tmpReset << std::endl;
+
+						//tmp->setReset(combine(rhsT->getReset(),tmpReset,haVar,rhsVar,lhsVar));
+						tmp->setReset(tmpReset);
 						tmp->setAggregation(rhsT->getAggregation());
 
 						Transition<Number>* t = parallelCompose(tmp, rhsT, lhsVar, rhsVar, haVar, ha, lhsLabels, rhsLabels);
