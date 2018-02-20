@@ -37,7 +37,7 @@ class Transition
     Aggregation mAggregationSetting = Aggregation::none; /// Aggregation settings.
     bool mUrgent = false; /// Flag if transition is urgent.
     Number mTriggerTime = Number(-1); /// Trigger-time: if positive acts as an additional guard.
-    std::set<Label> mLabels;
+    std::vector<Label> mLabels = std::vector<Label>();
 
   public:
 
@@ -83,7 +83,7 @@ class Transition
      * @param      target  The target
      */
     Transition(Location<Number>* source, Location<Number>* target)
-        : mSource(source), mTarget(target), mGuard(), mReset(), mAggregationSetting(), mUrgent(false)
+        : mSource(source), mTarget(target), mGuard(), mReset(), mAggregationSetting(), mUrgent(false) , mLabels()
     {}
 
     /**
@@ -94,7 +94,7 @@ class Transition
      * @param[in]  reset   The reset.
      */
     Transition(Location<Number>* source, Location<Number>* target, const Condition<Number>& guard, const Reset<Number>& reset)
-        : mSource(source), mTarget(target), mGuard(guard), mReset(reset), mAggregationSetting(), mUrgent(false)
+        : mSource(source), mTarget(target), mGuard(guard), mReset(reset), mAggregationSetting(), mUrgent(false), mLabels()
     {}
 
 
@@ -107,7 +107,7 @@ class Transition
     bool isUrgent() const { return mUrgent; }
     bool isTimeTriggered() const { return mTriggerTime >= 0; }
     bool hasIdentityReset() const { return mReset.isIdentity(); }
-    std::set<Label> getLabels() const { return mLabels; }
+    std::vector<Label> getLabels() const { return mLabels; }
 
     void setSource(Location<Number>* source) { mSource = source; }
     void setTarget(Location<Number>* target) { mTarget = target; }
@@ -116,8 +116,8 @@ class Transition
     void setAggregation(Aggregation agg) { mAggregationSetting = agg; }
     void setUrgent(bool urgent = true) { mUrgent = urgent; }
     void setTriggerTime(Number t) { mTriggerTime = t; }
-    void setLabels(const std::set<Label>& labels) { mLabels = labels; }
-    void addLabel(const Label& lab) { mLabels.insert(lab); }
+    void setLabels(const std::vector<Label>& labels) { mLabels = labels; }
+    void addLabel(const Label& lab) { mLabels.push_back(lab); }
 
     std::string getDotRepresentation(const std::vector<std::string>& vars) const {
     	std::stringstream o;

@@ -7,21 +7,31 @@
  */
 
 #pragma once
+#include <string>
 
 namespace hypro {
 
 class Label {
   private:
-    std::string mName;
+    std::string mName = "";
 
   public:
-    Label() = default;
+    Label() = delete;
+    Label(const Label& in)
+    	: mName()
+    {
+    	mName = in.getName();
+    }
+    Label(Label&& in) = default;
 
     Label(const std::string& name) { mName = name; };
 
     ~Label() {};
 
-    std::string getName() const { return mName; }
+    Label& operator=(const Label& in) = default;
+    Label& operator=(Label&& in) = default;
+
+    std::string getName() const { assert(mName!=""); return mName; }
 
     void setName(const std::string &name) { mName = name; }
 
@@ -44,3 +54,4 @@ class Label {
 };
 
 }
+
