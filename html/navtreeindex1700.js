@@ -1,5 +1,9 @@
 var NAVTREEINDEX1700 =
 {
+"structhypro_1_1sumContent.html":[9,0,1,88],
+"structhypro_1_1sumContent.html#a9979a1e3848208c1875f9cd65e07e4cc":[9,0,1,88,1],
+"structhypro_1_1sumContent.html#aa6d0de58fd7c1a67724d48d9312ebc72":[9,0,1,88,2],
+"structhypro_1_1sumContent.html#ab6bd8dceed2382bd94da89e2c5fd7d8d":[9,0,1,88,4],
 "structhypro_1_1sumContent.html#ab943d1013454c465304ecd852a7e957f":[9,0,1,88,0],
 "structhypro_1_1sumContent.html#ad082008fc6be546aeb826d0f83031105":[9,0,1,88,3],
 "structhypro_1_1trafoContent.html":[9,0,1,89],

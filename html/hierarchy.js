@@ -1185,14 +1185,14 @@ var hierarchy =
     [ "hypro::reachability::hypro::unionContent< Number >", "structhypro_1_1reachability_1_1hypro_1_1unionContent.html", null ],
     [ "hypro::unionContent< Number >", "structhypro_1_1unionContent.html", null ],
     [ "hypro::UtilSetting", "structhypro_1_1UtilSetting.html", null ],
-    [ "hypro::reachability::hypro::Vertex< Number >", "classhypro_1_1reachability_1_1hypro_1_1Vertex.html", null ],
     [ "hypro::Vertex< Number >", "classhypro_1_1Vertex.html", null ],
+    [ "hypro::reachability::hypro::Vertex< Number >", "classhypro_1_1reachability_1_1hypro_1_1Vertex.html", null ],
     [ "hypro::Vertex< std::size_t >", "classhypro_1_1Vertex.html", null ],
     [ "hypro::reachability::hypro::Vertex< std::size_t >", "classhypro_1_1reachability_1_1hypro_1_1Vertex.html", null ],
-    [ "hypro::reachability::hypro::VertexContainer< Number >", "classhypro_1_1reachability_1_1hypro_1_1VertexContainer.html", null ],
     [ "hypro::VertexContainer< Number >", "classhypro_1_1VertexContainer.html", null ],
+    [ "hypro::reachability::hypro::VertexContainer< Number >", "classhypro_1_1reachability_1_1hypro_1_1VertexContainer.html", null ],
     [ "hypro::VertexEnumeration< Number >", "classhypro_1_1VertexEnumeration.html", null ],
     [ "hypro::reachability::hypro::VertexEnumeration< Number >", "classhypro_1_1reachability_1_1hypro_1_1VertexEnumeration.html", null ],
-    [ "hypro::reachability::hypro::ZonotopeSetting", "structhypro_1_1reachability_1_1hypro_1_1ZonotopeSetting.html", null ],
-    [ "hypro::ZonotopeSetting", "structhypro_1_1ZonotopeSetting.html", null ]
+    [ "hypro::ZonotopeSetting", "structhypro_1_1ZonotopeSetting.html", null ],
+    [ "hypro::reachability::hypro::ZonotopeSetting", "structhypro_1_1reachability_1_1hypro_1_1ZonotopeSetting.html", null ]
 ];

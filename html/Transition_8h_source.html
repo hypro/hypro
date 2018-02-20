@@ -145,7 +145,7 @@ $(document).ready(function(){initNavTree('Transition_8h_source.html','');});
 <div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    Aggregation mAggregationSetting = Aggregation::none; </div>
 <div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    <span class="keywordtype">bool</span> mUrgent = <span class="keyword">false</span>; </div>
 <div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    Number mTriggerTime = Number(-1); </div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    std::set&lt;Label&gt; mLabels;</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    std::vector&lt;Label&gt; mLabels = std::vector&lt;Label&gt;();</div>
 <div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;</div>
 <div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;  <span class="keyword">public</span>:</div>
 <div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;</div>
@@ -162,11 +162,11 @@ $(document).ready(function(){initNavTree('Transition_8h_source.html','');});
 <div class="line"><a name="l00078"></a><span class="lineno"><a class="line" href="classhypro_1_1Transition.html#a538386202b6b77ca1e296332931db302">   78</a></span>&#160;    <a class="code" href="classhypro_1_1Transition.html#a538386202b6b77ca1e296332931db302">~Transition</a>() {}</div>
 <div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;</div>
 <div class="line"><a name="l00085"></a><span class="lineno"><a class="line" href="classhypro_1_1Transition.html#af353ec3f6a604f2cfc722e127178f14d">   85</a></span>&#160;    <a class="code" href="classhypro_1_1Transition.html#af353ec3f6a604f2cfc722e127178f14d">Transition</a>(<a class="code" href="classhypro_1_1Location.html">Location&lt;Number&gt;</a>* source, <a class="code" href="classhypro_1_1Location.html">Location&lt;Number&gt;</a>* target)</div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;        : mSource(source), mTarget(target), mGuard(), mReset(), mAggregationSetting(), mUrgent(false)</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;        : mSource(source), mTarget(target), mGuard(), mReset(), mAggregationSetting(), mUrgent(false) , mLabels()</div>
 <div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;    {}</div>
 <div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;</div>
 <div class="line"><a name="l00096"></a><span class="lineno"><a class="line" href="classhypro_1_1Transition.html#a9db904bf4611ae2b689c1ab854ea97c8">   96</a></span>&#160;    <a class="code" href="classhypro_1_1Transition.html#a9db904bf4611ae2b689c1ab854ea97c8">Transition</a>(<a class="code" href="classhypro_1_1Location.html">Location&lt;Number&gt;</a>* source, <a class="code" href="classhypro_1_1Location.html">Location&lt;Number&gt;</a>* target, <span class="keyword">const</span> <a class="code" href="classhypro_1_1Condition.html">Condition&lt;Number&gt;</a>&amp; guard, <span class="keyword">const</span> <a class="code" href="classhypro_1_1Reset.html">Reset&lt;Number&gt;</a>&amp; reset)</div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;        : mSource(source), mTarget(target), mGuard(guard), mReset(reset), mAggregationSetting(), mUrgent(false)</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;        : mSource(source), mTarget(target), mGuard(guard), mReset(reset), mAggregationSetting(), mUrgent(false), mLabels()</div>
 <div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;    {}</div>
 <div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;</div>
 <div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;</div>
@@ -179,7 +179,7 @@ $(document).ready(function(){initNavTree('Transition_8h_source.html','');});
 <div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;    <span class="keywordtype">bool</span> isUrgent()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> mUrgent; }</div>
 <div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;    <span class="keywordtype">bool</span> isTimeTriggered()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> mTriggerTime &gt;= 0; }</div>
 <div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;    <span class="keywordtype">bool</span> hasIdentityReset()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> mReset.isIdentity(); }</div>
-<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;    std::set&lt;Label&gt; getLabels()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> mLabels; }</div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;    std::vector&lt;Label&gt; getLabels()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> mLabels; }</div>
 <div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;</div>
 <div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;    <span class="keywordtype">void</span> setSource(Location&lt;Number&gt;* source) { mSource = source; }</div>
 <div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;    <span class="keywordtype">void</span> setTarget(Location&lt;Number&gt;* target) { mTarget = target; }</div>
@@ -188,8 +188,8 @@ $(document).ready(function(){initNavTree('Transition_8h_source.html','');});
 <div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;    <span class="keywordtype">void</span> setAggregation(Aggregation agg) { mAggregationSetting = agg; }</div>
 <div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;    <span class="keywordtype">void</span> setUrgent(<span class="keywordtype">bool</span> urgent = <span class="keyword">true</span>) { mUrgent = urgent; }</div>
 <div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;    <span class="keywordtype">void</span> setTriggerTime(Number t) { mTriggerTime = t; }</div>
-<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;    <span class="keywordtype">void</span> setLabels(<span class="keyword">const</span> std::set&lt;Label&gt;&amp; labels) { mLabels = labels; }</div>
-<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;    <span class="keywordtype">void</span> addLabel(<span class="keyword">const</span> Label&amp; lab) { mLabels.insert(lab); }</div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;    <span class="keywordtype">void</span> setLabels(<span class="keyword">const</span> std::vector&lt;Label&gt;&amp; labels) { mLabels = labels; }</div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;    <span class="keywordtype">void</span> addLabel(<span class="keyword">const</span> Label&amp; lab) { mLabels.push_back(lab); }</div>
 <div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;</div>
 <div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;    std::string getDotRepresentation(<span class="keyword">const</span> std::vector&lt;std::string&gt;&amp; vars)<span class="keyword"> const </span>{</div>
 <div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;        std::stringstream o;</div>

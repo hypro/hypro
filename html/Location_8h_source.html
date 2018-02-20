@@ -332,34 +332,35 @@ $(document).ready(function(){initNavTree('Location_8h_source.html','');});
 <div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;    }</div>
 <div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160;</div>
 <div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160;    <span class="keywordflow">if</span>(!admissible) {</div>
-<div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">nullptr</span>;</div>
-<div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160;    }</div>
-<div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;</div>
-<div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160;    Location&lt;Number&gt;* res = LocationManager&lt;Number&gt;::getInstance().create();</div>
-<div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160;</div>
-<div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160;    <span class="comment">//set name</span></div>
-<div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160;    res-&gt;setName(lhs-&gt;getName()+<span class="stringliteral">&quot;_&quot;</span>+rhs-&gt;getName());</div>
-<div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160;</div>
-<div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160;    <span class="comment">//std::cout &lt;&lt; &quot;Created flow: &quot; &lt;&lt; haFlow &lt;&lt; &quot; for location &quot; &lt;&lt; res-&gt;getName();</span></div>
-<div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160;</div>
-<div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160;    res-&gt;setFlow(haFlow);</div>
-<div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160;</div>
-<div class="line"><a name="l00261"></a><span class="lineno">  261</span>&#160;    <span class="comment">//set invariant</span></div>
-<div class="line"><a name="l00262"></a><span class="lineno">  262</span>&#160;    Condition&lt;Number&gt; inv = combine(lhs-&gt;getInvariant(), rhs-&gt;getInvariant(), haVar, lhsVar, rhsVar);</div>
-<div class="line"><a name="l00263"></a><span class="lineno">  263</span>&#160;    res-&gt;setInvariant(inv);</div>
-<div class="line"><a name="l00264"></a><span class="lineno">  264</span>&#160;</div>
-<div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160;    <span class="comment">//std::cout &lt;&lt; &quot;Created invariant: &quot; &lt;&lt; inv &lt;&lt; &quot; for location &quot; &lt;&lt; res-&gt;getName();</span></div>
-<div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160;</div>
+<div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160;        FATAL(<span class="stringliteral">&quot;hypro.datastructures&quot;</span>,<span class="stringliteral">&quot;Failed to create parallel composition of locations.&quot;</span>);</div>
+<div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">nullptr</span>;</div>
+<div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;    }</div>
+<div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160;</div>
+<div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160;    Location&lt;Number&gt;* res = LocationManager&lt;Number&gt;::getInstance().create();</div>
+<div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160;</div>
+<div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160;    <span class="comment">//set name</span></div>
+<div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160;    res-&gt;setName(lhs-&gt;getName()+<span class="stringliteral">&quot;_&quot;</span>+rhs-&gt;getName());</div>
+<div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160;</div>
+<div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160;    <span class="comment">//std::cout &lt;&lt; &quot;Created flow: &quot; &lt;&lt; haFlow &lt;&lt; &quot; for location &quot; &lt;&lt; res-&gt;getName();</span></div>
+<div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160;</div>
+<div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160;    res-&gt;setFlow(haFlow);</div>
+<div class="line"><a name="l00261"></a><span class="lineno">  261</span>&#160;</div>
+<div class="line"><a name="l00262"></a><span class="lineno">  262</span>&#160;    <span class="comment">//set invariant</span></div>
+<div class="line"><a name="l00263"></a><span class="lineno">  263</span>&#160;    Condition&lt;Number&gt; inv = combine(lhs-&gt;getInvariant(), rhs-&gt;getInvariant(), haVar, lhsVar, rhsVar);</div>
+<div class="line"><a name="l00264"></a><span class="lineno">  264</span>&#160;    res-&gt;setInvariant(inv);</div>
+<div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160;</div>
+<div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160;    <span class="comment">//std::cout &lt;&lt; &quot;Created invariant: &quot; &lt;&lt; inv &lt;&lt; &quot; for location &quot; &lt;&lt; res-&gt;getName();</span></div>
 <div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160;</div>
-<div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160;    <span class="comment">//std::cout &lt;&lt; &quot;setExtInput&quot; &lt;&lt; std::endl;</span></div>
-<div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160;    <span class="comment">//set extinput</span></div>
-<div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160;    <span class="comment">//loc-&gt;setExtInput(flowAndExtInput.second);</span></div>
-<div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160;    <span class="keywordflow">return</span> res;</div>
-<div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160;}</div>
-<div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160;</div>
-<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;}  <span class="comment">// namespace hypro</span></div>
-<div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;</div>
-<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;<span class="preprocessor">#include &quot;Location.tpp&quot;</span></div>
+<div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160;</div>
+<div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160;    <span class="comment">//std::cout &lt;&lt; &quot;setExtInput&quot; &lt;&lt; std::endl;</span></div>
+<div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160;    <span class="comment">//set extinput</span></div>
+<div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160;    <span class="comment">//loc-&gt;setExtInput(flowAndExtInput.second);</span></div>
+<div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160;    <span class="keywordflow">return</span> res;</div>
+<div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160;}</div>
+<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;</div>
+<div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;}  <span class="comment">// namespace hypro</span></div>
+<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;</div>
+<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;<span class="preprocessor">#include &quot;Location.tpp&quot;</span></div>
 <div class="ttc" id="classhypro_1_1Location_html"><div class="ttname"><a href="classhypro_1_1Location.html">hypro::Location</a></div><div class="ttdoc">Class for location. </div><div class="ttdef"><b>Definition:</b> <a href="Location_8h_source.html#l00031">Location.h:31</a></div></div>
 <div class="ttc" id="namespacehypro_html_a52a4896e811a0710bcfc5a410a780034"><div class="ttname"><a href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">hypro::matrix_t</a></div><div class="ttdeci">Eigen::Matrix&lt; Number, Eigen::Dynamic, Eigen::Dynamic &gt; matrix_t</div><div class="ttdef"><b>Definition:</b> <a href="types_8h_source.html#l00026">types.h:26</a></div></div>
 <div class="ttc" id="classhypro_1_1LocationManager_html"><div class="ttname"><a href="classhypro_1_1LocationManager.html">hypro::LocationManager</a></div><div class="ttdef"><b>Definition:</b> <a href="Location_8h_source.html#l00024">Location.h:24</a></div></div>
