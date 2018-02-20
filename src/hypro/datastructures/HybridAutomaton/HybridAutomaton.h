@@ -268,6 +268,7 @@ class HybridAutomaton
 
 		// non-synchronizing transitions in each component
 		// fix rhs first
+		//std::cout << "Fix rhs." << std::endl;
 		for(const auto lhsT: lhs.getTransitions()) {
 			if(lhsT->getLabels().empty()) {
 				for(const auto loc : rhs.getLocations()) {
@@ -275,7 +276,6 @@ class HybridAutomaton
 					//std::cout << "Original reset: " << lhsT->getReset().getMatrix() << " and " << lhsT->getReset().getVector() << std::endl;
 					Transition<Number>* tmp = new Transition<Number>(loc,loc);
 					// TODO: temporary test -> fix!
-					//tmp->setReset();
 					Reset<Number> tmpReset = Reset<Number>(matrix_t<Number>::Identity(rhsVar.size(), rhsVar.size()), vector_t<Number>::Zero(rhsVar.size()));
 					if(!sharedVars.empty()) {
 						// Attention: This is a temporary solution. Naturally, we would need to replicate the reset on the shared variables to create
@@ -308,10 +308,12 @@ class HybridAutomaton
 			}
 		}
 		// fix lhs
+		//std::cout << "Fix lhs." << std::endl;
 		for(const auto rhsT: rhs.getTransitions()) {
 				if(rhsT->getLabels().empty()) {
 					for(const auto loc : lhs.getLocations()) {
 						//std::cout << "Potential transition " << loc->getName()<< "_" << rhsT->getSource()->getName() << " -> " << loc->getName() << "_" << rhsT->getTarget()->getName() << std::endl;
+						//std::cout << "Original reset: " << rhsT->getReset().getMatrix() << " and " << rhsT->getReset().getVector() << std::endl;
 						Transition<Number>* tmp = new Transition<Number>(loc,loc);
 						// TODO: temporary test -> fix!
 						Reset<Number> tmpReset = Reset<Number>(matrix_t<Number>::Identity(lhsVar.size(), lhsVar.size()), vector_t<Number>::Zero(lhsVar.size()));
@@ -327,7 +329,7 @@ class HybridAutomaton
 							}
 						}
 
-						std::cout << "tmpreset after update: " << tmpReset << std::endl;
+						//std::cout << "tmpreset after update: " << tmpReset << std::endl;
 
 						//tmp->setReset(combine(rhsT->getReset(),tmpReset,haVar,rhsVar,lhsVar));
 						tmp->setReset(tmpReset);
