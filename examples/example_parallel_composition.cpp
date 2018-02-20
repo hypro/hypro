@@ -112,7 +112,7 @@ HybridAutomaton<Number> createComponent1(unsigned i) {
 	resetVec(2) = 1;
 	toFlash->setReset(Reset<Number>(resetMat,resetVec));
 	toFlash->setAggregation(Aggregation::parallelotopeAgg);
-	toFlash->setUrgent();
+	//toFlash->setUrgent();
 
 	wait->addTransition(toFlash);
 	res.addTransition(toFlash);
@@ -133,7 +133,7 @@ HybridAutomaton<Number> createComponent1(unsigned i) {
 	flashLoop->setUrgent();
 	flashLoop->addLabel(Label{"flash"});
 	flashLoop->setAggregation(Aggregation::parallelotopeAgg);
-	flashLoop->setUrgent();
+	//flashLoop->setUrgent();
 
 	flash->addTransition(flashLoop);
 	res.addTransition(flashLoop);
@@ -171,7 +171,7 @@ HybridAutomaton<Number> createComponent1(unsigned i) {
 	toAdapt->setReset(Reset<Number>(resetMat,resetVec));
 	toAdapt->addLabel({"flash"});
 	toAdapt->setAggregation(Aggregation::parallelotopeAgg);
-	toAdapt->setUrgent();
+	//toAdapt->setUrgent();
 
 	wait->addTransition(toAdapt);
 	res.addTransition(toAdapt);
@@ -243,7 +243,9 @@ HybridAutomaton<Number> createComponent2(unsigned i, const std::vector<Label>& l
 	st << "wait_" << i;
 	Lpt wait = manager.create();
 	wait->setName(st.str());
-	M waitFlow = M::Identity(dim,dim); // both variables advance
+	M waitFlow = M::Zero(dim+1,dim+1); // both variables advance
+	waitFlow(0,dim) = 1;
+	waitFlow(1,dim) = 1;
 	wait->setFlow(waitFlow);
 
 	M waitInvariant = M::Zero(1,dim);
@@ -292,7 +294,7 @@ HybridAutomaton<Number> createComponent2(unsigned i, const std::vector<Label>& l
 	flash->addLabel(labels[i]);
 	flash->setReset(Reset<Number>(resetMat,resetVec));
 	flash->setAggregation(Aggregation::parallelotopeAgg);
-	flash->setUrgent();
+	//flash->setUrgent();
 
 	wait->addTransition(flash);
 	res.addTransition(flash);
@@ -308,7 +310,7 @@ HybridAutomaton<Number> createComponent2(unsigned i, const std::vector<Label>& l
 			toAdapt->addLabel(labels[j]);
 	}
 	toAdapt->setAggregation(Aggregation::parallelotopeAgg);
-	toAdapt->setUrgent();
+	//toAdapt->setUrgent();
 
 	wait->addTransition(toAdapt);
 	res.addTransition(toAdapt);
@@ -362,13 +364,13 @@ int main(int argc, char** argv) {
 
 	HybridAutomaton<Number> ha1 = createComponent1<Number>(1);
 	HybridAutomaton<Number> ha2 = createComponent1<Number>(2);
-	HybridAutomaton<Number> ha3 = createComponent1<Number>(3);
+	//HybridAutomaton<Number> ha3 = createComponent1<Number>(3);
 	HybridAutomaton<Number> composed = ha1||ha2;
-	composed = composed||ha3;
+	//composed = composed||ha3;
 
 	assert(composed.isComposedOf(ha1));
 	assert(composed.isComposedOf(ha2));
-	assert(composed.isComposedOf(ha3));
+	//assert(composed.isComposedOf(ha3));
 
 	std::cout << "Create parallel composition for synchronization benchmark with " << componentCount << " components using label synchronization." << std::endl;
 
@@ -406,6 +408,10 @@ int main(int argc, char** argv) {
 	LockedFileWriter flowstar("composed.model");
 	flowstar.clearFile();
 	flowstar << toFlowstarFormat(composed);
+
+	LockedFileWriter flowstar2("composed2.model");
+	flowstar2.clearFile();
+	flowstar2 << toFlowstarFormat(composed_l);
 
 	// for testing
 	auto haTuple = parseFlowstarFile<double>(std::string("composed.model"));
