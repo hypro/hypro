@@ -117,8 +117,8 @@ class HybridAutomaton
      * @brief      Extension function.
      */
     ///@{
-    void addLocation(Location<Number>* location) { mLocations.insert(location); }
-    void addTransition(Transition<Number>* transition) { mTransitions.insert(transition); }
+    void addLocation(Location<Number>* location) { assert(location != nullptr); mLocations.insert(location); }
+    void addTransition(Transition<Number>* transition) { assert(transition != nullptr); mTransitions.insert(transition); }
     void addInitialState(const State& state) { mInitialStates.insert(std::make_pair(state.getLocation(),state)); }
     void addLocalBadState(const Location<Number>* loc, const Condition<Number>& condition) { mLocalBadStates.insert(std::make_pair(loc,condition)); }
     void addGlobalBadState(const Condition<Number>& state) { mGlobalBadStates.push_back(state); }

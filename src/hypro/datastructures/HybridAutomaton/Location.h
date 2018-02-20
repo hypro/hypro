@@ -246,6 +246,7 @@ Location<Number>* parallelCompose(const Location<Number>* lhs
 	}
 
 	if(!admissible) {
+		FATAL("hypro.datastructures","Failed to create parallel composition of locations.");
 		return nullptr;
 	}
 

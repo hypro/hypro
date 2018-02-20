@@ -16,6 +16,7 @@ Location<Number>* HybridAutomaton<Number,State>::getLocation(std::size_t id) con
 template<typename Number, typename State>
 Location<Number>* HybridAutomaton<Number,State>::getLocation(const std::string& name) const {
 	for(const auto loc : mLocations) {
+		assert(loc != nullptr);
 		if(loc->getName() == name) {
 			return loc;
 		}
