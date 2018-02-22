@@ -83,6 +83,8 @@ Condition<Number> combine(
 	return Condition<Number>(newMat, newVec);
 }
 
+
+template<typename Number>
 void Condition<Number>::decompose(std::vector<std::vector<size_t>> decomposition){
 	if(mConstraints.size() != 1){
 		//already decomposed/empty constraints

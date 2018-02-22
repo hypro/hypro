@@ -176,6 +176,8 @@ std::string HybridAutomaton<Number,State>::getDotRepresentation() const {
 	return res;
 }
 
+
+template<typename Number, typename State>
 void HybridAutomaton<Number,State>::decompose(std::vector<std::vector<size_t>> decomposition){
 	// decompose locations (flow (affine trafo) and invariant(condition))
     for(auto location : mLocations){

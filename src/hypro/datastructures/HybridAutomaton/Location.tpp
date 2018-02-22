@@ -175,6 +175,8 @@ bool Location<Number>::isComposedOf(const Location<Number>& rhs, const std::vect
 	return true;
 }
 
+
+template<typename Number>
 void Location<Number>::decompose(std::vector<std::vector<size_t>> decomposition){
 	if(mFlows.size() > 1 || mInvariant.size() > 1){
 		//already decomposed

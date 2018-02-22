@@ -363,10 +363,9 @@ void State<Number,tNumber,Representation,Rargs...>::decompose(std::vector<std::v
 		// no decomposition/already decomposed
 	}
 
-	std::vector<repVariant> newSets;
-
 	repVariant initSet = hypro::Converter<Number>::toHPolytope(boost::get<hypro::ConstraintSet<Number>>(mSets.at(0)));
 	DEBUG("hypro.datastructures", "State before decomposition: "  << *this);
+	int i = 0;
 	for(auto set : decomposition){
 		DEBUG("hypro.datastructures", "Trying to project set: \n " << mSets.at(0) << "\n to dimensions: " );
 		DEBUG("hypro.datastructures", "{");
@@ -375,10 +374,10 @@ void State<Number,tNumber,Representation,Rargs...>::decompose(std::vector<std::v
 		}
 		DEBUG("hypro.datastructures", "}");
 		repVariant tmp = boost::apply_visitor(genericProjectionVisitor<repVariant>(set), initSet);
-		newSets.push_back(hypro::Converter<Number>::toConstraintSet(boost::get<hypro::HPolytope<Number>>(tmp)));
+		setSetDirect(hypro::Converter<Number>::toConstraintSet(boost::get<hypro::HPolytope<Number>>(tmp)),i);
+		setSetType(hypro::representation_name::constraint_set,i);
+		i++;
 	}
-
-	setSetsSave(newSets);
 	DEBUG("hypro.datastructures", "State after decomposition: "  << *this);
 }
 

@@ -152,6 +152,7 @@ namespace hypro {
 		return re;
 	}
 
+	template<typename Number>
 	void Reset<Number>::decompose(std::vector<std::vector<size_t>> decomposition){
 		if(mResets.size() != 1){
 			//already decomposed/empty constraints
