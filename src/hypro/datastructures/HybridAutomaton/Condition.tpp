@@ -86,10 +86,21 @@ Condition<Number> combine(
 
 template<typename Number>
 void Condition<Number>::decompose(std::vector<std::vector<size_t>> decomposition){
-	if(mConstraints.size() != 1){
+	if(mConstraints.size() > 1){
 		//already decomposed/empty constraints
 		return;
 	}
+	else if(mConstraints.size() == 0 && decomposition.size() > 0){
+		//fill mConstaints with empty constraint sets
+		std::vector<ConstraintSet<Number>> newCset;
+		for(int i = 0; i < decomposition.size(); i++){
+			ConstraintSet<Number> res = ConstraintSet<Number>();
+			newCset.push_back(res);
+		}
+		mConstraints = newCset;
+		return;
+	}
+
 	ConstraintSet<Number> cset = mConstraints.at(0);
 	DEBUG("hypro.datastructures", "Constraint Set before: \n " << cset );
 

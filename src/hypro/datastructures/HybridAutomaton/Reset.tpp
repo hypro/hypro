@@ -165,7 +165,7 @@ namespace hypro {
 		vector_t<Number> constantsOld(cset.vector());
 
 		std::vector<ConstraintSet<Number>> newCset;
-		// for each set {i,j,..., k} select each constraint that defines over {i,j,k etc.}
+		// select constrains i,j,k into new constraint vector
 		for(auto set : decomposition){
 			DEBUG("hypro.datastructures", "decompose constraint for set: {");
 			for(auto entry : set){
@@ -175,21 +175,9 @@ namespace hypro {
 
 			// for each row of the constraints check if it contains an entry for one of the variables of the set
 			// and add the corresponding rows to a list of indices that are later added to a matrix
-			std::vector<int> indicesToAdd;
-			for(int i = 0; i < constraintsOld.rows(); i++){
-				vector_t<Number> row = constraintsOld.row(i);
-				bool containsVar = false;
-				for(int j = 0; j < row.rows(); j++){
-					if(row(j,0) != 0){
-						if(std::find(set.begin(),set.end(), j) != set.end()){
-							//set contains variable j, which is also contained in this constraint
-							containsVar = true;
-						}
-					}
-				}
-				if(containsVar){
-					indicesToAdd.push_back(i);
-				}
+			std::vector<size_t> indicesToAdd;
+			for(auto entry : set){
+				indicesToAdd.push_back(entry);
 			}
 
 			if(indicesToAdd.size() > 0){
@@ -217,6 +205,7 @@ namespace hypro {
 			}
 			else {
 				DEBUG("hypro.datastructures", "No constraints for set found.");
+				// add identity constraints
 				ConstraintSet<Number> res = ConstraintSet<Number>();
 				newCset.push_back(res);
 			}
