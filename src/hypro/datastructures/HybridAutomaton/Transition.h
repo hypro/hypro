@@ -174,6 +174,21 @@ class Transition
     		return false;
     	}
 
+    	// check labels
+    	for(const auto& l1 : rhs.getLabels()) {
+    		bool found = false;
+    		for(const auto l2 : this->getLabels()) {
+    			if(l2 == l1){
+    				found = true;
+    				break;
+    			}
+    		}
+    		if(!found){
+    			//std::cout << "Labels did not match." << std::endl;
+    			return false;
+    		}
+    	}
+
     	// compare guard constraints. As the order is not fixed, we consider each row, one by one and try to match rows (outer two loops).
     	// This is similar to the invariant comparison in Location.tpp
     	if(rhs.getGuard().size() != 0 ) {
