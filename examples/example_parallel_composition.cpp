@@ -300,20 +300,24 @@ HybridAutomaton<Number> createComponent2(unsigned i, const std::vector<Label>& l
 	res.addTransition(flash);
 
 	// to adapt
-	Tpt toAdapt = new Transition<Number>(wait,adapt);
-	resetMat = M::Identity(dim,dim);
-	resetMat(0,0) = Number(alpha);
-	resetVec = V::Zero(dim);
-	toAdapt->setReset(Reset<Number>(resetMat,resetVec));
 	for(unsigned j = 0; j < labels.size(); ++j) {
-		if(j != i)
-			toAdapt->addLabel(labels[j]);
-	}
-	toAdapt->setAggregation(Aggregation::parallelotopeAgg);
-	//toAdapt->setUrgent();
+		if(j != i) {
+			Tpt toAdapt = new Transition<Number>(wait,adapt);
+			resetMat = M::Identity(dim,dim);
+			resetMat(0,0) = Number(alpha);
+			resetVec = V::Zero(dim);
+			toAdapt->setReset(Reset<Number>(resetMat,resetVec));
 
-	wait->addTransition(toAdapt);
-	res.addTransition(toAdapt);
+			toAdapt->addLabel(labels[j]);
+
+			toAdapt->setAggregation(Aggregation::parallelotopeAgg);
+			//toAdapt->setUrgent();
+
+			wait->addTransition(toAdapt);
+			res.addTransition(toAdapt);
+		}
+	}
+
 
 	// from adapt, regular
 	Tpt fromAdaptRegular = new Transition<Number>(adapt,wait);
@@ -360,16 +364,16 @@ int main(int argc, char** argv) {
 	char* p;
 	componentCount = strtol(argv[2], &p, 10);
 
-	std::cout << "Create parallel composition for synchronization benchmark with " << componentCount << " components using a shared variable." << std::endl;
-
-	HybridAutomaton<Number> ha1 = createComponent1<Number>(1);
-	HybridAutomaton<Number> ha2 = createComponent1<Number>(2);
-	//HybridAutomaton<Number> ha3 = createComponent1<Number>(3);
-	HybridAutomaton<Number> composed = ha1||ha2;
-	//composed = composed||ha3;
-
-	assert(composed.isComposedOf(ha1));
-	assert(composed.isComposedOf(ha2));
+	//std::cout << "Create parallel composition for synchronization benchmark with " << componentCount << " components using a shared variable." << std::endl;
+//
+//	//HybridAutomaton<Number> ha1 = createComponent1<Number>(1);
+//	//HybridAutomaton<Number> ha2 = createComponent1<Number>(2);
+//	//HybridAutomaton<Number> ha3 = createComponent1<Number>(3);
+//	//HybridAutomaton<Number> composed = ha1||ha2;
+//	//composed = composed||ha3;
+//
+//	//assert(composed.isComposedOf(ha1));
+//	//assert(composed.isComposedOf(ha2));
 	//assert(composed.isComposedOf(ha3));
 
 	std::cout << "Create parallel composition for synchronization benchmark with " << componentCount << " components using label synchronization." << std::endl;
@@ -377,25 +381,27 @@ int main(int argc, char** argv) {
 	std::vector<Label> labels;
 	labels.emplace_back(Label("flash0"));
 	labels.emplace_back(Label("flash1"));
+	labels.emplace_back(Label("flash2"));
 	HybridAutomaton<Number> ha_l1 = createComponent2<Number>(0,labels);
 	HybridAutomaton<Number> ha_l2 = createComponent2<Number>(1,labels);
-	//HybridAutomaton<Number> ha_l3 = createComponent1<Number>(3);
+	HybridAutomaton<Number> ha_l3 = createComponent2<Number>(2,labels);
 	HybridAutomaton<Number> composed_l = ha_l1||ha_l2;
+	composed_l = composed_l||ha_l3;
 
 	assert(composed_l.isComposedOf(ha_l1));
 	assert(composed_l.isComposedOf(ha_l2));
-	//assert(composed.isComposedOf(ha3));
+	//assert(composed_l.isComposedOf(ha_l3));
 
 	//std::cout << "################################################" << std::endl;
 	//std::cout << "Result: " << std::endl << composed << std::endl;
 
-	LockedFileWriter out{"parallelHa.dot"};
-	out.clearFile();
-	out << composed.getDotRepresentation();
+	//LockedFileWriter out{"parallelHa.dot"};
+	//out.clearFile();
+	//out << composed.getDotRepresentation();
 
-	LockedFileWriter out2{"singleHa.dot"};
-	out2.clearFile();
-	out2 << ha1.getDotRepresentation();
+	//LockedFileWriter out2{"singleHa.dot"};
+	//out2.clearFile();
+	//out2 << ha1.getDotRepresentation();
 
 	LockedFileWriter out_l{"parallelHa2.dot"};
 	out_l.clearFile();
@@ -405,16 +411,16 @@ int main(int argc, char** argv) {
 	out2_l.clearFile();
 	out2_l << ha_l1.getDotRepresentation();
 
-	LockedFileWriter flowstar("composed.model");
-	flowstar.clearFile();
-	flowstar << toFlowstarFormat(composed);
+	//LockedFileWriter flowstar("composed.model");
+	//flowstar.clearFile();
+	//flowstar << toFlowstarFormat(composed);
 
 	LockedFileWriter flowstar2("composed2.model");
 	flowstar2.clearFile();
 	flowstar2 << toFlowstarFormat(composed_l);
 
 	// for testing
-	auto haTuple = parseFlowstarFile<double>(std::string("composed.model"));
+	//auto haTuple = parseFlowstarFile<double>(std::string("composed.model"));
 
 	return 0;
 }
