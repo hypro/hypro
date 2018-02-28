@@ -220,12 +220,22 @@ public:
     /**
      * intersects the DBM with the bound given by index x, y and bound value bound
      * i.e. x-y <= bound
-     * @param i
-     * @param j
+     * @param x
+     * @param y
      * @param bound
      * @return the intersection of the DBM with constraint x-y bound
      */
     DifferenceBoundsT<Number,Converter,Setting> intersectConstraint( const int x, const int y, const DBMEntry& bound ) const;
+
+    /**
+     * intersects the DBM with the bound given set of constraints
+     * i.e. x-y <= bound
+     * @param x
+     * @param y
+     * @param bound
+     * @return the intersection of the DBM with constraint x-y bound
+     */
+    std::pair<CONTAINMENT, DifferenceBoundsT> intersectConstraints(const matrix_t<Number> constraints, const vector_t<Number> constants, const CONTAINMENT defaultOnEmptyConstraints) const;
 
     /**
      * extrapolates the current DBM by using the ExtraM Method. A description

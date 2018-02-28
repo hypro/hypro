@@ -407,6 +407,51 @@ namespace hypro {
     }
 
     template <typename Number, typename Converter, class Setting>
+    std::pair<CONTAINMENT, DifferenceBoundsT<Number,Converter, Setting>> DifferenceBoundsT<Number, Converter, Setting>::intersectConstraints(const matrix_t<Number> constraints, const vector_t<Number> constants,const CONTAINMENT defaultOnEmptyConstraints) const{
+        if(constraints.rows() == 0){
+            return std::make_pair(defaultOnEmptyConstraints, *this);
+        }
+
+        hypro::DifferenceBoundsT<Number, Converter, Setting> dbm = hypro::DifferenceBoundsT<Number, Converter, Setting>(*this);
+        for(int i = 0; i < constraints.rows(); i++){
+            // for each constraint find the variable index it constraints
+            hypro::matrix_t<Number> constraint = constraints.row(i);
+            int var = -1;
+            for(int j = 0; j < constraint.cols(); j++){
+                if(constraint(0,j) == 1.0 || constraint(0,j) == -1.0){
+                    var = j;
+                    break;
+                }
+            }
+
+            // index found
+            if(var != -1){
+                
+                if(constraint(0,var) == 1.0){
+                    // cut with x-0 <= c 
+                    dbm = dbm.intersectConstraint(var+1,0,hypro::DifferenceBoundsT<Number, Converter, Setting>::DBMEntry(constants(i),hypro::DifferenceBoundsT<Number, Converter, Setting>::BOUND_TYPE::SMALLER_EQ));
+                }
+                else{
+                    // cut with 0-x <= c 
+                    dbm = dbm.intersectConstraint(0,var+1,hypro::DifferenceBoundsT<Number, Converter, Setting>::DBMEntry(constants(i),hypro::DifferenceBoundsT<Number, Converter, Setting>::BOUND_TYPE::SMALLER_EQ));
+                }
+            }
+        }
+        // if the resulting dbm is empty, the guard is not satisfied
+        if(dbm.empty()){
+            return std::make_pair(CONTAINMENT::NO, std::move(dbm));
+        }
+
+        // if the set did not change we have full containment
+        if(*this == dbm){
+            return std::make_pair(CONTAINMENT::FULL, std::move(dbm));
+        }
+        else{
+            return std::make_pair(CONTAINMENT::PARTIAL, std::move(dbm));
+        }
+    }
+
+    template <typename Number, typename Converter, class Setting>
     DifferenceBoundsT<Number,Converter, Setting> DifferenceBoundsT<Number, Converter, Setting>::extraM(const vector_t<DBMEntry>& MBounds) const{
         hypro::matrix_t<DBMEntry> mat = hypro::matrix_t<DBMEntry>(m_dbm);
         for(int i=0; i < mat.rows();i++){
