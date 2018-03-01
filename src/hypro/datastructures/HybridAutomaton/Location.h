@@ -113,9 +113,13 @@ public:
     #ifdef HYPRO_LOGGING
 	    //matrix_t<Number> tmp = matrix_t<Number>(l.getInvariant().getMatrix().rows(), l.getInvariant().getMatrix().cols() + 1);
 	    //tmp << l.getInvariant().getMatrix(), l.getInvariant().getVector();
-	    ostr << "location " << l.getName() << " ptr "<< &l  << " (id: " << l.getId() << ")"<< std::endl << "\t Flow: " << std::endl << l.getFlow() << std::endl << "\t Inv: " << std::endl << l.getInvariant();
+	    ostr << "location " << l.getName() << " ptr "<< &l  << " (id: " << l.getId() << ")"<< std::endl << "\t Flow: " << std::endl;
+	    for(size_t i = 0; i < l.getNumberFlow();i++){
+	    	ostr << i << ": " << l.getFlow(i) << std::endl;
+	    }
+		ostr << "\t Inv: " << std::endl << l.getInvariant();
 	    //ostr << l.getInvariant().getDiscreteCondition() << std::endl;
-      ostr << "ExternalInput:\n" << l.getExternalInput() << std::endl;
+      	ostr << "ExternalInput:\n" << l.getExternalInput() << std::endl;
 	    ostr << "Transitions: " << std::endl;
 	    for (auto transitionPtr : l.getTransitions()) {
 	        ostr << *transitionPtr << std::endl;

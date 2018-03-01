@@ -6,17 +6,17 @@ namespace hypro {
 	int initializeLogging(int& i) {
 		carl::logging::logger().configure("logfile_hypro", "hypro.log");
 		carl::logging::logger().filter("logfile_hypro")
-	    ("hypro", carl::logging::LogLevel::LVL_TRACE)
-		("hypro.representations", carl::logging::LogLevel::LVL_TRACE)
-		("hypro.representations.supportFunction", carl::logging::LogLevel::LVL_TRACE)
-		("hypro.datastructures", carl::logging::LogLevel::LVL_TRACE)
-		("hypro.reacher", carl::logging::LogLevel::LVL_TRACE)
-		("hypro.reacher.preprocessing", carl::logging::LogLevel::LVL_TRACE)
+	    ("hypro", carl::logging::LogLevel::LVL_OFF)
+		("hypro.representations", carl::logging::LogLevel::LVL_OFF)
+		("hypro.representations.supportFunction", carl::logging::LogLevel::LVL_OFF)
+		("hypro.datastructures", carl::logging::LogLevel::LVL_OFF)
+		("hypro.reacher", carl::logging::LogLevel::LVL_OFF)
+		("hypro.reacher.preprocessing", carl::logging::LogLevel::LVL_OFF)
 		;
 
 	  	carl::logging::logger().configure("stdout", std::cout);
 		carl::logging::logger().filter("stdout")
-	    ("hypro", carl::logging::LogLevel::LVL_WARN)
+	    ("hypro", carl::logging::LogLevel::LVL_OFF)
 		//("hypro.representations", carl::logging::LogLevel::LVL_TRACE)
 		;
 
