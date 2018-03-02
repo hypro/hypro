@@ -256,6 +256,18 @@ State<Number,tNumber,Representation,Rargs...> State<Number,tNumber,Representatio
 }
 
 template<typename Number, typename tNumber, typename Representation, typename ...Rargs>
+bool State<Number,tNumber,Representation,Rargs...>::contains(const State<Number,tNumber,Representation,Rargs...>& rhs) const {
+	assert(checkConsistency());
+	assert(rhs.getNumberSets() == this->getNumberSets());
+	for(std::size_t i=0; i < this->getNumberSets(); ++i){
+		if(!boost::apply_visitor(genericSetContainsVisitor(), this->getSet(i), rhs.getSet(i))) {
+			return false;
+		}
+	}
+	return true;
+}
+
+template<typename Number, typename tNumber, typename Representation, typename ...Rargs>
 std::vector<Point<Number>> State<Number,tNumber,Representation,Rargs...>::vertices(std::size_t I) const {
 	assert(checkConsistency());
 	return boost::apply_visitor(genericVerticesVisitor<Number>(), mSets.at(I));

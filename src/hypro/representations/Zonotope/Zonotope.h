@@ -267,6 +267,8 @@ class ZonotopeT : public GeometricObject<Number, ZonotopeT<Number,Converter>> {
 	ZonotopeT<Number,Converter> intervalHull() const;
 
 	bool contains(const Point<Number>& point) const;
+
+	bool contains(const ZonotopeT<Number,Converter>&) const {assert(false && "NOT IMPLEMENTED."); return false; }
 };
 
 /** @} */

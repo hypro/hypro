@@ -293,4 +293,21 @@ public:
     }
 };
 
+
+class genericSetContainsVisitor
+    : public boost::static_visitor<bool>
+{
+public:
+	template<typename A, typename B>
+	inline bool operator()(const A&, const B&) const {
+		assert(false && "CONTAINS CHECK OF DIFFERENT TYPES.");
+		return false;
+	}
+
+	template<typename A>
+    inline bool operator()(const A& lhs, const A& rhs) const {
+ 		return lhs.contains(rhs);
+    }
+};
+
 } // namespace
