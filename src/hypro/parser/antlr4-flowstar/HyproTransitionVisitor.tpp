@@ -199,15 +199,11 @@ namespace hypro {
 
 	template<typename Number>
 	antlrcpp::Any HyproTransitionVisitor<Number>::visitAggregation(HybridAutomatonParser::AggregationContext *ctx){
-
 		if(ctx->PARALLELOTOPE() != NULL){
-			//std::cout << "---- Aggregation is parallelotope" << std::endl;
 			return Aggregation::parallelotopeAgg;
-		} else if(ctx->BOX() != NULL){
-			//std::cout << "---- Aggregation is box" << std::endl;
+		} else if(ctx->BOX() != NULL || ctx->INTERVALAGG() != NULL){
 			return Aggregation::boxAgg;
 		} else {
-			//std::cout << "---- Aggregation is none" << std::endl;
 			return Aggregation::none;
 		}
 	}
