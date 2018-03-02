@@ -406,4 +406,8 @@ typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const Suppor
 
 }
 
-
+template<typename Number>
+typename Converter<Number>::Zonotope Converter<Number>::toZonotope(const Polytope& source, const CONV_MODE mode){
+    auto tmp = toVPolytope(source);
+    return Converter<Number>::toZonotope(tmp, mode);
+}

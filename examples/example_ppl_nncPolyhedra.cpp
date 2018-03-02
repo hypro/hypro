@@ -9,7 +9,7 @@
  */
 
 #include "representations/GeometricObject.h"
-#ifdef USE_PPL
+#ifdef HYPRO_USE_PPL
 #include <ppl.hh>
 
 using namespace Parma_Polyhedra_Library;
