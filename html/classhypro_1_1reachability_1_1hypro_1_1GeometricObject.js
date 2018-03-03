@@ -3,6 +3,7 @@ var classhypro_1_1reachability_1_1hypro_1_1GeometricObject =
     [ "~GeometricObject", "classhypro_1_1reachability_1_1hypro_1_1GeometricObject.html#ae02e1779044a1c71d3299c130949b776", null ],
     [ "affineTransformation", "classhypro_1_1reachability_1_1hypro_1_1GeometricObject.html#a5dbe3b2370b963053104286f81863b6c", null ],
     [ "contains", "classhypro_1_1reachability_1_1hypro_1_1GeometricObject.html#a33efd99b5943012cb8bb0b0dbccca230", null ],
+    [ "contains", "classhypro_1_1reachability_1_1hypro_1_1GeometricObject.html#af9df8b5d5f1a4ed3b7acc333b428f2a6", null ],
     [ "dimension", "classhypro_1_1reachability_1_1hypro_1_1GeometricObject.html#a7ffbfff0e83d0b48b0ddf4b54413e586", null ],
     [ "empty", "classhypro_1_1reachability_1_1hypro_1_1GeometricObject.html#a6c1555237a1651a6fcde849be0ab97c0", null ],
     [ "intersectHalfspace", "classhypro_1_1reachability_1_1hypro_1_1GeometricObject.html#a9b18c36206d2b74b34a7d4b505e1a5de", null ],

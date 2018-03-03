@@ -405,9 +405,27 @@ $(document).ready(function(){initNavTree('Visitors_8h_source.html','');});
 <div class="line"><a name="l00293"></a><span class="lineno">  293</span>&#160;    }</div>
 <div class="line"><a name="l00294"></a><span class="lineno">  294</span>&#160;};</div>
 <div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160;</div>
-<div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160;} <span class="comment">// namespace</span></div>
+<div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160;</div>
+<div class="line"><a name="l00297"></a><span class="lineno"><a class="line" href="classhypro_1_1genericSetContainsVisitor.html">  297</a></span>&#160;<span class="keyword">class </span><a class="code" href="classhypro_1_1genericSetContainsVisitor.html">genericSetContainsVisitor</a></div>
+<div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160;    : <span class="keyword">public</span> boost::static_visitor&lt;bool&gt;</div>
+<div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;{</div>
+<div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> A, <span class="keyword">typename</span> B&gt;</div>
+<div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160;    <span class="keyword">inline</span> <span class="keywordtype">bool</span> operator()(<span class="keyword">const</span> A&amp;, <span class="keyword">const</span> B&amp;)<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00303"></a><span class="lineno">  303</span>&#160;        assert(<span class="keyword">false</span> &amp;&amp; <span class="stringliteral">&quot;CONTAINS CHECK OF DIFFERENT TYPES.&quot;</span>);</div>
+<div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160;    }</div>
+<div class="line"><a name="l00306"></a><span class="lineno">  306</span>&#160;</div>
+<div class="line"><a name="l00307"></a><span class="lineno">  307</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> A&gt;</div>
+<div class="line"><a name="l00308"></a><span class="lineno">  308</span>&#160;    <span class="keyword">inline</span> <span class="keywordtype">bool</span> operator()(<span class="keyword">const</span> A&amp; lhs, <span class="keyword">const</span> A&amp; rhs)<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00309"></a><span class="lineno">  309</span>&#160;        <span class="keywordflow">return</span> lhs.contains(rhs);</div>
+<div class="line"><a name="l00310"></a><span class="lineno">  310</span>&#160;    }</div>
+<div class="line"><a name="l00311"></a><span class="lineno">  311</span>&#160;};</div>
+<div class="line"><a name="l00312"></a><span class="lineno">  312</span>&#160;</div>
+<div class="line"><a name="l00313"></a><span class="lineno">  313</span>&#160;} <span class="comment">// namespace</span></div>
 <div class="ttc" id="namespacehypro_html_aada824f660cac25bb643be870cdc0a86"><div class="ttname"><a href="namespacehypro.html#aada824f660cac25bb643be870cdc0a86">hypro::representation_name</a></div><div class="ttdeci">representation_name</div><div class="ttdoc">Enum encapsulating all provided state set representations to be able to determine a type...</div><div class="ttdef"><b>Definition:</b> <a href="representations_2types_8h_source.html#l00009">types.h:9</a></div></div>
 <div class="ttc" id="classhypro_1_1genericVerticesVisitor_html"><div class="ttname"><a href="classhypro_1_1genericVerticesVisitor.html">hypro::genericVerticesVisitor</a></div><div class="ttdef"><b>Definition:</b> <a href="Visitors_8h_source.html#l00269">Visitors.h:269</a></div></div>
+<div class="ttc" id="classhypro_1_1genericSetContainsVisitor_html"><div class="ttname"><a href="classhypro_1_1genericSetContainsVisitor.html">hypro::genericSetContainsVisitor</a></div><div class="ttdef"><b>Definition:</b> <a href="Visitors_8h_source.html#l00297">Visitors.h:297</a></div></div>
 <div class="ttc" id="namespacehypro_html_a52a4896e811a0710bcfc5a410a780034"><div class="ttname"><a href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">hypro::matrix_t</a></div><div class="ttdeci">Eigen::Matrix&lt; Number, Eigen::Dynamic, Eigen::Dynamic &gt; matrix_t</div><div class="ttdef"><b>Definition:</b> <a href="types_8h_source.html#l00026">types.h:26</a></div></div>
 <div class="ttc" id="namespacehypro_html_ad96debd897a91531861debc2a348b9e4"><div class="ttname"><a href="namespacehypro.html#ad96debd897a91531861debc2a348b9e4">hypro::Zonotope</a></div><div class="ttdeci">typename Converter&lt; Number &gt;::Zonotope Zonotope</div><div class="ttdef"><b>Definition:</b> <a href="Converter_8h_source.html#l00138">Converter.h:138</a></div></div>
 <div class="ttc" id="classhypro_1_1genericSatisfiesHalfspacesVisitor_html"><div class="ttname"><a href="classhypro_1_1genericSatisfiesHalfspacesVisitor.html">hypro::genericSatisfiesHalfspacesVisitor</a></div><div class="ttdef"><b>Definition:</b> <a href="Visitors_8h_source.html#l00184">Visitors.h:184</a></div></div>

@@ -3,6 +3,7 @@ var classhypro_1_1GeometricObject =
     [ "~GeometricObject", "classhypro_1_1GeometricObject.html#a28cf65685f4fa5e04c3dbf428a9d97b0", null ],
     [ "affineTransformation", "classhypro_1_1GeometricObject.html#a607fb37c2b6a0d9a59ed85d07160392a", null ],
     [ "contains", "classhypro_1_1GeometricObject.html#a44bae859470ea4cb3bc74c16f94b9638", null ],
+    [ "contains", "classhypro_1_1GeometricObject.html#a09bf3d067ae2eaa4588b3ec8cc2812a4", null ],
     [ "dimension", "classhypro_1_1GeometricObject.html#aecbf17700fe297f643f401b7ae17dd9c", null ],
     [ "empty", "classhypro_1_1GeometricObject.html#a3de514fbb8514689331e65a247a64927", null ],
     [ "intersectHalfspace", "classhypro_1_1GeometricObject.html#a478635198d1f273913e9438b08baa858", null ],

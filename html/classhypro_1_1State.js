@@ -11,6 +11,7 @@ var classhypro_1_1State =
     [ "applyTimeStep", "classhypro_1_1State.html#a93888ea5272d09e1d620f10a7fe600a4", null ],
     [ "applyTransformation", "classhypro_1_1State.html#a2fae58e7028603dd57f34f2d8688e014", null ],
     [ "applyTransformation", "classhypro_1_1State.html#aa2f2c0f4c29c2bd3b53939fb2654f4b8", null ],
+    [ "contains", "classhypro_1_1State.html#af7201eee25265171e9628624b703d3c6", null ],
     [ "getDimension", "classhypro_1_1State.html#aa43c00c42dc6b2784c4223d161c8c4d9", null ],
     [ "getLocation", "classhypro_1_1State.html#a86f167f3f413d17e459e82903ef00e7d", null ],
     [ "getNumberSets", "classhypro_1_1State.html#a3c37aca1d8fb10fe442b3155d6ea56d9", null ],

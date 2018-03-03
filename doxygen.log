@@ -5946,7 +5946,7 @@ Possible candidates:
 /home/travis/build/hypro/hypro/src/hypro/types.h:29: warning: documented symbol `typedef hypro::std::set< vector_t< Number >> vectorSet' was not declared or defined.
 /home/travis/build/hypro/hypro/src/hypro/util/Plotter.h:70: warning: documented symbol `Singleton< Plotter< Number > >' was not declared or defined.
 /home/travis/build/hypro/hypro/src/hypro/util/VariablePool.h:28: warning: documented symbol `Singleton< VariablePool >' was not declared or defined.
-error opening bib20198.bbl: No such file or directory
+error opening bib20010.bbl: No such file or directory
 bibtex command failed: No such file or directory
 cetEnumeration.cpp...
 Parsing file /home/travis/build/hypro/hypro/examples/INCOMPLETE_example_facetEnumeration.cpp...
@@ -6687,6 +6687,7 @@ Generating docs for compound hypro::genericSupremumVisitor...
 Generating docs for compound hypro::genericTypeVisitor...
 Generating docs for compound hypro::genericVerticesVisitor...
 Generating docs for compound hypro::genericProjectionVisitor...
+Generating docs for compound hypro::genericSetContainsVisitor...
 Generating docs for compound hypro::LRUCache...
 Generating docs for compound hypro::Point...
 Generating docs for compound hypro::Ridge...
@@ -6943,11 +6944,11 @@ Generating dependency graph for directory /home/travis/build/hypro/hypro/src/hyp
 Generating dependency graph for directory /home/travis/build/hypro/hypro/src
 Generating dependency graph for directory /home/travis/build/hypro/hypro/src/hypro/util/statistics
 Generating dependency graph for directory /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction
-Generating dependency graph for directory /home/travis/build/hypro/hypro/src/hypsh: 1: latex: not found
+Generating depesh: 1: latex: not found
 error: Problems running latex. Check your installation or look for typos in _formulas.tex and check _formulas.log!
 sh: 1: dvips: not found
 error: Problems running dvips. Check your installation!
-ro/representations/TaylorModel
+ndency graph for directory /home/travis/build/hypro/hypro/src/hypro/representations/TaylorModel
 Generating dependency graph for directory /home/travis/build/hypro/hypro/src/hypro/util/tuple_expansion
 Generating dependency graph for directory /home/travis/build/hypro/hypro/src/hypro/util
 Generating dependency graph for directory /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope
@@ -7278,5 +7279,5 @@ Patching output file 37/40
 Patching output file 38/40
 Patching output file 39/40
 Patching output file 40/40
-lookup cache used 22603/65536 hits=517552 misses=24077
+lookup cache used 22608/65536 hits=518129 misses=24082
 finished...

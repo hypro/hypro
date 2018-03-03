@@ -13,6 +13,7 @@ var classhypro_1_1reachability_1_1hypro_1_1ZonotopeT =
     [ "clear", "classhypro_1_1reachability_1_1hypro_1_1ZonotopeT.html#af94f0b9886d4c1b831e0c9f0382a1152", null ],
     [ "computeZonotopeBoundary", "classhypro_1_1reachability_1_1hypro_1_1ZonotopeT.html#a2646f551af863004a393226f74ab45b8", null ],
     [ "contains", "classhypro_1_1reachability_1_1hypro_1_1ZonotopeT.html#a7242c42b889b442a226efcad51c3d551", null ],
+    [ "contains", "classhypro_1_1reachability_1_1hypro_1_1ZonotopeT.html#a67a385ed20afad6e1dc7145763e88eea", null ],
     [ "dimension", "classhypro_1_1reachability_1_1hypro_1_1ZonotopeT.html#a97a40d83c74a6c5986f86beea3f0c0a5", null ],
     [ "empty", "classhypro_1_1reachability_1_1hypro_1_1ZonotopeT.html#a0bcabe767d571188772908ab07195869", null ],
     [ "generators", "classhypro_1_1reachability_1_1hypro_1_1ZonotopeT.html#a12df4c4c0291257bffdd9efb63355d94", null ],

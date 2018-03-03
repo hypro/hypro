@@ -271,6 +271,9 @@ Representation, Rargs...&gt;&#160;</td><td class="memItemRight" valign="bottom">
 <a class="el" href="classhypro_1_1State.html">State</a>&lt; Number, tNumber, <br class="typebreak"/>
 Representation, Rargs...&gt;&#160;</td><td class="memItemRight" valign="bottom"><b>partiallyMinkowskiSum</b> (const <a class="el" href="classhypro_1_1State.html">State</a>&lt; Number, tNumber, Representation, Rargs...&gt; &amp;rhs, std::size_t I) const </td></tr>
 <tr class="separator:adae967a060ed921f26514da3fd014908"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af7201eee25265171e9628624b703d3c6"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1State.html#af7201eee25265171e9628624b703d3c6">contains</a> (const <a class="el" href="classhypro_1_1State.html">State</a>&lt; Number, tNumber, Representation, Rargs...&gt; &amp;rhs) const </td></tr>
+<tr class="memdesc:af7201eee25265171e9628624b703d3c6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks whether a state is fully contained in caller-state.  <a href="#af7201eee25265171e9628624b703d3c6">More...</a><br/></td></tr>
+<tr class="separator:af7201eee25265171e9628624b703d3c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab3bfa5ae3139a0ec495e9341162fc839"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab3bfa5ae3139a0ec495e9341162fc839"></a>
 std::vector&lt; <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; Number &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>vertices</b> (std::size_t I=0) const </td></tr>
 <tr class="separator:ab3bfa5ae3139a0ec495e9341162fc839"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -603,6 +606,34 @@ template&lt;typename Number, typename tNumber, typename Representation, typename
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A state where each set has been transformed by the corresponding ConstraintSet. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="af7201eee25265171e9628624b703d3c6"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number, typename tNumber, typename Representation, typename... Rargs&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classhypro_1_1State.html">hypro::State</a>&lt; Number, tNumber, Representation, Rargs &gt;::contains </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classhypro_1_1State.html">State</a>&lt; Number, tNumber, Representation, Rargs...&gt; &amp;&#160;</td>
+          <td class="paramname"><em>rhs</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Checks whether a state is fully contained in caller-state. </p>
+<p>This calls "contains" for all stored state sets iteratively and returns "false" first time it can be detected. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">rhs</td><td>The right hand side state. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True, if every subset of rhs is fully contained in the respective subset of the caller-state. </dd></dl>
 
 </div>
 </div>
@@ -1497,7 +1528,7 @@ template&lt;typename Number, typename tNumber, typename Representation, typename
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True, if both states are not equal, false otherwise. </dd></dl>
 
-<p>Definition at line <a class="el" href="State_8h_source.html#l00444">444</a> of file <a class="el" href="State_8h_source.html">State.h</a>.</p>
+<p>Definition at line <a class="el" href="State_8h_source.html#l00452">452</a> of file <a class="el" href="State_8h_source.html">State.h</a>.</p>
 
 </div>
 </div>
@@ -1545,7 +1576,7 @@ template&lt;typename Number, typename tNumber, typename Representation, typename
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A reference to the outstream. </dd></dl>
 
-<p>Definition at line <a class="el" href="State_8h_source.html#l00409">409</a> of file <a class="el" href="State_8h_source.html">State.h</a>.</p>
+<p>Definition at line <a class="el" href="State_8h_source.html#l00417">417</a> of file <a class="el" href="State_8h_source.html">State.h</a>.</p>
 
 </div>
 </div>
@@ -1594,7 +1625,7 @@ template&lt;typename Number, typename tNumber, typename Representation, typename
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True, if both states are equal, false otherwise. </dd></dl>
 
-<p>Definition at line <a class="el" href="State_8h_source.html#l00421">421</a> of file <a class="el" href="State_8h_source.html">State.h</a>.</p>
+<p>Definition at line <a class="el" href="State_8h_source.html#l00429">429</a> of file <a class="el" href="State_8h_source.html">State.h</a>.</p>
 
 </div>
 </div>
