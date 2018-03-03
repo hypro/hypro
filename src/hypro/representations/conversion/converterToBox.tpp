@@ -237,8 +237,34 @@ typename Converter<Number>::Box Converter<Number>::toBox( const Zonotope& _sourc
 
 //conversion from difference bounds to box (no differentiation between conversion modes - always OVER)
 template<typename Number>
-typename Converter<Number>::Box Converter<Number>::toBox( const DifferenceBounds& _source, const CONV_MODE mode ) {
-	return toBox(toHPolytope(_source, mode));
+typename Converter<Number>::Box Converter<Number>::toBox( const DifferenceBounds& _source, const CONV_MODE ) {
+	if(_source.getDBM().rows() < 1){
+		return BoxT<Number,Converter,BoxLinearOptimizationOn>();
+	}
+ 	//first column describes lower bounds, first row describes upper bounds, cast these to point
+ 	std::vector<Number> lower;
+ 	// i=1 -- do not consider 0 clock
+ 	for(int i = 1; i < _source.getDBM().rows(); i++){
+ 		if(_source.getDBM()(i,0).second == DifferenceBoundsT<Number,Converter,DifferenceBoundsSetting>::BOUND_TYPE::INFTY){
+ 			// no infinite boxes
+ 			return BoxT<Number,Converter,BoxLinearOptimizationOn>();
+ 		}
+ 		lower.push_back(_source.getDBM()(i,0).first);
+ 	}
+
+ 	std::vector<Number> upper;
+ 	// i=1 -- do not consider 0 clock
+ 	for(int i = 1; i < _source.getDBM().cols(); i++){
+ 		if(_source.getDBM()(0,i).second == DifferenceBoundsT<Number,Converter,DifferenceBoundsSetting>::BOUND_TYPE::INFTY){
+ 			// no infinite boxes
+ 			return BoxT<Number,Converter,BoxLinearOptimizationOn>();
+ 		}
+ 		upper.push_back(_source.getDBM()(0,i).first);
+ 	}
+
+ 	Point<Number> minimum(lower);
+ 	Point<Number> maximum(upper);
+	return BoxT<Number,Converter,BoxLinearOptimizationOn>(std::make_pair(minimum, maximum));
 }
 
 
