@@ -292,7 +292,7 @@ HybridAutomaton<Number> createComponent2(unsigned i, const std::vector<Label>& l
 	M resetMat = M::Identity(dim,dim);
 	V resetVec = V::Zero(dim);
 	resetMat(0,0) = 0;
-	flash->addLabel(labels[i]);
+	flash->addLabel(labels.at(i));
 	flash->setReset(Reset<Number>(resetMat,resetVec));
 	flash->setAggregation(Aggregation::parallelotopeAgg);
 	//flash->setUrgent();
@@ -309,7 +309,7 @@ HybridAutomaton<Number> createComponent2(unsigned i, const std::vector<Label>& l
 			resetVec = V::Zero(dim);
 			toAdapt->setReset(Reset<Number>(resetMat,resetVec));
 
-			toAdapt->addLabel(labels[j]);
+			toAdapt->addLabel(labels.at(j));
 
 			toAdapt->setAggregation(Aggregation::parallelotopeAgg);
 			//toAdapt->setUrgent();
@@ -574,7 +574,7 @@ int main(int argc, char** argv) {
 	std::cout << "Create parallel composition for synchronization benchmark with " << componentCount << " components using a shared variable." << std::endl;
 
 	HybridAutomaton<Number> composed_sync_sharedVar = createComponent1<Number>(1);
-	for(int i = 2; i < componentCount; ++i) {
+	for(int i = 2; i <= componentCount; ++i) {
 		HybridAutomaton<Number> tmp = createComponent1<Number>(i);
 		composed_sync_sharedVar = composed_sync_sharedVar || tmp;
 		assert(composed_sync_sharedVar.isComposedOf(tmp));
@@ -582,6 +582,15 @@ int main(int argc, char** argv) {
 	LockedFileWriter flowstar_sharedVar("sync_sharedVar.model");
 	flowstar_sharedVar.clearFile();
 	flowstar_sharedVar << toFlowstarFormat(composed_sync_sharedVar);
+	// create dot output.
+	LockedFileWriter sharedVar_single("sync_sharedVarSingle.dot");
+	sharedVar_single.clearFile();
+	sharedVar_single << createComponent1<Number>(1).getDotRepresentation();
+	LockedFileWriter sharedVar_res("sync_sharedVarComposed.dot");
+	sharedVar_res.clearFile();
+	sharedVar_res << composed_sync_sharedVar.getDotRepresentation();
+
+	std::cout << "Automaton stats: " << std::endl << composed_sync_sharedVar.getStatistics() << std::endl;
 
 	std::cout << "Create parallel composition for synchronization benchmark with " << componentCount << " components using label synchronization." << std::endl;
 
@@ -593,8 +602,8 @@ int main(int argc, char** argv) {
 		labels.emplace_back(s.str());
 	}
 
-	HybridAutomaton<Number> composed_sync_label = createComponent2<Number>(1,labels);
-	for(int i = 2; i < componentCount; ++i) {
+	HybridAutomaton<Number> composed_sync_label = createComponent2<Number>(0,labels);
+	for(int i = 1; i < componentCount; ++i) {
 		HybridAutomaton<Number> tmp = createComponent2<Number>(i,labels);
 		composed_sync_label = composed_sync_label || tmp;
 		assert(composed_sync_label.isComposedOf(tmp));
@@ -602,11 +611,20 @@ int main(int argc, char** argv) {
 	LockedFileWriter flowstar_label("sync_labelSync.model");
 	flowstar_label.clearFile();
 	flowstar_label << toFlowstarFormat(composed_sync_label);
+	// create dot output.
+	LockedFileWriter label_single("sync_labelSingle.dot");
+	label_single.clearFile();
+	label_single << createComponent2<Number>(0,std::vector<Label>({Label("flash0")})).getDotRepresentation();
+	LockedFileWriter label_res("sync_labelComposed.dot");
+	label_res.clearFile();
+	label_res << composed_sync_label.getDotRepresentation();
+
+	std::cout << "Automaton stats: " << std::endl << composed_sync_label.getStatistics() << std::endl;
 
 	std::cout << "Create parallel composition for synchronization benchmark with " << componentCount << " components using a reduced version with a shared variable." << std::endl;
 
 	HybridAutomaton<Number> composed_sync_sharedVar_2states = createComponent3<Number>(1);
-	for(int i = 2; i < componentCount; ++i) {
+	for(int i = 2; i <= componentCount; ++i) {
 		HybridAutomaton<Number> tmp = createComponent3<Number>(i);
 		composed_sync_sharedVar_2states = composed_sync_sharedVar_2states || tmp;
 		assert(composed_sync_sharedVar_2states.isComposedOf(tmp));
@@ -614,6 +632,15 @@ int main(int argc, char** argv) {
 	LockedFileWriter flowstar_sharedVarRed("sync_sharedVar_2_states.model");
 	flowstar_sharedVarRed.clearFile();
 	flowstar_sharedVarRed << toFlowstarFormat(composed_sync_sharedVar_2states);
+	// create dot output.
+	LockedFileWriter sharedVarReduced_single("sync_sharedVarReducedSingle.dot");
+	sharedVarReduced_single.clearFile();
+	sharedVarReduced_single << createComponent3<Number>(1).getDotRepresentation();
+	LockedFileWriter sharedVarReduced_res("sync_sharedVarReducedComposed.dot");
+	sharedVarReduced_res.clearFile();
+	sharedVarReduced_res << composed_sync_sharedVar_2states.getDotRepresentation();
+
+	std::cout << "Automaton stats: " << std::endl << composed_sync_sharedVar_2states.getStatistics() << std::endl;
 
 	// for testing
 	//auto haTuple = parseFlowstarFile<double>(std::string("composed.model"));

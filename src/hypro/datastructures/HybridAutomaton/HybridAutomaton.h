@@ -145,6 +145,8 @@ class HybridAutomaton
 
     std::string getDotRepresentation() const;
 
+    std::string getStatistics() const;
+
     /**
      * @brief      Comparison for equality operator.
      * @param[in]  lhs   The left hand side.
@@ -252,7 +254,7 @@ class HybridAutomaton
 			}
 		}
 
-		//std::cout << "trans" << std::endl;
+		//std::cout << "######################## TRANSITIONS ########################" << std::endl;
 		//build transisitons
 		std::set<Label> lhsLabels = lhs.getLabels();
 		std::set<Label> rhsLabels = rhs.getLabels();

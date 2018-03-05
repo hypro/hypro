@@ -140,6 +140,7 @@ bool HybridAutomaton<Number,State>::isComposedOf(const HybridAutomaton<Number,St
 			for(auto rhsTransPtr : rhs.getTransitions()) {
 				//std::cout << "consider " << rhsTransPtr->getSource()->getName() << " -> " << rhsTransPtr->getTarget()->getName() << std::endl;
 				if(transPtr->isComposedOf(*rhsTransPtr, rhs.getVariables(), this->getVariables())) {
+					//std::cout << "Found " << rhsTransPtr->getSource()->getName() << " -> " << rhsTransPtr->getTarget()->getName() << std::endl;
 					if(foundOne) {
 						//std::cout << "found two matching transitions - return false" << std::endl;
 						return false;
@@ -174,6 +175,15 @@ std::string HybridAutomaton<Number,State>::getDotRepresentation() const {
 	res += "}\n";
 
 	return res;
+}
+
+template<typename Number, typename State>
+std::string HybridAutomaton<Number,State>::getStatistics() const {
+	std::stringstream out;
+	out << "#Locations: " << mLocations.size() << std::endl;
+	out << "#Transitions: " << mTransitions.size() << std::endl;
+
+	return out.str();
 }
 
 }  // namespace hydra
