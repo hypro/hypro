@@ -121,7 +121,7 @@ namespace hypro {
 	}
 
 	template<typename Number>
-	std::string toFlowstarFormat(const ReachabilitySettings& settings,
+	std::string toFlowstarFormat(const ReachabilitySettings<Number>& settings,
 								 const std::map<Eigen::Index, std::string>& varNameMap,
 								 const std::string& prefix) {
 		std::stringstream res;
