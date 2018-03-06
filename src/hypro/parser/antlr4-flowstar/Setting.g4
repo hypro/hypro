@@ -14,6 +14,7 @@ import Formula;
 //////// Parser Rules
 
 setting 		: 'setting' '{' (fixedsteps | time | remainder | identity | plotsetting | fixedorders | cutoff | precision | filename | maxjumps | print)* '}' ;
+//setting 		: 'setting' '{' (fixedsteps | time | identity | plotsetting | fixedorders | precision | filename | maxjumps | print)* '}' ;
 
 //// Important Parser Rules
 
@@ -27,9 +28,9 @@ filename 		: 'output' VARIABLE ;
 
 maxjumps 		: 'max jumps' NUMBER ;
 
-//// Unimportant Parser Rules
-
 print 			: 'print' VARIABLE ; 
+
+//// Unimportant Parser Rules
 
 remainder 		: 'remainder estimation' EXPONENTIAL ; 
 

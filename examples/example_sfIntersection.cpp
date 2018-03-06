@@ -7,26 +7,52 @@ using Matrix = matrix_t<Number>;
 using Vector = vector_t<Number>;
 
 Number sandwichValue(const SupportFunction<Number>& obj, Vector a, Number b, Vector direction, Number lambda) {
-	return obj.evaluate(direction - lambda*a).supportValue + lambda*b;
+	Vector tmp = direction - lambda*a;
+	std::cout << "Updated direction is " << tmp << std::endl;
+	return obj.evaluate(tmp).supportValue + lambda*b;
 }
 
 Number lowerBound(const SupportFunction<Number>& obj, Vector a, Number b, Vector direction, Number lambdaI, Number lambdaJ, Number lambda) {
 	return ((sandwichValue(obj,a,b,direction,lambdaJ) - sandwichValue(obj,a,b,direction,lambdaI)) / (lambdaJ - lambdaI)) * (lambda - lambdaI) + sandwichValue(obj,a,b,direction,lambdaI);
 }
 
-void determineLowerBound(const SupportFunction<Number>& obj, Vector a, Number b, Vector direction) {
-	int i = 0;
-	Number rLow = -std::numeric_limits::infinity();
-	Number rUp = std::numeric_limits::infinity();
-	std::vector<Number> lambdas;
-	lambas.push_back(0);
-	lambas.push_back(1);
-
-	while(true) {
-		if(sandwichValue(obj,a,b,direction,lambdas.back()) <= sandwichValue(obj,a,b,direction,*(lambdas.end()-2)))
-
-		lambdas.push_back(2*lambdas.back());
+/*
+Number fMinus(const std::vector<std::pair<Number,Number>>& samples, const std::pair<Number,Number>& sample) {
+	std::vector<Number> fMinusSampleValues;
+	for(std::size_t i = 0; i < samples.size(); ++i) {
+		for(std::size_t j = i+1; j < samples.size(); ++j) {
+			fMinusSampleValues.emplace_back(lowerBound(obj,a,b,direction,samples.at(i).first, samples.at(j).first, sample.first));
+		}
 	}
+	return std::max(-std::numeric_limits<Number>::infinity, )
+}
+*/
+
+std::pair<Number,Number> determineLowerBound(const SupportFunction<Number>& obj, Vector a, Number b, Vector direction) {
+	int i = 0;
+	Number rLow = -std::numeric_limits<Number>::infinity();
+	Number rUp = std::numeric_limits<Number>::infinity();
+	std::vector<std::pair<Number,Number>> samples;
+	samples.emplace_back(std::make_pair(0,sandwichValue(obj,a,b,direction,0)));
+	std::cout << "Lambda is: " << samples.back().first << ", f is: " << samples.back().second << std::endl;
+	samples.emplace_back(std::make_pair(0.001,sandwichValue(obj,a,b,direction,0.001)));
+	std::cout << "Lambda is: " << samples.back().first << ", f is: " << samples.back().second << std::endl;
+
+	// sample
+	while(true) {
+		samples.emplace_back(std::make_pair(2*(samples.back().first),sandwichValue(obj,a,b,direction,2*(samples.back().first))));
+		std::cout << "Lambda is: " << samples.back().first << ", f is: " << samples.back().second << std::endl;
+		std::cout << "Compare " << std::next(samples.rbegin(),2)->second << " and " << std::next(samples.rbegin(),1)->second << " and " << samples.rbegin()->second << std::endl;
+		if(std::next(samples.rbegin(),1)->second <= std::next(samples.rbegin(),2)->second && std::next(samples.rbegin(),1)->second <= samples.rbegin()->second ) {
+			break;
+		}
+	}
+
+	// tighten bounds
+
+	rUp = samples.back().second;
+
+	return std::make_pair(std::next(samples.rbegin(),2)->second, samples.rbegin()->second);
 }
 
 int main() {
@@ -51,6 +77,14 @@ int main() {
 
 	plt.addObject(sf.vertices());
 	plt.addObject(Halfspace<Number>(Vector(hsNormal.row(0)),hsOffset(0)));
+
+	Vector direction = Vector(2);
+	direction << 1,0;
+
+	std::pair<Number,Number> lowerUpperBound = determineLowerBound(sf,Vector(hsNormal.row(0)),hsOffset(0),direction);
+
+	plt.addObject(Halfspace<Number>(Vector(direction),lowerUpperBound.first));
+	//plt.addObject(Halfspace<Number>(Vector(direction),lowerUpperBound.second));
 
 	plt.plot2d();
 

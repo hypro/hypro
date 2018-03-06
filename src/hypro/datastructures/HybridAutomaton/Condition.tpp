@@ -28,6 +28,61 @@ void Condition<Number>::setVector(const vector_t<Number>& v, std::size_t I) {
 	DEBUG("hypro.datastructures","Set vector at pos " << I << ", mConstraints.size() = " << mConstraints.size());
 }
 
+template<typename Number>
+std::string Condition<Number>::getDotRepresentation(const std::vector<std::string>& vars) const {
+	std::stringstream o;
+	if(mConstraints.size() > 0) {
+		const matrix_t<Number>& constraints = mConstraints.begin()->matrix();
+		o << "<TR><TD ROWSPAN=\"" << constraints.rows() << "\">";
+		for(unsigned i = 0; i < constraints.rows(); ++i) {
+			for(unsigned j = 0; j < constraints.cols(); ++j) {
+				if(constraints(i,j) != 0) {
+					o << constraints(i,j) << "*" << vars[j] << " + ";
+				}
+			}
+			o << " &lt;= " << mConstraints.begin()->vector()(i);
+			if(i < constraints.rows() -1)
+				o << "<BR/>";
+		}
+		o << "</TD>";
+		o << "</TR>";
+	}
+	return o.str();
+}
+
+template<typename Number>
+Condition<Number> combine(
+	const Condition<Number>& lhs, const Condition<Number>& rhs,
+	const std::vector<std::string> haVar, const std::vector<std::string> lhsVar, const std::vector<std::string> rhsVar) {
+
+	if (lhs.size() == 0 and rhs.size() == 0) {
+		return Condition<Number>();
+	}
+
+	matrix_t<Number> lhsMatrix = matrix_t<Number>::Zero(0, lhsVar.size());
+	matrix_t<Number> rhsMatrix = matrix_t<Number>::Zero(0, rhsVar.size());;
+	vector_t<Number> lhsVector = vector_t<Number>::Zero(0);
+	vector_t<Number> rhsVector = vector_t<Number>::Zero(0);;
+
+	if (lhs.size() != 0) {
+		lhsMatrix = lhs.getMatrix();
+		lhsVector = lhs.getVector();
+	}
+	if (rhs.size() != 0) {
+		rhsMatrix = rhs.getMatrix();
+		rhsVector = rhs.getVector();
+	}
+
+	matrix_t<Number> newMat = combine(lhsMatrix, rhsMatrix, haVar, lhsVar, rhsVar);
+	vector_t<Number> newVec = combine(lhsVector, rhsVector);
+
+	/*vector_t<Number>::Zero(lhsInv.getVector().size()+rhsInv.getVector().size());
+	newVec.head(lhsInv.getVector().size()) = lhsInv.getVector();
+	newVec.tail(rhsInv.getVector().size()) = rhsInv.getVector();*/
+
+	return Condition<Number>(newMat, newVec);
+}
+
 //template<typename Number>
 //template<typename Representation, typename ...Rargs>
 //std::pair<bool,State<Number,Representation, Rargs...>> Condition<Number>::isSatisfiedBy(const State<Number,Representation, Rargs...>& inState) const {

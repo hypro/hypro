@@ -16,7 +16,7 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
             UtilityTest.cpp
     )
 
-    add_dependencies(runAlgorithmTests googletest)
+    add_dependencies(runAlgorithmTests resources)
     target_include_directories(runAlgorithmTests PRIVATE ${GTEST_INCLUDE_DIR})
 
     target_link_libraries(runAlgorithmTests

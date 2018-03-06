@@ -18,28 +18,28 @@ namespace hypro {
  */
 enum SF_TYPE { SUM, INTERSECT, LINTRAFO, SCALE, UNITE, POLY, INFTY_BALL, TWO_BALL, ELLIPSOID, BOX, ZONOTOPE, PROJECTION, NONE };
 
-	template<typename Content>
-	struct Cacheable {
-		mutable std::size_t mHash = 0;
-		std::pair<unsigned, Content> item;
+template<typename Content>
+struct Cacheable {
+	mutable std::size_t mHash = 0;
+	std::pair<unsigned, Content> item;
 
-		std::size_t hash() const {
-			if(mHash == 0) {
-				mHash = std::hash<std::pair<unsigned, Content>>()(item);
-			}
-			return mHash;
+	std::size_t hash() const {
+		if(mHash == 0) {
+			mHash = std::hash<std::pair<unsigned, Content>>()(item);
 		}
+		return mHash;
+	}
 
-		Cacheable(const std::pair<unsigned, Content>& i) : item(i) {}
-		Cacheable(unsigned exp, const Content& cont) : item(std::make_pair(exp,cont)) {}
+	explicit Cacheable(const std::pair<unsigned, Content>& i) : item(i) {}
+	Cacheable(unsigned exp, const Content& cont) : item(std::make_pair(exp,cont)) {}
 
-		friend bool operator==(const Cacheable<Content>& lhs, const Cacheable<Content>& rhs) {
-			if(lhs.hash() != rhs.hash()) {
-				return false;
-			}
-			return (lhs.item.first == rhs.item.first) && (lhs.item.second == rhs.item.second);
+	friend bool operator==(const Cacheable<Content>& lhs, const Cacheable<Content>& rhs) {
+		if(lhs.hash() != rhs.hash()) {
+			return false;
 		}
-	};
+		return (lhs.item.first == rhs.item.first) && (lhs.item.second == rhs.item.second);
+	}
+};
 
 } // namespace
 

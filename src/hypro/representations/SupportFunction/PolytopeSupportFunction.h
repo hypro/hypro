@@ -39,7 +39,7 @@ class PolytopeSupportFunction {
 
 	matrix_t<Number> mConstraints;
 	vector_t<Number> mConstraintConstants;
-	Optimizer<Number> mOpt;
+	mutable Optimizer<Number> mOpt;
 	std::size_t mDimension;
 	std::map<vector_t<Number>, Number> mCache;
 
@@ -106,9 +106,11 @@ class PolytopeSupportFunction {
 
 	bool empty() const;
 
-	void cleanUp();
+	void cleanUp() const;
 
     void print() const;
+
+    std::string getDotRepresentation() const;
 
     std::string createCode( unsigned index = 0 ) const;
 

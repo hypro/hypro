@@ -594,84 +594,85 @@ BoxT<double,Converter,Setting> BoxT<double,Converter,Setting>::intersectHalfspac
 	TRACE("hypro.representations", "Halfspaces: " << _mat << " and vector: " << _vec );
 	assert(_mat.rows() == _vec.rows());
 	assert(_mat.cols() == Eigen::Index(this->dimension()));
-	#ifdef HYPRO_BOX_AVOID_LINEAR_OPTIMIZATION
+	if(Setting::HYPRO_BOX_AVOID_LINEAR_OPTIMIZATION){
+		if(_mat.rows() == 0) {
+			return *this;
+		}
+		if(!this->empty()) {
+			BoxT<double,Converter,Setting> result = *this;
+			// Todo: This is a first draft using the function for single halfspaces - maybe we can check more than one plane at the same time.
+			for(unsigned planeIndex = 0; planeIndex < _mat.rows(); ++planeIndex) {
+				result = result.intersectHalfspace(Halfspace<double>(_mat.row(planeIndex), _vec(planeIndex)));
+				if(result.empty()){
+					break;
+				}
+			}
+			return result;
+		}
+		return Empty(this->dimension());
+	} else {
 
-	if(_mat.rows() == 0) {
-		return *this;
-	}
-	if(!this->empty()) {
-		BoxT<double,Converter,Setting> result = *this;
-		// Todo: This is a first draft using the function for single halfspaces - maybe we can check more than one plane at the same time.
-		for(unsigned planeIndex = 0; planeIndex < _mat.rows(); ++planeIndex) {
-			result = result.intersectHalfspace(Halfspace<double>(_mat.row(planeIndex), _vec(planeIndex)));
-			if(result.empty()){
-				break;
+		// convert box to a set of constraints, add other halfspaces and evaluate in box main directions to get new intervals.
+		std::vector<vector_t<double>> tpl = computeTemplate<double>(this->dimension(), 4);
+		matrix_t<double> boxDirections = matrix_t<double>::Zero(tpl.size(), this->dimension());
+		vector_t<double> boxDistances = vector_t<double>::Zero(boxDirections.rows());
+
+		// set up matrix.
+		// Todo: Can be combined with next loop.
+		Eigen::Index i = 0;
+		for(const auto& row : tpl) {
+			boxDirections.row(i) = row;
+			++i;
+		}
+
+		// the template has one non-Zero index per row
+		for(Eigen::Index rowIndex = 0; rowIndex < boxDirections.rows(); ++rowIndex) {
+			for(Eigen::Index colIndex = 0; colIndex < boxDirections.cols(); ++colIndex) {
+				if(boxDirections(rowIndex,colIndex) > 0) {
+					boxDistances(rowIndex) = mLimits.second.at(colIndex);
+					break;
+				} else if (boxDirections(rowIndex,colIndex) < 0) {
+					boxDistances(rowIndex) = -mLimits.first.at(colIndex);
+					break;
+				}
 			}
 		}
-		return result;
-	}
-	return Empty(this->dimension());
-	#else
 
-	// convert box to a set of constraints, add other halfspaces and evaluate in box main directions to get new intervals.
-	std::vector<vector_t<double>> tpl = computeTemplate<double>(this->dimension(), 4);
-	matrix_t<double> boxDirections = matrix_t<double>::Zero(tpl.size(), this->dimension());
-	vector_t<double> boxDistances = vector_t<double>::Zero(boxDirections.rows());
+		// At this point the constraints for the box are created as a matrix-vector pair.
+		// Now add the halfspace constraints in a fresh matrix (we re-use the box template later).
+		matrix_t<double> constraints = matrix_t<double>(boxDirections.rows() + _mat.rows(), _mat.cols());
+		vector_t<double> constants = vector_t<double>(boxDistances.rows() + _mat.rows());
+		constraints.block(0,0,boxDirections.rows(), boxDirections.cols()) = boxDirections;
+		constraints.block(boxDirections.rows(), 0, _mat.rows(), _mat.cols()) = _mat;
+		constants.block(0,0,boxDirections.rows(),1) = boxDistances;
+		constants.block(boxDirections.rows(),0,_vec.rows(),1) = _vec;
 
-	// set up matrix.
-	// Todo: Can be combined with next loop.
-	Eigen::Index i = 0;
-	for(const auto& row : tpl) {
-		boxDirections.row(i) = row;
-		++i;
-	}
+		// evaluate in box directions.
+		Optimizer<double> opt(constraints,constants);
+		std::vector<EvaluationResult<double>> results;
+		TRACE("hypro.representations.box","Multiple calls to evaluate.");
+		for(Eigen::Index rowIndex = 0; rowIndex < boxDirections.rows(); ++rowIndex) {
+			results.emplace_back(opt.evaluate(boxDirections.row(rowIndex), false));
+		}
+		TRACE("hypro.representations.box","Multiple calls to evaluate - Done.");
+		assert(Eigen::Index(results.size()) == boxDirections.rows());
+		TRACE("hypro.representations.box","Call to clean opt.");
+		opt.cleanGLPInstance();
 
-	// the template has one non-Zero index per row
-	for(Eigen::Index rowIndex = 0; rowIndex < boxDirections.rows(); ++rowIndex) {
-		for(Eigen::Index colIndex = 0; colIndex < boxDirections.cols(); ++colIndex) {
-			if(boxDirections(rowIndex,colIndex) > 0) {
-				boxDistances(rowIndex) = mLimits.second.at(colIndex);
-				break;
-			} else if (boxDirections(rowIndex,colIndex) < 0) {
-				boxDistances(rowIndex) = -mLimits.first.at(colIndex);
-				break;
+		// re-construct box from results.
+		std::pair<Point<double>,Point<double>> newLimits = std::make_pair(Point<double>(vector_t<double>::Zero(this->dimension())), Point<double>(vector_t<double>::Zero(this->dimension())));
+		for(Eigen::Index rowIndex = 0; rowIndex < boxDirections.rows(); ++rowIndex) {
+			//assert(boxDirections.row(rowIndex).nonZeros() == Eigen::Index(1));
+			for(Eigen::Index colIndex = 0; colIndex < boxDirections.cols(); ++colIndex) {
+				if(boxDirections(rowIndex,colIndex) > 0) {
+					newLimits.second[colIndex] = results[rowIndex].supportValue;
+				} else if (boxDirections(rowIndex,colIndex) < 0) {
+					newLimits.first[colIndex] = -results[rowIndex].supportValue;
+				}
 			}
 		}
+		return BoxT<double,Converter,Setting>(newLimits);
 	}
-
-	// At this point the constraints for the box are created as a matrix-vector pair.
-	// Now add the halfspace constraints in a fresh matrix (we re-use the box template later).
-	matrix_t<double> constraints = matrix_t<double>(boxDirections.rows() + _mat.rows(), _mat.cols());
-	vector_t<double> constants = vector_t<double>(boxDistances.rows() + _mat.rows());
-	constraints.block(0,0,boxDirections.rows(), boxDirections.cols()) = boxDirections;
-	constraints.block(boxDirections.rows(), 0, _mat.rows(), _mat.cols()) = _mat;
-	constants.block(0,0,boxDirections.rows(),1) = boxDistances;
-	constants.block(boxDirections.rows(),0,_vec.rows(),1) = _vec;
-
-	// evaluate in box directions.
-	Optimizer<double> opt(constraints,constants);
-	std::vector<EvaluationResult<double>> results;
-	for(Eigen::Index rowIndex = 0; rowIndex < boxDirections.rows(); ++rowIndex) {
-		results.emplace_back(opt.evaluate(boxDirections.row(rowIndex), false));
-	}
-	assert(Eigen::Index(results.size()) == boxDirections.rows());
-	opt.cleanGLPInstance();
-
-	// re-construct box from results.
-	std::pair<Point<double>,Point<double>> newLimits = std::make_pair(Point<double>(vector_t<double>::Zero(this->dimension())), Point<double>(vector_t<double>::Zero(this->dimension())));
-	for(Eigen::Index rowIndex = 0; rowIndex < boxDirections.rows(); ++rowIndex) {
-		//assert(boxDirections.row(rowIndex).nonZeros() == Eigen::Index(1));
-		for(Eigen::Index colIndex = 0; colIndex < boxDirections.cols(); ++colIndex) {
-			if(boxDirections(rowIndex,colIndex) > 0) {
-				newLimits.second[colIndex] = results[rowIndex].supportValue;
-			} else if (boxDirections(rowIndex,colIndex) < 0) {
-				newLimits.first[colIndex] = -results[rowIndex].supportValue;
-			}
-		}
-	}
-	return BoxT<double,Converter,Setting>(newLimits);
-
-	#endif
 }
 
 template<typename Converter, class Setting>

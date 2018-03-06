@@ -16,15 +16,16 @@ public:
 	Reset(Reset&& orig) = default;
 	Reset& operator=(const Reset<Number>& orig) = default;
 	Reset& operator=(Reset<Number>&& orig) = default;
+	Reset(const matrix_t<Number>& mat, const vector_t<Number>& vec);
 	~Reset() {}
 
 	bool empty() const { return mResets.empty(); }
 	std::size_t size() const { return mResets.size(); }
 
-	vector_t<Number> getVector(std::size_t I = 0) const { return mResets.at(I).vector(); }
-	matrix_t<Number> getMatrix(std::size_t I = 0) const { return mResets.at(I).matrix(); }
-	matrix_t<Number>& rGetMatrix(std::size_t I = 0) const { return mResets[I].rMatrix(); }
-	vector_t<Number>& rGetVector(std::size_t I = 0) const { return mResets[I].rVector(); }
+	const vector_t<Number>& getVector(std::size_t I = 0) const { return mResets.at(I).vector(); }
+	const matrix_t<Number>& getMatrix(std::size_t I = 0) const { return mResets.at(I).matrix(); }
+	matrix_t<Number>& rGetMatrix(std::size_t I = 0) { return mResets[I].rMatrix(); }
+	vector_t<Number>& rGetVector(std::size_t I = 0) { return mResets[I].rVector(); }
 
 	ConstraintSet<Number> getReset(std::size_t I = 0) const { return mResets.at(I); }
 	ConstraintSet<Number>& rGetReset(std::size_t I = 0) const { return mResets[I]; }
@@ -35,6 +36,8 @@ public:
 
 	template<typename Representation, typename ...Rargs>
 	State<Number,Representation,Rargs...> applyReset(const State<Number,Representation,Rargs...>& inState) const;
+
+	bool isIdentity() const;
 
 #ifdef HYPRO_LOGGING
     friend std::ostream& operator<<(std::ostream& ostr, const Reset<Number>& a)
@@ -68,6 +71,12 @@ public:
     	return !(lhs == rhs);
     }
 };
+
+template<typename Number>
+Reset<Number> combine(
+    const Reset<Number>& lhs, const Reset<Number>& rhs,
+    const std::vector<std::string> haVar, const std::vector<std::string> lhsVar, const std::vector<std::string> rhsVar);
+
 
 } // namespace
 

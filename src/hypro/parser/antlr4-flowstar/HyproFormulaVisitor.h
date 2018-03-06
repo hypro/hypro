@@ -12,6 +12,8 @@
 
 #include <string>
 #include <memory>
+#include "HybridAutomatonLexer.h"
+#include "HybridAutomatonParser.h"
 #include "HybridAutomatonBaseVisitor.h"
 #include <carl/interval/Interval.h>
 #include "../../types.h"

@@ -47,6 +47,7 @@ extern "C" {
 static const unsigned long fReach_DENOMINATOR = 1000000000; //!< @brief The common denominator used for the PPL wrapper class.
 
 static const unsigned long default_double_comparison_ulps = 128; //!< @brief The default threshold value for double ULP-comparison.
+//static const unsigned long default_double_comparison_ulps = 4096; //!< @brief The default threshold value for double ULP-comparison.
 
 static const unsigned long defaultTemplateDirectionCount = 8; //!< @brief The default number of template directions used in templated evaluation.
 
