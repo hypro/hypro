@@ -120,9 +120,27 @@ namespace hypro {
 		return out.str();
 	}
 
+	template<typename Number>
+	std::string toFlowstarFormat(const ReachabilitySettings& settings,
+								 const std::map<Eigen::Index, std::string>& varNameMap,
+								 const std::string& prefix) {
+		std::stringstream res;
+
+		res << prefix << "settings";
+		res << prefix << "{";
+		res << prefix << "\tfixed steps " << settings.timeStep;
+		res << prefix << "\ttime " << settings.timeBound;
+		res << prefix << "\tgnuplot octagon " << varNameMap.at(settings.plotDimensions[0]) << "," varNameMap.at(settings.plotDimensions[1]);
+		res << prefix << "\toutput" << settings.fileName;
+		res << prefix << "\tmax jumps" << settings.jumpDepth;
+		res << prefix << "}";
+
+		return res.str();
+	}
+
 
 	template<typename Number>
-	std::string toFlowstarFormat(const HybridAutomaton<Number>& in) {
+	std::string toFlowstarFormat(const HybridAutomaton<Number>& in, const ReachabilitySettings& settings = ReachabilitySettings() ) {
 		std::stringstream res;
 		std::map<Eigen::Index, std::string> vars;
 
@@ -143,20 +161,7 @@ namespace hypro {
 			}
 
 			// Todo: add out-commented exemplary settings
-			res << "setting\n\
- {\n\
-  fixed steps 0.01\n\
-  time 3\n\
-  remainder estimation 1e-5\n\
-  identity precondition\n\
-  gnuplot octagon x_0,x_1\n\
-  fixed orders 5\n\
-  cutoff 1e-15\n\
-  precision 128\n\
-  output out\n\
-  max jumps 1\n\
-  print on\n\
- }\n";
+			res << toFlowstarFormat(settings,vars,"\n");
 
 			// locations
 			res << "\tmodes\n\t{\n";

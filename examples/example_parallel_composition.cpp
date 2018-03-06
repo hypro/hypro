@@ -571,6 +571,11 @@ int main(int argc, char** argv) {
 	int componentCount = 0;
 	componentCount = atoi(argv[1]);
 
+	// settings to be used for flowstar format output
+	ReachabilitySettings settings;
+	settings.jumpBound=20;
+	settings.plotDimensions[1] = componentCount+1;
+
 	std::cout << "Create parallel composition for synchronization benchmark with " << componentCount << " components using a shared variable." << std::endl;
 
 	HybridAutomaton<Number> composed_sync_sharedVar = createComponent1<Number>(1);
