@@ -1,5 +1,6 @@
 #pragma once
 #include "../HybridAutomaton.h"
+#include "../Settings.h"
 #include "../Condition.h"
 #include <iostream>
 
