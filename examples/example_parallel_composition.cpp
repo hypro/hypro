@@ -572,9 +572,11 @@ int main(int argc, char** argv) {
 	componentCount = atoi(argv[1]);
 
 	// settings to be used for flowstar format output
-	ReachabilitySettings settings;
-	settings.jumpBound=20;
-	settings.plotDimensions[1] = componentCount+1;
+	ReachabilitySettings<Number> settings;
+	settings.jumpDepth=20;
+	settings.plotDimensions.push_back(std::vector<std::size_t>());
+	settings.plotDimensions[0].push_back(0);
+	settings.plotDimensions[0].push_back(componentCount+1);
 
 	std::cout << "Create parallel composition for synchronization benchmark with " << componentCount << " components using a shared variable." << std::endl;
 

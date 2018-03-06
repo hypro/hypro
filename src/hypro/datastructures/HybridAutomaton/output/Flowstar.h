@@ -134,7 +134,7 @@ namespace hypro {
 		if(!settings.plotDimensions.empty()) {
 			for(const auto& dims : settings.plotDimensions) {
 				assert(dims.size() == 2);
-				res << prefix << "\tgnuplot octagon " << varNameMap.at(dims[0]) << "," varNameMap.at(dims[1]);
+				res << prefix << "\tgnuplot octagon " << varNameMap.at(dims[0]) << "," << varNameMap.at(dims[1]);
 			}
 		}
 
@@ -147,7 +147,7 @@ namespace hypro {
 
 
 	template<typename Number>
-	std::string toFlowstarFormat(const HybridAutomaton<Number>& in, const ReachabilitySettings& settings = ReachabilitySettings() ) {
+	std::string toFlowstarFormat(const HybridAutomaton<Number>& in, const ReachabilitySettings<Number>& settings = ReachabilitySettings<Number>() ) {
 		std::stringstream res;
 		std::map<Eigen::Index, std::string> vars;
 
