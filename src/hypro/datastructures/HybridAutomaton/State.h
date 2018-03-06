@@ -430,8 +430,17 @@ class State
 
 };
 
+#ifdef HYPRO_USE_PPL
+
+template<typename Number, typename tNumber = Number>
+using State_t = State<Number, tNumber, Box<Number>, ConstraintSet<Number>, SupportFunction<Number>, Zonotope<Number>, HPolytope<Number>, VPolytope<Number>, Polytope<Number>>;
+
+#else
+
 template<typename Number, typename tNumber = Number>
 using State_t = State<Number, tNumber, Box<Number>, ConstraintSet<Number>, SupportFunction<Number>, Zonotope<Number>, HPolytope<Number>, VPolytope<Number>>;
+
+#endif
 
 } // namespace
 

@@ -178,7 +178,6 @@ protected:
 
 TYPED_TEST(ConverterTest, toBox)
 {
-
 	Converter<TypeParam>::toBox(this->box);
 	Converter<TypeParam>::toBox(this->support);
     Converter<TypeParam>::toBox(this->support2);

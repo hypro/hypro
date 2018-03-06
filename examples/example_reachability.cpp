@@ -37,6 +37,10 @@ static void computeReachableStates(const std::string& filename, const hypro::rep
 	hypro::Plotter<Number>& plotter = hypro::Plotter<Number>::getInstance();
 	std::string extendedFilename = boost::get<1>(ha).fileName;
 	switch (Representation::type()) {
+		case hypro::representation_name::ppl_polytope: {
+			extendedFilename += "_pplpoly";
+			break;
+		}
 		case hypro::representation_name::zonotope:{
 			extendedFilename += "_zonotope";
 			break;
@@ -140,6 +144,13 @@ int main(int argc, char** argv) {
 #endif
 
 	switch(rep){
+
+		case 6: {
+			using Representation = hypro::Polytope<Number>;
+			std::cout << "Using a ppl-polytope representation." << std::endl;
+			computeReachableStates<Number, Representation>(filename, hypro::representation_name::ppl_polytope);
+			break;
+		}
 
 		case 5: {
 			using Representation = hypro::Zonotope<Number>;

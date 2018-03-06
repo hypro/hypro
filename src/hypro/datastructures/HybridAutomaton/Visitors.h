@@ -129,7 +129,8 @@ public:
  				break;
  			}
  			case representation_name::ppl_polytope: {
- 				assert(false && "CONVERSION TO PPL POLYTOPE NOT YET IMPLEMENTED.");
+ 				Polytope<Number> tmp = Converter<Number>::toPolytope(lhs);
+ 				return tmp;
  				break;
  			}
  			case representation_name::constraint_set:

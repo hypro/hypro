@@ -47,7 +47,7 @@ hybrid reachability
   l
   {
    x in [10,10.2]
-   v in [0,1]
+   v in [0,0]
   }
  }
 }

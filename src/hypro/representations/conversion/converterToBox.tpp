@@ -193,10 +193,7 @@ typename Converter<Number>::Box Converter<Number>::toBox( const HPolytope& _sour
 #ifdef HYPRO_USE_PPL
 template<typename Number>
 typename Converter<Number>::Box Converter<Number>::toBox( const Polytope& _source, const CONV_MODE  ) {
-	std::cout << "In converterToBox.tpp:196: source vertices size is: " << _source.vertices().size() << std::endl;
-	std::cout << "In converterToBox.tpp:196: source vertices are: " << _source.vertices() << std::endl;
 	BoxT<Number,Converter,BoxLinearOptimizationOn> tmp(_source.vertices());
-	std::cout << "In converterToBox.tpp:197: Box max and min are: " << tmp.max() << " and " << tmp.min() << std::endl;
 	return BoxT<Number,Converter,BoxLinearOptimizationOn>( _source.vertices() );
 }
 #endif
