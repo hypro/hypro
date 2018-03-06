@@ -25,8 +25,6 @@ struct ReachabilitySettings {
      * @brief      Default constructor.
      */
     ReachabilitySettings<Number>() : timeBound(0), jumpDepth(0), timeStep(0), fileName("out"), pplDenomimator(0) {
-    	plotDimensions.push_back(0);
-    	plotDimensions.push_back(1);
     }
 
     template<typename T>

@@ -130,7 +130,13 @@ namespace hypro {
 		res << prefix << "{";
 		res << prefix << "\tfixed steps " << settings.timeStep;
 		res << prefix << "\ttime " << settings.timeBound;
-		res << prefix << "\tgnuplot octagon " << varNameMap.at(settings.plotDimensions[0]) << "," varNameMap.at(settings.plotDimensions[1]);
+		if(!settings.plotDimensions.empty()) {
+			for(const auto& dims : settings.plotDimensions) {
+				assert(dims.size() == 2);
+				res << prefix << "\tgnuplot octagon " << varNameMap.at(dims[0]) << "," varNameMap.at(dims[1]);
+			}
+		}
+
 		res << prefix << "\toutput" << settings.fileName;
 		res << prefix << "\tmax jumps" << settings.jumpDepth;
 		res << prefix << "}";
