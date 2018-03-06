@@ -31,13 +31,13 @@ grammar Formula;
 replacedexpr		: MINUS? NUMBER EQUALS MINUS? NUMBER ;
 
 constantexpr		: CONSTANT EQUALS MINUS? NUMBER {
-	std::cout << "In constantexpr! MINUS text is: " << $MINUS.text << std::endl;
+	//std::cout << "In constantexpr! MINUS text is: " << $MINUS.text << std::endl;
 	if($MINUS.text != ""){
 		constants.insert({$CONSTANT.text, $MINUS.text.append($NUMBER.text)});
-		std::cout << "Constant " << $CONSTANT.text << " with value " << $MINUS.text.append($NUMBER.text) << " was put in map!\n";
+		//std::cout << "Constant " << $CONSTANT.text << " with value " << $MINUS.text.append($NUMBER.text) << " was put in map!\n";
 	} else {
 		constants.insert({$CONSTANT.text, $NUMBER.text});
-		std::cout << "Constant " << $CONSTANT.text << " with value " << $NUMBER.text << " was put in map!\n";
+		//std::cout << "Constant " << $CONSTANT.text << " with value " << $NUMBER.text << " was put in map!\n";
 	}
 };
 

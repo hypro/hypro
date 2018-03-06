@@ -35,7 +35,8 @@ typename Converter<Number>::ConstraintSet Converter<Number>::toConstraintSet( co
 #ifdef HYPRO_USE_PPL
 template<typename Number>
 typename Converter<Number>::ConstraintSet Converter<Number>::toConstraintSet( const Polytope& _source, const CONV_MODE  ) {
-	return ConstraintSetT<Number,Converter>(_source.matrix(), _source.vector());
+	auto tmp = toHPolytope(_source);
+	return ConstraintSetT<Number,Converter>(tmp.matrix(), tmp.vector());
 }
 #endif
 

@@ -30,7 +30,7 @@ allocation	: VARIABLE DEFINE (polynom | interval) ;
 
 resetfct	: 'reset' '{' allocation* '}' ;
 
-aggregation	: (PARALLELOTOPE | BOX) '{' '}' ;
+aggregation	: (PARALLELOTOPE | BOX | INTERVALAGG) '{' '}' ;
 
 //////// Lexer Rules
 
@@ -38,23 +38,8 @@ PARALLELOTOPE 	: 'parallelotope aggregation' ;
 
 BOX 			: 'box aggregation' ;
 
+INTERVALAGG		: 'interval aggregation';
+
 JUMP			: '->' ;
 
 DEFINE 			: ':=' ;
-
-
-//jumps		: JUMPS CBOPEN transition* CBCLOSE ;
-//
-//transition 	: fromto (urgent | guard | resetfct | aggregation)* ;
-//
-//fromto		: VARIABLE JUMP VARIABLE ;
-//
-//urgent		: URGENT ;
-//
-//guard		: GUARD CBOPEN constrset CBCLOSE ;
-//
-//allocation	: VARIABLE DEFINE (polynom | interval) ;
-//
-//resetfct	: GUARD CBOPEN allocation* CBCLOSE ;
-//
-//aggregation	: (PARALLELOTOPE | BOX) CBOPEN CBCLOSE ;
