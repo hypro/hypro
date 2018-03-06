@@ -127,7 +127,7 @@ namespace hypro {
 								 const std::string& prefix) {
 		std::stringstream res;
 
-		res << prefix << "settings";
+		res << prefix << "setting";
 		res << prefix << "{";
 		res << prefix << "\tfixed steps " << settings.timeStep;
 		res << prefix << "\ttime " << settings.timeBound;
@@ -138,8 +138,8 @@ namespace hypro {
 			}
 		}
 
-		res << prefix << "\toutput" << settings.fileName;
-		res << prefix << "\tmax jumps" << settings.jumpDepth;
+		res << prefix << "\toutput " << settings.fileName;
+		res << prefix << "\tmax jumps " << settings.jumpDepth;
 		res << prefix << "}";
 
 		return res.str();

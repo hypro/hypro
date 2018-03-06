@@ -574,9 +574,11 @@ int main(int argc, char** argv) {
 	// settings to be used for flowstar format output
 	ReachabilitySettings<Number> settings;
 	settings.jumpDepth=20;
-	settings.plotDimensions.push_back(std::vector<std::size_t>());
-	settings.plotDimensions[0].push_back(0);
-	settings.plotDimensions[0].push_back(componentCount+1);
+	settings.timeBound = 1.1;
+	settings.timeStep = 0.01;
+	//settings.plotDimensions.push_back(std::vector<std::size_t>());
+	//settings.plotDimensions[0].push_back(0);
+	//settings.plotDimensions[0].push_back(componentCount+1);
 
 	std::cout << "Create parallel composition for synchronization benchmark with " << componentCount << " components using a shared variable." << std::endl;
 
@@ -586,9 +588,10 @@ int main(int argc, char** argv) {
 		composed_sync_sharedVar = composed_sync_sharedVar || tmp;
 		assert(composed_sync_sharedVar.isComposedOf(tmp));
 	}
+	settings.fileName = "sync_sharedVar";
 	LockedFileWriter flowstar_sharedVar("sync_sharedVar.model");
 	flowstar_sharedVar.clearFile();
-	flowstar_sharedVar << toFlowstarFormat(composed_sync_sharedVar);
+	flowstar_sharedVar << toFlowstarFormat(composed_sync_sharedVar, settings);
 	// create dot output.
 	LockedFileWriter sharedVar_single("sync_sharedVarSingle.dot");
 	sharedVar_single.clearFile();
@@ -615,9 +618,10 @@ int main(int argc, char** argv) {
 		composed_sync_label = composed_sync_label || tmp;
 		assert(composed_sync_label.isComposedOf(tmp));
 	}
+	settings.fileName = "sync_labels";
 	LockedFileWriter flowstar_label("sync_labelSync.model");
 	flowstar_label.clearFile();
-	flowstar_label << toFlowstarFormat(composed_sync_label);
+	flowstar_label << toFlowstarFormat(composed_sync_label,settings);
 	// create dot output.
 	LockedFileWriter label_single("sync_labelSingle.dot");
 	label_single.clearFile();
@@ -636,9 +640,10 @@ int main(int argc, char** argv) {
 		composed_sync_sharedVar_2states = composed_sync_sharedVar_2states || tmp;
 		assert(composed_sync_sharedVar_2states.isComposedOf(tmp));
 	}
+	settings.fileName = "sync_sharedVar2";
 	LockedFileWriter flowstar_sharedVarRed("sync_sharedVar_2_states.model");
 	flowstar_sharedVarRed.clearFile();
-	flowstar_sharedVarRed << toFlowstarFormat(composed_sync_sharedVar_2states);
+	flowstar_sharedVarRed << toFlowstarFormat(composed_sync_sharedVar_2states,settings);
 	// create dot output.
 	LockedFileWriter sharedVarReduced_single("sync_sharedVarReducedSingle.dot");
 	sharedVarReduced_single.clearFile();
