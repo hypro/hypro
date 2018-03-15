@@ -1,0 +1,20 @@
+digraph "/home/travis/build/hypro/hypro/src/hypro/util" {
+  compound=true
+  node [ fontsize="10", fontname="Helvetica"];
+  edge [ labelfontsize="10", labelfontname="Helvetica"];
+  subgraph clusterdir_2ce0cb9797b50c8d842bc50008b46cdd {
+    graph [ bgcolor="#ddddee", pencolor="black", label="hypro" fontname="Helvetica", fontsize="10", URL="dir_2ce0cb9797b50c8d842bc50008b46cdd.html"]
+  subgraph clusterdir_879d833e0dfbe8f31a5e860bb94efb50 {
+    graph [ bgcolor="#eeeeff", pencolor="black", label="" URL="dir_879d833e0dfbe8f31a5e860bb94efb50.html"];
+    dir_879d833e0dfbe8f31a5e860bb94efb50 [shape=plaintext label="util"];
+    dir_24cbef118a2511338dada52e6e2bd544 [shape=box label="adaptions_eigen" color="black" fillcolor="white" style="filled" URL="dir_24cbef118a2511338dada52e6e2bd544.html"];
+    dir_3100e148cb0b6b745355fdee31bcb5c6 [shape=box label="linearOptimization" color="red" fillcolor="white" style="filled" URL="dir_3100e148cb0b6b745355fdee31bcb5c6.html"];
+    dir_e44977c2db40c89968aef6d4236fe8a8 [shape=box label="logging" color="black" fillcolor="white" style="filled" URL="dir_e44977c2db40c89968aef6d4236fe8a8.html"];
+    dir_7ca2da3d0bdc47450f74c631953a3473 [shape=box label="multithreading" color="black" fillcolor="white" style="filled" URL="dir_7ca2da3d0bdc47450f74c631953a3473.html"];
+    dir_57790bb148fd18efc2431dd25a248521 [shape=box label="statistics" color="black" fillcolor="white" style="filled" URL="dir_57790bb148fd18efc2431dd25a248521.html"];
+    dir_3a35ee46332157846b55808bff5bb8c8 [shape=box label="tuple_expansion" color="black" fillcolor="white" style="filled" URL="dir_3a35ee46332157846b55808bff5bb8c8.html"];
+  }
+  }
+  dir_bce2075adec303dcb2f0c4fbfcbc8493 [shape=box label="datastructures" fillcolor="white" style="filled" color="red" URL="dir_bce2075adec303dcb2f0c4fbfcbc8493.html"];
+  dir_3100e148cb0b6b745355fdee31bcb5c6->dir_bce2075adec303dcb2f0c4fbfcbc8493 [headlabel="3", labeldistance=1.5 headhref="dir_000030_000010.html"];
+}

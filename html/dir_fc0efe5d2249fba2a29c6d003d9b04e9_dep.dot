@@ -1,0 +1,15 @@
+digraph "/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton" {
+  compound=true
+  node [ fontsize="10", fontname="Helvetica"];
+  edge [ labelfontsize="10", labelfontname="Helvetica"];
+  subgraph clusterdir_bce2075adec303dcb2f0c4fbfcbc8493 {
+    graph [ bgcolor="#ddddee", pencolor="black", label="datastructures" fontname="Helvetica", fontsize="10", URL="dir_bce2075adec303dcb2f0c4fbfcbc8493.html"]
+  subgraph clusterdir_fc0efe5d2249fba2a29c6d003d9b04e9 {
+    graph [ bgcolor="#eeeeff", pencolor="black", label="" URL="dir_fc0efe5d2249fba2a29c6d003d9b04e9.html"];
+    dir_fc0efe5d2249fba2a29c6d003d9b04e9 [shape=plaintext label="HybridAutomaton"];
+    dir_f8eeed5867fcfb10b0a82b230e717047 [shape=box label="output" color="black" fillcolor="white" style="filled" URL="dir_f8eeed5867fcfb10b0a82b230e717047.html"];
+  }
+  }
+  dir_7fa927d8fbf9dfbeef69af27f63bc81b [shape=box label="representations" fillcolor="white" style="filled" color="red" URL="dir_7fa927d8fbf9dfbeef69af27f63bc81b.html"];
+  dir_fc0efe5d2249fba2a29c6d003d9b04e9->dir_7fa927d8fbf9dfbeef69af27f63bc81b [headlabel="4", labeldistance=1.5 headhref="dir_000011_000007.html"];
+}
