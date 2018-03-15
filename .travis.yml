@@ -1,7 +1,5 @@
 env:
   global:
-   # The next declaration is the encrypted COVERITY_SCAN_TOKEN, created
-   #   via the "travis encrypt" command using the project repo's public key
    - secure: "VrgSZAgTRTdH1rq0OHXHtArOA5SyLsJX9YA9O5c+PSXI/drMjc3pGsTIK3NA7xcyGaEIT+DjzV36yxvAz/3uurYkFtiz/sl1suziy6nSNBqvQSE01lBU9GnqHpkPg6/alnijG0Bf3KvXTdw5MmRaK+f9corNJAa+s1sP0rP7WMQ="
 
 before_install:
@@ -18,8 +16,6 @@ env:
     - GH_REPO_NAME: hypro
     - DOXYFILE: $TRAVIS_BUILD_DIR/build/doc/Doxygen
     - GH_REPO_REF: github.com/hypro/hypro.git
-    # The next declaration is the encrypted COVERITY_SCAN_TOKEN, created
-    #   via the "travis encrypt" command using the project repo's public key
 
 notifications:
   email:
@@ -37,11 +33,6 @@ addons:
       - boost-latest
       - george-edison55-precise-backports
       - llvm-toolchain-precise
-      #- llvm-toolchain-precise-3.6
-      #- llvm-toolchain-precise-3.7
-      #- llvm-toolchain-precise-3.8
-      #- sourceline: 'deb http://apt.llvm.org/trusty/ llvm-toolchain-trusty-3.9 main'
-      #  key_url: 'http://apt.llvm.org/llvm-snapshot.gpg.key'
       - ubuntu-toolchain-r-test
     packages: &packages_base
       - cmake-data
@@ -66,7 +57,7 @@ matrix:
       addons:
         apt:
           sources: [*sources_base]
-          packages: [*packages_base g++-5]
+          packages: [*packages_base, g++-5]
       env: COMPILER=g++-5 FLAGS=-DCREATE_DOC=ON
     - os: linux
       dist: trusty
@@ -74,7 +65,7 @@ matrix:
       addons:
         apt:
           sources: [*sources_base]
-          packages: [*packages_base g++-6]
+          packages: [*packages_base, g++-6]
       env: COMPILER=g++-6 FLAGS=-DHYPRO_COVERAGE=ON
     - os: linux
       dist: trusty
@@ -85,24 +76,24 @@ matrix:
           token:
             secure: "sonarcloud_TOKEN"
         apt:
-          sources: [*sources_base llvm-toolchain-precise-3.6]
-          packages: [*packages_base clang-3.6]
+          sources: [*sources_base, llvm-toolchain-precise-3.6]
+          packages: [*packages_base, clang-3.6]
       env: COMPILER=clang++-3.6 Task=sonarcloud
     - os: linux
       dist: trusty
       compiler: clang
       addons:
         apt:
-          sources: [*sources_base llvm-toolchain-precise-3.7]
-          packages: [*packages_base clang-3.7]
+          sources: [*sources_base, llvm-toolchain-precise-3.7]
+          packages: [*packages_base, clang-3.7]
       env: COMPILER=clang++-3.7
     - os: linux
       dist: trusty
       compiler: clang
       addons:
         apt:
-          sources: [*sources_base llvm-toolchain-precise-3.8]
-          packages: [*packages_base clang-3.8]
+          sources: [*sources_base, llvm-toolchain-precise-3.8]
+          packages: [*packages_base, clang-3.8]
       env: COMPILER=clang++-3.8
     #- os: osx
     #  osx_image: xcode6.4
