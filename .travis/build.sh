@@ -7,7 +7,7 @@ cmake ../ || return 1
 
 if [[ ${TASK} == "sonarcloud" ]]; then
 	cmake ../ || return 1
-	W = "build-wrapper-linux-x86-64 --out-dir=../bw-out"
+	W="build-wrapper-linux-x86-64 --out-dir=../bw-out"
 	$W make -j4 hypro || return 1
 	$W make -j4 || return
 	#make coverage-collect
