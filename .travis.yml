@@ -74,7 +74,7 @@ matrix:
       compiler: clang
       addons:
         sonarcloud:
-          organization: "hypro"
+          organization: "hypro-github"
         apt:
           sources: [*sources_base, llvm-toolchain-precise-3.6]
           packages: [*packages_base, clang-3.6, lcov]
