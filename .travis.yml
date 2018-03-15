@@ -32,6 +32,10 @@ notifications:
 sudo: required
 
 addons:
+  sonarcloud:
+    organization: "hypro"
+    token:
+      secure: "sonarcloud_TOKEN"
   apt:
     sources:
       - boost-latest
@@ -78,7 +82,7 @@ matrix:
     - os: linux
       dist: trusty
       compiler: clang
-      env: COMPILER=clang++-3.6
+      env: COMPILER=clang++-3.6 Task=sonarcloud
     - os: linux
       dist: trusty
       compiler: clang
@@ -113,10 +117,11 @@ install:
 
 script:
   - cd ${TRAVIS_BUILD_DIR}
-  - mkdir build && cd build && cmake $FLAGS -DCMAKE_CXX_COMPILER=$COMPILER .. && make resources && make VERBOSE=1
+  .travis/build.sh
+  #- mkdir build && cd build && cmake $FLAGS -DCMAKE_CXX_COMPILER=$COMPILER .. && make resources && make VERBOSE=1
   #- cat /home/travis/build/hypro/hypro/src/resources/antlr_build/src/antlr4cpp-stamp/antlr4cpp-build-out.log
   #- cat /home/travis/build/hypro/hypro/src/resources/antlr_build/src/antlr4cpp-stamp/antlr4cpp-build-err.log
-  - make test
+  #- make test
 
 # Generate and deploy documentation
 after_success:
