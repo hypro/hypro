@@ -46,6 +46,7 @@ addons:
       - libgtest-dev
       - uuid-dev
       - openjdk-9-jre
+      - g++-6
 
 matrix:
   include:
