@@ -27,22 +27,29 @@ notifications:
 
 sudo: required
 
+cache:
+  apt: true
+  directories:
+    - $HOME/usr/
+    - $HOME/.sonar/cache
+    - build/resources
+
 addons:
   apt:
     sources: &sources_base
       - boost-latest
-      - george-edison55-precise-backports
+      #- george-edison55-precise-backports
       - llvm-toolchain-precise
+      - llvm-toolchain-precise-3.6
+      - llvm-toolchain-precise-3.7
+      - llvm-toolchain-precise-3.8- sourceline: 'deb http://apt.llvm.org/trusty/ llvm-toolchain-trusty-3.9 main'
+-        key_url: 'http://apt.llvm.org/llvm-snapshot.gpg.key'
       - ubuntu-toolchain-r-test
     packages: &packages_base
-      - cmake-data
-      - doxygen
-      - lcov
       - libboost1.55-all-dev
       - libeigen3-dev
       - libgmp-dev
       - libgtest-dev
-      - libc++-dev
       - uuid-dev
       - openjdk-9-jre
 
@@ -57,7 +64,7 @@ matrix:
       addons:
         apt:
           sources: [*sources_base]
-          packages: [*packages_base, g++-5]
+          packages: [*packages_base, g++-5, doxygen]
       env: COMPILER=g++-5 FLAGS=-DCREATE_DOC=ON
     - os: linux
       dist: trusty
@@ -65,7 +72,7 @@ matrix:
       addons:
         apt:
           sources: [*sources_base]
-          packages: [*packages_base, g++-6]
+          packages: [*packages_base, g++-6, lcov]
       env: COMPILER=g++-6 FLAGS=-DHYPRO_COVERAGE=ON
     - os: linux
       dist: trusty
@@ -77,8 +84,8 @@ matrix:
             secure: "sonarcloud_TOKEN"
         apt:
           sources: [*sources_base, llvm-toolchain-precise-3.6]
-          packages: [*packages_base, clang-3.6]
-      env: COMPILER=clang++-3.6 Task=sonarcloud
+          packages: [*packages_base, clang-3.6, lcov]
+      env: COMPILER=clang++-3.6 TASK=sonarcloud
     - os: linux
       dist: trusty
       compiler: clang
