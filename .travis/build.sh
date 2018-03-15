@@ -5,8 +5,7 @@ cd build || return 1
 
 cmake ../ || return 1
 
-if[[ ${TASK} == "sonarcloud" ]]; then
-
+if [[ ${TASK} == "sonarcloud" ]]; then
 	cmake ../ || return 1
 	W = "build-wrapper-linux-x86-64 --out-dir=../bw-out"
 	$W make -j4 hypro || return 1
