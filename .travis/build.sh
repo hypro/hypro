@@ -7,9 +7,7 @@ cmake ../ || return 1
 
 if [[ ${TASK} == "sonarcloud" ]]; then
 	cmake ../ || return 1
-	W="build-wrapper-linux-x86-64 --out-dir=../bw-out"
-	$W make -j4 hypro || return 1
-	$W make -j4 || return 1
+	build-wrapper-linux-x86-64 --out-dir=../bw-out make clean hypro -j4 || return 1
 	#make coverage-collect
 
 	cd ../ && sonar-scanner -X -Dproject.settings=.travis/sonar-project.properties -Dsonar.login&& cd build/

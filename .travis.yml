@@ -75,6 +75,8 @@ matrix:
       addons:
         sonarcloud:
           organization: "hypro-github"
+          token:
+            secure: ${SONAR_TOKEN}
         apt:
           sources: [*sources_base, llvm-toolchain-precise-3.6]
           packages: [*packages_base, clang-3.6, lcov]
