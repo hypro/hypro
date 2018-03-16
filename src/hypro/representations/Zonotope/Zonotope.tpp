@@ -1039,7 +1039,33 @@ std::pair<CONTAINMENT,ZonotopeT<Number,Converter>> ZonotopeT<Number,Converter>::
 
 	resultPair.second = resultPair.second.intersectHalfspaces(mat, vec);
 	if(!resultPair.second.empty()) {
-		resultPair.first = CONTAINMENT::YES;
+
+		//Check whether *this is contained fully or partially:
+		//Sum up all generators in one vector
+		vector_t<Number> summedGenerators = vector_t<Number>::Zero(mDimension);
+		for(int k = 0; k < mGenerators.rows(); k++){
+			summedGenerators(k) = mGenerators.row(k).array().abs().sum();
+		}
+		
+		//For every halfspace:
+		for(int i = 0; i < mat.rows(); i++){
+			//Build extreme point according to coefficients of halfspace
+			vector_t<Number> extremum = vector_t<Number>::Zero(mDimension);
+			for(int j = 0; j < mat.cols(); j++){
+				extremum(j) = mat(i,j) > 0 ? summedGenerators(j) : Number(-1) * summedGenerators(j);
+			}
+			extremum += mCenter;
+			
+			//Check if extreme point is contained in current halfspace, if yes, then zonotope is fully contained
+			//else zonotope is only partially contained
+			Halfspace<Number> hs = Halfspace<Number>(mat.row(i), vec(i));
+			bool containsExtremum = hs.contains(extremum);
+			if(!containsExtremum){
+				resultPair.first = CONTAINMENT::PARTIAL;
+				return resultPair;
+			}
+		}
+		resultPair.first = CONTAINMENT::FULL;
 	} else {
 		resultPair.first = CONTAINMENT::NO;
 	}
