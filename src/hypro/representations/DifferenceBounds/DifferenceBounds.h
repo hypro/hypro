@@ -204,6 +204,13 @@ public:
      */
     DifferenceBoundsT<Number,Converter,Setting> shift(int x, Number offset) const;
 
+    /**
+     * Shifts the valuation of all clocks by the given offset
+     * @param offset offset to be applied
+     * @return DBM with clocks shifted by offset
+     */
+    DifferenceBoundsT<Number,Converter,Setting> shift(Number offset) const;
+
 
     /**
      * checks whether _rhs is contained in the left hand side

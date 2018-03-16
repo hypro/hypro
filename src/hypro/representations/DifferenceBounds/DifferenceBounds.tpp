@@ -63,12 +63,7 @@ namespace hypro {
     template <typename Number, typename Converter, class Setting>
     bool DifferenceBoundsT<Number, Converter, Setting>::empty() const{
         /*
-         *  A DBM is empty if the following holds for a position i,j in a dbm matrix
-         *
-         *  Let i>j, i.e. d_ij defines an upper bound. Then its value must be larger
-         *  or equal to the corresponding lower bound d_ji.
-         *
-         *  Consequently it suffices to traverse the lower half of the dbm matrix
+         *  It suffices to traverse the lower half of the dbm matrix
          *  (i.e. where i is larger than j) to check emptiness.
          *
          *  Further, we can abuse the entry d_00 to keep track of an invalid dbm by
@@ -85,14 +80,23 @@ namespace hypro {
             return true;
         }
         // we assume that the dbm is non empty
-        for(int i=0; i< m_dbm.rows();i++){
+        for(int i=1; i< m_dbm.rows();i++){
             // lower half (i > j)
             for(int j = 0; j < i; j++){
-                // if the upper bound is lower than the corresponding lower bound we know the dbm is invalid
-                if(m_dbm(i,j) <  m_dbm(j,i)){
-                     m_dbm(0,0).first = -1.0;
-                    return true;
-                }
+                // if straight upper bound
+                if(j==0){
+                    if(m_dbm(i,j) <  m_dbm(j,i)){
+                         m_dbm(0,0).first = -1.0;
+                        return true;
+                    }
+                } 
+                else{
+                    //diagonal bound 
+                    if(m_dbm(i,j) >  m_dbm(j,i)){
+                         m_dbm(0,0).first = -1.0;
+                        return true;
+                    }
+                }  
 
             }
         }
@@ -233,7 +237,7 @@ namespace hypro {
                 }
             }
         }
-        hypro::DifferenceBoundsT<Number,Converter, Setting> pDBM = hypro::DifferenceBoundsT<Number,Converter, Setting>(*this);
+        hypro::DifferenceBoundsT<Number,Converter, Setting> pDBM = hypro::DifferenceBoundsT<Number,Converter, Setting>();
         pDBM.setDBM(mat);
         return this->contains(pDBM);
     }
@@ -243,15 +247,17 @@ namespace hypro {
         hypro::matrix_t<DBMEntry> mat =  hypro::matrix_t<DBMEntry>(m_dbm);
         for(int i=0; i < mat.rows(); i++){
             for(int j=0; j < mat.cols();j++) {
-                if(i!=j){
-                    // replace the entry with the maximum of lhs(ij) and rhs(ij)
+                if(i != j){
                     mat(i,j) = DBMEntry::max(mat(i,j), _rhs.getDBM()(i,j));
                 }
             }
         }
-        hypro::DifferenceBoundsT<Number,Converter, Setting> res = hypro::DifferenceBoundsT<Number,Converter, Setting>(*this);
+        hypro::DifferenceBoundsT<Number,Converter, Setting> res = hypro::DifferenceBoundsT<Number,Converter, Setting>();
         res.setDBM(mat);
-        return res;
+        return res;/*
+        hypro::HPolytopeT<Number, Converter, HPolytopeSetting> left = Converter::toHPolytope(*this);
+        hypro::HPolytopeT<Number, Converter, HPolytopeSetting> right = Converter::toHPolytope(_rhs);
+        return Converter::toDifferenceBounds(left.unite(right));*/
     }
 
 
@@ -261,7 +267,7 @@ namespace hypro {
         for(int i = 1; i < m_dbm.rows(); i++){
             mat(i,0) = DBMEntry(0.0, BOUND_TYPE::INFTY);
         }
-        hypro::DifferenceBoundsT<Number,Converter, Setting> res = hypro::DifferenceBoundsT<Number,Converter, Setting>(*this);
+        hypro::DifferenceBoundsT<Number,Converter, Setting> res = hypro::DifferenceBoundsT<Number,Converter, Setting>();
         res.setDBM(mat);
         return res;
     }
@@ -279,7 +285,7 @@ namespace hypro {
                 }
             }
         }
-        hypro::DifferenceBoundsT<Number,Converter, Setting> res = hypro::DifferenceBoundsT<Number,Converter, Setting>(*this);
+        hypro::DifferenceBoundsT<Number,Converter, Setting> res = hypro::DifferenceBoundsT<Number,Converter, Setting>();
         res.setDBM(mat);
         return res;
     }
@@ -296,7 +302,7 @@ namespace hypro {
                 mat(i,x) = DBMEntry(m_dbm(i,0).first, m_dbm(i,0).second);
             }
         }
-        hypro::DifferenceBoundsT<Number,Converter, Setting> res = hypro::DifferenceBoundsT<Number,Converter, Setting>(*this);
+        hypro::DifferenceBoundsT<Number,Converter, Setting> res = hypro::DifferenceBoundsT<Number,Converter, Setting>();
         res.setDBM(mat);
         return res;
     }
@@ -309,9 +315,9 @@ namespace hypro {
             mat(x,i) = DBMEntry(value, BOUND_TYPE::SMALLER_EQ)+m_dbm(0,i);
 
             // d_ix = d_i0 + (-value, <=)
-            mat(i,x) = m_dbm(i,0)+ DBMEntry(-value,BOUND_TYPE::SMALLER_EQ);
+            mat(i,x) = m_dbm(i,0)+ DBMEntry((-value)+0.0,BOUND_TYPE::SMALLER_EQ);
         }
-        hypro::DifferenceBoundsT<Number,Converter, Setting> res = hypro::DifferenceBoundsT<Number,Converter, Setting>(*this);
+        hypro::DifferenceBoundsT<Number,Converter, Setting> res = hypro::DifferenceBoundsT<Number,Converter, Setting>();
         res.setDBM(mat);
         return res;
     }
@@ -332,7 +338,7 @@ namespace hypro {
         // d_srcdest = (0,<=)
         mat(src,dest) = DBMEntry(0.0,BOUND_TYPE::SMALLER_EQ);
 
-        hypro::DifferenceBoundsT<Number,Converter, Setting> res = hypro::DifferenceBoundsT<Number,Converter, Setting>(*this);
+        hypro::DifferenceBoundsT<Number,Converter, Setting> res = hypro::DifferenceBoundsT<Number,Converter, Setting>();
         res.setDBM(mat);
         return res;
     }
@@ -355,7 +361,33 @@ namespace hypro {
         //d_0x = min(d_0x, (0, <=))
         mat(0, x) = DBMEntry::min(mat(0,x), DBMEntry(0, BOUND_TYPE::SMALLER_EQ));
 
-        hypro::DifferenceBoundsT<Number, Converter, Setting> res = hypro::DifferenceBoundsT<Number, Converter, Setting>(*this);
+        hypro::DifferenceBoundsT<Number, Converter, Setting> res = hypro::DifferenceBoundsT<Number, Converter, Setting>();
+        res.setDBM(mat);
+        return res;
+    }
+
+    template <typename Number, typename Converter, class Setting>
+    DifferenceBoundsT<Number,Converter, Setting> DifferenceBoundsT<Number, Converter, Setting>::shift(Number offset) const {
+        hypro::matrix_t<DBMEntry> mat = hypro::matrix_t<DBMEntry>(m_dbm);
+
+        for(int clock = 1; clock < m_dbm.rows(); clock++){
+            // for each clock apply the shift(x,offset) procedure
+            for (int i = 0; i < m_dbm.rows(); i++) {
+                if (i != clock) {
+                    // d_xi = d_xi+ (offset, <=)
+                    mat(clock, i) = m_dbm(clock, i) + DBMEntry(offset, BOUND_TYPE::SMALLER_EQ);
+
+                    // d_ix = d_ix + (-offset, <=)
+                    mat(i, clock) = m_dbm(i, clock) + DBMEntry(-offset, BOUND_TYPE::SMALLER_EQ);
+                }
+            }
+            //d_x0 = max(d_x0, (0, <=))
+            mat(clock, 0) = DBMEntry::max(mat(clock,0), DBMEntry(0, BOUND_TYPE::SMALLER_EQ));
+            //d_0x = min(d_0x, (0, <=))
+            mat(0, clock) = DBMEntry::min(mat(0,clock), DBMEntry(0, BOUND_TYPE::SMALLER_EQ));
+        }
+
+        hypro::DifferenceBoundsT<Number, Converter, Setting> res = hypro::DifferenceBoundsT<Number, Converter, Setting>();
         res.setDBM(mat);
         return res;
     }
@@ -381,7 +413,9 @@ namespace hypro {
     DifferenceBoundsT<Number,Converter, Setting> DifferenceBoundsT<Number, Converter, Setting>::intersectConstraint( const int x, const int y, const DBMEntry& bound ) const{
         hypro::matrix_t<DBMEntry> mat = hypro::matrix_t<DBMEntry>(m_dbm);
         // d_yx+bound < 0
-        if(mat(y,x)+bound < DBMEntry(0.0, BOUND_TYPE::SMALLER_EQ)){
+        DBMEntry potentialEntry = mat(y,x)+bound;
+        //TODO hot fix to account for rounding issue (should be way lower than time step)
+        if(potentialEntry < DBMEntry(0.0, BOUND_TYPE::SMALLER_EQ) && !(potentialEntry > DBMEntry(-0.00000001, BOUND_TYPE::SMALLER_EQ))){
             //invalid dbm because upper bound became negative
             mat(0,0).first = -1.0;
         }
@@ -392,16 +426,18 @@ namespace hypro {
             // we correct this because other operations depend on this assumption
             for(int i=0; i < mat.rows();i++){
                 for(int j=0; j < mat.cols();j++){
-                    if(mat(i,x)+mat(x,j) < mat(i,j)){
-                        mat(i,j) = mat(i,x)+mat(x,j);
-                    }
-                    if(mat(i,y) + mat(y,j)< mat(i,j)){
-                        mat(i,j) = mat(i,y)+mat(y,j);
+                    if(i!=j){
+                        if(mat(i,x)+mat(x,j) < mat(i,j)){
+                            mat(i,j) = mat(i,x)+mat(x,j);
+                        }
+                        if(mat(i,y) + mat(y,j)< mat(i,j)){
+                            mat(i,j) = mat(i,y)+mat(y,j);
+                        }
                     }
                 }
             }
         }
-        hypro::DifferenceBoundsT<Number, Converter, Setting> res = hypro::DifferenceBoundsT<Number, Converter, Setting>(*this);
+        hypro::DifferenceBoundsT<Number, Converter, Setting> res = hypro::DifferenceBoundsT<Number, Converter, Setting>();
         res.setDBM(mat);
         return res;
     }
@@ -436,19 +472,14 @@ namespace hypro {
                     dbm = dbm.intersectConstraint(0,var+1,hypro::DifferenceBoundsT<Number, Converter, Setting>::DBMEntry(constants(i),hypro::DifferenceBoundsT<Number, Converter, Setting>::BOUND_TYPE::SMALLER_EQ));
                 }
             }
-        }
-        // if the resulting dbm is empty, the guard is not satisfied
-        if(dbm.empty()){
-            return std::make_pair(CONTAINMENT::NO, std::move(dbm));
-        }
+            // if the resulting dbm is empty, the guard is not satisfied
+            if(dbm.getDBM()(0,0).first == -1.0){
+                return std::make_pair(CONTAINMENT::NO, std::move(dbm));
+            }
 
-        // if the set did not change we have full containment
-        if(*this == dbm){
-            return std::make_pair(CONTAINMENT::FULL, std::move(dbm));
         }
-        else{
-            return std::make_pair(CONTAINMENT::PARTIAL, std::move(dbm));
-        }
+        return std::make_pair(CONTAINMENT::PARTIAL, std::move(dbm));
+
     }
 
     template <typename Number, typename Converter, class Setting>
