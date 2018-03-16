@@ -30,7 +30,7 @@ template <typename Number>
 void Plotter<Number>::plot2d() const {
 	mOutfile.open( mFilename + "_pdf.plt" );
 
-	if ( (!mObjects.empty() && !mObjects.begin()->second.empty()) || !mPoints.empty() ) {
+	if ( (!mObjects.empty() && !mObjects.begin()->second.empty()) || !mPoints.empty()){// || mSettings.dimensions() != std::pair<unsigned,unsigned>()) {
 
 		// preamble
 		mOutfile << "# settings\n";

@@ -123,11 +123,13 @@ TYPED_TEST(AntlrParserTest, MinimalAcceptedFile){
 	controlSettings.jumpDepth = 1;
 	controlSettings.timeStep = TypeParam(0.01);
 	controlSettings.fileName = std::string("test_minimal_accepted_file");
-	std::vector<std::size_t> dimensions;
-	dimensions.push_back(0);
+	//std::vector<std::size_t> dimensions;
+	//dimensions.push_back(0);
 	std::vector<std::vector<std::size_t>> plotDims;
-	plotDims.push_back(dimensions);
+	//plotDims.push_back(dimensions);
 	controlSettings.plotDimensions = plotDims;
+	EXPECT_EQ(boost::get<1>(h).plotDimensions.size(), size_t(0));
+	EXPECT_EQ(boost::get<1>(h).plotDimensions.size(), controlSettings.plotDimensions.size());
 	EXPECT_EQ(boost::get<1>(h), controlSettings);
 
 	//Build hybrid automaton HA
