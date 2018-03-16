@@ -6,7 +6,7 @@ cd build || return 1
 cmake ../ || return 1
 
 if [[ ${TASK} == "sonarcloud" ]]; then
-	cmake ../ || return 1
+	cmake ../ -DHYPRO_COVERAGE=ON || return 1
 	build-wrapper-linux-x86-64 --out-dir=../bw-out make clean hypro -j4
 	#make coverage-collect
 
