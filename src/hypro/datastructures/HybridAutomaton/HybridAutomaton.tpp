@@ -163,7 +163,6 @@ template<typename Number, typename State>
 std::string HybridAutomaton<Number,State>::getDotRepresentation() const {
 	std::string res = "digraph {\n";
 
-	std::map<unsigned, Location<Number>*> locIds;
 	for(const auto loc : mLocations) {
 		res += loc->getDotRepresentation(mVariables);
 	}

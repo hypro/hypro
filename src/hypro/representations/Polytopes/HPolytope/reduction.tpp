@@ -22,10 +22,9 @@ namespace hypro {
 		std::vector<unsigned> subRes;
 
 		for(unsigned i=0; i<hpolytope.size(); i++){
-			if(vertexVector.dot(hpolytope.constraints().at(i).normal()) == hpolytope.constraints().at(i).offset()){
-				if(std::find(subRes.begin(), subRes.end(), i)==subRes.end()) {
-					subRes.push_back(i);
-				}
+			if(vertexVector.dot(hpolytope.constraints().at(i).normal()) == hpolytope.constraints().at(i).offset() &&
+				std::find(subRes.begin(), subRes.end(), i)==subRes.end()) {
+				subRes.push_back(i);
 			}
 		}
 		std::sort(subRes.begin(), subRes.end());

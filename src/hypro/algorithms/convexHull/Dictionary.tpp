@@ -194,8 +194,8 @@ namespace hypro {
 		Eigen::Index indexRef = index;
 		Eigen::Index pivot = 0;
 		Eigen::Index pivotRef = pivot;
-		if(not(mConstrains.outside(indexRef,diff,mB))) {return false;}//is there any variable out of its bounds
-		if(not(mConstrains.getPivot(indexRef,diff,pivotRef,mN,mDictionary))) {throw string("\n WARNING: empty set. \n");}//is there a suitable pivot
+		if(!(mConstrains.outside(indexRef,diff,mB))) {return false;}//is there any variable out of its bounds
+		if(!(mConstrains.getPivot(indexRef,diff,pivotRef,mN,mDictionary))) {throw string("\n WARNING: empty set. \n");}//is there a suitable pivot
 		this->pivot(indexRef,pivotRef);
 		mConstrains.modifyAssignment(pivotRef, diff, mB, mN, mDictionary);
 		return true;
@@ -399,14 +399,15 @@ namespace hypro {
 		// TODO: What is the purpose of this test? It searches all other cols, where the variable index is less than the variable index of the selected
 		// row and tests, if the objective coefficient is larger than
 		for(int colIndex=0;colIndex<mDictionary.cols()-1;++colIndex) {
-			if(mN[colIndex]<mB[i] && colIndex!=int(j)) {
-				if(mDictionary(mDictionary.rows()-1,colIndex) > mDictionary(mDictionary.rows()-1,j)*mDictionary(i,colIndex)/mDictionary(i,j) ) {
+			if(mN[colIndex]<mB[i] &&
+				colIndex!=int(j) &&
+				mDictionary(mDictionary.rows()-1,colIndex) > mDictionary(mDictionary.rows()-1,j)*mDictionary(i,colIndex)/mDictionary(i,j)  ){
 					#ifdef DICT_DBG
 					std::cout << "False, fourth check fails." << std::endl;
 					#endif
 					return false;
 				}
-			}
+
 		}
 
 
@@ -454,8 +455,8 @@ namespace hypro {
 			if(colIndex!=j&&mN[colIndex]<mB[i]&&(mDictionary(mDictionary.rows()-1,colIndex)==0 && mDictionary(availableIndices[i],colIndex)<0 )) {return false;}
 		}
 		for(Eigen::Index rowIndex=0;rowIndex < Eigen::Index(availableIndices.size());++rowIndex) {
-			if(mB[availableIndices[rowIndex]]<mN[j]&&availableIndices[rowIndex]!=i) {
-				if(mDictionary(availableIndices[rowIndex],mDictionary.cols()-1)>mDictionary(availableIndices[i],mDictionary.cols()-1)*mDictionary(availableIndices[rowIndex],j)/mDictionary(availableIndices[i],j)) {
+			if(mB[availableIndices[rowIndex]]<mN[j]&&availableIndices[rowIndex]!=i &&
+				mDictionary(availableIndices[rowIndex],mDictionary.cols()-1) > mDictionary(availableIndices[i],mDictionary.cols()-1)*mDictionary(availableIndices[rowIndex],j)/mDictionary(availableIndices[i],j) ) {
 					return false;
 				}
 			}
@@ -585,11 +586,10 @@ namespace hypro {
 		Number diff = mConstrains.diffToLowerBound(mN[colIndex]-1);//diff<0
 		long minDiffIndex = mDictionary.size();
 		for(unsigned rowIndex=0; rowIndex<unsigned(mDictionary.rows())-1;++rowIndex) {
-			if(mConstrains.finiteLowerBound(mB[rowIndex]-1)&&mDictionary(rowIndex,colIndex)>0) {
-				if(diff< (mConstrains.diffToLowerBound(mB[rowIndex]-1)/mDictionary(rowIndex,colIndex)) ) {
-					minDiffIndex = rowIndex;
-					diff = mConstrains.diffToLowerBound(mB[rowIndex]-1)/mDictionary(rowIndex,colIndex);
-				}
+			if(mConstrains.finiteLowerBound(mB[rowIndex]-1)&&mDictionary(rowIndex,colIndex) > 0 &&
+				diff < (mConstrains.diffToLowerBound(mB[rowIndex]-1)/mDictionary(rowIndex,colIndex)) ) {
+				minDiffIndex = rowIndex;
+				diff = mConstrains.diffToLowerBound(mB[rowIndex]-1)/mDictionary(rowIndex,colIndex);
 			}
 		}
 		if(minDiffIndex != mDictionary.size()) {
