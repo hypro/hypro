@@ -457,8 +457,7 @@ namespace hypro {
 		for(Eigen::Index rowIndex=0;rowIndex < Eigen::Index(availableIndices.size());++rowIndex) {
 			if(mB[availableIndices[rowIndex]]<mN[j]&&availableIndices[rowIndex]!=i &&
 				mDictionary(availableIndices[rowIndex],mDictionary.cols()-1) > mDictionary(availableIndices[i],mDictionary.cols()-1)*mDictionary(availableIndices[rowIndex],j)/mDictionary(availableIndices[i],j) ) {
-					return false;
-				}
+				return false;
 			}
 		}
 		return true;
