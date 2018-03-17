@@ -311,11 +311,13 @@ namespace hypro {
     DifferenceBoundsT<Number,Converter, Setting> DifferenceBoundsT<Number, Converter, Setting>::reset(int x, Number value) const{
         hypro::matrix_t<DBMEntry> mat =  hypro::matrix_t<DBMEntry>(m_dbm);
         for (int i = 0; i < m_dbm.rows();i++){
-            // d_xi = (value,<=)+d_0i
-            mat(x,i) = DBMEntry(value, BOUND_TYPE::SMALLER_EQ)+m_dbm(0,i);
+            if(i!=x){//don't touch diagonals
+                // d_xi = (value,<=)+d_0i
+                mat(x,i) = DBMEntry(value, BOUND_TYPE::SMALLER_EQ)+m_dbm(0,i);
 
-            // d_ix = d_i0 + (-value, <=)
-            mat(i,x) = m_dbm(i,0)+ DBMEntry((-value)+0.0,BOUND_TYPE::SMALLER_EQ);
+                // d_ix = d_i0 + (-value, <=)
+                mat(i,x) = m_dbm(i,0)+ DBMEntry((-value)+0.0,BOUND_TYPE::SMALLER_EQ);
+            }
         }
         hypro::DifferenceBoundsT<Number,Converter, Setting> res = hypro::DifferenceBoundsT<Number,Converter, Setting>();
         res.setDBM(mat);
