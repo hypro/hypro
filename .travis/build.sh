@@ -7,7 +7,7 @@ cmake ../ || return 1
 
 if [[ ${TASK} == "sonarcloud" ]]; then
 	cmake ../ -DHYPRO_COVERAGE=ON || return 1
-	build-wrapper-linux-x86-64 --out-dir=../bw-out make .j4 hypro
+	build-wrapper-linux-x86-64 --out-dir ../bw-out make -j4 hypro
 	#make coverage-collect
 	echo "This folder:"
 	ls -la
