@@ -414,6 +414,12 @@ namespace hypro {
     template <typename Number, typename Converter, class Setting>
     DifferenceBoundsT<Number,Converter, Setting> DifferenceBoundsT<Number, Converter, Setting>::intersectConstraint( const int x, const int y, const DBMEntry& bound ) const{
         hypro::matrix_t<DBMEntry> mat = hypro::matrix_t<DBMEntry>(m_dbm);
+        if(mat(x,y) == bound){
+            // bound does not change
+            hypro::DifferenceBoundsT<Number,Converter, Setting> res = hypro::DifferenceBoundsT<Number,Converter, Setting>();
+            res.setDBM(mat);
+            return res;
+        }
         // d_yx+bound < 0
         DBMEntry potentialEntry = mat(y,x)+bound;
         //TODO hot fix to account for rounding issue (should be way lower than time step)
