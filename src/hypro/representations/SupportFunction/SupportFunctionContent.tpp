@@ -463,7 +463,6 @@ std::vector<EvaluationResult<Number>> SupportFunctionContent<Number>::multiEvalu
 							for(auto& entry : resultStack.back().second.front()) {
 								vector_t<Number> currentDir(currentParam.row(directionCnt));
 								if(entry.errorCode == SOLUTION::INFTY) {
-									entry.optimumValue = entry.optimumValue;
 									entry.supportValue = 1;
 								} else {
 									//TRACE("hypro.representations.supportFunction", ": Entry val before trafo: " << entry.optimumValue);

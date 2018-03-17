@@ -420,14 +420,13 @@ namespace hypro {
 			if(uniteValue>bestUniteValue){
 			  bestUniteIndex=std::make_pair(a,b);
 			  bestUniteValue=uniteValue;
-			  if(std::min(sizesOfFacets.at(a),sizesOfFacets.at(b))<=0.8*std::max(sizesOfFacets.at(a),sizesOfFacets.at(b))){
+			  //if(std::min(sizesOfFacets.at(a),sizesOfFacets.at(b))<=0.8*std::max(sizesOfFacets.at(a),sizesOfFacets.at(b))){
 				//unite_standard
 				bestUniteStrat= REDUCTION_STRATEGY::UNITE;
-			  }
-			  else {
+			  //} else {
 				//unite_vertices
-				bestUniteStrat= REDUCTION_STRATEGY::UNITE;
-			  }
+				//bestUniteStrat= REDUCTION_STRATEGY::UNITE;
+			  //}
 			}
 			}
 	   }
