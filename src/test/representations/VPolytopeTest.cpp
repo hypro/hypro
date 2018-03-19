@@ -46,6 +46,56 @@ protected:
 		points2.push_back(Point<Number>(p6));
 		points2.push_back(Point<Number>(p7));
 		points2.push_back(Point<Number>(p8));
+
+		vector_t<Number> v01 = vector_t<Number>(3);
+		v01(0) = 1;
+		v01(1) = 1;
+		v01(2) = 1;
+		Point<Number> p01 = Point<Number>(v01);
+		vector_t<Number> v02 = vector_t<Number>(3);
+		v02(0) = 1;
+		v02(1) = 3;
+		v02(2) = 1;
+		Point<Number> p02 = Point<Number>(v02);
+		vector_t<Number> v03 = vector_t<Number>(3);
+		v03(0) = 3;
+		v03(1) = 1;
+		v03(2) = 1;
+		Point<Number> p03 = Point<Number>(v03);
+		vector_t<Number> v04 = vector_t<Number>(3);
+		v04(0) = 3;
+		v04(1) = 3;
+		v04(2) = 1;
+		Point<Number> p04 = Point<Number>(v04);
+		vector_t<Number> v05 = vector_t<Number>(3);
+		v05(0) = 1;
+		v05(1) = 1;
+		v05(2) = 3;
+		Point<Number> p05 = Point<Number>(v05);
+		vector_t<Number> v06 = vector_t<Number>(3);
+		v06(0) = 1;
+		v06(1) = 3;
+		v06(2) = 3;
+		Point<Number> p06 = Point<Number>(v06);
+		vector_t<Number> v07 = vector_t<Number>(3);
+		v07(0) = 3;
+		v07(1) = 1;
+		v07(2) = 3;
+		Point<Number> p07 = Point<Number>(v07);
+		vector_t<Number> v08 = vector_t<Number>(3);
+		v08(0) = 3;
+		v08(1) = 3;
+		v08(2) = 3;
+		Point<Number> p08 = Point<Number>(v08);
+
+		ps3.push_back(p01);
+		ps3.push_back(p02);
+		ps3.push_back(p03);
+		ps3.push_back(p04);
+		ps3.push_back(p05);
+		ps3.push_back(p06);
+		ps3.push_back(p07);
+		ps3.push_back(p08);
 	}
 
 	virtual void TearDown()
@@ -54,6 +104,7 @@ protected:
 
 	typename VPolytope<Number>::pointVector points1;
 	typename VPolytope<Number>::pointVector points2;
+	typename VPolytope<Number>::pointVector ps3;
 };
 
 TYPED_TEST(VPolytopeTest, Constructor)
@@ -112,58 +163,8 @@ TYPED_TEST(VPolytopeTest, Union)
 		EXPECT_TRUE(res.contains(vertex));
 	}
 
-	std::vector<Point<TypeParam>> ps3;
-	vector_t<TypeParam> v01 = vector_t<TypeParam>(3);
-	v01(0) = 1;
-	v01(1) = 1;
-	v01(2) = 1;
-	Point<TypeParam> p01 = Point<TypeParam>(v01);
-	vector_t<TypeParam> v02 = vector_t<TypeParam>(3);
-	v02(0) = 1;
-	v02(1) = 3;
-	v02(2) = 1;
-	Point<TypeParam> p02 = Point<TypeParam>(v02);
-	vector_t<TypeParam> v03 = vector_t<TypeParam>(3);
-	v03(0) = 3;
-	v03(1) = 1;
-	v03(2) = 1;
-	Point<TypeParam> p03 = Point<TypeParam>(v03);
-	vector_t<TypeParam> v04 = vector_t<TypeParam>(3);
-	v04(0) = 3;
-	v04(1) = 3;
-	v04(2) = 1;
-	Point<TypeParam> p04 = Point<TypeParam>(v04);
-	vector_t<TypeParam> v05 = vector_t<TypeParam>(3);
-	v05(0) = 1;
-	v05(1) = 1;
-	v05(2) = 3;
-	Point<TypeParam> p05 = Point<TypeParam>(v05);
-	vector_t<TypeParam> v06 = vector_t<TypeParam>(3);
-	v06(0) = 1;
-	v06(1) = 3;
-	v06(2) = 3;
-	Point<TypeParam> p06 = Point<TypeParam>(v06);
-	vector_t<TypeParam> v07 = vector_t<TypeParam>(3);
-	v07(0) = 3;
-	v07(1) = 1;
-	v07(2) = 3;
-	Point<TypeParam> p07 = Point<TypeParam>(v07);
-	vector_t<TypeParam> v08 = vector_t<TypeParam>(3);
-	v08(0) = 3;
-	v08(1) = 3;
-	v08(2) = 3;
-	Point<TypeParam> p08 = Point<TypeParam>(v08);
 
-	ps3.push_back(p01);
-	ps3.push_back(p02);
-	ps3.push_back(p03);
-	ps3.push_back(p04);
-	ps3.push_back(p05);
-	ps3.push_back(p06);
-	ps3.push_back(p07);
-	ps3.push_back(p08);
-
-	VPolytope<TypeParam> pt3 = VPolytope<TypeParam>(ps3);
+	VPolytope<TypeParam> pt3 = VPolytope<TypeParam>(this->ps3);
 
 	std::vector<Point<TypeParam>> ps4;
 	vector_t<TypeParam> v09 = vector_t<TypeParam>(3);
@@ -197,8 +198,8 @@ TYPED_TEST(VPolytopeTest, Union)
 	v14(2) = 3;
 	Point<TypeParam> p14 = Point<TypeParam>(v14);
 
-	ps4.push_back(p04);
-	ps4.push_back(p08);
+	ps4.push_back(this->ps3[3]);
+	ps4.push_back(this->ps3[7]);
 	ps4.push_back(p09);
 	ps4.push_back(p10);
 	ps4.push_back(p11);
@@ -272,57 +273,7 @@ TYPED_TEST(VPolytopeTest, Intersection)
 		EXPECT_TRUE(vpt2.contains(vertex));
 	}
 
-	std::vector<Point<TypeParam>> ps3;
-	vector_t<TypeParam> v01 = vector_t<TypeParam>(3);
-	v01(0) = 1;
-	v01(1) = 1;
-	v01(2) = 1;
-	Point<TypeParam> p01 = Point<TypeParam>(v01);
-	vector_t<TypeParam> v02 = vector_t<TypeParam>(3);
-	v02(0) = 1;
-	v02(1) = 3;
-	v02(2) = 1;
-	Point<TypeParam> p02 = Point<TypeParam>(v02);
-	vector_t<TypeParam> v03 = vector_t<TypeParam>(3);
-	v03(0) = 3;
-	v03(1) = 1;
-	v03(2) = 1;
-	Point<TypeParam> p03 = Point<TypeParam>(v03);
-	vector_t<TypeParam> v04 = vector_t<TypeParam>(3);
-	v04(0) = 3;
-	v04(1) = 3;
-	v04(2) = 1;
-	Point<TypeParam> p04 = Point<TypeParam>(v04);
-	vector_t<TypeParam> v05 = vector_t<TypeParam>(3);
-	v05(0) = 1;
-	v05(1) = 1;
-	v05(2) = 3;
-	Point<TypeParam> p05 = Point<TypeParam>(v05);
-	vector_t<TypeParam> v06 = vector_t<TypeParam>(3);
-	v06(0) = 1;
-	v06(1) = 3;
-	v06(2) = 3;
-	Point<TypeParam> p06 = Point<TypeParam>(v06);
-	vector_t<TypeParam> v07 = vector_t<TypeParam>(3);
-	v07(0) = 3;
-	v07(1) = 1;
-	v07(2) = 3;
-	Point<TypeParam> p07 = Point<TypeParam>(v07);
-	vector_t<TypeParam> v08 = vector_t<TypeParam>(3);
-	v08(0) = 3;
-	v08(1) = 3;
-	v08(2) = 3;
-	Point<TypeParam> p08 = Point<TypeParam>(v08);
-
-	ps3.push_back(p01);
-	ps3.push_back(p02);
-	ps3.push_back(p03);
-	ps3.push_back(p04);
-	ps3.push_back(p05);
-	ps3.push_back(p06);
-	ps3.push_back(p07);
-	ps3.push_back(p08);
-	VPolytope<TypeParam> pt3 = VPolytope<TypeParam>(ps3);
+	VPolytope<TypeParam> pt3 = VPolytope<TypeParam>(this->ps3);
 
 	std::vector<Point<TypeParam>> ps4;
 	vector_t<TypeParam> v09 = vector_t<TypeParam>(3);
