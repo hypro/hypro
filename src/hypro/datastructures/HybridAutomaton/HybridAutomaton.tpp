@@ -46,6 +46,16 @@ const std::set<Label> HybridAutomaton<Number,State>::getLabels() const {
 }
 
 template<typename Number, typename State>
+void HybridAutomaton<Number,State>::removeTransition(Transition<Number>* toRemove) {
+	for(auto tIt = mTransitions.begin(); tIt != mTransitions.end(); ) {
+		if(*tIt == toRemove)
+			tIt = mTransitions.erase(tIt);
+		else
+			++tIt;
+	}
+}
+
+template<typename Number, typename State>
 void HybridAutomaton<Number,State>::reduce() {
 	bool changed = true;
 	while(changed) {

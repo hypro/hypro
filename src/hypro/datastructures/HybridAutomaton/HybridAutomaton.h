@@ -124,6 +124,8 @@ class HybridAutomaton
     void addGlobalBadState(const Condition<Number>& state) { mGlobalBadStates.push_back(state); }
     ///@}
 
+    void removeTransition(Transition<Number>* toRemove);
+
     // copy assignment operator, TODO: implement via swap
     inline HybridAutomaton& operator=(const HybridAutomaton<Number,State>& rhs) = default;
     inline HybridAutomaton& operator=(HybridAutomaton<Number,State>&& rhs) = default;
