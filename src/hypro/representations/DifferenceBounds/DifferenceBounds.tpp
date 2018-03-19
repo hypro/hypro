@@ -371,7 +371,7 @@ namespace hypro {
     template <typename Number, typename Converter, class Setting>
     DifferenceBoundsT<Number,Converter, Setting> DifferenceBoundsT<Number, Converter, Setting>::shift(Number offset) const {
         hypro::matrix_t<DBMEntry> mat = hypro::matrix_t<DBMEntry>(m_dbm);
-
+        /*
         for(int clock = 1; clock < m_dbm.rows(); clock++){
             // for each clock apply the shift(x,offset) procedure
             for (int i = 0; i < m_dbm.rows(); i++) {
@@ -387,7 +387,22 @@ namespace hypro {
             mat(clock, 0) = DBMEntry::max(mat(clock,0), DBMEntry(0, BOUND_TYPE::SMALLER_EQ));
             //d_0x = min(d_0x, (0, <=))
             mat(0, clock) = DBMEntry::min(mat(0,clock), DBMEntry(0, BOUND_TYPE::SMALLER_EQ));
+        }*/
+
+        for(int clock = 1; clock < m_dbm.rows(); clock++){
+
+            // d_xi = d_xi+ (offset, <=)
+            mat(clock, 0) = m_dbm(clock, 0) + DBMEntry(offset, BOUND_TYPE::SMALLER_EQ);
+
+            // d_ix = d_ix + (-offset, <=)
+            mat(0, clock) = m_dbm(0, clock) + DBMEntry(-offset, BOUND_TYPE::SMALLER_EQ);
+            
+            //d_x0 = max(d_x0, (0, <=))
+            mat(clock, 0) = DBMEntry::max(mat(clock,0), DBMEntry(0, BOUND_TYPE::SMALLER_EQ));
+            //d_0x = min(d_0x, (0, <=))
+            mat(0, clock) = DBMEntry::min(mat(0,clock), DBMEntry(0, BOUND_TYPE::SMALLER_EQ));
         }
+
 
         hypro::DifferenceBoundsT<Number, Converter, Setting> res = hypro::DifferenceBoundsT<Number, Converter, Setting>();
         res.setDBM(mat);
@@ -435,11 +450,14 @@ namespace hypro {
             for(int i=0; i < mat.rows();i++){
                 for(int j=0; j < mat.cols();j++){
                     if(i!=j){
-                        if(mat(i,x)+mat(x,j) < mat(i,j)){
-                            mat(i,j) = mat(i,x)+mat(x,j);
+                        DBMEntry firstEntry = mat(i,x)+mat(x,j);
+                        // do not write really small error values (~10^⁻16)
+                        if(firstEntry < mat(i,j) && !(firstEntry < DBMEntry(0.0, BOUND_TYPE::SMALLER_EQ) && firstEntry > DBMEntry(-0.00000001, BOUND_TYPE::SMALLER_EQ))){
+                            mat(i,j) = firstEntry;
                         }
-                        if(mat(i,y) + mat(y,j)< mat(i,j)){
-                            mat(i,j) = mat(i,y)+mat(y,j);
+                        DBMEntry secondEntry = mat(i,y)+mat(y,j); 
+                        if(secondEntry< mat(i,j) && !(secondEntry < DBMEntry(0.0, BOUND_TYPE::SMALLER_EQ) && secondEntry > DBMEntry(-0.00000001, BOUND_TYPE::SMALLER_EQ))){
+                            mat(i,j) = secondEntry;
                         }
                     }
                 }
