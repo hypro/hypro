@@ -50,10 +50,12 @@ template <typename Number, typename Converter, class Setting>
 HPolytopeT<Number, Converter, Setting>::HPolytopeT( const std::vector<Point<Number>>& points )
 	: mHPlanes(), mDimension( 0 ), mEmpty(TRIBOOL::NSET), mNonRedundant(true) {
 	TRACE("hypro.representations.HPolytope","Construct from vertices: ");
+	#ifdef HYPRO_LOGGING
 	for(auto vertex : points) {
 		Point<double> tmp = convert<Number,double>(vertex);
 		TRACE("hypro.representations.HPolytope",tmp);
 	}
+	#endif
 	/*
 	if ( !points.empty() ) {
 		mDimension = points.begin()->dimension();
@@ -356,12 +358,10 @@ typename std::vector<Point<Number>> HPolytopeT<Number, Converter, Setting>::vert
 					}
 				}
 
-				if(!skip) {
-					if( !carl::AlmostEqual2sComplement(mHPlanes.at(planePos).offset(), mHPlanes.at(planePos).normal().dot(res), default_double_comparison_ulps) && mHPlanes.at(planePos).offset() - mHPlanes.at(planePos).normal().dot(res) < 0 ) {
-						TRACE("hypro.representations.HPolytope","Drop vertex: " << (convert<Number,double>(res).transpose()) << " because of plane " << planePos );
-						outside = true;
-						break;
-					}
+				if(!skip && !carl::AlmostEqual2sComplement(mHPlanes.at(planePos).offset(), mHPlanes.at(planePos).normal().dot(res), default_double_comparison_ulps) && mHPlanes.at(planePos).offset() - mHPlanes.at(planePos).normal().dot(res) < 0 ) {
+					TRACE("hypro.representations.HPolytope","Drop vertex: " << (convert<Number,double>(res).transpose()) << " because of plane " << planePos );
+					outside = true;
+					break;
 				}
 			}
 			if(!outside) {

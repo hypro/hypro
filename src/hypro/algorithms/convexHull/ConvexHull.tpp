@@ -257,7 +257,7 @@ namespace hypro {
 				vector_t<Number> nextLineatyVector = mLinealtySpace[index];
 				for(unsigned vectorIndex=0;vectorIndex<projectionBase.size();++vectorIndex){
 					nextLineatyVector=nextLineatyVector
-							-projectionBase[vectorIndex]*((projectionBase[vectorIndex].dot(nextLineatyVector)/norms[vectorIndex]));
+							-projectionBase[vectorIndex]*(projectionBase[vectorIndex].dot(nextLineatyVector)/norms[vectorIndex]);
 				}
 				int i=0;
 				while(i<nextLineatyVector.size()) {

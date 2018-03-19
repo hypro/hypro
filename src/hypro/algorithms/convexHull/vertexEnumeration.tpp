@@ -161,11 +161,9 @@ namespace hypro {
 						}
 					}
 
-					if(!skip) {
-						if( !carl::AlmostEqual2sComplement(mHsv.at(planePos).offset(), mHsv.at(planePos).normal().dot(res), default_double_comparison_ulps) && mHsv.at(planePos).offset() - mHsv.at(planePos).normal().dot(res) < 0 ) {
-							outside = true;
-							break;
-						}
+					if(!skip && !carl::AlmostEqual2sComplement(mHsv.at(planePos).offset(), mHsv.at(planePos).normal().dot(res), default_double_comparison_ulps) && mHsv.at(planePos).offset() - mHsv.at(planePos).normal().dot(res) < 0 ) {
+						outside = true;
+						break;
 					}
 				}
 				if(!outside) {
@@ -194,7 +192,7 @@ namespace hypro {
 		Eigen::Index m = Eigen::Index(dictionary.basis().size()-1);//different than the article
 		Eigen::Index n = Eigen::Index(dictionary.cobasis().size()-1);
 		while(i<m || depth>=0){
-			while(i<m && not(dictionary.reverse(i,j))){
+			while(i<m && !(dictionary.reverse(i,j))){
 				VertexEnumeration<Number>::increment(i,j,n);
 			}
 			if(i<m){
@@ -555,7 +553,7 @@ namespace hypro {
 		}
 		assert(mCones.empty());
 		for(const auto& cone: mPositiveCones) {
-			mCones.push_back((mPivotingMatrix*(-cone)));
+			mCones.push_back(mPivotingMatrix*(-cone));
 		}
 	}
 
@@ -569,7 +567,7 @@ namespace hypro {
 		while(count<dim&&index<mHsv.size()) {
 			vector_t<Number> candidate = mHsv[index].normal();
 			for(std::size_t vectorIndex=0;vectorIndex<count;++vectorIndex){
-				candidate=candidate-collection[vectorIndex]*((collection[vectorIndex].dot(candidate)/norms[vectorIndex]));
+				candidate=candidate-collection[vectorIndex]*(collection[vectorIndex].dot(candidate)/norms[vectorIndex]);
 			}
 			int i=0;
 			while(i<candidate.size()) {

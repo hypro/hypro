@@ -27,8 +27,8 @@ project(hypro CXX C)
 
 set(PROJECT_FULLNAME "HyPro")
 set(PROJECT_DESCRIPTION "A Toolbox for the Reachability Analysis of Hybrid Systems using Geometric Approximations")
-set(hypro_MAJORVERSION 17)
-set(hypro_MINORVERSION 09)
+string(TIMESTAMP hypro_MINORVERSION %m)
+string(TIMESTAMP hypro_MAJORVERSION %y)
 set(hypro_VERSION "${hypro_MAJORVERSION}.${hypro_MINORVERSION}")
 set(PROJECT_VERSION "${hypro_VERSION}")
 set(hypro_NAME "HyPro" )
@@ -77,6 +77,8 @@ elseif(${SECONDARY_SOLVER_BACKEND} STREQUAL "z3")
 elseif(${SECONDARY_SOLVER_BACKEND} STREQUAL "soplex")
 	set(HYPRO_USE_SOPLEX "ON")
 endif()
+
+configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/.travis/sonar-project.properties.in ${CMAKE_CURRENT_SOURCE_DIR}/.travis/sonar-project.properties )
 
 ###########################################################################################
 #### EXPORT SETTINGS
@@ -216,7 +218,6 @@ endif()
 
 if(HYPRO_USE_SMTRAT)
 	find_package(smtrat)
-	#load_library(${PROJECT_NAME} smtrat 0)
 endif()
 
 if(HYPRO_USE_Z3)
