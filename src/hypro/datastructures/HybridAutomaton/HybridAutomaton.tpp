@@ -16,6 +16,7 @@ Location<Number>* HybridAutomaton<Number,State>::getLocation(std::size_t id) con
 template<typename Number, typename State>
 Location<Number>* HybridAutomaton<Number,State>::getLocation(const std::string& name) const {
 	for(const auto loc : mLocations) {
+		assert(loc != nullptr);
 		if(loc->getName() == name) {
 			return loc;
 		}
@@ -42,6 +43,16 @@ const std::set<Label> HybridAutomaton<Number,State>::getLabels() const {
 		}
 	}
 	return labels;
+}
+
+template<typename Number, typename State>
+void HybridAutomaton<Number,State>::removeTransition(Transition<Number>* toRemove) {
+	for(auto tIt = mTransitions.begin(); tIt != mTransitions.end(); ) {
+		if(*tIt == toRemove)
+			tIt = mTransitions.erase(tIt);
+		else
+			++tIt;
+	}
 }
 
 template<typename Number, typename State>
@@ -139,6 +150,7 @@ bool HybridAutomaton<Number,State>::isComposedOf(const HybridAutomaton<Number,St
 			for(auto rhsTransPtr : rhs.getTransitions()) {
 				//std::cout << "consider " << rhsTransPtr->getSource()->getName() << " -> " << rhsTransPtr->getTarget()->getName() << std::endl;
 				if(transPtr->isComposedOf(*rhsTransPtr, rhs.getVariables(), this->getVariables())) {
+					//std::cout << "Found " << rhsTransPtr->getSource()->getName() << " -> " << rhsTransPtr->getTarget()->getName() << std::endl;
 					if(foundOne) {
 						//std::cout << "found two matching transitions - return false" << std::endl;
 						return false;
@@ -161,7 +173,6 @@ template<typename Number, typename State>
 std::string HybridAutomaton<Number,State>::getDotRepresentation() const {
 	std::string res = "digraph {\n";
 
-	std::map<unsigned, Location<Number>*> locIds;
 	for(const auto loc : mLocations) {
 		res += loc->getDotRepresentation(mVariables);
 	}
@@ -173,6 +184,15 @@ std::string HybridAutomaton<Number,State>::getDotRepresentation() const {
 	res += "}\n";
 
 	return res;
+}
+
+template<typename Number, typename State>
+std::string HybridAutomaton<Number,State>::getStatistics() const {
+	std::stringstream out;
+	out << "#Locations: " << mLocations.size() << std::endl;
+	out << "#Transitions: " << mTransitions.size() << std::endl;
+
+	return out.str();
 }
 
 }  // namespace hydra

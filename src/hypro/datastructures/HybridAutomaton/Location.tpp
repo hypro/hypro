@@ -157,12 +157,11 @@ bool Location<Number>::isComposedOf(const Location<Number>& rhs, const std::vect
 					}
 				}
 				// if the assumed correct row has been found, also check the constant part.
-				if(allMatched) {
-					if(this->getInvariant().getVector()(rowPos) == rhs.getInvariant().getVector()(rowI)) {
-						//std::cout << "matched row " << rowPos << std::endl;
-						foundConstraint = true;
-						break;
-					}
+				if(allMatched &&
+					this->getInvariant().getVector()(rowPos) == rhs.getInvariant().getVector()(rowI)) {
+					//std::cout << "matched row " << rowPos << std::endl;
+					foundConstraint = true;
+					break;
 				}
 			}
 			if(!foundConstraint) {

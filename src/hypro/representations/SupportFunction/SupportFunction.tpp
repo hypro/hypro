@@ -398,6 +398,17 @@ namespace hypro{
     }
 
     template<typename Number, typename Converter>
+    bool SupportFunctionT<Number,Converter>::contains( const SupportFunctionT<Number, Converter>& rhs ) const {
+    	std::vector<vector_t<Number>> templateDirections = computeTemplate<Number>(this->dimension(), 8);
+    	for(const auto& direction : templateDirections) {
+    		if(this->evaluate(direction).supportValue < rhs.evaluate(direction).supportValue){
+				return false;
+			}
+    	}
+    	return true;
+    }
+
+    template<typename Number, typename Converter>
     SupportFunctionT<Number,Converter>  SupportFunctionT<Number,Converter>::unite( const SupportFunctionT<Number,Converter> &_rhs ) const {
         return SupportFunctionT<Number,Converter>(content->unite(_rhs.content));
     }

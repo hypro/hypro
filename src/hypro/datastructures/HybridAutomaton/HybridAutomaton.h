@@ -117,12 +117,14 @@ class HybridAutomaton
      * @brief      Extension function.
      */
     ///@{
-    void addLocation(Location<Number>* location) { mLocations.insert(location); }
-    void addTransition(Transition<Number>* transition) { mTransitions.insert(transition); }
+    void addLocation(Location<Number>* location) { assert(location != nullptr); mLocations.insert(location); }
+    void addTransition(Transition<Number>* transition) { assert(transition != nullptr); mTransitions.insert(transition); }
     void addInitialState(const State& state) { mInitialStates.insert(std::make_pair(state.getLocation(),state)); }
     void addLocalBadState(const Location<Number>* loc, const Condition<Number>& condition) { mLocalBadStates.insert(std::make_pair(loc,condition)); }
     void addGlobalBadState(const Condition<Number>& state) { mGlobalBadStates.push_back(state); }
     ///@}
+
+    void removeTransition(Transition<Number>* toRemove);
 
     // copy assignment operator, TODO: implement via swap
     inline HybridAutomaton& operator=(const HybridAutomaton<Number,State>& rhs) = default;
@@ -144,6 +146,8 @@ class HybridAutomaton
     bool isComposedOf(const HybridAutomaton<Number,State>& rhs) const;
 
     std::string getDotRepresentation() const;
+
+    std::string getStatistics() const;
 
     /**
      * @brief      Comparison for equality operator.
@@ -252,7 +256,7 @@ class HybridAutomaton
 			}
 		}
 
-		//std::cout << "trans" << std::endl;
+		//std::cout << "######################## TRANSITIONS ########################" << std::endl;
 		//build transisitons
 		std::set<Label> lhsLabels = lhs.getLabels();
 		std::set<Label> rhsLabels = rhs.getLabels();

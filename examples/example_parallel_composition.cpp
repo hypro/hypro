@@ -112,7 +112,7 @@ HybridAutomaton<Number> createComponent1(unsigned i) {
 	resetVec(2) = 1;
 	toFlash->setReset(Reset<Number>(resetMat,resetVec));
 	toFlash->setAggregation(Aggregation::parallelotopeAgg);
-	toFlash->setUrgent();
+	//toFlash->setUrgent();
 
 	wait->addTransition(toFlash);
 	res.addTransition(toFlash);
@@ -133,7 +133,7 @@ HybridAutomaton<Number> createComponent1(unsigned i) {
 	flashLoop->setUrgent();
 	flashLoop->addLabel(Label{"flash"});
 	flashLoop->setAggregation(Aggregation::parallelotopeAgg);
-	flashLoop->setUrgent();
+	//flashLoop->setUrgent();
 
 	flash->addTransition(flashLoop);
 	res.addTransition(flashLoop);
@@ -171,7 +171,7 @@ HybridAutomaton<Number> createComponent1(unsigned i) {
 	toAdapt->setReset(Reset<Number>(resetMat,resetVec));
 	toAdapt->addLabel({"flash"});
 	toAdapt->setAggregation(Aggregation::parallelotopeAgg);
-	toAdapt->setUrgent();
+	//toAdapt->setUrgent();
 
 	wait->addTransition(toAdapt);
 	res.addTransition(toAdapt);
@@ -215,6 +215,7 @@ HybridAutomaton<Number> createComponent1(unsigned i) {
 	return res;
 }
 
+
 template<typename Number>
 HybridAutomaton<Number> createComponent2(unsigned i, const std::vector<Label>& labels) {
 	using HA = HybridAutomaton<Number>;
@@ -243,7 +244,9 @@ HybridAutomaton<Number> createComponent2(unsigned i, const std::vector<Label>& l
 	st << "wait_" << i;
 	Lpt wait = manager.create();
 	wait->setName(st.str());
-	M waitFlow = M::Identity(dim,dim); // both variables advance
+	M waitFlow = M::Zero(dim+1,dim+1); // both variables advance
+	waitFlow(0,dim) = 1;
+	waitFlow(1,dim) = 1;
 	wait->setFlow(waitFlow);
 
 	M waitInvariant = M::Zero(1,dim);
@@ -289,29 +292,33 @@ HybridAutomaton<Number> createComponent2(unsigned i, const std::vector<Label>& l
 	M resetMat = M::Identity(dim,dim);
 	V resetVec = V::Zero(dim);
 	resetMat(0,0) = 0;
-	flash->addLabel(labels[i]);
+	flash->addLabel(labels.at(i));
 	flash->setReset(Reset<Number>(resetMat,resetVec));
 	flash->setAggregation(Aggregation::parallelotopeAgg);
-	flash->setUrgent();
+	//flash->setUrgent();
 
 	wait->addTransition(flash);
 	res.addTransition(flash);
 
 	// to adapt
-	Tpt toAdapt = new Transition<Number>(wait,adapt);
-	resetMat = M::Identity(dim,dim);
-	resetMat(0,0) = Number(alpha);
-	resetVec = V::Zero(dim);
-	toAdapt->setReset(Reset<Number>(resetMat,resetVec));
 	for(unsigned j = 0; j < labels.size(); ++j) {
-		if(j != i)
-			toAdapt->addLabel(labels[j]);
-	}
-	toAdapt->setAggregation(Aggregation::parallelotopeAgg);
-	toAdapt->setUrgent();
+		if(j != i) {
+			Tpt toAdapt = new Transition<Number>(wait,adapt);
+			resetMat = M::Identity(dim,dim);
+			resetMat(0,0) = Number(alpha);
+			resetVec = V::Zero(dim);
+			toAdapt->setReset(Reset<Number>(resetMat,resetVec));
 
-	wait->addTransition(toAdapt);
-	res.addTransition(toAdapt);
+			toAdapt->addLabel(labels.at(j));
+
+			toAdapt->setAggregation(Aggregation::parallelotopeAgg);
+			//toAdapt->setUrgent();
+
+			wait->addTransition(toAdapt);
+			res.addTransition(toAdapt);
+		}
+	}
+
 
 	// from adapt, regular
 	Tpt fromAdaptRegular = new Transition<Number>(adapt,wait);
@@ -351,64 +358,304 @@ HybridAutomaton<Number> createComponent2(unsigned i, const std::vector<Label>& l
 }
 
 
+template<typename Number>
+HybridAutomaton<Number> createComponent3(unsigned i) {
+	using HA = HybridAutomaton<Number>;
+	using M = matrix_t<Number>;
+	using V = vector_t<Number>;
+	using Lpt = Location<Number>*;
+	using Tpt = Transition<Number>*;
+	using S = State_t<Number>;
+	LocationManager<Number>& manager = LocationManager<Number>::getInstance();
+	std::stringstream st;
+
+	// result automaton
+	HA res;
+
+	// set up variables
+	typename HybridAutomaton<Number>::variableVector vars;
+	st << "x_" << i;
+	vars.push_back(st.str());
+	vars.push_back("x_t"); // t is the global clock for plotting
+	vars.push_back("z"); // z is the shared variable
+	res.setVariables(vars);
+	st.str(std::string());
+	unsigned dim = vars.size();
+
+	// wait
+
+	st << "wait_" << i;
+	Lpt wait = manager.create();
+	wait->setName(st.str());
+	M waitFlow = M::Zero(dim+1,dim+1);
+	waitFlow(0,dim) = 1;
+	waitFlow(1,dim) = 1; // time always advances at rate 1
+	wait->setFlow(waitFlow);
+
+	M initConstraints = M::Zero(6,3);
+	initConstraints << 1,0,0,-1,0,0,0,1,0,0,-1,0,0,0,1,0,0,-1;
+	V initConstants = V::Zero(6);
+	initConstants << 0,0,0,0,0,0;
+
+	S initialState;
+	initialState.setLocation(wait);
+	initialState.setSet(ConstraintSet<Number>(initConstraints,initConstants));
+	res.addInitialState(initialState);
+
+	M waitInvariant = M::Zero(1,dim);
+	waitInvariant << 1,0,0;
+	V waitInvConsts = V::Zero(1);
+	waitInvConsts << Number(firingThreshold);
+	wait->setInvariant(Condition<Number>{waitInvariant, waitInvConsts});
+	res.addLocation(wait);
+
+	// adapt
+	//Lpt adapt = manager.create();
+	//st.str(std::string());
+	//st << "adapt_" << i;
+	//adapt->setName(st.str());
+//
+//	//M adaptFlow = M::Zero(dim+1,dim+1);
+//	//adaptFlow(1,dim) = 1; // time always advances at rate 1
+//	//adapt->setFlow(adaptFlow);
+//
+	//res.addLocation(adapt);
+
+	// flash
+	Lpt flash = manager.create();
+	st.str(std::string());
+	st << "flash_" << i;
+	flash->setName(st.str());
+
+	M flashFlow = M::Zero(dim+1,dim+1);
+	flashFlow(1,dim) = 1; // time always advances at rate 1
+	flash->setFlow(flashFlow);
+
+	//M flashInvariant = M::Zero(2,dim);
+	//flashInvariant(0,0) = 1;
+	//flashInvariant(1,0) = -1;
+	//V flashInvConsts = V::Zero(2);
+	//flash->setInvariant(Condition<Number>{flashInvariant, flashInvConsts});
+	res.addLocation(flash);
+
+	// transitions
+	// to flash
+	Tpt toFlash = new Transition<Number>(wait,flash);
+	M guardConstraints = M::Zero(2,dim);
+	guardConstraints(0,0) = 1;
+	guardConstraints(1,0) = -1;
+	V guardConstants = V::Zero(2);
+	guardConstants << Number(firingThreshold), Number(-firingThreshold);
+	toFlash->setGuard(Condition<Number>{guardConstraints,guardConstants});
+
+	M resetMat = M::Identity(dim,dim);
+	V resetVec = V::Zero(dim);
+	resetMat(0,0) = 0;
+	resetMat(2,2) = 0;
+	resetVec(2) = 1;
+	toFlash->setReset(Reset<Number>(resetMat,resetVec));
+	toFlash->setAggregation(Aggregation::parallelotopeAgg);
+	//toFlash->setUrgent();
+
+	wait->addTransition(toFlash);
+	res.addTransition(toFlash);
+
+	// to execFlash
+	Tpt flashLoop = new Transition<Number>(flash,flash);
+	guardConstraints = M::Zero(2,dim);
+	guardConstraints(0,2) = 1;
+	guardConstraints(1,2) = -1;
+	guardConstants = V::Zero(2);
+	guardConstants << 1,-1;
+	flashLoop->setGuard(Condition<Number>{guardConstraints,guardConstants});
+
+	resetMat = M::Identity(dim,dim);
+	resetMat(2,2) = 0;
+	resetVec = V::Zero(dim);
+	flashLoop->setReset(Reset<Number>(resetMat,resetVec));
+	flashLoop->setUrgent();
+	flashLoop->addLabel(Label{"flash"});
+	flashLoop->setAggregation(Aggregation::parallelotopeAgg);
+	//flashLoop->setUrgent();
+
+	flash->addTransition(flashLoop);
+	res.addTransition(flashLoop);
+
+	// back to wait
+	/*
+	Tpt reWait = new Transition<Number>(flash,wait);
+	guardConstraints = M::Zero(2,dim);
+	guardConstraints(0,2) = 1;
+	guardConstraints(1,2) = -1;
+	guardConstants = V::Zero(2);
+	reWait->setGuard(Condition<Number>{guardConstraints,guardConstants});
+	resetMat = M::Identity(dim,dim);
+	resetVec = V::Zero(dim);
+	reWait->addLabel({"return"});
+	reWait->setReset(Reset<Number>(resetMat,resetVec));
+	reWait->setUrgent();
+	reWait->setAggregation(Aggregation::parallelotopeAgg);
+
+	flash->addTransition(reWait);
+	res.addTransition(reWait);
+	*/
+
+	// to adapt
+	Tpt toAdapt = new Transition<Number>(wait,flash);
+	guardConstraints = M::Zero(3,dim);
+	guardConstraints(0,2) = 1;
+	guardConstraints(1,2) = -1;
+	guardConstraints(2,0) = 1;
+	guardConstants = V::Zero(3);
+	guardConstants << 1,-1,Number(firingThreshold);
+	toAdapt->setGuard(Condition<Number>{guardConstraints,guardConstants});
+	resetMat = M::Identity(dim,dim);
+	resetMat(0,0) = Number(alpha);
+	resetMat(2,2) = 0;
+	resetVec = V::Zero(dim);
+	toAdapt->setReset(Reset<Number>(resetMat,resetVec));
+	toAdapt->addLabel({"flash"});
+	toAdapt->setAggregation(Aggregation::parallelotopeAgg);
+	//toAdapt->setUrgent();
+
+	wait->addTransition(toAdapt);
+	res.addTransition(toAdapt);
+
+	// from adapt, regular
+	Tpt fromAdaptRegular = new Transition<Number>(flash,wait);
+	guardConstraints = M::Zero(3,dim);
+	guardConstraints(0,0) = 1;
+	guardConstraints(1,2) = 1;
+	guardConstraints(2,2) = -1;
+	guardConstants = V::Zero(3);
+	guardConstants << Number(firingThreshold),0,0;
+	fromAdaptRegular->setGuard(Condition<Number>{guardConstraints,guardConstants});
+	resetMat = M::Identity(dim,dim);
+	resetVec = V::Zero(dim);
+	fromAdaptRegular->setReset(Reset<Number>(resetMat,resetVec));
+	fromAdaptRegular->addLabel(Label{"return"});
+	fromAdaptRegular->setAggregation(Aggregation::parallelotopeAgg);
+	fromAdaptRegular->setUrgent();
+
+	flash->addTransition(fromAdaptRegular);
+	res.addTransition(fromAdaptRegular);
+
+	// from adapt, scale
+	Tpt fromAdaptScale = new Transition<Number>(flash,wait);
+	guardConstraints = M::Zero(3,dim);
+	guardConstraints(0,0) = -1;
+	guardConstraints(1,2) = 1;
+	guardConstraints(2,2) = -1;
+	guardConstants = V::Zero(3);
+	guardConstants << Number(-firingThreshold),0,0;
+	fromAdaptScale->setGuard(Condition<Number>{guardConstraints,guardConstants});
+	fromAdaptScale->addLabel(Label{"return"});
+	fromAdaptScale->setAggregation(Aggregation::parallelotopeAgg);
+	fromAdaptScale->setUrgent();
+
+	resetMat = M::Identity(dim,dim);
+	resetMat(0,0) = 0;
+	resetVec = V::Zero(dim);
+	fromAdaptScale->setReset(Reset<Number>(resetMat,resetVec));
+
+	flash->addTransition(fromAdaptScale);
+	res.addTransition(fromAdaptScale);
+
+	return res;
+}
+
+
 int main(int argc, char** argv) {
 	using Number = double;
 
 	int componentCount = 0;
-	char* p;
-	componentCount = strtol(argv[2], &p, 10);
+	componentCount = atoi(argv[1]);
+
+	// settings to be used for flowstar format output
+	ReachabilitySettings<Number> settings;
+	settings.jumpDepth=20;
+	settings.timeBound = 1.1;
+	settings.timeStep = 0.01;
+	//settings.plotDimensions.push_back(std::vector<std::size_t>());
+	//settings.plotDimensions[0].push_back(0);
+	//settings.plotDimensions[0].push_back(componentCount+1);
 
 	std::cout << "Create parallel composition for synchronization benchmark with " << componentCount << " components using a shared variable." << std::endl;
 
-	HybridAutomaton<Number> ha1 = createComponent1<Number>(1);
-	HybridAutomaton<Number> ha2 = createComponent1<Number>(2);
-	HybridAutomaton<Number> ha3 = createComponent1<Number>(3);
-	HybridAutomaton<Number> composed = ha1||ha2;
-	composed = composed||ha3;
+	HybridAutomaton<Number> composed_sync_sharedVar = createComponent1<Number>(1);
+	for(int i = 2; i <= componentCount; ++i) {
+		HybridAutomaton<Number> tmp = createComponent1<Number>(i);
+		composed_sync_sharedVar = composed_sync_sharedVar || tmp;
+		assert(composed_sync_sharedVar.isComposedOf(tmp));
+	}
+	settings.fileName = "sync_sharedVar";
+	LockedFileWriter flowstar_sharedVar("sync_sharedVar.model");
+	flowstar_sharedVar.clearFile();
+	flowstar_sharedVar << toFlowstarFormat(composed_sync_sharedVar, settings);
+	// create dot output.
+	LockedFileWriter sharedVar_single("sync_sharedVarSingle.dot");
+	sharedVar_single.clearFile();
+	sharedVar_single << createComponent1<Number>(1).getDotRepresentation();
+	LockedFileWriter sharedVar_res("sync_sharedVarComposed.dot");
+	sharedVar_res.clearFile();
+	sharedVar_res << composed_sync_sharedVar.getDotRepresentation();
 
-	assert(composed.isComposedOf(ha1));
-	assert(composed.isComposedOf(ha2));
-	assert(composed.isComposedOf(ha3));
+	std::cout << "Automaton stats: " << std::endl << composed_sync_sharedVar.getStatistics() << std::endl;
 
 	std::cout << "Create parallel composition for synchronization benchmark with " << componentCount << " components using label synchronization." << std::endl;
 
 	std::vector<Label> labels;
-	labels.emplace_back(Label("flash0"));
-	labels.emplace_back(Label("flash1"));
-	HybridAutomaton<Number> ha_l1 = createComponent2<Number>(0,labels);
-	HybridAutomaton<Number> ha_l2 = createComponent2<Number>(1,labels);
-	//HybridAutomaton<Number> ha_l3 = createComponent1<Number>(3);
-	HybridAutomaton<Number> composed_l = ha_l1||ha_l2;
+	std::stringstream s;
+	for(int i = 0; i < componentCount; ++i) {
+		s.str("");
+		s << "flash" << i;
+		labels.emplace_back(s.str());
+	}
 
-	assert(composed_l.isComposedOf(ha_l1));
-	assert(composed_l.isComposedOf(ha_l2));
-	//assert(composed.isComposedOf(ha3));
+	HybridAutomaton<Number> composed_sync_label = createComponent2<Number>(0,labels);
+	for(int i = 1; i < componentCount; ++i) {
+		HybridAutomaton<Number> tmp = createComponent2<Number>(i,labels);
+		composed_sync_label = composed_sync_label || tmp;
+		assert(composed_sync_label.isComposedOf(tmp));
+	}
+	settings.fileName = "sync_labels";
+	LockedFileWriter flowstar_label("sync_labelSync.model");
+	flowstar_label.clearFile();
+	flowstar_label << toFlowstarFormat(composed_sync_label,settings);
+	// create dot output.
+	LockedFileWriter label_single("sync_labelSingle.dot");
+	label_single.clearFile();
+	label_single << createComponent2<Number>(0,std::vector<Label>({Label("flash0")})).getDotRepresentation();
+	LockedFileWriter label_res("sync_labelComposed.dot");
+	label_res.clearFile();
+	label_res << composed_sync_label.getDotRepresentation();
 
-	//std::cout << "################################################" << std::endl;
-	//std::cout << "Result: " << std::endl << composed << std::endl;
+	std::cout << "Automaton stats: " << std::endl << composed_sync_label.getStatistics() << std::endl;
 
-	LockedFileWriter out{"parallelHa.dot"};
-	out.clearFile();
-	out << composed.getDotRepresentation();
+	std::cout << "Create parallel composition for synchronization benchmark with " << componentCount << " components using a reduced version with a shared variable." << std::endl;
 
-	LockedFileWriter out2{"singleHa.dot"};
-	out2.clearFile();
-	out2 << ha1.getDotRepresentation();
+	HybridAutomaton<Number> composed_sync_sharedVar_2states = createComponent3<Number>(1);
+	for(int i = 2; i <= componentCount; ++i) {
+		HybridAutomaton<Number> tmp = createComponent3<Number>(i);
+		composed_sync_sharedVar_2states = composed_sync_sharedVar_2states || tmp;
+		assert(composed_sync_sharedVar_2states.isComposedOf(tmp));
+	}
+	settings.fileName = "sync_sharedVar2";
+	LockedFileWriter flowstar_sharedVarRed("sync_sharedVar_2_states.model");
+	flowstar_sharedVarRed.clearFile();
+	flowstar_sharedVarRed << toFlowstarFormat(composed_sync_sharedVar_2states,settings);
+	// create dot output.
+	LockedFileWriter sharedVarReduced_single("sync_sharedVarReducedSingle.dot");
+	sharedVarReduced_single.clearFile();
+	sharedVarReduced_single << createComponent3<Number>(1).getDotRepresentation();
+	LockedFileWriter sharedVarReduced_res("sync_sharedVarReducedComposed.dot");
+	sharedVarReduced_res.clearFile();
+	sharedVarReduced_res << composed_sync_sharedVar_2states.getDotRepresentation();
 
-	LockedFileWriter out_l{"parallelHa2.dot"};
-	out_l.clearFile();
-	out_l << composed_l.getDotRepresentation();
-
-	LockedFileWriter out2_l{"singleHa2.dot"};
-	out2_l.clearFile();
-	out2_l << ha_l1.getDotRepresentation();
-
-	LockedFileWriter flowstar("composed.model");
-	flowstar.clearFile();
-	flowstar << toFlowstarFormat(composed);
+	std::cout << "Automaton stats: " << std::endl << composed_sync_sharedVar_2states.getStatistics() << std::endl;
 
 	// for testing
-	auto haTuple = parseFlowstarFile<double>(std::string("composed.model"));
+	//auto haTuple = parseFlowstarFile<double>(std::string("composed.model"));
 
 	return 0;
 }

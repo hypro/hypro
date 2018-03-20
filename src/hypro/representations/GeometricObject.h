@@ -133,7 +133,7 @@ public:
 	 */
 	virtual bool contains( const Point<Number>& point ) const = 0;
 	//virtual bool contains( const vector_t<Number>& vec ) const = 0;
-	//virtual bool contains( const DerivedShape& rhs ) const = 0;
+	virtual bool contains( const DerivedShape& rhs ) const = 0;
 
 	/**
 	 * @brief      Computes the convex hull of the union of the set and the passed set.

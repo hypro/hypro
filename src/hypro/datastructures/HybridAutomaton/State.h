@@ -375,6 +375,14 @@ class State
 
     State<Number,tNumber,Representation,Rargs...> partiallyMinkowskiSum(const State<Number,tNumber,Representation,Rargs...>& rhs, std::size_t I ) const;
 
+    /**
+     * @brief      Checks whether a state is fully contained in caller-state.
+     * @details    This calls "contains" for all stored state sets iteratively and returns "false" first time it can be detected.
+     * @param[in]  rhs   The right hand side state.
+     * @return     True, if every subset of rhs is fully contained in the respective subset of the caller-state.
+     */
+    bool contains(const State<Number,tNumber,Representation,Rargs...>& rhs) const;
+
     std::vector<Point<Number>> vertices(std::size_t I = 0) const;
 
     State<Number,tNumber,Representation,Rargs...> project(const std::vector<std::size_t>& dimensions, std::size_t I = 0) const;

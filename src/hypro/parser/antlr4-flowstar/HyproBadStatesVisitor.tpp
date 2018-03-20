@@ -40,7 +40,7 @@ namespace hypro {
 					assert(newMat.cols() == currbStateMat.cols());
 					newMat.conservativeResize((newMat.rows()+currbStateMat.rows()),newMat.cols());
 					for(int i = newMat.rows()-currbStateMat.rows(); i < newMat.rows(); i++){
-						newMat.row(i) = currbStateMat.row((i-newMatRowsBefore));
+						newMat.row(i) = currbStateMat.row(i-newMatRowsBefore);
 					}
 
 					//Extend inMapCondition.vector with badStateInfo.vector

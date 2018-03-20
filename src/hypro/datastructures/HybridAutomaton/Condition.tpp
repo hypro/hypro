@@ -55,7 +55,7 @@ Condition<Number> combine(
 	const Condition<Number>& lhs, const Condition<Number>& rhs,
 	const std::vector<std::string> haVar, const std::vector<std::string> lhsVar, const std::vector<std::string> rhsVar) {
 
-	if (lhs.size() == 0 and rhs.size() == 0) {
+	if (lhs.size() == 0 && rhs.size() == 0) {
 		return Condition<Number>();
 	}
 
