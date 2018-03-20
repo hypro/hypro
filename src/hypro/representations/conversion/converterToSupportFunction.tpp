@@ -76,8 +76,10 @@ typename Converter<Number>::SupportFunction Converter<Number>::toSupportFunction
 }
 
 // conversion from PPL polytope to support function (no differentiation between conversion modes - always EXACT)
+#ifdef HYPRO_USE_PPL
 template <typename Number>
 typename Converter<Number>::SupportFunction Converter<Number>::toSupportFunction( const Polytope& _source, const CONV_MODE){
     auto temp = toHPolytope(_source);
     return SupportFunction(temp.constraints());
 }
+#endif

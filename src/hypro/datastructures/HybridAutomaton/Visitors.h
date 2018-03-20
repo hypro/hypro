@@ -129,10 +129,15 @@ public:
  				break;
  			}
  			case representation_name::ppl_polytope: {
- 				Polytope<Number> tmp = Converter<Number>::toPolytope(lhs);
- 				return tmp;
- 				break;
+ 				#ifdef HYPRO_USE_PPL
+ 					Polytope<Number> tmp = Converter<Number>::toPolytope(lhs);
+ 					return tmp;
+ 					break;
+ 				#else
+ 					assert(false && "CANNOT CONVERT TO TYPE PPL POLYTOPE. Maybe set HYPRO_USE_PPL to true?");
+ 				#endif
  			}
+ 			
  			case representation_name::constraint_set: {
  				ConstraintSet<Number> tmp = Converter<Number>::toConstraintSet(lhs);
  				return tmp;
