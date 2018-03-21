@@ -114,6 +114,18 @@ namespace hypro {
 	template<typename Number>
 	antlrcpp::Any HyproTransitionVisitor<Number>::visitGuard(HybridAutomatonParser::GuardContext *ctx){
 
+		//1.Call HyproFormulaVisitor and get pair of matrix and vector if constrset exists
+		if(ctx->constrset() != NULL){
+			HyproFormulaVisitor<Number> visitor(vars);
+			std::pair<matrix_t<Number>,vector_t<Number>> result = visitor.visit(ctx->constrset());	
+			Condition<Number> inv;
+			inv.setMatrix(result.first);
+			inv.setVector(result.second);
+			return inv;
+		}
+		//Return empty condition if no guard given
+		return Condition<Number>();
+/*
 		//1.Call HyproFormulaVisitor and get pair of matrix and vector
 		HyproFormulaVisitor<Number> visitor(vars);
 		std::pair<matrix_t<Number>,vector_t<Number>> result = visitor.visit(ctx->constrset());
@@ -127,6 +139,7 @@ namespace hypro {
 
 		//3.Return condition
 		return inv;
+*/
 	}
 
 	template<typename Number>

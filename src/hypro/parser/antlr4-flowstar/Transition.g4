@@ -24,7 +24,7 @@ fromto		: VARIABLE JUMP VARIABLE ;
 
 urgent		: 'urgent' ;
 
-guard		: 'guard' '{' constrset '}' ;
+guard		: 'guard' '{' constrset? '}' ;
 
 allocation	: VARIABLE DEFINE (polynom | interval) ;
 
