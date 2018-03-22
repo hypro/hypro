@@ -50,13 +50,12 @@ protected:
     Location(unsigned id, const Location& loc);
     Location(unsigned id, const matrix_t<Number>& mat);
     Location(unsigned id, const matrix_t<Number>& mat, const transitionSet& trans, const Condition<Number>& inv);
-    Location(unsigned id, const matrix_t<Number>& mat, const transitionSet& trans, const Condition<Number>& inv,
-             const matrix_t<Number>& extInputMat);
     ///@}
 
 private:
     mutable std::vector<matrix_t<Number>> mFlows;
     Box<Number> mExternalInput;
+    bool mHasExternalInput;
     transitionSet mTransitions;
     Condition<Number> mInvariant;
     unsigned mId;
@@ -72,6 +71,7 @@ public:
     const Condition<Number>& getInvariant() const { return mInvariant; }
     const transitionSet& getTransitions() const { return mTransitions; }
     const Box<Number>& getExternalInput() const { return mExternalInput; }
+    bool hasExternalInput() const { return mHasExternalInput; }
     unsigned getId() const { return mId; }
 	std::string getName() const { return mName; }
 
@@ -80,7 +80,7 @@ public:
     void setInvariant(const Condition<Number>& inv) { mInvariant = inv; }
     void setTransitions(const transitionSet& trans) { mTransitions = trans; }
     void addTransition(Transition<Number>* trans) { mTransitions.insert(trans); }
-    void setExtInput(const Box<Number>& b) { mExternalInput = b; }
+    void setExtInput(const Box<Number>& b);
 
     /**
      * @brief      Determines if this composed of rhs and some potential rest.

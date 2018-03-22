@@ -356,4 +356,18 @@ void State<Number,tNumber,Representation,Rargs...>::setSetsSave(const std::vecto
 	assert(checkConsistency());
 }
 
+template<typename Number, typename tNumber, typename Representation, typename ...Rargs>
+void State<Number,tNumber,Representation,Rargs...>::setAndConvertType( representation_name to, std::size_t I ){
+	assert(checkConsistency());
+	assert(I < mTypes.size());
+	// skip, if type is already correct.
+	if(mTypes[I] == to) return;
+
+	// convert set to type
+	mSets[I] = boost::apply_visitor(genericConversionVisitor<repVariant,Number>(to), mSets[I]);
+	mTypes[I] = to;
+
+	assert(checkConsistency());
+}
+
 } // hypro

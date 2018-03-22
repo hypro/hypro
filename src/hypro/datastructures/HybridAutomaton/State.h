@@ -289,6 +289,8 @@ class State
 		mSets[I] = in;
 	}
 
+	void setAndConvertType( representation_name to, std::size_t I = 0 );
+
 	/**
 	 * @brief      Adds time to clocks.
 	 * @details    This is a meta-function which allows to change multiple sets. Currently it only affects the timestamp.
