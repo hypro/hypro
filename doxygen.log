@@ -445,8 +445,8 @@ Searching /home/travis/build/hypro/hypro/src/hypro/types.h:3: warning: include f
 /home/travis/build/hypro/hypro/src/hypro/util/statistics/statistics.h:4: warning: include file carl/util/Singleton.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/logging/Logger.h:4: warning: include file iostream not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/logging/Logger.h:5: warning: include file thread not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.h:293: warning: include file gmp.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.h:294: warning: include file gmpxx.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.h:295: warning: include file gmp.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.h:296: warning: include file gmpxx.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/logging/Logger.h:4: warning: include file iostream not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/logging/Logger.h:5: warning: include file thread not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/representations/Box/Box.h:19: warning: include file carl/interval/Interval.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
@@ -608,8 +608,8 @@ Searching /home/travis/build/hypro/hypro/src/hypro/types.h:3: warning: include f
 /home/travis/build/hypro/hypro/src/hypro/util/statistics/statistics.h:4: warning: include file carl/util/Singleton.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/logging/Logger.h:4: warning: include file iostream not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/logging/Logger.h:5: warning: include file thread not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.h:293: warning: include file gmp.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.h:294: warning: include file gmpxx.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.h:295: warning: include file gmp.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.h:296: warning: include file gmpxx.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/representations/Ellipsoids/Ellipsoid.h:8: warning: include file map not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/representations/Ellipsoids/Ellipsoid.h:9: warning: include file cassert not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/types.h:3: warning: include file iostream not found, perhaps you forgot to add its directory to INCLUDE_PATH?
@@ -1124,8 +1124,8 @@ Searching /home/travis/build/hypro/hypro/src/hypro/types.h:3: warning: include f
 /home/travis/build/hypro/hypro/src/hypro/util/statistics/statistics.h:4: warning: include file carl/util/Singleton.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/logging/Logger.h:4: warning: include file iostream not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/logging/Logger.h:5: warning: include file thread not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.h:293: warning: include file gmp.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.h:294: warning: include file gmpxx.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.h:295: warning: include file gmp.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.h:296: warning: include file gmpxx.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/logging/Logger.h:4: warning: include file iostream not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/logging/Logger.h:5: warning: include file thread not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/representations/Box/Box.h:19: warning: include file carl/interval/Interval.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
@@ -1884,8 +1884,8 @@ Searching /home/travis/build/hypro/hypro/src/hypro/types.h:3: warning: include f
 /home/travis/build/hypro/hypro/src/hypro/util/statistics/statistics.h:4: warning: include file carl/util/Singleton.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/logging/Logger.h:4: warning: include file iostream not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/logging/Logger.h:5: warning: include file thread not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.h:293: warning: include file gmp.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.h:294: warning: include file gmpxx.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.h:295: warning: include file gmp.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.h:296: warning: include file gmpxx.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/types.h:3: warning: include file iostream not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/types.h:5: warning: include file carl/numbers/numbers.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/types.h:6: warning: include file carl/interval/Interval.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
@@ -2965,8 +2965,8 @@ Searching /home/travis/build/hypro/hypro/src/hypro/types.h:3: warning: include f
 /home/travis/build/hypro/hypro/src/hypro/util/statistics/statistics.h:4: warning: include file carl/util/Singleton.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/logging/Logger.h:4: warning: include file iostream not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/logging/Logger.h:5: warning: include file thread not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.h:293: warning: include file gmp.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.h:294: warning: include file gmpxx.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.h:295: warning: include file gmp.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.h:296: warning: include file gmpxx.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/types.h:3: warning: include file iostream not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/types.h:5: warning: include file carl/numbers/numbers.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/types.h:6: warning: include file carl/interval/Interval.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
@@ -3913,8 +3913,8 @@ Searching /home/travis/build/hypro/hypro/src/hypro/types.h:3: warning: include f
 /home/travis/build/hypro/hypro/src/hypro/util/statistics/statistics.h:4: warning: include file carl/util/Singleton.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/logging/Logger.h:4: warning: include file iostream not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/logging/Logger.h:5: warning: include file thread not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.h:293: warning: include file gmp.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.h:294: warning: include file gmpxx.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.h:295: warning: include file gmp.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.h:296: warning: include file gmpxx.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/logging/Logger.h:4: warning: include file iostream not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/logging/Logger.h:5: warning: include file thread not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/types.h:3: warning: include file iostream not found, perhaps you forgot to add its directory to INCLUDE_PATH?
@@ -5937,16 +5937,16 @@ Possible candidates:
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Point.h:634: warning: member operator* belongs to two different groups. The second one found here will be ignored.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Point.h:642: warning: member operator* belongs to two different groups. The second one found here will be ignored.
 /home/travis/build/hypro/hypro/src/hypro/util/VariablePool.h:28: warning: documented symbol `Singleton< VariablePool >' was not declared or defined.
-/home/travis/build/hypro/hypro/src/hypro/util/Plotter.h:70: warning: documented symbol `Singleton< Plotter< Number > >' was not declared or defined.
+/home/travis/build/hypro/hypro/src/hypro/util/Plotter.h:71: warning: documented symbol `Singleton< Plotter< Number > >' was not declared or defined.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/LocationManager.h:16: warning: documented symbol `Singleton< LocationManager< Number > >' was not declared or defined.
 /home/travis/build/hypro/hypro/src/hypro/parser/flowstar/componentsAdapt.h:7: warning: member with no name found.
 /home/travis/build/hypro/hypro/src/hypro/parser/flowstar/componentsAdapt.h:11: warning: member with no name found.
 /home/travis/build/hypro/hypro/src/hypro/parser/flowstar/componentsAdapt.h:11: warning: member with no name found.
 /home/travis/build/hypro/hypro/src/hypro/parser/flowstar/componentsAdapt.h:16: warning: member with no name found.
 /home/travis/build/hypro/hypro/src/hypro/types.h:29: warning: documented symbol `typedef hypro::std::set< vector_t< Number >> vectorSet' was not declared or defined.
-/home/travis/build/hypro/hypro/src/hypro/util/Plotter.h:70: warning: documented symbol `Singleton< Plotter< Number > >' was not declared or defined.
+/home/travis/build/hypro/hypro/src/hypro/util/Plotter.h:71: warning: documented symbol `Singleton< Plotter< Number > >' was not declared or defined.
 /home/travis/build/hypro/hypro/src/hypro/util/VariablePool.h:28: warning: documented symbol `Singleton< VariablePool >' was not declared or defined.
-error opening bib16718.bbl: No such file or directory
+error opening bib16721.bbl: No such file or directory
 bibtex command failed: No such file or directory
 cetEnumeration.cpp...
 Parsing file /home/travis/build/hypro/hypro/examples/INCOMPLETE_example_facetEnumeration.cpp...
@@ -6963,9 +6963,9 @@ error: Problems running dot: exit code=127, command='dot', arguments='"/home/tra
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_c69b7163a8becb19bca702fdae1c2050_dep.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_c69b7163a8becb19bca702fdae1c2050_dep.png"'
 sh: 1: dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_9daea738ba0665232cd58b81f5fd3268_dep.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_9daea738ba0665232cd58b81f5fd3268_dep.png"'
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_3595f83f5be0d6a3539bc1ea5a059474_dep.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_3595f83f5be0d6a3539bc1ea5a059474_dep.png"'
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_9daea738ba0665232cd58b81f5fd3268_dep.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_9daea738ba0665232cd58b81f5fd3268_dep.png"'
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_bce2075adec303dcb2f0c4fbfcbc8493_dep.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_bce2075adec303dcb2f0c4fbfcbc8493_dep.png"'
 sh: 1: dot: not found
@@ -6995,9 +6995,9 @@ error: Problems running dot: exit code=127, command='dot', arguments='"/home/tra
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_f8eeed5867fcfb10b0a82b230e717047_dep.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_f8eeed5867fcfb10b0a82b230e717047_dep.png"'
 sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_dbbb4b37ecf24276c0f25796d6496cf7_dep.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_dbbb4b37ecf24276c0f25796d6496cf7_dep.png"'
-sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_2c8758a5fdbf28946c502b471e14bb83_dep.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_2c8758a5fdbf28946c502b471e14bb83_dep.png"'
+sh: 1: dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_dbbb4b37ecf24276c0f25796d6496cf7_dep.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_dbbb4b37ecf24276c0f25796d6496cf7_dep.png"'
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_ad938787f25f17484dcf7b42a899a1a5_dep.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_ad938787f25f17484dcf7b42a899a1a5_dep.png"'
 sh: 1: dot: not found
@@ -7013,9 +7013,9 @@ error: Problems running dot: exit code=127, command='dot', arguments='"/home/tra
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_68267d1309a1af8e8297ef4c3efbcdba_dep.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_68267d1309a1af8e8297ef4c3efbcdba_dep.png"'
 sh: 1: dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_57790bb148fd18efc2431dd25a248521_dep.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_57790bb148fd18efc2431dd25a248521_dep.png"'
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_5cc8785239517cfd59e944398d6252f9_dep.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_5cc8785239517cfd59e944398d6252f9_dep.png"'
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_57790bb148fd18efc2431dd25a248521_dep.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_57790bb148fd18efc2431dd25a248521_dep.png"'
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_f299c51bddf4791e0a4b318d117b72c2_dep.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_f299c51bddf4791e0a4b318d117b72c2_dep.png"'
 sh: 1: dot: not found
@@ -7037,22 +7037,22 @@ error: Problems running dot: exit code=127, command='dot', arguments='"/home/tra
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_3.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_3.png"'
 sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_5.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_5.png"'
-sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_4.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_4.png"'
+sh: 1: dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_5.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_5.png"'
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_6.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_6.png"'
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_7.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_7.png"'
 sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_8.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_8.png"'
-sh: 1: sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_11.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_11.png"'
-sh: 1: dot: not found
-dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_9.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_9.png"'
+sh: 1: dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_8.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_8.png"'
+sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_10.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_10.png"'
 sh: 1: dot: not found
+sh: 1: dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_11.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_11.png"'
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_12.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_12.png"'
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_13.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_13.png"'
@@ -7069,9 +7069,9 @@ error: Problems running dot: exit code=127, command='dot', arguments='"/home/tra
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_19.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_19.png"'
 sh: 1: dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_20.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_20.png"'
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_21.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_21.png"'
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_20.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_20.png"'
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_22.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_22.png"'
 sh: 1: dot: not found
@@ -7101,9 +7101,9 @@ error: Problems running dot: exit code=127, command='dot', arguments='"/home/tra
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_35.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_35.png"'
 sh: 1: dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_36.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_36.png"'
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_37.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_37.png"'
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_36.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_36.png"'
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_38.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_38.png"'
 sh: 1: dot: not found
@@ -7111,9 +7111,9 @@ error: Problems running dot: exit code=127, command='dot', arguments='"/home/tra
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_40.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_40.png"'
 sh: 1: dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_41.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_41.png"'
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_42.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_42.png"'
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_41.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_41.png"'
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_43.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_43.png"'
 sh: 1: dot: not found
@@ -7123,30 +7123,27 @@ error: Problems running dot: exit code=127, command='dot', arguments='"/home/tra
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_46.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_46.png"'
 sh: 1: dot: not found
-sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_47.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_47.png"'
+sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_48.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_48.png"'
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_49.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_49.png"'
 sh: 1: dot: not found
-sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_50.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_50.png"'
+sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_51.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_51.png"'
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_52.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_52.png"'
 sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_53.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_53.png"'
-sh: 1: sh: 1: dot: not found
-dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_54.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_54.png"'
+sh: 1: dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_53.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_53.png"'
+sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_55.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_55.png"'
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_56.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_56.png"'
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_57.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_57.png"'
-sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_59.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_59.png"'
-sh: 1: dot: not found
 ndency graph for directory /home/travis/build/hypro/hypro/src/hypro/representations/TaylorModel
 Generating dependency graph for directory /home/travis/build/hypro/hypro/src/hypro/util/tuple_expansion
 Generating dependency graph for directory /home/travis/build/hypro/hypro/src/hypro/util
@@ -7270,41 +7267,44 @@ Running dot for graph 96/267
 Running dot for graph 97/267
 Running dot for graph 98/267
 Running dot for graph 99/267
-Running dot for graerror: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_58.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_58.png"'
+Running dot for grash: 1: dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_58.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_58.png"'
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_60.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_60.png"'
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_61.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_61.png"'
 sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_64.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_64.png"'
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_59.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_59.png"'
 sh: 1: dot: not found
-sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_63.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_63.png"'
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_62.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_62.png"'
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_65.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_65.png"'
+sh: 1: dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_64.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_64.png"'
+sh: 1: dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_63.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_63.png"'
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_66.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_66.png"'
 sh: 1: dot: not found
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_68.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_68.png"'
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_67.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_67.png"'
-sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_69.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_69.png"'
-sh: 1: dot: not found
+sh: 1: dot: not foundsh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_70.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_70.png"'
+
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_69.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_69.png"'
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_71.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_71.png"'
 sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_72.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_72.png"'
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_73.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_73.png"'
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_72.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_72.png"'
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_74.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_74.png"'
 sh: 1: dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_75.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_75.png"'
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_76.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_76.png"'
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_75.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_75.png"'
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_77.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_77.png"'
 sh: 1: dot: not found
@@ -7314,12 +7314,12 @@ error: Problems running dot: exit code=127, command='dot', arguments='"/home/tra
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_80.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_80.png"'
 sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_81.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_81.png"'
-sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_82.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_82.png"'
 sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_84.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_84.png"'
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_81.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_81.png"'
 sh: 1: dot: not found
+sh: 1: dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_84.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_84.png"'
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_83.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_83.png"'
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_85.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_85.png"'
@@ -7334,15 +7334,15 @@ error: Problems running dot: exit code=127, command='dot', arguments='"/home/tra
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_90.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_90.png"'
 sh: 1: dot: not found
-sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_91.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_91.png"'
 sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_93.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_93.png"'
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_92.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_92.png"'
 sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_94.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_94.png"'
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_93.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_93.png"'
+sh: 1: dot: not found
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_95.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_95.png"'
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_94.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_94.png"'
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_96.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_96.png"'
 sh: 1: dot: not found
@@ -7350,25 +7350,25 @@ error: Problems running dot: exit code=127, command='dot', arguments='"/home/tra
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_98.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_98.png"'
 sh: 1: dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_99.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_99.png"'
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_100.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_100.png"'
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_99.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_99.png"'
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_101.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_101.png"'
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_102.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_102.png"'
 sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_104.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_104.png"'
-sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_103.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_103.png"'
+sh: 1: dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_104.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_104.png"'
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_105.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_105.png"'
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_106.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_106.png"'
 sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_108.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_108.png"'
-sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_107.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_107.png"'
+sh: 1: dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_108.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_108.png"'
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_109.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_109.png"'
 sh: 1: dot: not found
@@ -7396,9 +7396,9 @@ error: Problems running dot: exit code=127, command='dot', arguments='"/home/tra
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_121.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_121.png"'
 sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_123.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_123.png"'
-sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_122.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_122.png"'
+sh: 1: dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_123.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_123.png"'
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_124.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_124.png"'
 sh: 1: dot: not found
@@ -7408,29 +7408,29 @@ error: Problems running dot: exit code=127, command='dot', arguments='"/home/tra
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_127.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_127.png"'
 sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_128.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_128.png"'
 sh: 1: dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_128.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_128.png"'
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_129.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_129.png"'
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_130.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_130.png"'
 sh: 1: dot: not found
-sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_132.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_132.png"'
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_131.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_131.png"'
 sh: 1: dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_132.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_132.png"'
+sh: 1: sh: 1: dot: not found
+dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_133.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_133.png"'
-sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_134.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_134.png"'
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_135.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_135.png"'
 sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_136.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_136.png"'
 sh: 1: dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_136.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_136.png"'
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_137.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_137.png"'
 sh: 1: dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_138.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_138.png"'
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_139.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_139.png"'
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_138.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_138.png"'
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_140.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_140.png"'
 sh: 1: dot: not found
@@ -7444,10 +7444,10 @@ error: Problems running dot: exit code=127, command='dot', arguments='"/home/tra
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_145.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_145.png"'
 sh: 1: dot: not found
-sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_146.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_146.png"'
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_147.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_147.png"'
+sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_148.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_148.png"'
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_149.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_149.png"'
@@ -7458,8 +7458,8 @@ error: Problems running dot: exit code=127, command='dot', arguments='"/home/tra
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_152.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_152.png"'
 sh: 1: dot: not found
-sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_153.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_153.png"'
+sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_154.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_154.png"'
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_155.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_155.png"'
@@ -7482,9 +7482,9 @@ error: Problems running dot: exit code=127, command='dot', arguments='"/home/tra
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_164.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_164.png"'
 sh: 1: dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_165.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_165.png"'
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_166.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_166.png"'
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_165.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_165.png"'
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_167.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_167.png"'
 sh: 1: dot: not found
@@ -7500,9 +7500,9 @@ error: Problems running dot: exit code=127, command='dot', arguments='"/home/tra
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_173.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_173.png"'
 sh: 1: dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_174.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_174.png"'
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_175.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_175.png"'
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_174.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_174.png"'
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_176.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_176.png"'
 sh: 1: dot: not found
@@ -7512,23 +7512,23 @@ error: Problems running dot: exit code=127, command='dot', arguments='"/home/tra
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_179.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_179.png"'
 sh: 1: dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_180.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_180.png"'
+sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_181.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_181.png"'
 sh: 1: dot: not found
-sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_180.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_180.png"'
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_182.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_182.png"'
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_183.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_183.png"'
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_184.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_184.png"'
 sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_185.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_185.png"'
-sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_186.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_186.png"'
 sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_188.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_188.png"'
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_185.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_185.png"'
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_187.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_187.png"'
+sh: 1: dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_188.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_188.png"'
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_189.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_189.png"'
 sh: 1: dot: not found
@@ -7536,17 +7536,16 @@ error: Problems running dot: exit code=127, command='dot', arguments='"/home/tra
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_191.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_191.png"'
 sh: 1: dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_192.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_192.png"'
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_193.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_193.png"'
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_194.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_194.png"'
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_192.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_192.png"'
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_195.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_195.png"'
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_196.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_196.png"'
 sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_197.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_197.png"'
 ph 100/267
 Running dot for graph 101/267
 Running dot for graph 102/267
@@ -7684,31 +7683,32 @@ Running dot for graph 233/267
 Running dot for graph 234/267
 Running dot for graph 235/267
 Running dot for graph 236/267
-Runnish: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_198.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_198.png"'
+Runnierror: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_197.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_197.png"'
 sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_200.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_200.png"'
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_198.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_198.png"'
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_199.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_199.png"'
 sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_201.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_201.png"'
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_200.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_200.png"'
+sh: 1: dot: not found
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_202.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_202.png"'
-sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_203.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_203.png"'
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_201.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_201.png"'
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_204.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_204.png"'
 sh: 1: dot: not found
 sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_206.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_206.png"'
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_205.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_205.png"'
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_203.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_203.png"'
+sh: 1: dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_206.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_206.png"'
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_207.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_207.png"'
 sh: 1: dot: not found
-sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_208.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_208.png"'
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_209.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_209.png"'
 sh: 1: dot: not found
+sh: 1: dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_209.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_209.png"'
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_210.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_210.png"'
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_211.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_211.png"'
@@ -7721,27 +7721,27 @@ error: Problems running dot: exit code=127, command='dot', arguments='"/home/tra
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_215.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_215.png"'
 sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_216.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_216.png"'
 sh: 1: dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_216.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_216.png"'
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_217.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_217.png"'
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_218.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_218.png"'
 sh: 1: dot: not found
-sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_220.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_220.png"'
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_219.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_219.png"'
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_221.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_221.png"'
+sh: 1: dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_220.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_220.png"'
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_222.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_222.png"'
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_223.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_223.png"'
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_224.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_224.png"'
-sh: 1: sh: 1: dot: not found
-dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_226.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_226.png"'
+sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_225.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_225.png"'
+sh: 1: dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_226.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_226.png"'
 error: problems opening map file /home/travis/build/hypro/hypro/code_docs/hypro/html/dir_24cbef118a2511338dada52e6e2bd544_dep.map for inclusion in the docs!
 If you installed Graphviz/dot after a previous failing run, 
 try deleting the output directory and rerun doxygen.
@@ -8611,5 +8611,5 @@ Patching output file 37/40
 Patching output file 38/40
 Patching output file 39/40
 Patching output file 40/40
-lookup cache used 22620/65536 hits=518269 misses=24095
+lookup cache used 22635/65536 hits=518552 misses=24113
 finished...

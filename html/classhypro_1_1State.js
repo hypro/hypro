@@ -37,6 +37,7 @@ var classhypro_1_1State =
     [ "rGetSet", "classhypro_1_1State.html#ad4ef0fa3605e3c52dab40ac88e661b2b", null ],
     [ "satisfies", "classhypro_1_1State.html#a395a1ad98da7674b5c060e47fdd6735a", null ],
     [ "satisfiesHalfspaces", "classhypro_1_1State.html#aa87b1a7909bbdd958cc9a3e56bfb1c03", null ],
+    [ "setAndConvertType", "classhypro_1_1State.html#a5106967d96aff36dcdb1073b041ddd8f", null ],
     [ "setLocation", "classhypro_1_1State.html#a9d7649df9b2670e1873784c3c5fdca21", null ],
     [ "setSet", "classhypro_1_1State.html#af4889b0f91aea2b694ab7876ce89ba60", null ],
     [ "setSetDirect", "classhypro_1_1State.html#a842629cbd6c3f2e2788838113b1d5586", null ],

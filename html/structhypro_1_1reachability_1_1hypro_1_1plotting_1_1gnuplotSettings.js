@@ -9,5 +9,6 @@ var structhypro_1_1reachability_1_1hypro_1_1plotting_1_1gnuplotSettings =
     [ "keepAspectRatio", "structhypro_1_1reachability_1_1hypro_1_1plotting_1_1gnuplotSettings.html#abb39b39e5914982bb45eabafe8c74e6a", null ],
     [ "linewidth", "structhypro_1_1reachability_1_1hypro_1_1plotting_1_1gnuplotSettings.html#a194105de7da4404019deefba0c8bc0ad", null ],
     [ "name", "structhypro_1_1reachability_1_1hypro_1_1plotting_1_1gnuplotSettings.html#ab43fe757c2bd4df834ae80f15a5b1213", null ],
+    [ "plain", "structhypro_1_1reachability_1_1hypro_1_1plotting_1_1gnuplotSettings.html#aa69a4f9da02d85fa38ceba4447cb230b", null ],
     [ "pointSize", "structhypro_1_1reachability_1_1hypro_1_1plotting_1_1gnuplotSettings.html#ac63a2a38d287f8cf8e25c38c102669c5", null ]
 ];

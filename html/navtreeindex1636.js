@@ -2,7 +2,7 @@ var NAVTREEINDEX1636 =
 {
 "classhypro_1_1Location.html#ae0e07f4791ea563dee80590661758c89":[9,0,1,25,20],
 "classhypro_1_1Location.html#af341b96d0478f585a42f066ebd5c7bde":[9,0,1,25,27],
-"classhypro_1_1Location.html#afca89b8e15d30121aaff7b2224af45cc":[9,0,1,25,8],
+"classhypro_1_1Location.html#afca89b8e15d30121aaff7b2224af45cc":[9,0,1,25,7],
 "classhypro_1_1LocationManager.html":[9,0,1,24],
 "classhypro_1_1LocationManager.html#a03a0716860d930fb9b6c1e8d792a395e":[9,0,1,24,10],
 "classhypro_1_1LocationManager.html#a0e3b14dfef81c2b305df490fd77c5b6a":[9,0,1,24,9],

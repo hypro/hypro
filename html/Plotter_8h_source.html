@@ -159,85 +159,86 @@ $(document).ready(function(){initNavTree('Plotter_8h_source.html','');});
 <div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;        <span class="keywordtype">bool</span> keepAspectRatio = <span class="keyword">true</span>;         <span class="comment">// keep aspect ratio for both axes</span></div>
 <div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;        std::pair&lt;unsigned, unsigned&gt; dimensions = std::make_pair(0,1); <span class="comment">// dimensions to plot</span></div>
 <div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;        <span class="keywordtype">bool</span> cummulative = <span class="keyword">false</span>;            <span class="comment">// if enabled, plot each new segment in a new plot, only works for gnuplot, not for tex (TODO)</span></div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    };</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;} <span class="comment">// namespace plotting</span></div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;        <span class="keywordtype">bool</span> plain = <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    };</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;} <span class="comment">// namespace plotting</span></div>
 <div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> Number&gt;</div>
-<div class="line"><a name="l00069"></a><span class="lineno"><a class="line" href="classhypro_1_1Plotter.html">   69</a></span>&#160;<span class="keyword">class </span><a class="code" href="classhypro_1_1Plotter.html">Plotter</a> : <span class="keyword">public</span> carl::Singleton&lt;Plotter&lt;Number&gt;&gt; {</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;    <span class="keyword">friend</span> carl::Singleton&lt;Plotter&lt;Number&gt;&gt;;</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;  <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;    std::string mFilename = <span class="stringliteral">&quot;out&quot;</span>;</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;    <span class="keyword">mutable</span> std::ofstream mOutfile;</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;    <span class="keyword">mutable</span> std::multimap&lt;unsigned, std::vector&lt;Point&lt;Number&gt;&gt;&gt; mObjects;</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;    <span class="keyword">mutable</span> std::multimap&lt;unsigned, std::vector&lt;Halfspace&lt;Number&gt;&gt;&gt; mPlanes;</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;    <span class="keyword">mutable</span> std::multimap&lt;unsigned, Point&lt;Number&gt;&gt; mPoints;</div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;    <span class="keyword">mutable</span> std::multimap&lt;unsigned, vector_t&lt;Number&gt;&gt; mVectors;</div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;    <span class="keyword">mutable</span> std::pair&lt;int, int&gt; mLastDimensions;</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;    <span class="keyword">mutable</span> std::pair&lt;vector_t&lt;Number&gt;, <a class="code" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t&lt;Number&gt;</a>&gt; mLimits;</div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;    std::map&lt;unsigned, std::size_t&gt; mObjectColors;</div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;    <a class="code" href="structhypro_1_1plotting_1_1gnuplotSettings.html">plotting::gnuplotSettings</a> mSettings;</div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;    <span class="keywordtype">unsigned</span> mId;</div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;</div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;  <span class="keyword">protected</span>:</div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;    <a class="code" href="classhypro_1_1Plotter.html">Plotter</a>() : mLastDimensions(std::make_pair(-1,-1)), mId( 1 ) {}</div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;</div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;  <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;    ~<a class="code" href="classhypro_1_1Plotter.html">Plotter</a>();</div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;</div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhypro_1_1Plotter.html#a52ef9dfe2f19bc99090df94327f206fd">setFilename</a>( <span class="keyword">const</span> std::string&amp; _filename = <span class="stringliteral">&quot;out&quot;</span> );</div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;</div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhypro_1_1Plotter.html#ae70e9f2612ee938eebbdf278b6f79866">updateSettings</a>( <span class="keyword">const</span> <a class="code" href="structhypro_1_1plotting_1_1gnuplotSettings.html">plotting::gnuplotSettings</a>&amp; _settings );</div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;</div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;    <span class="keyword">const</span> <a class="code" href="structhypro_1_1plotting_1_1gnuplotSettings.html">plotting::gnuplotSettings</a>&amp; <a class="code" href="classhypro_1_1Plotter.html#a7d25a45e3dc66139c2e8ad85f2ee685c">settings</a>() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;</div>
-<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;    <a class="code" href="structhypro_1_1plotting_1_1gnuplotSettings.html">plotting::gnuplotSettings</a>&amp; <a class="code" href="classhypro_1_1Plotter.html#ae7fa3662c313daceb371c9e115d14e9d">rSettings</a>();</div>
-<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;</div>
-<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhypro_1_1Plotter.html#a020e89ed0c39a091bf49a0b400e511f8">plot2d</a>() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;</div>
-<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhypro_1_1Plotter.html#a28dbb6edd1dce9156bd22d339f810fed">plotTex</a>() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;</div>
-<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhypro_1_1Plotter.html#a04d0eec05e76743057fc6e2de615ce30">plotGen</a>() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;</div>
-<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhypro_1_1Plotter.html#a54b1944b908e221164588894ea4050dc">plotEps</a>() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;</div>
-<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;    <span class="keywordtype">unsigned</span> <a class="code" href="classhypro_1_1Plotter.html#a5993c1c7ece6f9f3c2c03b61a58d60ce">addObject</a>( <span class="keyword">const</span> std::vector&lt;<a class="code" href="classhypro_1_1Point.html">Point&lt;Number&gt;</a>&gt;&amp; _points );</div>
-<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;</div>
-<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;    <span class="keywordtype">unsigned</span> <a class="code" href="classhypro_1_1Plotter.html#a5993c1c7ece6f9f3c2c03b61a58d60ce">addObject</a>( <span class="keyword">const</span> std::vector&lt;std::vector&lt;<a class="code" href="classhypro_1_1Point.html">Point&lt;Number&gt;</a>&gt;&gt;&amp; _points );</div>
-<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;</div>
-<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;    <span class="keywordtype">unsigned</span> <a class="code" href="classhypro_1_1Plotter.html#a5993c1c7ece6f9f3c2c03b61a58d60ce">addObject</a>( <span class="keyword">const</span> std::vector&lt;<a class="code" href="classhypro_1_1Halfspace.html">Halfspace&lt;Number&gt;</a>&gt;&amp; _planes );</div>
-<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;</div>
-<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;    <span class="keywordtype">unsigned</span> <a class="code" href="classhypro_1_1Plotter.html#a5993c1c7ece6f9f3c2c03b61a58d60ce">addObject</a>( <span class="keyword">const</span> <a class="code" href="classhypro_1_1Halfspace.html">Halfspace&lt;Number&gt;</a>&amp; _plane );</div>
-<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;</div>
-<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;    <span class="keywordtype">unsigned</span> <a class="code" href="classhypro_1_1Plotter.html#af6084a89f7e0b18be7141234f684d492">addPoint</a>( <span class="keyword">const</span> <a class="code" href="classhypro_1_1Point.html">Point&lt;Number&gt;</a>&amp; _point );</div>
-<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;</div>
-<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;    <span class="keywordtype">unsigned</span> <a class="code" href="classhypro_1_1Plotter.html#aa499a644438df4e310fac48b8637f831">addPoints</a>( <span class="keyword">const</span> std::vector&lt;<a class="code" href="classhypro_1_1Point.html">Point&lt;Number&gt;</a>&gt;&amp; _points );</div>
-<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;</div>
-<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhypro_1_1Plotter.html#afa6b73d2194f0fa8b40da351f4d356ab">addVector</a>( <span class="keyword">const</span> <a class="code" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t&lt;Number&gt;</a>&amp; _vector );</div>
-<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;</div>
-<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhypro_1_1Plotter.html#a1fca511abc240a333e905d4431627119">setObjectColor</a>( <span class="keywordtype">unsigned</span> _id, <span class="keyword">const</span> std::size_t _color );</div>
-<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;</div>
-<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;    <span class="keywordtype">void</span> clear();</div>
-<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;</div>
-<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;  <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;    <span class="comment">// auxiliary functions</span></div>
-<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;    <span class="keywordtype">void</span> init( <span class="keyword">const</span> std::string&amp; _filename );</div>
-<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;    <span class="keywordtype">void</span> writeGnuplot() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;    <span class="keyword">static</span> std::vector&lt;Point&lt;Number&gt;&gt; grahamScan( <span class="keyword">const</span> std::vector&lt;<a class="code" href="classhypro_1_1Point.html">Point&lt;Number&gt;</a>&gt;&amp; _points );</div>
-<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">bool</span> isLeftTurn( <span class="keyword">const</span> <a class="code" href="classhypro_1_1Point.html">Point&lt;Number&gt;</a>&amp; a, <span class="keyword">const</span> <a class="code" href="classhypro_1_1Point.html">Point&lt;Number&gt;</a>&amp; b, <span class="keyword">const</span> <a class="code" href="classhypro_1_1Point.html">Point&lt;Number&gt;</a>&amp; c );</div>
-<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;    <span class="keywordtype">void</span> prepareObjects() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;};</div>
-<div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160;}</div>
-<div class="line"><a name="l00214"></a><span class="lineno">  214</span>&#160;</div>
-<div class="line"><a name="l00215"></a><span class="lineno">  215</span>&#160;<span class="preprocessor">#include &quot;Plotter.tpp&quot;</span></div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> Number&gt;</div>
+<div class="line"><a name="l00070"></a><span class="lineno"><a class="line" href="classhypro_1_1Plotter.html">   70</a></span>&#160;<span class="keyword">class </span><a class="code" href="classhypro_1_1Plotter.html">Plotter</a> : <span class="keyword">public</span> carl::Singleton&lt;Plotter&lt;Number&gt;&gt; {</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    <span class="keyword">friend</span> carl::Singleton&lt;Plotter&lt;Number&gt;&gt;;</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;  <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;    std::string mFilename = <span class="stringliteral">&quot;out&quot;</span>;</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;    <span class="keyword">mutable</span> std::ofstream mOutfile;</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;    <span class="keyword">mutable</span> std::multimap&lt;unsigned, std::vector&lt;Point&lt;Number&gt;&gt;&gt; mObjects;</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;    <span class="keyword">mutable</span> std::multimap&lt;unsigned, std::vector&lt;Halfspace&lt;Number&gt;&gt;&gt; mPlanes;</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;    <span class="keyword">mutable</span> std::multimap&lt;unsigned, Point&lt;Number&gt;&gt; mPoints;</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;    <span class="keyword">mutable</span> std::multimap&lt;unsigned, vector_t&lt;Number&gt;&gt; mVectors;</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;    <span class="keyword">mutable</span> std::pair&lt;int, int&gt; mLastDimensions;</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;    <span class="keyword">mutable</span> std::pair&lt;vector_t&lt;Number&gt;, <a class="code" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t&lt;Number&gt;</a>&gt; mLimits;</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;    std::map&lt;unsigned, std::size_t&gt; mObjectColors;</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;    <a class="code" href="structhypro_1_1plotting_1_1gnuplotSettings.html">plotting::gnuplotSettings</a> mSettings;</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;    <span class="keywordtype">unsigned</span> mId;</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;  <span class="keyword">protected</span>:</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;    <a class="code" href="classhypro_1_1Plotter.html">Plotter</a>() : mLastDimensions(std::make_pair(-1,-1)), mId( 1 ) {}</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;  <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;    ~<a class="code" href="classhypro_1_1Plotter.html">Plotter</a>();</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhypro_1_1Plotter.html#a52ef9dfe2f19bc99090df94327f206fd">setFilename</a>( <span class="keyword">const</span> std::string&amp; _filename = <span class="stringliteral">&quot;out&quot;</span> );</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhypro_1_1Plotter.html#ae70e9f2612ee938eebbdf278b6f79866">updateSettings</a>( <span class="keyword">const</span> <a class="code" href="structhypro_1_1plotting_1_1gnuplotSettings.html">plotting::gnuplotSettings</a>&amp; _settings );</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;    <span class="keyword">const</span> <a class="code" href="structhypro_1_1plotting_1_1gnuplotSettings.html">plotting::gnuplotSettings</a>&amp; <a class="code" href="classhypro_1_1Plotter.html#a7d25a45e3dc66139c2e8ad85f2ee685c">settings</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;</div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;    <a class="code" href="structhypro_1_1plotting_1_1gnuplotSettings.html">plotting::gnuplotSettings</a>&amp; <a class="code" href="classhypro_1_1Plotter.html#ae7fa3662c313daceb371c9e115d14e9d">rSettings</a>();</div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;</div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhypro_1_1Plotter.html#a020e89ed0c39a091bf49a0b400e511f8">plot2d</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;</div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhypro_1_1Plotter.html#a28dbb6edd1dce9156bd22d339f810fed">plotTex</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;</div>
+<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhypro_1_1Plotter.html#a04d0eec05e76743057fc6e2de615ce30">plotGen</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;</div>
+<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhypro_1_1Plotter.html#a54b1944b908e221164588894ea4050dc">plotEps</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;</div>
+<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;    <span class="keywordtype">unsigned</span> <a class="code" href="classhypro_1_1Plotter.html#a5993c1c7ece6f9f3c2c03b61a58d60ce">addObject</a>( <span class="keyword">const</span> std::vector&lt;<a class="code" href="classhypro_1_1Point.html">Point&lt;Number&gt;</a>&gt;&amp; _points );</div>
+<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;</div>
+<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;    <span class="keywordtype">unsigned</span> <a class="code" href="classhypro_1_1Plotter.html#a5993c1c7ece6f9f3c2c03b61a58d60ce">addObject</a>( <span class="keyword">const</span> std::vector&lt;std::vector&lt;<a class="code" href="classhypro_1_1Point.html">Point&lt;Number&gt;</a>&gt;&gt;&amp; _points );</div>
+<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;</div>
+<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;    <span class="keywordtype">unsigned</span> <a class="code" href="classhypro_1_1Plotter.html#a5993c1c7ece6f9f3c2c03b61a58d60ce">addObject</a>( <span class="keyword">const</span> std::vector&lt;<a class="code" href="classhypro_1_1Halfspace.html">Halfspace&lt;Number&gt;</a>&gt;&amp; _planes );</div>
+<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;</div>
+<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;    <span class="keywordtype">unsigned</span> <a class="code" href="classhypro_1_1Plotter.html#a5993c1c7ece6f9f3c2c03b61a58d60ce">addObject</a>( <span class="keyword">const</span> <a class="code" href="classhypro_1_1Halfspace.html">Halfspace&lt;Number&gt;</a>&amp; _plane );</div>
+<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;</div>
+<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;    <span class="keywordtype">unsigned</span> <a class="code" href="classhypro_1_1Plotter.html#af6084a89f7e0b18be7141234f684d492">addPoint</a>( <span class="keyword">const</span> <a class="code" href="classhypro_1_1Point.html">Point&lt;Number&gt;</a>&amp; _point );</div>
+<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;</div>
+<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;    <span class="keywordtype">unsigned</span> <a class="code" href="classhypro_1_1Plotter.html#aa499a644438df4e310fac48b8637f831">addPoints</a>( <span class="keyword">const</span> std::vector&lt;<a class="code" href="classhypro_1_1Point.html">Point&lt;Number&gt;</a>&gt;&amp; _points );</div>
+<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;</div>
+<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhypro_1_1Plotter.html#afa6b73d2194f0fa8b40da351f4d356ab">addVector</a>( <span class="keyword">const</span> <a class="code" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t&lt;Number&gt;</a>&amp; _vector );</div>
+<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;</div>
+<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhypro_1_1Plotter.html#a1fca511abc240a333e905d4431627119">setObjectColor</a>( <span class="keywordtype">unsigned</span> _id, <span class="keyword">const</span> std::size_t _color );</div>
+<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;</div>
+<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;    <span class="keywordtype">void</span> clear();</div>
+<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;</div>
+<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;  <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;    <span class="comment">// auxiliary functions</span></div>
+<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;    <span class="keywordtype">void</span> init( <span class="keyword">const</span> std::string&amp; _filename );</div>
+<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;    <span class="keywordtype">void</span> writeGnuplot() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;    <span class="keyword">static</span> std::vector&lt;Point&lt;Number&gt;&gt; grahamScan( <span class="keyword">const</span> std::vector&lt;<a class="code" href="classhypro_1_1Point.html">Point&lt;Number&gt;</a>&gt;&amp; _points );</div>
+<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">bool</span> isLeftTurn( <span class="keyword">const</span> <a class="code" href="classhypro_1_1Point.html">Point&lt;Number&gt;</a>&amp; a, <span class="keyword">const</span> <a class="code" href="classhypro_1_1Point.html">Point&lt;Number&gt;</a>&amp; b, <span class="keyword">const</span> <a class="code" href="classhypro_1_1Point.html">Point&lt;Number&gt;</a>&amp; c );</div>
+<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;    <span class="keywordtype">void</span> prepareObjects() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160;};</div>
+<div class="line"><a name="l00214"></a><span class="lineno">  214</span>&#160;}</div>
+<div class="line"><a name="l00215"></a><span class="lineno">  215</span>&#160;</div>
+<div class="line"><a name="l00216"></a><span class="lineno">  216</span>&#160;<span class="preprocessor">#include &quot;Plotter.tpp&quot;</span></div>
 <div class="ttc" id="classhypro_1_1Plotter_html_af6084a89f7e0b18be7141234f684d492"><div class="ttname"><a href="classhypro_1_1Plotter.html#af6084a89f7e0b18be7141234f684d492">hypro::Plotter::addPoint</a></div><div class="ttdeci">unsigned addPoint(const Point&lt; Number &gt; &amp;_point)</div><div class="ttdoc">Adds a point to the plotter. </div></div>
 <div class="ttc" id="classhypro_1_1Plotter_html_ae70e9f2612ee938eebbdf278b6f79866"><div class="ttname"><a href="classhypro_1_1Plotter.html#ae70e9f2612ee938eebbdf278b6f79866">hypro::Plotter::updateSettings</a></div><div class="ttdeci">void updateSettings(const plotting::gnuplotSettings &amp;_settings)</div><div class="ttdoc">Overrides the current plotting settings with the passed ones. </div></div>
 <div class="ttc" id="classhypro_1_1Point_html"><div class="ttname"><a href="classhypro_1_1Point.html">hypro::Point</a></div><div class="ttdoc">Class for a point. </div><div class="ttdef"><b>Definition:</b> <a href="Point_8h_source.html#l00025">Point.h:25</a></div></div>
 <div class="ttc" id="classhypro_1_1Plotter_html_ae7fa3662c313daceb371c9e115d14e9d"><div class="ttname"><a href="classhypro_1_1Plotter.html#ae7fa3662c313daceb371c9e115d14e9d">hypro::Plotter::rSettings</a></div><div class="ttdeci">plotting::gnuplotSettings &amp; rSettings()</div><div class="ttdoc">Provides a reference to the current plotting settings such that they can be changed in place...</div></div>
 <div class="ttc" id="classhypro_1_1Plotter_html_a1fca511abc240a333e905d4431627119"><div class="ttname"><a href="classhypro_1_1Plotter.html#a1fca511abc240a333e905d4431627119">hypro::Plotter::setObjectColor</a></div><div class="ttdeci">void setObjectColor(unsigned _id, const std::size_t _color)</div><div class="ttdoc">Sets the object color. </div></div>
-<div class="ttc" id="classhypro_1_1Plotter_html"><div class="ttname"><a href="classhypro_1_1Plotter.html">hypro::Plotter</a></div><div class="ttdoc">Class implementing a plotter. The plotter is implemented using carl::Singleton. </div><div class="ttdef"><b>Definition:</b> <a href="Plotter_8h_source.html#l00069">Plotter.h:69</a></div></div>
+<div class="ttc" id="classhypro_1_1Plotter_html"><div class="ttname"><a href="classhypro_1_1Plotter.html">hypro::Plotter</a></div><div class="ttdoc">Class implementing a plotter. The plotter is implemented using carl::Singleton. </div><div class="ttdef"><b>Definition:</b> <a href="Plotter_8h_source.html#l00070">Plotter.h:70</a></div></div>
 <div class="ttc" id="classhypro_1_1Plotter_html_a5993c1c7ece6f9f3c2c03b61a58d60ce"><div class="ttname"><a href="classhypro_1_1Plotter.html#a5993c1c7ece6f9f3c2c03b61a58d60ce">hypro::Plotter::addObject</a></div><div class="ttdeci">unsigned addObject(const std::vector&lt; Point&lt; Number &gt;&gt; &amp;_points)</div><div class="ttdoc">Adds an object represented as a vector of points. Duplicates and points inside will be removed by the...</div></div>
 <div class="ttc" id="classhypro_1_1Plotter_html_a52ef9dfe2f19bc99090df94327f206fd"><div class="ttname"><a href="classhypro_1_1Plotter.html#a52ef9dfe2f19bc99090df94327f206fd">hypro::Plotter::setFilename</a></div><div class="ttdeci">void setFilename(const std::string &amp;_filename=&quot;out&quot;)</div><div class="ttdoc">Sets the filename. </div></div>
 <div class="ttc" id="classhypro_1_1Plotter_html_aa499a644438df4e310fac48b8637f831"><div class="ttname"><a href="classhypro_1_1Plotter.html#aa499a644438df4e310fac48b8637f831">hypro::Plotter::addPoints</a></div><div class="ttdeci">unsigned addPoints(const std::vector&lt; Point&lt; Number &gt;&gt; &amp;_points)</div><div class="ttdoc">Adds points to the plotter. </div></div>
