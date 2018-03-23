@@ -140,9 +140,10 @@ TYPED_TEST(AntlrParserTest, MinimalAcceptedFile){
 	std::string name("l");
 	loc->setName(name);
 	//External Input
-	std::vector<carl::Interval<TypeParam>> emptyExtInput;
-	emptyExtInput.push_back(carl::Interval<TypeParam>());
-	loc->setExtInput(hypro::Box<TypeParam>(emptyExtInput));
+	//std::vector<carl::Interval<TypeParam>> ExtInput;
+	//ExtInput.push_back(carl::Interval<TypeParam>(-1,4));
+	//ExtInput.push_back(carl::Interval<TypeParam>());
+	//loc->setExtInput(hypro::Box<TypeParam>(ExtInput));
 	//Put location into locSet
 	std::set<hypro::Location<TypeParam>*> locSet;
 	locSet.insert(loc);

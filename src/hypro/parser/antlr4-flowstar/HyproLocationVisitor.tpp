@@ -16,7 +16,7 @@ namespace hypro {
 
 	template<typename Number>
 	antlrcpp::Any HyproLocationVisitor<Number>::visitModes(HybridAutomatonParser::ModesContext *ctx){
-		
+
 		//Calls visit(ctx->location()) to get location, name it, put into locSet, return locSet
 		unsigned i = 0;
 		std::set<Location<Number>*> locSet;
@@ -39,7 +39,7 @@ namespace hypro {
 
 	template<typename Number>
 	antlrcpp::Any HyproLocationVisitor<Number>::visitLocation(HybridAutomatonParser::LocationContext *ctx){
-	
+
 		//1.Calls visit(ctx->activities()) to get flowmatrix and externalInputBox
 		std::pair<matrix_t<Number>,Box<Number>> flowAndExtInput = visit(ctx->activities());
 		//std::cout << "---- Flow matrix is:\n" << flowAndExtInput.first << std::endl;
@@ -73,7 +73,7 @@ namespace hypro {
 						newVec(i) = currInvVec(i-newMatRowsBefore);
 					}
 
-					inv = Condition<Number>(newMat, newVec); 
+					inv = Condition<Number>(newMat, newVec);
 
 				}
 
@@ -91,7 +91,12 @@ namespace hypro {
 		loc->setName(ctx->VARIABLE()->getText());
 		loc->setFlow(flowAndExtInput.first);
 		loc->setInvariant(inv);
-		loc->setExtInput(flowAndExtInput.second);
+
+		// only set external input, if it is different from zero
+		if(!flowAndExtInput.second.empty() && flowAndExtInput.second != Box<Number>(std::make_pair(Point<Number>(vector_t<Number>::Zero(flowAndExtInput.first.cols()-1)), Point<Number>(vector_t<Number>::Zero(flowAndExtInput.first.cols()-1))))) {
+			std::cout << "Set external input to " << flowAndExtInput.second << " which is not equal to " << Box<Number>(std::make_pair(Point<Number>(vector_t<Number>::Zero(flowAndExtInput.first.cols()-1)), Point<Number>(vector_t<Number>::Zero(flowAndExtInput.first.cols()-1)))) << std::endl;
+			loc->setExtInput(flowAndExtInput.second);
+		}
 		return loc;
 	}
 
@@ -107,20 +112,20 @@ namespace hypro {
 		//1.Calls iteratively visit(ctx->equation()) to get vector, store them
 		matrix_t<Number> tmpMatrix = matrix_t<Number>::Zero(vars.size()+1, vars.size()+1);
 		std::vector<carl::Interval<Number>> extInputVec(vars.size(), carl::Interval<Number>());
-		//std::cout << "extInputVec has been made!\n"; 
+		//std::cout << "extInputVec has been made!\n";
 		HyproFormulaVisitor<Number> visitor(vars);
 		for(unsigned i=0; i < ctx->equation().size(); i++){
-			
+
 			//insert into row according to state var order
 			vector_t<Number> tmpRow = visitor.visit(ctx->equation()[i]);
 			for(unsigned j=0; j < vars.size(); j++){
 				if(ctx->equation()[i]->VARIABLE()->getText() == (vars[j] + "'")){
-					tmpMatrix.row(j) = tmpRow;	
+					tmpMatrix.row(j) = tmpRow;
 					if(ctx->equation(i)->interval() != NULL){
 						carl::Interval<Number> intervalValues = visitor.visit(ctx->equation(i)->interval());
 						extInputVec[j] = intervalValues;
 						//std::cout << "internalValues are: " << intervalValues << std::endl;
-					} 
+					}
 					//std::cout << "extInputVec is at pos " << j << "is now:\n" << extInputVec[j] << std::endl;
 				}
 			}
@@ -139,24 +144,24 @@ namespace hypro {
 
 	template<typename Number>
 	antlrcpp::Any HyproLocationVisitor<Number>::visitInvariants(HybridAutomatonParser::InvariantsContext *ctx){
-		
+
 		if(ctx->constrset() != NULL){
 
 			//1.Call HyproFormulaVisitor and get pair of matrix and vector
 			HyproFormulaVisitor<Number> visitor(vars);
 			std::pair<matrix_t<Number>,vector_t<Number>> result = visitor.visit(ctx->constrset());
-	
+
 			//2.Build condition out of them
 			Condition<Number> inv;
 			inv.setMatrix(result.first);
 			inv.setVector(result.second);
-	
+
 			//3.Return condition
 			return inv;
 
 		}
 
 		return Condition<Number>();
-		
+
 	}
 }

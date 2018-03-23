@@ -54,8 +54,8 @@ protected:
 
 private:
     mutable std::vector<matrix_t<Number>> mFlows;
-    Box<Number> mExternalInput;
-    bool mHasExternalInput;
+    Box<Number> mExternalInput = Box<Number>::Empty();
+    bool mHasExternalInput = false;
     transitionSet mTransitions;
     Condition<Number> mInvariant;
     unsigned mId;
