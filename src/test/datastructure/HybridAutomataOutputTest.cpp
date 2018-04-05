@@ -32,8 +32,8 @@ protected:
 		loc1 = locMan.create();
     	loc2 = locMan.create();
 
-
-    	trans = new Transition<double>();
+    	//trans = new Transition<double>();
+    	trans = std::make_unique<Transition<double>>();
 
 		invariantVec(0) = 10;
 		invariantVec(1) = 20;
@@ -100,11 +100,19 @@ protected:
 			hybrid.addInitialState(initState);
 		}
 
-		transition[0] = trans;
-		transSet = std::set<Transition<double>*>(transition, transition+1);
-
+		transition[0] = std::move(trans);
+		transSet = std::set<std::unique_ptr<Transition<double>>>(transition, transition+1);
+		for(auto& t : transSet){
+			ptrSet.insert(t.get());
+		}
 		hybrid.setTransitions(transSet);
-		loc1->setTransitions(transSet);
+		//loc1->setTransitions(transSet);
+		loc1->setTransitions(ptrSet);
+
+		//transition[0] = trans;
+		//transSet = std::set<Transition<double>*>(transition, transition+1);
+		//hybrid.setTransitions(transSet);
+		//loc1->setTransitions(transSet);
     }
 
     virtual void TearDown()
@@ -120,7 +128,8 @@ protected:
 
     Location<double>* loc1;
     Location<double>* loc2;
-    Transition<double>* trans;
+    //Transition<double>* trans;
+    std::unique_ptr<Transition<double>> trans;
     HybridAutomaton<double> hybrid;
 
     //Other Objects: Vectors, Matrices, Guards...
@@ -139,8 +148,11 @@ protected:
     Location<double>* init[1];
     std::set<Location<double>*> initLocSet;
 
-    Transition<double>* transition[1];
-	std::set<Transition<double>*> transSet;
+    //Transition<double>* transition[1];
+	//std::set<Transition<double>*> transSet;
+	std::unique_ptr<Transition<double>> transition[1];
+	std::set<std::unique_ptr<Transition<double>>> transSet;
+    std::set<Transition<double>*> ptrSet;
 
 	vector_t<double> coordinates = vector_t<double>(2,1);
     valuation_t poly;

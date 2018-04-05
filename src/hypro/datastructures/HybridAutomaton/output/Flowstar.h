@@ -180,7 +180,7 @@ namespace hypro {
 			if(!in.getTransitions().empty()) {
 				// transitions
 				res << "\tjumps\n\t{";
-				for(const auto transPtr : in.getTransitions()) {
+				for(const auto& transPtr : in.getTransitions()) {
 					//std::cout << "output transition " << transPtr->getSource()->getName() << " -> " << transPtr->getTarget()->getName() << std::endl;
 					res << "\n\t\t" << transPtr->getSource()->getName() << " -> " << transPtr->getTarget()->getName();
 					if(transPtr->isUrgent())

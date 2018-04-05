@@ -30,7 +30,11 @@ namespace hypro {
 		//4.Calls visit to get transitions
 		//NOTE: the transVisitor will modify locSet as every location has its own set of transitions that must be added here.
 		HyproTransitionVisitor<Number> transVisitor = HyproTransitionVisitor<Number>(varVec, rLocSet);
-		std::set<Transition<Number>*> transSet = transVisitor.visit(ctx->jumps()).template as<std::set<Transition<Number>*>>();
+		std::set<Transition<Number>*> tSet = transVisitor.visit(ctx->jumps()).template as<std::set<Transition<Number>*>>();
+		std::set<std::unique_ptr<Transition<Number>>> transSet;
+		for(auto& t : tSet){
+			transSet.insert(std::unique_ptr<Transition<Number>>(std::move(t)));
+		}
 
 		//5.Calls visit to get all initial states
 		typename hypro::HybridAutomaton<Number, State_t<Number,Number>>::locationStateMap initSet;

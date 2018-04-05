@@ -46,7 +46,8 @@ const std::set<Label> HybridAutomaton<Number,State>::getLabels() const {
 }
 
 template<typename Number, typename State>
-void HybridAutomaton<Number,State>::removeTransition(Transition<Number>* toRemove) {
+//void HybridAutomaton<Number,State>::removeTransition(Transition<Number>* toRemove) {
+void HybridAutomaton<Number,State>::removeTransition(std::unique_ptr<Transition<Number>> toRemove) {
 	for(auto tIt = mTransitions.begin(); tIt != mTransitions.end(); ) {
 		if(*tIt == toRemove)
 			tIt = mTransitions.erase(tIt);

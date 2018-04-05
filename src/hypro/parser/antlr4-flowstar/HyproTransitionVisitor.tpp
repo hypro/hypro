@@ -20,15 +20,20 @@ namespace hypro {
 
 		if(ctx->transition().size() > 0){
 			std::set<Transition<Number>*> trSet;
+			//std::set<std::unique_ptr<Transition<Number>>> trSet;
 			for(auto tr : ctx->transition()){
 				//trSet.insert(visit(tr).antlrcpp::Any::as<Transition<Number>*>());
-				Transition<Number>* t = visit(tr).template as<Transition<Number>*>();
+				//std::unique_ptr<Transition<Number>> t(std::move(visit(tr).template as<std::unique_ptr<Transition<Number>>>()));
+				Transition<Number>* t = visit(tr).antlrcpp::Any::as<Transition<Number>*>();
 				trSet.insert(t);
+				//trSet.insert(t);
 				(t->getSource())->addTransition(t);
 			}
 			return trSet;
+			//return std::move(trSet);
 		} else {
 			return std::set<Transition<Number>*>();
+			//return std::move(std::set<std::unique_ptr<Transition<Number>>>());
 		}
 
 	}
@@ -37,6 +42,7 @@ namespace hypro {
 	antlrcpp::Any HyproTransitionVisitor<Number>::visitTransition(HybridAutomatonParser::TransitionContext *ctx){
 
 		Transition<Number>* t = new Transition<Number>();
+		//std::unique_ptr<Transition<Number>> t = std::make_unique<Transition<Number>>();
 
 		//1.Collect start/destination location from visitFromTo
 		std::pair<Location<Number>*,Location<Number>*> fromTo = visit(ctx->fromto());

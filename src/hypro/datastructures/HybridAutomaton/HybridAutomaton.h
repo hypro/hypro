@@ -33,7 +33,8 @@ class HybridAutomaton
 {
   public:
     using locationSet = std::set<Location<Number>*>; /// Set of location pointers.
-    using transitionSet = std::set<Transition<Number>*>; /// Set of transition pointers.
+    //using transitionSet = std::set<Transition<Number>*>; /// Set of transition pointers.
+    using transitionSet = std::set<std::unique_ptr<Transition<Number>>>; /// Set of transition pointers.
     using locationStateMap = std::multimap<const Location<Number>*, State>; /// Multi-map from location pointers to states.
     using locationConditionMap = std::map<const Location<Number>*, Condition<Number>>; /// Map from location pointers to conditions.
     using conditionVector = std::vector<Condition<Number>>; /// Vector of conditions.
@@ -58,7 +59,18 @@ class HybridAutomaton
      *
      * @param[in]  hybrid  The original hybrid automaton.
      */
-    HybridAutomaton(const HybridAutomaton<Number,State>& hybrid) = default;
+    //HybridAutomaton(const HybridAutomaton<Number,State>& hybrid) = default;
+    HybridAutomaton(const HybridAutomaton<Number,State>& hybrid){
+    	mLocations = hybrid.getLocations();
+    	for(auto& t : hybrid.getTransitions()){
+    		//mTransitions.insert(std::make_unique<Transition<Number>>(new Transition<Number>(*t)));
+    		mTransitions.insert(std::unique_ptr<Transition<Number>>(new Transition<Number>(*t)));
+    	}
+    	mInitialStates = hybrid.getInitialStates();
+    	mLocalBadStates = hybrid.getLocalBadStates();
+    	mGlobalBadStates = hybrid.getGlobalBadStates();
+    	mVariables = hybrid.getVariables();
+    }
 
     /**
      * @brief      Move constructor.
@@ -106,7 +118,11 @@ class HybridAutomaton
      */
     ///@{
     void setLocations(const locationSet& locs) { mLocations = locs; }
-    void setTransitions(const transitionSet& trans) { mTransitions = trans; }
+    //void setTransitions(const transitionSet& trans) { mTransitions = trans; }
+    void setTransitions(transitionSet& trans) { 
+    	mTransitions.swap(trans);
+    	//std::swap(mTransitions,trans);
+    }
     void setInitialStates(const locationStateMap& states) { mInitialStates = states; }
     void setLocalBadStates(const locationConditionMap& states) { mLocalBadStates = states; }
     void setGlobalBadStates(const conditionVector& states) { mGlobalBadStates = states; }
@@ -118,13 +134,27 @@ class HybridAutomaton
      */
     ///@{
     void addLocation(Location<Number>* location) { assert(location != nullptr); mLocations.insert(location); }
-    void addTransition(Transition<Number>* transition) { assert(transition != nullptr); mTransitions.insert(transition); }
+    //void addTransition(Transition<Number>* transition) { assert(transition != nullptr); mTransitions.insert(transition); }
+    void addTransition(std::unique_ptr<Transition<Number>>& transition) { 
+    	assert(transition != nullptr);
+    	bool found = false;
+    	for(auto& t : mTransitions){
+    		if(*t == *transition){
+    			found = true;
+    			break;		
+    		}
+    	}
+    	if(!found){
+    		mTransitions.insert(transition); 
+    	}
+    }
     void addInitialState(const State& state) { mInitialStates.insert(std::make_pair(state.getLocation(),state)); }
     void addLocalBadState(const Location<Number>* loc, const Condition<Number>& condition) { mLocalBadStates.insert(std::make_pair(loc,condition)); }
     void addGlobalBadState(const Condition<Number>& state) { mGlobalBadStates.push_back(state); }
     ///@}
 
-    void removeTransition(Transition<Number>* toRemove);
+    //void removeTransition(Transition<Number>* toRemove);
+    void removeTransition(std::unique_ptr<Transition<Number>> toRemove);
 
     // copy assignment operator, TODO: implement via swap
     inline HybridAutomaton& operator=(const HybridAutomaton<Number,State>& rhs) = default;
@@ -262,7 +292,8 @@ class HybridAutomaton
 		std::set<Label> rhsLabels = rhs.getLabels();
 		for(const auto lhsT: lhs.getTransitions()) {
 			for(const auto rhsT: rhs.getTransitions()) {
-				Transition<Number>* t = parallelCompose(lhsT, rhsT, lhsVar, rhsVar, haVar, ha, lhsLabels, rhsLabels);
+				//Transition<Number>* t = parallelCompose(lhsT, rhsT, lhsVar, rhsVar, haVar, ha, lhsLabels, rhsLabels);
+				std::unique_ptr<Transition<Number>> t = parallelCompose(lhsT, rhsT, lhsVar, rhsVar, haVar, ha, lhsLabels, rhsLabels);
 				if(t) {
 					ha.addTransition(t);
 					(t->getSource())->addTransition(t);
@@ -278,7 +309,8 @@ class HybridAutomaton
 				for(const auto loc : rhs.getLocations()) {
 					//std::cout << "Potential transition " << lhsT->getSource()->getName() << "_" << loc->getName() << " -> " << lhsT->getTarget()->getName() << "_" << loc->getName() << std::endl;
 					//std::cout << "Original reset: " << lhsT->getReset().getMatrix() << " and " << lhsT->getReset().getVector() << std::endl;
-					Transition<Number>* tmp = new Transition<Number>(loc,loc);
+					//Transition<Number>* tmp = new Transition<Number>(loc,loc);
+					std::unique_ptr<Transition<Number>> tmp = std::make_unique(new Transition<Number>(loc,loc));
 					// TODO: temporary test -> fix!
 					Reset<Number> tmpReset = Reset<Number>(matrix_t<Number>::Identity(rhsVar.size(), rhsVar.size()), vector_t<Number>::Zero(rhsVar.size()));
 					if(!sharedVars.empty()) {
@@ -302,7 +334,8 @@ class HybridAutomaton
 					tmp->setReset(tmpReset);
 					tmp->setAggregation(lhsT->getAggregation());
 
-					Transition<Number>* t = parallelCompose(lhsT, tmp, lhsVar, rhsVar, haVar, ha, lhsLabels, rhsLabels);
+					//Transition<Number>* t = parallelCompose(lhsT, tmp, lhsVar, rhsVar, haVar, ha, lhsLabels, rhsLabels);
+					std::unique_ptr<Transition<Number>> t = parallelCompose(lhsT, tmp, lhsVar, rhsVar, haVar, ha, lhsLabels, rhsLabels);
 					if(t) {
 						//std::cout << "Add." << std::endl;
 						ha.addTransition(t);
@@ -318,7 +351,8 @@ class HybridAutomaton
 					for(const auto loc : lhs.getLocations()) {
 						//std::cout << "Potential transition " << loc->getName()<< "_" << rhsT->getSource()->getName() << " -> " << loc->getName() << "_" << rhsT->getTarget()->getName() << std::endl;
 						//std::cout << "Original reset: " << rhsT->getReset().getMatrix() << " and " << rhsT->getReset().getVector() << std::endl;
-						Transition<Number>* tmp = new Transition<Number>(loc,loc);
+						//Transition<Number>* tmp = new Transition<Number>(loc,loc);
+						std::unique_ptr<Transition<Number>> tmp = std::make_unique(new Transition<Number>(loc,loc));
 						// TODO: temporary test -> fix!
 						Reset<Number> tmpReset = Reset<Number>(matrix_t<Number>::Identity(lhsVar.size(), lhsVar.size()), vector_t<Number>::Zero(lhsVar.size()));
 						if(!sharedVars.empty()) {
@@ -339,7 +373,8 @@ class HybridAutomaton
 						tmp->setReset(tmpReset);
 						tmp->setAggregation(rhsT->getAggregation());
 
-						Transition<Number>* t = parallelCompose(tmp, rhsT, lhsVar, rhsVar, haVar, ha, lhsLabels, rhsLabels);
+						//Transition<Number>* t = parallelCompose(tmp, rhsT, lhsVar, rhsVar, haVar, ha, lhsLabels, rhsLabels);
+						std::unique_ptr<Transition<Number>> t = parallelCompose(tmp, rhsT, lhsVar, rhsVar, haVar, ha, lhsLabels, rhsLabels);
 						if(t) {
 							//std::cout << "Add." << std::endl;
 							ha.addTransition(t);

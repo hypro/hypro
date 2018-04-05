@@ -134,8 +134,9 @@ bool Transition<Number>::isComposedOf(const Transition<Number>& rhs, const std::
 }
 
 template<typename Number, typename State>
-Transition<Number>* parallelCompose(const Transition<Number>* lhsT
-                                , const Transition<Number>* rhsT
+//Transition<Number>* parallelCompose(const Transition<Number>* lhsT, const Transition<Number>* rhsT,
+std::unique_ptr<Transition<Number>> parallelCompose(const std::unique_ptr<Transition<Number>> lhsT
+                                , const std::unique_ptr<Transition<Number>> rhsT
                                 , const std::vector<std::string>& lhsVar
                                 , const std::vector<std::string>& rhsVar
                                 , const std::vector<std::string>& haVar
@@ -148,7 +149,8 @@ Transition<Number>* parallelCompose(const Transition<Number>* lhsT
 
     //std::cout << "Parallel composition of transitions " << lhsT->getSource()->getName() << " -> " << lhsT->getTarget()->getName() << " and " << rhsT->getSource()->getName() << " -> " << rhsT->getTarget()->getName() << std::endl;
 
-    Transition<Number>* t = new Transition<Number>();
+    //Transition<Number>* t = new Transition<Number>();
+    std::unique_ptr<Transition<Number>> t(new Transition<Number>());
 
     //set label
     if (lhsT->getLabels() == rhsT->getLabels()) {

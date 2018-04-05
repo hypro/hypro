@@ -176,8 +176,9 @@ class Transition
 };
 
 template<typename Number, typename State>
-Transition<Number>* parallelCompose(const Transition<Number>* lhsT
-                                , const Transition<Number>* rhsT
+//Transition<Number>* parallelCompose(const Transition<Number>* lhsT const Transition<Number>* rhsT,
+std::unique_ptr<Transition<Number>> parallelCompose(const std::unique_ptr<Transition<Number>> lhsT
+                                , const std::unique_ptr<Transition<Number>> rhsT
                                 , const std::vector<std::string>& lhsVar
                                 , const std::vector<std::string>& rhsVar
                                 , const std::vector<std::string>& haVar
