@@ -23,6 +23,7 @@
 #include "../../util/logging/Logger.h"
 #include "../../util/Permutator.h"
 #include <map>
+#include <queue>
 
 //#define PPOLYTOPESUPPORTFUNCTION_VERBOSE
 #define PPOLYTOPESUPPORTFUNCTION_VERIFY
