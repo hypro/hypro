@@ -300,6 +300,7 @@ class genericSetContainsVisitor
 public:
 	template<typename A, typename B>
 	inline bool operator()(const A&, const B&) const {
+		std::cout << "Types: " << A::type() << " and " << B::type() << std::endl;
 		assert(false && "CONTAINS CHECK OF DIFFERENT TYPES.");
 		return false;
 	}
