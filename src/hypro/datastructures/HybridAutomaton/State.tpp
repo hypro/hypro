@@ -260,6 +260,13 @@ bool State<Number,tNumber,Representation,Rargs...>::contains(const State<Number,
 	assert(checkConsistency());
 	assert(rhs.getNumberSets() == this->getNumberSets());
 	for(std::size_t i=0; i < this->getNumberSets(); ++i){
+		if(this->getSetType(i) != rhs.getSetType(i)){
+			DEBUG("hypro.state","In contains! Type of this: " << this->getSetType(i) << " and rhs: " << rhs.getSetType(i) << " were different.");
+			auto tmp = boost::apply_visitor(genericConversionVisitor<repVariant,Number>(this->getSetType(i)), rhs.getSet(i));
+			if(!boost::apply_visitor(genericSetContainsVisitor(), this->getSet(i), tmp)){
+				return false;
+			}
+		} 
 		if(!boost::apply_visitor(genericSetContainsVisitor(), this->getSet(i), rhs.getSet(i))) {
 			return false;
 		}
@@ -340,7 +347,10 @@ bool State<Number,tNumber,Representation,Rargs...>::checkConsistency() const {
 		if(mTypes.at(i) != boost::apply_visitor(genericTypeVisitor(), mSets.at(i))){
 			std::cout << "Types do not match (expected: " << mTypes.at(i) << ", is: " << boost::apply_visitor(genericTypeVisitor(), mSets.at(i)) << ")" << std::endl;
 			return false;
+		//} else {
+			//std::cout << "Types matched, in mTypes: " << mTypes.at(i) << " actual type in mSets is:" << boost::apply_visitor(genericTypeVisitor(), mSets.at(i)) << std::endl;
 		}
+
 	}
 	return true;
 }

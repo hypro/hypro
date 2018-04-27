@@ -18,13 +18,13 @@ public:
   enum {
     T__0 = 1, T__1 = 2, T__2 = 3, T__3 = 4, T__4 = 5, T__5 = 6, T__6 = 7, 
     T__7 = 8, T__8 = 9, T__9 = 10, T__10 = 11, T__11 = 12, T__12 = 13, T__13 = 14, 
-    T__14 = 15, T__15 = 16, T__16 = 17, T__17 = 18, T__18 = 19, T__19 = 20, 
-    T__20 = 21, T__21 = 22, IN = 23, TRUE = 24, FALSE = 25, PAR = 26, JUMPS = 27, 
-    URGENT = 28, GUARD = 29, RESET = 30, PARALLELOTOPE = 31, BOX = 32, JUMP = 33, 
-    DEFINE = 34, COMMENT = 35, EQUALS = 36, BOOLRELATION = 37, PLUS = 38, 
-    MINUS = 39, TIMES = 40, SBOPEN = 41, SBCLOSE = 42, CBOPEN = 43, CBCLOSE = 44, 
-    COMMA = 45, NUMBER = 46, CONSTANT = 47, VARIABLE = 48, WS = 49, INTERVALAGG = 50, 
-    EXPONENTIAL = 51
+    T__14 = 15, T__15 = 16, T__16 = 17, T__17 = 18, POLY = 19, LINEAR = 20, 
+    ODE = 21, IN = 22, TRUE = 23, FALSE = 24, PAR = 25, JUMPS = 26, URGENT = 27, 
+    GUARD = 28, RESET = 29, PARALLELOTOPE = 30, BOX = 31, JUMP = 32, DEFINE = 33, 
+    COMMENT = 34, EQUALS = 35, BOOLRELATION = 36, PLUS = 37, MINUS = 38, 
+    TIMES = 39, SBOPEN = 40, SBCLOSE = 41, CBOPEN = 42, CBCLOSE = 43, COMMA = 44, 
+    NUMBER = 45, CONSTANT = 46, VARIABLE = 47, WS = 48, INTERVALAGG = 49, 
+    EXPONENTIAL = 50
   };
 
   enum {
@@ -183,6 +183,10 @@ public:
   public:
     ActivitiesContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
+    antlr4::tree::TerminalNode *POLY();
+    antlr4::tree::TerminalNode *ODE();
+    antlr4::tree::TerminalNode *NUMBER();
+    antlr4::tree::TerminalNode *LINEAR();
     std::vector<EquationContext *> equation();
     EquationContext* equation(size_t i);
 
