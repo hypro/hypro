@@ -58,16 +58,7 @@ class HybridAutomaton
      *
      * @param[in]  hybrid  The original hybrid automaton.
      */
-    HybridAutomaton(const HybridAutomaton<Number,State>& hybrid){
-    	mLocations = hybrid.getLocations();
-    	for(auto& t : hybrid.getTransitions()){
-    		mTransitions.insert(std::unique_ptr<Transition<Number>>(new Transition<Number>(*t)));
-    	}
-    	mInitialStates = hybrid.getInitialStates();
-    	mLocalBadStates = hybrid.getLocalBadStates();
-    	mGlobalBadStates = hybrid.getGlobalBadStates();
-    	mVariables = hybrid.getVariables();
-    }
+    HybridAutomaton(const HybridAutomaton<Number,State>& hybrid);
 
     /**
      * @brief      Move constructor.
@@ -91,49 +82,14 @@ class HybridAutomaton
      *
      * @param[in]	rhs 	The original hybrid automaton
      **/
-    HybridAutomaton& operator=(const HybridAutomaton<Number,State>& rhs){
-    	if(this != &rhs){
-    		mLocations = rhs.getLocations();
-
-    		//Make deep copies of every transition (COSTLY)
-    		std::set<std::unique_ptr<Transition<Number>>> copyOfRhsTrans;
-    		for(auto& t : rhs.getTransitions()){
-    			std::unique_ptr<Transition<Number>> copyOfT = std::make_unique<Transition<Number>>(new Transition<Number>(*t));
-    			copyOfRhsTrans.insert(copyOfT);
-    		}
-    		assert(copyOfRhsTrans.size() == rhs.getTransitions().size());
-
-    		//Release old data
-    		mTransitions.clear();
-    		assert(mTransitions.size() == 0);
-
-    		//Assign 
-    		mTransitions = copyOfRhsTrans;
-
-    		mInitialStates = rhs.getInitialStates();
-    		mLocalBadStates = rhs.getLocalBadStates();
-    		mGlobalBadStates = rhs.getGlobalBadStates();
-    		mVariables = rhs.getVariables();	
-    	}
-    	return *this;	
-    }
+    HybridAutomaton& operator=(const HybridAutomaton<Number,State>& rhs);
 
     /**
      * @brief 		Move Assignment 
      *
      * @param[in]	rhs 	The original hybrid automaton
      **/
-    HybridAutomaton& operator=(HybridAutomaton<Number,State>&& rhs){
-    	if(this != &rhs){
-			mLocations = rhs.getLocations();
-			mTransitions.swap(rhs.getTransitions()); //TODO check if this works
-			mInitialStates = rhs.getInitialStates();
-    		mLocalBadStates = rhs.getLocalBadStates();
-    		mGlobalBadStates = rhs.getGlobalBadStates();
-    		mVariables = rhs.getVariables();    		
-    	}
-    	return *this;
-    }
+    HybridAutomaton& operator=(HybridAutomaton<Number,State>&& rhs);
 
     /**
      * @brief      Getter function.
@@ -175,20 +131,8 @@ class HybridAutomaton
      * @brief      Extension function.
      */
     ///@{
-    void addLocation(Location<Number>* location) { assert(location != nullptr); mLocations.insert(location); }
-    void addTransition(std::unique_ptr<Transition<Number>>& transition) { 
-    	assert(transition != nullptr);
-    	bool found = false;
-    	for(auto& t : mTransitions){
-    		if(*t == *transition){
-    			found = true;
-    			break;		
-    		}
-    	}
-    	if(!found){
-    		mTransitions.insert(std::move(transition)); 
-    	}
-    }
+    void addLocation(Location<Number>* location);
+    void addTransition(std::unique_ptr<Transition<Number>>& transition);
     void addInitialState(const State& state) { mInitialStates.insert(std::make_pair(state.getLocation(),state)); }
     void addLocalBadState(const Location<Number>* loc, const Condition<Number>& condition) { mLocalBadStates.insert(std::make_pair(loc,condition)); }
     void addGlobalBadState(const Condition<Number>& state) { mGlobalBadStates.push_back(state); }
@@ -235,211 +179,10 @@ class HybridAutomaton
      * @param[in]  rhs   The right hand side.
      * @return     Return parallel composition of two Automata.
      */
-	friend HybridAutomaton<Number, State> operator||(const HybridAutomaton<Number, State>& lhs, const HybridAutomaton<Number, State>& rhs) {
-		//std::cout << "||" << std::endl;
-
-		HybridAutomaton<Number, State> ha;
-
-		const variableVector& lhsVar = lhs.getVariables();
-		const variableVector& rhsVar = rhs.getVariables();
-		std::map<unsigned, std::pair<unsigned,unsigned>> sharedVars;
-
-		//std::cout << "lhs variables: ";
-		//for(auto a : lhsVar) { std::cout << a << " "; }
-		//std::cout << std::endl;
-		//std::cout << "rhs variables: ";
-		//for(auto a : rhsVar) { std::cout << a << " "; }
-		//std::cout << std::endl;
-
-		variableVector haVar;
-		variableVector::size_type  i=0, j=0;
-		while(i < lhsVar.size() and j < rhsVar.size()) {
-		if (lhsVar.at(i) == rhsVar.at(j)) {
-			//std::cout << "same var, add " << lhsVar[i] << std::endl;
-			haVar.push_back(lhsVar[i]);
-			i++; j++;
-			continue;
-		}
-		if (lhsVar.at(i) < rhsVar.at(j)) {
-			//std::cout << "push left first " << lhsVar.at(i) << std::endl;
-			haVar.push_back(lhsVar[i]);
-			i++;
-			continue;
-		}
-		if (lhsVar.at(i) > rhsVar.at(j)) {
-			//std::cout << "push right first " << rhsVar.at(j) << std::endl;
-			haVar.push_back(rhsVar[j]);
-			j++;
-			continue;
-		}
-		}
-		for(; i < lhsVar.size(); i++) {
-			//std::cout << "fill left: " << lhsVar[i] << std::endl;
-			haVar.push_back(lhsVar[i]);
-		}
-		for(; j < rhsVar.size(); j++) {
-			//std::cout << "fill right: " << rhsVar[j] << std::endl;
-			haVar.push_back(rhsVar[j]);
-		}
-		ha.setVariables(haVar);
-
-		//std::cout << "Variables: ";
-		//for(auto a : haVar) { std::cout << a << " "; }
-		//std::cout << "locations & transisitons" << std::endl;
-
-
-		// find shared variables
-		for(std::size_t i = 0; i != haVar.size(); ++i) {
-			bool left = false;
-			bool right = false;
-			std::size_t l = 0;
-			std::size_t r = 0;
-			while(l != lhsVar.size()) {
-				if(lhsVar[l] == haVar[i]){
-					left = true;
-					break;
-				}
-				++l;
-			}
-			while(r != rhsVar.size()) {
-				if(rhsVar[r] == haVar[i]){
-					right = true;
-					break;
-				}
-				++r;
-			}
-			if(left && right) {
-				//std::cout << "Shared var at " << i << " corresponds to (" << l << "," << r << ")" << std::endl;
-				sharedVars[i] = std::make_pair(l,r);
-			}
-		}
-		//std::cout << "Detected " << sharedVars.size() << " shared variables." << std::endl;
-
-		for(const Location<Number>* locLhs : lhs.getLocations()) {
-			for(const Location<Number>* locRhs : rhs.getLocations()) {
-				Location<Number>* loc = parallelCompose(locLhs,locRhs,lhsVar,rhsVar,haVar);
-				ha.addLocation(loc);
-			}
-		}
-
-		//std::cout << "######################## TRANSITIONS ########################" << std::endl;
-		//build transisitons
-		std::set<Label> lhsLabels = lhs.getLabels();
-		std::set<Label> rhsLabels = rhs.getLabels();
-		for(const auto lhsT: lhs.getTransitions()) {
-			for(const auto rhsT: rhs.getTransitions()) {
-				//Transition<Number>* t = parallelCompose(lhsT, rhsT, lhsVar, rhsVar, haVar, ha, lhsLabels, rhsLabels);
-				std::unique_ptr<Transition<Number>> t = parallelCompose(lhsT, rhsT, lhsVar, rhsVar, haVar, ha, lhsLabels, rhsLabels);
-				if(t) {
-					ha.addTransition(t);
-					(t->getSource())->addTransition(t);
-				}
-			}
-		}
-
-		// non-synchronizing transitions in each component
-		// fix rhs first
-		//std::cout << "Fix rhs." << std::endl;
-		for(const auto lhsT: lhs.getTransitions()) {
-			if(lhsT->getLabels().empty()) {
-				for(const auto loc : rhs.getLocations()) {
-					//std::cout << "Potential transition " << lhsT->getSource()->getName() << "_" << loc->getName() << " -> " << lhsT->getTarget()->getName() << "_" << loc->getName() << std::endl;
-					//std::cout << "Original reset: " << lhsT->getReset().getMatrix() << " and " << lhsT->getReset().getVector() << std::endl;
-					//Transition<Number>* tmp = new Transition<Number>(loc,loc);
-					std::unique_ptr<Transition<Number>> tmp = std::make_unique(new Transition<Number>(loc,loc));
-					// TODO: temporary test -> fix!
-					Reset<Number> tmpReset = Reset<Number>(matrix_t<Number>::Identity(rhsVar.size(), rhsVar.size()), vector_t<Number>::Zero(rhsVar.size()));
-					if(!sharedVars.empty()) {
-						// Attention: This is a temporary solution. Naturally, we would need to replicate the reset on the shared variables to create
-						// an admissible combined reset.
-						// Todo: iterate over rows, then over cols (only the ones which correspond to shared vars) and set the resets accordingly.
-
-						//std::cout << "Have " << sharedVars.size() << " shared variables." << std::endl;
-						for(auto shdIt = sharedVars.begin(); shdIt != sharedVars.end(); ++shdIt) {
-							//std::cout << "update row " << shdIt->second.second << std::endl;
-							for(auto colIt = sharedVars.begin(); colIt != sharedVars.end(); ++colIt) {
-								tmpReset.rGetMatrix()(shdIt->second.second, colIt->second.second) = lhsT->getReset().getMatrix()(shdIt->second.first,colIt->second.first);
-							}
-							tmpReset.rGetVector()(shdIt->second.second) = lhsT->getReset().getVector()(shdIt->second.first);
-						}
-					}
-
-					//std::cout << "tmpreset after update: " << tmpReset << std::endl;
-
-					//tmp->setReset(combine(lhsT->getReset(),tmpReset,haVar,lhsVar,rhsVar));
-					tmp->setReset(tmpReset);
-					tmp->setAggregation(lhsT->getAggregation());
-
-					//Transition<Number>* t = parallelCompose(lhsT, tmp, lhsVar, rhsVar, haVar, ha, lhsLabels, rhsLabels);
-					std::unique_ptr<Transition<Number>> t = parallelCompose(lhsT, tmp, lhsVar, rhsVar, haVar, ha, lhsLabels, rhsLabels);
-					if(t) {
-						//std::cout << "Add." << std::endl;
-						ha.addTransition(t);
-						(t->getSource())->addTransition(t);
-					}
-				}
-			}
-		}
-		// fix lhs
-		//std::cout << "Fix lhs." << std::endl;
-		for(const auto rhsT: rhs.getTransitions()) {
-				if(rhsT->getLabels().empty()) {
-					for(const auto loc : lhs.getLocations()) {
-						//std::cout << "Potential transition " << loc->getName()<< "_" << rhsT->getSource()->getName() << " -> " << loc->getName() << "_" << rhsT->getTarget()->getName() << std::endl;
-						//std::cout << "Original reset: " << rhsT->getReset().getMatrix() << " and " << rhsT->getReset().getVector() << std::endl;
-						//Transition<Number>* tmp = new Transition<Number>(loc,loc);
-						std::unique_ptr<Transition<Number>> tmp = std::make_unique(new Transition<Number>(loc,loc));
-						// TODO: temporary test -> fix!
-						Reset<Number> tmpReset = Reset<Number>(matrix_t<Number>::Identity(lhsVar.size(), lhsVar.size()), vector_t<Number>::Zero(lhsVar.size()));
-						if(!sharedVars.empty()) {
-							// Attention: This is a temporary solution. Naturally, we would need to replicate the reset on the shared variables to create
-							// an admissible combined reset.
-							for(auto shdIt = sharedVars.begin(); shdIt != sharedVars.end(); ++shdIt) {
-								//std::cout << "update row " << shdIt->second.second << std::endl;
-								for(auto colIt = sharedVars.begin(); colIt != sharedVars.end(); ++colIt) {
-									tmpReset.rGetMatrix()(shdIt->second.first, colIt->second.first) = rhsT->getReset().getMatrix()(shdIt->second.second,colIt->second.second);
-								}
-								tmpReset.rGetVector()(shdIt->second.first) = rhsT->getReset().getVector()(shdIt->second.second);
-							}
-						}
-
-						//std::cout << "tmpreset after update: " << tmpReset << std::endl;
-
-						//tmp->setReset(combine(rhsT->getReset(),tmpReset,haVar,rhsVar,lhsVar));
-						tmp->setReset(tmpReset);
-						tmp->setAggregation(rhsT->getAggregation());
-
-						//Transition<Number>* t = parallelCompose(tmp, rhsT, lhsVar, rhsVar, haVar, ha, lhsLabels, rhsLabels);
-						std::unique_ptr<Transition<Number>> t = parallelCompose(tmp, rhsT, lhsVar, rhsVar, haVar, ha, lhsLabels, rhsLabels);
-						if(t) {
-							//std::cout << "Add." << std::endl;
-							ha.addTransition(t);
-							(t->getSource())->addTransition(t);
-			        	}
-					}
-				}
-		}
-
-
-
-		// set initial states (//std:multimap<const Location<Number>*, State>;)
-		//std::cout << "set initial states" << std::endl;
-		for(const auto initialStateLhs: lhs.getInitialStates()) {
-			for(const auto initialStateRhs: rhs.getInitialStates()) {
-				State state = parallelCompose(initialStateLhs.second,  initialStateRhs.second, lhsVar, rhsVar, haVar, ha);
-				ha.addInitialState(state);
-			}
-		}
-
-		//localBadstates
-		//globalBAdstates
-
-		// remove non-reachable locations and transitions.
-		ha.reduce();
-
-		return ha; //std::move??? -> no, prevents copy-elision!
-    }
-
+    //This template is needed or else gcc spits out the warning -Wno-non-template-friend
+    //Num represents Number and Stat represents State
+    template<typename Num, typename Stat>
+	friend HybridAutomaton<Num, Stat> operator||(const HybridAutomaton<Num, Stat>& lhs, const HybridAutomaton<Num, Stat>& rhs);
     /**
      * @brief      Combination Operator.
      * @param[in]  lhs   The left hand side.
