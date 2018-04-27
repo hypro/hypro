@@ -33,8 +33,8 @@ protected:
 		loc1 = locMan.create();
     	loc2 = locMan.create();
 
-    	//trans = new Transition<Number>();
     	trans = std::make_unique<Transition<Number>>();
+    	copyOfTrans = std::make_unique<Transition<Number>>();
 
 		invariantVec(0) = 10;
 		invariantVec(1) = 20;
@@ -75,6 +75,11 @@ protected:
 		trans->setTarget(loc2);
 		trans->setReset(reset);
 
+		copyOfTrans->setGuard(guard);
+		copyOfTrans->setSource(loc1);
+		copyOfTrans->setTarget(loc2);
+		copyOfTrans->setReset(reset);
+
 		/*
 		 * Hybrid Automaton Setup
 		 */
@@ -101,15 +106,10 @@ protected:
 			hybrid.addInitialState(initState);
 		}
 
-		//transition[0] = trans;
-		//transSet = std::set<Transition<Number>*>(transition, transition+1);
-		transition[0] = std::move(trans);
-		transSet = std::set<std::unique_ptr<Transition<Number>>>(transition, transition+1);
-		for(auto& t : transSet){
-			ptrSet.insert(t.get());
-		}
+		transSet.insert(std::move(copyOfTrans));
+		ptrSet.insert(transSet.begin()->get());
+		
 		hybrid.setTransitions(transSet);
-		//loc1->setTransitions(transSet);
 		loc1->setTransitions(ptrSet);
     }
 
@@ -126,8 +126,8 @@ protected:
 
     Location<Number>* loc1;
     Location<Number>* loc2;
-    //Transition<Number>* trans;
     std::unique_ptr<Transition<Number>> trans;
+    std::unique_ptr<Transition<Number>> copyOfTrans;
     HybridAutomaton<Number> hybrid;
 
     //Other Objects: Vectors, Matrices, Guards...
@@ -146,9 +146,6 @@ protected:
     Location<Number>* init[1];
     std::set<Location<Number>*> initLocSet;
 
-    //Transition<Number>* transition[1];
-	//std::set<Transition<Number>*> transSet;
-	std::unique_ptr<Transition<Number>> transition[1];
     std::set<std::unique_ptr<Transition<Number>>> transSet;
     std::set<Transition<Number>*> ptrSet;
 
@@ -192,7 +189,6 @@ TYPED_TEST(HybridAutomataTest, LocationTest)
 	EXPECT_NE(this->loc1->getFlow(), locationMat2);
 
 	//location: set of outgoing transitions
-	//EXPECT_EQ(this->loc1->getTransitions(), this->transSet);
 	EXPECT_EQ(this->loc1->getTransitions(), this->ptrSet);
 
 	EXPECT_TRUE(*this->loc1 < *this->loc2);
@@ -265,13 +261,11 @@ TYPED_TEST(HybridAutomataTest, TransitionTest)
 	EXPECT_EQ(this->trans->getGuard().getMatrix(), this->guard.getMatrix());
 
 	// creation of transitions from source and target
-	//Transition<TypeParam>* t = new Transition<TypeParam>(this->loc1, this->loc2);
 	std::unique_ptr<Transition<TypeParam>> t(new Transition<TypeParam>(this->loc1, this->loc2));
 	EXPECT_EQ(t->getSource(), this->loc1);
 	EXPECT_EQ(t->getTarget(), this->loc2);
 	EXPECT_EQ(t->getAggregation(), Aggregation::none);
 	EXPECT_FALSE(t->isTimeTriggered());
-
 	t->setAggregation(Aggregation::boxAgg);
 	EXPECT_EQ(t->getAggregation(), Aggregation::boxAgg);
 
@@ -299,8 +293,20 @@ TYPED_TEST(HybridAutomataTest, HybridAutomatonTest)
 	EXPECT_TRUE(h1.getLocation("Location2") == this->loc2);
 	EXPECT_TRUE(h1.getLocation(this->loc2->getId()) == this->loc2);
 
-	h1.addTransition(this->trans);
-	EXPECT_TRUE(std::find(h1.getTransitions().begin(), h1.getTransitions().end(), this->trans) != h1.getTransitions().end());
+	//Check if trans can be found in h1's transition set after inserting
+	std::unique_ptr<Transition<TypeParam>> aTrans(new Transition<TypeParam>(*(this->trans)));
+	EXPECT_FALSE(aTrans == nullptr);
+	h1.addTransition(aTrans);
+	EXPECT_TRUE(aTrans == nullptr);
+	bool found = false;
+	for(auto& ptrToTrans : h1.getTransitions()){
+		if(*ptrToTrans == *(this->trans)){
+			found = true;
+		}
+	}
+	if(!found){
+		FAIL();
+	}
 
 	matrix_t<TypeParam> matr = matrix_t<TypeParam>::Identity(2,2);
 	vector_t<TypeParam> vec = vector_t<TypeParam>(2);
@@ -314,6 +320,8 @@ TYPED_TEST(HybridAutomataTest, HybridAutomatonTest)
 	// copy assignment operator
 	HybridAutomaton<TypeParam> h2 = h1;
 	EXPECT_EQ(h1, h2);
+
+	// somehow check move assignment
 }
 
 TYPED_TEST(HybridAutomataTest, LocationManagerTest)

@@ -167,16 +167,45 @@ class Transition
 			(lhs.mUrgent != rhs.mUrgent) ||
 			(lhs.mGuard != rhs.mGuard) ||
 			(lhs.mReset != rhs.mReset) ||
-      (lhs.mLabels != rhs.mLabels)) {
+            (lhs.mLabels != rhs.mLabels)) {
 			return false;
 		}
 
 		return true;
     }
+
+    /**
+     * @brief       Inequality comparison operator
+     * @param[in]   lhs     The left hand side
+     * @param[in]   rhs     The right hand side
+     * Qreturn      True if both transitions are unequal, false otherwise
+     */
+    friend bool operator!=(const Transition<Number>& lhs, const Transition<Number>& rhs){
+        return !(lhs == rhs);
+    }
+
+    /**
+     * @brief       Equality operator for sets of unique pointers to transitions.
+     * @details     First tests whether the size of the sets are equal. Then compares the transitions the unique pointers point to for equality.
+     * @param[in]   lhs     left hand side; first set to compare
+     * @param[in]   rhs     right hand sid; second set to compare
+     */
+    friend bool operator==( const std::set<std::unique_ptr<Transition<Number>>>& lhs, const std::set<std::unique_ptr<Transition<Number>>>& rhs){
+        if(lhs.size() != rhs.size()){
+            return false;
+        }
+        auto itRhs = rhs.begin();
+        for(auto itLhs = lhs.begin(); itLhs != lhs.end(); ++itLhs){
+            if(**itLhs != **itRhs){
+                return false;
+            }
+            ++itRhs;
+        }
+        return true;
+    }
 };
 
 template<typename Number, typename State>
-//Transition<Number>* parallelCompose(const Transition<Number>* lhsT const Transition<Number>* rhsT,
 std::unique_ptr<Transition<Number>> parallelCompose(const std::unique_ptr<Transition<Number>> lhsT
                                 , const std::unique_ptr<Transition<Number>> rhsT
                                 , const std::vector<std::string>& lhsVar

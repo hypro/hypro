@@ -32,9 +32,8 @@ protected:
 		loc1 = locMan.create();
     	loc2 = locMan.create();
 
-    	//trans = new Transition<double>();
     	trans = std::make_unique<Transition<double>>();
-
+    	
 		invariantVec(0) = 10;
 		invariantVec(1) = 20;
 
@@ -100,19 +99,11 @@ protected:
 			hybrid.addInitialState(initState);
 		}
 
-		transition[0] = std::move(trans);
-		transSet = std::set<std::unique_ptr<Transition<double>>>(transition, transition+1);
-		for(auto& t : transSet){
-			ptrSet.insert(t.get());
-		}
-		hybrid.setTransitions(transSet);
-		//loc1->setTransitions(transSet);
-		loc1->setTransitions(ptrSet);
+		transSet.insert(std::move(trans));
+		ptrSet.insert(transSet.begin()->get());
 
-		//transition[0] = trans;
-		//transSet = std::set<Transition<double>*>(transition, transition+1);
-		//hybrid.setTransitions(transSet);
-		//loc1->setTransitions(transSet);
+		hybrid.setTransitions(transSet);
+		loc1->setTransitions(ptrSet);
     }
 
     virtual void TearDown()
@@ -128,7 +119,6 @@ protected:
 
     Location<double>* loc1;
     Location<double>* loc2;
-    //Transition<double>* trans;
     std::unique_ptr<Transition<double>> trans;
     HybridAutomaton<double> hybrid;
 
@@ -148,9 +138,6 @@ protected:
     Location<double>* init[1];
     std::set<Location<double>*> initLocSet;
 
-    //Transition<double>* transition[1];
-	//std::set<Transition<double>*> transSet;
-	std::unique_ptr<Transition<double>> transition[1];
 	std::set<std::unique_ptr<Transition<double>>> transSet;
     std::set<Transition<double>*> ptrSet;
 
@@ -164,13 +151,22 @@ protected:
  */
 TEST_F(HybridAutomataOutputTest, HybridAutomatonTest)
 {
+	// make a deep copy of trans
+	std::unique_ptr<Transition<double>> copyOfTrans = std::make_unique<Transition<double>>();
+	copyOfTrans->setGuard(guard);
+	copyOfTrans->setSource(loc1);
+	copyOfTrans->setTarget(loc2);
+	copyOfTrans->setReset(reset);
+	
 	// construct a new hybrid automaton.
 	HybridAutomaton<double> h1;
 
 	h1.addLocation(loc1);
 	h1.addLocation(loc2);
-	h1.addTransition(trans);
 
+	EXPECT_FALSE(copyOfTrans == nullptr);
+	h1.addTransition(copyOfTrans);
+	EXPECT_TRUE(copyOfTrans == nullptr);
 	matrix_t<double> matr = matrix_t<double>::Identity(2,2);
 	vector_t<double> vec = vector_t<double>(2);
 	vec << 1,2;

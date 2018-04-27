@@ -33,7 +33,6 @@ class HybridAutomaton
 {
   public:
     using locationSet = std::set<Location<Number>*>; /// Set of location pointers.
-    //using transitionSet = std::set<Transition<Number>*>; /// Set of transition pointers.
     using transitionSet = std::set<std::unique_ptr<Transition<Number>>>; /// Set of transition pointers.
     using locationStateMap = std::multimap<const Location<Number>*, State>; /// Multi-map from location pointers to states.
     using locationConditionMap = std::map<const Location<Number>*, Condition<Number>>; /// Map from location pointers to conditions.
@@ -59,11 +58,9 @@ class HybridAutomaton
      *
      * @param[in]  hybrid  The original hybrid automaton.
      */
-    //HybridAutomaton(const HybridAutomaton<Number,State>& hybrid) = default;
     HybridAutomaton(const HybridAutomaton<Number,State>& hybrid){
     	mLocations = hybrid.getLocations();
     	for(auto& t : hybrid.getTransitions()){
-    		//mTransitions.insert(std::make_unique<Transition<Number>>(new Transition<Number>(*t)));
     		mTransitions.insert(std::unique_ptr<Transition<Number>>(new Transition<Number>(*t)));
     	}
     	mInitialStates = hybrid.getInitialStates();
@@ -87,6 +84,55 @@ class HybridAutomaton
             mTransitions.erase(mTransitions.begin());
             //delete toDelete;
         }
+    }
+
+    /**
+     * @brief 		Copy Assignment 
+     *
+     * @param[in]	rhs 	The original hybrid automaton
+     **/
+    HybridAutomaton& operator=(const HybridAutomaton<Number,State>& rhs){
+    	if(this != &rhs){
+    		mLocations = rhs.getLocations();
+
+    		//Make deep copies of every transition (COSTLY)
+    		std::set<std::unique_ptr<Transition<Number>>> copyOfRhsTrans;
+    		for(auto& t : rhs.getTransitions()){
+    			std::unique_ptr<Transition<Number>> copyOfT = std::make_unique<Transition<Number>>(new Transition<Number>(*t));
+    			copyOfRhsTrans.insert(copyOfT);
+    		}
+    		assert(copyOfRhsTrans.size() == rhs.getTransitions().size());
+
+    		//Release old data
+    		mTransitions.clear();
+    		assert(mTransitions.size() == 0);
+
+    		//Assign 
+    		mTransitions = copyOfRhsTrans;
+
+    		mInitialStates = rhs.getInitialStates();
+    		mLocalBadStates = rhs.getLocalBadStates();
+    		mGlobalBadStates = rhs.getGlobalBadStates();
+    		mVariables = rhs.getVariables();	
+    	}
+    	return *this;	
+    }
+
+    /**
+     * @brief 		Move Assignment 
+     *
+     * @param[in]	rhs 	The original hybrid automaton
+     **/
+    HybridAutomaton& operator=(HybridAutomaton<Number,State>&& rhs){
+    	if(this != &rhs){
+			mLocations = rhs.getLocations();
+			mTransitions.swap(rhs.getTransitions()); //TODO check if this works
+			mInitialStates = rhs.getInitialStates();
+    		mLocalBadStates = rhs.getLocalBadStates();
+    		mGlobalBadStates = rhs.getGlobalBadStates();
+    		mVariables = rhs.getVariables();    		
+    	}
+    	return *this;
     }
 
     /**
@@ -118,11 +164,7 @@ class HybridAutomaton
      */
     ///@{
     void setLocations(const locationSet& locs) { mLocations = locs; }
-    //void setTransitions(const transitionSet& trans) { mTransitions = trans; }
-    void setTransitions(transitionSet& trans) { 
-    	mTransitions.swap(trans);
-    	//std::swap(mTransitions,trans);
-    }
+    void setTransitions(transitionSet& trans) { mTransitions.swap(trans); } 
     void setInitialStates(const locationStateMap& states) { mInitialStates = states; }
     void setLocalBadStates(const locationConditionMap& states) { mLocalBadStates = states; }
     void setGlobalBadStates(const conditionVector& states) { mGlobalBadStates = states; }
@@ -134,7 +176,6 @@ class HybridAutomaton
      */
     ///@{
     void addLocation(Location<Number>* location) { assert(location != nullptr); mLocations.insert(location); }
-    //void addTransition(Transition<Number>* transition) { assert(transition != nullptr); mTransitions.insert(transition); }
     void addTransition(std::unique_ptr<Transition<Number>>& transition) { 
     	assert(transition != nullptr);
     	bool found = false;
@@ -145,7 +186,7 @@ class HybridAutomaton
     		}
     	}
     	if(!found){
-    		mTransitions.insert(transition); 
+    		mTransitions.insert(std::move(transition)); 
     	}
     }
     void addInitialState(const State& state) { mInitialStates.insert(std::make_pair(state.getLocation(),state)); }
@@ -153,12 +194,7 @@ class HybridAutomaton
     void addGlobalBadState(const Condition<Number>& state) { mGlobalBadStates.push_back(state); }
     ///@}
 
-    //void removeTransition(Transition<Number>* toRemove);
     void removeTransition(std::unique_ptr<Transition<Number>> toRemove);
-
-    // copy assignment operator, TODO: implement via swap
-    inline HybridAutomaton& operator=(const HybridAutomaton<Number,State>& rhs) = default;
-    inline HybridAutomaton& operator=(HybridAutomaton<Number,State>&& rhs) = default;
 
     /**
      * @brief      Reduces the automaton, i.e. removes Locations which are not connected to the automaton by transitions.
