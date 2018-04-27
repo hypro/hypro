@@ -148,12 +148,14 @@ int main(int argc, char** argv) {
 
 	switch(rep){
 
+		#ifdef HYPRO_USE_PPL
 		case 6: {
 			using Representation = hypro::Polytope<Number>;
 			std::cout << "Using a ppl-polytope representation." << std::endl;
 			computeReachableStates<Number, Representation>(filename, hypro::representation_name::ppl_polytope);
 			break;
 		}
+		#endif
 
 		case 5: {
 			using Representation = hypro::Zonotope<Number>;

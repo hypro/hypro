@@ -65,7 +65,9 @@ void bloatBox(State& in, const Box<Number>& bloatBox) {
 			break;
 		}
 		case representation_name::ppl_polytope: {
+            #ifdef HYPRO_USE_PPL
 			in.setSetDirect(boost::get<Polytope<Number>>(in.getSet(0)).minkowskiSum(Converter<Number>::toPolytope(bloatBox)));
+            #endif
 			break;
 		}
 		case representation_name::constraint_set:{
