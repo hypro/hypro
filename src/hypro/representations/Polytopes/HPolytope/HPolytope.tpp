@@ -15,9 +15,9 @@ HPolytopeT<Number, Converter, Setting>::HPolytopeT( const HalfspaceVector &plane
 		for ( const auto &plane : planes ) {
 			mHPlanes.push_back( plane );
 		}
-		#ifndef NDEBUG
+#ifndef NDEBUG
 		bool empty = this->empty();
-		#endif
+#endif
 		reduceNumberRepresentation();
 		assert( empty == this->empty() );
 	}
@@ -31,9 +31,9 @@ HPolytopeT<Number, Converter, Setting>::HPolytopeT( const matrix_t<Number> &A, c
 	for ( unsigned i = 0; i < A.rows(); ++i ) {
 		mHPlanes.emplace_back( A.row( i ), b( i ) );
 	}
-	#ifndef NDEBUG
+#ifndef NDEBUG
 	bool empty = this->empty();
-	#endif
+#endif
 	reduceNumberRepresentation();
 	assert( empty == this->empty() );
 }
@@ -50,12 +50,12 @@ template <typename Number, typename Converter, class Setting>
 HPolytopeT<Number, Converter, Setting>::HPolytopeT( const std::vector<Point<Number>>& points )
 	: mHPlanes(), mDimension( 0 ), mEmpty(TRIBOOL::NSET), mNonRedundant(true) {
 	TRACE("hypro.representations.HPolytope","Construct from vertices: ");
-	#ifdef HYPRO_LOGGING
+#ifdef HYPRO_LOGGING
 	for(auto vertex : points) {
 		Point<double> tmp = convert<Number,double>(vertex);
 		TRACE("hypro.representations.HPolytope",tmp);
 	}
-	#endif
+#endif
 	/*
 	if ( !points.empty() ) {
 		mDimension = points.begin()->dimension();

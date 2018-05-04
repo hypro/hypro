@@ -57,6 +57,7 @@ SupportFunctionContent<Number>::SupportFunctionContent( const SupportFunctionCon
 		case SF_TYPE::NONE: {
 			std::cout << __func__ << ": SF Type not properly initialized!" << std::endl;
 			assert(false);
+			break;
 		}
 		default:
 			assert( false );
@@ -310,6 +311,7 @@ SupportFunctionContent<Number>::~SupportFunctionContent() {
 		case SF_TYPE::NONE: {
 			std::cout << __func__ << ": SF Type not properly initialized!" << std::endl;
 			assert(false);
+			break;
 		}
 		default:
 			assert(false);
@@ -357,6 +359,7 @@ std::shared_ptr<SupportFunctionContent<Number>>& SupportFunctionContent<Number>:
 		case SF_TYPE::NONE: {
 			std::cout << __func__ << ": SF Type not properly initialized!" << std::endl;
 			assert(false);
+			break;
 		}
 		default:
 			assert( false );
@@ -646,11 +649,11 @@ std::vector<EvaluationResult<Number>> SupportFunctionContent<Number>::multiEvalu
 					}
 					case SF_TYPE::LINTRAFO: {
 						callStack.push_back(cur->linearTrafoParameters()->origin);
-						#ifndef HYPRO_USE_VECTOR_CACHING
+#ifndef HYPRO_USE_VECTOR_CACHING
 						paramStack.push_back(currentParam * cur->linearTrafoParameters()->parameters->getParameterSet(cur->linearTrafoParameters()->currentExponent).first);
-						#else
+#else
 						paramStack.push_back(cur->linearTrafoParameters()->parameters->getTransformedDirections(currentParam, cur->linearTrafoParameters()->currentExponent));
-						#endif
+#endif
 						resultStack.emplace_back(std::make_pair(callingFrame,std::vector<Res>()));
 						break;
 					}
@@ -957,6 +960,7 @@ void SupportFunctionContent<Number>::forceLinTransReduction(){
         case SF_TYPE::NONE: {
 			std::cout << __func__ << ": SF Type not properly initialized!" << std::endl;
 			assert(false);
+			break;
 		}
         default:
             break;
@@ -1045,8 +1049,8 @@ Point<Number> SupportFunctionContent<Number>::supremumPoint() const {
 		}
 		case SF_TYPE::NONE: {
 			std::cout << __func__ << ": SF Type not properly initialized!" << std::endl;
-			return Point<Number>();
 			assert(false);
+			return Point<Number>();
 		}
 		default:
 			assert(false);
