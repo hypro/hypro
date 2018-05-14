@@ -374,8 +374,8 @@ BoxT<double,Converter,Setting> BoxT<double,Converter,Setting>::linearTransformat
 	// create both limit matrices
 	// std::cout << __func__ << ": This: " << *this << std::endl;
 	// std::cout << __func__ << ": Matrix" <<  std::endl << A << std::endl << "Vector" << std::endl << b << std::endl;
-	matrix_t<double> ax(A);
-	matrix_t<double> bx(A);
+	//matrix_t<double> ax(A);
+	//matrix_t<double> bx(A);
 	Point<double> min;
 	Point<double> max;
 
