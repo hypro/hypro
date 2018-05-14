@@ -27,11 +27,8 @@
 namespace hypro {
 
 	template<typename Representation, typename Number, int operation>
-	//template<typename Representation, int operation>
 	class Benchmark {
 	private:
-		//typedef typename Representation::type Number;
-		//BenchmarkGenerator<Representation,operation> mGenerator;
 		BenchmarkGenerator<Representation,Number,operation> mGenerator;
 		std::vector<Result> mResults;
 		Executor<Representation, Number, operation> mExecutor;
