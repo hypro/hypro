@@ -36,13 +36,13 @@ TYPED_TEST(Benchmark, Box)
 	setup.minValue = 0;
 	setup.maxValue = 10;
 
-	hypro::Benchmark<hypro::Box<TypeParam>, hypro::operation::LINEARTRAFO> linearTrafo(setup);
-	hypro::Benchmark<hypro::Box<TypeParam>, hypro::operation::MINKOWSKISUM> minkowskiSum(setup);
-	hypro::Benchmark<hypro::Box<TypeParam>, hypro::operation::INTERSECTION> intersection(setup);
-	hypro::Benchmark<hypro::Box<TypeParam>, hypro::operation::CONTAINS> contains(setup);
-	hypro::Benchmark<hypro::Box<TypeParam>, hypro::operation::UNION> unite(setup);
+	hypro::Benchmark<hypro::Box<TypeParam>, TypeParam, hypro::operation::LINEARTRAFO> linearTrafo(setup);
+	hypro::Benchmark<hypro::Box<TypeParam>, TypeParam, hypro::operation::MINKOWSKISUM> minkowskiSum(setup);
+	hypro::Benchmark<hypro::Box<TypeParam>, TypeParam, hypro::operation::INTERSECTION> intersection(setup);
+	hypro::Benchmark<hypro::Box<TypeParam>, TypeParam, hypro::operation::CONTAINS> contains(setup);
+	hypro::Benchmark<hypro::Box<TypeParam>, TypeParam, hypro::operation::UNION> unite(setup);
 }
-
+/*
 TYPED_TEST(Benchmark, VPolytope)
 {
 	hypro::BenchmarkSetup<TypeParam> setup;
@@ -52,9 +52,10 @@ TYPED_TEST(Benchmark, VPolytope)
 	setup.minValue = 0;
 	setup.maxValue = 10;
 
-	hypro::Benchmark<hypro::VPolytope<TypeParam>, hypro::operation::LINEARTRAFO> linearTrafo(setup);
-	hypro::Benchmark<hypro::VPolytope<TypeParam>, hypro::operation::MINKOWSKISUM> minkowskiSum(setup);
-	hypro::Benchmark<hypro::VPolytope<TypeParam>, hypro::operation::INTERSECTION> intersection(setup);
-	hypro::Benchmark<hypro::VPolytope<TypeParam>, hypro::operation::CONTAINS> contains(setup);
-	hypro::Benchmark<hypro::VPolytope<TypeParam>, hypro::operation::UNION> unite(setup);
+	hypro::Benchmark<hypro::VPolytope<TypeParam>, TypeParam, hypro::operation::LINEARTRAFO> linearTrafo(setup);
+	hypro::Benchmark<hypro::VPolytope<TypeParam>, TypeParam, hypro::operation::MINKOWSKISUM> minkowskiSum(setup);
+	hypro::Benchmark<hypro::VPolytope<TypeParam>, TypeParam, hypro::operation::INTERSECTION> intersection(setup);
+	hypro::Benchmark<hypro::VPolytope<TypeParam>, TypeParam, hypro::operation::CONTAINS> contains(setup);
+	hypro::Benchmark<hypro::VPolytope<TypeParam>, TypeParam, hypro::operation::UNION> unite(setup);
 }
+*/

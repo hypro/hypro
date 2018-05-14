@@ -26,14 +26,15 @@
 
 namespace hypro {
 
-	template<typename Representation, int operation>
+	template<typename Representation, typename Number, int operation>
+	//template<typename Representation, int operation>
 	class Benchmark {
 	private:
-		typedef typename Representation::type Number;
-
-		BenchmarkGenerator<Representation,operation> mGenerator;
+		//typedef typename Representation::type Number;
+		//BenchmarkGenerator<Representation,operation> mGenerator;
+		BenchmarkGenerator<Representation,Number,operation> mGenerator;
 		std::vector<Result> mResults;
-		Executor<Representation, operation> mExecutor;
+		Executor<Representation, Number, operation> mExecutor;
 		BenchmarkSetup<Number> mSetup;
 		#ifdef COMPARE_POLYMAKE
 		polymake::Main mPolyMain;
@@ -49,7 +50,7 @@ namespace hypro {
 				mPolyMain();
 			#endif
 			mResults.reserve(mGenerator.size());
-			std::cout << "Generate " << _setup.size << " benchmarks for operation " << Generator<Representation,operation>(_setup).name << " ... ";
+			std::cout << "Generate " << _setup.size << " benchmarks for operation " << Generator<Representation,Number,operation>(_setup).name << " ... ";
 			double duration = mGenerator.generateBenchmark();
 			std::cout << "done (" << duration << " ms)" << std::endl;
 			std::cout << "Run benchmarks ... ";

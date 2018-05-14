@@ -15,20 +15,21 @@
  #include <vector>
 
 namespace hypro {
-	template<typename Representation, int operation>
+	template<typename Representation, typename Number, int operation>
+	//template<typename Representation, int operation>
 	class BenchmarkGenerator {
 	private:
-		typedef typename Representation::type Number;
+		//typedef typename Representation::type Number;
 
 		BenchmarkSetup<Number> mSetup;
-		std::vector<typename Generator<Representation, operation>::type> mBenchmarks;
+		std::vector<typename Generator<Representation, Number, operation>::type> mBenchmarks;
 	public:
 		BenchmarkGenerator(BenchmarkSetup<Number> _setup) : 
 			mSetup(_setup)
 		{}
 
 		double generateBenchmark() {
-			Generator<Representation, operation> g(mSetup);
+			Generator<Representation, Number, operation> g(mSetup);
 			Timer t;
 			for(unsigned i = 0; i < mSetup.size; ++i) {
 				mBenchmarks.emplace_back(g());
@@ -36,7 +37,7 @@ namespace hypro {
 			return t.elapsed();
 		}
 
-		typename Generator<Representation, operation>::type at(unsigned _pos) {
+		typename Generator<Representation, Number, operation>::type at(unsigned _pos) {
 			return mBenchmarks.at(_pos);
 		}
 
