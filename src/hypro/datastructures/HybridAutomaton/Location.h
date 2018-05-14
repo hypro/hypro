@@ -45,7 +45,6 @@ protected:
     /**
      * @param[in]  id    The identifier given by the LocationManager.
      * @param[loc] The original location which is copied.
-     *
      */
     Location(unsigned id, const Location& loc);
     Location(unsigned id, const matrix_t<Number>& mat);
@@ -63,11 +62,14 @@ private:
 
 public:
   	Location() = delete;
-    ~Location() {}
+    ~Location(){
+        std::cout << "loc " << mId << "sagt tschau!\n";
+    }
 
     std::size_t getNumberFlow() const { return mFlows.size(); }
     matrix_t<Number> getFlow(std::size_t I = 0) const { return mFlows.at(I); }
     matrix_t<Number>& rGetFlow(std::size_t I = 0) { return mFlows[I]; }
+    const std::vector<matrix_t<Number>>& getFlows() const { return mFlows; }
     const Condition<Number>& getInvariant() const { return mInvariant; }
     const transitionSet& getTransitions() const { return mTransitions; }
     const Box<Number>& getExternalInput() const { return mExternalInput; }
@@ -106,7 +108,7 @@ public:
 	    //tmp << l.getInvariant().getMatrix(), l.getInvariant().getVector();
 	    ostr << "location " << l.getName() << " ptr "<< &l  << " (id: " << l.getId() << ")"<< std::endl << "\t Flow: " << std::endl << l.getFlow() << std::endl << "\t Inv: " << std::endl << l.getInvariant();
 	    //ostr << l.getInvariant().getDiscreteCondition() << std::endl;
-      ostr << "ExternalInput:\n" << l.getExternalInput() << std::endl;
+        ostr << "ExternalInput:\n" << l.getExternalInput() << std::endl;
 	    ostr << "Transitions: " << std::endl;
 	    for (auto transitionPtr : l.getTransitions()) {
 	        ostr << *transitionPtr << std::endl;
@@ -121,14 +123,22 @@ public:
 template<typename Number>
 struct locPtrComp {
     bool operator()(const Location<Number>* lhs, const Location<Number>* rhs) const { return (*lhs < *rhs); }
+    bool operator()(const std::unique_ptr<Location<Number>>& lhs, const std::unique_ptr<Location<Number>>& rhs) const { return (*lhs < *rhs); }
 };
 
 template<typename Number>
-Location<Number>* parallelCompose(const Location<Number>* lhs
-								, const Location<Number>* rhs
-								, const std::vector<std::string>& lhsVar
-								, const std::vector<std::string>& rhsVar
-								, const std::vector<std::string>& haVar);
+//Location<Number>* parallelCompose(const Location<Number>* lhs
+//								, const Location<Number>* rhs
+//								, const std::vector<std::string>& lhsVar
+//								, const std::vector<std::string>& rhsVar
+//								, const std::vector<std::string>& haVar);
+
+std::unique_ptr<Location<Number>> parallelCompose(const std::unique_ptr<Location<Number>>& lhs
+                                , const std::unique_ptr<Location<Number>>& rhs
+                                , const std::vector<std::string>& lhsVar
+                                , const std::vector<std::string>& rhsVar
+                                , const std::vector<std::string>& haVar);
+
 
 }  // namespace hypro
 

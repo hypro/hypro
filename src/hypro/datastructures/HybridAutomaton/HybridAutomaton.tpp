@@ -13,7 +13,10 @@ HybridAutomaton<Number,State>::HybridAutomaton(const HybridAutomaton<Number,Stat
 	, mGlobalBadStates(hybrid.getGlobalBadStates())
 	, mVariables(hybrid.getVariables()) 
 {
-	mLocations = hybrid.getLocations();
+	//mLocations = hybrid.getLocations();
+	for(auto& l : hybrid.getLocations()){
+    	mLocations.insert(std::unique_ptr<Location<Number>>(new Location<Number>(*l)));
+   	} 	
 	for(auto& t : hybrid.getTransitions()){
 		mTransitions.insert(std::unique_ptr<Transition<Number>>(new Transition<Number>(*t)));
 	}
@@ -23,8 +26,25 @@ HybridAutomaton<Number,State>::HybridAutomaton(const HybridAutomaton<Number,Stat
 template<typename Number, typename State>
 HybridAutomaton<Number,State>& HybridAutomaton<Number,State>::operator=(const HybridAutomaton<Number,State>& rhs){
    	if(this != &rhs){
-   		mLocations = rhs.getLocations();
+   		//mLocations = rhs.getLocations();
 
+   		//Locations
+    	//Make deep copies of every location (COSTLY)
+    	std::set<std::unique_ptr<Location<Number>>> copyOfRhsLocs;
+    	for(auto& l : rhs.getLocations()){
+    		std::unique_ptr<Location<Number>> copyOfL = std::make_unique<Location<Number>>(new Location<Number>(*l));
+    		copyOfRhsLocs.insert(copyOfL);
+    	}
+    	assert(copyOfRhsLocs.size() == rhs.getLocations().size());
+
+    	//Realease old data
+    	mLocations.clear();
+    	assert(mLocations.size() == 0);
+
+    	//Assign
+    	mLocations = copyOfRhsLocs;
+
+    	//Transitions
    		//Make deep copies of every transition (COSTLY)
    		std::set<std::unique_ptr<Transition<Number>>> copyOfRhsTrans;
    		for(auto& t : rhs.getTransitions()){
@@ -52,7 +72,8 @@ HybridAutomaton<Number,State>& HybridAutomaton<Number,State>::operator=(const Hy
 template<typename Number, typename State>
 HybridAutomaton<Number,State>& HybridAutomaton<Number,State>::operator=(HybridAutomaton<Number,State>&& rhs){
    	if(this != &rhs){
-		mLocations = rhs.getLocations();
+		//mLocations = rhs.getLocations();
+		mLocations.swap(rhs.getLocations());
 		mTransitions.swap(rhs.getTransitions()); //TODO check if this works
 		mInitialStates = rhs.getInitialStates();
    		mLocalBadStates = rhs.getLocalBadStates();
@@ -64,9 +85,9 @@ HybridAutomaton<Number,State>& HybridAutomaton<Number,State>::operator=(HybridAu
 
 template<typename Number, typename State>
 Location<Number>* HybridAutomaton<Number,State>::getLocation(std::size_t id) const {
-	for(const auto loc : mLocations) {
+	for(const auto& loc : mLocations) {
 		if(loc->getId() == id) {
-			return loc;
+			return loc.get();
 		}
 	}
 	return nullptr;
@@ -74,10 +95,10 @@ Location<Number>* HybridAutomaton<Number,State>::getLocation(std::size_t id) con
 
 template<typename Number, typename State>
 Location<Number>* HybridAutomaton<Number,State>::getLocation(const std::string& name) const {
-	for(const auto loc : mLocations) {
+	for(const auto& loc : mLocations) {
 		assert(loc != nullptr);
 		if(loc->getName() == name) {
-			return loc;
+			return loc.get();
 		}
 	}
 	return nullptr;
@@ -96,7 +117,7 @@ const std::set<Label> HybridAutomaton<Number,State>::getLabels() const {
 
 	//TODO:
 	std::set<Label> labels;
-	for(const auto tra: mTransitions) {
+	for(const auto& tra: mTransitions) {
 		for(const auto lab: tra->getLabels()) {
 			labels.insert(lab);
 		}
@@ -105,13 +126,24 @@ const std::set<Label> HybridAutomaton<Number,State>::getLabels() const {
 }
 
 template<typename Number, typename State>
-void HybridAutomaton<Number,State>::addLocation(Location<Number>* location) { 
+void HybridAutomaton<Number,State>::addLocation(std::unique_ptr<Location<Number>>&& location) { 
 	assert(location != nullptr); 
-	mLocations.insert(location); 
+	//mLocations.insert(location); 
+	bool found = false;
+    for(auto& l : mLocations){
+    	if(*l == *location){
+    		found = true;
+    		break;		
+    	}
+    }
+    if(!found){
+    	mLocations.insert(std::move(location)); 
+    	//mLocations.insert(location); 
+    }
 }
 
 template<typename Number, typename State>
-void HybridAutomaton<Number,State>::addTransition(std::unique_ptr<Transition<Number>>& transition) { 
+void HybridAutomaton<Number,State>::addTransition(std::unique_ptr<Transition<Number>>&& transition) { 
 	assert(transition != nullptr);
 	bool found = false;
 	for(auto& t : mTransitions){
@@ -122,6 +154,7 @@ void HybridAutomaton<Number,State>::addTransition(std::unique_ptr<Transition<Num
 	}
 	if(!found){
 		mTransitions.insert(std::move(transition)); 
+		//mTransitions.insert(transition); 
 	}
 }
 

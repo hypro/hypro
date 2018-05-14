@@ -29,8 +29,13 @@ protected:
 		 * Location Setup
 		 */
 
-		loc1 = locMan.create();
-    	loc2 = locMan.create();
+    	//loc1Ptr = locMan.create();
+    	//loc2Ptr = locMan.create();
+    	loc1.reset(locMan.create());
+    	loc2.reset(locMan.create());
+		//loc1 = std::make_unique<Location<double>>(loc1Ptr);
+		//loc2 = std::make_unique<Location<double>>(loc2Ptr);
+    	//loc2 = locMan.create();
 
     	trans = std::make_unique<Transition<double>>();
     	
@@ -69,19 +74,30 @@ protected:
 		reset.setVector(inv.getVector());
 
 		trans->setGuard(guard);
-		trans->setSource(loc1);
-		trans->setTarget(loc2);
+		trans->setSource(loc1.get());
+		trans->setTarget(loc2.get());
 		trans->setReset(reset);
 
 		/*
 		 * Hybrid Automaton Setup
 		 */
-		locations[0] = loc1;
-		locations[1] = loc2;
 
-		locSet = std::set<Location<double>*>(locations, locations+2);
-		init[0] = loc1;
-		initLocSet = std::set<Location<double>*>(init, init+1);
+		initLocSet.insert(loc1.get());
+
+		locSet.insert(std::move(loc1));
+		locSet.insert(std::move(loc2));
+
+		if(*(initLocSet.begin()) == nullptr){
+			std::cout << "normal ptr to loc1 is invalid in initLocSet\n";
+		}
+
+		//locations[0] = loc1;
+		//locations[1] = loc2;
+
+		//locSet = std::set<Location<double>*>(locations, locations+2);
+
+		//init[0] = loc1;
+		//initLocSet = std::set<Location<double>*>(init, init+1);
 
 		//Polytope for InitialValuation & Guard Assignment
 		coordinates(0) = 2;
@@ -117,8 +133,10 @@ protected:
 
     LocationManager<double>& locMan = LocationManager<double>::getInstance();
 
-    Location<double>* loc1;
-    Location<double>* loc2;
+    //Location<double>* loc1Ptr;
+    //Location<double>* loc2Ptr;
+    std::unique_ptr<Location<double>> loc1;
+	std::unique_ptr<Location<double>> loc2;
     std::unique_ptr<Transition<double>> trans;
     HybridAutomaton<double> hybrid;
 
@@ -132,11 +150,16 @@ protected:
 
     Reset<double> reset;
 
-    Location<double>* locations[2];
-    std::set<Location<double>*> locSet;
+    //Location<double>* locations[2];
+    //std::set<Location<double>*> locSet;
+    //Location<double>* init[1];
+    //std::set<Location<double>*> initLocSet;
 
-    Location<double>* init[1];
-    std::set<Location<double>*> initLocSet;
+    //std::unique_ptr<Location<double>> locations[2];
+	std::set<std::unique_ptr<Location<double>>> locSet;
+
+	//std::unique_ptr<Location<double>> init[2];
+	std::set<Location<double>*> initLocSet;
 
 	std::set<std::unique_ptr<Transition<double>>> transSet;
     std::set<Transition<double>*> ptrSet;
@@ -151,34 +174,35 @@ protected:
  */
 TEST_F(HybridAutomataOutputTest, HybridAutomatonTest)
 {
-	// make a deep copy of trans
-	std::unique_ptr<Transition<double>> copyOfTrans = std::make_unique<Transition<double>>();
-	copyOfTrans->setGuard(guard);
-	copyOfTrans->setSource(loc1);
-	copyOfTrans->setTarget(loc2);
-	copyOfTrans->setReset(reset);
-	
-	// construct a new hybrid automaton.
-	HybridAutomaton<double> h1;
-
-	h1.addLocation(loc1);
-	h1.addLocation(loc2);
-
-	EXPECT_FALSE(copyOfTrans == nullptr);
-	h1.addTransition(copyOfTrans);
-	EXPECT_TRUE(copyOfTrans == nullptr);
-	matrix_t<double> matr = matrix_t<double>::Identity(2,2);
-	vector_t<double> vec = vector_t<double>(2);
-	vec << 1,2;
-
-	State_t<double> s(loc1);
-	s.setSet(ConstraintSet<double>(matr, vec));
-
-	h1.addInitialState(s);
+	// make a copy of trans
+	//std::unique_ptr<Transition<double>> copyOfTrans = std::make_unique<Transition<double>>();
+	//copyOfTrans->setGuard(guard);
+	//copyOfTrans->setSource(loc1);
+	//copyOfTrans->setTarget(loc2);
+	//copyOfTrans->setReset(reset);
+	//
+	//// construct a new hybrid automaton.
+	//HybridAutomaton<double> h1;
+//
+//	//h1.addLocation(std::move(loc1));
+//	//h1.addLocation(std::move(loc2));
+//
+//	//EXPECT_FALSE(copyOfTrans == nullptr);
+//	//h1.addTransition(std::move(copyOfTrans));
+//	//EXPECT_TRUE(copyOfTrans == nullptr);
+//	//matrix_t<double> matr = matrix_t<double>::Identity(2,2);
+//	//vector_t<double> vec = vector_t<double>(2);
+//	//vec << 1,2;
+//
+//	//State_t<double> s(loc1);
+//	//s.setSet(ConstraintSet<double>(matr, vec));
+//
+	//h1.addInitialState(s);
 
 	LockedFileWriter out("tmp.model");
 	out.clearFile();
-	out << toFlowstarFormat(h1);
+	//out << toFlowstarFormat(h1);
+	out << toFlowstarFormat(hybrid);
 
 	//boost::tuple<HybridAutomaton<double,State_t<double,double>>, ReachabilitySettings<double>> parsedResult = parseFlowstarFile<double>(std::string("tmp.model"));
 	//std::remove("tmp.model");

@@ -8,9 +8,10 @@ Location<Number>::Location(unsigned _id) : mFlows(), mExternalInput(), mTransiti
 {}
 
 template<typename Number>
-Location<Number>::Location(unsigned _id, const Location<Number>& _loc)
-    : mFlows(_loc.getFlows()), mExternalInput(_loc.getExternalInput()), mTransitions(_loc.getTransitions()), mInvariant(_loc.getInvariant()), mId(_id)
+Location<Number>::Location(unsigned _id, const Location<Number>& _loc) 
+	: mFlows(_loc.getFlows()), mExternalInput(_loc.getExternalInput()), mTransitions(_loc.getTransitions()), mInvariant(_loc.getInvariant()), mId(_id)
 {
+	std::cout << "loc " << _id << " wurde gebaut!\n";
 }
 
 template<typename Number>
@@ -191,11 +192,16 @@ bool Location<Number>::isComposedOf(const Location<Number>& rhs, const std::vect
 }
 
 template<typename Number>
-Location<Number>* parallelCompose(const Location<Number>* lhs
-								, const Location<Number>* rhs
-								, const std::vector<std::string>& lhsVar
-								, const std::vector<std::string>& rhsVar
-								, const std::vector<std::string>& haVar)
+//Location<Number>* parallelCompose(const Location<Number>* lhs
+//								, const Location<Number>* rhs
+//								, const std::vector<std::string>& lhsVar
+//								, const std::vector<std::string>& rhsVar
+//								, const std::vector<std::string>& haVar)
+std::unique_ptr<Location<Number>> parallelCompose(const std::unique_ptr<Location<Number>>& lhs
+                                , const std::unique_ptr<Location<Number>>& rhs
+                                , const std::vector<std::string>& lhsVar
+                                , const std::vector<std::string>& rhsVar
+                                , const std::vector<std::string>& haVar)
 {
 	//compute flow
 	matrix_t<Number> haFlow = matrix_t<Number>::Zero(haVar.size()+1, haVar.size()+1);
@@ -332,7 +338,7 @@ Location<Number>* parallelCompose(const Location<Number>* lhs
 	//std::cout << "setExtInput" << std::endl;
 	//set extinput
 	//loc->setExtInput(flowAndExtInput.second);
-	return res;
+	return std::unique_ptr<Location<Number>>(res);
 }
 
 

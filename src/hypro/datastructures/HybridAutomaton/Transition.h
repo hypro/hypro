@@ -111,6 +111,8 @@ class Transition
 
     void setSource(Location<Number>* source) { mSource = source; }
     void setTarget(Location<Number>* target) { mTarget = target; }
+    void setSource(std::unique_ptr<Location<Number>>& source) { mSource = source.get(); }
+    void setTarget(std::unique_ptr<Location<Number>>& target) { mTarget = target.get(); }
     void setGuard(const Condition<Number>& guard) { mGuard = guard; }
     void setReset(const Reset<Number>& val) { mReset = val; }
     void setAggregation(Aggregation agg) { mAggregationSetting = agg; }
@@ -206,8 +208,8 @@ class Transition
 };
 
 template<typename Number, typename State>
-std::unique_ptr<Transition<Number>> parallelCompose(const std::unique_ptr<Transition<Number>> lhsT
-                                , const std::unique_ptr<Transition<Number>> rhsT
+std::unique_ptr<Transition<Number>> parallelCompose(const std::unique_ptr<Transition<Number>>& lhsT
+                                , const std::unique_ptr<Transition<Number>>& rhsT
                                 , const std::vector<std::string>& lhsVar
                                 , const std::vector<std::string>& rhsVar
                                 , const std::vector<std::string>& haVar

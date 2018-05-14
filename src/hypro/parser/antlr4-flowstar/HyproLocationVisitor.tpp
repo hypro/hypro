@@ -20,6 +20,7 @@ namespace hypro {
 		//Calls visit(ctx->location()) to get location, name it, put into locSet, return locSet
 		unsigned i = 0;
 		std::set<Location<Number>*> locSet;
+		//std::set<std::unique_ptr<Location<Number>>> locSet;
 		while(i < ctx->location().size()){
 
 			//0.Syntax check - Location name already parsed?
@@ -31,6 +32,7 @@ namespace hypro {
 			}
 
 			Location<Number>* loc = visit(ctx->location().at(i));
+			//std::unique_ptr<Location<Number>> loc = visit(ctx->location().at(i));
 			locSet.insert(loc);
 			i++;
 		}
@@ -94,10 +96,11 @@ namespace hypro {
 
 		// only set external input, if it is different from zero
 		if(!flowAndExtInput.second.empty() && flowAndExtInput.second != Box<Number>(std::make_pair(Point<Number>(vector_t<Number>::Zero(flowAndExtInput.first.cols()-1)), Point<Number>(vector_t<Number>::Zero(flowAndExtInput.first.cols()-1))))) {
-			std::cout << "Set external input to " << flowAndExtInput.second << " which is not equal to " << Box<Number>(std::make_pair(Point<Number>(vector_t<Number>::Zero(flowAndExtInput.first.cols()-1)), Point<Number>(vector_t<Number>::Zero(flowAndExtInput.first.cols()-1)))) << std::endl;
+			//std::cout << "Set external input to " << flowAndExtInput.second << " which is not equal to " << Box<Number>(std::make_pair(Point<Number>(vector_t<Number>::Zero(flowAndExtInput.first.cols()-1)), Point<Number>(vector_t<Number>::Zero(flowAndExtInput.first.cols()-1)))) << std::endl;
 			loc->setExtInput(flowAndExtInput.second);
 		}
 		return loc;
+		//return std::unique_ptr<Location<Number>>(loc);
 	}
 
 	template<typename Number>

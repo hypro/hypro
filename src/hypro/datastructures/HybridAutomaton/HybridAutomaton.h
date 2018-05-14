@@ -27,13 +27,17 @@ namespace hypro
 /**
  * @brief      Class for linear hybrid automata.
  * @tparam     Number  Number type.
+ * @details	   The automaton owns all the locations and transitions. Newly created locations and transitions
+ 			   can only be added as unique pointers. If another class/object requests a location/transition, 
+ 			   then only normal pointers are returned. 
  */
 template <typename Number, typename State = State_t<Number,Number>>
 class HybridAutomaton
 {
   public:
-    using locationSet = std::set<Location<Number>*>; /// Set of location pointers.
-    using transitionSet = std::set<std::unique_ptr<Transition<Number>>>; /// Set of transition pointers.
+    //using locationSet = std::set<Location<Number>*>; 
+    using locationSet = std::set<std::unique_ptr<Location<Number>>>; /// Set of unique location pointers.
+    using transitionSet = std::set<std::unique_ptr<Transition<Number>>>; /// Set of unique transition pointers.
     using locationStateMap = std::multimap<const Location<Number>*, State>; /// Multi-map from location pointers to states.
     using locationConditionMap = std::map<const Location<Number>*, Condition<Number>>; /// Map from location pointers to conditions.
     using conditionVector = std::vector<Condition<Number>>; /// Vector of conditions.
@@ -49,24 +53,36 @@ class HybridAutomaton
 
   public:
   	/**
-  	 * @brief      Default constructor.
+  	 * @brief      	Default constructor.
   	 */
     HybridAutomaton() {}
 
     /**
-     * @brief      Copy constructor.
+     * @brief      	Copy constructor.
      *
-     * @param[in]  hybrid  The original hybrid automaton.
+     * @param[in]  	hybrid  The original hybrid automaton.
+     * @details 	This operation is costly as it performs deep copies
      */
     HybridAutomaton(const HybridAutomaton<Number,State>& hybrid);
 
     /**
-     * @brief      Move constructor.
+     * @brief      	Move constructor.
      *
-     * @param[in]  hybrid  The original hybrid automaton.
+     * @param[in]  	hybrid  The original hybrid automaton.
      */
     HybridAutomaton(HybridAutomaton<Number,State>&& hybrid) = default;
+
+    /**
+     * @brief 		Constructor from locations, transitions and initial states
+     * @param[in]	locs 			Set of locations
+     * @param[in]	trans 			Set of transitions
+     * @param[in] 	initialStates 	Map of initial states
+     */
     HybridAutomaton(const locationSet& locs, const transitionSet& trans, const locationStateMap& initialStates);
+
+    /**
+     * @brief 		Destructor
+     */
     virtual ~HybridAutomaton() {
 		// Without this we have a memory leak from HyproTransitionVisitor.
 		// The leak will be patched later by using only references.
@@ -81,14 +97,15 @@ class HybridAutomaton
      * @brief 		Copy Assignment 
      *
      * @param[in]	rhs 	The original hybrid automaton
-     **/
+     * @details 	This operation is costly as it performs deep copies
+     */
     HybridAutomaton& operator=(const HybridAutomaton<Number,State>& rhs);
 
     /**
      * @brief 		Move Assignment 
      *
      * @param[in]	rhs 	The original hybrid automaton
-     **/
+     */
     HybridAutomaton& operator=(HybridAutomaton<Number,State>&& rhs);
 
     /**
@@ -119,7 +136,10 @@ class HybridAutomaton
      * @brief      Setter function.
      */
     ///@{
-    void setLocations(const locationSet& locs) { mLocations = locs; }
+    //void setLocations(const locationSet& locs) { mLocations = locs; }
+    //void setLocations(const locationSet& locs) { mLocations.swap(locs); }
+    //void setTransitions(const transitionSet& trans) { mTransitions.swap(trans); } 
+    void setLocations(locationSet& locs) { mLocations.swap(locs); }
     void setTransitions(transitionSet& trans) { mTransitions.swap(trans); } 
     void setInitialStates(const locationStateMap& states) { mInitialStates = states; }
     void setLocalBadStates(const locationConditionMap& states) { mLocalBadStates = states; }
@@ -131,8 +151,8 @@ class HybridAutomaton
      * @brief      Extension function.
      */
     ///@{
-    void addLocation(Location<Number>* location);
-    void addTransition(std::unique_ptr<Transition<Number>>& transition);
+    void addLocation(std::unique_ptr<Location<Number>>&& location);
+    void addTransition(std::unique_ptr<Transition<Number>>&& transition);
     void addInitialState(const State& state) { mInitialStates.insert(std::make_pair(state.getLocation(),state)); }
     void addLocalBadState(const Location<Number>* loc, const Condition<Number>& condition) { mLocalBadStates.insert(std::make_pair(loc,condition)); }
     void addGlobalBadState(const Condition<Number>& state) { mGlobalBadStates.push_back(state); }
