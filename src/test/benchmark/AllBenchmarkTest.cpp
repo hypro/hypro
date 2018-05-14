@@ -11,8 +11,7 @@
 #include "gtest/gtest.h"
 #include "../defines.h"
 #include "Benchmark.h"
-#include "../../src/hypro/representations/Box/Box.h"
-#include "../../src/hypro/representations/Polytopes/VPolytope/VPolytope.h"
+#include "../../src/hypro/representations/GeometricObject.h"
 
 
 template<typename Number>

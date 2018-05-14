@@ -6,7 +6,7 @@
 
 #include <random>
 #include "../../hypro/datastructures/Point.h"
-#include "../../hypro/util/types.h"
+#include "../../hypro/types.h"
 
 namespace hypro {
 	template<typename Representation>
