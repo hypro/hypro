@@ -5,6 +5,14 @@ cd build || return 1
 
 cmake ../ || return 1
 
+function keep_waiting() {
+  while true; do
+    echo -e "."
+    sleep 60
+  done
+}
+
+
 if [[ ${TASK} == "sonarcloud" ]]; then
 	cmake ../ -DHYPRO_COVERAGE=ON || return 1
 	build-wrapper-linux-x86-64 --out-dir ../bw-out make -j4 hypro
@@ -18,7 +26,9 @@ if [[ ${TASK} == "sonarcloud" ]]; then
 
 else
 	cmake -j4 $FLAGS -DCMAKE_CXX_COMPILER=$COMPILER ..
-	make resources -j2
+	keep_waiting &
+	make resources -j2 || return 1
+	kill $!
 	make -j4 VERBOSE=1
 	make test
 
