@@ -3,15 +3,12 @@
 mkdir -p build || return 1
 cd build || return 1
 
-cmake ../ || return 1
-
 function keep_waiting() {
   while true; do
     echo -e "."
     sleep 60
   done
 }
-
 
 if [[ ${TASK} == "sonarcloud" ]]; then
 	cmake ../ -DHYPRO_COVERAGE=ON || return 1
