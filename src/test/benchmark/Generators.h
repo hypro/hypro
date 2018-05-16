@@ -4,14 +4,13 @@
 
 namespace hypro {
 
-	enum operation : int {LINEARTRAFO = 0, MINKOWSKISUM = 1, INTERSECTION = 2, CONTAINS = 3, UNION = 4};
+	enum operation : int {LINEARTRAFO = 0, MINKOWSKISUM = 1, INTERSECTION = 2, CONTAINS = 3, UNION = 4, INTERSECTHALFSPACE = 5};
 
 	template<typename Representation, typename Number, int operation>
 	struct Generator : public BaseGenerator<Representation,Number> {
 		typedef void type;
 		std::string name;
 
-		//Generator(const BenchmarkSetup<typename Representation::type>& _setup) {}
 		Generator(const BenchmarkSetup<Number>& _setup) {}
 		void operator()() const {}
 	};
@@ -75,5 +74,19 @@ namespace hypro {
 			return std::make_tuple(this->mGenerator.createSet(this->mSetup), this->mGenerator.createSet(this->mSetup));
 		}
 	};
+
+	template<typename Representation, typename Number>
+	struct Generator<Representation, Number, operation::INTERSECTHALFSPACE> : public BaseGenerator<Representation,Number> {
+		typedef std::pair<Representation, Halfspace<Number>> type;
+		std::string name;
+
+		Generator(const BenchmarkSetup<Number>& _setup) : BaseGenerator<Representation,Number>(_setup), name("intersectHalfspace") {}
+
+		type operator()() const {
+			Representation rep = this->mGenerator.createSet(this->mSetup);
+			return std::make_pair(rep, this->mGenerator.createLimitedHalfspace(this->mSetup, rep));
+		}
+	};
+	
 
 } // namespace
