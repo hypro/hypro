@@ -13,7 +13,6 @@ namespace hypro {
 	template<typename Representation, typename Number>
 	struct Executor<Representation, Number, operation::LINEARTRAFO> {
 		Result run(typename Generator<Representation, Number, operation::LINEARTRAFO>::type _in) {
-			//std::get<0>(_in).linearTransformation(std::get<1>(_in), std::get<2>(_in));
 			std::get<0>(_in).affineTransformation(std::get<1>(_in), std::get<2>(_in));
 			return Result();
 		}
@@ -50,4 +49,13 @@ namespace hypro {
 			return Result();
 		}
 	};
+
+	template<typename Representation, typename Number>
+	struct Executor<Representation, Number, operation::INTERSECTHALFSPACE> {
+		Result run(typename Generator<Representation, Number, operation::INTERSECTHALFSPACE>::type _in) {
+			std::get<0>(_in).intersectHalfspace(std::get<1>(_in));
+			return Result();
+		}
+	};
+
 } // namespace
