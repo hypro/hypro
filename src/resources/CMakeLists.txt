@@ -7,7 +7,6 @@ INCLUDE(ExternalProject)
 SET(EP_PREFIX_DIR ${CMAKE_BINARY_DIR}/resources )
 SET_DIRECTORY_PROPERTIES(PROPERTIES EP_PREFIX ${EP_PREFIX_DIR} )
 
-find_package(carl QUIET)
 if(carl_FOUND)
 	message("-- Use system version of CArL")
 else()

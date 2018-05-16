@@ -25,6 +25,11 @@ if [[ ${TASK} == "sonarcloud" ]]; then
 	cd ../ && sonar-scanner -X -Dproject.settings=.travis/sonar-project.properties && cd build/
 
 else
+	git clone https://github.com/smtrat/carl.git
+	cd carl && mkdir build && cd build && cmake -DCMAKE_CXX_COMPILER=$COMPILER -DCMAKE_BUILD_TYPE=Release .. && make resources
+	keep_waiting &
+	make lib_carl VERBOSE=1 || return 1
+	kill $!
 	cmake -j4 $FLAGS -DCMAKE_CXX_COMPILER=$COMPILER ..
 	keep_waiting &
 	make resources -j2 || return 1

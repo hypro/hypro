@@ -180,7 +180,8 @@ load_library(${PROJECT_NAME} GTest 0)
 
 # required, as carl also defines targets "resources" and "runCoreTests"
 #set(ALLOW_DUPLICATE_CUSTOM_TARGETS TRUE)
-#load_library(${PROJECT_NAME} carl 0)
+load_library(${PROJECT_NAME} carl 0)
+#find_package(carl REQUIRED)
 
 add_subdirectory(src/resources)
 
