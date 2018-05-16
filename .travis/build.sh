@@ -26,8 +26,8 @@ if [[ ${TASK} == "sonarcloud" ]]; then
 
 else
 	git clone https://github.com/smtrat/carl.git
-	cd carl && mkdir build && cd build && cmake -DCMAKE_CXX_COMPILER=$COMPILER -DCMAKE_BUILD_TYPE=Release .. && make resources
 	keep_waiting &
+	cd carl && mkdir build && cd build && cmake -DCMAKE_CXX_COMPILER=$COMPILER -DCMAKE_BUILD_TYPE=Release .. && make resources &
 	make lib_carl VERBOSE=1 || return 1
 	kill $!
 	cmake -j4 $FLAGS -DCMAKE_CXX_COMPILER=$COMPILER ..
