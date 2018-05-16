@@ -31,7 +31,7 @@
   <td id="projectlogo"><img alt="Logo" src="hypro_Logo.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">HyPro
-   &#160;<span id="projectnumber">18.03</span>
+   &#160;<span id="projectnumber">18.05</span>
    </div>
    <div id="projectbrief">A Toolbox for the Reachability Analysis of Hybrid Systems using Geometric Approximations</div>
   </td>
@@ -728,6 +728,10 @@ Number &gt;<br class="typebreak"/>
 <tr class="memitem:aa9de495215c4e14a55d1f389a06e3bc9"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1BoxT.html">BoxT</a>&lt; To, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacehypro.html#aa9de495215c4e14a55d1f389a06e3bc9">convert</a> (const <a class="el" href="classhypro_1_1BoxT.html">BoxT</a>&lt; From, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt; &amp;in)</td></tr>
 <tr class="memdesc:aa9de495215c4e14a55d1f389a06e3bc9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Conversion function for different number types.  <a href="#aa9de495215c4e14a55d1f389a06e3bc9">More...</a><br/></td></tr>
 <tr class="separator:aa9de495215c4e14a55d1f389a06e3bc9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a270d5169850cd2c134b6fb4affb1ec3c"><td class="memTemplParams" colspan="2">template&lt;typename Number &gt; </td></tr>
+<tr class="memitem:a270d5169850cd2c134b6fb4affb1ec3c"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacehypro.html#a270d5169850cd2c134b6fb4affb1ec3c">icpIntersectHalfspace</a> (std::vector&lt; carl::Interval&lt; Number &gt;&gt; &amp;intervals, const <a class="el" href="classhypro_1_1Halfspace.html">Halfspace</a>&lt; Number &gt; &amp;hsp)</td></tr>
+<tr class="memdesc:a270d5169850cd2c134b6fb4affb1ec3c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Performs intersection of a vector of intervals with a halfspace.  <a href="#a270d5169850cd2c134b6fb4affb1ec3c">More...</a><br/></td></tr>
+<tr class="separator:a270d5169850cd2c134b6fb4affb1ec3c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adfbd8e75b9999cddf06f18e38b20dea2"><td class="memTemplParams" colspan="2">template&lt;typename From , typename To , typename Converter &gt; </td></tr>
 <tr class="memitem:adfbd8e75b9999cddf06f18e38b20dea2"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1ConstraintSetT.html">ConstraintSetT</a>&lt; To, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacehypro.html#adfbd8e75b9999cddf06f18e38b20dea2">convert</a> (const <a class="el" href="classhypro_1_1ConstraintSetT.html">ConstraintSetT</a>&lt; From, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt; &amp;in)</td></tr>
 <tr class="memdesc:adfbd8e75b9999cddf06f18e38b20dea2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Conversion function for different number types.  <a href="#adfbd8e75b9999cddf06f18e38b20dea2">More...</a><br/></td></tr>
@@ -1330,9 +1334,9 @@ template&lt;typename From , typename To , typename Converter , class Setting &gt
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The resulting box. </dd></dl>
 
-<p>Definition at line <a class="el" href="Box_8h_source.html#l00468">468</a> of file <a class="el" href="Box_8h_source.html">Box.h</a>.</p>
+<p>Definition at line <a class="el" href="Box_8h_source.html#l00470">470</a> of file <a class="el" href="Box_8h_source.html">Box.h</a>.</p>
 
-<p>References <a class="el" href="Box_8h_source.html#l00163">hypro::BoxT&lt; Number, Converter, Setting &gt;::limits()</a>.</p>
+<p>References <a class="el" href="Box_8h_source.html#l00165">hypro::BoxT&lt; Number, Converter, Setting &gt;::limits()</a>.</p>
 
 </div>
 </div>
@@ -1463,6 +1467,55 @@ template&lt;typename Number &gt; </div>
 
 </div>
 </div>
+<a class="anchor" id="a270d5169850cd2c134b6fb4affb1ec3c"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">bool hypro::icpIntersectHalfspace </td>
+          <td>(</td>
+          <td class="paramtype">std::vector&lt; carl::Interval&lt; Number &gt;&gt; &amp;&#160;</td>
+          <td class="paramname"><em>intervals</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const Halfspace&lt; Number &gt; &amp;&#160;</td>
+          <td class="paramname"><em>hsp</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Performs intersection of a vector of intervals with a halfspace. </p>
+<p>The idea is to use ICP-style contractions to obtain the resulting box. As we know the constraint (the halfspace) is linear, we only need to perform one contraction per dimension and the order does not matter. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir"></td><td class="paramname">intervals</td><td>The intervals as a vector (call by reference). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">hsp</td><td>The halfspace</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">Number</td><td>The used number type.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True, if one of the resulting intervals is empty, False otherwise. </dd></dl>
+
+<p>Definition at line <a class="el" href="intervalMethods_8h_source.html#l00020">20</a> of file <a class="el" href="intervalMethods_8h_source.html">intervalMethods.h</a>.</p>
+
+<p>References <a class="el" href="classhypro_1_1Halfspace.html#ada47c49e9dca6befeef4c6fc2fac5a22">hypro::Halfspace&lt; Number &gt;::normal()</a>, and <a class="el" href="classhypro_1_1Halfspace.html#acc9193b4c2180fe7a04544d0e8295fa5">hypro::Halfspace&lt; Number &gt;::offset()</a>.</p>
+
+</div>
+</div>
 <a class="anchor" id="aa78d21b35ed555d7bb6cf29c782b63f8"></a>
 <div class="memitem">
 <div class="memproto">
@@ -1506,9 +1559,9 @@ template&lt;typename Number , typename Converter , class Setting &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The resulting box. </dd></dl>
 
-<p>Definition at line <a class="el" href="Box_8h_source.html#l00452">452</a> of file <a class="el" href="Box_8h_source.html">Box.h</a>.</p>
+<p>Definition at line <a class="el" href="Box_8h_source.html#l00454">454</a> of file <a class="el" href="Box_8h_source.html">Box.h</a>.</p>
 
-<p>References <a class="el" href="Box_8h_source.html#l00214">hypro::BoxT&lt; Number, Converter, Setting &gt;::empty()</a>.</p>
+<p>References <a class="el" href="Box_8h_source.html#l00216">hypro::BoxT&lt; Number, Converter, Setting &gt;::empty()</a>.</p>
 
 </div>
 </div>
