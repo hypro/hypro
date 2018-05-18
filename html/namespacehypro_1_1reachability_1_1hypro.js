@@ -56,6 +56,7 @@ var namespacehypro_1_1reachability_1_1hypro =
     [ "BoxSupportFunctionSetting", "structhypro_1_1reachability_1_1hypro_1_1BoxSupportFunctionSetting.html", null ],
     [ "NonLineaerOmegaOSupportFunctionSetting", "structhypro_1_1reachability_1_1hypro_1_1NonLineaerOmegaOSupportFunctionSetting.html", null ],
     [ "PolytopeSupportFunctionSetting", "structhypro_1_1reachability_1_1hypro_1_1PolytopeSupportFunctionSetting.html", null ],
+    [ "BoxSupportFunction", "classhypro_1_1reachability_1_1hypro_1_1BoxSupportFunction.html", "classhypro_1_1reachability_1_1hypro_1_1BoxSupportFunction" ],
     [ "PolytopeSupportFunction", "classhypro_1_1reachability_1_1hypro_1_1PolytopeSupportFunction.html", "classhypro_1_1reachability_1_1hypro_1_1PolytopeSupportFunction" ],
     [ "BallSupportFunction", "classhypro_1_1reachability_1_1hypro_1_1BallSupportFunction.html", "classhypro_1_1reachability_1_1hypro_1_1BallSupportFunction" ],
     [ "EllipsoidSupportFunction", "classhypro_1_1reachability_1_1hypro_1_1EllipsoidSupportFunction.html", "classhypro_1_1reachability_1_1hypro_1_1EllipsoidSupportFunction" ],

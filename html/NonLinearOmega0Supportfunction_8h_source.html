@@ -163,7 +163,7 @@ $(document).ready(function(){initNavTree('NonLinearOmega0Supportfunction_8h_sour
 <div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    <span class="comment">/*</span></div>
 <div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;<span class="comment">    * Computes a SupportFunctionContent being a symmetric box (centered at the origin) around the specified support function</span></div>
 <div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;<span class="comment">    */</span></div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    <a class="code" href="classhypro_1_1SymmetricCenteredBoxSupportFunction.html">SymmetricCenteredBoxSupportFunction&lt;BoxSupportFunctionSetting&gt;</a>* boxoperator( <a class="code" href="classhypro_1_1SupportFunctionContent.html">SupportFunctionContent</a>* sf ) {</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    SymmetricCenteredBoxSupportFunction&lt;BoxSupportFunctionSetting&gt;* boxoperator( <a class="code" href="classhypro_1_1SupportFunctionContent.html">SupportFunctionContent</a>* sf ) {</div>
 <div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;        </div>
 <div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;        std::string method = <span class="stringliteral">&quot;boxoperator:&quot;</span>;</div>
 <div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;</div>
@@ -207,7 +207,7 @@ $(document).ready(function(){initNavTree('NonLinearOmega0Supportfunction_8h_sour
 <div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;        }</div>
 <div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;</div>
 <div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;        <span class="keywordflow">if</span>(Setting::TEST_){</div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;            <a class="code" href="classhypro_1_1SymmetricCenteredBoxSupportFunction.html">SymmetricCenteredBoxSupportFunction&lt;BoxSupportFunctionSetting&gt;</a>* result = <span class="keyword">new</span> <a class="code" href="classhypro_1_1SymmetricCenteredBoxSupportFunction.html">SymmetricCenteredBoxSupportFunction&lt;BoxSupportFunctionSetting&gt;</a>( e, getAD() );</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;            SymmetricCenteredBoxSupportFunction&lt;BoxSupportFunctionSetting&gt;* result = <span class="keyword">new</span> SymmetricCenteredBoxSupportFunction&lt;BoxSupportFunctionSetting&gt;( e, getAD() );</div>
 <div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;            <a class="code" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t&lt;double&gt;</a> values( directionsAlongDimensions.size(), 1 );</div>
 <div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;            result-&gt;multiEvaluate( &amp;directionsAlongDimensions, &amp;values );</div>
 <div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;            TRACE(<span class="stringliteral">&quot;hypro.NLOmega0SF&quot;</span>,<span class="stringliteral">&quot;boxoperator(sF): result multiEvaluation: &quot;</span> &lt;&lt; BL &lt;&lt; values &lt;&lt; BL);</div>
@@ -216,7 +216,7 @@ $(document).ready(function(){initNavTree('NonLinearOmega0Supportfunction_8h_sour
 <div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;            TRACE(<span class="stringliteral">&quot;hypro.NLOmega0SF&quot;</span>,<span class="stringliteral">&quot;boxoperator(sF): sF multiEvaluation: &quot;</span> &lt;&lt; BL &lt;&lt; values &lt;&lt; BL);</div>
 <div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;            <span class="keywordflow">return</span> result;</div>
 <div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;        } <span class="keywordflow">else</span> {</div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;            <span class="keywordflow">return</span> <span class="keyword">new</span> <a class="code" href="classhypro_1_1SymmetricCenteredBoxSupportFunction.html">SymmetricCenteredBoxSupportFunction&lt;BoxSupportFunctionSetting&gt;</a>( e, getAD() );    </div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;            <span class="keywordflow">return</span> <span class="keyword">new</span> SymmetricCenteredBoxSupportFunction&lt;BoxSupportFunctionSetting&gt;( e, getAD() );    </div>
 <div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;        }</div>
 <div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;</div>
 <div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;    }</div>
@@ -294,7 +294,7 @@ $(document).ready(function(){initNavTree('NonLinearOmega0Supportfunction_8h_sour
 <div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;</div>
 <div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;        <span class="comment">// e_p</span></div>
 <div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;        MultiplicationSupportfunction* a2x0 = X0-&gt;multiply( Asquare );</div>
-<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;        <a class="code" href="classhypro_1_1SymmetricCenteredBoxSupportFunction.html">SymmetricCenteredBoxSupportFunction&lt;BoxSupportFunctionSetting&gt;</a>* a2x0_box = boxoperator( a2x0 );</div>
+<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;        SymmetricCenteredBoxSupportFunction&lt;BoxSupportFunctionSetting&gt;* a2x0_box = boxoperator( a2x0 );</div>
 <div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;</div>
 <div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;        <span class="keywordflow">if</span>(Setting::SUPPORTFUNCTION_VERBOSE &amp;&amp; Setting::CALCEPSILON_VERBOSE){</div>
 <div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;            TRACE(<span class="stringliteral">&quot;hypro.NLOmega0SF&quot;</span>,method &lt;&lt; <span class="stringliteral">&quot; a2x0_box constructed&quot;</span> &lt;&lt; <span class="charliteral">&#39;\n&#39;</span>);</div>
@@ -306,7 +306,7 @@ $(document).ready(function(){initNavTree('NonLinearOmega0Supportfunction_8h_sour
 <div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;            TRACE(<span class="stringliteral">&quot;hypro.NLOmega0SF&quot;</span>,method &lt;&lt; <span class="stringliteral">&quot; phi2.transpose() * &amp;a2x0_box constructed&quot;</span> &lt;&lt; <span class="charliteral">&#39;\n&#39;</span>);</div>
 <div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;        }</div>
 <div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;</div>
-<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;        <a class="code" href="classhypro_1_1SymmetricCenteredBoxSupportFunction.html">SymmetricCenteredBoxSupportFunction&lt;BoxSupportFunctionSetting&gt;</a>* result = boxoperator( temp );</div>
+<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;        SymmetricCenteredBoxSupportFunction&lt;BoxSupportFunctionSetting&gt;* result = boxoperator( temp );</div>
 <div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;        e_p = result-&gt;getE();</div>
 <div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;</div>
 <div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;        <span class="keywordflow">if</span>(Setting::SUPPORTFUNCTION_VERBOSE &amp;&amp; Setting::CALCEPSILON_VERBOSE){</div>
@@ -321,7 +321,7 @@ $(document).ready(function(){initNavTree('NonLinearOmega0Supportfunction_8h_sour
 <div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;</div>
 <div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;        <span class="comment">// e_n</span></div>
 <div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;        MultiplicationSupportfunction* a2ex0 = X0-&gt;multiply( edA * Asquare );</div>
-<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;        <a class="code" href="classhypro_1_1SymmetricCenteredBoxSupportFunction.html">SymmetricCenteredBoxSupportFunction&lt;BoxSupportFunctionSetting&gt;</a>* a2ex0_box = boxoperator( a2ex0 );</div>
+<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;        SymmetricCenteredBoxSupportFunction&lt;BoxSupportFunctionSetting&gt;* a2ex0_box = boxoperator( a2ex0 );</div>
 <div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160;        temp = a2ex0_box-&gt;multiply( phi2.transpose() );</div>
 <div class="line"><a name="l00214"></a><span class="lineno">  214</span>&#160;        result = boxoperator( temp );</div>
 <div class="line"><a name="l00215"></a><span class="lineno">  215</span>&#160;        e_n = result-&gt;getE();</div>
@@ -343,7 +343,7 @@ $(document).ready(function(){initNavTree('NonLinearOmega0Supportfunction_8h_sour
 <div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;            TRACE(<span class="stringliteral">&quot;hypro.NLOmega0SF&quot;</span>,method &lt;&lt; <span class="stringliteral">&quot; au &quot;</span> &lt;&lt; <span class="charliteral">&#39;\n&#39;</span>);</div>
 <div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160;        }</div>
 <div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160;</div>
-<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;        <a class="code" href="classhypro_1_1SymmetricCenteredBoxSupportFunction.html">SymmetricCenteredBoxSupportFunction&lt;BoxSupportFunctionSetting&gt;</a>* au_box = boxoperator( au );</div>
+<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;        SymmetricCenteredBoxSupportFunction&lt;BoxSupportFunctionSetting&gt;* au_box = boxoperator( au );</div>
 <div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160;</div>
 <div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160;        <span class="keywordflow">if</span>(Setting::SUPPORTFUNCTION_VERBOSE &amp;&amp; Setting::CALCEPSILON_VERBOSE){</div>
 <div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;            TRACE(<span class="stringliteral">&quot;hypro.NLOmega0SF&quot;</span>,method &lt;&lt; <span class="stringliteral">&quot; au_box &quot;</span> &lt;&lt; <span class="charliteral">&#39;\n&#39;</span>);</div>
@@ -574,8 +574,7 @@ $(document).ready(function(){initNavTree('NonLinearOmega0Supportfunction_8h_sour
 <div class="ttc" id="namespacehypro_html_a52a4896e811a0710bcfc5a410a780034"><div class="ttname"><a href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">hypro::matrix_t</a></div><div class="ttdeci">Eigen::Matrix&lt; Number, Eigen::Dynamic, Eigen::Dynamic &gt; matrix_t</div><div class="ttdef"><b>Definition:</b> <a href="types_8h_source.html#l00026">types.h:26</a></div></div>
 <div class="ttc" id="classhypro_1_1NonLinearOmega0Supportfunction_html_ac63286bab3e704b32e3c51cc5a12c7a3"><div class="ttname"><a href="classhypro_1_1NonLinearOmega0Supportfunction.html#ac63286bab3e704b32e3c51cc5a12c7a3">hypro::NonLinearOmega0Supportfunction::specificEvaluation</a></div><div class="ttdeci">evaluationResult specificEvaluation(matrix_t&lt; double &gt; l)</div><div class="ttdef"><b>Definition:</b> <a href="NonLinearOmega0Supportfunction_8h_source.html#l00307">NonLinearOmega0Supportfunction.h:307</a></div></div>
 <div class="ttc" id="classhypro_1_1NonLinearOmega0Supportfunction_html"><div class="ttname"><a href="classhypro_1_1NonLinearOmega0Supportfunction.html">hypro::NonLinearOmega0Supportfunction</a></div><div class="ttdef"><b>Definition:</b> <a href="NonLinearOmega0Supportfunction_8h_source.html#l00027">NonLinearOmega0Supportfunction.h:27</a></div></div>
-<div class="ttc" id="classhypro_1_1SupportFunctionContent_html"><div class="ttname"><a href="classhypro_1_1SupportFunctionContent.html">hypro::SupportFunctionContent</a></div><div class="ttdoc">Class for support function content. </div><div class="ttdef"><b>Definition:</b> <a href="SupportFunctionContent_8h_source.html#l00025">SupportFunctionContent.h:25</a></div></div>
-<div class="ttc" id="classhypro_1_1SymmetricCenteredBoxSupportFunction_html"><div class="ttname"><a href="classhypro_1_1SymmetricCenteredBoxSupportFunction.html">hypro::SymmetricCenteredBoxSupportFunction</a></div><div class="ttdef"><b>Definition:</b> <a href="BoxSupportfunction_8h_source.html#l00018">BoxSupportfunction.h:18</a></div></div>
+<div class="ttc" id="classhypro_1_1SupportFunctionContent_html"><div class="ttname"><a href="classhypro_1_1SupportFunctionContent.html">hypro::SupportFunctionContent</a></div><div class="ttdoc">Class for support function content. </div><div class="ttdef"><b>Definition:</b> <a href="SupportFunctionContent_8h_source.html#l00026">SupportFunctionContent.h:26</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- HTML footer for doxygen 1.8.12-->

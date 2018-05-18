@@ -8,6 +8,7 @@ var classhypro_1_1reachability_1_1hypro_1_1SupportFunctionT =
     [ "SupportFunctionT", "classhypro_1_1reachability_1_1hypro_1_1SupportFunctionT.html#a2ea2eb25b78a33031fb1fb277ebad63b", null ],
     [ "SupportFunctionT", "classhypro_1_1reachability_1_1hypro_1_1SupportFunctionT.html#aff5d61e1f9ea154b31a22a6afd28d41c", null ],
     [ "SupportFunctionT", "classhypro_1_1reachability_1_1hypro_1_1SupportFunctionT.html#a87b2462e92a8e909357c1150a8960d58", null ],
+    [ "SupportFunctionT", "classhypro_1_1reachability_1_1hypro_1_1SupportFunctionT.html#a550b5e4996879e53418c4139d04e26f4", null ],
     [ "~SupportFunctionT", "classhypro_1_1reachability_1_1hypro_1_1SupportFunctionT.html#afe51b608ede16e9c86fd8c155557265d", null ],
     [ "affineTransformation", "classhypro_1_1reachability_1_1hypro_1_1SupportFunctionT.html#a8d188f2dfd9272c549aa0d84873b6a95", null ],
     [ "ball", "classhypro_1_1reachability_1_1hypro_1_1SupportFunctionT.html#a68d163626763c0469f65cf51ae126807", null ],

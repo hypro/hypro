@@ -130,7 +130,7 @@ var namespacehypro =
     [ "HPolytopeSetting", "structhypro_1_1HPolytopeSetting.html", null ],
     [ "VPolytopeT", "classhypro_1_1VPolytopeT.html", "classhypro_1_1VPolytopeT" ],
     [ "BallSupportFunction", "classhypro_1_1BallSupportFunction.html", "classhypro_1_1BallSupportFunction" ],
-    [ "SymmetricCenteredBoxSupportFunction", "classhypro_1_1SymmetricCenteredBoxSupportFunction.html", "classhypro_1_1SymmetricCenteredBoxSupportFunction" ],
+    [ "BoxSupportFunction", "classhypro_1_1BoxSupportFunction.html", "classhypro_1_1BoxSupportFunction" ],
     [ "EllipsoidSupportFunction", "classhypro_1_1EllipsoidSupportFunction.html", "classhypro_1_1EllipsoidSupportFunction" ],
     [ "NonLinearOmega0Supportfunction", "classhypro_1_1NonLinearOmega0Supportfunction.html", "classhypro_1_1NonLinearOmega0Supportfunction" ],
     [ "PolytopeSupportFunction", "classhypro_1_1PolytopeSupportFunction.html", "classhypro_1_1PolytopeSupportFunction" ],

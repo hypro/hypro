@@ -193,6 +193,9 @@ std::vector&lt; std::size_t &gt;&#160;</td><td class="memItemRight" valign="bott
 &lt; Number, <br class="typebreak"/>
 <a class="el" href="structhypro_1_1reachability_1_1hypro_1_1PolytopeSupportFunctionSetting.html">PolytopeSupportFunctionSetting</a> &gt; *&#160;</td><td class="memItemRight" valign="bottom"><b>polytope</b> () const </td></tr>
 <tr class="separator:a07fb9b2a178aae9a99a24bf1a271ff3b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abb9a0955fc95ce0f7d26d979115575a8"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="abb9a0955fc95ce0f7d26d979115575a8"></a>
+<a class="el" href="classhypro_1_1reachability_1_1hypro_1_1BoxSupportFunction.html">BoxSupportFunction</a>&lt; Number &gt; *&#160;</td><td class="memItemRight" valign="bottom"><b>box</b> () const </td></tr>
+<tr class="separator:abb9a0955fc95ce0f7d26d979115575a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:affb9c47d72fa6f777d58bcd418444229"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="affb9c47d72fa6f777d58bcd418444229"></a>
 <a class="el" href="classhypro_1_1reachability_1_1hypro_1_1BallSupportFunction.html">BallSupportFunction</a>&lt; Number &gt; *&#160;</td><td class="memItemRight" valign="bottom"><b>ball</b> () const </td></tr>
 <tr class="separator:affb9c47d72fa6f777d58bcd418444229"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -269,6 +272,11 @@ static std::shared_ptr<br class="typebreak"/>
 &lt; <a class="el" href="classhypro_1_1reachability_1_1hypro_1_1SupportFunctionContent.html">SupportFunctionContent</a><br class="typebreak"/>
 &lt; Number &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>create</b> (<a class="el" href="namespacehypro_1_1reachability_1_1hypro.html#ac1521d62aa7254ec513110e3cc6b74df">SF_TYPE</a> _type, const <a class="el" href="namespacehypro_1_1reachability_1_1hypro.html#aba25d57908acd832a2f43dc0382a4bc6">matrix_t</a>&lt; Number &gt; &amp;_directions, const <a class="el" href="namespacehypro_1_1reachability_1_1hypro.html#a4c8f5479695cd143f25fea1e8474dc1c">vector_t</a>&lt; Number &gt; &amp;_distances)</td></tr>
 <tr class="separator:ab0192ca1fa2b9a4b8e7531a284fce483"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae8a1753f48ca2617dbcdde71453df4b2"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae8a1753f48ca2617dbcdde71453df4b2"></a>
+static std::shared_ptr<br class="typebreak"/>
+&lt; <a class="el" href="classhypro_1_1reachability_1_1hypro_1_1SupportFunctionContent.html">SupportFunctionContent</a><br class="typebreak"/>
+&lt; Number &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>create</b> (<a class="el" href="namespacehypro_1_1reachability_1_1hypro.html#ac1521d62aa7254ec513110e3cc6b74df">SF_TYPE</a> _type, const std::vector&lt; carl::Interval&lt; Number &gt;&gt; &amp;inbox)</td></tr>
+<tr class="separator:ae8a1753f48ca2617dbcdde71453df4b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad0103ddc3f9a14557495ef0da1f5e654"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad0103ddc3f9a14557495ef0da1f5e654"></a>
 static std::shared_ptr<br class="typebreak"/>
 &lt; <a class="el" href="classhypro_1_1reachability_1_1hypro_1_1SupportFunctionContent.html">SupportFunctionContent</a><br class="typebreak"/>
@@ -333,7 +341,7 @@ class hypro::reachability::hypro::SupportFunctionContent&lt; Number &gt;</h3>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="Reach_8h_source.html#l00025">25</a> of file <a class="el" href="Reach_8h_source.html">Reach.h</a>.</p>
+<p>Definition at line <a class="el" href="Reach_8h_source.html#l00026">26</a> of file <a class="el" href="Reach_8h_source.html">Reach.h</a>.</p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a class="anchor" id="a22b4d4cbac856c183bb931479db36180"></a>
 <div class="memitem">
@@ -351,7 +359,7 @@ template&lt;typename Number &gt; </div>
 </div><div class="memdoc">
 <p>Returns an approximation of the number of mv multiplications neccessary for an evaluation of the SF </p>
 
-<p>Definition at line <a class="el" href="Reach_8h_source.html#l00755">755</a> of file <a class="el" href="Reach_8h_source.html">Reach.h</a>.</p>
+<p>Definition at line <a class="el" href="Reach_8h_source.html#l00782">782</a> of file <a class="el" href="Reach_8h_source.html">Reach.h</a>.</p>
 
 </div>
 </div>

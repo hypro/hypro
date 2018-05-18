@@ -8,6 +8,7 @@ var classhypro_1_1SupportFunctionT =
     [ "SupportFunctionT", "classhypro_1_1SupportFunctionT.html#a09ce236c83afffa4aa14db568429b6cb", null ],
     [ "SupportFunctionT", "classhypro_1_1SupportFunctionT.html#a007d78685032d96b7b80288f03d0613c", null ],
     [ "SupportFunctionT", "classhypro_1_1SupportFunctionT.html#ab0dbdcf68aee7ba66a073e0bebf70ad5", null ],
+    [ "SupportFunctionT", "classhypro_1_1SupportFunctionT.html#a28218e427c137c521baffe5d347d81ec", null ],
     [ "~SupportFunctionT", "classhypro_1_1SupportFunctionT.html#a0631f1efbc838a5ea0348de9dbc7cec6", null ],
     [ "affineTransformation", "classhypro_1_1SupportFunctionT.html#a7728df10d18edc42f578a2c1a4e910b2", null ],
     [ "ball", "classhypro_1_1SupportFunctionT.html#a973976ca7f0a93c99e588c8b04776cee", null ],
