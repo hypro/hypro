@@ -337,6 +337,30 @@ std::vector<Point<Number>> BoxT<Number,Converter,Setting>::vertices( const matri
 }
 
 template<typename Number, typename Converter, class Setting>
+EvaluationResult<Number> BoxT<Number,Converter,Setting>::evaluate( const vector_t<Number>& _direction, bool ) const {
+	assert(_direction.rows() == this->dimension());
+	if(this->empty()){
+		return EvaluationResult<Number>(); // defaults to infeasible, i.e. empty.
+	}
+
+	// find the point, which represents the maximum towards the direction - compare signs.
+	vector_t<Number> furthestPoint = vector_t<Number>(this->dimension());
+	for(Eigen::Index i = 0; i < furthestPoint.rows(); ++i) {
+		furthestPoint(i) = _direction(i) >= 0 ? mLimits.second(i) : mLimits.first(i);
+	}
+	return EvaluationResult<Number>(furthestPoint.dot(_direction),furthestPoint,SOLUTION::FEAS);
+}
+
+template<typename Number, typename Converter, class Setting>
+std::vector<EvaluationResult<Number>> BoxT<Number,Converter,Setting>::multiEvaluate( const matrix_t<Number>& _directions, bool ) const {
+	std::vector<EvaluationResult<Number>> res;
+	for(Eigen::Index i = 0; i < _directions.rows(); ++i) {
+		res.emplace_back(this->evaluate(vector_t<Number>(_directions.row(i))));
+	}
+	return res;
+}
+
+template<typename Number, typename Converter, class Setting>
 std::size_t BoxT<Number,Converter,Setting>::size() const {
 	if(this->empty()) {
 		return 0;

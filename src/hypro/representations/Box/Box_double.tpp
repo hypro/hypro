@@ -258,6 +258,30 @@ std::vector<Point<double>> BoxT<double,Converter,Setting>::vertices( const matri
 }
 
 template<typename Converter, class Setting>
+EvaluationResult<double> BoxT<double,Converter,Setting>::evaluate( const vector_t<double>& _direction, bool ) const {
+	assert(_direction.rows() == this->dimension());
+	if(this->empty()){
+		return EvaluationResult<double>(); // defaults to infeasible, i.e. empty.
+	}
+
+	// find the point, which represents the maximum towards the direction - compare signs.
+	vector_t<double> furthestPoint = vector_t<double>(this->dimension());
+	for(Eigen::Index i = 0; i < furthestPoint.rows(); ++i) {
+		furthestPoint(i) = _direction(i) >= 0 ? mLimits.second(i) : mLimits.first(i);
+	}
+	return EvaluationResult<double>(furthestPoint.dot(_direction),furthestPoint,SOLUTION::FEAS);
+}
+
+template<typename Converter, class Setting>
+std::vector<EvaluationResult<double>> BoxT<double,Converter,Setting>::multiEvaluate( const matrix_t<double>& _directions, bool ) const {
+	std::vector<EvaluationResult<double>> res;
+	for(Eigen::Index i = 0; i < _directions.rows(); ++i) {
+		res.emplace_back(this->evaluate(vector_t<double>(_directions.row(i))));
+	}
+	return res;
+}
+
+template<typename Converter, class Setting>
 std::size_t BoxT<double,Converter,Setting>::size() const {
 	if(this->empty()) {
 		return 0;

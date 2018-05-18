@@ -274,6 +274,20 @@ class BoxT : public GeometricObject<Number, BoxT<Number,Converter,Setting>> {
 	std::vector<Point<Number>> vertices( const matrix_t<Number>& = matrix_t<Number>::Zero(0,0) ) const;
 
 	/**
+	 * @brief      Evaluation function (convex linear optimization).
+	 * @param[in]  _direction  The direction/cost function.
+	 * @return     Maximum towards _direction.
+	 */
+	EvaluationResult<Number> evaluate( const vector_t<Number>& _direction, bool ) const;
+
+	/**
+	 * @brief      Multi-evaluation function (convex linear optimization).
+	 * @param[in]  _directions  The directions/cost functions.
+	 * @return     A set of maxima towards the respective directions.
+	 */
+	std::vector<EvaluationResult<Number>> multiEvaluate( const matrix_t<Number>& _directions, bool useExact = true ) const;
+
+	/**
 	 * @brief Checks if two boxes are equal.
 	 * @param b1 Contains the first box.
 	 * @param b2 Contains the second box.
