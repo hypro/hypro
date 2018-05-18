@@ -148,6 +148,22 @@ SupportFunctionContent<Number>::SupportFunctionContent( const std::vector<Point<
 	}
 }
 
+template<typename Number>
+SupportFunctionContent<Number>::SupportFunctionContent( const std::vector<carl::Interval<Number>>& _inbox, SF_TYPE _type ) {
+	switch ( _type ) {
+		case SF_TYPE::BOX: {
+			mBox = new BoxSupportFunction<Number>( _inbox );
+			mType = SF_TYPE::BOX;
+			mDimension = box()->dimension();
+			mDepth = 0;
+			mOperationCount = 0;
+			break;
+		}
+		default:
+			assert( false );
+	}
+}
+
 template <typename Number>
 SupportFunctionContent<Number>::SupportFunctionContent( const std::shared_ptr<SupportFunctionContent<Number>>& _lhs,
 										 const std::shared_ptr<SupportFunctionContent<Number>>& _rhs, SF_TYPE _type ) {
@@ -290,6 +306,9 @@ SupportFunctionContent<Number>::~SupportFunctionContent() {
 		case SF_TYPE::POLY:
 			delete mPolytope;
 			break;
+		case SF_TYPE::BOX:
+			delete mBox;
+			break;
 		case SF_TYPE::PROJECTION:
 			delete mProjectionParameters;
 			break;
@@ -340,6 +359,10 @@ std::shared_ptr<SupportFunctionContent<Number>>& SupportFunctionContent<Number>:
 		case SF_TYPE::POLY:
 			// explicitly invoke copy constructor to avoid pointer copy
 			mPolytope = new PolytopeSupportFunction<Number,PolytopeSupportFunctionSetting>(*_other->polytope());
+			break;
+		case SF_TYPE::BOX:
+			// explicitly invoke copy constructor to avoid pointer copy
+			mBox = new BoxSupportFunction<Number>(*_other->polytope());
 			break;
 		case SF_TYPE::PROJECTION:
 			mProjectionParameters = new projectionContent<Number>(*_other->projectionParameters());
@@ -415,6 +438,9 @@ std::vector<EvaluationResult<Number>> SupportFunctionContent<Number>::multiEvalu
 					}
 					case SF_TYPE::POLY: {
 						return polytope()->multiEvaluate( currentParam, useExact );
+					}
+					case SF_TYPE::BOX: {
+						return box()->multiEvaluate( currentParam, useExact );
 					}
 					default:
 						assert(false);
@@ -642,6 +668,7 @@ std::vector<EvaluationResult<Number>> SupportFunctionContent<Number>::multiEvalu
 					case SF_TYPE::ELLIPSOID:
 					case SF_TYPE::INFTY_BALL:
 					case SF_TYPE::POLY:
+					case SF_TYPE::BOX:
 					case SF_TYPE::TWO_BALL: {
 						assert(false);
 						FATAL("hypro.representations.supportFunction","Leaf node cannot be an intermediate case.");
@@ -779,6 +806,7 @@ unsigned SupportFunctionContent<Number>::multiplicationsPerEvaluation() const {
 			switch(cur->type()) {
 				case SF_TYPE::INFTY_BALL:
 				case SF_TYPE::TWO_BALL:
+				case SF_TYPE::BOX:
 				case SF_TYPE::ELLIPSOID: {
 		            resultStack.at(currentResult.first).second.push_back(1);
 		            break;
@@ -988,6 +1016,9 @@ Point<Number> SupportFunctionContent<Number>::supremumPoint() const {
 		case SF_TYPE::POLY: {
 			return polytope()->supremumPoint();
 		}
+		case SF_TYPE::BOX: {
+			return box()->supremumPoint();
+		}
 		case SF_TYPE::PROJECTION: {
 			Point<Number> tmpRes = projectionParameters()->origin->supremumPoint();
 			vector_t<Number> tmp = vector_t<Number>::Zero(mDimension);
@@ -1078,7 +1109,7 @@ std::vector<std::size_t> SupportFunctionContent<Number>::collectProjections() co
 		//T currentParam = paramStack.back();
 
 		//if(cur->children.empty()) {
-		if(cur->mType == SF_TYPE::POLY || cur->mType == SF_TYPE::INFTY_BALL || cur->mType == SF_TYPE::TWO_BALL || cur->mType == SF_TYPE::ELLIPSOID ) {
+		if(cur->mType == SF_TYPE::BOX || cur->mType == SF_TYPE::POLY || cur->mType == SF_TYPE::INFTY_BALL || cur->mType == SF_TYPE::TWO_BALL || cur->mType == SF_TYPE::ELLIPSOID ) {
 			//std::cout << "Reached bottom." << std::endl;
 			// Do computation and write results in case recursion ends.
 
@@ -1287,6 +1318,12 @@ PolytopeSupportFunction<Number,PolytopeSupportFunctionSetting> *SupportFunctionC
 }
 
 template <typename Number>
+BoxSupportFunction<Number> *SupportFunctionContent<Number>::box() const {
+	assert( mType == SF_TYPE::BOX );
+	return mBox;
+}
+
+template <typename Number>
 EllipsoidSupportFunction<Number> *SupportFunctionContent<Number>::ellipsoid() const {
 	assert( mType == SF_TYPE::ELLIPSOID );
 	return mEllipsoid;
@@ -1348,6 +1385,10 @@ bool SupportFunctionContent<Number>::contains( const vector_t<Number> &_point ) 
 		case SF_TYPE::POLY: {
 			DEBUG("hypro.representations.supportFunction","POLY, point: " << _point);
 			return polytope()->contains( _point );
+		}
+		case SF_TYPE::BOX: {
+			DEBUG("hypro.representations.supportFunction","POLY, point: " << _point);
+			return box()->contains( _point );
 		}
 		case SF_TYPE::PROJECTION: {
 			DEBUG("hypro.representations.supportFunction","PROJECTION, point: " << _point);
@@ -1437,6 +1478,9 @@ bool SupportFunctionContent<Number>::empty() const {
 		case SF_TYPE::POLY: {
 			return polytope()->empty();
 		}
+		case SF_TYPE::BOX: {
+			return box()->empty();
+		}
 		case SF_TYPE::PROJECTION: {
 			if(projectionParameters()->dimensions.empty()){
 				return true;
@@ -1506,6 +1550,7 @@ void SupportFunctionContent<Number>::cleanUp() const {
 				}
 				case SF_TYPE::INFTY_BALL:
 				case SF_TYPE::TWO_BALL:
+				case SF_TYPE::BOX:
 				case SF_TYPE::ELLIPSOID: {
 		            break;
 		        }
@@ -1572,6 +1617,9 @@ void SupportFunctionContent<Number>::print() const {
 		} break;
 		case SF_TYPE::TWO_BALL: {
 			std::cout << "2-BALL" << std::endl;
+		} break;
+		case SF_TYPE::BOX: {
+			std::cout << "BOX" << std::endl;
 		} break;
 		case SF_TYPE::LINTRAFO: {
 			std::cout << "LINTRAFO A^" << linearTrafoParameters()->currentExponent << std::endl;

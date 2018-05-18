@@ -65,6 +65,11 @@ namespace hypro{
          //handled by initializer list
     }
 
+    template<typename Number, typename Converter>
+    SupportFunctionT<Number,Converter>::SupportFunctionT(const std::vector<carl::Interval<Number>>& inBox ) : content(SupportFunctionContent<Number>::create(SF_TYPE::BOX, inBox)) {
+    	//handled by initializer list
+    }
+
     //destructor
     template<typename Number, typename Converter>
     SupportFunctionT<Number,Converter>::~SupportFunctionT() {

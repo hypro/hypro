@@ -105,6 +105,17 @@ TYPED_TEST(SupportFunctionTest, constructor) {
 	EXPECT_EQ(this->sfChainComplete.evaluate(this->vec2), copied.evaluate(this->vec2));
 	EXPECT_EQ(this->sfChainComplete.evaluate(this->vec3), copied.evaluate(this->vec3));
 
+	std::vector<carl::Interval<TypeParam>> intervals;
+	intervals.emplace_back(carl::Interval<TypeParam>(2,3));
+	intervals.emplace_back(carl::Interval<TypeParam>(1,3));
+
+	SupportFunction<TypeParam> box = SupportFunction<TypeParam>(intervals);
+	EXPECT_EQ(box.sfType(),SF_TYPE::BOX);
+	EXPECT_EQ(box.evaluate(this->vec1).supportValue,TypeParam(18));
+	vector_t<TypeParam> r = vector_t<TypeParam>(2);
+	r << TypeParam(3),TypeParam(3);
+	EXPECT_EQ(box.evaluate(this->vec1).optimumValue,r);
+
 	SUCCEED();
 }
 

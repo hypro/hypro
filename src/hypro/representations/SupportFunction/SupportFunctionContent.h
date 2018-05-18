@@ -15,6 +15,7 @@
 #include "../../config.h"
 #include "util.h"
 #include "SupportFunctionSetting.h"
+#include "BoxSupportFunction.h"
 #include "PolytopeSupportFunction.h"
 #include "BallSupportFunction.h"
 #include "EllipsoidSupportFunction.h"
@@ -167,6 +168,7 @@ class SupportFunctionContent {
 		intersectionContent<Number>* mIntersectionParameters;
 		projectionContent<Number>* mProjectionParameters;
 		PolytopeSupportFunction<Number,PolytopeSupportFunctionSetting>* mPolytope;
+		BoxSupportFunction<Number>* mBox;
 		BallSupportFunction<Number>* mBall;
 		EllipsoidSupportFunction<Number>* mEllipsoid;
 	};
@@ -179,6 +181,7 @@ class SupportFunctionContent {
 					 SF_TYPE _type = SF_TYPE::POLY );
 	SupportFunctionContent( const std::vector<Halfspace<Number>>& _planes, SF_TYPE _type = SF_TYPE::POLY );
 	SupportFunctionContent( const std::vector<Point<Number>>& _points, SF_TYPE _type = SF_TYPE::POLY );
+	SupportFunctionContent( const std::vector<carl::Interval<Number>>& _inbox, SF_TYPE _type = SF_TYPE::BOX );
 	SupportFunctionContent( const std::shared_ptr<SupportFunctionContent<Number>>& _lhs, const std::shared_ptr<SupportFunctionContent<Number>>& _rhs,
 					 SF_TYPE _type );
 	SupportFunctionContent( const std::vector<std::shared_ptr<SupportFunctionContent<Number>>>& rhs, SF_TYPE type = SF_TYPE::UNITE );
@@ -207,6 +210,13 @@ class SupportFunctionContent {
 	static std::shared_ptr<SupportFunctionContent<Number>> create( SF_TYPE _type, const matrix_t<Number>& _directions,
 																	const vector_t<Number>& _distances ) {
 		auto obj = std::shared_ptr<SupportFunctionContent<Number>>( new SupportFunctionContent<Number>( _directions, _distances, _type ));
+		obj->pThis = obj;
+		assert(obj->checkTreeValidity());
+		return obj;
+	}
+
+	static std::shared_ptr<SupportFunctionContent<Number>> create( SF_TYPE _type, const std::vector<carl::Interval<Number>>& inbox  ) {
+		auto obj = std::shared_ptr<SupportFunctionContent<Number>>( new SupportFunctionContent<Number>( inbox, _type ));
 		obj->pThis = obj;
 		assert(obj->checkTreeValidity());
 		return obj;
@@ -302,6 +312,7 @@ class SupportFunctionContent {
 	intersectionContent<Number>* intersectionParameters() const;
 	projectionContent<Number>* projectionParameters() const;
 	PolytopeSupportFunction<Number,PolytopeSupportFunctionSetting>* polytope() const;
+	BoxSupportFunction<Number>* box() const;
 	BallSupportFunction<Number>* ball() const;
 	EllipsoidSupportFunction<Number>* ellipsoid() const;
 
@@ -364,6 +375,7 @@ class SupportFunctionContent {
 					case SF_TYPE::INFTY_BALL:
 					case SF_TYPE::TWO_BALL:
 					case SF_TYPE::POLY:
+					case SF_TYPE::BOX:
 					case SF_TYPE::ELLIPSOID: {
 			            resultStack.at(currentResult.first).second.push_back(true);
 			            break;
