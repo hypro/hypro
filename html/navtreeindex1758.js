@@ -1,5 +1,17 @@
 var NAVTREEINDEX1758 =
 {
+"classhypro_1_1BoxSupportFunction.html#af422c3b1445dce248e8fb029e51fba12":[9,0,1,83,5],
+"classhypro_1_1BoxSupportFunction.html#af4c7335ced4bc0cf0e141d08e9cc7113":[9,0,1,83,7],
+"classhypro_1_1BoxT.html":[9,0,1,63],
+"classhypro_1_1BoxT.html#a0ed7dccdf853858f4b2b544372f8169f":[9,0,1,63,10],
+"classhypro_1_1BoxT.html#a0efbff2f9a740e9cea28bd9018b44155":[9,0,1,63,40],
+"classhypro_1_1BoxT.html#a0f5f26c3dd464f33f45ccdf0cbd61f56":[9,0,1,63,18],
+"classhypro_1_1BoxT.html#a18966e2268c91589ebe98fc79aca3b70":[9,0,1,63,48],
+"classhypro_1_1BoxT.html#a1ac495af5bee486a7b3795019da6f0a7":[9,0,1,63,15],
+"classhypro_1_1BoxT.html#a1b97f14fda529e3cba2f4a4576d875a2":[9,0,1,63,31],
+"classhypro_1_1BoxT.html#a1f74178867655d727396d2e58f14c1dc":[9,0,1,63,51],
+"classhypro_1_1BoxT.html#a20fe1aa33ee29603b421d2b3067f707e":[9,0,1,63,5],
+"classhypro_1_1BoxT.html#a2642ff3621df757bb3ed748e90873117":[9,0,1,63,9],
 "classhypro_1_1BoxT.html#a2a78124d2f7d68917c77e207762a686c":[9,0,1,63,37],
 "classhypro_1_1BoxT.html#a2b6a3c60693707b94c19df735aff621d":[9,0,1,63,6],
 "classhypro_1_1BoxT.html#a2cc93b59dafe01bdfcb2a93e36a4799a":[9,0,1,63,19],
@@ -237,17 +249,5 @@ var NAVTREEINDEX1758 =
 "classhypro_1_1ConvexHull.html#a72d25c1b65f34c147196b1a0d5574c0f":[9,0,1,9,3],
 "classhypro_1_1ConvexHull.html#a7cd0cce18327874cff206c16f13156c2":[9,0,1,9,1],
 "classhypro_1_1ConvexHull.html#a90be3f4fd6e65cc5c114c909786d12e3":[9,0,1,9,7],
-"classhypro_1_1ConvexHull.html#a96c4b6d93273479a9b8743036c04e4c8":[9,0,1,9,11],
-"classhypro_1_1ConvexHull.html#ac518a93a564cc5b27f0b79549783a735":[9,0,1,9,4],
-"classhypro_1_1ConvexHull.html#ad211bd75ad9a017703f091fa8b1b3ce0":[9,0,1,9,14],
-"classhypro_1_1ConvexHull.html#ad3a6390cab0ea7170b8f15d88d973368":[9,0,1,9,18],
-"classhypro_1_1ConvexHull.html#ad62e527ce1ff98a8d1de5f82c35e4028":[9,0,1,9,8],
-"classhypro_1_1ConvexHull.html#ad7cf4ffa337f35a465d84940f8b2f917":[9,0,1,9,16],
-"classhypro_1_1ConvexHull.html#ae65257a677b4f0a22b15ca0a71b43c87":[9,0,1,9,0],
-"classhypro_1_1ConvexHull.html#aec105b132fc95888343d2773a569c10b":[9,0,1,9,15],
-"classhypro_1_1ConvexHull.html#affce5c30592a0551bd9bf94578f8c515":[9,0,1,9,17],
-"classhypro_1_1Dictionary.html":[9,0,1,10],
-"classhypro_1_1Dictionary.html#a01733c1d6fece3171d984ed419d7b1e7":[9,0,1,10,22],
-"classhypro_1_1Dictionary.html#a025dcac1be6208584cbf3d59bd9463f2":[9,0,1,10,27],
-"classhypro_1_1Dictionary.html#a0a43206511165a16ad0a4705ad42930d":[9,0,1,10,32]
+"classhypro_1_1ConvexHull.html#a96c4b6d93273479a9b8743036c04e4c8":[9,0,1,9,11]
 };

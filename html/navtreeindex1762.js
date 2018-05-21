@@ -1,5 +1,17 @@
 var NAVTREEINDEX1762 =
 {
+"classhypro_1_1PolynomialODE.html":[9,0,1,107],
+"classhypro_1_1PolynomialODE.html#a153f604c319283df5d240fb59b50287f":[9,0,1,107,4],
+"classhypro_1_1PolynomialODE.html#a50115a0c9dac62cbe93383f183136168":[9,0,1,107,2],
+"classhypro_1_1PolynomialODE.html#a6287307888d8e271d619fe67baa39c51":[9,0,1,107,1],
+"classhypro_1_1PolynomialODE.html#a7278755b59995add221da5b968bc9e5e":[9,0,1,107,0],
+"classhypro_1_1PolynomialODE.html#a7abd778d252102d60ce3763b9737fc6f":[9,0,1,107,10],
+"classhypro_1_1PolynomialODE.html#aa03228ded88fa19fde833634b6909d15":[9,0,1,107,3],
+"classhypro_1_1PolynomialODE.html#aa749868c56259cfacebe586a35d1da7a":[9,0,1,107,9],
+"classhypro_1_1PolynomialODE.html#abc3f55fc346d46049eec280d4342773f":[9,0,1,107,6],
+"classhypro_1_1PolynomialODE.html#acab98b12cb5fd61b59592d70e7b38d71":[9,0,1,107,8],
+"classhypro_1_1PolynomialODE.html#ad5526eb2f3f47b72cf7cb83ca4fcf453":[9,0,1,107,5],
+"classhypro_1_1PolynomialODE.html#aec64dcf2f6f046e562b04b3e51887264":[9,0,1,107,7],
 "classhypro_1_1PolytopeSupportFunction.html":[9,0,1,86],
 "classhypro_1_1PolytopeSupportFunction.html#a16b0c297382280271b0d83493ddc5f67":[9,0,1,86,0],
 "classhypro_1_1PolytopeSupportFunction.html#a1ceeeb0795e454b7d99e97990e5100d5":[9,0,1,86,15],
@@ -237,17 +249,5 @@ var NAVTREEINDEX1762 =
 "classhypro_1_1SupportFunctionT.html#ac2f6c4e5568a0ecf2e280963dfdc89cc":[9,0,1,87,20],
 "classhypro_1_1SupportFunctionT.html#ac8ed3c50959aa35570bca83e5fe57d7a":[9,0,1,87,55],
 "classhypro_1_1SupportFunctionT.html#acae27c62d3c09c9b84c79ededecb1543":[9,0,1,87,21],
-"classhypro_1_1SupportFunctionT.html#acc4adc872d5b153951d634d001639b6e":[9,0,1,87,49],
-"classhypro_1_1SupportFunctionT.html#ad0fe5b986c1d3fc5f5337641ccebd329":[9,0,1,87,51],
-"classhypro_1_1SupportFunctionT.html#ad5195e2d991a32b544b417d04b32858e":[9,0,1,87,41],
-"classhypro_1_1SupportFunctionT.html#adb3def7d35de0ec7fd32ae5936bf11d2":[9,0,1,87,17],
-"classhypro_1_1SupportFunctionT.html#ae5d528e964557aea9dd50d4f2f2287a4":[9,0,1,87,4],
-"classhypro_1_1SupportFunctionT.html#aefd078611ee83cd0a01ab44bc6f26d85":[9,0,1,87,1],
-"classhypro_1_1SupportFunctionT.html#af3f02c69ac2c8ad03a317251c3fed6eb":[9,0,1,87,13],
-"classhypro_1_1SupportFunctionT.html#af8c980e117c30cf8a44adf86d6e60843":[9,0,1,87,39],
-"classhypro_1_1TaylorModel.html":[9,0,1,108],
-"classhypro_1_1TaylorModel.html#a070f699793236652465675e36d3d7f3a":[9,0,1,108,13],
-"classhypro_1_1TaylorModel.html#a0900955090c93a4c2fc399b3ff335c79":[9,0,1,108,37],
-"classhypro_1_1TaylorModel.html#a099923b378d661f6f54b3837214006d0":[9,0,1,108,41],
-"classhypro_1_1TaylorModel.html#a0e92d179bee2ba32c30a79cf247e8106":[9,0,1,108,17]
+"classhypro_1_1SupportFunctionT.html#acc4adc872d5b153951d634d001639b6e":[9,0,1,87,49]
 };
