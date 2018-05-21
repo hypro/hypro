@@ -1,7 +1,6 @@
 /**
  * Wrapper class for SupportFunctionContent for easier use.
  * @file   SupportFunction.tpp
- * @author Simon Froitzheim
  *
  * @since      2015-11-23
  * @version    2015-12-16

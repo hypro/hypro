@@ -169,7 +169,7 @@ public:
 		if (estimatedCostWithReduction < estimatedCostWithoutReduction) {
 			*/
     	TRACE("hypro.datastructures", "GenericReduction for SF.");
-		auto tmpHPoly = Converter<Number>::toHPolytope(lhs);
+		auto tmpHPoly = Converter<Number>::toBox(lhs);
 		//std::vector<unsigned> projDims;
 		//projDims.push_back(0);
 		//projDims.push_back(3);

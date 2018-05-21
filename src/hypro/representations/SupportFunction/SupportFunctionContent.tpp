@@ -104,8 +104,26 @@ SupportFunctionContent<Number>::SupportFunctionContent( const matrix_t<Number> &
 										  SF_TYPE _type ) {
 	switch ( _type ) {
 		case SF_TYPE::POLY: {
-			mPolytope = new PolytopeSupportFunction<Number,PolytopeSupportFunctionSetting>( _directions, _distances );
-			mType = SF_TYPE::POLY;
+			boost::tuple<bool,std::vector<carl::Interval<Number>>> intervals = isBox(_directions,_distances);
+
+			if(boost::get<0>(intervals)) {
+				mBox = new BoxSupportFunction<Number>(boost::get<1>(intervals));
+				mType = SF_TYPE::BOX;
+				std::cout << "IS A BOX!" << std::endl;
+			} else {
+				mPolytope = new PolytopeSupportFunction<Number,PolytopeSupportFunctionSetting>( _directions, _distances );
+				mType = SF_TYPE::POLY;
+			}
+			mDimension = std::size_t(_directions.cols());
+			mDepth = 0;
+			mOperationCount = 0;
+			break;
+		}
+		case SF_TYPE::BOX: {
+			boost::tuple<bool,std::vector<carl::Interval<Number>>> intervals = isBox(_directions,_distances);
+			assert(boost::get<0>(intervals));
+			mBox = new BoxSupportFunction<Number>(boost::get<1>(intervals));
+			mType = SF_TYPE::BOX;
 			mDimension = std::size_t(_directions.cols());
 			mDepth = 0;
 			mOperationCount = 0;
@@ -459,6 +477,10 @@ std::vector<EvaluationResult<Number>> SupportFunctionContent<Number>::multiEvalu
 					}
 					case SF_TYPE::POLY: {
 						resultStack.at(currentResult.first).second.emplace_back(cur->polytope()->multiEvaluate( currentParam, useExact ));
+						break;
+					}
+					case SF_TYPE::BOX: {
+						resultStack.at(currentResult.first).second.emplace_back(cur->box()->multiEvaluate( currentParam, useExact ));
 						break;
 					}
 					default:

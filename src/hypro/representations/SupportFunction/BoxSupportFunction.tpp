@@ -117,6 +117,7 @@ Point<Number> BoxSupportFunction<Number>::supremumPoint() const {
 template <typename Number>
 EvaluationResult<Number> BoxSupportFunction<Number>::evaluate( const vector_t<Number> &l, bool ) const {
 	TRACE("hypro.representations.supportFunction", "");
+	COUNT("Box evaluate.");
 	assert(l.rows() == this->dimension());
 	if(this->empty()){
 		return EvaluationResult<Number>(); // defaults to infeasible, i.e. empty.
@@ -132,7 +133,7 @@ EvaluationResult<Number> BoxSupportFunction<Number>::evaluate( const vector_t<Nu
 
 template <typename Number>
 std::vector<EvaluationResult<Number>> BoxSupportFunction<Number>::multiEvaluate( const matrix_t<Number> &_A, bool , bool ) const {
-	assert( std::size_t(_A.cols()) == mDimension );
+	assert( std::size_t(_A.cols()) == this->dimension() );
 	TRACE("hypro.representations.supportFunction", "Evaluate in directions " << matrix_t<double>(convert<Number,double>(_A)) << std::endl << "BOX SF IS " << *this);
 	std::vector<EvaluationResult<Number>> res;
 	for(Eigen::Index i = 0; i < _A.rows(); ++i) {
@@ -154,7 +155,7 @@ bool BoxSupportFunction<Number>::contains( const Point<Number> &_point ) const {
 
 template <typename Number>
 bool BoxSupportFunction<Number>::contains( const vector_t<Number> &_point ) const {
-	assert(_point.dimension() == this->dimension());
+	assert(_point.rows() == this->dimension());
 	for(Eigen::Index i = 0; i < Eigen::Index(this->dimension()); ++i) {
 		if(!mBox[i].contains(_point(i))){
 			return false;

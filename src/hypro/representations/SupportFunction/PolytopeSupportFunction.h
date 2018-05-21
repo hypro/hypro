@@ -20,6 +20,7 @@
 #include "../../util/adaptions_eigen/adaptions_eigen.h"
 #include "../../util/linearOptimization/Optimizer.h"
 #include "../../util/logging/Logger.h"
+#include "../../util/statistics/statistics.h"
 #include "../../util/Permutator.h"
 #include <map>
 #include <queue>

@@ -9,6 +9,7 @@
 #include "util.h"
 #include "../../util/logging/Logger.h"
 #include "../../util/Permutator.h"
+#include "../../util/statistics/statistics.h"
 #include <carl/interval/Interval.h>
 #include <map>
 
