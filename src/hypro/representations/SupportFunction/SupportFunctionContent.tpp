@@ -109,7 +109,7 @@ SupportFunctionContent<Number>::SupportFunctionContent( const matrix_t<Number> &
 			if(boost::get<0>(intervals)) {
 				mBox = new BoxSupportFunction<Number>(boost::get<1>(intervals));
 				mType = SF_TYPE::BOX;
-				std::cout << "IS A BOX!" << std::endl;
+				//std::cout << "IS A BOX!" << std::endl;
 			} else {
 				mPolytope = new PolytopeSupportFunction<Number,PolytopeSupportFunctionSetting>( _directions, _distances );
 				mType = SF_TYPE::POLY;
