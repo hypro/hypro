@@ -52,7 +52,6 @@ class EllipsoidT {
 	 *
 	 * @param rhs An EllipsoidT.
 	 */
-
 	EllipsoidT<Number,Converter>& operator=( const EllipsoidT<Number,Converter>& rhs ) = default;
 
 	friend bool operator==( const EllipsoidT<Number,Converter>& b1, const EllipsoidT<Number,Converter>& b2 ) { return (b1.mShapeMatrix == b2.mShapeMatrix ? true : false); }

@@ -9,11 +9,14 @@ namespace hypro {
 	    ("hypro", carl::logging::LogLevel::LVL_TRACE)
 		("hypro.representations", carl::logging::LogLevel::LVL_TRACE)
 		("hypro.representations.supportFunction", carl::logging::LogLevel::LVL_TRACE)
+		("hypro.datastructures", carl::logging::LogLevel::LVL_TRACE)
+		("hypro.reacher", carl::logging::LogLevel::LVL_TRACE)
+		("hypro.reacher.preprocessing", carl::logging::LogLevel::LVL_TRACE)
 		;
 
 	  	carl::logging::logger().configure("stdout", std::cout);
 		carl::logging::logger().filter("stdout")
-	    ("hypro", carl::logging::LogLevel::LVL_WARN)
+	    ("hypro", carl::logging::LogLevel::LVL_OFF)
 		//("hypro.representations", carl::logging::LogLevel::LVL_TRACE)
 		;
 

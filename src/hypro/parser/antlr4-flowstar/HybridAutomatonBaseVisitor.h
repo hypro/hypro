@@ -1,5 +1,5 @@
 
-// Generated from HybridAutomaton.g4 by ANTLR 4.7
+// Generated from HybridAutomaton.g4 by ANTLR 4.7.1
 
 #pragma once
 
@@ -43,6 +43,10 @@ public:
     return visitChildren(ctx);
   }
 
+  virtual antlrcpp::Any visitReplacedexpr(HybridAutomatonParser::ReplacedexprContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
   virtual antlrcpp::Any visitConstantexpr(HybridAutomatonParser::ConstantexprContext *ctx) override {
     return visitChildren(ctx);
   }
@@ -76,10 +80,6 @@ public:
   }
 
   virtual antlrcpp::Any visitConstrset(HybridAutomatonParser::ConstrsetContext *ctx) override {
-    return visitChildren(ctx);
-  }
-
-  virtual antlrcpp::Any visitReplacedexpr(HybridAutomatonParser::ReplacedexprContext *ctx) override {
     return visitChildren(ctx);
   }
 

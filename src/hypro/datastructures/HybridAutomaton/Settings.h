@@ -27,7 +27,7 @@ struct ReachabilitySettings {
     ReachabilitySettings<Number>() : timeBound(0), jumpDepth(0), timeStep(0), fileName("out"), pplDenomimator(0) {}
 
     template<typename T>
-    ReachabilitySettings<Number>(const ReachabilitySettings<T>& orig)
+    explicit ReachabilitySettings<Number>(const ReachabilitySettings<T>& orig)
     	: timeBound(carl::convert<T,Number>(orig.timeBound))
     	, jumpDepth(orig.jumpDepth)
     	, timeStep(carl::convert<T,Number>(orig.timeStep))

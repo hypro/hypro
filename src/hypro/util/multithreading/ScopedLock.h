@@ -11,7 +11,7 @@ class ScopedLock
 	private:
 		Lockable &_mtx; //keep ref to the mutex passed to the constructor
 	public:
-		ScopedLock(Lockable & mtx ) : _mtx(mtx)
+		explicit ScopedLock(Lockable & mtx ) : _mtx(mtx)
 		{
 			_mtx.lock();  //lock the mutex in the constructor
 		}

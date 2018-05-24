@@ -54,7 +54,6 @@ namespace hypro {
 			case smtrat::Answer::SAT:{
 				//std::cout << "smtrat: SAT" << std::endl;
 				return extractSolution<Number>(simplex,objective,constraints.cols());
-				break;
 			}
 			default:{
 				#ifdef USE_PRESOLUTION
@@ -204,7 +203,6 @@ namespace hypro {
 		switch (firstCheck) {
 				case smtrat::Answer::UNSAT: {
 					return res;
-					break;
 				}
 				case smtrat::Answer::SAT: {
 					break;

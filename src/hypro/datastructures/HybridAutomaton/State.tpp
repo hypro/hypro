@@ -35,6 +35,7 @@ void State<Number,tNumber,Representation,Rargs...>::setSet(const R& s, std::size
 	mTypes[i] = R::type();
 	DEBUG("hypro.datastructures","Set set at pos " << i << ", mSets.size() = " << mSets.size());
 	assert(mSets.size() > i);
+	assert(checkConsistency());
 }
 
 
@@ -47,6 +48,7 @@ void State<Number,tNumber,Representation,Rargs...>::addTimeToClocks(tNumber t) {
 	//	clockShift = clockShift * t;
 	//	mClockAssignment = mClockAssignment.affineTransformation(identity,clockShift);
 	//}
+	assert(checkConsistency());
 	mTimestamp += t;
 }
 
@@ -64,7 +66,6 @@ State<Number,tNumber,Representation,Rargs...> State<Number,tNumber,Representatio
 		res.setSetDirect( boost::apply_visitor(genericUniteVisitor<repVariant>(), mSets.at(i), in.getSet(i)), i);
 	}
 
-	assert(checkConsistency());
 	TRACE("hypro.datastructures","Done union.");
 
 	res.setTimestamp(mTimestamp.convexHull(in.getTimestamp()));
@@ -105,7 +106,6 @@ std::pair<CONTAINMENT,State<Number,tNumber,Representation,Rargs...>> State<Numbe
 			strictestContainment = CONTAINMENT::PARTIAL;
 		}
 	}
-
 	return std::make_pair(strictestContainment, res);
 }
 
@@ -114,6 +114,7 @@ std::pair<CONTAINMENT,State<Number,tNumber,Representation,Rargs...>> State<Numbe
 	if(constraints.rows() == 0) {
 		return std::make_pair(CONTAINMENT::FULL,*this);
 	}
+	assert(checkConsistency());
 	return partiallySatisfies(Condition<Number>(constraints,constants), 0);
 }
 
@@ -190,11 +191,13 @@ State<Number,tNumber,Representation,Rargs...> State<Number,tNumber,Representatio
 
 template<typename Number, typename tNumber, typename Representation, typename ...Rargs>
 State<Number,tNumber,Representation,Rargs...> State<Number,tNumber,Representation,Rargs...>::linearTransformation(const matrix_t<Number>& matrix) const {
+	assert(checkConsistency());
 	return partiallyApplyTransformation(ConstraintSet<Number>(matrix, vector_t<Number>::Zero(matrix.rows())), 0);
 }
 
 template<typename Number, typename tNumber, typename Representation, typename ...Rargs>
 State<Number,tNumber,Representation,Rargs...> State<Number,tNumber,Representation,Rargs...>::affineTransformation(const matrix_t<Number>& matrix, const vector_t<Number>& vector) const {
+	assert(checkConsistency());
 	return partiallyApplyTransformation(ConstraintSet<Number>(matrix, vector), 0);
 }
 
@@ -254,7 +257,20 @@ State<Number,tNumber,Representation,Rargs...> State<Number,tNumber,Representatio
 }
 
 template<typename Number, typename tNumber, typename Representation, typename ...Rargs>
+bool State<Number,tNumber,Representation,Rargs...>::contains(const State<Number,tNumber,Representation,Rargs...>& rhs) const {
+	assert(checkConsistency());
+	assert(rhs.getNumberSets() == this->getNumberSets());
+	for(std::size_t i=0; i < this->getNumberSets(); ++i){
+		if(!boost::apply_visitor(genericSetContainsVisitor(), this->getSet(i), rhs.getSet(i))) {
+			return false;
+		}
+	}
+	return true;
+}
+
+template<typename Number, typename tNumber, typename Representation, typename ...Rargs>
 std::vector<Point<Number>> State<Number,tNumber,Representation,Rargs...>::vertices(std::size_t I) const {
+	assert(checkConsistency());
 	return boost::apply_visitor(genericVerticesVisitor<Number>(), mSets.at(I));
 }
 
@@ -318,10 +334,12 @@ void State<Number,tNumber,Representation,Rargs...>::partiallyRemoveRedundancy(st
 template<typename Number, typename tNumber, typename Representation, typename ...Rargs>
 bool State<Number,tNumber,Representation,Rargs...>::checkConsistency() const {
 	if(mSets.size() != mTypes.size()){
+		std::cout << "Inconsistent size!" << std::endl;
 		return false;
 	}
 	for(std::size_t i=0; i < mSets.size(); i++){
 		if(mTypes.at(i) != boost::apply_visitor(genericTypeVisitor(), mSets.at(i))){
+			std::cout << "Types do not match (expected: " << mTypes.at(i) << ", is: " << boost::apply_visitor(genericTypeVisitor(), mSets.at(i)) << ")" << std::endl;
 			return false;
 		}
 	}
@@ -336,6 +354,81 @@ void State<Number,tNumber,Representation,Rargs...>::setSetsSave(const std::vecto
 		setSetType(boost::apply_visitor(genericTypeVisitor(), sets.at(i)), i);
 	}
 	mSets = sets;
+	assert(checkConsistency());
+}
+
+template<typename Number, typename tNumber, typename Representation, typename ...Rargs>
+void State<Number,tNumber,Representation,Rargs...>::decompose(std::vector<std::vector<size_t>> decomposition){
+	if(decomposition.size() == 1 || mSets.size() != 1){
+		// no decomposition/already decomposed
+	}
+	// initial set is a constraint set
+	matrix_t<Number> constraintsOld(boost::get<hypro::ConstraintSet<Number>>(mSets.at(0)).matrix());
+	vector_t<Number> constantsOld(boost::get<hypro::ConstraintSet<Number>>(mSets.at(0)).vector());
+	int i = 0;
+	for(auto decomp : decomposition){
+		DEBUG("hypro.datastructures", "Trying to project set: \n " << mSets.at(0) << "\n to dimensions: " );
+		DEBUG("hypro.datastructures", "{");
+		for(auto entry : decomp){
+			DEBUG("hypro.datastructures","" <<  entry << ", ");
+		}
+		DEBUG("hypro.datastructures", "}");
+
+		// for each row of the constraints check if it contains an entry for one of the variables of the set
+		// and add the corresponding rows to a list of indices that are later added to the result matrix
+		std::vector<int> indicesToAdd;
+		for(int i = 0; i < constraintsOld.rows(); i++){
+			vector_t<Number> row = constraintsOld.row(i);
+			bool containsVar = false;
+			for(int j = 0; j < row.rows(); j++){
+				if(row(j,0) != 0){
+					if(std::find(decomp.begin(),decomp.end(), j) != decomp.end()){
+						//set contains variable j, which is also contained in this constraint
+						containsVar = true;
+						break;
+					}
+				}
+			}
+			if(containsVar){
+				// this row contains information for one of the variables of this decomposition
+				indicesToAdd.push_back(i);
+			}
+		}
+
+		// we found information for our decomposition
+		if(indicesToAdd.size() > 0){
+			// create a row matrix with numIndicesToAdd many rows
+			matrix_t<Number> rowMat = matrix_t<Number>::Zero(indicesToAdd.size(), constraintsOld.cols());
+			for(size_t index = 0; index < rowMat.rows(); index++){
+				// copy over preselected rows
+				rowMat.row(index) = constraintsOld.row(indicesToAdd[index]);
+			}
+			// create final matrix that does not contain columns not in this set
+			matrix_t<Number> finMat = matrix_t<Number>::Zero(rowMat.rows(), decomp.size());
+			// -1 for constant column
+			for(size_t index = 0; index < finMat.cols(); index++){
+				finMat.col(index) = rowMat.col(decomp[index]);
+			}
+			// create final constant vector
+			vector_t<Number> finVec =  vector_t<Number>::Zero(indicesToAdd.size());
+			for(size_t index=0; index < finVec.rows(); index++){
+				finVec(index) = constantsOld(indicesToAdd[index]);
+			}
+
+			ConstraintSet<Number> res(finMat,finVec);
+			DEBUG("hypro.datastructures","Final decomposed ConstraintSet: \n" << res); 
+			setSetDirect(hypro::Converter<Number>::toConstraintSet(res),i);
+			setSetType(hypro::representation_name::constraint_set,i);
+		}
+		else {
+			DEBUG("hypro.datastructures", "No constraints for set found.");
+			ConstraintSet<Number> res = ConstraintSet<Number>();
+			setSetDirect(hypro::Converter<Number>::toConstraintSet(res),i);
+			setSetType(hypro::representation_name::constraint_set,i);
+		}
+		i++;
+	}
+	DEBUG("hypro.datastructures", "State after decomposition: "  << *this);
 }
 
 template<typename Number, typename tNumber, typename Representation, typename ...Rargs>

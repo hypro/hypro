@@ -137,8 +137,11 @@ public:
  				assert(false && "CONVERSION TO PPL POLYTOPE NOT YET IMPLEMENTED.");
  				break;
  			}
- 			case representation_name::constraint_set:
- 				assert(false && "CANNOT CONVERT TO TYPE ConstraintSet<Number>.");
+ 			case representation_name::constraint_set: {
+ 				ConstraintSet<Number> tmp = Converter<Number>::toConstraintSet(lhs);
+ 				return tmp;
+ 				break;
+ 			}
  			case representation_name::taylor_model:
  				assert(false && "CANNOT CONVERT TO TYPE TAYLOR MODEL.");
  		}
@@ -292,6 +295,23 @@ public:
 	template<typename A>
     inline T operator()(const A& lhs) const {
  		return lhs.project(mDimensions);
+    }
+};
+
+
+class genericSetContainsVisitor
+    : public boost::static_visitor<bool>
+{
+public:
+	template<typename A, typename B>
+	inline bool operator()(const A&, const B&) const {
+		assert(false && "CONTAINS CHECK OF DIFFERENT TYPES.");
+		return false;
+	}
+
+	template<typename A>
+    inline bool operator()(const A& lhs, const A& rhs) const {
+ 		return lhs.contains(rhs);
     }
 };
 

@@ -17,7 +17,7 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
 		#AntlrParserCIFTest.cpp				#new for antlr with CIF
 	)
 
-	add_dependencies(runCoreTests googletest)
+	add_dependencies(runCoreTests resources)
 	target_include_directories(runCoreTests PRIVATE ${GTEST_INCLUDE_DIR})
 
 	target_link_libraries(runCoreTests
@@ -36,7 +36,7 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
 		AntlrParserCIFTest.cpp
 	)
 	#message("Added executable")
-	add_dependencies(runAntlrTests googletest antlr4cpp)
+	add_dependencies(runAntlrTests resources antlr4cpp)
 	#message("Added dependencies")
 	target_include_directories(runAntlrTests PRIVATE ${GTEST_INCLUDE_DIR})
 	target_link_libraries(runAntlrTests ${PROJECT_NAME} ${GTEST_LIBRARIES})

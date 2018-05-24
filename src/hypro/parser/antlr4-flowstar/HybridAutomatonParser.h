@@ -1,5 +1,5 @@
 
-// Generated from HybridAutomaton.g4 by ANTLR 4.7
+// Generated from HybridAutomaton.g4 by ANTLR 4.7.1
 
 #pragma once
 
@@ -19,20 +19,19 @@ public:
     T__0 = 1, T__1 = 2, T__2 = 3, T__3 = 4, T__4 = 5, T__5 = 6, T__6 = 7,
     T__7 = 8, T__8 = 9, T__9 = 10, T__10 = 11, T__11 = 12, T__12 = 13, T__13 = 14,
     T__14 = 15, T__15 = 16, T__16 = 17, T__17 = 18, T__18 = 19, T__19 = 20,
-    T__20 = 21, T__21 = 22, T__22 = 23, T__23 = 24, T__24 = 25, T__25 = 26,
-    IN = 27, TRUE = 28, FALSE = 29, PAR = 30, COMMENT = 31, EQUALS = 32,
-    BOOLRELATION = 33, PLUS = 34, MINUS = 35, TIMES = 36, SBOPEN = 37, SBCLOSE = 38,
-    CBOPEN = 39, CBCLOSE = 40, COMMA = 41, NUMBER = 42, CONSTANT = 43, VARIABLE = 44,
-    WS = 45, PARALLELOTOPE = 46, INTERVALAGG = 47, BOX = 48, JUMP = 49,
-    DEFINE = 50, EXPONENTIAL = 51
+    T__20 = 21, T__21 = 22, IN = 23, PAR = 24, JUMPS = 25, URGENT = 26,
+    GUARD = 27, RESET = 28, PARALLELOTOPE = 29, BOX = 30, JUMP = 31, DEFINE = 32,
+    COMMENT = 33, EQUALS = 34, BOOLRELATION = 35, PLUS = 36, MINUS = 37,
+    TIMES = 38, SBOPEN = 39, SBCLOSE = 40, CBOPEN = 41, CBCLOSE = 42, COMMA = 43,
+    NUMBER = 44, CONSTANT = 45, VARIABLE = 46, WS = 47, EXPONENTIAL = 48
   };
 
   enum {
     RuleStart = 0, RuleVardeclaration = 1, RuleConstantdeclaration = 2,
     RuleModes = 3, RuleLocation = 4, RuleActivities = 5, RuleInvariants = 6,
-    RuleConstantexpr = 7, RuleConnector = 8, RuleTerm = 9, RulePolynom = 10,
-    RuleInterval = 11, RuleEquation = 12, RuleConstraint = 13, RuleIntervalexpr = 14,
-    RuleConstrset = 15, RuleReplacedexpr = 16, RuleInit = 17, RuleInitstate = 18,
+    RuleReplacedexpr = 7, RuleConstantexpr = 8, RuleConnector = 9, RuleTerm = 10,
+    RulePolynom = 11, RuleInterval = 12, RuleEquation = 13, RuleConstraint = 14,
+    RuleIntervalexpr = 15, RuleConstrset = 16, RuleInit = 17, RuleInitstate = 18,
     RuleUnsafeset = 19, RuleLbadstate = 20, RuleGbadstate = 21, RuleJumps = 22,
     RuleTransition = 23, RuleFromto = 24, RuleUrgent = 25, RuleGuard = 26,
     RuleAllocation = 27, RuleResetfct = 28, RuleAggregation = 29, RuleSetting = 30,
@@ -61,6 +60,7 @@ public:
   class LocationContext;
   class ActivitiesContext;
   class InvariantsContext;
+  class ReplacedexprContext;
   class ConstantexprContext;
   class ConnectorContext;
   class TermContext;
@@ -70,7 +70,6 @@ public:
   class ConstraintContext;
   class IntervalexprContext;
   class ConstrsetContext;
-  class ReplacedexprContext;
   class InitContext;
   class InitstateContext;
   class UnsafesetContext;
@@ -203,6 +202,22 @@ public:
   };
 
   InvariantsContext* invariants();
+
+  class  ReplacedexprContext : public antlr4::ParserRuleContext {
+  public:
+    ReplacedexprContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    std::vector<antlr4::tree::TerminalNode *> NUMBER();
+    antlr4::tree::TerminalNode* NUMBER(size_t i);
+    antlr4::tree::TerminalNode *EQUALS();
+    std::vector<antlr4::tree::TerminalNode *> MINUS();
+    antlr4::tree::TerminalNode* MINUS(size_t i);
+
+    virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+
+  };
+
+  ReplacedexprContext* replacedexpr();
 
   class  ConstantexprContext : public antlr4::ParserRuleContext {
   public:
@@ -339,30 +354,12 @@ public:
     ConstraintContext* constraint(size_t i);
     std::vector<IntervalexprContext *> intervalexpr();
     IntervalexprContext* intervalexpr(size_t i);
-    antlr4::tree::TerminalNode *TRUE();
-    antlr4::tree::TerminalNode *FALSE();
 
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
 
   };
 
   ConstrsetContext* constrset();
-
-  class  ReplacedexprContext : public antlr4::ParserRuleContext {
-  public:
-    ReplacedexprContext(antlr4::ParserRuleContext *parent, size_t invokingState);
-    virtual size_t getRuleIndex() const override;
-    std::vector<antlr4::tree::TerminalNode *> NUMBER();
-    antlr4::tree::TerminalNode* NUMBER(size_t i);
-    antlr4::tree::TerminalNode *EQUALS();
-    std::vector<antlr4::tree::TerminalNode *> MINUS();
-    antlr4::tree::TerminalNode* MINUS(size_t i);
-
-    virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
-
-  };
-
-  ReplacedexprContext* replacedexpr();
 
   class  InitContext : public antlr4::ParserRuleContext {
   public:
@@ -534,7 +531,6 @@ public:
     virtual size_t getRuleIndex() const override;
     antlr4::tree::TerminalNode *PARALLELOTOPE();
     antlr4::tree::TerminalNode *BOX();
-    antlr4::tree::TerminalNode *INTERVALAGG();
 
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
 

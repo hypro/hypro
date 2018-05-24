@@ -39,7 +39,7 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
 	endif()
 
 
-	add_dependencies(runRepresentationTests googletest)
+	add_dependencies(runRepresentationTests resources)
 	target_include_directories(runRepresentationTests PRIVATE ${GTEST_INCLUDE_DIR})
 
 	target_link_libraries(runRepresentationTests LINK_PUBLIC

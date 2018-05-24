@@ -21,19 +21,19 @@ namespace Eigen {
 
 	template <typename Number>
 	inline bool operator<( const hypro::vector_t<Number>& lhs, const hypro::vector_t<Number>& rhs ) {
-	if ( lhs.rows() != rhs.rows() ){
+		if ( lhs.rows() != rhs.rows() ){
+			return false;
+		}
+
+		for ( unsigned dim = 0; dim < lhs.rows(); ++dim ) {
+			if ( lhs( dim ) > rhs( dim ) ) {
+				return false;
+			} else if ( lhs( dim ) < rhs( dim ) ) {
+				return true;
+			}
+		}
 		return false;
 	}
-
-	for ( unsigned dim = 0; dim < lhs.rows(); ++dim ) {
-		if ( lhs( dim ) > rhs( dim ) ) {
-			return false;
-		} else if ( lhs( dim ) < rhs( dim ) ) {
-			return true;
-		}
-	}
-	return false;
-}
 
 	template <typename Number>
 	inline bool operator<=( const hypro::vector_t<Number>& lhs, const hypro::vector_t<Number>& rhs ) {
@@ -364,6 +364,59 @@ namespace hypro {
 		st << ";\n";
 		return st.str();
 	}
+
+	template<typename Number>
+	static matrix_t<Number> combine(
+		const matrix_t<Number>& lhsMatrix, const matrix_t<Number>& rhsMatrix,
+		const std::vector<std::string>& haVar, const std::vector<std::string>& lhsVar, const std::vector<std::string>& rhsVar) {
+
+		//std::cout << "Combine " << lhsMatrix << " and " << rhsMatrix << std::endl;
+
+		size_t lhsRows = lhsMatrix.rows();
+		size_t rhsRows = rhsMatrix.rows();
+		matrix_t<Number> tmpMatrix = matrix_t<Number>::Zero(lhsRows+rhsRows, haVar.size());
+
+		size_t col=0;
+		unsigned colLhs = 0;
+		while (colLhs < lhsMatrix.cols()) {
+			if(haVar[col] == lhsVar[colLhs]) {
+				tmpMatrix.block(0, col, lhsRows, 1) = lhsMatrix.block(0, colLhs, lhsRows, 1);
+				col++; colLhs++;
+				continue;
+			}
+			if(haVar[col] < lhsVar[colLhs]) {
+				col++;
+				continue;
+			}
+		}
+
+		col=0;
+		unsigned colRhs = 0;
+		while (colRhs < rhsMatrix.cols()) {
+			if(haVar[col] == rhsVar[colRhs]) {
+				tmpMatrix.block(lhsRows, col, rhsRows, 1) = rhsMatrix.block(0, colRhs, rhsRows, 1);
+				col++; colRhs++;
+				continue;
+			}
+			if(haVar[col] < rhsVar[colRhs]) {
+				col++;
+				continue;
+			}
+		  }
+
+		//std::cout << "Result: " << tmpMatrix << std::endl;
+		return tmpMatrix;
+	}
+
+	template<typename Number>
+	static vector_t<Number> combine(const vector_t<Number>& lhs, const vector_t<Number>& rhs){
+		vector_t<Number> newVec = vector_t<Number>::Zero(lhs.size()+rhs.size());
+		newVec.head(lhs.size()) = lhs;
+		newVec.tail(rhs.size()) = rhs;
+
+		return newVec;
+	}
+
 
 } // namespace hypro
 

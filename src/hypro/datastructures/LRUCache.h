@@ -40,7 +40,7 @@ namespace hypro {
 		LRUCache(const LRUCache& orig ) = delete;
 		LRUCache(LRUCache&& orig ) = delete;
 
-		LRUCache(std::size_t size) : mMaxSize(size) {
+		explicit LRUCache(std::size_t size) : mMaxSize(size) {
 			//TRACE("hypro.datastructures.cache","Created cache of size " << size << " (@" << this << ")" );
 		}
 

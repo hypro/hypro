@@ -6,11 +6,9 @@
 #include "gtest/gtest.h"
 #include "../defines.h"
 #include "datastructures/HybridAutomaton/LocationManager.h"
-#include "datastructures/HybridAutomaton/Transition.h"
 #include "datastructures/HybridAutomaton/HybridAutomaton.h"
-#include "datastructures/HybridAutomaton/State.h"
 #include "representations/GeometricObject.h"
-#include "carl/core/VariablePool.h"
+
 
 using namespace hypro;
 using namespace carl;
@@ -98,7 +96,8 @@ protected:
 
 		hybrid.setLocations(locSet);
 		for(auto loc : initLocSet) {
-			State<Number,ConstraintSet<Number>> initState(loc, ConstraintSet<Number>(hpoly.matrix(), hpoly.vector()));
+			State_t<Number> initState(loc);
+			initState.setSet(ConstraintSet<Number>(hpoly.matrix(), hpoly.vector()));
 			hybrid.addInitialState(initState);
 		}
 
@@ -192,6 +191,50 @@ TYPED_TEST(HybridAutomataTest, LocationTest)
 	EXPECT_TRUE(locPtrComp<TypeParam>()(this->loc1, this->loc2));
 }
 
+TYPED_TEST(HybridAutomataTest, LocationParallelcompositionTest)
+{
+	Location<TypeParam>* l1 = this->locMan.create();
+	Location<TypeParam>* l2 = this->locMan.create();
+
+	typename HybridAutomaton<TypeParam>::variableVector l1Vars{"a","b"};
+	typename HybridAutomaton<TypeParam>::variableVector l2Vars{"x","b"};
+	typename HybridAutomaton<TypeParam>::variableVector haVars{"a","x","b"};
+
+	matrix_t<TypeParam> l1Flow = matrix_t<TypeParam>::Zero(3,3);
+	l1Flow << 1,2,0,
+				3,4,0,
+				0,0,0;
+	matrix_t<TypeParam> l2Flow = matrix_t<TypeParam>::Zero(3,3);
+	l2Flow << 1,2,0,
+				3,4,0,
+				0,0,0;
+
+	l1->setFlow(l1Flow);
+	l2->setFlow(l2Flow);
+
+	Location<TypeParam>* res1 = parallelCompose(l1,l2,l1Vars,l2Vars,haVars);
+	matrix_t<TypeParam> expectedResult1 = matrix_t<TypeParam>::Zero(haVars.size()+1, haVars.size()+1);
+	expectedResult1 << 1,0,2,0,
+						0,1,2,0,
+						3,3,4,0,
+						0,0,0,0;
+	EXPECT_EQ(res1->getFlow(),expectedResult1);
+
+
+	l1Vars = {"a","b"};
+	l2Vars = {"c","d"};
+	haVars = {"a","b","c","d"};
+	Location<TypeParam>* res2 = parallelCompose(l1,l2,l1Vars,l2Vars,haVars);
+
+	matrix_t<TypeParam> expectedResult2 = matrix_t<TypeParam>::Zero(haVars.size()+1, haVars.size()+1);
+	expectedResult2 << 1,2,0,0,0,
+						3,4,0,0,0,
+						0,0,1,2,0,
+						0,0,3,4,0,
+						0,0,0,0,0;
+	EXPECT_EQ(res2->getFlow(),expectedResult2);
+}
+
 /**
  * Transition Test
  */
@@ -252,7 +295,10 @@ TYPED_TEST(HybridAutomataTest, HybridAutomatonTest)
 	vector_t<TypeParam> vec = vector_t<TypeParam>(2);
 	vec << 1,2;
 
-	h1.addInitialState(State<TypeParam,ConstraintSet<TypeParam>>(this->loc1, ConstraintSet<TypeParam>(matr, vec)));
+	State_t<TypeParam> s(this->loc1);
+	s.setSet(ConstraintSet<TypeParam>(matr, vec));
+
+	h1.addInitialState(s);
 
 	// copy assignment operator
 	HybridAutomaton<TypeParam> h2 = h1;
@@ -272,12 +318,13 @@ TYPED_TEST(HybridAutomataTest, LocationManagerTest)
 
 TYPED_TEST(HybridAutomataTest, State) {
 	// Constructors
-	State<TypeParam, ConstraintSet<TypeParam>> s1(this->loc1);
+	State_t<TypeParam> s1(this->loc1);
 
 	matrix_t<TypeParam> matr = matrix_t<TypeParam>::Identity(2,2);
 	vector_t<TypeParam> vec = vector_t<TypeParam>(2);
 	vec << 1,2;
-	State<TypeParam, ConstraintSet<TypeParam>> s2(this->loc1, ConstraintSet<TypeParam>(matr, vec));
+	State_t<TypeParam> s2(this->loc1);
+	s2.setSet(ConstraintSet<TypeParam>(matr, vec));
 
 	EXPECT_EQ(s1.getLocation()->getId(), this->loc1->getId());
 	EXPECT_EQ(s2.getLocation()->getId(), this->loc1->getId());

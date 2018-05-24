@@ -11,6 +11,8 @@
 
 namespace hypro
 {
+template <typename Number, typename State>
+class HybridAutomaton;
 
 template<typename Number>
 class Location;
@@ -59,7 +61,9 @@ class State
     	mSets(orig.getSets()),
     	mTypes(orig.getTypes()),
     	mTimestamp(orig.getTimestamp())
-    {}
+    {
+    	assert(checkConsistency());
+    }
 
     /**
      * @brief Move constructor.
@@ -70,7 +74,9 @@ class State
     	mSets(orig.getSets()),
     	mTypes(orig.getTypes()),
     	mTimestamp(orig.getTimestamp())
-    {}
+    {
+    	assert(checkConsistency());
+    }
 
     /**
      * @brief      Copy assignment operator.
@@ -88,6 +94,7 @@ class State
     	assert(mSets.size() == orig.getNumberSets());
     	mTimestamp = orig.getTimestamp();
     	TRACE("hypro.datastructures","Assignment operator created state with " << mSets.size() << " sets.");
+    	assert(checkConsistency());
     	return *this;
     }
 
@@ -101,6 +108,7 @@ class State
     	mSets = orig.getSets();
     	mTypes = orig.getTypes();
     	mTimestamp = orig.getTimestamp();
+    	assert(checkConsistency());
     	return *this;
     }
 
@@ -113,7 +121,10 @@ class State
     	mSets(),
     	mTypes(),
     	mTimestamp(carl::Interval<tNumber>::unboundedInterval())
-    { assert(mLoc != nullptr); }
+    {
+    	assert(mLoc != nullptr);
+    	assert(checkConsistency());
+    }
 
     /**
      * @brief      Constructor.
@@ -140,6 +151,7 @@ class State
     	#pragma GCC diagnostic pop
     	(void) dummy;
     	(void) dummy2;
+    	assert(checkConsistency());
     }
 
     /**
@@ -175,7 +187,10 @@ class State
      */
     representation_name getSetType(std::size_t i = 0) const {
     	TRACE("hypro.datastructures","Attempt to get set type at pos " << i << ", mTypes.size() = " << mTypes.size());
+    	assert(i < mTypes.size());
+    	TRACE("hypro.datastructures","Type is " << mTypes.at(i));
     	assert(mSets.size() == mTypes.size());
+    	assert(checkConsistency());
     	return mTypes.at(i);
     }
 
@@ -224,13 +239,15 @@ class State
      * @param[in]  I     The position.
      */
     void setSetType(representation_name type, std::size_t I = 0) {
-    	TRACE("hypro.datastructures","Attempt to set set type at pos " << I << ", mSets.size() = " << mSets.size() << ", mTypes.size() = " << mTypes.size());
+    	TRACE("hypro.datastructures","Attempt to set set type at pos " << I << " to type " << type << ", mSets.size() = " << mSets.size() << ", mTypes.size() = " << mTypes.size());
     	assert(mSets.size() == mTypes.size());
 		while(I >= mSets.size()) {
 			mSets.emplace_back(Representation()); // some default set.
 			mTypes.push_back(Representation::type()); // some default set type.
 		}
+		TRACE("hypro.datastructures","Set set type at pos " << I << " to type " << type);
 		mTypes[I] = type;
+		assert(checkConsistency());
 	}
 
 	/**
@@ -357,11 +374,19 @@ class State
 
     State<Number,tNumber,Representation,Rargs...> partiallyMinkowskiSum(const State<Number,tNumber,Representation,Rargs...>& rhs, std::size_t I ) const;
 
+    /**
+     * @brief      Checks whether a state is fully contained in caller-state.
+     * @details    This calls "contains" for all stored state sets iteratively and returns "false" first time it can be detected.
+     * @param[in]  rhs   The right hand side state.
+     * @return     True, if every subset of rhs is fully contained in the respective subset of the caller-state.
+     */
+    bool contains(const State<Number,tNumber,Representation,Rargs...>& rhs) const;
+
     std::vector<Point<Number>> vertices(std::size_t I = 0) const;
 
     State<Number,tNumber,Representation,Rargs...> project(const std::vector<std::size_t>& dimensions, std::size_t I = 0) const;
 
-    std::size_t getDimension(std::size_t I) const;
+    std::size_t getDimension(std::size_t I = 0) const;
 
     Number getSupremum(std::size_t I) const;
 
@@ -435,8 +460,44 @@ class State
 
 };
 
+template<typename Number, typename State>
+State parallelCompose(
+    const State& lhsInitState, const State& rhsInitState,
+    const std::vector<std::string> lhsVar, const std::vector<std::string> rhsVar, const std::vector<std::string> haVar,
+    const HybridAutomaton<Number, State> ha) {
+
+    State haInitState;
+
+    // set location
+    std::string name = lhsInitState.getLocation()->getName()+"_"+rhsInitState.getLocation()->getName();
+    auto location = ha.getLocation(name);
+    assert(location != NULL);
+    haInitState.setLocation(location);
+
+    // set constraint
+    // TODO: Move this.
+    ConstraintSet<Number> lhsConstraintSet = boost::get<ConstraintSet<Number>>(lhsInitState.getSet(0));
+    ConstraintSet<Number> rhsConstraintSet = boost::get<ConstraintSet<Number>>(rhsInitState.getSet(0));
+    matrix_t<Number> lhsMatrix = lhsConstraintSet.matrix();
+    matrix_t<Number> rhsMatrix = rhsConstraintSet.matrix();
+    vector_t<Number> lhsVector = lhsConstraintSet.vector();
+    vector_t<Number> rhsVector = rhsConstraintSet.vector();
+    matrix_t<Number> newMatrix = combine(lhsMatrix, rhsMatrix, haVar, lhsVar, rhsVar);
+    matrix_t<Number> newVector = combine(lhsVector, rhsVector);
+    ConstraintSet<Number> haConstraintSet = ConstraintSet<Number>(newMatrix, newVector);
+
+    //ConstraintSet<Number> haConstraintSet = combine(lhsConstraintSet, rhsConstraintSet, lhsVar, rhsVar, haVar);
+    haInitState.setSet(haConstraintSet ,0);
+
+    // set timestamp
+    haInitState.setTimestamp(carl::Interval<Number>(0));
+
+    // return state
+    return haInitState;
+}
+
 template<typename Number, typename tNumber = Number>
-using State_t = State<Number, tNumber, Box<Number>, ConstraintSet<Number>, SupportFunction<Number>, Zonotope<Number>, HPolytope<Number>, VPolytope<Number>>;
+using State_t = State<Number, tNumber, Box<Number>, ConstraintSet<Number>, SupportFunction<Number>, Zonotope<Number>, HPolytope<Number>, VPolytope<Number>, DifferenceBounds<Number>>;
 
 } // namespace
 

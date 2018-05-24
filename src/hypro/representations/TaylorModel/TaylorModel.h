@@ -85,13 +85,13 @@ class TaylorModel {
 	~TaylorModel();
 
 	TaylorModel( const MultivariatePolynomial<carl::Interval<Number>>& p, const carl::Interval<Number>& r );
-	TaylorModel( const MultivariatePolynomial<carl::Interval<Number>>& p );
-	TaylorModel( const carl::Interval<Number>& I );
-	TaylorModel( const TaylorModel<Number>& tm );
-	TaylorModel( const std::initializer_list<Term<carl::Interval<Number>>>& terms );
+	explicit TaylorModel( const MultivariatePolynomial<carl::Interval<Number>>& p );
+	explicit TaylorModel( const carl::Interval<Number>& I );
+	explicit TaylorModel( const TaylorModel<Number>& tm );
+	explicit TaylorModel( const std::initializer_list<Term<carl::Interval<Number>>>& terms );
 	TaylorModel( const std::initializer_list<Term<carl::Interval<Number>>>& terms, const carl::Interval<Number>& r );
-	TaylorModel( const Term<carl::Interval<Number>>& term );
-	TaylorModel( carl::Variable::Arg v );
+	explicit TaylorModel( const Term<carl::Interval<Number>>& term );
+	explicit TaylorModel( carl::Variable::Arg v );
 
 	bool isZero() const;
 	bool isConstant() const;

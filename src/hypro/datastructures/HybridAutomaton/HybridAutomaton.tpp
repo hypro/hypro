@@ -4,7 +4,7 @@ namespace hypro
 {
 
 template<typename Number, typename State>
-const Location<Number>* HybridAutomaton<Number,State>::getLocation(std::size_t id) const {
+Location<Number>* HybridAutomaton<Number,State>::getLocation(std::size_t id) const {
 	for(const auto loc : mLocations) {
 		if(loc->getId() == id) {
 			return loc;
@@ -14,8 +14,9 @@ const Location<Number>* HybridAutomaton<Number,State>::getLocation(std::size_t i
 }
 
 template<typename Number, typename State>
-const Location<Number>* HybridAutomaton<Number,State>::getLocation(std::string name) const {
+Location<Number>* HybridAutomaton<Number,State>::getLocation(const std::string& name) const {
 	for(const auto loc : mLocations) {
+		assert(loc != nullptr);
 		if(loc->getName() == name) {
 			return loc;
 		}
@@ -28,7 +29,180 @@ unsigned HybridAutomaton<Number,State>::dimension() const
 {
     if (mInitialStates.empty()) return 0;
 
-    return (mInitialStates.begin()->first->getFlow().cols());
+    return (mInitialStates.begin()->first->getFlow().cols()-1);
+}
+
+template<typename Number, typename State>
+const std::set<Label> HybridAutomaton<Number,State>::getLabels() const {
+
+	//TODO:
+	std::set<Label> labels;
+	for(const auto tra: mTransitions) {
+		for(const auto lab: tra->getLabels()) {
+			labels.insert(lab);
+		}
+	}
+	return labels;
+}
+
+template<typename Number, typename State>
+void HybridAutomaton<Number,State>::reduce() {
+	bool changed = true;
+	while(changed) {
+		changed = false;
+		for(auto locIt = mLocations.begin(); locIt != mLocations.end(); ) {
+			// non-initial locations
+			if(mInitialStates.find(*locIt) == mInitialStates.end()) {
+				// check for being a target
+				bool isTarget = false;
+				for(auto t : mTransitions) {
+					if(t->getTarget() == *locIt) {
+						isTarget = true;
+						break;
+					}
+				}
+				// the location is discretely not reachable -> remove all outgoing transitions and then the location itself.
+				if(!isTarget) {
+					changed = true;
+					for(auto t = mTransitions.begin(); t != mTransitions.end(); ) {
+						if((*t)->getSource() == *locIt) {
+							//std::cout << __func__ << ": remove transition " << (*t)->getSource()->getName() << " -> " << (*t)->getTarget()->getName() << std::endl;
+							t = mTransitions.erase(t);
+						} else {
+							++t;
+						}
+					}
+					//std::cout << __func__ << ": remove unreachable location " << (*locIt)->getName() << std::endl;
+					locIt = mLocations.erase(locIt);
+				} else {
+					++locIt;
+				}
+			} else {
+				++locIt;
+			}
+		}
+	}
+}
+
+template<typename Number,typename State>
+bool HybridAutomaton<Number,State>::isComposedOf(const HybridAutomaton<Number,State>& rhs) const {
+	// trivial case.
+	if(*this == rhs) return true;
+
+	// check variable sets
+	for(const auto& v : rhs.getVariables()) {
+		if(std::find(mVariables.begin(), mVariables.end(), v) == mVariables.end()) {
+			//std::cout << "Variable " << v << " not contained in this, return false" << std::endl;
+			return false;
+		}
+	}
+
+	// check locations:
+	// try to find *exactly* one location, which matches - matching is defined by name, flow and invariant.
+	for(auto locPtr : this->mLocations) {
+		bool foundOne = false;
+		//std::cout << "Try to find a matching location for " << locPtr->getName() << std::endl;
+		for(auto rhsLocPtr : rhs.getLocations()) {
+			//std::cout << "Consider " << rhsLocPtr->getName() << std::endl;
+			if(locPtr->isComposedOf(*rhsLocPtr, rhs.getVariables(), this->getVariables())) {
+				if(foundOne) {
+					//std::cout << "composed from more than one loc - return false." << std::endl;
+					return false;
+				}
+				foundOne = true;
+			}
+		}
+		if(!foundOne) {
+			//std::cout << "could not find a matching location in rhs." << std::endl;
+			return false;
+		}
+	}
+
+	// check transitions:
+	// try to find a matching transition. Also take loops (no-op loops) into account for the check.
+	for(auto transPtr : this->mTransitions) {
+		bool foundOne = false;
+		//std::cout << "Try to find transition for " << transPtr->getSource()->getName() << " -> " << transPtr->getTarget()->getName() << std::endl;
+		// first try to find no-op transitions (where the control stays in the same mode for that component)
+		bool loop = false;
+		for(auto locPtr : rhs.getLocations()) {
+			//std::cout << "Find name " << locPtr->getName() << std::endl;
+			if(transPtr->getSource()->getName().find(locPtr->getName()) != std::string::npos && transPtr->getTarget()->getName().find(locPtr->getName()) != std::string::npos) {
+				//std::cout << "Found loop: " << transPtr->getSource()->getName() << " -> " << transPtr->getTarget()->getName() << std::endl;
+				if(loop) {
+					//std::cout << "Two loops - return false" << std::endl;
+					return false;
+				}
+				loop = true;
+			}
+		}
+		if(!loop) {
+			for(auto rhsTransPtr : rhs.getTransitions()) {
+				//std::cout << "consider " << rhsTransPtr->getSource()->getName() << " -> " << rhsTransPtr->getTarget()->getName() << std::endl;
+				if(transPtr->isComposedOf(*rhsTransPtr, rhs.getVariables(), this->getVariables())) {
+					if(foundOne) {
+						//std::cout << "found two matching transitions - return false" << std::endl;
+						return false;
+					}
+					foundOne = true;
+				}
+			}
+		}
+
+		if(!foundOne && !loop) {
+			//std::cout << "Did not find matching transition - return false." << std::endl;
+			return false;
+		}
+	}
+
+	return true;
+}
+
+template<typename Number, typename State>
+std::string HybridAutomaton<Number,State>::getDotRepresentation() const {
+	std::string res = "digraph {\n";
+
+	std::map<unsigned, Location<Number>*> locIds;
+	for(const auto loc : mLocations) {
+		res += loc->getDotRepresentation(mVariables);
+	}
+
+	for(const auto tra : mTransitions) {
+		res += tra->getDotRepresentation(mVariables);
+	}
+
+	res += "}\n";
+
+	return res;
+}
+
+
+template<typename Number, typename State>
+void HybridAutomaton<Number,State>::decompose(std::vector<std::vector<size_t>> decomposition){
+
+	// decompose locations (flow (affine trafo) and invariant(condition))
+    for(auto location : mLocations){
+    	location->decompose(decomposition);
+    }
+
+    // decompose transitions (guard and resets (both conditions))
+    for(auto transition : mTransitions){
+    	transition->decompose(decomposition);
+    }
+
+	// decompose local bad states (condition)
+	for(typename std::map<const Location<Number>*, Condition<Number>>::iterator it = mLocalBadStates.begin(); it != mLocalBadStates.end(); ++it){
+		it->second.decompose(decomposition);
+	}			
+
+	// decompose global bad states (conditions)
+	for(typename std::vector<Condition<Number>>::iterator it = mGlobalBadStates.begin(); it != mGlobalBadStates.end(); ++it){
+		it->decompose(decomposition);
+	}
+	// decompose intial states (state sets)
+	for(typename std::multimap<const Location<Number>*, State>::iterator it = mInitialStates.begin(); it != mInitialStates.end(); ++it){
+		it->second.decompose(decomposition);
+	}
 }
 
 template<typename Number, typename State>

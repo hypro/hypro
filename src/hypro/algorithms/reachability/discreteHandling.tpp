@@ -60,6 +60,7 @@ namespace reachability {
 					s = boost::get<0>(tuple)->getReset().applyReset(s);
 					std::pair<bool,State_t<Number>> invariantPair = s.satisfies(boost::get<0>(tuple)->getTarget()->getInvariant());
 					if(invariantPair.first){
+						TRACE("hypro.reacher","Enqueue " << invariantPair.second << " for level " << mCurrentLevel+1 << ", current queue size (before) is " << mWorkingQueue.size());
 						mWorkingQueue.emplace_back(mCurrentLevel+1, invariantPair.second);
 					}
 				}
@@ -147,9 +148,7 @@ namespace reachability {
 				}
 			}
 			if(!duplicate){
-				#ifdef REACH_DEBUG
-				INFO("hypro.reacher", "Enqueue " << s << " for level " << mCurrentLevel+1);
-				#endif
+				TRACE("hypro.reacher", "Enqueue " << s << " for level " << mCurrentLevel+1 << ", current queue size (before) is " << mWorkingQueue.size());
 				mWorkingQueue.emplace_back(mCurrentLevel+1, s);
 			}
 		}

@@ -71,9 +71,9 @@ TYPED_TEST(AntlrParserTest, JustTesting){
 
 	std::string path("../../../../src/test/core/examples/test_bouncing_ball.txt");
 	//std::string path("../../src/test/core/examples/test_bouncing_ball.txt");
-	//std::string path("../examples/input/boucing_ball.model");
+	//std::string path("/home/tobias/RWTH/8_WS2017/BA/hypro/src/test/core/examples/test_bouncing_ball.txt");
 
-	//this->cwd();
+	this->cwd();
 	try{
 		boost::tuple<hypro::HybridAutomaton<TypeParam,hypro::State_t<TypeParam,TypeParam>>, hypro::ReachabilitySettings<TypeParam>> h = hypro::parseFlowstarFile<TypeParam>(path);
 		SUCCEED();
@@ -87,7 +87,7 @@ TYPED_TEST(AntlrParserTest, JustTesting){
 TYPED_TEST(AntlrParserTest, EmptyFile){
 
 	std::string path("../../../../src/test/core/examples/test_empty_file.txt");
-	//std::string path("../../src/test/core/examples/test_empty_file.txt");
+	//std::string path("/home/tobias/RWTH/8_WS2017/BA/hypro/src/test/core/examples/test_empty_file.txt");
 
 	try{
 		boost::tuple<hypro::HybridAutomaton<TypeParam,hypro::State_t<TypeParam,TypeParam>>, hypro::ReachabilitySettings<TypeParam>> h = hypro::parseFlowstarFile<TypeParam>(path);
@@ -107,7 +107,9 @@ TYPED_TEST(AntlrParserTest, MinimalAcceptedFile){
 	 * - Settings for stepsize, maximum amount of jumps, duration of computation, output name, dimensions to plot
 	 */
 
+
 	std::string path("../../../../src/test/core/examples/test_minimal_accepted_file.txt");
+	//std::string path("/home/tobias/RWTH/8_WS2017/BA/hypro/src/test/core/examples/test_minimal_accepted_file.txt");
 	boost::tuple<hypro::HybridAutomaton<TypeParam,hypro::State_t<TypeParam,TypeParam>>, hypro::ReachabilitySettings<TypeParam>> h;
 	try{
 		h = hypro::parseFlowstarFile<TypeParam>(path);
@@ -178,6 +180,56 @@ TYPED_TEST(AntlrParserTest, MinimalAcceptedFile){
 	EXPECT_EQ(parsedHA.getGlobalBadStates().size(), std::size_t(0));
 
 }
+
+/*
+TYPED_TEST(AntlrParserTest, parallelComposition){
+	std::string pathA("/home/tobias/RWTH/8_WS2017/BA/examples/A.model");
+	std::string pathB("/home/tobias/RWTH/8_WS2017/BA/examples/B.model");
+
+	try{
+		std::cout << "Parser A" << std::endl;
+		boost::tuple<hypro::HybridAutomaton<TypeParam,hypro::State_t<TypeParam,TypeParam>>, hypro::ReachabilitySettings<TypeParam>> hA = hypro::parseFlowstarFile<TypeParam>(pathA);
+
+		std::cout << "Parser B" << std::endl;
+		boost::tuple<hypro::HybridAutomaton<TypeParam,hypro::State_t<TypeParam,TypeParam>>, hypro::ReachabilitySettings<TypeParam>> hB = hypro::parseFlowstarFile<TypeParam>(pathB);
+
+		hypro::HybridAutomaton<TypeParam,hypro::State_t<TypeParam,TypeParam>> haA = boost::get<0>(hA);
+		hypro::HybridAutomaton<TypeParam,hypro::State_t<TypeParam,TypeParam>> haB = boost::get<0>(hB);
+
+		haA||haB;
+
+		SUCCEED();
+	} catch(const std::runtime_error& e){
+		std::cout << e.what() << std::endl;
+		FAIL();
+	}
+}
+
+
+TYPED_TEST(AntlrParserTest, bouncing_ball_with_label){
+	std::string path("/home/tobias/RWTH/8_WS2017/BA/examples/bouncing_ball_with_label.model");
+
+	try{
+		boost::tuple<hypro::HybridAutomaton<TypeParam,hypro::State_t<TypeParam,TypeParam>>, hypro::ReachabilitySettings<TypeParam>> h = hypro::parseFlowstarFile<TypeParam>(path);
+		SUCCEED();
+	} catch(const std::runtime_error& e){
+		std::cout << e.what() << std::endl;
+		FAIL();
+	}
+}
+
+TYPED_TEST(AntlrParserTest, railraod_crossing){
+	std::string path("/home/tobias/RWTH/8_WS2017/BA/examples/railraod_crossing.model");
+
+	try{
+		boost::tuple<hypro::HybridAutomatonComp<TypeParam,hypro::State_t<TypeParam,TypeParam>>, hypro::ReachabilitySettings<TypeParam>> h = hypro::parseFlowstarCompFile<TypeParam>(path);
+		SUCCEED();
+	} catch(const std::runtime_error& e){
+		std::cout << e.what() << std::endl;
+		FAIL();
+	}
+}
+*/
 
 //TYPED_TEST(AntlrParserTest, VarNamesPrefixesOfEachOther){ } 	//x, x1, x10, x101 ...
 //TYPED_TEST(AntlrParserTest, SettingsTest){}					//smth like maxjumps 0, maxjumps 1e-10...

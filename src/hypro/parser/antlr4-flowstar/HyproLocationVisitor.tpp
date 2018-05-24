@@ -100,28 +100,14 @@ namespace hypro {
 
 		//0.Syntax check - Are there vars.size() equations?
 		if(vars.size() != ctx->equation().size()){
-			std::cerr << "ERROR: Wrong amount of activites for current location! Every stated variable needs exactly one activity." << std::endl;
+			std::cerr << "ERROR: Wrong amount of activites for current location!" << std::endl;
 			exit(0);
-		}
-
-		//0.Syntax check - Does every variable on the left side only occur once?
-		for(unsigned j=0; j < vars.size(); j++){
-			unsigned count = 0;
-			for(unsigned i=0; i < ctx->equation().size(); i++){
-				if(ctx->equation()[i]->VARIABLE()->getText() == (vars[j] + "'")){
-					count++;
-				}		
-			}
-			if(count != 1){
-				std::cerr << "ERROR: Every variable must have exactly one activity." << std::endl;
-				exit(0);
-			}
-			
 		}
 
 		//1.Calls iteratively visit(ctx->equation()) to get vector, store them
 		matrix_t<Number> tmpMatrix = matrix_t<Number>::Zero(vars.size()+1, vars.size()+1);
 		std::vector<carl::Interval<Number>> extInputVec(vars.size(), carl::Interval<Number>());
+		//std::cout << "extInputVec has been made!\n"; 
 		HyproFormulaVisitor<Number> visitor(vars);
 		for(unsigned i=0; i < ctx->equation().size(); i++){
 			

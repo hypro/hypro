@@ -339,10 +339,6 @@ typename std::vector<Point<Number>> HPolytopeT<Number, Converter, Setting>::vert
 			if ( lu_decomp.rank() < A.rows() ) {
 				continue;
 			}
-			#ifdef HPOLY_DEBUG_MSG
-			//std::cout << convert<Number,double>(A) << std::endl;
-			//std::cout << convert<Number,double>(b) << std::endl;
-			#endif
 
 			vector_t<Number> res = lu_decomp.solve( b );
 
@@ -891,24 +887,24 @@ HPolytopeT<Number, Converter, Setting> HPolytopeT<Number, Converter, Setting>::u
 		*/
 
 		//std::cout << "size after union: " << result.size() << std::endl;
-	
+
 		//assert(result.contains(*this));
 		//assert(result.contains(_rhs));
 		//std::cout << __func__ << " : tmpres " << tmpRes << std::endl;
-		
+
 		/*
 		std::cout << __func__ << " BEGIN." << std::endl;
 		std::vector<Point<Number>> unitedVertices(this->vertices());
 		for(const auto& vertex : _rhs.vertices()) {
 			unitedVertices.emplace_back(vertex);
 		}
-	
-	
+
+
 		for(const auto vertex : unitedVertices) {
 			std::cout << "Vertex to unite: " << vertex << std::endl;
 		}
-	
-	
+
+
 		ConvexHull<Number> ch = ConvexHull<Number>(unitedVertices);
 		ch.convexHullVertices();
 		HPolytopeT<Number,Converter,Setting> result = HPolytopeT<Number,Converter,Setting>(ch.getHsv());

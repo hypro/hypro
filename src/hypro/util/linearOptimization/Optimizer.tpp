@@ -113,7 +113,8 @@ namespace hypro {
 		#if defined(HYPRO_USE_SMTRAT) || defined(HYPRO_USE_Z3) || defined(HYPRO_USE_SOPLEX)
 		res = glpkOptimizeLinear(mGlpkContext[std::this_thread::get_id()].lp,_direction,mConstraintMatrix,mConstraintVector,useExactGlpk);
 		#else
-		return glpkOptimizeLinear(mGlpkContext.at(std::this_thread::get_id()).lp,_direction,mConstraintMatrix,mConstraintVector,useExactGlpk);
+		assert(mGlpkContext.find(std::this_thread::get_id()) != mGlpkContext.end());
+		return glpkOptimizeLinear(mGlpkContext[std::this_thread::get_id()].lp,_direction,mConstraintMatrix,mConstraintVector,useExactGlpk);
 		#endif
 
 		#if defined(HYPRO_USE_SMTRAT) || defined(HYPRO_USE_Z3) || defined(HYPRO_USE_SOPLEX)
@@ -343,26 +344,29 @@ namespace hypro {
 	void Optimizer<Number>::updateConstraints() const {
 		TRACE("hypro.optimizer","");
 		assert(isSane());
-		bool alreadyInitialized = mGlpkContext.find(std::this_thread::get_id()) != mGlpkContext.end() && mGlpkContext.at(std::this_thread::get_id()).mInitialized;
+		bool alreadyInitialized = mGlpkContext.find(std::this_thread::get_id()) != mGlpkContext.end() && mGlpkContext[std::this_thread::get_id()].mInitialized;
 		assert(!mConsistencyChecked || mGlpkContext.at(std::this_thread::get_id()).mConstraintsSet);
 		if(!alreadyInitialized){
 			TRACE("hypro.optimizer", "Thread " << std::this_thread::get_id() << " requires initialization of glp instance. (@" << this << ")");
 			initialize();
 		}
+		assert(mGlpkContext.find(std::this_thread::get_id()) != mGlpkContext.end());
 
-		if(!mGlpkContext.at(std::this_thread::get_id()).mConstraintsSet){
+		glpk_context& glpCtx = mGlpkContext[std::this_thread::get_id()];
+
+		if(!glpCtx.mConstraintsSet){
 			//std::cout << "!mConstraintsSet" << std::endl;
 
 			if(alreadyInitialized) { // clean up old setup.
 				//std::cout << "alreadyInitialized - Cleanup" << std::endl;
-				mGlpkContext[std::this_thread::get_id()].deleteArrays();
+				glpCtx.deleteArrays();
 
 				TRACE("hypro.optimizer", "Thread " << std::this_thread::get_id() << " refreshes its glp instance. (@" << &mGlpkContext[std::this_thread::get_id()] << ")");
 
-				mGlpkContext[std::this_thread::get_id()].deleteLPInstance();
-				mGlpkContext[std::this_thread::get_id()].createLPInstance();
+				glpCtx.deleteLPInstance();
+				glpCtx.createLPInstance();
 
-				glp_set_obj_dir( mGlpkContext[std::this_thread::get_id()].lp, GLP_MAX );
+				glp_set_obj_dir( glpCtx.lp, GLP_MAX );
 
 				#ifdef HYPRO_USE_SMTRAT
 				#ifndef RECREATE_SOLVER
@@ -387,36 +391,36 @@ namespace hypro {
 			int numberOfConstraints = int(mConstraintMatrix.rows());
 			if(numberOfConstraints > 0) {
 				// convert constraint constants
-				glp_add_rows( mGlpkContext[std::this_thread::get_id()].lp, numberOfConstraints );
+				glp_add_rows( glpCtx.lp, numberOfConstraints );
 				for ( int i = 0; i < numberOfConstraints; i++ ) {
-					glp_set_row_bnds( mGlpkContext[std::this_thread::get_id()].lp, i + 1, GLP_UP, 0.0, carl::toDouble( mConstraintVector(i) ) );
+					glp_set_row_bnds( glpCtx.lp, i + 1, GLP_UP, 0.0, carl::toDouble( mConstraintVector(i) ) );
 				}
 				// add cols here
 				int cols = int(mConstraintMatrix.cols());
-				glp_add_cols( mGlpkContext[std::this_thread::get_id()].lp, cols );
-				mGlpkContext[std::this_thread::get_id()].createArrays( unsigned(numberOfConstraints * cols) );
+				glp_add_cols( glpCtx.lp, cols );
+				glpCtx.createArrays( unsigned(numberOfConstraints * cols) );
 
 				// convert constraint matrix
-				mGlpkContext[std::this_thread::get_id()].ia[0] = 0;
-				mGlpkContext[std::this_thread::get_id()].ja[0] = 0;
-				mGlpkContext[std::this_thread::get_id()].ar[0] = 0;
+				glpCtx.ia[0] = 0;
+				glpCtx.ja[0] = 0;
+				glpCtx.ar[0] = 0;
 				assert(mConstraintMatrix.size() == numberOfConstraints * cols);
 				for ( int i = 0; i < numberOfConstraints * cols; ++i ) {
-					mGlpkContext[std::this_thread::get_id()].ia[i + 1] = ( int( i / cols ) ) + 1;
+					glpCtx.ia[i + 1] = ( int( i / cols ) ) + 1;
 					// std::cout << __func__ << " set ia[" << i+1 << "]= " << ia[i+1];
-					mGlpkContext[std::this_thread::get_id()].ja[i + 1] = ( int( i % cols ) ) + 1;
+					glpCtx.ja[i + 1] = ( int( i % cols ) ) + 1;
 					// std::cout << ", ja[" << i+1 << "]= " << ja[i+1];
-					mGlpkContext[std::this_thread::get_id()].ar[i + 1] = carl::toDouble( mConstraintMatrix.row(mGlpkContext[std::this_thread::get_id()].ia[i + 1] - 1)( mGlpkContext[std::this_thread::get_id()].ja[i + 1] - 1 ) );
+					glpCtx.ar[i + 1] = carl::toDouble( mConstraintMatrix.row(glpCtx.ia[i + 1] - 1)( glpCtx.ja[i + 1] - 1 ) );
 					// TODO:: Assuming ColMajor storage alignment.
 					//assert(*(mConstraintMatrix.data()+(ja[i+1]*numberOfConstraints) - ia[i+1]) ==  mConstraintMatrix.row(ia[i + 1] - 1)( ja[i + 1] - 1 ));
 					//std::cout << ", ar[" << i+1 << "]=" << ar[i+1] << std::endl;
 					//std::cout << "Came from: " << mConstraintMatrix.row(ia[i + 1] - 1)( ja[i + 1] - 1 ) << std::endl;
 				}
 
-				glp_load_matrix( mGlpkContext[std::this_thread::get_id()].lp, numberOfConstraints * cols, mGlpkContext[std::this_thread::get_id()].ia, mGlpkContext[std::this_thread::get_id()].ja, mGlpkContext[std::this_thread::get_id()].ar );
+				glp_load_matrix( glpCtx.lp, numberOfConstraints * cols, glpCtx.ia, glpCtx.ja, glpCtx.ar );
 				for ( int i = 0; i < cols; ++i ) {
-					glp_set_col_bnds( mGlpkContext[std::this_thread::get_id()].lp, i + 1, GLP_FR, 0.0, 0.0 );
-					glp_set_obj_coef( mGlpkContext[std::this_thread::get_id()].lp, i + 1, 1.0 ); // not needed?
+					glp_set_col_bnds( glpCtx.lp, i + 1, GLP_FR, 0.0, 0.0 );
+					glp_set_obj_coef( glpCtx.lp, i + 1, 1.0 ); // not needed?
 				}
 
 				#ifdef HYPRO_USE_SMTRAT
@@ -437,7 +441,7 @@ namespace hypro {
 				#endif
 			}
 
-			mGlpkContext[std::this_thread::get_id()].mConstraintsSet = true;
+			glpCtx.mConstraintsSet = true;
 		}
 		TRACE("hypro.optimizer","Done.");
 	}
