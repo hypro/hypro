@@ -22,6 +22,7 @@ class Label {
     {
     	mName = in.getName();
     }
+
     Label(Label&& in) = default;
 
     Label(const std::string& name) { mName = name; };
@@ -31,7 +32,7 @@ class Label {
     Label& operator=(const Label& in) = default;
     Label& operator=(Label&& in) = default;
 
-    std::string getName() const { assert(mName!=""); return mName; }
+    const std::string& getName() const { assert(mName!=""); return mName; }
 
     void setName(const std::string &name) { mName = name; }
 

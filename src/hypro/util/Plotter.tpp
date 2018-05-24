@@ -295,17 +295,22 @@ void Plotter<Number>::writeGnuplot() const {
 		mOutfile << "set xtics autofreq\n";
 		mOutfile << "set ytics autofreq\n";
 
-		if(mSettings.grid) {
-			mOutfile << "set grid back\n";
+		if(!mSettings.plain) {
+			if(mSettings.grid) {
+				mOutfile << "set grid back\n";
+			}
+			if(mSettings.axes) {
+				mOutfile << "# axis settings\n";
+				mOutfile << "set xzeroaxis\n";
+				mOutfile << "set zeroaxis\n";
+	            mOutfile << "set xtics axis\n";
+				mOutfile << "set yzeroaxis\n";
+	            mOutfile << "set ytics axis\n";
+			}
+		} else {
+			mOutfile << "unset border\nunset xtics\nunset ytics\n";
 		}
-		if(mSettings.axes) {
-			mOutfile << "# axis settings\n";
-			mOutfile << "set xzeroaxis \n";
-			mOutfile << "set zeroaxis \n";
-            mOutfile << "set xtics axis \n";
-			mOutfile << "set yzeroaxis \n";
-            mOutfile << "set ytics axis \n";
-		}
+
 
 		mOutfile << "set xrange ["<< ranges[0].lower() << ":" << ranges[0].upper() << "] \n";
 		mOutfile << "set yrange ["<< ranges[1].lower() << ":" << ranges[1].upper() << "] \n";
@@ -371,7 +376,7 @@ void Plotter<Number>::writeGnuplot() const {
 		//std::cout << "Done plotting sets." << std::endl;
 
 		if(mPlanes.empty() && mPoints.empty()){
-			mOutfile << "plot - NaN notitle \n";
+			mOutfile << "plot - NaN notitle\n";
 		}
 
 
@@ -435,7 +440,7 @@ void Plotter<Number>::writeGnuplot() const {
 		}
 
 		if(!mPlanes.empty() || !mPoints.empty())
-			mOutfile << "\n unset multiplot\n";
+			mOutfile << "\nunset multiplot\n";
 	}
 }
 

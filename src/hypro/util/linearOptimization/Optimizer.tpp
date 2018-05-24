@@ -6,14 +6,17 @@ namespace hypro {
 	void Optimizer<Number>::cleanGLPInstance() {
 		assert(isSane());
 		TRACE("hypro.optimizer", "Thread " << std::this_thread::get_id() << " attempts to erase its glp instance. (@" << this << ")");
-		auto ctxtIt = mGlpkContext.find(std::this_thread::get_id());
-		if( ctxtIt != mGlpkContext.end()) {
-			TRACE("hypro.optimizer", "Thread " << std::this_thread::get_id() << " glp instances left (before erase): " << mGlpkContext.size());
-			TRACE("hypro.optimizer", "Thread " << std::this_thread::get_id() << " erases its glp instance. (@" << this << ")");
-			ctxtIt->second.deleteLPInstance();
-			TRACE("hypro.optimizer", "Deleted lp instance.");
-			mGlpkContext.erase(ctxtIt);
-			TRACE("hypro.optimizer", "Thread " << std::this_thread::get_id() << " glp instances left (after erase): " << mGlpkContext.size());
+		{
+			std::lock_guard<std::mutex> lock(mGlpkLock);
+			auto ctxtIt = mGlpkContext.find(std::this_thread::get_id());
+			if( ctxtIt != mGlpkContext.end()) {
+				TRACE("hypro.optimizer", "Thread " << std::this_thread::get_id() << " glp instances left (before erase): " << mGlpkContext.size());
+				TRACE("hypro.optimizer", "Thread " << std::this_thread::get_id() << " erases its glp instance. (@" << this << ")");
+				ctxtIt->second.deleteLPInstance();
+				TRACE("hypro.optimizer", "Deleted lp instance.");
+				mGlpkContext.erase(ctxtIt);
+				TRACE("hypro.optimizer", "Thread " << std::this_thread::get_id() << " glp instances left (after erase): " << mGlpkContext.size());
+			}
 		}
 		assert(isSane());
 	}
@@ -313,7 +316,14 @@ namespace hypro {
 	}
 
 	template<typename Number>
+	bool Optimizer<Number>::hasContext(std::thread::id) const {
+		std::lock_guard<std::mutex> lock(mGlpkLock);
+		return mGlpkContext.find(std::this_thread::get_id()) != mGlpkContext.end();
+	}
+
+	template<typename Number>
 	bool Optimizer<Number>::isSane() const {
+		/*
 		TRACE("hypro.optimizer","Have " << mGlpkContext.size() << " instances to check.");
 		for(const auto& glpPair : mGlpkContext) {
 			if(glpPair.second.mConstraintsSet && (!glpPair.second.mInitialized || !glpPair.second.arraysCreated))
@@ -322,6 +332,7 @@ namespace hypro {
 				return false;
 			TRACE("hypro.optimizer","Instance " << &glpPair.second << " for thread " << glpPair.first << " is sane.");
 		}
+		*/
 		return true;
 	}
 
@@ -329,11 +340,12 @@ namespace hypro {
 	void Optimizer<Number>::initialize() const {
 		assert(isSane());
 		TRACE("hypro.optimizer","");
-		if(mGlpkContext.find(std::this_thread::get_id()) == mGlpkContext.end()){
+		if(!hasContext(std::this_thread::get_id())){
+			std::lock_guard<std::mutex> lock(mGlpkLock);
 			TRACE("hypro.optimizer","Actual creation.");
 			mGlpkContext.emplace(std::this_thread::get_id(), glpk_context());
 		}
-		assert(mGlpkContext.find(std::this_thread::get_id()) != mGlpkContext.end());
+		assert(hasContext(std::this_thread::get_id()));
 
 		mGlpkContext[std::this_thread::get_id()].createLPInstance();
 
@@ -344,13 +356,13 @@ namespace hypro {
 	void Optimizer<Number>::updateConstraints() const {
 		TRACE("hypro.optimizer","");
 		assert(isSane());
-		bool alreadyInitialized = mGlpkContext.find(std::this_thread::get_id()) != mGlpkContext.end() && mGlpkContext[std::this_thread::get_id()].mInitialized;
+		bool alreadyInitialized = hasContext(std::this_thread::get_id()) && mGlpkContext[std::this_thread::get_id()].mInitialized;
 		assert(!mConsistencyChecked || mGlpkContext.at(std::this_thread::get_id()).mConstraintsSet);
 		if(!alreadyInitialized){
 			TRACE("hypro.optimizer", "Thread " << std::this_thread::get_id() << " requires initialization of glp instance. (@" << this << ")");
 			initialize();
 		}
-		assert(mGlpkContext.find(std::this_thread::get_id()) != mGlpkContext.end());
+		assert(hasContext(std::this_thread::get_id()));
 
 		glpk_context& glpCtx = mGlpkContext[std::this_thread::get_id()];
 

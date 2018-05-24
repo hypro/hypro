@@ -5,7 +5,6 @@
  *
  * @author Norman Hansen
  * @author Stefan Schupp <stefan.schupp@cs.rwth-aachen.de>
- * @author Simon Froitzheim
  *
  * @version	2015-02-27
  */
@@ -21,8 +20,10 @@
 #include "../../util/adaptions_eigen/adaptions_eigen.h"
 #include "../../util/linearOptimization/Optimizer.h"
 #include "../../util/logging/Logger.h"
+#include "../../util/statistics/statistics.h"
 #include "../../util/Permutator.h"
 #include <map>
+#include <queue>
 
 //#define PPOLYTOPESUPPORTFUNCTION_VERBOSE
 #define PPOLYTOPESUPPORTFUNCTION_VERIFY

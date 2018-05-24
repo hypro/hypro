@@ -60,13 +60,16 @@ public:
 		return !(lhs == rhs);
 	}
 
-	friend std::ostream& operator<<(std::ostream& out, const Condition& in) {
+
 #ifdef HYPRO_LOGGING
+	friend std::ostream& operator<<(std::ostream& out, const Condition& in) {
 		std::size_t i = 0;
 		for(const auto& pair : in.constraints()) {
 			out << "Constraint " << i << ": " << pair.matrix() << " constants: " << pair.vector() << std::endl;
 			++i;
 		}
+#else
+	friend std::ostream& operator<<(std::ostream& out, const Condition& ) {
 #endif
 		return out;
 	}

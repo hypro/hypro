@@ -46,6 +46,16 @@ const std::set<Label> HybridAutomaton<Number,State>::getLabels() const {
 }
 
 template<typename Number, typename State>
+void HybridAutomaton<Number,State>::removeTransition(Transition<Number>* toRemove) {
+	for(auto tIt = mTransitions.begin(); tIt != mTransitions.end(); ) {
+		if(*tIt == toRemove)
+			tIt = mTransitions.erase(tIt);
+		else
+			++tIt;
+	}
+}
+
+template<typename Number, typename State>
 void HybridAutomaton<Number,State>::reduce() {
 	bool changed = true;
 	while(changed) {
@@ -140,6 +150,7 @@ bool HybridAutomaton<Number,State>::isComposedOf(const HybridAutomaton<Number,St
 			for(auto rhsTransPtr : rhs.getTransitions()) {
 				//std::cout << "consider " << rhsTransPtr->getSource()->getName() << " -> " << rhsTransPtr->getTarget()->getName() << std::endl;
 				if(transPtr->isComposedOf(*rhsTransPtr, rhs.getVariables(), this->getVariables())) {
+					//std::cout << "Found " << rhsTransPtr->getSource()->getName() << " -> " << rhsTransPtr->getTarget()->getName() << std::endl;
 					if(foundOne) {
 						//std::cout << "found two matching transitions - return false" << std::endl;
 						return false;
@@ -162,7 +173,6 @@ template<typename Number, typename State>
 std::string HybridAutomaton<Number,State>::getDotRepresentation() const {
 	std::string res = "digraph {\n";
 
-	std::map<unsigned, Location<Number>*> locIds;
 	for(const auto loc : mLocations) {
 		res += loc->getDotRepresentation(mVariables);
 	}
@@ -176,10 +186,8 @@ std::string HybridAutomaton<Number,State>::getDotRepresentation() const {
 	return res;
 }
 
-
 template<typename Number, typename State>
 void HybridAutomaton<Number,State>::decompose(std::vector<std::vector<size_t>> decomposition){
-
 	// decompose locations (flow (affine trafo) and invariant(condition))
     for(auto location : mLocations){
     	location->decompose(decomposition);
@@ -193,7 +201,7 @@ void HybridAutomaton<Number,State>::decompose(std::vector<std::vector<size_t>> d
 	// decompose local bad states (condition)
 	for(typename std::map<const Location<Number>*, Condition<Number>>::iterator it = mLocalBadStates.begin(); it != mLocalBadStates.end(); ++it){
 		it->second.decompose(decomposition);
-	}			
+	}
 
 	// decompose global bad states (conditions)
 	for(typename std::vector<Condition<Number>>::iterator it = mGlobalBadStates.begin(); it != mGlobalBadStates.end(); ++it){
@@ -206,33 +214,13 @@ void HybridAutomaton<Number,State>::decompose(std::vector<std::vector<size_t>> d
 }
 
 template<typename Number, typename State>
-void HybridAutomaton<Number,State>::decompose(std::vector<std::vector<size_t>> decomposition){
-	// decompose locations (flow (affine trafo) and invariant(condition))
-    for(auto location : mLocations){
-    	location->decompose(decomposition);
-    }
-    
-    // decompose transitions (guard and resets (both conditions))
-    for(auto transition : mTransitions){
-    	transition->decompose(decomposition);
-    }
-	
-	// decompose local bad states (condition)
-	for(typename std::map<const Location<Number>*, Condition<Number>>::iterator it = mLocalBadStates.begin(); it != mLocalBadStates.end(); ++it){
-		it->second.decompose(decomposition);
-	}			
+std::string HybridAutomaton<Number,State>::getStatistics() const {
+	std::stringstream out;
+	out << "#Locations: " << mLocations.size() << std::endl;
+	out << "#Transitions: " << mTransitions.size() << std::endl;
 
-	// decompose global bad states (conditions)
-	for(typename std::vector<Condition<Number>>::iterator it = mGlobalBadStates.begin(); it != mGlobalBadStates.end(); ++it){
-		it->decompose(decomposition);
-	}
-	
-	// decompose intial states (state sets)
-	for(typename std::multimap<const Location<Number>*, State>::iterator it = mInitialStates.begin(); it != mInitialStates.end(); ++it){
-		it->second.decompose(decomposition);
-	}
+	return out.str();
 }
-
 
 }  // namespace hydra
 

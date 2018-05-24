@@ -9,18 +9,20 @@
 	static_assert(false, "This file may only be included indirectly by GeometricObject.h");
 #endif
 
+#include "intervalMethods.h"
+#include "BoxSetting.h"
 #include "../../datastructures/Halfspace.h"
 #include "../../datastructures/Point.h"
 #include "../../util/Permutator.h"
 #include "../../util/templateDirections.h"
 #include "../../util/linearOptimization/Optimizer.h"
 #include "../../util/logging/Logger.h"
-#include "BoxSetting.h"
 #include <carl/interval/Interval.h>
 #include <cassert>
 #include <map>
 #include <set>
 #include <vector>
+#include <queue>
 
 namespace hypro {
 
@@ -270,6 +272,20 @@ class BoxT : public GeometricObject<Number, BoxT<Number,Converter,Setting>> {
 	 * @return A vector of points.
 	 */
 	std::vector<Point<Number>> vertices( const matrix_t<Number>& = matrix_t<Number>::Zero(0,0) ) const;
+
+	/**
+	 * @brief      Evaluation function (convex linear optimization).
+	 * @param[in]  _direction  The direction/cost function.
+	 * @return     Maximum towards _direction.
+	 */
+	EvaluationResult<Number> evaluate( const vector_t<Number>& _direction, bool ) const;
+
+	/**
+	 * @brief      Multi-evaluation function (convex linear optimization).
+	 * @param[in]  _directions  The directions/cost functions.
+	 * @return     A set of maxima towards the respective directions.
+	 */
+	std::vector<EvaluationResult<Number>> multiEvaluate( const matrix_t<Number>& _directions, bool useExact = true ) const;
 
 	/**
 	 * @brief Checks if two boxes are equal.

@@ -80,7 +80,7 @@ void bloatBox(State& in, const Box<Number>& bloatBox) {
 }
 
 template <typename Number, typename tNumber, typename State>
-boost::tuple<CONTAINMENT, State, matrix_t<Number>, vector_t<Number>> computeFirstSegment(const State& _state, tNumber timeStep)
+boost::tuple<CONTAINMENT, State, matrix_t<Number>, vector_t<Number>, Box<Number>> computeFirstSegment(const State& _state, tNumber timeStep)
 {
     assert(!_state.getTimestamp().isEmpty());
     // check if initial Valuation fulfills Invariant
@@ -99,7 +99,11 @@ boost::tuple<CONTAINMENT, State, matrix_t<Number>, vector_t<Number>> computeFirs
         if (_state.getLocation()->getFlow() == matrix_t<Number>::Zero(_state.getLocation()->getFlow(0).rows(), _state.getLocation()->getFlow(0).cols())) {
             // TRACE("Avoid further computation as the flow is zero." << std::endl);
             int rows =_state.getLocation()->getFlow(0).rows();
-            return boost::tuple<CONTAINMENT, State, matrix_t<Number>, vector_t<Number>>(initialPair.first, initialPair.second, matrix_t<Number>::Identity(rows,rows), vector_t<Number>::Zero(rows));
+            std::cout << "Attention, external input not yet captured in locations with no flow." << std::endl;
+            unsigned dimension = initialPair.second.getDimension(0);
+            Box<Number> externalInputTmp(std::make_pair(Point<Number>(vector_t<Number>::Zero(dimension+1)),
+                                                        Point<Number>(vector_t<Number>::Zero(dimension+1))));
+            return boost::tuple<CONTAINMENT, State, matrix_t<Number>, vector_t<Number>, Box<Number>>(initialPair.first, initialPair.second, matrix_t<Number>::Identity(rows,rows), vector_t<Number>::Zero(rows), externalInputTmp);
         }
 
         // approximate R_[0,delta](X0)
@@ -128,16 +132,19 @@ boost::tuple<CONTAINMENT, State, matrix_t<Number>, vector_t<Number>> computeFirs
 
         State firstSegment(_state.getLocation());
         unsigned dimension = initialPair.second.getDimension(0);
-        // vector_t<Number> lower = vector_t<Number>::Zero(dimension+1);
-        // vector_t<Number> upper = vector_t<Number>::Zero(dimension+1);
-        // lower.block(0,0,dimension,1) = _state.getLocation()->getExternalInput().min().rawCoordinates();
-        // upper.block(0,0,dimension,1) = _state.getLocation()->getExternalInput().max().rawCoordinates();
-		// Box<Number> externalInput(std::make_pair(Point<Number>(lower), Point<Number>(upper)));
 
-        Box<Number> externalInput(std::make_pair(Point<Number>(vector_t<Number>::Zero(dimension+1)),
+        std::vector<Box<Number>> errorBoxVector;
+
+        if(_state.getLocation()->getExternalInput().empty()) {
+        	Box<Number> externalInputTmp(std::make_pair(Point<Number>(vector_t<Number>::Zero(dimension+1)),
                                                         Point<Number>(vector_t<Number>::Zero(dimension+1))));
-        std::vector<Box<Number>> errorBoxVector =
-              errorBoxes(carl::convert<tNumber,Number>(timeStep), _state.getLocation()->getFlow(), initialPair.second, trafoMatrix, externalInput);
+        	errorBoxVector = errorBoxes(carl::convert<tNumber,Number>(timeStep), _state.getLocation()->getFlow(), initialPair.second, trafoMatrix, externalInputTmp);
+        } else {
+        	//std::cout << "Model has external input: " << _state.getLocation()->getExternalInput() << std::endl;
+        	errorBoxVector = errorBoxes(carl::convert<tNumber,Number>(timeStep), _state.getLocation()->getFlow(), initialPair.second, trafoMatrix, _state.getLocation()->getExternalInput());
+        }
+
+
 
         firstSegment = deltaValuation.unite(initialPair.second);
 
@@ -160,7 +167,7 @@ boost::tuple<CONTAINMENT, State, matrix_t<Number>, vector_t<Number>> computeFirs
             TRACE("hypro.reachability", "first Flowpipe Segment (after minkowski Sum): " << firstSegment);
             #endif
         } else {
-            return boost::tuple<CONTAINMENT, State, matrix_t<Number>, vector_t<Number>>(CONTAINMENT::NO);
+            return boost::tuple<CONTAINMENT, State, matrix_t<Number>, vector_t<Number>, Box<Number>>(CONTAINMENT::NO);
         }
 
 // (use_reduce_memory==true) apply clustering and reduction on segments for memory reduction
@@ -227,14 +234,14 @@ boost::tuple<CONTAINMENT, State, matrix_t<Number>, vector_t<Number>> computeFirs
 
         	assert(fullSegment.second.getLocation() != nullptr);
 
-            return boost::tuple<CONTAINMENT, State, matrix_t<Number>, vector_t<Number>>(fullSegment.first, fullSegment.second, trafoMatrixResized,
-                                                                                                       translation);
+            return boost::tuple<CONTAINMENT, State, matrix_t<Number>, vector_t<Number>, Box<Number>>(fullSegment.first, fullSegment.second, trafoMatrixResized,
+                                                                                                       translation, errorBoxVector[1]);
         } else {
-            return boost::tuple<CONTAINMENT, State, matrix_t<Number>, vector_t<Number>>(CONTAINMENT::NO);
+            return boost::tuple<CONTAINMENT, State, matrix_t<Number>, vector_t<Number>, Box<Number>>(CONTAINMENT::NO);
         }
     }  // if set does not satisfy the invariant, return false
     else {
-        return boost::tuple<CONTAINMENT, State, matrix_t<Number>, vector_t<Number>>(CONTAINMENT::NO);
+        return boost::tuple<CONTAINMENT, State, matrix_t<Number>, vector_t<Number>, Box<Number>>(CONTAINMENT::NO);
     }
 }
 

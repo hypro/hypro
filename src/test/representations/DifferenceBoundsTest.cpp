@@ -220,17 +220,15 @@ TYPED_TEST(DifferenceBoundsTest, Reset)
 
     DifferenceBounds<TypeParam> res = dbm.reset(1, TypeParam(0)); // reset x to 0
     //( 0, <= )( 0, <= )( -4, <= )
-    //( 0, <= )( 9, <= )( -4, <= )
+    //( 0, <= )( 0, <= )( -4, <= )
     //( 11, <= )( 11, <= )( 0, <= )
-
-
 
     EXPECT_EQ(res.getDBM()(0,0),typename DifferenceBounds<TypeParam>::DBMEntry(TypeParam(0),DifferenceBounds<TypeParam>::BOUND_TYPE::SMALLER_EQ));
     EXPECT_EQ(res.getDBM()(0,1),typename DifferenceBounds<TypeParam>::DBMEntry(TypeParam(0),DifferenceBounds<TypeParam>::BOUND_TYPE::SMALLER_EQ));
     EXPECT_EQ(res.getDBM()(0,2),typename DifferenceBounds<TypeParam>::DBMEntry(TypeParam(-4),DifferenceBounds<TypeParam>::BOUND_TYPE::SMALLER_EQ));
 
     EXPECT_EQ(res.getDBM()(1,0),typename DifferenceBounds<TypeParam>::DBMEntry(TypeParam(0),DifferenceBounds<TypeParam>::BOUND_TYPE::SMALLER_EQ));
-    EXPECT_EQ(res.getDBM()(1,1),typename DifferenceBounds<TypeParam>::DBMEntry(TypeParam(9),DifferenceBounds<TypeParam>::BOUND_TYPE::SMALLER_EQ));
+    EXPECT_EQ(res.getDBM()(1,1),typename DifferenceBounds<TypeParam>::DBMEntry(TypeParam(0),DifferenceBounds<TypeParam>::BOUND_TYPE::SMALLER_EQ));
     EXPECT_EQ(res.getDBM()(1,2),typename DifferenceBounds<TypeParam>::DBMEntry(TypeParam(-4),DifferenceBounds<TypeParam>::BOUND_TYPE::SMALLER_EQ));
 
     EXPECT_EQ(res.getDBM()(2,0),typename DifferenceBounds<TypeParam>::DBMEntry(TypeParam(11),DifferenceBounds<TypeParam>::BOUND_TYPE::SMALLER_EQ));
@@ -301,6 +299,8 @@ TYPED_TEST(DifferenceBoundsTest, Empty)
     DifferenceBounds<TypeParam> dbm = DifferenceBounds<TypeParam>();
     dbm.setDBM(this->mat);
     dbm.setTimeHorizon(TypeParam(20));
+
+    //std::cout << "DBM: " << std::endl << dbm << std::endl;
 
     EXPECT_FALSE(dbm.empty());
 

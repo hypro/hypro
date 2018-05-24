@@ -7,6 +7,7 @@
 
 #include "../../config.h"
 #include "util.h"
+#include "helperMethods.h"
 #include "SupportFunctionSetting.h"
 #include "SupportFunctionContent.h"
 #include "../../util/templateDirections.h"
@@ -22,6 +23,8 @@ namespace hypro {
 template <typename Number, typename Converter>
 class SupportFunctionT : public GeometricObject<Number, SupportFunctionT<Number,Converter>> {
 private:
+
+
 	std::shared_ptr<SupportFunctionContent<Number>> content;
 
 	mutable matrix_t<Number> mMatrix;
@@ -39,6 +42,7 @@ public:
 	SupportFunctionT (const std::vector<Halfspace<Number>>& _planes);
 	SupportFunctionT (SupportFunctionT<Number,Converter>&& other);
 	SupportFunctionT (const matrix_t<Number>& _shapeMatrix);
+	SupportFunctionT (const std::vector<carl::Interval<Number>>& inBox );
 
 	virtual ~SupportFunctionT();
 

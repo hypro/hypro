@@ -6,14 +6,14 @@
 
 #include <random>
 #include "../../hypro/datastructures/Point.h"
-#include "../../hypro/util/types.h"
+#include "../../hypro/datastructures/Halfspace.h"
+#include "../../hypro/representations/types.h"
+#include "../../hypro/types.h"
 
 namespace hypro {
-	template<typename Representation>
+	template<typename Representation, typename Number>
 	 class ObjectGenerator {
 	private:
-		typedef typename Representation::type Number;
-
 		BenchmarkSetup<Number> mSetup;
 		mutable std::mt19937 mRand;
 		mutable std::uniform_real_distribution<double> mDistr;
@@ -30,7 +30,7 @@ namespace hypro {
 
 		Representation createSet(BenchmarkSetup<Number> _setup) const{
 			std::vector<Point<Number>> pointVector;
-			std::uniform_real_distribution<double> distr (double(_setup.minValue), double(_setup.maxValue));
+			std::uniform_real_distribution<double> distr (carl::toDouble(_setup.minValue), carl::toDouble(_setup.maxValue));
 			for(unsigned i = 0; i < _setup.vertices; ++i) {
 				vector_t<Number> coordinates(_setup.dimension);
 				for(unsigned j = 0; j < _setup.dimension; ++j) {
@@ -43,7 +43,7 @@ namespace hypro {
 		}
 
 		vector_t<Number> createVector(BenchmarkSetup<Number> _setup) const{
-			std::uniform_real_distribution<double> distr (double(_setup.minValue), double(_setup.maxValue));
+			std::uniform_real_distribution<double> distr (carl::toDouble(_setup.minValue), carl::toDouble(_setup.maxValue));
 			vector_t<Number> coordinates(_setup.dimension);
 			for(unsigned j = 0; j < _setup.dimension; ++j) {
 				coordinates(j) = Number(distr(mRand));
@@ -66,17 +66,38 @@ namespace hypro {
 			return res;
 		}
 
+		Halfspace<Number> createLimitedHalfspace(BenchmarkSetup<Number> _setup, Representation& rep) const {	
+			if(Representation::type() == hypro::representation_name::box ){
+				//Generate normal
+				vector_t<Number> normal = (createVector(_setup));
+				//normal.normalize();
+				//Generate point inside box
+				vector_t<Number> p = vector_t<Number>::Zero(rep.dimension());
+				for(unsigned i = 0; i < rep.dimension(); i++){
+					std::uniform_real_distribution<double> distr (carl::toDouble(rep.min().at(i)), carl::toDouble(rep.max().at(i)));
+					p(i) = Number(distr(mRand));
+				}
+				//Compute halfplane distance
+				Number offset = normal.dot(p);
+				//Generate halfspace
+				return Halfspace<Number>(normal, offset);
+			} else {
+				assert(false && "creating limited halfspaces not implemented yet for other types");
+				return Halfspace<Number>();
+			}	
+		}
+
 	private:
 	 };
 
-	template<typename Representation>
+	template<typename Representation, typename Number>
 	struct BaseGenerator {
 	protected:
-	 	BenchmarkSetup<typename Representation::type> mSetup;
-	 	ObjectGenerator<Representation> mGenerator;
+	 	BenchmarkSetup<Number> mSetup;
+	 	ObjectGenerator<Representation,Number> mGenerator;
 	 public:
 	 	typedef void type;
-	 	BaseGenerator(const BenchmarkSetup<typename Representation::type>& _setup) : mSetup(_setup), mGenerator(_setup) {}
+	 	BaseGenerator(const BenchmarkSetup<Number>& _setup) : mSetup(_setup), mGenerator(_setup) {}
 	 	void operator()() const {}
 	 };
 } // namespace

@@ -85,18 +85,20 @@ namespace hypro {
             for(int j = 0; j < i; j++){
                 // if straight upper bound
                 if(j==0){
-                    if(m_dbm(i,j) <  m_dbm(j,i)){
-                         m_dbm(0,0).first = -1.0;
+                    if(m_dbm(i,j) < DBMEntry(-m_dbm(j,i).first,m_dbm(j,i).second)){ // Note: I've changed to -m_dbm(j,i).
+                    	//std::cout << i << ", "<< j << ": 0-Clock entry." << std::endl;
+                        m_dbm(0,0).first = -1.0;
                         return true;
                     }
-                } 
+                }
                 else{
-                    //diagonal bound 
-                    if(m_dbm(i,j) >  m_dbm(j,i)){
-                         m_dbm(0,0).first = -1.0;
+                    //diagonal bound
+                    if(m_dbm(i,j) <  DBMEntry(-m_dbm(j,i).first,m_dbm(j,i).second)){ // Note: I've changed to -m_dbm(j,i).
+                    	//std::cout << i << ", "<< j << ": regular entry." << std::endl;
+                        m_dbm(0,0).first = -1.0;
                         return true;
                     }
-                }  
+                }
 
             }
         }
@@ -155,7 +157,7 @@ namespace hypro {
 
     template <typename Number, typename Converter, class Setting>
     DifferenceBoundsT<Number,Converter, Setting> DifferenceBoundsT<Number, Converter, Setting>::project(const std::vector<std::size_t>& dimensions) const{
-        
+
         if((unsigned) dimensions.size()+1 == m_dbm.rows()){
             // if the dimensions to plot to are as large as our dbm, we are already done
             return hypro::DifferenceBoundsT<Number,Converter, Setting>(*this);
@@ -396,7 +398,7 @@ namespace hypro {
 
             // d_ix = d_ix + (-offset, <=)
             mat(0, clock) = m_dbm(0, clock) + DBMEntry(-offset, BOUND_TYPE::SMALLER_EQ);
-            
+
             //d_x0 = max(d_x0, (0, <=))
             mat(clock, 0) = DBMEntry::max(mat(clock,0), DBMEntry(0, BOUND_TYPE::SMALLER_EQ));
             //d_0x = min(d_0x, (0, <=))
@@ -455,7 +457,7 @@ namespace hypro {
                         if(firstEntry < mat(i,j) && !(firstEntry < DBMEntry(0.0, BOUND_TYPE::SMALLER_EQ) && firstEntry > DBMEntry(-0.00000001, BOUND_TYPE::SMALLER_EQ))){
                             mat(i,j) = firstEntry;
                         }
-                        DBMEntry secondEntry = mat(i,y)+mat(y,j); 
+                        DBMEntry secondEntry = mat(i,y)+mat(y,j);
                         if(secondEntry< mat(i,j) && !(secondEntry < DBMEntry(0.0, BOUND_TYPE::SMALLER_EQ) && secondEntry > DBMEntry(-0.00000001, BOUND_TYPE::SMALLER_EQ))){
                             mat(i,j) = secondEntry;
                         }
@@ -488,13 +490,13 @@ namespace hypro {
 
             // index found
             if(var != -1){
-                
+
                 if(constraint(0,var) == 1.0){
-                    // cut with x-0 <= c 
+                    // cut with x-0 <= c
                     dbm = dbm.intersectConstraint(var+1,0,hypro::DifferenceBoundsT<Number, Converter, Setting>::DBMEntry(constants(i),hypro::DifferenceBoundsT<Number, Converter, Setting>::BOUND_TYPE::SMALLER_EQ));
                 }
                 else{
-                    // cut with 0-x <= c 
+                    // cut with 0-x <= c
                     dbm = dbm.intersectConstraint(0,var+1,hypro::DifferenceBoundsT<Number, Converter, Setting>::DBMEntry(constants(i),hypro::DifferenceBoundsT<Number, Converter, Setting>::BOUND_TYPE::SMALLER_EQ));
                 }
             }

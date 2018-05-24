@@ -266,14 +266,6 @@ class Transition
         mReset.decompose(decomposition);
     }
 
-     /**
-    * decomposes guard  and reset of this transition.
-    */
-    void decompose(std::vector<std::vector<size_t>> decomposition){
-        mGuard.decompose(decomposition);
-        mReset.decompose(decomposition);
-    }
-
     /**
      * @brief      Outstream operator.
      * @param      ostr  The outstream.

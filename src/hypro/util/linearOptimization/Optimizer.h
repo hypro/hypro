@@ -133,6 +133,7 @@ namespace hypro {
 		#endif
 		#endif
 		// Glpk as a presolver
+		mutable std::mutex mGlpkLock;
 		mutable std::map<std::thread::id, glpk_context> mGlpkContext;
 
 	public:
@@ -268,6 +269,7 @@ namespace hypro {
 		std::vector<std::size_t> redundantConstraints() const;
 
 	private:
+		bool hasContext(std::thread::id) const;
 		bool isSane() const;
 
 

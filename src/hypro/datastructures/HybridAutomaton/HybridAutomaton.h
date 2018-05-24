@@ -127,10 +127,11 @@ class HybridAutomaton
     /**
      * @brief Decomposes an automaton into the components
      *  defined by decomposition. The vector should contain
-     *  sets of variables that are at least syntactically 
+     *  sets of variables that are at least syntactically
      *  independet to each other.
      */
     void decompose(std::vector<std::vector<size_t>> decomposition);
+    void removeTransition(Transition<Number>* toRemove);
 
     // copy assignment operator, TODO: implement via swap
     inline HybridAutomaton& operator=(const HybridAutomaton<Number,State>& rhs) = default;
@@ -152,6 +153,8 @@ class HybridAutomaton
     bool isComposedOf(const HybridAutomaton<Number,State>& rhs) const;
 
     std::string getDotRepresentation() const;
+
+    std::string getStatistics() const;
 
     /**
      * @brief      Comparison for equality operator.
@@ -260,7 +263,7 @@ class HybridAutomaton
 			}
 		}
 
-		//std::cout << "trans" << std::endl;
+		//std::cout << "######################## TRANSITIONS ########################" << std::endl;
 		//build transisitons
 		std::set<Label> lhsLabels = lhs.getLabels();
 		std::set<Label> rhsLabels = rhs.getLabels();

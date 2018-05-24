@@ -6,7 +6,6 @@
  *
  * @author Norman Hansen
  * @author Stefan Schupp <stefan.schupp@cs.rwth-aachen.de>
- * @author Simon Froitzheim
  *
  * @version	2015-02-27
  */
@@ -234,6 +233,7 @@ Point<Number> PolytopeSupportFunction<Number,Setting>::supremumPoint() const {
 template <typename Number, class Setting>
 EvaluationResult<Number> PolytopeSupportFunction<Number,Setting>::evaluate( const vector_t<Number> &l, bool useExact ) const {
 	TRACE("hypro.representations.supportFunction", "");
+	COUNT("Polytope evaluate.");
 	// catch half-space
 	if(mConstraints.rows() == 1) {
 		//std::cout << "only one constraint! -> we evaluate against a plane!" << std::endl;

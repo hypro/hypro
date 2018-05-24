@@ -261,7 +261,8 @@ bool State<Number,tNumber,Representation,Rargs...>::contains(const State<Number,
 	assert(checkConsistency());
 	assert(rhs.getNumberSets() == this->getNumberSets());
 	for(std::size_t i=0; i < this->getNumberSets(); ++i){
-		if(!boost::apply_visitor(genericSetContainsVisitor(), this->getSet(i), rhs.getSet(i))) {
+		auto tmp = boost::apply_visitor(hypro::genericConversionVisitor<boost::variant<Representation,Rargs...>, Number>(mTypes.at(i)), rhs.getSet(i));
+		if(!boost::apply_visitor(genericSetContainsVisitor(), this->getSet(i), tmp)) {
 			return false;
 		}
 	}
@@ -416,7 +417,7 @@ void State<Number,tNumber,Representation,Rargs...>::decompose(std::vector<std::v
 			}
 
 			ConstraintSet<Number> res(finMat,finVec);
-			DEBUG("hypro.datastructures","Final decomposed ConstraintSet: \n" << res); 
+			DEBUG("hypro.datastructures","Final decomposed ConstraintSet: \n" << res);
 			setSetDirect(hypro::Converter<Number>::toConstraintSet(res),i);
 			setSetType(hypro::representation_name::constraint_set,i);
 		}
@@ -431,29 +432,19 @@ void State<Number,tNumber,Representation,Rargs...>::decompose(std::vector<std::v
 	DEBUG("hypro.datastructures", "State after decomposition: "  << *this);
 }
 
+
 template<typename Number, typename tNumber, typename Representation, typename ...Rargs>
-void State<Number,tNumber,Representation,Rargs...>::decompose(std::vector<std::vector<size_t>> decomposition){
-	if(decomposition.size() == 1 || mSets.size() != 1){
-		// no decomposition/already decomposed
-	}
+void State<Number,tNumber,Representation,Rargs...>::setAndConvertType( representation_name to, std::size_t I ){
+	assert(checkConsistency());
+	assert(I < mTypes.size());
+	// skip, if type is already correct.
+	if(mTypes[I] == to) return;
 
-	std::vector<repVariant> newSets;
+	// convert set to type
+	mSets[I] = boost::apply_visitor(genericConversionVisitor<repVariant,Number>(to), mSets[I]);
+	mTypes[I] = to;
 
-	repVariant initSet = hypro::Converter<Number>::toHPolytope(boost::get<hypro::ConstraintSet<Number>>(mSets.at(0)));
-	DEBUG("hypro.datastructures", "State before decomposition: "  << *this);
-	for(auto set : decomposition){
-		DEBUG("hypro.datastructures", "Trying to project set: \n " << mSets.at(0) << "\n to dimensions: " );
-		DEBUG("hypro.datastructures", "{");
-		for(auto entry : set){
-			DEBUG("hypro.datastructures","" <<  entry << ", ");
-		}
-		DEBUG("hypro.datastructures", "}");
-		repVariant tmp = boost::apply_visitor(genericProjectionVisitor<repVariant>(set), initSet);
-		newSets.push_back(hypro::Converter<Number>::toConstraintSet(boost::get<hypro::HPolytope<Number>>(tmp)));
-	}
-
-	setSetsSave(newSets);
-	DEBUG("hypro.datastructures", "State after decomposition: "  << *this);
+	assert(checkConsistency());
 }
 
 } // hypro

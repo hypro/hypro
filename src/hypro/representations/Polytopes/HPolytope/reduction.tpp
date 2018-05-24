@@ -22,10 +22,9 @@ namespace hypro {
 		std::vector<unsigned> subRes;
 
 		for(unsigned i=0; i<hpolytope.size(); i++){
-			if(vertexVector.dot(hpolytope.constraints().at(i).normal()) == hpolytope.constraints().at(i).offset()){
-				if(std::find(subRes.begin(), subRes.end(), i)==subRes.end()) {
-					subRes.push_back(i);
-				}
+			if(vertexVector.dot(hpolytope.constraints().at(i).normal()) == hpolytope.constraints().at(i).offset() &&
+				std::find(subRes.begin(), subRes.end(), i)==subRes.end()) {
+				subRes.push_back(i);
 			}
 		}
 		std::sort(subRes.begin(), subRes.end());
@@ -420,14 +419,13 @@ namespace hypro {
 			if(uniteValue>bestUniteValue){
 			  bestUniteIndex=std::make_pair(a,b);
 			  bestUniteValue=uniteValue;
-			  if(std::min(sizesOfFacets.at(a),sizesOfFacets.at(b))<=0.8*std::max(sizesOfFacets.at(a),sizesOfFacets.at(b))){
+			  //if(std::min(sizesOfFacets.at(a),sizesOfFacets.at(b))<=0.8*std::max(sizesOfFacets.at(a),sizesOfFacets.at(b))){
 				//unite_standard
 				bestUniteStrat= REDUCTION_STRATEGY::UNITE;
-			  }
-			  else {
+			  //} else {
 				//unite_vertices
-				bestUniteStrat= REDUCTION_STRATEGY::UNITE;
-			  }
+				//bestUniteStrat= REDUCTION_STRATEGY::UNITE;
+			  //}
 			}
 			}
 	   }

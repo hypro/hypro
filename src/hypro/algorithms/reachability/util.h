@@ -75,7 +75,8 @@ std::vector<Box<Number>> errorBoxes(const Number& delta, const matrix_t<Number>&
 	if(initialSet.isEmpty()) {
 		return std::vector<Box<Number>>{};
 	}
-    (void) externalInput;
+	assert(initialSet.getDimension() == externalInput.dimension());
+
     std::vector<Box<Number>> res;
     unsigned dim = flow.cols();
     //std::cout << "Dim: " << dim << std::endl;
@@ -142,16 +143,12 @@ std::vector<Box<Number>> errorBoxes(const Number& delta, const matrix_t<Number>&
 
     //std::cout << "External Input: " << externalInput << std::endl;
     //Box<Number> errorBoxExternalInput = externalInput.affineTransformation(flow.block(0,0,dim-1,dim-1), vector_t<Number>(flow.block(0,dim-1,dim-1,1)));
-    Box<Number> errorBoxExternalInput = externalInput.linearTransformation(flow.block(0,0,dim,dim));
+    Box<Number> errorBoxExternalInput = externalInput.linearTransformation(flow.block(0,0,dim-1,dim-1));
     //std::cout << "Errorbox first linear transformation: " << convert<Number,double>(matrix_t<Number>(flow.block(0,0,dim-1,dim-1))) << " and b: " <<
     //convert<Number,double>(vector_t<Number>(flow.block(0,dim-1,dim-1,1))) << std::endl;
     errorBoxExternalInput.makeSymmetric();
     //errorBoxExternalInput = errorBoxExternalInput.linearTransformation(matrix_t<Number>(matrixBlock.block(0,2*dim,dim-1,dim-1)));
-    errorBoxExternalInput = errorBoxExternalInput.linearTransformation(matrix_t<Number>(matrixBlock.block(0,2*dim,dim,dim)));
-
-    Box<Number> differenceBox(errorBoxX0.minkowskiDecomposition(errorBoxExternalInput));
-    assert(!externalInput.empty() || errorBoxX0 == differenceBox);
-
+    errorBoxExternalInput = errorBoxExternalInput.linearTransformation(matrix_t<Number>(matrixBlock.block(0,2*dim,dim-1,dim-1)));
 
     // projection to remove augmented dimension.
     std::vector<std::size_t> projectionDimensions;
@@ -159,9 +156,14 @@ std::vector<Box<Number>> errorBoxes(const Number& delta, const matrix_t<Number>&
         projectionDimensions.push_back(i);
     }
 
-    res.emplace_back(errorBoxX0.project(projectionDimensions));
-    res.emplace_back(errorBoxExternalInput.project(projectionDimensions));
-    res.emplace_back(differenceBox.project(projectionDimensions));
+    errorBoxX0 = errorBoxX0.project(projectionDimensions);
+
+    Box<Number> differenceBox(errorBoxX0.minkowskiDecomposition(errorBoxExternalInput));
+    assert(!externalInput.empty() || errorBoxX0 == differenceBox);
+
+    res.emplace_back(errorBoxX0);
+    res.emplace_back(errorBoxExternalInput);
+    res.emplace_back(differenceBox);
 
     return res;
 }

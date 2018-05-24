@@ -57,6 +57,7 @@ SupportFunctionContent<Number>::SupportFunctionContent( const SupportFunctionCon
 		case SF_TYPE::NONE: {
 			std::cout << __func__ << ": SF Type not properly initialized!" << std::endl;
 			assert(false);
+			break;
 		}
 		default:
 			assert( false );
@@ -103,8 +104,26 @@ SupportFunctionContent<Number>::SupportFunctionContent( const matrix_t<Number> &
 										  SF_TYPE _type ) {
 	switch ( _type ) {
 		case SF_TYPE::POLY: {
-			mPolytope = new PolytopeSupportFunction<Number,PolytopeSupportFunctionSetting>( _directions, _distances );
-			mType = SF_TYPE::POLY;
+			boost::tuple<bool,std::vector<carl::Interval<Number>>> intervals = isBox(_directions,_distances);
+
+			if(boost::get<0>(intervals)) {
+				mBox = new BoxSupportFunction<Number>(boost::get<1>(intervals));
+				mType = SF_TYPE::BOX;
+				//std::cout << "IS A BOX!" << std::endl;
+			} else {
+				mPolytope = new PolytopeSupportFunction<Number,PolytopeSupportFunctionSetting>( _directions, _distances );
+				mType = SF_TYPE::POLY;
+			}
+			mDimension = std::size_t(_directions.cols());
+			mDepth = 0;
+			mOperationCount = 0;
+			break;
+		}
+		case SF_TYPE::BOX: {
+			boost::tuple<bool,std::vector<carl::Interval<Number>>> intervals = isBox(_directions,_distances);
+			assert(boost::get<0>(intervals));
+			mBox = new BoxSupportFunction<Number>(boost::get<1>(intervals));
+			mType = SF_TYPE::BOX;
 			mDimension = std::size_t(_directions.cols());
 			mDepth = 0;
 			mOperationCount = 0;
@@ -138,6 +157,22 @@ SupportFunctionContent<Number>::SupportFunctionContent( const std::vector<Point<
 			mPolytope = new PolytopeSupportFunction<Number,PolytopeSupportFunctionSetting>( _points );
 			mType = SF_TYPE::POLY;
 			mDimension = polytope()->dimension();
+			mDepth = 0;
+			mOperationCount = 0;
+			break;
+		}
+		default:
+			assert( false );
+	}
+}
+
+template<typename Number>
+SupportFunctionContent<Number>::SupportFunctionContent( const std::vector<carl::Interval<Number>>& _inbox, SF_TYPE _type ) {
+	switch ( _type ) {
+		case SF_TYPE::BOX: {
+			mBox = new BoxSupportFunction<Number>( _inbox );
+			mType = SF_TYPE::BOX;
+			mDimension = box()->dimension();
 			mDepth = 0;
 			mOperationCount = 0;
 			break;
@@ -289,6 +324,9 @@ SupportFunctionContent<Number>::~SupportFunctionContent() {
 		case SF_TYPE::POLY:
 			delete mPolytope;
 			break;
+		case SF_TYPE::BOX:
+			delete mBox;
+			break;
 		case SF_TYPE::PROJECTION:
 			delete mProjectionParameters;
 			break;
@@ -310,6 +348,7 @@ SupportFunctionContent<Number>::~SupportFunctionContent() {
 		case SF_TYPE::NONE: {
 			std::cout << __func__ << ": SF Type not properly initialized!" << std::endl;
 			assert(false);
+			break;
 		}
 		default:
 			assert(false);
@@ -339,6 +378,10 @@ std::shared_ptr<SupportFunctionContent<Number>>& SupportFunctionContent<Number>:
 			// explicitly invoke copy constructor to avoid pointer copy
 			mPolytope = new PolytopeSupportFunction<Number,PolytopeSupportFunctionSetting>(*_other->polytope());
 			break;
+		case SF_TYPE::BOX:
+			// explicitly invoke copy constructor to avoid pointer copy
+			mBox = new BoxSupportFunction<Number>(*_other->polytope());
+			break;
 		case SF_TYPE::PROJECTION:
 			mProjectionParameters = new projectionContent<Number>(*_other->projectionParameters());
 			break;
@@ -357,6 +400,7 @@ std::shared_ptr<SupportFunctionContent<Number>>& SupportFunctionContent<Number>:
 		case SF_TYPE::NONE: {
 			std::cout << __func__ << ": SF Type not properly initialized!" << std::endl;
 			assert(false);
+			break;
 		}
 		default:
 			assert( false );
@@ -370,310 +414,6 @@ EvaluationResult<Number> SupportFunctionContent<Number>::evaluate( const vector_
 	matrix_t<Number> tmp = matrix_t<Number>::Zero(1,_direction.rows());
 	tmp << _direction.transpose();
 	return multiEvaluate(tmp,useExact).at(0);
-
-	/*
-	assert(checkTreeValidity());
-
-	using Node = std::shared_ptr<SupportFunctionContent<Number>>;
-	using Param = vector_t<Number>;
-	using Res = EvaluationResult<Number>;
-
-	std::vector<Node> callStack;
-	std::vector<Param> paramStack;
-	std::vector<std::pair<int,std::vector<Res>>> resultStack; // The first value is an iterator to the calling frame
-
-	callStack.push_back(getThis());
-	paramStack.push_back(_direction);
-	resultStack.push_back(std::make_pair(-1, std::vector<Res>()));
-
-	while(!callStack.empty()) {
-		Node cur = callStack.back();
-		Param currentParam = paramStack.back();
-
-		if(cur->originCount() == 0) {
-			// Do computation and write results in case recursion ends.
-
-			std::pair<int,std::vector<Res>> currentResult = resultStack.back();
-
-			// update result
-			// special case: When the node is a leaf, we directly return the result.
-			if(currentResult.first == -1) {
-				// we reached the top, exit (or return result or whatever)
-				switch ( cur->type() ) {
-					case SF_TYPE::ELLIPSOID: {
-						return ellipsoid()->evaluate( currentParam );
-					}
-					case SF_TYPE::INFTY_BALL:
-					case SF_TYPE::TWO_BALL: {
-						return ball()->evaluate( currentParam );
-					}
-					case SF_TYPE::POLY: {
-						return polytope()->evaluate( currentParam, useExact );
-					}
-					default:
-						assert(false);
-						FATAL("hypro.representations.supportFunction","Wrong type.");
-				}
-			} else {
-				switch ( cur->type() ) {
-					case SF_TYPE::ELLIPSOID: {
-						resultStack.at(currentResult.first).second.push_back(cur->ellipsoid()->evaluate( currentParam ));
-						break;
-					}
-					case SF_TYPE::INFTY_BALL:
-					case SF_TYPE::TWO_BALL: {
-						resultStack.at(currentResult.first).second.push_back(cur->ball()->evaluate( currentParam ));
-						break;
-					}
-					case SF_TYPE::POLY: {
-						resultStack.at(currentResult.first).second.push_back(cur->polytope()->evaluate( currentParam, useExact ));
-						break;
-					}
-					default:
-						assert(false);
-						FATAL("hypro.representations.supportFunction","Wrong type.");
-				}
-			}
-
-			// leave recursive call.
-			callStack.pop_back();
-			paramStack.pop_back();
-			resultStack.pop_back();
-
-		} else {
-
-			// Detect, if this call is finished or new.
-			if(resultStack.back().second.size() == cur->originCount()) {
-				// the call is finished, perform accumulating operations and forward result.
-
-				// accumulate results - in this case sum.
-				Res accumulatedResult;
-				switch( cur->type() ) {
-					case SF_TYPE::LINTRAFO: {
-						assert(resultStack.back().second.size() == 1);
-						std::pair<matrix_t<Number>, vector_t<Number>> parameterPair = cur->linearTrafoParameters()->parameters->getParameterSet(cur->linearTrafoParameters()->currentExponent);
-						accumulatedResult = resultStack.back().second.front();
-						switch(accumulatedResult.errorCode){
-							case SOLUTION::INFTY:
-							case SOLUTION::INFEAS:{
-								break;
-							}
-							default:{
-								//TRACE("hypro.representations.supportFunction","opt val rows: " << res.optimumValue.rows() << " and direction rows: " << _direction.rows());
-								assert(accumulatedResult.errorCode == SOLUTION::FEAS);
-								assert(accumulatedResult.optimumValue.rows() == currentParam.rows());
-								accumulatedResult.optimumValue = parameterPair.first * accumulatedResult.optimumValue + parameterPair.second;
-								assert(accumulatedResult.optimumValue.rows() == currentParam.rows());
-								// As we know, that the optimal vertex lies on the supporting hyperplane, we can obtain the distance by dot product.
-								accumulatedResult.supportValue = accumulatedResult.optimumValue.dot(currentParam);
-							}
-						}
-						break;
-					}
-					case SF_TYPE::PROJECTION: {
-						assert(resultStack.back().second.size() == 1);
-						// simply forward the results
-						accumulatedResult = resultStack.back().second.front();
-						break;
-					}
-					case SF_TYPE::SCALE: {
-						assert(resultStack.back().second.size() == 1);
-						accumulatedResult = resultStack.back().second.front();
-						accumulatedResult.optimumValue *= scaleParameters()->factor;
-						accumulatedResult.supportValue *= scaleParameters()->factor;
-						break;
-					}
-					case SF_TYPE::SUM: {
-						assert( resultStack.back().second.size() == 2);
-						Res& resA = resultStack.back().second.at(0);
-						Res& resB = resultStack.back().second.at(1);
-						accumulatedResult = resA;
-						if(resB.errorCode == SOLUTION::INFEAS || resB.errorCode == SOLUTION::INFTY){
-							accumulatedResult = resB;
-							break;
-						} else {
-							if(resA.errorCode != SOLUTION::INFEAS && resA.errorCode != SOLUTION::INFTY) {
-								accumulatedResult.optimumValue += resB.optimumValue;
-								accumulatedResult.supportValue += resB.supportValue;
-							}
-						}
-						break;
-					}
-					case SF_TYPE::UNITE: {
-						assert(resultStack.back().second.size() > 0);
-						assert(resultStack.back().second.size() == cur->unionParameters()->items.size());
-						accumulatedResult = resultStack.back().second.front();
-
-						if(accumulatedResult.errorCode == SOLUTION::INFEAS) {
-							break;
-						} else if(accumulatedResult.errorCode == SOLUTION::INFTY) {
-							accumulatedResult.supportValue = 1;
-							break;
-						} else {
-							for(auto resIt = resultStack.back().second.begin(); resIt != resultStack.back().second.end(); ++resIt) {
-								if(resIt->errorCode == SOLUTION::INFEAS) {
-									accumulatedResult = *resIt;
-									break;
-								} else if(resIt->errorCode == SOLUTION::INFTY) {
-									resIt->supportValue = 1;
-									break;
-								} else {
-									accumulatedResult = accumulatedResult > *resIt ? accumulatedResult : *resIt;
-								}
-							}
-							assert(accumulatedResult.errorCode == SOLUTION::FEAS);
-						}
-						break;
-					}
-					case SF_TYPE::INTERSECT: {
-						assert(resultStack.back().second.size() == 2);
-						Res& resA = resultStack.back().second.at(0);
-						Res& resB = resultStack.back().second.at(1);
-
-						// easy checks for infeasibility and unboundedness first
-						if(resA.errorCode == SOLUTION::INFEAS){
-							accumulatedResult = resA;
-							break;
-						} else if(resB.errorCode == SOLUTION::INFEAS){
-							accumulatedResult = resB;
-							break;
-						}
-						assert(resA.errorCode != SOLUTION::INFEAS && resB.errorCode != SOLUTION::INFEAS);
-						if(resA.errorCode == SOLUTION::INFTY){
-							accumulatedResult = resB;
-							break;
-						} else if(resB.errorCode == SOLUTION::INFTY){
-							accumulatedResult = resA;
-							break;
-						}
-						// complete checks -> real containment TODO!!
-						assert(resA.errorCode == SOLUTION::FEAS && resB.errorCode == SOLUTION::FEAS);
-						accumulatedResult = resA.supportValue <= resB.supportValue ? resA : resB;
-						break;
-					}
-					case SF_TYPE::NONE: {
-						std::cout << __func__ << ": SF Type not properly initialized!" << std::endl;
-						assert(false);
-						break;
-					}
-					default:{
-						assert(false);
-						return EvaluationResult<Number>();
-					}
-				}
-
-				if(resultStack.back().first == -1) {
-					// we reached the top, exit
-					TRACE("hypro.representations.supportFunction","Direction: " << _direction << ", result: " << accumulatedResult);
-					return accumulatedResult;
-				}
-
-				// forward result.
-
-				resultStack.at(resultStack.back().first).second.push_back(accumulatedResult);
-
-				// delete result frame and close recursive call
-				callStack.pop_back();
-				paramStack.pop_back();
-				resultStack.pop_back();
-
-			} else {
-				// this is the branch for calling recursively
-
-				// here we create the new stack levels.
-				std::size_t callingFrame = callStack.size() - 1 ;
-				// Do some parameter transformation, i.e. create passed parameters
-				switch( cur->type() ) {
-					case SF_TYPE::ELLIPSOID:
-					case SF_TYPE::INFTY_BALL:
-					case SF_TYPE::POLY:
-					case SF_TYPE::TWO_BALL: {
-						assert(false);
-						FATAL("hypro.representations.supportFunction","Leaf node cannot be an intermediate case.");
-						break;
-					}
-					case SF_TYPE::LINTRAFO: {
-						std::pair<matrix_t<Number>, vector_t<Number>> parameterPair = cur->linearTrafoParameters()->parameters->getParameterSet(cur->linearTrafoParameters()->currentExponent);
-						#ifndef HYPRO_USE_VECTOR_CACHING
-						matrix_t<Number> tmp = parameterPair.first.transpose();
-						currentParam = tmp * _direction;
-						#else
-						currentParam = cur->linearTrafoParameters()->parameters->getTransformedDirection(currentParam, cur->linearTrafoParameters()->currentExponent);
-						#endif
-						callStack.push_back(cur->linearTrafoParameters()->origin);
-						paramStack.push_back(currentParam);
-						resultStack.push_back(std::make_pair(callingFrame,std::vector<Res>()));
-						break;
-					}
-					case SF_TYPE::PROJECTION: {
-						vector_t<Number> projectedDirection = vector_t<Number>::Zero(mDimension);
-						// reduce evaluation to projection dimensions
-						int entryIndex = 0;
-						for(const auto& projectionDimension : cur->projectionParameters()->dimensions) {
-							if(projectionDimension < cur->dimension()){
-								projectedDirection(entryIndex) = currentParam(projectionDimension);
-								++entryIndex;
-							}
-						}
-						currentParam = projectedDirection;
-						callStack.push_back(cur->projectionParameters()->origin);
-						paramStack.push_back(currentParam);
-						resultStack.push_back(std::make_pair(callingFrame,std::vector<Res>()));
-						break;
-					}
-					case SF_TYPE::SCALE: {
-						// Do nothing for scaling -> processing is done afterwards.
-						callStack.push_back(cur->scaleParameters()->origin);
-						paramStack.push_back(currentParam);
-						resultStack.push_back(std::make_pair(callingFrame,std::vector<Res>()));
-						break;
-					}
-					case SF_TYPE::SUM: {
-						// Do nothing for sum -> processing is done afterwards.
-						callStack.push_back(cur->summands()->rhs);
-						callStack.push_back(cur->summands()->lhs);
-						paramStack.push_back(currentParam);
-						paramStack.push_back(currentParam);
-						resultStack.push_back(std::make_pair(callingFrame,std::vector<Res>()));
-						resultStack.push_back(std::make_pair(callingFrame,std::vector<Res>()));
-						break;
-					}
-					case SF_TYPE::UNITE: {
-						// Do nothing for union -> processing is done afterwards.
-						for(unsigned i = 0; i < cur->unionParameters()->items.size(); ++i) {
-							callStack.push_back(cur->unionParameters()->items.at(i));
-							paramStack.push_back(currentParam);
-							resultStack.push_back(std::make_pair(callingFrame,std::vector<Res>()));
-						}
-						break;
-					}
-					case SF_TYPE::INTERSECT: {
-						// Do nothing for intersection -> processing is done afterwards.
-						callStack.push_back(cur->intersectionParameters()->rhs);
-						callStack.push_back(cur->intersectionParameters()->lhs);
-						paramStack.push_back(currentParam);
-						paramStack.push_back(currentParam);
-						resultStack.push_back(std::make_pair(callingFrame,std::vector<Res>()));
-						resultStack.push_back(std::make_pair(callingFrame,std::vector<Res>()));
-						break;
-					}
-					case SF_TYPE::NONE: {
-						std::cout << __func__ << ": SF Type not properly initialized!" << std::endl;
-						assert(false);
-						break;
-					}
-					default:{
-						assert(false);
-						return EvaluationResult<Number>();
-					}
-				}
-			}
-		}
-	}
-	assert(false);
-	std::cout << "THIS SHOULD NOT HAPPEN." << std::endl;
-	return EvaluationResult<Number>();
-	*/
 }
 
 template <typename Number>
@@ -717,6 +457,9 @@ std::vector<EvaluationResult<Number>> SupportFunctionContent<Number>::multiEvalu
 					case SF_TYPE::POLY: {
 						return polytope()->multiEvaluate( currentParam, useExact );
 					}
+					case SF_TYPE::BOX: {
+						return box()->multiEvaluate( currentParam, useExact );
+					}
 					default:
 						assert(false);
 						FATAL("hypro.representations.supportFunction","Wrong type.");
@@ -734,6 +477,10 @@ std::vector<EvaluationResult<Number>> SupportFunctionContent<Number>::multiEvalu
 					}
 					case SF_TYPE::POLY: {
 						resultStack.at(currentResult.first).second.emplace_back(cur->polytope()->multiEvaluate( currentParam, useExact ));
+						break;
+					}
+					case SF_TYPE::BOX: {
+						resultStack.at(currentResult.first).second.emplace_back(cur->box()->multiEvaluate( currentParam, useExact ));
 						break;
 					}
 					default:
@@ -767,7 +514,6 @@ std::vector<EvaluationResult<Number>> SupportFunctionContent<Number>::multiEvalu
 							for(auto& entry : resultStack.back().second.front()) {
 								vector_t<Number> currentDir(currentParam.row(directionCnt));
 								if(entry.errorCode == SOLUTION::INFTY) {
-									entry.optimumValue = entry.optimumValue;
 									entry.supportValue = 1;
 								} else {
 									//TRACE("hypro.representations.supportFunction", ": Entry val before trafo: " << entry.optimumValue);
@@ -944,6 +690,7 @@ std::vector<EvaluationResult<Number>> SupportFunctionContent<Number>::multiEvalu
 					case SF_TYPE::ELLIPSOID:
 					case SF_TYPE::INFTY_BALL:
 					case SF_TYPE::POLY:
+					case SF_TYPE::BOX:
 					case SF_TYPE::TWO_BALL: {
 						assert(false);
 						FATAL("hypro.representations.supportFunction","Leaf node cannot be an intermediate case.");
@@ -951,11 +698,11 @@ std::vector<EvaluationResult<Number>> SupportFunctionContent<Number>::multiEvalu
 					}
 					case SF_TYPE::LINTRAFO: {
 						callStack.push_back(cur->linearTrafoParameters()->origin);
-						#ifndef HYPRO_USE_VECTOR_CACHING
+#ifndef HYPRO_USE_VECTOR_CACHING
 						paramStack.push_back(currentParam * cur->linearTrafoParameters()->parameters->getParameterSet(cur->linearTrafoParameters()->currentExponent).first);
-						#else
+#else
 						paramStack.push_back(cur->linearTrafoParameters()->parameters->getTransformedDirections(currentParam, cur->linearTrafoParameters()->currentExponent));
-						#endif
+#endif
 						resultStack.emplace_back(std::make_pair(callingFrame,std::vector<Res>()));
 						break;
 					}
@@ -1081,6 +828,7 @@ unsigned SupportFunctionContent<Number>::multiplicationsPerEvaluation() const {
 			switch(cur->type()) {
 				case SF_TYPE::INFTY_BALL:
 				case SF_TYPE::TWO_BALL:
+				case SF_TYPE::BOX:
 				case SF_TYPE::ELLIPSOID: {
 		            resultStack.at(currentResult.first).second.push_back(1);
 		            break;
@@ -1262,6 +1010,7 @@ void SupportFunctionContent<Number>::forceLinTransReduction(){
         case SF_TYPE::NONE: {
 			std::cout << __func__ << ": SF Type not properly initialized!" << std::endl;
 			assert(false);
+			break;
 		}
         default:
             break;
@@ -1288,6 +1037,9 @@ Point<Number> SupportFunctionContent<Number>::supremumPoint() const {
 		}
 		case SF_TYPE::POLY: {
 			return polytope()->supremumPoint();
+		}
+		case SF_TYPE::BOX: {
+			return box()->supremumPoint();
 		}
 		case SF_TYPE::PROJECTION: {
 			Point<Number> tmpRes = projectionParameters()->origin->supremumPoint();
@@ -1350,8 +1102,8 @@ Point<Number> SupportFunctionContent<Number>::supremumPoint() const {
 		}
 		case SF_TYPE::NONE: {
 			std::cout << __func__ << ": SF Type not properly initialized!" << std::endl;
-			return Point<Number>();
 			assert(false);
+			return Point<Number>();
 		}
 		default:
 			assert(false);
@@ -1379,7 +1131,7 @@ std::vector<std::size_t> SupportFunctionContent<Number>::collectProjections() co
 		//T currentParam = paramStack.back();
 
 		//if(cur->children.empty()) {
-		if(cur->mType == SF_TYPE::POLY || cur->mType == SF_TYPE::INFTY_BALL || cur->mType == SF_TYPE::TWO_BALL || cur->mType == SF_TYPE::ELLIPSOID ) {
+		if(cur->mType == SF_TYPE::BOX || cur->mType == SF_TYPE::POLY || cur->mType == SF_TYPE::INFTY_BALL || cur->mType == SF_TYPE::TWO_BALL || cur->mType == SF_TYPE::ELLIPSOID ) {
 			//std::cout << "Reached bottom." << std::endl;
 			// Do computation and write results in case recursion ends.
 
@@ -1588,6 +1340,12 @@ PolytopeSupportFunction<Number,PolytopeSupportFunctionSetting> *SupportFunctionC
 }
 
 template <typename Number>
+BoxSupportFunction<Number> *SupportFunctionContent<Number>::box() const {
+	assert( mType == SF_TYPE::BOX );
+	return mBox;
+}
+
+template <typename Number>
 EllipsoidSupportFunction<Number> *SupportFunctionContent<Number>::ellipsoid() const {
 	assert( mType == SF_TYPE::ELLIPSOID );
 	return mEllipsoid;
@@ -1649,6 +1407,10 @@ bool SupportFunctionContent<Number>::contains( const vector_t<Number> &_point ) 
 		case SF_TYPE::POLY: {
 			DEBUG("hypro.representations.supportFunction","POLY, point: " << _point);
 			return polytope()->contains( _point );
+		}
+		case SF_TYPE::BOX: {
+			DEBUG("hypro.representations.supportFunction","POLY, point: " << _point);
+			return box()->contains( _point );
 		}
 		case SF_TYPE::PROJECTION: {
 			DEBUG("hypro.representations.supportFunction","PROJECTION, point: " << _point);
@@ -1738,6 +1500,9 @@ bool SupportFunctionContent<Number>::empty() const {
 		case SF_TYPE::POLY: {
 			return polytope()->empty();
 		}
+		case SF_TYPE::BOX: {
+			return box()->empty();
+		}
 		case SF_TYPE::PROJECTION: {
 			if(projectionParameters()->dimensions.empty()){
 				return true;
@@ -1807,6 +1572,7 @@ void SupportFunctionContent<Number>::cleanUp() const {
 				}
 				case SF_TYPE::INFTY_BALL:
 				case SF_TYPE::TWO_BALL:
+				case SF_TYPE::BOX:
 				case SF_TYPE::ELLIPSOID: {
 		            break;
 		        }
@@ -1873,6 +1639,9 @@ void SupportFunctionContent<Number>::print() const {
 		} break;
 		case SF_TYPE::TWO_BALL: {
 			std::cout << "2-BALL" << std::endl;
+		} break;
+		case SF_TYPE::BOX: {
+			std::cout << "BOX" << std::endl;
 		} break;
 		case SF_TYPE::LINTRAFO: {
 			std::cout << "LINTRAFO A^" << linearTrafoParameters()->currentExponent << std::endl;
