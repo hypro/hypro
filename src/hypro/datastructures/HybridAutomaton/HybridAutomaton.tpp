@@ -84,9 +84,10 @@ HybridAutomaton<Number,State>& HybridAutomaton<Number,State>::operator=(HybridAu
 }
 
 template<typename Number, typename State>
-Location<Number>* HybridAutomaton<Number,State>::getLocation(std::size_t id) const {
+Location<Number>* HybridAutomaton<Number,State>::getLocation(const std::size_t hash) const {
 	for(const auto& loc : mLocations) {
-		if(loc->getId() == id) {
+		assert(loc != nullptr);
+		if(loc->hash() == hash) {
 			return loc.get();
 		}
 	}
@@ -95,6 +96,7 @@ Location<Number>* HybridAutomaton<Number,State>::getLocation(std::size_t id) con
 
 template<typename Number, typename State>
 Location<Number>* HybridAutomaton<Number,State>::getLocation(const std::string& name) const {
+
 	for(const auto& loc : mLocations) {
 		assert(loc != nullptr);
 		if(loc->getName() == name) {

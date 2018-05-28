@@ -21,7 +21,7 @@ template<typename Number>
 class Transition;
 
 template<typename Number>
-class LocationManager;
+class [[deprecated]] LocationManager;
 
 /**
  * @brief       A enum used to determine which values have been changed after the last operation.
@@ -45,18 +45,18 @@ protected:
      * @details    Note that locations should only be constructed from the LocationManager.
      * @param[in]  id    The identifier given by the LocationManager.
      */
-    //[[deprecated]]
+    [[deprecated]]
     Location(unsigned id);
     ///@{
     /**
      * @param[in]  id    The identifier given by the LocationManager.
      * @param[loc] The original location which is copied.
      */
-    //[[deprecated]]
+    [[deprecated]]
     Location(unsigned id, const Location& loc);
-    //[[deprecated]]
+    [[deprecated]]
     Location(unsigned id, const matrix_t<Number>& mat);
-    //[[deprecated]]
+    [[deprecated]]
     Location(unsigned id, const matrix_t<Number>& mat, const transitionSet& trans, const Condition<Number>& inv);
     ///@}
 
@@ -68,11 +68,11 @@ private:
     Condition<Number> mInvariant;
     std::string mName;
     //std::vector<LocationChange> mChanges;
-    //[[deprecated]]
+    [[deprecated]]
     unsigned mId;
-    std::size_t mHash;
+    mutable std::size_t mHash = 0;
 
-    std::size_t computeHash();
+    //std::size_t computeHash();
 
 public:
   	//Location() = delete;
@@ -82,7 +82,7 @@ public:
     Location(const matrix_t<Number>& mat, const transitionSet& trans, const Condition<Number>& inv);
 
     ~Location(){
-        std::cout << "loc " << mName << " with id " << mId << " sagt tschau!\n";
+        std::cout << "loc " << mName << " with hash " << mHash << " sagt tschau!\n";
     }
 
     std::size_t getNumberFlow() const { return mFlows.size(); }
@@ -93,17 +93,18 @@ public:
     const transitionSet& getTransitions() const { return mTransitions; }
     const Box<Number>& getExternalInput() const { return mExternalInput; }
     bool hasExternalInput() const { return mHasExternalInput; }
+    [[deprecated]]
     unsigned getId() const { return mId; }
 	std::string getName() const { return mName; }
 
-    void setName(const std::string& name) { mName = name; }
+    void setName(const std::string& name) { mName = name; mHash = 0; }
     void setFlow(const matrix_t<Number>& mat, std::size_t I = 0);
-    void setInvariant(const Condition<Number>& inv) { mInvariant = inv; }
-    void setTransitions(const transitionSet& trans) { mTransitions = trans; }
-    void addTransition(Transition<Number>* trans) { mTransitions.insert(trans); }
+    void setInvariant(const Condition<Number>& inv) { mInvariant = inv; mHash = 0; }
+    void setTransitions(const transitionSet& trans) { mTransitions = trans; mHash = 0; }
+    void addTransition(Transition<Number>* trans) { mTransitions.insert(trans); mHash = 0; }
     void setExtInput(const Box<Number>& b);
 
-    std::size_t getHash() const { return mHash; }
+    std::size_t hash() const;
 
     /**
      * @brief      Determines if this composed of rhs and some potential rest.
@@ -122,23 +123,33 @@ public:
     //inline bool operator==(const Location<Number>& rhs) const { return (mId == rhs.getId()); }
     //inline bool operator!=(const Location<Number>& rhs) const { return (mId != rhs.getId()); }
 
-    inline bool operator<(const Location<Number>& rhs) const { return (mHash < rhs.getHash()); }
-    inline bool operator==(const Location<Number>& rhs) const { return (mHash == rhs.getHash()); }
-    inline bool operator!=(const Location<Number>& rhs) const { return (mHash != rhs.getHash()); }
+    inline bool operator<(const Location<Number>& rhs) const { 
+        if(this->hash() != rhs.hash()){
+            return this->hash() < rhs.hash(); 
+        } else {
+            //Costly case where we have to compare members.
+            //As order is does not mean anything here semantically, we are free to choose anything that gives us an ordering between locations.
+            //Here, we choose the lexicographical order between the names.
+            return mName < rhs.getName();
+        }
+    }
+    inline bool operator==(const Location<Number>& rhs) const { assert(this != nullptr); return (this->hash() == rhs.hash()); }
+    inline bool operator!=(const Location<Number>& rhs) const { assert(this != nullptr); return (this->hash() != rhs.hash()); }
 
     friend std::ostream& operator<<(std::ostream& ostr, const Location<Number>& l) {
 
     #ifdef HYPRO_LOGGING
 	    //matrix_t<Number> tmp = matrix_t<Number>(l.getInvariant().getMatrix().rows(), l.getInvariant().getMatrix().cols() + 1);
 	    //tmp << l.getInvariant().getMatrix(), l.getInvariant().getVector();
-	    ostr << "location " << l.getName() << " ptr "<< &l  << " (id: " << l.getId() << ")"<< std::endl << "\t Flow: " << std::endl << l.getFlow() << std::endl << "\t Inv: " << std::endl << l.getInvariant();
 	    //ostr << l.getInvariant().getDiscreteCondition() << std::endl;
+        //ostr << "location " << l.getName() << " ptr "<< &l  << " (id: " << l.getId() << ")"<< std::endl << "\t Flow: " << std::endl << l.getFlow() << std::endl << "\t Inv: " << std::endl << l.getInvariant();
+        ostr << "location " << l.getName() << " ptr "<< &l  << " (hash: " << l.hash() << ")"<< std::endl << "\t Flow: " << std::endl << l.getFlow() << std::endl << "\t Inv: " << std::endl << l.getInvariant();
         ostr << "ExternalInput:\n" << l.getExternalInput() << std::endl;
 	    ostr << "Transitions: " << std::endl;
 	    for (auto transitionPtr : l.getTransitions()) {
 	        ostr << *transitionPtr << std::endl;
 	    }
-      ostr << "and transitions.size() is: " << l.getTransitions().size() << std::endl;
+        ostr << "and transitions.size() is: " << l.getTransitions().size() << std::endl;
 	    ostr << std::endl << ")";
 	#endif
 	    return ostr;
@@ -177,7 +188,20 @@ namespace std {
         std::size_t operator()(const hypro::Location<Number>* locPtr) const
         {
             //return hypro::LocationHashValue(locPtr);
-            return locPtr->computeHash();
+            //return locPtr->computeHash();
+
+            //Flows
+            std::size_t seed = 0;
+            std::size_t flowHash = 0;
+            for(auto& flow : locPtr->getFlows()){
+                flowHash = std::hash<hypro::matrix_t<Number>>()(flow);
+            }
+            seed += flowHash;
+
+            //Name
+            seed += std::hash<std::string>()(locPtr->getName());
+
+            return seed;
         }
     };
 

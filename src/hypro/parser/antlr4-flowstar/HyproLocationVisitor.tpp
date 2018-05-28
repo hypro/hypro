@@ -33,9 +33,11 @@ namespace hypro {
 
 			Location<Number>* loc = visit(ctx->location().at(i));
 			//std::unique_ptr<Location<Number>> loc = visit(ctx->location().at(i));
+			assert(loc != nullptr);
 			locSet.insert(loc);
 			i++;
 		}
+		//return set of raw ptrs to locations
 		return locSet;
 	}
 
@@ -87,9 +89,11 @@ namespace hypro {
 			}
 		}
 
-		//3.Returns a location
-		LocationManager<Number>& manager = LocationManager<Number>::getInstance();
-		Location<Number>* loc = manager.create();
+		//3.Returns a ptr to location
+		//LocationManager<Number>& manager = LocationManager<Number>::getInstance();
+		//Location<Number>* loc = manager.create();
+		//std::unique_ptr<Location<Number>> loc = std::make_unique<Location<Number>>();
+		Location<Number>* loc = new Location<Number>();
 		loc->setName(ctx->VARIABLE()->getText());
 		loc->setFlow(flowAndExtInput.first);
 		loc->setInvariant(inv);

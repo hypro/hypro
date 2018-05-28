@@ -11,8 +11,8 @@
 namespace hypro
 {
 template<typename Number>
-//class [[deprecated("Use now public Location constructors instead")]] LocationManager : public carl::Singleton<LocationManager<Number>>
-class LocationManager : public carl::Singleton<LocationManager<Number>>
+class [[deprecated("Use now public Location constructors instead")]] LocationManager : public carl::Singleton<LocationManager<Number>>
+//class LocationManager : public carl::Singleton<LocationManager<Number>>
 {
     friend carl::Singleton<LocationManager<Number>>;
 
@@ -35,10 +35,10 @@ class LocationManager : public carl::Singleton<LocationManager<Number>>
         //}
         Location<Number>* toDelete = mLocations.begin()->second;
         if(toDelete != nullptr){
-          //mLocations.erase(mLocations.begin());
+          mLocations.erase(mLocations.begin());
           
           //std::cout << "Now deleting " << toDelete->getName() << " with id " << toDelete->getId() << " and hash " << toDelete->getHash() << std::endl;
-          size_t deleteCount = mLocations.erase(toDelete->getId());
+          //size_t deleteCount = mLocations.erase(toDelete->getId());
           //std::cout << "Deleted " << deleteCount << " times\n";
           delete toDelete;  
         }

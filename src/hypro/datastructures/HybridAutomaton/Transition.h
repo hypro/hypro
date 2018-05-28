@@ -144,8 +144,10 @@ class Transition
     friend std::ostream& operator<<(std::ostream& ostr, const Transition<Number>& t) {
 		#ifdef HYPRO_LOGGING
 	    ostr << "transition(" << std::endl
-	          << "\t Source = " << t.getSource()->getId() << std::endl
-	          << "\t Target = " << t.getTarget()->getId() << std::endl
+	          //<< "\t Source = " << t.getSource()->getId() << std::endl
+	          //<< "\t Target = " << t.getTarget()->getId() << std::endl
+              << "\t Source = " << t.getSource()->hash() << std::endl
+              << "\t Target = " << t.getTarget()->hash() << std::endl
 	          << "\t urgent = " << t.isUrgent() << std::endl
 	          << "\t Labels = ";
 	    for(const auto& label : t.getLabels()) ostr << label;

@@ -24,25 +24,29 @@ namespace hypro {
 
 		//3.Calls visit(ctx->modes()) to get locSet
 		HyproLocationVisitor<Number> locVisitor = HyproLocationVisitor<Number>(varVec);
-		//std::set<Location<Number>*> locSet = locVisitor.visit(ctx->modes()).template as<std::set<Location<Number>*>>();
 		std::set<Location<Number>*> locSet = locVisitor.visit(ctx->modes()).template as<std::set<Location<Number>*>>();
 		std::set<Location<Number>*>& rLocSet = locSet;
 		
-		
-		//std::set<Location<Number>*>& rLSet = lSet;
-		//std::set<std::unique_ptr<Location<Number>>>& rLocSet = locSet;
 		//std::set<std::unique_ptr<Location<Number>>> locSet = locVisitor.visit(ctx->modes()).template as<std::set<std::unique_ptr<Location<Number>>>>();
 		//std::set<std::unique_ptr<Location<Number>>>& rLocSet = locSet;
+		//std::set<Location<Number>*> rawLocSet;
+		//for(auto& l : locSet){
+		//	rawLocSet.insert(l.get());
+		//}
 
 		//4.Calls visit to get transitions
 		//NOTE: the transVisitor will modify locSet as every location has its own set of transitions that must be added here.
 		//HyproTransitionVisitor<Number> transVisitor = HyproTransitionVisitor<Number>(varVec, rLocSet);
 		HyproTransitionVisitor<Number> transVisitor = HyproTransitionVisitor<Number>(varVec, rLocSet);
 		std::set<Transition<Number>*> tSet = transVisitor.visit(ctx->jumps()).template as<std::set<Transition<Number>*>>();
+		
+		//4.1.Make a set of unique ptrs to transitions
 		std::set<std::unique_ptr<Transition<Number>>> transSet;
 		for(auto& t : tSet){
 			transSet.insert(std::unique_ptr<Transition<Number>>(std::move(t)));
 		}
+
+		//4.2.Make a set of unique ptrs to Locations
 		std::set<std::unique_ptr<Location<Number>>> uniquePtrLocSet;
 		for(auto& l : locSet){
 			uniquePtrLocSet.insert(std::unique_ptr<Location<Number>>(std::move(l)));

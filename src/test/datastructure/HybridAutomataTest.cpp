@@ -34,8 +34,10 @@ protected:
     	//loc2 = locMan.create();
 
     	std::cout << "a\n";
-    	loc1.reset(locMan.create());
-    	loc2.reset(locMan.create());
+    	//loc1.reset(locMan.create());
+    	//loc2.reset(locMan.create());
+    	loc1 = std::make_unique<Location<Number>>();
+    	loc2 = std::make_unique<Location<Number>>();
 
     	std::cout << "b\n";
     	trans = std::make_unique<Transition<Number>>();
@@ -70,15 +72,25 @@ protected:
 		loc2->setFlow(locationMat);
 
 		std::cout << "f\n";
-		//Location<Number>* tmp1 = locMan.location(loc1->getId());
-		
-		//copyOfLoc1 = std::make_unique<Location<Number>>(locMan.create(loc1.get()));
-		Location<Number>* tmp1 = locMan.create(loc1.get());
-		copyOfLoc1.reset(tmp1);
-
+		//copyOfLoc1 = std::make_unique<Location<Number>>(loc1.get());
+		//Location<Number>* tmp1 = new Location<Number>(loc1.get());
+		//copyOfLoc1.reset(tmp1);
+		copyOfLoc1 = std::unique_ptr<Location<Number>>(new Location<Number>(*loc1));
 		std::cout << "g\n";
-		Location<Number>* tmp2 = locMan.create(loc2.get());
-		copyOfLoc2.reset(tmp2);
+		//copyOfLoc2 = std::make_unique<Location<Number>>(loc2.get());
+		copyOfLoc2 = std::unique_ptr<Location<Number>>(new Location<Number>(*loc2));
+		//Location<Number>* tmp2 = new Location<Number>(loc2.get());
+		//copyOfLoc2.reset(tmp2);
+		
+
+		//Location<Number>* tmp1 = locMan.create(loc1.get());
+		//copyOfLoc1.reset(tmp1);
+		
+		//Location<Number>* tmp2 = locMan.create(loc2.get());
+		//copyOfLoc2.reset(tmp2);
+
+		//Location<Number>* tmp1 = locMan.location(loc1->getId());
+		//copyOfLoc1 = std::make_unique<Location<Number>>(locMan.create(loc1.get()));
 		//Location<Number>* tmp2 = locMan.location(loc2->getId());
 		//tmp2->setName("gna");
 		//copyOfLoc2 = std::make_unique<Location<Number>>(locMan.create(loc2.get()));
@@ -199,7 +211,7 @@ protected:
 
     //Hybrid Automaton Objects: Locations, Transitions, Automaton itself
 
-    LocationManager<Number>& locMan = LocationManager<Number>::getInstance();
+    //LocationManager<Number>& locMan = LocationManager<Number>::getInstance();
 
     std::unique_ptr<Location<Number>> loc1;
     std::unique_ptr<Location<Number>> loc2;
@@ -240,9 +252,9 @@ protected:
   			return false;
   		}
   		std::cout << "locSet size: " << locSet.size() << std::endl;
-  		std::cout << "loc has hash: " << loc->getHash() << std::endl;
+  		std::cout << "loc has hash: " << loc->hash() << std::endl;
 		for(auto& ptrToALoc : locSet){
-			std::cout << "ptrToALoc loc hash is: " << ptrToALoc->getHash() << std::endl;
+			std::cout << "ptrToALoc loc hash is: " << ptrToALoc->hash() << std::endl;
 			if(*ptrToALoc == *(loc)){
 				std::cout << "found a match!\n";
 				return true;
@@ -327,8 +339,11 @@ TYPED_TEST(HybridAutomataTest, LocationParallelcompositionTest)
 	//Location<TypeParam>* l1 = this->locMan.create();
 	//Location<TypeParam>* l2 = this->locMan.create();
 
-	std::unique_ptr<Location<TypeParam>> l1 (this->locMan.create());
-	std::unique_ptr<Location<TypeParam>> l2 (this->locMan.create());
+	//std::unique_ptr<Location<TypeParam>> l1 (this->locMan.create());
+	//std::unique_ptr<Location<TypeParam>> l2 (this->locMan.create());
+
+	std::unique_ptr<Location<TypeParam>> l1 = std::make_unique<Location<TypeParam>>();
+	std::unique_ptr<Location<TypeParam>> l2 = std::make_unique<Location<TypeParam>>();
 
 	typename HybridAutomaton<TypeParam>::variableVector l1Vars{"a","b"};
 	typename HybridAutomaton<TypeParam>::variableVector l2Vars{"x","b"};
@@ -427,6 +442,11 @@ TYPED_TEST(HybridAutomataTest, HybridAutomatonTest)
 	std::unique_ptr<Location<TypeParam>> anotherCopyOfLoc1(new Location<TypeParam>(*ptrToLoc1));
 	std::unique_ptr<Location<TypeParam>> anotherCopyOfLoc2(new Location<TypeParam>(*ptrToLoc2));
 	
+	std::cout << "loc1 name: " << this->loc1->getName() << " hash: " << this->loc1->hash() << std::endl;
+	std::cout << "loc2 name: " << this->loc2->getName() << " hash: " << this->loc2->hash() << std::endl;
+	std::cout << "anotherCopyOfLoc1 name: " << anotherCopyOfLoc1->getName() << " hash: " << anotherCopyOfLoc1->hash() << std::endl;
+	std::cout << "anotherCopyOfLoc2 name: " << anotherCopyOfLoc2->getName() << " hash: " << anotherCopyOfLoc2->hash() << std::endl;
+
 	h1.addLocation(std::move(anotherCopyOfLoc1));
 	h1.addLocation(std::move(anotherCopyOfLoc2));
 
@@ -436,13 +456,19 @@ TYPED_TEST(HybridAutomataTest, HybridAutomatonTest)
 	//EXPECT_TRUE(std::find(h1.getLocations().begin(), h1.getLocations().end(), this->loc1) != h1.getLocations().end());
 	//EXPECT_TRUE(std::find(h1.getLocations().begin(), h1.getLocations().end(), this->loc2) != h1.getLocations().end());
 
-	std::cout << "h1 getLocation via name Location1 with id " << h1.getLocation("Location1")->getId() << " and hash " << h1.getLocation("Location1")->getHash() << "\n";
-	std::cout << "this loc1.get() with id " << this->loc1->getId() << " and hash " << this->loc1->getHash() << "\n";
+	//std::cout << "h1 getLocation via name Location1 with id hash " << h1.getLocation("Location1")->hash() << "\n";
+	//std::cout << "this loc1.get() with hash " << this->loc1->hash() << "\n";
 
+	EXPECT_TRUE(h1.getLocation("Location1") != nullptr);
+	EXPECT_TRUE(this->loc1.get() != nullptr);
 	EXPECT_TRUE(*(h1.getLocation("Location1")) == *(this->loc1.get()));
-	EXPECT_TRUE(*(h1.getLocation(this->loc1->getId())) == *(this->loc1.get()));
+	EXPECT_TRUE(*(h1.getLocation(this->loc1->hash())) == *(this->loc1.get()));
+
+	//std::cout << "h1 getLocation via name Location2 with id hash " << h1.getLocation("Location2")->hash() << "\n";
+	//std::cout << "this loc1.get() with hash " << this->loc2->hash() << "\n";
+
 	EXPECT_TRUE(*(h1.getLocation("Location2")) == *(this->loc2.get()));
-	EXPECT_TRUE(*(h1.getLocation(this->loc2->getId())) == *(this->loc2.get()));
+	EXPECT_TRUE(*(h1.getLocation(this->loc2->hash())) == *(this->loc2.get()));
 
 	//Check if trans can be found in h1's transition set after inserting
 	std::unique_ptr<Transition<TypeParam>> aTrans(new Transition<TypeParam>(*(this->trans)));
@@ -481,6 +507,7 @@ TYPED_TEST(HybridAutomataTest, HybridAutomatonTest)
 	EXPECT_EQ(h2, h3);
 }
 
+/*
 TYPED_TEST(HybridAutomataTest, LocationManagerTest)
 {
 	matrix_t<TypeParam> flow = matrix_t<TypeParam>::Identity(2,2);
@@ -490,7 +517,7 @@ TYPED_TEST(HybridAutomataTest, LocationManagerTest)
 	unsigned id = this->locMan.id(loc);
 	EXPECT_EQ(this->locMan.location(id), loc);
 }
-
+*/
 
 TYPED_TEST(HybridAutomataTest, State) {
 	// Constructors

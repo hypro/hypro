@@ -114,7 +114,7 @@ class HybridAutomaton
     ///@{
     //* @return The set of locations. */
     const locationSet& getLocations() const { return mLocations; }
-    Location<Number>* getLocation(std::size_t id) const;
+    Location<Number>* getLocation(const std::size_t hash) const;
     Location<Number>* getLocation(const std::string& name) const;
     //* @return The set of transitions. */
     const transitionSet& getTransitions() const { return mTransitions; }
