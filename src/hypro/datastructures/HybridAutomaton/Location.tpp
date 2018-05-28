@@ -3,15 +3,17 @@
 namespace hypro
 {
 
+////// Deprecated Versions //////
+
 template<typename Number>
-Location<Number>::Location(unsigned _id) : mFlows(), mExternalInput(), mTransitions(), mInvariant(), mId(_id)
+Location<Number>::Location(unsigned _id) : mFlows(), mExternalInput(), mTransitions(), mInvariant(), mId(_id), mHash(computeHash())
 {}
 
 template<typename Number>
 Location<Number>::Location(unsigned _id, const Location<Number>& _loc) 
-	: mFlows(_loc.getFlows()), mExternalInput(_loc.getExternalInput()), mTransitions(_loc.getTransitions()), mInvariant(_loc.getInvariant()), mId(_id)
+	: mFlows(_loc.getFlows()), mExternalInput(_loc.getExternalInput()), mTransitions(_loc.getTransitions()), mInvariant(_loc.getInvariant()), mId(_id),mHash(computeHash())
 {
-	std::cout << "loc " << _id << " wurde gebaut!\n";
+	
 }
 
 template<typename Number>
@@ -22,6 +24,7 @@ Location<Number>::Location(unsigned _id, const matrix_t<Number>& _mat) : mFlows(
 	point.push_back(Point<Number>(vector_t<Number>::Zero(_mat.cols() -1 )));
 	mExternalInput = Box<Number>(point);
 	mHasExternalInput = false;
+	mHash = computeHash();
 }
 
 template<typename Number>
@@ -33,6 +36,41 @@ Location<Number>::Location(unsigned _id, const matrix_t<Number>& _mat, const typ
 	point.push_back(Point<Number>(vector_t<Number>::Zero(_mat.cols() -1 )));
 	mExternalInput = Box<Number>(point);
 	mHasExternalInput = false;
+	mHash = computeHash();
+}
+
+/////// New Versions ///////
+
+template<typename Number>
+Location<Number>::Location() : mFlows(), mExternalInput(), mTransitions(), mInvariant(), mId(), mHash(computeHash())
+{}
+
+template<typename Number>
+Location<Number>::Location(const Location<Number>& _loc) 
+	: mFlows(_loc.getFlows()), mExternalInput(_loc.getExternalInput()), mTransitions(_loc.getTransitions()), mInvariant(_loc.getInvariant()), mId(),mHash(computeHash())
+{}
+
+template<typename Number>
+Location<Number>::Location(const matrix_t<Number>& _mat) : mFlows(), mId()
+{
+	mFlows.push_back(_mat);
+	std::vector<Point<Number>> point;
+	point.push_back(Point<Number>(vector_t<Number>::Zero(_mat.cols() -1 )));
+	mExternalInput = Box<Number>(point);
+	mHasExternalInput = false;
+	mHash = computeHash();
+}
+
+template<typename Number>
+Location<Number>::Location(const matrix_t<Number>& _mat, const typename Location<Number>::transitionSet& _trans, const Condition<Number>& _inv)
+    : mFlows(), mExternalInput(), mTransitions(_trans), mInvariant(_inv), mId()
+{
+	mFlows.push_back(_mat);
+	std::vector<Point<Number>> point;
+	point.push_back(Point<Number>(vector_t<Number>::Zero(_mat.cols() -1 )));
+	mExternalInput = Box<Number>(point);
+	mHasExternalInput = false;
+	mHash = computeHash();
 }
 
 template<typename Number>
@@ -57,6 +95,53 @@ void Location<Number>::setExtInput(const Box<Number>& b) {
 			break;
 		}
 	}
+}
+
+template<typename Number>
+std::size_t Location<Number>::computeHash() {
+
+	//If mHash == 0 then compute complete hash
+	//if(mHash == 0){
+		//mHash = std::hash<Location<Number>*>()(this);
+	//} else {
+		//TODO: if mHashChanged != 0 (0 is equal to no change), then look up what changed. 
+		
+		//For changed parameters compute hash anew. 
+
+
+		//init seed
+		std::size_t seed = 0;
+	
+		//For every member make a hash
+		//Flows
+		std::size_t flowHash = 0;
+		for(auto& flow : mFlows){
+			flowHash = std::hash<matrix_t<Number>>()(flow);
+		}
+		seed += flowHash;
+	
+		//Extinput
+		//if(mHasExternalInput){
+		//	seed += std::hash<Box<Number>>()(mExternalInput);
+		//}
+	
+		//Transitions
+		//std::size_t transitionHash = 0;
+		//for(auto& t : mTransitions){
+		//	transitionHash = std::hash<Transition<Number>*>()(t);
+		//}
+		//seed += transitionHash;
+	
+		//Imvariant
+		//seed += std::hash<Condition<Number>>()(mInvariant);
+	
+		//Id
+		seed += std::hash<unsigned int>()(mId);
+	
+		//add them all and return hash
+		mHash = seed;
+	//}
+	return mHash;
 }
 
 template<typename Number>
@@ -340,6 +425,40 @@ std::unique_ptr<Location<Number>> parallelCompose(const std::unique_ptr<Location
 	//loc->setExtInput(flowAndExtInput.second);
 	return std::unique_ptr<Location<Number>>(res);
 }
+/*
+template<typename Number>
+std::size_t LocationHashValue(const Location<Number>* loc) {
+	//init seed
+	std::size_t seed = 0;
 
+	//For every member make a hash
+	//Flows
+	std::size_t flowHash = 0;
+	for(auto& flow : loc->getFlows()){
+		flowHash = std::hash<matrix_t<Number>>()(flow);
+	}
+	seed += flowHash;
 
+	//Extinput
+	//if(mHasExternalInput){
+	//	seed += std::hash<Box<Number>>()(mExternalInput);
+	//}
+
+	//Transitions
+	//std::size_t transitionHash = 0;
+	//for(auto& t : mTransitions){
+	//	transitionHash = std::hash<Transition<Number>*>()(t);
+	//}
+	//seed += transitionHash;
+
+	//Imvariant
+	//seed += std::hash<Condition<Number>>()(mInvariant);
+
+	//Id
+	seed += std::hash<unsigned>()(loc->getId());
+
+	//add them all and return hash
+	return seed;
+}
+*/
 }  // namespace hypro

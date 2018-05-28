@@ -70,13 +70,42 @@ protected:
 		loc2->setFlow(locationMat);
 
 		std::cout << "f\n";
-		Location<Number>* tmp1 = locMan.location(loc1->getId());
-		std::cout << "g\n";
-		Location<Number>* tmp2 = locMan.location(loc2->getId());
-		std::cout << "h\n";
+		//Location<Number>* tmp1 = locMan.location(loc1->getId());
+		
+		//copyOfLoc1 = std::make_unique<Location<Number>>(locMan.create(loc1.get()));
+		Location<Number>* tmp1 = locMan.create(loc1.get());
 		copyOfLoc1.reset(tmp1);
+
+		std::cout << "g\n";
+		Location<Number>* tmp2 = locMan.create(loc2.get());
+		copyOfLoc2.reset(tmp2);
+		//Location<Number>* tmp2 = locMan.location(loc2->getId());
+		//tmp2->setName("gna");
+		//copyOfLoc2 = std::make_unique<Location<Number>>(locMan.create(loc2.get()));
+		std::cout << "h\n";
+		//copyOfLoc1.reset(tmp1);
 		std::cout << "i\n";
-    	copyOfLoc2.reset(tmp2);
+    	//copyOfLoc2.reset(tmp2);
+    	if(copyOfLoc1 == nullptr){
+    		std::cout << "copyOfLoc1 is nullptr\n";
+    	} else {
+    		std::cout << "Name of loc is: " << copyOfLoc1->getName() << std::endl;
+    	}
+    	if(copyOfLoc2 == nullptr){
+    		std::cout << "copyOfLoc2 is nullptr\n";
+    	} else {
+    		std::cout << "Name of loc is: " << copyOfLoc2->getName() << std::endl;
+    	}
+    	if(loc1 == nullptr){
+    		std::cout << "loc1 is nullptr\n";
+    	} else {
+    		std::cout << "Name of loc is: " << loc1->getName() << std::endl;
+    	}
+    	if(loc2 == nullptr){
+    		std::cout << "loc2 is nullptr\n";
+    	} else {
+    		std::cout << "Name of loc is: " << loc2->getName() << std::endl;
+    	}
 
 		/*
 		 * Transition Setup
@@ -108,15 +137,23 @@ protected:
 		std::cout << "k\n";
 		if(copyOfLoc1 == nullptr){
     		std::cout << "copyOfLoc1 is nullptr\n";
+    	} else {
+    		std::cout << "Name of loc is: " << copyOfLoc1->getName() << std::endl;
     	}
     	if(copyOfLoc2 == nullptr){
     		std::cout << "copyOfLoc2 is nullptr\n";
+    	} else {
+    		std::cout << "Name of loc is: " << copyOfLoc2->getName() << std::endl;
     	}
     	if(loc1 == nullptr){
     		std::cout << "loc1 is nullptr\n";
+    	} else {
+    		std::cout << "Name of loc is: " << loc1->getName() << std::endl;
     	}
     	if(loc2 == nullptr){
     		std::cout << "loc2 is nullptr\n";
+    	} else {
+    		std::cout << "Name of loc is: " << loc2->getName() << std::endl;
     	}
 
 		//locations[0] = loc1;
@@ -129,9 +166,10 @@ protected:
 		//Polytope for InitialValuation & Guard Assignment
 		coordinates(0) = 2;
 		coordinates(1) = 3;
-
+		std::cout << "k1\n";		
     	std::vector< vector_t<Number> > vecSet;
     	vecSet.push_back(coordinates);
+    	std::cout << "k2\n";
 		poly = valuation_t<Number>(vecSet);
 		auto hpoly = Converter<Number>::toHPolytope(poly);
 
@@ -153,7 +191,7 @@ protected:
     }
 
     virtual void TearDown()
-    {
+    { 	
     	//delete loc1;
     	//delete loc2;
     	//delete trans;
@@ -202,9 +240,9 @@ protected:
   			return false;
   		}
   		std::cout << "locSet size: " << locSet.size() << std::endl;
-  		std::cout << "loc has id: " << loc->getId() << std::endl;
+  		std::cout << "loc has hash: " << loc->getHash() << std::endl;
 		for(auto& ptrToALoc : locSet){
-			std::cout << "ptrToALoc loc id is: " << ptrToALoc->getId() << std::endl;
+			std::cout << "ptrToALoc loc hash is: " << ptrToALoc->getHash() << std::endl;
 			if(*ptrToALoc == *(loc)){
 				std::cout << "found a match!\n";
 				return true;
@@ -398,10 +436,13 @@ TYPED_TEST(HybridAutomataTest, HybridAutomatonTest)
 	//EXPECT_TRUE(std::find(h1.getLocations().begin(), h1.getLocations().end(), this->loc1) != h1.getLocations().end());
 	//EXPECT_TRUE(std::find(h1.getLocations().begin(), h1.getLocations().end(), this->loc2) != h1.getLocations().end());
 
-	EXPECT_TRUE(h1.getLocation("Location1") == this->loc1.get());
-	EXPECT_TRUE(h1.getLocation(this->loc1->getId()) == this->loc1.get());
-	EXPECT_TRUE(h1.getLocation("Location2") == this->loc2.get());
-	EXPECT_TRUE(h1.getLocation(this->loc2->getId()) == this->loc2.get());
+	std::cout << "h1 getLocation via name Location1 with id " << h1.getLocation("Location1")->getId() << " and hash " << h1.getLocation("Location1")->getHash() << "\n";
+	std::cout << "this loc1.get() with id " << this->loc1->getId() << " and hash " << this->loc1->getHash() << "\n";
+
+	EXPECT_TRUE(*(h1.getLocation("Location1")) == *(this->loc1.get()));
+	EXPECT_TRUE(*(h1.getLocation(this->loc1->getId())) == *(this->loc1.get()));
+	EXPECT_TRUE(*(h1.getLocation("Location2")) == *(this->loc2.get()));
+	EXPECT_TRUE(*(h1.getLocation(this->loc2->getId())) == *(this->loc2.get()));
 
 	//Check if trans can be found in h1's transition set after inserting
 	std::unique_ptr<Transition<TypeParam>> aTrans(new Transition<TypeParam>(*(this->trans)));

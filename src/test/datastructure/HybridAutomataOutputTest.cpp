@@ -29,10 +29,12 @@ protected:
 		 * Location Setup
 		 */
 
-    	//loc1Ptr = locMan.create();
-    	//loc2Ptr = locMan.create();
-    	loc1.reset(locMan.create());
-    	loc2.reset(locMan.create());
+    	loc1Ptr = locMan.create();
+    	loc2Ptr = locMan.create();
+    	loc1.reset(loc1Ptr);
+    	loc2.reset(loc2Ptr);
+    	//loc1.reset(locMan.create());
+    	//loc2.reset(locMan.create());
 		//loc1 = std::make_unique<Location<double>>(loc1Ptr);
 		//loc2 = std::make_unique<Location<double>>(loc2Ptr);
     	//loc2 = locMan.create();
@@ -115,11 +117,36 @@ protected:
 			hybrid.addInitialState(initState);
 		}
 
+		std::cout << "at transitionset\n";
+		
+		ptrSet.insert(trans.get());
 		transSet.insert(std::move(trans));
-		ptrSet.insert(transSet.begin()->get());
+		if(*(ptrSet.begin()) == nullptr){
+			std::cout << "ptrSet.begin invalidated by moving\n";
+		}
+		if(ptrSet.begin() == ptrSet.end()){
+			std::cout << "ptrSet.begin does not exist\n";
+		}
 
-		hybrid.setTransitions(transSet);
+		//transSet.insert(std::move(trans));
+		//std::cout << "moved\n";
+		//ptrSet.insert(transSet.begin()->get());
+
+		std::cout << "ptrSet size: " << ptrSet.size(); 
+		std::cout << " and first elem source: " << **(ptrSet.begin()) << std::endl;
+		//std::cout << " and first elem target: " << *(ptrSet.begin())->getTarget().getName() << "\n";
+
 		loc1->setTransitions(ptrSet);
+		hybrid.setTransitions(transSet);
+		std::cout << "set transset\n";
+		if(*(ptrSet.begin()) == nullptr){
+			std::cout << "ptrSet.begin invalidated by moving later on\n";
+		}
+		if(ptrSet.begin() == ptrSet.end()){
+			std::cout << "ptrSet.begin does not exist later on\n";
+		}
+		
+		std::cout << "end\n";
     }
 
     virtual void TearDown()
@@ -133,8 +160,8 @@ protected:
 
     LocationManager<double>& locMan = LocationManager<double>::getInstance();
 
-    //Location<double>* loc1Ptr;
-    //Location<double>* loc2Ptr;
+    Location<double>* loc1Ptr;
+    Location<double>* loc2Ptr;
     std::unique_ptr<Location<double>> loc1;
 	std::unique_ptr<Location<double>> loc2;
     std::unique_ptr<Transition<double>> trans;

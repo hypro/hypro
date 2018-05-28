@@ -70,7 +70,8 @@ class AntlrParserTest : public ::testing::Test {
 
 TYPED_TEST(AntlrParserTest, JustTesting){
 
-	std::string path("../../../../src/test/core/examples/test_bouncing_ball.txt");
+	//std::string path("../../../../src/test/core/examples/test_bouncing_ball.txt");
+	std::string path("../src/test/core/examples/test_bouncing_ball.txt");
 	//std::string path("../../src/test/core/examples/test_bouncing_ball.txt");
 	//std::string path("/home/tobias/RWTH/8_WS2017/BA/hypro/src/test/core/examples/test_bouncing_ball.txt");
 

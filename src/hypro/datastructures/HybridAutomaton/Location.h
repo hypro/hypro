@@ -24,6 +24,11 @@ template<typename Number>
 class LocationManager;
 
 /**
+ * @brief       A enum used to determine which values have been changed after the last operation.
+ */
+//enum LocationChange { NOCHANGE = 0, FLOWS, EXTINPUT, TRANSITIONS, INVARIANT, ID, NAME };
+
+/**
  * @brief      Class for location.
  * @tparam     Number  The used number type.
  */
@@ -40,14 +45,18 @@ protected:
      * @details    Note that locations should only be constructed from the LocationManager.
      * @param[in]  id    The identifier given by the LocationManager.
      */
-    ///@{
+    //[[deprecated]]
     Location(unsigned id);
+    ///@{
     /**
      * @param[in]  id    The identifier given by the LocationManager.
      * @param[loc] The original location which is copied.
      */
+    //[[deprecated]]
     Location(unsigned id, const Location& loc);
+    //[[deprecated]]
     Location(unsigned id, const matrix_t<Number>& mat);
+    //[[deprecated]]
     Location(unsigned id, const matrix_t<Number>& mat, const transitionSet& trans, const Condition<Number>& inv);
     ///@}
 
@@ -57,13 +66,23 @@ private:
     bool mHasExternalInput = false;
     transitionSet mTransitions;
     Condition<Number> mInvariant;
-    unsigned mId;
     std::string mName;
+    //std::vector<LocationChange> mChanges;
+    //[[deprecated]]
+    unsigned mId;
+    std::size_t mHash;
+
+    std::size_t computeHash();
 
 public:
-  	Location() = delete;
+  	//Location() = delete;
+    Location();
+    Location(const Location& loc);
+    Location(const matrix_t<Number>& mat);
+    Location(const matrix_t<Number>& mat, const transitionSet& trans, const Condition<Number>& inv);
+
     ~Location(){
-        std::cout << "loc " << mId << "sagt tschau!\n";
+        std::cout << "loc " << mName << " with id " << mId << " sagt tschau!\n";
     }
 
     std::size_t getNumberFlow() const { return mFlows.size(); }
@@ -84,6 +103,8 @@ public:
     void addTransition(Transition<Number>* trans) { mTransitions.insert(trans); }
     void setExtInput(const Box<Number>& b);
 
+    std::size_t getHash() const { return mHash; }
+
     /**
      * @brief      Determines if this composed of rhs and some potential rest.
      * @details    Checks whether this location can be the result of a parallel composition where rhs is involved as a composite.
@@ -97,9 +118,13 @@ public:
     bool isComposedOf(const Location<Number>& rhs, const std::vector<std::string>& rhsVars, const std::vector<std::string>& thisVars) const;
     std::string getDotRepresentation(const std::vector<std::string>& vars) const;
 
-    inline bool operator<(const Location<Number>& rhs) const { return (mId < rhs.getId()); }
-    inline bool operator==(const Location<Number>& rhs) const { return (mId == rhs.getId()); }
-    inline bool operator!=(const Location<Number>& rhs) const { return (mId != rhs.getId()); }
+    //inline bool operator<(const Location<Number>& rhs) const { return (mId < rhs.getId()); }
+    //inline bool operator==(const Location<Number>& rhs) const { return (mId == rhs.getId()); }
+    //inline bool operator!=(const Location<Number>& rhs) const { return (mId != rhs.getId()); }
+
+    inline bool operator<(const Location<Number>& rhs) const { return (mHash < rhs.getHash()); }
+    inline bool operator==(const Location<Number>& rhs) const { return (mHash == rhs.getHash()); }
+    inline bool operator!=(const Location<Number>& rhs) const { return (mHash != rhs.getHash()); }
 
     friend std::ostream& operator<<(std::ostream& ostr, const Location<Number>& l) {
 
@@ -126,6 +151,9 @@ struct locPtrComp {
     bool operator()(const std::unique_ptr<Location<Number>>& lhs, const std::unique_ptr<Location<Number>>& rhs) const { return (*lhs < *rhs); }
 };
 
+//template<typename Number>
+//std::size_t LocationHashValue(const Location<Number>* loc);
+
 template<typename Number>
 //Location<Number>* parallelCompose(const Location<Number>* lhs
 //								, const Location<Number>* rhs
@@ -141,5 +169,18 @@ std::unique_ptr<Location<Number>> parallelCompose(const std::unique_ptr<Location
 
 
 }  // namespace hypro
+
+namespace std {
+
+    template<typename Number>
+    struct hash<hypro::Location<Number>*> {
+        std::size_t operator()(const hypro::Location<Number>* locPtr) const
+        {
+            //return hypro::LocationHashValue(locPtr);
+            return locPtr->computeHash();
+        }
+    };
+
+}  // namespace std
 
 #include "Location.tpp"
