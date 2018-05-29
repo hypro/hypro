@@ -89,6 +89,9 @@ class BoxSupportFunction {
     std::string getDotRepresentation() const;
 
     friend std::ostream& operator<<( std::ostream& lhs, const BoxSupportFunction<Number>& rhs ) {
+    	for(const auto& i : rhs.mBox){
+    		lhs << i << std::endl;
+    	}
     	return lhs;// << rhs.getBox();
 	}
 };

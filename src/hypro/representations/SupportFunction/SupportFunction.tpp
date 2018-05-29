@@ -473,6 +473,7 @@ namespace hypro{
         for(unsigned rowI = 0; rowI < _mat.rows(); ++rowI) {
         	TRACE("hypro.representations.supportFunction", "Evaluate against plane " << rowI );
         	EvaluationResult<Number> planeEvalRes = content->evaluate(_mat.row(rowI), false);
+        	TRACE("hypro.representations.supportFunction", "Return from evaluate." );
         	if(planeEvalRes.errorCode == SOLUTION::INFEAS){
 				TRACE("hypro.representations.supportFunction", "Is infeasible (should not happen)." );
 				TRACE("hypro.representations.supportFunction", "Set is (Hpoly): " << std::endl << Converter::toHPolytope(*this) );

@@ -116,10 +116,10 @@ Point<Number> BoxSupportFunction<Number>::supremumPoint() const {
 
 template <typename Number>
 EvaluationResult<Number> BoxSupportFunction<Number>::evaluate( const vector_t<Number> &l, bool ) const {
-	TRACE("hypro.representations.supportFunction", "");
+	TRACE("hypro.representations.supportFunction", "this dimension is " << this->dimension());
 	COUNT("Box evaluate.");
-	assert(l.rows() == this->dimension());
-	if(this->empty()){
+	assert(std::size_t(l.rows()) == this->dimension());
+	if(this->empty() || this->dimension() == 0){
 		return EvaluationResult<Number>(); // defaults to infeasible, i.e. empty.
 	}
 
@@ -128,6 +128,7 @@ EvaluationResult<Number> BoxSupportFunction<Number>::evaluate( const vector_t<Nu
 	for(Eigen::Index i = 0; i < furthestPoint.rows(); ++i) {
 		furthestPoint(i) = l(i) >= 0 ? mBox[i].upper() : mBox[i].lower();
 	}
+	TRACE("hypro.representations.supportFunction","Have result, return.");
 	return EvaluationResult<Number>(furthestPoint.dot(l),furthestPoint,SOLUTION::FEAS);
 }
 
@@ -139,6 +140,7 @@ std::vector<EvaluationResult<Number>> BoxSupportFunction<Number>::multiEvaluate(
 	for(Eigen::Index i = 0; i < _A.rows(); ++i) {
 		res.emplace_back(this->evaluate(vector_t<Number>(_A.row(i)), true));
 	}
+	TRACE("hypro.representations.supportFunction","Have result, return.");
 	return res;
 }
 
@@ -155,7 +157,7 @@ bool BoxSupportFunction<Number>::contains( const Point<Number> &_point ) const {
 
 template <typename Number>
 bool BoxSupportFunction<Number>::contains( const vector_t<Number> &_point ) const {
-	assert(_point.rows() == this->dimension());
+	assert(std::size_t(_point.rows()) == this->dimension());
 	for(Eigen::Index i = 0; i < Eigen::Index(this->dimension()); ++i) {
 		if(!mBox[i].contains(_point(i))){
 			return false;
@@ -169,9 +171,11 @@ bool BoxSupportFunction<Number>::empty() const {
 	TRACE("hypro.representations.supportFunction", "");
 	for(Eigen::Index i = 0; i < Eigen::Index(this->dimension()); ++i) {
 		if(mBox[i].isEmpty()){
+			TRACE("hypro.representations.supportFunction", "is empty.");
 			return true;
 		}
 	}
+	TRACE("hypro.representations.supportFunction", "is not empty.");
 	return false;
 }
 
