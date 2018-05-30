@@ -80,7 +80,7 @@ public:
     Location(const matrix_t<Number>& mat, const transitionSet& trans, const Condition<Number>& inv);
 
     ~Location(){
-        std::cout << "loc " << mName << " with hash " << mHash << " sagt tschau!\n";
+        //std::cout << "loc " << mName << " with hash " << mHash << " sagt tschau!\n";
     }
 
     std::size_t getNumberFlow() const { return mFlows.size(); }
