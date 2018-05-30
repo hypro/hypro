@@ -46,9 +46,7 @@ Location<Number>::Location() : mFlows(), mExternalInput(), mTransitions(), mInva
 template<typename Number>
 Location<Number>::Location(const Location<Number>& _loc) 
 	: mFlows(_loc.getFlows()), mExternalInput(_loc.getExternalInput()), mTransitions(_loc.getTransitions()), mInvariant(_loc.getInvariant()), mName(_loc.getName()), mId(), mHash(0)
-{
-	std::cout << "CONSTRUCTED " << mName << std::endl;
-}
+{}
 
 template<typename Number>
 Location<Number>::Location(const matrix_t<Number>& _mat) : mFlows(), mId()
@@ -101,50 +99,10 @@ void Location<Number>::setExtInput(const Box<Number>& b) {
 
 template<typename Number>
 std::size_t Location<Number>::hash() const {
-
-	//If mHash == 0 then compute complete hash
 	if(mHash == 0){
 		mHash = std::hash<Location<Number>*>()(this);
 	}
 	return mHash;
-	//} else {
-		//TODO: if mHashChanged != 0 (0 is equal to no change), then look up what changed. 
-		
-		//For changed parameters compute hash anew. 
-
-
-		//init seed
-		//std::size_t seed = 0;
-	
-		//For every member make a hash
-		//Flows
-		//std::size_t flowHash = 0;
-		//for(auto& flow : mFlows){
-		//	flowHash = std::hash<matrix_t<Number>>()(flow);
-		//}
-		//seed += flowHash;
-	
-		//Extinput
-		//if(mHasExternalInput){
-		//	seed += std::hash<Box<Number>>()(mExternalInput);
-		//}
-	
-		//Transitions
-		//std::size_t transitionHash = 0;
-		//for(auto& t : mTransitions){
-		//	transitionHash = std::hash<Transition<Number>*>()(t);
-		//}
-		//seed += transitionHash;
-	
-		//Imvariant
-		//seed += std::hash<Condition<Number>>()(mInvariant);
-	
-		//Id
-		//seed += std::hash<unsigned int>()(mId);
-	
-		//add them all and return hash
-		//return seed;
-	//}
 }
 
 template<typename Number>
@@ -407,7 +365,8 @@ std::unique_ptr<Location<Number>> parallelCompose(const std::unique_ptr<Location
 		return nullptr;
 	}
 
-	Location<Number>* res = LocationManager<Number>::getInstance().create();
+	//Location<Number>* res = LocationManager<Number>::getInstance().create();
+	std::unique_ptr<Location<Number>> res = std::make_unique<Location<Number>>();
 
 	//set name
 	res->setName(lhs->getName()+"_"+rhs->getName());
@@ -426,7 +385,8 @@ std::unique_ptr<Location<Number>> parallelCompose(const std::unique_ptr<Location
 	//std::cout << "setExtInput" << std::endl;
 	//set extinput
 	//loc->setExtInput(flowAndExtInput.second);
-	return std::unique_ptr<Location<Number>>(res);
+	//return std::unique_ptr<Location<Number>>(res);
+	return res;
 }
 
 }  // namespace hypro

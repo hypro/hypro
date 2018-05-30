@@ -8,7 +8,7 @@
 #pragma once
 
 #include "Condition.h"
-#include "LocationManager.h"
+//#include "LocationManager.h"
 //#include "lib/utils/types.h"
 //#include <hypro/types.h>
 #include "../../types.h"
@@ -72,8 +72,6 @@ private:
     unsigned mId;
     mutable std::size_t mHash = 0;
 
-    //std::size_t computeHash();
-
 public:
   	//Location() = delete;
     Location();
@@ -119,15 +117,11 @@ public:
     bool isComposedOf(const Location<Number>& rhs, const std::vector<std::string>& rhsVars, const std::vector<std::string>& thisVars) const;
     std::string getDotRepresentation(const std::vector<std::string>& vars) const;
 
-    //inline bool operator<(const Location<Number>& rhs) const { return (mId < rhs.getId()); }
-    //inline bool operator==(const Location<Number>& rhs) const { return (mId == rhs.getId()); }
-    //inline bool operator!=(const Location<Number>& rhs) const { return (mId != rhs.getId()); }
-
     inline bool operator<(const Location<Number>& rhs) const { 
         if(this->hash() != rhs.hash()){
             return this->hash() < rhs.hash(); 
         } else {
-            //Costly case where we have to compare members.
+            //Case where we have to compare members, as same hashes do not necessarily mean equality between the locations.
             //As order is does not mean anything here semantically, we are free to choose anything that gives us an ordering between locations.
             //Here, we choose the lexicographical order between the names.
             return mName < rhs.getName();
@@ -139,11 +133,7 @@ public:
     friend std::ostream& operator<<(std::ostream& ostr, const Location<Number>& l) {
 
     #ifdef HYPRO_LOGGING
-	    //matrix_t<Number> tmp = matrix_t<Number>(l.getInvariant().getMatrix().rows(), l.getInvariant().getMatrix().cols() + 1);
-	    //tmp << l.getInvariant().getMatrix(), l.getInvariant().getVector();
-	    //ostr << l.getInvariant().getDiscreteCondition() << std::endl;
-        //ostr << "location " << l.getName() << " ptr "<< &l  << " (id: " << l.getId() << ")"<< std::endl << "\t Flow: " << std::endl << l.getFlow() << std::endl << "\t Inv: " << std::endl << l.getInvariant();
-        ostr << "location " << l.getName() << " ptr "<< &l  << " (hash: " << l.hash() << ")"<< std::endl << "\t Flow: " << std::endl << l.getFlow() << std::endl << "\t Inv: " << std::endl << l.getInvariant();
+	    ostr << "location " << l.getName() << " ptr "<< &l  << " (hash: " << l.hash() << ")"<< std::endl << "\t Flow: " << std::endl << l.getFlow() << std::endl << "\t Inv: " << std::endl << l.getInvariant();
         ostr << "ExternalInput:\n" << l.getExternalInput() << std::endl;
 	    ostr << "Transitions: " << std::endl;
 	    for (auto transitionPtr : l.getTransitions()) {
@@ -200,6 +190,21 @@ namespace std {
 
             //Name
             seed += std::hash<std::string>()(locPtr->getName());
+
+            //Extinput
+            //if(mHasExternalInput){
+            //  seed += std::hash<Box<Number>>()(mExternalInput);
+            //}
+    
+            //Transitions
+            //std::size_t transitionHash = 0;
+            //for(auto& t : mTransitions){
+            //  transitionHash = std::hash<Transition<Number>*>()(t);
+            //}
+            //seed += transitionHash;
+    
+            //Imvariant
+            //seed += std::hash<Condition<Number>>()(mInvariant);
 
             return seed;
         }

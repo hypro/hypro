@@ -13,7 +13,6 @@ HybridAutomaton<Number,State>::HybridAutomaton(const HybridAutomaton<Number,Stat
 	, mGlobalBadStates(hybrid.getGlobalBadStates())
 	, mVariables(hybrid.getVariables()) 
 {
-	//mLocations = hybrid.getLocations();
 	for(auto& l : hybrid.getLocations()){
     	mLocations.insert(std::unique_ptr<Location<Number>>(new Location<Number>(*l)));
    	} 	
@@ -26,7 +25,6 @@ HybridAutomaton<Number,State>::HybridAutomaton(const HybridAutomaton<Number,Stat
 template<typename Number, typename State>
 HybridAutomaton<Number,State>& HybridAutomaton<Number,State>::operator=(const HybridAutomaton<Number,State>& rhs){
    	if(this != &rhs){
-   		//mLocations = rhs.getLocations();
 
    		//Locations
     	//Make deep copies of every location (COSTLY)
@@ -37,11 +35,9 @@ HybridAutomaton<Number,State>& HybridAutomaton<Number,State>::operator=(const Hy
     	}
     	assert(copyOfRhsLocs.size() == rhs.getLocations().size());
 
-    	//Realease old data
+    	//Realease old data and assign new data
     	mLocations.clear();
     	assert(mLocations.size() == 0);
-
-    	//Assign
     	mLocations = copyOfRhsLocs;
 
     	//Transitions
@@ -53,13 +49,12 @@ HybridAutomaton<Number,State>& HybridAutomaton<Number,State>::operator=(const Hy
    		}
    		assert(copyOfRhsTrans.size() == rhs.getTransitions().size());
 
-   		//Release old data
+   		//Release old data and assign new data
    		mTransitions.clear();
    		assert(mTransitions.size() == 0);
-
-   		//Assign 
    		mTransitions = copyOfRhsTrans;
 
+   		//Copy the rest
 		mInitialStates = rhs.getInitialStates();
 		mLocalBadStates = rhs.getLocalBadStates();
 		mGlobalBadStates = rhs.getGlobalBadStates();
@@ -72,9 +67,8 @@ HybridAutomaton<Number,State>& HybridAutomaton<Number,State>::operator=(const Hy
 template<typename Number, typename State>
 HybridAutomaton<Number,State>& HybridAutomaton<Number,State>::operator=(HybridAutomaton<Number,State>&& rhs){
    	if(this != &rhs){
-		//mLocations = rhs.getLocations();
 		mLocations.swap(rhs.getLocations());
-		mTransitions.swap(rhs.getTransitions()); //TODO check if this works
+		mTransitions.swap(rhs.getTransitions());
 		mInitialStates = rhs.getInitialStates();
    		mLocalBadStates = rhs.getLocalBadStates();
    		mGlobalBadStates = rhs.getGlobalBadStates();
@@ -140,7 +134,6 @@ void HybridAutomaton<Number,State>::addLocation(std::unique_ptr<Location<Number>
     }
     if(!found){
     	mLocations.insert(std::move(location)); 
-    	//mLocations.insert(location); 
     }
 }
 
@@ -156,7 +149,6 @@ void HybridAutomaton<Number,State>::addTransition(std::unique_ptr<Transition<Num
 	}
 	if(!found){
 		mTransitions.insert(std::move(transition)); 
-		//mTransitions.insert(transition); 
 	}
 }
 

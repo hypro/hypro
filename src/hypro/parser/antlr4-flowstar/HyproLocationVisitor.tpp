@@ -20,7 +20,6 @@ namespace hypro {
 		//Calls visit(ctx->location()) to get location, name it, put into locSet, return locSet
 		unsigned i = 0;
 		std::set<Location<Number>*> locSet;
-		//std::set<std::unique_ptr<Location<Number>>> locSet;
 		while(i < ctx->location().size()){
 
 			//0.Syntax check - Location name already parsed?
@@ -32,7 +31,6 @@ namespace hypro {
 			}
 
 			Location<Number>* loc = visit(ctx->location().at(i));
-			//std::unique_ptr<Location<Number>> loc = visit(ctx->location().at(i));
 			assert(loc != nullptr);
 			locSet.insert(loc);
 			i++;
@@ -90,9 +88,6 @@ namespace hypro {
 		}
 
 		//3.Returns a ptr to location
-		//LocationManager<Number>& manager = LocationManager<Number>::getInstance();
-		//Location<Number>* loc = manager.create();
-		//std::unique_ptr<Location<Number>> loc = std::make_unique<Location<Number>>();
 		Location<Number>* loc = new Location<Number>();
 		loc->setName(ctx->VARIABLE()->getText());
 		loc->setFlow(flowAndExtInput.first);
@@ -104,7 +99,6 @@ namespace hypro {
 			loc->setExtInput(flowAndExtInput.second);
 		}
 		return loc;
-		//return std::unique_ptr<Location<Number>>(loc);
 	}
 
 	template<typename Number>

@@ -35,7 +35,6 @@ template <typename Number, typename State = State_t<Number,Number>>
 class HybridAutomaton
 {
   public:
-    //using locationSet = std::set<Location<Number>*>; 
     using locationSet = std::set<std::unique_ptr<Location<Number>>>; /// Set of unique location pointers.
     using transitionSet = std::set<std::unique_ptr<Transition<Number>>>; /// Set of unique transition pointers.
     using locationStateMap = std::multimap<const Location<Number>*, State>; /// Multi-map from location pointers to states.
@@ -83,15 +82,7 @@ class HybridAutomaton
     /**
      * @brief 		Destructor
      */
-    virtual ~HybridAutomaton() {
-		// Without this we have a memory leak from HyproTransitionVisitor.
-		// The leak will be patched later by using only references.
-        while(!mTransitions.empty()) {
-        	//auto toDelete = *mTransitions.begin();
-            mTransitions.erase(mTransitions.begin());
-            //delete toDelete;
-        }
-    }
+    virtual ~HybridAutomaton() {}
 
     /**
      * @brief 		Copy Assignment 
@@ -136,9 +127,6 @@ class HybridAutomaton
      * @brief      Setter function.
      */
     ///@{
-    //void setLocations(const locationSet& locs) { mLocations = locs; }
-    //void setLocations(const locationSet& locs) { mLocations.swap(locs); }
-    //void setTransitions(const transitionSet& trans) { mTransitions.swap(trans); } 
     void setLocations(locationSet& locs) { mLocations.swap(locs); }
     void setTransitions(transitionSet& trans) { mTransitions.swap(trans); } 
     void setInitialStates(const locationStateMap& states) { mInitialStates = states; }

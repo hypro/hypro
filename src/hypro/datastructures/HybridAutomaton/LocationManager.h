@@ -30,16 +30,9 @@ class [[deprecated("Use now public Location constructors instead")]] LocationMan
     //LocationManager() : mId(0) {}
     ~LocationManager() {
       while(!mLocations.empty()) {
-        //for(auto tupel : mLocations){
-        //  std::cout << "name of loc with id " << tupel.first << " is: " << tupel.second->getName() << " with hash " << tupel.second->getHash() << std::endl;
-        //}
         Location<Number>* toDelete = mLocations.begin()->second;
         if(toDelete != nullptr){
           mLocations.erase(mLocations.begin());
-          
-          //std::cout << "Now deleting " << toDelete->getName() << " with id " << toDelete->getId() << " and hash " << toDelete->getHash() << std::endl;
-          //size_t deleteCount = mLocations.erase(toDelete->getId());
-          //std::cout << "Deleted " << deleteCount << " times\n";
           delete toDelete;  
         }
       }

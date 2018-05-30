@@ -42,8 +42,7 @@ namespace hypro {
 	antlrcpp::Any HyproTransitionVisitor<Number>::visitTransition(HybridAutomatonParser::TransitionContext *ctx){
 
 		Transition<Number>* t = new Transition<Number>();
-		//std::unique_ptr<Transition<Number>> t = std::make_unique<Transition<Number>>();
-
+		
 		//1.Collect start/destination location from visitFromTo
 		std::pair<Location<Number>*,Location<Number>*> fromTo = visit(ctx->fromto());
 		t->setSource(fromTo.first);
@@ -131,21 +130,7 @@ namespace hypro {
 		}
 		//Return empty condition if no guard given
 		return Condition<Number>();
-/*
-		//1.Call HyproFormulaVisitor and get pair of matrix and vector
-		HyproFormulaVisitor<Number> visitor(vars);
-		std::pair<matrix_t<Number>,vector_t<Number>> result = visitor.visit(ctx->constrset());
 
-		//2.Build condition out of them
-		Condition<Number> inv;
-		inv.setMatrix(result.first);
-		inv.setVector(result.second);
-
-		//std::cout << "---- Guard Matrix is:\n" << inv.getMatrix() << "and vector is:\n" << inv.getVector() << std::endl;
-
-		//3.Return condition
-		return inv;
-*/
 	}
 
 	template<typename Number>
