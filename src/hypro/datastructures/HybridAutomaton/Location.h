@@ -152,16 +152,7 @@ struct locPtrComp {
     bool operator()(const std::unique_ptr<Location<Number>>& lhs, const std::unique_ptr<Location<Number>>& rhs) const { return (*lhs < *rhs); }
 };
 
-//template<typename Number>
-//std::size_t LocationHashValue(const Location<Number>* loc);
-
 template<typename Number>
-//Location<Number>* parallelCompose(const Location<Number>* lhs
-//								, const Location<Number>* rhs
-//								, const std::vector<std::string>& lhsVar
-//								, const std::vector<std::string>& rhsVar
-//								, const std::vector<std::string>& haVar);
-
 std::unique_ptr<Location<Number>> parallelCompose(const std::unique_ptr<Location<Number>>& lhs
                                 , const std::unique_ptr<Location<Number>>& rhs
                                 , const std::vector<std::string>& lhsVar
@@ -177,33 +168,25 @@ namespace std {
     struct hash<hypro::Location<Number>*> {
         std::size_t operator()(const hypro::Location<Number>* locPtr) const
         {
-            //return hypro::LocationHashValue(locPtr);
-            //return locPtr->computeHash();
-
             //Flows
             std::size_t seed = 0;
-            std::size_t flowHash = 0;
             for(auto& flow : locPtr->getFlows()){
-                flowHash = std::hash<hypro::matrix_t<Number>>()(flow);
+                seed += std::hash<hypro::matrix_t<Number>>()(flow);
             }
-            seed += flowHash;
-
+            
             //Name
             seed += std::hash<std::string>()(locPtr->getName());
-
-            //Extinput
+    
+            ////Transitions
+            //std::size_t transitionHash = 0;
+            //for(auto& t : mTransitions){
+            //  seed += std::hash<Transition<Number>*>()(t);
+            //}
+            ////Extinput
             //if(mHasExternalInput){
             //  seed += std::hash<Box<Number>>()(mExternalInput);
             //}
-    
-            //Transitions
-            //std::size_t transitionHash = 0;
-            //for(auto& t : mTransitions){
-            //  transitionHash = std::hash<Transition<Number>*>()(t);
-            //}
-            //seed += transitionHash;
-    
-            //Imvariant
+            ////Imvariant
             //seed += std::hash<Condition<Number>>()(mInvariant);
 
             return seed;

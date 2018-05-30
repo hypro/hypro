@@ -384,8 +384,8 @@ TYPED_TEST(HybridAutomataTest, State) {
 	State_t<TypeParam> s2(this->loc1.get());
 	s2.setSet(ConstraintSet<TypeParam>(matr, vec));
 
-	EXPECT_EQ(s1.getLocation()->getId(), this->loc1->getId());
-	EXPECT_EQ(s2.getLocation()->getId(), this->loc1->getId());
+	EXPECT_EQ(s1.getLocation()->hash(), this->loc1->hash());
+	EXPECT_EQ(s2.getLocation()->hash(), this->loc1->hash());
 	EXPECT_EQ(boost::get<ConstraintSet<TypeParam>>(s2.getSet()).matrix(), matr);
 	EXPECT_EQ(boost::get<ConstraintSet<TypeParam>>(s2.getSet()).vector(), vec);
 	EXPECT_EQ(boost::get<ConstraintSet<TypeParam>>(s2.getSet(0)).matrix(), matr);
