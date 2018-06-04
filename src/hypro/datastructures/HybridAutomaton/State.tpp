@@ -260,7 +260,7 @@ bool State<Number,tNumber,Representation,Rargs...>::contains(const State<Number,
 	assert(checkConsistency());
 	assert(rhs.getNumberSets() == this->getNumberSets());
 	for(std::size_t i=0; i < this->getNumberSets(); ++i){
-		auto tmp = boost::apply_visitor(hypro::genericConversionVisitor<boost::variant<Representation,Rargs...>, Number>(mTypes.at(i)), rhs.getSet(i));
+		auto tmp = boost::apply_visitor(genericConversionVisitor<boost::variant<Representation,Rargs...>, Number>(mTypes.at(i)), rhs.getSet(i));
 		if(!boost::apply_visitor(genericSetContainsVisitor(), this->getSet(i), tmp)) {
 			return false;
 		}

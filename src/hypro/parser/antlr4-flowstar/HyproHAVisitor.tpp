@@ -33,20 +33,20 @@ namespace hypro {
 		std::set<Transition<Number>*> transSet = transVisitor.visit(ctx->jumps()).template as<std::set<Transition<Number>*>>();
 
 		//5.Calls visit to get all initial states
-		typename hypro::HybridAutomaton<Number, State_t<Number,Number>>::locationStateMap initSet;
+		typename HybridAutomaton<Number, State_t<Number,Number>>::locationStateMap initSet;
 		HyproInitialSetVisitor<Number> initVisitor = HyproInitialSetVisitor<Number>(varVec, rLocSet);
 		for(auto& initState : ctx->init()){
-			typename hypro::HybridAutomaton<Number,State_t<Number,Number>>::locationStateMap oneInitialState = initVisitor.visit(initState).template as<typename hypro::HybridAutomaton<Number,State_t<Number,Number>>::locationStateMap>();
+			typename HybridAutomaton<Number,State_t<Number,Number>>::locationStateMap oneInitialState = initVisitor.visit(initState).template as<typename HybridAutomaton<Number,State_t<Number,Number>>::locationStateMap>();
 			initSet.insert(oneInitialState.begin(), oneInitialState.end());
 		}
 
 		//6.Calls visit(ctx->unsafeset()) to get local and global badStates
-		typename hypro::HybridAutomaton<Number,State_t<Number,Number>>::locationConditionMap lBadStates;
+		typename HybridAutomaton<Number,State_t<Number,Number>>::locationConditionMap lBadStates;
 		std::vector<Condition<Number>> gBadStates;
 		if(ctx->unsafeset() != NULL && (ctx->unsafeset()->lbadstate().size() > 0 || ctx->unsafeset()->gbadstate().size() > 0)){
 			//std::cout << "-- size of badstates: " << ctx->unsafeset()->badstate().size() << std::endl;
 			HyproBadStatesVisitor<Number> bStateVisitor = HyproBadStatesVisitor<Number>(varVec, rLocSet);
-			lBadStates = bStateVisitor.visit(ctx->unsafeset()).template as<typename hypro::HybridAutomaton<Number, State_t<Number,Number>>::locationConditionMap>();
+			lBadStates = bStateVisitor.visit(ctx->unsafeset()).template as<typename HybridAutomaton<Number, State_t<Number,Number>>::locationConditionMap>();
 			gBadStates = bStateVisitor.getGlobalBadStates();
 		}
 

@@ -16,7 +16,7 @@ namespace hypro {
 	template<typename Number>
 	antlrcpp::Any HyproInitialSetVisitor<Number>::visitInit(HybridAutomatonParser::InitContext *ctx){
 
-		typename hypro::HybridAutomaton<Number, State_t<Number,Number>>::locationStateMap initialState;
+		typename HybridAutomaton<Number, State_t<Number,Number>>::locationStateMap initialState;
 
 		//For all initialstates - there must be at least one according to grammar
 		for(auto initStateCtx : ctx->initstate()){
