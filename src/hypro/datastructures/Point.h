@@ -189,6 +189,13 @@ class Point {
 	void setCoordinate( const carl::Variable& _dim, const Number& _value );
 
 	/**
+	 * @brief      Sets the coordinate for the passed dimension.
+	 * @param[in]  _dim    The dimension.
+	 * @param[in]  _value  The value.
+	 */
+	void setCoordinate( std::size_t dimension, const Number& _value );
+
+	/**
 	 * @brief      Swap operator.
 	 * @param      _rhs  The right hand side.
 	 */
@@ -539,7 +546,11 @@ class Point {
 	 */
 	Number& operator[]( const carl::Variable& _i );
 	Number& operator[]( std::size_t _i );
+	const Number& operator[]( const carl::Variable& _i ) const;
+	const Number& operator[]( std::size_t _i ) const;
 
+	Number& at( const carl::Variable& _i );
+	Number& at( std::size_t _index );
 	const Number& at( const carl::Variable& _i ) const;
 	const Number& at( std::size_t _index ) const;
 	//@}

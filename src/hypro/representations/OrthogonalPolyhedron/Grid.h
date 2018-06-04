@@ -46,7 +46,7 @@ struct pointIt {
 			--i;
 			it[i]++;
 		}
-		return std::move( current() );
+		return current();
 	}
 
 	// postfix
