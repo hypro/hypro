@@ -83,6 +83,7 @@ public:
     void setExtInput(const Box<Number>& b);
 
     /**
+<<<<<<< 4dda3818d9d4266312171298c4e8fc2cbcd08d45
      * @brief      Determines if this composed of rhs and some potential rest.
      * @details    Checks whether this location can be the result of a parallel composition where rhs is involved as a composite.
      *
@@ -94,6 +95,10 @@ public:
      */
     bool isComposedOf(const Location<Number>& rhs, const std::vector<std::string>& rhsVars, const std::vector<std::string>& thisVars) const;
     std::string getDotRepresentation(const std::vector<std::string>& vars) const;
+	/*
+    * decomposes flow and invariant of this location.
+    */
+    void decompose(std::vector<std::vector<size_t>> decomposition);
 
     inline bool operator<(const Location<Number>& rhs) const { return (mId < rhs.getId()); }
     inline bool operator==(const Location<Number>& rhs) const { return (mId == rhs.getId()); }
@@ -108,9 +113,13 @@ public:
     #ifdef HYPRO_LOGGING
 	    //matrix_t<Number> tmp = matrix_t<Number>(l.getInvariant().getMatrix().rows(), l.getInvariant().getMatrix().cols() + 1);
 	    //tmp << l.getInvariant().getMatrix(), l.getInvariant().getVector();
-	    ostr << "location " << l.getName() << " ptr "<< &l  << " (id: " << l.getId() << ")"<< std::endl << "\t Flow: " << std::endl << l.getFlow() << std::endl << "\t Inv: " << std::endl << l.getInvariant();
+	    ostr << "location " << l.getName() << " ptr "<< &l  << " (id: " << l.getId() << ")"<< std::endl << "\t Flow: " << std::endl;
+	    for(size_t i = 0; i < l.getNumberFlow();i++){
+	    	ostr << i << ": " << l.getFlow(i) << std::endl;
+	    }
+		ostr << "\t Inv: " << std::endl << l.getInvariant();
 	    //ostr << l.getInvariant().getDiscreteCondition() << std::endl;
-      ostr << "ExternalInput:\n" << l.getExternalInput() << std::endl;
+      	ostr << "ExternalInput:\n" << l.getExternalInput() << std::endl;
 	    ostr << "Transitions: " << std::endl;
 	    for (auto transitionPtr : l.getTransitions()) {
 	        ostr << *transitionPtr << std::endl;

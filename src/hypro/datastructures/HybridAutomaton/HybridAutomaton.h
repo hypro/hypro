@@ -124,6 +124,13 @@ class HybridAutomaton
     void addGlobalBadState(const Condition<Number>& state) { mGlobalBadStates.push_back(state); }
     ///@}
 
+    /**
+     * @brief Decomposes an automaton into the components
+     *  defined by decomposition. The vector should contain
+     *  sets of variables that are at least syntactically
+     *  independet to each other.
+     */
+    void decompose(std::vector<std::vector<size_t>> decomposition);
     void removeTransition(Transition<Number>* toRemove);
 
     // copy assignment operator, TODO: implement via swap

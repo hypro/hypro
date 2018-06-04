@@ -48,7 +48,7 @@ option(STATICLIB_SWITCH "Compile a statically linked version of the library." OF
 option(HYPRO_USE_COTIRE "Use the COmpilation TIme REducer." OFF)
 option(HYPRO_USE_OPENMP "Use OpenMp for parallelization in Eigen3." OFF)
 option(HYPRO_USE_PPL "Use PPl polytope wrapper." OFF)
-option(HYPRO_LOGGING "Allow logging." OFF)
+option(HYPRO_LOGGING "Allow logging." ON)
 option(HYPRO_COVERAGE "Enable compiler flags for test coverage diagnostics." OFF)
 option(HYPRO_STATISTICS "Create a statistic file." OFF)
 option(CLANG_TIDY "Enable usage of clang-tidy" OFF )

@@ -409,4 +409,10 @@ typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const Suppor
 
 }
 
+template<typename Number>
+typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const DifferenceBounds& _source, const CONV_MODE mode ) {
+    return toZonotope(toHPolytope(_source, mode));
+}
+
+
 

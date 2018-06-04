@@ -128,6 +128,11 @@ public:
  				return tmp;
  				break;
  			}
+ 			case representation_name::difference_bounds: {
+ 				DifferenceBounds<Number> tmp = Converter<Number>::toDifferenceBounds(lhs);
+ 				return tmp;
+ 				break;
+ 			}
  			case representation_name::ppl_polytope: {
  				assert(false && "CONVERSION TO PPL POLYTOPE NOT YET IMPLEMENTED.");
  				break;

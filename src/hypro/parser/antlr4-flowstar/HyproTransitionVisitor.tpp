@@ -162,8 +162,7 @@ namespace hypro {
 	}
 
 	template<typename Number>
-	antlrcpp::Any HyproTransitionVisitor<Number>::visitResetfct(HybridAutomatonParser::ResetfctContext *ctx){
-
+	antlrcpp::Any HyproTransitionVisitor<Number>::visitResetfct(HybridAutomatonParser::ResetfctContext *ctx){			
 		//0.Check if there are not too much resets
 		if(ctx->allocation().size() > vars.size()){
 			std::cerr << "ERROR: Too many resets for this amount of variables. Only one reset per transition per variable allowed." << std::endl;
@@ -183,9 +182,12 @@ namespace hypro {
 			resetMatrix.row(valuesNPos.second) = valuesNPos.first.head(vars.size());
 			resetVector(valuesNPos.second) = valuesNPos.first(valuesNPos.first.rows()-1);
 		}
+		/**
+		* TODO WHY THO
 		if(resetMatrix == matrix_t<Number>::Zero(vars.size(), vars.size())){
 			resetMatrix = matrix_t<Number>::Identity(vars.size(), vars.size());
 		}
+		*/
 		//std::cout << "---- resetMatrix:\n" << resetMatrix << "\n and resetVector:\n" << resetVector << std::endl;
 
 		//2.return a Reset - 0 in the setter arguments is for the position within the vector of ConstraintSets
