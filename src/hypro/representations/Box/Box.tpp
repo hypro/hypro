@@ -526,8 +526,8 @@ BoxT<Number,Converter,Setting> BoxT<Number,Converter,Setting>::linearTransformat
 	// std::cout << __func__ << ": Matrix" <<  std::endl << A << std::endl << "Vector" << std::endl << b << std::endl;
 	//matrix_t<Number> ax(A);
 	//matrix_t<Number> bx(A);
-	Point<Number> min;
-	Point<Number> max;
+	Point<Number> min(vector_t<Number>::Zero(this->dimension()));
+	Point<Number> max(vector_t<Number>::Zero(this->dimension()));
 
 	for (int k = 0; k < A.rows(); ++k) {
 		for (int j = 0; j < A.cols(); ++j) {

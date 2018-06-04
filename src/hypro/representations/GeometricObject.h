@@ -143,6 +143,13 @@ public:
 	virtual DerivedShape unite( const DerivedShape& rhs ) const = 0;
 
 	/**
+	 * @brief      Function called to reduce the representation - implementation is dependent on the actual
+	 * representation and might affect number representations as well as reducing the complexity of the set
+	 * at the cost of precision - the actual implementation should be settings-dependent.
+	 */
+	virtual void reduceRepresentation() = 0;
+
+	/**
 	 * @brief      Outstream operator.
 	 * @param      out   The outstream.
 	 * @param[in]  obj   The object.

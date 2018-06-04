@@ -54,10 +54,10 @@ struct pointIt {
 
 	Point<Number> current() {
 		assert( v.size() == it.size() );
-		Point<Number> res;
+		Point<Number> res(vector_t<Number>::Zero(v.size()));
 		for ( std::size_t i = 0; i < v.size(); ++i ) res[i] = *it.at( i );
 
-		return std::move( res );
+		return res;
 	}
 };
 

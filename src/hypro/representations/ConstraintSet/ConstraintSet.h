@@ -196,7 +196,7 @@ class ConstraintSetT : public GeometricObject<Number, ConstraintSetT<Number,Conv
 
 	std::pair<CONTAINMENT, ConstraintSetT> satisfiesHalfspace( const Halfspace<Number>&  ) const { return std::make_pair(CONTAINMENT::NO,*this); }
 	std::pair<CONTAINMENT, ConstraintSetT> satisfiesHalfspaces( const matrix_t<Number>& , const vector_t<Number>&  ) const { return std::make_pair(CONTAINMENT::NO,*this); }
-	
+
 	ConstraintSetT<Number,Converter> project(const std::vector<std::size_t>& ) const { return *this; }
 
 	ConstraintSetT<Number,Converter> linearTransformation( const matrix_t<Number>& ) const { return *this; }
@@ -234,6 +234,11 @@ class ConstraintSetT : public GeometricObject<Number, ConstraintSetT<Number,Conv
 	 * @return     The resulting constraintSet.
 	 */
 	static ConstraintSetT<Number,Converter> unite( const std::vector<ConstraintSetT<Number,Converter>>& ) { return ConstraintSetT<Number,Converter>(); }
+
+	/**
+	 * @brief      Does nothing as a ConstraintSet is only a container.
+	 */
+	void reduceRepresentation() {}
 
 	/**
 	 * @brief      Makes this constraintSet the empty constraintSet.

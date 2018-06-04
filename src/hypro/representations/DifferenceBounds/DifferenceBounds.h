@@ -154,6 +154,7 @@ public:
     DifferenceBoundsT<Number,Converter,Setting> intersectHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const;
     bool contains( const Point<Number>& _point ) const;
     DifferenceBoundsT<Number,Converter,Setting> unite( const DifferenceBoundsT<Number,Converter,Setting>& _rhs ) const;
+	void reduceRepresentation() { *this = this->removeRedundancy(); }
     const DifferenceBoundsT<Number,Converter,Setting>& removeRedundancy();
     // difference bounds specific
 

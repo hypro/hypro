@@ -446,6 +446,11 @@ class BoxT : public GeometricObject<Number, BoxT<Number,Converter,Setting>> {
 	static BoxT<Number,Converter,Setting> unite( const std::vector<BoxT<Number,Converter,Setting>>& boxes );
 
 	/**
+	 * @brief      Reduces the box - only in case rational types are used, the number representation is optimized.
+	 */
+	void reduceRepresentation() { *this = std::move(this->reduceNumberRepresentation()); removeRedundancy(); }
+
+	/**
 	 * @brief      Makes this box the empty box.
 	 */
 	void clear();

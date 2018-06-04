@@ -157,6 +157,11 @@ namespace hypro
 		//static PolytopeT<Number,Converter,Setting> unite(const PolytopeT<Number,Converter,Setting>& polytopes);
 	  //  static std::vector<Facet<Number>> convexHull(const std::vector<Point<Number>> points);
 
+		/**
+		 * @brief      Reduces the polytope by removing redundant constraints. The number representation is already optimized
+		 * by PPL internally.
+		 */
+		void reduceRepresentation() { removeRedundancy(); }
 
 		/**
 		 * Polytope related

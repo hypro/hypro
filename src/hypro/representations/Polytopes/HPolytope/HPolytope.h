@@ -252,6 +252,7 @@ public:
 	bool contains( const HPolytopeT<Number,Converter,Setting>& rhs ) const;
 	HPolytopeT unite( const HPolytopeT& rhs ) const;
 	static HPolytopeT unite( const std::vector<HPolytopeT>& rhs );
+	void reduceRepresentation() { reduceNumberRepresentation(); removeRedundancy(); }
 
 	void clear();
 	void print() const;
@@ -361,7 +362,7 @@ public:
 				#ifdef HPOLY_DEBUG_MSG
 				//std::cout << "After Reduction: " << *this << std::endl;
 				#endif
-			}	
+			}
 		}
 		//#endif
 	}

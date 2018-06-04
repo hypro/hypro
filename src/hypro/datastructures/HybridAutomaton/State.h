@@ -396,6 +396,8 @@ class State
 
     void partiallyRemoveRedundancy(std::size_t I);
 
+    void reduceRepresentation();
+
     /**
     * decomposes state set by projection
     */

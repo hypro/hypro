@@ -320,7 +320,7 @@ void State<Number,tNumber,Representation,Rargs...>::removeRedundancy(){
 	assert(checkConsistency());
 	State<Number,tNumber,Representation,Rargs...> res(*this);
 	for(std::size_t i=0; i < mSets.size(); i++){
-		res.setSetDirect(boost::apply_visitor(genericReductionVisitor<repVariant,Number>(), mSets.at(i)), i);
+		res.setSetDirect(boost::apply_visitor(genericRedundancyVisitor<repVariant,Number>(), mSets.at(i)), i);
 	}
 }
 
@@ -333,7 +333,15 @@ void State<Number,tNumber,Representation,Rargs...>::partiallyRemoveRedundancy(st
 	//	return boost::get<Representation>(mSets.at(0)).removeRedundancy();
 	//}
 	//For more representations avaiable: use boost visitor
-	return boost::apply_visitor(genericReductionVisitor<repVariant,Number>(),mSets.at(I), I);
+	return boost::apply_visitor(genericRedundancyVisitor<repVariant,Number>(),mSets.at(I), I);
+}
+
+template<typename Number, typename tNumber, typename Representation, typename ...Rargs>
+void State<Number,tNumber,Representation,Rargs...>::reduceRepresentation() {
+	assert(checkConsistency());
+	for(std::size_t i=0; i < mSets.size(); i++){
+		this->setSetDirect(boost::apply_visitor(genericReductionVisitor<repVariant,Number>(), mSets.at(i)), i);
+	}
 }
 
 template<typename Number, typename tNumber, typename Representation, typename ...Rargs>

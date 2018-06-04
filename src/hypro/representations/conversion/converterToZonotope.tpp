@@ -61,7 +61,7 @@ typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const Ellips
 	return ZonotopeT<Number,Converter> (constraintMatrix);
 	*/
 	WARN("hypro.representations","Conversion to Zonotopes not implemented yet.");
-	return ZonotopeT<Number,Converter>();
+	return Zonotope();
 }
 
 //conversion from H-Polytope to Zonotope (no differentiation between conversion modes - always OVER)
