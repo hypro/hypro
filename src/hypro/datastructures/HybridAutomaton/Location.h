@@ -24,11 +24,6 @@ template<typename Number>
 class [[deprecated]] LocationManager;
 
 /**
- * @brief       A enum used to determine which values have been changed after the last operation.
- */
-//enum LocationChange { NOCHANGE = 0, FLOWS, EXTINPUT, TRANSITIONS, INVARIANT, ID, NAME };
-
-/**
  * @brief      Class for location.
  * @tparam     Number  The used number type.
  */
@@ -67,21 +62,16 @@ private:
     transitionSet mTransitions;
     Condition<Number> mInvariant;
     std::string mName;
-    //std::vector<LocationChange> mChanges;
     [[deprecated]]
     unsigned mId;
     mutable std::size_t mHash = 0;
 
 public:
-  	//Location() = delete;
     Location();
     Location(const Location& loc);
     Location(const matrix_t<Number>& mat);
     Location(const matrix_t<Number>& mat, const transitionSet& trans, const Condition<Number>& inv);
-
-    ~Location(){
-        //std::cout << "loc " << mName << " with hash " << mHash << " sagt tschau!\n";
-    }
+    ~Location(){}
 
     std::size_t getNumberFlow() const { return mFlows.size(); }
     matrix_t<Number> getFlow(std::size_t I = 0) const { return mFlows.at(I); }
@@ -115,26 +105,38 @@ public:
      * @return     True if composed of, False otherwise.
      */
     bool isComposedOf(const Location<Number>& rhs, const std::vector<std::string>& rhsVars, const std::vector<std::string>& thisVars) const;
+    
     std::string getDotRepresentation(const std::vector<std::string>& vars) const;
+	
+    /*
+    * decomposes flow and invariant of this location.
+    */
+    void decompose(std::vector<std::vector<size_t>> decomposition);
 
     inline bool operator<(const Location<Number>& rhs) const { 
         if(this->hash() != rhs.hash()){
             return this->hash() < rhs.hash(); 
         } else {
             //Case where we have to compare members, as same hashes do not necessarily mean equality between the locations.
-            //As order is does not mean anything here semantically, we are free to choose anything that gives us an ordering between locations.
+            //As order does not mean anything here semantically, we are free to choose anything that gives us an ordering between locations.
             //Here, we choose the lexicographical order between the names.
             return mName < rhs.getName();
         }
     }
+
     inline bool operator==(const Location<Number>& rhs) const { assert(this != nullptr); return (this->hash() == rhs.hash()); }
     inline bool operator!=(const Location<Number>& rhs) const { assert(this != nullptr); return (this->hash() != rhs.hash()); }
 
     friend std::ostream& operator<<(std::ostream& ostr, const Location<Number>& l) {
 
     #ifdef HYPRO_LOGGING
-	    ostr << "location " << l.getName() << " ptr "<< &l  << " (hash: " << l.hash() << ")"<< std::endl << "\t Flow: " << std::endl << l.getFlow() << std::endl << "\t Inv: " << std::endl << l.getInvariant();
-        ostr << "ExternalInput:\n" << l.getExternalInput() << std::endl;
+	    ostr << "location " << l.getName() << " ptr "<< &l  << " (id: " << l.hash() << ")"<< std::endl << "\t Flow: " << std::endl;
+	    for(size_t i = 0; i < l.getNumberFlow();i++){
+	    	ostr << i << ": " << l.getFlow(i) << std::endl;
+	    }
+		ostr << "\t Inv: " << std::endl << l.getInvariant();
+	    //ostr << l.getInvariant().getDiscreteCondition() << std::endl;
+      	ostr << "ExternalInput:\n" << l.getExternalInput() << std::endl;
 	    ostr << "Transitions: " << std::endl;
 	    for (auto transitionPtr : l.getTransitions()) {
 	        ostr << *transitionPtr << std::endl;

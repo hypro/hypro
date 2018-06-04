@@ -238,11 +238,6 @@ bool Location<Number>::isComposedOf(const Location<Number>& rhs, const std::vect
 }
 
 template<typename Number>
-//Location<Number>* parallelCompose(const Location<Number>* lhs
-//								, const Location<Number>* rhs
-//								, const std::vector<std::string>& lhsVar
-//								, const std::vector<std::string>& rhsVar
-//								, const std::vector<std::string>& haVar)
 std::unique_ptr<Location<Number>> parallelCompose(const std::unique_ptr<Location<Number>>& lhs
                                 , const std::unique_ptr<Location<Number>>& rhs
                                 , const std::vector<std::string>& lhsVar
@@ -389,4 +384,48 @@ std::unique_ptr<Location<Number>> parallelCompose(const std::unique_ptr<Location
 	return res;
 }
 
+template<typename Number>
+void Location<Number>::decompose(std::vector<std::vector<size_t>> decomposition){
+	if(mFlows.size() > 1 || mInvariant.size() > 1){
+		//already decomposed
+		return;
+	}
+	DEBUG("hypro.datastructures","Flow Matrix before: \n " << mFlows.at(0));
+	// decompose flow
+	matrix_t<Number> oldFlow(mFlows.at(0));
+	std::vector<matrix_t<Number>> newFlows;
+	// for each set {i,j,..., k} select the i-th,j-th,...,k-th vector into a new square matrix
+	for(auto set : decomposition){
+		DEBUG("hypro.datastructures","decompose flow for set: {");
+		for(auto entry : set){
+			DEBUG("hypro.datastructures", "" << entry << ", ");
+		}
+		DEBUG("hypro.datastructures","}");
+		// +1 row for last-row of affine transformation
+		matrix_t<Number> rowMat = matrix_t<Number>::Zero(set.size()+1, oldFlow.cols());
+		// -1 because of last-row
+		for(size_t index = 0; index < rowMat.rows()-1; index++){
+			// select the specific rows into rowMat
+			rowMat.row(index) = oldFlow.row(set[index]);
+		}
+		//copy last row over
+		rowMat.row(rowMat.rows()-1) = oldFlow.row(oldFlow.rows()-1);
+
+		// +1 for constant column
+		matrix_t<Number> finMat = matrix_t<Number>::Zero(rowMat.rows(), set.size()+1);
+		// -1 for constant column
+		for(size_t index = 0; index < finMat.cols()-1; index++){
+			finMat.col(index) = rowMat.col(set[index]);
+		}
+		finMat.col(finMat.cols()-1) = rowMat.col(rowMat.cols()-1);
+		DEBUG("hypro.datastructures", "Final decomposed Flow: \n" << finMat ); 
+		newFlows.push_back(finMat);
+	}
+
+	mFlows = newFlows;
+	// decompose invariant
+	mInvariant.decompose(decomposition);
+}
+
 }  // namespace hypro
+

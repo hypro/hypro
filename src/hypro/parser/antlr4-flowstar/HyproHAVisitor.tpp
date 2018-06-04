@@ -45,19 +45,19 @@ namespace hypro {
 		}
 
 		//5.Calls visit to get all initial states
-		typename hypro::HybridAutomaton<Number, State_t<Number,Number>>::locationStateMap initSet;
+		typename HybridAutomaton<Number, State_t<Number,Number>>::locationStateMap initSet;
 		HyproInitialSetVisitor<Number> initVisitor = HyproInitialSetVisitor<Number>(varVec, rLocSet);
 		for(auto& initState : ctx->init()){
-			typename hypro::HybridAutomaton<Number,State_t<Number,Number>>::locationStateMap oneInitialState = initVisitor.visit(initState).template as<typename hypro::HybridAutomaton<Number,State_t<Number,Number>>::locationStateMap>();
+			typename HybridAutomaton<Number,State_t<Number,Number>>::locationStateMap oneInitialState = initVisitor.visit(initState).template as<typename HybridAutomaton<Number,State_t<Number,Number>>::locationStateMap>();
 			initSet.insert(oneInitialState.begin(), oneInitialState.end());
 		}
 
 		//6.Calls visit(ctx->unsafeset()) to get local and global badStates
-		typename hypro::HybridAutomaton<Number,State_t<Number,Number>>::locationConditionMap lBadStates;
+		typename HybridAutomaton<Number,State_t<Number,Number>>::locationConditionMap lBadStates;
 		std::vector<Condition<Number>> gBadStates;
 		if(ctx->unsafeset() != NULL && (ctx->unsafeset()->lbadstate().size() > 0 || ctx->unsafeset()->gbadstate().size() > 0)){
 			HyproBadStatesVisitor<Number> bStateVisitor = HyproBadStatesVisitor<Number>(varVec, rLocSet);
-			lBadStates = bStateVisitor.visit(ctx->unsafeset()).template as<typename hypro::HybridAutomaton<Number, State_t<Number,Number>>::locationConditionMap>();
+			lBadStates = bStateVisitor.visit(ctx->unsafeset()).template as<typename HybridAutomaton<Number, State_t<Number,Number>>::locationConditionMap>();
 			gBadStates = bStateVisitor.getGlobalBadStates();
 		}
 
@@ -67,7 +67,7 @@ namespace hypro {
 		COUT("================================\n");
 		COUT("Parsed variables: " << vars << std::endl);
 		COUT("Reachability settings:\n" << reachSettings);
-		COUT("All locations:\n");
+		COUT("All locations:\n");COUT("Size:"); COUT(rLocSet.size());
 		for(auto it = rLocSet.begin(); it != rLocSet.end(); ++it){
 			COUT(**it);
 		}

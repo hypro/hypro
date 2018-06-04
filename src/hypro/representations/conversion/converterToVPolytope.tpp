@@ -8,6 +8,9 @@
  */
 
 #include "Converter.h"
+#ifndef INCL_FROM_CONVERTERHEADER
+	static_assert(false, "This file may only be included indirectly by Converter.h");
+#endif
 
 /**
  * Is the caller function for the recursive method that computes exactly one boundary point for each direction that it gets (via support function)
@@ -325,3 +328,8 @@ typename Converter<Number>::VPolytope Converter<Number>::toVPolytope(const Polyt
     return Converter<Number>::VPolytope(source.vertices());
 }
 #endif
+
+template<typename Number>
+typename Converter<Number>::VPolytope Converter<Number>::toVPolytope( const DifferenceBounds& _source, const CONV_MODE mode ) {
+    return toVPolytope(toHPolytope(_source, mode));
+}

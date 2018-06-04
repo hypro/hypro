@@ -55,7 +55,7 @@ namespace hypro {
 		openFile(filename,input);
 
 		//Create Error Listener
-		hypro::ErrorListener* errListener = new hypro::ErrorListener();
+		ErrorListener* errListener = new ErrorListener();
 
 		//Create a Lexer and feed it with the input
 		HybridAutomatonLexer lexer(&input);
@@ -73,7 +73,7 @@ namespace hypro {
 		parser.removeErrorListeners();
 		parser.addErrorListener(errListener);
 		tree::ParseTree* tree = parser.start();	
-		
+				
 		//Create TokenStreamRewriter, needed for constants if defined
 		//std::cout << "Size of constant map: " << parser.getConstants().size() << std::endl;
 		//for(auto entry : parser.getConstants()){
@@ -100,9 +100,9 @@ namespace hypro {
 			parserMod.addErrorListener(errListener);
 			tree::ParseTree* tree = parserMod.start();
 
-			hypro::HyproHAVisitor<mpq_class> visitor;
+			HyproHAVisitor<mpq_class> visitor;
 
-			hypro::HybridAutomaton<mpq_class, State_t<mpq_class,mpq_class>> h = (visitor.visit(tree)).antlrcpp::Any::as<hypro::HybridAutomaton<mpq_class, State_t<mpq_class,mpq_class>>>();
+			HybridAutomaton<mpq_class, State_t<mpq_class,mpq_class>> h = (visitor.visit(tree)).antlrcpp::Any::as<HybridAutomaton<mpq_class, State_t<mpq_class,mpq_class>>>();
 
 			delete errListener;
 
@@ -110,9 +110,9 @@ namespace hypro {
 
 		} else {
 
-			hypro::HyproHAVisitor<mpq_class> visitor;
+			HyproHAVisitor<mpq_class> visitor;
 
-			hypro::HybridAutomaton<mpq_class, State_t<mpq_class,mpq_class>> h = (visitor.visit(tree)).antlrcpp::Any::as<hypro::HybridAutomaton<mpq_class, State_t<mpq_class,mpq_class>>>();
+			HybridAutomaton<mpq_class, State_t<mpq_class,mpq_class>> h = (visitor.visit(tree)).antlrcpp::Any::as<HybridAutomaton<mpq_class, State_t<mpq_class,mpq_class>>>();
 
 			delete errListener;
 
@@ -164,7 +164,7 @@ namespace hypro {
 			//Create an empty TokenStream obj
 			CommonTokenStream tokensMod(&lexerMod);
 
-			//Fill the TokenStream (and output it for demonstration)
+			//Fill the TokenStream
 			tokensMod.fill();
 
 			//Create a parser
@@ -173,9 +173,9 @@ namespace hypro {
 			parserMod.addErrorListener(errListener);
 			tree::ParseTree* tree = parserMod.start();
 
-			hypro::HyproHAVisitor<double> visitor;
+			HyproHAVisitor<double> visitor;
 
-			hypro::HybridAutomaton<double, State_t<double,double>> h = (visitor.visit(tree)).antlrcpp::Any::as<hypro::HybridAutomaton<double, State_t<double,double>>>();
+			HybridAutomaton<double, State_t<double,double>> h = (visitor.visit(tree)).antlrcpp::Any::as<HybridAutomaton<double, State_t<double,double>>>();
 
 			delete errListener;
 
@@ -183,9 +183,9 @@ namespace hypro {
 
 		} else {
 
-			hypro::HyproHAVisitor<double> visitor;
+			HyproHAVisitor<double> visitor;
 
-			hypro::HybridAutomaton<double, State_t<double,double>> h = (visitor.visit(tree)).antlrcpp::Any::as<hypro::HybridAutomaton<double, State_t<double,double>>>();
+			HybridAutomaton<double, State_t<double,double>> h = (visitor.visit(tree)).antlrcpp::Any::as<HybridAutomaton<double, State_t<double,double>>>();
 
 			delete errListener;
 

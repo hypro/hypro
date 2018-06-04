@@ -52,7 +52,7 @@ TYPED_TEST(Benchmark, Box)
 TYPED_TEST(Benchmark, BoxIntersectHalfspaces){
 
 	hypro::BenchmarkSetup<TypeParam> setup;
-	setup.size = 100;		//Amount of benchmarks being generated
+	setup.size = 10000;		//Amount of benchmarks being generated
 	setup.vertices = 2;		//The randomly generated vertices of the box according to minValue and maxValue
 	setup.dimension = 2;	//Initial dimensionaliy
 	setup.minValue = 0;		//Minimal coordinate value for each dimension
@@ -61,9 +61,14 @@ TYPED_TEST(Benchmark, BoxIntersectHalfspaces){
 	unsigned maxDim = 10;
 	while(setup.dimension <= maxDim){
 		hypro::Benchmark<hypro::Box<TypeParam>, TypeParam, hypro::operation::INTERSECTHALFSPACE> intersectHalfspace(setup);
+		std::cout << "Repeat with slow boxes." << std::endl;
+		auto gen = intersectHalfspace.getGenerator();
+		auto gen2 = hypro::BenchmarkGenerator<hypro::BoxT<TypeParam,hypro::Converter<TypeParam>,hypro::BoxAllOff>, TypeParam, hypro::operation::INTERSECTHALFSPACE>(setup);
+		gen2.setBenchmark(gen.convert<hypro::Box<TypeParam> >());
+		hypro::Benchmark<hypro::BoxT<TypeParam,hypro::Converter<TypeParam>,hypro::BoxAllOff>, TypeParam, hypro::operation::INTERSECTHALFSPACE> intersectHalfspace2(setup,gen);
 		setup.dimension++;
 	}
-}	
+}
 
 /*
 TYPED_TEST(Benchmark, VPolytope)

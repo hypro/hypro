@@ -286,3 +286,11 @@ TYPED_TEST(ConverterTest, toPolytope){
 	SUCCEED();
 }
 #endif
+
+TYPED_TEST(ConverterTest, settingsConversion)
+{
+	hypro::BoxT<TypeParam,Converter<TypeParam>,BoxAllOff> res = hypro::BoxT<TypeParam,Converter<TypeParam>,BoxAllOff>(this->box);
+    EXPECT_EQ(this->box, res);
+
+    SUCCEED();
+}

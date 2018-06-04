@@ -8,6 +8,9 @@
  */
 
 #include "Converter.h"
+#ifndef INCL_FROM_CONVERTERHEADER
+	static_assert(false, "This file may only be included indirectly by Converter.h");
+#endif
 
 /*
  *Computes the arithmetic mean for a given Point Vector
@@ -413,3 +416,8 @@ typename Converter<Number>::Zonotope Converter<Number>::toZonotope(const Polytop
     return Converter<Number>::toZonotope(tmp, mode);
 }
 #endif
+
+template<typename Number>
+typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const DifferenceBounds& _source, const CONV_MODE mode ) {
+    return toZonotope(toHPolytope(_source, mode));
+}

@@ -9,6 +9,9 @@
  */
 
 #include "Converter.h"
+#ifndef INCL_FROM_CONVERTERHEADER
+	static_assert(false, "This file may only be included indirectly by Converter.h");
+#endif
 
 // conversion from support function to support function (no differentiation between conversion modes - always EXACT)
 template <typename Number>
@@ -66,3 +69,8 @@ typename Converter<Number>::SupportFunction Converter<Number>::toSupportFunction
     return SupportFunction(temp.constraints());
 }
 #endif
+
+template<typename Number>
+typename Converter<Number>::SupportFunction Converter<Number>::toSupportFunction( const DifferenceBounds& _source, const CONV_MODE mode ) {
+    return toSupportFunction(toHPolytope(_source, mode));
+}

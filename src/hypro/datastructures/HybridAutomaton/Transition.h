@@ -135,6 +135,14 @@ class Transition
 	 */
     bool isComposedOf(const Transition<Number>& rhs, const std::vector<std::string>& rhsVars, const std::vector<std::string>& thisVars) const; 
 
+     /**
+    * decomposes guard  and reset of this transition.
+    */
+    void decompose(std::vector<std::vector<size_t>> decomposition){
+        mGuard.decompose(decomposition);
+        mReset.decompose(decomposition);
+    }
+
     /**
      * @brief      Outstream operator.
      * @param      ostr  The outstream.

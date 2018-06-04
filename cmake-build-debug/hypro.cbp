@@ -1,0 +1,2767 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6"/>
+	<Project>
+		<Option title="hypro"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="gcc"/>
+		<Option virtualFolders="CMake Files\;CMake Files\cmake\;CMake Files\..\;CMake Files\..\carl\;CMake Files\..\carl\build\;CMake Files\src\;CMake Files\src\resources\;CMake Files\src\resources\glpk-4.45\;CMake Files\src\resources\glpk-4.45\build\;CMake Files\src\resources\glpk-4.45\build\tmp\;CMake Files\src\resources\antlr_build\;CMake Files\src\resources\antlr_build\tmp\;CMake Files\src\hypro\;CMake Files\src\test\;CMake Files\src\test\algorithms\;CMake Files\src\test\core\;CMake Files\src\test\benchmark\;CMake Files\src\test\datastructure\;CMake Files\src\test\representations\;CMake Files\cmake-build-debug\;CMake Files\cmake-build-debug\resources\;CMake Files\cmake-build-debug\resources\tmp\;CMake Files\examples\;"/>
+		<Build>
+			<Target title="all">
+				<Option working_dir="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="install/strip">
+				<Option working_dir="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/Makefile&quot;  VERBOSE=1 install/strip"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="install/local">
+				<Option working_dir="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/Makefile&quot;  VERBOSE=1 install/local"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="install">
+				<Option working_dir="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/Makefile&quot;  VERBOSE=1 install"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="list_install_components">
+				<Option working_dir="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/Makefile&quot;  VERBOSE=1 list_install_components"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="rebuild_cache">
+				<Option working_dir="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="edit_cache">
+				<Option working_dir="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="test">
+				<Option working_dir="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/Makefile&quot;  VERBOSE=1 test"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="glpk">
+				<Option working_dir="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/src/resources"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/src/resources/Makefile&quot;  VERBOSE=1 glpk"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/src/resources/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/src/resources/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/src/resources/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="antlr4cpp">
+				<Option working_dir="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/src/resources"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/src/resources/Makefile&quot;  VERBOSE=1 antlr4cpp"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/src/resources/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/src/resources/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/src/resources/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="resources">
+				<Option working_dir="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/src/resources"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/src/resources/Makefile&quot;  VERBOSE=1 resources"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/src/resources/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/src/resources/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/src/resources/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="googletest">
+				<Option working_dir="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/src/resources"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/src/resources/Makefile&quot;  VERBOSE=1 googletest"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/src/resources/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/src/resources/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/src/resources/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="hypro">
+				<Option output="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/libhypro.so" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/src/hypro"/>
+				<Option object_output="./"/>
+				<Option type="3"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/resources/antlr_build/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/resources/antlr_build/include/antlr4-runtime/misc"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/resources/antlr_build/include/antlr4-runtime/atn"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/resources/antlr_build/include/antlr4-runtime/dfa"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/resources/antlr_build/include/antlr4-runtime/tree"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/resources/antlr_build/include/antlr4-runtime/support"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/src"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/build/resources/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include/c++/5"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/5"/>
+					<Add directory="/usr/include/c++/5/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/src/hypro/Makefile&quot;  VERBOSE=1 hypro"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/src/hypro/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/src/hypro/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/src/hypro/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="hypro/fast">
+				<Option output="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/libhypro.so" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/src/hypro"/>
+				<Option object_output="./"/>
+				<Option type="3"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/resources/antlr_build/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/resources/antlr_build/include/antlr4-runtime/misc"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/resources/antlr_build/include/antlr4-runtime/atn"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/resources/antlr_build/include/antlr4-runtime/dfa"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/resources/antlr_build/include/antlr4-runtime/tree"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/resources/antlr_build/include/antlr4-runtime/support"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/src"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/build/resources/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include/c++/5"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/5"/>
+					<Add directory="/usr/include/c++/5/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/src/hypro/Makefile&quot;  VERBOSE=1 hypro/fast"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/src/hypro/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/src/hypro/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/src/hypro/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="runAlgorithmTests">
+				<Option output="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin/runAlgorithmTests" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/resources/src/googletest/include"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/../resources/antlr_build/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/src"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/build/resources/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include/c++/5"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/5"/>
+					<Add directory="/usr/include/c++/5/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/src/test/algorithms/Makefile&quot;  VERBOSE=1 runAlgorithmTests"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/src/test/algorithms/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/src/test/algorithms/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/src/test/algorithms/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="runAlgorithmTests/fast">
+				<Option output="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin/runAlgorithmTests" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/resources/src/googletest/include"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/../resources/antlr_build/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/src"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/build/resources/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include/c++/5"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/5"/>
+					<Add directory="/usr/include/c++/5/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/src/test/algorithms/Makefile&quot;  VERBOSE=1 runAlgorithmTests/fast"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/src/test/algorithms/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/src/test/algorithms/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/src/test/algorithms/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="runAntlrTests">
+				<Option output="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin/runAntlrTests" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/resources/src/googletest/include"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/../resources/antlr_build/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/src"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/build/resources/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include/c++/5"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/5"/>
+					<Add directory="/usr/include/c++/5/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/src/test/core/Makefile&quot;  VERBOSE=1 runAntlrTests"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/src/test/core/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/src/test/core/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/src/test/core/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="runAntlrTests/fast">
+				<Option output="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin/runAntlrTests" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/resources/src/googletest/include"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/../resources/antlr_build/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/src"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/build/resources/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include/c++/5"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/5"/>
+					<Add directory="/usr/include/c++/5/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/src/test/core/Makefile&quot;  VERBOSE=1 runAntlrTests/fast"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/src/test/core/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/src/test/core/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/src/test/core/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="runCoreTests">
+				<Option output="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin/runCoreTests" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/resources/src/googletest/include"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/../resources/antlr_build/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/src"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/build/resources/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include/c++/5"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/5"/>
+					<Add directory="/usr/include/c++/5/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/src/test/core/Makefile&quot;  VERBOSE=1 runCoreTests"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/src/test/core/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/src/test/core/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/src/test/core/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="runCoreTests/fast">
+				<Option output="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin/runCoreTests" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/resources/src/googletest/include"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/../resources/antlr_build/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/src"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/build/resources/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include/c++/5"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/5"/>
+					<Add directory="/usr/include/c++/5/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/src/test/core/Makefile&quot;  VERBOSE=1 runCoreTests/fast"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/src/test/core/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/src/test/core/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/src/test/core/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="runBenchmark">
+				<Option output="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin/runBenchmark" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/resources/src/googletest/include"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/../resources/antlr_build/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/src"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/build/resources/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include/c++/5"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/5"/>
+					<Add directory="/usr/include/c++/5/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/src/test/benchmark/Makefile&quot;  VERBOSE=1 runBenchmark"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/src/test/benchmark/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/src/test/benchmark/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/src/test/benchmark/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="runBenchmark/fast">
+				<Option output="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin/runBenchmark" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/resources/src/googletest/include"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/../resources/antlr_build/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/src"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/build/resources/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include/c++/5"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/5"/>
+					<Add directory="/usr/include/c++/5/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/src/test/benchmark/Makefile&quot;  VERBOSE=1 runBenchmark/fast"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/src/test/benchmark/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/src/test/benchmark/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/src/test/benchmark/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="runDatastructureTests">
+				<Option output="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin/runDatastructureTests" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/resources/src/googletest/include"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/../resources/antlr_build/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/src"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/build/resources/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include/c++/5"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/5"/>
+					<Add directory="/usr/include/c++/5/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/src/test/datastructure/Makefile&quot;  VERBOSE=1 runDatastructureTests"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/src/test/datastructure/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/src/test/datastructure/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/src/test/datastructure/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="runDatastructureTests/fast">
+				<Option output="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin/runDatastructureTests" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/resources/src/googletest/include"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/../resources/antlr_build/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/src"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/build/resources/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include/c++/5"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/5"/>
+					<Add directory="/usr/include/c++/5/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/src/test/datastructure/Makefile&quot;  VERBOSE=1 runDatastructureTests/fast"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/src/test/datastructure/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/src/test/datastructure/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/src/test/datastructure/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="runRepresentationTests">
+				<Option output="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin/runRepresentationTests" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/resources/src/googletest/include"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/../resources/antlr_build/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/src"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/build/resources/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include/c++/5"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/5"/>
+					<Add directory="/usr/include/c++/5/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/src/test/representations/Makefile&quot;  VERBOSE=1 runRepresentationTests"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/src/test/representations/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/src/test/representations/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/src/test/representations/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="runRepresentationTests/fast">
+				<Option output="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin/runRepresentationTests" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/resources/src/googletest/include"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/../resources/antlr_build/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/src"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/build/resources/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include/c++/5"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/5"/>
+					<Add directory="/usr/include/c++/5/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/src/test/representations/Makefile&quot;  VERBOSE=1 runRepresentationTests/fast"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/src/test/representations/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/src/test/representations/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/src/test/representations/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="allExamples">
+				<Option output="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin/allExamples" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/../resources/antlr_build/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/src"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/build/resources/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include/c++/5"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/5"/>
+					<Add directory="/usr/include/c++/5/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 allExamples"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="allExamples/fast">
+				<Option output="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin/allExamples" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/../resources/antlr_build/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/src"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/build/resources/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include/c++/5"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/5"/>
+					<Add directory="/usr/include/c++/5/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 allExamples/fast"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="example_zonotope">
+				<Option output="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin/example_zonotope" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/examples/../build/locals/antlr4cpp/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/../resources/antlr_build/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/src"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/build/resources/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include/c++/5"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/5"/>
+					<Add directory="/usr/include/c++/5/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 example_zonotope"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="example_zonotope/fast">
+				<Option output="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin/example_zonotope" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/examples/../build/locals/antlr4cpp/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/../resources/antlr_build/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/src"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/build/resources/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include/c++/5"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/5"/>
+					<Add directory="/usr/include/c++/5/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 example_zonotope/fast"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="example_redundantConstraints">
+				<Option output="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin/example_redundantConstraints" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/examples/../build/locals/antlr4cpp/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/../resources/antlr_build/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/src"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/build/resources/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include/c++/5"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/5"/>
+					<Add directory="/usr/include/c++/5/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 example_redundantConstraints"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="example_redundantConstraints/fast">
+				<Option output="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin/example_redundantConstraints" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/examples/../build/locals/antlr4cpp/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/../resources/antlr_build/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/src"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/build/resources/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include/c++/5"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/5"/>
+					<Add directory="/usr/include/c++/5/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 example_redundantConstraints/fast"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="example_vertexEnumeration">
+				<Option output="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin/example_vertexEnumeration" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/examples/../build/locals/antlr4cpp/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/../resources/antlr_build/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/src"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/build/resources/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include/c++/5"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/5"/>
+					<Add directory="/usr/include/c++/5/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 example_vertexEnumeration"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="example_vertexEnumeration/fast">
+				<Option output="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin/example_vertexEnumeration" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/examples/../build/locals/antlr4cpp/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/../resources/antlr_build/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/src"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/build/resources/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include/c++/5"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/5"/>
+					<Add directory="/usr/include/c++/5/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 example_vertexEnumeration/fast"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="example_reachability">
+				<Option output="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin/example_reachability" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/examples/../build/locals/antlr4cpp/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/../resources/antlr_build/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/src"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/build/resources/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include/c++/5"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/5"/>
+					<Add directory="/usr/include/c++/5/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 example_reachability"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="example_reachability/fast">
+				<Option output="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin/example_reachability" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/examples/../build/locals/antlr4cpp/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/../resources/antlr_build/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/src"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/build/resources/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include/c++/5"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/5"/>
+					<Add directory="/usr/include/c++/5/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 example_reachability/fast"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="example_reduction">
+				<Option output="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin/example_reduction" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/examples/../build/locals/antlr4cpp/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/../resources/antlr_build/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/src"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/build/resources/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include/c++/5"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/5"/>
+					<Add directory="/usr/include/c++/5/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 example_reduction"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="example_reduction/fast">
+				<Option output="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin/example_reduction" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/examples/../build/locals/antlr4cpp/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/../resources/antlr_build/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/src"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/build/resources/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include/c++/5"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/5"/>
+					<Add directory="/usr/include/c++/5/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 example_reduction/fast"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="example_ppl_nncPolyhedra">
+				<Option output="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin/example_ppl_nncPolyhedra" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/examples/../build/locals/antlr4cpp/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/../resources/antlr_build/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/src"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/build/resources/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include/c++/5"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/5"/>
+					<Add directory="/usr/include/c++/5/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 example_ppl_nncPolyhedra"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="example_ppl_nncPolyhedra/fast">
+				<Option output="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin/example_ppl_nncPolyhedra" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/examples/../build/locals/antlr4cpp/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/../resources/antlr_build/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/src"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/build/resources/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include/c++/5"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/5"/>
+					<Add directory="/usr/include/c++/5/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 example_ppl_nncPolyhedra/fast"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="example_differenceBounds">
+				<Option output="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin/example_differenceBounds" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/examples/../build/locals/antlr4cpp/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/../resources/antlr_build/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/src"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/build/resources/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include/c++/5"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/5"/>
+					<Add directory="/usr/include/c++/5/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 example_differenceBounds"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="example_differenceBounds/fast">
+				<Option output="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin/example_differenceBounds" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/examples/../build/locals/antlr4cpp/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/../resources/antlr_build/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/src"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/build/resources/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include/c++/5"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/5"/>
+					<Add directory="/usr/include/c++/5/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 example_differenceBounds/fast"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="example_converter">
+				<Option output="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin/example_converter" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/examples/../build/locals/antlr4cpp/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/../resources/antlr_build/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/src"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/build/resources/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include/c++/5"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/5"/>
+					<Add directory="/usr/include/c++/5/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 example_converter"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="example_converter/fast">
+				<Option output="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin/example_converter" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/examples/../build/locals/antlr4cpp/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/../resources/antlr_build/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/src"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/build/resources/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include/c++/5"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/5"/>
+					<Add directory="/usr/include/c++/5/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 example_converter/fast"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="example_numberReduction">
+				<Option output="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin/example_numberReduction" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/examples/../build/locals/antlr4cpp/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/../resources/antlr_build/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/src"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/build/resources/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include/c++/5"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/5"/>
+					<Add directory="/usr/include/c++/5/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 example_numberReduction"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="example_numberReduction/fast">
+				<Option output="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin/example_numberReduction" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/examples/../build/locals/antlr4cpp/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/../resources/antlr_build/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/src"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/build/resources/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include/c++/5"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/5"/>
+					<Add directory="/usr/include/c++/5/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 example_numberReduction/fast"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="example_polytope">
+				<Option output="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin/example_polytope" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/examples/../build/locals/antlr4cpp/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/../resources/antlr_build/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/src"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/build/resources/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include/c++/5"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/5"/>
+					<Add directory="/usr/include/c++/5/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 example_polytope"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="example_polytope/fast">
+				<Option output="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin/example_polytope" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/examples/../build/locals/antlr4cpp/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/../resources/antlr_build/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/src"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/build/resources/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include/c++/5"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/5"/>
+					<Add directory="/usr/include/c++/5/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 example_polytope/fast"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="example_boxConversion">
+				<Option output="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin/example_boxConversion" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/examples/../build/locals/antlr4cpp/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/../resources/antlr_build/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/src"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/build/resources/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include/c++/5"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/5"/>
+					<Add directory="/usr/include/c++/5/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 example_boxConversion"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="example_boxConversion/fast">
+				<Option output="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin/example_boxConversion" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/examples/../build/locals/antlr4cpp/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/../resources/antlr_build/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/src"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/build/resources/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include/c++/5"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/5"/>
+					<Add directory="/usr/include/c++/5/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 example_boxConversion/fast"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="example_matrixPolyhedra">
+				<Option output="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin/example_matrixPolyhedra" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/examples/../build/locals/antlr4cpp/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/../resources/antlr_build/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/src"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/build/resources/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include/c++/5"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/5"/>
+					<Add directory="/usr/include/c++/5/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 example_matrixPolyhedra"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="example_matrixPolyhedra/fast">
+				<Option output="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin/example_matrixPolyhedra" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/examples/../build/locals/antlr4cpp/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/../resources/antlr_build/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/src"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/build/resources/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include/c++/5"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/5"/>
+					<Add directory="/usr/include/c++/5/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 example_matrixPolyhedra/fast"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="example_convexHull">
+				<Option output="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin/example_convexHull" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/examples/../build/locals/antlr4cpp/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/../resources/antlr_build/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/src"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/build/resources/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include/c++/5"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/5"/>
+					<Add directory="/usr/include/c++/5/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 example_convexHull"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="example_convexHull/fast">
+				<Option output="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin/example_convexHull" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/examples/../build/locals/antlr4cpp/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/../resources/antlr_build/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/src"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/build/resources/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include/c++/5"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/5"/>
+					<Add directory="/usr/include/c++/5/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 example_convexHull/fast"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="example_box">
+				<Option output="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin/example_box" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/examples/../build/locals/antlr4cpp/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/../resources/antlr_build/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/src"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/build/resources/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include/c++/5"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/5"/>
+					<Add directory="/usr/include/c++/5/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 example_box"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="example_box/fast">
+				<Option output="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin/example_box" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/examples/../build/locals/antlr4cpp/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/../resources/antlr_build/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/src"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/build/resources/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include/c++/5"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/5"/>
+					<Add directory="/usr/include/c++/5/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 example_box/fast"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="example_bouncingBall">
+				<Option output="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin/example_bouncingBall" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/examples/../build/locals/antlr4cpp/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/../resources/antlr_build/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/src"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/build/resources/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include/c++/5"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/5"/>
+					<Add directory="/usr/include/c++/5/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 example_bouncingBall"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="example_bouncingBall/fast">
+				<Option output="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin/example_bouncingBall" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/examples/../build/locals/antlr4cpp/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/../resources/antlr_build/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/src"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/build/resources/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include/c++/5"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/5"/>
+					<Add directory="/usr/include/c++/5/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 example_bouncingBall/fast"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="example_heuristic">
+				<Option output="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin/example_heuristic" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/examples/../build/locals/antlr4cpp/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/../resources/antlr_build/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/src"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/build/resources/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include/c++/5"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/5"/>
+					<Add directory="/usr/include/c++/5/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 example_heuristic"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="example_heuristic/fast">
+				<Option output="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin/example_heuristic" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/examples/../build/locals/antlr4cpp/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/../resources/antlr_build/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/src"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/build/resources/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include/c++/5"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/5"/>
+					<Add directory="/usr/include/c++/5/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 example_heuristic/fast"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="example_dynamicStrategies">
+				<Option output="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin/example_dynamicStrategies" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/examples/../build/locals/antlr4cpp/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/../resources/antlr_build/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/src"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/build/resources/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include/c++/5"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/5"/>
+					<Add directory="/usr/include/c++/5/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 example_dynamicStrategies"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="example_dynamicStrategies/fast">
+				<Option output="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin/example_dynamicStrategies" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/examples/../build/locals/antlr4cpp/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/../resources/antlr_build/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/src"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/build/resources/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include/c++/5"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/5"/>
+					<Add directory="/usr/include/c++/5/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 example_dynamicStrategies/fast"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="example_optimizer">
+				<Option output="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin/example_optimizer" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/examples/../build/locals/antlr4cpp/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/../resources/antlr_build/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/src"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/build/resources/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include/c++/5"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/5"/>
+					<Add directory="/usr/include/c++/5/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 example_optimizer"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="example_optimizer/fast">
+				<Option output="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin/example_optimizer" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/examples/../build/locals/antlr4cpp/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/../resources/antlr_build/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/src"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/build/resources/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include/c++/5"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/5"/>
+					<Add directory="/usr/include/c++/5/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 example_optimizer/fast"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="example_benchmark">
+				<Option output="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin/example_benchmark" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/examples/../build/locals/antlr4cpp/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/../resources/antlr_build/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/src"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/build/resources/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include/c++/5"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/5"/>
+					<Add directory="/usr/include/c++/5/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 example_benchmark"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="example_benchmark/fast">
+				<Option output="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin/example_benchmark" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/examples/../build/locals/antlr4cpp/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/../resources/antlr_build/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/src"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/build/resources/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include/c++/5"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/5"/>
+					<Add directory="/usr/include/c++/5/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 example_benchmark/fast"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="example_HPolytope">
+				<Option output="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin/example_HPolytope" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/examples/../build/locals/antlr4cpp/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/../resources/antlr_build/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/src"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/build/resources/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include/c++/5"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/5"/>
+					<Add directory="/usr/include/c++/5/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 example_HPolytope"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="example_HPolytope/fast">
+				<Option output="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin/example_HPolytope" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/examples/../build/locals/antlr4cpp/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/../resources/antlr_build/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/src"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/build/resources/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include/c++/5"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/5"/>
+					<Add directory="/usr/include/c++/5/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 example_HPolytope/fast"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="example_hashMatrix">
+				<Option output="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin/example_hashMatrix" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/examples/../build/locals/antlr4cpp/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/../resources/antlr_build/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/src"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/build/resources/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include/c++/5"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/5"/>
+					<Add directory="/usr/include/c++/5/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 example_hashMatrix"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="example_hashMatrix/fast">
+				<Option output="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin/example_hashMatrix" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/examples/../build/locals/antlr4cpp/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/../resources/antlr_build/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/src"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/build/resources/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include/c++/5"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/5"/>
+					<Add directory="/usr/include/c++/5/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 example_hashMatrix/fast"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="example_linearTransformation">
+				<Option output="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin/example_linearTransformation" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/examples/../build/locals/antlr4cpp/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/../resources/antlr_build/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/src"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/build/resources/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include/c++/5"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/5"/>
+					<Add directory="/usr/include/c++/5/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 example_linearTransformation"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="example_linearTransformation/fast">
+				<Option output="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin/example_linearTransformation" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/examples/../build/locals/antlr4cpp/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/../resources/antlr_build/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/src"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/build/resources/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include/c++/5"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/5"/>
+					<Add directory="/usr/include/c++/5/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 example_linearTransformation/fast"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="example_logger">
+				<Option output="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin/example_logger" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/examples/../build/locals/antlr4cpp/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/../resources/antlr_build/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/src"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/build/resources/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include/c++/5"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/5"/>
+					<Add directory="/usr/include/c++/5/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 example_logger"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="example_logger/fast">
+				<Option output="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin/example_logger" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/examples/../build/locals/antlr4cpp/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/../resources/antlr_build/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/src"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/build/resources/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include/c++/5"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/5"/>
+					<Add directory="/usr/include/c++/5/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 example_logger/fast"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="example_supportFunction">
+				<Option output="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin/example_supportFunction" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/examples/../build/locals/antlr4cpp/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/../resources/antlr_build/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/src"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/build/resources/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include/c++/5"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/5"/>
+					<Add directory="/usr/include/c++/5/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 example_supportFunction"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="example_supportFunction/fast">
+				<Option output="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin/example_supportFunction" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/examples/../build/locals/antlr4cpp/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/../resources/antlr_build/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/src"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/build/resources/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include/c++/5"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/5"/>
+					<Add directory="/usr/include/c++/5/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 example_supportFunction/fast"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="example_deepSFTree">
+				<Option output="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin/example_deepSFTree" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/examples/../build/locals/antlr4cpp/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/../resources/antlr_build/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/src"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/build/resources/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include/c++/5"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/5"/>
+					<Add directory="/usr/include/c++/5/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 example_deepSFTree"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="example_deepSFTree/fast">
+				<Option output="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin/example_deepSFTree" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/examples/../build/locals/antlr4cpp/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/../resources/antlr_build/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/src"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/build/resources/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include/c++/5"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/5"/>
+					<Add directory="/usr/include/c++/5/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 example_deepSFTree/fast"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="example_massif">
+				<Option output="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin/example_massif" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/examples/../build/locals/antlr4cpp/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/../resources/antlr_build/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/src"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/build/resources/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include/c++/5"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/5"/>
+					<Add directory="/usr/include/c++/5/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 example_massif"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="example_massif/fast">
+				<Option output="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin/example_massif" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/examples/../build/locals/antlr4cpp/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/../resources/antlr_build/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/src"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/build/resources/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include/c++/5"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/5"/>
+					<Add directory="/usr/include/c++/5/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 example_massif/fast"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="example_orthogonalPolyhedron">
+				<Option output="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin/example_orthogonalPolyhedron" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/examples/../build/locals/antlr4cpp/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/../resources/antlr_build/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/src"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/build/resources/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include/c++/5"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/5"/>
+					<Add directory="/usr/include/c++/5/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 example_orthogonalPolyhedron"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="example_orthogonalPolyhedron/fast">
+				<Option output="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin/example_orthogonalPolyhedron" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/examples/../build/locals/antlr4cpp/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/../resources/antlr_build/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/src"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/build/resources/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include/c++/5"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/5"/>
+					<Add directory="/usr/include/c++/5/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 example_orthogonalPolyhedron/fast"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="example_pca">
+				<Option output="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin/example_pca" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/examples/../build/locals/antlr4cpp/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/../resources/antlr_build/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/src"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/build/resources/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include/c++/5"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/5"/>
+					<Add directory="/usr/include/c++/5/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 example_pca"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="example_pca/fast">
+				<Option output="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin/example_pca" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/examples/../build/locals/antlr4cpp/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/../resources/antlr_build/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/src"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/build/resources/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include/c++/5"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/5"/>
+					<Add directory="/usr/include/c++/5/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 example_pca/fast"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="example_ellipsoidPlot">
+				<Option output="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin/example_ellipsoidPlot" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/examples/../build/locals/antlr4cpp/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/../resources/antlr_build/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/src"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/build/resources/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include/c++/5"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/5"/>
+					<Add directory="/usr/include/c++/5/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 example_ellipsoidPlot"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="example_ellipsoidPlot/fast">
+				<Option output="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin/example_ellipsoidPlot" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/examples/../build/locals/antlr4cpp/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/../resources/antlr_build/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/src"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/build/resources/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include/c++/5"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/5"/>
+					<Add directory="/usr/include/c++/5/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 example_ellipsoidPlot/fast"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="example_plot">
+				<Option output="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin/example_plot" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/examples/../build/locals/antlr4cpp/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/../resources/antlr_build/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/src"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/build/resources/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include/c++/5"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/5"/>
+					<Add directory="/usr/include/c++/5/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 example_plot"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="example_plot/fast">
+				<Option output="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin/example_plot" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/bin"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/examples/../build/locals/antlr4cpp/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/../resources/antlr_build/include/antlr4-runtime"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/src"/>
+					<Add directory="/home/justin/Documents/Masterarbeit/repo/carl/build/resources/include"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include/c++/5"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/5"/>
+					<Add directory="/usr/include/c++/5/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 example_plot/fast"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/examples/example_HPolytope.cpp">
+			<Option target="allExamples"/>
+			<Option target="example_HPolytope"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/examples/example_benchmark.cpp">
+			<Option target="allExamples"/>
+			<Option target="example_benchmark"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/examples/example_bouncingBall.cpp">
+			<Option target="allExamples"/>
+			<Option target="example_bouncingBall"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/examples/example_box.cpp">
+			<Option target="allExamples"/>
+			<Option target="example_box"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/examples/example_boxConversion.cpp">
+			<Option target="allExamples"/>
+			<Option target="example_boxConversion"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/examples/example_converter.cpp">
+			<Option target="allExamples"/>
+			<Option target="example_converter"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/examples/example_convexHull.cpp">
+			<Option target="allExamples"/>
+			<Option target="example_convexHull"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/examples/example_deepSFTree.cpp">
+			<Option target="allExamples"/>
+			<Option target="example_deepSFTree"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/examples/example_differenceBounds.cpp">
+			<Option target="allExamples"/>
+			<Option target="example_differenceBounds"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/examples/example_dynamicStrategies.cpp">
+			<Option target="allExamples"/>
+			<Option target="example_dynamicStrategies"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/examples/example_ellipsoidPlot.cpp">
+			<Option target="allExamples"/>
+			<Option target="example_ellipsoidPlot"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/examples/example_hashMatrix.cpp">
+			<Option target="allExamples"/>
+			<Option target="example_hashMatrix"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/examples/example_heuristic.cpp">
+			<Option target="allExamples"/>
+			<Option target="example_heuristic"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/examples/example_linearTransformation.cpp">
+			<Option target="allExamples"/>
+			<Option target="example_linearTransformation"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/examples/example_logger.cpp">
+			<Option target="allExamples"/>
+			<Option target="example_logger"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/examples/example_massif.cpp">
+			<Option target="allExamples"/>
+			<Option target="example_massif"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/examples/example_matrixPolyhedra.cpp">
+			<Option target="allExamples"/>
+			<Option target="example_matrixPolyhedra"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/examples/example_numberReduction.cpp">
+			<Option target="allExamples"/>
+			<Option target="example_numberReduction"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/examples/example_optimizer.cpp">
+			<Option target="allExamples"/>
+			<Option target="example_optimizer"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/examples/example_orthogonalPolyhedron.cpp">
+			<Option target="allExamples"/>
+			<Option target="example_orthogonalPolyhedron"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/examples/example_pca.cpp">
+			<Option target="allExamples"/>
+			<Option target="example_pca"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/examples/example_plot.cpp">
+			<Option target="allExamples"/>
+			<Option target="example_plot"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/examples/example_polytope.cpp">
+			<Option target="allExamples"/>
+			<Option target="example_polytope"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/examples/example_ppl_nncPolyhedra.cpp">
+			<Option target="allExamples"/>
+			<Option target="example_ppl_nncPolyhedra"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/examples/example_reachability.cpp">
+			<Option target="allExamples"/>
+			<Option target="example_reachability"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/examples/example_reduction.cpp">
+			<Option target="allExamples"/>
+			<Option target="example_reduction"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/examples/example_redundantConstraints.cpp">
+			<Option target="allExamples"/>
+			<Option target="example_redundantConstraints"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/examples/example_supportFunction.cpp">
+			<Option target="allExamples"/>
+			<Option target="example_supportFunction"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/examples/example_vertexEnumeration.cpp">
+			<Option target="allExamples"/>
+			<Option target="example_vertexEnumeration"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/examples/example_zonotope.cpp">
+			<Option target="allExamples"/>
+			<Option target="example_zonotope"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/datastructures/Halfspace.cpp">
+			<Option target="hypro"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/datastructures/Halfspace.h">
+			<Option target="hypro"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/datastructures/Point.cpp">
+			<Option target="hypro"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/datastructures/Point.h">
+			<Option target="hypro"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/parser/antlr4-cif/ExpressionsBaseVisitor.cpp">
+			<Option target="hypro"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/parser/antlr4-cif/ExpressionsBaseVisitor.h">
+			<Option target="hypro"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/parser/antlr4-cif/ExpressionsLexer.cpp">
+			<Option target="hypro"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/parser/antlr4-cif/ExpressionsLexer.h">
+			<Option target="hypro"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/parser/antlr4-cif/ExpressionsParser.cpp">
+			<Option target="hypro"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/parser/antlr4-cif/ExpressionsParser.h">
+			<Option target="hypro"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/parser/antlr4-cif/ExpressionsVisitor.cpp">
+			<Option target="hypro"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/parser/antlr4-cif/ExpressionsVisitor.h">
+			<Option target="hypro"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/parser/antlr4-cif/HybridSystemBaseVisitor.cpp">
+			<Option target="hypro"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/parser/antlr4-cif/HybridSystemBaseVisitor.h">
+			<Option target="hypro"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/parser/antlr4-cif/HybridSystemLexer.cpp">
+			<Option target="hypro"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/parser/antlr4-cif/HybridSystemLexer.h">
+			<Option target="hypro"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/parser/antlr4-cif/HybridSystemParser.cpp">
+			<Option target="hypro"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/parser/antlr4-cif/HybridSystemParser.h">
+			<Option target="hypro"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/parser/antlr4-cif/HybridSystemVisitor.cpp">
+			<Option target="hypro"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/parser/antlr4-cif/HybridSystemVisitor.h">
+			<Option target="hypro"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/parser/antlr4-cif/InputOutputBaseVisitor.cpp">
+			<Option target="hypro"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/parser/antlr4-cif/InputOutputBaseVisitor.h">
+			<Option target="hypro"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/parser/antlr4-cif/InputOutputLexer.cpp">
+			<Option target="hypro"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/parser/antlr4-cif/InputOutputLexer.h">
+			<Option target="hypro"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/parser/antlr4-cif/InputOutputParser.cpp">
+			<Option target="hypro"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/parser/antlr4-cif/InputOutputParser.h">
+			<Option target="hypro"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/parser/antlr4-cif/InputOutputVisitor.cpp">
+			<Option target="hypro"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/parser/antlr4-cif/InputOutputVisitor.h">
+			<Option target="hypro"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/parser/antlr4-flowstar/BadStatesLexer.cpp">
+			<Option target="hypro"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/parser/antlr4-flowstar/BadStatesLexer.h">
+			<Option target="hypro"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/parser/antlr4-flowstar/BadStatesParser.cpp">
+			<Option target="hypro"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/parser/antlr4-flowstar/BadStatesParser.h">
+			<Option target="hypro"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/parser/antlr4-flowstar/ErrorListener.cpp">
+			<Option target="hypro"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/parser/antlr4-flowstar/ErrorListener.h">
+			<Option target="hypro"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/parser/antlr4-flowstar/FormulaLexer.cpp">
+			<Option target="hypro"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/parser/antlr4-flowstar/FormulaLexer.h">
+			<Option target="hypro"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/parser/antlr4-flowstar/FormulaParser.cpp">
+			<Option target="hypro"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/parser/antlr4-flowstar/FormulaParser.h">
+			<Option target="hypro"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/parser/antlr4-flowstar/HybridAutomatonBaseVisitor.cpp">
+			<Option target="hypro"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/parser/antlr4-flowstar/HybridAutomatonBaseVisitor.h">
+			<Option target="hypro"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/parser/antlr4-flowstar/HybridAutomatonLexer.cpp">
+			<Option target="hypro"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/parser/antlr4-flowstar/HybridAutomatonLexer.h">
+			<Option target="hypro"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/parser/antlr4-flowstar/HybridAutomatonParser.cpp">
+			<Option target="hypro"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/parser/antlr4-flowstar/HybridAutomatonParser.h">
+			<Option target="hypro"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/parser/antlr4-flowstar/HybridAutomatonVisitor.cpp">
+			<Option target="hypro"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/parser/antlr4-flowstar/HybridAutomatonVisitor.h">
+			<Option target="hypro"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/parser/antlr4-flowstar/InitialSetLexer.cpp">
+			<Option target="hypro"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/parser/antlr4-flowstar/InitialSetLexer.h">
+			<Option target="hypro"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/parser/antlr4-flowstar/InitialSetParser.cpp">
+			<Option target="hypro"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/parser/antlr4-flowstar/InitialSetParser.h">
+			<Option target="hypro"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/parser/antlr4-flowstar/LocationLexer.cpp">
+			<Option target="hypro"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/parser/antlr4-flowstar/LocationLexer.h">
+			<Option target="hypro"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/parser/antlr4-flowstar/LocationParser.cpp">
+			<Option target="hypro"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/parser/antlr4-flowstar/LocationParser.h">
+			<Option target="hypro"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/parser/antlr4-flowstar/ParserWrapper.cpp">
+			<Option target="hypro"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/parser/antlr4-flowstar/ParserWrapper.h">
+			<Option target="hypro"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/parser/antlr4-flowstar/SettingLexer.cpp">
+			<Option target="hypro"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/parser/antlr4-flowstar/SettingLexer.h">
+			<Option target="hypro"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/parser/antlr4-flowstar/SettingParser.cpp">
+			<Option target="hypro"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/parser/antlr4-flowstar/SettingParser.h">
+			<Option target="hypro"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/parser/antlr4-flowstar/TransitionLexer.cpp">
+			<Option target="hypro"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/parser/antlr4-flowstar/TransitionLexer.h">
+			<Option target="hypro"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/parser/antlr4-flowstar/TransitionParser.cpp">
+			<Option target="hypro"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/parser/antlr4-flowstar/TransitionParser.h">
+			<Option target="hypro"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/parser/flowstar/ParserWrapper.cpp">
+			<Option target="hypro"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/parser/flowstar/ParserWrapper.h">
+			<Option target="hypro"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/representations/OrthogonalPolyhedron/NeighborhoodContainer.cpp">
+			<Option target="hypro"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/representations/OrthogonalPolyhedron/NeighborhoodContainer.h">
+			<Option target="hypro"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/util/PlotterUtil.cpp">
+			<Option target="hypro"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/util/PlotterUtil.h">
+			<Option target="hypro"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/util/linearOptimization/Optimizer.cpp">
+			<Option target="hypro"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/util/linearOptimization/Optimizer.h">
+			<Option target="hypro"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/util/linearOptimization/glpk/adaptions_glpk_double.cpp">
+			<Option target="hypro"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/util/linearOptimization/z3/adaptions_z3_double.cpp">
+			<Option target="hypro"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/util/linearOptimization/z3/z3Context.cpp">
+			<Option target="hypro"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/util/linearOptimization/z3/z3Context.h">
+			<Option target="hypro"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/util/logging/Logger.cpp">
+			<Option target="hypro"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/util/logging/Logger.h">
+			<Option target="hypro"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/src/test/algorithms/UtilityTest.cpp">
+			<Option target="runAlgorithmTests"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/src/test/algorithms/VertexEnumerationTest.cpp">
+			<Option target="runAlgorithmTests"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/src/test/benchmark/AllBenchmarkTest.cpp">
+			<Option target="runBenchmark"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/src/test/core/AntlrParserCIFTest.cpp">
+			<Option target="runAntlrTests"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/src/test/core/AntlrParserTest.cpp">
+			<Option target="runAntlrTests"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/src/test/core/EigenAdaptionsTest.cpp">
+			<Option target="runCoreTests"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/src/test/core/OptimizerTest.cpp">
+			<Option target="runCoreTests"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/src/test/core/PlotterTest.cpp">
+			<Option target="runCoreTests"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/src/test/core/UtilityTest.cpp">
+			<Option target="runCoreTests"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/src/test/datastructure/HalfspaceTest.cpp">
+			<Option target="runDatastructureTests"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/src/test/datastructure/PointTest.cpp">
+			<Option target="runDatastructureTests"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/src/test/datastructure/VertexContainerTest.cpp">
+			<Option target="runDatastructureTests"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/src/test/datastructure/VertexTest.cpp">
+			<Option target="runDatastructureTests"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/src/test/representations/BoxTest.cpp">
+			<Option target="runRepresentationTests"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/src/test/representations/ConverterTest.cpp">
+			<Option target="runRepresentationTests"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/src/test/representations/DifferenceBoundsTest.cpp">
+			<Option target="runRepresentationTests"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/src/test/representations/GridTest.cpp">
+			<Option target="runRepresentationTests"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/src/test/representations/HPolytopeTest.cpp">
+			<Option target="runRepresentationTests"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/src/test/representations/NeighborhoodContainerTest.cpp">
+			<Option target="runRepresentationTests"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/src/test/representations/OrthogonalPolyhedronTest.cpp">
+			<Option target="runRepresentationTests"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/src/test/representations/PolytopeSupportFunctionTest.cpp">
+			<Option target="runRepresentationTests"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/src/test/representations/SupportFunctionTest.cpp">
+			<Option target="runRepresentationTests"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/src/test/representations/VPolytopeTest.cpp">
+			<Option target="runRepresentationTests"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/src/test/representations/ZonotopeTest.cpp">
+			<Option target="runRepresentationTests"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/cmake/hypromacros.cmake">
+			<Option virtualFolder="CMake Files\cmake\"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/cmake/export.cmake">
+			<Option virtualFolder="CMake Files\cmake\"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/cmake/hyproConfig.cmake.in">
+			<Option virtualFolder="CMake Files\cmake\"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/cmake/hyproConfig.cmake.in">
+			<Option virtualFolder="CMake Files\cmake\"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/../carl/build/carlConfigVersion.cmake">
+			<Option virtualFolder="CMake Files\..\carl\build\"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/../carl/build/carlConfig.cmake">
+			<Option virtualFolder="CMake Files\..\carl\build\"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/../carl/build/carlTargets.cmake">
+			<Option virtualFolder="CMake Files\..\carl\build\"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/src/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\src\"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/src/resources/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\src\resources\"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/src/resources/gtest.cmake">
+			<Option virtualFolder="CMake Files\src\resources\"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/src/resources/glpk.cmake">
+			<Option virtualFolder="CMake Files\src\resources\"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/src/resources/ExternalAntlr4Cpp.cmake">
+			<Option virtualFolder="CMake Files\src\resources\"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/src/resources/glpk-4.45/build/tmp/glpk-cfgcmd.txt.in">
+			<Option virtualFolder="CMake Files\src\resources\glpk-4.45\build\tmp\"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/src/resources/antlr_build/tmp/antlr4cpp-cfgcmd.txt.in">
+			<Option virtualFolder="CMake Files\src\resources\antlr_build\tmp\"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\src\hypro\"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/src/hypro/flags.h.in">
+			<Option virtualFolder="CMake Files\src\hypro\"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/src/test/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\src\test\"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/src/test/algorithms/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\src\test\algorithms\"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/src/test/core/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\src\test\core\"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/src/test/benchmark/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\src\test\benchmark\"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/src/test/datastructure/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\src\test\datastructure\"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/src/test/representations/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\src\test\representations\"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/resources/tmp/googletest-cfgcmd.txt.in">
+			<Option virtualFolder="CMake Files\cmake-build-debug\resources\tmp\"/>
+		</Unit>
+		<Unit filename="/home/justin/Documents/Masterarbeit/repo/hypro/examples/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\examples\"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>

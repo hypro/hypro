@@ -142,6 +142,8 @@ class BoxT : public GeometricObject<Number, BoxT<Number,Converter,Setting>> {
 	 * Getters & setters
 	 **************************************************************************/
 
+	Setting getSettings() const { return Setting{}; }
+
 	 /**
 	  * @brief Static method for the construction of an empty box of required dimension.
 	  * @param dimension Required dimension.

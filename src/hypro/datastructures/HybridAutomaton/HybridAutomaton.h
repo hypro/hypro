@@ -147,6 +147,14 @@ class HybridAutomaton
     ///@}
 
     void removeTransition(std::unique_ptr<Transition<Number>> toRemove);
+    
+    /**
+     * @brief Decomposes an automaton into the components
+     *  defined by decomposition. The vector should contain
+     *  sets of variables that are at least syntactically
+     *  independet to each other.
+     */
+    void decompose(std::vector<std::vector<size_t>> decomposition);
 
     /**
      * @brief      Reduces the automaton, i.e. removes Locations which are not connected to the automaton by transitions.

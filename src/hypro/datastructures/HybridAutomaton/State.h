@@ -398,6 +398,11 @@ class State
     void partiallyRemoveRedundancy(std::size_t I);
 
     /**
+    * decomposes state set by projection
+    */
+    void decompose(std::vector<std::vector<size_t>> decomposition);
+
+    /**
      * @brief      Outstream operator.
      * @param      out    The outstream.
      * @param[in]  state  The state.
@@ -413,7 +418,7 @@ class State
     	}
     	if(state.getNumberSets() > 1) {
     		out << "Other sets: " << std::endl;
-	    	for(std::size_t i = 1; i <= sizeof...(Rargs); ++i)
+	    	for(std::size_t i = 1; i < state.getNumberSets(); ++i)
 	    		out << state.getSet(i) << std::endl;
     	}
     #else
@@ -496,10 +501,10 @@ State parallelCompose(
 
 #ifdef HYPRO_USE_PPL
 template<typename Number, typename tNumber = Number>
-using State_t = State<Number, tNumber, Box<Number>, ConstraintSet<Number>, SupportFunction<Number>, Zonotope<Number>, HPolytope<Number>, VPolytope<Number>, Polytope<Number>>;
+using State_t = State<Number, tNumber, Box<Number>, ConstraintSet<Number>, SupportFunction<Number>, Zonotope<Number>, HPolytope<Number>, VPolytope<Number>, DifferenceBounds<Number>, Polytope<Number>>;
 #else
 template<typename Number, typename tNumber = Number>
-using State_t = State<Number, tNumber, Box<Number>, ConstraintSet<Number>, SupportFunction<Number>, Zonotope<Number>, HPolytope<Number>, VPolytope<Number>>;
+using State_t = State<Number, tNumber, Box<Number>, ConstraintSet<Number>, SupportFunction<Number>, Zonotope<Number>, HPolytope<Number>, VPolytope<Number>, DifferenceBounds<Number>>;
 #endif
 
 } // namespace

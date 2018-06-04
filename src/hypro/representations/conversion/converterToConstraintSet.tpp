@@ -1,5 +1,8 @@
 
 #include "Converter.h"
+#ifndef INCL_FROM_CONVERTERHEADER
+	static_assert(false, "This file may only be included indirectly by Converter.h");
+#endif
 
 template<typename Number>
 typename Converter<Number>::ConstraintSet Converter<Number>::toConstraintSet( const Box& _source, const CONV_MODE  ) {
@@ -44,4 +47,8 @@ template<typename Number>
 typename Converter<Number>::ConstraintSet Converter<Number>::toConstraintSet( const Zonotope& , const CONV_MODE ) {
 	assert(false && "NotImplemented.");
     return ConstraintSetT<Number,Converter>();
+}
+template<typename Number>
+typename Converter<Number>::ConstraintSet Converter<Number>::toConstraintSet( const DifferenceBounds& _source, const CONV_MODE mode ) {
+	return toConstraintSet(toHPolytope(_source, mode));
 }

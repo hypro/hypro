@@ -10,6 +10,9 @@
 
 #include "Converter.h"
 #include "../../util/templateDirections.h"
+#ifndef INCL_FROM_CONVERTERHEADER
+	static_assert(false, "This file may only be included indirectly by Converter.h");
+#endif
 
 //conversion from H-Polytope to H-Polytope (no differentiation between conversion modes - always EXACT)
 template<typename Number>
@@ -242,6 +245,52 @@ typename Converter<Number>::HPolytope Converter<Number>::toHPolytope( const Supp
 		//constructs a H-Polytope out of the computed halfspaces
     	return HPolytope(constraints, constants);
 	}
+
+}
+
+
+// conversion from difference bounds to H-Polytope (no differentiation between conversion modes - always EXACT)
+template<typename Number>
+typename Converter<Number>::HPolytope Converter<Number>::toHPolytope(const DifferenceBounds& _source, const CONV_MODE){
+        assert(_source.getDBM().rows() == _source.getDBM().cols());
+        int numclocks = _source.getDBM().cols() - 1;
+        int numconstraints = 0; //all entries of the DBM (except the diagonal and inifinities) define a constraint
+        for (int i = 0; i < _source.getDBM().rows(); i++) {
+            for (int j = 0; j < _source.getDBM().rows(); j++) {
+                if (i != j && !(_source.getDBM()(i, j).second == DifferenceBoundsT<Number,Converter,DifferenceBoundsSetting>::BOUND_TYPE::INFTY)) {
+                    numconstraints++;
+                }
+            }
+        }
+        //constraints of the polytope
+        hypro::matrix_t<Number> HPolyConstraints = hypro::matrix_t<Number>::Zero(numconstraints, numclocks);
+        hypro::vector_t<Number> HPolyConstants = hypro::vector_t<Number>::Zero(numconstraints);
+
+        int counter = 0; // counter for indexing constraints
+        for (int i = 0; i < _source.getDBM().rows(); i++) {
+            for (int j = 0; j < _source.getDBM().cols(); j++) {
+                // do not consider diagonals
+                if (i != j && !(_source.getDBM()(i, j).second == DifferenceBoundsT<Number,Converter,DifferenceBoundsSetting>::BOUND_TYPE::INFTY)) {
+                    // the constraint to add
+                    matrix_t<Number> constraintVars = matrix_t<Number>::Zero(1, numclocks);
+                    if (i == 0) {
+                        // constraint of the form 0-x_j <= c_ij
+                        constraintVars(0, j - 1) = -1.0; // j-1 because we don't consider static clock 0
+                    } else if (j == 0) {
+                        // constraint of the form x_i - 0  <= c_ij
+                        constraintVars(0, i - 1) = 1.0; // i-1 because we don't consider static clock 0
+                    } else {
+                        // constraint of the form x_i - x_j  <= c_ij
+                        constraintVars(0, i - 1) = 1.0; // i-1 because we don't consider static clock 0
+                        constraintVars(0, j - 1) = -1.0; // j-1 because we don't consider static clock 0
+                    }
+                    HPolyConstraints.row(counter) = constraintVars;
+                    HPolyConstants(counter, 0) = _source.getDBM()(i, j).first;
+                    counter++;
+                }
+            }
+        }
+        return HPolytope(HPolyConstraints, HPolyConstants);
 }
 
 #ifdef HYPRO_USE_PPL
