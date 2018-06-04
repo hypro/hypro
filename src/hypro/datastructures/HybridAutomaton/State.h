@@ -247,7 +247,7 @@ class State
 		}
 		TRACE("hypro.datastructures","Set set type at pos " << I << " to type " << type);
 		mTypes[I] = type;
-		assert(checkConsistency());
+		//assert(checkConsistency());
 	}
 
 	/**
@@ -258,9 +258,10 @@ class State
 
     /**
      * @brief       Sets the sets.
+     * @details     Note that this method directly sets the sets while ignoring the consistency of the previously stored types
      * @param[in]   sets  The sets.
      */
-    void setSets(const std::vector<boost::variant<Representation,Rargs...>>& sets) { mSets = sets; }
+    void setSets(const std::vector<boost::variant<Representation,Rargs...>>& sets) { mSets = sets; } 
 
       /**
      * @brief       Sets the sets.
@@ -500,8 +501,13 @@ State parallelCompose(
     return haInitState;
 }
 
+#ifdef HYPRO_USE_PPL
+template<typename Number, typename tNumber = Number>
+using State_t = State<Number, tNumber, Box<Number>, ConstraintSet<Number>, SupportFunction<Number>, Zonotope<Number>, HPolytope<Number>, VPolytope<Number>, DifferenceBounds<Number>, Polytope<Number>>;
+#else
 template<typename Number, typename tNumber = Number>
 using State_t = State<Number, tNumber, Box<Number>, ConstraintSet<Number>, SupportFunction<Number>, Zonotope<Number>, HPolytope<Number>, VPolytope<Number>, DifferenceBounds<Number>>;
+#endif
 
 } // namespace
 

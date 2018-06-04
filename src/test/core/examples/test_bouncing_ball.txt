@@ -59,7 +59,7 @@ hybrid reachability {
   parallelotope aggregation {}
 
   l -> l
-  guard { x = 0 }
+  guard { false }
   reset { }
   box aggregation { }
  }

@@ -40,6 +40,7 @@ class ZonotopeT : public GeometricObject<Number, ZonotopeT<Number,Converter,Sett
   private:
 	std::size_t mDimension;
 	vector_t<Number> mCenter;
+	//Each column in mGenerators is a generator
 	matrix_t<Number> mGenerators;
 
 	void removeGenerator( unsigned int colToRemove );

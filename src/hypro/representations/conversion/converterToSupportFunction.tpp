@@ -42,8 +42,6 @@ typename Converter<Number>::SupportFunction Converter<Number>::toSupportFunction
     return SupportFunction( temp.constraints() );
 }
 
-
-
 // conversion from H-polytope to support function (no differentiation between conversion modes - always EXACT)
 template <typename Number>
 typename Converter<Number>::SupportFunction Converter<Number>::toSupportFunction( const HPolytope& _source, const CONV_MODE ) {
@@ -62,6 +60,15 @@ typename Converter<Number>::SupportFunction Converter<Number>::toSupportFunction
 
     return SupportFunction( temp.constraints() );
 }
+
+// conversion from PPL polytope to support function (no differentiation between conversion modes - always EXACT)
+#ifdef HYPRO_USE_PPL
+template <typename Number>
+typename Converter<Number>::SupportFunction Converter<Number>::toSupportFunction( const Polytope& _source, const CONV_MODE){
+    auto temp = toHPolytope(_source);
+    return SupportFunction(temp.constraints());
+}
+#endif
 
 template<typename Number>
 typename Converter<Number>::SupportFunction Converter<Number>::toSupportFunction( const DifferenceBounds& _source, const CONV_MODE mode ) {

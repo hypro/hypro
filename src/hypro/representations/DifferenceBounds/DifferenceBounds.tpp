@@ -117,7 +117,8 @@ namespace hypro {
             hypro::vector_t<Number> HPolyConstants = poly.vector();
             int numconstraints = HPolyConstraints.rows();
             HPolyConstraints.conservativeResize(numconstraints+2*numclocks, HPolyConstraints.cols());
-            HPolyConstants.conservativeResize(numconstraints+2*numclocks, HPolyConstraints.cols());
+            //HPolyConstants.conservativeResize(numconstraints+2*numclocks, HPolyConstraints.cols());
+            HPolyConstants.conservativeResize(numconstraints+2*numclocks);
 
             int counter = numconstraints;//start at next row
             for (int i = 0; i < numclocks; i++) {

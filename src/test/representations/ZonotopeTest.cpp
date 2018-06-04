@@ -430,3 +430,50 @@ TYPED_TEST(ZonotopeTest, IntervalHull) {
     EXPECT_EQ(result.generators(), expected_generators);
     EXPECT_EQ(result.center(), center);
 }
+
+TYPED_TEST(ZonotopeTest, SatisfiesHalfspaces){
+
+    //4 contraints making up the unit box centered around 1,1, so with corner points (0,0),(2,0),(2,2),(0,2)
+    //The zonotope has two generators (0.5,0.5) and (1,0). Thus, it will only be partially contained within the box.
+    //The two extreme points of the zonotope (2.5, 1.5) and (-0.5, 0.5) should stick out of the box.
+    matrix_t<TypeParam> boxMat = matrix_t<TypeParam>::Zero(4,2);
+    boxMat(0,0) = TypeParam(1);
+    boxMat(1,1) = TypeParam(1);
+    boxMat(2,0) = TypeParam(-1);
+    boxMat(3,1) = TypeParam(-1);
+    vector_t<TypeParam> boxVec = vector_t<TypeParam>::Zero(4);
+    boxVec(0) = TypeParam(2);
+    boxVec(1) = TypeParam(2);
+    boxVec(2) = TypeParam(0);
+    boxVec(3) = TypeParam(0);
+    matrix_t<TypeParam> generators = matrix_t<TypeParam>::Zero(2,2);
+    generators(0,0) = TypeParam(0.5);
+    generators(1,0) = TypeParam(0.5);
+    generators(0,1) = TypeParam(1);
+    generators(1,1) = TypeParam(0);
+    vector_t<TypeParam> center = vector_t<TypeParam>::Zero(2);
+    center(0) = TypeParam(1);
+    center(1) = TypeParam(1);
+    hypro::Zonotope<TypeParam> zono(center, generators);
+
+    //Tests
+    auto result = zono.satisfiesHalfspaces(boxMat, boxVec);
+    EXPECT_EQ(result.first, hypro::CONTAINMENT::PARTIAL);
+
+    Halfspace<TypeParam> rightSideOfBox(boxMat.row(0), boxVec(0));
+    Halfspace<TypeParam> leftSideOfBox(boxMat.row(2), boxVec(2));
+    Point<TypeParam> rightExtremePoint({TypeParam(2.5), TypeParam(1.5)});
+    Point<TypeParam> leftExtremePoint({TypeParam(-0.5), TypeParam(0.5)});
+    EXPECT_TRUE(!rightSideOfBox.contains(rightExtremePoint));
+    EXPECT_TRUE(!leftSideOfBox.contains(leftExtremePoint));
+    EXPECT_TRUE(zono.contains(rightExtremePoint));
+    EXPECT_TRUE(zono.contains(leftExtremePoint));
+
+    Halfspace<TypeParam> upperSideOfBox(boxMat.row(1), boxVec(1));
+    Halfspace<TypeParam> lowerSideOfBox(boxMat.row(3), boxVec(3));
+    auto satisfiesUpperSide = zono.satisfiesHalfspace(upperSideOfBox);
+    EXPECT_EQ(satisfiesUpperSide.first, hypro::CONTAINMENT::FULL);
+    auto satisfiesLowerSide = zono.satisfiesHalfspace(lowerSideOfBox);
+    EXPECT_EQ(satisfiesLowerSide.first, hypro::CONTAINMENT::FULL);
+
+}

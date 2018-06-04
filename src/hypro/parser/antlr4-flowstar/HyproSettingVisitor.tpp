@@ -23,60 +23,60 @@ namespace hypro {
 		Number tStep = Number(1);
 		if(ctx->fixedsteps().size() > 1){
 			std::cerr << "ERROR: fixed step in settings has been defined multiple times." << std::endl;
-      exit(0);
+      		exit(0);
 		} else if(ctx->fixedsteps().size() == 1){
 			tStep = visit(ctx->fixedsteps()[0]).template as<Number>();
 		} else {
 			std::cerr << "ERROR: fixed step size has not been defined" << std::endl;
-      exit(0);
+      		exit(0);
 		}
 
 		//time
 		Number tBound = Number(0);
 		if(ctx->time().size() > 1){
 			std::cerr << "ERROR: time in settings has been defined multiple times." << std::endl;
-      exit(0);
+      		exit(0);
 		} else if(ctx->time().size() == 1){
 			tBound = visit(ctx->time()[0]).template as<Number>();
 		} else {
 			std::cerr << "ERROR: time has not been defined" << std::endl;
-      exit(0);
+      		exit(0);
 		}
 
 		//gnuplot octagon
+		//NOTE: It is now possible to not give any dimension to plot; we will not plot then.
 		std::vector<std::vector<std::size_t>> plotDims;
 		if(ctx->plotsetting().size() >= 1){
 			for(const auto& p : ctx->plotsetting()){
-				std::vector<std::size_t> plotDimTupel = visit(p);
-				plotDims.push_back(plotDimTupel);
+				if(p->VARIABLE().size() >= 1){
+					std::vector<std::size_t> plotDimTupel = visit(p);
+					plotDims.push_back(plotDimTupel);	
+				}
 			}
-		} else {
-			std::cerr << "ERROR: gnuplot octagon has not been defined" << std::endl;
-      exit(0);
 		}
 
 		//filename
 		std::string name;
 		if(ctx->filename().size() > 1){
 			std::cerr << "ERROR: filename in settings has been defined multiple times." << std::endl;
-      exit(0);
+      		exit(0);
 		} else if(ctx->filename().size() == 1){
 			name = visit(ctx->filename()[0]).template as<std::string>();
 		} else {
 			std::cerr << "ERROR: filename has not been defined" << std::endl;
-      exit(0);
+      		exit(0);
 		}
 
 		//maxjumps
 		int jumps = 0;
 		if(ctx->maxjumps().size() > 1){
 			std::cerr << "ERROR: max jumps in settings has been defined multiple times." << std::endl;
-      exit(0);
+      		exit(0);
 		} else if(ctx->maxjumps().size() == 1){
 			jumps = visit(ctx->maxjumps()[0]);
 		} else {
 			std::cerr << "ERROR: max jumps has not been defined" << std::endl;
-      exit(0);
+      		exit(0);
 		}
 
 		//remainder

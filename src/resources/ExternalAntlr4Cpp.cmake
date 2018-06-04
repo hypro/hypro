@@ -58,7 +58,7 @@
 # only JRE required
 FIND_PACKAGE(Java COMPONENTS Runtime REQUIRED)
 
-set(ANTLR4CPP_LOCAL_REPO ${PROJECT_SOURCE_DIR}/src/resources/antlr4-cpp-runtime-4.7-source)
+set(ANTLR4CPP_LOCAL_REPO ${PROJECT_SOURCE_DIR}/src/resources/antlr4-cpp-runtime-4.7.1-source)
 #set(ANTLR4CPP_BUILD_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/src/resources/antlr_build)
 #message(STATUS "Current binary dir: ${CMAKE_BINARY_DIR}")
 set(ANTLR4CPP_BUILD_INCLUDE_DIR ${CMAKE_BINARY_DIR}/resources/antlr_build)

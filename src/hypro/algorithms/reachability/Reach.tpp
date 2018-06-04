@@ -106,7 +106,7 @@ namespace reachability {
 	flowpipe_t<Number> Reach<Number>::computeForwardTimeClosure( const State_t<Number>& _state ) {
 		assert(!_state.getTimestamp().isUnbounded());
 #ifdef REACH_DEBUG
-		INFO("hypro.reacher", "Location: " << _state.getLocation()->getId());
+		INFO("hypro.reacher", "Location: " << _state.getLocation()->hash());
 		INFO("hypro.reacher", "Location printed : " << *_state.getLocation());
 		INFO("hypro.reacher", "Time step size: " << mSettings.timeStep);
 		INFO("hypro.reacher", "Initial valuation: " << _state);

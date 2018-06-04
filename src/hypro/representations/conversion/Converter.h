@@ -73,6 +73,9 @@ class Converter {
 		static HPolytope toHPolytope(const Ellipsoid& source, const CONV_MODE = CONV_MODE::EXACT);
 		static HPolytope toHPolytope(const HPolytope& source, const CONV_MODE = CONV_MODE::EXACT);
 		static HPolytope toHPolytope(const VPolytope& source, const CONV_MODE = CONV_MODE::EXACT);
+		#ifdef HYPRO_USE_PPL
+		static HPolytope toHPolytope(const Polytope& source, const CONV_MODE = CONV_MODE::EXACT);
+		#endif
 		static HPolytope toHPolytope(const SupportFunction& source, const std::vector<vector_t<Number>>& additionalDirections = std::vector<vector_t<Number>>(), const CONV_MODE = CONV_MODE::OVER, std::size_t numberOfDirections = defaultTemplateDirectionCount );
 		static HPolytope toHPolytope(const Zonotope& source, const CONV_MODE = CONV_MODE::EXACT);
 		static HPolytope toHPolytope(const DifferenceBounds& source, const CONV_MODE = CONV_MODE::EXACT);
@@ -82,6 +85,9 @@ class Converter {
 		static VPolytope toVPolytope(const Ellipsoid& source, const CONV_MODE = CONV_MODE::EXACT);
 		static VPolytope toVPolytope(const HPolytope& source, const CONV_MODE = CONV_MODE::EXACT);
 		static VPolytope toVPolytope(const VPolytope& source, const CONV_MODE = CONV_MODE::EXACT);
+		#ifdef HYPRO_USE_PPL
+		static VPolytope toVPolytope(const Polytope& source, const CONV_MODE = CONV_MODE::EXACT);
+		#endif
 		static VPolytope toVPolytope(const SupportFunction& source, const CONV_MODE = CONV_MODE::UNDER, std::size_t numberOfDirections = defaultTemplateDirectionCount );
 		static VPolytope toVPolytope(const Zonotope& source, const CONV_MODE = CONV_MODE::EXACT);
 		static VPolytope toVPolytope(const DifferenceBounds& source, const CONV_MODE = CONV_MODE::EXACT);
@@ -91,6 +97,9 @@ class Converter {
 		static SupportFunction toSupportFunction(const Ellipsoid& source, const CONV_MODE = CONV_MODE::EXACT);
 		static SupportFunction toSupportFunction(const HPolytope& source, const CONV_MODE = CONV_MODE::EXACT);
 		static SupportFunction toSupportFunction(const VPolytope& source, const CONV_MODE = CONV_MODE::EXACT);
+		#ifdef HYPRO_USE_PPL
+		static SupportFunction toSupportFunction(const Polytope& source, const CONV_MODE = CONV_MODE::EXACT);
+		#endif
 		static SupportFunction toSupportFunction(const SupportFunction& source, const CONV_MODE = CONV_MODE::EXACT);
 		static SupportFunction toSupportFunction(const Zonotope& source, const CONV_MODE = CONV_MODE::EXACT);
 	    static SupportFunction toSupportFunction(const DifferenceBounds& source, const CONV_MODE = CONV_MODE::EXACT);
@@ -100,9 +109,25 @@ class Converter {
 		static Zonotope toZonotope(const Ellipsoid& source, const CONV_MODE = CONV_MODE::EXACT);
 		static Zonotope toZonotope(const HPolytope& source, const CONV_MODE = CONV_MODE::OVER);
 		static Zonotope toZonotope(const VPolytope& source, const CONV_MODE = CONV_MODE::OVER);
+		#ifdef HYPRO_USE_PPL
+		static Zonotope toZonotope(const Polytope& source, const CONV_MODE = CONV_MODE::EXACT);
+		#endif
 		static Zonotope toZonotope(const SupportFunction& source, const CONV_MODE = CONV_MODE::OVER, std::size_t numberOfDirections = defaultTemplateDirectionCount );
 		static Zonotope toZonotope(const Zonotope& source, const CONV_MODE = CONV_MODE::EXACT);
 		static Zonotope toZonotope(const DifferenceBounds& source, const CONV_MODE = CONV_MODE::OVER);
+
+		#ifdef HYPRO_USE_PPL
+		static Polytope toPolytope(const Polytope& source, const CONV_MODE = CONV_MODE::EXACT);
+		static Polytope toPolytope(const Box& source, const CONV_MODE = CONV_MODE::EXACT);
+		static Polytope toPolytope(const ConstraintSet& source, const CONV_MODE = CONV_MODE::EXACT);
+		static Polytope toPolytope(const Ellipsoid& source, const CONV_MODE = CONV_MODE::EXACT);
+		static Polytope toPolytope(const HPolytope& source, const CONV_MODE = CONV_MODE::EXACT);
+		static Polytope toPolytope(const VPolytope& source, const CONV_MODE = CONV_MODE::EXACT);
+		static Polytope toPolytope(const SupportFunction& source, const CONV_MODE = CONV_MODE::OVER, std::size_t numberOfDirections = defaultTemplateDirectionCount);
+		static Polytope toPolytope(const Zonotope& source, const CONV_MODE = CONV_MODE::EXACT);
+		//static Polytope toPolytope(const DifferenceBounds& source, const CONV_MODE = CONV_MODE::EXACT); //TODO NOT IMPLEMENTED YET
+		#endif
+		
 
 		static DifferenceBounds toDifferenceBounds(const Box& source, const CONV_MODE = CONV_MODE::EXACT);
 		static DifferenceBounds toDifferenceBounds(const ConstraintSet& source, const CONV_MODE = CONV_MODE::EXACT);
@@ -126,7 +151,6 @@ class Converter {
 		//static SupportFunctionT<Number,Converter,ToSettings> toSupportFunction(const SupportFunctionT<Number,Converter,FromSettings>& source);
 		//template<typename FromSettings, typename ToSettings>
 		//static ZonotopeT<Number,Converter,ToSettings> toZonotope(const ZonotopeT<Number,Converter,FromSettings>& source);
-
 };
 
 template<typename Number>
@@ -182,6 +206,9 @@ using DifferenceBounds = typename Converter<Number>::DifferenceBounds;
 #include "converterToVPolytope.tpp"
 #include "converterToSupportFunction.tpp"
 #include "converterToZonotope.tpp"
+#ifdef HYPRO_USE_PPL
+#include "converterToPolytope.tpp"
+#endif
 //#include "settingsConversion.tpp"
 #include "converterToDifferenceBounds.tpp"
 

@@ -292,3 +292,14 @@ typename Converter<Number>::HPolytope Converter<Number>::toHPolytope(const Diffe
         }
         return HPolytope(HPolyConstraints, HPolyConstants);
 }
+
+#ifdef HYPRO_USE_PPL
+
+//Convert a ppl polytope into a HPolytope. Luckily, ppl polytopes have halfspaces internally.
+template<typename Number>
+typename Converter<Number>::HPolytope Converter<Number>::toHPolytope(const Polytope& source, const CONV_MODE){
+	Converter<Number>::VPolytope v(source.vertices());
+	return toHPolytope(v, CONV_MODE::EXACT);
+}
+
+#endif

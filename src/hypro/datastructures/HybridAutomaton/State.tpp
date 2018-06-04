@@ -354,7 +354,10 @@ bool State<Number,tNumber,Representation,Rargs...>::checkConsistency() const {
 		if(mTypes.at(i) != boost::apply_visitor(genericTypeVisitor(), mSets.at(i))){
 			std::cout << "Types do not match (expected: " << mTypes.at(i) << ", is: " << boost::apply_visitor(genericTypeVisitor(), mSets.at(i)) << ")" << std::endl;
 			return false;
+		//} else {
+			//std::cout << "Types matched, in mTypes: " << mTypes.at(i) << " actual type in mSets is:" << boost::apply_visitor(genericTypeVisitor(), mSets.at(i)) << std::endl;
 		}
+
 	}
 	return true;
 }

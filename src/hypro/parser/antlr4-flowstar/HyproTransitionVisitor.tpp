@@ -20,15 +20,20 @@ namespace hypro {
 
 		if(ctx->transition().size() > 0){
 			std::set<Transition<Number>*> trSet;
+			//std::set<std::unique_ptr<Transition<Number>>> trSet;
 			for(auto tr : ctx->transition()){
 				//trSet.insert(visit(tr).antlrcpp::Any::as<Transition<Number>*>());
-				Transition<Number>* t = visit(tr).template as<Transition<Number>*>();
+				//std::unique_ptr<Transition<Number>> t(std::move(visit(tr).template as<std::unique_ptr<Transition<Number>>>()));
+				Transition<Number>* t = visit(tr).antlrcpp::Any::as<Transition<Number>*>();
 				trSet.insert(t);
+				//trSet.insert(t);
 				(t->getSource())->addTransition(t);
 			}
 			return trSet;
+			//return std::move(trSet);
 		} else {
 			return std::set<Transition<Number>*>();
+			//return std::move(std::set<std::unique_ptr<Transition<Number>>>());
 		}
 
 	}
@@ -37,7 +42,7 @@ namespace hypro {
 	antlrcpp::Any HyproTransitionVisitor<Number>::visitTransition(HybridAutomatonParser::TransitionContext *ctx){
 
 		Transition<Number>* t = new Transition<Number>();
-
+		
 		//1.Collect start/destination location from visitFromTo
 		std::pair<Location<Number>*,Location<Number>*> fromTo = visit(ctx->fromto());
 		t->setSource(fromTo.first);
@@ -114,19 +119,18 @@ namespace hypro {
 	template<typename Number>
 	antlrcpp::Any HyproTransitionVisitor<Number>::visitGuard(HybridAutomatonParser::GuardContext *ctx){
 
-		//1.Call HyproFormulaVisitor and get pair of matrix and vector
-		HyproFormulaVisitor<Number> visitor(vars);
-		std::pair<matrix_t<Number>,vector_t<Number>> result = visitor.visit(ctx->constrset());
+		//1.Call HyproFormulaVisitor and get pair of matrix and vector if constrset exists
+		if(ctx->constrset() != NULL){
+			HyproFormulaVisitor<Number> visitor(vars);
+			std::pair<matrix_t<Number>,vector_t<Number>> result = visitor.visit(ctx->constrset());	
+			Condition<Number> inv;
+			inv.setMatrix(result.first);
+			inv.setVector(result.second);
+			return inv;
+		}
+		//Return empty condition if no guard given
+		return Condition<Number>();
 
-		//2.Build condition out of them
-		Condition<Number> inv;
-		inv.setMatrix(result.first);
-		inv.setVector(result.second);
-
-		//std::cout << "---- Guard Matrix is:\n" << inv.getMatrix() << "and vector is:\n" << inv.getVector() << std::endl;
-
-		//3.Return condition
-		return inv;
 	}
 
 	template<typename Number>
@@ -199,15 +203,11 @@ namespace hypro {
 
 	template<typename Number>
 	antlrcpp::Any HyproTransitionVisitor<Number>::visitAggregation(HybridAutomatonParser::AggregationContext *ctx){
-
 		if(ctx->PARALLELOTOPE() != NULL){
-			//std::cout << "---- Aggregation is parallelotope" << std::endl;
 			return Aggregation::parallelotopeAgg;
-		} else if(ctx->BOX() != NULL){
-			//std::cout << "---- Aggregation is box" << std::endl;
+		} else if(ctx->BOX() != NULL || ctx->INTERVALAGG() != NULL){
 			return Aggregation::boxAgg;
 		} else {
-			//std::cout << "---- Aggregation is none" << std::endl;
 			return Aggregation::none;
 		}
 	}

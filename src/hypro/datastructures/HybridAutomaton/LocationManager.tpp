@@ -65,11 +65,11 @@ Location<Number>* LocationManager<Number>::location(unsigned _id) const
 template<typename Number>
 Location<Number>* LocationManager<Number>::location(std::string name) const
 {
-	for(auto locIt = mLocations.begin(); locIt != mLocations.end(); ++ locIt) {
-		if((*locIt).second->getName() == name) {
-			return (*locIt).second;
-		}
-	}
+    for(auto locIt = mLocations.begin(); locIt != mLocations.end(); ++ locIt) {
+        if((*locIt).second->getName() == name) {
+            return (*locIt).second;
+        }
+    }
     return nullptr;
 }
 

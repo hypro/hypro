@@ -409,10 +409,15 @@ typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const Suppor
 
 }
 
+#ifdef HYPRO_USE_PPL
+template<typename Number>
+typename Converter<Number>::Zonotope Converter<Number>::toZonotope(const Polytope& source, const CONV_MODE mode){
+    auto tmp = toVPolytope(source);
+    return Converter<Number>::toZonotope(tmp, mode);
+}
+#endif
+
 template<typename Number>
 typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const DifferenceBounds& _source, const CONV_MODE mode ) {
     return toZonotope(toHPolytope(_source, mode));
 }
-
-
-

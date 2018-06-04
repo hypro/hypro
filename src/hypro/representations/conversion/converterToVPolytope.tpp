@@ -322,9 +322,14 @@ typename Converter<Number>::VPolytope Converter<Number>::toVPolytope( const Supp
 	return target;
 }
 
+#ifdef HYPRO_USE_PPL
+template<typename Number>
+typename Converter<Number>::VPolytope Converter<Number>::toVPolytope(const Polytope& source, const CONV_MODE){
+    return Converter<Number>::VPolytope(source.vertices());
+}
+#endif
 
 template<typename Number>
 typename Converter<Number>::VPolytope Converter<Number>::toVPolytope( const DifferenceBounds& _source, const CONV_MODE mode ) {
     return toVPolytope(toHPolytope(_source, mode));
 }
-

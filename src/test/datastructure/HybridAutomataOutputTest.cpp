@@ -5,7 +5,7 @@
 
 #include "gtest/gtest.h"
 #include "../defines.h"
-#include "datastructures/HybridAutomaton/LocationManager.h"
+//#include "datastructures/HybridAutomaton/LocationManager.h"
 #include "datastructures/HybridAutomaton/HybridAutomaton.h"
 #include "datastructures/HybridAutomaton/output/Flowstar.h"
 #include "util/multithreading/Filewriter.h"
@@ -29,12 +29,11 @@ protected:
 		 * Location Setup
 		 */
 
-		loc1 = locMan.create();
-    	loc2 = locMan.create();
+    	loc1 = std::make_unique<Location<double>>();
+    	loc2 = std::make_unique<Location<double>>();
 
-
-    	trans = new Transition<double>();
-
+    	trans = std::make_unique<Transition<double>>();
+    	
 		invariantVec(0) = 10;
 		invariantVec(1) = 20;
 
@@ -70,20 +69,20 @@ protected:
 		reset.setVector(inv.getVector());
 
 		trans->setGuard(guard);
-		trans->setSource(loc1);
-		trans->setTarget(loc2);
+		trans->setSource(loc1.get());
+		trans->setTarget(loc2.get());
 		trans->setReset(reset);
 
 		/*
 		 * Hybrid Automaton Setup
 		 */
-		locations[0] = loc1;
-		locations[1] = loc2;
 
-		locSet = std::set<Location<double>*>(locations, locations+2);
-		init[0] = loc1;
-		initLocSet = std::set<Location<double>*>(init, init+1);
+		initLocSet.insert(loc1.get());
 
+		locSet.insert(std::move(loc1));
+		locSet.insert(std::move(loc2));
+		hybrid.setLocations(locSet);
+		
 		//Polytope for InitialValuation & Guard Assignment
 		coordinates(0) = 2;
 		coordinates(1) = 3;
@@ -93,18 +92,19 @@ protected:
 		poly = valuation_t(vecSet);
 		auto hpoly = Converter<double>::toHPolytope(poly);
 
-		hybrid.setLocations(locSet);
 		for(auto loc : initLocSet) {
 			State_t<double> initState(loc);
 			initState.setSet(ConstraintSet<double>(hpoly.matrix(), hpoly.vector()));
 			hybrid.addInitialState(initState);
 		}
 
-		transition[0] = trans;
-		transSet = std::set<Transition<double>*>(transition, transition+1);
-
+		ptrSet.insert(trans.get());
+		transSet.insert(std::move(trans));
+		
+		hybrid.getLocation("Location1")->setTransitions(ptrSet);
+		//loc1->setTransitions(ptrSet);
 		hybrid.setTransitions(transSet);
-		loc1->setTransitions(transSet);
+		
     }
 
     virtual void TearDown()
@@ -116,11 +116,9 @@ protected:
 
     //Hybrid Automaton Objects: Locations, Transitions, Automaton itself
 
-    LocationManager<double>& locMan = LocationManager<double>::getInstance();
-
-    Location<double>* loc1;
-    Location<double>* loc2;
-    Transition<double>* trans;
+    std::unique_ptr<Location<double>> loc1;
+	std::unique_ptr<Location<double>> loc2;
+    std::unique_ptr<Transition<double>> trans;
     HybridAutomaton<double> hybrid;
 
     //Other Objects: Vectors, Matrices, Guards...
@@ -133,44 +131,25 @@ protected:
 
     Reset<double> reset;
 
-    Location<double>* locations[2];
-    std::set<Location<double>*> locSet;
+    std::set<std::unique_ptr<Location<double>>, locPtrComp<double>> locSet;
 
-    Location<double>* init[1];
-    std::set<Location<double>*> initLocSet;
+	std::set<Location<double>*> initLocSet;
 
-    Transition<double>* transition[1];
-	std::set<Transition<double>*> transSet;
+	std::set<std::unique_ptr<Transition<double>>> transSet;
+    std::set<Transition<double>*> ptrSet;
 
 	vector_t<double> coordinates = vector_t<double>(2,1);
     valuation_t poly;
 };
-
 
 /**
  * Hybrid Automaton Test
  */
 TEST_F(HybridAutomataOutputTest, HybridAutomatonTest)
 {
-	// construct a new hybrid automaton.
-	HybridAutomaton<double> h1;
-
-	h1.addLocation(loc1);
-	h1.addLocation(loc2);
-	h1.addTransition(trans);
-
-	matrix_t<double> matr = matrix_t<double>::Identity(2,2);
-	vector_t<double> vec = vector_t<double>(2);
-	vec << 1,2;
-
-	State_t<double> s(loc1);
-	s.setSet(ConstraintSet<double>(matr, vec));
-
-	h1.addInitialState(s);
-
 	LockedFileWriter out("tmp.model");
 	out.clearFile();
-	out << toFlowstarFormat(h1);
+	out << toFlowstarFormat(hybrid);
 
 	//boost::tuple<HybridAutomaton<double,State_t<double,double>>, ReachabilitySettings<double>> parsedResult = parseFlowstarFile<double>(std::string("tmp.model"));
 	//std::remove("tmp.model");

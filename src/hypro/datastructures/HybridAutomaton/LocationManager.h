@@ -11,7 +11,8 @@
 namespace hypro
 {
 template<typename Number>
-class LocationManager : public carl::Singleton<LocationManager<Number>>
+class [[deprecated("Use now public Location constructors instead")]] LocationManager : public carl::Singleton<LocationManager<Number>>
+//class LocationManager : public carl::Singleton<LocationManager<Number>>
 {
     friend carl::Singleton<LocationManager<Number>>;
 
@@ -28,11 +29,13 @@ class LocationManager : public carl::Singleton<LocationManager<Number>>
   public:
     //LocationManager() : mId(0) {}
     ~LocationManager() {
-    	while(!mLocations.empty()) {
-    		Location<Number>* toDelete = mLocations.begin()->second;
-    		mLocations.erase(mLocations.begin());
-    		delete toDelete;
-    	}
+      while(!mLocations.empty()) {
+        Location<Number>* toDelete = mLocations.begin()->second;
+        if(toDelete != nullptr){
+          mLocations.erase(mLocations.begin());
+          delete toDelete;  
+        }
+      }
     }
 
     Location<Number>* create();
