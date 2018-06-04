@@ -35,7 +35,7 @@ template <typename Number, typename State = State_t<Number,Number>>
 class HybridAutomaton
 {
   public:
-    using locationSet = std::set<std::unique_ptr<Location<Number>>>; /// Set of unique location pointers.
+    using locationSet = std::set<std::unique_ptr<Location<Number>>, locPtrComp<Number>>; /// Set of unique location pointers.
     using transitionSet = std::set<std::unique_ptr<Transition<Number>>>; /// Set of unique transition pointers.
     using locationStateMap = std::multimap<const Location<Number>*, State>; /// Multi-map from location pointers to states.
     using locationConditionMap = std::map<const Location<Number>*, Condition<Number>>; /// Map from location pointers to conditions.
@@ -175,6 +175,21 @@ class HybridAutomaton
 
     std::string getStatistics() const;
 
+    //TODO: replace this with operator== for sets of pointers to loc (if implemented this way, standard == operator of set is used,
+    //which does not compare correctly 
+    bool equals(const locationSet& lhs, const locationSet& rhs) const {
+        if(lhs.size() != rhs.size()) return false;
+        auto rhsIt = rhs.begin(); 
+        for(auto lhsIt = lhs.begin(); lhsIt != lhs.end(); ++lhsIt){
+            //std::cout << "now comparing " << (*(lhsIt))->hash() << " and " << (*(rhsIt))->hash() << std::endl;
+            if(**lhsIt != **rhsIt){
+                return false;
+            }
+            ++rhsIt;
+        }
+        return true;
+    }
+    
     /**
      * @brief      Comparison for equality operator.
      * @param[in]  lhs   The left hand side.
@@ -182,7 +197,8 @@ class HybridAutomaton
      * @return     True, if both automata are equal, false otherwise.
      */
     friend bool operator==( const HybridAutomaton<Number,State>& lhs, const HybridAutomaton<Number,State>& rhs ) {
-    	return lhs.getLocations() == rhs.getLocations() &&
+        //return lhs.getLocations() == rhs.getLocations() &&
+        return lhs.equals(lhs.getLocations(),rhs.getLocations()) &&
     			lhs.getTransitions() == rhs.getTransitions() &&
     			lhs.getInitialStates() == rhs.getInitialStates() &&
     			lhs.getLocalBadStates() == rhs.getLocalBadStates() &&

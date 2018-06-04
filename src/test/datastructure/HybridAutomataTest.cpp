@@ -138,7 +138,7 @@ protected:
 
     Reset<Number> reset;
 
-    std::set<std::unique_ptr<Location<Number>>> locSet;
+    std::set<std::unique_ptr<Location<Number>>, locPtrComp<Number>> locSet;
 
     std::set<Location<Number>*> initLocSet;
 
@@ -150,7 +150,7 @@ protected:
 
   public:
 
-  	bool find(const std::unique_ptr<Location<Number>>& loc, const std::set<std::unique_ptr<Location<Number>>>& locSet) const {
+  	bool find(const std::unique_ptr<Location<Number>>& loc, const std::set<std::unique_ptr<Location<Number>>, locPtrComp<Number>>& locSet) const {
   		if(loc == nullptr || locSet.empty()){
   			std::cout << "loc was nullptr or locSet was empty\n";
   			return false;
@@ -354,6 +354,8 @@ TYPED_TEST(HybridAutomataTest, HybridAutomatonTest)
 
 	// copy assignment operator
 	HybridAutomaton<TypeParam> h2 = h1;
+	//EXPECT_TRUE(h1.getLocations() == h2.getLocations());
+	//EXPECT_TRUE(h1.equals(h1.getLocations(), h2.getLocations()));
 	EXPECT_EQ(h1, h2);
 
 	// somehow check move assignment

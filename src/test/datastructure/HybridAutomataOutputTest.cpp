@@ -131,7 +131,7 @@ protected:
 
     Reset<double> reset;
 
-    std::set<std::unique_ptr<Location<double>>> locSet;
+    std::set<std::unique_ptr<Location<double>>, locPtrComp<double>> locSet;
 
 	std::set<Location<double>*> initLocSet;
 

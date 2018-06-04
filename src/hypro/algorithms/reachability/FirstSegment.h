@@ -70,6 +70,10 @@ void bloatBox(State& in, const Box<Number>& bloatBox) {
             #endif
 			break;
 		}
+        case representation_name::difference_bounds: {
+            in.setSetDirect(boost::get<DifferenceBounds<Number>>(in.getSet(0)).minkowskiSum(Converter<Number>::toDifferenceBounds(bloatBox)));
+            break;
+        }
 		case representation_name::constraint_set:{
 			assert(false && "CANNOT CONVERT TO TYPE ConstraintSet<Number>.");
 			break;

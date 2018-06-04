@@ -35,7 +35,7 @@ HybridAutomaton<Number,State>& HybridAutomaton<Number,State>::operator=(const Hy
     	}
     	assert(copyOfRhsLocs.size() == rhs.getLocations().size());
 
-    	//Realease old data and assign new data
+    	//Release old data and assign new data
     	mLocations.clear();
     	assert(mLocations.size() == 0);
     	mLocations = copyOfRhsLocs;

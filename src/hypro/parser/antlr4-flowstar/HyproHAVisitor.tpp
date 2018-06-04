@@ -39,7 +39,7 @@ namespace hypro {
 		}
 
 		//4.2.Make a set of unique ptrs to Locations
-		std::set<std::unique_ptr<Location<Number>>> uniquePtrLocSet;
+		std::set<std::unique_ptr<Location<Number>>, locPtrComp<Number>> uniquePtrLocSet;
 		for(auto& l : locSet){
 			uniquePtrLocSet.insert(std::unique_ptr<Location<Number>>(std::move(l)));
 		}

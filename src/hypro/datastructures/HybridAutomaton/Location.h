@@ -40,18 +40,18 @@ protected:
      * @details    Note that locations should only be constructed from the LocationManager.
      * @param[in]  id    The identifier given by the LocationManager.
      */
-    [[deprecated]]
+    [[deprecated("use public location constructor instead")]]
     Location(unsigned id);
     ///@{
     /**
      * @param[in]  id    The identifier given by the LocationManager.
      * @param[loc] The original location which is copied.
      */
-    [[deprecated]]
+    [[deprecated("use public location constructor instead")]]
     Location(unsigned id, const Location& loc);
-    [[deprecated]]
+    [[deprecated("use public location constructor instead")]]
     Location(unsigned id, const matrix_t<Number>& mat);
-    [[deprecated]]
+    [[deprecated("use public location constructor instead")]]
     Location(unsigned id, const matrix_t<Number>& mat, const transitionSet& trans, const Condition<Number>& inv);
     ///@}
 
@@ -62,7 +62,7 @@ private:
     transitionSet mTransitions;
     Condition<Number> mInvariant;
     std::string mName;
-    [[deprecated]]
+    [[deprecated("Location are now identified via hashes")]]
     unsigned mId;
     mutable std::size_t mHash = 0;
 
@@ -81,7 +81,7 @@ public:
     const transitionSet& getTransitions() const { return mTransitions; }
     const Box<Number>& getExternalInput() const { return mExternalInput; }
     bool hasExternalInput() const { return mHasExternalInput; }
-    [[deprecated]]
+    [[deprecated("use hash() instead")]]
     unsigned getId() const { return mId; }
 	std::string getName() const { return mName; }
 

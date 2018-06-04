@@ -43,6 +43,10 @@ static void computeReachableStates(const std::string& filename, const hypro::rep
 				extendedFilename += "_pplpoly";
 				break;
 			}
+			case hypro::representation_name::difference_bounds: {
+				extendedFilename += "_differenceBounds";
+				break;
+			}
 			case hypro::representation_name::zonotope:{
 				extendedFilename += "_zonotope";
 				break;
@@ -149,13 +153,20 @@ int main(int argc, char** argv) {
 	switch(rep){
 
 		#ifdef HYPRO_USE_PPL
-		case 6: {
+		case 7: {
 			using Representation = hypro::Polytope<Number>;
 			std::cout << "Using a ppl-polytope representation." << std::endl;
 			computeReachableStates<Number, Representation>(filename, hypro::representation_name::ppl_polytope);
 			break;
 		}
 		#endif
+
+		case 6: {
+			using Representation = hypro::DifferenceBounds<Number>;
+			std::cout << "Using a difference bounds representation." << std::endl;
+			computeReachableStates<Number, Representation>(filename, hypro::representation_name::difference_bounds);
+			break;
+		}
 
 		case 5: {
 			using Representation = hypro::Zonotope<Number>;
