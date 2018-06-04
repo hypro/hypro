@@ -27,12 +27,12 @@ typename Converter<Number>::SupportFunction Converter<Number>::toSupportFunction
 
 template <typename Number>
 typename Converter<Number>::SupportFunction Converter<Number>::toSupportFunction( const ConstraintSet& _source, const CONV_MODE ){
-    return SupportFunctionT<Number,Converter>(_source.matrix(), _source.vector());
+    return SupportFunctionT<Number,Converter,SupportFunctionSetting>(_source.matrix(), _source.vector());
 }
 
 template <typename Number>
 typename Converter<Number>::SupportFunction Converter<Number>::toSupportFunction( const Ellipsoid& _source, const CONV_MODE ){
-    return SupportFunctionT<Number,Converter>(_source.matrix());
+    return SupportFunctionT<Number,Converter,SupportFunctionSetting>(_source.matrix());
 }
 
 // conversion from V-Polytope to support function (no differentiation between conversion modes - always EXACT)
@@ -55,7 +55,7 @@ template <typename Number>
 typename Converter<Number>::SupportFunction Converter<Number>::toSupportFunction( const Zonotope& _source, const CONV_MODE ) {
     typename std::vector<Point<Number>> vertices = _source.vertices();           //computes the vertices from the source zonotope
     if(vertices.empty()){
-    	return SupportFunctionT<Number,Converter>();
+    	return SupportFunctionT<Number,Converter,SupportFunctionSetting>();
     }
 
     HPolytope temp = HPolytope(vertices);

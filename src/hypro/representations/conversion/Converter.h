@@ -41,8 +41,8 @@ class Converter {
 		#ifdef HYPRO_USE_PPL
 		using Polytope = PolytopeT<Number,Converter,PolytopeSetting>;
 		#endif
-		using SupportFunction = SupportFunctionT<Number,Converter>;
-		using Zonotope = ZonotopeT<Number,Converter>;
+		using SupportFunction = SupportFunctionT<Number,Converter,SupportFunctionSetting>;
+		using Zonotope = ZonotopeT<Number,Converter,ZonotopeSetting>;
 
 		static Box toBox(const Box& source, const CONV_MODE = CONV_MODE::EXACT);
 		static Box toBox(const ConstraintSet& source, const CONV_MODE = CONV_MODE::EXACT);

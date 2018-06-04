@@ -17,7 +17,7 @@
  */
 
 template <typename Number, typename Converter>
-std::vector<Point<Number>> computeBoundaryPointsExpensive (const SupportFunctionT<Number,Converter>& sf, const matrix_t<Number>& directions) {
+std::vector<Point<Number>> computeBoundaryPointsExpensive (const SupportFunctionT<Number,Converter,SupportFunctionSetting>& sf, const matrix_t<Number>& directions) {
  //determines how many directions need to be checked
     Eigen::Index numberOfDirections = directions.rows();
     //gets dimension in which is currently computed
@@ -49,10 +49,10 @@ std::vector<Point<Number>> computeBoundaryPointsExpensive (const SupportFunction
             assert(curPlaneVector.size() == 2);
 
             //intersects the current support function with the Halfspace
-            SupportFunctionT<Number,Converter> curPlaneSup = SupportFunctionT<Number,Converter>(curPlaneVector);
+            SupportFunctionT<Number,Converter,SupportFunctionSetting> curPlaneSup = SupportFunctionT<Number,Converter,SupportFunctionSetting>(curPlaneVector);
             //std::cout << "current supportplane:" << std::endl;
             curPlaneSup.print();
-            SupportFunctionT<Number,Converter> curFace = sf.intersect(curPlaneSup);
+            SupportFunctionT<Number,Converter,SupportFunctionSetting> curFace = sf.intersect(curPlaneSup);
             //std::cout << "current face:" << std::endl;
             curFace.print();
             //only continue if face has still the same dimension as the source object (although it is technically now a dim-1 object at most)
@@ -80,7 +80,7 @@ std::vector<Point<Number>> computeBoundaryPointsExpensive (const SupportFunction
      *Recursively computes some boundary points that lie relatively central for each face of the object, this function is constructed to only be called by computeBoundaryPoints
      */
 template <typename Number, typename Converter>
-Point<Number> computeBoundaryPointsExpensiveRecursive (const SupportFunctionT<Number,Converter>& sf, const matrix_t<Number>& directions, std::size_t curDim) {
+Point<Number> computeBoundaryPointsExpensiveRecursive (const SupportFunctionT<Number,Converter,SupportFunctionSetting>& sf, const matrix_t<Number>& directions, std::size_t curDim) {
     //determines how many directions need to be checked
     Eigen::Index numberOfDirections = directions.rows();
     //only continue if directions and object match dimensionwise
@@ -110,10 +110,10 @@ Point<Number> computeBoundaryPointsExpensiveRecursive (const SupportFunctionT<Nu
             assert(curPlaneVector.size() == 2);
 
             //intersects the current support function with the Halfspace
-            SupportFunctionT<Number,Converter> curPlaneSup = SupportFunctionT<Number,Converter>(curPlaneVector);
+            SupportFunctionT<Number,Converter,SupportFunctionSetting> curPlaneSup = SupportFunctionT<Number,Converter,SupportFunctionSetting>(curPlaneVector);
             //std::cout << "current supportplane:" << std::endl;
             curPlaneSup.print();
-            SupportFunctionT<Number,Converter> curFace = sf.intersect(curPlaneSup);
+            SupportFunctionT<Number,Converter,SupportFunctionSetting> curFace = sf.intersect(curPlaneSup);
             //std::cout << "current face:" << std::endl;
             curFace.print();
             //only continue if face has still the same dimension as the source object (although it is technically now a dim-1 object at most)
