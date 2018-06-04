@@ -3,6 +3,7 @@
 #ifndef INCL_FROM_GOHEADER
 	static_assert(false, "This file may only be included indirectly by GeometricObject.h");
 #endif
+#define INCL_FROM_CONVERTERHEADER true
 
 #include "../../flags.h"
 #include "../Box/Box.h"
@@ -94,6 +95,20 @@ class Converter {
 		static Zonotope toZonotope(const VPolytope& source, const CONV_MODE = CONV_MODE::OVER);
 		static Zonotope toZonotope(const SupportFunction& source, const CONV_MODE = CONV_MODE::OVER, std::size_t numberOfDirections = defaultTemplateDirectionCount );
 		static Zonotope toZonotope(const Zonotope& source, const CONV_MODE = CONV_MODE::EXACT);
+
+		// Settings conversion
+		//template<typename FromSettings, typename ToSettings>
+		//static BoxT<Number,Converter,ToSettings> toBox(const BoxT<Number,Converter,FromSettings>& source);
+		//template<typename FromSettings, typename ToSettings>
+		//static ConstraintSetT<Number,Converter,ToSettings> toConstraintSet(const ConstraintSetT<Number,Converter,FromSettings>& source);
+		//template<typename FromSettings, typename ToSettings>
+		//static HPolytopeT<Number,Converter,ToSettings> toHPolytope(const HPolytopeT<Number,Converter,FromSettings>& source);
+		//template<typename FromSettings, typename ToSettings>
+		//static VPolytopeT<Number,Converter,ToSettings> toVPolytope(const VPolytopeT<Number,Converter,FromSettings>& source);
+		//template<typename FromSettings, typename ToSettings>
+		//static SupportFunctionT<Number,Converter,ToSettings> toSupportFunction(const SupportFunctionT<Number,Converter,FromSettings>& source);
+		//template<typename FromSettings, typename ToSettings>
+		//static ZonotopeT<Number,Converter,ToSettings> toZonotope(const ZonotopeT<Number,Converter,FromSettings>& source);
 };
 
 template<typename Number>
@@ -143,6 +158,7 @@ using Zonotope = typename Converter<Number>::Zonotope;
 #include "converterToVPolytope.tpp"
 #include "converterToSupportFunction.tpp"
 #include "converterToZonotope.tpp"
+//#include "settingsConversion.tpp"
 
 } // namespace hypro
 

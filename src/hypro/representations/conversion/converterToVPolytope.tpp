@@ -8,6 +8,9 @@
  */
 
 #include "Converter.h"
+#ifndef INCL_FROM_CONVERTERHEADER
+	static_assert(false, "This file may only be included indirectly by Converter.h");
+#endif
 
 /**
  * Is the caller function for the recursive method that computes exactly one boundary point for each direction that it gets (via support function)

@@ -1,12 +1,22 @@
-/*
- * This file should only be included via Converter.h
- */
+
+//#pragma once
 #include "../types.h"
+
+#ifndef INCL_FROM_CONVERTERHEADER
+	static_assert(false, "This file may only be included indirectly by Converter.h");
+#endif
 
 namespace hypro {
 
-	template<typename From, typename To, typename Number>
-	To convert(const From& in) {
+	/*
+	template<typename Number, typename From, representation_name::box>
+	static auto convert(const From& in) -> (decltype(Converter<Number>::toBox(in)))
+	{
+		return Converter<Number>::toBox(in);
+	}
+	*/
+
+	/*
 		switch(To::type()) {
 			case representation_name::box: {
 				return Converter<Number>::toBox(in);
@@ -38,6 +48,6 @@ namespace hypro {
 				assert(false);
 				return To();
 		}
-	}
+	*/
 
-}
+} // namespace
