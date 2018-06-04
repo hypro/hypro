@@ -241,3 +241,11 @@ TYPED_TEST(ConverterTest, toZonotope)
     auto result9 = Converter<TypeParam>::toZonotope(this->support2, ALTERNATIVE);
 	SUCCEED();
 }
+
+TYPED_TEST(ConverterTest, settingsConversion)
+{
+	hypro::BoxT<TypeParam,Converter<TypeParam>,BoxAllOff> res = hypro::BoxT<TypeParam,Converter<TypeParam>,BoxAllOff>(this->box);
+    EXPECT_EQ(this->box, res);
+
+    SUCCEED();
+}

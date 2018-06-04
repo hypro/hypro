@@ -87,6 +87,6 @@ namespace hypro {
 			return std::make_pair(rep, this->mGenerator.createLimitedHalfspace(this->mSetup, rep));
 		}
 	};
-	
+
 
 } // namespace
