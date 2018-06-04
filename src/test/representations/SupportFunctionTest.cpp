@@ -105,6 +105,17 @@ TYPED_TEST(SupportFunctionTest, constructor) {
 	EXPECT_EQ(this->sfChainComplete.evaluate(this->vec2), copied.evaluate(this->vec2));
 	EXPECT_EQ(this->sfChainComplete.evaluate(this->vec3), copied.evaluate(this->vec3));
 
+	std::vector<carl::Interval<TypeParam>> intervals;
+	intervals.emplace_back(carl::Interval<TypeParam>(2,3));
+	intervals.emplace_back(carl::Interval<TypeParam>(1,3));
+
+	SupportFunction<TypeParam> box = SupportFunction<TypeParam>(intervals);
+	EXPECT_EQ(box.sfType(),SF_TYPE::BOX);
+	EXPECT_EQ(box.evaluate(this->vec1).supportValue,TypeParam(18));
+	vector_t<TypeParam> r = vector_t<TypeParam>(2);
+	r << TypeParam(3),TypeParam(3);
+	EXPECT_EQ(box.evaluate(this->vec1).optimumValue,r);
+
 	SUCCEED();
 }
 
@@ -294,6 +305,8 @@ TYPED_TEST(SupportFunctionTest, intersect) {
 
 	SupportFunction<TypeParam> result = psf1.intersect(psf2);
 
+	std::cout << "did intersection." << std::endl;
+
 	vector_t<TypeParam> dir1 = vector_t<TypeParam>::Zero(2);
 	dir1 << 1,0;
 	vector_t<TypeParam> dir2 = vector_t<TypeParam>::Zero(2);
@@ -304,9 +317,13 @@ TYPED_TEST(SupportFunctionTest, intersect) {
 	dir4 << 0,-1;
 
 	EXPECT_EQ(result.evaluate(dir1).supportValue, TypeParam(0));
+	std::cout << "Evaluated 1" << std::endl;
 	EXPECT_EQ(result.evaluate(dir2).supportValue, TypeParam(0));
+	std::cout << "Evaluated 2" << std::endl;
 	EXPECT_EQ(result.evaluate(dir3).supportValue, TypeParam(1));
+	std::cout << "Evaluated 3" << std::endl;
 	EXPECT_EQ(result.evaluate(dir4).supportValue, TypeParam(1));
+	std::cout << "Evaluated 4" << std::endl;
 }
 
 TYPED_TEST(SupportFunctionTest, satisfiesHalfspaces) {
@@ -587,4 +604,50 @@ TYPED_TEST(SupportFunctionTest, dotRep) {
 	vec1 << 1,0;
 	psf1Assigned.evaluate(vec1);
 	//std::cout << psf1Assigned.getDotRepresentation();
+}
+
+TYPED_TEST(SupportFunctionTest, isBox) {
+	matrix_t<TypeParam> m1 = matrix_t<TypeParam>(4,2);
+	vector_t<TypeParam> v1 = vector_t<TypeParam>(4);
+	m1 << 1,0,-1,0,0,1,0,-1;
+	v1 << 1,2,3,4;
+
+	EXPECT_TRUE(boost::get<0>(isBox(m1,v1)));
+	EXPECT_EQ(boost::get<1>(isBox(m1,v1))[0], carl::Interval<TypeParam>(-2,1));
+	EXPECT_EQ(boost::get<1>(isBox(m1,v1))[1], carl::Interval<TypeParam>(-4,3));
+
+	matrix_t<TypeParam> m2 = matrix_t<TypeParam>(4,2);
+	vector_t<TypeParam> v2 = vector_t<TypeParam>(4);
+	m2 << 1,0,-1,0,1,0,0,-1;
+	v2 << 1,2,3,4;
+
+	EXPECT_FALSE(boost::get<0>(isBox(m2,v2)));
+
+	matrix_t<TypeParam> m3 = matrix_t<TypeParam>(5,2);
+	vector_t<TypeParam> v3 = vector_t<TypeParam>(4);
+	m3 << 1,0,-1,0,1,0,0,-1,1,4;
+	v3 << 1,2,3,4;
+
+	EXPECT_FALSE(boost::get<0>(isBox(m3,v3)));
+
+	matrix_t<TypeParam> m4 = matrix_t<TypeParam>(5,2);
+	vector_t<TypeParam> v4 = vector_t<TypeParam>(5);
+	m4 << 1,0,-1,0,1,0,0,-1,1,4;
+	v4 << 1,2,3,4,3;
+
+	EXPECT_FALSE(boost::get<0>(isBox(m4,v4)));
+
+	matrix_t<TypeParam> m5 = matrix_t<TypeParam>(4,2);
+	vector_t<TypeParam> v5 = vector_t<TypeParam>(4);
+	m5 << -1,0,0,1,1,0,0,-1;
+	v5 << 1,2,3,4;
+
+	EXPECT_TRUE(boost::get<0>(isBox(m5,v5)));
+
+	matrix_t<TypeParam> m6 = matrix_t<TypeParam>(4,2);
+	vector_t<TypeParam> v6 = vector_t<TypeParam>(4);
+	m6 << 1,1,-1,0,0,1,0,-1;
+	v6 << 1,2,3,4;
+
+	EXPECT_FALSE(boost::get<0>(isBox(m6,v6)));
 }

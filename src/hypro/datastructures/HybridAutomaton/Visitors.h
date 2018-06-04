@@ -175,7 +175,7 @@ public:
 		if (estimatedCostWithReduction < estimatedCostWithoutReduction) {
 			*/
     	TRACE("hypro.datastructures", "GenericReduction for SF.");
-		auto tmpHPoly = Converter<Number>::toHPolytope(lhs);
+		auto tmpHPoly = Converter<Number>::toBox(lhs);
 		//std::vector<unsigned> projDims;
 		//projDims.push_back(0);
 		//projDims.push_back(3);
@@ -306,6 +306,7 @@ class genericSetContainsVisitor
 public:
 	template<typename A, typename B>
 	inline bool operator()(const A&, const B&) const {
+		std::cout << "Types: " << A::type() << " and " << B::type() << std::endl;
 		assert(false && "CONTAINS CHECK OF DIFFERENT TYPES.");
 		return false;
 	}

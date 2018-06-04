@@ -13,6 +13,7 @@
 #include "../datastructures/Facet.h"
 #include "../datastructures/Ridge.h"
 #include "../datastructures/Point.h"
+#include <queue>
 
 namespace hypro {
 

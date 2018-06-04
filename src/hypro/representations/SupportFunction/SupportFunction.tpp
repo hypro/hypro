@@ -1,7 +1,6 @@
 /**
  * Wrapper class for SupportFunctionContent for easier use.
  * @file   SupportFunction.tpp
- * @author Simon Froitzheim
  *
  * @since      2015-11-23
  * @version    2015-12-16
@@ -63,6 +62,11 @@ namespace hypro{
     template<typename Number, typename Converter>
     SupportFunctionT<Number,Converter>::SupportFunctionT(const matrix_t<Number>& _shapeMatrix) : content(SupportFunctionContent<Number>::create(SF_TYPE::ELLIPSOID, _shapeMatrix)){
          //handled by initializer list
+    }
+
+    template<typename Number, typename Converter>
+    SupportFunctionT<Number,Converter>::SupportFunctionT(const std::vector<carl::Interval<Number>>& inBox ) : content(SupportFunctionContent<Number>::create(SF_TYPE::BOX, inBox)) {
+    	//handled by initializer list
     }
 
     //destructor
@@ -469,6 +473,7 @@ namespace hypro{
         for(unsigned rowI = 0; rowI < _mat.rows(); ++rowI) {
         	TRACE("hypro.representations.supportFunction", "Evaluate against plane " << rowI );
         	EvaluationResult<Number> planeEvalRes = content->evaluate(_mat.row(rowI), false);
+        	TRACE("hypro.representations.supportFunction", "Return from evaluate." );
         	if(planeEvalRes.errorCode == SOLUTION::INFEAS){
 				TRACE("hypro.representations.supportFunction", "Is infeasible (should not happen)." );
 				TRACE("hypro.representations.supportFunction", "Set is (Hpoly): " << std::endl << Converter::toHPolytope(*this) );

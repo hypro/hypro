@@ -11,8 +11,7 @@
 #include "gtest/gtest.h"
 #include "../defines.h"
 #include "Benchmark.h"
-#include "../../src/hypro/representations/Box/Box.h"
-#include "../../src/hypro/representations/Polytopes/VPolytope/VPolytope.h"
+#include "../../src/hypro/representations/GeometricObject.h"
 
 
 template<typename Number>
@@ -27,7 +26,7 @@ protected:
 	{
 	}
 };
-
+/*
 TYPED_TEST(Benchmark, Box)
 {
 	hypro::BenchmarkSetup<TypeParam> setup;
@@ -37,13 +36,36 @@ TYPED_TEST(Benchmark, Box)
 	setup.minValue = 0;
 	setup.maxValue = 10;
 
-	hypro::Benchmark<hypro::Box<TypeParam>, hypro::operation::LINEARTRAFO> linearTrafo(setup);
-	hypro::Benchmark<hypro::Box<TypeParam>, hypro::operation::MINKOWSKISUM> minkowskiSum(setup);
-	hypro::Benchmark<hypro::Box<TypeParam>, hypro::operation::INTERSECTION> intersection(setup);
-	hypro::Benchmark<hypro::Box<TypeParam>, hypro::operation::CONTAINS> contains(setup);
-	hypro::Benchmark<hypro::Box<TypeParam>, hypro::operation::UNION> unite(setup);
+	hypro::Benchmark<hypro::Box<TypeParam>, TypeParam, hypro::operation::LINEARTRAFO> linearTrafo(setup);
+	hypro::Benchmark<hypro::Box<TypeParam>, TypeParam, hypro::operation::MINKOWSKISUM> minkowskiSum(setup);
+	hypro::Benchmark<hypro::Box<TypeParam>, TypeParam, hypro::operation::INTERSECTION> intersection(setup);
+	hypro::Benchmark<hypro::Box<TypeParam>, TypeParam, hypro::operation::CONTAINS> contains(setup);
+	hypro::Benchmark<hypro::Box<TypeParam>, TypeParam, hypro::operation::UNION> unite(setup);
 }
+*/
 
+/*
+ * Benchmark for intersection of a halfspace with a box.
+ * Idea: For each box generated, generate random halfspaces one at a time and intersect each one of them with the box.
+ * During this, stepwise increase the dimensionality.
+ */
+TYPED_TEST(Benchmark, BoxIntersectHalfspaces){
+
+	hypro::BenchmarkSetup<TypeParam> setup;
+	setup.size = 100;		//Amount of benchmarks being generated
+	setup.vertices = 2;		//The randomly generated vertices of the box according to minValue and maxValue
+	setup.dimension = 2;	//Initial dimensionaliy
+	setup.minValue = 0;		//Minimal coordinate value for each dimension
+	setup.maxValue = 10;	//Maximal coordinate value for each dimension
+
+	unsigned maxDim = 10;
+	while(setup.dimension <= maxDim){
+		hypro::Benchmark<hypro::Box<TypeParam>, TypeParam, hypro::operation::INTERSECTHALFSPACE> intersectHalfspace(setup);
+		setup.dimension++;
+	}
+}	
+
+/*
 TYPED_TEST(Benchmark, VPolytope)
 {
 	hypro::BenchmarkSetup<TypeParam> setup;
@@ -53,9 +75,10 @@ TYPED_TEST(Benchmark, VPolytope)
 	setup.minValue = 0;
 	setup.maxValue = 10;
 
-	hypro::Benchmark<hypro::VPolytope<TypeParam>, hypro::operation::LINEARTRAFO> linearTrafo(setup);
-	hypro::Benchmark<hypro::VPolytope<TypeParam>, hypro::operation::MINKOWSKISUM> minkowskiSum(setup);
-	hypro::Benchmark<hypro::VPolytope<TypeParam>, hypro::operation::INTERSECTION> intersection(setup);
-	hypro::Benchmark<hypro::VPolytope<TypeParam>, hypro::operation::CONTAINS> contains(setup);
-	hypro::Benchmark<hypro::VPolytope<TypeParam>, hypro::operation::UNION> unite(setup);
+	hypro::Benchmark<hypro::VPolytope<TypeParam>, TypeParam, hypro::operation::LINEARTRAFO> linearTrafo(setup);
+	hypro::Benchmark<hypro::VPolytope<TypeParam>, TypeParam, hypro::operation::MINKOWSKISUM> minkowskiSum(setup);
+	hypro::Benchmark<hypro::VPolytope<TypeParam>, TypeParam, hypro::operation::INTERSECTION> intersection(setup);
+	hypro::Benchmark<hypro::VPolytope<TypeParam>, TypeParam, hypro::operation::CONTAINS> contains(setup);
+	hypro::Benchmark<hypro::VPolytope<TypeParam>, TypeParam, hypro::operation::UNION> unite(setup);
 }
+*/

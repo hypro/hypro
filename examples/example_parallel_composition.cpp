@@ -6,8 +6,9 @@
 
 using namespace hypro;
 
-static const int firingThreshold = 1;
+static const int firingThreshold = 100;
 static const double alpha = 1.1;
+static const double globalTimeHorizon = 300;
 
 /**
  * @brief      Creates a component using a synchronization variable for the synchronizating robots benchmark.
@@ -59,10 +60,10 @@ HybridAutomaton<Number> createComponent1(unsigned i) {
 	initialState.setSet(ConstraintSet<Number>(initConstraints,initConstants));
 	res.addInitialState(initialState);
 
-	M waitInvariant = M::Zero(1,dim);
-	waitInvariant << 1,0,0;
-	V waitInvConsts = V::Zero(1);
-	waitInvConsts << Number(firingThreshold);
+	M waitInvariant = M::Zero(2,dim);
+	waitInvariant << 1,0,0,0,1,0;
+	V waitInvConsts = V::Zero(2);
+	waitInvConsts << Number(firingThreshold),Number(globalTimeHorizon);
 	wait->setInvariant(Condition<Number>{waitInvariant, waitInvConsts});
 	res.addLocation(wait);
 
@@ -133,7 +134,6 @@ HybridAutomaton<Number> createComponent1(unsigned i) {
 	flashLoop->setUrgent();
 	flashLoop->addLabel(Label{"flash"});
 	flashLoop->setAggregation(Aggregation::parallelotopeAgg);
-	//flashLoop->setUrgent();
 
 	flash->addTransition(flashLoop);
 	res.addTransition(flashLoop);
@@ -249,10 +249,11 @@ HybridAutomaton<Number> createComponent2(unsigned i, const std::vector<Label>& l
 	waitFlow(1,dim) = 1;
 	wait->setFlow(waitFlow);
 
-	M waitInvariant = M::Zero(1,dim);
+	M waitInvariant = M::Zero(2,dim);
 	waitInvariant(0,0) = 1;
-	V waitInvConsts = V::Zero(1);
-	waitInvConsts << Number(firingThreshold);
+	waitInvariant(1,1) = 1;
+	V waitInvConsts = V::Zero(2);
+	waitInvConsts << Number(firingThreshold),Number(globalTimeHorizon);
 	wait->setInvariant(Condition<Number>{waitInvariant, waitInvConsts});
 	res.addLocation(wait);
 
@@ -295,7 +296,6 @@ HybridAutomaton<Number> createComponent2(unsigned i, const std::vector<Label>& l
 	flash->addLabel(labels.at(i));
 	flash->setReset(Reset<Number>(resetMat,resetVec));
 	flash->setAggregation(Aggregation::parallelotopeAgg);
-	//flash->setUrgent();
 
 	wait->addTransition(flash);
 	res.addTransition(flash);
@@ -312,7 +312,6 @@ HybridAutomaton<Number> createComponent2(unsigned i, const std::vector<Label>& l
 			toAdapt->addLabel(labels.at(j));
 
 			toAdapt->setAggregation(Aggregation::parallelotopeAgg);
-			//toAdapt->setUrgent();
 
 			wait->addTransition(toAdapt);
 			res.addTransition(toAdapt);
@@ -402,10 +401,10 @@ HybridAutomaton<Number> createComponent3(unsigned i) {
 	initialState.setSet(ConstraintSet<Number>(initConstraints,initConstants));
 	res.addInitialState(initialState);
 
-	M waitInvariant = M::Zero(1,dim);
-	waitInvariant << 1,0,0;
-	V waitInvConsts = V::Zero(1);
-	waitInvConsts << Number(firingThreshold);
+	M waitInvariant = M::Zero(2,dim);
+	waitInvariant << 1,0,0,0,1,0;
+	V waitInvConsts = V::Zero(2);
+	waitInvConsts << Number(firingThreshold),Number(globalTimeHorizon);
 	wait->setInvariant(Condition<Number>{waitInvariant, waitInvConsts});
 	res.addLocation(wait);
 
@@ -597,10 +596,11 @@ HybridAutomaton<Number> createComponent4(unsigned i, const std::vector<Label>& l
 	waitFlow(1,dim) = 1;
 	wait->setFlow(waitFlow);
 
-	M waitInvariant = M::Zero(1,dim);
+	M waitInvariant = M::Zero(2,dim);
 	waitInvariant(0,0) = 1;
-	V waitInvConsts = V::Zero(1);
-	waitInvConsts << Number(firingThreshold);
+	waitInvariant(1,1) = 1;
+	V waitInvConsts = V::Zero(2);
+	waitInvConsts << Number(firingThreshold),Number(globalTimeHorizon);
 	wait->setInvariant(Condition<Number>{waitInvariant, waitInvConsts});
 	res.addLocation(wait);
 
@@ -717,12 +717,13 @@ int main(int argc, char** argv) {
 	// settings to be used for flowstar format output
 	ReachabilitySettings<Number> settings;
 	settings.jumpDepth=20;
-	settings.timeBound = 1.1;
+	settings.timeBound = 110;
 	settings.timeStep = 0.01;
 	//settings.plotDimensions.push_back(std::vector<std::size_t>());
 	//settings.plotDimensions[0].push_back(0);
 	//settings.plotDimensions[0].push_back(componentCount+1);
 
+	/*
 	std::cout << "Create parallel composition for synchronization benchmark with " << componentCount << " components using a shared variable." << std::endl;
 
 	HybridAutomaton<Number> composed_sync_sharedVar = createComponent1<Number>(1);
@@ -731,6 +732,9 @@ int main(int argc, char** argv) {
 		composed_sync_sharedVar = composed_sync_sharedVar || tmp;
 		assert(composed_sync_sharedVar.isComposedOf(tmp));
 	}
+
+	composed_sync_sharedVar.reduce();
+
 	settings.fileName = "sync_sharedVar";
 	LockedFileWriter flowstar_sharedVar("sync_sharedVar.model");
 	flowstar_sharedVar.clearFile();
@@ -744,6 +748,7 @@ int main(int argc, char** argv) {
 	sharedVar_res << composed_sync_sharedVar.getDotRepresentation();
 
 	std::cout << "Automaton stats: " << std::endl << composed_sync_sharedVar.getStatistics() << std::endl;
+	*/
 
 	std::cout << "Create parallel composition for synchronization benchmark with " << componentCount << " components using label synchronization." << std::endl;
 
@@ -761,6 +766,7 @@ int main(int argc, char** argv) {
 		composed_sync_label = composed_sync_label || tmp;
 		assert(composed_sync_label.isComposedOf(tmp));
 	}
+	composed_sync_label.reduce();
 	settings.fileName = "sync_labels";
 	LockedFileWriter flowstar_label("sync_labelSync.model");
 	flowstar_label.clearFile();
@@ -779,10 +785,13 @@ int main(int argc, char** argv) {
 
 	for(auto t = composed_sync_label.getTransitions().begin(); t != composed_sync_label.getTransitions().end(); ++t) {
 		if((*t)->getSource()->getName().find("adapt") != std::string::npos && (*t)->getTarget()->getName().find("adapt") != std::string::npos) {
+			std::cout << "Remove edge " << (*t)->getSource()->getName() << " -> " << (*t)->getTarget()->getName() << std::endl;
 			composed_sync_label.removeTransition(*t);
 			t = composed_sync_label.getTransitions().begin();
 		}
 	}
+
+	composed_sync_label.reduce();
 
 	LockedFileWriter flowstar_label2("sync_labelSyncRed.model");
 	flowstar_label2.clearFile();
@@ -794,11 +803,13 @@ int main(int argc, char** argv) {
 
 	std::cout << "Automaton stats: " << std::endl << composed_sync_label.getStatistics() << std::endl;
 
+	/*
 	std::cout << "Create parallel composition for synchronization benchmark with " << componentCount << " components using 2nd optimized label synchronization." << std::endl;
-
+	*/
+	/*
 	HybridAutomaton<Number> composed_sync_label_opt = createComponent4<Number>(0,labels);
 	for(int i = 1; i < componentCount; ++i) {
-		HybridAutomaton<Number> tmp = createComponent2<Number>(i,labels);
+		HybridAutomaton<Number> tmp = createComponent4<Number>(i,labels);
 		composed_sync_label = composed_sync_label || tmp;
 		assert(composed_sync_label.isComposedOf(tmp));
 	}
@@ -815,7 +826,8 @@ int main(int argc, char** argv) {
 	label_res << composed_sync_label.getDotRepresentation();
 
 	std::cout << "Automaton stats: " << std::endl << composed_sync_label.getStatistics() << std::endl;
-
+	*/
+	/*
 	std::cout << "Create parallel composition for synchronization benchmark with " << componentCount << " components using a reduced version with a shared variable." << std::endl;
 
 	HybridAutomaton<Number> composed_sync_sharedVar_2states = createComponent3<Number>(1);
@@ -824,6 +836,9 @@ int main(int argc, char** argv) {
 		composed_sync_sharedVar_2states = composed_sync_sharedVar_2states || tmp;
 		assert(composed_sync_sharedVar_2states.isComposedOf(tmp));
 	}
+
+	composed_sync_sharedVar_2states.reduce();
+
 	settings.fileName = "sync_sharedVar2";
 	LockedFileWriter flowstar_sharedVarRed("sync_sharedVar_2_states.model");
 	flowstar_sharedVarRed.clearFile();
@@ -837,6 +852,7 @@ int main(int argc, char** argv) {
 	sharedVarReduced_res << composed_sync_sharedVar_2states.getDotRepresentation();
 
 	std::cout << "Automaton stats: " << std::endl << composed_sync_sharedVar_2states.getStatistics() << std::endl;
+	*/
 
 	// for testing
 	//auto haTuple = parseFlowstarFile<double>(std::string("composed.model"));

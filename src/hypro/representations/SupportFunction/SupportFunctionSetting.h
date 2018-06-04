@@ -10,11 +10,12 @@ namespace hypro {
 	//SupportFunctionContent
 	struct SupportFunctionContentSetting {
 		static constexpr bool USE_LIN_TRANS_REDUCTION = true;
+		static constexpr bool REDUCE_TO_BOX = true;
 	};
 
-	//BoxSupportFunctions 
-	struct BoxSupportFunctionSetting : SupportFunctionSetting {		
-    	static constexpr bool BOXSUPPORTFUNCTION_VERBOSE = false;     
+	//BoxSupportFunctions
+	struct BoxSupportFunctionSetting : SupportFunctionSetting {
+    	static constexpr bool BOXSUPPORTFUNCTION_VERBOSE = false;
 	};
 
 	//NonLineaerOmegaOSupportFunction

@@ -101,8 +101,11 @@ boost::tuple<CONTAINMENT, State, matrix_t<Number>, vector_t<Number>, Box<Number>
         if (_state.getLocation()->getFlow() == matrix_t<Number>::Zero(_state.getLocation()->getFlow(0).rows(), _state.getLocation()->getFlow(0).cols())) {
             // TRACE("Avoid further computation as the flow is zero." << std::endl);
             int rows =_state.getLocation()->getFlow(0).rows();
-            std::cout << "Attention, external input not yet captured in locations with no flow." << std::endl;
-            return boost::tuple<CONTAINMENT, State, matrix_t<Number>, vector_t<Number>, Box<Number>>(initialPair.first, initialPair.second, matrix_t<Number>::Identity(rows,rows), vector_t<Number>::Zero(rows), Box<Number>());
+            //std::cout << "Attention, external input not yet captured in locations with no flow." << std::endl;
+            unsigned dimension = initialPair.second.getDimension(0);
+            Box<Number> externalInputTmp(std::make_pair(Point<Number>(vector_t<Number>::Zero(dimension+1)),
+                                                        Point<Number>(vector_t<Number>::Zero(dimension+1))));
+            return boost::tuple<CONTAINMENT, State, matrix_t<Number>, vector_t<Number>, Box<Number>>(initialPair.first, initialPair.second, matrix_t<Number>::Identity(rows,rows), vector_t<Number>::Zero(rows), externalInputTmp);
         }
 
         // approximate R_[0,delta](X0)

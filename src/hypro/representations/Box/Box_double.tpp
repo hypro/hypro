@@ -258,6 +258,30 @@ std::vector<Point<double>> BoxT<double,Converter,Setting>::vertices( const matri
 }
 
 template<typename Converter, class Setting>
+EvaluationResult<double> BoxT<double,Converter,Setting>::evaluate( const vector_t<double>& _direction, bool ) const {
+	assert(_direction.rows() == this->dimension());
+	if(this->empty()){
+		return EvaluationResult<double>(); // defaults to infeasible, i.e. empty.
+	}
+
+	// find the point, which represents the maximum towards the direction - compare signs.
+	vector_t<double> furthestPoint = vector_t<double>(this->dimension());
+	for(Eigen::Index i = 0; i < furthestPoint.rows(); ++i) {
+		furthestPoint(i) = _direction(i) >= 0 ? mLimits.second(i) : mLimits.first(i);
+	}
+	return EvaluationResult<double>(furthestPoint.dot(_direction),furthestPoint,SOLUTION::FEAS);
+}
+
+template<typename Converter, class Setting>
+std::vector<EvaluationResult<double>> BoxT<double,Converter,Setting>::multiEvaluate( const matrix_t<double>& _directions, bool ) const {
+	std::vector<EvaluationResult<double>> res;
+	for(Eigen::Index i = 0; i < _directions.rows(); ++i) {
+		res.emplace_back(this->evaluate(vector_t<double>(_directions.row(i))));
+	}
+	return res;
+}
+
+template<typename Converter, class Setting>
 std::size_t BoxT<double,Converter,Setting>::size() const {
 	if(this->empty()) {
 		return 0;
@@ -374,8 +398,8 @@ BoxT<double,Converter,Setting> BoxT<double,Converter,Setting>::linearTransformat
 	// create both limit matrices
 	// std::cout << __func__ << ": This: " << *this << std::endl;
 	// std::cout << __func__ << ": Matrix" <<  std::endl << A << std::endl << "Vector" << std::endl << b << std::endl;
-	matrix_t<double> ax(A);
-	matrix_t<double> bx(A);
+	//matrix_t<double> ax(A);
+	//matrix_t<double> bx(A);
 	Point<double> min;
 	Point<double> max;
 
@@ -446,144 +470,153 @@ template<typename Converter, class Setting>
 BoxT<double,Converter,Setting> BoxT<double,Converter,Setting>::intersectHalfspace( const Halfspace<double>& hspace ) const {
 	//std::cout << __func__ << " of " << *this << " and " << hspace << std::endl;
 	if(!this->empty()) {
-		BoxT<double,Converter,Setting> copyBox(*this);
-		// Preprocessing: If any two points opposite to each other are contained, the box stays the same - test limit points
-		bool holdsMin = hspace.contains(mLimits.first.rawCoordinates());
-		bool holdsMax = hspace.contains(mLimits.second.rawCoordinates());
-		if(holdsMin && holdsMax){
-			//std::cout << __func__ << " Min and Max are below the halfspace." << std::endl;
-			return *this;
-		}
-
-		// another special case: if the hspace normal is axis-aligned, i.e. it has only one non-zero entry, we simply can use interval-
-		// style intersection.
-		if(hspace.normal().nonZeros() == 1) {
-			// from previous checks we know that either the lowest or the highest point is not contained. If both are not
-			// contained and the normal is axis-aligned, the set is empty.
-			if(!holdsMin && !holdsMax) {
+		if(Setting::USE_INTERVAL_ARITHMETIC) {
+			std::vector<carl::Interval<double>> intervals = this->boundaries();
+			bool empty = icpIntersectHalfspace(intervals,hspace);
+			if(empty) {
 				return Empty(this->dimension());
 			}
-
-			// find the one, non-zero component
-			unsigned nonZeroDim = 0;
-			while(hspace.normal()(nonZeroDim) == 0 ) ++nonZeroDim;
-
-			if(hspace.normal()(nonZeroDim) > 0) {
-				copyBox.rLimits().second[nonZeroDim] = hspace.offset() / hspace.normal()(nonZeroDim);
-			} else {
-				copyBox.rLimits().first[nonZeroDim] = hspace.offset() / hspace.normal()(nonZeroDim);
-			}
-			return copyBox;
-		}
-
-		//std::cout << __func__ << " Min below: " << holdsMin << ", Max below: " << holdsMax << std::endl;
-		std::size_t dim = this->dimension();
-
-		// Phase 1: Find starting point (point outside) for phase 2 by depth-first search or use limit points, if applicable
-		Point<double> farestPointOutside = copyBox.limits().first;
-		Point<double> farestPointInside = copyBox.limits().first;
-		std::size_t usedDimension = 0;
-		// determine walk direction by using plane normal and variable order
-		for(; usedDimension < dim; ++usedDimension){
-			if(hspace.normal()(Eigen::Index(usedDimension)) > 0){
-				if(farestPointOutside.at(usedDimension) != copyBox.limits().second.at(usedDimension)) {
-					farestPointOutside[usedDimension] = copyBox.limits().second.at(usedDimension);
-				}
-				if(farestPointInside.at(usedDimension) != copyBox.limits().first.at(usedDimension)) {
-					farestPointInside[usedDimension] = copyBox.limits().first.at(usedDimension);
-				}
-			} else if( hspace.normal()(Eigen::Index(usedDimension)) < 0){
-				if( farestPointOutside.at(usedDimension) != copyBox.limits().first.at(usedDimension) ) {
-					farestPointOutside[usedDimension] = copyBox.limits().first.at(usedDimension);
-				}
-				if(farestPointInside.at(usedDimension) != copyBox.limits().second.at(usedDimension)) {
-					farestPointInside[usedDimension] = copyBox.limits().second.at(usedDimension);
-				}
-			}
-		}
-		// farestPointOutside is the point farest point in direction of the plane normal - if it is contained in the halfspace, there is no intersection.
-		if(hspace.contains(farestPointOutside.rawCoordinates())) {
-			//std::cout << __func__ << " Farest point outside is contained - return full box." << std::endl;
-			return *this;
-		}
-		if(!hspace.contains(farestPointInside.rawCoordinates())) {
-			//std::cout << __func__ << " Farest point inside is  NOT contained - return EMPTY box." << std::endl;
-			return BoxT<double,Converter,Setting>::Empty();
-		}
-
-		//std::cout << __func__ << " Farest point outside: " << convert<double,double>(farestPointOutside.rawCoordinates()).transpose() << std::endl;
-
-		// at this point farestPointOutside is outside and farestPointInside is inside - the plane intersects the box somehow.
-		std::vector<Point<double>> discoveredPoints;
-		std::vector<Point<double>> intersectionPoints;
-		std::queue<Point<double>> workingQueue;
-		workingQueue.push(farestPointOutside);
-
-		// BFS search of points outside and intersection points.
-		//std::cout << __func__ << " Start BFS search." << std::endl;
-		while(!workingQueue.empty()){
-			//std::cout << "Queue size: " << workingQueue.size() << std::endl;
-			Point<double> current = workingQueue.front();
-			workingQueue.pop();
-			//std::cout << "Current Point: " << convert<double,double>(current.rawCoordinates()).transpose() << std::endl;
-			// create and test neighbors
-			for(unsigned d = 0; d < dim; ++d ) {
-				Point<double> tmp = current;
-				if( hspace.normal()(d) < 0 && current.at(d) == copyBox.limits().first.at(d) ){
-					tmp[d] = copyBox.limits().second.at(d);
-				} else if ( hspace.normal()(d) > 0 && current.at(d) == copyBox.limits().second.at(d) ) {
-					tmp[d] = copyBox.limits().first.at(d);
-				} else if ( hspace.normal()(d) == 0 ) {
-					tmp[d] = tmp.at(d) == copyBox.limits().first.at(d) ? copyBox.limits().second.at(d) : copyBox.limits().first.at(d);
-				} else {
-					// UNSINN!?
-					//std::cout << "Could create point " << tmp << ", but is the same as " << current << std::endl;
-					assert(tmp == current);
-					continue;
-				}
-
-				//std::cout << "Created search-point: " << convert<double,double>(tmp.rawCoordinates()).transpose() << std::endl;
-				// if neighbor is new, test is, otherwise skip.
-				if(std::find(discoveredPoints.begin(), discoveredPoints.end(), tmp) == discoveredPoints.end()){
-					if(!hspace.contains(tmp.rawCoordinates())){
-						//std::cout << "is also outside, enqueue." << std::endl;
-						workingQueue.push(tmp);
-					} else {
-						double dCoord = 0;
-						for(unsigned i = 0; i < dim; ++i){
-							if( i != d ) {
-								dCoord += hspace.normal()(i) * current.at(i);
-							}
-						}
-						dCoord -= hspace.offset();
-						dCoord /= -hspace.normal()(d);
-						Point<double> intersectionPoint = tmp;
-						intersectionPoint[d] = dCoord;
-						//std::cout << "is inside, intersection point is " << convert<double,double>(intersectionPoint.rawCoordinates()).transpose() << std::endl;
-						intersectionPoints.push_back(intersectionPoint);
-					}
-				} else {
-					//std::cout << "Already discovered - skip." << std::endl;
-				}
-			}
-			discoveredPoints.push_back(current);
-		}
-		//std::cout << __func__ << " BFS search finished." << std::endl;
-
-		// at this point we know that either min or max or both are outside but not both inside.
-		if(!holdsMin && !holdsMax) {
-			return BoxT<double,Converter,Setting>(intersectionPoints);
+			return BoxT<double,Converter,Setting>(intervals);
 		} else {
-			if(holdsMin){
-				intersectionPoints.push_back(copyBox.limits().first);
-			} else {
-				intersectionPoints.push_back(copyBox.limits().second);
+			BoxT<double,Converter,Setting> copyBox(*this);
+			// Preprocessing: If any two points opposite to each other are contained, the box stays the same - test limit points
+			bool holdsMin = hspace.contains(mLimits.first.rawCoordinates());
+			bool holdsMax = hspace.contains(mLimits.second.rawCoordinates());
+			if(holdsMin && holdsMax){
+				//std::cout << __func__ << " Min and Max are below the halfspace." << std::endl;
+				return *this;
 			}
-			//std::cout << __func__ << " Intersection points:" << std::endl;
-			//for(const auto& point : intersectionPoints) {
-			//	std::cout << convert<double,double>(point.rawCoordinates()).transpose() << std::endl;
-			//}
-			return BoxT<double,Converter,Setting>(intersectionPoints);
+
+			// another special case: if the hspace normal is axis-aligned, i.e. it has only one non-zero entry, we simply can use interval-
+			// style intersection.
+			if(hspace.normal().nonZeros() == 1) {
+				// from previous checks we know that either the lowest or the highest point is not contained. If both are not
+				// contained and the normal is axis-aligned, the set is empty.
+				if(!holdsMin && !holdsMax) {
+					return Empty(this->dimension());
+				}
+
+				// find the one, non-zero component
+				unsigned nonZeroDim = 0;
+				while(hspace.normal()(nonZeroDim) == 0 ) ++nonZeroDim;
+
+				if(hspace.normal()(nonZeroDim) > 0) {
+					copyBox.rLimits().second[nonZeroDim] = hspace.offset() / hspace.normal()(nonZeroDim);
+				} else {
+					copyBox.rLimits().first[nonZeroDim] = hspace.offset() / hspace.normal()(nonZeroDim);
+				}
+				return copyBox;
+			}
+
+			//std::cout << __func__ << " Min below: " << holdsMin << ", Max below: " << holdsMax << std::endl;
+			std::size_t dim = this->dimension();
+
+			// Phase 1: Find starting point (point outside) for phase 2 by depth-first search or use limit points, if applicable
+			Point<double> farestPointOutside = copyBox.limits().first;
+			Point<double> farestPointInside = copyBox.limits().first;
+			std::size_t usedDimension = 0;
+			// determine walk direction by using plane normal and variable order
+			for(; usedDimension < dim; ++usedDimension){
+				if(hspace.normal()(Eigen::Index(usedDimension)) > 0){
+					if(farestPointOutside.at(usedDimension) != copyBox.limits().second.at(usedDimension)) {
+						farestPointOutside[usedDimension] = copyBox.limits().second.at(usedDimension);
+					}
+					if(farestPointInside.at(usedDimension) != copyBox.limits().first.at(usedDimension)) {
+						farestPointInside[usedDimension] = copyBox.limits().first.at(usedDimension);
+					}
+				} else if( hspace.normal()(Eigen::Index(usedDimension)) < 0){
+					if( farestPointOutside.at(usedDimension) != copyBox.limits().first.at(usedDimension) ) {
+						farestPointOutside[usedDimension] = copyBox.limits().first.at(usedDimension);
+					}
+					if(farestPointInside.at(usedDimension) != copyBox.limits().second.at(usedDimension)) {
+						farestPointInside[usedDimension] = copyBox.limits().second.at(usedDimension);
+					}
+				}
+			}
+			// farestPointOutside is the point farest point in direction of the plane normal - if it is contained in the halfspace, there is no intersection.
+			if(hspace.contains(farestPointOutside.rawCoordinates())) {
+				//std::cout << __func__ << " Farest point outside is contained - return full box." << std::endl;
+				return *this;
+			}
+			if(!hspace.contains(farestPointInside.rawCoordinates())) {
+				//std::cout << __func__ << " Farest point inside is  NOT contained - return EMPTY box." << std::endl;
+				return BoxT<double,Converter,Setting>::Empty();
+			}
+
+			//std::cout << __func__ << " Farest point outside: " << convert<double,double>(farestPointOutside.rawCoordinates()).transpose() << std::endl;
+
+			// at this point farestPointOutside is outside and farestPointInside is inside - the plane intersects the box somehow.
+			std::vector<Point<double>> discoveredPoints;
+			std::vector<Point<double>> intersectionPoints;
+			std::queue<Point<double>> workingQueue;
+			workingQueue.push(farestPointOutside);
+
+			// BFS search of points outside and intersection points.
+			//std::cout << __func__ << " Start BFS search." << std::endl;
+			while(!workingQueue.empty()){
+				//std::cout << "Queue size: " << workingQueue.size() << std::endl;
+				Point<double> current = workingQueue.front();
+				workingQueue.pop();
+				//std::cout << "Current Point: " << convert<double,double>(current.rawCoordinates()).transpose() << std::endl;
+				// create and test neighbors
+				for(unsigned d = 0; d < dim; ++d ) {
+					Point<double> tmp = current;
+					if( hspace.normal()(d) < 0 && current.at(d) == copyBox.limits().first.at(d) ){
+						tmp[d] = copyBox.limits().second.at(d);
+					} else if ( hspace.normal()(d) > 0 && current.at(d) == copyBox.limits().second.at(d) ) {
+						tmp[d] = copyBox.limits().first.at(d);
+					} else if ( hspace.normal()(d) == 0 ) {
+						tmp[d] = tmp.at(d) == copyBox.limits().first.at(d) ? copyBox.limits().second.at(d) : copyBox.limits().first.at(d);
+					} else {
+						// UNSINN!?
+						//std::cout << "Could create point " << tmp << ", but is the same as " << current << std::endl;
+						assert(tmp == current);
+						continue;
+					}
+
+					//std::cout << "Created search-point: " << convert<double,double>(tmp.rawCoordinates()).transpose() << std::endl;
+					// if neighbor is new, test is, otherwise skip.
+					if(std::find(discoveredPoints.begin(), discoveredPoints.end(), tmp) == discoveredPoints.end()){
+						if(!hspace.contains(tmp.rawCoordinates())){
+							//std::cout << "is also outside, enqueue." << std::endl;
+							workingQueue.push(tmp);
+						} else {
+							double dCoord = 0;
+							for(unsigned i = 0; i < dim; ++i){
+								if( i != d ) {
+									dCoord += hspace.normal()(i) * current.at(i);
+								}
+							}
+							dCoord -= hspace.offset();
+							dCoord /= -hspace.normal()(d);
+							Point<double> intersectionPoint = tmp;
+							intersectionPoint[d] = dCoord;
+							//std::cout << "is inside, intersection point is " << convert<double,double>(intersectionPoint.rawCoordinates()).transpose() << std::endl;
+							intersectionPoints.push_back(intersectionPoint);
+						}
+					} else {
+						//std::cout << "Already discovered - skip." << std::endl;
+					}
+				}
+				discoveredPoints.push_back(current);
+			}
+			//std::cout << __func__ << " BFS search finished." << std::endl;
+
+			// at this point we know that either min or max or both are outside but not both inside.
+			if(!holdsMin && !holdsMax) {
+				return BoxT<double,Converter,Setting>(intersectionPoints);
+			} else {
+				if(holdsMin){
+					intersectionPoints.push_back(copyBox.limits().first);
+				} else {
+					intersectionPoints.push_back(copyBox.limits().second);
+				}
+				//std::cout << __func__ << " Intersection points:" << std::endl;
+				//for(const auto& point : intersectionPoints) {
+				//	std::cout << convert<double,double>(point.rawCoordinates()).transpose() << std::endl;
+				//}
+				return BoxT<double,Converter,Setting>(intersectionPoints);
+			}
 		}
 	}
 	return Empty(this->dimension());
@@ -594,7 +627,17 @@ BoxT<double,Converter,Setting> BoxT<double,Converter,Setting>::intersectHalfspac
 	TRACE("hypro.representations", "Halfspaces: " << _mat << " and vector: " << _vec );
 	assert(_mat.rows() == _vec.rows());
 	assert(_mat.cols() == Eigen::Index(this->dimension()));
-	if(Setting::HYPRO_BOX_AVOID_LINEAR_OPTIMIZATION){
+	if(Setting::USE_INTERVAL_ARITHMETIC) {
+		std::vector<carl::Interval<double>> intervals = this->boundaries();
+		// Todo: This is a first draft using the function for single halfspaces - maybe we can check more than one plane at the same time.
+		for(unsigned planeIndex = 0; planeIndex < _mat.rows(); ++planeIndex) {
+			bool empty = icpIntersectHalfspace(intervals,Halfspace<double>(_mat.row(planeIndex), _vec(planeIndex)));
+			if(empty){
+				return Empty(this->dimension());
+			}
+		}
+		return BoxT<double,Converter,Setting>(intervals);
+	} else if(Setting::HYPRO_BOX_AVOID_LINEAR_OPTIMIZATION){
 		if(_mat.rows() == 0) {
 			return *this;
 		}

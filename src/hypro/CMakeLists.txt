@@ -56,7 +56,7 @@ else()
 		LINKER_LANGUAGE CXX
 	)
 
-	get_target_property(IFL lib_carl INTERFACE_LINK_LIBRARIES)
+	#get_target_property(IFL lib_carl INTERFACE_LINK_LIBRARIES)
 	#message(STATUS "Carl interface link libraries: ${IFL}")
 	#message("hypro include dirs: " ${hypro_INCLUDE_DIRS})
 	#message(STATUS "antlr libs path: " ${ANTLR4CPP_LIBS})

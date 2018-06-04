@@ -6,7 +6,6 @@
  *
  * @author Norman Hansen
  * @author Stefan Schupp <stefan.schupp@cs.rwth-aachen.de>
- * @author Simon Froitzheim
  *
  * @version	2015-02-27
  */
@@ -236,6 +235,7 @@ EvaluationResult<Number> PolytopeSupportFunction<Number,Setting>::evaluate( cons
 	TRACE("hypro.representations.supportFunction", "");
 	// catch half-space
 	if(mConstraints.rows() == 1) {
+		COUNT("Single constraint evaluate.");
 		//std::cout << "only one constraint! -> we evaluate against a plane!" << std::endl;
 		// TODO: extend check to linear dependence. Here temporarily sufficient as we will initialize and evaluate with the plane normals, which should be the same vectors.
 		if(l == vector_t<Number>(mConstraints.row(0))){
@@ -257,6 +257,8 @@ EvaluationResult<Number> PolytopeSupportFunction<Number,Setting>::evaluate( cons
 			return EvaluationResult<Number>(0,SOLUTION::INFTY);
 		}
 	}
+
+	COUNT("Polytope evaluate.");
 
 	EvaluationResult<Number> res(mOpt.evaluate(l, useExact));
 	if(Setting::PPOLYTOPESUPPORTFUNCTION_VERBOSE){

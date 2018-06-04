@@ -5,8 +5,8 @@
  */
 
 #include "representations/GeometricObject.h"
-#include "datastructures/hybridAutomata/HybridAutomaton.h"
-#include "datastructures/hybridAutomata/LocationManager.h"
+#include "datastructures/HybridAutomaton/HybridAutomaton.h"
+#include "datastructures/HybridAutomaton/LocationManager.h"
 #include "algorithms/reachability/Reach.h"
 #include "parser/flowstar/ParserWrapper.h"
 //#include <boost/program_options.hpp>

@@ -2,9 +2,9 @@
 
 #include "Cone.h"
 #include "../../datastructures/Point.h"
+#include "../../util/linearOptimization/Optimizer.h"
 #include <carl/formula/Constraint.h>
 #include <cassert>
-#include <glpk.h>
 
 namespace hypro {
 
@@ -50,6 +50,8 @@ class Fan {
 	}
 
 	const Cone<Number>* containingCone( const Point<Number>& _vector ) const {
+		Optimizer<Number> opt{};
+
 		// set up glpk
 		glp_prob* cones;
 		cones = glp_create_prob();
@@ -62,30 +64,16 @@ class Fan {
 		unsigned numPlanes = vectors.size();
 		unsigned elements = this->mDimension * numPlanes;
 
-		glp_add_cols( cones, numPlanes );
-		glp_add_rows( cones, this->mDimension );
-
-		int* ia = new int[1 + elements];
-		int* ja = new int[1 + elements];
-		double* ar = new double[1 + elements];
-		unsigned pos = 1;
+		matrix_t<Number> constraints = matrix_t<Number>::Zero(this->mDimension,numPlanes);
 
 		for ( unsigned i = 1; i <= this->mDimension; ++i ) {
 			for ( unsigned j = 1; j <= numPlanes; ++j ) {
-				ia[pos] = i;
-				ja[pos] = j;
-				ar[pos] = vectors.at( j ).at( i );
-				++pos;
+				constraints(i,j) = vectors.at( j ).at( i );
 			}
 		}
-		assert( pos <= elements );
 
-		glp_load_matrix( cones, elements, ia, ja, ar );
-		glp_simplex( cones, NULL );
-
-		// TODO output & result interpretation
-
-		glp_delete_prob( cones );
+		opt.checkConsistency();
+		// TODO: output and stuff.
 	}
 
 	Fan<Number> operator=( const Fan<Number>& _rhs ) {

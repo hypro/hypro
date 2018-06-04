@@ -177,7 +177,11 @@ set(${PROJECT_NAME}_INCLUDE_DIRS "" CACHE STRING "Include directories var")
 #set(Boost_USE_STATIC_RUNTIME    OFF)
 
 load_library(${PROJECT_NAME} GTest 0)
-find_package(carl)
+
+# required, as carl also defines targets "resources" and "runCoreTests"
+#set(ALLOW_DUPLICATE_CUSTOM_TARGETS TRUE)
+load_library(${PROJECT_NAME} carl 0)
+#find_package(carl REQUIRED)
 
 add_subdirectory(src/resources)
 
