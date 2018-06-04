@@ -31,7 +31,7 @@
   <td id="projectlogo"><img alt="Logo" src="hypro_Logo.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">HyPro
-   &#160;<span id="projectnumber">18.05</span>
+   &#160;<span id="projectnumber">18.06</span>
    </div>
    <div id="projectbrief">A Toolbox for the Reachability Analysis of Hybrid Systems using Geometric Approximations</div>
   </td>
@@ -204,6 +204,9 @@ virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="c
 <tr class="memitem:af2ba3afb4c0b6ba7bc52a376369e77ee"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Point.html#af2ba3afb4c0b6ba7bc52a376369e77ee">setCoordinate</a> (const carl::Variable &amp;_dim, const Number &amp;_value)</td></tr>
 <tr class="memdesc:af2ba3afb4c0b6ba7bc52a376369e77ee"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the coordinate mapped to the given variable to the given value.  <a href="#af2ba3afb4c0b6ba7bc52a376369e77ee">More...</a><br/></td></tr>
 <tr class="separator:af2ba3afb4c0b6ba7bc52a376369e77ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a73d02f1464005bdd842d50e8d0a9b8d1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Point.html#a73d02f1464005bdd842d50e8d0a9b8d1">setCoordinate</a> (std::size_t <a class="el" href="classhypro_1_1Point.html#aa299aa4647fb454b534fb93db59f7baa">dimension</a>, const Number &amp;_value)</td></tr>
+<tr class="memdesc:a73d02f1464005bdd842d50e8d0a9b8d1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the coordinate for the passed dimension.  <a href="#a73d02f1464005bdd842d50e8d0a9b8d1">More...</a><br/></td></tr>
+<tr class="separator:a73d02f1464005bdd842d50e8d0a9b8d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3b894fe6fcdc61c49d6be9c3a22cecf3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Point.html#a3b894fe6fcdc61c49d6be9c3a22cecf3">swap</a> (<a class="el" href="classhypro_1_1Point.html">Point</a>&lt; Number &gt; &amp;_rhs)</td></tr>
 <tr class="memdesc:a3b894fe6fcdc61c49d6be9c3a22cecf3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Swap operator.  <a href="#a3b894fe6fcdc61c49d6be9c3a22cecf3">More...</a><br/></td></tr>
 <tr class="separator:a3b894fe6fcdc61c49d6be9c3a22cecf3"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -349,6 +352,18 @@ virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="c
 <tr class="memitem:aded350852679d2335df411129f2c8369"><td class="memItemLeft" align="right" valign="top">Number &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Point.html#aded350852679d2335df411129f2c8369">operator[]</a> (std::size_t _i)</td></tr>
 <tr class="memdesc:aded350852679d2335df411129f2c8369"><td class="mdescLeft">&#160;</td><td class="mdescRight">Access operator to the respective dimension coefficient.  <a href="#aded350852679d2335df411129f2c8369">More...</a><br/></td></tr>
 <tr class="separator:aded350852679d2335df411129f2c8369"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5d79b52c9b6c64c246eed7e82f24e607"><td class="memItemLeft" align="right" valign="top">const Number &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Point.html#a5d79b52c9b6c64c246eed7e82f24e607">operator[]</a> (const carl::Variable &amp;_i) const </td></tr>
+<tr class="memdesc:a5d79b52c9b6c64c246eed7e82f24e607"><td class="mdescLeft">&#160;</td><td class="mdescRight">Access operator to the respective dimension coefficient.  <a href="#a5d79b52c9b6c64c246eed7e82f24e607">More...</a><br/></td></tr>
+<tr class="separator:a5d79b52c9b6c64c246eed7e82f24e607"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6c9043c3bf0bcc18e0e0e139ad1efe13"><td class="memItemLeft" align="right" valign="top">const Number &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Point.html#a6c9043c3bf0bcc18e0e0e139ad1efe13">operator[]</a> (std::size_t _i) const </td></tr>
+<tr class="memdesc:a6c9043c3bf0bcc18e0e0e139ad1efe13"><td class="mdescLeft">&#160;</td><td class="mdescRight">Access operator to the respective dimension coefficient.  <a href="#a6c9043c3bf0bcc18e0e0e139ad1efe13">More...</a><br/></td></tr>
+<tr class="separator:a6c9043c3bf0bcc18e0e0e139ad1efe13"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae65cff5ddb3457efd4a377d549a997b1"><td class="memItemLeft" align="right" valign="top">Number &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Point.html#ae65cff5ddb3457efd4a377d549a997b1">at</a> (const carl::Variable &amp;_i)</td></tr>
+<tr class="memdesc:ae65cff5ddb3457efd4a377d549a997b1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Access operator to the respective dimension coefficient.  <a href="#ae65cff5ddb3457efd4a377d549a997b1">More...</a><br/></td></tr>
+<tr class="separator:ae65cff5ddb3457efd4a377d549a997b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a47e687678575f7e312f2fa1276bb4515"><td class="memItemLeft" align="right" valign="top">Number &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Point.html#a47e687678575f7e312f2fa1276bb4515">at</a> (std::size_t _index)</td></tr>
+<tr class="memdesc:a47e687678575f7e312f2fa1276bb4515"><td class="mdescLeft">&#160;</td><td class="mdescRight">Access operator to the respective dimension coefficient.  <a href="#a47e687678575f7e312f2fa1276bb4515">More...</a><br/></td></tr>
+<tr class="separator:a47e687678575f7e312f2fa1276bb4515"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adbd99d1c7ff9e355dec68d1b04447ab3"><td class="memItemLeft" align="right" valign="top">const Number &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Point.html#adbd99d1c7ff9e355dec68d1b04447ab3">at</a> (const carl::Variable &amp;_i) const </td></tr>
 <tr class="memdesc:adbd99d1c7ff9e355dec68d1b04447ab3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Access operator to the respective dimension coefficient.  <a href="#adbd99d1c7ff9e355dec68d1b04447ab3">More...</a><br/></td></tr>
 <tr class="separator:adbd99d1c7ff9e355dec68d1b04447ab3"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -402,7 +417,7 @@ class hypro::Point&lt; Number &gt;</h3>
   </table>
   </dd>
 </dl>
-<dl><dt><b>Examples: </b></dt><dd><a class="el" href="example_box_8cpp-example.html#_a1">example_box.cpp</a>, and <a class="el" href="example_plot_8cpp-example.html#_a4">example_plot.cpp</a>.</dd>
+<dl><dt><b>Examples: </b></dt><dd><a class="el" href="example_box_8cpp-example.html#_a1">example_box.cpp</a>, <a class="el" href="example_differenceBounds_8cpp-example.html#_a0">example_differenceBounds.cpp</a>, and <a class="el" href="example_plot_8cpp-example.html#_a4">example_plot.cpp</a>.</dd>
 </dl>
 <p>Definition at line <a class="el" href="Point_8h_source.html#l00025">25</a> of file <a class="el" href="Point_8h_source.html">Point.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
@@ -693,6 +708,62 @@ template&lt;class Number&gt; </div>
 
 </div>
 </div>
+<a class="anchor" id="ae65cff5ddb3457efd4a377d549a997b1"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class Number&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">Number&amp; <a class="el" href="classhypro_1_1Point.html">hypro::Point</a>&lt; Number &gt;::at </td>
+          <td>(</td>
+          <td class="paramtype">const carl::Variable &amp;&#160;</td>
+          <td class="paramname"><em>_i</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Access operator to the respective dimension coefficient. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">_i</td><td>The dimension. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The coefficient. </dd></dl>
+
+<p>Referenced by <a class="el" href="Point_8h_source.html#l00305">hypro::Point&lt; int &gt;::coeffWiseMax()</a>, <a class="el" href="Point_8h_source.html#l00320">hypro::Point&lt; int &gt;::coeffWiseMin()</a>, <a class="el" href="Point_8h_source.html#l00502">hypro::Point&lt; int &gt;::operator==()</a>, and <a class="el" href="Point_8h_source.html#l00093">hypro::Point&lt; int &gt;::Point()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a47e687678575f7e312f2fa1276bb4515"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class Number&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">Number&amp; <a class="el" href="classhypro_1_1Point.html">hypro::Point</a>&lt; Number &gt;::at </td>
+          <td>(</td>
+          <td class="paramtype">std::size_t&#160;</td>
+          <td class="paramname"><em>_index</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Access operator to the respective dimension coefficient. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">_i</td><td>The dimension. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The coefficient. </dd></dl>
+
+</div>
+</div>
 <a class="anchor" id="adbd99d1c7ff9e355dec68d1b04447ab3"></a>
 <div class="memitem">
 <div class="memproto">
@@ -717,8 +788,6 @@ template&lt;class Number&gt; </div>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The coefficient. </dd></dl>
-
-<p>Referenced by <a class="el" href="Point_8h_source.html#l00298">hypro::Point&lt; int &gt;::coeffWiseMax()</a>, <a class="el" href="Point_8h_source.html#l00313">hypro::Point&lt; int &gt;::coeffWiseMin()</a>, <a class="el" href="Point_8h_source.html#l00495">hypro::Point&lt; int &gt;::operator==()</a>, and <a class="el" href="Point_8h_source.html#l00093">hypro::Point&lt; int &gt;::Point()</a>.</p>
 
 </div>
 </div>
@@ -793,7 +862,7 @@ template&lt;class Number&gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The resulting point. </dd></dl>
 
-<p>Definition at line <a class="el" href="Point_8h_source.html#l00298">298</a> of file <a class="el" href="Point_8h_source.html">Point.h</a>.</p>
+<p>Definition at line <a class="el" href="Point_8h_source.html#l00305">305</a> of file <a class="el" href="Point_8h_source.html">Point.h</a>.</p>
 
 </div>
 </div>
@@ -841,7 +910,7 @@ template&lt;class Number&gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The resulting point. </dd></dl>
 
-<p>Definition at line <a class="el" href="Point_8h_source.html#l00313">313</a> of file <a class="el" href="Point_8h_source.html">Point.h</a>.</p>
+<p>Definition at line <a class="el" href="Point_8h_source.html#l00320">320</a> of file <a class="el" href="Point_8h_source.html">Point.h</a>.</p>
 
 </div>
 </div>
@@ -939,7 +1008,7 @@ template&lt;class Number&gt; </div>
 <p>Returns a mapping from variables to coordinates for the current point. </p>
 <dl class="section return"><dt>Returns</dt><dd>The mapping. </dd></dl>
 
-<p>Referenced by <a class="el" href="Point_8h_source.html#l00298">hypro::Point&lt; int &gt;::coeffWiseMax()</a>, <a class="el" href="Point_8h_source.html#l00313">hypro::Point&lt; int &gt;::coeffWiseMin()</a>, and <a class="el" href="Point_8h_source.html#l00093">hypro::Point&lt; int &gt;::Point()</a>.</p>
+<p>Referenced by <a class="el" href="Point_8h_source.html#l00305">hypro::Point&lt; int &gt;::coeffWiseMax()</a>, <a class="el" href="Point_8h_source.html#l00320">hypro::Point&lt; int &gt;::coeffWiseMin()</a>, and <a class="el" href="Point_8h_source.html#l00093">hypro::Point&lt; int &gt;::Point()</a>.</p>
 
 </div>
 </div>
@@ -1013,7 +1082,7 @@ template&lt;class Number&gt; </div>
 <p>Returns the space dimension. </p>
 <dl class="section return"><dt>Returns</dt><dd>The dimension. </dd></dl>
 
-<p>Referenced by <a class="el" href="Point_8h_source.html#l00298">hypro::Point&lt; int &gt;::coeffWiseMax()</a>, <a class="el" href="Point_8h_source.html#l00313">hypro::Point&lt; int &gt;::coeffWiseMin()</a>, <a class="el" href="Point_8h_source.html#l00327">hypro::Point&lt; int &gt;::inftyNorm()</a>, <a class="el" href="Point_8h_source.html#l00634">hypro::operator*()</a>, <a class="el" href="Point_8h_source.html#l00589">hypro::operator+()</a>, <a class="el" href="Point_8h_source.html#l00608">hypro::operator-()</a>, <a class="el" href="Point_8h_source.html#l00618">hypro::operator/()</a>, <a class="el" href="Point_8h_source.html#l00480">hypro::Point&lt; int &gt;::operator==()</a>, and <a class="el" href="Point_8h_source.html#l00093">hypro::Point&lt; int &gt;::Point()</a>.</p>
+<p>Referenced by <a class="el" href="Point_8h_source.html#l00305">hypro::Point&lt; int &gt;::coeffWiseMax()</a>, <a class="el" href="Point_8h_source.html#l00320">hypro::Point&lt; int &gt;::coeffWiseMin()</a>, <a class="el" href="Point_8h_source.html#l00334">hypro::Point&lt; int &gt;::inftyNorm()</a>, <a class="el" href="Point_8h_source.html#l00645">hypro::operator*()</a>, <a class="el" href="Point_8h_source.html#l00600">hypro::operator+()</a>, <a class="el" href="Point_8h_source.html#l00619">hypro::operator-()</a>, <a class="el" href="Point_8h_source.html#l00629">hypro::operator/()</a>, <a class="el" href="Point_8h_source.html#l00487">hypro::Point&lt; int &gt;::operator==()</a>, and <a class="el" href="Point_8h_source.html#l00093">hypro::Point&lt; int &gt;::Point()</a>.</p>
 
 </div>
 </div>
@@ -1243,7 +1312,7 @@ template&lt;class Number&gt; </div>
 
 <p>Definition at line <a class="el" href="Point_8h_source.html#l00110">110</a> of file <a class="el" href="Point_8h_source.html">Point.h</a>.</p>
 
-<p>Referenced by <a class="el" href="Point_8h_source.html#l00480">hypro::Point&lt; int &gt;::operator==()</a>.</p>
+<p>Referenced by <a class="el" href="Point_8h_source.html#l00487">hypro::Point&lt; int &gt;::operator==()</a>.</p>
 
 </div>
 </div>
@@ -1412,7 +1481,7 @@ template&lt;class Number&gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The infinity norm. </dd></dl>
 
-<p>Definition at line <a class="el" href="Point_8h_source.html#l00327">327</a> of file <a class="el" href="Point_8h_source.html">Point.h</a>.</p>
+<p>Definition at line <a class="el" href="Point_8h_source.html#l00334">334</a> of file <a class="el" href="Point_8h_source.html">Point.h</a>.</p>
 
 </div>
 </div>
@@ -1570,7 +1639,7 @@ template&lt;class Number&gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True, if for all coordinates the comparison holds. </dd></dl>
 
-<p>Definition at line <a class="el" href="Point_8h_source.html#l00513">513</a> of file <a class="el" href="Point_8h_source.html">Point.h</a>.</p>
+<p>Definition at line <a class="el" href="Point_8h_source.html#l00520">520</a> of file <a class="el" href="Point_8h_source.html">Point.h</a>.</p>
 
 </div>
 </div>
@@ -1795,7 +1864,7 @@ template&lt;class Number&gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True, if for all coordinates the comparison holds. </dd></dl>
 
-<p>Definition at line <a class="el" href="Point_8h_source.html#l00452">452</a> of file <a class="el" href="Point_8h_source.html">Point.h</a>.</p>
+<p>Definition at line <a class="el" href="Point_8h_source.html#l00459">459</a> of file <a class="el" href="Point_8h_source.html">Point.h</a>.</p>
 
 </div>
 </div>
@@ -1832,7 +1901,7 @@ template&lt;class Number&gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True, if for all coordinates the comparison holds. </dd></dl>
 
-<p>Definition at line <a class="el" href="Point_8h_source.html#l00459">459</a> of file <a class="el" href="Point_8h_source.html">Point.h</a>.</p>
+<p>Definition at line <a class="el" href="Point_8h_source.html#l00466">466</a> of file <a class="el" href="Point_8h_source.html">Point.h</a>.</p>
 
 </div>
 </div>
@@ -1977,7 +2046,7 @@ template&lt;class Number&gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True, if for all coordinates the comparison holds. </dd></dl>
 
-<p>Definition at line <a class="el" href="Point_8h_source.html#l00480">480</a> of file <a class="el" href="Point_8h_source.html">Point.h</a>.</p>
+<p>Definition at line <a class="el" href="Point_8h_source.html#l00487">487</a> of file <a class="el" href="Point_8h_source.html">Point.h</a>.</p>
 
 </div>
 </div>
@@ -2016,7 +2085,7 @@ template&lt;typename F , carl::DisableIf&lt; std::is_same&lt; F, Number &gt;&gt;
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True, if for all coordinates the comparison holds. </dd></dl>
 
-<p>Definition at line <a class="el" href="Point_8h_source.html#l00495">495</a> of file <a class="el" href="Point_8h_source.html">Point.h</a>.</p>
+<p>Definition at line <a class="el" href="Point_8h_source.html#l00502">502</a> of file <a class="el" href="Point_8h_source.html">Point.h</a>.</p>
 
 </div>
 </div>
@@ -2053,7 +2122,7 @@ template&lt;class Number&gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True, if for all coordinates the comparison holds. </dd></dl>
 
-<p>Definition at line <a class="el" href="Point_8h_source.html#l00466">466</a> of file <a class="el" href="Point_8h_source.html">Point.h</a>.</p>
+<p>Definition at line <a class="el" href="Point_8h_source.html#l00473">473</a> of file <a class="el" href="Point_8h_source.html">Point.h</a>.</p>
 
 </div>
 </div>
@@ -2090,7 +2159,7 @@ template&lt;class Number&gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True, if for all coordinates the comparison holds. </dd></dl>
 
-<p>Definition at line <a class="el" href="Point_8h_source.html#l00473">473</a> of file <a class="el" href="Point_8h_source.html">Point.h</a>.</p>
+<p>Definition at line <a class="el" href="Point_8h_source.html#l00480">480</a> of file <a class="el" href="Point_8h_source.html">Point.h</a>.</p>
 
 </div>
 </div>
@@ -2133,6 +2202,60 @@ template&lt;class Number&gt; </div>
           <td class="paramtype">std::size_t&#160;</td>
           <td class="paramname"><em>_i</em></td><td>)</td>
           <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Access operator to the respective dimension coefficient. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">_i</td><td>The dimension. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The coefficient. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a5d79b52c9b6c64c246eed7e82f24e607"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class Number&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">const Number&amp; <a class="el" href="classhypro_1_1Point.html">hypro::Point</a>&lt; Number &gt;::operator[] </td>
+          <td>(</td>
+          <td class="paramtype">const carl::Variable &amp;&#160;</td>
+          <td class="paramname"><em>_i</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Access operator to the respective dimension coefficient. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">_i</td><td>The dimension. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The coefficient. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a6c9043c3bf0bcc18e0e0e139ad1efe13"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class Number&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">const Number&amp; <a class="el" href="classhypro_1_1Point.html">hypro::Point</a>&lt; Number &gt;::operator[] </td>
+          <td>(</td>
+          <td class="paramtype">std::size_t&#160;</td>
+          <td class="paramname"><em>_i</em></td><td>)</td>
+          <td> const</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -2259,7 +2382,7 @@ template&lt;class Number&gt; </div>
 <p>Returns the coordinates as a vector representation. </p>
 <dl class="section return"><dt>Returns</dt><dd>The coordinate vector. </dd></dl>
 
-<p>Referenced by <a class="el" href="Point_8h_source.html#l00703">hypro::convert()</a>, <a class="el" href="Point_8h_source.html#l00327">hypro::Point&lt; int &gt;::inftyNorm()</a>, <a class="el" href="Point_8h_source.html#l00626">hypro::operator*()</a>, <a class="el" href="Point_8h_source.html#l00589">hypro::operator+()</a>, <a class="el" href="Point_8h_source.html#l00608">hypro::operator-()</a>, <a class="el" href="Point_8h_source.html#l00618">hypro::operator/()</a>, and <a class="el" href="Point_8h_source.html#l00480">hypro::Point&lt; int &gt;::operator==()</a>.</p>
+<p>Referenced by <a class="el" href="Point_8h_source.html#l00714">hypro::convert()</a>, <a class="el" href="Point_8h_source.html#l00334">hypro::Point&lt; int &gt;::inftyNorm()</a>, <a class="el" href="Point_8h_source.html#l00637">hypro::operator*()</a>, <a class="el" href="Point_8h_source.html#l00600">hypro::operator+()</a>, <a class="el" href="Point_8h_source.html#l00619">hypro::operator-()</a>, <a class="el" href="Point_8h_source.html#l00629">hypro::operator/()</a>, and <a class="el" href="Point_8h_source.html#l00487">hypro::Point&lt; int &gt;::operator==()</a>.</p>
 
 </div>
 </div>
@@ -2350,7 +2473,7 @@ template&lt;class Number&gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A point vector that is duplicate-free. </dd></dl>
 
-<p>Definition at line <a class="el" href="Point_8h_source.html#l00343">343</a> of file <a class="el" href="Point_8h_source.html">Point.h</a>.</p>
+<p>Definition at line <a class="el" href="Point_8h_source.html#l00350">350</a> of file <a class="el" href="Point_8h_source.html">Point.h</a>.</p>
 
 </div>
 </div>
@@ -2410,6 +2533,43 @@ template&lt;class Number&gt; </div>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">_dim</td><td>The variable. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">_value</td><td>The value. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="a73d02f1464005bdd842d50e8d0a9b8d1"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class Number&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classhypro_1_1Point.html">hypro::Point</a>&lt; Number &gt;::setCoordinate </td>
+          <td>(</td>
+          <td class="paramtype">std::size_t&#160;</td>
+          <td class="paramname"><em>dimension</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const Number &amp;&#160;</td>
+          <td class="paramname"><em>_value</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Sets the coordinate for the passed dimension. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">_dim</td><td>The dimension. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">_value</td><td>The value. </td></tr>
   </table>
   </dd>
@@ -2487,7 +2647,7 @@ template&lt;class Number&gt; </div>
   </dd>
 </dl>
 
-<p>Referenced by <a class="el" href="Point_8h_source.html#l00576">hypro::swap()</a>.</p>
+<p>Referenced by <a class="el" href="Point_8h_source.html#l00587">hypro::swap()</a>.</p>
 
 </div>
 </div>
@@ -2593,7 +2753,7 @@ template&lt;class Number&gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A reference to the outstream. </dd></dl>
 
-<p>Definition at line <a class="el" href="Point_8h_source.html#l00553">553</a> of file <a class="el" href="Point_8h_source.html">Point.h</a>.</p>
+<p>Definition at line <a class="el" href="Point_8h_source.html#l00564">564</a> of file <a class="el" href="Point_8h_source.html">Point.h</a>.</p>
 
 </div>
 </div>

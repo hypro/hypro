@@ -31,7 +31,7 @@
   <td id="projectlogo"><img alt="Logo" src="hypro_Logo.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">HyPro
-   &#160;<span id="projectnumber">18.05</span>
+   &#160;<span id="projectnumber">18.06</span>
    </div>
    <div id="projectbrief">A Toolbox for the Reachability Analysis of Hybrid Systems using Geometric Approximations</div>
   </td>
@@ -114,48 +114,34 @@ $(document).ready(function(){initNavTree('SupportFunctionSetting_8h_source.html'
 <div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor"></span></div>
 <div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="keyword">namespace </span>hypro {</div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;</div>
-<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;    <span class="comment">//General struct for support_functions</span></div>
-<div class="line"><a name="l00006"></a><span class="lineno"><a class="line" href="structhypro_1_1SupportFunctionSetting.html">    6</a></span>&#160;    <span class="keyword">struct </span><a class="code" href="structhypro_1_1SupportFunctionSetting.html">SupportFunctionSetting</a> {</div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;        <span class="keyword">static</span> constexpr <span class="keywordtype">bool</span> SUPPORTFUNCTION_VERBOSE = <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;    };</div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;</div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;    <span class="comment">//SupportFunctionContent</span></div>
-<div class="line"><a name="l00011"></a><span class="lineno"><a class="line" href="structhypro_1_1SupportFunctionContentSetting.html">   11</a></span>&#160;    <span class="keyword">struct </span><a class="code" href="structhypro_1_1SupportFunctionContentSetting.html">SupportFunctionContentSetting</a> {</div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;        <span class="keyword">static</span> constexpr <span class="keywordtype">bool</span> USE_LIN_TRANS_REDUCTION = <span class="keyword">true</span>;</div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;        <span class="keyword">static</span> constexpr <span class="keywordtype">bool</span> REDUCE_TO_BOX = <span class="keyword">true</span>;</div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;    };</div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;</div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;    <span class="comment">//BoxSupportFunctions</span></div>
-<div class="line"><a name="l00017"></a><span class="lineno"><a class="line" href="structhypro_1_1BoxSupportFunctionSetting.html">   17</a></span>&#160;    <span class="keyword">struct </span><a class="code" href="structhypro_1_1BoxSupportFunctionSetting.html">BoxSupportFunctionSetting</a> : <a class="code" href="structhypro_1_1SupportFunctionSetting.html">SupportFunctionSetting</a> {</div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;        <span class="keyword">static</span> constexpr <span class="keywordtype">bool</span> BOXSUPPORTFUNCTION_VERBOSE = <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;    };</div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;</div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;    <span class="comment">//NonLineaerOmegaOSupportFunction</span></div>
-<div class="line"><a name="l00022"></a><span class="lineno"><a class="line" href="structhypro_1_1NonLineaerOmegaOSupportFunctionSetting.html">   22</a></span>&#160;    <span class="keyword">struct </span><a class="code" href="structhypro_1_1NonLineaerOmegaOSupportFunctionSetting.html">NonLineaerOmegaOSupportFunctionSetting</a> : <a class="code" href="structhypro_1_1SupportFunctionSetting.html">SupportFunctionSetting</a> {</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;        <span class="keyword">static</span> constexpr <span class="keywordtype">bool</span> BOXOPERATOR_VERBOSE = <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;        <span class="keyword">static</span> constexpr <span class="keywordtype">bool</span> CALCEPSILON_VERBOSE = <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;        <span class="keyword">static</span> constexpr <span class="keywordtype">bool</span> CALCVALUES_VERBOSE = <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;        <span class="keyword">static</span> constexpr <span class="keywordtype">bool</span> TEST_ = <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00005"></a><span class="lineno"><a class="line" href="structhypro_1_1SupportFunctionSetting.html">    5</a></span>&#160;    <span class="keyword">struct </span><a class="code" href="structhypro_1_1SupportFunctionSetting.html">SupportFunctionSetting</a> {</div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;        <span class="keyword">static</span> constexpr <span class="keywordtype">bool</span> SUPPORTFUNCTION_VERBOSE = <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;        <span class="keyword">static</span> constexpr <span class="keywordtype">bool</span> USE_LIN_TRANS_REDUCTION = <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;        <span class="keyword">static</span> constexpr <span class="keywordtype">bool</span> REDUCE_TO_BOX = <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;        <span class="keyword">static</span> constexpr <span class="keywordtype">bool</span> BOXSUPPORTFUNCTION_VERBOSE = <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;        <span class="keyword">static</span> constexpr <span class="keywordtype">bool</span> BOXOPERATOR_VERBOSE = <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;        <span class="keyword">static</span> constexpr <span class="keywordtype">bool</span> CALCEPSILON_VERBOSE = <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;        <span class="keyword">static</span> constexpr <span class="keywordtype">bool</span> CALCVALUES_VERBOSE = <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;        <span class="keyword">static</span> constexpr <span class="keywordtype">bool</span> TEST_ = <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;        <span class="keyword">static</span> constexpr <span class="keywordtype">bool</span> PPOLYTOPESUPPORTFUNCTION_VERBOSE = <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;        <span class="keyword">static</span> constexpr <span class="keywordtype">bool</span> PPOLYTOPESUPPORTFUNCTION_VERIFY = <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;        <span class="comment">// static constexpr bool HYPRO_USE_VECTOR_CACHING = false;</span></div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;    };</div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;</div>
+<div class="line"><a name="l00019"></a><span class="lineno"><a class="line" href="structhypro_1_1NoBoxReduction.html">   19</a></span>&#160;    <span class="keyword">struct </span><a class="code" href="structhypro_1_1NoBoxReduction.html">NoBoxReduction</a> : <a class="code" href="structhypro_1_1SupportFunctionSetting.html">SupportFunctionSetting</a> {</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;        <span class="keyword">static</span> constexpr <span class="keywordtype">bool</span> REDUCE_TO_BOX = <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;    };</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;    <span class="comment">//PolytopeSupportFunctions</span></div>
+<div class="line"><a name="l00024"></a><span class="lineno"><a class="line" href="structhypro_1_1PolytopeSupportFunctionSetting.html">   24</a></span>&#160;    <span class="keyword">struct </span><a class="code" href="structhypro_1_1PolytopeSupportFunctionSetting.html">PolytopeSupportFunctionSetting</a> : <a class="code" href="structhypro_1_1SupportFunctionSetting.html">SupportFunctionSetting</a> {</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;        <span class="keyword">static</span> constexpr <span class="keywordtype">bool</span> PPOLYTOPESUPPORTFUNCTION_VERBOSE = <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;        <span class="keyword">static</span> constexpr <span class="keywordtype">bool</span> PPOLYTOPESUPPORTFUNCTION_VERIFY = <span class="keyword">true</span>;</div>
 <div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;    };</div>
 <div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;    <span class="comment">//PolytopeSupportFunctions</span></div>
-<div class="line"><a name="l00030"></a><span class="lineno"><a class="line" href="structhypro_1_1PolytopeSupportFunctionSetting.html">   30</a></span>&#160;    <span class="keyword">struct </span><a class="code" href="structhypro_1_1PolytopeSupportFunctionSetting.html">PolytopeSupportFunctionSetting</a> : <a class="code" href="structhypro_1_1SupportFunctionSetting.html">SupportFunctionSetting</a> {</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;        <span class="keyword">static</span> constexpr <span class="keywordtype">bool</span> PPOLYTOPESUPPORTFUNCTION_VERBOSE = <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;        <span class="keyword">static</span> constexpr <span class="keywordtype">bool</span> PPOLYTOPESUPPORTFUNCTION_VERIFY = <span class="keyword">true</span>;</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;    };</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    <span class="comment">//NOTE: must stay as a preprocessor directive as it en/disables includes</span></div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    <span class="comment">//SupportFunction/util: Cachable and linTrafoParameters</span></div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    <span class="comment">//struct UtilSetting {</span></div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    <span class="comment">//  static constexpr bool HYPRO_USE_VECTOR_CACHING = false;</span></div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    <span class="comment">//};</span></div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;}</div>
-<div class="ttc" id="structhypro_1_1BoxSupportFunctionSetting_html"><div class="ttname"><a href="structhypro_1_1BoxSupportFunctionSetting.html">hypro::BoxSupportFunctionSetting</a></div><div class="ttdef"><b>Definition:</b> <a href="SupportFunctionSetting_8h_source.html#l00017">SupportFunctionSetting.h:17</a></div></div>
-<div class="ttc" id="structhypro_1_1PolytopeSupportFunctionSetting_html"><div class="ttname"><a href="structhypro_1_1PolytopeSupportFunctionSetting.html">hypro::PolytopeSupportFunctionSetting</a></div><div class="ttdef"><b>Definition:</b> <a href="SupportFunctionSetting_8h_source.html#l00030">SupportFunctionSetting.h:30</a></div></div>
-<div class="ttc" id="structhypro_1_1NonLineaerOmegaOSupportFunctionSetting_html"><div class="ttname"><a href="structhypro_1_1NonLineaerOmegaOSupportFunctionSetting.html">hypro::NonLineaerOmegaOSupportFunctionSetting</a></div><div class="ttdef"><b>Definition:</b> <a href="SupportFunctionSetting_8h_source.html#l00022">SupportFunctionSetting.h:22</a></div></div>
-<div class="ttc" id="structhypro_1_1SupportFunctionSetting_html"><div class="ttname"><a href="structhypro_1_1SupportFunctionSetting.html">hypro::SupportFunctionSetting</a></div><div class="ttdef"><b>Definition:</b> <a href="SupportFunctionSetting_8h_source.html#l00006">SupportFunctionSetting.h:6</a></div></div>
-<div class="ttc" id="structhypro_1_1SupportFunctionContentSetting_html"><div class="ttname"><a href="structhypro_1_1SupportFunctionContentSetting.html">hypro::SupportFunctionContentSetting</a></div><div class="ttdef"><b>Definition:</b> <a href="SupportFunctionSetting_8h_source.html#l00011">SupportFunctionSetting.h:11</a></div></div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;}</div>
+<div class="ttc" id="structhypro_1_1NoBoxReduction_html"><div class="ttname"><a href="structhypro_1_1NoBoxReduction.html">hypro::NoBoxReduction</a></div><div class="ttdef"><b>Definition:</b> <a href="SupportFunctionSetting_8h_source.html#l00019">SupportFunctionSetting.h:19</a></div></div>
+<div class="ttc" id="structhypro_1_1PolytopeSupportFunctionSetting_html"><div class="ttname"><a href="structhypro_1_1PolytopeSupportFunctionSetting.html">hypro::PolytopeSupportFunctionSetting</a></div><div class="ttdef"><b>Definition:</b> <a href="SupportFunctionSetting_8h_source.html#l00024">SupportFunctionSetting.h:24</a></div></div>
+<div class="ttc" id="structhypro_1_1SupportFunctionSetting_html"><div class="ttname"><a href="structhypro_1_1SupportFunctionSetting.html">hypro::SupportFunctionSetting</a></div><div class="ttdef"><b>Definition:</b> <a href="SupportFunctionSetting_8h_source.html#l00005">SupportFunctionSetting.h:5</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- HTML footer for doxygen 1.8.12-->

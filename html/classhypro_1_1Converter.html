@@ -31,7 +31,7 @@
   <td id="projectlogo"><img alt="Logo" src="hypro_Logo.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">HyPro
-   &#160;<span id="projectnumber">18.05</span>
+   &#160;<span id="projectnumber">18.06</span>
    </div>
    <div id="projectbrief">A Toolbox for the Reachability Analysis of Hybrid Systems using Geometric Approximations</div>
   </td>
@@ -138,12 +138,15 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>OrthogonalPolyhedron
 <tr class="memitem:a2a6f375e308a8f1502a6fce663cb4c69"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2a6f375e308a8f1502a6fce663cb4c69"></a>
 using&#160;</td><td class="memItemRight" valign="bottom"><b>VPolytope</b> = <a class="el" href="classhypro_1_1VPolytopeT.html">VPolytopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt;</td></tr>
 <tr class="separator:a2a6f375e308a8f1502a6fce663cb4c69"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa62aa6c150bfb3fe380c5e8c12f7682e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa62aa6c150bfb3fe380c5e8c12f7682e"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>SupportFunction</b> = <a class="el" href="classhypro_1_1SupportFunctionT.html">SupportFunctionT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt;</td></tr>
-<tr class="separator:aa62aa6c150bfb3fe380c5e8c12f7682e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a757aa7ff6b69a840658948d697fc6d04"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a757aa7ff6b69a840658948d697fc6d04"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>Zonotope</b> = <a class="el" href="classhypro_1_1ZonotopeT.html">ZonotopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt;</td></tr>
-<tr class="separator:a757aa7ff6b69a840658948d697fc6d04"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adce8cc848738ea04c5b282f783fa9fc6"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="adce8cc848738ea04c5b282f783fa9fc6"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>DifferenceBounds</b> = <a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, <a class="el" href="structhypro_1_1DifferenceBoundsSetting.html">DifferenceBoundsSetting</a> &gt;</td></tr>
+<tr class="separator:adce8cc848738ea04c5b282f783fa9fc6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6df39c512af66ab7073dee4024b3e61a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6df39c512af66ab7073dee4024b3e61a"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>SupportFunction</b> = <a class="el" href="classhypro_1_1SupportFunctionT.html">SupportFunctionT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, <a class="el" href="structhypro_1_1SupportFunctionSetting.html">SupportFunctionSetting</a> &gt;</td></tr>
+<tr class="separator:a6df39c512af66ab7073dee4024b3e61a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac5e717813fecebc221a5ed56d707b71b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac5e717813fecebc221a5ed56d707b71b"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>Zonotope</b> = <a class="el" href="classhypro_1_1ZonotopeT.html">ZonotopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, <a class="el" href="structhypro_1_1ZonotopeSetting.html">ZonotopeSetting</a> &gt;</td></tr>
+<tr class="separator:ac5e717813fecebc221a5ed56d707b71b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
@@ -168,6 +171,9 @@ static <a class="el" href="classhypro_1_1BoxT.html">Box</a>&#160;</td><td class=
 <tr class="memitem:af16c936873739679ab345eb1ef6f3d36"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af16c936873739679ab345eb1ef6f3d36"></a>
 static <a class="el" href="classhypro_1_1BoxT.html">Box</a>&#160;</td><td class="memItemRight" valign="bottom"><b>toBox</b> (const <a class="el" href="classhypro_1_1ZonotopeT.html">Zonotope</a> &amp;source, const <a class="el" href="namespacehypro.html#ac9529cbda09f61cc0cdcc5a8940300cd">CONV_MODE</a>=CONV_MODE::OVER)</td></tr>
 <tr class="separator:af16c936873739679ab345eb1ef6f3d36"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad1c42f3416e1cd110e0bb7ef7516f7a4"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad1c42f3416e1cd110e0bb7ef7516f7a4"></a>
+static <a class="el" href="classhypro_1_1BoxT.html">Box</a>&#160;</td><td class="memItemRight" valign="bottom"><b>toBox</b> (const <a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBounds</a> &amp;source, const <a class="el" href="namespacehypro.html#ac9529cbda09f61cc0cdcc5a8940300cd">CONV_MODE</a>=CONV_MODE::OVER)</td></tr>
+<tr class="separator:ad1c42f3416e1cd110e0bb7ef7516f7a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a821b5576737c2a90bea389f7045157d8"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a821b5576737c2a90bea389f7045157d8"></a>
 static <a class="el" href="classhypro_1_1ConstraintSetT.html">ConstraintSet</a>&#160;</td><td class="memItemRight" valign="bottom"><b>toConstraintSet</b> (const <a class="el" href="classhypro_1_1BoxT.html">Box</a> &amp;source, const <a class="el" href="namespacehypro.html#ac9529cbda09f61cc0cdcc5a8940300cd">CONV_MODE</a>=CONV_MODE::EXACT)</td></tr>
 <tr class="separator:a821b5576737c2a90bea389f7045157d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -189,6 +195,9 @@ static <a class="el" href="classhypro_1_1ConstraintSetT.html">ConstraintSet</a>&
 <tr class="memitem:a5ed0b54b043c6ee22322edaa68d72988"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5ed0b54b043c6ee22322edaa68d72988"></a>
 static <a class="el" href="classhypro_1_1ConstraintSetT.html">ConstraintSet</a>&#160;</td><td class="memItemRight" valign="bottom"><b>toConstraintSet</b> (const <a class="el" href="classhypro_1_1ZonotopeT.html">Zonotope</a> &amp;source, const <a class="el" href="namespacehypro.html#ac9529cbda09f61cc0cdcc5a8940300cd">CONV_MODE</a>=CONV_MODE::OVER)</td></tr>
 <tr class="separator:a5ed0b54b043c6ee22322edaa68d72988"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad124069b1755a001a5e2a1f5dd4ba30c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad124069b1755a001a5e2a1f5dd4ba30c"></a>
+static <a class="el" href="classhypro_1_1ConstraintSetT.html">ConstraintSet</a>&#160;</td><td class="memItemRight" valign="bottom"><b>toConstraintSet</b> (const <a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBounds</a> &amp;source, const <a class="el" href="namespacehypro.html#ac9529cbda09f61cc0cdcc5a8940300cd">CONV_MODE</a>=CONV_MODE::OVER)</td></tr>
+<tr class="separator:ad124069b1755a001a5e2a1f5dd4ba30c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aec47751c7797a4a94fec0543f3e5e99d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aec47751c7797a4a94fec0543f3e5e99d"></a>
 static <a class="el" href="classhypro_1_1HPolytopeT.html">HPolytope</a>&#160;</td><td class="memItemRight" valign="bottom"><b>toHPolytope</b> (const <a class="el" href="classhypro_1_1BoxT.html">Box</a> &amp;source, const <a class="el" href="namespacehypro.html#ac9529cbda09f61cc0cdcc5a8940300cd">CONV_MODE</a>=CONV_MODE::EXACT)</td></tr>
 <tr class="separator:aec47751c7797a4a94fec0543f3e5e99d"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -210,6 +219,9 @@ static <a class="el" href="classhypro_1_1HPolytopeT.html">HPolytope</a>&#160;</t
 <tr class="memitem:a353db9b1c155b4fd1d571fcaf189f14e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a353db9b1c155b4fd1d571fcaf189f14e"></a>
 static <a class="el" href="classhypro_1_1HPolytopeT.html">HPolytope</a>&#160;</td><td class="memItemRight" valign="bottom"><b>toHPolytope</b> (const <a class="el" href="classhypro_1_1ZonotopeT.html">Zonotope</a> &amp;source, const <a class="el" href="namespacehypro.html#ac9529cbda09f61cc0cdcc5a8940300cd">CONV_MODE</a>=CONV_MODE::EXACT)</td></tr>
 <tr class="separator:a353db9b1c155b4fd1d571fcaf189f14e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9605b8dc246e701f0cdc7b7ed0a25eb9"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9605b8dc246e701f0cdc7b7ed0a25eb9"></a>
+static <a class="el" href="classhypro_1_1HPolytopeT.html">HPolytope</a>&#160;</td><td class="memItemRight" valign="bottom"><b>toHPolytope</b> (const <a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBounds</a> &amp;source, const <a class="el" href="namespacehypro.html#ac9529cbda09f61cc0cdcc5a8940300cd">CONV_MODE</a>=CONV_MODE::EXACT)</td></tr>
+<tr class="separator:a9605b8dc246e701f0cdc7b7ed0a25eb9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a77988e3ea239017e9f419b84bf8f01af"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a77988e3ea239017e9f419b84bf8f01af"></a>
 static <a class="el" href="classhypro_1_1VPolytopeT.html">VPolytope</a>&#160;</td><td class="memItemRight" valign="bottom"><b>toVPolytope</b> (const <a class="el" href="classhypro_1_1BoxT.html">Box</a> &amp;source, const <a class="el" href="namespacehypro.html#ac9529cbda09f61cc0cdcc5a8940300cd">CONV_MODE</a>=CONV_MODE::EXACT)</td></tr>
 <tr class="separator:a77988e3ea239017e9f419b84bf8f01af"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -231,6 +243,9 @@ static <a class="el" href="classhypro_1_1VPolytopeT.html">VPolytope</a>&#160;</t
 <tr class="memitem:adbd0df761a97fee4e77e923aaa279dda"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="adbd0df761a97fee4e77e923aaa279dda"></a>
 static <a class="el" href="classhypro_1_1VPolytopeT.html">VPolytope</a>&#160;</td><td class="memItemRight" valign="bottom"><b>toVPolytope</b> (const <a class="el" href="classhypro_1_1ZonotopeT.html">Zonotope</a> &amp;source, const <a class="el" href="namespacehypro.html#ac9529cbda09f61cc0cdcc5a8940300cd">CONV_MODE</a>=CONV_MODE::EXACT)</td></tr>
 <tr class="separator:adbd0df761a97fee4e77e923aaa279dda"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab194ca8bf97fc49d672d3175fd35ffe2"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab194ca8bf97fc49d672d3175fd35ffe2"></a>
+static <a class="el" href="classhypro_1_1VPolytopeT.html">VPolytope</a>&#160;</td><td class="memItemRight" valign="bottom"><b>toVPolytope</b> (const <a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBounds</a> &amp;source, const <a class="el" href="namespacehypro.html#ac9529cbda09f61cc0cdcc5a8940300cd">CONV_MODE</a>=CONV_MODE::EXACT)</td></tr>
+<tr class="separator:ab194ca8bf97fc49d672d3175fd35ffe2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a49818650d67516be1a5337995d6911d9"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a49818650d67516be1a5337995d6911d9"></a>
 static <a class="el" href="classhypro_1_1SupportFunctionT.html">SupportFunction</a>&#160;</td><td class="memItemRight" valign="bottom"><b>toSupportFunction</b> (const <a class="el" href="classhypro_1_1BoxT.html">Box</a> &amp;source, const <a class="el" href="namespacehypro.html#ac9529cbda09f61cc0cdcc5a8940300cd">CONV_MODE</a>=CONV_MODE::EXACT)</td></tr>
 <tr class="separator:a49818650d67516be1a5337995d6911d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -252,6 +267,9 @@ static <a class="el" href="classhypro_1_1SupportFunctionT.html">SupportFunction<
 <tr class="memitem:a32fca9683311f8f78ba6c46779716c18"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a32fca9683311f8f78ba6c46779716c18"></a>
 static <a class="el" href="classhypro_1_1SupportFunctionT.html">SupportFunction</a>&#160;</td><td class="memItemRight" valign="bottom"><b>toSupportFunction</b> (const <a class="el" href="classhypro_1_1ZonotopeT.html">Zonotope</a> &amp;source, const <a class="el" href="namespacehypro.html#ac9529cbda09f61cc0cdcc5a8940300cd">CONV_MODE</a>=CONV_MODE::EXACT)</td></tr>
 <tr class="separator:a32fca9683311f8f78ba6c46779716c18"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a00fda58f80287820d589c6d0e78ff444"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a00fda58f80287820d589c6d0e78ff444"></a>
+static <a class="el" href="classhypro_1_1SupportFunctionT.html">SupportFunction</a>&#160;</td><td class="memItemRight" valign="bottom"><b>toSupportFunction</b> (const <a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBounds</a> &amp;source, const <a class="el" href="namespacehypro.html#ac9529cbda09f61cc0cdcc5a8940300cd">CONV_MODE</a>=CONV_MODE::EXACT)</td></tr>
+<tr class="separator:a00fda58f80287820d589c6d0e78ff444"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9e3a0a9712f2f4b3c4bff29177b941e9"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9e3a0a9712f2f4b3c4bff29177b941e9"></a>
 static <a class="el" href="classhypro_1_1ZonotopeT.html">Zonotope</a>&#160;</td><td class="memItemRight" valign="bottom"><b>toZonotope</b> (const <a class="el" href="classhypro_1_1BoxT.html">Box</a> &amp;source, const <a class="el" href="namespacehypro.html#ac9529cbda09f61cc0cdcc5a8940300cd">CONV_MODE</a>=CONV_MODE::EXACT)</td></tr>
 <tr class="separator:a9e3a0a9712f2f4b3c4bff29177b941e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -273,14 +291,41 @@ static <a class="el" href="classhypro_1_1ZonotopeT.html">Zonotope</a>&#160;</td>
 <tr class="memitem:a93abdbb9d509c0ee7f93e6266a729ffe"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a93abdbb9d509c0ee7f93e6266a729ffe"></a>
 static <a class="el" href="classhypro_1_1ZonotopeT.html">Zonotope</a>&#160;</td><td class="memItemRight" valign="bottom"><b>toZonotope</b> (const <a class="el" href="classhypro_1_1ZonotopeT.html">Zonotope</a> &amp;source, const <a class="el" href="namespacehypro.html#ac9529cbda09f61cc0cdcc5a8940300cd">CONV_MODE</a>=CONV_MODE::EXACT)</td></tr>
 <tr class="separator:a93abdbb9d509c0ee7f93e6266a729ffe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa7aa70a7d964e63612629c666aebf9eb"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa7aa70a7d964e63612629c666aebf9eb"></a>
+static <a class="el" href="classhypro_1_1ZonotopeT.html">Zonotope</a>&#160;</td><td class="memItemRight" valign="bottom"><b>toZonotope</b> (const <a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBounds</a> &amp;source, const <a class="el" href="namespacehypro.html#ac9529cbda09f61cc0cdcc5a8940300cd">CONV_MODE</a>=CONV_MODE::OVER)</td></tr>
+<tr class="separator:aa7aa70a7d964e63612629c666aebf9eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abe94cfb100ea655e0137fcef7d422474"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="abe94cfb100ea655e0137fcef7d422474"></a>
+static <a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBounds</a>&#160;</td><td class="memItemRight" valign="bottom"><b>toDifferenceBounds</b> (const <a class="el" href="classhypro_1_1BoxT.html">Box</a> &amp;source, const <a class="el" href="namespacehypro.html#ac9529cbda09f61cc0cdcc5a8940300cd">CONV_MODE</a>=CONV_MODE::EXACT)</td></tr>
+<tr class="separator:abe94cfb100ea655e0137fcef7d422474"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af9a8d5b7ab5cd9836403db01e7a465f1"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af9a8d5b7ab5cd9836403db01e7a465f1"></a>
+static <a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBounds</a>&#160;</td><td class="memItemRight" valign="bottom"><b>toDifferenceBounds</b> (const <a class="el" href="classhypro_1_1ConstraintSetT.html">ConstraintSet</a> &amp;source, const <a class="el" href="namespacehypro.html#ac9529cbda09f61cc0cdcc5a8940300cd">CONV_MODE</a>=CONV_MODE::EXACT)</td></tr>
+<tr class="separator:af9a8d5b7ab5cd9836403db01e7a465f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae66f74a04783581d2c924098211448e4"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae66f74a04783581d2c924098211448e4"></a>
+static <a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBounds</a>&#160;</td><td class="memItemRight" valign="bottom"><b>toDifferenceBounds</b> (const <a class="el" href="classhypro_1_1EllipsoidT.html">Ellipsoid</a> &amp;source, const <a class="el" href="namespacehypro.html#ac9529cbda09f61cc0cdcc5a8940300cd">CONV_MODE</a>=CONV_MODE::EXACT)</td></tr>
+<tr class="separator:ae66f74a04783581d2c924098211448e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5ba170ac6e543468614f883672734d3a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5ba170ac6e543468614f883672734d3a"></a>
+static <a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBounds</a>&#160;</td><td class="memItemRight" valign="bottom"><b>toDifferenceBounds</b> (const <a class="el" href="classhypro_1_1HPolytopeT.html">HPolytope</a> &amp;source, const <a class="el" href="namespacehypro.html#ac9529cbda09f61cc0cdcc5a8940300cd">CONV_MODE</a>=CONV_MODE::EXACT)</td></tr>
+<tr class="separator:a5ba170ac6e543468614f883672734d3a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4dfd56beeb8580e647660e8ae637d514"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4dfd56beeb8580e647660e8ae637d514"></a>
+static <a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBounds</a>&#160;</td><td class="memItemRight" valign="bottom"><b>toDifferenceBounds</b> (const <a class="el" href="classhypro_1_1VPolytopeT.html">VPolytope</a> &amp;source, const <a class="el" href="namespacehypro.html#ac9529cbda09f61cc0cdcc5a8940300cd">CONV_MODE</a>=CONV_MODE::EXACT)</td></tr>
+<tr class="separator:a4dfd56beeb8580e647660e8ae637d514"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9dc2286ed58635c00cc584a76ff568dc"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9dc2286ed58635c00cc584a76ff568dc"></a>
+static <a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBounds</a>&#160;</td><td class="memItemRight" valign="bottom"><b>toDifferenceBounds</b> (const <a class="el" href="classhypro_1_1SupportFunctionT.html">SupportFunction</a> &amp;source, const std::vector&lt; <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt;&gt; &amp;additionalDirections=std::vector&lt; <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt;&gt;(), const <a class="el" href="namespacehypro.html#ac9529cbda09f61cc0cdcc5a8940300cd">CONV_MODE</a>=CONV_MODE::OVER, std::size_t numberOfDirections=defaultTemplateDirectionCount)</td></tr>
+<tr class="separator:a9dc2286ed58635c00cc584a76ff568dc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aecedc3e902737d77f10587b140be0a65"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aecedc3e902737d77f10587b140be0a65"></a>
+static <a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBounds</a>&#160;</td><td class="memItemRight" valign="bottom"><b>toDifferenceBounds</b> (const <a class="el" href="classhypro_1_1ZonotopeT.html">Zonotope</a> &amp;source, const <a class="el" href="namespacehypro.html#ac9529cbda09f61cc0cdcc5a8940300cd">CONV_MODE</a>=CONV_MODE::EXACT)</td></tr>
+<tr class="separator:aecedc3e902737d77f10587b140be0a65"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3699efb1906f4d02d587c70d9a57a835"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3699efb1906f4d02d587c70d9a57a835"></a>
+static <a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBounds</a>&#160;</td><td class="memItemRight" valign="bottom"><b>toDifferenceBounds</b> (const <a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBounds</a> &amp;source, const <a class="el" href="namespacehypro.html#ac9529cbda09f61cc0cdcc5a8940300cd">CONV_MODE</a>=CONV_MODE::EXACT)</td></tr>
+<tr class="separator:a3699efb1906f4d02d587c70d9a57a835"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><h3>template&lt;typename Number&gt;<br/>
 class hypro::Converter&lt; Number &gt;</h3>
 
-<dl><dt><b>Examples: </b></dt><dd><a class="el" href="example_converter_8cpp-example.html#_a0">example_converter.cpp</a>.</dd>
+<dl><dt><b>Examples: </b></dt><dd><a class="el" href="example_converter_8cpp-example.html#_a0">example_converter.cpp</a>, and <a class="el" href="example_differenceBounds_8cpp-example.html#_a7">example_differenceBounds.cpp</a>.</dd>
 </dl>
-<p>Definition at line <a class="el" href="Converter_8h_source.html#l00030">30</a> of file <a class="el" href="Converter_8h_source.html">Converter.h</a>.</p>
+<p>Definition at line <a class="el" href="Converter_8h_source.html#l00032">32</a> of file <a class="el" href="Converter_8h_source.html">Converter.h</a>.</p>
 </div><hr/>The documentation for this class was generated from the following file:<ul>
 <li>/home/travis/build/hypro/hypro/src/hypro/representations/conversion/<a class="el" href="Converter_8h_source.html">Converter.h</a></li>
 </ul>

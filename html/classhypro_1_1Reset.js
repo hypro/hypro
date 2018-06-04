@@ -6,6 +6,7 @@ var classhypro_1_1Reset =
     [ "Reset", "classhypro_1_1Reset.html#ad307df520ac8512d2c8c8a459970e73e", null ],
     [ "~Reset", "classhypro_1_1Reset.html#ac4a186f60ff147bb7eeedc9f5525df36", null ],
     [ "applyReset", "classhypro_1_1Reset.html#ac8ea83d07a84cc1746d1f380e6f630c2", null ],
+    [ "decompose", "classhypro_1_1Reset.html#a788b7d835870876a2ce6e1fce4d40ecb", null ],
     [ "empty", "classhypro_1_1Reset.html#ad0a7b55e6cbe9eb0dacf55c6801a3a1b", null ],
     [ "getMatrix", "classhypro_1_1Reset.html#aed42d13036f0be46c6e8c24ad982d02f", null ],
     [ "getReset", "classhypro_1_1Reset.html#a4e33151e4c211ae3e6cc7266feeb05ce", null ],
@@ -21,7 +22,7 @@ var classhypro_1_1Reset =
     [ "setVector", "classhypro_1_1Reset.html#ac9c9196595d85c87c01526eb860e27d9", null ],
     [ "size", "classhypro_1_1Reset.html#ab796685f61aa2e21a89ac4ca6a1e4207", null ],
     [ "operator!=", "classhypro_1_1Reset.html#a519225333c976d3c64fd91cda40e6bfe", null ],
-    [ "operator<<", "classhypro_1_1Reset.html#a77bc6233604980910f6162442605c7e0", null ],
+    [ "operator<<", "classhypro_1_1Reset.html#a115a946ae646aeaa0612a3ae7c6e4f85", null ],
     [ "operator==", "classhypro_1_1Reset.html#a710d843b4628d1ec4605793b6d0bce4c", null ],
     [ "mResets", "classhypro_1_1Reset.html#aa143735f3c77411ffc3a5b5a9ee0a208", null ]
 ];

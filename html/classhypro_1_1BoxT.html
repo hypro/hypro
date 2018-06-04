@@ -31,7 +31,7 @@
   <td id="projectlogo"><img alt="Logo" src="hypro_Logo.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">HyPro
-   &#160;<span id="projectnumber">18.05</span>
+   &#160;<span id="projectnumber">18.06</span>
    </div>
    <div id="projectbrief">A Toolbox for the Reachability Analysis of Hybrid Systems using Geometric Approximations</div>
   </td>
@@ -162,6 +162,9 @@ Public Member Functions</h2></td></tr>
 &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1BoxT.html#a0ed7dccdf853858f4b2b544372f8169f">~BoxT</a> ()</td></tr>
 <tr class="memdesc:a0ed7dccdf853858f4b2b544372f8169f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor. <br/></td></tr>
 <tr class="separator:a0ed7dccdf853858f4b2b544372f8169f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0ac49da94e5a23fcbbb66e31cef8cfef"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0ac49da94e5a23fcbbb66e31cef8cfef"></a>
+Setting&#160;</td><td class="memItemRight" valign="bottom"><b>getSettings</b> () const </td></tr>
+<tr class="separator:a0ac49da94e5a23fcbbb66e31cef8cfef"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8c13e040507e347cba58c8840c2734e7"><td class="memItemLeft" align="right" valign="top">std::vector&lt; carl::Interval<br class="typebreak"/>
 &lt; Number &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1BoxT.html#a8c13e040507e347cba58c8840c2734e7">boundaries</a> () const </td></tr>
 <tr class="memdesc:a8c13e040507e347cba58c8840c2734e7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Getter for interval representation of the current box.  <a href="#a8c13e040507e347cba58c8840c2734e7">More...</a><br/></td></tr>
@@ -287,6 +290,10 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>contains</b> (const <
 <tr class="memitem:a41119970e20c91ab7d349cb7efc3fc18"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1BoxT.html">BoxT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1BoxT.html#a41119970e20c91ab7d349cb7efc3fc18">unite</a> (const <a class="el" href="classhypro_1_1BoxT.html">BoxT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt; &amp;rhs) const </td></tr>
 <tr class="memdesc:a41119970e20c91ab7d349cb7efc3fc18"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the union of two boxes.  <a href="#a41119970e20c91ab7d349cb7efc3fc18">More...</a><br/></td></tr>
 <tr class="separator:a41119970e20c91ab7d349cb7efc3fc18"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0647c38c34ce94c61ba5826768330549"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0647c38c34ce94c61ba5826768330549"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1BoxT.html#a0647c38c34ce94c61ba5826768330549">reduceRepresentation</a> ()</td></tr>
+<tr class="memdesc:a0647c38c34ce94c61ba5826768330549"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reduces the box - only in case rational types are used, the number representation is optimized. <br/></td></tr>
+<tr class="separator:a0647c38c34ce94c61ba5826768330549"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7654ee3ad5a7d679a54952f4f99a9039"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7654ee3ad5a7d679a54952f4f99a9039"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1BoxT.html#a7654ee3ad5a7d679a54952f4f99a9039">clear</a> ()</td></tr>
 <tr class="memdesc:a7654ee3ad5a7d679a54952f4f99a9039"><td class="mdescLeft">&#160;</td><td class="mdescRight">Makes this box the empty box. <br/></td></tr>
@@ -353,9 +360,9 @@ Friends</h2></td></tr>
 <tr class="memitem:a7d9104d8a149e1abe766013eb8dd7824"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1BoxT.html#a7d9104d8a149e1abe766013eb8dd7824">operator!=</a> (const <a class="el" href="classhypro_1_1BoxT.html">BoxT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt; &amp;b1, const <a class="el" href="classhypro_1_1BoxT.html">BoxT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt; &amp;b2)</td></tr>
 <tr class="memdesc:a7d9104d8a149e1abe766013eb8dd7824"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines inequality of two boxes.  <a href="#a7d9104d8a149e1abe766013eb8dd7824">More...</a><br/></td></tr>
 <tr class="separator:a7d9104d8a149e1abe766013eb8dd7824"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adc091899bb1626a05675f979f15ff1db"><td class="memItemLeft" align="right" valign="top">std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1BoxT.html#adc091899bb1626a05675f979f15ff1db">operator&lt;&lt;</a> (std::ostream &amp;ostr, const <a class="el" href="classhypro_1_1BoxT.html">BoxT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt; &amp;)</td></tr>
-<tr class="memdesc:adc091899bb1626a05675f979f15ff1db"><td class="mdescLeft">&#160;</td><td class="mdescRight">Outstream operator.  <a href="#adc091899bb1626a05675f979f15ff1db">More...</a><br/></td></tr>
-<tr class="separator:adc091899bb1626a05675f979f15ff1db"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5809f2678374bf5ab4a6d335569a4556"><td class="memItemLeft" align="right" valign="top">std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1BoxT.html#a5809f2678374bf5ab4a6d335569a4556">operator&lt;&lt;</a> (std::ostream &amp;ostr, const <a class="el" href="classhypro_1_1BoxT.html">BoxT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt; &amp;b)</td></tr>
+<tr class="memdesc:a5809f2678374bf5ab4a6d335569a4556"><td class="mdescLeft">&#160;</td><td class="mdescRight">Outstream operator.  <a href="#a5809f2678374bf5ab4a6d335569a4556">More...</a><br/></td></tr>
+<tr class="separator:a5809f2678374bf5ab4a6d335569a4556"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><h3>template&lt;typename Number, typename Converter, class Setting&gt;<br/>
@@ -809,7 +816,7 @@ template&lt;typename Number, typename Converter, class Setting&gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>An interval. </dd></dl>
 
-<p>Definition at line <a class="el" href="Box_8h_source.html#l00204">204</a> of file <a class="el" href="Box_8h_source.html">Box.h</a>.</p>
+<p>Definition at line <a class="el" href="Box_8h_source.html#l00206">206</a> of file <a class="el" href="Box_8h_source.html">Box.h</a>.</p>
 
 </div>
 </div>
@@ -910,9 +917,9 @@ template&lt;typename Number, typename Converter, class Setting&gt; </div>
 
 <p>Implements <a class="el" href="classhypro_1_1GeometricObject.html#aecbf17700fe297f643f401b7ae17dd9c">hypro::GeometricObject&lt; Number, BoxT&lt; Number, Converter, Setting &gt; &gt;</a>.</p>
 
-<p>Definition at line <a class="el" href="Box_8h_source.html#l00367">367</a> of file <a class="el" href="Box_8h_source.html">Box.h</a>.</p>
+<p>Definition at line <a class="el" href="Box_8h_source.html#l00369">369</a> of file <a class="el" href="Box_8h_source.html">Box.h</a>.</p>
 
-<p>Referenced by <a class="el" href="Box__double_8h_source.html#l00038">hypro::BoxT&lt; double, Converter, Setting &gt;::BoxT()</a>, <a class="el" href="Box_8h_source.html#l00062">hypro::BoxT&lt; Number, hypro::Converter, Setting &gt;::BoxT()</a>, <a class="el" href="Box__double_8h_source.html#l00128">hypro::BoxT&lt; double, Converter, Setting &gt;::Empty()</a>, and <a class="el" href="Box_8h_source.html#l00150">hypro::BoxT&lt; Number, hypro::Converter, Setting &gt;::Empty()</a>.</p>
+<p>Referenced by <a class="el" href="Box__double_8h_source.html#l00038">hypro::BoxT&lt; double, Converter, Setting &gt;::BoxT()</a>, <a class="el" href="Box_8h_source.html#l00062">hypro::BoxT&lt; Number, hypro::Converter, Setting &gt;::BoxT()</a>, <a class="el" href="Box__double_8h_source.html#l00128">hypro::BoxT&lt; double, Converter, Setting &gt;::Empty()</a>, and <a class="el" href="Box_8h_source.html#l00152">hypro::BoxT&lt; Number, hypro::Converter, Setting &gt;::Empty()</a>.</p>
 
 </div>
 </div>
@@ -949,7 +956,7 @@ template&lt;typename Number, typename Converter, class Setting&gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Empty box. </dd></dl>
 
-<p>Definition at line <a class="el" href="Box_8h_source.html#l00150">150</a> of file <a class="el" href="Box_8h_source.html">Box.h</a>.</p>
+<p>Definition at line <a class="el" href="Box_8h_source.html#l00152">152</a> of file <a class="el" href="Box_8h_source.html">Box.h</a>.</p>
 
 </div>
 </div>
@@ -982,9 +989,9 @@ template&lt;typename Number, typename Converter, class Setting&gt; </div>
 
 <p>Implements <a class="el" href="classhypro_1_1GeometricObject.html#a3de514fbb8514689331e65a247a64927">hypro::GeometricObject&lt; Number, BoxT&lt; Number, Converter, Setting &gt; &gt;</a>.</p>
 
-<p>Definition at line <a class="el" href="Box_8h_source.html#l00216">216</a> of file <a class="el" href="Box_8h_source.html">Box.h</a>.</p>
+<p>Definition at line <a class="el" href="Box_8h_source.html#l00218">218</a> of file <a class="el" href="Box_8h_source.html">Box.h</a>.</p>
 
-<p>Referenced by <a class="el" href="Box__double_8h_source.html#l00038">hypro::BoxT&lt; double, Converter, Setting &gt;::BoxT()</a>, <a class="el" href="Box_8h_source.html#l00062">hypro::BoxT&lt; Number, hypro::Converter, Setting &gt;::BoxT()</a>, <a class="el" href="Box__double_8h_source.html#l00308">hypro::BoxT&lt; double, Converter, Setting &gt;::operator*()</a>, and <a class="el" href="Box_8h_source.html#l00468">hypro::operator*()</a>.</p>
+<p>Referenced by <a class="el" href="Box__double_8h_source.html#l00038">hypro::BoxT&lt; double, Converter, Setting &gt;::BoxT()</a>, <a class="el" href="Box_8h_source.html#l00062">hypro::BoxT&lt; Number, hypro::Converter, Setting &gt;::BoxT()</a>, <a class="el" href="Box__double_8h_source.html#l00308">hypro::BoxT&lt; double, Converter, Setting &gt;::operator*()</a>, and <a class="el" href="Box_8h_source.html#l00475">hypro::operator*()</a>.</p>
 
 </div>
 </div>
@@ -1058,7 +1065,7 @@ template&lt;typename Number, typename Converter, class Setting&gt; </div>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="Box_8h_source.html#l00188">188</a> of file <a class="el" href="Box_8h_source.html">Box.h</a>.</p>
+<p>Definition at line <a class="el" href="Box_8h_source.html#l00190">190</a> of file <a class="el" href="Box_8h_source.html">Box.h</a>.</p>
 
 </div>
 </div>
@@ -1193,7 +1200,7 @@ template&lt;typename Number, typename Converter, class Setting&gt; </div>
 <p>A box is symmetric, if its centroid is the origin in the respective space, i.e. if the center of each interval in each dimension is zero. </p>
 <dl class="section return"><dt>Returns</dt><dd>True if symmetric, False otherwise. </dd></dl>
 
-<p>Definition at line <a class="el" href="Box_8h_source.html#l00234">234</a> of file <a class="el" href="Box_8h_source.html">Box.h</a>.</p>
+<p>Definition at line <a class="el" href="Box_8h_source.html#l00236">236</a> of file <a class="el" href="Box_8h_source.html">Box.h</a>.</p>
 
 </div>
 </div>
@@ -1223,9 +1230,9 @@ template&lt;typename Number, typename Converter, class Setting&gt; </div>
 <p>Getter for the limiting points. </p>
 <dl class="section return"><dt>Returns</dt><dd>A pair of points. </dd></dl>
 
-<p>Definition at line <a class="el" href="Box_8h_source.html#l00165">165</a> of file <a class="el" href="Box_8h_source.html">Box.h</a>.</p>
+<p>Definition at line <a class="el" href="Box_8h_source.html#l00167">167</a> of file <a class="el" href="Box_8h_source.html">Box.h</a>.</p>
 
-<p>Referenced by <a class="el" href="Box__double_8h_source.html#l00077">hypro::BoxT&lt; double, Converter, Setting &gt;::BoxT()</a>, <a class="el" href="Box_8h_source.html#l00099">hypro::BoxT&lt; Number, hypro::Converter, Setting &gt;::BoxT()</a>, and <a class="el" href="Box_8h_source.html#l00484">hypro::convert()</a>.</p>
+<p>Referenced by <a class="el" href="Box__double_8h_source.html#l00077">hypro::BoxT&lt; double, Converter, Setting &gt;::BoxT()</a>, <a class="el" href="Box_8h_source.html#l00099">hypro::BoxT&lt; Number, hypro::Converter, Setting &gt;::BoxT()</a>, and <a class="el" href="Box_8h_source.html#l00491">hypro::convert()</a>.</p>
 
 </div>
 </div>
@@ -1314,7 +1321,7 @@ template&lt;typename Number, typename Converter, class Setting&gt; </div>
 <p>Getter for the maximal point. </p>
 <dl class="section return"><dt>Returns</dt><dd>A point. </dd></dl>
 
-<p>Definition at line <a class="el" href="Box_8h_source.html#l00250">250</a> of file <a class="el" href="Box_8h_source.html">Box.h</a>.</p>
+<p>Definition at line <a class="el" href="Box_8h_source.html#l00252">252</a> of file <a class="el" href="Box_8h_source.html">Box.h</a>.</p>
 
 </div>
 </div>
@@ -1344,7 +1351,7 @@ template&lt;typename Number, typename Converter, class Setting&gt; </div>
 <p>Getter for the minimal point. </p>
 <dl class="section return"><dt>Returns</dt><dd>A point. </dd></dl>
 
-<p>Definition at line <a class="el" href="Box_8h_source.html#l00258">258</a> of file <a class="el" href="Box_8h_source.html">Box.h</a>.</p>
+<p>Definition at line <a class="el" href="Box_8h_source.html#l00260">260</a> of file <a class="el" href="Box_8h_source.html">Box.h</a>.</p>
 
 </div>
 </div>
@@ -1445,7 +1452,7 @@ template&lt;typename Number, typename Converter, class Setting&gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The scaled box. </dd></dl>
 
-<p>Definition at line <a class="el" href="Box_8h_source.html#l00332">332</a> of file <a class="el" href="Box_8h_source.html">Box.h</a>.</p>
+<p>Definition at line <a class="el" href="Box_8h_source.html#l00334">334</a> of file <a class="el" href="Box_8h_source.html">Box.h</a>.</p>
 
 </div>
 </div>
@@ -1550,7 +1557,7 @@ template&lt;typename Number, typename Converter, class Setting&gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>An interval. </dd></dl>
 
-<p>Definition at line <a class="el" href="Box_8h_source.html#l00357">357</a> of file <a class="el" href="Box_8h_source.html">Box.h</a>.</p>
+<p>Definition at line <a class="el" href="Box_8h_source.html#l00359">359</a> of file <a class="el" href="Box_8h_source.html">Box.h</a>.</p>
 
 </div>
 </div>
@@ -1616,6 +1623,8 @@ template&lt;typename Number, typename Converter, class Setting&gt; </div>
   </dd>
 </dl>
 
+<p>Referenced by <a class="el" href="Box_8h_source.html#l00451">hypro::BoxT&lt; Number, hypro::Converter, Setting &gt;::reduceRepresentation()</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a69d195ab2f9686ba955e8f6404fc9a13"></a>
@@ -1644,7 +1653,7 @@ template&lt;typename Number, typename Converter, class Setting&gt; </div>
 <p>Reference getter for limiting points. </p>
 <dl class="section return"><dt>Returns</dt><dd>A reference to the limit point pair of the object. </dd></dl>
 
-<p>Definition at line <a class="el" href="Box_8h_source.html#l00171">171</a> of file <a class="el" href="Box_8h_source.html">Box.h</a>.</p>
+<p>Definition at line <a class="el" href="Box_8h_source.html#l00173">173</a> of file <a class="el" href="Box_8h_source.html">Box.h</a>.</p>
 
 </div>
 </div>
@@ -1876,11 +1885,11 @@ template&lt;typename Number, typename Converter, class Setting&gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>False, if both boxes are equal. </dd></dl>
 
-<p>Definition at line <a class="el" href="Box_8h_source.html#l00310">310</a> of file <a class="el" href="Box_8h_source.html">Box.h</a>.</p>
+<p>Definition at line <a class="el" href="Box_8h_source.html#l00312">312</a> of file <a class="el" href="Box_8h_source.html">Box.h</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="adc091899bb1626a05675f979f15ff1db"></a>
+<a class="anchor" id="a5809f2678374bf5ab4a6d335569a4556"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
@@ -1899,7 +1908,7 @@ template&lt;typename Number, typename Converter, class Setting&gt; </div>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const <a class="el" href="classhypro_1_1BoxT.html">BoxT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt; &amp;&#160;</td>
-          <td class="paramname">&#160;</td>
+          <td class="paramname"><em>b</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -1923,7 +1932,7 @@ template&lt;typename Number, typename Converter, class Setting&gt; </div>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="Box_8h_source.html#l00347">347</a> of file <a class="el" href="Box_8h_source.html">Box.h</a>.</p>
+<p>Definition at line <a class="el" href="Box_8h_source.html#l00342">342</a> of file <a class="el" href="Box_8h_source.html">Box.h</a>.</p>
 
 </div>
 </div>
@@ -1973,7 +1982,7 @@ template&lt;class SettingRhs &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True, if they are equal. </dd></dl>
 
-<p>Definition at line <a class="el" href="Box_8h_source.html#l00297">297</a> of file <a class="el" href="Box_8h_source.html">Box.h</a>.</p>
+<p>Definition at line <a class="el" href="Box_8h_source.html#l00299">299</a> of file <a class="el" href="Box_8h_source.html">Box.h</a>.</p>
 
 </div>
 </div>
@@ -2001,7 +2010,7 @@ template&lt;typename Number, typename Converter, class Setting&gt; </div>
 
 <p>Definition at line <a class="el" href="Box_8h_source.html#l00051">51</a> of file <a class="el" href="Box_8h_source.html">Box.h</a>.</p>
 
-<p>Referenced by <a class="el" href="Box__double_8h_source.html#l00182">hypro::BoxT&lt; double, Converter, Setting &gt;::at()</a>, <a class="el" href="Box_8h_source.html#l00204">hypro::BoxT&lt; Number, hypro::Converter, Setting &gt;::at()</a>, <a class="el" href="Box__double_8h_source.html#l00066">hypro::BoxT&lt; double, Converter, Setting &gt;::BoxT()</a>, <a class="el" href="Box_8h_source.html#l00088">hypro::BoxT&lt; Number, hypro::Converter, Setting &gt;::BoxT()</a>, <a class="el" href="Box__double_8h_source.html#l00348">hypro::BoxT&lt; double, Converter, Setting &gt;::dimension()</a>, <a class="el" href="Box_8h_source.html#l00367">hypro::BoxT&lt; Number, hypro::Converter, Setting &gt;::dimension()</a>, <a class="el" href="Box__double_8h_source.html#l00194">hypro::BoxT&lt; double, Converter, Setting &gt;::empty()</a>, <a class="el" href="Box_8h_source.html#l00216">hypro::BoxT&lt; Number, hypro::Converter, Setting &gt;::empty()</a>, <a class="el" href="Box__double_8h_source.html#l00166">hypro::BoxT&lt; double, Converter, Setting &gt;::insert()</a>, <a class="el" href="Box_8h_source.html#l00188">hypro::BoxT&lt; Number, hypro::Converter, Setting &gt;::insert()</a>, <a class="el" href="Box__double_8h_source.html#l00213">hypro::BoxT&lt; double, Converter, Setting &gt;::isSymmetric()</a>, <a class="el" href="Box_8h_source.html#l00234">hypro::BoxT&lt; Number, hypro::Converter, Setting &gt;::isSymmetric()</a>, <a class="el" href="Box__double_8h_source.html#l00143">hypro::BoxT&lt; double, Converter, Setting &gt;::limits()</a>, <a class="el" href="Box_8h_source.html#l00165">hypro::BoxT&lt; Number, hypro::Converter, Setting &gt;::limits()</a>, <a class="el" href="Box__double_8h_source.html#l00229">hypro::BoxT&lt; double, Converter, Setting &gt;::max()</a>, <a class="el" href="Box_8h_source.html#l00250">hypro::BoxT&lt; Number, hypro::Converter, Setting &gt;::max()</a>, <a class="el" href="Box__double_8h_source.html#l00237">hypro::BoxT&lt; double, Converter, Setting &gt;::min()</a>, <a class="el" href="Box_8h_source.html#l00258">hypro::BoxT&lt; Number, hypro::Converter, Setting &gt;::min()</a>, <a class="el" href="Box__double_8h_source.html#l00308">hypro::BoxT&lt; double, Converter, Setting &gt;::operator*()</a>, <a class="el" href="Box_8h_source.html#l00332">hypro::BoxT&lt; Number, hypro::Converter, Setting &gt;::operator*()</a>, <a class="el" href="Box__double_8h_source.html#l00338">hypro::BoxT&lt; double, Converter, Setting &gt;::operator[]()</a>, <a class="el" href="Box_8h_source.html#l00357">hypro::BoxT&lt; Number, hypro::Converter, Setting &gt;::operator[]()</a>, <a class="el" href="Box__double_8h_source.html#l00149">hypro::BoxT&lt; double, Converter, Setting &gt;::rLimits()</a>, and <a class="el" href="Box_8h_source.html#l00171">hypro::BoxT&lt; Number, hypro::Converter, Setting &gt;::rLimits()</a>.</p>
+<p>Referenced by <a class="el" href="Box__double_8h_source.html#l00182">hypro::BoxT&lt; double, Converter, Setting &gt;::at()</a>, <a class="el" href="Box_8h_source.html#l00206">hypro::BoxT&lt; Number, hypro::Converter, Setting &gt;::at()</a>, <a class="el" href="Box__double_8h_source.html#l00066">hypro::BoxT&lt; double, Converter, Setting &gt;::BoxT()</a>, <a class="el" href="Box_8h_source.html#l00088">hypro::BoxT&lt; Number, hypro::Converter, Setting &gt;::BoxT()</a>, <a class="el" href="Box__double_8h_source.html#l00348">hypro::BoxT&lt; double, Converter, Setting &gt;::dimension()</a>, <a class="el" href="Box_8h_source.html#l00369">hypro::BoxT&lt; Number, hypro::Converter, Setting &gt;::dimension()</a>, <a class="el" href="Box__double_8h_source.html#l00194">hypro::BoxT&lt; double, Converter, Setting &gt;::empty()</a>, <a class="el" href="Box_8h_source.html#l00218">hypro::BoxT&lt; Number, hypro::Converter, Setting &gt;::empty()</a>, <a class="el" href="Box__double_8h_source.html#l00166">hypro::BoxT&lt; double, Converter, Setting &gt;::insert()</a>, <a class="el" href="Box_8h_source.html#l00190">hypro::BoxT&lt; Number, hypro::Converter, Setting &gt;::insert()</a>, <a class="el" href="Box__double_8h_source.html#l00213">hypro::BoxT&lt; double, Converter, Setting &gt;::isSymmetric()</a>, <a class="el" href="Box_8h_source.html#l00236">hypro::BoxT&lt; Number, hypro::Converter, Setting &gt;::isSymmetric()</a>, <a class="el" href="Box__double_8h_source.html#l00143">hypro::BoxT&lt; double, Converter, Setting &gt;::limits()</a>, <a class="el" href="Box_8h_source.html#l00167">hypro::BoxT&lt; Number, hypro::Converter, Setting &gt;::limits()</a>, <a class="el" href="Box__double_8h_source.html#l00229">hypro::BoxT&lt; double, Converter, Setting &gt;::max()</a>, <a class="el" href="Box_8h_source.html#l00252">hypro::BoxT&lt; Number, hypro::Converter, Setting &gt;::max()</a>, <a class="el" href="Box__double_8h_source.html#l00237">hypro::BoxT&lt; double, Converter, Setting &gt;::min()</a>, <a class="el" href="Box_8h_source.html#l00260">hypro::BoxT&lt; Number, hypro::Converter, Setting &gt;::min()</a>, <a class="el" href="Box__double_8h_source.html#l00308">hypro::BoxT&lt; double, Converter, Setting &gt;::operator*()</a>, <a class="el" href="Box_8h_source.html#l00334">hypro::BoxT&lt; Number, hypro::Converter, Setting &gt;::operator*()</a>, <a class="el" href="Box__double_8h_source.html#l00338">hypro::BoxT&lt; double, Converter, Setting &gt;::operator[]()</a>, <a class="el" href="Box_8h_source.html#l00359">hypro::BoxT&lt; Number, hypro::Converter, Setting &gt;::operator[]()</a>, <a class="el" href="Box__double_8h_source.html#l00149">hypro::BoxT&lt; double, Converter, Setting &gt;::rLimits()</a>, and <a class="el" href="Box_8h_source.html#l00173">hypro::BoxT&lt; Number, hypro::Converter, Setting &gt;::rLimits()</a>.</p>
 
 </div>
 </div>

@@ -31,7 +31,7 @@
   <td id="projectlogo"><img alt="Logo" src="hypro_Logo.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">HyPro
-   &#160;<span id="projectnumber">18.05</span>
+   &#160;<span id="projectnumber">18.06</span>
    </div>
    <div id="projectbrief">A Toolbox for the Reachability Analysis of Hybrid Systems using Geometric Approximations</div>
   </td>
@@ -112,7 +112,8 @@ $(document).ready(function(){initNavTree('namespacehypro.html','');});
 <a href="#nested-classes">Classes</a> &#124;
 <a href="#typedef-members">Typedefs</a> &#124;
 <a href="#enum-members">Enumerations</a> &#124;
-<a href="#func-members">Functions</a>  </div>
+<a href="#func-members">Functions</a> &#124;
+<a href="#var-members">Variables</a>  </div>
   <div class="headertitle">
 <div class="title">hypro Namespace Reference</div>  </div>
 </div><!--header-->
@@ -167,8 +168,6 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Transition.html">Transition</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Class for transition.  <a href="classhypro_1_1Transition.html#details">More...</a><br/></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1LocationManager.html">LocationManager</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Location.html">Location</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Class for location.  <a href="classhypro_1_1Location.html#details">More...</a><br/></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -197,6 +196,8 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1genericAffineTransformationVisitor.html">genericAffineTransformationVisitor</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1genericConversionVisitor.html">genericConversionVisitor</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1genericRedundancyVisitor.html">genericRedundancyVisitor</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1genericReductionVisitor.html">genericReductionVisitor</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -261,10 +262,17 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1BoxLinearOptimizationOff.html">BoxLinearOptimizationOff</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1BoxAllOff.html">BoxAllOff</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ConstraintSetT.html">ConstraintSetT</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A class representing a plain constraint set.  <a href="classhypro_1_1ConstraintSetT.html#details">More...</a><br/></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Converter.html">Converter</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Class wrapping the difference bounds content.  <a href="classhypro_1_1DifferenceBoundsT.html#details">More...</a><br/></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1DifferenceBoundsSetting.html">DifferenceBoundsSetting</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1EllipsoidT.html">EllipsoidT</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Class for ellipsoids.  <a href="classhypro_1_1EllipsoidT.html#details">More...</a><br/></td></tr>
@@ -332,11 +340,7 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1SupportFunctionSetting.html">SupportFunctionSetting</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1SupportFunctionContentSetting.html">SupportFunctionContentSetting</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1BoxSupportFunctionSetting.html">BoxSupportFunctionSetting</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1NonLineaerOmegaOSupportFunctionSetting.html">NonLineaerOmegaOSupportFunctionSetting</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1NoBoxReduction.html">NoBoxReduction</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1PolytopeSupportFunctionSetting.html">PolytopeSupportFunctionSetting</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -420,10 +424,10 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>BoolMatrix</b> = <a 
 <tr class="memitem:a6a9bae381f2abc6e993f7b30b1504369"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6a9bae381f2abc6e993f7b30b1504369"></a>
 using&#160;</td><td class="memItemRight" valign="bottom"><b>ExpFunctionTypeStdVector</b> = std::vector&lt; EXP_FUNCT_TYPE &gt;</td></tr>
 <tr class="separator:a6a9bae381f2abc6e993f7b30b1504369"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a53f4b13464c8a8acb0173a8f11dc29ef"><td class="memTemplParams" colspan="2"><a class="anchor" id="a53f4b13464c8a8acb0173a8f11dc29ef"></a>
+<tr class="memitem:a31f01d271a4a1a4aa194d86752f236d6"><td class="memTemplParams" colspan="2"><a class="anchor" id="a31f01d271a4a1a4aa194d86752f236d6"></a>
 template&lt;typename Number , typename tNumber  = Number&gt; </td></tr>
-<tr class="memitem:a53f4b13464c8a8acb0173a8f11dc29ef"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><b>State_t</b> = <a class="el" href="classhypro_1_1State.html">State</a>&lt; Number, tNumber, Box&lt; Number &gt;, ConstraintSet&lt; Number &gt;, <a class="el" href="namespacehypro.html#a47344b22ce93940da4599cf2f2987321">SupportFunction</a>&lt; Number &gt;, <a class="el" href="namespacehypro.html#ad96debd897a91531861debc2a348b9e4">Zonotope</a>&lt; Number &gt;, <a class="el" href="namespacehypro.html#afd0bc8dcc54953e4b477a5aaf7065439">HPolytope</a>&lt; Number &gt;, <a class="el" href="namespacehypro.html#a39e49ed88fa9599f8b04b6758a3103a2">VPolytope</a>&lt; Number &gt;&gt;</td></tr>
-<tr class="separator:a53f4b13464c8a8acb0173a8f11dc29ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a31f01d271a4a1a4aa194d86752f236d6"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><b>State_t</b> = <a class="el" href="classhypro_1_1State.html">State</a>&lt; Number, tNumber, Box&lt; Number &gt;, ConstraintSet&lt; Number &gt;, <a class="el" href="namespacehypro.html#a47344b22ce93940da4599cf2f2987321">SupportFunction</a>&lt; Number &gt;, <a class="el" href="namespacehypro.html#ad96debd897a91531861debc2a348b9e4">Zonotope</a>&lt; Number &gt;, <a class="el" href="namespacehypro.html#afd0bc8dcc54953e4b477a5aaf7065439">HPolytope</a>&lt; Number &gt;, <a class="el" href="namespacehypro.html#a39e49ed88fa9599f8b04b6758a3103a2">VPolytope</a>&lt; Number &gt;, <a class="el" href="namespacehypro.html#a81a6782100a8fb335147ba9a67e18c65">DifferenceBounds</a>&lt; Number &gt;&gt;</td></tr>
+<tr class="separator:a31f01d271a4a1a4aa194d86752f236d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac81ca159915e8d3f271cd914efa31145"><td class="memTemplParams" colspan="2"><a class="anchor" id="ac81ca159915e8d3f271cd914efa31145"></a>
 template&lt;typename Number &gt; </td></tr>
 <tr class="memitem:ac81ca159915e8d3f271cd914efa31145"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><b>vVec</b> = typename std::vector&lt; <a class="el" href="classhypro_1_1Vertex.html">Vertex</a>&lt; Number &gt;&gt;</td></tr>
@@ -476,6 +480,9 @@ template&lt;typename Number &gt; </td></tr>
 <tr class="memitem:ad96debd897a91531861debc2a348b9e4"><td class="memTemplParams" colspan="2">template&lt;typename Number &gt; </td></tr>
 <tr class="memitem:ad96debd897a91531861debc2a348b9e4"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacehypro.html#ad96debd897a91531861debc2a348b9e4">Zonotope</a> = typename <a class="el" href="classhypro_1_1Converter.html">Converter</a>&lt; Number &gt;::<a class="el" href="namespacehypro.html#ad96debd897a91531861debc2a348b9e4">Zonotope</a></td></tr>
 <tr class="separator:ad96debd897a91531861debc2a348b9e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a81a6782100a8fb335147ba9a67e18c65"><td class="memTemplParams" colspan="2">template&lt;typename Number &gt; </td></tr>
+<tr class="memitem:a81a6782100a8fb335147ba9a67e18c65"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacehypro.html#a81a6782100a8fb335147ba9a67e18c65">DifferenceBounds</a> = typename <a class="el" href="classhypro_1_1Converter.html">Converter</a>&lt; Number &gt;::<a class="el" href="namespacehypro.html#a81a6782100a8fb335147ba9a67e18c65">DifferenceBounds</a></td></tr>
+<tr class="separator:a81a6782100a8fb335147ba9a67e18c65"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2c54bbae67220c4184f0ad0c075c6c98"><td class="memTemplParams" colspan="2"><a class="anchor" id="a2c54bbae67220c4184f0ad0c075c6c98"></a>
 template&lt;typename Number &gt; </td></tr>
 <tr class="memitem:a2c54bbae67220c4184f0ad0c075c6c98"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><b>vectorSet</b> = std::set&lt; <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt;&gt;</td></tr>
@@ -547,7 +554,9 @@ Enumerations</h2></td></tr>
 &#160;&#160;<b>ppl_polytope</b>, 
 <b>support_function</b>, 
 <b>taylor_model</b>, 
-<b>zonotope</b>
+<b>zonotope</b>, 
+<br/>
+&#160;&#160;<b>difference_bounds</b>
 <br/>
  }</td></tr>
 <tr class="memdesc:aada824f660cac25bb643be870cdc0a86"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enum encapsulating all provided state set representations to be able to determine a type. <br/></td></tr>
@@ -630,10 +639,14 @@ template&lt;typename Number &gt; </td></tr>
 template&lt;typename Number &gt; </td></tr>
 <tr class="memitem:a6723b7a63299c0802c305712bcf007b1"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1Condition.html">Condition</a>&lt; Number &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>combine</b> (const <a class="el" href="classhypro_1_1Condition.html">Condition</a>&lt; Number &gt; &amp;lhs, const <a class="el" href="classhypro_1_1Condition.html">Condition</a>&lt; Number &gt; &amp;rhs, const std::vector&lt; std::string &gt; haVar, const std::vector&lt; std::string &gt; lhsVar, const std::vector&lt; std::string &gt; rhsVar)</td></tr>
 <tr class="separator:a6723b7a63299c0802c305712bcf007b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ade108734ad86131b97c515c345f2f9a5"><td class="memTemplParams" colspan="2"><a class="anchor" id="ade108734ad86131b97c515c345f2f9a5"></a>
+<tr class="memitem:aa43734ffc4d96e5b855f37541309aabd"><td class="memTemplParams" colspan="2"><a class="anchor" id="aa43734ffc4d96e5b855f37541309aabd"></a>
 template&lt;typename Number &gt; </td></tr>
-<tr class="memitem:ade108734ad86131b97c515c345f2f9a5"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1Location.html">Location</a>&lt; Number &gt; *&#160;</td><td class="memTemplItemRight" valign="bottom"><b>parallelCompose</b> (const <a class="el" href="classhypro_1_1Location.html">Location</a>&lt; Number &gt; *lhs, const <a class="el" href="classhypro_1_1Location.html">Location</a>&lt; Number &gt; *rhs, const std::vector&lt; std::string &gt; &amp;lhsVar, const std::vector&lt; std::string &gt; &amp;rhsVar, const std::vector&lt; std::string &gt; &amp;haVar)</td></tr>
-<tr class="separator:ade108734ad86131b97c515c345f2f9a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa43734ffc4d96e5b855f37541309aabd"><td class="memTemplItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="classhypro_1_1Location.html">Location</a><br class="typebreak"/>
+&lt; Number &gt; &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>parallelCompose</b> (const std::unique_ptr&lt; <a class="el" href="classhypro_1_1Location.html">Location</a>&lt; Number &gt;&gt; &amp;lhs, const std::unique_ptr&lt; <a class="el" href="classhypro_1_1Location.html">Location</a>&lt; Number &gt;&gt; &amp;rhs, const std::vector&lt; std::string &gt; &amp;lhsVar, const std::vector&lt; std::string &gt; &amp;rhsVar, const std::vector&lt; std::string &gt; &amp;haVar)</td></tr>
+<tr class="separator:aa43734ffc4d96e5b855f37541309aabd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a62e193584cca56cf4dcd28e8fd15b91a"><td class="memTemplParams" colspan="2">template&lt;typename Number &gt; </td></tr>
+<tr class="memitem:a62e193584cca56cf4dcd28e8fd15b91a"><td class="memTemplItemLeft" align="right" valign="top">class&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacehypro.html#a62e193584cca56cf4dcd28e8fd15b91a">deprecated</a> (&quot;Use now public <a class="el" href="classhypro_1_1Location.html">Location</a> constructors instead&quot;)]] LocationManager</td></tr>
+<tr class="separator:a62e193584cca56cf4dcd28e8fd15b91a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aeb2334b7a170fa225564b8ff7d016745"><td class="memTemplParams" colspan="2"><a class="anchor" id="aeb2334b7a170fa225564b8ff7d016745"></a>
 template&lt;typename Number &gt; </td></tr>
 <tr class="memitem:aeb2334b7a170fa225564b8ff7d016745"><td class="memTemplItemLeft" align="right" valign="top">std::string&#160;</td><td class="memTemplItemRight" valign="bottom"><b>toFlowstarFormat</b> (const <a class="el" href="classhypro_1_1Condition.html">Condition</a>&lt; Number &gt; &amp;in, const std::map&lt; Eigen::Index, std::string &gt; &amp;varNameMap, const std::string &amp;prefix)</td></tr>
@@ -666,10 +679,11 @@ template&lt;typename Number &gt; </td></tr>
 template&lt;typename Number , typename State &gt; </td></tr>
 <tr class="memitem:a0c1d8e9d2f8d1cbefd0d2eeac066f7b8"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1State.html">State</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><b>parallelCompose</b> (const <a class="el" href="classhypro_1_1State.html">State</a> &amp;lhsInitState, const <a class="el" href="classhypro_1_1State.html">State</a> &amp;rhsInitState, const std::vector&lt; std::string &gt; lhsVar, const std::vector&lt; std::string &gt; rhsVar, const std::vector&lt; std::string &gt; haVar, const <a class="el" href="classhypro_1_1HybridAutomaton.html">HybridAutomaton</a>&lt; Number, <a class="el" href="classhypro_1_1State.html">State</a> &gt; ha)</td></tr>
 <tr class="separator:a0c1d8e9d2f8d1cbefd0d2eeac066f7b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5622fb78f000dda7c4aa2cd84725bfcc"><td class="memTemplParams" colspan="2"><a class="anchor" id="a5622fb78f000dda7c4aa2cd84725bfcc"></a>
+<tr class="memitem:a183ced768b7ccc44fd89eec50e9e0722"><td class="memTemplParams" colspan="2"><a class="anchor" id="a183ced768b7ccc44fd89eec50e9e0722"></a>
 template&lt;typename Number , typename State &gt; </td></tr>
-<tr class="memitem:a5622fb78f000dda7c4aa2cd84725bfcc"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1Transition.html">Transition</a>&lt; Number &gt; *&#160;</td><td class="memTemplItemRight" valign="bottom"><b>parallelCompose</b> (const <a class="el" href="classhypro_1_1Transition.html">Transition</a>&lt; Number &gt; *lhsT, const <a class="el" href="classhypro_1_1Transition.html">Transition</a>&lt; Number &gt; *rhsT, const std::vector&lt; std::string &gt; &amp;lhsVar, const std::vector&lt; std::string &gt; &amp;rhsVar, const std::vector&lt; std::string &gt; &amp;haVar, const <a class="el" href="classhypro_1_1HybridAutomaton.html">HybridAutomaton</a>&lt; Number, <a class="el" href="classhypro_1_1State.html">State</a> &gt; ha, const std::set&lt; <a class="el" href="classhypro_1_1Label.html">Label</a> &gt; lhsLabels, const std::set&lt; <a class="el" href="classhypro_1_1Label.html">Label</a> &gt; rhsLabels)</td></tr>
-<tr class="separator:a5622fb78f000dda7c4aa2cd84725bfcc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a183ced768b7ccc44fd89eec50e9e0722"><td class="memTemplItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="classhypro_1_1Transition.html">Transition</a><br class="typebreak"/>
+&lt; Number &gt; &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>parallelCompose</b> (const std::unique_ptr&lt; <a class="el" href="classhypro_1_1Transition.html">Transition</a>&lt; Number &gt;&gt; &amp;lhsT, const std::unique_ptr&lt; <a class="el" href="classhypro_1_1Transition.html">Transition</a>&lt; Number &gt;&gt; &amp;rhsT, const std::vector&lt; std::string &gt; &amp;lhsVar, const std::vector&lt; std::string &gt; &amp;rhsVar, const std::vector&lt; std::string &gt; &amp;haVar, const <a class="el" href="classhypro_1_1HybridAutomaton.html">HybridAutomaton</a>&lt; Number, <a class="el" href="classhypro_1_1State.html">State</a> &gt; ha, const std::set&lt; <a class="el" href="classhypro_1_1Label.html">Label</a> &gt; lhsLabels, const std::set&lt; <a class="el" href="classhypro_1_1Label.html">Label</a> &gt; rhsLabels)</td></tr>
+<tr class="separator:a183ced768b7ccc44fd89eec50e9e0722"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab6ebdbaafe6011f3864b3ae780bb132e"><td class="memTemplParams" colspan="2">template&lt;typename Number &gt; </td></tr>
 <tr class="memitem:ab6ebdbaafe6011f3864b3ae780bb132e"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacehypro.html#ab6ebdbaafe6011f3864b3ae780bb132e">swap</a> (<a class="el" href="classhypro_1_1Point.html">Point</a>&lt; Number &gt; &amp;_lhs, <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; Number &gt; &amp;_rhs)</td></tr>
 <tr class="memdesc:ab6ebdbaafe6011f3864b3ae780bb132e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Swap operator.  <a href="#ab6ebdbaafe6011f3864b3ae780bb132e">More...</a><br/></td></tr>
@@ -736,17 +750,13 @@ Number &gt;<br class="typebreak"/>
 <tr class="memitem:adfbd8e75b9999cddf06f18e38b20dea2"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1ConstraintSetT.html">ConstraintSetT</a>&lt; To, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacehypro.html#adfbd8e75b9999cddf06f18e38b20dea2">convert</a> (const <a class="el" href="classhypro_1_1ConstraintSetT.html">ConstraintSetT</a>&lt; From, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt; &amp;in)</td></tr>
 <tr class="memdesc:adfbd8e75b9999cddf06f18e38b20dea2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Conversion function for different number types.  <a href="#adfbd8e75b9999cddf06f18e38b20dea2">More...</a><br/></td></tr>
 <tr class="separator:adfbd8e75b9999cddf06f18e38b20dea2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad933b461d08c197584025aa9f78bc3a5"><td class="memTemplParams" colspan="2"><a class="anchor" id="ad933b461d08c197584025aa9f78bc3a5"></a>
-template&lt;typename From , typename To , typename Number &gt; </td></tr>
-<tr class="memitem:ad933b461d08c197584025aa9f78bc3a5"><td class="memTemplItemLeft" align="right" valign="top">To&#160;</td><td class="memTemplItemRight" valign="bottom"><b>convert</b> (const From &amp;in)</td></tr>
-<tr class="separator:ad933b461d08c197584025aa9f78bc3a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa3f92a4c96a06ef1f89757ee38cd1660"><td class="memTemplParams" colspan="2">template&lt;typename Number , typename Converter &gt; </td></tr>
-<tr class="memitem:aa3f92a4c96a06ef1f89757ee38cd1660"><td class="memTemplItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; Number &gt; &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacehypro.html#aa3f92a4c96a06ef1f89757ee38cd1660">computeBoundaryPointsExpensive</a> (const <a class="el" href="classhypro_1_1SupportFunctionT.html">SupportFunctionT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt; &amp;sf, const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;directions)</td></tr>
-<tr class="separator:aa3f92a4c96a06ef1f89757ee38cd1660"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad79fa1c9d10e259421fd77380d2f4db7"><td class="memTemplParams" colspan="2"><a class="anchor" id="ad79fa1c9d10e259421fd77380d2f4db7"></a>
+<tr class="memitem:a51d0e2f9adea7f1f091e3592330e0bbd"><td class="memTemplParams" colspan="2">template&lt;typename Number , typename Converter &gt; </td></tr>
+<tr class="memitem:a51d0e2f9adea7f1f091e3592330e0bbd"><td class="memTemplItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; Number &gt; &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacehypro.html#a51d0e2f9adea7f1f091e3592330e0bbd">computeBoundaryPointsExpensive</a> (const <a class="el" href="classhypro_1_1SupportFunctionT.html">SupportFunctionT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, <a class="el" href="structhypro_1_1SupportFunctionSetting.html">SupportFunctionSetting</a> &gt; &amp;sf, const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;directions)</td></tr>
+<tr class="separator:a51d0e2f9adea7f1f091e3592330e0bbd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a65d50371432a6acd0b1567b253de8205"><td class="memTemplParams" colspan="2"><a class="anchor" id="a65d50371432a6acd0b1567b253de8205"></a>
 template&lt;typename Number , typename Converter &gt; </td></tr>
-<tr class="memitem:ad79fa1c9d10e259421fd77380d2f4db7"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1Point.html">Point</a>&lt; Number &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>computeBoundaryPointsExpensiveRecursive</b> (const <a class="el" href="classhypro_1_1SupportFunctionT.html">SupportFunctionT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt; &amp;sf, const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;directions, std::size_t curDim)</td></tr>
-<tr class="separator:ad79fa1c9d10e259421fd77380d2f4db7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a65d50371432a6acd0b1567b253de8205"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1Point.html">Point</a>&lt; Number &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>computeBoundaryPointsExpensiveRecursive</b> (const <a class="el" href="classhypro_1_1SupportFunctionT.html">SupportFunctionT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, <a class="el" href="structhypro_1_1SupportFunctionSetting.html">SupportFunctionSetting</a> &gt; &amp;sf, const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;directions, std::size_t curDim)</td></tr>
+<tr class="separator:a65d50371432a6acd0b1567b253de8205"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3624ca5a624b0de8679dc35d53ed8f2f"><td class="memTemplParams" colspan="2"><a class="anchor" id="a3624ca5a624b0de8679dc35d53ed8f2f"></a>
 template&lt;typename Number &gt; </td></tr>
 <tr class="memitem:a3624ca5a624b0de8679dc35d53ed8f2f"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>computeArithmeticMeanPoint</b> (const std::vector&lt; <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; Number &gt;&gt; &amp;pointVec)</td></tr>
@@ -825,10 +835,10 @@ template&lt;typename Number &gt; </td></tr>
 template&lt;typename Number &gt; </td></tr>
 <tr class="memitem:ad5aae6603f42d1b48976a8af89c33f75"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>output_2D_interval_gnuplot</b> (std::list&lt; <a class="el" href="classhypro_1_1Flowpipe.html">Flowpipe</a>&lt; Number &gt;&gt; &amp;flowpipes, std::ofstream &amp;os, const std::string &amp;fileName, const carl::Variable &amp;axis_x, const carl::Variable &amp;axis_y)</td></tr>
 <tr class="separator:ad5aae6603f42d1b48976a8af89c33f75"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a47cc93273315b94f141287b102bc6cfb"><td class="memTemplParams" colspan="2"><a class="anchor" id="a47cc93273315b94f141287b102bc6cfb"></a>
-template&lt;typename Number , typename Converter &gt; </td></tr>
-<tr class="memitem:a47cc93273315b94f141287b102bc6cfb"><td class="memTemplItemLeft" align="right" valign="top">std::ostream &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>operator&lt;&lt;</b> (std::ostream &amp;out, const <a class="el" href="classhypro_1_1ZonotopeT.html">ZonotopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a> &gt; &amp;in)</td></tr>
-<tr class="separator:a47cc93273315b94f141287b102bc6cfb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a81906213507e689ce054b8bf81773ca6"><td class="memTemplParams" colspan="2"><a class="anchor" id="a81906213507e689ce054b8bf81773ca6"></a>
+template&lt;typename Number , typename Converter , typename Setting &gt; </td></tr>
+<tr class="memitem:a81906213507e689ce054b8bf81773ca6"><td class="memTemplItemLeft" align="right" valign="top">std::ostream &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>operator&lt;&lt;</b> (std::ostream &amp;out, const <a class="el" href="classhypro_1_1ZonotopeT.html">ZonotopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt; &amp;in)</td></tr>
+<tr class="separator:a81906213507e689ce054b8bf81773ca6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a68ae3af2a7228b818bab49bced6e60a5"><td class="memTemplParams" colspan="2">template&lt;typename From , typename To &gt; </td></tr>
 <tr class="memitem:a68ae3af2a7228b818bab49bced6e60a5"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; To &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacehypro.html#a68ae3af2a7228b818bab49bced6e60a5">convert</a> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; From &gt; &amp;_mat)</td></tr>
 <tr class="separator:a68ae3af2a7228b818bab49bced6e60a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -988,6 +998,9 @@ template&lt;typename Number &gt; </td></tr>
 template&lt;typename Number &gt; </td></tr>
 <tr class="memitem:a81f55c1fc94e0f5ae75c92c2062c27d4"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>addPreSolution</b> (z3::optimize &amp;solver, z3Context &amp;c, const <a class="el" href="structhypro_1_1EvaluationResult.html">EvaluationResult</a>&lt; Number &gt; &amp;preSolution, const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;direction, const z3::expr &amp;objective)</td></tr>
 <tr class="separator:a81f55c1fc94e0f5ae75c92c2062c27d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad8cf513decd177e5ebe9ee02c0715e1a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad8cf513decd177e5ebe9ee02c0715e1a"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><b>initializeLogging</b> (int &amp;i)</td></tr>
+<tr class="separator:ad8cf513decd177e5ebe9ee02c0715e1a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a600556476b0a5dd035fbcacde5e53a24"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a600556476b0a5dd035fbcacde5e53a24"></a>
 std::vector&lt; std::size_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>HEXtoRGB</b> (std::size_t color)</td></tr>
 <tr class="separator:a600556476b0a5dd035fbcacde5e53a24"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1052,6 +1065,13 @@ template&lt;typename... T&gt; </td></tr>
 <tr class="memitem:abb964bb5649e2c459370fafda04b76de"><td class="memTemplItemLeft" align="right" valign="top">const <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; Number &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacehypro.html#abb964bb5649e2c459370fafda04b76de">operator*</a> (const Number &amp;_factor, const <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; Number &gt; &amp;_rhs)</td></tr>
 <tr class="memdesc:abb964bb5649e2c459370fafda04b76de"><td class="mdescLeft">&#160;</td><td class="mdescRight">Arithmetic operator returning a new point.  <a href="#abb964bb5649e2c459370fafda04b76de">More...</a><br/></td></tr>
 <tr class="separator:abb964bb5649e2c459370fafda04b76de"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
+Variables</h2></td></tr>
+<tr class="memitem:a58c6181c049c6e831199047f524f4196"><td class="memTemplParams" colspan="2"><a class="anchor" id="a58c6181c049c6e831199047f524f4196"></a>
+template&lt;typename Number &gt; </td></tr>
+<tr class="memitem:a58c6181c049c6e831199047f524f4196"><td class="memTemplItemLeft" align="right" valign="top">class <a class="el" href="namespacehypro.html#a62e193584cca56cf4dcd28e8fd15b91a">deprecated</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><b>LocationManager</b></td></tr>
+<tr class="separator:a58c6181c049c6e831199047f524f4196"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>The most general namespace for the HyPro library. </p>
@@ -1062,6 +1082,23 @@ Stefan Schupp <a href="#" onclick="location.href='mai'+'lto:'+'ste'+'fa'+'n.s'+'
 <dl class="section version"><dt>Version</dt><dd>2016-03-22</dd></dl>
 <p>With reference to <a href="https://stackoverflow.com/questions/16387354/template-tuple-calling-a-function-on-each-element">https://stackoverflow.com/questions/16387354/template-tuple-calling-a-function-on-each-element</a> </p>
 </div><h2 class="groupheader">Typedef Documentation</h2>
+<a class="anchor" id="a81a6782100a8fb335147ba9a67e18c65"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="namespacehypro.html#a81a6782100a8fb335147ba9a67e18c65">hypro::DifferenceBounds</a> = typedef typename <a class="el" href="classhypro_1_1Converter.html">Converter</a>&lt;Number&gt;::<a class="el" href="namespacehypro.html#a81a6782100a8fb335147ba9a67e18c65">DifferenceBounds</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Typedef for <a class="el" href="classhypro_1_1DifferenceBoundsT.html" title="Class wrapping the difference bounds content. ">DifferenceBoundsT</a> </p>
+
+<p>Definition at line <a class="el" href="Converter_8h_source.html#l00201">201</a> of file <a class="el" href="Converter_8h_source.html">Converter.h</a>.</p>
+
+</div>
+</div>
 <a class="anchor" id="afd0bc8dcc54953e4b477a5aaf7065439"></a>
 <div class="memitem">
 <div class="memproto">
@@ -1075,7 +1112,7 @@ template&lt;typename Number &gt; </div>
 </div><div class="memdoc">
 <p>Typedef for HpolytopeT. </p>
 
-<p>Definition at line <a class="el" href="Converter_8h_source.html#l00112">112</a> of file <a class="el" href="Converter_8h_source.html">Converter.h</a>.</p>
+<p>Definition at line <a class="el" href="Converter_8h_source.html#l00169">169</a> of file <a class="el" href="Converter_8h_source.html">Converter.h</a>.</p>
 
 </div>
 </div>
@@ -1109,7 +1146,7 @@ template&lt;typename Number &gt; </div>
 </div><div class="memdoc">
 <p>Typedef for <a class="el" href="classhypro_1_1SupportFunctionT.html" title="Class wrapping the support function content. ">SupportFunctionT</a>. </p>
 
-<p>Definition at line <a class="el" href="Converter_8h_source.html#l00132">132</a> of file <a class="el" href="Converter_8h_source.html">Converter.h</a>.</p>
+<p>Definition at line <a class="el" href="Converter_8h_source.html#l00189">189</a> of file <a class="el" href="Converter_8h_source.html">Converter.h</a>.</p>
 
 </div>
 </div>
@@ -1143,7 +1180,7 @@ template&lt;typename Number &gt; </div>
 </div><div class="memdoc">
 <p>Typedef for <a class="el" href="classhypro_1_1VPolytopeT.html" title="The class implementing the vertex representation of a convex polytope. ">VPolytopeT</a>. </p>
 
-<p>Definition at line <a class="el" href="Converter_8h_source.html#l00121">121</a> of file <a class="el" href="Converter_8h_source.html">Converter.h</a>.</p>
+<p>Definition at line <a class="el" href="Converter_8h_source.html#l00178">178</a> of file <a class="el" href="Converter_8h_source.html">Converter.h</a>.</p>
 
 </div>
 </div>
@@ -1160,7 +1197,7 @@ template&lt;typename Number &gt; </div>
 </div><div class="memdoc">
 <p>Typedef for <a class="el" href="classhypro_1_1ZonotopeT.html" title="Class for Zonotopes. ">ZonotopeT</a>. </p>
 
-<p>Definition at line <a class="el" href="Converter_8h_source.html#l00138">138</a> of file <a class="el" href="Converter_8h_source.html">Converter.h</a>.</p>
+<p>Definition at line <a class="el" href="Converter_8h_source.html#l00195">195</a> of file <a class="el" href="Converter_8h_source.html">Converter.h</a>.</p>
 
 </div>
 </div>
@@ -1181,7 +1218,7 @@ template&lt;typename Number &gt; </div>
 </div>
 </div>
 <h2 class="groupheader">Function Documentation</h2>
-<a class="anchor" id="aa3f92a4c96a06ef1f89757ee38cd1660"></a>
+<a class="anchor" id="a51d0e2f9adea7f1f091e3592330e0bbd"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
@@ -1190,7 +1227,7 @@ template&lt;typename Number , typename Converter &gt; </div>
         <tr>
           <td class="memname">std::vector&lt;<a class="el" href="classhypro_1_1Point.html">Point</a>&lt;Number&gt; &gt; hypro::computeBoundaryPointsExpensive </td>
           <td>(</td>
-          <td class="paramtype">const SupportFunctionT&lt; Number, Converter &gt; &amp;&#160;</td>
+          <td class="paramtype">const SupportFunctionT&lt; Number, Converter, SupportFunctionSetting &gt; &amp;&#160;</td>
           <td class="paramname"><em>sf</em>, </td>
         </tr>
         <tr>
@@ -1208,7 +1245,7 @@ template&lt;typename Number , typename Converter &gt; </div>
 </div><div class="memdoc">
 <p>Is the caller function for the recursive method that computes exactly one boundary point for each direction that it gets (via support function) </p>
 
-<p>Definition at line <a class="el" href="Converter_8h_source.html#l00018">18</a> of file <a class="el" href="Converter_8h_source.html">Converter.h</a>.</p>
+<p>Definition at line <a class="el" href="Converter_8h_source.html#l00021">21</a> of file <a class="el" href="Converter_8h_source.html">Converter.h</a>.</p>
 
 </div>
 </div>
@@ -1266,7 +1303,7 @@ template&lt;typename From , typename To , typename Converter &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The resulting constraintSet. </dd></dl>
 
-<p>Definition at line <a class="el" href="ConstraintSet_8h_source.html#l00255">255</a> of file <a class="el" href="ConstraintSet_8h_source.html">ConstraintSet.h</a>.</p>
+<p>Definition at line <a class="el" href="ConstraintSet_8h_source.html#l00262">262</a> of file <a class="el" href="ConstraintSet_8h_source.html">ConstraintSet.h</a>.</p>
 
 </div>
 </div>
@@ -1341,9 +1378,9 @@ template&lt;typename From , typename To , typename Converter , class Setting &gt
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The resulting box. </dd></dl>
 
-<p>Definition at line <a class="el" href="Box_8h_source.html#l00484">484</a> of file <a class="el" href="Box_8h_source.html">Box.h</a>.</p>
+<p>Definition at line <a class="el" href="Box_8h_source.html#l00491">491</a> of file <a class="el" href="Box_8h_source.html">Box.h</a>.</p>
 
-<p>References <a class="el" href="Box_8h_source.html#l00165">hypro::BoxT&lt; Number, Converter, Setting &gt;::limits()</a>.</p>
+<p>References <a class="el" href="Box_8h_source.html#l00167">hypro::BoxT&lt; Number, Converter, Setting &gt;::limits()</a>.</p>
 
 </div>
 </div>
@@ -1379,9 +1416,30 @@ template&lt;typename From , typename To &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A point in the targeted number type. </dd></dl>
 
-<p>Definition at line <a class="el" href="Point_8h_source.html#l00703">703</a> of file <a class="el" href="Point_8h_source.html">Point.h</a>.</p>
+<p>Definition at line <a class="el" href="Point_8h_source.html#l00714">714</a> of file <a class="el" href="Point_8h_source.html">Point.h</a>.</p>
 
 <p>References <a class="el" href="classhypro_1_1Point.html#a444e722bcad6e231fe24ec0dc55867df">hypro::Point&lt; Number &gt;::rawCoordinates()</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a62e193584cca56cf4dcd28e8fd15b91a"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">class hypro::deprecated </td>
+          <td>(</td>
+          <td class="paramtype">&quot;Use now public Location constructors instead&quot;&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Default constructor and destructor</p>
+
+<p>Definition at line <a class="el" href="LocationManager_8h_source.html#l00014">14</a> of file <a class="el" href="LocationManager_8h_source.html">LocationManager.h</a>.</p>
 
 </div>
 </div>
@@ -1402,7 +1460,7 @@ template&lt;typename Number &gt; </div>
 </div><div class="memdoc">
 <p>Converts a list of directions into a matrix containing directions </p>
 
-<p>Definition at line <a class="el" href="helperMethods_8h_source.html#l00188">188</a> of file <a class="el" href="helperMethods_8h_source.html">helperMethods.h</a>.</p>
+<p>Definition at line <a class="el" href="helperMethods_8h_source.html#l00190">190</a> of file <a class="el" href="helperMethods_8h_source.html">helperMethods.h</a>.</p>
 
 </div>
 </div>
@@ -1437,7 +1495,7 @@ template&lt;typename Number &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The spanned dimension. </dd></dl>
 
-<p>Definition at line <a class="el" href="Point_8h_source.html#l00654">654</a> of file <a class="el" href="Point_8h_source.html">Point.h</a>.</p>
+<p>Definition at line <a class="el" href="Point_8h_source.html#l00665">665</a> of file <a class="el" href="Point_8h_source.html">Point.h</a>.</p>
 
 </div>
 </div>
@@ -1472,7 +1530,7 @@ template&lt;typename Number &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The spanned dimension. </dd></dl>
 
-<p>Definition at line <a class="el" href="Point_8h_source.html#l00678">678</a> of file <a class="el" href="Point_8h_source.html">Point.h</a>.</p>
+<p>Definition at line <a class="el" href="Point_8h_source.html#l00689">689</a> of file <a class="el" href="Point_8h_source.html">Point.h</a>.</p>
 
 </div>
 </div>
@@ -1614,9 +1672,9 @@ template&lt;typename Number , typename Converter , class Setting &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The resulting box. </dd></dl>
 
-<p>Definition at line <a class="el" href="Box_8h_source.html#l00468">468</a> of file <a class="el" href="Box_8h_source.html">Box.h</a>.</p>
+<p>Definition at line <a class="el" href="Box_8h_source.html#l00475">475</a> of file <a class="el" href="Box_8h_source.html">Box.h</a>.</p>
 
-<p>References <a class="el" href="Box_8h_source.html#l00216">hypro::BoxT&lt; Number, Converter, Setting &gt;::empty()</a>.</p>
+<p>References <a class="el" href="Box_8h_source.html#l00218">hypro::BoxT&lt; Number, Converter, Setting &gt;::empty()</a>.</p>
 
 </div>
 </div>
@@ -1662,7 +1720,7 @@ template&lt;typename Number &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The resulting point. </dd></dl>
 
-<p>Definition at line <a class="el" href="Point_8h_source.html#l00626">626</a> of file <a class="el" href="Point_8h_source.html">Point.h</a>.</p>
+<p>Definition at line <a class="el" href="Point_8h_source.html#l00637">637</a> of file <a class="el" href="Point_8h_source.html">Point.h</a>.</p>
 
 <p>References <a class="el" href="classhypro_1_1Point.html#a444e722bcad6e231fe24ec0dc55867df">hypro::Point&lt; Number &gt;::rawCoordinates()</a>.</p>
 
@@ -1710,7 +1768,7 @@ template&lt;typename Number &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The resulting point. </dd></dl>
 
-<p>Definition at line <a class="el" href="Point_8h_source.html#l00634">634</a> of file <a class="el" href="Point_8h_source.html">Point.h</a>.</p>
+<p>Definition at line <a class="el" href="Point_8h_source.html#l00645">645</a> of file <a class="el" href="Point_8h_source.html">Point.h</a>.</p>
 
 <p>References <a class="el" href="classhypro_1_1Point.html#aa299aa4647fb454b534fb93db59f7baa">hypro::Point&lt; Number &gt;::dimension()</a>, and <a class="el" href="classhypro_1_1Point.html#a444e722bcad6e231fe24ec0dc55867df">hypro::Point&lt; Number &gt;::rawCoordinates()</a>.</p>
 
@@ -1758,7 +1816,7 @@ template&lt;typename Number &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The resulting point. </dd></dl>
 
-<p>Definition at line <a class="el" href="Point_8h_source.html#l00642">642</a> of file <a class="el" href="Point_8h_source.html">Point.h</a>.</p>
+<p>Definition at line <a class="el" href="Point_8h_source.html#l00653">653</a> of file <a class="el" href="Point_8h_source.html">Point.h</a>.</p>
 
 </div>
 </div>
@@ -1804,7 +1862,7 @@ template&lt;typename Number &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The resulting point. </dd></dl>
 
-<p>Definition at line <a class="el" href="Point_8h_source.html#l00589">589</a> of file <a class="el" href="Point_8h_source.html">Point.h</a>.</p>
+<p>Definition at line <a class="el" href="Point_8h_source.html#l00600">600</a> of file <a class="el" href="Point_8h_source.html">Point.h</a>.</p>
 
 <p>References <a class="el" href="classhypro_1_1Point.html#aa299aa4647fb454b534fb93db59f7baa">hypro::Point&lt; Number &gt;::dimension()</a>, and <a class="el" href="classhypro_1_1Point.html#a444e722bcad6e231fe24ec0dc55867df">hypro::Point&lt; Number &gt;::rawCoordinates()</a>.</p>
 
@@ -1852,7 +1910,7 @@ template&lt;typename Number &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The resulting point. </dd></dl>
 
-<p>Definition at line <a class="el" href="Point_8h_source.html#l00599">599</a> of file <a class="el" href="Point_8h_source.html">Point.h</a>.</p>
+<p>Definition at line <a class="el" href="Point_8h_source.html#l00610">610</a> of file <a class="el" href="Point_8h_source.html">Point.h</a>.</p>
 
 <p>References <a class="el" href="classhypro_1_1Point.html#aa299aa4647fb454b534fb93db59f7baa">hypro::Point&lt; Number &gt;::dimension()</a>, and <a class="el" href="classhypro_1_1Point.html#a444e722bcad6e231fe24ec0dc55867df">hypro::Point&lt; Number &gt;::rawCoordinates()</a>.</p>
 
@@ -1938,7 +1996,7 @@ template&lt;typename Number &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The resulting point. </dd></dl>
 
-<p>Definition at line <a class="el" href="Point_8h_source.html#l00608">608</a> of file <a class="el" href="Point_8h_source.html">Point.h</a>.</p>
+<p>Definition at line <a class="el" href="Point_8h_source.html#l00619">619</a> of file <a class="el" href="Point_8h_source.html">Point.h</a>.</p>
 
 <p>References <a class="el" href="classhypro_1_1Point.html#aa299aa4647fb454b534fb93db59f7baa">hypro::Point&lt; Number &gt;::dimension()</a>, and <a class="el" href="classhypro_1_1Point.html#a444e722bcad6e231fe24ec0dc55867df">hypro::Point&lt; Number &gt;::rawCoordinates()</a>.</p>
 
@@ -1986,7 +2044,7 @@ template&lt;typename Number &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The resulting point. </dd></dl>
 
-<p>Definition at line <a class="el" href="Point_8h_source.html#l00618">618</a> of file <a class="el" href="Point_8h_source.html">Point.h</a>.</p>
+<p>Definition at line <a class="el" href="Point_8h_source.html#l00629">629</a> of file <a class="el" href="Point_8h_source.html">Point.h</a>.</p>
 
 <p>References <a class="el" href="classhypro_1_1Point.html#aa299aa4647fb454b534fb93db59f7baa">hypro::Point&lt; Number &gt;::dimension()</a>, and <a class="el" href="classhypro_1_1Point.html#a444e722bcad6e231fe24ec0dc55867df">hypro::Point&lt; Number &gt;::rawCoordinates()</a>.</p>
 
@@ -2174,7 +2232,7 @@ template&lt;typename Number &gt; </div>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="Point_8h_source.html#l00576">576</a> of file <a class="el" href="Point_8h_source.html">Point.h</a>.</p>
+<p>Definition at line <a class="el" href="Point_8h_source.html#l00587">587</a> of file <a class="el" href="Point_8h_source.html">Point.h</a>.</p>
 
 <p>References <a class="el" href="classhypro_1_1Point.html#a3b894fe6fcdc61c49d6be9c3a22cecf3">hypro::Point&lt; Number &gt;::swap()</a>.</p>
 

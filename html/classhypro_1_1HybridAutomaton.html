@@ -31,7 +31,7 @@
   <td id="projectlogo"><img alt="Logo" src="hypro_Logo.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">HyPro
-   &#160;<span id="projectnumber">18.05</span>
+   &#160;<span id="projectnumber">18.06</span>
    </div>
    <div id="projectbrief">A Toolbox for the Reachability Analysis of Hybrid Systems using Geometric Approximations</div>
   </td>
@@ -126,16 +126,16 @@ $(document).ready(function(){initNavTree('classhypro_1_1HybridAutomaton.html',''
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
-<tr class="memitem:a459d69dd88d314c0106d77c0645f4d31"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a459d69dd88d314c0106d77c0645f4d31"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>locationSet</b> = std::set&lt; <a class="el" href="classhypro_1_1Location.html">Location</a>&lt; Number &gt; * &gt;</td></tr>
-<tr class="separator:a459d69dd88d314c0106d77c0645f4d31"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:affe9d4c7587e702dd1e5d426a98c7acd"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="affe9d4c7587e702dd1e5d426a98c7acd"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HybridAutomaton.html#affe9d4c7587e702dd1e5d426a98c7acd">transitionSet</a> = std::set&lt; <a class="el" href="classhypro_1_1Transition.html">Transition</a>&lt; Number &gt; * &gt;</td></tr>
-<tr class="memdesc:affe9d4c7587e702dd1e5d426a98c7acd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set of location pointers. <br/></td></tr>
-<tr class="separator:affe9d4c7587e702dd1e5d426a98c7acd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a426e99c1cdc866c0fc08e9ac1b9176d9"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a426e99c1cdc866c0fc08e9ac1b9176d9"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>locationSet</b> = std::set&lt; std::unique_ptr&lt; <a class="el" href="classhypro_1_1Location.html">Location</a>&lt; Number &gt;&gt;, <a class="el" href="structhypro_1_1locPtrComp.html">locPtrComp</a>&lt; Number &gt;&gt;</td></tr>
+<tr class="separator:a426e99c1cdc866c0fc08e9ac1b9176d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae28671085ab01c6763f3c6174adece73"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae28671085ab01c6763f3c6174adece73"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HybridAutomaton.html#ae28671085ab01c6763f3c6174adece73">transitionSet</a> = std::set&lt; std::unique_ptr&lt; <a class="el" href="classhypro_1_1Transition.html">Transition</a>&lt; Number &gt;&gt;&gt;</td></tr>
+<tr class="memdesc:ae28671085ab01c6763f3c6174adece73"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set of unique location pointers. <br/></td></tr>
+<tr class="separator:ae28671085ab01c6763f3c6174adece73"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a20162ff9c207770818ab62dda9043462"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a20162ff9c207770818ab62dda9043462"></a>
 using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HybridAutomaton.html#a20162ff9c207770818ab62dda9043462">locationStateMap</a> = std::multimap&lt; const <a class="el" href="classhypro_1_1Location.html">Location</a>&lt; Number &gt; *, <a class="el" href="classhypro_1_1State.html">State</a> &gt;</td></tr>
-<tr class="memdesc:a20162ff9c207770818ab62dda9043462"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set of transition pointers. <br/></td></tr>
+<tr class="memdesc:a20162ff9c207770818ab62dda9043462"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set of unique transition pointers. <br/></td></tr>
 <tr class="separator:a20162ff9c207770818ab62dda9043462"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a22b5e659a44eef9036cab88ec91b49b0"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a22b5e659a44eef9036cab88ec91b49b0"></a>
 using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HybridAutomaton.html#a22b5e659a44eef9036cab88ec91b49b0">locationConditionMap</a> = std::map&lt; const <a class="el" href="classhypro_1_1Location.html">Location</a>&lt; Number &gt; *, <a class="el" href="classhypro_1_1Condition.html">Condition</a>&lt; Number &gt;&gt;</td></tr>
@@ -156,24 +156,32 @@ Public Member Functions</h2></td></tr>
 &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HybridAutomaton.html#a65815958a574bffbb022bde6787f11f6">HybridAutomaton</a> ()</td></tr>
 <tr class="memdesc:a65815958a574bffbb022bde6787f11f6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default constructor. <br/></td></tr>
 <tr class="separator:a65815958a574bffbb022bde6787f11f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7d65754da606a40e213bbf7f0af435fe"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HybridAutomaton.html#a7d65754da606a40e213bbf7f0af435fe">HybridAutomaton</a> (const <a class="el" href="classhypro_1_1HybridAutomaton.html">HybridAutomaton</a>&lt; Number, <a class="el" href="classhypro_1_1State.html">State</a> &gt; &amp;hybrid)=default</td></tr>
-<tr class="memdesc:a7d65754da606a40e213bbf7f0af435fe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copy constructor.  <a href="#a7d65754da606a40e213bbf7f0af435fe">More...</a><br/></td></tr>
-<tr class="separator:a7d65754da606a40e213bbf7f0af435fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa1bf8e357142bfa304f90b1829be476a"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HybridAutomaton.html#aa1bf8e357142bfa304f90b1829be476a">HybridAutomaton</a> (const <a class="el" href="classhypro_1_1HybridAutomaton.html">HybridAutomaton</a>&lt; Number, <a class="el" href="classhypro_1_1State.html">State</a> &gt; &amp;hybrid)</td></tr>
+<tr class="memdesc:aa1bf8e357142bfa304f90b1829be476a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copy constructor.  <a href="#aa1bf8e357142bfa304f90b1829be476a">More...</a><br/></td></tr>
+<tr class="separator:aa1bf8e357142bfa304f90b1829be476a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa67fc402663e4c819cb5ee887053aeba"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HybridAutomaton.html#aa67fc402663e4c819cb5ee887053aeba">HybridAutomaton</a> (<a class="el" href="classhypro_1_1HybridAutomaton.html">HybridAutomaton</a>&lt; Number, <a class="el" href="classhypro_1_1State.html">State</a> &gt; &amp;&amp;hybrid)=default</td></tr>
 <tr class="memdesc:aa67fc402663e4c819cb5ee887053aeba"><td class="mdescLeft">&#160;</td><td class="mdescRight">Move constructor.  <a href="#aa67fc402663e4c819cb5ee887053aeba">More...</a><br/></td></tr>
 <tr class="separator:aa67fc402663e4c819cb5ee887053aeba"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aeed4c3d086707039ff9732b18a95470e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aeed4c3d086707039ff9732b18a95470e"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>HybridAutomaton</b> (const locationSet &amp;locs, const <a class="el" href="classhypro_1_1HybridAutomaton.html#affe9d4c7587e702dd1e5d426a98c7acd">transitionSet</a> &amp;trans, const <a class="el" href="classhypro_1_1HybridAutomaton.html#a20162ff9c207770818ab62dda9043462">locationStateMap</a> &amp;initialStates)</td></tr>
+<tr class="memitem:aeed4c3d086707039ff9732b18a95470e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HybridAutomaton.html#aeed4c3d086707039ff9732b18a95470e">HybridAutomaton</a> (const locationSet &amp;locs, const <a class="el" href="classhypro_1_1HybridAutomaton.html#ae28671085ab01c6763f3c6174adece73">transitionSet</a> &amp;trans, const <a class="el" href="classhypro_1_1HybridAutomaton.html#a20162ff9c207770818ab62dda9043462">locationStateMap</a> &amp;initialStates)</td></tr>
+<tr class="memdesc:aeed4c3d086707039ff9732b18a95470e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor from locations, transitions and initial states.  <a href="#aeed4c3d086707039ff9732b18a95470e">More...</a><br/></td></tr>
 <tr class="separator:aeed4c3d086707039ff9732b18a95470e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5c54a5b73158802f9b667d3f365fa4f9"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5c54a5b73158802f9b667d3f365fa4f9"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>removeTransition</b> (<a class="el" href="classhypro_1_1Transition.html">Transition</a>&lt; Number &gt; *toRemove)</td></tr>
-<tr class="separator:a5c54a5b73158802f9b667d3f365fa4f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a48e877084879da4f0d2c22c11db5cfb7"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a48e877084879da4f0d2c22c11db5cfb7"></a>
-<a class="el" href="classhypro_1_1HybridAutomaton.html">HybridAutomaton</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator=</b> (const <a class="el" href="classhypro_1_1HybridAutomaton.html">HybridAutomaton</a>&lt; Number, <a class="el" href="classhypro_1_1State.html">State</a> &gt; &amp;rhs)=default</td></tr>
-<tr class="separator:a48e877084879da4f0d2c22c11db5cfb7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac91c80c3285ac1ce6fd02d45922e9fc5"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac91c80c3285ac1ce6fd02d45922e9fc5"></a>
-<a class="el" href="classhypro_1_1HybridAutomaton.html">HybridAutomaton</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator=</b> (<a class="el" href="classhypro_1_1HybridAutomaton.html">HybridAutomaton</a>&lt; Number, <a class="el" href="classhypro_1_1State.html">State</a> &gt; &amp;&amp;rhs)=default</td></tr>
-<tr class="separator:ac91c80c3285ac1ce6fd02d45922e9fc5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac20fcbdb513d18d00f66e152251f90b0"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac20fcbdb513d18d00f66e152251f90b0"></a>
+virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HybridAutomaton.html#ac20fcbdb513d18d00f66e152251f90b0">~HybridAutomaton</a> ()</td></tr>
+<tr class="memdesc:ac20fcbdb513d18d00f66e152251f90b0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor. <br/></td></tr>
+<tr class="separator:ac20fcbdb513d18d00f66e152251f90b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0c9539406bb9f77bf9ea6742536dc6b2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1HybridAutomaton.html">HybridAutomaton</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HybridAutomaton.html#a0c9539406bb9f77bf9ea6742536dc6b2">operator=</a> (const <a class="el" href="classhypro_1_1HybridAutomaton.html">HybridAutomaton</a>&lt; Number, <a class="el" href="classhypro_1_1State.html">State</a> &gt; &amp;rhs)</td></tr>
+<tr class="memdesc:a0c9539406bb9f77bf9ea6742536dc6b2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copy Assignment.  <a href="#a0c9539406bb9f77bf9ea6742536dc6b2">More...</a><br/></td></tr>
+<tr class="separator:a0c9539406bb9f77bf9ea6742536dc6b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a26735ed0dc707a1c338790fbc057a121"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1HybridAutomaton.html">HybridAutomaton</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HybridAutomaton.html#a26735ed0dc707a1c338790fbc057a121">operator=</a> (<a class="el" href="classhypro_1_1HybridAutomaton.html">HybridAutomaton</a>&lt; Number, <a class="el" href="classhypro_1_1State.html">State</a> &gt; &amp;&amp;rhs)</td></tr>
+<tr class="memdesc:a26735ed0dc707a1c338790fbc057a121"><td class="mdescLeft">&#160;</td><td class="mdescRight">Move Assignment.  <a href="#a26735ed0dc707a1c338790fbc057a121">More...</a><br/></td></tr>
+<tr class="separator:a26735ed0dc707a1c338790fbc057a121"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a46d4e7049bda814ed9420ed3a4d4213f"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a46d4e7049bda814ed9420ed3a4d4213f"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>removeTransition</b> (std::unique_ptr&lt; <a class="el" href="classhypro_1_1Transition.html">Transition</a>&lt; Number &gt;&gt; toRemove)</td></tr>
+<tr class="separator:a46d4e7049bda814ed9420ed3a4d4213f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2746891aa4f238ec8b4c562f70bafb93"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2746891aa4f238ec8b4c562f70bafb93"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HybridAutomaton.html#a2746891aa4f238ec8b4c562f70bafb93">decompose</a> (std::vector&lt; std::vector&lt; size_t &gt;&gt; decomposition)</td></tr>
+<tr class="memdesc:a2746891aa4f238ec8b4c562f70bafb93"><td class="mdescLeft">&#160;</td><td class="mdescRight">Decomposes an automaton into the components defined by decomposition. The vector should contain sets of variables that are at least syntactically independet to each other. <br/></td></tr>
+<tr class="separator:a2746891aa4f238ec8b4c562f70bafb93"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4397305ae7dd5c9bb26faf09d14673f6"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4397305ae7dd5c9bb26faf09d14673f6"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HybridAutomaton.html#a4397305ae7dd5c9bb26faf09d14673f6">reduce</a> ()</td></tr>
 <tr class="memdesc:a4397305ae7dd5c9bb26faf09d14673f6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reduces the automaton, i.e. removes Locations which are not connected to the automaton by transitions. <br/></td></tr>
@@ -187,21 +195,24 @@ std::string&#160;</td><td class="memItemRight" valign="bottom"><b>getDotRepresen
 <tr class="memitem:aa52f3c91d3e36bca8f45499ed606c544"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa52f3c91d3e36bca8f45499ed606c544"></a>
 std::string&#160;</td><td class="memItemRight" valign="bottom"><b>getStatistics</b> () const </td></tr>
 <tr class="separator:aa52f3c91d3e36bca8f45499ed606c544"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa1ff041172528e910a14fdeb67baf518"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa1ff041172528e910a14fdeb67baf518"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>equals</b> (const locationSet &amp;lhs, const locationSet &amp;rhs) const </td></tr>
+<tr class="separator:aa1ff041172528e910a14fdeb67baf518"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader"></div></td></tr>
 <tr class="memitem:a1299b1614fc4cb819e07ea845bf45f9f"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1299b1614fc4cb819e07ea845bf45f9f"></a>
 const locationSet &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HybridAutomaton.html#a1299b1614fc4cb819e07ea845bf45f9f">getLocations</a> () const </td></tr>
 <tr class="memdesc:a1299b1614fc4cb819e07ea845bf45f9f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Getter function. <br/></td></tr>
 <tr class="separator:a1299b1614fc4cb819e07ea845bf45f9f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a18937d9a9ecb4dd843b6ecaac3509235"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a18937d9a9ecb4dd843b6ecaac3509235"></a>
-<a class="el" href="classhypro_1_1Location.html">Location</a>&lt; Number &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HybridAutomaton.html#a18937d9a9ecb4dd843b6ecaac3509235">getLocation</a> (std::size_t id) const </td></tr>
-<tr class="memdesc:a18937d9a9ecb4dd843b6ecaac3509235"><td class="mdescLeft">&#160;</td><td class="mdescRight">Getter function. <br/></td></tr>
-<tr class="separator:a18937d9a9ecb4dd843b6ecaac3509235"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4b2d45bbba86a008f1c8d687f79ec151"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4b2d45bbba86a008f1c8d687f79ec151"></a>
+<a class="el" href="classhypro_1_1Location.html">Location</a>&lt; Number &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HybridAutomaton.html#a4b2d45bbba86a008f1c8d687f79ec151">getLocation</a> (const std::size_t hash) const </td></tr>
+<tr class="memdesc:a4b2d45bbba86a008f1c8d687f79ec151"><td class="mdescLeft">&#160;</td><td class="mdescRight">Getter function. <br/></td></tr>
+<tr class="separator:a4b2d45bbba86a008f1c8d687f79ec151"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a55d43d7ef47e1086ded975ceb8ceca13"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a55d43d7ef47e1086ded975ceb8ceca13"></a>
 <a class="el" href="classhypro_1_1Location.html">Location</a>&lt; Number &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HybridAutomaton.html#a55d43d7ef47e1086ded975ceb8ceca13">getLocation</a> (const std::string &amp;name) const </td></tr>
 <tr class="memdesc:a55d43d7ef47e1086ded975ceb8ceca13"><td class="mdescLeft">&#160;</td><td class="mdescRight">Getter function. <br/></td></tr>
 <tr class="separator:a55d43d7ef47e1086ded975ceb8ceca13"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6b41ee4d816b0334f2ea402a7685ccf5"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6b41ee4d816b0334f2ea402a7685ccf5"></a>
-const <a class="el" href="classhypro_1_1HybridAutomaton.html#affe9d4c7587e702dd1e5d426a98c7acd">transitionSet</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HybridAutomaton.html#a6b41ee4d816b0334f2ea402a7685ccf5">getTransitions</a> () const </td></tr>
+const <a class="el" href="classhypro_1_1HybridAutomaton.html#ae28671085ab01c6763f3c6174adece73">transitionSet</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HybridAutomaton.html#a6b41ee4d816b0334f2ea402a7685ccf5">getTransitions</a> () const </td></tr>
 <tr class="memdesc:a6b41ee4d816b0334f2ea402a7685ccf5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Getter function. <br/></td></tr>
 <tr class="separator:a6b41ee4d816b0334f2ea402a7685ccf5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af2d7d422ec0f3f965beba5bc672c342f"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af2d7d422ec0f3f965beba5bc672c342f"></a>
@@ -229,14 +240,14 @@ const std::set&lt; <a class="el" href="classhypro_1_1Label.html">Label</a> &gt;&
 <tr class="memdesc:ad41a3f888e0954a183f5b738f6a50802"><td class="mdescLeft">&#160;</td><td class="mdescRight">Getter function. <br/></td></tr>
 <tr class="separator:ad41a3f888e0954a183f5b738f6a50802"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader"></div></td></tr>
-<tr class="memitem:a53dabdb0ca8b8dc78923917392f43c25"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a53dabdb0ca8b8dc78923917392f43c25"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HybridAutomaton.html#a53dabdb0ca8b8dc78923917392f43c25">setLocations</a> (const locationSet &amp;locs)</td></tr>
-<tr class="memdesc:a53dabdb0ca8b8dc78923917392f43c25"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setter function. <br/></td></tr>
-<tr class="separator:a53dabdb0ca8b8dc78923917392f43c25"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae74d2f5a411d27f9454d5a78718fb2d8"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae74d2f5a411d27f9454d5a78718fb2d8"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HybridAutomaton.html#ae74d2f5a411d27f9454d5a78718fb2d8">setTransitions</a> (const <a class="el" href="classhypro_1_1HybridAutomaton.html#affe9d4c7587e702dd1e5d426a98c7acd">transitionSet</a> &amp;trans)</td></tr>
-<tr class="memdesc:ae74d2f5a411d27f9454d5a78718fb2d8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setter function. <br/></td></tr>
-<tr class="separator:ae74d2f5a411d27f9454d5a78718fb2d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0e5096cbb1a1e0f42905a270d689eb92"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0e5096cbb1a1e0f42905a270d689eb92"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HybridAutomaton.html#a0e5096cbb1a1e0f42905a270d689eb92">setLocations</a> (locationSet &amp;locs)</td></tr>
+<tr class="memdesc:a0e5096cbb1a1e0f42905a270d689eb92"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setter function. <br/></td></tr>
+<tr class="separator:a0e5096cbb1a1e0f42905a270d689eb92"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abbfa39ecd4d482185b63cd84e854496b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="abbfa39ecd4d482185b63cd84e854496b"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HybridAutomaton.html#abbfa39ecd4d482185b63cd84e854496b">setTransitions</a> (<a class="el" href="classhypro_1_1HybridAutomaton.html#ae28671085ab01c6763f3c6174adece73">transitionSet</a> &amp;trans)</td></tr>
+<tr class="memdesc:abbfa39ecd4d482185b63cd84e854496b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setter function. <br/></td></tr>
+<tr class="separator:abbfa39ecd4d482185b63cd84e854496b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac1f9ef87a14cdef61dc8928bf27140ad"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac1f9ef87a14cdef61dc8928bf27140ad"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HybridAutomaton.html#ac1f9ef87a14cdef61dc8928bf27140ad">setInitialStates</a> (const <a class="el" href="classhypro_1_1HybridAutomaton.html#a20162ff9c207770818ab62dda9043462">locationStateMap</a> &amp;states)</td></tr>
 <tr class="memdesc:ac1f9ef87a14cdef61dc8928bf27140ad"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setter function. <br/></td></tr>
@@ -254,14 +265,14 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 <tr class="memdesc:ab6f32509798cab60c619029394347344"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setter function. <br/></td></tr>
 <tr class="separator:ab6f32509798cab60c619029394347344"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader"></div></td></tr>
-<tr class="memitem:a1bbb56d189d1dd39f168ce30908a72ea"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1bbb56d189d1dd39f168ce30908a72ea"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HybridAutomaton.html#a1bbb56d189d1dd39f168ce30908a72ea">addLocation</a> (<a class="el" href="classhypro_1_1Location.html">Location</a>&lt; Number &gt; *location)</td></tr>
-<tr class="memdesc:a1bbb56d189d1dd39f168ce30908a72ea"><td class="mdescLeft">&#160;</td><td class="mdescRight">Extension function. <br/></td></tr>
-<tr class="separator:a1bbb56d189d1dd39f168ce30908a72ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa6a602441c69e47f1da5285e9b222e1d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa6a602441c69e47f1da5285e9b222e1d"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HybridAutomaton.html#aa6a602441c69e47f1da5285e9b222e1d">addTransition</a> (<a class="el" href="classhypro_1_1Transition.html">Transition</a>&lt; Number &gt; *transition)</td></tr>
-<tr class="memdesc:aa6a602441c69e47f1da5285e9b222e1d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Extension function. <br/></td></tr>
-<tr class="separator:aa6a602441c69e47f1da5285e9b222e1d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a69dd5ac1db0e8c60160c60cb4cfc5327"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a69dd5ac1db0e8c60160c60cb4cfc5327"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HybridAutomaton.html#a69dd5ac1db0e8c60160c60cb4cfc5327">addLocation</a> (std::unique_ptr&lt; <a class="el" href="classhypro_1_1Location.html">Location</a>&lt; Number &gt;&gt; &amp;&amp;location)</td></tr>
+<tr class="memdesc:a69dd5ac1db0e8c60160c60cb4cfc5327"><td class="mdescLeft">&#160;</td><td class="mdescRight">Extension function. <br/></td></tr>
+<tr class="separator:a69dd5ac1db0e8c60160c60cb4cfc5327"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acc40bb756af9e188c6a7222467e011db"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="acc40bb756af9e188c6a7222467e011db"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HybridAutomaton.html#acc40bb756af9e188c6a7222467e011db">addTransition</a> (std::unique_ptr&lt; <a class="el" href="classhypro_1_1Transition.html">Transition</a>&lt; Number &gt;&gt; &amp;&amp;transition)</td></tr>
+<tr class="memdesc:acc40bb756af9e188c6a7222467e011db"><td class="mdescLeft">&#160;</td><td class="mdescRight">Extension function. <br/></td></tr>
+<tr class="separator:acc40bb756af9e188c6a7222467e011db"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a68446638e51ec7ac284fa67d91af49e1"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a68446638e51ec7ac284fa67d91af49e1"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HybridAutomaton.html#a68446638e51ec7ac284fa67d91af49e1">addInitialState</a> (const <a class="el" href="classhypro_1_1State.html">State</a> &amp;state)</td></tr>
 <tr class="memdesc:a68446638e51ec7ac284fa67d91af49e1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Extension function. <br/></td></tr>
@@ -280,16 +291,17 @@ Friends</h2></td></tr>
 <tr class="memitem:afb620450a335430b322ebfcdb37e0d64"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HybridAutomaton.html#afb620450a335430b322ebfcdb37e0d64">operator==</a> (const <a class="el" href="classhypro_1_1HybridAutomaton.html">HybridAutomaton</a>&lt; Number, <a class="el" href="classhypro_1_1State.html">State</a> &gt; &amp;lhs, const <a class="el" href="classhypro_1_1HybridAutomaton.html">HybridAutomaton</a>&lt; Number, <a class="el" href="classhypro_1_1State.html">State</a> &gt; &amp;rhs)</td></tr>
 <tr class="memdesc:afb620450a335430b322ebfcdb37e0d64"><td class="mdescLeft">&#160;</td><td class="mdescRight">Comparison for equality operator.  <a href="#afb620450a335430b322ebfcdb37e0d64">More...</a><br/></td></tr>
 <tr class="separator:afb620450a335430b322ebfcdb37e0d64"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aaaf30a91f9b4b6e91b243d0edf94a90b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1HybridAutomaton.html">HybridAutomaton</a>&lt; Number, <a class="el" href="classhypro_1_1State.html">State</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HybridAutomaton.html#aaaf30a91f9b4b6e91b243d0edf94a90b">operator||</a> (const <a class="el" href="classhypro_1_1HybridAutomaton.html">HybridAutomaton</a>&lt; Number, <a class="el" href="classhypro_1_1State.html">State</a> &gt; &amp;lhs, const <a class="el" href="classhypro_1_1HybridAutomaton.html">HybridAutomaton</a>&lt; Number, <a class="el" href="classhypro_1_1State.html">State</a> &gt; &amp;rhs)</td></tr>
-<tr class="memdesc:aaaf30a91f9b4b6e91b243d0edf94a90b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parallel Composition Operator.  <a href="#aaaf30a91f9b4b6e91b243d0edf94a90b">More...</a><br/></td></tr>
-<tr class="separator:aaaf30a91f9b4b6e91b243d0edf94a90b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a087fab0922d0393dace0140e7b88a0ea"><td class="memTemplParams" colspan="2">template&lt;typename Num , typename Stat &gt; </td></tr>
+<tr class="memitem:a087fab0922d0393dace0140e7b88a0ea"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1HybridAutomaton.html">HybridAutomaton</a>&lt; Num, Stat &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classhypro_1_1HybridAutomaton.html#a087fab0922d0393dace0140e7b88a0ea">operator||</a> (const <a class="el" href="classhypro_1_1HybridAutomaton.html">HybridAutomaton</a>&lt; Num, Stat &gt; &amp;lhs, const <a class="el" href="classhypro_1_1HybridAutomaton.html">HybridAutomaton</a>&lt; Num, Stat &gt; &amp;rhs)</td></tr>
+<tr class="memdesc:a087fab0922d0393dace0140e7b88a0ea"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parallel Composition Operator.  <a href="#a087fab0922d0393dace0140e7b88a0ea">More...</a><br/></td></tr>
+<tr class="separator:a087fab0922d0393dace0140e7b88a0ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aef58ea3dc3ea919018dc20c9eac83a57"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1HybridAutomatonComp.html">HybridAutomatonComp</a>&lt; Number, <br class="typebreak"/>
 <a class="el" href="classhypro_1_1State.html">State</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HybridAutomaton.html#aef58ea3dc3ea919018dc20c9eac83a57">operator+</a> (const <a class="el" href="classhypro_1_1HybridAutomaton.html">HybridAutomaton</a>&lt; Number, <a class="el" href="classhypro_1_1State.html">State</a> &gt; &amp;lhs, const <a class="el" href="classhypro_1_1HybridAutomaton.html">HybridAutomaton</a>&lt; Number, <a class="el" href="classhypro_1_1State.html">State</a> &gt; &amp;rhs)</td></tr>
 <tr class="memdesc:aef58ea3dc3ea919018dc20c9eac83a57"><td class="mdescLeft">&#160;</td><td class="mdescRight">Combination Operator.  <a href="#aef58ea3dc3ea919018dc20c9eac83a57">More...</a><br/></td></tr>
 <tr class="separator:aef58ea3dc3ea919018dc20c9eac83a57"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a00a9384c2b3621cc609108f34fa4355e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a00a9384c2b3621cc609108f34fa4355e"></a>
-std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator&lt;&lt;</b> (std::ostream &amp;ostr, const <a class="el" href="classhypro_1_1HybridAutomaton.html">HybridAutomaton</a>&lt; Number, <a class="el" href="classhypro_1_1State.html">State</a> &gt; &amp;)</td></tr>
-<tr class="separator:a00a9384c2b3621cc609108f34fa4355e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0552bb99320cc8812ca15ab95b384eac"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0552bb99320cc8812ca15ab95b384eac"></a>
+std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator&lt;&lt;</b> (std::ostream &amp;ostr, const <a class="el" href="classhypro_1_1HybridAutomaton.html">HybridAutomaton</a>&lt; Number, <a class="el" href="classhypro_1_1State.html">State</a> &gt; &amp;a)</td></tr>
+<tr class="separator:a0552bb99320cc8812ca15ab95b384eac"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><h3>template&lt;typename Number, typename State = State_t&lt;Number,Number&gt;&gt;<br/>
@@ -298,21 +310,19 @@ class hypro::HybridAutomaton&lt; Number, State &gt;</h3>
 <p>Class for linear hybrid automata. </p>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
-    <tr><td class="paramname">Number</td><td>Number type. </td></tr>
+    <tr><td class="paramname">Number</td><td>Number type.</td></tr>
   </table>
   </dd>
 </dl>
+<p>The automaton owns all the locations and transitions. Newly created locations and transitions can only be added as unique pointers. If another class/object requests a location/transition, then only normal pointers are returned. </p>
 
-<p>Definition at line <a class="el" href="HybridAutomaton_8h_source.html#l00032">32</a> of file <a class="el" href="HybridAutomaton_8h_source.html">HybridAutomaton.h</a>.</p>
+<p>Definition at line <a class="el" href="HybridAutomaton_8h_source.html#l00035">35</a> of file <a class="el" href="HybridAutomaton_8h_source.html">HybridAutomaton.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a class="anchor" id="a7d65754da606a40e213bbf7f0af435fe"></a>
+<a class="anchor" id="aa1bf8e357142bfa304f90b1829be476a"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
 template&lt;typename Number, typename State = State_t&lt;Number,Number&gt;&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="classhypro_1_1HybridAutomaton.html">hypro::HybridAutomaton</a>&lt; Number, <a class="el" href="classhypro_1_1State.html">State</a> &gt;::<a class="el" href="classhypro_1_1HybridAutomaton.html">HybridAutomaton</a> </td>
@@ -322,20 +332,16 @@ template&lt;typename Number, typename State = State_t&lt;Number,Number&gt;&gt; <
           <td></td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">default</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
 <p>Copy constructor. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">hybrid</td><td>The original hybrid automaton. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">hybrid</td><td>The original hybrid automaton.</td></tr>
   </table>
   </dd>
 </dl>
+<p>This operation is costly as it performs deep copies </p>
 
 </div>
 </div>
@@ -373,6 +379,50 @@ template&lt;typename Number, typename State = State_t&lt;Number,Number&gt;&gt; <
 
 </div>
 </div>
+<a class="anchor" id="aeed4c3d086707039ff9732b18a95470e"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number, typename State = State_t&lt;Number,Number&gt;&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhypro_1_1HybridAutomaton.html">hypro::HybridAutomaton</a>&lt; Number, <a class="el" href="classhypro_1_1State.html">State</a> &gt;::<a class="el" href="classhypro_1_1HybridAutomaton.html">HybridAutomaton</a> </td>
+          <td>(</td>
+          <td class="paramtype">const locationSet &amp;&#160;</td>
+          <td class="paramname"><em>locs</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classhypro_1_1HybridAutomaton.html#ae28671085ab01c6763f3c6174adece73">transitionSet</a> &amp;&#160;</td>
+          <td class="paramname"><em>trans</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classhypro_1_1HybridAutomaton.html#a20162ff9c207770818ab62dda9043462">locationStateMap</a> &amp;&#160;</td>
+          <td class="paramname"><em>initialStates</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Constructor from locations, transitions and initial states. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">locs</td><td>Set of locations </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">trans</td><td>Set of transitions </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">initialStates</td><td>Map of initial states </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <h2 class="groupheader">Member Function Documentation</h2>
 <a class="anchor" id="abd8563c0e4c73bd3dc21b6476ee1c11d"></a>
 <div class="memitem">
@@ -399,6 +449,59 @@ template&lt;typename Number, typename State = State_t&lt;Number,Number&gt;&gt; <
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True, if this is composed of rhs and some (possibly empty) rest. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a0c9539406bb9f77bf9ea6742536dc6b2"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number, typename State = State_t&lt;Number,Number&gt;&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhypro_1_1HybridAutomaton.html">HybridAutomaton</a>&amp; <a class="el" href="classhypro_1_1HybridAutomaton.html">hypro::HybridAutomaton</a>&lt; Number, <a class="el" href="classhypro_1_1State.html">State</a> &gt;::operator= </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classhypro_1_1HybridAutomaton.html">HybridAutomaton</a>&lt; Number, <a class="el" href="classhypro_1_1State.html">State</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>rhs</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Copy Assignment. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">rhs</td><td>The original hybrid automaton</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>This operation is costly as it performs deep copies </p>
+
+</div>
+</div>
+<a class="anchor" id="a26735ed0dc707a1c338790fbc057a121"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number, typename State = State_t&lt;Number,Number&gt;&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhypro_1_1HybridAutomaton.html">HybridAutomaton</a>&amp; <a class="el" href="classhypro_1_1HybridAutomaton.html">hypro::HybridAutomaton</a>&lt; Number, <a class="el" href="classhypro_1_1State.html">State</a> &gt;::operator= </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classhypro_1_1HybridAutomaton.html">HybridAutomaton</a>&lt; Number, <a class="el" href="classhypro_1_1State.html">State</a> &gt; &amp;&amp;&#160;</td>
+          <td class="paramname"><em>rhs</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Move Assignment. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">rhs</td><td>The original hybrid automaton </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -447,7 +550,7 @@ template&lt;typename Number, typename State = State_t&lt;Number,Number&gt;&gt; <
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Return compositional Automata of two Automata. </dd></dl>
 
-<p>Definition at line <a class="el" href="HybridAutomaton_8h_source.html#l00378">378</a> of file <a class="el" href="HybridAutomaton_8h_source.html">HybridAutomaton.h</a>.</p>
+<p>Definition at line <a class="el" href="HybridAutomaton_8h_source.html#l00224">224</a> of file <a class="el" href="HybridAutomaton_8h_source.html">HybridAutomaton.h</a>.</p>
 
 </div>
 </div>
@@ -495,29 +598,31 @@ template&lt;typename Number, typename State = State_t&lt;Number,Number&gt;&gt; <
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True, if both automata are equal, false otherwise. </dd></dl>
 
-<p>Definition at line <a class="el" href="HybridAutomaton_8h_source.html#l00158">158</a> of file <a class="el" href="HybridAutomaton_8h_source.html">HybridAutomaton.h</a>.</p>
+<p>Definition at line <a class="el" href="HybridAutomaton_8h_source.html#l00199">199</a> of file <a class="el" href="HybridAutomaton_8h_source.html">HybridAutomaton.h</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="aaaf30a91f9b4b6e91b243d0edf94a90b"></a>
+<a class="anchor" id="a087fab0922d0393dace0140e7b88a0ea"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
 template&lt;typename Number, typename State = State_t&lt;Number,Number&gt;&gt; </div>
+<div class="memtemplate">
+template&lt;typename Num , typename Stat &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classhypro_1_1HybridAutomaton.html">HybridAutomaton</a>&lt;Number, <a class="el" href="classhypro_1_1State.html">State</a>&gt; operator|| </td>
+          <td class="memname"><a class="el" href="classhypro_1_1HybridAutomaton.html">HybridAutomaton</a>&lt;Num, Stat&gt; operator|| </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="classhypro_1_1HybridAutomaton.html">HybridAutomaton</a>&lt; Number, <a class="el" href="classhypro_1_1State.html">State</a> &gt; &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="classhypro_1_1HybridAutomaton.html">HybridAutomaton</a>&lt; Num, Stat &gt; &amp;&#160;</td>
           <td class="paramname"><em>lhs</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="classhypro_1_1HybridAutomaton.html">HybridAutomaton</a>&lt; Number, <a class="el" href="classhypro_1_1State.html">State</a> &gt; &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="classhypro_1_1HybridAutomaton.html">HybridAutomaton</a>&lt; Num, Stat &gt; &amp;&#160;</td>
           <td class="paramname"><em>rhs</em>&#160;</td>
         </tr>
         <tr>
@@ -542,8 +647,6 @@ template&lt;typename Number, typename State = State_t&lt;Number,Number&gt;&gt; <
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Return parallel composition of two Automata. </dd></dl>
-
-<p>Definition at line <a class="el" href="HybridAutomaton_8h_source.html#l00172">172</a> of file <a class="el" href="HybridAutomaton_8h_source.html">HybridAutomaton.h</a>.</p>
 
 </div>
 </div>

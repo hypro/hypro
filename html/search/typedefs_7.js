@@ -1,7 +1,4 @@
 var searchData=
 [
-  ['variablevector',['variableVector',['../classhypro_1_1HybridAutomaton.html#a4736080b1d745b40fbdd6089cc0acfd8',1,'hypro::HybridAutomaton']]],
-  ['vector_5ft',['vector_t',['../namespacehypro_1_1reachability_1_1hypro.html#a4c8f5479695cd143f25fea1e8474dc1c',1,'hypro::reachability::hypro::vector_t()'],['../namespacehypro_1_1reachability_1_1hypro_1_1hypro.html#a4173067857153321f35a1fe47a614eaf',1,'hypro::reachability::hypro::hypro::vector_t()'],['../namespacehypro_1_1hypro.html#a136cb111924f682618d8bcf06644ea5a',1,'hypro::hypro::vector_t()'],['../namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a',1,'hypro::vector_t()']]],
-  ['vertexset',['vertexSet',['../classhypro_1_1reachability_1_1hypro_1_1Ridge.html#a99704c533338d668ba5a0b0b120b697c',1,'hypro::reachability::hypro::Ridge::vertexSet()'],['../classhypro_1_1reachability_1_1hypro_1_1Ridge.html#a99704c533338d668ba5a0b0b120b697c',1,'hypro::reachability::hypro::Ridge::vertexSet()'],['../classhypro_1_1reachability_1_1hypro_1_1Ridge.html#a99704c533338d668ba5a0b0b120b697c',1,'hypro::reachability::hypro::Ridge::vertexSet()'],['../classhypro_1_1Ridge.html#a911de50d72630ed9de9190f9a8e4e03a',1,'hypro::Ridge::vertexSet()']]],
-  ['vpolytope',['VPolytope',['../namespacehypro_1_1reachability_1_1hypro.html#a082d4e2b52a8badc4e851eafb1742978',1,'hypro::reachability::hypro::VPolytope()'],['../namespacehypro.html#a39e49ed88fa9599f8b04b6758a3103a2',1,'hypro::VPolytope()']]]
+  ['transitionset',['transitionSet',['../classhypro_1_1HybridAutomaton.html#ae28671085ab01c6763f3c6174adece73',1,'hypro::HybridAutomaton']]]
 ];

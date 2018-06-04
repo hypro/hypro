@@ -31,7 +31,7 @@
   <td id="projectlogo"><img alt="Logo" src="hypro_Logo.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">HyPro
-   &#160;<span id="projectnumber">18.05</span>
+   &#160;<span id="projectnumber">18.06</span>
    </div>
    <div id="projectbrief">A Toolbox for the Reachability Analysis of Hybrid Systems using Geometric Approximations</div>
   </td>
@@ -296,6 +296,11 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>removeRedundancy</b> 
 <tr class="memitem:a01135852a6886dce2ec2384254adcdb5"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a01135852a6886dce2ec2384254adcdb5"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>partiallyRemoveRedundancy</b> (std::size_t I)</td></tr>
 <tr class="separator:a01135852a6886dce2ec2384254adcdb5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aae647d653761d00d2dbcbe771731eb32"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aae647d653761d00d2dbcbe771731eb32"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>reduceRepresentation</b> ()</td></tr>
+<tr class="separator:aae647d653761d00d2dbcbe771731eb32"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae3ba09492e8beea8d8fab90f5f2f7f03"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1State.html#ae3ba09492e8beea8d8fab90f5f2f7f03">decompose</a> (std::vector&lt; std::vector&lt; size_t &gt;&gt; decomposition)</td></tr>
+<tr class="separator:ae3ba09492e8beea8d8fab90f5f2f7f03"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
@@ -322,9 +327,9 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
 Friends</h2></td></tr>
-<tr class="memitem:aecfa15cab31564909e82aa1118e256ce"><td class="memItemLeft" align="right" valign="top">ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1State.html#aecfa15cab31564909e82aa1118e256ce">operator&lt;&lt;</a> (ostream &amp;out, const <a class="el" href="classhypro_1_1State.html">State</a>&lt; Number, tNumber, Representation, Rargs...&gt; &amp;)</td></tr>
-<tr class="memdesc:aecfa15cab31564909e82aa1118e256ce"><td class="mdescLeft">&#160;</td><td class="mdescRight">Outstream operator.  <a href="#aecfa15cab31564909e82aa1118e256ce">More...</a><br/></td></tr>
-<tr class="separator:aecfa15cab31564909e82aa1118e256ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a46d326f6e574f7372cafbe478e17ab6a"><td class="memItemLeft" align="right" valign="top">ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1State.html#a46d326f6e574f7372cafbe478e17ab6a">operator&lt;&lt;</a> (ostream &amp;out, const <a class="el" href="classhypro_1_1State.html">State</a>&lt; Number, tNumber, Representation, Rargs...&gt; &amp;state)</td></tr>
+<tr class="memdesc:a46d326f6e574f7372cafbe478e17ab6a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Outstream operator.  <a href="#a46d326f6e574f7372cafbe478e17ab6a">More...</a><br/></td></tr>
+<tr class="separator:a46d326f6e574f7372cafbe478e17ab6a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aded79f237def114ec0edea718b2485c4"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1State.html#aded79f237def114ec0edea718b2485c4">operator==</a> (const <a class="el" href="classhypro_1_1State.html">State</a>&lt; Number, tNumber, Representation, Rargs...&gt; &amp;lhs, const <a class="el" href="classhypro_1_1State.html">State</a>&lt; Number, tNumber, Representation, Rargs...&gt; &amp;rhs)</td></tr>
 <tr class="memdesc:aded79f237def114ec0edea718b2485c4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Comparison for equality operator.  <a href="#aded79f237def114ec0edea718b2485c4">More...</a><br/></td></tr>
 <tr class="separator:aded79f237def114ec0edea718b2485c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -346,7 +351,7 @@ class hypro::State&lt; Number, tNumber, Representation, Rargs &gt;</h3>
   </table>
   </dd>
 </dl>
-<dl><dt><b>Examples: </b></dt><dd><a class="el" href="example_bouncingBall_8cpp-example.html#_a6">example_bouncingBall.cpp</a>.</dd>
+<dl><dt><b>Examples: </b></dt><dd><a class="el" href="example_bouncingBall_8cpp-example.html#_a5">example_bouncingBall.cpp</a>.</dd>
 </dl>
 <p>Definition at line <a class="el" href="State_8h_source.html#l00030">30</a> of file <a class="el" href="State_8h_source.html">State.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
@@ -640,6 +645,25 @@ template&lt;typename Number, typename tNumber, typename Representation, typename
 
 </div>
 </div>
+<a class="anchor" id="ae3ba09492e8beea8d8fab90f5f2f7f03"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number, typename tNumber, typename Representation, typename... Rargs&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classhypro_1_1State.html">hypro::State</a>&lt; Number, tNumber, Representation, Rargs &gt;::decompose </td>
+          <td>(</td>
+          <td class="paramtype">std::vector&lt; std::vector&lt; size_t &gt;&gt;&#160;</td>
+          <td class="paramname"><em>decomposition</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>decomposes state set by projection </p>
+
+</div>
+</div>
 <a class="anchor" id="a86f167f3f413d17e459e82903ef00e7d"></a>
 <div class="memitem">
 <div class="memproto">
@@ -668,7 +692,7 @@ template&lt;typename Number, typename tNumber, typename Representation, typename
 
 <p>Definition at line <a class="el" href="State_8h_source.html#l00161">161</a> of file <a class="el" href="State_8h_source.html">State.h</a>.</p>
 
-<p>Referenced by <a class="el" href="HybridAutomaton_8h_source.html#l00122">hypro::HybridAutomaton&lt; Number, hypro::State&lt; Number, Number &gt; &gt;::addInitialState()</a>, and <a class="el" href="State_8h_source.html#l00086">hypro::State&lt; Number, Number &gt;::operator=()</a>.</p>
+<p>Referenced by <a class="el" href="HybridAutomaton_8h_source.html#l00144">hypro::HybridAutomaton&lt; Number, hypro::State&lt; Number, Number &gt; &gt;::addInitialState()</a>, and <a class="el" href="State_8h_source.html#l00086">hypro::State&lt; Number, Number &gt;::operator=()</a>.</p>
 
 </div>
 </div>
@@ -1213,7 +1237,7 @@ template&lt;typename Number, typename tNumber, typename Representation, typename
   </table>
   </dd>
 </dl>
-<dl><dt><b>Examples: </b></dt><dd><a class="el" href="example_bouncingBall_8cpp-example.html#a7">example_bouncingBall.cpp</a>.</dd>
+<dl><dt><b>Examples: </b></dt><dd><a class="el" href="example_bouncingBall_8cpp-example.html#a6">example_bouncingBall.cpp</a>.</dd>
 </dl>
 <p>Definition at line <a class="el" href="State_8h_source.html#l00225">225</a> of file <a class="el" href="State_8h_source.html">State.h</a>.</p>
 
@@ -1308,7 +1332,7 @@ template&lt;typename Number, typename tNumber, typename Representation, typename
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="State_8h_source.html#l00280">280</a> of file <a class="el" href="State_8h_source.html">State.h</a>.</p>
+<p>Definition at line <a class="el" href="State_8h_source.html#l00281">281</a> of file <a class="el" href="State_8h_source.html">State.h</a>.</p>
 
 </div>
 </div>
@@ -1337,6 +1361,7 @@ template&lt;typename Number, typename tNumber, typename Representation, typename
 </div><div class="memdoc">
 
 <p>Sets the sets. </p>
+<p>Note that this method directly sets the sets while ignoring the consistency of the previously stored types </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">sets</td><td>The sets. </td></tr>
@@ -1344,7 +1369,7 @@ template&lt;typename Number, typename tNumber, typename Representation, typename
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="State_8h_source.html#l00263">263</a> of file <a class="el" href="State_8h_source.html">State.h</a>.</p>
+<p>Definition at line <a class="el" href="State_8h_source.html#l00264">264</a> of file <a class="el" href="State_8h_source.html">State.h</a>.</p>
 
 </div>
 </div>
@@ -1531,11 +1556,11 @@ template&lt;typename Number, typename tNumber, typename Representation, typename
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True, if both states are not equal, false otherwise. </dd></dl>
 
-<p>Definition at line <a class="el" href="State_8h_source.html#l00454">454</a> of file <a class="el" href="State_8h_source.html">State.h</a>.</p>
+<p>Definition at line <a class="el" href="State_8h_source.html#l00462">462</a> of file <a class="el" href="State_8h_source.html">State.h</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="aecfa15cab31564909e82aa1118e256ce"></a>
+<a class="anchor" id="a46d326f6e574f7372cafbe478e17ab6a"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
@@ -1554,7 +1579,7 @@ template&lt;typename Number, typename tNumber, typename Representation, typename
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const <a class="el" href="classhypro_1_1State.html">State</a>&lt; Number, tNumber, Representation, Rargs...&gt; &amp;&#160;</td>
-          <td class="paramname">&#160;</td>
+          <td class="paramname"><em>state</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -1579,7 +1604,7 @@ template&lt;typename Number, typename tNumber, typename Representation, typename
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A reference to the outstream. </dd></dl>
 
-<p>Definition at line <a class="el" href="State_8h_source.html#l00419">419</a> of file <a class="el" href="State_8h_source.html">State.h</a>.</p>
+<p>Definition at line <a class="el" href="State_8h_source.html#l00414">414</a> of file <a class="el" href="State_8h_source.html">State.h</a>.</p>
 
 </div>
 </div>
@@ -1628,7 +1653,7 @@ template&lt;typename Number, typename tNumber, typename Representation, typename
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True, if both states are equal, false otherwise. </dd></dl>
 
-<p>Definition at line <a class="el" href="State_8h_source.html#l00431">431</a> of file <a class="el" href="State_8h_source.html">State.h</a>.</p>
+<p>Definition at line <a class="el" href="State_8h_source.html#l00439">439</a> of file <a class="el" href="State_8h_source.html">State.h</a>.</p>
 
 </div>
 </div>

@@ -22,6 +22,7 @@ var classhypro_1_1ConstraintSetT =
     [ "operator=", "classhypro_1_1ConstraintSetT.html#afe63dc58b9bed84eb3bf4fbc088d1250", null ],
     [ "project", "classhypro_1_1ConstraintSetT.html#a00e2100437a2866aed31ae18174f408b", null ],
     [ "reduceNumberRepresentation", "classhypro_1_1ConstraintSetT.html#ad2ee7ce67966057d729a02ff0c8eb68c", null ],
+    [ "reduceRepresentation", "classhypro_1_1ConstraintSetT.html#adf1f10a3ecc14e9fbc8e76a5222d6adc", null ],
     [ "removeRedundancy", "classhypro_1_1ConstraintSetT.html#a7501c3b99c68dccfa621587c9b77c5cf", null ],
     [ "rMatrix", "classhypro_1_1ConstraintSetT.html#a70cd279abf1415e52d81070fb416a45b", null ],
     [ "rVector", "classhypro_1_1ConstraintSetT.html#ac24bee49c048a7ea7b7c6fa8c23d3fe6", null ],
@@ -32,7 +33,7 @@ var classhypro_1_1ConstraintSetT =
     [ "vector", "classhypro_1_1ConstraintSetT.html#a23d9c1852754214a65b3c822ceb97995", null ],
     [ "vertices", "classhypro_1_1ConstraintSetT.html#a8cf1314861edc469174f5369669451de", null ],
     [ "operator!=", "classhypro_1_1ConstraintSetT.html#a5616f15bef0ceb159912960a5f3f4499", null ],
-    [ "operator<<", "classhypro_1_1ConstraintSetT.html#aa8c7bd561fc89d9e904ac406a1320309", null ],
+    [ "operator<<", "classhypro_1_1ConstraintSetT.html#a4eebf8f94bc1d2bfea5caac5cdf1a0cd", null ],
     [ "operator==", "classhypro_1_1ConstraintSetT.html#a8028a8af7bbf5335bd61798c605b0b42", null ],
     [ "mConstants", "classhypro_1_1ConstraintSetT.html#aac95da39ad6bc475d9dce395cb90023c", null ],
     [ "mConstraints", "classhypro_1_1ConstraintSetT.html#a4bdb08f71aa6b96c3ce379e4e4588a9e", null ]

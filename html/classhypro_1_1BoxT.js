@@ -21,6 +21,7 @@ var classhypro_1_1BoxT =
     [ "dimension", "classhypro_1_1BoxT.html#a0f5f26c3dd464f33f45ccdf0cbd61f56", null ],
     [ "empty", "classhypro_1_1BoxT.html#a2cc93b59dafe01bdfcb2a93e36a4799a", null ],
     [ "evaluate", "classhypro_1_1BoxT.html#aa725a4fccbb43b2e9f66bbc010717416", null ],
+    [ "getSettings", "classhypro_1_1BoxT.html#a0ac49da94e5a23fcbbb66e31cef8cfef", null ],
     [ "insert", "classhypro_1_1BoxT.html#a3bac1acbed2cc87c3acdbf79f782543e", null ],
     [ "intersect", "classhypro_1_1BoxT.html#abda4494a94ab767aea730ddbd166cb52", null ],
     [ "intersectHalfspace", "classhypro_1_1BoxT.html#a864645241f9e5d7f0630889e9d358a9c", null ],
@@ -43,6 +44,7 @@ var classhypro_1_1BoxT =
     [ "print", "classhypro_1_1BoxT.html#a0efbff2f9a740e9cea28bd9018b44155", null ],
     [ "project", "classhypro_1_1BoxT.html#ae7f8819de6e4ececa15d5b63b0dbbdb8", null ],
     [ "reduceNumberRepresentation", "classhypro_1_1BoxT.html#aacdf627545f79737baf3937eb83035f3", null ],
+    [ "reduceRepresentation", "classhypro_1_1BoxT.html#a0647c38c34ce94c61ba5826768330549", null ],
     [ "removeRedundancy", "classhypro_1_1BoxT.html#aebb35f675c01367a5fa74fd0c681ea78", null ],
     [ "rLimits", "classhypro_1_1BoxT.html#a69d195ab2f9686ba955e8f6404fc9a13", null ],
     [ "satisfiesHalfspace", "classhypro_1_1BoxT.html#a93d3df482f76377345dfffbb3bd79c07", null ],
@@ -53,7 +55,7 @@ var classhypro_1_1BoxT =
     [ "vector", "classhypro_1_1BoxT.html#aff8cd5ec2098f13022b74eb3b1225edc", null ],
     [ "vertices", "classhypro_1_1BoxT.html#a1f74178867655d727396d2e58f14c1dc", null ],
     [ "operator!=", "classhypro_1_1BoxT.html#a7d9104d8a149e1abe766013eb8dd7824", null ],
-    [ "operator<<", "classhypro_1_1BoxT.html#adc091899bb1626a05675f979f15ff1db", null ],
+    [ "operator<<", "classhypro_1_1BoxT.html#a5809f2678374bf5ab4a6d335569a4556", null ],
     [ "operator==", "classhypro_1_1BoxT.html#adc2c883fdf0aed15337b0bda5d58683e", null ],
     [ "mLimits", "classhypro_1_1BoxT.html#aa4961bc7cc908629c737adcabb31fa27", null ]
 ];

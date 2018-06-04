@@ -31,7 +31,7 @@
   <td id="projectlogo"><img alt="Logo" src="hypro_Logo.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">HyPro
-   &#160;<span id="projectnumber">18.05</span>
+   &#160;<span id="projectnumber">18.06</span>
    </div>
    <div id="projectbrief">A Toolbox for the Reachability Analysis of Hybrid Systems using Geometric Approximations</div>
   </td>
@@ -120,7 +120,7 @@ $(document).ready(function(){initNavTree('structhypro_1_1reachability_1_1hypro_1
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
-<tr class="memitem:a12f215f21333535abcaf476175c26d00"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom">{ <br/>
+<tr class="memitem:af08ee148fca3f66167d028197996759f"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom">{ <br/>
 &#160;&#160;<b>IsComplex</b> = 0, 
 <b>IsInteger</b> = 0, 
 <b>ReadCost</b> = 1, 
@@ -131,7 +131,28 @@ Public Types</h2></td></tr>
 <b>RequireInitialization</b> = 1
 <br/>
  }</td></tr>
-<tr class="separator:a12f215f21333535abcaf476175c26d00"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="separator:af08ee148fca3f66167d028197996759f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a87599864f2df61d4e4c65fda31a78484"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom">{ <br/>
+&#160;&#160;<b>IsComplex</b> = 0, 
+<b>IsInteger</b> = 0, 
+<b>ReadCost</b> = 1, 
+<b>AddCost</b> = 1, 
+<br/>
+&#160;&#160;<b>MulCost</b> = 1, 
+<b>IsSigned</b> = 1, 
+<b>RequireInitialization</b> = 1
+<br/>
+ }</td></tr>
+<tr class="separator:a87599864f2df61d4e4c65fda31a78484"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a54845e31c398ac1a224c5258d1a87a87"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a54845e31c398ac1a224c5258d1a87a87"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>Real</b> = carl::FLOAT_T&lt; Number &gt;</td></tr>
+<tr class="separator:a54845e31c398ac1a224c5258d1a87a87"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a77707b3c275ed4f9cd7396a65c32219e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a77707b3c275ed4f9cd7396a65c32219e"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>NonInteger</b> = carl::FLOAT_T&lt; Number &gt;</td></tr>
+<tr class="separator:a77707b3c275ed4f9cd7396a65c32219e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0d63c8b6ab66567421ab2e4ceea93643"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0d63c8b6ab66567421ab2e4ceea93643"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>Nested</b> = carl::FLOAT_T&lt; Number &gt;</td></tr>
+<tr class="separator:a0d63c8b6ab66567421ab2e4ceea93643"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a54845e31c398ac1a224c5258d1a87a87"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a54845e31c398ac1a224c5258d1a87a87"></a>
 using&#160;</td><td class="memItemRight" valign="bottom"><b>Real</b> = carl::FLOAT_T&lt; Number &gt;</td></tr>
 <tr class="separator:a54845e31c398ac1a224c5258d1a87a87"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -144,6 +165,18 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>Nested</b> = carl::F
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
+<tr class="memitem:a3917282dc5d7078807cd3be7d6248e90"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3917282dc5d7078807cd3be7d6248e90"></a>
+static Real&#160;</td><td class="memItemRight" valign="bottom"><b>epsilon</b> ()</td></tr>
+<tr class="separator:a3917282dc5d7078807cd3be7d6248e90"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a969872dc504793d26b86bee3f13abddc"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a969872dc504793d26b86bee3f13abddc"></a>
+static Real&#160;</td><td class="memItemRight" valign="bottom"><b>dummy_precision</b> ()</td></tr>
+<tr class="separator:a969872dc504793d26b86bee3f13abddc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa08a1722639121bcfed3e82361205a60"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa08a1722639121bcfed3e82361205a60"></a>
+static carl::FLOAT_T&lt; Number &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>highest</b> ()</td></tr>
+<tr class="separator:aa08a1722639121bcfed3e82361205a60"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a344b6db01c9e519df7db0df14a0ae7e7"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a344b6db01c9e519df7db0df14a0ae7e7"></a>
+static carl::FLOAT_T&lt; Number &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>lowest</b> ()</td></tr>
+<tr class="separator:a344b6db01c9e519df7db0df14a0ae7e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3917282dc5d7078807cd3be7d6248e90"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3917282dc5d7078807cd3be7d6248e90"></a>
 static Real&#160;</td><td class="memItemRight" valign="bottom"><b>epsilon</b> ()</td></tr>
 <tr class="separator:a3917282dc5d7078807cd3be7d6248e90"><td class="memSeparator" colspan="2">&#160;</td></tr>

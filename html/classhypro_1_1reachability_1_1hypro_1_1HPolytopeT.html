@@ -31,7 +31,7 @@
   <td id="projectlogo"><img alt="Logo" src="hypro_Logo.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">HyPro
-   &#160;<span id="projectnumber">18.05</span>
+   &#160;<span id="projectnumber">18.06</span>
    </div>
    <div id="projectbrief">A Toolbox for the Reachability Analysis of Hybrid Systems using Geometric Approximations</div>
   </td>
@@ -298,6 +298,10 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>contains</b> (const <
 <tr class="memitem:a0a5ca1378671f2ee53cd9ddedcf9287a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0a5ca1378671f2ee53cd9ddedcf9287a"></a>
 <a class="el" href="classhypro_1_1reachability_1_1hypro_1_1HPolytopeT.html">HPolytopeT</a>&#160;</td><td class="memItemRight" valign="bottom"><b>unite</b> (const <a class="el" href="classhypro_1_1reachability_1_1hypro_1_1HPolytopeT.html">HPolytopeT</a> &amp;rhs) const </td></tr>
 <tr class="separator:a0a5ca1378671f2ee53cd9ddedcf9287a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a81346a9d114ccc178d0e666cb6541b00"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a81346a9d114ccc178d0e666cb6541b00"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1reachability_1_1hypro_1_1HPolytopeT.html#a81346a9d114ccc178d0e666cb6541b00">reduceRepresentation</a> ()</td></tr>
+<tr class="memdesc:a81346a9d114ccc178d0e666cb6541b00"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function called to reduce the representation - implementation is dependent on the actual representation and might affect number representations as well as reducing the complexity of the set at the cost of precision - the actual implementation should be settings-dependent. <br/></td></tr>
+<tr class="separator:a81346a9d114ccc178d0e666cb6541b00"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a75ec0756fdf895157d729932a62c270b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a75ec0756fdf895157d729932a62c270b"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>clear</b> ()</td></tr>
 <tr class="separator:a75ec0756fdf895157d729932a62c270b"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -347,9 +351,9 @@ static <a class="el" href="classhypro_1_1reachability_1_1hypro_1_1HPolytopeT.htm
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
 Friends</h2></td></tr>
-<tr class="memitem:afd5e0f2c48f97841fcb7579dd13127fa"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="afd5e0f2c48f97841fcb7579dd13127fa"></a>
-std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator&lt;&lt;</b> (std::ostream &amp;lhs, const <a class="el" href="classhypro_1_1reachability_1_1hypro_1_1HPolytopeT.html">HPolytopeT</a>&lt; Number, <a class="el" href="classhypro_1_1reachability_1_1hypro_1_1Converter.html">Converter</a>, Setting &gt; &amp;)</td></tr>
-<tr class="separator:afd5e0f2c48f97841fcb7579dd13127fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad547ffca050ca1fd6b89616f0a330f34"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad547ffca050ca1fd6b89616f0a330f34"></a>
+std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator&lt;&lt;</b> (std::ostream &amp;lhs, const <a class="el" href="classhypro_1_1reachability_1_1hypro_1_1HPolytopeT.html">HPolytopeT</a>&lt; Number, <a class="el" href="classhypro_1_1reachability_1_1hypro_1_1Converter.html">Converter</a>, Setting &gt; &amp;rhs)</td></tr>
+<tr class="separator:ad547ffca050ca1fd6b89616f0a330f34"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a23e5867f9e7d2c8346c868aae6d24f51"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a23e5867f9e7d2c8346c868aae6d24f51"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>swap</b> (<a class="el" href="classhypro_1_1reachability_1_1hypro_1_1HPolytopeT.html">HPolytopeT</a>&lt; Number, <a class="el" href="classhypro_1_1reachability_1_1hypro_1_1Converter.html">Converter</a>, Setting &gt; &amp;a, <a class="el" href="classhypro_1_1reachability_1_1hypro_1_1HPolytopeT.html">HPolytopeT</a>&lt; Number, <a class="el" href="classhypro_1_1reachability_1_1hypro_1_1Converter.html">Converter</a>, Setting &gt; &amp;b)</td></tr>
 <tr class="separator:a23e5867f9e7d2c8346c868aae6d24f51"><td class="memSeparator" colspan="2">&#160;</td></tr>

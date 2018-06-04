@@ -12,6 +12,7 @@ var annotated =
     [ "statistics", "namespacestatistics.html", null ],
     [ "std", null, [
       [ "hash< hypro::Halfspace< Number > >", "structstd_1_1hash_3_01hypro_1_1Halfspace_3_01Number_01_4_01_4.html", "structstd_1_1hash_3_01hypro_1_1Halfspace_3_01Number_01_4_01_4" ],
+      [ "hash< hypro::Location< Number > * >", "structstd_1_1hash_3_01hypro_1_1Location_3_01Number_01_4_01_5_01_4.html", "structstd_1_1hash_3_01hypro_1_1Location_3_01Number_01_4_01_5_01_4" ],
       [ "hash< std::pair< first, second > >", "structstd_1_1hash_3_01std_1_1pair_3_01first_00_01second_01_4_01_4.html", "structstd_1_1hash_3_01std_1_1pair_3_01first_00_01second_01_4_01_4" ],
       [ "hash< hypro::Point< Number > >", "structstd_1_1hash_3_01hypro_1_1Point_3_01Number_01_4_01_4.html", "structstd_1_1hash_3_01hypro_1_1Point_3_01Number_01_4_01_4" ],
       [ "hash< hypro::Ridge< Number > >", "structstd_1_1hash_3_01hypro_1_1Ridge_3_01Number_01_4_01_4.html", "structstd_1_1hash_3_01hypro_1_1Ridge_3_01Number_01_4_01_4" ],

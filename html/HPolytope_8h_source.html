@@ -31,7 +31,7 @@
   <td id="projectlogo"><img alt="Logo" src="hypro_Logo.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">HyPro
-   &#160;<span id="projectnumber">18.05</span>
+   &#160;<span id="projectnumber">18.06</span>
    </div>
    <div id="projectbrief">A Toolbox for the Reachability Analysis of Hybrid Systems using Geometric Approximations</div>
   </td>
@@ -250,163 +250,164 @@ $(document).ready(function(){initNavTree('HPolytope_8h_source.html','');});
 <div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160;    <span class="keywordtype">bool</span> contains( <span class="keyword">const</span> <a class="code" href="classhypro_1_1HPolytopeT.html">HPolytopeT&lt;Number,Converter,Setting&gt;</a>&amp; rhs ) <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160;    <a class="code" href="classhypro_1_1HPolytopeT.html">HPolytopeT</a> unite( <span class="keyword">const</span> <a class="code" href="classhypro_1_1HPolytopeT.html">HPolytopeT</a>&amp; rhs ) <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160;    <span class="keyword">static</span> <a class="code" href="classhypro_1_1HPolytopeT.html">HPolytopeT</a> unite( <span class="keyword">const</span> std::vector&lt;HPolytopeT&gt;&amp; rhs );</div>
-<div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160;</div>
-<div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160;    <span class="keywordtype">void</span> clear();</div>
-<div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160;    <span class="keywordtype">void</span> print() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160;</div>
-<div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160;    <span class="comment">/*</span></div>
-<div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160;<span class="comment">     * Operators</span></div>
-<div class="line"><a name="l00261"></a><span class="lineno">  261</span>&#160;<span class="comment">     */</span></div>
-<div class="line"><a name="l00262"></a><span class="lineno">  262</span>&#160;    <a class="code" href="classhypro_1_1HPolytopeT.html">HPolytopeT</a>&amp; operator=( <span class="keyword">const</span> <a class="code" href="classhypro_1_1HPolytopeT.html">HPolytopeT&lt;Number,Converter,Setting&gt;</a>&amp; rhs ) = <span class="keywordflow">default</span>;</div>
-<div class="line"><a name="l00263"></a><span class="lineno">  263</span>&#160;</div>
-<div class="line"><a name="l00264"></a><span class="lineno">  264</span>&#160;<span class="preprocessor">#ifdef HYPRO_LOGGING</span></div>
-<div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160;<span class="preprocessor"></span>    <span class="keyword">friend</span> std::ostream&amp; operator&lt;&lt;( std::ostream&amp; lhs, const HPolytopeT&lt;Number,Converter,Setting&gt;&amp; rhs ) {</div>
-<div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160;        <span class="keywordflow">if</span> ( rhs.constraints().size() &gt; 0 ) {</div>
-<div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160;            lhs &lt;&lt; <span class="stringliteral">&quot;[ &quot;</span>;</div>
-<div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160;            <span class="keywordflow">for</span> ( <span class="keywordtype">unsigned</span> i = 0; i &lt; rhs.constraints().size() - 1; ++i ) {</div>
-<div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160;                lhs &lt;&lt; convert&lt;Number,double&gt;(rhs.constraints()[i]) &lt;&lt; <span class="stringliteral">&quot;,&quot;</span> &lt;&lt; std::endl;</div>
-<div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160;            }</div>
-<div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160;            lhs &lt;&lt; convert&lt;Number,double&gt;(rhs.constraints()[rhs.constraints().size() - 1]) &lt;&lt; <span class="stringliteral">&quot; ]&quot;</span>;</div>
-<div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160;        }</div>
-<div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160;<span class="preprocessor">#else</span></div>
-<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;<span class="preprocessor"></span>    <span class="keyword">friend</span> std::ostream&amp; operator&lt;&lt;( std::ostream&amp; lhs, const HPolytopeT&lt;Number,Converter,Setting&gt;&amp; ) {</div>
-<div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;<span class="preprocessor"></span>        <span class="keywordflow">return</span> lhs;</div>
-<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;    }</div>
-<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;</div>
-<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;    <span class="keywordtype">bool</span> operator==(<span class="keyword">const</span> HPolytopeT&lt;Number,Converter,Setting&gt;&amp; rhs)<span class="keyword"> const </span>{</div>
-<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;        <span class="keywordflow">if</span>(this-&gt;<a class="code" href="classhypro_1_1HPolytopeT.html#a55b9f25b978d0fcf9bfdeb5f9f5e3c02">dimension</a>() != rhs.dimension()) {</div>
-<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;            <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;        }</div>
-<div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160;</div>
-<div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160;        <span class="keywordflow">return</span> this-&gt;constraints() == rhs.constraints();</div>
-<div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160;    }</div>
-<div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160;</div>
-<div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;    <span class="keyword">friend</span> <span class="keywordtype">void</span> swap( HPolytopeT&lt;Number,Converter,Setting&gt;&amp; a, HPolytopeT&lt;Number,Converter,Setting&gt;&amp; b ) {</div>
-<div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160;        std::size_t tmpDim = a.mDimension;</div>
-<div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160;        a.mDimension = b.mDimension;</div>
-<div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160;        b.mDimension = tmpDim;</div>
-<div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160;        swap( a.mHPlanes, b.mHPlanes );</div>
-<div class="line"><a name="l00292"></a><span class="lineno">  292</span>&#160;    }</div>
-<div class="line"><a name="l00293"></a><span class="lineno">  293</span>&#160;</div>
-<div class="line"><a name="l00294"></a><span class="lineno">  294</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> N = Number, carl::DisableIf&lt; std::is_same&lt;N, <span class="keywordtype">double</span>&gt; &gt; = carl::dummy&gt;</div>
-<div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160;    <span class="keywordtype">void</span> reduceNumberRepresentation(<span class="keyword">const</span> std::vector&lt;Point&lt;Number&gt;&gt;&amp; _vertices = std::vector&lt;Point&lt;Number&gt;&gt;(), <span class="keywordtype">unsigned</span> limit = fReach_DENOMINATOR)<span class="keyword"> const </span>{</div>
-<div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160;        <span class="comment">//#ifdef REDUCE_NUMBERS</span></div>
-<div class="line"><a name="l00297"></a><span class="lineno">  297</span>&#160;        <span class="keywordflow">if</span>(Setting::REDUCE_NUMBERS == <span class="keyword">true</span>){</div>
-<div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160;            TRACE(<span class="stringliteral">&quot;hypro.hPolytope&quot;</span>,<span class="stringliteral">&quot;Attempt to reduce numbers.&quot;</span>);</div>
-<div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;            std::vector&lt;Point&lt;Number&gt;&gt; originalVertices;</div>
-<div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160;            <span class="keywordflow">if</span>(_vertices.empty()) {</div>
-<div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160;                TRACE(<span class="stringliteral">&quot;hypro.hPolytope&quot;</span>,<span class="stringliteral">&quot;No passed vertices, computed vertices.&quot;</span>);</div>
-<div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160;                originalVertices = this-&gt;<a class="code" href="classhypro_1_1HPolytopeT.html#a6ee070b0531864a636d2c609eb622f34">vertices</a>();</div>
-<div class="line"><a name="l00303"></a><span class="lineno">  303</span>&#160;            } <span class="keywordflow">else</span> {</div>
-<div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160;                TRACE(<span class="stringliteral">&quot;hypro.hPolytope&quot;</span>,<span class="stringliteral">&quot;Use passed vertices.&quot;</span>);</div>
-<div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160;                originalVertices = _vertices;</div>
-<div class="line"><a name="l00306"></a><span class="lineno">  306</span>&#160;            }</div>
-<div class="line"><a name="l00307"></a><span class="lineno">  307</span>&#160;            TRACE(<span class="stringliteral">&quot;hypro.hPolytope&quot;</span>,<span class="stringliteral">&quot;Vertices empty: &quot;</span> &lt;&lt; originalVertices.empty());</div>
-<div class="line"><a name="l00308"></a><span class="lineno">  308</span>&#160;</div>
-<div class="line"><a name="l00309"></a><span class="lineno">  309</span>&#160;            <span class="keywordflow">if</span>(!this-&gt;<a class="code" href="classhypro_1_1HPolytopeT.html#a02fe5979e648749f89bc595be9a3f7be">empty</a>()){</div>
-<div class="line"><a name="l00310"></a><span class="lineno">  310</span>&#160;                <span class="comment">// normal reduction</span></div>
-<div class="line"><a name="l00311"></a><span class="lineno">  311</span>&#160;                <span class="keywordflow">for</span>(<span class="keywordtype">unsigned</span> planeIndex = 0; planeIndex &lt; mHPlanes.size(); ++planeIndex){</div>
-<div class="line"><a name="l00312"></a><span class="lineno">  312</span>&#160;<span class="preprocessor">                    #ifdef HPOLY_DEBUG_MSG</span></div>
-<div class="line"><a name="l00313"></a><span class="lineno">  313</span>&#160;<span class="preprocessor"></span>                    std::cout &lt;&lt; <span class="stringliteral">&quot;Original: &quot;</span> &lt;&lt; mHPlanes.at(planeIndex) &lt;&lt; std::endl;</div>
-<div class="line"><a name="l00314"></a><span class="lineno">  314</span>&#160;<span class="preprocessor">                    #endif</span></div>
-<div class="line"><a name="l00315"></a><span class="lineno">  315</span>&#160;<span class="preprocessor"></span>                    <span class="comment">// find maximal value</span></div>
-<div class="line"><a name="l00316"></a><span class="lineno">  316</span>&#160;                    Number largest = Number(0);</div>
-<div class="line"><a name="l00317"></a><span class="lineno">  317</span>&#160;                    mHPlanes.at(planeIndex).makeInteger();</div>
-<div class="line"><a name="l00318"></a><span class="lineno">  318</span>&#160;<span class="preprocessor">                    #ifdef HPOLY_DEBUG_MSG</span></div>
-<div class="line"><a name="l00319"></a><span class="lineno">  319</span>&#160;<span class="preprocessor"></span>                    std::cout &lt;&lt; <span class="stringliteral">&quot;As Integer: &quot;</span> &lt;&lt; mHPlanes.at(planeIndex) &lt;&lt; std::endl;</div>
-<div class="line"><a name="l00320"></a><span class="lineno">  320</span>&#160;<span class="preprocessor">                    #endif</span></div>
-<div class="line"><a name="l00321"></a><span class="lineno">  321</span>&#160;<span class="preprocessor"></span>                    largest = carl::abs(mHPlanes.at(planeIndex).offset());</div>
-<div class="line"><a name="l00322"></a><span class="lineno">  322</span>&#160;                    <span class="keywordflow">for</span>(<span class="keywordtype">unsigned</span> i = 0; i &lt; mDimension; ++i){</div>
-<div class="line"><a name="l00323"></a><span class="lineno">  323</span>&#160;                        <span class="keywordflow">if</span>(carl::abs(mHPlanes.at(planeIndex).normal()(i)) &gt; largest){</div>
-<div class="line"><a name="l00324"></a><span class="lineno">  324</span>&#160;                            largest = carl::abs(mHPlanes.at(planeIndex).normal()(i));</div>
-<div class="line"><a name="l00325"></a><span class="lineno">  325</span>&#160;                        }</div>
-<div class="line"><a name="l00326"></a><span class="lineno">  326</span>&#160;                    }</div>
-<div class="line"><a name="l00327"></a><span class="lineno">  327</span>&#160;</div>
-<div class="line"><a name="l00328"></a><span class="lineno">  328</span>&#160;                    <span class="comment">// reduce, if reduction is required</span></div>
-<div class="line"><a name="l00329"></a><span class="lineno">  329</span>&#160;                    <span class="keywordflow">if</span>(largest &gt; (limit*limit)) {</div>
-<div class="line"><a name="l00330"></a><span class="lineno">  330</span>&#160;<span class="preprocessor">                        #ifdef HPOLY_DEBUG_MSG</span></div>
-<div class="line"><a name="l00331"></a><span class="lineno">  331</span>&#160;<span class="preprocessor"></span>                        std::cout &lt;&lt; <span class="stringliteral">&quot;Actual reduction&quot;</span> &lt;&lt; std::endl;</div>
-<div class="line"><a name="l00332"></a><span class="lineno">  332</span>&#160;<span class="preprocessor">                        #endif</span></div>
-<div class="line"><a name="l00333"></a><span class="lineno">  333</span>&#160;<span class="preprocessor"></span>                        vector_t&lt;Number&gt; newNormal(mDimension);</div>
-<div class="line"><a name="l00334"></a><span class="lineno">  334</span>&#160;                        <span class="keywordflow">for</span>(<span class="keywordtype">unsigned</span> i = 0; i &lt; mDimension; ++i){</div>
-<div class="line"><a name="l00335"></a><span class="lineno">  335</span>&#160;                            newNormal(i) = carl::floor(Number((mHPlanes.at(planeIndex).normal()(i)/largest)*Number(limit)));</div>
-<div class="line"><a name="l00336"></a><span class="lineno">  336</span>&#160;                            assert(carl::abs(Number(mHPlanes.at(planeIndex).normal()(i)/largest)) &lt;= Number(1));</div>
-<div class="line"><a name="l00337"></a><span class="lineno">  337</span>&#160;                            assert(carl::isInteger(newNormal(i)));</div>
-<div class="line"><a name="l00338"></a><span class="lineno">  338</span>&#160;                            assert(newNormal(i) &lt;= Number(limit));</div>
-<div class="line"><a name="l00339"></a><span class="lineno">  339</span>&#160;                        }</div>
-<div class="line"><a name="l00340"></a><span class="lineno">  340</span>&#160;                        mHPlanes.at(planeIndex).setNormal(newNormal);</div>
-<div class="line"><a name="l00341"></a><span class="lineno">  341</span>&#160;                        Number newOffset = mHPlanes.at(planeIndex).offset();</div>
-<div class="line"><a name="l00342"></a><span class="lineno">  342</span>&#160;                        newOffset = carl::ceil(Number((newOffset/largest)*Number(limit)));</div>
-<div class="line"><a name="l00343"></a><span class="lineno">  343</span>&#160;                        <span class="keywordflow">for</span>(<span class="keyword">const</span> <span class="keyword">auto</span>&amp; vertex : originalVertices) {</div>
-<div class="line"><a name="l00344"></a><span class="lineno">  344</span>&#160;                            Number tmp = newNormal.dot(vertex.rawCoordinates());</div>
-<div class="line"><a name="l00345"></a><span class="lineno">  345</span>&#160;                            <span class="keywordflow">if</span>(tmp &gt; newOffset){</div>
-<div class="line"><a name="l00346"></a><span class="lineno">  346</span>&#160;                                newOffset = newOffset + (tmp-newOffset);</div>
-<div class="line"><a name="l00347"></a><span class="lineno">  347</span>&#160;                                assert(newNormal.dot(vertex.rawCoordinates()) &lt;= newOffset);</div>
-<div class="line"><a name="l00348"></a><span class="lineno">  348</span>&#160;                            }</div>
-<div class="line"><a name="l00349"></a><span class="lineno">  349</span>&#160;                            assert(Halfspace&lt;Number&gt;(newNormal,newOffset).contains(vertex));</div>
-<div class="line"><a name="l00350"></a><span class="lineno">  350</span>&#160;                        }</div>
-<div class="line"><a name="l00351"></a><span class="lineno">  351</span>&#160;                        newOffset = carl::ceil(newOffset);</div>
-<div class="line"><a name="l00352"></a><span class="lineno">  352</span>&#160;<span class="preprocessor">                        #ifdef HPOLY_DEBUG_MSG</span></div>
-<div class="line"><a name="l00353"></a><span class="lineno">  353</span>&#160;<span class="preprocessor"></span>                        std::cout &lt;&lt; <span class="stringliteral">&quot;Reduced to &quot;</span> &lt;&lt; convert&lt;Number,double&gt;(newNormal).transpose() &lt;&lt; <span class="stringliteral">&quot; &lt;= &quot;</span> &lt;&lt; carl::toDouble(newOffset) &lt;&lt; std::endl;</div>
-<div class="line"><a name="l00354"></a><span class="lineno">  354</span>&#160;<span class="preprocessor">                        #endif</span></div>
-<div class="line"><a name="l00355"></a><span class="lineno">  355</span>&#160;<span class="preprocessor"></span>                        mHPlanes.at(planeIndex).setOffset(newOffset);</div>
-<div class="line"><a name="l00356"></a><span class="lineno">  356</span>&#160;                    }</div>
-<div class="line"><a name="l00357"></a><span class="lineno">  357</span>&#160;<span class="preprocessor">                    #ifdef HPOLY_DEBUG_MSG</span></div>
-<div class="line"><a name="l00358"></a><span class="lineno">  358</span>&#160;<span class="preprocessor"></span>                    std::cout &lt;&lt; <span class="stringliteral">&quot;Reduced: &quot;</span> &lt;&lt; mHPlanes.at(planeIndex) &lt;&lt; std::endl;</div>
-<div class="line"><a name="l00359"></a><span class="lineno">  359</span>&#160;<span class="preprocessor">                    #endif</span></div>
-<div class="line"><a name="l00360"></a><span class="lineno">  360</span>&#160;<span class="preprocessor"></span>                }</div>
-<div class="line"><a name="l00361"></a><span class="lineno">  361</span>&#160;<span class="preprocessor">                #ifdef HPOLY_DEBUG_MSG</span></div>
-<div class="line"><a name="l00362"></a><span class="lineno">  362</span>&#160;<span class="preprocessor"></span>                <span class="comment">//std::cout &lt;&lt; &quot;After Reduction: &quot; &lt;&lt; *this &lt;&lt; std::endl;</span></div>
-<div class="line"><a name="l00363"></a><span class="lineno">  363</span>&#160;<span class="preprocessor">                #endif</span></div>
-<div class="line"><a name="l00364"></a><span class="lineno">  364</span>&#160;<span class="preprocessor"></span>            }   </div>
-<div class="line"><a name="l00365"></a><span class="lineno">  365</span>&#160;        }</div>
-<div class="line"><a name="l00366"></a><span class="lineno">  366</span>&#160;        <span class="comment">//#endif</span></div>
-<div class="line"><a name="l00367"></a><span class="lineno">  367</span>&#160;    }</div>
-<div class="line"><a name="l00368"></a><span class="lineno">  368</span>&#160;</div>
-<div class="line"><a name="l00369"></a><span class="lineno">  369</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> N = Number, carl::EnableIf&lt; std::is_same&lt;N, <span class="keywordtype">double</span>&gt; &gt; = carl::dummy&gt;</div>
-<div class="line"><a name="l00370"></a><span class="lineno">  370</span>&#160;    <span class="keywordtype">void</span> reduceNumberRepresentation(<span class="keyword">const</span> std::vector&lt;Point&lt;double&gt;&gt;&amp; = std::vector&lt;Point&lt;double&gt;&gt;(), <span class="keywordtype">unsigned</span> = fReach_DENOMINATOR)<span class="keyword"> const </span>{}</div>
-<div class="line"><a name="l00371"></a><span class="lineno">  371</span>&#160;</div>
-<div class="line"><a name="l00372"></a><span class="lineno">  372</span>&#160;  <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00373"></a><span class="lineno">  373</span>&#160;    <span class="comment">/*</span></div>
-<div class="line"><a name="l00374"></a><span class="lineno">  374</span>&#160;<span class="comment">     * Auxiliary functions</span></div>
-<div class="line"><a name="l00375"></a><span class="lineno">  375</span>&#160;<span class="comment">     */</span></div>
-<div class="line"><a name="l00376"></a><span class="lineno">  376</span>&#160;</div>
-<div class="line"><a name="l00377"></a><span class="lineno">  377</span>&#160;    <span class="comment">//void calculateFan() const;</span></div>
-<div class="line"><a name="l00378"></a><span class="lineno">  378</span>&#160;</div>
-<div class="line"><a name="l00379"></a><span class="lineno">  379</span>&#160;    <span class="comment">/*</span></div>
-<div class="line"><a name="l00380"></a><span class="lineno">  380</span>&#160;<span class="comment">     * Computes a set of constraints that correpsonds to the convex hull of the points</span></div>
-<div class="line"><a name="l00381"></a><span class="lineno">  381</span>&#160;<span class="comment">     * @param points The set of points. Note that auxilarry points might be added to this vector.</span></div>
-<div class="line"><a name="l00382"></a><span class="lineno">  382</span>&#160;<span class="comment">     * @param degeneratedDimensions the number of dimensions in which the convex hull of the points is degenerated, i.e., spaceDimension - effectiveDimension</span></div>
-<div class="line"><a name="l00383"></a><span class="lineno">  383</span>&#160;<span class="comment">     */</span></div>
-<div class="line"><a name="l00384"></a><span class="lineno">  384</span>&#160;    HalfspaceVector computeConstraintsForDegeneratedPolytope(std::vector&lt;Point&lt;Number&gt;&gt;&amp; points, <span class="keywordtype">unsigned</span> degeneratedDimensions) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00385"></a><span class="lineno">  385</span>&#160;</div>
-<div class="line"><a name="l00386"></a><span class="lineno">  386</span>&#160;    std::vector&lt;std::vector&lt;unsigned&gt;&gt; getMembersOfVertices(std::vector&lt;Point&lt;Number&gt;&gt; <a class="code" href="classhypro_1_1HPolytopeT.html#a6ee070b0531864a636d2c609eb622f34">vertices</a>) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00387"></a><span class="lineno">  387</span>&#160;    std::vector&lt;unsigned&gt; getNeighborsOfIndex(<span class="keywordtype">unsigned</span> facet, std::vector&lt;std::vector&lt;unsigned&gt;&gt; membersOfvertices) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00388"></a><span class="lineno">  388</span>&#160;</div>
-<div class="line"><a name="l00389"></a><span class="lineno">  389</span>&#160;    std::vector&lt;Point&lt;Number&gt;&gt; getVerticesOfIndex(<span class="keywordtype">unsigned</span> a, std::vector&lt;Point&lt;Number&gt;&gt; <a class="code" href="classhypro_1_1HPolytopeT.html#a6ee070b0531864a636d2c609eb622f34">vertices</a>, std::vector&lt;std::vector&lt;unsigned&gt;&gt; membersOfvertices) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00390"></a><span class="lineno">  390</span>&#160;    std::vector&lt;Point&lt;Number&gt;&gt; getVerticesOf2Indices(<span class="keywordtype">unsigned</span> a, <span class="keywordtype">unsigned</span> b, std::vector&lt;Point&lt;Number&gt;&gt; <a class="code" href="classhypro_1_1HPolytopeT.html#a6ee070b0531864a636d2c609eb622f34">vertices</a>, std::vector&lt;std::vector&lt;unsigned&gt;&gt; membersOfvertices) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00391"></a><span class="lineno">  391</span>&#160;    std::vector&lt;Point&lt;Number&gt;&gt; getVerticesOf2IndicesAround(<span class="keywordtype">unsigned</span> a, <span class="keywordtype">unsigned</span> b, std::vector&lt;Point&lt;Number&gt;&gt; <a class="code" href="classhypro_1_1HPolytopeT.html#a6ee070b0531864a636d2c609eb622f34">vertices</a>, std::vector&lt;std::vector&lt;unsigned&gt;&gt; membersOfvertices) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00392"></a><span class="lineno">  392</span>&#160;    std::vector&lt;std::vector&lt;vector_t&lt;Number&gt;&gt;&gt; getVerticesPermutationForFacet(<span class="keywordtype">unsigned</span> a, <span class="keywordtype">unsigned</span> b, std::vector&lt;Point&lt;Number&gt;&gt; <a class="code" href="classhypro_1_1HPolytopeT.html#a6ee070b0531864a636d2c609eb622f34">vertices</a>) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00393"></a><span class="lineno">  393</span>&#160;</div>
-<div class="line"><a name="l00394"></a><span class="lineno">  394</span>&#160;    vector_t&lt;Number&gt; computeNormal(std::vector&lt;vector_t&lt;Number&gt;&gt; <a class="code" href="classhypro_1_1HPolytopeT.html#a6ee070b0531864a636d2c609eb622f34">vertices</a>, vector_t&lt;Number&gt; check) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00395"></a><span class="lineno">  395</span>&#160;</div>
-<div class="line"><a name="l00396"></a><span class="lineno">  396</span>&#160;    Point&lt;Number&gt; getVertexForVector(vector_t&lt;Number&gt; <a class="code" href="classhypro_1_1HPolytopeT.html#a8357a1566fbf7570a941816ac63ef8d5">vector</a>, std::vector&lt;Point&lt;Number&gt;&gt; <a class="code" href="classhypro_1_1HPolytopeT.html#a6ee070b0531864a636d2c609eb622f34">vertices</a>) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00397"></a><span class="lineno">  397</span>&#160;</div>
-<div class="line"><a name="l00404"></a><span class="lineno">  404</span>&#160;    <span class="keywordtype">void</span> insertEmptyDimensions(<span class="keyword">const</span> std::vector&lt;std::size_t&gt;&amp; existingDimensions, <span class="keyword">const</span> std::vector&lt;std::size_t&gt;&amp; newDimensions);</div>
-<div class="line"><a name="l00405"></a><span class="lineno">  405</span>&#160;</div>
-<div class="line"><a name="l00406"></a><span class="lineno">  406</span>&#160;};</div>
-<div class="line"><a name="l00409"></a><span class="lineno">  409</span>&#160;<span class="keyword">template</span>&lt;<span class="keyword">typename</span> From, <span class="keyword">typename</span> To, <span class="keyword">typename</span> Converter, <span class="keyword">class</span> Setting&gt;</div>
-<div class="line"><a name="l00410"></a><span class="lineno">  410</span>&#160;HPolytopeT&lt;To,Converter,Setting&gt; <a class="code" href="namespacehypro.html#a430a74d1edbcc624d5e03c4ec111c24c">convert</a>(<span class="keyword">const</span> HPolytopeT&lt;From,Converter,Setting&gt;&amp; in) {</div>
-<div class="line"><a name="l00411"></a><span class="lineno">  411</span>&#160;    <span class="keywordflow">return</span> HPolytopeT&lt;To,Converter,Setting&gt;(convert&lt;From,To&gt;(in.matrix()), convert&lt;From,To&gt;(in.vector()));</div>
-<div class="line"><a name="l00412"></a><span class="lineno">  412</span>&#160;}</div>
-<div class="line"><a name="l00413"></a><span class="lineno">  413</span>&#160;</div>
-<div class="line"><a name="l00414"></a><span class="lineno">  414</span>&#160;}  <span class="comment">// namespace hypro</span></div>
-<div class="line"><a name="l00415"></a><span class="lineno">  415</span>&#160;</div>
-<div class="line"><a name="l00416"></a><span class="lineno">  416</span>&#160;<span class="preprocessor">#include &quot;HPolytope.tpp&quot;</span></div>
-<div class="line"><a name="l00417"></a><span class="lineno">  417</span>&#160;<span class="preprocessor">#include &quot;reduction.tpp&quot;</span></div>
-<div class="line"><a name="l00418"></a><span class="lineno">  418</span>&#160;</div>
+<div class="line"><a name="l00255"></a><span class="lineno"><a class="line" href="classhypro_1_1HPolytopeT.html#aeef914a9d3a93dce001141eb8b1a76f2">  255</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhypro_1_1HPolytopeT.html#aeef914a9d3a93dce001141eb8b1a76f2">reduceRepresentation</a>() { reduceNumberRepresentation(); removeRedundancy(); }</div>
+<div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160;</div>
+<div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160;    <span class="keywordtype">void</span> clear();</div>
+<div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160;    <span class="keywordtype">void</span> print() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160;</div>
+<div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160;    <span class="comment">/*</span></div>
+<div class="line"><a name="l00261"></a><span class="lineno">  261</span>&#160;<span class="comment">     * Operators</span></div>
+<div class="line"><a name="l00262"></a><span class="lineno">  262</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00263"></a><span class="lineno">  263</span>&#160;    <a class="code" href="classhypro_1_1HPolytopeT.html">HPolytopeT</a>&amp; operator=( <span class="keyword">const</span> <a class="code" href="classhypro_1_1HPolytopeT.html">HPolytopeT&lt;Number,Converter,Setting&gt;</a>&amp; rhs ) = <span class="keywordflow">default</span>;</div>
+<div class="line"><a name="l00264"></a><span class="lineno">  264</span>&#160;</div>
+<div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160;<span class="preprocessor">#ifdef HYPRO_LOGGING</span></div>
+<div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160;<span class="preprocessor"></span>    <span class="keyword">friend</span> std::ostream&amp; operator&lt;&lt;( std::ostream&amp; lhs, const HPolytopeT&lt;Number,Converter,Setting&gt;&amp; rhs ) {</div>
+<div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160;        <span class="keywordflow">if</span> ( rhs.constraints().size() &gt; 0 ) {</div>
+<div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160;            lhs &lt;&lt; <span class="stringliteral">&quot;[ &quot;</span>;</div>
+<div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160;            <span class="keywordflow">for</span> ( <span class="keywordtype">unsigned</span> i = 0; i &lt; rhs.constraints().size() - 1; ++i ) {</div>
+<div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160;                lhs &lt;&lt; convert&lt;Number,double&gt;(rhs.constraints()[i]) &lt;&lt; <span class="stringliteral">&quot;,&quot;</span> &lt;&lt; std::endl;</div>
+<div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160;            }</div>
+<div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160;            lhs &lt;&lt; convert&lt;Number,double&gt;(rhs.constraints()[rhs.constraints().size() - 1]) &lt;&lt; <span class="stringliteral">&quot; ]&quot;</span>;</div>
+<div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160;        }</div>
+<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;<span class="preprocessor">#else</span></div>
+<div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;<span class="preprocessor"></span>    <span class="keyword">friend</span> std::ostream&amp; operator&lt;&lt;( std::ostream&amp; lhs, const HPolytopeT&lt;Number,Converter,Setting&gt;&amp; ) {</div>
+<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;<span class="preprocessor"></span>        <span class="keywordflow">return</span> lhs;</div>
+<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;    }</div>
+<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;</div>
+<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;    <span class="keywordtype">bool</span> operator==(<span class="keyword">const</span> HPolytopeT&lt;Number,Converter,Setting&gt;&amp; rhs)<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;        <span class="keywordflow">if</span>(this-&gt;<a class="code" href="classhypro_1_1HPolytopeT.html#a55b9f25b978d0fcf9bfdeb5f9f5e3c02">dimension</a>() != rhs.dimension()) {</div>
+<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;            <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160;        }</div>
+<div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160;</div>
+<div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160;        <span class="keywordflow">return</span> this-&gt;constraints() == rhs.constraints();</div>
+<div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160;    }</div>
+<div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;</div>
+<div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160;    <span class="keyword">friend</span> <span class="keywordtype">void</span> swap( HPolytopeT&lt;Number,Converter,Setting&gt;&amp; a, HPolytopeT&lt;Number,Converter,Setting&gt;&amp; b ) {</div>
+<div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160;        std::size_t tmpDim = a.mDimension;</div>
+<div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160;        a.mDimension = b.mDimension;</div>
+<div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160;        b.mDimension = tmpDim;</div>
+<div class="line"><a name="l00292"></a><span class="lineno">  292</span>&#160;        swap( a.mHPlanes, b.mHPlanes );</div>
+<div class="line"><a name="l00293"></a><span class="lineno">  293</span>&#160;    }</div>
+<div class="line"><a name="l00294"></a><span class="lineno">  294</span>&#160;</div>
+<div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> N = Number, carl::DisableIf&lt; std::is_same&lt;N, <span class="keywordtype">double</span>&gt; &gt; = carl::dummy&gt;</div>
+<div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160;    <span class="keywordtype">void</span> reduceNumberRepresentation(<span class="keyword">const</span> std::vector&lt;Point&lt;Number&gt;&gt;&amp; _vertices = std::vector&lt;Point&lt;Number&gt;&gt;(), <span class="keywordtype">unsigned</span> limit = fReach_DENOMINATOR)<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00297"></a><span class="lineno">  297</span>&#160;        <span class="comment">//#ifdef REDUCE_NUMBERS</span></div>
+<div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160;        <span class="keywordflow">if</span>(Setting::REDUCE_NUMBERS == <span class="keyword">true</span>){</div>
+<div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;            TRACE(<span class="stringliteral">&quot;hypro.hPolytope&quot;</span>,<span class="stringliteral">&quot;Attempt to reduce numbers.&quot;</span>);</div>
+<div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160;            std::vector&lt;Point&lt;Number&gt;&gt; originalVertices;</div>
+<div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160;            <span class="keywordflow">if</span>(_vertices.empty()) {</div>
+<div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160;                TRACE(<span class="stringliteral">&quot;hypro.hPolytope&quot;</span>,<span class="stringliteral">&quot;No passed vertices, computed vertices.&quot;</span>);</div>
+<div class="line"><a name="l00303"></a><span class="lineno">  303</span>&#160;                originalVertices = this-&gt;<a class="code" href="classhypro_1_1HPolytopeT.html#a6ee070b0531864a636d2c609eb622f34">vertices</a>();</div>
+<div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160;            } <span class="keywordflow">else</span> {</div>
+<div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160;                TRACE(<span class="stringliteral">&quot;hypro.hPolytope&quot;</span>,<span class="stringliteral">&quot;Use passed vertices.&quot;</span>);</div>
+<div class="line"><a name="l00306"></a><span class="lineno">  306</span>&#160;                originalVertices = _vertices;</div>
+<div class="line"><a name="l00307"></a><span class="lineno">  307</span>&#160;            }</div>
+<div class="line"><a name="l00308"></a><span class="lineno">  308</span>&#160;            TRACE(<span class="stringliteral">&quot;hypro.hPolytope&quot;</span>,<span class="stringliteral">&quot;Vertices empty: &quot;</span> &lt;&lt; originalVertices.empty());</div>
+<div class="line"><a name="l00309"></a><span class="lineno">  309</span>&#160;</div>
+<div class="line"><a name="l00310"></a><span class="lineno">  310</span>&#160;            <span class="keywordflow">if</span>(!this-&gt;<a class="code" href="classhypro_1_1HPolytopeT.html#a02fe5979e648749f89bc595be9a3f7be">empty</a>()){</div>
+<div class="line"><a name="l00311"></a><span class="lineno">  311</span>&#160;                <span class="comment">// normal reduction</span></div>
+<div class="line"><a name="l00312"></a><span class="lineno">  312</span>&#160;                <span class="keywordflow">for</span>(<span class="keywordtype">unsigned</span> planeIndex = 0; planeIndex &lt; mHPlanes.size(); ++planeIndex){</div>
+<div class="line"><a name="l00313"></a><span class="lineno">  313</span>&#160;<span class="preprocessor">                    #ifdef HPOLY_DEBUG_MSG</span></div>
+<div class="line"><a name="l00314"></a><span class="lineno">  314</span>&#160;<span class="preprocessor"></span>                    std::cout &lt;&lt; <span class="stringliteral">&quot;Original: &quot;</span> &lt;&lt; mHPlanes.at(planeIndex) &lt;&lt; std::endl;</div>
+<div class="line"><a name="l00315"></a><span class="lineno">  315</span>&#160;<span class="preprocessor">                    #endif</span></div>
+<div class="line"><a name="l00316"></a><span class="lineno">  316</span>&#160;<span class="preprocessor"></span>                    <span class="comment">// find maximal value</span></div>
+<div class="line"><a name="l00317"></a><span class="lineno">  317</span>&#160;                    Number largest = Number(0);</div>
+<div class="line"><a name="l00318"></a><span class="lineno">  318</span>&#160;                    mHPlanes.at(planeIndex).makeInteger();</div>
+<div class="line"><a name="l00319"></a><span class="lineno">  319</span>&#160;<span class="preprocessor">                    #ifdef HPOLY_DEBUG_MSG</span></div>
+<div class="line"><a name="l00320"></a><span class="lineno">  320</span>&#160;<span class="preprocessor"></span>                    std::cout &lt;&lt; <span class="stringliteral">&quot;As Integer: &quot;</span> &lt;&lt; mHPlanes.at(planeIndex) &lt;&lt; std::endl;</div>
+<div class="line"><a name="l00321"></a><span class="lineno">  321</span>&#160;<span class="preprocessor">                    #endif</span></div>
+<div class="line"><a name="l00322"></a><span class="lineno">  322</span>&#160;<span class="preprocessor"></span>                    largest = carl::abs(mHPlanes.at(planeIndex).offset());</div>
+<div class="line"><a name="l00323"></a><span class="lineno">  323</span>&#160;                    <span class="keywordflow">for</span>(<span class="keywordtype">unsigned</span> i = 0; i &lt; mDimension; ++i){</div>
+<div class="line"><a name="l00324"></a><span class="lineno">  324</span>&#160;                        <span class="keywordflow">if</span>(carl::abs(mHPlanes.at(planeIndex).normal()(i)) &gt; largest){</div>
+<div class="line"><a name="l00325"></a><span class="lineno">  325</span>&#160;                            largest = carl::abs(mHPlanes.at(planeIndex).normal()(i));</div>
+<div class="line"><a name="l00326"></a><span class="lineno">  326</span>&#160;                        }</div>
+<div class="line"><a name="l00327"></a><span class="lineno">  327</span>&#160;                    }</div>
+<div class="line"><a name="l00328"></a><span class="lineno">  328</span>&#160;</div>
+<div class="line"><a name="l00329"></a><span class="lineno">  329</span>&#160;                    <span class="comment">// reduce, if reduction is required</span></div>
+<div class="line"><a name="l00330"></a><span class="lineno">  330</span>&#160;                    <span class="keywordflow">if</span>(largest &gt; (limit*limit)) {</div>
+<div class="line"><a name="l00331"></a><span class="lineno">  331</span>&#160;<span class="preprocessor">                        #ifdef HPOLY_DEBUG_MSG</span></div>
+<div class="line"><a name="l00332"></a><span class="lineno">  332</span>&#160;<span class="preprocessor"></span>                        std::cout &lt;&lt; <span class="stringliteral">&quot;Actual reduction&quot;</span> &lt;&lt; std::endl;</div>
+<div class="line"><a name="l00333"></a><span class="lineno">  333</span>&#160;<span class="preprocessor">                        #endif</span></div>
+<div class="line"><a name="l00334"></a><span class="lineno">  334</span>&#160;<span class="preprocessor"></span>                        vector_t&lt;Number&gt; newNormal(mDimension);</div>
+<div class="line"><a name="l00335"></a><span class="lineno">  335</span>&#160;                        <span class="keywordflow">for</span>(<span class="keywordtype">unsigned</span> i = 0; i &lt; mDimension; ++i){</div>
+<div class="line"><a name="l00336"></a><span class="lineno">  336</span>&#160;                            newNormal(i) = carl::floor(Number((mHPlanes.at(planeIndex).normal()(i)/largest)*Number(limit)));</div>
+<div class="line"><a name="l00337"></a><span class="lineno">  337</span>&#160;                            assert(carl::abs(Number(mHPlanes.at(planeIndex).normal()(i)/largest)) &lt;= Number(1));</div>
+<div class="line"><a name="l00338"></a><span class="lineno">  338</span>&#160;                            assert(carl::isInteger(newNormal(i)));</div>
+<div class="line"><a name="l00339"></a><span class="lineno">  339</span>&#160;                            assert(newNormal(i) &lt;= Number(limit));</div>
+<div class="line"><a name="l00340"></a><span class="lineno">  340</span>&#160;                        }</div>
+<div class="line"><a name="l00341"></a><span class="lineno">  341</span>&#160;                        mHPlanes.at(planeIndex).setNormal(newNormal);</div>
+<div class="line"><a name="l00342"></a><span class="lineno">  342</span>&#160;                        Number newOffset = mHPlanes.at(planeIndex).offset();</div>
+<div class="line"><a name="l00343"></a><span class="lineno">  343</span>&#160;                        newOffset = carl::ceil(Number((newOffset/largest)*Number(limit)));</div>
+<div class="line"><a name="l00344"></a><span class="lineno">  344</span>&#160;                        <span class="keywordflow">for</span>(<span class="keyword">const</span> <span class="keyword">auto</span>&amp; vertex : originalVertices) {</div>
+<div class="line"><a name="l00345"></a><span class="lineno">  345</span>&#160;                            Number tmp = newNormal.dot(vertex.rawCoordinates());</div>
+<div class="line"><a name="l00346"></a><span class="lineno">  346</span>&#160;                            <span class="keywordflow">if</span>(tmp &gt; newOffset){</div>
+<div class="line"><a name="l00347"></a><span class="lineno">  347</span>&#160;                                newOffset = newOffset + (tmp-newOffset);</div>
+<div class="line"><a name="l00348"></a><span class="lineno">  348</span>&#160;                                assert(newNormal.dot(vertex.rawCoordinates()) &lt;= newOffset);</div>
+<div class="line"><a name="l00349"></a><span class="lineno">  349</span>&#160;                            }</div>
+<div class="line"><a name="l00350"></a><span class="lineno">  350</span>&#160;                            assert(Halfspace&lt;Number&gt;(newNormal,newOffset).contains(vertex));</div>
+<div class="line"><a name="l00351"></a><span class="lineno">  351</span>&#160;                        }</div>
+<div class="line"><a name="l00352"></a><span class="lineno">  352</span>&#160;                        newOffset = carl::ceil(newOffset);</div>
+<div class="line"><a name="l00353"></a><span class="lineno">  353</span>&#160;<span class="preprocessor">                        #ifdef HPOLY_DEBUG_MSG</span></div>
+<div class="line"><a name="l00354"></a><span class="lineno">  354</span>&#160;<span class="preprocessor"></span>                        std::cout &lt;&lt; <span class="stringliteral">&quot;Reduced to &quot;</span> &lt;&lt; convert&lt;Number,double&gt;(newNormal).transpose() &lt;&lt; <span class="stringliteral">&quot; &lt;= &quot;</span> &lt;&lt; carl::toDouble(newOffset) &lt;&lt; std::endl;</div>
+<div class="line"><a name="l00355"></a><span class="lineno">  355</span>&#160;<span class="preprocessor">                        #endif</span></div>
+<div class="line"><a name="l00356"></a><span class="lineno">  356</span>&#160;<span class="preprocessor"></span>                        mHPlanes.at(planeIndex).setOffset(newOffset);</div>
+<div class="line"><a name="l00357"></a><span class="lineno">  357</span>&#160;                    }</div>
+<div class="line"><a name="l00358"></a><span class="lineno">  358</span>&#160;<span class="preprocessor">                    #ifdef HPOLY_DEBUG_MSG</span></div>
+<div class="line"><a name="l00359"></a><span class="lineno">  359</span>&#160;<span class="preprocessor"></span>                    std::cout &lt;&lt; <span class="stringliteral">&quot;Reduced: &quot;</span> &lt;&lt; mHPlanes.at(planeIndex) &lt;&lt; std::endl;</div>
+<div class="line"><a name="l00360"></a><span class="lineno">  360</span>&#160;<span class="preprocessor">                    #endif</span></div>
+<div class="line"><a name="l00361"></a><span class="lineno">  361</span>&#160;<span class="preprocessor"></span>                }</div>
+<div class="line"><a name="l00362"></a><span class="lineno">  362</span>&#160;<span class="preprocessor">                #ifdef HPOLY_DEBUG_MSG</span></div>
+<div class="line"><a name="l00363"></a><span class="lineno">  363</span>&#160;<span class="preprocessor"></span>                <span class="comment">//std::cout &lt;&lt; &quot;After Reduction: &quot; &lt;&lt; *this &lt;&lt; std::endl;</span></div>
+<div class="line"><a name="l00364"></a><span class="lineno">  364</span>&#160;<span class="preprocessor">                #endif</span></div>
+<div class="line"><a name="l00365"></a><span class="lineno">  365</span>&#160;<span class="preprocessor"></span>            }</div>
+<div class="line"><a name="l00366"></a><span class="lineno">  366</span>&#160;        }</div>
+<div class="line"><a name="l00367"></a><span class="lineno">  367</span>&#160;        <span class="comment">//#endif</span></div>
+<div class="line"><a name="l00368"></a><span class="lineno">  368</span>&#160;    }</div>
+<div class="line"><a name="l00369"></a><span class="lineno">  369</span>&#160;</div>
+<div class="line"><a name="l00370"></a><span class="lineno">  370</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> N = Number, carl::EnableIf&lt; std::is_same&lt;N, <span class="keywordtype">double</span>&gt; &gt; = carl::dummy&gt;</div>
+<div class="line"><a name="l00371"></a><span class="lineno">  371</span>&#160;    <span class="keywordtype">void</span> reduceNumberRepresentation(<span class="keyword">const</span> std::vector&lt;Point&lt;double&gt;&gt;&amp; = std::vector&lt;Point&lt;double&gt;&gt;(), <span class="keywordtype">unsigned</span> = fReach_DENOMINATOR)<span class="keyword"> const </span>{}</div>
+<div class="line"><a name="l00372"></a><span class="lineno">  372</span>&#160;</div>
+<div class="line"><a name="l00373"></a><span class="lineno">  373</span>&#160;  <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00374"></a><span class="lineno">  374</span>&#160;    <span class="comment">/*</span></div>
+<div class="line"><a name="l00375"></a><span class="lineno">  375</span>&#160;<span class="comment">     * Auxiliary functions</span></div>
+<div class="line"><a name="l00376"></a><span class="lineno">  376</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00377"></a><span class="lineno">  377</span>&#160;</div>
+<div class="line"><a name="l00378"></a><span class="lineno">  378</span>&#160;    <span class="comment">//void calculateFan() const;</span></div>
+<div class="line"><a name="l00379"></a><span class="lineno">  379</span>&#160;</div>
+<div class="line"><a name="l00380"></a><span class="lineno">  380</span>&#160;    <span class="comment">/*</span></div>
+<div class="line"><a name="l00381"></a><span class="lineno">  381</span>&#160;<span class="comment">     * Computes a set of constraints that correpsonds to the convex hull of the points</span></div>
+<div class="line"><a name="l00382"></a><span class="lineno">  382</span>&#160;<span class="comment">     * @param points The set of points. Note that auxilarry points might be added to this vector.</span></div>
+<div class="line"><a name="l00383"></a><span class="lineno">  383</span>&#160;<span class="comment">     * @param degeneratedDimensions the number of dimensions in which the convex hull of the points is degenerated, i.e., spaceDimension - effectiveDimension</span></div>
+<div class="line"><a name="l00384"></a><span class="lineno">  384</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00385"></a><span class="lineno">  385</span>&#160;    HalfspaceVector computeConstraintsForDegeneratedPolytope(std::vector&lt;Point&lt;Number&gt;&gt;&amp; points, <span class="keywordtype">unsigned</span> degeneratedDimensions) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00386"></a><span class="lineno">  386</span>&#160;</div>
+<div class="line"><a name="l00387"></a><span class="lineno">  387</span>&#160;    std::vector&lt;std::vector&lt;unsigned&gt;&gt; getMembersOfVertices(std::vector&lt;Point&lt;Number&gt;&gt; <a class="code" href="classhypro_1_1HPolytopeT.html#a6ee070b0531864a636d2c609eb622f34">vertices</a>) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00388"></a><span class="lineno">  388</span>&#160;    std::vector&lt;unsigned&gt; getNeighborsOfIndex(<span class="keywordtype">unsigned</span> facet, std::vector&lt;std::vector&lt;unsigned&gt;&gt; membersOfvertices) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00389"></a><span class="lineno">  389</span>&#160;</div>
+<div class="line"><a name="l00390"></a><span class="lineno">  390</span>&#160;    std::vector&lt;Point&lt;Number&gt;&gt; getVerticesOfIndex(<span class="keywordtype">unsigned</span> a, std::vector&lt;Point&lt;Number&gt;&gt; <a class="code" href="classhypro_1_1HPolytopeT.html#a6ee070b0531864a636d2c609eb622f34">vertices</a>, std::vector&lt;std::vector&lt;unsigned&gt;&gt; membersOfvertices) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00391"></a><span class="lineno">  391</span>&#160;    std::vector&lt;Point&lt;Number&gt;&gt; getVerticesOf2Indices(<span class="keywordtype">unsigned</span> a, <span class="keywordtype">unsigned</span> b, std::vector&lt;Point&lt;Number&gt;&gt; <a class="code" href="classhypro_1_1HPolytopeT.html#a6ee070b0531864a636d2c609eb622f34">vertices</a>, std::vector&lt;std::vector&lt;unsigned&gt;&gt; membersOfvertices) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00392"></a><span class="lineno">  392</span>&#160;    std::vector&lt;Point&lt;Number&gt;&gt; getVerticesOf2IndicesAround(<span class="keywordtype">unsigned</span> a, <span class="keywordtype">unsigned</span> b, std::vector&lt;Point&lt;Number&gt;&gt; <a class="code" href="classhypro_1_1HPolytopeT.html#a6ee070b0531864a636d2c609eb622f34">vertices</a>, std::vector&lt;std::vector&lt;unsigned&gt;&gt; membersOfvertices) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00393"></a><span class="lineno">  393</span>&#160;    std::vector&lt;std::vector&lt;vector_t&lt;Number&gt;&gt;&gt; getVerticesPermutationForFacet(<span class="keywordtype">unsigned</span> a, <span class="keywordtype">unsigned</span> b, std::vector&lt;Point&lt;Number&gt;&gt; <a class="code" href="classhypro_1_1HPolytopeT.html#a6ee070b0531864a636d2c609eb622f34">vertices</a>) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00394"></a><span class="lineno">  394</span>&#160;</div>
+<div class="line"><a name="l00395"></a><span class="lineno">  395</span>&#160;    vector_t&lt;Number&gt; computeNormal(std::vector&lt;vector_t&lt;Number&gt;&gt; <a class="code" href="classhypro_1_1HPolytopeT.html#a6ee070b0531864a636d2c609eb622f34">vertices</a>, vector_t&lt;Number&gt; check) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00396"></a><span class="lineno">  396</span>&#160;</div>
+<div class="line"><a name="l00397"></a><span class="lineno">  397</span>&#160;    Point&lt;Number&gt; getVertexForVector(vector_t&lt;Number&gt; <a class="code" href="classhypro_1_1HPolytopeT.html#a8357a1566fbf7570a941816ac63ef8d5">vector</a>, std::vector&lt;Point&lt;Number&gt;&gt; <a class="code" href="classhypro_1_1HPolytopeT.html#a6ee070b0531864a636d2c609eb622f34">vertices</a>) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00398"></a><span class="lineno">  398</span>&#160;</div>
+<div class="line"><a name="l00405"></a><span class="lineno">  405</span>&#160;    <span class="keywordtype">void</span> insertEmptyDimensions(<span class="keyword">const</span> std::vector&lt;std::size_t&gt;&amp; existingDimensions, <span class="keyword">const</span> std::vector&lt;std::size_t&gt;&amp; newDimensions);</div>
+<div class="line"><a name="l00406"></a><span class="lineno">  406</span>&#160;</div>
+<div class="line"><a name="l00407"></a><span class="lineno">  407</span>&#160;};</div>
+<div class="line"><a name="l00410"></a><span class="lineno">  410</span>&#160;<span class="keyword">template</span>&lt;<span class="keyword">typename</span> From, <span class="keyword">typename</span> To, <span class="keyword">typename</span> Converter, <span class="keyword">class</span> Setting&gt;</div>
+<div class="line"><a name="l00411"></a><span class="lineno">  411</span>&#160;HPolytopeT&lt;To,Converter,Setting&gt; <a class="code" href="namespacehypro.html#a430a74d1edbcc624d5e03c4ec111c24c">convert</a>(<span class="keyword">const</span> HPolytopeT&lt;From,Converter,Setting&gt;&amp; in) {</div>
+<div class="line"><a name="l00412"></a><span class="lineno">  412</span>&#160;    <span class="keywordflow">return</span> HPolytopeT&lt;To,Converter,Setting&gt;(convert&lt;From,To&gt;(in.matrix()), convert&lt;From,To&gt;(in.vector()));</div>
+<div class="line"><a name="l00413"></a><span class="lineno">  413</span>&#160;}</div>
+<div class="line"><a name="l00414"></a><span class="lineno">  414</span>&#160;</div>
+<div class="line"><a name="l00415"></a><span class="lineno">  415</span>&#160;}  <span class="comment">// namespace hypro</span></div>
+<div class="line"><a name="l00416"></a><span class="lineno">  416</span>&#160;</div>
+<div class="line"><a name="l00417"></a><span class="lineno">  417</span>&#160;<span class="preprocessor">#include &quot;HPolytope.tpp&quot;</span></div>
+<div class="line"><a name="l00418"></a><span class="lineno">  418</span>&#160;<span class="preprocessor">#include &quot;reduction.tpp&quot;</span></div>
 <div class="line"><a name="l00419"></a><span class="lineno">  419</span>&#160;</div>
+<div class="line"><a name="l00420"></a><span class="lineno">  420</span>&#160;</div>
 <div class="ttc" id="classhypro_1_1HPolytopeT_html_abdb27912b10e4ce3c704840a8a8d8abe"><div class="ttname"><a href="classhypro_1_1HPolytopeT.html#abdb27912b10e4ce3c704840a8a8d8abe">hypro::HPolytopeT::insert</a></div><div class="ttdeci">void insert(const Halfspace&lt; Number &gt; &amp;plane)</div><div class="ttdoc">Inserts an additional bounding halfspace into the polytope. </div></div>
 <div class="ttc" id="classhypro_1_1HPolytopeT_html_ad15b3cae0d5adbde47a4e09afaf57109"><div class="ttname"><a href="classhypro_1_1HPolytopeT.html#ad15b3cae0d5adbde47a4e09afaf57109">hypro::HPolytopeT::size</a></div><div class="ttdeci">std::size_t size() const </div><div class="ttdoc">Getter for the number of constraints. </div></div>
 <div class="ttc" id="namespacehypro_html_aada824f660cac25bb643be870cdc0a86"><div class="ttname"><a href="namespacehypro.html#aada824f660cac25bb643be870cdc0a86">hypro::representation_name</a></div><div class="ttdeci">representation_name</div><div class="ttdoc">Enum encapsulating all provided state set representations to be able to determine a type...</div><div class="ttdef"><b>Definition:</b> <a href="representations_2types_8h_source.html#l00009">types.h:9</a></div></div>
@@ -434,6 +435,7 @@ $(document).ready(function(){initNavTree('HPolytope_8h_source.html','');});
 <div class="ttc" id="classhypro_1_1HPolytopeT_html_a02fe5979e648749f89bc595be9a3f7be"><div class="ttname"><a href="classhypro_1_1HPolytopeT.html#a02fe5979e648749f89bc595be9a3f7be">hypro::HPolytopeT::empty</a></div><div class="ttdeci">bool empty() const </div><div class="ttdoc">Determines, if the polytope is empty. </div></div>
 <div class="ttc" id="classhypro_1_1HPolytopeT_html_ac05f6a189a7860ca437652e345968f85"><div class="ttname"><a href="classhypro_1_1HPolytopeT.html#ac05f6a189a7860ca437652e345968f85">hypro::HPolytopeT::HPolytopeT</a></div><div class="ttdeci">HPolytopeT()</div><div class="ttdoc">Constructor for the universal H-polytope. </div></div>
 <div class="ttc" id="classhypro_1_1HPolytopeT_html_ad9e39624eccf0d080d5a6e04ff5f6e5c"><div class="ttname"><a href="classhypro_1_1HPolytopeT.html#ad9e39624eccf0d080d5a6e04ff5f6e5c">hypro::HPolytopeT::unreduce</a></div><div class="ttdeci">void unreduce() const </div><div class="ttdoc">Resets the information if the current polytope contains redundant constraints. </div><div class="ttdef"><b>Definition:</b> <a href="HPolytope_8h_source.html#l00153">HPolytope.h:153</a></div></div>
+<div class="ttc" id="classhypro_1_1HPolytopeT_html_aeef914a9d3a93dce001141eb8b1a76f2"><div class="ttname"><a href="classhypro_1_1HPolytopeT.html#aeef914a9d3a93dce001141eb8b1a76f2">hypro::HPolytopeT::reduceRepresentation</a></div><div class="ttdeci">void reduceRepresentation()</div><div class="ttdoc">Function called to reduce the representation - implementation is dependent on the actual representati...</div><div class="ttdef"><b>Definition:</b> <a href="HPolytope_8h_source.html#l00255">HPolytope.h:255</a></div></div>
 <div class="ttc" id="namespacehypro_html_aa70b7a97ac898c2b28a2af61f4607e3a"><div class="ttname"><a href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">hypro::vector_t</a></div><div class="ttdeci">Eigen::Matrix&lt; Number, Eigen::Dynamic, 1 &gt; vector_t</div><div class="ttdef"><b>Definition:</b> <a href="types_8h_source.html#l00020">types.h:20</a></div></div>
 <div class="ttc" id="classhypro_1_1HPolytopeT_html_a9f735d35cdb9ebda948ef1b754931212"><div class="ttname"><a href="classhypro_1_1HPolytopeT.html#a9f735d35cdb9ebda948ef1b754931212">hypro::HPolytopeT::linearTransformation</a></div><div class="ttdeci">HPolytopeT linearTransformation(const matrix_t&lt; Number &gt; &amp;A) const </div><div class="ttdoc">Applies a linear transformation with the matrix A to the set. </div></div>
 <div class="ttc" id="classhypro_1_1HPolytopeT_html_a60ad6f7ac31d11816b0951e4d0fe9967"><div class="ttname"><a href="classhypro_1_1HPolytopeT.html#a60ad6f7ac31d11816b0951e4d0fe9967">hypro::HPolytopeT::inequalities</a></div><div class="ttdeci">std::pair&lt; matrix_t&lt; Number &gt;, vector_t&lt; Number &gt; &gt; inequalities() const </div><div class="ttdoc">Getter for the full description of the polytope as a pair of a matrix and a vector. </div></div>

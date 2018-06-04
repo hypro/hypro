@@ -31,7 +31,7 @@
   <td id="projectlogo"><img alt="Logo" src="hypro_Logo.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">HyPro
-   &#160;<span id="projectnumber">18.05</span>
+   &#160;<span id="projectnumber">18.06</span>
    </div>
    <div id="projectbrief">A Toolbox for the Reachability Analysis of Hybrid Systems using Geometric Approximations</div>
   </td>
@@ -167,14 +167,16 @@ $(document).ready(function(){initNavTree('GeometricObject_8h_source.html','');})
 <div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;</div>
 <div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;    <span class="keyword">virtual</span> DerivedShape <a class="code" href="classhypro_1_1GeometricObject.html#a3ed4020101437144b34b62cc01d5bf01">unite</a>( <span class="keyword">const</span> DerivedShape&amp; rhs ) <span class="keyword">const</span> = 0;</div>
 <div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;</div>
-<div class="line"><a name="l00151"></a><span class="lineno"><a class="line" href="classhypro_1_1GeometricObject.html#aeec96cc4ca50fdc639b1ffab4b7b0c69">  151</a></span>&#160;    <span class="keyword">friend</span> std::ostream&amp; operator&lt;&lt;(std::ostream&amp; out, const GeometricObject&lt;Number,DerivedShape&gt;&amp; in){</div>
-<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;        <span class="keywordflow">return</span> out &lt;&lt; static_cast&lt;DerivedShape&gt;(in);</div>
-<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;    }</div>
-<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;};</div>
-<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;</div>
-<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;} <span class="comment">// namespace hypro</span></div>
-<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;</div>
-<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;<span class="preprocessor">#include &quot;conversion/Converter.h&quot;</span></div>
+<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classhypro_1_1GeometricObject.html#a6d5153ab5460051f4a44131136ba082a">reduceRepresentation</a>() = 0;</div>
+<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;</div>
+<div class="line"><a name="l00158"></a><span class="lineno"><a class="line" href="classhypro_1_1GeometricObject.html#aeec96cc4ca50fdc639b1ffab4b7b0c69">  158</a></span>&#160;    <span class="keyword">friend</span> std::ostream&amp; operator&lt;&lt;(std::ostream&amp; out, const GeometricObject&lt;Number,DerivedShape&gt;&amp; in){</div>
+<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;        <span class="keywordflow">return</span> out &lt;&lt; static_cast&lt;DerivedShape&gt;(in);</div>
+<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;    }</div>
+<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;};</div>
+<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;</div>
+<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;} <span class="comment">// namespace hypro</span></div>
+<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;</div>
+<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;<span class="preprocessor">#include &quot;conversion/Converter.h&quot;</span></div>
 <div class="ttc" id="classhypro_1_1GeometricObject_html_aecbf17700fe297f643f401b7ae17dd9c"><div class="ttname"><a href="classhypro_1_1GeometricObject.html#aecbf17700fe297f643f401b7ae17dd9c">hypro::GeometricObject::dimension</a></div><div class="ttdeci">virtual std::size_t dimension() const =0</div><div class="ttdoc">Returns the space dimension of the object. </div></div>
 <div class="ttc" id="classhypro_1_1GeometricObject_html_a3ed4020101437144b34b62cc01d5bf01"><div class="ttname"><a href="classhypro_1_1GeometricObject.html#a3ed4020101437144b34b62cc01d5bf01">hypro::GeometricObject::unite</a></div><div class="ttdeci">virtual DerivedShape unite(const DerivedShape &amp;rhs) const =0</div><div class="ttdoc">Computes the convex hull of the union of the set and the passed set. </div></div>
 <div class="ttc" id="classhypro_1_1GeometricObject_html_a3de514fbb8514689331e65a247a64927"><div class="ttname"><a href="classhypro_1_1GeometricObject.html#a3de514fbb8514689331e65a247a64927">hypro::GeometricObject::empty</a></div><div class="ttdeci">virtual bool empty() const =0</div><div class="ttdoc">Determines, whether the set is empty. </div></div>
@@ -185,6 +187,7 @@ $(document).ready(function(){initNavTree('GeometricObject_8h_source.html','');})
 <div class="ttc" id="classhypro_1_1GeometricObject_html_ae2a85775d748e9a7d9489439f85afd12"><div class="ttname"><a href="classhypro_1_1GeometricObject.html#ae2a85775d748e9a7d9489439f85afd12">hypro::GeometricObject::satisfiesHalfspace</a></div><div class="ttdeci">virtual std::pair&lt; CONTAINMENT, DerivedShape &gt; satisfiesHalfspace(const Halfspace&lt; Number &gt; &amp;rhs) const =0</div><div class="ttdoc">Method combining the intersection of the set with a halfspace and a test for emptiness of the resulti...</div></div>
 <div class="ttc" id="classhypro_1_1GeometricObject_html_a607fb37c2b6a0d9a59ed85d07160392a"><div class="ttname"><a href="classhypro_1_1GeometricObject.html#a607fb37c2b6a0d9a59ed85d07160392a">hypro::GeometricObject::affineTransformation</a></div><div class="ttdeci">virtual DerivedShape affineTransformation(const matrix_t&lt; Number &gt; &amp;A, const vector_t&lt; Number &gt; &amp;b) const =0</div><div class="ttdoc">Applies an affine transformation with the matrix A and the translation vector b to the set...</div></div>
 <div class="ttc" id="classhypro_1_1GeometricObject_html"><div class="ttname"><a href="classhypro_1_1GeometricObject.html">hypro::GeometricObject</a></div><div class="ttdoc">Purely virtual class defining a common interface for geometric objects. </div><div class="ttdef"><b>Definition:</b> <a href="GeometricObject_8h_source.html#l00035">GeometricObject.h:35</a></div></div>
+<div class="ttc" id="classhypro_1_1GeometricObject_html_a6d5153ab5460051f4a44131136ba082a"><div class="ttname"><a href="classhypro_1_1GeometricObject.html#a6d5153ab5460051f4a44131136ba082a">hypro::GeometricObject::reduceRepresentation</a></div><div class="ttdeci">virtual void reduceRepresentation()=0</div><div class="ttdoc">Function called to reduce the representation - implementation is dependent on the actual representati...</div></div>
 <div class="ttc" id="classhypro_1_1Halfspace_html"><div class="ttname"><a href="classhypro_1_1Halfspace.html">hypro::Halfspace</a></div><div class="ttdef"><b>Definition:</b> <a href="Halfspace_8h_source.html#l00023">Halfspace.h:23</a></div></div>
 <div class="ttc" id="classhypro_1_1GeometricObject_html_a44bae859470ea4cb3bc74c16f94b9638"><div class="ttname"><a href="classhypro_1_1GeometricObject.html#a44bae859470ea4cb3bc74c16f94b9638">hypro::GeometricObject::contains</a></div><div class="ttdeci">virtual bool contains(const Point&lt; Number &gt; &amp;point) const =0</div><div class="ttdoc">Checks, whether the set contains the passed point. </div></div>
 <div class="ttc" id="classhypro_1_1GeometricObject_html_a478635198d1f273913e9438b08baa858"><div class="ttname"><a href="classhypro_1_1GeometricObject.html#a478635198d1f273913e9438b08baa858">hypro::GeometricObject::intersectHalfspace</a></div><div class="ttdeci">virtual DerivedShape intersectHalfspace(const Halfspace&lt; Number &gt; &amp;rhs) const =0</div><div class="ttdoc">Computes the intersection of the set with the given halfspace. </div></div>

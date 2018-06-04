@@ -22,6 +22,7 @@ var classhypro_1_1reachability_1_1hypro_1_1ConstraintSetT =
     [ "operator=", "classhypro_1_1reachability_1_1hypro_1_1ConstraintSetT.html#a3278ac461aaf4a4d20c61f3c835ab30a", null ],
     [ "project", "classhypro_1_1reachability_1_1hypro_1_1ConstraintSetT.html#a1b5ad2c2a00fa4b4f400d6aabbc4b925", null ],
     [ "reduceNumberRepresentation", "classhypro_1_1reachability_1_1hypro_1_1ConstraintSetT.html#a8f0facdcf09f343e49510d5afd21191a", null ],
+    [ "reduceRepresentation", "classhypro_1_1reachability_1_1hypro_1_1ConstraintSetT.html#ac348e09f7741ddeebc06edea70c25288", null ],
     [ "removeRedundancy", "classhypro_1_1reachability_1_1hypro_1_1ConstraintSetT.html#a80d5b1bc97daa053b93a938645f80f88", null ],
     [ "rMatrix", "classhypro_1_1reachability_1_1hypro_1_1ConstraintSetT.html#a18b6c54de9b51cd03e423aecff2cc92c", null ],
     [ "rVector", "classhypro_1_1reachability_1_1hypro_1_1ConstraintSetT.html#aac13c1298045af6961bb8dd4841a94e7", null ],
@@ -32,7 +33,7 @@ var classhypro_1_1reachability_1_1hypro_1_1ConstraintSetT =
     [ "vector", "classhypro_1_1reachability_1_1hypro_1_1ConstraintSetT.html#aa989104e77473405dd84c69e28765847", null ],
     [ "vertices", "classhypro_1_1reachability_1_1hypro_1_1ConstraintSetT.html#a1852a15bb6c5e717c176f6e2e3f68298", null ],
     [ "operator!=", "classhypro_1_1reachability_1_1hypro_1_1ConstraintSetT.html#a5616f15bef0ceb159912960a5f3f4499", null ],
-    [ "operator<<", "classhypro_1_1reachability_1_1hypro_1_1ConstraintSetT.html#aa8c7bd561fc89d9e904ac406a1320309", null ],
+    [ "operator<<", "classhypro_1_1reachability_1_1hypro_1_1ConstraintSetT.html#a4eebf8f94bc1d2bfea5caac5cdf1a0cd", null ],
     [ "operator==", "classhypro_1_1reachability_1_1hypro_1_1ConstraintSetT.html#a8028a8af7bbf5335bd61798c605b0b42", null ],
     [ "mConstants", "classhypro_1_1reachability_1_1hypro_1_1ConstraintSetT.html#a8104ae622d217d7adca3974419b63a80", null ],
     [ "mConstraints", "classhypro_1_1reachability_1_1hypro_1_1ConstraintSetT.html#afcaf74345af128c1b54766a8d09a8735", null ]

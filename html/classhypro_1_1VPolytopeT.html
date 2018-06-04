@@ -31,7 +31,7 @@
   <td id="projectlogo"><img alt="Logo" src="hypro_Logo.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">HyPro
-   &#160;<span id="projectnumber">18.05</span>
+   &#160;<span id="projectnumber">18.06</span>
    </div>
    <div id="projectbrief">A Toolbox for the Reachability Analysis of Hybrid Systems using Geometric Approximations</div>
   </td>
@@ -199,6 +199,10 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>contains</b> (const <
 <tr class="memitem:a1121ee3ad173f9ed6c0be6b282c7622d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1121ee3ad173f9ed6c0be6b282c7622d"></a>
 <a class="el" href="classhypro_1_1VPolytopeT.html">VPolytopeT</a>&#160;</td><td class="memItemRight" valign="bottom"><b>unite</b> (const <a class="el" href="classhypro_1_1VPolytopeT.html">VPolytopeT</a> &amp;rhs) const </td></tr>
 <tr class="separator:a1121ee3ad173f9ed6c0be6b282c7622d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8e485ccd1d7fcd0545b44cb44c4ff79b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8e485ccd1d7fcd0545b44cb44c4ff79b"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1VPolytopeT.html#a8e485ccd1d7fcd0545b44cb44c4ff79b">reduceRepresentation</a> ()</td></tr>
+<tr class="memdesc:a8e485ccd1d7fcd0545b44cb44c4ff79b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reduces the box - only in case rational types are used, the number representation is optimized. <br/></td></tr>
+<tr class="separator:a8e485ccd1d7fcd0545b44cb44c4ff79b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1832593b8e138ab17a5f334e892112ba"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1832593b8e138ab17a5f334e892112ba"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1VPolytopeT.html#a1832593b8e138ab17a5f334e892112ba">clear</a> ()</td></tr>
 <tr class="memdesc:a1832593b8e138ab17a5f334e892112ba"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clears the polytope. <br/></td></tr>
@@ -603,7 +607,7 @@ template&lt;typename Number , typename Converter &gt; </div>
 <p>Returns the cone of this. </p>
 <dl class="section return"><dt>Returns</dt><dd>The cone. </dd></dl>
 
-<p>Definition at line <a class="el" href="VPolytope_8h_source.html#l00202">202</a> of file <a class="el" href="VPolytope_8h_source.html">VPolytope.h</a>.</p>
+<p>Definition at line <a class="el" href="VPolytope_8h_source.html#l00207">207</a> of file <a class="el" href="VPolytope_8h_source.html">VPolytope.h</a>.</p>
 
 </div>
 </div>
@@ -689,7 +693,7 @@ template&lt;typename Number , typename Converter &gt; </div>
 
 <p>Implements <a class="el" href="classhypro_1_1GeometricObject.html#aecbf17700fe297f643f401b7ae17dd9c">hypro::GeometricObject&lt; Number, VPolytopeT&lt; Number, Converter &gt; &gt;</a>.</p>
 
-<p>Definition at line <a class="el" href="VPolytope_8h_source.html#l00169">169</a> of file <a class="el" href="VPolytope_8h_source.html">VPolytope.h</a>.</p>
+<p>Definition at line <a class="el" href="VPolytope_8h_source.html#l00174">174</a> of file <a class="el" href="VPolytope_8h_source.html">VPolytope.h</a>.</p>
 
 </div>
 </div>
@@ -721,7 +725,7 @@ template&lt;typename Number , typename Converter &gt; </div>
 
 <p>Implements <a class="el" href="classhypro_1_1GeometricObject.html#a3de514fbb8514689331e65a247a64927">hypro::GeometricObject&lt; Number, VPolytopeT&lt; Number, Converter &gt; &gt;</a>.</p>
 
-<p>Definition at line <a class="el" href="VPolytope_8h_source.html#l00157">157</a> of file <a class="el" href="VPolytope_8h_source.html">VPolytope.h</a>.</p>
+<p>Definition at line <a class="el" href="VPolytope_8h_source.html#l00162">162</a> of file <a class="el" href="VPolytope_8h_source.html">VPolytope.h</a>.</p>
 
 </div>
 </div>
@@ -751,7 +755,7 @@ template&lt;typename Number , typename Converter &gt; </div>
 <p>Constructs the empty polytope. </p>
 <dl class="section return"><dt>Returns</dt><dd>The polytope. </dd></dl>
 
-<p>Definition at line <a class="el" href="VPolytope_8h_source.html#l00163">163</a> of file <a class="el" href="VPolytope_8h_source.html">VPolytope.h</a>.</p>
+<p>Definition at line <a class="el" href="VPolytope_8h_source.html#l00168">168</a> of file <a class="el" href="VPolytope_8h_source.html">VPolytope.h</a>.</p>
 
 <p>References <a class="el" href="classhypro_1_1VPolytopeT.html#a786f1613241c12598643c197180b8f44">hypro::VPolytopeT&lt; Number, Converter &gt;::VPolytopeT()</a>.</p>
 
@@ -934,7 +938,7 @@ template&lt;typename Number , typename Converter &gt; </div>
 <p>Returns whether the polytope has been reduced (i.e. the set of vertices is minimal). </p>
 <dl class="section return"><dt>Returns</dt><dd>True, if the set of vertices is minimal. </dd></dl>
 
-<p>Definition at line <a class="el" href="VPolytope_8h_source.html#l00190">190</a> of file <a class="el" href="VPolytope_8h_source.html">VPolytope.h</a>.</p>
+<p>Definition at line <a class="el" href="VPolytope_8h_source.html#l00195">195</a> of file <a class="el" href="VPolytope_8h_source.html">VPolytope.h</a>.</p>
 
 </div>
 </div>
@@ -1019,7 +1023,7 @@ template&lt;typename Number , typename Converter &gt; </div>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="VPolytope_8h_source.html#l00208">208</a> of file <a class="el" href="VPolytope_8h_source.html">VPolytope.h</a>.</p>
+<p>Definition at line <a class="el" href="VPolytope_8h_source.html#l00213">213</a> of file <a class="el" href="VPolytope_8h_source.html">VPolytope.h</a>.</p>
 
 </div>
 </div>
@@ -1049,7 +1053,7 @@ template&lt;typename Number , typename Converter &gt; </div>
 <p>Returns the number of vertices. </p>
 <dl class="section return"><dt>Returns</dt><dd>The number of vertices. </dd></dl>
 
-<p>Definition at line <a class="el" href="VPolytope_8h_source.html#l00178">178</a> of file <a class="el" href="VPolytope_8h_source.html">VPolytope.h</a>.</p>
+<p>Definition at line <a class="el" href="VPolytope_8h_source.html#l00183">183</a> of file <a class="el" href="VPolytope_8h_source.html">VPolytope.h</a>.</p>
 
 </div>
 </div>
@@ -1099,7 +1103,7 @@ template&lt;typename Number , typename Converter &gt; </div>
 <p>Returns the type. </p>
 <dl class="section return"><dt>Returns</dt><dd>The type. </dd></dl>
 
-<p>Definition at line <a class="el" href="VPolytope_8h_source.html#l00184">184</a> of file <a class="el" href="VPolytope_8h_source.html">VPolytope.h</a>.</p>
+<p>Definition at line <a class="el" href="VPolytope_8h_source.html#l00189">189</a> of file <a class="el" href="VPolytope_8h_source.html">VPolytope.h</a>.</p>
 
 </div>
 </div>
@@ -1167,7 +1171,7 @@ template&lt;typename Number , typename Converter &gt; </div>
 
 <p>Implements <a class="el" href="classhypro_1_1GeometricObject.html#ada1c4dd741b73792ada09f17ac2894c4">hypro::GeometricObject&lt; Number, VPolytopeT&lt; Number, Converter &gt; &gt;</a>.</p>
 
-<p>Definition at line <a class="el" href="VPolytope_8h_source.html#l00271">271</a> of file <a class="el" href="VPolytope_8h_source.html">VPolytope.h</a>.</p>
+<p>Definition at line <a class="el" href="VPolytope_8h_source.html#l00276">276</a> of file <a class="el" href="VPolytope_8h_source.html">VPolytope.h</a>.</p>
 
 </div>
 </div>

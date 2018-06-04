@@ -43,6 +43,7 @@ var classhypro_1_1BoxT_3_01double_00_01Converter_00_01Setting_01_4 =
     [ "print", "classhypro_1_1BoxT_3_01double_00_01Converter_00_01Setting_01_4.html#a648c7c74cc4b8b064733a684d9f3c5ee", null ],
     [ "project", "classhypro_1_1BoxT_3_01double_00_01Converter_00_01Setting_01_4.html#a54fcc04b1d07764886090045104a5217", null ],
     [ "reduceNumberRepresentation", "classhypro_1_1BoxT_3_01double_00_01Converter_00_01Setting_01_4.html#a7edc215cab65d9e239fc599d96e126b4", null ],
+    [ "reduceRepresentation", "classhypro_1_1BoxT_3_01double_00_01Converter_00_01Setting_01_4.html#a26b76980ca9b51cac9b44c66f10519a4", null ],
     [ "removeRedundancy", "classhypro_1_1BoxT_3_01double_00_01Converter_00_01Setting_01_4.html#a64d25135c0bc3f0a7e623a476766e40a", null ],
     [ "rLimits", "classhypro_1_1BoxT_3_01double_00_01Converter_00_01Setting_01_4.html#a5125eb1d859666e303169606544111dd", null ],
     [ "satisfiesHalfspace", "classhypro_1_1BoxT_3_01double_00_01Converter_00_01Setting_01_4.html#a7c98ae8ee07e9e91e9d40f3d74502112", null ],
@@ -53,7 +54,7 @@ var classhypro_1_1BoxT_3_01double_00_01Converter_00_01Setting_01_4 =
     [ "vector", "classhypro_1_1BoxT_3_01double_00_01Converter_00_01Setting_01_4.html#ae2c2cbbdeecf52d10bb108d045846c8f", null ],
     [ "vertices", "classhypro_1_1BoxT_3_01double_00_01Converter_00_01Setting_01_4.html#acdf742a1d4fc93419922a8d2ab281957", null ],
     [ "operator!=", "classhypro_1_1BoxT_3_01double_00_01Converter_00_01Setting_01_4.html#af6a4a05d462f5374f0d38a60ce33715d", null ],
-    [ "operator<<", "classhypro_1_1BoxT_3_01double_00_01Converter_00_01Setting_01_4.html#ad3f84fcc87b355af6fcd71adb3825f52", null ],
+    [ "operator<<", "classhypro_1_1BoxT_3_01double_00_01Converter_00_01Setting_01_4.html#a1bc1f34cf0137f988b9eb646e3076a1e", null ],
     [ "operator==", "classhypro_1_1BoxT_3_01double_00_01Converter_00_01Setting_01_4.html#a62ee9efcf9ab97116852cddef5723652", null ],
     [ "mLimits", "classhypro_1_1BoxT_3_01double_00_01Converter_00_01Setting_01_4.html#a0f88f38cdc2cb2fdfe6a79b0c02df828", null ]
 ];

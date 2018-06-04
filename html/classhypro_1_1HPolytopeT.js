@@ -53,6 +53,7 @@ var classhypro_1_1HPolytopeT =
     [ "reduceAssign", "classhypro_1_1HPolytopeT.html#ab2da5808b682e2c1d484771d93f0db42", null ],
     [ "reduceNumberRepresentation", "classhypro_1_1HPolytopeT.html#a548dbb96e9c65f7d81c73804f2e94893", null ],
     [ "reduceNumberRepresentation", "classhypro_1_1HPolytopeT.html#ab92fb2b895fd46d14edc58652388f3ac", null ],
+    [ "reduceRepresentation", "classhypro_1_1HPolytopeT.html#aeef914a9d3a93dce001141eb8b1a76f2", null ],
     [ "removeRedundancy", "classhypro_1_1HPolytopeT.html#af2d911fc979b9c459b4938a30b2df6af", null ],
     [ "satisfiesHalfspace", "classhypro_1_1HPolytopeT.html#a9d58be71c27b53807645267e27191e8d", null ],
     [ "satisfiesHalfspaces", "classhypro_1_1HPolytopeT.html#a27a78d8b046d94aacb5271c00eeeafb7", null ],
@@ -65,6 +66,6 @@ var classhypro_1_1HPolytopeT =
     [ "vector", "classhypro_1_1HPolytopeT.html#a8357a1566fbf7570a941816ac63ef8d5", null ],
     [ "vertexEnumeration", "classhypro_1_1HPolytopeT.html#a4112bb779d7593a3d35d9379454f09b6", null ],
     [ "vertices", "classhypro_1_1HPolytopeT.html#a6ee070b0531864a636d2c609eb622f34", null ],
-    [ "operator<<", "classhypro_1_1HPolytopeT.html#afd5e0f2c48f97841fcb7579dd13127fa", null ],
+    [ "operator<<", "classhypro_1_1HPolytopeT.html#ad547ffca050ca1fd6b89616f0a330f34", null ],
     [ "swap", "classhypro_1_1HPolytopeT.html#a23e5867f9e7d2c8346c868aae6d24f51", null ]
 ];

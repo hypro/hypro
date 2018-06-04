@@ -31,7 +31,7 @@
   <td id="projectlogo"><img alt="Logo" src="hypro_Logo.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">HyPro
-   &#160;<span id="projectnumber">18.05</span>
+   &#160;<span id="projectnumber">18.06</span>
    </div>
    <div id="projectbrief">A Toolbox for the Reachability Analysis of Hybrid Systems using Geometric Approximations</div>
   </td>
@@ -160,6 +160,8 @@ const std::vector<br class="typebreak"/>
 <tr class="memitem:ac8c61e0b29eab31dd389aeaa0593dbe0"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac8c61e0b29eab31dd389aeaa0593dbe0"></a>
 std::string&#160;</td><td class="memItemRight" valign="bottom"><b>getDotRepresentation</b> (const std::vector&lt; std::string &gt; &amp;vars) const </td></tr>
 <tr class="separator:ac8c61e0b29eab31dd389aeaa0593dbe0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad60546aca74107e1059c56c9dc1ac939"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Condition.html#ad60546aca74107e1059c56c9dc1ac939">decompose</a> (std::vector&lt; std::vector&lt; size_t &gt;&gt; decomposition)</td></tr>
+<tr class="separator:ad60546aca74107e1059c56c9dc1ac939"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
 Friends</h2></td></tr>
@@ -169,18 +171,38 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator==</b> (const
 <tr class="memitem:a29b2fc2fbd2ad3373ed0b3f3b7ad35f5"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a29b2fc2fbd2ad3373ed0b3f3b7ad35f5"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator!=</b> (const <a class="el" href="classhypro_1_1Condition.html">Condition</a> &amp;lhs, const <a class="el" href="classhypro_1_1Condition.html">Condition</a> &amp;rhs)</td></tr>
 <tr class="separator:a29b2fc2fbd2ad3373ed0b3f3b7ad35f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8daadcd692b7b2d82b23f13a45d16bb4"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8daadcd692b7b2d82b23f13a45d16bb4"></a>
-std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator&lt;&lt;</b> (std::ostream &amp;out, const <a class="el" href="classhypro_1_1Condition.html">Condition</a> &amp;)</td></tr>
-<tr class="separator:a8daadcd692b7b2d82b23f13a45d16bb4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8505d972bbf529b7761ea00192798e97"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8505d972bbf529b7761ea00192798e97"></a>
+std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator&lt;&lt;</b> (std::ostream &amp;out, const <a class="el" href="classhypro_1_1Condition.html">Condition</a> &amp;in)</td></tr>
+<tr class="separator:a8505d972bbf529b7761ea00192798e97"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><h3>template&lt;typename Number&gt;<br/>
 class hypro::Condition&lt; Number &gt;</h3>
 
-<dl><dt><b>Examples: </b></dt><dd><a class="el" href="example_bouncingBall_8cpp-example.html#_a4">example_bouncingBall.cpp</a>.</dd>
+<dl><dt><b>Examples: </b></dt><dd><a class="el" href="example_bouncingBall_8cpp-example.html#_a3">example_bouncingBall.cpp</a>.</dd>
 </dl>
 <p>Definition at line <a class="el" href="Condition_8h_source.html#l00010">10</a> of file <a class="el" href="Condition_8h_source.html">Condition.h</a>.</p>
-</div><hr/>The documentation for this class was generated from the following file:<ul>
+</div><h2 class="groupheader">Member Function Documentation</h2>
+<a class="anchor" id="ad60546aca74107e1059c56c9dc1ac939"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classhypro_1_1Condition.html">hypro::Condition</a>&lt; Number &gt;::decompose </td>
+          <td>(</td>
+          <td class="paramtype">std::vector&lt; std::vector&lt; size_t &gt;&gt;&#160;</td>
+          <td class="paramname"><em>decomposition</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>decomposes constraint set of this condition </p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following file:<ul>
 <li>/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/<a class="el" href="Condition_8h_source.html">Condition.h</a></li>
 </ul>
 </div><!-- contents -->

@@ -3,6 +3,7 @@ var dir_7fa927d8fbf9dfbeef69af27f63bc81b =
     [ "Box", "dir_2a022a7dd5883d249fd19381a9acb7ca.html", "dir_2a022a7dd5883d249fd19381a9acb7ca" ],
     [ "ConstraintSet", "dir_c69b7163a8becb19bca702fdae1c2050.html", "dir_c69b7163a8becb19bca702fdae1c2050" ],
     [ "conversion", "dir_9daea738ba0665232cd58b81f5fd3268.html", "dir_9daea738ba0665232cd58b81f5fd3268" ],
+    [ "DifferenceBounds", "dir_cf451874352f123b92a8eb670c7ebe66.html", "dir_cf451874352f123b92a8eb670c7ebe66" ],
     [ "Ellipsoids", "dir_d2e0e2e7c131de54c32d81549b14c3d5.html", "dir_d2e0e2e7c131de54c32d81549b14c3d5" ],
     [ "OrthogonalPolyhedron", "dir_c3a99445e85233736dff89b095acd8fe.html", "dir_c3a99445e85233736dff89b095acd8fe" ],
     [ "Polytope", "dir_dbbb4b37ecf24276c0f25796d6496cf7.html", "dir_dbbb4b37ecf24276c0f25796d6496cf7" ],

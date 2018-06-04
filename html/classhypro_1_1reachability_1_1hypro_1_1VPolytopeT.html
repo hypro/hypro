@@ -31,7 +31,7 @@
   <td id="projectlogo"><img alt="Logo" src="hypro_Logo.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">HyPro
-   &#160;<span id="projectnumber">18.05</span>
+   &#160;<span id="projectnumber">18.06</span>
    </div>
    <div id="projectbrief">A Toolbox for the Reachability Analysis of Hybrid Systems using Geometric Approximations</div>
   </td>
@@ -199,6 +199,10 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ac405e9f7f4abafb6e1352ad086480b13"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac405e9f7f4abafb6e1352ad086480b13"></a>
 <a class="el" href="classhypro_1_1reachability_1_1hypro_1_1VPolytopeT.html">VPolytopeT</a>&#160;</td><td class="memItemRight" valign="bottom"><b>unite</b> (const <a class="el" href="classhypro_1_1reachability_1_1hypro_1_1VPolytopeT.html">VPolytopeT</a> &amp;rhs) const </td></tr>
 <tr class="separator:ac405e9f7f4abafb6e1352ad086480b13"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab418e2f95e5aaabb1eb4958f9ace4b35"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab418e2f95e5aaabb1eb4958f9ace4b35"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1reachability_1_1hypro_1_1VPolytopeT.html#ab418e2f95e5aaabb1eb4958f9ace4b35">reduceRepresentation</a> ()</td></tr>
+<tr class="memdesc:ab418e2f95e5aaabb1eb4958f9ace4b35"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reduces the box - only in case rational types are used, the number representation is optimized. <br/></td></tr>
+<tr class="separator:ab418e2f95e5aaabb1eb4958f9ace4b35"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a111a64787e982d6f75dbb209d2fae67f"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a111a64787e982d6f75dbb209d2fae67f"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1reachability_1_1hypro_1_1VPolytopeT.html#a111a64787e982d6f75dbb209d2fae67f">clear</a> ()</td></tr>
 <tr class="memdesc:a111a64787e982d6f75dbb209d2fae67f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clears the polytope. <br/></td></tr>
@@ -602,7 +606,7 @@ template&lt;typename Number , typename Converter &gt; </div>
 <p>Returns the cone of this. </p>
 <dl class="section return"><dt>Returns</dt><dd>The cone. </dd></dl>
 
-<p>Definition at line <a class="el" href="Reach_8h_source.html#l00202">202</a> of file <a class="el" href="Reach_8h_source.html">Reach.h</a>.</p>
+<p>Definition at line <a class="el" href="Reach_8h_source.html#l00207">207</a> of file <a class="el" href="Reach_8h_source.html">Reach.h</a>.</p>
 
 </div>
 </div>
@@ -729,7 +733,7 @@ template&lt;typename Number , typename Converter &gt; </div>
 
 <p>Implements <a class="el" href="classhypro_1_1reachability_1_1hypro_1_1GeometricObject.html#a7ffbfff0e83d0b48b0ddf4b54413e586">hypro::reachability::hypro::GeometricObject&lt; Number, VPolytopeT&lt; Number, Converter &gt; &gt;</a>.</p>
 
-<p>Definition at line <a class="el" href="Reach_8h_source.html#l00169">169</a> of file <a class="el" href="Reach_8h_source.html">Reach.h</a>.</p>
+<p>Definition at line <a class="el" href="Reach_8h_source.html#l00174">174</a> of file <a class="el" href="Reach_8h_source.html">Reach.h</a>.</p>
 
 </div>
 </div>
@@ -761,7 +765,7 @@ template&lt;typename Number , typename Converter &gt; </div>
 
 <p>Implements <a class="el" href="classhypro_1_1reachability_1_1hypro_1_1GeometricObject.html#a6c1555237a1651a6fcde849be0ab97c0">hypro::reachability::hypro::GeometricObject&lt; Number, VPolytopeT&lt; Number, Converter &gt; &gt;</a>.</p>
 
-<p>Definition at line <a class="el" href="Reach_8h_source.html#l00157">157</a> of file <a class="el" href="Reach_8h_source.html">Reach.h</a>.</p>
+<p>Definition at line <a class="el" href="Reach_8h_source.html#l00162">162</a> of file <a class="el" href="Reach_8h_source.html">Reach.h</a>.</p>
 
 </div>
 </div>
@@ -791,7 +795,7 @@ template&lt;typename Number , typename Converter &gt; </div>
 <p>Constructs the empty polytope. </p>
 <dl class="section return"><dt>Returns</dt><dd>The polytope. </dd></dl>
 
-<p>Definition at line <a class="el" href="Reach_8h_source.html#l00163">163</a> of file <a class="el" href="Reach_8h_source.html">Reach.h</a>.</p>
+<p>Definition at line <a class="el" href="Reach_8h_source.html#l00168">168</a> of file <a class="el" href="Reach_8h_source.html">Reach.h</a>.</p>
 
 </div>
 </div>
@@ -1017,7 +1021,7 @@ template&lt;typename Number , typename Converter &gt; </div>
 <p>Returns whether the polytope has been reduced (i.e. the set of vertices is minimal). </p>
 <dl class="section return"><dt>Returns</dt><dd>True, if the set of vertices is minimal. </dd></dl>
 
-<p>Definition at line <a class="el" href="Reach_8h_source.html#l00190">190</a> of file <a class="el" href="Reach_8h_source.html">Reach.h</a>.</p>
+<p>Definition at line <a class="el" href="Reach_8h_source.html#l00195">195</a> of file <a class="el" href="Reach_8h_source.html">Reach.h</a>.</p>
 
 </div>
 </div>
@@ -1143,7 +1147,7 @@ template&lt;typename Number , typename Converter &gt; </div>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="Reach_8h_source.html#l00208">208</a> of file <a class="el" href="Reach_8h_source.html">Reach.h</a>.</p>
+<p>Definition at line <a class="el" href="Reach_8h_source.html#l00213">213</a> of file <a class="el" href="Reach_8h_source.html">Reach.h</a>.</p>
 
 </div>
 </div>
@@ -1173,7 +1177,7 @@ template&lt;typename Number , typename Converter &gt; </div>
 <p>Returns the number of vertices. </p>
 <dl class="section return"><dt>Returns</dt><dd>The number of vertices. </dd></dl>
 
-<p>Definition at line <a class="el" href="Reach_8h_source.html#l00178">178</a> of file <a class="el" href="Reach_8h_source.html">Reach.h</a>.</p>
+<p>Definition at line <a class="el" href="Reach_8h_source.html#l00183">183</a> of file <a class="el" href="Reach_8h_source.html">Reach.h</a>.</p>
 
 </div>
 </div>
@@ -1225,7 +1229,7 @@ template&lt;typename Number , typename Converter &gt; </div>
 <p>Returns the type. </p>
 <dl class="section return"><dt>Returns</dt><dd>The type. </dd></dl>
 
-<p>Definition at line <a class="el" href="Reach_8h_source.html#l00184">184</a> of file <a class="el" href="Reach_8h_source.html">Reach.h</a>.</p>
+<p>Definition at line <a class="el" href="Reach_8h_source.html#l00189">189</a> of file <a class="el" href="Reach_8h_source.html">Reach.h</a>.</p>
 
 </div>
 </div>
@@ -1295,7 +1299,7 @@ template&lt;typename Number , typename Converter &gt; </div>
 
 <p>Implements <a class="el" href="classhypro_1_1reachability_1_1hypro_1_1GeometricObject.html#a0eb064cd7a7822679ee5a393b10c5412">hypro::reachability::hypro::GeometricObject&lt; Number, VPolytopeT&lt; Number, Converter &gt; &gt;</a>.</p>
 
-<p>Definition at line <a class="el" href="Reach_8h_source.html#l00271">271</a> of file <a class="el" href="Reach_8h_source.html">Reach.h</a>.</p>
+<p>Definition at line <a class="el" href="Reach_8h_source.html#l00276">276</a> of file <a class="el" href="Reach_8h_source.html">Reach.h</a>.</p>
 
 </div>
 </div>

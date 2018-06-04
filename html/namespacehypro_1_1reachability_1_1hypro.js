@@ -26,6 +26,7 @@ var namespacehypro_1_1reachability_1_1hypro =
     [ "VariablePool", "classhypro_1_1reachability_1_1hypro_1_1VariablePool.html", "classhypro_1_1reachability_1_1hypro_1_1VariablePool" ],
     [ "BoxLinearOptimizationOn", "structhypro_1_1reachability_1_1hypro_1_1BoxLinearOptimizationOn.html", null ],
     [ "BoxLinearOptimizationOff", "structhypro_1_1reachability_1_1hypro_1_1BoxLinearOptimizationOff.html", null ],
+    [ "BoxAllOff", "structhypro_1_1reachability_1_1hypro_1_1BoxAllOff.html", null ],
     [ "Permutator", "classhypro_1_1reachability_1_1hypro_1_1Permutator.html", "classhypro_1_1reachability_1_1hypro_1_1Permutator" ],
     [ "EvaluationResult", "structhypro_1_1reachability_1_1hypro_1_1EvaluationResult.html", "structhypro_1_1reachability_1_1hypro_1_1EvaluationResult" ],
     [ "glpk_context", "structhypro_1_1reachability_1_1hypro_1_1glpk__context.html", "structhypro_1_1reachability_1_1hypro_1_1glpk__context" ],
@@ -52,9 +53,7 @@ var namespacehypro_1_1reachability_1_1hypro =
     [ "Cone", "classhypro_1_1reachability_1_1hypro_1_1Cone.html", "classhypro_1_1reachability_1_1hypro_1_1Cone" ],
     [ "VPolytopeT", "classhypro_1_1reachability_1_1hypro_1_1VPolytopeT.html", "classhypro_1_1reachability_1_1hypro_1_1VPolytopeT" ],
     [ "SupportFunctionSetting", "structhypro_1_1reachability_1_1hypro_1_1SupportFunctionSetting.html", null ],
-    [ "SupportFunctionContentSetting", "structhypro_1_1reachability_1_1hypro_1_1SupportFunctionContentSetting.html", null ],
-    [ "BoxSupportFunctionSetting", "structhypro_1_1reachability_1_1hypro_1_1BoxSupportFunctionSetting.html", null ],
-    [ "NonLineaerOmegaOSupportFunctionSetting", "structhypro_1_1reachability_1_1hypro_1_1NonLineaerOmegaOSupportFunctionSetting.html", null ],
+    [ "NoBoxReduction", "structhypro_1_1reachability_1_1hypro_1_1NoBoxReduction.html", null ],
     [ "PolytopeSupportFunctionSetting", "structhypro_1_1reachability_1_1hypro_1_1PolytopeSupportFunctionSetting.html", null ],
     [ "BoxSupportFunction", "classhypro_1_1reachability_1_1hypro_1_1BoxSupportFunction.html", "classhypro_1_1reachability_1_1hypro_1_1BoxSupportFunction" ],
     [ "PolytopeSupportFunction", "classhypro_1_1reachability_1_1hypro_1_1PolytopeSupportFunction.html", "classhypro_1_1reachability_1_1hypro_1_1PolytopeSupportFunction" ],
@@ -70,6 +69,8 @@ var namespacehypro_1_1reachability_1_1hypro =
     [ "SupportFunctionT", "classhypro_1_1reachability_1_1hypro_1_1SupportFunctionT.html", "classhypro_1_1reachability_1_1hypro_1_1SupportFunctionT" ],
     [ "ZonotopeSetting", "structhypro_1_1reachability_1_1hypro_1_1ZonotopeSetting.html", null ],
     [ "ZonotopeT", "classhypro_1_1reachability_1_1hypro_1_1ZonotopeT.html", "classhypro_1_1reachability_1_1hypro_1_1ZonotopeT" ],
+    [ "DifferenceBoundsSetting", "structhypro_1_1reachability_1_1hypro_1_1DifferenceBoundsSetting.html", null ],
+    [ "DifferenceBoundsT", "classhypro_1_1reachability_1_1hypro_1_1DifferenceBoundsT.html", "classhypro_1_1reachability_1_1hypro_1_1DifferenceBoundsT" ],
     [ "Converter", "classhypro_1_1reachability_1_1hypro_1_1Converter.html", "classhypro_1_1reachability_1_1hypro_1_1Converter" ],
     [ "Plotter", "classhypro_1_1reachability_1_1hypro_1_1Plotter.html", "classhypro_1_1reachability_1_1hypro_1_1Plotter" ]
 ];

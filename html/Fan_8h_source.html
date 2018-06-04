@@ -31,7 +31,7 @@
   <td id="projectlogo"><img alt="Logo" src="hypro_Logo.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">HyPro
-   &#160;<span id="projectnumber">18.05</span>
+   &#160;<span id="projectnumber">18.06</span>
    </div>
    <div id="projectbrief">A Toolbox for the Reachability Analysis of Hybrid Systems using Geometric Approximations</div>
   </td>
@@ -114,9 +114,9 @@ $(document).ready(function(){initNavTree('Fan_8h_source.html','');});
 <div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor"></span></div>
 <div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="preprocessor">#include &quot;Cone.h&quot;</span></div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="preprocessor">#include &quot;../../datastructures/Point.h&quot;</span></div>
-<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="preprocessor">#include &lt;carl/formula/Constraint.h&gt;</span></div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="preprocessor">#include &lt;cassert&gt;</span></div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="preprocessor">#include &lt;glpk.h&gt;</span></div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="preprocessor">#include &quot;../../util/linearOptimization/Optimizer.h&quot;</span></div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="preprocessor">#include &lt;carl/formula/Constraint.h&gt;</span></div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="preprocessor">#include &lt;cassert&gt;</span></div>
 <div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;</div>
 <div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="keyword">namespace </span>hypro {</div>
 <div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;</div>
@@ -157,60 +157,50 @@ $(document).ready(function(){initNavTree('Fan_8h_source.html','');});
 <div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    }</div>
 <div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;</div>
 <div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    <span class="keyword">const</span> <a class="code" href="classhypro_1_1Cone.html">Cone&lt;Number&gt;</a>* containingCone( <span class="keyword">const</span> <a class="code" href="classhypro_1_1Point.html">Point&lt;Number&gt;</a>&amp; _vector )<span class="keyword"> const </span>{</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;        <span class="comment">// set up glpk</span></div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;        glp_prob* cones;</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;        cones = glp_create_prob();</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;        glp_set_obj_dir( cones, GLP_MAX );</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;        <span class="keyword">typename</span> <a class="code" href="classhypro_1_1Cone.html">Cone&lt;Number&gt;::vectors</a> vectors;</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;        <span class="keywordflow">for</span> ( <span class="keyword">auto</span>&amp; cone : mCones ) {</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;            vectors.insert( vectors.end(), cone.begin(), cone.end() );</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;        }</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;        <span class="keywordtype">unsigned</span> numPlanes = vectors.size();</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;        <span class="keywordtype">unsigned</span> elements = this-&gt;mDimension * numPlanes;</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;        glp_add_cols( cones, numPlanes );</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;        glp_add_rows( cones, this-&gt;mDimension );</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;        <span class="keywordtype">int</span>* ia = <span class="keyword">new</span> <span class="keywordtype">int</span>[1 + elements];</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;        <span class="keywordtype">int</span>* ja = <span class="keyword">new</span> <span class="keywordtype">int</span>[1 + elements];</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;        <span class="keywordtype">double</span>* ar = <span class="keyword">new</span> <span class="keywordtype">double</span>[1 + elements];</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;        <span class="keywordtype">unsigned</span> pos = 1;</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;        <span class="keywordflow">for</span> ( <span class="keywordtype">unsigned</span> i = 1; i &lt;= this-&gt;mDimension; ++i ) {</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;            <span class="keywordflow">for</span> ( <span class="keywordtype">unsigned</span> j = 1; j &lt;= numPlanes; ++j ) {</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;                ia[pos] = i;</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;                ja[pos] = j;</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;                ar[pos] = vectors.at( j ).at( i );</div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;                ++pos;</div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;            }</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;        }</div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;        assert( pos &lt;= elements );</div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;</div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;        glp_load_matrix( cones, elements, ia, ja, ar );</div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;        glp_simplex( cones, NULL );</div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;</div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;        <span class="comment">// TODO output &amp; result interpretation</span></div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;</div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;        glp_delete_prob( cones );</div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;    }</div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;</div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;    <a class="code" href="classhypro_1_1Fan.html">Fan&lt;Number&gt;</a> operator=( <span class="keyword">const</span> <a class="code" href="classhypro_1_1Fan.html">Fan&lt;Number&gt;</a>&amp; _rhs ) {</div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;        <span class="comment">/* if( this != &amp;rhs )</span></div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;<span class="comment">         {</span></div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;<span class="comment">             Fan&lt;Number&gt; tmp(rhs);</span></div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;<span class="comment">             std::swap(*this,tmp);</span></div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;<span class="comment">         }</span></div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;<span class="comment">         return *this;</span></div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;<span class="comment">         */</span></div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;        this-&gt;mCones = _rhs.get();</div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;        this-&gt;mDimension = _rhs.dimension();</div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;        <span class="keywordflow">return</span> *<span class="keyword">this</span>;</div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;    }</div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;};</div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;</div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;}  <span class="comment">// namespace hypro</span></div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;        <a class="code" href="classhypro_1_1Optimizer.html">Optimizer&lt;Number&gt;</a> opt{};</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;        <span class="comment">// set up glpk</span></div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;        glp_prob* cones;</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;        cones = glp_create_prob();</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;        glp_set_obj_dir( cones, GLP_MAX );</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;        <span class="keyword">typename</span> <a class="code" href="classhypro_1_1Cone.html">Cone&lt;Number&gt;::vectors</a> vectors;</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;        <span class="keywordflow">for</span> ( <span class="keyword">auto</span>&amp; cone : mCones ) {</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;            vectors.insert( vectors.end(), cone.begin(), cone.end() );</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;        }</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;        <span class="keywordtype">unsigned</span> numPlanes = vectors.size();</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;        <span class="keywordtype">unsigned</span> elements = this-&gt;mDimension * numPlanes;</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;        <a class="code" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t&lt;Number&gt;</a> constraints = <a class="code" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t&lt;Number&gt;::Zero</a>(this-&gt;mDimension,numPlanes);</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;        <span class="keywordflow">for</span> ( <span class="keywordtype">unsigned</span> i = 1; i &lt;= this-&gt;mDimension; ++i ) {</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;            <span class="keywordflow">for</span> ( <span class="keywordtype">unsigned</span> j = 1; j &lt;= numPlanes; ++j ) {</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;                constraints(i,j) = vectors.at( j ).at( i );</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;            }</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;        }</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;        opt.checkConsistency();</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;        <span class="comment">// TODO: output and stuff.</span></div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;    }</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;    <a class="code" href="classhypro_1_1Fan.html">Fan&lt;Number&gt;</a> operator=( <span class="keyword">const</span> <a class="code" href="classhypro_1_1Fan.html">Fan&lt;Number&gt;</a>&amp; _rhs ) {</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;        <span class="comment">/* if( this != &amp;rhs )</span></div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;<span class="comment">         {</span></div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;<span class="comment">             Fan&lt;Number&gt; tmp(rhs);</span></div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;<span class="comment">             std::swap(*this,tmp);</span></div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;<span class="comment">         }</span></div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;<span class="comment">         return *this;</span></div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;<span class="comment">         */</span></div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;        this-&gt;mCones = _rhs.get();</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;        this-&gt;mDimension = _rhs.dimension();</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;        <span class="keywordflow">return</span> *<span class="keyword">this</span>;</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;    }</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;};</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;}  <span class="comment">// namespace hypro</span></div>
 <div class="ttc" id="classhypro_1_1Point_html"><div class="ttname"><a href="classhypro_1_1Point.html">hypro::Point</a></div><div class="ttdoc">Class for a point. </div><div class="ttdef"><b>Definition:</b> <a href="Point_8h_source.html#l00025">Point.h:25</a></div></div>
+<div class="ttc" id="namespacehypro_html_a52a4896e811a0710bcfc5a410a780034"><div class="ttname"><a href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">hypro::matrix_t</a></div><div class="ttdeci">Eigen::Matrix&lt; Number, Eigen::Dynamic, Eigen::Dynamic &gt; matrix_t</div><div class="ttdef"><b>Definition:</b> <a href="types_8h_source.html#l00026">types.h:26</a></div></div>
+<div class="ttc" id="classhypro_1_1Optimizer_html"><div class="ttname"><a href="classhypro_1_1Optimizer.html">hypro::Optimizer</a></div><div class="ttdoc">Wrapper class for linear optimization. </div><div class="ttdef"><b>Definition:</b> <a href="Optimizer_8h_source.html#l00115">Optimizer.h:115</a></div></div>
 <div class="ttc" id="classhypro_1_1Fan_html"><div class="ttname"><a href="classhypro_1_1Fan.html">hypro::Fan</a></div><div class="ttdoc">Class for a polytopal fan. </div><div class="ttdef"><b>Definition:</b> <a href="Fan_8h_source.html#l00017">Fan.h:17</a></div></div>
 <div class="ttc" id="classhypro_1_1Cone_html"><div class="ttname"><a href="classhypro_1_1Cone.html">hypro::Cone</a></div><div class="ttdef"><b>Definition:</b> <a href="Cone_8h_source.html#l00022">Cone.h:22</a></div></div>
 </div><!-- fragment --></div><!-- contents -->

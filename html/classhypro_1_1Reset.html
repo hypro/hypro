@@ -31,7 +31,7 @@
   <td id="projectlogo"><img alt="Logo" src="hypro_Logo.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">HyPro
-   &#160;<span id="projectnumber">18.05</span>
+   &#160;<span id="projectnumber">18.06</span>
    </div>
    <div id="projectbrief">A Toolbox for the Reachability Analysis of Hybrid Systems using Geometric Approximations</div>
   </td>
@@ -178,6 +178,8 @@ Rargs...&gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>applyRes
 <tr class="memitem:a2e7c1cfceb719f3dc26c2b53ca60e6fe"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2e7c1cfceb719f3dc26c2b53ca60e6fe"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>isIdentity</b> () const </td></tr>
 <tr class="separator:a2e7c1cfceb719f3dc26c2b53ca60e6fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a788b7d835870876a2ce6e1fce4d40ecb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Reset.html#a788b7d835870876a2ce6e1fce4d40ecb">decompose</a> (std::vector&lt; std::vector&lt; size_t &gt;&gt; decomposition)</td></tr>
+<tr class="separator:a788b7d835870876a2ce6e1fce4d40ecb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
@@ -188,9 +190,9 @@ std::vector&lt; ConstraintSet<br class="typebreak"/>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
 Friends</h2></td></tr>
-<tr class="memitem:a77bc6233604980910f6162442605c7e0"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a77bc6233604980910f6162442605c7e0"></a>
-std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator&lt;&lt;</b> (std::ostream &amp;ostr, const <a class="el" href="classhypro_1_1Reset.html">Reset</a>&lt; Number &gt; &amp;)</td></tr>
-<tr class="separator:a77bc6233604980910f6162442605c7e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a115a946ae646aeaa0612a3ae7c6e4f85"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a115a946ae646aeaa0612a3ae7c6e4f85"></a>
+std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator&lt;&lt;</b> (std::ostream &amp;ostr, const <a class="el" href="classhypro_1_1Reset.html">Reset</a>&lt; Number &gt; &amp;a)</td></tr>
+<tr class="separator:a115a946ae646aeaa0612a3ae7c6e4f85"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a710d843b4628d1ec4605793b6d0bce4c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a710d843b4628d1ec4605793b6d0bce4c"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator==</b> (const <a class="el" href="classhypro_1_1Reset.html">Reset</a>&lt; Number &gt; &amp;lhs, const <a class="el" href="classhypro_1_1Reset.html">Reset</a>&lt; Number &gt; &amp;rhs)</td></tr>
 <tr class="separator:a710d843b4628d1ec4605793b6d0bce4c"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -202,10 +204,30 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator!=</b> (const
 <div class="textblock"><h3>template&lt;typename Number&gt;<br/>
 class hypro::Reset&lt; Number &gt;</h3>
 
-<dl><dt><b>Examples: </b></dt><dd><a class="el" href="example_bouncingBall_8cpp-example.html#_a5">example_bouncingBall.cpp</a>.</dd>
+<dl><dt><b>Examples: </b></dt><dd><a class="el" href="example_bouncingBall_8cpp-example.html#_a4">example_bouncingBall.cpp</a>.</dd>
 </dl>
 <p>Definition at line <a class="el" href="Reset_8h_source.html#l00009">9</a> of file <a class="el" href="Reset_8h_source.html">Reset.h</a>.</p>
-</div><hr/>The documentation for this class was generated from the following file:<ul>
+</div><h2 class="groupheader">Member Function Documentation</h2>
+<a class="anchor" id="a788b7d835870876a2ce6e1fce4d40ecb"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classhypro_1_1Reset.html">hypro::Reset</a>&lt; Number &gt;::decompose </td>
+          <td>(</td>
+          <td class="paramtype">std::vector&lt; std::vector&lt; size_t &gt;&gt;&#160;</td>
+          <td class="paramname"><em>decomposition</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>decomposes reset </p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following file:<ul>
 <li>/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/<a class="el" href="Reset_8h_source.html">Reset.h</a></li>
 </ul>
 </div><!-- contents -->

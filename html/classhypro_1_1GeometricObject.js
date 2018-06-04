@@ -11,6 +11,7 @@ var classhypro_1_1GeometricObject =
     [ "linearTransformation", "classhypro_1_1GeometricObject.html#aa8ba3e6ef5dd89dec24c4876b9b85d55", null ],
     [ "minkowskiSum", "classhypro_1_1GeometricObject.html#a6d5b4a8d675cbe9da63408a5beab8460", null ],
     [ "project", "classhypro_1_1GeometricObject.html#ac59bf7420c712b4895c0a171e2e6e388", null ],
+    [ "reduceRepresentation", "classhypro_1_1GeometricObject.html#a6d5153ab5460051f4a44131136ba082a", null ],
     [ "satisfiesHalfspace", "classhypro_1_1GeometricObject.html#ae2a85775d748e9a7d9489439f85afd12", null ],
     [ "satisfiesHalfspaces", "classhypro_1_1GeometricObject.html#acdbbcb6aff4f47be2bc8ce67f0c8fc60", null ],
     [ "unite", "classhypro_1_1GeometricObject.html#a3ed4020101437144b34b62cc01d5bf01", null ],

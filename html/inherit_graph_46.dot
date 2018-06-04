@@ -3,5 +3,7 @@ digraph "Graphical Class Hierarchy"
   edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
   node [fontname="Helvetica",fontsize="10",shape=record];
   rankdir="LR";
-  Node1 [label="hypro::Halfspace\< Number \>",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classhypro_1_1Halfspace.html"];
+  Node1 [label="hypro::GeometricObject\l\< Number, VPolytopeT\<\l Number, Converter \> \>",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classhypro_1_1GeometricObject.html"];
+  Node1 -> Node2 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node2 [label="hypro::VPolytopeT\<\l Number, Converter \>",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classhypro_1_1VPolytopeT.html",tooltip="The class implementing the vertex representation of a convex polytope. "];
 }

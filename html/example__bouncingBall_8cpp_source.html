@@ -31,7 +31,7 @@
   <td id="projectlogo"><img alt="Logo" src="hypro_Logo.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">HyPro
-   &#160;<span id="projectnumber">18.05</span>
+   &#160;<span id="projectnumber">18.06</span>
    </div>
    <div id="projectbrief">A Toolbox for the Reachability Analysis of Hybrid Systems using Geometric Approximations</div>
   </td>
@@ -130,7 +130,7 @@ $(document).ready(function(){initNavTree('example__bouncingBall_8cpp_source.html
 <div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;    <span class="keyword">typedef</span> <a class="code" href="namespacehypro.html#afd0bc8dcc54953e4b477a5aaf7065439">hypro::HPolytope&lt;Number&gt;</a> Representation;</div>
 <div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;</div>
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;    <span class="comment">// LocationManager holds all created locations and allows to create new locations.</span></div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;    <a class="code" href="classhypro_1_1LocationManager.html">LocationManager&lt;Number&gt;</a>&amp; lManager = <a class="code" href="classhypro_1_1LocationManager.html">LocationManager&lt;Number&gt;::getInstance</a>();</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;    LocationManager&lt;Number&gt;&amp; lManager = LocationManager&lt;Number&gt;::getInstance();</div>
 <div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;</div>
 <div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;    <span class="comment">// create the discrete structure of the automaton and the automaton itself.</span></div>
 <div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;    <a class="code" href="classhypro_1_1Location.html">Location&lt;Number&gt;</a>* loc1 = lManager.create();</div>
@@ -285,12 +285,11 @@ $(document).ready(function(){initNavTree('example__bouncingBall_8cpp_source.html
 <div class="ttc" id="structhypro_1_1ReachabilitySettings_html"><div class="ttname"><a href="structhypro_1_1ReachabilitySettings.html">hypro::ReachabilitySettings</a></div><div class="ttdoc">Struct for reachability analysis algorithm settings. </div><div class="ttdef"><b>Definition:</b> <a href="Settings_8h_source.html#l00014">Settings.h:14</a></div></div>
 <div class="ttc" id="classhypro_1_1Plotter_html"><div class="ttname"><a href="classhypro_1_1Plotter.html">hypro::Plotter</a></div><div class="ttdoc">Class implementing a plotter. The plotter is implemented using carl::Singleton. </div><div class="ttdef"><b>Definition:</b> <a href="Plotter_8h_source.html#l00070">Plotter.h:70</a></div></div>
 <div class="ttc" id="Point_8h_html"><div class="ttname"><a href="Point_8h.html">Point.h</a></div></div>
-<div class="ttc" id="classhypro_1_1LocationManager_html"><div class="ttname"><a href="classhypro_1_1LocationManager.html">hypro::LocationManager</a></div><div class="ttdef"><b>Definition:</b> <a href="Location_8h_source.html#l00024">Location.h:24</a></div></div>
 <div class="ttc" id="classhypro_1_1Transition_html"><div class="ttname"><a href="classhypro_1_1Transition.html">hypro::Transition</a></div><div class="ttdoc">Class for transition. </div><div class="ttdef"><b>Definition:</b> <a href="Location_8h_source.html#l00021">Location.h:21</a></div></div>
 <div class="ttc" id="classhypro_1_1Condition_html"><div class="ttname"><a href="classhypro_1_1Condition.html">hypro::Condition</a></div><div class="ttdef"><b>Definition:</b> <a href="Condition_8h_source.html#l00010">Condition.h:10</a></div></div>
 <div class="ttc" id="Reach_8h_html"><div class="ttname"><a href="Reach_8h.html">Reach.h</a></div></div>
 <div class="ttc" id="classhypro_1_1State_html"><div class="ttname"><a href="classhypro_1_1State.html">hypro::State</a></div><div class="ttdoc">Class for state. </div><div class="ttdef"><b>Definition:</b> <a href="State_8h_source.html#l00030">State.h:30</a></div></div>
-<div class="ttc" id="namespacehypro_html_afd0bc8dcc54953e4b477a5aaf7065439"><div class="ttname"><a href="namespacehypro.html#afd0bc8dcc54953e4b477a5aaf7065439">hypro::HPolytope</a></div><div class="ttdeci">typename Converter&lt; Number &gt;::HPolytope HPolytope</div><div class="ttdef"><b>Definition:</b> <a href="Converter_8h_source.html#l00112">Converter.h:112</a></div></div>
+<div class="ttc" id="namespacehypro_html_afd0bc8dcc54953e4b477a5aaf7065439"><div class="ttname"><a href="namespacehypro.html#afd0bc8dcc54953e4b477a5aaf7065439">hypro::HPolytope</a></div><div class="ttdeci">typename Converter&lt; Number &gt;::HPolytope HPolytope</div><div class="ttdef"><b>Definition:</b> <a href="Converter_8h_source.html#l00169">Converter.h:169</a></div></div>
 <div class="ttc" id="structhypro_1_1ReachabilitySettings_html_a46dc42bf29cc6363a63d9ec34e1a0466"><div class="ttname"><a href="structhypro_1_1ReachabilitySettings.html#a46dc42bf29cc6363a63d9ec34e1a0466">hypro::ReachabilitySettings::timeStep</a></div><div class="ttdeci">Number timeStep</div><div class="ttdoc">The maximal number of jumps, i.e. the depth of the search tree. </div><div class="ttdef"><b>Definition:</b> <a href="Settings_8h_source.html#l00017">Settings.h:17</a></div></div>
 <div class="ttc" id="namespacehypro_html_aa70b7a97ac898c2b28a2af61f4607e3a"><div class="ttname"><a href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">hypro::vector_t</a></div><div class="ttdeci">Eigen::Matrix&lt; Number, Eigen::Dynamic, 1 &gt; vector_t</div><div class="ttdef"><b>Definition:</b> <a href="types_8h_source.html#l00020">types.h:20</a></div></div>
 <div class="ttc" id="classhypro_1_1State_html_a9d7649df9b2670e1873784c3c5fdca21"><div class="ttname"><a href="classhypro_1_1State.html#a9d7649df9b2670e1873784c3c5fdca21">hypro::State::setLocation</a></div><div class="ttdeci">void setLocation(const Location&lt; Number &gt; *l)</div><div class="ttdoc">Sets the location. </div><div class="ttdef"><b>Definition:</b> <a href="State_8h_source.html#l00225">State.h:225</a></div></div>

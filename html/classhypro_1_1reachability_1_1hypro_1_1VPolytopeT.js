@@ -40,6 +40,7 @@ var classhypro_1_1reachability_1_1hypro_1_1VPolytopeT =
     [ "reduced", "classhypro_1_1reachability_1_1hypro_1_1VPolytopeT.html#ac02bd624a9c88a2aad8960a410970ffc", null ],
     [ "reduceNumberRepresentation", "classhypro_1_1reachability_1_1hypro_1_1VPolytopeT.html#aa016f96c3c1a599e7a14fa48f1a26c21", null ],
     [ "reduceNumberRepresentation", "classhypro_1_1reachability_1_1hypro_1_1VPolytopeT.html#ab2849207c3cf35966484ac234aedd976", null ],
+    [ "reduceRepresentation", "classhypro_1_1reachability_1_1hypro_1_1VPolytopeT.html#ab418e2f95e5aaabb1eb4958f9ace4b35", null ],
     [ "removeRedundancy", "classhypro_1_1reachability_1_1hypro_1_1VPolytopeT.html#a94e1f076b99d70f96b517aecdb8789f4", null ],
     [ "satisfiesHalfspace", "classhypro_1_1reachability_1_1hypro_1_1VPolytopeT.html#a9679fd5abc8c4212a0693ccd26ecf342", null ],
     [ "satisfiesHalfspaces", "classhypro_1_1reachability_1_1hypro_1_1VPolytopeT.html#a72910ed38743a30d62caeacda0d2681a", null ],

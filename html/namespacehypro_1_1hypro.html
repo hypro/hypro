@@ -31,7 +31,7 @@
   <td id="projectlogo"><img alt="Logo" src="hypro_Logo.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">HyPro
-   &#160;<span id="projectnumber">18.05</span>
+   &#160;<span id="projectnumber">18.06</span>
    </div>
    <div id="projectbrief">A Toolbox for the Reachability Analysis of Hybrid Systems using Geometric Approximations</div>
   </td>
@@ -144,16 +144,29 @@ template&lt;typename Number &gt; </td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
 Enumerations</h2></td></tr>
-<tr class="memitem:aa4baff5f023c645e8b1809f4611478a1"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehypro_1_1hypro.html#aa4baff5f023c645e8b1809f4611478a1">TRIBOOL</a> { <b>TRUE</b>, 
+<tr class="memitem:aa4baff5f023c645e8b1809f4611478a1"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehypro_1_1hypro.html#aa4baff5f023c645e8b1809f4611478a1">TRIBOOL</a> { <br/>
+&#160;&#160;<b>TRUE</b>, 
 <b>FALSE</b>, 
+<b>NSET</b>, 
+<b>TRUE</b>, 
+<br/>
+&#160;&#160;<b>FALSE</b>, 
 <b>NSET</b>
+<br/>
  }</td></tr>
 <tr class="memdesc:aa4baff5f023c645e8b1809f4611478a1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enum implementing a tribool. <br/></td></tr>
 <tr class="separator:aa4baff5f023c645e8b1809f4611478a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4ab3ad6f10d25d661ca234d4875eb753"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehypro_1_1hypro.html#a4ab3ad6f10d25d661ca234d4875eb753">SOLUTION</a> { <b>FEAS</b> = 0, 
+<tr class="memitem:a4ab3ad6f10d25d661ca234d4875eb753"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehypro_1_1hypro.html#a4ab3ad6f10d25d661ca234d4875eb753">SOLUTION</a> { <br/>
+&#160;&#160;<b>FEAS</b> = 0, 
+<b>INFEAS</b>, 
+<b>INFTY</b>, 
+<b>UNKNOWN</b>, 
+<br/>
+&#160;&#160;<b>FEAS</b> = 0, 
 <b>INFEAS</b>, 
 <b>INFTY</b>, 
 <b>UNKNOWN</b>
+<br/>
  }</td></tr>
 <tr class="memdesc:a4ab3ad6f10d25d661ca234d4875eb753"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enum of possible solution types for linear optimization. <br/></td></tr>
 <tr class="separator:a4ab3ad6f10d25d661ca234d4875eb753"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -163,7 +176,56 @@ Enumerations</h2></td></tr>
 <b>PARTIAL</b>, 
 <b>YES</b>, 
 <br/>
-&#160;&#160;<b>BOT</b>
+&#160;&#160;<b>BOT</b>, 
+<b>NO</b> = 0, 
+<b>FULL</b>, 
+<b>PARTIAL</b>, 
+<br/>
+&#160;&#160;<b>YES</b>, 
+<b>BOT</b>
+<br/>
+ }</td></tr>
+<tr class="memdesc:aea0d4e87a42857800587cbdb7e735e9b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enum for set containment results. If known, we can make a statement about full or partial containment, otherwise fall back to YES/NO. Note: implicit conversion to bool still gives correct results (NO = 0). BOT is used for UNKNOWN. <br/></td></tr>
+<tr class="separator:aea0d4e87a42857800587cbdb7e735e9b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa4baff5f023c645e8b1809f4611478a1"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehypro_1_1hypro.html#aa4baff5f023c645e8b1809f4611478a1">TRIBOOL</a> { <br/>
+&#160;&#160;<b>TRUE</b>, 
+<b>FALSE</b>, 
+<b>NSET</b>, 
+<b>TRUE</b>, 
+<br/>
+&#160;&#160;<b>FALSE</b>, 
+<b>NSET</b>
+<br/>
+ }</td></tr>
+<tr class="memdesc:aa4baff5f023c645e8b1809f4611478a1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enum implementing a tribool. <br/></td></tr>
+<tr class="separator:aa4baff5f023c645e8b1809f4611478a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4ab3ad6f10d25d661ca234d4875eb753"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehypro_1_1hypro.html#a4ab3ad6f10d25d661ca234d4875eb753">SOLUTION</a> { <br/>
+&#160;&#160;<b>FEAS</b> = 0, 
+<b>INFEAS</b>, 
+<b>INFTY</b>, 
+<b>UNKNOWN</b>, 
+<br/>
+&#160;&#160;<b>FEAS</b> = 0, 
+<b>INFEAS</b>, 
+<b>INFTY</b>, 
+<b>UNKNOWN</b>
+<br/>
+ }</td></tr>
+<tr class="memdesc:a4ab3ad6f10d25d661ca234d4875eb753"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enum of possible solution types for linear optimization. <br/></td></tr>
+<tr class="separator:a4ab3ad6f10d25d661ca234d4875eb753"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aea0d4e87a42857800587cbdb7e735e9b"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehypro_1_1hypro.html#aea0d4e87a42857800587cbdb7e735e9b">CONTAINMENT</a> { <br/>
+&#160;&#160;<b>NO</b> = 0, 
+<b>FULL</b>, 
+<b>PARTIAL</b>, 
+<b>YES</b>, 
+<br/>
+&#160;&#160;<b>BOT</b>, 
+<b>NO</b> = 0, 
+<b>FULL</b>, 
+<b>PARTIAL</b>, 
+<br/>
+&#160;&#160;<b>YES</b>, 
+<b>BOT</b>
 <br/>
  }</td></tr>
 <tr class="memdesc:aea0d4e87a42857800587cbdb7e735e9b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enum for set containment results. If known, we can make a statement about full or partial containment, otherwise fall back to YES/NO. Note: implicit conversion to bool still gives correct results (NO = 0). BOT is used for UNKNOWN. <br/></td></tr>
@@ -171,34 +233,34 @@ Enumerations</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:aa24e4c2c4c78e075798a6a8f7eca92a3"><td class="memTemplParams" colspan="2">template&lt;typename From , typename To &gt; </td></tr>
-<tr class="memitem:aa24e4c2c4c78e075798a6a8f7eca92a3"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="namespacehypro_1_1hypro.html#a6eeda19c18af5aed479037ea8ce6af5c">matrix_t</a>&lt; To &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacehypro_1_1hypro.html#aa24e4c2c4c78e075798a6a8f7eca92a3">convert</a> (const <a class="el" href="namespacehypro_1_1hypro.html#a6eeda19c18af5aed479037ea8ce6af5c">matrix_t</a>&lt; From &gt; &amp;_mat)</td></tr>
-<tr class="separator:aa24e4c2c4c78e075798a6a8f7eca92a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a99cf0d1d51310253bd77a6e619221b76"><td class="memTemplParams" colspan="2"><a class="anchor" id="a99cf0d1d51310253bd77a6e619221b76"></a>
+<tr class="memitem:aabdb4a429cd4bb5354d60ba902bd66cb"><td class="memTemplParams" colspan="2">template&lt;typename From , typename To &gt; </td></tr>
+<tr class="memitem:aabdb4a429cd4bb5354d60ba902bd66cb"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="namespacehypro_1_1hypro.html#a6eeda19c18af5aed479037ea8ce6af5c">matrix_t</a>&lt; To &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacehypro_1_1hypro.html#aabdb4a429cd4bb5354d60ba902bd66cb">convert</a> (const <a class="el" href="namespacehypro_1_1hypro.html#a6eeda19c18af5aed479037ea8ce6af5c">matrix_t</a>&lt; From &gt; &amp;_mat)</td></tr>
+<tr class="separator:aabdb4a429cd4bb5354d60ba902bd66cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5042dd73181a9e3d71131aff53f46290"><td class="memTemplParams" colspan="2"><a class="anchor" id="a5042dd73181a9e3d71131aff53f46290"></a>
 template&lt;typename From , typename To &gt; </td></tr>
-<tr class="memitem:a99cf0d1d51310253bd77a6e619221b76"><td class="memTemplItemLeft" align="right" valign="top">Eigen::DiagonalMatrix&lt; To, <br class="typebreak"/>
+<tr class="memitem:a5042dd73181a9e3d71131aff53f46290"><td class="memTemplItemLeft" align="right" valign="top">Eigen::DiagonalMatrix&lt; To, <br class="typebreak"/>
 Eigen::Dynamic &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>convert</b> (const Eigen::DiagonalMatrix&lt; From, Eigen::Dynamic &gt; &amp;_mat)</td></tr>
-<tr class="separator:a99cf0d1d51310253bd77a6e619221b76"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a064e863d685fd8d8d8fa1d6bf4821d4f"><td class="memTemplParams" colspan="2"><a class="anchor" id="a064e863d685fd8d8d8fa1d6bf4821d4f"></a>
+<tr class="separator:a5042dd73181a9e3d71131aff53f46290"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae2ea1b1b9ff65ad0877717d7d67d87fb"><td class="memTemplParams" colspan="2"><a class="anchor" id="ae2ea1b1b9ff65ad0877717d7d67d87fb"></a>
 template&lt;typename Number &gt; </td></tr>
-<tr class="memitem:a064e863d685fd8d8d8fa1d6bf4821d4f"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="namespacehypro_1_1hypro.html#a136cb111924f682618d8bcf06644ea5a">vector_t</a>&lt; Number &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>normalize</b> (const <a class="el" href="namespacehypro_1_1hypro.html#a136cb111924f682618d8bcf06644ea5a">vector_t</a>&lt; Number &gt; &amp;in)</td></tr>
-<tr class="separator:a064e863d685fd8d8d8fa1d6bf4821d4f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a75edf202d5e83cb9f041b8d802688d0b"><td class="memTemplParams" colspan="2"><a class="anchor" id="a75edf202d5e83cb9f041b8d802688d0b"></a>
+<tr class="memitem:ae2ea1b1b9ff65ad0877717d7d67d87fb"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="namespacehypro_1_1hypro.html#a136cb111924f682618d8bcf06644ea5a">vector_t</a>&lt; Number &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>normalize</b> (const <a class="el" href="namespacehypro_1_1hypro.html#a136cb111924f682618d8bcf06644ea5a">vector_t</a>&lt; Number &gt; &amp;in)</td></tr>
+<tr class="separator:ae2ea1b1b9ff65ad0877717d7d67d87fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aabf60a1d890d78bee07b4c3886d3a2ef"><td class="memTemplParams" colspan="2"><a class="anchor" id="aabf60a1d890d78bee07b4c3886d3a2ef"></a>
 template&lt;typename Number &gt; </td></tr>
-<tr class="memitem:a75edf202d5e83cb9f041b8d802688d0b"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="namespacehypro_1_1hypro.html#a136cb111924f682618d8bcf06644ea5a">vector_t</a>&lt; Number &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>project</b> (const <a class="el" href="namespacehypro_1_1hypro.html#a136cb111924f682618d8bcf06644ea5a">vector_t</a>&lt; Number &gt; &amp;in, const std::vector&lt; std::size_t &gt; &amp;dimensions)</td></tr>
-<tr class="separator:a75edf202d5e83cb9f041b8d802688d0b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af01535bac2feed29e71bf66356926b1f"><td class="memTemplParams" colspan="2"><a class="anchor" id="af01535bac2feed29e71bf66356926b1f"></a>
+<tr class="memitem:aabf60a1d890d78bee07b4c3886d3a2ef"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="namespacehypro_1_1hypro.html#a136cb111924f682618d8bcf06644ea5a">vector_t</a>&lt; Number &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>project</b> (const <a class="el" href="namespacehypro_1_1hypro.html#a136cb111924f682618d8bcf06644ea5a">vector_t</a>&lt; Number &gt; &amp;in, const std::vector&lt; std::size_t &gt; &amp;dimensions)</td></tr>
+<tr class="separator:aabf60a1d890d78bee07b4c3886d3a2ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab33616afedcd7185429215631c18458a"><td class="memTemplParams" colspan="2"><a class="anchor" id="ab33616afedcd7185429215631c18458a"></a>
 template&lt;typename Number &gt; </td></tr>
-<tr class="memitem:af01535bac2feed29e71bf66356926b1f"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="namespacehypro_1_1hypro.html#a136cb111924f682618d8bcf06644ea5a">vector_t</a>&lt; Number &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>scalarProjection</b> (const <a class="el" href="namespacehypro_1_1hypro.html#a136cb111924f682618d8bcf06644ea5a">vector_t</a>&lt; Number &gt; &amp;source, const <a class="el" href="namespacehypro_1_1hypro.html#a136cb111924f682618d8bcf06644ea5a">vector_t</a>&lt; Number &gt; &amp;target)</td></tr>
-<tr class="separator:af01535bac2feed29e71bf66356926b1f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab33616afedcd7185429215631c18458a"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="namespacehypro_1_1hypro.html#a136cb111924f682618d8bcf06644ea5a">vector_t</a>&lt; Number &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>scalarProjection</b> (const <a class="el" href="namespacehypro_1_1hypro.html#a136cb111924f682618d8bcf06644ea5a">vector_t</a>&lt; Number &gt; &amp;source, const <a class="el" href="namespacehypro_1_1hypro.html#a136cb111924f682618d8bcf06644ea5a">vector_t</a>&lt; Number &gt; &amp;target)</td></tr>
+<tr class="separator:ab33616afedcd7185429215631c18458a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab69150c55f9c9993ec6c80db2a95feee"><td class="memTemplParams" colspan="2"><a class="anchor" id="ab69150c55f9c9993ec6c80db2a95feee"></a>
 template&lt;typename Number &gt; </td></tr>
 <tr class="memitem:ab69150c55f9c9993ec6c80db2a95feee"><td class="memTemplItemLeft" align="right" valign="top">int&#160;</td><td class="memTemplItemRight" valign="bottom"><b>effectiveDimension</b> (const std::vector&lt; <a class="el" href="namespacehypro_1_1hypro.html#a136cb111924f682618d8bcf06644ea5a">vector_t</a>&lt; Number &gt;&gt; &amp;vertices)</td></tr>
 <tr class="separator:ab69150c55f9c9993ec6c80db2a95feee"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af05f9c0cb967ecb26af0b07aedb203b2"><td class="memTemplParams" colspan="2"><a class="anchor" id="af05f9c0cb967ecb26af0b07aedb203b2"></a>
+<tr class="memitem:afc509716458144e0bb5236b0ac96b165"><td class="memTemplParams" colspan="2"><a class="anchor" id="afc509716458144e0bb5236b0ac96b165"></a>
 template&lt;typename Number &gt; </td></tr>
-<tr class="memitem:af05f9c0cb967ecb26af0b07aedb203b2"><td class="memTemplItemLeft" align="right" valign="top">std::pair&lt; bool, Number &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>linearDependent</b> (const <a class="el" href="namespacehypro_1_1hypro.html#a136cb111924f682618d8bcf06644ea5a">vector_t</a>&lt; Number &gt; &amp;lhs, const <a class="el" href="namespacehypro_1_1hypro.html#a136cb111924f682618d8bcf06644ea5a">vector_t</a>&lt; Number &gt; &amp;rhs)</td></tr>
-<tr class="separator:af05f9c0cb967ecb26af0b07aedb203b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afc509716458144e0bb5236b0ac96b165"><td class="memTemplItemLeft" align="right" valign="top">std::pair&lt; bool, Number &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>linearDependent</b> (const <a class="el" href="namespacehypro_1_1hypro.html#a136cb111924f682618d8bcf06644ea5a">vector_t</a>&lt; Number &gt; &amp;lhs, const <a class="el" href="namespacehypro_1_1hypro.html#a136cb111924f682618d8bcf06644ea5a">vector_t</a>&lt; Number &gt; &amp;rhs)</td></tr>
+<tr class="separator:afc509716458144e0bb5236b0ac96b165"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9d193ff3d836bcb8e5038534bc77183d"><td class="memTemplParams" colspan="2"><a class="anchor" id="a9d193ff3d836bcb8e5038534bc77183d"></a>
 template&lt;typename Number , carl::DisableIf&lt; std::is_same&lt; Number, double &gt; &gt;  = carl::dummy&gt; </td></tr>
 <tr class="memitem:a9d193ff3d836bcb8e5038534bc77183d"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="namespacehypro_1_1hypro.html#a136cb111924f682618d8bcf06644ea5a">vector_t</a>&lt; Number &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>reduceNumberRepresentation</b> (const <a class="el" href="namespacehypro_1_1hypro.html#a136cb111924f682618d8bcf06644ea5a">vector_t</a>&lt; Number &gt; &amp;in)</td></tr>
@@ -211,32 +273,32 @@ template&lt;typename Number &gt; </td></tr>
 template&lt;typename Number &gt; </td></tr>
 <tr class="memitem:a1453cc4f79ef19b7cf7461bbbf965864"><td class="memTemplItemLeft" align="right" valign="top">std::string&#160;</td><td class="memTemplItemRight" valign="bottom"><b>createCode</b> (const <a class="el" href="namespacehypro_1_1hypro.html#a136cb111924f682618d8bcf06644ea5a">vector_t</a>&lt; Number &gt; &amp;in, unsigned index=0)</td></tr>
 <tr class="separator:a1453cc4f79ef19b7cf7461bbbf965864"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a854b4417c0fa7d19d7fe308fbcba609e"><td class="memTemplParams" colspan="2"><a class="anchor" id="a854b4417c0fa7d19d7fe308fbcba609e"></a>
+<tr class="memitem:a952e8683acc0df65560bb0eea2912aea"><td class="memTemplParams" colspan="2"><a class="anchor" id="a952e8683acc0df65560bb0eea2912aea"></a>
 template&lt;&gt; </td></tr>
-<tr class="memitem:a854b4417c0fa7d19d7fe308fbcba609e"><td class="memTemplItemLeft" align="right" valign="top">std::pair&lt; bool, double &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>linearDependent</b> (const <a class="el" href="namespacehypro_1_1hypro.html#a136cb111924f682618d8bcf06644ea5a">vector_t</a>&lt; double &gt; &amp;lhs, const <a class="el" href="namespacehypro_1_1hypro.html#a136cb111924f682618d8bcf06644ea5a">vector_t</a>&lt; double &gt; &amp;rhs)</td></tr>
-<tr class="separator:a854b4417c0fa7d19d7fe308fbcba609e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7e6e1a18193decac3503410789da8c3c"><td class="memTemplParams" colspan="2"><a class="anchor" id="a7e6e1a18193decac3503410789da8c3c"></a>
+<tr class="memitem:a952e8683acc0df65560bb0eea2912aea"><td class="memTemplItemLeft" align="right" valign="top">std::pair&lt; bool, double &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>linearDependent</b> (const <a class="el" href="namespacehypro_1_1hypro.html#a136cb111924f682618d8bcf06644ea5a">vector_t</a>&lt; double &gt; &amp;lhs, const <a class="el" href="namespacehypro_1_1hypro.html#a136cb111924f682618d8bcf06644ea5a">vector_t</a>&lt; double &gt; &amp;rhs)</td></tr>
+<tr class="separator:a952e8683acc0df65560bb0eea2912aea"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a71b52898b847c1038f919ac004734348"><td class="memTemplParams" colspan="2"><a class="anchor" id="a71b52898b847c1038f919ac004734348"></a>
 template&lt;typename T &gt; </td></tr>
-<tr class="memitem:a7e6e1a18193decac3503410789da8c3c"><td class="memTemplItemLeft" align="right" valign="top">std::ostream &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>operator&lt;&lt;</b> (std::ostream &amp;_out, const std::set&lt; T &gt; &amp;_set)</td></tr>
-<tr class="separator:a7e6e1a18193decac3503410789da8c3c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a335cf4941d5d1064f8ebe2884eaf8818"><td class="memTemplParams" colspan="2"><a class="anchor" id="a335cf4941d5d1064f8ebe2884eaf8818"></a>
+<tr class="memitem:a71b52898b847c1038f919ac004734348"><td class="memTemplItemLeft" align="right" valign="top">std::ostream &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>operator&lt;&lt;</b> (std::ostream &amp;_out, const std::set&lt; T &gt; &amp;_set)</td></tr>
+<tr class="separator:a71b52898b847c1038f919ac004734348"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8bedbcc4669828fa506e8a6c2390b2fc"><td class="memTemplParams" colspan="2"><a class="anchor" id="a8bedbcc4669828fa506e8a6c2390b2fc"></a>
 template&lt;typename T &gt; </td></tr>
-<tr class="memitem:a335cf4941d5d1064f8ebe2884eaf8818"><td class="memTemplItemLeft" align="right" valign="top">std::ostream &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>operator&lt;&lt;</b> (std::ostream &amp;_out, const std::vector&lt; T &gt; &amp;_vector)</td></tr>
-<tr class="separator:a335cf4941d5d1064f8ebe2884eaf8818"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae5f5393a8c1bdc2d61b57a96c261f291"><td class="memTemplParams" colspan="2"><a class="anchor" id="ae5f5393a8c1bdc2d61b57a96c261f291"></a>
+<tr class="memitem:a8bedbcc4669828fa506e8a6c2390b2fc"><td class="memTemplItemLeft" align="right" valign="top">std::ostream &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>operator&lt;&lt;</b> (std::ostream &amp;_out, const std::vector&lt; T &gt; &amp;_vector)</td></tr>
+<tr class="separator:a8bedbcc4669828fa506e8a6c2390b2fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ada1e9f866efcb52b1e477f26c4785a93"><td class="memTemplParams" colspan="2"><a class="anchor" id="ada1e9f866efcb52b1e477f26c4785a93"></a>
 template&lt;typename T &gt; </td></tr>
-<tr class="memitem:ae5f5393a8c1bdc2d61b57a96c261f291"><td class="memTemplItemLeft" align="right" valign="top">std::ostream &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>operator&lt;&lt;</b> (std::ostream &amp;_out, const std::pair&lt; T, T &gt; &amp;_pair)</td></tr>
-<tr class="separator:ae5f5393a8c1bdc2d61b57a96c261f291"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae32105bfba6d1d682192dc62a3cbbd50"><td class="memTemplParams" colspan="2"><a class="anchor" id="ae32105bfba6d1d682192dc62a3cbbd50"></a>
+<tr class="memitem:ada1e9f866efcb52b1e477f26c4785a93"><td class="memTemplItemLeft" align="right" valign="top">std::ostream &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>operator&lt;&lt;</b> (std::ostream &amp;_out, const std::pair&lt; T, T &gt; &amp;_pair)</td></tr>
+<tr class="separator:ada1e9f866efcb52b1e477f26c4785a93"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a269a8d4e1beccdbd928eea00f403bc57"><td class="memTemplParams" colspan="2"><a class="anchor" id="a269a8d4e1beccdbd928eea00f403bc57"></a>
 template&lt;typename Key , typename T &gt; </td></tr>
-<tr class="memitem:ae32105bfba6d1d682192dc62a3cbbd50"><td class="memTemplItemLeft" align="right" valign="top">std::ostream &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>operator&lt;&lt;</b> (std::ostream &amp;_out, const std::map&lt; Key, T &gt; &amp;_map)</td></tr>
-<tr class="separator:ae32105bfba6d1d682192dc62a3cbbd50"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a269a8d4e1beccdbd928eea00f403bc57"><td class="memTemplItemLeft" align="right" valign="top">std::ostream &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>operator&lt;&lt;</b> (std::ostream &amp;_out, const std::map&lt; Key, T &gt; &amp;_map)</td></tr>
+<tr class="separator:a269a8d4e1beccdbd928eea00f403bc57"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad65e76586e4671636d0672e3daeba9e6"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad65e76586e4671636d0672e3daeba9e6"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><b>initializeLogging</b> (int &amp;i)</td></tr>
+<tr class="separator:ad65e76586e4671636d0672e3daeba9e6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><dl class="section author"><dt>Author</dt><dd>Stefan Schupp <a href="#" onclick="location.href='mai'+'lto:'+'ste'+'fa'+'n.s'+'ch'+'upp'+'@c'+'s.r'+'wt'+'h-a'+'ac'+'hen'+'.d'+'e'; return false;">stefa<span style="display: none;">.nosp@m.</span>n.sc<span style="display: none;">.nosp@m.</span>hupp@<span style="display: none;">.nosp@m.</span>cs.r<span style="display: none;">.nosp@m.</span>wth-a<span style="display: none;">.nosp@m.</span>ache<span style="display: none;">.nosp@m.</span>n.de</a> </dd></dl>
-<dl class="section since"><dt>Since</dt><dd>2016-03-22 </dd></dl>
-<dl class="section version"><dt>Version</dt><dd>2016-03-22</dd></dl>
-<p>Enables debug output for Fukudas Minkowski-Sum algorithm. </p>
+<div class="textblock"><p>Enables debug output for Fukudas Minkowski-Sum algorithm. </p>
 </div><h2 class="groupheader">Typedef Documentation</h2>
 <a class="anchor" id="a6eeda19c18af5aed479037ea8ce6af5c"></a>
 <div class="memitem">
@@ -273,14 +335,14 @@ template&lt;typename Number &gt; </div>
 </div>
 </div>
 <h2 class="groupheader">Function Documentation</h2>
-<a class="anchor" id="aa24e4c2c4c78e075798a6a8f7eca92a3"></a>
+<a class="anchor" id="aabdb4a429cd4bb5354d60ba902bd66cb"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
 template&lt;typename From , typename To &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespacehypro_1_1hypro.html#a6eeda19c18af5aed479037ea8ce6af5c">matrix_t</a>&lt;To&gt; hypro::hypro::convert </td>
+          <td class="memname"><a class="el" href="namespacehypro_1_1hypro.html#a6eeda19c18af5aed479037ea8ce6af5c">matrix_t</a>&lt; To &gt; hypro::hypro::convert </td>
           <td>(</td>
           <td class="paramtype">const matrix_t&lt; From &gt; &amp;&#160;</td>
           <td class="paramname"><em>_mat</em></td><td>)</td>

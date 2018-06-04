@@ -31,7 +31,7 @@
   <td id="projectlogo"><img alt="Logo" src="hypro_Logo.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">HyPro
-   &#160;<span id="projectnumber">18.05</span>
+   &#160;<span id="projectnumber">18.06</span>
    </div>
    <div id="projectbrief">A Toolbox for the Reachability Analysis of Hybrid Systems using Geometric Approximations</div>
   </td>
@@ -112,6 +112,7 @@ $(document).ready(function(){initNavTree('classhypro_1_1Location.html','');});
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pro-types">Protected Types</a> &#124;
+<a href="#pro-methods">Protected Member Functions</a> &#124;
 <a href="#friends">Friends</a> &#124;
 <a href="classhypro_1_1Location-members.html">List of all members</a>  </div>
   <div class="headertitle">
@@ -126,6 +127,15 @@ $(document).ready(function(){initNavTree('classhypro_1_1Location.html','');});
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
+<tr class="memitem:a84a35d2b77c229f685c9c304997ff776"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a84a35d2b77c229f685c9c304997ff776"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>Location</b> (const <a class="el" href="classhypro_1_1Location.html">Location</a> &amp;loc)</td></tr>
+<tr class="separator:a84a35d2b77c229f685c9c304997ff776"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeffc26c683ac9afcc6850a6c03e85df7"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aeffc26c683ac9afcc6850a6c03e85df7"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>Location</b> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;mat)</td></tr>
+<tr class="separator:aeffc26c683ac9afcc6850a6c03e85df7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa3c33cc27e279f45034e50019f2f2bfa"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa3c33cc27e279f45034e50019f2f2bfa"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>Location</b> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;mat, const transitionSet &amp;trans, const <a class="el" href="classhypro_1_1Condition.html">Condition</a>&lt; Number &gt; &amp;inv)</td></tr>
+<tr class="separator:aa3c33cc27e279f45034e50019f2f2bfa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7d8a180b8b08d3cd7abdd95d0bec5dde"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7d8a180b8b08d3cd7abdd95d0bec5dde"></a>
 std::size_t&#160;</td><td class="memItemRight" valign="bottom"><b>getNumberFlow</b> () const </td></tr>
 <tr class="separator:a7d8a180b8b08d3cd7abdd95d0bec5dde"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -135,6 +145,10 @@ std::size_t&#160;</td><td class="memItemRight" valign="bottom"><b>getNumberFlow<
 <tr class="memitem:a590201cb456f709b966693706d3f2ad1"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a590201cb456f709b966693706d3f2ad1"></a>
 <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>rGetFlow</b> (std::size_t I=0)</td></tr>
 <tr class="separator:a590201cb456f709b966693706d3f2ad1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a020cd891df68051d6c7953456d09dcca"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a020cd891df68051d6c7953456d09dcca"></a>
+const std::vector&lt; <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a><br class="typebreak"/>
+&lt; Number &gt; &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getFlows</b> () const </td></tr>
+<tr class="separator:a020cd891df68051d6c7953456d09dcca"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acf2a88e7cce8962765ae1f2468934952"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="acf2a88e7cce8962765ae1f2468934952"></a>
 const <a class="el" href="classhypro_1_1Condition.html">Condition</a>&lt; Number &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getInvariant</b> () const </td></tr>
 <tr class="separator:acf2a88e7cce8962765ae1f2468934952"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -171,12 +185,18 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>addTransition</b> (<a
 <tr class="memitem:ade09fa1e2d454cba37e1262aac0d3d7e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ade09fa1e2d454cba37e1262aac0d3d7e"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>setExtInput</b> (const Box&lt; Number &gt; &amp;b)</td></tr>
 <tr class="separator:ade09fa1e2d454cba37e1262aac0d3d7e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8a5754e841553cb19fd2ecbcecc0d262"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8a5754e841553cb19fd2ecbcecc0d262"></a>
+std::size_t&#160;</td><td class="memItemRight" valign="bottom"><b>hash</b> () const </td></tr>
+<tr class="separator:a8a5754e841553cb19fd2ecbcecc0d262"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a280bb96bba67484bc038bf6337d706a8"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Location.html#a280bb96bba67484bc038bf6337d706a8">isComposedOf</a> (const <a class="el" href="classhypro_1_1Location.html">Location</a>&lt; Number &gt; &amp;rhs, const std::vector&lt; std::string &gt; &amp;rhsVars, const std::vector&lt; std::string &gt; &amp;thisVars) const </td></tr>
 <tr class="memdesc:a280bb96bba67484bc038bf6337d706a8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines if this composed of rhs and some potential rest.  <a href="#a280bb96bba67484bc038bf6337d706a8">More...</a><br/></td></tr>
 <tr class="separator:a280bb96bba67484bc038bf6337d706a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a00e08686c4582cda2df4c2084dcabf9a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a00e08686c4582cda2df4c2084dcabf9a"></a>
 std::string&#160;</td><td class="memItemRight" valign="bottom"><b>getDotRepresentation</b> (const std::vector&lt; std::string &gt; &amp;vars) const </td></tr>
 <tr class="separator:a00e08686c4582cda2df4c2084dcabf9a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab5da19a9be3af5a9ca650288324a8028"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab5da19a9be3af5a9ca650288324a8028"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>decompose</b> (std::vector&lt; std::vector&lt; size_t &gt;&gt; decomposition)</td></tr>
+<tr class="separator:ab5da19a9be3af5a9ca650288324a8028"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8f33a74a18d96cf7bd207ad4491ee815"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8f33a74a18d96cf7bd207ad4491ee815"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator&lt;</b> (const <a class="el" href="classhypro_1_1Location.html">Location</a>&lt; Number &gt; &amp;rhs) const </td></tr>
 <tr class="separator:a8f33a74a18d96cf7bd207ad4491ee815"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -195,17 +215,15 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>transitionSet</b> = 
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
-<tr><td colspan="2"><div class="groupHeader"></div></td></tr>
 <tr class="memitem:a6e7ef40440fc9e460618e7fdf47ea41f"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Location.html#a6e7ef40440fc9e460618e7fdf47ea41f">Location</a> (unsigned id)</td></tr>
 <tr class="memdesc:a6e7ef40440fc9e460618e7fdf47ea41f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <a href="#a6e7ef40440fc9e460618e7fdf47ea41f">More...</a><br/></td></tr>
 <tr class="separator:a6e7ef40440fc9e460618e7fdf47ea41f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr><td colspan="2"><div class="groupHeader"></div></td></tr>
 <tr class="memitem:ad5a8502815ab1b69bf812ec6c9539330"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Location.html#ad5a8502815ab1b69bf812ec6c9539330">Location</a> (unsigned id, const <a class="el" href="classhypro_1_1Location.html">Location</a> &amp;loc)</td></tr>
 <tr class="separator:ad5a8502815ab1b69bf812ec6c9539330"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0db96e5ecd37ac0591ee8e81643c8354"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Location.html#a0db96e5ecd37ac0591ee8e81643c8354">Location</a> (unsigned id, const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;mat)</td></tr>
-<tr class="memdesc:a0db96e5ecd37ac0591ee8e81643c8354"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <a href="#a0db96e5ecd37ac0591ee8e81643c8354">More...</a><br/></td></tr>
 <tr class="separator:a0db96e5ecd37ac0591ee8e81643c8354"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa48a2d4286320d28ff981703c8e2723e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Location.html#aa48a2d4286320d28ff981703c8e2723e">Location</a> (unsigned id, const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;mat, const transitionSet &amp;trans, const <a class="el" href="classhypro_1_1Condition.html">Condition</a>&lt; Number &gt; &amp;inv)</td></tr>
-<tr class="memdesc:aa48a2d4286320d28ff981703c8e2723e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <a href="#aa48a2d4286320d28ff981703c8e2723e">More...</a><br/></td></tr>
 <tr class="separator:aa48a2d4286320d28ff981703c8e2723e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
@@ -225,7 +243,7 @@ class hypro::Location&lt; Number &gt;</h3>
   </table>
   </dd>
 </dl>
-<dl><dt><b>Examples: </b></dt><dd><a class="el" href="example_bouncingBall_8cpp-example.html#_a1">example_bouncingBall.cpp</a>.</dd>
+<dl><dt><b>Examples: </b></dt><dd><a class="el" href="example_bouncingBall_8cpp-example.html#_a0">example_bouncingBall.cpp</a>.</dd>
 </dl>
 <p>Definition at line <a class="el" href="Location_8h_source.html#l00031">31</a> of file <a class="el" href="Location_8h_source.html">Location.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
@@ -254,10 +272,10 @@ template&lt;typename Number&gt; </div>
 </div><div class="memdoc">
 
 <p>Constructor. </p>
-<p>Note that locations should only be constructed from the <a class="el" href="classhypro_1_1LocationManager.html">LocationManager</a>. </p>
+<p>Note that locations should only be constructed from the LocationManager. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">id</td><td>The identifier given by the <a class="el" href="classhypro_1_1LocationManager.html">LocationManager</a>. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">id</td><td>The identifier given by the LocationManager. </td></tr>
   </table>
   </dd>
 </dl>
@@ -299,7 +317,7 @@ template&lt;typename Number&gt; </div>
 </div><div class="memdoc">
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">id</td><td>The identifier given by the <a class="el" href="classhypro_1_1LocationManager.html">LocationManager</a>. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">id</td><td>The identifier given by the LocationManager. </td></tr>
     <tr><td class="paramdir"></td><td class="paramname">loc]</td><td>The original location which is copied. </td></tr>
   </table>
   </dd>
@@ -340,12 +358,10 @@ template&lt;typename Number&gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
-
-<p>Constructor. </p>
-<p>Note that locations should only be constructed from the <a class="el" href="classhypro_1_1LocationManager.html">LocationManager</a>. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">id</td><td>The identifier given by the <a class="el" href="classhypro_1_1LocationManager.html">LocationManager</a>. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">id</td><td>The identifier given by the LocationManager. </td></tr>
+    <tr><td class="paramdir"></td><td class="paramname">loc]</td><td>The original location which is copied. </td></tr>
   </table>
   </dd>
 </dl>
@@ -397,12 +413,10 @@ template&lt;typename Number&gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
-
-<p>Constructor. </p>
-<p>Note that locations should only be constructed from the <a class="el" href="classhypro_1_1LocationManager.html">LocationManager</a>. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">id</td><td>The identifier given by the <a class="el" href="classhypro_1_1LocationManager.html">LocationManager</a>. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">id</td><td>The identifier given by the LocationManager. </td></tr>
+    <tr><td class="paramdir"></td><td class="paramname">loc]</td><td>The original location which is copied. </td></tr>
   </table>
   </dd>
 </dl>

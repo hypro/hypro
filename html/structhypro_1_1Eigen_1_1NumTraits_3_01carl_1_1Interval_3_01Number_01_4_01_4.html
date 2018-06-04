@@ -31,7 +31,7 @@
   <td id="projectlogo"><img alt="Logo" src="hypro_Logo.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">HyPro
-   &#160;<span id="projectnumber">18.05</span>
+   &#160;<span id="projectnumber">18.06</span>
    </div>
    <div id="projectbrief">A Toolbox for the Reachability Analysis of Hybrid Systems using Geometric Approximations</div>
   </td>
@@ -120,7 +120,7 @@ $(document).ready(function(){initNavTree('structhypro_1_1Eigen_1_1NumTraits_3_01
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
-<tr class="memitem:a2b4eb285ce5b572a245499dc1503e762"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom">{ <br/>
+<tr class="memitem:a2005d674c6f444536bd4406eddc43c61"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom">{ <br/>
 &#160;&#160;<b>IsInteger</b> = 0, 
 <b>IsSigned</b> = 1, 
 <b>IsComplex</b> = 0, 
@@ -131,7 +131,28 @@ Public Types</h2></td></tr>
 <b>MulCost</b> = 100
 <br/>
  }</td></tr>
-<tr class="separator:a2b4eb285ce5b572a245499dc1503e762"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="separator:a2005d674c6f444536bd4406eddc43c61"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a288ee86ff61892f7c81c1b07f5735707"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom">{ <br/>
+&#160;&#160;<b>IsInteger</b> = 0, 
+<b>IsSigned</b> = 1, 
+<b>IsComplex</b> = 0, 
+<b>RequireInitialization</b> = 1, 
+<br/>
+&#160;&#160;<b>ReadCost</b> = 6, 
+<b>AddCost</b> = 150, 
+<b>MulCost</b> = 100
+<br/>
+ }</td></tr>
+<tr class="separator:a288ee86ff61892f7c81c1b07f5735707"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa053c0a3ead792691b6cc166083713b1"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa053c0a3ead792691b6cc166083713b1"></a>
+typedef carl::Interval&lt; Number &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>Real</b></td></tr>
+<tr class="separator:aa053c0a3ead792691b6cc166083713b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a619d1ddec13036416c5f009262838fcf"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a619d1ddec13036416c5f009262838fcf"></a>
+typedef carl::Interval&lt; Number &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>NonInteger</b></td></tr>
+<tr class="separator:a619d1ddec13036416c5f009262838fcf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aebeb626bf7f5dc31cbd15f4c85666d67"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aebeb626bf7f5dc31cbd15f4c85666d67"></a>
+typedef carl::Interval&lt; Number &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>Nested</b></td></tr>
+<tr class="separator:aebeb626bf7f5dc31cbd15f4c85666d67"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa053c0a3ead792691b6cc166083713b1"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa053c0a3ead792691b6cc166083713b1"></a>
 typedef carl::Interval&lt; Number &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>Real</b></td></tr>
 <tr class="separator:aa053c0a3ead792691b6cc166083713b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -144,6 +165,15 @@ typedef carl::Interval&lt; Number &gt;&#160;</td><td class="memItemRight" valign
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
+<tr class="memitem:ad9c7b9d6ecbd2012a607c1d45eb9dce5"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad9c7b9d6ecbd2012a607c1d45eb9dce5"></a>
+static Real&#160;</td><td class="memItemRight" valign="bottom"><b>epsilon</b> ()</td></tr>
+<tr class="separator:ad9c7b9d6ecbd2012a607c1d45eb9dce5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2efb076b67d00e6a7d88cb0a0a4417c3"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2efb076b67d00e6a7d88cb0a0a4417c3"></a>
+static Real&#160;</td><td class="memItemRight" valign="bottom"><b>dummy_precision</b> ()</td></tr>
+<tr class="separator:a2efb076b67d00e6a7d88cb0a0a4417c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a093c22990dfbc49b02991b163921156d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a093c22990dfbc49b02991b163921156d"></a>
+static Real&#160;</td><td class="memItemRight" valign="bottom"><b>digits10</b> ()</td></tr>
+<tr class="separator:a093c22990dfbc49b02991b163921156d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad9c7b9d6ecbd2012a607c1d45eb9dce5"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad9c7b9d6ecbd2012a607c1d45eb9dce5"></a>
 static Real&#160;</td><td class="memItemRight" valign="bottom"><b>epsilon</b> ()</td></tr>
 <tr class="separator:ad9c7b9d6ecbd2012a607c1d45eb9dce5"><td class="memSeparator" colspan="2">&#160;</td></tr>
