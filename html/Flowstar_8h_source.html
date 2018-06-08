@@ -286,14 +286,14 @@ $(document).ready(function(){initNavTree('Flowstar_8h_source.html','');});
 <div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;            res &lt;&lt; <span class="stringliteral">&quot;\tmodes\n\t{\n&quot;</span>;</div>
 <div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;            <span class="comment">//for(std::unique_ptr&lt;Location&lt;Number&gt;&gt;&amp; locPtr : in.getLocations()) {</span></div>
 <div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;            <span class="keywordflow">for</span>(<span class="keyword">auto</span>&amp; locPtr : in.getLocations()) {</div>
-<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;                res &lt;&lt; toFlowstarFormat(locPtr.get(), vars, <span class="stringliteral">&quot;\n\t\t&quot;</span>);</div>
+<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;                res &lt;&lt; toFlowstarFormat(locPtr, vars, <span class="stringliteral">&quot;\n\t\t&quot;</span>);</div>
 <div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;            }</div>
 <div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;            res &lt;&lt; <span class="stringliteral">&quot;\n\t}\n&quot;</span>;</div>
 <div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;</div>
 <div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;            <span class="keywordflow">if</span>(!in.getTransitions().empty()) {</div>
 <div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;                <span class="comment">// transitions</span></div>
 <div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;                res &lt;&lt; <span class="stringliteral">&quot;\tjumps\n\t{&quot;</span>;</div>
-<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;                <span class="keywordflow">for</span>(<span class="keyword">const</span> <span class="keyword">auto</span>&amp; transPtr : in.getTransitions()) {</div>
+<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;                <span class="keywordflow">for</span>(<span class="keyword">const</span> <span class="keyword">auto</span> transPtr : in.getTransitions()) {</div>
 <div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;                    <span class="comment">//std::cout &lt;&lt; &quot;output transition &quot; &lt;&lt; transPtr-&gt;getSource()-&gt;getName() &lt;&lt; &quot; -&gt; &quot; &lt;&lt; transPtr-&gt;getTarget()-&gt;getName() &lt;&lt; std::endl;</span></div>
 <div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;                    res &lt;&lt; <span class="stringliteral">&quot;\n\t\t&quot;</span> &lt;&lt; transPtr-&gt;getSource()-&gt;getName() &lt;&lt; <span class="stringliteral">&quot; -&gt; &quot;</span> &lt;&lt; transPtr-&gt;getTarget()-&gt;getName();</div>
 <div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;                    <span class="keywordflow">if</span>(transPtr-&gt;isUrgent())</div>

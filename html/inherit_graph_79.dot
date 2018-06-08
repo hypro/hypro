@@ -3,13 +3,5 @@ digraph "Graphical Class Hierarchy"
   edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
   node [fontname="Helvetica",fontsize="10",shape=record];
   rankdir="LR";
-  Node1 [label="Singleton",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled"];
-  Node1 -> Node2 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node2 [label="hypro::Plotter\< Number \>",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classhypro_1_1Plotter.html",tooltip="Class implementing a plotter. The plotter is implemented using carl::Singleton. "];
-  Node1 -> Node3 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node3 [label="hypro::reachability\l::hypro::Plotter\< Number \>",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classhypro_1_1reachability_1_1hypro_1_1Plotter.html",tooltip="Class implementing a plotter. The plotter is implemented using carl::Singleton. "];
-  Node1 -> Node4 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node4 [label="hypro::reachability\l::hypro::VariablePool",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classhypro_1_1reachability_1_1hypro_1_1VariablePool.html"];
-  Node1 -> Node5 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node5 [label="hypro::VariablePool",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classhypro_1_1VariablePool.html"];
+  Node1 [label="hypro::Permutator",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classhypro_1_1Permutator.html",tooltip="Class for a permutator. "];
 }
