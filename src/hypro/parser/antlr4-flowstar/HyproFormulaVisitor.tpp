@@ -96,7 +96,7 @@ namespace hypro {
 				std::cout << "ERROR: multiplication of several variables not allowed!" << std::endl;
 				exit(0);
 			}
-			coeffVec(dest) = (minusCount % 2 == 1) ? Number(-1)*multed : multed;
+			coeffVec(dest) += (minusCount % 2 == 1) ? Number(-1)*multed : multed;
 
 			lastTermEndIndex = mTerm->stop->getStopIndex();
 
