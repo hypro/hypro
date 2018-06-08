@@ -21,7 +21,7 @@ template<typename Number>
 class Transition;
 
 template<typename Number>
-class [[deprecated]] LocationManager;
+class LocationManager;
 
 /**
  * @brief      Class for location.
@@ -40,18 +40,14 @@ protected:
      * @details    Note that locations should only be constructed from the LocationManager.
      * @param[in]  id    The identifier given by the LocationManager.
      */
-    [[deprecated("use public location constructor instead")]]
     Location(unsigned id);
     ///@{
     /**
      * @param[in]  id    The identifier given by the LocationManager.
      * @param[loc] The original location which is copied.
      */
-    [[deprecated("use public location constructor instead")]]
     Location(unsigned id, const Location& loc);
-    [[deprecated("use public location constructor instead")]]
     Location(unsigned id, const matrix_t<Number>& mat);
-    [[deprecated("use public location constructor instead")]]
     Location(unsigned id, const matrix_t<Number>& mat, const transitionSet& trans, const Condition<Number>& inv);
     ///@}
 
@@ -105,17 +101,17 @@ public:
      * @return     True if composed of, False otherwise.
      */
     bool isComposedOf(const Location<Number>& rhs, const std::vector<std::string>& rhsVars, const std::vector<std::string>& thisVars) const;
-    
+
     std::string getDotRepresentation(const std::vector<std::string>& vars) const;
-	
+
     /*
     * decomposes flow and invariant of this location.
     */
     void decompose(std::vector<std::vector<size_t>> decomposition);
 
-    inline bool operator<(const Location<Number>& rhs) const { 
+    inline bool operator<(const Location<Number>& rhs) const {
         if(this->hash() != rhs.hash()){
-            return this->hash() < rhs.hash(); 
+            return this->hash() < rhs.hash();
         } else {
             //Case where we have to compare members, as same hashes do not necessarily mean equality between the locations.
             //As order does not mean anything here semantically, we are free to choose anything that gives us an ordering between locations.
@@ -172,13 +168,13 @@ namespace std {
         {
             //Flows
             std::size_t seed = 0;
-            for(auto& flow : locPtr->getFlows()){
+            for(const auto& flow : locPtr->getFlows()){
                 seed += std::hash<hypro::matrix_t<Number>>()(flow);
             }
-            
+
             //Name
             seed += std::hash<std::string>()(locPtr->getName());
-    
+
             ////Transitions
             //std::size_t transitionHash = 0;
             //for(auto& t : mTransitions){

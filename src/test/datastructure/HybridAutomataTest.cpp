@@ -63,7 +63,7 @@ protected:
 
 		copyOfLoc1 = std::unique_ptr<Location<Number>>(new Location<Number>(*loc1));
 		copyOfLoc2 = std::unique_ptr<Location<Number>>(new Location<Number>(*loc2));
-		
+
 		/*
 		 * Transition Setup
 		 */
@@ -90,7 +90,7 @@ protected:
 		initLocSet.insert(loc1.get());
 		locSet.insert(std::move(copyOfLoc1));
 		locSet.insert(std::move(copyOfLoc2));
-		
+
 		//Polytope for InitialValuation & Guard Assignment
 		coordinates(0) = 2;
 		coordinates(1) = 3;
@@ -112,7 +112,7 @@ protected:
     }
 
     virtual void TearDown()
-    { 	
+    {
     	//delete loc1;
     	//delete loc2;
     	//delete trans;
@@ -150,7 +150,7 @@ protected:
 
   public:
 
-  	bool find(const std::unique_ptr<Location<Number>>& loc, const std::set<std::unique_ptr<Location<Number>>, locPtrComp<Number>>& locSet) const {
+  	bool find(const Location<Number>* loc, const std::set<Location<Number>*>& locSet) const {
   		if(loc == nullptr || locSet.empty()){
   			std::cout << "loc was nullptr or locSet was empty\n";
   			return false;
@@ -167,8 +167,8 @@ protected:
 		std::cout << "found no match.\n";
 		return false;
   	}
-  	
-  	bool find(const std::unique_ptr<Transition<Number>>& trans, const std::set<std::unique_ptr<Transition<Number>>>& transSet) const {
+
+  	bool find(const Transition<Number>* trans, const std::set<Transition<Number>*>& transSet) const {
   		if(trans == nullptr || transSet.empty())
   			return false;
 		for(auto& ptrToTrans : transSet){
@@ -190,39 +190,39 @@ TYPED_TEST(HybridAutomataTest, LocationTest)
     //invariant: vector
     EXPECT_EQ(this->loc1->getInvariant().getVector(), this->invariantVec);
     EXPECT_EQ(this->loc2->getInvariant().getVector(), this->invariantVec);
-    
+
 	vector_t<TypeParam> invariantVec2(2,1);
 	invariantVec2(0) = 10;
 	invariantVec2(1) = 10;
 	EXPECT_NE(this->loc1->getInvariant().getVector(), invariantVec2);
-	
+
 	//invariant: matrix
 	EXPECT_EQ(this->loc1->getInvariant().getMatrix(), this->invariantMat);
 	EXPECT_EQ(this->loc2->getInvariant().getMatrix(), this->invariantMat);
-	
+
 	matrix_t<TypeParam> invariantMat2(2,2);
 	invariantMat2(0,0) = 1;
 	invariantMat2(0,1) = 0;
 	invariantMat2(1,0) = 0;
 	invariantMat2(1,1) = 3;
 	EXPECT_NE(this->loc1->getInvariant().getMatrix(), invariantMat2);
-	
+
 	//location: matrix
 	EXPECT_EQ(this->loc1->getFlow(), this->locationMat);
-	
+
 	matrix_t<TypeParam> locationMat2(2,2);
 	locationMat2(0,0) = 1;
 	locationMat2(0,1) = 0;
 	locationMat2(1,0) = 0;
 	locationMat2(1,1) = 1;
 	EXPECT_NE(this->loc1->getFlow(), locationMat2);
-	
+
 	//location: set of outgoing transitions
 	EXPECT_EQ(this->loc1->getTransitions(), this->ptrSet);
-	
+
 	EXPECT_TRUE(*this->loc1 < *this->loc2 || *this->loc2 < *this->loc1);
 	//EXPECT_FALSE(*this->loc2 < *this->loc1);
-	
+
 	EXPECT_TRUE(locPtrComp<TypeParam>()(this->loc1, this->loc2) || locPtrComp<TypeParam>()(this->loc2, this->loc1));
 }
 
@@ -260,7 +260,7 @@ TYPED_TEST(HybridAutomataTest, LocationParallelcompositionTest)
 	l2Vars = {"c","d"};
 	haVars = {"a","b","c","d"};
 	std::unique_ptr<Location<TypeParam>> res2 = parallelCompose(l1,l2,l1Vars,l2Vars,haVars);
-	
+
 	matrix_t<TypeParam> expectedResult2 = matrix_t<TypeParam>::Zero(haVars.size()+1, haVars.size()+1);
 	expectedResult2 << 1,2,0,0,0,
 						3,4,0,0,0,
@@ -316,7 +316,7 @@ TYPED_TEST(HybridAutomataTest, HybridAutomatonTest)
 
 	std::unique_ptr<Location<TypeParam>> anotherCopyOfLoc1(new Location<TypeParam>(*ptrToLoc1));
 	std::unique_ptr<Location<TypeParam>> anotherCopyOfLoc2(new Location<TypeParam>(*ptrToLoc2));
-	
+
 	//std::cout << "loc1 name: " << this->loc1->getName() << " hash: " << this->loc1->hash() << std::endl;
 	//std::cout << "loc2 name: " << this->loc2->getName() << " hash: " << this->loc2->hash() << std::endl;
 	//std::cout << "anotherCopyOfLoc1 name: " << anotherCopyOfLoc1->getName() << " hash: " << anotherCopyOfLoc1->hash() << std::endl;
@@ -325,8 +325,8 @@ TYPED_TEST(HybridAutomataTest, HybridAutomatonTest)
 	h1.addLocation(std::move(anotherCopyOfLoc1));
 	h1.addLocation(std::move(anotherCopyOfLoc2));
 
-	EXPECT_TRUE(this->find(this->loc1, h1.getLocations()));
-	EXPECT_TRUE(this->find(this->loc2, h1.getLocations()));
+	EXPECT_TRUE(this->find(this->loc1.get(), h1.getLocations()));
+	EXPECT_TRUE(this->find(this->loc2.get(), h1.getLocations()));
 
 	//EXPECT_TRUE(std::find(h1.getLocations().begin(), h1.getLocations().end(), this->loc1) != h1.getLocations().end());
 	//EXPECT_TRUE(std::find(h1.getLocations().begin(), h1.getLocations().end(), this->loc2) != h1.getLocations().end());
@@ -341,8 +341,8 @@ TYPED_TEST(HybridAutomataTest, HybridAutomatonTest)
 	EXPECT_FALSE(aTrans == nullptr);
 	h1.addTransition(std::move(aTrans));
 	EXPECT_TRUE(aTrans == nullptr);
-	EXPECT_TRUE(this->find(this->trans, h1.getTransitions()));
-	
+	EXPECT_TRUE(this->find(this->trans.get(), h1.getTransitions()));
+
 	matrix_t<TypeParam> matr = matrix_t<TypeParam>::Identity(2,2);
 	vector_t<TypeParam> vec = vector_t<TypeParam>(2);
 	vec << 1,2;

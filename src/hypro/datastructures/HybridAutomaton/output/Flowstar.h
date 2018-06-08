@@ -174,14 +174,14 @@ namespace hypro {
 			res << "\tmodes\n\t{\n";
 			//for(std::unique_ptr<Location<Number>>& locPtr : in.getLocations()) {
 			for(auto& locPtr : in.getLocations()) {
-				res << toFlowstarFormat(locPtr.get(), vars, "\n\t\t");
+				res << toFlowstarFormat(locPtr, vars, "\n\t\t");
 			}
 			res << "\n\t}\n";
 
 			if(!in.getTransitions().empty()) {
 				// transitions
 				res << "\tjumps\n\t{";
-				for(const auto& transPtr : in.getTransitions()) {
+				for(const auto transPtr : in.getTransitions()) {
 					//std::cout << "output transition " << transPtr->getSource()->getName() << " -> " << transPtr->getTarget()->getName() << std::endl;
 					res << "\n\t\t" << transPtr->getSource()->getName() << " -> " << transPtr->getTarget()->getName();
 					if(transPtr->isUrgent())

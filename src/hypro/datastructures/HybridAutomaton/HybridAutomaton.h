@@ -28,8 +28,8 @@ namespace hypro
  * @brief      Class for linear hybrid automata.
  * @tparam     Number  Number type.
  * @details	   The automaton owns all the locations and transitions. Newly created locations and transitions
- 			   can only be added as unique pointers. If another class/object requests a location/transition, 
- 			   then only normal pointers are returned. 
+ 			   can only be added as unique pointers. If another class/object requests a location/transition,
+ 			   then only normal pointers are returned.
  */
 template <typename Number, typename State = State_t<Number,Number>>
 class HybridAutomaton
@@ -85,7 +85,7 @@ class HybridAutomaton
     virtual ~HybridAutomaton() {}
 
     /**
-     * @brief 		Copy Assignment 
+     * @brief 		Copy Assignment
      *
      * @param[in]	rhs 	The original hybrid automaton
      * @details 	This operation is costly as it performs deep copies
@@ -93,7 +93,7 @@ class HybridAutomaton
     HybridAutomaton& operator=(const HybridAutomaton<Number,State>& rhs);
 
     /**
-     * @brief 		Move Assignment 
+     * @brief 		Move Assignment
      *
      * @param[in]	rhs 	The original hybrid automaton
      */
@@ -104,11 +104,11 @@ class HybridAutomaton
      */
     ///@{
     //* @return The set of locations. */
-    const locationSet& getLocations() const { return mLocations; }
+    std::set<Location<Number>*> getLocations() const;
     Location<Number>* getLocation(const std::size_t hash) const;
     Location<Number>* getLocation(const std::string& name) const;
     //* @return The set of transitions. */
-    const transitionSet& getTransitions() const { return mTransitions; }
+    std::set<Transition<Number>*> getTransitions() const;
     //* @return The set of initial states. */
     const locationStateMap& getInitialStates() const { return mInitialStates; }
     //* @return The set of bad states bound to locations. */
@@ -128,7 +128,7 @@ class HybridAutomaton
      */
     ///@{
     void setLocations(locationSet& locs) { mLocations.swap(locs); }
-    void setTransitions(transitionSet& trans) { mTransitions.swap(trans); } 
+    void setTransitions(transitionSet& trans) { mTransitions.swap(trans); }
     void setInitialStates(const locationStateMap& states) { mInitialStates = states; }
     void setLocalBadStates(const locationConditionMap& states) { mLocalBadStates = states; }
     void setGlobalBadStates(const conditionVector& states) { mGlobalBadStates = states; }
@@ -139,15 +139,17 @@ class HybridAutomaton
      * @brief      Extension function.
      */
     ///@{
+    void addLocation(const Location<Number>& location);
     void addLocation(std::unique_ptr<Location<Number>>&& location);
+    void addTransition(const Transition<Number>& transition);
     void addTransition(std::unique_ptr<Transition<Number>>&& transition);
-    void addInitialState(const State& state) { mInitialStates.insert(std::make_pair(state.getLocation(),state)); }
-    void addLocalBadState(const Location<Number>* loc, const Condition<Number>& condition) { mLocalBadStates.insert(std::make_pair(loc,condition)); }
+    void addInitialState(const State& state) { mInitialStates.emplace(std::make_pair(state.getLocation(),state)); }
+    void addLocalBadState(const Location<Number>* loc, const Condition<Number>& condition) { mLocalBadStates.emplace(std::make_pair(loc,condition)); }
     void addGlobalBadState(const Condition<Number>& state) { mGlobalBadStates.push_back(state); }
     ///@}
 
-    void removeTransition(std::unique_ptr<Transition<Number>> toRemove);
-    
+    void removeTransition(std::unique_ptr<Transition<Number>>& toRemove);
+
     /**
      * @brief Decomposes an automaton into the components
      *  defined by decomposition. The vector should contain
@@ -176,10 +178,12 @@ class HybridAutomaton
     std::string getStatistics() const;
 
     //TODO: replace this with operator== for sets of pointers to loc (if implemented this way, standard == operator of set is used,
-    //which does not compare correctly 
-    bool equals(const locationSet& lhs, const locationSet& rhs) const {
+    //which does not compare correctly
+    template<typename T>
+    bool equals(const std::set<T*>& lhs, const std::set<T*>& rhs) const {
+
         if(lhs.size() != rhs.size()) return false;
-        auto rhsIt = rhs.begin(); 
+        auto rhsIt = rhs.begin();
         for(auto lhsIt = lhs.begin(); lhsIt != lhs.end(); ++lhsIt){
             //std::cout << "now comparing " << (*(lhsIt))->hash() << " and " << (*(rhsIt))->hash() << std::endl;
             if(**lhsIt != **rhsIt){
@@ -187,9 +191,10 @@ class HybridAutomaton
             }
             ++rhsIt;
         }
+
         return true;
     }
-    
+
     /**
      * @brief      Comparison for equality operator.
      * @param[in]  lhs   The left hand side.
@@ -199,7 +204,7 @@ class HybridAutomaton
     friend bool operator==( const HybridAutomaton<Number,State>& lhs, const HybridAutomaton<Number,State>& rhs ) {
         //return lhs.getLocations() == rhs.getLocations() &&
         return lhs.equals(lhs.getLocations(),rhs.getLocations()) &&
-    			lhs.getTransitions() == rhs.getTransitions() &&
+    			lhs.equals(lhs.getTransitions(),rhs.getTransitions()) &&
     			lhs.getInitialStates() == rhs.getInitialStates() &&
     			lhs.getLocalBadStates() == rhs.getLocalBadStates() &&
     			lhs.getGlobalBadStates() == rhs.getGlobalBadStates();
@@ -245,8 +250,8 @@ class HybridAutomaton
             ostr << *((*initialIt).first) << ": " << (*initialIt).second << std::endl;
         }
         ostr << "locations: " << std::endl;
-        for (auto locationIT = a.getLocations().begin(); locationIT != a.getLocations().end(); ++locationIT) {
-            ostr << **locationIT << std::endl;
+        for (auto l : a.getLocations()) {
+            ostr << *l << std::endl;
         }
         ostr << "transitions: " << std::endl;
         for (const auto& transition : a.getTransitions()) {

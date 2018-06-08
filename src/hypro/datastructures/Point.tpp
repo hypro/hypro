@@ -76,7 +76,8 @@ Point<Number>::Point( const Point<Number> &_p )
 	//std::cout << "This coordinates " << mCoordinates << " vs. " << _p.rawCoordinates() << std::endl;
   	//std::cout << "This hash " << this->hash() << " vs. " << std::endl;
   	//std::cout << _p.hash() << std::endl;
-  	assert(_p.hash() == this->hash());
+  	assert(mCoordinates == _p.rawCoordinates());
+  	//assert(_p.hash() == this->hash());
   	assert(this->dimension() >= 0);
 }
 

@@ -133,7 +133,7 @@ class Transition
 	 *
 	 * @return     True if composed of, False otherwise.
 	 */
-    bool isComposedOf(const Transition<Number>& rhs, const std::vector<std::string>& rhsVars, const std::vector<std::string>& thisVars) const; 
+    bool isComposedOf(const Transition<Number>& rhs, const std::vector<std::string>& rhsVars, const std::vector<std::string>& thisVars) const;
 
      /**
     * decomposes guard  and reset of this transition.
@@ -223,7 +223,7 @@ std::unique_ptr<Transition<Number>> parallelCompose(const std::unique_ptr<Transi
                                 , const std::vector<std::string>& haVar
                                 , const HybridAutomaton<Number, State> ha
                                 , const std::set<Label> lhsLabels
-                                , const std::set<Label> rhsLabels); 
+                                , const std::set<Label> rhsLabels);
 
 }  // namespace hypro
 

@@ -31,7 +31,7 @@ class Point {
 	vector_t<Number> mCoordinates;
 	mutable std::size_t mHash;
 
-	// Adjacency List of this Point (if applicable)
+	// Adjacency List of this Point (if applicable
 	// std::vector<Point<Number>> mNeighbors;
 	// Minkowsi Decompositon of this point (if applicable)
 	std::vector<Point<Number>> mComposedOf;
@@ -108,8 +108,10 @@ class Point {
 	 * @return     The hash.
 	 */
 	std::size_t hash() const {
+		//std::cout << "request hash for " << *this << std::endl;
 		if(mHash == 0) {
 			mHash = std::hash<vector_t<Number>>()(mCoordinates);
+			//std::cout << "Computed hash: " << mHash << std::endl;
 		}
 		return mHash;
 	}
