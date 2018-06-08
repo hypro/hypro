@@ -183,8 +183,9 @@ namespace std {
             //if(mHasExternalInput){
             //  seed += std::hash<Box<Number>>()(mExternalInput);
             //}
+
             ////Imvariant
-            //seed += std::hash<Condition<Number>>()(mInvariant);
+            carl::hash_add(seed, loc.getInvariant().hash());
 
             return seed;
         }
