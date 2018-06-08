@@ -58,7 +58,6 @@ private:
     transitionSet mTransitions;
     Condition<Number> mInvariant;
     std::string mName;
-    [[deprecated("Location are now identified via hashes")]]
     unsigned mId;
     mutable std::size_t mHash = 0;
 
