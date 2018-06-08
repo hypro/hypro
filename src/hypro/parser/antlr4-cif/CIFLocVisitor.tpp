@@ -12,7 +12,7 @@ namespace hypro {
 
 	template<typename Number>
 	antlrcpp::Any CIFLocVisitor<Number>::visitLocations(HybridSystemParser::LocationsContext *ctx){
-		
+
 		std::set<Location<Number>*> locSet;
 
 		size_t n = ctx->children.size();
@@ -28,7 +28,7 @@ namespace hypro {
 			Location<Number>* loc = visit(ctx->children[i]);
 			locSet.insert(loc);
 		}
-		
+
 		for( std::pair<Transition<Number>*,string> ts : transWithTargets){
 			Transition<Number>* tmp = ts.first;
 			tmp->setTarget(manager.location(ts.second));
@@ -36,41 +36,41 @@ namespace hypro {
 			transitionSet.insert(tmp);
 		}
 
-		
+
 		std::pair< std::set<Location<Number>*>, std::set<Transition<Number>*> > result;
 		result.first = locSet;
 		result.second = transitionSet;
 		return result;
 
 	}
-	
+
 
 	template<typename Number>
 	antlrcpp::Any CIFLocVisitor<Number>::visitLocIdElem(HybridSystemParser::LocIdElemContext *ctx){
-		
+
 		//create location
-		Location<Number>* loc =	manager.create();
+		Location<Number>* loc =	new Location<Number>();
 		loc->setName( (ctx->identifier())->getText() );
 		actualLocation = loc;
 
-		//visit Elems to get information about edges, flow matrix and invariants 		
+		//visit Elems to get information about edges, flow matrix and invariants
 		visit(ctx->locationElements());
 
 		return loc;
-	}	
+	}
 
 
 	template<typename Number>
 	antlrcpp::Any CIFLocVisitor<Number>::visitLocElem(HybridSystemParser::LocElemContext *ctx){
-		
+
 		std::string locName = "onlyLonelyLocation";
-		
+
 		//create location
-		Location<Number>* loc =	manager.create();
+		Location<Number>* loc = new Location<Number>();
 		loc->setName( locName );
 		actualLocation = loc;
 
-		//visit Elems to get information about edges, flow matrix and invariants 		
+		//visit Elems to get information about edges, flow matrix and invariants
 		visit(ctx->locationElements());
 
 		return loc;
@@ -85,49 +85,49 @@ namespace hypro {
 
 	template<typename Number>
 	antlrcpp::Any CIFLocVisitor<Number>::visitInvExpr(HybridSystemParser::InvExprContext *ctx){
-		
+
 		CIFExprVisitor<Number> exprVisitor = CIFExprVisitor<Number>(vars);
 		std::vector<std::pair<vector_t<Number>,Number>> result = exprVisitor.visit(ctx->expression());
 		return result;
 	}
 
 
-	
+
 	//locationElements
 
 
 	template<typename Number>
 	antlrcpp::Any CIFLocVisitor<Number>::visitLocElemInitialFlag(HybridSystemParser::LocElemInitialFlagContext *ctx){
-		
+
 		return visitChildren(ctx); //for not generating a warning
 	}
 
 
 	template<typename Number>
 	antlrcpp::Any CIFLocVisitor<Number>::visitLocElemEqs(HybridSystemParser::LocElemEqsContext *ctx){
-		
+
 		//fill flow matrix
 		CIFExprVisitor<Number> exprVisitor = CIFExprVisitor<Number>(vars);
 		matrix_t<Number> flow = exprVisitor.visit(ctx->equations());
 
-		actualLocation->setFlow(flow);		
-		
+		actualLocation->setFlow(flow);
+
 		return flow;
 	}
 
 	template<typename Number>
 	antlrcpp::Any CIFLocVisitor<Number>::visitLocElemEdgeTo(HybridSystemParser::LocElemEdgeToContext *ctx){
-		
+
 		Transition<Number>* trans = new Transition<Number>();
 		std::pair<Transition<Number>*,string> result;
 		string sourceName = actualLocation->getName();
 		trans->setSource(actualLocation);
-		
+
 		visit(ctx->coreEdge());
 
 		result.first = trans;
 		result.second = (ctx->identifier())->getText() ;
-		
+
 		transWithTargets.insert(result);
 
 		return result;
@@ -135,15 +135,15 @@ namespace hypro {
 
 	template<typename Number>
 	antlrcpp::Any CIFLocVisitor<Number>::visitLocElemLoop(HybridSystemParser::LocElemLoopContext *ctx){
-		
+
 		Transition<Number>* trans = new Transition<Number>();
 		string sourceName = actualLocation->getName();
 		trans->setSource(actualLocation);
 		trans->setTarget(actualLocation);
 
 		//visit Children
-		visit(ctx->coreEdge());		
-		
+		visit(ctx->coreEdge());
+
 		actualLocation->addTransition(trans);
 		transitionSet.insert(trans);
 
@@ -171,14 +171,14 @@ namespace hypro {
 
 		unsigned int actualRow = 0;
 		for (unsigned int i = 0; i < numberOfInvariantVectors ; i++) {
- 
+
 			std::vector<std::pair<vector_t<Number>,Number>> invariant = allInvariantVectors[i];
 
 			for(unsigned int j = 0; invariant.size() ; j++){
 				resultMatrix.row(actualRow+j) = invariant[j].first;
 				resultVector[actualRow+j] = invariant[j].second;
 			}
-			
+
 			actualRow = actualRow + invariant.size();
 
 		}
@@ -216,17 +216,17 @@ namespace hypro {
 
 	template<typename Number>
 	antlrcpp::Any CIFLocVisitor<Number>::visitUpdateNonIf(HybridSystemParser::UpdateNonIfContext *ctx){
-		
+
 		CIFExprVisitor<Number> exprVisitor = CIFExprVisitor<Number>(vars);
 		std::vector<std::pair<vector_t<Number>,Number>> expr = exprVisitor.visit(ctx->expression());
-		
+
 		std::pair<string, vector_t<Number> > result;
 		string name = visit(ctx->adressable());
 		result.first = name;
 		result.second = expr[0].first;
 
 		return result;
-		
+
 	}
 
 
