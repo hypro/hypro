@@ -163,17 +163,17 @@ std::unique_ptr<Location<Number>> parallelCompose(const std::unique_ptr<Location
 namespace std {
 
     template<typename Number>
-    struct hash<hypro::Location<Number>*> {
-        std::size_t operator()(const hypro::Location<Number>* locPtr) const
+    struct hash<hypro::Location<Number>> {
+        std::size_t operator()(const hypro::Location<Number>& loc) const
         {
             //Flows
             std::size_t seed = 0;
-            for(const auto& flow : locPtr->getFlows()){
-                seed += std::hash<hypro::matrix_t<Number>>()(flow);
+            for(const auto& flow : loc.getFlows()){
+                carl::hash_add(seed,std::hash<hypro::matrix_t<Number>>()(flow));
             }
 
             //Name
-            seed += std::hash<std::string>()(locPtr->getName());
+            carl::hash_add(seed,std::hash<std::string>()(loc.getName()));
 
             ////Transitions
             //std::size_t transitionHash = 0;

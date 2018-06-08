@@ -10,7 +10,7 @@ Location<Number>::Location(unsigned _id) : mFlows(), mExternalInput(), mTransiti
 {}
 
 template<typename Number>
-Location<Number>::Location(unsigned _id, const Location<Number>& _loc) 
+Location<Number>::Location(unsigned _id, const Location<Number>& _loc)
 	: mFlows(_loc.getFlows()), mExternalInput(_loc.getExternalInput()), mTransitions(_loc.getTransitions()), mInvariant(_loc.getInvariant()), mId(_id), mHash(0)
 {}
 
@@ -44,7 +44,7 @@ Location<Number>::Location() : mFlows(), mExternalInput(), mTransitions(), mInva
 {}
 
 template<typename Number>
-Location<Number>::Location(const Location<Number>& _loc) 
+Location<Number>::Location(const Location<Number>& _loc)
 	: mFlows(_loc.getFlows()), mExternalInput(_loc.getExternalInput()), mTransitions(_loc.getTransitions()), mInvariant(_loc.getInvariant()), mName(_loc.getName()), mId(), mHash(0)
 {}
 
@@ -82,7 +82,7 @@ void Location<Number>::setFlow(const matrix_t<Number>& mat, std::size_t I) {
 		point.push_back(Point<Number>(vector_t<Number>::Zero(mat.cols() -1 )));
 		mExternalInput = Box<Number>(point);
 	}
-	mHash = 0; 
+	mHash = 0;
 }
 
 template<typename Number>
@@ -94,13 +94,13 @@ void Location<Number>::setExtInput(const Box<Number>& b) {
 			break;
 		}
 	}
-	mHash = 0; 
+	mHash = 0;
 }
 
 template<typename Number>
 std::size_t Location<Number>::hash() const {
 	if(mHash == 0){
-		mHash = std::hash<Location<Number>*>()(this);
+		mHash = std::hash<Location<Number>>()(*this);
 	}
 	return mHash;
 }
@@ -418,7 +418,7 @@ void Location<Number>::decompose(std::vector<std::vector<size_t>> decomposition)
 			finMat.col(index) = rowMat.col(set[index]);
 		}
 		finMat.col(finMat.cols()-1) = rowMat.col(rowMat.cols()-1);
-		DEBUG("hypro.datastructures", "Final decomposed Flow: \n" << finMat ); 
+		DEBUG("hypro.datastructures", "Final decomposed Flow: \n" << finMat );
 		newFlows.push_back(finMat);
 	}
 

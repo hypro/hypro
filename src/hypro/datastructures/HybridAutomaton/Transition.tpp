@@ -3,6 +3,14 @@
 namespace hypro {
 
 template<typename Number>
+std::size_t Transition<Number>::hash() const {
+	if(mHash == 0) {
+		mHash = std::hash<Transition<Number>>()(*this);
+	}
+	return mHash;
+}
+
+template<typename Number>
 std::string Transition<Number>::getDotRepresentation(const std::vector<std::string>& vars) const {
    	std::stringstream o;
    	o << this->getSource()->getId() << " -> " << this->getTarget()->getId();

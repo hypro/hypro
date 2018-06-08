@@ -38,6 +38,7 @@ class Transition
     bool mUrgent = false; /// Flag if transition is urgent.
     Number mTriggerTime = Number(-1); /// Trigger-time: if positive acts as an additional guard.
     std::vector<Label> mLabels = std::vector<Label>();
+    mutable std::size_t mHash = 0;
 
   public:
 
@@ -108,6 +109,7 @@ class Transition
     bool isTimeTriggered() const { return mTriggerTime >= 0; }
     bool hasIdentityReset() const { return mReset.isIdentity(); }
     std::vector<Label> getLabels() const { return mLabels; }
+    std::size_t hash() const;
 
     void setSource(Location<Number>* source) { mSource = source; }
     void setTarget(Location<Number>* target) { mTarget = target; }
@@ -226,5 +228,27 @@ std::unique_ptr<Transition<Number>> parallelCompose(const std::unique_ptr<Transi
                                 , const std::set<Label> rhsLabels);
 
 }  // namespace hypro
+
+namespace std {
+
+	template<typename Number>
+	struct hash<hypro::Transition<Number>>{
+		size_t	operator()(const hypro::Transition<Number>& trans) {
+			size_t seed = 0;
+			carl::hash_add(seed,trans.getSource()->hash());
+			carl::hash_add(seed,trans.getTarget()->hash());
+			//carl::hash_add(seed,std::hash<hypro::Condition<Number>>(mGuard));
+			//carl::hash_add(seed,std::hash<hypro::Reset<Number>>(mReset));
+			//carl::hash_add(seed,std::hash<hypro::Aggregation>(mAggregationSetting));
+			//carl::hash_add(seed,std::hash<bool>(trans.isUrgent()));
+			//carl::hash_add(seed,std::hash<Number>(mTriggerTime));
+			//for(const auto& l : mLabels) {
+			//	carl::hash_add(seed,std::hash<Label>(l));
+			//}
+			return seed;
+		}
+	};
+
+} // namespace
 
 #include "Transition.tpp"
