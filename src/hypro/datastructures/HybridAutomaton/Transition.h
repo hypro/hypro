@@ -174,6 +174,10 @@ class Transition
      * @return     True if both transitions are equal, false otherwise.
      */
     friend bool operator==(const Transition<Number>& lhs, const Transition<Number>& rhs) {
+    	if(lhs.hash() != rhs.hash()) {
+    		return false;
+    	}
+
     	if( (*lhs.mSource != *rhs.mSource) ||
 			(*lhs.mTarget != *rhs.mTarget) ||
 			(lhs.mUrgent != rhs.mUrgent) ||

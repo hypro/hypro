@@ -183,13 +183,18 @@ class HybridAutomaton
     bool equals(const std::set<T*>& lhs, const std::set<T*>& rhs) const {
 
         if(lhs.size() != rhs.size()) return false;
-        auto rhsIt = rhs.begin();
         for(auto lhsIt = lhs.begin(); lhsIt != lhs.end(); ++lhsIt){
-            //std::cout << "now comparing " << (*(lhsIt))->hash() << " and " << (*(rhsIt))->hash() << std::endl;
-            if(**lhsIt != **rhsIt){
+            bool found = false;
+            for(auto rhsIt = rhs.begin(); rhsIt != rhs.end(); ++rhsIt) {
+				//std::cout << "now comparing " << (*(lhsIt))->hash() << " and " << (*(rhsIt))->hash() << std::endl;
+            	if((*lhsIt)->hash() == (*rhsIt)->hash()){
+            		found = true;
+            		break;
+            	}
+            }
+            if(!found){
                 return false;
             }
-            ++rhsIt;
         }
 
         return true;
@@ -202,7 +207,6 @@ class HybridAutomaton
      * @return     True, if both automata are equal, false otherwise.
      */
     friend bool operator==( const HybridAutomaton<Number,State>& lhs, const HybridAutomaton<Number,State>& rhs ) {
-        //return lhs.getLocations() == rhs.getLocations() &&
         return lhs.equals(lhs.getLocations(),rhs.getLocations()) &&
     			lhs.equals(lhs.getTransitions(),rhs.getTransitions()) &&
     			lhs.getInitialStates() == rhs.getInitialStates() &&
