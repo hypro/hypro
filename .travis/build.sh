@@ -12,7 +12,8 @@ function keep_waiting() {
 
 if [[ ${TASK} == "sonarcloud" ]]; then
 	cmake ../ -DHYPRO_COVERAGE=ON || return 1
-	build-wrapper-linux-x86-64 --out-dir ../bw-out make -j4 hypro
+	WRAPPER="build-wrapper-linux-x86-64 --out-dir ../bw-out"
+	$WRAPPER make hypro -j4 || return 1
 	#make coverage-collect
 	echo "This folder:"
 	ls -la
