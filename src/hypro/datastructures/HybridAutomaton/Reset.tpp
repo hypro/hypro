@@ -6,6 +6,7 @@ namespace hypro {
 	Reset<Number>::Reset(const matrix_t<Number>& mat, const vector_t<Number>& vec) {
 		assert(mat.rows() == mat.cols());
 		mResets.emplace_back(mat,vec);
+		mHash = 0;
 	}
 
 	template<typename Number>
@@ -14,6 +15,7 @@ namespace hypro {
 			mResets.push_back(ConstraintSet<Number>());
 		}
 		mResets[I].rVector() = in;
+		mHash = 0;
 	}
 
 	template<typename Number>
@@ -23,6 +25,7 @@ namespace hypro {
 			mResets.push_back(ConstraintSet<Number>());
 		}
 		mResets[I].rMatrix() = in;
+		mHash = 0;
 	}
 
 	template<typename Number>
@@ -45,6 +48,14 @@ namespace hypro {
 			}
 		}
 		return true;
+	}
+
+	template<typename Number>
+	std::size_t Reset<Number>::hash() const {
+		if(mHash == 0){
+			mHash = std::hash<Reset<Number>>()(*this);
+		}
+		return mHash;
 	}
 
 	template<typename Number>
@@ -212,5 +223,6 @@ namespace hypro {
 		}
 
 		mResets = newCset;
+		mHash = 0;
 	}
 } // namespace

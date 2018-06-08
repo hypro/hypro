@@ -10,9 +10,10 @@ template<typename Number>
 class Condition {
 private:
 	std::vector<ConstraintSet<Number>> mConstraints;
+	mutable std::size_t mHash = 0;
 public:
 	Condition() = default;
-	Condition(const matrix_t<Number>& mat, const vector_t<Number>& vec) : mConstraints( {ConstraintSet<Number>(mat,vec)} ) {}
+	Condition(const matrix_t<Number>& mat, const vector_t<Number>& vec) : mConstraints( {ConstraintSet<Number>(mat,vec)} ), mHash(0) {}
 	Condition(const std::vector<boost::variant<ConstraintSet<Number>>>& sets);
 	Condition(const Condition& orig) = default;
 	Condition(Condition&& orig) = default;
@@ -31,6 +32,8 @@ public:
 	void setVector(const vector_t<Number>& v, std::size_t I = 0);
 
 	const std::vector<ConstraintSet<Number>>& constraints() const { return mConstraints; }
+
+	std::size_t hash() const;
 
 	std::string getDotRepresentation(const std::vector<std::string>& vars) const;
 
@@ -81,5 +84,23 @@ Condition<Number> combine(
     const std::vector<std::string> haVar, const std::vector<std::string> lhsVar, const std::vector<std::string> rhsVar);
 
 } // namespace
+
+namespace std {
+
+	template<typename Number>
+	struct hash<hypro::Condition<Number>>{
+		std::size_t operator()(const hypro::Condition<Number>& cond) const {
+
+			std::size_t seed = 0;
+			for(auto conSet : cond.constraints()){
+				carl::hash_add(seed, std::hash<hypro::matrix_t<Number>>()(conSet.matrix()));
+				carl::hash_add(seed, std::hash<hypro::vector_t<Number>>()(conSet.vector()));
+			}
+			return seed;
+
+		}
+	};
+
+}
 
 #include "Condition.tpp"

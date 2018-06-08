@@ -8,6 +8,7 @@ Condition<Number>::Condition(const std::vector<boost::variant<ConstraintSet<Numb
 	for(const auto& item : sets) {
 		mConstraints.push_back(boost::get<ConstraintSet<Number>>(item));
 	}
+	mHash = 0;
 }
 
 template<typename Number>
@@ -17,6 +18,7 @@ void Condition<Number>::setMatrix(const matrix_t<Number>& m, std::size_t I) {
 	}
 	mConstraints[I].rMatrix() = m;
 	DEBUG("hypro.datastructures","Set matrix at pos " << I << ", mConstraints.size() = " << mConstraints.size());
+	mHash = 0;
 }
 
 template<typename Number>
@@ -26,6 +28,15 @@ void Condition<Number>::setVector(const vector_t<Number>& v, std::size_t I) {
 	}
 	mConstraints[I].rVector() = v;
 	DEBUG("hypro.datastructures","Set vector at pos " << I << ", mConstraints.size() = " << mConstraints.size());
+	mHash = 0;
+}
+
+template<typename Number>
+std::size_t Condition<Number>::hash() const {
+	if(mHash == 0){
+		mHash = std::hash<Condition<Number>>()(*this);
+	}
+	return mHash;
 }
 
 template<typename Number>
@@ -98,6 +109,7 @@ void Condition<Number>::decompose(std::vector<std::vector<size_t>> decomposition
 			newCset.push_back(res);
 		}
 		mConstraints = newCset;
+		mHash = 0;
 		return;
 	}
 
@@ -166,6 +178,7 @@ void Condition<Number>::decompose(std::vector<std::vector<size_t>> decomposition
 	}
 
 	mConstraints = newCset;
+	mHash = 0;
 }
 
 //template<typename Number>

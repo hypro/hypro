@@ -9,6 +9,7 @@ template<typename Number>
 class Reset {
 protected:
 	std::vector<ConstraintSet<Number>> mResets;
+    mutable std::size_t mHash = 0;
 
 public:
 	Reset() = default;
@@ -38,6 +39,8 @@ public:
 	State<Number,Representation,Rargs...> applyReset(const State<Number,Representation,Rargs...>& inState) const;
 
 	bool isIdentity() const;
+
+    std::size_t hash() const;
      /**
     * decomposes reset
     */
@@ -83,5 +86,21 @@ Reset<Number> combine(
 
 
 } // namespace
+
+namespace std {
+
+    template<typename Number>
+    struct hash<hypro::Reset<Number>>{
+        std::size_t operator()(const hypro::Reset<Number>& reset) const {
+            std::size_t seed = 0;
+            for(auto conSet : reset.getResetTransformations()){
+                carl::hash_add(seed, std::hash<hypro::matrix_t<Number>>()(conSet.matrix()));
+                carl::hash_add(seed, std::hash<hypro::vector_t<Number>>()(conSet.vector()));
+            }
+            return seed;
+        }
+    };
+
+}
 
 #include "Reset.tpp"
