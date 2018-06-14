@@ -12,6 +12,7 @@ var classhypro_1_1Reset =
     [ "getReset", "classhypro_1_1Reset.html#a4e33151e4c211ae3e6cc7266feeb05ce", null ],
     [ "getResetTransformations", "classhypro_1_1Reset.html#a03d77603db6c671b81f69562767825a3", null ],
     [ "getVector", "classhypro_1_1Reset.html#a6b8f5a4b1fc04c25f3cd1970b0f87efe", null ],
+    [ "hash", "classhypro_1_1Reset.html#acc629bf4a09b0090a89a8ae825b6f858", null ],
     [ "isIdentity", "classhypro_1_1Reset.html#a2e7c1cfceb719f3dc26c2b53ca60e6fe", null ],
     [ "operator=", "classhypro_1_1Reset.html#a4dc6876b6b7de4d1b463be8034844997", null ],
     [ "operator=", "classhypro_1_1Reset.html#a3e331f1e3f6468e9de319b8c8a039102", null ],
@@ -24,5 +25,6 @@ var classhypro_1_1Reset =
     [ "operator!=", "classhypro_1_1Reset.html#a519225333c976d3c64fd91cda40e6bfe", null ],
     [ "operator<<", "classhypro_1_1Reset.html#a115a946ae646aeaa0612a3ae7c6e4f85", null ],
     [ "operator==", "classhypro_1_1Reset.html#a710d843b4628d1ec4605793b6d0bce4c", null ],
+    [ "mHash", "classhypro_1_1Reset.html#abf00200401608ee423920253fcc3538e", null ],
     [ "mResets", "classhypro_1_1Reset.html#aa143735f3c77411ffc3a5b5a9ee0a208", null ]
 ];
