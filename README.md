@@ -14,6 +14,10 @@ Current Coveralls state:
 
 [![Coverage Status](https://coveralls.io/repos/github/hypro/hypro/badge.svg)](https://coveralls.io/github/hypro/hypro)
 
+SonarCloud state:
+
+[![SonarCloud Status](https://sonarcloud.io/api/project_badges/measure?project=hypro&metric=alert_status)](https://sonarcloud.io/dashboard?id=hypro)
+
 Docker Image:
 
 https://hub.docker.com/r/hypro/hypro/
