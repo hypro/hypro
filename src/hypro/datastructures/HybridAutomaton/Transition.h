@@ -111,17 +111,17 @@ class Transition
     std::vector<Label> getLabels() const { return mLabels; }
     std::size_t hash() const;
 
-    void setSource(Location<Number>* source) { mSource = source; }
-    void setTarget(Location<Number>* target) { mTarget = target; }
-    void setSource(std::unique_ptr<Location<Number>>& source) { mSource = source.get(); }
-    void setTarget(std::unique_ptr<Location<Number>>& target) { mTarget = target.get(); }
-    void setGuard(const Condition<Number>& guard) { mGuard = guard; }
-    void setReset(const Reset<Number>& val) { mReset = val; }
-    void setAggregation(Aggregation agg) { mAggregationSetting = agg; }
-    void setUrgent(bool urgent = true) { mUrgent = urgent; }
-    void setTriggerTime(Number t) { mTriggerTime = t; }
-    void setLabels(const std::vector<Label>& labels) { mLabels = labels; }
-    void addLabel(const Label& lab) { mLabels.push_back(lab); }
+    void setSource(Location<Number>* source) { mSource = source; mHash = 0; }
+    void setTarget(Location<Number>* target) { mTarget = target; mHash = 0; }
+    void setSource(std::unique_ptr<Location<Number>>& source) { mSource = source.get(); mHash = 0; }
+    void setTarget(std::unique_ptr<Location<Number>>& target) { mTarget = target.get(); mHash = 0; }
+    void setGuard(const Condition<Number>& guard) { mGuard = guard; mHash = 0; }
+    void setReset(const Reset<Number>& val) { mReset = val; mHash = 0; }
+    void setAggregation(Aggregation agg) { mAggregationSetting = agg; mHash = 0; }
+    void setUrgent(bool urgent = true) { mUrgent = urgent; mHash = 0; }
+    void setTriggerTime(Number t) { mTriggerTime = t; mHash = 0; }
+    void setLabels(const std::vector<Label>& labels) { mLabels = labels; mHash = 0; }
+    void addLabel(const Label& lab) { mLabels.push_back(lab); mHash = 0; }
 
     std::string getDotRepresentation(const std::vector<std::string>& vars) const;
 
@@ -143,6 +143,7 @@ class Transition
     void decompose(std::vector<std::vector<size_t>> decomposition){
         mGuard.decompose(decomposition);
         mReset.decompose(decomposition);
+        mHash = 0; 
     }
 
     /**
@@ -237,12 +238,12 @@ namespace std {
 
 	template<typename Number>
 	struct hash<hypro::Transition<Number>>{
-		size_t	operator()(const hypro::Transition<Number>& trans) {
+		size_t operator()(const hypro::Transition<Number>& trans) {
 			size_t seed = 0;
 			carl::hash_add(seed,trans.getSource()->hash());
 			carl::hash_add(seed,trans.getTarget()->hash());
-			//carl::hash_add(seed,std::hash<hypro::Condition<Number>>(mGuard));
-			//carl::hash_add(seed,std::hash<hypro::Reset<Number>>(mReset));
+			carl::hash_add(seed,trans.getGuard().hash());
+			carl::hash_add(seed,trans.getReset().hash());
 			//carl::hash_add(seed,std::hash<hypro::Aggregation>(mAggregationSetting));
 			//carl::hash_add(seed,std::hash<bool>(trans.isUrgent()));
 			//carl::hash_add(seed,std::hash<Number>(mTriggerTime));

@@ -80,7 +80,7 @@ matrix:
         apt:
           sources: [*sources_base, llvm-toolchain-precise-3.6]
           packages: [*packages_base, clang-3.6, lcov]
-      env: COMPILER=clang++-3.6 TASK=sonarcloud
+      env: COMPILER=clang++-3.6 TASK=sonarcloud FLAGS=-DHYPRO_COVERAGE=ON
     - os: linux
       dist: trusty
       compiler: clang

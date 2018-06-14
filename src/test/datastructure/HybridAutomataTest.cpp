@@ -393,3 +393,29 @@ TYPED_TEST(HybridAutomataTest, State) {
 	EXPECT_EQ(boost::get<ConstraintSet<TypeParam>>(s2.getSet(0)).matrix(), matr);
 	EXPECT_EQ(boost::get<ConstraintSet<TypeParam>>(s2.getSet(0)).vector(), vec);
 }
+
+TYPED_TEST(HybridAutomataTest, HashTest){
+
+	//Condition
+	Condition<TypeParam> c1;
+	EXPECT_TRUE(c1.hash() == 0);
+	matrix_t<TypeParam> m = matrix_t<TypeParam>::Identity(3,3);
+	vector_t<TypeParam> v = vector_t<TypeParam>(3);
+	v << 1,2,3;
+	c1.setMatrix(m);
+	c1.setVector(v);
+	EXPECT_TRUE(c1.hash() != 0);
+	Condition<TypeParam> c2 = c1;
+	EXPECT_TRUE(c1.hash() == c2.hash());
+
+	//Reset
+	Reset<TypeParam> r1;
+	EXPECT_TRUE(r1.hash() == 0);
+	r1.setMatrix(m);
+	r1.setVector(v);
+	EXPECT_TRUE(r1.hash() != 0);
+	Reset<TypeParam> r2 = r1;
+	EXPECT_TRUE(r1.hash() == r2.hash());	
+	
+
+}
