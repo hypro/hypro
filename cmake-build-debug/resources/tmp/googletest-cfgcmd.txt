@@ -1,1 +1,0 @@
-cmd='/usr/bin/cmake;-GUnix Makefiles;/home/justin/Documents/Masterarbeit/repo/hypro/cmake-build-debug/resources/src/googletest'
