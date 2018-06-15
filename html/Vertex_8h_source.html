@@ -252,7 +252,7 @@ $(document).ready(function(){initNavTree('Vertex_8h_source.html','');});
 <div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160;            std::hash&lt;bool&gt; boolHasher;</div>
 <div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;            std::size_t seed;</div>
 <div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160;            seed = pointHasher(vertex.<a class="code" href="classhypro_1_1Vertex.html#abcd889574cdadf04c39ce65e3348d81f">point</a>());</div>
-<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;            boost::hash_combine(seed, boolHasher(vertex.<a class="code" href="classhypro_1_1Vertex.html#a2c16bc5cafc02c562d09fe45f10e287b">color</a>()));</div>
+<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;            carl::hash_add(seed, boolHasher(vertex.<a class="code" href="classhypro_1_1Vertex.html#a2c16bc5cafc02c562d09fe45f10e287b">color</a>()));</div>
 <div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160;            <span class="keywordflow">return</span> seed;</div>
 <div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160;        }</div>
 <div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160;    };</div>

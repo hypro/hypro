@@ -339,7 +339,7 @@ $(document).ready(function(){initNavTree('VertexContainer_8h_source.html','');})
 <div class="line"><a name="l00315"></a><span class="lineno">  315</span>&#160;            <span class="keywordtype">size_t</span> result = 0;</div>
 <div class="line"><a name="l00316"></a><span class="lineno">  316</span>&#160;            hash&lt;hypro::Vertex&lt;Number&gt;&gt; vertexHasher;</div>
 <div class="line"><a name="l00317"></a><span class="lineno">  317</span>&#160;            <span class="keywordflow">for</span> (<span class="keyword">auto</span> it = set.begin(); it != set.end(); it++) {</div>
-<div class="line"><a name="l00318"></a><span class="lineno">  318</span>&#160;                boost::hash_combine(result, vertexHasher(*it));</div>
+<div class="line"><a name="l00318"></a><span class="lineno">  318</span>&#160;                carl::hash_add(result, vertexHasher(*it));</div>
 <div class="line"><a name="l00319"></a><span class="lineno">  319</span>&#160;            }</div>
 <div class="line"><a name="l00320"></a><span class="lineno">  320</span>&#160;            <span class="keywordflow">return</span> result;</div>
 <div class="line"><a name="l00321"></a><span class="lineno">  321</span>&#160;        }</div>

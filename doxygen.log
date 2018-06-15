@@ -203,7 +203,8 @@ Searching for files in directory /home/travis/build/hypro/hypro/src/hypro/util/s
 /home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:16: warning: include file limits not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:17: warning: include file eigen3/Eigen/Eigenvalues not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:18: warning: include file eigen3/Eigen/Dense not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:15: warning: include file ../../resources/glpk-4.45/build/include/glpk.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/resources/glpk-4.45/build/include/glpk.h:28: warning: include file stdarg.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/resources/glpk-4.45/build/include/glpk.h:29: warning: include file stddef.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:16: warning: include file carl/formula/Constraint.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:17: warning: include file cassert not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/representations/Box/intervalMethods.h:3: warning: include file carl/interval/Interval.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
@@ -272,7 +273,6 @@ Searching for files in directory /home/travis/build/hypro/hypro/src/hypro/util/s
 /home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:16: warning: include file limits not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:17: warning: include file eigen3/Eigen/Eigenvalues not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:18: warning: include file eigen3/Eigen/Dense not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:15: warning: include file ../../resources/glpk-4.45/build/include/glpk.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:16: warning: include file carl/formula/Constraint.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:17: warning: include file cassert not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/types.h:3: warning: include file iostream not found, perhaps you forgot to add its directory to INCLUDE_PATH?
@@ -521,7 +521,6 @@ Searching for files in directory /home/travis/build/hypro/hypro/src/hypro/util/s
 /home/travis/build/hypro/hypro/src/hypro/util/logging/Logger.h:4: warning: include file iostream not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/logging/Logger.h:5: warning: include file thread not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/logging/Logger.h:18: warning: include file carl/core/carlLogging.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/glpk/adaptions_glpk.h:8: warning: include file ../../../../resources/glpk-4.45/build/include/glpk.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.h:22: warning: include file carl/util/Singleton.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.h:23: warning: include file mutex not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.h:24: warning: include file thread not found, perhaps you forgot to add its directory to INCLUDE_PATH?
@@ -529,7 +528,6 @@ Searching for files in directory /home/travis/build/hypro/hypro/src/hypro/util/s
 /home/travis/build/hypro/hypro/src/hypro/util/logging/Logger.h:4: warning: include file iostream not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/logging/Logger.h:5: warning: include file thread not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/logging/Logger.h:18: warning: include file carl/core/carlLogging.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.h:33: warning: include file ../../../resources/glpk-4.45/build/include/glpk.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.h:295: warning: include file gmp.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.h:296: warning: include file gmpxx.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/logging/Logger.h:4: warning: include file iostream not found, perhaps you forgot to add its directory to INCLUDE_PATH?
@@ -695,7 +693,6 @@ Searching for files in directory /home/travis/build/hypro/hypro/src/hypro/util/s
 /home/travis/build/hypro/hypro/src/hypro/util/logging/Logger.h:4: warning: include file iostream not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/logging/Logger.h:5: warning: include file thread not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/logging/Logger.h:18: warning: include file carl/core/carlLogging.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/glpk/adaptions_glpk.h:8: warning: include file ../../../../resources/glpk-4.45/build/include/glpk.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.h:22: warning: include file carl/util/Singleton.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.h:23: warning: include file mutex not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.h:24: warning: include file thread not found, perhaps you forgot to add its directory to INCLUDE_PATH?
@@ -703,7 +700,6 @@ Searching for files in directory /home/travis/build/hypro/hypro/src/hypro/util/s
 /home/travis/build/hypro/hypro/src/hypro/util/logging/Logger.h:4: warning: include file iostream not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/logging/Logger.h:5: warning: include file thread not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/logging/Logger.h:18: warning: include file carl/core/carlLogging.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.h:33: warning: include file ../../../resources/glpk-4.45/build/include/glpk.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.h:295: warning: include file gmp.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.h:296: warning: include file gmpxx.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/representations/Ellipsoids/Ellipsoid.h:8: warning: include file map not found, perhaps you forgot to add its directory to INCLUDE_PATH?
@@ -772,7 +768,6 @@ Searching for files in directory /home/travis/build/hypro/hypro/src/hypro/util/s
 /home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:16: warning: include file limits not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:17: warning: include file eigen3/Eigen/Eigenvalues not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:18: warning: include file eigen3/Eigen/Dense not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:15: warning: include file ../../resources/glpk-4.45/build/include/glpk.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:16: warning: include file carl/formula/Constraint.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:17: warning: include file cassert not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/types.h:3: warning: include file iostream not found, perhaps you forgot to add its directory to INCLUDE_PATH?
@@ -988,7 +983,6 @@ Searching for files in directory /home/travis/build/hypro/hypro/src/hypro/util/s
 /home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:16: warning: include file limits not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:17: warning: include file eigen3/Eigen/Eigenvalues not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:18: warning: include file eigen3/Eigen/Dense not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:15: warning: include file ../../resources/glpk-4.45/build/include/glpk.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:16: warning: include file carl/formula/Constraint.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:17: warning: include file cassert not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/representations/Box/intervalMethods.h:3: warning: include file carl/interval/Interval.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
@@ -1057,7 +1051,6 @@ Searching for files in directory /home/travis/build/hypro/hypro/src/hypro/util/s
 /home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:16: warning: include file limits not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:17: warning: include file eigen3/Eigen/Eigenvalues not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:18: warning: include file eigen3/Eigen/Dense not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:15: warning: include file ../../resources/glpk-4.45/build/include/glpk.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:16: warning: include file carl/formula/Constraint.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:17: warning: include file cassert not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/types.h:3: warning: include file iostream not found, perhaps you forgot to add its directory to INCLUDE_PATH?
@@ -1306,7 +1299,6 @@ Searching for files in directory /home/travis/build/hypro/hypro/src/hypro/util/s
 /home/travis/build/hypro/hypro/src/hypro/util/logging/Logger.h:4: warning: include file iostream not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/logging/Logger.h:5: warning: include file thread not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/logging/Logger.h:18: warning: include file carl/core/carlLogging.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/glpk/adaptions_glpk.h:8: warning: include file ../../../../resources/glpk-4.45/build/include/glpk.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.h:22: warning: include file carl/util/Singleton.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.h:23: warning: include file mutex not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.h:24: warning: include file thread not found, perhaps you forgot to add its directory to INCLUDE_PATH?
@@ -1314,7 +1306,6 @@ Searching for files in directory /home/travis/build/hypro/hypro/src/hypro/util/s
 /home/travis/build/hypro/hypro/src/hypro/util/logging/Logger.h:4: warning: include file iostream not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/logging/Logger.h:5: warning: include file thread not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/logging/Logger.h:18: warning: include file carl/core/carlLogging.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.h:33: warning: include file ../../../resources/glpk-4.45/build/include/glpk.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.h:295: warning: include file gmp.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.h:296: warning: include file gmpxx.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/logging/Logger.h:4: warning: include file iostream not found, perhaps you forgot to add its directory to INCLUDE_PATH?
@@ -1554,7 +1545,6 @@ Searching for files in directory /home/travis/build/hypro/hypro/src/hypro/util/s
 /home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:16: warning: include file limits not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:17: warning: include file eigen3/Eigen/Eigenvalues not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:18: warning: include file eigen3/Eigen/Dense not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:15: warning: include file ../../resources/glpk-4.45/build/include/glpk.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:16: warning: include file carl/formula/Constraint.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:17: warning: include file cassert not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/types.h:3: warning: include file iostream not found, perhaps you forgot to add its directory to INCLUDE_PATH?
@@ -1636,7 +1626,6 @@ Searching for files in directory /home/travis/build/hypro/hypro/src/hypro/util/s
 /home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:16: warning: include file limits not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:17: warning: include file eigen3/Eigen/Eigenvalues not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:18: warning: include file eigen3/Eigen/Dense not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:15: warning: include file ../../resources/glpk-4.45/build/include/glpk.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:16: warning: include file carl/formula/Constraint.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:17: warning: include file cassert not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/types.h:3: warning: include file iostream not found, perhaps you forgot to add its directory to INCLUDE_PATH?
@@ -1741,7 +1730,6 @@ Searching for files in directory /home/travis/build/hypro/hypro/src/hypro/util/s
 /home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:16: warning: include file limits not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:17: warning: include file eigen3/Eigen/Eigenvalues not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:18: warning: include file eigen3/Eigen/Dense not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:15: warning: include file ../../resources/glpk-4.45/build/include/glpk.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:16: warning: include file carl/formula/Constraint.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:17: warning: include file cassert not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/types.h:3: warning: include file iostream not found, perhaps you forgot to add its directory to INCLUDE_PATH?
@@ -1930,7 +1918,6 @@ Searching for files in directory /home/travis/build/hypro/hypro/src/hypro/util/s
 /home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:16: warning: include file limits not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:17: warning: include file eigen3/Eigen/Eigenvalues not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:18: warning: include file eigen3/Eigen/Dense not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:15: warning: include file ../../resources/glpk-4.45/build/include/glpk.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:16: warning: include file carl/formula/Constraint.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:17: warning: include file cassert not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/types.h:3: warning: include file iostream not found, perhaps you forgot to add its directory to INCLUDE_PATH?
@@ -2107,7 +2094,6 @@ Searching for files in directory /home/travis/build/hypro/hypro/src/hypro/util/s
 /home/travis/build/hypro/hypro/src/hypro/util/logging/Logger.h:4: warning: include file iostream not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/logging/Logger.h:5: warning: include file thread not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/logging/Logger.h:18: warning: include file carl/core/carlLogging.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/glpk/adaptions_glpk.h:8: warning: include file ../../../../resources/glpk-4.45/build/include/glpk.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.h:22: warning: include file carl/util/Singleton.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.h:23: warning: include file mutex not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.h:24: warning: include file thread not found, perhaps you forgot to add its directory to INCLUDE_PATH?
@@ -2115,7 +2101,6 @@ Searching for files in directory /home/travis/build/hypro/hypro/src/hypro/util/s
 /home/travis/build/hypro/hypro/src/hypro/util/logging/Logger.h:4: warning: include file iostream not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/logging/Logger.h:5: warning: include file thread not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/logging/Logger.h:18: warning: include file carl/core/carlLogging.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.h:33: warning: include file ../../../resources/glpk-4.45/build/include/glpk.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.h:295: warning: include file gmp.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.h:296: warning: include file gmpxx.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/types.h:3: warning: include file iostream not found, perhaps you forgot to add its directory to INCLUDE_PATH?
@@ -2254,7 +2239,6 @@ Searching for files in directory /home/travis/build/hypro/hypro/src/hypro/util/s
 /home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:16: warning: include file limits not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:17: warning: include file eigen3/Eigen/Eigenvalues not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:18: warning: include file eigen3/Eigen/Dense not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:15: warning: include file ../../resources/glpk-4.45/build/include/glpk.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:16: warning: include file carl/formula/Constraint.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:17: warning: include file cassert not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/types.h:3: warning: include file iostream not found, perhaps you forgot to add its directory to INCLUDE_PATH?
@@ -2393,7 +2377,6 @@ Searching for files in directory /home/travis/build/hypro/hypro/src/hypro/util/s
 /home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:16: warning: include file limits not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:17: warning: include file eigen3/Eigen/Eigenvalues not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:18: warning: include file eigen3/Eigen/Dense not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:15: warning: include file ../../resources/glpk-4.45/build/include/glpk.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:16: warning: include file carl/formula/Constraint.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:17: warning: include file cassert not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/types.h:3: warning: include file iostream not found, perhaps you forgot to add its directory to INCLUDE_PATH?
@@ -2485,7 +2468,6 @@ Searching for files in directory /home/travis/build/hypro/hypro/src/hypro/util/s
 /home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:16: warning: include file limits not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:17: warning: include file eigen3/Eigen/Eigenvalues not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:18: warning: include file eigen3/Eigen/Dense not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:15: warning: include file ../../resources/glpk-4.45/build/include/glpk.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:16: warning: include file carl/formula/Constraint.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:17: warning: include file cassert not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/Cone.h:8: warning: include file vector not found, perhaps you forgot to add its directory to INCLUDE_PATH?
@@ -2626,7 +2608,6 @@ Searching for files in directory /home/travis/build/hypro/hypro/src/hypro/util/s
 /home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:16: warning: include file limits not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:17: warning: include file eigen3/Eigen/Eigenvalues not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:18: warning: include file eigen3/Eigen/Dense not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:15: warning: include file ../../resources/glpk-4.45/build/include/glpk.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:16: warning: include file carl/formula/Constraint.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:17: warning: include file cassert not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/types.h:3: warning: include file iostream not found, perhaps you forgot to add its directory to INCLUDE_PATH?
@@ -2765,7 +2746,6 @@ Searching for files in directory /home/travis/build/hypro/hypro/src/hypro/util/s
 /home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:16: warning: include file limits not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:17: warning: include file eigen3/Eigen/Eigenvalues not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:18: warning: include file eigen3/Eigen/Dense not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:15: warning: include file ../../resources/glpk-4.45/build/include/glpk.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:16: warning: include file carl/formula/Constraint.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:17: warning: include file cassert not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/types.h:3: warning: include file iostream not found, perhaps you forgot to add its directory to INCLUDE_PATH?
@@ -2855,7 +2835,6 @@ Searching for files in directory /home/travis/build/hypro/hypro/src/hypro/util/s
 /home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:16: warning: include file limits not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:17: warning: include file eigen3/Eigen/Eigenvalues not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:18: warning: include file eigen3/Eigen/Dense not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:15: warning: include file ../../resources/glpk-4.45/build/include/glpk.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:16: warning: include file carl/formula/Constraint.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:17: warning: include file cassert not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/types.h:3: warning: include file iostream not found, perhaps you forgot to add its directory to INCLUDE_PATH?
@@ -2937,7 +2916,6 @@ Searching for files in directory /home/travis/build/hypro/hypro/src/hypro/util/s
 /home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:16: warning: include file limits not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:17: warning: include file eigen3/Eigen/Eigenvalues not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:18: warning: include file eigen3/Eigen/Dense not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:15: warning: include file ../../resources/glpk-4.45/build/include/glpk.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:16: warning: include file carl/formula/Constraint.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:17: warning: include file cassert not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/types.h:3: warning: include file iostream not found, perhaps you forgot to add its directory to INCLUDE_PATH?
@@ -3042,7 +3020,6 @@ Searching for files in directory /home/travis/build/hypro/hypro/src/hypro/util/s
 /home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:16: warning: include file limits not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:17: warning: include file eigen3/Eigen/Eigenvalues not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:18: warning: include file eigen3/Eigen/Dense not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:15: warning: include file ../../resources/glpk-4.45/build/include/glpk.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:16: warning: include file carl/formula/Constraint.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:17: warning: include file cassert not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/types.h:3: warning: include file iostream not found, perhaps you forgot to add its directory to INCLUDE_PATH?
@@ -3246,7 +3223,6 @@ Searching for files in directory /home/travis/build/hypro/hypro/src/hypro/util/s
 /home/travis/build/hypro/hypro/src/hypro/util/logging/Logger.h:4: warning: include file iostream not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/logging/Logger.h:5: warning: include file thread not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/logging/Logger.h:18: warning: include file carl/core/carlLogging.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/glpk/adaptions_glpk.h:8: warning: include file ../../../../resources/glpk-4.45/build/include/glpk.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.h:22: warning: include file carl/util/Singleton.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.h:23: warning: include file mutex not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.h:24: warning: include file thread not found, perhaps you forgot to add its directory to INCLUDE_PATH?
@@ -3254,7 +3230,6 @@ Searching for files in directory /home/travis/build/hypro/hypro/src/hypro/util/s
 /home/travis/build/hypro/hypro/src/hypro/util/logging/Logger.h:4: warning: include file iostream not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/logging/Logger.h:5: warning: include file thread not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/logging/Logger.h:18: warning: include file carl/core/carlLogging.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.h:33: warning: include file ../../../resources/glpk-4.45/build/include/glpk.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.h:295: warning: include file gmp.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.h:296: warning: include file gmpxx.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/types.h:3: warning: include file iostream not found, perhaps you forgot to add its directory to INCLUDE_PATH?
@@ -3393,7 +3368,6 @@ Searching for files in directory /home/travis/build/hypro/hypro/src/hypro/util/s
 /home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:16: warning: include file limits not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:17: warning: include file eigen3/Eigen/Eigenvalues not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:18: warning: include file eigen3/Eigen/Dense not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:15: warning: include file ../../resources/glpk-4.45/build/include/glpk.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:16: warning: include file carl/formula/Constraint.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:17: warning: include file cassert not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/types.h:3: warning: include file iostream not found, perhaps you forgot to add its directory to INCLUDE_PATH?
@@ -3475,7 +3449,6 @@ Searching for files in directory /home/travis/build/hypro/hypro/src/hypro/util/s
 /home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:16: warning: include file limits not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:17: warning: include file eigen3/Eigen/Eigenvalues not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:18: warning: include file eigen3/Eigen/Dense not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:15: warning: include file ../../resources/glpk-4.45/build/include/glpk.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:16: warning: include file carl/formula/Constraint.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:17: warning: include file cassert not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytope.h:18: warning: include file set not found, perhaps you forgot to add its directory to INCLUDE_PATH?
@@ -3845,7 +3818,6 @@ Searching for files in directory /home/travis/build/hypro/hypro/src/hypro/util/s
 /home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:16: warning: include file limits not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:17: warning: include file eigen3/Eigen/Eigenvalues not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:18: warning: include file eigen3/Eigen/Dense not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:15: warning: include file ../../resources/glpk-4.45/build/include/glpk.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:16: warning: include file carl/formula/Constraint.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:17: warning: include file cassert not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/types.h:3: warning: include file iostream not found, perhaps you forgot to add its directory to INCLUDE_PATH?
@@ -3912,114 +3884,8 @@ Searching for files in directory /home/travis/build/hypro/hypro/src/hypro/util/s
 /home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:16: warning: include file limits not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:17: warning: include file eigen3/Eigen/Eigenvalues not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:18: warning: include file eigen3/Eigen/Dense not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:15: warning: include file ../../resources/glpk-4.45/build/include/glpk.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:16: warning: include file carl/formula/Constraint.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:17: warning: include file cassert not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/types.h:3: warning: include file iostream not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/types.h:5: warning: include file carl/numbers/numbers.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/types.h:6: warning: include file carl/interval/Interval.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/types.h:7: warning: include file carl/core/Variable.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/types.h:8: warning: include file carl/util/hash.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/types.h:9: warning: include file eigen3/Eigen/Dense not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/types.h:10: warning: include file eigen3/unsupported/Eigen/src/MatrixFunctions/MatrixExponential.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/types.h:11: warning: include file eigen3/Eigen/Core not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/types.h:12: warning: include file boost/operators.hpp not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:13: warning: include file carl/numbers/numbers.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:14: warning: include file functional not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:15: warning: include file iostream not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:16: warning: include file limits not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:17: warning: include file eigen3/Eigen/Eigenvalues not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:18: warning: include file eigen3/Eigen/Dense not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/types.h:3: warning: include file iostream not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/types.h:5: warning: include file carl/numbers/numbers.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/types.h:6: warning: include file carl/interval/Interval.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/types.h:7: warning: include file carl/core/Variable.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/types.h:8: warning: include file carl/util/hash.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/types.h:9: warning: include file eigen3/Eigen/Dense not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/types.h:10: warning: include file eigen3/unsupported/Eigen/src/MatrixFunctions/MatrixExponential.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/types.h:11: warning: include file eigen3/Eigen/Core not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/types.h:12: warning: include file boost/operators.hpp not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:13: warning: include file carl/numbers/numbers.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:14: warning: include file functional not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:15: warning: include file iostream not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:16: warning: include file limits not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:17: warning: include file eigen3/Eigen/Eigenvalues not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:18: warning: include file eigen3/Eigen/Dense not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/types.h:3: warning: include file iostream not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/types.h:5: warning: include file carl/numbers/numbers.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/types.h:6: warning: include file carl/interval/Interval.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/types.h:7: warning: include file carl/core/Variable.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/types.h:8: warning: include file carl/util/hash.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/types.h:9: warning: include file eigen3/Eigen/Dense not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/types.h:10: warning: include file eigen3/unsupported/Eigen/src/MatrixFunctions/MatrixExponential.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/types.h:11: warning: include file eigen3/Eigen/Core not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/types.h:12: warning: include file boost/operators.hpp not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:13: warning: include file carl/numbers/numbers.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:14: warning: include file functional not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:15: warning: include file iostream not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:16: warning: include file limits not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:17: warning: include file eigen3/Eigen/Eigenvalues not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:18: warning: include file eigen3/Eigen/Dense not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/util/convenienceOperators.h:4: warning: include file iostream not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/util/convenienceOperators.h:5: warning: include file map not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/util/convenienceOperators.h:6: warning: include file set not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/util/convenienceOperators.h:7: warning: include file utility not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/util/convenienceOperators.h:8: warning: include file vector not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/util/logging/Logger.h:4: warning: include file iostream not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/util/logging/Logger.h:5: warning: include file thread not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/util/logging/Logger.h:18: warning: include file carl/core/carlLogging.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/util/logging/Logger.h:4: warning: include file iostream not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/util/logging/Logger.h:5: warning: include file thread not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/util/logging/Logger.h:18: warning: include file carl/core/carlLogging.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/util/VariablePool.h:15: warning: include file carl/core/Variable.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/util/VariablePool.h:16: warning: include file carl/core/VariablePool.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/util/VariablePool.h:17: warning: include file carl/util/Singleton.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/util/VariablePool.h:18: warning: include file map not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/util/VariablePool.h:19: warning: include file vector not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/util/VariablePool.h:20: warning: include file cassert not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Point.h:13: warning: include file set not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Point.h:14: warning: include file vector not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/util/logging/Logger.h:4: warning: include file iostream not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/util/logging/Logger.h:5: warning: include file thread not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/util/logging/Logger.h:18: warning: include file carl/core/carlLogging.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/util/VariablePool.h:15: warning: include file carl/core/Variable.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/util/VariablePool.h:16: warning: include file carl/core/VariablePool.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/util/VariablePool.h:17: warning: include file carl/util/Singleton.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/util/VariablePool.h:18: warning: include file map not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/util/VariablePool.h:19: warning: include file vector not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/util/VariablePool.h:20: warning: include file cassert not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:13: warning: include file carl/numbers/numbers.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:14: warning: include file functional not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:15: warning: include file iostream not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:16: warning: include file limits not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:17: warning: include file eigen3/Eigen/Eigenvalues not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:18: warning: include file eigen3/Eigen/Dense not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:15: warning: include file ../../resources/glpk-4.45/build/include/glpk.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:16: warning: include file carl/formula/Constraint.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:17: warning: include file cassert not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/types.h:3: warning: include file iostream not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/types.h:5: warning: include file carl/numbers/numbers.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/types.h:6: warning: include file carl/interval/Interval.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/types.h:7: warning: include file carl/core/Variable.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/types.h:8: warning: include file carl/util/hash.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/types.h:9: warning: include file eigen3/Eigen/Dense not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/types.h:10: warning: include file eigen3/unsupported/Eigen/src/MatrixFunctions/MatrixExponential.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/types.h:11: warning: include file eigen3/Eigen/Core not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/types.h:12: warning: include file boost/operators.hpp not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:13: warning: include file carl/numbers/numbers.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:14: warning: include file functional not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:15: warning: include file iostream not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:16: warning: include file limits not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:17: warning: include file eigen3/Eigen/Eigenvalues not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:18: warning: include file eigen3/Eigen/Dense not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/util/convenienceOperators.h:4: warning: include file iostream not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/util/convenienceOperators.h:5: warning: include file map not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/util/convenienceOperators.h:6: warning: include file set not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/util/convenienceOperators.h:7: warning: include file utility not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/util/convenienceOperators.h:8: warning: include file vector not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/util/logging/Logger.h:4: warning: include file iostream not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/util/logging/Logger.h:5: warning: include file thread not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/util/logging/Logger.h:18: warning: include file carl/core/carlLogging.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/types.h:3: warning: include file iostream not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/types.h:5: warning: include file carl/numbers/numbers.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/types.h:6: warning: include file carl/interval/Interval.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
@@ -4099,7 +3965,110 @@ Searching for files in directory /home/travis/build/hypro/hypro/src/hypro/util/s
 /home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:16: warning: include file limits not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:17: warning: include file eigen3/Eigen/Eigenvalues not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:18: warning: include file eigen3/Eigen/Dense not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:15: warning: include file ../../resources/glpk-4.45/build/include/glpk.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:16: warning: include file carl/formula/Constraint.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:17: warning: include file cassert not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/types.h:3: warning: include file iostream not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/types.h:5: warning: include file carl/numbers/numbers.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/types.h:6: warning: include file carl/interval/Interval.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/types.h:7: warning: include file carl/core/Variable.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/types.h:8: warning: include file carl/util/hash.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/types.h:9: warning: include file eigen3/Eigen/Dense not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/types.h:10: warning: include file eigen3/unsupported/Eigen/src/MatrixFunctions/MatrixExponential.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/types.h:11: warning: include file eigen3/Eigen/Core not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/types.h:12: warning: include file boost/operators.hpp not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:13: warning: include file carl/numbers/numbers.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:14: warning: include file functional not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:15: warning: include file iostream not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:16: warning: include file limits not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:17: warning: include file eigen3/Eigen/Eigenvalues not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:18: warning: include file eigen3/Eigen/Dense not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/util/convenienceOperators.h:4: warning: include file iostream not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/util/convenienceOperators.h:5: warning: include file map not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/util/convenienceOperators.h:6: warning: include file set not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/util/convenienceOperators.h:7: warning: include file utility not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/util/convenienceOperators.h:8: warning: include file vector not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/util/logging/Logger.h:4: warning: include file iostream not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/util/logging/Logger.h:5: warning: include file thread not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/util/logging/Logger.h:18: warning: include file carl/core/carlLogging.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/types.h:3: warning: include file iostream not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/types.h:5: warning: include file carl/numbers/numbers.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/types.h:6: warning: include file carl/interval/Interval.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/types.h:7: warning: include file carl/core/Variable.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/types.h:8: warning: include file carl/util/hash.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/types.h:9: warning: include file eigen3/Eigen/Dense not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/types.h:10: warning: include file eigen3/unsupported/Eigen/src/MatrixFunctions/MatrixExponential.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/types.h:11: warning: include file eigen3/Eigen/Core not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/types.h:12: warning: include file boost/operators.hpp not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:13: warning: include file carl/numbers/numbers.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:14: warning: include file functional not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:15: warning: include file iostream not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:16: warning: include file limits not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:17: warning: include file eigen3/Eigen/Eigenvalues not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:18: warning: include file eigen3/Eigen/Dense not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/types.h:3: warning: include file iostream not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/types.h:5: warning: include file carl/numbers/numbers.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/types.h:6: warning: include file carl/interval/Interval.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/types.h:7: warning: include file carl/core/Variable.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/types.h:8: warning: include file carl/util/hash.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/types.h:9: warning: include file eigen3/Eigen/Dense not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/types.h:10: warning: include file eigen3/unsupported/Eigen/src/MatrixFunctions/MatrixExponential.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/types.h:11: warning: include file eigen3/Eigen/Core not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/types.h:12: warning: include file boost/operators.hpp not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:13: warning: include file carl/numbers/numbers.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:14: warning: include file functional not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:15: warning: include file iostream not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:16: warning: include file limits not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:17: warning: include file eigen3/Eigen/Eigenvalues not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:18: warning: include file eigen3/Eigen/Dense not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/types.h:3: warning: include file iostream not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/types.h:5: warning: include file carl/numbers/numbers.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/types.h:6: warning: include file carl/interval/Interval.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/types.h:7: warning: include file carl/core/Variable.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/types.h:8: warning: include file carl/util/hash.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/types.h:9: warning: include file eigen3/Eigen/Dense not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/types.h:10: warning: include file eigen3/unsupported/Eigen/src/MatrixFunctions/MatrixExponential.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/types.h:11: warning: include file eigen3/Eigen/Core not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/types.h:12: warning: include file boost/operators.hpp not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:13: warning: include file carl/numbers/numbers.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:14: warning: include file functional not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:15: warning: include file iostream not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:16: warning: include file limits not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:17: warning: include file eigen3/Eigen/Eigenvalues not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:18: warning: include file eigen3/Eigen/Dense not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/util/convenienceOperators.h:4: warning: include file iostream not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/util/convenienceOperators.h:5: warning: include file map not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/util/convenienceOperators.h:6: warning: include file set not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/util/convenienceOperators.h:7: warning: include file utility not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/util/convenienceOperators.h:8: warning: include file vector not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/util/logging/Logger.h:4: warning: include file iostream not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/util/logging/Logger.h:5: warning: include file thread not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/util/logging/Logger.h:18: warning: include file carl/core/carlLogging.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/util/logging/Logger.h:4: warning: include file iostream not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/util/logging/Logger.h:5: warning: include file thread not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/util/logging/Logger.h:18: warning: include file carl/core/carlLogging.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/util/VariablePool.h:15: warning: include file carl/core/Variable.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/util/VariablePool.h:16: warning: include file carl/core/VariablePool.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/util/VariablePool.h:17: warning: include file carl/util/Singleton.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/util/VariablePool.h:18: warning: include file map not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/util/VariablePool.h:19: warning: include file vector not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/util/VariablePool.h:20: warning: include file cassert not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/datastructures/Point.h:13: warning: include file set not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/datastructures/Point.h:14: warning: include file vector not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/util/logging/Logger.h:4: warning: include file iostream not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/util/logging/Logger.h:5: warning: include file thread not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/util/logging/Logger.h:18: warning: include file carl/core/carlLogging.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/util/VariablePool.h:15: warning: include file carl/core/Variable.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/util/VariablePool.h:16: warning: include file carl/core/VariablePool.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/util/VariablePool.h:17: warning: include file carl/util/Singleton.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/util/VariablePool.h:18: warning: include file map not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/util/VariablePool.h:19: warning: include file vector not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/util/VariablePool.h:20: warning: include file cassert not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:13: warning: include file carl/numbers/numbers.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:14: warning: include file functional not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:15: warning: include file iostream not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:16: warning: include file limits not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:17: warning: include file eigen3/Eigen/Eigenvalues not found, perhaps you forgot to add its directory to INCLUDE_PATH?
+/home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:18: warning: include file eigen3/Eigen/Dense not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:16: warning: include file carl/formula/Constraint.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:17: warning: include file cassert not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/types.h:3: warning: include file iostream not found, perhaps you forgot to add its directory to INCLUDE_PATH?
@@ -4309,7 +4278,6 @@ Searching for files in directory /home/travis/build/hypro/hypro/src/hypro/util/s
 /home/travis/build/hypro/hypro/src/hypro/util/logging/Logger.h:4: warning: include file iostream not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/logging/Logger.h:5: warning: include file thread not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/logging/Logger.h:18: warning: include file carl/core/carlLogging.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/glpk/adaptions_glpk.h:8: warning: include file ../../../../resources/glpk-4.45/build/include/glpk.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.h:22: warning: include file carl/util/Singleton.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.h:23: warning: include file mutex not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.h:24: warning: include file thread not found, perhaps you forgot to add its directory to INCLUDE_PATH?
@@ -4317,7 +4285,6 @@ Searching for files in directory /home/travis/build/hypro/hypro/src/hypro/util/s
 /home/travis/build/hypro/hypro/src/hypro/util/logging/Logger.h:4: warning: include file iostream not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/logging/Logger.h:5: warning: include file thread not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/logging/Logger.h:18: warning: include file carl/core/carlLogging.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.h:33: warning: include file ../../../resources/glpk-4.45/build/include/glpk.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.h:295: warning: include file gmp.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.h:296: warning: include file gmpxx.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/logging/Logger.h:4: warning: include file iostream not found, perhaps you forgot to add its directory to INCLUDE_PATH?
@@ -4655,7 +4622,6 @@ Searching for files in directory /home/travis/build/hypro/hypro/src/hypro/util/s
 /home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:16: warning: include file limits not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:17: warning: include file eigen3/Eigen/Eigenvalues not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:18: warning: include file eigen3/Eigen/Dense not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:15: warning: include file ../../resources/glpk-4.45/build/include/glpk.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:16: warning: include file carl/formula/Constraint.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:17: warning: include file cassert not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/types.h:3: warning: include file iostream not found, perhaps you forgot to add its directory to INCLUDE_PATH?
@@ -4771,7 +4737,6 @@ Searching for files in directory /home/travis/build/hypro/hypro/src/hypro/util/s
 /home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:16: warning: include file limits not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:17: warning: include file eigen3/Eigen/Eigenvalues not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:18: warning: include file eigen3/Eigen/Dense not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:15: warning: include file ../../resources/glpk-4.45/build/include/glpk.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:16: warning: include file carl/formula/Constraint.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:17: warning: include file cassert not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:13: warning: include file carl/numbers/numbers.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
@@ -4952,7 +4917,6 @@ Searching for files in directory /home/travis/build/hypro/hypro/src/hypro/util/s
 /home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:16: warning: include file limits not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:17: warning: include file eigen3/Eigen/Eigenvalues not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:18: warning: include file eigen3/Eigen/Dense not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:15: warning: include file ../../resources/glpk-4.45/build/include/glpk.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:16: warning: include file carl/formula/Constraint.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:17: warning: include file cassert not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/types.h:3: warning: include file iostream not found, perhaps you forgot to add its directory to INCLUDE_PATH?
@@ -5142,7 +5106,6 @@ Searching for files in directory /home/travis/build/hypro/hypro/src/hypro/util/s
 /home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:16: warning: include file limits not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:17: warning: include file eigen3/Eigen/Eigenvalues not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:18: warning: include file eigen3/Eigen/Dense not found, perhaps you forgot to add its directory to INCLUDE_PATH?
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:15: warning: include file ../../resources/glpk-4.45/build/include/glpk.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:16: warning: include file carl/formula/Constraint.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:17: warning: include file cassert not found, perhaps you forgot to add its directory to INCLUDE_PATH?
 /home/travis/build/hypro/hypro/src/hypro/util/Plotter.h:15: warning: include file carl/util/Singleton.h not found, perhaps you forgot to add its directory to INCLUDE_PATH?
@@ -6556,7 +6519,7 @@ Possible candidates:
 /home/travis/build/hypro/hypro/src/hypro/types.h:29: warning: documented symbol `typedef hypro::std::set< vector_t< Number >> vectorSet' was not declared or defined.
 /home/travis/build/hypro/hypro/src/hypro/util/Plotter.h:71: warning: documented symbol `Singleton< Plotter< Number > >' was not declared or defined.
 /home/travis/build/hypro/hypro/src/hypro/util/VariablePool.h:28: warning: documented symbol `Singleton< VariablePool >' was not declared or defined.
-error opening bib9789.bbl: No such file or directory
+error opening bib14426.bbl: No such file or directory
 bibtex command failed: No such file or directory
  /home/travis/build/hypro/hypro/examples/example_redundantConstraints.cpp...
 Parsing file /home/travis/build/hypro/hypro/examples/example_redundantConstraints.cpp...
@@ -7428,6 +7391,17 @@ Generating docs for compound hypro::parser::constraintParser...
 Generating docs for compound hypro::parser::discreteConstraintParser...
 Generating docs for compound hypro::parser::aggregation_...
 Generating docs for compound hypro::plotting::gnuplotSettings...
+Generating docs for compound hypro::reachability::glp_bfcp...
+Generating docs for compound hypro::reachability::glp_smcp...
+Generating docs for compound hypro::reachability::glp_iptcp...
+Generating docs for compound hypro::reachability::glp_iocp...
+Generating docs for compound hypro::reachability::glp_attr...
+Generating docs for compound hypro::reachability::glp_mpscp...
+Generating docs for compound hypro::reachability::glp_cpxcp...
+Generating docs for compound hypro::reachability::_glp_graph...
+Generating docs for compound hypro::reachability::_glp_vertex...
+Generating docs for compound hypro::reachability::_glp_arc...
+Generating docs for compound hypro::reachability::LPXKKT...
 Generating docs for compound hypro::reachability::Reach...
 Generating docs for namespace hypro::reachability::Eigen
 Generating docs for compound hypro::reachability::Eigen::NumTraits< carl::FLOAT_T< Number > >...
@@ -7549,70 +7523,23 @@ Generating dependency graph for directory /home/travis/build/hypro/hypro/src/hyp
 Generating dependency graph for directory /home/travis/build/hypro/hypro/src/hypro/representations/ConstraintSet
 Generating dependency graph for directory /home/travis/build/hypro/hypro/src/hypro/representations/conversion
 Generating dependency graph for directory /home/travis/build/hypro/hypro/src/hypro/algorithms/convexHull
-Generating dependency graph for directory /home/travis/build/hypro/hypro/src/hypro/datastructures
-Generating dependency graph for directory /home/travis/build/hypro/hypro/src/hypro/representations/DifferenceBounds
-Generating dependency graph for directory /home/travis/build/hypro/hypro/src/hypro/algorithms/eigendecomposition
-Generating dependency graph for directory /home/travis/build/hypro/hypro/src/hypro/representations/Ellipsoids
-Generating dependency graph for directory /home/travis/build/hypro/hypro/examples
-Generating dependency graph for directory /home/travis/build/hypro/hypro/src/hypro/parser/flowstar
-Generating dependency graph for directory /home/travis/build/hypro/hypro/src/hypro/util/linearOptimizash: 1: latex: not found
+Generating dependency graph for sh: 1: latex: not found
 error: Problems running latex. Check your installation or look for typos in _formulas.tex and check _formulas.log!
 sh: 1: dvips: not found
 error: Problems running dvips. Check your installation!
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/graph_legend.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/graph_legend.png"'
 sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_24cbef118a2511338dada52e6e2bd544_dep.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_24cbef118a2511338dada52e6e2bd544_dep.png"'
-sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_55730fee9a0c1f12da77eb14a8325c4c_dep.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_55730fee9a0c1f12da77eb14a8325c4c_dep.png"'
 sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_293cf7ffd2d1ce76fb1a113fdef90fd7_dep.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_293cf7ffd2d1ce76fb1a113fdef90fd7_dep.png"'
-sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_2a022a7dd5883d249fd19381a9acb7ca_dep.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_2a022a7dd5883d249fd19381a9acb7ca_dep.png"'
-sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_d21d851d43d9af6e0004f77727cc1ce2_dep.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_d21d851d43d9af6e0004f77727cc1ce2_dep.png"'
-sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_c69b7163a8becb19bca702fdae1c2050_dep.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_c69b7163a8becb19bca702fdae1c2050_dep.png"'
-sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_9daea738ba0665232cd58b81f5fd3268_dep.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_9daea738ba0665232cd58b81f5fd3268_dep.png"'
-sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_3595f83f5be0d6a3539bc1ea5a059474_dep.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_3595f83f5be0d6a3539bc1ea5a059474_dep.png"'
-sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_bce2075adec303dcb2f0c4fbfcbc8493_dep.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_bce2075adec303dcb2f0c4fbfcbc8493_dep.png"'
-sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_cf451874352f123b92a8eb670c7ebe66_dep.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_cf451874352f123b92a8eb670c7ebe66_dep.png"'
-sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_633a5d29f60255dcee3b171168087cee_dep.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_633a5d29f60255dcee3b171168087cee_dep.png"'
-sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_d2e0e2e7c131de54c32d81549b14c3d5_dep.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_d2e0e2e7c131de54c32d81549b14c3d5_dep.png"'
-sh: 1: dot: not found
-sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_d28a4824dc47e487b107a5db32ef43c4_dep.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_d28a4824dc47e487b107a5db32ef43c4_dep.png"'
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_f9717485e2c54dccf37fdcc8c536ee8a_dep.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_f9717485e2c54dccf37fdcc8c536ee8a_dep.png"'
-sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_6a5e837390fbd392226c1c2e9854e767_dep.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_6a5e837390fbd392226c1c2e9854e767_dep.png"'
-sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_19f7ed9a1a9707d41c15619f6b9af49c_dep.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_19f7ed9a1a9707d41c15619f6b9af49c_dep.png"'
-sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_fc0efe5d2249fba2a29c6d003d9b04e9_dep.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_fc0efe5d2249fba2a29c6d003d9b04e9_dep.png"'
-sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_2ce0cb9797b50c8d842bc50008b46cdd_dep.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_2ce0cb9797b50c8d842bc50008b46cdd_dep.png"'
-sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_3100e148cb0b6b745355fdee31bcb5c6_dep.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_3100e148cb0b6b745355fdee31bcb5c6_dep.png"'
-sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_e44977c2db40c89968aef6d4236fe8a8_dep.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_e44977c2db40c89968aef6d4236fe8a8_dep.png"'
-sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_7ca2da3d0bdc47450f74c631953a3473_dep.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_7ca2da3d0bdc47450f74c631953a3473_dep.png"'
-sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_c3a99445e85233736dff89b095acd8fe_dep.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_c3a99445e85233736dff89b095acd8fe_dep.png"'
-sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_f8eeed5867fcfb10b0a82b230e717047_dep.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_f8eeed5867fcfb10b0a82b230e717047_dep.png"'
-sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_2c8758a5fdbf28946c502b471e14bb83_dep.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_2c8758a5fdbf28946c502b471e14bb83_dep.png"'
-sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_dbbb4b37ecf24276c0f25796d6496cf7_dep.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_dbbb4b37ecf24276c0f25796d6496cf7_dep.png"'
-sh: 1: dot: not found
-tion/glpk
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_24cbef118a2511338dada52e6e2bd544_dep.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_24cbef118a2511338dada52e6e2bd544_dep.png"'
+directory /home/travis/build/hypro/hypro/src/hypro/datastructures
+Generating dependency graph for directory /home/travis/build/hypro/hypro/src/hypro/representations/DifferenceBounds
+Generating dependency graph for directory /home/travis/build/hypro/hypro/src/hypro/algorithms/eigendecomposition
+Generating dependency graph for directory /home/travis/build/hypro/hypro/src/hypro/representations/Ellipsoids
+Generating dependency graph for directory /home/travis/build/hypro/hypro/examples
+Generating dependency graph for directory /home/travis/build/hypro/hypro/src/hypro/parser/flowstar
+Generating dependency graph for directory /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/glpk
 Generating dependency graph for directory /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope
 Generating dependency graph for directory /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton
 Generating dependency graph for directory /home/travis/build/hypro/hypro/src/hypro
@@ -7656,35 +7583,58 @@ Generating example index...
 finalizing index lists...
 Running dot...
 Generating dot graphs using 3 parallel threads...
-Running dot for graph 1/264
-Running dot for graph 2/264
-Running dot for graph 3/264
-Running dot for graph 4/264
-Running dot for graph 5/264
-Running dot for graph 6/264
-Running dot for graph 7/264
-Running dot for graph 8/264
-Running dot for graph 9/264
-Running dot for graph 10/264
-Running dot for graph 11/264
-Running dot for graph 12/264
-Running dot for graph 13/264
-Running dot for graph 14/264
-Running dot for graph 15/264
-Running dot for graph 16/264
-Running dot for graph 17/264
-Running dot for graph 18/264
-Running dot for graph 19/264
-Running dot for graph 20/264
-Running dot for graph 21/264
-Running dot for graph 22/264
-Running dot for graph 23/264
-Running dot for graph 24/264
-Running dot for graph 25/264
-Running dot for graph 26/264
-Running dot for graph 27/264
-Running dot for graph 28/264
-Running dot for graph error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_ad938787f25f17484dcf7b42a899a1a5_dep.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_ad938787f25f17484dcf7b42a899a1a5_dep.png"'
+Running dot for graph 1/275
+Running dot for graph 2/275
+Running dot for graph 3/275
+Running dot for graph 4/275
+Running dot for graph 5/2sh: 1: dot: not found
+sh: 1: dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_293cf7ffd2d1ce76fb1a113fdef90fd7_dep.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_293cf7ffd2d1ce76fb1a113fdef90fd7_dep.png"'
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_d21d851d43d9af6e0004f77727cc1ce2_dep.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_d21d851d43d9af6e0004f77727cc1ce2_dep.png"'
+sh: 1: dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_2a022a7dd5883d249fd19381a9acb7ca_dep.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_2a022a7dd5883d249fd19381a9acb7ca_dep.png"'
+sh: 1: dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_9daea738ba0665232cd58b81f5fd3268_dep.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_9daea738ba0665232cd58b81f5fd3268_dep.png"'
+sh: 1: dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_c69b7163a8becb19bca702fdae1c2050_dep.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_c69b7163a8becb19bca702fdae1c2050_dep.png"'
+sh: 1: dot: not found
+sh: 1: dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_bce2075adec303dcb2f0c4fbfcbc8493_dep.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_bce2075adec303dcb2f0c4fbfcbc8493_dep.png"'
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_3595f83f5be0d6a3539bc1ea5a059474_dep.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_3595f83f5be0d6a3539bc1ea5a059474_dep.png"'
+sh: 1: dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_cf451874352f123b92a8eb670c7ebe66_dep.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_cf451874352f123b92a8eb670c7ebe66_dep.png"'
+sh: 1: dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_633a5d29f60255dcee3b171168087cee_dep.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_633a5d29f60255dcee3b171168087cee_dep.png"'
+sh: 1: dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_d2e0e2e7c131de54c32d81549b14c3d5_dep.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_d2e0e2e7c131de54c32d81549b14c3d5_dep.png"'
+sh: 1: dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_d28a4824dc47e487b107a5db32ef43c4_dep.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_d28a4824dc47e487b107a5db32ef43c4_dep.png"'
+sh: 1: dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_f9717485e2c54dccf37fdcc8c536ee8a_dep.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_f9717485e2c54dccf37fdcc8c536ee8a_dep.png"'
+sh: 1: dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_6a5e837390fbd392226c1c2e9854e767_dep.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_6a5e837390fbd392226c1c2e9854e767_dep.png"'
+sh: 1: dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_19f7ed9a1a9707d41c15619f6b9af49c_dep.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_19f7ed9a1a9707d41c15619f6b9af49c_dep.png"'
+sh: 1: dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_fc0efe5d2249fba2a29c6d003d9b04e9_dep.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_fc0efe5d2249fba2a29c6d003d9b04e9_dep.png"'
+sh: 1: dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_2ce0cb9797b50c8d842bc50008b46cdd_dep.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_2ce0cb9797b50c8d842bc50008b46cdd_dep.png"'
+sh: 1: dot: not found
+sh: 1: dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_e44977c2db40c89968aef6d4236fe8a8_dep.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_e44977c2db40c89968aef6d4236fe8a8_dep.png"'
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_3100e148cb0b6b745355fdee31bcb5c6_dep.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_3100e148cb0b6b745355fdee31bcb5c6_dep.png"'
+sh: 1: dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_7ca2da3d0bdc47450f74c631953a3473_dep.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_7ca2da3d0bdc47450f74c631953a3473_dep.png"'
+sh: 1: dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_c3a99445e85233736dff89b095acd8fe_dep.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_c3a99445e85233736dff89b095acd8fe_dep.png"'
+sh: 1: dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_f8eeed5867fcfb10b0a82b230e717047_dep.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_f8eeed5867fcfb10b0a82b230e717047_dep.png"'
+sh: 1: dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_2c8758a5fdbf28946c502b471e14bb83_dep.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_2c8758a5fdbf28946c502b471e14bb83_dep.png"'
+sh: 1: dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_dbbb4b37ecf24276c0f25796d6496cf7_dep.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_dbbb4b37ecf24276c0f25796d6496cf7_dep.png"'
+sh: 1: dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_ad938787f25f17484dcf7b42a899a1a5_dep.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_ad938787f25f17484dcf7b42a899a1a5_dep.png"'
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_6a6edf7123c81d000975d26367682a7a_dep.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_6a6edf7123c81d000975d26367682a7a_dep.png"'
 sh: 1: dot: not found
@@ -7694,9 +7644,9 @@ error: Problems running dot: exit code=127, command='dot', arguments='"/home/tra
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_390abfd5d68d503b469591b35069a435_dep.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_390abfd5d68d503b469591b35069a435_dep.png"'
 sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_68267d1309a1af8e8297ef4c3efbcdba_dep.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_68267d1309a1af8e8297ef4c3efbcdba_dep.png"'
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_a938320afa8b4ed01722153f3c100ea6_dep.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_a938320afa8b4ed01722153f3c100ea6_dep.png"'
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_68267d1309a1af8e8297ef4c3efbcdba_dep.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_68267d1309a1af8e8297ef4c3efbcdba_dep.png"'
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_57790bb148fd18efc2431dd25a248521_dep.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_57790bb148fd18efc2431dd25a248521_dep.png"'
 sh: 1: dot: not found
@@ -7704,16 +7654,16 @@ error: Problems running dot: exit code=127, command='dot', arguments='"/home/tra
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_f299c51bddf4791e0a4b318d117b72c2_dep.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_f299c51bddf4791e0a4b318d117b72c2_dep.png"'
 sh: 1: dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_3a35ee46332157846b55808bff5bb8c8_dep.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_3a35ee46332157846b55808bff5bb8c8_dep.png"'
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_879d833e0dfbe8f31a5e860bb94efb50_dep.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_879d833e0dfbe8f31a5e860bb94efb50_dep.png"'
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_3a35ee46332157846b55808bff5bb8c8_dep.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_3a35ee46332157846b55808bff5bb8c8_dep.png"'
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_7ca784a8a47198f8f271993b816bdc67_dep.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_7ca784a8a47198f8f271993b816bdc67_dep.png"'
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_41e6b291ceaca213b8048a0ff55a26ee_dep.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_41e6b291ceaca213b8048a0ff55a26ee_dep.png"'
 sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_97de49a5bc6f4f4b12a8405ff97bd656_dep.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_97de49a5bc6f4f4b12a8405ff97bd656_dep.png"'
 sh: 1: dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_97de49a5bc6f4f4b12a8405ff97bd656_dep.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/dir_97de49a5bc6f4f4b12a8405ff97bd656_dep.png"'
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_0.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_0.png"'
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_1.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_1.png"'
@@ -7736,11 +7686,11 @@ error: Problems running dot: exit code=127, command='dot', arguments='"/home/tra
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_10.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_10.png"'
 sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_12.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_12.png"'
-sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_11.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_11.png"'
 sh: 1: dot: not found
+sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_13.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_13.png"'
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_12.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_12.png"'
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_14.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_14.png"'
 sh: 1: dot: not found
@@ -7754,9 +7704,9 @@ error: Problems running dot: exit code=127, command='dot', arguments='"/home/tra
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_19.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_19.png"'
 sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_20.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_20.png"'
-sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_21.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_21.png"'
+sh: 1: dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_20.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_20.png"'
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_22.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_22.png"'
 sh: 1: dot: not found
@@ -7766,19 +7716,19 @@ error: Problems running dot: exit code=127, command='dot', arguments='"/home/tra
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_25.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_25.png"'
 sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_26.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_26.png"'
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_27.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_27.png"'
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_26.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_26.png"'
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_28.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_28.png"'
 sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_30.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_30.png"'
-sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_29.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_29.png"'
 sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_31.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_31.png"'
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_30.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_30.png"'
+sh: 1: dot: not found
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_32.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_32.png"'
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_31.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_31.png"'
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_33.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_33.png"'
 sh: 1: dot: not found
@@ -7796,9 +7746,9 @@ error: Problems running dot: exit code=127, command='dot', arguments='"/home/tra
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_40.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_40.png"'
 sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_41.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_41.png"'
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_42.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_42.png"'
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_41.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_41.png"'
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_43.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_43.png"'
 sh: 1: dot: not found
@@ -7813,31 +7763,31 @@ sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_48.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_48.png"'
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_49.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_49.png"'
-sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_50.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_50.png"'
-sh: 1: dot: not found
+sh: 1: sh: 1: dot: not found
+dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_51.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_51.png"'
-sh: 1: dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_50.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_50.png"'
+sh: 1: dot: not foundsh: 1: dot: not found
+
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_52.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_52.png"'
-sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_53.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_53.png"'
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_54.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_54.png"'
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_55.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_55.png"'
 sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_56.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_56.png"'
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_57.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_57.png"'
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_56.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_56.png"'
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_58.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_58.png"'
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_59.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_59.png"'
-sh: 1: dot: not found
+sh: 1: sh: 1: dot: not found
+dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_61.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_61.png"'
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_60.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_60.png"'
 sh: 1: dot: not found
-sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_61.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_61.png"'
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_62.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_62.png"'
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_63.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_63.png"'
@@ -7846,15 +7796,15 @@ error: Problems running dot: exit code=127, command='dot', arguments='"/home/tra
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_65.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_65.png"'
 sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_66.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_66.png"'
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_67.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_67.png"'
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_66.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_66.png"'
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_68.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_68.png"'
 sh: 1: dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_69.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_69.png"'
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_70.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_70.png"'
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_69.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_69.png"'
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_71.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_71.png"'
 sh: 1: dot: not found
@@ -7862,23 +7812,23 @@ error: Problems running dot: exit code=127, command='dot', arguments='"/home/tra
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_73.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_73.png"'
 sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_74.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_74.png"'
 sh: 1: dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_74.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_74.png"'
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_75.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_75.png"'
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_76.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_76.png"'
 sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_77.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_77.png"'
-sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_78.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_78.png"'
+sh: 1: dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_77.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_77.png"'
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_79.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_79.png"'
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_80.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_80.png"'
-sh: 1: sh: 1: dot: not found
-dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_82.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_82.png"'
+sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_81.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_81.png"'
+sh: 1: dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_82.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_82.png"'
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_83.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_83.png"'
 sh: 1: dot: not found
@@ -7896,8 +7846,8 @@ error: Problems running dot: exit code=127, command='dot', arguments='"/home/tra
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_90.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_90.png"'
 sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_91.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_91.png"'
 sh: 1: dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_91.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_91.png"'
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_92.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_92.png"'
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_93.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_93.png"'
@@ -7907,32 +7857,172 @@ sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_95.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_95.png"'
 sh: 1: dot: not found
 sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_96.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_96.png"'
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_97.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_97.png"'
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_96.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_96.png"'
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_98.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_98.png"'
 sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_99.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_99.png"'
 sh: 1: dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_99.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_99.png"'
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_100.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_100.png"'
+75
+Running dot for graph 6/275
+Running dot for graph 7/275
+Running dot for graph 8/275
+Running dot for graph 9/275
+Running dot for graph 10/275
+Running dot for graph 11/275
+Running dot for graph 12/275
+Running dot for graph 13/275
+Running dot for graph 14/275
+Running dot for graph 15/275
+Running dot for graph 16/275
+Running dot for graph 17/275
+Running dot for graph 18/275
+Running dot for graph 19/275
+Running dot for graph 20/275
+Running dot for graph 21/275
+Running dot for graph 22/275
+Running dot for graph 23/275
+Running dot for graph 24/275
+Running dot for graph 25/275
+Running dot for graph 26/275
+Running dot for graph 27/275
+Running dot for graph 28/275
+Running dot for graph 29/275
+Running dot for graph 30/275
+Running dot for graph 31/275
+Running dot for graph 32/275
+Running dot for graph 33/275
+Running dot for graph 34/275
+Running dot for graph 35/275
+Running dot for graph 36/275
+Running dot for graph 37/275
+Running dot for graph 38/275
+Running dot for graph 39/275
+Running dot for graph 40/275
+Running dot for graph 41/275
+Running dot for graph 42/275
+Running dot for graph 43/275
+Running dot for graph 44/275
+Running dot for graph 45/275
+Running dot for graph 46/275
+Running dot for graph 47/275
+Running dot for graph 48/275
+Running dot for graph 49/275
+Running dot for graph 50/275
+Running dot for graph 51/275
+Running dot for graph 52/275
+Running dot for graph 53/275
+Running dot for graph 54/275
+Running dot for graph 55/275
+Running dot for graph 56/275
+Running dot for graph 57/275
+Running dot for graph 58/275
+Running dot for graph 59/275
+Running dot for graph 60/275
+Running dot for graph 61/275
+Running dot for graph 62/275
+Running dot for graph 63/275
+Running dot for graph 64/275
+Running dot for graph 65/275
+Running dot for graph 66/275
+Running dot for graph 67/275
+Running dot for graph 68/275
+Running dot for graph 69/275
+Running dot for graph 70/275
+Running dot for graph 71/275
+Running dot for graph 72/275
+Running dot for graph 73/275
+Running dot for graph 74/275
+Running dot for graph 75/275
+Running dot for graph 76/275
+Running dot for graph 77/275
+Running dot for graph 78/275
+Running dot for graph 79/275
+Running dot for graph 80/275
+Running dot for graph 81/275
+Running dot for graph 82/275
+Running dot for graph 83/275
+Running dot for graph 84/275
+Running dot for graph 85/275
+Running dot for graph 86/275
+Running dot for graph 87/275
+Running dot for graph 88/275
+Running dot for graph 89/275
+Running dot for graph 90/275
+Running dot for graph 91/275
+Running dot for graph 92/275
+Running dot for graph 93/275
+Running dot for graph 94/275
+Running dot for graph 95/275
+Running dot for graph 96/275
+Running dot for graph 97/275
+Running dot for graph 98/275
+Running dot for graph 99/275
+Running dot for graph 100/275
+Running dot for graph 101/275
+Running dot for graph 102/275
+Running dot for graph 103/275
+Running dot for graph 104/275
+Running dot for graph 105/275
+Running dot for graph 106/275
+Running dot for graph 107/275
+Running dot for graph 108/275
+Running dot for graph 109/275
+Running dot for graph 110/275
+Running dot for graph 111/275
+Running dot for graph 112/275
+Running dot for graph 113/275
+Running dot for graph 114/275
+Running dot for graph 115/275
+Running dot for graph 116/275
+Running dot for graph 117/275
+Running dot for graph 118/275
+Running dot for graph 119/275
+Running dot for graph 120/275
+Running dot for graph 121/275
+Running dot for graph 122/275
+Running dot for graph 123/275
+Running dot for graph 124/275
+Running dot for graph 125/275
+Running dot for graph 126/275
+Running dot for graph 127/275
+Running dot for graph 128/275
+Running dot for graph 129/275
+Running dot for graph 130/275
+Running dot for graph 131/275
+Running dot for graph 132/275
+Running dot for graph 133/275
+Running dot for graph 134/275
+Running dot for graph 135/275
+Running dot for graph 136/275
+Running dot for graph 137/275
+Running dot for graph 138/275
+Running dot for graph 139/275
+Running dot for graph 140/275
+Running dot for graph 141/275
+Running dot for graph 142/275
+Running dot for graph 143/275
+Running dot for graph 144/275
+Running dot for graphsh: 1: dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_103.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_103.png"'
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_101.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_101.png"'
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_102.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_102.png"'
 sh: 1: dot: not found
-sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_103.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_103.png"'
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_104.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_104.png"'
 sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_105.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_105.png"'
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_106.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_106.png"'
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_105.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_105.png"'
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_107.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_107.png"'
 sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_108.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_108.png"'
-sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_109.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_109.png"'
+sh: 1: dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_108.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_108.png"'
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_110.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_110.png"'
 sh: 1: dot: not found
@@ -7942,10 +8032,10 @@ error: Problems running dot: exit code=127, command='dot', arguments='"/home/tra
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_113.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_113.png"'
 sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_114.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_114.png"'
-sh: 1: dot: not found
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_115.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_115.png"'
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_114.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_114.png"'
+sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_116.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_116.png"'
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_117.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_117.png"'
@@ -7954,174 +8044,35 @@ error: Problems running dot: exit code=127, command='dot', arguments='"/home/tra
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_119.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_119.png"'
 sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_120.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_120.png"'
 sh: 1: dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_120.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_120.png"'
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_121.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_121.png"'
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_122.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_122.png"'
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_123.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_123.png"'
 sh: 1: dot: not found
-sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_124.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_124.png"'
+sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_125.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_125.png"'
-sh: 1: dot: not found
-29/264
-Running dot for graph 30/264
-Running dot for graph 31/264
-Running dot for graph 32/264
-Running dot for graph 33/264
-Running dot for graph 34/264
-Running dot for graph 35/264
-Running dot for graph 36/264
-Running dot for graph 37/264
-Running dot for graph 38/264
-Running dot for graph 39/264
-Running dot for graph 40/264
-Running dot for graph 41/264
-Running dot for graph 42/264
-Running dot for graph 43/264
-Running dot for graph 44/264
-Running dot for graph 45/264
-Running dot for graph 46/264
-Running dot for graph 47/264
-Running dot for graph 48/264
-Running dot for graph 49/264
-Running dot for graph 50/264
-Running dot for graph 51/264
-Running dot for graph 52/264
-Running dot for graph 53/264
-Running dot for graph 54/264
-Running dot for graph 55/264
-Running dot for graph 56/264
-Running dot for graph 57/264
-Running dot for graph 58/264
-Running dot for graph 59/264
-Running dot for graph 60/264
-Running dot for graph 61/264
-Running dot for graph 62/264
-Running dot for graph 63/264
-Running dot for graph 64/264
-Running dot for graph 65/264
-Running dot for graph 66/264
-Running dot for graph 67/264
-Running dot for graph 68/264
-Running dot for graph 69/264
-Running dot for graph 70/264
-Running dot for graph 71/264
-Running dot for graph 72/264
-Running dot for graph 73/264
-Running dot for graph 74/264
-Running dot for graph 75/264
-Running dot for graph 76/264
-Running dot for graph 77/264
-Running dot for graph 78/264
-Running dot for graph 79/264
-Running dot for graph 80/264
-Running dot for graph 81/264
-Running dot for graph 82/264
-Running dot for graph 83/264
-Running dot for graph 84/264
-Running dot for graph 85/264
-Running dot for graph 86/264
-Running dot for graph 87/264
-Running dot for graph 88/264
-Running dot for graph 89/264
-Running dot for graph 90/264
-Running dot for graph 91/264
-Running dot for graph 92/264
-Running dot for graph 93/264
-Running dot for graph 94/264
-Running dot for graph 95/264
-Running dot for graph 96/264
-Running dot for graph 97/264
-Running dot for graph 98/264
-Running dot for graph 99/264
-Running dot for graph 100/264
-Running dot for graph 101/264
-Running dot for graph 102/264
-Running dot for graph 103/264
-Running dot for graph 104/264
-Running dot for graph 105/264
-Running dot for graph 106/264
-Running dot for graph 107/264
-Running dot for graph 108/264
-Running dot for graph 109/264
-Running dot for graph 110/264
-Running dot for graph 111/264
-Running dot for graph 112/264
-Running dot for graph 113/264
-Running dot for graph 114/264
-Running dot for graph 115/264
-Running dot for graph 116/264
-Running dot for graph 117/264
-Running dot for graph 118/264
-Running dot for graph 119/264
-Running dot for graph 120/264
-Running dot for graph 121/264
-Running dot for graph 122/264
-Running dot for graph 123/264
-Running dot for graph 124/264
-Running dot for graph 125/264
-Running dot for graph 126/264
-Running dot for graph 127/264
-Running dot for graph 128/264
-Running dot for graph 129/264
-Running dot for graph 130/264
-Running dot for graph 131/264
-Running dot for graph 132/264
-Running dot for graph 133/264
-Running dot for graph 134/264
-Running dot for graph 135/264
-Running dot for graph 136/264
-Running dot for graph 137/264
-Running dot for graph 138/264
-Running dot for graph 139/264
-Running dot for graph 140/264
-Running dot for graph 141/264
-Running dot for graph 142/264
-Running dot for graph 143/264
-Running dot for graph 144/264
-Running dot for graph 145/264
-Running dot for graph 146/264
-Running dot for graph 147/264
-Running dot for graph 148/264
-Running dot for graph 149/264
-Running dot for graph 150/264
-Running dot for graph 151/264
-Running dot for graph 152/264
-Running dot for graph 153/264
-Running dot for graph 154/264
-Running dot for graph 155/264
-Running dot for graph 156/264
-Running dot for graph 157/264
-Running dot for graph 158/264
-Running dot for graph 159/264
-Running dot for graph 160/264
-Running dot for graph 161/264
-Running dot for graph 162/264
-Running dot for graph 163/264
-Running dot for graph 164/264
-Running dot for graph 165/264
-Running dot for graph 166/264
-Running dot for graph 167/264
-Running dot for graerror: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_126.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_126.png"'
-sh: 1: dot: not found
+sh: 1: sh: 1: dot: not found
+dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_126.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_126.png"'
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_127.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_127.png"'
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_128.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_128.png"'
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_129.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_129.png"'
 sh: 1: dot: not found
-sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_130.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_130.png"'
+sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_131.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_131.png"'
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_132.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_132.png"'
 sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_133.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_133.png"'
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_134.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_134.png"'
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_133.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_133.png"'
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_135.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_135.png"'
 sh: 1: dot: not found
@@ -8135,8 +8086,8 @@ error: Problems running dot: exit code=127, command='dot', arguments='"/home/tra
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_140.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_140.png"'
 sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_141.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_141.png"'
 sh: 1: dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_141.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_141.png"'
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_142.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_142.png"'
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_143.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_143.png"'
@@ -8151,21 +8102,21 @@ error: Problems running dot: exit code=127, command='dot', arguments='"/home/tra
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_148.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_148.png"'
 sh: 1: dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_150.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_150.png"'
+sh: 1: dot: not foundsh: 1: dot: not found
+
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_151.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_151.png"'
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_149.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_149.png"'
 sh: 1: dot: not found
 sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_150.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_150.png"'
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_151.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_151.png"'
-sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_152.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_152.png"'
-sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_153.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_153.png"'
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_152.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_152.png"'
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_154.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_154.png"'
 sh: 1: dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_155.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_155.png"'
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_156.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_156.png"'
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_155.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_155.png"'
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_157.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_157.png"'
 sh: 1: dot: not found
@@ -8177,22 +8128,22 @@ error: Problems running dot: exit code=127, command='dot', arguments='"/home/tra
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_161.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_161.png"'
 sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_162.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_162.png"'
 sh: 1: dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_162.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_162.png"'
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_163.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_163.png"'
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_164.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_164.png"'
 sh: 1: dot: not found
-sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_166.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_166.png"'
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_165.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_165.png"'
 sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_167.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_167.png"'
 sh: 1: dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_167.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_167.png"'
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_166.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_166.png"'
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_168.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_168.png"'
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_169.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_169.png"'
+sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_170.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_170.png"'
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_171.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_171.png"'
@@ -8209,21 +8160,21 @@ error: Problems running dot: exit code=127, command='dot', arguments='"/home/tra
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_177.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_177.png"'
 sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_178.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_178.png"'
 sh: 1: dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_178.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_178.png"'
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_179.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_179.png"'
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_180.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_180.png"'
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_181.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_181.png"'
 sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_182.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_182.png"'
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_183.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_183.png"'
 sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_185.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_185.png"'
-sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_184.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_184.png"'
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_182.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_182.png"'
+sh: 1: dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_185.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_185.png"'
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_186.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_186.png"'
 sh: 1: dot: not found
@@ -8233,16 +8184,16 @@ error: Problems running dot: exit code=127, command='dot', arguments='"/home/tra
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_189.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_189.png"'
 sh: 1: dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_190.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_190.png"'
+sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_191.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_191.png"'
 sh: 1: dot: not found
-sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_192.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_192.png"'
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_190.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_190.png"'
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_193.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_193.png"'
 sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_194.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_194.png"'
 sh: 1: dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_194.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_194.png"'
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_195.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_195.png"'
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_196.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_196.png"'
@@ -8255,9 +8206,9 @@ error: Problems running dot: exit code=127, command='dot', arguments='"/home/tra
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_200.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_200.png"'
 sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_201.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_201.png"'
-sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_202.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_202.png"'
+sh: 1: dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_201.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_201.png"'
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_203.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_203.png"'
 sh: 1: dot: not found
@@ -8285,9 +8236,9 @@ error: Problems running dot: exit code=127, command='dot', arguments='"/home/tra
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_215.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_215.png"'
 sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_216.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_216.png"'
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_217.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_217.png"'
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_216.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_216.png"'
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_218.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_218.png"'
 sh: 1: dot: not found
@@ -8298,6 +8249,28 @@ sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_221.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_221.png"'
 sh: 1: dot: not found
 error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_222.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_222.png"'
+sh: 1: dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_223.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_223.png"'
+sh: 1: dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_224.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_224.png"'
+sh: 1: dot: not found
+sh: 1: dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_225.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_225.png"'
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_226.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_226.png"'
+sh: 1: dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_227.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_227.png"'
+sh: 1: dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_228.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_228.png"'
+sh: 1: dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_229.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_229.png"'
+sh: 1: dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_230.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_230.png"'
+sh: 1: dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_231.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_231.png"'
+sh: 1: dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_232.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_232.png"'
+sh: 1: dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_233.dot" -Tpng -o "/home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_233.png"'
 error: problems opening map file /home/travis/build/hypro/hypro/code_docs/hypro/html/dir_24cbef118a2511338dada52e6e2bd544_dep.map for inclusion in the docs!
 If you installed Graphviz/dot after a previous failing run, 
 try deleting the output directory and rerun doxygen.
@@ -8319,7 +8292,145 @@ try deleting the output directory and rerun doxygen.
 error: problems opening map file /home/travis/build/hypro/hypro/code_docs/hypro/html/dir_9daea738ba0665232cd58b81f5fd3268_dep.map for inclusion in the docs!
 If you installed Graphviz/dot after a previous failing run, 
 try deleting the output directory and rerun doxygen.
-error: problems opening map file /home/travis/build/hypro/hypro/code_docs/hypro/html/dir_3595f83f5be0d6a3539bc1ea5a059474_dep.map for inclusion in the docs!
+ 145/275
+Running dot for graph 146/275
+Running dot for graph 147/275
+Running dot for graph 148/275
+Running dot for graph 149/275
+Running dot for graph 150/275
+Running dot for graph 151/275
+Running dot for graph 152/275
+Running dot for graph 153/275
+Running dot for graph 154/275
+Running dot for graph 155/275
+Running dot for graph 156/275
+Running dot for graph 157/275
+Running dot for graph 158/275
+Running dot for graph 159/275
+Running dot for graph 160/275
+Running dot for graph 161/275
+Running dot for graph 162/275
+Running dot for graph 163/275
+Running dot for graph 164/275
+Running dot for graph 165/275
+Running dot for graph 166/275
+Running dot for graph 167/275
+Running dot for graph 168/275
+Running dot for graph 169/275
+Running dot for graph 170/275
+Running dot for graph 171/275
+Running dot for graph 172/275
+Running dot for graph 173/275
+Running dot for graph 174/275
+Running dot for graph 175/275
+Running dot for graph 176/275
+Running dot for graph 177/275
+Running dot for graph 178/275
+Running dot for graph 179/275
+Running dot for graph 180/275
+Running dot for graph 181/275
+Running dot for graph 182/275
+Running dot for graph 183/275
+Running dot for graph 184/275
+Running dot for graph 185/275
+Running dot for graph 186/275
+Running dot for graph 187/275
+Running dot for graph 188/275
+Running dot for graph 189/275
+Running dot for graph 190/275
+Running dot for graph 191/275
+Running dot for graph 192/275
+Running dot for graph 193/275
+Running dot for graph 194/275
+Running dot for graph 195/275
+Running dot for graph 196/275
+Running dot for graph 197/275
+Running dot for graph 198/275
+Running dot for graph 199/275
+Running dot for graph 200/275
+Running dot for graph 201/275
+Running dot for graph 202/275
+Running dot for graph 203/275
+Running dot for graph 204/275
+Running dot for graph 205/275
+Running dot for graph 206/275
+Running dot for graph 207/275
+Running dot for graph 208/275
+Running dot for graph 209/275
+Running dot for graph 210/275
+Running dot for graph 211/275
+Running dot for graph 212/275
+Running dot for graph 213/275
+Running dot for graph 214/275
+Running dot for graph 215/275
+Running dot for graph 216/275
+Running dot for graph 217/275
+Running dot for graph 218/275
+Running dot for graph 219/275
+Running dot for graph 220/275
+Running dot for graph 221/275
+Running dot for graph 222/275
+Running dot for graph 223/275
+Running dot for graph 224/275
+Running dot for graph 225/275
+Running dot for graph 226/275
+Running dot for graph 227/275
+Running dot for graph 228/275
+Running dot for graph 229/275
+Running dot for graph 230/275
+Running dot for graph 231/275
+Running dot for graph 232/275
+Running dot for graph 233/275
+Running dot for graph 234/275
+Running dot for graph 235/275
+Running dot for graph 236/275
+Running dot for graph 237/275
+Running dot for graph 238/275
+Running dot for graph 239/275
+Running dot for graph 240/275
+Running dot for graph 241/275
+Running dot for graph 242/275
+Running dot for graph 243/275
+Running dot for graph 244/275
+Running dot for graph 245/275
+Running dot for graph 246/275
+Running dot for graph 247/275
+Running dot for graph 248/275
+Running dot for graph 249/275
+Running dot for graph 250/275
+Running dot for graph 251/275
+Running dot for graph 252/275
+Running dot for graph 253/275
+Running dot for graph 254/275
+Running dot for graph 255/275
+Running dot for graph 256/275
+Running dot for graph 257/275
+Running dot for graph 258/275
+Running dot for graph 259/275
+Running dot for graph 260/275
+Running dot for graph 261/275
+Running dot for graph 262/275
+Running dot for graph 263/275
+Running dot for graph 264/275
+Running dot for graph 265/275
+Running dot for graph 266/275
+Running dot for graph 267/275
+Running dot for graph 268/275
+Running dot for graph 269/275
+Running dot for graph 270/275
+Running dot for graph 271/275
+Running dot for graph 272/275
+Running dot for graph 273/275
+Running dot for graph 274/275
+Running dot for graph 275/275
+Patching output file 1/41
+Patching output file 2/41
+Patching output file 3/41
+Patching output file 4/41
+Patching output file 5/41
+Patching output file 6/41
+Patching output file 7/41
+Patcherror: problems opening map file /home/travis/build/hypro/hypro/code_docs/hypro/html/dir_3595f83f5be0d6a3539bc1ea5a059474_dep.map for inclusion in the docs!
 If you installed Graphviz/dot after a previous failing run, 
 try deleting the output directory and rerun doxygen.
 error: problems opening map file /home/travis/build/hypro/hypro/code_docs/hypro/html/dir_bce2075adec303dcb2f0c4fbfcbc8493_dep.map for inclusion in the docs!
@@ -9087,111 +9198,40 @@ try deleting the output directory and rerun doxygen.
 error: problems opening map file /home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_222.map for inclusion in the docs!
 If you installed Graphviz/dot after a previous failing run, 
 try deleting the output directory and rerun doxygen.
-ph 168/264
-Running dot for graph 169/264
-Running dot for graph 170/264
-Running dot for graph 171/264
-Running dot for graph 172/264
-Running dot for graph 173/264
-Running dot for graph 174/264
-Running dot for graph 175/264
-Running dot for graph 176/264
-Running dot for graph 177/264
-Running dot for graph 178/264
-Running dot for graph 179/264
-Running dot for graph 180/264
-Running dot for graph 181/264
-Running dot for graph 182/264
-Running dot for graph 183/264
-Running dot for graph 184/264
-Running dot for graph 185/264
-Running dot for graph 186/264
-Running dot for graph 187/264
-Running dot for graph 188/264
-Running dot for graph 189/264
-Running dot for graph 190/264
-Running dot for graph 191/264
-Running dot for graph 192/264
-Running dot for graph 193/264
-Running dot for graph 194/264
-Running dot for graph 195/264
-Running dot for graph 196/264
-Running dot for graph 197/264
-Running dot for graph 198/264
-Running dot for graph 199/264
-Running dot for graph 200/264
-Running dot for graph 201/264
-Running dot for graph 202/264
-Running dot for graph 203/264
-Running dot for graph 204/264
-Running dot for graph 205/264
-Running dot for graph 206/264
-Running dot for graph 207/264
-Running dot for graph 208/264
-Running dot for graph 209/264
-Running dot for graph 210/264
-Running dot for graph 211/264
-Running dot for graph 212/264
-Running dot for graph 213/264
-Running dot for graph 214/264
-Running dot for graph 215/264
-Running dot for graph 216/264
-Running dot for graph 217/264
-Running dot for graph 218/264
-Running dot for graph 219/264
-Running dot for graph 220/264
-Running dot for graph 221/264
-Running dot for graph 222/264
-Running dot for graph 223/264
-Running dot for graph 224/264
-Running dot for graph 225/264
-Running dot for graph 226/264
-Running dot for graph 227/264
-Running dot for graph 228/264
-Running dot for graph 229/264
-Running dot for graph 230/264
-Running dot for graph 231/264
-Running dot for graph 232/264
-Running dot for graph 233/264
-Running dot for graph 234/264
-Running dot for graph 235/264
-Running dot for graph 236/264
-Running dot for graph 237/264
-Running dot for graph 238/264
-Running dot for graph 239/264
-Running dot for graph 240/264
-Running dot for graph 241/264
-Running dot for graph 242/264
-Running dot for graph 243/264
-Running dot for graph 244/264
-Running dot for graph 245/264
-Running dot for graph 246/264
-Running dot for graph 247/264
-Running dot for graph 248/264
-Running dot for graph 249/264
-Running dot for graph 250/264
-Running dot for graph 251/264
-Running dot for graph 252/264
-Running dot for graph 253/264
-Running dot for graph 254/264
-Running dot for graph 255/264
-Running dot for graph 256/264
-Running dot for graph 257/264
-Running dot for graph 258/264
-Running dot for graph 259/264
-Running dot for graph 260/264
-Running dot for graph 261/264
-Running dot for graph 262/264
-Running dot for graph 263/264
-Running dot for graph 264/264
-Patching output file 1/41
-Patching output file 2/41
-Patching output file 3/41
-Patching output file 4/41
-Patching output file 5/41
-Patching output file 6/41
-Patching output file 7/41
-Patching output file 8/41
+error: problems opening map file /home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_223.map for inclusion in the docs!
+If you installed Graphviz/dot after a previous failing run, 
+try deleting the output directory and rerun doxygen.
+error: problems opening map file /home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_224.map for inclusion in the docs!
+If you installed Graphviz/dot after a previous failing run, 
+try deleting the output directory and rerun doxygen.
+error: problems opening map file /home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_225.map for inclusion in the docs!
+If you installed Graphviz/dot after a previous failing run, 
+try deleting the output directory and rerun doxygen.
+error: problems opening map file /home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_226.map for inclusion in the docs!
+If you installed Graphviz/dot after a previous failing run, 
+try deleting the output directory and rerun doxygen.
+error: problems opening map file /home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_227.map for inclusion in the docs!
+If you installed Graphviz/dot after a previous failing run, 
+try deleting the output directory and rerun doxygen.
+error: problems opening map file /home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_228.map for inclusion in the docs!
+If you installed Graphviz/dot after a previous failing run, 
+try deleting the output directory and rerun doxygen.
+error: problems opening map file /home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_229.map for inclusion in the docs!
+If you installed Graphviz/dot after a previous failing run, 
+try deleting the output directory and rerun doxygen.
+error: problems opening map file /home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_230.map for inclusion in the docs!
+If you installed Graphviz/dot after a previous failing run, 
+try deleting the output directory and rerun doxygen.
+error: problems opening map file /home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_231.map for inclusion in the docs!
+If you installed Graphviz/dot after a previous failing run, 
+try deleting the output directory and rerun doxygen.
+error: problems opening map file /home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_232.map for inclusion in the docs!
+If you installed Graphviz/dot after a previous failing run, 
+try deleting the output directory and rerun doxygen.
+error: problems opening map file /home/travis/build/hypro/hypro/code_docs/hypro/html/inherit_graph_233.map for inclusion in the docs!
+If you installed Graphviz/dot after a previous failing run, 
+try deleting the output directory and rerun doxygen.
+ing output file 8/41
 Patching output file 9/41
 Patching output file 10/41
 Patching output file 11/41
@@ -9225,5 +9265,5 @@ Patching output file 38/41
 Patching output file 39/41
 Patching output file 40/41
 Patching output file 41/41
-lookup cache used 22683/65536 hits=537538 misses=24138
+lookup cache used 23119/65536 hits=543325 misses=24584
 finished...

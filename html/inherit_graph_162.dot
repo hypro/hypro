@@ -3,5 +3,5 @@ digraph "Graphical Class Hierarchy"
   edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
   node [fontname="Helvetica",fontsize="10",shape=record];
   rankdir="LR";
-  Node1 [label="hypro::reachability\l::std::hash\< hypro::\lHalfspace\< Number \> \>",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$structhypro_1_1reachability_1_1std_1_1hash_3_01hypro_1_1Halfspace_3_01Number_01_4_01_4.html",tooltip="Hash operator for halfspaces. "];
+  Node1 [label="hypro::reachability\l::hypro::typeName\< mpq\l_class \>",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$structhypro_1_1reachability_1_1hypro_1_1typeName_3_01mpq__class_01_4.html"];
 }

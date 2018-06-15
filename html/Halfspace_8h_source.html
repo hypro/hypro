@@ -286,7 +286,7 @@ $(document).ready(function(){initNavTree('Halfspace_8h_source.html','');});
 <div class="line"><a name="l00383"></a><span class="lineno">  383</span>&#160;            std::hash&lt;hypro::vector_t&lt;Number&gt;&gt; vectorHasher;</div>
 <div class="line"><a name="l00384"></a><span class="lineno">  384</span>&#160;            std::hash&lt;Number&gt; numberHasher;</div>
 <div class="line"><a name="l00385"></a><span class="lineno">  385</span>&#160;            seed = vectorHasher(normal);</div>
-<div class="line"><a name="l00386"></a><span class="lineno">  386</span>&#160;            boost::hash_combine(seed, numberHasher(scalar));</div>
+<div class="line"><a name="l00386"></a><span class="lineno">  386</span>&#160;            carl::hash_add(seed, numberHasher(scalar));</div>
 <div class="line"><a name="l00387"></a><span class="lineno">  387</span>&#160;            <span class="keywordflow">return</span> seed;</div>
 <div class="line"><a name="l00388"></a><span class="lineno">  388</span>&#160;        }</div>
 <div class="line"><a name="l00389"></a><span class="lineno">  389</span>&#160;    };</div>

@@ -194,7 +194,7 @@ $(document).ready(function(){initNavTree('Ridge_8h_source.html','');});
 <div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;            std::hash&lt;hypro::Point&lt;Number&gt;&gt; pointHasher;</div>
 <div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;            std::vector&lt;hypro::Point&lt;Number&gt;&gt; vertices = ridge.vertices();</div>
 <div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;            <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; vertices.rows(); i++) {</div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;                boost::hash_combine(seed, pointHasher(vertices(i)));</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;                carl::hash_add(seed, pointHasher(vertices(i)));</div>
 <div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;            }</div>
 <div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;            <span class="keywordflow">return</span> seed;</div>
 <div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;        }</div>
