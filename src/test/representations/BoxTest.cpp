@@ -14,6 +14,18 @@
 #include "../../hypro/representations/GeometricObject.h"
 #include "gtest/gtest.h"
 
+
+template<typename Number>
+hypro::matrix_t<Number> createRotationMatrix(Number angle, std::size_t dimension, std::size_t first, std::size_t second) {
+	hypro::matrix_t<Number> rotX = hypro::matrix_t<Number>::Identity(dimension, dimension);
+	rotX(first,first) = carl::cos(angle);
+	rotX(first,second) = -carl::sin(angle);
+	rotX(second,first) = carl::sin(angle);
+	rotX(second, second) = carl::cos(angle);
+	return rotX;
+}
+
+
 template<typename Number>
 class BoxTest : public ::testing::Test
 {
@@ -29,6 +41,47 @@ protected:
         boundaries2.push_back(carl::Interval<Number>(-1,6));
         boundaries2.push_back(carl::Interval<Number>(4,7));
         box2 = hypro::Box<Number>(boundaries2);
+
+        carl::Interval<Number> x = carl::Interval<Number>(-2,2);
+		carl::Interval<Number> y = carl::Interval<Number>(2,4);
+		carl::Interval<Number> z = carl::Interval<Number>(-4,-2);
+		std::vector<carl::Interval<Number>> intervals1;
+		intervals1.push_back(x);
+		intervals1.push_back(y);
+		intervals1.push_back(z);
+
+		b1 = hypro::Box<Number>(intervals1);
+
+		carl::Interval<Number> a = carl::Interval<Number>(-1,3);
+		carl::Interval<Number> b = carl::Interval<Number>(2,4);
+		carl::Interval<Number> c = carl::Interval<Number>(-3,6);
+		std::vector<carl::Interval<Number>> intervals2;
+		intervals2.push_back(a);
+		intervals2.push_back(b);
+		intervals2.push_back(c);
+
+		b2 = hypro::Box<Number>(intervals2);
+
+		x = carl::Interval<Number>(3,5);
+		y = carl::Interval<Number>(1,3);
+		z = carl::Interval<Number>(2,5);
+		std::vector<carl::Interval<Number>> intervals3;
+		intervals3.push_back(x);
+		intervals3.push_back(y);
+		intervals3.push_back(z);
+
+		b3 = hypro::Box<Number>(intervals3);
+
+		a = carl::Interval<Number>(1);
+		b = carl::Interval<Number>(2,4);
+		c = carl::Interval<Number>(-2,3);
+		std::vector<carl::Interval<Number>> intervals4;
+		intervals4.push_back(a);
+		intervals4.push_back(b);
+		intervals4.push_back(c);
+
+		b4 = hypro::Box<Number>(intervals4);
+
     }
 
     virtual void TearDown()
@@ -38,6 +91,11 @@ protected:
     hypro::Box<Number> box1;
     hypro::Box<Number> box2;
     hypro::Box<Number> box3;
+
+    hypro::Box<Number> b1;
+    hypro::Box<Number> b2;
+    hypro::Box<Number> b3;
+    hypro::Box<Number> b4;
 };
 
 TYPED_TEST(BoxTest, Constructor)
@@ -115,17 +173,8 @@ TYPED_TEST(BoxTest, Insertion)
 }
 
 TYPED_TEST(BoxTest, Vertices) {
-	carl::Interval<TypeParam> x = carl::Interval<TypeParam>(3,5);
-	carl::Interval<TypeParam> y = carl::Interval<TypeParam>(1,3);
-	carl::Interval<TypeParam> z = carl::Interval<TypeParam>(2,5);
-	std::vector<carl::Interval<TypeParam>> intervals1;
-	intervals1.push_back(x);
-	intervals1.push_back(y);
-	intervals1.push_back(z);
 
-	hypro::Box<TypeParam> b1(intervals1);
-
-	std::vector<hypro::Point<TypeParam>> corners = b1.vertices();
+	std::vector<hypro::Point<TypeParam>> corners = this->b3.vertices();
 	EXPECT_EQ((unsigned) 8, corners.size());
 
 	EXPECT_EQ(true, std::find(corners.begin(), corners.end(),hypro::Point<TypeParam>({3,1,2})) != corners.end());
@@ -140,27 +189,8 @@ TYPED_TEST(BoxTest, Vertices) {
 
 TYPED_TEST(BoxTest, Union)
 {
-	carl::Interval<TypeParam> x = carl::Interval<TypeParam>(3,5);
-	carl::Interval<TypeParam> y = carl::Interval<TypeParam>(1,3);
-	carl::Interval<TypeParam> z = carl::Interval<TypeParam>(2,5);
-	std::vector<carl::Interval<TypeParam>> intervals1;
-	intervals1.push_back(x);
-	intervals1.push_back(y);
-	intervals1.push_back(z);
 
-	hypro::Box<TypeParam> b1(intervals1);
-
-	carl::Interval<TypeParam> a = carl::Interval<TypeParam>(-1,3);
-	carl::Interval<TypeParam> b = carl::Interval<TypeParam>(2,4);
-	carl::Interval<TypeParam> c = carl::Interval<TypeParam>(-3,6);
-	std::vector<carl::Interval<TypeParam>> intervals2;
-	intervals2.push_back(a);
-	intervals2.push_back(b);
-	intervals2.push_back(c);
-
-	hypro::Box<TypeParam> b2(intervals2);
-
-	hypro::Box<TypeParam> result = b1.unite(b2);
+	hypro::Box<TypeParam> result = this->b3.unite(this->b2);
 
 	EXPECT_EQ(TypeParam(-1), result.min().at(0));
 	EXPECT_EQ(TypeParam(1), result.min().at(1));
@@ -185,28 +215,9 @@ TYPED_TEST(BoxTest, LinearTransformation)
 	// rotation
 	TypeParam angle = 90;
 
-	hypro::matrix_t<TypeParam> rotX = hypro::matrix_t<TypeParam>::Zero(3,3);
-	rotX(0,0) = 1;
-	rotX(1,1) = carl::cos(angle);
-	rotX(1,2) = -carl::sin(angle);
-	rotX(2,1) = carl::sin(angle);
-	rotX(2,2) = carl::cos(angle);
-
-
-	hypro::matrix_t<TypeParam> rotY = hypro::matrix_t<TypeParam>::Zero(3,3);
-	rotY(0,0) = carl::cos(angle);
-	rotY(0,2) = carl::sin(angle);
-	rotY(1,1) = 1;
-	rotY(2,0) = -carl::sin(angle);
-	rotY(2,2) = carl::cos(angle);
-
-	hypro::matrix_t<TypeParam> rotZ = hypro::matrix_t<TypeParam>::Zero(3,3);
-	rotZ(0,0) = carl::cos(angle);
-	rotZ(0,1) = -carl::sin(angle);
-	rotZ(1,0) = carl::sin(angle);
-	rotZ(1,1) = carl::cos(angle);
-	rotZ(2,2) = 1;
-
+	hypro::matrix_t<TypeParam> rotX = createRotationMatrix(angle,3,1,2);
+	hypro::matrix_t<TypeParam> rotY = createRotationMatrix(angle,3,0,2);
+	hypro::matrix_t<TypeParam> rotZ = createRotationMatrix(angle,3,0,1);
 
 	// result
 	hypro::Box<TypeParam> resX = b1.linearTransformation(rotX);
@@ -221,7 +232,6 @@ TYPED_TEST(BoxTest, LinearTransformation)
 		newCorners.push_back(hypro::Point<TypeParam>(rotX*point.rawCoordinates()));
 	}
 	EXPECT_EQ(resX, hypro::Box<TypeParam>(newCorners));
-
 
 	newCorners.clear();
 	std::vector<hypro::Point<TypeParam>> cornersY = resY.vertices();
@@ -240,51 +250,23 @@ TYPED_TEST(BoxTest, LinearTransformation)
 
 TYPED_TEST(BoxTest, affineTransformation)
 {
-	carl::Interval<TypeParam> x = carl::Interval<TypeParam>(-2,2);
-	carl::Interval<TypeParam> y = carl::Interval<TypeParam>(2,4);
-	carl::Interval<TypeParam> z = carl::Interval<TypeParam>(-4,-2);
-	std::vector<carl::Interval<TypeParam>> intervals1;
-	intervals1.push_back(x);
-	intervals1.push_back(y);
-	intervals1.push_back(z);
-
-	hypro::Box<TypeParam> b1(intervals1);
-
 	// rotation
 	TypeParam angle = 90;
 
-	hypro::matrix_t<TypeParam> rotX = hypro::matrix_t<TypeParam>::Zero(3,3);
-	rotX(0,0) = 1;
-	rotX(1,1) = carl::cos(angle);
-	rotX(1,2) = -carl::sin(angle);
-	rotX(2,1) = carl::sin(angle);
-	rotX(2,2) = carl::cos(angle);
-
-
-	hypro::matrix_t<TypeParam> rotY = hypro::matrix_t<TypeParam>::Zero(3,3);
-	rotY(0,0) = carl::cos(angle);
-	rotY(0,2) = carl::sin(angle);
-	rotY(1,1) = 1;
-	rotY(2,0) = -carl::sin(angle);
-	rotY(2,2) = carl::cos(angle);
-
-	hypro::matrix_t<TypeParam> rotZ = hypro::matrix_t<TypeParam>::Zero(3,3);
-	rotZ(0,0) = carl::cos(angle);
-	rotZ(0,1) = -carl::sin(angle);
-	rotZ(1,0) = carl::sin(angle);
-	rotZ(1,1) = carl::cos(angle);
-	rotZ(2,2) = 1;
+	hypro::matrix_t<TypeParam> rotX = createRotationMatrix(angle,3,1,2);
+	hypro::matrix_t<TypeParam> rotY = createRotationMatrix(angle,3,0,2);
+	hypro::matrix_t<TypeParam> rotZ = createRotationMatrix(angle,3,0,1);
 
 	hypro::vector_t<TypeParam> offset = hypro::vector_t<TypeParam>::Zero(3);
 
 	// result
-	hypro::Box<TypeParam> resX = b1.affineTransformation(rotX, offset);
-	hypro::Box<TypeParam> resY = b1.affineTransformation(rotY, offset);
-	hypro::Box<TypeParam> resZ = b1.affineTransformation(rotZ, offset);
+	hypro::Box<TypeParam> resX = this->b1.affineTransformation(rotX, offset);
+	hypro::Box<TypeParam> resY = this->b1.affineTransformation(rotY, offset);
+	hypro::Box<TypeParam> resZ = this->b1.affineTransformation(rotZ, offset);
 
 	std::vector<hypro::Point<TypeParam>> cornersX = resX.vertices();
 
-	std::vector<hypro::Point<TypeParam>> originalCorners = b1.vertices();
+	std::vector<hypro::Point<TypeParam>> originalCorners = this->b1.vertices();
 	std::vector<hypro::Point<TypeParam>> newCorners;
 	for(auto& point : originalCorners) {
 		newCorners.push_back(hypro::Point<TypeParam>(rotX*point.rawCoordinates()));
@@ -309,13 +291,13 @@ TYPED_TEST(BoxTest, affineTransformation)
 	offset << TypeParam(1),TypeParam(1),TypeParam(1);
 
 	// result with shifting
-	resX = b1.affineTransformation(rotX, offset);
-	resY = b1.affineTransformation(rotY, offset);
-	resZ = b1.affineTransformation(rotZ, offset);
+	resX = this->b1.affineTransformation(rotX, offset);
+	resY = this->b1.affineTransformation(rotY, offset);
+	resZ = this->b1.affineTransformation(rotZ, offset);
 
 	cornersX = resX.vertices();
 
-	originalCorners = b1.vertices();
+	originalCorners = this->b1.vertices();
 	newCorners.clear();
 	for(auto& point : originalCorners) {
 		newCorners.push_back(hypro::Point<TypeParam>(rotX*point.rawCoordinates() + offset));
@@ -346,27 +328,8 @@ TYPED_TEST(BoxTest, MinkowskiSum)
     EXPECT_EQ(5 , result.interval(1).lower());
     EXPECT_EQ(10 , result.interval(1).upper());
 
-	carl::Interval<TypeParam> x = carl::Interval<TypeParam>(-2,2);
-	carl::Interval<TypeParam> y = carl::Interval<TypeParam>(2,4);
-	carl::Interval<TypeParam> z = carl::Interval<TypeParam>(-4,-2);
-	std::vector<carl::Interval<TypeParam>> intervals1;
-	intervals1.push_back(x);
-	intervals1.push_back(y);
-	intervals1.push_back(z);
 
-	hypro::Box<TypeParam> b1(intervals1);
-
-	carl::Interval<TypeParam> a = carl::Interval<TypeParam>(1);
-	carl::Interval<TypeParam> b = carl::Interval<TypeParam>(2,4);
-	carl::Interval<TypeParam> c = carl::Interval<TypeParam>(-2,3);
-	std::vector<carl::Interval<TypeParam>> intervals2;
-	intervals2.push_back(a);
-	intervals2.push_back(b);
-	intervals2.push_back(c);
-
-	hypro::Box<TypeParam> b2(intervals2);
-
-	hypro::Box<TypeParam> res = b1.minkowskiSum(b2);
+	hypro::Box<TypeParam> res = this->b1.minkowskiSum(this->b4);
 	std::vector<hypro::Point<TypeParam>> corners = res.vertices();
 
 	EXPECT_TRUE(std::find( corners.begin(), corners.end(), hypro::Point<TypeParam>({-1,4,-6}) ) != corners.end());
@@ -424,24 +387,12 @@ TYPED_TEST(BoxTest, Intersection)
 	carl::Interval<TypeParam> x = carl::Interval<TypeParam>(-2,2);
 	carl::Interval<TypeParam> y = carl::Interval<TypeParam>(2,4);
 	carl::Interval<TypeParam> z = carl::Interval<TypeParam>(-4,-2);
-	std::vector<carl::Interval<TypeParam>> intervals1;
-	intervals1.push_back(x);
-	intervals1.push_back(y);
-	intervals1.push_back(z);
-
-	hypro::Box<TypeParam> b1(intervals1);
 
 	carl::Interval<TypeParam> a = carl::Interval<TypeParam>(1);
 	carl::Interval<TypeParam> b = carl::Interval<TypeParam>(2,4);
 	carl::Interval<TypeParam> c = carl::Interval<TypeParam>(-2,3);
-	std::vector<carl::Interval<TypeParam>> intervals2;
-	intervals2.push_back(a);
-	intervals2.push_back(b);
-	intervals2.push_back(c);
 
-	hypro::Box<TypeParam> b2(intervals2);
-
-	hypro::Box<TypeParam> res = b1.intersect(b2);
+	hypro::Box<TypeParam> res = this->b1.intersect(this->b4);
 	carl::Interval<TypeParam> i = x.intersect(a);
 	carl::Interval<TypeParam> j = y.intersect(b);
 	carl::Interval<TypeParam> k = z.intersect(c);
