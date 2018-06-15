@@ -145,10 +145,13 @@ ExternalProject_ADD(
   LOG_BUILD ON
   #--Install step---------------
   # INSTALL_COMMAND    ""
-  # INSTALL_DIR ${CMAKE_BINARY_DIR}/
+  INSTALL_DIR ${ANTLR4CPP_BUILD_INCLUDE_DIR}/
   #--Install step---------------
   # INSTALL_COMMAND    ""
 )
+
+message(STATUS "CMake compiler: ${CMAKE_CXX_COMPILER}")
+message(STATUS "antrlr prefix: ${ANTLR4CPP_BUILD_INCLUDE_DIR}")
 
 ExternalProject_Get_Property(antlr4cpp INSTALL_DIR)
 
