@@ -35,7 +35,9 @@ else
 	popd
 	cmake -j4 $FLAGS -DCMAKE_CXX_COMPILER=$COMPILER ..
 	make resources -j2 || return 1
-	make -j4 VERBOSE=1
+	keep_waiting &
+	make -j4 VERBOSE=1 || return 1
+	kill $!
 	make test
 
 fi
