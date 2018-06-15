@@ -243,7 +243,7 @@ namespace std {
             std::hash<bool> boolHasher;
             std::size_t seed;
             seed = pointHasher(vertex.point());
-            carl::::hash_add(seed, boolHasher(vertex.color()));
+            carl::hash_add(seed, boolHasher(vertex.color()));
             return seed;
         }
     };
