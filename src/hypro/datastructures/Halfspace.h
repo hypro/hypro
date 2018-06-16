@@ -383,8 +383,8 @@ namespace std{
             std::hash<hypro::vector_t<Number>> vectorHasher;
             std::hash<Number> numberHasher;
             seed = vectorHasher(normal);
-            boost::hash_combine(seed, numberHasher(scalar));
-            return seed;
+            carl::hash_add(seed, numberHasher(scalar));
+  	        return seed;
         }
     };
 } //namespace std

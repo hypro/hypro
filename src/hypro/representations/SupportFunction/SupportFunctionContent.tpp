@@ -11,8 +11,8 @@
 
 namespace hypro {
 
-template <typename Number>
-SupportFunctionContent<Number>::SupportFunctionContent( const SupportFunctionContent<Number>& _orig )
+template<typename Number, typename Setting>
+SupportFunctionContent<Number,Setting>::SupportFunctionContent( const SupportFunctionContent<Number,Setting>& _orig )
 	: mType( _orig.type() ), mDimension( _orig.dimension(), mDepth( _orig.depth()) ) {
 	assert(_orig.checkTreeValidity());
 	//std::cout << "Copy constructor, this->type:" << mType << std::endl;
@@ -27,31 +27,31 @@ SupportFunctionContent<Number>::SupportFunctionContent( const SupportFunctionCon
 			break;
 		}
 		case SF_TYPE::INTERSECT: {
-			mIntersectionParameters = new intersectionContent<Number>(*_orig.intersectionParameters());
+			mIntersectionParameters = new intersectionContent<Number,Setting>(*_orig.intersectionParameters());
 			break;
 		}
 		case SF_TYPE::LINTRAFO: {
-			mLinearTrafoParameters = new trafoContent<Number,SupportFunctionContentSetting>(*_orig.linearTrafoParameters());
+			mLinearTrafoParameters = new trafoContent<Number,Setting>(*_orig.linearTrafoParameters());
 			break;
 		}
 		case SF_TYPE::POLY: {
-			mPolytope = new PolytopeSupportFunction<Number,PolytopeSupportFunctionSetting>(*_orig.polytope());
+			mPolytope = new PolytopeSupportFunction<Number,Setting>(*_orig.polytope());
 			break;
 		}
 		case SF_TYPE::PROJECTION: {
-			mProjectionParameters = new projectionContent<Number>(*_orig.projectionParameters());
+			mProjectionParameters = new projectionContent<Number,Setting>(*_orig.projectionParameters());
 			break;
 		}
 		case SF_TYPE::SCALE: {
-			mScaleParameters = new scaleContent<Number>(*_orig.scaleParameters());
+			mScaleParameters = new scaleContent<Number,Setting>(*_orig.scaleParameters());
 			break;
 		}
 		case SF_TYPE::SUM: {
-			mSummands = new sumContent<Number>(*_orig.summands());
+			mSummands = new sumContent<Number,Setting>(*_orig.summands());
 			break;
 		}
 		case SF_TYPE::UNITE: {
-			mUnionParameters = new unionContent<Number>(*_orig.unionParameters());
+			mUnionParameters = new unionContent<Number,Setting>(*_orig.unionParameters());
 			break;
 		}
 		case SF_TYPE::NONE: {
@@ -65,8 +65,8 @@ SupportFunctionContent<Number>::SupportFunctionContent( const SupportFunctionCon
 	assert(checkTreeValidity());
 }
 
-template <typename Number>
-SupportFunctionContent<Number>::SupportFunctionContent( const matrix_t<Number>& _shapeMatrix, SF_TYPE _type ) {
+template<typename Number, typename Setting>
+SupportFunctionContent<Number,Setting>::SupportFunctionContent( const matrix_t<Number>& _shapeMatrix, SF_TYPE _type ) {
     	switch ( _type ) {
 		case SF_TYPE::ELLIPSOID: {
 			mEllipsoid = new EllipsoidSupportFunction<Number>( _shapeMatrix);
@@ -81,8 +81,8 @@ SupportFunctionContent<Number>::SupportFunctionContent( const matrix_t<Number>& 
 	}
 }
 
-template <typename Number>
-SupportFunctionContent<Number>::SupportFunctionContent( Number _radius, unsigned dimension, SF_TYPE _type ) {
+template<typename Number, typename Setting>
+SupportFunctionContent<Number,Setting>::SupportFunctionContent( Number _radius, unsigned dimension, SF_TYPE _type ) {
 	switch ( _type ) {
 		case SF_TYPE::INFTY_BALL:
 		case SF_TYPE::TWO_BALL: {
@@ -99,19 +99,20 @@ SupportFunctionContent<Number>::SupportFunctionContent( Number _radius, unsigned
 	}
 }
 
-template <typename Number>
-SupportFunctionContent<Number>::SupportFunctionContent( const matrix_t<Number> &_directions, const vector_t<Number> &_distances,
+template<typename Number, typename Setting>
+SupportFunctionContent<Number,Setting>::SupportFunctionContent( const matrix_t<Number> &_directions, const vector_t<Number> &_distances,
 										  SF_TYPE _type ) {
 	switch ( _type ) {
 		case SF_TYPE::POLY: {
 			boost::tuple<bool,std::vector<carl::Interval<Number>>> intervals = isBox(_directions,_distances);
 
 			if(boost::get<0>(intervals)) {
-				mBox = new BoxSupportFunction<Number>(boost::get<1>(intervals));
+				mBox = new BoxSupportFunction<Number,Setting>(boost::get<1>(intervals));
 				mType = SF_TYPE::BOX;
-				std::cout << "IS A BOX!" << std::endl;
+				TRACE("hypro.representations.supportFunction","Handed polytope is actually a box, use box representation.")
+				//std::cout << "IS A BOX!" << std::endl;
 			} else {
-				mPolytope = new PolytopeSupportFunction<Number,PolytopeSupportFunctionSetting>( _directions, _distances );
+				mPolytope = new PolytopeSupportFunction<Number,Setting>( _directions, _distances );
 				mType = SF_TYPE::POLY;
 			}
 			mDimension = std::size_t(_directions.cols());
@@ -122,7 +123,7 @@ SupportFunctionContent<Number>::SupportFunctionContent( const matrix_t<Number> &
 		case SF_TYPE::BOX: {
 			boost::tuple<bool,std::vector<carl::Interval<Number>>> intervals = isBox(_directions,_distances);
 			assert(boost::get<0>(intervals));
-			mBox = new BoxSupportFunction<Number>(boost::get<1>(intervals));
+			mBox = new BoxSupportFunction<Number,Setting>(boost::get<1>(intervals));
 			mType = SF_TYPE::BOX;
 			mDimension = std::size_t(_directions.cols());
 			mDepth = 0;
@@ -134,11 +135,11 @@ SupportFunctionContent<Number>::SupportFunctionContent( const matrix_t<Number> &
 	}
 }
 
-template <typename Number>
-SupportFunctionContent<Number>::SupportFunctionContent( const std::vector<Halfspace<Number>>& _planes, SF_TYPE _type ) {
+template<typename Number, typename Setting>
+SupportFunctionContent<Number,Setting>::SupportFunctionContent( const std::vector<Halfspace<Number>>& _planes, SF_TYPE _type ) {
 	switch ( _type ) {
 		case SF_TYPE::POLY: {
-			mPolytope = new PolytopeSupportFunction<Number,PolytopeSupportFunctionSetting>( _planes );
+			mPolytope = new PolytopeSupportFunction<Number,Setting>( _planes );
 			mType = SF_TYPE::POLY;
 			mDimension = polytope()->dimension();
 			mDepth = 0;
@@ -150,11 +151,11 @@ SupportFunctionContent<Number>::SupportFunctionContent( const std::vector<Halfsp
 	}
 }
 
-template<typename Number>
-SupportFunctionContent<Number>::SupportFunctionContent( const std::vector<Point<Number>>& _points, SF_TYPE _type ) {
+template<typename Number, typename Setting>
+SupportFunctionContent<Number,Setting>::SupportFunctionContent( const std::vector<Point<Number>>& _points, SF_TYPE _type ) {
 	switch ( _type ) {
 		case SF_TYPE::POLY: {
-			mPolytope = new PolytopeSupportFunction<Number,PolytopeSupportFunctionSetting>( _points );
+			mPolytope = new PolytopeSupportFunction<Number,Setting>( _points );
 			mType = SF_TYPE::POLY;
 			mDimension = polytope()->dimension();
 			mDepth = 0;
@@ -166,11 +167,11 @@ SupportFunctionContent<Number>::SupportFunctionContent( const std::vector<Point<
 	}
 }
 
-template<typename Number>
-SupportFunctionContent<Number>::SupportFunctionContent( const std::vector<carl::Interval<Number>>& _inbox, SF_TYPE _type ) {
+template<typename Number, typename Setting>
+SupportFunctionContent<Number,Setting>::SupportFunctionContent( const std::vector<carl::Interval<Number>>& _inbox, SF_TYPE _type ) {
 	switch ( _type ) {
 		case SF_TYPE::BOX: {
-			mBox = new BoxSupportFunction<Number>( _inbox );
+			mBox = new BoxSupportFunction<Number,Setting>( _inbox );
 			mType = SF_TYPE::BOX;
 			mDimension = box()->dimension();
 			mDepth = 0;
@@ -182,15 +183,15 @@ SupportFunctionContent<Number>::SupportFunctionContent( const std::vector<carl::
 	}
 }
 
-template <typename Number>
-SupportFunctionContent<Number>::SupportFunctionContent( const std::shared_ptr<SupportFunctionContent<Number>>& _lhs,
-										 const std::shared_ptr<SupportFunctionContent<Number>>& _rhs, SF_TYPE _type ) {
+template<typename Number, typename Setting>
+SupportFunctionContent<Number,Setting>::SupportFunctionContent( const std::shared_ptr<SupportFunctionContent<Number,Setting>>& _lhs,
+										 const std::shared_ptr<SupportFunctionContent<Number,Setting>>& _rhs, SF_TYPE _type ) {
 	// assert(_lhs.dimension() == _rhs.dimension());
 	assert(_lhs->checkTreeValidity());
 	assert(_rhs->checkTreeValidity());
 	switch ( _type ) {
 		case SF_TYPE::SUM: {
-			mSummands = new sumContent<Number>( _lhs, _rhs );
+			mSummands = new sumContent<Number,Setting>( _lhs, _rhs );
 			mType = SF_TYPE::SUM;
 			mDimension = _lhs->dimension();
 			assert( _lhs->type() == summands()->lhs->type() && _rhs->type() == summands()->rhs->type() );
@@ -203,7 +204,7 @@ SupportFunctionContent<Number>::SupportFunctionContent( const std::shared_ptr<Su
 			break;
 		}
 		case SF_TYPE::UNITE: {
-			mUnionParameters = new unionContent<Number>( _lhs, _rhs );
+			mUnionParameters = new unionContent<Number,Setting>( _lhs, _rhs );
 			mType = SF_TYPE::UNITE;
 			mDimension = _lhs->dimension();
 			if (_rhs->depth() > _lhs->depth()){
@@ -215,7 +216,7 @@ SupportFunctionContent<Number>::SupportFunctionContent( const std::shared_ptr<Su
 			break;
 		}
 		case SF_TYPE::INTERSECT: {
-			mIntersectionParameters = new intersectionContent<Number>( _lhs, _rhs );
+			mIntersectionParameters = new intersectionContent<Number,Setting>( _lhs, _rhs );
 			mType = SF_TYPE::INTERSECT;
 			mDimension = _lhs->dimension();
 			if (_rhs->depth() > _lhs->depth()){
@@ -231,14 +232,14 @@ SupportFunctionContent<Number>::SupportFunctionContent( const std::shared_ptr<Su
 	}
 }
 
-template <typename Number>
-SupportFunctionContent<Number>::SupportFunctionContent( const std::vector<std::shared_ptr<SupportFunctionContent<Number>>>& rhs, SF_TYPE type ) {
+template<typename Number, typename Setting>
+SupportFunctionContent<Number,Setting>::SupportFunctionContent( const std::vector<std::shared_ptr<SupportFunctionContent<Number,Setting>>>& rhs, SF_TYPE type ) {
 	// assert(_lhs.dimension() == _rhs.dimension());
 	assert(rhs->checkTreeValidity());
 	switch ( type ) {
 		case SF_TYPE::UNITE: {
 			assert(!rhs.empty());
-			mUnionParameters = new unionContent<Number>( rhs );
+			mUnionParameters = new unionContent<Number,Setting>( rhs );
 			mType = SF_TYPE::UNITE;
 			mDimension = rhs.begin()->dimension();
 			mDepth = 0;
@@ -258,13 +259,13 @@ SupportFunctionContent<Number>::SupportFunctionContent( const std::vector<std::s
 	}
 }
 
-template <typename Number>
-SupportFunctionContent<Number>::SupportFunctionContent( const std::shared_ptr<SupportFunctionContent<Number>>& _origin, const matrix_t<Number>& A, const vector_t<Number>& b
+template<typename Number, typename Setting>
+SupportFunctionContent<Number,Setting>::SupportFunctionContent( const std::shared_ptr<SupportFunctionContent<Number,Setting>>& _origin, const matrix_t<Number>& A, const vector_t<Number>& b
 			, SF_TYPE _type ) {
 	assert(_origin->checkTreeValidity());
 	switch ( _type ) {
 		case SF_TYPE::LINTRAFO: {
-			mLinearTrafoParameters = new trafoContent<Number,SupportFunctionContentSetting>( _origin, A, b );
+			mLinearTrafoParameters = new trafoContent<Number,Setting>( _origin, A, b );
 			mType = SF_TYPE::LINTRAFO;
 			mDimension = _origin->dimension();
 			mDepth = linearTrafoParameters()->origin->depth() +1;
@@ -276,13 +277,13 @@ SupportFunctionContent<Number>::SupportFunctionContent( const std::shared_ptr<Su
 	}
 }
 
-template <typename Number>
-SupportFunctionContent<Number>::SupportFunctionContent( const std::shared_ptr<SupportFunctionContent<Number>>& _origin, const Number &_factor,
+template<typename Number, typename Setting>
+SupportFunctionContent<Number,Setting>::SupportFunctionContent( const std::shared_ptr<SupportFunctionContent<Number,Setting>>& _origin, const Number &_factor,
 										  SF_TYPE _type ) {
 	assert(_origin->checkTreeValidity());
 	switch ( _type ) {
 		case SF_TYPE::SCALE: {
-			mScaleParameters = new scaleContent<Number>( _origin, _factor );
+			mScaleParameters = new scaleContent<Number,Setting>( _origin, _factor );
 			mType = SF_TYPE::SCALE;
 			mDimension = _origin->dimension();
 			mDepth = _origin->depth() +1;
@@ -294,12 +295,12 @@ SupportFunctionContent<Number>::SupportFunctionContent( const std::shared_ptr<Su
 	}
 }
 
-template<typename Number>
-SupportFunctionContent<Number>::SupportFunctionContent( const std::shared_ptr<SupportFunctionContent<Number>>& _origin, const std::vector<std::size_t>& dimensions, SF_TYPE _type ) {
+template<typename Number, typename Setting>
+SupportFunctionContent<Number,Setting>::SupportFunctionContent( const std::shared_ptr<SupportFunctionContent<Number,Setting>>& _origin, const std::vector<std::size_t>& dimensions, SF_TYPE _type ) {
 	assert(_origin->checkTreeValidity());
 	switch ( _type ) {
 		case SF_TYPE::PROJECTION: {
-			mProjectionParameters = new projectionContent<Number>(_origin,dimensions);
+			mProjectionParameters = new projectionContent<Number,Setting>(_origin,dimensions);
 			mType = SF_TYPE::PROJECTION;
 			mDimension = _origin->dimension();
 			mDepth = _origin->depth() + 1;
@@ -311,8 +312,8 @@ SupportFunctionContent<Number>::SupportFunctionContent( const std::shared_ptr<Su
 	}
 }
 
-template <typename Number>
-SupportFunctionContent<Number>::~SupportFunctionContent() {
+template<typename Number, typename Setting>
+SupportFunctionContent<Number,Setting>::~SupportFunctionContent() {
 	switch ( mType ) {
 		case SF_TYPE::INFTY_BALL:
 		case SF_TYPE::TWO_BALL:
@@ -356,9 +357,9 @@ SupportFunctionContent<Number>::~SupportFunctionContent() {
 	}
 }
 
-template <typename Number>
-std::shared_ptr<SupportFunctionContent<Number>>& SupportFunctionContent<Number>::operator=(
-	  const std::shared_ptr<SupportFunctionContent<Number>>& _other ){
+template<typename Number, typename Setting>
+std::shared_ptr<SupportFunctionContent<Number,Setting>>& SupportFunctionContent<Number,Setting>::operator=(
+	  const std::shared_ptr<SupportFunctionContent<Number,Setting>>& _other ){
         // std::cout << "SupportFunctionContent Copy\n";
 	//std::cout << "Assignment, this->type:" << _other->type() << std::endl;
 	assert(_other->checkTreeValidity());
@@ -372,30 +373,30 @@ std::shared_ptr<SupportFunctionContent<Number>>& SupportFunctionContent<Number>:
 			mBall = new BallSupportFunction<Number>(*_other->ball());
 			break;
 		case SF_TYPE::LINTRAFO:
-			mLinearTrafoParameters = new trafoContent<Number,SupportFunctionContentSetting>(*_other->linearTrafoParameters());
+			mLinearTrafoParameters = new trafoContent<Number,Setting>(*_other->linearTrafoParameters());
 			break;
 		case SF_TYPE::POLY:
 			// explicitly invoke copy constructor to avoid pointer copy
-			mPolytope = new PolytopeSupportFunction<Number,PolytopeSupportFunctionSetting>(*_other->polytope());
+			mPolytope = new PolytopeSupportFunction<Number,Setting>(*_other->polytope());
 			break;
 		case SF_TYPE::BOX:
 			// explicitly invoke copy constructor to avoid pointer copy
-			mBox = new BoxSupportFunction<Number>(*_other->polytope());
+			mBox = new BoxSupportFunction<Number,Setting>(*_other->polytope());
 			break;
 		case SF_TYPE::PROJECTION:
-			mProjectionParameters = new projectionContent<Number>(*_other->projectionParameters());
+			mProjectionParameters = new projectionContent<Number,Setting>(*_other->projectionParameters());
 			break;
 		case SF_TYPE::SCALE:
-			mScaleParameters = new scaleContent<Number>(*_other->scaleParameters());
+			mScaleParameters = new scaleContent<Number,Setting>(*_other->scaleParameters());
 			break;
 		case SF_TYPE::SUM:
-			mSummands = new sumContent<Number>(*_other->summands());
+			mSummands = new sumContent<Number,Setting>(*_other->summands());
 			break;
 		case SF_TYPE::UNITE:
-			mUnionParameters = new unionContent<Number>(*_other->unionParameters());
+			mUnionParameters = new unionContent<Number,Setting>(*_other->unionParameters());
 			break;
 		case SF_TYPE::INTERSECT:
-			mIntersectionParameters = new intersectionContent<Number>(*_other->intersectionParameters());
+			mIntersectionParameters = new intersectionContent<Number,Setting>(*_other->intersectionParameters());
 			break;
 		case SF_TYPE::NONE: {
 			std::cout << __func__ << ": SF Type not properly initialized!" << std::endl;
@@ -406,22 +407,24 @@ std::shared_ptr<SupportFunctionContent<Number>>& SupportFunctionContent<Number>:
 			assert( false );
 	}
 	assert(checkTreeValidity());
-	return std::shared_ptr<SupportFunctionContent<Number>>( this->pThis );
+	return std::shared_ptr<SupportFunctionContent<Number,Setting>>( this->pThis );
 }
 
-template <typename Number>
-EvaluationResult<Number> SupportFunctionContent<Number>::evaluate( const vector_t<Number> &_direction, bool useExact ) const {
+template<typename Number, typename Setting>
+EvaluationResult<Number> SupportFunctionContent<Number,Setting>::evaluate( const vector_t<Number> &_direction, bool useExact ) const {
 	matrix_t<Number> tmp = matrix_t<Number>::Zero(1,_direction.rows());
 	tmp << _direction.transpose();
-	return multiEvaluate(tmp,useExact).at(0);
+	auto res = multiEvaluate(tmp,useExact).at(0);
+	TRACE("hypro.representations.supportFunctoin","Return result.");
+	return res;
 }
 
-template <typename Number>
-std::vector<EvaluationResult<Number>> SupportFunctionContent<Number>::multiEvaluate( const matrix_t<Number> &_directions, bool useExact ) const {
+template<typename Number, typename Setting>
+std::vector<EvaluationResult<Number>> SupportFunctionContent<Number,Setting>::multiEvaluate( const matrix_t<Number> &_directions, bool useExact ) const {
 	//std::cout << "Multi-evaluate, type: " << mType << std::endl;
 	assert(checkTreeValidity());
 
-	using Node = std::shared_ptr<SupportFunctionContent<Number>>;
+	using Node = std::shared_ptr<SupportFunctionContent<Number,Setting>>;
 	using Param = matrix_t<Number>;
 	using Res = std::vector<EvaluationResult<Number>>;
 
@@ -446,6 +449,7 @@ std::vector<EvaluationResult<Number>> SupportFunctionContent<Number>::multiEvalu
 			// special case: When the node is a leaf, we directly return the result.
 			if(currentResult.first == -1) {
 				// we reached the top, exit (or return result or whatever)
+				TRACE("hypro.representations.supportFunction","Is leaf. Evaluate and return.");
 				switch ( cur->type() ) {
 					case SF_TYPE::ELLIPSOID: {
 						return ellipsoid()->multiEvaluate( currentParam );
@@ -465,6 +469,7 @@ std::vector<EvaluationResult<Number>> SupportFunctionContent<Number>::multiEvalu
 						FATAL("hypro.representations.supportFunction","Wrong type.");
 				}
 			} else {
+				TRACE("hypro.representations.supportFunction","Evaluate and add to results stack.");
 				switch ( cur->type() ) {
 					case SF_TYPE::ELLIPSOID: {
 						resultStack.at(currentResult.first).second.emplace_back(cur->ellipsoid()->multiEvaluate( currentParam ));
@@ -488,6 +493,7 @@ std::vector<EvaluationResult<Number>> SupportFunctionContent<Number>::multiEvalu
 						FATAL("hypro.representations.supportFunction","Wrong type.");
 				}
 			}
+			TRACE("hypro.representations.supportFunction","Leave recursive call.");
 
 			// leave recursive call.
 			callStack.pop_back();
@@ -499,16 +505,16 @@ std::vector<EvaluationResult<Number>> SupportFunctionContent<Number>::multiEvalu
 			// Detect, if this call is finished or new.
 			if(resultStack.back().second.size() == cur->originCount()) {
 				// the call is finished, perform accumulating operations and forward result.
-				//TRACE("hypro.representations.supportFunction", ": Accumulate results.");
+				TRACE("hypro.representations.supportFunction", ": Accumulate results.");
 				// accumulate results - in this case sum.
 				Res accumulatedResult;
 				switch( cur->type() ) {
 					case SF_TYPE::LINTRAFO: {
-						//TRACE("hypro.representations.supportFunction", ": LINTRAFO, accumulate results.")
+						TRACE("hypro.representations.supportFunction", ": LINTRAFO, accumulate results.")
 						assert(resultStack.back().second.size() == 1);
 						const std::pair<matrix_t<Number>, vector_t<Number>>& parameterPair = cur->linearTrafoParameters()->parameters->getParameterSet(cur->linearTrafoParameters()->currentExponent);
-						//TRACE("hypro.representations.supportFunction", "Matrix: " << parameterPair.first);
-						//TRACE("hypro.representations.supportFunction", "Vector: " << parameterPair.second);
+						TRACE("hypro.representations.supportFunction", "Matrix: " << parameterPair.first);
+						TRACE("hypro.representations.supportFunction", "Vector: " << parameterPair.second);
 						if(resultStack.back().second.front().begin()->errorCode != SOLUTION::INFEAS) {
 							unsigned directionCnt = 0;
 							for(auto& entry : resultStack.back().second.front()) {
@@ -516,7 +522,7 @@ std::vector<EvaluationResult<Number>> SupportFunctionContent<Number>::multiEvalu
 								if(entry.errorCode == SOLUTION::INFTY) {
 									entry.supportValue = 1;
 								} else {
-									//TRACE("hypro.representations.supportFunction", ": Entry val before trafo: " << entry.optimumValue);
+									TRACE("hypro.representations.supportFunction", ": Entry val before trafo: " << entry.optimumValue);
 									entry.optimumValue = parameterPair.first * entry.optimumValue + parameterPair.second;
 									// As we know, that the optimal vertex lies on the supporting Halfspace, we can obtain the distance by dot product.
 									entry.supportValue = entry.optimumValue.dot(currentDir);
@@ -526,19 +532,19 @@ std::vector<EvaluationResult<Number>> SupportFunctionContent<Number>::multiEvalu
 								++directionCnt;
 							}
 						}
-						//TRACE("hypro.representations.supportFunction",": LINTRAFO, accumulate results done.");
+						TRACE("hypro.representations.supportFunction",": LINTRAFO, accumulate results done.");
 						accumulatedResult = resultStack.back().second.front();
 						break;
 					}
 					case SF_TYPE::PROJECTION: {
-						//TRACE("hypro.representations.supportFunction", ": PROJECTION, accumulate results.")
+						TRACE("hypro.representations.supportFunction", ": PROJECTION, accumulate results.")
 						assert(resultStack.back().second.size() == 1);
 						// simply forward the results
 						accumulatedResult = resultStack.back().second.front();
 						break;
 					}
 					case SF_TYPE::SCALE: {
-						//TRACE("hypro.representations.supportFunction", ": SCALE, accumulate results.")
+						TRACE("hypro.representations.supportFunction", ": SCALE, accumulate results.")
 						assert(resultStack.back().second.size() == 1);
 						// if one result is infeasible, the others will be too -> do not process.
 						if(resultStack.back().second.front().begin()->errorCode != SOLUTION::INFEAS){
@@ -554,7 +560,7 @@ std::vector<EvaluationResult<Number>> SupportFunctionContent<Number>::multiEvalu
 						break;
 					}
 					case SF_TYPE::SUM: {
-						//TRACE("hypro.representations.supportFunction", ": SUM, accumulate results.")
+						TRACE("hypro.representations.supportFunction", ": SUM, accumulate results.")
 						assert( resultStack.back().second.size() == 2);
 						assert( resultStack.back().second.at(0).size() == std::size_t(currentParam.rows()));
 						assert( resultStack.back().second.at(0).size() == resultStack.back().second.at(1).size());
@@ -581,7 +587,7 @@ std::vector<EvaluationResult<Number>> SupportFunctionContent<Number>::multiEvalu
 						break;
 					}
 					case SF_TYPE::UNITE: {
-						//TRACE("hypro.representations.supportFunction", ": UNITE, accumulate results.")
+						TRACE("hypro.representations.supportFunction", ": UNITE, accumulate results.")
 						assert(resultStack.back().second.size() > 0);
 						assert(resultStack.back().second.size() == cur->unionParameters()->items.size());
 						accumulatedResult = resultStack.back().second.front();
@@ -604,7 +610,7 @@ std::vector<EvaluationResult<Number>> SupportFunctionContent<Number>::multiEvalu
 						break;
 					}
 					case SF_TYPE::INTERSECT: {
-						//TRACE("hypro.representations.supportFunction", ": INTERSECT, accumulate results.")
+						TRACE("hypro.representations.supportFunction", ": INTERSECT, accumulate results.")
 						assert(resultStack.back().second.size() == 2);
 						Res& resA = resultStack.back().second.at(0);
 						Res& resB = resultStack.back().second.at(1);
@@ -623,19 +629,19 @@ std::vector<EvaluationResult<Number>> SupportFunctionContent<Number>::multiEvalu
 							assert(resA[i].errorCode != SOLUTION::INFEAS && resB[i].errorCode != SOLUTION::INFEAS);
 							EvaluationResult<Number> res;
 							if (resA[i].errorCode == SOLUTION::INFTY) {
-								//TRACE("hypro.representations.supportFunction","resA infinite");
+								TRACE("hypro.representations.supportFunction","resA infinite");
 								res.errorCode = resB[i].errorCode;
 								res.supportValue = resB[i].supportValue;
 								res.optimumValue = resB[i].optimumValue;
 							} else if (resB[i].errorCode == SOLUTION::INFTY) {
-								//TRACE("hypro.representations.supportFunction","resB infinite");
+								TRACE("hypro.representations.supportFunction","resB infinite");
 								assert(resA[i].errorCode == SOLUTION::FEAS);
 								res.errorCode = resA[i].errorCode;
 								res.supportValue = resA[i].supportValue;
 								res.optimumValue = resA[i].optimumValue;
 							} else {
 								assert(resA[i].errorCode == SOLUTION::FEAS && resB[i].errorCode == SOLUTION::FEAS);
-								//TRACE("hypro.representations.supportFunction","Both finite: A " << resA[i].supportValue << " vs B " << resB[i].supportValue);
+								TRACE("hypro.representations.supportFunction","Both finite: A " << resA[i].supportValue << " vs B " << resB[i].supportValue);
 								res.errorCode = SOLUTION::FEAS;
 								if(resA[i].supportValue < resB[i].supportValue){
 									res.supportValue = resA[i].supportValue;
@@ -666,7 +672,7 @@ std::vector<EvaluationResult<Number>> SupportFunctionContent<Number>::multiEvalu
 
 				if(resultStack.back().first == -1) {
 					// we reached the top, exit
-					//TRACE("hypro.representations.supportFunction","Return accumulated result.");
+					TRACE("hypro.representations.supportFunction","Return accumulated result.");
 					return accumulatedResult;
 				}
 
@@ -681,6 +687,7 @@ std::vector<EvaluationResult<Number>> SupportFunctionContent<Number>::multiEvalu
 
 			} else {
 				// this is the branch for calling recursively
+				TRACE("hypro.representations.supportFunction","Invoke recursive call.");
 
 				// here we create the new stack levels.
 				std::size_t callingFrame = callStack.size() - 1 ;
@@ -776,32 +783,32 @@ std::vector<EvaluationResult<Number>> SupportFunctionContent<Number>::multiEvalu
 	return std::vector<EvaluationResult<Number>>();
 }
 
-template <typename Number>
-std::size_t SupportFunctionContent<Number>::dimension() const {
+template<typename Number, typename Setting>
+std::size_t SupportFunctionContent<Number,Setting>::dimension() const {
 	assert(mType != SF_TYPE::NONE);
 	return mDimension;
 }
 
-template <typename Number>
-SF_TYPE SupportFunctionContent<Number>::type() const {
+template<typename Number, typename Setting>
+SF_TYPE SupportFunctionContent<Number,Setting>::type() const {
 	return mType;
 }
 
-template <typename Number>
-unsigned SupportFunctionContent<Number>::depth() const {
+template<typename Number, typename Setting>
+unsigned SupportFunctionContent<Number,Setting>::depth() const {
 	assert(mType != SF_TYPE::NONE);
 	return mDepth;
 }
 
-template <typename Number>
-unsigned SupportFunctionContent<Number>::operationCount() const {
+template<typename Number, typename Setting>
+unsigned SupportFunctionContent<Number,Setting>::operationCount() const {
 	assert(mType != SF_TYPE::NONE);
 	return mOperationCount;
 }
 
-template <typename Number>
-unsigned SupportFunctionContent<Number>::multiplicationsPerEvaluation() const {
-	using Node = std::shared_ptr<SupportFunctionContent<Number>>;
+template<typename Number, typename Setting>
+unsigned SupportFunctionContent<Number,Setting>::multiplicationsPerEvaluation() const {
+	using Node = std::shared_ptr<SupportFunctionContent<Number,Setting>>;
 	using Res = unsigned;
 	std::vector<Node> callStack;
 	std::vector<std::pair<std::size_t,std::vector<Res>>> resultStack; // The first value is an iterator to the calling frame
@@ -951,12 +958,12 @@ unsigned SupportFunctionContent<Number>::multiplicationsPerEvaluation() const {
 	return 0;
 }
 
-template <typename Number>
-void SupportFunctionContent<Number>::forceLinTransReduction(){
+template<typename Number, typename Setting>
+void SupportFunctionContent<Number,Setting>::forceLinTransReduction(){
 	assert(checkTreeValidity());
     switch ( mType ) {
         case SF_TYPE::LINTRAFO: {
-            std::shared_ptr<SupportFunctionContent<Number>> origin = linearTrafoParameters()->origin;
+            std::shared_ptr<SupportFunctionContent<Number,Setting>> origin = linearTrafoParameters()->origin;
             std::pair<matrix_t<Number>, vector_t<Number>> parameterPair = linearTrafoParameters()->parameters->getParameterSet(linearTrafoParameters()->currentExponent);
             std::pair<matrix_t<Number>, vector_t<Number>> nextPair;
             while(origin->type() == SF_TYPE::LINTRAFO){
@@ -969,7 +976,7 @@ void SupportFunctionContent<Number>::forceLinTransReduction(){
             }
 			mDepth = origin->depth() + 1;
 			mOperationCount = origin->operationCount() +1;
-            mLinearTrafoParameters = new trafoContent<Number,SupportFunctionContentSetting>( origin, std::make_shared<lintrafoParameters<Number>>(parameterPair.first, parameterPair.second) );
+            mLinearTrafoParameters = new trafoContent<Number,Setting>( origin, std::make_shared<lintrafoParameters<Number>>(parameterPair.first, parameterPair.second) );
             break;
         }
         case SF_TYPE::SUM: {
@@ -1019,8 +1026,8 @@ void SupportFunctionContent<Number>::forceLinTransReduction(){
 }
 
 
-template<typename Number>
-Point<Number> SupportFunctionContent<Number>::supremumPoint() const {
+template<typename Number, typename Setting>
+Point<Number> SupportFunctionContent<Number,Setting>::supremumPoint() const {
 	assert(checkTreeValidity());
 	switch ( mType ) {
 		case SF_TYPE::INFTY_BALL:
@@ -1111,9 +1118,9 @@ Point<Number> SupportFunctionContent<Number>::supremumPoint() const {
 	}
 }
 
-template<typename Number>
-std::vector<std::size_t> SupportFunctionContent<Number>::collectProjections() const {
-	using Node = std::shared_ptr<SupportFunctionContent<Number>>;
+template<typename Number, typename Setting>
+std::vector<std::size_t> SupportFunctionContent<Number,Setting>::collectProjections() const {
+	using Node = std::shared_ptr<SupportFunctionContent<Number,Setting>>;
 	using Res = std::vector<std::size_t>;
 
 	std::vector<Node> callStack;
@@ -1296,98 +1303,98 @@ std::vector<std::size_t> SupportFunctionContent<Number>::collectProjections() co
 	return std::vector<std::size_t>();
 }
 
-template <typename Number>
-sumContent<Number> *SupportFunctionContent<Number>::summands() const {
+template<typename Number, typename Setting>
+sumContent<Number,Setting> *SupportFunctionContent<Number,Setting>::summands() const {
 	assert( mType == SF_TYPE::SUM);
 	return mSummands;
 }
 
-template <typename Number>
-trafoContent<Number,SupportFunctionContentSetting> *SupportFunctionContent<Number>::linearTrafoParameters() const {
+template<typename Number, typename Setting>
+trafoContent<Number,Setting> *SupportFunctionContent<Number,Setting>::linearTrafoParameters() const {
 	assert(mType == SF_TYPE::LINTRAFO);
 	return mLinearTrafoParameters;
 }
 
-template <typename Number>
-scaleContent<Number> *SupportFunctionContent<Number>::scaleParameters() const {
+template<typename Number, typename Setting>
+scaleContent<Number,Setting> *SupportFunctionContent<Number,Setting>::scaleParameters() const {
 	assert( mType == SF_TYPE::SCALE);
 	return mScaleParameters;
 }
 
-template <typename Number>
-unionContent<Number> *SupportFunctionContent<Number>::unionParameters() const {
+template<typename Number, typename Setting>
+unionContent<Number,Setting> *SupportFunctionContent<Number,Setting>::unionParameters() const {
 	assert( mType == SF_TYPE::UNITE);
 	return mUnionParameters;
 }
 
-template <typename Number>
-intersectionContent<Number> *SupportFunctionContent<Number>::intersectionParameters() const {
+template<typename Number, typename Setting>
+intersectionContent<Number,Setting> *SupportFunctionContent<Number,Setting>::intersectionParameters() const {
 	assert( mType == SF_TYPE::INTERSECT );
 	assert(mIntersectionParameters);
 	return mIntersectionParameters;
 }
 
-template<typename Number>
-projectionContent<Number>* SupportFunctionContent<Number>::projectionParameters() const {
+template<typename Number, typename Setting>
+projectionContent<Number,Setting>* SupportFunctionContent<Number,Setting>::projectionParameters() const {
 	assert( mType == SF_TYPE::PROJECTION );
 	return mProjectionParameters;
 }
 
-template <typename Number>
-PolytopeSupportFunction<Number,PolytopeSupportFunctionSetting> *SupportFunctionContent<Number>::polytope() const {
+template<typename Number, typename Setting>
+PolytopeSupportFunction<Number,Setting> *SupportFunctionContent<Number,Setting>::polytope() const {
 	assert( mType == SF_TYPE::POLY );
 	return mPolytope;
 }
 
-template <typename Number>
-BoxSupportFunction<Number> *SupportFunctionContent<Number>::box() const {
+template<typename Number, typename Setting>
+BoxSupportFunction<Number,Setting> *SupportFunctionContent<Number,Setting>::box() const {
 	assert( mType == SF_TYPE::BOX );
 	return mBox;
 }
 
-template <typename Number>
-EllipsoidSupportFunction<Number> *SupportFunctionContent<Number>::ellipsoid() const {
+template<typename Number, typename Setting>
+EllipsoidSupportFunction<Number> *SupportFunctionContent<Number,Setting>::ellipsoid() const {
 	assert( mType == SF_TYPE::ELLIPSOID );
 	return mEllipsoid;
 }
 
-template <typename Number>
-BallSupportFunction<Number> *SupportFunctionContent<Number>::ball() const {
+template<typename Number, typename Setting>
+BallSupportFunction<Number> *SupportFunctionContent<Number,Setting>::ball() const {
 	assert( mType == SF_TYPE::INFTY_BALL || mType == SF_TYPE::TWO_BALL);
 	return mBall;
 }
 
-template<typename Number>
-std::shared_ptr<SupportFunctionContent<Number>> SupportFunctionContent<Number>::project(const std::vector<std::size_t>& dimensions) const {
+template<typename Number, typename Setting>
+std::shared_ptr<SupportFunctionContent<Number,Setting>> SupportFunctionContent<Number,Setting>::project(const std::vector<std::size_t>& dimensions) const {
 	return create(getThis(),dimensions);
 }
 
-template <typename Number>
-std::shared_ptr<SupportFunctionContent<Number>> SupportFunctionContent<Number>::affineTransformation(
+template<typename Number, typename Setting>
+std::shared_ptr<SupportFunctionContent<Number,Setting>> SupportFunctionContent<Number,Setting>::affineTransformation(
 	  const matrix_t<Number>& A, const vector_t<Number>& b ) const {
 	return create(getThis(), A, b);
 }
 
-template <typename Number>
-std::shared_ptr<SupportFunctionContent<Number>> SupportFunctionContent<Number>::minkowskiSum(
-	  const std::shared_ptr<SupportFunctionContent<Number>>& rhs ) const {
+template<typename Number, typename Setting>
+std::shared_ptr<SupportFunctionContent<Number,Setting>> SupportFunctionContent<Number,Setting>::minkowskiSum(
+	  const std::shared_ptr<SupportFunctionContent<Number,Setting>>& rhs ) const {
 	return create(SF_TYPE::SUM, getThis(), rhs);
 }
 
-template <typename Number>
-std::shared_ptr<SupportFunctionContent<Number>> SupportFunctionContent<Number>::intersect(
-	  const std::shared_ptr<SupportFunctionContent<Number>>& rhs ) const {
+template<typename Number, typename Setting>
+std::shared_ptr<SupportFunctionContent<Number,Setting>> SupportFunctionContent<Number,Setting>::intersect(
+	  const std::shared_ptr<SupportFunctionContent<Number,Setting>>& rhs ) const {
 	return create(SF_TYPE::INTERSECT, getThis() , rhs);
 }
 
-template <typename Number>
-bool SupportFunctionContent<Number>::contains( const Point<Number> &_point ) const {
+template<typename Number, typename Setting>
+bool SupportFunctionContent<Number,Setting>::contains( const Point<Number> &_point ) const {
 	assert(mType != SF_TYPE::NONE);
 	return this->contains( _point.rawCoordinates() );
 }
 
-template <typename Number>
-bool SupportFunctionContent<Number>::contains( const vector_t<Number> &_point ) const {
+template<typename Number, typename Setting>
+bool SupportFunctionContent<Number,Setting>::contains( const vector_t<Number> &_point ) const {
 	switch ( mType ) {
 		case SF_TYPE::ELLIPSOID: {
 			DEBUG("hypro.representations.supportFunction","ELLIPSOID, point: " << _point);
@@ -1467,24 +1474,29 @@ bool SupportFunctionContent<Number>::contains( const vector_t<Number> &_point ) 
 	return true;
 }
 
-template <typename Number>
-std::shared_ptr<SupportFunctionContent<Number>> SupportFunctionContent<Number>::unite(
-	  const std::shared_ptr<SupportFunctionContent<Number>>& rhs ) const {
+template<typename Number, typename Setting>
+std::shared_ptr<SupportFunctionContent<Number,Setting>> SupportFunctionContent<Number,Setting>::unite(
+	  const std::shared_ptr<SupportFunctionContent<Number,Setting>>& rhs ) const {
 	return create(SF_TYPE::UNITE, getThis(), rhs);
 }
 
-template<typename Number>
-std::shared_ptr<SupportFunctionContent<Number>> SupportFunctionContent<Number>::unite( const std::vector<std::shared_ptr<SupportFunctionContent<Number>>>& rhs ) {
+template<typename Number, typename Setting>
+std::shared_ptr<SupportFunctionContent<Number,Setting>> SupportFunctionContent<Number,Setting>::unite( const std::vector<std::shared_ptr<SupportFunctionContent<Number,Setting>>>& rhs ) {
 	return create(SF_TYPE::UNITE, rhs);
 }
 
-template <typename Number>
-std::shared_ptr<SupportFunctionContent<Number>> SupportFunctionContent<Number>::scale( const Number& factor ) const {;
+template<typename Number, typename Setting>
+std::shared_ptr<SupportFunctionContent<Number,Setting>> SupportFunctionContent<Number,Setting>::scale( const Number& factor ) const {
 	return create(getThis(), factor);
 }
 
-template <typename Number>
-bool SupportFunctionContent<Number>::empty() const {
+template<typename Number, typename Setting>
+void SupportFunctionContent<Number,Setting>::reduceRepresentation() {
+
+}
+
+template<typename Number, typename Setting>
+bool SupportFunctionContent<Number,Setting>::empty() const {
 	assert(checkTreeValidity());
 	switch ( mType ) {
 		case SF_TYPE::ELLIPSOID: {
@@ -1553,9 +1565,14 @@ bool SupportFunctionContent<Number>::empty() const {
 	}
 }
 
-template <typename Number>
-void SupportFunctionContent<Number>::cleanUp() const {
-	using Node = std::shared_ptr<SupportFunctionContent<Number>>;
+template<typename Number, typename Setting>
+void reduceRepresentation() {
+
+}
+
+template<typename Number, typename Setting>
+void SupportFunctionContent<Number,Setting>::cleanUp() const {
+	using Node = std::shared_ptr<SupportFunctionContent<Number,Setting>>;
 	std::vector<Node> callStack;
 
 	callStack.push_back(getThis());
@@ -1628,8 +1645,8 @@ void SupportFunctionContent<Number>::cleanUp() const {
 	}
 }
 
-template <typename Number>
-void SupportFunctionContent<Number>::print() const {
+template<typename Number, typename Setting>
+void SupportFunctionContent<Number,Setting>::print() const {
 	switch ( mType ) {
 		case SF_TYPE::ELLIPSOID: {
 			std::cout << "ELLIPSOID" << std::endl;

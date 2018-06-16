@@ -95,7 +95,7 @@ namespace std {
             std::hash<hypro::Point<Number>> pointHasher;
             std::vector<hypro::Point<Number>> vertices = ridge.vertices();
             for (int i = 0; i < vertices.rows(); i++) {
-                boost::hash_combine(seed, pointHasher(vertices(i)));
+                carl::hash_add(seed, pointHasher(vertices(i)));
             }
             return seed;
         }

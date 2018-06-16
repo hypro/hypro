@@ -8,15 +8,15 @@
 
 namespace hypro {
 
-template <typename Number>
-BoxSupportFunction<Number>::BoxSupportFunction( const std::vector<carl::Interval<Number>>& intervals )
+template <typename Number, typename Setting>
+BoxSupportFunction<Number,Setting>::BoxSupportFunction( const std::vector<carl::Interval<Number>>& intervals )
 	: mBox(intervals) {
 		TRACE("hypro.representations.supportFunction", "");
 }
 
 
-template<typename Number>
-BoxSupportFunction<Number>::BoxSupportFunction( const std::vector<Point<Number>>& _points )
+template <typename Number, typename Setting>
+BoxSupportFunction<Number,Setting>::BoxSupportFunction( const std::vector<Point<Number>>& _points )
 	: mBox()
 {
 	TRACE("hypro.representations.supportFunction", "");
@@ -32,36 +32,36 @@ BoxSupportFunction<Number>::BoxSupportFunction( const std::vector<Point<Number>>
 	}
 }
 
-template <typename Number>
-BoxSupportFunction<Number>::BoxSupportFunction( const BoxSupportFunction<Number> &_origin )
+template <typename Number, typename Setting>
+BoxSupportFunction<Number,Setting>::BoxSupportFunction( const BoxSupportFunction<Number,Setting> &_origin )
 	: mBox(_origin.getBox())
 {
 		TRACE("hypro.representations.supportFunction", "");
 }
 
-template <typename Number>
-BoxSupportFunction<Number>::~BoxSupportFunction() {
+template <typename Number, typename Setting>
+BoxSupportFunction<Number,Setting>::~BoxSupportFunction() {
 	TRACE("hypro.representations.supportFunction", "");
 }
 
-template <typename Number>
-BoxSupportFunction<Number>& BoxSupportFunction<Number>::operator=(const BoxSupportFunction<Number>& _orig){
+template <typename Number, typename Setting>
+BoxSupportFunction<Number,Setting>& BoxSupportFunction<Number,Setting>::operator=(const BoxSupportFunction<Number,Setting>& _orig){
 	TRACE("hypro.representations.supportFunction", "");
     this->mBox = _orig.mBox;
 }
 
-template <typename Number>
-std::size_t BoxSupportFunction<Number>::dimension() const {
+template <typename Number, typename Setting>
+std::size_t BoxSupportFunction<Number,Setting>::dimension() const {
 	return mBox.size();
 }
 
-template <typename Number>
-SF_TYPE BoxSupportFunction<Number>::type() const {
+template <typename Number, typename Setting>
+SF_TYPE BoxSupportFunction<Number,Setting>::type() const {
 	return SF_TYPE::BOX;
 }
 
-template <typename Number>
-matrix_t<Number> BoxSupportFunction<Number>::constraints() const {
+template <typename Number, typename Setting>
+matrix_t<Number> BoxSupportFunction<Number,Setting>::constraints() const {
 	std::vector<vector_t<Number>> constraints = computeTemplate(mBox.size(),4);
 	matrix_t<Number> res = matrix_t<Number>(constraints.size(), mBox.size());
 	Eigen::Index row = 0;
@@ -72,8 +72,8 @@ matrix_t<Number> BoxSupportFunction<Number>::constraints() const {
 	return res;
 }
 
-template <typename Number>
-vector_t<Number> BoxSupportFunction<Number>::constants() const {
+template <typename Number, typename Setting>
+vector_t<Number> BoxSupportFunction<Number,Setting>::constants() const {
 	vector_t<Number> res = vector_t<Number>(mBox.size() * 2);
 	Eigen::Index row = 0;
 	for(const auto& i : mBox) {
@@ -84,8 +84,8 @@ vector_t<Number> BoxSupportFunction<Number>::constants() const {
 	return res;
 }
 
-template<typename Number>
-std::vector<Point<Number>> BoxSupportFunction<Number>::vertices() const {
+template <typename Number, typename Setting>
+std::vector<Point<Number>> BoxSupportFunction<Number,Setting>::vertices() const {
 	std::vector<Point<Number>> result;
 	std::size_t limit = std::size_t(pow( 2, this->dimension() ));
 
@@ -104,8 +104,8 @@ std::vector<Point<Number>> BoxSupportFunction<Number>::vertices() const {
 	return result;
 }
 
-template<typename Number>
-Point<Number> BoxSupportFunction<Number>::supremumPoint() const {
+template <typename Number, typename Setting>
+Point<Number> BoxSupportFunction<Number,Setting>::supremumPoint() const {
 	assert(!this->empty());
 	vector_t<Number> res = vector_t<Number>(mBox.size());
 	for(Eigen::Index i = 0; i < res.rows(); ++i) {
@@ -114,12 +114,12 @@ Point<Number> BoxSupportFunction<Number>::supremumPoint() const {
 	return Point<Number>(res);
 }
 
-template <typename Number>
-EvaluationResult<Number> BoxSupportFunction<Number>::evaluate( const vector_t<Number> &l, bool ) const {
-	TRACE("hypro.representations.supportFunction", "");
+template <typename Number, typename Setting>
+EvaluationResult<Number> BoxSupportFunction<Number,Setting>::evaluate( const vector_t<Number> &l, bool ) const {
+	TRACE("hypro.representations.supportFunction", "this dimension is " << this->dimension());
 	COUNT("Box evaluate.");
-	assert(l.rows() == this->dimension());
-	if(this->empty()){
+	assert(std::size_t(l.rows()) == this->dimension());
+	if(this->empty() || this->dimension() == 0){
 		return EvaluationResult<Number>(); // defaults to infeasible, i.e. empty.
 	}
 
@@ -128,22 +128,24 @@ EvaluationResult<Number> BoxSupportFunction<Number>::evaluate( const vector_t<Nu
 	for(Eigen::Index i = 0; i < furthestPoint.rows(); ++i) {
 		furthestPoint(i) = l(i) >= 0 ? mBox[i].upper() : mBox[i].lower();
 	}
+	TRACE("hypro.representations.supportFunction","Have result, return.");
 	return EvaluationResult<Number>(furthestPoint.dot(l),furthestPoint,SOLUTION::FEAS);
 }
 
-template <typename Number>
-std::vector<EvaluationResult<Number>> BoxSupportFunction<Number>::multiEvaluate( const matrix_t<Number> &_A, bool , bool ) const {
+template <typename Number, typename Setting>
+std::vector<EvaluationResult<Number>> BoxSupportFunction<Number,Setting>::multiEvaluate( const matrix_t<Number> &_A, bool , bool ) const {
 	assert( std::size_t(_A.cols()) == this->dimension() );
 	TRACE("hypro.representations.supportFunction", "Evaluate in directions " << matrix_t<double>(convert<Number,double>(_A)) << std::endl << "BOX SF IS " << *this);
 	std::vector<EvaluationResult<Number>> res;
 	for(Eigen::Index i = 0; i < _A.rows(); ++i) {
 		res.emplace_back(this->evaluate(vector_t<Number>(_A.row(i)), true));
 	}
+	TRACE("hypro.representations.supportFunction","Have result, return.");
 	return res;
 }
 
-template <typename Number>
-bool BoxSupportFunction<Number>::contains( const Point<Number> &_point ) const {
+template <typename Number, typename Setting>
+bool BoxSupportFunction<Number,Setting>::contains( const Point<Number> &_point ) const {
 	assert(_point.dimension() == this->dimension());
 	for(Eigen::Index i = 0; i < this->dimension(); ++i) {
 		if(!mBox[i].contains(_point[i])){
@@ -153,9 +155,9 @@ bool BoxSupportFunction<Number>::contains( const Point<Number> &_point ) const {
 	return true;
 }
 
-template <typename Number>
-bool BoxSupportFunction<Number>::contains( const vector_t<Number> &_point ) const {
-	assert(_point.rows() == this->dimension());
+template <typename Number, typename Setting>
+bool BoxSupportFunction<Number,Setting>::contains( const vector_t<Number> &_point ) const {
+	assert(std::size_t(_point.rows()) == this->dimension());
 	for(Eigen::Index i = 0; i < Eigen::Index(this->dimension()); ++i) {
 		if(!mBox[i].contains(_point(i))){
 			return false;
@@ -164,19 +166,21 @@ bool BoxSupportFunction<Number>::contains( const vector_t<Number> &_point ) cons
 	return true;
 }
 
-template <typename Number>
-bool BoxSupportFunction<Number>::empty() const {
+template <typename Number, typename Setting>
+bool BoxSupportFunction<Number,Setting>::empty() const {
 	TRACE("hypro.representations.supportFunction", "");
 	for(Eigen::Index i = 0; i < Eigen::Index(this->dimension()); ++i) {
 		if(mBox[i].isEmpty()){
+			TRACE("hypro.representations.supportFunction", "is empty.");
 			return true;
 		}
 	}
+	TRACE("hypro.representations.supportFunction", "is not empty.");
 	return false;
 }
 
-template <typename Number>
-std::string BoxSupportFunction<Number>::getDotRepresentation() const {
+template <typename Number, typename Setting>
+std::string BoxSupportFunction<Number,Setting>::getDotRepresentation() const {
 	std::stringstream s;
 	s << "<TR><TD>";
 	for(const auto& i : mBox) {

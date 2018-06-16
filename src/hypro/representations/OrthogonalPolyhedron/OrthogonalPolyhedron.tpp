@@ -282,7 +282,7 @@ OrthogonalPolyhedronT<Number, Converter, Setting, Type> OrthogonalPolyhedronT<Nu
 
 	std::size_t nrofVertices = std::size_t(pow( 2, dimension() ));
 	VertexContainer<Number> container;
-	Vertex<Number> vertex;
+	Vertex<Number> vertex(vector_t<Number>(this->dimension()));
 
 	for ( std::size_t vertexNr = 0; vertexNr < nrofVertices; vertexNr++ ) {
 		int i = 0;

@@ -37,6 +37,8 @@ namespace hypro {
 		polymake::Main mPolyMain;
 		#endif
 	public:
+		Benchmark() = default;
+
 		Benchmark(BenchmarkSetup<Number> _setup) :
 			mGenerator(_setup),
 			mResults(),
@@ -55,6 +57,24 @@ namespace hypro {
 			std::cout << "done (" << duration << " ms)" << std::endl;
 		}
 
+		Benchmark(BenchmarkSetup<Number> _setup, const BenchmarkGenerator<Representation,Number,operation>& generator) :
+			mGenerator(generator),
+			mResults(),
+			mExecutor(),
+			mSetup(_setup)
+		{
+			mResults.reserve(mGenerator.size());
+			std::cout << "Run benchmarks ... ";
+			double duration = runBenchmarks();
+			std::cout << "done (" << duration << " ms)" << std::endl;
+		}
+
+		const BenchmarkGenerator<Representation,Number,operation>& getGenerator() const { return mGenerator; }
+		void setSetup(const BenchmarkSetup<Number>& inSetup) { mSetup = inSetup; }
+
+		//template<typename Other>
+		//BenchmarkGenerator<Other,Number,operation> convertRepresentation() const;
+
 	private:
 		double runBenchmarks() {
 			Timer clock;
@@ -68,4 +88,4 @@ namespace hypro {
 
 } // namespace
 
-
+#include "Benchmark.tpp"

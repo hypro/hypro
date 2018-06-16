@@ -482,6 +482,11 @@ class BoxT<double,Converter,Setting> : public GeometricObject<double, BoxT<doubl
 	static BoxT<double,Converter,Setting> unite( const std::vector<BoxT<double,Converter,Setting>>& boxes );
 
 	/**
+	 * @brief      Reduces the box - does nothing, as the number type cannot be optimized.
+	 */
+	void reduceRepresentation() { }
+
+	/**
 	 * @brief      Makes this box the empty box.
 	 */
 	void clear();

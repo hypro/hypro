@@ -90,7 +90,7 @@ static inline Parma_Polyhedra_Library::Generator pointToGenerator( const vector_
 		Linear_Expression tmp = tmpValue * VariablePool::getInstance().pplVarByIndex( i );
 		ls += tmp;
 	}
-	Generator result = Generator::point( ls, fReach_DENOMINATOR );
+	Parma_Polyhedra_Library::Generator result = Parma_Polyhedra_Library::Generator::point( ls, fReach_DENOMINATOR );
 	return result;
 }
 

@@ -4,7 +4,7 @@
 namespace hypro {
 template <typename Number, typename Converter, class Setting>
 PolytopeT<Number,Converter,Setting>::PolytopeT()
-	: mPolyhedron( 0, Parma_Polyhedra_Library::EMPTY ), mPoints(), mPointsUpToDate( true ) {
+	: mPolyhedron( 0, Parma_Polyhedra_Library::EMPTY ), mPoints(), mPointsUpToDate( false ) {
 }
 
 template <typename Number, typename Converter, class Setting>
@@ -48,7 +48,7 @@ PolytopeT<Number,Converter,Setting>::PolytopeT( const typename std::vector<vecto
 	mPolyhedron =
 		  Parma_Polyhedra_Library::C_Polyhedron( points.begin()->rows(), Parma_Polyhedra_Library::EMPTY );
 	for ( auto pointIt = points.begin(); pointIt != points.end(); ++pointIt ) {
-		Generator tmp = polytope::pointToGenerator( *pointIt );
+		Parma_Polyhedra_Library::Generator tmp = polytope::pointToGenerator( *pointIt );
 		mPolyhedron.add_generator( tmp );
 		Point<Number> tmpPoint = Point<Number>( *pointIt );
 		mPoints.push_back( tmpPoint );
@@ -93,7 +93,7 @@ bool PolytopeT<Number,Converter,Setting>::empty() const {
 
 template <typename Number, typename Converter, class Setting>
 void PolytopeT<Number,Converter,Setting>::addPoint( const Point<Number> &point ) {
-	Generator tmp = polytope::pointToGenerator( point );
+	Parma_Polyhedra_Library::Generator tmp = polytope::pointToGenerator( point );
 	if ( mPolyhedron.space_dimension() != tmp.space_dimension() ) {
 		mPolyhedron.add_space_dimensions_and_embed( tmp.space_dimension() );
 	}
@@ -250,7 +250,7 @@ PolytopeT<Number,Converter,Setting> PolytopeT<Number,Converter,Setting>::linearT
 		for ( unsigned j = 0; j < res.rows(); ++j ) t( j ) = res.col( i )( j );
 		ps.push_back( t );
 	}
-	C_Polyhedron tmp = Parma_Polyhedra_Library::C_Polyhedron( res.rows(), Parma_Polyhedra_Library::EMPTY );
+	Parma_Polyhedra_Library::C_Polyhedron tmp = Parma_Polyhedra_Library::C_Polyhedron( res.rows(), Parma_Polyhedra_Library::EMPTY );
 
 	for ( auto &pointSetIt : ps ) {
 		tmp.add_generator( polytope::pointToGenerator( pointSetIt ) );
@@ -315,6 +315,7 @@ PolytopeT<Number,Converter,Setting> PolytopeT<Number,Converter,Setting>::affineT
 	}
 
 	result.mPolyhedron = tmp;
+	result.updatePoints();
 
 	// update neighbor relations
 	/*
@@ -343,7 +344,6 @@ PolytopeT<Number,Converter,Setting> PolytopeT<Number,Converter,Setting>::affineT
 			}
 	}
 	*/
-
 	return result;
 }
 
@@ -640,10 +640,17 @@ template <typename Number, typename Converter, class Setting>
 std::pair<CONTAINMENT, PolytopeT<Number,Converter,Setting>> PolytopeT<Number,Converter,Setting>::satisfiesHalfspace( const Halfspace<Number> &rhs ) const {
 	TRACE("hypro.pplPolytope",*this << " and halfspace " << rhs);
 	PolytopeT<Number,Converter,Setting> res = this->intersectHalfspace(rhs);
-	if(!res.empty())
-		return std::make_pair(CONTAINMENT::YES, res);
-	else
+	if(!res.empty()){
+		for(auto point : this->vertices()){
+			if(!res.contains(point)){
+				return std::make_pair(CONTAINMENT::PARTIAL, res);
+			}
+		}
+		return std::make_pair(CONTAINMENT::FULL, res);
+		//return std::make_pair(CONTAINMENT::YES, res);
+	} else {
 		return std::make_pair(CONTAINMENT::NO, res);
+	}
 }
 
 template <typename Number, typename Converter, class Setting>
@@ -651,10 +658,17 @@ std::pair<CONTAINMENT, PolytopeT<Number,Converter,Setting>> PolytopeT<Number,Con
 														 const vector_t<Number> &_vec ) const {
 	TRACE("hypro.pplPolytope",*this << " and halfspaces " << _mat << " <= " << _vec);
 	PolytopeT<Number,Converter,Setting> res = this->intersectHalfspaces(_mat,_vec);
-	if(!res.empty())
-		return std::make_pair(CONTAINMENT::YES, res);
-	else
+	if(!res.empty()){
+		for(auto point : this->vertices()){
+			if(!res.contains(point)){
+				return std::make_pair(CONTAINMENT::PARTIAL, res);
+			}
+		}
+		return std::make_pair(CONTAINMENT::FULL, res);
+		//return std::make_pair(CONTAINMENT::YES, res);
+	} else {
 		return std::make_pair(CONTAINMENT::NO, res);
+	}
 }
 
 template <typename Number, typename Converter, class Setting>
@@ -847,7 +861,7 @@ Point<Number> PolytopeT<Number,Converter,Setting>::localSearch( Point<Number> &_
 	if(Setting::fukuda_DEBUG){
 		std::cout << "-------------------------" << std::endl;
 		std::cout << "in the following: Local Search for Vertex " << _vertex << std::endl;
-		std::cout << "-------------------------" << std::endl;	
+		std::cout << "-------------------------" << std::endl;
 	}
 
 	// compute the maximizer vector of the currently considered vertex
@@ -916,7 +930,7 @@ Point<Number> PolytopeT<Number,Converter,Setting>::localSearch( Point<Number> &_
 		if ( ( dotProduct / normFactor == 1 + EPSILON ) || ( dotProduct / normFactor == 1 - EPSILON ) ||
 			 ( dotProduct / normFactor == -1 + EPSILON ) || ( dotProduct / normFactor == -1 - EPSILON ) ||
 			 ( dotProduct / normFactor == -1 ) || ( dotProduct / normFactor == 1 ) ) {
-			
+
 			if(Setting::fukuda_DEBUG){
 				std::cout << "Parallel Edge found" << std::endl;
 				std::cout << "-----------------" << std::endl;

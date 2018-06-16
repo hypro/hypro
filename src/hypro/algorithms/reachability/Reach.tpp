@@ -90,12 +90,12 @@ namespace reachability {
 			TRACE("hypro.reacher","working queue after pop: " << mWorkingQueue.size());
 
 			mCurrentLevel = boost::get<0>(nextInitialSet);
-			INFO("hypro.reacher","Depth " << mCurrentLevel << ", Location: " << boost::get<1>(nextInitialSet).getLocation()->getId());
+			INFO("hypro.reacher","Depth " << mCurrentLevel << ", Location: " << boost::get<1>(nextInitialSet).getLocation()->getName());
 			assert(int(mCurrentLevel) <= mSettings.jumpDepth);
 			TRACE("hypro.reacher","Obtained set of type " << boost::get<1>(nextInitialSet).getSetType() << ", requested type is " << mType);
 			flowpipe_t<Number> newFlowpipe = computeForwardTimeClosure(boost::get<1>(nextInitialSet));
 
-			collectedReachableStates.emplace_back(std::make_pair(boost::get<1>(nextInitialSet).getLocation()->getId(), newFlowpipe));
+			collectedReachableStates.emplace_back(std::make_pair(boost::get<1>(nextInitialSet).getLocation()->hash(), newFlowpipe));
 		}
 
 		return collectedReachableStates;
@@ -106,7 +106,7 @@ namespace reachability {
 	flowpipe_t<Number> Reach<Number>::computeForwardTimeClosure( const State_t<Number>& _state ) {
 		assert(!_state.getTimestamp().isUnbounded());
 #ifdef REACH_DEBUG
-		INFO("hypro.reacher", "Location: " << _state.getLocation()->getId());
+		INFO("hypro.reacher", "Location: " << _state.getLocation()->hash());
 		INFO("hypro.reacher", "Location printed : " << *_state.getLocation());
 		INFO("hypro.reacher", "Time step size: " << mSettings.timeStep);
 		INFO("hypro.reacher", "Initial valuation: " << _state);

@@ -8,13 +8,16 @@
  */
 
 #include "Converter.h"
+#ifndef INCL_FROM_CONVERTERHEADER
+	static_assert(false, "This file may only be included indirectly by Converter.h");
+#endif
 
 /**
  * Is the caller function for the recursive method that computes exactly one boundary point for each direction that it gets (via support function)
  */
 
 template <typename Number, typename Converter>
-std::vector<Point<Number>> computeBoundaryPointsExpensive (const SupportFunctionT<Number,Converter>& sf, const matrix_t<Number>& directions) {
+std::vector<Point<Number>> computeBoundaryPointsExpensive (const SupportFunctionT<Number,Converter,SupportFunctionSetting>& sf, const matrix_t<Number>& directions) {
  //determines how many directions need to be checked
     Eigen::Index numberOfDirections = directions.rows();
     //gets dimension in which is currently computed
@@ -46,10 +49,10 @@ std::vector<Point<Number>> computeBoundaryPointsExpensive (const SupportFunction
             assert(curPlaneVector.size() == 2);
 
             //intersects the current support function with the Halfspace
-            SupportFunctionT<Number,Converter> curPlaneSup = SupportFunctionT<Number,Converter>(curPlaneVector);
+            SupportFunctionT<Number,Converter,SupportFunctionSetting> curPlaneSup = SupportFunctionT<Number,Converter,SupportFunctionSetting>(curPlaneVector);
             //std::cout << "current supportplane:" << std::endl;
             curPlaneSup.print();
-            SupportFunctionT<Number,Converter> curFace = sf.intersect(curPlaneSup);
+            SupportFunctionT<Number,Converter,SupportFunctionSetting> curFace = sf.intersect(curPlaneSup);
             //std::cout << "current face:" << std::endl;
             curFace.print();
             //only continue if face has still the same dimension as the source object (although it is technically now a dim-1 object at most)
@@ -77,7 +80,7 @@ std::vector<Point<Number>> computeBoundaryPointsExpensive (const SupportFunction
      *Recursively computes some boundary points that lie relatively central for each face of the object, this function is constructed to only be called by computeBoundaryPoints
      */
 template <typename Number, typename Converter>
-Point<Number> computeBoundaryPointsExpensiveRecursive (const SupportFunctionT<Number,Converter>& sf, const matrix_t<Number>& directions, std::size_t curDim) {
+Point<Number> computeBoundaryPointsExpensiveRecursive (const SupportFunctionT<Number,Converter,SupportFunctionSetting>& sf, const matrix_t<Number>& directions, std::size_t curDim) {
     //determines how many directions need to be checked
     Eigen::Index numberOfDirections = directions.rows();
     //only continue if directions and object match dimensionwise
@@ -107,10 +110,10 @@ Point<Number> computeBoundaryPointsExpensiveRecursive (const SupportFunctionT<Nu
             assert(curPlaneVector.size() == 2);
 
             //intersects the current support function with the Halfspace
-            SupportFunctionT<Number,Converter> curPlaneSup = SupportFunctionT<Number,Converter>(curPlaneVector);
+            SupportFunctionT<Number,Converter,SupportFunctionSetting> curPlaneSup = SupportFunctionT<Number,Converter,SupportFunctionSetting>(curPlaneVector);
             //std::cout << "current supportplane:" << std::endl;
             curPlaneSup.print();
-            SupportFunctionT<Number,Converter> curFace = sf.intersect(curPlaneSup);
+            SupportFunctionT<Number,Converter,SupportFunctionSetting> curFace = sf.intersect(curPlaneSup);
             //std::cout << "current face:" << std::endl;
             curFace.print();
             //only continue if face has still the same dimension as the source object (although it is technically now a dim-1 object at most)
@@ -317,4 +320,16 @@ typename Converter<Number>::VPolytope Converter<Number>::toVPolytope( const Supp
 
     }
 	return target;
+}
+
+#ifdef HYPRO_USE_PPL
+template<typename Number>
+typename Converter<Number>::VPolytope Converter<Number>::toVPolytope(const Polytope& source, const CONV_MODE){
+    return Converter<Number>::VPolytope(source.vertices());
+}
+#endif
+
+template<typename Number>
+typename Converter<Number>::VPolytope Converter<Number>::toVPolytope( const DifferenceBounds& _source, const CONV_MODE mode ) {
+    return toVPolytope(toHPolytope(_source, mode));
 }

@@ -9,7 +9,7 @@ sonar.projectVersion=${hypro_VERSION}
 # This property is optional if sonar.modules is set.
 sonar.language=cpp
 sonar.sources=src
-sonar.exclusions=src/resources/**/*
+sonar.exclusions=src/resources/**/*, src/hypro/parser
 sonar.cpp.file.suffixes=.h,.tpp,.cpp
 
 # Encoding of the source code. Default is default system encoding

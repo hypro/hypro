@@ -142,6 +142,11 @@ class VPolytopeT : public GeometricObject<Number, VPolytopeT<Number,Converter>> 
 	static VPolytopeT unite( const std::vector<VPolytopeT>& rhs );
 
 	/**
+	 * @brief      Reduces the box - only in case rational types are used, the number representation is optimized.
+	 */
+	void reduceRepresentation() { reduceNumberRepresentation(); removeRedundancy(); }
+
+	/**
 	 * @brief      Clears the polytope.
 	 */
 	void clear();

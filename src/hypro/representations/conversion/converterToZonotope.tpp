@@ -8,6 +8,9 @@
  */
 
 #include "Converter.h"
+#ifndef INCL_FROM_CONVERTERHEADER
+	static_assert(false, "This file may only be included indirectly by Converter.h");
+#endif
 
 /*
  *Computes the arithmetic mean for a given Point Vector
@@ -58,7 +61,7 @@ typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const Ellips
 	return ZonotopeT<Number,Converter> (constraintMatrix);
 	*/
 	WARN("hypro.representations","Conversion to Zonotopes not implemented yet.");
-	return ZonotopeT<Number,Converter>();
+	return Zonotope();
 }
 
 //conversion from H-Polytope to Zonotope (no differentiation between conversion modes - always OVER)
@@ -406,4 +409,15 @@ typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const Suppor
 
 }
 
+#ifdef HYPRO_USE_PPL
+template<typename Number>
+typename Converter<Number>::Zonotope Converter<Number>::toZonotope(const Polytope& source, const CONV_MODE mode){
+    auto tmp = toVPolytope(source);
+    return Converter<Number>::toZonotope(tmp, mode);
+}
+#endif
 
+template<typename Number>
+typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const DifferenceBounds& _source, const CONV_MODE mode ) {
+    return toZonotope(toHPolytope(_source, mode));
+}

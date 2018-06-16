@@ -142,6 +142,8 @@ class BoxT : public GeometricObject<Number, BoxT<Number,Converter,Setting>> {
 	 * Getters & setters
 	 **************************************************************************/
 
+	Setting getSettings() const { return Setting{}; }
+
 	 /**
 	  * @brief Static method for the construction of an empty box of required dimension.
 	  * @param dimension Required dimension.
@@ -442,6 +444,11 @@ class BoxT : public GeometricObject<Number, BoxT<Number,Converter,Setting>> {
 	 * @return     The resulting box.
 	 */
 	static BoxT<Number,Converter,Setting> unite( const std::vector<BoxT<Number,Converter,Setting>>& boxes );
+
+	/**
+	 * @brief      Reduces the box - only in case rational types are used, the number representation is optimized.
+	 */
+	void reduceRepresentation() { *this = std::move(this->reduceNumberRepresentation()); removeRedundancy(); }
 
 	/**
 	 * @brief      Makes this box the empty box.

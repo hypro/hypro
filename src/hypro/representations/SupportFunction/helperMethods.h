@@ -21,12 +21,14 @@ template<typename Number>
 boost::tuple<bool,std::vector<carl::Interval<Number>>> isBox(const matrix_t<Number>& constraints, const vector_t<Number>& constants) {
 	if(constraints.rows() != constants.rows()) {
 		//std::cout << "Rows do not match." << std::endl;
-		return false;
+		//return false;
+		return boost::tuple<bool,std::vector<carl::Interval<Number>>>(false);
 	}
 	Eigen::Index dimension = constraints.cols();
 	if(constraints.rows() != 2*dimension) {
 		//std::cout << "Too little or too many rows." << std::endl;
-		return false;
+		//return false;
+		return boost::tuple<bool,std::vector<carl::Interval<Number>>>(false);
 	}
 	std::vector<carl::Interval<Number>> boundsDefined = std::vector<carl::Interval<Number>>(dimension, carl::Interval<Number>::unboundedInterval());
 	for(Eigen::Index r = 0; r < constraints.rows(); ++r) {

@@ -17,7 +17,8 @@ namespace reachability {
 				return true;
 			}
 			#ifdef REACH_DEBUG
-			std::cout << "No intersection with local bad states" << std::endl;
+			//std::cout << "No intersection with local bad states" << std::endl;
+			DEBUG("hypro.Reach", "No intersection with local bad states.\n");
 			#endif
 		}
 

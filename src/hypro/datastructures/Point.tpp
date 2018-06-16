@@ -76,7 +76,8 @@ Point<Number>::Point( const Point<Number> &_p )
 	//std::cout << "This coordinates " << mCoordinates << " vs. " << _p.rawCoordinates() << std::endl;
   	//std::cout << "This hash " << this->hash() << " vs. " << std::endl;
   	//std::cout << _p.hash() << std::endl;
-  	assert(_p.hash() == this->hash());
+  	assert(mCoordinates == _p.rawCoordinates());
+  	//assert(_p.hash() == this->hash());
   	assert(this->dimension() >= 0);
 }
 
@@ -204,6 +205,18 @@ void Point<Number>::setCoordinate( const carl::Variable &_dim, const Number &_va
 		mCoordinates.topLeftCorner( old.rows(), 1 ) = old;
 	}
 	mCoordinates( dim ) = _value;
+	mHash = 0;
+}
+
+template <typename Number>
+void Point<Number>::setCoordinate( std::size_t dimension, const Number& _value ) {
+	assert( dimension >= 0 );
+	if ( Eigen::Index(dimension) >= mCoordinates.rows() ) {
+		vector_t<Number> old = mCoordinates;
+		mCoordinates.resize( dimension + 1 );
+		mCoordinates.topLeftCorner( old.rows(), 1 ) = old;
+	}
+	mCoordinates( dimension ) = _value;
 	mHash = 0;
 }
 
@@ -569,35 +582,54 @@ Point<Number>& Point<Number>::operator=( vector_t<Number>&& _in ) {
 template <typename Number>
 Number &Point<Number>::operator[]( const carl::Variable &_i ) {
 	unsigned dim = hypro::VariablePool::getInstance().id( _i );
-	if ( dim >= mCoordinates.rows() ) {
-		vector_t<Number> old = mCoordinates;
-		mCoordinates.resize( dim + 1 );
-		mCoordinates.topLeftCorner( old.rows(), 1 ) = old;
-	}
-	mHash = 0;
 	return mCoordinates( dim );
 }
 
 template <typename Number>
 Number &Point<Number>::operator[]( std::size_t _i ) {
-	if ( _i >= std::size_t(mCoordinates.rows()) ) {
-		vector_t<Number> old = mCoordinates;
-		mCoordinates = vector_t<Number>::Zero( _i + 1 );
-		mCoordinates.topLeftCorner( old.rows(), 1 ) = old;
-	}
-	mHash = 0;
 	return mCoordinates( _i );
 }
 
 template <typename Number>
+const Number &Point<Number>::operator[]( const carl::Variable &_i ) const {
+	unsigned dim = hypro::VariablePool::getInstance().id( _i );
+	return mCoordinates( dim );
+}
+
+template <typename Number>
+const Number &Point<Number>::operator[]( std::size_t _i ) const {
+	return mCoordinates( _i );
+}
+
+template <typename Number>
+Number& Point<Number>::at( const carl::Variable &_i ) {
+	if(hypro::VariablePool::getInstance().id( _i ) >= mCoordinates.rows()) {
+		throw std::out_of_range("Variable dimension larger than state space of vector");
+	}
+	return mCoordinates( hypro::VariablePool::getInstance().id( _i ) );
+}
+
+template <typename Number>
+Number& Point<Number>::at( std::size_t _index ) {
+	if(Eigen::Index(_index) >= mCoordinates.rows()) {
+		throw std::out_of_range("Index larger than state space of vector");
+	}
+	return mCoordinates( _index );
+}
+
+template <typename Number>
 const Number& Point<Number>::at( const carl::Variable &_i ) const {
-	assert( hypro::VariablePool::getInstance().id( _i ) < mCoordinates.rows() );
+	if(hypro::VariablePool::getInstance().id( _i ) >= mCoordinates.rows()) {
+		throw std::out_of_range("Variable dimension larger than state space of vector");
+	}
 	return mCoordinates( hypro::VariablePool::getInstance().id( _i ) );
 }
 
 template <typename Number>
 const Number& Point<Number>::at( std::size_t _index ) const {
-	assert( _index < std::size_t(mCoordinates.rows()) );
+	if(Eigen::Index(_index) >= mCoordinates.rows()) {
+		throw std::out_of_range("Index larger than state space of vector");
+	}
 	return mCoordinates( _index );
 }
 }  // namespace hypro

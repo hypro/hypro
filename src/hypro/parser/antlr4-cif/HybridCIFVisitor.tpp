@@ -35,22 +35,23 @@ namespace hypro {
 		//optional: initial values, variable declarations, multiple not-so-far handable options like synchronisation etc.
 		visit(ctx->optAutDecls());
 
+		/*
 		std::cout << "Vars are:" << std::endl;
 		for (auto i = vars.begin(); i != vars.end(); ++i)
     			std::cout << *i << ' ';
 		std::cout << std::endl;
-
+		*/
 
 		//locations, also containing edge information
 		CIFLocVisitor<Number> locVisitor = CIFLocVisitor<Number>(vars);
-		std::pair< std::set<Location<Number>*>, std::set<Transition<Number>*> > result = locVisitor.visit(ctx->locations());	
+		std::pair< std::set<Location<Number>*>, std::set<Transition<Number>*> > result = locVisitor.visit(ctx->locations());
 		locSet = result.first;
 		transitionSet = result.second;
 
 
 		//IO Delcarations
 		visit(ctx->optIoDecls());
-		
+
 		return true;
 	}
 
@@ -91,7 +92,7 @@ namespace hypro {
 		exit( 1 );
 		return visitChildren(ctx); //for not generating a warning
 	}
-	
+
 	//IMPORTANT: maybe information for settings
 	template<typename Number>
 	antlrcpp::Any HybridCIFVisitor<Number>::visitIoDecls(HybridSystemParser::IoDeclsContext *ctx){

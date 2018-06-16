@@ -19,17 +19,17 @@ namespace hypro {
 * This class defines a support Function object representing a box
 * SupportFunctions can be evaluated in a specified direction l and return a correspondent EvaluationResult
 */
-template <typename Number>
+template <typename Number, typename Setting>
 class BoxSupportFunction {
   private:
   	std::vector<carl::Interval<Number>> mBox;
   public:
 	BoxSupportFunction( const std::vector<carl::Interval<Number>>& intervals );
 	BoxSupportFunction( const std::vector<Point<Number>>& _points );
-	BoxSupportFunction( const BoxSupportFunction<Number>& _origin );
+	BoxSupportFunction( const BoxSupportFunction<Number,Setting>& _origin );
 	~BoxSupportFunction();
 
-    BoxSupportFunction<Number>& operator=(const BoxSupportFunction& _orig);
+    BoxSupportFunction<Number,Setting>& operator=(const BoxSupportFunction<Number,Setting>& _orig);
 
 	/**
 	 * Returns the dimension of the object.
@@ -88,7 +88,10 @@ class BoxSupportFunction {
 
     std::string getDotRepresentation() const;
 
-    friend std::ostream& operator<<( std::ostream& lhs, const BoxSupportFunction<Number>& rhs ) {
+    friend std::ostream& operator<<( std::ostream& lhs, const BoxSupportFunction<Number,Setting>& rhs ) {
+    	for(const auto& i : rhs.mBox){
+    		lhs << i << std::endl;
+    	}
     	return lhs;// << rhs.getBox();
 	}
 };

@@ -3,15 +3,16 @@
 namespace hypro
 {
 
+////// Deprecated Versions //////
+
 template<typename Number>
-Location<Number>::Location(unsigned _id) : mFlows(), mExternalInput(), mTransitions(), mInvariant(), mId(_id)
+Location<Number>::Location(unsigned _id) : mFlows(), mExternalInput(), mTransitions(), mInvariant(), mId(_id), mHash(0)
 {}
 
 template<typename Number>
 Location<Number>::Location(unsigned _id, const Location<Number>& _loc)
-    : mFlows(_loc.getFlows()), mExternalInput(_loc.getExternalInput()), mTransitions(_loc.getTransitions()), mInvariant(_loc.getInvariant()), mId(_id)
-{
-}
+	: mFlows(_loc.getFlows()), mExternalInput(_loc.getExternalInput()), mTransitions(_loc.getTransitions()), mInvariant(_loc.getInvariant()), mId(_id), mHash(0)
+{}
 
 template<typename Number>
 Location<Number>::Location(unsigned _id, const matrix_t<Number>& _mat) : mFlows(), mId(_id)
@@ -21,6 +22,7 @@ Location<Number>::Location(unsigned _id, const matrix_t<Number>& _mat) : mFlows(
 	point.push_back(Point<Number>(vector_t<Number>::Zero(_mat.cols() -1 )));
 	mExternalInput = Box<Number>(point);
 	mHasExternalInput = false;
+	mHash = 0;
 }
 
 template<typename Number>
@@ -32,6 +34,41 @@ Location<Number>::Location(unsigned _id, const matrix_t<Number>& _mat, const typ
 	point.push_back(Point<Number>(vector_t<Number>::Zero(_mat.cols() -1 )));
 	mExternalInput = Box<Number>(point);
 	mHasExternalInput = false;
+	mHash = 0;
+}
+
+/////// New Versions ///////
+
+template<typename Number>
+Location<Number>::Location() : mFlows(), mExternalInput(), mTransitions(), mInvariant(), mId(), mHash(0)
+{}
+
+template<typename Number>
+Location<Number>::Location(const Location<Number>& _loc)
+	: mFlows(_loc.getFlows()), mExternalInput(_loc.getExternalInput()), mTransitions(_loc.getTransitions()), mInvariant(_loc.getInvariant()), mName(_loc.getName()), mId(), mHash(0)
+{}
+
+template<typename Number>
+Location<Number>::Location(const matrix_t<Number>& _mat) : mFlows(), mId()
+{
+	mFlows.push_back(_mat);
+	std::vector<Point<Number>> point;
+	point.push_back(Point<Number>(vector_t<Number>::Zero(_mat.cols() -1 )));
+	mExternalInput = Box<Number>(point);
+	mHasExternalInput = false;
+	mHash = 0;
+}
+
+template<typename Number>
+Location<Number>::Location(const matrix_t<Number>& _mat, const typename Location<Number>::transitionSet& _trans, const Condition<Number>& _inv)
+    : mFlows(), mExternalInput(), mTransitions(_trans), mInvariant(_inv), mId()
+{
+	mFlows.push_back(_mat);
+	std::vector<Point<Number>> point;
+	point.push_back(Point<Number>(vector_t<Number>::Zero(_mat.cols() -1 )));
+	mExternalInput = Box<Number>(point);
+	mHasExternalInput = false;
+	mHash = 0;
 }
 
 template<typename Number>
@@ -45,6 +82,7 @@ void Location<Number>::setFlow(const matrix_t<Number>& mat, std::size_t I) {
 		point.push_back(Point<Number>(vector_t<Number>::Zero(mat.cols() -1 )));
 		mExternalInput = Box<Number>(point);
 	}
+	mHash = 0;
 }
 
 template<typename Number>
@@ -56,6 +94,15 @@ void Location<Number>::setExtInput(const Box<Number>& b) {
 			break;
 		}
 	}
+	mHash = 0;
+}
+
+template<typename Number>
+std::size_t Location<Number>::hash() const {
+	if(mHash == 0){
+		mHash = std::hash<Location<Number>>()(*this);
+	}
+	return mHash;
 }
 
 template<typename Number>
@@ -190,4 +237,195 @@ bool Location<Number>::isComposedOf(const Location<Number>& rhs, const std::vect
 	return true;
 }
 
-}  // namespace hydra
+template<typename Number>
+std::unique_ptr<Location<Number>> parallelCompose(const std::unique_ptr<Location<Number>>& lhs
+                                , const std::unique_ptr<Location<Number>>& rhs
+                                , const std::vector<std::string>& lhsVar
+                                , const std::vector<std::string>& rhsVar
+                                , const std::vector<std::string>& haVar)
+{
+	//compute flow
+	matrix_t<Number> haFlow = matrix_t<Number>::Zero(haVar.size()+1, haVar.size()+1);
+
+	//std::cout << "combine Locations " << lhs->getName() << " and " << rhs->getName() << std::endl;
+	//std::cout << "With flows " << lhs->getFlow() << " and " << rhs->getFlow() << std::endl;
+
+	std::size_t lhsIR = 0, lhsIC = 0, rhsIR = 0, rhsIC = 0;
+	bool admissible = true; // flag used to denote a non-admissible flow, i.e. shared variables with different flow.
+	// iterate over all rows
+	for( std::size_t rowI = 0; rowI != haVar.size(); ++rowI ) {
+		//std::cout << "Consider composed row " << rowI << " for var " << haVar[rowI] << std::endl;
+		//std::cout << "lhsIR: " << lhsIR << std::endl;
+		//std::cout << "rhsIR: " << rhsIR << std::endl;
+		//std::cout << "Now left hand side." << std::endl;
+		if(lhsIR < lhsVar.size() && lhsVar[lhsIR] == haVar[rowI]) {
+			// iterate over all columns
+			lhsIC = 0;
+			for( std::size_t colI = 0; colI != haVar.size(); ++colI) {
+				//std::cout << "Consider composed col " << colI << " for var " << haVar[colI] << std::endl;
+				//std::cout << "lhsIC: " << lhsIC << std::endl;
+				//std::cout << "rhsIC: " << rhsIC << std::endl;
+				if(lhsVar[lhsIC] == haVar[colI]) {
+					haFlow(rowI,colI) = lhs->getFlow()(lhsIR,lhsIC);
+					++lhsIC;
+					if(lhsIC == lhsVar.size()) {
+						break;
+					}
+				}
+			}
+			++lhsIR;
+		}
+		//std::cout << "lhsIR: " << lhsIR << std::endl;
+		//std::cout << "intermediate result: " << haFlow << std::endl;
+		//std::cout << "Now right hand side." << std::endl;
+		if(rhsIR < rhsVar.size() && rhsVar[rhsIR] == haVar[rowI]) {
+			// iterate over all columns
+			rhsIC = 0;
+			for( std::size_t colI = 0; colI != haVar.size(); ++colI) {
+				//std::cout << "Consider composed col " << colI << " for var " << haVar[colI] << std::endl;
+				//std::cout << "lhsIC: " << lhsIC << std::endl;
+				//std::cout << "rhsIC: " << rhsIC << std::endl;
+				if(rhsVar[rhsIC] == haVar[colI]) {
+					// TODO: the check is not entirely correct, since the flow can be non-admissible but set to 0 in lhs and something != 0 in rhs.
+					if(haFlow(rowI,colI) != 0 && rhs->getFlow()(rhsIR,rhsIC) != haFlow(rowI,colI)) {
+						admissible = false;
+						break;
+					}
+					haFlow(rowI,colI) = rhs->getFlow()(rhsIR,rhsIC);
+					++rhsIC;
+					if(rhsIC == rhsVar.size()) {
+						break;
+					}
+				}
+			}
+			++rhsIR;
+		}
+		//std::cout << "rhsIR: " << rhsIR << std::endl;
+		if(!admissible)
+			break;
+	}
+
+	// constant parts - TODO: integrate into loop above?
+	for(unsigned rowI = 0; rowI < haFlow.rows()-1; ++rowI) {
+		//std::cout << "Constant part for var " << haVar[rowI] << std::endl;
+		unsigned lhsPos = 0;
+		unsigned rhsPos = 0;
+		bool leftFound = false;
+		bool rightFound = false;
+		while(lhsPos != lhsVar.size()) {
+			if(lhsVar[lhsPos] == haVar[rowI]) {
+				leftFound = true;
+				//std::cout << "Found in lhs at pos " << lhsPos << std::endl;
+				break;
+			}
+			++lhsPos;
+		}
+
+		while(rhsPos != rhsVar.size()) {
+			if(rhsVar[rhsPos] == haVar[rowI]) {
+				//std::cout << "Found in rhs at pos " << lhsPos << std::endl;
+				rightFound = true;
+				break;
+			}
+			++rhsPos;
+		}
+		if(leftFound) {
+			// if is shared variable
+			if(rightFound) {
+				if(lhs->getFlow()(lhsPos, lhs->getFlow().cols()-1) != rhs->getFlow()(rhsPos, rhs->getFlow().cols()-1)) {
+					admissible = false;
+					break;
+				} else {
+					haFlow(rowI,haFlow.cols()-1) = lhs->getFlow()(lhsPos, lhs->getFlow().cols()-1);
+					//std::cout << "Set to " << haFlow(rowI,haFlow.cols()-1) << std::endl;
+				}
+			} else {
+				haFlow(rowI,haFlow.cols()-1) = lhs->getFlow()(lhsPos, lhs->getFlow().cols()-1);
+				//std::cout << "Set to " << haFlow(rowI,haFlow.cols()-1) << std::endl;
+			}
+		} else {
+			if(rightFound) {
+				haFlow(rowI,haFlow.cols()-1) = rhs->getFlow()(rhsPos, rhs->getFlow().cols()-1);
+				//std::cout << "Set to " << haFlow(rowI,haFlow.cols()-1) << std::endl;
+			} else {
+				//std::cout << "Variable is neither part of lhs or rhs!" << std::endl;
+				assert(false);
+				admissible = false;
+			}
+		}
+	}
+
+	if(!admissible) {
+		FATAL("hypro.datastructures","Failed to create parallel composition of locations.");
+		return nullptr;
+	}
+
+	//Location<Number>* res = LocationManager<Number>::getInstance().create();
+	std::unique_ptr<Location<Number>> res = std::make_unique<Location<Number>>();
+
+	//set name
+	res->setName(lhs->getName()+"_"+rhs->getName());
+
+	//std::cout << "Created flow: " << haFlow << " for location " << res->getName();
+
+	res->setFlow(haFlow);
+
+	//set invariant
+	Condition<Number> inv = combine(lhs->getInvariant(), rhs->getInvariant(), haVar, lhsVar, rhsVar);
+	res->setInvariant(inv);
+
+	//std::cout << "Created invariant: " << inv << " for location " << res->getName();
+
+
+	//std::cout << "setExtInput" << std::endl;
+	//set extinput
+	//loc->setExtInput(flowAndExtInput.second);
+	//return std::unique_ptr<Location<Number>>(res);
+	return res;
+}
+
+template<typename Number>
+void Location<Number>::decompose(std::vector<std::vector<size_t>> decomposition){
+	if(mFlows.size() > 1 || mInvariant.size() > 1){
+		//already decomposed
+		return;
+	}
+	DEBUG("hypro.datastructures","Flow Matrix before: \n " << mFlows.at(0));
+	// decompose flow
+	matrix_t<Number> oldFlow(mFlows.at(0));
+	std::vector<matrix_t<Number>> newFlows;
+	// for each set {i,j,..., k} select the i-th,j-th,...,k-th vector into a new square matrix
+	for(auto set : decomposition){
+		DEBUG("hypro.datastructures","decompose flow for set: {");
+		for(auto entry : set){
+			DEBUG("hypro.datastructures", "" << entry << ", ");
+		}
+		DEBUG("hypro.datastructures","}");
+		// +1 row for last-row of affine transformation
+		matrix_t<Number> rowMat = matrix_t<Number>::Zero(set.size()+1, oldFlow.cols());
+		// -1 because of last-row
+		for(size_t index = 0; index < rowMat.rows()-1; index++){
+			// select the specific rows into rowMat
+			rowMat.row(index) = oldFlow.row(set[index]);
+		}
+		//copy last row over
+		rowMat.row(rowMat.rows()-1) = oldFlow.row(oldFlow.rows()-1);
+
+		// +1 for constant column
+		matrix_t<Number> finMat = matrix_t<Number>::Zero(rowMat.rows(), set.size()+1);
+		// -1 for constant column
+		for(size_t index = 0; index < finMat.cols()-1; index++){
+			finMat.col(index) = rowMat.col(set[index]);
+		}
+		finMat.col(finMat.cols()-1) = rowMat.col(rowMat.cols()-1);
+		DEBUG("hypro.datastructures", "Final decomposed Flow: \n" << finMat );
+		newFlows.push_back(finMat);
+	}
+
+	mFlows = newFlows;
+	// decompose invariant
+	mInvariant.decompose(decomposition);
+}
+
+}  // namespace hypro
+

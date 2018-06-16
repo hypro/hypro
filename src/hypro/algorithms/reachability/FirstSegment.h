@@ -28,15 +28,15 @@ matrix_t<Number> computeTrafoMatrix(const Location<Number>* _loc, Number timeSte
     matrix_t<double> expMatrix(deltaMatrix.rows(), deltaMatrix.cols());
     doubleMatrix = convert<Number, double>(deltaMatrix);
 
-    TRACE("hypro.reachability","transformed matrix: " << doubleMatrix);
+    TRACE("hypro.reachability","transformed matrix:\n " << doubleMatrix);
 
     expMatrix = doubleMatrix.exp();
 
-    TRACE("hypro.reachability","exp matrix: " << expMatrix);
+    TRACE("hypro.reachability","exp matrix:\n " << expMatrix);
 
     resultMatrix = convert<double, Number>(expMatrix);
 
-	TRACE("hypro.reachability","transformed matrix: " << resultMatrix);
+	TRACE("hypro.reachability","transformed matrix:\n " << resultMatrix);
 
     return resultMatrix;
 }
@@ -65,9 +65,15 @@ void bloatBox(State& in, const Box<Number>& bloatBox) {
 			break;
 		}
 		case representation_name::ppl_polytope: {
-			assert(false && "CONVERSION TO PPL POLYTOPE NOT YET IMPLEMENTED.");
+            #ifdef HYPRO_USE_PPL
+			in.setSetDirect(boost::get<Polytope<Number>>(in.getSet(0)).minkowskiSum(Converter<Number>::toPolytope(bloatBox)));
+            #endif
 			break;
 		}
+        case representation_name::difference_bounds: {
+            in.setSetDirect(boost::get<DifferenceBounds<Number>>(in.getSet(0)).minkowskiSum(Converter<Number>::toDifferenceBounds(bloatBox)));
+            break;
+        }
 		case representation_name::constraint_set:{
 			assert(false && "CANNOT CONVERT TO TYPE ConstraintSet<Number>.");
 			break;
@@ -99,7 +105,7 @@ boost::tuple<CONTAINMENT, State, matrix_t<Number>, vector_t<Number>, Box<Number>
         if (_state.getLocation()->getFlow() == matrix_t<Number>::Zero(_state.getLocation()->getFlow(0).rows(), _state.getLocation()->getFlow(0).cols())) {
             // TRACE("Avoid further computation as the flow is zero." << std::endl);
             int rows =_state.getLocation()->getFlow(0).rows();
-            std::cout << "Attention, external input not yet captured in locations with no flow." << std::endl;
+            //std::cout << "Attention, external input not yet captured in locations with no flow." << std::endl;
             unsigned dimension = initialPair.second.getDimension(0);
             Box<Number> externalInputTmp(std::make_pair(Point<Number>(vector_t<Number>::Zero(dimension+1)),
                                                         Point<Number>(vector_t<Number>::Zero(dimension+1))));

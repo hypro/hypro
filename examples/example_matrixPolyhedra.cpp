@@ -1,4 +1,4 @@
-#ifdef USE_PPL
+#ifdef HYPRO_USE_PPL
 #include <ppl.hh>
 
 int main(int argc, char** argv) {

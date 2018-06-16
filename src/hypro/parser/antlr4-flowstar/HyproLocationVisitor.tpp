@@ -31,9 +31,11 @@ namespace hypro {
 			}
 
 			Location<Number>* loc = visit(ctx->location().at(i));
+			assert(loc != nullptr);
 			locSet.insert(loc);
 			i++;
 		}
+		//return set of raw ptrs to locations
 		return locSet;
 	}
 
@@ -85,16 +87,15 @@ namespace hypro {
 			}
 		}
 
-		//3.Returns a location
-		LocationManager<Number>& manager = LocationManager<Number>::getInstance();
-		Location<Number>* loc = manager.create();
+		//3.Returns a ptr to location
+		Location<Number>* loc = new Location<Number>();
 		loc->setName(ctx->VARIABLE()->getText());
 		loc->setFlow(flowAndExtInput.first);
 		loc->setInvariant(inv);
 
 		// only set external input, if it is different from zero
 		if(!flowAndExtInput.second.empty() && flowAndExtInput.second != Box<Number>(std::make_pair(Point<Number>(vector_t<Number>::Zero(flowAndExtInput.first.cols()-1)), Point<Number>(vector_t<Number>::Zero(flowAndExtInput.first.cols()-1))))) {
-			std::cout << "Set external input to " << flowAndExtInput.second << " which is not equal to " << Box<Number>(std::make_pair(Point<Number>(vector_t<Number>::Zero(flowAndExtInput.first.cols()-1)), Point<Number>(vector_t<Number>::Zero(flowAndExtInput.first.cols()-1)))) << std::endl;
+			//std::cout << "Set external input to " << flowAndExtInput.second << " which is not equal to " << Box<Number>(std::make_pair(Point<Number>(vector_t<Number>::Zero(flowAndExtInput.first.cols()-1)), Point<Number>(vector_t<Number>::Zero(flowAndExtInput.first.cols()-1)))) << std::endl;
 			loc->setExtInput(flowAndExtInput.second);
 		}
 		return loc;

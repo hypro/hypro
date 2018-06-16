@@ -35,11 +35,12 @@ namespace hypro {
  * @tparam     Converter  The converter.
  * \ingroup geoState @{
  */
-template<typename Number, typename Converter>
-class ZonotopeT : public GeometricObject<Number, ZonotopeT<Number,Converter>> {
+template<typename Number, typename Converter, typename Setting>
+class ZonotopeT : public GeometricObject<Number, ZonotopeT<Number,Converter,Setting>> {
   private:
 	std::size_t mDimension;
 	vector_t<Number> mCenter;
+	//Each column in mGenerators is a generator
 	matrix_t<Number> mGenerators;
 
 	void removeGenerator( unsigned int colToRemove );
@@ -65,7 +66,7 @@ class ZonotopeT : public GeometricObject<Number, ZonotopeT<Number,Converter>> {
 	 * Copy Constructor - constructs a zonotopeT from an existing one.
 	 * @param other Another ZonotopeT, from which a new zonotopeT is constructed
 	 */
-	ZonotopeT( const ZonotopeT<Number,Converter>& other ) = default;
+	ZonotopeT( const ZonotopeT<Number,Converter,Setting>& other ) = default;
 
 	/**
 	 * Copy Constructor - constructs a 2D-zonotopeT of from an existing ND one.
@@ -73,7 +74,7 @@ class ZonotopeT : public GeometricObject<Number, ZonotopeT<Number,Converter>> {
 	 * @param d1 : 1st dimension (0 <= d1 < other.dimension)
 	 * @param d2 : 2nd dimension (0 <= d2 < other.dimension) d1!=d2
 	 */
-	ZonotopeT( const ZonotopeT<Number,Converter>& other, unsigned d1, unsigned d2 );
+	ZonotopeT( const ZonotopeT<Number,Converter,Setting>& other, unsigned d1, unsigned d2 );
 
 	virtual ~ZonotopeT();
 
@@ -98,8 +99,8 @@ class ZonotopeT : public GeometricObject<Number, ZonotopeT<Number,Converter>> {
 	bool empty() const;
 
 
-	static ZonotopeT<Number,Converter> Empty(std::size_t dimension = 1) {
-		return ZonotopeT<Number,Converter>(vector_t<Number>::Zero(dimension), matrix_t<Number>(dimension,0));
+	static ZonotopeT<Number,Converter,Setting> Empty(std::size_t dimension = 1) {
+		return ZonotopeT<Number,Converter,Setting>(vector_t<Number>::Zero(dimension), matrix_t<Number>(dimension,0));
 	}
 
 	static representation_name type() { return representation_name::zonotope; }
@@ -158,7 +159,7 @@ class ZonotopeT : public GeometricObject<Number, ZonotopeT<Number,Converter>> {
 
     void print() const;
 
-    bool operator==(const ZonotopeT<Number,Converter>& rhs) const {
+    bool operator==(const ZonotopeT<Number,Converter,Setting>& rhs) const {
     	if(this->mDimension != rhs.dimension()) {
     		return false;
     	}
@@ -173,8 +174,7 @@ class ZonotopeT : public GeometricObject<Number, ZonotopeT<Number,Converter>> {
 
     void removeRedundancy() const {}
 
-    template<class Setting>
-    void reduceOrder( Number limit = Number(Setting::ZONOTOPE_ORDERLIMIT) );
+    void reduceOrder( unsigned limit = Setting::ZONOTOPE_ORDERLIMIT );
 
     void reduceNumberRepresentation();
 
@@ -184,10 +184,10 @@ class ZonotopeT : public GeometricObject<Number, ZonotopeT<Number,Converter>> {
 	*                                                                           *
 	*****************************************************************************/
 
-	ZonotopeT<Number,Converter> minkowskiSum( const ZonotopeT<Number,Converter>& rhs ) const;
-	ZonotopeT<Number,Converter> project( const std::vector<std::size_t>& dimensions ) const;
-	ZonotopeT<Number,Converter> linearTransformation( const matrix_t<Number>& A) const;
-	ZonotopeT<Number,Converter> affineTransformation( const matrix_t<Number>& A, const vector_t<Number>& b ) const;
+	ZonotopeT<Number,Converter,Setting> minkowskiSum( const ZonotopeT<Number,Converter,Setting>& rhs ) const;
+	ZonotopeT<Number,Converter,Setting> project( const std::vector<std::size_t>& dimensions ) const;
+	ZonotopeT<Number,Converter,Setting> linearTransformation( const matrix_t<Number>& A) const;
+	ZonotopeT<Number,Converter,Setting> affineTransformation( const matrix_t<Number>& A, const vector_t<Number>& b ) const;
 
 	/**
 	 * Compute boundaries of zonotopeT
@@ -204,11 +204,11 @@ class ZonotopeT : public GeometricObject<Number, ZonotopeT<Number,Converter>> {
 	 */
 	std::vector<Point<Number>> vertices( const matrix_t<Number>& = matrix_t<Number>::Zero(0,0) ) const;
 
-	ZonotopeT<Number,Converter> intersectHalfspace( const Halfspace<Number>& rhs ) const;
-	ZonotopeT<Number,Converter> intersectHalfspaces( const matrix_t<Number>& mat, const vector_t<Number>& vec ) const;
+	ZonotopeT<Number,Converter,Setting> intersectHalfspace( const Halfspace<Number>& rhs ) const;
+	ZonotopeT<Number,Converter,Setting> intersectHalfspaces( const matrix_t<Number>& mat, const vector_t<Number>& vec ) const;
 
-	std::pair<CONTAINMENT,ZonotopeT<Number,Converter>> satisfiesHalfspace( const Halfspace<Number>& rhs ) const;
-	std::pair<CONTAINMENT,ZonotopeT<Number,Converter>> satisfiesHalfspaces( const matrix_t<Number>& mat, const vector_t<Number>& vec ) const;
+	std::pair<CONTAINMENT,ZonotopeT<Number,Converter,Setting>> satisfiesHalfspace( const Halfspace<Number>& rhs ) const;
+	std::pair<CONTAINMENT,ZonotopeT<Number,Converter,Setting>> satisfiesHalfspaces( const matrix_t<Number>& mat, const vector_t<Number>& vec ) const;
 
 	#ifdef HYPRO_USE_PPL
 	/**
@@ -217,7 +217,7 @@ class ZonotopeT : public GeometricObject<Number, ZonotopeT<Number,Converter>> {
 	 * @param halfspace : Halfspace as represented in PPL (see PPL documentation for more information)
 	 * @return true if intersect is found, false otherwise (result parameter is not modified if false)
 	 */
-	ZonotopeT<Number,Converter> intersect( const Parma_Polyhedra_Library::Constraint& halfspace ) const;
+	ZonotopeT<Number,Converter,Setting> intersect( const Parma_Polyhedra_Library::Constraint& halfspace ) const;
 	#endif
 
 	/**
@@ -226,7 +226,7 @@ class ZonotopeT : public GeometricObject<Number, ZonotopeT<Number,Converter>> {
 	 * @param rhs The right-hand-side stateset. Is not modified.
 	 * @return True if intersect is found
 	 */
-	ZonotopeT<Number,Converter> intersect( const Halfspace<Number>& rhs, int method );
+	ZonotopeT<Number,Converter,Setting> intersect( const Halfspace<Number>& rhs, int method );
 
 	/**
 	 * Intersects the given stateset with a second one.
@@ -234,7 +234,7 @@ class ZonotopeT : public GeometricObject<Number, ZonotopeT<Number,Converter>> {
 	 * @param rhs The right-hand-side stateset. Is not modified.
 	 * @return True if intersect is found
 	 */
-	ZonotopeT<Number,Converter> intersectHalfspaces( const matrix_t<Number>& mat, const vector_t<Number> vec, int method );
+	ZonotopeT<Number,Converter,Setting> intersectHalfspaces( const matrix_t<Number>& mat, const vector_t<Number> vec, int method );
 
 	/**
 	 * Intersects the given stateset with a second one and returns min-max only when NDPROJECTION method is used
@@ -243,7 +243,7 @@ class ZonotopeT : public GeometricObject<Number, ZonotopeT<Number,Converter>> {
 	 * @param rhs : The right-hand-side stateset. Is not modified.
 	 * @return True if intersect is found.
 	 */
-	ZonotopeT<Number,Converter> intersect( const Halfspace<Number>& rhs, matrix_t<Number>& minMaxOfLine, int method );
+	ZonotopeT<Number,Converter,Setting> intersect( const Halfspace<Number>& rhs, matrix_t<Number>& minMaxOfLine, int method );
 
 	#ifdef HYPRO_USE_PPL
 	/**
@@ -252,29 +252,34 @@ class ZonotopeT : public GeometricObject<Number, ZonotopeT<Number,Converter>> {
 	 * @param rhs : The closed polyhedron as represented in PPL (see PPL documentation for more information).
 	 * @return true if intersect is found, false otherwise (result parameter is not modified if false)
 	 */
-	ZonotopeT<Number,Converter> intersect( const Parma_Polyhedra_Library::C_Polyhedron& rhs ) const;
+	ZonotopeT<Number,Converter,Setting> intersect( const Parma_Polyhedra_Library::C_Polyhedron& rhs ) const;
 	#endif
 
-	ZonotopeT<Number,Converter> unite( const ZonotopeT<Number,Converter>& other ) const;
+	ZonotopeT<Number,Converter,Setting> unite( const ZonotopeT<Number,Converter,Setting>& other ) const;
 
-	static ZonotopeT<Number,Converter> unite( const std::vector<ZonotopeT<Number,Converter>>& sets );
+	static ZonotopeT<Number,Converter,Setting> unite( const std::vector<ZonotopeT<Number,Converter,Setting>>& sets );
+
+	/**
+	 * @brief      Reduces the zonotope by reducing order, number representation and removing redundant generators.
+	 */
+	void reduceRepresentation() { reduceOrder(); reduceNumberRepresentation(); removeRedundancy(); }
 
 	/**
 	 * Computes the interval hull of the member zonotopeT
 	 * @param result: the resulting interval hull (also a zonotopeT)
 	 * @return true for all cases
 	 */
-	ZonotopeT<Number,Converter> intervalHull() const;
+	ZonotopeT<Number,Converter,Setting> intervalHull() const;
 
 	bool contains(const Point<Number>& point) const;
 
-	bool contains(const ZonotopeT<Number,Converter>&) const {assert(false && "NOT IMPLEMENTED."); return false; }
+	bool contains(const ZonotopeT<Number,Converter,Setting>&) const {assert(false && "NOT IMPLEMENTED."); return false; }
 };
 
 /** @} */
 
-template<typename Number, typename Converter>
-std::ostream& operator<<(std::ostream& out, const ZonotopeT<Number,Converter>& in ) {
+template<typename Number, typename Converter, typename Setting>
+std::ostream& operator<<(std::ostream& out, const ZonotopeT<Number,Converter,Setting>& in ) {
 	out << "< c: " << convert<Number,double>(in.center()).transpose() << "," << std::endl;
 	for(unsigned i = 0; i < in.generators().rows(); ++i) {
 		for(unsigned j = 0; j < in.generators().cols(); ++j) {

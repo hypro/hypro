@@ -31,7 +31,7 @@ class Point {
 	vector_t<Number> mCoordinates;
 	mutable std::size_t mHash;
 
-	// Adjacency List of this Point (if applicable)
+	// Adjacency List of this Point (if applicable
 	// std::vector<Point<Number>> mNeighbors;
 	// Minkowsi Decompositon of this point (if applicable)
 	std::vector<Point<Number>> mComposedOf;
@@ -108,8 +108,10 @@ class Point {
 	 * @return     The hash.
 	 */
 	std::size_t hash() const {
+		//std::cout << "request hash for " << *this << std::endl;
 		if(mHash == 0) {
 			mHash = std::hash<vector_t<Number>>()(mCoordinates);
+			//std::cout << "Computed hash: " << mHash << std::endl;
 		}
 		return mHash;
 	}
@@ -187,6 +189,13 @@ class Point {
 	 * @param[in]  _value  The value.
 	 */
 	void setCoordinate( const carl::Variable& _dim, const Number& _value );
+
+	/**
+	 * @brief      Sets the coordinate for the passed dimension.
+	 * @param[in]  _dim    The dimension.
+	 * @param[in]  _value  The value.
+	 */
+	void setCoordinate( std::size_t dimension, const Number& _value );
 
 	/**
 	 * @brief      Swap operator.
@@ -539,7 +548,11 @@ class Point {
 	 */
 	Number& operator[]( const carl::Variable& _i );
 	Number& operator[]( std::size_t _i );
+	const Number& operator[]( const carl::Variable& _i ) const;
+	const Number& operator[]( std::size_t _i ) const;
 
+	Number& at( const carl::Variable& _i );
+	Number& at( std::size_t _index );
 	const Number& at( const carl::Variable& _i ) const;
 	const Number& at( std::size_t _index ) const;
 	//@}

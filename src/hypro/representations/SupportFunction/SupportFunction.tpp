@@ -14,70 +14,70 @@ namespace hypro{
 
 
     //-------PRIVATE---------
-    template<typename Number, typename Converter>
-    SupportFunctionT<Number,Converter>::SupportFunctionT(const std::shared_ptr<SupportFunctionContent<Number>> _source) : content(_source){
+    template<typename Number, typename Converter, typename Setting>
+    SupportFunctionT<Number,Converter,Setting>::SupportFunctionT(const std::shared_ptr<SupportFunctionContent<Number,Setting>> _source) : content(_source){
         //handled by initializer list
     }
 
     //-------PUBLIC---------
-    template<typename Number, typename Converter>
-    SupportFunctionT<Number,Converter>::SupportFunctionT() {
+    template<typename Number, typename Converter, typename Setting>
+    SupportFunctionT<Number,Converter,Setting>::SupportFunctionT() {
         //handled by initializer list
     }
 
     //copy constructor
-    template<typename Number, typename Converter>
-    SupportFunctionT<Number,Converter>::SupportFunctionT( const SupportFunctionT<Number,Converter> &_orig ) : content(_orig.content){
+    template<typename Number, typename Converter, typename Setting>
+    SupportFunctionT<Number,Converter,Setting>::SupportFunctionT( const SupportFunctionT<Number,Converter,Setting> &_orig ) : content(_orig.content){
         //handled by initializer list
     }
 
     //move constructor
-    template<typename Number, typename Converter>
-    SupportFunctionT<Number,Converter>::SupportFunctionT( SupportFunctionT<Number,Converter>&& other) : SupportFunctionT<Number,Converter>(){
+    template<typename Number, typename Converter, typename Setting>
+    SupportFunctionT<Number,Converter,Setting>::SupportFunctionT( SupportFunctionT<Number,Converter,Setting>&& other) : SupportFunctionT<Number,Converter,Setting>(){
         swap(*this, other);
     }
 
 
-    template<typename Number, typename Converter>
-    SupportFunctionT<Number,Converter>::SupportFunctionT(SF_TYPE _type, Number _radius, unsigned dimension ) : content(SupportFunctionContent<Number>::create(_type, _radius, dimension)){
+    template<typename Number, typename Converter, typename Setting>
+    SupportFunctionT<Number,Converter,Setting>::SupportFunctionT(SF_TYPE _type, Number _radius, unsigned dimension ) : content(SupportFunctionContent<Number,Setting>::create(_type, _radius, dimension)){
         //handled by initializer list
     }
 
-    template<typename Number, typename Converter>
-    SupportFunctionT<Number,Converter>::SupportFunctionT(const std::vector<Point<Number>>& _vertices)
-        : content(SupportFunctionContent<Number>::create(SF_TYPE::POLY, _vertices)) {
+    template<typename Number, typename Converter, typename Setting>
+    SupportFunctionT<Number,Converter,Setting>::SupportFunctionT(const std::vector<Point<Number>>& _vertices)
+        : content(SupportFunctionContent<Number,Setting>::create(SF_TYPE::POLY, _vertices)) {
         //handled by initializer list
     }
 
-    template<typename Number, typename Converter>
-    SupportFunctionT<Number,Converter>::SupportFunctionT(const matrix_t<Number>& _directions, const vector_t<Number>& _distances) : content(SupportFunctionContent<Number>::create(SF_TYPE::POLY, _directions, _distances)){
+    template<typename Number, typename Converter, typename Setting>
+    SupportFunctionT<Number,Converter,Setting>::SupportFunctionT(const matrix_t<Number>& _directions, const vector_t<Number>& _distances) : content(SupportFunctionContent<Number,Setting>::create(SF_TYPE::POLY, _directions, _distances)){
          //handled by initializer list
     }
 
-    template<typename Number, typename Converter>
-    SupportFunctionT<Number,Converter>::SupportFunctionT(const std::vector<Halfspace<Number>>& _planes) : content(SupportFunctionContent<Number>::create(SF_TYPE::POLY, _planes)){
+    template<typename Number, typename Converter, typename Setting>
+    SupportFunctionT<Number,Converter,Setting>::SupportFunctionT(const std::vector<Halfspace<Number>>& _planes) : content(SupportFunctionContent<Number,Setting>::create(SF_TYPE::POLY, _planes)){
          //handled by initializer list
     }
 
-    template<typename Number, typename Converter>
-    SupportFunctionT<Number,Converter>::SupportFunctionT(const matrix_t<Number>& _shapeMatrix) : content(SupportFunctionContent<Number>::create(SF_TYPE::ELLIPSOID, _shapeMatrix)){
+    template<typename Number, typename Converter, typename Setting>
+    SupportFunctionT<Number,Converter,Setting>::SupportFunctionT(const matrix_t<Number>& _shapeMatrix) : content(SupportFunctionContent<Number,Setting>::create(SF_TYPE::ELLIPSOID, _shapeMatrix)){
          //handled by initializer list
     }
 
-    template<typename Number, typename Converter>
-    SupportFunctionT<Number,Converter>::SupportFunctionT(const std::vector<carl::Interval<Number>>& inBox ) : content(SupportFunctionContent<Number>::create(SF_TYPE::BOX, inBox)) {
+    template<typename Number, typename Converter, typename Setting>
+    SupportFunctionT<Number,Converter,Setting>::SupportFunctionT(const std::vector<carl::Interval<Number>>& inBox ) : content(SupportFunctionContent<Number,Setting>::create(SF_TYPE::BOX, inBox)) {
     	//handled by initializer list
     }
 
     //destructor
-    template<typename Number, typename Converter>
-    SupportFunctionT<Number,Converter>::~SupportFunctionT() {
+    template<typename Number, typename Converter, typename Setting>
+    SupportFunctionT<Number,Converter,Setting>::~SupportFunctionT() {
     }
 
 // OPERATOR OVERLOADING
 
-    template<typename Number, typename Converter>
-    SupportFunctionT<Number,Converter>& SupportFunctionT<Number,Converter>::operator=(SupportFunctionT<Number,Converter> _orig) {
+    template<typename Number, typename Converter, typename Setting>
+    SupportFunctionT<Number,Converter,Setting>& SupportFunctionT<Number,Converter,Setting>::operator=(SupportFunctionT<Number,Converter,Setting> _orig) {
         //std::cout << "SupportFunction Copy\n";
         if (this != &_orig){
             swap(*this, _orig);
@@ -88,8 +88,8 @@ namespace hypro{
 
 // FUNCTIONS
 
-    template<typename Number, typename Converter>
-    EvaluationResult<Number> SupportFunctionT<Number,Converter>::evaluate( const vector_t<Number> &_direction, bool useExact ) const {
+    template<typename Number, typename Converter, typename Setting>
+    EvaluationResult<Number> SupportFunctionT<Number,Converter,Setting>::evaluate( const vector_t<Number> &_direction, bool useExact ) const {
     	matrix_t<Number> tmpMatrix = _direction.transpose();
         EvaluationResult<Number> tmp = content->multiEvaluate(tmpMatrix, useExact).at(0);
         TRACE("hypro.representations.supportFunction", "(" << _direction << ") :" << tmp.supportValue);
@@ -97,8 +97,8 @@ namespace hypro{
 		return tmp;
     }
 
-    template<typename Number, typename Converter>
-    std::vector<EvaluationResult<Number>> SupportFunctionT<Number,Converter>::multiEvaluate( const matrix_t<Number> &_directions, bool useExact ) const {
+    template<typename Number, typename Converter, typename Setting>
+    std::vector<EvaluationResult<Number>> SupportFunctionT<Number,Converter,Setting>::multiEvaluate( const matrix_t<Number> &_directions, bool useExact ) const {
         TRACE("hypro.representations.supportFunction", "Directions: " << _directions);
         std::vector<EvaluationResult<Number>> res = content->multiEvaluate(_directions, useExact);
         assert(res.size() == std::size_t(_directions.rows()));
@@ -109,33 +109,33 @@ namespace hypro{
         return res;
     }
 
-    template<typename Number, typename Converter>
-    std::size_t SupportFunctionT<Number,Converter>::dimension() const {
+    template<typename Number, typename Converter, typename Setting>
+    std::size_t SupportFunctionT<Number,Converter,Setting>::dimension() const {
         return content->dimension();
     }
 
-    template<typename Number, typename Converter>
-    SF_TYPE SupportFunctionT<Number,Converter>::sfType() const {
+    template<typename Number, typename Converter, typename Setting>
+    SF_TYPE SupportFunctionT<Number,Converter,Setting>::sfType() const {
         return content->type();
     }
 
-    template<typename Number, typename Converter>
-    unsigned SupportFunctionT<Number,Converter>::depth() const {
+    template<typename Number, typename Converter, typename Setting>
+    unsigned SupportFunctionT<Number,Converter,Setting>::depth() const {
         return content->depth();
     }
 
-    template<typename Number, typename Converter>
-    unsigned SupportFunctionT<Number,Converter>::multiplicationsPerEvaluation() const {
+    template<typename Number, typename Converter, typename Setting>
+    unsigned SupportFunctionT<Number,Converter,Setting>::multiplicationsPerEvaluation() const {
         return content->multiplicationsPerEvaluation();
     }
 
-	template<typename Number, typename Converter>
-    void SupportFunctionT<Number,Converter>::cleanUp() const {
+	template<typename Number, typename Converter, typename Setting>
+    void SupportFunctionT<Number,Converter,Setting>::cleanUp() const {
     	content->cleanUp();
     }
 
-    template<typename Number, typename Converter>
-    std::string SupportFunctionT<Number,Converter>::getDotRepresentation() const {
+    template<typename Number, typename Converter, typename Setting>
+    std::string SupportFunctionT<Number,Converter,Setting>::getDotRepresentation() const {
     	std::string nodes = "digraph structs \n { node [shape=record];\n";
     	std::string transitions = "";
 
@@ -144,74 +144,74 @@ namespace hypro{
     	return nodes + transitions + "}\n";
     }
 
-    template<typename Number, typename Converter>
-    unsigned SupportFunctionT<Number,Converter>::operationCount() const {
+    template<typename Number, typename Converter, typename Setting>
+    unsigned SupportFunctionT<Number,Converter,Setting>::operationCount() const {
         return content->operationCount();
     }
 
-    template<typename Number, typename Converter>
-    sumContent<Number> *SupportFunctionT<Number,Converter>::summands() const {
+    template<typename Number, typename Converter, typename Setting>
+    sumContent<Number,Setting> *SupportFunctionT<Number,Converter,Setting>::summands() const {
        return content->summands();
     }
 
-    template<typename Number, typename Converter>
-    trafoContent<Number,SupportFunctionContentSetting> *SupportFunctionT<Number,Converter>::linearTrafoParameters() const {
+    template<typename Number, typename Converter, typename Setting>
+    trafoContent<Number,Setting> *SupportFunctionT<Number,Converter,Setting>::linearTrafoParameters() const {
         return content->linearTrafoParameters();
     }
 
-    template<typename Number, typename Converter>
-    scaleContent<Number> *SupportFunctionT<Number,Converter>::scaleParameters() const {
+    template<typename Number, typename Converter, typename Setting>
+    scaleContent<Number,Setting> *SupportFunctionT<Number,Converter,Setting>::scaleParameters() const {
         return content->scaleParameters();
     }
 
-    template<typename Number, typename Converter>
-    unionContent<Number> *SupportFunctionT<Number,Converter>::unionParameters() const {
+    template<typename Number, typename Converter, typename Setting>
+    unionContent<Number,Setting> *SupportFunctionT<Number,Converter,Setting>::unionParameters() const {
         return content->unionParameters();
     }
 
-    template<typename Number, typename Converter>
-    intersectionContent<Number> *SupportFunctionT<Number,Converter>::intersectionParameters() const {
+    template<typename Number, typename Converter, typename Setting>
+    intersectionContent<Number,Setting> *SupportFunctionT<Number,Converter,Setting>::intersectionParameters() const {
         return content->intersectionParameters();
     }
 
-    template<typename Number, typename Converter>
-    PolytopeSupportFunction<Number,PolytopeSupportFunctionSetting> *SupportFunctionT<Number,Converter>::polytope() const {
+    template<typename Number, typename Converter, typename Setting>
+    PolytopeSupportFunction<Number,Setting> *SupportFunctionT<Number,Converter,Setting>::polytope() const {
         return content->polytope();
     }
 
-    template<typename Number, typename Converter>
-    BallSupportFunction<Number> *SupportFunctionT<Number,Converter>::ball() const {
+    template<typename Number, typename Converter, typename Setting>
+    BallSupportFunction<Number> *SupportFunctionT<Number,Converter,Setting>::ball() const {
         return content->ball();
     }
 
-    template<typename Number, typename Converter>
-    EllipsoidSupportFunction<Number> *SupportFunctionT<Number,Converter>::ellipsoid() const {
+    template<typename Number, typename Converter, typename Setting>
+    EllipsoidSupportFunction<Number> *SupportFunctionT<Number,Converter,Setting>::ellipsoid() const {
         return content->ellipsoid();
     }
 
-	template<typename Number, typename Converter>
-    matrix_t<Number> SupportFunctionT<Number,Converter>::matrix() const {
+	template<typename Number, typename Converter, typename Setting>
+    matrix_t<Number> SupportFunctionT<Number,Converter,Setting>::matrix() const {
     	if(!mTemplateSet) {
     		evaluateTemplate();
     	}
     	return mMatrix;
     }
 
-	template<typename Number, typename Converter>
-	vector_t<Number> SupportFunctionT<Number,Converter>::vector() const {
+	template<typename Number, typename Converter, typename Setting>
+	vector_t<Number> SupportFunctionT<Number,Converter,Setting>::vector() const {
 		if(!mTemplateSet) {
     		evaluateTemplate();
     	}
     	return mVector;
 	}
 
-    template<typename Number, typename Converter>
-    void SupportFunctionT<Number,Converter>::removeRedundancy() {
+    template<typename Number, typename Converter, typename Setting>
+    void SupportFunctionT<Number,Converter,Setting>::removeRedundancy() {
         // Support functions are already non-redundant (Polytope support functions are made non-redundant upon construction).
     }
 
-    template<typename Number, typename Converter>
-    std::vector<Point<Number>> SupportFunctionT<Number,Converter>::vertices(const matrix_t<Number>& additionalDirections) const {
+    template<typename Number, typename Converter, typename Setting>
+    std::vector<Point<Number>> SupportFunctionT<Number,Converter,Setting>::vertices(const matrix_t<Number>& additionalDirections) const {
 		std::vector<vector_t<Number>> additionalDirectionVector;
 		for(unsigned rowIndex = 0; rowIndex < additionalDirections.rows(); ++rowIndex){
 			additionalDirectionVector.push_back(vector_t<Number>(additionalDirections.row(rowIndex)));
@@ -308,14 +308,14 @@ namespace hypro{
 		return tmp.vertices();
     }
 
-    template<typename Number, typename Converter>
-    Number SupportFunctionT<Number,Converter>::supremum() const {
+    template<typename Number, typename Converter, typename Setting>
+    Number SupportFunctionT<Number,Converter,Setting>::supremum() const {
 		Point<Number> supPoint = content->supremumPoint();
         return Point<Number>::inftyNorm(supPoint);
     }
 
-	template<typename Number, typename Converter>
-	SupportFunctionT<Number,Converter> SupportFunctionT<Number,Converter>::project(const std::vector<std::size_t>& dimensions) const {
+	template<typename Number, typename Converter, typename Setting>
+	SupportFunctionT<Number,Converter,Setting> SupportFunctionT<Number,Converter,Setting>::project(const std::vector<std::size_t>& dimensions) const {
 		// check for full projection
 		bool fullProjection = true;
 		if(dimensions.size() == this->dimension()) {
@@ -331,67 +331,67 @@ namespace hypro{
 
 		if(!fullProjection){
 			DEBUG("hypro.represetations.supportFunction", "No full projection, create.");
-			SupportFunctionT<Number,Converter> res = SupportFunctionT<Number,Converter>(content->project(dimensions));
+			SupportFunctionT<Number,Converter,Setting> res = SupportFunctionT<Number,Converter,Setting>(content->project(dimensions));
 			return res;
 		}
 		DEBUG("hypro.represetations.supportFunction", "Full projection, copy.");
 		return *this;
 	}
 
-    template<typename Number, typename Converter>
-    SupportFunctionT<Number,Converter> SupportFunctionT<Number,Converter>::linearTransformation( const matrix_t<Number>& A ) const {
-        SupportFunctionT<Number,Converter> res = SupportFunctionT<Number,Converter>(content->affineTransformation(A, vector_t<Number>::Zero(A.rows())));
+    template<typename Number, typename Converter, typename Setting>
+    SupportFunctionT<Number,Converter,Setting> SupportFunctionT<Number,Converter,Setting>::linearTransformation( const matrix_t<Number>& A ) const {
+        SupportFunctionT<Number,Converter,Setting> res = SupportFunctionT<Number,Converter,Setting>(content->affineTransformation(A, vector_t<Number>::Zero(A.rows())));
         return res;
     }
 
-    template<typename Number, typename Converter>
-    SupportFunctionT<Number,Converter> SupportFunctionT<Number,Converter>::affineTransformation( const matrix_t<Number>& A, const vector_t<Number>& b ) const {
-        SupportFunctionT<Number,Converter> res = SupportFunctionT<Number,Converter>(content->affineTransformation(A, b));
+    template<typename Number, typename Converter, typename Setting>
+    SupportFunctionT<Number,Converter,Setting> SupportFunctionT<Number,Converter,Setting>::affineTransformation( const matrix_t<Number>& A, const vector_t<Number>& b ) const {
+        SupportFunctionT<Number,Converter,Setting> res = SupportFunctionT<Number,Converter,Setting>(content->affineTransformation(A, b));
         return res;
     }
 
-    template<typename Number, typename Converter>
-    SupportFunctionT<Number,Converter>  SupportFunctionT<Number,Converter>::minkowskiSum( const SupportFunctionT<Number,Converter> &_rhs ) const {
-        SupportFunctionT<Number,Converter> res = SupportFunctionT<Number,Converter>(content->minkowskiSum(_rhs.content));
+    template<typename Number, typename Converter, typename Setting>
+    SupportFunctionT<Number,Converter,Setting>  SupportFunctionT<Number,Converter,Setting>::minkowskiSum( const SupportFunctionT<Number,Converter,Setting> &_rhs ) const {
+        SupportFunctionT<Number,Converter,Setting> res = SupportFunctionT<Number,Converter,Setting>(content->minkowskiSum(_rhs.content));
         return res;
     }
 
-    template<typename Number, typename Converter>
-    SupportFunctionT<Number,Converter> SupportFunctionT<Number,Converter>::intersect(const SupportFunctionT<Number,Converter> &_rhs) const {
-        SupportFunctionT<Number,Converter> res = SupportFunctionT<Number,Converter>(content->intersect(_rhs.content));
+    template<typename Number, typename Converter, typename Setting>
+    SupportFunctionT<Number,Converter,Setting> SupportFunctionT<Number,Converter,Setting>::intersect(const SupportFunctionT<Number,Converter,Setting> &_rhs) const {
+        SupportFunctionT<Number,Converter,Setting> res = SupportFunctionT<Number,Converter,Setting>(content->intersect(_rhs.content));
         return res;
     }
 
-    template<typename Number, typename Converter>
-    SupportFunctionT<Number,Converter> SupportFunctionT<Number,Converter>::intersectHalfspace( const Halfspace<Number>& hs ) const{
+    template<typename Number, typename Converter, typename Setting>
+    SupportFunctionT<Number,Converter,Setting> SupportFunctionT<Number,Converter,Setting>::intersectHalfspace( const Halfspace<Number>& hs ) const{
     	matrix_t<Number> mat = matrix_t<Number>(1,hs.normal().rows());
     	for(unsigned i = 0; i < hs.normal().rows(); ++i){
     		mat(0,i) = hs.normal()(i);
     	}
     	vector_t<Number> vec = vector_t<Number>(1);
     	vec(0) = hs.offset();
-        SupportFunctionT<Number,Converter> res = SupportFunctionT<Number,Converter>(content->intersect(SupportFunctionT<Number,Converter>(mat,vec).content));
+        SupportFunctionT<Number,Converter,Setting> res = SupportFunctionT<Number,Converter,Setting>(content->intersect(SupportFunctionT<Number,Converter,Setting>(mat,vec).content));
         return res;
     }
 
-    template<typename Number, typename Converter>
-    SupportFunctionT<Number,Converter> SupportFunctionT<Number,Converter>::intersectHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const{
-        SupportFunctionT<Number,Converter> res = SupportFunctionT<Number,Converter>(content->intersect(SupportFunctionT<Number,Converter>(_mat,_vec).content));
+    template<typename Number, typename Converter, typename Setting>
+    SupportFunctionT<Number,Converter,Setting> SupportFunctionT<Number,Converter,Setting>::intersectHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const{
+        SupportFunctionT<Number,Converter,Setting> res = SupportFunctionT<Number,Converter,Setting>(content->intersect(SupportFunctionT<Number,Converter,Setting>(_mat,_vec).content));
         return res;
     }
 
-    template<typename Number, typename Converter>
-    bool SupportFunctionT<Number,Converter>::contains( const Point<Number> &_point ) const {
+    template<typename Number, typename Converter, typename Setting>
+    bool SupportFunctionT<Number,Converter,Setting>::contains( const Point<Number> &_point ) const {
         return content->contains(_point);
     }
 
-    template<typename Number, typename Converter>
-    bool SupportFunctionT<Number,Converter>::contains( const vector_t<Number> &_point ) const {
+    template<typename Number, typename Converter, typename Setting>
+    bool SupportFunctionT<Number,Converter,Setting>::contains( const vector_t<Number> &_point ) const {
         return content->contains(_point);
     }
 
-    template<typename Number, typename Converter>
-    bool SupportFunctionT<Number,Converter>::contains( const SupportFunctionT<Number, Converter>& rhs, std::size_t directions ) const {
+    template<typename Number, typename Converter, typename Setting>
+    bool SupportFunctionT<Number,Converter,Setting>::contains( const SupportFunctionT<Number,Converter,Setting>& rhs, std::size_t directions ) const {
     	std::vector<vector_t<Number>> templateDirections = computeTemplate<Number>(this->dimension(), directions);
     	for(const auto& direction : templateDirections) {
     		if(this->evaluate(direction).supportValue < rhs.evaluate(direction).supportValue){
@@ -401,8 +401,8 @@ namespace hypro{
     	return true;
     }
 
-    template<typename Number, typename Converter>
-    bool SupportFunctionT<Number,Converter>::contains( const SupportFunctionT<Number, Converter>& rhs ) const {
+    template<typename Number, typename Converter, typename Setting>
+    bool SupportFunctionT<Number,Converter,Setting>::contains( const SupportFunctionT<Number,Converter,Setting>& rhs ) const {
     	std::vector<vector_t<Number>> templateDirections = computeTemplate<Number>(this->dimension(), 8);
     	for(const auto& direction : templateDirections) {
     		if(this->evaluate(direction).supportValue < rhs.evaluate(direction).supportValue){
@@ -412,27 +412,27 @@ namespace hypro{
     	return true;
     }
 
-    template<typename Number, typename Converter>
-    SupportFunctionT<Number,Converter>  SupportFunctionT<Number,Converter>::unite( const SupportFunctionT<Number,Converter> &_rhs ) const {
-        return SupportFunctionT<Number,Converter>(content->unite(_rhs.content));
+    template<typename Number, typename Converter, typename Setting>
+    SupportFunctionT<Number,Converter,Setting>  SupportFunctionT<Number,Converter,Setting>::unite( const SupportFunctionT<Number,Converter,Setting> &_rhs ) const {
+        return SupportFunctionT<Number,Converter,Setting>(content->unite(_rhs.content));
     }
 
-	template<typename Number, typename Converter>
-    SupportFunctionT<Number,Converter> unite( const std::vector<SupportFunctionT<Number,Converter>>& _rhs ) {
-    	std::vector<SupportFunctionContent<Number>> converted;
+	template<typename Number, typename Converter, typename Setting>
+    SupportFunctionT<Number,Converter,Setting> unite( const std::vector<SupportFunctionT<Number,Converter,Setting>>& _rhs ) {
+    	std::vector<SupportFunctionContent<Number,Setting>> converted;
     	for(const auto& set : _rhs) {
     		converted.push_back(set->content);
     	}
-    	return SupportFunctionT<Number,Converter>(SupportFunctionContent<Number>::unite(converted));
+    	return SupportFunctionT<Number,Converter,Setting>(SupportFunctionContent<Number,Setting>::unite(converted));
     }
 
-    template<typename Number, typename Converter>
-    SupportFunctionT<Number,Converter> SupportFunctionT<Number,Converter>::scale( const Number &_factor ) const {
-        return SupportFunctionT<Number,Converter>(content->scale( _factor));
+    template<typename Number, typename Converter, typename Setting>
+    SupportFunctionT<Number,Converter,Setting> SupportFunctionT<Number,Converter,Setting>::scale( const Number &_factor ) const {
+        return SupportFunctionT<Number,Converter,Setting>(content->scale( _factor));
     }
 
-    template<typename Number, typename Converter>
-    std::pair<CONTAINMENT, SupportFunctionT<Number,Converter>> SupportFunctionT<Number,Converter>::satisfiesHalfspace( const Halfspace<Number>& rhs ) const {
+    template<typename Number, typename Converter, typename Setting>
+    std::pair<CONTAINMENT, SupportFunctionT<Number,Converter,Setting>> SupportFunctionT<Number,Converter,Setting>::satisfiesHalfspace( const Halfspace<Number>& rhs ) const {
         //std::cout << __func__ << ": " << _mat << std::endl << " <= " << _vec <<  std::endl;
 
 		bool limiting = false;
@@ -462,8 +462,8 @@ namespace hypro{
     	}
     }
 
-    template<typename Number, typename Converter>
-    std::pair<CONTAINMENT, SupportFunctionT<Number,Converter>> SupportFunctionT<Number,Converter>::satisfiesHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const {
+    template<typename Number, typename Converter, typename Setting>
+    std::pair<CONTAINMENT, SupportFunctionT<Number,Converter,Setting>> SupportFunctionT<Number,Converter,Setting>::satisfiesHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const {
         TRACE("hypro.representations.supportFunction","Matrix: " << _mat << std::endl << " <= " << _vec );
 		if(_mat.rows() == 0) {
 			return std::make_pair(CONTAINMENT::FULL, *this);
@@ -473,6 +473,7 @@ namespace hypro{
         for(unsigned rowI = 0; rowI < _mat.rows(); ++rowI) {
         	TRACE("hypro.representations.supportFunction", "Evaluate against plane " << rowI );
         	EvaluationResult<Number> planeEvalRes = content->evaluate(_mat.row(rowI), false);
+        	TRACE("hypro.representations.supportFunction", "Return from evaluate." );
         	if(planeEvalRes.errorCode == SOLUTION::INFEAS){
 				TRACE("hypro.representations.supportFunction", "Is infeasible (should not happen)." );
 				TRACE("hypro.representations.supportFunction", "Set is (Hpoly): " << std::endl << Converter::toHPolytope(*this) );
@@ -534,34 +535,39 @@ namespace hypro{
     	}
     }
 
-    template<typename Number, typename Converter>
-    bool SupportFunctionT<Number,Converter>::empty() const {
+    template<typename Number, typename Converter, typename Setting>
+    void SupportFunctionT<Number,Converter,Setting>::reduceRepresentation() {
+    	content->reduceRepresentation();
+    }
+
+    template<typename Number, typename Converter, typename Setting>
+    bool SupportFunctionT<Number,Converter,Setting>::empty() const {
         return content->empty();
     }
 
-    template<typename Number, typename Converter>
-    void SupportFunctionT<Number,Converter>::print() const {
+    template<typename Number, typename Converter, typename Setting>
+    void SupportFunctionT<Number,Converter,Setting>::print() const {
         return content->print();
     }
 
-    template<typename Number, typename Converter>
-    void SupportFunctionT<Number,Converter>::swap(SupportFunctionT<Number,Converter>& first, SupportFunctionT<Number,Converter>& second){
+    template<typename Number, typename Converter, typename Setting>
+    void SupportFunctionT<Number,Converter,Setting>::swap(SupportFunctionT<Number,Converter,Setting>& first, SupportFunctionT<Number,Converter,Setting>& second){
          first.content.swap(second.content);
      }
 
-    template<typename Number, typename Converter>
-    void SupportFunctionT<Number,Converter>::forceLinTransReduction(){
+    template<typename Number, typename Converter, typename Setting>
+    void SupportFunctionT<Number,Converter,Setting>::forceLinTransReduction(){
         content->forceLinTransReduction();
     }
 
-	template<typename Number, typename Converter>
-	std::vector<std::size_t> SupportFunctionT<Number,Converter>::collectProjections() const {
+	template<typename Number, typename Converter, typename Setting>
+	std::vector<std::size_t> SupportFunctionT<Number,Converter,Setting>::collectProjections() const {
 		assert(content->checkTreeValidity());
 		return content->collectProjections();
 	}
 
-	template<typename Number, typename Converter>
-	void SupportFunctionT<Number,Converter>::evaluateTemplate() const {
+	template<typename Number, typename Converter, typename Setting>
+	void SupportFunctionT<Number,Converter,Setting>::evaluateTemplate() const {
 		if(!mTemplateSet) {
 			std::vector<vector_t<Number>> templateDirections = computeTemplate<Number>(this->dimension(), defaultTemplateDirectionCount);
 

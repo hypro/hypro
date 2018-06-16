@@ -392,6 +392,8 @@ BoxT<double,Converter,Setting> BoxT<double,Converter,Setting>::project(const std
 
 template<typename Converter, class Setting>
 BoxT<double,Converter,Setting> BoxT<double,Converter,Setting>::linearTransformation( const matrix_t<double> &A ) const {
+	assert(A.rows() == A.cols());
+	assert(A.rows() == Eigen::Index(this->dimension()));
 	if(this->empty()) {
 		return *this;
 	}
@@ -400,8 +402,8 @@ BoxT<double,Converter,Setting> BoxT<double,Converter,Setting>::linearTransformat
 	// std::cout << __func__ << ": Matrix" <<  std::endl << A << std::endl << "Vector" << std::endl << b << std::endl;
 	//matrix_t<double> ax(A);
 	//matrix_t<double> bx(A);
-	Point<double> min;
-	Point<double> max;
+	Point<double> min(vector_t<double>::Zero(this->dimension()));
+	Point<double> max(vector_t<double>::Zero(this->dimension()));
 
 	for (std::size_t k = 0; k < std::size_t(A.rows()); ++k) {
 		for (std::size_t j = 0; j < std::size_t(A.cols()); ++j) {

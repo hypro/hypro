@@ -128,10 +128,21 @@ public:
  				return tmp;
  				break;
  			}
- 			case representation_name::ppl_polytope: {
- 				assert(false && "CONVERSION TO PPL POLYTOPE NOT YET IMPLEMENTED.");
+ 			case representation_name::difference_bounds: {
+ 				DifferenceBounds<Number> tmp = Converter<Number>::toDifferenceBounds(lhs);
+ 				return tmp;
  				break;
  			}
+ 			case representation_name::ppl_polytope: {
+ 				#ifdef HYPRO_USE_PPL
+ 					Polytope<Number> tmp = Converter<Number>::toPolytope(lhs);
+ 					return tmp;
+ 					break;
+ 				#else
+ 					assert(false && "CANNOT CONVERT TO TYPE PPL POLYTOPE. Maybe set HYPRO_USE_PPL to true?");
+ 				#endif
+ 			}
+ 			
  			case representation_name::constraint_set: {
  				ConstraintSet<Number> tmp = Converter<Number>::toConstraintSet(lhs);
  				return tmp;
@@ -146,6 +157,19 @@ public:
 };
 
 template<typename T, typename Number>
+class genericRedundancyVisitor
+    : public boost::static_visitor<T>
+{
+public:
+
+	template<typename A>
+    inline T operator()(A lhs) const {
+    	lhs.removeRedundancy();
+    	return lhs;
+    }
+};
+
+template<typename T, typename Number>
 class genericReductionVisitor
     : public boost::static_visitor<T>
 {
@@ -153,30 +177,8 @@ public:
 
 	template<typename A>
     inline T operator()(A lhs) const {
-    	//Use removeRedundancy if not supportfunction
-    	lhs.removeRedundancy();
+    	lhs.reduceRepresentation();
     	return lhs;
-    }
-
-    inline T operator()(const SupportFunction<Number>& lhs) const {
-    	/*
-    	Number temp = timeBound/timeStep;
-		unsigned long multPerEval = lhs.multiplicationsPerEvaluation();
-		unsigned long estimatedNumberOfEvaluations =  (transition->guard().mat.rows() + transition->target()->invariant().mat.rows()) * carl::toInt<carl::uint>(carl::ceil(temp));
-		unsigned long estimatedCostWithoutReduction = estimatedNumberOfEvaluations * multPerEval;
-		unsigned long hyperplanesForReduction = 2* lhs.dimension() * (lhs.dimension()-1)+ 2* lhs.dimension();
-		unsigned long estimatedCostWithReduction = hyperplanesForReduction* multPerEval+ estimatedNumberOfEvaluations * carl::pow(hyperplanesForReduction, 2);
-		if (estimatedCostWithReduction < estimatedCostWithoutReduction) {
-			*/
-    	TRACE("hypro.datastructures", "GenericReduction for SF.");
-		auto tmpHPoly = Converter<Number>::toBox(lhs);
-		//std::vector<unsigned> projDims;
-		//projDims.push_back(0);
-		//projDims.push_back(3);
-		//TRACE("hydra.datastructures","Reduction visitor created set " << tmpHPoly.project(projDims));
-		SupportFunction<Number> newSet(tmpHPoly.matrix(), tmpHPoly.vector());
-		return newSet;
-		//}
     }
 };
 

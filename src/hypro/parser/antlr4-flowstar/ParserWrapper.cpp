@@ -43,7 +43,7 @@ namespace hypro {
 				rewriter.replace(i, i, constants.at(it->first));
 			}
 		}
-		std::cout << "======== ALTERED VERSION =========\n" << rewriter.getText() << std::endl;
+		//std::cout << "======== ALTERED VERSION =========\n" << rewriter.getText() << std::endl;
 		return rewriter.getText();
 	}
 
@@ -55,40 +55,32 @@ namespace hypro {
 		openFile(filename,input);
 
 		//Create Error Listener
-		hypro::ErrorListener* errListener = new hypro::ErrorListener();
+		ErrorListener* errListener = new ErrorListener();
 
 		//Create a Lexer and feed it with the input
-		std::cout << "Before lexer\n";
 		HybridAutomatonLexer lexer(&input);
 		lexer.removeErrorListeners();
 		lexer.addErrorListener(errListener);
-		std::cout << "After lexer\n";
-
+		
 		//Create an empty TokenStream obj
 		CommonTokenStream tokens(&lexer);
-		std::cout << "After CTokenStream\n";
-
+	
 		//Fill the TokenStream (and output it for demonstration)
 		tokens.fill();
-		std::cout << "after filling\n";
-		std::cout << "TEXT IN TOKENSTREAM:\n" << tokens.getText() << std::endl;
-
+		
 		//Create a parser
 		HybridAutomatonParser parser(&tokens);
 		parser.removeErrorListeners();
 		parser.addErrorListener(errListener);
-		std::cout << "After parser creation\n";
 		tree::ParseTree* tree = parser.start();	
-		std::cout << "After parsing\n";
-
+				
 		//Create TokenStreamRewriter, needed for constants if defined
-		std::cout << "Size of constant map: " << parser.getConstants().size() << std::endl;
-		for(auto entry : parser.getConstants()){
-			std::cout << "Constant name: " << entry.first << " constant value " << entry.second << std::endl;
-		}
+		//std::cout << "Size of constant map: " << parser.getConstants().size() << std::endl;
+		//for(auto entry : parser.getConstants()){
+		//	std::cout << "Constant name: " << entry.first << " constant value " << entry.second << std::endl;
+		//}
 
 		if(parser.getConstants().size() > 0){
-			std::cout << "Replacing..." << std::endl;
 			TokenStreamRewriter rewriter(&tokens);
 			std::string modified = replaceConstantsWithValues(rewriter, parser.getConstants());
 			ANTLRInputStream inputMod(modified);
@@ -108,9 +100,9 @@ namespace hypro {
 			parserMod.addErrorListener(errListener);
 			tree::ParseTree* tree = parserMod.start();
 
-			hypro::HyproHAVisitor<mpq_class> visitor;
+			HyproHAVisitor<mpq_class> visitor;
 
-			hypro::HybridAutomaton<mpq_class, State_t<mpq_class,mpq_class>> h = (visitor.visit(tree)).antlrcpp::Any::as<hypro::HybridAutomaton<mpq_class, State_t<mpq_class,mpq_class>>>();
+			HybridAutomaton<mpq_class, State_t<mpq_class,mpq_class>> h = (visitor.visit(tree)).antlrcpp::Any::as<HybridAutomaton<mpq_class, State_t<mpq_class,mpq_class>>>();
 
 			delete errListener;
 
@@ -118,11 +110,9 @@ namespace hypro {
 
 		} else {
 
-			std::cout << "Do not replace!" << std::endl;
+			HyproHAVisitor<mpq_class> visitor;
 
-			hypro::HyproHAVisitor<mpq_class> visitor;
-
-			hypro::HybridAutomaton<mpq_class, State_t<mpq_class,mpq_class>> h = (visitor.visit(tree)).antlrcpp::Any::as<hypro::HybridAutomaton<mpq_class, State_t<mpq_class,mpq_class>>>();
+			HybridAutomaton<mpq_class, State_t<mpq_class,mpq_class>> h = (visitor.visit(tree)).antlrcpp::Any::as<HybridAutomaton<mpq_class, State_t<mpq_class,mpq_class>>>();
 
 			delete errListener;
 
@@ -157,14 +147,13 @@ namespace hypro {
 		parser.addErrorListener(errListener);
 		tree::ParseTree* tree = parser.start();
 
-		std::cout << "Size of constant map: " << parser.getConstants().size() << std::endl;
-		for(auto entry : parser.getConstants()){
-			std::cout << "Constant name: " << entry.first << " constant value " << entry.second << std::endl;
-		}
+		//std::cout << "Size of constant map: " << parser.getConstants().size() << std::endl;
+		//for(auto entry : parser.getConstants()){
+		//	std::cout << "Constant name: " << entry.first << " constant value " << entry.second << std::endl;
+		//}
 
 		//Create TokenStreamRewriter, needed for constants if defined
 		if(parser.getConstants().size() > 0){
-			std::cout << "Replacing..." << std::endl;
 			TokenStreamRewriter rewriter(&tokens);
 			std::string modified = replaceConstantsWithValues(rewriter, parser.getConstants());
 			ANTLRInputStream inputMod(modified);
@@ -175,7 +164,7 @@ namespace hypro {
 			//Create an empty TokenStream obj
 			CommonTokenStream tokensMod(&lexerMod);
 
-			//Fill the TokenStream (and output it for demonstration)
+			//Fill the TokenStream
 			tokensMod.fill();
 
 			//Create a parser
@@ -184,9 +173,9 @@ namespace hypro {
 			parserMod.addErrorListener(errListener);
 			tree::ParseTree* tree = parserMod.start();
 
-			hypro::HyproHAVisitor<double> visitor;
+			HyproHAVisitor<double> visitor;
 
-			hypro::HybridAutomaton<double, State_t<double,double>> h = (visitor.visit(tree)).antlrcpp::Any::as<hypro::HybridAutomaton<double, State_t<double,double>>>();
+			HybridAutomaton<double, State_t<double,double>> h = (visitor.visit(tree)).antlrcpp::Any::as<HybridAutomaton<double, State_t<double,double>>>();
 
 			delete errListener;
 
@@ -194,11 +183,9 @@ namespace hypro {
 
 		} else {
 
-			std::cout << "Do not replace!" << std::endl;
+			HyproHAVisitor<double> visitor;
 
-			hypro::HyproHAVisitor<double> visitor;
-
-			hypro::HybridAutomaton<double, State_t<double,double>> h = (visitor.visit(tree)).antlrcpp::Any::as<hypro::HybridAutomaton<double, State_t<double,double>>>();
+			HybridAutomaton<double, State_t<double,double>> h = (visitor.visit(tree)).antlrcpp::Any::as<HybridAutomaton<double, State_t<double,double>>>();
 
 			delete errListener;
 

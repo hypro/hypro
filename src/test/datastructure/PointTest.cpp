@@ -59,13 +59,7 @@ TYPED_TEST(PointTest, Constructor)
     p = Point<TypeParam>(5);
     EXPECT_EQ(p.dimension(), (unsigned) 1);
 
-    p[1] = 0;
-    p[2] = 5;
-    p[3] = 2;
-    p[4] = 2;
-    p[5] = 2;
-    p[6] = 2;
-    p[7] = 2;
+    p = Point<TypeParam>({5,0,5,2,2,2,2,2});
 
     EXPECT_EQ(p.dimension(), (unsigned) 8);
     EXPECT_EQ(p[2], TypeParam(5));
@@ -148,12 +142,12 @@ TYPED_TEST(PointTest, CoordinateDimensionTest)
     EXPECT_EQ(this->p1[this->x], TypeParam(4));
     EXPECT_EQ(this->p1[this->y], TypeParam(7));
 
-    this->p1[4] = 14;
+    this->p1.setCoordinate(4,14);
     EXPECT_EQ(this->p1[this->x], TypeParam(4));
     EXPECT_EQ(this->p1[this->y], TypeParam(7));
     EXPECT_EQ(this->p1[4], TypeParam(14));
 
-	this->p1[VariablePool::getInstance().carlVarByIndex(5)] = 3;
+	this->p1.setCoordinate(VariablePool::getInstance().carlVarByIndex(5), 3);
     EXPECT_EQ(this->p1[this->x], TypeParam(4));
     EXPECT_EQ(this->p1[this->y], TypeParam(7));
     EXPECT_EQ(this->p1[4], TypeParam(14));

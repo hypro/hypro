@@ -30,7 +30,7 @@ template <typename Number>
 void Plotter<Number>::plot2d() const {
 	mOutfile.open( mFilename + "_pdf.plt" );
 
-	if ( (!mObjects.empty() && !mObjects.begin()->second.empty()) || !mPoints.empty() ) {
+	if ( (!mObjects.empty() && !mObjects.begin()->second.empty()) || !mPoints.empty()){// || mSettings.dimensions() != std::pair<unsigned,unsigned>()) {
 
 		// preamble
 		mOutfile << "# settings\n";
@@ -278,8 +278,15 @@ void Plotter<Number>::writeGnuplot() const {
 			if(rangeExt != 0){
 				ranges[d] = carl::Interval<double>(carl::toDouble(min( d )) - rangeExt, carl::toDouble(max( d )) + rangeExt );
 			} else{
-				rangeExt = min(d) == 0 ? 0.1 : carl::toDouble(carl::toDouble(min( d ))* 0.1);
-				ranges[d] = carl::Interval<double>(carl::toDouble(min( d )) - rangeExt, carl::toDouble(max( d )) + rangeExt );
+				rangeExt = carl::toDouble(carl::toDouble(min( d ))* 0.1);
+                double leftBound = carl::toDouble(min( d )) - rangeExt;
+                double rightBound = carl::toDouble(max( d )) + rangeExt;
+                // if both bounds are zero, add a slight margin left and right so range is not empty
+                if(leftBound == 0 && rightBound == 0){
+                    leftBound -= 0.1;
+                    rightBound += 0.1;
+                }
+                ranges[d] = carl::Interval<double>(leftBound, rightBound);
 			}
 		}
 
@@ -383,6 +390,7 @@ void Plotter<Number>::writeGnuplot() const {
 					//std::cout << "Plot plane " << plane << std::endl;
 					assert(plane.dimension() == 2);
 					vector_t<Number> normal = plane.normal();
+
 					if(normal(1) == Number(0)){
 						mOutfile << "set arrow from " << carl::toDouble(Number(plane.offset()/normal(0))) <<",graph(0,0) to " << carl::toDouble(Number(plane.offset()/normal(0))) << ",graph(1,1) nohead\n";
 					} else {
@@ -390,7 +398,6 @@ void Plotter<Number>::writeGnuplot() const {
 						double off = carl::toDouble(Number(plane.offset()/normal(1)));
 						if(off >= 0)
 							mOutfile << "+";
-
 						mOutfile << off << "\n";
 						++index;
 					}

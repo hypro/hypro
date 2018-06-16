@@ -172,7 +172,8 @@ namespace hypro {
 
 			// locations
 			res << "\tmodes\n\t{\n";
-			for(Location<Number>* locPtr : in.getLocations()) {
+			//for(std::unique_ptr<Location<Number>>& locPtr : in.getLocations()) {
+			for(auto& locPtr : in.getLocations()) {
 				res << toFlowstarFormat(locPtr, vars, "\n\t\t");
 			}
 			res << "\n\t}\n";

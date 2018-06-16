@@ -20,15 +20,20 @@ namespace hypro {
 
 		if(ctx->transition().size() > 0){
 			std::set<Transition<Number>*> trSet;
+			//std::set<std::unique_ptr<Transition<Number>>> trSet;
 			for(auto tr : ctx->transition()){
 				//trSet.insert(visit(tr).antlrcpp::Any::as<Transition<Number>*>());
-				Transition<Number>* t = visit(tr).template as<Transition<Number>*>();
+				//std::unique_ptr<Transition<Number>> t(std::move(visit(tr).template as<std::unique_ptr<Transition<Number>>>()));
+				Transition<Number>* t = visit(tr);//.antlrcpp::Any::as<Transition<Number>*>();
 				trSet.insert(t);
+				//trSet.insert(t);
 				(t->getSource())->addTransition(t);
 			}
 			return trSet;
+			//return std::move(trSet);
 		} else {
 			return std::set<Transition<Number>*>();
+			//return std::move(std::set<std::unique_ptr<Transition<Number>>>());
 		}
 
 	}
@@ -51,7 +56,7 @@ namespace hypro {
 		} else {
 			t->setUrgent(false);
 		}
-		
+
 		//3.Collect Guards
 		if(ctx->guard().size() > 1){
 			std::cout << "WARNING: Please refrain from entering multiple guard constraints via several guard spaces. Typing one guard space of the form 'guard { constraint1 constraint2 ... }' is sufficient->" << std::endl;
@@ -60,7 +65,7 @@ namespace hypro {
 			Condition<Number> inv = visit(ctx->guard()[0]);
 			t->setGuard(inv);
 		}
-		
+
 		//4.Collect Resets
 		if(ctx->resetfct().size() > 1){
 			std::cout << "WARNING: Please refrain from entering multiple reset allocations via several reset spaces. Typing one reset space of the form 'reset { allocation1 allocation2 ... }' is sufficient->" << std::endl;
@@ -69,7 +74,7 @@ namespace hypro {
 			Reset<Number> reset = visit(ctx->resetfct()[0]);
 			t->setReset(reset);
 		}
-		
+
 		//5.Collect Aggregation
 		if(ctx->aggregation().size() > 1){
 			std::cerr << "ERROR: Multiple aggregation types specified for one transition." << std::endl;
@@ -79,7 +84,7 @@ namespace hypro {
 			Aggregation agg = visit(ctx->aggregation()[0]);
 			t->setAggregation(agg);
 		}
-		
+
 		return t;
 	}
 
@@ -114,19 +119,18 @@ namespace hypro {
 	template<typename Number>
 	antlrcpp::Any HyproTransitionVisitor<Number>::visitGuard(HybridAutomatonParser::GuardContext *ctx){
 
-		//1.Call HyproFormulaVisitor and get pair of matrix and vector
-		HyproFormulaVisitor<Number> visitor(vars);
-		std::pair<matrix_t<Number>,vector_t<Number>> result = visitor.visit(ctx->constrset());
+		//1.Call HyproFormulaVisitor and get pair of matrix and vector if constrset exists
+		if(ctx->constrset() != NULL){
+			HyproFormulaVisitor<Number> visitor(vars);
+			std::pair<matrix_t<Number>,vector_t<Number>> result = visitor.visit(ctx->constrset());
+			Condition<Number> inv;
+			inv.setMatrix(result.first);
+			inv.setVector(result.second);
+			return inv;
+		}
+		//Return empty condition if no guard given
+		return Condition<Number>();
 
-		//2.Build condition out of them
-		Condition<Number> inv;
-		inv.setMatrix(result.first);
-		inv.setVector(result.second);
-
-		//std::cout << "---- Guard Matrix is:\n" << inv.getMatrix() << "and vector is:\n" << inv.getVector() << std::endl;
-
-		//3.Return condition
-		return inv;
 	}
 
 	template<typename Number>
@@ -163,7 +167,6 @@ namespace hypro {
 
 	template<typename Number>
 	antlrcpp::Any HyproTransitionVisitor<Number>::visitResetfct(HybridAutomatonParser::ResetfctContext *ctx){
-
 		//0.Check if there are not too much resets
 		if(ctx->allocation().size() > vars.size()){
 			std::cerr << "ERROR: Too many resets for this amount of variables. Only one reset per transition per variable allowed." << std::endl;
@@ -183,9 +186,12 @@ namespace hypro {
 			resetMatrix.row(valuesNPos.second) = valuesNPos.first.head(vars.size());
 			resetVector(valuesNPos.second) = valuesNPos.first(valuesNPos.first.rows()-1);
 		}
+		/**
+		* TODO WHY THO
 		if(resetMatrix == matrix_t<Number>::Zero(vars.size(), vars.size())){
 			resetMatrix = matrix_t<Number>::Identity(vars.size(), vars.size());
 		}
+		*/
 		//std::cout << "---- resetMatrix:\n" << resetMatrix << "\n and resetVector:\n" << resetVector << std::endl;
 
 		//2.return a Reset - 0 in the setter arguments is for the position within the vector of ConstraintSets
@@ -197,15 +203,11 @@ namespace hypro {
 
 	template<typename Number>
 	antlrcpp::Any HyproTransitionVisitor<Number>::visitAggregation(HybridAutomatonParser::AggregationContext *ctx){
-
 		if(ctx->PARALLELOTOPE() != NULL){
-			//std::cout << "---- Aggregation is parallelotope" << std::endl;
 			return Aggregation::parallelotopeAgg;
-		} else if(ctx->BOX() != NULL){
-			//std::cout << "---- Aggregation is box" << std::endl;
+		} else if(ctx->BOX() != NULL || ctx->INTERVALAGG() != NULL){
 			return Aggregation::boxAgg;
 		} else {
-			//std::cout << "---- Aggregation is none" << std::endl;
 			return Aggregation::none;
 		}
 	}
