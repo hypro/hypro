@@ -11,7 +11,7 @@ function keep_waiting() {
 }
 
 if [[ ${TASK} == "sonarcloud" ]]; then
-	cmake ../ -DHYPRO_COVERAGE=ON || return 1
+	cmake ../ -DHYPRO_COVERAGE=ON -DCMAKE_CXX_COMPILER=$COMPILER || return 1
 	WRAPPER="build-wrapper-linux-x86-64 --out-dir ../bw-out"
 	$WRAPPER make hypro -j4 || return 1
 	#make coverage-collect
@@ -25,18 +25,18 @@ if [[ ${TASK} == "sonarcloud" ]]; then
 else
 	git clone https://github.com/smtrat/carl.git
 	pushd carl
-	mkdir build
-	pushd build && cmake -DCMAKE_CXX_COMPILER=$COMPILER -DCMAKE_BUILD_TYPE=Release ..
-	keep_waiting &
-	make resources || return 1
-	kill $!
-	make lib_carl VERBOSE=1 || return 1
+		mkdir build
+		pushd build && cmake -DCMAKE_CXX_COMPILER=$COMPILER -DCMAKE_BUILD_TYPE=Release ..
+			keep_waiting &
+			make resources || return 1
+			kill $!
+			make lib_carl VERBOSE=1 || return 1
+		popd
 	popd
-	popd
-	cmake -j4 $FLAGS -DCMAKE_CXX_COMPILER=$COMPILER ..
+	cmake -DCMAKE_CXX_COMPILER=$COMPILER ..
 	make resources -j2 || return 1
 	keep_waiting &
-	make -j4 VERBOSE=1 || return 1
+	make -j2 VERBOSE=1 || return 1
 	kill $!
 	make test
 
