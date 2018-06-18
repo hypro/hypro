@@ -1,6 +1,5 @@
 var NAVTREEINDEX1778 =
 {
-"classCIFLocationBaseVisitor.html#a095b3458cadbd85d9de2895e2c62d4b7":[9,0,8,50],
 "classCIFLocationBaseVisitor.html#a0c0edf0bac6a533479d401d163eae9b1":[9,0,8,54],
 "classCIFLocationBaseVisitor.html#a0c9181b69514dd63092a61364f7dbdc3":[9,0,8,48],
 "classCIFLocationBaseVisitor.html#a11fbc9e6c0e16d6ba0a458f6bce2a6d6":[9,0,8,38],
@@ -249,5 +248,6 @@ var NAVTREEINDEX1778 =
 "classCIFLocationParser.html#a3e1d4de3b4592faeaa0d6202de862a04adccf075e48ecd3796e1e5e78dfd03b4a":[9,0,10,207],
 "classCIFLocationParser.html#a3e1d4de3b4592faeaa0d6202de862a04aeaf375f12eb1de1034b6ee91937ae007":[9,0,10,192],
 "classCIFLocationParser.html#a3e1d4de3b4592faeaa0d6202de862a04aeedf399177bf859c8356bb7492b1fa72":[9,0,10,215],
-"classCIFLocationParser.html#a3e1d4de3b4592faeaa0d6202de862a04af05971233c942c152320789d2bfaea07":[9,0,10,194]
+"classCIFLocationParser.html#a3e1d4de3b4592faeaa0d6202de862a04af05971233c942c152320789d2bfaea07":[9,0,10,194],
+"classCIFLocationParser.html#a3e1d4de3b4592faeaa0d6202de862a04af29fc8bb48085f21a39f94ba7dda5ae6":[9,0,10,190]
 };

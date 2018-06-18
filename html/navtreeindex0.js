@@ -130,7 +130,6 @@ var NAVTREEINDEX0 =
 "NeighborhoodContainer_8h_source.html":[10,0,1,0,3,5,3],
 "Neighborhood_8h.html":[10,0,1,0,3,5,0,0],
 "Neighborhood_8h_source.html":[10,0,1,0,3,5,0,0],
-"NewDictionary_8h_source.html":[10,0,1,0,0,0,3],
 "NonLinearOmega0Supportfunction_8h_source.html":[10,0,1,0,3,8,4],
 "OperationCounter_8h_source.html":[10,0,1,0,4,4,1],
 "Optimizer_8cpp_source.html":[10,0,1,0,4,1,5],
@@ -249,5 +248,6 @@ var NAVTREEINDEX0 =
 "Reach_8h.html#a2405ccdddadb123ffc7389254943624e":[10,0,1,0,0,2,1,2673],
 "Reach_8h.html#a2449aa51d72493ec2f52d2b5343fada2":[10,0,1,0,0,2,1,2722],
 "Reach_8h.html#a249021c236db6db4c2c78340316f8572":[10,0,1,0,0,2,1,2580],
-"Reach_8h.html#a24c48c7fda099099fc489ab970787f23":[10,0,1,0,0,2,1,2524]
+"Reach_8h.html#a24c48c7fda099099fc489ab970787f23":[10,0,1,0,0,2,1,2524],
+"Reach_8h.html#a2585a6512d6b35bf9291f0644c44c3cd":[10,0,1,0,0,2,1,2918]
 };

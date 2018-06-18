@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['get',['get',['../classhypro_1_1Dictionary.html#a18ee536c203d3ec1efadc70f99637e34',1,'hypro::Dictionary']]],
   ['getglobalbadstates',['getGlobalBadStates',['../classhypro_1_1HybridAutomaton.html#ac044fb6369c028d4e1fdd08379e72246',1,'hypro::HybridAutomaton']]],
   ['gethash',['getHash',['../classhypro_1_1reachability_1_1hypro_1_1VertexContainer.html#aabf9e60bc56eb10fbbcf7e669031b775',1,'hypro::reachability::hypro::VertexContainer::getHash()'],['../classhypro_1_1VertexContainer.html#a144e240d9723fb1352dd222f1e15c722',1,'hypro::VertexContainer::getHash()']]],
   ['getinitialstates',['getInitialStates',['../classhypro_1_1HybridAutomaton.html#af2d7d422ec0f3f965beba5bc672c342f',1,'hypro::HybridAutomaton']]],

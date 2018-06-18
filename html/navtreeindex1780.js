@@ -1,6 +1,5 @@
 var NAVTREEINDEX1780 =
 {
-"classCIFLocationParser_1_1ExprFactContext.html#a5862c3c98d10e17f42b3001981d91554":[9,0,10,19,0],
 "classCIFLocationParser_1_1ExprFactContext.html#a6e915c68fc2371265dca93478e784d68":[9,0,10,19,3],
 "classCIFLocationParser_1_1ExprFactContext.html#a9b2c8464bfda456f7c049760f1d8889b":[9,0,10,19,2],
 "classCIFLocationParser_1_1ExprFactContext.html#a9e0db3e020cfcd97336fdec4696c913e":[9,0,10,19,8],
@@ -249,5 +248,6 @@ var NAVTREEINDEX1780 =
 "classCIFLocationParser_1_1OptExpressionContext.html":[9,0,10,63],
 "classCIFLocationParser_1_1OptExpressionContext.html#a153a4c889739526cbda7865e61d2221e":[9,0,10,63,2],
 "classCIFLocationParser_1_1OptExpressionContext.html#a6ba3db485180597c21812b419307a226":[9,0,10,63,3],
-"classCIFLocationParser_1_1OptExpressionContext.html#a7b68680bf910382dc16997a475b1ec3f":[9,0,10,63,1]
+"classCIFLocationParser_1_1OptExpressionContext.html#a7b68680bf910382dc16997a475b1ec3f":[9,0,10,63,1],
+"classCIFLocationParser_1_1OptExpressionContext.html#ac679f7bf97c70b6c959158779396181b":[9,0,10,63,0]
 };
