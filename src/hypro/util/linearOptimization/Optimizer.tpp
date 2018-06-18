@@ -282,12 +282,10 @@ namespace hypro {
 		mLastConsistencyAnswer = res.errorCode;
 		#else
 
-		// TODO: Avoid re-call here too!
-		glp_simplex( mGlpkContext[std::this_thread::get_id()].lp, NULL);
-		glp_exact( mGlpkContext[std::this_thread::get_id()].lp, NULL );
-		//return (glp_get_status(lp) != GLP_NOFEAS);
+		res = glpkGetInternalPoint<Number>(mGlpkContext[std::this_thread::get_id()].lp, mConstraintMatrix.cols(), false);
+		mConsistencyChecked = true;
+		mLastConsistencyAnswer = res.errorCode;
 
-		//TODO: Undone!
 		#endif
 		return res;
 	}
