@@ -1,5 +1,6 @@
 var NAVTREEINDEX1797 =
 {
+"classhypro_1_1ConstrainSet.html#ac967d7d904c2d93411d6cb4d15ab2494":[9,0,1,8,14],
 "classhypro_1_1ConstrainSet.html#ad5a7563c31bf4db2287facb9b13077ff":[9,0,1,8,4],
 "classhypro_1_1ConstrainSet.html#adc00e2515013dcd1d2ee91bfcd0887db":[9,0,1,8,8],
 "classhypro_1_1ConstrainSet.html#ae584eb993a46a1bc9af3ba7d3e3c3e6b":[9,0,1,8,0],
@@ -248,6 +249,5 @@ var NAVTREEINDEX1797 =
 "classhypro_1_1Facet.html#a498c15ac3bf905677bc2ce9924940c49":[9,0,1,17,4],
 "classhypro_1_1Facet.html#a50394a1cd6f0599c8d5503619498b76a":[9,0,1,17,25],
 "classhypro_1_1Facet.html#a6181e0299d9f8543ef9e27f0903ef709":[9,0,1,17,15],
-"classhypro_1_1Facet.html#a63e7e2cfbc4921b554efce8a08a5bf46":[9,0,1,17,35],
-"classhypro_1_1Facet.html#a7a12cdcdc12ea69455ec07f823bdf480":[9,0,1,17,16]
+"classhypro_1_1Facet.html#a63e7e2cfbc4921b554efce8a08a5bf46":[9,0,1,17,35]
 };

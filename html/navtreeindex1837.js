@@ -1,5 +1,6 @@
 var NAVTREEINDEX1837 =
 {
+"dir_2a022a7dd5883d249fd19381a9acb7ca.html":[10,0,1,0,3,0],
 "dir_2c8758a5fdbf28946c502b471e14bb83.html":[10,0,1,0,2],
 "dir_2ce0cb9797b50c8d842bc50008b46cdd.html":[10,0,1,0],
 "dir_3100e148cb0b6b745355fdee31bcb5c6.html":[10,0,1,0,4,1],
@@ -153,20 +154,20 @@ var NAVTREEINDEX1837 =
 "md__home_travis_build_hypro_hypro_doc_markdown_stateSets.html":[4],
 "md__home_travis_build_hypro_hypro_doc_markdown_utilityFunctions.html":[5],
 "modules.html":[7],
-"namespacehypro.html":[9,0,1],
 "namespacehypro.html":[8,0,0],
+"namespacehypro.html":[9,0,1],
 "namespacehypro_1_1hypro.html":[8,0,0,0],
 "namespacehypro_1_1hypro.html":[9,0,1,2],
 "namespacehypro_1_1reachability_1_1Eigen.html":[9,0,1,5,0],
 "namespacehypro_1_1reachability_1_1Eigen.html":[8,0,0,1,0],
-"namespacehypro_1_1reachability_1_1ZUtility.html":[9,0,1,5,3],
 "namespacehypro_1_1reachability_1_1ZUtility.html":[8,0,0,1,2],
+"namespacehypro_1_1reachability_1_1ZUtility.html":[9,0,1,5,3],
 "namespacehypro_1_1reachability_1_1hypro.html":[8,0,0,1,1],
 "namespacehypro_1_1reachability_1_1hypro.html":[9,0,1,5,1],
 "namespacehypro_1_1reachability_1_1hypro_1_1hypro.html":[9,0,1,5,1,1],
 "namespacehypro_1_1reachability_1_1hypro_1_1hypro.html":[8,0,0,1,1,0],
-"namespacemembers.html":[8,1,0,0],
 "namespacemembers.html":[8,1,0],
+"namespacemembers.html":[8,1,0,0],
 "namespacemembers_d.html":[8,1,0,1],
 "namespacemembers_e.html":[8,1,0,2],
 "namespacemembers_enum.html":[8,1,3,0],
@@ -186,8 +187,8 @@ var NAVTREEINDEX1837 =
 "namespacemembers_type.html":[8,1,2],
 "namespacemembers_v.html":[8,1,0,10],
 "namespacemembers_z.html":[8,1,0,11],
-"namespaceparser.html":[9,0,2],
 "namespaceparser.html":[8,0,1],
+"namespaceparser.html":[9,0,2],
 "namespaceplotting.html":[8,0,2],
 "namespaceplotting.html":[9,0,3],
 "namespacereachability.html":[8,0,3],
@@ -248,6 +249,5 @@ var NAVTREEINDEX1837 =
 "structEval__functions.html#ae2fe281bf841a4e9e3f467bc087b7ee0":[9,0,13,0],
 "structFlags.html":[9,0,18],
 "structFlags.html#a1b78fbc048625cad2017688b209856c3":[9,0,18,5],
-"structFlags.html#a47d59eb0bd2a0e7ca8c2e7ce70d929a1":[9,0,18,4],
-"structFlags.html#a86060954cf6340ad27d5c6f1edbe4c4f":[9,0,18,2]
+"structFlags.html#a47d59eb0bd2a0e7ca8c2e7ce70d929a1":[9,0,18,4]
 };
