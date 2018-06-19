@@ -243,7 +243,8 @@ class ConstraintSetT : public GeometricObject<Number, ConstraintSetT<Number,Conv
 	/**
 	 * @brief      Makes this constraintSet the empty constraintSet.
 	 */
-	void clear() { return *this; }
+	//void clear() { return *this; }
+	void clear() {}
 
 };
 /** @} */

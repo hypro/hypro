@@ -24,14 +24,14 @@ hybrid reachability {
 
  modes
  {
-  l
+  location_with_under_scores
   {
    poly ode 1
    {
     #v' = --9.81 + -+-v*42*-3 + [2,5]
     #x' = +++4*-+--v
-    x' = 3*v + [-1,4]
-    v' = gabunga + c*v
+    x' = 3*v + gabunga + c*v + [-1,4]
+    #v' = gabunga + c*v
    }
 
    inv
@@ -52,13 +52,13 @@ hybrid reachability {
 
  jumps
  {
-  l -> l
+  location_with_under_scores -> location_with_under_scores
   guard { x = 0 v <= 0 }
   #reset { v' := -0.75*v }
   reset { v' := gabunga*0.1 }
   parallelotope aggregation {}
 
-  l -> l
+  location_with_under_scores -> location_with_under_scores
   guard { false }
   reset { }
   box aggregation { }
@@ -66,13 +66,13 @@ hybrid reachability {
 
  init
  {
-  l
+  location_with_under_scores
   {
    x in [gabunga,10.2]
    #x in [10,10.2]
    v in [0,1]
   }
-  l
+  location_with_under_scores
   {
    x in [1,1.2]
    v in [0,1]
@@ -81,7 +81,7 @@ hybrid reachability {
 
  init
  {
-  l
+  location_with_under_scores
   {
    x in [3,5]
    v in [0,0]
@@ -92,14 +92,14 @@ hybrid reachability {
 
 unsafe set
 {
- l
-  {
-   x in [4,6]
-  }
- l
-  {
-   v in [-2.5,0]
-  }
+ location_with_under_scores
+ {
+  x in [4,6]
+ }
+ location_with_under_scores
+ {
+  v in [-2.5,0]
+ }
  x >= 15+gabunga
  v+2+c >= -v+23
  v-7+8*x >= 33-12*x

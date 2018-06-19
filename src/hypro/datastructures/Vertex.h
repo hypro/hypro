@@ -12,6 +12,7 @@
 
 #pragma once
 
+#include <boost/functional/hash.hpp>
 #include <list>
 
 #include "Point.h"
