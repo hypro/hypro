@@ -23,7 +23,7 @@ var classhypro_1_1Path =
     [ "getTransitionToJumpDepth", "classhypro_1_1Path.html#a204059f1637694ac5aefede27aeac9bb", null ],
     [ "hasChatteringZeno", "classhypro_1_1Path.html#a4b665f2ee633bab17dd7e7e35d5dcbbf", null ],
     [ "isEmpty", "classhypro_1_1Path.html#a26b444d6da4aa35eeca2753ee898156d", null ],
-    [ "maximalTimeSpan", "classhypro_1_1Path.html#ab4776f7da0f2fcff92fa6659e8783099", null ],
+    [ "maximalTimeSpan", "classhypro_1_1Path.html#acffffb3d4f8cf277cbf4442297519296", null ],
     [ "operator!=", "classhypro_1_1Path.html#ac795ff5e25a594f1a774c9875c6d479f", null ],
     [ "operator==", "classhypro_1_1Path.html#a59a0bae6ac98f1e903d46a8eac5371c7", null ],
     [ "operator>", "classhypro_1_1Path.html#a9ab9a5c853e1057ead6b157ad08a369c", null ],
