@@ -25,6 +25,16 @@ namespace hypro {
 		//3.Calls visit(ctx->modes()) to get locSet
 		HyproLocationVisitor<Number> locVisitor = HyproLocationVisitor<Number>(varVec);
 		std::set<Location<Number>*> locSet = locVisitor.visit(ctx->modes()).template as<std::set<Location<Number>*>>();
+		
+		//4.2.Make a set of unique ptrs to Locations
+		std::set<std::unique_ptr<Location<Number>>, locPtrComp<Number>> uniquePtrLocSet;
+		for(auto& l : locSet){
+			uniquePtrLocSet.emplace(std::unique_ptr<Location<Number>>(std::move(l)));
+		}
+		assert(*(locSet.begin()) != NULL);
+		for(auto& l : uniquePtrLocSet){
+			locSet.emplace(l.get());
+		}
 		std::set<Location<Number>*>& rLocSet = locSet;
 		
 		//4.Calls visit to get transitions
@@ -35,18 +45,14 @@ namespace hypro {
 		//4.1.Make a set of unique ptrs to transitions
 		std::set<std::unique_ptr<Transition<Number>>> transSet;
 		for(auto& t : tSet){
-			transSet.insert(std::unique_ptr<Transition<Number>>(std::move(t)));
+			transSet.emplace(std::unique_ptr<Transition<Number>>(std::move(t)));
 		}
-
-		//4.2.Make a set of unique ptrs to Locations
-		std::set<std::unique_ptr<Location<Number>>, locPtrComp<Number>> uniquePtrLocSet;
-		for(auto& l : locSet){
-			uniquePtrLocSet.insert(std::unique_ptr<Location<Number>>(std::move(l)));
-		}
+		assert(*(transSet.begin()) != NULL);
 
 		//5.Calls visit to get all initial states
 		typename HybridAutomaton<Number, State_t<Number,Number>>::locationStateMap initSet;
-		HyproInitialSetVisitor<Number> initVisitor = HyproInitialSetVisitor<Number>(varVec, rLocSet);
+		//HyproInitialSetVisitor<Number> initVisitor = HyproInitialSetVisitor<Number>(varVec, rLocSet);
+		HyproInitialSetVisitor<Number> initVisitor = HyproInitialSetVisitor<Number>(varVec, locSet);
 		for(auto& initState : ctx->init()){
 			typename HybridAutomaton<Number,State_t<Number,Number>>::locationStateMap oneInitialState = initVisitor.visit(initState).template as<typename HybridAutomaton<Number,State_t<Number,Number>>::locationStateMap>();
 			initSet.insert(oneInitialState.begin(), oneInitialState.end());
@@ -91,8 +97,8 @@ namespace hypro {
 #endif
 		//7.Build HybridAutomaton, return it
 		HybridAutomaton<Number,State_t<Number,Number>> ha;
-		ha.setLocations(uniquePtrLocSet);
-		ha.setTransitions(transSet);
+		ha.setLocations(std::move(uniquePtrLocSet));
+		ha.setTransitions(std::move(transSet));
 		ha.setInitialStates(initSet);
 		ha.setLocalBadStates(lBadStates);
 		ha.setGlobalBadStates(gBadStates);

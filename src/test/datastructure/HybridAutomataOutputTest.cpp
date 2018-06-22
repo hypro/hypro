@@ -81,7 +81,7 @@ protected:
 
 		locSet.insert(std::move(loc1));
 		locSet.insert(std::move(loc2));
-		hybrid.setLocations(locSet);
+		hybrid.setLocations(std::move(locSet));
 		
 		//Polytope for InitialValuation & Guard Assignment
 		coordinates(0) = 2;
@@ -103,7 +103,7 @@ protected:
 		
 		hybrid.getLocation("Location1")->setTransitions(ptrSet);
 		//loc1->setTransitions(ptrSet);
-		hybrid.setTransitions(transSet);
+		hybrid.setTransitions(std::move(transSet));
 		
     }
 

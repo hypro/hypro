@@ -100,6 +100,13 @@ namespace hypro {
 	 */
 	template<typename Number, typename tNumber = Number>
 	class Path {
+
+		private:
+			std::deque<TPathElement<Number,tNumber>> mPath; // why is this a deque? - shouldn't it be more of a double-linked list?
+			// or even better: define this recursively. A path is empty or a subpath
+			// Stefan: This is historic :).
+			bool chatteringZeno = false;
+			
 		public:
 
 			Path(){};
@@ -123,7 +130,7 @@ namespace hypro {
 			Path sharedPrefix(const Path<Number,tNumber>& rhs) const;
 			Path removeSharedPrefix(const Path<Number,tNumber>& rhs) const;
 			bool isEmpty() const { return (mPath.size() == 0); }
-			tNumber maximalTimeSpan(typename std::deque<TPathElement<Number,tNumber>>::const_iterator start=mPath.begin(), typename std::deque<TPathElement<Number,tNumber>>::const_iterator end=mPath.end()) const;
+			tNumber maximalTimeSpan(typename std::deque<TPathElement<Number,tNumber>>::const_iterator start = mPath.begin(), typename std::deque<TPathElement<Number,tNumber>>::const_iterator end = mPath.end()) const;
 
 			std::size_t getNumberDiscreteJumps() const;
 			std::vector<Transition<Number>*> getTransitionSequence(typename std::deque<TPathElement<Number,tNumber>>::const_iterator start, typename std::deque<TPathElement<Number,tNumber>>::const_iterator end) const;
@@ -175,12 +182,6 @@ namespace hypro {
 			bool operator!=(const Path<Number,tNumber>& rhs) const {
 				return !(*this == rhs);
 			}
-
-		private:
-			std::deque<TPathElement<Number,tNumber>> mPath; // why is this a deque? - shouldn't it be more of a double-linked list?
-			// or even better: define this recursively. A path is empty or a subpath
-			// Stefan: This is historic :).
-			bool chatteringZeno = false;
 
 	};
 

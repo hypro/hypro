@@ -127,8 +127,20 @@ class HybridAutomaton
      * @brief      Setter function.
      */
     ///@{
-    void setLocations(locationSet& locs) { mLocations.swap(locs); }
-    void setTransitions(transitionSet& trans) { mTransitions.swap(trans); }
+    //void setLocations(locationSet& locs) { mLocations.swap(locs); }
+    void setLocations(locationSet&& locs) { 
+        assert(checkConsistency());
+        mLocations.clear(); 
+        mLocations = std::move(locs); 
+        assert(checkConsistency());
+    }
+    //void setTransitions(transitionSet& trans) { mTransitions.swap(trans); }
+    void setTransitions(transitionSet&& trans) { 
+        assert(checkConsistency());
+        mTransitions.clear(); 
+        mTransitions = std::move(trans); 
+        assert(checkConsistency());
+    }
     void setInitialStates(const locationStateMap& states) { mInitialStates = states; }
     void setLocalBadStates(const locationConditionMap& states) { mLocalBadStates = states; }
     void setGlobalBadStates(const conditionVector& states) { mGlobalBadStates = states; }
@@ -267,6 +279,13 @@ class HybridAutomaton
         }
 #endif
         return ostr;
+    }
+
+    bool checkConsistency() const {
+        for(const auto& l : mLocations){
+            if(!l) return false;
+        }
+        return true;
     }
 };
 
