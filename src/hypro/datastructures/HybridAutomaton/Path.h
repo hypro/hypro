@@ -56,7 +56,8 @@ namespace hypro {
 		friend std::ostream& operator<<(std::ostream& out, const TPathElement<Number,tNumber>& pathElem) {
 			carl::Interval<double> tmp(carl::convert<tNumber,double>(pathElem.timeInterval.lower()), carl::convert<tNumber,double>(pathElem.timeInterval.upper()));
 			if(pathElem.isDiscreteStep()){
-				out << pathElem.transition->getSource()->getId() << " -> " << pathElem.transition->getTarget()->getId() << " " << tmp;
+				//out << pathElem.transition->getSource()->getId() << " -> " << pathElem.transition->getTarget()->getId() << " " << tmp;
+				out << pathElem.transition->getSource()->hash() << " -> " << pathElem.transition->getTarget()->hash() << " " << tmp;
 			} else {
 				out << tmp;
 			}
