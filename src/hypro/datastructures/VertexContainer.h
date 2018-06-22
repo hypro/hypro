@@ -315,7 +315,7 @@ namespace std {
 			size_t result = 0;
 			hash<hypro::Vertex<Number>> vertexHasher;
 			for (auto it = set.begin(); it != set.end(); it++) {
-				boost::hash_combine(result, vertexHasher(*it));
+				carl::hash_add(result, vertexHasher(*it));
 			}
 			return result;
 		}

@@ -19,6 +19,9 @@ namespace hypro {
 	template<typename Number>
 	std::vector<std::size_t> glpkRedundantConstraints(glp_prob* glpkProblem, matrix_t<Number> constraints, vector_t<Number> constants);
 
+	template<typename Number>
+	EvaluationResult<Number> glpkGetInternalPoint(glp_prob* glpkProblem, std::size_t dimension, bool useExact);
+
 	// specializations
 	template<>
 	EvaluationResult<double> glpkOptimizeLinear(glp_prob* glpkProblem, const vector_t<double>& _direction, const matrix_t<double>& constraints, const vector_t<double>& constants, bool useExact);

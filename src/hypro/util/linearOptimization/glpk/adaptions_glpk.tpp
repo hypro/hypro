@@ -158,4 +158,31 @@ namespace hypro {
 
 		return res;
 	}
+
+	template<typename Number>
+	EvaluationResult<Number> glpkGetInternalPoint(glp_prob* glpkProblem, std::size_t dimension, bool useExact) {
+		glp_simplex( glpkProblem, NULL);
+		if(useExact) {
+			glp_exact( glpkProblem, NULL );
+		}
+
+		vector_t<Number> glpkModel(dimension);
+		for(int i=1; i <= int(dimension); ++i) {
+			glpkModel(i-1) = glp_get_col_prim( glpkProblem, i);
+		}
+
+		switch ( glp_get_status( glpkProblem ) ) {
+			case GLP_OPT:
+			case GLP_FEAS: {
+				return EvaluationResult<Number>(glp_get_obj_val(glpkProblem), glpkModel, SOLUTION::FEAS);
+				break;
+			}
+			case GLP_UNBND: {
+				return EvaluationResult<Number>(1, glpkModel, SOLUTION::INFTY);
+				break;
+			}
+			default:
+				return EvaluationResult<Number>(0, vector_t<Number>::Zero(1), SOLUTION::INFEAS);
+		}
+	}
 } // namespace hypro

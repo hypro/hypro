@@ -1,13 +1,19 @@
 # Create configure command dependend on compiler
-if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
-		set(cmake_command -Dgtest_force_shared_crt=ON -DCXX=/usr/bin/clang++ -DCMAKE_CXX_FLAGS=-stdlib=libc++ -DCMAKE_CXX_FLAGS=-std=c++11 -DCMAKE_CXX_FLAGS=-DGTEST_USE_OWN_TR1_TUPLE=1 )
-else()
+#if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+		#set(cmake_command -Dgtest_force_shared_crt=ON -DCXX=/usr/bin/clang++ -DCMAKE_CXX_FLAGS=-stdlib=libc++ -DCMAKE_CXX_FLAGS=-std=c++11 -DCMAKE_CXX_FLAGS=-DGTEST_USE_OWN_TR1_TUPLE=1 )
+#else()
 		set(cmake_command -Dgtest_force_shared_crt=ON)
-endif()
+#endif()
 # Add gtest (local build)
 ExternalProject_Add(
 	googletest
 	GIT_REPOSITORY http://github.com/google/googletest.git
+	DOWNLOAD_NO_PROGRESS 1
+	#CONFIGURE_COMMAND ${CMAKE_COMMAND} ../googletest-stamp -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER} -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS=${CMAKE_CXX_FLAGS}
+	BUILD_COMMAND cmake --build . --config ${CMAKE_BUILD_TYPE} --target gtest
+	COMMAND cmake --build . --config ${CMAKE_BUILD_TYPE} --target gtest_main
+	LOG_CONFIGURE ON
+	LOG_BUILD ON
 	# Force separate output paths for debug and release builds to allow easy
 	# identification of correct lib in subsequent TARGET_LINK_LIBRARIES
 	#CMAKE_ARGS ${cmake_command}

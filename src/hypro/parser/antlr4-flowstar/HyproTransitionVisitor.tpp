@@ -24,7 +24,7 @@ namespace hypro {
 			for(auto tr : ctx->transition()){
 				//trSet.insert(visit(tr).antlrcpp::Any::as<Transition<Number>*>());
 				//std::unique_ptr<Transition<Number>> t(std::move(visit(tr).template as<std::unique_ptr<Transition<Number>>>()));
-				Transition<Number>* t = visit(tr).antlrcpp::Any::as<Transition<Number>*>();
+				Transition<Number>* t = visit(tr);//.antlrcpp::Any::as<Transition<Number>*>();
 				trSet.insert(t);
 				//trSet.insert(t);
 				(t->getSource())->addTransition(t);
@@ -42,7 +42,7 @@ namespace hypro {
 	antlrcpp::Any HyproTransitionVisitor<Number>::visitTransition(HybridAutomatonParser::TransitionContext *ctx){
 
 		Transition<Number>* t = new Transition<Number>();
-		
+
 		//1.Collect start/destination location from visitFromTo
 		std::pair<Location<Number>*,Location<Number>*> fromTo = visit(ctx->fromto());
 		t->setSource(fromTo.first);
@@ -56,7 +56,7 @@ namespace hypro {
 		} else {
 			t->setUrgent(false);
 		}
-		
+
 		//3.Collect Guards
 		if(ctx->guard().size() > 1){
 			std::cout << "WARNING: Please refrain from entering multiple guard constraints via several guard spaces. Typing one guard space of the form 'guard { constraint1 constraint2 ... }' is sufficient->" << std::endl;
@@ -65,7 +65,7 @@ namespace hypro {
 			Condition<Number> inv = visit(ctx->guard()[0]);
 			t->setGuard(inv);
 		}
-		
+
 		//4.Collect Resets
 		if(ctx->resetfct().size() > 1){
 			std::cout << "WARNING: Please refrain from entering multiple reset allocations via several reset spaces. Typing one reset space of the form 'reset { allocation1 allocation2 ... }' is sufficient->" << std::endl;
@@ -74,7 +74,7 @@ namespace hypro {
 			Reset<Number> reset = visit(ctx->resetfct()[0]);
 			t->setReset(reset);
 		}
-		
+
 		//5.Collect Aggregation
 		if(ctx->aggregation().size() > 1){
 			std::cerr << "ERROR: Multiple aggregation types specified for one transition." << std::endl;
@@ -84,7 +84,7 @@ namespace hypro {
 			Aggregation agg = visit(ctx->aggregation()[0]);
 			t->setAggregation(agg);
 		}
-		
+
 		return t;
 	}
 
@@ -122,7 +122,7 @@ namespace hypro {
 		//1.Call HyproFormulaVisitor and get pair of matrix and vector if constrset exists
 		if(ctx->constrset() != NULL){
 			HyproFormulaVisitor<Number> visitor(vars);
-			std::pair<matrix_t<Number>,vector_t<Number>> result = visitor.visit(ctx->constrset());	
+			std::pair<matrix_t<Number>,vector_t<Number>> result = visitor.visit(ctx->constrset());
 			Condition<Number> inv;
 			inv.setMatrix(result.first);
 			inv.setVector(result.second);
@@ -166,7 +166,7 @@ namespace hypro {
 	}
 
 	template<typename Number>
-	antlrcpp::Any HyproTransitionVisitor<Number>::visitResetfct(HybridAutomatonParser::ResetfctContext *ctx){			
+	antlrcpp::Any HyproTransitionVisitor<Number>::visitResetfct(HybridAutomatonParser::ResetfctContext *ctx){
 		//0.Check if there are not too much resets
 		if(ctx->allocation().size() > vars.size()){
 			std::cerr << "ERROR: Too many resets for this amount of variables. Only one reset per transition per variable allowed." << std::endl;
