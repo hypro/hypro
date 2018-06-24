@@ -69,7 +69,7 @@ class HybridAutomaton
      *
      * @param[in]  	hybrid  The original hybrid automaton.
      */
-    HybridAutomaton(HybridAutomaton<Number,State>&& hybrid) = default;
+    HybridAutomaton(HybridAutomaton<Number,State>&& hybrid);
 
     /**
      * @brief 		Constructor from locations, transitions and initial states

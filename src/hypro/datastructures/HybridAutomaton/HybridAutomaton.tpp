@@ -13,17 +13,52 @@ HybridAutomaton<Number,State>::HybridAutomaton(const HybridAutomaton<Number,Stat
 	, mGlobalBadStates(hybrid.getGlobalBadStates())
 	, mVariables(hybrid.getVariables())
 {
+	std::cout << "In HA copy constructor!\n";
+
 	for(auto& l : hybrid.getLocations()){
-    	mLocations.emplace(std::make_unique<Location<Number>>(*l));
+    	mLocations.emplace(std::make_unique<Location<Number>>(*(l.get())));
    	}
 	for(auto& t : hybrid.getTransitions()){
-		mTransitions.emplace(std::make_unique<Transition<Number>>(*t));
+		mTransitions.emplace(std::make_unique<Transition<Number>>(*(t.get())));
 	}
+}
+
+//Move constructor
+template<typename Number, typename State>
+HybridAutomaton<Number,State>::HybridAutomaton(HybridAutomaton<Number,State>&& hybrid){
+	
+	std::cout << "In HA move constructor!\n";
+
+	//fill mLocations
+	for(auto& l : hybrid.getLocations()){
+    	mLocations.emplace(std::make_unique<Location<Number>>(*(l.get())));
+   	}
+
+	//fill mTransitions
+	for(auto& t : hybrid.getTransitions()){
+		mTransitions.emplace(std::make_unique<Transition<Number>>(*(t.get())));
+	}
+
+	//removal for test
+	hybrid.getLocations().clear();
+	assert(hybrid.getLocations().size() == 0);
+	assert(mLocations.size() != 0);
+	assert(*(mLocations.begin()));
+
+	hybrid.getTransitions().clear();
+	assert(hybrid.getTransitions().size() == 0);
+	assert(mTransitions.size() != 0);
+	assert(*(mTransitions.begin()));
+
+	//update transitions and locations
+	
+
 }
 
 //Copy assignment
 template<typename Number, typename State>
 HybridAutomaton<Number,State>& HybridAutomaton<Number,State>::operator=(const HybridAutomaton<Number,State>& rhs){
+	std::cout << "In HA copy assignment!\n";
    	if(this != &rhs){
 
    		//Locations
@@ -52,6 +87,7 @@ HybridAutomaton<Number,State>& HybridAutomaton<Number,State>::operator=(const Hy
 //Move Assignment
 template<typename Number, typename State>
 HybridAutomaton<Number,State>& HybridAutomaton<Number,State>::operator=(HybridAutomaton<Number,State>&& rhs){
+	std::cout << "In HA move assignment!\n";
    	if(this != &rhs){
     	std::swap(rhs.mLocations, mLocations);
     	std::swap(rhs.mTransitions, mTransitions);
