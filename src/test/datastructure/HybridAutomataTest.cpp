@@ -99,7 +99,7 @@ protected:
     	poly = valuation_t<Number>(vecSet);
 		auto hpoly = Converter<Number>::toHPolytope(poly);
 
-		hybrid.setLocations(locSet);
+		hybrid.setLocations(std::move(locSet));
 		for(auto loc : initLocSet) {
 			State_t<Number> initState(loc);
 			initState.setSet(ConstraintSet<Number>(hpoly.matrix(), hpoly.vector()));
@@ -107,7 +107,7 @@ protected:
 		}
 		transSet.insert(std::move(copyOfTrans));
 		ptrSet.insert(transSet.begin()->get());
-		hybrid.setTransitions(transSet);
+		hybrid.setTransitions(std::move(transSet));
 		loc1->setTransitions(ptrSet);
     }
 
@@ -360,8 +360,12 @@ TYPED_TEST(HybridAutomataTest, HybridAutomatonTest)
 
 	// somehow check move assignment
 	HybridAutomaton<TypeParam> h3 = std::move(h1);
-	EXPECT_TRUE(h1.getTransitions().size() == 0);
+	//EXPECT_TRUE(h1.getTransitions().size() == 0);
 	EXPECT_EQ(h2, h3);
+
+	// move constructor
+	HybridAutomaton<TypeParam> h4(std::move(h1));
+	EXPECT_EQ(h3,h4);
 }
 
 /*

@@ -21,6 +21,28 @@ HybridAutomaton<Number,State>::HybridAutomaton(const HybridAutomaton<Number,Stat
 	}
 }
 
+//Move Constructor
+template<typename Number, typename State>
+HybridAutomaton<Number,State>::HybridAutomaton(HybridAutomaton<Number,State>&& hybrid) noexcept
+	: mLocations()
+	, mTransitions()
+	, mInitialStates(hybrid.getInitialStates())
+	, mLocalBadStates(hybrid.getLocalBadStates())
+	, mGlobalBadStates(hybrid.getGlobalBadStates())
+	, mVariables(hybrid.getVariables())
+{
+	for(auto& l : hybrid.getLocations()){
+		//mLocations.insert(std::move(l));
+		mLocations.emplace(std::make_unique<Location<Number>>(*l));
+	}
+	//hybrid.setLocations(std::move(std::set<std::unique_ptr<Location<Number>>>()));
+	for(auto& t : hybrid.getTransitions()){
+		//mTransitions.insert(std::move(t));
+		mTransitions.emplace(std::make_unique<Transition<Number>>(*t));
+	}
+	//hybrid.setLocations(std::move(std::set<std::unique_ptr<Transition<Number>>>()));
+}
+
 //Copy assignment
 template<typename Number, typename State>
 HybridAutomaton<Number,State>& HybridAutomaton<Number,State>::operator=(const HybridAutomaton<Number,State>& rhs){
@@ -53,9 +75,10 @@ HybridAutomaton<Number,State>& HybridAutomaton<Number,State>::operator=(const Hy
 template<typename Number, typename State>
 HybridAutomaton<Number,State>& HybridAutomaton<Number,State>::operator=(HybridAutomaton<Number,State>&& rhs){
    	if(this != &rhs){
-    	std::swap(rhs.mLocations, mLocations);
-    	std::swap(rhs.mTransitions, mTransitions);
-
+    	//std::swap(rhs.mLocations, mLocations);
+    	//std::swap(rhs.mTransitions, mTransitions);
+    	mLocations = std::move(rhs.mLocations) ;
+    	mTransitions = std::move(rhs.mTransitions) ;
    		//Copy the rest
 		mInitialStates = rhs.getInitialStates();
 		mLocalBadStates = rhs.getLocalBadStates();

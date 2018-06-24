@@ -46,7 +46,7 @@ namespace hypro {
 		//std::cout << "======== ALTERED VERSION =========\n" << rewriter.getText() << std::endl;
 		return rewriter.getText();
 	}
-
+/*
 	template<>
 	boost::tuple<HybridAutomaton<mpq_class, State_t<mpq_class,mpq_class>>, ReachabilitySettings<mpq_class>> parseFlowstarFile<mpq_class>(const std::string& filename) {
 
@@ -61,19 +61,19 @@ namespace hypro {
 		HybridAutomatonLexer lexer(&input);
 		lexer.removeErrorListeners();
 		lexer.addErrorListener(errListener);
-		
+
 		//Create an empty TokenStream obj
 		CommonTokenStream tokens(&lexer);
-	
+
 		//Fill the TokenStream (and output it for demonstration)
 		tokens.fill();
-		
+
 		//Create a parser
 		HybridAutomatonParser parser(&tokens);
 		parser.removeErrorListeners();
 		parser.addErrorListener(errListener);
-		tree::ParseTree* tree = parser.start();	
-				
+		tree::ParseTree* tree = parser.start();
+
 		//Create TokenStreamRewriter, needed for constants if defined
 		//std::cout << "Size of constant map: " << parser.getConstants().size() << std::endl;
 		//for(auto entry : parser.getConstants()){
@@ -119,9 +119,10 @@ namespace hypro {
 			return boost::tuple<HybridAutomaton<mpq_class, State_t<mpq_class,mpq_class>>&, ReachabilitySettings<mpq_class>>(h, visitor.getSettings());
 		}
 	}
-
+*/
 	template<>
 	boost::tuple<HybridAutomaton<double,State_t<double,double>>, ReachabilitySettings<double>> parseFlowstarFile<double>(const std::string& filename) {
+	//std::pair<HybridAutomaton<double,State_t<double,double>>, ReachabilitySettings<double>> parseFlowstarFile<double>(const std::string& filename) {
 
 		//Create an ANTLRInputStream
 		ANTLRInputStream input;
@@ -180,16 +181,29 @@ namespace hypro {
 			delete errListener;
 
 			return boost::tuple<HybridAutomaton<double, State_t<double,double>>&, ReachabilitySettings<double>>(h, visitor.getSettings());
+			//return std::make_pair(std::move(h), visitor.getSettings());
 
 		} else {
 
 			HyproHAVisitor<double> visitor;
 
-			HybridAutomaton<double, State_t<double,double>> h = (visitor.visit(tree)).antlrcpp::Any::as<HybridAutomaton<double, State_t<double,double>>>();
+			HybridAutomaton<double, State_t<double,double>> h { std::move((visitor.visit(tree)).antlrcpp::Any::as<HybridAutomaton<double, State_t<double,double>>>()) };
+			//HybridAutomaton<double, State_t<double,double>> h = std::move((visitor.visit(tree)).antlrcpp::Any::as<HybridAutomaton<double, State_t<double,double>>>());
 
 			delete errListener;
 
+			std::cout << "========== PARSERWRAPPER =============" << std::endl;
+			std::cout << "Parsed HybridAutomaton Transitions:\n";
+			for(const auto t : h.getTransitions()){
+				std::cout << *t << std::endl;
+			}
+			std::cout << "Parsed HybridAutomaton Locations:\n";
+			for(const auto l : h.getLocations()){
+				std::cout << *l << std::endl;
+			}
+
 			return boost::tuple<HybridAutomaton<double, State_t<double,double>>&, ReachabilitySettings<double>>(h, visitor.getSettings());
+			//return std::make_pair(std::move(h), visitor.getSettings());
 		}
 	}
 

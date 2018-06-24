@@ -4,6 +4,7 @@
 #include <fstream>
 #include "gtest/gtest.h"
 #include "../defines.h"
+#include <boost/tuple/tuple.hpp>
 
 #include <unistd.h>		//getcwd()
 

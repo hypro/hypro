@@ -167,12 +167,12 @@ namespace std {
         {
             //Flows
             std::size_t seed = 0;
-            for(const auto& flow : loc.getFlows()){
-                carl::hash_add(seed,std::hash<hypro::matrix_t<Number>>()(flow));
+            for(auto& flow : loc.getFlows()){
+                carl::hash_add(seed, std::hash<hypro::matrix_t<Number>>()(flow));
             }
 
             //Name
-            carl::hash_add(seed,std::hash<std::string>()(loc.getName()));
+            carl::hash_add(seed, std::hash<std::string>()(loc.getName()));
 
             ////Transitions
             //std::size_t transitionHash = 0;

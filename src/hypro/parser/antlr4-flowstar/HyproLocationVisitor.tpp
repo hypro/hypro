@@ -105,10 +105,10 @@ namespace hypro {
 	antlrcpp::Any HyproLocationVisitor<Number>::visitActivities(HybridAutomatonParser::ActivitiesContext *ctx){
 
 		//0.Syntax check - Are there vars.size() equations?
-		if(vars.size() != ctx->equation().size()){
-			std::cerr << "ERROR: Wrong amount of activites for current location!" << std::endl;
-			exit(0);
-		}
+		//if(vars.size() != ctx->equation().size()){
+		//	std::cerr << "ERROR: Wrong amount of activites for current location!" << std::endl;
+		//	exit(0);
+		//}
 
 		//1.Calls iteratively visit(ctx->equation()) to get vector, store them
 		matrix_t<Number> tmpMatrix = matrix_t<Number>::Zero(vars.size()+1, vars.size()+1);

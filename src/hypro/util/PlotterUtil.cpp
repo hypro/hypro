@@ -7,7 +7,7 @@ namespace hypro {
 		std::size_t g = ((color & (255 << 8)) >> 8);
 		std::size_t b = color & 255;
 		//std::cout << "Convert " << color << " to [" << r << ", " << g << ", " << b << "]" << std::endl;
-		return std::vector<std::size_t>({r,g,b});
+		return {r,g,b};
 	}
 
 	std::size_t RGBtoHEX(std::vector<std::size_t> color) {

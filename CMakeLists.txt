@@ -112,7 +112,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14 -DGTEST_USE_OWN_TR1_TUPLE=1")
 
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
 	#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libstdc++ -isystem\ /usr/include/libcxxabi/ -D__STRICT_ANSI__")
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libstdc++")
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++")
 	if (APPLE)
 		message("-- Using clang on apple")
 		set(CMAKE_MACOSX_RPATH 1)
