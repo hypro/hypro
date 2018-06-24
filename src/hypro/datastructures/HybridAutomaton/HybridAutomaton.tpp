@@ -15,28 +15,29 @@ HybridAutomaton<Number,State>::HybridAutomaton(const HybridAutomaton<Number,Stat
 {
 	std::cout << "In HA copy constructor!\n";
 
+	//This here will most likely not work
 	for(auto& l : hybrid.getLocations()){
-    	mLocations.emplace(std::make_unique<Location<Number>>(*(l.get())));
+    	mLocations.emplace(std::make_unique<Location<Number>>(*l));
    	}
 	for(auto& t : hybrid.getTransitions()){
-		mTransitions.emplace(std::make_unique<Transition<Number>>(*(t.get())));
+		mTransitions.emplace(std::make_unique<Transition<Number>>(*t));
 	}
 }
 
 //Move constructor
 template<typename Number, typename State>
-HybridAutomaton<Number,State>::HybridAutomaton(HybridAutomaton<Number,State>&& hybrid){
+HybridAutomaton<Number,State>::HybridAutomaton(HybridAutomaton<Number,State>&& hybrid) noexcept {
 	
 	std::cout << "In HA move constructor!\n";
 
 	//fill mLocations
 	for(auto& l : hybrid.getLocations()){
-    	mLocations.emplace(std::make_unique<Location<Number>>(*(l.get())));
+    	mLocations.emplace(std::make_unique<Location<Number>>(*l));
    	}
 
 	//fill mTransitions
 	for(auto& t : hybrid.getTransitions()){
-		mTransitions.emplace(std::make_unique<Transition<Number>>(*(t.get())));
+		mTransitions.emplace(std::make_unique<Transition<Number>>(*t));
 	}
 
 	//removal for test
@@ -50,10 +51,34 @@ HybridAutomaton<Number,State>::HybridAutomaton(HybridAutomaton<Number,State>&& h
 	assert(mTransitions.size() != 0);
 	assert(*(mTransitions.begin()));
 
-	//update transitions and locations
+	//update locations of transitions and transitions of locations
 	
+	//update initial sets
 
 }
+/*
+//Move Constructor
+template<typename Number, typename State>
+HybridAutomaton<Number,State>::HybridAutomaton(HybridAutomaton<Number,State>&& hybrid) noexcept
+	: mLocations()
+	, mTransitions()
+	, mInitialStates(hybrid.getInitialStates())
+	, mLocalBadStates(hybrid.getLocalBadStates())
+	, mGlobalBadStates(hybrid.getGlobalBadStates())
+	, mVariables(hybrid.getVariables())
+{
+	for(auto& l : hybrid.getLocations()){
+		//mLocations.insert(std::move(l));
+		mLocations.emplace(std::make_unique<Location<Number>>(*l));
+	}
+	//hybrid.setLocations(std::move(std::set<std::unique_ptr<Location<Number>>>()));
+	for(auto& t : hybrid.getTransitions()){
+		//mTransitions.insert(std::move(t));
+		mTransitions.emplace(std::make_unique<Transition<Number>>(*t));
+	}
+	//hybrid.setLocations(std::move(std::set<std::unique_ptr<Transition<Number>>>()));
+}
+*/
 
 //Copy assignment
 template<typename Number, typename State>
@@ -89,9 +114,10 @@ template<typename Number, typename State>
 HybridAutomaton<Number,State>& HybridAutomaton<Number,State>::operator=(HybridAutomaton<Number,State>&& rhs){
 	std::cout << "In HA move assignment!\n";
    	if(this != &rhs){
-    	std::swap(rhs.mLocations, mLocations);
-    	std::swap(rhs.mTransitions, mTransitions);
-
+    	//std::swap(rhs.mLocations, mLocations);
+    	//std::swap(rhs.mTransitions, mTransitions);
+    	mLocations = std::move(rhs.mLocations) ;
+    	mTransitions = std::move(rhs.mTransitions) ;
    		//Copy the rest
 		mInitialStates = rhs.getInitialStates();
 		mLocalBadStates = rhs.getLocalBadStates();
