@@ -179,6 +179,11 @@ protected:
 		return false;
   	}
 
+  	//To test copying
+  	HybridAutomaton<Number> dummyCopy(HybridAutomaton<Number> orig){ return orig; }
+
+  	//To test moving
+	HybridAutomaton<Number> dummyMove(HybridAutomaton<Number>&& orig){ return orig; }  	
 
 };
 
@@ -352,16 +357,35 @@ TYPED_TEST(HybridAutomataTest, HybridAutomatonTest)
 
 	h1.addInitialState(s);
 
+	//Copy constructor;
+	std::cout << "Expect copy constructor\n";
+	HybridAutomaton<TypeParam> h0(h1);
+	EXPECT_EQ(h0, h1);
+
 	// copy assignment operator
+	std::cout << "Expect copy assignment\n";
 	HybridAutomaton<TypeParam> h2 = h1;
 	//EXPECT_TRUE(h1.getLocations() == h2.getLocations());
 	//EXPECT_TRUE(h1.equals(h1.getLocations(), h2.getLocations()));
 	EXPECT_EQ(h1, h2);
 
 	// somehow check move assignment
+	std::cout << "Expect move assignment\n";
 	HybridAutomaton<TypeParam> h3 = std::move(h1);
-	EXPECT_TRUE(h1.getTransitions().size() == 0);
+	//EXPECT_TRUE(h1.getTransitions().size() == 0);
 	EXPECT_EQ(h2, h3);
+
+	std::cout << "Expect move constructor\n";
+	HybridAutomaton<TypeParam> h4(std::move(h2));
+	EXPECT_EQ(h3, h4);
+
+	std::cout << "Expect copy assignment\n";
+	HybridAutomaton<TypeParam> h5 = this->dummyCopy(h3);
+	EXPECT_EQ(h4, h5);
+
+	std::cout << "Expect move assignment\n";
+	HybridAutomaton<TypeParam> h6 = this->dummyMove(std::move(h3));
+	EXPECT_EQ(h4, h5);
 }
 
 /*

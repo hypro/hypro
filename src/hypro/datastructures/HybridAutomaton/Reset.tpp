@@ -178,11 +178,13 @@ namespace hypro {
 		std::vector<ConstraintSet<Number>> newCset;
 		// select constrains i,j,k into new constraint vector
 		for(auto set : decomposition){
+			#ifdef HYPRO_LOGGING
 			DEBUG("hypro.datastructures", "decompose constraint for set: {");
 			for(auto entry : set){
 				DEBUG("hypro.datastructures", "" <<  entry << ", ");
 			}
 			DEBUG("hypro.datastructures", "}");
+			#endif
 
 			// for each row of the constraints check if it contains an entry for one of the variables of the set
 			// and add the corresponding rows to a list of indices that are later added to a matrix
@@ -193,25 +195,14 @@ namespace hypro {
 
 			if(indicesToAdd.size() > 0){
 				// create a row matrix with numIndicesToAdd many rows
-				matrix_t<Number> rowMat = matrix_t<Number>::Zero(indicesToAdd.size(), constraintsOld.cols());
-				for(size_t index = 0; index < rowMat.rows(); index++){
-					// copy over preselected rows
-					rowMat.row(index) = constraintsOld.row(indicesToAdd[index]);
-				}
-				// create final matrix that does not contain columns not in this set
-				matrix_t<Number> finMat = matrix_t<Number>::Zero(rowMat.rows(), set.size());
-				// -1 for constant column
-				for(size_t index = 0; index < finMat.cols(); index++){
-					finMat.col(index) = rowMat.col(set[index]);
-				}
-				// create final constant vector
-				vector_t<Number> finVec =  vector_t<Number>::Zero(indicesToAdd.size());
-				for(size_t index=0; index < finVec.rows(); index++){
-					finVec(index) = constantsOld(indicesToAdd[index]);
-				}
+				matrix_t<Number> newMatrix = selectRows(constraintsOld, indicesToAdd);
+				newMatrix = selectCols(constraintsOld, set);
 
-				ConstraintSet<Number> res(finMat,finVec);
-				DEBUG("hypro.datastructures", "Final decomposed ConstraintSet: \n" << res); 
+				// create final constant vector
+				vector_t<Number> newVec = selectRows(constantsOld, indicesToAdd);
+
+				ConstraintSet<Number> res(newMatrix,newVec);
+				DEBUG("hypro.datastructures", "Final decomposed ConstraintSet: \n" << res);
 				newCset.push_back(res);
 			}
 			else {

@@ -130,7 +130,7 @@ namespace hypro {
 			Path sharedPrefix(const Path<Number,tNumber>& rhs) const;
 			Path removeSharedPrefix(const Path<Number,tNumber>& rhs) const;
 			bool isEmpty() const { return (mPath.size() == 0); }
-			tNumber maximalTimeSpan(typename std::deque<TPathElement<Number,tNumber>>::const_iterator start=this->begin(), typename std::deque<TPathElement<Number,tNumber>>::const_iterator end=this->end()) const;
+			tNumber maximalTimeSpan(typename std::deque<TPathElement<Number,tNumber>>::const_iterator start, typename std::deque<TPathElement<Number,tNumber>>::const_iterator end) const;
 
 			std::size_t getNumberDiscreteJumps() const;
 			std::vector<Transition<Number>*> getTransitionSequence(typename std::deque<TPathElement<Number,tNumber>>::const_iterator start, typename std::deque<TPathElement<Number,tNumber>>::const_iterator end) const;

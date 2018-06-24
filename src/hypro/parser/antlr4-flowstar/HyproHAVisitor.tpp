@@ -47,6 +47,15 @@ namespace hypro {
 		for(auto& t : tSet){
 			transSet.emplace(std::unique_ptr<Transition<Number>>(std::move(t)));
 		}
+		for(auto& l : uniquePtrLocSet){
+			for(auto& t : transSet){
+				t->getSource()->addTransition(t.get());
+				if(t->getSource()->hash() == l->hash()){
+					l->addTransition(t.get());
+				}
+			}	
+		}
+		
 		assert(*(transSet.begin()) != NULL);
 
 		//5.Calls visit to get all initial states
@@ -103,7 +112,7 @@ namespace hypro {
 		ha.setLocalBadStates(lBadStates);
 		ha.setGlobalBadStates(gBadStates);
 
-		return std::move(ha);			//Move the ownership of ha to whoever uses ha then, i.e. the test suite
+		return ha;			//Move the ownership of ha to whoever uses ha then, i.e. the test suite
 	}
 
 	template<typename Number>
