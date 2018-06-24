@@ -95,6 +95,7 @@ void Location<Number>::updateTransition(Transition<Number>* original, Transition
 	assert(newT != nullptr);
 	mTransitions.erase(tPos);
 	mTransitions.insert(newT);
+	mHash = 0;
 }
 
 template<typename Number>
