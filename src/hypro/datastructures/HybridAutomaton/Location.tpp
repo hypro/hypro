@@ -86,6 +86,18 @@ void Location<Number>::setFlow(const matrix_t<Number>& mat, std::size_t I) {
 }
 
 template<typename Number>
+void Location<Number>::updateTransition(Transition<Number>* original, Transition<Number>* newT) {
+	auto tPos = std::find(mTransitions.begin(), mTransitions.end(), original);
+	if( tPos == mTransitions.end()) {
+		TRACE("hypro.datastructures.hybridAutomaton","Attempted to update non-existing transition @" << original);
+		return;
+	}
+	assert(newT != nullptr);
+	mTransitions.erase(tPos);
+	mTransitions.insert(newT);
+}
+
+template<typename Number>
 void Location<Number>::setExtInput(const Box<Number>& b) {
 	mExternalInput = b;
 	for(std::size_t i = 0; i < b.dimension(); ++i) {

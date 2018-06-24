@@ -15,32 +15,42 @@ HybridAutomaton<Number,State>::HybridAutomaton(const HybridAutomaton<Number,Stat
 {
 	std::cout << "In HA copy constructor!\n";
 
-	//This here will most likely not work
+	// Stef: We create actual copies of the locations, what remains to do is to update the initial and bad states
+	// accordingly.
 	for(auto& l : hybrid.getLocations()){
-    	mLocations.emplace(std::make_unique<Location<Number>>(*l));
+    	mLocations.emplace(std::make_unique<Location<Number>>(Location<Number>(*l)));
    	}
 	for(auto& t : hybrid.getTransitions()){
-		mTransitions.emplace(std::make_unique<Transition<Number>>(*t));
+		mTransitions.emplace(std::make_unique<Transition<Number>>(Transition<Number>(*t)));
 	}
 }
 
 //Move constructor
 template<typename Number, typename State>
-HybridAutomaton<Number,State>::HybridAutomaton(HybridAutomaton<Number,State>&& hybrid) noexcept {
-	
+HybridAutomaton<Number,State>::HybridAutomaton(HybridAutomaton<Number,State>&& hybrid) noexcept
+	:
+	mLocations(),
+	mTransitions(),
+	mGlobalBadStates(hybrid.getGlobalBadStates())
+ {
+
 	std::cout << "In HA move constructor!\n";
 
 	//fill mLocations
 	for(auto& l : hybrid.getLocations()){
-    	mLocations.emplace(std::make_unique<Location<Number>>(*l));
+    	mLocations.emplace(std::make_unique<Location<Number>>(Location<Number>(*l)));
    	}
 
 	//fill mTransitions
 	for(auto& t : hybrid.getTransitions()){
-		mTransitions.emplace(std::make_unique<Transition<Number>>(*t));
+		mTransitions.emplace(std::make_unique<Transition<Number>>(Transition<Number>(*t)));
 	}
 
 	//removal for test
+	// Stef: This does not work, because whenever you call getLocations, a new set
+	// is created containing only the raw pointers - if you empty that set, nothing happens to
+	// the original object.
+	/*
 	hybrid.getLocations().clear();
 	assert(hybrid.getLocations().size() == 0);
 	assert(mLocations.size() != 0);
@@ -50,11 +60,59 @@ HybridAutomaton<Number,State>::HybridAutomaton(HybridAutomaton<Number,State>&& h
 	assert(hybrid.getTransitions().size() == 0);
 	assert(mTransitions.size() != 0);
 	assert(*(mTransitions.begin()));
+	*/
 
 	//update locations of transitions and transitions of locations
-	
-	//update initial sets
+	for(auto& l : mLocations) {
+		for(auto& lTrans : l->getTransitions()){
+			for(auto& t : mTransitions) {
+				if( *lTrans == *t.get() ) {
+					// insert new Transition
+					l->updateTransition(lTrans,t.get());
+				}
+				// update location in transitions as well, only if pointers are different but content is the same.
+				if( *l.get() == *t->getSource() && l.get() != t->getSource()) {
+					t->setSource(l.get());
+				}
+				if( *l.get() == *t->getTarget() && l.get() != t->getTarget()) {
+					t->setTarget(l.get());
+				}
+			}
+		}
+	}
 
+	//update initial sets
+	mInitialStates.clear();
+	for(auto otherInit : hybrid.getInitialStates()) {
+		auto copy = otherInit.second;
+		// update location
+		for(auto& l : mLocations) {
+			if( *l == *copy.getLocation()) {
+				copy.setLocation(l.get());
+				break;
+			}
+		}
+		this->addInitialState(copy);
+	}
+
+	mLocalBadStates.clear();
+	for(auto otherBad : hybrid.getLocalBadStates()) {
+		auto copy = otherBad.second;
+		// update location
+		#ifndef NDEBUG
+		bool found = false;
+		#endif
+		for(auto& l : mLocations) {
+			if( *l.get() == *otherBad.first ) {
+				#ifndef NDEBUG
+				found = true;
+				#endif
+				this->addLocalBadState(l.get(), copy);
+				break;
+			}
+		}
+		assert(found);
+	}
 }
 /*
 //Move Constructor

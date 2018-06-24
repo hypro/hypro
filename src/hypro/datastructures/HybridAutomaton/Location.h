@@ -85,6 +85,7 @@ public:
     void setInvariant(const Condition<Number>& inv) { mInvariant = inv; mHash = 0; }
     void setTransitions(const transitionSet& trans) { mTransitions = trans; mHash = 0; }
     void addTransition(Transition<Number>* trans) { mTransitions.insert(trans); mHash = 0; }
+    void updateTransition(Transition<Number>* original, Transition<Number>* newT);
     void setExtInput(const Box<Number>& b);
 
     std::size_t hash() const;
@@ -119,8 +120,8 @@ public:
         }
     }
 
-    inline bool operator==(const Location<Number>& rhs) const { assert(this != nullptr); return (this->hash() == rhs.hash()); }
-    inline bool operator!=(const Location<Number>& rhs) const { assert(this != nullptr); return (this->hash() != rhs.hash()); }
+    inline bool operator==(const Location<Number>& rhs) const { return (this->hash() == rhs.hash()); }
+    inline bool operator!=(const Location<Number>& rhs) const { return (this->hash() != rhs.hash()); }
 
     friend std::ostream& operator<<(std::ostream& ostr, const Location<Number>& l) {
 
