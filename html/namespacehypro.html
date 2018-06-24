@@ -877,6 +877,14 @@ template&lt;typename Number &gt; </td></tr>
 template&lt;typename Number &gt; </td></tr>
 <tr class="memitem:a30c119e7444b792de3f0ab86fc560b0b"><td class="memTemplItemLeft" align="right" valign="top">std::string&#160;</td><td class="memTemplItemRight" valign="bottom"><b>createCode</b> (const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;in, unsigned index=0)</td></tr>
 <tr class="separator:a30c119e7444b792de3f0ab86fc560b0b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abb7304656b52e4a24159d1a105d09a75"><td class="memTemplParams" colspan="2"><a class="anchor" id="abb7304656b52e4a24159d1a105d09a75"></a>
+template&lt;typename Number &gt; </td></tr>
+<tr class="memitem:abb7304656b52e4a24159d1a105d09a75"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>selectRows</b> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;original, const std::vector&lt; Eigen::Index &gt; &amp;rowIndices)</td></tr>
+<tr class="separator:abb7304656b52e4a24159d1a105d09a75"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4a4f2575828c195248024113bb441573"><td class="memTemplParams" colspan="2"><a class="anchor" id="a4a4f2575828c195248024113bb441573"></a>
+template&lt;typename Number &gt; </td></tr>
+<tr class="memitem:a4a4f2575828c195248024113bb441573"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>selectCols</b> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;original, const std::vector&lt; Eigen::Index &gt; &amp;colIndices)</td></tr>
+<tr class="separator:a4a4f2575828c195248024113bb441573"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a978bf61b4bb1edfd46e6f9fd8ba7f450"><td class="memTemplParams" colspan="2"><a class="anchor" id="a978bf61b4bb1edfd46e6f9fd8ba7f450"></a>
 template&lt;typename T &gt; </td></tr>
 <tr class="memitem:a978bf61b4bb1edfd46e6f9fd8ba7f450"><td class="memTemplItemLeft" align="right" valign="top">std::ostream &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>operator&lt;&lt;</b> (std::ostream &amp;_out, const std::set&lt; T &gt; &amp;_set)</td></tr>
@@ -1070,9 +1078,9 @@ template&lt;typename... T&gt; </td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>The most general namespace for the HyPro library. </p>
-<dl class="section author"><dt>Author</dt><dd>Stefan Schupp <a href="#" onclick="location.href='mai'+'lto:'+'ste'+'fa'+'n.s'+'ch'+'upp'+'@c'+'s.r'+'wt'+'h-a'+'ac'+'hen'+'.d'+'e'; return false;">stefa<span style="display: none;">.nosp@m.</span>n.sc<span style="display: none;">.nosp@m.</span>hupp@<span style="display: none;">.nosp@m.</span>cs.r<span style="display: none;">.nosp@m.</span>wth-a<span style="display: none;">.nosp@m.</span>ache<span style="display: none;">.nosp@m.</span>n.de</a></dd>
-<dd>
-Stefan Schupp <a href="#" onclick="location.href='mai'+'lto:'+'ste'+'fa'+'n.s'+'ch'+'upp'+'@c'+'s.r'+'wt'+'h-a'+'ac'+'hen'+'.d'+'e'; return false;">stefa<span style="display: none;">.nosp@m.</span>n.sc<span style="display: none;">.nosp@m.</span>hupp@<span style="display: none;">.nosp@m.</span>cs.r<span style="display: none;">.nosp@m.</span>wth-a<span style="display: none;">.nosp@m.</span>ache<span style="display: none;">.nosp@m.</span>n.de</a> </dd></dl>
+<dl class="section author"><dt>Author</dt><dd>Stefan Schupp <a href="#" onclick="location.href='mai'+'lto:'+'ste'+'fa'+'n.s'+'ch'+'upp'+'@c'+'s.r'+'wt'+'h-a'+'ac'+'hen'+'.d'+'e'; return false;">stefa<span style="display: none;">.nosp@m.</span>n.sc<span style="display: none;">.nosp@m.</span>hupp@<span style="display: none;">.nosp@m.</span>cs.r<span style="display: none;">.nosp@m.</span>wth-a<span style="display: none;">.nosp@m.</span>ache<span style="display: none;">.nosp@m.</span>n.de</a></dd></dl>
+<p>This file contains transformation functions for matrices and vectors.</p>
+<dl class="section author"><dt>Author</dt><dd>Stefan Schupp <a href="#" onclick="location.href='mai'+'lto:'+'ste'+'fa'+'n.s'+'ch'+'upp'+'@c'+'s.r'+'wt'+'h-a'+'ac'+'hen'+'.d'+'e'; return false;">stefa<span style="display: none;">.nosp@m.</span>n.sc<span style="display: none;">.nosp@m.</span>hupp@<span style="display: none;">.nosp@m.</span>cs.r<span style="display: none;">.nosp@m.</span>wth-a<span style="display: none;">.nosp@m.</span>ache<span style="display: none;">.nosp@m.</span>n.de</a> </dd></dl>
 <dl class="section since"><dt>Since</dt><dd>2016-03-22 </dd></dl>
 <dl class="section version"><dt>Version</dt><dd>2016-03-22</dd></dl>
 <p>With reference to <a href="https://stackoverflow.com/questions/16387354/template-tuple-calling-a-function-on-each-element">https://stackoverflow.com/questions/16387354/template-tuple-calling-a-function-on-each-element</a> </p>
@@ -1261,7 +1269,7 @@ template&lt;typename From , typename To &gt; </div>
 </div><div class="memdoc">
 <p>conversion of a matrix_t </p>
 
-<p>Definition at line <a class="el" href="adaptions__eigen_8h_source.html#l00213">213</a> of file <a class="el" href="adaptions__eigen_8h_source.html">adaptions_eigen.h</a>.</p>
+<p>Definition at line <a class="el" href="adaptions__eigen_8h_source.html#l00215">215</a> of file <a class="el" href="adaptions__eigen_8h_source.html">adaptions_eigen.h</a>.</p>
 
 </div>
 </div>

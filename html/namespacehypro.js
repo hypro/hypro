@@ -32,7 +32,11 @@ var namespacehypro =
       [ "gnuplotSettings", "structhypro_1_1plotting_1_1gnuplotSettings.html", "structhypro_1_1plotting_1_1gnuplotSettings" ]
     ] ],
     [ "reachability", null, [
-      [ "Eigen", "namespacehypro_1_1reachability_1_1Eigen.html", "namespacehypro_1_1reachability_1_1Eigen" ],
+      [ "Eigen", null, [
+        [ "NumTraits< carl::FLOAT_T< Number > >", "structhypro_1_1reachability_1_1Eigen_1_1NumTraits_3_01carl_1_1FLOAT__T_3_01Number_01_4_01_4.html", "structhypro_1_1reachability_1_1Eigen_1_1NumTraits_3_01carl_1_1FLOAT__T_3_01Number_01_4_01_4" ],
+        [ "NumTraits< mpq_class >", "structhypro_1_1reachability_1_1Eigen_1_1NumTraits_3_01mpq__class_01_4.html", "structhypro_1_1reachability_1_1Eigen_1_1NumTraits_3_01mpq__class_01_4" ],
+        [ "NumTraits< carl::Interval< Number > >", "structhypro_1_1reachability_1_1Eigen_1_1NumTraits_3_01carl_1_1Interval_3_01Number_01_4_01_4.html", "structhypro_1_1reachability_1_1Eigen_1_1NumTraits_3_01carl_1_1Interval_3_01Number_01_4_01_4" ]
+      ] ],
       [ "hypro", "namespacehypro_1_1reachability_1_1hypro.html", "namespacehypro_1_1reachability_1_1hypro" ],
       [ "std", null, [
         [ "hash< hypro::vector_t< Number > >", "structhypro_1_1reachability_1_1std_1_1hash_3_01hypro_1_1vector__t_3_01Number_01_4_01_4.html", "structhypro_1_1reachability_1_1std_1_1hash_3_01hypro_1_1vector__t_3_01Number_01_4_01_4" ],
