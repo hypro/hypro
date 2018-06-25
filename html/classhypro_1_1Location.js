@@ -33,5 +33,6 @@ var classhypro_1_1Location =
     [ "setInvariant", "classhypro_1_1Location.html#a031f5c93b7979bea0582283618ea8a00", null ],
     [ "setName", "classhypro_1_1Location.html#a3f49334e8502bfee63c7e9448820c5e1", null ],
     [ "setTransitions", "classhypro_1_1Location.html#a6c854c08a0e6f94dfb89f32284dd9597", null ],
+    [ "updateTransition", "classhypro_1_1Location.html#af8dc5754d664496dd99c57dfcaa10fec", null ],
     [ "operator<<", "classhypro_1_1Location.html#af341b96d0478f585a42f066ebd5c7bde", null ]
 ];

@@ -119,7 +119,7 @@ $(document).ready(function(){initNavTree('PlotterUtil_8cpp_source.html','');});
 <div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;        std::size_t g = ((color &amp; (255 &lt;&lt; 8)) &gt;&gt; 8);</div>
 <div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;        std::size_t b = color &amp; 255;</div>
 <div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;        <span class="comment">//std::cout &lt;&lt; &quot;Convert &quot; &lt;&lt; color &lt;&lt; &quot; to [&quot; &lt;&lt; r &lt;&lt; &quot;, &quot; &lt;&lt; g &lt;&lt; &quot;, &quot; &lt;&lt; b &lt;&lt; &quot;]&quot; &lt;&lt; std::endl;</span></div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;        <span class="keywordflow">return</span> std::vector&lt;std::size_t&gt;({r,g,b});</div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;        <span class="keywordflow">return</span> {r,g,b};</div>
 <div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;    }</div>
 <div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;</div>
 <div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;    std::size_t RGBtoHEX(std::vector&lt;std::size_t&gt; color) {</div>
