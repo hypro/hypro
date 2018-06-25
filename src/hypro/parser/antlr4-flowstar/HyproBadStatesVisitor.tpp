@@ -25,7 +25,8 @@ namespace hypro {
 			for(auto bState : ctx->lbadstate()){
 				std::pair<Location<Number>*,Condition<Number>> badStateInfo = visit(bState).template as<std::pair<Location<Number>*,Condition<Number>>>();
 				std::size_t lcMapSize = lcMap.size();
-				lcMap.insert(badStateInfo);
+				//lcMap.insert(badStateInfo);
+				lcMap.emplace(badStateInfo);
 				//Case that nothing has been inserted as location already existed in map:
 				//Extend condition matrix and vector of condition that is already in map
 				if(lcMapSize == lcMap.size()){

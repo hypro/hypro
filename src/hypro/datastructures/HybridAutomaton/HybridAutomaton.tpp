@@ -8,8 +8,8 @@ template<typename Number, typename State>
 HybridAutomaton<Number,State>::HybridAutomaton(const HybridAutomaton<Number,State>& hybrid)
 	: mLocations()
 	, mTransitions()
-	, mInitialStates(hybrid.getInitialStates())
-	, mLocalBadStates(hybrid.getLocalBadStates())
+	//, mInitialStates(hybrid.getInitialStates())
+	//, mLocalBadStates(hybrid.getLocalBadStates())
 	, mGlobalBadStates(hybrid.getGlobalBadStates())
 	, mVariables(hybrid.getVariables())
 {
@@ -22,6 +22,59 @@ HybridAutomaton<Number,State>::HybridAutomaton(const HybridAutomaton<Number,Stat
    	}
 	for(auto& t : hybrid.getTransitions()){
 		mTransitions.emplace(std::make_unique<Transition<Number>>(Transition<Number>(*t)));
+	}
+
+	//update locations of transitions and transitions of locations
+	for(auto& l : mLocations) {
+		for(auto& lTrans : l->getTransitions()){
+			for(auto& t : mTransitions) {
+				if( *lTrans == *t.get() ) {
+					// insert new Transition
+					l->updateTransition(lTrans,t.get());
+				}
+				// update location in transitions as well, only if pointers are different but content is the same.
+				if( *l.get() == *t->getSource() && l.get() != t->getSource()) {
+					t->setSource(l.get());
+				}
+				if( *l.get() == *t->getTarget() && l.get() != t->getTarget()) {
+					t->setTarget(l.get());
+				}
+			}
+		}
+	}
+
+	//update initial sets
+	mInitialStates.clear();
+	for(auto& otherInit : hybrid.getInitialStates()) {
+		auto copy = otherInit.second;
+		// update location
+		for(auto& l : mLocations) {
+			//std::cout << "l hash: " << l->hash() << "and copy loc hash: " << copy.getLocation()->hash() << std::endl;
+			if( *l == *copy.getLocation()) {
+				copy.setLocation(l.get());
+				break;
+			}
+		}
+		this->addInitialState(copy);
+	}
+
+	mLocalBadStates.clear();
+	for(auto otherBad : hybrid.getLocalBadStates()) {
+		auto copy = otherBad.second;
+		// update location
+		#ifndef NDEBUG
+		bool found = false;
+		#endif
+		for(auto& l : mLocations) {
+			if( *l.get() == *otherBad.first ) {
+				#ifndef NDEBUG
+				found = true;
+				#endif
+				this->addLocalBadState(l.get(), copy);
+				break;
+			}
+		}
+		assert(found);
 	}
 }
 
@@ -45,22 +98,6 @@ HybridAutomaton<Number,State>::HybridAutomaton(HybridAutomaton<Number,State>&& h
 	for(auto& t : hybrid.getTransitions()){
 		mTransitions.emplace(std::make_unique<Transition<Number>>(Transition<Number>(*t)));
 	}
-
-	//removal for test
-	// Stef: This does not work, because whenever you call getLocations, a new set
-	// is created containing only the raw pointers - if you empty that set, nothing happens to
-	// the original object.
-	/*
-	hybrid.getLocations().clear();
-	assert(hybrid.getLocations().size() == 0);
-	assert(mLocations.size() != 0);
-	assert(*(mLocations.begin()));
-
-	hybrid.getTransitions().clear();
-	assert(hybrid.getTransitions().size() == 0);
-	assert(mTransitions.size() != 0);
-	assert(*(mTransitions.begin()));
-	*/
 
 	//update locations of transitions and transitions of locations
 	for(auto& l : mLocations) {

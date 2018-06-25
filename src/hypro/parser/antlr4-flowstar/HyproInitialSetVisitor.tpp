@@ -44,7 +44,7 @@ namespace hypro {
 			state.setSet(conSet,0);
 			assert(state.getNumberSets() == 1);
 			state.setTimestamp(carl::Interval<Number>(0));
-			initialState.insert(std::make_pair(initialLoc, state));
+			initialState.emplace(std::make_pair(initialLoc, state));
 		}
 
 		return initialState;

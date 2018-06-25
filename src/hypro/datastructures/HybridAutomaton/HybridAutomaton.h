@@ -220,6 +220,36 @@ class HybridAutomaton
      * @return     True, if both automata are equal, false otherwise.
      */
     friend bool operator==( const HybridAutomaton<Number,State>& lhs, const HybridAutomaton<Number,State>& rhs ) {
+        if(!(lhs.equals(lhs.getLocations(),rhs.getLocations()))){
+            std::cout << "no equality of locations\n";
+        }
+        if(!(lhs.equals(lhs.getTransitions(),rhs.getTransitions()))){
+            std::cout << "no equality of transitions\n";
+        }
+        if(lhs.getInitialStates() != rhs.getInitialStates()){
+            std::cout << "no equality of initials\n";
+            if(lhs.getInitialStates().size() != rhs.getInitialStates().size()){
+                std::cout << "initial set sizes were different\n";
+            }
+            std::cout << "size of lhs initial set: " << lhs.getInitialStates().size() << " size of rhs initial set: " << rhs.getInitialStates().size() << std::endl;
+            auto rhsIt = rhs.getInitialStates().begin();
+            for(auto lhsIt = lhs.getInitialStates().begin(); lhsIt != lhs.getInitialStates().end(); ++lhsIt){
+                if((*lhsIt).first != (*rhsIt).first){
+                    std::cout << (*lhsIt).first->getName() << " with hash " << (*lhsIt).first->hash() << " unequal to " << (*rhsIt).first->getName() << " with hash " << (*rhsIt).first->hash() << std::endl;
+                }
+                if((*lhsIt).second != (*rhsIt).second){
+                    std::cout << "states were different\n";
+                }
+                rhsIt++;
+            }
+        }
+        if(lhs.getLocalBadStates() != rhs.getLocalBadStates()){
+            std::cout << "no equality of local bads\n";    
+        }
+        if(lhs.getGlobalBadStates() != rhs.getGlobalBadStates()){
+            std::cout << "no equality of global bads\n";    
+        }
+
         return lhs.equals(lhs.getLocations(),rhs.getLocations()) &&
     			lhs.equals(lhs.getTransitions(),rhs.getTransitions()) &&
     			lhs.getInitialStates() == rhs.getInitialStates() &&
