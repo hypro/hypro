@@ -18,7 +18,11 @@ HybridAutomaton<Number,State>::HybridAutomaton(const HybridAutomaton<Number,Stat
 	// Stef: We create actual copies of the locations, what remains to do is to update the initial and bad states
 	// accordingly.
 	for(auto& l : hybrid.getLocations()){
-    	mLocations.emplace(std::make_unique<Location<Number>>(Location<Number>(*l)));
+		Location<Number> tmp = Location<Number>(*l);
+		tmp.setTransitions(std::set<Transition<Number>*>());
+    	mLocations.emplace(std::make_unique<Location<Number>>(tmp));
+    	std::cout << "Copied location." << std::endl;
+    	std::cout << "mLocations size: " << mLocations.size() << std::endl;
    	}
 	for(auto& t : hybrid.getTransitions()){
 		mTransitions.emplace(std::make_unique<Transition<Number>>(Transition<Number>(*t)));
@@ -26,19 +30,17 @@ HybridAutomaton<Number,State>::HybridAutomaton(const HybridAutomaton<Number,Stat
 
 	//update locations of transitions and transitions of locations
 	for(auto& l : mLocations) {
-		for(auto& lTrans : l->getTransitions()){
-			for(auto& t : mTransitions) {
-				if( *lTrans == *t.get() ) {
-					// insert new Transition
-					l->updateTransition(lTrans,t.get());
-				}
-				// update location in transitions as well, only if pointers are different but content is the same.
-				if( *l.get() == *t->getSource() && l.get() != t->getSource()) {
-					t->setSource(l.get());
-				}
-				if( *l.get() == *t->getTarget() && l.get() != t->getTarget()) {
-					t->setTarget(l.get());
-				}
+		for(auto& t : mTransitions) {
+			if( *t->getSource() == *l.get() ) {
+				// insert new Transition
+				l->addTransition(t.get());
+			}
+			// update location in transitions as well, only if pointers are different but content is the same.
+			if( *l.get() == *t->getSource() && l.get() != t->getSource()) {
+				t->setSource(l.get());
+			}
+			if( *l.get() == *t->getTarget() && l.get() != t->getTarget()) {
+				t->setTarget(l.get());
 			}
 		}
 	}
@@ -84,14 +86,18 @@ HybridAutomaton<Number,State>::HybridAutomaton(HybridAutomaton<Number,State>&& h
 	:
 	mLocations(),
 	mTransitions(),
-	mGlobalBadStates(hybrid.getGlobalBadStates())
+	mGlobalBadStates(hybrid.getGlobalBadStates()),
+	mVariables(hybrid.getVariables())
  {
 
 	std::cout << "In HA move constructor!\n";
 
 	//fill mLocations
 	for(auto& l : hybrid.getLocations()){
-    	mLocations.emplace(std::make_unique<Location<Number>>(Location<Number>(*l)));
+    	Location<Number> tmp = Location<Number>(*l);
+		tmp.setTransitions(std::set<Transition<Number>*>());
+    	mLocations.emplace(std::make_unique<Location<Number>>(tmp));
+    	std::cout << "Supposed to copy location." << std::endl;
    	}
 
 	//fill mTransitions
@@ -101,19 +107,17 @@ HybridAutomaton<Number,State>::HybridAutomaton(HybridAutomaton<Number,State>&& h
 
 	//update locations of transitions and transitions of locations
 	for(auto& l : mLocations) {
-		for(auto& lTrans : l->getTransitions()){
-			for(auto& t : mTransitions) {
-				if( *lTrans == *t.get() ) {
-					// insert new Transition
-					l->updateTransition(lTrans,t.get());
-				}
-				// update location in transitions as well, only if pointers are different but content is the same.
-				if( *l.get() == *t->getSource() && l.get() != t->getSource()) {
-					t->setSource(l.get());
-				}
-				if( *l.get() == *t->getTarget() && l.get() != t->getTarget()) {
-					t->setTarget(l.get());
-				}
+		for(auto& t : mTransitions) {
+			if( *t->getSource() == *l.get() ) {
+				// insert new Transition
+				l->addTransition(t.get());
+			}
+			// update location in transitions as well, only if pointers are different but content is the same.
+			if( *l.get() == *t->getSource() && l.get() != t->getSource()) {
+				t->setSource(l.get());
+			}
+			if( *l.get() == *t->getTarget() && l.get() != t->getTarget()) {
+				t->setTarget(l.get());
 			}
 		}
 	}
