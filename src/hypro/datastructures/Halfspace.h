@@ -14,6 +14,7 @@
 #include "../util/adaptions_eigen/adaptions_eigen.h"
 #include "../../resources/glpk-4.45/build/include/glpk.h"
 #include <carl/formula/Constraint.h>
+#include <boost/functional/hash.hpp>
 #include <cassert>
 
 

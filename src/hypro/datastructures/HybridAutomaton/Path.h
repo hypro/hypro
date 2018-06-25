@@ -56,7 +56,8 @@ namespace hypro {
 		friend std::ostream& operator<<(std::ostream& out, const TPathElement<Number,tNumber>& pathElem) {
 			carl::Interval<double> tmp(carl::convert<tNumber,double>(pathElem.timeInterval.lower()), carl::convert<tNumber,double>(pathElem.timeInterval.upper()));
 			if(pathElem.isDiscreteStep()){
-				out << pathElem.transition->getSource()->getId() << " -> " << pathElem.transition->getTarget()->getId() << " " << tmp;
+				//out << pathElem.transition->getSource()->getId() << " -> " << pathElem.transition->getTarget()->getId() << " " << tmp;
+				out << pathElem.transition->getSource()->hash() << " -> " << pathElem.transition->getTarget()->hash() << " " << tmp;
 			} else {
 				out << tmp;
 			}
@@ -99,6 +100,13 @@ namespace hypro {
 	 */
 	template<typename Number, typename tNumber = Number>
 	class Path {
+
+		private:
+			std::deque<TPathElement<Number,tNumber>> mPath; // why is this a deque? - shouldn't it be more of a double-linked list?
+			// or even better: define this recursively. A path is empty or a subpath
+			// Stefan: This is historic :).
+			bool chatteringZeno = false;
+			
 		public:
 
 			Path(){};
@@ -174,12 +182,6 @@ namespace hypro {
 			bool operator!=(const Path<Number,tNumber>& rhs) const {
 				return !(*this == rhs);
 			}
-
-		private:
-			std::deque<TPathElement<Number,tNumber>> mPath; // why is this a deque? - shouldn't it be more of a double-linked list?
-			// or even better: define this recursively. A path is empty or a subpath
-			// Stefan: This is historic :).
-			bool chatteringZeno = false;
 
 	};
 

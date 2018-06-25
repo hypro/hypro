@@ -25,8 +25,8 @@ namespace hypro {
 				//trSet.insert(visit(tr).antlrcpp::Any::as<Transition<Number>*>());
 				//std::unique_ptr<Transition<Number>> t(std::move(visit(tr).template as<std::unique_ptr<Transition<Number>>>()));
 				Transition<Number>* t = visit(tr);//.antlrcpp::Any::as<Transition<Number>*>();
-				trSet.insert(t);
 				//trSet.insert(t);
+				trSet.emplace(t);
 				(t->getSource())->addTransition(t);
 			}
 			return trSet;

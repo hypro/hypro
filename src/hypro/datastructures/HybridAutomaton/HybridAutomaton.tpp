@@ -8,44 +8,155 @@ template<typename Number, typename State>
 HybridAutomaton<Number,State>::HybridAutomaton(const HybridAutomaton<Number,State>& hybrid)
 	: mLocations()
 	, mTransitions()
-	, mInitialStates(hybrid.getInitialStates())
-	, mLocalBadStates(hybrid.getLocalBadStates())
+	//, mInitialStates(hybrid.getInitialStates())
+	//, mLocalBadStates(hybrid.getLocalBadStates())
 	, mGlobalBadStates(hybrid.getGlobalBadStates())
 	, mVariables(hybrid.getVariables())
 {
+	//std::cout << "In HA copy constructor!\n";
+
+	// Stef: We create actual copies of the locations, what remains to do is to update the initial and bad states
+	// accordingly.
 	for(auto& l : hybrid.getLocations()){
-    	mLocations.emplace(std::make_unique<Location<Number>>(*l));
+		Location<Number> tmp = Location<Number>(*l);
+		tmp.setTransitions(std::set<Transition<Number>*>());
+    	mLocations.emplace(std::make_unique<Location<Number>>(tmp));
    	}
 	for(auto& t : hybrid.getTransitions()){
-		mTransitions.emplace(std::make_unique<Transition<Number>>(*t));
+		mTransitions.emplace(std::make_unique<Transition<Number>>(Transition<Number>(*t)));
+	}
+
+	//update locations of transitions and transitions of locations
+	for(auto& l : mLocations) {
+		for(auto& t : mTransitions) {
+			if( *t->getSource() == *l.get() ) {
+				// insert new Transition
+				l->addTransition(t.get());
+			}
+			// update location in transitions as well, only if pointers are different but content is the same.
+			if( *l.get() == *t->getSource() && l.get() != t->getSource()) {
+				t->setSource(l.get());
+			}
+			if( *l.get() == *t->getTarget() && l.get() != t->getTarget()) {
+				t->setTarget(l.get());
+			}
+		}
+	}
+
+	//update initial sets
+	mInitialStates.clear();
+	for(auto& otherInit : hybrid.getInitialStates()) {
+		auto copy = otherInit.second;
+		// update location
+		for(auto& l : mLocations) {
+			//std::cout << "l hash: " << l->hash() << "and copy loc hash: " << copy.getLocation()->hash() << std::endl;
+			if( *l == *copy.getLocation()) {
+				copy.setLocation(l.get());
+				break;
+			}
+		}
+		this->addInitialState(copy);
+	}
+
+	mLocalBadStates.clear();
+	for(auto otherBad : hybrid.getLocalBadStates()) {
+		auto copy = otherBad.second;
+		// update location
+		#ifndef NDEBUG
+		bool found = false;
+		#endif
+		for(auto& l : mLocations) {
+			if( *l.get() == *otherBad.first ) {
+				#ifndef NDEBUG
+				found = true;
+				#endif
+				this->addLocalBadState(l.get(), copy);
+				break;
+			}
+		}
+		assert(found);
 	}
 }
 
-//Move Constructor
+//Move constructor
 template<typename Number, typename State>
-HybridAutomaton<Number,State>::HybridAutomaton(HybridAutomaton<Number,State>&& hybrid) noexcept
-	: mLocations()
-	, mTransitions()
-	, mInitialStates(hybrid.getInitialStates())
-	, mLocalBadStates(hybrid.getLocalBadStates())
-	, mGlobalBadStates(hybrid.getGlobalBadStates())
-	, mVariables(hybrid.getVariables())
-{
+HybridAutomaton<Number,State>::HybridAutomaton(HybridAutomaton<Number,State>&& hybrid)
+	:
+	mLocations(),
+	mTransitions(),
+	mGlobalBadStates(hybrid.getGlobalBadStates()),
+	mVariables(hybrid.getVariables())
+ {
+
+	//std::cout << "In HA move constructor!\n";
+
+	//fill mLocations
 	for(auto& l : hybrid.getLocations()){
-		//mLocations.insert(std::move(l));
-		mLocations.emplace(std::make_unique<Location<Number>>(*l));
-	}
-	//hybrid.setLocations(std::move(std::set<std::unique_ptr<Location<Number>>>()));
+    	Location<Number> tmp = Location<Number>(*l);
+		tmp.setTransitions(std::set<Transition<Number>*>());
+    	mLocations.emplace(std::make_unique<Location<Number>>(tmp));
+   	}
+
+	//fill mTransitions
 	for(auto& t : hybrid.getTransitions()){
-		//mTransitions.insert(std::move(t));
-		mTransitions.emplace(std::make_unique<Transition<Number>>(*t));
+		mTransitions.emplace(std::make_unique<Transition<Number>>(Transition<Number>(*t)));
 	}
-	//hybrid.setLocations(std::move(std::set<std::unique_ptr<Transition<Number>>>()));
+
+	//update locations of transitions and transitions of locations
+	for(auto& l : mLocations) {
+		for(auto& t : mTransitions) {
+			if( *t->getSource() == *l.get() ) {
+				// insert new Transition
+				l->addTransition(t.get());
+			}
+			// update location in transitions as well, only if pointers are different but content is the same.
+			if( *l.get() == *t->getSource() && l.get() != t->getSource()) {
+				t->setSource(l.get());
+			}
+			if( *l.get() == *t->getTarget() && l.get() != t->getTarget()) {
+				t->setTarget(l.get());
+			}
+		}
+	}
+
+	//update initial sets
+	mInitialStates.clear();
+	for(auto otherInit : hybrid.getInitialStates()) {
+		auto copy = otherInit.second;
+		// update location
+		for(auto& l : mLocations) {
+			if( *l == *copy.getLocation()) {
+				copy.setLocation(l.get());
+				break;
+			}
+		}
+		this->addInitialState(copy);
+	}
+
+	mLocalBadStates.clear();
+	for(auto otherBad : hybrid.getLocalBadStates()) {
+		auto copy = otherBad.second;
+		// update location
+		#ifndef NDEBUG
+		bool found = false;
+		#endif
+		for(auto& l : mLocations) {
+			if( *l.get() == *otherBad.first ) {
+				#ifndef NDEBUG
+				found = true;
+				#endif
+				this->addLocalBadState(l.get(), copy);
+				break;
+			}
+		}
+		assert(found);
+	}
 }
 
 //Copy assignment
 template<typename Number, typename State>
 HybridAutomaton<Number,State>& HybridAutomaton<Number,State>::operator=(const HybridAutomaton<Number,State>& rhs){
+	//std::cout << "In HA copy assignment!\n";
    	if(this != &rhs){
 
    		//Locations
@@ -74,6 +185,7 @@ HybridAutomaton<Number,State>& HybridAutomaton<Number,State>::operator=(const Hy
 //Move Assignment
 template<typename Number, typename State>
 HybridAutomaton<Number,State>& HybridAutomaton<Number,State>::operator=(HybridAutomaton<Number,State>&& rhs){
+	std::cout << "In HA move assignment!\n";
    	if(this != &rhs){
     	//std::swap(rhs.mLocations, mLocations);
     	//std::swap(rhs.mTransitions, mTransitions);
@@ -554,5 +666,5 @@ HybridAutomaton<Number, State> operator||(const HybridAutomaton<Number, State>& 
 	return ha; //std::move??? -> no, prevents copy-elision!
 }
 
-}  // namespace hydra
+}  // namespace hypro
 

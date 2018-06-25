@@ -64,7 +64,10 @@ namespace hypro {
 		HyproInitialSetVisitor<Number> initVisitor = HyproInitialSetVisitor<Number>(varVec, locSet);
 		for(auto& initState : ctx->init()){
 			typename HybridAutomaton<Number,State_t<Number,Number>>::locationStateMap oneInitialState = initVisitor.visit(initState).template as<typename HybridAutomaton<Number,State_t<Number,Number>>::locationStateMap>();
-			initSet.insert(oneInitialState.begin(), oneInitialState.end());
+			//initSet.insert(oneInitialState.begin(), oneInitialState.end());
+			for(auto& is : oneInitialState){
+				initSet.emplace(is);
+			}
 		}
 
 		//6.Calls visit(ctx->unsafeset()) to get local and global badStates

@@ -32,7 +32,8 @@ namespace hypro {
 
 			Location<Number>* loc = visit(ctx->location().at(i));
 			assert(loc != nullptr);
-			locSet.insert(loc);
+			//locSet.insert(loc);
+			locSet.emplace(loc);
 			i++;
 		}
 		//return set of raw ptrs to locations

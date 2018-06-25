@@ -31,17 +31,17 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
 
 	#New for AnTLR
 	#message("I made it to AntlrTests")
-	add_executable(runAntlrTests
-		AntlrParserTest.cpp
-		AntlrParserCIFTest.cpp
-	)
+	#add_executable(runAntlrTests
+		#AntlrParserTest.cpp
+		#AntlrParserCIFTest.cpp
+	#)
 	#message("Added executable")
-	add_dependencies(runAntlrTests resources antlr4cpp)
+	#add_dependencies(runAntlrTests resources antlr4cpp)
 	#message("Added dependencies")
-	target_include_directories(runAntlrTests PRIVATE ${GTEST_INCLUDE_DIR})
-	target_link_libraries(runAntlrTests ${PROJECT_NAME} ${GTEST_LIBRARIES})
+	#target_include_directories(runAntlrTests PRIVATE ${GTEST_INCLUDE_DIR})
+	#target_link_libraries(runAntlrTests ${PROJECT_NAME} ${GTEST_LIBRARIES})
 	#message("Targeted link libraries: " ${PROJECT_NAME} ${GTEST_LIBRARIES} ${ANTLR4CPP_LIBS})
-	add_test( NAME parser COMMAND runAntlrTests )
+	#add_test( NAME parser COMMAND runAntlrTests )
 	#message("Added a test named parser")
 
 

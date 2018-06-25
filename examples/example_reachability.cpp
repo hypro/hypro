@@ -20,10 +20,21 @@ static void computeReachableStates(const std::string& filename, const hypro::rep
 	using timeunit = std::chrono::microseconds;
 	clock::time_point start = clock::now();
 
-	boost::tuple<hypro::HybridAutomaton<Number>, hypro::ReachabilitySettings<Number>> ha = hypro::parseFlowstarFile<Number>(filename);
-//#ifdef HYPRO_LOGGING
-//	std::cout << "Parsed HybridAutomaton:\n" << boost::get<0>(ha) << "Parsed ReachabilitySettings:\n" << boost::get<1>(ha) << std::endl;
-//#endif
+	//boost::tuple<hypro::HybridAutomaton<Number>, hypro::ReachabilitySettings<Number>> ha = std::move(hypro::parseFlowstarFile<Number>(filename));
+	std::pair<hypro::HybridAutomaton<Number>, hypro::ReachabilitySettings<Number>> ha = std::move(hypro::parseFlowstarFile<Number>(filename))  ; 
+#ifdef HYPRO_LOGGING
+	std::cout << "========== DIRECTLY AFTER =============" << std::endl;
+	std::cout << "Parsed HybridAutomaton Transitions:\n";
+	for(const auto& t : ha.first.getTransitions()){
+		std::cout << *t << std::endl;
+	}
+	std::cout << "Parsed HybridAutomaton Locations:\n";
+	for(const auto& l : ha.first.getLocations()){
+		std::cout << *l << std::endl;
+	}
+	std::cout << "Parsed HybridAutomaton:\n" << ha.first << "Parsed ReachabilitySettings:\n" << ha.second << std::endl;
+#endif
+/*
 	hypro::reachability::Reach<Number> reacher(boost::get<0>(ha), boost::get<1>(ha));
 	reacher.setRepresentationType(type);
 	std::cout << boost::get<1>(ha) << std::endl;
@@ -133,6 +144,7 @@ static void computeReachableStates(const std::string& filename, const hypro::rep
 
 //#endif
 	}
+	*/
 }
 
 int main(int argc, char** argv) {

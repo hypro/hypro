@@ -86,6 +86,19 @@ void Location<Number>::setFlow(const matrix_t<Number>& mat, std::size_t I) {
 }
 
 template<typename Number>
+void Location<Number>::updateTransition(Transition<Number>* original, Transition<Number>* newT) {
+	auto tPos = std::find(mTransitions.begin(), mTransitions.end(), original);
+	if( tPos == mTransitions.end()) {
+		TRACE("hypro.datastructures.hybridAutomaton","Attempted to update non-existing transition @" << original);
+		return;
+	}
+	assert(newT != nullptr);
+	mTransitions.erase(tPos);
+	mTransitions.insert(newT);
+	mHash = 0;
+}
+
+template<typename Number>
 void Location<Number>::setExtInput(const Box<Number>& b) {
 	mExternalInput = b;
 	for(std::size_t i = 0; i < b.dimension(); ++i) {
@@ -396,11 +409,13 @@ void Location<Number>::decompose(std::vector<std::vector<size_t>> decomposition)
 	std::vector<matrix_t<Number>> newFlows;
 	// for each set {i,j,..., k} select the i-th,j-th,...,k-th vector into a new square matrix
 	for(auto set : decomposition){
+		#ifdef HYPRO_LOGGING
 		DEBUG("hypro.datastructures","decompose flow for set: {");
 		for(auto entry : set){
 			DEBUG("hypro.datastructures", "" << entry << ", ");
 		}
 		DEBUG("hypro.datastructures","}");
+		#endif
 		// +1 row for last-row of affine transformation
 		matrix_t<Number> rowMat = matrix_t<Number>::Zero(set.size()+1, oldFlow.cols());
 		// -1 because of last-row

@@ -69,7 +69,7 @@ class HybridAutomaton
      *
      * @param[in]  	hybrid  The original hybrid automaton.
      */
-    HybridAutomaton(HybridAutomaton<Number,State>&& hybrid) noexcept;
+    HybridAutomaton(HybridAutomaton<Number,State>&& hybrid);
 
     /**
      * @brief 		Constructor from locations, transitions and initial states
@@ -128,17 +128,17 @@ class HybridAutomaton
      */
     ///@{
     //void setLocations(locationSet& locs) { mLocations.swap(locs); }
-    void setLocations(locationSet&& locs) { 
+    void setLocations(locationSet&& locs) {
         assert(checkConsistency());
-        mLocations.clear(); 
-        mLocations = std::move(locs); 
+        mLocations.clear();
+        mLocations = std::move(locs);
         assert(checkConsistency());
     }
     //void setTransitions(transitionSet& trans) { mTransitions.swap(trans); }
-    void setTransitions(transitionSet&& trans) { 
+    void setTransitions(transitionSet&& trans) {
         assert(checkConsistency());
-        mTransitions.clear(); 
-        mTransitions = std::move(trans); 
+        mTransitions.clear();
+        mTransitions = std::move(trans);
         assert(checkConsistency());
     }
     void setInitialStates(const locationStateMap& states) { mInitialStates = states; }
@@ -219,11 +219,49 @@ class HybridAutomaton
      * @return     True, if both automata are equal, false otherwise.
      */
     friend bool operator==( const HybridAutomaton<Number,State>& lhs, const HybridAutomaton<Number,State>& rhs ) {
-        return lhs.equals(lhs.getLocations(),rhs.getLocations()) &&
-    			lhs.equals(lhs.getTransitions(),rhs.getTransitions()) &&
-    			lhs.getInitialStates() == rhs.getInitialStates() &&
-    			lhs.getLocalBadStates() == rhs.getLocalBadStates() &&
-    			lhs.getGlobalBadStates() == rhs.getGlobalBadStates();
+        if(!(lhs.equals(lhs.getLocations(),rhs.getLocations()))){
+            TRACE("hypro.datastructures.hybridAutomaton", "no equality of locations.");
+            return false;
+        }
+        if(!(lhs.equals(lhs.getTransitions(),rhs.getTransitions()))){
+            TRACE("hypro.datastructures.hybridAutomaton", "no equality of transitions.");
+            return false;
+        }
+        if(lhs.getInitialStates().size() != rhs.getInitialStates().size()){
+            TRACE("hypro.datastructures.hybridAutomaton", "initial set sizes were different.");
+            return false;
+        }
+        if(lhs.getInitialStates() != rhs.getInitialStates()){
+            TRACE("hypro.datastructures.hybridAutomaton", "no equality of initials.");
+
+            TRACE("hypro.datastructures.hybridAutomaton", "size of lhs initial set: " << lhs.getInitialStates().size() << " size of rhs initial set: " << rhs.getInitialStates().size());
+            auto rhsIt = rhs.getInitialStates().begin();
+            for(auto lhsIt = lhs.getInitialStates().begin(); lhsIt != lhs.getInitialStates().end(); ++lhsIt){
+                if(*((*lhsIt).first) != *((*rhsIt).first)){
+                    TRACE("hypro.datastructures.hybridAutomaton", (*lhsIt).first->getName() << " with hash " << (*lhsIt).first->hash() << " unequal to " << (*rhsIt).first->getName() << " with hash " << (*rhsIt).first->hash());
+                    return false;
+                }
+                if((*lhsIt).second != (*rhsIt).second){
+                    TRACE("hypro.datastructures.hybridAutomaton", "states were different.");
+                    return false;
+                }
+                rhsIt++;
+            }
+        }
+        if(lhs.getLocalBadStates() != rhs.getLocalBadStates()){
+            TRACE("hypro.datastructures.hybridAutomaton", "no equality of local bads.");
+            return false;
+        }
+        if(lhs.getGlobalBadStates() != rhs.getGlobalBadStates()){
+            TRACE("hypro.datastructures.hybridAutomaton", "no equality of global bads.");
+            return false;
+        }
+
+        return true;
+    }
+
+    friend bool operator!=( const HybridAutomaton<Number,State>& lhs, const HybridAutomaton<Number,State>& rhs ) {
+    	return !(lhs == rhs);
     }
 
     /**
