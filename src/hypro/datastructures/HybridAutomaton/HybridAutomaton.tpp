@@ -179,7 +179,7 @@ HybridAutomaton<Number,State>::HybridAutomaton(HybridAutomaton<Number,State>&& h
 //Copy assignment
 template<typename Number, typename State>
 HybridAutomaton<Number,State>& HybridAutomaton<Number,State>::operator=(const HybridAutomaton<Number,State>& rhs){
-	std::cout << "In HA copy assignment!\n";
+	//std::cout << "In HA copy assignment!\n";
    	if(this != &rhs){
 
    		//Locations
