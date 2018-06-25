@@ -13,7 +13,7 @@ HybridAutomaton<Number,State>::HybridAutomaton(const HybridAutomaton<Number,Stat
 	, mGlobalBadStates(hybrid.getGlobalBadStates())
 	, mVariables(hybrid.getVariables())
 {
-	std::cout << "In HA copy constructor!\n";
+	//std::cout << "In HA copy constructor!\n";
 
 	// Stef: We create actual copies of the locations, what remains to do is to update the initial and bad states
 	// accordingly.
@@ -21,8 +21,6 @@ HybridAutomaton<Number,State>::HybridAutomaton(const HybridAutomaton<Number,Stat
 		Location<Number> tmp = Location<Number>(*l);
 		tmp.setTransitions(std::set<Transition<Number>*>());
     	mLocations.emplace(std::make_unique<Location<Number>>(tmp));
-    	std::cout << "Copied location." << std::endl;
-    	std::cout << "mLocations size: " << mLocations.size() << std::endl;
    	}
 	for(auto& t : hybrid.getTransitions()){
 		mTransitions.emplace(std::make_unique<Transition<Number>>(Transition<Number>(*t)));
@@ -90,14 +88,13 @@ HybridAutomaton<Number,State>::HybridAutomaton(HybridAutomaton<Number,State>&& h
 	mVariables(hybrid.getVariables())
  {
 
-	std::cout << "In HA move constructor!\n";
+	//std::cout << "In HA move constructor!\n";
 
 	//fill mLocations
 	for(auto& l : hybrid.getLocations()){
     	Location<Number> tmp = Location<Number>(*l);
 		tmp.setTransitions(std::set<Transition<Number>*>());
     	mLocations.emplace(std::make_unique<Location<Number>>(tmp));
-    	std::cout << "Supposed to copy location." << std::endl;
    	}
 
 	//fill mTransitions

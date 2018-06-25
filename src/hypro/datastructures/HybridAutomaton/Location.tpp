@@ -46,9 +46,7 @@ Location<Number>::Location() : mFlows(), mExternalInput(), mTransitions(), mInva
 template<typename Number>
 Location<Number>::Location(const Location<Number>& _loc)
 	: mFlows(_loc.getFlows()), mExternalInput(_loc.getExternalInput()), mTransitions(_loc.getTransitions()), mInvariant(_loc.getInvariant()), mName(_loc.getName()), mId(), mHash(0)
-{
-	std::cout << "Location copy constructor." << std::endl;
-}
+{}
 
 template<typename Number>
 Location<Number>::Location(const matrix_t<Number>& _mat) : mFlows(), mId()

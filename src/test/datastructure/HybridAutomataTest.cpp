@@ -152,19 +152,19 @@ protected:
 
   	bool find(const Location<Number>* loc, const std::set<Location<Number>*>& locSet) const {
   		if(loc == nullptr || locSet.empty()){
-  			std::cout << "loc was nullptr or locSet was empty\n";
+  			//std::cout << "loc was nullptr or locSet was empty\n";
   			return false;
   		}
-  		std::cout << "locSet size: " << locSet.size() << std::endl;
-  		std::cout << "loc has hash: " << loc->hash() << std::endl;
+  		//std::cout << "locSet size: " << locSet.size() << std::endl;
+  		//std::cout << "loc has hash: " << loc->hash() << std::endl;
 		for(auto& ptrToALoc : locSet){
-			std::cout << "ptrToALoc loc hash is: " << ptrToALoc->hash() << std::endl;
+			//std::cout << "ptrToALoc loc hash is: " << ptrToALoc->hash() << std::endl;
 			if(*ptrToALoc == *(loc)){
-				std::cout << "found a match!\n";
+				//std::cout << "found a match!\n";
 				return true;
 			}
 		}
-		std::cout << "found no match.\n";
+		//std::cout << "found no match.\n";
 		return false;
   	}
 
@@ -183,7 +183,7 @@ protected:
   	HybridAutomaton<Number> dummyCopy(HybridAutomaton<Number> orig){ return orig; }
 
   	//To test moving
-	HybridAutomaton<Number> dummyMove(HybridAutomaton<Number>&& orig){ return orig; }  	
+	HybridAutomaton<Number> dummyMove(HybridAutomaton<Number>&& orig){ return orig; }
 
 };
 
@@ -443,7 +443,7 @@ TYPED_TEST(HybridAutomataTest, HashTest){
 	r1.setVector(v);
 	EXPECT_TRUE(r1.hash() != 0);
 	Reset<TypeParam> r2 = r1;
-	EXPECT_TRUE(r1.hash() == r2.hash());	
-	
+	EXPECT_TRUE(r1.hash() == r2.hash());
+
 
 }

@@ -129,17 +129,17 @@ class HybridAutomaton
      */
     ///@{
     //void setLocations(locationSet& locs) { mLocations.swap(locs); }
-    void setLocations(locationSet&& locs) { 
+    void setLocations(locationSet&& locs) {
         assert(checkConsistency());
-        mLocations.clear(); 
-        mLocations = std::move(locs); 
+        mLocations.clear();
+        mLocations = std::move(locs);
         assert(checkConsistency());
     }
     //void setTransitions(transitionSet& trans) { mTransitions.swap(trans); }
-    void setTransitions(transitionSet&& trans) { 
+    void setTransitions(transitionSet&& trans) {
         assert(checkConsistency());
-        mTransitions.clear(); 
-        mTransitions = std::move(trans); 
+        mTransitions.clear();
+        mTransitions = std::move(trans);
         assert(checkConsistency());
     }
     void setInitialStates(const locationStateMap& states) { mInitialStates = states; }
@@ -221,40 +221,48 @@ class HybridAutomaton
      */
     friend bool operator==( const HybridAutomaton<Number,State>& lhs, const HybridAutomaton<Number,State>& rhs ) {
         if(!(lhs.equals(lhs.getLocations(),rhs.getLocations()))){
-            std::cout << "no equality of locations\n";
+            TRACE("hypro.datastructures.hybridAutomaton", "no equality of locations.");
+            return false;
         }
         if(!(lhs.equals(lhs.getTransitions(),rhs.getTransitions()))){
-            std::cout << "no equality of transitions\n";
+            TRACE("hypro.datastructures.hybridAutomaton", "no equality of transitions.");
+            return false;
+        }
+        if(lhs.getInitialStates().size() != rhs.getInitialStates().size()){
+            TRACE("hypro.datastructures.hybridAutomaton", "initial set sizes were different.");
+            return false;
         }
         if(lhs.getInitialStates() != rhs.getInitialStates()){
-            std::cout << "no equality of initials\n";
-            if(lhs.getInitialStates().size() != rhs.getInitialStates().size()){
-                std::cout << "initial set sizes were different\n";
-            }
-            std::cout << "size of lhs initial set: " << lhs.getInitialStates().size() << " size of rhs initial set: " << rhs.getInitialStates().size() << std::endl;
+            TRACE("hypro.datastructures.hybridAutomaton", "no equality of initials.");
+
+            TRACE("hypro.datastructures.hybridAutomaton", "size of lhs initial set: " << lhs.getInitialStates().size() << " size of rhs initial set: " << rhs.getInitialStates().size());
             auto rhsIt = rhs.getInitialStates().begin();
             for(auto lhsIt = lhs.getInitialStates().begin(); lhsIt != lhs.getInitialStates().end(); ++lhsIt){
-                if((*lhsIt).first != (*rhsIt).first){
-                    std::cout << (*lhsIt).first->getName() << " with hash " << (*lhsIt).first->hash() << " unequal to " << (*rhsIt).first->getName() << " with hash " << (*rhsIt).first->hash() << std::endl;
+                if(*((*lhsIt).first) != *((*rhsIt).first)){
+                    TRACE("hypro.datastructures.hybridAutomaton", (*lhsIt).first->getName() << " with hash " << (*lhsIt).first->hash() << " unequal to " << (*rhsIt).first->getName() << " with hash " << (*rhsIt).first->hash());
+                    return false;
                 }
                 if((*lhsIt).second != (*rhsIt).second){
-                    std::cout << "states were different\n";
+                    TRACE("hypro.datastructures.hybridAutomaton", "states were different.");
+                    return false;
                 }
                 rhsIt++;
             }
         }
         if(lhs.getLocalBadStates() != rhs.getLocalBadStates()){
-            std::cout << "no equality of local bads\n";    
+            TRACE("hypro.datastructures.hybridAutomaton", "no equality of local bads.");
+            return false;
         }
         if(lhs.getGlobalBadStates() != rhs.getGlobalBadStates()){
-            std::cout << "no equality of global bads\n";    
+            TRACE("hypro.datastructures.hybridAutomaton", "no equality of global bads.");
+            return false;
         }
 
-        return lhs.equals(lhs.getLocations(),rhs.getLocations()) &&
-    			lhs.equals(lhs.getTransitions(),rhs.getTransitions()) &&
-    			lhs.getInitialStates() == rhs.getInitialStates() &&
-    			lhs.getLocalBadStates() == rhs.getLocalBadStates() &&
-    			lhs.getGlobalBadStates() == rhs.getGlobalBadStates();
+        return true;
+    }
+
+    friend bool operator!=( const HybridAutomaton<Number,State>& lhs, const HybridAutomaton<Number,State>& rhs ) {
+    	return !(lhs == rhs);
     }
 
     /**

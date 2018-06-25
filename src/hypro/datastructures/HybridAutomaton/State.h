@@ -261,7 +261,7 @@ class State
      * @details     Note that this method directly sets the sets while ignoring the consistency of the previously stored types
      * @param[in]   sets  The sets.
      */
-    void setSets(const std::vector<boost::variant<Representation,Rargs...>>& sets) { mSets = sets; } 
+    void setSets(const std::vector<boost::variant<Representation,Rargs...>>& sets) { mSets = sets; }
 
       /**
      * @brief       Sets the sets.
@@ -438,7 +438,7 @@ class State
      */
     friend bool operator==(const State<Number,tNumber,Representation,Rargs...>& lhs, const State<Number,tNumber,Representation,Rargs...>& rhs) {
     	// quick checks first
-    	if (lhs.getNumberSets() != rhs.getNumberSets() || lhs.mLoc != rhs.mLoc || lhs.mTimestamp != rhs.mTimestamp) {
+    	if (lhs.getNumberSets() != rhs.getNumberSets() || *(lhs.mLoc) != *(rhs.mLoc) || lhs.mTimestamp != rhs.mTimestamp) {
     		return false;
     	}
 
