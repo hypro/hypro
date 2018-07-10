@@ -6,6 +6,8 @@
 #endif
 
 #include "REPRESENTATIONSetting.h"
+#include "../../util/linearOptimization/Optimizer.h"
+#include "../../util/logging/Logger.h"
 
 namespace hypro {
 
@@ -48,7 +50,9 @@ class REPRESENTATIONT : public GeometricObject<Number, REPRESENTATIONT<Number,Co
 	 * @param[in]  orig  The original.
 	 */
 	template<typename SettingRhs, carl::DisableIf< std::is_same<Setting, SettingRhs> > = carl::dummy>
-	REPRESENTATIONT(const REPRESENTATIONT<Number,Converter,SettingRhs>& orig);
+	REPRESENTATIONT(const REPRESENTATIONT<Number,Converter,SettingRhs>& orig) {
+
+	}
 
 	/**
 	 * @brief      Move constructor.

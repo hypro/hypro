@@ -14,18 +14,9 @@ namespace hypro {
 	}
 
 	template<typename Number, typename Converter, typename Setting>
-	template<class SettingRhs>
-	REPRESENTATIONT<Number,Converter,Setting>::REPRESENTATIONT(const REPRESENTATIONT<Number,Converter,SettingRhs>& orig) {
-
-	}
-
-	template<typename Number, typename Converter, typename Setting>
 	REPRESENTATIONT<Number,Converter,Setting>::REPRESENTATIONT( REPRESENTATIONT<Number,Converter,Setting>&& orig ) {
 
 	}
-
-	template<typename Number, typename Converter, typename Setting>
-	~REPRESENTATIONT<Number,Converter,Setting>::REPRESENTATIONT() {}
 
 	template<typename Number, typename Converter, typename Setting>
 	bool REPRESENTATIONT<Number,Converter,Setting>::empty() const {
@@ -38,7 +29,7 @@ namespace hypro {
 	}
 
 	template<typename Number, typename Converter, typename Setting>
-	std::vector<Point<Number>> REPRESENTATIONT<Number,Converter,Setting>::vertices( const matrix_t<Number>& = matrix_t<Number>::Zero(0,0) ) const {
+	std::vector<Point<Number>> REPRESENTATIONT<Number,Converter,Setting>::vertices( const matrix_t<Number>& m ) const {
 
 	}
 
@@ -48,7 +39,7 @@ namespace hypro {
 	}
 
 	template<typename Number, typename Converter, typename Setting>
-	std::vector<EvaluationResult<Number>> REPRESENTATIONT<Number,Converter,Setting>::multiEvaluate( const matrix_t<Number>& _directions, bool useExact = true ) const {
+	std::vector<EvaluationResult<Number>> REPRESENTATIONT<Number,Converter,Setting>::multiEvaluate( const matrix_t<Number>& _directions, bool useExact ) const {
 
 	}
 
@@ -128,12 +119,12 @@ namespace hypro {
 	}
 
 	template<typename Number, typename Converter, typename Setting>
-	REPRESENTATIONT<Number,Converter,Setting> REPRESENTATIONT<Number,Converter,Setting>::( const REPRESENTATIONT<Number,Converter,Setting>& rhs ) const {
+	REPRESENTATIONT<Number,Converter,Setting> REPRESENTATIONT<Number,Converter,Setting>::unite( const REPRESENTATIONT<Number,Converter,Setting>& rhs ) const {
 
 	}
 
 	template<typename Number, typename Converter, typename Setting>
-	static REPRESENTATIONT<Number,Converter,Setting> REPRESENTATIONT<Number,Converter,Setting>::unite( const std::vector<REPRESENTATIONT<Number,Converter,Setting>>& REPRESENTATIONes ) {
+	REPRESENTATIONT<Number,Converter,Setting> REPRESENTATIONT<Number,Converter,Setting>::unite( const std::vector<REPRESENTATIONT<Number,Converter,Setting>>& REPRESENTATIONes ) {
 
 	}
 
@@ -146,7 +137,5 @@ namespace hypro {
 	void REPRESENTATIONT<Number,Converter,Setting>::clear() {
 
 	}
-
-};
 
 } // namespace hypro
