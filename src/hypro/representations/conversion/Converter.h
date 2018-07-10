@@ -31,6 +31,8 @@ enum CONV_MODE {
 template<typename Number>
 class Converter {
 	public:
+		/* BEGIN typedefs (do not remove this comment!) */
+
 		using Box = BoxT<Number,Converter,BoxLinearOptimizationOn>;
 		using ConstraintSet = ConstraintSetT<Number,Converter>;
 		using Ellipsoid = EllipsoidT<Number,Converter>;
@@ -43,6 +45,10 @@ class Converter {
 		#endif
 		using SupportFunction = SupportFunctionT<Number,Converter,SupportFunctionSetting>;
 		using Zonotope = ZonotopeT<Number,Converter,ZonotopeSetting>;
+
+		/* END typedefs (do not remove this comment!) */
+
+		/* BEGIN Conversion (do not remove this comment!) */
 
 		static Box toBox(const Box& source, const CONV_MODE = CONV_MODE::EXACT);
 		static Box toBox(const ConstraintSet& source, const CONV_MODE = CONV_MODE::EXACT);
@@ -127,7 +133,6 @@ class Converter {
 		static Polytope toPolytope(const Zonotope& source, const CONV_MODE = CONV_MODE::EXACT);
 		//static Polytope toPolytope(const DifferenceBounds& source, const CONV_MODE = CONV_MODE::EXACT); //TODO NOT IMPLEMENTED YET
 		#endif
-		
 
 		static DifferenceBounds toDifferenceBounds(const Box& source, const CONV_MODE = CONV_MODE::EXACT);
 		static DifferenceBounds toDifferenceBounds(const ConstraintSet& source, const CONV_MODE = CONV_MODE::EXACT);
@@ -138,68 +143,10 @@ class Converter {
 		static DifferenceBounds toDifferenceBounds(const Zonotope& source, const CONV_MODE = CONV_MODE::EXACT);
 		static DifferenceBounds toDifferenceBounds(const DifferenceBounds& source, const CONV_MODE = CONV_MODE::EXACT);
 
-		// Settings conversion
-		//template<typename FromSettings, typename ToSettings>
-		//static BoxT<Number,Converter,ToSettings> toBox(const BoxT<Number,Converter,FromSettings>& source);
-		//template<typename FromSettings, typename ToSettings>
-		//static ConstraintSetT<Number,Converter,ToSettings> toConstraintSet(const ConstraintSetT<Number,Converter,FromSettings>& source);
-		//template<typename FromSettings, typename ToSettings>
-		//static HPolytopeT<Number,Converter,ToSettings> toHPolytope(const HPolytopeT<Number,Converter,FromSettings>& source);
-		//template<typename FromSettings, typename ToSettings>
-		//static VPolytopeT<Number,Converter,ToSettings> toVPolytope(const VPolytopeT<Number,Converter,FromSettings>& source);
-		//template<typename FromSettings, typename ToSettings>
-		//static SupportFunctionT<Number,Converter,ToSettings> toSupportFunction(const SupportFunctionT<Number,Converter,FromSettings>& source);
-		//template<typename FromSettings, typename ToSettings>
-		//static ZonotopeT<Number,Converter,ToSettings> toZonotope(const ZonotopeT<Number,Converter,FromSettings>& source);
+		/* END Conversion (do not remove this comment!) */
 };
 
-template<typename Number>
-using Box = typename Converter<Number>::Box;
-
-template<typename Number>
-using ConstraintSet = typename Converter<Number>::ConstraintSet;
-
-template<typename Number>
-using Ellipsoid = typename Converter<Number>::Ellipsoid;
-
-/**
- * Typedef for HpolytopeT.
- */
-template<typename Number>
-using HPolytope = typename Converter<Number>::HPolytope;
-
-template<typename Number>
-using OrthogonalPolyhedron = typename Converter<Number>::OrthogonalPolyhedron;
-
-/**
- * Typedef for VPolytopeT.
- */
-template<typename Number>
-using VPolytope = typename Converter<Number>::VPolytope;
-
-#ifdef HYPRO_USE_PPL
-template<typename Number>
-using Polytope = typename Converter<Number>::Polytope;
-#endif
-
-/**
- * Typedef for SupportFunctionT.
- */
-template<typename Number>
-using SupportFunction = typename Converter<Number>::SupportFunction;
-
-/**
- * Typedef for ZonotopeT.
- */
-template<typename Number>
-using Zonotope = typename Converter<Number>::Zonotope;
-
-/**
- * Typedef for DifferenceBoundsT
- */
-template<typename Number>
-using DifferenceBounds = typename Converter<Number>::DifferenceBounds;
-
+#include "typedefs.h"
 #include "converterToBox.tpp"
 #include "converterToConstraintSet.tpp"
 #include "converterToHPolytope.tpp"
