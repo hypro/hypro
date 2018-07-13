@@ -192,16 +192,6 @@ namespace hypro {
 
 			delete errListener;
 
-			std::cout << "========== PARSERWRAPPER =============" << std::endl;
-			std::cout << "Parsed HybridAutomaton Transitions:\n";
-			for(const auto t : h.getTransitions()){
-				std::cout << *t << std::endl;
-			}
-			std::cout << "Parsed HybridAutomaton Locations:\n";
-			for(const auto l : h.getLocations()){
-				std::cout << *l << std::endl;
-			}
-
 			//return boost::tuple<HybridAutomaton<double, State_t<double,double>>&, ReachabilitySettings<double>>(h, visitor.getSettings());
 			return std::make_pair(std::move(h), visitor.getSettings());
 		}

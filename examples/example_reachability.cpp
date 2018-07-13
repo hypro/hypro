@@ -23,15 +23,6 @@ static void computeReachableStates(const std::string& filename, const hypro::rep
 	//boost::tuple<hypro::HybridAutomaton<Number>, hypro::ReachabilitySettings<Number>> ha = std::move(hypro::parseFlowstarFile<Number>(filename));
 	std::pair<hypro::HybridAutomaton<Number>, hypro::ReachabilitySettings<Number>> ha = std::move(hypro::parseFlowstarFile<Number>(filename))  ; 
 #ifdef HYPRO_LOGGING
-	std::cout << "========== DIRECTLY AFTER =============" << std::endl;
-	std::cout << "Parsed HybridAutomaton Transitions:\n";
-	for(const auto& t : ha.first.getTransitions()){
-		std::cout << *t << std::endl;
-	}
-	std::cout << "Parsed HybridAutomaton Locations:\n";
-	for(const auto& l : ha.first.getLocations()){
-		std::cout << *l << std::endl;
-	}
 	std::cout << "Parsed HybridAutomaton:\n" << ha.first << "Parsed ReachabilitySettings:\n" << ha.second << std::endl;
 #endif
 /*
