@@ -295,7 +295,7 @@ vector_t<Number> Halfspace<Number>::saveIntersect( const std::vector<Halfspace<N
 
 template <typename Number>
 bool Halfspace<Number>::contains( const vector_t<Number> _vector ) const {
-	return ( _vector.dot( mNormal ) <= mScalar );
+	return ( _vector.dot( mNormal ) < mScalar || carl::AlmostEqual2sComplement(_vector.dot( mNormal ), mScalar, 128) );
 }
 
 template <typename Number>
