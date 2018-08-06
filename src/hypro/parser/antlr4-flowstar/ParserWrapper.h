@@ -1,3 +1,5 @@
+#pragma once
+
 #include "HybridAutomatonLexer.h"
 #include "HybridAutomatonParser.h"
 #include "HyproHAVisitor.h"

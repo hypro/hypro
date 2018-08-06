@@ -10,8 +10,8 @@
 
 #pragma once
 
-#include "transformation.h"
 #include "../../types.h"
+#include "transformation.h"
 #include <carl/numbers/numbers.h>
 #include <functional>
 #include <iostream>
@@ -403,4 +403,4 @@ namespace std {
 
 } // namespace std
 
-#include "adaptions_eigen_double.tpp"
+//#include "adaptions_eigen_double.tpp"
