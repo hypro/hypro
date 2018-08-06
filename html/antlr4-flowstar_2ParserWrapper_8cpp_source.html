@@ -304,21 +304,23 @@ $(document).ready(function(){initNavTree('antlr4-flowstar_2ParserWrapper_8cpp_so
 <div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;</div>
 <div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;            <span class="keyword">delete</span> errListener;</div>
 <div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;</div>
-<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;            std::cout &lt;&lt; <span class="stringliteral">&quot;========== PARSERWRAPPER =============&quot;</span> &lt;&lt; std::endl;</div>
-<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;            std::cout &lt;&lt; <span class="stringliteral">&quot;Parsed HybridAutomaton Transitions:\n&quot;</span>;</div>
-<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;            <span class="keywordflow">for</span>(<span class="keyword">const</span> <span class="keyword">auto</span> t : h.getTransitions()){</div>
-<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;                std::cout &lt;&lt; *t &lt;&lt; std::endl;</div>
-<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;            }</div>
-<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;            std::cout &lt;&lt; <span class="stringliteral">&quot;Parsed HybridAutomaton Locations:\n&quot;</span>;</div>
-<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;            <span class="keywordflow">for</span>(<span class="keyword">const</span> <span class="keyword">auto</span> l : h.getLocations()){</div>
-<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;                std::cout &lt;&lt; *l &lt;&lt; std::endl;</div>
-<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;            }</div>
-<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;            <span class="comment">//return boost::tuple&lt;HybridAutomaton&lt;double, State_t&lt;double,double&gt;&gt;&amp;, ReachabilitySettings&lt;double&gt;&gt;(h, visitor.getSettings());</span></div>
-<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;            <span class="keywordflow">return</span> std::make_pair(std::move(h), visitor.getSettings());</div>
-<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;        }</div>
-<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;    }</div>
-<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;</div>
-<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;} <span class="comment">// namespace</span></div>
+<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;            <span class="comment">/*</span></div>
+<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;<span class="comment">            std::cout &lt;&lt; &quot;========== PARSERWRAPPER =============&quot; &lt;&lt; std::endl;</span></div>
+<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;<span class="comment">            std::cout &lt;&lt; &quot;Parsed HybridAutomaton Transitions:\n&quot;;</span></div>
+<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;<span class="comment">            for(const auto t : h.getTransitions()){</span></div>
+<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;<span class="comment">                std::cout &lt;&lt; *t &lt;&lt; std::endl;</span></div>
+<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;<span class="comment">            }</span></div>
+<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;<span class="comment">            std::cout &lt;&lt; &quot;Parsed HybridAutomaton Locations:\n&quot;;</span></div>
+<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;<span class="comment">            for(const auto l : h.getLocations()){</span></div>
+<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;<span class="comment">                std::cout &lt;&lt; *l &lt;&lt; std::endl;</span></div>
+<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;<span class="comment">            }</span></div>
+<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;<span class="comment">            */</span></div>
+<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;            <span class="comment">//return boost::tuple&lt;HybridAutomaton&lt;double, State_t&lt;double,double&gt;&gt;&amp;, ReachabilitySettings&lt;double&gt;&gt;(h, visitor.getSettings());</span></div>
+<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;            <span class="keywordflow">return</span> std::make_pair(std::move(h), visitor.getSettings());</div>
+<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;        }</div>
+<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;    }</div>
+<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;</div>
+<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;} <span class="comment">// namespace</span></div>
 <div class="ttc" id="classHybridAutomatonParser_html"><div class="ttname"><a href="classHybridAutomatonParser.html">HybridAutomatonParser</a></div><div class="ttdef"><b>Definition:</b> <a href="HybridAutomatonParser_8h_source.html#l00016">HybridAutomatonParser.h:16</a></div></div>
 <div class="ttc" id="classHybridAutomatonLexer_html"><div class="ttname"><a href="classHybridAutomatonLexer.html">HybridAutomatonLexer</a></div><div class="ttdef"><b>Definition:</b> <a href="HybridAutomatonLexer_8h_source.html#l00012">HybridAutomatonLexer.h:12</a></div></div>
 </div><!-- fragment --></div><!-- contents -->

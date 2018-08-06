@@ -853,10 +853,10 @@ template&lt;typename Number &gt; </td></tr>
 template&lt;typename Number &gt; </td></tr>
 <tr class="memitem:a889d6ed4634207a53c2ed4e2bb6ca50f"><td class="memTemplItemLeft" align="right" valign="top">int&#160;</td><td class="memTemplItemRight" valign="bottom"><b>effectiveDimension</b> (const std::vector&lt; <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt;&gt; &amp;vertices)</td></tr>
 <tr class="separator:a889d6ed4634207a53c2ed4e2bb6ca50f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4ada5b58ac6bed869d1c74a202de075b"><td class="memTemplParams" colspan="2"><a class="anchor" id="a4ada5b58ac6bed869d1c74a202de075b"></a>
+<tr class="memitem:aa672c97b1b44b237ff6b3c2ee8a2ba8d"><td class="memTemplParams" colspan="2"><a class="anchor" id="aa672c97b1b44b237ff6b3c2ee8a2ba8d"></a>
 template&lt;typename Number &gt; </td></tr>
-<tr class="memitem:a4ada5b58ac6bed869d1c74a202de075b"><td class="memTemplItemLeft" align="right" valign="top">std::pair&lt; bool, Number &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>linearDependent</b> (const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;lhs, const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;rhs)</td></tr>
-<tr class="separator:a4ada5b58ac6bed869d1c74a202de075b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa672c97b1b44b237ff6b3c2ee8a2ba8d"><td class="memTemplItemLeft" align="right" valign="top">std::pair&lt; bool, Number &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>linearDependent</b> (const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;lhs, const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;rhs)</td></tr>
+<tr class="separator:aa672c97b1b44b237ff6b3c2ee8a2ba8d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5361af8f44051257b971137e44a87037"><td class="memTemplParams" colspan="2"><a class="anchor" id="a5361af8f44051257b971137e44a87037"></a>
 template&lt;typename Number , carl::DisableIf&lt; std::is_same&lt; Number, double &gt; &gt;  = carl::dummy&gt; </td></tr>
 <tr class="memitem:a5361af8f44051257b971137e44a87037"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>reduceNumberRepresentation</b> (const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;in)</td></tr>
@@ -869,6 +869,10 @@ template&lt;typename Number &gt; </td></tr>
 template&lt;typename Number &gt; </td></tr>
 <tr class="memitem:a30c119e7444b792de3f0ab86fc560b0b"><td class="memTemplItemLeft" align="right" valign="top">std::string&#160;</td><td class="memTemplItemRight" valign="bottom"><b>createCode</b> (const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;in, unsigned index=0)</td></tr>
 <tr class="separator:a30c119e7444b792de3f0ab86fc560b0b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab12a6f07d3f31c9df2ccd41a5372d9e6"><td class="memTemplParams" colspan="2"><a class="anchor" id="ab12a6f07d3f31c9df2ccd41a5372d9e6"></a>
+template&lt;typename Number &gt; </td></tr>
+<tr class="memitem:ab12a6f07d3f31c9df2ccd41a5372d9e6"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><b>satisfiesIneqation</b> (const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;constraint, Number constant, const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;point)</td></tr>
+<tr class="separator:ab12a6f07d3f31c9df2ccd41a5372d9e6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abb7304656b52e4a24159d1a105d09a75"><td class="memTemplParams" colspan="2"><a class="anchor" id="abb7304656b52e4a24159d1a105d09a75"></a>
 template&lt;typename Number &gt; </td></tr>
 <tr class="memitem:abb7304656b52e4a24159d1a105d09a75"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>selectRows</b> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;original, const std::vector&lt; Eigen::Index &gt; &amp;rowIndices)</td></tr>
