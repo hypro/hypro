@@ -367,6 +367,17 @@ namespace hypro {
 		return st.str();
 	}
 
+	template<typename Number>
+	bool satisfiesIneqation(const vector_t<Number>& constraint, Number constant, const vector_t<Number>& point) {
+		Number sp = constraint.dot( point );
+
+	    if (sp < constant) {
+	        return true;
+	    }
+
+	    return carl::AlmostEqual2sComplement(sp, constant, 128);
+	}
+
 } // namespace hypro
 
 namespace std {

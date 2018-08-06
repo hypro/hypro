@@ -111,4 +111,20 @@ namespace hypro {
 		return std::make_pair(false,0);
 	}
 
+	template<>
+	bool satisfiesIneqation(const vector_t<double>& constraint, double constant, const vector_t<double>& point) {
+		double sp = point.dot( constraint );
+	    double absDiff = fabs(sp - constant);
+
+	    if (sp < constant) {
+	        return true;
+	    }
+
+	    if (absDiff <= FLT_EPSILON) {
+	        return true;
+	    }
+
+	    return carl::AlmostEqual2sComplement(sp, constant, 128);
+	}
+
 } // namespace hypro
