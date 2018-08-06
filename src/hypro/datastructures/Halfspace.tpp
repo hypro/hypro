@@ -295,7 +295,18 @@ vector_t<Number> Halfspace<Number>::saveIntersect( const std::vector<Halfspace<N
 
 template <typename Number>
 bool Halfspace<Number>::contains( const vector_t<Number> _vector ) const {
-	return ( _vector.dot( mNormal ) < mScalar || carl::AlmostEqual2sComplement(_vector.dot( mNormal ), mScalar, 128) );
+	Number sp = _vector.dot( mNormal );
+    Number absDiff = fabs(sp - mScalar);
+
+    if (sp < mScalar) {
+        return true;
+    }
+
+    if (absDiff <= FLT_EPSILON) {
+        return true;
+    }
+
+    return carl::AlmostEqual2sComplement(sp, mScalar, 128);
 }
 
 template <typename Number>
@@ -306,11 +317,11 @@ bool Halfspace<Number>::contains( const Point<Number> _vector ) const {
 template<typename Number>
 bool Halfspace<Number>::contains( const std::vector<Point<Number>>& _points) const {
 	for(const auto& point : _points){
-		if(!carl::AlmostEqual2sComplement(point.rawCoordinates().dot(mNormal), mScalar, 128) && point.rawCoordinates().dot(mNormal) > mScalar){
-			return false;
-		}
-	}
-	return true;
+        if(!this->contains(point.rawCoordinates())){
+             return false;
+        }
+    }
+    return true;
 }
 
 template <typename Number>
