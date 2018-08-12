@@ -1,3 +1,5 @@
+#include <iostream>
+
 #ifdef HYPRO_USE_PPL
 #include <ppl.hh>
 
@@ -30,4 +32,11 @@ int main(int argc, char** argv) {
     mPolyhedron.print();
     std::cout << std::endl;
 }
+#else
+
+int main(int argc, char** argv) {
+  std::cout << "This example only works if the PPL-wrapper of hypro is enabled." << std::endl;
+  return 0;
+}
+
 #endif

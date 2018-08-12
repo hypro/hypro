@@ -21,7 +21,7 @@ Transformation<Number>::Transformation (const HybridAutomaton<Number>& _hybrid) 
     Matrix<Number> A_nonlinear;
     Vector<Number> b_nonlinear;
     LocationManager<Number>& locationManager = LocationManager<Number>::getInstance();
-    locationSet locations;
+    typename HybridAutomaton<Number>::locationSet locations;
     Location<Number>* PtrtoNewLoc;
     mTransformedHA = HybridAutomaton<Number>();
 //LOCATIONS
@@ -49,7 +49,7 @@ Transformation<Number>::Transformation (const HybridAutomaton<Number>& _hybrid) 
         std::cout<<"inital A:\n" << A_in;
         size_t numberLinear = countLinearAndRemember(A_in, m_size, mSTallvalues);
         std::cout << "Number of Linear Terms: " << numberLinear <<"\n";
-    //LINEARONLY 
+    //LINEARONLY
         if(numberLinear  == m_size) {
             std::cout << "linear FLOW only\n";
             Vinv.setIdentity(m_size,m_size);
@@ -83,14 +83,13 @@ Transformation<Number>::Transformation (const HybridAutomaton<Number>& _hybrid) 
                 EigenvalueDecomposition(A_in, m_size, CONDITION_LIMIT, V, mSTallvalues.mSTindependentFunct.D, Vinv);
                 mSTallvalues.mSTflowpipeSegment.Vinv       = Vinv;
                 mSTallvalues.mSTflowpipeSegment.V          = V;
-           } 
+           }
         //TRAFO of b_tr to Eigenspace
             b_tr = Vinv*b_tr;
             analyzeExponentialTerms(m_size, mSTallvalues);
         }
-	    PtrtoNewLoc = locationManager.create(matrix_in_parser);
-        locations.insert(PtrtoNewLoc);
-        mLocationPtrsMap.insert(std::make_pair(LocPtr, PtrtoNewLoc));
+	    std::unique_ptr<Location<Number>> PtrtoNewLoc = std::make_unique<Location<Number>>(matrix_in_parser);
+        mLocationPtrsMap.insert(std::make_pair(LocPtr, PtrtoNewLoc.get()));
     //SAVING STRUCT
         TRACE("hypro.eigendecomposition", "D exact:\n" << mSTallvalues.mSTindependentFunct.D.diagonal() );
         TRACE("hypro.eigendecomposition", "b_tr :\n" << b_tr );
@@ -113,7 +112,7 @@ Transformation<Number>::Transformation (const HybridAutomaton<Number>& _hybrid) 
             std::exit(EXIT_FAILURE);
         }
         TRACE("hypro.eigendecomposition", "xinhom :\n" << mSTallvalues.mSTindependentFunct.xinhom );
-        mLocPtrtoComputationvaluesMap.insert(std::make_pair(PtrtoNewLoc, mSTallvalues));
+        mLocPtrtoComputationvaluesMap.insert(std::make_pair(PtrtoNewLoc.get(), mSTallvalues));
         //std::cout << "old loc: "<<LocPtr<<"\n";
         //std::cout << "new loc: "<<PtrtoNewLoc<<"\n";
     //INVARIANTS(TYPE CONDITION)
@@ -122,22 +121,23 @@ Transformation<Number>::Transformation (const HybridAutomaton<Number>& _hybrid) 
         //Condition(Ax<=b): A*Vsource*xeigen <= b;
         for( i=0; i<invar1.size(); ++i ) {
             invar1NEW.setMatrix(invar1.getMatrix(i)*V,i);
-            invar1NEW.setVector(invar1.getVector(i)  ,i);    
+            invar1NEW.setVector(invar1.getVector(i)  ,i);
         }
         PtrtoNewLoc->setInvariant(invar1NEW);
+        locations.emplace(std::move(PtrtoNewLoc));
     }
-    mTransformedHA.setLocations(locations); 
+    mTransformedHA.setLocations(std::move(locations));
     //TRANSITIONS
-    transitionSet transitions;
+    typename HybridAutomaton<Number>::transitionSet transitions;
     for (Transition<Number>* TransPtr : _hybrid.getTransitions() ) {
-        Transition<Number>* NewTransPtr = new Transition<Number>(*TransPtr);
+        std::unique_ptr<Transition<Number>> NewTransPtr = std::make_unique<Transition<Number>>(*TransPtr);
         //TODO transitionManager? transitions not freed, shared_ptr too costly in multithreaded context
     //POINTER
         Location<Number>*   NewSourceLocPtr = mLocationPtrsMap[TransPtr->getSource()];
         Location<Number>*   NewTargetLocPtr = mLocationPtrsMap[TransPtr->getTarget()];
-        const Matrix<Number> & VSource = 
+        const Matrix<Number> & VSource =
           mLocPtrtoComputationvaluesMap[NewSourceLocPtr].mSTflowpipeSegment.V;
-        const Matrix<Number> & VinvTarget = 
+        const Matrix<Number> & VinvTarget =
           mLocPtrtoComputationvaluesMap[NewTargetLocPtr].mSTflowpipeSegment.Vinv;
         const Matrix<Number> & trafoInputTarget =
           mLocPtrtoComputationvaluesMap[NewTargetLocPtr].mSTflowpipeSegment.trafoInput;
@@ -149,27 +149,27 @@ Transformation<Number>::Transformation (const HybridAutomaton<Number>& _hybrid) 
         Condition<Number> guard1NEW; // = NewTransPtr->getGuard();
         //Condition(Ax<=b): A*Vsource*xeigen <= b;
         for( i=0; i<guard1.size(); ++i ) {
-            guard1NEW.setMatrix(guard1.getMatrix(i)*VSource ,i);    
-            guard1NEW.setVector(guard1.getVector(i)         ,i);    
+            guard1NEW.setMatrix(guard1.getMatrix(i)*VSource ,i);
+            guard1NEW.setVector(guard1.getVector(i)         ,i);
         }
         NewTransPtr->setGuard(guard1NEW);
     //RESET ( reset into new location ) note: s:=source, t:=target, inv:=^(-1)
         const Reset<Number>& reset1    = TransPtr->getReset();
         Reset<Number> reset1NEW;// = NewTransPtr->getReset();
-        //reset(into Eigenspace of new location): Vtarget^(-1)x'= 
+        //reset(into Eigenspace of new location): Vtarget^(-1)x'=
         //Vtinv*removelinearTerms*A*Vsource*xeigen[Vsource^(-1)x] + Vtarget^(-1)b
         for( i=0; i<reset1.size(); ++i ) {
             reset1NEW.setMatrix(VinvTarget * trafoInputTarget * reset1.getMatrix(i) * VSource,i);
             reset1NEW.setVector(VinvTarget * reset1.getVector(i),i);
         }
         NewTransPtr->setReset(reset1NEW);
-        transitions.insert(NewTransPtr);
-        NewTargetLocPtr->addTransition(NewTransPtr);
+        NewTargetLocPtr->addTransition(NewTransPtr.get());
+        transitions.emplace(std::move(NewTransPtr));
     }
-    mTransformedHA.setTransitions    (transitions);
+    mTransformedHA.setTransitions(std::move(transitions));
 //INITIAL STATES (transformed into Eigenspace later on reachability analysis)
     locationStateMap initialStates;
-    for(typename locationStateMap::const_iterator it=_hybrid.getInitialStates().begin(); 
+    for(typename locationStateMap::const_iterator it=_hybrid.getInitialStates().begin();
       it!=_hybrid.getInitialStates().end(); ++it) {
         Location<Number>* NewLocPtr = mLocationPtrsMap[it->first];
         State_t<Number> state1NEW = State_t<Number>(it->second);
@@ -186,7 +186,7 @@ Transformation<Number>::Transformation (const HybridAutomaton<Number>& _hybrid) 
         const Condition<Number> & badState = it->second;
         TRACE("hypro.eigendecomposition","BadState" << badState);
         Condition<Number> badStateNEW;
-        const Matrix<Number> & V = 
+        const Matrix<Number> & V =
           mLocPtrtoComputationvaluesMap[NewLocPtr].mSTflowpipeSegment.V;
         for(i=0; i<badState.size(); ++i) {
         //Condition(Ax<=b): A*Vsource*xeigen <= b;
@@ -241,9 +241,9 @@ void Transformation<Number>::addGlobalBadStates
         assert (!globalBadStatesTransformed);
         //TODO MEMORY ASSERTION?
         size_t i;
-        for (typename conditionVector::const_iterator it = _hybrid.getGlobalBadStates().begin(); 
+        for (typename conditionVector::const_iterator it = _hybrid.getGlobalBadStates().begin();
           it!=_hybrid.getGlobalBadStates().end(); ++it) {
-            for (typename locationPtrMap::iterator locMapIt = mLocationPtrsMap.begin(); 
+            for (typename locationPtrMap::iterator locMapIt = mLocationPtrsMap.begin();
               locMapIt!=mLocationPtrsMap.end(); ++locMapIt) {
                 Condition<Number> badStateNEW;
                 const Matrix<Number> & V = mLocPtrtoComputationvaluesMap[locMapIt->second].mSTflowpipeSegment.V;
@@ -258,10 +258,10 @@ void Transformation<Number>::addGlobalBadStates
     } else {
 //NO TRANSFORMATION -> add to globalBadStates
         size_t i;
-        for (typename conditionVector::const_iterator it = _hybrid.getGlobalBadStates().begin(); 
+        for (typename conditionVector::const_iterator it = _hybrid.getGlobalBadStates().begin();
           it!=_hybrid.getGlobalBadStates().end(); ++it) {
            //loop through global states + copy to other HybridAutomaton
-            for (typename locationPtrMap::iterator locMapIt = mLocationPtrsMap.begin(); 
+            for (typename locationPtrMap::iterator locMapIt = mLocationPtrsMap.begin();
               locMapIt!=mLocationPtrsMap.end(); ++locMapIt) {
                 Condition<Number> globalbadStateNEW;
                 for(i=0; i<it->size(); ++i) {
@@ -284,7 +284,7 @@ void Transformation<Number>::declare_structures(STallValues<Number>& mSTallValue
 }
 //count linear and remember in according std::vector
 template <typename Number>
-size_t Transformation<Number>::countLinearAndRemember(const Matrix<Number>& A_in, 
+size_t Transformation<Number>::countLinearAndRemember(const Matrix<Number>& A_in,
         const size_t dimension, STallValues<Number>& mSTallvalues) {
     //std::cout << "starting linear counting\n";
     //dimension = dimension of A_in
@@ -310,7 +310,7 @@ size_t Transformation<Number>::countLinearAndRemember(const Matrix<Number>& A_in
 }
 //having linear terms, we grep nonlinear terms to apply EVD on
 template <typename Number>
-void Transformation<Number>::insertNonLinearAndClassify(const Matrix<Number>& A_in, const Vector<Number>& b_in, 
+void Transformation<Number>::insertNonLinearAndClassify(const Matrix<Number>& A_in, const Vector<Number>& b_in,
         const size_t dimension, Matrix<Number>& A_nonlinear, Vector<Number>& b_nonlinear, STallValues<Number>& mSTallvalues) {
     size_t ncol, nrow;
     size_t count_linVar_row = 0;
@@ -348,8 +348,8 @@ void Transformation<Number>::insertNonLinearAndClassify(const Matrix<Number>& A_
     std::cout << "A_nonlinear after reduction\n"<< A_nonlinear;
 }
 template <typename Number>
-void Transformation<Number>::EigenvalueDecomposition(const Matrix<Number>& A_nonlinear, 
-        const size_t dimensionNonLinear, const size_t CONDITION_LIMIT, Matrix<Number>& V_EVD, 
+void Transformation<Number>::EigenvalueDecomposition(const Matrix<Number>& A_nonlinear,
+        const size_t dimensionNonLinear, const size_t CONDITION_LIMIT, Matrix<Number>& V_EVD,
         DiagonalMatrix<Number>& D_EVD, Matrix<Number>& Vinv_EVD) {
 //ONE DIMENSION -> set values(to save time)
     if(dimensionNonLinear == 1) {
@@ -370,7 +370,7 @@ void Transformation<Number>::EigenvalueDecomposition(const Matrix<Number>& A_non
     Ddouble.diagonal() << es.eigenvalues().real();
     Vinvdouble = Vdouble.inverse();
 //ASSERTION CONDITION TODO making this faster for big/sparse matrices
-    Eigen::JacobiSVD<Matrix<double>> svd(Vinvdouble);  
+    Eigen::JacobiSVD<Matrix<double>> svd(Vinvdouble);
     double cond = svd.singularValues()(0)  / svd.singularValues()(svd.singularValues().size()-1);
     if(std::abs(cond) > CONDITION_LIMIT) {
         FATAL("hypro.eigendecomposition","condition is higher than CONDITION_LIMIT");
@@ -401,9 +401,9 @@ void Transformation<Number>::EigenvalueDecomposition(const Matrix<Number>& A_non
 }
 template <typename Number>
 void Transformation<Number>::adjustLinearAndEVDcomponents(
-        const Matrix<Number>& V_EVD, const DiagonalMatrix<Number>& D_EVD, const Matrix<Number>& Vinv_EVD, 
-        const Matrix<Number>& A_in, const Vector<Number>& b_nonlinear, const size_t dimension, 
-        Matrix<Number>& V, Matrix<Number>& Vinv, 
+        const Matrix<Number>& V_EVD, const DiagonalMatrix<Number>& D_EVD, const Matrix<Number>& Vinv_EVD,
+        const Matrix<Number>& A_in, const Vector<Number>& b_nonlinear, const size_t dimension,
+        Matrix<Number>& V, Matrix<Number>& Vinv,
         Vector<Number>& b_tr, STallValues<Number>& mSTallvalues) {
 //1.setting V,Vinv,D, b_tr
     V.setIdentity   (dimension,dimension);

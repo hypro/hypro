@@ -5,7 +5,7 @@
 
 #include "representations/GeometricObject.h"
 #include "util/Plotter.h"
-#include <Eigen/Eigenvalues>
+#include <eigen3/Eigen/Eigenvalues>
 #define FLOATING_FIX 10e-12
 #define PTS_DEBUG 1         //show all added points
 #define TRANFORMED_PLOT 1   //for later use

@@ -1,5 +1,7 @@
 file(GLOB EXAMPLES RELATIVE ${CMAKE_CURRENT_LIST_DIR} example_*.cpp)
 
+add_custom_target(allExamples)
+
 if(STATICLIB_SWITCH)
 	set(CMAKE_EXE_LINKER_FLAGS "-static")
 	set(BUILD_SHARED_LIBS OFF)
@@ -18,11 +20,8 @@ foreach( example ${EXAMPLES} )
 		target_link_libraries( ${example_name} ${PROJECT_NAME} ${ANTLR4_STATIC})
 		target_include_directories( ${example_name} PUBLIC "${CMAKE_CURRENT_LIST_DIR}/../build/locals/antlr4cpp/include/antlr4-runtime" )
     endif()
+		add_dependencies(allExamples ${example_name})
 endforeach( example )
-
-# ATTENTION: This is just used to test if all examples compile.
-add_executable( allExamples EXCLUDE_FROM_ALL ${EXAMPLES} )
-target_link_libraries( allExamples ${PROJECT_NAME})
 
 if(${STATICLIB_SWITCH} STREQUAL "ON")
 	set_target_properties( allExamples PROPERTIES LINK_SEARCH_END_STATIC TRUE )

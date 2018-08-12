@@ -255,7 +255,7 @@ HybridAutomaton<Number> createComponent2(unsigned i, const std::vector<Label>& l
 	V waitInvConsts = V::Zero(2);
 	waitInvConsts << Number(firingThreshold),Number(globalTimeHorizon);
 	wait->setInvariant(Condition<Number>{waitInvariant, waitInvConsts});
-	res.addLocation(wait);
+	res.addLocation(std::make_unique<Location<Number>>(wait));
 
 	// initial state
 	M initConstraints = M::Zero(4,2);
@@ -278,7 +278,7 @@ HybridAutomaton<Number> createComponent2(unsigned i, const std::vector<Label>& l
 	adaptFlow(1,dim) = 1; // time always advances at rate 1
 	adapt->setFlow(adaptFlow);
 
-	res.addLocation(adapt);
+	res.addLocation(std::make_unique<Location<Number>>(adapt));
 
 	// transitions
 	// flash self loop
@@ -298,7 +298,7 @@ HybridAutomaton<Number> createComponent2(unsigned i, const std::vector<Label>& l
 	flash->setAggregation(Aggregation::parallelotopeAgg);
 
 	wait->addTransition(flash);
-	res.addTransition(flash);
+	res.addTransition(std::make_unique<Transition<Number>>(flash));
 
 	// to adapt
 	for(unsigned j = 0; j < labels.size(); ++j) {
@@ -314,7 +314,7 @@ HybridAutomaton<Number> createComponent2(unsigned i, const std::vector<Label>& l
 			toAdapt->setAggregation(Aggregation::parallelotopeAgg);
 
 			wait->addTransition(toAdapt);
-			res.addTransition(toAdapt);
+			res.addTransition(std::make_unique<Transition<Number>>(toAdapt));
 		}
 	}
 
@@ -333,7 +333,7 @@ HybridAutomaton<Number> createComponent2(unsigned i, const std::vector<Label>& l
 	fromAdaptRegular->setUrgent();
 
 	adapt->addTransition(fromAdaptRegular);
-	res.addTransition(fromAdaptRegular);
+	res.addTransition(std::make_unique<Transition<Number>>(fromAdaptRegular));
 
 	// from adapt, scale
 	Tpt fromAdaptScale = new Transition<Number>(adapt,wait);
@@ -351,7 +351,7 @@ HybridAutomaton<Number> createComponent2(unsigned i, const std::vector<Label>& l
 	fromAdaptScale->setReset(Reset<Number>(resetMat,resetVec));
 
 	adapt->addTransition(fromAdaptScale);
-	res.addTransition(fromAdaptScale);
+	res.addTransition(std::make_unique<Transition<Number>>(fromAdaptScale));
 
 	return res;
 }

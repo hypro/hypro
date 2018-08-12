@@ -3,10 +3,10 @@
  */
 
 #include <string>
-#include "../src/hypro/datastructures/hybridAutomata/HybridAutomaton.h"
+#include "../src/hypro/datastructures/HybridAutomaton/HybridAutomaton.h"
 #include "../src/hypro/algorithms/reachability/Reach.h"
 #include "../src/hypro/representations/GeometricObject.h"
-#include "../src/hypro/parser/flowstar/flowstarParser.h"
+#include "../src/hypro/parser/antlr4-flowstar/ParserWrapper.h"
 #include "../src/hypro/util/Plotter.h"
 
 int main() {
@@ -17,17 +17,16 @@ int main() {
 
 	std::string filename = "../examples/input/thermostat.model";
 
-	hypro::parser::flowstarParser<Number> parser;
-	hypro::HybridAutomaton<Number> ha = parser.parseInput(filename);
+	std::pair<hypro::HybridAutomaton<Number>, hypro::State_t<Number,Number>> ha = hypro::parseFlowstarFile(filename);
 
-	hypro::reachability::Reach<Number,boxValuation> boxReach(ha, parser.mSettings);
-	hypro::reachability::Reach<Number,hpValuation> hpReach(ha, parser.mSettings);
+	hypro::reachability::Reach<Number,boxValuation> boxReach(ha.first, ha.second);
+	hypro::reachability::Reach<Number,hpValuation> hpReach(ha.first, ha.second);
 	vector<std::pair<unsigned,hypro::reachability::flowpipe_t<boxValuation>>> boxFlowpipes = boxReach.computeForwardReachability();
 	vector<std::pair<unsigned,hypro::reachability::flowpipe_t<hpValuation>>> hpFlowpipes = hpReach.computeForwardReachability();
 	vector<std::pair<unsigned,hypro::reachability::flowpipe_t<sfValuation>>> sfFlowpipes;
 
 	//if(boxReach.reachedBadStates()) {
-		hypro::reachability::Reach<Number,sfValuation> sfReach(ha, parser.mSettings);
+		hypro::reachability::Reach<Number,sfValuation> sfReach(ha.first, ha.second);
 		sfFlowpipes = sfReach.computeForwardReachability();
 	//}
 

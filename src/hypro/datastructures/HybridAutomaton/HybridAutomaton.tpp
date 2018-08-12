@@ -285,9 +285,9 @@ void HybridAutomaton<Number,State>::addTransition(std::unique_ptr<Transition<Num
 }
 
 template<typename Number, typename State>
-void HybridAutomaton<Number,State>::removeTransition(std::unique_ptr<Transition<Number>>& toRemove) {
+void HybridAutomaton<Number,State>::removeTransition(Transition<Number>* toRemove) {
 	for(auto tIt = mTransitions.begin(); tIt != mTransitions.end(); ) {
-		if(*tIt == toRemove)
+		if((*tIt).get() == toRemove)
 			tIt = mTransitions.erase(tIt);
 		else
 			++tIt;
@@ -545,8 +545,8 @@ HybridAutomaton<Number, State> operator||(const HybridAutomaton<Number, State>& 
 
 	for(const auto& locLhs : lhs.getLocations()) {
 		for(const auto& locRhs : rhs.getLocations()) {
-			Location<Number>* loc = parallelCompose(locLhs.get(),locRhs.get(),lhsVar,rhsVar,haVar);
-			ha.addLocation(loc);
+			Location<Number>* loc = parallelCompose(locLhs,locRhs,lhsVar,rhsVar,haVar);
+			ha.addLocation(*loc);
 		}
 	}
 
@@ -667,4 +667,3 @@ HybridAutomaton<Number, State> operator||(const HybridAutomaton<Number, State>& 
 }
 
 }  // namespace hypro
-
