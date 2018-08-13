@@ -1,11 +1,9 @@
 
-#pragma once
-
 #include "adaptions_eigen.h"
 
 namespace Eigen {
 
-	template <>
+
 	inline bool operator<( const hypro::vector_t<double>& lhs, const hypro::vector_t<double>& rhs ) {
 		if ( lhs.rows() != rhs.rows() ){
 			return false;
@@ -21,7 +19,7 @@ namespace Eigen {
 		return false;
 	}
 
-	template <>
+
 	inline bool operator<=( const hypro::vector_t<double>& lhs, const hypro::vector_t<double>& rhs ) {
 		if ( lhs.rows() != rhs.rows() ) {
 			return false;
@@ -37,13 +35,13 @@ namespace Eigen {
 		return false;
 	}
 
-	template<>
+
 	inline bool operator>( const hypro::vector_t<double>& lhs, const hypro::vector_t<double>& rhs ) { return rhs < lhs;}
 
-	template<>
+
 	inline bool operator>=( const hypro::vector_t<double>& lhs, const hypro::vector_t<double>& rhs ) { return rhs <= lhs;}
 
-	template <>
+
 	inline bool operator==( const hypro::vector_t<double>& lhs, const hypro::vector_t<double>& rhs ) {
 		if ( lhs.rows() != rhs.rows() ){
 			return false;
@@ -58,12 +56,12 @@ namespace Eigen {
 		return true;
 	}
 
-	template<>
+
 	inline bool operator!=( const hypro::vector_t<double>& lhs, const hypro::vector_t<double>& rhs ) {
 		return !(lhs == rhs);
 	}
 
-	template <>
+
 	inline bool operator==( const hypro::matrix_t<double>& lhs, const hypro::matrix_t<double>& rhs ) {
 		if ( lhs.rows() != rhs.rows() || lhs.cols() != rhs.cols() ){
 			return false;
@@ -80,7 +78,7 @@ namespace Eigen {
 		return true;
 	}
 
-	template <>
+
 	inline bool operator!=( const hypro::matrix_t<double>& lhs, const hypro::matrix_t<double>& rhs ) {
 		return !(lhs == rhs);
 	}
@@ -88,7 +86,7 @@ namespace Eigen {
 } // namespace Eigen
 
 namespace hypro {
-	template<>
+
 	inline std::pair<bool,double> linearDependent(const vector_t<double>& lhs, const vector_t<double>& rhs) {
 		unsigned firstNonZeroPos = 0;
 		if(lhs.nonZeros() == 0 || rhs.nonZeros() == 0){
@@ -105,13 +103,13 @@ namespace hypro {
 			return std::make_pair(false,0);
 		}
 		double scalar = lhs(firstNonZeroPos)/rhs(firstNonZeroPos);
-		if(lhs == rhs*scalar) {
+		if(lhs == vector_t<double>(rhs*scalar)) {
 			return std::make_pair(true,scalar);
 		}
 		return std::make_pair(false,0);
 	}
 
-	template<>
+
 	bool satisfiesIneqation(const vector_t<double>& constraint, double constant, const vector_t<double>& point) {
 		double sp = point.dot( constraint );
 	    double absDiff = fabs(sp - constant);

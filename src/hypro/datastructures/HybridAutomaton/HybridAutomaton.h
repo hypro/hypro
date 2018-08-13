@@ -69,8 +69,7 @@ class HybridAutomaton
      *
      * @param[in]  	hybrid  The original hybrid automaton.
      */
-    HybridAutomaton(HybridAutomaton<Number,State>&& hybrid) noexcept;
-
+    HybridAutomaton(HybridAutomaton<Number,State>&& hybrid);
 
     /**
      * @brief 		Constructor from locations, transitions and initial states
@@ -161,7 +160,7 @@ class HybridAutomaton
     void addGlobalBadState(const Condition<Number>& state) { mGlobalBadStates.push_back(state); }
     ///@}
 
-    void removeTransition(std::unique_ptr<Transition<Number>>& toRemove);
+    void removeTransition(Transition<Number>* toRemove);
 
     /**
      * @brief Decomposes an automaton into the components

@@ -31,10 +31,14 @@ include(glpk.cmake)
 #AntLR
 message("-- Use included version of AnTLR")
 
+find_package(UUID QUIET)
+if(NOT UUID_FOUND)
+	message(SEND_ERROR "Package uuid-dev required to build antlr.")
+endif()
+
+
 #set variable pointing to antlr tool
 #set(ANTLR4CPP_JAR_LOCATION ${PROJECT_SOURCE_DIR}/src/resources/antlr-4.7-complete.jar)
 #include external cmake file
 include(ExternalAntlr4Cpp.cmake)
 #message(STATUS "Found antlr4cpp libs: ${ANTLR4CPP_LIBS} and includes: ${ANTLR4CPP_INCLUDE_DIRS} ")
-
-

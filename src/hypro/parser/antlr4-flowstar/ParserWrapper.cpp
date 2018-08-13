@@ -61,19 +61,19 @@ namespace hypro {
 		HybridAutomatonLexer lexer(&input);
 		lexer.removeErrorListeners();
 		lexer.addErrorListener(errListener);
-		
+
 		//Create an empty TokenStream obj
 		CommonTokenStream tokens(&lexer);
-	
+
 		//Fill the TokenStream (and output it for demonstration)
 		tokens.fill();
-		
+
 		//Create a parser with error listener
 		HybridAutomatonParser parser(&tokens);
 		parser.removeErrorListeners();
 		parser.addErrorListener(errListener);
-		tree::ParseTree* tree = parser.start();	
-				
+		tree::ParseTree* tree = parser.start();
+
 		//Create TokenStreamRewriter, needed for constants if defined
 		//std::cout << "Size of constant map: " << parser.getConstants().size() << std::endl;
 		//for(auto entry : parser.getConstants()){

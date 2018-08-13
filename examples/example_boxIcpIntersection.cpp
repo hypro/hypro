@@ -20,9 +20,9 @@ int main()
 	hypro::Halfspace<Number> hsp1{n1,Number(2)};
 
 	std::cout << "Intersect with " << hsp1 << std::endl;
-	std::vector<carl::Interval<Number>> res1 = hypro::icpIntersectHalfspace(intervals,hsp1);
+	bool red = hypro::icpIntersectHalfspace(intervals,hsp1);
 	std::cout << "Result:" << std::endl;
-	for(const auto& i : res1) {
+	for(const auto& i : intervals) {
 		std::cout << i << std::endl;
 	}
 

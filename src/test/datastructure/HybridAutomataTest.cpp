@@ -389,7 +389,7 @@ TYPED_TEST(HybridAutomataTest, HybridAutomatonTest)
 
 	std::cout << "====== Expect move assignment\n";
 	HybridAutomaton<TypeParam> h6 = this->dummyMove(std::move(h3));
-	EXPECT_EQ(h4, h5);
+	EXPECT_EQ(h4, h6);
 }
 
 /*

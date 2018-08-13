@@ -6,10 +6,10 @@
 #include "../../datastructures/HybridAutomaton/Settings.h"
 #include "../../datastructures/HybridAutomaton/HybridAutomaton.h"
 #include "../../representations/conversion/Converter.h"
-#include <Eigen/Eigenvalues>
-#include <Eigen/Dense>
-#include <Eigen/SVD>
-#include <Eigen/Core>
+#include <eigen3/Eigen/Eigenvalues>
+#include <eigen3/Eigen/Dense>
+#include <eigen3/Eigen/SVD>
+#include <eigen3/Eigen/Core>
 
 namespace hypro {
     //EVD possible values of Euler functions
@@ -38,7 +38,7 @@ struct STflowpipeSegment {
   Matrix<Number>                Vinv;
   Matrix<Number>                trafoInput;
 };
-/** 
+/**
  * @brief   STallValues as struct for all for reachability analysis relevant EVD values for constant flow of location
  *          input vertices have to be representable as points for evaluation
  */
@@ -73,22 +73,22 @@ class Transformation {
     void declare_structures(STallValues<Number> & mSTallValues, const int n);
 
 //count linear terms in A_in and set some properties accordingly in mSTallvalues
-    size_t countLinearAndRemember(const Matrix<Number>& A_in, const size_t dimension, 
+    size_t countLinearAndRemember(const Matrix<Number>& A_in, const size_t dimension,
         STallValues<Number>& mSTallvalues);
 //inserting A_nonlinear terms from A_in and b_in respectively and classify linearity in mSTallvalues
-    void insertNonLinearAndClassify(const Matrix<Number>& A_in, const Vector<Number>& b_in, const size_t dimension, 
+    void insertNonLinearAndClassify(const Matrix<Number>& A_in, const Vector<Number>& b_in, const size_t dimension,
         Matrix<Number>& A_nonlinear, Vector<Number>& b_nonlinear, STallValues<Number>& mSTallvalues);
 //run EVD on A_nonlinear checking CONDITION_LIMIT returning result in V_EVD,D_EVD,Vinv_EVD
-    void EigenvalueDecomposition(const Matrix<Number>& A_nonlinear, const size_t dimensionNonLinear, 
-        const size_t CONDITION_LIMIT, Matrix<Number>& V_EVD, DiagonalMatrix<Number>& D_EVD, 
+    void EigenvalueDecomposition(const Matrix<Number>& A_nonlinear, const size_t dimensionNonLinear,
+        const size_t CONDITION_LIMIT, Matrix<Number>& V_EVD, DiagonalMatrix<Number>& D_EVD,
         Matrix<Number>& Vinv_EVD);
 //use EVD results adjusting V,Vinv,D accordingly to be of full rang to use implemented methods
 //V,Vinv,D are written to mSTallvalues to be accessible for reachability analysis
 //NOTE: this is a quick fix, but one could adapt the reachability analysis for the linear/constant terms accordingly saving computation effort etc
     void adjustLinearAndEVDcomponents(
-        const Matrix<Number>& V_EVD, const DiagonalMatrix<Number>& D_EVD, const Matrix<Number>& Vinv_EVD, 
-        const Matrix<Number>& A_in, const Vector<Number>& b_nonlinear, const size_t dimension, 
-        Matrix<Number>& V, Matrix<Number>& Vinv, 
+        const Matrix<Number>& V_EVD, const DiagonalMatrix<Number>& D_EVD, const Matrix<Number>& Vinv_EVD,
+        const Matrix<Number>& A_in, const Vector<Number>& b_nonlinear, const size_t dimension,
+        Matrix<Number>& V, Matrix<Number>& Vinv,
         Vector<Number>& b_tr, STallValues<Number>& mSTallvalues);
 //analyzing exponential terms in case of no linear terms
     void analyzeExponentialTerms(const size_t dimension, STallValues<Number>& mSTallvalues);
@@ -100,7 +100,7 @@ class Transformation {
 	Transformation() = delete;
     /**
      * @brief      Constructor from hybrid automata to adjust automaton and transformation
-     *             All static properties relating to the Hybrid Automaton 
+     *             All static properties relating to the Hybrid Automaton
      *             are stored in this class.
      * @param[in]  _hybrid  The original hybrid automaton.
      */
@@ -116,7 +116,7 @@ class Transformation {
     //TODO clean up locations and transitions on desctructor
     void output_HybridAutomaton();
 
-    /* 
+    /*
      * @brief       adding transformedBadGlobalStates to transformedLocalBadStates
      *   [optional] call only by setting according flag to reachability analysis
      * TODO storage requirement setting/analysis?

@@ -10,8 +10,8 @@
 
 #pragma once
 
-#include "transformation.h"
 #include "../../types.h"
+#include "transformation.h"
 #include <carl/numbers/numbers.h>
 #include <functional>
 #include <iostream>
@@ -367,6 +367,17 @@ namespace hypro {
 		return st.str();
 	}
 
+	template<typename Number>
+	bool satisfiesIneqation(const vector_t<Number>& constraint, Number constant, const vector_t<Number>& point) {
+		Number sp = constraint.dot( point );
+
+	    if (sp < constant) {
+	        return true;
+	    }
+
+	    return carl::AlmostEqual2sComplement(sp, constant, 128);
+	}
+
 } // namespace hypro
 
 namespace std {
@@ -392,4 +403,4 @@ namespace std {
 
 } // namespace std
 
-#include "adaptions_eigen_double.tpp"
+//#include "adaptions_eigen_double.tpp"

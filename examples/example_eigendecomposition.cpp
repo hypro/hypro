@@ -5,7 +5,7 @@
 
 #include "representations/GeometricObject.h"
 #include "util/Plotter.h"
-#include <Eigen/Eigenvalues>
+#include <eigen3/Eigen/Eigenvalues>
 
 int main()
 {
@@ -22,8 +22,8 @@ int main()
 			0.2,0.02;
 */
 
-	A << 	0, 1, 0, 
-			0, 0, -9.81, 
+	A << 	0, 1, 0,
+			0, 0, -9.81,
 			0, 0, 0;
 
 	Matrix B = Matrix(n,n);
