@@ -24,7 +24,6 @@ HybridAutomaton<Number> createComponent1(unsigned i) {
 	using Lpt = Location<Number>*;
 	using Tpt = Transition<Number>*;
 	using S = State_t<Number>;
-	LocationManager<Number>& manager = LocationManager<Number>::getInstance();
 	std::stringstream st;
 
 	// result automaton
@@ -43,7 +42,7 @@ HybridAutomaton<Number> createComponent1(unsigned i) {
 	// wait
 
 	st << "wait_" << i;
-	Lpt wait = manager.create();
+	Location<Number> wait = Location<Number>();
 	wait->setName(st.str());
 	M waitFlow = M::Zero(dim+1,dim+1);
 	waitFlow(0,dim) = 1;
@@ -68,7 +67,7 @@ HybridAutomaton<Number> createComponent1(unsigned i) {
 	res.addLocation(wait);
 
 	// adapt
-	Lpt adapt = manager.create();
+	Location<Number> adapt;
 	st.str(std::string());
 	st << "adapt_" << i;
 	adapt->setName(st.str());
@@ -80,7 +79,7 @@ HybridAutomaton<Number> createComponent1(unsigned i) {
 	res.addLocation(adapt);
 
 	// flash
-	Lpt flash = manager.create();
+	Location<Number> flash;
 	st.str(std::string());
 	st << "flash_" << i;
 	flash->setName(st.str());
@@ -224,7 +223,6 @@ HybridAutomaton<Number> createComponent2(unsigned i, const std::vector<Label>& l
 	using Lpt = Location<Number>*;
 	using Tpt = Transition<Number>*;
 	using S = State_t<Number>;
-	LocationManager<Number>& manager = LocationManager<Number>::getInstance();
 	std::stringstream st;
 
 	// result automaton
@@ -242,7 +240,8 @@ HybridAutomaton<Number> createComponent2(unsigned i, const std::vector<Label>& l
 	// wait
 
 	st << "wait_" << i;
-	Lpt wait = manager.create();
+	Location<Number> waitLoc = Location<Number>();
+	Lpt wait = &waitLoc;
 	wait->setName(st.str());
 	M waitFlow = M::Zero(dim+1,dim+1); // both variables advance
 	waitFlow(0,dim) = 1;
@@ -255,7 +254,7 @@ HybridAutomaton<Number> createComponent2(unsigned i, const std::vector<Label>& l
 	V waitInvConsts = V::Zero(2);
 	waitInvConsts << Number(firingThreshold),Number(globalTimeHorizon);
 	wait->setInvariant(Condition<Number>{waitInvariant, waitInvConsts});
-	res.addLocation(std::make_unique<Location<Number>>(wait));
+	res.addLocation(std::move(std::unique_ptr<Location<Number>>(wait)));	
 
 	// initial state
 	M initConstraints = M::Zero(4,2);
@@ -269,7 +268,8 @@ HybridAutomaton<Number> createComponent2(unsigned i, const std::vector<Label>& l
 	res.addInitialState(initialState);
 
 	// adapt
-	Lpt adapt = manager.create();
+	Location<Number> adaptLoc;
+	Lpt adapt = &adaptLoc;
 	st.str(std::string());
 	st << "adapt_" << i;
 	adapt->setName(st.str());
@@ -278,7 +278,7 @@ HybridAutomaton<Number> createComponent2(unsigned i, const std::vector<Label>& l
 	adaptFlow(1,dim) = 1; // time always advances at rate 1
 	adapt->setFlow(adaptFlow);
 
-	res.addLocation(std::make_unique<Location<Number>>(adapt));
+	res.addLocation(*adapt);
 
 	// transitions
 	// flash self loop
@@ -298,7 +298,7 @@ HybridAutomaton<Number> createComponent2(unsigned i, const std::vector<Label>& l
 	flash->setAggregation(Aggregation::parallelotopeAgg);
 
 	wait->addTransition(flash);
-	res.addTransition(std::make_unique<Transition<Number>>(flash));
+	res.addTransition(*flash);
 
 	// to adapt
 	for(unsigned j = 0; j < labels.size(); ++j) {
@@ -314,7 +314,7 @@ HybridAutomaton<Number> createComponent2(unsigned i, const std::vector<Label>& l
 			toAdapt->setAggregation(Aggregation::parallelotopeAgg);
 
 			wait->addTransition(toAdapt);
-			res.addTransition(std::make_unique<Transition<Number>>(toAdapt));
+			res.addTransition(*toAdapt);
 		}
 	}
 
@@ -333,7 +333,7 @@ HybridAutomaton<Number> createComponent2(unsigned i, const std::vector<Label>& l
 	fromAdaptRegular->setUrgent();
 
 	adapt->addTransition(fromAdaptRegular);
-	res.addTransition(std::make_unique<Transition<Number>>(fromAdaptRegular));
+	res.addTransition(*fromAdaptRegular);
 
 	// from adapt, scale
 	Tpt fromAdaptScale = new Transition<Number>(adapt,wait);
@@ -351,7 +351,7 @@ HybridAutomaton<Number> createComponent2(unsigned i, const std::vector<Label>& l
 	fromAdaptScale->setReset(Reset<Number>(resetMat,resetVec));
 
 	adapt->addTransition(fromAdaptScale);
-	res.addTransition(std::make_unique<Transition<Number>>(fromAdaptScale));
+	res.addTransition(*fromAdaptScale);
 
 	return res;
 }
@@ -365,7 +365,6 @@ HybridAutomaton<Number> createComponent3(unsigned i) {
 	using Lpt = Location<Number>*;
 	using Tpt = Transition<Number>*;
 	using S = State_t<Number>;
-	LocationManager<Number>& manager = LocationManager<Number>::getInstance();
 	std::stringstream st;
 
 	// result automaton
@@ -384,7 +383,7 @@ HybridAutomaton<Number> createComponent3(unsigned i) {
 	// wait
 
 	st << "wait_" << i;
-	Lpt wait = manager.create();
+	Location<Number> wait;
 	wait->setName(st.str());
 	M waitFlow = M::Zero(dim+1,dim+1);
 	waitFlow(0,dim) = 1;
@@ -421,7 +420,7 @@ HybridAutomaton<Number> createComponent3(unsigned i) {
 	//res.addLocation(adapt);
 
 	// flash
-	Lpt flash = manager.create();
+	Location<Number> flash;
 	st.str(std::string());
 	st << "flash_" << i;
 	flash->setName(st.str());
@@ -571,7 +570,6 @@ HybridAutomaton<Number> createComponent4(unsigned i, const std::vector<Label>& l
 	using Lpt = Location<Number>*;
 	using Tpt = Transition<Number>*;
 	using S = State_t<Number>;
-	LocationManager<Number>& manager = LocationManager<Number>::getInstance();
 	std::stringstream st;
 
 	// result automaton
@@ -589,7 +587,7 @@ HybridAutomaton<Number> createComponent4(unsigned i, const std::vector<Label>& l
 	// wait
 
 	st << "wait_" << i;
-	Lpt wait = manager.create();
+	Location<Number> wait;
 	wait->setName(st.str());
 	M waitFlow = M::Zero(dim+1,dim+1); // both variables advance
 	waitFlow(0,dim) = 1;
@@ -616,7 +614,7 @@ HybridAutomaton<Number> createComponent4(unsigned i, const std::vector<Label>& l
 	res.addInitialState(initialState);
 
 	// adapt
-	Lpt adapt = manager.create();
+	Location<Number> adapt;
 	st.str(std::string());
 	st << "adapt_" << i;
 	adapt->setName(st.str());

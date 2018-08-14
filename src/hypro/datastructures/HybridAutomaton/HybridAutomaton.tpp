@@ -301,11 +301,11 @@ void HybridAutomaton<Number,State>::reduce() {
 		changed = false;
 		for(auto locIt = mLocations.begin(); locIt != mLocations.end(); ) {
 			// non-initial locations
-			if(mInitialStates.find(*locIt) == mInitialStates.end()) {
+			if(mInitialStates.find((*locIt).get()) == mInitialStates.end()) {
 				// check for being a target
 				bool isTarget = false;
 				for(auto& t : mTransitions) {
-					if(t->getTarget() == *locIt) {
+					if(t->getTarget() == (*locIt).get()) {
 						isTarget = true;
 						break;
 					}
@@ -314,7 +314,7 @@ void HybridAutomaton<Number,State>::reduce() {
 				if(!isTarget) {
 					changed = true;
 					for(auto t = mTransitions.begin(); t != mTransitions.end(); ) {
-						if((*t)->getSource() == *locIt) {
+						if((*t)->getSource() == (*locIt).get()) {
 							//std::cout << __func__ << ": remove transition " << (*t)->getSource()->getName() << " -> " << (*t)->getTarget()->getName() << std::endl;
 							t = mTransitions.erase(t);
 						} else {
@@ -545,8 +545,10 @@ HybridAutomaton<Number, State> operator||(const HybridAutomaton<Number, State>& 
 
 	for(const auto& locLhs : lhs.getLocations()) {
 		for(const auto& locRhs : rhs.getLocations()) {
-			Location<Number>* loc = parallelCompose(locLhs,locRhs,lhsVar,rhsVar,haVar);
-			ha.addLocation(*loc);
+			//Location<Number>* loc = parallelCompose(locLhs,locRhs,lhsVar,rhsVar,haVar);
+			//ha.addLocation(*loc);
+			std::unique_ptr<Location<Number>> loc = parallelCompose(locLhs,locRhs,lhsVar,rhsVar,haVar);
+			ha.addLocation(std::move(loc));
 		}
 	}
 
@@ -557,10 +559,10 @@ HybridAutomaton<Number, State> operator||(const HybridAutomaton<Number, State>& 
 	for(const auto& lhsT: lhs.getTransitions()) {
 		for(const auto& rhsT: rhs.getTransitions()) {
 			//Transition<Number>* t = parallelCompose(lhsT, rhsT, lhsVar, rhsVar, haVar, ha, lhsLabels, rhsLabels);
-			std::unique_ptr<Transition<Number>> t = parallelCompose(lhsT.get(), rhsT.get(), lhsVar, rhsVar, haVar, ha, lhsLabels, rhsLabels);
+			std::unique_ptr<Transition<Number>> t = parallelCompose(lhsT, rhsT, lhsVar, rhsVar, haVar, ha, lhsLabels, rhsLabels);
 			if(t) {
-				ha.addTransition(t);
-				(t->getSource())->addTransition(t);
+				ha.addTransition(std::move(t));
+				(t->getSource())->addTransition(t.get());
 			}
 		}
 	}
@@ -574,7 +576,8 @@ HybridAutomaton<Number, State> operator||(const HybridAutomaton<Number, State>& 
 				//std::cout << "Potential transition " << lhsT->getSource()->getName() << "_" << loc->getName() << " -> " << lhsT->getTarget()->getName() << "_" << loc->getName() << std::endl;
 				//std::cout << "Original reset: " << lhsT->getReset().getMatrix() << " and " << lhsT->getReset().getVector() << std::endl;
 				//Transition<Number>* tmp = new Transition<Number>(loc,loc);
-				std::unique_ptr<Transition<Number>> tmp = std::make_unique(new Transition<Number>(loc,loc));
+				//std::unique_ptr<Transition<Number>> tmp = std::make_unique<Transition<Number>>(new Transition<Number>(loc,loc));
+				std::unique_ptr<Transition<Number>> tmp = std::make_unique<Transition<Number>>(Transition<Number>(loc,loc));
 				// TODO: temporary test -> fix!
 				Reset<Number> tmpReset = Reset<Number>(matrix_t<Number>::Identity(rhsVar.size(), rhsVar.size()), vector_t<Number>::Zero(rhsVar.size()));
 				if(!sharedVars.empty()) {
@@ -599,11 +602,11 @@ HybridAutomaton<Number, State> operator||(const HybridAutomaton<Number, State>& 
 				tmp->setAggregation(lhsT->getAggregation());
 
 				//Transition<Number>* t = parallelCompose(lhsT, tmp, lhsVar, rhsVar, haVar, ha, lhsLabels, rhsLabels);
-				std::unique_ptr<Transition<Number>> t = parallelCompose(lhsT, tmp, lhsVar, rhsVar, haVar, ha, lhsLabels, rhsLabels);
+				std::unique_ptr<Transition<Number>> t = parallelCompose(lhsT, tmp.get(), lhsVar, rhsVar, haVar, ha, lhsLabels, rhsLabels);
 				if(t) {
 					//std::cout << "Add." << std::endl;
-					ha.addTransition(t);
-					(t->getSource())->addTransition(t);
+					ha.addTransition(std::move(t));
+					(t->getSource())->addTransition(t.get());
 				}
 			}
 		}
@@ -616,7 +619,7 @@ HybridAutomaton<Number, State> operator||(const HybridAutomaton<Number, State>& 
 				//std::cout << "Potential transition " << loc->getName()<< "_" << rhsT->getSource()->getName() << " -> " << loc->getName() << "_" << rhsT->getTarget()->getName() << std::endl;
 				//std::cout << "Original reset: " << rhsT->getReset().getMatrix() << " and " << rhsT->getReset().getVector() << std::endl;
 				//Transition<Number>* tmp = new Transition<Number>(loc,loc);
-				std::unique_ptr<Transition<Number>> tmp = std::make_unique(new Transition<Number>(loc,loc));
+				std::unique_ptr<Transition<Number>> tmp = std::make_unique<Transition<Number>>(Transition<Number>(loc,loc));
 				// TODO: temporary test -> fix!
 				Reset<Number> tmpReset = Reset<Number>(matrix_t<Number>::Identity(lhsVar.size(), lhsVar.size()), vector_t<Number>::Zero(lhsVar.size()));
 				if(!sharedVars.empty()) {
@@ -638,11 +641,11 @@ HybridAutomaton<Number, State> operator||(const HybridAutomaton<Number, State>& 
 				tmp->setAggregation(rhsT->getAggregation());
 
 				//Transition<Number>* t = parallelCompose(tmp, rhsT, lhsVar, rhsVar, haVar, ha, lhsLabels, rhsLabels);
-				std::unique_ptr<Transition<Number>> t = parallelCompose(tmp, rhsT, lhsVar, rhsVar, haVar, ha, lhsLabels, rhsLabels);
+				std::unique_ptr<Transition<Number>> t = parallelCompose(tmp.get(), rhsT, lhsVar, rhsVar, haVar, ha, lhsLabels, rhsLabels);
 				if(t) {
 					//std::cout << "Add." << std::endl;
-					ha.addTransition(t);
-					(t->getSource())->addTransition(t);
+					ha.addTransition(std::move(t));
+					(t->getSource())->addTransition(t.get());
 		       	}
 			}
 		}

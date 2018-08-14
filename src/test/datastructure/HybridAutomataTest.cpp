@@ -252,7 +252,7 @@ TYPED_TEST(HybridAutomataTest, LocationParallelcompositionTest)
 	l1->setFlow(l1Flow);
 	l2->setFlow(l2Flow);
 
-	std::unique_ptr<Location<TypeParam>> res1 = parallelCompose(l1,l2,l1Vars,l2Vars,haVars);
+	std::unique_ptr<Location<TypeParam>> res1 = parallelCompose(l1.get(),l2.get(),l1Vars,l2Vars,haVars);
 	matrix_t<TypeParam> expectedResult1 = matrix_t<TypeParam>::Zero(haVars.size()+1, haVars.size()+1);
 	expectedResult1 << 1,0,2,0,
 						0,1,2,0,
@@ -264,7 +264,7 @@ TYPED_TEST(HybridAutomataTest, LocationParallelcompositionTest)
 	l1Vars = {"a","b"};
 	l2Vars = {"c","d"};
 	haVars = {"a","b","c","d"};
-	std::unique_ptr<Location<TypeParam>> res2 = parallelCompose(l1,l2,l1Vars,l2Vars,haVars);
+	std::unique_ptr<Location<TypeParam>> res2 = parallelCompose(l1.get(),l2.get(),l1Vars,l2Vars,haVars);
 
 	matrix_t<TypeParam> expectedResult2 = matrix_t<TypeParam>::Zero(haVars.size()+1, haVars.size()+1);
 	expectedResult2 << 1,2,0,0,0,

@@ -8,7 +8,8 @@
 #include "datastructures/HybridAutomaton/HybridAutomaton.h"
 #include "datastructures/HybridAutomaton/LocationManager.h"
 #include "algorithms/reachability/Reach.h"
-#include "parser/flowstar/ParserWrapper.h"
+#include "parser/antlr4-flowstar/ParserWrapper.h"
+//#include "parser/flowstar/ParserWrapper.h"
 //#include <boost/program_options.hpp>
 #include <sys/wait.h>
 #include <signal.h>
@@ -27,14 +28,15 @@ static void computeReachableStates(const std::string& filename) {
 	std::vector<std::chrono::duration<double, std::milli>> runtimes(numberRuns);
 	std::chrono::duration<double, std::milli> summedTime(0.0);
 	clock::time_point startParsing = clock::now();
-	boost::tuple<hypro::HybridAutomaton<Number>, hypro::ReachabilitySettings<Number>> ha = hypro::parseFlowstarFile<Number>(filename);
+	std::pair<hypro::HybridAutomaton<Number>, hypro::ReachabilitySettings<Number>> ha = std::move(hypro::parseFlowstarFile<Number>(filename)); 
 	std::chrono::duration<double, std::milli> parseTime = std::chrono::duration_cast<std::chrono::duration<double, std::milli>>(clock::now() - startParsing);
-	std::vector<std::pair<unsigned, hypro::reachability::flowpipe_t<Representation>>> flowpipes;
+	std::vector<std::pair<unsigned, hypro::reachability::flowpipe_t<Number>>> flowpipes;
 	//std::cout << "Parse time is " << parseTime.count() << std::endl;
 
 	for(std::size_t run = 0; run < numberRuns; ++run) {
 		clock::time_point start = clock::now();
-		hypro::reachability::Reach<Number,Representation> reacher(boost::get<0>(ha), boost::get<1>(ha));
+		hypro::reachability::Reach<Number> reacher(ha.first, ha.second);
+		reacher.setRepresentationType(Representation::type());
 		flowpipes = reacher.computeForwardReachability();
 		runtimes.push_back(std::chrono::duration_cast<timeunit>( clock::now() - start ));
 		summedTime += std::chrono::duration_cast<std::chrono::duration<double, std::milli>>( clock::now() - start )/(numberRuns);
@@ -44,7 +46,7 @@ static void computeReachableStates(const std::string& filename) {
 		PRINT_STATS()
 		RESET_STATS()
 	}
-	std::cout << boost::get<1>(ha) << std::endl;
+	std::cout << ha.second << std::endl;
 	double runtime = std::chrono::duration_cast<std::chrono::duration<double, std::milli>>(summedTime).count()+std::chrono::duration_cast<std::chrono::duration<double, std::milli>>(parseTime).count();
 	std::cout << "Finished computation of reachable states: " << std::chrono::duration_cast<std::chrono::duration<double, std::milli>>(summedTime).count()+std::chrono::duration_cast<std::chrono::duration<double, std::milli>>(parseTime).count() << " ms" << std::endl;
 	std::time_t end_time = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
@@ -57,8 +59,8 @@ static void computeReachableStates(const std::string& filename) {
 	clock::time_point startPlotting = clock::now();
 
 	hypro::Plotter<Number>& plotter = hypro::Plotter<Number>::getInstance();
-	std::string extendedFilename = boost::get<0>(ha).reachabilitySettings().fileName;
-	csvString += "," + extendedFilename + "," + std::to_string(boost::get<0>(ha).reachabilitySettings().jumpDepth) + "," + std::to_string(carl::convert<Number,double>(boost::get<0>(ha).reachabilitySettings().timeStep));
+	std::string extendedFilename = ha.second.fileName;
+	csvString += "," + extendedFilename + "," + std::to_string(ha.second.jumpDepth) + "," + std::to_string(carl::convert<Number,double>(ha.second.timeStep));
 	switch (Representation::type()) {
 		case hypro::representation_name::zonotope:{
 			extendedFilename += "_zonotope";
@@ -124,16 +126,16 @@ static void computeReachableStates(const std::string& filename) {
 
 	//std::cout << "filename is " << extendedFilename << std::endl;
 	plotter.setFilename(extendedFilename);
-	std::vector<unsigned> plottingDimensions = boost::get<0>(ha).reachabilitySettings().plotDimensions;
-	plotter.rSettings().dimensions.first = plottingDimensions.front();
-	plotter.rSettings().dimensions.second = plottingDimensions.back();
+	std::vector<std::vector<std::size_t>> plottingDimensions = ha.second.plotDimensions;
+	plotter.rSettings().dimensions.first = plottingDimensions.front().front();
+	plotter.rSettings().dimensions.second = plottingDimensions.front().back();
 	plotter.rSettings().cummulative = false;
 
 
 	// bad states plotting
-	typename hypro::HybridAutomaton<Number>::locationStateMap badStateMapping = boost::get<0>(ha).localBadStates();
+	typename hypro::HybridAutomaton<Number>::locationConditionMap badStateMapping = ha.first.getLocalBadStates();
 	for(const auto& state : badStateMapping) {
-		unsigned bs = plotter.addObject(Representation(state.second.set.first, state.second.set.second).vertices());
+		unsigned bs = plotter.addObject(Representation(state.second.getMatrix(), state.second.getVector()).vertices());
 		plotter.setObjectColor(bs, hypro::plotting::colors[hypro::plotting::red]);
 	}
 
@@ -143,7 +145,7 @@ static void computeReachableStates(const std::string& filename) {
 		unsigned cnt = 0;
 		for(const auto& segment : flowpipePair.second){
 			//std::cout << "Plot segment " << cnt << "/" << flowpipePair.second.size() << std::endl;
-			unsigned tmp = plotter.addObject(segment.project(plottingDimensions).vertices());
+			unsigned tmp = plotter.addObject(segment.project(plottingDimensions.front()).vertices());
 			plotter.setObjectColor(tmp, hypro::plotting::colors[flowpipePair.first % (sizeof(hypro::plotting::colors)/sizeof(*hypro::plotting::colors))]);
 			++cnt;
 		}

@@ -121,9 +121,9 @@ std::size_t Location<Number>::hash() const {
 template<typename Number>
 std::string Location<Number>::getDotRepresentation(const std::vector<std::string>& vars) const {
 	std::stringstream o;
-	o << this->getId() << " [shape=none, margin=0, label=<";
+	o << this->hash() << " [shape=none, margin=0, label=<";
 	o << "<TABLE>";
-	o << "<TR><TD>" << this->getName() << " (" << this->getId() << ") </TD></TR>";
+	o << "<TR><TD>" << this->getName() << " (" << this->hash() << ") </TD></TR>";
 	// flow
 	matrix_t<Number>& flow = *mFlows.begin();
 	o << "<TR><TD ROWSPAN=\"" << flow.rows() << "\">";
@@ -251,11 +251,13 @@ bool Location<Number>::isComposedOf(const Location<Number>& rhs, const std::vect
 }
 
 template<typename Number>
-std::unique_ptr<Location<Number>> parallelCompose(const std::unique_ptr<Location<Number>>& lhs
-                                , const std::unique_ptr<Location<Number>>& rhs
-                                , const std::vector<std::string>& lhsVar
-                                , const std::vector<std::string>& rhsVar
-                                , const std::vector<std::string>& haVar)
+//std::unique_ptr<Location<Number>> parallelCompose(const std::unique_ptr<Location<Number>>& lhs
+//                                , const std::unique_ptr<Location<Number>>& rhs
+std::unique_ptr<Location<Number>> parallelCompose(const Location<Number>* lhs
+                                                , const Location<Number>* rhs
+                                                , const std::vector<std::string>& lhsVar
+                                                , const std::vector<std::string>& rhsVar
+                                                , const std::vector<std::string>& haVar)
 {
 	//compute flow
 	matrix_t<Number> haFlow = matrix_t<Number>::Zero(haVar.size()+1, haVar.size()+1);
@@ -299,11 +301,19 @@ std::unique_ptr<Location<Number>> parallelCompose(const std::unique_ptr<Location
 				//std::cout << "lhsIC: " << lhsIC << std::endl;
 				//std::cout << "rhsIC: " << rhsIC << std::endl;
 				if(rhsVar[rhsIC] == haVar[colI]) {
-					// TODO: the check is not entirely correct, since the flow can be non-admissible but set to 0 in lhs and something != 0 in rhs.
+					// TODO: the check is not entirely correct, since the flow can be non-admissible but set to 0 in lhs and something != 0 in rhs.					
 					if(haFlow(rowI,colI) != 0 && rhs->getFlow()(rhsIR,rhsIC) != haFlow(rowI,colI)) {
 						admissible = false;
 						break;
 					}
+					
+					//std::cout << "haFlow sizes: " << haFlow.rows() << "x" << haFlow.cols() << std::endl;
+					//std::cout << "rhs->getFlow() sizes: " << rhs->getFlow().rows() << "x" << rhs->getFlow().cols() << std::endl;
+					//std::cout << "rowI: " << rowI << " colI " << colI << " rhsIR " << rhsIR << " rhsIC " << rhsIC << std::endl;
+					//assert(rowI < haFlow.rows());
+					//assert(colI < haFlow.cols());
+					//assert(rhsIR <= rhs->getFlow().rows());
+					//assert(rhsIC <= rhs->getFlow().cols());
 					haFlow(rowI,colI) = rhs->getFlow()(rhsIR,rhsIC);
 					++rhsIC;
 					if(rhsIC == rhsVar.size()) {
