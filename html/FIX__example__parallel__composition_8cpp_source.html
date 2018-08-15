@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.6"/>
-<title>HyPro: /home/travis/build/hypro/hypro/examples/example_parallel_composition.cpp Source File</title>
+<title>HyPro: /home/travis/build/hypro/hypro/examples/FIX_example_parallel_composition.cpp Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -88,7 +88,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   </div>
 </div>
 <script type="text/javascript">
-$(document).ready(function(){initNavTree('example__parallel__composition_8cpp_source.html','');});
+$(document).ready(function(){initNavTree('FIX__example__parallel__composition_8cpp_source.html','');});
 </script>
 <div id="doc-content">
 <!-- window showing the filter options -->
@@ -107,7 +107,7 @@ $(document).ready(function(){initNavTree('example__parallel__composition_8cpp_so
 
 <div class="header">
   <div class="headertitle">
-<div class="title">example_parallel_composition.cpp</div>  </div>
+<div class="title">FIX_example_parallel_composition.cpp</div>  </div>
 </div><!--header-->
 <div class="contents">
 <div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#include &quot;datastructures/HybridAutomaton/HybridAutomaton.h&quot;</span></div>
@@ -361,7 +361,7 @@ $(document).ready(function(){initNavTree('example__parallel__composition_8cpp_so
 <div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160;    V waitInvConsts = V::Zero(2);</div>
 <div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160;    waitInvConsts &lt;&lt; Number(firingThreshold),Number(globalTimeHorizon);</div>
 <div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160;    wait-&gt;setInvariant(<a class="code" href="classhypro_1_1Condition.html">Condition&lt;Number&gt;</a>{waitInvariant, waitInvConsts});</div>
-<div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160;    res.addLocation(wait);</div>
+<div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160;    res.addLocation(std::make_unique&lt;<a class="code" href="classhypro_1_1Location.html">Location&lt;Number&gt;</a>&gt;(wait));</div>
 <div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160;</div>
 <div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160;    <span class="comment">// initial state</span></div>
 <div class="line"><a name="l00261"></a><span class="lineno">  261</span>&#160;    M initConstraints = M::Zero(4,2);</div>
@@ -384,7 +384,7 @@ $(document).ready(function(){initNavTree('example__parallel__composition_8cpp_so
 <div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;    adaptFlow(1,dim) = 1; <span class="comment">// time always advances at rate 1</span></div>
 <div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;    adapt-&gt;setFlow(adaptFlow);</div>
 <div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;</div>
-<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;    res.addLocation(adapt);</div>
+<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;    res.addLocation(std::make_unique&lt;<a class="code" href="classhypro_1_1Location.html">Location&lt;Number&gt;</a>&gt;(adapt));</div>
 <div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;</div>
 <div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160;    <span class="comment">// transitions</span></div>
 <div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160;    <span class="comment">// flash self loop</span></div>
@@ -404,7 +404,7 @@ $(document).ready(function(){initNavTree('example__parallel__composition_8cpp_so
 <div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160;    flash-&gt;setAggregation(Aggregation::parallelotopeAgg);</div>
 <div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;</div>
 <div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160;    wait-&gt;addTransition(flash);</div>
-<div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160;    res.addTransition(flash);</div>
+<div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160;    res.addTransition(std::make_unique&lt;<a class="code" href="classhypro_1_1Transition.html">Transition&lt;Number&gt;</a>&gt;(flash));</div>
 <div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160;</div>
 <div class="line"><a name="l00303"></a><span class="lineno">  303</span>&#160;    <span class="comment">// to adapt</span></div>
 <div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160;    <span class="keywordflow">for</span>(<span class="keywordtype">unsigned</span> j = 0; j &lt; labels.size(); ++j) {</div>
@@ -420,7 +420,7 @@ $(document).ready(function(){initNavTree('example__parallel__composition_8cpp_so
 <div class="line"><a name="l00314"></a><span class="lineno">  314</span>&#160;            toAdapt-&gt;setAggregation(Aggregation::parallelotopeAgg);</div>
 <div class="line"><a name="l00315"></a><span class="lineno">  315</span>&#160;</div>
 <div class="line"><a name="l00316"></a><span class="lineno">  316</span>&#160;            wait-&gt;addTransition(toAdapt);</div>
-<div class="line"><a name="l00317"></a><span class="lineno">  317</span>&#160;            res.addTransition(toAdapt);</div>
+<div class="line"><a name="l00317"></a><span class="lineno">  317</span>&#160;            res.addTransition(std::make_unique&lt;<a class="code" href="classhypro_1_1Transition.html">Transition&lt;Number&gt;</a>&gt;(toAdapt));</div>
 <div class="line"><a name="l00318"></a><span class="lineno">  318</span>&#160;        }</div>
 <div class="line"><a name="l00319"></a><span class="lineno">  319</span>&#160;    }</div>
 <div class="line"><a name="l00320"></a><span class="lineno">  320</span>&#160;</div>
@@ -439,7 +439,7 @@ $(document).ready(function(){initNavTree('example__parallel__composition_8cpp_so
 <div class="line"><a name="l00333"></a><span class="lineno">  333</span>&#160;    fromAdaptRegular-&gt;setUrgent();</div>
 <div class="line"><a name="l00334"></a><span class="lineno">  334</span>&#160;</div>
 <div class="line"><a name="l00335"></a><span class="lineno">  335</span>&#160;    adapt-&gt;addTransition(fromAdaptRegular);</div>
-<div class="line"><a name="l00336"></a><span class="lineno">  336</span>&#160;    res.addTransition(fromAdaptRegular);</div>
+<div class="line"><a name="l00336"></a><span class="lineno">  336</span>&#160;    res.addTransition(std::make_unique&lt;<a class="code" href="classhypro_1_1Transition.html">Transition&lt;Number&gt;</a>&gt;(fromAdaptRegular));</div>
 <div class="line"><a name="l00337"></a><span class="lineno">  337</span>&#160;</div>
 <div class="line"><a name="l00338"></a><span class="lineno">  338</span>&#160;    <span class="comment">// from adapt, scale</span></div>
 <div class="line"><a name="l00339"></a><span class="lineno">  339</span>&#160;    Tpt fromAdaptScale = <span class="keyword">new</span> <a class="code" href="classhypro_1_1Transition.html">Transition&lt;Number&gt;</a>(adapt,wait);</div>
@@ -457,7 +457,7 @@ $(document).ready(function(){initNavTree('example__parallel__composition_8cpp_so
 <div class="line"><a name="l00351"></a><span class="lineno">  351</span>&#160;    fromAdaptScale-&gt;setReset(<a class="code" href="classhypro_1_1Reset.html">Reset&lt;Number&gt;</a>(resetMat,resetVec));</div>
 <div class="line"><a name="l00352"></a><span class="lineno">  352</span>&#160;</div>
 <div class="line"><a name="l00353"></a><span class="lineno">  353</span>&#160;    adapt-&gt;addTransition(fromAdaptScale);</div>
-<div class="line"><a name="l00354"></a><span class="lineno">  354</span>&#160;    res.addTransition(fromAdaptScale);</div>
+<div class="line"><a name="l00354"></a><span class="lineno">  354</span>&#160;    res.addTransition(std::make_unique&lt;<a class="code" href="classhypro_1_1Transition.html">Transition&lt;Number&gt;</a>&gt;(fromAdaptScale));</div>
 <div class="line"><a name="l00355"></a><span class="lineno">  355</span>&#160;</div>
 <div class="line"><a name="l00356"></a><span class="lineno">  356</span>&#160;    <span class="keywordflow">return</span> res;</div>
 <div class="line"><a name="l00357"></a><span class="lineno">  357</span>&#160;}</div>
@@ -988,7 +988,7 @@ $(document).ready(function(){initNavTree('example__parallel__composition_8cpp_so
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="dir_d28a4824dc47e487b107a5db32ef43c4.html">examples</a></li><li class="navelem"><b>example_parallel_composition.cpp</b></li>
+    <li class="navelem"><a class="el" href="dir_d28a4824dc47e487b107a5db32ef43c4.html">examples</a></li><li class="navelem"><b>FIX_example_parallel_composition.cpp</b></li>
     <li class="footer">
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.6 </li>

@@ -37,7 +37,7 @@ var classhypro_1_1HybridAutomaton =
     [ "operator=", "classhypro_1_1HybridAutomaton.html#a0c9539406bb9f77bf9ea6742536dc6b2", null ],
     [ "operator=", "classhypro_1_1HybridAutomaton.html#a26735ed0dc707a1c338790fbc057a121", null ],
     [ "reduce", "classhypro_1_1HybridAutomaton.html#a4397305ae7dd5c9bb26faf09d14673f6", null ],
-    [ "removeTransition", "classhypro_1_1HybridAutomaton.html#a42ae7e6f7e99a8209b7c8948b8f5ef3d", null ],
+    [ "removeTransition", "classhypro_1_1HybridAutomaton.html#a5c54a5b73158802f9b667d3f365fa4f9", null ],
     [ "setGlobalBadStates", "classhypro_1_1HybridAutomaton.html#ad5ecf7ff88c1b17c7bdcae42684a2acf", null ],
     [ "setInitialStates", "classhypro_1_1HybridAutomaton.html#ac1f9ef87a14cdef61dc8928bf27140ad", null ],
     [ "setLocalBadStates", "classhypro_1_1HybridAutomaton.html#aa816eb5715b4c482ebf038bba0cbf808", null ],

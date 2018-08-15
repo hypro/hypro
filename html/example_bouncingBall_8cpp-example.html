@@ -129,9 +129,9 @@ $(document).ready(function(){initNavTree('example_bouncingBall_8cpp-example.html
 <div class="line">    <a name="_a0"></a><a class="code" href="classhypro_1_1LocationManager.html">LocationManager&lt;Number&gt;</a>&amp; lManager = <a class="code" href="classhypro_1_1LocationManager.html">LocationManager&lt;Number&gt;::getInstance</a>();</div>
 <div class="line"></div>
 <div class="line">    <span class="comment">// create the discrete structure of the automaton and the automaton itself.</span></div>
-<div class="line">    <a name="_a1"></a><a class="code" href="classhypro_1_1Location.html">Location&lt;Number&gt;</a>* loc1 = lManager.create();</div>
-<div class="line">    <a name="_a2"></a><a class="code" href="classhypro_1_1Transition.html">hypro::Transition&lt;Number&gt;</a>* trans = <span class="keyword">new</span> <a class="code" href="classhypro_1_1Transition.html">hypro::Transition&lt;Number&gt;</a>();</div>
-<div class="line">    <a name="_a3"></a><a class="code" href="classhypro_1_1HybridAutomaton.html">HybridAutomaton&lt;Number&gt;</a> bBallAutomaton = <a class="code" href="classhypro_1_1HybridAutomaton.html">HybridAutomaton&lt;Number&gt;</a>();</div>
+<div class="line">    std::unique_ptr&lt;Location&lt;Number&gt;&gt; loc1 = std::make_unique&lt;Location&lt;Number&gt;&gt;();</div>
+<div class="line">    std::unique_ptr&lt;Transition&lt;Number&gt;&gt; trans = std::make_unique&lt;Transition&lt;Number&gt;&gt;();</div>
+<div class="line">    <a name="_a1"></a><a class="code" href="classhypro_1_1HybridAutomaton.html">HybridAutomaton&lt;Number&gt;</a> bBallAutomaton = <a class="code" href="classhypro_1_1HybridAutomaton.html">HybridAutomaton&lt;Number&gt;</a>();</div>
 <div class="line"></div>
 <div class="line">    <span class="comment">// matrix defining the flow (note: 3rd dimension for constant parts).</span></div>
 <div class="line">    <a class="code" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t&lt;Number&gt;</a> flowMatrix = <a class="code" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t&lt;Number&gt;</a>(3,3);</div>
@@ -146,7 +146,7 @@ $(document).ready(function(){initNavTree('example_bouncingBall_8cpp-example.html
 <div class="line">    invariantMat(0,0) = Number(-1);</div>
 <div class="line">    invariantMat(0,1) = Number(0);</div>
 <div class="line"></div>
-<div class="line">    <a name="_a4"></a><a class="code" href="classhypro_1_1Condition.html">Condition&lt;Number&gt;</a> inv(invariantMat,invariantVec);</div>
+<div class="line">    <a name="_a2"></a><a class="code" href="classhypro_1_1Condition.html">Condition&lt;Number&gt;</a> inv(invariantMat,invariantVec);</div>
 <div class="line"></div>
 <div class="line">    loc1-&gt;setInvariant(inv);</div>
 <div class="line"></div>
@@ -184,7 +184,7 @@ $(document).ready(function(){initNavTree('example_bouncingBall_8cpp-example.html
 <div class="line">    guard.setVector(guardVec);</div>
 <div class="line"></div>
 <div class="line">    <span class="comment">// reset function</span></div>
-<div class="line">    <a name="_a5"></a><a class="code" href="classhypro_1_1Reset.html">Reset&lt;Number&gt;</a> reset;</div>
+<div class="line">    <a name="_a3"></a><a class="code" href="classhypro_1_1Reset.html">Reset&lt;Number&gt;</a> reset;</div>
 <div class="line">    <a class="code" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t&lt;Number&gt;</a> constantReset = <a class="code" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t&lt;Number&gt;</a>(2,1);</div>
 <div class="line">    <a class="code" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t&lt;Number&gt;</a> linearReset = <a class="code" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t&lt;Number&gt;</a>(2,2);</div>
 <div class="line"></div>
@@ -208,9 +208,7 @@ $(document).ready(function(){initNavTree('example_bouncingBall_8cpp-example.html
 <div class="line"></div>
 <div class="line"></div>
 <div class="line">    <span class="comment">// add defined location and transition to the automaton.</span></div>
-<div class="line">    bBallAutomaton.addLocation(loc1);</div>
-<div class="line">    bBallAutomaton.addTransition(trans);</div>
-<div class="line">    loc1-&gt;addTransition(trans);</div>
+<div class="line">    loc1-&gt;addTransition(trans.get());</div>
 <div class="line"></div>
 <div class="line">    <span class="comment">// create Box holding the initial set.</span></div>
 <div class="line">    <a class="code" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t&lt;Number&gt;</a> boxMat = <a class="code" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t&lt;Number&gt;</a>(4,2);</div>
@@ -231,30 +229,33 @@ $(document).ready(function(){initNavTree('example_bouncingBall_8cpp-example.html
 <div class="line">    boxMat(3,1) = Number(-1);</div>
 <div class="line"></div>
 <div class="line">    <span class="comment">// create initial state.</span></div>
-<div class="line">    <a name="_a6"></a><a class="code" href="classhypro_1_1State.html">hypro::State&lt;Number,hypro::ConstraintSet&lt;Number&gt;</a>&gt; initialState;</div>
-<div class="line">    initialState.<a name="a7"></a><a class="code" href="classhypro_1_1State.html#a9d7649df9b2670e1873784c3c5fdca21">setLocation</a>(loc1);</div>
+<div class="line">    <a name="_a4"></a><a class="code" href="classhypro_1_1State.html">hypro::State_t&lt;Number&gt;</a> initialState;</div>
+<div class="line">    initialState.<a name="a5"></a><a class="code" href="classhypro_1_1State.html#a9d7649df9b2670e1873784c3c5fdca21">setLocation</a>(loc1.get());</div>
 <div class="line">    initialState.setSet(ConstraintSet&lt;Number&gt;(boxMat, boxVec));</div>
 <div class="line">    bBallAutomaton.addInitialState(initialState);</div>
+<div class="line"></div>
+<div class="line">    bBallAutomaton.addLocation(std::move(loc1));</div>
+<div class="line">    bBallAutomaton.addTransition(std::move(trans));</div>
 <div class="line"></div>
 <div class="line">    <span class="comment">// vector of sets to collect flowpipes (which are again a vector of sets).</span></div>
 <div class="line">    std::vector&lt;std::vector&lt;Representation&gt;&gt; flowpipes;</div>
 <div class="line"></div>
 <div class="line">    <span class="comment">// instanciate reachability analysis algorithm.</span></div>
-<div class="line">    <a name="_a8"></a><a class="code" href="classhypro_1_1reachability_1_1Reach.html">hypro::reachability::Reach&lt;Number&gt;</a> reacher(bBallAutomaton);</div>
-<div class="line">    <a name="_a9"></a><a class="code" href="structhypro_1_1ReachabilitySettings.html">hypro::ReachabilitySettings&lt;Number&gt;</a> settings = reacher.<a name="a10"></a>settings();</div>
+<div class="line">    <a name="_a6"></a><a class="code" href="classhypro_1_1reachability_1_1Reach.html">hypro::reachability::Reach&lt;Number&gt;</a> reacher(bBallAutomaton);</div>
+<div class="line">    <a name="_a7"></a><a class="code" href="structhypro_1_1ReachabilitySettings.html">hypro::ReachabilitySettings&lt;Number&gt;</a> settings = reacher.<a name="a8"></a>settings();</div>
 <div class="line">    settings.timeStep = carl::convert&lt;double,Number&gt;(0.01);</div>
 <div class="line">    settings.timeBound = Number(3);</div>
 <div class="line">    settings.jumpDepth = 3;</div>
-<div class="line">    reacher.<a name="a11"></a>setSettings(settings);</div>
+<div class="line">    reacher.<a name="a9"></a>setSettings(settings);</div>
 <div class="line"></div>
 <div class="line">    <span class="comment">// perform reachability analysis.</span></div>
-<div class="line">    std::vector&lt;std::pair&lt;unsigned, reachability::flowpipe_t&lt;Number&gt;&gt;&gt; flowpipeIndices = reacher.<a name="a12"></a><a class="code" href="classhypro_1_1reachability_1_1Reach.html#aed1d333aa28ed68bf8dbbe13a546435f">computeForwardReachability</a>();</div>
+<div class="line">    std::vector&lt;std::pair&lt;unsigned, reachability::flowpipe_t&lt;Number&gt;&gt;&gt; flowpipeIndices = reacher.<a name="a10"></a><a class="code" href="classhypro_1_1reachability_1_1Reach.html#aed1d333aa28ed68bf8dbbe13a546435f">computeForwardReachability</a>();</div>
 <div class="line"></div>
 <div class="line">    <span class="comment">// plot flowpipes.</span></div>
-<div class="line">    <a name="_a13"></a><a class="code" href="classhypro_1_1Plotter.html">Plotter&lt;Number&gt;</a>&amp; plotter = <a class="code" href="classhypro_1_1Plotter.html">Plotter&lt;Number&gt;::getInstance</a>();</div>
+<div class="line">    <a name="_a11"></a><a class="code" href="classhypro_1_1Plotter.html">Plotter&lt;Number&gt;</a>&amp; plotter = <a class="code" href="classhypro_1_1Plotter.html">Plotter&lt;Number&gt;::getInstance</a>();</div>
 <div class="line">    plotter.setFilename(<span class="stringliteral">&quot;bouncingBall&quot;</span>);</div>
 <div class="line">    <span class="keywordflow">for</span>(<span class="keyword">auto</span>&amp; indexPair : flowpipeIndices){</div>
-<div class="line">        std::vector&lt;hypro::reachability::State_t&lt;Number&gt;&gt; flowpipe = indexPair.second;</div>
+<div class="line">        std::vector&lt;hypro::State_t&lt;Number&gt;&gt; flowpipe = indexPair.second;</div>
 <div class="line">        <span class="comment">// Plot single flowpipe</span></div>
 <div class="line">        <span class="keywordflow">for</span>(<span class="keyword">auto</span>&amp; set : flowpipe) {</div>
 <div class="line">            std::vector&lt;Point&lt;Number&gt;&gt; points = set.vertices();</div>

@@ -1,5 +1,8 @@
 var NAVTREEINDEX2395 =
 {
+"classhypro_1_1HPolytopeT.html#a23e5867f9e7d2c8346c868aae6d24f51":[9,0,1,83,57],
+"classhypro_1_1HPolytopeT.html#a27a78d8b046d94aacb5271c00eeeafb7":[9,0,1,83,46],
+"classhypro_1_1HPolytopeT.html#a2c9cbc32e04938dd191f9ee932445563":[9,0,1,83,1],
 "classhypro_1_1HPolytopeT.html#a2c9cbc32e04938dd191f9ee932445563a47f3a32095c7c48a98ff53651e3e7779":[9,0,1,83,1,8],
 "classhypro_1_1HPolytopeT.html#a2c9cbc32e04938dd191f9ee932445563a4ea976ef9898fd77ca78a54cefd53437":[9,0,1,83,1,4],
 "classhypro_1_1HPolytopeT.html#a2c9cbc32e04938dd191f9ee932445563a58924f24105681253ad3e2ec088809a4":[9,0,1,83,1,5],
@@ -107,7 +110,6 @@ var NAVTREEINDEX2395 =
 "classhypro_1_1HybridAutomaton.html#a2746891aa4f238ec8b4c562f70bafb93":[9,0,1,20,19],
 "classhypro_1_1HybridAutomaton.html#a2f8b6cb122de2348401e2172bd718bac":[9,0,1,20,13],
 "classhypro_1_1HybridAutomaton.html#a426e99c1cdc866c0fc08e9ac1b9176d9":[9,0,1,20,2],
-"classhypro_1_1HybridAutomaton.html#a42ae7e6f7e99a8209b7c8948b8f5ef3d":[9,0,1,20,37],
 "classhypro_1_1HybridAutomaton.html#a4397305ae7dd5c9bb26faf09d14673f6":[9,0,1,20,36],
 "classhypro_1_1HybridAutomaton.html#a4736080b1d745b40fbdd6089cc0acfd8":[9,0,1,20,5],
 "classhypro_1_1HybridAutomaton.html#a4b2d45bbba86a008f1c8d687f79ec151":[9,0,1,20,27],
@@ -115,6 +117,7 @@ var NAVTREEINDEX2395 =
 "classhypro_1_1HybridAutomaton.html#a524599f24436782ead1db96c9818e3d8":[9,0,1,20,44],
 "classhypro_1_1HybridAutomaton.html#a55d43d7ef47e1086ded975ceb8ceca13":[9,0,1,20,28],
 "classhypro_1_1HybridAutomaton.html#a5b84f612e093fa2581b60a830a84ff11":[9,0,1,20,42],
+"classhypro_1_1HybridAutomaton.html#a5c54a5b73158802f9b667d3f365fa4f9":[9,0,1,20,37],
 "classhypro_1_1HybridAutomaton.html#a65815958a574bffbb022bde6787f11f6":[9,0,1,20,6],
 "classhypro_1_1HybridAutomaton.html#a68446638e51ec7ac284fa67d91af49e1":[9,0,1,20,12],
 "classhypro_1_1HybridAutomaton.html#a69dd5ac1db0e8c60160c60cb4cfc5327":[9,0,1,20,15],
@@ -246,8 +249,5 @@ var NAVTREEINDEX2395 =
 "classhypro_1_1Location.html#ae0e07f4791ea563dee80590661758c89":[9,0,1,25,26],
 "classhypro_1_1Location.html#aeffc26c683ac9afcc6850a6c03e85df7":[9,0,1,25,7],
 "classhypro_1_1Location.html#af341b96d0478f585a42f066ebd5c7bde":[9,0,1,25,34],
-"classhypro_1_1Location.html#af8dc5754d664496dd99c57dfcaa10fec":[9,0,1,25,33],
-"classhypro_1_1Location.html#afca89b8e15d30121aaff7b2224af45cc":[9,0,1,25,10],
-"classhypro_1_1LocationManager.html":[9,0,1,24],
-"classhypro_1_1LocationManager.html#a03a0716860d930fb9b6c1e8d792a395e":[9,0,1,24,10]
+"classhypro_1_1Location.html#af8dc5754d664496dd99c57dfcaa10fec":[9,0,1,25,33]
 };
