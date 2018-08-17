@@ -5,39 +5,65 @@ using namespace std;
 int main(){
 
 	//Operations
+	TrafoOp traOp;
+	cout << "Unary operator traOp evaluates to type: " << traOp.evaluate() << " and should be 1" << endl;
+
 	SumOp sumOp;
-	cout << "sumOp evaluates: " << sumOp.evaluate() << " and should be 2" << endl;
+	cout << "Binary operator sumOp evaluates to type: " << sumOp.evaluate() << " and should be 2" << endl;
 
 	//Leaf test
 	string blub = "blub";
-	Leaf<string> leaf(blub);
-	cout << "leaf evaluates: " << leaf.evaluate() << " and should be 3" << std::endl;
-	cout << "leaf says: " << leaf.say() << std::endl;
+	Leaf<string> leaf1(blub);
+	cout << "leaf1 evaluates to type: " << leaf1.evaluate() << " and should be 3" << endl;
+	cout << "leaf1 says: " << leaf1.say() << std::endl;
+
+	//Leat 2
+	string bam = "bam";
+	Leaf<string> leaf2(blub);
 
 	//Make raw pointers to sumOp and l
+	TrafoOp* tptr = &traOp;
 	SumOp* sptr = &sumOp;
-	Leaf<string>* lptr = &leaf;
+	Leaf<string>* l1ptr = &leaf1;
+	Leaf<string>* l2ptr = &leaf2;
 
-	//Put everything into SFC
-	SFC<Node> sfc;
-	sfc.add(sptr);
-	sfc.add(lptr);
-	cout << "scf evaluate is: ";
-	for(Node* n : sfc.getChildren()){
-		cout << n->evaluate() << ",";
-	}
-	cout << endl << " and should be 2,3\n";
+	//Put everything into SFC. Tree looks like
+	//		
+	//		binOp
+	//    /		 \
+	// traOp    leaf2
+	//   |
+	// leaf1
+	//
 
-	//Make raw pointers to sumOp and l
+	SFC sfc(l1ptr);
+	sfc.addUnaryOp(tptr);
+	
+	//For testing: only make support function with content leaf2. 
+	SFC sfc2(l2ptr);
+	SF sf2(&sfc2);
+	cout << "Made sf2 with only leaf2 of type " << sfc2.getRoot()->evaluate() << ". underlying tree of sf2 is: ";
+	sf2.listUnderlyingTree();
+
+	//Finish building the tree
+	sfc.RootGrowTree::addBinaryOp(sptr, &sfc2);
+	
+	cout << "Made sfc with bigger tree structure. sfc is:\n" << sfc << endl;
+
+	//cout << "scf evaluate is: ";
+	
+	//Make raw pointers to sumOp and traOp
 	SumOp* sptr2 = &sumOp;
-	Leaf<string>* lptr2 = &leaf;
+	TrafoOp* tptr2 = &traOp;
 
 	//Put everything into SFC
-	SFC<Node> sfc2;
-	sfc2.add(sptr2);
-	sfc2.add(lptr2);
-	SF<Node> sf(&sfc2);
-	std::cout << "SupportFunction sf has children sumOp (2) and leaf (3). sf.listAllDirectChildren() gives: \n"; 
+	SF sf(&sfc);
+	cout << "All direct children of sf are of type: \n";
 	sf.listAllDirectChildren();
+	cout << "underlying tree of sf is: \n";
+	sf.listUnderlyingTree();
+
+	//second sf
+		
 
 }

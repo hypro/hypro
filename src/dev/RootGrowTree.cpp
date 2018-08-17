@@ -1,5 +1,45 @@
 #include "RootGrowTree.h"
 
+void RootGrowTree::addUnaryOp(RootGrowNode* unary){
+	if(unary->isUnary()){
+
+		//Make a copy of the root ptr
+		RootGrowNode* copyOfRootPtr = mRoot;
+
+		//Save the Height of the current root
+		unsigned tmp = mRoot->getHeight();
+
+		//Add current root as child of given unary node
+		unary->addToChildren(copyOfRootPtr);
+
+		//set unary as the root
+		mRoot = unary;
+
+		//set Height of unary one up
+		mRoot->setHeight(tmp+1);
+
+	} else {
+		std::cout << "WARNING: operation to add was not unary. Nothing added.\n";
+	}
+	
+}
+
+void RootGrowTree::addBinaryOp(RootGrowNode* binary, RootGrowTree* rhs){
+	if(!binary->isUnary()){
+		RootGrowNode* lhsRootPtr = mRoot;
+		RootGrowNode* rhsRootPtr = rhs->getRoot();
+		unsigned tmp = mRoot->getHeight();
+		binary->addToChildren(lhsRootPtr);
+		binary->addToChildren(rhsRootPtr);
+		mRoot = binary;
+		mRoot->setHeight(tmp+1);
+		rhs->setRoot(binary);
+	} else {
+		std::cout << "WARNING: operation to add was not binary. Nothing added.\n";	
+	}
+}
+
+/*
 //Experimental test file
 
 int main(){
@@ -14,15 +54,15 @@ int main(){
 	RootGrowTree t(rPtr);
 
 	//Insert a new unary node with index 50
-	RootGrowNode r2(50, std::vector<RootGrowNode*>(), unary, 0);
+	RootGrowNode r2(50, std::vector<RootGrowNode*>(), unary);
 	RootGrowNode* r2Ptr = &r2;	
 	t.addUnaryOp(r2Ptr);
 
 	//Insert a third unary node with index 40 via binary operator 30
-	RootGrowNode r3(40, std::vector<RootGrowNode*>(), unary, 0);
+	RootGrowNode r3(40, std::vector<RootGrowNode*>(), unary);
 	RootGrowNode* r3Ptr = &r3;
 
-	RootGrowNode binary(30, std::vector<RootGrowNode*>(), !unary, 0);
+	RootGrowNode binary(30, std::vector<RootGrowNode*>(), !unary);
 	RootGrowNode* binaryPtr = &binary;
 
 	//Build second tree
@@ -37,3 +77,4 @@ int main(){
 
 
 }
+*/
