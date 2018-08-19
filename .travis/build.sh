@@ -35,6 +35,8 @@ else
 	popd
 	cmake -DCMAKE_CXX_COMPILER=$COMPILER ..
 	make resources -j2 || return 1
+	cat /home/travis/build/hypro/hypro/build/resources/antlr_build/src/antlr4cpp-stamp/antlr4cpp-build-out.log
+	cat /home/travis/build/hypro/hypro/build/resources/antlr_build/src/antlr4cpp-stamp/antlr4cpp-build-err.log
 	keep_waiting &
 	make -j2 VERBOSE=1 || return 1
 	kill $!
