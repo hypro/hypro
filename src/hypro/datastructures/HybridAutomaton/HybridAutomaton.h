@@ -160,7 +160,7 @@ class HybridAutomaton
     void addGlobalBadState(const Condition<Number>& state) { mGlobalBadStates.push_back(state); }
     ///@}
 
-    void removeTransition(std::unique_ptr<Transition<Number>>& toRemove);
+    void removeTransition(Transition<Number>* toRemove);
 
     /**
      * @brief Decomposes an automaton into the components

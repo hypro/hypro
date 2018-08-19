@@ -1,11 +1,9 @@
 
-#pragma once
-
 #include "adaptions_eigen.h"
 
 namespace Eigen {
 
-	template <>
+	template<>
 	inline bool operator<( const hypro::vector_t<double>& lhs, const hypro::vector_t<double>& rhs ) {
 		if ( lhs.rows() != rhs.rows() ){
 			return false;
@@ -21,7 +19,7 @@ namespace Eigen {
 		return false;
 	}
 
-	template <>
+	template<>
 	inline bool operator<=( const hypro::vector_t<double>& lhs, const hypro::vector_t<double>& rhs ) {
 		if ( lhs.rows() != rhs.rows() ) {
 			return false;
@@ -43,7 +41,7 @@ namespace Eigen {
 	template<>
 	inline bool operator>=( const hypro::vector_t<double>& lhs, const hypro::vector_t<double>& rhs ) { return rhs <= lhs;}
 
-	template <>
+	template<>
 	inline bool operator==( const hypro::vector_t<double>& lhs, const hypro::vector_t<double>& rhs ) {
 		if ( lhs.rows() != rhs.rows() ){
 			return false;
@@ -63,7 +61,7 @@ namespace Eigen {
 		return !(lhs == rhs);
 	}
 
-	template <>
+	template<>
 	inline bool operator==( const hypro::matrix_t<double>& lhs, const hypro::matrix_t<double>& rhs ) {
 		if ( lhs.rows() != rhs.rows() || lhs.cols() != rhs.cols() ){
 			return false;
@@ -80,7 +78,7 @@ namespace Eigen {
 		return true;
 	}
 
-	template <>
+	template<>
 	inline bool operator!=( const hypro::matrix_t<double>& lhs, const hypro::matrix_t<double>& rhs ) {
 		return !(lhs == rhs);
 	}
@@ -105,10 +103,26 @@ namespace hypro {
 			return std::make_pair(false,0);
 		}
 		double scalar = lhs(firstNonZeroPos)/rhs(firstNonZeroPos);
-		if(lhs == rhs*scalar) {
+		if(lhs == vector_t<double>(rhs*scalar)) {
 			return std::make_pair(true,scalar);
 		}
 		return std::make_pair(false,0);
+	}
+
+	template<>
+	bool satisfiesIneqation(const vector_t<double>& constraint, double constant, const vector_t<double>& point) {
+		double sp = point.dot( constraint );
+	    double absDiff = fabs(sp - constant);
+
+	    if (sp < constant) {
+	        return true;
+	    }
+
+	    if (absDiff <= FLT_EPSILON) {
+	        return true;
+	    }
+
+	    return carl::AlmostEqual2sComplement(sp, constant, 128);
 	}
 
 } // namespace hypro

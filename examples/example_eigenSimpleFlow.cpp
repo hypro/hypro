@@ -6,8 +6,6 @@
 #include "algorithms/eigendecomposition/Transformation.h"
 #include "representations/GeometricObject.h"
 #include "util/Plotter.h"
-#include <Eigen/Eigenvalues>
-#include <Eigen/Dense>
 //#include <Eigen/LU>
 using namespace hypro;
 using Number = double;
@@ -112,11 +110,11 @@ int main(int argc, char** argv)
     //wont work: bouncing_ball.model filtered_oscillator_4.model
     //hypo working: bouncin_ball_inhomogen rod_reactor
     //hypro not working switching_5 (to fix!!!)
-    //HyDRA not working: rod_reactor 
+    //HyDRA not working: rod_reactor
     //bouncing_ball_inhomogen.model  rod_reactor.model switching_5.model
     //filtered_oscillator_4.model bouncing_ball_inhomogen.model missing: GearBox ARCH17, Comp3
-	boost::tuple<HybridAutomaton<Number>, ReachabilitySettings<Number>> ha = parseFlowstarFile<Number>(filename);
-    HybridAutomaton<Number> original_ha = boost::get<0>(ha);
+	std::pair<HybridAutomaton<Number>, ReachabilitySettings<Number>> ha = parseFlowstarFile<Number>(filename);
+    HybridAutomaton<Number> original_ha = ha.first;
     Transformation<Number> trafo = Transformation<Number>(original_ha);
     std::cout << "----------    END OF TRANSFORMATION   ------------\n";
     std::cout << original_ha << std::endl;

@@ -26,8 +26,8 @@ int main()
 	LocationManager<Number>& lManager = LocationManager<Number>::getInstance();
 
 	// create the discrete structure of the automaton and the automaton itself.
-	Location<Number>* loc1 = lManager.create();
-	hypro::Transition<Number>* trans = new hypro::Transition<Number>();
+	std::unique_ptr<Location<Number>> loc1 = std::make_unique<Location<Number>>();
+	std::unique_ptr<Transition<Number>> trans = std::make_unique<Transition<Number>>();
 	HybridAutomaton<Number> bBallAutomaton = HybridAutomaton<Number>();
 
 	// matrix defining the flow (note: 3rd dimension for constant parts).
@@ -105,9 +105,7 @@ int main()
 
 
 	// add defined location and transition to the automaton.
-	bBallAutomaton.addLocation(loc1);
-	bBallAutomaton.addTransition(trans);
-	loc1->addTransition(trans);
+	loc1->addTransition(trans.get());
 
 	// create Box holding the initial set.
 	matrix_t<Number> boxMat = matrix_t<Number>(4,2);
@@ -128,10 +126,13 @@ int main()
 	boxMat(3,1) = Number(-1);
 
 	// create initial state.
-	hypro::State<Number,hypro::ConstraintSet<Number>> initialState;
-	initialState.setLocation(loc1);
+	hypro::State_t<Number> initialState;
+	initialState.setLocation(loc1.get());
 	initialState.setSet(ConstraintSet<Number>(boxMat, boxVec));
 	bBallAutomaton.addInitialState(initialState);
+
+	bBallAutomaton.addLocation(std::move(loc1));
+	bBallAutomaton.addTransition(std::move(trans));
 
 	// vector of sets to collect flowpipes (which are again a vector of sets).
 	std::vector<std::vector<Representation>> flowpipes;
@@ -151,7 +152,7 @@ int main()
 	Plotter<Number>& plotter = Plotter<Number>::getInstance();
 	plotter.setFilename("bouncingBall");
 	for(auto& indexPair : flowpipeIndices){
-		std::vector<hypro::reachability::State_t<Number>> flowpipe = indexPair.second;
+		std::vector<hypro::State_t<Number>> flowpipe = indexPair.second;
 		// Plot single flowpipe
 		for(auto& set : flowpipe) {
 			std::vector<Point<Number>> points = set.vertices();
