@@ -13,7 +13,7 @@ std::size_t Transition<Number>::hash() const {
 template<typename Number>
 std::string Transition<Number>::getDotRepresentation(const std::vector<std::string>& vars) const {
    	std::stringstream o;
-   	o << this->getSource()->getId() << " -> " << this->getTarget()->getId();
+   	o << this->getSource()->hash() << " -> " << this->getTarget()->hash();
    	if(getLabels().size() != 0 || (mReset.size() > 0 && !mReset.isIdentity()) || mGuard.size() != 0) {
    		o << "[label=< <TABLE>";
     	// sync labels
@@ -142,22 +142,23 @@ bool Transition<Number>::isComposedOf(const Transition<Number>& rhs, const std::
 }
 
 template<typename Number, typename State>
-std::unique_ptr<Transition<Number>> parallelCompose(const std::unique_ptr<Transition<Number>>& lhsT
-                                , const std::unique_ptr<Transition<Number>>& rhsT
-                                , const std::vector<std::string>& lhsVar
-                                , const std::vector<std::string>& rhsVar
-                                , const std::vector<std::string>& haVar
-                                , const HybridAutomaton<Number, State> ha
-                                , const std::set<Label> lhsLabels
-                                , const std::set<Label> rhsLabels) {
-
+std::unique_ptr<Transition<Number>> parallelCompose(const Transition<Number>* lhsT
+                                                    , const Transition<Number>* rhsT
+                                                    , const std::vector<std::string>& lhsVar
+                                                    , const std::vector<std::string>& rhsVar
+                                                    , const std::vector<std::string>& haVar
+                                                    , const HybridAutomaton<Number, State>& ha
+                                                    , const std::set<Label> lhsLabels
+                                                    , const std::set<Label> rhsLabels)
+{
     assert(haVar.size() >= lhsVar.size());
     assert(haVar.size() >= rhsVar.size());
 
     //std::cout << "Parallel composition of transitions " << lhsT->getSource()->getName() << " -> " << lhsT->getTarget()->getName() << " and " << rhsT->getSource()->getName() << " -> " << rhsT->getTarget()->getName() << std::endl;
 
     //Transition<Number>* t = new Transition<Number>();
-    std::unique_ptr<Transition<Number>> t(new Transition<Number>());
+    //std::unique_ptr<Transition<Number>> t = new Transition<Number>()
+    std::unique_ptr<Transition<Number>> t = std::make_unique<Transition<Number>>();
 
     //set label
     if (lhsT->getLabels() == rhsT->getLabels()) {
@@ -171,7 +172,7 @@ std::unique_ptr<Transition<Number>> parallelCompose(const std::unique_ptr<Transi
         t->setLabels(rhsT->getLabels());
     } else {
         //std::cout << "d" << std::endl;
-        delete t;
+        //delete t;
         return nullptr;
     }
 
@@ -200,7 +201,7 @@ std::unique_ptr<Transition<Number>> parallelCompose(const std::unique_ptr<Transi
     		if(lhsT->getReset().getMatrix()(varTuple.second.first,other.second.first) != rhsT->getReset().getMatrix()(varTuple.second.second,other.second.second)
     			|| lhsT->getReset().getVector()(varTuple.second.first) != rhsT->getReset().getVector()(varTuple.second.second) ) {
     			//std::cout << "Delete." << std::endl;
-    			delete t;
+    			//delete t;
     			return nullptr;
     		}
     	}

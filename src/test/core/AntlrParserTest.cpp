@@ -14,59 +14,59 @@ using namespace hypro;
 template<typename Number>
 class AntlrParserTest : public ::testing::Test {
 
-	protected:
+  protected:
 
-		AntlrParserTest(){}
-		~AntlrParserTest(){}
-		virtual void setUp(){}
-		virtual void tearDown(){}
+	AntlrParserTest(){}
+	~AntlrParserTest(){}
+	virtual void setUp(){}
+	virtual void tearDown(){}
 
-		void cwd(){
-			char cwd[1024];
-		   	if (getcwd(cwd, sizeof(cwd)) != NULL)
-		       fprintf(stdout, "Current working dir: %s\n", cwd);
-		   	else
-		       std::cerr << "getcwd() error" << std::endl;
+	void cwd(){
+		char cwd[1024];
+	   	if (getcwd(cwd, sizeof(cwd)) != NULL)
+	       fprintf(stdout, "Current working dir: %s\n", cwd);
+	   	else
+	       std::cerr << "getcwd() error" << std::endl;
+	}
+/*
+	//Equality of Locations - without looking at transitions or id
+	bool equals(const Location<Number>* lhs, const Location<Number>* rhs){
+		return (lhs->getFlow() == rhs->getFlow() &&
+				lhs->getExternalInput() == rhs->getExternalInput() &&
+				lhs->getInvariant() == rhs->getInvariant() &&
+				lhs->getName() == rhs->getName() );
+	}
+
+	//Equality of Transitions
+	//bool equals(Transition<Number>* lhs, Transition<Number>* rhs){
+	bool equals(std::unique_ptr<Transition<Number>> lhs, std::unique_ptr<Transition<Number>> rhs){
+		if( (!equals(lhs->getSource(), rhs->getSource())) ||
+			(!equals(lhs->getTarget(), rhs->getTarget())) ||
+			(lhs->getUrgent() != rhs->getUrgent()) ||
+			(lhs->getGuard() != rhs->getGuard()) ||
+			(lhs->getReset() != rhs->getReset()) ) {
+			return false;
 		}
+		return true;
+	}
 
-		//Equality of Locations - without looking at transitions or id
-		bool equals(const Location<Number>* lhs, const Location<Number>* rhs){
-			return (lhs->getFlow() == rhs->getFlow() &&
-					lhs->getExternalInput() == rhs->getExternalInput() &&
-					lhs->getInvariant() == rhs->getInvariant() &&
-					lhs->getName() == rhs->getName() );
+	//Equality of States
+	bool equals(State_t<Number,Number> lhs, State_t<Number,Number> rhs){
+		// quick checks first
+		if (lhs.getNumberSets() != rhs.getNumberSets() || !equals(lhs.getLocation(),rhs.getLocation()) || lhs.getTimestamp() != rhs.getTimestamp()) {
+			return false;
 		}
-
-		//Equality of Transitions
-		//bool equals(Transition<Number>* lhs, Transition<Number>* rhs){
-		bool equals(std::unique_ptr<Transition<Number>> lhs, std::unique_ptr<Transition<Number>> rhs){
-			if( (!equals(lhs->getSource(), rhs->getSource())) ||
-				(!equals(lhs->getTarget(), rhs->getTarget())) ||
-				(lhs->getUrgent() != rhs->getUrgent()) ||
-				(lhs->getGuard() != rhs->getGuard()) ||
-				(lhs->getReset() != rhs->getReset()) ) {
+		for(std::size_t i = 0; i < lhs.getNumberSets(); ++i) {
+			if( lhs.getSetType(i) != rhs.getSetType(i)) {
 				return false;
 			}
-			return true;
+			if(!boost::apply_visitor(genericCompareVisitor(), lhs.getSet(i), rhs.getSet(i))) {
+				return false;
+			}
 		}
-
-		//Equality of States
-		bool equals(State_t<Number,Number> lhs, State_t<Number,Number> rhs){
-			// quick checks first
-    		if (lhs.getNumberSets() != rhs.getNumberSets() || !equals(lhs.getLocation(),rhs.getLocation()) || lhs.getTimestamp() != rhs.getTimestamp()) {
-    			return false;
-    		}
-    		for(std::size_t i = 0; i < lhs.getNumberSets(); ++i) {
-    			if( lhs.getSetType(i) != rhs.getSetType(i)) {
-    				return false;
-    			}
-    			if(!boost::apply_visitor(genericCompareVisitor(), lhs.getSet(i), rhs.getSet(i))) {
-    				return false;
-    			}
-    		}
-    		return true;
-		}
-
+		return true;
+	}
+*/
 };
 
 TYPED_TEST(AntlrParserTest, JustTesting){
@@ -78,7 +78,8 @@ TYPED_TEST(AntlrParserTest, JustTesting){
 
 	this->cwd();
 	try{
-		boost::tuple<HybridAutomaton<TypeParam,State_t<TypeParam,TypeParam>>, ReachabilitySettings<TypeParam>> h = parseFlowstarFile<TypeParam>(path);
+		//boost::tuple<HybridAutomaton<TypeParam,State_t<TypeParam,TypeParam>>, ReachabilitySettings<TypeParam>> h = parseFlowstarFile<TypeParam>(path);
+		std::pair<HybridAutomaton<TypeParam,State_t<TypeParam,TypeParam>>, ReachabilitySettings<TypeParam>> h = parseFlowstarFile<TypeParam>(path);
 		SUCCEED();
 	}catch (const std::runtime_error& e){
 		std::cout << e.what() << std::endl;
@@ -93,7 +94,8 @@ TYPED_TEST(AntlrParserTest, EmptyFile){
 	//std::string path("/home/tobias/RWTH/8_WS2017/BA/hypro/src/test/core/examples/test_empty_file.txt");
 
 	try{
-		boost::tuple<HybridAutomaton<TypeParam,State_t<TypeParam,TypeParam>>, ReachabilitySettings<TypeParam>> h = parseFlowstarFile<TypeParam>(path);
+		//boost::tuple<HybridAutomaton<TypeParam,State_t<TypeParam,TypeParam>>, ReachabilitySettings<TypeParam>> h = parseFlowstarFile<TypeParam>(path);
+		std::pair<HybridAutomaton<TypeParam,State_t<TypeParam,TypeParam>>, ReachabilitySettings<TypeParam>> h = parseFlowstarFile<TypeParam>(path);
 		FAIL();
 	} catch(const std::runtime_error& e){
 		std::cout << e.what() << std::endl;

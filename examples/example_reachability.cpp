@@ -20,35 +20,23 @@ static void computeReachableStates(const std::string& filename, const hypro::rep
 	using timeunit = std::chrono::microseconds;
 	clock::time_point start = clock::now();
 
-	//boost::tuple<hypro::HybridAutomaton<Number>, hypro::ReachabilitySettings<Number>> ha = std::move(hypro::parseFlowstarFile<Number>(filename));
-	std::pair<hypro::HybridAutomaton<Number>, hypro::ReachabilitySettings<Number>> ha = std::move(hypro::parseFlowstarFile<Number>(filename))  ; 
-#ifdef HYPRO_LOGGING
-	std::cout << "========== DIRECTLY AFTER =============" << std::endl;
-	std::cout << "Parsed HybridAutomaton Transitions:\n";
-	for(const auto& t : ha.first.getTransitions()){
-		std::cout << *t << std::endl;
-	}
-	std::cout << "Parsed HybridAutomaton Locations:\n";
-	for(const auto& l : ha.first.getLocations()){
-		std::cout << *l << std::endl;
-	}
-	std::cout << "Parsed HybridAutomaton:\n" << ha.first << "Parsed ReachabilitySettings:\n" << ha.second << std::endl;
-#endif
-/*
-	hypro::reachability::Reach<Number> reacher(boost::get<0>(ha), boost::get<1>(ha));
+	std::pair<hypro::HybridAutomaton<Number>, hypro::ReachabilitySettings<Number>> ha = std::move(hypro::parseFlowstarFile<Number>(filename)); 
+	//#ifdef HYPRO_LOGGING
+	//std::cout << "Parsed HybridAutomaton:\n" << ha.first << "Parsed ReachabilitySettings:\n" << ha.second << std::endl;
+	//#endif
+
+	hypro::reachability::Reach<Number> reacher(ha.first, ha.second);
 	reacher.setRepresentationType(type);
-	std::cout << boost::get<1>(ha) << std::endl;
 	std::vector<std::pair<unsigned, hypro::reachability::flowpipe_t<Number>>> flowpipes = reacher.computeForwardReachability();
 
 	std::cout << "Finished computation of reachable states: " << std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000.0 << " ms" << std::endl;
 
-//#ifdef PLOT_FLOWPIPE
-    if(boost::get<1>(ha).plotDimensions.size() > 0){
+    if(ha.second.plotDimensions.size() > 0){
 
 		clock::time_point startPlotting = clock::now();
 
 		hypro::Plotter<Number>& plotter = hypro::Plotter<Number>::getInstance();
-		std::string extendedFilename = boost::get<1>(ha).fileName;
+		std::string extendedFilename = ha.second.fileName;
 		switch (Representation::type()) {
 			case hypro::representation_name::ppl_polytope: {
 				extendedFilename += "_pplpoly";
@@ -83,14 +71,14 @@ static void computeReachableStates(const std::string& filename, const hypro::rep
 		}
 		std::cout << "filename is " << extendedFilename << std::endl;
 		plotter.setFilename(extendedFilename);
-		std::vector<std::size_t> plottingDimensions = boost::get<1>(ha).plotDimensions.at(0);
+		std::vector<std::size_t> plottingDimensions = ha.second.plotDimensions.at(0);
 		plotter.rSettings().dimensions.first = plottingDimensions.front();
 		plotter.rSettings().dimensions.second = plottingDimensions.back();
 		plotter.rSettings().cummulative = false;
 
 
 		// bad states plotting
-		typename hypro::HybridAutomaton<Number>::locationConditionMap badStateMapping = boost::get<0>(ha).getLocalBadStates();
+		typename hypro::HybridAutomaton<Number>::locationConditionMap badStateMapping = ha.first.getLocalBadStates();
 		for(const auto& state : badStateMapping) {
 			unsigned bs = plotter.addObject(Representation(state.second.getMatrix(0), state.second.getVector(0)).vertices());
 			plotter.setObjectColor(bs, hypro::plotting::colors[hypro::plotting::red]);
@@ -105,7 +93,6 @@ static void computeReachableStates(const std::string& filename, const hypro::rep
 				Representation seg = boost::get<Representation>(segment.getSet(0));
 				switch (type) {
 					case hypro::representation_name::support_function:{
-						//unsigned tmp = plotter.addObject(segment.project(plottingDimensions).vertices(hypro::LocationManager<Number>::getInstance().location(flowpipePair.first)));
 						unsigned tmp = plotter.addObject(seg.project(plottingDimensions).vertices());
 						plotter.setObjectColor(tmp, hypro::plotting::colors[flowpipePair.first % (sizeof(hypro::plotting::colors)/sizeof(*hypro::plotting::colors))]);
 						break;
@@ -142,9 +129,8 @@ static void computeReachableStates(const std::string& filename, const hypro::rep
 
 		std::cout << "Finished plotting: " << std::chrono::duration_cast<timeunit>( clock::now() - startPlotting ).count()/1000.0 << " ms" << std::endl;
 
-//#endif
 	}
-	*/
+	
 }
 
 int main(int argc, char** argv) {

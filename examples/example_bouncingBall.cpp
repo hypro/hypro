@@ -144,6 +144,7 @@ int main()
 	settings.timeBound = Number(3);
 	settings.jumpDepth = 3;
 	reacher.setSettings(settings);
+	reacher.setRepresentationType(Representation::type());
 
 	// perform reachability analysis.
 	std::vector<std::pair<unsigned, reachability::flowpipe_t<Number>>> flowpipeIndices = reacher.computeForwardReachability();
