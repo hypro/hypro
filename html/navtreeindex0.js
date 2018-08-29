@@ -59,9 +59,6 @@ var NAVTREEINDEX0 =
 "ExpressionsParser_8h_source.html":[10,0,1,0,2,0,15],
 "ExpressionsVisitor_8cpp_source.html":[10,0,1,0,2,0,16],
 "ExpressionsVisitor_8h_source.html":[10,0,1,0,2,0,17],
-"FIX__example__benchmark_8cpp_source.html":[10,0,0,33],
-"FIX__example__dynamicStrategies_8cpp_source.html":[10,0,0,34],
-"FIX__example__parallel__composition_8cpp_source.html":[10,0,0,35],
 "Facet_8h.html":[10,0,1,0,1,1],
 "Facet_8h.html#afd53e65bd9b40647f75d1b9d610f902a":[10,0,1,0,1,1,1],
 "Facet_8h_source.html":[10,0,1,0,1,1],
@@ -70,8 +67,8 @@ var NAVTREEINDEX0 =
 "FirstSegment_8h_source.html":[10,0,1,0,0,2,0],
 "Flowstar_8h_source.html":[10,0,1,0,1,0,0,0],
 "GeometricObject_8h.html":[10,0,1,0,3,11],
-"GeometricObject_8h.html#a77c748d2de8b266db9e5cc40d4674941":[10,0,1,0,3,11,5],
 "GeometricObject_8h.html#a77c748d2de8b266db9e5cc40d4674941":[10,0,1,0,3,11,4],
+"GeometricObject_8h.html#a77c748d2de8b266db9e5cc40d4674941":[10,0,1,0,3,11,5],
 "GeometricObject_8h_source.html":[10,0,1,0,3,11],
 "Grid_8h_source.html":[10,0,1,0,3,5,1],
 "HPolytopeSetting_8h_source.html":[10,0,1,0,3,7,0,1],
@@ -249,5 +246,8 @@ var NAVTREEINDEX0 =
 "Reach_8h.html#a2405ccdddadb123ffc7389254943624e":[10,0,1,0,0,2,1,2853],
 "Reach_8h.html#a2449aa51d72493ec2f52d2b5343fada2":[10,0,1,0,0,2,1,2901],
 "Reach_8h.html#a249021c236db6db4c2c78340316f8572":[10,0,1,0,0,2,1,2760],
-"Reach_8h.html#a24c48c7fda099099fc489ab970787f23":[10,0,1,0,0,2,1,2704]
+"Reach_8h.html#a24c48c7fda099099fc489ab970787f23":[10,0,1,0,0,2,1,2704],
+"Reach_8h.html#a2585a6512d6b35bf9291f0644c44c3cd":[10,0,1,0,0,2,1,3087],
+"Reach_8h.html#a25a277b36a6afe2214120fc2fc32178e":[10,0,1,0,0,2,1,2625],
+"Reach_8h.html#a25f8746648472d7e14ee844abb97cede":[10,0,1,0,0,2,1,2843]
 };

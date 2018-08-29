@@ -1,8 +1,5 @@
 var NAVTREEINDEX2376 =
 {
-"classCIFLocationParser.html#aa52701dfa234334fba54805a8ee22376":[9,0,10,297],
-"classCIFLocationParser.html#aa587f3389aa0e6a48ea25d592c020406":[9,0,10,280],
-"classCIFLocationParser.html#aa76a6548ab860e4a7d523da7fde27288":[9,0,10,266],
 "classCIFLocationParser.html#aadde84ce809374349738b045c4c99e61":[9,0,10,268],
 "classCIFLocationParser.html#aaf458b48f3f8ce819257fa93b9dfc22d":[9,0,10,252],
 "classCIFLocationParser.html#abb71a059c2360e3d2713779e600b8af9":[9,0,10,290],
@@ -249,5 +246,8 @@ var NAVTREEINDEX2376 =
 "classCIFLocationParser_1_1LocElemEqsContext.html#ab24d058b73c7ea5579314ea3ab94168b":[9,0,10,42,1],
 "classCIFLocationParser_1_1LocElemInitialFlagContext.html":[9,0,10,43],
 "classCIFLocationParser_1_1LocElemInitialFlagContext.html#abfec3dce78556c445c0771561a2e6e16":[9,0,10,43,1],
-"classCIFLocationParser_1_1LocElemInitialFlagContext.html#acbe40bdc6939f3c9a0e1eaee57744046":[9,0,10,43,0]
+"classCIFLocationParser_1_1LocElemInitialFlagContext.html#acbe40bdc6939f3c9a0e1eaee57744046":[9,0,10,43,0],
+"classCIFLocationParser_1_1LocElemInitialFlagExprContext.html":[9,0,10,44],
+"classCIFLocationParser_1_1LocElemInitialFlagExprContext.html#a79d4bcef16a571844ed70f2aeb42bc6c":[9,0,10,44,1],
+"classCIFLocationParser_1_1LocElemInitialFlagExprContext.html#a845241c1762d5c09677780becbc4377d":[9,0,10,44,0]
 };

@@ -1,8 +1,5 @@
 var NAVTREEINDEX2394 =
 {
-"classhypro_1_1DifferenceBoundsT.html#a100e2df570177f1b74010e4fd6fdf3da":[9,0,1,71,6],
-"classhypro_1_1DifferenceBoundsT.html#a1168d084536f90893cae2589dfd1cb50":[9,0,1,71,1],
-"classhypro_1_1DifferenceBoundsT.html#a1168d084536f90893cae2589dfd1cb50a49d4f39a651909cc21d315a196c519de":[9,0,1,71,1,1],
 "classhypro_1_1DifferenceBoundsT.html#a1168d084536f90893cae2589dfd1cb50ab4ea6bff7b7882e96403d7e01052c2c3":[9,0,1,71,1,0],
 "classhypro_1_1DifferenceBoundsT.html#a1168d084536f90893cae2589dfd1cb50ac3b57c667161429a0de064c7741620ab":[9,0,1,71,1,2],
 "classhypro_1_1DifferenceBoundsT.html#a145ea4a444dd1d3f5c96469a6a86e36e":[9,0,1,71,36],
@@ -74,8 +71,8 @@ var NAVTREEINDEX2394 =
 "classhypro_1_1EllipsoidSupportFunction.html#a5b6b6acb9182e2cd5205506cce865e19":[9,0,1,88,6],
 "classhypro_1_1EllipsoidSupportFunction.html#a622757f58b0b2a7e223609c868138d92":[9,0,1,88,4],
 "classhypro_1_1EllipsoidSupportFunction.html#a75b07358df92f14d7070bdf6d7afb23b":[9,0,1,88,5],
-"classhypro_1_1EllipsoidSupportFunction.html#aae1d8a34744daf77f2c8656a351c71f3":[9,0,1,88,7],
 "classhypro_1_1EllipsoidSupportFunction.html#aae1d8a34744daf77f2c8656a351c71f3":[9,0,1,88,8],
+"classhypro_1_1EllipsoidSupportFunction.html#aae1d8a34744daf77f2c8656a351c71f3":[9,0,1,88,7],
 "classhypro_1_1EllipsoidSupportFunction.html#aafd5aa9372ea951c906fefd900333cdf":[9,0,1,88,9],
 "classhypro_1_1EllipsoidSupportFunction.html#aba27832ec002e8ebeaffc4de25e103f0":[9,0,1,88,11],
 "classhypro_1_1EllipsoidSupportFunction.html#af71f93ec43507bf60e0471e44490072f":[9,0,1,88,0],
@@ -249,5 +246,8 @@ var NAVTREEINDEX2394 =
 "classhypro_1_1HPolytopeT.html#a09362df9f62d7ffbdde1f32467268f85":[9,0,1,83,9],
 "classhypro_1_1HPolytopeT.html#a0dd8fa027162de65280b62842e7755cd":[9,0,1,83,33],
 "classhypro_1_1HPolytopeT.html#a12080ffe05a018fad79eb5cb1045f19d":[9,0,1,83,23],
-"classhypro_1_1HPolytopeT.html#a1a60fa4ec4f30fa1c570bdd7d321b56f":[9,0,1,83,47]
+"classhypro_1_1HPolytopeT.html#a1a60fa4ec4f30fa1c570bdd7d321b56f":[9,0,1,83,47],
+"classhypro_1_1HPolytopeT.html#a23e5867f9e7d2c8346c868aae6d24f51":[9,0,1,83,57],
+"classhypro_1_1HPolytopeT.html#a27a78d8b046d94aacb5271c00eeeafb7":[9,0,1,83,46],
+"classhypro_1_1HPolytopeT.html#a2c9cbc32e04938dd191f9ee932445563":[9,0,1,83,1]
 };
