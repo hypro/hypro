@@ -1,5 +1,8 @@
 var NAVTREEINDEX2395 =
 {
+"classhypro_1_1HPolytopeT.html#a23e5867f9e7d2c8346c868aae6d24f51":[9,0,1,83,57],
+"classhypro_1_1HPolytopeT.html#a27a78d8b046d94aacb5271c00eeeafb7":[9,0,1,83,46],
+"classhypro_1_1HPolytopeT.html#a2c9cbc32e04938dd191f9ee932445563":[9,0,1,83,1],
 "classhypro_1_1HPolytopeT.html#a2c9cbc32e04938dd191f9ee932445563a47f3a32095c7c48a98ff53651e3e7779":[9,0,1,83,1,8],
 "classhypro_1_1HPolytopeT.html#a2c9cbc32e04938dd191f9ee932445563a4ea976ef9898fd77ca78a54cefd53437":[9,0,1,83,1,4],
 "classhypro_1_1HPolytopeT.html#a2c9cbc32e04938dd191f9ee932445563a58924f24105681253ad3e2ec088809a4":[9,0,1,83,1,5],
@@ -246,8 +249,5 @@ var NAVTREEINDEX2395 =
 "classhypro_1_1Location.html#ae0e07f4791ea563dee80590661758c89":[9,0,1,25,26],
 "classhypro_1_1Location.html#aeffc26c683ac9afcc6850a6c03e85df7":[9,0,1,25,7],
 "classhypro_1_1Location.html#af341b96d0478f585a42f066ebd5c7bde":[9,0,1,25,34],
-"classhypro_1_1Location.html#af8dc5754d664496dd99c57dfcaa10fec":[9,0,1,25,33],
-"classhypro_1_1Location.html#afca89b8e15d30121aaff7b2224af45cc":[9,0,1,25,10],
-"classhypro_1_1LocationManager.html":[9,0,1,24],
-"classhypro_1_1LocationManager.html#a03a0716860d930fb9b6c1e8d792a395e":[9,0,1,24,10]
+"classhypro_1_1Location.html#af8dc5754d664496dd99c57dfcaa10fec":[9,0,1,25,33]
 };
