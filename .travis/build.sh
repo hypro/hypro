@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 mkdir -p build || return 1
-cd build || return 1
+pushd build
 
 function keep_waiting() {
   while true; do
@@ -44,5 +44,6 @@ else
 
 fi
 
+popd
 
 
