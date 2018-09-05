@@ -1,9 +1,12 @@
+#include <functional>
 #include "RootGrowNode.h"
+
+
 
 //This class will later model a SFC
 //Assuming we start with some unconnected nodes as leaves
 class RootGrowTree {
-private:
+protected:
 
 	//ptr to most upper node in tree
 	RootGrowNode* mRoot = nullptr;					
@@ -28,5 +31,12 @@ public:
 		ostr << *(t.getRoot()) << std::endl;
 		return ostr;
 	}
+
+	////// Stack handling Functions //////
+
+	static void test(){ std::cout << "test successful\n"; }
+	static void prepareStack(int blub){ std::cout << "preparedStack!\n" << blub << std::endl; }
+	static int accumulate(float test){ std::cout << "accumulated! test is: " << int(test) << "\n"; return test; }
+
 };
 
