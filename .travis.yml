@@ -125,8 +125,8 @@ script:
   - cd ${TRAVIS_BUILD_DIR}
   - .travis/build.sh
   #- mkdir build && cd build && cmake $FLAGS -DCMAKE_CXX_COMPILER=$COMPILER .. && make resources && make VERBOSE=1
-  - cat build/resources/antlr_build/src/antlr4cpp-stamp/antlr4cpp-configure-out.log
-  - cat build/resources/antlr_build/src/antlr4cpp-stamp/antlr4cpp-configure-err.log
+  #- cat build/resources/antlr_build/src/antlr4cpp-stamp/antlr4cpp-configure-out.log
+  #- cat build/resources/antlr_build/src/antlr4cpp-stamp/antlr4cpp-configure-err.log
   #- make test
 
 # Generate and deploy documentation
