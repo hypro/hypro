@@ -47,6 +47,7 @@ addons:
       - uuid-dev
       - openjdk-9-jre
       - g++-6
+      - libc++-dev
 
 matrix:
   include:
