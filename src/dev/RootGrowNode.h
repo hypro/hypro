@@ -13,6 +13,7 @@ enum SF_TYPE { NONE = 0, TRAFO, SUM, LEAF };
 struct EvalResult
 {
 	int res;
+	EvalResult() : res(0) {}
 	EvalResult(int r) : res(r) {}
 
 	friend std::ostream& operator<<(std::ostream& ostr, const EvalResult& e){
@@ -22,6 +23,11 @@ struct EvalResult
 
 	friend EvalResult operator+ (const EvalResult& lhs, const EvalResult& rhs){
 		int tmp = lhs.res + rhs.res;
+		return EvalResult(tmp); 
+	}
+
+	friend EvalResult operator* (const EvalResult& lhs, const EvalResult& rhs){
+		int tmp = lhs.res * rhs.res;
 		return EvalResult(tmp); 
 	}
 };
@@ -48,28 +54,6 @@ private:
 protected:
 	std::vector<RootGrowNode*> mChildren = std::vector<RootGrowNode*>();	//vector of all current children
 
-/*	
-	////// Hidden Structs for Evaluation (needed since virtual templated functions like evaluate not possible)
-
-	//Abstract class that knows that there is an evaluate function
-	struct EvalConcept {
-		virtual ~EvalConcept() = default;
-		virtual EvalResult evaluate() = 0;
-		//Possibly other virtual functions here
-	}
-
-	//Class that connects the possible different types via templates
-	//with the virtual functions defined in EvalConcept
-	template<typename Node>
-	struct EvalModel : EvalConcept {
-		Node evaluatable;
-		EvalModel(Node n) : evaluatable(std::move(n)) {}
-		EvalResult evaluate(Marix param){ n.evaluate(param); }
-	}
-
-	//RootGrowNode holds a pointer to EvalConcept
-	std::unique_ptr<EvalConcept> mSelf;
-*/
 public:
 
 	////// Constructors
@@ -91,7 +75,7 @@ public:
 
 	unsigned getHeight() const { return mHeight; }
 	std::vector<RootGrowNode*> getChildren() const { return mChildren; }
-	bool isItUnary() const { return mUnary; }
+	virtual bool isItUnary() const { return mUnary; }
 	virtual SF_TYPE getType() const { return mType; }
 	virtual unsigned getOriginCount() const { return originCount; }
 
@@ -136,6 +120,13 @@ public:
 		execute<RetPost,ParamPost...>(post, paramPost);
 	}
 
-	virtual EvalResult evaluate(Matrix m) { return EvalResult(m.entry); }
+	//Since this is a virtual function, the implementation is actually not important / should be neglected
+	virtual std::vector<EvalResult> evaluate(Matrix m) = 0;
+	virtual std::vector<EvalResult> accumulate(std::vector<std::vector<EvalResult>>& resultStackBack) = 0;
+	virtual void pushToStacks(	std::vector<RootGrowNode*>& callStack, 
+								std::vector<Matrix>& paramStack,
+								std::vector<std::pair<int,std::vector<std::vector<EvalResult>>>>& resultStack,
+								Matrix param,
+								std::size_t callingFrame) = 0;
 	
 };

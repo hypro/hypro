@@ -2,6 +2,7 @@
 #include <string>
 #include <vector>
 #include <tuple>
+#include <cassert>
 #include "RootGrowTree.h"
 
 //Specialized subclass for transformations as example of a unary operator
@@ -16,15 +17,44 @@ private:
 	////// Members for this class
 
 	int factor = 5;
+	int translation = -10;
 
 public:
-	TrafoOp(){}
+	TrafoOp() {}
 	~TrafoOp(){}
 	SF_TYPE getType() const override { return type; }
+	bool isItUnary() const override { return isUnary; }
 	unsigned getOriginCount() const { return originCount; }
-	EvalResult evaluate(Matrix m) { 
-		std::cout << "TrafoOp evaluate is factor: " << factor << " times m.entry: " << m.entry << std::endl;
-		return factor*m.entry; 
+
+	//Return transformed result of its children
+	std::vector<EvalResult> evaluate(Matrix m) { 
+		auto tmp = mChildren.at(0)->evaluate(m);
+		for(unsigned i=0; i < tmp.size(); i++){
+			tmp.at(i) = EvalResult(factor*tmp.at(i) + translation);
+		}
+		return tmp; 
+	}
+
+	//Given the results, return vector of evaluation results (here only first place needed, since unary op), here, we also modify
+	std::vector<EvalResult> accumulate(std::vector<std::vector<EvalResult>>& resultStackBack){ 
+		//Make sure only one vector of parameters here
+		assert(resultStackBack.size() == 1); 
+		for(unsigned i = 0; i < resultStackBack.at(0).size(); i++){
+			resultStackBack.at(0).at(i) = EvalResult(factor*resultStackBack.at(0).at(i).res + translation);	
+		}
+		return resultStackBack.at(0);
+	}
+
+	//Push needed children onto callStack, push transformed given parameter onto paramStack, push callingFrame/results pair onto resultStack
+	void pushToStacks(std::vector<RootGrowNode*>& callStack, 
+					 std::vector<Matrix>& paramStack,
+					 std::vector<std::pair<int,std::vector<std::vector<EvalResult>>>>& resultStack,
+					 Matrix param,
+					 std::size_t callingFrame) override {
+		std::cout << "in TrafoOp::pushToStack, callStack size before is: " << callStack.size() << std::endl;
+		callStack.push_back(mChildren.at(0));
+		paramStack.push_back(factor*param.entry + translation);
+		resultStack.push_back(std::make_pair(callingFrame, std::vector<std::vector<EvalResult>>()));
 	}
 };
 
@@ -43,11 +73,48 @@ private:
 public:
 	SumOp(){}
 	~SumOp(){}
+	bool isItUnary() const override { return isUnary; }
 	SF_TYPE getType() const override { return type; }
 	unsigned getOriginCount() const { return originCount; }
-	EvalResult evaluate(Matrix m) { 
-		std::cout << "SumOp evaluate is: " << mChildren.at(0)->evaluate(m) << " and " << mChildren.at(0)->evaluate(m) << std::endl;
-		return mChildren.at(0)->evaluate(m) + mChildren.at(1)->evaluate(m);
+
+	//Do the sum op
+	std::vector<EvalResult> evaluate(Matrix m) { 
+		auto tmp0 = mChildren.at(0)->evaluate(m);
+		auto tmp1 = mChildren.at(1)->evaluate(m);
+		std::vector<EvalResult> result;
+		for(unsigned i=0; i < tmp0.size(); i++){
+			result.at(i) = tmp0.at(i) + tmp1.at(i);
+		}
+		return result;
+	}
+
+	//Given two result vecs, sum them coefficientwise
+	std::vector<EvalResult> accumulate(std::vector<std::vector<EvalResult>>& resultStackBack) {
+		assert(resultStackBack.size() == 2);
+		assert(resultStackBack.at(0).size() == resultStackBack.at(1).size());
+		std::vector<EvalResult> r;
+		for(unsigned i=0; i < resultStackBack.at(0).size(); i++){
+			EvalResult e;
+			e.res = resultStackBack.at(0).at(i).res + resultStackBack.at(1).at(i).res;
+			r.emplace_back(e);
+		}
+		return r;
+	}
+
+	//push onto stacks
+	void pushToStacks(std::vector<RootGrowNode*>& callStack, 
+		 			 std::vector<Matrix>& paramStack,
+					 std::vector<std::pair<int,std::vector<std::vector<EvalResult>>>>& resultStack,
+					 Matrix param,
+					 std::size_t callingFrame) {
+		std::cout << "in SumOp::pushToStack, callStack size before is: " << callStack.size() << std::endl;
+		callStack.push_back(mChildren.at(0));
+		callStack.push_back(mChildren.at(1));
+		std::cout << "in SumOp::pushToStack, callStack size after is: " << callStack.size() << std::endl;
+		paramStack.push_back(param);
+		paramStack.push_back(param);
+		resultStack.emplace_back(std::make_pair(callingFrame,std::vector<std::vector<EvalResult>>()));
+		resultStack.emplace_back(std::make_pair(callingFrame,std::vector<std::vector<EvalResult>>()));
 	}
 };
 
@@ -64,12 +131,30 @@ public:
 	Leaf(){}
 	Leaf(Rep r) : member(r) {}
 	~Leaf(){}
+	bool isItUnary() const override { return isUnary; }
 	SF_TYPE getType() const override { return type; }
 	unsigned getOriginCount() const { return originCount; }
 	Rep say(){ return member; }
-	EvalResult evaluate(Matrix m){ 
-		std::cout << "Leaf evaluate is: " << mem << std::endl;
-		return mem; 
+
+	//Evaluate leaf. Just return a vector of length m, filled with mem
+	std::vector<EvalResult> evaluate(Matrix m){ 
+		return std::vector<EvalResult>(m.entry, mem); 
+	}
+
+	//Leaves cannot accumulate
+	std::vector<EvalResult> accumulate(std::vector<std::vector<EvalResult>>& resultStackBack){
+		assert(false);
+		return std::vector<EvalResult>();
+	}
+
+	//Leaves cannot pushToStack as they cannot be an intermediate node
+	void pushToStacks(	std::vector<RootGrowNode*>& callStack, 
+								std::vector<Matrix>& paramStack,
+								std::vector<std::pair<int,std::vector<std::vector<EvalResult>>>>& resultStack,
+								Matrix param,
+								std::size_t callingFrame) {
+		std::cout << "in Leaf::pushToStack, callStack size before is: " << callStack.size() << std::endl;
+		assert(false);
 	}
 };
 
@@ -92,12 +177,12 @@ public:
 	}
 
 	//Here: function evaluate, that calls traverse on the root node to start the traversing process
-	int evaluate(Matrix directions){
+	std::vector<EvalResult> evaluate(Matrix directions){
 
 		//Usings
 		using Node = RootGrowNode*;
 		using Param = Matrix;
-		using Res = EvalResult;
+		using Res = std::vector<EvalResult>;
 		
 		//Prepare Stacks
 		std::vector<Node> callStack;
@@ -112,10 +197,11 @@ public:
 			Node cur = callStack.back();
 			Param currentParam = paramStack.back();
 
+			std::cout << "callStack size: " << callStack.size() << std::endl;
+			std::cout << "cur type is: " << cur->getType() << std::endl;
+
 			std::cout << "START EVALUATION\n";
-			auto tmp = cur->evaluate(currentParam);
-			std::cout << "RESULT OF EVALUATION: " << tmp.res << std::endl;
-/*
+
 			if(cur->getOriginCount() == 0){
 
 				std::pair<int,std::vector<Res>> currentResult = resultStack.back();
@@ -123,10 +209,15 @@ public:
 				//If leaf and end of stack is reached
 				if(currentResult.first == -1){
 
-					return cur->evaluate();
+					std::cout << "Case 1\n";
+					return cur->evaluate(currentParam);
 
 				//If leaf and not end of stack is reached	
-				//} else {
+				} else {
+
+					std::cout << "Case 2\n";
+					auto tmp = cur->evaluate(currentParam);
+					resultStack.at(currentResult.first).second.emplace_back(tmp);
 
 				}
 
@@ -135,21 +226,44 @@ public:
 				paramStack.pop_back();
 				resultStack.pop_back();
 
+			} else {
+
+				//If enough arguments for operation of node and #arguments != 0
+				if(resultStack.back().second.size() == cur->getOriginCount()) {
+
+					std::cout << "Case 3\n";
+
+					Res accumulatedResult = cur->accumulate(resultStack.back().second);
+
+					// we reached the top, exit
+					if(resultStack.back().first == -1) {
+						return accumulatedResult;
+					}
+
+					// forward result.
+					resultStack.at(resultStack.back().first).second.emplace_back(accumulatedResult);
+
+					// delete result frame and close recursive call
+					callStack.pop_back();
+					paramStack.pop_back();
+					resultStack.pop_back();
+
+				//Every other case (recursive call)
+				} else {
+
+					std::cout << "Case 4\n";
+
+					// here we create the new stack levels.
+					std::size_t callingFrame = callStack.size() - 1;
+
+					cur->pushToStacks(callStack, paramStack, resultStack, currentParam, callingFrame);
+					std::cout << "In SFC::evaluate, callStack size is: " << callStack.size() << std::endl;
+				}
 			}
-*/
-			//If enough arguments for operation of node and #arguments != 0
-
-			//Every other case (recursive call)
-
-			// delete result frame and close recursive call (DELETE LATER)
-			callStack.pop_back();
-			paramStack.pop_back();
-			resultStack.pop_back();
-
 		}
 
-		//return Result
-		return resultStack.back().second.front().res;
+		std::cout << "THIS SHOULD NOT HAPPEN." << std::endl;
+		return std::vector<EvalResult>();
 	}
 	
 
