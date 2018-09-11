@@ -91,7 +91,8 @@ public:
 	//Given two result vecs, sum them coefficientwise
 	std::vector<EvalResult> accumulate(std::vector<std::vector<EvalResult>>& resultStackBack) {
 		assert(resultStackBack.size() == 2);
-		assert(resultStackBack.at(0).size() == resultStackBack.at(1).size());
+		std::cout << "resultStackBack.at(0).size(): " << resultStackBack.at(0).size() << " and at 1:" << resultStackBack.at(1).size() << std::endl;
+		//assert(resultStackBack.at(0).size() == resultStackBack.at(1).size());
 		std::vector<EvalResult> r;
 		for(unsigned i=0; i < resultStackBack.at(0).size(); i++){
 			EvalResult e;
@@ -197,10 +198,24 @@ public:
 			Node cur = callStack.back();
 			Param currentParam = paramStack.back();
 
+			std::cout << "=== START EVALUATION\n";
 			std::cout << "callStack size: " << callStack.size() << std::endl;
+			std::cout << "paramStack size: " << paramStack.size() << std::endl;
+			std::cout << "resultStack size: " << resultStack.size() << std::endl;
+			std::cout << "resultStack content: \n";
+			for(auto r : resultStack){
+				std::cout << "\t" << r.first;
+				for(auto operands : r.second){
+					std::cout << "\t" << "[";
+					for(auto args : operands){
+						std::cout << args.res << ","; 
+					}
+					std::cout << "]";
+				}
+				std::cout << "\n";
+			}
+			std::cout << "\n";
 			std::cout << "cur type is: " << cur->getType() << std::endl;
-
-			std::cout << "START EVALUATION\n";
 
 			if(cur->getOriginCount() == 0){
 
@@ -210,12 +225,14 @@ public:
 				if(currentResult.first == -1){
 
 					std::cout << "Case 1\n";
+					assert(cur->getType() == 3);
 					return cur->evaluate(currentParam);
 
 				//If leaf and not end of stack is reached	
 				} else {
 
 					std::cout << "Case 2\n";
+					assert(cur->getType() == 3);
 					auto tmp = cur->evaluate(currentParam);
 					resultStack.at(currentResult.first).second.emplace_back(tmp);
 
@@ -237,6 +254,11 @@ public:
 
 					// we reached the top, exit
 					if(resultStack.back().first == -1) {
+
+						std::cout << "accumulatedResult: "; 
+						for(unsigned i=0; i<accumulatedResult.size(); i++){
+							std::cout << accumulatedResult.at(i).res;	
+						}
 						return accumulatedResult;
 					}
 
