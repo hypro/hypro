@@ -51,9 +51,8 @@ public:
 					 std::vector<std::pair<int,std::vector<std::vector<EvalResult>>>>& resultStack,
 					 Matrix param,
 					 std::size_t callingFrame) override {
-		std::cout << "in TrafoOp::pushToStack, callStack size before is: " << callStack.size() << std::endl;
 		callStack.push_back(mChildren.at(0));
-		paramStack.push_back(factor*param.entry + translation);
+		paramStack.push_back(Matrix(factor*param.entry + translation));
 		resultStack.push_back(std::make_pair(callingFrame, std::vector<std::vector<EvalResult>>()));
 	}
 };
@@ -91,8 +90,7 @@ public:
 	//Given two result vecs, sum them coefficientwise
 	std::vector<EvalResult> accumulate(std::vector<std::vector<EvalResult>>& resultStackBack) {
 		assert(resultStackBack.size() == 2);
-		std::cout << "resultStackBack.at(0).size(): " << resultStackBack.at(0).size() << " and at 1:" << resultStackBack.at(1).size() << std::endl;
-		//assert(resultStackBack.at(0).size() == resultStackBack.at(1).size());
+		assert(resultStackBack.at(0).size() == resultStackBack.at(1).size());
 		std::vector<EvalResult> r;
 		for(unsigned i=0; i < resultStackBack.at(0).size(); i++){
 			EvalResult e;
@@ -108,10 +106,8 @@ public:
 					 std::vector<std::pair<int,std::vector<std::vector<EvalResult>>>>& resultStack,
 					 Matrix param,
 					 std::size_t callingFrame) {
-		std::cout << "in SumOp::pushToStack, callStack size before is: " << callStack.size() << std::endl;
 		callStack.push_back(mChildren.at(0));
 		callStack.push_back(mChildren.at(1));
-		std::cout << "in SumOp::pushToStack, callStack size after is: " << callStack.size() << std::endl;
 		paramStack.push_back(param);
 		paramStack.push_back(param);
 		resultStack.emplace_back(std::make_pair(callingFrame,std::vector<std::vector<EvalResult>>()));
@@ -139,7 +135,7 @@ public:
 
 	//Evaluate leaf. Just return a vector of length m, filled with mem
 	std::vector<EvalResult> evaluate(Matrix m){ 
-		return std::vector<EvalResult>(m.entry, mem); 
+		return std::vector<EvalResult>(mem, m.entry); 
 	}
 
 	//Leaves cannot accumulate
@@ -154,7 +150,6 @@ public:
 								std::vector<std::pair<int,std::vector<std::vector<EvalResult>>>>& resultStack,
 								Matrix param,
 								std::size_t callingFrame) {
-		std::cout << "in Leaf::pushToStack, callStack size before is: " << callStack.size() << std::endl;
 		assert(false);
 	}
 };
@@ -198,9 +193,14 @@ public:
 			Node cur = callStack.back();
 			Param currentParam = paramStack.back();
 
+			//Only printing stuff
 			std::cout << "=== START EVALUATION\n";
 			std::cout << "callStack size: " << callStack.size() << std::endl;
 			std::cout << "paramStack size: " << paramStack.size() << std::endl;
+			std::cout << "paramStack content: \n";
+			for(auto p : paramStack){
+				std::cout << "\t" << p.entry << std::endl;
+			}
 			std::cout << "resultStack size: " << resultStack.size() << std::endl;
 			std::cout << "resultStack content: \n";
 			for(auto r : resultStack){
@@ -220,19 +220,16 @@ public:
 			if(cur->getOriginCount() == 0){
 
 				std::pair<int,std::vector<Res>> currentResult = resultStack.back();
+				assert(cur->getType() == 3);
 
 				//If leaf and end of stack is reached
 				if(currentResult.first == -1){
 
-					std::cout << "Case 1\n";
-					assert(cur->getType() == 3);
 					return cur->evaluate(currentParam);
 
 				//If leaf and not end of stack is reached	
 				} else {
 
-					std::cout << "Case 2\n";
-					assert(cur->getType() == 3);
 					auto tmp = cur->evaluate(currentParam);
 					resultStack.at(currentResult.first).second.emplace_back(tmp);
 
@@ -248,17 +245,17 @@ public:
 				//If enough arguments for operation of node and #arguments != 0
 				if(resultStack.back().second.size() == cur->getOriginCount()) {
 
-					std::cout << "Case 3\n";
-
 					Res accumulatedResult = cur->accumulate(resultStack.back().second);
 
 					// we reached the top, exit
 					if(resultStack.back().first == -1) {
-
-						std::cout << "accumulatedResult: "; 
+						
+						std::cout << "accumulatedResult: ["; 
 						for(unsigned i=0; i<accumulatedResult.size(); i++){
-							std::cout << accumulatedResult.at(i).res;	
+							std::cout << accumulatedResult.at(i).res << ",";	
 						}
+						std::cout << "]\n";
+						
 						return accumulatedResult;
 					}
 
@@ -273,13 +270,9 @@ public:
 				//Every other case (recursive call)
 				} else {
 
-					std::cout << "Case 4\n";
-
 					// here we create the new stack levels.
 					std::size_t callingFrame = callStack.size() - 1;
-
 					cur->pushToStacks(callStack, paramStack, resultStack, currentParam, callingFrame);
-					std::cout << "In SFC::evaluate, callStack size is: " << callStack.size() << std::endl;
 				}
 			}
 		}

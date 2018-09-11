@@ -32,7 +32,7 @@ public:
 		return ostr;
 	}
 
-	////// Stack handling Functions //////
+	////// IMPORTANT: These are not the actual stack handling functions. Only needed for testing  //////
 
 	static void test(){ std::cout << "test successful\n"; }
 	static void prepareStack(int blub){ std::cout << "preparedStack!\n" << blub << std::endl; }

@@ -7,6 +7,7 @@
 #include <tuple>
 
 //Type of nodes. Needed to fast determine which node subclass is actually calling a function. 
+//NOTE: is actually redundant
 enum SF_TYPE { NONE = 0, TRAFO, SUM, LEAF };
 
 //Pseudo EvaluationResult
@@ -39,7 +40,7 @@ struct Matrix
 	Matrix(int m) : entry(m) {}
 };
 
-//A node in the tree. Knows its children and its height in the tree.
+//A node in the tree. Knows its children and its height in the tree. (Height only needed for printing)
 //Base class for operations and leaves
 class RootGrowNode {
 private:
@@ -69,7 +70,7 @@ public:
 	RootGrowNode(std::vector<RootGrowNode*> c, bool u, SF_TYPE t)
 		: mChildren(c), mUnary(u), mType(t) {}
 
-	~RootGrowNode(){}	//not sure how to define deletion mechanics
+	virtual ~RootGrowNode(){}	//not sure how to define deletion mechanics
 
 	////// Getters and Setters
 
@@ -102,6 +103,8 @@ public:
 
 	////// Traversal
 
+	//Handles execution of one function with x parameters.
+	//Can handle void or non-void functions. Needs c++17 because of std::apply
 	template<typename Ret, typename ...Param>
 	auto execute(std::function<Ret(Param...)> pre, std::tuple<Param...> param){
 		if(std::is_void<Ret>::value){
@@ -111,6 +114,7 @@ public:
 		}
 	}
 
+	//Execute the pre function with params, then the in function, then the post fct
 	template<typename RetPre, typename ...ParamPre, typename RetIn, typename ...ParamIn, typename RetPost, typename ...ParamPost>
 	auto traverse(	std::function<RetPre(ParamPre...)> pre,		std::tuple<ParamPre...> paramPre, 
 					std::function<RetIn(ParamIn...)> in, 		std::tuple<ParamIn...> paramIn,
@@ -120,7 +124,7 @@ public:
 		execute<RetPost,ParamPost...>(post, paramPost);
 	}
 
-	//Since this is a virtual function, the implementation is actually not important / should be neglected
+	//The needed functions for evaluate. Virtual s.t. they can be implemented in the Operation/Leaf classes
 	virtual std::vector<EvalResult> evaluate(Matrix m) = 0;
 	virtual std::vector<EvalResult> accumulate(std::vector<std::vector<EvalResult>>& resultStackBack) = 0;
 	virtual void pushToStacks(	std::vector<RootGrowNode*>& callStack, 
