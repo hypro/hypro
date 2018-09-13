@@ -5,6 +5,7 @@
 #include <functional>
 #include <type_traits>
 #include <tuple>
+#include <cassert>
 
 //Type of nodes. Needed to fast determine which node subclass is actually calling a function. 
 //NOTE: is actually redundant
@@ -103,34 +104,15 @@ public:
 
 	////// Traversal
 
-	//Handles execution of one function with x parameters.
-	//Can handle void or non-void functions. Needs c++17 because of std::apply
-	template<typename Ret, typename ...Param>
-	auto execute(std::function<Ret(Param...)> pre, std::tuple<Param...> param){
-		if(std::is_void<Ret>::value){
-			std::apply(pre, param);
-		} else {
-			return std::apply(pre, param);
-		}
-	}
-
-	//Execute the pre function with params, then the in function, then the post fct
-	template<typename RetPre, typename ...ParamPre, typename RetIn, typename ...ParamIn, typename RetPost, typename ...ParamPost>
-	auto traverse(	std::function<RetPre(ParamPre...)> pre,		std::tuple<ParamPre...> paramPre, 
-					std::function<RetIn(ParamIn...)> in, 		std::tuple<ParamIn...> paramIn,
-					std::function<RetPost(ParamPost...)> post, 	std::tuple<ParamPost...> paramPost){
-		execute<RetPre,ParamPre...>(pre, paramPre);
-		execute<RetIn,ParamIn...>(in, paramIn);
-		execute<RetPost,ParamPost...>(post, paramPost);
-	}
-
 	//The needed functions for evaluate. Virtual s.t. they can be implemented in the Operation/Leaf classes
-	virtual std::vector<EvalResult> evaluate(Matrix m) = 0;
-	virtual std::vector<EvalResult> accumulate(std::vector<std::vector<EvalResult>>& resultStackBack) = 0;
-	virtual void pushToStacks(	std::vector<RootGrowNode*>& callStack, 
-								std::vector<Matrix>& paramStack,
-								std::vector<std::pair<int,std::vector<std::vector<EvalResult>>>>& resultStack,
-								Matrix param,
-								std::size_t callingFrame) = 0;
-	
+
+	//For leaves
+	virtual std::vector<EvalResult> evaluate(Matrix& m) { assert(false); std::cout << "USED EVALUATE(MATRIX) FROM NODE SUPERCLASS.\n"; }
+
+	//For operations
+	virtual std::vector<EvalResult> evaluate(std::vector<std::vector<Matrix>>& resultStackBack) { assert(false); std::cout << "USED EVALUATE(STACK) FROM NODE SUPERCLASS.\n"; }
+
+	//For everyone
+	virtual Matrix transform(Matrix& param){ assert(false); std::cout << "USED TRANSFORM(RARGS) FROM NODE SUPERCLASS.\n"; }
 };
+

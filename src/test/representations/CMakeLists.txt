@@ -20,6 +20,7 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
 			#TaylorModelTest.cpp
 			VPolytopeTest.cpp
 			ZonotopeTest.cpp
+			SupportFunctionNewTest.cpp
 		)
 	else()
 		add_executable(runRepresentationTests
@@ -35,6 +36,7 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
 			#TaylorModelTest.cpp
 			VPolytopeTest.cpp
 			ZonotopeTest.cpp
+			SupportFunctionNewTest.cpp
 		)
 	endif()
 

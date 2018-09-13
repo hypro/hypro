@@ -26,17 +26,8 @@ public:
 	bool isItUnary() const override { return isUnary; }
 	unsigned getOriginCount() const { return originCount; }
 
-	//Return transformed result of its children
-	std::vector<EvalResult> evaluate(Matrix m) { 
-		auto tmp = mChildren.at(0)->evaluate(m);
-		for(unsigned i=0; i < tmp.size(); i++){
-			tmp.at(i) = EvalResult(factor*tmp.at(i) + translation);
-		}
-		return tmp; 
-	}
-
 	//Given the results, return vector of evaluation results (here only first place needed, since unary op), here, we also modify
-	std::vector<EvalResult> accumulate(std::vector<std::vector<EvalResult>>& resultStackBack){ 
+	std::vector<EvalResult> evaluate(std::vector<std::vector<EvalResult>>& resultStackBack){ 
 		//Make sure only one vector of parameters here
 		assert(resultStackBack.size() == 1); 
 		for(unsigned i = 0; i < resultStackBack.at(0).size(); i++){
@@ -45,15 +36,9 @@ public:
 		return resultStackBack.at(0);
 	}
 
-	//Push needed children onto callStack, push transformed given parameter onto paramStack, push callingFrame/results pair onto resultStack
-	void pushToStacks(std::vector<RootGrowNode*>& callStack, 
-					 std::vector<Matrix>& paramStack,
-					 std::vector<std::pair<int,std::vector<std::vector<EvalResult>>>>& resultStack,
-					 Matrix param,
-					 std::size_t callingFrame) override {
-		callStack.push_back(mChildren.at(0));
-		paramStack.push_back(Matrix(factor*param.entry + translation));
-		resultStack.push_back(std::make_pair(callingFrame, std::vector<std::vector<EvalResult>>()));
+	//Test with void functions
+	Matrix transform(Matrix& param){
+		return Matrix(factor*param.entry + translation);
 	}
 };
 
@@ -76,19 +61,8 @@ public:
 	SF_TYPE getType() const override { return type; }
 	unsigned getOriginCount() const { return originCount; }
 
-	//Do the sum op
-	std::vector<EvalResult> evaluate(Matrix m) { 
-		auto tmp0 = mChildren.at(0)->evaluate(m);
-		auto tmp1 = mChildren.at(1)->evaluate(m);
-		std::vector<EvalResult> result;
-		for(unsigned i=0; i < tmp0.size(); i++){
-			result.at(i) = tmp0.at(i) + tmp1.at(i);
-		}
-		return result;
-	}
-
 	//Given two result vecs, sum them coefficientwise
-	std::vector<EvalResult> accumulate(std::vector<std::vector<EvalResult>>& resultStackBack) {
+	std::vector<EvalResult> evaluate(std::vector<std::vector<EvalResult>>& resultStackBack) {
 		assert(resultStackBack.size() == 2);
 		assert(resultStackBack.at(0).size() == resultStackBack.at(1).size());
 		std::vector<EvalResult> r;
@@ -100,18 +74,8 @@ public:
 		return r;
 	}
 
-	//push onto stacks
-	void pushToStacks(std::vector<RootGrowNode*>& callStack, 
-		 			 std::vector<Matrix>& paramStack,
-					 std::vector<std::pair<int,std::vector<std::vector<EvalResult>>>>& resultStack,
-					 Matrix param,
-					 std::size_t callingFrame) {
-		callStack.push_back(mChildren.at(0));
-		callStack.push_back(mChildren.at(1));
-		paramStack.push_back(param);
-		paramStack.push_back(param);
-		resultStack.emplace_back(std::make_pair(callingFrame,std::vector<std::vector<EvalResult>>()));
-		resultStack.emplace_back(std::make_pair(callingFrame,std::vector<std::vector<EvalResult>>()));
+	Matrix transform(Matrix& param){
+		return param;
 	}
 };
 
@@ -138,20 +102,8 @@ public:
 		return std::vector<EvalResult>(mem, m.entry); 
 	}
 
-	//Leaves cannot accumulate
-	std::vector<EvalResult> accumulate(std::vector<std::vector<EvalResult>>& resultStackBack){
-		assert(false);
-		return std::vector<EvalResult>();
-	}
+	Matrix transform(Matrix&){ assert(false); return Matrix(-1); }
 
-	//Leaves cannot pushToStack as they cannot be an intermediate node
-	void pushToStacks(	std::vector<RootGrowNode*>& callStack, 
-								std::vector<Matrix>& paramStack,
-								std::vector<std::pair<int,std::vector<std::vector<EvalResult>>>>& resultStack,
-								Matrix param,
-								std::size_t callingFrame) {
-		assert(false);
-	}
 };
 
 //Support Function Content
@@ -172,6 +124,45 @@ public:
 		return ostr;
 	}
 
+	std::vector<EvalResult> evaluate(Matrix directions){
+		std::cout << "SFC::evaluate\n";
+		//If ptr caught as reference in traverse(), then dangling references, avoid somehow
+		auto eval = [](RootGrowNode* n, Matrix dir) -> std::vector<EvalResult> { return n->evaluate(dir); };
+		std::cout << "SFC::evaluate made eval\n";
+		auto trans = [](RootGrowNode* n, Matrix param) -> Matrix { return n->transform(param); };
+		std::cout << "SFC::evaluate made trans\n";
+		return traverse(eval, std::make_tuple(directions), trans, std::make_tuple());
+	}	
+
+};
+
+//Support Function
+class SF {
+private:
+	SFC* content;
+public:
+	SF(){}
+	SF(SFC* c) : content(c) {}
+
+	SFC* getContent() const { return content; }
+
+	void listAllDirectChildren(){
+		for(auto ch : content->getRoot()->getChildren()){
+			std::cout << ch->getType() << "," << std::endl;
+		}
+	}
+
+	void listUnderlyingTree(){
+		std::cout << *(content->getRoot()) << std::endl;
+	}
+
+	friend std::ostream& operator<< (std::ostream& ostr, const SF& rhs){
+		ostr << *(rhs.getContent()) << std::endl;
+		return ostr;
+	}
+};
+
+/* WAS IN SFC
 	//Here: function evaluate, that calls traverse on the root node to start the traversing process
 	std::vector<EvalResult> evaluate(Matrix directions){
 
@@ -280,34 +271,4 @@ public:
 		std::cout << "THIS SHOULD NOT HAPPEN." << std::endl;
 		return std::vector<EvalResult>();
 	}
-	
-
-	//NEXT: Implement evaluate in all node types and implement stack operations
-
-};
-
-//Support Function
-class SF {
-private:
-	SFC* content;
-public:
-	SF(){}
-	SF(SFC* c) : content(c) {}
-
-	SFC* getContent() const { return content; }
-
-	void listAllDirectChildren(){
-		for(auto ch : content->getRoot()->getChildren()){
-			std::cout << ch->getType() << "," << std::endl;
-		}
-	}
-
-	void listUnderlyingTree(){
-		std::cout << *(content->getRoot()) << std::endl;
-	}
-
-	friend std::ostream& operator<< (std::ostream& ostr, const SF& rhs){
-		ostr << *(rhs.getContent()) << std::endl;
-		return ostr;
-	}
-};
+*/

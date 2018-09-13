@@ -72,17 +72,16 @@ int main(){
 	//sfc.traverse<int,int>(f2, 1000);
 	std::function<void()> f3 = RootGrowTree::test;
 
-	auto f1Param = std::make_tuple(1000);
-	auto f2Param = std::make_tuple(2000.0f);
-	auto f3Param = std::make_tuple();
-	traOp.execute<void,int>(f1, f1Param);
-	auto m = traOp.execute<int,float>(f2, f2Param);
-	std::cout << "Indeed! f2 returned: " << m << std::endl;
-	traOp.execute<void>(f3, f3Param);
+	//auto f1Param = std::make_tuple(1000);
+	//auto f2Param = std::make_tuple(2000.0f);
+	//auto f3Param = std::make_tuple();
+	//traOp.execute<void,int>(f1, f1Param);
+	//auto m = traOp.execute<int,float>(f2, f2Param);
+	//std::cout << "Indeed! f2 returned: " << m << std::endl;
+	//traOp.execute<void>(f3, f3Param);
 
-
-	cout << "TESTING TRAVERSAL \n";
-	traOp.traverse(f1, f1Param, f2, f2Param, f3, f3Param);
+	//cout << "TESTING TRAVERSAL \n";
+	//traOp.traverse(f1, f1Param, f2, f2Param, f3, f3Param);
 
 	cout << "TESTING EVALUATION \n";
 	Matrix mat(3);
