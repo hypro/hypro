@@ -346,7 +346,7 @@ EvaluationResult<Number> BoxT<Number,Converter,Setting>::evaluate( const vector_
 	// find the point, which represents the maximum towards the direction - compare signs.
 	vector_t<Number> furthestPoint = vector_t<Number>(this->dimension());
 	for(Eigen::Index i = 0; i < furthestPoint.rows(); ++i) {
-		furthestPoint(i) = _direction(i) >= 0 ? mLimits.second(i) : mLimits.first(i);
+		furthestPoint(i) = _direction(i) >= 0 ? mLimits.second[i] : mLimits.first[i];
 	}
 	return EvaluationResult<Number>(furthestPoint.dot(_direction),furthestPoint,SOLUTION::FEAS);
 }
