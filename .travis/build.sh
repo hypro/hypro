@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 mkdir -p build || return 1
-cd build || return 1
+pushd build
 
 function keep_waiting() {
   while true; do
@@ -35,6 +35,8 @@ else
 	popd
 	cmake -DCMAKE_CXX_COMPILER=$COMPILER ..
 	make resources -j2 || return 1
+	echo /home/travis/build/hypro/hypro/build/resources/antlr_build/src/antlr4cpp-stamp/antlr4cpp-build-out.log
+	echo /home/travis/build/hypro/hypro/build/resources/antlr_build/src/antlr4cpp-stamp/antlr4cpp-build-err.log
 	keep_waiting &
 	make -j2 VERBOSE=1 || return 1
 	kill $!
@@ -42,5 +44,6 @@ else
 
 fi
 
+popd
 
 
