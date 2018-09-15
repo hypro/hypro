@@ -8,10 +8,12 @@
  * @version 	2015-03-20
  */
 
+#include "Timer.h"
 #include "gtest/gtest.h"
 #include "../defines.h"
 #include "Benchmark.h"
 #include "../../src/hypro/representations/GeometricObject.h"
+#include <random>
 
 
 template<typename Number>
@@ -49,6 +51,7 @@ TYPED_TEST(Benchmark, Box)
  * Idea: For each box generated, generate random halfspaces one at a time and intersect each one of them with the box.
  * During this, stepwise increase the dimensionality.
  */
+/*
 TYPED_TEST(Benchmark, BoxIntersectHalfspaces){
 
 	hypro::BenchmarkSetup<TypeParam> setup;
@@ -69,7 +72,7 @@ TYPED_TEST(Benchmark, BoxIntersectHalfspaces){
 		setup.dimension++;
 	}
 }
-
+*/
 /*
 TYPED_TEST(Benchmark, VPolytope)
 {
@@ -87,3 +90,47 @@ TYPED_TEST(Benchmark, VPolytope)
 	hypro::Benchmark<hypro::VPolytope<TypeParam>, TypeParam, hypro::operation::UNION> unite(setup);
 }
 */
+
+TYPED_TEST(Benchmark, BoxSampleSupport)
+{
+	std::size_t maxDimension = 200;
+	std::size_t samples = 1000;
+	std::vector<std::vector<hypro::vector_t<TypeParam>>> directions;
+
+	std::random_device rd;  //Will be used to obtain a seed for the random number engine
+    std::mt19937 gen(rd()); //Standard mersenne_twister_engine seeded with rd()
+    std::uniform_real_distribution<> dis(0.0, 1.0);
+	
+	// for each dimension
+	hypro::Timer generatorTimer;
+	for(std::size_t d = 1; d <= maxDimension; ++d) {
+		directions.push_back(std::vector<hypro::vector_t<TypeParam>>());
+		// create all sample directions
+		for(std::size_t i = 0; i < samples; ++i) {
+			hypro::vector_t<TypeParam> sample = hypro::vector_t<TypeParam>(d);
+			for(Eigen::Index r = 0; r < d; ++r ){
+				sample(r) = dis(gen);
+			}
+			directions[d-1].push_back(sample);
+		}
+	}
+	double generationTime = generatorTimer.elapsed();
+
+	std::cout << "Created " << maxDimension*samples << " samples in " << generationTime << " ms." << std::endl;
+
+	// actual benchmark.
+	hypro::Box<TypeParam> box;
+	for(std::size_t d = 1; d <= maxDimension; ++d) {
+		std::cout << "Benchmark dimension " << d << std::endl;
+		box.insert(carl::Interval<TypeParam>(-1,1));
+		assert(box.dimension() == d);
+
+		hypro::Timer bmTimer;
+		for(auto sIt = directions[d-1].begin(); sIt != directions[d-1].end(); ++sIt) {
+			box.evaluate(*sIt);
+		}
+		double rt = bmTimer.elapsed();
+		std::cout << "Took " << rt << " ms." << std::endl;
+	}
+
+}
