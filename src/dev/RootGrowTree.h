@@ -134,7 +134,7 @@ public:
 		std::cout << "executed compute!\n";
 		std::invoke(aggregate, callStack.back(), 0.0f);
 */
-/*
+
 		//Traversal loop
 		while(!callStack.empty()){
 
@@ -148,23 +148,27 @@ public:
 				//If leaf and end of stack is reached
 				if(currentResult.first == -1){
 
-					if(isRetCompVoid){
-						std::apply(compute, std::tuple_cat(std::make_tuple(cur), currentParam));
+					if(isResultVoid){
+						std::invoke(compute, cur, currentParam);
+						//std::apply(compute, std::tuple_cat(std::make_tuple(cur), currentParam));
 						//std::apply(toApply, cur, currentParam);
 					} else {
-						return std::apply(compute, std::tuple_cat(std::make_tuple(cur), currentParam));
+						return std::invoke(compute, cur, currentParam);
+						//return std::apply(compute, std::tuple_cat(std::make_tuple(cur), currentParam));
 						//return std::apply(toApply, cur, currentParam);	
 					}
 					
 				//If leaf and not end of stack is reached	
 				} else {
 
-					if(isRetCompVoid){
+					if(isResultVoid){
+						std::invoke(compute, cur, currentParam);
 						//std::apply(toApply, cur, currentParam);
-						std::apply(compute, std::tuple_cat(std::make_tuple(cur), currentParam));
+						//std::apply(compute, std::tuple_cat(std::make_tuple(cur), currentParam));
 					} else {
+						resultStack.at(currentResult.first).second.emplace_back(std::invoke(compute, cur, currentParam));
 						//resultStack.at(currentResult.first).second.emplace_back(std::apply(toApply, cur, currentParam));
-						resultStack.at(currentResult.first).second.emplace_back(std::apply(compute, std::tuple_cat(std::make_tuple(cur), currentParam)));
+						//resultStack.at(currentResult.first).second.emplace_back(std::apply(compute, std::tuple_cat(std::make_tuple(cur), currentParam)));
 					}
 
 				}
@@ -176,7 +180,7 @@ public:
 
 			} //else {
 		}
-*/
+
 	}
 /*
 	template<typename RetTrafo, typename ParamTrafo,
