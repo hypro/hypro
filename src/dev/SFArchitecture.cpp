@@ -68,7 +68,7 @@ int main(){
 	cout << "TESTING TRAVERSAL AND TEMPLATES\n";
 	std::function<void(int)> f1 = RootGrowTree::prepareStack;
 	//sfc.traverse<void,int>(f1, 2000);
-	std::function<int(float)> f2 = RootGrowTree::accumulate;
+	std::function<void(float)> f2 = RootGrowTree::accumulate;
 	//sfc.traverse<int,int>(f2, 1000);
 	std::function<void()> f3 = RootGrowTree::test;
 
@@ -85,7 +85,8 @@ int main(){
 
 	cout << "TESTING EVALUATION \n";
 	Matrix mat(3);
-	sfc.evaluate(mat);
+	//sfc.evaluate(mat);
+	sfc.travTest(mat);
 
 
 }

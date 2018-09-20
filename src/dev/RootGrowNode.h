@@ -17,6 +17,7 @@ struct EvalResult
 	int res;
 	EvalResult() : res(0) {}
 	EvalResult(int r) : res(r) {}
+	~EvalResult() { std::cout << "~EvalResult\n"; }
 
 	friend std::ostream& operator<<(std::ostream& ostr, const EvalResult& e){
 		ostr << e.res << std::endl;
@@ -106,13 +107,15 @@ public:
 
 	//The needed functions for evaluate. Virtual s.t. they can be implemented in the Operation/Leaf classes
 
-	//For leaves
-	virtual std::vector<EvalResult> evaluate(Matrix& m) { assert(false); std::cout << "USED EVALUATE(MATRIX) FROM NODE SUPERCLASS.\n"; }
+	//For everyone - call
+	virtual Matrix transform(Matrix& param){ assert(false); std::cout << "USED TRANSFORM FROM NODE SUPERCLASS.\n"; }
 
-	//For operations
-	virtual std::vector<EvalResult> evaluate(std::vector<std::vector<Matrix>>& resultStackBack) { assert(false); std::cout << "USED EVALUATE(STACK) FROM NODE SUPERCLASS.\n"; }
+	//For leaves - compute
+	virtual std::vector<EvalResult> compute(Matrix& m) { assert(false); std::cout << "USED COMPUTE FROM NODE SUPERCLASS.\n"; }
 
-	//For everyone
-	virtual Matrix transform(Matrix& param){ assert(false); std::cout << "USED TRANSFORM(RARGS) FROM NODE SUPERCLASS.\n"; }
+	//For operations - aggregate
+	virtual std::vector<EvalResult> aggregate(std::vector<std::vector<EvalResult>>& resultStackBack) { assert(false); std::cout << "USED AGGREGATE FROM NODE SUPERCLASS.\n"; }
+
+	
 };
 
