@@ -41,7 +41,11 @@ public:
 		return Matrix(factor*param.entry + translation);
 	}
 
-
+	std::vector<EvalResult> compute(Matrix& m){ 
+		std::cout << "USED COMPUTE FROM TRAFOOP SUBCLASS.\n"; 
+		assert(false); 
+		return std::vector<EvalResult>();
+	}
 };
 
 
@@ -79,6 +83,12 @@ public:
 	Matrix transform(Matrix& param){
 		return param;
 	}
+
+	std::vector<EvalResult> compute(Matrix& m){ 
+		std::cout << "USED COMPUTE FROM SUMOP SUBCLASS.\n"; 
+		assert(false); 
+		return std::vector<EvalResult>();
+	}
 };
 
 //Another still templated subclass of RootGrowNode
@@ -100,7 +110,7 @@ public:
 	Rep say(){ return member; }
 
 	//Evaluate leaf. Just return a vector of length m, filled with mem
-	std::vector<EvalResult> compute(Matrix m){ 
+	std::vector<EvalResult> compute(Matrix& m) { 
 		return std::vector<EvalResult>(mem, m.entry); 
 	}
 
@@ -125,51 +135,9 @@ public:
 		ostr << *(rhs.getRoot()) << std::endl;
 		return ostr;
 	}
-/*
+
 	std::vector<EvalResult> evaluate(Matrix directions){
 		std::cout << "SFC::evaluate\n";
-		//If ptr caught as reference in traverse(), then dangling references, avoid somehow
-		//auto eval = [](RootGrowNode* n, Matrix dir) -> std::vector<EvalResult> { return n->evaluate(dir); };
-		std::function<std::vector<EvalResult>(RootGrowNode*, Matrix)> eval = [](RootGrowNode* n, Matrix dir) -> std::vector<EvalResult> { return n->evaluate(dir); };
-		std::cout << "SFC::evaluate made eval\n";
-		//auto trans = [](RootGrowNode* n, Matrix param) -> Matrix { return n->transform(param); };
-		std::function<Matrix(RootGrowNode*,Matrix)> trans = [](RootGrowNode* n, Matrix param) -> Matrix { return n->transform(param); };
-		std::cout << "SFC::evaluate made trans\n";
-		std::tuple<Matrix> dir = std::make_tuple(directions);
-		std::cout << "SFC::evaluate made dir\n";
-		std::tuple<Matrix> empty = std::make_tuple(Matrix(0));
-		std::cout << "SFC::evaluate made empty\n";
-		return traverse(eval, dir, trans, empty);
-	}
-*/
-/*
-	std::vector<EvalResult> evaluate(Matrix directions){
-		std::cout << "SFC::evaluate\n";
-		std::function<Matrix(RootGrowNode*,Matrix)> trans = [](RootGrowNode* n, Matrix param) -> Matrix { return n->transform(param); };
-		std::function<std::vector<EvalResult>(RootGrowNode*, Matrix)> comp = [](RootGrowNode* n, Matrix dir) -> std::vector<EvalResult> { return n->compute(dir); };
-		std::function<std::vector<EvalResult>(RootGrowNode*, std::vector<std::vector<Matrix>>)> agg = 
-			[](RootGrowNode* n, std::vector<std::vector<Matrix>> resultStackBack) -> std::vector<EvalResult> { return n->aggregate(resultStackBack); };
-		std::cout << "SFC::evaluate made funcs\n";
-		std::tuple<Matrix> dir = std::make_tuple(directions);
-		std::cout << "SFC::evaluate made dir\n";
-		std::cout << "traverse invocable? " << std::is_invocable<decltype(traverse(trans, comp, agg, dir))>::value << std::endl;
-		return std::vector<EvalResult>();
-		//return traverse(trans, comp, agg, dir);
-	}
-*/
-	void travTest(Matrix directions){
-		std::cout << "SFC::travTest\n";
-/*
-		std::function<int(RootGrowNode*, int)> testing = [](RootGrowNode* n, int dir) -> int { return RootGrowTree::f(dir); };
-		std::cout << "testing invocable? " << std::is_invocable_r<int, decltype(testing), RootGrowNode*, int>::value << std::endl;
-		std::function<void(RootGrowNode*, int)> testing2 = [](RootGrowNode* n, int dir) { RootGrowTree::prepareStack(dir); };
-		std::cout << "testing2 invocable? " << std::is_invocable_r<void, decltype(testing2), RootGrowNode*, int>::value << std::endl;
-		std::function<void(RootGrowNode*, float)> testing3 = [](RootGrowNode* n, float dir) { return RootGrowTree::accumulate(dir); };
-		std::cout << "testing3 invocable? " << std::is_invocable_r<void, decltype(testing3), RootGrowNode*, float>::value << std::endl;
-*/
-		//traverseTest(testing, directions, testing2, directions, testing3, 0.0f);
-		//traverseTest(testing, testing2, testing3, directions);
-		//traverseTest(testing, directions);
 
 		std::function<Matrix(RootGrowNode*, Matrix)> trans = [](RootGrowNode* n, Matrix param) -> Matrix { return n->transform(param); };
 		std::cout << "trans invocable? " << std::is_invocable_r<Matrix, decltype(trans), RootGrowNode*, Matrix>::value << std::endl;
@@ -181,8 +149,7 @@ public:
 			[](RootGrowNode* n, std::vector<std::vector<EvalResult>> resultStackBack) -> std::vector<EvalResult> { return n->aggregate(resultStackBack); };
 		std::cout << "agg invocable? " << std::is_invocable_r<std::vector<EvalResult>, decltype(agg), RootGrowNode*, std::vector<std::vector<EvalResult>>>::value << std::endl;
 
-		traverseTest(trans, comp, agg, directions);
-		//traverseTest(trans, testing2, testing3, directions);
+		return traverse(trans, comp, agg, directions);
 	}	
 
 };

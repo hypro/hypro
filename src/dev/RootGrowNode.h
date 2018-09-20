@@ -17,7 +17,7 @@ struct EvalResult
 	int res;
 	EvalResult() : res(0) {}
 	EvalResult(int r) : res(r) {}
-	~EvalResult() { std::cout << "~EvalResult\n"; }
+	~EvalResult() { }
 
 	friend std::ostream& operator<<(std::ostream& ostr, const EvalResult& e){
 		ostr << e.res << std::endl;
@@ -105,16 +105,26 @@ public:
 
 	////// Traversal
 
-	//The needed functions for evaluate. Virtual s.t. they can be implemented in the Operation/Leaf classes
+	// The needed functions for evaluate. Virtual s.t. they can be implemented in the Operation/Leaf classes
+	// Three functions are needed: call, compute and aggregate.
+	// - call will be called by every node
+	// - compute will only be called by leaf nodes
+	// - aggregate will only be called by all non leaf nodes
+	//
+	// NOTE: 	All functions used as the call must have the signature A name(A param)
+	//			All functions used as the compute must have the signature B name(A param)
+	//			All functions used as the aggregate must have the signature std::vector<B> name(B param)
+
+	//For pseudo evaluate
 
 	//For everyone - call
-	virtual Matrix transform(Matrix& param){ assert(false); std::cout << "USED TRANSFORM FROM NODE SUPERCLASS.\n"; }
-
+	virtual Matrix transform(Matrix& param){ std::cout << "USED TRANSFORM FROM NODE SUPERCLASS.\n"; assert(false); }
 	//For leaves - compute
-	virtual std::vector<EvalResult> compute(Matrix& m) { assert(false); std::cout << "USED COMPUTE FROM NODE SUPERCLASS.\n"; }
-
+	virtual std::vector<EvalResult> compute(Matrix& m) = 0; //{ std::cout << "USED COMPUTE FROM NODE SUPERCLASS.\n"; assert(false); }
 	//For operations - aggregate
-	virtual std::vector<EvalResult> aggregate(std::vector<std::vector<EvalResult>>& resultStackBack) { assert(false); std::cout << "USED AGGREGATE FROM NODE SUPERCLASS.\n"; }
+	virtual std::vector<EvalResult> aggregate(std::vector<std::vector<EvalResult>>& resultStackBack) { std::cout << "USED AGGREGATE FROM NODE SUPERCLASS.\n"; assert(false); }
+
+	//For pseudo size
 
 	
 };

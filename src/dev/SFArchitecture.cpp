@@ -32,11 +32,11 @@ int main(){
 
 	//Put everything into SFC. Tree looks like
 	//		
-	//		binOp
-	//    /		 \
-	// traOp    leaf2
+	//		binOp (sum)
+	//    /		 		\
+	// traOp (5x-10)    leaf2 (2)
 	//   |
-	// leaf1
+	// leaf1 (2)
 	//
 
 	SFC sfc(l1ptr);
@@ -65,28 +65,18 @@ int main(){
 	sf.listUnderlyingTree();
 
 	//Traversal Test
-	cout << "TESTING TRAVERSAL AND TEMPLATES\n";
-	std::function<void(int)> f1 = RootGrowTree::prepareStack;
-	//sfc.traverse<void,int>(f1, 2000);
-	std::function<void(float)> f2 = RootGrowTree::accumulate;
-	//sfc.traverse<int,int>(f2, 1000);
-	std::function<void()> f3 = RootGrowTree::test;
 
-	//auto f1Param = std::make_tuple(1000);
-	//auto f2Param = std::make_tuple(2000.0f);
-	//auto f3Param = std::make_tuple();
-	//traOp.execute<void,int>(f1, f1Param);
-	//auto m = traOp.execute<int,float>(f2, f2Param);
-	//std::cout << "Indeed! f2 returned: " << m << std::endl;
-	//traOp.execute<void>(f3, f3Param);
+	// Evaluation procedure should be:
+	// - Input: 3
+	// - Give to trafoOp: 5*3-10 = 5
+	// - When reaching leaf1: [5,5]
+	// - Forward result to trafoOp: [5*5-10,5*5-10] = [15,15]
+	// - SumOp gets [15,15] from trafoOp and [3,3] from leaf2, so summed up: [18,18]
+	// Endresult: [18,18]
 
-	//cout << "TESTING TRAVERSAL \n";
-	//traOp.traverse(f1, f1Param, f2, f2Param, f3, f3Param);
-
-	cout << "TESTING EVALUATION \n";
+	cout << "TESTING TRAVERSAL \n";
 	Matrix mat(3);
-	//sfc.evaluate(mat);
-	sfc.travTest(mat);
+	sfc.evaluate(mat);
 
-
+	return 0;
 }
