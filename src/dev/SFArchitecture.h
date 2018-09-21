@@ -138,18 +138,41 @@ public:
 
 	std::vector<EvalResult> evaluate(Matrix directions){
 		std::cout << "SFC::evaluate\n";
-
+/*
 		std::function<Matrix(RootGrowNode*, Matrix)> trans = [](RootGrowNode* n, Matrix param) -> Matrix { return n->transform(param); };
 		std::cout << "trans invocable? " << std::is_invocable_r<Matrix, decltype(trans), RootGrowNode*, Matrix>::value << std::endl;
-
 		std::function<std::vector<EvalResult>(RootGrowNode*, Matrix)> comp = [](RootGrowNode* n, Matrix dir) -> std::vector<EvalResult> { return n->compute(dir); };
 		std::cout << "comp invocable? " << std::is_invocable_r<std::vector<EvalResult>, decltype(comp), RootGrowNode*, Matrix>::value << std::endl;
-
 		std::function<std::vector<EvalResult>(RootGrowNode*, std::vector<std::vector<EvalResult>>)> agg = 
 			[](RootGrowNode* n, std::vector<std::vector<EvalResult>> resultStackBack) -> std::vector<EvalResult> { return n->aggregate(resultStackBack); };
 		std::cout << "agg invocable? " << std::is_invocable_r<std::vector<EvalResult>, decltype(agg), RootGrowNode*, std::vector<std::vector<EvalResult>>>::value << std::endl;
+		return traverse(trans, comp, agg, std::make_tuple(directions));
+*/
+		
+		std::function<Parameters<Matrix>(RootGrowNode*, Parameters<Matrix>)> trans = 
+			[](RootGrowNode* n, Parameters<Matrix> param) -> Parameters<Matrix> { 
+				return Parameters<Matrix>(n->transform(std::get<0>(param.args))); 
+			};
 
-		return traverse(trans, comp, agg, directions);
+		std::function<std::vector<EvalResult>(RootGrowNode*, Parameters<Matrix>)> comp = 
+			[](RootGrowNode* n, Parameters<Matrix> dir) -> std::vector<EvalResult> { 
+				return n->compute(std::get<0>(dir.args)); 
+			};
+		std::function<std::vector<EvalResult>(RootGrowNode*, std::vector<std::vector<EvalResult>>)> agg = 
+			[](RootGrowNode* n, std::vector<std::vector<EvalResult>> resultStackBack) -> std::vector<EvalResult> { 
+				return n->aggregate(resultStackBack); 
+			};
+		
+		std::cout << "trans invocable? " << std::is_invocable_r<Parameters<Matrix>, decltype(trans), RootGrowNode*, Parameters<Matrix>>::value << std::endl;
+		std::cout << "comp invocable? " << std::is_invocable_r<std::vector<EvalResult>, decltype(comp), RootGrowNode*, Parameters<Matrix>>::value << std::endl;
+		std::cout << "agg invocable? " << std::is_invocable_r<std::vector<EvalResult>, decltype(agg), RootGrowNode*, std::vector<std::vector<EvalResult>>>::value << std::endl;
+
+		return traverse(trans, comp, agg, Parameters<Matrix>(directions));
+
+		//AAAAAAAAAAAAARRRRRGH
+		//std::function<void(RootGrowNode*, Parameters<>)> f = [](RootGrowNode* n, Parameters<> par){ std::cout << "f executed! Current node type: " << n->getType() << std::endl; };
+		//traverse(f, f, f);
+		//return std::vector<EvalResult>();
 	}	
 
 };
