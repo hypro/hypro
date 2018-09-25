@@ -23,10 +23,10 @@ namespace hypro {
 template<typename Number>
 class Dictionary {
 private:
-	matrix_t<Number> 	mDictionary;
-	std::vector<Eigen::Index> mB;
-	std::vector<Eigen::Index> mN;
-	ConstrainSet<Number> mConstrains;
+	matrix_t<Number> 	mDictionary;  // table
+	std::vector<Eigen::Index> mB;     // basis
+	std::vector<Eigen::Index> mN;     // co-basis
+	ConstrainSet<Number> mConstrains; // original constraints
 
 public:
 	Dictionary() = default;
@@ -50,30 +50,28 @@ public:
 
 	matrix_t<Number> tableau() const;
 
-	Number get (Eigen::Index i,Eigen::Index j) const;
 	/**
 	 * @return the number in the cell (i,j) of mDictionary.
 	 */
-
-	void setValue(Eigen::Index i, Eigen::Index j, Number val);
+	Number get (Eigen::Index i,Eigen::Index j) const;
+	
 	/**
 	 * @brief set mDicionary(i,j) to val.
 	 */
+	void setValue(Eigen::Index i, Eigen::Index j, Number val);
 
 	void printDictionary() const;
-
-	void pivotDictionary(Eigen::Index i, Eigen::Index j);
 
 	/**
 	 * @brief Pivot expected ‘)’ before ‘<’ tokenthe dictionary, no modification made to mB and mN.
 	 */
+	void pivotDictionary(Eigen::Index i, Eigen::Index j);
 
-	void pivot(Eigen::Index i, Eigen::Index j);
 	/**
 	 * @brief The whole pivot.
 	 */
+	void pivot(Eigen::Index i, Eigen::Index j);
 
-	bool selectCrissCrossPivot(Eigen::Index& i, Eigen::Index& j);
 	/**
 	 * @brief Selects the next pivot according to CrissCross's rule.
 	 *
@@ -82,21 +80,25 @@ public:
 	 *
 	 * @return True, if there is a valid pivot.
 	 */
+	bool selectCrissCrossPivot(Eigen::Index& i, Eigen::Index& j);
 
-	bool fixOutOfBounds();
 	/**
-	 * @brief Check for the satisfiability of the dictionary and finds a sutable assignement
+	 * @brief Check for the satisfiability of the dictionary and finds a suitable assignment.
+	 * @details Checks if variables are out of bound. If yes, tries to find a suitable pivot to fix this. If there is none throws exception (empty set).
+	 * If a suitable pivot is found, apply pivot step and update assignment.
+	 * @returns True, if assignment has been updated.
 	 */
-
-	bool selectBlandPivot(Eigen::Index& i, Eigen::Index& j) const;
+	bool fixOutOfBounds();
+	
 	/**
 	 * @brief Puts in i and j the pivot, returns false iff none was sutable.
 	 */
-
-	bool selectDualBlandPivot(Eigen::Index& i, Eigen::Index& j, const std::vector<Eigen::Index> availableIndices);//
+	bool selectBlandPivot(Eigen::Index& i, Eigen::Index& j) const;
+	
 	/**
 	 * @param available indices is the set of indices the pivot is allowed to pick in.
 	 */
+	bool selectDualBlandPivot(Eigen::Index& i, Eigen::Index& j, const std::vector<Eigen::Index> availableIndices);//
 
 	bool isPrimalFeasible() const;
 
@@ -104,11 +106,11 @@ public:
 
 	bool isOptimal() const;
 
-	bool reverse(const Eigen::Index i, const Eigen::Index j);
-	bool reverse_old(const Eigen::Index i, const Eigen::Index j);//before optimization
 	/**
 	 * @brief is (i,j) the pivot given by the Bland's rule for the dictionary obtained by pivoting around (i,j).
 	 */
+	bool reverse(const Eigen::Index i, const Eigen::Index j);
+	bool reverse_old(const Eigen::Index i, const Eigen::Index j);//before optimization
 
 	bool reverseDual(const Eigen::Index i, const Eigen::Index j, const std::vector<Eigen::Index>& availableIndices);
 	bool reverseDual_old(const Eigen::Index i, const Eigen::Index j, const std::vector<Eigen::Index> availableIndices);
@@ -117,34 +119,35 @@ public:
 
 	Point<Number> toPoint() const;
 
-	std::vector<Eigen::Index> findZeros();
 	/**
 	 * @brief gives the list of the degenerated constrains in the dictionary.
 	 */
-	void setOnes(const std::vector<Eigen::Index>& indices);
+	std::vector<Eigen::Index> findZeros();
+	
 	/**
 	 * @brief put 1 in the last column for the indices provided by @param indices.
 	 */
+	void setOnes(const std::vector<Eigen::Index>& indices);
 
 	void setZeros(const std::vector<Eigen::Index>& indices);
 
-	void nonSlackToBase();
 	/**
 	 * @brief Puts the non slack variable to the basis.
 	 */
+	void nonSlackToBase();
+	
 	void nonSlackToBase(std::vector<vector_t<Number>>& linealtySpace);
 
-	std::set<Eigen::Index> toCobase(const std::set<Eigen::Index>& saturatedIndices);
 	/**
 	 * @brief Puts the saturated variable to the cobasis.
 	 */
-
-
-	void pushToBounds(Eigen::Index colIndex);
+	std::set<Eigen::Index> toCobase(const std::set<Eigen::Index>& saturatedIndices);
+	
 	/**
 	 * @brief Tries to push the corresponding variable to its bound, if another bound is reached before, pivot around the later.
 	 */
-
+	void pushToBounds(Eigen::Index colIndex);
+	
 	std::set<vector_t<Number>> findCones();
 
 	friend bool operator==(const Dictionary<Number>& lhs, const Dictionary<Number>& rhs) {

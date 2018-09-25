@@ -64,14 +64,20 @@ namespace hypro {
 
 	template<typename Number>
 	void ConvexHull<Number>::findOffset() {
+		// compute barycenter
 		mOffset = vector_t<Number>::Zero(mPoints[0].rawCoordinates().size());
 		for(const auto& point: mPoints) {
 			mOffset+=point.rawCoordinates();
 		}
 		mOffset = mOffset/mPoints.size();
+
+		// translate all points to make the barycenter the origin.
 		unsigned index = 0;
 		for(auto& point: mPoints) {
 			point.setCoordinates(point.rawCoordinates() - mOffset);
+			
+			// small tuning - remove point that lies exactly on the barycenter, as we know it lies inside
+			// Comment: Not neccesaryly true, what if it is the only point?
 			if(point.rawCoordinates().nonZeros() == 0) {
 				mPoints.erase(mPoints.begin()+index);
 			}
@@ -107,19 +113,23 @@ namespace hypro {
 		}
 		#endif
 
-		if(mPoints.size()==0) {//emptyset
+		if(mPoints.size()==0) { // emptyset
+			// set up half-spaces which describe the empty set.
 			vector_t<Number> h1 = vector_t<Number>(1);
 			vector_t<Number> h2 = vector_t<Number>(1);
 			h1[0]=1;
 			h2[0]=-1;
 			mHsv.push_back(Halfspace<Number>(h1,Number(-1)));
 			mHsv.push_back(Halfspace<Number>(h2,Number(-1)));
-		} else {
+		} else { // non-empty
 			unsigned dimension = mPoints[0].rawCoordinates().size();
+
+			// translate all points to make the barycenter the new origin.
 			findOffset();
-			if(mPoints.size()==0) {
+			if(mPoints.size()==0) { // if all points coincide with the barycenter
 				Point<Number> zeroPoint = Point<Number>(vector_t<Number>::Zero(dimension));
 				mPoints.push_back(zeroPoint);
+				// set half-spaces describing the origin (a box arount 0).
 				for(unsigned index=0;index<dimension;++index) {
 					vector_t<Number> newNormal = vector_t<Number>::Zero(dimension);
 					newNormal[index]=1;
@@ -127,18 +137,25 @@ namespace hypro {
 					newNormal[index]=-1;
 					mHsv.push_back(Halfspace<Number>(newNormal,Number(0)));
 				}
-			} else {
+			} else { // the polytope contains more than one point.
+				// switch to dual description - convert facet enumeration to vertex enumeration in the dual.
 				toDual();
+				// construct vertex enumerator.
 				VertexEnumeration<Number> ev = VertexEnumeration<Number>(mDualHsv);
+				// compute vertex enumeration.
 				ev.enumerateVertices();
+				// Todo: Check what this means exactly. Guess: Unbounded object.
 				for(const auto& l:ev.getLinealtySpace()) {
 					mHsv.push_back(Halfspace<Number>(l,Number(0)));
 					mHsv.push_back(Halfspace<Number>(-1*l,Number(0)));
 					std::cout << "LinealtySpace NOT empty!" << std::endl;
 				}
+				// convert back to primal to extract the facets.
 				toPrimal(ev.getPoints());
 			}
+			// revert translation to the barycenter to the original position.
 			translateHsv();
+			// debug output.
 			std::cout << __func__ << ": Result: " << std::endl;
 			for(const auto& plane : mHsv) {
 				std::cout << plane << std::endl;
@@ -239,6 +256,7 @@ namespace hypro {
 
 	template<typename Number>
 	void ConvexHull<Number>::translateHsv() {
+		// Todo: Check if this does the right thing (seems so).
 		for(auto& hs:mHsv) {
 			for(unsigned index = 0;index<hs.normal().size();++index) {
 				hs.setOffset(hs.offset() + hs.normal()[index]*mOffset[index]);

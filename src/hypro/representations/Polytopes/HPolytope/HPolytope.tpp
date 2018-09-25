@@ -374,6 +374,33 @@ typename std::vector<Point<Number>> HPolytopeT<Number, Converter, Setting>::vert
 			}
 		}
 	}
+
+	// verify against reverse-search algorithm.
+	/*
+	#ifndef NDEBUG
+	VertexEnumeration<Number> ev = VertexEnumeration<Number>(mHPlanes);
+	ev.enumerateVertices();
+	//std::cout << "Enumerate vertices of " << std::endl << *this << std::endl;
+	assert(ev.getLinealtySpace().empty());
+
+	if(!ev.getCones().empty()) {
+		std::cout << "Computed cone: " << std::endl;
+		for(const auto& cone : ev.getCones() ) {
+			std::cout << convert<Number,double>(cone).transpose() << std::endl;
+		}
+	}
+
+	assert(ev.getCones().empty());
+	for (const auto& point : ev.getPoints() ) {
+		bool found = false;
+		for (const auto& vert : vertices ) {
+			found= found || (point==vert);
+		}
+		assert(found);
+	}
+	return ev.getPoints();
+	#endif
+	*/
 	return vertices;
 /*
 	VertexEnumeration<Number> ev = VertexEnumeration<Number>(mHPlanes);

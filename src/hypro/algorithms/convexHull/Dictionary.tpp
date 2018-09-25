@@ -25,6 +25,68 @@ namespace hypro {
 	{}
 
 	template<typename Number>
+	Dictionary<Number>::Dictionary(const std::vector<Halfspace<Number>>& hsv) {
+		int d = hsv[0].dimension();		// get dimension (number of cols)
+		int n0 = int(hsv.size());		// get number of rows
+		Eigen::Index i,j;				// some indices.
+		matrix_t<Number> Ab = matrix_t<Number>::Zero(n0+1, n0+1);	// create square matrix Ab, has one more row than constraints exist.
+
+		for(i=0; i<n0; ++i){
+			Ab(i, i+1) = -1;
+		}
+		Ab(n0,0)=-1; 
+		// Ab (is square) contains all -1's one right to the diagonal and lower left ist also -1.
+
+		matrix_t<Number> An = matrix_t<Number>::Zero(n0+1, d+1); // An has dimensions as the final dictionary. 
+
+		// make first row (f in the paper) all ones except g-col, which is the last col.
+		for(i=0; i<d; ++i){
+			An(0, i) = 1;
+		}
+		An(0, d) = 0;
+
+		// An contains all 1's in the first row (except the last col)
+		for(i=1; i<n0+1; ++i){
+			// last col holds negative offsets -> form n*x <= c to n*x -c <= 0
+			An(i, d) = -1*hsv[i-1].offset();
+			// write normals.
+			for(j=0; j<d; ++j){
+				An(i, j) = hsv[i-1].normal()[j];
+			}
+		}
+
+		// create actual dictionary -> negate rows and constants and move f-row (which was top) to the bottom, now containing all -1's
+		mDictionary = Ab * An;
+		std::cout << "MDictionary: " << std::endl << mDictionary << std::endl;
+
+		// initially the basis constraints are the n0 row indices. Note that the indices start from 1.
+		for(i=1; i<n0+1; ++i){
+			mB.push_back(i);
+		}
+		mB.push_back(Eigen::Index(n0+d+1));
+		// the col indices are the cobasis initially.
+		for(i=n0+1; i<n0+d+1; ++i){
+			mN.push_back(i);
+		}
+		mN.push_back(Eigen::Index(n0+d+2));
+		//f=n0+d+1 ; g= n0+d+2
+
+		// add variable bounds and assignments.
+		for(i=0;i<n0;++i) {
+			// initially all basic variables have the constant part as a lower bound (all vars are set to zero, 1st phase of simplex) and assigned the value 0.
+			mConstrains.add(std::tuple<std::pair<bool,Number>,std::pair<bool,Number>,Number>(
+				// note: take negated -mDictionary(i,d), as it is on the LHS now. Assignment is 0, upper bound is infty.
+				std::pair<bool,Number>(false,-mDictionary(i,d)),std::pair<bool,Number>(true,Number(0)),Number(0)));
+		}
+		for(i=0;i<d;++i) {
+			// initially all non-basic variables are unbounded and assigned 0
+			mConstrains.add(std::tuple<std::pair<bool,Number>,std::pair<bool,Number>,Number>(
+				// variables from co-basis (cols) are initially unbounded.
+				std::pair<bool,Number>(true,Number(0)),std::pair<bool,Number>(true,Number(0)),Number(0)));
+		}
+	}
+
+	template<typename Number>
 	std::vector<Eigen::Index> Dictionary<Number>::basis() const {
 		return mB;
 	}
@@ -53,54 +115,6 @@ namespace hypro {
 	template<typename Number>
 	matrix_t<Number> Dictionary<Number>::tableau() const {
 		return mDictionary;
-	}
-
-	template<typename Number>
-	Dictionary<Number>::Dictionary(const std::vector<Halfspace<Number>>& hsv) {
-		int d = hsv[0].dimension();
-		int n0 = int(hsv.size());
-		Eigen::Index i,j;
-		matrix_t<Number> Ab = matrix_t<Number>::Zero(n0+1, n0+1);
-
-		for(i=0; i<n0; ++i){
-			Ab(i, i+1) = -1;
-		}
-		Ab(n0,0)=-1;
-
-		matrix_t<Number> An = matrix_t<Number>::Zero(n0+1, d+1);
-
-		for(i=0; i<d; ++i){
-			An(0, i) = 1;
-		}
-		An(0, d) = 0;
-		for(i=1; i<n0+1; ++i){
-			An(i, d) = -1*hsv[i-1].offset();
-			for(j=0; j<d; ++j){
-				An(i, j) = hsv[i-1].normal()[j];
-			}
-		}
-
-		mDictionary = Ab * An;
-
-		for(i=1; i<n0+1; ++i){
-			mB.push_back(i);
-		}
-		mB.push_back(Eigen::Index(n0+d+1));
-		for(i=n0+1; i<n0+d+1; ++i){
-			mN.push_back(i);
-		}
-		mN.push_back(Eigen::Index(n0+d+2));
-		//f=n0+d+1, ; g= n0+d+2
-
-		for(i=0;i<n0;++i) {
-			mConstrains.add(std::tuple<std::pair<bool,Number>,std::pair<bool,Number>,Number>(
-					std::pair<bool,Number>(false,-mDictionary(i,d)),std::pair<bool,Number>(true,Number(0)),Number(0)));
-		}
-		for(i=0;i<d;++i) {
-			mConstrains.add(
-			std::tuple<std::pair<bool,Number>,std::pair<bool,Number>,Number>(
-					std::pair<bool,Number>(true,Number(0)),std::pair<bool,Number>(true,Number(0)),Number(0)));
-		}
 	}
 
 	template<typename Number>
@@ -189,15 +203,14 @@ namespace hypro {
 	template<typename Number>
 	bool Dictionary<Number>::fixOutOfBounds() {
 		Number diff = 0;
-		Number diffRef = diff;
 		Eigen::Index index = 0;
 		Eigen::Index indexRef = index;
 		Eigen::Index pivot = 0;
 		Eigen::Index pivotRef = pivot;
-		if(!(mConstrains.outside(indexRef,diff,mB))) {return false;}//is there any variable out of its bounds
+		if(!(mConstrains.outside(indexRef,diff,mB))) {return false;} // is there any variable out of its bounds
 		if(!(mConstrains.getPivot(indexRef,diff,pivotRef,mN,mDictionary))) {throw string("\n WARNING: empty set. \n");}//is there a suitable pivot
-		this->pivot(indexRef,pivotRef);
-		mConstrains.modifyAssignment(pivotRef, diff, mB, mN, mDictionary);
+		this->pivot(indexRef,pivotRef); // apply pivot.
+		mConstrains.modifyAssignment(pivotRef, diff, mB, mN, mDictionary); // update bounds.
 		return true;
 	}
 
@@ -346,6 +359,13 @@ namespace hypro {
 
 	template<typename Number>
 	bool Dictionary<Number>::isOptimal() const {
+		#ifndef NDEBUG
+		if(not(this->isPrimalFeasible() && this->isDualFeasible())) {
+			std::cout << "This is not optimal: " << std::endl;
+			printDictionary();
+		}
+		#endif
+
 		return this->isPrimalFeasible() && this->isDualFeasible();
 	}
 
@@ -518,15 +538,16 @@ namespace hypro {
 	template<typename Number>
 	void Dictionary<Number>::nonSlackToBase(std::vector<vector_t<Number>>& linealtySpace) {
 		for(unsigned colIndex=0; colIndex<mN.size()-1;++colIndex) {
-			if(mN[colIndex]>= Eigen::Index(mB.size())) {
+			if(mN[colIndex]>= Eigen::Index(mB.size())) { // non slack var in cobase -> pivot to base
 				unsigned rowIndex=0;
+				// find suitable pivot
 				for(rowIndex=0; rowIndex<mB.size()-1;++rowIndex) {
-					if(mDictionary(rowIndex,colIndex)!=0 && mB[rowIndex]< Eigen::Index(mB.size())) {
+					if(mDictionary(rowIndex,colIndex)!=0 && mB[rowIndex]< Eigen::Index(mB.size())) { // found pivot - apply.
 						this->pivot(rowIndex,colIndex);
 						break;
 					}
 				}
-				if(rowIndex==mB.size()-1) { //we did not find a suitable pivot
+				if(rowIndex==mB.size()-1) { // we did not find a suitable pivot
 					vector_t<Number> newLinealty = vector_t<Number>::Zero(mN.size()-1);
 					newLinealty[mN[colIndex]-mB.size()] = 1;
 					for(rowIndex=0; rowIndex<mB.size()-1;++rowIndex) {
