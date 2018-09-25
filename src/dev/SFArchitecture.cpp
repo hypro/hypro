@@ -76,7 +76,14 @@ int main(){
 
 	cout << "TESTING TRAVERSAL \n";
 	Matrix mat(3);
-	sfc.evaluate(mat);
+	auto tmp = sfc.evaluate(mat);
+	std::cout << "[";
+	for(EvalResult e : tmp){
+		std::cout << e << ",";
+	}
+	std::cout << "]\n";
+
+	sfc.functionTest();
 
 	return 0;
 }

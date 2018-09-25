@@ -20,7 +20,7 @@ struct EvalResult
 	~EvalResult() { }
 
 	friend std::ostream& operator<<(std::ostream& ostr, const EvalResult& e){
-		ostr << e.res << std::endl;
+		ostr << e.res;
 		return ostr;
 	}
 

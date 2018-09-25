@@ -137,18 +137,10 @@ public:
 	}
 
 	std::vector<EvalResult> evaluate(Matrix directions){
-		std::cout << "SFC::evaluate\n";
-/*
-		std::function<Matrix(RootGrowNode*, Matrix)> trans = [](RootGrowNode* n, Matrix param) -> Matrix { return n->transform(param); };
-		std::cout << "trans invocable? " << std::is_invocable_r<Matrix, decltype(trans), RootGrowNode*, Matrix>::value << std::endl;
-		std::function<std::vector<EvalResult>(RootGrowNode*, Matrix)> comp = [](RootGrowNode* n, Matrix dir) -> std::vector<EvalResult> { return n->compute(dir); };
-		std::cout << "comp invocable? " << std::is_invocable_r<std::vector<EvalResult>, decltype(comp), RootGrowNode*, Matrix>::value << std::endl;
-		std::function<std::vector<EvalResult>(RootGrowNode*, std::vector<std::vector<EvalResult>>)> agg = 
-			[](RootGrowNode* n, std::vector<std::vector<EvalResult>> resultStackBack) -> std::vector<EvalResult> { return n->aggregate(resultStackBack); };
-		std::cout << "agg invocable? " << std::is_invocable_r<std::vector<EvalResult>, decltype(agg), RootGrowNode*, std::vector<std::vector<EvalResult>>>::value << std::endl;
-		return traverse(trans, comp, agg, std::make_tuple(directions));
-*/
 		
+		std::cout << "SFC::evaluate\n";
+
+		//Real evaluate
 		std::function<Parameters<Matrix>(RootGrowNode*, Parameters<Matrix>)> trans = 
 			[](RootGrowNode* n, Parameters<Matrix> param) -> Parameters<Matrix> { 
 				return Parameters<Matrix>(n->transform(std::get<0>(param.args))); 
@@ -158,21 +150,113 @@ public:
 			[](RootGrowNode* n, Parameters<Matrix> dir) -> std::vector<EvalResult> { 
 				return n->compute(std::get<0>(dir.args)); 
 			};
+
 		std::function<std::vector<EvalResult>(RootGrowNode*, std::vector<std::vector<EvalResult>>)> agg = 
 			[](RootGrowNode* n, std::vector<std::vector<EvalResult>> resultStackBack) -> std::vector<EvalResult> { 
 				return n->aggregate(resultStackBack); 
 			};
-		
+
 		std::cout << "trans invocable? " << std::is_invocable_r<Parameters<Matrix>, decltype(trans), RootGrowNode*, Parameters<Matrix>>::value << std::endl;
 		std::cout << "comp invocable? " << std::is_invocable_r<std::vector<EvalResult>, decltype(comp), RootGrowNode*, Parameters<Matrix>>::value << std::endl;
 		std::cout << "agg invocable? " << std::is_invocable_r<std::vector<EvalResult>, decltype(agg), RootGrowNode*, std::vector<std::vector<EvalResult>>>::value << std::endl;
-
 		return traverse(trans, comp, agg, Parameters<Matrix>(directions));
+	}
 
-		//AAAAAAAAAAAAARRRRRGH
-		//std::function<void(RootGrowNode*, Parameters<>)> f = [](RootGrowNode* n, Parameters<> par){ std::cout << "f executed! Current node type: " << n->getType() << std::endl; };
-		//traverse(f, f, f);
-		//return std::vector<EvalResult>();
+	//Testing of each overloaded version of traverse.
+	void functionTest(){
+
+		//three different functions
+		std::cout << "====== TESTING FUNCS WITH NO PARAMETERS\n";
+		std::function<Parameters<>(RootGrowNode*, Parameters<>)> fTrafo = 
+			[](RootGrowNode* n, Parameters<> par){ 
+				std::cout << "fTrafo executed! Current node type: " << n->getType() << std::endl; 
+				return par;
+			};
+		std::function<EvalResult(RootGrowNode*, Parameters<>)> gComp = 
+			[](RootGrowNode* n, Parameters<> par){ 
+				std::cout << "gComp executed! Current node type: " << n->getType() << std::endl; 
+				return EvalResult(1);
+			};
+		std::function<EvalResult(RootGrowNode*, std::vector<EvalResult>)> hAgg = 
+			[](RootGrowNode* n, std::vector<EvalResult> v){ 
+				EvalResult res(0);
+				for(auto e : v){
+					res = res + e;
+				}
+				std::cout << "hAgg executed! Current node type: " << n->getType() << std::endl; 
+				return res;
+			};
+		Parameters<> p;
+		traverse(fTrafo, gComp, hAgg, p);
+	
+
+		//only void functions
+		std::cout << "====== TESTING FUNCS WITH NO PARAMETERS RETURNING VOID\n";
+		std::function<void(RootGrowNode*)> i = 
+			[](RootGrowNode* n){ 
+				std::cout << "i executed! Current node type: " << n->getType() << std::endl; 
+			};
+		traverse(i,i,i);
+		
+
+		//only parameter type = void
+		std::cout << "====== TESTING FUNCS WHERE PARAM TYPE = VOID \n";
+		std::function<int(RootGrowNode*)> jComp = 
+			[](RootGrowNode* n){ 
+				std::cout << "jComp executed! returning: " << 1000 << std::endl;
+				return 1000; 
+			};
+		std::function<int(RootGrowNode*, std::vector<int>)> kAgg = 
+			[](RootGrowNode* n, std::vector<int> v){ 
+				int tmp = 0;
+				for(auto res : v){
+					tmp += res;
+				}
+				std::cout << "kAgg executed! returning: " << tmp << std::endl; 
+				return tmp;
+			};
+		traverse(i,jComp,kAgg);
+
+
+		//only return type = void
+		std::cout << "====== TESTING FUNCS WHERE RESULT TYPE = VOID\n";
+		std::function<Parameters<int>(RootGrowNode*, Parameters<int>)> lTrafo =
+			[](RootGrowNode* n, Parameters<int> m){
+				std::cout << "lTrafo executed! got: " << std::get<0>(m.args) << std::endl; 
+				return m;
+			};
+		std::function<void(RootGrowNode*,Parameters<int>)> mComp =
+			[](RootGrowNode* n, Parameters<int> blub){
+				std::cout << "gotcha" << std::endl;
+			};
+		traverse(lTrafo, mComp, i, Parameters<int>(-12));
+
+
+		//multiple parameters
+		std::cout << "====== TESTING FUNCS WITH MULTIPLE PARAMETERS\n";
+		std::function<Parameters<int,float>(RootGrowNode*, Parameters<int,float>)> trafoWithMoreParams =
+			[](RootGrowNode* n, Parameters<int,float> p) -> Parameters<int,float> {
+				auto tmp = Parameters<int,float>(std::get<0>(p.args), 2.0f*std::get<1>(p.args));
+				std::cout << "trafoWithMoreParams executed! new values are: [" << std::get<0>(p.args) << "," << 2.0f*std::get<1>(p.args) << "]\n";
+				return tmp;
+			};
+		std::function<std::pair<float,bool>(RootGrowNode*, Parameters<int,float>)> compWithMoreParams =
+			[](RootGrowNode* n, Parameters<int,float> p) -> std::pair<float,bool> {
+				auto tmp = std::make_pair(float(std::get<0>(p.args) + std::get<1>(p.args)), false);
+				std::cout << "compWithMoreParams executed! new pair is: (" << tmp.first << "," << tmp.second << ")\n";
+				return tmp;
+			};
+		std::function<std::pair<float,bool>(RootGrowNode*, std::vector<std::pair<float,bool>>)> aggWithMoreParams =
+			[](RootGrowNode* n, std::vector<std::pair<float,bool>> v) -> std::pair<float,bool> {
+				float res = 0.0f;
+				for(auto elem : v){
+					res += elem.first;
+				}
+				auto tmp = std::make_pair(res, true);
+				std::cout << "aggWithMoreParams executed! agg'd pair is: (" << tmp.first << "," << tmp.second << ")\n";	
+				return tmp;
+			};
+		traverse(trafoWithMoreParams, compWithMoreParams, aggWithMoreParams, Parameters<int,float>(2,1.0f));
 	}	
 
 };
@@ -203,113 +287,3 @@ public:
 	}
 };
 
-/* WAS IN SFC
-	//Here: function evaluate, that calls traverse on the root node to start the traversing process
-	std::vector<EvalResult> evaluate(Matrix directions){
-
-		//Usings
-		using Node = RootGrowNode*;
-		using Param = Matrix;
-		using Res = std::vector<EvalResult>;
-		
-		//Prepare Stacks
-		std::vector<Node> callStack;
-		std::vector<Param> paramStack;
-		std::vector<std::pair<int,std::vector<Res>>> resultStack;  
-		callStack.push_back(mRoot);
-		paramStack.push_back(directions);
-		resultStack.push_back(std::make_pair(-1, std::vector<Res>()));
-
-		while(!callStack.empty()){
-
-			Node cur = callStack.back();
-			Param currentParam = paramStack.back();
-
-			//Only printing stuff
-			std::cout << "=== START EVALUATION\n";
-			std::cout << "callStack size: " << callStack.size() << std::endl;
-			std::cout << "paramStack size: " << paramStack.size() << std::endl;
-			std::cout << "paramStack content: \n";
-			for(auto p : paramStack){
-				std::cout << "\t" << p.entry << std::endl;
-			}
-			std::cout << "resultStack size: " << resultStack.size() << std::endl;
-			std::cout << "resultStack content: \n";
-			for(auto r : resultStack){
-				std::cout << "\t" << r.first;
-				for(auto operands : r.second){
-					std::cout << "\t" << "[";
-					for(auto args : operands){
-						std::cout << args.res << ","; 
-					}
-					std::cout << "]";
-				}
-				std::cout << "\n";
-			}
-			std::cout << "\n";
-			std::cout << "cur type is: " << cur->getType() << std::endl;
-
-			if(cur->getOriginCount() == 0){
-
-				std::pair<int,std::vector<Res>> currentResult = resultStack.back();
-				assert(cur->getType() == 3);
-
-				//If leaf and end of stack is reached
-				if(currentResult.first == -1){
-
-					return cur->evaluate(currentParam);
-
-				//If leaf and not end of stack is reached	
-				} else {
-
-					auto tmp = cur->evaluate(currentParam);
-					resultStack.at(currentResult.first).second.emplace_back(tmp);
-
-				}
-
-				// delete result frame and close recursive call
-				callStack.pop_back();
-				paramStack.pop_back();
-				resultStack.pop_back();
-
-			} else {
-
-				//If enough arguments for operation of node and #arguments != 0
-				if(resultStack.back().second.size() == cur->getOriginCount()) {
-
-					Res accumulatedResult = cur->accumulate(resultStack.back().second);
-
-					// we reached the top, exit
-					if(resultStack.back().first == -1) {
-						
-						std::cout << "accumulatedResult: ["; 
-						for(unsigned i=0; i<accumulatedResult.size(); i++){
-							std::cout << accumulatedResult.at(i).res << ",";	
-						}
-						std::cout << "]\n";
-						
-						return accumulatedResult;
-					}
-
-					// forward result.
-					resultStack.at(resultStack.back().first).second.emplace_back(accumulatedResult);
-
-					// delete result frame and close recursive call
-					callStack.pop_back();
-					paramStack.pop_back();
-					resultStack.pop_back();
-
-				//Every other case (recursive call)
-				} else {
-
-					// here we create the new stack levels.
-					std::size_t callingFrame = callStack.size() - 1;
-					cur->pushToStacks(callStack, paramStack, resultStack, currentParam, callingFrame);
-				}
-			}
-		}
-
-		std::cout << "THIS SHOULD NOT HAPPEN." << std::endl;
-		return std::vector<EvalResult>();
-	}
-*/
