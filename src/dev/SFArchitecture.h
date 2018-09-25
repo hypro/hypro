@@ -234,18 +234,22 @@ public:
 
 		//multiple parameters
 		std::cout << "====== TESTING FUNCS WITH MULTIPLE PARAMETERS\n";
+
+		//For two parameters of type int and float, double the value of the one of type float
 		std::function<Parameters<int,float>(RootGrowNode*, Parameters<int,float>)> trafoWithMoreParams =
 			[](RootGrowNode* n, Parameters<int,float> p) -> Parameters<int,float> {
 				auto tmp = Parameters<int,float>(std::get<0>(p.args), 2.0f*std::get<1>(p.args));
 				std::cout << "trafoWithMoreParams executed! new values are: [" << std::get<0>(p.args) << "," << 2.0f*std::get<1>(p.args) << "]\n";
 				return tmp;
 			};
+		//Sum both the int and the float parameters. Add a bool flag that indicates that we have computed. Make a float,bool-pair
 		std::function<std::pair<float,bool>(RootGrowNode*, Parameters<int,float>)> compWithMoreParams =
 			[](RootGrowNode* n, Parameters<int,float> p) -> std::pair<float,bool> {
 				auto tmp = std::make_pair(float(std::get<0>(p.args) + std::get<1>(p.args)), false);
 				std::cout << "compWithMoreParams executed! new pair is: (" << tmp.first << "," << tmp.second << ")\n";
 				return tmp;
 			};
+		//Sum up all floats in the vector of float-bool-pairs. Set bool flat to true to indicate that we have aggregated
 		std::function<std::pair<float,bool>(RootGrowNode*, std::vector<std::pair<float,bool>>)> aggWithMoreParams =
 			[](RootGrowNode* n, std::vector<std::pair<float,bool>> v) -> std::pair<float,bool> {
 				float res = 0.0f;

@@ -47,7 +47,7 @@ public:
 /*
 	- TURN std::function TO GENERAL LATER
 	- OPTIMIZE WRT CONST AND &
-	
+
 	ResultStack Build: 1.Layer: Stack, 2.Layer: Für m operationen, 3.Layer für n operanden pro child
 	    -> 1.Layer necessary, 2.Layer bestimmt ob baum eher breit ist oder länglich 
 	    	-> länglich vllt besser für bestehende optimierung, breit für eine horizontale optimierung (zwei sumOp nebeneinander zusammenfassen)	
@@ -122,6 +122,8 @@ public:
 
 
 	//Actual traverse function
+	//Since all cases where Result or Rargs are void / empty are handled by the overloaded versions of this function above,
+	//we can assume that we do not get functions returning void / that have no parameters
 	template<typename Result, typename ...Rargs>
 	Result traverse(std::function<Parameters<Rargs...>(RootGrowNode*, Parameters<Rargs...>)> transform,
 					std::function<Result(RootGrowNode*, Parameters<Rargs...>)> compute, 
@@ -131,13 +133,12 @@ public:
 		std::cout << "RGT::traverse\n";
 
 		constexpr bool isResultVoid = std::is_void<Result>::value;
-		
+		//std::cout << "isResultVoid: " << isResultVoid << std::endl;		
+
 		//Usings
 		using Node = RootGrowNode*;
 		using Param = Parameters<Rargs...>;
 		using Res = typename std::conditional<isResultVoid,unsigned,Result>::type; //Result itself can already be a vector
-
-		std::cout << "isResultVoid: " << isResultVoid << std::endl;		
 
 		//Prepare Stacks
 		std::vector<Node> callStack;
@@ -160,20 +161,24 @@ public:
 				//If leaf and end of stack is reached
 				if(currentResult.first == -1){
 
-					if(isResultVoid){
-						std::apply(compute, std::make_tuple(cur, currentParam));
-					} else {
-						return std::apply(compute, std::make_tuple(cur, currentParam));
-					}
+					return std::apply(compute, std::make_tuple(cur, currentParam));
+
+					//if(isResultVoid){
+					//	std::apply(compute, std::make_tuple(cur, currentParam));
+					//} else {
+					//	return std::apply(compute, std::make_tuple(cur, currentParam));
+					//}
 					
 				//If leaf and not end of stack is reached	
 				} else {
 
-					if(isResultVoid){
-						std::apply(compute, std::make_tuple(cur, currentParam.args));
-					} else {
-						resultStack.at(currentResult.first).second.emplace_back(std::apply(compute, std::make_tuple(cur, currentParam)));
-					}
+					resultStack.at(currentResult.first).second.emplace_back(std::apply(compute, std::make_tuple(cur, currentParam)));
+
+					//if(isResultVoid){
+					//	std::apply(compute, std::make_tuple(cur, currentParam.args));
+					//} else {
+					//	resultStack.at(currentResult.first).second.emplace_back(std::apply(compute, std::make_tuple(cur, currentParam)));
+					//}
 
 				}
 
@@ -188,11 +193,12 @@ public:
 				if(resultStack.back().second.size() == cur->getOriginCount()) {
 
 					//Res accumulatedResult = cur->accumulate(resultStack.back().second);
-					Res accumulatedResult;
+					//Res accumulatedResult;
 
-					if(!isResultVoid){
-						accumulatedResult = std::apply(aggregate, std::make_pair(cur, resultStack.back().second));
-					}
+					Res accumulatedResult = std::apply(aggregate, std::make_pair(cur, resultStack.back().second));
+					//if(!isResultVoid){
+					//	accumulatedResult = std::apply(aggregate, std::make_pair(cur, resultStack.back().second));
+					//}
 
 					// we reached the top, exit
 					if(resultStack.back().first == -1) {
@@ -214,11 +220,12 @@ public:
 					std::size_t callingFrame = callStack.size() - 1;
 					for(auto c : cur->getChildren()){
 						callStack.push_back(c);
-						if(isResultVoid){
-							std::apply(transform, std::make_tuple(cur, currentParam));
-						} else {
-							paramStack.push_back(std::apply(transform, std::make_tuple(cur, currentParam)));	
-						}
+						paramStack.push_back(std::apply(transform, std::make_tuple(cur, currentParam)));
+						//if(isResultVoid){
+						//	std::apply(transform, std::make_tuple(cur, currentParam));
+						//} else {
+						//	paramStack.push_back(std::apply(transform, std::make_tuple(cur, currentParam)));	
+						//}
 						resultStack.push_back(std::make_pair(callingFrame, std::vector<Res>()));
 					}
 				}
