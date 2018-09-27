@@ -263,6 +263,32 @@ public:
 		traverse(trafoWithMoreParams, compWithMoreParams, aggWithMoreParams, Parameters<int,float>(2,1.0f));
 	}	
 
+	//Idea for size: We do nothing while going down, a leaf returns one and results are aggregated upwards.
+	unsigned size(){
+		//Trafo does nothing, 
+		std::function<void(RootGrowNode*)> noTrafo = [](RootGrowNode* n){ std::cout << "trafo: I do nothing!\n"; };
+
+		//comp: a leaf returns 1.
+		std::function<unsigned(RootGrowNode*)> sizeForLeaves = [](RootGrowNode* n){ std::cout << "comp: reached leaf. return 1\n"; return 1; };
+		
+		//agg: Adds the numbers of all child nodes together	
+		std::function<unsigned(RootGrowNode*, std::vector<unsigned>)> sizeAggregate =
+			[](RootGrowNode* n, std::vector<unsigned> v){
+				unsigned tmp = 0;
+				std::cout << "agg: sizes before aggregating: ";
+				for(unsigned elem : v){
+					std::cout << elem << ",";
+					tmp += elem;
+				}
+				std::cout << "\naggregated result + itself: " << tmp+1 << std::endl;
+				return tmp+1;
+			};
+		//return traverse(sizeLambda, sizeForLeaves, sizeAggregate, Parameters<unsigned>(0));
+		return traverse(noTrafo, sizeForLeaves, sizeAggregate);
+	}
+
+	//unsigned getDepth(){}
+
 };
 
 //Support Function

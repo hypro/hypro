@@ -125,7 +125,7 @@ public:
 	virtual std::vector<EvalResult> aggregate(std::vector<std::vector<EvalResult>>& resultStackBack) { std::cout << "USED AGGREGATE FROM NODE SUPERCLASS.\n"; assert(false); }
 
 	//For pseudo size
-
+	//virtual unsigned size(unsigned sizeBefore){ return sizeBefore+1; }
 	
 };
 

@@ -85,5 +85,8 @@ int main(){
 
 	sfc.functionTest();
 
+	cout << "SIZE OF TREE IS: \n";
+	cout << sfc.size();
+
 	return 0;
 }
