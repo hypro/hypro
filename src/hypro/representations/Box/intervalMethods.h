@@ -41,50 +41,67 @@ namespace hypro {
 
 		}
 		return false;
+	}
 
-		/*
-		carl::MultivariatePolynomial<Number> hspNormal;
-		std::map<carl::Variable, carl::Interval<Number>> intervalMap;
-		std::vector<carl::Variable> posVector; // maps hypro dimension to carl::Variable
+	template<typename Number>
+	void reduceIntervalsNumberRepresentation( std::vector<carl::Interval<Number>>& , unsigned ) {
+		// do nothing.
+	}
 
-		for(Eigen::Index pos = 0; pos < hsp.normal().rows(); ++pos) {
-			carl::Variable tmp = carl::freshVariable(carl::VariableType::VT_REAL);
-			intervalMap[tmp] = intervals.at(pos);
-			if(hsp.normal()(pos) != 0){
-				hspNormal.addTerm(carl::Term<Number>(hsp.normal()(pos),tmp,1));
+	template<>
+	void reduceIntervalsNumberRepresentation( std::vector<carl::Interval<mpq_class>>& intervals, unsigned limit) {
+		mpq_class limit2 = mpq_class(limit)*mpq_class(limit);
+		for(unsigned d = 0; d < intervals.size(); ++d) {
+			//std::cout << "(Upper Bound) mpq_class: " << intervals[d].upper() << std::endl;
+			if(intervals[d].upper() != 0) {
+				mpq_class numerator = carl::getNum(intervals[d].upper());
+				mpq_class denominator = carl::getDenom(intervals[d].upper());
+				mpq_class largest = carl::abs(numerator) > carl::abs(denominator) ? carl::abs(numerator) : carl::abs(denominator);
+				if(largest > limit2){
+					mpq_class dividend = largest / mpq_class(limit);
+					assert(largest/dividend == limit);
+					mpq_class val = mpq_class(carl::ceil(numerator/dividend));
+					mpq_class newDenom;
+					if(intervals[d].upper() > 0) {
+						newDenom = mpq_class(carl::floor(denominator/dividend));
+					} else {
+						newDenom = mpq_class(carl::ceil(denominator/dividend));
+					}
+					if(newDenom != 0) {
+						val = val / newDenom;
+						assert(val >= intervals[d].upper());
+						intervals[d].setUpper(mpq_class(val));
+					}
+					//std::cout << "Assert: " << val << " >= " << intervals[d].upper() << std::endl;
+					//std::cout << "(Upper bound) Rounding Error: " << carl::convert<mpq_class,double>(val - intervals[d].upper()) << std::endl;
+				}
 			}
-			posVector.push_back(tmp);
-		}
 
-		carl::Variable constant = carl::freshVariable(carl::VariableType::VT_REAL);
-		hspNormal.addTerm(carl::Term<Number>(Number(-1),constant,1));
-		intervalMap[constant] = carl::Interval<Number>(hsp.offset(),carl::BoundType::INFTY,hsp.offset(),carl::BoundType::WEAK);
-
-		std::cout << "Resulting Polynomial: " << hspNormal << std::endl;
-
-		// contraction
-		for(unsigned i = 0; i < hspNormal.size(); ++i){
-			if(hspNormal[i].coeff() != 0) {
-				std::cout << "Solved for " << hspNormal[i].monomial()->getSingleVariable();
-				carl::MultivariatePolynomial<Number> t = (hspNormal - hspNormal[i]) / Number(-hspNormal[i].coeff());
-				std::cout << ": " << t << std::endl;
-				carl::Interval<Number> newIntv = carl::IntervalEvaluation::evaluate(t,intervalMap);
-				std::cout << "New interval: " << newIntv << std::endl;
-				assert(hspNormal[i].monomial()->isLinear());
-				auto tmp = intervalMap[hspNormal[i].monomial()->getSingleVariable()].intersect(newIntv);
-				std::cout << "After intersection: " << tmp << std::endl;
-				intervalMap[hspNormal[i].monomial()->getSingleVariable()] = tmp;
+			//std::cout << "(Lower Bound) mpq_class: " << intervals[d].lower() << std::endl;
+			if(intervals[d].lower() != 0) {
+				mpq_class numerator = carl::getNum(intervals[d].lower());
+				mpq_class denominator = carl::getDenom(intervals[d].lower());
+				mpq_class largest = carl::abs(numerator) > carl::abs(denominator) ? carl::abs(numerator) : carl::abs(denominator);
+				if(largest > limit2){
+					mpq_class dividend = largest / mpq_class(limit);
+					assert(largest/dividend == limit);
+					mpq_class val = mpq_class(carl::floor(numerator/dividend));
+					mpq_class newDenom;
+					if( intervals[d].lower() > 0) {
+						newDenom = mpq_class(carl::ceil(denominator/dividend));
+					} else {
+						newDenom = mpq_class(carl::floor(denominator/dividend));
+					}
+					if(newDenom != 0) {
+						val = val / newDenom;
+						assert(val <= intervals[d].lower());
+						intervals[d].setLower(val);
+					}
+					//std::cout << "Assert: " << val << " <= " << intervals[d].lower() << std::endl;
+					//std::cout << "(Lower bound) Rounding Error: " << carl::convert<mpq_class,double>(val - intervals[d].lower()) << std::endl;
+				}
 			}
 		}
-
-		// creation of result vector
-		std::vector<carl::Interval<Number>> res;
-		for(Eigen::Index i = 0; i < hsp.normal().rows(); ++i) {
-			res.emplace_back(intervalMap[posVector[i]]);
-		}
-
-		return res;
-		*/
 	}
 
 } // namespace hypro

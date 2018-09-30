@@ -24,7 +24,8 @@ class BoxT<double,Converter,Setting> : public GeometricObject<double, BoxT<doubl
 	 * Members
 	 **************************************************************************/
   protected:
-    std::pair<Point<double>, Point<double>> mLimits; /*!< Pair of points describing the minimal and the maximal point of the box.*/
+    std::vector<carl::Interval<double>> mLimits; /*!< Pair of points describing the minimal and the maximal point of the box.*/
+	bool mEmpty; /*<! Cache if the box is empty.
 
   public:
 	/***************************************************************************
@@ -48,7 +49,7 @@ class BoxT<double,Converter,Setting> : public GeometricObject<double, BoxT<doubl
 	 * @param[in]  orig  The original.
 	 */
 	template<typename SettingRhs, carl::DisableIf< std::is_same<Setting, SettingRhs> > = carl::dummy>
-	BoxT(const BoxT<double,Converter,SettingRhs>& orig) : mLimits(orig.limits())
+	BoxT(const BoxT<double,Converter,SettingRhs>& orig) : mLimits(orig.intervals())
 	{ }
 
 	/**
@@ -134,7 +135,7 @@ class BoxT<double,Converter,Setting> : public GeometricObject<double, BoxT<doubl
 	 * @details Converts the two-points representation of the current box into a sorted vector of intervals.
 	 * @return A vector of intervals.
 	 */
-	std::vector<carl::Interval<double>> boundaries() const;
+	std::vector<carl::Interval<double>> intervals() const;
 
 	/**
 	 * @brief Getter for the limiting points.

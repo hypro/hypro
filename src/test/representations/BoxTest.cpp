@@ -127,7 +127,7 @@ TYPED_TEST(BoxTest, Constructor)
 
 TYPED_TEST(BoxTest, Access)
 {
-    std::vector<carl::Interval<TypeParam>> tmp = this->box1.boundaries();
+    std::vector<carl::Interval<TypeParam>> tmp = this->box1.intervals();
     EXPECT_EQ(2, tmp[0].lower());
     EXPECT_EQ(6, tmp[0].upper());
     EXPECT_EQ(1, tmp[1].lower());

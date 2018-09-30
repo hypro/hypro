@@ -22,7 +22,7 @@ typename Converter<Number>::SupportFunction Converter<Number>::toSupportFunction
 // conversion from box to support function (no differentiation between conversion modes - always EXACT)
 template <typename Number>
 typename Converter<Number>::SupportFunction Converter<Number>::toSupportFunction( const Box& _source, const CONV_MODE ) {
-    return SupportFunction(_source.boundaries());
+    return SupportFunction(_source.intervals());
 }
 
 template <typename Number>
