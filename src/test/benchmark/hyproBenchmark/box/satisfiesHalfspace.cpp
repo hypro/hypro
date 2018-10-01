@@ -67,6 +67,7 @@ namespace box {
                 }
                 Timer runTimerPPL;
                 b.refine_with_constraint(pplHsps[i]);
+                bool a = b.is_empty();
                 pplRT += runTimerPPL.elapsed();
             }
             std::cout << __func__ << " Dimension " << d << ":  Running took " << pplRT.count() << " sec (PPL)." << std::endl;
