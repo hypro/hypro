@@ -10,6 +10,5 @@ Files modified:
 
 Dependencies:
 - Cmake (>=2.8)
-- Java >=1.6 
 
 IMPORTANT: On linux, the package uuid-dev is needed in order to run the runtime
