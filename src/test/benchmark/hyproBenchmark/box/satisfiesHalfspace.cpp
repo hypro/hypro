@@ -43,16 +43,16 @@ namespace box {
                 #endif
             }
             auto creationTime = creationTimer.elapsed();
-            std::cout << "Dimension " << d << ": Creation took " << creationTime.count() << " sec." << std::endl;
+            std::cout << __func__ << " Dimension " << d << ": Creation took " << creationTime.count() << " sec." << std::endl;
             ress.mCreationTime += creationTime;
 
             // run instances
             Timer runTimerHyPro;
             for(std::size_t i = 0; i < settings.iterations; ++i) {
-                box.intersectHalfspace(hsps[i]);
+                box.satisfiesHalfspace(hsps[i]);
             }
             auto runningTime = runTimerHyPro.elapsed();
-            std::cout << "Dimension " << d << ":  Running took " << runningTime.count() << " sec." << std::endl;
+            std::cout << __func__ << " Dimension " << d << ":  Running took " << runningTime.count() << " sec." << std::endl;
 
             #ifdef HYPRO_USE_PPL
             std::chrono::duration<double> pplRT = std::chrono::duration<double>::zero();
@@ -69,7 +69,7 @@ namespace box {
                 b.refine_with_constraint(pplHsps[i]);
                 pplRT += runTimerPPL.elapsed();
             }
-            std::cout << "Dimension " << d << ":  Running took " << pplRT.count() << " sec (PPL)." << std::endl;
+            std::cout << __func__ << " Dimension " << d << ":  Running took " << pplRT.count() << " sec (PPL)." << std::endl;
             #endif
 
             ress.mRunningTime += runningTime;

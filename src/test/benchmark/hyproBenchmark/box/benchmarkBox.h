@@ -24,6 +24,7 @@ namespace benchmark {
 namespace box
 {
     Results<int> intersectHalfspaces(const Settings& settings);
+    Results<int> satisfiesHalfspaces(const Settings& settings);
     Results<int> run(const Settings& settings);
 
 } // box

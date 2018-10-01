@@ -12,6 +12,9 @@ namespace box
         auto tmp = intersectHalfspaces(settings);
         ress.insert(ress.end(), tmp.begin(), tmp.end());       
 
+        // satisfies half-spaces
+        satisfiesHalfspaces(settings);
+
         std::cout << "Box benchmarking took " << totalRunningTime.elapsedMs() << " sec in total." << std::endl;
 
         return ress;
