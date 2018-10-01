@@ -60,7 +60,10 @@ class BoxT : public GeometricObject<Number, BoxT<Number,Converter,Setting>> {
 	 * @brief      Creates an empty box.
 	 * @details   The empty box is represented by a zero-dimensional point pair.
 	 */
-	BoxT() { assert(this->dimension() == 0); assert(this->empty()); }
+	BoxT() :
+		mLimits()
+		, mEmpty(true)
+	{ assert(this->dimension() == 0); assert(this->empty()); }
 
 	/**
 	 * @brief      Copy constructor.
@@ -73,7 +76,7 @@ class BoxT : public GeometricObject<Number, BoxT<Number,Converter,Setting>> {
 	 * @param[in]  orig  The original.
 	 */
 	template<typename SettingRhs, carl::DisableIf< std::is_same<Setting, SettingRhs> > = carl::dummy>
-	BoxT(const BoxT<Number,Converter,SettingRhs>& orig) : mLimits(orig.intervals())
+	BoxT(const BoxT<Number,Converter,SettingRhs>& orig) : mLimits(orig.intervals()), mEmpty(orig.empty())
 	{ }
 
 	/**
@@ -113,7 +116,7 @@ class BoxT : public GeometricObject<Number, BoxT<Number,Converter,Setting>> {
 	 * @param _intervals A vector of intervals.
 	 */
 	explicit BoxT( const std::vector<carl::Interval<Number>>& _intervals ) 
-		: mLimits(_intervals)
+		: mLimits(_intervals), mEmpty(false)
 	{
 		for(const auto& i : mLimits){
 			if(i.isEmpty()) {
@@ -175,7 +178,7 @@ class BoxT : public GeometricObject<Number, BoxT<Number,Converter,Setting>> {
 	const std::vector<carl::Interval<Number>>& intervals() const {
 		return mLimits;
 	}
-	std::vector<carl::Interval<Number>>& rIntervals() const {
+	std::vector<carl::Interval<Number>>& rIntervals() {
 		return mLimits;
 	}
 
@@ -212,7 +215,14 @@ class BoxT : public GeometricObject<Number, BoxT<Number,Converter,Setting>> {
 	 * @details Effectively extends the dimension of the current box.
 	 * @param val An interval.
 	 */
-	void insert( const carl::Interval<Number>& val ) { mLimits.push_back(val);}
+	void insert( const carl::Interval<Number>& val ) { 
+		mLimits.push_back(val);
+		if(mLimits.back().isEmpty()) {
+			mEmpty = true;
+		} else if (mLimits.size() == 1) { // the new interval was the first and it is not empty.
+			mEmpty = false;
+		} // otherise do not modify mEmpty - if it was true before it stays true, otherwise nothing happens.
+	}
 
 	/**
 	 * @brief Getter for an interval representation of one specific dimension.
@@ -224,6 +234,7 @@ class BoxT : public GeometricObject<Number, BoxT<Number,Converter,Setting>> {
 		assert(d < mLimits.size());
 		return mLimits[d];
 	}
+
 	carl::Interval<Number>& rInterval( std::size_t d ) {
 		assert(d < mLimits.size());
 		return mLimits[d];
@@ -259,7 +270,7 @@ class BoxT : public GeometricObject<Number, BoxT<Number,Converter,Setting>> {
 			return true;
 		}
 		for ( std::size_t d = 0; d < mLimits.size(); ++d ) {
-			if ( !mLimits[d].isSymmetric() ) {
+			if ( ! (-mLimits[d].lower() == mLimits[d].upper() && mLimits[d].lowerBoundType() == mLimits[d].upperBoundType()) ) {
 				return false;
 			}
 		}
@@ -329,7 +340,12 @@ class BoxT : public GeometricObject<Number, BoxT<Number,Converter,Setting>> {
 		if ( b1.dimension() != b2.dimension() ) {
 			return false;
 		}
-		return ( b1.limits() == b2.limits());
+		for(std::size_t i = 0; i < b1.dimension(); ++i) {
+			if(b1.interval(i) != b2.interval(i)) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 	/**
@@ -361,8 +377,8 @@ class BoxT : public GeometricObject<Number, BoxT<Number,Converter,Setting>> {
 	 * @return     The scaled box.
 	 */
 	BoxT<Number,Converter,Setting> operator*(const Number& factor) const { 
-		Box<Number> copy{*this};
-		for(auto& i : copy.rintervals()){
+		BoxT<Number,Converter,Setting> copy{*this};
+		for(auto& i : copy.rIntervals()){
 			i *= factor;
 		}
 		return copy;

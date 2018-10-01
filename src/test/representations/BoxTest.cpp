@@ -133,8 +133,6 @@ TYPED_TEST(BoxTest, Access)
     EXPECT_EQ(1, tmp[1].lower());
     EXPECT_EQ(3, tmp[1].upper());
 
-    EXPECT_EQ(this->box1.interval(2), carl::Interval<TypeParam>::emptyInterval());
-
     EXPECT_EQ((unsigned) 2, this->box1.dimension());
     EXPECT_EQ((unsigned) 2, this->box2.dimension());
     EXPECT_EQ((unsigned) 0, this->box3.dimension());
@@ -410,7 +408,10 @@ TYPED_TEST(BoxTest, Intersection)
 	EXPECT_TRUE(empt2.empty());
 
 	hypro::Box<TypeParam> reduced = this->box1.intersect(hypro::Box<TypeParam>(carl::Interval<TypeParam>(3,4)));
-	EXPECT_EQ(reduced, hypro::Box<TypeParam>(carl::Interval<TypeParam>(3,4)));
+	std::vector<carl::Interval<TypeParam>> its;
+	its.emplace_back(3,4);
+	its.emplace_back(1,3);
+	EXPECT_EQ(reduced, hypro::Box<TypeParam>(its));
 }
 
 TYPED_TEST(BoxTest, IntersectionHalfspace)

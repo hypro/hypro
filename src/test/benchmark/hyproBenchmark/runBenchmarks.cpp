@@ -6,10 +6,11 @@
  * @date 2018-09-28
  */
 
+#include <flags.h>
 #include "types.h"
 #include "Clock.h"
 #include "Settings.h"
-#include "benchmarkBox.h"
+#include "box/benchmarkBox.h"
 #include <representations/GeometricObject.h>
 #include <iostream>
 

@@ -20,7 +20,7 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
 	#add_test( NAME benchmark COMMAND runBenchmark )
 endif()
 
-file(GLOB BM_SOURCES ${CMAKE_CURRENT_LIST_DIR}/hyproBenchmark/*.cpp)
+file(GLOB_RECURSE BM_SOURCES ${CMAKE_CURRENT_LIST_DIR}/hyproBenchmark/*.cpp)
 
 # general collection of benchmarks
 add_executable(benchmark

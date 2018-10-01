@@ -7,15 +7,16 @@
  */
 #pragma once
 
-#include "Clock.h"
-#include "pplStructs.h"
-#include "Results.h"
-#include "Settings.h"
-#include "types.h"
+#include "../Clock.h"
+#include "../Results.h"
+#include "../Settings.h"
+#include "../types.h"
+#include <flags.h>
 #include <representations/GeometricObject.h>
 #include <iostream>
 #include <random>
 #ifdef HYPRO_USE_PPL
+#include "pplStructs.h"
 #include <ppl.hh>
 #endif
 

@@ -1,14 +1,14 @@
 #include "benchmarkBox.h"
 
-namespace benchmark{
-namespace box
-{
-    Results<int> intersectHalfspaces(const Settings& settings) {
+namespace benchmark {
+namespace box {
+
+  Results<int> intersectHalfspaces(const Settings& settings) {
         Results<int> ress;
         hypro::Box<::benchmark::Number> box;
         // benchmark against PPL
         #ifdef HYPRO_USE_PPL
-        using pplItv = Parma_Polyhedra_Library::Interval<double,Parma_Polyhedra_Library::Interval_Info_Null<::benchmark::Double_Interval_Policy>>;
+        using pplItv = Parma_Polyhedra_Library::Interval<double,Parma_Polyhedra_Library::Interval_Info_Null<benchmark::box::Double_Interval_Policy>>;
         using pplbox = Parma_Polyhedra_Library::Box<pplItv>;
         #endif
         box.insert(carl::Interval<::benchmark::Number>(-1,1));
@@ -76,24 +76,10 @@ namespace box
 
             // prepare next run
             box.insert(carl::Interval<::benchmark::Number>(-1,1));
-            #ifdef HYPRO_USE_PPL
-
-            #endif
         }
         return ress;
     }
 
-    Results<int> run(const Settings& settings) {
-        Timer totalRunningTime;
-        Results<int> ress;
-
-        // half-space intersection
-        auto tmp = intersectHalfspaces(settings);
-        ress.insert(ress.end(), tmp.begin(), tmp.end());       
-
-        std::cout << "Box benchmarking took " << totalRunningTime.elapsedMs() << " sec in total." << std::endl;
-
-        return ress;
-    }
-} // box    
+} // box
 } // benchmark
+

@@ -19,6 +19,7 @@ namespace hypro {
 
 		assert(_constraints.rows() == _constants.rows());
 		if(_constraints.rows() == 0) {
+			mEmpty=true;
 			assert(this->empty());
 			assert(this->dimension() == 0);
 			return;
@@ -27,12 +28,6 @@ namespace hypro {
 		if(Setting::HYPRO_BOX_AVOID_LINEAR_OPTIMIZATION == true){
 			// calculate all possible Halfspace intersections -> TODO: dPermutation can
 			// be improved.
-			assert(_constraints.rows() == _constants.rows());
-			if(_constraints.rows() == 0) {
-				assert(this->empty());
-				assert(this->dimension() == 0);
-				return;
-			}
 			Permutator permutator = Permutator( _constraints.rows(), _constraints.cols() );
 			matrix_t<Number> intersection = matrix_t<Number>( _constraints.cols(), _constraints.cols() );
 			vector_t<Number> intersectionConstants = vector_t<Number>( _constraints.cols() );
@@ -83,8 +78,8 @@ namespace hypro {
 			// std::cout<<__func__ << " : " <<__LINE__ <<std::endl;
 			// finish initialization
 			if(possibleVertices.empty()) {
-				assert(false);
 				*this = BoxT<Number,Converter,Setting>::Empty();
+				return;
 			} else {
 				vector_t<Number> min = *possibleVertices.begin();
 				vector_t<Number> max = *possibleVertices.begin();
@@ -111,6 +106,11 @@ namespace hypro {
 			std::vector<EvaluationResult<Number>> results;
 			for(Eigen::Index rowIndex = 0; rowIndex < _constraints.rows(); ++rowIndex) {
 				results.emplace_back(opt.evaluate(tpl[rowIndex], false));
+				if(results.back().errorCode == SOLUTION::INFEAS){
+					opt.cleanGLPInstance();
+					*this = BoxT<Number,Converter,Setting>::Empty();
+					return;
+				}
 			}
 			opt.cleanGLPInstance();
 			assert(Eigen::Index(results.size()) == tpl.size());
@@ -124,6 +124,7 @@ namespace hypro {
 						mLimits[colIndex].setLower(-results[rowIndex].supportValue);
 				}
 			}
+			mEmpty = false;
 		}
 
 		reduceNumberRepresentation();
@@ -146,6 +147,9 @@ BoxT<Number,Converter,Setting>::BoxT( const std::set<Point<Number>> &_points ) {
 			}
 			mLimits.emplace_back(min,max);
 		}
+		mEmpty = false;
+	} else {
+		mEmpty = true;
 	}
 	reduceNumberRepresentation();
 }
@@ -166,6 +170,9 @@ BoxT<Number,Converter,Setting>::BoxT( const std::vector<Point<Number>> &_points 
 			}
 			mLimits.emplace_back(min,max);
 		}
+		mEmpty = false;
+	} else {
+		mEmpty = true;
 	}
 	reduceNumberRepresentation();
 }
@@ -220,6 +227,7 @@ template<typename Number, typename Converter, class Setting>
 std::vector<Point<Number>> BoxT<Number,Converter,Setting>::vertices( const matrix_t<Number>& ) const {
 	std::vector<Point<Number>> result;
 	if(this->empty()){
+		std::cout << "Box is empty. (size: " << mLimits.size() << ")" << std::endl;
 		return result;
 	}
 	std::size_t d = this->dimension();
@@ -282,27 +290,25 @@ const BoxT<Number,Converter,Setting>& BoxT<Number,Converter,Setting>::reduceNumb
 	return *this;
 }
 
+template<typename Number, typename Converter, typename Setting>
+BoxT<Number,Converter,Setting> BoxT<Number,Converter,Setting>::makeSymmetric() const {
+	if(this->empty()){
+		return *this;
+	}
+	std::vector<carl::Interval<Number>> newIntervals;
+	for(const auto& i : mLimits) {
+		newIntervals.emplace_back(-i.upper(),i.upper());
+	}
+	return BoxT<Number,Converter,Setting>(newIntervals);
+}
+
 template<typename Number, typename Converter, class Setting>
 std::pair<CONTAINMENT, BoxT<Number,Converter,Setting>> BoxT<Number,Converter,Setting>::satisfiesHalfspace( const Halfspace<Number>& rhs ) const {
-	std::vector<Point<Number>> vertices = this->vertices();
-	bool allVerticesContained = true;
-	unsigned outsideVertexCnt = 0;
-	for(const auto& vertex : vertices) {
-
-		if(!rhs.contains(vertex.rawCoordinates())){
-			allVerticesContained = false;
-			outsideVertexCnt++;
-		}
-	}
-	if(allVerticesContained) {
-		return std::make_pair(CONTAINMENT::FULL, *this);
-	}
-
-	if(outsideVertexCnt == vertices.size()) {
-		return std::make_pair(CONTAINMENT::NO, Empty());
-	}
-
-	return std::make_pair(CONTAINMENT::PARTIAL, this->intersectHalfspace(rhs));
+	matrix_t<Number> constraints = matrix_t<Number>(1,this->dimension());
+	constraints.row(0) = rhs.normal();
+	vector_t<Number> constants = vector_t<Number>(1);
+	constants << rhs.offset();
+	return this->satisfiesHalfspaces(constraints,constants);
 }
 
 template<typename Number, typename Converter, class Setting>
@@ -312,6 +318,7 @@ std::pair<CONTAINMENT, BoxT<Number,Converter,Setting>> BoxT<Number,Converter,Set
 	}
 
 	if(this->empty()) {
+		//std::cout << __func__ << " Box is empty." << std::endl;
 		return std::make_pair(CONTAINMENT::NO, *this);
 	}
 
@@ -458,17 +465,28 @@ BoxT<Number,Converter,Setting> BoxT<Number,Converter,Setting>::minkowskiDecompos
 	assert( dimension() == rhs.dimension() );
 	std::vector<carl::Interval<Number>> newIntervals;
 	for(std::size_t d = 0; d < this->dimension(); ++d) {
-		newIntervals.emplace_back(mLimits[d]-rhs.interval(d));
+		newIntervals.emplace_back(mLimits[d].lower()-rhs.interval(d).lower(), mLimits[d].upper() - rhs.interval(d).upper());
 	}
 	return BoxT<Number,Converter,Setting>(newIntervals);
 }
 
 template<typename Number, typename Converter, class Setting>
 BoxT<Number,Converter,Setting> BoxT<Number,Converter,Setting>::intersect( const BoxT<Number,Converter,Setting> &rhs ) const {
-	assert( dimension() == rhs.dimension() ); // TODO: We can handle different dimension via projection.
 	std::vector<carl::Interval<Number>> newIntervals;
+	std::size_t dim = this->dimension();
+	std::size_t rdim = rhs.dimension();
 	for(std::size_t d = 0; d < this->dimension(); ++d) {
-		newIntervals.emplace_back(mLimits[d].intersect(rhs.interval(d)));
+		// intersection if both agree on the dimension
+		if(d < rdim)
+			newIntervals.emplace_back(mLimits[d].intersect(rhs.interval(d)));
+		else // if this->dimension() > rdim use projection
+			newIntervals.emplace_back(mLimits[d]);
+	}
+	// if the other box has a larger dimension use projection as well.
+	if(rdim > dim) {
+		for(std::size_t d = dim; d < rdim; ++d) {
+			newIntervals.emplace_back(rhs.interval(d));
+		}	
 	}
 	return BoxT<Number,Converter,Setting>(newIntervals);
 }
