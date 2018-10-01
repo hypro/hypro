@@ -11,3 +11,4 @@ src/hypro/flags.h
 src/resources/glpk-4.45/
 *.sublime-*
 *.tokens
+.travis/sonar-project.properties

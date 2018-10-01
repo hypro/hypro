@@ -131,7 +131,7 @@ class Converter {
 		static Polytope toPolytope(const VPolytope& source, const CONV_MODE = CONV_MODE::EXACT);
 		static Polytope toPolytope(const SupportFunction& source, const CONV_MODE = CONV_MODE::OVER, std::size_t numberOfDirections = defaultTemplateDirectionCount);
 		static Polytope toPolytope(const Zonotope& source, const CONV_MODE = CONV_MODE::EXACT);
-		//static Polytope toPolytope(const DifferenceBounds& source, const CONV_MODE = CONV_MODE::EXACT); //TODO NOT IMPLEMENTED YET
+		static Polytope toPolytope(const DifferenceBounds& source, const CONV_MODE = CONV_MODE::EXACT); //TODO NOT IMPLEMENTED YET
 		#endif
 
 		static DifferenceBounds toDifferenceBounds(const Box& source, const CONV_MODE = CONV_MODE::EXACT);
@@ -139,6 +139,9 @@ class Converter {
 		static DifferenceBounds toDifferenceBounds(const Ellipsoid& source, const CONV_MODE = CONV_MODE::EXACT);
 		static DifferenceBounds toDifferenceBounds(const HPolytope& source, const CONV_MODE = CONV_MODE::EXACT);
 		static DifferenceBounds toDifferenceBounds(const VPolytope& source, const CONV_MODE = CONV_MODE::EXACT);
+		#ifdef HYPRO_USE_PPL
+		static DifferenceBounds toDifferenceBounds(const Polytope& source, const CONV_MODE = CONV_MODE::EXACT);// TODO NOT IMPLEMENTED YET
+		#endif
 		static DifferenceBounds toDifferenceBounds(const SupportFunction& source, const std::vector<vector_t<Number>>& additionalDirections = std::vector<vector_t<Number>>(), const CONV_MODE = CONV_MODE::OVER, std::size_t numberOfDirections = defaultTemplateDirectionCount );
 		static DifferenceBounds toDifferenceBounds(const Zonotope& source, const CONV_MODE = CONV_MODE::EXACT);
 		static DifferenceBounds toDifferenceBounds(const DifferenceBounds& source, const CONV_MODE = CONV_MODE::EXACT);

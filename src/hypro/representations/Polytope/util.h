@@ -27,7 +27,6 @@ using carl::operator<<;
  * @return     The number of generators.
  */
 static inline unsigned gsSize( const Parma_Polyhedra_Library::Generator_System& gs ) {
-	using namespace Parma_Polyhedra_Library;
 	unsigned i = 0;
 	for ( const auto& g : gs ) {
 		++i;
@@ -42,7 +41,6 @@ static inline unsigned gsSize( const Parma_Polyhedra_Library::Generator_System& 
  * @return     The number of constraints.
  */
 static inline unsigned csSize( const Parma_Polyhedra_Library::Constraint_System& cs ) {
-	using namespace Parma_Polyhedra_Library;
 	unsigned i = 0;
 	for ( const auto& c : cs ) {
 		++i;
@@ -81,8 +79,6 @@ Parma_Polyhedra_Library::Constraint createConstraint(const vector_t<Number>& con
  */
 template <typename Number>
 static inline Parma_Polyhedra_Library::Generator pointToGenerator( const vector_t<Number>& point ) {
-	using Parma_Polyhedra_Library::IO_Operators::operator<<;
-	using namespace Parma_Polyhedra_Library;
 	double tmpValue;
 	Linear_Expression ls;
 	for ( unsigned i = 0; i < point.rows(); ++i ) {
