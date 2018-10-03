@@ -50,6 +50,17 @@ var namespacehypro =
         [ "hash< hypro::Ridge< Number > >", "structhypro_1_1reachability_1_1std_1_1hash_3_01hypro_1_1Ridge_3_01Number_01_4_01_4.html", "structhypro_1_1reachability_1_1std_1_1hash_3_01hypro_1_1Ridge_3_01Number_01_4_01_4" ]
       ] ],
       [ "ZUtility", "namespacehypro_1_1reachability_1_1ZUtility.html", "namespacehypro_1_1reachability_1_1ZUtility" ],
+      [ "glp_bfcp", "structhypro_1_1reachability_1_1glp__bfcp.html", "structhypro_1_1reachability_1_1glp__bfcp" ],
+      [ "glp_smcp", "structhypro_1_1reachability_1_1glp__smcp.html", "structhypro_1_1reachability_1_1glp__smcp" ],
+      [ "glp_iptcp", "structhypro_1_1reachability_1_1glp__iptcp.html", "structhypro_1_1reachability_1_1glp__iptcp" ],
+      [ "glp_iocp", "structhypro_1_1reachability_1_1glp__iocp.html", "structhypro_1_1reachability_1_1glp__iocp" ],
+      [ "glp_attr", "structhypro_1_1reachability_1_1glp__attr.html", "structhypro_1_1reachability_1_1glp__attr" ],
+      [ "glp_mpscp", "structhypro_1_1reachability_1_1glp__mpscp.html", "structhypro_1_1reachability_1_1glp__mpscp" ],
+      [ "glp_cpxcp", "structhypro_1_1reachability_1_1glp__cpxcp.html", "structhypro_1_1reachability_1_1glp__cpxcp" ],
+      [ "_glp_graph", "structhypro_1_1reachability_1_1__glp__graph.html", "structhypro_1_1reachability_1_1__glp__graph" ],
+      [ "_glp_vertex", "structhypro_1_1reachability_1_1__glp__vertex.html", "structhypro_1_1reachability_1_1__glp__vertex" ],
+      [ "_glp_arc", "structhypro_1_1reachability_1_1__glp__arc.html", "structhypro_1_1reachability_1_1__glp__arc" ],
+      [ "LPXKKT", "structhypro_1_1reachability_1_1LPXKKT.html", "structhypro_1_1reachability_1_1LPXKKT" ],
       [ "Reach", "classhypro_1_1reachability_1_1Reach.html", "classhypro_1_1reachability_1_1Reach" ]
     ] ],
     [ "statistics", null, [
@@ -116,7 +127,6 @@ var namespacehypro =
     [ "HyproSettingVisitor", "classhypro_1_1HyproSettingVisitor.html", "classhypro_1_1HyproSettingVisitor" ],
     [ "HyproFormulaVisitor", "classhypro_1_1HyproFormulaVisitor.html", "classhypro_1_1HyproFormulaVisitor" ],
     [ "BoxT", "classhypro_1_1BoxT.html", "classhypro_1_1BoxT" ],
-    [ "BoxT< double, Converter, Setting >", "classhypro_1_1BoxT_3_01double_00_01Converter_00_01Setting_01_4.html", "classhypro_1_1BoxT_3_01double_00_01Converter_00_01Setting_01_4" ],
     [ "BoxLinearOptimizationOn", "structhypro_1_1BoxLinearOptimizationOn.html", null ],
     [ "BoxLinearOptimizationOff", "structhypro_1_1BoxLinearOptimizationOff.html", null ],
     [ "BoxAllOff", "structhypro_1_1BoxAllOff.html", null ],

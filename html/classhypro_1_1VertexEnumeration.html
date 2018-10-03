@@ -31,7 +31,7 @@
   <td id="projectlogo"><img alt="Logo" src="hypro_Logo.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">HyPro
-   &#160;<span id="projectnumber">18.09</span>
+   &#160;<span id="projectnumber">18.10</span>
    </div>
    <div id="projectbrief">A Toolbox for the Reachability Analysis of Hybrid Systems using Geometric Approximations</div>
   </td>
@@ -122,39 +122,52 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a723ecee350995761dccb7bb5aadb4d95"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a723ecee350995761dccb7bb5aadb4d95"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>VertexEnumeration</b> (const <a class="el" href="classhypro_1_1VertexEnumeration.html">VertexEnumeration</a>&lt; Number &gt; &amp;_orig)=default</td></tr>
 <tr class="separator:a723ecee350995761dccb7bb5aadb4d95"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0584141010f440db3728f6facc991947"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0584141010f440db3728f6facc991947"></a>
-std::vector&lt; <a class="el" href="classhypro_1_1Halfspace.html">Halfspace</a>&lt; Number &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getHsv</b> () const </td></tr>
-<tr class="separator:a0584141010f440db3728f6facc991947"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a258f19d785508677e2b88a47c0ecb71f"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a258f19d785508677e2b88a47c0ecb71f"></a>
-std::vector&lt; <a class="el" href="classhypro_1_1Dictionary.html">Dictionary</a>&lt; Number &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getDictionaries</b> () const </td></tr>
-<tr class="separator:a258f19d785508677e2b88a47c0ecb71f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac37f8cb1eeb34368329b82afc2d8ab28"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac37f8cb1eeb34368329b82afc2d8ab28"></a>
-std::vector&lt; <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; Number &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getPositivePoints</b> () const </td></tr>
-<tr class="separator:ac37f8cb1eeb34368329b82afc2d8ab28"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0b2fd03e244ff848898ba48e522b2432"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0b2fd03e244ff848898ba48e522b2432"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>VertexEnumeration</b> (const std::vector&lt; <a class="el" href="classhypro_1_1Halfspace.html">Halfspace</a>&lt; Number &gt;&gt; &amp;hsv)</td></tr>
+<tr class="separator:a0b2fd03e244ff848898ba48e522b2432"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9aa02d679c1849aa2a0904d165c68497"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9aa02d679c1849aa2a0904d165c68497"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>VertexEnumeration</b> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;constraints, const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;constants)</td></tr>
+<tr class="separator:a9aa02d679c1849aa2a0904d165c68497"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aee5907ccaae4ce4f4f1411f5d359a988"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aee5907ccaae4ce4f4f1411f5d359a988"></a>
+const std::vector&lt; <a class="el" href="classhypro_1_1Halfspace.html">Halfspace</a><br class="typebreak"/>
+&lt; Number &gt; &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getHsv</b> () const </td></tr>
+<tr class="separator:aee5907ccaae4ce4f4f1411f5d359a988"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a33de7953412ddcf95942d7de5170d104"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a33de7953412ddcf95942d7de5170d104"></a>
+const std::vector&lt; <a class="el" href="classhypro_1_1Dictionary.html">Dictionary</a><br class="typebreak"/>
+&lt; Number &gt; &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getDictionaries</b> () const </td></tr>
+<tr class="separator:a33de7953412ddcf95942d7de5170d104"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2fd094d8a5ae54dd67168ab2af3348cf"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2fd094d8a5ae54dd67168ab2af3348cf"></a>
+const std::vector&lt; <a class="el" href="classhypro_1_1Point.html">Point</a><br class="typebreak"/>
+&lt; Number &gt; &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getPositivePoints</b> () const </td></tr>
+<tr class="separator:a2fd094d8a5ae54dd67168ab2af3348cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa0e81c5f20be1098f0ac34653d1eaad2"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa0e81c5f20be1098f0ac34653d1eaad2"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>printPositivePoints</b> () const </td></tr>
 <tr class="separator:aa0e81c5f20be1098f0ac34653d1eaad2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afab13121c5dbc9a0cb7c2506ba67684e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="afab13121c5dbc9a0cb7c2506ba67684e"></a>
-std::vector&lt; <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; Number &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getPoints</b> () const </td></tr>
-<tr class="separator:afab13121c5dbc9a0cb7c2506ba67684e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0f360e4c518c7d1c9fefa5c01daa1947"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0f360e4c518c7d1c9fefa5c01daa1947"></a>
+const std::vector&lt; <a class="el" href="classhypro_1_1Point.html">Point</a><br class="typebreak"/>
+&lt; Number &gt; &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getPoints</b> () const </td></tr>
+<tr class="separator:a0f360e4c518c7d1c9fefa5c01daa1947"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a130311349c35c413cae7ff1284af330d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a130311349c35c413cae7ff1284af330d"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>printPoints</b> () const </td></tr>
 <tr class="separator:a130311349c35c413cae7ff1284af330d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af47b2bf4064aa3a13235d53a984c9e7c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af47b2bf4064aa3a13235d53a984c9e7c"></a>
-std::vector&lt; <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getLinealtySpace</b> () const </td></tr>
-<tr class="separator:af47b2bf4064aa3a13235d53a984c9e7c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa046729e9a4e2448634ffbcc2e85ff7f"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa046729e9a4e2448634ffbcc2e85ff7f"></a>
+const std::vector&lt; <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a><br class="typebreak"/>
+&lt; Number &gt; &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getLinealtySpace</b> () const </td></tr>
+<tr class="separator:aa046729e9a4e2448634ffbcc2e85ff7f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ada520b106a28f40077920855663673a8"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ada520b106a28f40077920855663673a8"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>printLinealtySpace</b> () const </td></tr>
 <tr class="separator:ada520b106a28f40077920855663673a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3da499088c7cf50249f6768c2c6b4be4"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3da499088c7cf50249f6768c2c6b4be4"></a>
-std::vector&lt; <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getPositiveCones</b> () const </td></tr>
-<tr class="separator:a3da499088c7cf50249f6768c2c6b4be4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a341d3bac46b99ea66e6557a70229f8fb"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a341d3bac46b99ea66e6557a70229f8fb"></a>
+const std::vector&lt; <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a><br class="typebreak"/>
+&lt; Number &gt; &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getPositiveCones</b> () const </td></tr>
+<tr class="separator:a341d3bac46b99ea66e6557a70229f8fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6c18b28cf6b2b3f0e60ebcb152ae33e4"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6c18b28cf6b2b3f0e60ebcb152ae33e4"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>printPositiveCones</b> () const </td></tr>
 <tr class="separator:a6c18b28cf6b2b3f0e60ebcb152ae33e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acef2436cd2855443378ad5bc249fa8ed"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="acef2436cd2855443378ad5bc249fa8ed"></a>
-std::vector&lt; <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getCones</b> () const </td></tr>
-<tr class="separator:acef2436cd2855443378ad5bc249fa8ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a46b3f53e1128b3b951812c4485709668"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a46b3f53e1128b3b951812c4485709668"></a>
+const std::vector&lt; <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a><br class="typebreak"/>
+&lt; Number &gt; &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getCones</b> () const </td></tr>
+<tr class="separator:a46b3f53e1128b3b951812c4485709668"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a54e17b831126dbde43ab8326500b40f8"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a54e17b831126dbde43ab8326500b40f8"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>printCones</b> () const </td></tr>
 <tr class="separator:a54e17b831126dbde43ab8326500b40f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -162,56 +175,51 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>printCones</b> () con
 void&#160;</td><td class="memItemRight" valign="bottom"><b>increment</b> (Eigen::Index &amp;i, Eigen::Index &amp;j, std::size_t maxJ)</td></tr>
 <tr class="separator:a425584dff6da23036086009f51a96607"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a28cc2f73f05d243708abebbb35446d1c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a28cc2f73f05d243708abebbb35446d1c"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>enumerateVertices</b> ()</td></tr>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1VertexEnumeration.html#a28cc2f73f05d243708abebbb35446d1c">enumerateVertices</a> ()</td></tr>
+<tr class="memdesc:a28cc2f73f05d243708abebbb35446d1c"><td class="mdescLeft">&#160;</td><td class="mdescRight">does everything with the halfspaces in mHsv <br/></td></tr>
 <tr class="separator:a28cc2f73f05d243708abebbb35446d1c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acec84355494bca17bde9e68683603432"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="acec84355494bca17bde9e68683603432"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1VertexEnumeration.html#acec84355494bca17bde9e68683603432">enumerateVerticesNaive</a> ()</td></tr>
-<tr class="memdesc:acec84355494bca17bde9e68683603432"><td class="mdescLeft">&#160;</td><td class="mdescRight">does everything with the halfspaces in mHsv <br/></td></tr>
+<tr class="memdesc:acec84355494bca17bde9e68683603432"><td class="mdescLeft">&#160;</td><td class="mdescRight">create vertices by permutating all d-combinations of half-spaces. <br/></td></tr>
 <tr class="separator:acec84355494bca17bde9e68683603432"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0b2fd03e244ff848898ba48e522b2432"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0b2fd03e244ff848898ba48e522b2432"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>VertexEnumeration</b> (const std::vector&lt; <a class="el" href="classhypro_1_1Halfspace.html">Halfspace</a>&lt; Number &gt;&gt; &amp;hsv)</td></tr>
-<tr class="separator:a0b2fd03e244ff848898ba48e522b2432"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9aa02d679c1849aa2a0904d165c68497"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9aa02d679c1849aa2a0904d165c68497"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1VertexEnumeration.html#a9aa02d679c1849aa2a0904d165c68497">VertexEnumeration</a> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;constraints, const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;constants)</td></tr>
-<tr class="memdesc:a9aa02d679c1849aa2a0904d165c68497"><td class="mdescLeft">&#160;</td><td class="mdescRight">mHsv:=hsv <br/></td></tr>
-<tr class="separator:a9aa02d679c1849aa2a0904d165c68497"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7fc671d314d91337e867809ecbbe6014"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7fc671d314d91337e867809ecbbe6014"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>enumerateVertices</b> (<a class="el" href="classhypro_1_1Dictionary.html">Dictionary</a>&lt; Number &gt; &amp;dictionary)</td></tr>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1VertexEnumeration.html#a7fc671d314d91337e867809ecbbe6014">enumerateVertices</a> (<a class="el" href="classhypro_1_1Dictionary.html">Dictionary</a>&lt; Number &gt; &amp;dictionary)</td></tr>
+<tr class="memdesc:a7fc671d314d91337e867809ecbbe6014"><td class="mdescLeft">&#160;</td><td class="mdescRight">find all the vertices obtained from a given dictionary acording to Fukuda's algorithm. <br/></td></tr>
 <tr class="separator:a7fc671d314d91337e867809ecbbe6014"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae9bacc4195ea797b5c3e967e0cb9df5c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae9bacc4195ea797b5c3e967e0cb9df5c"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1VertexEnumeration.html#ae9bacc4195ea797b5c3e967e0cb9df5c">enumerateVerticesEachDictionary</a> ()</td></tr>
-<tr class="memdesc:ae9bacc4195ea797b5c3e967e0cb9df5c"><td class="mdescLeft">&#160;</td><td class="mdescRight">find all the vertices obtained from a given dictionary acording to Fukuda's algorithm. <br/></td></tr>
+<tr class="memdesc:ae9bacc4195ea797b5c3e967e0cb9df5c"><td class="mdescLeft">&#160;</td><td class="mdescRight">enumerate all the vertices of the dictionaries in mDictionaries. <br/></td></tr>
 <tr class="separator:ae9bacc4195ea797b5c3e967e0cb9df5c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acfc0614e611850867d0db61cac88202e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="acfc0614e611850867d0db61cac88202e"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1VertexEnumeration.html#acfc0614e611850867d0db61cac88202e">enumerateDictionaries</a> ()</td></tr>
-<tr class="memdesc:acfc0614e611850867d0db61cac88202e"><td class="mdescLeft">&#160;</td><td class="mdescRight">enumerate all the vertices of the dictionaries in mDictionaries. <br/></td></tr>
+<tr class="memdesc:acfc0614e611850867d0db61cac88202e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Finds all the optimal dictionaries from the first one in mDictionaries. <br/></td></tr>
 <tr class="separator:acfc0614e611850867d0db61cac88202e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a70e2fd3988ed01724dfcea0e10bf86c3"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a70e2fd3988ed01724dfcea0e10bf86c3"></a>
 <a class="el" href="classhypro_1_1Dictionary.html">Dictionary</a>&lt; Number &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1VertexEnumeration.html#a70e2fd3988ed01724dfcea0e10bf86c3">findFirstVertex</a> ()</td></tr>
-<tr class="memdesc:a70e2fd3988ed01724dfcea0e10bf86c3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Finds all the optimal dictionaries from the first one in mDictionaries. <br/></td></tr>
+<tr class="memdesc:a70e2fd3988ed01724dfcea0e10bf86c3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Finds a fist vertex, detects the linealty spaces and adds the corresponding constrains. <br/></td></tr>
 <tr class="separator:a70e2fd3988ed01724dfcea0e10bf86c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab5be5a73569a8cc642868a5af2bd866f"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab5be5a73569a8cc642868a5af2bd866f"></a>
 int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1VertexEnumeration.html#ab5be5a73569a8cc642868a5af2bd866f">linearIndependance</a> (std::map&lt; int, <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt;&gt; collection, <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;candidateRef) const </td></tr>
-<tr class="memdesc:ab5be5a73569a8cc642868a5af2bd866f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Finds a fist vertex, detects the linealty spaces and adds the corresponding constrains. <br/></td></tr>
+<tr class="memdesc:ab5be5a73569a8cc642868a5af2bd866f"><td class="mdescLeft">&#160;</td><td class="mdescRight">If the candidate is independent from the collection, returns the smallest non nul coordinate, -1 otherwise. <br/></td></tr>
 <tr class="separator:ab5be5a73569a8cc642868a5af2bd866f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad11dcea8cb4b190dbb6a9d9f1af92567"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad11dcea8cb4b190dbb6a9d9f1af92567"></a>
-std::vector&lt; std::size_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1VertexEnumeration.html#ad11dcea8cb4b190dbb6a9d9f1af92567">findIndepHs</a> () const </td></tr>
-<tr class="memdesc:ad11dcea8cb4b190dbb6a9d9f1af92567"><td class="mdescLeft">&#160;</td><td class="mdescRight">If the candidate is independent from the collection, returns the smallest non nul coordinate, -1 otherwise. <br/></td></tr>
+<tr class="memitem:ad11dcea8cb4b190dbb6a9d9f1af92567"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::size_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1VertexEnumeration.html#ad11dcea8cb4b190dbb6a9d9f1af92567">findIndepHs</a> () const </td></tr>
 <tr class="separator:ad11dcea8cb4b190dbb6a9d9f1af92567"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a17b89fcbc0646b667a4f928fc6bbb4c4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1Point.html">Point</a>&lt; Number &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1VertexEnumeration.html#a17b89fcbc0646b667a4f928fc6bbb4c4">findIntersection</a> (const std::vector&lt; std::size_t &gt; &amp;selectionRef) const </td></tr>
 <tr class="separator:a17b89fcbc0646b667a4f928fc6bbb4c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af9cb5538f58da8c21e3e779eb7332ac2"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1VertexEnumeration.html#af9cb5538f58da8c21e3e779eb7332ac2">findPositiveConstrains</a> ()</td></tr>
+<tr class="memitem:af9cb5538f58da8c21e3e779eb7332ac2"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af9cb5538f58da8c21e3e779eb7332ac2"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1VertexEnumeration.html#af9cb5538f58da8c21e3e779eb7332ac2">findPositiveConstrains</a> ()</td></tr>
+<tr class="memdesc:af9cb5538f58da8c21e3e779eb7332ac2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Transform Ax&lt;=b into A'y&lt;=b' &amp; y&gt;=0. <br/></td></tr>
 <tr class="separator:af9cb5538f58da8c21e3e779eb7332ac2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a64c95b3ddb91524beede68a6b42e1d8d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a64c95b3ddb91524beede68a6b42e1d8d"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1VertexEnumeration.html#a64c95b3ddb91524beede68a6b42e1d8d">toGeneralCoordinates</a> ()</td></tr>
-<tr class="memdesc:a64c95b3ddb91524beede68a6b42e1d8d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Transform Ax&lt;=b into A'y&lt;=b' &amp; y&gt;=0. <br/></td></tr>
+<tr class="memdesc:a64c95b3ddb91524beede68a6b42e1d8d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts the positive cones and points into the original system of coordinates. <br/></td></tr>
 <tr class="separator:a64c95b3ddb91524beede68a6b42e1d8d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa9d3087ecb2d46a8e14d0959c7a0ad74"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa9d3087ecb2d46a8e14d0959c7a0ad74"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1VertexEnumeration.html#aa9d3087ecb2d46a8e14d0959c7a0ad74">findLinealtySpace</a> ()</td></tr>
-<tr class="memdesc:aa9d3087ecb2d46a8e14d0959c7a0ad74"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts the positive cones and points into the original system of coordinates. <br/></td></tr>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>findLinealtySpace</b> ()</td></tr>
 <tr class="separator:aa9d3087ecb2d46a8e14d0959c7a0ad74"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a030c826a5cd6853cc8ae5374b684e964"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a030c826a5cd6853cc8ae5374b684e964"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>addLinealtyConstrains</b> ()</td></tr>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1VertexEnumeration.html#a030c826a5cd6853cc8ae5374b684e964">addLinealtyConstrains</a> ()</td></tr>
+<tr class="memdesc:a030c826a5cd6853cc8ae5374b684e964"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds to halfspace set two halfspaces for each linealty direction to block it. <br/></td></tr>
 <tr class="separator:a030c826a5cd6853cc8ae5374b684e964"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
@@ -221,6 +229,24 @@ class hypro::VertexEnumeration&lt; Number &gt;</h3>
 
 <p>Definition at line <a class="el" href="vertexEnumeration_8h_source.html#l00009">9</a> of file <a class="el" href="vertexEnumeration_8h_source.html">vertexEnumeration.h</a>.</p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
+<a class="anchor" id="ad11dcea8cb4b190dbb6a9d9f1af92567"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;std::size_t&gt; <a class="el" href="classhypro_1_1VertexEnumeration.html">hypro::VertexEnumeration</a>&lt; Number &gt;::findIndepHs </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section return"><dt>Returns</dt><dd>A set of the index of d independent hyperplanes of mHsv. </dd></dl>
+
+</div>
+</div>
 <a class="anchor" id="a17b89fcbc0646b667a4f928fc6bbb4c4"></a>
 <div class="memitem">
 <div class="memproto">
@@ -233,24 +259,6 @@ template&lt;typename Number&gt; </div>
           <td class="paramtype">const std::vector&lt; std::size_t &gt; &amp;&#160;</td>
           <td class="paramname"><em>selectionRef</em></td><td>)</td>
           <td> const</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<dl class="section return"><dt>Returns</dt><dd>A set of the index of d independent hyperplanes of mHsv. </dd></dl>
-
-</div>
-</div>
-<a class="anchor" id="af9cb5538f58da8c21e3e779eb7332ac2"></a>
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename Number&gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">bool <a class="el" href="classhypro_1_1VertexEnumeration.html">hypro::VertexEnumeration</a>&lt; Number &gt;::findPositiveConstrains </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
         </tr>
       </table>
 </div><div class="memdoc">

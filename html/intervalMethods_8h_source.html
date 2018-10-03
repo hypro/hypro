@@ -31,7 +31,7 @@
   <td id="projectlogo"><img alt="Logo" src="hypro_Logo.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">HyPro
-   &#160;<span id="projectnumber">18.09</span>
+   &#160;<span id="projectnumber">18.10</span>
    </div>
    <div id="projectbrief">A Toolbox for the Reachability Analysis of Hybrid Systems using Geometric Approximations</div>
   </td>
@@ -142,53 +142,16 @@ $(document).ready(function(){initNavTree('intervalMethods_8h_source.html','');})
 <div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;</div>
 <div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;        }</div>
 <div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;        <span class="comment">/*</span></div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;<span class="comment">        carl::MultivariatePolynomial&lt;Number&gt; hspNormal;</span></div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;<span class="comment">        std::map&lt;carl::Variable, carl::Interval&lt;Number&gt;&gt; intervalMap;</span></div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;<span class="comment">        std::vector&lt;carl::Variable&gt; posVector; // maps hypro dimension to carl::Variable</span></div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;<span class="comment"></span></div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;<span class="comment">        for(Eigen::Index pos = 0; pos &lt; hsp.normal().rows(); ++pos) {</span></div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;<span class="comment">            carl::Variable tmp = carl::freshVariable(carl::VariableType::VT_REAL);</span></div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;<span class="comment">            intervalMap[tmp] = intervals.at(pos);</span></div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;<span class="comment">            if(hsp.normal()(pos) != 0){</span></div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;<span class="comment">                hspNormal.addTerm(carl::Term&lt;Number&gt;(hsp.normal()(pos),tmp,1));</span></div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;<span class="comment">            }</span></div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;<span class="comment">            posVector.push_back(tmp);</span></div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;<span class="comment">        }</span></div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;<span class="comment"></span></div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;<span class="comment">        carl::Variable constant = carl::freshVariable(carl::VariableType::VT_REAL);</span></div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;<span class="comment">        hspNormal.addTerm(carl::Term&lt;Number&gt;(Number(-1),constant,1));</span></div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;<span class="comment">        intervalMap[constant] = carl::Interval&lt;Number&gt;(hsp.offset(),carl::BoundType::INFTY,hsp.offset(),carl::BoundType::WEAK);</span></div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;<span class="comment"></span></div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;<span class="comment">        std::cout &lt;&lt; &quot;Resulting Polynomial: &quot; &lt;&lt; hspNormal &lt;&lt; std::endl;</span></div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;<span class="comment"></span></div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;<span class="comment">        // contraction</span></div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;<span class="comment">        for(unsigned i = 0; i &lt; hspNormal.size(); ++i){</span></div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;<span class="comment">            if(hspNormal[i].coeff() != 0) {</span></div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;<span class="comment">                std::cout &lt;&lt; &quot;Solved for &quot; &lt;&lt; hspNormal[i].monomial()-&gt;getSingleVariable();</span></div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;<span class="comment">                carl::MultivariatePolynomial&lt;Number&gt; t = (hspNormal - hspNormal[i]) / Number(-hspNormal[i].coeff());</span></div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;<span class="comment">                std::cout &lt;&lt; &quot;: &quot; &lt;&lt; t &lt;&lt; std::endl;</span></div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;<span class="comment">                carl::Interval&lt;Number&gt; newIntv = carl::IntervalEvaluation::evaluate(t,intervalMap);</span></div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;<span class="comment">                std::cout &lt;&lt; &quot;New interval: &quot; &lt;&lt; newIntv &lt;&lt; std::endl;</span></div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;<span class="comment">                assert(hspNormal[i].monomial()-&gt;isLinear());</span></div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;<span class="comment">                auto tmp = intervalMap[hspNormal[i].monomial()-&gt;getSingleVariable()].intersect(newIntv);</span></div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;<span class="comment">                std::cout &lt;&lt; &quot;After intersection: &quot; &lt;&lt; tmp &lt;&lt; std::endl;</span></div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;<span class="comment">                intervalMap[hspNormal[i].monomial()-&gt;getSingleVariable()] = tmp;</span></div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;<span class="comment">            }</span></div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;<span class="comment">        }</span></div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;<span class="comment"></span></div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;<span class="comment">        // creation of result vector</span></div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;<span class="comment">        std::vector&lt;carl::Interval&lt;Number&gt;&gt; res;</span></div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;<span class="comment">        for(Eigen::Index i = 0; i &lt; hsp.normal().rows(); ++i) {</span></div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;<span class="comment">            res.emplace_back(intervalMap[posVector[i]]);</span></div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;<span class="comment">        }</span></div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;<span class="comment"></span></div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;<span class="comment">        return res;</span></div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;<span class="comment">        */</span></div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;    }</div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;</div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;} <span class="comment">// namespace hypro</span></div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    }</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> Number&gt;</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    <span class="keywordtype">void</span> reduceIntervalsNumberRepresentation( std::vector&lt;carl::Interval&lt;Number&gt;&gt;&amp; , <span class="keywordtype">unsigned</span> ) {</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;        <span class="comment">// do nothing.</span></div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    }</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    <span class="keywordtype">void</span> reduceIntervalsNumberRepresentation( std::vector&lt;carl::Interval&lt;mpq_class&gt;&gt;&amp; intervals, <span class="keywordtype">unsigned</span> limit);</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;} <span class="comment">// namespace hypro</span></div>
 <div class="ttc" id="classhypro_1_1Halfspace_html_acc9193b4c2180fe7a04544d0e8295fa5"><div class="ttname"><a href="classhypro_1_1Halfspace.html#acc9193b4c2180fe7a04544d0e8295fa5">hypro::Halfspace::offset</a></div><div class="ttdeci">Number offset() const </div><div class="ttdoc">Returns the plane offset. </div></div>
 <div class="ttc" id="classhypro_1_1Halfspace_html"><div class="ttname"><a href="classhypro_1_1Halfspace.html">hypro::Halfspace</a></div><div class="ttdef"><b>Definition:</b> <a href="Halfspace_8h_source.html#l00024">Halfspace.h:24</a></div></div>
 <div class="ttc" id="namespacehypro_html_a270d5169850cd2c134b6fb4affb1ec3c"><div class="ttname"><a href="namespacehypro.html#a270d5169850cd2c134b6fb4affb1ec3c">hypro::icpIntersectHalfspace</a></div><div class="ttdeci">bool icpIntersectHalfspace(std::vector&lt; carl::Interval&lt; Number &gt;&gt; &amp;intervals, const Halfspace&lt; Number &gt; &amp;hsp)</div><div class="ttdoc">Performs intersection of a vector of intervals with a halfspace. </div><div class="ttdef"><b>Definition:</b> <a href="intervalMethods_8h_source.html#l00020">intervalMethods.h:20</a></div></div>
