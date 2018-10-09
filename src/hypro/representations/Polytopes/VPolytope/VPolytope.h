@@ -151,6 +151,9 @@ class VPolytopeT : public GeometricObject<Number, VPolytopeT<Number,Converter>> 
 	 */
 	void clear();
 
+	EvaluationResult<Number> evaluate(const matrix_t<Number>& directions) const __attribute__((warning("not implemented")));
+	std::vector<EvaluationResult<Number>> multiEvaluate(const matrix_t<Number>& directions, bool useExact = true) const __attribute__((warning("not implemented")));
+
 	/***************************************************************************
 	 * Getters, Setters, Iterators
 	 **************************************************************************/

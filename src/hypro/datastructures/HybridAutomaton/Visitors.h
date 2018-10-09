@@ -141,12 +141,14 @@ public:
  				#else
  					assert(false && "CANNOT CONVERT TO TYPE PPL POLYTOPE. Maybe set HYPRO_USE_PPL to true?");
  				#endif
- 			}
- 			
+ 			}	
  			case representation_name::constraint_set: {
  				ConstraintSet<Number> tmp = Converter<Number>::toConstraintSet(lhs);
  				return tmp;
  				break;
+ 			}
+ 			case representation_name::SFN: {
+ 				assert(false && "NOT IMPLEMNTED YET");
  			}
  			case representation_name::taylor_model:
  				assert(false && "CANNOT CONVERT TO TYPE TAYLOR MODEL.");

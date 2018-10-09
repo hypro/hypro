@@ -40,6 +40,7 @@ struct Matrix
 {
 	int entry;
 	Matrix(int m) : entry(m) {}
+
 };
 
 //A node in the tree. Knows its children and its height in the tree. (Height only needed for printing)
@@ -123,9 +124,5 @@ public:
 	virtual std::vector<EvalResult> compute(Matrix& m) = 0; //{ std::cout << "USED COMPUTE FROM NODE SUPERCLASS.\n"; assert(false); }
 	//For operations - aggregate
 	virtual std::vector<EvalResult> aggregate(std::vector<std::vector<EvalResult>>& resultStackBack) { std::cout << "USED AGGREGATE FROM NODE SUPERCLASS.\n"; assert(false); }
-
-	//For pseudo size
-	//virtual unsigned size(unsigned sizeBefore){ return sizeBefore+1; }
-	
 };
 

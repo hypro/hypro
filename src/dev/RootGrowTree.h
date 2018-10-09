@@ -1,3 +1,4 @@
+
 #include <functional>
 #include <cassert>
 #include "RootGrowNode.h"
@@ -235,5 +236,5 @@ public:
 		return Res();
 	}
 };
-
+ 
 

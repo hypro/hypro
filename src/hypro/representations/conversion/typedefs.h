@@ -1,3 +1,6 @@
+template<typename Number>
+using SupportFunctionNew = typename Converter<Number>::SupportFunctionNew;
+
 
 template<typename Number>
 using Box = typename Converter<Number>::Box;
