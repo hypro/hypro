@@ -126,10 +126,10 @@ $(document).ready(function(){initNavTree('Dictionary_8h_source.html','');});
 <div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="keyword">template</span>&lt;<span class="keyword">typename</span> Number&gt;</div>
 <div class="line"><a name="l00024"></a><span class="lineno"><a class="line" href="classhypro_1_1Dictionary.html">   24</a></span>&#160;<span class="keyword">class </span><a class="code" href="classhypro_1_1Dictionary.html">Dictionary</a> {</div>
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;    <a class="code" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t&lt;Number&gt;</a>    mDictionary;  <span class="comment">// table</span></div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;    std::vector&lt;Eigen::Index&gt; mB;     <span class="comment">// basis</span></div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;    std::vector&lt;Eigen::Index&gt; mN;     <span class="comment">// co-basis</span></div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;    <a class="code" href="classhypro_1_1ConstrainSet.html">ConstrainSet&lt;Number&gt;</a> mConstrains; <span class="comment">// original constraints</span></div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;    <a class="code" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t&lt;Number&gt;</a>    mDictionary;</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;    std::vector&lt;Eigen::Index&gt; mB;</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;    std::vector&lt;Eigen::Index&gt; mN;</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;    <a class="code" href="classhypro_1_1ConstrainSet.html">ConstrainSet&lt;Number&gt;</a> mConstrains;</div>
 <div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;</div>
 <div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="keyword">public</span>:</div>
 <div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;    <a class="code" href="classhypro_1_1Dictionary.html">Dictionary</a>() = <span class="keywordflow">default</span>;</div>
@@ -145,141 +145,128 @@ $(document).ready(function(){initNavTree('Dictionary_8h_source.html','');});
 <div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;</div>
 <div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    <a class="code" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t&lt;Number&gt;</a> tableau() <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    Number <span class="keyword">get</span> (Eigen::Index i,Eigen::Index j) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    </div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhypro_1_1Dictionary.html#a2ac0e068c6e99b0ff8d6d1804c7e8e6a">setValue</a>(Eigen::Index i, Eigen::Index j, Number val);</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    <span class="keywordtype">void</span> printDictionary() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    Number <span class="keyword">get</span> (Eigen::Index i,Eigen::Index j) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhypro_1_1Dictionary.html#a2ac0e068c6e99b0ff8d6d1804c7e8e6a">setValue</a>(Eigen::Index i, Eigen::Index j, Number val);</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhypro_1_1Dictionary.html#af60c39f6eb9d35e23d1a9925a3ede97d">printDictionary</a>() <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhypro_1_1Dictionary.html#a40f6b112fa5fc8e729f1d78357fb6f8a">pivotDictionary</a>(Eigen::Index i, Eigen::Index j);</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhypro_1_1Dictionary.html#aa33d4272de177048425bb86842f1c027">pivot</a>(Eigen::Index i, Eigen::Index j);</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;</div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="classhypro_1_1Dictionary.html#a025dcac1be6208584cbf3d59bd9463f2">selectCrissCrossPivot</a>(Eigen::Index&amp; i, Eigen::Index&amp; j);</div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;</div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="classhypro_1_1Dictionary.html#a253f033e04084926ba46d144c63e283e">fixOutOfBounds</a>();</div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;    </div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="classhypro_1_1Dictionary.html#a7b7af3f5b87421c2d43bfb84604dd122">selectBlandPivot</a>(Eigen::Index&amp; i, Eigen::Index&amp; j) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;    </div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="classhypro_1_1Dictionary.html#ac38453a0968a860de6efca8880f6011b">selectDualBlandPivot</a>(Eigen::Index&amp; i, Eigen::Index&amp; j, <span class="keyword">const</span> std::vector&lt;Eigen::Index&gt; availableIndices);<span class="comment">//</span></div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    <span class="keywordtype">void</span> pivotDictionary(Eigen::Index i, Eigen::Index j);</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhypro_1_1Dictionary.html#aa33d4272de177048425bb86842f1c027">pivot</a>(Eigen::Index i, Eigen::Index j);</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="classhypro_1_1Dictionary.html#a025dcac1be6208584cbf3d59bd9463f2">selectCrissCrossPivot</a>(Eigen::Index&amp; i, Eigen::Index&amp; j);</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="classhypro_1_1Dictionary.html#a253f033e04084926ba46d144c63e283e">fixOutOfBounds</a>();</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="classhypro_1_1Dictionary.html#a7b7af3f5b87421c2d43bfb84604dd122">selectBlandPivot</a>(Eigen::Index&amp; i, Eigen::Index&amp; j) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="classhypro_1_1Dictionary.html#ac38453a0968a860de6efca8880f6011b">selectDualBlandPivot</a>(Eigen::Index&amp; i, Eigen::Index&amp; j, <span class="keyword">const</span> std::vector&lt;Eigen::Index&gt; availableIndices);<span class="comment">//</span></div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;<span class="comment"></span>    <span class="keywordtype">bool</span> <a class="code" href="classhypro_1_1Dictionary.html#af5b45608cedaf14db298ff65d2424c4f">isPrimalFeasible</a>() <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;</div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;    <span class="keywordtype">bool</span> isPrimalFeasible() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;    <span class="keywordtype">bool</span> isDualFeasible() <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;</div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;    <span class="keywordtype">bool</span> isDualFeasible() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;    <span class="keywordtype">bool</span> isOptimal() <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;</div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;    <span class="keywordtype">bool</span> isOptimal() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;</div>
-<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="classhypro_1_1Dictionary.html#a01733c1d6fece3171d984ed419d7b1e7">reverse</a>(<span class="keyword">const</span> Eigen::Index i, <span class="keyword">const</span> Eigen::Index j);</div>
-<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;    <span class="keywordtype">bool</span> reverse_old(<span class="keyword">const</span> Eigen::Index i, <span class="keyword">const</span> Eigen::Index j);<span class="comment">//before optimization</span></div>
-<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;</div>
-<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;    <span class="keywordtype">bool</span> reverseDual(<span class="keyword">const</span> Eigen::Index i, <span class="keyword">const</span> Eigen::Index j, <span class="keyword">const</span> std::vector&lt;Eigen::Index&gt;&amp; availableIndices);</div>
-<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;    <span class="keywordtype">bool</span> reverseDual_old(<span class="keyword">const</span> Eigen::Index i, <span class="keyword">const</span> Eigen::Index j, <span class="keyword">const</span> std::vector&lt;Eigen::Index&gt; availableIndices);</div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;    <span class="keywordtype">bool</span> reverse(<span class="keyword">const</span> Eigen::Index i, <span class="keyword">const</span> Eigen::Index j);</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;    <span class="keywordtype">bool</span> reverse_old(<span class="keyword">const</span> Eigen::Index i, <span class="keyword">const</span> Eigen::Index j);<span class="comment">//before optimization</span></div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;<span class="comment"></span>    <span class="keywordtype">bool</span> <a class="code" href="classhypro_1_1Dictionary.html#ac6a5b2e8beccedb8f19b820617055b91">reverseDual</a>(<span class="keyword">const</span> Eigen::Index i, <span class="keyword">const</span> Eigen::Index j, <span class="keyword">const</span> std::vector&lt;Eigen::Index&gt;&amp; availableIndices);</div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;    <span class="keywordtype">bool</span> reverseDual_old(<span class="keyword">const</span> Eigen::Index i, <span class="keyword">const</span> Eigen::Index j, <span class="keyword">const</span> std::vector&lt;Eigen::Index&gt; availableIndices);</div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;</div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;    <span class="keywordtype">bool</span> isLexMin();</div>
 <div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;</div>
-<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;    <span class="keywordtype">bool</span> isLexMin();</div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;    <a class="code" href="classhypro_1_1Point.html">Point&lt;Number&gt;</a> toPoint() <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;</div>
-<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;    <a class="code" href="classhypro_1_1Point.html">Point&lt;Number&gt;</a> toPoint() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;</div>
-<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;    std::vector&lt;Eigen::Index&gt; <a class="code" href="classhypro_1_1Dictionary.html#ab55276d984eb36c7c4b213427505f944">findZeros</a>();</div>
-<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;    </div>
-<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhypro_1_1Dictionary.html#ad6fe4718db9d0e3154d25ec35db32b2b">setOnes</a>(<span class="keyword">const</span> std::vector&lt;Eigen::Index&gt;&amp; indices);</div>
-<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;</div>
-<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;    <span class="keywordtype">void</span> setZeros(<span class="keyword">const</span> std::vector&lt;Eigen::Index&gt;&amp; indices);</div>
-<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;</div>
-<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhypro_1_1Dictionary.html#a75e63ae2dfe9f4230904067e12d854bd">nonSlackToBase</a>();</div>
-<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;    </div>
-<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhypro_1_1Dictionary.html#a75e63ae2dfe9f4230904067e12d854bd">nonSlackToBase</a>(std::vector&lt;<a class="code" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t&lt;Number&gt;</a>&gt;&amp; linealtySpace);</div>
-<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;</div>
-<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;    std::set&lt;Eigen::Index&gt; <a class="code" href="classhypro_1_1Dictionary.html#aadcf6cd0a47ee7c3770f2b99df1aa2a5">toCobase</a>(<span class="keyword">const</span> std::set&lt;Eigen::Index&gt;&amp; saturatedIndices);</div>
-<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;    </div>
-<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhypro_1_1Dictionary.html#af3c3bcc3b4d49d42dbb40d4688aa065f">pushToBounds</a>(Eigen::Index colIndex);</div>
-<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;    </div>
-<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;    std::set&lt;vector_t&lt;Number&gt;&gt; findCones();</div>
-<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;</div>
-<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;    <span class="keyword">friend</span> <span class="keywordtype">bool</span> operator==(<span class="keyword">const</span> <a class="code" href="classhypro_1_1Dictionary.html">Dictionary&lt;Number&gt;</a>&amp; lhs, <span class="keyword">const</span> <a class="code" href="classhypro_1_1Dictionary.html">Dictionary&lt;Number&gt;</a>&amp; rhs) {</div>
-<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;        <span class="keywordflow">if</span>(lhs.mB != rhs.mB) {</div>
-<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;            <span class="comment">//std::cout &lt;&lt; __func__ &lt;&lt; &quot; Basis not equal.&quot; &lt;&lt; std::endl;</span></div>
-<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;            <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;        }</div>
-<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;</div>
-<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;        <span class="keywordflow">if</span>(lhs.mN != rhs.mN) {</div>
-<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;            <span class="comment">//std::cout &lt;&lt; __func__ &lt;&lt; &quot; CoBasis not equal.&quot; &lt;&lt; std::endl;</span></div>
-<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;            <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;        }</div>
-<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;</div>
-<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;        <span class="keywordflow">if</span>(lhs.mConstrains != rhs.mConstrains) {</div>
-<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;            <span class="comment">//std::cout &lt;&lt; __func__ &lt;&lt; &quot; ConstraintSet not equal.&quot; &lt;&lt; std::endl;</span></div>
-<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;            <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;        }</div>
-<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;</div>
-<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;        <span class="keywordflow">if</span>(lhs.mDictionary != rhs.mDictionary) {</div>
-<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;            <span class="comment">//std::cout &lt;&lt; __func__ &lt;&lt; &quot; Tableau not equal.&quot; &lt;&lt; std::endl;</span></div>
-<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;            <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;        }</div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;    std::vector&lt;Eigen::Index&gt; findZeros();</div>
+<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhypro_1_1Dictionary.html#ad6fe4718db9d0e3154d25ec35db32b2b">setOnes</a>(<span class="keyword">const</span> std::vector&lt;Eigen::Index&gt;&amp; indices);</div>
+<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhypro_1_1Dictionary.html#a3374eb13618d1f2f6676b8f834e3a08c">setZeros</a>(<span class="keyword">const</span> std::vector&lt;Eigen::Index&gt;&amp; indices);</div>
+<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;</div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;    <span class="keywordtype">void</span> nonSlackToBase();</div>
+<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;    <span class="keywordtype">void</span> nonSlackToBase(std::vector&lt;<a class="code" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t&lt;Number&gt;</a>&gt;&amp; linealtySpace);</div>
+<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;</div>
+<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;    std::set&lt;Eigen::Index&gt; toCobase(<span class="keyword">const</span> std::set&lt;Eigen::Index&gt;&amp; saturatedIndices);</div>
+<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhypro_1_1Dictionary.html#af3c3bcc3b4d49d42dbb40d4688aa065f">pushToBounds</a>(Eigen::Index colIndex);</div>
+<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;    std::set&lt;vector_t&lt;Number&gt;&gt; <a class="code" href="classhypro_1_1Dictionary.html#a7142b23cb796dd2a8a0424a60e2a5fa8">findCones</a>();</div>
+<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;</div>
+<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;    <span class="keyword">friend</span> <span class="keywordtype">bool</span> operator==(<span class="keyword">const</span> <a class="code" href="classhypro_1_1Dictionary.html">Dictionary&lt;Number&gt;</a>&amp; lhs, <span class="keyword">const</span> <a class="code" href="classhypro_1_1Dictionary.html">Dictionary&lt;Number&gt;</a>&amp; rhs) {</div>
+<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;        <span class="keywordflow">if</span>(lhs.mB != rhs.mB) {</div>
+<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;            <span class="comment">//std::cout &lt;&lt; __func__ &lt;&lt; &quot; Basis not equal.&quot; &lt;&lt; std::endl;</span></div>
+<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;            <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;        }</div>
+<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;</div>
+<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;        <span class="keywordflow">if</span>(lhs.mN != rhs.mN) {</div>
+<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;            <span class="comment">//std::cout &lt;&lt; __func__ &lt;&lt; &quot; CoBasis not equal.&quot; &lt;&lt; std::endl;</span></div>
+<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;            <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;        }</div>
+<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;</div>
+<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;        <span class="keywordflow">if</span>(lhs.mConstrains != rhs.mConstrains) {</div>
+<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;            <span class="comment">//std::cout &lt;&lt; __func__ &lt;&lt; &quot; ConstraintSet not equal.&quot; &lt;&lt; std::endl;</span></div>
+<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;            <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;        }</div>
+<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;</div>
+<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;        <span class="keywordflow">if</span>(lhs.mDictionary != rhs.mDictionary) {</div>
+<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;            <span class="comment">//std::cout &lt;&lt; __func__ &lt;&lt; &quot; Tableau not equal.&quot; &lt;&lt; std::endl;</span></div>
+<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;            <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;        }</div>
+<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;</div>
+<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;    }</div>
 <div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;</div>
-<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
-<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;    }</div>
-<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;</div>
-<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;    <span class="keyword">friend</span> <span class="keywordtype">bool</span> operator!=(<span class="keyword">const</span> <a class="code" href="classhypro_1_1Dictionary.html">Dictionary&lt;Number&gt;</a>&amp; lhs, <span class="keyword">const</span> <a class="code" href="classhypro_1_1Dictionary.html">Dictionary&lt;Number&gt;</a>&amp; rhs) {</div>
-<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;        <span class="keywordflow">return</span> !(lhs==rhs);</div>
-<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;    }</div>
-<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;</div>
-<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;    <span class="keyword">friend</span> std::ostream&amp; operator&lt;&lt;( std::ostream&amp; _ostr, const Dictionary&lt;Number&gt;&amp; d ) {</div>
-<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;        uint32_t i,j;</div>
-<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;        _ostr &lt;&lt; <span class="stringliteral">&quot;\n mB size=&quot;</span>;</div>
-<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;        _ostr &lt;&lt; d.basis().size();</div>
-<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;        _ostr &lt;&lt; <span class="stringliteral">&quot;\n mN size=&quot;</span>;</div>
-<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;        _ostr &lt;&lt; d.cobasis().size();</div>
-<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;        _ostr &lt;&lt; <span class="stringliteral">&quot;\n mDictionary size=&quot;</span>;</div>
-<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;        _ostr &lt;&lt; d.tableau().size();</div>
-<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;        _ostr &lt;&lt; <span class="stringliteral">&quot;\n \n&quot;</span>;</div>
-<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;</div>
-<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;        _ostr &lt;&lt;<span class="stringliteral">&quot;mB = &quot;</span>;</div>
-<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;        <span class="keywordflow">for</span>(i=0; i&lt;d.basis().size(); ++i){</div>
-<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;            _ostr &lt;&lt; d.basis()[i];</div>
-<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;            _ostr &lt;&lt; <span class="stringliteral">&quot;;  &quot;</span>;</div>
-<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;        }</div>
-<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;        _ostr &lt;&lt;<span class="stringliteral">&quot;\nmN = &quot;</span>;</div>
-<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;        <span class="keywordflow">for</span>(j=0; j&lt;d.cobasis().size(); ++j){</div>
-<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;            _ostr &lt;&lt; d.cobasis()[j];</div>
-<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;            _ostr &lt;&lt; <span class="stringliteral">&quot;;  &quot;</span>;</div>
-<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;        }</div>
-<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;        _ostr &lt;&lt; <span class="stringliteral">&quot;\n \n&quot;</span>;</div>
-<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;</div>
-<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;        <span class="keywordflow">for</span>(i=0; i&lt;d.basis().size(); ++i){</div>
-<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;            <span class="keywordflow">for</span>(j=0; j&lt;d.cobasis().size(); ++j){</div>
-<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;                _ostr &lt;&lt; d.tableau()(i,j);</div>
-<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;                _ostr &lt;&lt; <span class="stringliteral">&quot; ; &quot;</span>;</div>
-<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;            }</div>
-<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;            _ostr &lt;&lt; <span class="stringliteral">&quot;\n&quot;</span>;</div>
-<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;        }</div>
-<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;        _ostr.flush();</div>
-<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;        <span class="keywordflow">return</span> _ostr;</div>
-<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;    }</div>
-<div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160;};</div>
-<div class="line"><a name="l00214"></a><span class="lineno">  214</span>&#160;</div>
-<div class="line"><a name="l00215"></a><span class="lineno">  215</span>&#160;} <span class="comment">// namespace hypro</span></div>
-<div class="line"><a name="l00216"></a><span class="lineno">  216</span>&#160;</div>
-<div class="line"><a name="l00217"></a><span class="lineno">  217</span>&#160;<span class="preprocessor">#include &quot;Dictionary.tpp&quot;</span></div>
-<div class="ttc" id="classhypro_1_1Dictionary_html_a01733c1d6fece3171d984ed419d7b1e7"><div class="ttname"><a href="classhypro_1_1Dictionary.html#a01733c1d6fece3171d984ed419d7b1e7">hypro::Dictionary::reverse</a></div><div class="ttdeci">bool reverse(const Eigen::Index i, const Eigen::Index j)</div><div class="ttdoc">is (i,j) the pivot given by the Bland&#39;s rule for the dictionary obtained by pivoting around (i...</div></div>
-<div class="ttc" id="classhypro_1_1Dictionary_html_aa33d4272de177048425bb86842f1c027"><div class="ttname"><a href="classhypro_1_1Dictionary.html#aa33d4272de177048425bb86842f1c027">hypro::Dictionary::pivot</a></div><div class="ttdeci">void pivot(Eigen::Index i, Eigen::Index j)</div><div class="ttdoc">The whole pivot. </div></div>
+<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;    <span class="keyword">friend</span> <span class="keywordtype">bool</span> operator!=(<span class="keyword">const</span> <a class="code" href="classhypro_1_1Dictionary.html">Dictionary&lt;Number&gt;</a>&amp; lhs, <span class="keyword">const</span> <a class="code" href="classhypro_1_1Dictionary.html">Dictionary&lt;Number&gt;</a>&amp; rhs) {</div>
+<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;        <span class="keywordflow">return</span> !(lhs==rhs);</div>
+<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;    }</div>
+<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;</div>
+<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;    <span class="keyword">friend</span> std::ostream&amp; operator&lt;&lt;( std::ostream&amp; _ostr, const Dictionary&lt;Number&gt;&amp; d ) {</div>
+<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;        uint32_t i,j;</div>
+<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;        _ostr &lt;&lt; <span class="stringliteral">&quot;\n mB size=&quot;</span>;</div>
+<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;        _ostr &lt;&lt; d.basis().size();</div>
+<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;        _ostr &lt;&lt; <span class="stringliteral">&quot;\n mN size=&quot;</span>;</div>
+<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;        _ostr &lt;&lt; d.cobasis().size();</div>
+<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;        _ostr &lt;&lt; <span class="stringliteral">&quot;\n mDictionary size=&quot;</span>;</div>
+<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;        _ostr &lt;&lt; d.tableau().size();</div>
+<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;        _ostr &lt;&lt; <span class="stringliteral">&quot;\n \n&quot;</span>;</div>
+<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;</div>
+<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;        _ostr &lt;&lt;<span class="stringliteral">&quot;mB = &quot;</span>;</div>
+<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;        <span class="keywordflow">for</span>(i=0; i&lt;d.basis().size(); ++i){</div>
+<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;            _ostr &lt;&lt; d.basis()[i];</div>
+<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;            _ostr &lt;&lt; <span class="stringliteral">&quot;;  &quot;</span>;</div>
+<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;        }</div>
+<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;        _ostr &lt;&lt;<span class="stringliteral">&quot;\nmN = &quot;</span>;</div>
+<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;        <span class="keywordflow">for</span>(j=0; j&lt;d.cobasis().size(); ++j){</div>
+<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;            _ostr &lt;&lt; d.cobasis()[j];</div>
+<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;            _ostr &lt;&lt; <span class="stringliteral">&quot;;  &quot;</span>;</div>
+<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;        }</div>
+<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;        _ostr &lt;&lt; <span class="stringliteral">&quot;\n \n&quot;</span>;</div>
+<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;</div>
+<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;        <span class="keywordflow">for</span>(i=0; i&lt;d.basis().size(); ++i){</div>
+<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;            <span class="keywordflow">for</span>(j=0; j&lt;d.cobasis().size(); ++j){</div>
+<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;                _ostr &lt;&lt; d.tableau()(i,j);</div>
+<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;                _ostr &lt;&lt; <span class="stringliteral">&quot; ; &quot;</span>;</div>
+<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;            }</div>
+<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;            _ostr &lt;&lt; <span class="stringliteral">&quot;\n&quot;</span>;</div>
+<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;        }</div>
+<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;        _ostr.flush();</div>
+<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;        <span class="keywordflow">return</span> _ostr;</div>
+<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;    }</div>
+<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;};</div>
+<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;</div>
+<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;} <span class="comment">// namespace hypro</span></div>
+<div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160;</div>
+<div class="line"><a name="l00214"></a><span class="lineno">  214</span>&#160;<span class="preprocessor">#include &quot;Dictionary.tpp&quot;</span></div>
+<div class="ttc" id="classhypro_1_1Dictionary_html_af60c39f6eb9d35e23d1a9925a3ede97d"><div class="ttname"><a href="classhypro_1_1Dictionary.html#af60c39f6eb9d35e23d1a9925a3ede97d">hypro::Dictionary::printDictionary</a></div><div class="ttdeci">void printDictionary() const </div><div class="ttdoc">set mDicionary(i,j) to val. </div></div>
+<div class="ttc" id="classhypro_1_1Dictionary_html_aa33d4272de177048425bb86842f1c027"><div class="ttname"><a href="classhypro_1_1Dictionary.html#aa33d4272de177048425bb86842f1c027">hypro::Dictionary::pivot</a></div><div class="ttdeci">void pivot(Eigen::Index i, Eigen::Index j)</div><div class="ttdoc">Pivot expected ‘)’ before ‘&lt;’ tokenthe dictionary, no modification made to mB and mN...</div></div>
 <div class="ttc" id="classhypro_1_1ConstrainSet_html"><div class="ttname"><a href="classhypro_1_1ConstrainSet.html">hypro::ConstrainSet</a></div><div class="ttdef"><b>Definition:</b> <a href="ConstrainSet_8h_source.html#l00008">ConstrainSet.h:8</a></div></div>
 <div class="ttc" id="classhypro_1_1Point_html"><div class="ttname"><a href="classhypro_1_1Point.html">hypro::Point</a></div><div class="ttdoc">Class for a point. </div><div class="ttdef"><b>Definition:</b> <a href="Point_8h_source.html#l00025">Point.h:25</a></div></div>
 <div class="ttc" id="namespacehypro_html_a52a4896e811a0710bcfc5a410a780034"><div class="ttname"><a href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">hypro::matrix_t</a></div><div class="ttdeci">Eigen::Matrix&lt; Number, Eigen::Dynamic, Eigen::Dynamic &gt; matrix_t</div><div class="ttdef"><b>Definition:</b> <a href="types_8h_source.html#l00026">types.h:26</a></div></div>
-<div class="ttc" id="classhypro_1_1Dictionary_html_aadcf6cd0a47ee7c3770f2b99df1aa2a5"><div class="ttname"><a href="classhypro_1_1Dictionary.html#aadcf6cd0a47ee7c3770f2b99df1aa2a5">hypro::Dictionary::toCobase</a></div><div class="ttdeci">std::set&lt; Eigen::Index &gt; toCobase(const std::set&lt; Eigen::Index &gt; &amp;saturatedIndices)</div><div class="ttdoc">Puts the saturated variable to the cobasis. </div></div>
+<div class="ttc" id="classhypro_1_1Dictionary_html_af5b45608cedaf14db298ff65d2424c4f"><div class="ttname"><a href="classhypro_1_1Dictionary.html#af5b45608cedaf14db298ff65d2424c4f">hypro::Dictionary::isPrimalFeasible</a></div><div class="ttdeci">bool isPrimalFeasible() const </div></div>
 <div class="ttc" id="classhypro_1_1Dictionary_html"><div class="ttname"><a href="classhypro_1_1Dictionary.html">hypro::Dictionary</a></div><div class="ttdef"><b>Definition:</b> <a href="Dictionary_8h_source.html#l00024">Dictionary.h:24</a></div></div>
-<div class="ttc" id="classhypro_1_1Dictionary_html_a2ac0e068c6e99b0ff8d6d1804c7e8e6a"><div class="ttname"><a href="classhypro_1_1Dictionary.html#a2ac0e068c6e99b0ff8d6d1804c7e8e6a">hypro::Dictionary::setValue</a></div><div class="ttdeci">void setValue(Eigen::Index i, Eigen::Index j, Number val)</div><div class="ttdoc">set mDicionary(i,j) to val. </div></div>
-<div class="ttc" id="classhypro_1_1Dictionary_html_a025dcac1be6208584cbf3d59bd9463f2"><div class="ttname"><a href="classhypro_1_1Dictionary.html#a025dcac1be6208584cbf3d59bd9463f2">hypro::Dictionary::selectCrissCrossPivot</a></div><div class="ttdeci">bool selectCrissCrossPivot(Eigen::Index &amp;i, Eigen::Index &amp;j)</div><div class="ttdoc">Selects the next pivot according to CrissCross&#39;s rule. </div></div>
-<div class="ttc" id="classhypro_1_1Dictionary_html_a40f6b112fa5fc8e729f1d78357fb6f8a"><div class="ttname"><a href="classhypro_1_1Dictionary.html#a40f6b112fa5fc8e729f1d78357fb6f8a">hypro::Dictionary::pivotDictionary</a></div><div class="ttdeci">void pivotDictionary(Eigen::Index i, Eigen::Index j)</div><div class="ttdoc">Pivot expected ‘)’ before ‘&lt;’ tokenthe dictionary, no modification made to mB and mN...</div></div>
+<div class="ttc" id="classhypro_1_1Dictionary_html_a7142b23cb796dd2a8a0424a60e2a5fa8"><div class="ttname"><a href="classhypro_1_1Dictionary.html#a7142b23cb796dd2a8a0424a60e2a5fa8">hypro::Dictionary::findCones</a></div><div class="ttdeci">std::set&lt; vector_t&lt; Number &gt; &gt; findCones()</div><div class="ttdoc">Tries to push the corresponding variable to its bound, if another bound is reached before...</div></div>
+<div class="ttc" id="classhypro_1_1Dictionary_html_a3374eb13618d1f2f6676b8f834e3a08c"><div class="ttname"><a href="classhypro_1_1Dictionary.html#a3374eb13618d1f2f6676b8f834e3a08c">hypro::Dictionary::setZeros</a></div><div class="ttdeci">void setZeros(const std::vector&lt; Eigen::Index &gt; &amp;indices)</div><div class="ttdoc">put 1 in the last column for the indices provided by </div></div>
+<div class="ttc" id="classhypro_1_1Dictionary_html_a2ac0e068c6e99b0ff8d6d1804c7e8e6a"><div class="ttname"><a href="classhypro_1_1Dictionary.html#a2ac0e068c6e99b0ff8d6d1804c7e8e6a">hypro::Dictionary::setValue</a></div><div class="ttdeci">void setValue(Eigen::Index i, Eigen::Index j, Number val)</div></div>
+<div class="ttc" id="classhypro_1_1Dictionary_html_a025dcac1be6208584cbf3d59bd9463f2"><div class="ttname"><a href="classhypro_1_1Dictionary.html#a025dcac1be6208584cbf3d59bd9463f2">hypro::Dictionary::selectCrissCrossPivot</a></div><div class="ttdeci">bool selectCrissCrossPivot(Eigen::Index &amp;i, Eigen::Index &amp;j)</div><div class="ttdoc">The whole pivot. </div></div>
 <div class="ttc" id="classhypro_1_1Halfspace_html"><div class="ttname"><a href="classhypro_1_1Halfspace.html">hypro::Halfspace</a></div><div class="ttdef"><b>Definition:</b> <a href="Halfspace_8h_source.html#l00024">Halfspace.h:24</a></div></div>
-<div class="ttc" id="classhypro_1_1Dictionary_html_af3c3bcc3b4d49d42dbb40d4688aa065f"><div class="ttname"><a href="classhypro_1_1Dictionary.html#af3c3bcc3b4d49d42dbb40d4688aa065f">hypro::Dictionary::pushToBounds</a></div><div class="ttdeci">void pushToBounds(Eigen::Index colIndex)</div><div class="ttdoc">Tries to push the corresponding variable to its bound, if another bound is reached before...</div></div>
-<div class="ttc" id="classhypro_1_1Dictionary_html_a75e63ae2dfe9f4230904067e12d854bd"><div class="ttname"><a href="classhypro_1_1Dictionary.html#a75e63ae2dfe9f4230904067e12d854bd">hypro::Dictionary::nonSlackToBase</a></div><div class="ttdeci">void nonSlackToBase()</div><div class="ttdoc">Puts the non slack variable to the basis. </div></div>
-<div class="ttc" id="classhypro_1_1Dictionary_html_ac38453a0968a860de6efca8880f6011b"><div class="ttname"><a href="classhypro_1_1Dictionary.html#ac38453a0968a860de6efca8880f6011b">hypro::Dictionary::selectDualBlandPivot</a></div><div class="ttdeci">bool selectDualBlandPivot(Eigen::Index &amp;i, Eigen::Index &amp;j, const std::vector&lt; Eigen::Index &gt; availableIndices)</div></div>
-<div class="ttc" id="classhypro_1_1Dictionary_html_ad6fe4718db9d0e3154d25ec35db32b2b"><div class="ttname"><a href="classhypro_1_1Dictionary.html#ad6fe4718db9d0e3154d25ec35db32b2b">hypro::Dictionary::setOnes</a></div><div class="ttdeci">void setOnes(const std::vector&lt; Eigen::Index &gt; &amp;indices)</div><div class="ttdoc">put 1 in the last column for the indices provided by </div></div>
-<div class="ttc" id="classhypro_1_1Dictionary_html_a253f033e04084926ba46d144c63e283e"><div class="ttname"><a href="classhypro_1_1Dictionary.html#a253f033e04084926ba46d144c63e283e">hypro::Dictionary::fixOutOfBounds</a></div><div class="ttdeci">bool fixOutOfBounds()</div><div class="ttdoc">Check for the satisfiability of the dictionary and finds a suitable assignment. </div></div>
+<div class="ttc" id="classhypro_1_1Dictionary_html_ac6a5b2e8beccedb8f19b820617055b91"><div class="ttname"><a href="classhypro_1_1Dictionary.html#ac6a5b2e8beccedb8f19b820617055b91">hypro::Dictionary::reverseDual</a></div><div class="ttdeci">bool reverseDual(const Eigen::Index i, const Eigen::Index j, const std::vector&lt; Eigen::Index &gt; &amp;availableIndices)</div><div class="ttdoc">is (i,j) the pivot given by the Bland&#39;s rule for the dictionary obtained by pivoting around (i...</div></div>
+<div class="ttc" id="classhypro_1_1Dictionary_html_af3c3bcc3b4d49d42dbb40d4688aa065f"><div class="ttname"><a href="classhypro_1_1Dictionary.html#af3c3bcc3b4d49d42dbb40d4688aa065f">hypro::Dictionary::pushToBounds</a></div><div class="ttdeci">void pushToBounds(Eigen::Index colIndex)</div><div class="ttdoc">Puts the saturated variable to the cobasis. </div></div>
+<div class="ttc" id="classhypro_1_1Dictionary_html_ac38453a0968a860de6efca8880f6011b"><div class="ttname"><a href="classhypro_1_1Dictionary.html#ac38453a0968a860de6efca8880f6011b">hypro::Dictionary::selectDualBlandPivot</a></div><div class="ttdeci">bool selectDualBlandPivot(Eigen::Index &amp;i, Eigen::Index &amp;j, const std::vector&lt; Eigen::Index &gt; availableIndices)</div><div class="ttdoc">Puts in i and j the pivot, returns false iff none was sutable. </div></div>
+<div class="ttc" id="classhypro_1_1Dictionary_html_ad6fe4718db9d0e3154d25ec35db32b2b"><div class="ttname"><a href="classhypro_1_1Dictionary.html#ad6fe4718db9d0e3154d25ec35db32b2b">hypro::Dictionary::setOnes</a></div><div class="ttdeci">void setOnes(const std::vector&lt; Eigen::Index &gt; &amp;indices)</div><div class="ttdoc">gives the list of the degenerated constrains in the dictionary. </div></div>
+<div class="ttc" id="classhypro_1_1Dictionary_html_a253f033e04084926ba46d144c63e283e"><div class="ttname"><a href="classhypro_1_1Dictionary.html#a253f033e04084926ba46d144c63e283e">hypro::Dictionary::fixOutOfBounds</a></div><div class="ttdeci">bool fixOutOfBounds()</div><div class="ttdoc">Selects the next pivot according to CrissCross&#39;s rule. </div></div>
 <div class="ttc" id="classhypro_1_1Dictionary_html_acf2a69d0627481344926eea2900f3f37"><div class="ttname"><a href="classhypro_1_1Dictionary.html#acf2a69d0627481344926eea2900f3f37">hypro::Dictionary::basis</a></div><div class="ttdeci">std::vector&lt; Eigen::Index &gt; basis() const </div><div class="ttdoc">Build a dictionary based on the hyperplane set hsv. </div></div>
 <div class="ttc" id="namespacehypro_html_aa70b7a97ac898c2b28a2af61f4607e3a"><div class="ttname"><a href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">hypro::vector_t</a></div><div class="ttdeci">Eigen::Matrix&lt; Number, Eigen::Dynamic, 1 &gt; vector_t</div><div class="ttdef"><b>Definition:</b> <a href="types_8h_source.html#l00020">types.h:20</a></div></div>
-<div class="ttc" id="classhypro_1_1Dictionary_html_ab55276d984eb36c7c4b213427505f944"><div class="ttname"><a href="classhypro_1_1Dictionary.html#ab55276d984eb36c7c4b213427505f944">hypro::Dictionary::findZeros</a></div><div class="ttdeci">std::vector&lt; Eigen::Index &gt; findZeros()</div><div class="ttdoc">gives the list of the degenerated constrains in the dictionary. </div></div>
-<div class="ttc" id="classhypro_1_1Dictionary_html_a7b7af3f5b87421c2d43bfb84604dd122"><div class="ttname"><a href="classhypro_1_1Dictionary.html#a7b7af3f5b87421c2d43bfb84604dd122">hypro::Dictionary::selectBlandPivot</a></div><div class="ttdeci">bool selectBlandPivot(Eigen::Index &amp;i, Eigen::Index &amp;j) const </div><div class="ttdoc">Puts in i and j the pivot, returns false iff none was sutable. </div></div>
+<div class="ttc" id="classhypro_1_1Dictionary_html_a7b7af3f5b87421c2d43bfb84604dd122"><div class="ttname"><a href="classhypro_1_1Dictionary.html#a7b7af3f5b87421c2d43bfb84604dd122">hypro::Dictionary::selectBlandPivot</a></div><div class="ttdeci">bool selectBlandPivot(Eigen::Index &amp;i, Eigen::Index &amp;j) const </div><div class="ttdoc">Check for the satisfiability of the dictionary and finds a sutable assignement. </div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- HTML footer for doxygen 1.8.12-->

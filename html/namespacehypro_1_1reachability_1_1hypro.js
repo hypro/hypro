@@ -33,6 +33,7 @@ var namespacehypro_1_1reachability_1_1hypro =
     [ "Optimizer", "classhypro_1_1reachability_1_1hypro_1_1Optimizer.html", "classhypro_1_1reachability_1_1hypro_1_1Optimizer" ],
     [ "Vertex", "classhypro_1_1reachability_1_1hypro_1_1Vertex.html", "classhypro_1_1reachability_1_1hypro_1_1Vertex" ],
     [ "BoxT", "classhypro_1_1reachability_1_1hypro_1_1BoxT.html", "classhypro_1_1reachability_1_1hypro_1_1BoxT" ],
+    [ "BoxT< double, Converter, Setting >", "classhypro_1_1reachability_1_1hypro_1_1BoxT_3_01double_00_01Converter_00_01Setting_01_4.html", "classhypro_1_1reachability_1_1hypro_1_1BoxT_3_01double_00_01Converter_00_01Setting_01_4" ],
     [ "ConstraintSetT", "classhypro_1_1reachability_1_1hypro_1_1ConstraintSetT.html", "classhypro_1_1reachability_1_1hypro_1_1ConstraintSetT" ],
     [ "EllipsoidT", "classhypro_1_1reachability_1_1hypro_1_1EllipsoidT.html", "classhypro_1_1reachability_1_1hypro_1_1EllipsoidT" ],
     [ "VertexContainer", "classhypro_1_1reachability_1_1hypro_1_1VertexContainer.html", "classhypro_1_1reachability_1_1hypro_1_1VertexContainer" ],

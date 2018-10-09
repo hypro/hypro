@@ -3,7 +3,5 @@ digraph "Graphical Class Hierarchy"
   edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
   node [fontname="Helvetica",fontsize="10",shape=record];
   rankdir="LR";
-  Node1 [label="hypro::SupportFunctionContent\l\< Number, Setting \>",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classhypro_1_1SupportFunctionContent.html",tooltip="Class for support function content. "];
-  Node1 -> Node2 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node2 [label="hypro::NonLinearOmega0Supportfunction\l\< Setting \>",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classhypro_1_1NonLinearOmega0Supportfunction.html"];
+  Node1 [label="hypro::typeName\< double \>",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$structhypro_1_1typeName_3_01double_01_4.html"];
 }
