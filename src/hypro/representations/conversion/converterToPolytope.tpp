@@ -26,6 +26,12 @@ typename Converter<Number>::Polytope Converter<Number>::toPolytope(const Constra
 	return Converter<Number>::Polytope(source.matrix(), source.vector());
 }
 
+//Conversion from difference bounds to ppl poly
+template<typename Number>
+typename Converter<Number>::Polytope Converter<Number>::toPolytope(const DifferenceBounds& source, const CONV_MODE){
+	// TODO IMPLEMENT
+}
+
 //Conversion from ellipsoid to ppl poly
 template<typename Number>
 typename Converter<Number>::Polytope Converter<Number>::toPolytope(const Ellipsoid& source, const CONV_MODE){

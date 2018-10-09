@@ -57,7 +57,7 @@ namespace hypro {
 
 		// create actual dictionary -> negate rows and constants and move f-row (which was top) to the bottom, now containing all -1's
 		mDictionary = Ab * An;
-		std::cout << "MDictionary: " << std::endl << mDictionary << std::endl;
+		//std::cout << "MDictionary: " << std::endl << mDictionary << std::endl;
 
 		// initially the basis constraints are the n0 row indices. Note that the indices start from 1.
 		for(i=1; i<n0+1; ++i){
@@ -207,8 +207,17 @@ namespace hypro {
 		Eigen::Index indexRef = index;
 		Eigen::Index pivot = 0;
 		Eigen::Index pivotRef = pivot;
-		if(!(mConstrains.outside(indexRef,diff,mB))) {return false;} // is there any variable out of its bounds
+		if(!(mConstrains.outside(indexRef,diff,mB))) { // is there any variable out of its bounds?
+			#ifdef DICT_DBG
+			std::cout << "All variables are in their bounds." << std::endl;
+			#endif
+			return false;
+		} 
 		if(!(mConstrains.getPivot(indexRef,diff,pivotRef,mN,mDictionary))) {throw string("\n WARNING: empty set. \n");}//is there a suitable pivot
+		#ifdef DICT_DBG
+		std::cout << "Variable " << indexRef << " is out of bounds by " << diff << std::endl;
+		std::cout << "suitable pivot: " << pivotRef << std::endl;
+		#endif
 		this->pivot(indexRef,pivotRef); // apply pivot.
 		mConstrains.modifyAssignment(pivotRef, diff, mB, mN, mDictionary); // update bounds.
 		return true;

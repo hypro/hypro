@@ -92,33 +92,7 @@ typename Converter<Number>::HPolytope Converter<Number>::toHPolytope( const VPol
 //conversion from Box to H-Polytope (no differentiation between conversion modes - always EXACT)
 template<typename Number>
 typename Converter<Number>::HPolytope Converter<Number>::toHPolytope( const Box& _source, const CONV_MODE ){
-     //gets dimension of box
-     std::size_t dim = _source.dimension();
-     //only continue if dimension is at least 1
-     assert( dim >= 1);
-
-     //initialize normal matrix as zero matrix with 2*dim rows and dim columns
-     matrix_t<Number> directions = matrix_t<Number>::Zero( 2 * dim, dim );
-     //for every dimension:
-     for ( std::size_t i = 0; i < dim; ++i ) {
-         //write fixed entries (because of box) into the normal matrix (2 each column)
-           directions( 2 * i, i ) = Number(-1);
-           directions( 2 * i + 1, i ) = Number(1);
-     }
-
-     //initialize distance vector with 2*dim rows
-     vector_t<Number> distances = vector_t<Number>( 2 * dim );
-
-      //gets intervals of box
-     std::vector<carl::Interval<Number>> intervals = _source.boundaries();
-      //for every dimension:
-     for ( std::size_t i = 0; i < dim; ++i ) {
-         //write inverted lower bound values and upper bound values into the distance vector
-           distances( 2 * i ) = -intervals[i].lower();
-           distances( 2 * i + 1 ) = intervals[i].upper();
-     }
-
-     return HPolytope(directions, distances);
+     return HPolytope(_source.matrix(), _source.vector());
 }
 
 //conversion from zonotope to H-Polytope (no differentiation between conversion modes - always EXACT)

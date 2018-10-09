@@ -458,14 +458,23 @@ BoxT<double,Converter,Setting> BoxT<double,Converter,Setting>::minkowskiDecompos
 
 template<typename Converter, class Setting>
 BoxT<double,Converter,Setting> BoxT<double,Converter,Setting>::intersect( const BoxT<double,Converter,Setting> &rhs ) const {
-	std::size_t dim = rhs.dimension() < this->dimension() ? rhs.dimension() : this->dimension();
-	std::pair<Point<double>, Point<double>> limits(std::make_pair(Point<double>(vector_t<double>::Zero(Eigen::Index(dim))), Point<double>(vector_t<double>::Zero(Eigen::Index(dim)))));
-	std::pair<Point<double>, Point<double>> rhsLimits = rhs.limits();
+	std::size_t dim = this->dimension();
+	std::size_t rdim = rhs.dimension();
+	std::vector<carl::Interval<Number>> newIntervals;
+
 	for ( std::size_t i = 0; i < dim; ++i ) {
-		limits.first[i] = mLimits.first.at(i) > rhsLimits.first.at(i) ? mLimits.first.at(i) : rhsLimits.first.at(i);
-		limits.second[i] = mLimits.second.at(i) < rhsLimits.second.at(i) ? mLimits.second.at(i) : rhsLimits.second.at(i);
+		if(i >= rdim) {
+			newIntervals.emplace(mLimits[i]);	
+		} else {
+			newIntervals.emplace(mLimits[i].intersect(rhs.interval(i)));
+		}
 	}
-	return BoxT<double,Converter,Setting>(limits);
+	if(rdim > dim) {
+		for ( std::size_t i = dim; i < rdim; ++i ) {
+			newIntervals.emplace(rhs.interval(i));
+		}	
+	}
+	return BoxT<double,Converter,Setting>(newIntervals);
 }
 
 template<typename Converter, class Setting>

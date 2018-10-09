@@ -91,7 +91,7 @@ typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const Constr
 template <typename Number>
 typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const Box& _source, const CONV_MODE  ){
     std::size_t dim = _source.dimension();                                             //gets dimension from source object
-    std::vector<carl::Interval<Number>> intervals = _source.boundaries();           //gets intervals from source object
+    std::vector<carl::Interval<Number>> intervals = _source.intervals();           //gets intervals from source object
     matrix_t<Number> generators = matrix_t<Number>::Zero(dim, dim);                 //defines an empty generator matrix for dim generators
     vector_t<Number> center = vector_t<Number>(dim);                                //defines an empty center vector
 
