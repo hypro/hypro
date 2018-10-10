@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 mkdir -p build || return 1
-pushd build
+cd build || return 1
 
 function keep_waiting() {
   while true; do
@@ -23,7 +23,8 @@ if [[ ${TASK} == "sonarcloud" ]]; then
 	cd ../ && sonar-scanner -X -Dproject.settings=.travis/sonar-project.properties && cd build/
 
 else
-	git clone https://github.com/smtrat/carl.git
+	git clone https://github.com/smtrat/carl.git --branch master14 --single-branch carl
+	#git clone https://github.com/smtrat/carl.git
 	pushd carl
 		mkdir build
 		pushd build && cmake -DCMAKE_CXX_COMPILER=$COMPILER -DCMAKE_BUILD_TYPE=Release ..
@@ -35,8 +36,8 @@ else
 	popd
 	cmake -DCMAKE_CXX_COMPILER=$COMPILER ..
 	make resources -j2 || return 1
-	echo /home/travis/build/hypro/hypro/build/resources/antlr_build/src/antlr4cpp-stamp/antlr4cpp-build-out.log
-	echo /home/travis/build/hypro/hypro/build/resources/antlr_build/src/antlr4cpp-stamp/antlr4cpp-build-err.log
+	cat /home/travis/build/hypro/hypro/build/resources/antlr_build/src/antlr4cpp-stamp/antlr4cpp-build-out.log
+	cat /home/travis/build/hypro/hypro/build/resources/antlr_build/src/antlr4cpp-stamp/antlr4cpp-build-err.log
 	keep_waiting &
 	make -j2 VERBOSE=1 || return 1
 	kill $!
@@ -44,6 +45,5 @@ else
 
 fi
 
-popd
 
 
