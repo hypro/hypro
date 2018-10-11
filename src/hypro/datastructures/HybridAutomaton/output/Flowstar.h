@@ -1,6 +1,6 @@
 #pragma once
 #include "../HybridAutomaton.h"
-#include "../Settings.h"
+#include "../../reachability/Settings.h"
 #include "../Condition.h"
 #include <iostream>
 
