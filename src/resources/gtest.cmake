@@ -1,9 +1,9 @@
 # Create configure command dependend on compiler
-#if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
-		#set(cmake_command -Dgtest_force_shared_crt=ON -DCXX=/usr/bin/clang++ -DCMAKE_CXX_FLAGS=-stdlib=libc++ -DCMAKE_CXX_FLAGS=-std=c++11 -DCMAKE_CXX_FLAGS=-DGTEST_USE_OWN_TR1_TUPLE=1 )
-#else()
+if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+		set(cmake_command -Dgtest_force_shared_crt=ON -DCXX=${CMAKE_CXX_COMPILER} -DCMAKE_CXX_FLAGS=-stdlib=libc++ -DCMAKE_CXX_FLAGS=-std=c++14 -DCMAKE_CXX_FLAGS=-DGTEST_USE_OWN_TR1_TUPLE=1 )
+else()
 		set(cmake_command -Dgtest_force_shared_crt=ON)
-#endif()
+endif()
 # Add gtest (local build)
 ExternalProject_Add(
 	googletest
