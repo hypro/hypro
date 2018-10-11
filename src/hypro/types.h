@@ -13,6 +13,12 @@
 
 // global typedefs
 namespace hypro {
+
+	/**
+	 * @brief Number type used for timings and time intervals.
+	 */
+	using tNumber = mpq_class;
+
     /**
      * typedef wrapping an Eigen::Matrix type with only one column.
      */
@@ -44,6 +50,16 @@ namespace hypro {
      * correct results (NO = 0). BOT is used for UNKNOWN.
      */
     enum CONTAINMENT{ NO = 0, FULL, PARTIAL, YES, BOT };
+
+	/**
+	 * @brief classifies the type of subspace in case subspace decomposition is used.
+	 */
+	enum SUBSPACETYPE{LTI=0,TIMED=1,DISCRETE=2};
+
+	/**
+	 * @brief classifies the type of location, which reflects the dynamics in case we dynamically detect subspaces.
+	 */
+	enum LOCATIONTYPE{LTILOC=0,TIMEDLOC=1};
 
 } // namespace hypro
 

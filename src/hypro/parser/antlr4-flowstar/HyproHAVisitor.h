@@ -21,7 +21,7 @@
 #include "HyproSettingVisitor.h"
 #include "HyproBadStatesVisitor.h"
 #include "../../datastructures/HybridAutomaton/HybridAutomaton.h"
-#include "../../datastructures/HybridAutomaton/Settings.h"
+#include "../../datastructures/reachability/Settings.h"
 #include "../../util/logging/Logger.h"
 
 using namespace antlr4;

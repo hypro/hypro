@@ -12,14 +12,14 @@ namespace hypro
  */
 template <typename Number>
 struct ReachabilitySettings {
-    Number timeBound; /// The local time horizon.
-    int jumpDepth; /// The maximal number of jumps, i.e. the depth of the search tree.
-    Number timeStep; /// Time step size.
-    std::string fileName; /// Name for the output file (plotting).
-    unsigned long pplDenomimator; /// Common denominator for ppl-numbers (only relevant if ppl is used).
-    std::vector<std::vector<std::size_t>> plotDimensions; /// A set of dimension pairs to plot.
-    bool uniformBloating = false; /// Bloating settings.
-    int clustering = -1; /// -1 = off, 0 = all (aggregation), i = maximal number of segments to unify
+    Number                                  timeBound; /// The local time horizon.
+    int                                     jumpDepth; /// The maximal number of jumps, i.e. the depth of the search tree.
+    Number                                  timeStep; /// Time step size.
+    std::string                             fileName; /// Name for the output file (plotting).
+    unsigned long                           pplDenomimator; /// Common denominator for ppl-numbers (only relevant if ppl is used).
+    std::vector<std::vector<std::size_t>>   plotDimensions; /// A set of dimension pairs to plot.
+    bool                                    uniformBloating = false; /// Bloating settings.
+    int                                     clustering = -1; /// -1 = off, 0 = all (aggregation), i = maximal number of segments to unify
 
     /**
      * @brief      Default constructor.

@@ -1,5 +1,5 @@
 #include "gtest/gtest.h"
-#include "datastructures/HybridAutomaton/Settings.h"
+#include "datastructures/HybridAutomaton/reachability/Settings.h"
 #include <iostream>
 
 TEST(UtilityTest, ReachabilitySettings)
