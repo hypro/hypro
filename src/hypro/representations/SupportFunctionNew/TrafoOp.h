@@ -53,8 +53,6 @@ public:
 				} else {
 					successiveTransformations = 0;
 				}
-				std::cout << "successiveTransformations with exponent " << currentExponent << ": " << successiveTransformations << std::endl;
-				std::cout << "parameters power is: " << parameters->power << std::endl;
 				if (successiveTransformations == unsigned(carl::pow(2,parameters->power)-1)) {
 					reduced = true;
 					currentExponent = currentExponent*(carl::pow(2,parameters->power));

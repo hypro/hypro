@@ -47,7 +47,9 @@ TYPED_TEST(SupportFunctionNewTest, LeafTest){
 TYPED_TEST(SupportFunctionNewTest, TrafoOp){
 
 	//Make the box leaf
-	Box<TypeParam> box;
+	Point<TypeParam> p({TypeParam(-1),TypeParam(0),TypeParam(0)});
+	Point<TypeParam> q({TypeParam(0),TypeParam(1),TypeParam(1)});
+	Box<TypeParam> box(std::make_pair(p,q));
 	Leaf<TypeParam, Box<TypeParam>> r(&box);
 	EXPECT_TRUE(r.getType() == SFNEW_TYPE::LEAF);
 	EXPECT_TRUE(r.getOriginCount() == 0);
@@ -66,51 +68,93 @@ TYPED_TEST(SupportFunctionNewTest, TrafoOp){
 	tVec(0) = 1;
 
 	//Construct trafo1
-	std::cout << "make trafo1" << std::endl;
 	TrafoOp<TypeParam> trafo1(&sfc, tMat, tVec);
 	EXPECT_EQ(trafo1.getCurrentExponent(), 1);
 	EXPECT_EQ(trafo1.getSuccessiveTransformations(), 0);
 
 	//Construct trafo2
-	std::cout << "make trafo2" << std::endl;
 	TrafoOp<TypeParam> trafo2(&sfc, tMat, tVec);	
 	EXPECT_EQ(trafo2.getCurrentExponent(), 1);
-	EXPECT_EQ(trafo2.getSuccessiveTransformations(), 1);	
+	EXPECT_EQ(trafo2.getSuccessiveTransformations(), 1);
 
-	std::cout << "make trafo3" << std::endl;
+	//Evaluate
+	matrix_t<TypeParam> directions = matrix_t<TypeParam>::Identity(dim,dim);
+	std::cout << "START EVALUATION FOR 2 TRAFOS\n"; 
+	std::vector<EvaluationResult<TypeParam>> res = sfc.evaluate(directions);
+	std::cout << "END EVALUATION\n";
+	std::cout << "Result of Evaluation is:\n";
+	for(auto& eRes : res){
+		std::cout << eRes << std::endl;
+	}	
+	//Check results here
+
 	TrafoOp<TypeParam> trafo3(&sfc, tMat, tVec);
 	EXPECT_EQ(trafo3.getCurrentExponent(), 1);
 	EXPECT_EQ(trafo3.getSuccessiveTransformations(), 2);
 
-	std::cout << "make trafo4" << std::endl;
 	TrafoOp<TypeParam> trafo4(&sfc, tMat, tVec);
 	EXPECT_EQ(trafo4.getCurrentExponent(), 4);
 	EXPECT_EQ(trafo4.getSuccessiveTransformations(), 0);	
 
-	std::cout << "make trafo5" << std::endl;
+	//Evaluate
+	std::cout << "START EVALUATION FOR 4 TRAFOS\n"; 
+	res = sfc.evaluate(directions);
+	std::cout << "END EVALUATION\n";
+	std::cout << "Result of Evaluation is:\n";
+	for(auto& eRes : res){
+		std::cout << eRes << std::endl;
+	}
+	//Check results here
+
 	TrafoOp<TypeParam> trafo5(&sfc, tMat, tVec);
 	EXPECT_EQ(trafo5.getCurrentExponent(), 1);
 	EXPECT_EQ(trafo5.getSuccessiveTransformations(), 0);
 
-	std::cout << "make trafo6" << std::endl;
 	TrafoOp<TypeParam> trafo6(&sfc, tMat, tVec);
 	EXPECT_EQ(trafo6.getCurrentExponent(), 1);
 	EXPECT_EQ(trafo6.getSuccessiveTransformations(), 1);
 
-	std::cout << "make trafo7" << std::endl;
+	//Evaluate
+	std::cout << "START EVALUATION FOR 6 TRAFOS\n"; 
+	res = sfc.evaluate(directions);
+	std::cout << "END EVALUATION\n";
+	std::cout << "Result of Evaluation is:\n";
+	for(auto& eRes : res){
+		std::cout << eRes << std::endl;
+	}
+	//Check results here
+
 	TrafoOp<TypeParam> trafo7(&sfc, tMat, tVec);
 	EXPECT_EQ(trafo7.getCurrentExponent(), 1);
 	EXPECT_EQ(trafo7.getSuccessiveTransformations(), 2);
 
-	std::cout << "make trafo8" << std::endl;
 	TrafoOp<TypeParam> trafo8(&sfc, tMat, tVec);
 	EXPECT_EQ(trafo8.getCurrentExponent(), 4);
 	EXPECT_EQ(trafo8.getSuccessiveTransformations(), 0);
 
-	std::cout << "make trafo9" << std::endl;
+	//Evaluate
+	std::cout << "START EVALUATION FOR 8 TRAFOS\n"; 
+	res = sfc.evaluate(directions);
+	std::cout << "END EVALUATION\n";
+	std::cout << "Result of Evaluation is:\n";
+	for(auto& eRes : res){
+		std::cout << eRes << std::endl;
+	}
+	//Check results here
+
 	TrafoOp<TypeParam> trafo9(&sfc, tMat, tVec);
 	EXPECT_EQ(trafo9.getCurrentExponent(), 1);
 	EXPECT_EQ(trafo9.getSuccessiveTransformations(), 0);
+
+	//Evaluate
+	std::cout << "START EVALUATION FOR 9 TRAFOS\n"; 
+	res = sfc.evaluate(directions);
+	std::cout << "END EVALUATION\n";
+	std::cout << "Result of Evaluation is:\n";
+	for(auto& eRes : res){
+		std::cout << eRes << std::endl;
+	}
+	//Check results here
 }
 
 /*
@@ -137,32 +181,32 @@ TYPED_TEST(SupportFunctionNewTest, RootGrowTree){
 
 TYPED_TEST(SupportFunctionNewTest, SupportFunctionNewEvaluate){
 	
-	//Construct needed nodes
+	//Construct leaf nodes
 	Box<TypeParam> box1 (std::make_pair(Point<TypeParam>({TypeParam(0),TypeParam(-1)}), Point<TypeParam>({TypeParam(1), TypeParam(2)})));
 	std::cout << "box1: " << box1 << std::endl;
 	Leaf<TypeParam, Box<TypeParam>> l1(&box1);
 	Box<TypeParam> box2 (std::make_pair(Point<TypeParam>({TypeParam(0),TypeParam(0)}), Point<TypeParam>({TypeParam(2), TypeParam(2)})));
 	std::cout << "box2: " << box2 << std::endl;
 	Leaf<TypeParam, Box<TypeParam>> l2(&box2);
-/*
-	matrix_t<TypeParam> trafoMat = matrix_t<TypeParam>::Zero(2,2);
-	trafoMat(0,0) = TypeParam(2);
-	trafoMat(1,1) = TypeParam(2);
-	vector_t<TypeParam> trafoVec = vector_t<TypeParam>::Zero(2);
-	TrafoOp<TypeParam> trafo(trafoMat, trafoVec);
-*/
-	SumOp<TypeParam> sum;
 
 	//Assemble them to a tree 
 	SupportFunctionContentNew<TypeParam> sfc(&l1);
 	EXPECT_TRUE(sfc.getRoot()->getParent() == nullptr);
 	SupportFunctionContentNew<TypeParam> sfc2(&l2);
-/*
-	sfc.addUnaryOp(&trafo);
+
+	//Build trafoOp
+	matrix_t<TypeParam> trafoMat = matrix_t<TypeParam>::Zero(2,2);
+	trafoMat(0,0) = TypeParam(2);
+	trafoMat(1,1) = TypeParam(2);
+	vector_t<TypeParam> trafoVec = vector_t<TypeParam>::Zero(2);
+	TrafoOp<TypeParam> trafo(&sfc, trafoMat, trafoVec);
+
 	EXPECT_TRUE(sfc.getRoot() == &trafo);
 	EXPECT_TRUE(sfc.getRoot()->getChildren().size() == 1);
 	EXPECT_TRUE(sfc.getRoot()->getChildren().at(0)->getParent() == &trafo);
-*/
+
+	SumOp<TypeParam> sum;
+
 	sfc.addBinaryOp(&sum, &sfc2);
 	EXPECT_TRUE(sfc.getRoot() == &sum);
 	EXPECT_TRUE(sfc.getRoot()->getType() == SFNEW_TYPE::SUMOP);
