@@ -85,8 +85,22 @@ public:
 	void insertInvariant(const carl::Interval<tNumber>& timeInterval, CONTAINMENT type);
 	void insertBadState(const carl::Interval<tNumber>& timeInterval, CONTAINMENT type);
 
-	friend std::ostream& operator<<(std::ostream& out, const EventTimingContainer& in);
-	friend bool operator==(const EventTimingContainer& lhs, const EventTimingContainer& rhs);
+	friend std::ostream& operator<<(std::ostream& out, const EventTimingContainer& in) {
+		out << "Inv.: " << in.mInvariantEvents;
+		out << "Tr.: ";
+		for(const auto& TTPair : in.mTransitionEvents){
+			out << TTPair.first->getSource()->getId() << "->" << TTPair.first->getTarget()->getId() << ": " << TTPair.second;
+		}
+		out << "Bs.: " << in.mBadStateEvents;
+		return out;
+	}
+
+	friend bool operator==(const EventTimingContainer& lhs, const EventTimingContainer& rhs) {
+		return (lhs.mInvariantEvents == rhs.mInvariantEvents
+				&& lhs.mBadStateEvents == rhs.mBadStateEvents
+				&& lhs.mTransitionEvents == rhs.mTransitionEvents);
+	}
+
 	friend bool operator!=(const EventTimingContainer& lhs, const EventTimingContainer& rhs) { return !(lhs == rhs); }
 
 	//std::size_t getDotRepresentation(std::size_t startIndex, std::string& nodes, std::string& transitions, std::vector<unsigned>& levels) const;

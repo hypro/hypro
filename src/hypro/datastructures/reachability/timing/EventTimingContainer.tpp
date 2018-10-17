@@ -140,24 +140,6 @@ namespace hypro {
 		return mBadStateEvents;
 	}
 
-	template<typename Number>
-	std::ostream& operator<<(std::ostream& out, const EventTimingContainer<Number>& in) {
-		out << "Inv.: " << in.mInvariantEvents;
-		out << "Tr.: ";
-		for(const auto& TTPair : in.mTransitionEvents){
-			out << TTPair.first->getSource()->getId() << "->" << TTPair.first->getTarget()->getId() << ": " << TTPair.second;
-		}
-		out << "Bs.: " << in.mBadStateEvents;
-		return out;
-	}
-
-	template<typename Number>
-	bool operator==(const EventTimingContainer<Number>& lhs, const EventTimingContainer<Number>& rhs) {
-		return (lhs.mInvariantEvents == rhs.mInvariantEvents
-				&& lhs.mBadStateEvents == rhs.mBadStateEvents
-				&& lhs.mTransitionEvents == rhs.mTransitionEvents);
-	}
-
 	/*
 	template<typename Number>
 	std::size_t EventTimingContainer<Number>::getDotRepresentation(std::size_t startIndex, std::string& nodes, std::string& transitions, std::vector<unsigned>& levels) const {
