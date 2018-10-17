@@ -10,6 +10,7 @@
 #include <cassert>
 #include "../../types.h"
 #include "../../util/linearOptimization/EvaluationResult.h"
+#include "LinTrafoParameters.h"
 
 namespace hypro {
 
@@ -26,6 +27,7 @@ protected:
 	////// Members
 	SFNEW_TYPE mType = NODE;												//NONE since RootGrowNode should later be an abstract class
 	unsigned originCount = 0;												//Amount of children needed to function properly
+	RootGrowNode* mParent = nullptr;										//parent of the current node. The topmost node has nullptr as parent
 	std::vector<RootGrowNode*> mChildren = std::vector<RootGrowNode*>();	//vector of all current children
 
 public:
@@ -39,16 +41,31 @@ public:
 
 	virtual SFNEW_TYPE getType() const { return mType; }
 	virtual unsigned getOriginCount() const { return originCount; }
+	virtual RootGrowNode* getParent() const { return mParent; }
 	virtual std::vector<RootGrowNode*> getChildren() const { return mChildren; }
 
 	////// Modifiers
 
 	void addToChildren(RootGrowNode* rhs){ mChildren.push_back(rhs); }
+	void setAsParent(RootGrowNode* parent){ mParent = parent; }
 
 	////// Displaying
 
 	friend std::ostream& operator<<(std::ostream& ostr, const RootGrowNode& r){
-		ostr << r.getType() << std::endl;
+		ostr << "current type: " << r.getType() << std::endl;
+		if(r.getParent() != nullptr){
+			ostr << "parent type: " << r.getParent()->getType() << std::endl;	
+		} else {
+			ostr << "parent type: nullptr" << std::endl;
+		}
+		ostr << "children types: ";
+		for(auto c : r.getChildren()){
+			ostr << c->getType() << ",";
+		}
+		ostr << std::endl;
+		for(auto c : r.getChildren()){
+			ostr << *c << std::endl;
+		}
 		return ostr;
 	}
 
@@ -72,6 +89,9 @@ public:
 	virtual std::vector<EvaluationResult<Number>> compute(const matrix_t<Number>& param) const = 0; 
 	//For operations - aggregate
 	virtual std::vector<EvaluationResult<Number>> aggregate(std::vector<std::vector<EvaluationResult<Number>>>& resultStackBack, const matrix_t<Number>& currentParam) const = 0;
+
+	//For hasTrafo - should only be called by trafoOp objects
+	virtual bool hasTrafo(std::shared_ptr<const LinTrafoParameters<Number>>& ltParam, const matrix_t<Number>& A, const vector_t<Number>& b) = 0;
 	
 };
 

@@ -46,6 +46,11 @@ public:
 		return std::vector<EvaluationResult<Number>>();
 	}
 
+	bool hasTrafo(std::shared_ptr<const LinTrafoParameters<Number>>& , const matrix_t<Number>& , const vector_t<Number>& ){
+		assert(false && "Leaf::hasTrafo should never be called\n");
+		return false;
+	}
+
 };
 
 } //namespace hypro

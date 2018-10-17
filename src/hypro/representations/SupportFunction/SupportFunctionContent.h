@@ -671,6 +671,7 @@ class SupportFunctionContent {
 				assert(false);
 				return 0;
 		}
+		
 	}
 
 	bool hasTrafo(std::shared_ptr<const lintrafoParameters<Number>>& resNode, const matrix_t<Number>& A, const vector_t<Number>& b) const {

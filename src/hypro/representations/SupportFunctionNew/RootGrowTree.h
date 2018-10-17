@@ -1,9 +1,9 @@
 #pragma once
 
 #include "RootGrowNode.h"
-#include "Leaf.h"
-#include "TrafoOp.h"
-#include "SumOp.h"
+//#include "Leaf.h"
+//#include "TrafoOp.h"
+//#include "SumOp.h"
 
 namespace hypro {
 

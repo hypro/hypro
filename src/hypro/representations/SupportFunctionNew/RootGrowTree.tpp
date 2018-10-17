@@ -4,43 +4,34 @@ namespace hypro {
 
 	template<typename Number>
 	RootGrowTree<Number>* RootGrowTree<Number>::addUnaryOp(RootGrowNode<Number>* unary){
-		if(unary->getOriginCount() == 1){
+		assert(unary->getOriginCount() == 1);
+			
+		//Make a copy of the root ptr
+		RootGrowNode<Number>* copyOfRootPtr = mRoot;
 
-			//Make a copy of the root ptr
-			RootGrowNode<Number>* copyOfRootPtr = mRoot;
+		//Add current root as child of given unary node
+		unary->addToChildren(copyOfRootPtr);
 
-			//Save the Height of the current root
-			//unsigned tmp = mRoot->getHeight();
+		//set unary as parent of root
+		copyOfRootPtr->setAsParent(unary);
 
-			//Add current root as child of given unary node
-			unary->addToChildren(copyOfRootPtr);
+		//set unary as the root
+		mRoot = unary;
 
-			//set unary as the root
-			mRoot = unary;
-
-			//set Height of unary one up
-			//mRoot->setHeight(tmp+1);
-
-		} else {
-			std::cout << "WARNING: operation to add was not unary. Nothing added.\n";
-		}
 		return this;
 	}
 
 	template<typename Number>
 	RootGrowTree<Number>* RootGrowTree<Number>::addBinaryOp(RootGrowNode<Number>* binary, RootGrowTree<Number>* rhs){
-		if(binary->getOriginCount() == 2){
-			RootGrowNode<Number>* lhsRootPtr = mRoot;
-			RootGrowNode<Number>* rhsRootPtr = rhs->getRoot();
-			//unsigned tmp = mRoot->getHeight();
-			binary->addToChildren(lhsRootPtr);
-			binary->addToChildren(rhsRootPtr);
-			mRoot = binary;
-			//mRoot->setHeight(tmp+1);
-			rhs->setRoot(binary);
-		} else {
-			std::cout << "WARNING: operation to add was not binary. Nothing added.\n";	
-		}
+		assert(binary->getOriginCount() == 2);
+		RootGrowNode<Number>* lhsRootPtr = mRoot;
+		RootGrowNode<Number>* rhsRootPtr = rhs->getRoot();
+		binary->addToChildren(lhsRootPtr);
+		binary->addToChildren(rhsRootPtr);
+		lhsRootPtr->setAsParent(binary);
+		rhsRootPtr->setAsParent(binary);
+		mRoot = binary;
+		rhs->setRoot(binary);
 		return this;
 	}
 
@@ -65,9 +56,9 @@ namespace hypro {
 		std::function<Result(RootGrowNode<Number>*)> compute, 
 		std::function<Result(RootGrowNode<Number>*, std::vector<Result>)> aggregate)
 	{	
-		std::function<Parameters<>(RootGrowNode<Number>*, Parameters<>)> tNotVoid = [&](RootGrowNode<Number>* n, Parameters<> p) -> Parameters<> { transform(n); return Parameters<>(); };
-		std::function<Result(RootGrowNode<Number>*, Parameters<>)> cNotVoid = [&](RootGrowNode<Number>* n, Parameters<> p) -> Result { return compute(n); };
-		std::function<Result(RootGrowNode<Number>*, std::vector<Parameters<>>, Parameters<>)> aWithParams = [&](RootGrowNode<Number>* n, std::vector<Parameters<>> v, Parameters<> p) -> Parameters<> { return aggregate(n,v); };
+		std::function<Parameters<>(RootGrowNode<Number>*, Parameters<>)> tNotVoid = [&](RootGrowNode<Number>* n, Parameters<> ) -> Parameters<> { transform(n); return Parameters<>(); };
+		std::function<Result(RootGrowNode<Number>*, Parameters<>)> cNotVoid = [&](RootGrowNode<Number>* n, Parameters<> ) -> Result { return compute(n); };
+		std::function<Result(RootGrowNode<Number>*, std::vector<Result>, Parameters<>)> aWithParams = [&](RootGrowNode<Number>* n, std::vector<Result> v, Parameters<> ) -> Result { return aggregate(n,v); };
 		return traverse(tNotVoid, cNotVoid, aWithParams, Parameters<>());
 	}
 
@@ -95,14 +86,13 @@ namespace hypro {
 		Parameters<Rargs...> initParams)
 	{ 
 
-		std::cout << "in traverse\n";
-
-		constexpr bool isResultVoid = std::is_void<Result>::value;		
+		//constexpr bool isResultVoid = std::is_void<Result>::value;		
 
 		//Usings
 		using Node = RootGrowNode<Number>*;
 		using Param = Parameters<Rargs...>;
-		using Res = typename std::conditional<isResultVoid,unsigned,Result>::type; //Result itself can already be a vector
+		//using Res = typename std::conditional<isResultVoid,unsigned,Result>::type; //Result itself can already be a vector
+		using Res = Result;
 
 		//Prepare Stacks
 		std::vector<Node> callStack;
@@ -115,8 +105,6 @@ namespace hypro {
 		//Traversal loop
 		while(!callStack.empty()){
 
-			std::cout << "resultStack back calling frame: " << resultStack.back().first << std::endl;
-
 			Node cur = callStack.back();
 			Param currentParam = paramStack.back();
 
@@ -126,7 +114,6 @@ namespace hypro {
 
 				//If leaf and end of stack is reached
 				if(currentResult.first == -1){
-
 					return std::apply(compute, std::make_pair(cur, currentParam));
 					
 				//If leaf and not end of stack is reached	
@@ -147,7 +134,7 @@ namespace hypro {
 				if(resultStack.back().second.size() == cur->getOriginCount()) {
 
 					Res accumulatedResult = std::apply(aggregate, std::make_tuple(cur, resultStack.back().second, currentParam));
-					
+
 					// we reached the top, exit
 					if(resultStack.back().first == -1) {
 						return accumulatedResult;

@@ -12,6 +12,7 @@ private:
 
 	SFNEW_TYPE type = SFNEW_TYPE::SUMOP;
 	unsigned originCount = 2;
+	std::vector<RootGrowNode<Number>*> mChildren = std::vector<RootGrowNode<Number>*>(2,nullptr);
 
 	////// Members for this class: uses the children of the Node
 
@@ -66,6 +67,11 @@ public:
 			std::cout << e << std::endl;
 		}
 		return accumulatedResult;
+	}
+
+	bool hasTrafo(std::shared_ptr<const LinTrafoParameters<Number>>& , const matrix_t<Number>& , const vector_t<Number>& ){
+		assert(false && "SumOp::hasTrafo should never be called\n");
+		return false;
 	}
 };
 
