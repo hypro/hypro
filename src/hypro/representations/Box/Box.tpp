@@ -392,7 +392,6 @@ BoxT<Number,Converter,Setting> BoxT<Number,Converter,Setting>::linearTransformat
 	//matrix_t<Number> bx(A);
 	Point<Number> min(vector_t<Number>::Zero(this->dimension()));
 	Point<Number> max(vector_t<Number>::Zero(this->dimension()));
-
 	for (int k = 0; k < A.rows(); ++k) {
 		for (int j = 0; j < A.cols(); ++j) {
 			Number a = mLimits[j].lower()*A(k,j);
@@ -440,9 +439,9 @@ BoxT<Number,Converter,Setting> BoxT<Number,Converter,Setting>::affineTransformat
 	if(this->empty()){
 		return *this;
 	}
-	TRACE("hypro.representations.box","This: " << *this << ", A: " << A << "b: " << b);
+	//TRACE("hypro.representations.box","This: " << *this << ", A: " << A << "b: " << b);
 	BoxT<Number,Converter,Setting> res = this->linearTransformation(A);
-	TRACE("hypro.representations.box","Result of linear trafo: " << res);
+	//TRACE("hypro.representations.box","Result of linear trafo: " << res);
 	return BoxT<Number,Converter,Setting>( std::make_pair(res.min()+b, res.max()+b) );
 }
 
