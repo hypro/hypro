@@ -41,50 +41,13 @@ namespace hypro {
 
 		}
 		return false;
-
-		/*
-		carl::MultivariatePolynomial<Number> hspNormal;
-		std::map<carl::Variable, carl::Interval<Number>> intervalMap;
-		std::vector<carl::Variable> posVector; // maps hypro dimension to carl::Variable
-
-		for(Eigen::Index pos = 0; pos < hsp.normal().rows(); ++pos) {
-			carl::Variable tmp = carl::freshVariable(carl::VariableType::VT_REAL);
-			intervalMap[tmp] = intervals.at(pos);
-			if(hsp.normal()(pos) != 0){
-				hspNormal.addTerm(carl::Term<Number>(hsp.normal()(pos),tmp,1));
-			}
-			posVector.push_back(tmp);
-		}
-
-		carl::Variable constant = carl::freshVariable(carl::VariableType::VT_REAL);
-		hspNormal.addTerm(carl::Term<Number>(Number(-1),constant,1));
-		intervalMap[constant] = carl::Interval<Number>(hsp.offset(),carl::BoundType::INFTY,hsp.offset(),carl::BoundType::WEAK);
-
-		std::cout << "Resulting Polynomial: " << hspNormal << std::endl;
-
-		// contraction
-		for(unsigned i = 0; i < hspNormal.size(); ++i){
-			if(hspNormal[i].coeff() != 0) {
-				std::cout << "Solved for " << hspNormal[i].monomial()->getSingleVariable();
-				carl::MultivariatePolynomial<Number> t = (hspNormal - hspNormal[i]) / Number(-hspNormal[i].coeff());
-				std::cout << ": " << t << std::endl;
-				carl::Interval<Number> newIntv = carl::IntervalEvaluation::evaluate(t,intervalMap);
-				std::cout << "New interval: " << newIntv << std::endl;
-				assert(hspNormal[i].monomial()->isLinear());
-				auto tmp = intervalMap[hspNormal[i].monomial()->getSingleVariable()].intersect(newIntv);
-				std::cout << "After intersection: " << tmp << std::endl;
-				intervalMap[hspNormal[i].monomial()->getSingleVariable()] = tmp;
-			}
-		}
-
-		// creation of result vector
-		std::vector<carl::Interval<Number>> res;
-		for(Eigen::Index i = 0; i < hsp.normal().rows(); ++i) {
-			res.emplace_back(intervalMap[posVector[i]]);
-		}
-
-		return res;
-		*/
 	}
+
+	template<typename Number>
+	void reduceIntervalsNumberRepresentation( std::vector<carl::Interval<Number>>& , unsigned ) {
+		// do nothing.
+	}
+
+	void reduceIntervalsNumberRepresentation( std::vector<carl::Interval<mpq_class>>& intervals, unsigned limit);
 
 } // namespace hypro

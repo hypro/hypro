@@ -48,7 +48,8 @@ class BoxT : public GeometricObject<Number, BoxT<Number,Converter,Setting>> {
 	 **************************************************************************/
   protected:
 
-    std::pair<Point<Number>, Point<Number>> mLimits; /*!< Pair of points describing the minimal and the maximal point of the box.*/
+    std::vector<carl::Interval<Number>> mLimits; 	/*!< Box as a vector of intervals. */
+	bool 								mEmpty; 	/*!< Cache for emptines. */
 
   public:
 	/***************************************************************************
@@ -59,7 +60,10 @@ class BoxT : public GeometricObject<Number, BoxT<Number,Converter,Setting>> {
 	 * @brief      Creates an empty box.
 	 * @details   The empty box is represented by a zero-dimensional point pair.
 	 */
-	BoxT() { assert(this->dimension() == 0); assert(this->empty()); }
+	BoxT() :
+		mLimits()
+		, mEmpty(true)
+	{ assert(this->dimension() == 0); assert(this->empty()); }
 
 	/**
 	 * @brief      Copy constructor.
@@ -72,7 +76,7 @@ class BoxT : public GeometricObject<Number, BoxT<Number,Converter,Setting>> {
 	 * @param[in]  orig  The original.
 	 */
 	template<typename SettingRhs, carl::DisableIf< std::is_same<Setting, SettingRhs> > = carl::dummy>
-	BoxT(const BoxT<Number,Converter,SettingRhs>& orig) : mLimits(orig.limits())
+	BoxT(const BoxT<Number,Converter,SettingRhs>& orig) : mLimits(orig.intervals()), mEmpty(orig.empty())
 	{ }
 
 	/**
@@ -86,8 +90,8 @@ class BoxT : public GeometricObject<Number, BoxT<Number,Converter,Setting>> {
 	  * @param[in]  val   An interval.
 	  */
 	explicit BoxT( const carl::Interval<Number>& val ) {
-        mLimits.first = Point<Number>({val.lower()});
-        mLimits.second = Point<Number>({val.upper()});
+        mLimits.push_back(val);
+		mEmpty = val.isEmpty();
 	}
 
 	/**
@@ -96,10 +100,14 @@ class BoxT : public GeometricObject<Number, BoxT<Number,Converter,Setting>> {
 	 * The constructor does not check the order of points.
 	 * @param limits Pair of points.
 	 */
-	explicit BoxT( const std::pair<Point<Number>, Point<Number>>& limits) :
-			mLimits(limits)
+	explicit BoxT( const std::pair<Point<Number>, Point<Number>>& limits) 
 	{
 		assert(limits.first.dimension() == limits.second.dimension());
+		mEmpty = false;
+		for(std::size_t i = 0; i < limits.first.dimension(); ++i) {
+			mLimits.emplace_back(carl::Interval<Number>(limits.first[i], limits.second[i]));
+			mEmpty = mEmpty || mLimits.back().isEmpty();
+		}
 	}
 
 	/**
@@ -107,7 +115,16 @@ class BoxT : public GeometricObject<Number, BoxT<Number,Converter,Setting>> {
 	 * @details The vector is required to be sorted, i.e. the first interval maps to the first dimension etc..
 	 * @param _intervals A vector of intervals.
 	 */
-	explicit BoxT( const std::vector<carl::Interval<Number>>& _intervals );
+	explicit BoxT( const std::vector<carl::Interval<Number>>& _intervals ) 
+		: mLimits(_intervals), mEmpty(false)
+	{
+		for(const auto& i : mLimits){
+			if(i.isEmpty()) {
+				mEmpty = true;
+				break;
+			}
+		}
+	}
 
 	/**
 	 * @brief Constructor from a matrix and a vector.
@@ -158,19 +175,30 @@ class BoxT : public GeometricObject<Number, BoxT<Number,Converter,Setting>> {
 	 * @details Converts the two-points representation of the current box into a sorted vector of intervals.
 	 * @return A vector of intervals.
 	 */
-	std::vector<carl::Interval<Number>> boundaries() const;
+	const std::vector<carl::Interval<Number>>& intervals() const {
+		return mLimits;
+	}
+	std::vector<carl::Interval<Number>>& rIntervals() {
+		return mLimits;
+	}
 
 	/**
 	 * @brief Getter for the limiting points.
 	 * @return A pair of points.
 	 */
-	const std::pair<Point<Number>, Point<Number>>& limits() const { return mLimits; }
-
-	/**
-	 * @brief      Reference getter for limiting points.
-	 * @return     A reference to the limit point pair of the object.
-	 */
-	std::pair<Point<Number>, Point<Number>>& rLimits() { return mLimits; }
+	std::pair<Point<Number>, Point<Number>> limits() const { 
+		if(mEmpty) {
+			return std::pair<Point<Number>,Point<Number>>{Point<Number>(vector_t<Number>::Ones(this->dimension())), Point<Number>(vector_t<Number>::Zero(this->dimension()))};
+		}
+		std::pair<Point<Number>, Point<Number>> res {Point<Number>(vector_t<Number>(this->dimension())), Point<Number>(vector_t<Number>(this->dimension()))};
+		std::size_t p = 0;
+		for(const auto& i : mLimits) {
+			res.first[p] = i.lower();
+			res.second[p] = i.upper();
+			++p;
+		}
+		return res;
+	}
 
 	matrix_t<Number> matrix() const;
 	vector_t<Number> vector() const;
@@ -187,7 +215,14 @@ class BoxT : public GeometricObject<Number, BoxT<Number,Converter,Setting>> {
 	 * @details Effectively extends the dimension of the current box.
 	 * @param val An interval.
 	 */
-	void insert( const carl::Interval<Number>& val ) { mLimits.first.extend(val.lower()); mLimits.second.extend(val.upper());}
+	void insert( const carl::Interval<Number>& val ) { 
+		mLimits.push_back(val);
+		if(mLimits.back().isEmpty()) {
+			mEmpty = true;
+		} else if (mLimits.size() == 1) { // the new interval was the first and it is not empty.
+			mEmpty = false;
+		} // otherise do not modify mEmpty - if it was true before it stays true, otherwise nothing happens.
+	}
 
 	/**
 	 * @brief Getter for an interval representation of one specific dimension.
@@ -195,7 +230,15 @@ class BoxT : public GeometricObject<Number, BoxT<Number,Converter,Setting>> {
 	 * @param d The queried dimension.
 	 * @return An interval.
 	 */
-	carl::Interval<Number> interval( std::size_t d ) const;
+	const carl::Interval<Number>& interval( std::size_t d ) const {
+		assert(d < mLimits.size());
+		return mLimits[d];
+	}
+
+	carl::Interval<Number>& rInterval( std::size_t d ) {
+		assert(d < mLimits.size());
+		return mLimits[d];
+	}
 
 	/**
 	 * @brief Getter for an interval representation of one specific dimension.
@@ -204,10 +247,7 @@ class BoxT : public GeometricObject<Number, BoxT<Number,Converter,Setting>> {
 	 * @return An interval.
 	 */
 	carl::Interval<Number> at( std::size_t _index ) const {
-		if ( _index > mLimits.first.dimension() ) {
-			return carl::Interval<Number>::emptyInterval();
-		}
-		return carl::Interval<Number>(mLimits.first.at(_index), mLimits.second.at(_index));
+		return mLimits.at(_index);
 	}
 
 	/**
@@ -216,15 +256,7 @@ class BoxT : public GeometricObject<Number, BoxT<Number,Converter,Setting>> {
 	 * @return True, if one interval is empty. False if the dimension is 0 or no interval is empty.
 	 */
 	bool empty() const {
-		if ( mLimits.first.dimension() == 0 ) {
-			return true;
-		}
-		for ( std::size_t d = 0; d < mLimits.first.dimension(); ++d ) {
-			if ( mLimits.first.at(d) > mLimits.second.at(d) ) {
-				return true;
-			}
-		}
-		return false;
+		return mEmpty;
 	}
 
 	/**
@@ -234,11 +266,11 @@ class BoxT : public GeometricObject<Number, BoxT<Number,Converter,Setting>> {
 	 * @return     True if symmetric, False otherwise.
 	 */
 	bool isSymmetric() const {
-		if ( mLimits.first.dimension() == 0 ) {
+		if ( mEmpty ) {
 			return true;
 		}
-		for ( std::size_t d = 0; d < mLimits.first.dimension(); ++d ) {
-			if ( mLimits.first.at(d) != -mLimits.second.at(d) ) {
+		for ( std::size_t d = 0; d < mLimits.size(); ++d ) {
+			if ( ! (-mLimits[d].lower() == mLimits[d].upper() && mLimits[d].lowerBoundType() == mLimits[d].upperBoundType()) ) {
 				return false;
 			}
 		}
@@ -250,7 +282,11 @@ class BoxT : public GeometricObject<Number, BoxT<Number,Converter,Setting>> {
 	 * @return A point.
 	 */
 	Point<Number> max() const {
-		return mLimits.second;
+		Point<Number> res{vector_t<Number>(this->dimension())};
+		for(std::size_t d = 0; d < mLimits.size(); ++d){
+			res[d] = mLimits[d].upper();
+		}
+		return res;
 	}
 
 	/**
@@ -258,7 +294,11 @@ class BoxT : public GeometricObject<Number, BoxT<Number,Converter,Setting>> {
 	 * @return A point.
 	 */
 	Point<Number> min() const {
-		return mLimits.first;
+		Point<Number> res{vector_t<Number>(this->dimension())};
+		for(std::size_t d = 0; d < mLimits.size(); ++d){
+			res[d] = mLimits[d].lower();
+		}
+		return res;
 	}
 
 	/**
@@ -280,7 +320,7 @@ class BoxT : public GeometricObject<Number, BoxT<Number,Converter,Setting>> {
 	 * @param[in]  _direction  The direction/cost function.
 	 * @return     Maximum towards _direction.
 	 */
-	EvaluationResult<Number> evaluate( const vector_t<Number>& _direction, bool = true ) const;
+	EvaluationResult<Number> evaluate( const vector_t<Number>& _direction, bool ) const;
 
 	/**
 	 * @brief      Multi-evaluation function (convex linear optimization).
@@ -300,7 +340,12 @@ class BoxT : public GeometricObject<Number, BoxT<Number,Converter,Setting>> {
 		if ( b1.dimension() != b2.dimension() ) {
 			return false;
 		}
-		return ( b1.limits() == b2.limits());
+		for(std::size_t i = 0; i < b1.dimension(); ++i) {
+			if(b1.interval(i) != b2.interval(i)) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 	/**
@@ -331,7 +376,13 @@ class BoxT : public GeometricObject<Number, BoxT<Number,Converter,Setting>> {
 	 * @param[in]  factor  The scaling factor.
 	 * @return     The scaled box.
 	 */
-	BoxT<Number,Converter,Setting> operator*(const Number& factor) const { return BoxT<Number,Converter,Setting>(std::make_pair(factor*mLimits.first, factor*mLimits.second));}
+	BoxT<Number,Converter,Setting> operator*(const Number& factor) const { 
+		BoxT<Number,Converter,Setting> copy{*this};
+		for(auto& i : copy.rIntervals()){
+			i *= factor;
+		}
+		return copy;
+	}
 
 	/**
 	 * @brief Outstream operator.
@@ -356,7 +407,8 @@ class BoxT : public GeometricObject<Number, BoxT<Number,Converter,Setting>> {
 	 * @param i Dimension to access.
 	 * @return An interval.
 	 */
-	carl::Interval<Number> operator[]( unsigned i ) const { return carl::Interval<Number>(mLimits.first.at(i), mLimits.second.at(i)); }
+	const carl::Interval<Number>& operator[]( unsigned i ) const { return mLimits[i]; }
+	carl::Interval<Number>& operator[]( unsigned i ) { return mLimits[i]; }
 
 	/***************************************************************************
 	 * General interface
@@ -366,7 +418,7 @@ class BoxT : public GeometricObject<Number, BoxT<Number,Converter,Setting>> {
 	  * @brief      Getter for the space dimension.
 	  * @return     The dimension of the space.
 	  */
-	std::size_t dimension() const { return mLimits.first.dimension(); }
+	std::size_t dimension() const { return mLimits.size(); }
 
 	/**
 	 * @brief      Removes redundancy (part of the general interface. Does nothing for boxes.)
@@ -497,4 +549,4 @@ BoxT<To,Converter,Setting> convert(const BoxT<From,Converter,Setting>& in) {
 } // namespace hypro
 
 #include "Box.tpp"
-#include "Box_double.h"
+//#include "Box_double.h"

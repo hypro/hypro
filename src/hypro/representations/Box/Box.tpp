@@ -11,35 +11,23 @@
 #include "Box.h"
 
 namespace hypro {
-
-	template<typename Number, typename Converter, class Setting>
-	BoxT<Number,Converter,Setting>::BoxT( const std::vector<carl::Interval<Number>>& _intervals )
-	{
-		if(!_intervals.empty()) {
-			vector_t<Number> lower = vector_t<Number>(_intervals.size());
-			vector_t<Number> upper = vector_t<Number>(_intervals.size());
-			for (std::size_t dim = 0; dim < _intervals.size(); ++dim) {
-				lower(dim) = _intervals.at(dim).lower();
-				upper(dim) = _intervals.at(dim).upper();
-			}
-			mLimits = std::make_pair(Point<Number>(lower), Point<Number>(upper));
-		}
-		reduceNumberRepresentation();
-	}
-
+	
 	template<typename Number, typename Converter, class Setting>
 	BoxT<Number,Converter,Setting>::BoxT( const matrix_t<Number>& _constraints, const vector_t<Number>& _constants )
 	{
 		TRACE("hypro.representations","matrix: " << _constraints << ", vector: " << _constants);
+
+		assert(_constraints.rows() == _constants.rows());
+		if(_constraints.rows() == 0) {
+			mEmpty=true;
+			assert(this->empty());
+			assert(this->dimension() == 0);
+			return;
+		}
+
 		if(Setting::HYPRO_BOX_AVOID_LINEAR_OPTIMIZATION == true){
 			// calculate all possible Halfspace intersections -> TODO: dPermutation can
 			// be improved.
-			assert(_constraints.rows() == _constants.rows());
-			if(_constraints.rows() == 0) {
-				assert(this->empty());
-				assert(this->dimension() == 0);
-				return;
-			}
 			Permutator permutator = Permutator( _constraints.rows(), _constraints.cols() );
 			matrix_t<Number> intersection = matrix_t<Number>( _constraints.cols(), _constraints.cols() );
 			vector_t<Number> intersectionConstants = vector_t<Number>( _constraints.cols() );
@@ -90,8 +78,8 @@ namespace hypro {
 			// std::cout<<__func__ << " : " <<__LINE__ <<std::endl;
 			// finish initialization
 			if(possibleVertices.empty()) {
-				assert(false);
 				*this = BoxT<Number,Converter,Setting>::Empty();
+				return;
 			} else {
 				vector_t<Number> min = *possibleVertices.begin();
 				vector_t<Number> max = *possibleVertices.begin();
@@ -105,58 +93,38 @@ namespace hypro {
 						}
 					}
 				}
-				mLimits = std::make_pair(Point<Number>(min), Point<Number>(max));
+				*this = BoxT<Number,Converter,Setting>(std::make_pair(Point<Number>(min),Point<Number>(max)));
 			}
 
 		} else {
 
 			// convert box to a set of constraints, add other halfspaces and evaluate in box main directions to get new intervals.
 			std::vector<vector_t<Number>> tpl = computeTemplate<Number>(_constraints.cols(), 4);
-			matrix_t<Number> boxDirections = matrix_t<Number>::Zero(tpl.size(), _constraints.cols());
-			vector_t<Number> boxDistances = vector_t<Number>::Zero(boxDirections.rows());
-
-			// set up matrix.
-			// Todo: Can be combined with next loop.
-			Eigen::Index i = 0;
-			for(const auto& row : tpl) {
-				boxDirections.row(i) = row;
-				++i;
-			}
-
-			// the template has one non-Zero index per row
-			/*
-			for(Eigen::Index rowIndex = 0; rowIndex < boxDirections.rows(); ++rowIndex) {
-				for(Eigen::Index colIndex = 0; colIndex < boxDirections.cols(); ++colIndex) {
-					if(boxDirections(rowIndex,colIndex) > 0) {
-						boxDistances(rowIndex) = mLimits.second.at(colIndex);
-						break;
-					} else if (boxDirections(rowIndex,colIndex) < 0) {
-						boxDistances(rowIndex) = -mLimits.first.at(colIndex);
-						break;
-					}
-				}
-			}
-			*/
-
+			
 			// evaluate in box directions.
 			Optimizer<Number> opt(_constraints,_constants);
 			std::vector<EvaluationResult<Number>> results;
-			for(Eigen::Index rowIndex = 0; rowIndex < boxDirections.rows(); ++rowIndex) {
-				results.emplace_back(opt.evaluate(boxDirections.row(rowIndex), false));
-			}
-			opt.cleanGLPInstance();
-			assert(Eigen::Index(results.size()) == boxDirections.rows());
-
-			// re-construct box from results.
-			mLimits = std::make_pair(Point<Number>(vector_t<Number>::Zero(_constraints.cols())), Point<Number>(vector_t<Number>::Zero(_constraints.cols())));
-			for(Eigen::Index rowIndex = 0; rowIndex < boxDirections.rows(); ++rowIndex) {
-				for(Eigen::Index colIndex = 0; colIndex < boxDirections.cols(); ++colIndex) {
-					if(boxDirections(rowIndex,colIndex) > 0) {
-						mLimits.second[colIndex] = results[rowIndex].supportValue;
-					} else if (boxDirections(rowIndex,colIndex) < 0) {
-						mLimits.first[colIndex] = -results[rowIndex].supportValue;
+			for(Eigen::Index rowIndex = 0; rowIndex < _constraints.rows(); ++rowIndex) {
+				results.emplace_back(opt.evaluate(tpl[rowIndex], false));
+				if(results.back().errorCode == SOLUTION::INFEAS){
+					opt.cleanGLPInstance();
+					*this = BoxT<Number,Converter,Setting>::Empty();
+					return;
 				}
 			}
+			opt.cleanGLPInstance();
+			assert(Eigen::Index(results.size()) == tpl.size());
+
+			// re-construct box from results.
+			for(Eigen::Index rowIndex = 0; rowIndex < tpl.size(); ++rowIndex) {
+				for(Eigen::Index colIndex = 0; colIndex < _constraints.cols(); ++colIndex) {
+					if(tpl[rowIndex](colIndex) > 0) {
+						mLimits[colIndex].setUpper(results[rowIndex].supportValue);
+					} else if (tpl[rowIndex](colIndex) < 0) {
+						mLimits[colIndex].setLower(-results[rowIndex].supportValue);
+				}
+			}
+			mEmpty = false;
 		}
 
 		reduceNumberRepresentation();
@@ -166,20 +134,22 @@ namespace hypro {
 template<typename Number, typename Converter, class Setting>
 BoxT<Number,Converter,Setting>::BoxT( const std::set<Point<Number>> &_points ) {
 	if ( !_points.empty() ) {
-		vector_t<Number> lower = _points.begin()->rawCoordinates();
-		vector_t<Number> upper = _points.begin()->rawCoordinates();
-		for(const auto& point : _points) {
-			for(std::size_t d = 0; d < point.dimension(); ++d){
-				if(point.at(d) < lower(d)) {
-					lower(d) = point.at(d);
+		for(std::size_t d = 0; d < _points.begin()->dimension(); ++d){
+			Number min = _points.begin()->rawCoordinates()(d);
+			Number max = _points.begin()->rawCoordinates()(d);
+			for(const auto& point : _points) {
+				if(point[d] < min) {
+					min = point[d];
 				}
-
-				if(point.at(d) > upper(d)) {
-					upper(d) = point.at(d);
+				if(point[d] > max) {
+					max = point[d];
 				}
 			}
+			mLimits.emplace_back(min,max);
 		}
-		mLimits = std::make_pair(Point<Number>(lower), Point<Number>(upper));
+		mEmpty = false;
+	} else {
+		mEmpty = true;
 	}
 	reduceNumberRepresentation();
 }
@@ -187,81 +157,30 @@ BoxT<Number,Converter,Setting>::BoxT( const std::set<Point<Number>> &_points ) {
 template<typename Number, typename Converter, class Setting>
 BoxT<Number,Converter,Setting>::BoxT( const std::vector<Point<Number>> &_points ) {
 	if ( !_points.empty() ) {
-		vector_t<Number> lower = _points.begin()->rawCoordinates();
-		vector_t<Number> upper = _points.begin()->rawCoordinates();
-		for(const auto& point : _points) {
-			for(std::size_t d = 0; d < point.dimension(); ++d){
-				if(point.at(d) < lower(d)) {
-					lower(d) = point.at(d);
+		for(std::size_t d = 0; d < _points.begin()->dimension(); ++d){
+			Number min = _points.begin()->rawCoordinates()(d);
+			Number max = _points.begin()->rawCoordinates()(d);
+			for(const auto& point : _points) {
+				if(point[d] < min) {
+					min = point[d];
 				}
-
-				if(point.at(d) > upper(d)) {
-					upper(d) = point.at(d);
+				if(point[d] > max) {
+					max = point[d];
 				}
 			}
+			mLimits.emplace_back(min,max);
 		}
-		mLimits = std::make_pair(Point<Number>(lower), Point<Number>(upper));
+		mEmpty = false;
+	} else {
+		mEmpty = true;
 	}
 	reduceNumberRepresentation();
 }
 
-/*
-template<typename Number, typename Converter, class Setting>
-BoxT<Number,Converter,Setting>::BoxT( const std::set<Vertex<Number>> &_vertices ) {
-	if ( !_vertices.empty() ) {
-		vector_t<Number> lower = _vertices.begin()->rawCoordinates();
-		vector_t<Number> upper = _vertices.begin()->rawCoordinates();
-		for(const auto& point : _vertices) {
-			for(std::size_t d = 0; d < point.dimension(); ++d){
-				if(point.at(d) < lower(d))
-					lower(d) = point.at(d);
-
-				if(point.at(d) > upper(d))
-					upper(d) = point.at(d);
-			}
-		}
-		mLimits = std::make_pair(Point<Number>(lower), Point<Number>(upper));
-	}
-}
-*/
-
-/*
-template<typename Number, typename Converter, class Setting>
-BoxT<Number,Converter,Setting>::BoxT( const std::vector<Vertex<Number>> &_vertices ) {
-	if ( !_vertices.empty() ) {
-		vector_t<Number> lower = _vertices.begin()->rawCoordinates();
-		vector_t<Number> upper = _vertices.begin()->rawCoordinates();
-		for(const auto& point : _vertices) {
-			for(std::size_t d = 0; d < point.dimension(); ++d){
-				if(point.at(d) < lower(d))
-					lower(d) = point.at(d);
-
-				if(point.at(d) > upper(d))
-					upper(d) = point.at(d);
-			}
-		}
-		mLimits = std::make_pair(Point<Number>(lower), Point<Number>(upper));
-	}
-	std::cout << "Constructed box " << *this << std::endl;
-}
-*/
-
-template<typename Number, typename Converter, class Setting>
-std::vector<carl::Interval<Number>> BoxT<Number,Converter,Setting>::boundaries() const {
-	std::vector<carl::Interval<Number>> result;
-	result.reserve(this->dimension());
-
-	for(std::size_t d = 0; d < this->dimension(); ++d) {
-		result.push_back(carl::Interval<Number>(mLimits.first.at(d), mLimits.second.at(d)));
-	}
-
-	return result;
-}
-
 template<typename Number, typename Converter, class Setting>
 matrix_t<Number> BoxT<Number,Converter,Setting>::matrix() const {
-	matrix_t<Number> res = matrix_t<Number>::Zero(2*mLimits.first.dimension(), mLimits.first.dimension());
-	for(unsigned i = 0; i < mLimits.first.dimension(); ++i) {
+	matrix_t<Number> res = matrix_t<Number>::Zero(2*this->dimension(), this->dimension());
+	for(unsigned i = 0; i < this->dimension(); ++i) {
 		res(2*i,i) = 1;
 		res(2*i+1,i) = -1;
 	}
@@ -270,10 +189,10 @@ matrix_t<Number> BoxT<Number,Converter,Setting>::matrix() const {
 
 template<typename Number, typename Converter, class Setting>
 vector_t<Number> BoxT<Number,Converter,Setting>::vector() const {
-	vector_t<Number> res = vector_t<Number>::Zero(2*mLimits.first.dimension());
-	for(unsigned i = 0; i < mLimits.first.dimension(); ++i) {
-		res(2*i) = mLimits.second.at(i);
-		res(2*i+1) = -mLimits.first.at(i);
+	vector_t<Number> res = vector_t<Number>::Zero(2*this->dimension());
+	for(unsigned i = 0; i < this->dimension(); ++i) {
+		res(2*i) = mLimits[i].upper();
+		res(2*i+1) = -mLimits[i].lower();
 	}
 	return res;
 }
@@ -281,29 +200,17 @@ vector_t<Number> BoxT<Number,Converter,Setting>::vector() const {
 template<typename Number, typename Converter, class Setting>
 std::vector<Halfspace<Number>> BoxT<Number,Converter,Setting>::constraints() const {
 	std::vector<Halfspace<Number>> res;
-	if(this->dimension() != 0) {
-		std::size_t dim = this->dimension();
+	std::size_t dim = this->dimension();
+	if(!this->empty() && dim != 0) {
+		matrix_t<Number> m = this->matrix();
+		vector_t<Number> v = this->vector();
 		res.reserve(2*dim);
 		for( std::size_t d = 0; d < dim; ++d) {
-			vector_t<Number> low = vector_t<Number>::Zero(dim);
-			low(d) = -1;
-			vector_t<Number> up = vector_t<Number>::Zero(dim);
-			up(d) = 1;
-			Number lOff = -mLimits.first.at(d);
-			Number uOff = mLimits.second.at(d);
-			res.emplace_back(low, lOff);
-			res.emplace_back(up, uOff);
+			res.emplace_back(m.row(2*d),v(2*d));
+			res.emplace_back(m.row(2*d+1),v(2*d+1));
 		}
 	}
 	return res;
-}
-
-template<typename Number, typename Converter, class Setting>
-carl::Interval<Number> BoxT<Number,Converter,Setting>::interval( std::size_t d ) const {
-	if ( d >= mLimits.first.dimension() ) {
-		return carl::Interval<Number>::emptyInterval();
-	}
-	return carl::Interval<Number>(mLimits.first.at(d), mLimits.second.at(d));
 }
 
 template<typename Number, typename Converter, class Setting>
@@ -319,19 +226,26 @@ Number BoxT<Number,Converter,Setting>::supremum() const {
 template<typename Number, typename Converter, class Setting>
 std::vector<Point<Number>> BoxT<Number,Converter,Setting>::vertices( const matrix_t<Number>& ) const {
 	std::vector<Point<Number>> result;
-	std::size_t limit = std::size_t(pow( 2, mLimits.first.dimension() ));
+	if(this->empty()){
+		std::cout << "Box is empty. (size: " << mLimits.size() << ")" << std::endl;
+		return result;
+	}
+	std::size_t d = this->dimension();
+
+	std::size_t limit = std::size_t(pow( 2, d ));
+	result.reserve(limit);
 
 	for ( std::size_t bitCount = 0; bitCount < limit; ++bitCount ) {
-		vector_t<Number> coord = vector_t<Number>( dimension() );
-		for ( std::size_t dimension = 0; dimension < this->dimension(); ++dimension ) {
+		vector_t<Number> coord = vector_t<Number>( d );
+		for ( std::size_t dimension = 0; dimension < d; ++dimension ) {
 			std::size_t pos = ( 1 << dimension );
 			if ( bitCount & pos ) {
-				coord( dimension ) = mLimits.second.at(dimension);
+				coord( dimension ) = mLimits[dimension].upper();
 			} else {
-				coord( dimension ) = mLimits.first.at(dimension);
+				coord( dimension ) = mLimits[dimension].lower();
 			}
 		}
-		result.push_back( Point<Number>( coord ) );
+		result.emplace_back( coord );
 	}
 	return result;
 }
@@ -346,7 +260,7 @@ EvaluationResult<Number> BoxT<Number,Converter,Setting>::evaluate( const vector_
 	// find the point, which represents the maximum towards the direction - compare signs.
 	vector_t<Number> furthestPoint = vector_t<Number>(this->dimension());
 	for(Eigen::Index i = 0; i < furthestPoint.rows(); ++i) {
-		furthestPoint(i) = _direction(i) >= 0 ? mLimits.second[i] : mLimits.first[i];
+		furthestPoint(i) = _direction(i) >= 0 ? mLimits[i].upper() : mLimits[i].lower();
 	}
 	return EvaluationResult<Number>(furthestPoint.dot(_direction),furthestPoint,SOLUTION::FEAS);
 }
@@ -371,91 +285,30 @@ std::size_t BoxT<Number,Converter,Setting>::size() const {
 
 template<typename Number, typename Converter, class Setting>
 const BoxT<Number,Converter,Setting>& BoxT<Number,Converter,Setting>::reduceNumberRepresentation(unsigned limit) {
-	Number limit2 = Number(limit)*Number(limit);
-	for(unsigned d = 0; d < this->dimension(); ++d) {
-		//std::cout << "(Upper Bound) Number: " << mLimits.second.at(d) << std::endl;
-		if(mLimits.second.at(d) != 0) {
-			Number numerator = carl::getNum(mLimits.second.at(d));
-			Number denominator = carl::getDenom(mLimits.second.at(d));
-			Number largest = carl::abs(numerator) > carl::abs(denominator) ? carl::abs(numerator) : carl::abs(denominator);
-			if(largest > limit2){
-				Number dividend = largest / Number(limit);
-				assert(largest/dividend == limit);
-				Number val = Number(carl::ceil(numerator/dividend));
-				Number newDenom;
-				if(mLimits.second.at(d) > 0) {
-					newDenom = Number(carl::floor(denominator/dividend));
-				} else {
-					newDenom = Number(carl::ceil(denominator/dividend));
-				}
-				if(newDenom != 0) {
-					val = val / newDenom;
-					assert(val >= mLimits.second.at(d));
-					mLimits.second[d] = val;
-				}
-				//std::cout << "Assert: " << val << " >= " << mLimits.second.at(d) << std::endl;
-				//std::cout << "(Upper bound) Rounding Error: " << carl::convert<Number,double>(val - mLimits.second.at(d)) << std::endl;
-			}
-		}
+	reduceIntervalsNumberRepresentation(mLimits, limit);
 
-		//std::cout << "(Lower Bound) Number: " << mLimits.first.at(d) << std::endl;
-		if(mLimits.first.at(d) != 0) {
-			Number numerator = carl::getNum(mLimits.first.at(d));
-			Number denominator = carl::getDenom(mLimits.first.at(d));
-			Number largest = carl::abs(numerator) > carl::abs(denominator) ? carl::abs(numerator) : carl::abs(denominator);
-			if(largest > limit2){
-				Number dividend = largest / Number(limit);
-				assert(largest/dividend == limit);
-				Number val = Number(carl::floor(numerator/dividend));
-				Number newDenom;
-				if( mLimits.first.at(d) > 0) {
-					newDenom = Number(carl::ceil(denominator/dividend));
-				} else {
-					newDenom = Number(carl::floor(denominator/dividend));
-				}
-				if(newDenom != 0) {
-					val = val / newDenom;
-					assert(val <= mLimits.first.at(d));
-					mLimits.first[d] = val;
-				}
-				//std::cout << "Assert: " << val << " <= " << mLimits.first.at(d) << std::endl;
-				//std::cout << "(Lower bound) Rounding Error: " << carl::convert<Number,double>(val - mLimits.first.at(d)) << std::endl;
-			}
-		}
-	}
 	return *this;
 }
 
-template<typename Number, typename Converter, class Setting>
+template<typename Number, typename Converter, typename Setting>
 BoxT<Number,Converter,Setting> BoxT<Number,Converter,Setting>::makeSymmetric() const {
-	Point<Number> limit = mLimits.first;
-	for(unsigned d = 0; d < mLimits.first.dimension(); ++d) {
-		limit[d] = carl::abs(mLimits.first.at(d)) >= carl::abs(mLimits.second.at(d)) ? carl::abs(mLimits.first.at(d)) : carl::abs(mLimits.second.at(d));
+	if(this->empty()){
+		return *this;
 	}
-	return BoxT<Number,Converter,Setting>(std::make_pair(-limit, limit));
+	std::vector<carl::Interval<Number>> newIntervals;
+	for(const auto& i : mLimits) {
+		newIntervals.emplace_back(-i.upper(),i.upper());
+	}
+	return BoxT<Number,Converter,Setting>(newIntervals);
 }
 
 template<typename Number, typename Converter, class Setting>
 std::pair<CONTAINMENT, BoxT<Number,Converter,Setting>> BoxT<Number,Converter,Setting>::satisfiesHalfspace( const Halfspace<Number>& rhs ) const {
-	std::vector<Point<Number>> vertices = this->vertices();
-	bool allVerticesContained = true;
-	unsigned outsideVertexCnt = 0;
-	for(const auto& vertex : vertices) {
-
-		if(vertex.rawCoordinates().dot(rhs.normal()) > rhs.offset()){
-			allVerticesContained = false;
-			outsideVertexCnt++;
-		}
-	}
-	if(allVerticesContained) {
-		return std::make_pair(CONTAINMENT::FULL, *this);
-	}
-
-	if(outsideVertexCnt == vertices.size()) {
-		return std::make_pair(CONTAINMENT::NO, Empty());
-	}
-
-	return std::make_pair(CONTAINMENT::PARTIAL, this->intersectHalfspace(rhs));
+	matrix_t<Number> constraints = matrix_t<Number>(1,this->dimension());
+	constraints.row(0) = rhs.normal();
+	vector_t<Number> constants = vector_t<Number>(1);
+	constants << rhs.offset();
+	return this->satisfiesHalfspaces(constraints,constants);
 }
 
 template<typename Number, typename Converter, class Setting>
@@ -463,6 +316,12 @@ std::pair<CONTAINMENT, BoxT<Number,Converter,Setting>> BoxT<Number,Converter,Set
 	if(_mat.rows() == 0) {
 		return std::make_pair(CONTAINMENT::FULL, *this);
 	}
+
+	if(this->empty()) {
+		//std::cout << __func__ << " Box is empty." << std::endl;
+		return std::make_pair(CONTAINMENT::NO, *this);
+	}
+
 	//std::cout << __func__ << " This: " << convert<Number,double>(*this) << std::endl;
 	//std::cout << __func__ << ": input matrix: " << convert<Number,double>(_mat) << std::endl << "input vector: " << convert<Number,double>(_vec) << std::endl;
 	// std::cout << __func__ << ": This->dimension() = " << this->dimension() << std::endl;
@@ -472,7 +331,7 @@ std::pair<CONTAINMENT, BoxT<Number,Converter,Setting>> BoxT<Number,Converter,Set
 	for(unsigned rowIndex = 0; rowIndex < _mat.rows(); ++rowIndex) {
 		carl::Interval<Number> evaluatedBox = carl::Interval<Number>(0);
 		for(unsigned d = 0; d < _mat.cols(); ++d){
-			evaluatedBox += carl::Interval<Number>(mLimits.first.at(d), mLimits.second.at(d)) * Number(_mat(rowIndex,d));
+			evaluatedBox += mLimits[d] * Number(_mat(rowIndex,d));
 		}
 
 		//std::cout << __func__ << " Row: " << convert<Number,double>(_mat.row(rowIndex)) << std::endl;
@@ -513,14 +372,19 @@ BoxT<Number,Converter,Setting> BoxT<Number,Converter,Setting>::project(const std
 	if(dimensions.empty()) {
 		return Empty();
 	}
-	return BoxT<Number,Converter,Setting>(std::make_pair(mLimits.first.project(dimensions), mLimits.second.project(dimensions)));
+	std::vector<carl::Interval<Number>> newIntervals;
+	for(const auto d : dimensions) {
+		assert(d < this->dimension());
+		newIntervals.push_back(mLimits[d]);
+	}
+	return BoxT<Number,Converter,Setting>(newIntervals);
 }
 
 template<typename Number, typename Converter, class Setting>
 BoxT<Number,Converter,Setting> BoxT<Number,Converter,Setting>::linearTransformation( const matrix_t<Number> &A ) const {
-	#ifndef NDEBUG
-	bool empty = this->empty();
-	#endif
+	if(this->empty()) {
+		return *this;
+	}
 	// create both limit matrices
 	// std::cout << __func__ << ": This: " << *this << std::endl;
 	// std::cout << __func__ << ": Matrix" <<  std::endl << A << std::endl << "Vector" << std::endl << b << std::endl;
@@ -528,11 +392,10 @@ BoxT<Number,Converter,Setting> BoxT<Number,Converter,Setting>::linearTransformat
 	//matrix_t<Number> bx(A);
 	Point<Number> min(vector_t<Number>::Zero(this->dimension()));
 	Point<Number> max(vector_t<Number>::Zero(this->dimension()));
-
 	for (int k = 0; k < A.rows(); ++k) {
 		for (int j = 0; j < A.cols(); ++j) {
-			Number a = mLimits.first.at(j)*A(k,j);
-			Number b = mLimits.second.at(j)*A(k,j);
+			Number a = mLimits[j].lower()*A(k,j);
+			Number b = mLimits[j].upper()*A(k,j);
 			//std::cout << "Obtained values " << a << " and " << b << " for dimension " << k << " and colum " << j << std::endl;
 				if(a > b){
 					max[k] += a;
@@ -545,13 +408,10 @@ BoxT<Number,Converter,Setting> BoxT<Number,Converter,Setting>::linearTransformat
 		}
 	}
 	//std::cout << __func__ << ": Min: " << min << ", Max: " << max << std::endl;
-	#ifndef NDEBUG
-	assert( (BoxT<Number,Converter,Setting>(std::make_pair(min, max)).empty() == empty) );
-	#endif
 	BoxT<Number,Converter,Setting> res(std::make_pair(min, max));
 	res.reduceNumberRepresentation();
-	assert(res.contains(Point<Number>(A*mLimits.first.rawCoordinates())));
-	assert(res.contains(Point<Number>(A*mLimits.second.rawCoordinates())));
+	assert(res.contains(Point<Number>(A*this->min().rawCoordinates())));
+	assert(res.contains(Point<Number>(A*this->max().rawCoordinates())));
 	#ifndef NDEBUG
 	std::vector<Point<Number>> vertices = this->vertices();
 	Point<Number> manualMin = Point<Number>(A*(vertices.begin()->rawCoordinates()));
@@ -579,16 +439,20 @@ BoxT<Number,Converter,Setting> BoxT<Number,Converter,Setting>::affineTransformat
 	if(this->empty()){
 		return *this;
 	}
-	TRACE("hypro.representations.box","This: " << *this << ", A: " << A << "b: " << b);
+	//TRACE("hypro.representations.box","This: " << *this << ", A: " << A << "b: " << b);
 	BoxT<Number,Converter,Setting> res = this->linearTransformation(A);
-	TRACE("hypro.representations.box","Result of linear trafo: " << res);
+	//TRACE("hypro.representations.box","Result of linear trafo: " << res);
 	return BoxT<Number,Converter,Setting>( std::make_pair(res.min()+b, res.max()+b) );
 }
 
 template<typename Number, typename Converter, class Setting>
 BoxT<Number,Converter,Setting> BoxT<Number,Converter,Setting>::minkowskiSum( const BoxT<Number,Converter,Setting> &rhs ) const {
 	assert( dimension() == rhs.dimension() );
-	return BoxT<Number,Converter,Setting>(std::make_pair(mLimits.first + rhs.min(), mLimits.second + rhs.max()));
+	std::vector<carl::Interval<Number>> newIntervals;
+	for(std::size_t d = 0; d < this->dimension(); ++d) {
+		newIntervals.emplace_back(mLimits[d]+rhs.interval(d));
+	}
+	return BoxT<Number,Converter,Setting>(newIntervals);
 }
 
 template<typename Number, typename Converter, class Setting>
@@ -598,21 +462,32 @@ BoxT<Number,Converter,Setting> BoxT<Number,Converter,Setting>::minkowskiDecompos
 	}
 	TRACE("hypro.representations.box","This: " << *this << ", Rhs: " << rhs);
 	assert( dimension() == rhs.dimension() );
-	// assert( std::mismatch(this->boundaries().begin(), this->boundaries.end(), rhs.boundaries().begin(), rhs.boundaries.end(), [&](a,b) -> bool {return a.diameter() >= b.diameter()}  ) ); // TODO: wait for c++14 support
-	// assert( (BoxT<Number,Converter,Setting>(std::make_pair(mLimits.first - rhs.min(), mLimits.second - rhs.max())).minkowskiSum(rhs) == *this) );
-	return BoxT<Number,Converter,Setting>(std::make_pair(mLimits.first - rhs.min(), mLimits.second - rhs.max()));
+	std::vector<carl::Interval<Number>> newIntervals;
+	for(std::size_t d = 0; d < this->dimension(); ++d) {
+		newIntervals.emplace_back(mLimits[d].lower()-rhs.interval(d).lower(), mLimits[d].upper() - rhs.interval(d).upper());
+	}
+	return BoxT<Number,Converter,Setting>(newIntervals);
 }
 
 template<typename Number, typename Converter, class Setting>
 BoxT<Number,Converter,Setting> BoxT<Number,Converter,Setting>::intersect( const BoxT<Number,Converter,Setting> &rhs ) const {
-	std::size_t dim = rhs.dimension() < this->dimension() ? rhs.dimension() : this->dimension();
-	std::pair<Point<Number>, Point<Number>> limits(std::make_pair(Point<Number>(vector_t<Number>::Zero(dim)), Point<Number>(vector_t<Number>::Zero(dim))));
-	std::pair<Point<Number>, Point<Number>> rhsLimits = rhs.limits();
-	for ( std::size_t i = 0; i < dim; ++i ) {
-		limits.first[i] = mLimits.first.at(i) > rhsLimits.first.at(i) ? mLimits.first.at(i) : rhsLimits.first.at(i);
-		limits.second[i] = mLimits.second.at(i) < rhsLimits.second.at(i) ? mLimits.second.at(i) : rhsLimits.second.at(i);
+	std::vector<carl::Interval<Number>> newIntervals;
+	std::size_t dim = this->dimension();
+	std::size_t rdim = rhs.dimension();
+	for(std::size_t d = 0; d < this->dimension(); ++d) {
+		// intersection if both agree on the dimension
+		if(d < rdim)
+			newIntervals.emplace_back(mLimits[d].intersect(rhs.interval(d)));
+		else // if this->dimension() > rdim use projection
+			newIntervals.emplace_back(mLimits[d]);
 	}
-	return BoxT<Number,Converter,Setting>(limits);
+	// if the other box has a larger dimension use projection as well.
+	if(rdim > dim) {
+		for(std::size_t d = dim; d < rdim; ++d) {
+			newIntervals.emplace_back(rhs.interval(d));
+		}	
+	}
+	return BoxT<Number,Converter,Setting>(newIntervals);
 }
 
 template<typename Number, typename Converter, class Setting>
@@ -620,7 +495,7 @@ BoxT<Number,Converter,Setting> BoxT<Number,Converter,Setting>::intersectHalfspac
 	//std::cout << __func__ << " of " << *this << " and " << hspace << std::endl;
 	if(!this->empty()) {
 		if(Setting::USE_INTERVAL_ARITHMETIC) {
-			std::vector<carl::Interval<Number>> intervals = this->boundaries();
+			std::vector<carl::Interval<Number>> intervals = this->intervals();
 			bool empty = icpIntersectHalfspace(intervals,hspace);
 			if(empty) {
 				return Empty(this->dimension());
@@ -629,8 +504,8 @@ BoxT<Number,Converter,Setting> BoxT<Number,Converter,Setting>::intersectHalfspac
 		} else { // Do not use interval arithmetic.
 			BoxT<Number,Converter,Setting> boxcopy(*this);
 			// Preprocessing: If any two points opposite to each other are contained, the box stays the same - test limit points
-			bool holdsMin = hspace.contains(boxcopy.limits().first.rawCoordinates());
-			bool holdsMax = hspace.contains(boxcopy.limits().second.rawCoordinates());
+			bool holdsMin = hspace.contains(boxcopy.min());
+			bool holdsMax = hspace.contains(boxcopy.max());
 			if(holdsMin && holdsMax){
 				//std::cout << __func__ << " Min and Max are below the halfspace." << std::endl;
 				return *this;
@@ -650,9 +525,9 @@ BoxT<Number,Converter,Setting> BoxT<Number,Converter,Setting>::intersectHalfspac
 				while(hspace.normal()(nonZeroDim) == 0 ) ++nonZeroDim;
 
 				if(hspace.normal()(nonZeroDim) > 0) {
-					boxcopy.rLimits().second[nonZeroDim] = hspace.offset() / hspace.normal()(nonZeroDim);
+					boxcopy.rInterval(nonZeroDim).setUpper(hspace.offset() / hspace.normal()(nonZeroDim));
 				} else {
-					boxcopy.rLimits().first[nonZeroDim] = hspace.offset() / hspace.normal()(nonZeroDim);
+					boxcopy.rInterval(nonZeroDim).setLower(hspace.offset() / hspace.normal()(nonZeroDim));
 				}
 				return boxcopy;
 			}
@@ -661,24 +536,24 @@ BoxT<Number,Converter,Setting> BoxT<Number,Converter,Setting>::intersectHalfspac
 			std::size_t dim = this->dimension();
 
 			// Phase 1: Find starting point (point outside) for phase 2 by depth-first search or use limit points, if applicable
-			Point<Number> farestPointOutside = boxcopy.limits().first;
-			Point<Number> farestPointInside = boxcopy.limits().first;
+			Point<Number> farestPointOutside = boxcopy.min();
+			Point<Number> farestPointInside = boxcopy.min();
 			std::size_t usedDimension = 0;
 			// determine walk direction by using plane normal and variable order
 			for(; usedDimension < dim; ++usedDimension){
 				if(hspace.normal()(usedDimension) > 0){
-					if(farestPointOutside.at(usedDimension) != boxcopy.limits().second.at(usedDimension)) {
-						farestPointOutside[usedDimension] = boxcopy.limits().second.at(usedDimension);
+					if(farestPointOutside.at(usedDimension) != boxcopy.intervals()[usedDimension].upper()) {
+						farestPointOutside[usedDimension] = boxcopy.intervals()[usedDimension].upper();
 					}
-					if(farestPointInside.at(usedDimension) != boxcopy.limits().first.at(usedDimension)) {
-						farestPointInside[usedDimension] = boxcopy.limits().first.at(usedDimension);
+					if(farestPointInside.at(usedDimension) != boxcopy.intervals()[usedDimension].lower()) {
+						farestPointInside[usedDimension] = boxcopy.intervals()[usedDimension].lower();
 					}
 				} else if( hspace.normal()(usedDimension) < 0){
-					if( farestPointOutside.at(usedDimension) != boxcopy.limits().first.at(usedDimension) ) {
-						farestPointOutside[usedDimension] = boxcopy.limits().first.at(usedDimension);
+					if( farestPointOutside.at(usedDimension) != boxcopy.intervals()[usedDimension].lower() ) {
+						farestPointOutside[usedDimension] = boxcopy.intervals()[usedDimension].lower();
 					}
-					if(farestPointInside.at(usedDimension) != boxcopy.limits().second.at(usedDimension)) {
-						farestPointInside[usedDimension] = boxcopy.limits().second.at(usedDimension);
+					if(farestPointInside.at(usedDimension) != boxcopy.intervals()[usedDimension].upper()) {
+						farestPointInside[usedDimension] = boxcopy.intervals()[usedDimension].upper();
 					}
 				}
 			}
@@ -710,12 +585,12 @@ BoxT<Number,Converter,Setting> BoxT<Number,Converter,Setting>::intersectHalfspac
 				// create and test neighbors
 				for(unsigned d = 0; d < dim; ++d ) {
 					Point<Number> tmp = current;
-					if( hspace.normal()(d) < 0 && current.at(d) == boxcopy.limits().first.at(d) ){
-						tmp[d] = boxcopy.limits().second.at(d);
-					} else if ( hspace.normal()(d) > 0 && current.at(d) == boxcopy.limits().second.at(d) ) {
-						tmp[d] = boxcopy.limits().first.at(d);
+					if( hspace.normal()(d) < 0 && current.at(d) == boxcopy.intervals()[d].lower() ){
+						tmp[d] = boxcopy.intervals()[d].upper();
+					} else if ( hspace.normal()(d) > 0 && current.at(d) == boxcopy.intervals()[d].upper() ) {
+						tmp[d] = boxcopy.intervals()[d].lower();
 					} else if ( hspace.normal()(d) == 0 ) {
-						tmp[d] = tmp.at(d) == boxcopy.limits().first.at(d) ? boxcopy.limits().second.at(d) : boxcopy.limits().first.at(d);
+						tmp[d] = tmp.at(d) == boxcopy.intervals()[d].lower() ? boxcopy.intervals()[d].upper() : boxcopy.intervals()[d].lower();
 					} else {
 						// UNSINN!?
 						//std::cout << "Could create point " << tmp << ", but is the same as " << current << std::endl;
@@ -756,9 +631,9 @@ BoxT<Number,Converter,Setting> BoxT<Number,Converter,Setting>::intersectHalfspac
 				return BoxT<Number,Converter,Setting>(intersectionPoints);
 			} else {
 				if(holdsMin){
-					intersectionPoints.push_back(boxcopy.limits().first);
+					intersectionPoints.push_back(boxcopy.min());
 				} else {
-					intersectionPoints.push_back(boxcopy.limits().second);
+					intersectionPoints.push_back(boxcopy.max());
 				}
 				return BoxT<Number,Converter,Setting>(intersectionPoints);
 			}
@@ -779,7 +654,7 @@ BoxT<Number,Converter,Setting> BoxT<Number,Converter,Setting>::intersectHalfspac
 	}
 
 	if(Setting::USE_INTERVAL_ARITHMETIC) {
-		std::vector<carl::Interval<Number>> intervals = this->boundaries();
+		std::vector<carl::Interval<Number>> intervals = this->intervals();
 		// Todo: This is a first draft using the function for single halfspaces - maybe we can check more than one plane at the same time.
 		for(unsigned planeIndex = 0; planeIndex < _mat.rows(); ++planeIndex) {
 			bool empty = icpIntersectHalfspace(intervals,Halfspace<Number>(_mat.row(planeIndex), _vec(planeIndex)));
@@ -788,33 +663,28 @@ BoxT<Number,Converter,Setting> BoxT<Number,Converter,Setting>::intersectHalfspac
 			}
 		}
 		return BoxT<Number,Converter,Setting>(intervals);
+	} else if(Setting::HYPRO_BOX_AVOID_LINEAR_OPTIMIZATION){
+		if(_mat.rows() == 0) {
+			return *this;
+		}
+		if(!this->empty()) {
+			BoxT<Number,Converter,Setting> result = *this;
+			// Todo: This is a first draft using the function for single halfspaces - maybe we can check more than one plane at the same time.
+			for(unsigned planeIndex = 0; planeIndex < _mat.rows(); ++planeIndex) {
+				result = result.intersectHalfspace(Halfspace<Number>(_mat.row(planeIndex), _vec(planeIndex)));
+				if(result.empty()){
+					break;
+				}
+			}
+			return result;
+		}
+		return Empty(this->dimension());
 	} else {
 
 		// convert box to a set of constraints, add other halfspaces and evaluate in box main directions to get new intervals.
 		std::vector<vector_t<Number>> tpl = computeTemplate<Number>(this->dimension(), 4);
-		matrix_t<Number> boxDirections = matrix_t<Number>::Zero(tpl.size(), this->dimension());
-		vector_t<Number> boxDistances = vector_t<Number>::Zero(boxDirections.rows());
-
-		// set up matrix.
-		// Todo: Can be combined with next loop.
-		Eigen::Index i = 0;
-		for(const auto& row : tpl) {
-			boxDirections.row(i) = row;
-			++i;
-		}
-
-		// the template has one non-Zero index per row
-		for(Eigen::Index rowIndex = 0; rowIndex < boxDirections.rows(); ++rowIndex) {
-			for(Eigen::Index colIndex = 0; colIndex < boxDirections.cols(); ++colIndex) {
-				if(boxDirections(rowIndex,colIndex) > 0) {
-					boxDistances(rowIndex) = mLimits.second.at(colIndex);
-					break;
-				} else if (boxDirections(rowIndex,colIndex) < 0) {
-					boxDistances(rowIndex) = -mLimits.first.at(colIndex);
-					break;
-				}
-			}
-		}
+		matrix_t<Number> boxDirections = this->matrix();
+		vector_t<Number> boxDistances = this->vector();
 
 		// At this point the constraints for the box are created as a matrix-vector pair.
 		// Now add the halfspace constraints in a fresh matrix (we re-use the box template later).
@@ -858,10 +728,9 @@ bool BoxT<Number,Converter,Setting>::contains( const Point<Number> &point ) cons
 	}
 
 	for(unsigned d = 0; d < this->dimension(); ++d) {
-		if(mLimits.first.at(d) > point.at(d))
+		if(!mLimits[d].contains(point.at(d))) {
 			return false;
-		if(mLimits.second.at(d) < point.at(d))
-			return false;
+		}
 	}
 	return true;
 }
@@ -873,10 +742,9 @@ bool BoxT<Number,Converter,Setting>::contains( const BoxT<Number,Converter,Setti
 	}
 
 	for(unsigned d = 0; d < this->dimension(); ++d) {
-		if(mLimits.first.at(d) > box.min().at(d))
+		if(!mLimits[d].contains(box.interval(d))) {
 			return false;
-		if(mLimits.second.at(d) < box.max().at(d))
-			return false;
+		}
 	}
 	return true;
 }
@@ -884,15 +752,12 @@ bool BoxT<Number,Converter,Setting>::contains( const BoxT<Number,Converter,Setti
 template<typename Number, typename Converter, class Setting>
 BoxT<Number,Converter,Setting> BoxT<Number,Converter,Setting>::unite( const BoxT<Number,Converter,Setting> &rhs ) const {
 	assert( dimension() == rhs.dimension() );
-	std::size_t dim = this->dimension();
 
-	std::pair<Point<Number>, Point<Number>> limits(std::make_pair(Point<Number>(vector_t<Number>::Zero(dim)), Point<Number>(vector_t<Number>::Zero(dim))));
-	std::pair<Point<Number>, Point<Number>> rhsLimits = rhs.limits();
-	for ( std::size_t i = 0; i < dim; ++i ) {
-		limits.first[i] = mLimits.first.at(i) < rhsLimits.first.at(i) ? mLimits.first.at(i) : rhsLimits.first.at(i);
-		limits.second[i] = mLimits.second.at(i) > rhsLimits.second.at(i) ? mLimits.second.at(i) : rhsLimits.second.at(i);
+	std::vector<carl::Interval<Number>> newIntervals;
+	for ( std::size_t i = 0; i < this->dimension(); ++i ) {
+		newIntervals.emplace_back(mLimits[i].convexHull(rhs.interval(i)));
 	}
-	return BoxT<Number,Converter,Setting>(limits);
+	return BoxT<Number,Converter,Setting>(newIntervals);
 }
 
 template<typename Number, typename Converter, class Setting>
