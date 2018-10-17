@@ -72,4 +72,19 @@ namespace hypro {
 		return newVec;
 	}
 
+	// interprets all vectors as row-vectors and creates a matrix
+	template<typename Number>
+	static matrix_t<Number> combineRows(const std::vector<vector_t<Number>>& vectors) {
+		matrix_t<Number> res = matrix_t<Number>(vectors.size(),vectors.begin()->rows());
+
+		Eigen::Index rowCount = 0;
+		for(const auto& r : vectors) {
+			assert(r.rows() == res.cols());
+			res.row(rowCount) = r;
+			++rowCount;
+		}
+
+		return res;
+	}
+
 }
