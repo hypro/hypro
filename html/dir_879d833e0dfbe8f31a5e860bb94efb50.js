@@ -12,6 +12,7 @@ var dir_879d833e0dfbe8f31a5e860bb94efb50 =
       [ "PrincipalComponentAnalysis", "classhypro_1_1PrincipalComponentAnalysis.html", "classhypro_1_1PrincipalComponentAnalysis" ]
     ] ],
     [ "Permutator.h", "Permutator_8h_source.html", null ],
+    [ "PlotData.h", "PlotData_8h_source.html", null ],
     [ "Plotter.h", "Plotter_8h_source.html", null ],
     [ "PlotterUtil.cpp", "PlotterUtil_8cpp_source.html", null ],
     [ "PlotterUtil.h", "PlotterUtil_8h_source.html", null ],

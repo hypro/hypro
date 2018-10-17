@@ -251,37 +251,38 @@ $(document).ready(function(){initNavTree('example__bouncingBall_8cpp_source.html
 <div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;    settings.timeBound = Number(3);</div>
 <div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;    settings.jumpDepth = 3;</div>
 <div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;    reacher.setSettings(settings);</div>
-<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;</div>
-<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;    <span class="comment">// perform reachability analysis.</span></div>
-<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;    std::vector&lt;std::pair&lt;unsigned, reachability::flowpipe_t&lt;Number&gt;&gt;&gt; flowpipeIndices = reacher.computeForwardReachability();</div>
-<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;</div>
-<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;    <span class="comment">// plot flowpipes.</span></div>
-<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;    <a class="code" href="classhypro_1_1Plotter.html">Plotter&lt;Number&gt;</a>&amp; plotter = <a class="code" href="classhypro_1_1Plotter.html">Plotter&lt;Number&gt;::getInstance</a>();</div>
-<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;    plotter.setFilename(<span class="stringliteral">&quot;bouncingBall&quot;</span>);</div>
-<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;    <span class="keywordflow">for</span>(<span class="keyword">auto</span>&amp; indexPair : flowpipeIndices){</div>
-<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;        std::vector&lt;hypro::State_t&lt;Number&gt;&gt; flowpipe = indexPair.second;</div>
-<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;        <span class="comment">// Plot single flowpipe</span></div>
-<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;        <span class="keywordflow">for</span>(<span class="keyword">auto</span>&amp; set : flowpipe) {</div>
-<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;            std::vector&lt;Point&lt;Number&gt;&gt; points = set.vertices();</div>
-<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;            <span class="keywordflow">if</span>(!points.empty() &amp;&amp; points.size() &gt; 2) {</div>
-<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;                <span class="keywordflow">for</span>(<span class="keyword">auto</span>&amp; point : points) {</div>
-<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;                    point.reduceDimension(2);</div>
-<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;                }</div>
-<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;                plotter.addObject(points);</div>
-<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;                points.clear();</div>
-<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;            }</div>
-<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;        }</div>
-<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;    }</div>
-<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;</div>
-<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;    <span class="comment">// write output.</span></div>
-<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;    plotter.plot2d();</div>
-<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;</div>
-<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;    <span class="keywordflow">return</span> 0;</div>
-<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;}</div>
+<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;    reacher.setRepresentationType(Representation::type());</div>
+<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;</div>
+<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;    <span class="comment">// perform reachability analysis.</span></div>
+<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;    std::vector&lt;std::pair&lt;unsigned, reachability::flowpipe_t&lt;Number&gt;&gt;&gt; flowpipeIndices = reacher.computeForwardReachability();</div>
+<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;</div>
+<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;    <span class="comment">// plot flowpipes.</span></div>
+<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;    <a class="code" href="classhypro_1_1Plotter.html">Plotter&lt;Number&gt;</a>&amp; plotter = <a class="code" href="classhypro_1_1Plotter.html">Plotter&lt;Number&gt;::getInstance</a>();</div>
+<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;    plotter.setFilename(<span class="stringliteral">&quot;bouncingBall&quot;</span>);</div>
+<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;    <span class="keywordflow">for</span>(<span class="keyword">auto</span>&amp; indexPair : flowpipeIndices){</div>
+<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;        std::vector&lt;hypro::State_t&lt;Number&gt;&gt; flowpipe = indexPair.second;</div>
+<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;        <span class="comment">// Plot single flowpipe</span></div>
+<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;        <span class="keywordflow">for</span>(<span class="keyword">auto</span>&amp; set : flowpipe) {</div>
+<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;            std::vector&lt;Point&lt;Number&gt;&gt; points = set.vertices();</div>
+<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;            <span class="keywordflow">if</span>(!points.empty() &amp;&amp; points.size() &gt; 2) {</div>
+<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;                <span class="keywordflow">for</span>(<span class="keyword">auto</span>&amp; point : points) {</div>
+<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;                    point.reduceDimension(2);</div>
+<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;                }</div>
+<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;                plotter.addObject(points);</div>
+<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;                points.clear();</div>
+<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;            }</div>
+<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;        }</div>
+<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;    }</div>
+<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;</div>
+<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;    <span class="comment">// write output.</span></div>
+<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;    plotter.plot2d();</div>
+<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;</div>
+<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;    <span class="keywordflow">return</span> 0;</div>
+<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;}</div>
 <div class="ttc" id="GeometricObject_8h_html"><div class="ttname"><a href="GeometricObject_8h.html">GeometricObject.h</a></div></div>
 <div class="ttc" id="classhypro_1_1HybridAutomaton_html"><div class="ttname"><a href="classhypro_1_1HybridAutomaton.html">hypro::HybridAutomaton&lt; Number &gt;</a></div></div>
 <div class="ttc" id="classhypro_1_1Reset_html"><div class="ttname"><a href="classhypro_1_1Reset.html">hypro::Reset</a></div><div class="ttdef"><b>Definition:</b> <a href="Reset_8h_source.html#l00009">Reset.h:9</a></div></div>
-<div class="ttc" id="namespacehypro_html_a52a4896e811a0710bcfc5a410a780034"><div class="ttname"><a href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">hypro::matrix_t</a></div><div class="ttdeci">Eigen::Matrix&lt; Number, Eigen::Dynamic, Eigen::Dynamic &gt; matrix_t</div><div class="ttdef"><b>Definition:</b> <a href="types_8h_source.html#l00026">types.h:26</a></div></div>
+<div class="ttc" id="namespacehypro_html_a52a4896e811a0710bcfc5a410a780034"><div class="ttname"><a href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">hypro::matrix_t</a></div><div class="ttdeci">Eigen::Matrix&lt; Number, Eigen::Dynamic, Eigen::Dynamic &gt; matrix_t</div><div class="ttdef"><b>Definition:</b> <a href="types_8h_source.html#l00032">types.h:32</a></div></div>
 <div class="ttc" id="structhypro_1_1ReachabilitySettings_html"><div class="ttname"><a href="structhypro_1_1ReachabilitySettings.html">hypro::ReachabilitySettings</a></div><div class="ttdoc">Struct for reachability analysis algorithm settings. </div><div class="ttdef"><b>Definition:</b> <a href="Settings_8h_source.html#l00014">Settings.h:14</a></div></div>
 <div class="ttc" id="classhypro_1_1Plotter_html"><div class="ttname"><a href="classhypro_1_1Plotter.html">hypro::Plotter</a></div><div class="ttdoc">Class implementing a plotter. The plotter is implemented using carl::Singleton. </div><div class="ttdef"><b>Definition:</b> <a href="Plotter_8h_source.html#l00070">Plotter.h:70</a></div></div>
 <div class="ttc" id="Point_8h_html"><div class="ttname"><a href="Point_8h.html">Point.h</a></div></div>
@@ -289,9 +290,9 @@ $(document).ready(function(){initNavTree('example__bouncingBall_8cpp_source.html
 <div class="ttc" id="classhypro_1_1Condition_html"><div class="ttname"><a href="classhypro_1_1Condition.html">hypro::Condition</a></div><div class="ttdef"><b>Definition:</b> <a href="Condition_8h_source.html#l00010">Condition.h:10</a></div></div>
 <div class="ttc" id="Reach_8h_html"><div class="ttname"><a href="Reach_8h.html">Reach.h</a></div></div>
 <div class="ttc" id="classhypro_1_1State_html"><div class="ttname"><a href="classhypro_1_1State.html">hypro::State</a></div><div class="ttdoc">Class for state. </div><div class="ttdef"><b>Definition:</b> <a href="State_8h_source.html#l00030">State.h:30</a></div></div>
-<div class="ttc" id="namespacehypro_html_afd0bc8dcc54953e4b477a5aaf7065439"><div class="ttname"><a href="namespacehypro.html#afd0bc8dcc54953e4b477a5aaf7065439">hypro::HPolytope</a></div><div class="ttdeci">typename Converter&lt; Number &gt;::HPolytope HPolytope</div><div class="ttdef"><b>Definition:</b> <a href="Converter_8h_source.html#l00169">Converter.h:169</a></div></div>
+<div class="ttc" id="namespacehypro_html_afd0bc8dcc54953e4b477a5aaf7065439"><div class="ttname"><a href="namespacehypro.html#afd0bc8dcc54953e4b477a5aaf7065439">hypro::HPolytope</a></div><div class="ttdeci">typename Converter&lt; Number &gt;::HPolytope HPolytope</div><div class="ttdef"><b>Definition:</b> <a href="Converter_8h_source.html#l00016">Converter.h:16</a></div></div>
 <div class="ttc" id="structhypro_1_1ReachabilitySettings_html_a46dc42bf29cc6363a63d9ec34e1a0466"><div class="ttname"><a href="structhypro_1_1ReachabilitySettings.html#a46dc42bf29cc6363a63d9ec34e1a0466">hypro::ReachabilitySettings::timeStep</a></div><div class="ttdeci">Number timeStep</div><div class="ttdoc">The maximal number of jumps, i.e. the depth of the search tree. </div><div class="ttdef"><b>Definition:</b> <a href="Settings_8h_source.html#l00017">Settings.h:17</a></div></div>
-<div class="ttc" id="namespacehypro_html_aa70b7a97ac898c2b28a2af61f4607e3a"><div class="ttname"><a href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">hypro::vector_t</a></div><div class="ttdeci">Eigen::Matrix&lt; Number, Eigen::Dynamic, 1 &gt; vector_t</div><div class="ttdef"><b>Definition:</b> <a href="types_8h_source.html#l00020">types.h:20</a></div></div>
+<div class="ttc" id="namespacehypro_html_aa70b7a97ac898c2b28a2af61f4607e3a"><div class="ttname"><a href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">hypro::vector_t</a></div><div class="ttdeci">Eigen::Matrix&lt; Number, Eigen::Dynamic, 1 &gt; vector_t</div><div class="ttdef"><b>Definition:</b> <a href="types_8h_source.html#l00026">types.h:26</a></div></div>
 <div class="ttc" id="classhypro_1_1State_html_a9d7649df9b2670e1873784c3c5fdca21"><div class="ttname"><a href="classhypro_1_1State.html#a9d7649df9b2670e1873784c3c5fdca21">hypro::State::setLocation</a></div><div class="ttdeci">void setLocation(const Location&lt; Number &gt; *l)</div><div class="ttdoc">Sets the location. </div><div class="ttdef"><b>Definition:</b> <a href="State_8h_source.html#l00225">State.h:225</a></div></div>
 <div class="ttc" id="classhypro_1_1reachability_1_1Reach_html"><div class="ttname"><a href="classhypro_1_1reachability_1_1Reach.html">hypro::reachability::Reach</a></div><div class="ttdoc">Class implementing a basic reachbility analysis algorithm for linear hybrid automata. </div><div class="ttdef"><b>Definition:</b> <a href="Reach_8h_source.html#l00061">Reach.h:61</a></div></div>
 </div><!-- fragment --></div><!-- contents -->

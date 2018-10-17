@@ -198,7 +198,7 @@ $(document).ready(function(){initNavTree('FirstSegment_8h_source.html','');});
 <div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;}</div>
 <div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;</div>
 <div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> Number, <span class="keyword">typename</span> tNumber, <span class="keyword">typename</span> State&gt;</div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;boost::tuple&lt;CONTAINMENT, State, matrix_t&lt;Number&gt;, vector_t&lt;Number&gt;, Box&lt;Number&gt;&gt; computeFirstSegment(<span class="keyword">const</span> State&amp; _state, tNumber timeStep)</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;boost::tuple&lt;CONTAINMENT, State, matrix_t&lt;Number&gt;, vector_t&lt;Number&gt;, Box&lt;Number&gt;&gt; computeFirstSegment(<span class="keyword">const</span> State&amp; _state, <a class="code" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> timeStep)</div>
 <div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;{</div>
 <div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;    assert(!_state.getTimestamp().isEmpty());</div>
 <div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;    <span class="comment">// check if initial Valuation fulfills Invariant</span></div>
@@ -365,6 +365,7 @@ $(document).ready(function(){initNavTree('FirstSegment_8h_source.html','');});
 <div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160;</div>
 <div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160;}  <span class="comment">// namespace reachability</span></div>
 <div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160;}  <span class="comment">// namespace hypro</span></div>
+<div class="ttc" id="namespacehypro_html_aecbc4b3475e1d41764127bd99c0e2b1c"><div class="ttname"><a href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">hypro::tNumber</a></div><div class="ttdeci">mpq_class tNumber</div><div class="ttdoc">Number type used for timings and time intervals. </div><div class="ttdef"><b>Definition:</b> <a href="types_8h_source.html#l00020">types.h:20</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- HTML footer for doxygen 1.8.12-->

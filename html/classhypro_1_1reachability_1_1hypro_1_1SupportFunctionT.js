@@ -23,6 +23,7 @@ var classhypro_1_1reachability_1_1hypro_1_1SupportFunctionT =
     [ "ellipsoid", "classhypro_1_1reachability_1_1hypro_1_1SupportFunctionT.html#ad9ced24d4d0effd30f255c350e8ad5ee", null ],
     [ "empty", "classhypro_1_1reachability_1_1hypro_1_1SupportFunctionT.html#a7fd20c6ec7b04fe1bbf40331b01c3d6a", null ],
     [ "evaluate", "classhypro_1_1reachability_1_1hypro_1_1SupportFunctionT.html#a136eaa6257da9cd99db3ff532c51ed08", null ],
+    [ "evaluateTemplate", "classhypro_1_1reachability_1_1hypro_1_1SupportFunctionT.html#a4130267d598fe4e12663c5f9116284bb", null ],
     [ "forceLinTransReduction", "classhypro_1_1reachability_1_1hypro_1_1SupportFunctionT.html#a2164de700b40ea792fb6ecffcf08025b", null ],
     [ "getDotRepresentation", "classhypro_1_1reachability_1_1hypro_1_1SupportFunctionT.html#a8b5e8c2c8a6ba72d606dd4be9bd2b083", null ],
     [ "intersect", "classhypro_1_1reachability_1_1hypro_1_1SupportFunctionT.html#ac109e76369bb7e7447d2f71b15ee3d4f", null ],

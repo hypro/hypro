@@ -181,7 +181,22 @@ $(document).ready(function(){initNavTree('transformation_8h_source.html','');});
 <div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;        <span class="keywordflow">return</span> newVec;</div>
 <div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;    }</div>
 <div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;}</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;    <span class="comment">// interprets all vectors as row-vectors and creates a matrix</span></div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> Number&gt;</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;    <span class="keyword">static</span> matrix_t&lt;Number&gt; combineRows(<span class="keyword">const</span> std::vector&lt;vector_t&lt;Number&gt;&gt;&amp; vectors) {</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;        matrix_t&lt;Number&gt; res = matrix_t&lt;Number&gt;(vectors.size(),vectors.begin()-&gt;rows());</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;        Eigen::Index rowCount = 0;</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;        <span class="keywordflow">for</span>(<span class="keyword">const</span> <span class="keyword">auto</span>&amp; r : vectors) {</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;            assert(r.rows() == res.cols());</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;            res.row(rowCount) = r;</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;            ++rowCount;</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;        }</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;        <span class="keywordflow">return</span> res;</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;    }</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;}</div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- HTML footer for doxygen 1.8.12-->
