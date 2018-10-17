@@ -88,6 +88,13 @@ typename Converter<Number>::DifferenceBounds Converter<Number>::toDifferenceBoun
     return toDifferenceBounds(tmp);
 }
 
+#ifdef HYPRO_USE_PPL
+template<typename Number>
+typename Converter<Number>::DifferenceBounds Converter<Number>::toDifferenceBounds(const Polytope& source, const CONV_MODE ){
+    // TODO IMPLEMENT.
+}
+#endif
+
 template<typename Number>
 typename Converter<Number>::DifferenceBounds Converter<Number>::toDifferenceBounds(const SupportFunction& _source, const std::vector<vector_t<Number>>& , const CONV_MODE, std::size_t ){
     // TODO make better, this is just the cheap solution
