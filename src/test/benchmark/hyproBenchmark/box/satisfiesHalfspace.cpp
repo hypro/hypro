@@ -3,8 +3,8 @@
 namespace benchmark {
 namespace box {
 
-  Results<int> satisfiesHalfspaces(const Settings& settings) {
-        Results<int> ress;
+  Results<std::size_t> satisfiesHalfspaces(const Settings& settings) {
+        Results<std::size_t> ress;
         hypro::Box<::benchmark::Number> box;
         // benchmark against PPL
         #ifdef HYPRO_USE_PPL

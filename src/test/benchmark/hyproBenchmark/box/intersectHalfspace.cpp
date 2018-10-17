@@ -3,8 +3,8 @@
 namespace benchmark {
 namespace box {
 
-  Results<int> intersectHalfspace(const Settings& settings) {
-        Results<int> ress;
+  Results<std::size_t> intersectHalfspace(const Settings& settings) {
+        Results<std::size_t> ress;
         hypro::Box<::benchmark::Number> box;
         // benchmark against PPL
         #ifdef HYPRO_USE_PPL
@@ -52,7 +52,7 @@ namespace box {
                 box.intersectHalfspace(hsps[i]);
             }
             auto runningTime = runTimerHyPro.elapsed();
-            ress.emplace_back({"intersectHalfspace",runningTime,d});
+            ress.emplace_back({"intersectHalfspace",runningTime,static_cast<int>(d)});
             std::cout << "Dimension " << d << ":  Running took " << runningTime.count() << " sec." << std::endl;
 
             #ifdef HYPRO_USE_PPL

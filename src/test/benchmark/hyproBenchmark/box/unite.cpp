@@ -3,8 +3,8 @@
 namespace benchmark {
 namespace box {
 
-  Results<int> unite(const Settings& settings) {
-        Results<int> ress;
+  Results<std::size_t> unite(const Settings& settings) {
+        Results<std::size_t> ress;
         // benchmark against PPL
         #ifdef HYPRO_USE_PPL
         using pplItv = Parma_Polyhedra_Library::Interval<double,Parma_Polyhedra_Library::Interval_Info_Null<benchmark::box::Double_Interval_Policy>>;
@@ -43,7 +43,7 @@ namespace box {
                 auto tmp = lhsBoxes[i].unite(rhsBoxes[i]);
             }
             auto runningTime = runTimerHyPro.elapsed();
-            ress.emplace_back({"union",runningTime,d});
+            ress.emplace_back({"union",runningTime,static_cast<int>(d)});
             std::cout << "Dimension " << d << ":  Running took " << runningTime.count() << " sec." << std::endl;
 
             ress.mRunningTime += runningTime;

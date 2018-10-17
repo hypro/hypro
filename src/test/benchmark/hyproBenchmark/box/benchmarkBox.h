@@ -23,11 +23,11 @@
 namespace benchmark {
 namespace box
 {
-    Results<int> intersectHalfspace(const Settings& settings);
-    Results<int> affineTransformation(const Settings& settings);
-    Results<int> unite(const Settings& settings);
-    Results<int> intersect(const Settings& settings);
-    Results<int> run(const Settings& settings);
+    Results<std::size_t> intersectHalfspace(const Settings& settings);
+    Results<std::size_t> affineTransformation(const Settings& settings);
+    Results<std::size_t> unite(const Settings& settings);
+    Results<std::size_t> intersect(const Settings& settings);
+    Results<std::size_t> run(const Settings& settings);
 
 } // box
 } // namespace benchmark

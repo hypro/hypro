@@ -29,7 +29,8 @@ struct Results {
 
     auto push_back(const Result<Data>& in) {return mResults.push_back(in);}
     auto emplace_back(Result<Data>&& in) {return mResults.emplace_back(std::move(in));}
-    auto insert(auto pos, auto inStart, auto inEnd) {return mResults.insert(pos,inStart,inEnd);}
+    auto insert(typename std::vector<Result<Data>>::iterator pos, typename std::vector<Result<Data>>::iterator inStart, typename std::vector<Result<Data>>::iterator inEnd) 
+    {return mResults.insert(pos,inStart,inEnd);}
 
     void createCSV(const std::string& filename, const std::string& delimiter = " ", const std::string& filter = "") {
         std::ofstream fstr;

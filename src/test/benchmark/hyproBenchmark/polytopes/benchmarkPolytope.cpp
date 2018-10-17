@@ -1,42 +1,42 @@
-#include "benchmarkBox.h"
+#include "benchmarkPolytope.h"
 
 namespace benchmark{
-namespace box
+namespace polytope
 {
 
-    Results<std::size_t> run(const Settings& settings) {
+    Results<int> run(const Settings& settings) {
         Timer totalRunningTime;
-        Results<std::size_t> ress;
+        Results<int> ress;
 
         // half-space intersection
         std::cout << "Benchmarking half space intersection." << std::endl;
         auto tmp = intersectHalfspace(settings);
-        tmp.createCSV("boxIntersectHalfspace", "\t", "intersectHalfspace");
-        tmp.createCSV("boxIntersectHalfspacePPL", "\t", "intersectHalfspacePPL");
+        tmp.createCSV("polytopeIntersectHalfspace", "\t", "intersectHalfspace");
+        tmp.createCSV("polytopeIntersectHalfspacePPL", "\t", "intersectHalfspacePPL");
         ress.insert(ress.end(), tmp.begin(), tmp.end());       
 
         // affine transformation
         std::cout << "Benchmarking affine transformation." << std::endl;
         tmp = affineTransformation(settings);
-        tmp.createCSV("boxAffineTransformation", "\t");
+        tmp.createCSV("polytopeAffineTransformation", "\t");
         ress.insert(ress.end(), tmp.begin(), tmp.end());
 
         // union
         std::cout << "Benchmarking union." << std::endl;
         tmp = unite(settings);
-        tmp.createCSV("boxUnion", "\t");
+        tmp.createCSV("polytopeUnion", "\t");
         ress.insert(ress.end(), tmp.begin(), tmp.end());
 
         // intersection
         std::cout << "Benchmarking intersection." << std::endl;
         tmp = intersect(settings);
-        tmp.createCSV("boxIntersection", "\t","intersect");
-        tmp.createCSV("boxIntersectionPPL", "\t", "intersectPPL");
+        tmp.createCSV("polytopeIntersection", "\t","intersect");
+        tmp.createCSV("polytopeIntersectionPPL", "\t", "intersectPPL");
         ress.insert(ress.end(), tmp.begin(), tmp.end());
 
-        std::cout << "Box benchmarking took " << totalRunningTime.elapsedMs() << " sec in total." << std::endl;
+        std::cout << "Polytope benchmarking took " << totalRunningTime.elapsedMs() << " sec in total." << std::endl;
 
         return ress;
     }
-} // box    
+} // polytope    
 } // benchmark

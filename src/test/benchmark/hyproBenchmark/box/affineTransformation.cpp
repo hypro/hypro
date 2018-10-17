@@ -3,8 +3,8 @@
 namespace benchmark {
 namespace box {
 
-  Results<int> affineTransformation(const Settings& settings) {
-        Results<int> ress;
+  Results<std::size_t> affineTransformation(const Settings& settings) {
+        Results<std::size_t> ress;
         hypro::Box<::benchmark::Number> box;
         // benchmark against PPL
         #ifdef HYPRO_USE_PPL
@@ -45,7 +45,7 @@ namespace box {
                 box.affineTransformation(matrices[i], vectors[i]);
             }
             auto runningTime = runTimerHyPro.elapsed();
-            ress.emplace_back({"affineTransformation",runningTime,d});
+            ress.emplace_back({"affineTransformation",runningTime,static_cast<int>(d)});
             std::cout << "Dimension " << d << ":  Running took " << runningTime.count() << " sec." << std::endl;
 
             ress.mRunningTime += runningTime;

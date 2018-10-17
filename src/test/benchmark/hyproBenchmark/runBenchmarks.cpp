@@ -11,6 +11,7 @@
 #include "Clock.h"
 #include "Settings.h"
 #include "box/benchmarkBox.h"
+#include "polytopes/benchmarkPolytope.h"
 #include <representations/GeometricObject.h>
 #include <iostream>
 
@@ -20,6 +21,8 @@ int main(int argc, char const *argv[])
     benchmark::Settings s;
 
     benchmark::box::run(s);
+
+    benchmark::polytope::run(s);
 
     std::cout << "Benchmarking took " << general.elapsedMs() << " sec." << std::endl;
     return 0;
