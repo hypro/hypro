@@ -5,6 +5,7 @@
 #include "../../types.h"
 #include "../HybridAutomaton/HybridAutomaton.h"
 #include "../HybridAutomaton/decomposition/DecisionEntity.h"
+#include "../HybridAutomaton/decomposition/Decomposition.h"
 #include "../../util/multithreading/Filewriter.h"
 #include "../../util/logging/Logger.h"
 #include <carl/util/Singleton.h>
@@ -72,8 +73,8 @@ class SettingsProvider : public carl::Singleton<SettingsProvider<Number>>
     // experimental feature to switch between standard and fulltimed context. 
     bool useContextSwitch(){return contextSwitch;}
     
-    const std::vector<std::vector<size_t>> getSubspaceDecomposition() const {return mSubspaceDecomposition;}
-    void setSubspaceDecomposition(const std::vector<std::vector<size_t>> decomp) {mSubspaceDecomposition = decomp;}
+    const Decomposition& getSubspaceDecomposition() const {return mSubspaceDecomposition;}
+    void setSubspaceDecomposition(const Decomposition& decomp) {mSubspaceDecomposition = decomp;}
 
     std::map<const Location<Number>*, std::shared_ptr<std::vector<SUBSPACETYPE>>> getLocationSubspaceTypeMap(){return mLocationSubspaceTypeMap;}
     void computeLocationSubspaceTypeMapping(const HybridAutomaton<Number> &ha);
@@ -94,7 +95,7 @@ class SettingsProvider : public carl::Singleton<SettingsProvider<Number>>
     int mThreadcount = 1;
     double mBalancingRatio = 1.0;
     LockedFileWriter treeDotFileWriter;
-    std::vector<std::vector<size_t>> mSubspaceDecomposition;
+    Decomposition mSubspaceDecomposition;
 
     bool fullTimed = false;
 

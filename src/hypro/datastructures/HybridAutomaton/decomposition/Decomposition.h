@@ -10,6 +10,8 @@ namespace hypro
 
         std::size_t size() const { return mDecomposition.size(); }
 
+        void push_back(const std::vector<std::size_t>& decomp) {mDecomposition.push_back(decomp);}
+
         std::vector<std::vector<std::size_t>>::iterator begin() {return mDecomposition.begin();}
         std::vector<std::vector<std::size_t>>::const_iterator begin() const {return mDecomposition.begin();}
         std::vector<std::vector<std::size_t>>::iterator end() {return mDecomposition.end();}
