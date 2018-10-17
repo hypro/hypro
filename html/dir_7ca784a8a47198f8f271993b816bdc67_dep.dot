@@ -8,7 +8,7 @@ digraph "/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPol
   }
   dir_879d833e0dfbe8f31a5e860bb94efb50 [shape=box label="util" fillcolor="white" style="filled" color="red" URL="dir_879d833e0dfbe8f31a5e860bb94efb50.html"];
   dir_bce2075adec303dcb2f0c4fbfcbc8493 [shape=box label="datastructures" fillcolor="white" style="filled" color="red" URL="dir_bce2075adec303dcb2f0c4fbfcbc8493.html"];
-  dir_879d833e0dfbe8f31a5e860bb94efb50->dir_bce2075adec303dcb2f0c4fbfcbc8493 [headlabel="10", labeldistance=1.5 headhref="dir_000033_000020.html"];
-  dir_7ca784a8a47198f8f271993b816bdc67->dir_879d833e0dfbe8f31a5e860bb94efb50 [headlabel="1", labeldistance=1.5 headhref="dir_000040_000033.html"];
-  dir_7ca784a8a47198f8f271993b816bdc67->dir_bce2075adec303dcb2f0c4fbfcbc8493 [headlabel="1", labeldistance=1.5 headhref="dir_000040_000020.html"];
+  dir_879d833e0dfbe8f31a5e860bb94efb50->dir_bce2075adec303dcb2f0c4fbfcbc8493 [headlabel="10", labeldistance=1.5 headhref="dir_000020_000010.html"];
+  dir_7ca784a8a47198f8f271993b816bdc67->dir_879d833e0dfbe8f31a5e860bb94efb50 [headlabel="1", labeldistance=1.5 headhref="dir_000027_000020.html"];
+  dir_7ca784a8a47198f8f271993b816bdc67->dir_bce2075adec303dcb2f0c4fbfcbc8493 [headlabel="1", labeldistance=1.5 headhref="dir_000027_000010.html"];
 }

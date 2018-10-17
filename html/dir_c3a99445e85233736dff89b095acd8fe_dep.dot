@@ -12,7 +12,7 @@ digraph "/home/travis/build/hypro/hypro/src/hypro/representations/OrthogonalPoly
   }
   dir_bce2075adec303dcb2f0c4fbfcbc8493 [shape=box label="datastructures" fillcolor="white" style="filled" color="red" URL="dir_bce2075adec303dcb2f0c4fbfcbc8493.html"];
   dir_2a022a7dd5883d249fd19381a9acb7ca [shape=box label="Box" URL="dir_2a022a7dd5883d249fd19381a9acb7ca.html"];
-  dir_c3a99445e85233736dff89b095acd8fe->dir_bce2075adec303dcb2f0c4fbfcbc8493 [headlabel="6", labeldistance=1.5 headhref="dir_000036_000020.html"];
-  dir_c3a99445e85233736dff89b095acd8fe->dir_2a022a7dd5883d249fd19381a9acb7ca [headlabel="1", labeldistance=1.5 headhref="dir_000036_000030.html"];
-  dir_2a022a7dd5883d249fd19381a9acb7ca->dir_bce2075adec303dcb2f0c4fbfcbc8493 [headlabel="3", labeldistance=1.5 headhref="dir_000030_000020.html"];
+  dir_c3a99445e85233736dff89b095acd8fe->dir_bce2075adec303dcb2f0c4fbfcbc8493 [headlabel="6", labeldistance=1.5 headhref="dir_000023_000010.html"];
+  dir_c3a99445e85233736dff89b095acd8fe->dir_2a022a7dd5883d249fd19381a9acb7ca [headlabel="1", labeldistance=1.5 headhref="dir_000023_000017.html"];
+  dir_2a022a7dd5883d249fd19381a9acb7ca->dir_bce2075adec303dcb2f0c4fbfcbc8493 [headlabel="3", labeldistance=1.5 headhref="dir_000017_000010.html"];
 }

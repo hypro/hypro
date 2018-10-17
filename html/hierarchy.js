@@ -37,14 +37,14 @@ var hierarchy =
     [ "BaseErrorListener", null, [
       [ "hypro::ErrorListener", "classhypro_1_1ErrorListener.html", null ]
     ] ],
-    [ "hypro::BoxAllOff", "structhypro_1_1BoxAllOff.html", null ],
     [ "hypro::reachability::hypro::BoxAllOff", "structhypro_1_1reachability_1_1hypro_1_1BoxAllOff.html", null ],
-    [ "hypro::BoxIntervalArithmeticOff", "structhypro_1_1BoxIntervalArithmeticOff.html", null ],
+    [ "hypro::BoxAllOff", "structhypro_1_1BoxAllOff.html", null ],
     [ "hypro::reachability::hypro::BoxIntervalArithmeticOff", "structhypro_1_1reachability_1_1hypro_1_1BoxIntervalArithmeticOff.html", null ],
+    [ "hypro::BoxIntervalArithmeticOff", "structhypro_1_1BoxIntervalArithmeticOff.html", null ],
     [ "hypro::BoxLinearOptimizationOff", "structhypro_1_1BoxLinearOptimizationOff.html", null ],
     [ "hypro::reachability::hypro::BoxLinearOptimizationOff", "structhypro_1_1reachability_1_1hypro_1_1BoxLinearOptimizationOff.html", null ],
-    [ "hypro::BoxLinearOptimizationOn", "structhypro_1_1BoxLinearOptimizationOn.html", null ],
     [ "hypro::reachability::hypro::BoxLinearOptimizationOn", "structhypro_1_1reachability_1_1hypro_1_1BoxLinearOptimizationOn.html", null ],
+    [ "hypro::BoxLinearOptimizationOn", "structhypro_1_1BoxLinearOptimizationOn.html", null ],
     [ "hypro::BoxSupportFunction< Number, Setting >", "classhypro_1_1BoxSupportFunction.html", null ],
     [ "hypro::reachability::hypro::BoxSupportFunction< Number, Setting >", "classhypro_1_1reachability_1_1hypro_1_1BoxSupportFunction.html", null ],
     [ "hypro::reachability::hypro::Cacheable< Content >", "structhypro_1_1reachability_1_1hypro_1_1Cacheable.html", null ],
@@ -55,35 +55,27 @@ var hierarchy =
     [ "hypro::ConstrainSet< Number >", "classhypro_1_1ConstrainSet.html", null ],
     [ "hypro::reachability::hypro::ConstrainSet< Number >", "classhypro_1_1reachability_1_1hypro_1_1ConstrainSet.html", null ],
     [ "hypro::ContinuousSystem< Number >", "classhypro_1_1ContinuousSystem.html", null ],
-    [ "hypro::reachability::hypro::Converter< Number >", "classhypro_1_1reachability_1_1hypro_1_1Converter.html", null ],
     [ "hypro::Converter< Number >", "classhypro_1_1Converter.html", null ],
+    [ "hypro::reachability::hypro::Converter< Number >", "classhypro_1_1reachability_1_1hypro_1_1Converter.html", null ],
     [ "hypro::ConvexHull< Number >", "classhypro_1_1ConvexHull.html", null ],
     [ "hypro::reachability::hypro::ConvexHull< Number >", "classhypro_1_1reachability_1_1hypro_1_1ConvexHull.html", null ],
     [ "hypro::statistics::CounterRepository", "classhypro_1_1statistics_1_1CounterRepository.html", null ],
-    [ "hypro::Decomposition", "structhypro_1_1Decomposition.html", null ],
     [ "Dependent_part_funct", "structDependent__part__funct.html", null ],
     [ "hypro::Dictionary< Number >", "classhypro_1_1Dictionary.html", null ],
     [ "hypro::reachability::hypro::Dictionary< Number >", "classhypro_1_1reachability_1_1hypro_1_1Dictionary.html", null ],
-    [ "hypro::reachability::hypro::DifferenceBoundsSetting", "structhypro_1_1reachability_1_1hypro_1_1DifferenceBoundsSetting.html", null ],
     [ "hypro::DifferenceBoundsSetting", "structhypro_1_1DifferenceBoundsSetting.html", null ],
+    [ "hypro::reachability::hypro::DifferenceBoundsSetting", "structhypro_1_1reachability_1_1hypro_1_1DifferenceBoundsSetting.html", null ],
     [ "hypro::Domain< Number >", "classhypro_1_1Domain.html", null ],
     [ "hypro::EllipsoidSupportFunction< Number >", "classhypro_1_1EllipsoidSupportFunction.html", null ],
     [ "hypro::reachability::hypro::EllipsoidSupportFunction< Number >", "classhypro_1_1reachability_1_1hypro_1_1EllipsoidSupportFunction.html", null ],
     [ "hypro::EllipsoidT< Number, Converter >", "classhypro_1_1EllipsoidT.html", null ],
     [ "hypro::reachability::hypro::EllipsoidT< Number, Converter >", "classhypro_1_1reachability_1_1hypro_1_1EllipsoidT.html", null ],
-    [ "hypro::endPoint< T, Number >", "structhypro_1_1endPoint.html", null ],
-    [ "hypro::endPoint< CONTAINMENT, tNumber >", "structhypro_1_1endPoint.html", null ],
     [ "hypro::parser::ErrorHandler", "structhypro_1_1parser_1_1ErrorHandler.html", null ],
     [ "Eval_functions", "structEval__functions.html", null ],
-    [ "hypro::EvaluationResult< Number >", "structhypro_1_1EvaluationResult.html", null ],
     [ "hypro::reachability::hypro::EvaluationResult< Number >", "structhypro_1_1reachability_1_1hypro_1_1EvaluationResult.html", null ],
-    [ "hypro::EventTimingContainer< Number >", "classhypro_1_1EventTimingContainer.html", null ],
-    [ "exception", null, [
-      [ "FinishWithDiscreteProcessingException", "classFinishWithDiscreteProcessingException.html", null ],
-      [ "HardTerminateException", "classHardTerminateException.html", null ]
-    ] ],
-    [ "hypro::Facet< Number >", "classhypro_1_1Facet.html", null ],
+    [ "hypro::EvaluationResult< Number >", "structhypro_1_1EvaluationResult.html", null ],
     [ "hypro::reachability::hypro::Facet< Number >", "classhypro_1_1reachability_1_1hypro_1_1Facet.html", null ],
+    [ "hypro::Facet< Number >", "classhypro_1_1Facet.html", null ],
     [ "hypro::Fan< Number >", "classhypro_1_1Fan.html", null ],
     [ "Flags", "structFlags.html", null ],
     [ "hypro::Flowpipe< Number >", "classhypro_1_1Flowpipe.html", null ],
@@ -545,14 +537,14 @@ var hierarchy =
       [ "hypro::reachability::hypro::Eigen::NumTraits< mpq_class >", "structhypro_1_1reachability_1_1hypro_1_1Eigen_1_1NumTraits_3_01mpq__class_01_4.html", null ],
       [ "hypro::reachability::hypro::Eigen::NumTraits< mpq_class >", "structhypro_1_1reachability_1_1hypro_1_1Eigen_1_1NumTraits_3_01mpq__class_01_4.html", null ]
     ] ],
-    [ "hypro::GeometricObject< Number, DerivedShape >", "classhypro_1_1GeometricObject.html", null ],
     [ "hypro::reachability::hypro::GeometricObject< Number, DerivedShape >", "classhypro_1_1reachability_1_1hypro_1_1GeometricObject.html", null ],
+    [ "hypro::GeometricObject< Number, DerivedShape >", "classhypro_1_1GeometricObject.html", null ],
+    [ "hypro::GeometricObject< Number, BoxT< Number, Converter, Setting > >", "classhypro_1_1GeometricObject.html", [
+      [ "hypro::BoxT< Number, Converter, Setting >", "classhypro_1_1BoxT.html", null ]
+    ] ],
     [ "hypro::reachability::hypro::GeometricObject< Number, BoxT< Number, Converter, Setting > >", "classhypro_1_1reachability_1_1hypro_1_1GeometricObject.html", [
       [ "hypro::reachability::hypro::BoxT< Number, Converter, Setting >", "classhypro_1_1reachability_1_1hypro_1_1BoxT.html", null ],
       [ "hypro::reachability::hypro::BoxT< Number, Converter, Setting >", "classhypro_1_1reachability_1_1hypro_1_1BoxT.html", null ]
-    ] ],
-    [ "hypro::GeometricObject< Number, BoxT< Number, Converter, Setting > >", "classhypro_1_1GeometricObject.html", [
-      [ "hypro::BoxT< Number, Converter, Setting >", "classhypro_1_1BoxT.html", null ]
     ] ],
     [ "hypro::GeometricObject< Number, BoxT< Number, hypro::Converter, Setting > >", "classhypro_1_1GeometricObject.html", [
       [ "hypro::BoxT< Number, hypro::Converter, Setting >", "classhypro_1_1BoxT.html", null ]
@@ -567,11 +559,11 @@ var hierarchy =
     [ "hypro::GeometricObject< Number, ConstraintSetT< Number, Converter > >", "classhypro_1_1GeometricObject.html", [
       [ "hypro::ConstraintSetT< Number, Converter >", "classhypro_1_1ConstraintSetT.html", null ]
     ] ],
-    [ "hypro::GeometricObject< Number, DifferenceBoundsT< Number, Converter, Setting > >", "classhypro_1_1GeometricObject.html", [
-      [ "hypro::DifferenceBoundsT< Number, Converter, Setting >", "classhypro_1_1DifferenceBoundsT.html", null ]
-    ] ],
     [ "hypro::reachability::hypro::GeometricObject< Number, DifferenceBoundsT< Number, Converter, Setting > >", "classhypro_1_1reachability_1_1hypro_1_1GeometricObject.html", [
       [ "hypro::reachability::hypro::DifferenceBoundsT< Number, Converter, Setting >", "classhypro_1_1reachability_1_1hypro_1_1DifferenceBoundsT.html", null ]
+    ] ],
+    [ "hypro::GeometricObject< Number, DifferenceBoundsT< Number, Converter, Setting > >", "classhypro_1_1GeometricObject.html", [
+      [ "hypro::DifferenceBoundsT< Number, Converter, Setting >", "classhypro_1_1DifferenceBoundsT.html", null ]
     ] ],
     [ "hypro::reachability::hypro::GeometricObject< Number, HPolytopeT< Number, Converter, Setting > >", "classhypro_1_1reachability_1_1hypro_1_1GeometricObject.html", [
       [ "hypro::reachability::hypro::HPolytopeT< Number, Converter, Setting >", "classhypro_1_1reachability_1_1hypro_1_1HPolytopeT.html", null ]
@@ -591,14 +583,11 @@ var hierarchy =
     [ "hypro::GeometricObject< Number, VPolytopeT< Number, Converter > >", "classhypro_1_1GeometricObject.html", [
       [ "hypro::VPolytopeT< Number, Converter >", "classhypro_1_1VPolytopeT.html", null ]
     ] ],
-    [ "hypro::reachability::hypro::GeometricObject< Number, ZonotopeT< Number, Converter, Setting > >", "classhypro_1_1reachability_1_1hypro_1_1GeometricObject.html", [
-      [ "hypro::reachability::hypro::ZonotopeT< Number, Converter, Setting >", "classhypro_1_1reachability_1_1hypro_1_1ZonotopeT.html", null ]
-    ] ],
     [ "hypro::GeometricObject< Number, ZonotopeT< Number, Converter, Setting > >", "classhypro_1_1GeometricObject.html", [
       [ "hypro::ZonotopeT< Number, Converter, Setting >", "classhypro_1_1ZonotopeT.html", null ]
     ] ],
-    [ "hypro::GeometricObject< StatisticWrapper< Representation > >", "classhypro_1_1GeometricObject.html", [
-      [ "hypro::StatisticWrapper< Representation >", "classhypro_1_1StatisticWrapper.html", null ]
+    [ "hypro::reachability::hypro::GeometricObject< Number, ZonotopeT< Number, Converter, Setting > >", "classhypro_1_1reachability_1_1hypro_1_1GeometricObject.html", [
+      [ "hypro::reachability::hypro::ZonotopeT< Number, Converter, Setting >", "classhypro_1_1reachability_1_1hypro_1_1ZonotopeT.html", null ]
     ] ],
     [ "hypro::reachability::glp_attr", "structhypro_1_1reachability_1_1glp__attr.html", null ],
     [ "hypro::reachability::glp_bfcp", "structhypro_1_1reachability_1_1glp__bfcp.html", null ],
@@ -607,10 +596,10 @@ var hierarchy =
     [ "hypro::reachability::glp_iptcp", "structhypro_1_1reachability_1_1glp__iptcp.html", null ],
     [ "hypro::reachability::glp_mpscp", "structhypro_1_1reachability_1_1glp__mpscp.html", null ],
     [ "hypro::reachability::glp_smcp", "structhypro_1_1reachability_1_1glp__smcp.html", null ],
-    [ "hypro::glpk_context", "structhypro_1_1glpk__context.html", null ],
     [ "hypro::reachability::hypro::glpk_context", "structhypro_1_1reachability_1_1hypro_1_1glpk__context.html", null ],
-    [ "hypro::reachability::hypro::plotting::gnuplotSettings", "structhypro_1_1reachability_1_1hypro_1_1plotting_1_1gnuplotSettings.html", null ],
+    [ "hypro::glpk_context", "structhypro_1_1glpk__context.html", null ],
     [ "hypro::plotting::gnuplotSettings", "structhypro_1_1plotting_1_1gnuplotSettings.html", null ],
+    [ "hypro::reachability::hypro::plotting::gnuplotSettings", "structhypro_1_1reachability_1_1hypro_1_1plotting_1_1gnuplotSettings.html", null ],
     [ "grammar", null, [
       [ "hypro::parser::constraintParser< Iterator, Number >", "structhypro_1_1parser_1_1constraintParser.html", null ],
       [ "hypro::parser::discreteConstraintParser< Iterator, Number >", "structhypro_1_1parser_1_1discreteConstraintParser.html", null ],
@@ -628,29 +617,28 @@ var hierarchy =
     ] ],
     [ "hypro::Grid< Number >", "classhypro_1_1Grid.html", null ],
     [ "hypro::reachability::hypro::Grid< Number >", "classhypro_1_1reachability_1_1hypro_1_1Grid.html", null ],
-    [ "hypro::guardHandlerSorter", "structhypro_1_1guardHandlerSorter.html", null ],
-    [ "hypro::Halfspace< Number >", "classhypro_1_1Halfspace.html", null ],
     [ "hypro::reachability::hypro::Halfspace< Number >", "classhypro_1_1reachability_1_1hypro_1_1Halfspace.html", null ],
+    [ "hypro::Halfspace< Number >", "classhypro_1_1Halfspace.html", null ],
     [ "hypro::reachability::std::hash< hypro::Cacheable< Content > >", "structhypro_1_1reachability_1_1std_1_1hash_3_01hypro_1_1Cacheable_3_01Content_01_4_01_4.html", null ],
     [ "std::hash< hypro::Cacheable< Content > >", "structstd_1_1hash_3_01hypro_1_1Cacheable_3_01Content_01_4_01_4.html", null ],
     [ "std::hash< hypro::Condition< Number > >", "structstd_1_1hash_3_01hypro_1_1Condition_3_01Number_01_4_01_4.html", null ],
-    [ "std::hash< hypro::Halfspace< Number > >", "structstd_1_1hash_3_01hypro_1_1Halfspace_3_01Number_01_4_01_4.html", null ],
     [ "hypro::reachability::std::hash< hypro::Halfspace< Number > >", "structhypro_1_1reachability_1_1std_1_1hash_3_01hypro_1_1Halfspace_3_01Number_01_4_01_4.html", null ],
+    [ "std::hash< hypro::Halfspace< Number > >", "structstd_1_1hash_3_01hypro_1_1Halfspace_3_01Number_01_4_01_4.html", null ],
     [ "std::hash< hypro::Location< Number > >", "structstd_1_1hash_3_01hypro_1_1Location_3_01Number_01_4_01_4.html", null ],
-    [ "hypro::reachability::hypro::std::hash< hypro::matrix_t< Number > >", "structhypro_1_1reachability_1_1hypro_1_1std_1_1hash_3_01hypro_1_1matrix__t_3_01Number_01_4_01_4.html", null ],
     [ "hypro::reachability::std::hash< hypro::matrix_t< Number > >", "structhypro_1_1reachability_1_1std_1_1hash_3_01hypro_1_1matrix__t_3_01Number_01_4_01_4.html", null ],
     [ "hypro::std::hash< hypro::matrix_t< Number > >", "structhypro_1_1std_1_1hash_3_01hypro_1_1matrix__t_3_01Number_01_4_01_4.html", null ],
     [ "std::hash< hypro::matrix_t< Number > >", "structstd_1_1hash_3_01hypro_1_1matrix__t_3_01Number_01_4_01_4.html", null ],
+    [ "hypro::reachability::hypro::std::hash< hypro::matrix_t< Number > >", "structhypro_1_1reachability_1_1hypro_1_1std_1_1hash_3_01hypro_1_1matrix__t_3_01Number_01_4_01_4.html", null ],
     [ "std::hash< hypro::Point< Number > >", "structstd_1_1hash_3_01hypro_1_1Point_3_01Number_01_4_01_4.html", null ],
     [ "hypro::reachability::std::hash< hypro::Point< Number > >", "structhypro_1_1reachability_1_1std_1_1hash_3_01hypro_1_1Point_3_01Number_01_4_01_4.html", null ],
     [ "std::hash< hypro::Reset< Number > >", "structstd_1_1hash_3_01hypro_1_1Reset_3_01Number_01_4_01_4.html", null ],
     [ "std::hash< hypro::Ridge< Number > >", "structstd_1_1hash_3_01hypro_1_1Ridge_3_01Number_01_4_01_4.html", null ],
     [ "hypro::reachability::std::hash< hypro::Ridge< Number > >", "structhypro_1_1reachability_1_1std_1_1hash_3_01hypro_1_1Ridge_3_01Number_01_4_01_4.html", null ],
     [ "std::hash< hypro::Transition< Number > >", "structstd_1_1hash_3_01hypro_1_1Transition_3_01Number_01_4_01_4.html", null ],
-    [ "hypro::reachability::hypro::std::hash< hypro::vector_t< Number > >", "structhypro_1_1reachability_1_1hypro_1_1std_1_1hash_3_01hypro_1_1vector__t_3_01Number_01_4_01_4.html", null ],
-    [ "std::hash< hypro::vector_t< Number > >", "structstd_1_1hash_3_01hypro_1_1vector__t_3_01Number_01_4_01_4.html", null ],
     [ "hypro::reachability::std::hash< hypro::vector_t< Number > >", "structhypro_1_1reachability_1_1std_1_1hash_3_01hypro_1_1vector__t_3_01Number_01_4_01_4.html", null ],
     [ "hypro::std::hash< hypro::vector_t< Number > >", "structhypro_1_1std_1_1hash_3_01hypro_1_1vector__t_3_01Number_01_4_01_4.html", null ],
+    [ "std::hash< hypro::vector_t< Number > >", "structstd_1_1hash_3_01hypro_1_1vector__t_3_01Number_01_4_01_4.html", null ],
+    [ "hypro::reachability::hypro::std::hash< hypro::vector_t< Number > >", "structhypro_1_1reachability_1_1hypro_1_1std_1_1hash_3_01hypro_1_1vector__t_3_01Number_01_4_01_4.html", null ],
     [ "std::hash< hypro::Vertex< Number > >", "structstd_1_1hash_3_01hypro_1_1Vertex_3_01Number_01_4_01_4.html", null ],
     [ "hypro::reachability::std::hash< hypro::Vertex< Number > >", "structhypro_1_1reachability_1_1std_1_1hash_3_01hypro_1_1Vertex_3_01Number_01_4_01_4.html", null ],
     [ "std::hash< hypro::VertexContainer< Number > >", "structstd_1_1hash_3_01hypro_1_1VertexContainer_3_01Number_01_4_01_4.html", null ],
@@ -658,8 +646,6 @@ var hierarchy =
     [ "std::hash< set< hypro::Vertex< Number > > >", "structstd_1_1hash_3_01set_3_01hypro_1_1Vertex_3_01Number_01_4_01_4_01_4.html", null ],
     [ "hypro::reachability::std::hash< set< hypro::Vertex< Number > > >", "structhypro_1_1reachability_1_1std_1_1hash_3_01set_3_01hypro_1_1Vertex_3_01Number_01_4_01_4_01_4.html", null ],
     [ "std::hash< std::pair< first, second > >", "structstd_1_1hash_3_01std_1_1pair_3_01first_00_01second_01_4_01_4.html", null ],
-    [ "hypro::HierarchicalIntervalVector< T, Number >", "classhypro_1_1HierarchicalIntervalVector.html", null ],
-    [ "hypro::HierarchicalIntervalVector< CONTAINMENT, tNumber >", "classhypro_1_1HierarchicalIntervalVector.html", null ],
     [ "hypro::HPolytopeSetting", "structhypro_1_1HPolytopeSetting.html", null ],
     [ "hypro::reachability::hypro::HPolytopeSetting", "structhypro_1_1reachability_1_1hypro_1_1HPolytopeSetting.html", null ],
     [ "hypro::HybridAutomaton< Number, State >", "classhypro_1_1HybridAutomaton.html", null ],
@@ -667,61 +653,11 @@ var hierarchy =
     [ "hypro::HybridAutomaton< Number, hypro::State >", "classhypro_1_1HybridAutomaton.html", null ],
     [ "hypro::HybridAutomaton< Number, hypro::State< Number, Number > >", "classhypro_1_1HybridAutomaton.html", null ],
     [ "hypro::HybridAutomatonComp< Number, State >", "classhypro_1_1HybridAutomatonComp.html", null ],
-    [ "hypro::IContext", "classhypro_1_1IContext.html", [
-      [ "hypro::LTIContext< Number >", "classhypro_1_1LTIContext.html", null ]
-    ] ],
-    [ "hypro::IHandler", "classhypro_1_1IHandler.html", [
-      [ "hypro::IBadStateHandler", "classhypro_1_1IBadStateHandler.html", [
-        [ "hypro::ltiBadStateHandler< Representation, Number >", "classhypro_1_1ltiBadStateHandler.html", [
-          [ "hypro::discreteBadStateHandler< Representation, Number >", "classhypro_1_1discreteBadStateHandler.html", null ],
-          [ "hypro::timedBadStateHandler< Representation, Number >", "classhypro_1_1timedBadStateHandler.html", null ]
-        ] ]
-      ] ],
-      [ "hypro::IFirstSegmentHandler< Number >", "classhypro_1_1IFirstSegmentHandler.html", [
-        [ "hypro::ltiFirstSegmentHandler< Representation, Number >", "classhypro_1_1ltiFirstSegmentHandler.html", [
-          [ "hypro::timedElapseFirstSegmentHandler< Representation, Number >", "classhypro_1_1timedElapseFirstSegmentHandler.html", null ],
-          [ "hypro::timedFirstSegmentHandler< Representation, Number >", "classhypro_1_1timedFirstSegmentHandler.html", null ]
-        ] ]
-      ] ],
-      [ "hypro::IGuardHandler< Number >", "classhypro_1_1IGuardHandler.html", [
-        [ "hypro::ltiGuardHandler< Representation, Number >", "classhypro_1_1ltiGuardHandler.html", [
-          [ "hypro::discreteGuardHandler< Representation, Number >", "classhypro_1_1discreteGuardHandler.html", null ],
-          [ "hypro::timedGuardHandler< Representation, Number >", "classhypro_1_1timedGuardHandler.html", null ]
-        ] ]
-      ] ],
-      [ "hypro::IInvariantHandler", "classhypro_1_1IInvariantHandler.html", [
-        [ "hypro::ltiInvariantHandler< Representation, Number >", "classhypro_1_1ltiInvariantHandler.html", [
-          [ "hypro::discreteInvariantHandler< Representation, Number >", "classhypro_1_1discreteInvariantHandler.html", null ],
-          [ "hypro::timedInvariantHandler< Representation, Number >", "classhypro_1_1timedInvariantHandler.html", null ]
-        ] ]
-      ] ],
-      [ "hypro::IJumpHandler", "classhypro_1_1IJumpHandler.html", [
-        [ "hypro::ltiJumpHandler< Number >", "classhypro_1_1ltiJumpHandler.html", null ]
-      ] ],
-      [ "hypro::IResetHandler", "classhypro_1_1IResetHandler.html", [
-        [ "hypro::ltiResetHandler< Representation, Number >", "classhypro_1_1ltiResetHandler.html", [
-          [ "hypro::discreteResetHandler< Representation, Number >", "classhypro_1_1discreteResetHandler.html", null ],
-          [ "hypro::timedResetHandler< Representation, Number >", "classhypro_1_1timedResetHandler.html", null ]
-        ] ]
-      ] ],
-      [ "hypro::ITimeEvolutionHandler", "classhypro_1_1ITimeEvolutionHandler.html", [
-        [ "hypro::discreteTimeEvolutionHandler", "classhypro_1_1discreteTimeEvolutionHandler.html", null ],
-        [ "hypro::ltiTimeEvolutionHandler< Representation, Number >", "classhypro_1_1ltiTimeEvolutionHandler.html", [
-          [ "hypro::timedElapseAfterTickTimeEvolutionHandler< Representation, Number >", "classhypro_1_1timedElapseAfterTickTimeEvolutionHandler.html", null ],
-          [ "hypro::timedElapseTimeEvolutionHandler< Representation, Number >", "classhypro_1_1timedElapseTimeEvolutionHandler.html", null ],
-          [ "hypro::timedTickTimeEvolutionHandler< Representation, Number >", "classhypro_1_1timedTickTimeEvolutionHandler.html", null ]
-        ] ]
-      ] ]
-    ] ],
     [ "Independent_part_funct", "structIndependent__part__funct.html", null ],
     [ "Input_equation", "structInput__equation.html", null ],
     [ "hypro::intersectionContent< Number, Setting >", "structhypro_1_1intersectionContent.html", null ],
     [ "hypro::reachability::hypro::intersectionContent< Number, Setting >", "structhypro_1_1reachability_1_1hypro_1_1intersectionContent.html", null ],
     [ "Invariants", "structInvariants.html", null ],
-    [ "hypro::IWorker< Workable, Number >", "classhypro_1_1IWorker.html", null ],
-    [ "hypro::IWorker< std::shared_ptr< Task< Number > >, Number >", "classhypro_1_1IWorker.html", [
-      [ "hypro::ContextBasedReachabilityWorker< Number >", "classhypro_1_1ContextBasedReachabilityWorker.html", null ]
-    ] ],
     [ "hypro::Label", "classhypro_1_1Label.html", null ],
     [ "Lexer", null, [
       [ "CIFLocationLexer", "classCIFLocationLexer.html", null ],
@@ -730,12 +666,12 @@ var hierarchy =
       [ "HybridSystemLexer", "classHybridSystemLexer.html", null ],
       [ "InputOutputLexer", "classInputOutputLexer.html", null ]
     ] ],
-    [ "hypro::reachability::ZUtility::Line_t< Number >", "structhypro_1_1reachability_1_1ZUtility_1_1Line__t.html", null ],
     [ "ZUtility::Line_t< Number >", "structZUtility_1_1Line__t.html", null ],
+    [ "hypro::reachability::ZUtility::Line_t< Number >", "structhypro_1_1reachability_1_1ZUtility_1_1Line__t.html", null ],
     [ "hypro::reachability::hypro::lintrafoParameters< Number >", "structhypro_1_1reachability_1_1hypro_1_1lintrafoParameters.html", null ],
     [ "hypro::lintrafoParameters< Number >", "structhypro_1_1lintrafoParameters.html", null ],
-    [ "hypro::Location< Number >", "classhypro_1_1Location.html", null ],
     [ "hypro::reachability::hypro::Location< Number >", "classhypro_1_1reachability_1_1hypro_1_1Location.html", null ],
+    [ "hypro::Location< Number >", "classhypro_1_1Location.html", null ],
     [ "hypro::LockableBase", "classhypro_1_1LockableBase.html", [
       [ "hypro::LockedFileWriter", "classhypro_1_1LockedFileWriter.html", null ]
     ] ],
@@ -743,17 +679,17 @@ var hierarchy =
     [ "hypro::locPtrComp< Number >", "structhypro_1_1locPtrComp.html", null ],
     [ "hypro::reachability::LPXKKT", "structhypro_1_1reachability_1_1LPXKKT.html", null ],
     [ "hypro::LRUCache< Key, Value >", "classhypro_1_1LRUCache.html", null ],
-    [ "hypro::NeighborhoodContainer", "classhypro_1_1NeighborhoodContainer.html", null ],
     [ "hypro::reachability::hypro::NeighborhoodContainer", "classhypro_1_1reachability_1_1hypro_1_1NeighborhoodContainer.html", null ],
-    [ "Eigen::NumTraits< carl::FLOAT_T< Number > >", "structEigen_1_1NumTraits_3_01carl_1_1FLOAT__T_3_01Number_01_4_01_4.html", null ],
+    [ "hypro::NeighborhoodContainer", "classhypro_1_1NeighborhoodContainer.html", null ],
     [ "hypro::reachability::hypro::Eigen::NumTraits< carl::FLOAT_T< Number > >", "structhypro_1_1reachability_1_1hypro_1_1Eigen_1_1NumTraits_3_01carl_1_1FLOAT__T_3_01Number_01_4_01_4.html", null ],
-    [ "hypro::reachability::Eigen::NumTraits< carl::FLOAT_T< Number > >", "structhypro_1_1reachability_1_1Eigen_1_1NumTraits_3_01carl_1_1FLOAT__T_3_01Number_01_4_01_4.html", null ],
     [ "hypro::Eigen::NumTraits< carl::FLOAT_T< Number > >", "structhypro_1_1Eigen_1_1NumTraits_3_01carl_1_1FLOAT__T_3_01Number_01_4_01_4.html", null ],
-    [ "hypro::Optimizer< Number >", "classhypro_1_1Optimizer.html", null ],
+    [ "Eigen::NumTraits< carl::FLOAT_T< Number > >", "structEigen_1_1NumTraits_3_01carl_1_1FLOAT__T_3_01Number_01_4_01_4.html", null ],
+    [ "hypro::reachability::Eigen::NumTraits< carl::FLOAT_T< Number > >", "structhypro_1_1reachability_1_1Eigen_1_1NumTraits_3_01carl_1_1FLOAT__T_3_01Number_01_4_01_4.html", null ],
     [ "hypro::reachability::hypro::Optimizer< Number >", "classhypro_1_1reachability_1_1hypro_1_1Optimizer.html", null ],
+    [ "hypro::Optimizer< Number >", "classhypro_1_1Optimizer.html", null ],
     [ "hypro::OrthogonalPolyhedron< Number, NEIGHBORHOOD >", "classhypro_1_1OrthogonalPolyhedron.html", null ],
-    [ "hypro::reachability::hypro::OrthogonalPolyhedronT< Number, Converter, Setting, Type >", "classhypro_1_1reachability_1_1hypro_1_1OrthogonalPolyhedronT.html", null ],
     [ "hypro::OrthogonalPolyhedronT< Number, Converter, Setting, Type >", "classhypro_1_1OrthogonalPolyhedronT.html", null ],
+    [ "hypro::reachability::hypro::OrthogonalPolyhedronT< Number, Converter, Setting, Type >", "classhypro_1_1reachability_1_1hypro_1_1OrthogonalPolyhedronT.html", null ],
     [ "pair", null, [
       [ "hypro::DifferenceBoundsT< Number, Converter, Setting >::DBMEntry", "classhypro_1_1DifferenceBoundsT_1_1DBMEntry.html", null ],
       [ "hypro::reachability::hypro::DifferenceBoundsT< Number, Converter, Setting >::DBMEntry", "classhypro_1_1reachability_1_1hypro_1_1DifferenceBoundsT_1_1DBMEntry.html", null ]
@@ -1144,13 +1080,12 @@ var hierarchy =
       [ "InputOutputParser::UnaryExpressionContext", "classInputOutputParser_1_1UnaryExpressionContext.html", null ]
     ] ],
     [ "hypro::Path< Number, tNumber >", "classhypro_1_1Path.html", null ],
-    [ "hypro::reachability::hypro::hypro::Permutator", "classhypro_1_1reachability_1_1hypro_1_1hypro_1_1Permutator.html", null ],
-    [ "hypro::hypro::Permutator", "classhypro_1_1hypro_1_1Permutator.html", null ],
     [ "hypro::reachability::hypro::Permutator", "classhypro_1_1reachability_1_1hypro_1_1Permutator.html", null ],
+    [ "hypro::hypro::Permutator", "classhypro_1_1hypro_1_1Permutator.html", null ],
     [ "hypro::Permutator", "classhypro_1_1Permutator.html", null ],
-    [ "hypro::PlotData< Number >", "structhypro_1_1PlotData.html", null ],
-    [ "hypro::reachability::hypro::Point< Number >", "classhypro_1_1reachability_1_1hypro_1_1Point.html", null ],
+    [ "hypro::reachability::hypro::hypro::Permutator", "classhypro_1_1reachability_1_1hypro_1_1hypro_1_1Permutator.html", null ],
     [ "hypro::Point< Number >", "classhypro_1_1Point.html", null ],
+    [ "hypro::reachability::hypro::Point< Number >", "classhypro_1_1reachability_1_1hypro_1_1Point.html", null ],
     [ "hypro::Point< int >", "classhypro_1_1Point.html", null ],
     [ "hypro::reachability::hypro::Point< int >", "classhypro_1_1reachability_1_1hypro_1_1Point.html", null ],
     [ "hypro::Point< std::size_t >", "classhypro_1_1Point.html", null ],
@@ -1168,25 +1103,18 @@ var hierarchy =
     [ "hypro::Range< Number >", "classhypro_1_1Range.html", null ],
     [ "hypro::reachability::Reach< Number >", "classhypro_1_1reachability_1_1Reach.html", null ],
     [ "hypro::ReachabilitySettings< Number >", "structhypro_1_1ReachabilitySettings.html", null ],
-    [ "hypro::ReachabilitySettings< tNumber >", "structhypro_1_1ReachabilitySettings.html", null ],
-    [ "hypro::ReachTree", "classhypro_1_1ReachTree.html", null ],
-    [ "hypro::RefinementSetting< Number >", "structhypro_1_1RefinementSetting.html", null ],
     [ "hypro::Reset< Number >", "classhypro_1_1Reset.html", null ],
     [ "hypro::parser::ErrorHandler::result< typename >", "structhypro_1_1parser_1_1ErrorHandler_1_1result.html", null ],
     [ "hypro::Ridge< Number >", "classhypro_1_1Ridge.html", null ],
     [ "hypro::reachability::hypro::Ridge< Number >", "classhypro_1_1reachability_1_1hypro_1_1Ridge.html", null ],
-    [ "hypro::scaleContent< Number, Setting >", "structhypro_1_1scaleContent.html", null ],
     [ "hypro::reachability::hypro::scaleContent< Number, Setting >", "structhypro_1_1reachability_1_1hypro_1_1scaleContent.html", null ],
+    [ "hypro::scaleContent< Number, Setting >", "structhypro_1_1scaleContent.html", null ],
     [ "ScopedLock< Lockable >", "classScopedLock.html", null ],
     [ "hypro::detail::seq< Is >", "structhypro_1_1detail_1_1seq.html", null ],
     [ "hypro::detail::seq< Is...>", "structhypro_1_1detail_1_1seq.html", [
       [ "hypro::detail::gen_seq< 0, Is...>", "structhypro_1_1detail_1_1gen__seq_3_010_00_01Is_8_8_8_4.html", null ]
     ] ],
     [ "Singleton", null, [
-      [ "hypro::ContextFactory< Number >", "classhypro_1_1ContextFactory.html", null ],
-      [ "hypro::DecisionEntity< Number >", "classhypro_1_1DecisionEntity.html", null ],
-      [ "hypro::EventTimingProvider< Number >", "classhypro_1_1EventTimingProvider.html", null ],
-      [ "hypro::HandlerFactory< Number >", "classhypro_1_1HandlerFactory.html", null ],
       [ "hypro::LocationManager< Number >", "classhypro_1_1LocationManager.html", null ],
       [ "hypro::Plotter< Number >", "classhypro_1_1Plotter.html", null ],
       [ "hypro::reachability::hypro::Plotter< Number >", "classhypro_1_1reachability_1_1hypro_1_1Plotter.html", null ],
@@ -1279,16 +1207,12 @@ var hierarchy =
       [ "hypro::reachability::hypro::VariablePool", "classhypro_1_1reachability_1_1hypro_1_1VariablePool.html", null ],
       [ "hypro::reachability::hypro::VariablePool", "classhypro_1_1reachability_1_1hypro_1_1VariablePool.html", null ],
       [ "hypro::reachability::hypro::VariablePool", "classhypro_1_1reachability_1_1hypro_1_1VariablePool.html", null ],
-      [ "hypro::SettingsProvider< Number >", "classhypro_1_1SettingsProvider.html", null ],
       [ "hypro::VariablePool", "classhypro_1_1VariablePool.html", null ]
     ] ],
-    [ "hypro::Spinlock", "classhypro_1_1Spinlock.html", null ],
     [ "hypro::STallValues< Number >", "structhypro_1_1STallValues.html", null ],
     [ "hypro::State< Number, tNumber, Representation, Rargs >", "classhypro_1_1State.html", null ],
-    [ "hypro::State< Number >", "classhypro_1_1State.html", null ],
     [ "hypro::State< Number, ConstraintSet< Number > >", "classhypro_1_1State.html", null ],
     [ "hypro::State< Number, Number >", "classhypro_1_1State.html", null ],
-    [ "hypro::State< Number, tNumber >", "classhypro_1_1State.html", null ],
     [ "static_visitor", null, [
       [ "hypro::genericAffineTransformationVisitor< T, Number >", "classhypro_1_1genericAffineTransformationVisitor.html", null ],
       [ "hypro::genericCompareVisitor", "classhypro_1_1genericCompareVisitor.html", null ],
@@ -1309,13 +1233,12 @@ var hierarchy =
     ] ],
     [ "hypro::STflowpipeSegment< Number >", "structhypro_1_1STflowpipeSegment.html", null ],
     [ "hypro::STindependentFunct< Number >", "structhypro_1_1STindependentFunct.html", null ],
-    [ "hypro::StrategyNode", "structhypro_1_1StrategyNode.html", null ],
-    [ "hypro::sumContent< Number, Setting >", "structhypro_1_1sumContent.html", null ],
     [ "hypro::reachability::hypro::sumContent< Number, Setting >", "structhypro_1_1reachability_1_1hypro_1_1sumContent.html", null ],
-    [ "hypro::reachability::hypro::SupportFunctionContent< Number, Setting >", "classhypro_1_1reachability_1_1hypro_1_1SupportFunctionContent.html", null ],
+    [ "hypro::sumContent< Number, Setting >", "structhypro_1_1sumContent.html", null ],
     [ "hypro::SupportFunctionContent< Number, Setting >", "classhypro_1_1SupportFunctionContent.html", [
       [ "hypro::NonLinearOmega0Supportfunction< Setting >", "classhypro_1_1NonLinearOmega0Supportfunction.html", null ]
     ] ],
+    [ "hypro::reachability::hypro::SupportFunctionContent< Number, Setting >", "classhypro_1_1reachability_1_1hypro_1_1SupportFunctionContent.html", null ],
     [ "hypro::SupportFunctionSetting", "structhypro_1_1SupportFunctionSetting.html", [
       [ "hypro::NoBoxReduction", "structhypro_1_1NoBoxReduction.html", null ],
       [ "hypro::PolytopeSupportFunctionSetting", "structhypro_1_1PolytopeSupportFunctionSetting.html", null ]
@@ -1331,10 +1254,8 @@ var hierarchy =
     [ "symbols", null, [
       [ "hypro::parser::aggregation_", "structhypro_1_1parser_1_1aggregation__.html", null ]
     ] ],
-    [ "hypro::Task< Number >", "structhypro_1_1Task.html", null ],
     [ "hypro::TaylorModel< Number >", "classhypro_1_1TaylorModel.html", null ],
     [ "hypro::TaylorModelVec< Number >", "classhypro_1_1TaylorModelVec.html", null ],
-    [ "hypro::TBacktrackingInfo< Number >", "structhypro_1_1TBacktrackingInfo.html", null ],
     [ "hypro::TPathElement< Number, tNumber >", "structhypro_1_1TPathElement.html", null ],
     [ "hypro::reachability::hypro::trafoContent< Number, Setting >", "structhypro_1_1reachability_1_1hypro_1_1trafoContent.html", null ],
     [ "hypro::trafoContent< Number, Setting >", "structhypro_1_1trafoContent.html", null ],
@@ -1342,37 +1263,29 @@ var hierarchy =
     [ "hypro::reachability::hypro::TrafoParameters< Number >", "classhypro_1_1reachability_1_1hypro_1_1TrafoParameters.html", null ],
     [ "hypro::Transformation< Number >", "classhypro_1_1Transformation.html", null ],
     [ "hypro::Transition< Number >", "classhypro_1_1Transition.html", null ],
-    [ "hypro::TreeNode", "classhypro_1_1TreeNode.html", [
-      [ "hypro::EventTimingNode< Number >", "classhypro_1_1EventTimingNode.html", null ],
-      [ "hypro::ReachTreeNode< Number >", "classhypro_1_1ReachTreeNode.html", null ]
-    ] ],
-    [ "hypro::TreeStatistic", "structhypro_1_1TreeStatistic.html", null ],
-    [ "hypro::reachability::hypro::typeName< T >", "structhypro_1_1reachability_1_1hypro_1_1typeName.html", null ],
     [ "hypro::reachability::hypro::hypro::typeName< T >", "structhypro_1_1reachability_1_1hypro_1_1hypro_1_1typeName.html", null ],
-    [ "hypro::typeName< T >", "structhypro_1_1typeName.html", null ],
     [ "hypro::hypro::typeName< T >", "structhypro_1_1hypro_1_1typeName.html", null ],
-    [ "hypro::reachability::hypro::hypro::typeName< double >", "structhypro_1_1reachability_1_1hypro_1_1hypro_1_1typeName_3_01double_01_4.html", null ],
+    [ "hypro::reachability::hypro::typeName< T >", "structhypro_1_1reachability_1_1hypro_1_1typeName.html", null ],
+    [ "hypro::typeName< T >", "structhypro_1_1typeName.html", null ],
     [ "hypro::reachability::hypro::typeName< double >", "structhypro_1_1reachability_1_1hypro_1_1typeName_3_01double_01_4.html", null ],
+    [ "hypro::reachability::hypro::hypro::typeName< double >", "structhypro_1_1reachability_1_1hypro_1_1hypro_1_1typeName_3_01double_01_4.html", null ],
     [ "hypro::typeName< double >", "structhypro_1_1typeName_3_01double_01_4.html", null ],
     [ "hypro::hypro::typeName< double >", "structhypro_1_1hypro_1_1typeName_3_01double_01_4.html", null ],
-    [ "hypro::typeName< mpq_class >", "structhypro_1_1typeName_3_01mpq__class_01_4.html", null ],
     [ "hypro::reachability::hypro::hypro::typeName< mpq_class >", "structhypro_1_1reachability_1_1hypro_1_1hypro_1_1typeName_3_01mpq__class_01_4.html", null ],
-    [ "hypro::reachability::hypro::typeName< mpq_class >", "structhypro_1_1reachability_1_1hypro_1_1typeName_3_01mpq__class_01_4.html", null ],
     [ "hypro::hypro::typeName< mpq_class >", "structhypro_1_1hypro_1_1typeName_3_01mpq__class_01_4.html", null ],
-    [ "hypro::unionContent< Number, Setting >", "structhypro_1_1unionContent.html", null ],
+    [ "hypro::reachability::hypro::typeName< mpq_class >", "structhypro_1_1reachability_1_1hypro_1_1typeName_3_01mpq__class_01_4.html", null ],
+    [ "hypro::typeName< mpq_class >", "structhypro_1_1typeName_3_01mpq__class_01_4.html", null ],
     [ "hypro::reachability::hypro::unionContent< Number, Setting >", "structhypro_1_1reachability_1_1hypro_1_1unionContent.html", null ],
+    [ "hypro::unionContent< Number, Setting >", "structhypro_1_1unionContent.html", null ],
     [ "hypro::UtilSetting", "structhypro_1_1UtilSetting.html", null ],
-    [ "hypro::Vertex< Number >", "classhypro_1_1Vertex.html", null ],
     [ "hypro::reachability::hypro::Vertex< Number >", "classhypro_1_1reachability_1_1hypro_1_1Vertex.html", null ],
+    [ "hypro::Vertex< Number >", "classhypro_1_1Vertex.html", null ],
     [ "hypro::reachability::hypro::Vertex< std::size_t >", "classhypro_1_1reachability_1_1hypro_1_1Vertex.html", null ],
     [ "hypro::Vertex< std::size_t >", "classhypro_1_1Vertex.html", null ],
-    [ "hypro::reachability::hypro::VertexContainer< Number >", "classhypro_1_1reachability_1_1hypro_1_1VertexContainer.html", null ],
     [ "hypro::VertexContainer< Number >", "classhypro_1_1VertexContainer.html", null ],
+    [ "hypro::reachability::hypro::VertexContainer< Number >", "classhypro_1_1reachability_1_1hypro_1_1VertexContainer.html", null ],
     [ "hypro::reachability::hypro::VertexEnumeration< Number >", "classhypro_1_1reachability_1_1hypro_1_1VertexEnumeration.html", null ],
     [ "hypro::VertexEnumeration< Number >", "classhypro_1_1VertexEnumeration.html", null ],
-    [ "hypro::WorkQueueDefaultSetting", "structhypro_1_1WorkQueueDefaultSetting.html", null ],
-    [ "hypro::WorkQueueT< Workable, Setting >", "classhypro_1_1WorkQueueT.html", null ],
-    [ "hypro::WorkQueueT< std::shared_ptr< hypro::Task< Number > > >", "classhypro_1_1WorkQueueT.html", null ],
     [ "hypro::ZonotopeSetting", "structhypro_1_1ZonotopeSetting.html", null ],
     [ "hypro::reachability::hypro::ZonotopeSetting", "structhypro_1_1reachability_1_1hypro_1_1ZonotopeSetting.html", null ]
 ];

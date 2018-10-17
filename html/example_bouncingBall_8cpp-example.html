@@ -247,13 +247,12 @@ $(document).ready(function(){initNavTree('example_bouncingBall_8cpp-example.html
 <div class="line">    settings.timeBound = Number(3);</div>
 <div class="line">    settings.jumpDepth = 3;</div>
 <div class="line">    reacher.<a name="a9"></a>setSettings(settings);</div>
-<div class="line">    reacher.<a name="a10"></a>setRepresentationType(Representation::type());</div>
 <div class="line"></div>
 <div class="line">    <span class="comment">// perform reachability analysis.</span></div>
-<div class="line">    std::vector&lt;std::pair&lt;unsigned, reachability::flowpipe_t&lt;Number&gt;&gt;&gt; flowpipeIndices = reacher.<a name="a11"></a><a class="code" href="classhypro_1_1reachability_1_1Reach.html#aed1d333aa28ed68bf8dbbe13a546435f">computeForwardReachability</a>();</div>
+<div class="line">    std::vector&lt;std::pair&lt;unsigned, reachability::flowpipe_t&lt;Number&gt;&gt;&gt; flowpipeIndices = reacher.<a name="a10"></a><a class="code" href="classhypro_1_1reachability_1_1Reach.html#aed1d333aa28ed68bf8dbbe13a546435f">computeForwardReachability</a>();</div>
 <div class="line"></div>
 <div class="line">    <span class="comment">// plot flowpipes.</span></div>
-<div class="line">    <a name="_a12"></a><a class="code" href="classhypro_1_1Plotter.html">Plotter&lt;Number&gt;</a>&amp; plotter = <a class="code" href="classhypro_1_1Plotter.html">Plotter&lt;Number&gt;::getInstance</a>();</div>
+<div class="line">    <a name="_a11"></a><a class="code" href="classhypro_1_1Plotter.html">Plotter&lt;Number&gt;</a>&amp; plotter = <a class="code" href="classhypro_1_1Plotter.html">Plotter&lt;Number&gt;::getInstance</a>();</div>
 <div class="line">    plotter.setFilename(<span class="stringliteral">&quot;bouncingBall&quot;</span>);</div>
 <div class="line">    <span class="keywordflow">for</span>(<span class="keyword">auto</span>&amp; indexPair : flowpipeIndices){</div>
 <div class="line">        std::vector&lt;hypro::State_t&lt;Number&gt;&gt; flowpipe = indexPair.second;</div>

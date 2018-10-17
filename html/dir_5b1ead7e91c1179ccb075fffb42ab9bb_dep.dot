@@ -1,9 +1,0 @@
-digraph "/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/handlers/resetHandlers" {
-  compound=true
-  node [ fontsize="10", fontname="Helvetica"];
-  edge [ labelfontsize="10", labelfontname="Helvetica"];
-  subgraph clusterdir_32033642301c2effdf6af876d53153c1 {
-    graph [ bgcolor="#ddddee", pencolor="black", label="handlers" fontname="Helvetica", fontsize="10", URL="dir_32033642301c2effdf6af876d53153c1.html"]
-  dir_5b1ead7e91c1179ccb075fffb42ab9bb [shape=box, label="resetHandlers", style="filled", fillcolor="#eeeeff", pencolor="black", URL="dir_5b1ead7e91c1179ccb075fffb42ab9bb.html"];
-  }
-}
