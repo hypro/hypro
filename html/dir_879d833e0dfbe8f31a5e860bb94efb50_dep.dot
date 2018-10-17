@@ -16,5 +16,9 @@ digraph "/home/travis/build/hypro/hypro/src/hypro/util" {
   }
   }
   dir_bce2075adec303dcb2f0c4fbfcbc8493 [shape=box label="datastructures" fillcolor="white" style="filled" color="red" URL="dir_bce2075adec303dcb2f0c4fbfcbc8493.html"];
-  dir_3100e148cb0b6b745355fdee31bcb5c6->dir_bce2075adec303dcb2f0c4fbfcbc8493 [headlabel="3", labeldistance=1.5 headhref="dir_000031_000010.html"];
+  dir_7fa927d8fbf9dfbeef69af27f63bc81b [shape=box label="representations" fillcolor="white" style="filled" color="red" URL="dir_7fa927d8fbf9dfbeef69af27f63bc81b.html"];
+  dir_3100e148cb0b6b745355fdee31bcb5c6->dir_bce2075adec303dcb2f0c4fbfcbc8493 [headlabel="3", labeldistance=1.5 headhref="dir_000044_000020.html"];
+  dir_bce2075adec303dcb2f0c4fbfcbc8493->dir_7fa927d8fbf9dfbeef69af27f63bc81b [headlabel="5", labeldistance=1.5 headhref="dir_000020_000016.html"];
+  dir_57790bb148fd18efc2431dd25a248521->dir_7fa927d8fbf9dfbeef69af27f63bc81b [headlabel="1", labeldistance=1.5 headhref="dir_000051_000016.html"];
+  dir_7fa927d8fbf9dfbeef69af27f63bc81b->dir_bce2075adec303dcb2f0c4fbfcbc8493 [headlabel="18", labeldistance=1.5 headhref="dir_000016_000020.html"];
 }

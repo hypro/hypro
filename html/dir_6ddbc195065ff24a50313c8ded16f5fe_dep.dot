@@ -1,0 +1,9 @@
+digraph "/home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/timing" {
+  compound=true
+  node [ fontsize="10", fontname="Helvetica"];
+  edge [ labelfontsize="10", labelfontname="Helvetica"];
+  subgraph clusterdir_f695c0e486b1567b2450488137a0ccfa {
+    graph [ bgcolor="#ddddee", pencolor="black", label="reachability" fontname="Helvetica", fontsize="10", URL="dir_f695c0e486b1567b2450488137a0ccfa.html"]
+  dir_6ddbc195065ff24a50313c8ded16f5fe [shape=box, label="timing", style="filled", fillcolor="#eeeeff", pencolor="black", URL="dir_6ddbc195065ff24a50313c8ded16f5fe.html"];
+  }
+}
