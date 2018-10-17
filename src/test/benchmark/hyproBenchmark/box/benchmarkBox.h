@@ -23,7 +23,10 @@
 namespace benchmark {
 namespace box
 {
-    Results<int> intersectHalfspaces(const Settings& settings);
+    Results<int> intersectHalfspace(const Settings& settings);
+    Results<int> affineTransformation(const Settings& settings);
+    Results<int> unite(const Settings& settings);
+    Results<int> intersect(const Settings& settings);
     Results<int> run(const Settings& settings);
 
 } // box

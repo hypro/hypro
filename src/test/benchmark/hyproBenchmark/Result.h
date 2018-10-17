@@ -16,12 +16,19 @@ template<typename Data>
 struct Result {
     std::string mName;                              // name as a reference
     std::chrono::duration<double> mRunningTime;     // running time
+    int mDimension = 1;                             // the dimension of the state space
     Data mContent;                                  // some result data
 
 public:
     Result(const std::string& name, const std::chrono::duration<double>& runningTime) :
         mName(name)
         ,mRunningTime(runningTime)
+    {}
+
+    Result(const std::string& name, const std::chrono::duration<double>& runningTime, int dim) :
+        mName(name)
+        ,mRunningTime(runningTime)
+        ,mDimension(dim)
     {}
 };
 
