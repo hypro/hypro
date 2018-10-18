@@ -201,7 +201,7 @@ $(document).ready(function(){initNavTree('EventTimingContainer_8h_source.html','
 <div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;        out &lt;&lt; <span class="stringliteral">&quot;Inv.: &quot;</span> &lt;&lt; in.mInvariantEvents;</div>
 <div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;        out &lt;&lt; <span class="stringliteral">&quot;Tr.: &quot;</span>;</div>
 <div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;        <span class="keywordflow">for</span>(<span class="keyword">const</span> <span class="keyword">auto</span>&amp; TTPair : in.mTransitionEvents){</div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;            out &lt;&lt; TTPair.first-&gt;getSource()-&gt;getId() &lt;&lt; <span class="stringliteral">&quot;-&gt;&quot;</span> &lt;&lt; TTPair.first-&gt;getTarget()-&gt;getId() &lt;&lt; <span class="stringliteral">&quot;: &quot;</span> &lt;&lt; TTPair.second;</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;            out &lt;&lt; TTPair.first-&gt;getSource()-&gt;hash() &lt;&lt; <span class="stringliteral">&quot;-&gt;&quot;</span> &lt;&lt; TTPair.first-&gt;getTarget()-&gt;hash() &lt;&lt; <span class="stringliteral">&quot;: &quot;</span> &lt;&lt; TTPair.second;</div>
 <div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;        }</div>
 <div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;        out &lt;&lt; <span class="stringliteral">&quot;Bs.: &quot;</span> &lt;&lt; in.mBadStateEvents;</div>
 <div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;        <span class="keywordflow">return</span> out;</div>

@@ -3,7 +3,6 @@ var searchData=
   ['range',['Range',['../classhypro_1_1Range.html',1,'hypro']]],
   ['reach',['Reach',['../classhypro_1_1reachability_1_1Reach.html',1,'hypro::reachability']]],
   ['reachabilitysettings',['ReachabilitySettings',['../structhypro_1_1ReachabilitySettings.html',1,'hypro']]],
-  ['reachabilitysettings_3c_20tnumber_20_3e',['ReachabilitySettings&lt; tNumber &gt;',['../structhypro_1_1ReachabilitySettings.html',1,'hypro']]],
   ['reachtree',['ReachTree',['../classhypro_1_1ReachTree.html',1,'hypro']]],
   ['reachtreenode',['ReachTreeNode',['../classhypro_1_1ReachTreeNode.html',1,'hypro']]],
   ['refinementsetting',['RefinementSetting',['../structhypro_1_1RefinementSetting.html',1,'hypro']]],

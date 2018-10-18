@@ -153,9 +153,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:abfc7ab696ff8dc0438ea30bf6cb8f6d9"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="abfc7ab696ff8dc0438ea30bf6cb8f6d9"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>ReachTreeNode</b> (const <a class="el" href="classhypro_1_1State.html">State_t</a>&lt; Number &gt; &amp;state, unsigned level=0)</td></tr>
 <tr class="separator:abfc7ab696ff8dc0438ea30bf6cb8f6d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abf98b49bb85f06e785bb2e742e01bc55"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="abf98b49bb85f06e785bb2e742e01bc55"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>ReachTreeNode</b> (const <a class="el" href="classhypro_1_1State.html">State_t</a>&lt; Number &gt; &amp;state, unsigned level, typename <a class="el" href="classhypro_1_1ReachTreeNode.html">ReachTreeNode</a>&lt; Number &gt;::<a class="el" href="classhypro_1_1TreeNode.html">Node_t</a> parent)</td></tr>
-<tr class="separator:abf98b49bb85f06e785bb2e742e01bc55"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a433ae186b1bc7d90b92018422a227502"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a433ae186b1bc7d90b92018422a227502"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>ReachTreeNode</b> (const <a class="el" href="classhypro_1_1State.html">State_t</a>&lt; Number &gt; &amp;state, unsigned level, <a class="el" href="classhypro_1_1ReachTreeNode.html">ReachTreeNode</a>&lt; Number &gt; *parent)</td></tr>
+<tr class="separator:a433ae186b1bc7d90b92018422a227502"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a346637b51d617a16792599d36da2dfd8"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a346637b51d617a16792599d36da2dfd8"></a>
 std::mutex &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getMutex</b> () const </td></tr>
 <tr class="separator:a346637b51d617a16792599d36da2dfd8"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -266,15 +266,18 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setParent</b> (<a cla
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
 Friends</h2></td></tr>
-<tr class="memitem:ada72f552c1a571a598026ebde5f20cac"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ada72f552c1a571a598026ebde5f20cac"></a>
-std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator&lt;&lt;</b> (std::ostream &amp;out, const <a class="el" href="classhypro_1_1ReachTreeNode.html">ReachTreeNode</a>&lt; Number &gt; &amp;reachTreeNode)</td></tr>
-<tr class="separator:ada72f552c1a571a598026ebde5f20cac"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a791cbdffb32a35ef82d5b9802e217480"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a791cbdffb32a35ef82d5b9802e217480"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator&lt;</b> (const <a class="el" href="classhypro_1_1ReachTreeNode.html">ReachTreeNode</a>&lt; Number &gt; &amp;lhs, const <a class="el" href="classhypro_1_1ReachTreeNode.html">ReachTreeNode</a>&lt; Number &gt; &amp;rhs)</td></tr>
-<tr class="separator:a791cbdffb32a35ef82d5b9802e217480"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9ff1203b725fe754e4fd19fbadf112b5"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9ff1203b725fe754e4fd19fbadf112b5"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator==</b> (const <a class="el" href="classhypro_1_1ReachTreeNode.html">ReachTreeNode</a>&lt; Number &gt; &amp;lhs, const <a class="el" href="classhypro_1_1ReachTreeNode.html">ReachTreeNode</a>&lt; Number &gt; &amp;rhs)</td></tr>
-<tr class="separator:a9ff1203b725fe754e4fd19fbadf112b5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acabd256b3544bc734f38498cb0eb9c92"><td class="memTemplParams" colspan="2"><a class="anchor" id="acabd256b3544bc734f38498cb0eb9c92"></a>
+template&lt;typename N &gt; </td></tr>
+<tr class="memitem:acabd256b3544bc734f38498cb0eb9c92"><td class="memTemplItemLeft" align="right" valign="top">std::ostream &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>operator&lt;&lt;</b> (std::ostream &amp;out, const <a class="el" href="classhypro_1_1ReachTreeNode.html">ReachTreeNode</a>&lt; N &gt; &amp;reachTreeNode)</td></tr>
+<tr class="separator:acabd256b3544bc734f38498cb0eb9c92"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af3c75eb9ff760c6014079313fadc2c69"><td class="memTemplParams" colspan="2"><a class="anchor" id="af3c75eb9ff760c6014079313fadc2c69"></a>
+template&lt;typename N &gt; </td></tr>
+<tr class="memitem:af3c75eb9ff760c6014079313fadc2c69"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><b>operator&lt;</b> (const <a class="el" href="classhypro_1_1ReachTreeNode.html">ReachTreeNode</a>&lt; N &gt; &amp;lhs, const <a class="el" href="classhypro_1_1ReachTreeNode.html">ReachTreeNode</a>&lt; N &gt; &amp;rhs)</td></tr>
+<tr class="separator:af3c75eb9ff760c6014079313fadc2c69"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a23ba09b94be7b9ca98f17ae75a028935"><td class="memTemplParams" colspan="2"><a class="anchor" id="a23ba09b94be7b9ca98f17ae75a028935"></a>
+template&lt;typename N &gt; </td></tr>
+<tr class="memitem:a23ba09b94be7b9ca98f17ae75a028935"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><b>operator==</b> (const <a class="el" href="classhypro_1_1ReachTreeNode.html">ReachTreeNode</a>&lt; N &gt; &amp;lhs, const <a class="el" href="classhypro_1_1ReachTreeNode.html">ReachTreeNode</a>&lt; N &gt; &amp;rhs)</td></tr>
+<tr class="separator:a23ba09b94be7b9ca98f17ae75a028935"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
