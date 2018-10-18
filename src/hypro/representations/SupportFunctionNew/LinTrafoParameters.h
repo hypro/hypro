@@ -48,7 +48,7 @@ struct LinTrafoParameters {
 	}
 
 	const std::pair<matrix_t<Number>, vector_t<Number>>& getParameterSet(unsigned exponent) const {
-		std::cout << this << " Request parameter set for exponent " << exponent << std::endl;
+		//std::cout << this << " Request parameter set for exponent " << exponent << std::endl;
 		if(parameters.find(exponent) != parameters.end()){
 			return parameters.at(exponent);
 		}

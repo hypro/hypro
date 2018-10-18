@@ -57,7 +57,8 @@ public:
 					reduced = true;
 					currentExponent = currentExponent*(carl::pow(2,parameters->power));
 					for(std::size_t i = 0; i < unsigned(carl::pow(2,parameters->power)-1); i++ ){
-						origin->getRoot()->getChildren().at(0) = origin->getRoot()->getChildren().at(0)->getChildren().at(0);
+						//origin->getRoot()->getChildren().at(0) = origin->getRoot()->getChildren().at(0)->getChildren().at(0);
+						origin->setAsOnlyChild(origin->getRoot()->getChildren().at(0)->getChildren().at(0));
 					}
 					// Note: The following assertion does not hold in combination with the current reduction techniques.
 					//assert(mChildren.at(0)->type() != SF_TYPE::LINTRAFO || (mChildren.at(0)->linearTrafoParameters()->parameters == this->parameters && mChildren.at(0)->linearTrafoParameters()->currentExponent >= currentExponent) );

@@ -53,6 +53,9 @@ public:
 	//the second child of "binary".
 	RootGrowTree* addBinaryOp(RootGrowNode<Number>* binary, RootGrowTree* rhs);
 
+	//Remove all pointers to current children of mRoot. Set "child" as the only child of mRoot
+	RootGrowTree* setAsOnlyChild(RootGrowNode<Number>* child);
+
 	////// Displaying
 
 	friend std::ostream& operator<<(std::ostream& ostr, const RootGrowTree& t){

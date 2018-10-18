@@ -48,6 +48,7 @@ public:
 
 	void addToChildren(RootGrowNode* rhs){ mChildren.push_back(rhs); }
 	void setAsParent(RootGrowNode* parent){ mParent = parent; }
+	void clearChildren(){ mChildren.clear(); }
 
 	////// Displaying
 
@@ -58,11 +59,11 @@ public:
 		} else {
 			ostr << "parent type: nullptr" << std::endl;
 		}
-		ostr << "children types: ";
+		ostr << "children types: [";
 		for(auto c : r.getChildren()){
 			ostr << c->getType() << ",";
 		}
-		ostr << std::endl;
+		ostr << "]" << std::endl;
 		for(auto c : r.getChildren()){
 			ostr << *c << std::endl;
 		}

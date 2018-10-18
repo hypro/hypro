@@ -35,6 +35,14 @@ namespace hypro {
 		return this;
 	}
 
+	template<typename Number>
+	RootGrowTree<Number>* RootGrowTree<Number>::setAsOnlyChild(RootGrowNode<Number>* child){
+		mRoot->clearChildren();
+		mRoot->addToChildren(child);
+		child->setAsParent(mRoot);
+		return this;
+	}
+
 	//When Result type and Param type = void
 	template<typename Number>
 	void RootGrowTree<Number>::traverse( 	

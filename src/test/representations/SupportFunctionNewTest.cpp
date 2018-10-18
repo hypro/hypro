@@ -47,8 +47,8 @@ TYPED_TEST(SupportFunctionNewTest, LeafTest){
 TYPED_TEST(SupportFunctionNewTest, TrafoOp){
 
 	//Make the box leaf
-	Point<TypeParam> p({TypeParam(-1),TypeParam(0),TypeParam(0)});
-	Point<TypeParam> q({TypeParam(0),TypeParam(1),TypeParam(1)});
+	Point<TypeParam> p({TypeParam(0),TypeParam(0)});
+	Point<TypeParam> q({TypeParam(1),TypeParam(1)});
 	Box<TypeParam> box(std::make_pair(p,q));
 	Leaf<TypeParam, Box<TypeParam>> r(&box);
 	EXPECT_TRUE(r.getType() == SFNEW_TYPE::LEAF);
@@ -59,11 +59,11 @@ TYPED_TEST(SupportFunctionNewTest, TrafoOp){
 	SupportFunctionContentNew<TypeParam> sfc(&r);
 
 	//tMat = 2 * Identity_Matrix , tVec = (1 0 0)
-	int dim = 3;
+	int dim = 2;
 	matrix_t<TypeParam> tMat = matrix_t<TypeParam>::Zero(dim, dim);
 	vector_t<TypeParam> tVec = vector_t<TypeParam>::Zero(dim);
 	for(int i = 0; i < tMat.rows(); i++){
-		tMat(i,i) = 2;
+		tMat(i,i) = 1;
 	}
 	tVec(0) = 1;
 
@@ -71,6 +71,9 @@ TYPED_TEST(SupportFunctionNewTest, TrafoOp){
 	TrafoOp<TypeParam> trafo1(&sfc, tMat, tVec);
 	EXPECT_EQ(trafo1.getCurrentExponent(), 1);
 	EXPECT_EQ(trafo1.getSuccessiveTransformations(), 0);
+
+	//Save pointer to parameters for later, checking if it remains the same object 
+	std::shared_ptr<const LinTrafoParameters<TypeParam>> trafo1Params = trafo1.getParameters();
 
 	//Construct trafo2
 	TrafoOp<TypeParam> trafo2(&sfc, tMat, tVec);	
@@ -82,11 +85,11 @@ TYPED_TEST(SupportFunctionNewTest, TrafoOp){
 	std::cout << "START EVALUATION FOR 2 TRAFOS\n"; 
 	std::vector<EvaluationResult<TypeParam>> res = sfc.evaluate(directions);
 	std::cout << "END EVALUATION\n";
-	std::cout << "Result of Evaluation is:\n";
-	for(auto& eRes : res){
-		std::cout << eRes << std::endl;
-	}	
-	//Check results here
+	
+	//Check if the supportvalues were right
+	//Should be [1 + #trafos , 1] everywhere
+	EXPECT_EQ(res.at(0).supportValue, TypeParam(3));
+	EXPECT_EQ(res.at(1).supportValue, TypeParam(1));
 
 	TrafoOp<TypeParam> trafo3(&sfc, tMat, tVec);
 	EXPECT_EQ(trafo3.getCurrentExponent(), 1);
@@ -94,17 +97,18 @@ TYPED_TEST(SupportFunctionNewTest, TrafoOp){
 
 	TrafoOp<TypeParam> trafo4(&sfc, tMat, tVec);
 	EXPECT_EQ(trafo4.getCurrentExponent(), 4);
-	EXPECT_EQ(trafo4.getSuccessiveTransformations(), 0);	
+	EXPECT_EQ(trafo4.getSuccessiveTransformations(), 0);
+
+	//Check whether parameter object remained the same (whether both point to the same address)
+	EXPECT_EQ(trafo1Params, trafo4.getParameters());
 
 	//Evaluate
 	std::cout << "START EVALUATION FOR 4 TRAFOS\n"; 
 	res = sfc.evaluate(directions);
 	std::cout << "END EVALUATION\n";
-	std::cout << "Result of Evaluation is:\n";
-	for(auto& eRes : res){
-		std::cout << eRes << std::endl;
-	}
-	//Check results here
+
+	EXPECT_EQ(res.at(0).supportValue, TypeParam(5));
+	EXPECT_EQ(res.at(1).supportValue, TypeParam(1));
 
 	TrafoOp<TypeParam> trafo5(&sfc, tMat, tVec);
 	EXPECT_EQ(trafo5.getCurrentExponent(), 1);
@@ -118,11 +122,9 @@ TYPED_TEST(SupportFunctionNewTest, TrafoOp){
 	std::cout << "START EVALUATION FOR 6 TRAFOS\n"; 
 	res = sfc.evaluate(directions);
 	std::cout << "END EVALUATION\n";
-	std::cout << "Result of Evaluation is:\n";
-	for(auto& eRes : res){
-		std::cout << eRes << std::endl;
-	}
-	//Check results here
+
+	EXPECT_EQ(res.at(0).supportValue, TypeParam(7));
+	EXPECT_EQ(res.at(1).supportValue, TypeParam(1));
 
 	TrafoOp<TypeParam> trafo7(&sfc, tMat, tVec);
 	EXPECT_EQ(trafo7.getCurrentExponent(), 1);
@@ -130,17 +132,17 @@ TYPED_TEST(SupportFunctionNewTest, TrafoOp){
 
 	TrafoOp<TypeParam> trafo8(&sfc, tMat, tVec);
 	EXPECT_EQ(trafo8.getCurrentExponent(), 4);
-	EXPECT_EQ(trafo8.getSuccessiveTransformations(), 0);
+	EXPECT_EQ(trafo8.getSuccessiveTransformations(), 1);
+
+	EXPECT_EQ(trafo1Params, trafo8.getParameters());
 
 	//Evaluate
 	std::cout << "START EVALUATION FOR 8 TRAFOS\n"; 
 	res = sfc.evaluate(directions);
 	std::cout << "END EVALUATION\n";
-	std::cout << "Result of Evaluation is:\n";
-	for(auto& eRes : res){
-		std::cout << eRes << std::endl;
-	}
-	//Check results here
+
+	EXPECT_EQ(res.at(0).supportValue, TypeParam(9));
+	EXPECT_EQ(res.at(1).supportValue, TypeParam(1));
 
 	TrafoOp<TypeParam> trafo9(&sfc, tMat, tVec);
 	EXPECT_EQ(trafo9.getCurrentExponent(), 1);
@@ -150,32 +152,8 @@ TYPED_TEST(SupportFunctionNewTest, TrafoOp){
 	std::cout << "START EVALUATION FOR 9 TRAFOS\n"; 
 	res = sfc.evaluate(directions);
 	std::cout << "END EVALUATION\n";
-	std::cout << "Result of Evaluation is:\n";
-	for(auto& eRes : res){
-		std::cout << eRes << std::endl;
-	}
-	//Check results here
-}
-
-/*
-TYPED_TEST(SupportFunctionNewTest, ParameterStruct){
-
-	RootGrowNode<TypeParam> r;
-	Parameters<int, float, RootGrowNode<TypeParam>> p(1, 2.0f, r);
-	//EXPECT_TRUE(Parameters<int,float,RootGrowNode<TypeParam>>::size() == std::size_t(3));
-
-	Parameters<double, matrix_t<TypeParam>> p2(std::make_tuple(-2.0, matrix_t<TypeParam>::Zero(4,4)));
-	//EXPECT_TRUE(Parameters<double, matrix_t<TypeParam>>::size() == std::size_t(2));
-}
-*/
-
-TYPED_TEST(SupportFunctionNewTest, RootGrowTree){
-
-	SUCCEED();
 
 }
-
-////// Data Structure Integration Tests (Virtual functions etc)
 
 ////// Functionality Tests
 
