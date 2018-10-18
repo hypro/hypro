@@ -5,25 +5,27 @@
  * Created on April 8, 2016, 12:04 PM
  */
 
+#pragma once
 #include "ReachTreeNode.h"
 #include "TreeStatistic.h"
 #include <string>
 
 namespace hypro
 {
+template<typename Number>
 class ReachTree
 {
   private:
-    ReachTreeNode::Node_t mRoot;
+    ReachTreeNode<Number>* mRoot;
 
   public:
-    ReachTree(ReachTreeNode::Node_t _root);
+    ReachTree(ReachTreeNode<Number>* _root);
 
     ~ReachTree(){
     	delete mRoot;
     }
 
-    ReachTreeNode::Node_t getRoot() const;
+    ReachTreeNode<Number>* getRoot() const;
 
     std::size_t getDepth() const;
 
@@ -38,3 +40,5 @@ class ReachTree
     TreeStatistic getTreeStats() const;
 };
 } // hypro
+
+#include "ReachTree.tpp"

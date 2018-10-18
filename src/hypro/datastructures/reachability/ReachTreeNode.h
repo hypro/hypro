@@ -205,7 +205,7 @@ class ReachTreeNode : public TreeNode
     	mRefinements[level].initialSet = state;
     }
 
-    ReachTreeNode(const State_t<Number>& state, unsigned level, typename ReachTreeNode<Number>::Node_t parent)
+    ReachTreeNode(const State_t<Number>& state, unsigned level, ReachTreeNode<Number>* parent)
     	: TreeNode()
     	, mPath()
     	, mRefinements()
@@ -285,13 +285,16 @@ class ReachTreeNode : public TreeNode
 
     std::size_t getDotRepresentation(std::size_t startIndex, std::string& nodes, std::string& transitions, std::vector<unsigned>& levels) const;
 
-    friend std::ostream& operator<< (std::ostream &out, const ReachTreeNode<Number> &reachTreeNode);
+	template<typename N>
+    friend std::ostream& operator<< (std::ostream &out, const ReachTreeNode<N> &reachTreeNode);
 
-    friend bool operator<(const ReachTreeNode<Number>& lhs, const ReachTreeNode<Number>& rhs) {
+	template<typename N>
+    friend bool operator<(const ReachTreeNode<N>& lhs, const ReachTreeNode<N>& rhs) {
     	return (lhs.getDepth() < rhs.getDepth());
     }
 
-    friend bool operator==(const ReachTreeNode<Number>& lhs, const ReachTreeNode<Number>& rhs) {
+	template<typename N>
+    friend bool operator==(const ReachTreeNode<N>& lhs, const ReachTreeNode<N>& rhs) {
     	// properties of tree node
     	if(lhs.mDepth != rhs.mDepth ||
     	    lhs.mParent != rhs.mParent ||
@@ -318,3 +321,5 @@ class ReachTreeNode : public TreeNode
 };
 
 } // hypro
+
+#include "ReachTreeNode.tpp"
