@@ -21,7 +21,7 @@ namespace hypro {
 		}
 
 		/*
-		ReachabilitySettings<Number>& settings = SettingsProvider<Number>::getInstance().getReachabilitySettings();
+		ReachabilitySettings& settings = SettingsProvider<Number>::getInstance().getReachabilitySettings();
 		EventTimingContainer empty = EventTimingContainer(settings.timeBound*settings.jumpDepth);
 		empty.insertBadState(std::make_pair(CONTAINMENT::BOT, carl::Interval<tNumber>(Number(0),settings.timeBound*settings.jumpDepth)));
 		for(auto locationPtr : ha.getLocations()) {

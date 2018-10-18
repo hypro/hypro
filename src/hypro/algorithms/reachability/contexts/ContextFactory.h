@@ -20,7 +20,7 @@ namespace hypro
 		                    WorkQueue<std::shared_ptr<Task<Number>>>* localQueue,
 		                    WorkQueue<std::shared_ptr<Task<Number>>>* localCEXQueue,
 		                    std::vector<PlotData<Number>>* localSegments,
-		                    hypro::ReachabilitySettings<tNumber> &settings);
+		                    hypro::ReachabilitySettings &settings);
 
 
         // Todo: Add destructor and vector which keeps the pointers to the contexts.

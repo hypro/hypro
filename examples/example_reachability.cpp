@@ -20,7 +20,7 @@ static void computeReachableStates(const std::string& filename, const hypro::rep
 	using timeunit = std::chrono::microseconds;
 	clock::time_point start = clock::now();
 
-	std::pair<hypro::HybridAutomaton<Number>, hypro::ReachabilitySettings<Number>> ha = std::move(hypro::parseFlowstarFile<Number>(filename)); 
+	std::pair<hypro::HybridAutomaton<Number>, hypro::ReachabilitySettings> ha = std::move(hypro::parseFlowstarFile<Number>(filename)); 
 	//#ifdef HYPRO_LOGGING
 	//std::cout << "Parsed HybridAutomaton:\n" << ha.first << "Parsed ReachabilitySettings:\n" << ha.second << std::endl;
 	//#endif

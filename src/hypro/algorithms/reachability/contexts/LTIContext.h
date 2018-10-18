@@ -23,15 +23,15 @@ namespace hypro
 		WorkQueue<std::shared_ptr<Task<Number>>>* mLocalQueue;
 		WorkQueue<std::shared_ptr<Task<Number>>>* mLocalCEXQueue;
 	    std::vector<PlotData<Number>>* mLocalSegments;
-	    ReachabilitySettings<tNumber> mSettings;
+	    ReachabilitySettings mSettings;
 
 	    EventTimingContainer<Number> mLocalTimings;
     	HierarchicalIntervalVector<CONTAINMENT, tNumber> mTransitionTimings;
 
 
-   		std::vector<boost::tuple<Transition<Number>*, State_t<Number,tNumber>>> mDiscreteSuccessorBuffer;
+   		std::vector<boost::tuple<Transition<Number>*, State_t<Number>>> mDiscreteSuccessorBuffer;
 
-	    std::map<Transition<Number>*, State_t<Number,tNumber>> mPotentialZenoTransitions;
+	    std::map<Transition<Number>*, State_t<Number>> mPotentialZenoTransitions;
 	    std::vector<Transition<Number>*> mDisabledTransitions;
 
    		tNumber mCurrentLocalTime;
@@ -39,7 +39,7 @@ namespace hypro
 	    carl::Interval<tNumber> mCurrentTimeInterval;
 
         // a copy of the state to perform the computation in, the state in the task is untouched
-        State_t<Number,tNumber> mComputationState; 
+        State_t<Number> mComputationState; 
 
         // the handlers to process each operation in the specific subset
         // this is a 1:1 relation, for each subset at index I, there is a corresponding handler at index I
@@ -61,7 +61,7 @@ namespace hypro
 	                    WorkQueue<std::shared_ptr<Task<Number>>>* localQueue,
 	                    WorkQueue<std::shared_ptr<Task<Number>>>* localCEXQueue,
 	                    std::vector<PlotData<Number>>* localSegments,
-	                    ReachabilitySettings<tNumber> &settings);
+	                    ReachabilitySettings &settings);
 
 		virtual void execOnStart() override ;
 

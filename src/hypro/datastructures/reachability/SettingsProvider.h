@@ -25,7 +25,7 @@ class SettingsProvider : public carl::Singleton<SettingsProvider<Number>>
   public:
     const HybridAutomaton<Number>& getHybridAutomaton();
 
-    ReachabilitySettings<tNumber> &getReachabilitySettings();
+    ReachabilitySettings &getReachabilitySettings();
 
     unsigned getWorkerThreadCount();
 
@@ -41,14 +41,14 @@ class SettingsProvider : public carl::Singleton<SettingsProvider<Number>>
 
     void setHybridAutomaton(const HybridAutomaton<Number> &ha);
 
-    void setReachabilitySettings(const ReachabilitySettings<tNumber> &rs);
+    void setReachabilitySettings(const ReachabilitySettings &rs);
 
-    //In case we got a ReachabilitySettings<double> from parser, we need to convert it to ReachabilitySettings<tNumber>
+    //In case we got a ReachabilitySettings from parser, we need to convert it to ReachabilitySettings
     template<typename N = Number, typename T = tNumber, carl::DisableIf< std::is_same<N,T> > = carl::dummy >
-    void setReachabilitySettings(const ReachabilitySettings<Number> &rs){
-        ReachabilitySettings<tNumber> rsConverted;
-        rsConverted.timeBound = carl::convert<Number,tNumber>(rs.timeBound);
-        rsConverted.timeStep = carl::convert<Number,tNumber>(rs.timeStep);
+    void setReachabilitySettings(const ReachabilitySettings &rs){
+        ReachabilitySettings rsConverted;
+        rsConverted.timeBound = rs.timeBound;
+        rsConverted.timeStep = rs.timeStep;
         rsConverted.jumpDepth = rs.jumpDepth;
         rsConverted.fileName = rs.fileName;
         rsConverted.pplDenomimator = rs.pplDenomimator;
@@ -84,7 +84,7 @@ class SettingsProvider : public carl::Singleton<SettingsProvider<Number>>
 
   private:
     HybridAutomaton<Number> mHybridAutomaton;
-    ReachabilitySettings<tNumber> mReachabilitySettings;
+    ReachabilitySettings mReachabilitySettings;
     std::vector<StrategyNode> mStrategy;
     bool mGlobalQueuesOnly = false;
     bool mSkipPlot = false;

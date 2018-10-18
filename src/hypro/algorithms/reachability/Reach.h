@@ -61,7 +61,7 @@ template <typename Number>
 class Reach {
 private:
 	HybridAutomaton<Number, State_t<Number,Number>> mAutomaton;
-	ReachabilitySettings<Number> mSettings;
+	ReachabilitySettings mSettings;
 	std::size_t mCurrentLevel = 0;
     Number mBloatingFactor = 0;
 	std::map<unsigned, std::vector<flowpipe_t<Number>>> mReachableStates;
@@ -78,7 +78,7 @@ public:
 	 * @param _automaton The analyzed automaton.
 	 * @param _settings The reachability analysis settings.
 	 */
-	Reach( const HybridAutomaton<Number, State_t<Number,Number>>& _automaton, const ReachabilitySettings<Number>& _settings = ReachabilitySettings<Number>());
+	Reach( const HybridAutomaton<Number, State_t<Number,Number>>& _automaton, const ReachabilitySettings& _settings = ReachabilitySettings());
 
 	/**
 	 * @brief Computes the forward reachability of the given automaton.
@@ -128,8 +128,8 @@ public:
 
 	bool checkTransitions(const State_t<Number>& _state, const carl::Interval<Number>& currentTime, std::vector<boost::tuple<Transition<Number>*, State_t<Number>>>& nextInitialSets) const;
 
-	const ReachabilitySettings<Number>& settings() const { return mSettings; }
-	void setSettings(const ReachabilitySettings<Number>& settings) { mSettings = settings; }
+	const ReachabilitySettings& settings() const { return mSettings; }
+	void setSettings(const ReachabilitySettings& settings) { mSettings = settings; }
 
 	representation_name getRepresentationType() const { return mType; }
 	void setRepresentationType(const representation_name& type) { mType = type; }

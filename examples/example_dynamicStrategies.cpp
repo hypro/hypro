@@ -18,7 +18,7 @@ int main() {
 	//std::string filename = "../examples/input/thermostat.model";
 	std::string filename = "../examples/input/bouncing_ball.model";
 
-	std::pair<hypro::HybridAutomaton<Number>, hypro::ReachabilitySettings<Number>> ha = std::move(hypro::parseFlowstarFile<Number>(filename));
+	std::pair<hypro::HybridAutomaton<Number>, hypro::ReachabilitySettings> ha = std::move(hypro::parseFlowstarFile<Number>(filename));
 
 	//hypro::reachability::Reach<Number,boxValuation> boxReach(ha.first, ha.second);
 	//hypro::reachability::Reach<Number,hpValuation> hpReach(ha.first, ha.second);

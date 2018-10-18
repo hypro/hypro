@@ -8,7 +8,7 @@ namespace reachability {
 	using timeunit = std::chrono::microseconds;
 
 	template<typename Number>
-	Reach<Number>::Reach( const HybridAutomaton<Number, State_t<Number,Number>>& _automaton, const ReachabilitySettings<Number>& _settings)
+	Reach<Number>::Reach( const HybridAutomaton<Number, State_t<Number,Number>>& _automaton, const ReachabilitySettings& _settings)
 		: mAutomaton( _automaton ), mSettings(_settings), mCurrentLevel(0), mIntersectedBadStates(false) {
 			//mAutomaton.addArtificialDimension();
 		}

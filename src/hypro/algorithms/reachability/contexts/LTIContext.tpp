@@ -8,7 +8,7 @@ namespace hypro
 	                    WorkQueue<std::shared_ptr<Task<Number>>>* localQueue,
 	                    WorkQueue<std::shared_ptr<Task<Number>>>* localCEXQueue,
 	                    std::vector<PlotData<Number>>* localSegments,
-	                    ReachabilitySettings<tNumber> &settings) : mTransitionTimings(HierarchicalIntervalVector<CONTAINMENT, tNumber>(std::vector<CONTAINMENT>({CONTAINMENT::BOT, CONTAINMENT::FULL, CONTAINMENT::NO, CONTAINMENT::YES})))
+	                    ReachabilitySettings &settings) : mTransitionTimings(HierarchicalIntervalVector<CONTAINMENT, tNumber>(std::vector<CONTAINMENT>({CONTAINMENT::BOT, CONTAINMENT::FULL, CONTAINMENT::NO, CONTAINMENT::YES})))
 	{
 		mTask = t;
 		mStrategy = strat;

@@ -28,7 +28,7 @@ static void computeReachableStates(const std::string& filename) {
 	std::vector<std::chrono::duration<double, std::milli>> runtimes(numberRuns);
 	std::chrono::duration<double, std::milli> summedTime(0.0);
 	clock::time_point startParsing = clock::now();
-	std::pair<hypro::HybridAutomaton<Number>, hypro::ReachabilitySettings<Number>> ha = std::move(hypro::parseFlowstarFile<Number>(filename)); 
+	std::pair<hypro::HybridAutomaton<Number>, hypro::ReachabilitySettings> ha = std::move(hypro::parseFlowstarFile<Number>(filename)); 
 	std::chrono::duration<double, std::milli> parseTime = std::chrono::duration_cast<std::chrono::duration<double, std::milli>>(clock::now() - startParsing);
 	std::vector<std::pair<unsigned, hypro::reachability::flowpipe_t<Number>>> flowpipes;
 	//std::cout << "Parse time is " << parseTime.count() << std::endl;

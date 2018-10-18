@@ -9,7 +9,7 @@ const HybridAutomaton<Number>& SettingsProvider<Number>::getHybridAutomaton()
 }
 
 template<typename Number>
-ReachabilitySettings<tNumber>& SettingsProvider<Number>::getReachabilitySettings()
+ReachabilitySettings& SettingsProvider<Number>::getReachabilitySettings()
 {
     return mReachabilitySettings;
 }
@@ -63,7 +63,7 @@ void SettingsProvider<Number>::setHybridAutomaton(const HybridAutomaton<Number>&
 }
 
 template<typename Number>
-void SettingsProvider<Number>::setReachabilitySettings(const ReachabilitySettings<tNumber>& rs)
+void SettingsProvider<Number>::setReachabilitySettings(const ReachabilitySettings& rs)
 {
     mReachabilitySettings = rs;
 }

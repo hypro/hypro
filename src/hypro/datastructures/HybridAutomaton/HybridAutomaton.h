@@ -31,7 +31,7 @@ namespace hypro
  			   can only be added as unique pointers. If another class/object requests a location/transition,
  			   then only normal pointers are returned.
  */
-template <typename Number, typename State = State_t<Number,Number>>
+template <typename Number, typename State = State_t<Number>>
 class HybridAutomaton
 {
   public:

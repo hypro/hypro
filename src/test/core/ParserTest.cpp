@@ -18,9 +18,9 @@ TEST(ParserTest, ParseAutomaton)
 	// test content
 
 	std::string filename = "/tmp/automaton.model";
-	boost::tuple<HybridAutomaton<mpq_class>, reachability::ReachabilitySettings<mpq_class>> parseResult = parseFlowstarFile<mpq_class>(filename);
+	boost::tuple<HybridAutomaton<mpq_class>, reachability::ReachabilitySettings> parseResult = parseFlowstarFile<mpq_class>(filename);
 
-	reachability::ReachabilitySettings<mpq_class> settings = boost::get<1>(parseResult);
+	reachability::ReachabilitySettings settings = boost::get<1>(parseResult);
 	HybridAutomaton<mpq_class> automaton = boost::get<0>(parseResult);
 
 	EXPECT_EQ(automaton.locations().size(), unsigned(2));

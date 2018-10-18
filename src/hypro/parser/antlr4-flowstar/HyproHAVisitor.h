@@ -39,7 +39,7 @@ class HyproHAVisitor : public HybridAutomatonBaseVisitor {
 		std::vector<std::string> vars;
 
 		//Stores the parsed reachability settings
-		ReachabilitySettings<Number> reachSettings;
+		ReachabilitySettings reachSettings;
 
 		//Inherited from HybridAutomatonBaseVisitor which is generated from AnTLR
 		antlrcpp::Any visitVardeclaration(HybridAutomatonParser::VardeclarationContext *ctx) override;
@@ -59,7 +59,7 @@ class HyproHAVisitor : public HybridAutomatonBaseVisitor {
 		antlrcpp::Any visitStart(HybridAutomatonParser::StartContext *ctx) override;
 
 		//Getter for settings
-		inline ReachabilitySettings<Number> getSettings() { return reachSettings; }
+		inline ReachabilitySettings getSettings() { return reachSettings; }
 };
 
 } //namespace hypro

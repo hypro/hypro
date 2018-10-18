@@ -139,7 +139,7 @@ int main()
 
 	// instanciate reachability analysis algorithm.
 	hypro::reachability::Reach<Number> reacher(bBallAutomaton);
-	hypro::ReachabilitySettings<Number> settings = reacher.settings();
+	hypro::ReachabilitySettings settings = reacher.settings();
 	settings.timeStep = carl::convert<double,Number>(0.01);
 	settings.timeBound = Number(3);
 	settings.jumpDepth = 3;

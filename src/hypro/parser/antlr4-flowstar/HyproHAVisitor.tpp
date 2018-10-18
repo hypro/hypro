@@ -59,11 +59,11 @@ namespace hypro {
 		assert(*(transSet.begin()) != NULL);
 
 		//5.Calls visit to get all initial states
-		typename HybridAutomaton<Number, State_t<Number,Number>>::locationStateMap initSet;
+		typename HybridAutomaton<Number, State_t<Number>>::locationStateMap initSet;
 		//HyproInitialSetVisitor<Number> initVisitor = HyproInitialSetVisitor<Number>(varVec, rLocSet);
 		HyproInitialSetVisitor<Number> initVisitor = HyproInitialSetVisitor<Number>(varVec, locSet);
 		for(auto& initState : ctx->init()){
-			typename HybridAutomaton<Number,State_t<Number,Number>>::locationStateMap oneInitialState = initVisitor.visit(initState).template as<typename HybridAutomaton<Number,State_t<Number,Number>>::locationStateMap>();
+			typename HybridAutomaton<Number,State_t<Number>>::locationStateMap oneInitialState = initVisitor.visit(initState).template as<typename HybridAutomaton<Number,State_t<Number>>::locationStateMap>();
 			//initSet.insert(oneInitialState.begin(), oneInitialState.end());
 			for(auto& is : oneInitialState){
 				initSet.emplace(is);
@@ -71,11 +71,11 @@ namespace hypro {
 		}
 
 		//6.Calls visit(ctx->unsafeset()) to get local and global badStates
-		typename HybridAutomaton<Number,State_t<Number,Number>>::locationConditionMap lBadStates;
+		typename HybridAutomaton<Number,State_t<Number>>::locationConditionMap lBadStates;
 		std::vector<Condition<Number>> gBadStates;
 		if(ctx->unsafeset() != NULL && (ctx->unsafeset()->lbadstate().size() > 0 || ctx->unsafeset()->gbadstate().size() > 0)){
 			HyproBadStatesVisitor<Number> bStateVisitor = HyproBadStatesVisitor<Number>(varVec, rLocSet);
-			lBadStates = bStateVisitor.visit(ctx->unsafeset()).template as<typename HybridAutomaton<Number, State_t<Number,Number>>::locationConditionMap>();
+			lBadStates = bStateVisitor.visit(ctx->unsafeset()).template as<typename HybridAutomaton<Number, State_t<Number>>::locationConditionMap>();
 			gBadStates = bStateVisitor.getGlobalBadStates();
 		}
 
@@ -108,7 +108,7 @@ namespace hypro {
 
 #endif
 		//7.Build HybridAutomaton, return it
-		HybridAutomaton<Number,State_t<Number,Number>> ha;
+		HybridAutomaton<Number,State_t<Number>> ha;
 		ha.setLocations(std::move(uniquePtrLocSet));
 		ha.setTransitions(std::move(transSet));
 		ha.setInitialStates(initSet);

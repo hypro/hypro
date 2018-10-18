@@ -21,7 +21,7 @@ class IWorker
      * Constructor responsible for setting the respective EventHandler
      * and WorkQueue.
      */
-    IWorker(const ReachabilitySettings<tNumber> &settings) :
+    IWorker(const ReachabilitySettings &settings) :
       mSettings(settings)
     {}
 
@@ -40,7 +40,7 @@ class IWorker
 
 
   protected:
-    ReachabilitySettings<tNumber> mSettings;
+    ReachabilitySettings mSettings;
 };
 
 }  // namespace hydra

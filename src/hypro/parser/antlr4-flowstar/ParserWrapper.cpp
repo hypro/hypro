@@ -48,7 +48,7 @@ namespace hypro {
 	}
 /*
 	template<>
-	boost::tuple<HybridAutomaton<mpq_class, State_t<mpq_class,mpq_class>>, ReachabilitySettings<mpq_class>> parseFlowstarFile<mpq_class>(const std::string& filename) {
+	boost::tuple<HybridAutomaton<mpq_class, State_t<mpq_class>>, ReachabilitySettings> parseFlowstarFile<mpq_class>(const std::string& filename) {
 
 		//Create an AnTLRInputStream
 		ANTLRInputStream input;
@@ -102,27 +102,27 @@ namespace hypro {
 
 			HyproHAVisitor<mpq_class> visitor;
 
-			HybridAutomaton<mpq_class, State_t<mpq_class,mpq_class>> h = (visitor.visit(tree)).antlrcpp::Any::as<HybridAutomaton<mpq_class, State_t<mpq_class,mpq_class>>>();
+			HybridAutomaton<mpq_class, State_t<mpq_class>> h = (visitor.visit(tree)).antlrcpp::Any::as<HybridAutomaton<mpq_class, State_t<mpq_class>>>();
 
 			delete errListener;
 
-			return boost::tuple<HybridAutomaton<mpq_class, State_t<mpq_class,mpq_class>>&, ReachabilitySettings<mpq_class>>(h, visitor.getSettings());
+			return boost::tuple<HybridAutomaton<mpq_class, State_t<mpq_class>>&, ReachabilitySettings>(h, visitor.getSettings());
 
 		} else {
 
 			HyproHAVisitor<mpq_class> visitor;
 
-			HybridAutomaton<mpq_class, State_t<mpq_class,mpq_class>> h = (visitor.visit(tree)).antlrcpp::Any::as<HybridAutomaton<mpq_class, State_t<mpq_class,mpq_class>>>();
+			HybridAutomaton<mpq_class, State_t<mpq_class>> h = (visitor.visit(tree)).antlrcpp::Any::as<HybridAutomaton<mpq_class, State_t<mpq_class>>>();
 
 			delete errListener;
 
-			return boost::tuple<HybridAutomaton<mpq_class, State_t<mpq_class,mpq_class>>&, ReachabilitySettings<mpq_class>>(h, visitor.getSettings());
+			return boost::tuple<HybridAutomaton<mpq_class, State_t<mpq_class>>&, ReachabilitySettings>(h, visitor.getSettings());
 		}
 	}
 */
 	template<>
-	//boost::tuple<HybridAutomaton<double,State_t<double,double>>, ReachabilitySettings<double>> parseFlowstarFile<double>(const std::string& filename) {
-	std::pair<HybridAutomaton<mpq_class,State_t<mpq_class,mpq_class>>, ReachabilitySettings<mpq_class>> parseFlowstarFile<mpq_class>(const std::string& filename) {
+	//boost::tuple<HybridAutomaton<double,State_t<double>>, ReachabilitySettings> parseFlowstarFile<double>(const std::string& filename) {
+	std::pair<HybridAutomaton<mpq_class,State_t<mpq_class>>, ReachabilitySettings> parseFlowstarFile<mpq_class>(const std::string& filename) {
 
 		//Create an ANTLRInputStream
 		ANTLRInputStream input;
@@ -177,32 +177,32 @@ namespace hypro {
 
 			HyproHAVisitor<mpq_class> visitor;
 
-			//HybridAutomaton<mpq_class, State_t<mpq_class,mpq_class>> h = (visitor.visit(tree)).antlrcpp::Any::as<HybridAutomaton<mpq_class, State_t<mpq_class,mpq_class>>>();
-			HybridAutomaton<mpq_class, State_t<mpq_class,mpq_class>> h { std::move((visitor.visit(tree)).antlrcpp::Any::as<HybridAutomaton<mpq_class, State_t<mpq_class,mpq_class>>>()) };
+			//HybridAutomaton<mpq_class, State_t<mpq_class>> h = (visitor.visit(tree)).antlrcpp::Any::as<HybridAutomaton<mpq_class, State_t<mpq_class>>>();
+			HybridAutomaton<mpq_class, State_t<mpq_class>> h { std::move((visitor.visit(tree)).antlrcpp::Any::as<HybridAutomaton<mpq_class, State_t<mpq_class>>>()) };
 
 			delete errListener;
 
-			//return boost::tuple<HybridAutomaton<double, State_t<double,double>>&, ReachabilitySettings<double>>(h, visitor.getSettings());
+			//return boost::tuple<HybridAutomaton<double, State_t<double>>&, ReachabilitySettings>(h, visitor.getSettings());
 			return std::make_pair(std::move(h), visitor.getSettings());
 
 		} else {
 
 			HyproHAVisitor<mpq_class> visitor;
 
-			//HybridAutomaton<double, State_t<double,double>> h = std::move((visitor.visit(tree)).antlrcpp::Any::as<HybridAutomaton<double, State_t<double,double>>>());
-			HybridAutomaton<mpq_class, State_t<mpq_class,mpq_class>> h { std::move((visitor.visit(tree)).antlrcpp::Any::as<HybridAutomaton<mpq_class, State_t<mpq_class,mpq_class>>>()) };
+			//HybridAutomaton<double, State_t<double>> h = std::move((visitor.visit(tree)).antlrcpp::Any::as<HybridAutomaton<double, State_t<double>>>());
+			HybridAutomaton<mpq_class, State_t<mpq_class>> h { std::move((visitor.visit(tree)).antlrcpp::Any::as<HybridAutomaton<mpq_class, State_t<mpq_class>>>()) };
 
 			delete errListener;
 
-			//return boost::tuple<HybridAutomaton<double, State_t<double,double>>&, ReachabilitySettings<double>>(h, visitor.getSettings());
+			//return boost::tuple<HybridAutomaton<double, State_t<double>>&, ReachabilitySettings>(h, visitor.getSettings());
 			return std::make_pair(std::move(h), visitor.getSettings());
 		}
 	}
 
 
 	template<>
-	//boost::tuple<HybridAutomaton<double,State_t<double,double>>, ReachabilitySettings<double>> parseFlowstarFile<double>(const std::string& filename) {
-	std::pair<HybridAutomaton<double,State_t<double,double>>, ReachabilitySettings<double>> parseFlowstarFile<double>(const std::string& filename) {
+	//boost::tuple<HybridAutomaton<double,State_t<double>>, ReachabilitySettings> parseFlowstarFile<double>(const std::string& filename) {
+	std::pair<HybridAutomaton<double,State_t<double>>, ReachabilitySettings> parseFlowstarFile<double>(const std::string& filename) {
 
 		//Create an ANTLRInputStream
 		ANTLRInputStream input;
@@ -257,24 +257,24 @@ namespace hypro {
 
 			HyproHAVisitor<double> visitor;
 
-			//HybridAutomaton<double, State_t<double,double>> h = (visitor.visit(tree)).antlrcpp::Any::as<HybridAutomaton<double, State_t<double,double>>>();
-			HybridAutomaton<double, State_t<double,double>> h { std::move((visitor.visit(tree)).antlrcpp::Any::as<HybridAutomaton<double, State_t<double,double>>>()) };
+			//HybridAutomaton<double, State_t<double>> h = (visitor.visit(tree)).antlrcpp::Any::as<HybridAutomaton<double, State_t<double>>>();
+			HybridAutomaton<double, State_t<double>> h { std::move((visitor.visit(tree)).antlrcpp::Any::as<HybridAutomaton<double, State_t<double>>>()) };
 
 			delete errListener;
 
-			//return boost::tuple<HybridAutomaton<double, State_t<double,double>>&, ReachabilitySettings<double>>(h, visitor.getSettings());
+			//return boost::tuple<HybridAutomaton<double, State_t<double>>&, ReachabilitySettings>(h, visitor.getSettings());
 			return std::make_pair(std::move(h), visitor.getSettings());
 
 		} else {
 
 			HyproHAVisitor<double> visitor;
 
-			HybridAutomaton<double, State_t<double,double>> h { std::move((visitor.visit(tree)).antlrcpp::Any::as<HybridAutomaton<double, State_t<double,double>>>()) };
-			//HybridAutomaton<double, State_t<double,double>> h = std::move((visitor.visit(tree)).antlrcpp::Any::as<HybridAutomaton<double, State_t<double,double>>>());
+			HybridAutomaton<double, State_t<double>> h { std::move((visitor.visit(tree)).antlrcpp::Any::as<HybridAutomaton<double, State_t<double>>>()) };
+			//HybridAutomaton<double, State_t<double>> h = std::move((visitor.visit(tree)).antlrcpp::Any::as<HybridAutomaton<double, State_t<double>>>());
 
 			delete errListener;
 
-			//return boost::tuple<HybridAutomaton<double, State_t<double,double>>&, ReachabilitySettings<double>>(h, visitor.getSettings());
+			//return boost::tuple<HybridAutomaton<double, State_t<double>>&, ReachabilitySettings>(h, visitor.getSettings());
 			return std::make_pair(std::move(h), visitor.getSettings());
 		}
 	}

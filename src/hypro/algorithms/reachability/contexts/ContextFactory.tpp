@@ -7,7 +7,7 @@ namespace hypro {
 		                    WorkQueue<std::shared_ptr<Task<Number>>>* localQueue,
 		                    WorkQueue<std::shared_ptr<Task<Number>>>* localCEXQueue,
 		                    std::vector<PlotData<Number>>* localSegments,
-		                    hypro::ReachabilitySettings<tNumber> &settings)
+		                    hypro::ReachabilitySettings &settings)
     {
         /*
         if(SettingsProvider::getInstance().useDecider() && SettingsProvider::getInstance().getLocationTypeMap().find(t->treeNode->getStateAtLevel(t->btInfo.btLevel).getLocation())->second == hydra::LOCATIONTYPE::TIMEDLOC){				

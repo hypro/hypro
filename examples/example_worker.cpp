@@ -19,8 +19,8 @@ int main(int argc, char** argv) {
     std::string filename = argv[1];
     std::cout << "Read input file " << filename << std::endl;
 
-    std::pair<hypro::HybridAutomaton<double>, hypro::ReachabilitySettings<double>> parsedInput = hypro::parseFlowstarFile<double>(filename);
-    hypro::ReachabilitySettings<hypro::tNumber> convertedSettings(parsedInput.second);
+    std::pair<hypro::HybridAutomaton<Number>, hypro::ReachabilitySettings> parsedInput = hypro::parseFlowstarFile<Number>(filename);
+    hypro::ReachabilitySettings convertedSettings(parsedInput.second);
 
     std::vector<size_t> decomposition;
     for(size_t i = 0; i < parsedInput.first.dimension();i++ ){

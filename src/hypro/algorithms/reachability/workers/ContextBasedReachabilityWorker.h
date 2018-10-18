@@ -22,7 +22,7 @@ template<typename Number>
 class ContextBasedReachabilityWorker : public IWorker<std::shared_ptr<Task<Number>>,Number>
 {
 public:
-    ContextBasedReachabilityWorker(const hypro::ReachabilitySettings<tNumber> &settings) : IWorker<std::shared_ptr<Task<Number>>,Number>(settings) {
+    ContextBasedReachabilityWorker(const hypro::ReachabilitySettings &settings) : IWorker<std::shared_ptr<Task<Number>>,Number>(settings) {
     }
 
     ~ContextBasedReachabilityWorker() {
