@@ -77,7 +77,7 @@ void SettingsProvider<Number>::computeLocationSubspaceTypeMapping(const HybridAu
         DEBUG("hypro.util", "Subspace types for location " << location->getName()<< ":");
 
         std::vector<SUBSPACETYPE> vec;
-        for(int i = 0; i < decompositions.size(); i++){
+        for(std::size_t i = 0; i < decompositions.size(); i++){
             if(DecisionEntity<Number>::getInstance().isTimedSubspace(*location, i)){
                 vec.push_back(SUBSPACETYPE::TIMED);
             }
@@ -102,7 +102,7 @@ void SettingsProvider<Number>::computeLocationTypeMapping(const HybridAutomaton<
         std::vector<SUBSPACETYPE> subspacetypes = *subspacetypesptr;
 
         bool timed = true;
-        for(int i = 0; i < subspacetypes.size(); i++){
+        for(std::size_t i = 0; i < subspacetypes.size(); i++){
             if(subspacetypes.at(i) == SUBSPACETYPE::LTI){
                 timed = false;
                 break;

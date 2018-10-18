@@ -64,7 +64,7 @@ struct RefinementSetting {
 		, isEmpty(false)
 	{
 		mTimings.setLocation(loc);
-		TRACE("hydra.datastructures","Create Refinement-Setting for location " << loc->getId() << " with representation " << name);
+		TRACE("hydra.datastructures","Create Refinement-Setting for location " << loc->hash() << " with representation " << name);
 		switch(name) {
 			case representation_name::box: {
 				initialSet.setSet(boost::get<Box<Number>>(set));

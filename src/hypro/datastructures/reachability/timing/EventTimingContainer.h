@@ -89,7 +89,7 @@ public:
 		out << "Inv.: " << in.mInvariantEvents;
 		out << "Tr.: ";
 		for(const auto& TTPair : in.mTransitionEvents){
-			out << TTPair.first->getSource()->getId() << "->" << TTPair.first->getTarget()->getId() << ": " << TTPair.second;
+			out << TTPair.first->getSource()->hash() << "->" << TTPair.first->getTarget()->hash() << ": " << TTPair.second;
 		}
 		out << "Bs.: " << in.mBadStateEvents;
 		return out;
