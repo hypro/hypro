@@ -150,6 +150,9 @@ public:
  			}
  			case representation_name::taylor_model:
  				assert(false && "CANNOT CONVERT TO TYPE TAYLOR MODEL.");
+			
+			case representation_name::UNDEF:
+				assert(false && "CANNOT CONVERT TO TYPE UNDEF.");
  		}
  		assert(false && "SHOULD NEVER REACH THIS");
  		return T();
