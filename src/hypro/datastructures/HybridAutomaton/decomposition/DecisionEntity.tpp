@@ -2,6 +2,42 @@
 namespace hypro
 {
 	template<typename Number>
+	representation_name DecisionEntity<Number>::getRepresentationForSubspace(const Location<Number> &loc, size_t index){
+		// in the beginning we assume it is a timed automaton
+		bool isTimed = isTimedSubspace(loc,index);
+
+		TRACE("hypro.decisionEntity", "Is Timed subspace? " << isTimed);
+		if(isTimed){
+			return representation_name::difference_bounds;
+		}
+		return representation_name::UNDEF;
+	}
+
+	template<typename Number>
+	representation_name DecisionEntity<Number>::getRepresentationForAutomaton(const HybridAutomaton<Number> &ha){
+		// in the beginning we assume it is a timed automaton
+		bool isTimed = isTimedAutomaton(ha);
+
+		TRACE("hypro.decisionEntity", "Is Timed automaton? " << isTimed);
+		if(isTimed){
+			return representation_name::difference_bounds;
+		}
+    	return representation_name::UNDEF;
+	}
+
+	template<typename Number>
+	representation_name DecisionEntity<Number>::getRepresentationForLocation(const Location<Number> &loc){
+		// in the beginning we assume it is a timed automaton
+		bool isTimed = isTimedLocation(loc);
+
+		TRACE("hypro.decisionEntity", "Is Timed location? " << isTimed);
+		if(isTimed){
+			return representation_name::difference_bounds;
+		}
+		return representation_name::UNDEF;
+	}
+
+	template<typename Number>
 	bool DecisionEntity<Number>::isDiscreteSubspace(const Location<Number> &loc, size_t index){
 		if(loc.getFlow(index) == matrix_t<Number>::Zero(loc.getFlow(index).rows(), loc.getFlow(index).cols())){
 			return true;

@@ -22,6 +22,9 @@ class DecisionEntity : public carl::Singleton<DecisionEntity<Number>>
   friend carl::Singleton<DecisionEntity<Number>>;
 
   public:
+    representation_name getRepresentationForAutomaton(const HybridAutomaton<Number> &ha);
+    representation_name getRepresentationForLocation(const Location<Number> &loc);
+    representation_name getRepresentationForSubspace(const Location<Number> &loc, size_t index);
     /**
     * decomposed the given space into a set of set of variables. Each of the variable sets indicate
     * dependent variables
