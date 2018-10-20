@@ -25,6 +25,20 @@ namespace hypro {
 	}
 	*/
 
+	// enum outstream operators
+	template <typename Enumeration>
+	auto as_integer(Enumeration const value)
+    -> typename std::underlying_type<Enumeration>::type
+	{
+		return static_cast<typename std::underlying_type<Enumeration>::type>(value);
+	}
+
+	template<typename Enumeration, carl::EnableIf<std::is_enum<Enumeration>> = carl::dummy>
+	std::ostream& operator<<(std::ostream& out, Enumeration in) {
+		out << as_integer(in);
+		return out;
+	}
+
 	template<typename T>
 	std::ostream& operator <<(std::ostream& _out, const std::set<T>& _set) {
 		if(!_set.empty()) {

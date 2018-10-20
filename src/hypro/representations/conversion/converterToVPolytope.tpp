@@ -69,7 +69,7 @@ std::vector<Point<Number>> computeBoundaryPointsExpensive (const SupportFunction
         //evaluates the object in the first direction (any direction produces the same result)
         EvaluationResult<Number> point = sf.evaluate(directions.row(1));
         //there needs to be a result here, otherwise something went terribly wrong
-        assert(point.errorCode != INFEAS && point.errorCode != UNKNOWN);
+        assert(point.errorCode !=SOLUTION::INFEAS && point.errorCode !=SOLUTION::UNKNOWN);
         res.emplace_back(point.optimumValue);
         assert(sf.contains(Point<Number>(point.optimumValue)));
    }
@@ -136,7 +136,7 @@ Point<Number> computeBoundaryPointsExpensiveRecursive (const SupportFunctionT<Nu
         //evaluates the object in the first direction (any direction produces the same result)
         EvaluationResult<Number> point = sf.evaluate(directions.row(1));
         //there needs to be a result here, otherwise something went terribly wrong
-        assert(point.errorCode != INFEAS && point.errorCode != UNKNOWN);
+        assert(point.errorCode !=SOLUTION::INFEAS && point.errorCode !=SOLUTION::UNKNOWN);
         res = Point<Number>(point.optimumValue);
         assert(sf.contains(point.optimumValue));
         //std::cout << "deepest floor point:" << point.optimumValue << std::endl;

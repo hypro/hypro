@@ -20,9 +20,9 @@ namespace hypro {
 
 		#ifdef USE_PRESOLUTION
 		z3Optimizer.push();
-		if(preSolution.errorCode == FEAS) {
+		if(preSolution.errorCode ==SOLUTION::FEAS) {
 			addPreSolution(z3Optimizer, c, preSolution, _direction, formulaObjectivePair.second);
-		} else if( preSolution.errorCode == INFEAS) {
+		} else if( preSolution.errorCode ==SOLUTION::INFEAS) {
 			if(z3Optimizer.check() == z3::unsat){
 				//std::cout << "Z3 infeas." << std::endl;
 				return preSolution; // glpk correctly detected infeasibility.
@@ -64,7 +64,7 @@ namespace hypro {
 			sstr << z3res;
 
 			if (std::string("oo") == sstr.str()) {
-		       res = EvaluationResult<Number>( 1, pointCoordinates, INFTY );
+		       res = EvaluationResult<Number>( 1, pointCoordinates, SOLUTION::INFTY );
 			}
 			else {
 		       // std::cout << "Point satisfying res: " << pointCoordinates << std::endl;
@@ -103,7 +103,7 @@ namespace hypro {
 					sstr << z3res;
 
 					if (std::string("oo") == sstr.str()) {
-				       res = EvaluationResult<Number>( 1, pointCoordinates, INFTY );
+				       res = EvaluationResult<Number>( 1, pointCoordinates, SOLUTION::INFTY );
 					}
 					else {
 				       // std::cout << "Point satisfying res: " << pointCoordinates << std::endl;

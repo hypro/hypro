@@ -326,7 +326,7 @@ namespace hypro
 	    	for(int i = 0; i < mInvariantHandlers.size();i++){
 				mInvariantHandlers.at(i)->handle();
 
-				if(!mInvariantHandlers.at(i)->getContainment()) {
+				if(mInvariantHandlers.at(i)->getContainment() == CONTAINMENT::NO) {
 					TRACE("hypro.worker.continuous","State set " << i << "(type " << mComputationState.getSetType(i) << ") failed the condition - return empty.");
 					strictestContainment = mInvariantHandlers.at(i)->getContainment();
 					break;
@@ -342,7 +342,7 @@ namespace hypro
 		    DEBUG("hypro.worker.continuous", "Valuation fulfills Invariant?: ");
 		    DEBUG("hypro.worker.continuous", " " << strictestContainment << std::endl);
 
-		    if (!strictestContainment) {
+		    if (strictestContainment == CONTAINMENT::NO) {
 		    	//throw FinishWithDiscreteProcessingException("Segment does not fulfill invariant! Terminating worker by processing discrete States.");
 		    }
 

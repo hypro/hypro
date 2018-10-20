@@ -5,8 +5,6 @@
 namespace hypro
 {
 
-enum AGG_SETTING{MODEL,AGG,NO_AGG};
-
 struct StrategyNode {
 	mpq_class timeStep;
 	representation_name representation;
