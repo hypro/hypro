@@ -10,9 +10,9 @@ namespace hypro {
 		                    hypro::ReachabilitySettings &settings)
     {
         /*
-        if(SettingsProvider::getInstance().useDecider() && SettingsProvider::getInstance().getLocationTypeMap().find(t->treeNode->getStateAtLevel(t->btInfo.btLevel).getLocation())->second == hydra::LOCATIONTYPE::TIMEDLOC){				
+        if(SettingsProvider<Number>::getInstance().useDecider() && SettingsProvider<Number>::getInstance().getLocationTypeMap().find(t->treeNode->getStateAtLevel(t->btInfo.btLevel).getLocation())->second == hydra::LOCATIONTYPE::TIMEDLOC){				
 			// either use on full timed automa or if context switch is enabled
-			if(SettingsProvider::getInstance().isFullTimed() || SettingsProvider::getInstance().useContextSwitch()){
+			if(SettingsProvider<Number>::getInstance().isFullTimed() || SettingsProvider<Number>::getInstance().useContextSwitch()){
 				DEBUG("hydra.worker", "Using full timed context!");
 				return new FullTimedContext(t,strat,localQueue,localCEXQueue,localSegments,settings);
 			}
