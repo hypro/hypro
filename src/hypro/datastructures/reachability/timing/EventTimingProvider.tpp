@@ -94,9 +94,10 @@ namespace hypro {
 	}
 
 	template<typename Number>
-	TreeNode::Node_t EventTimingProvider<Number>::addChildToNode(TreeNode::Node_t parent, tNumber timeHorizon) {
+	typename EventTimingNode<Number>::Node_t addChildToNode(typename TreeNode<EventTimingNode<Number>>::Node_t parent, tNumber timeHorizon) {
 		TRACE("hydra.datastructures.timing","Add child to node " << parent);
-		typename EventTimingContainer<Number>::Node_t newChild = new EventTimingContainer<Number>(timeHorizon);
+		typename EventTimingContainer<Number>::Node_t newContainer = new EventTimingContainer<Number>(timeHorizon);
+		typename EventTimingNode<Number>::Node_t newChild = new EventTimingNode<Number>(newContainer);
 		newChild->setParent(parent);
 		parent->addChild(newChild);
 		return newChild;

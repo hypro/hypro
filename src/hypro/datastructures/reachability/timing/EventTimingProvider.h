@@ -29,7 +29,7 @@ public:
 	
 	void updateTimings(const Path<Number,tNumber>& path, const EventTimingContainer<Number>& update);
 
-	typename TreeNode::Node_t addChildToNode(TreeNode::Node_t parent, tNumber timeHorizon);
+	typename EventTimingNode<Number>::Node_t addChildToNode(typename TreeNode<EventTimingNode<Number>>::Node_t parent, tNumber timeHorizon);
 
 	std::string getDotRepresentation() const;
 };

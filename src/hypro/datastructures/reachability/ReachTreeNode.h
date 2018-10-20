@@ -151,9 +151,9 @@ struct RefinementSetting {
 
 
 template<typename Number>
-class ReachTreeNode : public TreeNode
+class ReachTreeNode : public TreeNode<ReachTreeNode<Number>>
 {
-  private:
+  protected:
   	Path<Number,tNumber> mPath; /// path cache.
   	std::vector<RefinementSetting<Number>> mRefinements; /// ordered list of applied refinements.
 
@@ -161,13 +161,13 @@ class ReachTreeNode : public TreeNode
 
   public:
 
-  	using Node_t = TreeNode::Node_t;
-  	using const_Node_t = TreeNode::const_Node_t;
-  	using NodeList_t = TreeNode::NodeList_t;
+  	using Node_t = typename TreeNode<ReachTreeNode<Number>>::Node_t;
+  	using const_Node_t = typename TreeNode<ReachTreeNode<Number>>::const_Node_t;
+  	using NodeList_t = typename TreeNode<ReachTreeNode<Number>>::NodeList_t;
 
     //ReachTreeNode() = default;
     ReachTreeNode(const ReachTreeNode<Number>& orig)
-    	: TreeNode(orig)
+    	: TreeNode<ReachTreeNode<Number>>(orig)
     	, mPath(orig.getPath())
     	, mRefinements(orig.getRefinements())
     	//, mTransitionTimings(orig.getTransitionTimings())
@@ -186,7 +186,7 @@ class ReachTreeNode : public TreeNode
 
 
     ReachTreeNode()
-        : TreeNode()
+        : TreeNode<ReachTreeNode<Number>>()
         , mPath()
         , mRefinements()
         //, mTransitionTimings()
@@ -194,7 +194,7 @@ class ReachTreeNode : public TreeNode
     }
 
     ReachTreeNode(const State_t<Number>& state, unsigned level = 0)
-    	: TreeNode()
+    	: TreeNode<ReachTreeNode<Number>>()
     	, mPath()
     	, mRefinements()
     	//, mTransitionTimings()
@@ -206,7 +206,7 @@ class ReachTreeNode : public TreeNode
     }
 
     ReachTreeNode(const State_t<Number>& state, unsigned level, ReachTreeNode<Number>* parent)
-    	: TreeNode()
+    	: TreeNode<ReachTreeNode<Number>>()
     	, mPath()
     	, mRefinements()
     	//, mTransitionTimings()

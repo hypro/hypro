@@ -5,15 +5,15 @@
 namespace hypro {
 
 template<typename Number>
-class EventTimingNode : public TreeNode {
+class EventTimingNode : public TreeNode<EventTimingNode<Number>> {
 protected:
     EventTimingContainer<Number> mTimings;
     const Location<Number>*       mLocation;
     carl::Interval<tNumber> mEntryTimeStamp;
 public:
-    using Node_t = TreeNode::Node_t;
-  	using const_Node_t = TreeNode::const_Node_t;
-  	using NodeList_t = TreeNode::NodeList_t;
+    using Node_t = typename TreeNode<EventTimingNode<Number>>::Node_t;
+  	using const_Node_t = typename TreeNode<EventTimingNode<Number>>::const_Node_t;
+  	using NodeList_t = typename TreeNode<EventTimingNode<Number>>::NodeList_t;
 
     EventTimingNode() = default;
     EventTimingNode(const EventTimingContainer<Number>& in)

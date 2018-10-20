@@ -10,26 +10,26 @@
 namespace hypro
 {
 
+template<typename Data>
 class TreeNode
 {
   protected:
     unsigned mDepth; /// depth cache
-    std::vector<TreeNode*> mChildren; /// children list
-    TreeNode* mParent; /// pointer to parent node, nullptr if root.
+    std::vector<Data*> mChildren; /// children list
+    Data* mParent; /// pointer to parent node, nullptr if root.
 
   public:
+  	using Node_t = Data*;
+  	using const_Node_t = const Data*;
+  	using NodeList_t = std::vector<Data*>;
 
-  	using Node_t = TreeNode*;
-  	using const_Node_t = const TreeNode*;
-  	using NodeList_t = std::vector<TreeNode*>;
-
-    TreeNode()
+    TreeNode<Data>()
     	: mDepth(0)
     	, mChildren()
     	, mParent(nullptr)
     {}
 
-    TreeNode(unsigned _depth, const std::vector<TreeNode*>& _children, TreeNode* _parent)
+    TreeNode<Data>(unsigned _depth, const std::vector<Data*>& _children, Data* _parent)
         : mDepth(_depth)
         , mChildren(_children)
         , mParent(_parent)
@@ -39,7 +39,7 @@ class TreeNode
     		assert(mParent == nullptr);
     	} else {
     		unsigned tmpDepth = 1;
-    		TreeNode* parent = this->getParent();
+    		Data* parent = this->getParent();
 	    	while(parent->getParent() != nullptr) {
 	    		++tmpDepth;
 	    		parent = parent->getParent();
@@ -61,7 +61,7 @@ class TreeNode
     	}
 #ifndef NDEBUG
     	unsigned tmpDepth = 1;
-    	TreeNode* parent = this->getParent();
+    	Data* parent = this->getParent();
     	while(parent->getParent() != nullptr) {
     		++tmpDepth;
     		parent = parent->getParent();
@@ -108,11 +108,11 @@ class TreeNode
     	return res;
     }
 
-    const std::vector<TreeNode*>& getChildren() const {
+    const std::vector<Data*>& getChildren() const {
     	return mChildren;
     }
 
-    TreeNode* getParent() const {
+    Data* getParent() const {
     	return mParent;
     }
 
@@ -123,7 +123,7 @@ class TreeNode
     		assert(mParent == nullptr);
     	} else {
     		unsigned tmpDepth = 1;
-    		TreeNode* parent = this->getParent();
+    		Data* parent = this->getParent();
 	    	while(parent->getParent() != nullptr) {
 	    		++tmpDepth;
 	    		parent = parent->getParent();
@@ -133,18 +133,18 @@ class TreeNode
 #endif
     }
 
-    void addChild(TreeNode* child) {
+    void addChild(Data* child) {
     	assert(*child->getParent() == *this);
     	mChildren.push_back(child);
     }
 
-    void setParent(TreeNode* parent) {
+    void setParent(Data* parent) {
     	mParent = parent;
     	// update depth
     	mDepth = mParent->getDepth() + 1;
     }
 
-    friend bool operator==(const TreeNode& lhs, const TreeNode& rhs) {
+    friend bool operator==(const TreeNode<Data>& lhs, const TreeNode<Data>& rhs) {
     	return (lhs.mDepth == rhs.mDepth && lhs.mParent == rhs.mParent && lhs.mChildren == rhs.mChildren );
     }
 };

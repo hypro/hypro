@@ -66,8 +66,8 @@ void ReachTreeNode<Number>::getLevelCnt(std::vector<std::size_t>& levels) const 
 			levels[pos] += 1;
 		}
 	}
-	for(const auto child : mChildren) {
-		static_cast<ReachTreeNode<Number>*>(child)->getLevelCnt(levels);
+	for(const auto child : this->getChildren()) {
+		child->getLevelCnt(levels);
 	}
 }
 
@@ -80,7 +80,7 @@ std::vector<ReachTreeNode<Number>*> ReachTreeNode<Number>::getChildrenForTransit
 	// delete all children not being a result of the transition
 	for(auto childIt = children.begin(); childIt != children.end(); ++childIt) {
 		// Note: The offset -1 for the depth results from the additional root node.
-		ReachTreeNode<Number>* castChild = static_cast<ReachTreeNode<Number>*>(*childIt);
+		ReachTreeNode<Number>* castChild = *childIt;
 		if(castChild->getPath().getTransitionSequence(castChild->getPath().begin(), castChild->getPath().end()).back() == transition ) {
 			TRACE("hydra.datastructures", "Transition: " << castChild->getPath().getTransitionSequence(castChild->getPath().begin(), castChild->getPath().end()).back() << " == " << transition);
 			res.emplace_back(castChild);
@@ -272,8 +272,8 @@ bool ReachTreeNode<Number>::hasFixedPoint(const State_t<Number>& s, ReachTreeNod
 		this->getMutex().unlock();
 	}
 
-	for(const auto c : mChildren) {
-		if(static_cast<ReachTreeNode<Number>*>(c)->hasFixedPoint(s,skip))
+	for(const auto c : this->getChildren()) {
+		if(c->hasFixedPoint(s,skip))
 			return true;
 	}
 	return false;
@@ -281,7 +281,7 @@ bool ReachTreeNode<Number>::hasFixedPoint(const State_t<Number>& s, ReachTreeNod
 
 template<typename Number>
 void ReachTreeNode<Number>::setParent(ReachTreeNode<Number>* parent) {
-	TreeNode::setParent(parent);
+	TreeNode<ReachTreeNode<Number>>::setParent(parent);
 	mPath = parent->getPath();
 }
 
@@ -349,18 +349,18 @@ std::size_t ReachTreeNode<Number>::getDotRepresentation(std::size_t startIndex, 
 	s << "</TABLE>>];" << std::endl;
 	nodes += s.str();
 	std::size_t offset = ++startIndex;
-	if(!mChildren.empty()){
-		for(const auto child : mChildren) {
+	if(!this->getChildren().empty()){
+		for(const auto child : this->getChildren()) {
 			std::stringstream t;
 
 			//carl::Interval<tNumber> timestamp = child->getTimestamp(child->getRefinements().size()-1);
 			t << "node" << (startIndex-1) << " -> node" << offset << " [label=\" ";
-			for(auto& ref : static_cast<ReachTreeNode<Number>*>(child)->getRefinements()){
+			for(auto& ref : child->getRefinements()){
 				t << carl::Interval<double>(carl::convert<tNumber,double>(ref.entryTimestamp.lower()), carl::convert<tNumber,double>(ref.entryTimestamp.upper())) << "\n";
 			}
 			t <<"\"];" << std::endl;
 			transitions += t.str();;
-			offset = static_cast<ReachTreeNode<Number>*>(child)->getDotRepresentation(offset,nodes,transitions,levels);
+			offset = child->getDotRepresentation(offset,nodes,transitions,levels);
 		}
 	}
 	return offset;
