@@ -26,7 +26,7 @@ int main(int argc, char** argv) {
     std::cout << "Read input file " << filename << std::endl;
 
     std::pair<hypro::HybridAutomaton<Number>, hypro::ReachabilitySettings> parsedInput = hypro::parseFlowstarFile<Number>(filename);
-    hypro::ReachabilitySettings convertedSettings(parsedInput.second);
+    hypro::SettingsProvider<Number>::getInstance().addStrategyElement({mpq_class(1/100), hypro::representation_name::box});
 
     std::vector<size_t> decomposition;
     for(size_t i = 0; i < parsedInput.first.dimension();i++ ){
@@ -41,7 +41,7 @@ int main(int argc, char** argv) {
 
 
     hypro::SettingsProvider<Number>::getInstance().setHybridAutomaton(parsedInput.first);
-    hypro::SettingsProvider<Number>::getInstance().setReachabilitySettings(convertedSettings);
+    hypro::SettingsProvider<Number>::getInstance().setReachabilitySettings(parsedInput.second);
     hypro::EventTimingProvider<Number>::getInstance().initialize(parsedInput.first);
 
     hypro::WorkQueueManager<std::shared_ptr<hypro::Task<Number>>> queueManager;
@@ -115,6 +115,6 @@ int main(int argc, char** argv) {
         globalQueue->enqueue(std::shared_ptr<hypro::Task<Number>>(new hypro::Task<Number>(initialNode)));
     }
 
-    hypro::ContextBasedReachabilityWorker<Number> worker = hypro::ContextBasedReachabilityWorker<Number>(convertedSettings);
+    hypro::ContextBasedReachabilityWorker<Number> worker = hypro::ContextBasedReachabilityWorker<Number>(parsedInput.second);
 	return 0;
 }
