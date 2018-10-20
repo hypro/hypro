@@ -498,7 +498,7 @@ TYPED_TEST(BoxTest, SatisfiesHalfspace)
 	EXPECT_EQ(box.satisfiesHalfspace(hsp1).first, hypro::CONTAINMENT::FULL);
 	EXPECT_EQ(box.satisfiesHalfspace(hsp2).first, hypro::CONTAINMENT::NO);
 	EXPECT_EQ(box.satisfiesHalfspace(hsp3).first, hypro::CONTAINMENT::PARTIAL);
-	EXPECT_TRUE(box.satisfiesHalfspaces(hypro::matrix_t<TypeParam>(), hypro::vector_t<TypeParam>()).first);
+	EXPECT_TRUE(box.satisfiesHalfspaces(hypro::matrix_t<TypeParam>(), hypro::vector_t<TypeParam>()).first != hypro::CONTAINMENT::NO);
 	hypro::matrix_t<TypeParam> mat = hypro::matrix_t<TypeParam>(2,1);
 	mat << 1,-1;
 	hypro::vector_t<TypeParam> vec = hypro::vector_t<TypeParam>(2);

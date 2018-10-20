@@ -344,10 +344,10 @@ TYPED_TEST(SupportFunctionTest, satisfiesHalfspaces) {
 	vector_t<TypeParam> offset = vector_t<TypeParam>::Zero(1);
 	offset << 2;
 
-	std::pair<bool,SupportFunction<TypeParam>> fullyContained = psf1.satisfiesHalfspaces(normal, offset);
-	std::pair<bool,SupportFunction<TypeParam>> fullyContained2 = psf1.satisfiesHalfspace(Halfspace<TypeParam>(normalVector, 2));
-	EXPECT_TRUE(fullyContained.first);
-	EXPECT_TRUE(fullyContained2.first);
+	std::pair<CONTAINMENT,SupportFunction<TypeParam>> fullyContained = psf1.satisfiesHalfspaces(normal, offset);
+	std::pair<CONTAINMENT,SupportFunction<TypeParam>> fullyContained2 = psf1.satisfiesHalfspace(Halfspace<TypeParam>(normalVector, 2));
+	EXPECT_TRUE(fullyContained.first != CONTAINMENT::NO);
+	EXPECT_TRUE(fullyContained2.first != CONTAINMENT::NO);
 	vector_t<TypeParam> evalDir = normal.row(0);
 	EXPECT_TRUE(fullyContained.second.evaluate(evalDir).supportValue >= 1);
 	EXPECT_TRUE(fullyContained2.second.evaluate(evalDir).supportValue >= 1);
@@ -355,36 +355,36 @@ TYPED_TEST(SupportFunctionTest, satisfiesHalfspaces) {
 	normal << 1,0;
 	normalVector << 1,0;
 	offset << 1;
-	std::pair<bool,SupportFunction<TypeParam>> onBorder = psf1.satisfiesHalfspaces(normal, offset);
-	std::pair<bool,SupportFunction<TypeParam>> onBorder2 = psf1.satisfiesHalfspace(Halfspace<TypeParam>(normalVector, 1));
-	EXPECT_TRUE(onBorder.first);
-	EXPECT_TRUE(onBorder2.first);
+	std::pair<CONTAINMENT,SupportFunction<TypeParam>> onBorder = psf1.satisfiesHalfspaces(normal, offset);
+	std::pair<CONTAINMENT,SupportFunction<TypeParam>> onBorder2 = psf1.satisfiesHalfspace(Halfspace<TypeParam>(normalVector, 1));
+	EXPECT_TRUE(onBorder.first != CONTAINMENT::NO);
+	EXPECT_TRUE(onBorder2.first != CONTAINMENT::NO);
 	evalDir = normal.row(0);
 	EXPECT_TRUE(onBorder.second.evaluate(evalDir).supportValue == 1);
 	EXPECT_TRUE(onBorder2.second.evaluate(evalDir).supportValue == 1);
 
 	offset << 0;
-	std::pair<bool,SupportFunction<TypeParam>> cutHalf = psf1.satisfiesHalfspaces(normal, offset);
-	std::pair<bool,SupportFunction<TypeParam>> cutHalf2 = psf1.satisfiesHalfspace(Halfspace<TypeParam>(normalVector, 0));
-	EXPECT_TRUE(cutHalf.first);
+	std::pair<CONTAINMENT,SupportFunction<TypeParam>> cutHalf = psf1.satisfiesHalfspaces(normal, offset);
+	std::pair<CONTAINMENT,SupportFunction<TypeParam>> cutHalf2 = psf1.satisfiesHalfspace(Halfspace<TypeParam>(normalVector, 0));
+	EXPECT_TRUE(cutHalf.first != CONTAINMENT::NO);
+	EXPECT_TRUE(cutHalf2.first != CONTAINMENT::NO);
 	EXPECT_TRUE(cutHalf.second.evaluate(evalDir).supportValue == 0);
-	EXPECT_TRUE(cutHalf2.first);
 	EXPECT_TRUE(cutHalf2.second.evaluate(evalDir).supportValue == 0);
 
 	offset << -1;
-	std::pair<bool,SupportFunction<TypeParam>> barelyContained = psf1.satisfiesHalfspaces(normal, offset);
-	std::pair<bool,SupportFunction<TypeParam>> barelyContained2 = psf1.satisfiesHalfspace(Halfspace<TypeParam>(normalVector, -1));
-	EXPECT_TRUE(barelyContained.first);
+	std::pair<CONTAINMENT,SupportFunction<TypeParam>> barelyContained = psf1.satisfiesHalfspaces(normal, offset);
+	std::pair<CONTAINMENT,SupportFunction<TypeParam>> barelyContained2 = psf1.satisfiesHalfspace(Halfspace<TypeParam>(normalVector, -1));
+	EXPECT_TRUE(barelyContained.first != CONTAINMENT::NO);
+	EXPECT_TRUE(barelyContained2.first != CONTAINMENT::NO);
 	EXPECT_EQ(barelyContained.second.evaluate(evalDir).supportValue, -1);
-	EXPECT_TRUE(barelyContained2.first);
 	EXPECT_EQ(barelyContained2.second.evaluate(evalDir).supportValue, -1);
 
 	offset << -1.1;
-	std::pair<bool,SupportFunction<TypeParam>> notContained = psf1.satisfiesHalfspaces(normal, offset);
-	std::pair<bool,SupportFunction<TypeParam>> notContained2 = psf1.satisfiesHalfspace(Halfspace<TypeParam>(normalVector, -1.1));
-	EXPECT_FALSE(notContained.first);
+	std::pair<CONTAINMENT,SupportFunction<TypeParam>> notContained = psf1.satisfiesHalfspaces(normal, offset);
+	std::pair<CONTAINMENT,SupportFunction<TypeParam>> notContained2 = psf1.satisfiesHalfspace(Halfspace<TypeParam>(normalVector, -1.1));
+	EXPECT_FALSE(notContained.first != CONTAINMENT::NO);
+	EXPECT_FALSE(notContained2.first != CONTAINMENT::NO);
 	EXPECT_TRUE(notContained.second.empty());
-	EXPECT_FALSE(notContained2.first);
 	EXPECT_TRUE(notContained2.second.empty());
 }
 
