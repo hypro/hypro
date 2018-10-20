@@ -4,9 +4,9 @@
 #include "../contexts/Exceptions.h"
 #include "../contexts/IContext.h"
 #include "../contexts/ContextFactory.h"
-#include "../../../datastructures/reachability/WorkQueue.h"
 #include "../../../datastructures/reachability/Task.h"
 #include "../../../datastructures/reachability/Settings.h"
+#include "../../../datastructures/reachability/workQueue/WorkQueue.h"
 
 #include "../../../util/logging/Logger.h"
 #include "../../../util/PlotData.h"

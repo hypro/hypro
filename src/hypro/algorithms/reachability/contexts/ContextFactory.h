@@ -4,7 +4,7 @@
 #include "../workers/IWorker.h"
 #include "../../../datastructures/reachability/Settings.h"
 #include "../../../datastructures/reachability/Task.h"
-#include "../../../datastructures/reachability/WorkQueue.h"
+#include "../../../datastructures/reachability/workQueue/WorkQueue.h"
 #include "../../../util/PlotData.h"
 #include "../../../util/logging/Logger.h"
 

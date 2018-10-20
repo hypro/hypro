@@ -5,6 +5,7 @@
 #include <datastructures/reachability/SettingsProvider.h>
 #include <datastructures/reachability/ReachTree.h>
 #include <datastructures/reachability/Task.h>
+#include <datastructures/reachability/workQueue/WorkQueueManager.h>
 #include <datastructures/reachability/timing/EventTimingProvider.h>
 #include <algorithms/reachability/workers/ContextBasedReachabilityWorker.h>
 #include <parser/antlr4-flowstar/ParserWrapper.h>
@@ -43,8 +44,10 @@ int main(int argc, char** argv) {
     hypro::SettingsProvider<Number>::getInstance().setReachabilitySettings(convertedSettings);
     hypro::EventTimingProvider<Number>::getInstance().initialize(parsedInput.first);
 
-    hypro::WorkQueue<std::shared_ptr<hypro::Task<Number>>>* globalQueue = new hypro::WorkQueue<std::shared_ptr<hypro::Task<Number>>>();
-    hypro::WorkQueue<std::shared_ptr<hypro::Task<Number>>>* globalCEXQueue = new hypro::WorkQueue<std::shared_ptr<hypro::Task<Number>>>();
+    hypro::WorkQueueManager<std::shared_ptr<hypro::Task<Number>>> queueManager;
+
+    auto globalCEXQueue = queueManager.addQueue();
+    auto globalQueue = queueManager.addQueue();
 
     hypro::HybridAutomaton<Number>::locationStateMap initialStates = hypro::SettingsProvider<Number>::getInstance().getHybridAutomaton().getInitialStates();
     std::vector<hypro::State_t<Number>> initialStateData;

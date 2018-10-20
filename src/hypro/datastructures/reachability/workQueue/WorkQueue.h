@@ -1,7 +1,9 @@
 #pragma once
 
 #include "WorkQueueSettings.h"
-#include "../../util/multithreading/Spinlock.h"
+#include "../../../util/multithreading/Spinlock.h"
+#include "../../../util/typetraits.h"
+#include "../../../util/logging/Logger.h"
 
 #include <chrono>
 #include <condition_variable>
@@ -20,6 +22,8 @@ namespace hypro {
 template <class Workable, class Setting>
 class WorkQueueT
 {
+    static_assert(std::is_pointer<Workable>::value || is_shared_ptr<Workable>::value, "WorkQueue requires pointer type." );
+
   public:
     /**
      * Destructor
@@ -102,8 +106,8 @@ class WorkQueueT
     //std::condition_variable_any cond_var;
 };
 
-template<typename Number>
-using WorkQueue = WorkQueueT<Number,WorkQueueDefaultSetting>;
+template<typename Workable>
+using WorkQueue = WorkQueueT<Workable,WorkQueueDefaultSetting>;
 
 } // hypro
 

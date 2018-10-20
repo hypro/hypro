@@ -1,5 +1,4 @@
 #include "WorkQueue.h"
-#include "../../util/logging/Logger.h"
 #include <assert.h>
 #include <mutex>
 #include <sstream>

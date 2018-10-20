@@ -3,7 +3,7 @@
 //#include "lib/EventSystem/EventHandler.h"
 #include "../../../datastructures/reachability/StrategyNode.h"
 #include "../../../datastructures/reachability/Task.h"
-#include "../../../datastructures/reachability/WorkQueue.h"
+#include "../../../datastructures/reachability/workQueue/WorkQueue.h"
 #include "../../../types.h"
 #include "../../../util/PlotData.h"
 #include "../../../datastructures/reachability/Settings.h"
