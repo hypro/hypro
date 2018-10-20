@@ -1,15 +1,10 @@
 #pragma once
 #include "IHandler.h"
-#include "firstSegmentHandlers/FirstSegmentHandlers.h"
-#include "invariantHandlers/InvariantHandlers.h"
-#include "badStateHandlers/BadStateHandlers.h"
-#include "guardHandlers/GuardHandlers.h"
-#include "timeEvolutionHandlers/TimeEvolutionHandlers.h"
-#include "resetHandlers/ResetHandlers.h"
-#include "jumpHandlers/JumpHandlers.h"
+#include "forwardDeclarations.h"
 
 namespace hypro
 {
+
 	template<typename Number>
 	class HandlerFactory : public carl::Singleton<HandlerFactory<Number>>
 	{
@@ -32,5 +27,13 @@ namespace hypro
 										WorkQueue<std::shared_ptr<Task<Number>>>* localCEXQueue);
 	};
 } // hypro
+
+#include "firstSegmentHandlers/FirstSegmentHandlers.h"
+#include "invariantHandlers/InvariantHandlers.h"
+#include "badStateHandlers/BadStateHandlers.h"
+#include "guardHandlers/GuardHandlers.h"
+#include "timeEvolutionHandlers/TimeEvolutionHandlers.h"
+#include "resetHandlers/ResetHandlers.h"
+#include "jumpHandlers/JumpHandlers.h"
 
 #include "HandlerFactory.tpp"

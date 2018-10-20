@@ -1,11 +1,14 @@
 #pragma once
+#include "util.h"
+#include "timingUtil.h"
 #include "../IHandler.h"
-#include "../../../../datastructures/HybridAutomaton/State.h"
-#include "../../../../datastructures/reachability/WorkQueue.h"
-#include "../../../../datastructures/reachability/Task.h"
-#include "../../../../datastructures/reachability/ReachTreeNode.h"
-
 #include "../HandlerFactory.h"
+#include "../../../../datastructures/HybridAutomaton/State.h"
+#include "../../../../datastructures/reachability/workQueue/WorkQueue.h"
+#include "../../../../datastructures/reachability/NodeManager.h"
+#include "../../../../datastructures/reachability/ReachTreeNode.h"
+#include "../../../../datastructures/reachability/Task.h"
+
 namespace hypro {
 
 	template<typename Number>
