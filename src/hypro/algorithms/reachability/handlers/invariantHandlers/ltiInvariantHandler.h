@@ -27,3 +27,5 @@ namespace hypro
 
 	};
 } // hypro
+
+#include "ltiInvariantHandler.tpp"

@@ -14,3 +14,5 @@ namespace hypro
 		const char* handlerName() {return "timedResetHandler";}
 	};
 } // hypro
+
+#include "timedResetHandler.tpp"

@@ -42,3 +42,5 @@ namespace hypro
 		virtual void setMarkedForDelete(bool toDelete) override { mMarkedForDelete = toDelete;}
 	};
 } // hypro
+
+#include "ltiGuardHandler.tpp"

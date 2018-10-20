@@ -14,3 +14,5 @@ namespace hypro
 		const char* handlerName() {return "timedBadStateHandler";}
 	};
 } // hypro
+
+#include "timedBadStateHandler.tpp"

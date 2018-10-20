@@ -14,3 +14,5 @@ namespace hypro
 		const char* handlerName() {return "timedElapseFirstSegmentHandler";}
 	};
 } // hypro
+
+#include "timedElapseFirstSegmentHandler.tpp"

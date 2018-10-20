@@ -15,3 +15,5 @@ namespace hypro
 
 	};
 } // hypro
+
+#include "timedInvariantHandler.tpp"

@@ -30,3 +30,5 @@ namespace hypro
 	};
 
 } // hypro
+
+#include "ltiFirstSegmentHandler.tpp"

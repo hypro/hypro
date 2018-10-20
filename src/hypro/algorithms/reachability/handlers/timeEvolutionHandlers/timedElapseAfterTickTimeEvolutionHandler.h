@@ -25,3 +25,5 @@ namespace hypro
 		const char* handlerName() {return "timedElapseContinuousEvolutionHandler";}
 	};
 } // hypro
+
+#include "timedElapseAfterTickTimeEvolutionHandler.tpp"

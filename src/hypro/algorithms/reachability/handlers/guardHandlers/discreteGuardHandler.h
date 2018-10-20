@@ -21,3 +21,5 @@ namespace hypro
 		virtual void setSortIndex(double sortIndex) override {this->mSortIndex = sortIndex;}
 	};
 } // hypro
+
+#include "discreteGuardHandler.tpp"

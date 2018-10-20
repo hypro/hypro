@@ -29,3 +29,5 @@ namespace hypro
 
 	};
 } // hypro
+
+#include "ltiBadStateHandler.tpp"
