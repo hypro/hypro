@@ -24,7 +24,7 @@ namespace hypro
 	void LTIContext<Number>::initalizeFirstSegmentHandlers(){
 		TRACE("hypro.worker","Initializing " << mComputationState.getNumberSets() <<" first segment handlers");
 		// initialize first segment handlers
-		for(int i = 0; i < mComputationState.getNumberSets();i++){
+		for(std::size_t i = 0; i < mComputationState.getNumberSets();i++){
 			mFirstSegmentHandlers.push_back(HandlerFactory<Number>::getInstance().buildFirstSegmentHandler(mComputationState.getSetType(i), &mComputationState, i,mStrategy.at(mTask->btInfo.btLevel).timeStep));
 			DEBUG("hypro.worker","Built " << mFirstSegmentHandlers.at(i)->handlerName() << "at pos " << i);
 		}
@@ -33,7 +33,7 @@ namespace hypro
 	void LTIContext<Number>::initializeInvariantHandlers(){		
 		TRACE("hypro.worker","Initializing " << mComputationState.getNumberSets() <<" invariant handlers");
 		// initialize invariant handlers
-		for(int i = 0; i < mComputationState.getNumberSets();i++){
+		for(std::size_t i = 0; i < mComputationState.getNumberSets();i++){
 			matrix_t<Number> trafo = mFirstSegmentHandlers.at(i)->getTrafo();
 			vector_t<Number> translation = mFirstSegmentHandlers.at(i)->getTranslation();
 			bool noFlow = (trafo == matrix_t<Number>::Identity(trafo.rows(),trafo.rows()) && translation == vector_t<Number>::Zero(trafo.rows()));
@@ -49,7 +49,7 @@ namespace hypro
 	void LTIContext<Number>::initializeBadStateHandlers(){		
 		TRACE("hypro.worker","Initializing " << mComputationState.getNumberSets() <<" bad state handlers");
 		// initalize bad state handlers
-		for(int i = 0; i < mComputationState.getNumberSets();i++){
+		for(std::size_t i = 0; i < mComputationState.getNumberSets();i++){
 			matrix_t<Number> trafo = mFirstSegmentHandlers.at(i)->getTrafo();
 			vector_t<Number> translation = mFirstSegmentHandlers.at(i)->getTranslation();
 			bool noFlow = (trafo == matrix_t<Number>::Identity(trafo.rows(),trafo.rows()) && translation == vector_t<Number>::Zero(trafo.rows()));
@@ -69,14 +69,14 @@ namespace hypro
 
 			State_t<Number>* guardStatePtr = new State_t<Number>(mComputationState);	
     		std::shared_ptr<State_t<Number>> shGuardPtr= std::shared_ptr<State_t<Number>>(guardStatePtr);
-			for(int i = 0; i < mComputationState.getNumberSets();i++){
+			for(std::size_t i = 0; i < mComputationState.getNumberSets();i++){
 				matrix_t<Number> trafo = mFirstSegmentHandlers.at(i)->getTrafo();
 				vector_t<Number> translation = mFirstSegmentHandlers.at(i)->getTranslation();
 				bool noFlow = (trafo == matrix_t<Number>::Identity(trafo.rows(),trafo.rows()) && translation == vector_t<Number>::Zero(trafo.rows()));
 				IGuardHandler<Number>* ptr = HandlerFactory<Number>::getInstance().buildGuardHandler(guardStatePtr->getSetType(i), shGuardPtr, i, transition, noFlow);
 				if(ptr){
 					guardHandlers.push_back(ptr);
-					DEBUG("hypro.worker","Built " << ptr->handlerName() << "at pos " << i << " for transition " << transition->getSource()->getId() << " -> " << transition->getTarget()->getId());
+					DEBUG("hypro.worker","Built " << ptr->handlerName() << "at pos " << i << " for transition " << transition->getSource()->hash() << " -> " << transition->getTarget()->hash());
 				}
 			}
 
@@ -129,7 +129,7 @@ namespace hypro
 		if(btNode->getRefinements().size() == targetLevel) {
 			// add a new refinement
 			RefinementSetting<Number> newSetting(btNode->getStateAtLevel(mTask->btInfo.btLevel).getLocation());
-			for(int i = 0; i < btNode->getRefinements().at(targetLevel-1).initialSet.getNumberSets(); i++){
+			for(std::size_t i = 0; i < btNode->getRefinements().at(targetLevel-1).initialSet.getNumberSets(); i++){
 				newSetting.initialSet.setSetDirect(boost::apply_visitor(genericConversionVisitor<typename State_t<Number>::repVariant, Number>(mStrategy.at(targetLevel).representation), btNode->getRefinements().at(targetLevel-1).initialSet.getSet(i)), i);
 				newSetting.initialSet.setSetType(mStrategy.at(targetLevel).representation, i);
 			}
@@ -161,7 +161,7 @@ namespace hypro
 	
 	template<typename Number>
 	void LTIContext<Number>::execOnStart(){
-		INFO("hypro.worker",  std::this_thread::get_id() << ": Compute flow in location " << mTask->treeNode->getStateAtLevel(mTask->btInfo.btLevel).getLocation()->getName() << "(" << mTask->treeNode->getStateAtLevel(mTask->btInfo.btLevel).getLocation()->getId() << ") on strategy level " << mTask->btInfo.btLevel);
+		INFO("hypro.worker",  std::this_thread::get_id() << ": Compute flow in location " << mTask->treeNode->getStateAtLevel(mTask->btInfo.btLevel).getLocation()->getName() << "(" << mTask->treeNode->getStateAtLevel(mTask->btInfo.btLevel).getLocation()->hash() << ") on strategy level " << mTask->btInfo.btLevel);
 		DEBUG("hypro.worker",  std::this_thread::get_id() << ": Process Node address:" << mTask->treeNode);
 		DEBUG("hypro.worker",  std::this_thread::get_id() << ": WorkQueue size:" << mLocalQueue->size());
 		DEBUG("hypro.worker",  std::this_thread::get_id() << ": Node path:" << mTask->treeNode->getPath());
@@ -178,7 +178,7 @@ namespace hypro
 	    DEBUG("hypro.worker",  std::this_thread::get_id() << ": Depth: " << mTask->treeNode->getDepth() );
 	    DEBUG("hypro.worker",  std::this_thread::get_id() << ": Desired refinement level: " << mTask->btInfo.btLevel);
 	    DEBUG("hypro.worker",  std::this_thread::get_id() << ": Number sets (current strategy level): " << mTask->treeNode->getStateAtLevel(mTask->btInfo.btLevel).getNumberSets());
-	    DEBUG("hypro.worker",  std::this_thread::get_id() << ": Location: " << mTask->treeNode->getStateAtLevel(mTask->btInfo.btLevel).getLocation()->getName() << "(" << mTask->treeNode->getStateAtLevel(mTask->btInfo.btLevel).getLocation()->getId() << ")");
+	    DEBUG("hypro.worker",  std::this_thread::get_id() << ": Location: " << mTask->treeNode->getStateAtLevel(mTask->btInfo.btLevel).getLocation()->getName() << "(" << mTask->treeNode->getStateAtLevel(mTask->btInfo.btLevel).getLocation()->hash() << ")");
 	    DEBUG("hypro.worker",  std::this_thread::get_id() << ": Time step size (current strategy level): " << carl::toDouble(mStrategy.at(mTask->btInfo.btLevel).timeStep) );
 	    DEBUG("hypro.worker",  std::this_thread::get_id() << ": Representation (current strategy level): " << mStrategy.at(mTask->btInfo.btLevel).representation );
 	    DEBUG("hypro.worker",  std::this_thread::get_id() << ": Refinements:");
@@ -199,7 +199,7 @@ namespace hypro
 	    		assert(child->getPath().back().isDiscreteStep());
 	    		mLocalTimings.insertTransition(child->getPath().back().transition, carl::Interval<tNumber>(0,tBound), CONTAINMENT::NO);
 	    		mLocalTimings.insertTransition(child->getPath().back().transition, child->getPath().back().timeInterval, CONTAINMENT::YES);
-	    		TRACE("hypro.worker.timings", "Current transition timings for transition " << child->getPath().back().transition->getSource()->getId() << " -> " << child->getPath().back().transition->getTarget()->getId() << ": " << mLocalTimings.getTransitionTimings(child->getPath().back().transition));
+	    		TRACE("hypro.worker.timings", "Current transition timings for transition " << child->getPath().back().transition->getSource()->hash() << " -> " << child->getPath().back().transition->getTarget()->hash() << ": " << mLocalTimings.getTransitionTimings(child->getPath().back().transition));
 	    	}
 
 	    }
@@ -219,19 +219,19 @@ namespace hypro
 	            	State_t<Number> guardSatisfyingState(mComputationState);
 	            	std::shared_ptr<State_t<Number>> ptr = std::make_shared<State_t<Number>>(guardSatisfyingState);
 		        	std::vector<IGuardHandler<Number>*> guardHandlers;
-		        	TRACE("hypro.worker","Initializing " << mComputationState.getNumberSets() <<" guard handlers for transition " << transition->getSource()->getId() << " -> " << transition->getTarget()->getId());
+		        	TRACE("hypro.worker","Initializing " << mComputationState.getNumberSets() <<" guard handlers for transition " << transition->getSource()->hash() << " -> " << transition->getTarget()->hash());
 		        	// create a set of fresh guard handlers for this transition
-					for(int i = 0; i < mComputationState.getNumberSets();i++){
+					for(std::size_t i = 0; i < mComputationState.getNumberSets();i++){
 						IGuardHandler<Number>* gptr = HandlerFactory<Number>::getInstance().buildGuardHandler(guardSatisfyingState.getSetType(i), ptr, i, transition,false);
 						if(gptr){
 							guardHandlers.push_back(gptr);
-							DEBUG("hypro.worker","Built " << gptr->handlerName() << "at pos " << i << " for transition " << transition->getSource()->getId() << " -> " << transition->getTarget()->getId());
+							DEBUG("hypro.worker","Built " << gptr->handlerName() << "at pos " << i << " for transition " << transition->getSource()->hash() << " -> " << transition->getTarget()->hash());
 						}
 					}
 
 					// apply handlers					
 					bool guardSatisfied = true;
-					for(int i = 0; i < guardHandlers.size();i++){
+					for(std::size_t i = 0; i < guardHandlers.size();i++){
 						guardHandlers.at(i)->handle();
 						guardSatisfied &= guardHandlers.at(i)->satisfiesGuard();
 						if(!guardSatisfied){
@@ -239,7 +239,7 @@ namespace hypro
 						}
 					}
 
-	                TRACE("hypro.worker.discrete", "Checking urgent transition " << transition->getSource()->getId() << " -> " << transition->getTarget()->getId());
+	                TRACE("hypro.worker.discrete", "Checking urgent transition " << transition->getSource()->hash() << " -> " << transition->getTarget()->hash());
 	                // Check if the transition is enabled.
 	                if (guardSatisfied) {
 	                    // Only jump, if maximal jump depth is not already reached.
@@ -267,7 +267,7 @@ namespace hypro
 	    	std::shared_ptr<State_t<Number>> ptr = std::make_shared<State_t<Number>>(guardSatisfyingState);
         	std::vector<IGuardHandler<Number>*> guardHandlers;
         	// create a set of fresh guard handlers for this transition
-			for(int i = 0; i < mComputationState.getNumberSets();i++){
+			for(std::size_t i = 0; i < mComputationState.getNumberSets();i++){
 				IGuardHandler<Number>* gptr = HandlerFactory<Number>::getInstance().buildGuardHandler(guardSatisfyingState.getSetType(i), ptr, i, transition,false);
 				if(gptr){
 					guardHandlers.push_back(gptr);
@@ -277,7 +277,7 @@ namespace hypro
 
 			// apply handlers
 			bool guardSatisfied = true;
-			for(int i = 0; i < guardHandlers.size();i++){
+			for(std::size_t i = 0; i < guardHandlers.size();i++){
 				guardHandlers.at(i)->handle();			
 				guardSatisfied &= guardHandlers.at(i)->satisfiesGuard();
 				if(!guardSatisfied){
@@ -305,7 +305,7 @@ namespace hypro
 	void LTIContext<Number>::firstSegment(){
 
 		// applay handlers to state
-		for(int i = 0; i < mComputationState.getNumberSets();i++){
+		for(std::size_t i = 0; i < mComputationState.getNumberSets();i++){
 			mFirstSegmentHandlers.at(i)->handle();
 		}
 
@@ -323,7 +323,7 @@ namespace hypro
 	    	// compute strictes containment on the fly
 	    	CONTAINMENT strictestContainment = CONTAINMENT::FULL;
 	    	// applay handlers to state	
-	    	for(int i = 0; i < mInvariantHandlers.size();i++){
+	    	for(std::size_t i = 0; i < mInvariantHandlers.size();i++){
 				mInvariantHandlers.at(i)->handle();
 
 				if(mInvariantHandlers.at(i)->getContainment() == CONTAINMENT::NO) {
@@ -376,7 +376,7 @@ namespace hypro
 
 	    	// apply handlers to state
 	    	bool intersects = false;
-			for(int i = 0; i < mBadStateHandlers.size();i++){
+			for(std::size_t i = 0; i < mBadStateHandlers.size();i++){
 				mBadStateHandlers.at(i)->handle();
 				intersects = mBadStateHandlers.at(i)->intersectsBadState();
 				if(intersects){
@@ -433,7 +433,7 @@ namespace hypro
 	    // the valid first segment also computed the trafo mat and translation vec, we can create timestep handlers now
 	    // initialize invariant handlers
 	    TRACE("hypro.worker","Initializing " << mComputationState.getNumberSets() <<" continuous evolution handlers");
-		for(int i = 0; i < mComputationState.getNumberSets();i++){
+		for(std::size_t i = 0; i < mComputationState.getNumberSets();i++){
 			ITimeEvolutionHandler* ptr = HandlerFactory<Number>::getInstance().buildContinuousEvolutionHandler(mComputationState.getSetType(i), &mComputationState, i, mStrategy.at(mTask->btInfo.btLevel).timeStep, mSettings.timeBound, mFirstSegmentHandlers.at(i)->getTrafo(), mFirstSegmentHandlers.at(i)->getTranslation());
 			if(ptr){
 				mContinuousEvolutionHandlers.push_back(ptr);
@@ -452,7 +452,7 @@ namespace hypro
         	std::shared_ptr<State_t<Number>> ptr = std::make_shared<State_t<Number>>(potentialZenoState);
         	std::vector<IGuardHandler<Number>*> guardHandlers;
         	// create a set of fresh guard handlers for this transition
-			for(int i = 0; i < mComputationState.getNumberSets();i++){
+			for(std::size_t i = 0; i < mComputationState.getNumberSets();i++){
 				IGuardHandler<Number>* gptr = HandlerFactory<Number>::getInstance().buildGuardHandler(potentialZenoState.getSetType(i), ptr, i, transitionStatePair.first,false);
 				if(gptr){
 					guardHandlers.push_back(gptr);
@@ -461,7 +461,7 @@ namespace hypro
 
 			// apply handlers			
 			bool guardSatisfied = true;
-			for(int i = 0; i < guardHandlers.size();i++){
+			for(std::size_t i = 0; i < guardHandlers.size();i++){
 				guardHandlers.at(i)->handle();
 				guardSatisfied &= guardHandlers.at(i)->satisfiesGuard();
 				if(!guardSatisfied){
@@ -519,12 +519,12 @@ namespace hypro
         		continue;
         	}
 
-    		TRACE("hypro.worker","Initializing " << it->second.size() <<" guard handlers for transition " << it->first->getSource()->getId() << " -> " << it->first->getTarget()->getId());
+    		TRACE("hypro.worker","Initializing " << it->second.size() <<" guard handlers for transition " << it->first->getSource()->hash() << " -> " << it->first->getTarget()->hash());
     		
     		State_t<Number>* guardStatePtr = new State_t<Number>(mComputationState);
     		std::shared_ptr<State_t<Number>> shGuardPtr= std::shared_ptr<State_t<Number>>(guardStatePtr);
 
-			for(int i = 0; i < it->second.size();i++){
+			for(std::size_t i = 0; i < it->second.size();i++){
 				it->second.at(i)->setState(shGuardPtr);
 			}
 
@@ -545,7 +545,7 @@ namespace hypro
 
 					if(!guardSatisfied &&(strcmp((*guardIt)->handlerName(),"noFlowGuardHandler")==0) ){
 						//this transition will never be enabled, remove it from the map
-						TRACE("hypro.worker.discrete","noFlowGuardHandler unsatisfied for transition " << it->first->getSource()->getId() << " -> " << it->first->getTarget()->getId() << ". Transition will be removed from further checks.");
+						TRACE("hypro.worker.discrete","noFlowGuardHandler unsatisfied for transition " << it->first->getSource()->hash() << " -> " << it->first->getTarget()->hash() << ". Transition will be removed from further checks.");
 						//std::cout << "Guard not satisfied and no Flow handler. Removing Transition." << std::endl;
 						alwaysDisabledTransitions.push_back(it);
 						deleteRequested = false;
@@ -582,7 +582,7 @@ namespace hypro
 			}
         	// handle time-triggered transitions
             if (it->first->isUrgent()) {
-                TRACE("hypro.worker.discrete", "Checking urgent transition " << it->first->getSource()->getId() << " -> " << it->first->getTarget()->getId());
+                TRACE("hypro.worker.discrete", "Checking urgent transition " << it->first->getSource()->hash() << " -> " << it->first->getTarget()->hash());
                 if (guardSatisfied) {
                     mDiscreteSuccessorBuffer.push_back(boost::tuple<Transition<Number>*, State_t<Number>>(it->first, *guardStatePtr));
                     urgentTransitionEnabled = true;
@@ -615,7 +615,7 @@ namespace hypro
 
     template<typename Number>
 	void LTIContext<Number>::applyContinuousEvolution(){
-    	for(int i = 0; i < mContinuousEvolutionHandlers.size();i++){
+    	for(std::size_t i = 0; i < mContinuousEvolutionHandlers.size();i++){
 			mContinuousEvolutionHandlers.at(i)->handle();
 		}
 		mComputationState.setTimestamp(mComputationState.getTimestamp()+mStrategy.at(mTask->btInfo.btLevel).timeStep);

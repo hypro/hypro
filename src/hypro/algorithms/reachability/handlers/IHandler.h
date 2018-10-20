@@ -22,6 +22,7 @@ namespace hypro {
 
 	class IInvariantHandler : public IHandler {
 	public:
+		virtual ~IInvariantHandler(){}
 		virtual void handle() = 0;
 		virtual const char* handlerName() = 0;
 		// provides information whether the handlers set fullfils containment conditions (eg. invariant)
@@ -32,6 +33,7 @@ namespace hypro {
 
 	class IBadStateHandler : public IHandler {
 	public:
+		virtual ~IBadStateHandler(){}
 		virtual void handle() = 0;
 		virtual const char* handlerName() = 0;
 		// provides information whether the handlers set intersects its bad states
@@ -43,6 +45,7 @@ namespace hypro {
 	template<typename Number>
 	class IGuardHandler : public IHandler {
 	public:
+		virtual ~IGuardHandler(){}
 		virtual void handle() = 0;
 		virtual const char* handlerName() = 0;
 		// provides information whether the handlers set intersects the transitions guard

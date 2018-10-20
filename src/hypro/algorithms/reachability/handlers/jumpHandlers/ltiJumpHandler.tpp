@@ -191,7 +191,7 @@ namespace hypro {
 					// check invariant in new location
 					newState.setLocation(boost::get<0>(tuple)->getTarget());
 					bool strictestContainment = true;
-					for(int i = 0; i < newState.getNumberSets();i++){
+					for(std::size_t i = 0; i < newState.getNumberSets();i++){
 
 						IInvariantHandler* ptr = HandlerFactory<Number>::getInstance().buildInvariantHandler(newState.getSetType(i), &newState, i, false);
 						if(ptr){
@@ -255,7 +255,7 @@ namespace hypro {
 			// counts the number of processed sets - just for debugging.
 			unsigned setCnt = 1;
 			// counts the number of sets in the current cluster.
-			unsigned clusterCnt = 1;
+			std::size_t clusterCnt = 1;
 			// determines whether there are still sets to be clustered together.
 			bool leftovers = true;
 
@@ -267,7 +267,7 @@ namespace hypro {
 				assert(!(*stateIt).getTimestamp().isEmpty());
 				TRACE("hydra.worker.discrete","Agg. aggState and set " << setCnt);
 				// actual aggregation.
-				for(int i = 0; i < aggregatedState.getNumberSets(); i++){
+				for(std::size_t i = 0; i < aggregatedState.getNumberSets(); i++){
 					if(types.at(i) == SUBSPACETYPE::DISCRETE){
 						// in discrete subspaces, the set does not change
 						continue;
@@ -295,7 +295,7 @@ namespace hypro {
 					}
 				}
 				#else
-				if(strategy.clustering > 0 && clusterCnt == strategy.clustering) {
+				if(strategy.clustering > 0 && clusterCnt == std::size_t(strategy.clustering)) {
 					TRACE("hydra.worker.discrete","Clustering.");
 					aggregatedStates.emplace_back(aggregatedState);
 					leftovers = false;
@@ -366,7 +366,7 @@ namespace hypro {
 
 				//START_BENCHMARK_OPERATION(TARGET_INVARIANT);
 				bool strictestContainment = true;
-				for(int i = 0; i < state.getNumberSets();i++){
+				for(std::size_t i = 0; i < state.getNumberSets();i++){
 					IInvariantHandler* ptr = HandlerFactory<Number>::getInstance().buildInvariantHandler(state.getSetType(i), &state, i, false);
 					if(ptr){
 						ptr->handle();

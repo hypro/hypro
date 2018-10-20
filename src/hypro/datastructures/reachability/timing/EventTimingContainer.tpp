@@ -95,7 +95,7 @@ namespace hypro {
 
 	template<typename Number>
 	void EventTimingContainer<Number>::insertTransition(Transition<Number>* transition, const carl::Interval<mpq_class>& timeInterval, CONTAINMENT type) {
-		TRACE("hydra.datastructures.etc","In " << this << ": Transition: " << transition->getSource()->getId() << " -> " << transition->getTarget()->getId() << " in time " << timeInterval);
+		TRACE("hydra.datastructures.etc","In " << this << ": Transition: " << transition->getSource()->hash() << " -> " << transition->getTarget()->hash() << " in time " << timeInterval);
 		if(mTransitionEvents.find(transition) == mTransitionEvents.end()) {
 			assert(!mInvariantEvents.empty());
 			// initialize with same time horizon as invariants and bad states.
