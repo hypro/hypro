@@ -10,13 +10,13 @@ namespace hypro
 		bool mSatisfies = false;
 		bool mMarkedForDelete =false;
 		std::shared_ptr<State_t<Number>> mGuardSatisfyingState; 
-		hypro::Transition<Number>* mTransition;
+		Transition<Number>* mTransition;
 
 		size_t mIndex;
 		double mSortIndex;
 	public:
 		ltiGuardHandler() = delete;
-		ltiGuardHandler(std::shared_ptr<State_t<Number>> state, size_t index, hypro::Transition<Number>* transition){
+		ltiGuardHandler(std::shared_ptr<State_t<Number>> state, size_t index, Transition<Number>* transition){
 			mGuardSatisfyingState = state;
 			mIndex = index;
 			mTransition = transition;

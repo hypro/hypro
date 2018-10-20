@@ -87,7 +87,7 @@ void SettingsProvider<Number>::computeLocationSubspaceTypeMapping(const HybridAu
             else {
                 vec.push_back(SUBSPACETYPE::LTI);
             }
-             DEBUG("hypro.util",  "" << i << ": " << vec.at(i));
+             //DEBUG("hypro.util",  "" << i << ": " << vec.at(i));
         }
         mLocationSubspaceTypeMap.insert(std::make_pair(location, std::make_shared<std::vector<SUBSPACETYPE>>(vec)));
     }
