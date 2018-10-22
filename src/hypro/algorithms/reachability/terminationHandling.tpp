@@ -9,7 +9,7 @@ namespace reachability {
 		// check local bad states TODO: Note, we currently allow only one bad state per location -> allow multiple bad states!
 		auto badStateIterator = mAutomaton.getLocalBadStates().find(_state.getLocation());
 		if(badStateIterator != mAutomaton.getLocalBadStates().end()){
-			if(_state.satisfies(badStateIterator->second).first == true){
+			if(_state.satisfies(badStateIterator->second).first != CONTAINMENT::NO){
 				#ifdef REACH_DEBUG
 				std::cout << "Intersection with all local bad states" << std::endl;
 				#endif
@@ -26,7 +26,7 @@ namespace reachability {
 		if(!mAutomaton.getGlobalBadStates().empty()){
 			for(const auto& set : mAutomaton.getGlobalBadStates() ) {
 				// bad state intersection
-				if(_state.satisfies(set).first){
+				if(_state.satisfies(set).first != CONTAINMENT::NO){
 					#ifdef REACH_DEBUG
 					std::cout << "Intersection with global bad states" << std::endl;
 					#endif

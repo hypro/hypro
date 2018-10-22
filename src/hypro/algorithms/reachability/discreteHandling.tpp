@@ -11,12 +11,12 @@ namespace reachability {
 		//std::cout << "------ start intersecting guard!" << std::endl;
 
 		// check for continuous set guard intersection
-		std::pair<bool, State_t<Number>> guardSatisfyingSet = _state.satisfies( _trans->getGuard() );
+		std::pair<CONTAINMENT, State_t<Number>> guardSatisfyingSet = _state.satisfies( _trans->getGuard() );
 
 		//std::cout << "------ guard satisfied? " << guardSatisfyingSet.first << std::endl;
 
 		// check if the intersection is empty
-		if ( guardSatisfyingSet.first ) {
+		if ( guardSatisfyingSet.first != CONTAINMENT::NO ) {
 			#ifdef REACH_DEBUG
 			INFO("hypro.reacher", "Transition enabled at timestamp " << _state.getTimestamp() << "!");
 			#endif
@@ -58,8 +58,8 @@ namespace reachability {
 				if(!duplicate){
 
 					s = boost::get<0>(tuple)->getReset().applyReset(s);
-					std::pair<bool,State_t<Number>> invariantPair = s.satisfies(boost::get<0>(tuple)->getTarget()->getInvariant());
-					if(invariantPair.first){
+					std::pair<CONTAINMENT,State_t<Number>> invariantPair = s.satisfies(boost::get<0>(tuple)->getTarget()->getInvariant());
+					if(invariantPair.first != CONTAINMENT::NO){
 						TRACE("hypro.reacher","Enqueue " << invariantPair.second << " for level " << mCurrentLevel+1 << ", current queue size (before) is " << mWorkingQueue.size());
 						mWorkingQueue.emplace_back(mCurrentLevel+1, invariantPair.second);
 					}
@@ -81,7 +81,7 @@ namespace reachability {
 			INFO("hypro.reacher", "-- Entered aggregation loop");
 
 			assert(!aggregationPair.second.empty());
-			carl::Interval<Number> aggregatedTimestamp = aggregationPair.second.begin()->getTimestamp();
+			carl::Interval<tNumber> aggregatedTimestamp = aggregationPair.second.begin()->getTimestamp();
 			//std::cout << "Aggregated timestamp before aggregation " << aggregatedTimestamp << std::endl;
 			State_t<Number> collectedSets = *aggregationPair.second.begin();
 			for(auto stateIt = ++aggregationPair.second.begin(); stateIt != aggregationPair.second.end(); ++stateIt){
@@ -128,8 +128,8 @@ namespace reachability {
 			//	std::cout << convert<Number,double>(vertex) << std::endl;
 			//}
 
-			std::pair<bool, State_t<Number>> invariantSatisfyingSet = tmp.satisfies(aggregationPair.first->getTarget()->getInvariant());
-			if(invariantSatisfyingSet.first){
+			std::pair<CONTAINMENT, State_t<Number>> invariantSatisfyingSet = tmp.satisfies(aggregationPair.first->getTarget()->getInvariant());
+			if(invariantSatisfyingSet.first != CONTAINMENT::NO){
 				//unsigned tmp = Plotter<Number>::getInstance().addObject(invariantSatisfyingSet.second.vertices());
 				//Plotter<Number>::getInstance().setObjectColor(tmp, colors[orange]);
 				//s.setSets(invariantSatisfyingSet.second.getSets());
@@ -157,7 +157,7 @@ namespace reachability {
 	}
 
 	template<typename Number>
-	bool Reach<Number>::checkTransitions(const State_t<Number>& state, const carl::Interval<Number>& , std::vector<boost::tuple<Transition<Number>*, State_t<Number>>>& nextInitialSets) const {
+	bool Reach<Number>::checkTransitions(const State_t<Number>& state, const carl::Interval<tNumber>& , std::vector<boost::tuple<Transition<Number>*, State_t<Number>>>& nextInitialSets) const {
 
 		State_t<Number> guardSatisfyingState;
 		bool transitionEnabled = false;

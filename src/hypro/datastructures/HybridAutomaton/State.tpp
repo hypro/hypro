@@ -98,7 +98,7 @@ std::pair<CONTAINMENT,State<Number,Representation,Rargs...>> State<Number,Repres
 
 		res.setSetDirect(resultPair.second, i);
 
-		if(!resultPair.first) {
+		if(resultPair.first == CONTAINMENT::NO) {
 			TRACE("hypro.datastructures","State set " << i << "(type " << mTypes.at(i) << ") failed the condition - return empty.");
 			strictestContainment = resultPair.first;
 			break;

@@ -85,7 +85,7 @@ void bloatBox(State& in, const Box<Number>& bloatBox) {
 	}
 }
 
-template <typename Number, typename tNumber, typename State>
+template <typename Number, typename State>
 boost::tuple<CONTAINMENT, State, matrix_t<Number>, vector_t<Number>, Box<Number>> computeFirstSegment(const State& _state, tNumber timeStep)
 {
     assert(!_state.getTimestamp().isEmpty());
@@ -99,7 +99,7 @@ boost::tuple<CONTAINMENT, State, matrix_t<Number>, vector_t<Number>, Box<Number>
     //TRACE("hypro.reachability","Initial pair segment: " << tmp3);
     #endif
 
-    if (initialPair.first) {
+    if (initialPair.first != CONTAINMENT::NO) {
 
     	// if the location has no flow, stop computation and exit.
         if (_state.getLocation()->getFlow() == matrix_t<Number>::Zero(_state.getLocation()->getFlow(0).rows(), _state.getLocation()->getFlow(0).cols())) {
@@ -230,7 +230,7 @@ boost::tuple<CONTAINMENT, State, matrix_t<Number>, vector_t<Number>, Box<Number>
         TRACE("hypro.reachability","Check invariant.");
         std::pair<CONTAINMENT, State> fullSegment = firstSegment.satisfies(_state.getLocation()->getInvariant());
         TRACE("hypro.reachability","Check invariant - done.");
-        if (fullSegment.first) {
+        if (fullSegment.first != CONTAINMENT::NO) {
         	//fullSegment.second.setTimestamp(carl::Interval<tNumber>(fullSegment.second.getTimestamp().lower(),fullSegment.second.getTimestamp().upper() + timeStep));
         	#ifdef HYPRO_LOGGING
         	// DBG

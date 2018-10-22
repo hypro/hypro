@@ -12,7 +12,7 @@
 
 #pragma once
 #include "FirstSegment.h"
-#include "datastructures/HybridAutomaton/Settings.h"
+#include "datastructures/reachability/Settings.h"
 #include "datastructures/HybridAutomaton/HybridAutomaton.h"
 #include "datastructures/HybridAutomaton/State.h"
 #include "config.h"
@@ -60,7 +60,7 @@ using flowpipe_t = std::vector<State_t<Number>>;
 template <typename Number>
 class Reach {
 private:
-	HybridAutomaton<Number, State_t<Number,Number>> mAutomaton;
+	HybridAutomaton<Number, State_t<Number>> mAutomaton;
 	ReachabilitySettings mSettings;
 	std::size_t mCurrentLevel = 0;
     Number mBloatingFactor = 0;
@@ -78,7 +78,7 @@ public:
 	 * @param _automaton The analyzed automaton.
 	 * @param _settings The reachability analysis settings.
 	 */
-	Reach( const HybridAutomaton<Number, State_t<Number,Number>>& _automaton, const ReachabilitySettings& _settings = ReachabilitySettings());
+	Reach( const HybridAutomaton<Number, State_t<Number>>& _automaton, const ReachabilitySettings& _settings = ReachabilitySettings());
 
 	/**
 	 * @brief Computes the forward reachability of the given automaton.
@@ -126,7 +126,7 @@ public:
 	 */
 	bool intersectGuard( Transition<Number>* _trans, const State_t<Number>& _segment, State_t<Number>& result ) const;
 
-	bool checkTransitions(const State_t<Number>& _state, const carl::Interval<Number>& currentTime, std::vector<boost::tuple<Transition<Number>*, State_t<Number>>>& nextInitialSets) const;
+	bool checkTransitions(const State_t<Number>& _state, const carl::Interval<tNumber>& currentTime, std::vector<boost::tuple<Transition<Number>*, State_t<Number>>>& nextInitialSets) const;
 
 	const ReachabilitySettings& settings() const { return mSettings; }
 	void setSettings(const ReachabilitySettings& settings) { mSettings = settings; }
