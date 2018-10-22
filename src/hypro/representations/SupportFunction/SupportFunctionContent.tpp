@@ -105,13 +105,12 @@ SupportFunctionContent<Number,Setting>::SupportFunctionContent( const matrix_t<N
 	switch ( _type ) {
 		case SF_TYPE::POLY: {
 			boost::tuple<bool,std::vector<carl::Interval<Number>>> intervals = isBox(_directions,_distances);
-
 			if(boost::get<0>(intervals)) {
+				TRACE("hypro.representations.supportFunction","Handed polytope actually is a box, use box representation.")
 				mBox = new BoxSupportFunction<Number,Setting>(boost::get<1>(intervals));
 				mType = SF_TYPE::BOX;
-				TRACE("hypro.representations.supportFunction","Handed polytope is actually a box, use box representation.")
-				//std::cout << "IS A BOX!" << std::endl;
 			} else {
+				TRACE("hypro.representations.supportFunction","Handed polytope indeed is a polytope, use H-representation.")
 				mPolytope = new PolytopeSupportFunction<Number,Setting>( _directions, _distances );
 				mType = SF_TYPE::POLY;
 			}
@@ -122,9 +121,15 @@ SupportFunctionContent<Number,Setting>::SupportFunctionContent( const matrix_t<N
 		}
 		case SF_TYPE::BOX: {
 			boost::tuple<bool,std::vector<carl::Interval<Number>>> intervals = isBox(_directions,_distances);
-			assert(boost::get<0>(intervals));
-			mBox = new BoxSupportFunction<Number,Setting>(boost::get<1>(intervals));
-			mType = SF_TYPE::BOX;
+			if(boost::get<0>(intervals)) {
+				TRACE("hypro.representations.supportFunction","Handed box indeed is a box.")
+				mBox = new BoxSupportFunction<Number,Setting>(boost::get<1>(intervals));
+				mType = SF_TYPE::BOX;
+			} else {
+				TRACE("hypro.representations.supportFunction","Handed box actually is a polytope, use H-representation.")
+				mPolytope = new PolytopeSupportFunction<Number,Setting>( _directions, _distances );
+				mType = SF_TYPE::POLY;
+			}
 			mDimension = std::size_t(_directions.cols());
 			mDepth = 0;
 			mOperationCount = 0;
