@@ -51,13 +51,17 @@ using flowpipe_t = std::vector<State_t<Number>>;
 
 #include "util.h"
 
+struct ReachSettings {
+	static constexpr bool printStatus = true;
+};
+
 /**
  * @brief      Class implementing a basic reachbility analysis algorithm for linear hybrid automata.
  *
  * @tparam     Number          The used number type.
  * @tparam     Representation  The used state set representation type.
  */
-template <typename Number>
+template <typename Number, typename ReacherSettings>
 class Reach {
 private:
 	HybridAutomaton<Number, State_t<Number>> mAutomaton;

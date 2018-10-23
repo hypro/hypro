@@ -1,8 +1,8 @@
 
 namespace hypro {
 namespace reachability {
-	template<typename Number>
-	bool Reach<Number>::intersectGuard( Transition<Number>* _trans, const State_t<Number>& _state,
+	template<typename Number, typename ReacherSettings>
+	bool Reach<Number,ReacherSettings>::intersectGuard( Transition<Number>* _trans, const State_t<Number>& _state,
 							   State_t<Number>& result ) const {
 
 		assert(!_state.getTimestamp().isUnbounded());
@@ -37,8 +37,8 @@ namespace reachability {
 		}
 	}
 
-	template<typename Number>
-	void Reach<Number>::processDiscreteBehaviour( const std::vector<boost::tuple<Transition<Number>*, State_t<Number>>>& _newInitialSets ) {
+	template<typename Number,typename ReacherSettings>
+	void Reach<Number,ReacherSettings>::processDiscreteBehaviour( const std::vector<boost::tuple<Transition<Number>*, State_t<Number>>>& _newInitialSets ) {
 		std::map<Transition<Number>*, std::vector<State_t<Number>>> toAggregate;
 
 		for(const auto& tuple : _newInitialSets ) {
@@ -156,8 +156,8 @@ namespace reachability {
 		INFO("hypro.reacher", "After aggregation loop");
 	}
 
-	template<typename Number>
-	bool Reach<Number>::checkTransitions(const State_t<Number>& state, const carl::Interval<tNumber>& , std::vector<boost::tuple<Transition<Number>*, State_t<Number>>>& nextInitialSets) const {
+	template<typename Number,typename ReacherSettings>
+	bool Reach<Number,ReacherSettings>::checkTransitions(const State_t<Number>& state, const carl::Interval<tNumber>& , std::vector<boost::tuple<Transition<Number>*, State_t<Number>>>& nextInitialSets) const {
 
 		State_t<Number> guardSatisfyingState;
 		bool transitionEnabled = false;

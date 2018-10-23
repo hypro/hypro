@@ -7,15 +7,15 @@ namespace reachability {
 	using clock = std::chrono::high_resolution_clock;
 	using timeunit = std::chrono::microseconds;
 
-	template<typename Number>
-	Reach<Number>::Reach( const HybridAutomaton<Number, State_t<Number>>& _automaton, const ReachabilitySettings& _settings)
+	template<typename Number, typename ReacherSettings>
+	Reach<Number,ReacherSettings>::Reach( const HybridAutomaton<Number, State_t<Number>>& _automaton, const ReachabilitySettings& _settings)
 		: mAutomaton( _automaton ), mSettings(_settings), mCurrentLevel(0), mIntersectedBadStates(false) {
 			//mAutomaton.addArtificialDimension();
 		}
 
 
-	template<typename Number>
-	std::vector<std::pair<unsigned, flowpipe_t<Number>>> Reach<Number>::computeForwardReachability() {
+	template<typename Number, typename ReacherSettings>
+	std::vector<std::pair<unsigned, flowpipe_t<Number>>> Reach<Number,ReacherSettings>::computeForwardReachability() {
 		// set up working queue -> add initial states
 		// collect all computed reachable states
 		std::vector<std::pair<unsigned, flowpipe_t<Number>>> collectedReachableStates;
@@ -83,11 +83,20 @@ namespace reachability {
 			}
 		}
 
+		if(ReacherSettings::printStatus) {
+			std::cout << std::endl << "Queue size: " << mWorkingQueue.size() << std::flush;
+		}
+
 		TRACE("hypro.reacher","working queue size: " << mWorkingQueue.size());
+
+		std::cout << std::endl;
 		while ( !mWorkingQueue.empty() ) {
 			initialSet<Number> nextInitialSet = mWorkingQueue.front();
 			mWorkingQueue.pop_front();
 			TRACE("hypro.reacher","working queue after pop: " << mWorkingQueue.size());
+			if(ReacherSettings::printStatus) {
+				std::cout << "\rQueue size: " << mWorkingQueue.size() << std::flush;
+			}
 
 			mCurrentLevel = boost::get<0>(nextInitialSet);
 			INFO("hypro.reacher","Depth " << mCurrentLevel << ", Location: " << boost::get<1>(nextInitialSet).getLocation()->getName());
@@ -102,8 +111,8 @@ namespace reachability {
 	}
 
 
-	template<typename Number>
-	flowpipe_t<Number> Reach<Number>::computeForwardTimeClosure( const State_t<Number>& _state ) {
+	template<typename Number, typename ReacherSettings>
+	flowpipe_t<Number> Reach<Number,ReacherSettings>::computeForwardTimeClosure( const State_t<Number>& _state ) {
 		assert(!_state.getTimestamp().isUnbounded());
 #ifdef REACH_DEBUG
 		INFO("hypro.reacher", "Location: " << _state.getLocation()->hash());
