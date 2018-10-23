@@ -12,6 +12,7 @@ void applyReduction( Representation& ) {
 
 template<typename Number, typename Representation, carl::EnableIf< std::is_same<Representation, SupportFunction<Number> > > = carl::dummy>
 void applyReduction( Representation& _in) {
+    _in.evaluateTemplate(4,false); // temporary, forces reduction to box.
 	_in.forceLinTransReduction();
 }
 

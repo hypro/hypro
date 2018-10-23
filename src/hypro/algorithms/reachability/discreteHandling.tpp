@@ -106,6 +106,10 @@ namespace reachability {
 			//collectedSets.removeRedundancy();
 			#ifdef USE_SMART_AGGREGATION
 			collectedSets.removeRedundancy();
+			if(collectedSets.getSetType(0) == representation_name::support_function) {
+				// Forced reduction to a box template.
+				applyReduction<Number>(boost::get<hypro::SupportFunction<Number>>(collectedSets.rGetSet(0)));
+			}
 			//aggregationReduction(collectedSets, aggregationPair.first, mSettings.timeBound, mSettings.timeStep);
 			#endif
 
