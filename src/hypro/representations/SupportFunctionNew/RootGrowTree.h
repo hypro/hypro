@@ -47,13 +47,15 @@ public:
 	////// Modifier
 
 	//Add node "unary" that can only have one child as parent of current root.
+	//Also sets original parents.
 	RootGrowTree* addUnaryOp(RootGrowNode<Number>* unary);
 
 	//Add node "binary" that can only have two children as parent of current root. "rhs" is a tree that will be
-	//the second child of "binary".
+	//the second child of "binary". Also sets original parents.
 	RootGrowTree* addBinaryOp(RootGrowNode<Number>* binary, RootGrowTree* rhs);
 
-	//Remove all pointers to current children of mRoot. Set "child" as the only child of mRoot
+	//Remove all pointers to current children of mRoot. Set "child" as the only child of mRoot.
+	//Does not set original parent.
 	RootGrowTree* setAsOnlyChild(RootGrowNode<Number>* child);
 
 	////// Displaying

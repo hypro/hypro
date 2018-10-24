@@ -183,9 +183,8 @@ TYPED_TEST(SupportFunctionNewTest, SupportFunctionNewEvaluate){
 	EXPECT_TRUE(sfc.getRoot()->getChildren().size() == 1);
 	EXPECT_TRUE(sfc.getRoot()->getChildren().at(0)->getParent() == &trafo);
 
-	SumOp<TypeParam> sum;
-
-	sfc.addBinaryOp(&sum, &sfc2);
+	SumOp<TypeParam> sum(&sfc, &sfc2);
+	
 	EXPECT_TRUE(sfc.getRoot() == &sum);
 	EXPECT_TRUE(sfc.getRoot()->getType() == SFNEW_TYPE::SUMOP);
 	EXPECT_TRUE(sfc.getRoot()->getOriginCount() == sfc.getRoot()->getChildren().size());

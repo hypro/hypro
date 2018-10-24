@@ -15,6 +15,9 @@ namespace hypro {
 		//set unary as parent of root
 		copyOfRootPtr->setAsParent(unary);
 
+		//set unary also as original parent of root
+		//copyOfRootPtr->setAsOriginalParent(unary);
+
 		//set unary as the root
 		mRoot = unary;
 
@@ -30,6 +33,8 @@ namespace hypro {
 		binary->addToChildren(rhsRootPtr);
 		lhsRootPtr->setAsParent(binary);
 		rhsRootPtr->setAsParent(binary);
+		//lhsRootPtr->setAsOriginalParent(binary);
+		//rhsRootPtr->setAsOriginalParent(binary);
 		mRoot = binary;
 		rhs->setRoot(binary);
 		return this;
@@ -40,6 +45,7 @@ namespace hypro {
 		mRoot->clearChildren();
 		mRoot->addToChildren(child);
 		child->setAsParent(mRoot);
+		//Does not set mRoot as original parent
 		return this;
 	}
 

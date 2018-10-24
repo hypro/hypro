@@ -35,12 +35,14 @@ public:
 	//Set new trafoOp object as parent of origin, 
 	TrafoOp(SupportFunctionContentNew<Number>* origin, const matrix_t<Number>& A, const vector_t<Number>& b) : currentExponent(1) {
 		
-		// Determine, if we need to create new parameters or if this matrix and vector pair has already been used (recursive).
 		parameters = std::make_shared<const LinTrafoParameters<Number>>(A,b);
-		// in case this transformation has already been performed, parameters will be updated.
+
 		origin->addUnaryOp(this);
 		assert(origin->getRoot() == this);
 		assert(this->getChildren().size() == 1);
+
+		// Determine, if we need to create new parameters or if this matrix and vector pair has already been used (recursive).
+		// in case this transformation has already been performed, parameters will be updated.
 		origin->hasTrafo(parameters, A, b);
 		
 		//if(Setting::USE_LIN_TRANS_REDUCTION){
@@ -57,11 +59,11 @@ public:
 					reduced = true;
 					currentExponent = currentExponent*(carl::pow(2,parameters->power));
 					for(std::size_t i = 0; i < unsigned(carl::pow(2,parameters->power)-1); i++ ){
-						//origin->getRoot()->getChildren().at(0) = origin->getRoot()->getChildren().at(0)->getChildren().at(0);
+
+						=== Hier vllt alle übersprungenen nodes direkt löschen? dann brauchen wir keinen originalParent bei dem die traversierung nicht funktioniert!
+
 						origin->setAsOnlyChild(origin->getRoot()->getChildren().at(0)->getChildren().at(0));
 					}
-					// Note: The following assertion does not hold in combination with the current reduction techniques.
-					//assert(mChildren.at(0)->type() != SF_TYPE::LINTRAFO || (mChildren.at(0)->linearTrafoParameters()->parameters == this->parameters && mChildren.at(0)->linearTrafoParameters()->currentExponent >= currentExponent) );
 				} 
 			} while (reduced == true);
 			//assert(mChildren.at(0)->checkTreeValidity());
@@ -117,6 +119,8 @@ public:
 		return resultStackBack.front();
 	}
 
+	//Compares the parameters from the current TrafoOp with the parameters A and b from other LinTrafoParameters
+	//and sets the generally used LinTrafoParameters to parameters if they are the same
 	bool hasTrafo(std::shared_ptr<const LinTrafoParameters<Number>>& ltParam, const matrix_t<Number>& A, const vector_t<Number>& b){
 		if(parameters->matrix() == A && parameters->vector() == b){
 			ltParam = parameters;

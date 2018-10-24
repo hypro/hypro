@@ -1,8 +1,12 @@
 #pragma once
 
 #include "RootGrowNode.h"
+#include "SupportFunctionContentNew.h"
 
 namespace hypro {
+
+template<typename Number>
+class SupportFunctionContentNew;	
 
 //Specialized subclass for sums as example of a binary operator
 template<typename Number>
@@ -17,14 +21,22 @@ private:
 	////// Members for this class: uses the children of the Node
 
 public:
-	SumOp(){}
+
+	////// Constructors & Destructors
+
+	SumOp() = delete;
+	SumOp(SupportFunctionContentNew<Number>* lhs, SupportFunctionContentNew<Number>* rhs){ lhs->addBinaryOp(this, rhs); }
 	~SumOp(){}
+
+	////// Getters and Setters
+
 	SFNEW_TYPE getType() const override { return type; }
 	unsigned getOriginCount() const { return originCount; }
 
+	////// RootGrowNode Interface
+
 	//Does nothing
 	matrix_t<Number> transform(const matrix_t<Number>& param) const {
-		std::cout << "calling SumOp::transform, returns:\n" << param << std::endl;
 		return param;
 	}
 
@@ -37,7 +49,6 @@ public:
 
 	//Given two result vecs, sum them coefficientwise
 	std::vector<EvaluationResult<Number>> aggregate(std::vector<std::vector<EvaluationResult<Number>>>& resultStackBack, const matrix_t<Number>& currentParam) const {
-		std::cout << "calling SumOp::aggregate\n";
 		assert(resultStackBack.size() == 2);
 		assert(resultStackBack.at(0).size() == resultStackBack.at(1).size());
 		assert(resultStackBack.at(0).size() == std::size_t(currentParam.rows()));
@@ -62,13 +73,13 @@ public:
 				accumulatedResult.emplace_back(r);
 			}
 		}
-		std::cout << "returns\n";
-		for(auto& e : accumulatedResult){
-			std::cout << e << std::endl;
-		}
+		//for(auto& e : accumulatedResult){
+		//	std::cout << e << std::endl;
+		//}
 		return accumulatedResult;
 	}
 
+	//Should not be called
 	bool hasTrafo(std::shared_ptr<const LinTrafoParameters<Number>>& , const matrix_t<Number>& , const vector_t<Number>& ){
 		assert(false && "SumOp::hasTrafo should never be called\n");
 		return false;

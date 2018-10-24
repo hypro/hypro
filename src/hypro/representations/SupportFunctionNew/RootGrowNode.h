@@ -28,7 +28,9 @@ protected:
 	SFNEW_TYPE mType = NODE;												//NONE since RootGrowNode should later be an abstract class
 	unsigned originCount = 0;												//Amount of children needed to function properly
 	RootGrowNode* mParent = nullptr;										//parent of the current node. The topmost node has nullptr as parent
+	//RootGrowNode* mOriginalParent = nullptr;								//parent of the current node, before the parent pointer was redirected through LIN_TRAFO_REDUCTION
 	std::vector<RootGrowNode*> mChildren = std::vector<RootGrowNode*>();	//vector of all current children
+	bool deletable = false;													//flag whether node has been called to be deleted 
 
 public:
 
@@ -42,13 +44,17 @@ public:
 	virtual SFNEW_TYPE getType() const { return mType; }
 	virtual unsigned getOriginCount() const { return originCount; }
 	virtual RootGrowNode* getParent() const { return mParent; }
+	//virtual RootGrowNode* getOriginalParent() const { return mOriginalParent; }
 	virtual std::vector<RootGrowNode*> getChildren() const { return mChildren; }
+	virtual bool isDeletable() const { return deletable; }
 
 	////// Modifiers
 
 	void addToChildren(RootGrowNode* rhs){ mChildren.push_back(rhs); }
 	void setAsParent(RootGrowNode* parent){ mParent = parent; }
+	//void setAsOriginalParent(RootGrowNode* parent){ mOriginalParent = parent; }
 	void clearChildren(){ mChildren.clear(); }
+	void setDeletable(bool choice){ deletable = choice; }
 
 	////// Displaying
 
