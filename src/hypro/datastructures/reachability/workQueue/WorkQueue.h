@@ -25,6 +25,13 @@ class WorkQueueT
     static_assert(std::is_pointer<Workable>::value || is_shared_ptr<Workable>::value, "WorkQueue requires pointer type." );
 
   public:
+
+    WorkQueueT() = default;
+    WorkQueueT(WorkQueueT<Workable,Setting>&& in)
+        :mQueue(std::move(in.mQueue))
+    {}
+    WorkQueueT(const WorkQueueT<Workable,Setting>& in) = delete;
+
     /**
      * Destructor
      **/
@@ -62,8 +69,8 @@ class WorkQueueT
      *
      * @return true iff no Workable is left.
      */
-    bool isEmpty();
-    bool nonLockingIsEmpty();
+    bool isEmpty() const;
+    bool nonLockingIsEmpty() const;
 
     std::size_t size() const;
     std::size_t nonLockingSize() const;

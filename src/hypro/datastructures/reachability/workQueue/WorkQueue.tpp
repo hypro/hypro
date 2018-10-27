@@ -107,14 +107,14 @@ Workable WorkQueueT<Workable,Setting>::nonLockingDequeueBack()
 
 
 template <class Workable, class Setting>
-bool WorkQueueT<Workable,Setting>::isEmpty()
+bool WorkQueueT<Workable,Setting>::isEmpty() const
 {
 	std::unique_lock<std::mutex> lock(mSpinlock);
     return nonLockingIsEmpty();
 }
 
 template <class Workable, class Setting>
-bool WorkQueueT<Workable,Setting>::nonLockingIsEmpty()
+bool WorkQueueT<Workable,Setting>::nonLockingIsEmpty() const
 {
     return mQueue.empty();
 }

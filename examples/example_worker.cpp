@@ -46,8 +46,8 @@ int main(int argc, char** argv) {
 
     hypro::WorkQueueManager<std::shared_ptr<hypro::Task<Number>>> queueManager;
 
-    auto globalCEXQueue = queueManager.addQueue();
-    auto globalQueue = queueManager.addQueue();
+    auto& globalCEXQueue = queueManager.addQueue();
+    auto& globalQueue = queueManager.addQueue();
 
     hypro::HybridAutomaton<Number>::locationStateMap initialStates = hypro::SettingsProvider<Number>::getInstance().getHybridAutomaton().getInitialStates();
     std::vector<hypro::State_t<Number>> initialStateData;
@@ -112,9 +112,17 @@ int main(int argc, char** argv) {
     }
     
     for (const auto& initialNode : initialNodes) {
-        globalQueue->enqueue(std::shared_ptr<hypro::Task<Number>>(new hypro::Task<Number>(initialNode)));
+        globalQueue.enqueue(std::shared_ptr<hypro::Task<Number>>(new hypro::Task<Number>(initialNode)));
     }
 
     hypro::ContextBasedReachabilityWorker<Number> worker = hypro::ContextBasedReachabilityWorker<Number>(parsedInput.second);
+    std::vector<hypro::PlotData<Number>> segments;
+
+    while(queueManager.hasWorkable(true)) { // locking access to queues.
+        auto task = queueManager.getNextWorkable(true,true); // get next task locked and dequeue from front.
+        assert(task!=nullptr);
+        worker.processTask(task,hypro::SettingsProvider<Number>::getInstance().getStrategy(), globalQueue, globalCEXQueue, &segments);
+    }
+
 	return 0;
 }
