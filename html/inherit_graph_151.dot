@@ -3,5 +3,5 @@ digraph "Graphical Class Hierarchy"
   edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
   node [fontname="Helvetica",fontsize="10",shape=record];
   rankdir="LR";
-  Node1 [label="hypro::reachability\l::hypro::intersectionContent\l\< Number, Setting \>",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$structhypro_1_1reachability_1_1hypro_1_1intersectionContent.html"];
+  Node1 [label="hypro::reachability\l::hypro::hypro::typeName\l\< double \>",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$structhypro_1_1reachability_1_1hypro_1_1hypro_1_1typeName_3_01double_01_4.html"];
 }

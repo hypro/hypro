@@ -135,9 +135,9 @@ virtual double&#160;</td><td class="memItemRight" valign="bottom"><b>getSortInde
 virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>setSortIndex</b> (double sortIndex) override</td></tr>
 <tr class="separator:a1bfb4bd38461c6d132b7b983f0fc22da"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classhypro_1_1ltiGuardHandler"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classhypro_1_1ltiGuardHandler')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classhypro_1_1ltiGuardHandler.html">hypro::ltiGuardHandler&lt; Representation, Number &gt;</a></td></tr>
-<tr class="memitem:a6ea3ec4bf8a747e3d3314c1a143d07fe inherit pub_methods_classhypro_1_1ltiGuardHandler"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6ea3ec4bf8a747e3d3314c1a143d07fe"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>ltiGuardHandler</b> (std::shared_ptr&lt; <a class="el" href="classhypro_1_1State.html">State_t</a>&lt; Number &gt;&gt; state, size_t index, <a class="el" href="classhypro_1_1Transition.html">hypro::Transition</a>&lt; Number &gt; *transition)</td></tr>
-<tr class="separator:a6ea3ec4bf8a747e3d3314c1a143d07fe inherit pub_methods_classhypro_1_1ltiGuardHandler"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aac8788670b6e7beeeeea57bad4855485 inherit pub_methods_classhypro_1_1ltiGuardHandler"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aac8788670b6e7beeeeea57bad4855485"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>ltiGuardHandler</b> (std::shared_ptr&lt; <a class="el" href="classhypro_1_1State.html">State_t</a>&lt; Number &gt;&gt; state, size_t index, <a class="el" href="classhypro_1_1Transition.html">Transition</a>&lt; Number &gt; *transition)</td></tr>
+<tr class="separator:aac8788670b6e7beeeeea57bad4855485 inherit pub_methods_classhypro_1_1ltiGuardHandler"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3d146719542ff312b391461b30efc7ab inherit pub_methods_classhypro_1_1ltiGuardHandler"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3d146719542ff312b391461b30efc7ab"></a>
 virtual bool&#160;</td><td class="memItemRight" valign="bottom"><b>satisfiesGuard</b> () override</td></tr>
 <tr class="separator:a3d146719542ff312b391461b30efc7ab inherit pub_methods_classhypro_1_1ltiGuardHandler"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -171,9 +171,9 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>mMarkedForDelete</b> 
 std::shared_ptr&lt; <a class="el" href="classhypro_1_1State.html">State_t</a><br class="typebreak"/>
 &lt; Number &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>mGuardSatisfyingState</b></td></tr>
 <tr class="separator:a9dcd275b094cc7f9ef9fc23ab0a4b058 inherit pro_attribs_classhypro_1_1ltiGuardHandler"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac4505d607fc7184cad1c749d0ec82897 inherit pro_attribs_classhypro_1_1ltiGuardHandler"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac4505d607fc7184cad1c749d0ec82897"></a>
-<a class="el" href="classhypro_1_1Transition.html">hypro::Transition</a>&lt; Number &gt; *&#160;</td><td class="memItemRight" valign="bottom"><b>mTransition</b></td></tr>
-<tr class="separator:ac4505d607fc7184cad1c749d0ec82897 inherit pro_attribs_classhypro_1_1ltiGuardHandler"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0490aea471bcabdf496b9ace862205ae inherit pro_attribs_classhypro_1_1ltiGuardHandler"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0490aea471bcabdf496b9ace862205ae"></a>
+<a class="el" href="classhypro_1_1Transition.html">Transition</a>&lt; Number &gt; *&#160;</td><td class="memItemRight" valign="bottom"><b>mTransition</b></td></tr>
+<tr class="separator:a0490aea471bcabdf496b9ace862205ae inherit pro_attribs_classhypro_1_1ltiGuardHandler"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac5713ad7d1f654d8e9b5b65669877a06 inherit pro_attribs_classhypro_1_1ltiGuardHandler"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac5713ad7d1f654d8e9b5b65669877a06"></a>
 size_t&#160;</td><td class="memItemRight" valign="bottom"><b>mIndex</b></td></tr>
 <tr class="separator:ac5713ad7d1f654d8e9b5b65669877a06 inherit pro_attribs_classhypro_1_1ltiGuardHandler"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -182,12 +182,13 @@ double&#160;</td><td class="memItemRight" valign="bottom"><b>mSortIndex</b></td>
 <tr class="separator:ad909be59df335b92014f8cc2eadcd31d inherit pro_attribs_classhypro_1_1ltiGuardHandler"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><h3>template&lt;class Representation, typename Number&gt;<br/>
+<div class="textblock"><h3>template&lt;typename Representation, typename Number&gt;<br/>
 class hypro::timedGuardHandler&lt; Representation, Number &gt;</h3>
 
 
-<p>Definition at line <a class="el" href="timedGuardHandler_8h_source.html#l00008">8</a> of file <a class="el" href="timedGuardHandler_8h_source.html">timedGuardHandler.h</a>.</p>
-</div><hr/>The documentation for this class was generated from the following file:<ul>
+<p>Definition at line <a class="el" href="forwardDeclarations_8h_source.html#l00028">28</a> of file <a class="el" href="forwardDeclarations_8h_source.html">forwardDeclarations.h</a>.</p>
+</div><hr/>The documentation for this class was generated from the following files:<ul>
+<li>/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/handlers/<a class="el" href="forwardDeclarations_8h_source.html">forwardDeclarations.h</a></li>
 <li>/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/handlers/guardHandlers/<a class="el" href="timedGuardHandler_8h_source.html">timedGuardHandler.h</a></li>
 </ul>
 </div><!-- contents -->

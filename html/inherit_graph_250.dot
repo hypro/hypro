@@ -3,5 +3,5 @@ digraph "Graphical Class Hierarchy"
   edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
   node [fontname="Helvetica",fontsize="10",shape=record];
   rankdir="LR";
-  Node1 [label="std::hash\< hypro::Point\l\< Number \> \>",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$structstd_1_1hash_3_01hypro_1_1Point_3_01Number_01_4_01_4.html",tooltip="A hash operator for fast comparison. "];
+  Node1 [label="ScopedLock\< Lockable \>",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classScopedLock.html",tooltip="Class for scoped lock, taken from http://stackoverflow.com/questions/14276508/how-does-scope-locking-..."];
 }

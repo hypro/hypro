@@ -189,7 +189,7 @@ Enumerations</h2></td></tr>
 <b>BOT</b>
 <br/>
  }</td></tr>
-<tr class="memdesc:ab3c17ffb2757fcb55f5570998d91d728"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enum for set containment results. If known, we can make a statement about full or partial containment, otherwise fall back to YES/NO. Note: implicit conversion to bool still gives correct results (NO = 0). BOT is used for UNKNOWN. <br/></td></tr>
+<tr class="memdesc:ab3c17ffb2757fcb55f5570998d91d728"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enum for set containment results. If known, we can make a statement about full or partial containment, otherwise fall back to YES/NO. Note: BOT is used for UNKNOWN. <br/></td></tr>
 <tr class="separator:ab3c17ffb2757fcb55f5570998d91d728"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adde30a4b9662f0b7a976e43098e3e431"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehypro_1_1reachability_1_1hypro_1_1hypro.html#adde30a4b9662f0b7a976e43098e3e431">SUBSPACETYPE</a> { <br/>
 &#160;&#160;<b>LTI</b> =0, 
@@ -210,6 +210,17 @@ Enumerations</h2></td></tr>
  }</td></tr>
 <tr class="memdesc:ae0d7f88f82341cf40d82ec8b7440fed5"><td class="mdescLeft">&#160;</td><td class="mdescRight">classifies the type of location, which reflects the dynamics in case we dynamically detect subspaces. <br/></td></tr>
 <tr class="separator:ae0d7f88f82341cf40d82ec8b7440fed5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a08f4cbd8e3c8b4fc6e029a1b48c87323"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><b>AGG_SETTING</b> { <br/>
+&#160;&#160;<b>MODEL</b>, 
+<b>AGG</b>, 
+<b>NO_AGG</b>, 
+<b>MODEL</b>, 
+<br/>
+&#160;&#160;<b>AGG</b>, 
+<b>NO_AGG</b>
+<br/>
+ }</td></tr>
+<tr class="separator:a08f4cbd8e3c8b4fc6e029a1b48c87323"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa45a294fdf92a86d777edf1e35a49c58"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehypro_1_1reachability_1_1hypro_1_1hypro.html#aa45a294fdf92a86d777edf1e35a49c58">TRIBOOL</a> { <br/>
 &#160;&#160;<b>TRUE</b>, 
 <b>FALSE</b>, 
@@ -251,7 +262,7 @@ Enumerations</h2></td></tr>
 <b>BOT</b>
 <br/>
  }</td></tr>
-<tr class="memdesc:ab3c17ffb2757fcb55f5570998d91d728"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enum for set containment results. If known, we can make a statement about full or partial containment, otherwise fall back to YES/NO. Note: implicit conversion to bool still gives correct results (NO = 0). BOT is used for UNKNOWN. <br/></td></tr>
+<tr class="memdesc:ab3c17ffb2757fcb55f5570998d91d728"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enum for set containment results. If known, we can make a statement about full or partial containment, otherwise fall back to YES/NO. Note: BOT is used for UNKNOWN. <br/></td></tr>
 <tr class="separator:ab3c17ffb2757fcb55f5570998d91d728"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adde30a4b9662f0b7a976e43098e3e431"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehypro_1_1reachability_1_1hypro_1_1hypro.html#adde30a4b9662f0b7a976e43098e3e431">SUBSPACETYPE</a> { <br/>
 &#160;&#160;<b>LTI</b> =0, 
@@ -272,6 +283,17 @@ Enumerations</h2></td></tr>
  }</td></tr>
 <tr class="memdesc:ae0d7f88f82341cf40d82ec8b7440fed5"><td class="mdescLeft">&#160;</td><td class="mdescRight">classifies the type of location, which reflects the dynamics in case we dynamically detect subspaces. <br/></td></tr>
 <tr class="separator:ae0d7f88f82341cf40d82ec8b7440fed5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a08f4cbd8e3c8b4fc6e029a1b48c87323"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><b>AGG_SETTING</b> { <br/>
+&#160;&#160;<b>MODEL</b>, 
+<b>AGG</b>, 
+<b>NO_AGG</b>, 
+<b>MODEL</b>, 
+<br/>
+&#160;&#160;<b>AGG</b>, 
+<b>NO_AGG</b>
+<br/>
+ }</td></tr>
+<tr class="separator:a08f4cbd8e3c8b4fc6e029a1b48c87323"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
@@ -327,6 +349,14 @@ template&lt;typename Number &gt; </td></tr>
 template&lt;typename Number &gt; </td></tr>
 <tr class="memitem:ad18fb1e81fe0368fba6c9dbb6c5ed6be"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><b>satisfiesIneqation</b> (const <a class="el" href="namespacehypro_1_1reachability_1_1hypro_1_1hypro.html#a4173067857153321f35a1fe47a614eaf">vector_t</a>&lt; Number &gt; &amp;constraint, Number constant, const <a class="el" href="namespacehypro_1_1reachability_1_1hypro_1_1hypro.html#a4173067857153321f35a1fe47a614eaf">vector_t</a>&lt; Number &gt; &amp;point)</td></tr>
 <tr class="separator:ad18fb1e81fe0368fba6c9dbb6c5ed6be"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad24f8690e3f0e0aff25fd6dd43f58bc1"><td class="memTemplParams" colspan="2"><a class="anchor" id="ad24f8690e3f0e0aff25fd6dd43f58bc1"></a>
+template&lt;typename Enumeration &gt; </td></tr>
+<tr class="memitem:ad24f8690e3f0e0aff25fd6dd43f58bc1"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><b>as_integer</b> (Enumeration const value) -&gt; typename std::underlying_type&lt; Enumeration &gt;::type</td></tr>
+<tr class="separator:ad24f8690e3f0e0aff25fd6dd43f58bc1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2feec6b13f2b357a54f00b7acb6ad54b"><td class="memTemplParams" colspan="2"><a class="anchor" id="a2feec6b13f2b357a54f00b7acb6ad54b"></a>
+template&lt;typename Enumeration , carl::EnableIf&lt; std::is_enum&lt; Enumeration &gt;&gt;  = carl::dummy&gt; </td></tr>
+<tr class="memitem:a2feec6b13f2b357a54f00b7acb6ad54b"><td class="memTemplItemLeft" align="right" valign="top">std::ostream &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>operator&lt;&lt;</b> (std::ostream &amp;out, Enumeration in)</td></tr>
+<tr class="separator:a2feec6b13f2b357a54f00b7acb6ad54b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8b024108ed7a9493df5b06b37dedde97"><td class="memTemplParams" colspan="2"><a class="anchor" id="a8b024108ed7a9493df5b06b37dedde97"></a>
 template&lt;typename T &gt; </td></tr>
 <tr class="memitem:a8b024108ed7a9493df5b06b37dedde97"><td class="memTemplItemLeft" align="right" valign="top">std::ostream &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>operator&lt;&lt;</b> (std::ostream &amp;_out, const std::set&lt; T &gt; &amp;_set)</td></tr>

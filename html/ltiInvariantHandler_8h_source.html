@@ -116,16 +116,16 @@ $(document).ready(function(){initNavTree('ltiInvariantHandler_8h_source.html',''
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="keyword">namespace </span>hypro</div>
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;{</div>
 <div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">class</span> Representation, <span class="keyword">typename</span> Number&gt;</div>
-<div class="line"><a name="l00007"></a><span class="lineno"><a class="line" href="classhypro_1_1ltiInvariantHandler.html">    7</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classhypro_1_1ltiInvariantHandler.html">ltiInvariantHandler</a> : <span class="keyword">public</span> <a class="code" href="classhypro_1_1IInvariantHandler.html">IInvariantHandler</a> {</div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;    <span class="keyword">class </span>ltiInvariantHandler : <span class="keyword">public</span> IInvariantHandler {</div>
 <div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;    <span class="keyword">protected</span>:</div>
 <div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;        <a class="code" href="namespacehypro.html#ab7a1dbbbe2d40e57ecab2c9b64b3615d">CONTAINMENT</a> mContainment = CONTAINMENT::NO;</div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;        <a class="code" href="classhypro_1_1State.html">State_t&lt;Number&gt;</a>*  mState; </div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;        State_t&lt;Number&gt;*  mState; </div>
 <div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;        <span class="keywordtype">size_t</span> mIndex;</div>
 <div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;        <span class="keywordtype">bool</span> mMarkedForDelete = <span class="keyword">false</span>;</div>
 <div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;</div>
 <div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;        <a class="code" href="classhypro_1_1ltiInvariantHandler.html">ltiInvariantHandler</a>() = <span class="keyword">delete</span>;</div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;        <a class="code" href="classhypro_1_1ltiInvariantHandler.html">ltiInvariantHandler</a>(<a class="code" href="classhypro_1_1State.html">State_t&lt;Number&gt;</a>* state, <span class="keywordtype">size_t</span> index){</div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;        ltiInvariantHandler() = <span class="keyword">delete</span>;</div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;        ltiInvariantHandler(State_t&lt;Number&gt;* state, <span class="keywordtype">size_t</span> index){</div>
 <div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;            mState = state;</div>
 <div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;            mIndex = index;</div>
 <div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;        }</div>
@@ -139,10 +139,9 @@ $(document).ready(function(){initNavTree('ltiInvariantHandler_8h_source.html',''
 <div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;</div>
 <div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;    };</div>
 <div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;} <span class="comment">// hypro</span></div>
-<div class="ttc" id="classhypro_1_1State_html"><div class="ttname"><a href="classhypro_1_1State.html">hypro::State</a></div><div class="ttdoc">Class for state. </div><div class="ttdef"><b>Definition:</b> <a href="State_8h_source.html#l00030">State.h:30</a></div></div>
-<div class="ttc" id="classhypro_1_1ltiInvariantHandler_html"><div class="ttname"><a href="classhypro_1_1ltiInvariantHandler.html">hypro::ltiInvariantHandler</a></div><div class="ttdef"><b>Definition:</b> <a href="ltiInvariantHandler_8h_source.html#l00007">ltiInvariantHandler.h:7</a></div></div>
-<div class="ttc" id="namespacehypro_html_ab7a1dbbbe2d40e57ecab2c9b64b3615d"><div class="ttname"><a href="namespacehypro.html#ab7a1dbbbe2d40e57ecab2c9b64b3615d">hypro::CONTAINMENT</a></div><div class="ttdeci">CONTAINMENT</div><div class="ttdoc">Enum for set containment results. If known, we can make a statement about full or partial containment...</div><div class="ttdef"><b>Definition:</b> <a href="types_8h_source.html#l00052">types.h:52</a></div></div>
-<div class="ttc" id="classhypro_1_1IInvariantHandler_html"><div class="ttname"><a href="classhypro_1_1IInvariantHandler.html">hypro::IInvariantHandler</a></div><div class="ttdef"><b>Definition:</b> <a href="IHandler_8h_source.html#l00023">IHandler.h:23</a></div></div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="preprocessor">#include &quot;ltiInvariantHandler.tpp&quot;</span></div>
+<div class="ttc" id="namespacehypro_html_ab7a1dbbbe2d40e57ecab2c9b64b3615d"><div class="ttname"><a href="namespacehypro.html#ab7a1dbbbe2d40e57ecab2c9b64b3615d">hypro::CONTAINMENT</a></div><div class="ttdeci">CONTAINMENT</div><div class="ttdoc">Enum for set containment results. If known, we can make a statement about full or partial containment...</div><div class="ttdef"><b>Definition:</b> <a href="types_8h_source.html#l00051">types.h:51</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- HTML footer for doxygen 1.8.12-->

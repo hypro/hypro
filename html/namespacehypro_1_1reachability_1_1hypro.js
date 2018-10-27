@@ -6,9 +6,6 @@ var namespacehypro_1_1reachability_1_1hypro =
       [ "NumTraits< carl::Interval< Number > >", "structhypro_1_1reachability_1_1hypro_1_1Eigen_1_1NumTraits_3_01carl_1_1Interval_3_01Number_01_4_01_4.html", "structhypro_1_1reachability_1_1hypro_1_1Eigen_1_1NumTraits_3_01carl_1_1Interval_3_01Number_01_4_01_4" ]
     ] ],
     [ "hypro", "namespacehypro_1_1reachability_1_1hypro_1_1hypro.html", "namespacehypro_1_1reachability_1_1hypro_1_1hypro" ],
-    [ "plotting", null, [
-      [ "gnuplotSettings", "structhypro_1_1reachability_1_1hypro_1_1plotting_1_1gnuplotSettings.html", "structhypro_1_1reachability_1_1hypro_1_1plotting_1_1gnuplotSettings" ]
-    ] ],
     [ "std", null, [
       [ "hash< hypro::vector_t< Number > >", "structhypro_1_1reachability_1_1hypro_1_1std_1_1hash_3_01hypro_1_1vector__t_3_01Number_01_4_01_4.html", "structhypro_1_1reachability_1_1hypro_1_1std_1_1hash_3_01hypro_1_1vector__t_3_01Number_01_4_01_4" ],
       [ "hash< hypro::matrix_t< Number > >", "structhypro_1_1reachability_1_1hypro_1_1std_1_1hash_3_01hypro_1_1matrix__t_3_01Number_01_4_01_4.html", "structhypro_1_1reachability_1_1hypro_1_1std_1_1hash_3_01hypro_1_1matrix__t_3_01Number_01_4_01_4" ]
@@ -71,6 +68,5 @@ var namespacehypro_1_1reachability_1_1hypro =
     [ "ZonotopeT", "classhypro_1_1reachability_1_1hypro_1_1ZonotopeT.html", "classhypro_1_1reachability_1_1hypro_1_1ZonotopeT" ],
     [ "DifferenceBoundsSetting", "structhypro_1_1reachability_1_1hypro_1_1DifferenceBoundsSetting.html", null ],
     [ "DifferenceBoundsT", "classhypro_1_1reachability_1_1hypro_1_1DifferenceBoundsT.html", "classhypro_1_1reachability_1_1hypro_1_1DifferenceBoundsT" ],
-    [ "Converter", "classhypro_1_1reachability_1_1hypro_1_1Converter.html", "classhypro_1_1reachability_1_1hypro_1_1Converter" ],
-    [ "Plotter", "classhypro_1_1reachability_1_1hypro_1_1Plotter.html", "classhypro_1_1reachability_1_1hypro_1_1Plotter" ]
+    [ "Converter", "classhypro_1_1reachability_1_1hypro_1_1Converter.html", "classhypro_1_1reachability_1_1hypro_1_1Converter" ]
 ];

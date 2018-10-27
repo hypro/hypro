@@ -122,6 +122,12 @@ $(document).ready(function(){initNavTree('classhypro_1_1WorkQueueT.html','');});
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
+<tr class="memitem:a5ce4502419daff1892e110c80c2f9105"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5ce4502419daff1892e110c80c2f9105"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>WorkQueueT</b> (<a class="el" href="classhypro_1_1WorkQueueT.html">WorkQueueT</a>&lt; Workable, Setting &gt; &amp;&amp;in)</td></tr>
+<tr class="separator:a5ce4502419daff1892e110c80c2f9105"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adf3b335ac5ed585c7db538f891d1956c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="adf3b335ac5ed585c7db538f891d1956c"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>WorkQueueT</b> (const <a class="el" href="classhypro_1_1WorkQueueT.html">WorkQueueT</a>&lt; Workable, Setting &gt; &amp;in)=delete</td></tr>
+<tr class="separator:adf3b335ac5ed585c7db538f891d1956c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a57ee87bd75ed2aa560fc67a9c979f245"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1WorkQueueT.html#a57ee87bd75ed2aa560fc67a9c979f245">~WorkQueueT</a> ()</td></tr>
 <tr class="separator:a57ee87bd75ed2aa560fc67a9c979f245"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac675b19ebeaa41ab596d8dd1577ff128"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1WorkQueueT.html#ac675b19ebeaa41ab596d8dd1577ff128">pushFront</a> (const Workable &amp;item)</td></tr>
@@ -145,11 +151,11 @@ Workable&#160;</td><td class="memItemRight" valign="bottom"><b>dequeueBack</b> (
 <tr class="memitem:ac23dfc87b80e72a7c181a9544229584b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac23dfc87b80e72a7c181a9544229584b"></a>
 Workable&#160;</td><td class="memItemRight" valign="bottom"><b>nonLockingDequeueBack</b> ()</td></tr>
 <tr class="separator:ac23dfc87b80e72a7c181a9544229584b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ada8b22f26130867ad231c239341c2103"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1WorkQueueT.html#ada8b22f26130867ad231c239341c2103">isEmpty</a> ()</td></tr>
-<tr class="separator:ada8b22f26130867ad231c239341c2103"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa7298393bedd283e8f4a78663af3cf7f"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa7298393bedd283e8f4a78663af3cf7f"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>nonLockingIsEmpty</b> ()</td></tr>
-<tr class="separator:aa7298393bedd283e8f4a78663af3cf7f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a199625e1a119380566df3f1e8fd7946c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1WorkQueueT.html#a199625e1a119380566df3f1e8fd7946c">isEmpty</a> () const </td></tr>
+<tr class="separator:a199625e1a119380566df3f1e8fd7946c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3dbabfab9851026334870dba3daa527d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3dbabfab9851026334870dba3daa527d"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>nonLockingIsEmpty</b> () const </td></tr>
+<tr class="separator:a3dbabfab9851026334870dba3daa527d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a97e6f8d529b21e1754463d146a94389e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a97e6f8d529b21e1754463d146a94389e"></a>
 std::size_t&#160;</td><td class="memItemRight" valign="bottom"><b>size</b> () const </td></tr>
 <tr class="separator:a97e6f8d529b21e1754463d146a94389e"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -178,7 +184,7 @@ class hypro::WorkQueueT&lt; Workable, Setting &gt;</h3>
 
 <p>Class encapsulating a thread safe queue in order to be accessed by multiple workers. </p>
 
-<p>Definition at line <a class="el" href="WorkQueue_8h_source.html#l00021">21</a> of file <a class="el" href="WorkQueue_8h_source.html">WorkQueue.h</a>.</p>
+<p>Definition at line <a class="el" href="WorkQueue_8h_source.html#l00023">23</a> of file <a class="el" href="WorkQueue_8h_source.html">WorkQueue.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="a57ee87bd75ed2aa560fc67a9c979f245"></a>
 <div class="memitem">
@@ -204,7 +210,7 @@ template&lt;class Workable, class Setting&gt; </div>
 </div><div class="memdoc">
 <p>Destructor </p>
 
-<p>Definition at line <a class="el" href="WorkQueue_8h_source.html#l00027">27</a> of file <a class="el" href="WorkQueue_8h_source.html">WorkQueue.h</a>.</p>
+<p>Definition at line <a class="el" href="WorkQueue_8h_source.html#l00038">38</a> of file <a class="el" href="WorkQueue_8h_source.html">WorkQueue.h</a>.</p>
 
 </div>
 </div>
@@ -253,7 +259,7 @@ template&lt;class Workable, class Setting&gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="ada8b22f26130867ad231c239341c2103"></a>
+<a class="anchor" id="a199625e1a119380566df3f1e8fd7946c"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
@@ -263,7 +269,7 @@ template&lt;class Workable, class Setting&gt; </div>
           <td class="memname">bool <a class="el" href="classhypro_1_1WorkQueueT.html">hypro::WorkQueueT</a>&lt; Workable, Setting &gt;::isEmpty </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
-          <td></td>
+          <td> const</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -298,7 +304,7 @@ template&lt;class Workable, class Setting&gt; </div>
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following file:<ul>
-<li>/home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/<a class="el" href="WorkQueue_8h_source.html">WorkQueue.h</a></li>
+<li>/home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/workQueue/<a class="el" href="WorkQueue_8h_source.html">WorkQueue.h</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->

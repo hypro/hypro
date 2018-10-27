@@ -1,8 +1,8 @@
 var classhypro_1_1EventTimingNode =
 [
-    [ "const_Node_t", "classhypro_1_1EventTimingNode.html#adec2d87497d2627e2af6b91e91ab12a8", null ],
-    [ "Node_t", "classhypro_1_1EventTimingNode.html#ac81cc09ef3de1bb4a0b130a4eba9d53a", null ],
-    [ "NodeList_t", "classhypro_1_1EventTimingNode.html#a1d26cb06934a54cc3fb9fc1af0cd234d", null ],
+    [ "const_Node_t", "classhypro_1_1EventTimingNode.html#ad306f5f6950916b3f4fcb50669b22421", null ],
+    [ "Node_t", "classhypro_1_1EventTimingNode.html#a1068ba43d0ec92405a14b1b0b40e3513", null ],
+    [ "NodeList_t", "classhypro_1_1EventTimingNode.html#a6fd3b63c955f5b3f0b01be239ac0d510", null ],
     [ "EventTimingNode", "classhypro_1_1EventTimingNode.html#af2562568b188548dc7d968a032610f63", null ],
     [ "EventTimingNode", "classhypro_1_1EventTimingNode.html#aaeaebcc808e7c532009738505d971500", null ],
     [ "getSettings", "classhypro_1_1EventTimingNode.html#ae3b22940bc47f4559572ac2ea843d1f9", null ],

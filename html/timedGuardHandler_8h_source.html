@@ -117,13 +117,13 @@ $(document).ready(function(){initNavTree('timedGuardHandler_8h_source.html','');
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="keyword">namespace </span>hypro</div>
 <div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;{</div>
 <div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">class</span> Representation,<span class="keyword">typename</span> Number&gt;</div>
-<div class="line"><a name="l00008"></a><span class="lineno"><a class="line" href="classhypro_1_1timedGuardHandler.html">    8</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classhypro_1_1timedGuardHandler.html">timedGuardHandler</a> : <span class="keyword">public</span> <a class="code" href="classhypro_1_1ltiGuardHandler.html">ltiGuardHandler</a>&lt;Representation,Number&gt; {</div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;    <span class="keyword">class </span>timedGuardHandler : <span class="keyword">public</span> ltiGuardHandler&lt;Representation,Number&gt; {</div>
 <div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;        <a class="code" href="classhypro_1_1timedGuardHandler.html">timedGuardHandler</a>() = <span class="keyword">delete</span>;</div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;        <a class="code" href="classhypro_1_1timedGuardHandler.html">timedGuardHandler</a>(std::shared_ptr&lt;<a class="code" href="classhypro_1_1State.html">State_t&lt;Number&gt;</a>&gt; state, <span class="keywordtype">size_t</span> index, <a class="code" href="classhypro_1_1Transition.html">Transition&lt;Number&gt;</a>* transition) : <a class="code" href="classhypro_1_1ltiGuardHandler.html">ltiGuardHandler&lt;Representation,Number&gt;</a>(state,index,transition){</div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;        timedGuardHandler() = <span class="keyword">delete</span>;</div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;        timedGuardHandler(std::shared_ptr&lt;State_t&lt;Number&gt;&gt; state, <span class="keywordtype">size_t</span> index, Transition&lt;Number&gt;* transition) : ltiGuardHandler&lt;Representation,Number&gt;(state,index,transition){</div>
 <div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;            <span class="comment">// 0.1 because standard before timed of same dimension</span></div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;            <span class="keywordflow">if</span>(<a class="code" href="classhypro_1_1SettingsProvider.html">SettingsProvider&lt;Number&gt;::getInstance</a>().decomposeAutomaton()){</div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;                this-&gt;mSortIndex = 0.1+<a class="code" href="classhypro_1_1SettingsProvider.html">SettingsProvider&lt;Number&gt;::getInstance</a>().getSubspaceDecomposition().at(this-&gt;mIndex).size();</div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;            <span class="keywordflow">if</span>(SettingsProvider&lt;Number&gt;::getInstance().decomposeAutomaton()){</div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;                this-&gt;mSortIndex = 0.1+SettingsProvider&lt;Number&gt;::getInstance().getSubspaceDecomposition().at(this-&gt;mIndex).size();</div>
 <div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;            }</div>
 <div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;            <span class="keywordflow">else</span>{</div>
 <div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;                this-&gt;mSortIndex = 0;</div>
@@ -138,11 +138,8 @@ $(document).ready(function(){initNavTree('timedGuardHandler_8h_source.html','');
 <div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;</div>
 <div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;    };</div>
 <div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;} <span class="comment">// hypro</span></div>
-<div class="ttc" id="classhypro_1_1SettingsProvider_html"><div class="ttname"><a href="classhypro_1_1SettingsProvider.html">hypro::SettingsProvider</a></div><div class="ttdef"><b>Definition:</b> <a href="SettingsProvider_8h_source.html#l00020">SettingsProvider.h:20</a></div></div>
-<div class="ttc" id="classhypro_1_1Transition_html"><div class="ttname"><a href="classhypro_1_1Transition.html">hypro::Transition</a></div><div class="ttdoc">Class for transition. </div><div class="ttdef"><b>Definition:</b> <a href="Location_8h_source.html#l00021">Location.h:21</a></div></div>
-<div class="ttc" id="classhypro_1_1State_html"><div class="ttname"><a href="classhypro_1_1State.html">hypro::State</a></div><div class="ttdoc">Class for state. </div><div class="ttdef"><b>Definition:</b> <a href="State_8h_source.html#l00030">State.h:30</a></div></div>
-<div class="ttc" id="classhypro_1_1ltiGuardHandler_html"><div class="ttname"><a href="classhypro_1_1ltiGuardHandler.html">hypro::ltiGuardHandler</a></div><div class="ttdef"><b>Definition:</b> <a href="ltiGuardHandler_8h_source.html#l00008">ltiGuardHandler.h:8</a></div></div>
-<div class="ttc" id="classhypro_1_1timedGuardHandler_html"><div class="ttname"><a href="classhypro_1_1timedGuardHandler.html">hypro::timedGuardHandler</a></div><div class="ttdef"><b>Definition:</b> <a href="timedGuardHandler_8h_source.html#l00008">timedGuardHandler.h:8</a></div></div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="preprocessor">#include &quot;timedGuardHandler.tpp&quot;</span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- HTML footer for doxygen 1.8.12-->

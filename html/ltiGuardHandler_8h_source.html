@@ -117,23 +117,23 @@ $(document).ready(function(){initNavTree('ltiGuardHandler_8h_source.html','');})
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="keyword">namespace </span>hypro</div>
 <div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;{</div>
 <div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">class</span> Representation,<span class="keyword">typename</span> Number&gt;</div>
-<div class="line"><a name="l00008"></a><span class="lineno"><a class="line" href="classhypro_1_1ltiGuardHandler.html">    8</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classhypro_1_1ltiGuardHandler.html">ltiGuardHandler</a> : <span class="keyword">public</span> <a class="code" href="classhypro_1_1IGuardHandler.html">IGuardHandler</a>&lt;Number&gt; {</div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;    <span class="keyword">class </span>ltiGuardHandler : <span class="keyword">public</span> IGuardHandler&lt;Number&gt; {</div>
 <div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;    <span class="keyword">protected</span>:</div>
 <div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;        <span class="keywordtype">bool</span> mSatisfies = <span class="keyword">false</span>;</div>
 <div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;        <span class="keywordtype">bool</span> mMarkedForDelete =<span class="keyword">false</span>;</div>
 <div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;        std::shared_ptr&lt;State_t&lt;Number&gt;&gt; mGuardSatisfyingState; </div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;        <a class="code" href="classhypro_1_1Transition.html">hypro::Transition&lt;Number&gt;</a>* mTransition;</div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;        Transition&lt;Number&gt;* mTransition;</div>
 <div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;</div>
 <div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;        <span class="keywordtype">size_t</span> mIndex;</div>
 <div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;        <span class="keywordtype">double</span> mSortIndex;</div>
 <div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;        <a class="code" href="classhypro_1_1ltiGuardHandler.html">ltiGuardHandler</a>() = <span class="keyword">delete</span>;</div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;        <a class="code" href="classhypro_1_1ltiGuardHandler.html">ltiGuardHandler</a>(std::shared_ptr&lt;<a class="code" href="classhypro_1_1State.html">State_t&lt;Number&gt;</a>&gt; state, <span class="keywordtype">size_t</span> index, <a class="code" href="classhypro_1_1Transition.html">hypro::Transition&lt;Number&gt;</a>* transition){</div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;        ltiGuardHandler() = <span class="keyword">delete</span>;</div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;        ltiGuardHandler(std::shared_ptr&lt;State_t&lt;Number&gt;&gt; state, <span class="keywordtype">size_t</span> index, Transition&lt;Number&gt;* transition){</div>
 <div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;            mGuardSatisfyingState = state;</div>
 <div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;            mIndex = index;</div>
 <div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;            mTransition = transition;</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;            <span class="keywordflow">if</span>(<a class="code" href="classhypro_1_1SettingsProvider.html">SettingsProvider&lt;Number&gt;::getInstance</a>().decomposeAutomaton()){</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;                mSortIndex = <a class="code" href="classhypro_1_1SettingsProvider.html">SettingsProvider&lt;Number&gt;::getInstance</a>().getSubspaceDecomposition().at(mIndex).size();</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;            <span class="keywordflow">if</span>(SettingsProvider&lt;Number&gt;::getInstance().decomposeAutomaton()){</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;                mSortIndex = SettingsProvider&lt;Number&gt;::getInstance().getSubspaceDecomposition().at(mIndex).size();</div>
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;            }</div>
 <div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;            <span class="keywordflow">else</span>{</div>
 <div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;                mSortIndex = 0;</div>
@@ -145,7 +145,7 @@ $(document).ready(function(){initNavTree('ltiGuardHandler_8h_source.html','');})
 <div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;        <span class="comment">// return containment status</span></div>
 <div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;        <span class="keyword">virtual</span> <span class="keywordtype">bool</span> satisfiesGuard()<span class="keyword"> override </span>{<span class="keywordflow">return</span> mSatisfies;}</div>
 <div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;        <span class="keyword">virtual</span> std::shared_ptr&lt;State_t&lt;Number&gt;&gt; getState()<span class="keyword"> override</span>{<span class="keywordflow">return</span> mGuardSatisfyingState;}     </div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;        <span class="keyword">virtual</span> <span class="keywordtype">void</span> setState(std::shared_ptr&lt;<a class="code" href="classhypro_1_1State.html">State_t&lt;Number&gt;</a>&gt; ptr)<span class="keyword"> override</span>{mGuardSatisfyingState = ptr;}</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;        <span class="keyword">virtual</span> <span class="keywordtype">void</span> setState(std::shared_ptr&lt;State_t&lt;Number&gt;&gt; ptr)<span class="keyword"> override</span>{mGuardSatisfyingState = ptr;}</div>
 <div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;        <span class="keywordtype">void</span> reinitialize();</div>
 <div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;        <span class="keyword">virtual</span> <span class="keywordtype">double</span> getSortIndex()<span class="keyword"> override </span>{<span class="keywordflow">return</span> mSortIndex;}</div>
 <div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;        <span class="keyword">virtual</span> <span class="keywordtype">void</span> setSortIndex(<span class="keywordtype">double</span> sortIndex)<span class="keyword"> override </span>{ mSortIndex = sortIndex;}</div>
@@ -154,11 +154,8 @@ $(document).ready(function(){initNavTree('ltiGuardHandler_8h_source.html','');})
 <div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;        <span class="keyword">virtual</span> <span class="keywordtype">void</span> setMarkedForDelete(<span class="keywordtype">bool</span> toDelete)<span class="keyword"> override </span>{ mMarkedForDelete = toDelete;}</div>
 <div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    };</div>
 <div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;} <span class="comment">// hypro</span></div>
-<div class="ttc" id="classhypro_1_1SettingsProvider_html"><div class="ttname"><a href="classhypro_1_1SettingsProvider.html">hypro::SettingsProvider</a></div><div class="ttdef"><b>Definition:</b> <a href="SettingsProvider_8h_source.html#l00020">SettingsProvider.h:20</a></div></div>
-<div class="ttc" id="classhypro_1_1IGuardHandler_html"><div class="ttname"><a href="classhypro_1_1IGuardHandler.html">hypro::IGuardHandler</a></div><div class="ttdef"><b>Definition:</b> <a href="IHandler_8h_source.html#l00044">IHandler.h:44</a></div></div>
-<div class="ttc" id="classhypro_1_1Transition_html"><div class="ttname"><a href="classhypro_1_1Transition.html">hypro::Transition</a></div><div class="ttdoc">Class for transition. </div><div class="ttdef"><b>Definition:</b> <a href="Location_8h_source.html#l00021">Location.h:21</a></div></div>
-<div class="ttc" id="classhypro_1_1State_html"><div class="ttname"><a href="classhypro_1_1State.html">hypro::State</a></div><div class="ttdoc">Class for state. </div><div class="ttdef"><b>Definition:</b> <a href="State_8h_source.html#l00030">State.h:30</a></div></div>
-<div class="ttc" id="classhypro_1_1ltiGuardHandler_html"><div class="ttname"><a href="classhypro_1_1ltiGuardHandler.html">hypro::ltiGuardHandler</a></div><div class="ttdef"><b>Definition:</b> <a href="ltiGuardHandler_8h_source.html#l00008">ltiGuardHandler.h:8</a></div></div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;<span class="preprocessor">#include &quot;ltiGuardHandler.tpp&quot;</span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- HTML footer for doxygen 1.8.12-->

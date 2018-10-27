@@ -1,8 +1,8 @@
 var classhypro_1_1ReachTreeNode =
 [
-    [ "const_Node_t", "classhypro_1_1ReachTreeNode.html#a6704bce896db6a5bf686b51a74a7bade", null ],
-    [ "Node_t", "classhypro_1_1ReachTreeNode.html#ade4418475738b525e385d62071ff42b7", null ],
-    [ "NodeList_t", "classhypro_1_1ReachTreeNode.html#a4cd8857c93f9f9e4a432b252f5244957", null ],
+    [ "const_Node_t", "classhypro_1_1ReachTreeNode.html#a25e978af1d0388745f281c96bfc70b73", null ],
+    [ "Node_t", "classhypro_1_1ReachTreeNode.html#adc1c51e0e8161d12dd938861c11d4613", null ],
+    [ "NodeList_t", "classhypro_1_1ReachTreeNode.html#a66816a3e4a96565401b7b30fd578f3c5", null ],
     [ "ReachTreeNode", "classhypro_1_1ReachTreeNode.html#a9dc8ba738601c76e14d4184d18d93097", null ],
     [ "~ReachTreeNode", "classhypro_1_1ReachTreeNode.html#ac7229539b30297ad93e0d5ee7c5cf93d", null ],
     [ "ReachTreeNode", "classhypro_1_1ReachTreeNode.html#a2b352e1f9d1c359af7bb7a859e60309b", null ],
@@ -34,5 +34,8 @@ var classhypro_1_1ReachTreeNode =
     [ "updateContent", "classhypro_1_1ReachTreeNode.html#a624f6001c53591c25abcd99ba40dfb62", null ],
     [ "operator<", "classhypro_1_1ReachTreeNode.html#af3c75eb9ff760c6014079313fadc2c69", null ],
     [ "operator<<", "classhypro_1_1ReachTreeNode.html#acabd256b3544bc734f38498cb0eb9c92", null ],
-    [ "operator==", "classhypro_1_1ReachTreeNode.html#a23ba09b94be7b9ca98f17ae75a028935", null ]
+    [ "operator==", "classhypro_1_1ReachTreeNode.html#a23ba09b94be7b9ca98f17ae75a028935", null ],
+    [ "mPath", "classhypro_1_1ReachTreeNode.html#a328e83757adacc36e024338e730ea5e0", null ],
+    [ "mRefinements", "classhypro_1_1ReachTreeNode.html#a26bbe137d3f261355eb7c9056b300d1e", null ],
+    [ "mutex", "classhypro_1_1ReachTreeNode.html#afd50ff67dedbb3f1831090c81b0acadc", null ]
 ];

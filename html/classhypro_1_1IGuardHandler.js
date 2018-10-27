@@ -1,5 +1,6 @@
 var classhypro_1_1IGuardHandler =
 [
+    [ "~IGuardHandler", "classhypro_1_1IGuardHandler.html#a6a44c31300a42b0abaf5df584873d072", null ],
     [ "getMarkedForDelete", "classhypro_1_1IGuardHandler.html#adb0eeef3203ea765741ce02a45136c54", null ],
     [ "getSortIndex", "classhypro_1_1IGuardHandler.html#add50075818d5151a728d8c8e969136bf", null ],
     [ "getState", "classhypro_1_1IGuardHandler.html#a5b907d5abc5453ea5fecd6dcf420fbb1", null ],

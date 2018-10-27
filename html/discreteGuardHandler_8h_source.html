@@ -117,12 +117,12 @@ $(document).ready(function(){initNavTree('discreteGuardHandler_8h_source.html','
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="keyword">namespace </span>hypro</div>
 <div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;{</div>
 <div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">class</span> Representation,<span class="keyword">typename</span> Number&gt;</div>
-<div class="line"><a name="l00008"></a><span class="lineno"><a class="line" href="classhypro_1_1discreteGuardHandler.html">    8</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classhypro_1_1discreteGuardHandler.html">discreteGuardHandler</a> : <span class="keyword">public</span> <a class="code" href="classhypro_1_1ltiGuardHandler.html">ltiGuardHandler</a>&lt;Representation,Number&gt; {</div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;    <span class="keyword">class </span>discreteGuardHandler : <span class="keyword">public</span> ltiGuardHandler&lt;Representation,Number&gt; {</div>
 <div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;    <span class="keyword">protected</span>:</div>
 <div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;        <span class="keywordtype">bool</span> mComputed = <span class="keyword">false</span>;</div>
 <div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;        <a class="code" href="classhypro_1_1discreteGuardHandler.html">discreteGuardHandler</a>() = <span class="keyword">delete</span>;</div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;        <a class="code" href="classhypro_1_1discreteGuardHandler.html">discreteGuardHandler</a>(std::shared_ptr&lt;<a class="code" href="classhypro_1_1State.html">State_t&lt;Number&gt;</a>&gt; state, <span class="keywordtype">size_t</span> index, <a class="code" href="classhypro_1_1Transition.html">hypro::Transition&lt;Number&gt;</a>* transition) : <a class="code" href="classhypro_1_1ltiGuardHandler.html">ltiGuardHandler&lt;Representation,Number&gt;</a>(state,index,transition){</div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;        discreteGuardHandler() = <span class="keyword">delete</span>;</div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;        discreteGuardHandler(std::shared_ptr&lt;State_t&lt;Number&gt;&gt; state, <span class="keywordtype">size_t</span> index, <a class="code" href="classhypro_1_1Transition.html">hypro::Transition&lt;Number&gt;</a>* transition) : ltiGuardHandler&lt;Representation,Number&gt;(state,index,transition){</div>
 <div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;            this-&gt;mSortIndex = 0;</div>
 <div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;        }</div>
 <div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;        </div>
@@ -133,10 +133,9 @@ $(document).ready(function(){initNavTree('discreteGuardHandler_8h_source.html','
 <div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;        <span class="keyword">virtual</span> <span class="keywordtype">void</span> setSortIndex(<span class="keywordtype">double</span> sortIndex)<span class="keyword"> override </span>{this-&gt;mSortIndex = sortIndex;}</div>
 <div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;    };</div>
 <div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;} <span class="comment">// hypro</span></div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="preprocessor">#include &quot;discreteGuardHandler.tpp&quot;</span></div>
 <div class="ttc" id="classhypro_1_1Transition_html"><div class="ttname"><a href="classhypro_1_1Transition.html">hypro::Transition</a></div><div class="ttdoc">Class for transition. </div><div class="ttdef"><b>Definition:</b> <a href="Location_8h_source.html#l00021">Location.h:21</a></div></div>
-<div class="ttc" id="classhypro_1_1State_html"><div class="ttname"><a href="classhypro_1_1State.html">hypro::State</a></div><div class="ttdoc">Class for state. </div><div class="ttdef"><b>Definition:</b> <a href="State_8h_source.html#l00030">State.h:30</a></div></div>
-<div class="ttc" id="classhypro_1_1ltiGuardHandler_html"><div class="ttname"><a href="classhypro_1_1ltiGuardHandler.html">hypro::ltiGuardHandler</a></div><div class="ttdef"><b>Definition:</b> <a href="ltiGuardHandler_8h_source.html#l00008">ltiGuardHandler.h:8</a></div></div>
-<div class="ttc" id="classhypro_1_1discreteGuardHandler_html"><div class="ttname"><a href="classhypro_1_1discreteGuardHandler.html">hypro::discreteGuardHandler</a></div><div class="ttdef"><b>Definition:</b> <a href="discreteGuardHandler_8h_source.html#l00008">discreteGuardHandler.h:8</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- HTML footer for doxygen 1.8.12-->
