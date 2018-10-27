@@ -9,7 +9,7 @@
 #include "../../../datastructures/reachability/workQueue/WorkQueue.h"
 
 #include "../../../util/logging/Logger.h"
-#include "../../../util/PlotData.h"
+#include "../../../util/plotting/PlotData.h"
 
 #include "../../../datastructures/HybridAutomaton/decomposition/DecisionEntity.h"
 

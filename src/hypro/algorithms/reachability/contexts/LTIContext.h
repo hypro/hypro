@@ -12,7 +12,7 @@
 #include "../../../datastructures/reachability/timing/EventTimingContainer.h"
 #include "../../../datastructures/HybridAutomaton/decomposition/DecisionEntity.h"
 #include "../../../util/logging/Logger.h"
-#include "../../../util/PlotData.h"
+#include "../../../util/plotting/PlotData.h"
 
 namespace hypro
 {

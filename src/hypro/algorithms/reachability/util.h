@@ -1,7 +1,6 @@
 #pragma once
 #include "TrafoParameters.h"
 #include "../../representations/GeometricObject.h"
-#include "../../util/Plotter.h"
 #include <carl/util/SFINAE.h>
 
 namespace hypro {

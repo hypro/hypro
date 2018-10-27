@@ -7,11 +7,9 @@
  */
 
 #include "../../hypro/representations/GeometricObject.h"
-#include "../../hypro/util/Plotter.h"
+#include "../../hypro/util/plotting/Plotter.h"
 #include "gtest/gtest.h"
 #include "../defines.h"
-
-#include "util/Plotter.h"
 
 
 using namespace hypro;

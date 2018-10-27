@@ -5,7 +5,7 @@
 #include "../../../datastructures/reachability/Task.h"
 #include "../../../datastructures/reachability/workQueue/WorkQueue.h"
 #include "../../../types.h"
-#include "../../../util/PlotData.h"
+#include "../../../util/plotting/PlotData.h"
 #include "../../../datastructures/reachability/Settings.h"
 #include <atomic>
 #include <boost/any.hpp>
