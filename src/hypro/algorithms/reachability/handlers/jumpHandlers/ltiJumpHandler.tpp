@@ -89,7 +89,7 @@ namespace hypro {
 						#endif
 					}
 				}
-				INFO("hydra.worker.discrete","No backtracking. localQueue is now:\n" << *(mLocalQueue) << "localCEXQueue is now:\n" << *(mLocalCEXQueue));
+				//INFO("hydra.worker.discrete","No backtracking. localQueue is now:\n" << *(mLocalQueue) << "localCEXQueue is now:\n" << *(mLocalCEXQueue));
 			} else { // there are already children, which need to be mapped. This is irregardless, whether the current task was a
 						// refinement task or not. Upon queuing we decide, whether the new task will be a refinement task or not.
 						// Edit: It is not irregardless of backtracking. If there are already children, but it is not a bt-task, these children might

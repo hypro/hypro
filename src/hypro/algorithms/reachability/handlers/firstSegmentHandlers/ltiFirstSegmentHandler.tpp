@@ -45,8 +45,8 @@ namespace hypro
 
         State_t<Number> firstSegment(mState->getLocation());
         unsigned dimension = boost::get<Representation>(mState->getSet(mIndex)).dimension();
-       Box<Number> externalInput(std::make_pair(Point<Number>(vector_t<Number>::Zero(dimension+1)),
-                                                       Point<Number>(vector_t<Number>::Zero(dimension+1))));
+        Box<Number> externalInput(std::make_pair(Point<Number>(vector_t<Number>::Zero(dimension)),
+                                                       Point<Number>(vector_t<Number>::Zero(dimension))));
 
         std::vector<Box<Number>> errorBoxVector =
               errorBoxes(carl::convert<tNumber,Number>(mTimeStep), mState->getLocation()->getFlow(mIndex), *mState, trafoMatrix, externalInput);       

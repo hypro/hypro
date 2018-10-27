@@ -91,6 +91,15 @@ boost::tuple<CONTAINMENT, State, matrix_t<Number>, vector_t<Number>, Box<Number>
     assert(!_state.getTimestamp().isEmpty());
     // check if initial Valuation fulfills Invariant
     assert(_state.getLocation() != nullptr);
+
+    #ifdef HYPRO_LOGGING
+        TRACE("hypro.reachability", "Location: " << _state.getLocation()->getName() << std::endl);
+        double convertedTimeStep =carl::convert<tNumber,double>(timeStep);
+        TRACE("hypro.reachability", "Time step size: " << timeStep << "(" << convertedTimeStep << ")" << std::endl);
+        TRACE("hypro.reachability", "------" << std::endl);
+        #endif
+
+
     DEBUG("hypro.reachability","Check invariant: " << _state.getLocation()->getInvariant() << " for set " << _state);
     std::pair<CONTAINMENT,State> initialPair = _state.satisfies(_state.getLocation()->getInvariant());
 
