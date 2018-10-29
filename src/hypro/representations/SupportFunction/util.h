@@ -8,6 +8,7 @@
 
 #include "../../config.h"
 #include "../../types.h"
+#include "../../util/adaptions_eigen/adaptions_eigen.h"
 #ifdef HYPRO_USE_VECTOR_CACHING
 #include "../../datastructures/LRUCache.h"
 #endif
@@ -69,6 +70,7 @@ namespace hypro {
 		mutable LRUCache<Cacheable<matrix_t<Number>>, matrix_t<Number>> mMatrixCache;
 		#endif
 		unsigned power = 2; // 2^power operations are collected
+		mutable std::size_t mHash = 0;
 
 		lintrafoParameters() = delete;
 
@@ -96,6 +98,16 @@ namespace hypro {
 		vector_t<Number> vector() const {
 			assert(parameters.begin()->first == 1);
 			return parameters.begin()->second.second;
+		}
+
+		std::size_t hash() const {
+			if(mHash == 0) {
+				//std::hash<hypro::vector_t<Number>> vectorHasher;
+				//std::hash<hypro::matrix_t<Number>> matrixHasher;
+				mHash = std::hash<hypro::vector_t<Number>>()(this->parameters.begin()->second.second);
+				carl::hash_add(mHash, std::hash<hypro::matrix_t<Number>>()(this->parameters.begin()->second.first));
+			}
+			return mHash;
 		}
 
 		const std::pair<matrix_t<Number>, vector_t<Number>>& getParameterSet(unsigned exponent) const {
@@ -169,6 +181,10 @@ namespace hypro {
 		}
 
 		bool operator== (const lintrafoParameters<Number>& rhs) const {
+			//return (this->parameters.begin()->second == rhs.parameters.begin()->second);
+			if( this->hash() != rhs.hash() ) {
+				return false;
+			}
 			return (this->parameters.begin()->second == rhs.parameters.begin()->second);
 		}
 
