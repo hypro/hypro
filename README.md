@@ -9,6 +9,7 @@ https://ths.rwth-aachen.de/research/projects/hypro/
 Current TravisCi build state:
 
 master: [![Build Status](https://travis-ci.org/hypro/hypro.svg?branch=master)](https://travis-ci.org/hypro/hypro)
+
 alpha:  [![Build Status](https://travis-ci.org/hypro/hypro.svg?branch=alpha)](https://travis-ci.org/hypro/hypro)
 
 Current Coveralls state:
