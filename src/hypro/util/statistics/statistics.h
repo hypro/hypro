@@ -6,6 +6,8 @@
 #define PRINT_STATS()
 #define RESET_STATS()
 #define COUNT(expr)
+#define START_BENCHMARK_OPERATION(expr)
+#define EVALUATE_BENCHMARK_RESULT(expr)          
 
 #ifdef HYPRO_STATISTICS
 #define INCL_FROM_STATISTICS
@@ -49,8 +51,16 @@ namespace statistics {
 #undef PRINT_STATS
 #undef RESET_STATS
 #undef COUNT
+#undef START_BENCHMARK_OPERATION
+#undef EVALUATE_BENCHMARK_RESULT
 #define PRINT_STATS() std::cout << hypro::statistics::Statistician::getInstance() << std::endl;
 #define RESET_STATS() hypro::statistics::Statistician::getInstance().reset();
 #define COUNT(expr) ++hypro::statistics::Statistician::getInstance().get(expr);
+#define START_BENCHMARK_OPERATION(name) std::chrono::high_resolution_clock::time_point name = std::chrono::high_resolution_clock::now()
+#define EVALUATE_BENCHMARK_RESULT(name)                                                                                  \
+    do {                                                                                                                 \
+        std::chrono::high_resolution_clock::time_point name##_##end = std::chrono::high_resolution_clock::now();         \
+        COUT(#name << " took " << std::chrono::duration<double>(name##_##end - name).count() << "s" << std::endl); \
+    } while (0)
 
 #endif

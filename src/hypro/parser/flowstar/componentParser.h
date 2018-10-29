@@ -333,9 +333,9 @@ namespace parser {
 
 	template <typename Iterator, typename Number>
 	struct settingsParser
-	    : qi::grammar<Iterator, hypro::ReachabilitySettings<Number>(symbol_table const&),Skipper>
+	    : qi::grammar<Iterator, hypro::ReachabilitySettings(symbol_table const&),Skipper>
 	{
-		hypro::ReachabilitySettings<Number> mLocalSettings;
+		hypro::ReachabilitySettings mLocalSettings;
 		px::function<ErrorHandler> errorHandler;
 
 		settingsParser() : settingsParser::base_type( start ), mLocalSettings() {
@@ -386,7 +386,7 @@ namespace parser {
  			mLocalSettings.plotDimensions.push_back(_dimensions);
  		}
 
-		qi::rule<Iterator, hypro::ReachabilitySettings<Number>(symbol_table const&), Skipper> start;
+		qi::rule<Iterator, hypro::ReachabilitySettings(symbol_table const&), Skipper> start;
 		qi::rule<Iterator, Skipper> steps;
 		qi::rule<Iterator, Skipper> order;
 		qi::rule<Iterator, Skipper> time;

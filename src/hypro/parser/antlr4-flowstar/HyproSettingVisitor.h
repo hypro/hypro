@@ -15,7 +15,7 @@
 #include "HybridAutomatonParser.h"
 #include "HybridAutomatonBaseVisitor.h"
 #include "HyproFormulaVisitor.h"
-#include "../../datastructures/HybridAutomaton/Settings.h"
+#include "../../datastructures/reachability/Settings.h"
 #include <math.h>
 
 using namespace antlr4;

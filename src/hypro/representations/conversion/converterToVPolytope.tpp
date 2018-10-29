@@ -16,8 +16,8 @@
  * Is the caller function for the recursive method that computes exactly one boundary point for each direction that it gets (via support function)
  */
 
-template <typename Number, typename Converter>
-std::vector<Point<Number>> computeBoundaryPointsExpensive (const SupportFunctionT<Number,Converter,SupportFunctionSetting>& sf, const matrix_t<Number>& directions) {
+template <typename Number, typename Converter, typename sfSetting>
+std::vector<Point<Number>> computeBoundaryPointsExpensive (const SupportFunctionT<Number,Converter,sfSetting>& sf, const matrix_t<Number>& directions) {
  //determines how many directions need to be checked
     Eigen::Index numberOfDirections = directions.rows();
     //gets dimension in which is currently computed
@@ -69,7 +69,7 @@ std::vector<Point<Number>> computeBoundaryPointsExpensive (const SupportFunction
         //evaluates the object in the first direction (any direction produces the same result)
         EvaluationResult<Number> point = sf.evaluate(directions.row(1));
         //there needs to be a result here, otherwise something went terribly wrong
-        assert(point.errorCode != INFEAS && point.errorCode != UNKNOWN);
+        assert(point.errorCode !=SOLUTION::INFEAS && point.errorCode !=SOLUTION::UNKNOWN);
         res.emplace_back(point.optimumValue);
         assert(sf.contains(Point<Number>(point.optimumValue)));
    }
@@ -79,8 +79,8 @@ std::vector<Point<Number>> computeBoundaryPointsExpensive (const SupportFunction
     /*
      *Recursively computes some boundary points that lie relatively central for each face of the object, this function is constructed to only be called by computeBoundaryPoints
      */
-template <typename Number, typename Converter>
-Point<Number> computeBoundaryPointsExpensiveRecursive (const SupportFunctionT<Number,Converter,SupportFunctionSetting>& sf, const matrix_t<Number>& directions, std::size_t curDim) {
+template <typename Number, typename Converter, typename sfSetting>
+Point<Number> computeBoundaryPointsExpensiveRecursive (const SupportFunctionT<Number,Converter,sfSetting>& sf, const matrix_t<Number>& directions, std::size_t curDim) {
     //determines how many directions need to be checked
     Eigen::Index numberOfDirections = directions.rows();
     //only continue if directions and object match dimensionwise
@@ -136,7 +136,7 @@ Point<Number> computeBoundaryPointsExpensiveRecursive (const SupportFunctionT<Nu
         //evaluates the object in the first direction (any direction produces the same result)
         EvaluationResult<Number> point = sf.evaluate(directions.row(1));
         //there needs to be a result here, otherwise something went terribly wrong
-        assert(point.errorCode != INFEAS && point.errorCode != UNKNOWN);
+        assert(point.errorCode !=SOLUTION::INFEAS && point.errorCode !=SOLUTION::UNKNOWN);
         res = Point<Number>(point.optimumValue);
         assert(sf.contains(point.optimumValue));
         //std::cout << "deepest floor point:" << point.optimumValue << std::endl;
@@ -220,7 +220,8 @@ typename Converter<Number>::VPolytope Converter<Number>::toVPolytope( const Zono
 // conversion from Support Function to V-Polytope (OVER, UNDER or ALTERNATIVE)
 //ALTERNATIVE mode gives an underapproximation that is probably better but costs a lot more to compute
 template<typename Number>
-typename Converter<Number>::VPolytope Converter<Number>::toVPolytope( const SupportFunction& _source, const CONV_MODE mode, std::size_t numberOfDirections){
+template<typename sfSetting>
+typename Converter<Number>::VPolytope Converter<Number>::toVPolytope( const SupportFunctionT<Number,Converter,sfSetting>& _source, const CONV_MODE mode, std::size_t numberOfDirections){
 	VPolytope target;
 	if (mode == OVER){
 		//gets dimension of source object

@@ -85,12 +85,21 @@ void bloatBox(State& in, const Box<Number>& bloatBox) {
 	}
 }
 
-template <typename Number, typename tNumber, typename State>
+template <typename Number, typename State>
 boost::tuple<CONTAINMENT, State, matrix_t<Number>, vector_t<Number>, Box<Number>> computeFirstSegment(const State& _state, tNumber timeStep)
 {
     assert(!_state.getTimestamp().isEmpty());
     // check if initial Valuation fulfills Invariant
     assert(_state.getLocation() != nullptr);
+
+    #ifdef HYPRO_LOGGING
+        TRACE("hypro.reachability", "Location: " << _state.getLocation()->getName() << std::endl);
+        double convertedTimeStep =carl::convert<tNumber,double>(timeStep);
+        TRACE("hypro.reachability", "Time step size: " << timeStep << "(" << convertedTimeStep << ")" << std::endl);
+        TRACE("hypro.reachability", "------" << std::endl);
+        #endif
+
+
     DEBUG("hypro.reachability","Check invariant: " << _state.getLocation()->getInvariant() << " for set " << _state);
     std::pair<CONTAINMENT,State> initialPair = _state.satisfies(_state.getLocation()->getInvariant());
 
@@ -99,7 +108,7 @@ boost::tuple<CONTAINMENT, State, matrix_t<Number>, vector_t<Number>, Box<Number>
     //TRACE("hypro.reachability","Initial pair segment: " << tmp3);
     #endif
 
-    if (initialPair.first) {
+    if (initialPair.first != CONTAINMENT::NO) {
 
     	// if the location has no flow, stop computation and exit.
         if (_state.getLocation()->getFlow() == matrix_t<Number>::Zero(_state.getLocation()->getFlow(0).rows(), _state.getLocation()->getFlow(0).cols())) {
@@ -230,7 +239,7 @@ boost::tuple<CONTAINMENT, State, matrix_t<Number>, vector_t<Number>, Box<Number>
         TRACE("hypro.reachability","Check invariant.");
         std::pair<CONTAINMENT, State> fullSegment = firstSegment.satisfies(_state.getLocation()->getInvariant());
         TRACE("hypro.reachability","Check invariant - done.");
-        if (fullSegment.first) {
+        if (fullSegment.first != CONTAINMENT::NO) {
         	//fullSegment.second.setTimestamp(carl::Interval<tNumber>(fullSegment.second.getTimestamp().lower(),fullSegment.second.getTimestamp().upper() + timeStep));
         	#ifdef HYPRO_LOGGING
         	// DBG

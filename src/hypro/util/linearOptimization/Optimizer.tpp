@@ -197,9 +197,9 @@ namespace hypro {
 		}
 
 		// if there is a valid solution (FEAS), it implies the optimumValue is set.
-		//assert(res.errorCode  != FEAS || (res.optimumValue.rows() > 1 || (res.optimumValue != vector_t<Number>::Zero(0) && res.supportValue > 0 )));
+		//assert(res.errorCode  !=SOLUTION::FEAS || (res.optimumValue.rows() > 1 || (res.optimumValue != vector_t<Number>::Zero(0) && res.supportValue > 0 )));
 		//std::cout << "Point: " << res.optimumValue << " contained: " << checkPoint(Point<Number>(res.optimumValue)) << ", Solution is feasible: " << (res.errorCode==SOLUTION::FEAS) << std::endl;
-		//assert(res.errorCode  != FEAS || checkPoint(Point<Number>(res.optimumValue)));
+		//assert(res.errorCode  !=SOLUTION::FEAS || checkPoint(Point<Number>(res.optimumValue)));
 		#ifdef DEBUG_MSG
 		//std::cout << "Final solution distance: " << res.supportValue << std::endl;
 		#endif

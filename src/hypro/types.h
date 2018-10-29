@@ -13,6 +13,12 @@
 
 // global typedefs
 namespace hypro {
+
+	/**
+	 * @brief Number type used for timings and time intervals.
+	 */
+	using tNumber = mpq_class;
+
     /**
      * typedef wrapping an Eigen::Matrix type with only one column.
      */
@@ -31,19 +37,30 @@ namespace hypro {
     /**
      * @brief      Enum implementing a tribool.
      */
-    enum TRIBOOL{TRUE,FALSE,NSET};
+    enum class TRIBOOL{TRUE,FALSE,NSET};
 
     /**
      * @brief      Enum of possible solution types for linear optimization.
      */
-    enum SOLUTION { FEAS = 0, INFEAS, INFTY, UNKNOWN };
+    enum class SOLUTION { FEAS = 0, INFEAS, INFTY, UNKNOWN };
 
     /**
      * @brief      Enum for set containment results. If known, we can make a statement
-     * about full or partial containment, otherwise fall back to YES/NO. Note: implicit conversion to bool still gives
-     * correct results (NO = 0). BOT is used for UNKNOWN.
+     * about full or partial containment, otherwise fall back to YES/NO. Note: BOT is used for UNKNOWN.
      */
-    enum CONTAINMENT{ NO = 0, FULL, PARTIAL, YES, BOT };
+    enum class CONTAINMENT{ NO = 0, FULL, PARTIAL, YES, BOT };
+
+	/**
+	 * @brief classifies the type of subspace in case subspace decomposition is used.
+	 */
+	enum class SUBSPACETYPE{LTI=0,TIMED=1,DISCRETE=2};
+
+	/**
+	 * @brief classifies the type of location, which reflects the dynamics in case we dynamically detect subspaces.
+	 */
+	enum class LOCATIONTYPE{LTILOC=0,TIMEDLOC=1};
+
+	enum class AGG_SETTING{MODEL,AGG,NO_AGG};
 
 } // namespace hypro
 

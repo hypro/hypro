@@ -230,7 +230,7 @@ namespace hypro {
 
 	for(vector_t<Number> evaluation: evaluations){
 		EvaluationResult<Number> evaluation_result = hpolytope.evaluate(evaluation);
-		if(evaluation_result.errorCode == INFTY){
+		if(evaluation_result.errorCode == SOLUTION::INFTY){
 			return false;
 		}
 	}

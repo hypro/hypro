@@ -20,6 +20,10 @@ namespace hypro {
 		static constexpr bool REDUCE_TO_BOX = false;
 	};
 
+	struct NoTrafoReduction : SupportFunctionSetting {
+		static constexpr bool USE_LIN_TRANS_REDUCTION = false;
+	};
+
 	//PolytopeSupportFunctions
 	struct PolytopeSupportFunctionSetting : SupportFunctionSetting {
 		static constexpr bool PPOLYTOPESUPPORTFUNCTION_VERBOSE = false;

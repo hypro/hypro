@@ -7,15 +7,15 @@ namespace reachability {
 	using clock = std::chrono::high_resolution_clock;
 	using timeunit = std::chrono::microseconds;
 
-	template<typename Number>
-	Reach<Number>::Reach( const HybridAutomaton<Number, State_t<Number,Number>>& _automaton, const ReachabilitySettings<Number>& _settings)
+	template<typename Number, typename ReacherSettings>
+	Reach<Number,ReacherSettings>::Reach( const HybridAutomaton<Number, State_t<Number>>& _automaton, const ReachabilitySettings& _settings)
 		: mAutomaton( _automaton ), mSettings(_settings), mCurrentLevel(0), mIntersectedBadStates(false) {
 			//mAutomaton.addArtificialDimension();
 		}
 
 
-	template<typename Number>
-	std::vector<std::pair<unsigned, flowpipe_t<Number>>> Reach<Number>::computeForwardReachability() {
+	template<typename Number, typename ReacherSettings>
+	std::vector<std::pair<unsigned, flowpipe_t<Number>>> Reach<Number,ReacherSettings>::computeForwardReachability() {
 		// set up working queue -> add initial states
 		// collect all computed reachable states
 		std::vector<std::pair<unsigned, flowpipe_t<Number>>> collectedReachableStates;
@@ -78,16 +78,25 @@ namespace reachability {
 				DEBUG("hypro.reacher","Adding initial set of type " << mType << ", current queue size (before) is " << mWorkingQueue.size());
 				assert(mType == s.getSetType());
 
-				s.setTimestamp(carl::Interval<Number>(0));
+				s.setTimestamp(carl::Interval<tNumber>(0));
 				mWorkingQueue.push_back(initialSet<Number>(mCurrentLevel, s));
 			}
 		}
 
+		if(ReacherSettings::printStatus) {
+			std::cout << std::endl << "Queue size: " << mWorkingQueue.size() << std::flush;
+		}
+
 		TRACE("hypro.reacher","working queue size: " << mWorkingQueue.size());
+
+		std::cout << std::endl;
 		while ( !mWorkingQueue.empty() ) {
 			initialSet<Number> nextInitialSet = mWorkingQueue.front();
 			mWorkingQueue.pop_front();
 			TRACE("hypro.reacher","working queue after pop: " << mWorkingQueue.size());
+			if(ReacherSettings::printStatus) {
+				std::cout << "\rQueue size: " << mWorkingQueue.size() << std::flush;
+			}
 
 			mCurrentLevel = boost::get<0>(nextInitialSet);
 			INFO("hypro.reacher","Depth " << mCurrentLevel << ", Location: " << boost::get<1>(nextInitialSet).getLocation()->getName());
@@ -102,8 +111,8 @@ namespace reachability {
 	}
 
 
-	template<typename Number>
-	flowpipe_t<Number> Reach<Number>::computeForwardTimeClosure( const State_t<Number>& _state ) {
+	template<typename Number, typename ReacherSettings>
+	flowpipe_t<Number> Reach<Number,ReacherSettings>::computeForwardTimeClosure( const State_t<Number>& _state ) {
 		assert(!_state.getTimestamp().isUnbounded());
 #ifdef REACH_DEBUG
 		INFO("hypro.reacher", "Location: " << _state.getLocation()->hash());
@@ -117,11 +126,11 @@ namespace reachability {
 		flowpipe_t<Number> flowpipe;
 		std::vector<boost::tuple<Transition<Number>*, State_t<Number>>> nextInitialSets;
 
-		boost::tuple<bool, State_t<Number>, matrix_t<Number>, vector_t<Number>, Box<Number>> initialSetup = computeFirstSegment<Number,Number,State_t<Number>>(_state, mSettings.timeStep);
+		boost::tuple<hypro::CONTAINMENT, State_t<Number>, matrix_t<Number>, vector_t<Number>, Box<Number>> initialSetup = computeFirstSegment<Number,State_t<Number>>(_state, mSettings.timeStep);
 #ifdef REACH_DEBUG
 		INFO("hypro.reacher", "Valuation fulfills Invariant?: " << boost::get<0>(initialSetup));
 #endif
-		if ( boost::get<0>(initialSetup) ) {
+		if ( boost::get<0>(initialSetup) != CONTAINMENT::NO ) { // see convenienceOperators for details
 			assert(!boost::get<1>(initialSetup).getTimestamp().isUnbounded());
 			bool noFlow = false;
 
@@ -132,7 +141,7 @@ namespace reachability {
 				// Collect potential new initial states from discrete behaviour.
 				if(int(mCurrentLevel) <= mSettings.jumpDepth || mSettings.jumpDepth < 0) {
 					INFO("hypro.reacher", "-- Checking Transitions from initial!");
-					checkTransitions(_state, carl::Interval<Number>(Number(0),mSettings.timeBound), nextInitialSets);
+					checkTransitions(_state, carl::Interval<tNumber>(tNumber(0),mSettings.timeBound), nextInitialSets);
 				}
 			}
 
@@ -175,7 +184,7 @@ namespace reachability {
 #endif
 
 			// the first segment covers one time step already
-			Number currentLocalTime = mSettings.timeStep;
+			tNumber currentLocalTime = mSettings.timeStep;
 			// intersection of bad states and violation of invariant is handled inside the loop
 			while( !noFlow && currentLocalTime <= mSettings.timeBound ) {
 				INFO("hypro.reacher","Time: " << std::setprecision(4) << std::setw(8) << fixed << carl::toDouble(currentLocalTime));
@@ -211,13 +220,13 @@ namespace reachability {
 				nextSegment =  currentSegment.partiallyApplyTimeStep(ConstraintSet<Number>(boost::get<2>(initialSetup), boost::get<3>(initialSetup)), mSettings.timeStep, 0);
 #endif
 				// extend flowpipe (only if still within Invariant of location)
-				std::pair<bool, State_t<Number>> newSegment = nextSegment.satisfies( _state.getLocation()->getInvariant());
+				std::pair<hypro::CONTAINMENT, State_t<Number>> newSegment = nextSegment.satisfies( _state.getLocation()->getInvariant());
 
 #ifdef REACH_DEBUG
 				INFO("hypro.reacher", "Next Flowpipe Segment: " << newSegment.second);
 				INFO("hypro.reacher", "still within Invariant?: " << newSegment.first);
 #endif
-				if ( newSegment.first ) {
+				if ( newSegment.first != CONTAINMENT::NO ) {
 					flowpipe.push_back( newSegment.second );
 					if(intersectBadStates(newSegment.second)){
 						// clear queue to stop whole algorithm

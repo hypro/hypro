@@ -1,7 +1,7 @@
 if(${STATICLIB_SWITCH} STREQUAL "OFF")
 
 	################################
-	# Unit Tests
+	# Core Unit Tests
 	################################
 
 	add_executable(runCoreTests
@@ -13,8 +13,6 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
 		#ParserTest.cpp
 		PlotterTest.cpp
 		UtilityTest.cpp
-		#AntlrParserTest.cpp				#new for antlr
-		#AntlrParserCIFTest.cpp				#new for antlr with CIF
 	)
 
 	add_dependencies(runCoreTests resources)
@@ -29,22 +27,19 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
 
 	add_test( NAME core COMMAND runCoreTests )
 
-	#New for AnTLR
-	#message("I made it to AntlrTests")
-	#add_executable(runAntlrTests
-		#AntlrParserTest.cpp
+
+	################################
+	# Parser Unit Tests
+	################################
+
+	add_executable(runParserTests
+		AntlrParserTest.cpp
 		#AntlrParserCIFTest.cpp
-	#)
-	#message("Added executable")
-	#add_dependencies(runAntlrTests resources antlr4cpp)
-	#message("Added dependencies")
-	#target_include_directories(runAntlrTests PRIVATE ${GTEST_INCLUDE_DIR})
-	#target_link_libraries(runAntlrTests ${PROJECT_NAME} ${GTEST_LIBRARIES})
+	)
+	add_dependencies(runParserTests resources antlr4cpp)
+	target_include_directories(runParserTests PRIVATE ${GTEST_INCLUDE_DIR})
+	target_link_libraries(runParserTests ${PROJECT_NAME} ${GTEST_LIBRARIES})
 	#message("Targeted link libraries: " ${PROJECT_NAME} ${GTEST_LIBRARIES} ${ANTLR4CPP_LIBS})
-	#add_test( NAME parser COMMAND runAntlrTests )
-	#message("Added a test named parser")
-
-
-
+	add_test( NAME parser COMMAND runParserTests )
 
 endif()

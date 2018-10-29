@@ -1,6 +1,6 @@
 #pragma once
 #include "../HybridAutomaton.h"
-#include "../Settings.h"
+#include "../../reachability/Settings.h"
 #include "../Condition.h"
 #include <iostream>
 
@@ -121,8 +121,7 @@ namespace hypro {
 		return out.str();
 	}
 
-	template<typename Number>
-	std::string toFlowstarFormat(const ReachabilitySettings<Number>& settings,
+	std::string toFlowstarFormat(const ReachabilitySettings& settings,
 								 const std::map<Eigen::Index, std::string>& varNameMap,
 								 const std::string& prefix) {
 		std::stringstream res;
@@ -147,7 +146,7 @@ namespace hypro {
 
 
 	template<typename Number>
-	std::string toFlowstarFormat(const HybridAutomaton<Number>& in, const ReachabilitySettings<Number>& settings = ReachabilitySettings<Number>() ) {
+	std::string toFlowstarFormat(const HybridAutomaton<Number>& in, const ReachabilitySettings& settings = ReachabilitySettings() ) {
 		std::stringstream res;
 		std::map<Eigen::Index, std::string> vars;
 

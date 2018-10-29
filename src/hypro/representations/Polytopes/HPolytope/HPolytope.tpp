@@ -374,6 +374,33 @@ typename std::vector<Point<Number>> HPolytopeT<Number, Converter, Setting>::vert
 			}
 		}
 	}
+
+	// verify against reverse-search algorithm.
+	/*
+	#ifndef NDEBUG
+	VertexEnumeration<Number> ev = VertexEnumeration<Number>(mHPlanes);
+	ev.enumerateVertices();
+	//std::cout << "Enumerate vertices of " << std::endl << *this << std::endl;
+	assert(ev.getLinealtySpace().empty());
+
+	if(!ev.getCones().empty()) {
+		std::cout << "Computed cone: " << std::endl;
+		for(const auto& cone : ev.getCones() ) {
+			std::cout << convert<Number,double>(cone).transpose() << std::endl;
+		}
+	}
+
+	assert(ev.getCones().empty());
+	for (const auto& point : ev.getPoints() ) {
+		bool found = false;
+		for (const auto& vert : vertices ) {
+			found= found || (point==vert);
+		}
+		assert(found);
+	}
+	return ev.getPoints();
+	#endif
+	*/
 	return vertices;
 /*
 	VertexEnumeration<Number> ev = VertexEnumeration<Number>(mHPlanes);
@@ -583,7 +610,7 @@ bool HPolytopeT<Number, Converter, Setting>::isExtremePoint( const Point<Number>
 template <typename Number, typename Converter, class Setting>
 EvaluationResult<Number> HPolytopeT<Number, Converter, Setting>::evaluate( const vector_t<Number> &_direction ) const {
 	if(mHPlanes.empty()) {
-		return EvaluationResult<Number>( Number(1), INFTY );
+		return EvaluationResult<Number>( Number(1), SOLUTION::INFTY );
 	}
 
 	//reduceNumberRepresentation();
@@ -724,9 +751,9 @@ HPolytopeT<Number, Converter, Setting> HPolytopeT<Number, Converter, Setting>::m
 	// evaluation of rhs in directions of lhs
 	for ( unsigned i = 0; i < mHPlanes.size(); ++i ) {
 		EvaluationResult<Number> evalRes = rhs.evaluate( mHPlanes.at( i ).normal() );
-		if ( evalRes.errorCode == INFTY ) {
+		if ( evalRes.errorCode == SOLUTION::INFTY ) {
 			// Do nothing - omit inserting plane.
-		} else if ( evalRes.errorCode == INFEAS ) {
+		} else if ( evalRes.errorCode ==SOLUTION::INFEAS ) {
 			return Empty();
 		} else {
 			result = mHPlanes.at( i ).offset() + evalRes.supportValue;
@@ -738,9 +765,9 @@ HPolytopeT<Number, Converter, Setting> HPolytopeT<Number, Converter, Setting>::m
 		// evaluation of lhs in directions of rhs
 		for ( unsigned i = 0; i < rhs.constraints().size(); ++i ) {
 			EvaluationResult<Number> evalRes = this->evaluate( rhs.constraints().at( i ).normal() );
-			if ( evalRes.errorCode == INFTY ) {
+			if ( evalRes.errorCode == SOLUTION::INFTY ) {
 				// Do nothing - omit inserting plane.
-			} else if ( evalRes.errorCode == INFEAS ) {
+			} else if ( evalRes.errorCode ==SOLUTION::INFEAS ) {
 				return Empty();
 			} else {
 				result = rhs.constraints().at( i ).offset() + evalRes.supportValue;
@@ -824,12 +851,12 @@ bool HPolytopeT<Number, Converter, Setting>::contains( const HPolytopeT<Number, 
 
 	for ( const auto &plane : rhs.constraints() ) {
 		EvaluationResult<Number> evalRes = this->evaluate( plane.normal() );
-		if ( evalRes.errorCode == INFEAS ) {
+		if ( evalRes.errorCode ==SOLUTION::INFEAS ) {
 			return false;  // empty!
-		} else if ( evalRes.errorCode == INFTY ) {
+		} else if ( evalRes.errorCode == SOLUTION::INFTY ) {
 			continue;
 		} else if ( evalRes.supportValue < plane.offset() ) {
-			assert(evalRes.errorCode == FEAS);
+			assert(evalRes.errorCode ==SOLUTION::FEAS);
 			return false;
 		}
 	}
@@ -937,7 +964,7 @@ template <typename Number, typename Converter, class Setting>
 void HPolytopeT<Number, Converter, Setting>::clear() {
 	mHPlanes.clear();
 	mDimension = 0;
-	mEmpty = FALSE;
+	mEmpty =TRIBOOL::FALSE;
 	mNonRedundant = true;
 }
 

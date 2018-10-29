@@ -87,7 +87,7 @@ namespace hypro {
 		//print
 
 		//2.Build ReachabilitySettings and return it.
-		ReachabilitySettings<Number> r;
+		ReachabilitySettings r;
 		r.timeStep = tStep;
 		r.timeBound = tBound;
 		r.plotDimensions = plotDims;

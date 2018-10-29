@@ -909,6 +909,7 @@ ZonotopeT<Number,Converter,Setting> ZonotopeT<Number,Converter,Setting>::interse
 	Number qu = dc + zs, qd = dc - zs;  // qd holds the minimal value of the zonotope generators
 										// evaluated into the direction of the
 										// Halfspace (with respect to the center)
+	// Qu and Qd are the offsets of the supporting hyperplanes in direction of the normal vector of the half-space
 	if ( qd <= rhs.offset() ) {				// the zonotope is below the Halfspace -> there is an
 										// intersection
 		if ( qu <= rhs.offset() ) {			// the zonotopes maximal evaluation is also below the
@@ -917,13 +918,11 @@ ZonotopeT<Number,Converter,Setting> ZonotopeT<Number,Converter,Setting>::interse
 		} else {  // partly contained
 			// sigma is half the distance between the Halfspace and the "lowest"
 			// point of the zonotope.
-			Number sigma = ( rhs.offset() - qd ) / 2, d = ( qd + rhs.offset() ) / 2;  // d holds ?
+			Number sigma = ( rhs.offset() - qd ) / 2, d = ( qd + rhs.offset() ) / 2;  // d is half the distance between the lowest point and the center and the offset
 			matrix_t<Number> HHT = this->mGenerators * this->mGenerators.transpose();
 			vector_t<Number> lambda = HHT * rhs.normal() / ( ( rhs.normal().transpose() * HHT * rhs.normal() )(0,0) + sigma * sigma );
 			result.setCenter( this->mCenter + lambda * ( d - dc ) );
-			matrix_t<Number> identity;
-			identity.resize( mDimension, mDimension );
-			identity.setIdentity();
+			matrix_t<Number> identity = matrix_t<Number>::Identity(mDimension,mDimension);
 			result.setGenerators( ( identity - lambda * rhs.normal().transpose() ) * this->mGenerators );
 			result.addGenerators( sigma * lambda );
 		}

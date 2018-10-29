@@ -20,9 +20,9 @@ namespace hypro {
 		#ifdef USE_PRESOLUTION
 		simplex.push();
 		// Add a constraint forcing SMT-RAT to improve the solution calculated by glpk (increase precision).
-		if(preSolution.errorCode == FEAS) {
+		if(preSolution.errorCode ==SOLUTION::FEAS) {
 			addPreSolution(simplex,preSolution,_direction,objective);
-		} else if( preSolution.errorCode == INFEAS) {
+		} else if( preSolution.errorCode ==SOLUTION::INFEAS) {
 			if(simplex.check() == smtrat::Answer::UNSAT){
 				//std::cout << "SMTRAT infeas." << std::endl;
 				return preSolution; // glpk correctly detected infeasibility.

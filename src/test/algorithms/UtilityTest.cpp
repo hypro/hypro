@@ -1,14 +1,14 @@
 #include "gtest/gtest.h"
-#include "datastructures/HybridAutomaton/Settings.h"
+#include "datastructures/reachability/Settings.h"
 #include <iostream>
 
 TEST(UtilityTest, ReachabilitySettings)
 {
-	hypro::ReachabilitySettings<double> settings;
+	hypro::ReachabilitySettings settings;
 	settings.timeBound = 3.0;
 
-	hypro::ReachabilitySettings<double> copy(settings);
-	hypro::ReachabilitySettings<double> copy2 = settings;
+	hypro::ReachabilitySettings copy(settings);
+	hypro::ReachabilitySettings copy2 = settings;
 
 	EXPECT_EQ(settings, copy);
 	EXPECT_EQ(settings, copy2);

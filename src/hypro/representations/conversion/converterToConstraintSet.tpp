@@ -20,7 +20,8 @@ typename Converter<Number>::ConstraintSet Converter<Number>::toConstraintSet( co
 }
 
 template<typename Number>
-typename Converter<Number>::ConstraintSet Converter<Number>::toConstraintSet( const SupportFunction& _source, const CONV_MODE  ) {
+template<typename sfSetting>
+typename Converter<Number>::ConstraintSet Converter<Number>::toConstraintSet( const SupportFunctionT<Number,Converter,sfSetting>& _source, const CONV_MODE  ) {
 	return ConstraintSetT<Number,Converter>(_source.matrix(), _source.vector());
 }
 

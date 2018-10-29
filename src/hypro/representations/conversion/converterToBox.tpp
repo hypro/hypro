@@ -44,7 +44,8 @@ typename Converter<Number>::Box Converter<Number>::toBox( const Ellipsoid& _sour
 
 // conversion from support function to box (no differentiation between conversion modes - always OVER)
 template<typename Number>
-typename Converter<Number>::Box Converter<Number>::toBox( const SupportFunction& _source, const CONV_MODE  ) {
+template<typename sfSetting>
+typename Converter<Number>::Box Converter<Number>::toBox( const SupportFunctionT<Number,Converter,sfSetting>& _source, const CONV_MODE  ) {
 	std::size_t dim = _source.dimension();                                                                     //gets dimension from the source object
 
 	matrix_t<Number> directions = matrix_t<Number>::Zero( 2 * dim, dim );                                   //initialize normal matrix as zero matrix with 2*dim rows and dim columns

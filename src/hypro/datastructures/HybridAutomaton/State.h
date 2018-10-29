@@ -26,7 +26,7 @@ class Location;
  * @tparam     Representation  The type of the primary state set.
  * @tparam     Rargs           The type of the additional state sets.
  */
-template<typename Number, typename tNumber, typename Representation, typename ...Rargs>
+template<typename Number, typename Representation, typename ...Rargs>
 class State
 {
   public:
@@ -56,7 +56,7 @@ class State
      * @brief      Copy constructor.
      * @param[in]  orig  The original.
      */
-    State(const State<Number,tNumber,Representation,Rargs...>& orig) :
+    State(const State<Number,Representation,Rargs...>& orig) :
     	mLoc(orig.getLocation()),
     	mSets(orig.getSets()),
     	mTypes(orig.getTypes()),
@@ -69,7 +69,7 @@ class State
      * @brief Move constructor.
      * @param orig The original.
      */
-    State(State<Number,tNumber,Representation,Rargs...>&& orig) :
+    State(State<Number,Representation,Rargs...>&& orig) :
     	mLoc(orig.getLocation()),
     	mSets(orig.getSets()),
     	mTypes(orig.getTypes()),
@@ -83,7 +83,7 @@ class State
      * @param[in]  orig  The original
      * @return     A copy of the original state.
      */
-    State<Number,tNumber,Representation,Rargs...>& operator=(const State<Number,tNumber,Representation,Rargs...>& orig) {
+    State<Number,Representation,Rargs...>& operator=(const State<Number,Representation,Rargs...>& orig) {
     	TRACE("hypro.datastructures","Assignment operator for state with " << orig.getNumberSets() << " sets.");
     	TRACE("hypro.datastructures","Self: mSets.size(): " << mSets.size() << " and types: " << mTypes.size());
     	mLoc = orig.getLocation();
@@ -103,7 +103,7 @@ class State
      * @param[in]  orig  The original.
      * @return     A state corresponding to the original.
      */
-    State<Number,tNumber,Representation,Rargs...>& operator=(State<Number,tNumber,Representation,Rargs...>&& orig) {
+    State<Number,Representation,Rargs...>& operator=(State<Number,Representation,Rargs...>&& orig) {
     	mLoc = orig.getLocation();
     	mSets = orig.getSets();
     	mTypes = orig.getTypes();
@@ -305,7 +305,7 @@ class State
      * @param[in]  in    The passed second state.
      * @return     A state which represents the closure of the union of both states.
      */
-    State<Number,tNumber,Representation,Rargs...> unite(const State<Number,tNumber,Representation,Rargs...>& in) const;
+    State<Number,Representation,Rargs...> unite(const State<Number,Representation,Rargs...>& in) const;
 
     /**
      * @brief      Meta-function to verify a state against a condition.
@@ -314,8 +314,8 @@ class State
      * @param[in]  in    The passed condition.
      * @return     A pair of a Boolean and the resulting state. The Boolean is set to True, if the resulting state is not empty.
      */
-    std::pair<CONTAINMENT,State<Number,tNumber,Representation,Rargs...>> satisfies(const Condition<Number>& in) const;
-    std::pair<CONTAINMENT,State<Number,tNumber,Representation,Rargs...>> satisfiesHalfspaces(const matrix_t<Number>& constraints, const vector_t<Number>& constants) const;
+    std::pair<CONTAINMENT,State<Number,Representation,Rargs...>> satisfies(const Condition<Number>& in) const;
+    std::pair<CONTAINMENT,State<Number,Representation,Rargs...>> satisfiesHalfspaces(const matrix_t<Number>& constraints, const vector_t<Number>& constants) const;
 
     /**
      * @brief      Meta-function to verify the i-th set of a state against the i-th component of a condition.
@@ -323,7 +323,7 @@ class State
      * @param[in]  I	 The set index.
      * @return     A pair of a Boolean and the resulting state. The Boolean is set to True, if the resulting state is not empty.
      */
-    std::pair<CONTAINMENT,State<Number,tNumber,Representation,Rargs...>> partiallySatisfies(const Condition<Number>& in, std::size_t I) const;
+    std::pair<CONTAINMENT,State<Number,Representation,Rargs...>> partiallySatisfies(const Condition<Number>& in, std::size_t I) const;
 
     /**
      * @brief      Meta-function which can be used to transform all contained sets at once with the passed parameters and adjust the
@@ -332,7 +332,7 @@ class State
      * @param[in]  timeStepSize  The time step size.
      * @return     A state where each set has been transformed by the passed parameters and the timestamp has been increased by timeStepSize.
      */
-    State<Number,tNumber,Representation,Rargs...> applyTimeStep(const std::vector<std::pair<const matrix_t<Number>&, const vector_t<Number>&>>& flows, tNumber timeStepSize ) const;
+    State<Number,Representation,Rargs...> applyTimeStep(const std::vector<std::pair<const matrix_t<Number>&, const vector_t<Number>&>>& flows, tNumber timeStepSize ) const;
 
     /**
      * @brief      Meta-function which applies a transformation by the passed parameters and increases the timestamp for the i-th set.
@@ -341,18 +341,18 @@ class State
      * @param[in]  I             The set index.
      * @return     A state where the i-th set has been transformed by the passed parameters and the timestamp has been increased by timeStepSize.
      */
-    State<Number,tNumber,Representation,Rargs...> partiallyApplyTimeStep(const ConstraintSet<Number>& flow, tNumber timeStepSize, std::size_t I ) const;
+    State<Number,Representation,Rargs...> partiallyApplyTimeStep(const ConstraintSet<Number>& flow, tNumber timeStepSize, std::size_t I ) const;
 
     /**
      * @brief      Meta-function, which applies an affine transformation to each set contained.
      * @param[in]  trafos  The trafos represented as a vector of ConstraintSet.
      * @return     A state where each set has been transformed by the corresponding ConstraintSet.
      */
-    State<Number,tNumber,Representation,Rargs...> applyTransformation(const std::vector<ConstraintSet<Number>>& trafos ) const;
-    State<Number,tNumber,Representation,Rargs...> linearTransformation(const matrix_t<Number>& matrix) const;
-    State<Number,tNumber,Representation,Rargs...> affineTransformation(const matrix_t<Number>& matrix, const vector_t<Number>& vector) const;
+    State<Number,Representation,Rargs...> applyTransformation(const std::vector<ConstraintSet<Number>>& trafos ) const;
+    State<Number,Representation,Rargs...> linearTransformation(const matrix_t<Number>& matrix) const;
+    State<Number,Representation,Rargs...> affineTransformation(const matrix_t<Number>& matrix, const vector_t<Number>& vector) const;
 
-    State<Number,tNumber,Representation,Rargs...> applyTransformation(const ConstraintSet<Number>& trafo ) const;
+    State<Number,Representation,Rargs...> applyTransformation(const ConstraintSet<Number>& trafo ) const;
 
     /**
      * @brief      Meta-function, which applies an affine transformation to each set contained in the state and whose index is contained
@@ -361,7 +361,7 @@ class State
      * @param[in]  sets    The indices of the sets to transform.
      * @return     A state where each indexed set has been transformed by the corresponding ConstraintSet.
      */
-    State<Number,tNumber,Representation,Rargs...> partiallyApplyTransformation(const std::vector<ConstraintSet<Number>>& trafos, const std::vector<std::size_t>& sets ) const;
+    State<Number,Representation,Rargs...> partiallyApplyTransformation(const std::vector<ConstraintSet<Number>>& trafos, const std::vector<std::size_t>& sets ) const;
 
     /**
      * @brief      Meta-function, which applies an affine transformation to the i-th set contained in the state
@@ -369,13 +369,13 @@ class State
      * @param[in]  I      The set index.
      * @return     A state where the i-th set has been transformed by the passed parameters.
      */
-    State<Number,tNumber,Representation,Rargs...> partiallyApplyTransformation(const ConstraintSet<Number>& trafo, std::size_t I ) const;
+    State<Number,Representation,Rargs...> partiallyApplyTransformation(const ConstraintSet<Number>& trafo, std::size_t I ) const;
 
     //TODO: Documentation from here on
 
-    State<Number,tNumber,Representation,Rargs...> minkowskiSum(const State<Number,tNumber,Representation,Rargs...>& rhs) const;
+    State<Number,Representation,Rargs...> minkowskiSum(const State<Number,Representation,Rargs...>& rhs) const;
 
-    State<Number,tNumber,Representation,Rargs...> partiallyMinkowskiSum(const State<Number,tNumber,Representation,Rargs...>& rhs, std::size_t I ) const;
+    State<Number,Representation,Rargs...> partiallyMinkowskiSum(const State<Number,Representation,Rargs...>& rhs, std::size_t I ) const;
 
     /**
      * @brief      Checks whether a state is fully contained in caller-state.
@@ -383,11 +383,11 @@ class State
      * @param[in]  rhs   The right hand side state.
      * @return     True, if every subset of rhs is fully contained in the respective subset of the caller-state.
      */
-    bool contains(const State<Number,tNumber,Representation,Rargs...>& rhs) const;
+    bool contains(const State<Number,Representation,Rargs...>& rhs) const;
 
     std::vector<Point<Number>> vertices(std::size_t I = 0) const;
 
-    State<Number,tNumber,Representation,Rargs...> project(const std::vector<std::size_t>& dimensions, std::size_t I = 0) const;
+    State<Number,Representation,Rargs...> project(const std::vector<std::size_t>& dimensions, std::size_t I = 0) const;
 
     std::size_t getDimension(std::size_t I = 0) const;
 
@@ -411,7 +411,7 @@ class State
      * @return     A reference to the outstream.
      */
     #ifdef HYPRO_LOGGING
-    friend ostream& operator<<(ostream& out, const State<Number,tNumber,Representation,Rargs...>& state) {
+    friend ostream& operator<<(ostream& out, const State<Number,Representation,Rargs...>& state) {
     	out << "location: " << state.getLocation()->getName() << " at timestamp " << state.getTimestamp() << std::endl;
     	//out << "Set: " << convert<Number,double>(Converter<Number>::toBox(state.getSet())) << std::endl;
     	//out << "Set: " << boost::apply_visitor(genericConversionVisitor<repVariant,Number>(representation_name::box), state.getSet()) << std::endl;
@@ -424,7 +424,7 @@ class State
 	    		out << state.getSet(i) << std::endl;
     	}
     #else
-    friend ostream& operator<<(ostream& out, const State<Number,tNumber,Representation,Rargs...>&) {
+    friend ostream& operator<<(ostream& out, const State<Number,Representation,Rargs...>&) {
     #endif
     	return out;
     }
@@ -436,7 +436,7 @@ class State
      * @param[in]  rhs   The right hand side.
      * @return     True, if both states are equal, false otherwise.
      */
-    friend bool operator==(const State<Number,tNumber,Representation,Rargs...>& lhs, const State<Number,tNumber,Representation,Rargs...>& rhs) {
+    friend bool operator==(const State<Number,Representation,Rargs...>& lhs, const State<Number,Representation,Rargs...>& rhs) {
     	// quick checks first
     	if (lhs.getNumberSets() != rhs.getNumberSets() || *(lhs.mLoc) != *(rhs.mLoc) || lhs.mTimestamp != rhs.mTimestamp) {
     		return false;
@@ -459,7 +459,7 @@ class State
      * @param[in]  rhs   The right hand side.
      * @return     True, if both states are not equal, false otherwise.
      */
-    friend bool operator!=(const State<Number,tNumber,Representation,Rargs...>& lhs, const State<Number,tNumber,Representation,Rargs...>& rhs) {
+    friend bool operator!=(const State<Number,Representation,Rargs...>& lhs, const State<Number,Representation,Rargs...>& rhs) {
     	return !(lhs == rhs);
     }
 
@@ -502,11 +502,11 @@ State parallelCompose(
 }
 
 #ifdef HYPRO_USE_PPL
-template<typename Number, typename tNumber = Number>
-using State_t = State<Number, tNumber, Box<Number>, ConstraintSet<Number>, SupportFunction<Number>, Zonotope<Number>, HPolytope<Number>, VPolytope<Number>, DifferenceBounds<Number>, Polytope<Number>>;
+template<typename Number>
+using State_t = State<Number, Box<Number>, ConstraintSet<Number>, SupportFunction<Number>, Zonotope<Number>, HPolytope<Number>, VPolytope<Number>, DifferenceBounds<Number>, Polytope<Number>>;
 #else
-template<typename Number, typename tNumber = Number>
-using State_t = State<Number, tNumber, Box<Number>, ConstraintSet<Number>, SupportFunction<Number>, Zonotope<Number>, HPolytope<Number>, VPolytope<Number>, DifferenceBounds<Number>>;
+template<typename Number>
+using State_t = State<Number, Box<Number>, ConstraintSet<Number>, SupportFunction<Number>, Zonotope<Number>, HPolytope<Number>, VPolytope<Number>, DifferenceBounds<Number>>;
 #endif
 
 } // namespace

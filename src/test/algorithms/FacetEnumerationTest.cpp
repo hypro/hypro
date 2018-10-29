@@ -102,7 +102,9 @@ public:
 	TEST_F(FacetEnumerationTest, DegenerateEnumeration2) {
 		// Actual (failing) problem from benchmark runs, which specifies an object described by 2 points in a 3D space.
 		std::vector<Point<mpq_class>> points;
+		// approx. (0.1001,0,0)
 		points.push_back(Point<mpq_class>({mpq_class("1170371095970163531301353990512407462289424333177/11692013098647223345629478661730264157247460343808"), 0, 0}));
+		// approx. (0.2002,0,0)
 		points.push_back(Point<mpq_class>({mpq_class("2340742191940321312133937153702758040756082833417/11692013098647223345629478661730264157247460343808"), 0, 0}));
 
 		ConvexHull<mpq_class> ch(points);

@@ -12,11 +12,11 @@
 
 #pragma once
 #include "FirstSegment.h"
-#include "datastructures/HybridAutomaton/Settings.h"
+#include "datastructures/reachability/Settings.h"
 #include "datastructures/HybridAutomaton/HybridAutomaton.h"
 #include "datastructures/HybridAutomaton/State.h"
 #include "config.h"
-#include "util/Plotter.h"
+#include "util/plotting/Plotter.h"
 #include "representations/Ellipsoids/Ellipsoid.h"
 #include "representations/GeometricObject.h"
 #include "boost/tuple/tuple.hpp"
@@ -51,17 +51,21 @@ using flowpipe_t = std::vector<State_t<Number>>;
 
 #include "util.h"
 
+struct ReachSettings {
+	static constexpr bool printStatus = true;
+};
+
 /**
  * @brief      Class implementing a basic reachbility analysis algorithm for linear hybrid automata.
  *
  * @tparam     Number          The used number type.
  * @tparam     Representation  The used state set representation type.
  */
-template <typename Number>
+template <typename Number, typename ReacherSettings>
 class Reach {
 private:
-	HybridAutomaton<Number, State_t<Number,Number>> mAutomaton;
-	ReachabilitySettings<Number> mSettings;
+	HybridAutomaton<Number, State_t<Number>> mAutomaton;
+	ReachabilitySettings mSettings;
 	std::size_t mCurrentLevel = 0;
     Number mBloatingFactor = 0;
 	std::map<unsigned, std::vector<flowpipe_t<Number>>> mReachableStates;
@@ -78,7 +82,7 @@ public:
 	 * @param _automaton The analyzed automaton.
 	 * @param _settings The reachability analysis settings.
 	 */
-	Reach( const HybridAutomaton<Number, State_t<Number,Number>>& _automaton, const ReachabilitySettings<Number>& _settings = ReachabilitySettings<Number>());
+	Reach( const HybridAutomaton<Number, State_t<Number>>& _automaton, const ReachabilitySettings& _settings = ReachabilitySettings());
 
 	/**
 	 * @brief Computes the forward reachability of the given automaton.
@@ -126,10 +130,10 @@ public:
 	 */
 	bool intersectGuard( Transition<Number>* _trans, const State_t<Number>& _segment, State_t<Number>& result ) const;
 
-	bool checkTransitions(const State_t<Number>& _state, const carl::Interval<Number>& currentTime, std::vector<boost::tuple<Transition<Number>*, State_t<Number>>>& nextInitialSets) const;
+	bool checkTransitions(const State_t<Number>& _state, const carl::Interval<tNumber>& currentTime, std::vector<boost::tuple<Transition<Number>*, State_t<Number>>>& nextInitialSets) const;
 
-	const ReachabilitySettings<Number>& settings() const { return mSettings; }
-	void setSettings(const ReachabilitySettings<Number>& settings) { mSettings = settings; }
+	const ReachabilitySettings& settings() const { return mSettings; }
+	void setSettings(const ReachabilitySettings& settings) { mSettings = settings; }
 
 	representation_name getRepresentationType() const { return mType; }
 	void setRepresentationType(const representation_name& type) { mType = type; }
