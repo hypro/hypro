@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.6"/>
-<title>HyPro: hypro::reachability::Reach&lt; Number, ReacherSettings &gt; Class Template Reference</title>
+<title>HyPro: hypro::reachability::Reach&lt; Number &gt; Class Template Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -113,7 +113,7 @@ $(document).ready(function(){initNavTree('classhypro_1_1reachability_1_1Reach.ht
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="classhypro_1_1reachability_1_1Reach-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">hypro::reachability::Reach&lt; Number, ReacherSettings &gt; Class Template Reference</div>  </div>
+<div class="title">hypro::reachability::Reach&lt; Number &gt; Class Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 
@@ -124,44 +124,45 @@ $(document).ready(function(){initNavTree('classhypro_1_1reachability_1_1Reach.ht
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a47c996fe1abeaed1575673f005e6272d"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1reachability_1_1Reach.html#a47c996fe1abeaed1575673f005e6272d">Reach</a> (const <a class="el" href="classhypro_1_1HybridAutomaton.html">HybridAutomaton</a>&lt; Number, <a class="el" href="classhypro_1_1State.html">State_t</a>&lt; Number &gt;&gt; &amp;_automaton, const <a class="el" href="structhypro_1_1ReachabilitySettings.html">ReachabilitySettings</a> &amp;_settings=<a class="el" href="structhypro_1_1ReachabilitySettings.html">ReachabilitySettings</a>())</td></tr>
-<tr class="memdesc:a47c996fe1abeaed1575673f005e6272d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor for a basic reachability analysis algorithm for linear hybrid automata.  <a href="#a47c996fe1abeaed1575673f005e6272d">More...</a><br/></td></tr>
-<tr class="separator:a47c996fe1abeaed1575673f005e6272d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6deff8b506155045f6e6c197d1c7d631"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::pair<br class="typebreak"/>
-&lt; unsigned, flowpipe_t&lt; Number &gt; &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1reachability_1_1Reach.html#a6deff8b506155045f6e6c197d1c7d631">computeForwardReachability</a> ()</td></tr>
-<tr class="memdesc:a6deff8b506155045f6e6c197d1c7d631"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the forward reachability of the given automaton.  <a href="#a6deff8b506155045f6e6c197d1c7d631">More...</a><br/></td></tr>
-<tr class="separator:a6deff8b506155045f6e6c197d1c7d631"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a11b4b0406d83758b9bf2aae6259a5909"><td class="memItemLeft" align="right" valign="top">flowpipe_t&lt; Number &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1reachability_1_1Reach.html#a11b4b0406d83758b9bf2aae6259a5909">computeForwardTimeClosure</a> (const <a class="el" href="classhypro_1_1State.html">State_t</a>&lt; Number &gt; &amp;_state)</td></tr>
-<tr class="memdesc:a11b4b0406d83758b9bf2aae6259a5909"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the forward time closure (FTC) of the given valuation in the respective location.  <a href="#a11b4b0406d83758b9bf2aae6259a5909">More...</a><br/></td></tr>
-<tr class="separator:a11b4b0406d83758b9bf2aae6259a5909"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a23fbdc1d2fe809b9b6bdce47e247fe2d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1reachability_1_1Reach.html#a23fbdc1d2fe809b9b6bdce47e247fe2d">reachedBadStates</a> () const </td></tr>
-<tr class="memdesc:a23fbdc1d2fe809b9b6bdce47e247fe2d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns whether the bad states were reachable so far.  <a href="#a23fbdc1d2fe809b9b6bdce47e247fe2d">More...</a><br/></td></tr>
-<tr class="separator:a23fbdc1d2fe809b9b6bdce47e247fe2d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a29b6696f9fb27f1bd6b2f888830d0ed7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1reachability_1_1Reach.html#a29b6696f9fb27f1bd6b2f888830d0ed7">processDiscreteBehaviour</a> (const std::vector&lt; boost::tuple&lt; <a class="el" href="classhypro_1_1Transition.html">Transition</a>&lt; Number &gt; *, <a class="el" href="classhypro_1_1State.html">State_t</a>&lt; Number &gt;&gt;&gt; &amp;_newInitialSets)</td></tr>
-<tr class="memdesc:a29b6696f9fb27f1bd6b2f888830d0ed7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes one time step and one discrete step, i.e. increases the depth of the search by one.  <a href="#a29b6696f9fb27f1bd6b2f888830d0ed7">More...</a><br/></td></tr>
-<tr class="separator:a29b6696f9fb27f1bd6b2f888830d0ed7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7405ea7536e86a69f61a3cfc9cef5966"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1reachability_1_1Reach.html#a7405ea7536e86a69f61a3cfc9cef5966">intersectGuard</a> (<a class="el" href="classhypro_1_1Transition.html">Transition</a>&lt; Number &gt; *_trans, const <a class="el" href="classhypro_1_1State.html">State_t</a>&lt; Number &gt; &amp;_segment, <a class="el" href="classhypro_1_1State.html">State_t</a>&lt; Number &gt; &amp;result) const </td></tr>
-<tr class="memdesc:a7405ea7536e86a69f61a3cfc9cef5966"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks, whether the passed transition is enabled by the passed valuation. Sets the result to be the intersection of the guard and the valuation.  <a href="#a7405ea7536e86a69f61a3cfc9cef5966">More...</a><br/></td></tr>
-<tr class="separator:a7405ea7536e86a69f61a3cfc9cef5966"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a334172570ea11ee2689143e17ba746b5"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a334172570ea11ee2689143e17ba746b5"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>checkTransitions</b> (const <a class="el" href="classhypro_1_1State.html">State_t</a>&lt; Number &gt; &amp;_state, const carl::Interval&lt; <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt; &amp;currentTime, std::vector&lt; boost::tuple&lt; <a class="el" href="classhypro_1_1Transition.html">Transition</a>&lt; Number &gt; *, <a class="el" href="classhypro_1_1State.html">State_t</a>&lt; Number &gt;&gt;&gt; &amp;nextInitialSets) const </td></tr>
-<tr class="separator:a334172570ea11ee2689143e17ba746b5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a935dc01779d57583f41d38c3660580cf"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a935dc01779d57583f41d38c3660580cf"></a>
-const <a class="el" href="structhypro_1_1ReachabilitySettings.html">ReachabilitySettings</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>settings</b> () const </td></tr>
-<tr class="separator:a935dc01779d57583f41d38c3660580cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afee347d1f42cb9249a97c9c29d4e4275"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="afee347d1f42cb9249a97c9c29d4e4275"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>setSettings</b> (const <a class="el" href="structhypro_1_1ReachabilitySettings.html">ReachabilitySettings</a> &amp;settings)</td></tr>
-<tr class="separator:afee347d1f42cb9249a97c9c29d4e4275"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a49ce252f3a325fac2cc8471f8d2beee4"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a49ce252f3a325fac2cc8471f8d2beee4"></a>
+<tr class="memitem:ac32179c10b6f5d053bd133ae048d0805"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1reachability_1_1Reach.html#ac32179c10b6f5d053bd133ae048d0805">Reach</a> (const <a class="el" href="classhypro_1_1HybridAutomaton.html">HybridAutomaton</a>&lt; Number, <a class="el" href="classhypro_1_1State.html">State_t</a>&lt; Number, Number &gt;&gt; &amp;_automaton, const <a class="el" href="structhypro_1_1ReachabilitySettings.html">ReachabilitySettings</a>&lt; Number &gt; &amp;_settings=<a class="el" href="structhypro_1_1ReachabilitySettings.html">ReachabilitySettings</a>&lt; Number &gt;())</td></tr>
+<tr class="memdesc:ac32179c10b6f5d053bd133ae048d0805"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor for a basic reachability analysis algorithm for linear hybrid automata.  <a href="#ac32179c10b6f5d053bd133ae048d0805">More...</a><br/></td></tr>
+<tr class="separator:ac32179c10b6f5d053bd133ae048d0805"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aed1d333aa28ed68bf8dbbe13a546435f"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::pair<br class="typebreak"/>
+&lt; unsigned, flowpipe_t&lt; Number &gt; &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1reachability_1_1Reach.html#aed1d333aa28ed68bf8dbbe13a546435f">computeForwardReachability</a> ()</td></tr>
+<tr class="memdesc:aed1d333aa28ed68bf8dbbe13a546435f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the forward reachability of the given automaton.  <a href="#aed1d333aa28ed68bf8dbbe13a546435f">More...</a><br/></td></tr>
+<tr class="separator:aed1d333aa28ed68bf8dbbe13a546435f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a43a6993275910e73d5fee2c507ee61b6"><td class="memItemLeft" align="right" valign="top">flowpipe_t&lt; Number &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1reachability_1_1Reach.html#a43a6993275910e73d5fee2c507ee61b6">computeForwardTimeClosure</a> (const <a class="el" href="classhypro_1_1State.html">State_t</a>&lt; Number &gt; &amp;_state)</td></tr>
+<tr class="memdesc:a43a6993275910e73d5fee2c507ee61b6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the forward time closure (FTC) of the given valuation in the respective location.  <a href="#a43a6993275910e73d5fee2c507ee61b6">More...</a><br/></td></tr>
+<tr class="separator:a43a6993275910e73d5fee2c507ee61b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a08032fdfa127897d4407693c6537e97a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1reachability_1_1Reach.html#a08032fdfa127897d4407693c6537e97a">reachedBadStates</a> () const </td></tr>
+<tr class="memdesc:a08032fdfa127897d4407693c6537e97a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns whether the bad states were reachable so far.  <a href="#a08032fdfa127897d4407693c6537e97a">More...</a><br/></td></tr>
+<tr class="separator:a08032fdfa127897d4407693c6537e97a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aca3c8d56625869b3ac6234b97f3ab09d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1reachability_1_1Reach.html#aca3c8d56625869b3ac6234b97f3ab09d">processDiscreteBehaviour</a> (const std::vector&lt; boost::tuple&lt; <a class="el" href="classhypro_1_1Transition.html">Transition</a>&lt; Number &gt; *, <a class="el" href="classhypro_1_1State.html">State_t</a>&lt; Number &gt;&gt;&gt; &amp;_newInitialSets)</td></tr>
+<tr class="memdesc:aca3c8d56625869b3ac6234b97f3ab09d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes one time step and one discrete step, i.e. increases the depth of the search by one.  <a href="#aca3c8d56625869b3ac6234b97f3ab09d">More...</a><br/></td></tr>
+<tr class="separator:aca3c8d56625869b3ac6234b97f3ab09d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afdc68ba57b69b91c725a53cae55c55ba"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1reachability_1_1Reach.html#afdc68ba57b69b91c725a53cae55c55ba">intersectGuard</a> (<a class="el" href="classhypro_1_1Transition.html">Transition</a>&lt; Number &gt; *_trans, const <a class="el" href="classhypro_1_1State.html">State_t</a>&lt; Number &gt; &amp;_segment, <a class="el" href="classhypro_1_1State.html">State_t</a>&lt; Number &gt; &amp;result) const </td></tr>
+<tr class="memdesc:afdc68ba57b69b91c725a53cae55c55ba"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks, whether the passed transition is enabled by the passed valuation. Sets the result to be the intersection of the guard and the valuation.  <a href="#afdc68ba57b69b91c725a53cae55c55ba">More...</a><br/></td></tr>
+<tr class="separator:afdc68ba57b69b91c725a53cae55c55ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a22e11fea2d7b4b51a0707acd7229c10e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a22e11fea2d7b4b51a0707acd7229c10e"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>checkTransitions</b> (const <a class="el" href="classhypro_1_1State.html">State_t</a>&lt; Number &gt; &amp;_state, const carl::Interval&lt; Number &gt; &amp;currentTime, std::vector&lt; boost::tuple&lt; <a class="el" href="classhypro_1_1Transition.html">Transition</a>&lt; Number &gt; *, <a class="el" href="classhypro_1_1State.html">State_t</a>&lt; Number &gt;&gt;&gt; &amp;nextInitialSets) const </td></tr>
+<tr class="separator:a22e11fea2d7b4b51a0707acd7229c10e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af663106bcf2d919cd2aa8fd51d848194"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af663106bcf2d919cd2aa8fd51d848194"></a>
+const <a class="el" href="structhypro_1_1ReachabilitySettings.html">ReachabilitySettings</a><br class="typebreak"/>
+&lt; Number &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>settings</b> () const </td></tr>
+<tr class="separator:af663106bcf2d919cd2aa8fd51d848194"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6b3aac0af3c6b295e4465c4386779ce2"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6b3aac0af3c6b295e4465c4386779ce2"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setSettings</b> (const <a class="el" href="structhypro_1_1ReachabilitySettings.html">ReachabilitySettings</a>&lt; Number &gt; &amp;settings)</td></tr>
+<tr class="separator:a6b3aac0af3c6b295e4465c4386779ce2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abbdd011a98747ba0318968e68ed7d9c1"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="abbdd011a98747ba0318968e68ed7d9c1"></a>
 <a class="el" href="namespacehypro.html#aada824f660cac25bb643be870cdc0a86">representation_name</a>&#160;</td><td class="memItemRight" valign="bottom"><b>getRepresentationType</b> () const </td></tr>
-<tr class="separator:a49ce252f3a325fac2cc8471f8d2beee4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0b573a11860e62f6641b9a77a9b50c17"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0b573a11860e62f6641b9a77a9b50c17"></a>
+<tr class="separator:abbdd011a98747ba0318968e68ed7d9c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3badafec27577ca125bdcaab5d82d7ce"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3badafec27577ca125bdcaab5d82d7ce"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>setRepresentationType</b> (const <a class="el" href="namespacehypro.html#aada824f660cac25bb643be870cdc0a86">representation_name</a> &amp;type)</td></tr>
-<tr class="separator:a0b573a11860e62f6641b9a77a9b50c17"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="separator:a3badafec27577ca125bdcaab5d82d7ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><h3>template&lt;typename Number, typename ReacherSettings&gt;<br/>
-class hypro::reachability::Reach&lt; Number, ReacherSettings &gt;</h3>
+<div class="textblock"><h3>template&lt;typename Number&gt;<br/>
+class hypro::reachability::Reach&lt; Number &gt;</h3>
 
 <p>Class implementing a basic reachbility analysis algorithm for linear hybrid automata. </p>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
@@ -171,27 +172,27 @@ class hypro::reachability::Reach&lt; Number, ReacherSettings &gt;</h3>
   </table>
   </dd>
 </dl>
-<dl><dt><b>Examples: </b></dt><dd><a class="el" href="example_benchmark_8cpp-example.html#_a1">example_benchmark.cpp</a>, and <a class="el" href="example_bouncingBall_8cpp-example.html#_a6">example_bouncingBall.cpp</a>.</dd>
+<dl><dt><b>Examples: </b></dt><dd><a class="el" href="example_bouncingBall_8cpp-example.html#_a6">example_bouncingBall.cpp</a>.</dd>
 </dl>
-<p>Definition at line <a class="el" href="Reach_8h_source.html#l00065">65</a> of file <a class="el" href="Reach_8h_source.html">Reach.h</a>.</p>
+<p>Definition at line <a class="el" href="Reach_8h_source.html#l00061">61</a> of file <a class="el" href="Reach_8h_source.html">Reach.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a class="anchor" id="a47c996fe1abeaed1575673f005e6272d"></a>
+<a class="anchor" id="ac32179c10b6f5d053bd133ae048d0805"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number, typename ReacherSettings&gt; </div>
+template&lt;typename Number&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classhypro_1_1reachability_1_1Reach.html">hypro::reachability::Reach</a>&lt; Number, ReacherSettings &gt;::<a class="el" href="classhypro_1_1reachability_1_1Reach.html">Reach</a> </td>
+          <td class="memname"><a class="el" href="classhypro_1_1reachability_1_1Reach.html">hypro::reachability::Reach</a>&lt; Number &gt;::<a class="el" href="classhypro_1_1reachability_1_1Reach.html">Reach</a> </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="classhypro_1_1HybridAutomaton.html">HybridAutomaton</a>&lt; Number, <a class="el" href="classhypro_1_1State.html">State_t</a>&lt; Number &gt;&gt; &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="classhypro_1_1HybridAutomaton.html">HybridAutomaton</a>&lt; Number, <a class="el" href="classhypro_1_1State.html">State_t</a>&lt; Number, Number &gt;&gt; &amp;&#160;</td>
           <td class="paramname"><em>_automaton</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="structhypro_1_1ReachabilitySettings.html">ReachabilitySettings</a> &amp;&#160;</td>
-          <td class="paramname"><em>_settings</em> = <code><a class="el" href="structhypro_1_1ReachabilitySettings.html">ReachabilitySettings</a>()</code>&#160;</td>
+          <td class="paramtype">const <a class="el" href="structhypro_1_1ReachabilitySettings.html">ReachabilitySettings</a>&lt; Number &gt; &amp;&#160;</td>
+          <td class="paramname"><em>_settings</em> = <code><a class="el" href="structhypro_1_1ReachabilitySettings.html">ReachabilitySettings</a>&lt;&#160;Number&#160;&gt;()</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -213,14 +214,14 @@ template&lt;typename Number, typename ReacherSettings&gt; </div>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="a6deff8b506155045f6e6c197d1c7d631"></a>
+<a class="anchor" id="aed1d333aa28ed68bf8dbbe13a546435f"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number, typename ReacherSettings&gt; </div>
+template&lt;typename Number&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">std::vector&lt;std::pair&lt;unsigned, flowpipe_t&lt;Number&gt; &gt; &gt; <a class="el" href="classhypro_1_1reachability_1_1Reach.html">hypro::reachability::Reach</a>&lt; Number, ReacherSettings &gt;::computeForwardReachability </td>
+          <td class="memname">std::vector&lt;std::pair&lt;unsigned, flowpipe_t&lt;Number&gt; &gt; &gt; <a class="el" href="classhypro_1_1reachability_1_1Reach.html">hypro::reachability::Reach</a>&lt; Number &gt;::computeForwardReachability </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -233,14 +234,14 @@ template&lt;typename Number, typename ReacherSettings&gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="a11b4b0406d83758b9bf2aae6259a5909"></a>
+<a class="anchor" id="a43a6993275910e73d5fee2c507ee61b6"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number, typename ReacherSettings&gt; </div>
+template&lt;typename Number&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">flowpipe_t&lt;Number&gt; <a class="el" href="classhypro_1_1reachability_1_1Reach.html">hypro::reachability::Reach</a>&lt; Number, ReacherSettings &gt;::computeForwardTimeClosure </td>
+          <td class="memname">flowpipe_t&lt;Number&gt; <a class="el" href="classhypro_1_1reachability_1_1Reach.html">hypro::reachability::Reach</a>&lt; Number &gt;::computeForwardTimeClosure </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="classhypro_1_1State.html">State_t</a>&lt; Number &gt; &amp;&#160;</td>
           <td class="paramname"><em>_state</em></td><td>)</td>
@@ -262,14 +263,14 @@ template&lt;typename Number, typename ReacherSettings&gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="a7405ea7536e86a69f61a3cfc9cef5966"></a>
+<a class="anchor" id="afdc68ba57b69b91c725a53cae55c55ba"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number, typename ReacherSettings&gt; </div>
+template&lt;typename Number&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">bool <a class="el" href="classhypro_1_1reachability_1_1Reach.html">hypro::reachability::Reach</a>&lt; Number, ReacherSettings &gt;::intersectGuard </td>
+          <td class="memname">bool <a class="el" href="classhypro_1_1reachability_1_1Reach.html">hypro::reachability::Reach</a>&lt; Number &gt;::intersectGuard </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classhypro_1_1Transition.html">Transition</a>&lt; Number &gt; *&#160;</td>
           <td class="paramname"><em>_trans</em>, </td>
@@ -308,14 +309,14 @@ template&lt;typename Number, typename ReacherSettings&gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="a29b6696f9fb27f1bd6b2f888830d0ed7"></a>
+<a class="anchor" id="aca3c8d56625869b3ac6234b97f3ab09d"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number, typename ReacherSettings&gt; </div>
+template&lt;typename Number&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classhypro_1_1reachability_1_1Reach.html">hypro::reachability::Reach</a>&lt; Number, ReacherSettings &gt;::processDiscreteBehaviour </td>
+          <td class="memname">void <a class="el" href="classhypro_1_1reachability_1_1Reach.html">hypro::reachability::Reach</a>&lt; Number &gt;::processDiscreteBehaviour </td>
           <td>(</td>
           <td class="paramtype">const std::vector&lt; boost::tuple&lt; <a class="el" href="classhypro_1_1Transition.html">Transition</a>&lt; Number &gt; *, <a class="el" href="classhypro_1_1State.html">State_t</a>&lt; Number &gt;&gt;&gt; &amp;&#160;</td>
           <td class="paramname"><em>_newInitialSets</em></td><td>)</td>
@@ -336,17 +337,17 @@ template&lt;typename Number, typename ReacherSettings&gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="a23fbdc1d2fe809b9b6bdce47e247fe2d"></a>
+<a class="anchor" id="a08032fdfa127897d4407693c6537e97a"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Number, typename ReacherSettings&gt; </div>
+template&lt;typename Number&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">bool <a class="el" href="classhypro_1_1reachability_1_1Reach.html">hypro::reachability::Reach</a>&lt; Number, ReacherSettings &gt;::reachedBadStates </td>
+          <td class="memname">bool <a class="el" href="classhypro_1_1reachability_1_1Reach.html">hypro::reachability::Reach</a>&lt; Number &gt;::reachedBadStates </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -363,7 +364,7 @@ template&lt;typename Number, typename ReacherSettings&gt; </div>
 <p>[long description] </p>
 <dl class="section return"><dt>Returns</dt><dd>true, if the bad states were reachable. </dd></dl>
 
-<p>Definition at line <a class="el" href="Reach_8h_source.html#l00111">111</a> of file <a class="el" href="Reach_8h_source.html">Reach.h</a>.</p>
+<p>Definition at line <a class="el" href="Reach_8h_source.html#l00107">107</a> of file <a class="el" href="Reach_8h_source.html">Reach.h</a>.</p>
 
 </div>
 </div>

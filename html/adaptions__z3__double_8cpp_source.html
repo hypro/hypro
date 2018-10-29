@@ -136,9 +136,9 @@ $(document).ready(function(){initNavTree('adaptions__z3__double_8cpp_source.html
 <div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;</div>
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="preprocessor">        #ifdef USE_PRESOLUTION</span></div>
 <div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="preprocessor"></span>        z3Optimizer.push();</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;        <span class="keywordflow">if</span>(preSolution.errorCode ==SOLUTION::FEAS) {</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;        <span class="keywordflow">if</span>(preSolution.errorCode == FEAS) {</div>
 <div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;            addPreSolution(z3Optimizer, c, preSolution, _direction, formulaObjectivePair.second);</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;        } <span class="keywordflow">else</span> <span class="keywordflow">if</span>( preSolution.errorCode ==SOLUTION::INFEAS) {</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;        } <span class="keywordflow">else</span> <span class="keywordflow">if</span>( preSolution.errorCode == INFEAS) {</div>
 <div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;            <span class="keywordflow">if</span>(z3Optimizer.check() == z3::unsat){</div>
 <div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;                <span class="comment">//std::cout &lt;&lt; &quot;SMTRAT infeas.&quot; &lt;&lt; std::endl;</span></div>
 <div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;                <span class="keywordflow">return</span> preSolution; <span class="comment">// glpk correctly detected infeasibility.</span></div>
@@ -174,7 +174,7 @@ $(document).ready(function(){initNavTree('adaptions__z3__double_8cpp_source.html
 <div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;            sstr &lt;&lt; z3res;</div>
 <div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;</div>
 <div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;            <span class="keywordflow">if</span> (std::string(<span class="stringliteral">&quot;oo&quot;</span>) == sstr.str()) {</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;               res = EvaluationResult&lt;double&gt;( 1, pointCoordinates, SOLUTION::INFTY );</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;               res = EvaluationResult&lt;double&gt;( 1, pointCoordinates, INFTY );</div>
 <div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;            }</div>
 <div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;            <span class="keywordflow">else</span> {</div>
 <div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;               <span class="comment">// std::cout &lt;&lt; &quot;Point satisfying res: &quot; &lt;&lt; pointCoordinates &lt;&lt; std::endl;</span></div>
@@ -213,7 +213,7 @@ $(document).ready(function(){initNavTree('adaptions__z3__double_8cpp_source.html
 <div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;                    sstr &lt;&lt; z3res;</div>
 <div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;</div>
 <div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;                    <span class="keywordflow">if</span> (std::string(<span class="stringliteral">&quot;oo&quot;</span>) == sstr.str()) {</div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;                       res = EvaluationResult&lt;double&gt;( 1, pointCoordinates, SOLUTION::INFTY );</div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;                       res = EvaluationResult&lt;double&gt;( 1, pointCoordinates, INFTY );</div>
 <div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;                    }</div>
 <div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;                    <span class="keywordflow">else</span> {</div>
 <div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;                       <span class="comment">// std::cout &lt;&lt; &quot;Point satisfying res: &quot; &lt;&lt; pointCoordinates &lt;&lt; std::endl;</span></div>

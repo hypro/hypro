@@ -155,7 +155,7 @@ $(document).ready(function(){initNavTree('smtrat_2helper__methods_8h_source.html
 <div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;            res = EvaluationResult&lt;Number&gt;( 1, INFTY );</div>
 <div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;        } <span class="keywordflow">else</span> {</div>
 <div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;            assert(valuation.isRational());</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;            res = EvaluationResult&lt;Number&gt;( carl::convert&lt;smtrat::Rational, Number&gt;(valuation.asRational()),SOLUTION::FEAS );</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;            res = EvaluationResult&lt;Number&gt;( carl::convert&lt;smtrat::Rational, Number&gt;(valuation.asRational()), FEAS );</div>
 <div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;            smtrat::Model assignment = solver.model();</div>
 <div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;            vector_t&lt;Number&gt; point = vector_t&lt;Number&gt;(dimension);</div>
 <div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;            <span class="keywordflow">for</span>(<span class="keywordtype">unsigned</span> d = 0; d &lt; dimension; ++d){</div>

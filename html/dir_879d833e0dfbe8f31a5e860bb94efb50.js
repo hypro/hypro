@@ -4,7 +4,6 @@ var dir_879d833e0dfbe8f31a5e860bb94efb50 =
     [ "linearOptimization", "dir_3100e148cb0b6b745355fdee31bcb5c6.html", "dir_3100e148cb0b6b745355fdee31bcb5c6" ],
     [ "logging", "dir_e44977c2db40c89968aef6d4236fe8a8.html", "dir_e44977c2db40c89968aef6d4236fe8a8" ],
     [ "multithreading", "dir_7ca2da3d0bdc47450f74c631953a3473.html", "dir_7ca2da3d0bdc47450f74c631953a3473" ],
-    [ "plotting", "dir_88175a59a487d6ac58f6c5607ce909d5.html", "dir_88175a59a487d6ac58f6c5607ce909d5" ],
     [ "statistics", "dir_57790bb148fd18efc2431dd25a248521.html", "dir_57790bb148fd18efc2431dd25a248521" ],
     [ "tuple_expansion", "dir_3a35ee46332157846b55808bff5bb8c8.html", "dir_3a35ee46332157846b55808bff5bb8c8" ],
     [ "convenienceOperators.h", "util_2convenienceOperators_8h_source.html", null ],
@@ -13,7 +12,9 @@ var dir_879d833e0dfbe8f31a5e860bb94efb50 =
       [ "PrincipalComponentAnalysis", "classhypro_1_1PrincipalComponentAnalysis.html", "classhypro_1_1PrincipalComponentAnalysis" ]
     ] ],
     [ "Permutator.h", "Permutator_8h_source.html", null ],
+    [ "Plotter.h", "Plotter_8h_source.html", null ],
+    [ "PlotterUtil.cpp", "PlotterUtil_8cpp_source.html", null ],
+    [ "PlotterUtil.h", "PlotterUtil_8h_source.html", null ],
     [ "templateDirections.h", "templateDirections_8h_source.html", null ],
-    [ "typetraits.h", "typetraits_8h_source.html", null ],
     [ "VariablePool.h", "VariablePool_8h_source.html", null ]
 ];

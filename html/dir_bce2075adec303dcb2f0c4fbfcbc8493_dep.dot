@@ -8,10 +8,8 @@ digraph "/home/travis/build/hypro/hypro/src/hypro/datastructures" {
     graph [ bgcolor="#eeeeff", pencolor="black", label="" URL="dir_bce2075adec303dcb2f0c4fbfcbc8493.html"];
     dir_bce2075adec303dcb2f0c4fbfcbc8493 [shape=plaintext label="datastructures"];
     dir_fc0efe5d2249fba2a29c6d003d9b04e9 [shape=box label="HybridAutomaton" color="red" fillcolor="white" style="filled" URL="dir_fc0efe5d2249fba2a29c6d003d9b04e9.html"];
-    dir_f695c0e486b1567b2450488137a0ccfa [shape=box label="reachability" color="red" fillcolor="white" style="filled" URL="dir_f695c0e486b1567b2450488137a0ccfa.html"];
   }
   }
   dir_7fa927d8fbf9dfbeef69af27f63bc81b [shape=box label="representations" fillcolor="white" style="filled" color="red" URL="dir_7fa927d8fbf9dfbeef69af27f63bc81b.html"];
-  dir_f695c0e486b1567b2450488137a0ccfa->dir_7fa927d8fbf9dfbeef69af27f63bc81b [headlabel="2", labeldistance=1.5 headhref="dir_000024_000014.html"];
-  dir_fc0efe5d2249fba2a29c6d003d9b04e9->dir_7fa927d8fbf9dfbeef69af27f63bc81b [headlabel="4", labeldistance=1.5 headhref="dir_000021_000014.html"];
+  dir_fc0efe5d2249fba2a29c6d003d9b04e9->dir_7fa927d8fbf9dfbeef69af27f63bc81b [headlabel="4", labeldistance=1.5 headhref="dir_000011_000007.html"];
 }

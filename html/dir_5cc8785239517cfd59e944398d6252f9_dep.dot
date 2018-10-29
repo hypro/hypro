@@ -7,5 +7,5 @@ digraph "/home/travis/build/hypro/hypro/src/hypro/representations/SupportFunctio
   dir_5cc8785239517cfd59e944398d6252f9 [shape=box, label="SupportFunction", style="filled", fillcolor="#eeeeff", pencolor="black", URL="dir_5cc8785239517cfd59e944398d6252f9.html"];
   }
   dir_bce2075adec303dcb2f0c4fbfcbc8493 [shape=box label="datastructures" fillcolor="white" style="filled" color="red" URL="dir_bce2075adec303dcb2f0c4fbfcbc8493.html"];
-  dir_5cc8785239517cfd59e944398d6252f9->dir_bce2075adec303dcb2f0c4fbfcbc8493 [headlabel="3", labeldistance=1.5 headhref="dir_000016_000020.html"];
+  dir_5cc8785239517cfd59e944398d6252f9->dir_bce2075adec303dcb2f0c4fbfcbc8493 [headlabel="3", labeldistance=1.5 headhref="dir_000009_000010.html"];
 }

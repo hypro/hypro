@@ -4,14 +4,8 @@ digraph "/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability" {
   edge [ labelfontsize="10", labelfontname="Helvetica"];
   subgraph clusterdir_55730fee9a0c1f12da77eb14a8325c4c {
     graph [ bgcolor="#ddddee", pencolor="black", label="algorithms" fontname="Helvetica", fontsize="10", URL="dir_55730fee9a0c1f12da77eb14a8325c4c.html"]
-  subgraph clusterdir_6a6edf7123c81d000975d26367682a7a {
-    graph [ bgcolor="#eeeeff", pencolor="black", label="" URL="dir_6a6edf7123c81d000975d26367682a7a.html"];
-    dir_6a6edf7123c81d000975d26367682a7a [shape=plaintext label="reachability"];
-    dir_1d177bd438e269a304e1f07d1a6d36f2 [shape=box label="contexts" color="black" fillcolor="white" style="filled" URL="dir_1d177bd438e269a304e1f07d1a6d36f2.html"];
-    dir_32033642301c2effdf6af876d53153c1 [shape=box label="handlers" color="red" fillcolor="white" style="filled" URL="dir_32033642301c2effdf6af876d53153c1.html"];
-    dir_519994d85a4cf46cf1798a8eeb04af9e [shape=box label="workers" color="black" fillcolor="white" style="filled" URL="dir_519994d85a4cf46cf1798a8eeb04af9e.html"];
-  }
+  dir_6a6edf7123c81d000975d26367682a7a [shape=box, label="reachability", style="filled", fillcolor="#eeeeff", pencolor="black", URL="dir_6a6edf7123c81d000975d26367682a7a.html"];
   }
   dir_7fa927d8fbf9dfbeef69af27f63bc81b [shape=box label="representations" fillcolor="white" style="filled" color="red" URL="dir_7fa927d8fbf9dfbeef69af27f63bc81b.html"];
-  dir_32033642301c2effdf6af876d53153c1->dir_7fa927d8fbf9dfbeef69af27f63bc81b [headlabel="1", labeldistance=1.5 headhref="dir_000008_000014.html"];
+  dir_6a6edf7123c81d000975d26367682a7a->dir_7fa927d8fbf9dfbeef69af27f63bc81b [headlabel="3", labeldistance=1.5 headhref="dir_000006_000007.html"];
 }
