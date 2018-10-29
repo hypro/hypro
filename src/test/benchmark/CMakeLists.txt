@@ -30,3 +30,4 @@ target_link_libraries(benchmark
 						${PROJECT_NAME}
 )
 cotire(runBenchmark)
+cotire(benchmark)
