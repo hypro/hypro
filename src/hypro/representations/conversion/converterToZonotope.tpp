@@ -206,7 +206,8 @@ typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const VPolyt
 //conversion from Support Function to Zonotope (OVER or ALTERNATIVE)
 //ALTERNATIVE computes a set of boundary points which then go to pca for an oriented rectangular hull before checking whether the source object is really in that box and maybe expanding it)
 template <typename Number>
-typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const SupportFunction& _source, const CONV_MODE mode, std::size_t numberOfDirections){
+template<typename sfSetting>
+typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const SupportFunctionT<Number,Converter,sfSetting>& _source, const CONV_MODE mode, std::size_t numberOfDirections){
     Zonotope res;
     if (mode == OVER) {
          //gets dimension of source object

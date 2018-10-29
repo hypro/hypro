@@ -110,7 +110,8 @@ typename Converter<Number>::HPolytope Converter<Number>::toHPolytope( const Zono
 
 // conversion from support function to H-Polytope (no differentiation between conversion modes - always OVER)
 template<typename Number>
-typename Converter<Number>::HPolytope Converter<Number>::toHPolytope( const SupportFunction& _source, const std::vector<vector_t<Number>>& additionalDirections, const CONV_MODE, std::size_t numberOfDirections){
+template<typename sfSetting>
+typename Converter<Number>::HPolytope Converter<Number>::toHPolytope( const SupportFunctionT<Number,Converter,sfSetting>& _source, const std::vector<vector_t<Number>>& additionalDirections, const CONV_MODE, std::size_t numberOfDirections){
     //gets dimension of source object
     std::size_t dim = _source.dimension();
 

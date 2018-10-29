@@ -96,7 +96,8 @@ typename Converter<Number>::DifferenceBounds Converter<Number>::toDifferenceBoun
 #endif
 
 template<typename Number>
-typename Converter<Number>::DifferenceBounds Converter<Number>::toDifferenceBounds(const SupportFunction& _source, const std::vector<vector_t<Number>>& , const CONV_MODE, std::size_t ){
+template<typename sfSetting>
+typename Converter<Number>::DifferenceBounds Converter<Number>::toDifferenceBounds(const SupportFunctionT<Number,Converter,sfSetting>& _source, const std::vector<vector_t<Number>>& , const CONV_MODE, std::size_t ){
     // TODO make better, this is just the cheap solution
     HPolytope tmp = toHPolytope(_source);
     return toDifferenceBounds(tmp);

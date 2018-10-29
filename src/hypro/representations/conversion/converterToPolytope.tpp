@@ -53,7 +53,8 @@ typename Converter<Number>::Polytope Converter<Number>::toPolytope(const VPolyto
 
 //Conversion from supportfunction to ppl poly
 template<typename Number>
-typename Converter<Number>::Polytope Converter<Number>::toPolytope(const SupportFunction& source, const CONV_MODE, std::size_t numberOfDirections){
+template<typename sfSetting>
+typename Converter<Number>::Polytope Converter<Number>::toPolytope(const SupportFunctionT<Number,Converter,sfSetting>& source, const CONV_MODE, std::size_t numberOfDirections){
 	//First convert to HPolytope, afterwards to ppl Polytope
 	Converter<Number>::HPolytope tmp = Converter<Number>::toHPolytope(source, std::vector<vector_t<Number>>(), CONV_MODE::EXACT, numberOfDirections);
 	return Converter<Number>::Polytope(tmp.matrix(), tmp.vector());
