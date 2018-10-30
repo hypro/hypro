@@ -1,16 +1,33 @@
-
 #pragma once
 
 #ifndef INCL_FROM_GOHEADER
 	static_assert(false, "This file may only be included indirectly by GeometricObject.h");
 #endif
 
+#include <memory>
 #include "SupportFunctionNewSetting.h"
 #include "../../util/linearOptimization/Optimizer.h"
 #include "../../util/logging/Logger.h"
+#include "Leaf.h"
+#include "SumOp.h"
+#include "TrafoOp.h"
 
 namespace hypro {
 
+//A struct for the parameters.
+//All parameters for a function must be placed inside a parameter object.
+//Ensures that traversal() gets only one argument instead of 20 or 30!
+template<typename ...Rargs>
+struct Parameters {
+	
+	std::tuple<Rargs...> args;
+
+	Parameters(Rargs... r) : args(std::make_tuple(r...)) {}
+	Parameters(std::tuple<Rargs...> r) : args(r) {}
+	~Parameters(){}
+
+	//static std::size_t size(){ return std::size_t(std::tuple_size<Rargs...>::value); }
+};
 
 /**
  * @brief      The class which represents a SupportFunctionNew.
@@ -28,6 +45,9 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
 	/***************************************************************************
 	 * Members
 	 **************************************************************************/
+
+  	//std::unique_ptr<RootGrowNode<Number>> mRoot = nullptr;
+  	RootGrowNode<Number>* mRoot = nullptr;
 
   public:
 	/***************************************************************************
@@ -61,6 +81,15 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
 	SupportFunctionNewT( SupportFunctionNewT&& orig );
 
 	/**
+	 * DEPRECATED
+	 * @brief      Constructor with given RootGrowNode
+	 * @param[in]  r 	A RootGrowNode which will be set as root of the SupportFunction
+	 */
+	SupportFunctionNewT( RootGrowNode<Number>* r) : mRoot(r) {}
+
+	//SupportFunctionNewT( std::unique_ptr<RootGrowNode<Number>> r ) : mRoot(r) {}
+
+	/**
 	 * @brief Destructor.
 	 */
 	~SupportFunctionNewT() {}
@@ -71,6 +100,23 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
 
 	Setting getSettings() const { return Setting{}; }
 
+	RootGrowNode<Number>* getRoot() const { return mRoot; }
+	void setRoot(RootGrowNode<Number>* r){ mRoot = r; }
+
+	//DEPRECATED
+	//Add node "unary" that can only have one child as parent of current root.
+	//Also sets original parents.
+	SupportFunctionNewT<Number,Converter,Setting>* addUnaryOp(RootGrowNode<Number>* unary);
+
+	//DEPRECATED
+	//Add node "binary" that can only have two children as parent of current root. "rhs" is a tree that will be
+	//the second child of "binary". Also sets original parents.
+	SupportFunctionNewT<Number,Converter,Setting>* addBinaryOp(RootGrowNode<Number>* binary, SupportFunctionNewT<Number,Converter,Setting>* rhs);
+
+	//Remove all pointers to current children of mRoot. Set "child" as the only child of mRoot.
+	//Does not set original parent.
+	SupportFunctionNewT<Number,Converter,Setting>* setAsOnlyChild(RootGrowNode<Number>* child);
+
 	 /**
 	  * @brief Static method for the construction of an empty SupportFunctionNew of required dimension.
 	  * @param dimension Required dimension.
@@ -79,6 +125,57 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
 	static SupportFunctionNewT<Number,Converter,Setting> Empty(std::size_t dimension = 1) {
 		return SupportFunctionNewT<Number,Converter,Setting>();
 	}
+
+	/***************************************************************************
+	 * Tree Traversal
+	 **************************************************************************/
+	/*
+	There are only four possibilities of how void functions and / or functions without parameters can be combined, such that the stack operations 
+	made during the actual traversal still remain valid:
+	- Result = void,	Params = void:	"void transform()" 		&& "void compute()" 	&& "void aggregate()" 					&& no initParams
+	- Result = int, 	Params = void: 	"void transform()" 		&& "int compute()"		&& "int aggregate(vector<int>)" 		&& no initParams
+	- Result = void, 	Params = int:	"int transform(int)" 	&& "void compute(int)" 	&& "void aggregate(int)"				&& initParams
+	- Result = int, 	Params = int: 	"int transform(int)" 	&& "int compute(int)" 	&& "int aggregate(vector<int>, int)" 	&& initParams
+	If the parameter type does not exist (so, Rargs... = empty set), then additional parameters can be left out in all three functions, 
+	and if parameters would be returned, void is returned instead (i.e. transform).
+	If the result type is void, then the vector to be aggregated for the aggregate function can be left out.
+	Below, the four possibilites are implemented, functions returning void or having no additional parameters are wrapped into functions that return 
+	empty parameters & receive one additional parameter.
+	*/
+
+	//When Result type and Param type = void
+	//Wrap given functions into other functions that take Parameter (or smth else) additionally as input
+	void traverse(	std::function<void(RootGrowNode<Number>*)>& transform,
+					std::function<void(RootGrowNode<Number>*)>& compute, 	
+					std::function<void(RootGrowNode<Number>*)>& aggregate) const;
+
+	//When Param type = void, but Result type not
+	//Wrap transform and compute into other functions that take Parameter (or smth else) additionally as input
+	template<typename Result>
+	Result traverse(std::function<void(RootGrowNode<Number>*)>& transform,
+					std::function<Result(RootGrowNode<Number>*)>& compute, 
+					std::function<Result(RootGrowNode<Number>*, std::vector<Result>)>& aggregate) const;
+
+	//When Result type = void, but Param type not
+	//Wrap aggregate and compute into other functions that take Parameter (or smth else) additionally as input
+	template<typename ...Rargs>
+	void traverse(	std::function<Parameters<Rargs...>(RootGrowNode<Number>*, Parameters<Rargs...>)>& transform,
+					std::function<void(RootGrowNode<Number>*, Parameters<Rargs...>)>& compute, 
+					std::function<void(RootGrowNode<Number>*, Parameters<Rargs...>)>& aggregate,
+					Parameters<Rargs...>& initParams) const;
+
+	//Actual traverse function
+	//Since all cases where Result or Rargs are void / empty are handled by the overloaded versions of this function above,
+	//we can assume that we do not get functions returning void / that have no parameters
+	template<typename Result, typename ...Rargs>
+	Result traverse(std::function<Parameters<Rargs...>(RootGrowNode<Number>*, Parameters<Rargs...>)>& transform,
+					std::function<Result(RootGrowNode<Number>*, Parameters<Rargs...>)>& compute, 
+					std::function<Result(RootGrowNode<Number>*, std::vector<Result>, Parameters<Rargs...>)>& aggregate, 
+					Parameters<Rargs...>& initParams) const;
+
+	/***************************************************************************
+	 * Evaluation
+	 **************************************************************************/
 
 	/**
 	 * @brief Determines if the current SupportFunctionNew is empty.
@@ -111,6 +208,20 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
 	 * @return     A set of maxima towards the respective directions.
 	 */
 	std::vector<EvaluationResult<Number>> multiEvaluate( const matrix_t<Number>& _directions, bool useExact = true ) const;
+
+	/**
+	 * @brief 		Answers whether the tree has at least one TrafoOp with the given parameters inside and updates ltParam if needed
+	 * @param[in]	ltParam 	Actually used parameters which A and b are compared to 
+	 * @param[in]	A 			Matrix to compare to ltParam
+	 * @param[in]	b 			Vector to compare to ltParam
+	 * @return 		True if at least one TrafoOp is found in the whole subtree, else false. 
+	 *				ltParam gets updated to the parameters of the found TrafoOp if A and b are the parameters of the found TrafoOp.
+	 */
+  	bool hasTrafo(std::shared_ptr<const LinTrafoParameters<Number>>& ltParam, const matrix_t<Number>& A, const vector_t<Number>& b);
+
+	/***************************************************************************
+	 * Operators
+	 **************************************************************************/
 
 	/**
 	 * @brief Checks if two SupportFunctionNews are equal.
@@ -150,7 +261,7 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
 	 */
 #ifdef HYPRO_LOGGING
 	friend std::ostream& operator<<( std::ostream& ostr, const SupportFunctionNewT<Number,Converter,Setting>& b ) {
-		// Put outstream operations here.
+		ostr << *(b.getRoot()) << std::endl;
 #else
 	friend std::ostream& operator<<( std::ostream& ostr, const SupportFunctionNewT<Number,Converter,Setting>& ) {
 #endif

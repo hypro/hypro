@@ -35,7 +35,8 @@ public:
 
 	//Evaluate leaf via multiEvaluate function of the representation
 	std::vector<EvaluationResult<Number>> compute(const matrix_t<Number>& param) const { 
-		std::cout << "calling Leaf::compute, returns\n" << rep->multiEvaluate(param, true) << std::endl;
+		//std::cout << "calling Leaf::compute, returns\n" << rep->multiEvaluate(param, true) << std::endl;
+		std::cout << "calling Leaf::compute\n";
 		return rep->multiEvaluate(param, true);
 	}
 

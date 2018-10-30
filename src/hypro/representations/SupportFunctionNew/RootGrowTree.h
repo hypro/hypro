@@ -1,3 +1,4 @@
+/*
 #pragma once
 
 #include "RootGrowNode.h"
@@ -64,7 +65,7 @@ public:
 		ostr << *(t.getRoot()) << std::endl;
 		return ostr;
 	}
-
+*/
 	////// TRAVERSAL
 /*
 	There are only four possibilities of how void functions and / or functions without parameters can be combined, such that the stack operations 
@@ -79,7 +80,7 @@ public:
 	Below, the four possibilites are implemented, functions returning void or having no additional parameters are wrapped into functions that return 
 	empty parameters & receive one additional parameter.
 */
-
+/*
 	//When Result type and Param type = void
 	//Wrap given functions into other functions that take Parameter (or smth else) additionally as input
 	void traverse(	std::function<void(RootGrowNode<Number>*)> transform,
@@ -114,3 +115,4 @@ public:
 } //namespace hypro
 
 #include "RootGrowTree.tpp"
+*/

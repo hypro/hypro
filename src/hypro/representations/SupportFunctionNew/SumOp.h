@@ -1,31 +1,42 @@
 #pragma once
 
 #include "RootGrowNode.h"
-#include "SupportFunctionContentNew.h"
+#include "SupportFunctionNew.h"
 
 namespace hypro {
 
-template<typename Number>
-class SupportFunctionContentNew;	
+//Forward Declaration
+template<typename Number, typename Converter, typename Setting>
+class SupportFunctionNewT;	
 
 //Specialized subclass for sums as example of a binary operator
-template<typename Number>
+template<typename Number, typename Converter, typename Setting>
 class SumOp : public RootGrowNode<Number> {
 private:
+	
 	////// General Interface
 
 	SFNEW_TYPE type = SFNEW_TYPE::SUMOP;
 	unsigned originCount = 2;
 	std::vector<RootGrowNode<Number>*> mChildren = std::vector<RootGrowNode<Number>*>(2,nullptr);
 
-	////// Members for this class: uses the children of the Node
+	////// Special members of this class
 
 public:
 
 	////// Constructors & Destructors
 
 	SumOp() = delete;
-	SumOp(SupportFunctionContentNew<Number>* lhs, SupportFunctionContentNew<Number>* rhs){ lhs->addBinaryOp(this, rhs); }
+	SumOp(SupportFunctionNewT<Number,Converter,Setting>* lhs, SupportFunctionNewT<Number,Converter,Setting>* rhs){ lhs->addBinaryOp(this, rhs); }
+	//SumOp(SupportFunctionNewT<Number,Converter,Setting>* lhs, SupportFunctionNewT<Number,Converter,Setting>* rhs){ 
+	//	RootGrowNode<Number>* lhsRootPtr = mRoot;
+	//	RootGrowNode<Number>* rhsRootPtr = rhs->getRoot();
+	//	binary->addToChildren(lhsRootPtr);
+	//	binary->addToChildren(rhsRootPtr);
+	//	lhsRootPtr->setAsParent(binary);
+	//	rhsRootPtr->setAsParent(binary);
+	//	lhs->addBinaryOp(this, rhs); 
+	//}
 	~SumOp(){}
 
 	////// Getters and Setters

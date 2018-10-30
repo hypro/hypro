@@ -1,4 +1,4 @@
-#pragma once
+/*#pragma once
 
 #include "RootGrowTree.h"
 #include "Leaf.h"
@@ -37,3 +37,4 @@ class SupportFunctionContentNew : public RootGrowTree<Number> {
 } //namespace hypro
 
 #include "SupportFunctionContentNew.tpp"
+*/

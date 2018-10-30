@@ -1,15 +1,16 @@
 #pragma once
 
 #include "RootGrowNode.h"
-#include "SupportFunctionContentNew.h"
+#include "SupportFunctionNew.h"
 
 namespace hypro {
 
-template<typename Number>
-class SupportFunctionContentNew;	
+//Forward Declaration
+template<typename Number, typename Converter, typename Setting>
+class SupportFunctionNewT;	
 
 //Specialized subclass for transformations as example of a unary operator
-template<typename Number>
+template<typename Number, typename Converter, typename Setting>
 class TrafoOp : public RootGrowNode<Number> {
 private:
 	////// General Interface
@@ -33,7 +34,8 @@ public:
 	TrafoOp() = delete;
 
 	//Set new trafoOp object as parent of origin, 
-	TrafoOp(SupportFunctionContentNew<Number>* origin, const matrix_t<Number>& A, const vector_t<Number>& b) : currentExponent(1) {
+	//TrafoOp(SupportFunctionContentNew<Number>* origin, const matrix_t<Number>& A, const vector_t<Number>& b) : currentExponent(1) {
+	TrafoOp(SupportFunctionNewT<Number,Converter,Setting>* origin, const matrix_t<Number>& A, const vector_t<Number>& b) : currentExponent(1) {
 		
 		parameters = std::make_shared<const LinTrafoParameters<Number>>(A,b);
 
@@ -45,13 +47,15 @@ public:
 		// in case this transformation has already been performed, parameters will be updated.
 		origin->hasTrafo(parameters, A, b);
 		
-		//if(Setting::USE_LIN_TRANS_REDUCTION){
+		if(Setting::USE_LIN_TRANS_REDUCTION == true){
 			// best points for reduction are powers of 2 thus we only use these points for possible reduction points
 			bool reduced;
 			do {
 				reduced = false;
-				if (origin->getRoot()->getChildren().at(0)->getType() == SFNEW_TYPE::TRAFO && *(dynamic_cast<TrafoOp<Number>*>(origin->getRoot()->getChildren().at(0))->getParameters()) == *parameters && dynamic_cast<TrafoOp<Number>*>(origin->getRoot()->getChildren().at(0))->getCurrentExponent() == currentExponent){
-					successiveTransformations = dynamic_cast<TrafoOp<Number>*>(origin->getRoot()->getChildren().at(0))->getSuccessiveTransformations()+1;
+				if (origin->getRoot()->getChildren().at(0)->getType() == SFNEW_TYPE::TRAFO
+					&& *(dynamic_cast<TrafoOp<Number,Converter,Setting>*>(origin->getRoot()->getChildren().at(0))->getParameters()) == *parameters
+					&& dynamic_cast<TrafoOp<Number,Converter,Setting>*>(origin->getRoot()->getChildren().at(0))->getCurrentExponent() == currentExponent){
+					successiveTransformations = dynamic_cast<TrafoOp<Number,Converter,Setting>*>(origin->getRoot()->getChildren().at(0))->getSuccessiveTransformations()+1;
 				} else {
 					successiveTransformations = 0;
 				}
@@ -59,15 +63,12 @@ public:
 					reduced = true;
 					currentExponent = currentExponent*(carl::pow(2,parameters->power));
 					for(std::size_t i = 0; i < unsigned(carl::pow(2,parameters->power)-1); i++ ){
-
-						=== Hier vllt alle übersprungenen nodes direkt löschen? dann brauchen wir keinen originalParent bei dem die traversierung nicht funktioniert!
-
 						origin->setAsOnlyChild(origin->getRoot()->getChildren().at(0)->getChildren().at(0));
 					}
 				} 
 			} while (reduced == true);
 			//assert(mChildren.at(0)->checkTreeValidity());
-		//}
+		}
 	}
 
 	~TrafoOp(){}
@@ -79,6 +80,8 @@ public:
 	unsigned getCurrentExponent() const { return currentExponent; }
 	std::size_t getSuccessiveTransformations() const { return successiveTransformations; }
 	std::shared_ptr<const LinTrafoParameters<Number>> getParameters() const { return parameters; }
+
+	////// RootGrowNode Interface
 
 	//transforms parameters
 	matrix_t<Number> transform(const matrix_t<Number>& param) const {
