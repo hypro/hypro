@@ -37,7 +37,7 @@ namespace hypro {
 	}
 
 	template<typename Number>
-	EvaluationResult<Number> glpkOptimizeLinear(glp_prob* glpkProblem, const vector_t<Number>& _direction, const matrix_t<Number>& constraints, const vector_t<Number>& constants, bool useExact) {
+	EvaluationResult<Number> glpkOptimizeLinear(glpk_context& context, const vector_t<Number>& _direction, const matrix_t<Number>& constraints, const vector_t<Number>& constants, bool useExact) {
 		/*
 		std::cout << __func__ << " in direction " << convert<Number,double>(_direction).transpose() << std::endl;
 		std::cout << __func__ << " constraints: " << std::endl << constraints << std::endl << "constants: " << std::endl << constants << std::endl << "Glpk Problem: " << std::endl;
@@ -46,18 +46,18 @@ namespace hypro {
 
 		// setup glpk
 		for ( unsigned i = 0; i < constraints.cols(); i++ ) {
-			glp_set_col_bnds( glpkProblem, i + 1, GLP_FR, 0.0, 0.0 );
-			glp_set_obj_coef( glpkProblem, i + 1, carl::toDouble( _direction( i ) ) );
+			glp_set_col_bnds( context.lp, i + 1, GLP_FR, 0.0, 0.0 );
+			glp_set_obj_coef( context.lp, i + 1, carl::toDouble( _direction( i ) ) );
 		}
 		/* solve problem */
 		if(useExact){
-			glp_exact( glpkProblem, NULL );
+			glp_exact( context.lp, &context.parm );
 		} else {
-			glp_simplex( glpkProblem, NULL );
+			glp_simplex( context.lp, &context.parm );
 		}
 
 		vector_t<Number> exactSolution;
-		switch ( glp_get_status( glpkProblem ) ) {
+		switch ( glp_get_status( context.lp ) ) {
 			case GLP_OPT:
 			case GLP_FEAS: {
 				// if satisfiable, derive exact solution by intersecting all constraints, which are at their upper bounds (we always maximize).
@@ -66,7 +66,7 @@ namespace hypro {
 				unsigned pos = 0;
 				for(unsigned i = 1; i <= constraints.rows(); ++i) {
 					// we search for d non-basic variables at their upper bound, which define the optimal point.
-					int status = glp_get_row_stat( glpkProblem, i);
+					int status = glp_get_row_stat( context.lp, i);
 					if( status == GLP_NU ) {
 						#ifdef DEBUG_MSG
 						//std::cout << "Row " << i << " is at its upper bounds." << std::endl;
@@ -87,7 +87,7 @@ namespace hypro {
 			case GLP_UNBND: {
 				vector_t<Number> glpkModel(constraints.cols());
 				for(unsigned i=1; i <= constraints.cols(); ++i) {
-					glpkModel(i-1) = carl::rationalize<Number>(glp_get_col_prim( glpkProblem, i));
+					glpkModel(i-1) = carl::rationalize<Number>(glp_get_col_prim( context.lp, i));
 				}
 				return EvaluationResult<Number>(1, glpkModel, SOLUTION::INFTY);
 				break;
@@ -98,33 +98,33 @@ namespace hypro {
 	}
 
 	template<typename Number>
-	bool glpkCheckPoint(glp_prob* glpkProblem, const matrix_t<Number>& constraints, const vector_t<Number>& , const Point<Number>& point) {
+	bool glpkCheckPoint(glpk_context& context, const matrix_t<Number>& constraints, const vector_t<Number>& , const Point<Number>& point) {
 		// set point
 		assert(constraints.cols() == point.rawCoordinates().rows());
 		for ( unsigned i = 0; i < constraints.cols(); ++i ) {
-			glp_set_col_bnds( glpkProblem, i + 1, GLP_FX, carl::toDouble(point.rawCoordinates()(i)), 0.0 );
-			glp_set_obj_coef( glpkProblem, i + 1, 1.0 ); // not needed?
+			glp_set_col_bnds( context.lp, i + 1, GLP_FX, carl::toDouble(point.rawCoordinates()(i)), 0.0 );
+			glp_set_obj_coef( context.lp, i + 1, 1.0 ); // not needed?
 		}
-		glp_simplex( glpkProblem, NULL);
-		glp_exact( glpkProblem, NULL );
-		return (glp_get_status( glpkProblem ) != GLP_NOFEAS);
+		glp_simplex( context.lp, &context.parm);
+		glp_exact( context.lp, &context.parm );
+		return (glp_get_status( context.lp ) != GLP_NOFEAS);
 	}
 
 	template<typename Number>
-	std::vector<std::size_t> glpkRedundantConstraints(glp_prob* glpkProblem, matrix_t<Number> constraints, vector_t<Number> constants) {
+	std::vector<std::size_t> glpkRedundantConstraints(glpk_context& context, matrix_t<Number> constraints, vector_t<Number> constants) {
 		std::vector<std::size_t> res;
 
 		// TODO: ATTENTION: This relies upon that glpk maintains the order of the constraints!
 		for ( unsigned i = 0; i < constraints.cols(); ++i ) {
-			glp_set_col_bnds( glpkProblem, i + 1, GLP_FR, 0.0, 0.0 );
-			glp_set_obj_coef( glpkProblem, i + 1, 1.0 ); // not needed?
+			glp_set_col_bnds( context.lp, i + 1, GLP_FR, 0.0, 0.0 );
+			glp_set_obj_coef( context.lp, i + 1, 1.0 ); // not needed?
 		}
 
 		// first call to check satisfiability
-		glp_simplex( glpkProblem, NULL);
-		glp_exact( glpkProblem, NULL );
+		glp_simplex( context.lp, &context.parm);
+		glp_exact( context.lp, &context.parm );
 
-		switch (glp_get_status( glpkProblem )) {
+		switch (glp_get_status( context.lp )) {
 			case GLP_INFEAS:
 			case GLP_NOFEAS: {
 				return res;
@@ -133,17 +133,17 @@ namespace hypro {
 
 		for(std::size_t constraintIndex = std::size_t(constraints.rows()-1); ; --constraintIndex) {
 			// evaluate in current constraint direction
-			EvaluationResult<Number> actualRes = glpkOptimizeLinear(glpkProblem, vector_t<Number>(constraints.row(constraintIndex)), constraints, constants, true);
+			EvaluationResult<Number> actualRes = glpkOptimizeLinear(context, vector_t<Number>(constraints.row(constraintIndex)), constraints, constants, true);
 			//assert(actualRes.supportValue <= constants(constraintIndex));
 
 			// remove constraint by removing the boundaries
-			glp_set_row_bnds(glpkProblem, int(constraintIndex)+1, GLP_FR, 0.0, 0.0);
-			EvaluationResult<Number> updatedRes = glpkOptimizeLinear(glpkProblem, vector_t<Number>(constraints.row(constraintIndex)), constraints, constants, true);
+			glp_set_row_bnds(context.lp, int(constraintIndex)+1, GLP_FR, 0.0, 0.0);
+			EvaluationResult<Number> updatedRes = glpkOptimizeLinear(context, vector_t<Number>(constraints.row(constraintIndex)), constraints, constants, true);
 
 			if(updatedRes.supportValue == actualRes.supportValue && updatedRes.errorCode == actualRes.errorCode) {
 				res.push_back(constraintIndex);
 			} else {
-				glp_set_row_bnds(glpkProblem, int(constraintIndex)+1, GLP_UP,  0.0, carl::toDouble( constants(constraintIndex) ));
+				glp_set_row_bnds(context.lp, int(constraintIndex)+1, GLP_UP,  0.0, carl::toDouble( constants(constraintIndex) ));
 			}
 
 			if( constraintIndex == 0 ) {
@@ -153,28 +153,28 @@ namespace hypro {
 
 		// restore original problem
 		for(const auto item : res ) {
-			glp_set_row_bnds(glpkProblem, int(item)+1, GLP_UP,  0.0, carl::toDouble( constants(item) ));
+			glp_set_row_bnds(context.lp, int(item)+1, GLP_UP,  0.0, carl::toDouble( constants(item) ));
 		}
 
 		return res;
 	}
 
 	template<typename Number>
-	EvaluationResult<Number> glpkGetInternalPoint(glp_prob* glpkProblem, std::size_t dimension, bool useExact) {
-		glp_simplex( glpkProblem, NULL);
+	EvaluationResult<Number> glpkGetInternalPoint(glpk_context& context, std::size_t dimension, bool useExact) {
+		glp_simplex( context.lp, &context.parm);
 		if(useExact) {
-			glp_exact( glpkProblem, NULL );
+			glp_exact( context.lp, &context.parm );
 		}
 
 		vector_t<Number> glpkModel(dimension);
 		for(int i=1; i <= int(dimension); ++i) {
-			glpkModel(i-1) = glp_get_col_prim( glpkProblem, i);
+			glpkModel(i-1) = glp_get_col_prim( context.lp, i);
 		}
 
-		switch ( glp_get_status( glpkProblem ) ) {
+		switch ( glp_get_status( context.lp ) ) {
 			case GLP_OPT:
 			case GLP_FEAS: {
-				return EvaluationResult<Number>(glp_get_obj_val(glpkProblem), glpkModel, SOLUTION::FEAS);
+				return EvaluationResult<Number>(glp_get_obj_val(context.lp), glpkModel, SOLUTION::FEAS);
 				break;
 			}
 			case GLP_UNBND: {
