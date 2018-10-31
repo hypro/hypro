@@ -15,10 +15,15 @@ namespace sf {
         //ress.insert(ress.end(), tmp.begin(), tmp.end());       
 
         // affine transformation
-        std::cout << "Benchmarking affine transformation." << std::endl;
-        tmp = affineTransformation(settings);
-        tmp.createCSV("sfAffineTransformation", "\t");
-        ress.insert(ress.end(), tmp.begin(), tmp.end());
+        //std::cout << "Benchmarking affine transformation." << std::endl;
+        //tmp = affineTransformation(settings);
+        //tmp.createCSV("sfAffineTransformation", "\t");
+        //ress.insert(ress.end(), tmp.begin(), tmp.end());
+
+        std::cout << "Benchmarking affine transformation with evaluation." << std::endl;
+        auto results = affineTransformationEvaluation(settings);
+        results.createCSV("sfAffineTransformationEvaluation", "\t");
+        //ress.insert(ress.end(), tmp.begin(), tmp.end());
 
         // union
         //std::cout << "Benchmarking union." << std::endl;

@@ -52,7 +52,6 @@ namespace sf {
                 for(std::size_t multiplications = 0; multiplications < 512; ++multiplications) {
                     tmp = tmp.affineTransformation(matrices[i], vectors[i]);
                 }
-                tmp.evaluate(directions[i]);
             }
             auto runningTime = runTimerHyPro.elapsed();
             ress.emplace_back({"affineTransformation",runningTime,static_cast<int>(d)});
@@ -63,9 +62,6 @@ namespace sf {
                 auto tmp2 = sFunctNoReduction;
                 for(std::size_t multiplications = 0; multiplications < 512; ++multiplications) {
                     tmp2 = tmp2.affineTransformation(matrices[i], vectors[i]);
-                }
-                for(std::size_t j = 0; j < settings.iterations; ++j) {
-                    tmp2.evaluate(directions[j]);
                 }
             }
             runningTime = runTimerNoReduction.elapsed();

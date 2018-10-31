@@ -7,34 +7,30 @@ namespace box
     Results<std::size_t> run(const Settings& settings) {
         Timer totalRunningTime;
         Results<std::size_t> ress;
+        std::vector<std::future<Results<std::size_t>>> workingTasks;
+
+        workingTasks.emplace_back(std::async(std::launch::async,intersectHalfspace,settings));
+        workingTasks.emplace_back(std::async(std::launch::async,affineTransformation,settings));
+        workingTasks.emplace_back(std::async(std::launch::async,unite,settings));
+        workingTasks.emplace_back(std::async(std::launch::async,intersect,settings));
 
         // half-space intersection
-        std::cout << "Benchmarking half space intersection." << std::endl;
-        auto tmp = intersectHalfspace(settings);
+        auto tmp = workingTasks[0].get();
         tmp.createCSV("boxIntersectHalfspace", "\t", "intersectHalfspace");
         tmp.createCSV("boxIntersectHalfspacePPL", "\t", "intersectHalfspacePPL");
-        ress.insert(ress.end(), tmp.begin(), tmp.end());       
 
         // affine transformation
-        std::cout << "Benchmarking affine transformation." << std::endl;
-        tmp = affineTransformation(settings);
+        tmp = workingTasks[1].get();
         tmp.createCSV("boxAffineTransformation", "\t");
-        ress.insert(ress.end(), tmp.begin(), tmp.end());
 
         // union
-        std::cout << "Benchmarking union." << std::endl;
-        tmp = unite(settings);
+        tmp = workingTasks[2].get();
         tmp.createCSV("boxUnion", "\t");
-        ress.insert(ress.end(), tmp.begin(), tmp.end());
 
         // intersection
-        std::cout << "Benchmarking intersection." << std::endl;
-        tmp = intersect(settings);
+        tmp = workingTasks[3].get();
         tmp.createCSV("boxIntersection", "\t","intersect");
         tmp.createCSV("boxIntersectionPPL", "\t", "intersectPPL");
-        ress.insert(ress.end(), tmp.begin(), tmp.end());
-
-        std::cout << "Box benchmarking took " << totalRunningTime.elapsedMs() << " sec in total." << std::endl;
 
         return ress;
     }

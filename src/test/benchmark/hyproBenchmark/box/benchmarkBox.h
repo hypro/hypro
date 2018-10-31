@@ -14,6 +14,7 @@
 #include <flags.h>
 #include <representations/GeometricObject.h>
 #include <iostream>
+#include <future>
 #include <random>
 #ifdef HYPRO_USE_PPL
 #include "pplStructs.h"
