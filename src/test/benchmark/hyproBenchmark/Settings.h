@@ -13,5 +13,8 @@ namespace benchmark
     {
         static constexpr std::size_t maxDimension = 100;        // maximal dimension for benchmark objects
         static constexpr std::size_t iterations = 1000;        // number of iterations per benchmark
+        static constexpr std::size_t multiplications = 100;
+        static constexpr std::size_t evaluations = 100;
+        static constexpr std::size_t stepSize = 5;
     };
 } // benchmark
