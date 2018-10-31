@@ -171,9 +171,9 @@ std::size_t&#160;</td><td class="memItemRight" valign="bottom"><b>size</b> () co
 <tr class="memitem:ad80390a9e2669637155ee4517ace424b"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; Number &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1DifferenceBoundsT.html#ad80390a9e2669637155ee4517ace424b">vertices</a> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;=<a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt;::Zero(0, 0)) const </td></tr>
 <tr class="memdesc:ad80390a9e2669637155ee4517ace424b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the set of extreme vertices, whose convex hull is the smallest convex set containing this set.  <a href="#ad80390a9e2669637155ee4517ace424b">More...</a><br/></td></tr>
 <tr class="separator:ad80390a9e2669637155ee4517ace424b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a72f94526afc5e89f01df321059e88083"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a72f94526afc5e89f01df321059e88083"></a>
-std::pair&lt; <a class="el" href="namespacehypro.html#ab7a1dbbbe2d40e57ecab2c9b64b3615d">CONTAINMENT</a>, <br class="typebreak"/>
-<a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>satisfiesHalfspace</b> (const <a class="el" href="classhypro_1_1Halfspace.html">Halfspace</a>&lt; Number &gt; &amp;rhs) const </td></tr>
+<tr class="memitem:a72f94526afc5e89f01df321059e88083"><td class="memItemLeft" align="right" valign="top">std::pair&lt; <a class="el" href="namespacehypro.html#ab7a1dbbbe2d40e57ecab2c9b64b3615d">CONTAINMENT</a>, <br class="typebreak"/>
+<a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1DifferenceBoundsT.html#a72f94526afc5e89f01df321059e88083">satisfiesHalfspace</a> (const <a class="el" href="classhypro_1_1Halfspace.html">Halfspace</a>&lt; Number &gt; &amp;rhs) const </td></tr>
+<tr class="memdesc:a72f94526afc5e89f01df321059e88083"><td class="mdescLeft">&#160;</td><td class="mdescRight">Method combining the intersection of the set with a halfspace and a test for emptiness of the resulting set.  <a href="#a72f94526afc5e89f01df321059e88083">More...</a><br/></td></tr>
 <tr class="separator:a72f94526afc5e89f01df321059e88083"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa0f2b593b60bcd4d26db858e19867c05"><td class="memItemLeft" align="right" valign="top">std::pair&lt; <a class="el" href="namespacehypro.html#ab7a1dbbbe2d40e57ecab2c9b64b3615d">CONTAINMENT</a>, <br class="typebreak"/>
 <a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1DifferenceBoundsT.html#aa0f2b593b60bcd4d26db858e19867c05">satisfiesHalfspaces</a> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;_mat, const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;_vec) const </td></tr>
@@ -191,28 +191,28 @@ std::pair&lt; <a class="el" href="namespacehypro.html#ab7a1dbbbe2d40e57ecab2c9b6
 <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1DifferenceBoundsT.html#a00b92dfd037afae6d6f28cfb4abf9928">affineTransformation</a> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;A, const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;b) const </td></tr>
 <tr class="memdesc:a00b92dfd037afae6d6f28cfb4abf9928"><td class="mdescLeft">&#160;</td><td class="mdescRight">Applies an affine transformation with the matrix A and the translation vector b to the set.  <a href="#a00b92dfd037afae6d6f28cfb4abf9928">More...</a><br/></td></tr>
 <tr class="separator:a00b92dfd037afae6d6f28cfb4abf9928"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a07fb24a02b012dc2650f5f04cc8b8a97"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a07fb24a02b012dc2650f5f04cc8b8a97"></a>
-<a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a>&lt; Number, <br class="typebreak"/>
-<a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>minkowskiSum</b> (const <a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt; &amp;_rhs) const </td></tr>
+<tr class="memitem:a07fb24a02b012dc2650f5f04cc8b8a97"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a>&lt; Number, <br class="typebreak"/>
+<a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1DifferenceBoundsT.html#a07fb24a02b012dc2650f5f04cc8b8a97">minkowskiSum</a> (const <a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt; &amp;_rhs) const </td></tr>
+<tr class="memdesc:a07fb24a02b012dc2650f5f04cc8b8a97"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes Minkowski's sum of the current set and the passed set.  <a href="#a07fb24a02b012dc2650f5f04cc8b8a97">More...</a><br/></td></tr>
 <tr class="separator:a07fb24a02b012dc2650f5f04cc8b8a97"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a30fc56605b08aff2efae9c04a3d8a272"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a30fc56605b08aff2efae9c04a3d8a272"></a>
 <a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a>&lt; Number, <br class="typebreak"/>
 <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>intersect</b> (const <a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt; &amp;_rhs) const </td></tr>
 <tr class="separator:a30fc56605b08aff2efae9c04a3d8a272"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aad11bf076ede7a30899484810ddb353e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aad11bf076ede7a30899484810ddb353e"></a>
-<a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a>&lt; Number, <br class="typebreak"/>
-<a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>intersectHalfspace</b> (const <a class="el" href="classhypro_1_1Halfspace.html">Halfspace</a>&lt; Number &gt; &amp;hs) const </td></tr>
+<tr class="memitem:aad11bf076ede7a30899484810ddb353e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a>&lt; Number, <br class="typebreak"/>
+<a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1DifferenceBoundsT.html#aad11bf076ede7a30899484810ddb353e">intersectHalfspace</a> (const <a class="el" href="classhypro_1_1Halfspace.html">Halfspace</a>&lt; Number &gt; &amp;hs) const </td></tr>
+<tr class="memdesc:aad11bf076ede7a30899484810ddb353e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the intersection of the set with the given halfspace.  <a href="#aad11bf076ede7a30899484810ddb353e">More...</a><br/></td></tr>
 <tr class="separator:aad11bf076ede7a30899484810ddb353e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa2ec742cd500c3d1d26838c44981ae83"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a>&lt; Number, <br class="typebreak"/>
 <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1DifferenceBoundsT.html#aa2ec742cd500c3d1d26838c44981ae83">intersectHalfspaces</a> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;_mat, const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;_vec) const </td></tr>
 <tr class="memdesc:aa2ec742cd500c3d1d26838c44981ae83"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the intersection of the set with a set of halfspaces.  <a href="#aa2ec742cd500c3d1d26838c44981ae83">More...</a><br/></td></tr>
 <tr class="separator:aa2ec742cd500c3d1d26838c44981ae83"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a100e2df570177f1b74010e4fd6fdf3da"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a100e2df570177f1b74010e4fd6fdf3da"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>contains</b> (const <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; Number &gt; &amp;_point) const </td></tr>
+<tr class="memitem:a100e2df570177f1b74010e4fd6fdf3da"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1DifferenceBoundsT.html#a100e2df570177f1b74010e4fd6fdf3da">contains</a> (const <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; Number &gt; &amp;_point) const </td></tr>
+<tr class="memdesc:a100e2df570177f1b74010e4fd6fdf3da"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks, whether the set contains the passed point.  <a href="#a100e2df570177f1b74010e4fd6fdf3da">More...</a><br/></td></tr>
 <tr class="separator:a100e2df570177f1b74010e4fd6fdf3da"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a531eab74285a000bb9158d2256fb0e37"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a531eab74285a000bb9158d2256fb0e37"></a>
-<a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a>&lt; Number, <br class="typebreak"/>
-<a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>unite</b> (const <a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt; &amp;_rhs) const </td></tr>
+<tr class="memitem:a531eab74285a000bb9158d2256fb0e37"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a>&lt; Number, <br class="typebreak"/>
+<a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1DifferenceBoundsT.html#a531eab74285a000bb9158d2256fb0e37">unite</a> (const <a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt; &amp;_rhs) const </td></tr>
+<tr class="memdesc:a531eab74285a000bb9158d2256fb0e37"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the convex hull of the union of the set and the passed set.  <a href="#a531eab74285a000bb9158d2256fb0e37">More...</a><br/></td></tr>
 <tr class="separator:a531eab74285a000bb9158d2256fb0e37"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a05b7844e57dc4e95635b54608ab4f7aa"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a05b7844e57dc4e95635b54608ab4f7aa"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1DifferenceBoundsT.html#a05b7844e57dc4e95635b54608ab4f7aa">reduceRepresentation</a> ()</td></tr>
@@ -268,29 +268,6 @@ const <a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBounds
 virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1GeometricObject.html#a28cf65685f4fa5e04c3dbf428a9d97b0">~GeometricObject</a> ()</td></tr>
 <tr class="memdesc:a28cf65685f4fa5e04c3dbf428a9d97b0 inherit pub_methods_classhypro_1_1GeometricObject"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destroys the object. <br/></td></tr>
 <tr class="separator:a28cf65685f4fa5e04c3dbf428a9d97b0 inherit pub_methods_classhypro_1_1GeometricObject"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae2a85775d748e9a7d9489439f85afd12 inherit pub_methods_classhypro_1_1GeometricObject"><td class="memItemLeft" align="right" valign="top">virtual std::pair&lt; <a class="el" href="namespacehypro.html#ab7a1dbbbe2d40e57ecab2c9b64b3615d">CONTAINMENT</a>, <br class="typebreak"/>
-<a class="el" href="classhypro_1_1reachability_1_1hypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a>&lt; Number, <br class="typebreak"/>
-<a class="el" href="classhypro_1_1reachability_1_1hypro_1_1Converter.html">Converter</a>, Setting &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1GeometricObject.html#ae2a85775d748e9a7d9489439f85afd12">satisfiesHalfspace</a> (const <a class="el" href="classhypro_1_1reachability_1_1hypro_1_1Halfspace.html">Halfspace</a>&lt; Number &gt; &amp;rhs) const =0</td></tr>
-<tr class="memdesc:ae2a85775d748e9a7d9489439f85afd12 inherit pub_methods_classhypro_1_1GeometricObject"><td class="mdescLeft">&#160;</td><td class="mdescRight">Method combining the intersection of the set with a halfspace and a test for emptiness of the resulting set.  <a href="#ae2a85775d748e9a7d9489439f85afd12">More...</a><br/></td></tr>
-<tr class="separator:ae2a85775d748e9a7d9489439f85afd12 inherit pub_methods_classhypro_1_1GeometricObject"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6d5b4a8d675cbe9da63408a5beab8460 inherit pub_methods_classhypro_1_1GeometricObject"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classhypro_1_1reachability_1_1hypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a><br class="typebreak"/>
-&lt; Number, <a class="el" href="classhypro_1_1reachability_1_1hypro_1_1Converter.html">Converter</a>, Setting &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1GeometricObject.html#a6d5b4a8d675cbe9da63408a5beab8460">minkowskiSum</a> (const <a class="el" href="classhypro_1_1reachability_1_1hypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a>&lt; Number, <a class="el" href="classhypro_1_1reachability_1_1hypro_1_1Converter.html">Converter</a>, Setting &gt; &amp;rhs) const =0</td></tr>
-<tr class="memdesc:a6d5b4a8d675cbe9da63408a5beab8460 inherit pub_methods_classhypro_1_1GeometricObject"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes Minkowski's sum of the current set and the passed set.  <a href="#a6d5b4a8d675cbe9da63408a5beab8460">More...</a><br/></td></tr>
-<tr class="separator:a6d5b4a8d675cbe9da63408a5beab8460 inherit pub_methods_classhypro_1_1GeometricObject"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a478635198d1f273913e9438b08baa858 inherit pub_methods_classhypro_1_1GeometricObject"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classhypro_1_1reachability_1_1hypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a><br class="typebreak"/>
-&lt; Number, <a class="el" href="classhypro_1_1reachability_1_1hypro_1_1Converter.html">Converter</a>, Setting &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1GeometricObject.html#a478635198d1f273913e9438b08baa858">intersectHalfspace</a> (const <a class="el" href="classhypro_1_1reachability_1_1hypro_1_1Halfspace.html">Halfspace</a>&lt; Number &gt; &amp;rhs) const =0</td></tr>
-<tr class="memdesc:a478635198d1f273913e9438b08baa858 inherit pub_methods_classhypro_1_1GeometricObject"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the intersection of the set with the given halfspace.  <a href="#a478635198d1f273913e9438b08baa858">More...</a><br/></td></tr>
-<tr class="separator:a478635198d1f273913e9438b08baa858 inherit pub_methods_classhypro_1_1GeometricObject"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a44bae859470ea4cb3bc74c16f94b9638 inherit pub_methods_classhypro_1_1GeometricObject"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1GeometricObject.html#a44bae859470ea4cb3bc74c16f94b9638">contains</a> (const <a class="el" href="classhypro_1_1reachability_1_1hypro_1_1Point.html">Point</a>&lt; Number &gt; &amp;point) const =0</td></tr>
-<tr class="memdesc:a44bae859470ea4cb3bc74c16f94b9638 inherit pub_methods_classhypro_1_1GeometricObject"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks, whether the set contains the passed point.  <a href="#a44bae859470ea4cb3bc74c16f94b9638">More...</a><br/></td></tr>
-<tr class="separator:a44bae859470ea4cb3bc74c16f94b9638 inherit pub_methods_classhypro_1_1GeometricObject"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a09bf3d067ae2eaa4588b3ec8cc2812a4 inherit pub_methods_classhypro_1_1GeometricObject"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a09bf3d067ae2eaa4588b3ec8cc2812a4"></a>
-virtual bool&#160;</td><td class="memItemRight" valign="bottom"><b>contains</b> (const <a class="el" href="classhypro_1_1reachability_1_1hypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a>&lt; Number, <a class="el" href="classhypro_1_1reachability_1_1hypro_1_1Converter.html">Converter</a>, Setting &gt; &amp;rhs) const =0</td></tr>
-<tr class="separator:a09bf3d067ae2eaa4588b3ec8cc2812a4 inherit pub_methods_classhypro_1_1GeometricObject"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3ed4020101437144b34b62cc01d5bf01 inherit pub_methods_classhypro_1_1GeometricObject"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classhypro_1_1reachability_1_1hypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a><br class="typebreak"/>
-&lt; Number, <a class="el" href="classhypro_1_1reachability_1_1hypro_1_1Converter.html">Converter</a>, Setting &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1GeometricObject.html#a3ed4020101437144b34b62cc01d5bf01">unite</a> (const <a class="el" href="classhypro_1_1reachability_1_1hypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a>&lt; Number, <a class="el" href="classhypro_1_1reachability_1_1hypro_1_1Converter.html">Converter</a>, Setting &gt; &amp;rhs) const =0</td></tr>
-<tr class="memdesc:a3ed4020101437144b34b62cc01d5bf01 inherit pub_methods_classhypro_1_1GeometricObject"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the convex hull of the union of the set and the passed set.  <a href="#a3ed4020101437144b34b62cc01d5bf01">More...</a><br/></td></tr>
-<tr class="separator:a3ed4020101437144b34b62cc01d5bf01 inherit pub_methods_classhypro_1_1GeometricObject"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
@@ -374,11 +351,51 @@ template&lt;typename Number, typename Converter, class Setting&gt; </div>
 
 </div>
 </div>
+<a class="anchor" id="a100e2df570177f1b74010e4fd6fdf3da"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number, typename Converter, class Setting&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classhypro_1_1DifferenceBoundsT.html">hypro::DifferenceBoundsT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::contains </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; Number &gt; &amp;&#160;</td>
+          <td class="paramname"><em>point</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Checks, whether the set contains the passed point. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">point</td><td>The point. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True, if the point lies inside the set, false otherwise. </dd></dl>
+
+<p>Implements <a class="el" href="classhypro_1_1GeometricObject.html#a44bae859470ea4cb3bc74c16f94b9638">hypro::GeometricObject&lt; Number, DifferenceBoundsT&lt; Number, Converter, Setting &gt; &gt;</a>.</p>
+
+</div>
+</div>
 <a class="anchor" id="ae6e04e0c025b398a33eaa54f1916d515"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
 template&lt;typename Number, typename Converter, class Setting&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">bool <a class="el" href="classhypro_1_1DifferenceBoundsT.html">hypro::DifferenceBoundsT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::contains </td>
@@ -388,6 +405,11 @@ template&lt;typename Number, typename Converter, class Setting&gt; </div>
           <td> const</td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 <p>checks whether _rhs is contained in the left hand side</p>
 <p>A DBM X contains a DBM Y if the lower bounds of Y are greater or equal than the lower bounds of X and the upper bounds of Y are smaller or equal than the upper bounds of X.</p>
@@ -399,6 +421,8 @@ template&lt;typename Number, typename Converter, class Setting&gt; </div>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true is lhs contains rhs </dd></dl>
+
+<p>Implements <a class="el" href="classhypro_1_1GeometricObject.html">hypro::GeometricObject&lt; Number, DifferenceBoundsT&lt; Number, Converter, Setting &gt; &gt;</a>.</p>
 
 </div>
 </div>
@@ -760,6 +784,43 @@ template&lt;typename Number, typename Converter, class Setting&gt; </div>
 
 </div>
 </div>
+<a class="anchor" id="aad11bf076ede7a30899484810ddb353e"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number, typename Converter, class Setting&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a>&lt;Number,<a class="el" href="classhypro_1_1Converter.html">Converter</a>,Setting&gt; <a class="el" href="classhypro_1_1DifferenceBoundsT.html">hypro::DifferenceBoundsT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::intersectHalfspace </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classhypro_1_1Halfspace.html">Halfspace</a>&lt; Number &gt; &amp;&#160;</td>
+          <td class="paramname"><em>rhs</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Computes the intersection of the set with the given halfspace. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">rhs</td><td>The halfspace. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The resulting set. </dd></dl>
+
+<p>Implements <a class="el" href="classhypro_1_1GeometricObject.html#a478635198d1f273913e9438b08baa858">hypro::GeometricObject&lt; Number, DifferenceBoundsT&lt; Number, Converter, Setting &gt; &gt;</a>.</p>
+
+</div>
+</div>
 <a class="anchor" id="aa2ec742cd500c3d1d26838c44981ae83"></a>
 <div class="memitem">
 <div class="memproto">
@@ -844,6 +905,43 @@ template&lt;typename Number, typename Converter, class Setting&gt; </div>
 <dl class="section return"><dt>Returns</dt><dd>The resulting set. </dd></dl>
 
 <p>Implements <a class="el" href="classhypro_1_1GeometricObject.html#aa8ba3e6ef5dd89dec24c4876b9b85d55">hypro::GeometricObject&lt; Number, DifferenceBoundsT&lt; Number, Converter, Setting &gt; &gt;</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a07fb24a02b012dc2650f5f04cc8b8a97"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number, typename Converter, class Setting&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a>&lt;Number,<a class="el" href="classhypro_1_1Converter.html">Converter</a>,Setting&gt; <a class="el" href="classhypro_1_1DifferenceBoundsT.html">hypro::DifferenceBoundsT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::minkowskiSum </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt; &amp;&#160;</td>
+          <td class="paramname"><em>rhs</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Computes Minkowski's sum of the current set and the passed set. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">rhs</td><td>The other passed set. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The resulting set. </dd></dl>
+
+<p>Implements <a class="el" href="classhypro_1_1GeometricObject.html#a6d5b4a8d675cbe9da63408a5beab8460">hypro::GeometricObject&lt; Number, DifferenceBoundsT&lt; Number, Converter, Setting &gt; &gt;</a>.</p>
 
 </div>
 </div>
@@ -938,6 +1036,43 @@ template&lt;typename Number, typename Converter, class Setting&gt; </div>
 <p>Computes the set of clock assignments that can reach the current DBMs Zone when time is elapsed. It is computed by setting all lower clock bound to 0.</p>
 <p>I.e. d_0i (that is 0-x_i &lt;= d_0i &lt;=&gt; x_i &gt;= -d_01) is set to 0 </p>
 <dl class="section return"><dt>Returns</dt><dd>a DBM where the greater_(eq) constraints for each clock is moved to 0. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a72f94526afc5e89f01df321059e88083"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number, typename Converter, class Setting&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::pair&lt;<a class="el" href="namespacehypro.html#ab7a1dbbbe2d40e57ecab2c9b64b3615d">CONTAINMENT</a>, <a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a>&gt; <a class="el" href="classhypro_1_1DifferenceBoundsT.html">hypro::DifferenceBoundsT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::satisfiesHalfspace </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classhypro_1_1Halfspace.html">Halfspace</a>&lt; Number &gt; &amp;&#160;</td>
+          <td class="paramname"><em>rhs</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Method combining the intersection of the set with a halfspace and a test for emptiness of the resulting set. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">rhs</td><td>The halfspace. Note that this check is at least as fast as performing the intersection and testing for emptiness, but in general we encourage to use this method instead. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A pair of a CONTAINMENT type stating whether the resulting set is empty and the resulting set. </dd></dl>
+
+<p>Implements <a class="el" href="classhypro_1_1GeometricObject.html#ae2a85775d748e9a7d9489439f85afd12">hypro::GeometricObject&lt; Number, DifferenceBoundsT&lt; Number, Converter, Setting &gt; &gt;</a>.</p>
 
 </div>
 </div>
@@ -1050,6 +1185,43 @@ template&lt;typename Number, typename Converter, class Setting&gt; </div>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>DBM with clocks shifted by offset </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a531eab74285a000bb9158d2256fb0e37"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number, typename Converter, class Setting&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a>&lt;Number,<a class="el" href="classhypro_1_1Converter.html">Converter</a>,Setting&gt; <a class="el" href="classhypro_1_1DifferenceBoundsT.html">hypro::DifferenceBoundsT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt;::unite </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, Setting &gt; &amp;&#160;</td>
+          <td class="paramname"><em>rhs</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Computes the convex hull of the union of the set and the passed set. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">rhs</td><td>The passed set. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The resulting set. </dd></dl>
+
+<p>Implements <a class="el" href="classhypro_1_1GeometricObject.html#a3ed4020101437144b34b62cc01d5bf01">hypro::GeometricObject&lt; Number, DifferenceBoundsT&lt; Number, Converter, Setting &gt; &gt;</a>.</p>
 
 </div>
 </div>

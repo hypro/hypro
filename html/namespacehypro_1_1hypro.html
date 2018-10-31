@@ -131,6 +131,10 @@ Classes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
 Typedefs</h2></td></tr>
+<tr class="memitem:a2017b7d4a148be505a69a7206f734f05"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2017b7d4a148be505a69a7206f734f05"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehypro_1_1hypro.html#a2017b7d4a148be505a69a7206f734f05">tNumber</a> = mpq_class</td></tr>
+<tr class="memdesc:a2017b7d4a148be505a69a7206f734f05"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number type used for timings and time intervals. <br/></td></tr>
+<tr class="separator:a2017b7d4a148be505a69a7206f734f05"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a136cb111924f682618d8bcf06644ea5a"><td class="memTemplParams" colspan="2">template&lt;typename Number &gt; </td></tr>
 <tr class="memitem:a136cb111924f682618d8bcf06644ea5a"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacehypro_1_1hypro.html#a136cb111924f682618d8bcf06644ea5a">vector_t</a> = Eigen::Matrix&lt; Number, Eigen::Dynamic, 1 &gt;</td></tr>
 <tr class="separator:a136cb111924f682618d8bcf06644ea5a"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -185,8 +189,38 @@ Enumerations</h2></td></tr>
 <b>BOT</b>
 <br/>
  }</td></tr>
-<tr class="memdesc:aea0d4e87a42857800587cbdb7e735e9b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enum for set containment results. If known, we can make a statement about full or partial containment, otherwise fall back to YES/NO. Note: implicit conversion to bool still gives correct results (NO = 0). BOT is used for UNKNOWN. <br/></td></tr>
+<tr class="memdesc:aea0d4e87a42857800587cbdb7e735e9b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enum for set containment results. If known, we can make a statement about full or partial containment, otherwise fall back to YES/NO. Note: BOT is used for UNKNOWN. <br/></td></tr>
 <tr class="separator:aea0d4e87a42857800587cbdb7e735e9b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8ef65dfc07c325359f99d0fe8759ad78"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehypro_1_1hypro.html#a8ef65dfc07c325359f99d0fe8759ad78">SUBSPACETYPE</a> { <br/>
+&#160;&#160;<b>LTI</b> =0, 
+<b>TIMED</b> =1, 
+<b>DISCRETE</b> =2, 
+<b>LTI</b> =0, 
+<br/>
+&#160;&#160;<b>TIMED</b> =1, 
+<b>DISCRETE</b> =2
+<br/>
+ }</td></tr>
+<tr class="memdesc:a8ef65dfc07c325359f99d0fe8759ad78"><td class="mdescLeft">&#160;</td><td class="mdescRight">classifies the type of subspace in case subspace decomposition is used. <br/></td></tr>
+<tr class="separator:a8ef65dfc07c325359f99d0fe8759ad78"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9cf736faf15a3e2982233085da15fa64"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehypro_1_1hypro.html#a9cf736faf15a3e2982233085da15fa64">LOCATIONTYPE</a> { <b>LTILOC</b> =0, 
+<b>TIMEDLOC</b> =1, 
+<b>LTILOC</b> =0, 
+<b>TIMEDLOC</b> =1
+ }</td></tr>
+<tr class="memdesc:a9cf736faf15a3e2982233085da15fa64"><td class="mdescLeft">&#160;</td><td class="mdescRight">classifies the type of location, which reflects the dynamics in case we dynamically detect subspaces. <br/></td></tr>
+<tr class="separator:a9cf736faf15a3e2982233085da15fa64"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7136dd5d7fbd7658a533f02bf8885698"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><b>AGG_SETTING</b> { <br/>
+&#160;&#160;<b>MODEL</b>, 
+<b>AGG</b>, 
+<b>NO_AGG</b>, 
+<b>MODEL</b>, 
+<br/>
+&#160;&#160;<b>AGG</b>, 
+<b>NO_AGG</b>
+<br/>
+ }</td></tr>
+<tr class="separator:a7136dd5d7fbd7658a533f02bf8885698"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa4baff5f023c645e8b1809f4611478a1"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehypro_1_1hypro.html#aa4baff5f023c645e8b1809f4611478a1">TRIBOOL</a> { <br/>
 &#160;&#160;<b>TRUE</b>, 
 <b>FALSE</b>, 
@@ -228,8 +262,38 @@ Enumerations</h2></td></tr>
 <b>BOT</b>
 <br/>
  }</td></tr>
-<tr class="memdesc:aea0d4e87a42857800587cbdb7e735e9b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enum for set containment results. If known, we can make a statement about full or partial containment, otherwise fall back to YES/NO. Note: implicit conversion to bool still gives correct results (NO = 0). BOT is used for UNKNOWN. <br/></td></tr>
+<tr class="memdesc:aea0d4e87a42857800587cbdb7e735e9b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enum for set containment results. If known, we can make a statement about full or partial containment, otherwise fall back to YES/NO. Note: BOT is used for UNKNOWN. <br/></td></tr>
 <tr class="separator:aea0d4e87a42857800587cbdb7e735e9b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8ef65dfc07c325359f99d0fe8759ad78"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehypro_1_1hypro.html#a8ef65dfc07c325359f99d0fe8759ad78">SUBSPACETYPE</a> { <br/>
+&#160;&#160;<b>LTI</b> =0, 
+<b>TIMED</b> =1, 
+<b>DISCRETE</b> =2, 
+<b>LTI</b> =0, 
+<br/>
+&#160;&#160;<b>TIMED</b> =1, 
+<b>DISCRETE</b> =2
+<br/>
+ }</td></tr>
+<tr class="memdesc:a8ef65dfc07c325359f99d0fe8759ad78"><td class="mdescLeft">&#160;</td><td class="mdescRight">classifies the type of subspace in case subspace decomposition is used. <br/></td></tr>
+<tr class="separator:a8ef65dfc07c325359f99d0fe8759ad78"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9cf736faf15a3e2982233085da15fa64"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehypro_1_1hypro.html#a9cf736faf15a3e2982233085da15fa64">LOCATIONTYPE</a> { <b>LTILOC</b> =0, 
+<b>TIMEDLOC</b> =1, 
+<b>LTILOC</b> =0, 
+<b>TIMEDLOC</b> =1
+ }</td></tr>
+<tr class="memdesc:a9cf736faf15a3e2982233085da15fa64"><td class="mdescLeft">&#160;</td><td class="mdescRight">classifies the type of location, which reflects the dynamics in case we dynamically detect subspaces. <br/></td></tr>
+<tr class="separator:a9cf736faf15a3e2982233085da15fa64"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7136dd5d7fbd7658a533f02bf8885698"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><b>AGG_SETTING</b> { <br/>
+&#160;&#160;<b>MODEL</b>, 
+<b>AGG</b>, 
+<b>NO_AGG</b>, 
+<b>MODEL</b>, 
+<br/>
+&#160;&#160;<b>AGG</b>, 
+<b>NO_AGG</b>
+<br/>
+ }</td></tr>
+<tr class="separator:a7136dd5d7fbd7658a533f02bf8885698"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
@@ -285,6 +349,14 @@ template&lt;typename Number &gt; </td></tr>
 template&lt;typename Number &gt; </td></tr>
 <tr class="memitem:ab866d49bd30ad9712ca44091ac4af070"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><b>satisfiesIneqation</b> (const <a class="el" href="namespacehypro_1_1hypro.html#a136cb111924f682618d8bcf06644ea5a">vector_t</a>&lt; Number &gt; &amp;constraint, Number constant, const <a class="el" href="namespacehypro_1_1hypro.html#a136cb111924f682618d8bcf06644ea5a">vector_t</a>&lt; Number &gt; &amp;point)</td></tr>
 <tr class="separator:ab866d49bd30ad9712ca44091ac4af070"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6cc8f7d84055119c87588bd1d7aa0f12"><td class="memTemplParams" colspan="2"><a class="anchor" id="a6cc8f7d84055119c87588bd1d7aa0f12"></a>
+template&lt;typename Enumeration &gt; </td></tr>
+<tr class="memitem:a6cc8f7d84055119c87588bd1d7aa0f12"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><b>as_integer</b> (Enumeration const value) -&gt; typename std::underlying_type&lt; Enumeration &gt;::type</td></tr>
+<tr class="separator:a6cc8f7d84055119c87588bd1d7aa0f12"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0f6003b37ba5365acb31a3b1fa6d1825"><td class="memTemplParams" colspan="2"><a class="anchor" id="a0f6003b37ba5365acb31a3b1fa6d1825"></a>
+template&lt;typename Enumeration , carl::EnableIf&lt; std::is_enum&lt; Enumeration &gt;&gt;  = carl::dummy&gt; </td></tr>
+<tr class="memitem:a0f6003b37ba5365acb31a3b1fa6d1825"><td class="memTemplItemLeft" align="right" valign="top">std::ostream &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>operator&lt;&lt;</b> (std::ostream &amp;out, Enumeration in)</td></tr>
+<tr class="separator:a0f6003b37ba5365acb31a3b1fa6d1825"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a71b52898b847c1038f919ac004734348"><td class="memTemplParams" colspan="2"><a class="anchor" id="a71b52898b847c1038f919ac004734348"></a>
 template&lt;typename T &gt; </td></tr>
 <tr class="memitem:a71b52898b847c1038f919ac004734348"><td class="memTemplItemLeft" align="right" valign="top">std::ostream &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>operator&lt;&lt;</b> (std::ostream &amp;_out, const std::set&lt; T &gt; &amp;_set)</td></tr>
@@ -322,7 +394,7 @@ template&lt;typename Number &gt; </div>
 </div><div class="memdoc">
 <p>typedef wrapping an Eigen::Matrix type. </p>
 
-<p>Definition at line <a class="el" href="Converter_8h_source.html#l00027">27</a> of file <a class="el" href="Converter_8h_source.html">Converter.h</a>.</p>
+<p>Definition at line <a class="el" href="Converter_8h_source.html#l00033">33</a> of file <a class="el" href="Converter_8h_source.html">Converter.h</a>.</p>
 
 </div>
 </div>
@@ -339,7 +411,7 @@ template&lt;typename Number &gt; </div>
 </div><div class="memdoc">
 <p>typedef wrapping an Eigen::Matrix type with only one column. </p>
 
-<p>Definition at line <a class="el" href="Converter_8h_source.html#l00021">21</a> of file <a class="el" href="Converter_8h_source.html">Converter.h</a>.</p>
+<p>Definition at line <a class="el" href="Converter_8h_source.html#l00027">27</a> of file <a class="el" href="Converter_8h_source.html">Converter.h</a>.</p>
 
 </div>
 </div>

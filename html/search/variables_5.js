@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['timeinterval',['timeInterval',['../structhypro_1_1TPathElement.html#a571a283d729e8360a3b7473537759349',1,'hypro::TPathElement']]],
-  ['timestep',['timeStep',['../structhypro_1_1ReachabilitySettings.html#a46dc42bf29cc6363a63d9ec34e1a0466',1,'hypro::ReachabilitySettings']]]
+  ['plotdimensions',['plotDimensions',['../structhypro_1_1ReachabilitySettings.html#a35fc098a7a33f2087f2b9add63f874d7',1,'hypro::ReachabilitySettings']]],
+  ['ppldenomimator',['pplDenomimator',['../structhypro_1_1ReachabilitySettings.html#aa17f76655c115df2a6ce1107f6c03341',1,'hypro::ReachabilitySettings']]]
 ];

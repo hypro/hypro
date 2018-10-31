@@ -3,5 +3,5 @@ digraph "Graphical Class Hierarchy"
   edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
   node [fontname="Helvetica",fontsize="10",shape=record];
   rankdir="LR";
-  Node1 [label="hypro::reachability\l::hypro::BoxSupportFunction\l\< Number, Setting \>",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classhypro_1_1reachability_1_1hypro_1_1BoxSupportFunction.html"];
+  Node1 [label="hypro::ReachabilitySettings",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$structhypro_1_1ReachabilitySettings.html",tooltip="Struct for reachability analysis algorithm settings. "];
 }

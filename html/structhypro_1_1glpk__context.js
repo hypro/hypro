@@ -12,5 +12,6 @@ var structhypro_1_1glpk__context =
     [ "ja", "structhypro_1_1glpk__context.html#a53524e6a5136e0965959c774187673ad", null ],
     [ "lp", "structhypro_1_1glpk__context.html#a9ea064ea8fa691a62657844e64ae5073", null ],
     [ "mConstraintsSet", "structhypro_1_1glpk__context.html#acbf09c6ccea590c9e1337061b34e4ef7", null ],
-    [ "mInitialized", "structhypro_1_1glpk__context.html#a161cfaf59da4a76f01e3431996906920", null ]
+    [ "mInitialized", "structhypro_1_1glpk__context.html#a161cfaf59da4a76f01e3431996906920", null ],
+    [ "parm", "structhypro_1_1glpk__context.html#a84a70b9d3d2c4d8d73791a49f4f54750", null ]
 ];

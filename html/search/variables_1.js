@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['filename',['fileName',['../structhypro_1_1ReachabilitySettings.html#a60d7439b247075058d03977c4aecf430',1,'hypro::ReachabilitySettings']]]
+  ['clustering',['clustering',['../structhypro_1_1ReachabilitySettings.html#aec7ef31f8312516dd54b2b338903e6fd',1,'hypro::ReachabilitySettings']]],
+  ['currentbtposition',['currentBTPosition',['../structhypro_1_1TBacktrackingInfo.html#a113aa00925adc4303c6cdc62dad52991',1,'hypro::TBacktrackingInfo']]]
 ];
