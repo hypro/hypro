@@ -36,7 +36,7 @@ namespace box {
                 vectors.emplace_back(std::move(vector));
             }
             auto creationTime = creationTimer.elapsed();
-            std::cout << "Dimension " << d << ": Creation took " << creationTime.count() << " sec." << std::endl;
+            //std::cout << "Dimension " << d << ": Creation took " << creationTime.count() << " sec." << std::endl;
             ress.mCreationTime += creationTime;
 
             // run instances
@@ -46,7 +46,7 @@ namespace box {
             }
             auto runningTime = runTimerHyPro.elapsed();
             ress.emplace_back({"affineTransformation",runningTime,static_cast<int>(d)});
-            std::cout << "Dimension " << d << ":  Running took " << runningTime.count() << " sec." << std::endl;
+            //std::cout << "Dimension " << d << ":  Running took " << runningTime.count() << " sec." << std::endl;
 
             ress.mRunningTime += runningTime;
 

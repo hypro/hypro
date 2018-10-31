@@ -43,7 +43,7 @@ namespace box {
                 #endif
             }
             auto creationTime = creationTimer.elapsed();
-            std::cout << "Dimension " << d << ": Creation took " << creationTime.count() << " sec." << std::endl;
+            //std::cout << "Dimension " << d << ": Creation took " << creationTime.count() << " sec." << std::endl;
             ress.mCreationTime += creationTime;
 
             // run instances
@@ -53,7 +53,7 @@ namespace box {
             }
             auto runningTime = runTimerHyPro.elapsed();
             ress.emplace_back({"intersectHalfspace",runningTime,static_cast<int>(d)});
-            std::cout << "Dimension " << d << ":  Running took " << runningTime.count() << " sec." << std::endl;
+            //std::cout << "Dimension " << d << ":  Running took " << runningTime.count() << " sec." << std::endl;
 
             #ifdef HYPRO_USE_PPL
             std::chrono::duration<double> pplRT = std::chrono::duration<double>::zero();
