@@ -8,6 +8,7 @@
 #pragma once
 
 #include "Result.h"
+#include <util/convenienceOperators.h>
 #include <chrono>
 #include <iostream>
 #include <fstream>
@@ -40,10 +41,16 @@ struct Results {
             // if results are filtered, apply filter.
             if(filter != "") {
                 if(r.mName == filter) {
-                    fstr << r.mDimension << delimiter << r.mRunningTime.count() << "\n";    
+                    fstr << r.mDimension << delimiter;
+                    for(const auto& i : r.mContent) 
+                        fstr << i << delimiter;
+                    fstr << r.mRunningTime.count() << "\n";
                 }
             } else {
-                fstr << r.mDimension << delimiter << r.mRunningTime.count() << "\n";
+                fstr << r.mDimension << delimiter;
+                for(const auto& i : r.mContent) 
+                    fstr << i << delimiter;
+                fstr << r.mRunningTime.count() << "\n";
             }
         }
 
