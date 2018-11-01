@@ -2,10 +2,10 @@
 
 namespace benchmark {
 namespace sf {
-    
+
     Results<std::size_t> affineTransformation(const Settings& settings) {
         Results<std::size_t> ress;
-        
+
         // initialize random number generator
         mt19937 generator;
         std::uniform_int_distribution<int> dist = std::uniform_int_distribution<int>(0,10);
@@ -54,7 +54,7 @@ namespace sf {
                 }
             }
             auto runningTime = runTimerHyPro.elapsed();
-            ress.emplace_back({"affineTransformation",runningTime,static_cast<int>(d)});
+            ress.emplace_back({"affineTransformation",runningTime/settings.iterations,static_cast<int>(d)});
             std::cout << "Dimension " << d << ":  Running took " << runningTime.count() << " sec." << std::endl;
 
             Timer runTimerNoReduction;
@@ -65,7 +65,7 @@ namespace sf {
                 }
             }
             runningTime = runTimerNoReduction.elapsed();
-            ress.emplace_back({"affineTransformationNoReduction",runningTime,static_cast<int>(d)});
+            ress.emplace_back({"affineTransformationNoReduction",runningTime/settings.iterations,static_cast<int>(d)});
             std::cout << "Dimension " << d << ":  Running took " << runningTime.count() << " sec (no reduction)." << std::endl;
 
             ress.mRunningTime += runningTime;

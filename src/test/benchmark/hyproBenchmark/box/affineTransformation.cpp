@@ -45,7 +45,7 @@ namespace box {
                 box.affineTransformation(matrices[i], vectors[i]);
             }
             auto runningTime = runTimerHyPro.elapsed();
-            ress.emplace_back({"affineTransformation",runningTime,static_cast<int>(d)});
+            ress.emplace_back({"affineTransformation",runningTime/settings.iterations,static_cast<int>(d)});
             //std::cout << "Dimension " << d << ":  Running took " << runningTime.count() << " sec." << std::endl;
 
             ress.mRunningTime += runningTime;
@@ -58,4 +58,3 @@ namespace box {
 
 } // box
 } // benchmark
-

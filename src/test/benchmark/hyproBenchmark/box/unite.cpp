@@ -43,7 +43,7 @@ namespace box {
                 auto tmp = lhsBoxes[i].unite(rhsBoxes[i]);
             }
             auto runningTime = runTimerHyPro.elapsed();
-            ress.emplace_back({"union",runningTime,static_cast<int>(d)});
+            ress.emplace_back({"union",runningTime/settings.iterations,static_cast<int>(d)});
             //std::cout << "Dimension " << d << ":  Running took " << runningTime.count() << " sec." << std::endl;
 
             ress.mRunningTime += runningTime;
@@ -53,4 +53,3 @@ namespace box {
 
 } // box
 } // benchmark
-

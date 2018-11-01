@@ -52,7 +52,7 @@ namespace box {
                 box.intersectHalfspace(hsps[i]);
             }
             auto runningTime = runTimerHyPro.elapsed();
-            ress.emplace_back({"intersectHalfspace",runningTime,static_cast<int>(d)});
+            ress.emplace_back({"intersectHalfspace",runningTime/settings.iterations,static_cast<int>(d)});
             //std::cout << "Dimension " << d << ":  Running took " << runningTime.count() << " sec." << std::endl;
 
             #ifdef HYPRO_USE_PPL
@@ -70,7 +70,7 @@ namespace box {
                 b.refine_with_constraint(pplHsps[i]);
                 pplRT += runTimerPPL.elapsed();
             }
-            ress.emplace_back({"intersectHalfspacePPL",pplRT,d});
+            ress.emplace_back({"intersectHalfspacePPL",pplRT/settings.iterations,d});
             std::cout << "Dimension " << d << ":  Running took " << pplRT.count() << " sec (PPL)." << std::endl;
             #endif
 
@@ -84,4 +84,3 @@ namespace box {
 
 } // box
 } // benchmark
-

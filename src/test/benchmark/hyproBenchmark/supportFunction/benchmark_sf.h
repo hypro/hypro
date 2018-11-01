@@ -23,13 +23,13 @@ namespace sf {
                             const Settings& settings);
 
     template<typename SFSettings>
-    Results<std::size_t> affineTrafoHelper(const std::vector<hypro::matrix_t<::benchmark::Number>>& matrices, 
+    Results<std::size_t> affineTrafoHelper(const std::vector<hypro::matrix_t<::benchmark::Number>>& matrices,
                                            const std::vector<hypro::vector_t<::benchmark::Number>>& vectors,
                                            const std::vector<hypro::vector_t<::benchmark::Number>>& directions,
                                            std::size_t dimension,
                                            std::string name,
                                            const Settings& settings,
-                                           const hypro::SupportFunctionT<::benchmark::Number,hypro::Converter<::benchmark::Number>,SFSettings>& sf) 
+                                           const hypro::SupportFunctionT<::benchmark::Number,hypro::Converter<::benchmark::Number>,SFSettings>& sf)
     {
         Results<std::size_t> ress;
         // for all configurations, i.e. all combinations of dimension, multiplications and evaluations run #instances many experiments.
@@ -49,7 +49,7 @@ namespace sf {
                 std::vector<std::size_t> data;
                 data.push_back(m);
                 data.push_back(e);
-                ress.emplace_back({name,runningTime,static_cast<int>(dimension),data});
+                ress.emplace_back({name,runningTime/settings.iterations,static_cast<int>(dimension),data});
                 //std::cout << "Dimension " << d << ", m " << m << ", e "<< e << ":  Running took " << runningTime.count() << " sec." << std::endl;
             }
         }

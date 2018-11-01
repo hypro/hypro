@@ -33,7 +33,7 @@ namespace box {
                 pplbox lhs = pplbox(d);
                 pplbox rhs = pplbox(d);
                 #endif
-                
+
                 for(std::size_t id = 0; id < d; ++id) {
                     ::benchmark::Number ll = -dist(generator);
                     ::benchmark::Number lu = dist(generator);
@@ -73,7 +73,7 @@ namespace box {
                 auto tmp = lhsBoxes[i].intersect(rhsBoxes[i]);
             }
             auto runningTime = runTimerHyPro.elapsed();
-            ress.emplace_back({"intersect",runningTime,static_cast<int>(d)});
+            ress.emplace_back({"intersect",runningTime/settings.iterations,static_cast<int>(d)});
             //std::cout << "Dimension " << d << ":  Running took " << runningTime.count() << " sec." << std::endl;
 
             #ifdef HYPRO_USE_PPL
@@ -82,7 +82,7 @@ namespace box {
                 pplLhsBoxes[i].intersection_assign(pplRhsBoxes[i]);
             }
             runningTime = runTimerPPL.elapsed();
-            ress.emplace_back({"intersectPPL",runningTime,d});
+            ress.emplace_back({"intersectPPL",runningTime/settings.iterations,d});
             std::cout << "Dimension " << d << ":  Running took " << runningTime.count() << " sec (PPL)." << std::endl;
             #endif
 
@@ -93,4 +93,3 @@ namespace box {
 
 } // box
 } // benchmark
-
