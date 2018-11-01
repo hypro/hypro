@@ -33,8 +33,8 @@ namespace sf {
     {
         Results<std::size_t> ress;
         // for all configurations, i.e. all combinations of dimension, multiplications and evaluations run #instances many experiments.
-        for(std::size_t m = 0; m < settings.multiplications; m += settings.stepSize) {
-            for(std::size_t e = 0; e < settings.evaluations; e += settings.stepSize) {
+        for(std::size_t m = 0; m < settings.multiplications; m += settings.stepSizeMultiplications) {
+            for(std::size_t e = 0; e < settings.evaluations; e += settings.stepSizeEvaluations) {
                 Timer runTimerHyPro;
                 for(std::size_t i = 0; i < settings.iterations; ++i) {
                     auto tmp = sf;

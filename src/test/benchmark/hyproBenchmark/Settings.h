@@ -16,5 +16,7 @@ namespace benchmark
         static constexpr std::size_t multiplications = 100;
         static constexpr std::size_t evaluations = 100;
         static constexpr std::size_t stepSize = 5;
+        static constexpr std::size_t stepSizeEvaluations = 10;
+        static constexpr std::size_t stepSizeMultiplications = 2;
     };
 } // benchmark
