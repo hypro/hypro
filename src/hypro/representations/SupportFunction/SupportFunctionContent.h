@@ -49,13 +49,14 @@ struct trafoContent {
 		// Determine, if we need to create new parameters or if this matrix and vector pair has already been used (recursive).
 		parameters = std::make_shared<const lintrafoParameters<Number>>(A,b);
 		// in case this transformation has already been performed, parameters will be updated.
-		_origin->hasTrafo(parameters, A, b);
+		auto trafoInDepth = _origin->hasTrafo(parameters, A, b, 0); // returns a pair of bool and depth in which the node was found -> this saves some comparisons later, as we know if the second value is 1, we can reduce.
+		assert(!trafoInDepth.second == 1 || ((origin->type() == SF_TYPE::LINTRAFO) && (*origin->linearTrafoParameters()->parameters == *parameters)));
 		if(Setting::USE_LIN_TRANS_REDUCTION){
 			// best points for reduction are powers of 2 thus we only use these points for possible reduction points
 			bool reduced;
 			do {
 				reduced = false;
-				if ( (origin->type() == SF_TYPE::LINTRAFO) && (*origin->linearTrafoParameters()->parameters == *parameters) && origin->linearTrafoParameters()->currentExponent == currentExponent ) {
+				if ( trafoInDepth.second == 1 && origin->linearTrafoParameters()->currentExponent == currentExponent ) {
 					successiveTransformations = origin->linearTrafoParameters()->successiveTransformations +1 ;
 				} else {
 					successiveTransformations = 0;
@@ -673,39 +674,40 @@ class SupportFunctionContent {
 		}
 	}
 
-	bool hasTrafo(std::shared_ptr<const lintrafoParameters<Number>>& resNode, const matrix_t<Number>& A, const vector_t<Number>& b) const {
+	std::pair<bool,std::size_t> hasTrafo(std::shared_ptr<const lintrafoParameters<Number>>& resNode, const matrix_t<Number>& A, const vector_t<Number>& b, std::size_t depth) const {
 		switch ( mType ) {
 			case SF_TYPE::SUM: {
-				bool res = summands()->lhs->hasTrafo(resNode, A, b);
-				if(!res) {
-					res = summands()->rhs->hasTrafo(resNode, A, b);
+				std::pair<bool,std::size_t> res = summands()->lhs->hasTrafo(resNode, A, b, depth+1);
+				if(!res.first) {
+					res = summands()->rhs->hasTrafo(resNode, A, b, depth+1);
 				}
 				return res;
 			}
 			case SF_TYPE::INTERSECT: {
-				bool res = intersectionParameters()->lhs->hasTrafo(resNode, A, b);
-				if(!res) {
-					res = intersectionParameters()->rhs->hasTrafo(resNode, A, b);
+				std::pair<bool,std::size_t> res = intersectionParameters()->lhs->hasTrafo(resNode, A, b, depth+1);
+				if(!res.first) {
+					res = intersectionParameters()->rhs->hasTrafo(resNode, A, b, depth+1);
 				}
 				return res;
 			}
 			case SF_TYPE::LINTRAFO: {
 				if(linearTrafoParameters()->parameters->matrix() == A && linearTrafoParameters()->parameters->vector() == b) {
 					resNode = linearTrafoParameters()->parameters;
-					return true;
+					return std::make_pair(true,depth+1);
 				}
-				return linearTrafoParameters()->origin->hasTrafo(resNode, A, b);
+				return linearTrafoParameters()->origin->hasTrafo(resNode, A, b, depth+1);
 			}
 			case SF_TYPE::SCALE: {
-				return scaleParameters()->origin->hasTrafo(resNode, A, b);
+				return scaleParameters()->origin->hasTrafo(resNode, A, b, depth+1);
 			}
 			case SF_TYPE::UNITE: {
 				for(const auto& item : unionParameters()->items) {
-					if(item->hasTrafo(resNode,A,b)) {
-						return true;
+					auto tmp = item->hasTrafo(resNode,A,b,depth+1);
+					if(tmp.first) {
+						return tmp;
 					}
 				}
-				return false;
+				return std::make_pair(false,0);
 			}
 			case SF_TYPE::POLY:
 			case SF_TYPE::INFTY_BALL:
@@ -713,16 +715,16 @@ class SupportFunctionContent {
 			case SF_TYPE::ELLIPSOID:
 			case SF_TYPE::BOX:
 			case SF_TYPE::ZONOTOPE: {
-				return false;
+				return std::make_pair(false,0);
 			}
 			case SF_TYPE::PROJECTION: {
-				return projectionParameters()->origin->hasTrafo(resNode, A, b);
+				return projectionParameters()->origin->hasTrafo(resNode, A, b, depth+1);
 				break;
 			}
 			case SF_TYPE::NONE:
 			default:
 				assert(false);
-				return false;
+				return std::make_pair(false,0);
 		}
 	}
 
