@@ -16,7 +16,7 @@
 #include <iostream>
 #include <random>
 #ifdef HYPRO_USE_PPL
-#include "pplStructs.h"
+#include "../box/pplStructs.h"
 #include <ppl.hh>
 #endif
 
