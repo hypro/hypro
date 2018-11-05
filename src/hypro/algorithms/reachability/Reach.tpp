@@ -89,7 +89,9 @@ namespace reachability {
 
 		TRACE("hypro.reacher","working queue size: " << mWorkingQueue.size());
 
-		std::cout << std::endl;
+		if(ReacherSettings::printStatus) {
+			std::cout << std::endl;
+		}
 		while ( !mWorkingQueue.empty() ) {
 			initialSet<Number> nextInitialSet = mWorkingQueue.front();
 			mWorkingQueue.pop_front();
