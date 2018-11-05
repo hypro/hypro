@@ -50,19 +50,20 @@ struct trafoContent {
 		parameters = std::make_shared<const lintrafoParameters<Number>>(A,b);
 		// in case this transformation has already been performed, parameters will be updated.
 		auto trafoInDepth = _origin->hasTrafo(parameters, A, b, 0); // returns a pair of bool and depth in which the node was found -> this saves some comparisons later, as we know if the second value is 1, we can reduce.
-		assert(!trafoInDepth.second == 1 || ((origin->type() == SF_TYPE::LINTRAFO) && (*origin->linearTrafoParameters()->parameters == *parameters)));
+		assert(trafoInDepth.second != 1 || ((origin->type() == SF_TYPE::LINTRAFO) && (*origin->linearTrafoParameters()->parameters == *parameters) && trafoInDepth.first ) );
 		if(Setting::USE_LIN_TRANS_REDUCTION){
 			// best points for reduction are powers of 2 thus we only use these points for possible reduction points
 			bool reduced;
 			do {
 				reduced = false;
-				if ( trafoInDepth.second == 1 && origin->linearTrafoParameters()->currentExponent == currentExponent ) {
+				if ( trafoInDepth.first && trafoInDepth.second == 1 && origin->linearTrafoParameters()->currentExponent == currentExponent ) {
 					successiveTransformations = origin->linearTrafoParameters()->successiveTransformations +1 ;
 				} else {
 					successiveTransformations = 0;
 				}
-				//std::cout << "successiveTransformations with exponent " << currentExponent << ": " << successiveTransformations << std::endl;
+				TRACE("hypro.representations.supportFunction","successiveTransformations with exponent " << currentExponent << ": " << successiveTransformations);
 				if (successiveTransformations == unsigned(carl::pow(2,parameters->power)-1)) {
+					TRACE("hypro.representations.supportFunction", "Update origin pointer as a result of lintrafo reduction.");
 					reduced = true;
 					currentExponent = currentExponent*(carl::pow(2,parameters->power));
 					for(std::size_t i = 0; i < unsigned(carl::pow(2,parameters->power)-1); i++ ){
@@ -70,6 +71,12 @@ struct trafoContent {
 					}
 					// Note: The following assertion does not hold in combination with the current reduction techniques.
 					//assert(origin->type() != SF_TYPE::LINTRAFO || (origin->linearTrafoParameters()->parameters == this->parameters && origin->linearTrafoParameters()->currentExponent >= currentExponent) );
+
+					// update information whether another trafo follows/is the origin.
+					// TODO: If the next operation is not a linTrafo we can directly quit.
+					trafoInDepth = origin->hasTrafo(parameters, A, b, 0);
+					TRACE("hypro.representations.supportFunction","Next linear trafo at depth: " << trafoInDepth.second);
+					TRACE("hypro.representations.supportFunction","Next node type: " << origin->type());
 				}
 			} while (reduced == true);
 			assert(origin->checkTreeValidity());
@@ -210,6 +217,7 @@ class SupportFunctionContent {
 
 	static std::shared_ptr<SupportFunctionContent<Number,Setting>> create( SF_TYPE _type, const matrix_t<Number>& _directions,
 																	const vector_t<Number>& _distances ) {
+		TRACE("hypro.representations.supportFunction","");
 		auto obj = std::shared_ptr<SupportFunctionContent<Number,Setting>>( new SupportFunctionContent<Number,Setting>( _directions, _distances, _type ));
 		obj->pThis = obj;
 		assert(obj->checkTreeValidity());
@@ -217,6 +225,7 @@ class SupportFunctionContent {
 	}
 
 	static std::shared_ptr<SupportFunctionContent<Number,Setting>> create( SF_TYPE _type, const std::vector<carl::Interval<Number>>& inbox  ) {
+		TRACE("hypro.representations.supportFunction","");
 		auto obj = std::shared_ptr<SupportFunctionContent<Number,Setting>>( new SupportFunctionContent<Number,Setting>( inbox, _type ));
 		obj->pThis = obj;
 		assert(obj->checkTreeValidity());
@@ -224,6 +233,7 @@ class SupportFunctionContent {
 	}
 
 	static std::shared_ptr<SupportFunctionContent<Number,Setting>> create( SF_TYPE _type, const std::vector<Halfspace<Number>>& _planes ) {
+		TRACE("hypro.representations.supportFunction","");
 		auto obj = std::shared_ptr<SupportFunctionContent<Number,Setting>>( new SupportFunctionContent<Number,Setting>( _planes, _type ));
 		obj->pThis = obj;
 		assert(obj->checkTreeValidity());
@@ -253,6 +263,7 @@ class SupportFunctionContent {
 
 	static std::shared_ptr<SupportFunctionContent<Number,Setting>> create( const std::shared_ptr<SupportFunctionContent<Number,Setting>>& orig, const matrix_t<Number>& constraints,
 															const vector_t<Number>& constants ) {
+		TRACE("hypro.representations.supportFunction","");
 		auto obj = std::shared_ptr<SupportFunctionContent<Number,Setting>>( new SupportFunctionContent<Number,Setting>(orig, constraints, constants, SF_TYPE::LINTRAFO));
 		obj->pThis = obj;
 		assert(obj->checkTreeValidity());

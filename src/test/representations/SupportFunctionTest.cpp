@@ -619,7 +619,7 @@ TYPED_TEST(SupportFunctionTest, isBox) {
 	m2 << 1,0,-1,0,1,0,0,-1;
 	v2 << 1,2,3,4;
 
-	EXPECT_FALSE(boost::get<0>(isBox(m2,v2)));
+	EXPECT_TRUE(boost::get<0>(isBox(m2,v2)));
 
 	matrix_t<TypeParam> m3 = matrix_t<TypeParam>(5,2);
 	vector_t<TypeParam> v3 = vector_t<TypeParam>(4);
