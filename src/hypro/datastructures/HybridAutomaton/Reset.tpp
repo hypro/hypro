@@ -188,9 +188,9 @@ namespace hypro {
 
 			// for each row of the constraints check if it contains an entry for one of the variables of the set
 			// and add the corresponding rows to a list of indices that are later added to a matrix
-			std::vector<size_t> indicesToAdd;
+			std::vector<Eigen::Index> indicesToAdd;
 			for(auto entry : set){
-				indicesToAdd.push_back(entry);
+				indicesToAdd.push_back(Eigen::Index(entry));
 			}
 
 			if(indicesToAdd.size() > 0){

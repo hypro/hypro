@@ -6,20 +6,29 @@
 
 namespace hypro {
 
-	template<typename Number>
-	matrix_t<Number> selectRows(const matrix_t<Number>& original, const std::vector<Eigen::Index>& rowIndices) {
+	template<typename Number, typename IdxType>
+	matrix_t<Number> selectRows(const matrix_t<Number>& original, const std::vector<IdxType>& rowIndices) {
 		matrix_t<Number> res = matrix_t<Number>(rowIndices.size(), original.cols());
 		for(Eigen::Index index = 0; index < res.rows(); index++){
-			res.row(index) = original.row(rowIndices[index]);
+			res.row(index) = original.row(Eigen::Index(rowIndices[index]));
 		}
 		return res;
 	}
 
-	template<typename Number>
-	matrix_t<Number> selectCols(const matrix_t<Number>& original, const std::vector<Eigen::Index>& colIndices) {
-		matrix_t<Number> res = matrix_t<Number>(original.rows(), colIndices.size());
+	template<typename Number, typename IdxType>
+	vector_t<Number> selectRows(const vector_t<Number>& original, const std::vector<IdxType>& rowIndices) {
+		vector_t<Number> res = vector_t<Number>(rowIndices.size());
+		for(Eigen::Index index = 0; index < res.rows(); index++){
+			res(index) = original(Eigen::Index(rowIndices[index]));
+		}
+		return res;
+	}
+
+	template<typename Number, typename IdxType>
+	matrix_t<Number> selectCols(const matrix_t<Number>& original, const std::vector<IdxType>& colIndices) {
+		matrix_t<Number> res = matrix_t<Number>(original.rows(), Eigen::Index(colIndices.size()));
 		for(Eigen::Index index = 0; index < res.cols(); index++){
-			res.col(index) = original.col(colIndices[index]);
+			res.col(index) = original.col(Eigen::Index(colIndices[index]));
 		}
 		return res;
 	}

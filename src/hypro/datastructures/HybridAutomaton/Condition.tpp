@@ -130,11 +130,11 @@ void Condition<Number>::decompose(std::vector<std::vector<size_t>> decomposition
 
 		// for each row of the constraints check if it contains an entry for one of the variables of the set
 		// and add the corresponding rows to a list of indices that are later added to a matrix
-		std::vector<int> indicesToAdd;
-		for(int i = 0; i < constraintsOld.rows(); i++){
+		std::vector<Eigen::Index> indicesToAdd;
+		for(Eigen::Index i = 0; i < constraintsOld.rows(); i++){
 			vector_t<Number> row = constraintsOld.row(i);
 			bool containsVar = false;
-			for(int j = 0; j < row.rows(); j++){
+			for(Eigen::Index j = 0; j < row.rows(); j++){
 				if(row(j,0) != 0){
 					if(std::find(set.begin(),set.end(), j) != set.end()){
 						//set contains variable j, which is also contained in this constraint
