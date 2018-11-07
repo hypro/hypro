@@ -8,6 +8,7 @@
 	static_assert(false, "This file may only be included indirectly by GeometricObject.h");
 #endif
 
+#include "VPolytopeSettings.h"
 #include "../Cone.h"
 #include "../../../algorithms/convexHull/ConvexHull.h"
 #include "../../../util/convexHull.h"
@@ -27,8 +28,8 @@ namespace hypro {
  * @tparam     Converter  The used converter.
  * \ingroup geoState @{
  */
-template <typename Number, typename Converter>
-class VPolytopeT : public GeometricObject<Number, VPolytopeT<Number,Converter>> {
+template <typename Number, typename Converter, typename Settings>
+class VPolytopeT : public GeometricObject<Number, VPolytopeT<Number,Converter,Settings>> {
   public:
 
 	using pointVector = std::vector<Point<Number>>;
@@ -374,15 +375,15 @@ class VPolytopeT : public GeometricObject<Number, VPolytopeT<Number,Converter>> 
 	 * Operators
 	 **************************************************************************/
   public:
-	VPolytopeT<Number, Converter>& operator=( const VPolytopeT<Number, Converter>& rhs ) = default;
-	VPolytopeT<Number, Converter>& operator=( VPolytopeT<Number, Converter>&& rhs ) = default;
-	bool operator==( const VPolytopeT<Number, Converter>& rhs ) const;
+	VPolytopeT<Number,Converter,Settings>& operator=( const VPolytopeT<Number,Converter,Settings>& rhs ) = default;
+	VPolytopeT<Number,Converter,Settings>& operator=( VPolytopeT<Number,Converter,Settings>&& rhs ) = default;
+	bool operator==( const VPolytopeT<Number,Converter,Settings>& rhs ) const;
 };
 
 /** @} */
 
-template <typename Number, typename Converter>
-std::ostream& operator<<( std::ostream& out, const hypro::VPolytopeT<Number, Converter>& lhs ) {
+template <typename Number, typename Converter, typename Settings>
+std::ostream& operator<<( std::ostream& out, const hypro::VPolytopeT<Number,Converter,Settings>& lhs ) {
 #ifdef HYPRO_LOGGING
 	out << "{ ";
 	for ( const auto& vector : lhs ) {
@@ -393,13 +394,13 @@ std::ostream& operator<<( std::ostream& out, const hypro::VPolytopeT<Number, Con
 	return out;
 }
 
-template<typename From, typename To, typename Converter>
-VPolytopeT<To,Converter> convert(const VPolytopeT<From,Converter>& in) {
+template<typename From, typename To, typename Converter, typename Settings>
+VPolytopeT<To,Converter,Settings> convert(const VPolytopeT<From,Converter,Settings>& in) {
 	std::vector<Point<To>> convertedVertices;
 	for(const auto& vertex : in.vertices()) {
 		convertedVertices.push_back(Point<To>(convert<From,To>(vertex.rawCoordinates())));
 	}
-	return VPolytopeT<To,Converter>(convertedVertices);
+	return VPolytopeT<To,Converter,Settings>(convertedVertices);
 }
 
 }  // namespace

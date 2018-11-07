@@ -109,14 +109,15 @@ typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const Box& _
 
 //conversion from V-Polytope to Zonotope (no differentiation between conversion modes - always OVER)
 template <typename Number>
-typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const VPolytope& _source, const CONV_MODE mode ){
+template<typename VPolySettings>
+typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const VPolytopeT<Number,Converter<Number>,VPolySettings>& _source, const CONV_MODE mode ){
     //overapproximation
     //if( mode == OVER){
         //gets dimension from source object
         std::size_t dim = _source.dimension();
 
         //gets vertices from source object
-        typename VPolytopeT<Number,Converter>::pointVector vertices = _source.vertices();
+        typename VPolytopeT<Number,Converter,VPolySettings>::pointVector vertices = _source.vertices();
 
         //computes an oriented Box as special Zonotope around the source object (returns Halfspaces)
         PrincipalComponentAnalysis<Number> pca(vertices);
@@ -127,7 +128,7 @@ typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const VPolyt
         auto vpoly = toVPolytope(hpoly, mode);
 
         //gets vertices of box
-        typename VPolytopeT<Number,Converter>::pointVector newVertices = vpoly.vertices();
+        typename VPolytopeT<Number,Converter,VPolySettings>::pointVector newVertices = vpoly.vertices();
 
         //defines empty generator matrix and center vector
         matrix_t<Number> generators = matrix_t<Number>::Zero(dim, dim);
@@ -333,7 +334,7 @@ typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const Suppor
         //converts computed box H -> V
         auto vpoly = toVPolytope(hpoly, mode);
         //gets vertices of box
-        typename VPolytopeT<Number,Converter>::pointVector newVertices = vpoly.vertices();
+        typename VPolytope::pointVector newVertices = vpoly.vertices();
 
         //defines empty generator matrix and center vector
         matrix_t<Number> generators = matrix_t<Number>::Zero(dim, dim);

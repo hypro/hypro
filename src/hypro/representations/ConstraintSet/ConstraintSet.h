@@ -8,6 +8,8 @@
 
 namespace hypro {
 
+struct ConstraintSetSettings{};
+
 /**
  * @brief      A class representing a plain constraint set.
  * @details    A constraint set in this case is a datastructure similar to a H-Polytope but without any functionality. The idea is just to
@@ -16,8 +18,8 @@ namespace hypro {
  * @tparam     Converter  The used converter.
  * \ingroup geoState @{
  */
-template <typename Number, typename Converter>
-class ConstraintSetT : public GeometricObject<Number, ConstraintSetT<Number,Converter>> {
+template <typename Number, typename Converter, typename Settings>
+class ConstraintSetT : public GeometricObject<Number, ConstraintSetT<Number,Converter,Settings>> {
   private:
   public:
 	/***************************************************************************
@@ -121,7 +123,7 @@ class ConstraintSetT : public GeometricObject<Number, ConstraintSetT<Number,Conv
 	 * @param b2 Contains the second constraintSet.
 	 * @return True, if they are equal.
 	 */
-	friend bool operator==( const ConstraintSetT<Number,Converter>& b1, const ConstraintSetT<Number,Converter>& b2 ) {
+	friend bool operator==( const ConstraintSetT<Number,Converter,Settings>& b1, const ConstraintSetT<Number,Converter,Settings>& b2 ) {
 		if ( b1.dimension() != b2.dimension() ) {
 			return false;
 		}
@@ -134,19 +136,19 @@ class ConstraintSetT : public GeometricObject<Number, ConstraintSetT<Number,Conv
 	 * @param b2 A constraintSet.
 	 * @return False, if both constraintSets are equal.
 	 */
-	friend bool operator!=( const ConstraintSetT<Number,Converter>& b1, const ConstraintSetT<Number,Converter>& b2 ) { return !( b1 == b2 ); }
+	friend bool operator!=( const ConstraintSetT<Number,Converter,Settings>& b1, const ConstraintSetT<Number,Converter,Settings>& b2 ) { return !( b1 == b2 ); }
 
 	/**
 	 * @brief Assignment operator.
 	 * @param rhs A constraintSet.
 	 */
-	ConstraintSetT<Number,Converter>& operator=( const ConstraintSetT<Number,Converter>& rhs ) = default;
+	ConstraintSetT<Number,Converter,Settings>& operator=( const ConstraintSetT<Number,Converter,Settings>& rhs ) = default;
 
 	/**
 	 * @brief Move assignment operator.
 	 * @param rhs A constraintSet.
 	 */
-	ConstraintSetT<Number,Converter>& operator=(ConstraintSetT<Number,Converter>&& rhs) = default;
+	ConstraintSetT<Number,Converter,Settings>& operator=(ConstraintSetT<Number,Converter,Settings>&& rhs) = default;
 
 	/**
 	 * @brief Outstream operator.
@@ -154,10 +156,10 @@ class ConstraintSetT : public GeometricObject<Number, ConstraintSetT<Number,Conv
 	 * @param b A constraintSet.
 	 */
 #ifdef HYPRO_LOGGING
-	friend std::ostream& operator<<( std::ostream& ostr, const ConstraintSetT<Number,Converter>& b ) {
+	friend std::ostream& operator<<( std::ostream& ostr, const ConstraintSetT<Number,Converter,Settings>& b ) {
 		ostr << "Matrix: " << b.matrix() << ", Vector: " << b.vector();
 #else
-	friend std::ostream& operator<<( std::ostream& ostr, const ConstraintSetT<Number,Converter>& ) {
+	friend std::ostream& operator<<( std::ostream& ostr, const ConstraintSetT<Number,Converter,Settings>& ) {
 #endif
 		return ostr;
 	}
@@ -192,26 +194,26 @@ class ConstraintSetT : public GeometricObject<Number, ConstraintSetT<Number,Conv
 	 *
 	 * @param[in]  limit      The limit
 	 */
-	const ConstraintSetT<Number,Converter>& reduceNumberRepresentation(unsigned) { return *this; }
+	const ConstraintSetT<Number,Converter,Settings>& reduceNumberRepresentation(unsigned) { return *this; }
 
 	std::pair<CONTAINMENT, ConstraintSetT> satisfiesHalfspace( const Halfspace<Number>&  ) const { return std::make_pair(CONTAINMENT::NO,*this); }
 	std::pair<CONTAINMENT, ConstraintSetT> satisfiesHalfspaces( const matrix_t<Number>& , const vector_t<Number>&  ) const { return std::make_pair(CONTAINMENT::NO,*this); }
 
-	ConstraintSetT<Number,Converter> project(const std::vector<std::size_t>& ) const { return *this; }
+	ConstraintSetT<Number,Converter,Settings> project(const std::vector<std::size_t>& ) const { return *this; }
 
-	ConstraintSetT<Number,Converter> linearTransformation( const matrix_t<Number>& ) const { return *this; }
-	ConstraintSetT<Number,Converter> affineTransformation( const matrix_t<Number>& , const vector_t<Number>& ) const { return *this; }
-	ConstraintSetT<Number,Converter> minkowskiSum( const ConstraintSetT<Number,Converter>& ) const { return *this; }
+	ConstraintSetT<Number,Converter,Settings> linearTransformation( const matrix_t<Number>& ) const { return *this; }
+	ConstraintSetT<Number,Converter,Settings> affineTransformation( const matrix_t<Number>& , const vector_t<Number>& ) const { return *this; }
+	ConstraintSetT<Number,Converter,Settings> minkowskiSum( const ConstraintSetT<Number,Converter,Settings>& ) const { return *this; }
 
 	/**
 	 * @brief      Computes the intersection of two constraintSets.
 	 * @param[in]  rhs   The right hand side constraintSet.
 	 * @return     The resulting constraintSet.
 	 */
-	ConstraintSetT<Number,Converter> intersect( const ConstraintSetT<Number,Converter>& ) const { return *this; }
+	ConstraintSetT<Number,Converter,Settings> intersect( const ConstraintSetT<Number,Converter,Settings>& ) const { return *this; }
 
-	ConstraintSetT<Number,Converter> intersectHalfspace( const Halfspace<Number>& ) const { return *this; }
-	ConstraintSetT<Number,Converter> intersectHalfspaces( const matrix_t<Number>& , const vector_t<Number>& ) const { return *this; }
+	ConstraintSetT<Number,Converter,Settings> intersectHalfspace( const Halfspace<Number>& ) const { return *this; }
+	ConstraintSetT<Number,Converter,Settings> intersectHalfspaces( const matrix_t<Number>& , const vector_t<Number>& ) const { return *this; }
 	bool contains( const Point<Number>& ) const { return true; }
 
 	/**
@@ -219,21 +221,21 @@ class ConstraintSetT : public GeometricObject<Number, ConstraintSetT<Number,Conv
 	 * @param[in]  constraintSet   The constraintSet.
 	 * @return     True, if the given constraintSet is contained in the current constraintSet, false otherwise.
 	 */
-	bool contains( const ConstraintSetT<Number,Converter>& ) const { assert(false); return true; }
+	bool contains( const ConstraintSetT<Number,Converter,Settings>& ) const { assert(false); return true; }
 
 	/**
 	 * @brief      Computes the union of two constraintSets.
 	 * @param[in]  rhs   The right hand side constraintSet.
 	 * @return     The resulting constraintSet.
 	 */
-	ConstraintSetT<Number,Converter> unite( const ConstraintSetT<Number,Converter>& ) const { return *this; }
+	ConstraintSetT<Number,Converter,Settings> unite( const ConstraintSetT<Number,Converter,Settings>& ) const { return *this; }
 
 	/**
 	 * @brief      Computes the union of the current constraintSet with a set of constraintSets.
 	 * @param[in]  constraintSets  The constraintSets.
 	 * @return     The resulting constraintSet.
 	 */
-	static ConstraintSetT<Number,Converter> unite( const std::vector<ConstraintSetT<Number,Converter>>& ) { return ConstraintSetT<Number,Converter>(); }
+	static ConstraintSetT<Number,Converter,Settings> unite( const std::vector<ConstraintSetT<Number,Converter,Settings>>& ) { return ConstraintSetT<Number,Converter,Settings>(); }
 
 	/**
 	 * @brief      Does nothing as a ConstraintSet is only a container.
@@ -259,9 +261,9 @@ class ConstraintSetT : public GeometricObject<Number, ConstraintSetT<Number,Conv
  * @tparam     Converter  The passed representation converter.
  * @return     The resulting constraintSet.
  */
-template<typename From, typename To, typename Converter>
-ConstraintSetT<To,Converter> convert(const ConstraintSetT<From,Converter>& in) {
-	return ConstraintSetT<To,Converter>( convert<From,To>(in.matrix()), convert<From,To>(in.vector()));
+template<typename From, typename To, typename Converter, typename Settings>
+ConstraintSetT<To,Converter,Settings> convert(const ConstraintSetT<From,Converter,Settings>& in) {
+	return ConstraintSetT<To,Converter,Settings>( convert<From,To>(in.matrix()), convert<From,To>(in.vector()));
 }
 
 } // namespace hypro

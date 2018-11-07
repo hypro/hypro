@@ -9,20 +9,20 @@
 #include "VPolytope.h"
 
 namespace hypro {
-template <typename Number, typename Converter>
-VPolytopeT<Number, Converter>::VPolytopeT()
+template <typename Number, typename Converter, typename Settings>
+VPolytopeT<Number,Converter,Settings>::VPolytopeT()
 	: mVertices(), mReduced( true ), mNeighbors() {
 }
 
-template <typename Number, typename Converter>
-VPolytopeT<Number, Converter>::VPolytopeT( const Point<Number> &point ) {
+template <typename Number, typename Converter, typename Settings>
+VPolytopeT<Number,Converter,Settings>::VPolytopeT( const Point<Number> &point ) {
 	mVertices.push_back( point );
 	mReduced = true;
 	mNeighbors.push_back( std::set<unsigned>() );
 }
 
-template <typename Number, typename Converter>
-VPolytopeT<Number, Converter>::VPolytopeT( const pointVector &points ) {
+template <typename Number, typename Converter, typename Settings>
+VPolytopeT<Number,Converter,Settings>::VPolytopeT( const pointVector &points ) {
 	for ( const auto point : points ) {
 		if(std::find(mVertices.begin(), mVertices.end(), point) == mVertices.end()) {
 			mVertices.push_back( point );
@@ -33,8 +33,8 @@ VPolytopeT<Number, Converter>::VPolytopeT( const pointVector &points ) {
 	reduceNumberRepresentation();
 }
 
-template <typename Number, typename Converter>
-VPolytopeT<Number, Converter>::VPolytopeT( const std::vector<vector_t<Number>>& rawPoints ) {
+template <typename Number, typename Converter, typename Settings>
+VPolytopeT<Number,Converter,Settings>::VPolytopeT( const std::vector<vector_t<Number>>& rawPoints ) {
 	for ( const auto point : rawPoints ) {
 		Point<Number> tmpPoint(point);
 		if(std::find(mVertices.begin(), mVertices.end(), tmpPoint ) == mVertices.end()) {
@@ -46,8 +46,8 @@ VPolytopeT<Number, Converter>::VPolytopeT( const std::vector<vector_t<Number>>& 
 	reduceNumberRepresentation();
 }
 
-template <typename Number, typename Converter>
-VPolytopeT<Number, Converter>::VPolytopeT( const matrix_t<Number> &_constraints, const vector_t<Number> _constants ) {
+template <typename Number, typename Converter, typename Settings>
+VPolytopeT<Number,Converter,Settings>::VPolytopeT( const matrix_t<Number> &_constraints, const vector_t<Number> _constants ) {
 	// calculate all possible Halfspace intersections
 
 	//std::cout << __func__ << ": matrix: " << _constraints << " and vector: " << _constants << std::endl;
@@ -117,8 +117,8 @@ VPolytopeT<Number, Converter>::VPolytopeT( const matrix_t<Number> &_constraints,
 	//reduceNumberRepresentation();
 }
 
-template<typename Number, typename Converter>
-VPolytopeT<Number,Converter> VPolytopeT<Number,Converter>::project(const std::vector<std::size_t>& dimensions) const {
+template<typename Number, typename Converter, typename Settings>
+VPolytopeT<Number,Converter,Settings> VPolytopeT<Number,Converter,Settings>::project(const std::vector<std::size_t>& dimensions) const {
 	if(dimensions.empty()) {
 		return Empty();
 	}
@@ -128,13 +128,13 @@ VPolytopeT<Number,Converter> VPolytopeT<Number,Converter>::project(const std::ve
 		projectedVertices.emplace_back(vertex.project(dimensions));
 	}
 
-	return VPolytopeT<Number,Converter>(projectedVertices);
+	return VPolytopeT<Number,Converter,Settings>(projectedVertices);
 }
 
-template <typename Number, typename Converter>
-VPolytopeT<Number, Converter> VPolytopeT<Number, Converter>::linearTransformation( const matrix_t<Number> &A ) const {
+template <typename Number, typename Converter, typename Settings>
+VPolytopeT<Number,Converter,Settings> VPolytopeT<Number,Converter,Settings>::linearTransformation( const matrix_t<Number> &A ) const {
 	// std::cout << __func__ << " A: " << A << ", b: " << b << std::endl;
-	VPolytopeT<Number, Converter> result;
+	VPolytopeT<Number,Converter,Settings> result;
 	for ( const auto &vertex : mVertices ) {
 		Point<Number> tmp(vertex.linearTransformation( A ));
 		if(std::find(result.begin(), result.end(), tmp) == result.end()) {
@@ -146,11 +146,11 @@ VPolytopeT<Number, Converter> VPolytopeT<Number, Converter>::linearTransformatio
 	return result;
 }
 
-template <typename Number, typename Converter>
-VPolytopeT<Number, Converter> VPolytopeT<Number, Converter>::affineTransformation( const matrix_t<Number> &A,
+template <typename Number, typename Converter, typename Settings>
+VPolytopeT<Number,Converter,Settings> VPolytopeT<Number,Converter,Settings>::affineTransformation( const matrix_t<Number> &A,
 														   const vector_t<Number> &b ) const {
 	// std::cout << __func__ << " A: " << A << ", b: " << b << std::endl;
-	VPolytopeT<Number, Converter> result;
+	VPolytopeT<Number,Converter,Settings> result;
 	for ( const auto &vertex : mVertices ) {
 		Point<Number> tmp(vertex.affineTransformation( A, b ));
 		if(std::find(result.begin(), result.end(), tmp) == result.end()) {
@@ -162,9 +162,9 @@ VPolytopeT<Number, Converter> VPolytopeT<Number, Converter>::affineTransformatio
 	return result;
 }
 
-template <typename Number, typename Converter>
-VPolytopeT<Number, Converter> VPolytopeT<Number, Converter>::minkowskiSum( const VPolytopeT<Number, Converter> &rhs ) const {
-	VPolytopeT<Number, Converter> result;
+template <typename Number, typename Converter, typename Settings>
+VPolytopeT<Number,Converter,Settings> VPolytopeT<Number,Converter,Settings>::minkowskiSum( const VPolytopeT<Number,Converter,Settings> &rhs ) const {
+	VPolytopeT<Number,Converter,Settings> result;
 	// add each rhs-vertex to each vertex of this polytope.
 	for ( auto lhsVertex : mVertices ) {
 		for ( auto rhsVertex : rhs.mVertices ) {
@@ -175,11 +175,11 @@ VPolytopeT<Number, Converter> VPolytopeT<Number, Converter>::minkowskiSum( const
 	return result;
 }
 
-template <typename Number, typename Converter>
-VPolytopeT<Number, Converter> VPolytopeT<Number, Converter>::intersect( const VPolytopeT<Number, Converter> &rhs ) const {
+template <typename Number, typename Converter, typename Settings>
+VPolytopeT<Number,Converter,Settings> VPolytopeT<Number,Converter,Settings>::intersect( const VPolytopeT<Number,Converter,Settings> &rhs ) const {
 	// create a set of possible points via combination of all coordinates
 	if ( rhs.size() == 0 ) {
-		return VPolytopeT<Number, Converter>();
+		return VPolytopeT<Number,Converter,Settings>();
 	} else {
 		pointVector possibleVertices;
 		for ( const auto &lhsVertex : mVertices ) {
@@ -201,42 +201,42 @@ VPolytopeT<Number, Converter> VPolytopeT<Number, Converter>::intersect( const VP
 				++vertexIt;
 			}
 		}
-		return VPolytopeT<Number, Converter>( std::move(possibleVertices) );
+		return VPolytopeT<Number,Converter,Settings>( std::move(possibleVertices) );
 	}
 }
 
-template<typename Number, typename Converter>
-VPolytopeT<Number, Converter> VPolytopeT<Number, Converter>::intersectHalfspace( const Halfspace<Number>& rhs ) const {
+template<typename Number, typename Converter, typename Settings>
+VPolytopeT<Number,Converter,Settings> VPolytopeT<Number,Converter,Settings>::intersectHalfspace( const Halfspace<Number>& rhs ) const {
 	auto intermediate = Converter::toHPolytope(*this);
 	auto intersection = intermediate.intersectHalfspace(rhs);
 	//intersection.removeRedundancy();
-	VPolytopeT<Number, Converter> res(Converter::toVPolytope(intersection));
+	VPolytopeT<Number,Converter,Settings> res(Converter::toVPolytope(intersection));
 	return res;
 }
 
-template<typename Number, typename Converter>
-VPolytopeT<Number, Converter> VPolytopeT<Number, Converter>::intersectHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const {
+template<typename Number, typename Converter, typename Settings>
+VPolytopeT<Number,Converter,Settings> VPolytopeT<Number,Converter,Settings>::intersectHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const {
 	auto intermediate = Converter::toHPolytope(*this);
 	auto intersection = intermediate.intersectHalfspaces(_mat, _vec);
 	//intersection.removeRedundancy();
-	VPolytopeT<Number, Converter> res(Converter::toVPolytope(intersection));
+	VPolytopeT<Number,Converter,Settings> res(Converter::toVPolytope(intersection));
 	return res;
 }
 
-template<typename Number, typename Converter>
-std::pair<CONTAINMENT, VPolytopeT<Number, Converter>> VPolytopeT<Number, Converter>::satisfiesHalfspace( const Halfspace<Number>& rhs ) const {
+template<typename Number, typename Converter, typename Settings>
+std::pair<CONTAINMENT, VPolytopeT<Number,Converter,Settings>> VPolytopeT<Number,Converter,Settings>::satisfiesHalfspace( const Halfspace<Number>& rhs ) const {
 	auto intermediate = Converter::toHPolytope(*this);
 	auto resultPair = intermediate.satisfiesHalfspace(rhs);
 	if(resultPair.first != CONTAINMENT::NO){
 		//resultPair.second.removeRedundancy();
-		VPolytopeT<Number, Converter> res(Converter::toVPolytope(resultPair.second));
+		VPolytopeT<Number,Converter,Settings> res(Converter::toVPolytope(resultPair.second));
 		return std::make_pair(resultPair.first, std::move(res));
 	}
-	return std::make_pair(resultPair.first, std::move(VPolytopeT<Number,Converter>::Empty()));
+	return std::make_pair(resultPair.first, std::move(VPolytopeT<Number,Converter,Settings>::Empty()));
 }
 
-template<typename Number, typename Converter>
-std::pair<CONTAINMENT, VPolytopeT<Number, Converter>> VPolytopeT<Number, Converter>::satisfiesHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const {
+template<typename Number, typename Converter, typename Settings>
+std::pair<CONTAINMENT, VPolytopeT<Number,Converter,Settings>> VPolytopeT<Number,Converter,Settings>::satisfiesHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const {
 	//std::cout << typeid(*this).name() << "::" << __func__ << ": Matrix: " << _mat << " and vector: " << _vec << std::endl;
 	//std::cout << "This VPolytope: " << *this << std::endl;
 	auto intermediate = Converter::toHPolytope(*this);
@@ -247,28 +247,28 @@ std::pair<CONTAINMENT, VPolytopeT<Number, Converter>> VPolytopeT<Number, Convert
 		//resultPair.second.removeRedundancy();
 		assert(!resultPair.second.empty());
 		TRACE("hypro.representations.vpolytope",": Intermediate hpoly convert back: " << resultPair.second);
-		VPolytopeT<Number, Converter> res(Converter::toVPolytope(resultPair.second));
+		VPolytopeT<Number,Converter,Settings> res(Converter::toVPolytope(resultPair.second));
 		TRACE("hypro.representations.vpolytope","Re-Converted v-poly: " << res);
 		assert(!res.empty());
 		return std::make_pair(resultPair.first, std::move(res));
 	}
-	return std::make_pair(resultPair.first, std::move(VPolytopeT<Number,Converter>::Empty()));
+	return std::make_pair(resultPair.first, std::move(VPolytopeT<Number,Converter,Settings>::Empty()));
 }
 
 
-template <typename Number, typename Converter>
-bool VPolytopeT<Number, Converter>::contains( const Point<Number> &point ) const {
+template <typename Number, typename Converter, typename Settings>
+bool VPolytopeT<Number,Converter,Settings>::contains( const Point<Number> &point ) const {
 	return this->contains( point.rawCoordinates() );
 }
 
-template <typename Number, typename Converter>
-bool VPolytopeT<Number, Converter>::contains( const vector_t<Number> &vec ) const {
+template <typename Number, typename Converter, typename Settings>
+bool VPolytopeT<Number,Converter,Settings>::contains( const vector_t<Number> &vec ) const {
 	auto tmpHPoly = Converter::toHPolytope(*this);
 	return tmpHPoly.contains(vec);
 }
 
-template <typename Number, typename Converter>
-bool VPolytopeT<Number, Converter>::contains( const VPolytopeT<Number, Converter> &_other ) const {
+template <typename Number, typename Converter, typename Settings>
+bool VPolytopeT<Number,Converter,Settings>::contains( const VPolytopeT<Number,Converter,Settings> &_other ) const {
 	// std::cout << *this<< " " << __func__ << " " << _other << std::endl;
 	for ( const auto &vertex : _other.vertices() ) {
 		// std::cout << __func__ << " check vertex " << vertex << std::endl;
@@ -280,21 +280,21 @@ bool VPolytopeT<Number, Converter>::contains( const VPolytopeT<Number, Converter
 	return true;
 }
 
-template <typename Number, typename Converter>
-VPolytopeT<Number, Converter> VPolytopeT<Number, Converter>::unite( const VPolytopeT<Number, Converter> &rhs ) const {
+template <typename Number, typename Converter, typename Settings>
+VPolytopeT<Number,Converter,Settings> VPolytopeT<Number,Converter,Settings>::unite( const VPolytopeT<Number,Converter,Settings> &rhs ) const {
 	if ( rhs.dimension() == 0 ) {
-		return VPolytopeT<Number, Converter>( mVertices );
+		return VPolytopeT<Number,Converter,Settings>( mVertices );
 	} else {
-		VPolytopeT<Number,Converter> result;
+		VPolytopeT<Number,Converter,Settings> result;
 		//std::cout << __func__ << " : of " << *this << " and " << rhs << std::endl;
-		VPolytopeT<Number, Converter>::pointVector points;
+		VPolytopeT<Number,Converter,Settings>::pointVector points;
 
 		std::set<Point<Number>> pointSet;
 		pointSet.insert( this->mVertices.begin(), this->mVertices.end() );
 		pointSet.insert( rhs.mVertices.begin(), rhs.mVertices.end() );
 
 		if(pointSet.empty()){
-			return VPolytopeT<Number,Converter>();
+			return VPolytopeT<Number,Converter,Settings>();
 		}
 
 		unsigned effDim = unsigned(effectiveDimension(pointSet));
@@ -304,7 +304,7 @@ VPolytopeT<Number, Converter> VPolytopeT<Number, Converter>::unite( const VPolyt
 
 		if(effDim < points.begin()->dimension()){
 			// TODO: We can optimize this here.
-			return VPolytopeT<Number,Converter>(points);
+			return VPolytopeT<Number,Converter,Settings>(points);
 		} else if(points.size() > points.begin()->dimension()){
 			TRACE("hypro.representations.vpolytope","Using convex hull algorithm to reduce point set.");
 			std::vector<std::shared_ptr<Facet<Number>>> facets = convexHull( points ).first;
@@ -314,13 +314,13 @@ VPolytopeT<Number, Converter> VPolytopeT<Number, Converter>::unite( const VPolyt
 					preresult.insert( facets[i]->vertices().at( j ) );
 				}
 			}
-			VPolytopeT<Number, Converter>::pointVector res;
+			VPolytopeT<Number,Converter,Settings>::pointVector res;
 			for ( const auto &point : preresult ) {
 				res.push_back( point );
 			}
-			result = VPolytopeT<Number, Converter>( res );
+			result = VPolytopeT<Number,Converter,Settings>( res );
 		} else {
-			result = VPolytopeT<Number, Converter>(points);
+			result = VPolytopeT<Number,Converter,Settings>(points);
 		}
 
 		//assert(result.contains(*this));
@@ -330,14 +330,14 @@ VPolytopeT<Number, Converter> VPolytopeT<Number, Converter>::unite( const VPolyt
 	}
 }
 
-template<typename Number, typename Converter>
-VPolytopeT<Number,Converter> VPolytopeT<Number,Converter>::unite( const std::vector<VPolytopeT>& rhs ) {
+template<typename Number, typename Converter, typename Settings>
+VPolytopeT<Number,Converter,Settings> VPolytopeT<Number,Converter,Settings>::unite( const std::vector<VPolytopeT>& rhs ) {
 	if ( rhs.size() == 0 ) {
-		return VPolytopeT<Number, Converter>::Empty();
+		return VPolytopeT<Number,Converter,Settings>::Empty();
 	} else {
-		VPolytopeT<Number,Converter> result;
+		VPolytopeT<Number,Converter,Settings> result;
 		//std::cout << __func__ << " : of " << *this << " and " << rhs << std::endl;
-		VPolytopeT<Number, Converter>::pointVector points;
+		VPolytopeT<Number,Converter,Settings>::pointVector points;
 
 		std::set<Point<Number>> pointSet;
 		for(const auto& poly : rhs){
@@ -345,7 +345,7 @@ VPolytopeT<Number,Converter> VPolytopeT<Number,Converter>::unite( const std::vec
 		}
 
 		if(pointSet.empty()){
-			return VPolytopeT<Number,Converter>();
+			return VPolytopeT<Number,Converter,Settings>();
 		}
 
 		unsigned effDim = unsigned(effectiveDimension(pointSet));
@@ -414,26 +414,26 @@ VPolytopeT<Number,Converter> VPolytopeT<Number,Converter>::unite( const std::vec
 					preresult.insert( facets[i]->vertices().at( j ) );
 				}
 			}
-			VPolytopeT<Number, Converter>::pointVector res;
+			VPolytopeT<Number,Converter,Settings>::pointVector res;
 			for ( const auto &point : preresult ) {
 				res.push_back( point );
 			}
-			result = VPolytopeT<Number, Converter>( res );
+			result = VPolytopeT<Number,Converter,Settings>( res );
 		} else {
-			result = VPolytopeT<Number, Converter>(points);
+			result = VPolytopeT<Number,Converter,Settings>(points);
 		}
 		//assert(result.contains(*this));
 		return result;
 	}
 }
 
-template <typename Number, typename Converter>
-void VPolytopeT<Number, Converter>::clear() {
+template <typename Number, typename Converter, typename Settings>
+void VPolytopeT<Number,Converter,Settings>::clear() {
 	mVertices.clear();
 }
 
-template <typename Number, typename Converter>
-Number VPolytopeT<Number, Converter>::supremum() const {
+template <typename Number, typename Converter, typename Settings>
+Number VPolytopeT<Number,Converter,Settings>::supremum() const {
 	Number max = 0;
 	for ( auto &point : mVertices ) {
 		Number inftyNorm = Point<Number>::inftyNorm( point );
@@ -442,8 +442,8 @@ Number VPolytopeT<Number, Converter>::supremum() const {
 	return max;
 }
 
-template <typename Number, typename Converter>
-void VPolytopeT<Number, Converter>::removeRedundancy() {
+template <typename Number, typename Converter, typename Settings>
+void VPolytopeT<Number,Converter,Settings>::removeRedundancy() {
 	if ( !mReduced ) {
 		#ifdef USE_SMTRAT
 			std::set<Point<Number>> toDelete;
@@ -515,8 +515,8 @@ void VPolytopeT<Number, Converter>::removeRedundancy() {
 	}
 }
 
-template <typename Number, typename Converter>
-void VPolytopeT<Number, Converter>::updateNeighbors() {
+template <typename Number, typename Converter, typename Settings>
+void VPolytopeT<Number,Converter,Settings>::updateNeighbors() {
 	std::map<Point<Number>, std::set<Point<Number>>> neighbors = convexHull( mVertices ).second;
 	mVertices.clear();
 	for ( const auto &pointNeighborsPair : neighbors ) {
@@ -533,8 +533,8 @@ void VPolytopeT<Number, Converter>::updateNeighbors() {
  * Auxiliary functions
  **************************************************************************/
 
-template<typename Number, typename Converter>
-bool VPolytopeT<Number, Converter>::belowPlanes(const vector_t<Number>& vertex, const matrix_t<Number>& normals, const vector_t<Number>& offsets) {
+template<typename Number, typename Converter, typename Settings>
+bool VPolytopeT<Number,Converter,Settings>::belowPlanes(const vector_t<Number>& vertex, const matrix_t<Number>& normals, const vector_t<Number>& offsets) {
 	for(unsigned rowIndex = 0; rowIndex < normals.rows(); ++rowIndex){
 		if(vertex.dot(normals.row(rowIndex)) > offsets(rowIndex)){
 			return false;
@@ -543,8 +543,8 @@ bool VPolytopeT<Number, Converter>::belowPlanes(const vector_t<Number>& vertex, 
 	return true;
 }
 
-template<typename Number, typename Converter>
-bool VPolytopeT<Number, Converter>::abovePlanes(const vector_t<Number>& vertex, const matrix_t<Number>& normals, const vector_t<Number>& offsets) {
+template<typename Number, typename Converter, typename Settings>
+bool VPolytopeT<Number,Converter,Settings>::abovePlanes(const vector_t<Number>& vertex, const matrix_t<Number>& normals, const vector_t<Number>& offsets) {
 	for(unsigned rowIndex = 0; rowIndex < normals.rows(); ++rowIndex){
 		if(vertex.dot(normals.row(rowIndex)) < offsets(rowIndex)){
 			return false;
@@ -553,8 +553,8 @@ bool VPolytopeT<Number, Converter>::abovePlanes(const vector_t<Number>& vertex, 
 	return true;
 }
 
-template <typename Number, typename Converter>
-bool VPolytopeT<Number, Converter>::operator==( const VPolytopeT<Number, Converter> &rhs ) const {
+template <typename Number, typename Converter, typename Settings>
+bool VPolytopeT<Number,Converter,Settings>::operator==( const VPolytopeT<Number,Converter,Settings> &rhs ) const {
 	if ( this->dimension() != rhs.dimension() ) return false;
 
 	// TODO: Highly inefficient!!!

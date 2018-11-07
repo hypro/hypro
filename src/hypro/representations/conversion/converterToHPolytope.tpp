@@ -69,7 +69,8 @@ typename Converter<Number>::HPolytope Converter<Number>::toHPolytope( const Elli
 
 //conversion from V-Polytope to H-Polytope (EXACT or OVER)
 template<typename Number>
-typename Converter<Number>::HPolytope Converter<Number>::toHPolytope( const VPolytope& _source, const CONV_MODE mode ){
+template<typename VPolySettings>
+typename Converter<Number>::HPolytope Converter<Number>::toHPolytope( const VPolytopeT<Number,Converter<Number>,VPolySettings>& _source, const CONV_MODE mode ){
 	if(_source.empty()) {
 		return HPolytope::Empty();
 	}
@@ -79,7 +80,7 @@ typename Converter<Number>::HPolytope Converter<Number>::toHPolytope( const VPol
 		target = HPolytope(_source.vertices());
     } else if (mode == OVER) {
 	    //gets vertices from source object
-	    typename VPolytopeT<Number,Converter>::pointVector vertices = _source.vertices();
+	    typename VPolytopeT<Number,Converter<Number>,VPolySettings>::pointVector vertices = _source.vertices();
 
 	    //computes an oriented Box as overapproximation around the source object (returns Halfspaces)
 	    PrincipalComponentAnalysis<Number> pca(vertices);

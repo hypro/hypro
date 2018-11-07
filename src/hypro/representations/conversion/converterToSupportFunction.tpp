@@ -38,7 +38,8 @@ typename Converter<Number>::SupportFunction Converter<Number>::toSupportFunction
 
 // conversion from V-Polytope to support function (no differentiation between conversion modes - always EXACT)
 template <typename Number>
-typename Converter<Number>::SupportFunction Converter<Number>::toSupportFunction( const VPolytope& _source, const CONV_MODE mode) {
+template<typename VPolySettings>
+typename Converter<Number>::SupportFunction Converter<Number>::toSupportFunction( const VPolytopeT<Number,Converter<Number>,VPolySettings>& _source, const CONV_MODE mode) {
     auto temp = toHPolytope(_source, mode);
     return SupportFunction( temp.constraints() );
 }

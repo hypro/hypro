@@ -82,7 +82,8 @@ typename Converter<Number>::DifferenceBounds Converter<Number>::toDifferenceBoun
 }
 
 template<typename Number>
-typename Converter<Number>::DifferenceBounds Converter<Number>::toDifferenceBounds(const VPolytope& source, const CONV_MODE ){
+template<typename VPolySettings>
+typename Converter<Number>::DifferenceBounds Converter<Number>::toDifferenceBounds(const VPolytopeT<Number,Converter<Number>,VPolySettings>& source, const CONV_MODE ){
     // TODO make better, this is just the cheap solution
     HPolytope tmp = toHPolytope(source);
     return toDifferenceBounds(tmp);

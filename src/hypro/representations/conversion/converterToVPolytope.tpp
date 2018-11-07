@@ -146,13 +146,14 @@ Point<Number> computeBoundaryPointsExpensiveRecursive (const SupportFunctionT<Nu
 
 //conversion from V-Polytope to V-Polytope (no differentiation between conversion modes - always EXACT)
 template<typename Number>
-typename Converter<Number>::VPolytope Converter<Number>::toVPolytope( const VPolytope& _source, const CONV_MODE  ){
+template<typename VPolySettings>
+typename Converter<Number>::VPolytope Converter<Number>::toVPolytope( const VPolytopeT<Number,Converter<Number>,VPolySettings>& _source, const CONV_MODE  ){
 	return _source;
 }
 
 template<typename Number>
 typename Converter<Number>::VPolytope Converter<Number>::toVPolytope( const ConstraintSet& _source, const CONV_MODE ){
-    return VPolytopeT<Number,Converter>(_source.matrix(), _source.vector());
+    return VPolytope(_source.matrix(), _source.vector());
 }
 
 template<typename Number>
@@ -326,7 +327,7 @@ typename Converter<Number>::VPolytope Converter<Number>::toVPolytope( const Supp
 #ifdef HYPRO_USE_PPL
 template<typename Number>
 typename Converter<Number>::VPolytope Converter<Number>::toVPolytope(const Polytope& source, const CONV_MODE){
-    return Converter<Number>::VPolytope(source.vertices());
+    return VPolytope(source.vertices());
 }
 #endif
 
