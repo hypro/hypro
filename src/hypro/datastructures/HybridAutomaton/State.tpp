@@ -265,8 +265,7 @@ bool State<Number,Representation,Rargs...>::contains(const State<Number,Represen
 	assert(checkConsistency());
 	assert(rhs.getNumberSets() == this->getNumberSets());
 	for(std::size_t i=0; i < this->getNumberSets(); ++i){
-		auto tmp = boost::apply_visitor(genericConversionVisitor<boost::variant<Representation,Rargs...>, Number>(mTypes.at(i)), rhs.getSet(i));
-		if(!boost::apply_visitor(genericSetContainsVisitor(), this->getSet(i), tmp)) {
+		if(!boost::apply_visitor(genericSetContainsVisitor(), this->getSet(i), rhs.getSet(i))) {
 			return false;
 		}
 	}
