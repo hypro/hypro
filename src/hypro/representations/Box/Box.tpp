@@ -11,7 +11,7 @@
 #include "Box.h"
 
 namespace hypro {
-	
+
 	template<typename Number, typename Converter, class Setting>
 	BoxT<Number,Converter,Setting>::BoxT( const matrix_t<Number>& _constraints, const vector_t<Number>& _constants )
 	{
@@ -100,7 +100,7 @@ namespace hypro {
 
 			// convert box to a set of constraints, add other halfspaces and evaluate in box main directions to get new intervals.
 			std::vector<vector_t<Number>> tpl = computeTemplate<Number>(_constraints.cols(), 4);
-			
+
 			// evaluate in box directions.
 			Optimizer<Number> opt(_constraints,_constants);
 			std::vector<EvaluationResult<Number>> results;
@@ -485,7 +485,7 @@ BoxT<Number,Converter,Setting> BoxT<Number,Converter,Setting>::intersect( const 
 	if(rdim > dim) {
 		for(std::size_t d = dim; d < rdim; ++d) {
 			newIntervals.emplace_back(rhs.interval(d));
-		}	
+		}
 	}
 	return BoxT<Number,Converter,Setting>(newIntervals);
 }

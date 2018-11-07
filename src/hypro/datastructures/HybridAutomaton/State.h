@@ -290,7 +290,8 @@ class State
 		mSets[I] = in;
 	}
 
-	void setAndConvertType( representation_name to, std::size_t I = 0 );
+  template<typename To>
+	void setAndConvertType( std::size_t I = 0 );
 
 	/**
 	 * @brief      Adds time to clocks.
@@ -512,5 +513,3 @@ using State_t = State<Number, Box<Number>, ConstraintSet<Number>, SupportFunctio
 } // namespace
 
 #include "State.tpp"
-
-

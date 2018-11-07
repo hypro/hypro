@@ -110,8 +110,8 @@ class Converter {
 		#ifdef HYPRO_USE_PPL
 		static SupportFunction toSupportFunction(const Polytope& source, const CONV_MODE = CONV_MODE::EXACT);
 		#endif
-		template<typename sfSetting>
-		static SupportFunction toSupportFunction(const SupportFunctionT<Number,Converter,sfSetting>& source, const CONV_MODE = CONV_MODE::EXACT);
+		template<typename sfSettingIn, typename sfSettingOut>
+		static SupportFunctionT<Number,Converter<Number>,sfSettingOut> toSupportFunction(const SupportFunctionT<Number,Converter<Number>,sfSettingIn>& source, const CONV_MODE = CONV_MODE::EXACT);
 		static SupportFunction toSupportFunction(const Zonotope& source, const CONV_MODE = CONV_MODE::EXACT);
 	    static SupportFunction toSupportFunction(const DifferenceBounds& source, const CONV_MODE = CONV_MODE::EXACT);
 

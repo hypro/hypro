@@ -135,7 +135,7 @@ public:
 	void evaluateTemplate(std::size_t directionCount = defaultTemplateDirectionCount, bool force = false) const;
 
 private:
-	
+
 };
 
 /** @} */

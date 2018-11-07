@@ -15,8 +15,8 @@
 
 // conversion from support function to support function (no differentiation between conversion modes - always EXACT)
 template <typename Number>
-template<typename sfSetting>
-typename Converter<Number>::SupportFunction Converter<Number>::toSupportFunction( const SupportFunctionT<Number,Converter,sfSetting>& _source, const CONV_MODE ){
+template<typename sfSettingIn, typename sfSettingOut>
+SupportFunctionT<Number,Converter<Number>,sfSettingOut> Converter<Number>::toSupportFunction( const SupportFunctionT<Number,Converter<Number>,sfSettingIn>& _source, const CONV_MODE ){
     return _source;
 }
 

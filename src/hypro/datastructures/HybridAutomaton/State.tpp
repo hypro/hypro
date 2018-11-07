@@ -448,15 +448,14 @@ void State<Number,Representation,Rargs...>::decompose(std::vector<std::vector<si
 
 
 template<typename Number, typename Representation, typename ...Rargs>
-void State<Number,Representation,Rargs...>::setAndConvertType( representation_name to, std::size_t I ){
+template<typename To>
+void State<Number,Representation,Rargs...>::setAndConvertType( std::size_t I ){
 	assert(checkConsistency());
 	assert(I < mTypes.size());
-	// skip, if type is already correct.
-	if(mTypes[I] == to) return;
 
 	// convert set to type
-	mSets[I] = boost::apply_visitor(genericConversionVisitor<repVariant,Number>(to), mSets[I]);
-	mTypes[I] = to;
+	mSets[I] = boost::apply_visitor(genericConversionVisitor<repVariant,Number,To>(To::type()), mSets[I]);
+	mTypes[I] = To::type();
 
 	assert(checkConsistency());
 }
