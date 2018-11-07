@@ -20,12 +20,12 @@ static void computeReachableStates(const std::string& filename, const hypro::rep
 	using timeunit = std::chrono::microseconds;
 	clock::time_point start = clock::now();
 
-	std::pair<hypro::HybridAutomaton<Number>, hypro::ReachabilitySettings> ha = std::move(hypro::parseFlowstarFile<Number>(filename)); 
+	std::pair<hypro::HybridAutomaton<Number>, hypro::ReachabilitySettings> ha = std::move(hypro::parseFlowstarFile<Number>(filename));
 	//#ifdef HYPRO_LOGGING
 	//std::cout << "Parsed HybridAutomaton:\n" << ha.first << "Parsed ReachabilitySettings:\n" << ha.second << std::endl;
 	//#endif
 
-	hypro::reachability::Reach<Number> reacher(ha.first, ha.second);
+	hypro::reachability::Reach<Number,hypro::reachability::ReachSettings> reacher(ha.first, ha.second);
 	reacher.setRepresentationType(type);
 	std::vector<std::pair<unsigned, hypro::reachability::flowpipe_t<Number>>> flowpipes = reacher.computeForwardReachability();
 
@@ -130,7 +130,7 @@ static void computeReachableStates(const std::string& filename, const hypro::rep
 		std::cout << "Finished plotting: " << std::chrono::duration_cast<timeunit>( clock::now() - startPlotting ).count()/1000.0 << " ms" << std::endl;
 
 	}
-	
+
 }
 
 int main(int argc, char** argv) {
