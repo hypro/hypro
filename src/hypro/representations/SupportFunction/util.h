@@ -90,12 +90,12 @@ namespace hypro {
 			//TRACE("hypro.representations.supportFunction", "Delete lintrafo object." << " (@" << this << ")");
 		}
 
-		matrix_t<Number> matrix() const {
+		const matrix_t<Number>& matrix() const {
 			assert(parameters.begin()->first == 1);
 			return parameters.begin()->second.first;
 		}
 
-		vector_t<Number> vector() const {
+		const vector_t<Number>& vector() const {
 			assert(parameters.begin()->first == 1);
 			return parameters.begin()->second.second;
 		}

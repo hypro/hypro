@@ -53,10 +53,10 @@ namespace hypro {
 				if(t->getSource()->hash() == l->hash()){
 					l->addTransition(t.get());
 				}
-			}	
+			}
 		}
-		
-		assert(*(transSet.begin()) != NULL);
+
+		//assert(*(transSet.begin()) != NULL);
 
 		//5.Calls visit to get all initial states
 		typename HybridAutomaton<Number, State_t<Number>>::locationStateMap initSet;
