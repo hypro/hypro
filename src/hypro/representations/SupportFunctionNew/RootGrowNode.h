@@ -22,46 +22,35 @@ enum SFNEW_TYPE { NODE = 0, TRAFO, SUMOP, LEAF };
 template<typename Number>
 class RootGrowNode {
 
-protected:
+  protected:
 
 	////// Members
 	SFNEW_TYPE mType = NODE;												//NONE since RootGrowNode should later be an abstract class
 	unsigned originCount = 0;												//Amount of children needed to function properly
-	RootGrowNode* mParent = nullptr;										//parent of the current node. The topmost node has nullptr as parent
 	std::vector<RootGrowNode*> mChildren = std::vector<RootGrowNode*>();	//vector of all current children
-	bool deletable = false;													//flag whether node has been called to be deleted 
-
-public:
+	
+  public:
 
 	////// Constructors
 
 	RootGrowNode(){}
-	virtual ~RootGrowNode(){}	//not sure how to define deletion mechanics
+	virtual ~RootGrowNode(){}	
 
 	////// Getters and Setters
 
 	virtual SFNEW_TYPE getType() const { return mType; }
 	virtual unsigned getOriginCount() const { return originCount; }
-	virtual RootGrowNode* getParent() const { return mParent; }
 	virtual std::vector<RootGrowNode*> getChildren() const { return mChildren; }
-	virtual bool isDeletable() const { return deletable; }
 
 	////// Modifiers
 
 	void addToChildren(RootGrowNode* rhs){ mChildren.push_back(rhs); }
-	void setAsParent(RootGrowNode* parent){ mParent = parent; }
 	void clearChildren(){ mChildren.clear(); }
-	void setDeletable(bool choice){ deletable = choice; }
 
 	////// Displaying
 
 	friend std::ostream& operator<<(std::ostream& ostr, const RootGrowNode& r){
 		ostr << "current type: " << r.getType() << std::endl;
-		if(r.getParent() != nullptr){
-			ostr << "parent type: " << r.getParent()->getType() << std::endl;	
-		} else {
-			ostr << "parent type: nullptr" << std::endl;
-		}
 		ostr << "children types: [";
 		for(auto c : r.getChildren()){
 			ostr << c->getType() << ",";
@@ -90,7 +79,7 @@ public:
 	//For everyone - transform
 	virtual matrix_t<Number> transform(const matrix_t<Number>& param) const = 0;
 	//For leaves - compute
-	virtual std::vector<EvaluationResult<Number>> compute(const matrix_t<Number>& param) const = 0; 
+	virtual std::vector<EvaluationResult<Number>> compute(const matrix_t<Number>& param, bool useExact) const = 0; 
 	//For operations - aggregate
 	virtual std::vector<EvaluationResult<Number>> aggregate(std::vector<std::vector<EvaluationResult<Number>>>& resultStackBack, const matrix_t<Number>& currentParam) const = 0;
 

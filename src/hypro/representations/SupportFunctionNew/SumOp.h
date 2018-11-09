@@ -12,7 +12,8 @@ class SupportFunctionNewT;
 //Specialized subclass for sums as example of a binary operator
 template<typename Number, typename Converter, typename Setting>
 class SumOp : public RootGrowNode<Number> {
-private:
+  
+  private:
 	
 	////// General Interface
 
@@ -22,21 +23,14 @@ private:
 
 	////// Special members of this class
 
-public:
+  public:
 
 	////// Constructors & Destructors
 
 	SumOp() = delete;
+
 	SumOp(SupportFunctionNewT<Number,Converter,Setting>* lhs, SupportFunctionNewT<Number,Converter,Setting>* rhs){ lhs->addBinaryOp(this, rhs); }
-	//SumOp(SupportFunctionNewT<Number,Converter,Setting>* lhs, SupportFunctionNewT<Number,Converter,Setting>* rhs){ 
-	//	RootGrowNode<Number>* lhsRootPtr = mRoot;
-	//	RootGrowNode<Number>* rhsRootPtr = rhs->getRoot();
-	//	binary->addToChildren(lhsRootPtr);
-	//	binary->addToChildren(rhsRootPtr);
-	//	lhsRootPtr->setAsParent(binary);
-	//	rhsRootPtr->setAsParent(binary);
-	//	lhs->addBinaryOp(this, rhs); 
-	//}
+
 	~SumOp(){}
 
 	////// Getters and Setters
@@ -52,7 +46,7 @@ public:
 	}
 
 	//Should not be reached
-	std::vector<EvaluationResult<Number>> compute(const matrix_t<Number>& ) const { 
+	std::vector<EvaluationResult<Number>> compute(const matrix_t<Number>& , bool ) const { 
 		std::cout << "USED COMPUTE FROM SUMOP SUBCLASS.\n"; 
 		assert(false); 
 		return std::vector<EvaluationResult<Number>>();

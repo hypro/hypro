@@ -10,9 +10,10 @@ namespace hypro {
 
 	template<typename Number, typename Converter, typename Setting>
 	SupportFunctionNewT<Number,Converter,Setting>::SupportFunctionNewT() {
-
+		//do nothing
 	}
 
+	//copy constructor
 	template<typename Number, typename Converter, typename Setting>
 	SupportFunctionNewT<Number,Converter,Setting>::SupportFunctionNewT( const SupportFunctionNewT<Number,Converter,Setting>& orig ) {
 
@@ -28,36 +29,30 @@ namespace hypro {
 	 **************************************************************************/
 
 	template<typename Number, typename Converter, typename Setting>
-	SupportFunctionNewT<Number,Converter,Setting>* SupportFunctionNewT<Number,Converter,Setting>::addUnaryOp(RootGrowNode<Number>* unary){
+	void SupportFunctionNewT<Number,Converter,Setting>::addUnaryOp(RootGrowNode<Number>* unary) const {
+		std::cout << "SF::addUnaryOp_RGN" << std::endl;
+		assert(unary != nullptr);
 		assert(unary->getOriginCount() == 1);
 			
 		//Make a copy of the root ptr
-		RootGrowNode<Number>* copyOfRootPtr = mRoot;
+		RootGrowNode<Number>* copyOfRootPtr = mRoot.get();
 
 		//Add current root as child of given unary node
 		unary->addToChildren(copyOfRootPtr);
 
-		//set unary as parent of root
-		copyOfRootPtr->setAsParent(unary);
-
-		//set unary as the root
-		mRoot = unary;
-
-		return this;
+		assert(unary->getChildren().size() == 1);
 	}
 
+
 	template<typename Number, typename Converter, typename Setting>
-	SupportFunctionNewT<Number,Converter,Setting>* SupportFunctionNewT<Number,Converter,Setting>::addBinaryOp(RootGrowNode<Number>* binary, SupportFunctionNewT<Number,Converter,Setting>* rhs){
+	void SupportFunctionNewT<Number,Converter,Setting>::addBinaryOp(RootGrowNode<Number>* binary, SupportFunctionNewT<Number,Converter,Setting>* rhs) const {
+		assert(binary != nullptr);
 		assert(binary->getOriginCount() == 2);
-		RootGrowNode<Number>* lhsRootPtr = mRoot;
+		RootGrowNode<Number>* lhsRootPtr = mRoot.get();
 		RootGrowNode<Number>* rhsRootPtr = rhs->getRoot();
 		binary->addToChildren(lhsRootPtr);
 		binary->addToChildren(rhsRootPtr);
-		lhsRootPtr->setAsParent(binary);
-		rhsRootPtr->setAsParent(binary);
-		mRoot = binary;
-		rhs->setRoot(binary);
-		return this;
+		assert(binary->getChildren().size() == 2);
 	}
 /*
 	template<typename Number, typename Converter, typename Setting>
@@ -76,14 +71,6 @@ namespace hypro {
 		return this;
 	}
 */
-	template<typename Number, typename Converter, typename Setting>
-	SupportFunctionNewT<Number,Converter,Setting>* SupportFunctionNewT<Number,Converter,Setting>::setAsOnlyChild(RootGrowNode<Number>* child){
-		mRoot->clearChildren();
-		mRoot->addToChildren(child);
-		child->setAsParent(mRoot);
-		//Does not set mRoot as original parent
-		return this;
-	}
 
 	/***************************************************************************
 	 * Tree Traversal
@@ -149,7 +136,7 @@ namespace hypro {
 		std::vector<Node> callStack;
 		std::vector<Param> paramStack;
 		std::vector<std::pair<int,std::vector<Res>>> resultStack;  
-		callStack.push_back(mRoot);
+		callStack.push_back(mRoot.get());
 		paramStack.push_back(initParams);
 		resultStack.push_back(std::make_pair(-1, std::vector<Res>()));
 
@@ -165,6 +152,7 @@ namespace hypro {
 
 				//If leaf and end of stack is reached
 				if(currentResult.first == -1){
+
 					return std::apply(compute, std::make_pair(cur, currentParam));
 					
 				//If leaf and not end of stack is reached	
@@ -250,8 +238,8 @@ namespace hypro {
 			};
 
 		std::function<std::vector<EvaluationResult<Number>>(RootGrowNode<Number>*, Parameters<matrix_t<Number>>)> comp = 
-			[](RootGrowNode<Number>* n, Parameters<matrix_t<Number>> dir) -> std::vector<EvaluationResult<Number>> { 
-				return n->compute(std::get<0>(dir.args)); 
+			[&](RootGrowNode<Number>* n, Parameters<matrix_t<Number>> dir) -> std::vector<EvaluationResult<Number>> { 
+				return n->compute(std::get<0>(dir.args), useExact); 
 			};
 
 		std::function<std::vector<EvaluationResult<Number>>(RootGrowNode<Number>*, std::vector<std::vector<EvaluationResult<Number>>>, Parameters<matrix_t<Number>>)> agg = 
@@ -271,7 +259,7 @@ namespace hypro {
 
 	//Find out if tree has at least one trafoOp and if yes, update the linTrafoParameters
 	template<typename Number, typename Converter, typename Setting>
-	bool SupportFunctionNewT<Number,Converter,Setting>::hasTrafo(std::shared_ptr<const LinTrafoParameters<Number>>& ltParam, const matrix_t<Number>& A, const vector_t<Number>& b){
+	bool SupportFunctionNewT<Number,Converter,Setting>::hasTrafo(std::shared_ptr<const LinTrafoParameters<Number>>& ltParam, const matrix_t<Number>& A, const vector_t<Number>& b) const {
 
 		//first function - parameters are not transformed
 		std::function<void(RootGrowNode<Number>*)> doNothing = [](RootGrowNode<Number>* ){ };
@@ -346,7 +334,12 @@ namespace hypro {
 
 	template<typename Number, typename Converter, typename Setting>
 	SupportFunctionNewT<Number,Converter,Setting> SupportFunctionNewT<Number,Converter,Setting>::affineTransformation( const matrix_t<Number>& A, const vector_t<Number>& b ) const {
-
+		std::cout << "affineTransformation" << std::endl;
+		TrafoOp<Number,Converter,Setting>* trafo = new TrafoOp<Number,Converter,Setting>(this, A, b);
+		std::unique_ptr<RootGrowNode<Number>> trafoPtr(std::move(static_cast<RootGrowNode<Number>*>(trafo)));
+		SupportFunctionNewT<Number,Converter,Setting> sf = SupportFunctionNewT<Number,Converter,Setting>(trafoPtr);
+		std::cout << "affineTransformation ende" << std::endl;
+		return sf;
 	}
 
 	template<typename Number, typename Converter, typename Setting>

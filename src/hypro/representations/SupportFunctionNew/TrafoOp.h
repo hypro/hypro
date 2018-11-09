@@ -12,7 +12,8 @@ class SupportFunctionNewT;
 //Specialized subclass for transformations as example of a unary operator
 template<typename Number, typename Converter, typename Setting>
 class TrafoOp : public RootGrowNode<Number> {
-private:
+  
+  private:
 	////// General Interface
 
 	SFNEW_TYPE type = SFNEW_TYPE::TRAFO;
@@ -26,7 +27,7 @@ private:
 	std::size_t successiveTransformations;
 	std::shared_ptr<const LinTrafoParameters<Number>> parameters;	
 
-public:
+  public:
 	
 	////// Constructors & Destructors
 
@@ -34,15 +35,17 @@ public:
 	TrafoOp() = delete;
 
 	//Set new trafoOp object as parent of origin, 
-	//TrafoOp(SupportFunctionContentNew<Number>* origin, const matrix_t<Number>& A, const vector_t<Number>& b) : currentExponent(1) {
-	TrafoOp(SupportFunctionNewT<Number,Converter,Setting>* origin, const matrix_t<Number>& A, const vector_t<Number>& b) : currentExponent(1) {
+	TrafoOp(const SupportFunctionNewT<Number,Converter,Setting>* origin, const matrix_t<Number>& A, const vector_t<Number>& b) : currentExponent(1) {
 		
+		std::cout << "TrafoOp::TrafoOp(origin, A, b)" << std::endl;
+
 		parameters = std::make_shared<const LinTrafoParameters<Number>>(A,b);
 
 		origin->addUnaryOp(this);
-		assert(origin->getRoot() == this);
 		assert(this->getChildren().size() == 1);
+		std::cout << "Added trafoSF to origin!" << std::endl;
 
+		
 		// Determine, if we need to create new parameters or if this matrix and vector pair has already been used (recursive).
 		// in case this transformation has already been performed, parameters will be updated.
 		origin->hasTrafo(parameters, A, b);
@@ -52,10 +55,10 @@ public:
 			bool reduced;
 			do {
 				reduced = false;
-				if (origin->getRoot()->getChildren().at(0)->getType() == SFNEW_TYPE::TRAFO
-					&& *(dynamic_cast<TrafoOp<Number,Converter,Setting>*>(origin->getRoot()->getChildren().at(0))->getParameters()) == *parameters
-					&& dynamic_cast<TrafoOp<Number,Converter,Setting>*>(origin->getRoot()->getChildren().at(0))->getCurrentExponent() == currentExponent){
-					successiveTransformations = dynamic_cast<TrafoOp<Number,Converter,Setting>*>(origin->getRoot()->getChildren().at(0))->getSuccessiveTransformations()+1;
+				if (this->getChildren().at(0)->getType() == SFNEW_TYPE::TRAFO
+					&& *(dynamic_cast<TrafoOp<Number,Converter,Setting>*>(this->getChildren().at(0))->getParameters()) == *parameters
+					&& dynamic_cast<TrafoOp<Number,Converter,Setting>*>(this->getChildren().at(0))->getCurrentExponent() == currentExponent){
+					successiveTransformations = dynamic_cast<TrafoOp<Number,Converter,Setting>*>(this->getChildren().at(0))->getSuccessiveTransformations()+1;
 				} else {
 					successiveTransformations = 0;
 				}
@@ -63,15 +66,22 @@ public:
 					reduced = true;
 					currentExponent = currentExponent*(carl::pow(2,parameters->power));
 					for(std::size_t i = 0; i < unsigned(carl::pow(2,parameters->power)-1); i++ ){
-						origin->setAsOnlyChild(origin->getRoot()->getChildren().at(0)->getChildren().at(0));
+						RootGrowNode<Number>* grandChild = this->getChildren().at(0)->getChildren().at(0);
+						this->clearChildren();
+						this->addToChildren(grandChild);
+						assert(this->getChildren().size() == 1);
 					}
 				} 
 			} while (reduced == true);
 			//assert(mChildren.at(0)->checkTreeValidity());
 		}
+
+		std::cout << "Constructed TrafoOp!" << std::endl;
 	}
 
-	~TrafoOp(){}
+	~TrafoOp(){ 
+		std::cout << "TrafoOp::~TrafoOp" << std::endl; 
+	}
 
 	////// Getters & Setters
 
@@ -89,7 +99,7 @@ public:
 	}
 
 	//should not be reachable
-	std::vector<EvaluationResult<Number>> compute(const matrix_t<Number>& ) const { 
+	std::vector<EvaluationResult<Number>> compute(const matrix_t<Number>& , bool ) const { 
 		std::cout << "USED COMPUTE FROM TRAFOOP SUBCLASS.\n"; 
 		assert(false); 
 		return std::vector<EvaluationResult<Number>>();
@@ -97,6 +107,7 @@ public:
 
 	//Given the results, return vector of evaluation results (here only first place needed, since unary op), here, we also modify
 	std::vector<EvaluationResult<Number>> aggregate(std::vector<std::vector<EvaluationResult<Number>>>& resultStackBack, const matrix_t<Number>& currentParam) const {
+		std::cout << "TrafoOp::aggregate" << std::endl;
 		assert(resultStackBack.size() == 1); 
 		const std::pair<matrix_t<Number>, vector_t<Number>>& parameterPair = parameters->getParameterSet(currentExponent);
 		if(resultStackBack.front().begin()->errorCode != SOLUTION::INFEAS){

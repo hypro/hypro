@@ -38,22 +38,34 @@ struct Parameters {
  */
 template <typename Number, typename Converter, class Setting>
 class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<Number,Converter,Setting>> {
-  private:
-  public:
+
+  friend class TrafoOp<Number,Converter,Setting>;
+
   protected:
 
 	/***************************************************************************
 	 * Members
 	 **************************************************************************/
 
-  	//std::unique_ptr<RootGrowNode<Number>> mRoot = nullptr;
-  	RootGrowNode<Number>* mRoot = nullptr;
+  	mutable std::unique_ptr<RootGrowNode<Number>> mRoot = nullptr;
 
-  public:
 	/***************************************************************************
 	 * Constructors
 	 **************************************************************************/
 
+  private:
+
+  	//constructor for adding a new node
+  	SupportFunctionNewT( std::unique_ptr<RootGrowNode<Number>>& root ) : mRoot(std::move(root)) {
+  		std::cout << "SupportFunctionNewT::unique_RGN constructor" << std::endl;
+  	}
+
+  	//constructor for adding a new node
+  	SupportFunctionNewT( RootGrowNode<Number>* root ) : mRoot(std::move(std::unique_ptr<RootGrowNode<Number>>(root))) {
+  		std::cout << "SupportFunctionNewT::RGN constructor" << std::endl;
+  	}
+
+  public:
 	/**
 	 * @brief      Creates an empty SupportFunctionNew.
 	 */
@@ -80,42 +92,37 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
 	 */
 	SupportFunctionNewT( SupportFunctionNewT&& orig );
 
-	/**
-	 * DEPRECATED
-	 * @brief      Constructor with given RootGrowNode
-	 * @param[in]  r 	A RootGrowNode which will be set as root of the SupportFunction
-	 */
-	SupportFunctionNewT( RootGrowNode<Number>* r) : mRoot(r) {}
-
-	//SupportFunctionNewT( std::unique_ptr<RootGrowNode<Number>> r ) : mRoot(r) {}
+	//leaf constructor
+	template<typename Representation>
+	SupportFunctionNewT( GeometricObject<Number,Representation>* r) : mRoot(std::make_unique<Leaf<Number,Representation>>(dynamic_cast<Representation*>(r))) { 
+		std::cout << "SupportFunctionNewT::Leaf constructor" << std::endl;
+	}
 
 	/**
 	 * @brief Destructor.
 	 */
-	~SupportFunctionNewT() {}
+	~SupportFunctionNewT() {
+		std::cout << "SupportFunctionNewT::~SupportFunctionNewT" << std::endl;
+		//mRoot ptr deleted via unique_ptr	
+		//mRoot itself deleted via unique_ptr
+		//mRoot->children deleted as member of mRoot
+	}
 
 	/***************************************************************************
 	 * Getters & setters
 	 **************************************************************************/
 
+  private:
+
+  	void addUnaryOp(RootGrowNode<Number>* unary) const;
+
+  public:
+
+	void addBinaryOp(RootGrowNode<Number>* binary, SupportFunctionNewT<Number,Converter,Setting>* rhs) const;
+
 	Setting getSettings() const { return Setting{}; }
 
-	RootGrowNode<Number>* getRoot() const { return mRoot; }
-	void setRoot(RootGrowNode<Number>* r){ mRoot = r; }
-
-	//DEPRECATED
-	//Add node "unary" that can only have one child as parent of current root.
-	//Also sets original parents.
-	SupportFunctionNewT<Number,Converter,Setting>* addUnaryOp(RootGrowNode<Number>* unary);
-
-	//DEPRECATED
-	//Add node "binary" that can only have two children as parent of current root. "rhs" is a tree that will be
-	//the second child of "binary". Also sets original parents.
-	SupportFunctionNewT<Number,Converter,Setting>* addBinaryOp(RootGrowNode<Number>* binary, SupportFunctionNewT<Number,Converter,Setting>* rhs);
-
-	//Remove all pointers to current children of mRoot. Set "child" as the only child of mRoot.
-	//Does not set original parent.
-	SupportFunctionNewT<Number,Converter,Setting>* setAsOnlyChild(RootGrowNode<Number>* child);
+	RootGrowNode<Number>* getRoot() const { return mRoot.get(); }
 
 	 /**
 	  * @brief Static method for the construction of an empty SupportFunctionNew of required dimension.
@@ -217,7 +224,7 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
 	 * @return 		True if at least one TrafoOp is found in the whole subtree, else false. 
 	 *				ltParam gets updated to the parameters of the found TrafoOp if A and b are the parameters of the found TrafoOp.
 	 */
-  	bool hasTrafo(std::shared_ptr<const LinTrafoParameters<Number>>& ltParam, const matrix_t<Number>& A, const vector_t<Number>& b);
+  	bool hasTrafo(std::shared_ptr<const LinTrafoParameters<Number>>& ltParam, const matrix_t<Number>& A, const vector_t<Number>& b) const;
 
 	/***************************************************************************
 	 * Operators

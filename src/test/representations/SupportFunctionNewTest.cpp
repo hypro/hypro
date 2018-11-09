@@ -28,11 +28,12 @@ protected:
 TYPED_TEST(SupportFunctionNewTest, LeafTest){
 
 	Box<TypeParam> box;
-	Leaf<TypeParam, Box<TypeParam>> r(&box);
-	EXPECT_TRUE(r.getType() == SFNEW_TYPE::LEAF);
-	EXPECT_TRUE(r.getOriginCount() == 0);
-	EXPECT_TRUE(r.getChildren().size() == 0);
-
+	matrix_t<TypeParam> directions = matrix_t<TypeParam>::Identity(2,2);
+	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sf(&box);
+	EXPECT_TRUE(sf.getRoot()->getType() == SFNEW_TYPE::LEAF);
+	EXPECT_TRUE(sf.getRoot()->getOriginCount() == 0);
+	EXPECT_TRUE(sf.getRoot()->getChildren().size() == 0);
+	
 /*	WAIT UNTIL VPOLY::MULTIEVALUATE IMPLEMENTED
 	VPolytope<TypeParam> vpoly;
 	Leaf<TypeParam, VPolytope<TypeParam>> child(&vpoly);
@@ -42,122 +43,72 @@ TYPED_TEST(SupportFunctionNewTest, LeafTest){
 */
 }
 
+
 //Have a box as a leaf. Put a chain of trafoOps above the leaf. 
 //Check currentExponent, successiveTransformations and parameter values
 TYPED_TEST(SupportFunctionNewTest, TrafoOp){
 
-	//Make the box leaf
+	//Make the box 
 	Point<TypeParam> p({TypeParam(0),TypeParam(0)});
 	Point<TypeParam> q({TypeParam(1),TypeParam(1)});
 	Box<TypeParam> box(std::make_pair(p,q));
-	Leaf<TypeParam, Box<TypeParam>> r(&box);
-	EXPECT_TRUE(r.getType() == SFNEW_TYPE::LEAF);
-	EXPECT_TRUE(r.getOriginCount() == 0);
-	EXPECT_TRUE(r.getChildren().size() == 0);
-
-	//The tree
-	//SupportFunctionContentNew<TypeParam> sfc(&r);
-	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sf(&r);
+	
+	//The tree with only one leaf containing the box
+	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sf(&box);
+	EXPECT_TRUE(sf.getRoot()->getType() == SFNEW_TYPE::LEAF);
+	EXPECT_TRUE(sf.getRoot()->getOriginCount() == 0);
+	EXPECT_TRUE(sf.getRoot()->getChildren().size() == 0);
 
 	//tMat = 2 * Identity_Matrix , tVec = (1 0 0)
 	int dim = 2;
-	matrix_t<TypeParam> tMat = matrix_t<TypeParam>::Zero(dim, dim);
+	matrix_t<TypeParam> tMat = matrix_t<TypeParam>::Identity(dim, dim);
 	vector_t<TypeParam> tVec = vector_t<TypeParam>::Zero(dim);
-	for(int i = 0; i < tMat.rows(); i++){
-		tMat(i,i) = 1;
-	}
 	tVec(0) = 1;
 
-	//Construct trafo1
-	TrafoOp<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> trafo1(&sf, tMat, tVec);
-	EXPECT_EQ(trafo1.getCurrentExponent(), 1);
-	EXPECT_EQ(trafo1.getSuccessiveTransformations(), 0);
+	//Directions to evaluate, is the identity matrix
+	matrix_t<TypeParam> directions = matrix_t<TypeParam>::Identity(dim,dim);
 
 	//Save pointer to parameters for later, checking if it remains the same object 
-	std::shared_ptr<const LinTrafoParameters<TypeParam>> trafo1Params = trafo1.getParameters();
+	std::shared_ptr<const LinTrafoParameters<TypeParam>> trafo0Params = nullptr;
 
-	//Construct trafo2
-	TrafoOp<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> trafo2(&sf, tMat, tVec);	
-	EXPECT_EQ(trafo2.getCurrentExponent(), 1);
-	EXPECT_EQ(trafo2.getSuccessiveTransformations(), 1);
+	int numOfTrafos = 9;
+	for(int i = 0; i < numOfTrafos; i++){
+		
+		sf = sf.affineTransformation(tMat, tVec);
+		
+		EXPECT_TRUE(sf.getRoot() != nullptr);
+		EXPECT_TRUE(sf.getRoot()->getChildren().size() == 1);
+		EXPECT_EQ((dynamic_cast<TrafoOp<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>*>(sf.getRoot()))->getCurrentExponent(), 1);
+		EXPECT_EQ((dynamic_cast<TrafoOp<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>*>(sf.getRoot()))->getSuccessiveTransformations(), 0);
+		std::cout << "Constructed trafo" << i << std::endl;
+		
+		if(i == 0){
+			//Save pointer to parameters for later, checking if it remains the same object 
+			trafo0Params = (dynamic_cast<TrafoOp<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>*>(sf.getRoot()))->getParameters();
+			std::cout << "saved trafo0Params with address " << trafo0Params << std::endl;
+		}
+		
+		if((i % 2 == 1) || (i == numOfTrafos)){
 
-	//Evaluate
-	matrix_t<TypeParam> directions = matrix_t<TypeParam>::Identity(dim,dim);
-	std::cout << "START EVALUATION FOR 2 TRAFOS\n"; 
-	std::vector<EvaluationResult<TypeParam>> res = sf.multiEvaluate(directions);
-	std::cout << "END EVALUATION\n";
-	
-	//Check if the supportvalues were right
-	//Should be [1 + #trafos , 1] everywhere
-	EXPECT_EQ(res.at(0).supportValue, TypeParam(3));
-	EXPECT_EQ(res.at(1).supportValue, TypeParam(1));
+			//Check whether parameter object remained the same (whether both point to the same address)
+			EXPECT_EQ(trafo0Params, (dynamic_cast<TrafoOp<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>*>(sf.getRoot())->getParameters()));
 
-	TrafoOp<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> trafo3(&sf, tMat, tVec);
-	EXPECT_EQ(trafo3.getCurrentExponent(), 1);
-	EXPECT_EQ(trafo3.getSuccessiveTransformations(), 2);
+			//Evaluate
+			std::cout << "START EVALUATION FOR " << i << " TRAFOS\n"; 
+			std::vector<EvaluationResult<TypeParam>> res = sf.multiEvaluate(directions,true);
+			std::cout << "END EVALUATION\n";
 
-	TrafoOp<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> trafo4(&sf, tMat, tVec);
-	EXPECT_EQ(trafo4.getCurrentExponent(), 4);
-	EXPECT_EQ(trafo4.getSuccessiveTransformations(), 0);
-
-	//Check whether parameter object remained the same (whether both point to the same address)
-	EXPECT_EQ(trafo1Params, trafo4.getParameters());
-
-	//multiEvaluate
-	std::cout << "START EVALUATION FOR 4 TRAFOS\n"; 
-	res = sf.multiEvaluate(directions);
-	std::cout << "END EVALUATION\n";
-
-	EXPECT_EQ(res.at(0).supportValue, TypeParam(5));
-	EXPECT_EQ(res.at(1).supportValue, TypeParam(1));
-
-	TrafoOp<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> trafo5(&sf, tMat, tVec);
-	EXPECT_EQ(trafo5.getCurrentExponent(), 1);
-	EXPECT_EQ(trafo5.getSuccessiveTransformations(), 0);
-
-	TrafoOp<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> trafo6(&sf, tMat, tVec);
-	EXPECT_EQ(trafo6.getCurrentExponent(), 1);
-	EXPECT_EQ(trafo6.getSuccessiveTransformations(), 1);
-
-	//multiEvaluate
-	std::cout << "START EVALUATION FOR 6 TRAFOS\n"; 
-	res = sf.multiEvaluate(directions);
-	std::cout << "END EVALUATION\n";
-
-	EXPECT_EQ(res.at(0).supportValue, TypeParam(7));
-	EXPECT_EQ(res.at(1).supportValue, TypeParam(1));
-
-	TrafoOp<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> trafo7(&sf, tMat, tVec);
-	EXPECT_EQ(trafo7.getCurrentExponent(), 1);
-	EXPECT_EQ(trafo7.getSuccessiveTransformations(), 2);
-
-	TrafoOp<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> trafo8(&sf, tMat, tVec);
-	EXPECT_EQ(trafo8.getCurrentExponent(), 4);
-	EXPECT_EQ(trafo8.getSuccessiveTransformations(), 1);
-
-	EXPECT_EQ(trafo1Params, trafo8.getParameters());
-
-	//multiEvaluate
-	std::cout << "START EVALUATION FOR 8 TRAFOS\n"; 
-	res = sf.multiEvaluate(directions);
-	std::cout << "END EVALUATION\n";
-
-	EXPECT_EQ(res.at(0).supportValue, TypeParam(9));
-	EXPECT_EQ(res.at(1).supportValue, TypeParam(1));
-
-	TrafoOp<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> trafo9(&sf, tMat, tVec);
-	EXPECT_EQ(trafo9.getCurrentExponent(), 1);
-	EXPECT_EQ(trafo9.getSuccessiveTransformations(), 0);
-
-	//multiEvaluate
-	std::cout << "START EVALUATION FOR 9 TRAFOS\n"; 
-	res = sf.multiEvaluate(directions);
-	std::cout << "END EVALUATION\n";
-
+			//Check if the supportvalues were right
+			//Should be [1 + #trafos , 1] everywhere
+			EXPECT_EQ(res.at(0).supportValue, TypeParam(1 + (i + 1)));
+			EXPECT_EQ(res.at(1).supportValue, TypeParam(1));
+		}
+	}
 }
 
-////// Functionality Tests
 
+////// Functionality Tests
+/*
 TYPED_TEST(SupportFunctionNewTest, SupportFunctionNewEvaluate){
 	
 	//Construct leaf nodes
@@ -172,6 +123,7 @@ TYPED_TEST(SupportFunctionNewTest, SupportFunctionNewEvaluate){
 	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sf(&l1);
 	EXPECT_TRUE(sf.getRoot()->getParent() == nullptr);
 	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sf2(&l2);
+	EXPECT_TRUE(sf2.getRoot()->getParent() == nullptr);
 
 	//Build trafop
 	matrix_t<TypeParam> trafoMat = matrix_t<TypeParam>::Zero(2,2);
@@ -198,7 +150,7 @@ TYPED_TEST(SupportFunctionNewTest, SupportFunctionNewEvaluate){
 	directions(0,0) = TypeParam(1);
 	directions(1,1) = TypeParam(1);
 	std::cout << "START EVALUATION\n"; 
-	std::vector<EvaluationResult<TypeParam>> res = sf.multiEvaluate(directions);
+	std::vector<EvaluationResult<TypeParam>> res = sf.multiEvaluate(directions,true);
 	std::cout << "END EVALUATION\n";
 	std::cout << "Result of Evaluation is:\n";
 	for(auto& eRes : res){
@@ -206,3 +158,32 @@ TYPED_TEST(SupportFunctionNewTest, SupportFunctionNewEvaluate){
 	}
 	
 }
+*/
+/*
+TYPED_TEST(SupportFunctionNewTest, AffineTransformation){
+
+	//Make the box leaf
+	Point<TypeParam> p({TypeParam(0),TypeParam(0)});
+	Point<TypeParam> q({TypeParam(1),TypeParam(1)});
+	Box<TypeParam> box(std::make_pair(p,q));
+	Leaf<TypeParam, Box<TypeParam>> r(&box);
+	EXPECT_TRUE(r.getType() == SFNEW_TYPE::LEAF);
+	EXPECT_TRUE(r.getOriginCount() == 0);
+	EXPECT_TRUE(r.getChildren().size() == 0);
+
+	//The tree
+	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sf(&r);
+
+	//tMat = 2 * Identity_Matrix , tVec = (1 0 0)
+	int dim = 2;
+	matrix_t<TypeParam> tMat = matrix_t<TypeParam>::Zero(dim, dim);
+	vector_t<TypeParam> tVec = vector_t<TypeParam>::Zero(dim);
+	for(int i = 0; i < tMat.rows(); i++){
+		tMat(i,i) = 1;
+	}
+	tVec(0) = 1;
+
+	sf = sf.affineTransformation(tMat, tVec);	
+
+}
+*/

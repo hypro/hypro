@@ -7,7 +7,8 @@ namespace hypro {
 //Subclass of RootGrowNode, is a node with a representation of a state
 template<typename Number, typename Representation> 
 class Leaf : public RootGrowNode<Number> {
-private:
+  
+  private:
 	
 	////// General Interface
 
@@ -16,15 +17,30 @@ private:
 
 	////// Members for this class
 
-	Representation* rep;
+	Representation* rep = nullptr;
 	
-public:
+  public:
 
-	Leaf(){}
-	Leaf(Representation* r) : rep(r) {}
-	~Leaf(){}
+	////// Constructors & Destructors
+
+	Leaf(){ }
+
+	Leaf(Representation* r) : rep(r) { 
+		std::cout << "Leaf::Leaf(r)" << std::endl;
+	}
+
+	~Leaf(){
+		std::cout << "Leaf::~Leaf" << std::endl;
+	}
+
+	////// Getters & Setters
+
 	SFNEW_TYPE getType() const { return type; }
 	unsigned getOriginCount() const { return originCount; }
+	Representation* getRepresentation() const { return rep; }
+	void setRepresentation(Representation* r){ rep = r; }
+
+	////// RootGrowNode Interface
 
 	//Leaves usually do not transform
 	matrix_t<Number> transform(const matrix_t<Number>&) const {
@@ -34,10 +50,10 @@ public:
 	}
 
 	//Evaluate leaf via multiEvaluate function of the representation
-	std::vector<EvaluationResult<Number>> compute(const matrix_t<Number>& param) const { 
-		//std::cout << "calling Leaf::compute, returns\n" << rep->multiEvaluate(param, true) << std::endl;
-		std::cout << "calling Leaf::compute\n";
-		return rep->multiEvaluate(param, true);
+	std::vector<EvaluationResult<Number>> compute(const matrix_t<Number>& param, bool useExact) const { 
+		std::cout << "calling Leaf::compute" << std::endl;
+		assert(rep != nullptr);
+		return rep->multiEvaluate(param, useExact);
 	}
 
 	//Leaves do not aggregate
