@@ -7,6 +7,7 @@ var dir_f695c0e486b1567b2450488137a0ccfa =
     [ "ReachTreeNode.h", "ReachTreeNode_8h_source.html", null ],
     [ "Settings.h", "Settings_8h_source.html", null ],
     [ "SettingsProvider.h", "SettingsProvider_8h_source.html", null ],
+    [ "Strategy.h", "datastructures_2reachability_2Strategy_8h_source.html", null ],
     [ "StrategyNode.h", "StrategyNode_8h_source.html", null ],
     [ "Task.h", "Task_8h_source.html", null ],
     [ "TreeNode.h", "TreeNode_8h_source.html", null ],

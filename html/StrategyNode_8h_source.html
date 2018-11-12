@@ -118,47 +118,54 @@ $(document).ready(function(){initNavTree('StrategyNode_8h_source.html','');});
 <div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;{</div>
 <div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;</div>
 <div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="keyword">namespace </span>detail{</div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> Number, <span class="keyword">typename</span> State&gt;</div>
 <div class="line"><a name="l00010"></a><span class="lineno"><a class="line" href="structhypro_1_1detail_1_1strategyConversionVisitor.html">   10</a></span>&#160;    <span class="keyword">struct </span><a class="code" href="structhypro_1_1detail_1_1strategyConversionVisitor.html">strategyConversionVisitor</a> : <span class="keyword">public</span> boost::static_visitor&lt;&gt; {</div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;</div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span> CurrentSNode, <span class="keyword">typename</span> NewSNode, S&gt;</div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;        <span class="keywordtype">void</span> operator()(<span class="keyword">const</span> CurrentSNode&amp; sNode, <span class="keyword">const</span> NewSNode&amp; newSNode, S&amp; state){</div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;            state.setSetDirect(boost::apply_visitor(<a class="code" href="classhypro_1_1genericConversionVisitor.html">genericConversionVisitor&lt;&gt;</a>(), state.getSet()));</div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;            <span class="comment">// TODO: SET TYPE</span></div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;            <span class="comment">//state.setSetType(newSNode::representationType)</span></div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;        }</div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;    };</div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;}</div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;</div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="keyword">template</span>&lt;<span class="keyword">typename</span> Representation&gt;</div>
-<div class="line"><a name="l00022"></a><span class="lineno"><a class="line" href="structhypro_1_1StrategyNode.html">   22</a></span>&#160;<span class="keyword">struct </span><a class="code" href="structhypro_1_1StrategyNode.html">StrategyNode</a> {</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;    <span class="keyword">typedef</span> Representation representationType;</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;    mpq_class timeStep;</div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;    AGG_SETTING aggregation = AGG_SETTING::NO_AGG;</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;    <span class="keywordtype">int</span> clustering = -1;</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;    <a class="code" href="structhypro_1_1StrategyNode.html">StrategyNode</a>(mpq_class ts)</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;        : timeStep(ts)</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;        , aggregation(AGG_SETTING::MODEL)</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;        , clustering(-1)</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;    {</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;        <span class="comment">//TRACE(&quot;hydra.datastructures&quot;,&quot;Create strategy node with timestep &quot; &lt;&lt; ts &lt;&lt; &quot;, representation: &quot; &lt;&lt; rep &lt;&lt; &quot;, aggregation: &quot; &lt;&lt; aggregation);</span></div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;        <span class="comment">//std::cout &lt;&lt; &quot;Create strategy node with timestep &quot; &lt;&lt; ts &lt;&lt; &quot;, representation: &quot; &lt;&lt; rep &lt;&lt; &quot;, aggregation: &quot; &lt;&lt; aggregation &lt;&lt; &quot;, clustering &quot; &lt;&lt; clustering &lt;&lt; std::endl;</span></div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    }</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    <a class="code" href="structhypro_1_1StrategyNode.html">StrategyNode</a>(mpq_class ts, AGG_SETTING agg, <span class="keywordtype">int</span> clu)</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;        : timeStep(ts)</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;        , aggregation(agg)</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;        , clustering(clu)</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    {</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;        <span class="comment">//std::cout &lt;&lt; &quot;Create strategy node with timestep &quot; &lt;&lt; ts &lt;&lt; &quot;, representation: &quot; &lt;&lt; rep &lt;&lt; &quot;, aggregation: &quot; &lt;&lt; aggregation &lt;&lt; &quot;, clustering &quot; &lt;&lt; clustering &lt;&lt; std::endl;</span></div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    }</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;};</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;} <span class="comment">// hypro</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;        <a class="code" href="classhypro_1_1State.html">State</a>&amp; mState;</div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;</div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;        <a class="code" href="structhypro_1_1detail_1_1strategyConversionVisitor.html">strategyConversionVisitor</a>() = <span class="keyword">delete</span>;</div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;        <a class="code" href="structhypro_1_1detail_1_1strategyConversionVisitor.html">strategyConversionVisitor</a>(<a class="code" href="classhypro_1_1State.html">State</a>&amp; s) : mState(s) {}</div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;</div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span> Node&gt;</div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;        <span class="keywordtype">void</span> operator()(Node&amp; )<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;            mState.<a class="code" href="classhypro_1_1State.html#a6d6967061238ce37745fa48b87273304">setSetDirect</a>(boost::apply_visitor(<a class="code" href="classhypro_1_1genericConversionVisitor.html">genericConversionVisitor&lt;typename State::repVariant, Number, typename Node::representationType&gt;</a>(), mState.<a class="code" href="classhypro_1_1State.html#ae99059873cf9cee50ea25f43905497ae">getSet</a>()));</div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;            mState.<a class="code" href="classhypro_1_1State.html#ad09f4d08fd29ffb18803f776ccd839dd">setSetType</a>(Node::representationType::type());</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;        }</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;    };</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;}</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="keyword">template</span>&lt;<span class="keyword">typename</span> Representation&gt;</div>
+<div class="line"><a name="l00025"></a><span class="lineno"><a class="line" href="structhypro_1_1StrategyNode.html">   25</a></span>&#160;<span class="keyword">struct </span><a class="code" href="structhypro_1_1StrategyNode.html">StrategyNode</a> {</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;    <span class="keyword">typedef</span> Representation representationType;</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;    mpq_class timeStep;</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;    AGG_SETTING aggregation = AGG_SETTING::NO_AGG;</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;    <span class="keywordtype">int</span> clustering = -1;</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;    <a class="code" href="structhypro_1_1StrategyNode.html">StrategyNode</a>(mpq_class ts)</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;        : timeStep(ts)</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;        , aggregation(AGG_SETTING::MODEL)</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;        , clustering(-1)</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    {</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;        <span class="comment">//TRACE(&quot;hydra.datastructures&quot;,&quot;Create strategy node with timestep &quot; &lt;&lt; ts &lt;&lt; &quot;, representation: &quot; &lt;&lt; rep &lt;&lt; &quot;, aggregation: &quot; &lt;&lt; aggregation);</span></div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;        <span class="comment">//std::cout &lt;&lt; &quot;Create strategy node with timestep &quot; &lt;&lt; ts &lt;&lt; &quot;, representation: &quot; &lt;&lt; rep &lt;&lt; &quot;, aggregation: &quot; &lt;&lt; aggregation &lt;&lt; &quot;, clustering &quot; &lt;&lt; clustering &lt;&lt; std::endl;</span></div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    }</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    <a class="code" href="structhypro_1_1StrategyNode.html">StrategyNode</a>(mpq_class ts, AGG_SETTING agg, <span class="keywordtype">int</span> clu)</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;        : timeStep(ts)</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;        , aggregation(agg)</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;        , clustering(clu)</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    {</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;        <span class="comment">//std::cout &lt;&lt; &quot;Create strategy node with timestep &quot; &lt;&lt; ts &lt;&lt; &quot;, representation: &quot; &lt;&lt; rep &lt;&lt; &quot;, aggregation: &quot; &lt;&lt; aggregation &lt;&lt; &quot;, clustering &quot; &lt;&lt; clustering &lt;&lt; std::endl;</span></div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;    }</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;};</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;} <span class="comment">// hypro</span></div>
+<div class="ttc" id="classhypro_1_1State_html_a6d6967061238ce37745fa48b87273304"><div class="ttname"><a href="classhypro_1_1State.html#a6d6967061238ce37745fa48b87273304">hypro::State::setSetDirect</a></div><div class="ttdeci">void setSetDirect(const repVariant &amp;in, std::size_t I=0)</div><div class="ttdoc">Sets the set. </div><div class="ttdef"><b>Definition:</b> <a href="State_8h_source.html#l00281">State.h:281</a></div></div>
 <div class="ttc" id="classhypro_1_1genericConversionVisitor_html"><div class="ttname"><a href="classhypro_1_1genericConversionVisitor.html">hypro::genericConversionVisitor</a></div><div class="ttdef"><b>Definition:</b> <a href="Visitors_8h_source.html#l00091">Visitors.h:91</a></div></div>
+<div class="ttc" id="classhypro_1_1State_html"><div class="ttname"><a href="classhypro_1_1State.html">hypro::State</a></div><div class="ttdoc">Class for state. </div><div class="ttdef"><b>Definition:</b> <a href="State_8h_source.html#l00030">State.h:30</a></div></div>
 <div class="ttc" id="structhypro_1_1detail_1_1strategyConversionVisitor_html"><div class="ttname"><a href="structhypro_1_1detail_1_1strategyConversionVisitor.html">hypro::detail::strategyConversionVisitor</a></div><div class="ttdef"><b>Definition:</b> <a href="StrategyNode_8h_source.html#l00010">StrategyNode.h:10</a></div></div>
-<div class="ttc" id="structhypro_1_1StrategyNode_html"><div class="ttname"><a href="structhypro_1_1StrategyNode.html">hypro::StrategyNode</a></div><div class="ttdef"><b>Definition:</b> <a href="StrategyNode_8h_source.html#l00022">StrategyNode.h:22</a></div></div>
+<div class="ttc" id="classhypro_1_1State_html_ad09f4d08fd29ffb18803f776ccd839dd"><div class="ttname"><a href="classhypro_1_1State.html#ad09f4d08fd29ffb18803f776ccd839dd">hypro::State::setSetType</a></div><div class="ttdeci">void setSetType(representation_name type, std::size_t I=0)</div><div class="ttdoc">Sets the set type for the set at position i. </div><div class="ttdef"><b>Definition:</b> <a href="State_8h_source.html#l00241">State.h:241</a></div></div>
+<div class="ttc" id="structhypro_1_1StrategyNode_html"><div class="ttname"><a href="structhypro_1_1StrategyNode.html">hypro::StrategyNode</a></div><div class="ttdef"><b>Definition:</b> <a href="StrategyNode_8h_source.html#l00025">StrategyNode.h:25</a></div></div>
+<div class="ttc" id="classhypro_1_1State_html_ae99059873cf9cee50ea25f43905497ae"><div class="ttname"><a href="classhypro_1_1State.html#ae99059873cf9cee50ea25f43905497ae">hypro::State::getSet</a></div><div class="ttdeci">const boost::variant&lt; Representation, Rargs...&gt; &amp; getSet(std::size_t i=0) const </div><div class="ttdoc">Gets the i-th set. </div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- HTML footer for doxygen 1.8.12-->

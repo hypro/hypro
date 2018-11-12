@@ -191,12 +191,11 @@ var NAVTREEINDEX0 =
 "Spinlock_8h_source.html":[10,0,1,0,4,3,5],
 "State_8h_source.html":[10,0,1,0,1,0,10],
 "StatisticWrapper_8h_source.html":[10,0,1,0,4,5,3],
-"StrategyNode_8h_source.html":[10,0,1,0,1,1,7],
-"Strategy_8h_source.html":[10,0,1,0,4,1,8],
+"StrategyNode_8h_source.html":[10,0,1,0,1,1,8],
 "SupportFunctionContent_8h_source.html":[10,0,1,0,3,8,7],
 "SupportFunctionSetting_8h_source.html":[10,0,1,0,3,8,8],
 "SupportFunction_8h_source.html":[10,0,1,0,3,8,6],
-"Task_8h_source.html":[10,0,1,0,1,1,8],
+"Task_8h_source.html":[10,0,1,0,1,1,9],
 "TaylorModel_8h_source.html":[10,0,1,0,3,9,2],
 "TimeEvolutionHandlers_8h_source.html":[10,0,1,0,0,2,1,6,5],
 "TrafoParameters_8h_source.html":[10,0,1,0,0,2,5],
@@ -216,8 +215,8 @@ var NAVTREEINDEX0 =
 "Transformation_8h.html#a8156f7e13af9fd4d87f85c527d54a155ac9e0be20859899cf11bc3d797bcbaf9e":[10,0,1,0,0,1,0,10,2],
 "Transformation_8h_source.html":[10,0,1,0,0,1,0],
 "Transition_8h_source.html":[10,0,1,0,1,0,11],
-"TreeNode_8h_source.html":[10,0,1,0,1,1,9],
-"TreeStatistic_8h_source.html":[10,0,1,0,1,1,10],
+"TreeNode_8h_source.html":[10,0,1,0,1,1,10],
+"TreeStatistic_8h_source.html":[10,0,1,0,1,1,11],
 "VPolytopeSettings_8h_source.html":[10,0,1,0,3,7,1,1],
 "VPolytope_8h_source.html":[10,0,1,0,3,7,1,0],
 "VariablePool_8h_source.html":[10,0,1,0,4,13],
@@ -249,5 +248,6 @@ var NAVTREEINDEX0 =
 "algorithms_2reachability_2handlers_2jumpHandlers_2util_8h_source.html":[10,0,1,0,0,2,1,4,3],
 "algorithms_2reachability_2util_8h_source.html":[10,0,1,0,0,2,6],
 "annotated.html":[9,0],
-"antlr4-flowstar_2ParserWrapper_8cpp_source.html":[10,0,1,0,2,1,17]
+"antlr4-flowstar_2ParserWrapper_8cpp_source.html":[10,0,1,0,2,1,17],
+"antlr4-flowstar_2ParserWrapper_8h_source.html":[10,0,1,0,2,1,18]
 };

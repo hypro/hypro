@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.6"/>
-<title>HyPro: hypro::detail::strategyConversionVisitor&lt; T &gt; Struct Template Reference</title>
+<title>HyPro: hypro::detail::strategyConversionVisitor&lt; Number, State &gt; Struct Template Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -111,22 +111,32 @@ $(document).ready(function(){initNavTree('structhypro_1_1detail_1_1strategyConve
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-attribs">Public Attributes</a> &#124;
 <a href="structhypro_1_1detail_1_1strategyConversionVisitor-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">hypro::detail::strategyConversionVisitor&lt; T &gt; Struct Template Reference</div>  </div>
+<div class="title">hypro::detail::strategyConversionVisitor&lt; Number, State &gt; Struct Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a7075b37fbda9dcec98366e2d4cfb2fbf"><td class="memTemplParams" colspan="2"><a class="anchor" id="a7075b37fbda9dcec98366e2d4cfb2fbf"></a>
-template&lt;typename CurrentSNode , typename NewSNode , S &gt; </td></tr>
-<tr class="memitem:a7075b37fbda9dcec98366e2d4cfb2fbf"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>operator()</b> (const CurrentSNode &amp;sNode, const NewSNode &amp;newSNode, S &amp;state)</td></tr>
-<tr class="separator:a7075b37fbda9dcec98366e2d4cfb2fbf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9e0d25cbc17e2cd78fa778bafc951cbd"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9e0d25cbc17e2cd78fa778bafc951cbd"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>strategyConversionVisitor</b> (<a class="el" href="classhypro_1_1State.html">State</a> &amp;s)</td></tr>
+<tr class="separator:a9e0d25cbc17e2cd78fa778bafc951cbd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad578fa1d6f712dc493e233d00563b40d"><td class="memTemplParams" colspan="2"><a class="anchor" id="ad578fa1d6f712dc493e233d00563b40d"></a>
+template&lt;typename Node &gt; </td></tr>
+<tr class="memitem:ad578fa1d6f712dc493e233d00563b40d"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>operator()</b> (Node &amp;) const </td></tr>
+<tr class="separator:ad578fa1d6f712dc493e233d00563b40d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
+Public Attributes</h2></td></tr>
+<tr class="memitem:aff432f0e6da548f769ef075b27642a1e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aff432f0e6da548f769ef075b27642a1e"></a>
+<a class="el" href="classhypro_1_1State.html">State</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>mState</b></td></tr>
+<tr class="separator:aff432f0e6da548f769ef075b27642a1e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><h3>template&lt;typename T&gt;<br/>
-struct hypro::detail::strategyConversionVisitor&lt; T &gt;</h3>
+<div class="textblock"><h3>template&lt;typename Number, typename State&gt;<br/>
+struct hypro::detail::strategyConversionVisitor&lt; Number, State &gt;</h3>
 
 
 <p>Definition at line <a class="el" href="StrategyNode_8h_source.html#l00010">10</a> of file <a class="el" href="StrategyNode_8h_source.html">StrategyNode.h</a>.</p>

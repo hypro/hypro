@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.6"/>
-<title>HyPro: /home/travis/build/hypro/hypro/src/hypro/parser -&gt; representations Relation</title>
+<title>HyPro: /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Strategy.h Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -51,7 +51,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li><a href="modules.html"><span>Modules</span></a></li>
       <li><a href="namespaces.html"><span>Namespaces</span></a></li>
       <li><a href="annotated.html"><span>Classes</span></a></li>
-      <li><a href="files.html"><span>Files</span></a></li>
+      <li class="current"><a href="files.html"><span>Files</span></a></li>
       <li><a href="examples.html"><span>Examples</span></a></li>
       <li>
         <div id="MSearchBox" class="MSearchBoxInactive">
@@ -71,6 +71,11 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       </li>
     </ul>
   </div>
+  <div id="navrow2" class="tabs2">
+    <ul class="tablist">
+      <li><a href="files.html"><span>File&#160;List</span></a></li>
+    </ul>
+  </div>
 </div><!-- top -->
 <div id="side-nav" class="ui-resizable side-nav-resizable">
   <div id="nav-tree">
@@ -83,7 +88,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   </div>
 </div>
 <script type="text/javascript">
-$(document).ready(function(){initNavTree('dir_2c8758a5fdbf28946c502b471e14bb83.html','');});
+$(document).ready(function(){initNavTree('util_2linearOptimization_2Strategy_8h_source.html','');});
 </script>
 <div id="doc-content">
 <!-- window showing the filter options -->
@@ -100,14 +105,37 @@ $(document).ready(function(){initNavTree('dir_2c8758a5fdbf28946c502b471e14bb83.h
 </iframe>
 </div>
 
+<div class="header">
+  <div class="headertitle">
+<div class="title">Strategy.h</div>  </div>
+</div><!--header-->
 <div class="contents">
-<h3>parser &rarr; representations Relation</h3><table class="dirtab"><tr class="dirtab"><th class="dirtab">File in src/hypro/parser</th><th class="dirtab">Includes file in src/hypro/representations</th></tr><tr class="dirtab"><td class="dirtab"><a class="el" href="dir_d21d851d43d9af6e0004f77727cc1ce2.html">antlr4-flowstar</a>&#160;/&#160;<b>HyproLocationVisitor.h</b></td><td class="dirtab"><a class="el" href="dir_2a022a7dd5883d249fd19381a9acb7ca.html">Box</a>&#160;/&#160;<a class="el" href="Box_8h.html">Box.h</a></td></tr></table></div><!-- contents -->
+<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#pragma once</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="keyword">namespace </span>hypro {</div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;</div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;    <span class="keyword">enum</span> OptimizerStrategy</div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;    {</div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="preprocessor">        #ifdef HYPRO_USE_SMTRAT</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="preprocessor"></span>        SMTRAT,</div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">        #endif</span></div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="preprocessor"></span><span class="preprocessor">        #ifdef HYPRO_USE_SOPLEX</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor"></span>        SOPLEX,</div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">        #endif</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="preprocessor"></span><span class="preprocessor">        #ifdef HYPRO_USE_Z3</span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="preprocessor"></span>        SMTRAT,</div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="preprocessor">        #endif</span></div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="preprocessor"></span>        GLPK</div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;    };</div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;</div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;} <span class="comment">// namespace hypro</span></div>
+</div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- HTML footer for doxygen 1.8.12-->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_2ce0cb9797b50c8d842bc50008b46cdd.html">hypro</a></li><li class="navelem"><a class="el" href="dir_2c8758a5fdbf28946c502b471e14bb83.html">parser</a></li>
+    <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_2ce0cb9797b50c8d842bc50008b46cdd.html">hypro</a></li><li class="navelem"><a class="el" href="dir_879d833e0dfbe8f31a5e860bb94efb50.html">util</a></li><li class="navelem"><a class="el" href="dir_3100e148cb0b6b745355fdee31bcb5c6.html">linearOptimization</a></li><li class="navelem"><b>Strategy.h</b></li>
     <li class="footer">
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.6 </li>

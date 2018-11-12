@@ -1,6 +1,8 @@
 var namespacehypro =
 [
     [ "detail", null, [
+      [ "StrategyVariant", "structhypro_1_1detail_1_1StrategyVariant.html", null ],
+      [ "StrategyVariant< boost::variant< Ts...> >", "structhypro_1_1detail_1_1StrategyVariant_3_01boost_1_1variant_3_01Ts_8_8_8_4_01_4.html", "structhypro_1_1detail_1_1StrategyVariant_3_01boost_1_1variant_3_01Ts_8_8_8_4_01_4" ],
       [ "strategyConversionVisitor", "structhypro_1_1detail_1_1strategyConversionVisitor.html", "structhypro_1_1detail_1_1strategyConversionVisitor" ],
       [ "seq", "structhypro_1_1detail_1_1seq.html", null ],
       [ "gen_seq", "structhypro_1_1detail_1_1gen__seq.html", null ],
@@ -125,6 +127,7 @@ var namespacehypro =
     [ "ReachTreeNode", "classhypro_1_1ReachTreeNode.html", "classhypro_1_1ReachTreeNode" ],
     [ "ReachabilitySettings", "structhypro_1_1ReachabilitySettings.html", "structhypro_1_1ReachabilitySettings" ],
     [ "SettingsProvider", "classhypro_1_1SettingsProvider.html", "classhypro_1_1SettingsProvider" ],
+    [ "Strategy", "structhypro_1_1Strategy.html", "structhypro_1_1Strategy" ],
     [ "StrategyNode", "structhypro_1_1StrategyNode.html", "structhypro_1_1StrategyNode" ],
     [ "TBacktrackingInfo", "structhypro_1_1TBacktrackingInfo.html", "structhypro_1_1TBacktrackingInfo" ],
     [ "Task", "structhypro_1_1Task.html", "structhypro_1_1Task" ],

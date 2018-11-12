@@ -5,7 +5,7 @@ digraph "Graphical Class Hierarchy"
   rankdir="LR";
   Node1 [label="static_visitor",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled"];
   Node1 -> Node2 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node2 [label="hypro::detail::strategyConversion\lVisitor\< T \>",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$structhypro_1_1detail_1_1strategyConversionVisitor.html"];
+  Node2 [label="hypro::detail::strategyConversion\lVisitor\< Number, State \>",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$structhypro_1_1detail_1_1strategyConversionVisitor.html"];
   Node1 -> Node3 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
   Node3 [label="hypro::genericAffineTransformation\lVisitor\< T, Number \>",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classhypro_1_1genericAffineTransformationVisitor.html"];
   Node1 -> Node4 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
