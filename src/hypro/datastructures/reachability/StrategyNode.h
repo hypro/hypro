@@ -5,15 +5,28 @@
 namespace hypro
 {
 
+namespace detail{
+	template<typename T>
+	struct strategyConversionVisitor : public boost::static_visitor<> {
+
+		template<typename CurrentSNode, typename NewSNode, S>
+		void operator()(const CurrentSNode& sNode, const NewSNode& newSNode, S& state){
+			state.setSetDirect(boost::apply_visitor(genericConversionVisitor<>(), state.getSet()));
+			// TODO: SET TYPE
+			//state.setSetType(newSNode::representationType)
+		}
+	};
+}
+
+template<typename Representation>
 struct StrategyNode {
+	typedef Representation representationType;
 	mpq_class timeStep;
-	representation_name representation;
 	AGG_SETTING aggregation = AGG_SETTING::NO_AGG;
 	int clustering = -1;
 
-	StrategyNode(mpq_class ts, representation_name rep)
+	StrategyNode(mpq_class ts)
 		: timeStep(ts)
-		, representation(rep)
 		, aggregation(AGG_SETTING::MODEL)
 		, clustering(-1)
 	{
@@ -21,9 +34,8 @@ struct StrategyNode {
 		//std::cout << "Create strategy node with timestep " << ts << ", representation: " << rep << ", aggregation: " << aggregation << ", clustering " << clustering << std::endl;
 	}
 
-	StrategyNode(mpq_class ts, representation_name rep, AGG_SETTING agg, int clu)
+	StrategyNode(mpq_class ts, AGG_SETTING agg, int clu)
 		: timeStep(ts)
-		, representation(rep)
 		, aggregation(agg)
 		, clustering(clu)
 	{
