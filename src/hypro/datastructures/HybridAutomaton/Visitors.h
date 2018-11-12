@@ -103,8 +103,64 @@ public:
 	template<typename B>
     inline T operator()(const B& lhs) const {
 		To tmp;
-		convert(tmp,lhs);
- 		return tmp;
+		convert<Number,typename To::Settings, B>(lhs, tmp);
+		return tmp;
+		/*
+ 		switch(To::type()){
+ 			case representation_name::box: {
+ 				To tmp = Converter<Number>:: template toBox<BoxLinearOptimizationOn>(lhs);
+ 				return tmp;
+ 				break;
+ 			}
+ 			case representation_name::polytope_h: {
+ 				To tmp = Converter<Number>::toHPolytope(lhs);
+ 				return tmp;
+ 				break;
+ 			}
+ 			case representation_name::polytope_v: {
+ 				To tmp = Converter<Number>::toVPolytope(lhs);
+ 				return tmp;
+ 				break;
+ 			}
+ 			case representation_name::zonotope: {
+ 				To tmp = Converter<Number>::toZonotope(lhs);
+ 				return tmp;
+ 				break;
+ 			}
+ 			case representation_name::support_function: {
+ 				To tmp = Converter<Number>::toSupportFunction(lhs);
+ 				return tmp;
+ 				break;
+ 			}
+ 			case representation_name::difference_bounds: {
+ 				To tmp = Converter<Number>::toDifferenceBounds(lhs);
+ 				return tmp;
+ 				break;
+ 			}
+ 			case representation_name::ppl_polytope: {
+ 				#ifdef HYPRO_USE_PPL
+ 					To tmp = Converter<Number>::toPolytope(lhs);
+ 					return tmp;
+ 					break;
+ 				#else
+ 					assert(false && "CANNOT CONVERT TO TYPE PPL POLYTOPE. Maybe set HYPRO_USE_PPL to true?");
+ 				#endif
+ 			}
+
+ 			case representation_name::constraint_set: {
+ 				To tmp = Converter<Number>::toConstraintSet(lhs);
+ 				return tmp;
+ 				break;
+ 			}
+ 			case representation_name::taylor_model:
+ 				assert(false && "CANNOT CONVERT TO TYPE TAYLOR MODEL.");
+
+			case representation_name::UNDEF:
+				assert(false && "CANNOT CONVERT TO TYPE UNDEF.");
+ 		}
+ 		assert(false && "SHOULD NEVER REACH THIS");
+ 		return T();
+		*/
     }
 };
 
