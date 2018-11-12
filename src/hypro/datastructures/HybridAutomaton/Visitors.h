@@ -91,14 +91,8 @@ template<typename T, typename Number, typename To>
 class genericConversionVisitor
     : public boost::static_visitor<T>
 {
-protected:
-	representation_name toType;
 
 public:
-	genericConversionVisitor() = delete;
-	genericConversionVisitor(representation_name to) :
-		toType(to)
-	{}
 
 	template<typename B>
     inline T operator()(const B& lhs) const {
