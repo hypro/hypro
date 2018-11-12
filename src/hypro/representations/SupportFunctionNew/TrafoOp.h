@@ -12,13 +12,16 @@ class SupportFunctionNewT;
 //Specialized subclass for transformations as example of a unary operator
 template<typename Number, typename Converter, typename Setting>
 class TrafoOp : public RootGrowNode<Number> {
+
+	using PointerVec = typename RootGrowNode<Number>::PointerVec;
   
   private:
+
 	////// General Interface
 
 	SFNEW_TYPE type = SFNEW_TYPE::TRAFO;
 	unsigned originCount = 1;
-	std::vector<RootGrowNode<Number>*> mChildren = std::vector<RootGrowNode<Number>*>(1,nullptr);
+	PointerVec mChildren = PointerVec(1,nullptr);
 
 	////// Members for this class
 
@@ -35,6 +38,7 @@ class TrafoOp : public RootGrowNode<Number> {
 	TrafoOp() = delete;
 
 	//Set new trafoOp object as parent of origin, 
+	//TrafoOp(const SupportFunctionNewT<Number,Converter,Setting>* origin, const matrix_t<Number>& A, const vector_t<Number>& b) : currentExponent(1) {
 	TrafoOp(const SupportFunctionNewT<Number,Converter,Setting>* origin, const matrix_t<Number>& A, const vector_t<Number>& b) : currentExponent(1) {
 		
 		std::cout << "TrafoOp::TrafoOp(origin, A, b)" << std::endl;
@@ -56,9 +60,9 @@ class TrafoOp : public RootGrowNode<Number> {
 			do {
 				reduced = false;
 				if (this->getChildren().at(0)->getType() == SFNEW_TYPE::TRAFO
-					&& *(dynamic_cast<TrafoOp<Number,Converter,Setting>*>(this->getChildren().at(0))->getParameters()) == *parameters
-					&& dynamic_cast<TrafoOp<Number,Converter,Setting>*>(this->getChildren().at(0))->getCurrentExponent() == currentExponent){
-					successiveTransformations = dynamic_cast<TrafoOp<Number,Converter,Setting>*>(this->getChildren().at(0))->getSuccessiveTransformations()+1;
+					&& *(dynamic_cast<TrafoOp<Number,Converter,Setting>*>(this->getChildren().at(0).get())->getParameters()) == *parameters
+					&& dynamic_cast<TrafoOp<Number,Converter,Setting>*>(this->getChildren().at(0).get())->getCurrentExponent() == currentExponent){
+					successiveTransformations = dynamic_cast<TrafoOp<Number,Converter,Setting>*>(this->getChildren().at(0).get())->getSuccessiveTransformations()+1;
 				} else {
 					successiveTransformations = 0;
 				}
@@ -66,7 +70,7 @@ class TrafoOp : public RootGrowNode<Number> {
 					reduced = true;
 					currentExponent = currentExponent*(carl::pow(2,parameters->power));
 					for(std::size_t i = 0; i < unsigned(carl::pow(2,parameters->power)-1); i++ ){
-						RootGrowNode<Number>* grandChild = this->getChildren().at(0)->getChildren().at(0);
+						std::shared_ptr<RootGrowNode<Number>> grandChild = this->getChildren().at(0)->getChildren().at(0);
 						this->clearChildren();
 						this->addToChildren(grandChild);
 						assert(this->getChildren().size() == 1);

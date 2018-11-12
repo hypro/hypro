@@ -27,7 +27,7 @@ namespace hypro {
 	/***************************************************************************
 	 * Getters & setters
 	 **************************************************************************/
-
+/*
 	template<typename Number, typename Converter, typename Setting>
 	void SupportFunctionNewT<Number,Converter,Setting>::addUnaryOp(RootGrowNode<Number>* unary) const {
 		std::cout << "SF::addUnaryOp_RGN" << std::endl;
@@ -42,8 +42,28 @@ namespace hypro {
 
 		assert(unary->getChildren().size() == 1);
 	}
+*/
+	template<typename Number, typename Converter, typename Setting>
+	void SupportFunctionNewT<Number,Converter,Setting>::addUnaryOp(RootGrowNode<Number>* unary) const {
+		std::cout << "SF::addUnaryOp_RGN" << std::endl;
+		assert(unary->getOriginCount() == 1);
+		//RootGrowNode<Number>* copyOfRootPtr = nullptr;
+		if(unary){
+			//Add current root as child of given unary node
+			std::shared_ptr<RootGrowNode<Number>> tmp = mRoot->getThis();
+			unary->addToChildren(tmp);
+			//Set unary as root
+			//copyOfRootPtr = mRoot.get();
+			//mRoot.release();
+			//mRoot = std::move(unary);
+			//mRoot = std::shared_ptr<RootGrowNode<Number>>(unary);
+			assert(unary->getChildren().size() == 1);
+		}
+		//return copyOfRootPtr;
+	}
 
 
+	//MUST BE REWORKED
 	template<typename Number, typename Converter, typename Setting>
 	void SupportFunctionNewT<Number,Converter,Setting>::addBinaryOp(RootGrowNode<Number>* binary, SupportFunctionNewT<Number,Converter,Setting>* rhs) const {
 		assert(binary != nullptr);
@@ -193,7 +213,7 @@ namespace hypro {
 					// here we create the new stack levels.
 					std::size_t callingFrame = callStack.size() - 1;
 					for(auto c : cur->getChildren()){
-						callStack.push_back(c);
+						callStack.push_back(c.get());
 						paramStack.push_back(std::apply(transform, std::make_pair(cur, currentParam)));
 						resultStack.push_back(std::make_pair(callingFrame, std::vector<Res>()));
 					}
@@ -335,8 +355,14 @@ namespace hypro {
 	template<typename Number, typename Converter, typename Setting>
 	SupportFunctionNewT<Number,Converter,Setting> SupportFunctionNewT<Number,Converter,Setting>::affineTransformation( const matrix_t<Number>& A, const vector_t<Number>& b ) const {
 		std::cout << "affineTransformation" << std::endl;
-		TrafoOp<Number,Converter,Setting>* trafo = new TrafoOp<Number,Converter,Setting>(this, A, b);
-		std::unique_ptr<RootGrowNode<Number>> trafoPtr(std::move(static_cast<RootGrowNode<Number>*>(trafo)));
+		//<TrafoOp<Number,Converter,Setting>* trafo = new TrafoOp<Number,Converter,Setting>(this, A, b);
+		//std::unique_ptr<RootGrowNode<Number>> trafoPtr(std::move(static_cast<RootGrowNode<Number>*>(trafo)));
+		//SupportFunctionNewT<Number,Converter,Setting> sf = SupportFunctionNewT<Number,Converter,Setting>(trafoPtr);
+		std::shared_ptr<TrafoOp<Number,Converter,Setting>> trafo = std::make_shared<TrafoOp<Number,Converter,Setting>>(this, A, b);
+		trafo->setThis(std::static_pointer_cast<RootGrowNode<Number>>(trafo));
+		assert(trafo->getThis() == trafo);
+		//std::shared_ptr<RootGrowNode<Number>> trafoPtr = std::static_pointer_cast<RootGrowNode<Number>>(trafo->getThis());
+		std::shared_ptr<RootGrowNode<Number>> trafoPtr = trafo->getThis();
 		SupportFunctionNewT<Number,Converter,Setting> sf = SupportFunctionNewT<Number,Converter,Setting>(trafoPtr);
 		std::cout << "affineTransformation ende" << std::endl;
 		return sf;

@@ -22,29 +22,40 @@ enum SFNEW_TYPE { NODE = 0, TRAFO, SUMOP, LEAF };
 template<typename Number>
 class RootGrowNode {
 
+  public:
+
+  	using PointerVec = std::vector<std::shared_ptr<RootGrowNode<Number>>>;
+
   protected:
 
 	////// Members
 	SFNEW_TYPE mType = NODE;												//NONE since RootGrowNode should later be an abstract class
 	unsigned originCount = 0;												//Amount of children needed to function properly
-	std::vector<RootGrowNode*> mChildren = std::vector<RootGrowNode*>();	//vector of all current children
-	
+	//std::vector<RootGrowNode*> mChildren = std::vector<RootGrowNode*>();	//vector of all current children
+	PointerVec mChildren = PointerVec();									//vector of all current children
+	std::weak_ptr<RootGrowNode<Number>> pThis;
+
+
   public:
 
 	////// Constructors
 
-	RootGrowNode(){}
+	RootGrowNode() {}
 	virtual ~RootGrowNode(){}	
 
 	////// Getters and Setters
 
 	virtual SFNEW_TYPE getType() const { return mType; }
 	virtual unsigned getOriginCount() const { return originCount; }
-	virtual std::vector<RootGrowNode*> getChildren() const { return mChildren; }
+	//virtual std::vector<RootGrowNode*> getChildren() const { return mChildren; }
+	virtual PointerVec getChildren() const { return mChildren; }
+	std::shared_ptr<RootGrowNode<Number>> getThis() const { return std::shared_ptr<RootGrowNode<Number>>(pThis); }
+	void setThis(const std::shared_ptr<RootGrowNode<Number>>& ptr){ pThis = ptr; }
 
 	////// Modifiers
 
-	void addToChildren(RootGrowNode* rhs){ mChildren.push_back(rhs); }
+	//void addToChildren(RootGrowNode* rhs){ mChildren.push_back(rhs); }
+	void addToChildren(std::shared_ptr<RootGrowNode>& rhs){ mChildren.push_back(rhs); }
 	void clearChildren(){ mChildren.clear(); }
 
 	////// Displaying

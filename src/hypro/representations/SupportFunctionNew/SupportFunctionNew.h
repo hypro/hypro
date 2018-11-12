@@ -47,7 +47,7 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
 	 * Members
 	 **************************************************************************/
 
-  	mutable std::unique_ptr<RootGrowNode<Number>> mRoot = nullptr;
+  	mutable std::shared_ptr<RootGrowNode<Number>> mRoot = nullptr;
 
 	/***************************************************************************
 	 * Constructors
@@ -56,14 +56,15 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
   private:
 
   	//constructor for adding a new node
-  	SupportFunctionNewT( std::unique_ptr<RootGrowNode<Number>>& root ) : mRoot(std::move(root)) {
-  		std::cout << "SupportFunctionNewT::unique_RGN constructor" << std::endl;
+  	SupportFunctionNewT( const std::shared_ptr<RootGrowNode<Number>>& root ) : mRoot(root) {
+  		std::cout << "SupportFunctionNewT::shared_RGN constructor" << std::endl;
+  		mRoot->setThis(mRoot);
   	}
 
-  	//constructor for adding a new node
-  	SupportFunctionNewT( RootGrowNode<Number>* root ) : mRoot(std::move(std::unique_ptr<RootGrowNode<Number>>(root))) {
-  		std::cout << "SupportFunctionNewT::RGN constructor" << std::endl;
-  	}
+  	////constructor for adding a new node
+  	//SupportFunctionNewT( RootGrowNode<Number>* root ) : mRoot(std::shared_ptr<RootGrowNode<Number>>(root)) {
+  	//	std::cout << "SupportFunctionNewT::RGN constructor" << std::endl;
+  	//}
 
   public:
 	/**
@@ -94,7 +95,8 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
 
 	//leaf constructor
 	template<typename Representation>
-	SupportFunctionNewT( GeometricObject<Number,Representation>* r) : mRoot(std::make_unique<Leaf<Number,Representation>>(dynamic_cast<Representation*>(r))) { 
+	SupportFunctionNewT( GeometricObject<Number,Representation>* r) : mRoot(std::make_shared<Leaf<Number,Representation>>(dynamic_cast<Representation*>(r))) { 
+		mRoot->setThis(mRoot);
 		std::cout << "SupportFunctionNewT::Leaf constructor" << std::endl;
 	}
 
@@ -103,6 +105,7 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
 	 */
 	~SupportFunctionNewT() {
 		std::cout << "SupportFunctionNewT::~SupportFunctionNewT" << std::endl;
+		std::cout << "Ref count of mRoot: " << mRoot.use_count() << std::endl;	
 		//mRoot ptr deleted via unique_ptr	
 		//mRoot itself deleted via unique_ptr
 		//mRoot->children deleted as member of mRoot
@@ -115,6 +118,7 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
   private:
 
   	void addUnaryOp(RootGrowNode<Number>* unary) const;
+  	//void addUnaryOp(std::shared_ptr<RootGrowNode<Number>>& unary) const;
 
   public:
 
@@ -122,7 +126,8 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
 
 	Setting getSettings() const { return Setting{}; }
 
-	RootGrowNode<Number>* getRoot() const { return mRoot.get(); }
+	//RootGrowNode<Number>* getRoot() const { return mRoot.get(); }
+	std::shared_ptr<RootGrowNode<Number>> getRoot() const { return mRoot; }
 
 	 /**
 	  * @brief Static method for the construction of an empty SupportFunctionNew of required dimension.
