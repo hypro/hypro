@@ -1,5 +1,6 @@
 var classhypro_1_1ZonotopeT =
 [
+    [ "Settings", "classhypro_1_1ZonotopeT.html#af9155d15961fae5e76c53b92d944d3e6", null ],
     [ "ZonotopeT", "classhypro_1_1ZonotopeT.html#a1a2ee2c092b4d450823b6c9cee2d3d03", null ],
     [ "ZonotopeT", "classhypro_1_1ZonotopeT.html#aa46d97439cd78827946127ab7fda247a", null ],
     [ "ZonotopeT", "classhypro_1_1ZonotopeT.html#a1de71e12de0c0d01779d40330e7a022d", null ],

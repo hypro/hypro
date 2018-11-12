@@ -42,6 +42,7 @@ var hierarchy =
     [ "hypro::Condition< Number >", "classhypro_1_1Condition.html", null ],
     [ "hypro::Cone< Number >", "classhypro_1_1Cone.html", null ],
     [ "hypro::ConstrainSet< Number >", "classhypro_1_1ConstrainSet.html", null ],
+    [ "hypro::ConstraintSetSettings", "structhypro_1_1ConstraintSetSettings.html", null ],
     [ "hypro::ContinuousSystem< Number >", "classhypro_1_1ContinuousSystem.html", null ],
     [ "hypro::Converter< Number >", "classhypro_1_1Converter.html", null ],
     [ "hypro::ConvexHull< Number >", "classhypro_1_1ConvexHull.html", null ],
@@ -87,8 +88,8 @@ var hierarchy =
     [ "hypro::GeometricObject< Number, BoxT< Number, hypro::Converter, Setting > >", "classhypro_1_1GeometricObject.html", [
       [ "hypro::BoxT< Number, hypro::Converter, Setting >", "classhypro_1_1BoxT.html", null ]
     ] ],
-    [ "hypro::GeometricObject< Number, ConstraintSetT< Number, Converter > >", "classhypro_1_1GeometricObject.html", [
-      [ "hypro::ConstraintSetT< Number, Converter >", "classhypro_1_1ConstraintSetT.html", null ]
+    [ "hypro::GeometricObject< Number, ConstraintSetT< Number, Converter, S > >", "classhypro_1_1GeometricObject.html", [
+      [ "hypro::ConstraintSetT< Number, Converter, S >", "classhypro_1_1ConstraintSetT.html", null ]
     ] ],
     [ "hypro::GeometricObject< Number, DifferenceBoundsT< Number, Converter, Setting > >", "classhypro_1_1GeometricObject.html", [
       [ "hypro::DifferenceBoundsT< Number, Converter, Setting >", "classhypro_1_1DifferenceBoundsT.html", null ]
@@ -99,8 +100,8 @@ var hierarchy =
     [ "hypro::GeometricObject< Number, SupportFunctionT< Number, Converter, Setting > >", "classhypro_1_1GeometricObject.html", [
       [ "hypro::SupportFunctionT< Number, Converter, Setting >", "classhypro_1_1SupportFunctionT.html", null ]
     ] ],
-    [ "hypro::GeometricObject< Number, VPolytopeT< Number, Converter > >", "classhypro_1_1GeometricObject.html", [
-      [ "hypro::VPolytopeT< Number, Converter >", "classhypro_1_1VPolytopeT.html", null ]
+    [ "hypro::GeometricObject< Number, VPolytopeT< Number, Converter, S > >", "classhypro_1_1GeometricObject.html", [
+      [ "hypro::VPolytopeT< Number, Converter, S >", "classhypro_1_1VPolytopeT.html", null ]
     ] ],
     [ "hypro::GeometricObject< Number, ZonotopeT< Number, Converter, Setting > >", "classhypro_1_1GeometricObject.html", [
       [ "hypro::ZonotopeT< Number, Converter, Setting >", "classhypro_1_1ZonotopeT.html", null ]
@@ -662,7 +663,7 @@ var hierarchy =
     [ "static_visitor", null, [
       [ "hypro::genericAffineTransformationVisitor< T, Number >", "classhypro_1_1genericAffineTransformationVisitor.html", null ],
       [ "hypro::genericCompareVisitor", "classhypro_1_1genericCompareVisitor.html", null ],
-      [ "hypro::genericConversionVisitor< T, Number >", "classhypro_1_1genericConversionVisitor.html", null ],
+      [ "hypro::genericConversionVisitor< T, Number, To >", "classhypro_1_1genericConversionVisitor.html", null ],
       [ "hypro::genericDimensionVisitor", "classhypro_1_1genericDimensionVisitor.html", null ],
       [ "hypro::genericIntersectVisitor< T >", "classhypro_1_1genericIntersectVisitor.html", null ],
       [ "hypro::genericMinkowskiSumVisitor< T >", "classhypro_1_1genericMinkowskiSumVisitor.html", null ],
@@ -712,10 +713,10 @@ var hierarchy =
     [ "true_type", null, [
       [ "hypro::is_shared_ptr< std::shared_ptr< T > >", "structhypro_1_1is__shared__ptr_3_01std_1_1shared__ptr_3_01T_01_4_01_4.html", null ]
     ] ],
-    [ "hypro::typeName< T >", "structhypro_1_1typeName.html", null ],
     [ "hypro::hypro::typeName< T >", "structhypro_1_1hypro_1_1typeName.html", null ],
-    [ "hypro::hypro::typeName< double >", "structhypro_1_1hypro_1_1typeName_3_01double_01_4.html", null ],
+    [ "hypro::typeName< T >", "structhypro_1_1typeName.html", null ],
     [ "hypro::typeName< double >", "structhypro_1_1typeName_3_01double_01_4.html", null ],
+    [ "hypro::hypro::typeName< double >", "structhypro_1_1hypro_1_1typeName_3_01double_01_4.html", null ],
     [ "hypro::typeName< mpq_class >", "structhypro_1_1typeName_3_01mpq__class_01_4.html", null ],
     [ "hypro::hypro::typeName< mpq_class >", "structhypro_1_1hypro_1_1typeName_3_01mpq__class_01_4.html", null ],
     [ "hypro::unionContent< Number, Setting >", "structhypro_1_1unionContent.html", null ],
@@ -724,6 +725,7 @@ var hierarchy =
     [ "hypro::Vertex< std::size_t >", "classhypro_1_1Vertex.html", null ],
     [ "hypro::VertexContainer< Number >", "classhypro_1_1VertexContainer.html", null ],
     [ "hypro::VertexEnumeration< Number >", "classhypro_1_1VertexEnumeration.html", null ],
+    [ "hypro::VPolytopeSettings", "structhypro_1_1VPolytopeSettings.html", null ],
     [ "hypro::WorkQueueDefaultSetting", "structhypro_1_1WorkQueueDefaultSetting.html", null ],
     [ "hypro::WorkQueueManager< Workable >", "classhypro_1_1WorkQueueManager.html", null ],
     [ "hypro::WorkQueueT< Workable, Setting >", "classhypro_1_1WorkQueueT.html", null ],

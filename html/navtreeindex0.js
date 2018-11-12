@@ -36,7 +36,7 @@ var NAVTREEINDEX0 =
 "ContextBasedReachabilityWorker_8h_source.html":[10,0,1,0,0,2,2,0],
 "ContextFactory_8h_source.html":[10,0,1,0,0,2,0,0],
 "ContinuousSetting_8h_source.html":[10,0,1,0,3,9,1],
-"Converter_8h_source.html":[10,0,1,0,3,2,1],
+"Converter_8h_source.html":[10,0,1,0,3,2,2],
 "ConvexHull_8h_source.html":[10,0,1,0,0,0,1],
 "CounterRepository_8h_source.html":[10,0,1,0,4,5,0],
 "DecisionEntity_8h_source.html":[10,0,1,0,1,0,0,0],
@@ -218,6 +218,7 @@ var NAVTREEINDEX0 =
 "Transition_8h_source.html":[10,0,1,0,1,0,11],
 "TreeNode_8h_source.html":[10,0,1,0,1,1,9],
 "TreeStatistic_8h_source.html":[10,0,1,0,1,1,10],
+"VPolytopeSettings_8h_source.html":[10,0,1,0,3,7,1,1],
 "VPolytope_8h_source.html":[10,0,1,0,3,7,1,0],
 "VariablePool_8h_source.html":[10,0,1,0,4,13],
 "VertexContainer_8h.html":[10,0,1,0,1,9],
@@ -248,6 +249,5 @@ var NAVTREEINDEX0 =
 "algorithms_2reachability_2handlers_2jumpHandlers_2util_8h_source.html":[10,0,1,0,0,2,1,4,3],
 "algorithms_2reachability_2util_8h_source.html":[10,0,1,0,0,2,6],
 "annotated.html":[9,0],
-"antlr4-flowstar_2ParserWrapper_8cpp_source.html":[10,0,1,0,2,1,17],
-"antlr4-flowstar_2ParserWrapper_8h_source.html":[10,0,1,0,2,1,18]
+"antlr4-flowstar_2ParserWrapper_8cpp_source.html":[10,0,1,0,2,1,17]
 };

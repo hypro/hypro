@@ -1,5 +1,6 @@
 var classhypro_1_1BoxT =
 [
+    [ "Settings", "classhypro_1_1BoxT.html#adbbf70c4896237b785a7cf0ccac0db61", null ],
     [ "BoxT", "classhypro_1_1BoxT.html#aa4384ed948ff04ee4cfe33e4ee53fb48", null ],
     [ "BoxT", "classhypro_1_1BoxT.html#a68d80ad7accafdf8d9ed452fd968956c", null ],
     [ "BoxT", "classhypro_1_1BoxT.html#af92fc242b77b0d0b360fe571bb5a2710", null ],

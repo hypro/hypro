@@ -1,6 +1,7 @@
 var classhypro_1_1DifferenceBoundsT =
 [
     [ "DBMEntry", "classhypro_1_1DifferenceBoundsT_1_1DBMEntry.html", "classhypro_1_1DifferenceBoundsT_1_1DBMEntry" ],
+    [ "Settings", "classhypro_1_1DifferenceBoundsT.html#a39641596db114377dc5dd91e63bd6cea", null ],
     [ "BOUND_TYPE", "classhypro_1_1DifferenceBoundsT.html#a1168d084536f90893cae2589dfd1cb50", [
       [ "SMALLER", "classhypro_1_1DifferenceBoundsT.html#a1168d084536f90893cae2589dfd1cb50ab4ea6bff7b7882e96403d7e01052c2c3", null ],
       [ "SMALLER_EQ", "classhypro_1_1DifferenceBoundsT.html#a1168d084536f90893cae2589dfd1cb50a49d4f39a651909cc21d315a196c519de", null ],

@@ -1,6 +1,7 @@
 var classhypro_1_1HPolytopeT =
 [
     [ "HalfspaceVector", "classhypro_1_1HPolytopeT.html#aa86730f4acc4f6b85e3e63ac3d454e24", null ],
+    [ "Settings", "classhypro_1_1HPolytopeT.html#aa507246cde1836acb6f7883be3e348f1", null ],
     [ "REDUCTION_STRATEGY", "classhypro_1_1HPolytopeT.html#a2c9cbc32e04938dd191f9ee932445563", [
       [ "DROP", "classhypro_1_1HPolytopeT.html#a2c9cbc32e04938dd191f9ee932445563acd0a97c335fd44855bc584636c988718", null ],
       [ "DROP_SMOOTH", "classhypro_1_1HPolytopeT.html#a2c9cbc32e04938dd191f9ee932445563a874cf3c95eef0eba816e03b67ee78f0f", null ],
