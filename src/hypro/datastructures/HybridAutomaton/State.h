@@ -31,6 +31,7 @@ class State
 {
   public:
 	using repVariant = boost::variant<Representation,Rargs...>; /// Boost variant type for all possible state set representations.
+  typedef Number NumberType;
 
   protected:
     const Location<Number>* mLoc = nullptr; /// Location of the state.

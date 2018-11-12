@@ -17,9 +17,13 @@ namespace detail {
 template<typename State>
 using StrategyNodeVariant = typename detail::StrategyVariant<typename State::repVariant>::types;
 
-template<typename T>
+template<typename StateType>
 struct Strategy {
-    std::vector<StrategyNodeVariant<T>> mStrategy;
+    std::vector<StrategyNodeVariant<StateType>> mStrategy;
+
+    void advanceToLevel( StateType& state, std::size_t lvl) {
+        boost::apply_visitor(detail::strategyConversionVisitor<StateType>(state), mStrategy[lvl]);
+    }
 };
 
 } // hypro

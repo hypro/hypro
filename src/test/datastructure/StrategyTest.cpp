@@ -14,13 +14,13 @@ TEST(StrategyTest, Constructor)
 
 	strat.mStrategy.emplace_back(StrategyNode<Box<double>>{mpq_class(1)});
 
-	EXPECT_EQ(strat.mStrategy.size(), 1);
+	EXPECT_EQ(strat.mStrategy.size(), std::size_t(1));
 
 	Strategy<State_t<double>> strat2;
 	strat2.mStrategy = {StrategyNode<Box<double>>(mpq_class(1)), StrategyNode<SupportFunction<double>>(mpq_class(1)),
 		StrategyNode<Zonotope<double>>(mpq_class(1))};
 
-	EXPECT_EQ(strat2.mStrategy.size(), 3);
+	EXPECT_EQ(strat2.mStrategy.size(), std::size_t(3));
 }
 
 TEST(StrategyTest, Conversion)
@@ -38,11 +38,26 @@ TEST(StrategyTest, Conversion)
 
 	auto tmp = strat.mStrategy[1];
 
-	boost::apply_visitor(detail::strategyConversionVisitor<double,State_t<double>>(s), strat.mStrategy[1]);
+	boost::apply_visitor(detail::strategyConversionVisitor<State_t<double>>(s), strat.mStrategy[1]);
+
+
 
 	EXPECT_NO_THROW(boost::get<SupportFunction<double>>(s.getSet()));
 	EXPECT_ANY_THROW(boost::get<Box<double>>(s.getSet()));
 
 	EXPECT_EQ(boost::get<SupportFunction<double>>(s.getSet()).type(), representation_name::support_function);
 	EXPECT_EQ(s.getSetType(), representation_name::support_function);
+
+	// using conversion function
+
+	strat.advanceToLevel(s,0);
+	EXPECT_ANY_THROW(boost::get<SupportFunction<double>>(s.getSet()));
+	EXPECT_NO_THROW(boost::get<Box<double>>(s.getSet()));
+	EXPECT_EQ(s.getSetType(), representation_name::box);
+
+	strat.advanceToLevel(s,1);
+	EXPECT_NO_THROW(boost::get<SupportFunction<double>>(s.getSet()));
+	EXPECT_ANY_THROW(boost::get<Box<double>>(s.getSet()));
+	EXPECT_EQ(s.getSetType(), representation_name::support_function);
+
 }
