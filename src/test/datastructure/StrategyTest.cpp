@@ -30,5 +30,7 @@ TEST(StrategyTest, Conversion)
 
 	auto tmp = strat.mStrategy[1];
 
-	s.setSetDirect(boost::get<SupportFunction<double>(boost::apply_visitor(genericConversionVisitor<typename State_t<double>::repVariant, double, tmp::representationType>(representation_name::support_function), s.getSet())));
+	boost::apply_visitor(detail::strategyConversionVisitor<double>(strat.mStrategy[1]), s);
+
+	//s.setSetDirect(boost::get<SupportFunction<double>(boost::apply_visitor(genericConversionVisitor<typename State_t<double>::repVariant, double, tmp::representationType>(representation_name::support_function), s.getSet())));
 }

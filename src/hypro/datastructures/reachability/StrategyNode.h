@@ -6,12 +6,17 @@ namespace hypro
 {
 
 namespace detail{
-	template<typename T>
+	template<typename Number, typename NewSNode>
 	struct strategyConversionVisitor : public boost::static_visitor<> {
 
-		template<typename CurrentSNode, typename NewSNode, S>
-		void operator()(const CurrentSNode& sNode, const NewSNode& newSNode, S& state){
-			state.setSetDirect(boost::apply_visitor(genericConversionVisitor<>(), state.getSet()));
+		NewSNode& mNewNode;
+
+		strategyConversionVisitor() = delete;
+		strategyConversionVisitor(NewSNode& newNode) : mNewNode(newNode) {}
+
+		template<typename S>
+		void operator()(S& state){
+			state.setSetDirect(boost::apply_visitor(genericConversionVisitor<typename S::repVariant, Number, typename NewSNode::representationType>(), state.getSet()));
 			// TODO: SET TYPE
 			//state.setSetType(newSNode::representationType)
 		}
