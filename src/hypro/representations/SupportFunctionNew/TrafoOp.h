@@ -41,14 +41,10 @@ class TrafoOp : public RootGrowNode<Number> {
 	//TrafoOp(const SupportFunctionNewT<Number,Converter,Setting>* origin, const matrix_t<Number>& A, const vector_t<Number>& b) : currentExponent(1) {
 	TrafoOp(const SupportFunctionNewT<Number,Converter,Setting>* origin, const matrix_t<Number>& A, const vector_t<Number>& b) : currentExponent(1) {
 		
-		std::cout << "TrafoOp::TrafoOp(origin, A, b)" << std::endl;
-
 		parameters = std::make_shared<const LinTrafoParameters<Number>>(A,b);
 
 		origin->addUnaryOp(this);
 		assert(this->getChildren().size() == 1);
-		std::cout << "Added trafoSF to origin!" << std::endl;
-
 		
 		// Determine, if we need to create new parameters or if this matrix and vector pair has already been used (recursive).
 		// in case this transformation has already been performed, parameters will be updated.

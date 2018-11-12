@@ -79,9 +79,6 @@ TYPED_TEST(SupportFunctionNewTest, TrafoOp){
 	EXPECT_EQ((dynamic_cast<TrafoOp<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>*>(sf1.getRoot().get()))->getSuccessiveTransformations(), 0);
 	std::cout << "Constructed trafo1" << std::endl;
 
-	std::cout << "Ref count of trafo1 before deletion: " << sf1.getRoot().use_count() << std::endl;
-	std::cout << "Ref count of leaf before deletion: " << sf1.getRoot()->getChildren().at(0).use_count() << std::endl;
-
 	//Fill trafo0Params
 	trafo0Params = (dynamic_cast<TrafoOp<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>*>(sf1.getRoot().get()))->getParameters();
 	std::cout << "saved trafo0Params with address " << trafo0Params << std::endl;
@@ -105,6 +102,101 @@ TYPED_TEST(SupportFunctionNewTest, TrafoOp){
 	//Check if the supportvalues were right
 	//Should be [1 + #trafos , 1] everywhere
 	EXPECT_EQ(res.at(0).supportValue, TypeParam(3));
+	EXPECT_EQ(res.at(1).supportValue, TypeParam(1));
+
+	//sf3
+	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sf3 = sf2.affineTransformation(tMat, tVec); 
+	EXPECT_TRUE(sf3.getRoot() != nullptr);
+	EXPECT_TRUE(sf3.getRoot()->getChildren().size() == 1);
+	EXPECT_EQ((dynamic_cast<TrafoOp<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>*>(sf3.getRoot().get()))->getCurrentExponent(), 1);
+	EXPECT_EQ((dynamic_cast<TrafoOp<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>*>(sf3.getRoot().get()))->getSuccessiveTransformations(), 2);
+	std::cout << "Constructed trafo3" << std::endl;
+
+	//sf4
+	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sf4 = sf3.affineTransformation(tMat, tVec); 
+	EXPECT_TRUE(sf4.getRoot() != nullptr);
+	EXPECT_TRUE(sf4.getRoot()->getChildren().size() == 1);
+	EXPECT_EQ((dynamic_cast<TrafoOp<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>*>(sf4.getRoot().get()))->getCurrentExponent(), 4);
+	EXPECT_EQ((dynamic_cast<TrafoOp<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>*>(sf4.getRoot().get()))->getSuccessiveTransformations(), 0);
+	std::cout << "Constructed trafo4" << std::endl;
+
+	//Check whether parameter object remained the same (whether both point to the same address)
+	EXPECT_EQ(trafo0Params, (dynamic_cast<TrafoOp<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>*>(sf4.getRoot().get())->getParameters()));
+
+	//Evaluate
+	std::cout << "START EVALUATION FOR 4 TRAFOS\n"; 
+	res = sf4.multiEvaluate(directions,true);
+	std::cout << "END EVALUATION\n";
+
+	//Check if the supportvalues were right
+	//Should be [1 + #trafos , 1] everywhere
+	EXPECT_EQ(res.at(0).supportValue, TypeParam(5));
+	EXPECT_EQ(res.at(1).supportValue, TypeParam(1));
+
+	//sf5
+	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sf5 = sf4.affineTransformation(tMat, tVec); 
+	EXPECT_TRUE(sf5.getRoot() != nullptr);
+	EXPECT_TRUE(sf5.getRoot()->getChildren().size() == 1);
+	EXPECT_EQ((dynamic_cast<TrafoOp<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>*>(sf5.getRoot().get()))->getCurrentExponent(), 1);
+	EXPECT_EQ((dynamic_cast<TrafoOp<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>*>(sf5.getRoot().get()))->getSuccessiveTransformations(), 0);
+	std::cout << "Constructed trafo5" << std::endl;
+
+	//sf6
+	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sf6 = sf5.affineTransformation(tMat, tVec); 
+	EXPECT_TRUE(sf6.getRoot() != nullptr);
+	EXPECT_TRUE(sf6.getRoot()->getChildren().size() == 1);
+	EXPECT_EQ((dynamic_cast<TrafoOp<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>*>(sf6.getRoot().get()))->getCurrentExponent(), 1);
+	EXPECT_EQ((dynamic_cast<TrafoOp<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>*>(sf6.getRoot().get()))->getSuccessiveTransformations(), 1);
+	std::cout << "Constructed trafo6" << std::endl;
+
+	//sf7
+	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sf7 = sf6.affineTransformation(tMat, tVec); 
+	EXPECT_TRUE(sf7.getRoot() != nullptr);
+	EXPECT_TRUE(sf7.getRoot()->getChildren().size() == 1);
+	EXPECT_EQ((dynamic_cast<TrafoOp<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>*>(sf7.getRoot().get()))->getCurrentExponent(), 1);
+	EXPECT_EQ((dynamic_cast<TrafoOp<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>*>(sf7.getRoot().get()))->getSuccessiveTransformations(), 2);
+	std::cout << "Constructed trafo7" << std::endl;
+
+	//sf8
+	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sf8 = sf7.affineTransformation(tMat, tVec); 
+	EXPECT_TRUE(sf8.getRoot() != nullptr);
+	EXPECT_TRUE(sf8.getRoot()->getChildren().size() == 1);
+	EXPECT_EQ((dynamic_cast<TrafoOp<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>*>(sf8.getRoot().get()))->getCurrentExponent(), 4);
+	EXPECT_EQ((dynamic_cast<TrafoOp<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>*>(sf8.getRoot().get()))->getSuccessiveTransformations(), 1);
+	std::cout << "Constructed trafo8" << std::endl;
+
+	//Check whether parameter object remained the same (whether both point to the same address)
+	EXPECT_EQ(trafo0Params, (dynamic_cast<TrafoOp<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>*>(sf8.getRoot().get())->getParameters()));
+
+	//Evaluate
+	std::cout << "START EVALUATION FOR 8 TRAFOS\n"; 
+	res = sf8.multiEvaluate(directions,true);
+	std::cout << "END EVALUATION\n";
+
+	//Check if the supportvalues were right
+	//Should be [1 + #trafos , 1] everywhere
+	EXPECT_EQ(res.at(0).supportValue, TypeParam(9));
+	EXPECT_EQ(res.at(1).supportValue, TypeParam(1));
+
+	//sf9
+	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sf9 = sf8.affineTransformation(tMat, tVec); 
+	EXPECT_TRUE(sf9.getRoot() != nullptr);
+	EXPECT_TRUE(sf9.getRoot()->getChildren().size() == 1);
+	EXPECT_EQ((dynamic_cast<TrafoOp<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>*>(sf9.getRoot().get()))->getCurrentExponent(), 1);
+	EXPECT_EQ((dynamic_cast<TrafoOp<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>*>(sf9.getRoot().get()))->getSuccessiveTransformations(), 0);
+	std::cout << "Constructed trafo9" << std::endl;
+
+	//Check whether parameter object remained the same (whether both point to the same address)
+	EXPECT_EQ(trafo0Params, (dynamic_cast<TrafoOp<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>*>(sf9.getRoot().get())->getParameters()));
+
+	//Evaluate
+	std::cout << "START EVALUATION FOR 9 TRAFOS\n"; 
+	res = sf9.multiEvaluate(directions,true);
+	std::cout << "END EVALUATION\n";
+
+	//Check if the supportvalues were right
+	//Should be [1 + #trafos , 1] everywhere
+	EXPECT_EQ(res.at(0).supportValue, TypeParam(10));
 	EXPECT_EQ(res.at(1).supportValue, TypeParam(1));
 
 /*
