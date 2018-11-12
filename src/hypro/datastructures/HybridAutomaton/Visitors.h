@@ -3,7 +3,6 @@
 #include "../../representations/GeometricObject.h"
 #include "../../representations/types.h"
 #include "../../types.h"
-#include "conversionHelper.h"
 
 namespace hypro {
 
