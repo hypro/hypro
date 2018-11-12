@@ -1,5 +1,6 @@
 var classhypro_1_1State =
 [
+    [ "NumberType", "classhypro_1_1State.html#a8596fb990ea3ae3528b1ed522e0bc574", null ],
     [ "repVariant", "classhypro_1_1State.html#a91b483e24a3fea6fb3272eceedc6ba8e", null ],
     [ "State", "classhypro_1_1State.html#adddf0f28a7dde72046df7c027900582f", null ],
     [ "State", "classhypro_1_1State.html#af116c33f1a8b686cba6273f2f5c55e22", null ],

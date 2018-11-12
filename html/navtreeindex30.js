@@ -1,5 +1,6 @@
 var NAVTREEINDEX30 =
 {
+"structhypro_1_1PlotData.html#a560b3237ed76c3d3a06e12d978746d5b":[9,0,1,186,1],
 "structhypro_1_1PlotData.html#a57b4bf99b8eff05a48dbc0fa115c90dd":[9,0,1,186,2],
 "structhypro_1_1PlotData.html#a9f29d8be44c69ace40a6b20191f9039a":[9,0,1,186,4],
 "structhypro_1_1PlotData.html#af9890b496365fded665eb37a7c446f10":[9,0,1,186,0],
@@ -47,7 +48,8 @@ var NAVTREEINDEX30 =
 "structhypro_1_1STindependentFunct.html#ab6585fd1aef43ba50ff3d25dc43a9d50":[9,0,1,11,0],
 "structhypro_1_1STindependentFunct.html#af2d36438d06319f72d3f0beb6fed60ea":[9,0,1,11,2],
 "structhypro_1_1Strategy.html":[9,0,1,93],
-"structhypro_1_1Strategy.html#a165ac8879e348ddebfb8a53088d17703":[9,0,1,93,0],
+"structhypro_1_1Strategy.html#a4a9a9c9ff714c78bfca84775223863f8":[9,0,1,93,0],
+"structhypro_1_1Strategy.html#aa25eedbf64ea0519fa8ad15afaf96d7f":[9,0,1,93,1],
 "structhypro_1_1StrategyNode.html":[9,0,1,94],
 "structhypro_1_1StrategyNode.html#a22f9ae0aa69e9abe6072c78683012866":[9,0,1,94,5],
 "structhypro_1_1StrategyNode.html#a37b04274959a538bc34e8db2d88cc789":[9,0,1,94,0],
@@ -98,10 +100,10 @@ var NAVTREEINDEX30 =
 "structhypro_1_1detail_1_1gen__seq_3_010_00_01Is_8_8_8_4.html":[9,0,1,0,5],
 "structhypro_1_1detail_1_1seq.html":[9,0,1,0,3],
 "structhypro_1_1detail_1_1strategyConversionVisitor.html":[9,0,1,0,2],
-"structhypro_1_1detail_1_1strategyConversionVisitor.html#a6c2d618856fd3cae031c5259625171e5":[9,0,1,0,2,0],
-"structhypro_1_1detail_1_1strategyConversionVisitor.html#a9e0d25cbc17e2cd78fa778bafc951cbd":[9,0,1,0,2,1],
-"structhypro_1_1detail_1_1strategyConversionVisitor.html#ad578fa1d6f712dc493e233d00563b40d":[9,0,1,0,2,2],
-"structhypro_1_1detail_1_1strategyConversionVisitor.html#aff432f0e6da548f769ef075b27642a1e":[9,0,1,0,2,3],
+"structhypro_1_1detail_1_1strategyConversionVisitor.html#a13befbd94dfada7333094b160f9b7e21":[9,0,1,0,2,3],
+"structhypro_1_1detail_1_1strategyConversionVisitor.html#a8fed6f96e12459d4ed02fb166cc5d10f":[9,0,1,0,2,1],
+"structhypro_1_1detail_1_1strategyConversionVisitor.html#ae777484345db44dfbe3de6076aa5ba24":[9,0,1,0,2,2],
+"structhypro_1_1detail_1_1strategyConversionVisitor.html#af3f3b23f70a6d5ad00367b0bfa3b2d74":[9,0,1,0,2,0],
 "structhypro_1_1endPoint.html":[9,0,1,100],
 "structhypro_1_1endPoint.html#a1c5b895284a8de7e17aaf4e0e0f958ea":[9,0,1,100,2],
 "structhypro_1_1endPoint.html#a4cccaba4af21780fc3c5d912f7bffcc6":[9,0,1,100,4],
@@ -132,8 +134,8 @@ var NAVTREEINDEX30 =
 "structhypro_1_1hypro_1_1typeName_3_01double_01_4.html#aa380f92949856a149089009c62a710ca":[9,0,1,2,1,0],
 "structhypro_1_1hypro_1_1typeName_3_01double_01_4.html#aa380f92949856a149089009c62a710ca":[9,0,1,2,1,1],
 "structhypro_1_1hypro_1_1typeName_3_01mpq__class_01_4.html":[9,0,1,2,2],
-"structhypro_1_1hypro_1_1typeName_3_01mpq__class_01_4.html#a2ad8111517b5efdfda509c48bc49dc1f":[9,0,1,2,2,0],
 "structhypro_1_1hypro_1_1typeName_3_01mpq__class_01_4.html#a2ad8111517b5efdfda509c48bc49dc1f":[9,0,1,2,2,1],
+"structhypro_1_1hypro_1_1typeName_3_01mpq__class_01_4.html#a2ad8111517b5efdfda509c48bc49dc1f":[9,0,1,2,2,0],
 "structhypro_1_1intersectionContent.html":[9,0,1,156],
 "structhypro_1_1intersectionContent.html#a497f7e85e3b43ba5024b708b154fe0d4":[9,0,1,156,3],
 "structhypro_1_1intersectionContent.html#abd10f77ea9a873419f2b5e096e3fb666":[9,0,1,156,4],
@@ -247,7 +249,5 @@ var NAVTREEINDEX30 =
 "structhypro_1_1parser_1_1modeParser.html":[9,0,1,3,3],
 "structhypro_1_1parser_1_1modeParser.html#a04e02ce6cd59189aefa47c17863d2fd0":[9,0,1,3,3,11],
 "structhypro_1_1parser_1_1modeParser.html#a09b91a16c07c5891f3dd43374e359e94":[9,0,1,3,3,4],
-"structhypro_1_1parser_1_1modeParser.html#a11ab6a4f6d1de1a8c9f688700cdcfb32":[9,0,1,3,3,16],
-"structhypro_1_1parser_1_1modeParser.html#a2ac02b66073f873cab0dfd09665b40f7":[9,0,1,3,3,17],
-"structhypro_1_1parser_1_1modeParser.html#a2d797fc5f7a9ea2bb735bdf6d9f3e891":[9,0,1,3,3,9]
+"structhypro_1_1parser_1_1modeParser.html#a11ab6a4f6d1de1a8c9f688700cdcfb32":[9,0,1,3,3,16]
 };

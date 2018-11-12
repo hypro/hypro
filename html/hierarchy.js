@@ -661,7 +661,7 @@ var hierarchy =
     [ "hypro::State< Number >", "classhypro_1_1State.html", null ],
     [ "hypro::State< Number, ConstraintSet< Number > >", "classhypro_1_1State.html", null ],
     [ "static_visitor", null, [
-      [ "hypro::detail::strategyConversionVisitor< Number, State >", "structhypro_1_1detail_1_1strategyConversionVisitor.html", null ],
+      [ "hypro::detail::strategyConversionVisitor< State >", "structhypro_1_1detail_1_1strategyConversionVisitor.html", null ],
       [ "hypro::genericAffineTransformationVisitor< T, Number >", "classhypro_1_1genericAffineTransformationVisitor.html", null ],
       [ "hypro::genericCompareVisitor", "classhypro_1_1genericCompareVisitor.html", null ],
       [ "hypro::genericConversionVisitor< T, Number, To >", "classhypro_1_1genericConversionVisitor.html", null ],
@@ -681,7 +681,7 @@ var hierarchy =
     ] ],
     [ "hypro::STflowpipeSegment< Number >", "structhypro_1_1STflowpipeSegment.html", null ],
     [ "hypro::STindependentFunct< Number >", "structhypro_1_1STindependentFunct.html", null ],
-    [ "hypro::Strategy< T >", "structhypro_1_1Strategy.html", null ],
+    [ "hypro::Strategy< StateType >", "structhypro_1_1Strategy.html", null ],
     [ "hypro::StrategyNode< Representation >", "structhypro_1_1StrategyNode.html", null ],
     [ "hypro::detail::StrategyVariant< T >", "structhypro_1_1detail_1_1StrategyVariant.html", null ],
     [ "hypro::detail::StrategyVariant< boost::variant< Ts...> >", "structhypro_1_1detail_1_1StrategyVariant_3_01boost_1_1variant_3_01Ts_8_8_8_4_01_4.html", null ],
