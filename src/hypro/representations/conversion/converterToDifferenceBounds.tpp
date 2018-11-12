@@ -12,37 +12,42 @@
 
 //conversion from DifferenceBounds to DifferenceBounds (no differentiation between conversion modes - always EXACT)
 template<typename Number>
-typename Converter<Number>::DifferenceBounds Converter<Number>::toDifferenceBounds(const DifferenceBounds& source, const CONV_MODE ){
+template<typename DBSetting, typename inSetting>
+DifferenceBoundsT<Number,Converter<Number>,DBSetting> Converter<Number>::toDifferenceBounds(const DifferenceBoundsT<Number,Converter<Number>,inSetting>& source, const CONV_MODE ){
     return source;
 }
 
 template<typename Number>
-typename Converter<Number>::DifferenceBounds Converter<Number>::toDifferenceBounds(const Box& source, const CONV_MODE ){
+template<typename DBSetting, typename inSetting>
+DifferenceBoundsT<Number,Converter<Number>,DBSetting> Converter<Number>::toDifferenceBounds(const BoxT<Number,Converter<Number>,inSetting>& source, const CONV_MODE ){
     // TODO make better, this is just the cheap solution
     HPolytope tmp = toHPolytope(source);
     return toDifferenceBounds(tmp);
 }
 
 template<typename Number>
-typename Converter<Number>::DifferenceBounds Converter<Number>::toDifferenceBounds(const ConstraintSet& source, const CONV_MODE ){
+template<typename DBSetting, typename inSetting>
+DifferenceBoundsT<Number,Converter<Number>,DBSetting> Converter<Number>::toDifferenceBounds(const ConstraintSetT<Number,Converter<Number>,inSetting>& source, const CONV_MODE ){
     // TODO make better, this is just the cheap solution
     HPolytope tmp = toHPolytope(source);
     return toDifferenceBounds(tmp);
 }
 
 template<typename Number>
-typename Converter<Number>::DifferenceBounds Converter<Number>::toDifferenceBounds(const Ellipsoid& source, const CONV_MODE ){
+template<typename DBSetting>
+DifferenceBoundsT<Number,Converter<Number>,DBSetting> Converter<Number>::toDifferenceBounds(const Ellipsoid& source, const CONV_MODE ){
     // TODO make better, this is just the cheap solution
     HPolytope tmp = toHPolytope(source);
     return toDifferenceBounds(tmp);
 }
 
 template<typename Number>
-typename Converter<Number>::DifferenceBounds Converter<Number>::toDifferenceBounds(const HPolytope& source, const CONV_MODE ){
+template<typename DBSetting, typename inSetting>
+DifferenceBoundsT<Number,Converter<Number>,DBSetting> Converter<Number>::toDifferenceBounds(const HPolytopeT<Number,Converter<Number>,inSetting>& source, const CONV_MODE ){
     size_t numclocks = source.dimension();
     // 1. introduce a zero clock (numclocks+1)
     numclocks++;
-    hypro::matrix_t<typename Converter<Number>::DifferenceBounds::DBMEntry> dbm = hypro::matrix_t<typename Converter<Number>::DifferenceBounds::DBMEntry>(numclocks, numclocks);
+    hypro::matrix_t<typename DifferenceBoundsT<Number,Converter<Number>,DBSetting>::DBMEntry> dbm = hypro::matrix_t<typename DifferenceBoundsT<Number,Converter<Number>,DBSetting>::DBMEntry>(numclocks, numclocks);
 
     //  for each pair of variables i,j
     for(size_t i = 0; i < numclocks; i++) {
@@ -65,24 +70,25 @@ typename Converter<Number>::DifferenceBounds Converter<Number>::toDifferenceBoun
                 }
                 EvaluationResult<Number> res = source.evaluate(direction);
                 if(res.errorCode == hypro::SOLUTION::INFTY){
-                    dbm(i, j) = typename Converter<Number>::DifferenceBounds::DBMEntry(0.0, DifferenceBounds::BOUND_TYPE::INFTY);
+                    dbm(i, j) = typename DifferenceBoundsT<Number,Converter<Number>,DBSetting>::DBMEntry(0.0, DifferenceBounds::BOUND_TYPE::INFTY);
                 }
                 else {
-                    dbm(i, j) = typename Converter<Number>::DifferenceBounds::DBMEntry(res.supportValue, DifferenceBounds::BOUND_TYPE::SMALLER_EQ);
+                    dbm(i, j) = typename DifferenceBoundsT<Number,Converter<Number>,DBSetting>::DBMEntry(res.supportValue, DifferenceBounds::BOUND_TYPE::SMALLER_EQ);
                 }
             }
             else{
-                dbm(i,j)=typename Converter<Number>::DifferenceBounds::DBMEntry(0.0, DifferenceBounds::BOUND_TYPE::SMALLER_EQ);
+                dbm(i,j) = typename DifferenceBoundsT<Number,Converter<Number>,DBSetting>::DBMEntry(0.0, DifferenceBounds::BOUND_TYPE::SMALLER_EQ);
             }
         }
     }
-    DifferenceBounds result = DifferenceBounds();
+    DifferenceBoundsT<Number,Converter,DBSetting> result{};
     result.setDBM(dbm);
     return result;
 }
 
 template<typename Number>
-typename Converter<Number>::DifferenceBounds Converter<Number>::toDifferenceBounds(const VPolytope& source, const CONV_MODE ){
+template<typename DBSetting, typename inSetting>
+DifferenceBoundsT<Number,Converter<Number>,DBSetting> Converter<Number>::toDifferenceBounds(const VPolytopeT<Number,Converter<Number>,inSetting>& source, const CONV_MODE ){
     // TODO make better, this is just the cheap solution
     HPolytope tmp = toHPolytope(source);
     return toDifferenceBounds(tmp);
@@ -90,21 +96,23 @@ typename Converter<Number>::DifferenceBounds Converter<Number>::toDifferenceBoun
 
 #ifdef HYPRO_USE_PPL
 template<typename Number>
-typename Converter<Number>::DifferenceBounds Converter<Number>::toDifferenceBounds(const Polytope& source, const CONV_MODE ){
+template<typename DBSetting, typename inSetting>
+DifferenceBoundsT<Number,Converter<Number>,DBSetting> Converter<Number>::toDifferenceBounds(const PolytopeT<Number,Converter<Number>,inSetting>& source, const CONV_MODE ){
     // TODO IMPLEMENT.
 }
 #endif
 
 template<typename Number>
-template<typename sfSetting>
-typename Converter<Number>::DifferenceBounds Converter<Number>::toDifferenceBounds(const SupportFunctionT<Number,Converter,sfSetting>& _source, const std::vector<vector_t<Number>>& , const CONV_MODE, std::size_t ){
+template<typename DBSetting, typename inSetting>
+DifferenceBoundsT<Number,Converter<Number>,DBSetting> Converter<Number>::toDifferenceBounds(const SupportFunctionT<Number,Converter<Number>,inSetting>& _source, const std::vector<vector_t<Number>>& , const CONV_MODE, std::size_t ){
     // TODO make better, this is just the cheap solution
     HPolytope tmp = toHPolytope(_source);
     return toDifferenceBounds(tmp);
 }
 
 template<typename Number>
-typename Converter<Number>::DifferenceBounds Converter<Number>::toDifferenceBounds(const Zonotope& source, const CONV_MODE ){
+template<typename DBSetting, typename inSetting>
+DifferenceBoundsT<Number,Converter<Number>,DBSetting> Converter<Number>::toDifferenceBounds(const ZonotopeT<Number,Converter<Number>,inSetting>& source, const CONV_MODE ){
     // TODO make better, this is just the cheap solution
     HPolytope tmp = toHPolytope(source);
     return toDifferenceBounds(tmp);

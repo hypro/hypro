@@ -16,8 +16,8 @@
  * Is the caller function for the recursive method that computes exactly one boundary point for each direction that it gets (via support function)
  */
 
-template <typename Number, typename Converter, typename sfSetting>
-std::vector<Point<Number>> computeBoundaryPointsExpensive (const SupportFunctionT<Number,Converter,sfSetting>& sf, const matrix_t<Number>& directions) {
+template <typename Number, typename Converter, typename inSetting>
+std::vector<Point<Number>> computeBoundaryPointsExpensive (const SupportFunctionT<Number,Converter,inSetting>& sf, const matrix_t<Number>& directions) {
  //determines how many directions need to be checked
     Eigen::Index numberOfDirections = directions.rows();
     //gets dimension in which is currently computed
@@ -79,8 +79,8 @@ std::vector<Point<Number>> computeBoundaryPointsExpensive (const SupportFunction
     /*
      *Recursively computes some boundary points that lie relatively central for each face of the object, this function is constructed to only be called by computeBoundaryPoints
      */
-template <typename Number, typename Converter, typename sfSetting>
-Point<Number> computeBoundaryPointsExpensiveRecursive (const SupportFunctionT<Number,Converter,sfSetting>& sf, const matrix_t<Number>& directions, std::size_t curDim) {
+template <typename Number, typename Converter, typename inSetting>
+Point<Number> computeBoundaryPointsExpensiveRecursive (const SupportFunctionT<Number,Converter,inSetting>& sf, const matrix_t<Number>& directions, std::size_t curDim) {
     //determines how many directions need to be checked
     Eigen::Index numberOfDirections = directions.rows();
     //only continue if directions and object match dimensionwise
@@ -146,17 +146,20 @@ Point<Number> computeBoundaryPointsExpensiveRecursive (const SupportFunctionT<Nu
 
 //conversion from V-Polytope to V-Polytope (no differentiation between conversion modes - always EXACT)
 template<typename Number>
-typename Converter<Number>::VPolytope Converter<Number>::toVPolytope( const VPolytope& _source, const CONV_MODE  ){
+template<typename VPolySetting, typename inSetting>
+VPolytopeT<Number,Converter<Number>,VPolySetting> Converter<Number>::toVPolytope( const VPolytopeT<Number,Converter<Number>,inSetting>& _source, const CONV_MODE  ){
 	return _source;
 }
 
 template<typename Number>
-typename Converter<Number>::VPolytope Converter<Number>::toVPolytope( const ConstraintSet& _source, const CONV_MODE ){
-    return VPolytopeT<Number,Converter>(_source.matrix(), _source.vector());
+template<typename VPolySetting, typename inSetting>
+VPolytopeT<Number,Converter<Number>,VPolySetting> Converter<Number>::toVPolytope( const ConstraintSetT<Number,Converter<Number>,inSetting>& _source, const CONV_MODE ){
+    return VPolytopeT<Number,Converter,VPolySetting>(_source.matrix(), _source.vector());
 }
 
 template<typename Number>
-typename Converter<Number>::VPolytope Converter<Number>::toVPolytope( const Ellipsoid& _source, const CONV_MODE  ){
+template<typename VPolySetting>
+VPolytopeT<Number,Converter<Number>,VPolySetting> Converter<Number>::toVPolytope( const Ellipsoid& _source, const CONV_MODE  ){
 	vector_t<Number> l(_source.dimension());
 	l.setZero();
 	vector_t<Number> evaluation;
@@ -194,35 +197,38 @@ typename Converter<Number>::VPolytope Converter<Number>::toVPolytope( const Elli
 	for (std::size_t i = 0; i < constraints.size(); i++){
 	    constraintMatrix.row(i) = constraints.at(i);
 	}
-	return VPolytope(constraintMatrix, b);
+	return VPolytopeT<Number,Converter<Number>,VPolySetting>(constraintMatrix, b);
 }
 
 //conversion from H-Polytope to V-Polytope (no differentiation between conversion modes - always EXACT)
 template<typename Number>
-typename Converter<Number>::VPolytope Converter<Number>::toVPolytope( const HPolytope& _source, const CONV_MODE  ){
+template<typename VPolySetting, typename inSetting>
+VPolytopeT<Number,Converter<Number>,VPolySetting> Converter<Number>::toVPolytope( const HPolytopeT<Number,Converter<Number>,inSetting>& _source, const CONV_MODE  ){
 	//exact conversion
-	return VPolytope(_source.matrix(), _source.vector());
+	return VPolytopeT<Number,Converter<Number>,VPolySetting>(_source.matrix(), _source.vector());
 }
 
 //conversion from Box to V-Polytope (no differentiation between conversion modes - always EXACT)
 template<typename Number>
-typename Converter<Number>::VPolytope Converter<Number>::toVPolytope( const Box& _source, const CONV_MODE  ){
-	return VPolytope(_source.vertices());
+template<typename VPolySetting, typename inSetting>
+VPolytopeT<Number,Converter<Number>,VPolySetting> Converter<Number>::toVPolytope( const BoxT<Number,Converter<Number>,inSetting>& _source, const CONV_MODE  ){
+	return VPolytopeT<Number,Converter<Number>,VPolySetting>(_source.vertices());
 }
 
 //conversion from Zonotope to V-Polytope (no differentiation between conversion modes - always EXACT)
 template<typename Number>
-typename Converter<Number>::VPolytope Converter<Number>::toVPolytope( const Zonotope& _source, const CONV_MODE  ){
-	return VPolytope(_source.vertices());
+template<typename VPolySetting, typename inSetting>
+VPolytopeT<Number,Converter<Number>,VPolySetting> Converter<Number>::toVPolytope( const ZonotopeT<Number,Converter<Number>,inSetting>& _source, const CONV_MODE  ){
+	return VPolytopeT<Number,Converter<Number>,VPolySetting>(_source.vertices());
 }
 
 //TODO verification of alternatoive underapproximation (yields only one point for some reason)
 // conversion from Support Function to V-Polytope (OVER, UNDER or ALTERNATIVE)
 //ALTERNATIVE mode gives an underapproximation that is probably better but costs a lot more to compute
 template<typename Number>
-template<typename sfSetting>
-typename Converter<Number>::VPolytope Converter<Number>::toVPolytope( const SupportFunctionT<Number,Converter,sfSetting>& _source, const CONV_MODE mode, std::size_t numberOfDirections){
-	VPolytope target;
+template<typename VPolySetting, typename inSetting>
+VPolytopeT<Number,Converter<Number>,VPolySetting> Converter<Number>::toVPolytope( const SupportFunctionT<Number,Converter<Number>,inSetting>& _source, const CONV_MODE mode, std::size_t numberOfDirections){
+	VPolytopeT<Number,Converter<Number>,VPolySetting> target;
 	if (mode == OVER){
 		//gets dimension of source object
 		std::size_t dim = _source.dimension();
@@ -259,7 +265,7 @@ typename Converter<Number>::VPolytope Converter<Number>::toVPolytope( const Supp
         }
 
         //constructs a V-Polytope out of the computed halfspaces (implicit conversion H->V)
-        target = VPolytope(constraints, constants);
+        target = VPolytopeT<Number,Converter,VPolySetting>(constraints, constants);
     }
     if (mode == UNDER){
             //gets dimension of source object
@@ -296,7 +302,7 @@ typename Converter<Number>::VPolytope Converter<Number>::toVPolytope( const Supp
         }
 
         //constructs a V-Polytope out of the computed points
-        target = VPolytope(points);
+        target = VPolytopeT<Number,Converter,VPolySetting>(points);
 	}
 
     if (mode == ALTERNATIVE){
@@ -317,7 +323,7 @@ typename Converter<Number>::VPolytope Converter<Number>::toVPolytope( const Supp
         //computes some central boundary points based on the directions (pretty precise but expensive)
         std::vector<Point<Number>> boundaryPoints = computeBoundaryPointsExpensive(_source, templateDirectionMatrix);
 
-        target = VPolytope(boundaryPoints);
+        target = VPolytopeT<Number,Converter,VPolySetting>(boundaryPoints);
 
     }
 	return target;
@@ -325,12 +331,14 @@ typename Converter<Number>::VPolytope Converter<Number>::toVPolytope( const Supp
 
 #ifdef HYPRO_USE_PPL
 template<typename Number>
-typename Converter<Number>::VPolytope Converter<Number>::toVPolytope(const Polytope& source, const CONV_MODE){
-    return Converter<Number>::VPolytope(source.vertices());
+template<typename VPolySetting, typename inSetting>
+VPolytopeT<Number,Converter<Number>,VPolySetting> Converter<Number>::toVPolytope(const Polytope& source, const CONV_MODE){
+    return VPolytopeT<Number,Converter<Number>,VPolySetting>(source.vertices());
 }
 #endif
 
 template<typename Number>
-typename Converter<Number>::VPolytope Converter<Number>::toVPolytope( const DifferenceBounds& _source, const CONV_MODE mode ) {
+template<typename VPolySetting, typename inSetting>
+VPolytopeT<Number,Converter<Number>,VPolySetting> Converter<Number>::toVPolytope( const DifferenceBoundsT<Number,Converter<Number>,inSetting>& _source, const CONV_MODE mode ) {
     return toVPolytope(toHPolytope(_source, mode));
 }

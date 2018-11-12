@@ -22,6 +22,10 @@ namespace hypro {
  */
 template <typename Number, typename Converter, typename Setting>
 class SupportFunctionT : public GeometricObject<Number, SupportFunctionT<Number,Converter,Setting>> {
+public:
+
+	typedef Setting Settings;
+
 private:
 
 

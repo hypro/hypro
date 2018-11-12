@@ -46,6 +46,8 @@ class BoxT : public GeometricObject<Number, BoxT<Number,Converter,Setting>> {
 	/***************************************************************************
 	 * Members
 	 **************************************************************************/
+
+	typedef Setting Settings;
   protected:
 
     std::vector<carl::Interval<Number>> mLimits; 	/*!< Box as a vector of intervals. */
@@ -100,7 +102,7 @@ class BoxT : public GeometricObject<Number, BoxT<Number,Converter,Setting>> {
 	 * The constructor does not check the order of points.
 	 * @param limits Pair of points.
 	 */
-	explicit BoxT( const std::pair<Point<Number>, Point<Number>>& limits) 
+	explicit BoxT( const std::pair<Point<Number>, Point<Number>>& limits)
 	{
 		assert(limits.first.dimension() == limits.second.dimension());
 		mEmpty = false;
@@ -115,7 +117,7 @@ class BoxT : public GeometricObject<Number, BoxT<Number,Converter,Setting>> {
 	 * @details The vector is required to be sorted, i.e. the first interval maps to the first dimension etc..
 	 * @param _intervals A vector of intervals.
 	 */
-	explicit BoxT( const std::vector<carl::Interval<Number>>& _intervals ) 
+	explicit BoxT( const std::vector<carl::Interval<Number>>& _intervals )
 		: mLimits(_intervals), mEmpty(false)
 	{
 		for(const auto& i : mLimits){
@@ -186,7 +188,7 @@ class BoxT : public GeometricObject<Number, BoxT<Number,Converter,Setting>> {
 	 * @brief Getter for the limiting points.
 	 * @return A pair of points.
 	 */
-	std::pair<Point<Number>, Point<Number>> limits() const { 
+	std::pair<Point<Number>, Point<Number>> limits() const {
 		if(mEmpty) {
 			return std::pair<Point<Number>,Point<Number>>{Point<Number>(vector_t<Number>::Ones(this->dimension())), Point<Number>(vector_t<Number>::Zero(this->dimension()))};
 		}
@@ -215,7 +217,7 @@ class BoxT : public GeometricObject<Number, BoxT<Number,Converter,Setting>> {
 	 * @details Effectively extends the dimension of the current box.
 	 * @param val An interval.
 	 */
-	void insert( const carl::Interval<Number>& val ) { 
+	void insert( const carl::Interval<Number>& val ) {
 		mLimits.push_back(val);
 		if(mLimits.back().isEmpty()) {
 			mEmpty = true;
@@ -376,7 +378,7 @@ class BoxT : public GeometricObject<Number, BoxT<Number,Converter,Setting>> {
 	 * @param[in]  factor  The scaling factor.
 	 * @return     The scaled box.
 	 */
-	BoxT<Number,Converter,Setting> operator*(const Number& factor) const { 
+	BoxT<Number,Converter,Setting> operator*(const Number& factor) const {
 		BoxT<Number,Converter,Setting> copy{*this};
 		for(auto& i : copy.rIntervals()){
 			i *= factor;
