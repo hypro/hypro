@@ -1,6 +1,7 @@
 var namespacehypro =
 [
     [ "detail", null, [
+      [ "strategyConversionVisitor", "structhypro_1_1detail_1_1strategyConversionVisitor.html", "structhypro_1_1detail_1_1strategyConversionVisitor" ],
       [ "seq", "structhypro_1_1detail_1_1seq.html", null ],
       [ "gen_seq", "structhypro_1_1detail_1_1gen__seq.html", null ],
       [ "gen_seq< 0, Is...>", "structhypro_1_1detail_1_1gen__seq_3_010_00_01Is_8_8_8_4.html", null ]

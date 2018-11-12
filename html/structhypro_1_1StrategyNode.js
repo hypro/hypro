@@ -1,9 +1,9 @@
 var structhypro_1_1StrategyNode =
 [
-    [ "StrategyNode", "structhypro_1_1StrategyNode.html#a57052d76aa5ec32363caebe0019e638f", null ],
-    [ "StrategyNode", "structhypro_1_1StrategyNode.html#a70bbb4e85dd47c14c691b69a1085c8ac", null ],
-    [ "aggregation", "structhypro_1_1StrategyNode.html#a2b5a6122138579ff8e69c2bb97ccddce", null ],
-    [ "clustering", "structhypro_1_1StrategyNode.html#af011de266c23d36e241c37c759a26ddd", null ],
-    [ "representation", "structhypro_1_1StrategyNode.html#a3d4fbdff98fdf8c0ab7ead64649f6d60", null ],
-    [ "timeStep", "structhypro_1_1StrategyNode.html#a03c0a1a708aa43361722ec85721b1866", null ]
+    [ "representationType", "structhypro_1_1StrategyNode.html#a37b04274959a538bc34e8db2d88cc789", null ],
+    [ "StrategyNode", "structhypro_1_1StrategyNode.html#a9fd810ba9065a76a3bb25b1ad75dfb30", null ],
+    [ "StrategyNode", "structhypro_1_1StrategyNode.html#aff6354360770264364099f0f61130a30", null ],
+    [ "aggregation", "structhypro_1_1StrategyNode.html#af05156b54f446960a7405d01b2ebd84e", null ],
+    [ "clustering", "structhypro_1_1StrategyNode.html#ab0051013dba2d4948e11eccc0af79b8e", null ],
+    [ "timeStep", "structhypro_1_1StrategyNode.html#a22f9ae0aa69e9abe6072c78683012866", null ]
 ];

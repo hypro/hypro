@@ -167,10 +167,7 @@ var NAVTREEINDEX27 =
 "classhypro_1_1genericCompareVisitor.html#a85ad707c162e63f250d75c921e66bd9d":[9,0,1,77,1],
 "classhypro_1_1genericCompareVisitor.html#ac82857e169a3e35d9b76d8003e258bb0":[9,0,1,77,0],
 "classhypro_1_1genericConversionVisitor.html":[9,0,1,73],
-"classhypro_1_1genericConversionVisitor.html#a0ba8c4b8496d514389e6e18d4732785d":[9,0,1,73,1],
-"classhypro_1_1genericConversionVisitor.html#a2adf8babcdd767b09ae4256d803174d3":[9,0,1,73,3],
-"classhypro_1_1genericConversionVisitor.html#a2ef13db8a96522e89f3fbc44cd9b4919":[9,0,1,73,0],
-"classhypro_1_1genericConversionVisitor.html#af6b928887da6b32945f384d7004079d9":[9,0,1,73,2],
+"classhypro_1_1genericConversionVisitor.html#af6b928887da6b32945f384d7004079d9":[9,0,1,73,0],
 "classhypro_1_1genericDimensionVisitor.html":[9,0,1,79],
 "classhypro_1_1genericDimensionVisitor.html#afef9a888e69d563e18b5c0b36f083333":[9,0,1,79,0],
 "classhypro_1_1genericIntersectVisitor.html":[9,0,1,71],
@@ -212,8 +209,8 @@ var NAVTREEINDEX27 =
 "classhypro_1_1genericVerticesVisitor.html":[9,0,1,82],
 "classhypro_1_1genericVerticesVisitor.html#a54d12c17bb80af8c45173e7c20c8b72c":[9,0,1,82,0],
 "classhypro_1_1hypro_1_1Permutator.html":[9,0,1,2,3],
-"classhypro_1_1hypro_1_1Permutator.html#a199bf9e70bfbfea5329ca95e2ded1d43":[9,0,1,2,3,4],
 "classhypro_1_1hypro_1_1Permutator.html#a199bf9e70bfbfea5329ca95e2ded1d43":[9,0,1,2,3,5],
+"classhypro_1_1hypro_1_1Permutator.html#a199bf9e70bfbfea5329ca95e2ded1d43":[9,0,1,2,3,4],
 "classhypro_1_1hypro_1_1Permutator.html#a32da28cb8891dc53fa1ca8cb8c1221d9":[9,0,1,2,3,3],
 "classhypro_1_1hypro_1_1Permutator.html#a32da28cb8891dc53fa1ca8cb8c1221d9":[9,0,1,2,3,2],
 "classhypro_1_1hypro_1_1Permutator.html#aff3bd91187ad755a930c4f573d35198f":[9,0,1,2,3,0],
@@ -249,5 +246,8 @@ var NAVTREEINDEX27 =
 "classhypro_1_1ltiGuardHandler.html#a1985053fd8fa50154aa0f87c84a67efa":[9,0,1,28,14],
 "classhypro_1_1ltiGuardHandler.html#a1ddccd891f6aefacc41f34fb11b3336c":[9,0,1,28,3],
 "classhypro_1_1ltiGuardHandler.html#a257485f0b5254dc2c79117197e3c0a33":[9,0,1,28,5],
-"classhypro_1_1ltiGuardHandler.html#a29912ef9a5e219f02c867f24a652e0f8":[9,0,1,28,15]
+"classhypro_1_1ltiGuardHandler.html#a29912ef9a5e219f02c867f24a652e0f8":[9,0,1,28,15],
+"classhypro_1_1ltiGuardHandler.html#a33a09c4981d68fd5ae5ac5bbe2377dbb":[9,0,1,28,9],
+"classhypro_1_1ltiGuardHandler.html#a36b0c082162a71d80d01ed0cbe13064f":[9,0,1,28,10],
+"classhypro_1_1ltiGuardHandler.html#a3d146719542ff312b391461b30efc7ab":[9,0,1,28,8]
 };

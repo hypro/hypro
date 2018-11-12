@@ -661,6 +661,7 @@ var hierarchy =
     [ "hypro::State< Number >", "classhypro_1_1State.html", null ],
     [ "hypro::State< Number, ConstraintSet< Number > >", "classhypro_1_1State.html", null ],
     [ "static_visitor", null, [
+      [ "hypro::detail::strategyConversionVisitor< T >", "structhypro_1_1detail_1_1strategyConversionVisitor.html", null ],
       [ "hypro::genericAffineTransformationVisitor< T, Number >", "classhypro_1_1genericAffineTransformationVisitor.html", null ],
       [ "hypro::genericCompareVisitor", "classhypro_1_1genericCompareVisitor.html", null ],
       [ "hypro::genericConversionVisitor< T, Number, To >", "classhypro_1_1genericConversionVisitor.html", null ],
@@ -680,7 +681,7 @@ var hierarchy =
     ] ],
     [ "hypro::STflowpipeSegment< Number >", "structhypro_1_1STflowpipeSegment.html", null ],
     [ "hypro::STindependentFunct< Number >", "structhypro_1_1STindependentFunct.html", null ],
-    [ "hypro::StrategyNode", "structhypro_1_1StrategyNode.html", null ],
+    [ "hypro::StrategyNode< Representation >", "structhypro_1_1StrategyNode.html", null ],
     [ "hypro::sumContent< Number, Setting >", "structhypro_1_1sumContent.html", null ],
     [ "hypro::SupportFunctionContent< Number, Setting >", "classhypro_1_1SupportFunctionContent.html", [
       [ "hypro::NonLinearOmega0Supportfunction< Setting >", "classhypro_1_1NonLinearOmega0Supportfunction.html", null ]
