@@ -27,7 +27,6 @@ template<typename CSSetting, typename inSetting>
 ConstraintSetT<Number,Converter<Number>,CSSetting> Converter<Number>::toConstraintSet( const SupportFunctionT<Number,Converter<Number>,inSetting>& _source, const CONV_MODE  ) {
 	return ConstraintSetT<Number,Converter<Number>,CSSetting>(_source.matrix(), _source.vector());
 }
-
 template<typename Number>
 template<typename CSSetting, typename inSetting>
 ConstraintSetT<Number,Converter<Number>,CSSetting> Converter<Number>::toConstraintSet( const VPolytopeT<Number,Converter<Number>,inSetting>& _source, const CONV_MODE  ) {
@@ -41,14 +40,12 @@ ConstraintSetT<Number,Converter<Number>,CSSetting> Converter<Number>::toConstrai
 	return ConstraintSetT<Number,Converter<Number>,CSSetting>(_source.matrix(), _source.vector());
 }
 
-#ifdef HYPRO_USE_PPL
 template<typename Number>
 template<typename CSSetting, typename inSetting>
 ConstraintSetT<Number,Converter<Number>,CSSetting> Converter<Number>::toConstraintSet( const PolytopeT<Number,Converter<Number>,inSetting>& _source, const CONV_MODE  ) {
 	auto tmp = toHPolytope(_source);
 	return ConstraintSetT<Number,Converter<Number>,CSSetting>(tmp.matrix(), tmp.vector());
 }
-#endif
 
 template<typename Number>
 template<typename CSSetting, typename inSetting>

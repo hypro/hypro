@@ -22,9 +22,6 @@
 
 namespace hypro {
 
-struct VPolytopeSettings {
-
-};
 
 /**
  * @brief      The class implementing the vertex representation of a convex polytope.

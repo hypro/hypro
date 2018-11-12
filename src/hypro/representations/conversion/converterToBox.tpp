@@ -88,9 +88,9 @@ BoxT<Number,Converter<Number>,BoxSetting> Converter<Number>::toBox( const Suppor
 
 //conversion from V-Polytope to box (no differentiation between conversion modes - always OVER)
 template<typename Number>
-template<typename VPolySettings>
-typename Converter<Number>::Box Converter<Number>::toBox( const VPolytopeT<Number,Converter<Number>,VPolySettings>& _source, const CONV_MODE  ) {
-	typename VPolytopeT<Number,Converter<Number>,VPolySettings>::pointVector vertices = _source.vertices();               //gets vertices as a vector from the source object
+template<typename BoxSetting, typename inSetting>
+BoxT<Number,Converter<Number>,BoxSetting> Converter<Number>::toBox( const VPolytopeT<Number,Converter<Number>,inSetting>& _source, const CONV_MODE  ) {
+	typename VPolytopeT<Number,Converter<Number>,inSetting>::pointVector vertices = _source.vertices();               //gets vertices as a vector from the source object
 	if(!vertices.empty()){
 		vector_t<Number> minima = vertices[0].rawCoordinates();                                         //creates a vector_t with the first vertex of the source object
 		vector_t<Number> maxima = vertices[0].rawCoordinates();                                         //creates another vector_t with the first vertex of the source object
