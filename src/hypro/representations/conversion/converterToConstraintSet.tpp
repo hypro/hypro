@@ -59,5 +59,5 @@ ConstraintSetT<Number,Converter<Number>,CSSetting> Converter<Number>::toConstrai
 template<typename Number>
 template<typename CSSetting, typename inSetting>
 ConstraintSetT<Number,Converter<Number>,CSSetting> Converter<Number>::toConstraintSet( const DifferenceBoundsT<Number,Converter<Number>,inSetting>& _source, const CONV_MODE mode ) {
-	return toConstraintSet<CSSetting,inSetting>(toHPolytope(_source, mode));
+	return toConstraintSet(toHPolytope(_source, mode));
 }

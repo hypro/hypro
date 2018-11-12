@@ -102,9 +102,13 @@ public:
 
 	template<typename B>
     inline T operator()(const B& lhs) const {
+		To tmp;
+		convert<Number,typename To::Settings, B>(lhs, tmp);
+		return tmp;
+		/*
  		switch(To::type()){
  			case representation_name::box: {
- 				To tmp = Converter<Number>::toBox(lhs);
+ 				To tmp = Converter<Number>:: template toBox<BoxLinearOptimizationOn>(lhs);
  				return tmp;
  				break;
  			}
@@ -156,6 +160,7 @@ public:
  		}
  		assert(false && "SHOULD NEVER REACH THIS");
  		return T();
+		*/
     }
 };
 
