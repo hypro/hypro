@@ -8,6 +8,7 @@
 	static_assert(false, "This file may only be included indirectly by GeometricObject.h");
 #endif
 
+#include "VPolytopeSettings.h"
 #include "../Cone.h"
 #include "../../../algorithms/convexHull/ConvexHull.h"
 #include "../../../util/convexHull.h"
@@ -21,9 +22,6 @@
 
 namespace hypro {
 
-struct VPolytopeSettings {
-
-};
 
 /**
  * @brief      The class implementing the vertex representation of a convex polytope.

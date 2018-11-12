@@ -3,9 +3,9 @@
 namespace hypro
 {
 
-template<typename To, typename From>
-To convert(const From& in) {
-    return;
+template<typename Number, typename OutSettings, typename In>
+void convert(BoxT<Number,Converter<Number>,OutSettings>& out, const In& in) {
+    out = Converter<Number>::template toBox<OutSettings>(in);
 }
 
 template<typename Number, typename OutSettings, typename In>
