@@ -5,59 +5,59 @@
 #endif
 
 template<typename Number>
-template<typename ConstraintSetSettings>
-ConstraintSetT<Number,Converter<Number>,ConstraintSetSettings> Converter<Number>::toConstraintSet( const Box& _source, const CONV_MODE  ) {
-	return ConstraintSetT<Number,Converter,ConstraintSetSettings>(_source.matrix(), _source.vector());
+template<typename CSSetting, typename inSetting>
+ConstraintSetT<Number,Converter<Number>,CSSetting> Converter<Number>::toConstraintSet( const BoxT<Number,Converter<Number>,inSetting>& _source, const CONV_MODE  ) {
+	return ConstraintSetT<Number,Converter<Number>,CSSetting>(_source.matrix(), _source.vector());
 }
 
 template<typename Number>
-template<typename ConstraintSetSettings>
-ConstraintSetT<Number,Converter<Number>,ConstraintSetSettings> Converter<Number>::toConstraintSet( const ConstraintSet& _source, const CONV_MODE  ) {
+template<typename CSSetting, typename inSetting>
+ConstraintSetT<Number,Converter<Number>,CSSetting> Converter<Number>::toConstraintSet( const ConstraintSetT<Number,Converter<Number>,inSetting>& _source, const CONV_MODE  ) {
 	return _source;
 }
 
 template<typename Number>
-template<typename ConstraintSetSettings>
-ConstraintSetT<Number,Converter<Number>,ConstraintSetSettings> Converter<Number>::toConstraintSet( const Ellipsoid& _source, const CONV_MODE  ) {
-	return ConstraintSetT<Number,Converter,ConstraintSetSettings>(_source.matrix(), _source.vector());
+template<typename CSSetting>
+ConstraintSetT<Number,Converter<Number>,CSSetting> Converter<Number>::toConstraintSet( const Ellipsoid& _source, const CONV_MODE  ) {
+	return ConstraintSetT<Number,Converter<Number>,CSSetting>(_source.matrix(), _source.vector());
 }
 
 template<typename Number>
-template<typename ConstraintSetSettings,typename sfSetting>
-ConstraintSetT<Number,Converter<Number>,ConstraintSetSettings> Converter<Number>::toConstraintSet( const SupportFunctionT<Number,Converter,sfSetting>& _source, const CONV_MODE  ) {
-	return ConstraintSetT<Number,Converter,ConstraintSetSettings>(_source.matrix(), _source.vector());
+template<typename CSSetting, typename inSetting>
+ConstraintSetT<Number,Converter<Number>,CSSetting> Converter<Number>::toConstraintSet( const SupportFunctionT<Number,Converter<Number>,inSetting>& _source, const CONV_MODE  ) {
+	return ConstraintSetT<Number,Converter<Number>,CSSetting>(_source.matrix(), _source.vector());
 }
 
 template<typename Number>
-template<typename ConstraintSetSettings,typename VPolySettings>
-ConstraintSetT<Number,Converter<Number>,ConstraintSetSettings> Converter<Number>::toConstraintSet( const VPolytopeT<Number,Converter<Number>,VPolySettings>& _source, const CONV_MODE  ) {
+template<typename CSSetting, typename inSetting>
+ConstraintSetT<Number,Converter<Number>,CSSetting> Converter<Number>::toConstraintSet( const VPolytopeT<Number,Converter<Number>,inSetting>& _source, const CONV_MODE  ) {
 	auto tmp = toHPolytope(_source);
-	return ConstraintSetT<Number,Converter,ConstraintSetSettings>(tmp.matrix(), tmp.vector());
+	return ConstraintSetT<Number,Converter<Number>,CSSetting>(tmp.matrix(), tmp.vector());
 }
 
 template<typename Number>
-template<typename ConstraintSetSettings>
-ConstraintSetT<Number,Converter<Number>,ConstraintSetSettings> Converter<Number>::toConstraintSet( const HPolytope& _source, const CONV_MODE  ) {
-	return ConstraintSetT<Number,Converter,ConstraintSetSettings>(_source.matrix(), _source.vector());
+template<typename CSSetting, typename inSetting>
+ConstraintSetT<Number,Converter<Number>,CSSetting> Converter<Number>::toConstraintSet( const HPolytopeT<Number,Converter<Number>,inSetting>& _source, const CONV_MODE  ) {
+	return ConstraintSetT<Number,Converter<Number>,CSSetting>(_source.matrix(), _source.vector());
 }
 
 #ifdef HYPRO_USE_PPL
 template<typename Number>
-template<typename ConstraintSetSettings>
-ConstraintSetT<Number,Converter<Number>,ConstraintSetSettings> Converter<Number>::toConstraintSet( const Polytope& _source, const CONV_MODE  ) {
+template<typename CSSetting, typename inSetting>
+ConstraintSetT<Number,Converter<Number>,CSSetting> Converter<Number>::toConstraintSet( const PolytopeT<Number,Converter<Number>,inSetting>& _source, const CONV_MODE  ) {
 	auto tmp = toHPolytope(_source);
-	return ConstraintSetT<Number,Converter,ConstraintSetSettings>(tmp.matrix(), tmp.vector());
+	return ConstraintSetT<Number,Converter<Number>,CSSetting>(tmp.matrix(), tmp.vector());
 }
 #endif
 
 template<typename Number>
-template<typename ConstraintSetSettings>
-ConstraintSetT<Number,Converter<Number>,ConstraintSetSettings> Converter<Number>::toConstraintSet( const Zonotope& , const CONV_MODE ) {
+template<typename CSSetting, typename inSetting>
+ConstraintSetT<Number,Converter<Number>,CSSetting> Converter<Number>::toConstraintSet( const ZonotopeT<Number,Converter<Number>,inSetting>& , const CONV_MODE ) {
 	assert(false && "NotImplemented.");
-    return ConstraintSetT<Number,Converter,ConstraintSetSettings>();
+    return ConstraintSetT<Number,Converter<Number>,CSSetting>();
 }
 template<typename Number>
-template<typename ConstraintSetSettings>
-ConstraintSetT<Number,Converter<Number>,ConstraintSetSettings> Converter<Number>::toConstraintSet( const DifferenceBounds& _source, const CONV_MODE mode ) {
-	return toConstraintSet<ConstraintSetSettings>(toHPolytope(_source, mode));
+template<typename CSSetting, typename inSetting>
+ConstraintSetT<Number,Converter<Number>,CSSetting> Converter<Number>::toConstraintSet( const DifferenceBoundsT<Number,Converter<Number>,inSetting>& _source, const CONV_MODE mode ) {
+	return toConstraintSet<CSSetting,inSetting>(toHPolytope(_source, mode));
 }

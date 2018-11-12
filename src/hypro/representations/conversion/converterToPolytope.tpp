@@ -10,58 +10,67 @@
 
 //Conversion from ppl poly to ppl poly
 template<typename Number>
-typename Converter<Number>::Polytope Converter<Number>::toPolytope(const Polytope& source, const CONV_MODE){
+template<typename PolytopeSetting, typename inSetting>
+PolytopeT<Number,Converter,PolytopeSetting> Converter<Number>::toPolytope(const PolytopeT<Number,Converter<Number>,inSetting>& source, const CONV_MODE){
 	return source;
 }
 
 //Conversion from box to ppl poly
 template<typename Number>
-typename Converter<Number>::Polytope Converter<Number>::toPolytope(const Box& source, const CONV_MODE){
-	return Converter<Number>::Polytope(source.matrix(), source.vector());
+template<typename PolytopeSetting, typename inSetting>
+PolytopeT<Number,Converter,PolytopeSetting> Converter<Number>::toPolytope(const BoxT<Number,Converter<Number>,inSetting>& source, const CONV_MODE){
+	return PolytopeT<Number,Converter,PolytopeSetting>(source.matrix(), source.vector());
 }
 
 //Conversion from constraintSet to ppl poly
 template<typename Number>
-typename Converter<Number>::Polytope Converter<Number>::toPolytope(const ConstraintSet& source, const CONV_MODE){
-	return Converter<Number>::Polytope(source.matrix(), source.vector());
+template<typename PolytopeSetting, typename inSetting>
+PolytopeT<Number,Converter,PolytopeSetting> Converter<Number>::toPolytope(const ConstraintSetT<Number,Converter<Number>,inSetting>& source, const CONV_MODE){
+	return PolytopeT<Number,Converter,PolytopeSetting>(source.matrix(), source.vector());
 }
 
 //Conversion from difference bounds to ppl poly
 template<typename Number>
-typename Converter<Number>::Polytope Converter<Number>::toPolytope(const DifferenceBounds& source, const CONV_MODE){
+template<typename PolytopeSetting, typename inSetting>
+PolytopeT<Number,Converter,PolytopeSetting> Converter<Number>::toPolytope(const DifferenceBoundsT<Number,Converter<Number>,inSetting>& source, const CONV_MODE){
 	// TODO IMPLEMENT
 }
 
 //Conversion from ellipsoid to ppl poly
 template<typename Number>
-typename Converter<Number>::Polytope Converter<Number>::toPolytope(const Ellipsoid& source, const CONV_MODE){
+template<typename PolytopeSetting, typename inSetting>
+PolytopeT<Number,Converter,PolytopeSetting> Converter<Number>::toPolytope(const Ellipsoid& source, const CONV_MODE){
 	Converter<Number>::HPolytope tmp = Converter<Number>::toHPolytope(source);
-	return Converter<Number>::Polytope(tmp.matrix(), tmp.vector());
+	return PolytopeT<Number,Converter,PolytopeSetting>(tmp.matrix(), tmp.vector());
 }
 
 //Conversion from hpoly to ppl poly
 template<typename Number>
-typename Converter<Number>::Polytope Converter<Number>::toPolytope(const HPolytope& source, const CONV_MODE){
-	return Converter<Number>::Polytope(source.matrix(), source.vector());
+template<typename PolytopeSetting, typename inSetting>
+PolytopeT<Number,Converter,PolytopeSetting> Converter<Number>::toPolytope(const HPolytopeT<Number,Converter<Number>,inSetting>& source, const CONV_MODE){
+	return PolytopeT<Number,Converter,PolytopeSetting>(source.matrix(), source.vector());
 }
 
 //Conversion from vpoly to ppl poly
 template<typename Number>
-typename Converter<Number>::Polytope Converter<Number>::toPolytope(const VPolytope& source, const CONV_MODE){
-	return Converter<Number>::Polytope(source.vertices());
+template<typename PolytopeSetting, typename inSetting>
+PolytopeT<Number,Converter,PolytopeSetting> Converter<Number>::toPolytope(const VPolytopeT<Number,Converter<Number>,inSetting>& source, const CONV_MODE){
+	return PolytopeT<Number,Converter,PolytopeSetting>(source.vertices());
 }
 
 //Conversion from supportfunction to ppl poly
 template<typename Number>
+template<typename PolytopeSetting, typename inSetting>
 template<typename sfSetting>
-typename Converter<Number>::Polytope Converter<Number>::toPolytope(const SupportFunctionT<Number,Converter,sfSetting>& source, const CONV_MODE, std::size_t numberOfDirections){
+PolytopeT<Number,Converter,PolytopeSetting> Converter<Number>::toPolytope(const SupportFunctionT<Number,Converter<Number>,inSetting>& source, const CONV_MODE, std::size_t numberOfDirections){
 	//First convert to HPolytope, afterwards to ppl Polytope
 	Converter<Number>::HPolytope tmp = Converter<Number>::toHPolytope(source, std::vector<vector_t<Number>>(), CONV_MODE::EXACT, numberOfDirections);
-	return Converter<Number>::Polytope(tmp.matrix(), tmp.vector());
+	return PolytopeT<Number,Converter,PolytopeSetting>(tmp.matrix(), tmp.vector());
 }
 
-//Conversion from zonotopoe to ppl poly 
+//Conversion from zonotopoe to ppl poly
 template<typename Number>
-typename Converter<Number>::Polytope Converter<Number>::toPolytope(const Zonotope& source, const CONV_MODE){
-	return Converter<Number>::Polytope(source.vertices());
+template<typename PolytopeSetting, typename inSetting>
+PolytopeT<Number,Converter,PolytopeSetting> Converter<Number>::toPolytope(const ZonotopeT<Number,Converter<Number>,inSetting>& source, const CONV_MODE){
+	return PolytopeT<Number,Converter,PolytopeSetting>(source.vertices());
 }

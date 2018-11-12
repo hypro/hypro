@@ -22,17 +22,22 @@
 
 namespace hypro {
 
+struct VPolytopeSettings {
+
+};
+
 /**
  * @brief      The class implementing the vertex representation of a convex polytope.
  * @tparam     Number     The used number type.
  * @tparam     Converter  The used converter.
  * \ingroup geoState @{
  */
-template <typename Number, typename Converter, typename Settings>
-class VPolytopeT : public GeometricObject<Number, VPolytopeT<Number,Converter,Settings>> {
+template <typename Number, typename Converter, typename S>
+class VPolytopeT : public GeometricObject<Number, VPolytopeT<Number,Converter,S>> {
   public:
 
 	using pointVector = std::vector<Point<Number>>;
+	typedef S Settings;
 
 	/***************************************************************************
 	 * Members
@@ -375,15 +380,15 @@ class VPolytopeT : public GeometricObject<Number, VPolytopeT<Number,Converter,Se
 	 * Operators
 	 **************************************************************************/
   public:
-	VPolytopeT<Number,Converter,Settings>& operator=( const VPolytopeT<Number,Converter,Settings>& rhs ) = default;
-	VPolytopeT<Number,Converter,Settings>& operator=( VPolytopeT<Number,Converter,Settings>&& rhs ) = default;
-	bool operator==( const VPolytopeT<Number,Converter,Settings>& rhs ) const;
+	VPolytopeT<Number, Converter, S>& operator=( const VPolytopeT<Number, Converter, S>& rhs ) = default;
+	VPolytopeT<Number, Converter, S>& operator=( VPolytopeT<Number, Converter, S>&& rhs ) = default;
+	bool operator==( const VPolytopeT<Number, Converter, S>& rhs ) const;
 };
 
 /** @} */
 
-template <typename Number, typename Converter, typename Settings>
-std::ostream& operator<<( std::ostream& out, const hypro::VPolytopeT<Number,Converter,Settings>& lhs ) {
+template <typename Number, typename Converter, typename S>
+std::ostream& operator<<( std::ostream& out, const hypro::VPolytopeT<Number, Converter, S>& lhs ) {
 #ifdef HYPRO_LOGGING
 	out << "{ ";
 	for ( const auto& vector : lhs ) {
@@ -394,13 +399,13 @@ std::ostream& operator<<( std::ostream& out, const hypro::VPolytopeT<Number,Conv
 	return out;
 }
 
-template<typename From, typename To, typename Converter, typename Settings>
-VPolytopeT<To,Converter,Settings> convert(const VPolytopeT<From,Converter,Settings>& in) {
+template<typename From, typename To, typename Converter, typename S>
+VPolytopeT<To,Converter,S> convert(const VPolytopeT<From,Converter,S>& in) {
 	std::vector<Point<To>> convertedVertices;
 	for(const auto& vertex : in.vertices()) {
 		convertedVertices.push_back(Point<To>(convert<From,To>(vertex.rawCoordinates())));
 	}
-	return VPolytopeT<To,Converter,Settings>(convertedVertices);
+	return VPolytopeT<To,Converter,S>(convertedVertices);
 }
 
 }  // namespace

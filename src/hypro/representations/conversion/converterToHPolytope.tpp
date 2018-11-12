@@ -16,17 +16,20 @@
 
 //conversion from H-Polytope to H-Polytope (no differentiation between conversion modes - always EXACT)
 template<typename Number>
-typename Converter<Number>::HPolytope Converter<Number>::toHPolytope( const HPolytope& _source, const CONV_MODE ){
+template<typename HPolySetting, typename inSetting>
+HPolytopeT<Number,Converter<Number>,HPolySetting> Converter<Number>::toHPolytope( const HPolytopeT<Number,Converter<Number>,inSetting>& _source, const CONV_MODE ){
     return _source;
 }
 
 template<typename Number>
-typename Converter<Number>::HPolytope Converter<Number>::toHPolytope( const ConstraintSet& _source, const CONV_MODE ){
-    return HPolytopeT<Number,Converter,HPolytopeSetting>(_source.matrix(), _source.vector());
+template<typename HPolySetting, typename inSetting>
+HPolytopeT<Number,Converter<Number>,HPolySetting> Converter<Number>::toHPolytope( const ConstraintSetT<Number,Converter<Number>,inSetting>& _source, const CONV_MODE ){
+    return HPolytopeT<Number,Converter<Number>,HPolytopeSetting>(_source.matrix(), _source.vector());
 }
 
 template<typename Number>
-typename Converter<Number>::HPolytope Converter<Number>::toHPolytope( const Ellipsoid& _source, const CONV_MODE ){
+template<typename HPolySetting>
+HPolytopeT<Number,Converter<Number>,HPolySetting> Converter<Number>::toHPolytope( const Ellipsoid& _source, const CONV_MODE ){
 	vector_t<Number> l(_source.dimension());
 	l.setZero();
 	vector_t<Number> evaluation;
@@ -64,13 +67,13 @@ typename Converter<Number>::HPolytope Converter<Number>::toHPolytope( const Elli
 	for (std::size_t i = 0; i < constraints.size(); i++){
 	    constraintMatrix.row(i) = constraints.at(i);
 	}
-	return HPolytopeT<Number,Converter,HPolytopeSetting>(constraintMatrix, b);
+	return HPolytopeT<Number,Converter<Number>,HPolytopeSetting>(constraintMatrix, b);
 }
 
 //conversion from V-Polytope to H-Polytope (EXACT or OVER)
 template<typename Number>
-template<typename VPolySettings>
-typename Converter<Number>::HPolytope Converter<Number>::toHPolytope( const VPolytopeT<Number,Converter<Number>,VPolySettings>& _source, const CONV_MODE mode ){
+template<typename HPolySetting, typename inSetting>
+HPolytopeT<Number,Converter<Number>,HPolySetting> Converter<Number>::toHPolytope( const VPolytopeT<Number,Converter<Number>,inSetting>& _source, const CONV_MODE mode ){
 	if(_source.empty()) {
 		return HPolytope::Empty();
 	}
@@ -80,7 +83,7 @@ typename Converter<Number>::HPolytope Converter<Number>::toHPolytope( const VPol
 		target = HPolytope(_source.vertices());
     } else if (mode == OVER) {
 	    //gets vertices from source object
-	    typename VPolytopeT<Number,Converter<Number>,VPolySettings>::pointVector vertices = _source.vertices();
+	    typename VPolytopeT<Number,Converter<Number>,inSetting>::pointVector vertices = _source.vertices();
 
 	    //computes an oriented Box as overapproximation around the source object (returns Halfspaces)
 	    PrincipalComponentAnalysis<Number> pca(vertices);
@@ -92,17 +95,19 @@ typename Converter<Number>::HPolytope Converter<Number>::toHPolytope( const VPol
 
 //conversion from Box to H-Polytope (no differentiation between conversion modes - always EXACT)
 template<typename Number>
-typename Converter<Number>::HPolytope Converter<Number>::toHPolytope( const Box& _source, const CONV_MODE ){
+template<typename HPolySetting, typename inSetting>
+HPolytopeT<Number,Converter<Number>,HPolySetting> Converter<Number>::toHPolytope( const BoxT<Number,Converter<Number>,inSetting>& _source, const CONV_MODE ){
      return HPolytope(_source.matrix(), _source.vector());
 }
 
 //conversion from zonotope to H-Polytope (no differentiation between conversion modes - always EXACT)
 template<typename Number>
-typename Converter<Number>::HPolytope Converter<Number>::toHPolytope( const Zonotope& _source, const CONV_MODE mode ){
+template<typename HPolySetting, typename inSetting>
+HPolytopeT<Number,Converter<Number>,HPolySetting> Converter<Number>::toHPolytope( const ZonotopeT<Number,Converter<Number>,inSetting>& _source, const CONV_MODE mode ){
     //computes vertices from source object
     typename std::vector<Point<Number>> vertices = _source.vertices();
     if(vertices.empty()){
-    	return HPolytopeT<Number,Converter,HPolytopeSetting>();
+    	return HPolytopeT<Number,Converter<Number>,HPolytopeSetting>();
     }
     VPolytope vpoly = VPolytope(vertices);
 
@@ -111,8 +116,8 @@ typename Converter<Number>::HPolytope Converter<Number>::toHPolytope( const Zono
 
 // conversion from support function to H-Polytope (no differentiation between conversion modes - always OVER)
 template<typename Number>
-template<typename sfSetting>
-typename Converter<Number>::HPolytope Converter<Number>::toHPolytope( const SupportFunctionT<Number,Converter,sfSetting>& _source, const std::vector<vector_t<Number>>& additionalDirections, const CONV_MODE, std::size_t numberOfDirections){
+template<typename HPolySetting, typename inSetting>
+HPolytopeT<Number,Converter<Number>,HPolySetting> Converter<Number>::toHPolytope( const SupportFunctionT<Number,Converter<Number>,inSetting>& _source, const std::vector<vector_t<Number>>& additionalDirections, const CONV_MODE, std::size_t numberOfDirections){
     //gets dimension of source object
     std::size_t dim = _source.dimension();
 
@@ -227,13 +232,14 @@ typename Converter<Number>::HPolytope Converter<Number>::toHPolytope( const Supp
 
 // conversion from difference bounds to H-Polytope (no differentiation between conversion modes - always EXACT)
 template<typename Number>
-typename Converter<Number>::HPolytope Converter<Number>::toHPolytope(const DifferenceBounds& _source, const CONV_MODE){
+template<typename HPolySetting, typename inSetting>
+HPolytopeT<Number,Converter<Number>,HPolySetting> Converter<Number>::toHPolytope(const DifferenceBoundsT<Number,Converter<Number>,inSetting>& _source, const CONV_MODE){
         assert(_source.getDBM().rows() == _source.getDBM().cols());
         int numclocks = _source.getDBM().cols() - 1;
         int numconstraints = 0; //all entries of the DBM (except the diagonal and inifinities) define a constraint
         for (int i = 0; i < _source.getDBM().rows(); i++) {
             for (int j = 0; j < _source.getDBM().rows(); j++) {
-                if (i != j && !(_source.getDBM()(i, j).second == DifferenceBoundsT<Number,Converter,DifferenceBoundsSetting>::BOUND_TYPE::INFTY)) {
+                if (i != j && !(_source.getDBM()(i, j).second == DifferenceBoundsT<Number,Converter<Number>,DifferenceBoundsSetting>::BOUND_TYPE::INFTY)) {
                     numconstraints++;
                 }
             }
@@ -246,7 +252,7 @@ typename Converter<Number>::HPolytope Converter<Number>::toHPolytope(const Diffe
         for (int i = 0; i < _source.getDBM().rows(); i++) {
             for (int j = 0; j < _source.getDBM().cols(); j++) {
                 // do not consider diagonals
-                if (i != j && !(_source.getDBM()(i, j).second == DifferenceBoundsT<Number,Converter,DifferenceBoundsSetting>::BOUND_TYPE::INFTY)) {
+                if (i != j && !(_source.getDBM()(i, j).second == DifferenceBoundsT<Number,Converter<Number>,DifferenceBoundsSetting>::BOUND_TYPE::INFTY)) {
                     // the constraint to add
                     matrix_t<Number> constraintVars = matrix_t<Number>::Zero(1, numclocks);
                     if (i == 0) {
@@ -273,7 +279,8 @@ typename Converter<Number>::HPolytope Converter<Number>::toHPolytope(const Diffe
 
 //Convert a ppl polytope into a HPolytope. Luckily, ppl polytopes have halfspaces internally.
 template<typename Number>
-typename Converter<Number>::HPolytope Converter<Number>::toHPolytope(const Polytope& source, const CONV_MODE){
+template<typename HPolySetting, typename inSetting>
+HPolytopeT<Number,Converter<Number>,HPolySetting> Converter<Number>::toHPolytope(const PolytopeT<Number,Converter<Number>,inSetting>& source, const CONV_MODE){
 	Converter<Number>::VPolytope v(source.vertices());
 	return toHPolytope(v, CONV_MODE::EXACT);
 }

@@ -178,24 +178,24 @@ protected:
 
 TYPED_TEST(ConverterTest, toBox)
 {
-	Converter<TypeParam>::toBox(this->box);
-	Converter<TypeParam>::toBox(this->support);
-    Converter<TypeParam>::toBox(this->support2);
-	Converter<TypeParam>::toBox(this->vpolytope);
-    Converter<TypeParam>::toBox(this->vpolytope2);
-	Converter<TypeParam>::toBox(this->zonotope);
-    Converter<TypeParam>::toBox(this->zonotope2);
-    Converter<TypeParam>::toBox(this->zonotope, ALTERNATIVE);
-    Converter<TypeParam>::toBox(this->zonotope2, ALTERNATIVE);
-    Converter<TypeParam>::toBox(this->hpolytope);
-    Converter<TypeParam>::toBox(this->hpolytope2);
-    auto result = Converter<TypeParam>::toBox(this->hpolytope, ALTERNATIVE);
-    auto result2 = Converter<TypeParam>::toBox(this->hpolytope2, ALTERNATIVE);
-    auto result3 = Converter<TypeParam>::toBox(this->hpolytope);
-    auto result4 = Converter<TypeParam>::toBox(this->hpolytope2);
+	Converter<TypeParam>::template toBox<BoxLinearOptimizationOn>(this->box);
+	Converter<TypeParam>::template toBox<BoxLinearOptimizationOn>(this->support);
+    Converter<TypeParam>::template toBox<BoxLinearOptimizationOn>(this->support2);
+	Converter<TypeParam>::template toBox<BoxLinearOptimizationOn>(this->vpolytope);
+    Converter<TypeParam>::template toBox<BoxLinearOptimizationOn>(this->vpolytope2);
+	Converter<TypeParam>::template toBox<BoxLinearOptimizationOn>(this->zonotope);
+    Converter<TypeParam>::template toBox<BoxLinearOptimizationOn>(this->zonotope2);
+    Converter<TypeParam>::template toBox<BoxLinearOptimizationOn>(this->zonotope, ALTERNATIVE);
+    Converter<TypeParam>::template toBox<BoxLinearOptimizationOn>(this->zonotope2, ALTERNATIVE);
+    Converter<TypeParam>::template toBox<BoxLinearOptimizationOn>(this->hpolytope);
+    Converter<TypeParam>::template toBox<BoxLinearOptimizationOn>(this->hpolytope2);
+    auto result = Converter<TypeParam>::template toBox<BoxLinearOptimizationOn>(this->hpolytope, ALTERNATIVE);
+    auto result2 = Converter<TypeParam>::template toBox<BoxLinearOptimizationOn>(this->hpolytope2, ALTERNATIVE);
+    auto result3 = Converter<TypeParam>::template toBox<BoxLinearOptimizationOn>(this->hpolytope);
+    auto result4 = Converter<TypeParam>::template toBox<BoxLinearOptimizationOn>(this->hpolytope2);
     #ifdef HYPRO_USE_PPL
-    Converter<TypeParam>::toBox(this->pplpolytope);
-    Converter<TypeParam>::toBox(this->pplpolytope2);
+    Converter<TypeParam>::template toBox<BoxLinearOptimizationOn>(this->pplpolytope);
+    Converter<TypeParam>::template toBox<BoxLinearOptimizationOn>(this->pplpolytope2);
     #endif
     SUCCEED();
 }
@@ -220,7 +220,7 @@ TYPED_TEST(ConverterTest, toHPolytope)
 
 TYPED_TEST(ConverterTest, toSupportFunction)
 {
-    Converter<TypeParam>::template toSupportFunction<SupportFunctionSetting, SupportFunctionSetting>(this->support);
+    Converter<TypeParam>::template toSupportFunction<SupportFunctionSetting,SupportFunctionSetting>(this->support);
     Converter<TypeParam>::toSupportFunction(this->hpolytope);
     Converter<TypeParam>::toSupportFunction(this->hpolytope2);
     Converter<TypeParam>::toSupportFunction(this->box);
