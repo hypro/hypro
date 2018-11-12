@@ -1,7 +1,7 @@
 #pragma once
 
 #include "StrategyNode.h"
-#include <vector.h>
+#include <vector>
 
 namespace hypro {
 
