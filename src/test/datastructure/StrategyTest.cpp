@@ -13,6 +13,14 @@ TEST(StrategyTest, Constructor)
     Strategy<State_t<double>> strat;
 
 	strat.mStrategy.emplace_back(StrategyNode<Box<double>>{mpq_class(1)});
+
+	EXPECT_EQ(strat.mStrategy.size(), 1);
+
+	Strategy<State_t<double>> strat2;
+	strat2.mStrategy = {StrategyNode<Box<double>>(mpq_class(1)), StrategyNode<SupportFunction<double>>(mpq_class(1)),
+		StrategyNode<Zonotope<double>>(mpq_class(1))};
+
+	EXPECT_EQ(strat2.mStrategy.size(), 3);
 }
 
 TEST(StrategyTest, Conversion)
@@ -32,7 +40,9 @@ TEST(StrategyTest, Conversion)
 
 	boost::apply_visitor(detail::strategyConversionVisitor<double,State_t<double>>(s), strat.mStrategy[1]);
 
-	auto sfSet = boost::get<SupportFunction<double>>(s.getSet());
+	EXPECT_NO_THROW(boost::get<SupportFunction<double>>(s.getSet()));
+	EXPECT_ANY_THROW(boost::get<Box<double>>(s.getSet()));
 
-	//s.setSetDirect(boost::get<SupportFunction<double>(boost::apply_visitor(genericConversionVisitor<typename State_t<double>::repVariant, double, tmp::representationType>(representation_name::support_function), s.getSet())));
+	EXPECT_EQ(boost::get<SupportFunction<double>>(s.getSet()).type(), representation_name::support_function);
+	EXPECT_EQ(s.getSetType(), representation_name::support_function);
 }
