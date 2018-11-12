@@ -28,34 +28,34 @@ namespace reachability {
 
 				if(state.second.getSetType(0) != mType) {
 					TRACE("hypro.reacher.preprocessing","Type is: " << state.second.getSetType(0) << ", requested type is: " << mType);
-					switch(state.second.getSetType(0)){
+					switch(mType){
 						case representation_name::box: {
-							s.setSet(boost::get<Box<Number>>(state.second.getSet()));
+							s.setSetDirect(boost::apply_visitor(genericConversionVisitor<typename State_t<Number>::repVariant, Number, Box<Number>>(mType), state.second.getSet()));
 							break;
 						}
 						case representation_name::polytope_h: {
-							s.setSet(boost::get<HPolytope<Number>>(state.second.getSet()));
+							s.setSetDirect(boost::apply_visitor(genericConversionVisitor<typename State_t<Number>::repVariant, Number, HPolytope<Number>>(mType), state.second.getSet()));
 							break;
 						}
 						case representation_name::polytope_v: {
-							s.setSet(boost::get<VPolytope<Number>>(state.second.getSet()));
+							s.setSetDirect(boost::apply_visitor(genericConversionVisitor<typename State_t<Number>::repVariant, Number, VPolytope<Number>>(mType), state.second.getSet()));
 							break;
 						}
 						case representation_name::support_function: {
-							s.setSet(boost::get<SupportFunction<Number>>(state.second.getSet()));
+							s.setSetDirect(boost::apply_visitor(genericConversionVisitor<typename State_t<Number>::repVariant, Number, SupportFunction<Number>>(mType), state.second.getSet()));
 							break;
 						}
 						case representation_name::zonotope: {
-							s.setSet(boost::get<Zonotope<Number>>(state.second.getSet()));
+							s.setSetDirect(boost::apply_visitor(genericConversionVisitor<typename State_t<Number>::repVariant, Number, Zonotope<Number>>(mType), state.second.getSet()));
 							break;
 						}
 						case representation_name::constraint_set: {
-							s.setSet(boost::get<ConstraintSet<Number>>(state.second.getSet()));
+							s.setSetDirect(boost::apply_visitor(genericConversionVisitor<typename State_t<Number>::repVariant, Number, ConstraintSet<Number>>(mType), state.second.getSet()));
 							break;
 						}
 						#ifdef HYPRO_USE_PPL
 						case representation_name::ppl_polytope: {
-							s.setSet(boost::get<Polytope<Number>>(state.second.getSet()));
+							s.setSetDirect(boost::apply_visitor(genericConversionVisitor<typename State_t<Number>::repVariant, Number, Polytope<Number>>(mType), state.second.getSet()));
 							break;
 						}
 						#endif
@@ -65,7 +65,7 @@ namespace reachability {
 						}
 					}
 					TRACE("hypro.reacher.preprocessing","convert.");
-					s.setSetDirect(boost::apply_visitor(genericConversionVisitor<typename State_t<Number>::repVariant, Number>(mType), s.getSet()));
+					//s.setSetDirect(boost::apply_visitor(genericConversionVisitor<typename State_t<Number>::repVariant, Number>(mType), s.getSet()));
 					s.setSetType(mType);
 					TRACE("hypro.reacher.preprocessing","Type after conversion is " << s.getSetType(0));
 				} else {
