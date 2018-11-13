@@ -15,7 +15,7 @@ namespace detail{
 
 		template<typename Node>
 		void operator()(Node& ) const {
-			mState.setSetDirect(boost::apply_visitor(genericConversionVisitor<typename State::repVariant, typename State::NumberType, typename Node::representationType>(), mState.getSet()));
+			mState.setSetDirect(boost::apply_visitor(genericConversionVisitor<typename State::repVariant, typename Node::representationType>(), mState.getSet()));
 			mState.setSetType(Node::representationType::type());
 		}
 	};

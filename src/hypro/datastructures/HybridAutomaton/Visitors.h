@@ -87,7 +87,7 @@ public:
     }
 };
 
-template<typename T, typename Number, typename To>
+template<typename T, typename To>
 class genericConversionVisitor
     : public boost::static_visitor<T>
 {
@@ -97,7 +97,7 @@ public:
 	template<typename B>
     inline T operator()(const B& lhs) const {
 		To tmp;
-		convert<Number,typename To::Settings, B>(lhs, tmp);
+		convert<typename To::NumberType,typename To::Settings, B>(lhs, tmp);
 		return tmp;
 		/*
  		switch(To::type()){

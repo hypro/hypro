@@ -454,7 +454,7 @@ void State<Number,Representation,Rargs...>::setAndConvertType( std::size_t I ){
 	assert(I < mTypes.size());
 
 	// convert set to type
-	mSets[I] = boost::apply_visitor(genericConversionVisitor<repVariant,Number,To>(To::type()), mSets[I]);
+	mSets[I] = boost::apply_visitor(genericConversionVisitor<repVariant,To>(To::type()), mSets[I]);
 	mTypes[I] = To::type();
 
 	assert(checkConsistency());

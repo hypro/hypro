@@ -30,32 +30,32 @@ namespace reachability {
 					TRACE("hypro.reacher.preprocessing","Type is: " << state.second.getSetType(0) << ", requested type is: " << mType);
 					switch(mType){
 						case representation_name::box: {
-							s.setSetDirect(boost::apply_visitor(genericConversionVisitor<typename State_t<Number>::repVariant, Number, Box<Number>>(), state.second.getSet()));
+							s.setSetDirect(boost::apply_visitor(genericConversionVisitor<typename State_t<Number>::repVariant, Box<Number>>(), state.second.getSet()));
 							break;
 						}
 						case representation_name::polytope_h: {
-							s.setSetDirect(boost::apply_visitor(genericConversionVisitor<typename State_t<Number>::repVariant, Number, HPolytope<Number>>(), state.second.getSet()));
+							s.setSetDirect(boost::apply_visitor(genericConversionVisitor<typename State_t<Number>::repVariant, HPolytope<Number>>(), state.second.getSet()));
 							break;
 						}
 						case representation_name::polytope_v: {
-							s.setSetDirect(boost::apply_visitor(genericConversionVisitor<typename State_t<Number>::repVariant, Number, VPolytope<Number>>(), state.second.getSet()));
+							s.setSetDirect(boost::apply_visitor(genericConversionVisitor<typename State_t<Number>::repVariant, VPolytope<Number>>(), state.second.getSet()));
 							break;
 						}
 						case representation_name::support_function: {
-							s.setSetDirect(boost::apply_visitor(genericConversionVisitor<typename State_t<Number>::repVariant, Number, SupportFunction<Number>>(), state.second.getSet()));
+							s.setSetDirect(boost::apply_visitor(genericConversionVisitor<typename State_t<Number>::repVariant, SupportFunction<Number>>(), state.second.getSet()));
 							break;
 						}
 						case representation_name::zonotope: {
-							s.setSetDirect(boost::apply_visitor(genericConversionVisitor<typename State_t<Number>::repVariant, Number, Zonotope<Number>>(), state.second.getSet()));
+							s.setSetDirect(boost::apply_visitor(genericConversionVisitor<typename State_t<Number>::repVariant, Zonotope<Number>>(), state.second.getSet()));
 							break;
 						}
 						case representation_name::constraint_set: {
-							s.setSetDirect(boost::apply_visitor(genericConversionVisitor<typename State_t<Number>::repVariant, Number, ConstraintSet<Number>>(), state.second.getSet()));
+							s.setSetDirect(boost::apply_visitor(genericConversionVisitor<typename State_t<Number>::repVariant, ConstraintSet<Number>>(), state.second.getSet()));
 							break;
 						}
 						#ifdef HYPRO_USE_PPL
 						case representation_name::ppl_polytope: {
-							s.setSetDirect(boost::apply_visitor(genericConversionVisitor<typename State_t<Number>::repVariant, Number, Polytope<Number>>(), state.second.getSet()));
+							s.setSetDirect(boost::apply_visitor(genericConversionVisitor<typename State_t<Number>::repVariant, Polytope<Number>>(), state.second.getSet()));
 							break;
 						}
 						#endif

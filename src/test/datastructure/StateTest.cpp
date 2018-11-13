@@ -51,3 +51,18 @@ TEST(StateTest, CleanUp)
 
 	t->join();
 }
+
+TEST(StateTest, Conversion)
+{
+	Box<double> b;
+	b.insert(carl::Interval<double>(1,2));
+
+	State_t<double> s;
+	s.setSet(b);
+
+	s.setSetDirect(boost::apply_visitor(genericConversionVisitor<typename State_t<double>::repVariant, SupportFunction<double>>(), s.getSet()));
+	s.setSetType(representation_name::support_function);
+
+	EXPECT_NO_THROW(boost::get<SupportFunction<double>>(s.getSet()));
+	EXPECT_ANY_THROW(boost::get<Box<double>>(s.getSet()));
+}
