@@ -12,23 +12,23 @@ TEST(StrategyTest, Constructor)
 {
     Strategy<State_t<double>> strat;
 
-	strat.mStrategy.emplace_back(StrategyNode<Box<double>>{mpq_class(1)});
+	strat.emplace_back(StrategyNode<Box<double>>{mpq_class(1)});
 
-	EXPECT_EQ(strat.mStrategy.size(), std::size_t(1));
+	EXPECT_EQ(strat.size(), std::size_t(1));
 
 	Strategy<State_t<double>> strat2;
-	strat2.mStrategy = {StrategyNode<Box<double>>(mpq_class(1)), StrategyNode<SupportFunction<double>>(mpq_class(1)),
+	strat2 = {StrategyNode<Box<double>>(mpq_class(1)), StrategyNode<SupportFunction<double>>(mpq_class(1)),
 		StrategyNode<Zonotope<double>>(mpq_class(1))};
 
-	EXPECT_EQ(strat2.mStrategy.size(), std::size_t(3));
+	EXPECT_EQ(strat2.size(), std::size_t(3));
 }
 
 TEST(StrategyTest, Conversion)
 {
     Strategy<State_t<double>> strat;
 
-	strat.mStrategy.emplace_back(StrategyNode<Box<double>>{mpq_class(1)});
-	strat.mStrategy.emplace_back(StrategyNode<SupportFunction<double>>{mpq_class(1)});
+	strat.emplace_back(StrategyNode<Box<double>>{mpq_class(1)});
+	strat.emplace_back(StrategyNode<SupportFunction<double>>{mpq_class(1)});
 
 	Box<double> b;
 	b.insert(carl::Interval<double>(1,2));
@@ -36,9 +36,9 @@ TEST(StrategyTest, Conversion)
 	State_t<double> s;
 	s.setSet(b);
 
-	auto tmp = strat.mStrategy[1];
+	auto tmp = strat[1];
 
-	boost::apply_visitor(detail::strategyConversionVisitor<State_t<double>>(s), strat.mStrategy[1]);
+	boost::apply_visitor(detail::strategyConversionVisitor<State_t<double>>(s), strat[1]);
 
 
 
