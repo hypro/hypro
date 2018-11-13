@@ -1,5 +1,6 @@
 var NAVTREEINDEX24 =
 {
+"classhypro_1_1Path.html#af52324f7e39ae142d55cbce5a21be92a":[9,0,1,66,15],
 "classhypro_1_1Permutator.html":[9,0,1,185],
 "classhypro_1_1Permutator.html#a9c7f4f323d3252c57e3d267fedb737a2":[9,0,1,185,1],
 "classhypro_1_1Permutator.html#ac94e07fe5fa87d8fec83d3220f7451b5":[9,0,1,185,0],
@@ -248,6 +249,5 @@ var NAVTREEINDEX24 =
 "classhypro_1_1Ridge.html#a911de50d72630ed9de9190f9a8e4e03a":[9,0,1,107,0],
 "classhypro_1_1Ridge.html#aa5e3591049fe55484625a60d27807a9e":[9,0,1,107,2],
 "classhypro_1_1Ridge.html#ab180f8e99e430f205d0b533534b55bdb":[9,0,1,107,7],
-"classhypro_1_1Ridge.html#ae240a1116fbfa9c8665a3dbf3edc0887":[9,0,1,107,4],
-"classhypro_1_1SettingsProvider.html":[9,0,1,92]
+"classhypro_1_1Ridge.html#ae240a1116fbfa9c8665a3dbf3edc0887":[9,0,1,107,4]
 };

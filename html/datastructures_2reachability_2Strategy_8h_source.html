@@ -130,16 +130,27 @@ $(document).ready(function(){initNavTree('datastructures_2reachability_2Strategy
 <div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="keyword">using</span> StrategyNodeVariant = <span class="keyword">typename</span> <a class="code" href="structhypro_1_1detail_1_1StrategyVariant.html">detail::StrategyVariant&lt;typename State::repVariant&gt;::types</a>;</div>
 <div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;</div>
 <div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="keyword">template</span>&lt;<span class="keyword">typename</span> StateType&gt;</div>
-<div class="line"><a name="l00021"></a><span class="lineno"><a class="line" href="structhypro_1_1Strategy.html">   21</a></span>&#160;<span class="keyword">struct </span><a class="code" href="structhypro_1_1Strategy.html">Strategy</a> {</div>
+<div class="line"><a name="l00021"></a><span class="lineno"><a class="line" href="classhypro_1_1Strategy.html">   21</a></span>&#160;<span class="keyword">class </span><a class="code" href="classhypro_1_1Strategy.html">Strategy</a> {</div>
 <div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;    std::vector&lt;StrategyNodeVariant&lt;StateType&gt;&gt; mStrategy;</div>
 <div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;    <span class="keywordtype">void</span> advanceToLevel( StateType&amp; state, std::size_t lvl) {</div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;        boost::apply_visitor(<a class="code" href="structhypro_1_1detail_1_1strategyConversionVisitor.html">detail::strategyConversionVisitor&lt;StateType&gt;</a>(state), mStrategy[lvl]);</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;    }</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;};</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;} <span class="comment">// hypro</span></div>
-<div class="ttc" id="structhypro_1_1Strategy_html"><div class="ttname"><a href="structhypro_1_1Strategy.html">hypro::Strategy</a></div><div class="ttdef"><b>Definition:</b> <a href="datastructures_2reachability_2Strategy_8h_source.html#l00021">Strategy.h:21</a></div></div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;    <a class="code" href="classhypro_1_1Strategy.html">Strategy</a>() = <span class="keywordflow">default</span>;</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;    <a class="code" href="classhypro_1_1Strategy.html">Strategy</a>(std::initializer_list&lt;StrategyNodeVariant&lt;StateType&gt;&gt; in) : mStrategy(in) {}</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;    <span class="keyword">const</span> std::vector&lt;StrategyNodeVariant&lt;StateType&gt;&gt;&amp; getStrategy()<span class="keyword"> const </span>{<span class="keywordflow">return</span> mStrategy;}</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;    <span class="keywordtype">void</span> setStrategy(<span class="keyword">const</span> std::vector&lt;StrategyNodeVariant&lt;StateType&gt;&gt;&amp; s) {mStrategy = s;}</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;    <span class="keywordtype">void</span> emplace_back(StrategyNodeVariant&lt;StateType&gt;&amp;&amp; n) {mStrategy.emplace_back(std::move(n));}</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;    std::size_t size()<span class="keyword"> const </span>{<span class="keywordflow">return</span> mStrategy.size();}</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;    <span class="keyword">const</span> StrategyNodeVariant&lt;StateType&gt;&amp; operator[](std::size_t i) {<span class="keywordflow">return</span> mStrategy[i];}</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    <span class="keywordtype">void</span> advanceToLevel( StateType&amp; state, std::size_t lvl) {</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;        boost::apply_visitor(<a class="code" href="structhypro_1_1detail_1_1strategyConversionVisitor.html">detail::strategyConversionVisitor&lt;StateType&gt;</a>(state), mStrategy[lvl]);</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    }</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;};</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;} <span class="comment">// hypro</span></div>
+<div class="ttc" id="classhypro_1_1Strategy_html"><div class="ttname"><a href="classhypro_1_1Strategy.html">hypro::Strategy</a></div><div class="ttdef"><b>Definition:</b> <a href="datastructures_2reachability_2Strategy_8h_source.html#l00021">Strategy.h:21</a></div></div>
 <div class="ttc" id="structhypro_1_1detail_1_1StrategyVariant_html"><div class="ttname"><a href="structhypro_1_1detail_1_1StrategyVariant.html">hypro::detail::StrategyVariant</a></div><div class="ttdef"><b>Definition:</b> <a href="datastructures_2reachability_2Strategy_8h_source.html#l00010">Strategy.h:10</a></div></div>
 <div class="ttc" id="structhypro_1_1detail_1_1strategyConversionVisitor_html"><div class="ttname"><a href="structhypro_1_1detail_1_1strategyConversionVisitor.html">hypro::detail::strategyConversionVisitor</a></div><div class="ttdef"><b>Definition:</b> <a href="StrategyNode_8h_source.html#l00010">StrategyNode.h:10</a></div></div>
 </div><!-- fragment --></div><!-- contents -->

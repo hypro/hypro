@@ -22,7 +22,7 @@ var searchData=
   ['stdlibfunctioncontext',['StdLibFunctionContext',['../classHybridSystemParser_1_1StdLibFunctionContext.html',1,'HybridSystemParser']]],
   ['stflowpipesegment',['STflowpipeSegment',['../structhypro_1_1STflowpipeSegment.html',1,'hypro']]],
   ['stindependentfunct',['STindependentFunct',['../structhypro_1_1STindependentFunct.html',1,'hypro']]],
-  ['strategy',['Strategy',['../structhypro_1_1Strategy.html',1,'hypro']]],
+  ['strategy',['Strategy',['../classhypro_1_1Strategy.html',1,'hypro']]],
   ['strategyconversionvisitor',['strategyConversionVisitor',['../structhypro_1_1detail_1_1strategyConversionVisitor.html',1,'hypro::detail']]],
   ['strategynode',['StrategyNode',['../structhypro_1_1StrategyNode.html',1,'hypro']]],
   ['strategyvariant',['StrategyVariant',['../structhypro_1_1detail_1_1StrategyVariant.html',1,'hypro::detail']]],

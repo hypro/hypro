@@ -1,5 +1,6 @@
 var classhypro_1_1GeometricObject =
 [
+    [ "NumberType", "classhypro_1_1GeometricObject.html#a90226c553b38c46eb616d3674f7926dd", null ],
     [ "~GeometricObject", "classhypro_1_1GeometricObject.html#a28cf65685f4fa5e04c3dbf428a9d97b0", null ],
     [ "affineTransformation", "classhypro_1_1GeometricObject.html#a607fb37c2b6a0d9a59ed85d07160392a", null ],
     [ "contains", "classhypro_1_1GeometricObject.html#a44bae859470ea4cb3bc74c16f94b9638", null ],

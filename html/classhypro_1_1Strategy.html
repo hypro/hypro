@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.6"/>
-<title>HyPro: Member List</title>
+<title>HyPro: hypro::Strategy&lt; StateType &gt; Class Template Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -91,7 +91,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   </div>
 </div>
 <script type="text/javascript">
-$(document).ready(function(){initNavTree('structhypro_1_1Strategy.html','');});
+$(document).ready(function(){initNavTree('classhypro_1_1Strategy.html','');});
 </script>
 <div id="doc-content">
 <!-- window showing the filter options -->
@@ -109,21 +109,57 @@ $(document).ready(function(){initNavTree('structhypro_1_1Strategy.html','');});
 </div>
 
 <div class="header">
+  <div class="summary">
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="classhypro_1_1Strategy-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">hypro::Strategy&lt; StateType &gt; Member List</div>  </div>
+<div class="title">hypro::Strategy&lt; StateType &gt; Class Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:a5a35f94c8a56f290e25ab1e03028354b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5a35f94c8a56f290e25ab1e03028354b"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>Strategy</b> (std::initializer_list&lt; StrategyNodeVariant&lt; StateType &gt;&gt; in)</td></tr>
+<tr class="separator:a5a35f94c8a56f290e25ab1e03028354b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae2534b7c506fe839a2e1d58352543837"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae2534b7c506fe839a2e1d58352543837"></a>
+const std::vector<br class="typebreak"/>
+&lt; StrategyNodeVariant<br class="typebreak"/>
+&lt; StateType &gt; &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getStrategy</b> () const </td></tr>
+<tr class="separator:ae2534b7c506fe839a2e1d58352543837"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae70049d54958b0cbc497bcc65cb32afa"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae70049d54958b0cbc497bcc65cb32afa"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setStrategy</b> (const std::vector&lt; StrategyNodeVariant&lt; StateType &gt;&gt; &amp;s)</td></tr>
+<tr class="separator:ae70049d54958b0cbc497bcc65cb32afa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae339fd73724cecf6860afde81fbc877e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae339fd73724cecf6860afde81fbc877e"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>emplace_back</b> (StrategyNodeVariant&lt; StateType &gt; &amp;&amp;n)</td></tr>
+<tr class="separator:ae339fd73724cecf6860afde81fbc877e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2c725615208fc8e904120d658635d56c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2c725615208fc8e904120d658635d56c"></a>
+std::size_t&#160;</td><td class="memItemRight" valign="bottom"><b>size</b> () const </td></tr>
+<tr class="separator:a2c725615208fc8e904120d658635d56c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a07d9eea72e2dec4c6ee82ddbe1f4fa0b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a07d9eea72e2dec4c6ee82ddbe1f4fa0b"></a>
+const StrategyNodeVariant<br class="typebreak"/>
+&lt; StateType &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator[]</b> (std::size_t i)</td></tr>
+<tr class="separator:a07d9eea72e2dec4c6ee82ddbe1f4fa0b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4a9a9c9ff714c78bfca84775223863f8"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4a9a9c9ff714c78bfca84775223863f8"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>advanceToLevel</b> (StateType &amp;state, std::size_t lvl)</td></tr>
+<tr class="separator:a4a9a9c9ff714c78bfca84775223863f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><h3>template&lt;typename StateType&gt;<br/>
+class hypro::Strategy&lt; StateType &gt;</h3>
 
-<p>This is the complete list of members for <a class="el" href="structhypro_1_1Strategy.html">hypro::Strategy&lt; StateType &gt;</a>, including all inherited members.</p>
-<table class="directory">
-  <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>advanceToLevel</b>(StateType &amp;state, std::size_t lvl) (defined in <a class="el" href="structhypro_1_1Strategy.html">hypro::Strategy&lt; StateType &gt;</a>)</td><td class="entry"><a class="el" href="structhypro_1_1Strategy.html">hypro::Strategy&lt; StateType &gt;</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
-  <tr bgcolor="#f0f0f0"><td class="entry"><b>mStrategy</b> (defined in <a class="el" href="structhypro_1_1Strategy.html">hypro::Strategy&lt; StateType &gt;</a>)</td><td class="entry"><a class="el" href="structhypro_1_1Strategy.html">hypro::Strategy&lt; StateType &gt;</a></td><td class="entry"></td></tr>
-</table></div><!-- contents -->
+
+<p>Definition at line <a class="el" href="datastructures_2reachability_2Strategy_8h_source.html#l00021">21</a> of file <a class="el" href="datastructures_2reachability_2Strategy_8h_source.html">Strategy.h</a>.</p>
+</div><hr/>The documentation for this class was generated from the following file:<ul>
+<li>/home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/<a class="el" href="datastructures_2reachability_2Strategy_8h_source.html">Strategy.h</a></li>
+</ul>
+</div><!-- contents -->
 </div><!-- doc-content -->
 <!-- HTML footer for doxygen 1.8.12-->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
+    <li class="navelem"><a class="el" href="namespacehypro.html">hypro</a></li><li class="navelem"><a class="el" href="classhypro_1_1Strategy.html">Strategy</a></li>
     <li class="footer">
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.6 </li>

@@ -127,7 +127,7 @@ var namespacehypro =
     [ "ReachTreeNode", "classhypro_1_1ReachTreeNode.html", "classhypro_1_1ReachTreeNode" ],
     [ "ReachabilitySettings", "structhypro_1_1ReachabilitySettings.html", "structhypro_1_1ReachabilitySettings" ],
     [ "SettingsProvider", "classhypro_1_1SettingsProvider.html", "classhypro_1_1SettingsProvider" ],
-    [ "Strategy", "structhypro_1_1Strategy.html", "structhypro_1_1Strategy" ],
+    [ "Strategy", "classhypro_1_1Strategy.html", "classhypro_1_1Strategy" ],
     [ "StrategyNode", "structhypro_1_1StrategyNode.html", "structhypro_1_1StrategyNode" ],
     [ "TBacktrackingInfo", "structhypro_1_1TBacktrackingInfo.html", "structhypro_1_1TBacktrackingInfo" ],
     [ "Task", "structhypro_1_1Task.html", "structhypro_1_1Task" ],
