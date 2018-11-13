@@ -18,6 +18,8 @@ struct LinTrafoParameters {
 
 	mutable std::map<unsigned, std::pair<matrix_t<Number>, vector_t<Number>>> parameters;
 	unsigned power = 2; // 2^power operations are collected
+						// 2^power defines the max. number of successive lin.trans before reducing the SF
+	
 
 	////// Constructors & Destructors
 

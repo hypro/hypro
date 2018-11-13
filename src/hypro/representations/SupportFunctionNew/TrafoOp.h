@@ -1,3 +1,13 @@
+/*
+ * TrafoOp.h
+ *
+ * A RootGrowNode that represents a linear transformation operation in the tree of operations representing a SupportFunction.
+ * Every TrafoOp knows its parameters for the linear transformation, which is a separate object for an optimization.
+ *
+ * @author Stefan Schupp
+ * @author Phillip Tse
+ */
+
 #pragma once
 
 #include "RootGrowNode.h"
@@ -25,10 +35,9 @@ class TrafoOp : public RootGrowNode<Number> {
 
 	////// Members for this class
 
-	// 2^power defines the max. number of successive lin.trans before reducing the SF
-	unsigned currentExponent;
-	std::size_t successiveTransformations;
-	std::shared_ptr<const LinTrafoParameters<Number>> parameters;	
+	unsigned currentExponent;											//Has value 2^power if 2^power successive transformations has been reached, else 1
+	std::size_t successiveTransformations;								//Counts how many transformations with the same parameters are used consecutively
+	std::shared_ptr<const LinTrafoParameters<Number>> parameters;		//A ptr to the object where its parameters are stored
 
   public:
 	
@@ -37,21 +46,22 @@ class TrafoOp : public RootGrowNode<Number> {
 	//Thou shalt not make an unconnected transformation without any parameters
 	TrafoOp() = delete;
 
-	//Set new trafoOp object as parent of origin, 
-	//TrafoOp(const SupportFunctionNewT<Number,Converter,Setting>* origin, const matrix_t<Number>& A, const vector_t<Number>& b) : currentExponent(1) {
-	TrafoOp(const SupportFunctionNewT<Number,Converter,Setting>* origin, const matrix_t<Number>& A, const vector_t<Number>& b) : currentExponent(1) {
+	//Set new trafoOp object as parent of origin.
+	//During construction, find out how many TrafoOps with the same parameters are chained successively in the tree 
+	//and summarize groups of 2^power linear transformations for optimization
+	TrafoOp(const SupportFunctionNewT<Number,Converter,Setting>& origin, const matrix_t<Number>& A, const vector_t<Number>& b) : currentExponent(1) {
 		
 		parameters = std::make_shared<const LinTrafoParameters<Number>>(A,b);
 
-		origin->addUnaryOp(this);
+		origin.addUnaryOp(this);
 		assert(this->getChildren().size() == 1);
 		
 		// Determine, if we need to create new parameters or if this matrix and vector pair has already been used (recursive).
 		// in case this transformation has already been performed, parameters will be updated.
-		origin->hasTrafo(parameters, A, b);
+		origin.hasTrafo(parameters, A, b);
 		
+		// best points for reduction are powers of 2 thus we only use these points for possible reduction points
 		if(Setting::USE_LIN_TRANS_REDUCTION == true){
-			// best points for reduction are powers of 2 thus we only use these points for possible reduction points
 			bool reduced;
 			do {
 				reduced = false;

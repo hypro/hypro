@@ -1,3 +1,18 @@
+/*
+ * SupportFunctionNew.h
+ *
+ * Class representing a SupportFunction.
+ * Here, a SupportFunction is a tree where a new node is set above the new root, thus growing at the root.
+ * The SupportFunction itself knows and owns the root node, which in turn knows its children and so on.
+ * Note that the pointer to the root node will not be shifted when a new node is added. 
+ * Through this, it is possible to query an evaluation of the operations from each node in the tree.
+ * Each leaf node in this tree holds a representation of a state, i.e. a box, a V-polytope, etc.
+ * Each node that is not a leaf represents an operation that is performed on its children.
+ *
+ * @author Stefan Schupp
+ * @author Phillip Tse
+ */
+
 #pragma once
 
 #ifndef INCL_FROM_GOHEADER
@@ -40,6 +55,7 @@ template <typename Number, typename Converter, class Setting>
 class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<Number,Converter,Setting>> {
 
   friend class TrafoOp<Number,Converter,Setting>;
+  friend class SumOp<Number,Converter,Setting>;
 
   protected:
 
@@ -60,11 +76,6 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
   		std::cout << "SupportFunctionNewT::shared_RGN constructor" << std::endl;
   		mRoot->setThis(mRoot);
   	}
-
-  	////constructor for adding a new node
-  	//SupportFunctionNewT( RootGrowNode<Number>* root ) : mRoot(std::shared_ptr<RootGrowNode<Number>>(root)) {
-  	//	std::cout << "SupportFunctionNewT::RGN constructor" << std::endl;
-  	//}
 
   public:
 	/**
@@ -118,15 +129,13 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
   private:
 
   	void addUnaryOp(RootGrowNode<Number>* unary) const;
-  	//void addUnaryOp(std::shared_ptr<RootGrowNode<Number>>& unary) const;
+
+  	void addBinaryOp(RootGrowNode<Number>* binary, const SupportFunctionNewT<Number,Converter,Setting>& rhs) const;
 
   public:
 
-	void addBinaryOp(RootGrowNode<Number>* binary, SupportFunctionNewT<Number,Converter,Setting>* rhs) const;
-
 	Setting getSettings() const { return Setting{}; }
 
-	//RootGrowNode<Number>* getRoot() const { return mRoot.get(); }
 	std::shared_ptr<RootGrowNode<Number>> getRoot() const { return mRoot; }
 
 	 /**

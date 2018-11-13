@@ -1,3 +1,13 @@
+/*
+ * Leaf.h
+ *
+ * A RootGrowNode that represents a leaf node in the tree of operations representing a SupportFunction.
+ * Each tree has a pointer to a Representation: Box, H-Polytope, etc.
+ *
+ * @author Stefan Schupp
+ * @author Phillip Tse
+ */
+
 #pragma once
 
 #include "RootGrowNode.h"
@@ -13,7 +23,7 @@ class Leaf : public RootGrowNode<Number> {
 	////// General Interface
 
 	SFNEW_TYPE type = SFNEW_TYPE::LEAF;
-	unsigned originCount = 0;
+	unsigned originCount = 0;				//A leaf cannot have children
 
 	////// Members for this class
 
@@ -23,15 +33,11 @@ class Leaf : public RootGrowNode<Number> {
 
 	////// Constructors & Destructors
 
-	Leaf(){ }
+	Leaf(){}
 
-	Leaf(Representation* r) : rep(r) { 
-		std::cout << "Leaf::Leaf(r)" << std::endl;
-	}
+	Leaf(Representation* r) : rep(r) { std::cout << "Leaf::Leaf(r)" << std::endl; }
 
-	~Leaf(){
-		std::cout << "Leaf::~Leaf" << std::endl;
-	}
+	~Leaf(){ std::cout << "Leaf::~Leaf" << std::endl; }
 
 	////// Getters & Setters
 
@@ -44,22 +50,19 @@ class Leaf : public RootGrowNode<Number> {
 
 	//Leaves usually do not transform
 	matrix_t<Number> transform(const matrix_t<Number>&) const {
-		std::cout << "calling Leaf::transform\n";
-		assert(false); 
+		assert(false && "Leaf::transform should never be called\n"); 
 		return matrix_t<Number>::Zero(1,1); 
 	}
 
 	//Evaluate leaf via multiEvaluate function of the representation
 	std::vector<EvaluationResult<Number>> compute(const matrix_t<Number>& param, bool useExact) const { 
-		std::cout << "calling Leaf::compute" << std::endl;
 		assert(rep != nullptr);
 		return rep->multiEvaluate(param, useExact);
 	}
 
 	//Leaves do not aggregate
 	std::vector<EvaluationResult<Number>> aggregate(std::vector<std::vector<EvaluationResult<Number>>>& , const matrix_t<Number>& ) const {
-		std::cout << "calling Leaf::aggregate\n";
-		assert(false);
+		assert(false && "Leaf::aggregate should never be called\n");
 		return std::vector<EvaluationResult<Number>>();
 	}
 

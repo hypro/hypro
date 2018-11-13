@@ -1,3 +1,12 @@
+/*
+ * SumOp.h
+ *
+ * A RootGrowNode that represents a Minkowski Sum operation in the tree of operations representing a SupportFunction.
+ *
+ * @author Stefan Schupp
+ * @author Phillip Tse
+ */
+
 #pragma once
 
 #include "RootGrowNode.h"
@@ -29,7 +38,7 @@ class SumOp : public RootGrowNode<Number> {
 
 	SumOp() = delete;
 
-	SumOp(SupportFunctionNewT<Number,Converter,Setting>* lhs, SupportFunctionNewT<Number,Converter,Setting>* rhs){ lhs->addBinaryOp(this, rhs); }
+	SumOp(const SupportFunctionNewT<Number,Converter,Setting>& lhs, const SupportFunctionNewT<Number,Converter,Setting>& rhs){ lhs.addBinaryOp(this, rhs); }
 
 	~SumOp(){}
 

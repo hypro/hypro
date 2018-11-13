@@ -1,3 +1,16 @@
+/*
+ * RootGrowNode.h
+ *
+ * An abstract class representing a node in a tree where a new node is set above the root,
+ * thus making the tree grow at its root.
+ * Each node knows and owns its children and has a weak_ptr to itself.
+ * Every type of operation and leaf must inherit from this base class, since only then
+ * this unifying base class can be used for calculations.
+ *
+ * @author Stefan Schupp
+ * @author Phillip Tse
+ */
+
 #pragma once 
 
 #include <iostream>
@@ -17,8 +30,6 @@ namespace hypro {
 //Type of nodes. Needed to fast determine which node subclass is actually calling a function. 
 enum SFNEW_TYPE { NODE = 0, TRAFO, SUMOP, LEAF };
 
-//A node in the tree. Knows its children and its height in the tree. (Height only needed for printing)
-//Base class for operations and leaves
 template<typename Number>
 class RootGrowNode {
 
@@ -29,12 +40,12 @@ class RootGrowNode {
   protected:
 
 	////// Members
-	SFNEW_TYPE mType = NODE;												//NONE since RootGrowNode should later be an abstract class
-	unsigned originCount = 0;												//Amount of children needed to function properly
-	//std::vector<RootGrowNode*> mChildren = std::vector<RootGrowNode*>();	//vector of all current children
-	PointerVec mChildren = PointerVec();									//vector of all current children
-	std::weak_ptr<RootGrowNode<Number>> pThis;
 
+	SFNEW_TYPE mType = NODE;							//NONE since RootGrowNode should later be an abstract class
+	unsigned originCount = 0;							//Amount of children needed to function properly
+	PointerVec mChildren = PointerVec();				//vector of all current children
+	std::weak_ptr<RootGrowNode<Number>> pThis;			//A non-owning pointer to itself. Every shared_ptr pointing to "this" must copy from this pointer for the ref count.
+														//Note that pThis can only be initialized after a shared_ptr to "this" has been created.
 
   public:
 
@@ -47,14 +58,12 @@ class RootGrowNode {
 
 	virtual SFNEW_TYPE getType() const { return mType; }
 	virtual unsigned getOriginCount() const { return originCount; }
-	//virtual std::vector<RootGrowNode*> getChildren() const { return mChildren; }
 	virtual PointerVec getChildren() const { return mChildren; }
 	std::shared_ptr<RootGrowNode<Number>> getThis() const { return std::shared_ptr<RootGrowNode<Number>>(pThis); }
 	void setThis(const std::shared_ptr<RootGrowNode<Number>>& ptr){ pThis = ptr; }
 
 	////// Modifiers
 
-	//void addToChildren(RootGrowNode* rhs){ mChildren.push_back(rhs); }
 	void addToChildren(std::shared_ptr<RootGrowNode>& rhs){ mChildren.push_back(rhs); }
 	void clearChildren(){ mChildren.clear(); }
 
