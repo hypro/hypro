@@ -1000,8 +1000,8 @@ void SupportFunctionContent<Number,Setting>::forceLinTransReduction(){
         case SF_TYPE::INTERSECT: {
             intersectionParameters()->rhs->forceLinTransReduction();
             intersectionParameters()->lhs->forceLinTransReduction();
-			mDepth = std::max(summands()->lhs->operationCount(), summands()->rhs->operationCount()) +1;
-			mOperationCount = summands()->lhs->operationCount() + summands()->rhs->operationCount() +1;
+			mDepth = std::max(intersectionParameters()->lhs->operationCount(), intersectionParameters()->rhs->operationCount()) +1;
+			mOperationCount = intersectionParameters()->lhs->operationCount() + intersectionParameters()->rhs->operationCount() +1;
 			break;
         }
         case SF_TYPE::UNITE: {
