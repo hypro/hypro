@@ -17,7 +17,8 @@
 template <typename Number>
 template<typename SFSetting, typename inSetting>
 SupportFunctionT<Number,Converter<Number>,SFSetting> Converter<Number>::toSupportFunction( const SupportFunctionT<Number,Converter<Number>,inSetting>& _source, const CONV_MODE ){
-    return _source;
+    // TODO: This is non-optimal, we need to proapagate/transfer the new settings instead of over-approximating the new set.
+    return SupportFunctionT<Number,Converter<Number>,SFSetting>(_source.matrix(), _source.vector());
 }
 
 // conversion from box to support function (no differentiation between conversion modes - always EXACT)
@@ -81,5 +82,5 @@ SupportFunctionT<Number,Converter<Number>,SFSetting> Converter<Number>::toSuppor
 template<typename Number>
 template<typename SFSetting, typename inSetting>
 SupportFunctionT<Number,Converter<Number>,SFSetting> Converter<Number>::toSupportFunction( const DifferenceBoundsT<Number,Converter<Number>,inSetting>& _source, const CONV_MODE mode ) {
-    return toSupportFunction(toHPolytope(_source, mode));
+    return toSupportFunction<SFSetting,HPolytopeSetting>(toHPolytope<HPolytopeSetting,inSetting>(_source, mode));
 }

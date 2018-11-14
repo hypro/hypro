@@ -49,10 +49,10 @@ std::vector<Point<Number>> computeBoundaryPointsExpensive (const SupportFunction
             assert(curPlaneVector.size() == 2);
 
             //intersects the current support function with the Halfspace
-            SupportFunctionT<Number,Converter,SupportFunctionSetting> curPlaneSup = SupportFunctionT<Number,Converter,SupportFunctionSetting>(curPlaneVector);
+            SupportFunctionT<Number,Converter,inSetting> curPlaneSup = SupportFunctionT<Number,Converter,inSetting>(curPlaneVector);
             //std::cout << "current supportplane:" << std::endl;
             curPlaneSup.print();
-            SupportFunctionT<Number,Converter,SupportFunctionSetting> curFace = sf.intersect(curPlaneSup);
+            SupportFunctionT<Number,Converter,inSetting> curFace = sf.intersect(curPlaneSup);
             //std::cout << "current face:" << std::endl;
             curFace.print();
             //only continue if face has still the same dimension as the source object (although it is technically now a dim-1 object at most)
@@ -110,10 +110,10 @@ Point<Number> computeBoundaryPointsExpensiveRecursive (const SupportFunctionT<Nu
             assert(curPlaneVector.size() == 2);
 
             //intersects the current support function with the Halfspace
-            SupportFunctionT<Number,Converter,SupportFunctionSetting> curPlaneSup = SupportFunctionT<Number,Converter,SupportFunctionSetting>(curPlaneVector);
+            SupportFunctionT<Number,Converter,inSetting> curPlaneSup = SupportFunctionT<Number,Converter,inSetting>(curPlaneVector);
             //std::cout << "current supportplane:" << std::endl;
             curPlaneSup.print();
-            SupportFunctionT<Number,Converter,SupportFunctionSetting> curFace = sf.intersect(curPlaneSup);
+            SupportFunctionT<Number,Converter,inSetting> curFace = sf.intersect(curPlaneSup);
             //std::cout << "current face:" << std::endl;
             curFace.print();
             //only continue if face has still the same dimension as the source object (although it is technically now a dim-1 object at most)
