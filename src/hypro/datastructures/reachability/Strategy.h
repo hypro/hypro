@@ -32,8 +32,13 @@ public:
     std::size_t size() const {return mStrategy.size();}
     const StrategyNodeVariant<StateType>& operator[](std::size_t i) const {return mStrategy[i];}
 
-    void advanceToLevel( StateType& state, std::size_t lvl) {
-        boost::apply_visitor(detail::strategyConversionVisitor<StateType>(state), mStrategy[lvl]);
+    void advanceToLevel( StateType& state, std::size_t lvl, std::size_t subset=0) const {
+        boost::apply_visitor(detail::strategyConversionVisitor<StateType>(state,subset), mStrategy[lvl]);
+    }
+
+    StrategyParameters getParameters(std::size_t lvl) const {
+        assert(lvl < mStrategy.size());
+        return boost::apply_visitor(detail::getParametersVisitor(), mStrategy[lvl]);
     }
 };
 

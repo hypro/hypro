@@ -5,18 +5,36 @@
 namespace hypro
 {
 
+struct StrategyParameters {
+	mpq_class timeStep = 0;
+	AGG_SETTING aggregation = AGG_SETTING::NO_AGG;
+	int clustering = -1;
+	representation_name representation_type = representation_name::UNDEF;
+};
+
 namespace detail{
 	template<typename State>
 	struct strategyConversionVisitor : public boost::static_visitor<> {
 		State& mState;
+		std::size_t mSubsetIndex;
 
 		strategyConversionVisitor() = delete;
-		strategyConversionVisitor(State& s) : mState(s) {}
+		strategyConversionVisitor(State& s, std::size_t subset=0) : mState(s), mSubsetIndex(subset) {}
 
 		template<typename Node>
 		void operator()(Node& ) const {
-			mState.setSetDirect(boost::apply_visitor(genericConversionVisitor<typename State::repVariant, typename Node::representationType>(), mState.getSet()));
+			mState.setSetDirect(boost::apply_visitor(::hypro::genericConversionVisitor<typename State::repVariant, typename Node::representationType>(), mState.getSet(mSubsetIndex)));
 			mState.setSetType(Node::representationType::type());
+		}
+	};
+
+	struct getParametersVisitor : public boost::static_visitor<StrategyParameters> {
+
+		getParametersVisitor() = default;
+
+		template<typename Node>
+		const StrategyParameters& operator()(Node& n) const {
+			return n.mParameters;
 		}
 	};
 }
@@ -24,25 +42,23 @@ namespace detail{
 template<typename Representation>
 struct StrategyNode {
 	typedef Representation representationType;
-	mpq_class timeStep;
-	AGG_SETTING aggregation = AGG_SETTING::NO_AGG;
-	int clustering = -1;
+
+	StrategyParameters mParameters;
 
 	StrategyNode(mpq_class ts)
-		: timeStep(ts)
-		, aggregation(AGG_SETTING::MODEL)
-		, clustering(-1)
 	{
-		//TRACE("hydra.datastructures","Create strategy node with timestep " << ts << ", representation: " << rep << ", aggregation: " << aggregation);
-		//std::cout << "Create strategy node with timestep " << ts << ", representation: " << rep << ", aggregation: " << aggregation << ", clustering " << clustering << std::endl;
+		mParameters.timeStep = ts;
+		mParameters.aggregation = AGG_SETTING::MODEL;
+		mParameters.clustering = -1;
+		mParameters.representation_type = Representation::type();
 	}
 
 	StrategyNode(mpq_class ts, AGG_SETTING agg, int clu)
-		: timeStep(ts)
-		, aggregation(agg)
-		, clustering(clu)
 	{
-		//std::cout << "Create strategy node with timestep " << ts << ", representation: " << rep << ", aggregation: " << aggregation << ", clustering " << clustering << std::endl;
+		mParameters.timeStep = ts;
+		mParameters.aggregation = agg;
+		mParameters.clustering = clu;
+		mParameters.representation_type = Representation::type();
 	}
 };
 
