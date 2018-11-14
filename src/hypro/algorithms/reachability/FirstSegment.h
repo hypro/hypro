@@ -82,6 +82,9 @@ void bloatBox(State& in, const Box<Number>& bloatBox) {
 			assert(false && "CANNOT CONVERT TO TYPE TAYLOR MODEL.");
 			break;
 		}
+        default:
+            assert(false && "STATE SET TYPE UNDEF.");
+            break;
 	}
 }
 

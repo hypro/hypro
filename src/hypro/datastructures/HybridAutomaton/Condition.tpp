@@ -104,7 +104,7 @@ void Condition<Number>::decompose(std::vector<std::vector<size_t>> decomposition
 	else if(mConstraints.size() == 0 && decomposition.size() > 0){
 		//fill mConstaints with empty constraint sets
 		std::vector<ConstraintSet<Number>> newCset;
-		for(int i = 0; i < decomposition.size(); i++){
+		for(std::size_t i = 0; i < decomposition.size(); i++){
 			ConstraintSet<Number> res = ConstraintSet<Number>();
 			newCset.push_back(res);
 		}

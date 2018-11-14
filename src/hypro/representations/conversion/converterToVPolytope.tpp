@@ -222,7 +222,7 @@ VPolytopeT<Number,Converter<Number>,VPolySetting> Converter<Number>::toVPolytope
 	return VPolytopeT<Number,Converter<Number>,VPolySetting>(_source.vertices());
 }
 
-//TODO verification of alternatoive underapproximation (yields only one point for some reason)
+//TODO verification of alternative underapproximation (yields only one point for some reason)
 // conversion from Support Function to V-Polytope (OVER, UNDER or ALTERNATIVE)
 //ALTERNATIVE mode gives an underapproximation that is probably better but costs a lot more to compute
 template<typename Number>

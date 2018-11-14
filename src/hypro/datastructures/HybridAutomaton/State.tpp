@@ -414,19 +414,19 @@ void State<Number,Representation,Rargs...>::decompose(std::vector<std::vector<si
 		if(indicesToAdd.size() > 0){
 			// create a row matrix with numIndicesToAdd many rows
 			matrix_t<Number> rowMat = matrix_t<Number>::Zero(indicesToAdd.size(), constraintsOld.cols());
-			for(size_t index = 0; index < rowMat.rows(); index++){
+			for(Eigen::Index index = 0; index < rowMat.rows(); index++){
 				// copy over preselected rows
 				rowMat.row(index) = constraintsOld.row(indicesToAdd[index]);
 			}
 			// create final matrix that does not contain columns not in this set
 			matrix_t<Number> finMat = matrix_t<Number>::Zero(rowMat.rows(), decomp.size());
 			// -1 for constant column
-			for(size_t index = 0; index < finMat.cols(); index++){
+			for(Eigen::Index index = 0; index < finMat.cols(); index++){
 				finMat.col(index) = rowMat.col(decomp[index]);
 			}
 			// create final constant vector
 			vector_t<Number> finVec =  vector_t<Number>::Zero(indicesToAdd.size());
-			for(size_t index=0; index < finVec.rows(); index++){
+			for(Eigen::Index index=0; index < finVec.rows(); index++){
 				finVec(index) = constantsOld(indicesToAdd[index]);
 			}
 

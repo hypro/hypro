@@ -301,12 +301,12 @@ std::unique_ptr<Location<Number>> parallelCompose(const Location<Number>* lhs
 				//std::cout << "lhsIC: " << lhsIC << std::endl;
 				//std::cout << "rhsIC: " << rhsIC << std::endl;
 				if(rhsVar[rhsIC] == haVar[colI]) {
-					// TODO: the check is not entirely correct, since the flow can be non-admissible but set to 0 in lhs and something != 0 in rhs.					
+					// TODO: the check is not entirely correct, since the flow can be non-admissible but set to 0 in lhs and something != 0 in rhs.
 					if(haFlow(rowI,colI) != 0 && rhs->getFlow()(rhsIR,rhsIC) != haFlow(rowI,colI)) {
 						admissible = false;
 						break;
 					}
-					
+
 					//std::cout << "haFlow sizes: " << haFlow.rows() << "x" << haFlow.cols() << std::endl;
 					//std::cout << "rhs->getFlow() sizes: " << rhs->getFlow().rows() << "x" << rhs->getFlow().cols() << std::endl;
 					//std::cout << "rowI: " << rowI << " colI " << colI << " rhsIR " << rhsIR << " rhsIC " << rhsIC << std::endl;
@@ -429,7 +429,7 @@ void Location<Number>::decompose(std::vector<std::vector<size_t>> decomposition)
 		// +1 row for last-row of affine transformation
 		matrix_t<Number> rowMat = matrix_t<Number>::Zero(set.size()+1, oldFlow.cols());
 		// -1 because of last-row
-		for(size_t index = 0; index < rowMat.rows()-1; index++){
+		for(Eigen::Index index = 0; index < rowMat.rows()-1; index++){
 			// select the specific rows into rowMat
 			rowMat.row(index) = oldFlow.row(set[index]);
 		}
@@ -439,7 +439,7 @@ void Location<Number>::decompose(std::vector<std::vector<size_t>> decomposition)
 		// +1 for constant column
 		matrix_t<Number> finMat = matrix_t<Number>::Zero(rowMat.rows(), set.size()+1);
 		// -1 for constant column
-		for(size_t index = 0; index < finMat.cols()-1; index++){
+		for(Eigen::Index index = 0; index < finMat.cols()-1; index++){
 			finMat.col(index) = rowMat.col(set[index]);
 		}
 		finMat.col(finMat.cols()-1) = rowMat.col(rowMat.cols()-1);
@@ -453,4 +453,3 @@ void Location<Number>::decompose(std::vector<std::vector<size_t>> decomposition)
 }
 
 }  // namespace hypro
-

@@ -12,7 +12,7 @@ namespace detail {
     struct StrategyVariant<boost::variant<Ts...>> {
         using types = boost::variant<StrategyNode<Ts>...>;
     };
-}
+} // detail
 
 template<typename State>
 using StrategyNodeVariant = typename detail::StrategyVariant<typename State::repVariant>::types;
