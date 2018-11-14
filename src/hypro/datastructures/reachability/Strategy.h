@@ -30,7 +30,7 @@ public:
     void emplace_back(StrategyNodeVariant<StateType>&& n) {mStrategy.emplace_back(std::move(n));}
 
     std::size_t size() const {return mStrategy.size();}
-    const StrategyNodeVariant<StateType>& operator[](std::size_t i) {return mStrategy[i];}
+    const StrategyNodeVariant<StateType>& operator[](std::size_t i) const {return mStrategy[i];}
 
     void advanceToLevel( StateType& state, std::size_t lvl) {
         boost::apply_visitor(detail::strategyConversionVisitor<StateType>(state), mStrategy[lvl]);
