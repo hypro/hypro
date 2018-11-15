@@ -280,3 +280,163 @@ TYPED_TEST(SupportFunctionNewTest, SupportFunctionNewEvaluate){
 	}
 	
 }
+
+TYPED_TEST(SupportFunctionNewTest, Deletion){
+
+	//Non-owning pointers needed to check whether the sf's they are pointing to are actually deleted or not
+	std::weak_ptr<SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>> sf1Copy;
+	std::weak_ptr<SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>> sf2Copy;
+	std::weak_ptr<SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>> sfTrafoCopy;
+	std::weak_ptr<SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>> sfSumCopy;
+
+	{
+		//Construct leaf nodes
+		Box<TypeParam> box1 (std::make_pair(Point<TypeParam>({TypeParam(0),TypeParam(-1)}), Point<TypeParam>({TypeParam(1), TypeParam(2)})));
+		Box<TypeParam> box2 (std::make_pair(Point<TypeParam>({TypeParam(0),TypeParam(0)}), Point<TypeParam>({TypeParam(2), TypeParam(2)})));
+		std::shared_ptr<SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>> sf1 = std::make_shared<SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>>(&box1);
+		std::shared_ptr<SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>> sf2 = std::make_shared<SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>>(&box2);
+		sf1Copy = sf1;
+		sf2Copy = sf2;
+		{
+			//Build trafop
+			std::cout << "Building trafoOp" << std::endl;
+			matrix_t<TypeParam> trafoMat = matrix_t<TypeParam>::Zero(2,2);
+			trafoMat(0,0) = TypeParam(2);
+			trafoMat(1,1) = TypeParam(2);
+			vector_t<TypeParam> trafoVec = vector_t<TypeParam>::Zero(2);
+
+			SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sfTrafo = sf1->affineTransformation(trafoMat, trafoVec);
+			//std::shared_ptr<SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>> sfTrafoPtr = std::shared_ptr<SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>>(&sfTrafo);
+			std::shared_ptr<SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>> sfTrafoPtr = std::make_shared<SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>>(&sfTrafo);
+			sfTrafoCopy = sfTrafoPtr;
+
+			EXPECT_TRUE(sfTrafo.getRoot()->getType() == SFNEW_TYPE::TRAFO);
+			EXPECT_TRUE(sfTrafo.getRoot()->getChildren().size() == 1);		
+
+			{
+				//Build SumOp
+				std::cout << "Building sumOp" << std::endl;
+				SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sum = sfTrafo.minkowskiSum(*sf2);
+				//std::shared_ptr<SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>> sumPtr = std::shared_ptr<SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>>(&sum);
+				std::shared_ptr<SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>> sumPtr = std::make_shared<SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>>(&sum);
+				std::cout << "copying shared_ptr" << std::endl;
+				sfSumCopy = sumPtr;
+				EXPECT_TRUE(sum.getRoot()->getType() == SFNEW_TYPE::SUMOP);
+				EXPECT_TRUE(sum.getRoot()->getOriginCount() == sum.getRoot()->getChildren().size());
+				std::cout << sum << std::endl;
+			}
+			//Since SumOp's scope ended, it will be deleted -> sfSumCopy's use_count == 0;
+			EXPECT_TRUE(sfSumCopy.expired());
+			EXPECT_TRUE(!sfTrafoCopy.expired());
+			EXPECT_TRUE(!sf1Copy.expired());
+			EXPECT_TRUE(!sf2Copy.expired());
+			std::cout << "SumOp expired" << std::endl;
+		}	
+		EXPECT_TRUE(sfTrafoCopy.expired());
+		EXPECT_TRUE(!sf1Copy.expired());
+		EXPECT_TRUE(!sf2Copy.expired());	
+		std::cout << "TrafoOp expired" << std::endl;
+	}
+	EXPECT_TRUE(sf1Copy.expired());
+	std::cout << "sf1 expired" << std::endl;
+	EXPECT_TRUE(sf2Copy.expired());
+	std::cout << "sf2 expired" << std::endl;
+}
+
+/*
+ * Test deletion mechanics. Test cases:
+ * 1. Delete supportfunction to leaf (tree stays the same, only sf to leaf vanishes)
+ * 2. Delete supportfunction to intermediate node (tree stays the same, only sf to intermediate node vanishes)
+ * 3. Delete supportfunction to root (root and its pointer to its children get deleted)
+ * 
+ * NEEDS COPY ASSIGNMENT
+ */
+/*
+TYPED_TEST(SupportFunctionNewTest, Deletion){
+
+	//Construct leaf nodes
+	Box<TypeParam> box1 (std::make_pair(Point<TypeParam>({TypeParam(0),TypeParam(-1)}), Point<TypeParam>({TypeParam(1), TypeParam(2)})));
+	Box<TypeParam> box2 (std::make_pair(Point<TypeParam>({TypeParam(0),TypeParam(0)}), Point<TypeParam>({TypeParam(2), TypeParam(2)})));
+	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sf1 = new SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>(&box1);
+	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sf2 = new SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>(&box2);
+	
+	//These pointer are needed to check later whether sf2 was deleted
+	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>* sf1ptr = &sf1;
+	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>* sf2ptr = &sf2;
+
+	//This pointer is needed to delete sf2
+	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>* deleteSf2 = &sf2;
+
+	//Build trafop
+	matrix_t<TypeParam> trafoMat = matrix_t<TypeParam>::Identity(2,2);
+	vector_t<TypeParam> trafoVec = vector_t<TypeParam>::Zero(2);
+
+	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sfWithTrafo = new SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>(sf1.affineTransformation(trafoMat, trafoVec));
+	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>* sfWithTrafoPtr = &sfWithTrafo;
+	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>* deleteSfWithTrafo = &sfWithTrafo;
+
+	EXPECT_TRUE(sfWithTrafo.getRoot()->getType() == SFNEW_TYPE::TRAFO);
+	EXPECT_TRUE(sfWithTrafo.getRoot()->getChildren().size() == 1);
+	
+	//Build SumOp
+	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sum = new SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>(sfWithTrafo.minkowskiSum(sf2));
+	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>* sumPtr = &sum;
+	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>* deleteSum = &sum;
+	
+	EXPECT_TRUE(sum.getRoot()->getType() == SFNEW_TYPE::SUMOP);
+	EXPECT_TRUE(sum.getRoot()->getOriginCount() == sum.getRoot()->getChildren().size());	
+
+	std::cout << sum << std::endl;
+
+	//Evaluate
+	matrix_t<TypeParam> directions = matrix_t<TypeParam>::Zero(2,2);
+	directions(0,0) = TypeParam(1);
+	directions(1,1) = TypeParam(1);
+	//std::cout << "START EVALUATION\n"; 
+	std::vector<EvaluationResult<TypeParam>> res = sum.multiEvaluate(directions,true);
+	//std::cout << "END EVALUATION\n";
+	//std::cout << "Result of Evaluation is:\n";
+	//for(auto& eRes : res){
+	//	std::cout << eRes << std::endl;
+	//}
+
+	//Now delete a leaf
+	delete deleteSf2;
+	EXPECT_TRUE(sum.getRoot()->getChildren().at(1) != nullptr);
+	std::vector<EvaluationResult<TypeParam>> res2 = sum.multiEvaluate(directions,true);
+	EXPECT_TRUE(res2.size() == res.size());
+	for(int i=0; i < res2.size(); i++){
+		EXPECT_TRUE(res2.at(i) == res.at(i));
+	}
+	EXPECT_TRUE(sf1ptr != nullptr);
+	EXPECT_TRUE(sf2ptr != nullptr);
+	EXPECT_TRUE(sfWithTrafoPtr != nullptr);
+	EXPECT_TRUE(sumPtr != nullptr);
+
+	//Now delete a intermediate node
+	delete deleteSfWithTrafo;
+	EXPECT_TRUE(sum.getRoot()->getChildren().at(0) != nullptr);
+	res2 = sum.multiEvaluate(directions,true);
+	EXPECT_TRUE(res2.size() == res.size());
+	for(int i=0; i < res2.size(); i++){
+		EXPECT_TRUE(res2.at(i) == res.at(i));
+	}	
+	EXPECT_TRUE(sf1ptr != nullptr);
+	EXPECT_TRUE(sf2ptr != nullptr);
+	EXPECT_TRUE(sfWithTrafoPtr != nullptr);
+	EXPECT_TRUE(sumPtr != nullptr);
+
+	//Now delete root
+	delete deleteSum;
+	EXPECT_TRUE(sf1ptr != nullptr);
+	EXPECT_TRUE(sf2ptr == nullptr);
+	EXPECT_TRUE(sfWithTrafoPtr == nullptr);
+	EXPECT_TRUE(sumPtr == nullptr);
+
+	//Cleanup
+	delete sf1ptr;
+	delete sf2ptr;
+	delete sfWithTrafoPtr;
+	delete sumPtr;
+}
+*/

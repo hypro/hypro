@@ -30,11 +30,13 @@ namespace hypro {
 //Type of nodes. Needed to fast determine which node subclass is actually calling a function. 
 enum SFNEW_TYPE { NODE = 0, TRAFO, SUMOP, LEAF };
 
+//template<typename Number, typename Setting>
 template<typename Number>
 class RootGrowNode {
 
   public:
 
+  	//using PointerVec = std::vector<std::shared_ptr<RootGrowNode<Number>>>;
   	using PointerVec = std::vector<std::shared_ptr<RootGrowNode<Number>>>;
 
   protected:
@@ -44,9 +46,7 @@ class RootGrowNode {
 	SFNEW_TYPE mType = NODE;							//NONE since RootGrowNode should later be an abstract class
 	unsigned originCount = 0;							//Amount of children needed to function properly
 	PointerVec mChildren = PointerVec();				//vector of all current children
-	std::weak_ptr<RootGrowNode<Number>> pThis;			//A non-owning pointer to itself. Every shared_ptr pointing to "this" must copy from this pointer for the ref count.
-														//Note that pThis can only be initialized after a shared_ptr to "this" has been created.
-
+	
   public:
 
 	////// Constructors
@@ -59,12 +59,10 @@ class RootGrowNode {
 	virtual SFNEW_TYPE getType() const { return mType; }
 	virtual unsigned getOriginCount() const { return originCount; }
 	virtual PointerVec getChildren() const { return mChildren; }
-	std::shared_ptr<RootGrowNode<Number>> getThis() const { return std::shared_ptr<RootGrowNode<Number>>(pThis); }
-	void setThis(const std::shared_ptr<RootGrowNode<Number>>& ptr){ pThis = ptr; }
-
+	
 	////// Modifiers
 
-	void addToChildren(std::shared_ptr<RootGrowNode>& rhs){ mChildren.push_back(rhs); }
+	void addToChildren(const std::shared_ptr<RootGrowNode>& rhs){ mChildren.push_back(rhs); }
 	void clearChildren(){ mChildren.clear(); }
 
 	////// Displaying
@@ -104,6 +102,7 @@ class RootGrowNode {
 	virtual std::vector<EvaluationResult<Number>> aggregate(std::vector<std::vector<EvaluationResult<Number>>>& resultStackBack, const matrix_t<Number>& currentParam) const = 0;
 
 	//For hasTrafo - should only be called by trafoOp objects
+	//virtual bool hasTrafo(std::shared_ptr<const LinTrafoParameters<Number,Setting>>& ltParam, const matrix_t<Number>& A, const vector_t<Number>& b) = 0;
 	virtual bool hasTrafo(std::shared_ptr<const LinTrafoParameters<Number>>& ltParam, const matrix_t<Number>& A, const vector_t<Number>& b) = 0;
 	
 };

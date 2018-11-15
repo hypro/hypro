@@ -33,8 +33,9 @@ namespace hypro {
 		assert(unary->getOriginCount() == 1);
 		if(unary){
 			//Add current root as child of given unary node via this ptr of root
-			std::shared_ptr<RootGrowNode<Number>> tmp = mRoot->getThis();
-			unary->addToChildren(tmp);
+			//std::shared_ptr<RootGrowNode<Number>> tmp = mRoot->getThis();
+			//unary->addToChildren(tmp);
+			unary->addToChildren(mRoot);
 			assert(unary->getChildren().size() == 1);
 		}
 	}
@@ -43,10 +44,12 @@ namespace hypro {
 	void SupportFunctionNewT<Number,Converter,Setting>::addBinaryOp(RootGrowNode<Number>* binary, const SupportFunctionNewT<Number,Converter,Setting>& rhs) const {
 		assert(binary != nullptr);
 		assert(binary->getOriginCount() == 2);
-		auto lhsRootPtr = mRoot->getThis();
-		auto rhsRootPtr = rhs.getRoot()->getThis();
-		binary->addToChildren(lhsRootPtr);
-		binary->addToChildren(rhsRootPtr);
+		//auto lhsRootPtr = mRoot->getThis();
+		//auto rhsRootPtr = rhs.getRoot()->getThis();
+		//binary->addToChildren(lhsRootPtr);
+		//binary->addToChildren(rhsRootPtr);
+		binary->addToChildren(mRoot);
+		binary->addToChildren(rhs.getRoot());
 		assert(binary->getChildren().size() == 2);
 	}
 /*
@@ -330,9 +333,10 @@ namespace hypro {
 	template<typename Number, typename Converter, typename Setting>
 	SupportFunctionNewT<Number,Converter,Setting> SupportFunctionNewT<Number,Converter,Setting>::affineTransformation( const matrix_t<Number>& A, const vector_t<Number>& b ) const {
 		std::shared_ptr<TrafoOp<Number,Converter,Setting>> trafo = std::make_shared<TrafoOp<Number,Converter,Setting>>(*this, A, b);
-		trafo->setThis(std::static_pointer_cast<RootGrowNode<Number>>(trafo));
-		assert(trafo->getThis() == trafo);
-		std::shared_ptr<RootGrowNode<Number>> trafoPtr = trafo->getThis();
+		//trafo->setThis(std::static_pointer_cast<RootGrowNode<Number>>(trafo));
+		//assert(trafo->getThis() == trafo);
+		//std::shared_ptr<RootGrowNode<Number>> trafoPtr = trafo->getThis();
+		std::shared_ptr<RootGrowNode<Number>> trafoPtr = std::static_pointer_cast<RootGrowNode<Number>>(trafo);
 		SupportFunctionNewT<Number,Converter,Setting> sf = SupportFunctionNewT<Number,Converter,Setting>(trafoPtr);
 		return sf;
 	}
@@ -340,8 +344,9 @@ namespace hypro {
 	template<typename Number, typename Converter, typename Setting>
 	SupportFunctionNewT<Number,Converter,Setting> SupportFunctionNewT<Number,Converter,Setting>::minkowskiSum( const SupportFunctionNewT<Number,Converter,Setting>& rhs ) const {
 		std::shared_ptr<SumOp<Number,Converter,Setting>> sum = std::make_shared<SumOp<Number,Converter,Setting>>(*this, rhs);
-		sum->setThis(std::static_pointer_cast<RootGrowNode<Number>>(sum));
-		std::shared_ptr<RootGrowNode<Number>> sumPtr = sum->getThis();
+		//sum->setThis(std::static_pointer_cast<RootGrowNode<Number>>(sum));
+		//std::shared_ptr<RootGrowNode<Number>> sumPtr = sum->getThis();
+		std::shared_ptr<RootGrowNode<Number>> sumPtr = std::static_pointer_cast<RootGrowNode<Number>>(sum);
 		SupportFunctionNewT<Number,Converter,Setting> sf = SupportFunctionNewT<Number,Converter,Setting>(sumPtr);
 		return sf;
 	}

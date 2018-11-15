@@ -73,8 +73,8 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
 
   	//constructor for adding a new node
   	SupportFunctionNewT( const std::shared_ptr<RootGrowNode<Number>>& root ) : mRoot(root) {
-  		std::cout << "SupportFunctionNewT::shared_RGN constructor" << std::endl;
-  		mRoot->setThis(mRoot);
+  		std::cout << "SupportFunctionNewT::shared_RGN constructor, address: " << this << std::endl;
+  		//mRoot->setThis(mRoot);
   	}
 
   public:
@@ -107,15 +107,22 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
 	//leaf constructor
 	template<typename Representation>
 	SupportFunctionNewT( GeometricObject<Number,Representation>* r) : mRoot(std::make_shared<Leaf<Number,Representation>>(dynamic_cast<Representation*>(r))) { 
-		mRoot->setThis(mRoot);
-		std::cout << "SupportFunctionNewT::Leaf constructor" << std::endl;
+	//SupportFunctionNewT( GeometricObject<Number,Representation>* r) { 
+		//Leaf<Number,Representation>* leaf = new Leaf<Number,Representation>(dynamic_cast<Representation*>(r));
+		//leaf->setThis(std::shared_ptr<Leaf<Number,Representation>>(leaf));
+		//mRoot = leaf->getThis();
+		//std::shared_ptr<Leaf<Number,Representation>> tmp = std::make_shared<Leaf<Number,Representation>>(dynamic_cast<Representation*>(r));
+		//mRoot->setThis(tmp);
+		//mRoot = getThis();
+		std::cout << "SupportFunctionNewT::Leaf constructor, address " << this << std::endl;
+		//mRoot->setThis(mRoot);
 	}
 
 	/**
 	 * @brief Destructor.
 	 */
 	~SupportFunctionNewT() {
-		std::cout << "SupportFunctionNewT::~SupportFunctionNewT" << std::endl;
+		std::cout << "SupportFunctionNewT::~SupportFunctionNewT, address: " << this << std::endl;
 		std::cout << "Ref count of mRoot: " << mRoot.use_count() << std::endl;	
 		//mRoot ptr deleted via unique_ptr	
 		//mRoot itself deleted via unique_ptr
