@@ -63,7 +63,7 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
 	 * Members
 	 **************************************************************************/
 
-  	mutable std::shared_ptr<RootGrowNode<Number>> mRoot = nullptr;
+  	mutable std::shared_ptr<RootGrowNode<Number,Setting>> mRoot = nullptr;
 
 	/***************************************************************************
 	 * Constructors
@@ -72,9 +72,8 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
   private:
 
   	//constructor for adding a new node
-  	SupportFunctionNewT( const std::shared_ptr<RootGrowNode<Number>>& root ) : mRoot(root) {
+  	SupportFunctionNewT( const std::shared_ptr<RootGrowNode<Number,Setting>>& root ) : mRoot(root) {
   		std::cout << "SupportFunctionNewT::shared_RGN constructor, address: " << this << std::endl;
-  		//mRoot->setThis(mRoot);
   	}
 
   public:
@@ -106,16 +105,8 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
 
 	//leaf constructor
 	template<typename Representation>
-	SupportFunctionNewT( GeometricObject<Number,Representation>* r) : mRoot(std::make_shared<Leaf<Number,Representation>>(dynamic_cast<Representation*>(r))) { 
-	//SupportFunctionNewT( GeometricObject<Number,Representation>* r) { 
-		//Leaf<Number,Representation>* leaf = new Leaf<Number,Representation>(dynamic_cast<Representation*>(r));
-		//leaf->setThis(std::shared_ptr<Leaf<Number,Representation>>(leaf));
-		//mRoot = leaf->getThis();
-		//std::shared_ptr<Leaf<Number,Representation>> tmp = std::make_shared<Leaf<Number,Representation>>(dynamic_cast<Representation*>(r));
-		//mRoot->setThis(tmp);
-		//mRoot = getThis();
+	SupportFunctionNewT( GeometricObject<Number,Representation>* r) : mRoot(std::make_shared<Leaf<Number,Setting,Representation>>(dynamic_cast<Representation*>(r))) { 
 		std::cout << "SupportFunctionNewT::Leaf constructor, address " << this << std::endl;
-		//mRoot->setThis(mRoot);
 	}
 
 	/**
@@ -135,15 +126,15 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
 
   private:
 
-  	void addUnaryOp(RootGrowNode<Number>* unary) const;
+  	void addUnaryOp(RootGrowNode<Number,Setting>* unary) const;
 
-  	void addBinaryOp(RootGrowNode<Number>* binary, const SupportFunctionNewT<Number,Converter,Setting>& rhs) const;
+  	void addBinaryOp(RootGrowNode<Number,Setting>* binary, const SupportFunctionNewT<Number,Converter,Setting>& rhs) const;
 
   public:
 
 	Setting getSettings() const { return Setting{}; }
 
-	std::shared_ptr<RootGrowNode<Number>> getRoot() const { return mRoot; }
+	std::shared_ptr<RootGrowNode<Number,Setting>> getRoot() const { return mRoot; }
 
 	 /**
 	  * @brief Static method for the construction of an empty SupportFunctionNew of required dimension.
@@ -173,32 +164,32 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
 
 	//When Result type and Param type = void
 	//Wrap given functions into other functions that take Parameter (or smth else) additionally as input
-	void traverse(	std::function<void(RootGrowNode<Number>*)>& transform,
-					std::function<void(RootGrowNode<Number>*)>& compute, 	
-					std::function<void(RootGrowNode<Number>*)>& aggregate) const;
+	void traverse(	std::function<void(RootGrowNode<Number,Setting>*)>& transform,
+					std::function<void(RootGrowNode<Number,Setting>*)>& compute, 	
+					std::function<void(RootGrowNode<Number,Setting>*)>& aggregate) const;
 
 	//When Param type = void, but Result type not
 	//Wrap transform and compute into other functions that take Parameter (or smth else) additionally as input
 	template<typename Result>
-	Result traverse(std::function<void(RootGrowNode<Number>*)>& transform,
-					std::function<Result(RootGrowNode<Number>*)>& compute, 
-					std::function<Result(RootGrowNode<Number>*, std::vector<Result>)>& aggregate) const;
+	Result traverse(std::function<void(RootGrowNode<Number,Setting>*)>& transform,
+					std::function<Result(RootGrowNode<Number,Setting>*)>& compute, 
+					std::function<Result(RootGrowNode<Number,Setting>*, std::vector<Result>)>& aggregate) const;
 
 	//When Result type = void, but Param type not
 	//Wrap aggregate and compute into other functions that take Parameter (or smth else) additionally as input
 	template<typename ...Rargs>
-	void traverse(	std::function<Parameters<Rargs...>(RootGrowNode<Number>*, Parameters<Rargs...>)>& transform,
-					std::function<void(RootGrowNode<Number>*, Parameters<Rargs...>)>& compute, 
-					std::function<void(RootGrowNode<Number>*, Parameters<Rargs...>)>& aggregate,
+	void traverse(	std::function<Parameters<Rargs...>(RootGrowNode<Number,Setting>*, Parameters<Rargs...>)>& transform,
+					std::function<void(RootGrowNode<Number,Setting>*, Parameters<Rargs...>)>& compute, 
+					std::function<void(RootGrowNode<Number,Setting>*, Parameters<Rargs...>)>& aggregate,
 					Parameters<Rargs...>& initParams) const;
 
 	//Actual traverse function
 	//Since all cases where Result or Rargs are void / empty are handled by the overloaded versions of this function above,
 	//we can assume that we do not get functions returning void / that have no parameters
 	template<typename Result, typename ...Rargs>
-	Result traverse(std::function<Parameters<Rargs...>(RootGrowNode<Number>*, Parameters<Rargs...>)>& transform,
-					std::function<Result(RootGrowNode<Number>*, Parameters<Rargs...>)>& compute, 
-					std::function<Result(RootGrowNode<Number>*, std::vector<Result>, Parameters<Rargs...>)>& aggregate, 
+	Result traverse(std::function<Parameters<Rargs...>(RootGrowNode<Number,Setting>*, Parameters<Rargs...>)>& transform,
+					std::function<Result(RootGrowNode<Number,Setting>*, Parameters<Rargs...>)>& compute, 
+					std::function<Result(RootGrowNode<Number,Setting>*, std::vector<Result>, Parameters<Rargs...>)>& aggregate, 
 					Parameters<Rargs...>& initParams) const;
 
 	/***************************************************************************
@@ -245,7 +236,7 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
 	 * @return 		True if at least one TrafoOp is found in the whole subtree, else false. 
 	 *				ltParam gets updated to the parameters of the found TrafoOp if A and b are the parameters of the found TrafoOp.
 	 */
-  	bool hasTrafo(std::shared_ptr<const LinTrafoParameters<Number>>& ltParam, const matrix_t<Number>& A, const vector_t<Number>& b) const;
+  	bool hasTrafo(std::shared_ptr<const LinTrafoParameters<Number,Setting>>& ltParam, const matrix_t<Number>& A, const vector_t<Number>& b) const;
 
 	/***************************************************************************
 	 * Operators

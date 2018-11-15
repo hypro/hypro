@@ -11,24 +11,22 @@ namespace hypro {
  * @brief      Struct holding linear and affine transformation parameters.
  * @tparam     Number  The used number type.
  */
-//template<typename Number, typename Setting>
-template<typename Number>
+template<typename Number, typename Setting>
 struct LinTrafoParameters {
 
 	////// Member Variables
 
 	mutable std::map<unsigned, std::pair<matrix_t<Number>, vector_t<Number>>> parameters;
-	//unsigned power = Setting::LIN_TRANS_REDUCTION_GROUP_SIZE;
-	unsigned power = 2; // 2^power operations are collected
-						// 2^power defines the max. number of successive lin.trans before reducing the SF
+	unsigned power = Setting::LIN_TRANS_REDUCTION_GROUP_SIZE;
+	// 2^power operations are collected
+	// 2^power defines the max. number of successive lin.trans before reducing the SF
 	
 
 	////// Constructors & Destructors
 
 	LinTrafoParameters() = delete;
 
-	//LinTrafoParameters(const matrix_t<Number>& _A, const vector_t<Number>& _b, unsigned _power = Setting::LIN_TRANS_REDUCTION_GROUP_SIZE) :
-	LinTrafoParameters(const matrix_t<Number>& _A, const vector_t<Number>& _b, unsigned _power = 2) :
+	LinTrafoParameters(const matrix_t<Number>& _A, const vector_t<Number>& _b, unsigned _power = Setting::LIN_TRANS_REDUCTION_GROUP_SIZE) :
 		power(_power)
 	{
 		//TRACE("hypro.representations.supportFunction", "Created new lintrafo object." << " (@" << this << ")");
@@ -96,7 +94,7 @@ struct LinTrafoParameters {
 		parameters[exponent] = std::make_pair(aTrans, bTrans);
 	}
 
-	bool operator== (const LinTrafoParameters<Number>& rhs) const {
+	bool operator== (const LinTrafoParameters<Number,Setting>& rhs) const {
 		return (this->parameters.begin()->second == rhs.parameters.begin()->second);
 	}
 

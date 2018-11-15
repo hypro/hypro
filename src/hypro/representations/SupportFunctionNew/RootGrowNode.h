@@ -30,14 +30,12 @@ namespace hypro {
 //Type of nodes. Needed to fast determine which node subclass is actually calling a function. 
 enum SFNEW_TYPE { NODE = 0, TRAFO, SUMOP, LEAF };
 
-//template<typename Number, typename Setting>
-template<typename Number>
+template<typename Number, typename Setting>
 class RootGrowNode {
 
   public:
 
-  	//using PointerVec = std::vector<std::shared_ptr<RootGrowNode<Number>>>;
-  	using PointerVec = std::vector<std::shared_ptr<RootGrowNode<Number>>>;
+  	using PointerVec = std::vector<std::shared_ptr<RootGrowNode<Number,Setting>>>;
 
   protected:
 
@@ -102,8 +100,7 @@ class RootGrowNode {
 	virtual std::vector<EvaluationResult<Number>> aggregate(std::vector<std::vector<EvaluationResult<Number>>>& resultStackBack, const matrix_t<Number>& currentParam) const = 0;
 
 	//For hasTrafo - should only be called by trafoOp objects
-	//virtual bool hasTrafo(std::shared_ptr<const LinTrafoParameters<Number,Setting>>& ltParam, const matrix_t<Number>& A, const vector_t<Number>& b) = 0;
-	virtual bool hasTrafo(std::shared_ptr<const LinTrafoParameters<Number>>& ltParam, const matrix_t<Number>& A, const vector_t<Number>& b) = 0;
+	virtual bool hasTrafo(std::shared_ptr<const LinTrafoParameters<Number,Setting>>& ltParam, const matrix_t<Number>& A, const vector_t<Number>& b) = 0;
 	
 };
 

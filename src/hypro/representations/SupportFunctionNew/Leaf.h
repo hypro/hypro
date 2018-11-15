@@ -15,8 +15,8 @@
 namespace hypro {
 
 //Subclass of RootGrowNode, is a node with a representation of a state
-template<typename Number, typename Representation> 
-class Leaf : public RootGrowNode<Number> {
+template<typename Number, typename Setting, typename Representation> 
+class Leaf : public RootGrowNode<Number,Setting> {
   
   private:
 	
@@ -66,7 +66,7 @@ class Leaf : public RootGrowNode<Number> {
 		return std::vector<EvaluationResult<Number>>();
 	}
 
-	bool hasTrafo(std::shared_ptr<const LinTrafoParameters<Number>>& , const matrix_t<Number>& , const vector_t<Number>& ){
+	bool hasTrafo(std::shared_ptr<const LinTrafoParameters<Number,Setting>>& , const matrix_t<Number>& , const vector_t<Number>& ){
 		assert(false && "Leaf::hasTrafo should never be called\n");
 		return false;
 	}

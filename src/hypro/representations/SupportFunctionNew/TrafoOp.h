@@ -21,9 +21,9 @@ class SupportFunctionNewT;
 
 //Specialized subclass for transformations as example of a unary operator
 template<typename Number, typename Converter, typename Setting>
-class TrafoOp : public RootGrowNode<Number> {
+class TrafoOp : public RootGrowNode<Number,Setting> {
 
-	using PointerVec = typename RootGrowNode<Number>::PointerVec;
+	using PointerVec = typename RootGrowNode<Number,Setting>::PointerVec;
   
   private:
 
@@ -35,9 +35,9 @@ class TrafoOp : public RootGrowNode<Number> {
 
 	////// Members for this class
 
-	unsigned currentExponent;											//Has value 2^power if 2^power successive transformations has been reached, else 1
-	std::size_t successiveTransformations;								//Counts how many transformations with the same parameters are used consecutively
-	std::shared_ptr<const LinTrafoParameters<Number>> parameters;		//A ptr to the object where its parameters are stored
+	unsigned currentExponent;												//Has value 2^power if 2^power successive transformations has been reached, else 1
+	std::size_t successiveTransformations;									//Counts how many transformations with the same parameters are used consecutively
+	std::shared_ptr<const LinTrafoParameters<Number,Setting>> parameters;	//A ptr to the object where its parameters are stored
 
   public:
 	
@@ -51,7 +51,7 @@ class TrafoOp : public RootGrowNode<Number> {
 	//and summarize groups of 2^power linear transformations for optimization
 	TrafoOp(const SupportFunctionNewT<Number,Converter,Setting>& origin, const matrix_t<Number>& A, const vector_t<Number>& b) : currentExponent(1) {
 		
-		parameters = std::make_shared<const LinTrafoParameters<Number>>(A,b);
+		parameters = std::make_shared<const LinTrafoParameters<Number,Setting>>(A,b);
 
 		origin.addUnaryOp(this);
 		assert(this->getChildren().size() == 1);
@@ -76,7 +76,7 @@ class TrafoOp : public RootGrowNode<Number> {
 					reduced = true;
 					currentExponent = currentExponent*(carl::pow(2,parameters->power));
 					for(std::size_t i = 0; i < unsigned(carl::pow(2,parameters->power)-1); i++ ){
-						std::shared_ptr<RootGrowNode<Number>> grandChild = this->getChildren().at(0)->getChildren().at(0);
+						std::shared_ptr<RootGrowNode<Number,Setting>> grandChild = this->getChildren().at(0)->getChildren().at(0);
 						this->clearChildren();
 						this->addToChildren(grandChild);
 						assert(this->getChildren().size() == 1);
@@ -99,7 +99,7 @@ class TrafoOp : public RootGrowNode<Number> {
 	unsigned getOriginCount() const { return originCount; }
 	unsigned getCurrentExponent() const { return currentExponent; }
 	std::size_t getSuccessiveTransformations() const { return successiveTransformations; }
-	std::shared_ptr<const LinTrafoParameters<Number>> getParameters() const { return parameters; }
+	std::shared_ptr<const LinTrafoParameters<Number,Setting>> getParameters() const { return parameters; }
 
 	////// RootGrowNode Interface
 
@@ -145,7 +145,7 @@ class TrafoOp : public RootGrowNode<Number> {
 
 	//Compares the parameters from the current TrafoOp with the parameters A and b from other LinTrafoParameters
 	//and sets the generally used LinTrafoParameters to parameters if they are the same
-	bool hasTrafo(std::shared_ptr<const LinTrafoParameters<Number>>& ltParam, const matrix_t<Number>& A, const vector_t<Number>& b){
+	bool hasTrafo(std::shared_ptr<const LinTrafoParameters<Number,Setting>>& ltParam, const matrix_t<Number>& A, const vector_t<Number>& b){
 		if(parameters->matrix() == A && parameters->vector() == b){
 			ltParam = parameters;
 		} 

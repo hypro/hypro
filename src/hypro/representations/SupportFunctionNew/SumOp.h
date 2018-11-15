@@ -20,7 +20,9 @@ class SupportFunctionNewT;
 
 //Specialized subclass for sums as example of a binary operator
 template<typename Number, typename Converter, typename Setting>
-class SumOp : public RootGrowNode<Number> {
+class SumOp : public RootGrowNode<Number,Setting> {
+
+	using PointerVec = typename RootGrowNode<Number,Setting>::PointerVec;
   
   private:
 	
@@ -28,7 +30,7 @@ class SumOp : public RootGrowNode<Number> {
 
 	SFNEW_TYPE type = SFNEW_TYPE::SUMOP;
 	unsigned originCount = 2;
-	std::vector<RootGrowNode<Number>*> mChildren = std::vector<RootGrowNode<Number>*>(2,nullptr);
+	PointerVec mChildren = PointerVec(2,nullptr);
 
 	////// Special members of this class
 
@@ -94,7 +96,7 @@ class SumOp : public RootGrowNode<Number> {
 	}
 
 	//Should not be called
-	bool hasTrafo(std::shared_ptr<const LinTrafoParameters<Number>>& , const matrix_t<Number>& , const vector_t<Number>& ){
+	bool hasTrafo(std::shared_ptr<const LinTrafoParameters<Number,Setting>>& , const matrix_t<Number>& , const vector_t<Number>& ){
 		assert(false && "SumOp::hasTrafo should never be called\n");
 		return false;
 	}
