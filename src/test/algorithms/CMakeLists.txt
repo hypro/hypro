@@ -12,6 +12,7 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
             #MinkowskiSumTest.cpp
             #SumPerformanceTest.cpp
               # rahsTwoTankTest.cpp
+            FourierMotzkinQETest.cpp
             VertexEnumerationTest.cpp
             UtilityTest.cpp
     )
