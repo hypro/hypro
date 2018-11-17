@@ -661,6 +661,7 @@ var hierarchy =
     [ "hypro::State< Number >", "classhypro_1_1State.html", null ],
     [ "hypro::State< Number, ConstraintSet< Number > >", "classhypro_1_1State.html", null ],
     [ "static_visitor", null, [
+      [ "hypro::detail::getParametersVisitor", "structhypro_1_1detail_1_1getParametersVisitor.html", null ],
       [ "hypro::detail::strategyConversionVisitor< State >", "structhypro_1_1detail_1_1strategyConversionVisitor.html", null ],
       [ "hypro::genericAffineTransformationVisitor< T, Number >", "classhypro_1_1genericAffineTransformationVisitor.html", null ],
       [ "hypro::genericCompareVisitor", "classhypro_1_1genericCompareVisitor.html", null ],
@@ -683,6 +684,7 @@ var hierarchy =
     [ "hypro::STindependentFunct< Number >", "structhypro_1_1STindependentFunct.html", null ],
     [ "hypro::Strategy< StateType >", "classhypro_1_1Strategy.html", null ],
     [ "hypro::StrategyNode< Representation >", "structhypro_1_1StrategyNode.html", null ],
+    [ "hypro::StrategyParameters", "structhypro_1_1StrategyParameters.html", null ],
     [ "hypro::detail::StrategyVariant< T >", "structhypro_1_1detail_1_1StrategyVariant.html", null ],
     [ "hypro::detail::StrategyVariant< boost::variant< Ts...> >", "structhypro_1_1detail_1_1StrategyVariant_3_01boost_1_1variant_3_01Ts_8_8_8_4_01_4.html", null ],
     [ "hypro::sumContent< Number, Setting >", "structhypro_1_1sumContent.html", null ],
@@ -690,7 +692,9 @@ var hierarchy =
       [ "hypro::NonLinearOmega0Supportfunction< Setting >", "classhypro_1_1NonLinearOmega0Supportfunction.html", null ]
     ] ],
     [ "hypro::SupportFunctionSetting", "structhypro_1_1SupportFunctionSetting.html", [
+      [ "hypro::NoBoxDetection", "structhypro_1_1NoBoxDetection.html", null ],
       [ "hypro::NoBoxReduction", "structhypro_1_1NoBoxReduction.html", null ],
+      [ "hypro::NoReduction", "structhypro_1_1NoReduction.html", null ],
       [ "hypro::NoTrafoReduction", "structhypro_1_1NoTrafoReduction.html", null ],
       [ "hypro::PolytopeSupportFunctionSetting", "structhypro_1_1PolytopeSupportFunctionSetting.html", null ]
     ] ],
@@ -717,12 +721,12 @@ var hierarchy =
     [ "true_type", null, [
       [ "hypro::is_shared_ptr< std::shared_ptr< T > >", "structhypro_1_1is__shared__ptr_3_01std_1_1shared__ptr_3_01T_01_4_01_4.html", null ]
     ] ],
-    [ "hypro::hypro::typeName< T >", "structhypro_1_1hypro_1_1typeName.html", null ],
     [ "hypro::typeName< T >", "structhypro_1_1typeName.html", null ],
+    [ "hypro::hypro::typeName< T >", "structhypro_1_1hypro_1_1typeName.html", null ],
     [ "hypro::hypro::typeName< double >", "structhypro_1_1hypro_1_1typeName_3_01double_01_4.html", null ],
     [ "hypro::typeName< double >", "structhypro_1_1typeName_3_01double_01_4.html", null ],
-    [ "hypro::hypro::typeName< mpq_class >", "structhypro_1_1hypro_1_1typeName_3_01mpq__class_01_4.html", null ],
     [ "hypro::typeName< mpq_class >", "structhypro_1_1typeName_3_01mpq__class_01_4.html", null ],
+    [ "hypro::hypro::typeName< mpq_class >", "structhypro_1_1hypro_1_1typeName_3_01mpq__class_01_4.html", null ],
     [ "hypro::unionContent< Number, Setting >", "structhypro_1_1unionContent.html", null ],
     [ "hypro::UtilSetting", "structhypro_1_1UtilSetting.html", null ],
     [ "hypro::Vertex< Number >", "classhypro_1_1Vertex.html", null ],

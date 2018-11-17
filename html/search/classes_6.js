@@ -29,6 +29,7 @@ var searchData=
   ['geometricobject_3c_20number_2c_20vpolytopet_3c_20number_2c_20converter_2c_20s_20_3e_20_3e',['GeometricObject&lt; Number, VPolytopeT&lt; Number, Converter, S &gt; &gt;',['../classhypro_1_1GeometricObject.html',1,'hypro']]],
   ['geometricobject_3c_20number_2c_20zonotopet_3c_20number_2c_20converter_2c_20setting_20_3e_20_3e',['GeometricObject&lt; Number, ZonotopeT&lt; Number, Converter, Setting &gt; &gt;',['../classhypro_1_1GeometricObject.html',1,'hypro']]],
   ['geometricobject_3c_20statisticwrapper_3c_20representation_20_3e_20_3e',['GeometricObject&lt; StatisticWrapper&lt; Representation &gt; &gt;',['../classhypro_1_1GeometricObject.html',1,'hypro']]],
+  ['getparametersvisitor',['getParametersVisitor',['../structhypro_1_1detail_1_1getParametersVisitor.html',1,'hypro::detail']]],
   ['glpk_5fcontext',['glpk_context',['../structhypro_1_1glpk__context.html',1,'hypro']]],
   ['gnuplotsettings',['gnuplotSettings',['../structhypro_1_1plotting_1_1gnuplotSettings.html',1,'hypro::plotting']]],
   ['grid',['Grid',['../classhypro_1_1Grid.html',1,'hypro']]],
