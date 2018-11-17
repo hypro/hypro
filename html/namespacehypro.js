@@ -50,6 +50,7 @@ var namespacehypro =
     [ "STflowpipeSegment", "structhypro_1_1STflowpipeSegment.html", "structhypro_1_1STflowpipeSegment" ],
     [ "STallValues", "structhypro_1_1STallValues.html", "structhypro_1_1STallValues" ],
     [ "Transformation", "classhypro_1_1Transformation.html", "classhypro_1_1Transformation" ],
+    [ "FourierMotzkinQE", "classhypro_1_1FourierMotzkinQE.html", "classhypro_1_1FourierMotzkinQE" ],
     [ "ContextFactory", "classhypro_1_1ContextFactory.html", "classhypro_1_1ContextFactory" ],
     [ "IContext", "classhypro_1_1IContext.html", "classhypro_1_1IContext" ],
     [ "LTIContext", "classhypro_1_1LTIContext.html", "classhypro_1_1LTIContext" ],
