@@ -60,6 +60,7 @@ TYPED_TEST_CASE(HybridAutomataParallelCompositionTest, allTypes);
 
 // Representations
 TYPED_TEST_CASE(BoxTest, allTypes);
+TYPED_TEST_CASE(CarlPolytopeTest, rationalTypes);
 TYPED_TEST_CASE(ConverterTest, allTypes);
 TYPED_TEST_CASE(GridTest, allTypes);
 TYPED_TEST_CASE(HPolytopeTest, allTypes);
