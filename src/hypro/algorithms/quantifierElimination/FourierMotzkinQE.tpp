@@ -110,32 +110,60 @@ namespace hypro {
         FormulasT<Number> constraints;
 
         // check if equations are pairwise equal - if not return false, otherwise use one of the equations.
-        for(const auto& f : bounds[2]) {
-            assert(f.getType() == carl::FormulaType::CONSTRAINT);
-            for(const auto& g : bounds[2]) {
-                assert(g.getType() == carl::FormulaType::CONSTRAINT);
-                if( FormulaT<Number>(f.constraint().lhs() - g.constraint().lhs(), carl::Relation::EQ).getType() == carl::FormulaType::FALSE) {
-                    constraints.emplace_back(FormulaT<Number>(carl::FormulaType::FALSE));
-                    return constraints;
+        // Todo: This test is not correct: having x = 3 + y and x = 3 would fail this test but still is satisfiable when y is existentially quantified or if it is all-quantified it is after x.
+        FormulasT<Number> substitutes;
+        if(bounds[2].size() == 1) {
+            substitutes.push_back(FormulaT<Number>(bounds[2].front()));
+        } else {
+            for(auto f = bounds[2].begin(); f != bounds[2].end(); ++f) {
+                assert(f->getType() == carl::FormulaType::CONSTRAINT);
+                assert(f->constraint().relation() == carl::Relation::EQ);
+
+                std::cout << "F: " << *f << std::endl;
+                for(auto g = std::next(f); g != bounds[2].end(); ++g) {
+                    assert(g->getType() == carl::FormulaType::CONSTRAINT);
+                    assert(g->constraint().relation() == carl::Relation::EQ);
+                    FormulaT<Number> newEq = FormulaT<Number>(f->constraint().lhs() - g->constraint().lhs(), carl::Relation::EQ);
+
+                    std::cout << "G: " << *g << std::endl;
+
+                    // 1st case: equalities contradict each other - quit substitution.
+                    if( newEq.getType() == carl::FormulaType::FALSE) {
+                        constraints.clear();
+                        constraints.emplace_back(FormulaT<Number>(carl::FormulaType::FALSE));
+                        return constraints;
+                    } else if( newEq.getType() == carl::FormulaType::TRUE) {
+                        // both equations are completely equal, just take one.
+                        substitutes.push_back(FormulaT<Number>(*f));
+                    } else {
+                        // the equations are no equal but involve different variables, e.g. [eliminate x]: x = y AND x = z
+                        substitutes.push_back(FormulaT<Number>(*f));
+                        substitutes.push_back(FormulaT<Number>(*g));
+                        // Todo: We could add the constraint y = z.
+                    }
                 }
             }
         }
 
         std::cout << "All equations are equal." << std::endl;
 
-        // at this point all equations are pairwise equal, chose one (the first) for substitution in bounds[0], bounds[1].
-        PolyT<Number> substitute = -(bounds[2].front().constraint().lhs() - bounds[2].front().constraint().coefficient(v,1)*v);
-        // lower bounds
-        for(auto fc : bounds[0]) {
-            assert(fc.getType() == carl::FormulaType::CONSTRAINT);
-            constraints.emplace_back(fc.constraint().lhs().substitute(v, substitute), fc.constraint().relation());
-            std::cout << "substitute lower bound to " << constraints.back() << std::endl;
-        }
-        // upper bounds
-        for(auto fc : bounds[1]) {
-            assert(fc.getType() == carl::FormulaType::CONSTRAINT);
-            constraints.emplace_back(fc.constraint().lhs().substitute(v, substitute), fc.constraint().relation());
-            std::cout << "substitute upper bound to " << constraints.back() << std::endl;
+        // substitute
+        for(const auto& f : substitutes) {
+            std::cout << "Substitute: " << f << std::endl;
+            assert(f.getType() == carl::FormulaType::CONSTRAINT);
+            PolyT<Number> substitute = -(f.constraint().lhs() - f.constraint().coefficient(v,1)*v);
+            // lower bounds
+            for(auto fc : bounds[0]) {
+                assert(fc.getType() == carl::FormulaType::CONSTRAINT);
+                constraints.emplace_back(fc.constraint().lhs().substitute(v, substitute), fc.constraint().relation());
+                std::cout << "substitute lower bound to " << constraints.back() << std::endl;
+            }
+            // upper bounds
+            for(auto fc : bounds[1]) {
+                assert(fc.getType() == carl::FormulaType::CONSTRAINT);
+                constraints.emplace_back(fc.constraint().lhs().substitute(v, substitute), fc.constraint().relation());
+                std::cout << "substitute upper bound to " << constraints.back() << std::endl;
+            }
         }
 
         return constraints;

@@ -11,7 +11,7 @@ template<typename Number>
 class FourierMotzkinQE {
 public:
     // we use four vectors, one for the discovered lower bounds, one for the upper bounds, one for the equations and one for unrelated constraints.
-    using FormulaPartition = std::vector<std::vector<FormulaT<Number>>>;
+    using FormulaPartition = std::vector<FormulasT<Number>>;
 
 private:
     QEQuery mQuery;
