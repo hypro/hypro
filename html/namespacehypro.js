@@ -176,6 +176,7 @@ var namespacehypro =
     [ "OrthogonalPolyhedronT", "classhypro_1_1OrthogonalPolyhedronT.html", "classhypro_1_1OrthogonalPolyhedronT" ],
     [ "OrthogonalPolyhedron", "classhypro_1_1OrthogonalPolyhedron.html", "classhypro_1_1OrthogonalPolyhedron" ],
     [ "PolytopeSetting", "structhypro_1_1PolytopeSetting.html", null ],
+    [ "CarlPolytope", "classhypro_1_1CarlPolytope.html", "classhypro_1_1CarlPolytope" ],
     [ "Cone", "classhypro_1_1Cone.html", "classhypro_1_1Cone" ],
     [ "Fan", "classhypro_1_1Fan.html", "classhypro_1_1Fan" ],
     [ "HPolytopeT", "classhypro_1_1HPolytopeT.html", "classhypro_1_1HPolytopeT" ],

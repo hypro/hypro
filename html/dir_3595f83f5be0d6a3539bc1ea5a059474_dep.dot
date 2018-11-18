@@ -7,5 +7,5 @@ digraph "/home/travis/build/hypro/hypro/src/hypro/algorithms/convexHull" {
   dir_3595f83f5be0d6a3539bc1ea5a059474 [shape=box, label="convexHull", style="filled", fillcolor="#eeeeff", pencolor="black", URL="dir_3595f83f5be0d6a3539bc1ea5a059474.html"];
   }
   dir_bce2075adec303dcb2f0c4fbfcbc8493 [shape=box label="datastructures" fillcolor="white" style="filled" color="red" URL="dir_bce2075adec303dcb2f0c4fbfcbc8493.html"];
-  dir_3595f83f5be0d6a3539bc1ea5a059474->dir_bce2075adec303dcb2f0c4fbfcbc8493 [headlabel="4", labeldistance=1.5 headhref="dir_000004_000021.html"];
+  dir_3595f83f5be0d6a3539bc1ea5a059474->dir_bce2075adec303dcb2f0c4fbfcbc8493 [headlabel="4", labeldistance=1.5 headhref="dir_000004_000023.html"];
 }

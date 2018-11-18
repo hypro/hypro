@@ -3,6 +3,7 @@ var searchData=
   ['cacheable',['Cacheable',['../structhypro_1_1Cacheable.html',1,'hypro']]],
   ['calculateinduced',['calculateInduced',['../classhypro_1_1Grid.html#aa300a49350c363539ea74ba0fc9d6745',1,'hypro::Grid']]],
   ['calculateoriginal',['calculateOriginal',['../classhypro_1_1Grid.html#aca75bd8c550914250e7f170cae1e5a4a',1,'hypro::Grid']]],
+  ['carlpolytope',['CarlPolytope',['../classhypro_1_1CarlPolytope.html',1,'hypro']]],
   ['changedimension',['changeDimension',['../classhypro_1_1ZonotopeT.html#aedbecf1c0b7608c6f68e729d2dfaa183',1,'hypro::ZonotopeT']]],
   ['checkconsistency',['checkConsistency',['../classhypro_1_1Optimizer.html#a9be5c80cccc5a7e6eef6af0c227e10d7',1,'hypro::Optimizer']]],
   ['checkpoint',['checkPoint',['../classhypro_1_1Optimizer.html#a528ae62064de85098bc5746c11a3a045',1,'hypro::Optimizer']]],
@@ -61,8 +62,8 @@ var searchData=
   ['coordinate',['coordinate',['../classhypro_1_1Point.html#aeaa2b4e9a55ea1ba4fe4ecf163cd0f53',1,'hypro::Point::coordinate(const carl::Variable &amp;_var) const '],['../classhypro_1_1Point.html#af3a4db44815daa25768b01afaf88e68a',1,'hypro::Point::coordinate(std::size_t _dimension) const '],['../classhypro_1_1Vertex.html#a52db98764c18889c9d28414df7ef7b68',1,'hypro::Vertex::coordinate()']]],
   ['coordinates',['coordinates',['../classhypro_1_1Point.html#ab90b8ddb5ba4fcb0cab0554b36359ac3',1,'hypro::Point']]],
   ['copy',['copy',['../classhypro_1_1DifferenceBoundsT.html#a8f9b8d741c790e73cd5227fdbd37d0fb',1,'hypro::DifferenceBoundsT']]],
-  ['coreedgecontext',['CoreEdgeContext',['../classCIFLocationParser_1_1CoreEdgeContext.html',1,'CIFLocationParser']]],
   ['coreedgecontext',['CoreEdgeContext',['../classHybridSystemParser_1_1CoreEdgeContext.html',1,'HybridSystemParser']]],
+  ['coreedgecontext',['CoreEdgeContext',['../classCIFLocationParser_1_1CoreEdgeContext.html',1,'CIFLocationParser']]],
   ['counterrepository',['CounterRepository',['../classhypro_1_1statistics_1_1CounterRepository.html',1,'hypro::statistics']]],
   ['currentbtposition',['currentBTPosition',['../structhypro_1_1TBacktrackingInfo.html#a113aa00925adc4303c6cdc62dad52991',1,'hypro::TBacktrackingInfo']]],
   ['cutoffcontext',['CutoffContext',['../classHybridAutomatonParser_1_1CutoffContext.html',1,'HybridAutomatonParser']]]
