@@ -4,20 +4,24 @@
 
 using namespace hypro;
 
+using Pol = PolyT<mpq_class>;
+using Constr = ConstraintT<mpq_class>;
+using Form = FormulaT<mpq_class>;
+
 TEST( FourierMotzkinEliminationTest, SingleVariable )
 {
     carl::Variable x = carl::freshRealVariable("x");
     carl::Variable y = carl::freshRealVariable("y");
     carl::Variable z = carl::freshRealVariable("z");
 
-    ConstraintT<mpq_class> c1 = ConstraintT<mpq_class>(PolyT<mpq_class>(x) - PolyT<mpq_class>(y) + PolyT<mpq_class>(z), carl::Relation::GEQ);
-    ConstraintT<mpq_class> c2 = ConstraintT<mpq_class>(PolyT<mpq_class>(x) + PolyT<mpq_class>(y) + PolyT<mpq_class>(-5), carl::Relation::LEQ);
+    Constr c1 = Constr(Pol(x) - Pol(y) + Pol(z), carl::Relation::GEQ);
+    Constr c2 = Constr(Pol(x) + Pol(y) + Pol(-5), carl::Relation::LEQ);
 
     FormulasT<mpq_class> constraints;
     constraints.emplace_back(c1);
     constraints.emplace_back(c2);
 
-    FormulaT<mpq_class> inFormula = FormulaT<mpq_class>(carl::FormulaType::AND, constraints);
+    Form inFormula = Form(carl::FormulaType::AND, constraints);
 
     std::cout << "Formula: " << inFormula << ", eliminate " << x << std::endl;
 
@@ -35,14 +39,14 @@ TEST( FourierMotzkinEliminationTest, NoReminder )
     carl::Variable x = carl::freshRealVariable("x");
     carl::Variable y = carl::freshRealVariable("y");
 
-    ConstraintT<mpq_class> c1 = ConstraintT<mpq_class>(PolyT<mpq_class>(x) - PolyT<mpq_class>(y), carl::Relation::GEQ);
-    ConstraintT<mpq_class> c2 = ConstraintT<mpq_class>(PolyT<mpq_class>(x) - PolyT<mpq_class>(y) + PolyT<mpq_class>(-5), carl::Relation::LEQ);
+    Constr c1 = Constr(Pol(x) - Pol(y), carl::Relation::GEQ);
+    Constr c2 = Constr(Pol(x) - Pol(y) + Pol(-5), carl::Relation::LEQ);
 
     FormulasT<mpq_class> constraints;
     constraints.emplace_back(c1);
     constraints.emplace_back(c2);
 
-    FormulaT<mpq_class> inFormula = FormulaT<mpq_class>(carl::FormulaType::AND, constraints);
+    Form inFormula = Form(carl::FormulaType::AND, constraints);
 
     std::cout << "Formula: " << inFormula << ", eliminate " << x << std::endl;
 
@@ -53,7 +57,7 @@ TEST( FourierMotzkinEliminationTest, NoReminder )
 
     std::cout << "New formula: " << newFormula << std::endl;
 
-    EXPECT_EQ(FormulaT<mpq_class>(carl::FormulaType::TRUE), newFormula);
+    EXPECT_EQ(Form(carl::FormulaType::TRUE), newFormula);
 }
 
 TEST( FourierMotzkinEliminationTest, Reminder )
@@ -62,16 +66,16 @@ TEST( FourierMotzkinEliminationTest, Reminder )
     carl::Variable y = carl::freshRealVariable("y");
     carl::Variable z = carl::freshRealVariable("z");
 
-    ConstraintT<mpq_class> c1 = ConstraintT<mpq_class>(PolyT<mpq_class>(x) - PolyT<mpq_class>(y), carl::Relation::GEQ);
-    ConstraintT<mpq_class> c2 = ConstraintT<mpq_class>(PolyT<mpq_class>(x) - PolyT<mpq_class>(y) + PolyT<mpq_class>(-5), carl::Relation::LEQ);
-    ConstraintT<mpq_class> c3 = ConstraintT<mpq_class>(PolyT<mpq_class>(y) - PolyT<mpq_class>(z), carl::Relation::LEQ);
+    Constr c1 = Constr(Pol(x) - Pol(y), carl::Relation::GEQ);
+    Constr c2 = Constr(Pol(x) - Pol(y) + Pol(-5), carl::Relation::LEQ);
+    Constr c3 = Constr(Pol(y) - Pol(z), carl::Relation::LEQ);
 
     FormulasT<mpq_class> constraints;
     constraints.emplace_back(c1);
     constraints.emplace_back(c2);
     constraints.emplace_back(c3);
 
-    FormulaT<mpq_class> inFormula = FormulaT<mpq_class>(carl::FormulaType::AND, constraints);
+    Form inFormula = Form(carl::FormulaType::AND, constraints);
 
     std::cout << "Formula: " << inFormula << ", eliminate " << x << std::endl;
 
@@ -82,7 +86,7 @@ TEST( FourierMotzkinEliminationTest, Reminder )
 
     std::cout << "New formula: " << newFormula << std::endl;
 
-    EXPECT_EQ(FormulaT<mpq_class>(c3), newFormula);
+    EXPECT_EQ(Form(c3), newFormula);
 
 }
 
@@ -92,16 +96,16 @@ TEST( FourierMotzkinEliminationTest, MultipleVariables )
     carl::Variable y = carl::freshRealVariable("y");
     carl::Variable z = carl::freshRealVariable("z");
 
-    ConstraintT<mpq_class> c1 = ConstraintT<mpq_class>(PolyT<mpq_class>(x) - PolyT<mpq_class>(y) + PolyT<mpq_class>(z), carl::Relation::GEQ);
-    ConstraintT<mpq_class> c2 = ConstraintT<mpq_class>(PolyT<mpq_class>(y), carl::Relation::GEQ);
-    ConstraintT<mpq_class> c3 = ConstraintT<mpq_class>(PolyT<mpq_class>(x) + PolyT<mpq_class>(y) + PolyT<mpq_class>(-5), carl::Relation::LEQ);
+    Constr c1 = Constr(Pol(x) - Pol(y) + Pol(z), carl::Relation::GEQ);
+    Constr c2 = Constr(Pol(y), carl::Relation::GEQ);
+    Constr c3 = Constr(Pol(x) + Pol(y) + Pol(-5), carl::Relation::LEQ);
 
     FormulasT<mpq_class> constraints;
     constraints.emplace_back(c1);
     constraints.emplace_back(c2);
     constraints.emplace_back(c3);
 
-    FormulaT<mpq_class> inFormula = FormulaT<mpq_class>(carl::FormulaType::AND, constraints);
+    Form inFormula = Form(carl::FormulaType::AND, constraints);
 
     std::cout << "Formula: " << inFormula << std::endl;
 
@@ -111,4 +115,33 @@ TEST( FourierMotzkinEliminationTest, MultipleVariables )
     auto newFormula = eliminateQuantifiers(inFormula, query);
 
     std::cout << "New formula: " << newFormula << std::endl;
+}
+
+TEST( FourierMotzkinEliminationTest, SingleVariableEquation )
+{
+    carl::Variable x = carl::freshRealVariable("x");
+    carl::Variable y = carl::freshRealVariable("y");
+    carl::Variable z = carl::freshRealVariable("z");
+
+    Constr c1 = Constr(Pol(x) + Pol(z), carl::Relation::GEQ);
+    Constr c2 = Constr(Pol(x) - Pol(y), carl::Relation::LEQ);
+    Constr c3 = Constr(Pol(x) + Pol(y) + Pol(-5), carl::Relation::EQ);
+
+    FormulasT<mpq_class> constraints;
+    constraints.emplace_back(c1);
+    constraints.emplace_back(c2);
+    constraints.emplace_back(c3);
+
+    Form inFormula = Form(carl::FormulaType::AND, constraints);
+
+    std::cout << "Formula: " << inFormula << std::endl;
+
+    QEQuery query;
+    query.emplace_back(std::make_pair(QuantifierType::EXISTS,std::vector<carl::Variable>{x}));
+
+    auto newFormula = eliminateQuantifiers(inFormula, query);
+
+    std::cout << "New formula: " << newFormula << std::endl;
+
+    EXPECT_EQ(Form(carl::FormulaType::AND, FormulasT<mpq_class>{Form(Constr(Pol(5)-Pol(y)+Pol(z),carl::Relation::GEQ)), Form(Constr(Pol(5)-Pol(y)*Pol(2), carl::Relation::LEQ))}),newFormula);
 }
