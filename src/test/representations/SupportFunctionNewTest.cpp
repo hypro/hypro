@@ -15,10 +15,30 @@ class SupportFunctionNewTest : public ::testing::Test {
 protected:
 	virtual void SetUp() {
 
+		////Construct leaf nodes
+		//box1 = Box<TypeParam>(std::make_pair(Point<TypeParam>({TypeParam(0),TypeParam(-1)}), Point<TypeParam>({TypeParam(1), TypeParam(2)})));
+		//box2 = Box<TypeParam>(std::make_pair(Point<TypeParam>({TypeParam(0),TypeParam(0)}), Point<TypeParam>({TypeParam(2), TypeParam(2)})));
+		////Assemble them to a tree 
+		//sfl1 = SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>(&box1);
+		//sfl2 = SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>(&box2);
+		////Build trafop
+		//matrix_t<TypeParam> trafoMat = matrix_t<TypeParam>::Identity(2,2);
+		//vector_t<TypeParam> trafoVec = vector_t<TypeParam>::Zero(2);
+		//sfWithTrafo = sfl1.affineTransformation(trafoMat, trafoVec);
+		////Build sum operation as root 
+		//sum = sfWithTrafo.minkowskiSum(sf2);
+		
 	}
-	virtual void TearDown() {
 
-	}	
+	virtual void TearDown() {}	
+
+	//Box<TypeParam> box1;
+	//Box<TypeParam> box2;
+	//SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sf1;
+	//SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sf2;
+	//SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sfWithTrafo;
+	//SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sum;
+
 };
 
 ////// Data Structure Tests
@@ -68,7 +88,7 @@ TYPED_TEST(SupportFunctionNewTest, TrafoOp){
 	matrix_t<TypeParam> directions = matrix_t<TypeParam>::Identity(dim,dim);
 
 	//Save pointer to parameters for later, checking if it remains the same object 
-	std::shared_ptr<const LinTrafoParameters<TypeParam>> trafo0Params = nullptr;
+	std::shared_ptr<const LinTrafoParameters<TypeParam,SupportFunctionNewDefault>> trafo0Params = nullptr;
 
 	//sf1
 	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sf1 = sf.affineTransformation(tMat, tVec); 
@@ -238,13 +258,11 @@ TYPED_TEST(SupportFunctionNewTest, TrafoOp){
 
 ////// Functionality Tests
 
-TYPED_TEST(SupportFunctionNewTest, SupportFunctionNewEvaluate){
+TYPED_TEST(SupportFunctionNewTest, Evaluate){
 	
 	//Construct leaf nodes
 	Box<TypeParam> box1 (std::make_pair(Point<TypeParam>({TypeParam(0),TypeParam(-1)}), Point<TypeParam>({TypeParam(1), TypeParam(2)})));
-	std::cout << "box1: " << box1 << std::endl;
 	Box<TypeParam> box2 (std::make_pair(Point<TypeParam>({TypeParam(0),TypeParam(0)}), Point<TypeParam>({TypeParam(2), TypeParam(2)})));
-	std::cout << "box2: " << box2 << std::endl;
 
 	//Assemble them to a tree 
 	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sf(&box1);
@@ -271,13 +289,13 @@ TYPED_TEST(SupportFunctionNewTest, SupportFunctionNewEvaluate){
 	matrix_t<TypeParam> directions = matrix_t<TypeParam>::Zero(2,2);
 	directions(0,0) = TypeParam(1);
 	directions(1,1) = TypeParam(1);
-	std::cout << "START EVALUATION\n"; 
+	//std::cout << "START EVALUATION\n"; 
 	std::vector<EvaluationResult<TypeParam>> res = sum.multiEvaluate(directions,true);
-	std::cout << "END EVALUATION\n";
-	std::cout << "Result of Evaluation is:\n";
-	for(auto& eRes : res){
-		std::cout << eRes << std::endl;
-	}
+	//std::cout << "END EVALUATION\n";
+	//std::cout << "Result of Evaluation is:\n";
+	//for(auto& eRes : res){
+	//	std::cout << eRes << std::endl;
+	//}
 	
 }
 
@@ -351,47 +369,37 @@ TYPED_TEST(SupportFunctionNewTest, Deletion){
  * 
  * NEEDS COPY ASSIGNMENT
  */
-/*
-TYPED_TEST(SupportFunctionNewTest, Deletion){
+TYPED_TEST(SupportFunctionNewTest, IntermediateDeletion){
 
 	//Construct leaf nodes
 	Box<TypeParam> box1 (std::make_pair(Point<TypeParam>({TypeParam(0),TypeParam(-1)}), Point<TypeParam>({TypeParam(1), TypeParam(2)})));
 	Box<TypeParam> box2 (std::make_pair(Point<TypeParam>({TypeParam(0),TypeParam(0)}), Point<TypeParam>({TypeParam(2), TypeParam(2)})));
-	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sf1 = new SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>(&box1);
-	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sf2 = new SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>(&box2);
+	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sf1(&box1);
+	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sf2(&box2);
 	
-	//These pointer are needed to check later whether sf2 was deleted
-	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>* sf1ptr = &sf1;
-	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>* sf2ptr = &sf2;
-
-	//This pointer is needed to delete sf2
-	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>* deleteSf2 = &sf2;
-
 	//Build trafop
 	matrix_t<TypeParam> trafoMat = matrix_t<TypeParam>::Identity(2,2);
 	vector_t<TypeParam> trafoVec = vector_t<TypeParam>::Zero(2);
-
-	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sfWithTrafo = new SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>(sf1.affineTransformation(trafoMat, trafoVec));
-	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>* sfWithTrafoPtr = &sfWithTrafo;
-	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>* deleteSfWithTrafo = &sfWithTrafo;
+	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sfWithTrafo = sf1.affineTransformation(trafoMat, trafoVec);
 
 	EXPECT_TRUE(sfWithTrafo.getRoot()->getType() == SFNEW_TYPE::TRAFO);
 	EXPECT_TRUE(sfWithTrafo.getRoot()->getChildren().size() == 1);
 	
 	//Build SumOp
-	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sum = new SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>(sfWithTrafo.minkowskiSum(sf2));
-	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>* sumPtr = &sum;
-	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>* deleteSum = &sum;
-	
+	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sum = sfWithTrafo.minkowskiSum(sf2);
 	EXPECT_TRUE(sum.getRoot()->getType() == SFNEW_TYPE::SUMOP);
 	EXPECT_TRUE(sum.getRoot()->getOriginCount() == sum.getRoot()->getChildren().size());	
-
 	std::cout << sum << std::endl;
 
+	//Vector where all supportFunctions are saved - sf's are saved in deletion order, last one deleted first
+	std::vector<SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>> sfVec;
+	sfVec.push_back(std::move(sf1));
+	sfVec.push_back(std::move(sum));
+	sfVec.push_back(std::move(sfWithTrafo));
+	sfVec.push_back(std::move(sf2));
+
 	//Evaluate
-	matrix_t<TypeParam> directions = matrix_t<TypeParam>::Zero(2,2);
-	directions(0,0) = TypeParam(1);
-	directions(1,1) = TypeParam(1);
+	matrix_t<TypeParam> directions = matrix_t<TypeParam>::Identity(2,2);
 	//std::cout << "START EVALUATION\n"; 
 	std::vector<EvaluationResult<TypeParam>> res = sum.multiEvaluate(directions,true);
 	//std::cout << "END EVALUATION\n";
@@ -400,43 +408,50 @@ TYPED_TEST(SupportFunctionNewTest, Deletion){
 	//	std::cout << eRes << std::endl;
 	//}
 
-	//Now delete a leaf
-	delete deleteSf2;
+	//Now delete leaf2
+	std::cout << "=== Now delete leaf2" << std::endl;
+	sfVec.pop_back();
 	EXPECT_TRUE(sum.getRoot()->getChildren().at(1) != nullptr);
 	std::vector<EvaluationResult<TypeParam>> res2 = sum.multiEvaluate(directions,true);
 	EXPECT_TRUE(res2.size() == res.size());
 	for(int i=0; i < res2.size(); i++){
 		EXPECT_TRUE(res2.at(i) == res.at(i));
 	}
-	EXPECT_TRUE(sf1ptr != nullptr);
-	EXPECT_TRUE(sf2ptr != nullptr);
-	EXPECT_TRUE(sfWithTrafoPtr != nullptr);
-	EXPECT_TRUE(sumPtr != nullptr);
-
+	
 	//Now delete a intermediate node
-	delete deleteSfWithTrafo;
+	std::cout << "=== Now delete trafo" << std::endl;
+	sfVec.pop_back();
 	EXPECT_TRUE(sum.getRoot()->getChildren().at(0) != nullptr);
 	res2 = sum.multiEvaluate(directions,true);
 	EXPECT_TRUE(res2.size() == res.size());
 	for(int i=0; i < res2.size(); i++){
 		EXPECT_TRUE(res2.at(i) == res.at(i));
 	}	
-	EXPECT_TRUE(sf1ptr != nullptr);
-	EXPECT_TRUE(sf2ptr != nullptr);
-	EXPECT_TRUE(sfWithTrafoPtr != nullptr);
-	EXPECT_TRUE(sumPtr != nullptr);
-
+	
 	//Now delete root
-	delete deleteSum;
-	EXPECT_TRUE(sf1ptr != nullptr);
-	EXPECT_TRUE(sf2ptr == nullptr);
-	EXPECT_TRUE(sfWithTrafoPtr == nullptr);
-	EXPECT_TRUE(sumPtr == nullptr);
-
-	//Cleanup
-	delete sf1ptr;
-	delete sf2ptr;
-	delete sfWithTrafoPtr;
-	delete sumPtr;
+	std::cout << "=== Now delete sum" << std::endl;
+	sfVec.pop_back();
+	EXPECT_TRUE(sum.getRoot()->getChildren().size() == 0);//?
+	std::cout << "Children size of sum: " << sum.getRoot()->getChildren().size() << std::endl;
+	//res2 = sum.multiEvaluate(directions,true);
+	//for(int i=0; i < res2.size(); i++){
+	//	EXPECT_TRUE(res2.at(i) == res.at(i));
+	//}
 }
-*/
+
+TYPED_TEST(SupportFunctionNewTest, Emptyness){
+
+	Box<TypeParam> box1 = Box<TypeParam>::Empty(2);
+	Box<TypeParam> box2 (std::make_pair(Point<TypeParam>({TypeParam(0),TypeParam(0)}), Point<TypeParam>({TypeParam(2), TypeParam(2)})));
+	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sf1(&box1);
+	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sf2(&box1);
+	EXPECT_TRUE(sf1.empty());
+
+	matrix_t<TypeParam> mat = matrix_t<TypeParam>::Identity(2,2);
+	vector_t<TypeParam> vec = vector_t<TypeParam>::Zero(2);
+	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> trafo = sf1.affineTransformation(mat, vec);
+	EXPECT_TRUE(trafo.empty());	
+
+	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sum = trafo.minkowskiSum(sf2);
+	EXPECT_TRUE(sum.empty());
+}

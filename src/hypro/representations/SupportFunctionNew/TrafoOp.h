@@ -152,6 +152,11 @@ class TrafoOp : public RootGrowNode<Number,Setting> {
 		return true;
 	}
 
+	bool empty() const { 
+		assert(false && "TrafoOp::empty should never be called\n"); 
+		return false; 
+	}
+
 };
 
 } //namespace hypro

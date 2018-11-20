@@ -16,9 +16,10 @@ namespace hypro {
 	//copy constructor
 	template<typename Number, typename Converter, typename Setting>
 	SupportFunctionNewT<Number,Converter,Setting>::SupportFunctionNewT( const SupportFunctionNewT<Number,Converter,Setting>& orig ) {
-
+		
 	}
 
+	//move constructor
 	template<typename Number, typename Converter, typename Setting>
 	SupportFunctionNewT<Number,Converter,Setting>::SupportFunctionNewT( SupportFunctionNewT<Number,Converter,Setting>&& orig ) {
 
@@ -32,9 +33,6 @@ namespace hypro {
 	void SupportFunctionNewT<Number,Converter,Setting>::addUnaryOp(RootGrowNode<Number,Setting>* unary) const {
 		assert(unary->getOriginCount() == 1);
 		if(unary){
-			//Add current root as child of given unary node via this ptr of root
-			//std::shared_ptr<RootGrowNode<Number,Setting>> tmp = mRoot->getThis();
-			//unary->addToChildren(tmp);
 			unary->addToChildren(mRoot);
 			assert(unary->getChildren().size() == 1);
 		}
@@ -44,10 +42,6 @@ namespace hypro {
 	void SupportFunctionNewT<Number,Converter,Setting>::addBinaryOp(RootGrowNode<Number,Setting>* binary, const SupportFunctionNewT<Number,Converter,Setting>& rhs) const {
 		assert(binary != nullptr);
 		assert(binary->getOriginCount() == 2);
-		//auto lhsRootPtr = mRoot->getThis();
-		//auto rhsRootPtr = rhs.getRoot()->getThis();
-		//binary->addToChildren(lhsRootPtr);
-		//binary->addToChildren(rhsRootPtr);
 		binary->addToChildren(mRoot);
 		binary->addToChildren(rhs.getRoot());
 		assert(binary->getChildren().size() == 2);
@@ -208,7 +202,26 @@ namespace hypro {
 
 	template<typename Number, typename Converter, typename Setting>
 	bool SupportFunctionNewT<Number,Converter,Setting>::empty() const {
-		return true;
+		
+		//first function - parameters are not transformed
+		std::function<void(RootGrowNode<Number,Setting>*)> doNothing = [](RootGrowNode<Number,Setting>* ){ };
+
+		//if leaf - call empty function of representation
+		std::function<bool(RootGrowNode<Number,Setting>*)> leafEmpty = 
+			[](RootGrowNode<Number,Setting>* n) -> bool {
+				return n->empty();
+			};
+
+		//if not leaf - not empty if all children not empty
+		std::function<bool(RootGrowNode<Number,Setting>*, std::vector<bool>)> childrenEmpty =
+			[](RootGrowNode<Number,Setting>* n, std::vector<bool> childrenEmpty) -> bool {
+				for(auto child : childrenEmpty){
+					if(child) return true;
+				}
+				return false;
+			};
+
+		return traverse(doNothing, leafEmpty, childrenEmpty);
 	}
 
 	template<typename Number, typename Converter, typename Setting>

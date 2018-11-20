@@ -102,6 +102,7 @@ class RootGrowNode {
 	//For hasTrafo - should only be called by trafoOp objects
 	virtual bool hasTrafo(std::shared_ptr<const LinTrafoParameters<Number,Setting>>& ltParam, const matrix_t<Number>& A, const vector_t<Number>& b) = 0;
 	
+	virtual bool empty() const = 0;
 };
 
 } //namespace hypro

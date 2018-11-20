@@ -71,6 +71,8 @@ class Leaf : public RootGrowNode<Number,Setting> {
 		return false;
 	}
 
+	bool empty() const { return rep->empty(); }
+
 };
 
 } //namespace hypro

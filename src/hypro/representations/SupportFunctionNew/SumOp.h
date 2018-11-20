@@ -100,6 +100,11 @@ class SumOp : public RootGrowNode<Number,Setting> {
 		assert(false && "SumOp::hasTrafo should never be called\n");
 		return false;
 	}
+
+	bool empty() const { 
+		assert(false && "SumOp::empty should never be called\n"); 
+		return false; 
+	}
 };
 
 } //namespace hypro
