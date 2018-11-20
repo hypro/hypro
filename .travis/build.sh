@@ -23,8 +23,8 @@ if [[ ${TASK} == "sonarcloud" ]]; then
 	cd ../ && sonar-scanner -X -Dproject.settings=.travis/sonar-project.properties && cd build/
 
 else
-	git clone https://github.com/smtrat/carl.git --branch master14 --single-branch carl
-	#git clone https://github.com/smtrat/carl.git
+	#git clone https://github.com/smtrat/carl.git --branch master14 --single-branch carl
+	git clone https://github.com/smtrat/carl.git
 	pushd carl
 		mkdir build
 		pushd build && cmake -DCMAKE_CXX_COMPILER=$COMPILER -DCMAKE_BUILD_TYPE=Release ..
@@ -44,6 +44,3 @@ else
 	make test
 
 fi
-
-
-
