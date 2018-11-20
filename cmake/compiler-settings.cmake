@@ -20,7 +20,10 @@ elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
 	if(CMAKE_CXX_COMPILER_VERSION VERSION_LESS 7)
 		message(FATAL_ERROR "gcc version should be larger or equal than 7.")
 	endif()
+<<<<<<< HEAD
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fdiagnostics-color=auto")
+=======
+>>>>>>> 9f2265a241fe804ab8aad2eaf0e4d106a8188562
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17")
     set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3")
 	set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O1")

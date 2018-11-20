@@ -47,71 +47,66 @@ addons:
       - libgtest-dev
       - uuid-dev
       - openjdk-9-jre
-      - g++-6
 
 matrix:
   include:
-    #- os: linux
-    #  compiler: gcc
-    #  env: COMPILER=g++-4.9
     - os: linux
-      dist: trusty
-      compiler: gcc
+      compiler: g++-7
       addons:
         apt:
           sources: [*sources_base]
-          packages: [*packages_base, g++-5, doxygen]
-      env: COMPILER=g++-5 FLAGS=-DCREATE_DOC=ON
+          packages: [*packages_base, g++-7, doxygen]
+      env: COMPILER=g++-7 FLAGS=-DCREATE_DOC=ON
     - os: linux
-      dist: trusty
-      compiler: gcc
+      compiler: g++-8
       addons:
         apt:
           sources: [*sources_base]
-          packages: [*packages_base, g++-6, lcov]
-      env: COMPILER=g++-6 FLAGS=-DHYPRO_COVERAGE=ON
+          packages: [*packages_base, g++-8, lcov]
+      env: COMPILER=g++-8 FLAGS=-DHYPRO_COVERAGE=ON
     - os: linux
-      dist: trusty
-      compiler: clang
+      compiler: clang++-5.0
       addons:
         sonarcloud:
           organization: "hypro-github"
           token:
             secure: "ISgh4qcPIZhB/oVqkvRVHwYTwpD0HqxkmOP3nETL3Sy06UFQmHkZCsnkZ30w5bBquMqPQ4vvIUKGatIAHXjtQiv8tqSwTAQ2r9iG+hrHpnEXZRB/7ZH4f26zqUCe7tkAf8fFz3O0lZ7Njkt6EDj/ynBtq82RMyPtBsQH/tzCel0UB1jhbK9AAepn4Aq5oW5wxBjXXxrPIqBIUddgbHr48IVfTtB4G0SpEqKhm56FHWG5vcsaB4+cH+v67OYs/3+HfrFZD2kkGPGxj4317Q83ZlcIp/bwKiETV8ez+8z8YRD/J/QKbmrole0M5T5KeNAOdetS9d0RhNKnygFMx75cDSfE7OXys5fhheOdXsLljgvoWqP3FOc7HMeAs/rn/SLrbZlQe5DucyyeQI9u2/elKntmuPfLOQvvX6suwJM7avSEndhrGcdE5x9Z9Shy4GDU4YCmpxRYlfcRpwQK7dn5KpkRLUB9FrgtGRroGdW7XRbFFmXNMJKmDUXLqWx5Ses8pEFY37rBpGi50NcRHzl/ZCAkXboYSS7x1b6hcwNL3w0SfWXbCkuna8/DFwdX7hvDNxiafyZX3GdsXpvQffgbtlZZUSlPbWakzVhV6cZptcV0V0/2HVP+m+azMRt3lbI3l2dfmWhq8l3fJJfkD/D0FsKMD3xVfqZT+xZIYxyWMy0="
         apt:
-          sources: [*sources_base, llvm-toolchain-precise-3.6]
-          packages: [*packages_base, clang-3.6, lcov libc++-dev libc++abi-dev]
-      env: COMPILER=clang++-3.6 TASK=sonarcloud FLAGS=-DHYPRO_COVERAGE=ON
+          sources: [*sources_base, llvm-toolchain-trusty-5.0]
+          packages: [*packages_base, clang-5.0 lcov libstdc++-8-dev libc++abi-dev]
+      env: COMPILER=clang++-5.0 TASK=sonarcloud FLAGS=-DHYPRO_COVERAGE=ON
     - os: linux
-      dist: trusty
-      compiler: clang
+      compiler: clang++-6.0
       addons:
         apt:
-          sources: [*sources_base, llvm-toolchain-precise-3.7]
-          packages: [*packages_base, clang-3.7 libc++abi-dev libc++-dev]
-      env: COMPILER=clang++-3.7
+          sources: [*sources_base, llvm-toolchain-trusty-6.0]
+          packages: [*packages_base, clang-6.0 libc++abi-dev libstdc++-8-dev]
+      env: COMPILER=clang++-6.0
     - os: linux
-      dist: trusty
-      compiler: clang
+      compiler: clang++-7.0
       addons:
         apt:
-          sources: [*sources_base, llvm-toolchain-precise-3.8]
-          packages: [*packages_base, clang-3.8 libc++abi-dev libc++-dev]
-      env: COMPILER=clang++-3.8
+          sources: [*sources_base, llvm-toolchain-trusty-7.0]
+          packages: [*packages_base, clang-7.0 libc++abi-dev libstdc++-8-dev]
+      env: COMPILER=clang++-7.0
     #- os: osx
     #  osx_image: xcode6.4
     #  compiler: clang
     #  env: COMPILER=clang++
     - os: osx
-      osx_image: xcode7.3
+      osx_image: xcode9.3
       compiler: clang
       env: COMPILER=clang++
     - os: osx
-      osx_image: xcode8
+      osx_image: xcode9.4
       compiler: clang
       env: COMPILER=clang++
     - os: osx
-      osx_image: xcode8.2
+      osx_image: xcode10
+      compiler: clang
+      env: COMPILER=clang++
+    - os: osx
+      osx_image: xcode10.1
       compiler: clang
       env: COMPILER=clang++
 
@@ -119,16 +114,9 @@ before_install:
   - cd .travis/ && source setupTravis.sh && cd ../
   - sudo motion update || echo 'up to date'
 
-#install:
-#  - git clone https://github.com/smtrat/carl.git && cd carl && mkdir build && cd build && cmake -DCMAKE_CXX_COMPILER=$COMPILER -DCMAKE_BUILD_TYPE=Release .. && make resources && make lib_carl VERBOSE=1
-
 script:
   - cd ${TRAVIS_BUILD_DIR}
   - .travis/build.sh
-  #- mkdir build && cd build && cmake $FLAGS -DCMAKE_CXX_COMPILER=$COMPILER .. && make resources && make VERBOSE=1
-  #- cat build/resources/antlr_build/src/antlr4cpp-stamp/antlr4cpp-configure-out.log
-  #- cat build/resources/antlr_build/src/antlr4cpp-stamp/antlr4cpp-configure-err.log
-  #- make test
 
 # Generate and deploy documentation
 after_success:
