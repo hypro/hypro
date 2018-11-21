@@ -2,8 +2,8 @@
 
 namespace hypro {
 
-    template<typename Number>
-    CarlPolytope<Number>::CarlPolytope(const matrix_t<Number>& constraints, const vector_t<Number>& constants) {
+    template<typename Number, typename Converter, typename Settings>
+    CarlPolytopeT<Number,Converter,Settings>::CarlPolytopeT(const matrix_t<Number>& constraints, const vector_t<Number>& constants) {
         FormulasT<Number> newConstraints;
 
         for(Eigen::Index row = 0; row < constraints.rows(); ++row) {
@@ -18,25 +18,56 @@ namespace hypro {
         mFormula = FormulaT<Number>{carl::FormulaType::AND, newConstraints};
     }
 
-    template<typename Number>
-    CarlPolytope<Number>::CarlPolytope(const std::vector<carl::Interval<Number>>& intervals) {
+    template<typename Number, typename Converter, typename Settings>
+    CarlPolytopeT<Number,Converter,Settings>::CarlPolytopeT(const std::vector<carl::Interval<Number>>& intervals) {
         FormulasT<Number> newConstraints;
 
         for(std::size_t i = 0; i < intervals.size(); ++i) {
-            auto tmp = intervalToConstraints(intervals[i], i);
+            auto tmp = intervalToFormulas(intervals[i], i);
             newConstraints.insert(newConstraints.end(),tmp.begin(),tmp.end());
         }
         mFormula = FormulaT<Number>{carl::FormulaType::AND, newConstraints};
     }
 
-    template<typename Number>
-    CarlPolytope<Number> CarlPolytope<Number>::intersect(const CarlPolytope<Number>& rhs) const {
-        FormulasT<Number> newConstraints;
+    template<typename Number, typename Converter, typename Settings>
+    CarlPolytopeT<Number,Converter,Settings> CarlPolytopeT<Number,Converter,Settings>::intersect(const CarlPolytopeT<Number,Converter,Settings>& rhs) const {
+        assert(mFormula.isConstraintConjunction());
+        assert(rhs.getFormula().isConstraintConjunction());
+        std::vector<ConstraintT<Number>> newConstraints;
         mFormula.getConstraints(newConstraints);
-        for(const auto& subformula : rhs.getFormula()) {
-            newConstraints.emplace_back(FormulaT<Number>(subformula));
+        rhs.getFormula().getConstraints(newConstraints);
+        FormulasT<Number> newFormulas;
+        std::for_each(newConstraints.begin(), newConstraints.end(), [&](const ConstraintT<Number>& c){newFormulas.emplace_back(std::move(FormulaT<Number>{c}));});
+        return CarlPolytopeT<Number,Converter,Settings>{FormulaT<Number>(carl::FormulaType::AND, newFormulas)};
+    }
+
+    template<typename Number, typename Converter, typename Settings>
+    const std::vector<Halfspace<Number>>& CarlPolytopeT<Number,Converter,Settings>::getHalfspaces() const {
+        if(mHalfspaces.empty()) {
+            mHalfspaces = computeHalfspaces(mFormula);
         }
-        return CarlPolytope<Number>{FormulaT<Number>(carl::FormulaType::AND, newConstraints)};
+        return mHalfspaces;
+    }
+
+    template<typename Number, typename Converter, typename Settings>
+    void CarlPolytopeT<Number,Converter,Settings>::addConstraint(const ConstraintT<Number>& constraint) {
+        std::vector<ConstraintT<Number>> constraints;
+        mFormula.getConstraints(constraints);
+        constraints.push_back(constraint);
+        mFormula = FormulaT<Number>(carl::FormulaType::AND, constraints);
+    }
+
+    template<typename Number, typename Converter, typename Settings>
+    void CarlPolytopeT<Number,Converter,Settings>::addConstraints(const std::vector<ConstraintT<Number>>& constraints) {
+        auto cCopy = constraints;
+        mFormula.getConstraints(cCopy);
+        mFormula = FormulaT<Number>(carl::FormulaType::AND, cCopy);
+    }
+
+    template<typename Number, typename Converter, typename Settings>
+    std::vector<Point<Number>> CarlPolytopeT<Number,Converter,Settings>::vertices() const {
+        auto hpoly = Converter::toHPolytope(*this);
+        return hpoly.vertices();
     }
 
 } // hypro

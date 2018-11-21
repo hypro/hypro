@@ -11,6 +11,7 @@
 #include "../Ellipsoids/Ellipsoid.h"
 #include "../OrthogonalPolyhedron/OrthogonalPolyhedron.h"
 #include "../Polytope/Polytope.h"
+#include "../Polytopes/carlPolytope/carlPolytope.h"
 #include "../Polytopes/HPolytope/HPolytope.h"
 #include "../Polytopes/VPolytope/VPolytope.h"
 #include "../SupportFunction/SupportFunction.h"
@@ -34,6 +35,7 @@ class Converter {
 		/* BEGIN typedefs (do not remove this comment!) */
 
 		using Box = BoxT<Number,Converter,BoxLinearOptimizationOn>;
+		using CarlPolytope = CarlPolytopeT<Number,Converter,CarlPolytopeSettings>;
 		using ConstraintSet = ConstraintSetT<Number,Converter,ConstraintSetSettings>;
 		using Ellipsoid = EllipsoidT<Number,Converter>;
 		using HPolytope = HPolytopeT<Number,Converter,HPolytopeSetting>;
@@ -112,6 +114,8 @@ class Converter {
 		static HPolytopeT<Number,Converter<Number>,HPolySetting> toHPolytope(const ZonotopeT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);
 		template<typename HPolySetting = typename HPolytope::Settings, typename inSetting>
 		static HPolytopeT<Number,Converter<Number>,HPolySetting> toHPolytope(const DifferenceBoundsT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);
+		template<typename HPolySetting = typename HPolytope::Settings, typename inSetting>
+		static HPolytopeT<Number,Converter<Number>,HPolySetting> toHPolytope(const CarlPolytopeT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);
 
 		template<typename VPolySetting = typename VPolytope::Settings, typename inSetting>
 		static VPolytopeT<Number,Converter<Number>,VPolySetting> toVPolytope(const BoxT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);
