@@ -4,9 +4,9 @@
 sudo apt-get update
 
 if [[ ${COMPILER} == "g++-7" ]]; then
-	defCXX gcc-5 g++-7
+	defCXX gcc-7 g++-7
 elif [[ ${COMPILER} == "g++-8" ]]; then
-	defCXX gcc-6 g++-8
+	defCXX gcc-8 g++-8
 elif [[ ${COMPILER} == "clang++-7.0" ]]; then
 	defCXX clang-7.0 clang++-7.0
 elif [[ ${COMPILER} == "clang-5.0" ]]; then
