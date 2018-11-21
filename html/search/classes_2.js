@@ -1,7 +1,8 @@
 var searchData=
 [
   ['cacheable',['Cacheable',['../structhypro_1_1Cacheable.html',1,'hypro']]],
-  ['carlpolytope',['CarlPolytope',['../classhypro_1_1CarlPolytope.html',1,'hypro']]],
+  ['carlpolytopesettings',['CarlPolytopeSettings',['../structhypro_1_1CarlPolytopeSettings.html',1,'hypro']]],
+  ['carlpolytopet',['CarlPolytopeT',['../classhypro_1_1CarlPolytopeT.html',1,'hypro']]],
   ['cifexprvisitor',['CIFExprVisitor',['../classhypro_1_1CIFExprVisitor.html',1,'hypro']]],
   ['ciflocationbasevisitor',['CIFLocationBaseVisitor',['../classCIFLocationBaseVisitor.html',1,'']]],
   ['ciflocationlexer',['CIFLocationLexer',['../classCIFLocationLexer.html',1,'']]],

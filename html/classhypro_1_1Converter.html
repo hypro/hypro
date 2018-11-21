@@ -124,6 +124,9 @@ Public Types</h2></td></tr>
 <tr class="memitem:a778d734dc5407cc315ae017b43cb2ae4"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a778d734dc5407cc315ae017b43cb2ae4"></a>
 using&#160;</td><td class="memItemRight" valign="bottom"><b>Box</b> = <a class="el" href="classhypro_1_1BoxT.html">BoxT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, <a class="el" href="structhypro_1_1BoxLinearOptimizationOn.html">BoxLinearOptimizationOn</a> &gt;</td></tr>
 <tr class="separator:a778d734dc5407cc315ae017b43cb2ae4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1cadfade4d9e3fa1efd957d5bf90e078"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1cadfade4d9e3fa1efd957d5bf90e078"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>CarlPolytope</b> = <a class="el" href="classhypro_1_1CarlPolytopeT.html">CarlPolytopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, <a class="el" href="structhypro_1_1CarlPolytopeSettings.html">CarlPolytopeSettings</a> &gt;</td></tr>
+<tr class="separator:a1cadfade4d9e3fa1efd957d5bf90e078"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af922c70177edc1247ac0fc80fcc7c61f"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af922c70177edc1247ac0fc80fcc7c61f"></a>
 using&#160;</td><td class="memItemRight" valign="bottom"><b>ConstraintSet</b> = <a class="el" href="classhypro_1_1ConstraintSetT.html">ConstraintSetT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>, <a class="el" href="structhypro_1_1ConstraintSetSettings.html">ConstraintSetSettings</a> &gt;</td></tr>
 <tr class="separator:af922c70177edc1247ac0fc80fcc7c61f"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -287,6 +290,12 @@ template&lt;typename HPolySetting  = typename HPolytope::Settings, typename inSe
 <a class="el" href="classhypro_1_1Converter.html">Converter</a>&lt; Number &gt;<br class="typebreak"/>
 , HPolySetting &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>toHPolytope</b> (const <a class="el" href="classhypro_1_1DifferenceBoundsT.html">DifferenceBoundsT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>&lt; Number &gt;, inSetting &gt; &amp;source, const <a class="el" href="namespacehypro.html#ac9529cbda09f61cc0cdcc5a8940300cd">CONV_MODE</a>=CONV_MODE::EXACT)</td></tr>
 <tr class="separator:a7ee3f40df380814c9eeb43aff405aa1e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab75e0a62f7748bcdc20b6518ed99cee9"><td class="memTemplParams" colspan="2"><a class="anchor" id="ab75e0a62f7748bcdc20b6518ed99cee9"></a>
+template&lt;typename HPolySetting  = typename HPolytope::Settings, typename inSetting &gt; </td></tr>
+<tr class="memitem:ab75e0a62f7748bcdc20b6518ed99cee9"><td class="memTemplItemLeft" align="right" valign="top">static <a class="el" href="classhypro_1_1HPolytopeT.html">HPolytopeT</a>&lt; Number, <br class="typebreak"/>
+<a class="el" href="classhypro_1_1Converter.html">Converter</a>&lt; Number &gt;<br class="typebreak"/>
+, HPolySetting &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>toHPolytope</b> (const <a class="el" href="classhypro_1_1CarlPolytopeT.html">CarlPolytopeT</a>&lt; Number, <a class="el" href="classhypro_1_1Converter.html">Converter</a>&lt; Number &gt;, inSetting &gt; &amp;source, const <a class="el" href="namespacehypro.html#ac9529cbda09f61cc0cdcc5a8940300cd">CONV_MODE</a>=CONV_MODE::EXACT)</td></tr>
+<tr class="separator:ab75e0a62f7748bcdc20b6518ed99cee9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a642c0aa76d75abbb6395e0d1e636138e"><td class="memTemplParams" colspan="2"><a class="anchor" id="a642c0aa76d75abbb6395e0d1e636138e"></a>
 template&lt;typename VPolySetting  = typename VPolytope::Settings, typename inSetting &gt; </td></tr>
 <tr class="memitem:a642c0aa76d75abbb6395e0d1e636138e"><td class="memTemplItemLeft" align="right" valign="top">static <a class="el" href="classhypro_1_1VPolytopeT.html">VPolytopeT</a>&lt; Number, <br class="typebreak"/>
@@ -486,7 +495,7 @@ class hypro::Converter&lt; Number &gt;</h3>
 
 <dl><dt><b>Examples: </b></dt><dd><a class="el" href="example_converter_8cpp-example.html#_a0">example_converter.cpp</a>, and <a class="el" href="example_differenceBounds_8cpp-example.html#_a7">example_differenceBounds.cpp</a>.</dd>
 </dl>
-<p>Definition at line <a class="el" href="Converter_8h_source.html#l00032">32</a> of file <a class="el" href="Converter_8h_source.html">Converter.h</a>.</p>
+<p>Definition at line <a class="el" href="Converter_8h_source.html#l00033">33</a> of file <a class="el" href="Converter_8h_source.html">Converter.h</a>.</p>
 </div><hr/>The documentation for this class was generated from the following file:<ul>
 <li>/home/travis/build/hypro/hypro/src/hypro/representations/conversion/<a class="el" href="Converter_8h_source.html">Converter.h</a></li>
 </ul>

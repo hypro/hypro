@@ -6,4 +6,6 @@ digraph "/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/carl
     graph [ bgcolor="#ddddee", pencolor="black", label="Polytopes" fontname="Helvetica", fontsize="10", URL="dir_ad938787f25f17484dcf7b42a899a1a5.html"]
   dir_1af6716d628c86fbaf49b4d06740528b [shape=box, label="carlPolytope", style="filled", fillcolor="#eeeeff", pencolor="black", URL="dir_1af6716d628c86fbaf49b4d06740528b.html"];
   }
+  dir_bce2075adec303dcb2f0c4fbfcbc8493 [shape=box label="datastructures" fillcolor="white" style="filled" color="red" URL="dir_bce2075adec303dcb2f0c4fbfcbc8493.html"];
+  dir_1af6716d628c86fbaf49b4d06740528b->dir_bce2075adec303dcb2f0c4fbfcbc8493 [headlabel="2", labeldistance=1.5 headhref="dir_000018_000023.html"];
 }

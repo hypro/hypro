@@ -421,7 +421,9 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1PolytopeSetting.html">PolytopeSetting</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1CarlPolytope.html">CarlPolytope</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1CarlPolytopeT.html">CarlPolytopeT</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structhypro_1_1CarlPolytopeSettings.html">CarlPolytopeSettings</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Cone.html">Cone</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -617,6 +619,10 @@ template&lt;typename Number &gt; </td></tr>
 template&lt;typename Number &gt; </td></tr>
 <tr class="memitem:a26fa0b70f0eef004bebcc80332eab2dd"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><b>Box</b> = typename <a class="el" href="classhypro_1_1Converter.html">Converter</a>&lt; Number &gt;::Box</td></tr>
 <tr class="separator:a26fa0b70f0eef004bebcc80332eab2dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a23561a57dd4df64b37858a26526eab55"><td class="memTemplParams" colspan="2"><a class="anchor" id="a23561a57dd4df64b37858a26526eab55"></a>
+template&lt;typename Number &gt; </td></tr>
+<tr class="memitem:a23561a57dd4df64b37858a26526eab55"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><b>CarlPolytope</b> = typename <a class="el" href="classhypro_1_1Converter.html">Converter</a>&lt; Number &gt;::CarlPolytope</td></tr>
+<tr class="separator:a23561a57dd4df64b37858a26526eab55"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0fc65cb36f6ca752c7f12b5b9744c156"><td class="memTemplParams" colspan="2"><a class="anchor" id="a0fc65cb36f6ca752c7f12b5b9744c156"></a>
 template&lt;typename Number &gt; </td></tr>
 <tr class="memitem:a0fc65cb36f6ca752c7f12b5b9744c156"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><b>ConstraintSet</b> = typename <a class="el" href="classhypro_1_1Converter.html">Converter</a>&lt; Number &gt;::ConstraintSet</td></tr>
@@ -1005,10 +1011,18 @@ template&lt;typename Number , typename Converter , typename inSetting &gt; </td>
 template&lt;typename Number &gt; </td></tr>
 <tr class="memitem:a3624ca5a624b0de8679dc35d53ed8f2f"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>computeArithmeticMeanPoint</b> (const std::vector&lt; <a class="el" href="classhypro_1_1Point.html">Point</a>&lt; Number &gt;&gt; &amp;pointVec)</td></tr>
 <tr class="separator:a3624ca5a624b0de8679dc35d53ed8f2f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a71f25b9dbec14f130155ff6db1653675"><td class="memTemplParams" colspan="2"><a class="anchor" id="a71f25b9dbec14f130155ff6db1653675"></a>
+<tr class="memitem:a8735a4c58310a4176454710f472c51ee"><td class="memTemplParams" colspan="2"><a class="anchor" id="a8735a4c58310a4176454710f472c51ee"></a>
 template&lt;typename N &gt; </td></tr>
-<tr class="memitem:a71f25b9dbec14f130155ff6db1653675"><td class="memTemplItemLeft" align="right" valign="top">FormulasT&lt; N &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>intervalToConstraints</b> (const carl::Interval&lt; N &gt; &amp;interval, std::size_t variableIndex)</td></tr>
-<tr class="separator:a71f25b9dbec14f130155ff6db1653675"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8735a4c58310a4176454710f472c51ee"><td class="memTemplItemLeft" align="right" valign="top">FormulasT&lt; N &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>intervalToFormulas</b> (const carl::Interval&lt; N &gt; &amp;interval, std::size_t variableIndex)</td></tr>
+<tr class="separator:a8735a4c58310a4176454710f472c51ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abf672b40164c8288dc9aa8fb9c1a9fbc"><td class="memTemplParams" colspan="2"><a class="anchor" id="abf672b40164c8288dc9aa8fb9c1a9fbc"></a>
+template&lt;typename N &gt; </td></tr>
+<tr class="memitem:abf672b40164c8288dc9aa8fb9c1a9fbc"><td class="memTemplItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classhypro_1_1Halfspace.html">Halfspace</a>&lt; N &gt; &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>constraintToHalfspace</b> (const ConstraintT&lt; N &gt; constraint, std::size_t dim)</td></tr>
+<tr class="separator:abf672b40164c8288dc9aa8fb9c1a9fbc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab6a1f4157c819b658b87706e6211c1e7"><td class="memTemplParams" colspan="2"><a class="anchor" id="ab6a1f4157c819b658b87706e6211c1e7"></a>
+template&lt;typename N &gt; </td></tr>
+<tr class="memitem:ab6a1f4157c819b658b87706e6211c1e7"><td class="memTemplItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classhypro_1_1Halfspace.html">Halfspace</a>&lt; N &gt; &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>computeHalfspaces</b> (const FormulaT&lt; N &gt; &amp;formula, std::size_t dim)</td></tr>
+<tr class="separator:ab6a1f4157c819b658b87706e6211c1e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a463bd044aca4432fc987a57f1d5ceb4e"><td class="memTemplParams" colspan="2"><a class="anchor" id="a463bd044aca4432fc987a57f1d5ceb4e"></a>
 template&lt;typename Number &gt; </td></tr>
 <tr class="memitem:a463bd044aca4432fc987a57f1d5ceb4e"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><b>operator&lt;</b> (std::shared_ptr&lt; <a class="el" href="classhypro_1_1Halfspace.html">Halfspace</a>&lt; Number &gt;&gt; _lhs, std::shared_ptr&lt; <a class="el" href="classhypro_1_1Halfspace.html">Halfspace</a>&lt; Number &gt;&gt; _rhs)</td></tr>
@@ -1373,7 +1387,7 @@ template&lt;typename Number &gt; </div>
 </div><div class="memdoc">
 <p>Typedef for <a class="el" href="classhypro_1_1DifferenceBoundsT.html" title="Class wrapping the difference bounds content. ">DifferenceBoundsT</a> </p>
 
-<p>Definition at line <a class="el" href="Converter_8h_source.html#l00048">48</a> of file <a class="el" href="Converter_8h_source.html">Converter.h</a>.</p>
+<p>Definition at line <a class="el" href="Converter_8h_source.html#l00051">51</a> of file <a class="el" href="Converter_8h_source.html">Converter.h</a>.</p>
 
 </div>
 </div>
@@ -1390,7 +1404,7 @@ template&lt;typename Number &gt; </div>
 </div><div class="memdoc">
 <p>Typedef for HpolytopeT. </p>
 
-<p>Definition at line <a class="el" href="Converter_8h_source.html#l00016">16</a> of file <a class="el" href="Converter_8h_source.html">Converter.h</a>.</p>
+<p>Definition at line <a class="el" href="Converter_8h_source.html#l00019">19</a> of file <a class="el" href="Converter_8h_source.html">Converter.h</a>.</p>
 
 </div>
 </div>
@@ -1424,7 +1438,7 @@ template&lt;typename Number &gt; </div>
 </div><div class="memdoc">
 <p>Typedef for <a class="el" href="classhypro_1_1SupportFunctionT.html" title="Class wrapping the support function content. ">SupportFunctionT</a>. </p>
 
-<p>Definition at line <a class="el" href="Converter_8h_source.html#l00036">36</a> of file <a class="el" href="Converter_8h_source.html">Converter.h</a>.</p>
+<p>Definition at line <a class="el" href="Converter_8h_source.html#l00039">39</a> of file <a class="el" href="Converter_8h_source.html">Converter.h</a>.</p>
 
 </div>
 </div>
@@ -1475,7 +1489,7 @@ template&lt;typename Number &gt; </div>
 </div><div class="memdoc">
 <p>Typedef for <a class="el" href="classhypro_1_1VPolytopeT.html" title="The class implementing the vertex representation of a convex polytope. ">VPolytopeT</a>. </p>
 
-<p>Definition at line <a class="el" href="Converter_8h_source.html#l00025">25</a> of file <a class="el" href="Converter_8h_source.html">Converter.h</a>.</p>
+<p>Definition at line <a class="el" href="Converter_8h_source.html#l00028">28</a> of file <a class="el" href="Converter_8h_source.html">Converter.h</a>.</p>
 
 </div>
 </div>
@@ -1492,7 +1506,7 @@ template&lt;typename Number &gt; </div>
 </div><div class="memdoc">
 <p>Typedef for <a class="el" href="classhypro_1_1ZonotopeT.html" title="Class for Zonotopes. ">ZonotopeT</a>. </p>
 
-<p>Definition at line <a class="el" href="Converter_8h_source.html#l00042">42</a> of file <a class="el" href="Converter_8h_source.html">Converter.h</a>.</p>
+<p>Definition at line <a class="el" href="Converter_8h_source.html#l00045">45</a> of file <a class="el" href="Converter_8h_source.html">Converter.h</a>.</p>
 
 </div>
 </div>
@@ -1673,9 +1687,9 @@ template&lt;typename From , typename To , typename Converter , class Setting &gt
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The resulting box. </dd></dl>
 
-<p>Definition at line <a class="el" href="Box_8h_source.html#l00545">545</a> of file <a class="el" href="Box_8h_source.html">Box.h</a>.</p>
+<p>Definition at line <a class="el" href="Box_8h_source.html#l00546">546</a> of file <a class="el" href="Box_8h_source.html">Box.h</a>.</p>
 
-<p>References <a class="el" href="Box_8h_source.html#l00191">hypro::BoxT&lt; Number, Converter, Setting &gt;::limits()</a>.</p>
+<p>References <a class="el" href="Box_8h_source.html#l00192">hypro::BoxT&lt; Number, Converter, Setting &gt;::limits()</a>.</p>
 
 </div>
 </div>
@@ -1851,7 +1865,7 @@ template&lt;typename Number &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True, if one of the resulting intervals is empty, False otherwise. </dd></dl>
 
-<p>Definition at line <a class="el" href="intervalMethods_8h_source.html#l00020">20</a> of file <a class="el" href="intervalMethods_8h_source.html">intervalMethods.h</a>.</p>
+<p>Definition at line <a class="el" href="intervalMethods_8h_source.html#l00021">21</a> of file <a class="el" href="intervalMethods_8h_source.html">intervalMethods.h</a>.</p>
 
 <p>References <a class="el" href="classhypro_1_1Halfspace.html#ada47c49e9dca6befeef4c6fc2fac5a22">hypro::Halfspace&lt; Number &gt;::normal()</a>, and <a class="el" href="classhypro_1_1Halfspace.html#acc9193b4c2180fe7a04544d0e8295fa5">hypro::Halfspace&lt; Number &gt;::offset()</a>.</p>
 
@@ -1946,9 +1960,9 @@ template&lt;typename Number , typename Converter , class Setting &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The resulting box. </dd></dl>
 
-<p>Definition at line <a class="el" href="Box_8h_source.html#l00529">529</a> of file <a class="el" href="Box_8h_source.html">Box.h</a>.</p>
+<p>Definition at line <a class="el" href="Box_8h_source.html#l00530">530</a> of file <a class="el" href="Box_8h_source.html">Box.h</a>.</p>
 
-<p>References <a class="el" href="Box_8h_source.html#l00260">hypro::BoxT&lt; Number, Converter, Setting &gt;::empty()</a>.</p>
+<p>References <a class="el" href="Box_8h_source.html#l00261">hypro::BoxT&lt; Number, Converter, Setting &gt;::empty()</a>.</p>
 
 </div>
 </div>

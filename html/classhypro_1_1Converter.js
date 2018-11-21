@@ -1,6 +1,7 @@
 var classhypro_1_1Converter =
 [
     [ "Box", "classhypro_1_1Converter.html#a778d734dc5407cc315ae017b43cb2ae4", null ],
+    [ "CarlPolytope", "classhypro_1_1Converter.html#a1cadfade4d9e3fa1efd957d5bf90e078", null ],
     [ "ConstraintSet", "classhypro_1_1Converter.html#af922c70177edc1247ac0fc80fcc7c61f", null ],
     [ "DifferenceBounds", "classhypro_1_1Converter.html#adce8cc848738ea04c5b282f783fa9fc6", null ],
     [ "Ellipsoid", "classhypro_1_1Converter.html#a782e84d160d8571b3d56bbf371686832", null ],

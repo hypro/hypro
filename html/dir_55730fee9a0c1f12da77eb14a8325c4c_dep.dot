@@ -18,5 +18,5 @@ digraph "/home/travis/build/hypro/hypro/src/hypro/algorithms" {
   dir_bce2075adec303dcb2f0c4fbfcbc8493->dir_7fa927d8fbf9dfbeef69af27f63bc81b [headlabel="6", labeldistance=1.5 headhref="dir_000023_000015.html"];
   dir_6a6edf7123c81d000975d26367682a7a->dir_7fa927d8fbf9dfbeef69af27f63bc81b [headlabel="4", labeldistance=1.5 headhref="dir_000007_000015.html"];
   dir_3595f83f5be0d6a3539bc1ea5a059474->dir_bce2075adec303dcb2f0c4fbfcbc8493 [headlabel="4", labeldistance=1.5 headhref="dir_000004_000023.html"];
-  dir_7fa927d8fbf9dfbeef69af27f63bc81b->dir_bce2075adec303dcb2f0c4fbfcbc8493 [headlabel="18", labeldistance=1.5 headhref="dir_000015_000023.html"];
+  dir_7fa927d8fbf9dfbeef69af27f63bc81b->dir_bce2075adec303dcb2f0c4fbfcbc8493 [headlabel="20", labeldistance=1.5 headhref="dir_000015_000023.html"];
 }

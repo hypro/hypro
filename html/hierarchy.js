@@ -39,7 +39,8 @@ var hierarchy =
     [ "hypro::BoxLinearOptimizationOn", "structhypro_1_1BoxLinearOptimizationOn.html", null ],
     [ "hypro::BoxSupportFunction< Number, Setting >", "classhypro_1_1BoxSupportFunction.html", null ],
     [ "hypro::Cacheable< Content >", "structhypro_1_1Cacheable.html", null ],
-    [ "hypro::CarlPolytope< Number >", "classhypro_1_1CarlPolytope.html", null ],
+    [ "hypro::CarlPolytopeSettings", "structhypro_1_1CarlPolytopeSettings.html", null ],
+    [ "hypro::CarlPolytopeT< Number, Converter, Settings >", "classhypro_1_1CarlPolytopeT.html", null ],
     [ "hypro::Condition< Number >", "classhypro_1_1Condition.html", null ],
     [ "hypro::Cone< Number >", "classhypro_1_1Cone.html", null ],
     [ "hypro::ConstrainSet< Number >", "classhypro_1_1ConstrainSet.html", null ],
@@ -723,10 +724,10 @@ var hierarchy =
     [ "true_type", null, [
       [ "hypro::is_shared_ptr< std::shared_ptr< T > >", "structhypro_1_1is__shared__ptr_3_01std_1_1shared__ptr_3_01T_01_4_01_4.html", null ]
     ] ],
-    [ "hypro::typeName< T >", "structhypro_1_1typeName.html", null ],
     [ "hypro::hypro::typeName< T >", "structhypro_1_1hypro_1_1typeName.html", null ],
-    [ "hypro::hypro::typeName< double >", "structhypro_1_1hypro_1_1typeName_3_01double_01_4.html", null ],
+    [ "hypro::typeName< T >", "structhypro_1_1typeName.html", null ],
     [ "hypro::typeName< double >", "structhypro_1_1typeName_3_01double_01_4.html", null ],
+    [ "hypro::hypro::typeName< double >", "structhypro_1_1hypro_1_1typeName_3_01double_01_4.html", null ],
     [ "hypro::hypro::typeName< mpq_class >", "structhypro_1_1hypro_1_1typeName_3_01mpq__class_01_4.html", null ],
     [ "hypro::typeName< mpq_class >", "structhypro_1_1typeName_3_01mpq__class_01_4.html", null ],
     [ "hypro::unionContent< Number, Setting >", "structhypro_1_1unionContent.html", null ],

@@ -3,5 +3,23 @@ digraph "Graphical Class Hierarchy"
   edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
   node [fontname="Helvetica",fontsize="10",shape=record];
   rankdir="LR";
-  Node1 [label="hypro::ContinuousSystem\l\< Number \>",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classhypro_1_1ContinuousSystem.html"];
+  Node1 [label="Singleton",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled"];
+  Node1 -> Node2 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node2 [label="hypro::ContextFactory\l\< Number \>",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classhypro_1_1ContextFactory.html"];
+  Node1 -> Node3 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node3 [label="hypro::DecisionEntity\l\< Number \>",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classhypro_1_1DecisionEntity.html"];
+  Node1 -> Node4 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node4 [label="hypro::EventTimingProvider\l\< Number \>",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classhypro_1_1EventTimingProvider.html"];
+  Node1 -> Node5 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node5 [label="hypro::HandlerFactory\l\< Number \>",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classhypro_1_1HandlerFactory.html"];
+  Node1 -> Node6 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node6 [label="hypro::LocationManager\l\< Number \>",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classhypro_1_1LocationManager.html"];
+  Node1 -> Node7 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node7 [label="hypro::NodeManager\l\< Number \>",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classhypro_1_1NodeManager.html"];
+  Node1 -> Node8 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node8 [label="hypro::Plotter\< Number \>",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classhypro_1_1Plotter.html",tooltip="Class implementing a plotter. The plotter is implemented using carl::Singleton. "];
+  Node1 -> Node9 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node9 [label="hypro::SettingsProvider\l\< Number \>",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classhypro_1_1SettingsProvider.html"];
+  Node1 -> Node10 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node10 [label="hypro::VariablePool",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classhypro_1_1VariablePool.html"];
 }
