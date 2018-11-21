@@ -11,7 +11,6 @@
 
 
 using namespace hypro;
-using namespace carl;
 
 template <typename Number>
 using valuation_t = VPolytope<Number>;

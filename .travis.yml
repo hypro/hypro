@@ -55,15 +55,15 @@ matrix:
       addons:
         apt:
           sources: [*sources_base]
-          packages: [*packages_base, g++-7, doxygen]
-      env: COMPILER=g++-7 FLAGS=-DCREATE_DOC=ON
+          packages: [*packages_base, g++-7, gcc-7, doxygen]
+      env: COMPILER=g++-7 FLAGS=-DCREATE_DOC=ON CC=gcc-7 CXX=g++-7
     - os: linux
       compiler: g++-8
       addons:
         apt:
           sources: [*sources_base]
           packages: [*packages_base, g++-8, lcov]
-      env: COMPILER=g++-8 FLAGS=-DHYPRO_COVERAGE=ON
+      env: COMPILER=g++-8 FLAGS=-DHYPRO_COVERAGE=ON CC=gcc-8 CXX=g++-8
     - os: linux
       compiler: clang++-5.0
       addons:
@@ -86,7 +86,7 @@ matrix:
       compiler: clang++-7.0
       addons:
         apt:
-          sources: [*sources_base, llvm-toolchain-trusty-7.0]
+          sources: [*sources_base, llvm-toolchain-trusty-7]
           packages: [*packages_base, clang-7.0 libc++abi-dev libstdc++-8-dev]
       env: COMPILER=clang++-7.0
     #- os: osx

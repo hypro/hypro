@@ -391,9 +391,9 @@ TYPED_TEST(BoxTest, Intersection)
 	carl::Interval<TypeParam> c = carl::Interval<TypeParam>(-2,3);
 
 	hypro::Box<TypeParam> res = this->b1.intersect(this->b4);
-	carl::Interval<TypeParam> i = x.intersect(a);
-	carl::Interval<TypeParam> j = y.intersect(b);
-	carl::Interval<TypeParam> k = z.intersect(c);
+	carl::Interval<TypeParam> i = set_intersection(x,a);
+	carl::Interval<TypeParam> j = set_intersection(y,b);
+	carl::Interval<TypeParam> k = set_intersection(z,c);
 	std::vector<carl::Interval<TypeParam>> intervals;
 	intervals.push_back(i);
 	intervals.push_back(j);

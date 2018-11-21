@@ -477,7 +477,7 @@ BoxT<Number,Converter,Setting> BoxT<Number,Converter,Setting>::intersect( const 
 	for(std::size_t d = 0; d < this->dimension(); ++d) {
 		// intersection if both agree on the dimension
 		if(d < rdim)
-			newIntervals.emplace_back(mLimits[d].intersect(rhs.interval(d)));
+			newIntervals.emplace_back(set_intersection(mLimits[d],rhs.interval(d)));
 		else // if this->dimension() > rdim use projection
 			newIntervals.emplace_back(mLimits[d]);
 	}

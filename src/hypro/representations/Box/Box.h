@@ -18,6 +18,7 @@
 #include "../../util/linearOptimization/Optimizer.h"
 #include "../../util/logging/Logger.h"
 #include <carl/interval/Interval.h>
+#include <carl/interval/set_theory.h>
 #include <cassert>
 #include <map>
 #include <set>

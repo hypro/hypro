@@ -2,6 +2,7 @@
 #include "../../datastructures/Halfspace.h"
 #include <carl/interval/Interval.h>
 #include <carl/interval/IntervalEvaluation.h>
+#include <carl/interval/set_theory.h>
 
 namespace hypro {
 
@@ -32,8 +33,7 @@ namespace hypro {
 					}
 				}
 				newIntv /= Number(-hsp.normal()(cVar));
-
-				intervals[cVar] = intervals[cVar].intersect(newIntv);
+				intervals[cVar] = set_intersection(intervals[cVar], newIntv);
 				if(intervals[cVar].isEmpty()) {
 					return true;
 				}

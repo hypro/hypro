@@ -26,7 +26,7 @@ else
 			keep_waiting &
 			make resources || return 1
 			kill $!
-			make lib_carl VERBOSE=1 || return 1
+			make carl VERBOSE=1 || return 1
 		popd
 	popd
 	cmake -DCMAKE_CXX_COMPILER=$COMPILER ..
