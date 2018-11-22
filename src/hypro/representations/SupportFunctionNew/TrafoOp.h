@@ -117,7 +117,7 @@ class TrafoOp : public RootGrowNode<Number,Setting> {
 
 	//Given the results, return vector of evaluation results (here only first place needed, since unary op), here, we also modify
 	std::vector<EvaluationResult<Number>> aggregate(std::vector<std::vector<EvaluationResult<Number>>>& resultStackBack, const matrix_t<Number>& currentParam) const {
-		std::cout << "TrafoOp::aggregate" << std::endl;
+		//std::cout << "TrafoOp::aggregate" << std::endl;
 		assert(resultStackBack.size() == 1); 
 		const std::pair<matrix_t<Number>, vector_t<Number>>& parameterPair = parameters->getParameterSet(currentExponent);
 		if(resultStackBack.front().begin()->errorCode != SOLUTION::INFEAS){
@@ -137,9 +137,9 @@ class TrafoOp : public RootGrowNode<Number,Setting> {
 				++directionCnt;
 			}
 		}
-		for(auto& e : resultStackBack.front()){
-			std::cout << e << std::endl;
-		}
+		//for(auto& e : resultStackBack.front()){
+		//	std::cout << e << std::endl;
+		//}
 		return resultStackBack.front();
 	}
 

@@ -15,15 +15,29 @@ namespace hypro {
 
 	//copy constructor
 	template<typename Number, typename Converter, typename Setting>
-	SupportFunctionNewT<Number,Converter,Setting>::SupportFunctionNewT( const SupportFunctionNewT<Number,Converter,Setting>& orig ) {
-		
+	SupportFunctionNewT<Number,Converter,Setting>::SupportFunctionNewT( const SupportFunctionNewT<Number,Converter,Setting>& orig ) : mRoot(orig.getRoot()) {
+		//handled by initializer list
+		std::cout << "SF copy constructor, copy from " << &orig << " creating " << this << std::endl;
 	}
+
+	//template<typename Number, typename Converter, typename Setting>
+	//void swap(SupportFunctionNewT<Number,Converter,Setting>& lhs, SupportFunctionNewT<Number,Converter,Setting>& rhs){}
 
 	//move constructor
 	template<typename Number, typename Converter, typename Setting>
 	SupportFunctionNewT<Number,Converter,Setting>::SupportFunctionNewT( SupportFunctionNewT<Number,Converter,Setting>&& orig ) {
-
+		std::cout << "SF move constructor, move from " << &orig << " creating " << this << std::endl;
+		//std::shared_ptr<RootGrowNode<Number,Setting>> tmp = orig.getRoot();
+		//mRoot.swap(tmp);
+		mRoot = std::move(orig.getRoot());
+		orig.setRootToNull();
 	}
+
+
+
+	//copy assign 
+
+	//move assign 
 
 	/***************************************************************************
 	 * Getters & setters
@@ -202,6 +216,8 @@ namespace hypro {
 
 	template<typename Number, typename Converter, typename Setting>
 	bool SupportFunctionNewT<Number,Converter,Setting>::empty() const {
+
+		if(mRoot == nullptr) return true;
 		
 		//first function - parameters are not transformed
 		std::function<void(RootGrowNode<Number,Setting>*)> doNothing = [](RootGrowNode<Number,Setting>* ){ };
@@ -214,7 +230,7 @@ namespace hypro {
 
 		//if not leaf - not empty if all children not empty
 		std::function<bool(RootGrowNode<Number,Setting>*, std::vector<bool>)> childrenEmpty =
-			[](RootGrowNode<Number,Setting>* n, std::vector<bool> childrenEmpty) -> bool {
+			[](RootGrowNode<Number,Setting>* , std::vector<bool> childrenEmpty) -> bool {
 				for(auto child : childrenEmpty){
 					if(child) return true;
 				}

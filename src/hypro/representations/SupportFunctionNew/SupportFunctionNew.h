@@ -107,6 +107,7 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
 	template<typename Representation>
 	SupportFunctionNewT( GeometricObject<Number,Representation>* r) : mRoot(std::make_shared<Leaf<Number,Setting,Representation>>(dynamic_cast<Representation*>(r))) { 
 		std::cout << "SupportFunctionNewT::Leaf constructor, address " << this << std::endl;
+		std::cout << "Ref count of mRoot: " << mRoot.use_count() << std::endl;	
 	}
 
 	/**
@@ -134,7 +135,9 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
 
 	Setting getSettings() const { return Setting{}; }
 
-	std::shared_ptr<RootGrowNode<Number,Setting>> getRoot() const { return mRoot; }
+	std::shared_ptr<RootGrowNode<Number,Setting>>& getRoot() const { return mRoot; }
+
+	void setRootToNull() { mRoot = nullptr; }
 
 	 /**
 	  * @brief Static method for the construction of an empty SupportFunctionNew of required dimension.

@@ -66,10 +66,20 @@ class RootGrowNode {
 	////// Displaying
 
 	friend std::ostream& operator<<(std::ostream& ostr, const RootGrowNode& r){
-		ostr << "current type: " << r.getType() << std::endl;
-		ostr << "children types: [";
+		//ostr << "current type: " << r.getType() << std::endl;
+		//ostr << "children types: [";
+		//for(auto c : r.getChildren()){
+		//	ostr << c->getType() << ",";
+		//}
+		//ostr << "]" << std::endl;
+		//for(auto c : r.getChildren()){
+		//	ostr << *c << std::endl;
+		//}
+		//return ostr;
+
+		ostr << "current address: " << &r << " type: " << r.getType() << " children types(address): [";
 		for(auto c : r.getChildren()){
-			ostr << c->getType() << ",";
+			ostr << c->getType() << "(" << &c << ")" << ",";
 		}
 		ostr << "]" << std::endl;
 		for(auto c : r.getChildren()){
