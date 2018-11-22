@@ -44,9 +44,8 @@ namespace hypro {
         std::vector<ConstraintT<Number>> newConstraints;
         mFormula.getConstraints(newConstraints);
         rhs.getFormula().getConstraints(newConstraints);
-        FormulasT<Number> newFormulas;
-        std::for_each(newConstraints.begin(), newConstraints.end(), [&](const ConstraintT<Number>& c){newFormulas.emplace_back(std::move(FormulaT<Number>{c}));});
-        return CarlPolytopeT<Number,Converter,Settings>{FormulaT<Number>(carl::FormulaType::AND, newFormulas)};
+
+        return CarlPolytopeT<Number,Converter,Settings>{FormulaT<Number>(carl::FormulaType::AND, constraintsToFormulas(newConstraints))};
     }
 
     template<typename Number, typename Converter, typename Settings>

@@ -6,11 +6,18 @@
 namespace hypro {
 
     template<typename N>
+    inline FormulasT<N> constraintsToFormulas(const std::vector<ConstraintT<N>>& in) {
+        FormulasT<N> res;
+        std::for_each(in.begin(),in.end(), [&](auto in){res.emplace_back(FormulaT<N>(in));});
+        return res;
+    }
+
+    template<typename N>
     FormulasT<N> intervalToFormulas(const carl::Interval<N>& interval, std::size_t variableIndex) {
         TRACE("hypro.representations.carlPolytope","Create interval constraints for variable index " << variableIndex);
         FormulasT<N> res;
-        res.emplace_back(ConstraintT<N>(PolyT<N>(interval.lower()*VariablePool::getInstance().carlVarByIndex(variableIndex)), carl::Relation::GEQ));
-        res.emplace_back(ConstraintT<N>(PolyT<N>(interval.upper()*VariablePool::getInstance().carlVarByIndex(variableIndex)), carl::Relation::LEQ));
+        res.emplace_back(ConstraintT<N>(PolyT<N>(VariablePool::getInstance().carlVarByIndex(variableIndex)) - PolyT<N>(interval.lower()), carl::Relation::GEQ));
+        res.emplace_back(ConstraintT<N>(PolyT<N>(VariablePool::getInstance().carlVarByIndex(variableIndex)) - PolyT<N>(interval.upper()), carl::Relation::LEQ));
         return res;
     }
 
