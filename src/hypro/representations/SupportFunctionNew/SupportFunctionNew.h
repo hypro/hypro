@@ -27,6 +27,7 @@
 #include "SumOp.h"
 #include "TrafoOp.h"
 #include "ScaleOp.h"
+#include "ProjectOp.h"
 
 namespace hypro {
 
@@ -58,6 +59,7 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
   friend class SumOp<Number,Converter,Setting>;
   friend class TrafoOp<Number,Converter,Setting>;
   friend class ScaleOp<Number,Converter,Setting>;
+  friend class ProjectOp<Number,Converter,Setting>;
 
   protected:
 
@@ -65,7 +67,11 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
 	 * Members
 	 **************************************************************************/
 
+  	//A pointer of shared ownership pointing to a node in the whole tree. This node is the root for this upportfunction, the nodes above root are not known.
   	mutable std::shared_ptr<RootGrowNode<Number,Setting>> mRoot = nullptr;
+
+  	//The dimension of the operations and representations
+  	std::size_t mDimension; 
 
 	/***************************************************************************
 	 * Constructors
@@ -138,11 +144,11 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
 
   public:
 
-	Setting getSettings() const { return Setting{}; }
+	inline Setting getSettings() const { return Setting{}; }
 
-	std::shared_ptr<RootGrowNode<Number,Setting>>& getRoot() const { return mRoot; }
+	inline std::shared_ptr<RootGrowNode<Number,Setting>>& getRoot() const { return mRoot; }
 
-	void setRootToNull() { mRoot = nullptr; }
+	inline void setRootToNull() { mRoot = nullptr; }
 
 	 /**
 	  * @brief Static method for the construction of an empty SupportFunctionNew of required dimension.

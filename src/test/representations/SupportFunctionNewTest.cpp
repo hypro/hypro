@@ -267,16 +267,40 @@ TYPED_TEST(SupportFunctionNewTest, ScaleOp){
 	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sf(&box);
 	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sfScale = sf.scale(TypeParam(10));
 	EXPECT_TRUE(sfScale.getRoot()->getType() == SFNEW_TYPE::SCALEOP);
-	EXPECT_EQ(sfScale.getRoot()->getOriginCount(), 1);
-	EXPECT_EQ(sfScale.getRoot()->getChildren().size(), 1);
+	EXPECT_EQ(sfScale.getRoot()->getOriginCount(), unsigned(1));
+	EXPECT_EQ(sfScale.getRoot()->getChildren().size(), std::size_t(1));
 	EXPECT_EQ(sfScale.getRoot().use_count(), 1);
 	EXPECT_EQ((dynamic_cast<ScaleOp<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>*>(sfScale.getRoot().get())->getFactor()), TypeParam(10));
 
 	//Evaluate
 	matrix_t<TypeParam> directions = matrix_t<TypeParam>::Identity(2,2);
 	std::vector<EvaluationResult<TypeParam>> res = sfScale.multiEvaluate(directions,true);
-	EXPECT_TRUE(res.at(0) == TypeParam(10));
-	EXPECT_TRUE(res.at(1) == TypeParam(10));
+	EXPECT_TRUE(res.at(0).supportValue == TypeParam(10));
+	EXPECT_TRUE(res.at(1).supportValue == TypeParam(10));
+	
+}
+
+TYPED_TEST(SupportFunctionNewTest, ProjectOp){
+
+	//3d box
+	Box<TypeParam> box (std::make_pair(Point<TypeParam>({TypeParam(0),TypeParam(0),TypeParam(0)}), Point<TypeParam>({TypeParam(1),TypeParam(1),TypeParam(1)})));
+	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sf(&box);
+
+	//We want to throw out first and third dimension, keep second dimension
+	std::vector<std::size_t> dims({1});
+	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sfProject = sf.project(dims);
+	EXPECT_TRUE(sfProject.getRoot()->getType() == SFNEW_TYPE::PROJECTOP);
+	EXPECT_EQ(sfProject.getRoot()->getOriginCount(), 1);
+	EXPECT_EQ(sfProject.getRoot()->getChildren().size(), 1);
+	EXPECT_EQ(sfProject.getRoot().use_count(), 1);
+	EXPECT_EQ((dynamic_cast<ProjectOp<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>*>(sfProject.getRoot().get())->getDimensions().at(0)), std::size_t(1));
+
+	//Evaluate
+	matrix_t<TypeParam> directions = matrix_t<TypeParam>::Identity(3,3);
+	std::vector<EvaluationResult<TypeParam>> res = sfProject.multiEvaluate(directions,true);
+	EXPECT_TRUE(res.at(0).supportValue == TypeParam(0));
+	EXPECT_TRUE(res.at(1).supportValue == TypeParam(1));
+	EXPECT_TRUE(res.at(2).supportValue == TypeParam(0));
 	
 }
 

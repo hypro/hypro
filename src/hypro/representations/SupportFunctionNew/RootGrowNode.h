@@ -28,7 +28,7 @@
 namespace hypro {
 
 //Type of nodes. Needed to fast determine which node subclass is actually calling a function. 
-enum SFNEW_TYPE { NODE = 0, LEAF, TRAFO, SCALEOP, SUMOP};
+enum SFNEW_TYPE { NODE = 0, LEAF, TRAFO, SCALEOP, PROJECTOP, SUMOP};
 
 template<typename Number, typename Setting>
 class RootGrowNode {

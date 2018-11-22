@@ -331,7 +331,7 @@ namespace hypro {
 
 	template<typename Number, typename Converter, typename Setting>
 	std::size_t SupportFunctionNewT<Number,Converter,Setting>::dimension() const {
-		return std::size_t(1);
+		return mDimension;
 	}
 
 	template<typename Number, typename Converter, typename Setting>
@@ -361,7 +361,28 @@ namespace hypro {
 
 	template<typename Number, typename Converter, typename Setting>
 	SupportFunctionNewT<Number,Converter,Setting> SupportFunctionNewT<Number,Converter,Setting>::project(const std::vector<std::size_t>& dimensions) const {
+		// check for full projection
+		bool fullProjection = true;
+		if(dimensions.size() == this->dimension()) {
+			for(unsigned i = 0; i < this->dimension(); ++i) {
+				if(dimensions.at(i) != i) {
+					fullProjection = false;
+					break;
+				}
+			}
+		} else {
+			fullProjection = false;
+		}
 
+		if(!fullProjection){
+			DEBUG("hypro.represetations.supportFunction", "No full projection, create.");
+			std::shared_ptr<ProjectOp<Number,Converter,Setting>> proj = std::make_shared<ProjectOp<Number,Converter,Setting>>(*this, dimensions);
+			std::shared_ptr<RootGrowNode<Number,Setting>> projPtr = std::static_pointer_cast<RootGrowNode<Number,Setting>>(proj);
+			SupportFunctionNewT<Number,Converter,Setting> sf = SupportFunctionNewT<Number,Converter,Setting>(projPtr);
+			return sf;
+		}
+		DEBUG("hypro.represetations.supportFunction", "Full projection, copy.");
+		return *this;
 	}
 
 	template<typename Number, typename Converter, typename Setting>
