@@ -7,6 +7,7 @@ namespace hypro {
 
     template<typename N>
     FormulasT<N> intervalToFormulas(const carl::Interval<N>& interval, std::size_t variableIndex) {
+        TRACE("hypro.representations.carlPolytope","Create interval constraints for variable index " << variableIndex);
         FormulasT<N> res;
         res.emplace_back(ConstraintT<N>(PolyT<N>(interval.lower()*VariablePool::getInstance().carlVarByIndex(variableIndex)), carl::Relation::GEQ));
         res.emplace_back(ConstraintT<N>(PolyT<N>(interval.upper()*VariablePool::getInstance().carlVarByIndex(variableIndex)), carl::Relation::LEQ));
@@ -15,6 +16,7 @@ namespace hypro {
 
     template<typename N>
     std::vector<Halfspace<N>> constraintToHalfspace(const ConstraintT<N> constraint, std::size_t dim) {
+        TRACE("hypro.representations.carlPolytope","Compute half-spaces from " << constraint << " with dimension " << dim);
         std::vector<Halfspace<N>> res;
         vector_t<N> normalV = vector_t<N>::Zero(dim);
         N offset = 0;
@@ -33,9 +35,11 @@ namespace hypro {
             offset = constraint.getPolynomial().constantPart();
         }
         res.emplace_back(Halfspace<N>{normalV,offset});
+        TRACE("hypro.representations.carlPolytope","Hsp: " << res.back());
 
         if(constraint.relation() == carl::Relation::EQ) {
             res.emplace_back(Halfspace<N>{-normalV, -offset});
+            TRACE("hypro.representations.carlPolytope","Hsp: " << res.back());
         }
 
         return res;

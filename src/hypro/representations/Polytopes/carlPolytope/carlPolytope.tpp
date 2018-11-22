@@ -4,6 +4,7 @@ namespace hypro {
 
     template<typename Number, typename Converter, typename Settings>
     CarlPolytopeT<Number,Converter,Settings>::CarlPolytopeT(const matrix_t<Number>& constraints, const vector_t<Number>& constants) {
+        TRACE("hypro.representations.carlPolytope","Construct P from " << constraints << " and " << constants);
         FormulasT<Number> newConstraints;
 
         for(Eigen::Index row = 0; row < constraints.rows(); ++row) {
@@ -20,6 +21,7 @@ namespace hypro {
 
     template<typename Number, typename Converter, typename Settings>
     CarlPolytopeT<Number,Converter,Settings>::CarlPolytopeT(const std::vector<carl::Interval<Number>>& intervals) {
+        TRACE("hypro.representations.carlPolytope","Construct P from interval vector.");
         FormulasT<Number> newConstraints;
 
         for(std::size_t i = 0; i < intervals.size(); ++i) {
@@ -31,8 +33,10 @@ namespace hypro {
 
     template<typename Number, typename Converter, typename Settings>
     CarlPolytopeT<Number,Converter,Settings> CarlPolytopeT<Number,Converter,Settings>::intersect(const CarlPolytopeT<Number,Converter,Settings>& rhs) const {
+        TRACE("hypro.representations.carlPolytope","Intersect " << *this << " and " << rhs);
         assert(mFormula.isConstraintConjunction());
         assert(rhs.getFormula().isConstraintConjunction());
+        // collect constraints
         std::vector<ConstraintT<Number>> newConstraints;
         mFormula.getConstraints(newConstraints);
         rhs.getFormula().getConstraints(newConstraints);
@@ -46,11 +50,15 @@ namespace hypro {
         if(mHalfspaces.empty()) {
             mHalfspaces = computeHalfspaces(mFormula);
         }
+        TRACE("hypro.representations.carlPolytope","Computed halfspaces..");
         return mHalfspaces;
     }
 
     template<typename Number, typename Converter, typename Settings>
     void CarlPolytopeT<Number,Converter,Settings>::addConstraint(const ConstraintT<Number>& constraint) {
+        // reset Half-space cache
+        mHalfspaces.clear();
+        // add constraint to formula
         std::vector<ConstraintT<Number>> constraints;
         mFormula.getConstraints(constraints);
         constraints.push_back(constraint);
@@ -59,6 +67,9 @@ namespace hypro {
 
     template<typename Number, typename Converter, typename Settings>
     void CarlPolytopeT<Number,Converter,Settings>::addConstraints(const std::vector<ConstraintT<Number>>& constraints) {
+        // reset Half-space cache
+        mHalfspaces.clear();
+        // add constraints to formula
         auto cCopy = constraints;
         mFormula.getConstraints(cCopy);
         mFormula = FormulaT<Number>(carl::FormulaType::AND, cCopy);

@@ -6,6 +6,7 @@
 #include "../../../algorithms/quantifierElimination/qe.h"
 #include "../../../carlTypes.h"
 #include "../../../util/VariablePool.h"
+#include "../../../util/logging/Logger.h"
 
 namespace hypro {
 
