@@ -27,24 +27,24 @@ void WorkQueueT<Workable,Setting>::nonLockingPushFront(const Workable& item)
 }
 
 template <class Workable, class Setting>
-void WorkQueueT<Workable,Setting>::enqueue(const Workable& item)
+void WorkQueueT<Workable,Setting>::enqueue(Workable&& item)
 {
 	assert(item != nullptr);
     std::lock_guard<std::mutex> lock(mSpinlock);
-    this->nonLockingEnqueue(item);
+    this->nonLockingEnqueue(std::move(item));
 }
 
 template <class Workable, class Setting>
-void WorkQueueT<Workable,Setting>::nonLockingEnqueue(const Workable& item)
+void WorkQueueT<Workable,Setting>::nonLockingEnqueue(Workable&& item)
 {
 	assert(item != nullptr);
     if(Setting::findDuplicates) {
         if(!nonLockingExists(item)) {
-            mQueue.push_back(item);
+            mQueue.emplace_back(std::move(item));
         }
         return;
     }
-    mQueue.push_back(item);
+    mQueue.emplace_back(std::move(item));
 }
 
 template <class Workable, class Setting>
@@ -80,7 +80,7 @@ Workable WorkQueueT<Workable,Setting>::nonLockingDequeueFront()
     if (this->nonLockingIsEmpty()) {
         return nullptr;
     }
-    Workable item = mQueue.front();
+    Workable item{std::move(mQueue.front())};
     mQueue.pop_front();
     assert(item != nullptr);
     return item;

@@ -3,8 +3,8 @@
 namespace hypro {
 namespace reachability {
 
-	template<typename Number, typename ReacherSettings>
-	bool Reach<Number,ReacherSettings>::intersectBadStates( const State_t<Number>& _state ) const {
+	template<typename Number, typename ReacherSettings, typename State>
+	bool Reach<Number,ReacherSettings,State>::intersectBadStates( const State& _state ) const {
 		assert(!_state.getTimestamp().isUnbounded());
 		// check local bad states TODO: Note, we currently allow only one bad state per location -> allow multiple bad states!
 		auto badStateIterator = mAutomaton.getLocalBadStates().find(_state.getLocation());

@@ -15,6 +15,8 @@
 
 namespace hypro {
 
+
+
 /**
  * Class encapsulating a thread safe queue in order to be accessed by
  * multiple workers.
@@ -22,7 +24,7 @@ namespace hypro {
 template <class Workable, class Setting>
 class WorkQueueT
 {
-    static_assert(std::is_pointer<Workable>::value || is_shared_ptr<Workable>::value, "WorkQueue requires pointer type." );
+    static_assert(std::is_pointer<Workable>::value || is_shared_ptr<Workable>::value || is_unique_ptr<Workable>::value, "WorkQueue requires pointer type." );
 
   public:
 
@@ -49,8 +51,8 @@ class WorkQueueT
      * enqueues an item
      * @param item item to be enqueued
      */
-    void enqueue(const Workable& item);
-	void nonLockingEnqueue(const Workable& item);
+    void enqueue(Workable&& item);
+	void nonLockingEnqueue(Workable&& item);
 
 
     /**
@@ -119,5 +121,3 @@ using WorkQueue = WorkQueueT<Workable,WorkQueueDefaultSetting>;
 } // hypro
 
 #include "WorkQueue.tpp"
-
-

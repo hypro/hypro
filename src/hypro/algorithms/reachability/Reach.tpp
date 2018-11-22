@@ -7,23 +7,18 @@ namespace reachability {
 	using clock = std::chrono::high_resolution_clock;
 	using timeunit = std::chrono::microseconds;
 
-	template<typename Number, typename ReacherSettings>
-	Reach<Number,ReacherSettings>::Reach( const HybridAutomaton<Number>& _automaton, const ReachabilitySettings& _settings)
+	template<typename Number, typename ReacherSettings, typename State>
+	Reach<Number,ReacherSettings,State>::Reach( const HybridAutomaton<Number>& _automaton, const ReachabilitySettings& _settings)
 		: mAutomaton( _automaton ), mSettings(_settings), mCurrentLevel(0), mIntersectedBadStates(false) {
 			//mAutomaton.addArtificialDimension();
 		}
 
-
-	template<typename Number, typename ReacherSettings>
-	std::vector<std::pair<unsigned, flowpipe_t<Number>>> Reach<Number,ReacherSettings>::computeForwardReachability() {
-		// set up working queue -> add initial states
-		// collect all computed reachable states
-		std::vector<std::pair<unsigned, flowpipe_t<Number>>> collectedReachableStates;
-
+	template<typename Number, typename ReacherSettings, typename State>
+	void Reach<Number,ReacherSettings,State>::initQueue() {
 		for ( const auto& locationConstraintPair : mAutomaton.getInitialStates() ) {
 			if(int(mCurrentLevel) <= mSettings.jumpDepth || mSettings.jumpDepth < 0){
 				// Convert representation in state from matrix and vector to used representation type.
-				State_t<Number> s;
+				State s;
 				s.setLocation(locationConstraintPair.first);
 				switch(mType){
 					case representation_name::box: {
@@ -62,7 +57,7 @@ namespace reachability {
 					}
 				}
 				TRACE("hypro.reacher.preprocessing","convert.");
-				//s.setSetDirect(boost::apply_visitor(genericConversionVisitor<typename State_t<Number>::repVariant, Number>(mType), s.getSet()));
+				//s.setSetDirect(boost::apply_visitor(genericConversionVisitor<typename State::repVariant, Number>(mType), s.getSet()));
 				s.setSetType(mType);
 				TRACE("hypro.reacher.preprocessing","Type after conversion is " << s.getSetType(0));
 
@@ -70,9 +65,16 @@ namespace reachability {
 				assert(mType == s.getSetType());
 
 				s.setTimestamp(carl::Interval<tNumber>(0));
-				mWorkingQueue.push_back(initialSet<Number>(mCurrentLevel, s));
+				mWorkingQueue.enqueue(std::make_unique<TaskType>(std::make_pair(mCurrentLevel, s)));
 			}
 		}
+	}
+
+	template<typename Number, typename ReacherSettings, typename State>
+	std::vector<std::pair<unsigned, typename Reach<Number,ReacherSettings,State>::flowpipe_t>> Reach<Number,ReacherSettings,State>::computeForwardReachability() {
+		// set up working queue -> add initial states
+		// collect all computed reachable states
+		std::vector<std::pair<unsigned, typename Reach<Number,ReacherSettings,State>::flowpipe_t>> collectedReachableStates;
 
 		if(ReacherSettings::printStatus) {
 			std::cout << std::endl << "Queue size: " << mWorkingQueue.size() << std::flush;
@@ -83,43 +85,42 @@ namespace reachability {
 		if(ReacherSettings::printStatus) {
 			std::cout << std::endl;
 		}
-		while ( !mWorkingQueue.empty() ) {
-			initialSet<Number> nextInitialSet = mWorkingQueue.front();
-			mWorkingQueue.pop_front();
+		while ( !mWorkingQueue.isEmpty() ) {
+			TaskTypePtr nextInitialSet = mWorkingQueue.dequeueFront();
 			TRACE("hypro.reacher","working queue after pop: " << mWorkingQueue.size());
 			if(ReacherSettings::printStatus) {
 				std::cout << "\rQueue size: " << mWorkingQueue.size() << std::flush;
 			}
 
-			mCurrentLevel = boost::get<0>(nextInitialSet);
-			INFO("hypro.reacher","Depth " << mCurrentLevel << ", Location: " << boost::get<1>(nextInitialSet).getLocation()->getName());
+			mCurrentLevel = nextInitialSet->first;
+			INFO("hypro.reacher","Depth " << mCurrentLevel << ", Location: " << nextInitialSet->second.getLocation()->getName());
 			assert(int(mCurrentLevel) <= mSettings.jumpDepth);
-			TRACE("hypro.reacher","Obtained set of type " << boost::get<1>(nextInitialSet).getSetType() << ", requested type is " << mType);
-			flowpipe_t<Number> newFlowpipe = computeForwardTimeClosure(boost::get<1>(nextInitialSet));
+			TRACE("hypro.reacher","Obtained set of type " << nextInitialSet->second.getSetType() << ", requested type is " << mType);
+			flowpipe_t newFlowpipe = computeForwardTimeClosure(nextInitialSet->second);
 
-			collectedReachableStates.emplace_back(std::make_pair(boost::get<1>(nextInitialSet).getLocation()->hash(), newFlowpipe));
+			collectedReachableStates.emplace_back(std::make_pair(nextInitialSet->second.getLocation()->hash(), newFlowpipe));
 		}
 
 		return collectedReachableStates;
 	}
 
 
-	template<typename Number, typename ReacherSettings>
-	flowpipe_t<Number> Reach<Number,ReacherSettings>::computeForwardTimeClosure( const State_t<Number>& _state ) {
+	template<typename Number, typename ReacherSettings, typename State>
+	typename Reach<Number,ReacherSettings,State>::flowpipe_t Reach<Number,ReacherSettings,State>::computeForwardTimeClosure( const State& _state ) {
 		assert(!_state.getTimestamp().isUnbounded());
 #ifdef REACH_DEBUG
 		INFO("hypro.reacher", "Location: " << _state.getLocation()->hash());
 		INFO("hypro.reacher", "Location printed : " << *(_state.getLocation()));
 		INFO("hypro.reacher", "Time step size: " << mSettings.timeStep);
 		INFO("hypro.reacher", "Initial valuation: " << _state);
-		//std::cout << boost::get<State_t<Number>>(_state) << std::endl;
+		//std::cout << boost::get<State>(_state) << std::endl;
 		//std::cout << _state << std::endl;
 #endif
 		// new empty Flowpipe
-		flowpipe_t<Number> flowpipe;
-		std::vector<boost::tuple<Transition<Number>*, State_t<Number>>> nextInitialSets;
+		typename Reach<Number,ReacherSettings,State>::flowpipe_t flowpipe;
+		std::vector<boost::tuple<Transition<Number>*, State>> nextInitialSets;
 
-		boost::tuple<hypro::CONTAINMENT, State_t<Number>, matrix_t<Number>, vector_t<Number>, Box<Number>> initialSetup = computeFirstSegment<Number,State_t<Number>>(_state, mSettings.timeStep);
+		boost::tuple<hypro::CONTAINMENT, State, matrix_t<Number>, vector_t<Number>, Box<Number>> initialSetup = computeFirstSegment<Number,State>(_state, mSettings.timeStep);
 #ifdef REACH_DEBUG
 		INFO("hypro.reacher", "Valuation fulfills Invariant?: " << boost::get<0>(initialSetup));
 #endif
@@ -139,7 +140,7 @@ namespace reachability {
 			}
 
 			// insert first Segment into the empty flowpipe
-			State_t<Number> currentSegment;
+			State currentSegment;
 			if(noFlow) {
 				currentSegment = _state;
 			} else {
@@ -150,24 +151,24 @@ namespace reachability {
 			// Check for bad states intersection. The first segment is validated against the invariant, already.
 			if(intersectBadStates(currentSegment)){
 				// clear queue to stop whole algorithm
-				while(!mWorkingQueue.empty()){
-					mWorkingQueue.pop_front();
+				while(!mWorkingQueue.isEmpty()){
+					mWorkingQueue.dequeueFront();
 				}
 				return flowpipe;
 			}
 
 			// Set after linear transformation
-			State_t<Number> nextSegment;
+			State nextSegment;
 #ifdef USE_SYSTEM_SEPARATION
-			State_t<Number> autonomPart = currentSegment;
+			State autonomPart = currentSegment;
 #ifdef USE_ELLIPSOIDS
-			// Easy to addapt to any State_t<Number> use ellipsoid for the idea of my masterthesis here
+			// Easy to addapt to any State use ellipsoid for the idea of my masterthesis here
 			Ellipsoid<Number> nonautonomPart(mBloatingFactor, currentSegment.dimension());
 			Ellipsoid<Number> totalBloating = nonautonomPart;
 #else
 			Ellipsoid<Number> nonautonomPartAsEllispsoid(mBloatingFactor, currentSegment.dimension());
-			State_t<Number> nonautonomPart = State_t<Number>(nonautonomPartAsEllispsoid);
-			State_t<Number> totalBloating = nonautonomPart;
+			State nonautonomPart = State(nonautonomPartAsEllispsoid);
+			State totalBloating = nonautonomPart;
 #endif
 #endif
 #ifdef REACH_DEBUG
@@ -183,8 +184,8 @@ namespace reachability {
 				INFO("hypro.reacher","Time: " << std::setprecision(4) << std::setw(8) << fixed << carl::toDouble(currentLocalTime));
 				// Verify transitions on the current set.
 				if(int(mCurrentLevel) < mSettings.jumpDepth || mSettings.jumpDepth < 0) {
-					//State_t<Number> currentState = _state;
-					State_t<Number> currentState = currentSegment;
+					//State currentState = _state;
+					State currentState = currentSegment;
 					//std::cout << "-- Checking Transitions!" << std::endl;
 					checkTransitions(currentState, currentState.getTimestamp(), nextInitialSets);
 				}
@@ -213,7 +214,7 @@ namespace reachability {
 				nextSegment =  currentSegment.partiallyApplyTimeStep(ConstraintSet<Number>(boost::get<2>(initialSetup), boost::get<3>(initialSetup)), mSettings.timeStep, 0);
 #endif
 				// extend flowpipe (only if still within Invariant of location)
-				std::pair<hypro::CONTAINMENT, State_t<Number>> newSegment = nextSegment.satisfies( _state.getLocation()->getInvariant());
+				std::pair<hypro::CONTAINMENT, State> newSegment = nextSegment.satisfies( _state.getLocation()->getInvariant());
 
 #ifdef REACH_DEBUG
 				INFO("hypro.reacher", "Next Flowpipe Segment: " << newSegment.second);
@@ -223,8 +224,8 @@ namespace reachability {
 					flowpipe.push_back( newSegment.second );
 					if(intersectBadStates(newSegment.second)){
 						// clear queue to stop whole algorithm
-						while(!mWorkingQueue.empty()){
-							mWorkingQueue.pop_front();
+						while(!mWorkingQueue.isEmpty()){
+							mWorkingQueue.dequeueFront();
 						}
 						return flowpipe;
 					}

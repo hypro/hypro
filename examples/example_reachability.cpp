@@ -23,9 +23,10 @@ static void computeReachableStates(const std::string& filename, const hypro::rep
 	//std::cout << "Parsed HybridAutomaton:\n" << ha.first << "Parsed ReachabilitySettings:\n" << ha.second << std::endl;
 	//#endif
 
-	hypro::reachability::Reach<Number,hypro::reachability::ReachSettings> reacher(ha.first, ha.second);
+	hypro::reachability::Reach<Number,hypro::reachability::ReachSettings, hypro::State_t<Number>> reacher(ha.first, ha.second);
 	reacher.setRepresentationType(type);
-	std::vector<std::pair<unsigned, hypro::reachability::flowpipe_t<Number>>> flowpipes = reacher.computeForwardReachability();
+	reacher.initQueue();
+	auto flowpipes = reacher.computeForwardReachability();
 
 	std::cout << "Finished computation of reachable states: " << std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000.0 << " ms" << std::endl;
 

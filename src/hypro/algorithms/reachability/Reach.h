@@ -15,6 +15,7 @@
 #include "datastructures/reachability/Settings.h"
 #include "datastructures/HybridAutomaton/HybridAutomaton.h"
 #include "datastructures/HybridAutomaton/State.h"
+#include "datastructures/reachability/workQueue/WorkQueue.h"
 #include "config.h"
 #include "util/plotting/Plotter.h"
 #include "representations/Ellipsoids/Ellipsoid.h"
@@ -43,12 +44,6 @@ namespace hypro {
  */
 namespace reachability {
 
-template<typename Number>
-using initialSet = boost::tuple<unsigned, State_t<Number>>;
-
-template <typename Number>
-using flowpipe_t = std::vector<State_t<Number>>;
-
 #include "util.h"
 
 struct ReachSettings {
@@ -61,15 +56,20 @@ struct ReachSettings {
  * @tparam     Number          The used number type.
  * @tparam     Representation  The used state set representation type.
  */
-template <typename Number, typename ReacherSettings>
+template <typename Number, typename ReacherSettings, typename State>
 class Reach {
+public:
+	using TaskType = std::pair<unsigned, State>;
+	using TaskTypePtr = std::unique_ptr<TaskType>;
+	using flowpipe_t = std::vector<State>;
+
 private:
 	HybridAutomaton<Number> mAutomaton;
 	ReachabilitySettings mSettings;
 	std::size_t mCurrentLevel = 0;
     Number mBloatingFactor = 0;
-	std::map<unsigned, std::vector<flowpipe_t<Number>>> mReachableStates;
-	std::list<initialSet<Number>> mWorkingQueue;
+	std::map<unsigned, std::vector<flowpipe_t>> mReachableStates;
+	WorkQueue<TaskTypePtr> mWorkingQueue;
 	Plotter<Number>& plotter = Plotter<Number>::getInstance();
 	representation_name mType;
 
@@ -89,7 +89,11 @@ public:
 	 * @details
 	 * @return The flowpipe as a result of this computation.
 	 */
-	std::vector<std::pair<unsigned, flowpipe_t<Number>>> computeForwardReachability();
+	std::vector<std::pair<unsigned, flowpipe_t>> computeForwardReachability();
+
+	void initQueue();
+
+	WorkQueue<TaskTypePtr>& rGetQueue() { return mWorkingQueue; }
 
 	/**
 	 * @brief Computes the forward time closure (FTC) of the given valuation in the respective location.
@@ -100,7 +104,7 @@ public:
 	 *
 	 * @return The id of the computed flowpipe.
 	 */
-	flowpipe_t<Number> computeForwardTimeClosure( const State_t<Number>& _state );
+	flowpipe_t computeForwardTimeClosure( const State& _state );
 
 
 	/**
@@ -117,7 +121,7 @@ public:
 	 * @param _init The initial valuations.
 	 * @return The resulting flowpipes.
 	 */
-	void processDiscreteBehaviour( const std::vector<boost::tuple<Transition<Number>*, State_t<Number>>>& _newInitialSets );
+	void processDiscreteBehaviour( const std::vector<boost::tuple<Transition<Number>*, State>>& _newInitialSets );
 
 	/**
 	 * @brief Checks, whether the passed transition is enabled by the passed valuation. Sets the result to be the intersection of the guard and the valuation.
@@ -128,9 +132,9 @@ public:
 	 * @param result At the end of the method this holds the result of the intersection of the guard and the valuation.
 	 * @return True, if the transition is enabled, false otherwise.
 	 */
-	bool intersectGuard( Transition<Number>* _trans, const State_t<Number>& _segment, State_t<Number>& result ) const;
+	bool intersectGuard( Transition<Number>* _trans, const State& _segment, State& result ) const;
 
-	bool checkTransitions(const State_t<Number>& _state, const carl::Interval<tNumber>& currentTime, std::vector<boost::tuple<Transition<Number>*, State_t<Number>>>& nextInitialSets) const;
+	bool checkTransitions(const State& _state, const carl::Interval<tNumber>& currentTime, std::vector<boost::tuple<Transition<Number>*, State>>& nextInitialSets) const;
 
 	const ReachabilitySettings& settings() const { return mSettings; }
 	void setSettings(const ReachabilitySettings& settings) { mSettings = settings; }
@@ -141,8 +145,8 @@ public:
 private:
 
 	matrix_t<Number> computeTrafoMatrix( const Location<Number>* _loc ) const;
-	//boost::tuple<bool, State_t<Number>, matrix_t<Number>, vector_t<Number>> computeFirstSegment( const State_t<Number>& _state ) const;
-	bool intersectBadStates( const State_t<Number>& _state ) const;
+	//boost::tuple<bool, State, matrix_t<Number>, vector_t<Number>> computeFirstSegment( const State& _state ) const;
+	bool intersectBadStates( const State& _state ) const;
 };
 
 }  // namespace reachability

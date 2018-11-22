@@ -147,7 +147,7 @@ int main()
 	reacher.setRepresentationType(Representation::type());
 
 	// perform reachability analysis.
-	std::vector<std::pair<unsigned, reachability::flowpipe_t<Number>>> flowpipeIndices = reacher.computeForwardReachability();
+	std::vector<std::pair<unsigned, reachability::flowpipe_t>> flowpipeIndices = reacher.computeForwardReachability();
 
 	// plot flowpipes.
 	Plotter<Number>& plotter = Plotter<Number>::getInstance();
