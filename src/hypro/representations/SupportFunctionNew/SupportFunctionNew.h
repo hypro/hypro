@@ -26,6 +26,7 @@
 #include "Leaf.h"
 #include "SumOp.h"
 #include "TrafoOp.h"
+#include "ScaleOp.h"
 
 namespace hypro {
 
@@ -54,8 +55,9 @@ struct Parameters {
 template <typename Number, typename Converter, class Setting>
 class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<Number,Converter,Setting>> {
 
-  friend class TrafoOp<Number,Converter,Setting>;
   friend class SumOp<Number,Converter,Setting>;
+  friend class TrafoOp<Number,Converter,Setting>;
+  friend class ScaleOp<Number,Converter,Setting>;
 
   protected:
 
@@ -130,6 +132,9 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
   	void addUnaryOp(RootGrowNode<Number,Setting>* unary) const;
 
   	void addBinaryOp(RootGrowNode<Number,Setting>* binary, const SupportFunctionNewT<Number,Converter,Setting>& rhs) const;
+
+  	//template<typename Node, typename ...Rargs>
+  	//SupportFunctionNewT<Number,Converter,Setting> create(const SupportFunctionNewT<Number,Converter,Setting>* pThis, const Rargs&... args) const;
 
   public:
 
@@ -326,6 +331,7 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
 	SupportFunctionNewT<Number,Converter,Setting> linearTransformation( const matrix_t<Number>& A ) const;
 	SupportFunctionNewT<Number,Converter,Setting> affineTransformation( const matrix_t<Number>& A, const vector_t<Number>& b ) const;
 	SupportFunctionNewT<Number,Converter,Setting> minkowskiSum( const SupportFunctionNewT<Number,Converter,Setting>& rhs ) const;
+	SupportFunctionNewT<Number,Converter,Setting> scale( const Number& _factor = 1 ) const;
 
 	/**
 	 * @brief      Computes the intersection of two SupportFunctionNewes.

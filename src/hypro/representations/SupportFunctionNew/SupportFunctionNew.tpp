@@ -33,8 +33,6 @@ namespace hypro {
 		orig.setRootToNull();
 	}
 
-
-
 	//copy assign 
 
 	//move assign 
@@ -77,7 +75,19 @@ namespace hypro {
 		return this;
 	}
 */
-
+/*
+	template<typename Number, typename Converter, typename Setting>
+	template<typename Node, typename ...Rargs>
+	SupportFunctionNewT<Number,Converter,Setting> SupportFunctionNewT<Number,Converter,Setting>::create(const SupportFunctionNewT<Number,Converter,Setting>* pThis, const Rargs&... args) const {
+		if(std::is_invocable<std::shared_ptr<Node>, SupportFunctionNewT<Number,Converter,Setting>*, Rargs...>::value){
+			std::shared_ptr<Node> node = std::make_shared<Node>(pThis, args...);
+			std::shared_ptr<RootGrowNode<Number,Setting>> nodePtr = std::static_pointer_cast<RootGrowNode<Number,Setting>>(node);
+			SupportFunctionNewT<Number,Converter,Setting> sf = SupportFunctionNewT<Number,Converter,Setting>(nodePtr);
+			return sf;
+		}
+		return SupportFunctionNewT<Number,Converter,Setting>::Empty();
+	}
+*/
 	/***************************************************************************
 	 * Tree Traversal
 	 **************************************************************************/
@@ -373,6 +383,17 @@ namespace hypro {
 		std::shared_ptr<RootGrowNode<Number,Setting>> sumPtr = std::static_pointer_cast<RootGrowNode<Number,Setting>>(sum);
 		SupportFunctionNewT<Number,Converter,Setting> sf = SupportFunctionNewT<Number,Converter,Setting>(sumPtr);
 		return sf;
+	}
+
+	template<typename Number, typename Converter, typename Setting>
+	SupportFunctionNewT<Number,Converter,Setting> SupportFunctionNewT<Number,Converter,Setting>::scale( const Number& factor ) const {
+		std::shared_ptr<ScaleOp<Number,Converter,Setting>> scale = std::make_shared<ScaleOp<Number,Converter,Setting>>(*this, factor);
+		std::shared_ptr<RootGrowNode<Number,Setting>> scalePtr = std::static_pointer_cast<RootGrowNode<Number,Setting>>(scale);
+		SupportFunctionNewT<Number,Converter,Setting> sf = SupportFunctionNewT<Number,Converter,Setting>(scalePtr);
+		return sf;	
+		//SupportFunctionNewT<Number,Converter,Setting> sf = create<ScaleOp<Number,Converter,Setting>, Number>(*this, factor);
+		//assert(sf != (SupportFunctionNewT<Number,Converter,Setting>::Empty()));
+		//return sf; 
 	}
 
 	template<typename Number, typename Converter, typename Setting>

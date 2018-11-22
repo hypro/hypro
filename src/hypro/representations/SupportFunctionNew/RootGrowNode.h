@@ -28,7 +28,7 @@
 namespace hypro {
 
 //Type of nodes. Needed to fast determine which node subclass is actually calling a function. 
-enum SFNEW_TYPE { NODE = 0, TRAFO, SUMOP, LEAF };
+enum SFNEW_TYPE { NODE = 0, LEAF, TRAFO, SCALEOP, SUMOP};
 
 template<typename Number, typename Setting>
 class RootGrowNode {
@@ -66,17 +66,6 @@ class RootGrowNode {
 	////// Displaying
 
 	friend std::ostream& operator<<(std::ostream& ostr, const RootGrowNode& r){
-		//ostr << "current type: " << r.getType() << std::endl;
-		//ostr << "children types: [";
-		//for(auto c : r.getChildren()){
-		//	ostr << c->getType() << ",";
-		//}
-		//ostr << "]" << std::endl;
-		//for(auto c : r.getChildren()){
-		//	ostr << *c << std::endl;
-		//}
-		//return ostr;
-
 		ostr << "current address: " << &r << " type: " << r.getType() << " children types(address): [";
 		for(auto c : r.getChildren()){
 			ostr << c->getType() << "(" << &c << ")" << ",";
@@ -100,19 +89,23 @@ class RootGrowNode {
 	//			All functions used as the compute must have the signature B name(A param)
 	//			All functions used as the aggregate must have the signature std::vector<B> name(B param)
 
-	//For evaluate
-
 	//For everyone - transform
 	virtual matrix_t<Number> transform(const matrix_t<Number>& param) const = 0;
+
 	//For leaves - compute
 	virtual std::vector<EvaluationResult<Number>> compute(const matrix_t<Number>& param, bool useExact) const = 0; 
+	
 	//For operations - aggregate
 	virtual std::vector<EvaluationResult<Number>> aggregate(std::vector<std::vector<EvaluationResult<Number>>>& resultStackBack, const matrix_t<Number>& currentParam) const = 0;
 
 	//For hasTrafo - should only be called by trafoOp objects
 	virtual bool hasTrafo(std::shared_ptr<const LinTrafoParameters<Number,Setting>>& ltParam, const matrix_t<Number>& A, const vector_t<Number>& b) = 0;
+
+	////// Functions for SupportFunctionNew
 	
 	virtual bool empty() const = 0;
+
+	//virtual Number supremum() const = 0;
 };
 
 } //namespace hypro
