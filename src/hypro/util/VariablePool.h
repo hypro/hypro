@@ -143,6 +143,24 @@ class VariablePool : public carl::Singleton<VariablePool> {
 		return mCarlVariables.back();
 	}
 
+	std::size_t addCarlVariable( carl::Variable var ) {
+		if(std::find(mCarlVariables.begin(), mCarlVariables.end(), var) == mCarlVariables.end()) {
+			mCarlVariables.push_back(var);
+			#ifdef HYPRO_USE_PPL
+			Parma_Polyhedra_Library::Variable pVar = Parma_Polyhedra_Library::Variable( mPplId++ );
+			mPplVariables.push_back( pVar );
+			#else
+			++mPplId;
+			#endif
+		}
+		assert( mCarlVariables.size() == mPplId );
+		#ifdef HYPRO_USE_PPL
+		assert( mPplVariables.size() == mPplId );
+		#endif
+		// return id - decrease by one as we start counting from zero.
+		return mCarlVariables.size()-1;
+	}
+
 	#ifdef HYPRO_USE_PPL
 	const Parma_Polyhedra_Library::Variable& newPplVariable() {
 		assert( mCarlVariables.size() == mPplId );
@@ -186,7 +204,7 @@ class VariablePool : public carl::Singleton<VariablePool> {
 	}
 	#endif
 
-	std::size_t inline id( const carl::Variable& _var ) const {
+	std::size_t inline id( const carl::Variable& _var ) {
 		assert( mCarlVariables.size() == mPplId );
 		#ifdef HYPRO_USE_PPL
 		assert( mPplVariables.size() == mPplId );
@@ -196,8 +214,8 @@ class VariablePool : public carl::Singleton<VariablePool> {
 				return pos;
 			}
 		}
-		assert(false);
-		return 0;
+		// if the variable is not registered yet, add and return its associated dimension.
+		return addCarlVariable(_var);
 	}
 
 	std::vector<carl::Variable> carlVariables() const {
