@@ -3,6 +3,8 @@
 #include <carl/core/MultivariatePolynomial.h>
 #include <carl/formula/Formula.h>
 
+namespace hypro {
+
 enum class QuantifierType { EXISTS, FORALL };
 
 template<typename Number>
@@ -18,3 +20,5 @@ template<typename Number>
 using FormulasT = std::vector<FormulaT<Number>>;
 
 using QEQuery = std::vector<std::pair<QuantifierType, std::vector<carl::Variable>>>;
+
+} // hypro
