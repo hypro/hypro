@@ -12,7 +12,7 @@ namespace hypro {
 	template<typename Number>
 	void Reset<Number>::setVector(const vector_t<Number>& in, std::size_t I) {
 		while (mResets.size() < I+1) {
-			mResets.push_back(ConstraintSet<Number>());
+			mResets.push_back(ConstraintSetT<Number>());
 		}
 		mResets[I].rVector() = in;
 		mHash = 0;
@@ -22,21 +22,10 @@ namespace hypro {
 	void Reset<Number>::setMatrix(const matrix_t<Number>& in, std::size_t I) {
 		assert(in.rows() == in.cols());
 		while (mResets.size() < I+1) {
-			mResets.push_back(ConstraintSet<Number>());
+			mResets.push_back(ConstraintSetT<Number>());
 		}
 		mResets[I].rMatrix() = in;
 		mHash = 0;
-	}
-
-	template<typename Number>
-	template<typename Representation, typename ...Rargs>
-	State<Number,Representation, Rargs...> Reset<Number>::applyReset(const State<Number,Representation,Rargs...>& inState) const {
-		TRACE("hydra.datastructures","inState #sets: " << inState.getNumberSets() << " and #resets: " << this->size());
-		assert(this->empty() || inState.getNumberSets() == this->size());
-		if(this->empty()) {
-			return inState;
-		}
-		return inState.applyTransformation(mResets);
 	}
 
 	template<typename Number>
@@ -169,13 +158,13 @@ namespace hypro {
 			//already decomposed/empty constraints
 			return;
 		}
-		ConstraintSet<Number> cset = mResets.at(0);
+		ConstraintSetT<Number> cset = mResets.at(0);
 		DEBUG("hypro.datastructures", "Constraint Set before: \n " << cset );
 
 		matrix_t<Number> constraintsOld(cset.matrix());
 		vector_t<Number> constantsOld(cset.vector());
 
-		std::vector<ConstraintSet<Number>> newCset;
+		std::vector<ConstraintSetT<Number>> newCset;
 		// select constrains i,j,k into new constraint vector
 		for(auto set : decomposition){
 			#ifdef HYPRO_LOGGING
@@ -201,14 +190,14 @@ namespace hypro {
 				// create final constant vector
 				vector_t<Number> newVec = selectRows(constantsOld, indicesToAdd);
 
-				ConstraintSet<Number> res(newMatrix,newVec);
-				DEBUG("hypro.datastructures", "Final decomposed ConstraintSet: \n" << res);
+				ConstraintSetT<Number> res(newMatrix,newVec);
+				DEBUG("hypro.datastructures", "Final decomposed ConstraintSetT: \n" << res);
 				newCset.push_back(res);
 			}
 			else {
 				DEBUG("hypro.datastructures", "No constraints for set found.");
 				// add identity constraints
-				ConstraintSet<Number> res = ConstraintSet<Number>();
+				ConstraintSetT<Number> res = ConstraintSetT<Number>();
 				newCset.push_back(res);
 			}
 		}

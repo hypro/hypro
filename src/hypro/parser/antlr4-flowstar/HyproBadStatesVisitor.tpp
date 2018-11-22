@@ -20,7 +20,7 @@ namespace hypro {
 	antlrcpp::Any HyproBadStatesVisitor<Number>::visitUnsafeset(HybridAutomatonParser::UnsafesetContext *ctx){
 
 		//1.Collect badState information. NOTE: There can be multiple denoted badstates for one location.
-		typename HybridAutomaton<Number, State_t<Number>>::locationConditionMap lcMap;
+		typename HybridAutomaton<Number>::locationConditionMap lcMap;
 		if(ctx->lbadstate().size() > 0){
 			for(auto bState : ctx->lbadstate()){
 				std::pair<Location<Number>*,Condition<Number>> badStateInfo = visit(bState).template as<std::pair<Location<Number>*,Condition<Number>>>();

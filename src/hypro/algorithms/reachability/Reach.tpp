@@ -8,7 +8,7 @@ namespace reachability {
 	using timeunit = std::chrono::microseconds;
 
 	template<typename Number, typename ReacherSettings>
-	Reach<Number,ReacherSettings>::Reach( const HybridAutomaton<Number, State_t<Number>>& _automaton, const ReachabilitySettings& _settings)
+	Reach<Number,ReacherSettings>::Reach( const HybridAutomaton<Number>& _automaton, const ReachabilitySettings& _settings)
 		: mAutomaton( _automaton ), mSettings(_settings), mCurrentLevel(0), mIntersectedBadStates(false) {
 			//mAutomaton.addArtificialDimension();
 		}
@@ -20,60 +20,51 @@ namespace reachability {
 		// collect all computed reachable states
 		std::vector<std::pair<unsigned, flowpipe_t<Number>>> collectedReachableStates;
 
-		for ( const auto& state : mAutomaton.getInitialStates() ) {
+		for ( const auto& locationConstraintPair : mAutomaton.getInitialStates() ) {
 			if(int(mCurrentLevel) <= mSettings.jumpDepth || mSettings.jumpDepth < 0){
 				// Convert representation in state from matrix and vector to used representation type.
 				State_t<Number> s;
-				s.setLocation(state.second.getLocation());
-
-				if(state.second.getSetType(0) != mType) {
-					TRACE("hypro.reacher.preprocessing","Type is: " << state.second.getSetType(0) << ", requested type is: " << mType);
-					switch(mType){
-						case representation_name::box: {
-							s.setSetDirect(boost::apply_visitor(genericConversionVisitor<typename State_t<Number>::repVariant, Box<Number>>(), state.second.getSet()));
-							break;
-						}
-						case representation_name::polytope_h: {
-							s.setSetDirect(boost::apply_visitor(genericConversionVisitor<typename State_t<Number>::repVariant, HPolytope<Number>>(), state.second.getSet()));
-							break;
-						}
-						case representation_name::polytope_v: {
-							s.setSetDirect(boost::apply_visitor(genericConversionVisitor<typename State_t<Number>::repVariant, VPolytope<Number>>(), state.second.getSet()));
-							break;
-						}
-						case representation_name::support_function: {
-							s.setSetDirect(boost::apply_visitor(genericConversionVisitor<typename State_t<Number>::repVariant, SupportFunction<Number>>(), state.second.getSet()));
-							break;
-						}
-						case representation_name::zonotope: {
-							s.setSetDirect(boost::apply_visitor(genericConversionVisitor<typename State_t<Number>::repVariant, Zonotope<Number>>(), state.second.getSet()));
-							break;
-						}
-						case representation_name::constraint_set: {
-							s.setSetDirect(boost::apply_visitor(genericConversionVisitor<typename State_t<Number>::repVariant, ConstraintSet<Number>>(), state.second.getSet()));
-							break;
-						}
-						#ifdef HYPRO_USE_PPL
-						case representation_name::ppl_polytope: {
-							s.setSetDirect(boost::apply_visitor(genericConversionVisitor<typename State_t<Number>::repVariant, Polytope<Number>>(), state.second.getSet()));
-							break;
-						}
-						#endif
-
-						default: {
-							assert(false);
-						}
+				s.setLocation(locationConstraintPair.first);
+				switch(mType){
+					case representation_name::box: {
+						s.setSetDirect(Converter<Number>::toBox(locationConstraintPair.second));
+						break;
 					}
-					TRACE("hypro.reacher.preprocessing","convert.");
-					//s.setSetDirect(boost::apply_visitor(genericConversionVisitor<typename State_t<Number>::repVariant, Number>(mType), s.getSet()));
-					s.setSetType(mType);
-					TRACE("hypro.reacher.preprocessing","Type after conversion is " << s.getSetType(0));
-				} else {
-					TRACE("hypro.reacher.preprocessing","Types match, do nothing.");
-					assert(boost::apply_visitor(genericTypeVisitor(), state.second.getSet()) == mType);
-					s.setSetDirect(state.second.getSet());
-					s.setSetType(boost::apply_visitor(genericTypeVisitor(), state.second.getSet()));
+					case representation_name::polytope_h: {
+						s.setSetDirect(Converter<Number>::toHPolytope(locationConstraintPair.second));
+						break;
+					}
+					case representation_name::polytope_v: {
+						s.setSetDirect(Converter<Number>::toVPolytope(locationConstraintPair.second));
+						break;
+					}
+					case representation_name::support_function: {
+						s.setSetDirect(Converter<Number>::toSupportFunction(locationConstraintPair.second));
+						break;
+					}
+					case representation_name::zonotope: {
+						s.setSetDirect(Converter<Number>::toZonotope(locationConstraintPair.second));
+						break;
+					}
+					case representation_name::constraint_set: {
+						s.setSetDirect(locationConstraintPair.second);
+						break;
+					}
+					#ifdef HYPRO_USE_PPL
+					case representation_name::ppl_polytope: {
+						s.setSetDirect(Converter<Number>::toPolytope(locationConstraintPair.second));
+						break;
+					}
+					#endif
+
+					default: {
+						assert(false);
+					}
 				}
+				TRACE("hypro.reacher.preprocessing","convert.");
+				//s.setSetDirect(boost::apply_visitor(genericConversionVisitor<typename State_t<Number>::repVariant, Number>(mType), s.getSet()));
+				s.setSetType(mType);
+				TRACE("hypro.reacher.preprocessing","Type after conversion is " << s.getSetType(0));
 
 				DEBUG("hypro.reacher","Adding initial set of type " << mType << ", current queue size (before) is " << mWorkingQueue.size());
 				assert(mType == s.getSetType());

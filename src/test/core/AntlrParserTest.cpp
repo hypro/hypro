@@ -78,8 +78,8 @@ TYPED_TEST(AntlrParserTest, JustTesting){
 
 	this->cwd();
 	try{
-		//boost::tuple<HybridAutomaton<TypeParam,State_t<TypeParam>>, ReachabilitySettings> h = parseFlowstarFile<TypeParam>(path);
-		std::pair<HybridAutomaton<TypeParam,State_t<TypeParam>>, ReachabilitySettings> h = parseFlowstarFile<TypeParam>(path);
+		//boost::tuple<HybridAutomaton<TypeParam>, ReachabilitySettings> h = parseFlowstarFile<TypeParam>(path);
+		std::pair<HybridAutomaton<TypeParam>, ReachabilitySettings> h = parseFlowstarFile<TypeParam>(path);
 		SUCCEED();
 	}catch (const std::runtime_error& e){
 		std::cout << e.what() << std::endl;
@@ -95,7 +95,7 @@ TYPED_TEST(AntlrParserTest, EmptyFile){
 
 	try{
 		//boost::tuple<HybridAutomaton<TypeParam,State_t<TypeParam>>, ReachabilitySettings> h = parseFlowstarFile<TypeParam>(path);
-		std::pair<HybridAutomaton<TypeParam,State_t<TypeParam>>, ReachabilitySettings> h = parseFlowstarFile<TypeParam>(path);
+		std::pair<HybridAutomaton<TypeParam>, ReachabilitySettings> h = parseFlowstarFile<TypeParam>(path);
 		FAIL();
 	} catch(const std::runtime_error& e){
 		std::cout << e.what() << std::endl;
@@ -260,4 +260,3 @@ TYPED_TEST(AntlrParserTest, railraod_crossing){
 //	}
 //
 //}
-

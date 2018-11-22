@@ -53,6 +53,9 @@ public:
     void addConstraint(const ConstraintT<Number>& constraint);
     void addConstraints(const std::vector<ConstraintT<Number>>& constraints);
 
+    void eliminateVariable(carl::Variable var);
+    void eliminateVariables(const std::vector<carl::Variable>& vars);
+
     std::vector<Point<Number>> vertices() const;
 
     friend std::ostream& operator<<(std::ostream& out, const CarlPolytopeT<Number,Converter,Settings>& in ) {

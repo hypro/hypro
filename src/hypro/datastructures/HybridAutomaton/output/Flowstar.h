@@ -40,7 +40,7 @@ namespace hypro {
 	}
 
 	template<typename Number>
-	std::string toFlowstarFormat(const ConstraintSet<Number>& in,
+	std::string toFlowstarFormat(const ConstraintSetT<Number>& in,
 								const std::map<Eigen::Index, std::string>& varNameMap,
 								const std::string& prefix)
 	{
@@ -212,7 +212,7 @@ namespace hypro {
 			for(const auto& s : in.getInitialStates() ) {
 				res << "\n\t\t" << s.first->getName();
 				res << "\n\t\t{";
-				auto tmpConstraintSet = boost::get<ConstraintSet<Number>>(boost::apply_visitor(genericConversionVisitor<typename State_t<Number>::repVariant, ConstraintSet<Number>>(), s.second.getSet()));
+				auto tmpConstraintSet = s.second;
 				res << toFlowstarFormat(std::move(Condition<Number>(tmpConstraintSet.matrix(), tmpConstraintSet.vector())), vars, "\n\t\t\t" );
 				res << "\n\t\t}";
 			}

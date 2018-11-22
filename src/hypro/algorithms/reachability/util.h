@@ -1,6 +1,7 @@
 #pragma once
 #include "TrafoParameters.h"
 #include "../../representations/GeometricObject.h"
+#include "../../datastructures/HybridAutomaton/State.h"
 #include <carl/util/SFINAE.h>
 
 namespace hypro {

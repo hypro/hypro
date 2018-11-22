@@ -16,7 +16,7 @@ namespace hypro {
 	template<typename Number>
 	antlrcpp::Any HyproInitialSetVisitor<Number>::visitInit(HybridAutomatonParser::InitContext *ctx){
 
-		typename HybridAutomaton<Number, State_t<Number>>::locationStateMap initialState;
+		typename HybridAutomaton<Number>::locationStateMap initialState;
 
 		//For all initialstates - there must be at least one according to grammar
 		for(auto initStateCtx : ctx->initstate()){
@@ -37,14 +37,9 @@ namespace hypro {
 			}
 
 			//1.Get ConstraintSet, build State and add to localStateMap
-			ConstraintSet<Number> conSet = visit(initStateCtx);
-			State_t<Number> state;
+			ConstraintSetT<Number> conSet = visit(initStateCtx);
 			assert(initialLoc != NULL);
-			state.setLocation(initialLoc);
-			state.setSet(conSet,0);
-			assert(state.getNumberSets() == 1);
-			state.setTimestamp(carl::Interval<mpq_class>(0));
-			initialState.emplace(std::make_pair(initialLoc, state));
+			initialState.emplace(std::make_pair(initialLoc, conSet));
 		}
 
 		return initialState;
@@ -86,6 +81,6 @@ namespace hypro {
 		std::pair<matrix_t<Number>,vector_t<Number>> result = visitor.visit(ctx->constrset());
 
 		//2.Build ConstraintSet and return it
-		return ConstraintSet<Number>(result.first, result.second);
+		return ConstraintSetT<Number>(result.first, result.second);
   	}
 }

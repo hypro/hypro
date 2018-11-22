@@ -14,24 +14,24 @@
 
 namespace hypro {
 
-  template <typename Number, typename State>
+  template <typename Number>
   class HybridAutomaton;
 
   /**
     * @brief      Class for linear hybrid automata with components.
     * @tparam     Number  Number type.
   */
-  template <typename Number, typename State>
+  template <typename Number>
   class HybridAutomatonComp {
     private:
-      std::set<HybridAutomaton<Number, State>*> mAutomatas;
+      std::set<HybridAutomaton<Number>*> mAutomatas;
 
     public:
       HybridAutomatonComp() {};
 
       ~HybridAutomatonComp() {};
 
-      void addAutomata(HybridAutomaton<Number, State>* automata) { mAutomatas.insert(automata); }
+      void addAutomata(HybridAutomaton<Number>* automata) { mAutomatas.insert(automata); }
   };
 }
 

@@ -4,9 +4,7 @@
 
 #include "representations/GeometricObject.h"
 #include "datastructures/HybridAutomaton/HybridAutomaton.h"
-#include "datastructures/HybridAutomaton/LocationManager.h"
 #include "algorithms/reachability/Reach.h"
-//#include "parser/flowstar/ParserWrapper.h"
 #include "parser/antlr4-flowstar/ParserWrapper.h"
 #include "util/statistics/statistics.h"
 #ifdef HYPRO_USE_LACE

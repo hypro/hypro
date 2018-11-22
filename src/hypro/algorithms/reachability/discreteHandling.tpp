@@ -57,7 +57,7 @@ namespace reachability {
 				}
 				if(!duplicate){
 
-					s = boost::get<0>(tuple)->getReset().applyReset(s);
+					s = applyReset(s,boost::get<0>(tuple)->getReset());
 					std::pair<CONTAINMENT,State_t<Number>> invariantPair = s.satisfies(boost::get<0>(tuple)->getTarget()->getInvariant());
 					if(invariantPair.first != CONTAINMENT::NO){
 						TRACE("hypro.reacher","Enqueue " << invariantPair.second << " for level " << mCurrentLevel+1 << ", current queue size (before) is " << mWorkingQueue.size());
@@ -126,7 +126,7 @@ namespace reachability {
 			//std::cout << "Aggregated timestamp: " << aggregatedTimestamp << std::endl;
 
 			// Perform resets.
-			State_t<Number> tmp = aggregationPair.first->getReset().applyReset(collectedSets);
+			State_t<Number> tmp = applyReset(collectedSets, aggregationPair.first->getReset());
 			//std::cout << "Vertices after reset: " << std::endl;
 			//for(const auto& vertex : tmp.vertices()) {
 			//	std::cout << convert<Number,double>(vertex) << std::endl;

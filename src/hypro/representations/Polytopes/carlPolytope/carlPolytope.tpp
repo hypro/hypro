@@ -81,6 +81,22 @@ namespace hypro {
     }
 
     template<typename Number, typename Converter, typename Settings>
+    void CarlPolytopeT<Number,Converter,Settings>::eliminateVariable(carl::Variable var) {
+        DEBUG("hypro.representations.carlPolytope","Eliminate variable " << var);
+        QEQuery query;
+        query.emplace_back(std::make_pair(QuantifierType::EXISTS, std::vector<carl::Variable>({var})));
+        mFormula = eliminateQuantifiers(mFormula);
+    }
+
+    template<typename Number, typename Converter, typename Settings>
+    void CarlPolytopeT<Number,Converter,Settings>::eliminateVariables(const std::vector<carl::Variable>& vars) {
+        DEBUG("hypro.representations.carlPolytope","Eliminate variables..");
+        QEQuery query;
+        query.emplace_back(std::make_pair(QuantifierType::EXISTS, vars));
+        mFormula = eliminateQuantifiers(mFormula);
+    }
+
+    template<typename Number, typename Converter, typename Settings>
     std::vector<Point<Number>> CarlPolytopeT<Number,Converter,Settings>::vertices() const {
         auto hpoly = Converter::toHPolytope(*this);
         return hpoly.vertices();

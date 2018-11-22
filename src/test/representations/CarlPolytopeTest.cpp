@@ -85,7 +85,7 @@ TYPED_TEST(CarlPolytopeTest, GetHalfspaces)
     EXPECT_TRUE(std::find(hspVector.begin(), hspVector.end(), hypro::Halfspace<TypeParam>({0,-1},-1)) != hspVector.end());
 }
 
-TYPED_TEST(CarlPolytopeTest, AddConstraints)
+TYPED_TEST(CarlPolytopeTest, AddConstraint)
 {
     carl::Interval<TypeParam> i1 = carl::Interval<TypeParam>{1,2};
     carl::Interval<TypeParam> i2 = carl::Interval<TypeParam>{1,2};

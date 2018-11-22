@@ -64,7 +64,7 @@ struct ReachSettings {
 template <typename Number, typename ReacherSettings>
 class Reach {
 private:
-	HybridAutomaton<Number, State_t<Number>> mAutomaton;
+	HybridAutomaton<Number> mAutomaton;
 	ReachabilitySettings mSettings;
 	std::size_t mCurrentLevel = 0;
     Number mBloatingFactor = 0;
@@ -82,7 +82,7 @@ public:
 	 * @param _automaton The analyzed automaton.
 	 * @param _settings The reachability analysis settings.
 	 */
-	Reach( const HybridAutomaton<Number, State_t<Number>>& _automaton, const ReachabilitySettings& _settings = ReachabilitySettings());
+	Reach( const HybridAutomaton<Number>& _automaton, const ReachabilitySettings& _settings = ReachabilitySettings());
 
 	/**
 	 * @brief Computes the forward reachability of the given automaton.

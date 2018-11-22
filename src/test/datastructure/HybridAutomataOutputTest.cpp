@@ -7,6 +7,8 @@
 #include "../defines.h"
 //#include "datastructures/HybridAutomaton/LocationManager.h"
 #include "datastructures/HybridAutomaton/HybridAutomaton.h"
+#include "datastructures/HybridAutomaton/State.h"
+#include "representations/GeometricObject.h"
 #include "datastructures/HybridAutomaton/output/Flowstar.h"
 #include "util/multithreading/Filewriter.h"
 #include "parser/antlr4-flowstar/ParserWrapper.h"
@@ -33,7 +35,7 @@ protected:
     	loc2 = std::make_unique<Location<double>>();
 
     	trans = std::make_unique<Transition<double>>();
-    	
+
 		invariantVec(0) = 10;
 		invariantVec(1) = 20;
 
@@ -82,7 +84,7 @@ protected:
 		locSet.insert(std::move(loc1));
 		locSet.insert(std::move(loc2));
 		hybrid.setLocations(std::move(locSet));
-		
+
 		//Polytope for InitialValuation & Guard Assignment
 		coordinates(0) = 2;
 		coordinates(1) = 3;
@@ -93,18 +95,16 @@ protected:
 		auto hpoly = Converter<double>::toHPolytope(poly);
 
 		for(auto loc : initLocSet) {
-			State_t<double> initState(loc);
-			initState.setSet(ConstraintSet<double>(hpoly.matrix(), hpoly.vector()));
-			hybrid.addInitialState(initState);
+			hybrid.addInitialState(loc, ConstraintSetT<double>(hpoly.matrix(), hpoly.vector()));
 		}
 
 		ptrSet.insert(trans.get());
 		transSet.insert(std::move(trans));
-		
+
 		hybrid.getLocation("Location1")->setTransitions(ptrSet);
 		//loc1->setTransitions(ptrSet);
 		hybrid.setTransitions(std::move(transSet));
-		
+
     }
 
     virtual void TearDown()

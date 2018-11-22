@@ -7,6 +7,7 @@
 #include "../defines.h"
 //#include "datastructures/HybridAutomaton/LocationManager.h"
 #include "datastructures/HybridAutomaton/HybridAutomaton.h"
+#include "datastructures/HybridAutomaton/State.h"
 #include "representations/GeometricObject.h"
 
 
@@ -98,12 +99,10 @@ protected:
     	poly = valuation_t<Number>(vecSet);
 		auto hpoly = Converter<Number>::toHPolytope(poly);
 
-		hybrid.setLocations(std::move(locSet));
 		for(auto loc : initLocSet) {
-			State_t<Number> initState(loc);
-			initState.setSet(ConstraintSet<Number>(hpoly.matrix(), hpoly.vector()));
-			hybrid.addInitialState(initState);
+			hybrid.addInitialState(loc, ConstraintSet<Number>(hpoly.matrix(), hpoly.vector()));
 		}
+		hybrid.setLocations(std::move(locSet));
 		transSet.insert(std::move(copyOfTrans));
 		ptrSet.insert(transSet.begin()->get());
 		hybrid.setTransitions(std::move(transSet));
@@ -351,10 +350,7 @@ TYPED_TEST(HybridAutomataTest, HybridAutomatonTest)
 	vector_t<TypeParam> vec = vector_t<TypeParam>(2);
 	vec << 1,2;
 
-	State_t<TypeParam> s(this->loc1.get());
-	s.setSet(ConstraintSet<TypeParam>(matr, vec));
-
-	h1.addInitialState(s);
+	h1.addInitialState(this->loc1.get(), ConstraintSet<TypeParam>(matr, vec));
 
 	//Copy constructor;
 	/*

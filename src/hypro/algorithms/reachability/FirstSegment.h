@@ -1,6 +1,8 @@
 #pragma once
 #include "util.h"
 #include "../../representations/GeometricObject.h"
+#include "../../datastructures/HybridAutomaton/Location.h"
+#include "../../datastructures/HybridAutomaton/State.h"
 #include <boost/tuple/tuple.hpp>
 
 namespace hypro{
@@ -159,7 +161,7 @@ boost::tuple<CONTAINMENT, State, matrix_t<Number>, vector_t<Number>, Box<Number>
         	errorBoxVector = errorBoxes(carl::convert<tNumber,Number>(timeStep), _state.getLocation()->getFlow(), initialPair.second, trafoMatrix, externalInputTmp);
         } else {
         	//std::cout << "Model has external input: " << _state.getLocation()->getExternalInput() << std::endl;
-        	errorBoxVector = errorBoxes(carl::convert<tNumber,Number>(timeStep), _state.getLocation()->getFlow(), initialPair.second, trafoMatrix, _state.getLocation()->getExternalInput());
+        	errorBoxVector = errorBoxes(carl::convert<tNumber,Number>(timeStep), _state.getLocation()->getFlow(), initialPair.second, trafoMatrix, Box<Number>{_state.getLocation()->getExternalInput()});
         }
 
 

@@ -141,13 +141,14 @@ bool Transition<Number>::isComposedOf(const Transition<Number>& rhs, const std::
     return true;
 }
 
+/*
 template<typename Number, typename State>
 std::unique_ptr<Transition<Number>> parallelCompose(const Transition<Number>* lhsT
                                                     , const Transition<Number>* rhsT
                                                     , const std::vector<std::string>& lhsVar
                                                     , const std::vector<std::string>& rhsVar
                                                     , const std::vector<std::string>& haVar
-                                                    , const HybridAutomaton<Number, State>& ha
+                                                    , const HybridAutomaton<Number>& ha
                                                     , const std::set<Label> lhsLabels
                                                     , const std::set<Label> rhsLabels)
 {
@@ -235,6 +236,6 @@ std::unique_ptr<Transition<Number>> parallelCompose(const Transition<Number>* lh
 
     return t;
 }
-
+*/
 
 } //namespace hypro

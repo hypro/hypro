@@ -2,16 +2,16 @@
 #pragma once
 
 #include "Condition.h"
+#include "Visitors.h"
 #include "../../representations/types.h"
 #include "../../representations/GeometricObject.h"
-#include "../HybridAutomaton/Visitors.h"
 //#include "../../util/tuple_expansion/for_each.h"
 #include <carl/util/tuple_util.h>
 #include <carl/interval/Interval.h>
 
 namespace hypro
 {
-template <typename Number, typename State>
+template <typename Number>
 class HybridAutomaton;
 
 template<typename Number>
@@ -467,6 +467,7 @@ class State
 
 };
 
+/*
 template<typename Number, typename State>
 State parallelCompose(
     const State& lhsInitState, const State& rhsInitState,
@@ -502,6 +503,7 @@ State parallelCompose(
     // return state
     return haInitState;
 }
+*/
 
 #ifdef HYPRO_USE_PPL
 template<typename Number>
@@ -514,3 +516,4 @@ using State_t = State<Number, Box<Number>, ConstraintSet<Number>, SupportFunctio
 } // namespace
 
 #include "State.tpp"
+#include "StateUtil.h"
