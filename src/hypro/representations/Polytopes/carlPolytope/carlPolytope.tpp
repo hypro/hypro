@@ -17,6 +17,8 @@ namespace hypro {
         }
 
         mFormula = FormulaT<Number>{carl::FormulaType::AND, newConstraints};
+        TRACE("hypro.representations.carlPolytope","Result formula: " << mFormula);
+        detectDimension();
     }
 
     template<typename Number, typename Converter, typename Settings>
@@ -29,6 +31,8 @@ namespace hypro {
             newConstraints.insert(newConstraints.end(),tmp.begin(),tmp.end());
         }
         mFormula = FormulaT<Number>{carl::FormulaType::AND, newConstraints};
+        TRACE("hypro.representations.carlPolytope","Result formula: " << mFormula);
+        detectDimension();
     }
 
     template<typename Number, typename Converter, typename Settings>
@@ -48,7 +52,7 @@ namespace hypro {
     template<typename Number, typename Converter, typename Settings>
     const std::vector<Halfspace<Number>>& CarlPolytopeT<Number,Converter,Settings>::getHalfspaces() const {
         if(mHalfspaces.empty()) {
-            mHalfspaces = computeHalfspaces(mFormula);
+            mHalfspaces = computeHalfspaces(mFormula, this->dimension());
         }
         TRACE("hypro.representations.carlPolytope","Computed halfspaces..");
         return mHalfspaces;
@@ -62,7 +66,8 @@ namespace hypro {
         std::vector<ConstraintT<Number>> constraints;
         mFormula.getConstraints(constraints);
         constraints.push_back(constraint);
-        mFormula = FormulaT<Number>(carl::FormulaType::AND, constraints);
+        mFormula = FormulaT<Number>(carl::FormulaType::AND, constraintsToFormulas(constraints));
+        detectDimension();
     }
 
     template<typename Number, typename Converter, typename Settings>
@@ -73,12 +78,22 @@ namespace hypro {
         auto cCopy = constraints;
         mFormula.getConstraints(cCopy);
         mFormula = FormulaT<Number>(carl::FormulaType::AND, cCopy);
+        detectDimension();
     }
 
     template<typename Number, typename Converter, typename Settings>
     std::vector<Point<Number>> CarlPolytopeT<Number,Converter,Settings>::vertices() const {
         auto hpoly = Converter::toHPolytope(*this);
         return hpoly.vertices();
+    }
+
+    template<typename Number, typename Converter, typename Settings>
+    void CarlPolytopeT<Number,Converter,Settings>::detectDimension() {
+        std::size_t d = 0;
+        // get maximal state space dimension based on the variables used in mFormula.
+        std::for_each(mFormula.variables().begin(),mFormula.variables().end(), [&](const carl::Variable& v){ d = std::max(d,VariablePool::getInstance().id(v)); std::cout << "Var: " << v << " dimension " << VariablePool::getInstance().id(v) << std::endl;});
+        mDimension = d+1; // add one as we start counting from zero.
+        TRACE("hypro.representations.carlPolytope","Set dimension to " << mDimension );
     }
 
 } // hypro
