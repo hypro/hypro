@@ -261,6 +261,25 @@ TYPED_TEST(SupportFunctionNewTest, TrafoOp){
 */
 }
 
+TYPED_TEST(SupportFunctionNewTest, ScaleOp){
+
+	Box<TypeParam> box (std::make_pair(Point<TypeParam>({TypeParam(0),TypeParam(0)}), Point<TypeParam>({TypeParam(1), TypeParam(1)})));
+	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sf(&box);
+	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sfScale = sf.scale(TypeParam(10));
+	EXPECT_TRUE(sfScale.getRoot()->getType() == SFNEW_TYPE::SCALEOP);
+	EXPECT_EQ(sfScale.getRoot()->getOriginCount(), 1);
+	EXPECT_EQ(sfScale.getRoot()->getChildren().size(), 1);
+	EXPECT_EQ(sfScale.getRoot().use_count(), 1);
+	EXPECT_EQ((dynamic_cast<ScaleOp<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>*>(sfScale.getRoot().get())->getFactor()), TypeParam(10));
+
+	//Evaluate
+	matrix_t<TypeParam> directions = matrix_t<TypeParam>::Identity(2,2);
+	std::vector<EvaluationResult<TypeParam>> res = sfScale.multiEvaluate(directions,true);
+	EXPECT_TRUE(res.at(0) == TypeParam(10));
+	EXPECT_TRUE(res.at(1) == TypeParam(10));
+	
+}
+
 TYPED_TEST(SupportFunctionNewTest, Constructors){
 
 	//Empty constructor
