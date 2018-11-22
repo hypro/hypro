@@ -81,7 +81,7 @@ ZonotopeT<Number,Converter<Number>,ZonotopeSetting> Converter<Number>::toZonotop
 
 template <typename Number>
 template<typename ZonotopeSetting, typename inSetting>
-ZonotopeT<Number,Converter<Number>,ZonotopeSetting> Converter<Number>::toZonotope( const ConstraintSetT<Number,Converter<Number>,inSetting>& _source, const CONV_MODE mode ){
+ZonotopeT<Number,Converter<Number>,ZonotopeSetting> Converter<Number>::toZonotope( const ConstraintSetT<Number,inSetting>& _source, const CONV_MODE mode ){
     //converts source object into a v-polytope
     auto temp = toHPolytope(_source, mode);
 

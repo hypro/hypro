@@ -14,7 +14,7 @@ void convert(const In& in, BoxT<Number,Converter<Number>,OutSettings>& out) {
 }
 
 template<typename Number, typename OutSettings, typename In>
-void convert(const In& in, ConstraintSetT<Number,Converter<Number>,OutSettings>& out) {
+void convert(const In& in, ConstraintSetT<Number,OutSettings>& out) {
     out = Converter<Number>::template toConstraintSet<OutSettings>(in);
 }
 

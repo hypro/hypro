@@ -25,7 +25,7 @@ PolytopeT<Number,Converter,PolytopeSetting> Converter<Number>::toPolytope(const 
 //Conversion from constraintSet to ppl poly
 template<typename Number>
 template<typename PolytopeSetting, typename inSetting>
-PolytopeT<Number,Converter,PolytopeSetting> Converter<Number>::toPolytope(const ConstraintSetT<Number,Converter<Number>,inSetting>& source, const CONV_MODE){
+PolytopeT<Number,Converter,PolytopeSetting> Converter<Number>::toPolytope(const ConstraintSetT<Number,inSetting>& source, const CONV_MODE){
 	return PolytopeT<Number,Converter,PolytopeSetting>(source.matrix(), source.vector());
 }
 

@@ -44,7 +44,7 @@ namespace hypro {
 	antlrcpp::Any HyproLocationVisitor<Number>::visitLocation(HybridAutomatonParser::LocationContext *ctx){
 
 		//1.Calls visit(ctx->activities()) to get flowmatrix and externalInputBox
-		std::pair<matrix_t<Number>,Box<Number>> flowAndExtInput = visit(ctx->activities());
+		std::pair<matrix_t<Number>,std::vector<carl::Interval<Number>>> flowAndExtInput = visit(ctx->activities());
 		//std::cout << "---- Flow matrix is:\n" << flowAndExtInput.first << std::endl;
 		//std::cout << "---- externalInputBox is:\n" << flowAndExtInput.second << std::endl;
 
@@ -95,7 +95,7 @@ namespace hypro {
 		loc->setInvariant(inv);
 
 		// only set external input, if it is different from zero
-		if(!flowAndExtInput.second.empty() && flowAndExtInput.second != Box<Number>(std::make_pair(Point<Number>(vector_t<Number>::Zero(flowAndExtInput.first.cols()-1)), Point<Number>(vector_t<Number>::Zero(flowAndExtInput.first.cols()-1))))) {
+		if(!flowAndExtInput.second.empty()) {
 			//std::cout << "Set external input to " << flowAndExtInput.second << " which is not equal to " << Box<Number>(std::make_pair(Point<Number>(vector_t<Number>::Zero(flowAndExtInput.first.cols()-1)), Point<Number>(vector_t<Number>::Zero(flowAndExtInput.first.cols()-1)))) << std::endl;
 			loc->setExtInput(flowAndExtInput.second);
 		}
@@ -141,7 +141,7 @@ namespace hypro {
 		}
 
 		//4.Returns a flowmatrix and a externalInputBox
-		return std::pair<matrix_t<Number>,Box<Number>>(tmpMatrix, Box<Number>(extInputVec));
+		return std::pair<matrix_t<Number>,std::vector<carl::Interval<Number>>>(tmpMatrix, extInputVec);
 	}
 
 	template<typename Number>

@@ -1,5 +1,5 @@
 #pragma once
-#include "../../representations/GeometricObject.h"
+#include "../../representations/ConstraintSet/ConstraintSet.h"
 #include "../../representations/types.h"
 #include <iostream>
 #include <cstdlib>
@@ -9,12 +9,12 @@ namespace hypro {
 template<typename Number>
 class Condition {
 private:
-	std::vector<ConstraintSet<Number>> mConstraints;
+	std::vector<ConstraintSetT<Number>> mConstraints;
 	mutable std::size_t mHash = 0;
 public:
 	Condition() = default;
-	Condition(const matrix_t<Number>& mat, const vector_t<Number>& vec) : mConstraints( {ConstraintSet<Number>(mat,vec)} ), mHash(0) {}
-	Condition(const std::vector<boost::variant<ConstraintSet<Number>>>& sets);
+	Condition(const matrix_t<Number>& mat, const vector_t<Number>& vec) : mConstraints( {ConstraintSetT<Number>(mat,vec)} ), mHash(0) {}
+	Condition(const std::vector<boost::variant<ConstraintSetT<Number>>>& sets);
 	Condition(const Condition& orig) = default;
 	Condition(Condition&& orig) = default;
 	Condition& operator=(const Condition& orig) = default;
@@ -31,7 +31,7 @@ public:
 	void setMatrix(const matrix_t<Number>& m, std::size_t I = 0);
 	void setVector(const vector_t<Number>& v, std::size_t I = 0);
 
-	const std::vector<ConstraintSet<Number>>& constraints() const { return mConstraints; }
+	const std::vector<ConstraintSetT<Number>>& constraints() const { return mConstraints; }
 
 	std::size_t hash() const;
 

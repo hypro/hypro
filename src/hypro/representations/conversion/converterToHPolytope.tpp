@@ -23,7 +23,7 @@ HPolytopeT<Number,Converter<Number>,HPolySetting> Converter<Number>::toHPolytope
 
 template<typename Number>
 template<typename HPolySetting, typename inSetting>
-HPolytopeT<Number,Converter<Number>,HPolySetting> Converter<Number>::toHPolytope( const ConstraintSetT<Number,Converter<Number>,inSetting>& _source, const CONV_MODE ){
+HPolytopeT<Number,Converter<Number>,HPolySetting> Converter<Number>::toHPolytope( const ConstraintSetT<Number,inSetting>& _source, const CONV_MODE ){
     return HPolytopeT<Number,Converter<Number>,HPolytopeSetting>(_source.matrix(), _source.vector());
 }
 

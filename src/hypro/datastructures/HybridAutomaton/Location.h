@@ -8,9 +8,6 @@
 #pragma once
 
 #include "Condition.h"
-//#include "LocationManager.h"
-//#include "lib/utils/types.h"
-//#include <hypro/types.h>
 #include "../../types.h"
 #include <iostream>
 #include <string>
@@ -20,8 +17,6 @@ namespace hypro
 template<typename Number>
 class Transition;
 
-template<typename Number>
-class LocationManager;
 
 /**
  * @brief      Class for location.
@@ -30,8 +25,6 @@ class LocationManager;
 template<typename Number>
 class Location
 {
-    friend LocationManager<Number>;
-
 protected:
     using transitionSet = std::set<Transition<Number>*>;
 
@@ -53,7 +46,7 @@ protected:
 
 private:
     mutable std::vector<matrix_t<Number>> mFlows;
-    Box<Number> mExternalInput = Box<Number>::Empty();
+    std::vector<carl::Interval<Number>> mExternalInput;
     bool mHasExternalInput = false;
     transitionSet mTransitions;
     Condition<Number> mInvariant;
@@ -74,7 +67,7 @@ public:
     const std::vector<matrix_t<Number>>& getFlows() const { return mFlows; }
     const Condition<Number>& getInvariant() const { return mInvariant; }
     const transitionSet& getTransitions() const { return mTransitions; }
-    const Box<Number>& getExternalInput() const { return mExternalInput; }
+    const std::vector<carl::Interval<Number>>& getExternalInput() const { return mExternalInput; }
     bool hasExternalInput() const { return mHasExternalInput; }
     [[deprecated("use hash() instead")]]
     unsigned getId() const { return mId; }
@@ -86,7 +79,7 @@ public:
     void setTransitions(const transitionSet& trans) { mTransitions = trans; mHash = 0; }
     void addTransition(Transition<Number>* trans) { mTransitions.insert(trans); mHash = 0; }
     void updateTransition(Transition<Number>* original, Transition<Number>* newT);
-    void setExtInput(const Box<Number>& b);
+    void setExtInput(const std::vector<carl::Interval<Number>>& b);
 
     std::size_t hash() const;
 

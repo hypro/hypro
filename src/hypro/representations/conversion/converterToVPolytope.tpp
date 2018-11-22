@@ -153,7 +153,7 @@ VPolytopeT<Number,Converter<Number>,VPolySetting> Converter<Number>::toVPolytope
 
 template<typename Number>
 template<typename VPolySetting, typename inSetting>
-VPolytopeT<Number,Converter<Number>,VPolySetting> Converter<Number>::toVPolytope( const ConstraintSetT<Number,Converter<Number>,inSetting>& _source, const CONV_MODE ){
+VPolytopeT<Number,Converter<Number>,VPolySetting> Converter<Number>::toVPolytope( const ConstraintSetT<Number,inSetting>& _source, const CONV_MODE ){
     return VPolytopeT<Number,Converter,VPolySetting>(_source.matrix(), _source.vector());
 }
 

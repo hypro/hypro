@@ -15,24 +15,18 @@ Location<Number>::Location(unsigned _id, const Location<Number>& _loc)
 {}
 
 template<typename Number>
-Location<Number>::Location(unsigned _id, const matrix_t<Number>& _mat) : mFlows(), mId(_id)
+Location<Number>::Location(unsigned _id, const matrix_t<Number>& _mat) : mFlows(), mId(_id), mExternalInput()
 {
 	mFlows.push_back(_mat);
-	std::vector<Point<Number>> point;
-	point.push_back(Point<Number>(vector_t<Number>::Zero(_mat.cols() -1 )));
-	mExternalInput = Box<Number>(point);
 	mHasExternalInput = false;
 	mHash = 0;
 }
 
 template<typename Number>
 Location<Number>::Location(unsigned _id, const matrix_t<Number>& _mat, const typename Location<Number>::transitionSet& _trans, const Condition<Number>& _inv)
-    : mFlows(), mExternalInput(), mTransitions(_trans), mInvariant(_inv), mId(_id)
+    : mFlows(), mExternalInput(), mTransitions(_trans), mInvariant(_inv), mId(_id), mExternalInput()
 {
 	mFlows.push_back(_mat);
-	std::vector<Point<Number>> point;
-	point.push_back(Point<Number>(vector_t<Number>::Zero(_mat.cols() -1 )));
-	mExternalInput = Box<Number>(point);
 	mHasExternalInput = false;
 	mHash = 0;
 }
@@ -49,12 +43,9 @@ Location<Number>::Location(const Location<Number>& _loc)
 {}
 
 template<typename Number>
-Location<Number>::Location(const matrix_t<Number>& _mat) : mFlows(), mId()
+Location<Number>::Location(const matrix_t<Number>& _mat) : mFlows(), mId(), mExternalInput()
 {
 	mFlows.push_back(_mat);
-	std::vector<Point<Number>> point;
-	point.push_back(Point<Number>(vector_t<Number>::Zero(_mat.cols() -1 )));
-	mExternalInput = Box<Number>(point);
 	mHasExternalInput = false;
 	mHash = 0;
 }
@@ -64,9 +55,6 @@ Location<Number>::Location(const matrix_t<Number>& _mat, const typename Location
     : mFlows(), mExternalInput(), mTransitions(_trans), mInvariant(_inv), mId()
 {
 	mFlows.push_back(_mat);
-	std::vector<Point<Number>> point;
-	point.push_back(Point<Number>(vector_t<Number>::Zero(_mat.cols() -1 )));
-	mExternalInput = Box<Number>(point);
 	mHasExternalInput = false;
 	mHash = 0;
 }
@@ -77,11 +65,6 @@ void Location<Number>::setFlow(const matrix_t<Number>& mat, std::size_t I) {
 		mFlows.push_back(matrix_t<Number>::Identity(mat.rows(),mat.cols()));
 	}
 	mFlows.push_back(mat);
-	if(!mHasExternalInput) {
-		std::vector<Point<Number>> point;
-		point.push_back(Point<Number>(vector_t<Number>::Zero(mat.cols() -1 )));
-		mExternalInput = Box<Number>(point);
-	}
 	mHash = 0;
 }
 
@@ -99,10 +82,10 @@ void Location<Number>::updateTransition(Transition<Number>* original, Transition
 }
 
 template<typename Number>
-void Location<Number>::setExtInput(const Box<Number>& b) {
+void Location<Number>::setExtInput(const std::vector<carl::Interval<Number>>& b) {
 	mExternalInput = b;
-	for(std::size_t i = 0; i < b.dimension(); ++i) {
-		if(b.min()[i] != 0 || b.max()[i] != 0) {
+	for(std::size_t i = 0; i < b.size(); ++i) {
+		if(b[i] != carl::Interval<Number>(0)) {
 			mHasExternalInput = true;
 			break;
 		}
