@@ -91,7 +91,8 @@ namespace hypro {
         DEBUG("hypro.representations.carlPolytope","Eliminate variable " << var);
         QEQuery query;
         query.emplace_back(std::make_pair(QuantifierType::EXISTS, std::vector<carl::Variable>({var})));
-        mFormula = eliminateQuantifiers(mFormula);
+        mFormula = eliminateQuantifiers(mFormula, query);
+        detectDimension();
     }
 
     template<typename Number, typename Converter, typename Settings>
@@ -99,7 +100,8 @@ namespace hypro {
         DEBUG("hypro.representations.carlPolytope","Eliminate variables..");
         QEQuery query;
         query.emplace_back(std::make_pair(QuantifierType::EXISTS, vars));
-        mFormula = eliminateQuantifiers(mFormula);
+        mFormula = eliminateQuantifiers(mFormula, query);
+        detectDimension();
     }
 
     template<typename Number, typename Converter, typename Settings>
