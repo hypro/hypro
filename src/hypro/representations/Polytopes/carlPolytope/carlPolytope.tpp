@@ -81,6 +81,12 @@ namespace hypro {
     }
 
     template<typename Number, typename Converter, typename Settings>
+    void CarlPolytopeT<Number,Converter,Settings>::substituteVariable(carl::Variable oldVar, carl::Variable newVar) {
+        mFormula = mFormula.substitute(oldVar, PolyT<Number>(newVar));
+        detectDimension();
+    }
+
+    template<typename Number, typename Converter, typename Settings>
     void CarlPolytopeT<Number,Converter,Settings>::eliminateVariable(carl::Variable var) {
         DEBUG("hypro.representations.carlPolytope","Eliminate variable " << var);
         QEQuery query;

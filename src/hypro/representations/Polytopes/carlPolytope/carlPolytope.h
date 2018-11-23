@@ -52,6 +52,7 @@ public:
     void setDimension(std::size_t d) { mDimension = d; }
     void addConstraint(const ConstraintT<Number>& constraint);
     void addConstraints(const std::vector<ConstraintT<Number>>& constraints);
+    void substituteVariable(carl::Variable oldVar, carl::Variable newVar);
 
     void eliminateVariable(carl::Variable var);
     void eliminateVariables(const std::vector<carl::Variable>& vars);
