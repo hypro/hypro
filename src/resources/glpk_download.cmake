@@ -5,7 +5,7 @@ ExternalProject_Add(
     LOG_DOWNLOAD true
     LOG_CONFIGURE true
     LOG_BUILD true
-    DOWNLOAD_NO_PROGRESS 1
+    TIMEOUT 60
 	URL ftp://ftp.gnu.org/gnu/glpk/glpk-${glpk_version}.tar.gz
 	#SOURCE_DIR "${CMAKE_BINARY_DIR}/resources/glpk-${glpk_version}"
     CONFIGURE_COMMAND ./configure --prefix=${CMAKE_BINARY_DIR}/resources/src/glpk_download --with-gmp --with-pic CPPFLAGS=-fPIC --disable-shared --disable-dl --enable-static
