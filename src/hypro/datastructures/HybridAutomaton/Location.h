@@ -125,7 +125,7 @@ public:
 	    }
 		ostr << "\t Inv: " << std::endl << l.getInvariant();
 	    //ostr << l.getInvariant().getDiscreteCondition() << std::endl;
-      	ostr << "ExternalInput:\n" << l.getExternalInput() << std::endl;
+      	//ostr << "ExternalInput:\n" << l.getExternalInput() << std::endl;
 	    ostr << "Transitions: " << std::endl;
 	    for (auto transitionPtr : l.getTransitions()) {
 	        ostr << *transitionPtr << std::endl;
