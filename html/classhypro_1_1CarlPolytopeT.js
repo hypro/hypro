@@ -13,6 +13,7 @@ var classhypro_1_1CarlPolytopeT =
     [ "getHalfspaces", "classhypro_1_1CarlPolytopeT.html#a4d1cd4783ce8c080a7aac208ce9cffa1", null ],
     [ "intersect", "classhypro_1_1CarlPolytopeT.html#a05a33f7e45f6154592a4aa01795ad275", null ],
     [ "setDimension", "classhypro_1_1CarlPolytopeT.html#a4d407c5dc2cca376ed6831d9452d9947", null ],
+    [ "substituteVariable", "classhypro_1_1CarlPolytopeT.html#a3636aca5f933c4882141b4f7a8d7c5b3", null ],
     [ "vertices", "classhypro_1_1CarlPolytopeT.html#ac0d6614d0f85d0932543d43951f8c58d", null ],
     [ "operator<<", "classhypro_1_1CarlPolytopeT.html#a7ad0fa65c0fd3a835b1c50fbfa73483f", null ]
 ];

@@ -1,5 +1,6 @@
 var NAVTREEINDEX28 =
 {
+"classhypro_1_1ltiBadStateHandler.html#a9db99c75b13e72a7aa43a4c0fd299f75":[9,0,1,20,2],
 "classhypro_1_1ltiBadStateHandler.html#aad7999212328ae63f1ccc59077745208":[9,0,1,20,8],
 "classhypro_1_1ltiBadStateHandler.html#ab01169d66f96f9bb7c7bf1581517434e":[9,0,1,20,4],
 "classhypro_1_1ltiBadStateHandler.html#ac537df5cc5bb0a903bc846d806303d04":[9,0,1,20,3],
@@ -248,6 +249,5 @@ var NAVTREEINDEX28 =
 "example__worker_8cpp_source.html":[10,0,0,36],
 "example__zonotope_8cpp_source.html":[10,0,0,37],
 "example_benchmark_8cpp-example.html":[11,0],
-"example_bouncingBall_8cpp-example.html":[11,1],
-"example_box_8cpp-example.html":[11,2]
+"example_bouncingBall_8cpp-example.html":[11,1]
 };
