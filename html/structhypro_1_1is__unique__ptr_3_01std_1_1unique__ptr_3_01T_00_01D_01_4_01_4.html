@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.6"/>
-<title>HyPro: /home/travis/build/hypro/hypro/src/hypro/flags.h Source File</title>
+<title>HyPro: hypro::is_unique_ptr&lt; std::unique_ptr&lt; T, D &gt; &gt; Struct Template Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -50,8 +50,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li><a href="pages.html"><span>Related&#160;Pages</span></a></li>
       <li><a href="modules.html"><span>Modules</span></a></li>
       <li><a href="namespaces.html"><span>Namespaces</span></a></li>
-      <li><a href="annotated.html"><span>Classes</span></a></li>
-      <li class="current"><a href="files.html"><span>Files</span></a></li>
+      <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
+      <li><a href="files.html"><span>Files</span></a></li>
       <li><a href="examples.html"><span>Examples</span></a></li>
       <li>
         <div id="MSearchBox" class="MSearchBoxInactive">
@@ -73,7 +73,10 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   </div>
   <div id="navrow2" class="tabs2">
     <ul class="tablist">
-      <li><a href="files.html"><span>File&#160;List</span></a></li>
+      <li><a href="annotated.html"><span>Class&#160;List</span></a></li>
+      <li><a href="classes.html"><span>Class&#160;Index</span></a></li>
+      <li><a href="inherits.html"><span>Class&#160;Hierarchy</span></a></li>
+      <li><a href="functions.html"><span>Class&#160;Members</span></a></li>
     </ul>
   </div>
 </div><!-- top -->
@@ -88,7 +91,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   </div>
 </div>
 <script type="text/javascript">
-$(document).ready(function(){initNavTree('flags_8h_source.html','');});
+$(document).ready(function(){initNavTree('structhypro_1_1is__unique__ptr_3_01std_1_1unique__ptr_3_01T_00_01D_01_4_01_4.html','');});
 </script>
 <div id="doc-content">
 <!-- window showing the filter options -->
@@ -107,34 +110,25 @@ $(document).ready(function(){initNavTree('flags_8h_source.html','');});
 
 <div class="header">
   <div class="headertitle">
-<div class="title">flags.h</div>  </div>
+<div class="title">hypro::is_unique_ptr&lt; std::unique_ptr&lt; T, D &gt; &gt; Struct Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#pragma once</span></div>
-<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor"></span><span class="comment">/* #undef SUPPORT_MPFR */</span></div>
-<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment">/* #undef COMPARE_CDD */</span></div>
-<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment">/* #undef COMPARE_POLYMAKE */</span></div>
-<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment">/* #undef HYPRO_USE_PPL */</span></div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment">/* #undef HYPRO_USE_OPENMP */</span></div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="comment">/* #undef HYPRO_USE_SMTRAT */</span></div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment">/* #undef HYPRO_USE_SOPLEX */</span></div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="comment">/* #undef HYPRO_USE_Z3 */</span></div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="comment">/* #undef USE_CLANG */</span></div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="comment">/* #undef EXTERNALIZE_CLASSES */</span></div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#define HYPRO_LOGGING</span></div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="preprocessor"></span><span class="comment">/* #undef HYPRO_STATISTICS */</span></div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="comment">/* #undef FORWARD_REACHABILITY_METHOD_2 */</span></div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;</div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="preprocessor">#ifdef HYPRO_USE_SOPLEX</span></div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define SOPLEX_WITH_GMP</span></div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#endif</span></div>
-</div><!-- fragment --></div><!-- contents -->
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><h3>template&lt;class T, class D&gt;<br/>
+struct hypro::is_unique_ptr&lt; std::unique_ptr&lt; T, D &gt; &gt;</h3>
+
+
+<p>Definition at line <a class="el" href="typetraits_8h_source.html#l00018">18</a> of file <a class="el" href="typetraits_8h_source.html">typetraits.h</a>.</p>
+</div><hr/>The documentation for this struct was generated from the following file:<ul>
+<li>/home/travis/build/hypro/hypro/src/hypro/util/<a class="el" href="typetraits_8h_source.html">typetraits.h</a></li>
+</ul>
+</div><!-- contents -->
 </div><!-- doc-content -->
 <!-- HTML footer for doxygen 1.8.12-->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_2ce0cb9797b50c8d842bc50008b46cdd.html">hypro</a></li><li class="navelem"><b>flags.h</b></li>
+    <li class="navelem"><a class="el" href="namespacehypro.html">hypro</a></li><li class="navelem"><a class="el" href="structhypro_1_1is__unique__ptr_3_01std_1_1unique__ptr_3_01T_00_01D_01_4_01_4.html">is_unique_ptr< std::unique_ptr< T, D > ></a></li>
     <li class="footer">
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.6 </li>

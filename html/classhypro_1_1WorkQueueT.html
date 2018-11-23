@@ -135,11 +135,11 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aa9d44d9015f1646def026fc2ad73ded4"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa9d44d9015f1646def026fc2ad73ded4"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>nonLockingPushFront</b> (const Workable &amp;item)</td></tr>
 <tr class="separator:aa9d44d9015f1646def026fc2ad73ded4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a82d06ee076c50627263a390c2e8f23d0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1WorkQueueT.html#a82d06ee076c50627263a390c2e8f23d0">enqueue</a> (const Workable &amp;item)</td></tr>
-<tr class="separator:a82d06ee076c50627263a390c2e8f23d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae7c43210ed5503c430095504402b776e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae7c43210ed5503c430095504402b776e"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>nonLockingEnqueue</b> (const Workable &amp;item)</td></tr>
-<tr class="separator:ae7c43210ed5503c430095504402b776e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a757dd7247347b85166a8fcddb814ca65"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1WorkQueueT.html#a757dd7247347b85166a8fcddb814ca65">enqueue</a> (Workable &amp;&amp;item)</td></tr>
+<tr class="separator:a757dd7247347b85166a8fcddb814ca65"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa168cb736cffc7a136def76a8388c2bc"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa168cb736cffc7a136def76a8388c2bc"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>nonLockingEnqueue</b> (Workable &amp;&amp;item)</td></tr>
+<tr class="separator:aa168cb736cffc7a136def76a8388c2bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aee52999fbf2fd883b9d07f9bd26d699d"><td class="memItemLeft" align="right" valign="top">Workable&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1WorkQueueT.html#aee52999fbf2fd883b9d07f9bd26d699d">dequeueFront</a> ()</td></tr>
 <tr class="separator:aee52999fbf2fd883b9d07f9bd26d699d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad26359ed06dde66f00a592719f4a3591"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad26359ed06dde66f00a592719f4a3591"></a>
@@ -184,7 +184,7 @@ class hypro::WorkQueueT&lt; Workable, Setting &gt;</h3>
 
 <p>Class encapsulating a thread safe queue in order to be accessed by multiple workers. </p>
 
-<p>Definition at line <a class="el" href="WorkQueue_8h_source.html#l00023">23</a> of file <a class="el" href="WorkQueue_8h_source.html">WorkQueue.h</a>.</p>
+<p>Definition at line <a class="el" href="WorkQueue_8h_source.html#l00025">25</a> of file <a class="el" href="WorkQueue_8h_source.html">WorkQueue.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="a57ee87bd75ed2aa560fc67a9c979f245"></a>
 <div class="memitem">
@@ -210,7 +210,7 @@ template&lt;class Workable, class Setting&gt; </div>
 </div><div class="memdoc">
 <p>Destructor </p>
 
-<p>Definition at line <a class="el" href="WorkQueue_8h_source.html#l00038">38</a> of file <a class="el" href="WorkQueue_8h_source.html">WorkQueue.h</a>.</p>
+<p>Definition at line <a class="el" href="WorkQueue_8h_source.html#l00040">40</a> of file <a class="el" href="WorkQueue_8h_source.html">WorkQueue.h</a>.</p>
 
 </div>
 </div>
@@ -234,7 +234,7 @@ template&lt;class Workable, class Setting&gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="a82d06ee076c50627263a390c2e8f23d0"></a>
+<a class="anchor" id="a757dd7247347b85166a8fcddb814ca65"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
@@ -243,7 +243,7 @@ template&lt;class Workable, class Setting&gt; </div>
         <tr>
           <td class="memname">void <a class="el" href="classhypro_1_1WorkQueueT.html">hypro::WorkQueueT</a>&lt; Workable, Setting &gt;::enqueue </td>
           <td>(</td>
-          <td class="paramtype">const Workable &amp;&#160;</td>
+          <td class="paramtype">Workable &amp;&amp;&#160;</td>
           <td class="paramname"><em>item</em></td><td>)</td>
           <td></td>
         </tr>

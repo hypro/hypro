@@ -7,6 +7,8 @@ var classhypro_1_1CarlPolytopeT =
     [ "addConstraint", "classhypro_1_1CarlPolytopeT.html#acb1436678859b49b932c6f288385e79b", null ],
     [ "addConstraints", "classhypro_1_1CarlPolytopeT.html#add73ddd207862044c2499e1f14229211", null ],
     [ "dimension", "classhypro_1_1CarlPolytopeT.html#ae0e0c67ae9d68ebe7afd668b9c50ad04", null ],
+    [ "eliminateVariable", "classhypro_1_1CarlPolytopeT.html#ae193d9ae15e7a4477115a0cd9f47efbe", null ],
+    [ "eliminateVariables", "classhypro_1_1CarlPolytopeT.html#a567cc3f45dcc49dda20e5e95cee643f4", null ],
     [ "getFormula", "classhypro_1_1CarlPolytopeT.html#a7d013dd2407cb17e3feb4d44462d8ce5", null ],
     [ "getHalfspaces", "classhypro_1_1CarlPolytopeT.html#a4d1cd4783ce8c080a7aac208ce9cffa1", null ],
     [ "intersect", "classhypro_1_1CarlPolytopeT.html#a05a33f7e45f6154592a4aa01795ad275", null ],

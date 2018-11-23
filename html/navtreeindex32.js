@@ -1,11 +1,5 @@
 var NAVTREEINDEX32 =
 {
-"structstd_1_1hash_3_01hypro_1_1matrix__t_3_01Number_01_4_01_4.html":[9,0,6,13],
-"structstd_1_1hash_3_01hypro_1_1matrix__t_3_01Number_01_4_01_4.html#aa8f3c83fcc1a388a82f8a2ebf6da7235":[9,0,6,13,0],
-"structstd_1_1hash_3_01hypro_1_1vector__t_3_01Number_01_4_01_4.html":[9,0,6,12],
-"structstd_1_1hash_3_01hypro_1_1vector__t_3_01Number_01_4_01_4.html#aeb24a1a7ff9c2232c4ac1eeb17f98593":[9,0,6,12,0],
-"structstd_1_1hash_3_01set_3_01hypro_1_1Vertex_3_01Number_01_4_01_4_01_4.html":[9,0,6,10],
-"structstd_1_1hash_3_01set_3_01hypro_1_1Vertex_3_01Number_01_4_01_4_01_4.html#a84cd2d0a005c9ac3d8e6217d8f2c5f62":[9,0,6,10,0],
 "structstd_1_1hash_3_01std_1_1pair_3_01first_00_01second_01_4_01_4.html":[9,0,6,5],
 "structstd_1_1hash_3_01std_1_1pair_3_01first_00_01second_01_4_01_4.html#ae62947175df518ad6f395e8dec0576ef":[9,0,6,5,0],
 "symbols_8h_source.html":[10,0,1,0,2,2,7],

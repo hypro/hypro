@@ -1,5 +1,7 @@
 var NAVTREEINDEX1 =
 {
+"annotated.html":[9,0],
+"antlr4-flowstar_2ParserWrapper_8cpp_source.html":[10,0,1,0,2,1,17],
 "antlr4-flowstar_2ParserWrapper_8h_source.html":[10,0,1,0,2,1,18],
 "carlPolytopeSettings_8h_source.html":[10,0,1,0,3,7,0,1],
 "carlPolytope_8h_source.html":[10,0,1,0,3,7,0,0],
@@ -247,7 +249,5 @@ var NAVTREEINDEX1 =
 "classCIFLocationParser.html#a28ba184413479bd6c4d5ec200a7675cfa5c117e7442f8a421e6198831a56004ef":[9,0,10,93],
 "classCIFLocationParser.html#a28ba184413479bd6c4d5ec200a7675cfa5c56ee3e8ace676060a4899a8337a956":[9,0,10,173],
 "classCIFLocationParser.html#a28ba184413479bd6c4d5ec200a7675cfa5f6cb3663e5648f57c8d86d505290954":[9,0,10,125],
-"classCIFLocationParser.html#a28ba184413479bd6c4d5ec200a7675cfa616861498ed6f0f1c86809afd14c1ed7":[9,0,10,164],
-"classCIFLocationParser.html#a28ba184413479bd6c4d5ec200a7675cfa62ca11509f7fa989874ea462f04b49f0":[9,0,10,179],
-"classCIFLocationParser.html#a28ba184413479bd6c4d5ec200a7675cfa6524be38895a1c93c45046d22b5c26eb":[9,0,10,185]
+"classCIFLocationParser.html#a28ba184413479bd6c4d5ec200a7675cfa616861498ed6f0f1c86809afd14c1ed7":[9,0,10,164]
 };

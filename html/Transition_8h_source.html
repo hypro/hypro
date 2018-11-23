@@ -202,7 +202,7 @@ $(document).ready(function(){initNavTree('Transition_8h_source.html','');});
 <div class="line"><a name="l00143"></a><span class="lineno"><a class="line" href="classhypro_1_1Transition.html#ad161752f6bc43a85a3743ccb39a29816">  143</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classhypro_1_1Transition.html#ad161752f6bc43a85a3743ccb39a29816">decompose</a>(std::vector&lt;std::vector&lt;size_t&gt;&gt; decomposition){</div>
 <div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;        mGuard.decompose(decomposition);</div>
 <div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;        mReset.decompose(decomposition);</div>
-<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;        mHash = 0; </div>
+<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;        mHash = 0;</div>
 <div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;    }</div>
 <div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;</div>
 <div class="line"><a name="l00155"></a><span class="lineno"><a class="line" href="classhypro_1_1Transition.html#af0adce6170b39f721c3bd59bbe5497f4">  155</a></span>&#160;    <span class="keyword">friend</span> std::ostream&amp; operator&lt;&lt;(std::ostream&amp; ostr, const Transition&lt;Number&gt;&amp; t) {</div>
@@ -258,49 +258,51 @@ $(document).ready(function(){initNavTree('Transition_8h_source.html','');});
 <div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160;    }</div>
 <div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160;};</div>
 <div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160;</div>
-<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;<span class="keyword">template</span>&lt;<span class="keyword">typename</span> Number, <span class="keyword">typename</span> State&gt;</div>
-<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160;<span class="comment">//std::unique_ptr&lt;Transition&lt;Number&gt;&gt; parallelCompose(const std::unique_ptr&lt;Transition&lt;Number&gt;&gt;&amp; lhsT</span></div>
-<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;<span class="comment">//                                , const std::unique_ptr&lt;Transition&lt;Number&gt;&gt;&amp; rhsT</span></div>
-<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;std::unique_ptr&lt;Transition&lt;Number&gt;&gt; parallelCompose(<span class="keyword">const</span> Transition&lt;Number&gt;* lhsT</div>
-<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160;                                                    , <span class="keyword">const</span> Transition&lt;Number&gt;* rhsT</div>
-<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;                                                    , <span class="keyword">const</span> std::vector&lt;std::string&gt;&amp; lhsVar</div>
-<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160;                                                    , <span class="keyword">const</span> std::vector&lt;std::string&gt;&amp; rhsVar</div>
-<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160;                                                    , <span class="keyword">const</span> std::vector&lt;std::string&gt;&amp; haVar</div>
-<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;                                                    , <span class="keyword">const</span> HybridAutomaton&lt;Number, State&gt;&amp; ha</div>
-<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160;                                                    , <span class="keyword">const</span> std::set&lt;Label&gt; lhsLabels</div>
-<div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160;                                                    , <span class="keyword">const</span> std::set&lt;Label&gt; rhsLabels);</div>
-<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;</div>
-<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;}  <span class="comment">// namespace hypro</span></div>
-<div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160;</div>
-<div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160;<span class="keyword">namespace </span>std {</div>
+<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;<span class="comment">/*</span></div>
+<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160;<span class="comment">template&lt;typename Number&gt;</span></div>
+<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;<span class="comment">//std::unique_ptr&lt;Transition&lt;Number&gt;&gt; parallelCompose(const std::unique_ptr&lt;Transition&lt;Number&gt;&gt;&amp; lhsT</span></div>
+<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;<span class="comment">//                                , const std::unique_ptr&lt;Transition&lt;Number&gt;&gt;&amp; rhsT</span></div>
+<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160;<span class="comment"></span></div>
+<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;<span class="comment">std::unique_ptr&lt;Transition&lt;Number&gt;&gt; parallelCompose(const Transition&lt;Number&gt;* lhsT</span></div>
+<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160;<span class="comment">                                                    , const Transition&lt;Number&gt;* rhsT</span></div>
+<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160;<span class="comment">                                                    , const std::vector&lt;std::string&gt;&amp; lhsVar</span></div>
+<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;<span class="comment">                                                    , const std::vector&lt;std::string&gt;&amp; rhsVar</span></div>
+<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160;<span class="comment">                                                    , const std::vector&lt;std::string&gt;&amp; haVar</span></div>
+<div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160;<span class="comment">                                                    , const HybridAutomaton&lt;Number&gt;&amp; ha</span></div>
+<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;<span class="comment">                                                    , const std::set&lt;Label&gt; lhsLabels</span></div>
+<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;<span class="comment">                                                    , const std::set&lt;Label&gt; rhsLabels);</span></div>
+<div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160;<span class="comment">*/</span></div>
+<div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160;}  <span class="comment">// namespace hypro</span></div>
 <div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160;</div>
-<div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> Number&gt;</div>
-<div class="line"><a name="l00243"></a><span class="lineno"><a class="line" href="structstd_1_1hash_3_01hypro_1_1Transition_3_01Number_01_4_01_4.html">  243</a></span>&#160;    <span class="keyword">struct </span>hash&lt;hypro::Transition&lt;Number&gt;&gt;{</div>
-<div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;        <span class="keywordtype">size_t</span> operator()(<span class="keyword">const</span> <a class="code" href="classhypro_1_1Transition.html">hypro::Transition&lt;Number&gt;</a>&amp; trans) {</div>
-<div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160;            <span class="keywordtype">size_t</span> seed = 0;</div>
-<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;            carl::hash_add(seed,trans.getSource()-&gt;hash());</div>
-<div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160;            carl::hash_add(seed,trans.getTarget()-&gt;hash());</div>
-<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160;            carl::hash_add(seed,trans.getGuard().hash());</div>
-<div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160;            carl::hash_add(seed,trans.getReset().hash());</div>
-<div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160;            <span class="comment">//carl::hash_add(seed,std::hash&lt;hypro::Aggregation&gt;(mAggregationSetting));</span></div>
-<div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;            <span class="comment">//carl::hash_add(seed,std::hash&lt;bool&gt;(trans.isUrgent()));</span></div>
-<div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160;            <span class="comment">//carl::hash_add(seed,std::hash&lt;Number&gt;(mTriggerTime));</span></div>
-<div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160;            <span class="comment">//for(const auto&amp; l : mLabels) {</span></div>
-<div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160;            <span class="comment">//  carl::hash_add(seed,std::hash&lt;Label&gt;(l));</span></div>
-<div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160;            <span class="comment">//}</span></div>
-<div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160;            <span class="keywordflow">return</span> seed;</div>
-<div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160;        }</div>
-<div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160;    };</div>
-<div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160;</div>
-<div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160;} <span class="comment">// namespace</span></div>
+<div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160;<span class="keyword">namespace </span>std {</div>
+<div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160;</div>
+<div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> Number&gt;</div>
+<div class="line"><a name="l00245"></a><span class="lineno"><a class="line" href="structstd_1_1hash_3_01hypro_1_1Transition_3_01Number_01_4_01_4.html">  245</a></span>&#160;    <span class="keyword">struct </span>hash&lt;hypro::Transition&lt;Number&gt;&gt;{</div>
+<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;        <span class="keywordtype">size_t</span> operator()(<span class="keyword">const</span> <a class="code" href="classhypro_1_1Transition.html">hypro::Transition&lt;Number&gt;</a>&amp; trans) {</div>
+<div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160;            <span class="keywordtype">size_t</span> seed = 0;</div>
+<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160;            carl::hash_add(seed,trans.getSource()-&gt;hash());</div>
+<div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160;            carl::hash_add(seed,trans.getTarget()-&gt;hash());</div>
+<div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160;            carl::hash_add(seed,trans.getGuard().hash());</div>
+<div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;            carl::hash_add(seed,trans.getReset().hash());</div>
+<div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160;            <span class="comment">//carl::hash_add(seed,std::hash&lt;hypro::Aggregation&gt;(mAggregationSetting));</span></div>
+<div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160;            <span class="comment">//carl::hash_add(seed,std::hash&lt;bool&gt;(trans.isUrgent()));</span></div>
+<div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160;            <span class="comment">//carl::hash_add(seed,std::hash&lt;Number&gt;(mTriggerTime));</span></div>
+<div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160;            <span class="comment">//for(const auto&amp; l : mLabels) {</span></div>
+<div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160;            <span class="comment">//  carl::hash_add(seed,std::hash&lt;Label&gt;(l));</span></div>
+<div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160;            <span class="comment">//}</span></div>
+<div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160;            <span class="keywordflow">return</span> seed;</div>
+<div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160;        }</div>
+<div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160;    };</div>
 <div class="line"><a name="l00261"></a><span class="lineno">  261</span>&#160;</div>
-<div class="line"><a name="l00262"></a><span class="lineno">  262</span>&#160;<span class="preprocessor">#include &quot;Transition.tpp&quot;</span></div>
+<div class="line"><a name="l00262"></a><span class="lineno">  262</span>&#160;} <span class="comment">// namespace</span></div>
+<div class="line"><a name="l00263"></a><span class="lineno">  263</span>&#160;</div>
+<div class="line"><a name="l00264"></a><span class="lineno">  264</span>&#160;<span class="preprocessor">#include &quot;Transition.tpp&quot;</span></div>
 <div class="ttc" id="classhypro_1_1Transition_html_a3f7b3bbf1b50c4d5255108d74f5588a0"><div class="ttname"><a href="classhypro_1_1Transition.html#a3f7b3bbf1b50c4d5255108d74f5588a0">hypro::Transition::operator!=</a></div><div class="ttdeci">friend bool operator!=(const Transition&lt; Number &gt; &amp;lhs, const Transition&lt; Number &gt; &amp;rhs)</div><div class="ttdoc">Inequality comparison operator. </div><div class="ttdef"><b>Definition:</b> <a href="Transition_8h_source.html#l00201">Transition.h:201</a></div></div>
 <div class="ttc" id="classhypro_1_1Transition_html_a9db904bf4611ae2b689c1ab854ea97c8"><div class="ttname"><a href="classhypro_1_1Transition.html#a9db904bf4611ae2b689c1ab854ea97c8">hypro::Transition::Transition</a></div><div class="ttdeci">Transition(Location&lt; Number &gt; *source, Location&lt; Number &gt; *target, const Condition&lt; Number &gt; &amp;guard, const Reset&lt; Number &gt; &amp;reset)</div><div class="ttdoc">Full constructor for basic transition. </div><div class="ttdef"><b>Definition:</b> <a href="Transition_8h_source.html#l00097">Transition.h:97</a></div></div>
-<div class="ttc" id="classhypro_1_1Reset_html"><div class="ttname"><a href="classhypro_1_1Reset.html">hypro::Reset</a></div><div class="ttdef"><b>Definition:</b> <a href="Reset_8h_source.html#l00009">Reset.h:9</a></div></div>
-<div class="ttc" id="classhypro_1_1Location_html"><div class="ttname"><a href="classhypro_1_1Location.html">hypro::Location</a></div><div class="ttdoc">Class for location. </div><div class="ttdef"><b>Definition:</b> <a href="Location_8h_source.html#l00031">Location.h:31</a></div></div>
+<div class="ttc" id="classhypro_1_1Reset_html"><div class="ttname"><a href="classhypro_1_1Reset.html">hypro::Reset</a></div><div class="ttdef"><b>Definition:</b> <a href="Reset_8h_source.html#l00008">Reset.h:8</a></div></div>
+<div class="ttc" id="classhypro_1_1Location_html"><div class="ttname"><a href="classhypro_1_1Location.html">hypro::Location</a></div><div class="ttdoc">Class for location. </div><div class="ttdef"><b>Definition:</b> <a href="Location_8h_source.html#l00026">Location.h:26</a></div></div>
 <div class="ttc" id="classhypro_1_1Transition_html_a5f4fc1c6ef9374f064a6cd5f9a86fef4"><div class="ttname"><a href="classhypro_1_1Transition.html#a5f4fc1c6ef9374f064a6cd5f9a86fef4">hypro::Transition::Transition</a></div><div class="ttdeci">Transition()=default</div><div class="ttdoc">Default constructor. </div></div>
-<div class="ttc" id="classhypro_1_1Transition_html"><div class="ttname"><a href="classhypro_1_1Transition.html">hypro::Transition</a></div><div class="ttdoc">Class for transition. </div><div class="ttdef"><b>Definition:</b> <a href="Location_8h_source.html#l00021">Location.h:21</a></div></div>
+<div class="ttc" id="classhypro_1_1Transition_html"><div class="ttname"><a href="classhypro_1_1Transition.html">hypro::Transition</a></div><div class="ttdoc">Class for transition. </div><div class="ttdef"><b>Definition:</b> <a href="Location_8h_source.html#l00018">Location.h:18</a></div></div>
 <div class="ttc" id="classhypro_1_1Condition_html"><div class="ttname"><a href="classhypro_1_1Condition.html">hypro::Condition</a></div><div class="ttdef"><b>Definition:</b> <a href="Condition_8h_source.html#l00010">Condition.h:10</a></div></div>
 <div class="ttc" id="classhypro_1_1Transition_html_ae641838c198b78f02181b60aab6365e4"><div class="ttname"><a href="classhypro_1_1Transition.html#ae641838c198b78f02181b60aab6365e4">hypro::Transition::operator==</a></div><div class="ttdeci">friend bool operator==(const Transition&lt; Number &gt; &amp;lhs, const Transition&lt; Number &gt; &amp;rhs)</div><div class="ttdoc">Equality comparison operator. </div><div class="ttdef"><b>Definition:</b> <a href="Transition_8h_source.html#l00178">Transition.h:178</a></div></div>
 <div class="ttc" id="classhypro_1_1Transition_html_abdb77bd0b27d3961ba441c7310004f29"><div class="ttname"><a href="classhypro_1_1Transition.html#abdb77bd0b27d3961ba441c7310004f29">hypro::Transition::operator=</a></div><div class="ttdeci">Transition &amp; operator=(const Transition&lt; Number &gt; &amp;orig)=default</div><div class="ttdoc">Copy assignment operator. </div></div>

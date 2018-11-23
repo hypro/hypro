@@ -155,9 +155,10 @@ const <a class="el" href="classhypro_1_1Condition.html">Condition</a>&lt; Number
 <tr class="memitem:a5df716358559a72d9a66644c6594bcce"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5df716358559a72d9a66644c6594bcce"></a>
 const transitionSet &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getTransitions</b> () const </td></tr>
 <tr class="separator:a5df716358559a72d9a66644c6594bcce"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa127f386bd41c47279839ec9d224861d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa127f386bd41c47279839ec9d224861d"></a>
-const Box&lt; Number &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getExternalInput</b> () const </td></tr>
-<tr class="separator:aa127f386bd41c47279839ec9d224861d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a385adc86c40a3c7c44017bd22ea06370"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a385adc86c40a3c7c44017bd22ea06370"></a>
+const std::vector<br class="typebreak"/>
+&lt; carl::Interval&lt; Number &gt; &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getExternalInput</b> () const </td></tr>
+<tr class="separator:a385adc86c40a3c7c44017bd22ea06370"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac0f38bec41d57aba1e82d8b1d7b97668"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac0f38bec41d57aba1e82d8b1d7b97668"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>hasExternalInput</b> () const </td></tr>
 <tr class="separator:ac0f38bec41d57aba1e82d8b1d7b97668"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -185,9 +186,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>addTransition</b> (<a
 <tr class="memitem:af8dc5754d664496dd99c57dfcaa10fec"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af8dc5754d664496dd99c57dfcaa10fec"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>updateTransition</b> (<a class="el" href="classhypro_1_1Transition.html">Transition</a>&lt; Number &gt; *original, <a class="el" href="classhypro_1_1Transition.html">Transition</a>&lt; Number &gt; *newT)</td></tr>
 <tr class="separator:af8dc5754d664496dd99c57dfcaa10fec"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ade09fa1e2d454cba37e1262aac0d3d7e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ade09fa1e2d454cba37e1262aac0d3d7e"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>setExtInput</b> (const Box&lt; Number &gt; &amp;b)</td></tr>
-<tr class="separator:ade09fa1e2d454cba37e1262aac0d3d7e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8284f6bdb0295e1e654bd10869a82ff4"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8284f6bdb0295e1e654bd10869a82ff4"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setExtInput</b> (const std::vector&lt; carl::Interval&lt; Number &gt;&gt; &amp;b)</td></tr>
+<tr class="separator:a8284f6bdb0295e1e654bd10869a82ff4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8a5754e841553cb19fd2ecbcecc0d262"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8a5754e841553cb19fd2ecbcecc0d262"></a>
 std::size_t&#160;</td><td class="memItemRight" valign="bottom"><b>hash</b> () const </td></tr>
 <tr class="separator:a8a5754e841553cb19fd2ecbcecc0d262"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -247,7 +248,7 @@ class hypro::Location&lt; Number &gt;</h3>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="Location_8h_source.html#l00031">31</a> of file <a class="el" href="Location_8h_source.html">Location.h</a>.</p>
+<p>Definition at line <a class="el" href="Location_8h_source.html#l00026">26</a> of file <a class="el" href="Location_8h_source.html">Location.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="a6e7ef40440fc9e460618e7fdf47ea41f"></a>
 <div class="memitem">
@@ -274,10 +275,10 @@ template&lt;typename Number&gt; </div>
 </div><div class="memdoc">
 
 <p>Constructor. </p>
-<p>Note that locations should only be constructed from the <a class="el" href="classhypro_1_1LocationManager.html">LocationManager</a>. </p>
+<p>Note that locations should only be constructed from the LocationManager. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">id</td><td>The identifier given by the <a class="el" href="classhypro_1_1LocationManager.html">LocationManager</a>. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">id</td><td>The identifier given by the LocationManager. </td></tr>
   </table>
   </dd>
 </dl>
@@ -319,7 +320,7 @@ template&lt;typename Number&gt; </div>
 </div><div class="memdoc">
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">id</td><td>The identifier given by the <a class="el" href="classhypro_1_1LocationManager.html">LocationManager</a>. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">id</td><td>The identifier given by the LocationManager. </td></tr>
     <tr><td class="paramdir"></td><td class="paramname">loc]</td><td>The original location which is copied. </td></tr>
   </table>
   </dd>
@@ -362,7 +363,7 @@ template&lt;typename Number&gt; </div>
 </div><div class="memdoc">
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">id</td><td>The identifier given by the <a class="el" href="classhypro_1_1LocationManager.html">LocationManager</a>. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">id</td><td>The identifier given by the LocationManager. </td></tr>
     <tr><td class="paramdir"></td><td class="paramname">loc]</td><td>The original location which is copied. </td></tr>
   </table>
   </dd>
@@ -417,7 +418,7 @@ template&lt;typename Number&gt; </div>
 </div><div class="memdoc">
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">id</td><td>The identifier given by the <a class="el" href="classhypro_1_1LocationManager.html">LocationManager</a>. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">id</td><td>The identifier given by the LocationManager. </td></tr>
     <tr><td class="paramdir"></td><td class="paramname">loc]</td><td>The original location which is copied. </td></tr>
   </table>
   </dd>

@@ -114,16 +114,16 @@ $(document).ready(function(){initNavTree('State_8h_source.html','');});
 <div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor">#pragma once</span></div>
 <div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="preprocessor"></span></div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="preprocessor">#include &quot;Condition.h&quot;</span></div>
-<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="preprocessor">#include &quot;../../representations/types.h&quot;</span></div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="preprocessor">#include &quot;../../representations/GeometricObject.h&quot;</span></div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="preprocessor">#include &quot;../HybridAutomaton/Visitors.h&quot;</span></div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="preprocessor">#include &quot;Visitors.h&quot;</span></div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="preprocessor">#include &quot;../../representations/types.h&quot;</span></div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="preprocessor">#include &quot;../../representations/GeometricObject.h&quot;</span></div>
 <div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment">//#include &quot;../../util/tuple_expansion/for_each.h&quot;</span></div>
 <div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">#include &lt;carl/util/tuple_util.h&gt;</span></div>
 <div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="preprocessor">#include &lt;carl/interval/Interval.h&gt;</span></div>
 <div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;</div>
 <div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="keyword">namespace </span>hypro</div>
 <div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;{</div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> Number, <span class="keyword">typename</span> State&gt;</div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> Number&gt;</div>
 <div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="keyword">class </span>HybridAutomaton;</div>
 <div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;</div>
 <div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="keyword">template</span>&lt;<span class="keyword">typename</span> Number&gt;</div>
@@ -375,53 +375,56 @@ $(document).ready(function(){initNavTree('State_8h_source.html','');});
 <div class="line"><a name="l00467"></a><span class="lineno">  467</span>&#160;</div>
 <div class="line"><a name="l00468"></a><span class="lineno">  468</span>&#160;};</div>
 <div class="line"><a name="l00469"></a><span class="lineno">  469</span>&#160;</div>
-<div class="line"><a name="l00470"></a><span class="lineno">  470</span>&#160;<span class="keyword">template</span>&lt;<span class="keyword">typename</span> Number, <span class="keyword">typename</span> State&gt;</div>
-<div class="line"><a name="l00471"></a><span class="lineno">  471</span>&#160;<a class="code" href="classhypro_1_1State.html#adddf0f28a7dde72046df7c027900582f">State</a> parallelCompose(</div>
-<div class="line"><a name="l00472"></a><span class="lineno">  472</span>&#160;    <span class="keyword">const</span> <a class="code" href="classhypro_1_1State.html#adddf0f28a7dde72046df7c027900582f">State</a>&amp; lhsInitState, <span class="keyword">const</span> <a class="code" href="classhypro_1_1State.html#adddf0f28a7dde72046df7c027900582f">State</a>&amp; rhsInitState,</div>
-<div class="line"><a name="l00473"></a><span class="lineno">  473</span>&#160;    <span class="keyword">const</span> std::vector&lt;std::string&gt; lhsVar, <span class="keyword">const</span> std::vector&lt;std::string&gt; rhsVar, <span class="keyword">const</span> std::vector&lt;std::string&gt; haVar,</div>
-<div class="line"><a name="l00474"></a><span class="lineno">  474</span>&#160;    <span class="keyword">const</span> HybridAutomaton&lt;Number, State&gt; ha) {</div>
-<div class="line"><a name="l00475"></a><span class="lineno">  475</span>&#160;</div>
-<div class="line"><a name="l00476"></a><span class="lineno">  476</span>&#160;    <a class="code" href="classhypro_1_1State.html#adddf0f28a7dde72046df7c027900582f">State</a> haInitState;</div>
-<div class="line"><a name="l00477"></a><span class="lineno">  477</span>&#160;</div>
-<div class="line"><a name="l00478"></a><span class="lineno">  478</span>&#160;    <span class="comment">// set location</span></div>
-<div class="line"><a name="l00479"></a><span class="lineno">  479</span>&#160;    std::string name = lhsInitState.getLocation()-&gt;getName()+<span class="stringliteral">&quot;_&quot;</span>+rhsInitState.getLocation()-&gt;getName();</div>
-<div class="line"><a name="l00480"></a><span class="lineno">  480</span>&#160;    <span class="keyword">auto</span> location = ha.getLocation(name);</div>
-<div class="line"><a name="l00481"></a><span class="lineno">  481</span>&#160;    assert(location != NULL);</div>
-<div class="line"><a name="l00482"></a><span class="lineno">  482</span>&#160;    haInitState.setLocation(location);</div>
-<div class="line"><a name="l00483"></a><span class="lineno">  483</span>&#160;</div>
-<div class="line"><a name="l00484"></a><span class="lineno">  484</span>&#160;    <span class="comment">// set constraint</span></div>
-<div class="line"><a name="l00485"></a><span class="lineno">  485</span>&#160;    <span class="comment">// TODO: Move this.</span></div>
-<div class="line"><a name="l00486"></a><span class="lineno">  486</span>&#160;    ConstraintSet&lt;Number&gt; lhsConstraintSet = boost::get&lt;ConstraintSet&lt;Number&gt;&gt;(lhsInitState.getSet(0));</div>
-<div class="line"><a name="l00487"></a><span class="lineno">  487</span>&#160;    ConstraintSet&lt;Number&gt; rhsConstraintSet = boost::get&lt;ConstraintSet&lt;Number&gt;&gt;(rhsInitState.getSet(0));</div>
-<div class="line"><a name="l00488"></a><span class="lineno">  488</span>&#160;    matrix_t&lt;Number&gt; lhsMatrix = lhsConstraintSet.matrix();</div>
-<div class="line"><a name="l00489"></a><span class="lineno">  489</span>&#160;    matrix_t&lt;Number&gt; rhsMatrix = rhsConstraintSet.matrix();</div>
-<div class="line"><a name="l00490"></a><span class="lineno">  490</span>&#160;    vector_t&lt;Number&gt; lhsVector = lhsConstraintSet.vector();</div>
-<div class="line"><a name="l00491"></a><span class="lineno">  491</span>&#160;    vector_t&lt;Number&gt; rhsVector = rhsConstraintSet.vector();</div>
-<div class="line"><a name="l00492"></a><span class="lineno">  492</span>&#160;    matrix_t&lt;Number&gt; newMatrix = combine(lhsMatrix, rhsMatrix, haVar, lhsVar, rhsVar);</div>
-<div class="line"><a name="l00493"></a><span class="lineno">  493</span>&#160;    matrix_t&lt;Number&gt; newVector = combine(lhsVector, rhsVector);</div>
-<div class="line"><a name="l00494"></a><span class="lineno">  494</span>&#160;    ConstraintSet&lt;Number&gt; haConstraintSet = ConstraintSet&lt;Number&gt;(newMatrix, newVector);</div>
-<div class="line"><a name="l00495"></a><span class="lineno">  495</span>&#160;</div>
-<div class="line"><a name="l00496"></a><span class="lineno">  496</span>&#160;    <span class="comment">//ConstraintSet&lt;Number&gt; haConstraintSet = combine(lhsConstraintSet, rhsConstraintSet, lhsVar, rhsVar, haVar);</span></div>
-<div class="line"><a name="l00497"></a><span class="lineno">  497</span>&#160;    haInitState.setSet(haConstraintSet ,0);</div>
-<div class="line"><a name="l00498"></a><span class="lineno">  498</span>&#160;</div>
-<div class="line"><a name="l00499"></a><span class="lineno">  499</span>&#160;    <span class="comment">// set timestamp</span></div>
-<div class="line"><a name="l00500"></a><span class="lineno">  500</span>&#160;    haInitState.setTimestamp(carl::Interval&lt;Number&gt;(0));</div>
-<div class="line"><a name="l00501"></a><span class="lineno">  501</span>&#160;</div>
-<div class="line"><a name="l00502"></a><span class="lineno">  502</span>&#160;    <span class="comment">// return state</span></div>
-<div class="line"><a name="l00503"></a><span class="lineno">  503</span>&#160;    <span class="keywordflow">return</span> haInitState;</div>
-<div class="line"><a name="l00504"></a><span class="lineno">  504</span>&#160;}</div>
-<div class="line"><a name="l00505"></a><span class="lineno">  505</span>&#160;</div>
-<div class="line"><a name="l00506"></a><span class="lineno">  506</span>&#160;<span class="preprocessor">#ifdef HYPRO_USE_PPL</span></div>
-<div class="line"><a name="l00507"></a><span class="lineno">  507</span>&#160;<span class="preprocessor"></span><span class="keyword">template</span>&lt;<span class="keyword">typename</span> Number&gt;</div>
-<div class="line"><a name="l00508"></a><span class="lineno">  508</span>&#160;<span class="keyword">using</span> State_t = State&lt;Number, Box&lt;Number&gt;, ConstraintSet&lt;Number&gt;, SupportFunction&lt;Number&gt;, Zonotope&lt;Number&gt;, HPolytope&lt;Number&gt;, VPolytope&lt;Number&gt;, DifferenceBounds&lt;Number&gt;, Polytope&lt;Number&gt;&gt;;</div>
-<div class="line"><a name="l00509"></a><span class="lineno">  509</span>&#160;<span class="preprocessor">#else</span></div>
-<div class="line"><a name="l00510"></a><span class="lineno">  510</span>&#160;<span class="preprocessor"></span><span class="keyword">template</span>&lt;<span class="keyword">typename</span> Number&gt;</div>
-<div class="line"><a name="l00511"></a><span class="lineno">  511</span>&#160;<span class="keyword">using</span> State_t = State&lt;Number, Box&lt;Number&gt;, ConstraintSet&lt;Number&gt;, SupportFunction&lt;Number&gt;, Zonotope&lt;Number&gt;, HPolytope&lt;Number&gt;, VPolytope&lt;Number&gt;, DifferenceBounds&lt;Number&gt;&gt;;</div>
-<div class="line"><a name="l00512"></a><span class="lineno">  512</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00513"></a><span class="lineno">  513</span>&#160;<span class="preprocessor"></span></div>
-<div class="line"><a name="l00514"></a><span class="lineno">  514</span>&#160;} <span class="comment">// namespace</span></div>
-<div class="line"><a name="l00515"></a><span class="lineno">  515</span>&#160;</div>
-<div class="line"><a name="l00516"></a><span class="lineno">  516</span>&#160;<span class="preprocessor">#include &quot;State.tpp&quot;</span></div>
+<div class="line"><a name="l00470"></a><span class="lineno">  470</span>&#160;<span class="comment">/*</span></div>
+<div class="line"><a name="l00471"></a><span class="lineno">  471</span>&#160;<span class="comment">template&lt;typename Number, typename State&gt;</span></div>
+<div class="line"><a name="l00472"></a><span class="lineno">  472</span>&#160;<span class="comment">State parallelCompose(</span></div>
+<div class="line"><a name="l00473"></a><span class="lineno">  473</span>&#160;<span class="comment">    const State&amp; lhsInitState, const State&amp; rhsInitState,</span></div>
+<div class="line"><a name="l00474"></a><span class="lineno">  474</span>&#160;<span class="comment">    const std::vector&lt;std::string&gt; lhsVar, const std::vector&lt;std::string&gt; rhsVar, const std::vector&lt;std::string&gt; haVar,</span></div>
+<div class="line"><a name="l00475"></a><span class="lineno">  475</span>&#160;<span class="comment">    const HybridAutomaton&lt;Number, State&gt; ha) {</span></div>
+<div class="line"><a name="l00476"></a><span class="lineno">  476</span>&#160;<span class="comment"></span></div>
+<div class="line"><a name="l00477"></a><span class="lineno">  477</span>&#160;<span class="comment">    State haInitState;</span></div>
+<div class="line"><a name="l00478"></a><span class="lineno">  478</span>&#160;<span class="comment"></span></div>
+<div class="line"><a name="l00479"></a><span class="lineno">  479</span>&#160;<span class="comment">    // set location</span></div>
+<div class="line"><a name="l00480"></a><span class="lineno">  480</span>&#160;<span class="comment">    std::string name = lhsInitState.getLocation()-&gt;getName()+&quot;_&quot;+rhsInitState.getLocation()-&gt;getName();</span></div>
+<div class="line"><a name="l00481"></a><span class="lineno">  481</span>&#160;<span class="comment">    auto location = ha.getLocation(name);</span></div>
+<div class="line"><a name="l00482"></a><span class="lineno">  482</span>&#160;<span class="comment">    assert(location != NULL);</span></div>
+<div class="line"><a name="l00483"></a><span class="lineno">  483</span>&#160;<span class="comment">    haInitState.setLocation(location);</span></div>
+<div class="line"><a name="l00484"></a><span class="lineno">  484</span>&#160;<span class="comment"></span></div>
+<div class="line"><a name="l00485"></a><span class="lineno">  485</span>&#160;<span class="comment">    // set constraint</span></div>
+<div class="line"><a name="l00486"></a><span class="lineno">  486</span>&#160;<span class="comment">    // TODO: Move this.</span></div>
+<div class="line"><a name="l00487"></a><span class="lineno">  487</span>&#160;<span class="comment">    ConstraintSet&lt;Number&gt; lhsConstraintSet = boost::get&lt;ConstraintSet&lt;Number&gt;&gt;(lhsInitState.getSet(0));</span></div>
+<div class="line"><a name="l00488"></a><span class="lineno">  488</span>&#160;<span class="comment">    ConstraintSet&lt;Number&gt; rhsConstraintSet = boost::get&lt;ConstraintSet&lt;Number&gt;&gt;(rhsInitState.getSet(0));</span></div>
+<div class="line"><a name="l00489"></a><span class="lineno">  489</span>&#160;<span class="comment">    matrix_t&lt;Number&gt; lhsMatrix = lhsConstraintSet.matrix();</span></div>
+<div class="line"><a name="l00490"></a><span class="lineno">  490</span>&#160;<span class="comment">    matrix_t&lt;Number&gt; rhsMatrix = rhsConstraintSet.matrix();</span></div>
+<div class="line"><a name="l00491"></a><span class="lineno">  491</span>&#160;<span class="comment">    vector_t&lt;Number&gt; lhsVector = lhsConstraintSet.vector();</span></div>
+<div class="line"><a name="l00492"></a><span class="lineno">  492</span>&#160;<span class="comment">    vector_t&lt;Number&gt; rhsVector = rhsConstraintSet.vector();</span></div>
+<div class="line"><a name="l00493"></a><span class="lineno">  493</span>&#160;<span class="comment">    matrix_t&lt;Number&gt; newMatrix = combine(lhsMatrix, rhsMatrix, haVar, lhsVar, rhsVar);</span></div>
+<div class="line"><a name="l00494"></a><span class="lineno">  494</span>&#160;<span class="comment">    matrix_t&lt;Number&gt; newVector = combine(lhsVector, rhsVector);</span></div>
+<div class="line"><a name="l00495"></a><span class="lineno">  495</span>&#160;<span class="comment">    ConstraintSet&lt;Number&gt; haConstraintSet = ConstraintSet&lt;Number&gt;(newMatrix, newVector);</span></div>
+<div class="line"><a name="l00496"></a><span class="lineno">  496</span>&#160;<span class="comment"></span></div>
+<div class="line"><a name="l00497"></a><span class="lineno">  497</span>&#160;<span class="comment">    //ConstraintSet&lt;Number&gt; haConstraintSet = combine(lhsConstraintSet, rhsConstraintSet, lhsVar, rhsVar, haVar);</span></div>
+<div class="line"><a name="l00498"></a><span class="lineno">  498</span>&#160;<span class="comment">    haInitState.setSet(haConstraintSet ,0);</span></div>
+<div class="line"><a name="l00499"></a><span class="lineno">  499</span>&#160;<span class="comment"></span></div>
+<div class="line"><a name="l00500"></a><span class="lineno">  500</span>&#160;<span class="comment">    // set timestamp</span></div>
+<div class="line"><a name="l00501"></a><span class="lineno">  501</span>&#160;<span class="comment">    haInitState.setTimestamp(carl::Interval&lt;Number&gt;(0));</span></div>
+<div class="line"><a name="l00502"></a><span class="lineno">  502</span>&#160;<span class="comment"></span></div>
+<div class="line"><a name="l00503"></a><span class="lineno">  503</span>&#160;<span class="comment">    // return state</span></div>
+<div class="line"><a name="l00504"></a><span class="lineno">  504</span>&#160;<span class="comment">    return haInitState;</span></div>
+<div class="line"><a name="l00505"></a><span class="lineno">  505</span>&#160;<span class="comment">}</span></div>
+<div class="line"><a name="l00506"></a><span class="lineno">  506</span>&#160;<span class="comment">*/</span></div>
+<div class="line"><a name="l00507"></a><span class="lineno">  507</span>&#160;</div>
+<div class="line"><a name="l00508"></a><span class="lineno">  508</span>&#160;<span class="preprocessor">#ifdef HYPRO_USE_PPL</span></div>
+<div class="line"><a name="l00509"></a><span class="lineno">  509</span>&#160;<span class="preprocessor"></span><span class="keyword">template</span>&lt;<span class="keyword">typename</span> Number&gt;</div>
+<div class="line"><a name="l00510"></a><span class="lineno">  510</span>&#160;<span class="keyword">using</span> State_t = State&lt;Number, Box&lt;Number&gt;, ConstraintSet&lt;Number&gt;, SupportFunction&lt;Number&gt;, Zonotope&lt;Number&gt;, HPolytope&lt;Number&gt;, VPolytope&lt;Number&gt;, DifferenceBounds&lt;Number&gt;, Polytope&lt;Number&gt;&gt;;</div>
+<div class="line"><a name="l00511"></a><span class="lineno">  511</span>&#160;<span class="preprocessor">#else</span></div>
+<div class="line"><a name="l00512"></a><span class="lineno">  512</span>&#160;<span class="preprocessor"></span><span class="keyword">template</span>&lt;<span class="keyword">typename</span> Number&gt;</div>
+<div class="line"><a name="l00513"></a><span class="lineno">  513</span>&#160;<span class="keyword">using</span> State_t = State&lt;Number, Box&lt;Number&gt;, ConstraintSet&lt;Number&gt;, SupportFunction&lt;Number&gt;, Zonotope&lt;Number&gt;, HPolytope&lt;Number&gt;, VPolytope&lt;Number&gt;, DifferenceBounds&lt;Number&gt;&gt;;</div>
+<div class="line"><a name="l00514"></a><span class="lineno">  514</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00515"></a><span class="lineno">  515</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00516"></a><span class="lineno">  516</span>&#160;} <span class="comment">// namespace</span></div>
+<div class="line"><a name="l00517"></a><span class="lineno">  517</span>&#160;</div>
+<div class="line"><a name="l00518"></a><span class="lineno">  518</span>&#160;<span class="preprocessor">#include &quot;State.tpp&quot;</span></div>
+<div class="line"><a name="l00519"></a><span class="lineno">  519</span>&#160;<span class="preprocessor">#include &quot;StateUtil.h&quot;</span></div>
 <div class="ttc" id="classhypro_1_1State_html_aa4c0cebfb8a191e34624164c467d41f9"><div class="ttname"><a href="classhypro_1_1State.html#aa4c0cebfb8a191e34624164c467d41f9">hypro::State::addTimeToClocks</a></div><div class="ttdeci">void addTimeToClocks(tNumber t)</div><div class="ttdoc">Adds time to clocks. </div></div>
 <div class="ttc" id="namespacehypro_html_aada824f660cac25bb643be870cdc0a86"><div class="ttname"><a href="namespacehypro.html#aada824f660cac25bb643be870cdc0a86">hypro::representation_name</a></div><div class="ttdeci">representation_name</div><div class="ttdoc">Enum encapsulating all provided state set representations to be able to determine a type...</div><div class="ttdef"><b>Definition:</b> <a href="representations_2types_8h_source.html#l00009">types.h:9</a></div></div>
 <div class="ttc" id="classhypro_1_1State_html_a4902f9963dca670e2972ac8f9fb1c65f"><div class="ttname"><a href="classhypro_1_1State.html#a4902f9963dca670e2972ac8f9fb1c65f">hypro::State::rGetSet</a></div><div class="ttdeci">boost::variant&lt; Representation, Rargs...&gt; &amp; rGetSet(std::size_t i=0)</div><div class="ttdoc">Gets a reference to the i-th set. </div></div>
@@ -431,7 +434,7 @@ $(document).ready(function(){initNavTree('State_8h_source.html','');});
 <div class="ttc" id="classhypro_1_1State_html_a0ec35bff84e449b41f0a91df3561933f"><div class="ttname"><a href="classhypro_1_1State.html#a0ec35bff84e449b41f0a91df3561933f">hypro::State::operator!=</a></div><div class="ttdeci">friend bool operator!=(const State&lt; Number, Representation, Rargs...&gt; &amp;lhs, const State&lt; Number, Representation, Rargs...&gt; &amp;rhs)</div><div class="ttdoc">Operator for unequal. </div><div class="ttdef"><b>Definition:</b> <a href="State_8h_source.html#l00464">State.h:464</a></div></div>
 <div class="ttc" id="classhypro_1_1State_html_a986a6aeff5e10b7d89108cdc50aef3e3"><div class="ttname"><a href="classhypro_1_1State.html#a986a6aeff5e10b7d89108cdc50aef3e3">hypro::State::mSets</a></div><div class="ttdeci">std::vector&lt; repVariant &gt; mSets</div><div class="ttdoc">Location of the state. </div><div class="ttdef"><b>Definition:</b> <a href="State_8h_source.html#l00038">State.h:38</a></div></div>
 <div class="ttc" id="classhypro_1_1State_html_a6d6967061238ce37745fa48b87273304"><div class="ttname"><a href="classhypro_1_1State.html#a6d6967061238ce37745fa48b87273304">hypro::State::setSetDirect</a></div><div class="ttdeci">void setSetDirect(const repVariant &amp;in, std::size_t I=0)</div><div class="ttdoc">Sets the set. </div><div class="ttdef"><b>Definition:</b> <a href="State_8h_source.html#l00282">State.h:282</a></div></div>
-<div class="ttc" id="classhypro_1_1Location_html"><div class="ttname"><a href="classhypro_1_1Location.html">hypro::Location</a></div><div class="ttdoc">Class for location. </div><div class="ttdef"><b>Definition:</b> <a href="Location_8h_source.html#l00031">Location.h:31</a></div></div>
+<div class="ttc" id="classhypro_1_1Location_html"><div class="ttname"><a href="classhypro_1_1Location.html">hypro::Location</a></div><div class="ttdoc">Class for location. </div><div class="ttdef"><b>Definition:</b> <a href="Location_8h_source.html#l00026">Location.h:26</a></div></div>
 <div class="ttc" id="classhypro_1_1State_html_a11f2e0d160c5592010fb6f23f51d005d"><div class="ttname"><a href="classhypro_1_1State.html#a11f2e0d160c5592010fb6f23f51d005d">hypro::State::unite</a></div><div class="ttdeci">State&lt; Number, Representation, Rargs...&gt; unite(const State&lt; Number, Representation, Rargs...&gt; &amp;in) const </div><div class="ttdoc">Meta-function to aggregate two states. </div></div>
 <div class="ttc" id="namespacehypro_html_a52a4896e811a0710bcfc5a410a780034"><div class="ttname"><a href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">hypro::matrix_t</a></div><div class="ttdeci">Eigen::Matrix&lt; Number, Eigen::Dynamic, Eigen::Dynamic &gt; matrix_t</div><div class="ttdef"><b>Definition:</b> <a href="types_8h_source.html#l00032">types.h:32</a></div></div>
 <div class="ttc" id="classhypro_1_1State_html_ac1dbfaa16416bf85b062405bffbca55d"><div class="ttname"><a href="classhypro_1_1State.html#ac1dbfaa16416bf85b062405bffbca55d">hypro::State::mTypes</a></div><div class="ttdeci">std::vector&lt; representation_name &gt; mTypes</div><div class="ttdoc">The state sets wrapped in boost variant (repVariant). </div><div class="ttdef"><b>Definition:</b> <a href="State_8h_source.html#l00039">State.h:39</a></div></div>

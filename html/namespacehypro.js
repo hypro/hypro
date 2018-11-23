@@ -98,7 +98,6 @@ var namespacehypro =
     [ "HybridAutomatonComp", "classhypro_1_1HybridAutomatonComp.html", "classhypro_1_1HybridAutomatonComp" ],
     [ "Label", "classhypro_1_1Label.html", "classhypro_1_1Label" ],
     [ "Transition", "classhypro_1_1Transition.html", "classhypro_1_1Transition" ],
-    [ "LocationManager", "classhypro_1_1LocationManager.html", "classhypro_1_1LocationManager" ],
     [ "Location", "classhypro_1_1Location.html", "classhypro_1_1Location" ],
     [ "locPtrComp", "structhypro_1_1locPtrComp.html", "structhypro_1_1locPtrComp" ],
     [ "TPathElement", "structhypro_1_1TPathElement.html", "structhypro_1_1TPathElement" ],
@@ -232,5 +231,7 @@ var namespacehypro =
     [ "StatisticWrapper", "classhypro_1_1StatisticWrapper.html", "classhypro_1_1StatisticWrapper" ],
     [ "is_shared_ptr", "structhypro_1_1is__shared__ptr.html", null ],
     [ "is_shared_ptr< std::shared_ptr< T > >", "structhypro_1_1is__shared__ptr_3_01std_1_1shared__ptr_3_01T_01_4_01_4.html", null ],
+    [ "is_unique_ptr", "structhypro_1_1is__unique__ptr.html", null ],
+    [ "is_unique_ptr< std::unique_ptr< T, D > >", "structhypro_1_1is__unique__ptr_3_01std_1_1unique__ptr_3_01T_00_01D_01_4_01_4.html", null ],
     [ "VariablePool", "classhypro_1_1VariablePool.html", "classhypro_1_1VariablePool" ]
 ];

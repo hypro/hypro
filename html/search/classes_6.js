@@ -22,7 +22,6 @@ var searchData=
   ['geometricobject',['GeometricObject',['../classhypro_1_1GeometricObject.html',1,'hypro']]],
   ['geometricobject_3c_20number_2c_20boxt_3c_20number_2c_20converter_2c_20setting_20_3e_20_3e',['GeometricObject&lt; Number, BoxT&lt; Number, Converter, Setting &gt; &gt;',['../classhypro_1_1GeometricObject.html',1,'hypro']]],
   ['geometricobject_3c_20number_2c_20boxt_3c_20number_2c_20hypro_3a_3aconverter_2c_20setting_20_3e_20_3e',['GeometricObject&lt; Number, BoxT&lt; Number, hypro::Converter, Setting &gt; &gt;',['../classhypro_1_1GeometricObject.html',1,'hypro']]],
-  ['geometricobject_3c_20number_2c_20constraintsett_3c_20number_2c_20converter_2c_20s_20_3e_20_3e',['GeometricObject&lt; Number, ConstraintSetT&lt; Number, Converter, S &gt; &gt;',['../classhypro_1_1GeometricObject.html',1,'hypro']]],
   ['geometricobject_3c_20number_2c_20differenceboundst_3c_20number_2c_20converter_2c_20setting_20_3e_20_3e',['GeometricObject&lt; Number, DifferenceBoundsT&lt; Number, Converter, Setting &gt; &gt;',['../classhypro_1_1GeometricObject.html',1,'hypro']]],
   ['geometricobject_3c_20number_2c_20hpolytopet_3c_20number_2c_20converter_2c_20setting_20_3e_20_3e',['GeometricObject&lt; Number, HPolytopeT&lt; Number, Converter, Setting &gt; &gt;',['../classhypro_1_1GeometricObject.html',1,'hypro']]],
   ['geometricobject_3c_20number_2c_20supportfunctiont_3c_20number_2c_20converter_2c_20setting_20_3e_20_3e',['GeometricObject&lt; Number, SupportFunctionT&lt; Number, Converter, Setting &gt; &gt;',['../classhypro_1_1GeometricObject.html',1,'hypro']]],

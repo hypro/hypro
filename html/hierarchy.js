@@ -45,6 +45,8 @@ var hierarchy =
     [ "hypro::Cone< Number >", "classhypro_1_1Cone.html", null ],
     [ "hypro::ConstrainSet< Number >", "classhypro_1_1ConstrainSet.html", null ],
     [ "hypro::ConstraintSetSettings", "structhypro_1_1ConstraintSetSettings.html", null ],
+    [ "hypro::ConstraintSetT< Number, S >", "classhypro_1_1ConstraintSetT.html", null ],
+    [ "hypro::ConstraintSetT< Number >", "classhypro_1_1ConstraintSetT.html", null ],
     [ "hypro::ContinuousSystem< Number >", "classhypro_1_1ContinuousSystem.html", null ],
     [ "hypro::Converter< Number >", "classhypro_1_1Converter.html", null ],
     [ "hypro::ConvexHull< Number >", "classhypro_1_1ConvexHull.html", null ],
@@ -68,7 +70,8 @@ var hierarchy =
     ] ],
     [ "hypro::Facet< Number >", "classhypro_1_1Facet.html", null ],
     [ "false_type", null, [
-      [ "hypro::is_shared_ptr< T >", "structhypro_1_1is__shared__ptr.html", null ]
+      [ "hypro::is_shared_ptr< T >", "structhypro_1_1is__shared__ptr.html", null ],
+      [ "hypro::is_unique_ptr< T >", "structhypro_1_1is__unique__ptr.html", null ]
     ] ],
     [ "hypro::Fan< Number >", "classhypro_1_1Fan.html", null ],
     [ "Flags", "structFlags.html", null ],
@@ -90,9 +93,6 @@ var hierarchy =
     ] ],
     [ "hypro::GeometricObject< Number, BoxT< Number, hypro::Converter, Setting > >", "classhypro_1_1GeometricObject.html", [
       [ "hypro::BoxT< Number, hypro::Converter, Setting >", "classhypro_1_1BoxT.html", null ]
-    ] ],
-    [ "hypro::GeometricObject< Number, ConstraintSetT< Number, Converter, S > >", "classhypro_1_1GeometricObject.html", [
-      [ "hypro::ConstraintSetT< Number, Converter, S >", "classhypro_1_1ConstraintSetT.html", null ]
     ] ],
     [ "hypro::GeometricObject< Number, DifferenceBoundsT< Number, Converter, Setting > >", "classhypro_1_1GeometricObject.html", [
       [ "hypro::DifferenceBoundsT< Number, Converter, Setting >", "classhypro_1_1DifferenceBoundsT.html", null ]
@@ -136,8 +136,8 @@ var hierarchy =
     [ "std::hash< hypro::Condition< Number > >", "structstd_1_1hash_3_01hypro_1_1Condition_3_01Number_01_4_01_4.html", null ],
     [ "std::hash< hypro::Halfspace< Number > >", "structstd_1_1hash_3_01hypro_1_1Halfspace_3_01Number_01_4_01_4.html", null ],
     [ "std::hash< hypro::Location< Number > >", "structstd_1_1hash_3_01hypro_1_1Location_3_01Number_01_4_01_4.html", null ],
-    [ "hypro::std::hash< hypro::matrix_t< Number > >", "structhypro_1_1std_1_1hash_3_01hypro_1_1matrix__t_3_01Number_01_4_01_4.html", null ],
     [ "std::hash< hypro::matrix_t< Number > >", "structstd_1_1hash_3_01hypro_1_1matrix__t_3_01Number_01_4_01_4.html", null ],
+    [ "hypro::std::hash< hypro::matrix_t< Number > >", "structhypro_1_1std_1_1hash_3_01hypro_1_1matrix__t_3_01Number_01_4_01_4.html", null ],
     [ "std::hash< hypro::Point< Number > >", "structstd_1_1hash_3_01hypro_1_1Point_3_01Number_01_4_01_4.html", null ],
     [ "std::hash< hypro::Reset< Number > >", "structstd_1_1hash_3_01hypro_1_1Reset_3_01Number_01_4_01_4.html", null ],
     [ "std::hash< hypro::Ridge< Number > >", "structstd_1_1hash_3_01hypro_1_1Ridge_3_01Number_01_4_01_4.html", null ],
@@ -151,10 +151,8 @@ var hierarchy =
     [ "hypro::HierarchicalIntervalVector< T, Number >", "classhypro_1_1HierarchicalIntervalVector.html", null ],
     [ "hypro::HierarchicalIntervalVector< CONTAINMENT, tNumber >", "classhypro_1_1HierarchicalIntervalVector.html", null ],
     [ "hypro::HPolytopeSetting", "structhypro_1_1HPolytopeSetting.html", null ],
-    [ "hypro::HybridAutomaton< Number, State >", "classhypro_1_1HybridAutomaton.html", null ],
     [ "hypro::HybridAutomaton< Number >", "classhypro_1_1HybridAutomaton.html", null ],
-    [ "hypro::HybridAutomaton< Number, hypro::State >", "classhypro_1_1HybridAutomaton.html", null ],
-    [ "hypro::HybridAutomatonComp< Number, State >", "classhypro_1_1HybridAutomatonComp.html", null ],
+    [ "hypro::HybridAutomatonComp< Number >", "classhypro_1_1HybridAutomatonComp.html", null ],
     [ "hypro::IContext", "classhypro_1_1IContext.html", [
       [ "hypro::LTIContext< Number >", "classhypro_1_1LTIContext.html", null ]
     ] ],
@@ -652,7 +650,6 @@ var hierarchy =
       [ "hypro::DecisionEntity< Number >", "classhypro_1_1DecisionEntity.html", null ],
       [ "hypro::EventTimingProvider< Number >", "classhypro_1_1EventTimingProvider.html", null ],
       [ "hypro::HandlerFactory< Number >", "classhypro_1_1HandlerFactory.html", null ],
-      [ "hypro::LocationManager< Number >", "classhypro_1_1LocationManager.html", null ],
       [ "hypro::NodeManager< Number >", "classhypro_1_1NodeManager.html", null ],
       [ "hypro::Plotter< Number >", "classhypro_1_1Plotter.html", null ],
       [ "hypro::SettingsProvider< Number >", "classhypro_1_1SettingsProvider.html", null ],
@@ -722,14 +719,15 @@ var hierarchy =
     ] ],
     [ "hypro::TreeStatistic", "structhypro_1_1TreeStatistic.html", null ],
     [ "true_type", null, [
-      [ "hypro::is_shared_ptr< std::shared_ptr< T > >", "structhypro_1_1is__shared__ptr_3_01std_1_1shared__ptr_3_01T_01_4_01_4.html", null ]
+      [ "hypro::is_shared_ptr< std::shared_ptr< T > >", "structhypro_1_1is__shared__ptr_3_01std_1_1shared__ptr_3_01T_01_4_01_4.html", null ],
+      [ "hypro::is_unique_ptr< std::unique_ptr< T, D > >", "structhypro_1_1is__unique__ptr_3_01std_1_1unique__ptr_3_01T_00_01D_01_4_01_4.html", null ]
     ] ],
     [ "hypro::hypro::typeName< T >", "structhypro_1_1hypro_1_1typeName.html", null ],
     [ "hypro::typeName< T >", "structhypro_1_1typeName.html", null ],
-    [ "hypro::typeName< double >", "structhypro_1_1typeName_3_01double_01_4.html", null ],
     [ "hypro::hypro::typeName< double >", "structhypro_1_1hypro_1_1typeName_3_01double_01_4.html", null ],
-    [ "hypro::hypro::typeName< mpq_class >", "structhypro_1_1hypro_1_1typeName_3_01mpq__class_01_4.html", null ],
+    [ "hypro::typeName< double >", "structhypro_1_1typeName_3_01double_01_4.html", null ],
     [ "hypro::typeName< mpq_class >", "structhypro_1_1typeName_3_01mpq__class_01_4.html", null ],
+    [ "hypro::hypro::typeName< mpq_class >", "structhypro_1_1hypro_1_1typeName_3_01mpq__class_01_4.html", null ],
     [ "hypro::unionContent< Number, Setting >", "structhypro_1_1unionContent.html", null ],
     [ "hypro::UtilSetting", "structhypro_1_1UtilSetting.html", null ],
     [ "hypro::Vertex< Number >", "classhypro_1_1Vertex.html", null ],

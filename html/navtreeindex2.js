@@ -1,5 +1,7 @@
 var NAVTREEINDEX2 =
 {
+"classCIFLocationParser.html#a28ba184413479bd6c4d5ec200a7675cfa62ca11509f7fa989874ea462f04b49f0":[9,0,10,179],
+"classCIFLocationParser.html#a28ba184413479bd6c4d5ec200a7675cfa6524be38895a1c93c45046d22b5c26eb":[9,0,10,185],
 "classCIFLocationParser.html#a28ba184413479bd6c4d5ec200a7675cfa6590c8ae65a7fbbbc1a0486d45f87d43":[9,0,10,157],
 "classCIFLocationParser.html#a28ba184413479bd6c4d5ec200a7675cfa66c74497b6ff43c7aa798e0af0e6e665":[9,0,10,128],
 "classCIFLocationParser.html#a28ba184413479bd6c4d5ec200a7675cfa6c874d1a8f05bd23baad675e7e93d9d0":[9,0,10,134],
@@ -247,7 +249,5 @@ var NAVTREEINDEX2 =
 "classCIFLocationParser_1_1EquationDerivateContext.html#a3a3df52b76cf4b7ffef6ac1475627b06":[9,0,10,13,3],
 "classCIFLocationParser_1_1EquationDerivateContext.html#a473f85c0b63605062733b1562c43100d":[9,0,10,13,1],
 "classCIFLocationParser_1_1EquationDerivateContext.html#ad1a0d402d03fd610a3f3978a4ac78bb6":[9,0,10,13,2],
-"classCIFLocationParser_1_1EquationDerivateContext.html#ada084458d4eb4a2abc15cce8cb31259e":[9,0,10,13,0],
-"classCIFLocationParser_1_1EquationNonDerivateContext.html":[9,0,10,14],
-"classCIFLocationParser_1_1EquationNonDerivateContext.html#a32ce5923d8d6b69fac8944d6ac750432":[9,0,10,14,2]
+"classCIFLocationParser_1_1EquationDerivateContext.html#ada084458d4eb4a2abc15cce8cb31259e":[9,0,10,13,0]
 };
