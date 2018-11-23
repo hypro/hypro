@@ -114,7 +114,7 @@ namespace hypro {
     void CarlPolytopeT<Number,Converter,Settings>::detectDimension() {
         std::size_t d = 0;
         // get maximal state space dimension based on the variables used in mFormula.
-        std::for_each(mFormula.variables().begin(),mFormula.variables().end(), [&](const carl::Variable& v){ d = std::max(d,VariablePool::getInstance().id(v)); std::cout << "Var: " << v << " dimension " << VariablePool::getInstance().id(v) << std::endl;});
+        std::for_each(mFormula.variables().begin(),mFormula.variables().end(), [&](const carl::Variable& v){ d = std::max(d,VariablePool::getInstance().id(v));});
         mDimension = d+1; // add one as we start counting from zero.
         TRACE("hypro.representations.carlPolytope","Set dimension to " << mDimension );
     }
