@@ -146,10 +146,10 @@ TYPED_TEST(CarlPolytopeTest, Substitution)
     hspVector = c1.getHalfspaces();
 
     EXPECT_EQ(std::size_t(4),hspVector.size());
-    EXPECT_TRUE(std::find(hspVector.begin(), hspVector.end(), hypro::Halfspace<TypeParam>({1,0},2)) != hspVector.end());
-    EXPECT_TRUE(std::find(hspVector.begin(), hspVector.end(), hypro::Halfspace<TypeParam>({-1,0},-1)) != hspVector.end());
-    EXPECT_TRUE(std::find(hspVector.begin(), hspVector.end(), hypro::Halfspace<TypeParam>({0,1},2)) != hspVector.end());
-    EXPECT_TRUE(std::find(hspVector.begin(), hspVector.end(), hypro::Halfspace<TypeParam>({0,-1},-1)) != hspVector.end());
+    EXPECT_TRUE(std::find(hspVector.begin(), hspVector.end(), hypro::Halfspace<TypeParam>({0,0,1},2)) != hspVector.end());
+    EXPECT_TRUE(std::find(hspVector.begin(), hspVector.end(), hypro::Halfspace<TypeParam>({0,0,-1},-1)) != hspVector.end());
+    EXPECT_TRUE(std::find(hspVector.begin(), hspVector.end(), hypro::Halfspace<TypeParam>({0,1,0},2)) != hspVector.end());
+    EXPECT_TRUE(std::find(hspVector.begin(), hspVector.end(), hypro::Halfspace<TypeParam>({0,-1,0},-1)) != hspVector.end());
 }
 
 TYPED_TEST(CarlPolytopeTest, TimeElapse)
@@ -207,4 +207,46 @@ TYPED_TEST(CarlPolytopeTest, TimeElapse)
     std::cout << "After elimination of t: " << c1 << std::endl;
 
     EXPECT_EQ(std::size_t(2), c1.dimension());
+}
+
+TYPED_TEST(CarlPolytopeTest, RedundantConstraints) {
+    using Pol = hypro::PolyT<TypeParam>;
+    using Constr = hypro::ConstraintT<TypeParam>;
+    using Intv = carl::Interval<TypeParam>;
+    using Var = carl::Variable;
+
+    auto& vpool = hypro::VariablePool::getInstance();
+
+    // original variables
+    Var x = vpool.carlVarByIndex(0);
+    Var y = vpool.carlVarByIndex(1);
+
+    // initial constraints
+    Intv i1 = Intv{1,2};
+    Intv i2 = Intv{1,2};
+    std::vector<Intv> intervals;
+    intervals.push_back(i1);
+    intervals.push_back(i2);
+    // create initial set represented as a carlPolytope
+    hypro::CarlPolytope<TypeParam> c1{intervals};
+
+    EXPECT_EQ(std::size_t(4), c1.size());
+
+    c1.addConstraint(Constr(Pol(x) - Pol(5), carl::Relation::LEQ));
+    c1.addConstraint(Constr(Pol(x) + Pol(y) - Pol(20), carl::Relation::LEQ));
+
+    EXPECT_EQ(std::size_t(6), c1.size());
+
+    c1.reduceRepresentation();
+
+    EXPECT_EQ(std::size_t(4), c1.size());
+
+    auto hspVector = c1.getHalfspaces();
+
+    EXPECT_EQ(std::size_t(4),hspVector.size());
+    EXPECT_TRUE(std::find(hspVector.begin(), hspVector.end(), hypro::Halfspace<TypeParam>({1,0},2)) != hspVector.end());
+    EXPECT_TRUE(std::find(hspVector.begin(), hspVector.end(), hypro::Halfspace<TypeParam>({-1,0},-1)) != hspVector.end());
+    EXPECT_TRUE(std::find(hspVector.begin(), hspVector.end(), hypro::Halfspace<TypeParam>({0,1},2)) != hspVector.end());
+    EXPECT_TRUE(std::find(hspVector.begin(), hspVector.end(), hypro::Halfspace<TypeParam>({0,-1},-1)) != hspVector.end());
+    EXPECT_EQ(std::size_t(2),c1.dimension());
 }

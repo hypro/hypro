@@ -7,6 +7,7 @@
 #include "../../../carlTypes.h"
 #include "../../../util/VariablePool.h"
 #include "../../../util/logging/Logger.h"
+#include "../../../util/linearOptimization/Optimizer.h"
 
 namespace hypro {
 
@@ -16,10 +17,10 @@ public:
     // typedefs
 
 private:
-    FormulaT<Number> mFormula;
+    FormulaT<Number> mFormula; /// The description of the polytope as a conjunction of linear constraints.
     mutable std::vector<Halfspace<Number>> mHalfspaces; /// Caches transformed half-spaces.
-    std::size_t mDimension = 0;
-
+    mutable std::size_t mDimension = 0; /// Stores the state space dimension the polytope resides in.
+    mutable TRIBOOL mEmpty = TRIBOOL::NSET; /// Caches whether the polytope is empty.
 public:
 
     CarlPolytopeT()
@@ -43,6 +44,8 @@ public:
 
     CarlPolytopeT(const std::vector<carl::Interval<Number>>& intervals);
 
+    static CarlPolytopeT<Number,Converter,Settings> Empty();
+
     CarlPolytopeT<Number,Converter,Settings> intersect(const CarlPolytopeT<Number,Converter,Settings>& rhs) const;
 
     std::size_t dimension() const { return mDimension; }
@@ -58,6 +61,12 @@ public:
     void eliminateVariables(const std::vector<carl::Variable>& vars);
 
     std::vector<Point<Number>> vertices() const;
+    matrix_t<Number> matrix() const;
+    vector_t<Number> vector() const;
+    std::size_t size() const { return mFormula.size(); }
+    bool empty() const;
+
+    void reduceRepresentation();
 
     friend std::ostream& operator<<(std::ostream& out, const CarlPolytopeT<Number,Converter,Settings>& in ) {
         out << in.getFormula();
@@ -65,7 +74,13 @@ public:
     }
 
 private:
-    void detectDimension();
+    void clearCache() const;
+    void detectDimension() const ;
+
+    /**
+     * @brief Should only be used in assertions to detect inconsistency in mDimension.
+     */
+    bool dimensionWasCorrectlySet() const;
 };
 
 } // hypro
