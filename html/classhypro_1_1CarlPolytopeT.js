@@ -9,11 +9,16 @@ var classhypro_1_1CarlPolytopeT =
     [ "dimension", "classhypro_1_1CarlPolytopeT.html#ae0e0c67ae9d68ebe7afd668b9c50ad04", null ],
     [ "eliminateVariable", "classhypro_1_1CarlPolytopeT.html#ae193d9ae15e7a4477115a0cd9f47efbe", null ],
     [ "eliminateVariables", "classhypro_1_1CarlPolytopeT.html#a567cc3f45dcc49dda20e5e95cee643f4", null ],
+    [ "empty", "classhypro_1_1CarlPolytopeT.html#ae2eb0eda7ec518485101dba2f95968c3", null ],
     [ "getFormula", "classhypro_1_1CarlPolytopeT.html#a7d013dd2407cb17e3feb4d44462d8ce5", null ],
     [ "getHalfspaces", "classhypro_1_1CarlPolytopeT.html#a4d1cd4783ce8c080a7aac208ce9cffa1", null ],
     [ "intersect", "classhypro_1_1CarlPolytopeT.html#a05a33f7e45f6154592a4aa01795ad275", null ],
+    [ "matrix", "classhypro_1_1CarlPolytopeT.html#a94d0690aaf6a04c82593143a88fa1cc5", null ],
+    [ "reduceRepresentation", "classhypro_1_1CarlPolytopeT.html#a9ff0557873616fc12c7d698731ae14cb", null ],
     [ "setDimension", "classhypro_1_1CarlPolytopeT.html#a4d407c5dc2cca376ed6831d9452d9947", null ],
+    [ "size", "classhypro_1_1CarlPolytopeT.html#ad4fc07215a87168562a4d3203fdd2cef", null ],
     [ "substituteVariable", "classhypro_1_1CarlPolytopeT.html#a3636aca5f933c4882141b4f7a8d7c5b3", null ],
+    [ "vector", "classhypro_1_1CarlPolytopeT.html#a49f8138a6fefb9311202b0464ca04832", null ],
     [ "vertices", "classhypro_1_1CarlPolytopeT.html#ac0d6614d0f85d0932543d43951f8c58d", null ],
     [ "operator<<", "classhypro_1_1CarlPolytopeT.html#a7ad0fa65c0fd3a835b1c50fbfa73483f", null ]
 ];

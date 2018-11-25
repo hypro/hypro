@@ -99,6 +99,7 @@ digraph "/home/travis/build/hypro/hypro/src/hypro/algorithms/eigendecomposition/
   Node29 -> Node14 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
   Node25 -> Node31 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
   Node31 [label="../Polytopes/carlPolytope\l/carlPolytope.h",height=0.2,width=0.4,color="red", fillcolor="white", style="filled",URL="$carlPolytope_8h_source.html"];
+  Node31 -> Node24 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
   Node25 -> Node32 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
   Node32 [label="../Polytopes/HPolytope\l/HPolytope.h",height=0.2,width=0.4,color="red", fillcolor="white", style="filled",URL="$HPolytope_8h_source.html"];
   Node32 -> Node33 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
