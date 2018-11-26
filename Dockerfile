@@ -8,10 +8,7 @@ RUN apt-get update \
     uuid-dev \
     pkg-config \
     libboost-dev
-RUN update-alternatives --remove-all gcc && \
-    update-alternatives --remove-all g++ && \
-    update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-7 60 --slave /usr/bin/g++ g++ /usr/bin/g++-7
 RUN cd /root/hypro \
-&& mkdir build && cd build && cmake ../ \
+&& mkdir build && cd build && cmake .. -DCMAKE_C_COMPILER=/usr/bin/gcc-7 -DCMAKE_CXX_COMPILER=/usr/bin/g++-7 / \
 && make resources \
 && make
