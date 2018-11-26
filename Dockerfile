@@ -9,6 +9,6 @@ RUN apt-get update \
     pkg-config \
     libboost-dev
 RUN cd /root/hypro \
-&& mkdir build && cd build && cmake .. -DCMAKE_C_COMPILER=/usr/bin/gcc-7 -DCMAKE_CXX_COMPILER=/usr/bin/g++-7 / \
+&& mkdir build && cd build && cmake .. -DCMAKE_C_COMPILER=/usr/bin/gcc-7 -DCMAKE_CXX_COMPILER=/usr/bin/g++-7 \
 && make resources \
 && make
