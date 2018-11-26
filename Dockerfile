@@ -8,7 +8,6 @@ RUN apt-get update \
     uuid-dev \
     pkg-config \
     libboost-dev
-RUN apt-add
 RUN cd /root/hypro \
 && mkdir build && cd build && cmake ../ \
 && make resources \
