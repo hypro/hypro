@@ -11,6 +11,6 @@ RUN apt-get update \
 RUN export CC="gcc-8" && \
     export CXX="g++-8"
 RUN cd /root/hypro \
-&& mkdir build && cd build && cmake .. \
+&& mkdir build && cd build && cmake .. -DCMAKE_CXX_COMPILER=g++-8 \
 && make resources \
 && make
