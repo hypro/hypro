@@ -1,5 +1,8 @@
 set(glpk_version "4.65")
 
+# create include output folder
+file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/resources/src/glpk_download/include")
+
 ExternalProject_Add(
     glpk_download
     LOG_DOWNLOAD true
