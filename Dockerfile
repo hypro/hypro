@@ -1,4 +1,4 @@
-FROM fefrei/carl:18.04
+FROM fefrei/carl:18.08
 COPY / /root/hypro/
 RUN echo "deb http://http.us.debian.org/debian/ testing non-free contrib main" >> /etc/apt/sources.list
 RUN apt-get update \
