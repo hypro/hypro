@@ -10,8 +10,8 @@ RUN apt-get update \
     uuid-dev \
     pkg-config \
     libboost-dev
-RUN export CC="gcc-8" && \
-    export CXX="g++-8"
+ENV CC="gcc-8"
+ENV CXX="g++-8"
 RUN cd /root/hypro \
 && mkdir build && cd build && cmake .. -DCMAKE_CXX_COMPILER=g++-8 \
 && make resources \
