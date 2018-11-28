@@ -13,6 +13,9 @@ var annotated =
     [ "std", null, [
       [ "hash< hypro::Halfspace< Number > >", "structstd_1_1hash_3_01hypro_1_1Halfspace_3_01Number_01_4_01_4.html", "structstd_1_1hash_3_01hypro_1_1Halfspace_3_01Number_01_4_01_4" ],
       [ "hash< hypro::Condition< Number > >", "structstd_1_1hash_3_01hypro_1_1Condition_3_01Number_01_4_01_4.html", "structstd_1_1hash_3_01hypro_1_1Condition_3_01Number_01_4_01_4" ],
+      [ "hash< hypro::affineFlow< Number > >", "structstd_1_1hash_3_01hypro_1_1affineFlow_3_01Number_01_4_01_4.html", "structstd_1_1hash_3_01hypro_1_1affineFlow_3_01Number_01_4_01_4" ],
+      [ "hash< hypro::linearFlow< Number > >", "structstd_1_1hash_3_01hypro_1_1linearFlow_3_01Number_01_4_01_4.html", "structstd_1_1hash_3_01hypro_1_1linearFlow_3_01Number_01_4_01_4" ],
+      [ "hash< hypro::rectangularFlow< Number > >", "structstd_1_1hash_3_01hypro_1_1rectangularFlow_3_01Number_01_4_01_4.html", "structstd_1_1hash_3_01hypro_1_1rectangularFlow_3_01Number_01_4_01_4" ],
       [ "hash< hypro::Location< Number > >", "structstd_1_1hash_3_01hypro_1_1Location_3_01Number_01_4_01_4.html", "structstd_1_1hash_3_01hypro_1_1Location_3_01Number_01_4_01_4" ],
       [ "hash< hypro::Reset< Number > >", "structstd_1_1hash_3_01hypro_1_1Reset_3_01Number_01_4_01_4.html", "structstd_1_1hash_3_01hypro_1_1Reset_3_01Number_01_4_01_4" ],
       [ "hash< hypro::Transition< Number > >", "structstd_1_1hash_3_01hypro_1_1Transition_3_01Number_01_4_01_4.html", "structstd_1_1hash_3_01hypro_1_1Transition_3_01Number_01_4_01_4" ],

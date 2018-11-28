@@ -7,9 +7,9 @@ var searchData=
   ['misempty',['mIsEmpty',['../classhypro_1_1State.html#a84823df2e3658543b73ad3c0087c380b',1,'hypro::State']]],
   ['mlimits',['mLimits',['../classhypro_1_1BoxT.html#a5b0f6eb0f2b1b742f453bbe0984eae8b',1,'hypro::BoxT']]],
   ['mparent',['mParent',['../classhypro_1_1TreeNode.html#a9d2f003348321ef60086b24bd4945294',1,'hypro::TreeNode']]],
-  ['mrefinements',['mRefinements',['../classhypro_1_1ReachTreeNode.html#a26bbe137d3f261355eb7c9056b300d1e',1,'hypro::ReachTreeNode']]],
+  ['mrefinements',['mRefinements',['../classhypro_1_1ReachTreeNode.html#a2f70ad4cf1c030acd54a1fb0e364f451',1,'hypro::ReachTreeNode']]],
   ['msets',['mSets',['../classhypro_1_1State.html#a986a6aeff5e10b7d89108cdc50aef3e3',1,'hypro::State']]],
   ['mtimestamp',['mTimestamp',['../classhypro_1_1State.html#ad86266f458259a56d6e4318d72dbc651',1,'hypro::State']]],
   ['mtypes',['mTypes',['../classhypro_1_1State.html#ac1dbfaa16416bf85b062405bffbca55d',1,'hypro::State']]],
-  ['mutex',['mutex',['../classhypro_1_1ReachTreeNode.html#afd50ff67dedbb3f1831090c81b0acadc',1,'hypro::ReachTreeNode']]]
+  ['mutex',['mutex',['../classhypro_1_1ReachTreeNode.html#a5ebb16119a90db37ff2b377865b1f307',1,'hypro::ReachTreeNode']]]
 ];

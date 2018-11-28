@@ -110,6 +110,7 @@ $(document).ready(function(){initNavTree('classhypro_1_1Location.html','');});
 
 <div class="header">
   <div class="summary">
+<a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pro-types">Protected Types</a> &#124;
 <a href="#pro-methods">Protected Member Functions</a> &#124;
@@ -125,6 +126,12 @@ $(document).ready(function(){initNavTree('classhypro_1_1Location.html','');});
 
 <p><code>#include &lt;<a class="el" href="Location_8h_source.html">Location.h</a>&gt;</code></p>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr class="memitem:a99ec4a8ecc47b7c6b97365b543829ccc"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a99ec4a8ecc47b7c6b97365b543829ccc"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>flowVariant</b> = boost::variant&lt; <a class="el" href="classhypro_1_1linearFlow.html">linearFlow</a>&lt; Number &gt;, <a class="el" href="classhypro_1_1affineFlow.html">affineFlow</a>&lt; Number &gt;, <a class="el" href="classhypro_1_1rectangularFlow.html">rectangularFlow</a>&lt; Number &gt;&gt;</td></tr>
+<tr class="separator:a99ec4a8ecc47b7c6b97365b543829ccc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a84a35d2b77c229f685c9c304997ff776"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a84a35d2b77c229f685c9c304997ff776"></a>
@@ -139,16 +146,15 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a7d8a180b8b08d3cd7abdd95d0bec5dde"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7d8a180b8b08d3cd7abdd95d0bec5dde"></a>
 std::size_t&#160;</td><td class="memItemRight" valign="bottom"><b>getNumberFlow</b> () const </td></tr>
 <tr class="separator:a7d8a180b8b08d3cd7abdd95d0bec5dde"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab137cbf1e1d715dbef8c984408bdb498"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab137cbf1e1d715dbef8c984408bdb498"></a>
-<a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getFlow</b> (std::size_t I=0) const </td></tr>
-<tr class="separator:ab137cbf1e1d715dbef8c984408bdb498"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a590201cb456f709b966693706d3f2ad1"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a590201cb456f709b966693706d3f2ad1"></a>
-<a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>rGetFlow</b> (std::size_t I=0)</td></tr>
-<tr class="separator:a590201cb456f709b966693706d3f2ad1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a020cd891df68051d6c7953456d09dcca"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a020cd891df68051d6c7953456d09dcca"></a>
-const std::vector&lt; <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a><br class="typebreak"/>
-&lt; Number &gt; &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getFlows</b> () const </td></tr>
-<tr class="separator:a020cd891df68051d6c7953456d09dcca"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4b00c9e6ba176a620c26aeeb63c99d0c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4b00c9e6ba176a620c26aeeb63c99d0c"></a>
+flowVariant&#160;</td><td class="memItemRight" valign="bottom"><b>getFlow</b> (std::size_t I=0) const </td></tr>
+<tr class="separator:a4b00c9e6ba176a620c26aeeb63c99d0c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae2710145f38379a1de7c462d529eb0d0"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae2710145f38379a1de7c462d529eb0d0"></a>
+flowVariant &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>rGetFlow</b> (std::size_t I=0)</td></tr>
+<tr class="separator:ae2710145f38379a1de7c462d529eb0d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6822984a4635d8c19e34577322bc1deb"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6822984a4635d8c19e34577322bc1deb"></a>
+const std::vector&lt; flowVariant &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getFlows</b> () const </td></tr>
+<tr class="separator:a6822984a4635d8c19e34577322bc1deb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acf2a88e7cce8962765ae1f2468934952"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="acf2a88e7cce8962765ae1f2468934952"></a>
 const <a class="el" href="classhypro_1_1Condition.html">Condition</a>&lt; Number &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getInvariant</b> () const </td></tr>
 <tr class="separator:acf2a88e7cce8962765ae1f2468934952"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -168,12 +174,18 @@ unsigned&#160;</td><td class="memItemRight" valign="bottom"><b>getId</b> () cons
 <tr class="memitem:ad029947136449288ec724ab36a483036"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad029947136449288ec724ab36a483036"></a>
 std::string&#160;</td><td class="memItemRight" valign="bottom"><b>getName</b> () const </td></tr>
 <tr class="separator:ad029947136449288ec724ab36a483036"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac8f40e19fd7d2ee2655d4e898680e957"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac8f40e19fd7d2ee2655d4e898680e957"></a>
+std::size_t&#160;</td><td class="memItemRight" valign="bottom"><b>dimension</b> () const </td></tr>
+<tr class="separator:ac8f40e19fd7d2ee2655d4e898680e957"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab56663403e32b53f04661ca1c685f993"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab56663403e32b53f04661ca1c685f993"></a>
+std::size_t&#160;</td><td class="memItemRight" valign="bottom"><b>dimension</b> (std::size_t i) const </td></tr>
+<tr class="separator:ab56663403e32b53f04661ca1c685f993"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3f49334e8502bfee63c7e9448820c5e1"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3f49334e8502bfee63c7e9448820c5e1"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>setName</b> (const std::string &amp;name)</td></tr>
 <tr class="separator:a3f49334e8502bfee63c7e9448820c5e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8e45d373a2fbfaa98181a288a634306c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8e45d373a2fbfaa98181a288a634306c"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>setFlow</b> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;mat, std::size_t I=0)</td></tr>
-<tr class="separator:a8e45d373a2fbfaa98181a288a634306c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8401af3e42196b2633c08dafeefcb1a3"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8401af3e42196b2633c08dafeefcb1a3"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setFlow</b> (const flowVariant &amp;f, std::size_t I=0)</td></tr>
+<tr class="separator:a8401af3e42196b2633c08dafeefcb1a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a031f5c93b7979bea0582283618ea8a00"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a031f5c93b7979bea0582283618ea8a00"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>setInvariant</b> (const <a class="el" href="classhypro_1_1Condition.html">Condition</a>&lt; Number &gt; &amp;inv)</td></tr>
 <tr class="separator:a031f5c93b7979bea0582283618ea8a00"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -248,7 +260,7 @@ class hypro::Location&lt; Number &gt;</h3>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="Location_8h_source.html#l00026">26</a> of file <a class="el" href="Location_8h_source.html">Location.h</a>.</p>
+<p>Definition at line <a class="el" href="Location_8h_source.html#l00032">32</a> of file <a class="el" href="Location_8h_source.html">Location.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="a6e7ef40440fc9e460618e7fdf47ea41f"></a>
 <div class="memitem">

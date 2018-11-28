@@ -3,5 +3,7 @@ digraph "Graphical Class Hierarchy"
   edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
   node [fontname="Helvetica",fontsize="10",shape=record];
   rankdir="LR";
-  Node1 [label="hypro::lintrafoParameters\l\< Number \>",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$structhypro_1_1lintrafoParameters.html",tooltip="Struct holding linear and affine transformation parameters. "];
+  Node1 [label="hypro::linearFlow\<\l Number \>",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classhypro_1_1linearFlow.html"];
+  Node1 -> Node2 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node2 [label="hypro::affineFlow\<\l Number \>",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classhypro_1_1affineFlow.html"];
 }

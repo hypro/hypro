@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.6"/>
-<title>HyPro: hypro::IWorker&lt; Workable, Number &gt; Class Template Reference</title>
+<title>HyPro: hypro::IWorker&lt; Workable, State &gt; Class Template Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -114,41 +114,41 @@ $(document).ready(function(){initNavTree('classhypro_1_1IWorker.html','');});
 <a href="#pro-attribs">Protected Attributes</a> &#124;
 <a href="classhypro_1_1IWorker-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">hypro::IWorker&lt; Workable, Number &gt; Class Template Reference<span class="mlabels"><span class="mlabel">abstract</span></span></div>  </div>
+<div class="title">hypro::IWorker&lt; Workable, State &gt; Class Template Reference<span class="mlabels"><span class="mlabel">abstract</span></span></div>  </div>
 </div><!--header-->
 <div class="contents">
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a54c5c9fb2bd7fa7d05691d3c1b8ef8e3"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1IWorker.html#a54c5c9fb2bd7fa7d05691d3c1b8ef8e3">IWorker</a> (const <a class="el" href="structhypro_1_1ReachabilitySettings.html">ReachabilitySettings</a> &amp;settings)</td></tr>
-<tr class="separator:a54c5c9fb2bd7fa7d05691d3c1b8ef8e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1051d0d091402e8af5236c9e550b72bf"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1IWorker.html#a1051d0d091402e8af5236c9e550b72bf">processTask</a> (const Workable &amp;w, const std::vector&lt; <a class="el" href="structhypro_1_1StrategyNode.html">StrategyNode</a> &gt; &amp;strategy, <a class="el" href="classhypro_1_1WorkQueueT.html">WorkQueue</a>&lt; std::shared_ptr&lt; <a class="el" href="structhypro_1_1Task.html">Task</a>&lt; Number &gt;&gt;&gt; &amp;localQueue, <a class="el" href="classhypro_1_1WorkQueueT.html">WorkQueue</a>&lt; std::shared_ptr&lt; <a class="el" href="structhypro_1_1Task.html">Task</a>&lt; Number &gt;&gt;&gt; &amp;localCEXQueue, std::vector&lt; <a class="el" href="structhypro_1_1PlotData.html">PlotData</a>&lt; Number &gt;&gt; *localSegments)=0</td></tr>
-<tr class="separator:a1051d0d091402e8af5236c9e550b72bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae5d4c1f8f4318a64a973ee5ebe441a54"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1IWorker.html#ae5d4c1f8f4318a64a973ee5ebe441a54">IWorker</a> (const <a class="el" href="structhypro_1_1ReachabilitySettings.html">ReachabilitySettings</a> &amp;settings)</td></tr>
+<tr class="separator:ae5d4c1f8f4318a64a973ee5ebe441a54"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4e9ed7b8a4c751cb2051e2240548749b"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1IWorker.html#a4e9ed7b8a4c751cb2051e2240548749b">processTask</a> (const Workable &amp;w, const <a class="el" href="classhypro_1_1Strategy.html">Strategy</a>&lt; <a class="el" href="classhypro_1_1State.html">State</a> &gt; &amp;strategy, <a class="el" href="classhypro_1_1WorkQueueT.html">WorkQueue</a>&lt; std::shared_ptr&lt; <a class="el" href="structhypro_1_1Task.html">Task</a>&lt; <a class="el" href="classhypro_1_1State.html">State</a> &gt;&gt;&gt; &amp;localQueue, <a class="el" href="classhypro_1_1WorkQueueT.html">WorkQueue</a>&lt; std::shared_ptr&lt; <a class="el" href="structhypro_1_1Task.html">Task</a>&lt; <a class="el" href="classhypro_1_1State.html">State</a> &gt;&gt;&gt; &amp;localCEXQueue, std::vector&lt; <a class="el" href="structhypro_1_1PlotData.html">PlotData</a>&lt; Number &gt;&gt; *localSegments)=0</td></tr>
+<tr class="separator:a4e9ed7b8a4c751cb2051e2240548749b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
-<tr class="memitem:a439994a0c5d830783582735b4f6dd63c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a439994a0c5d830783582735b4f6dd63c"></a>
+<tr class="memitem:a918ff4c18cb0996bb5008dc4e119c216"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a918ff4c18cb0996bb5008dc4e119c216"></a>
 <a class="el" href="structhypro_1_1ReachabilitySettings.html">ReachabilitySettings</a>&#160;</td><td class="memItemRight" valign="bottom"><b>mSettings</b></td></tr>
-<tr class="separator:a439994a0c5d830783582735b4f6dd63c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="separator:a918ff4c18cb0996bb5008dc4e119c216"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><h3>template&lt;class Workable, typename Number&gt;<br/>
-class hypro::IWorker&lt; Workable, Number &gt;</h3>
+<div class="textblock"><h3>template&lt;class Workable, typename State&gt;<br/>
+class hypro::IWorker&lt; Workable, State &gt;</h3>
 
 
 <p>Definition at line <a class="el" href="IWorker_8h_source.html#l00017">17</a> of file <a class="el" href="IWorker_8h_source.html">IWorker.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a class="anchor" id="a54c5c9fb2bd7fa7d05691d3c1b8ef8e3"></a>
+<a class="anchor" id="ae5d4c1f8f4318a64a973ee5ebe441a54"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;class Workable, typename Number&gt; </div>
+template&lt;class Workable, typename State&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classhypro_1_1IWorker.html">hypro::IWorker</a>&lt; Workable, Number &gt;::<a class="el" href="classhypro_1_1IWorker.html">IWorker</a> </td>
+          <td class="memname"><a class="el" href="classhypro_1_1IWorker.html">hypro::IWorker</a>&lt; Workable, <a class="el" href="classhypro_1_1State.html">State</a> &gt;::<a class="el" href="classhypro_1_1IWorker.html">IWorker</a> </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="structhypro_1_1ReachabilitySettings.html">ReachabilitySettings</a> &amp;&#160;</td>
           <td class="paramname"><em>settings</em></td><td>)</td>
@@ -163,22 +163,22 @@ template&lt;class Workable, typename Number&gt; </div>
 </div><div class="memdoc">
 <p>Constructor responsible for setting the respective EventHandler and WorkQueue. </p>
 
-<p>Definition at line <a class="el" href="IWorker_8h_source.html#l00024">24</a> of file <a class="el" href="IWorker_8h_source.html">IWorker.h</a>.</p>
+<p>Definition at line <a class="el" href="IWorker_8h_source.html#l00025">25</a> of file <a class="el" href="IWorker_8h_source.html">IWorker.h</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="a1051d0d091402e8af5236c9e550b72bf"></a>
+<a class="anchor" id="a4e9ed7b8a4c751cb2051e2240548749b"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;class Workable, typename Number&gt; </div>
+template&lt;class Workable, typename State&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual void <a class="el" href="classhypro_1_1IWorker.html">hypro::IWorker</a>&lt; Workable, Number &gt;::processTask </td>
+          <td class="memname">virtual void <a class="el" href="classhypro_1_1IWorker.html">hypro::IWorker</a>&lt; Workable, <a class="el" href="classhypro_1_1State.html">State</a> &gt;::processTask </td>
           <td>(</td>
           <td class="paramtype">const Workable &amp;&#160;</td>
           <td class="paramname"><em>w</em>, </td>
@@ -186,19 +186,19 @@ template&lt;class Workable, typename Number&gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const std::vector&lt; <a class="el" href="structhypro_1_1StrategyNode.html">StrategyNode</a> &gt; &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="classhypro_1_1Strategy.html">Strategy</a>&lt; <a class="el" href="classhypro_1_1State.html">State</a> &gt; &amp;&#160;</td>
           <td class="paramname"><em>strategy</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="classhypro_1_1WorkQueueT.html">WorkQueue</a>&lt; std::shared_ptr&lt; <a class="el" href="structhypro_1_1Task.html">Task</a>&lt; Number &gt;&gt;&gt; &amp;&#160;</td>
+          <td class="paramtype"><a class="el" href="classhypro_1_1WorkQueueT.html">WorkQueue</a>&lt; std::shared_ptr&lt; <a class="el" href="structhypro_1_1Task.html">Task</a>&lt; <a class="el" href="classhypro_1_1State.html">State</a> &gt;&gt;&gt; &amp;&#160;</td>
           <td class="paramname"><em>localQueue</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="classhypro_1_1WorkQueueT.html">WorkQueue</a>&lt; std::shared_ptr&lt; <a class="el" href="structhypro_1_1Task.html">Task</a>&lt; Number &gt;&gt;&gt; &amp;&#160;</td>
+          <td class="paramtype"><a class="el" href="classhypro_1_1WorkQueueT.html">WorkQueue</a>&lt; std::shared_ptr&lt; <a class="el" href="structhypro_1_1Task.html">Task</a>&lt; <a class="el" href="classhypro_1_1State.html">State</a> &gt;&gt;&gt; &amp;&#160;</td>
           <td class="paramname"><em>localCEXQueue</em>, </td>
         </tr>
         <tr>

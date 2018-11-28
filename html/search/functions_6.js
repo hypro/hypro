@@ -18,7 +18,7 @@ var searchData=
   ['getsets',['getSets',['../classhypro_1_1State.html#a3a201f27dd93043f4690aefe40b9d8cf',1,'hypro::State']]],
   ['getsettype',['getSetType',['../classhypro_1_1State.html#a3965ed577f394957ef076c8a86333c1a',1,'hypro::State']]],
   ['getsubspacedecomposition',['getSubspaceDecomposition',['../classhypro_1_1DecisionEntity.html#a94aa2d360ceea7af839ab8683b372d40',1,'hypro::DecisionEntity']]],
-  ['gettimestamp',['getTimestamp',['../classhypro_1_1State.html#a060eaaf2487442c87d3f8f8062c34ea1',1,'hypro::State::getTimestamp()'],['../classhypro_1_1ReachTreeNode.html#a0795744ba0ca4e713233bc1fac12514b',1,'hypro::ReachTreeNode::getTimestamp()']]],
+  ['gettimestamp',['getTimestamp',['../classhypro_1_1State.html#a060eaaf2487442c87d3f8f8062c34ea1',1,'hypro::State::getTimestamp()'],['../classhypro_1_1ReachTreeNode.html#a2a90e36bd25f3c6f1a1e79913592f3a9',1,'hypro::ReachTreeNode::getTimestamp()']]],
   ['gettransitions',['getTransitions',['../classhypro_1_1HybridAutomaton.html#a38e3d7960dfba11a02469403c5ede7ef',1,'hypro::HybridAutomaton']]],
   ['gettypes',['getTypes',['../classhypro_1_1State.html#a45b310b941c444d30bb09baff76c95d3',1,'hypro::State']]],
   ['getvariables',['getVariables',['../classhypro_1_1HybridAutomaton.html#a20912e1e9b6f5e6bc566cc5035c472ea',1,'hypro::HybridAutomaton']]],

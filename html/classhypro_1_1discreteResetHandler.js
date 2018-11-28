@@ -1,7 +1,7 @@
 var classhypro_1_1discreteResetHandler =
 [
-    [ "discreteResetHandler", "classhypro_1_1discreteResetHandler.html#aa67033b0ca058b6afc6f40793decb23b", null ],
-    [ "discreteResetHandler", "classhypro_1_1discreteResetHandler.html#a34efceb117cf16ab87441573be97a38e", null ],
-    [ "handle", "classhypro_1_1discreteResetHandler.html#ae64c6b21f8eb357afee1a9302f69918f", null ],
-    [ "handlerName", "classhypro_1_1discreteResetHandler.html#acb86e98f68a8ccbd58db4348ecd83c95", null ]
+    [ "discreteResetHandler", "classhypro_1_1discreteResetHandler.html#a64b21688d35337269fe17607a7c8427a", null ],
+    [ "discreteResetHandler", "classhypro_1_1discreteResetHandler.html#a4a441f0e8c1cbbc56056ade1263f3fec", null ],
+    [ "handle", "classhypro_1_1discreteResetHandler.html#a99b997ccae35ca549e4adbb7521d2b1c", null ],
+    [ "handlerName", "classhypro_1_1discreteResetHandler.html#afe0a9f8e9bab37ff97d0ab9429c2c19c", null ]
 ];

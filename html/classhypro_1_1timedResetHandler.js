@@ -1,7 +1,7 @@
 var classhypro_1_1timedResetHandler =
 [
-    [ "timedResetHandler", "classhypro_1_1timedResetHandler.html#a341b9f494f74a3d4711fca7749b1f3b8", null ],
-    [ "timedResetHandler", "classhypro_1_1timedResetHandler.html#a82464fd9e3dae2ea0376d9d836b91ca3", null ],
-    [ "handle", "classhypro_1_1timedResetHandler.html#aceb351e9104c15d1e66892851a7f0d97", null ],
-    [ "handlerName", "classhypro_1_1timedResetHandler.html#a4b4dc3bdb3ce511b8c6c2297ce7300ba", null ]
+    [ "timedResetHandler", "classhypro_1_1timedResetHandler.html#a0a6a1d5433d04a008c865987df9779b5", null ],
+    [ "timedResetHandler", "classhypro_1_1timedResetHandler.html#a75736acf0f1e554b62c4e8f713f8c28a", null ],
+    [ "handle", "classhypro_1_1timedResetHandler.html#aed30f443cc12a1740d284d1d5321031a", null ],
+    [ "handlerName", "classhypro_1_1timedResetHandler.html#a9169561198e704b896ac4d3e71b5f759", null ]
 ];

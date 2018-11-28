@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['representation_5fname',['representation_name',['../namespacehypro.html#aada824f660cac25bb643be870cdc0a86',1,'hypro']]]
+  ['ortho_5ftype',['ORTHO_TYPE',['../namespacehypro.html#a2178b258724a50a2191326e5e17a4a01',1,'hypro']]]
 ];

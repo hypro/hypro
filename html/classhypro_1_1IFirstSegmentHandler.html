@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.6"/>
-<title>HyPro: hypro::IFirstSegmentHandler&lt; Number &gt; Class Template Reference</title>
+<title>HyPro: hypro::IFirstSegmentHandler&lt; State &gt; Class Template Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -113,28 +113,30 @@ $(document).ready(function(){initNavTree('classhypro_1_1IFirstSegmentHandler.htm
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="classhypro_1_1IFirstSegmentHandler-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">hypro::IFirstSegmentHandler&lt; Number &gt; Class Template Reference<span class="mlabels"><span class="mlabel">abstract</span></span></div>  </div>
+<div class="title">hypro::IFirstSegmentHandler&lt; State &gt; Class Template Reference<span class="mlabels"><span class="mlabel">abstract</span></span></div>  </div>
 </div><!--header-->
 <div class="contents">
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a719f09cc0d1f5b4a6bc729060a6e2dff"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a719f09cc0d1f5b4a6bc729060a6e2dff"></a>
+<tr class="memitem:ae036fd1ee03b14ed18a1c78391d87609"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae036fd1ee03b14ed18a1c78391d87609"></a>
 virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>handle</b> ()=0</td></tr>
-<tr class="separator:a719f09cc0d1f5b4a6bc729060a6e2dff"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab8c15744475b5810454f758d518f9af3"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab8c15744475b5810454f758d518f9af3"></a>
+<tr class="separator:ae036fd1ee03b14ed18a1c78391d87609"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aec75a64a583e9fa8b32325f2585629ed"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aec75a64a583e9fa8b32325f2585629ed"></a>
 virtual const char *&#160;</td><td class="memItemRight" valign="bottom"><b>handlerName</b> ()=0</td></tr>
-<tr class="separator:ab8c15744475b5810454f758d518f9af3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a46e65ae94c23a2ffd810a462894d1b31"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a46e65ae94c23a2ffd810a462894d1b31"></a>
-virtual <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getTrafo</b> ()=0</td></tr>
-<tr class="separator:a46e65ae94c23a2ffd810a462894d1b31"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af50715f911926a2fcc918b6de14d7a4f"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af50715f911926a2fcc918b6de14d7a4f"></a>
-virtual <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getTranslation</b> ()=0</td></tr>
-<tr class="separator:af50715f911926a2fcc918b6de14d7a4f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="separator:aec75a64a583e9fa8b32325f2585629ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeb57683fec17239d757408714e828256"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aeb57683fec17239d757408714e828256"></a>
+virtual const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a><br class="typebreak"/>
+&lt; typename <a class="el" href="classhypro_1_1State.html#a8596fb990ea3ae3528b1ed522e0bc574">State::NumberType</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getTrafo</b> () const =0</td></tr>
+<tr class="separator:aeb57683fec17239d757408714e828256"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:affce95729824e82b636a5427b7080c74"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="affce95729824e82b636a5427b7080c74"></a>
+virtual const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a><br class="typebreak"/>
+&lt; typename <a class="el" href="classhypro_1_1State.html#a8596fb990ea3ae3528b1ed522e0bc574">State::NumberType</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getTranslation</b> () const =0</td></tr>
+<tr class="separator:affce95729824e82b636a5427b7080c74"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><h3>template&lt;typename Number&gt;<br/>
-class hypro::IFirstSegmentHandler&lt; Number &gt;</h3>
+<div class="textblock"><h3>template&lt;typename State&gt;<br/>
+class hypro::IFirstSegmentHandler&lt; State &gt;</h3>
 
 
 <p>Definition at line <a class="el" href="IHandler_8h_source.html#l00014">14</a> of file <a class="el" href="IHandler_8h_source.html">IHandler.h</a>.</p>

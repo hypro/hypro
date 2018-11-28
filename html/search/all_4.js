@@ -1,9 +1,9 @@
 var searchData=
 [
-  ['edgeeventcontext',['EdgeEventContext',['../classCIFLocationParser_1_1EdgeEventContext.html',1,'CIFLocationParser']]],
   ['edgeeventcontext',['EdgeEventContext',['../classHybridSystemParser_1_1EdgeEventContext.html',1,'HybridSystemParser']]],
-  ['edgeeventscontext',['EdgeEventsContext',['../classHybridSystemParser_1_1EdgeEventsContext.html',1,'HybridSystemParser']]],
+  ['edgeeventcontext',['EdgeEventContext',['../classCIFLocationParser_1_1EdgeEventContext.html',1,'CIFLocationParser']]],
   ['edgeeventscontext',['EdgeEventsContext',['../classCIFLocationParser_1_1EdgeEventsContext.html',1,'CIFLocationParser']]],
+  ['edgeeventscontext',['EdgeEventsContext',['../classHybridSystemParser_1_1EdgeEventsContext.html',1,'HybridSystemParser']]],
   ['effectivedimension',['effectiveDimension',['../namespacehypro.html#a51c8805bc90a16030ddd0ca7c04f172c',1,'hypro::effectiveDimension(const std::vector&lt; Point&lt; Number &gt;&gt; &amp;vertices)'],['../namespacehypro.html#a033867efd71000b8cb7491fe1fd5e24d',1,'hypro::effectiveDimension(const std::set&lt; Point&lt; Number &gt;&gt; &amp;vertices)']]],
   ['elapse',['elapse',['../classhypro_1_1DifferenceBoundsT.html#a545285d371308178334e2ee2d6456444',1,'hypro::DifferenceBoundsT']]],
   ['ellipsoidsupportfunction',['EllipsoidSupportFunction',['../classhypro_1_1EllipsoidSupportFunction.html',1,'hypro']]],
@@ -18,8 +18,8 @@ var searchData=
   ['enumeratevertices',['enumerateVertices',['../classhypro_1_1VertexEnumeration.html#a28cc2f73f05d243708abebbb35446d1c',1,'hypro::VertexEnumeration::enumerateVertices()'],['../classhypro_1_1VertexEnumeration.html#a7fc671d314d91337e867809ecbbe6014',1,'hypro::VertexEnumeration::enumerateVertices(Dictionary&lt; Number &gt; &amp;dictionary)']]],
   ['enumerateverticeseachdictionary',['enumerateVerticesEachDictionary',['../classhypro_1_1VertexEnumeration.html#ae9bacc4195ea797b5c3e967e0cb9df5c',1,'hypro::VertexEnumeration']]],
   ['enumerateverticesnaive',['enumerateVerticesNaive',['../classhypro_1_1VertexEnumeration.html#acec84355494bca17bde9e68683603432',1,'hypro::VertexEnumeration']]],
-  ['equationcontext',['EquationContext',['../classCIFLocationParser_1_1EquationContext.html',1,'CIFLocationParser']]],
   ['equationcontext',['EquationContext',['../classHybridAutomatonParser_1_1EquationContext.html',1,'HybridAutomatonParser']]],
+  ['equationcontext',['EquationContext',['../classCIFLocationParser_1_1EquationContext.html',1,'CIFLocationParser']]],
   ['equationcontext',['EquationContext',['../classExpressionsParser_1_1EquationContext.html',1,'ExpressionsParser']]],
   ['equationcontext',['EquationContext',['../classHybridSystemParser_1_1EquationContext.html',1,'HybridSystemParser']]],
   ['equationderivatecontext',['EquationDerivateContext',['../classHybridSystemParser_1_1EquationDerivateContext.html',1,'HybridSystemParser']]],

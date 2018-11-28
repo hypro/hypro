@@ -1,18 +1,19 @@
 var structhypro_1_1RefinementSetting =
 [
-    [ "RefinementSetting", "structhypro_1_1RefinementSetting.html#aa2733f9a4a5d44d0fb84154df550f5d1", null ],
-    [ "RefinementSetting", "structhypro_1_1RefinementSetting.html#a7c5a4fc56943a13912f4e3645ef0d1bb", null ],
-    [ "RefinementSetting", "structhypro_1_1RefinementSetting.html#ad491418a6616abf108d083e29e097d3e", null ],
-    [ "RefinementSetting", "structhypro_1_1RefinementSetting.html#a093042b5c05a20b961d877aeb70647d7", null ],
-    [ "operator=", "structhypro_1_1RefinementSetting.html#a777f9f7bdc239e8644170eca19bdc8a7", null ],
+    [ "Number", "structhypro_1_1RefinementSetting.html#a5aabc29003c8c7e326bd4331a14832b3", null ],
+    [ "RefinementSetting", "structhypro_1_1RefinementSetting.html#aef4ab59d09d621981204dd0c3533cc38", null ],
+    [ "RefinementSetting", "structhypro_1_1RefinementSetting.html#a1976676ce5f63d1bc5c1fab1a848d910", null ],
+    [ "RefinementSetting", "structhypro_1_1RefinementSetting.html#abbd9ae816a0c61ff34f271b64605619a", null ],
+    [ "RefinementSetting", "structhypro_1_1RefinementSetting.html#a1734f2ae5f25c39ec4f2410f25837e9e", null ],
+    [ "operator=", "structhypro_1_1RefinementSetting.html#a2fe0bdf82691817eae8cf98758171f4c", null ],
     [ "operator!=", "structhypro_1_1RefinementSetting.html#a300b6bb9d42520797cdc8010ca031f53", null ],
     [ "operator<<", "structhypro_1_1RefinementSetting.html#a2e57f79d5e17bae672220d9654ae250d", null ],
     [ "operator==", "structhypro_1_1RefinementSetting.html#a2deac931944e63c6a522635706a7f322", null ],
-    [ "entryTimestamp", "structhypro_1_1RefinementSetting.html#a6ce340b83a7df57db5420b18e860b12c", null ],
-    [ "fullyComputed", "structhypro_1_1RefinementSetting.html#a265ab0afdacac932258cf15ca255459f", null ],
-    [ "hitBadStates", "structhypro_1_1RefinementSetting.html#a28cb9ec8f77ff3384dc6ab2af866545b", null ],
-    [ "initialSet", "structhypro_1_1RefinementSetting.html#a51168d89a838e9dcc078715d5ddf9fee", null ],
-    [ "isDummy", "structhypro_1_1RefinementSetting.html#abf51860697ef4c08788901ccce9e38e5", null ],
-    [ "isEmpty", "structhypro_1_1RefinementSetting.html#a635cbaafd989d6b45b2929e66ca82e2c", null ],
-    [ "mTimings", "structhypro_1_1RefinementSetting.html#a3b7df09633af4555380f5933148c87b1", null ]
+    [ "entryTimestamp", "structhypro_1_1RefinementSetting.html#a78398fa4ee05be7cd74c0daa963cf2dc", null ],
+    [ "fullyComputed", "structhypro_1_1RefinementSetting.html#ab9b6b81e3582a8333be993296524445c", null ],
+    [ "hitBadStates", "structhypro_1_1RefinementSetting.html#a7242295cbc4f8db4cff7540186d9f8f7", null ],
+    [ "initialSet", "structhypro_1_1RefinementSetting.html#a4e7926b0e7047f50a04733ccd803dfd8", null ],
+    [ "isDummy", "structhypro_1_1RefinementSetting.html#a43f8d881492109bf6feb508955b061ce", null ],
+    [ "isEmpty", "structhypro_1_1RefinementSetting.html#ab71e70941d2a0e43acb5a2662355e925", null ],
+    [ "mTimings", "structhypro_1_1RefinementSetting.html#a0b63b1680c1a01011f3ffef30e1e4a39", null ]
 ];

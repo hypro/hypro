@@ -26,7 +26,7 @@ var searchData=
   ['setones',['setOnes',['../classhypro_1_1Dictionary.html#ad6fe4718db9d0e3154d25ec35db32b2b',1,'hypro::Dictionary']]],
   ['setpoint',['setPoint',['../classhypro_1_1Vertex.html#a7f6466528dbc07736390861973b69162',1,'hypro::Vertex']]],
   ['setreduced',['setReduced',['../classhypro_1_1HPolytopeT.html#a1a60fa4ec4f30fa1c570bdd7d321b56f',1,'hypro::HPolytopeT']]],
-  ['setset',['setSet',['../classhypro_1_1State.html#a7e84fc95eb0335c56508ad6353f7c899',1,'hypro::State']]],
+  ['setset',['setSet',['../classhypro_1_1State.html#a7e84fc95eb0335c56508ad6353f7c899',1,'hypro::State::setSet(const R &amp;s, std::size_t i=0)'],['../classhypro_1_1State.html#a4eec9cff012f18489ed72463ba112a61',1,'hypro::State::setSet(const repVariant &amp;s, std::size_t i=0)']]],
   ['setsetdirect',['setSetDirect',['../classhypro_1_1State.html#a6d6967061238ce37745fa48b87273304',1,'hypro::State']]],
   ['setsets',['setSets',['../classhypro_1_1State.html#a6ce1f5cecd1263870cd8381043db84d9',1,'hypro::State']]],
   ['setsetssave',['setSetsSave',['../classhypro_1_1State.html#a62e33e2ee66f24c594403d01c16c097a',1,'hypro::State']]],

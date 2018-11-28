@@ -1,11 +1,12 @@
 var structhypro_1_1Task =
 [
-    [ "Task", "structhypro_1_1Task.html#ada5254414247cee7d334397a0bdc8893", null ],
-    [ "Task", "structhypro_1_1Task.html#a1124e505fb7404d2ac2cfd95b95e0266", null ],
-    [ "operator!=", "structhypro_1_1Task.html#a15fd0b41828ba45df484d8acaabce103", null ],
-    [ "operator<", "structhypro_1_1Task.html#a9fd394744feded83b6b213528dab0134", null ],
-    [ "operator<<", "structhypro_1_1Task.html#a6a95a50a3674497820a00b4f499ab20b", null ],
-    [ "operator==", "structhypro_1_1Task.html#aa13a0eeb59bce688ca3fe701380d9407", null ],
-    [ "btInfo", "structhypro_1_1Task.html#a995ba7f356b3d648e1dcc31ee50de71d", null ],
-    [ "treeNode", "structhypro_1_1Task.html#ac43881df4b032d553d1da5eebf5c7316", null ]
+    [ "Number", "structhypro_1_1Task.html#afed891aad92ac271ffa8fd9696712167", null ],
+    [ "Task", "structhypro_1_1Task.html#ae87313f1c3e5999b4998ca9d83a05163", null ],
+    [ "Task", "structhypro_1_1Task.html#a5e8cba4fd8aab66345359ce9e332f1a2", null ],
+    [ "operator!=", "structhypro_1_1Task.html#a0570f7fc17b121f1e6f2263e4c9ecb57", null ],
+    [ "operator<", "structhypro_1_1Task.html#a04730868169d6dcbe1b2793b12b15c08", null ],
+    [ "operator<<", "structhypro_1_1Task.html#a95aee2b8d763e2be4591e540026004fe", null ],
+    [ "operator==", "structhypro_1_1Task.html#aaa369183f7a183931d49bc95072177fb", null ],
+    [ "btInfo", "structhypro_1_1Task.html#ac64e5aac2a70750c6c8f878a51690e64", null ],
+    [ "treeNode", "structhypro_1_1Task.html#a4fa85face7a3d93b4ada24cca2645263", null ]
 ];

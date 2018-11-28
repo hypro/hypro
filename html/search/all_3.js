@@ -31,5 +31,6 @@ var searchData=
   ['discretetimeevolutionhandler',['discreteTimeEvolutionHandler',['../classhypro_1_1discreteTimeEvolutionHandler.html',1,'hypro']]],
   ['distance',['distance',['../classhypro_1_1Point.html#a3f87fd5562d144a031be521708a99c6b',1,'hypro::Point']]],
   ['domain',['Domain',['../classhypro_1_1Domain.html',1,'hypro']]],
-  ['dynamicheuristic',['DYNAMICHEURISTIC',['../group__globals.html#ga98440d6bfbf58b2832bb868378cbbaaa',1,'Converter.h']]]
+  ['dynamicheuristic',['DYNAMICHEURISTIC',['../group__globals.html#ga98440d6bfbf58b2832bb868378cbbaaa',1,'Converter.h']]],
+  ['dynamictype',['DynamicType',['../namespacehypro_1_1hypro.html#a77b05b2268b8ff83c56ff45e333cce22',1,'hypro::hypro::DynamicType()'],['../namespacehypro_1_1hypro.html#a77b05b2268b8ff83c56ff45e333cce22',1,'hypro::hypro::DynamicType()'],['../namespacehypro.html#ade3e42b7b774f60999db5eb776027882',1,'hypro::DynamicType()']]]
 ];

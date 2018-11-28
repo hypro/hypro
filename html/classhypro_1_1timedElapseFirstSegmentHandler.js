@@ -1,7 +1,7 @@
 var classhypro_1_1timedElapseFirstSegmentHandler =
 [
-    [ "timedElapseFirstSegmentHandler", "classhypro_1_1timedElapseFirstSegmentHandler.html#ad0055c700e40256975dac6962e18c69e", null ],
-    [ "timedElapseFirstSegmentHandler", "classhypro_1_1timedElapseFirstSegmentHandler.html#af4ba5d8a47aa61e44be3bc5fd3b5dd7f", null ],
-    [ "handle", "classhypro_1_1timedElapseFirstSegmentHandler.html#aed9185831eb569d35c15d2eb50eb4106", null ],
-    [ "handlerName", "classhypro_1_1timedElapseFirstSegmentHandler.html#a4fa9525813206a221a8a4c043301b492", null ]
+    [ "timedElapseFirstSegmentHandler", "classhypro_1_1timedElapseFirstSegmentHandler.html#a9280ec7e2511784b0c7b57b0a7f68f24", null ],
+    [ "timedElapseFirstSegmentHandler", "classhypro_1_1timedElapseFirstSegmentHandler.html#a5b66d34337b07fce90824598cc75c9cd", null ],
+    [ "handle", "classhypro_1_1timedElapseFirstSegmentHandler.html#a544e598f10dcb1d7a03bda9f26121bda", null ],
+    [ "handlerName", "classhypro_1_1timedElapseFirstSegmentHandler.html#ae74cfad6c4967f4bf9b0f113900d93c4", null ]
 ];

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['locationtype',['LOCATIONTYPE',['../namespacehypro_1_1hypro.html#a9cf736faf15a3e2982233085da15fa64',1,'hypro::hypro::LOCATIONTYPE()'],['../namespacehypro_1_1hypro.html#a9cf736faf15a3e2982233085da15fa64',1,'hypro::hypro::LOCATIONTYPE()'],['../namespacehypro.html#a591ce576c89c11741bb7ee90db71c677',1,'hypro::LOCATIONTYPE()']]]
+  ['dynamictype',['DynamicType',['../namespacehypro_1_1hypro.html#a77b05b2268b8ff83c56ff45e333cce22',1,'hypro::hypro::DynamicType()'],['../namespacehypro_1_1hypro.html#a77b05b2268b8ff83c56ff45e333cce22',1,'hypro::hypro::DynamicType()'],['../namespacehypro.html#ade3e42b7b774f60999db5eb776027882',1,'hypro::DynamicType()']]]
 ];

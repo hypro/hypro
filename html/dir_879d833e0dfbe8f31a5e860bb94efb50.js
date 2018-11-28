@@ -14,6 +14,6 @@ var dir_879d833e0dfbe8f31a5e860bb94efb50 =
     ] ],
     [ "Permutator.h", "Permutator_8h_source.html", null ],
     [ "templateDirections.h", "templateDirections_8h_source.html", null ],
-    [ "typetraits.h", "typetraits_8h_source.html", null ],
+    [ "typetraits.h", "util_2typetraits_8h_source.html", null ],
     [ "VariablePool.h", "VariablePool_8h_source.html", null ]
 ];

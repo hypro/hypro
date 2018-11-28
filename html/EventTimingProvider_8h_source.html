@@ -134,11 +134,11 @@ $(document).ready(function(){initNavTree('EventTimingProvider_8h_source.html',''
 <div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;    <span class="keyword">typename</span> EventTimingNode&lt;Number&gt;::Node_t mRoot;</div>
 <div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;</div>
 <div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;    </div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;    <span class="keywordtype">void</span> initialize(<span class="keyword">const</span> <a class="code" href="classhypro_1_1HybridAutomaton.html">HybridAutomaton&lt;Number&gt;</a>&amp; ha);</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;    </div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;    <span class="keywordtype">void</span> initialize(<span class="keyword">const</span> <a class="code" href="classhypro_1_1HybridAutomaton.html">HybridAutomaton&lt;Number&gt;</a>&amp; ha, <a class="code" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> globalTimeHorizon);</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;</div>
 <div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;    <a class="code" href="classhypro_1_1EventTimingContainer.html">EventTimingContainer&lt;Number&gt;</a>* getTimings(<span class="keyword">const</span> <a class="code" href="classhypro_1_1Path.html">Path&lt;Number,tNumber&gt;</a>&amp; path) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;    </div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;</div>
 <div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;    <span class="keywordtype">void</span> updateTimings(<span class="keyword">const</span> <a class="code" href="classhypro_1_1Path.html">Path&lt;Number,tNumber&gt;</a>&amp; path, <span class="keyword">const</span> <a class="code" href="classhypro_1_1EventTimingContainer.html">EventTimingContainer&lt;Number&gt;</a>&amp; update);</div>
 <div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;</div>
 <div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;    <span class="keyword">typename</span> EventTimingNode&lt;Number&gt;::Node_t addChildToNode(<span class="keyword">typename</span> <a class="code" href="classhypro_1_1TreeNode.html">TreeNode</a>&lt;<a class="code" href="classhypro_1_1EventTimingNode.html">EventTimingNode&lt;Number&gt;</a>&gt;::Node_t parent, <a class="code" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> timeHorizon);</div>

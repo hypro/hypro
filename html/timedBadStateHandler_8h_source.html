@@ -116,21 +116,23 @@ $(document).ready(function(){initNavTree('timedBadStateHandler_8h_source.html','
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;</div>
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="keyword">namespace </span>hypro</div>
 <div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;{</div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">class</span> Representation,<span class="keyword">typename</span> Number&gt;</div>
-<div class="line"><a name="l00008"></a><span class="lineno"><a class="line" href="classhypro_1_1timedBadStateHandler.html">    8</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classhypro_1_1timedBadStateHandler.html">timedBadStateHandler</a> : <span class="keyword">public</span> <a class="code" href="classhypro_1_1ltiBadStateHandler.html">ltiBadStateHandler</a>&lt;Representation,Number&gt; {</div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;        <a class="code" href="classhypro_1_1timedBadStateHandler.html">timedBadStateHandler</a>() = <span class="keyword">delete</span>;</div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;        <a class="code" href="classhypro_1_1timedBadStateHandler.html">timedBadStateHandler</a>(<a class="code" href="classhypro_1_1State.html">State_t&lt;Number&gt;</a>* state, <span class="keywordtype">size_t</span> index) : <a class="code" href="classhypro_1_1ltiBadStateHandler.html">ltiBadStateHandler&lt;Representation,Number&gt;</a>(state,index){}</div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;        </div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;        <span class="keywordtype">void</span> handle();</div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;        <span class="keyword">const</span> <span class="keywordtype">char</span>* handlerName() {<span class="keywordflow">return</span> <span class="stringliteral">&quot;timedBadStateHandler&quot;</span>;}</div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;    };</div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;} <span class="comment">// hypro</span></div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;</div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="preprocessor">#include &quot;timedBadStateHandler.tpp&quot;</span></div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> State&gt;</div>
+<div class="line"><a name="l00008"></a><span class="lineno"><a class="line" href="classhypro_1_1timedBadStateHandler.html">    8</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classhypro_1_1timedBadStateHandler.html">timedBadStateHandler</a> : <span class="keyword">public</span> <a class="code" href="classhypro_1_1ltiBadStateHandler.html">ltiBadStateHandler</a>&lt;State&gt; {</div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;        <span class="keyword">using</span> Number = <span class="keyword">typename</span> <a class="code" href="classhypro_1_1State.html#a8596fb990ea3ae3528b1ed522e0bc574">State::NumberType</a>;</div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;        <a class="code" href="classhypro_1_1timedBadStateHandler.html">timedBadStateHandler</a>() = <span class="keyword">delete</span>;</div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;        <a class="code" href="classhypro_1_1timedBadStateHandler.html">timedBadStateHandler</a>(<a class="code" href="classhypro_1_1State.html">State</a>* state, <span class="keywordtype">size_t</span> index) : <a class="code" href="classhypro_1_1ltiBadStateHandler.html">ltiBadStateHandler&lt;State&gt;</a>(state,index){}</div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;</div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;        <span class="keywordtype">void</span> handle();</div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;        <span class="keyword">const</span> <span class="keywordtype">char</span>* handlerName() {<span class="keywordflow">return</span> <span class="stringliteral">&quot;timedBadStateHandler&quot;</span>;}</div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;    };</div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;} <span class="comment">// hypro</span></div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;</div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="preprocessor">#include &quot;timedBadStateHandler.tpp&quot;</span></div>
 <div class="ttc" id="classhypro_1_1timedBadStateHandler_html"><div class="ttname"><a href="classhypro_1_1timedBadStateHandler.html">hypro::timedBadStateHandler</a></div><div class="ttdef"><b>Definition:</b> <a href="timedBadStateHandler_8h_source.html#l00008">timedBadStateHandler.h:8</a></div></div>
 <div class="ttc" id="classhypro_1_1State_html"><div class="ttname"><a href="classhypro_1_1State.html">hypro::State</a></div><div class="ttdoc">Class for state. </div><div class="ttdef"><b>Definition:</b> <a href="State_8h_source.html#l00030">State.h:30</a></div></div>
 <div class="ttc" id="classhypro_1_1ltiBadStateHandler_html"><div class="ttname"><a href="classhypro_1_1ltiBadStateHandler.html">hypro::ltiBadStateHandler</a></div><div class="ttdef"><b>Definition:</b> <a href="ltiBadStateHandler_8h_source.html#l00007">ltiBadStateHandler.h:7</a></div></div>
+<div class="ttc" id="classhypro_1_1State_html_a8596fb990ea3ae3528b1ed522e0bc574"><div class="ttname"><a href="classhypro_1_1State.html#a8596fb990ea3ae3528b1ed522e0bc574">hypro::State::NumberType</a></div><div class="ttdeci">Number NumberType</div><div class="ttdoc">Boost variant type for all possible state set representations. </div><div class="ttdef"><b>Definition:</b> <a href="State_8h_source.html#l00034">State.h:34</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- HTML footer for doxygen 1.8.12-->

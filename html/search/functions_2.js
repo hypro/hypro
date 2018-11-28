@@ -17,6 +17,7 @@ var searchData=
   ['computeplanenormal',['computePlaneNormal',['../classhypro_1_1Halfspace.html#adb5e2938f230976484893135809dd6c6',1,'hypro::Halfspace']]],
   ['computeplaneoffset',['computePlaneOffset',['../classhypro_1_1Halfspace.html#ac0b4738ef579ec38a95b54c80842351c',1,'hypro::Halfspace']]],
   ['computezonotopeboundary',['computeZonotopeBoundary',['../classhypro_1_1ZonotopeT.html#abc9b71526711085fd4d184d338ad9a37',1,'hypro::ZonotopeT']]],
+  ['condition',['Condition',['../classhypro_1_1Condition.html#a24cf5f16f796ef9a6fd622daa3684271',1,'hypro::Condition']]],
   ['cone',['cone',['../classhypro_1_1VPolytopeT.html#a1b10d464f47e71a118121c5fd197e0f3',1,'hypro::VPolytopeT']]],
   ['conichull',['conicHull',['../classhypro_1_1ConvexHull.html#a7154e0b98a29f63698ab13b1b9f183e2',1,'hypro::ConvexHull']]],
   ['constraints',['constraints',['../classhypro_1_1BoxT.html#a1ac495af5bee486a7b3795019da6f0a7',1,'hypro::BoxT']]],

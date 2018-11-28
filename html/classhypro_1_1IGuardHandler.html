@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.6"/>
-<title>HyPro: hypro::IGuardHandler&lt; Number &gt; Class Template Reference</title>
+<title>HyPro: hypro::IGuardHandler&lt; State &gt; Class Template Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -113,47 +113,46 @@ $(document).ready(function(){initNavTree('classhypro_1_1IGuardHandler.html','');
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="classhypro_1_1IGuardHandler-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">hypro::IGuardHandler&lt; Number &gt; Class Template Reference<span class="mlabels"><span class="mlabel">abstract</span></span></div>  </div>
+<div class="title">hypro::IGuardHandler&lt; State &gt; Class Template Reference<span class="mlabels"><span class="mlabel">abstract</span></span></div>  </div>
 </div><!--header-->
 <div class="contents">
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a5fcc46d4833d4e385297b30ae67f4910"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5fcc46d4833d4e385297b30ae67f4910"></a>
+<tr class="memitem:acc7c2d9987aa402faa3286290f59d9c2"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="acc7c2d9987aa402faa3286290f59d9c2"></a>
 virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>handle</b> ()=0</td></tr>
-<tr class="separator:a5fcc46d4833d4e385297b30ae67f4910"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abf2acab494e368d465842a9a856578f2"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="abf2acab494e368d465842a9a856578f2"></a>
+<tr class="separator:acc7c2d9987aa402faa3286290f59d9c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa81efe5b7828495f55d5962cacdab754"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa81efe5b7828495f55d5962cacdab754"></a>
 virtual const char *&#160;</td><td class="memItemRight" valign="bottom"><b>handlerName</b> ()=0</td></tr>
-<tr class="separator:abf2acab494e368d465842a9a856578f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a984244f90ef165dca0b057b8a06dd9eb"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a984244f90ef165dca0b057b8a06dd9eb"></a>
+<tr class="separator:aa81efe5b7828495f55d5962cacdab754"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5c015e2c48774ecedda8b3fbf7c5491e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5c015e2c48774ecedda8b3fbf7c5491e"></a>
 virtual bool&#160;</td><td class="memItemRight" valign="bottom"><b>satisfiesGuard</b> ()=0</td></tr>
-<tr class="separator:a984244f90ef165dca0b057b8a06dd9eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5b907d5abc5453ea5fecd6dcf420fbb1"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5b907d5abc5453ea5fecd6dcf420fbb1"></a>
-virtual std::shared_ptr<br class="typebreak"/>
-&lt; <a class="el" href="classhypro_1_1State.html">State_t</a>&lt; Number &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getState</b> ()=0</td></tr>
-<tr class="separator:a5b907d5abc5453ea5fecd6dcf420fbb1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4dfe80c6ef6f65c5850e4bf7a083d253"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4dfe80c6ef6f65c5850e4bf7a083d253"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>setState</b> (std::shared_ptr&lt; <a class="el" href="classhypro_1_1State.html">State_t</a>&lt; Number &gt;&gt; ptr)=0</td></tr>
-<tr class="separator:a4dfe80c6ef6f65c5850e4bf7a083d253"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a77db65bfb01317e00e1a883bd421a862"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a77db65bfb01317e00e1a883bd421a862"></a>
+<tr class="separator:a5c015e2c48774ecedda8b3fbf7c5491e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7a4f8b3f4ce8f7a7fa0788e056d1b2b6"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7a4f8b3f4ce8f7a7fa0788e056d1b2b6"></a>
+virtual std::shared_ptr&lt; <a class="el" href="classhypro_1_1State.html">State</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getState</b> ()=0</td></tr>
+<tr class="separator:a7a4f8b3f4ce8f7a7fa0788e056d1b2b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1dc854bf93c6a105d23b4a2e30ff8de6"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1dc854bf93c6a105d23b4a2e30ff8de6"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>setState</b> (std::shared_ptr&lt; <a class="el" href="classhypro_1_1State.html">State</a> &gt; ptr)=0</td></tr>
+<tr class="separator:a1dc854bf93c6a105d23b4a2e30ff8de6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1a9444b5b1e51139a120de974a232bc4"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1a9444b5b1e51139a120de974a232bc4"></a>
 virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>reinitialize</b> ()=0</td></tr>
-<tr class="separator:a77db65bfb01317e00e1a883bd421a862"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:add50075818d5151a728d8c8e969136bf"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="add50075818d5151a728d8c8e969136bf"></a>
+<tr class="separator:a1a9444b5b1e51139a120de974a232bc4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af573412d5aaa9a956fe2809de1b14e1e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af573412d5aaa9a956fe2809de1b14e1e"></a>
 virtual double&#160;</td><td class="memItemRight" valign="bottom"><b>getSortIndex</b> ()=0</td></tr>
-<tr class="separator:add50075818d5151a728d8c8e969136bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9f7176b7a59f7a612449e7fe858a5369"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9f7176b7a59f7a612449e7fe858a5369"></a>
+<tr class="separator:af573412d5aaa9a956fe2809de1b14e1e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad7c0b814beec495b2593d1384ac27823"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad7c0b814beec495b2593d1384ac27823"></a>
 virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>setSortIndex</b> (double sortIndex)=0</td></tr>
-<tr class="separator:a9f7176b7a59f7a612449e7fe858a5369"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adb0eeef3203ea765741ce02a45136c54"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="adb0eeef3203ea765741ce02a45136c54"></a>
+<tr class="separator:ad7c0b814beec495b2593d1384ac27823"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afd5f8adb14ef6c077149fb77d73966a7"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="afd5f8adb14ef6c077149fb77d73966a7"></a>
 virtual bool&#160;</td><td class="memItemRight" valign="bottom"><b>getMarkedForDelete</b> ()=0</td></tr>
-<tr class="separator:adb0eeef3203ea765741ce02a45136c54"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5138aec0d69d063765cab4aa974a35bd"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5138aec0d69d063765cab4aa974a35bd"></a>
+<tr class="separator:afd5f8adb14ef6c077149fb77d73966a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a88786dba19eff832bb615c9bd52c18b3"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a88786dba19eff832bb615c9bd52c18b3"></a>
 virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>setMarkedForDelete</b> (bool toDelete)=0</td></tr>
-<tr class="separator:a5138aec0d69d063765cab4aa974a35bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="separator:a88786dba19eff832bb615c9bd52c18b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><h3>template&lt;typename Number&gt;<br/>
-class hypro::IGuardHandler&lt; Number &gt;</h3>
+<div class="textblock"><h3>template&lt;typename State&gt;<br/>
+class hypro::IGuardHandler&lt; State &gt;</h3>
 
 
 <p>Definition at line <a class="el" href="IHandler_8h_source.html#l00046">46</a> of file <a class="el" href="IHandler_8h_source.html">IHandler.h</a>.</p>

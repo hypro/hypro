@@ -133,87 +133,91 @@ $(document).ready(function(){initNavTree('Task_8h_source.html','');});
 <div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    }</div>
 <div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;};</div>
 <div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;<span class="keyword">template</span>&lt;<span class="keyword">typename</span> Number&gt;</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;<span class="keyword">template</span>&lt;<span class="keyword">typename</span> State&gt;</div>
 <div class="line"><a name="l00041"></a><span class="lineno"><a class="line" href="structhypro_1_1Task.html">   41</a></span>&#160;<span class="keyword">struct </span><a class="code" href="structhypro_1_1Task.html">Task</a> {</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    <a class="code" href="classhypro_1_1ReachTreeNode.html">ReachTreeNode&lt;Number&gt;</a>* treeNode = <span class="keyword">nullptr</span>;</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    <a class="code" href="structhypro_1_1TBacktrackingInfo.html">TBacktrackingInfo&lt;Number&gt;</a> btInfo = <a class="code" href="structhypro_1_1TBacktrackingInfo.html">TBacktrackingInfo&lt;Number&gt;</a>();</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    <span class="keyword">using</span> Number = <span class="keyword">typename</span> <a class="code" href="classhypro_1_1State.html#a8596fb990ea3ae3528b1ed522e0bc574">State::NumberType</a>;</div>
 <div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    <a class="code" href="structhypro_1_1Task.html">Task</a>(<a class="code" href="classhypro_1_1ReachTreeNode.html">ReachTreeNode&lt;Number&gt;</a>* node)</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;        : treeNode(node)</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;        , btInfo()</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;    {</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;        assert(btInfo.btPath.size() &lt;= 0 || btInfo.btLevel &gt; 0);</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    }</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    Task(<a class="code" href="classhypro_1_1ReachTreeNode.html">ReachTreeNode&lt;Number&gt;</a>* node, <span class="keyword">const</span> <a class="code" href="structhypro_1_1TBacktrackingInfo.html">TBacktrackingInfo&lt;Number&gt;</a>&amp; btI)</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;        : treeNode(node)</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;        , btInfo(btI)</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    {}</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    <span class="keyword">friend</span> ostream&amp; operator&lt;&lt;(ostream&amp; out, const Task&lt;Number&gt;&amp; task) {</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;        <span class="comment">//out &lt;&lt; *task.treeNode;</span></div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;        out &lt;&lt; task.treeNode;</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;        <span class="keywordflow">return</span> out;</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;    }</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    <span class="keyword">friend</span> <span class="keywordtype">bool</span> operator==(<span class="keyword">const</span> <a class="code" href="structhypro_1_1Task.html">Task&lt;Number&gt;</a>&amp; lhs, <span class="keyword">const</span> <a class="code" href="structhypro_1_1Task.html">Task&lt;Number&gt;</a>&amp; rhs) {</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;        <span class="keywordflow">return</span> (lhs.treeNode == rhs.treeNode &amp;&amp; lhs.btInfo == rhs.btInfo);</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    }</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;    <span class="keyword">friend</span> <span class="keywordtype">bool</span> operator!=(<span class="keyword">const</span> <a class="code" href="structhypro_1_1Task.html">Task&lt;Number&gt;</a>&amp; lhs, <span class="keyword">const</span> <a class="code" href="structhypro_1_1Task.html">Task&lt;Number&gt;</a>&amp; rhs) {</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;        <span class="keywordflow">return</span> !(lhs == rhs);</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    }</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    <span class="keyword">friend</span> <span class="keywordtype">bool</span> operator&lt;(const Task&lt;Number&gt;&amp; lhs, <span class="keyword">const</span> <a class="code" href="structhypro_1_1Task.html">Task&lt;Number&gt;</a>&amp; rhs) {</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;        DEBUG(<span class="stringliteral">&quot;hypro.workQueue&quot;</span>, <span class="stringliteral">&quot;Compare &quot;</span> &lt;&lt; lhs &lt;&lt; <span class="stringliteral">&quot; and &quot;</span> &lt;&lt; rhs &lt;&lt; <span class="stringliteral">&quot;: &quot;</span>);</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;        <span class="keywordflow">if</span> (lhs == rhs) { <span class="comment">// strict weak ordering requires this, thus rhs is inserted before lhs.</span></div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;            <span class="comment">// however, this should never happen(?)</span></div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;            assert(<span class="keyword">false</span>);</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;            DEBUG(<span class="stringliteral">&quot;hypro.workQueue&quot;</span>, <span class="stringliteral">&quot;Should not happen.&quot;</span>);</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;            <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;        }</div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;        <span class="keywordflow">if</span> (lhs.btInfo.btPath.size() &gt; 0 &amp;&amp; rhs.btInfo.btPath.size() &gt; 0) {</div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;            <span class="comment">// check whether there are common nodes in the btPath.</span></div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;            <span class="keywordflow">if</span> (lhs.btInfo.btPath.sharesPrefix(rhs.btInfo.btPath)) {</div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;                <span class="comment">// we simply don&#39;t care but can return an arbitrary value. keep strict ordering by btLevel</span></div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;                DEBUG(<span class="stringliteral">&quot;hypro.workQueue&quot;</span>, (lhs.btInfo.btLevel &gt; rhs.btInfo.btLevel));</div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;                <span class="keywordflow">return</span> lhs.btInfo.btLevel &gt; rhs.btInfo.btLevel;</div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;            }</div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;</div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;            <span class="comment">// TODO we have a node in common - how do we handle this?</span></div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;</div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;        }</div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;</div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;        <span class="keywordflow">if</span> (lhs.btInfo.btLevel == rhs.btInfo.btLevel &amp;&amp; lhs.btInfo.btLevel != 0) {</div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;            DEBUG(<span class="stringliteral">&quot;hypro.workQueue&quot;</span>, (lhs.btInfo.btPath.size() &gt; rhs.btInfo.btPath.size()));</div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;            <span class="keywordflow">return</span> lhs.btInfo.btPath.size() &gt; rhs.btInfo.btPath.size(); <span class="comment">// insert longer path first</span></div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;        }</div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;</div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;        DEBUG(<span class="stringliteral">&quot;hypro.workQueue&quot;</span>, (lhs.btInfo.btLevel &gt; rhs.btInfo.btLevel));</div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;</div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;        <span class="keywordflow">if</span> (lhs.btInfo.btLevel == rhs.btInfo.btLevel &amp;&amp; lhs.btInfo.btLevel == 0) {</div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;            <span class="keywordflow">return</span> lhs.treeNode-&gt;getDepth() &lt; rhs.treeNode-&gt;getDepth();</div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;        }</div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;</div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;        <span class="keywordflow">return</span> lhs.btInfo.btLevel &gt; rhs.btInfo.btLevel; <span class="comment">// insert higher btLevel first</span></div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;    }</div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;};</div>
-<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;</div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;<span class="keyword">template</span>&lt;<span class="keyword">typename</span> Number&gt;</div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;<span class="keywordtype">bool</span> <a class="code" href="namespacehypro.html#a77f572dc128e6a7e83c38eeaff3a278f">operator==</a>(<span class="keyword">const</span> std::shared_ptr&lt;<a class="code" href="structhypro_1_1Task.html">Task&lt;Number&gt;</a>&gt;&amp; lhs, <span class="keyword">const</span> std::shared_ptr&lt;<a class="code" href="structhypro_1_1Task.html">Task&lt;Number&gt;</a>&gt;&amp; rhs) {</div>
-<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;    <span class="keywordflow">return</span> *lhs == *rhs;</div>
-<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;}</div>
-<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;</div>
-<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;} <span class="comment">// hypro</span></div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    <a class="code" href="classhypro_1_1ReachTreeNode.html">ReachTreeNode&lt;State&gt;</a>* treeNode = <span class="keyword">nullptr</span>;</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;    <a class="code" href="structhypro_1_1TBacktrackingInfo.html">TBacktrackingInfo&lt;Number&gt;</a> btInfo = <a class="code" href="structhypro_1_1TBacktrackingInfo.html">TBacktrackingInfo&lt;Number&gt;</a>();</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;    <a class="code" href="structhypro_1_1Task.html">Task</a>(<a class="code" href="classhypro_1_1ReachTreeNode.html">ReachTreeNode&lt;State&gt;</a>* node)</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;        : treeNode(node)</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;        , btInfo()</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    {</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;        assert(btInfo.btPath.size() &lt;= 0 || btInfo.btLevel &gt; 0);</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    }</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    Task(<a class="code" href="classhypro_1_1ReachTreeNode.html">ReachTreeNode&lt;State&gt;</a>* node, <span class="keyword">const</span> <a class="code" href="structhypro_1_1TBacktrackingInfo.html">TBacktrackingInfo&lt;Number&gt;</a>&amp; btI)</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;        : treeNode(node)</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;        , btInfo(btI)</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    {}</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    <span class="keyword">friend</span> ostream&amp; operator&lt;&lt;(ostream&amp; out, const Task&lt;State&gt;&amp; task) {</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;        <span class="comment">//out &lt;&lt; *task.treeNode;</span></div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;        out &lt;&lt; task.treeNode;</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;        <span class="keywordflow">return</span> out;</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    }</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    <span class="keyword">friend</span> <span class="keywordtype">bool</span> operator==(<span class="keyword">const</span> <a class="code" href="structhypro_1_1Task.html">Task&lt;State&gt;</a>&amp; lhs, <span class="keyword">const</span> <a class="code" href="structhypro_1_1Task.html">Task&lt;State&gt;</a>&amp; rhs) {</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;        <span class="keywordflow">return</span> (lhs.treeNode == rhs.treeNode &amp;&amp; lhs.btInfo == rhs.btInfo);</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    }</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;    <span class="keyword">friend</span> <span class="keywordtype">bool</span> operator!=(<span class="keyword">const</span> <a class="code" href="structhypro_1_1Task.html">Task&lt;State&gt;</a>&amp; lhs, <span class="keyword">const</span> <a class="code" href="structhypro_1_1Task.html">Task&lt;State&gt;</a>&amp; rhs) {</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;        <span class="keywordflow">return</span> !(lhs == rhs);</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;    }</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;    <span class="keyword">friend</span> <span class="keywordtype">bool</span> operator&lt;(const Task&lt;State&gt;&amp; lhs, <span class="keyword">const</span> <a class="code" href="structhypro_1_1Task.html">Task&lt;State&gt;</a>&amp; rhs) {</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;        DEBUG(<span class="stringliteral">&quot;hypro.workQueue&quot;</span>, <span class="stringliteral">&quot;Compare &quot;</span> &lt;&lt; lhs &lt;&lt; <span class="stringliteral">&quot; and &quot;</span> &lt;&lt; rhs &lt;&lt; <span class="stringliteral">&quot;: &quot;</span>);</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;        <span class="keywordflow">if</span> (lhs == rhs) { <span class="comment">// strict weak ordering requires this, thus rhs is inserted before lhs.</span></div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;            <span class="comment">// however, this should never happen(?)</span></div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;            assert(<span class="keyword">false</span>);</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;            DEBUG(<span class="stringliteral">&quot;hypro.workQueue&quot;</span>, <span class="stringliteral">&quot;Should not happen.&quot;</span>);</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;            <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;        }</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;        <span class="keywordflow">if</span> (lhs.btInfo.btPath.size() &gt; 0 &amp;&amp; rhs.btInfo.btPath.size() &gt; 0) {</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;            <span class="comment">// check whether there are common nodes in the btPath.</span></div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;            <span class="keywordflow">if</span> (lhs.btInfo.btPath.sharesPrefix(rhs.btInfo.btPath)) {</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;                <span class="comment">// we simply don&#39;t care but can return an arbitrary value. keep strict ordering by btLevel</span></div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;                DEBUG(<span class="stringliteral">&quot;hypro.workQueue&quot;</span>, (lhs.btInfo.btLevel &gt; rhs.btInfo.btLevel));</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;                <span class="keywordflow">return</span> lhs.btInfo.btLevel &gt; rhs.btInfo.btLevel;</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;            }</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;            <span class="comment">// TODO we have a node in common - how do we handle this?</span></div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;        }</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;        <span class="keywordflow">if</span> (lhs.btInfo.btLevel == rhs.btInfo.btLevel &amp;&amp; lhs.btInfo.btLevel != 0) {</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;            DEBUG(<span class="stringliteral">&quot;hypro.workQueue&quot;</span>, (lhs.btInfo.btPath.size() &gt; rhs.btInfo.btPath.size()));</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;            <span class="keywordflow">return</span> lhs.btInfo.btPath.size() &gt; rhs.btInfo.btPath.size(); <span class="comment">// insert longer path first</span></div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;        }</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;        DEBUG(<span class="stringliteral">&quot;hypro.workQueue&quot;</span>, (lhs.btInfo.btLevel &gt; rhs.btInfo.btLevel));</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;        <span class="keywordflow">if</span> (lhs.btInfo.btLevel == rhs.btInfo.btLevel &amp;&amp; lhs.btInfo.btLevel == 0) {</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;            <span class="keywordflow">return</span> lhs.treeNode-&gt;getDepth() &lt; rhs.treeNode-&gt;getDepth();</div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;        }</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;</div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;        <span class="keywordflow">return</span> lhs.btInfo.btLevel &gt; rhs.btInfo.btLevel; <span class="comment">// insert higher btLevel first</span></div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;    }</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;};</div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;</div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;<span class="keyword">template</span>&lt;<span class="keyword">typename</span> Number, <span class="keyword">typename</span> State&gt;</div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;<span class="keywordtype">bool</span> <a class="code" href="namespacehypro.html#a77f572dc128e6a7e83c38eeaff3a278f">operator==</a>(<span class="keyword">const</span> std::shared_ptr&lt;<a class="code" href="structhypro_1_1Task.html">Task&lt;State&gt;</a>&gt;&amp; lhs, <span class="keyword">const</span> std::shared_ptr&lt;<a class="code" href="structhypro_1_1Task.html">Task&lt;State&gt;</a>&gt;&amp; rhs) {</div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;    <span class="keywordflow">return</span> *lhs == *rhs;</div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;}</div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;</div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;} <span class="comment">// hypro</span></div>
 <div class="ttc" id="structhypro_1_1TBacktrackingInfo_html_ae945791c3efd87f7f652ce6e73824a23"><div class="ttname"><a href="structhypro_1_1TBacktrackingInfo.html#ae945791c3efd87f7f652ce6e73824a23">hypro::TBacktrackingInfo::btPath</a></div><div class="ttdeci">Path&lt; Number, tNumber &gt; btPath</div><div class="ttdef"><b>Definition:</b> <a href="Task_8h_source.html#l00018">Task.h:18</a></div></div>
 <div class="ttc" id="namespacehypro_html_a77f572dc128e6a7e83c38eeaff3a278f"><div class="ttname"><a href="namespacehypro.html#a77f572dc128e6a7e83c38eeaff3a278f">hypro::operator==</a></div><div class="ttdeci">bool operator==(const Halfspace&lt; Number &gt; &amp;lhs, const Halfspace&lt; Number &gt; &amp;rhs)</div><div class="ttdoc">Comparison operator. </div><div class="ttdef"><b>Definition:</b> <a href="Halfspace_8h_source.html#l00329">Halfspace.h:329</a></div></div>
 <div class="ttc" id="classhypro_1_1Path_html"><div class="ttname"><a href="classhypro_1_1Path.html">hypro::Path</a></div><div class="ttdoc">Class to define a path in some hybrid automaton. </div><div class="ttdef"><b>Definition:</b> <a href="Path_8h_source.html#l00103">Path.h:103</a></div></div>
 <div class="ttc" id="structhypro_1_1TBacktrackingInfo_html_a383ad28c0cad7e91d23ae992e3bb3b70"><div class="ttname"><a href="structhypro_1_1TBacktrackingInfo.html#a383ad28c0cad7e91d23ae992e3bb3b70">hypro::TBacktrackingInfo::btLevel</a></div><div class="ttdeci">unsigned btLevel</div><div class="ttdef"><b>Definition:</b> <a href="Task_8h_source.html#l00027">Task.h:27</a></div></div>
+<div class="ttc" id="classhypro_1_1State_html_a8596fb990ea3ae3528b1ed522e0bc574"><div class="ttname"><a href="classhypro_1_1State.html#a8596fb990ea3ae3528b1ed522e0bc574">hypro::State::NumberType</a></div><div class="ttdeci">Number NumberType</div><div class="ttdoc">Boost variant type for all possible state set representations. </div><div class="ttdef"><b>Definition:</b> <a href="State_8h_source.html#l00034">State.h:34</a></div></div>
 <div class="ttc" id="structhypro_1_1TBacktrackingInfo_html"><div class="ttname"><a href="structhypro_1_1TBacktrackingInfo.html">hypro::TBacktrackingInfo</a></div><div class="ttdoc">Struct holding all currently required information for backtracking. </div><div class="ttdef"><b>Definition:</b> <a href="Task_8h_source.html#l00014">Task.h:14</a></div></div>
 <div class="ttc" id="structhypro_1_1TBacktrackingInfo_html_a113aa00925adc4303c6cdc62dad52991"><div class="ttname"><a href="structhypro_1_1TBacktrackingInfo.html#a113aa00925adc4303c6cdc62dad52991">hypro::TBacktrackingInfo::currentBTPosition</a></div><div class="ttdeci">unsigned currentBTPosition</div><div class="ttdef"><b>Definition:</b> <a href="Task_8h_source.html#l00023">Task.h:23</a></div></div>
 <div class="ttc" id="structhypro_1_1Task_html"><div class="ttname"><a href="structhypro_1_1Task.html">hypro::Task</a></div><div class="ttdef"><b>Definition:</b> <a href="Task_8h_source.html#l00041">Task.h:41</a></div></div>
-<div class="ttc" id="classhypro_1_1ReachTreeNode_html"><div class="ttname"><a href="classhypro_1_1ReachTreeNode.html">hypro::ReachTreeNode</a></div><div class="ttdef"><b>Definition:</b> <a href="ReachTreeNode_8h_source.html#l00154">ReachTreeNode.h:154</a></div></div>
+<div class="ttc" id="classhypro_1_1ReachTreeNode_html"><div class="ttname"><a href="classhypro_1_1ReachTreeNode.html">hypro::ReachTreeNode</a></div><div class="ttdef"><b>Definition:</b> <a href="ReachTreeNode_8h_source.html#l00113">ReachTreeNode.h:113</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- HTML footer for doxygen 1.8.12-->

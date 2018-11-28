@@ -1,10 +1,12 @@
 var NAVTREEINDEX1 =
 {
+"algorithms_2reachability_2handlers_2jumpHandlers_2util_8h_source.html":[10,0,1,0,0,3,1,4,3],
+"algorithms_2reachability_2util_8h_source.html":[10,0,1,0,0,3,6],
 "annotated.html":[9,0],
 "antlr4-flowstar_2ParserWrapper_8cpp_source.html":[10,0,1,0,2,1,17],
 "antlr4-flowstar_2ParserWrapper_8h_source.html":[10,0,1,0,2,1,18],
-"carlPolytopeSettings_8h_source.html":[10,0,1,0,3,7,0,1],
-"carlPolytope_8h_source.html":[10,0,1,0,3,7,0,0],
+"carlPolytopeSettings_8h_source.html":[10,0,1,0,3,8,0,1],
+"carlPolytope_8h_source.html":[10,0,1,0,3,8,0,0],
 "carlTypes_8h_source.html":[10,0,1,0,5],
 "citelist.html":[6],
 "classCIFLocationBaseVisitor.html":[9,0,8],
@@ -247,7 +249,5 @@ var NAVTREEINDEX1 =
 "classCIFLocationParser.html#a28ba184413479bd6c4d5ec200a7675cfa58fb2e8fe4a39864a707d26efc4e09ae":[9,0,10,172],
 "classCIFLocationParser.html#a28ba184413479bd6c4d5ec200a7675cfa5975edd583fc4c135351a9f68ba0c35c":[9,0,10,166],
 "classCIFLocationParser.html#a28ba184413479bd6c4d5ec200a7675cfa5c117e7442f8a421e6198831a56004ef":[9,0,10,93],
-"classCIFLocationParser.html#a28ba184413479bd6c4d5ec200a7675cfa5c56ee3e8ace676060a4899a8337a956":[9,0,10,173],
-"classCIFLocationParser.html#a28ba184413479bd6c4d5ec200a7675cfa5f6cb3663e5648f57c8d86d505290954":[9,0,10,125],
-"classCIFLocationParser.html#a28ba184413479bd6c4d5ec200a7675cfa616861498ed6f0f1c86809afd14c1ed7":[9,0,10,164]
+"classCIFLocationParser.html#a28ba184413479bd6c4d5ec200a7675cfa5c56ee3e8ace676060a4899a8337a956":[9,0,10,173]
 };

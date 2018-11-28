@@ -1,0 +1,9 @@
+digraph "/home/travis/build/hypro/hypro/src/hypro/representations/helperMethods" {
+  compound=true
+  node [ fontsize="10", fontname="Helvetica"];
+  edge [ labelfontsize="10", labelfontname="Helvetica"];
+  subgraph clusterdir_7fa927d8fbf9dfbeef69af27f63bc81b {
+    graph [ bgcolor="#ddddee", pencolor="black", label="representations" fontname="Helvetica", fontsize="10", URL="dir_7fa927d8fbf9dfbeef69af27f63bc81b.html"]
+  dir_347b12423904bd932c4239ca1a522dfa [shape=box, label="helperMethods", style="filled", fillcolor="#eeeeff", pencolor="black", URL="dir_347b12423904bd932c4239ca1a522dfa.html"];
+  }
+}

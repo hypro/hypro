@@ -70,6 +70,7 @@ var hierarchy =
     ] ],
     [ "hypro::Facet< Number >", "classhypro_1_1Facet.html", null ],
     [ "false_type", null, [
+      [ "hypro::is_flow< T >", "structhypro_1_1is__flow.html", null ],
       [ "hypro::is_shared_ptr< T >", "structhypro_1_1is__shared__ptr.html", null ],
       [ "hypro::is_unique_ptr< T >", "structhypro_1_1is__unique__ptr.html", null ]
     ] ],
@@ -132,13 +133,16 @@ var hierarchy =
     [ "hypro::Grid< Number >", "classhypro_1_1Grid.html", null ],
     [ "hypro::guardHandlerSorter", "structhypro_1_1guardHandlerSorter.html", null ],
     [ "hypro::Halfspace< Number >", "classhypro_1_1Halfspace.html", null ],
+    [ "std::hash< hypro::affineFlow< Number > >", "structstd_1_1hash_3_01hypro_1_1affineFlow_3_01Number_01_4_01_4.html", null ],
     [ "std::hash< hypro::Cacheable< Content > >", "structstd_1_1hash_3_01hypro_1_1Cacheable_3_01Content_01_4_01_4.html", null ],
     [ "std::hash< hypro::Condition< Number > >", "structstd_1_1hash_3_01hypro_1_1Condition_3_01Number_01_4_01_4.html", null ],
     [ "std::hash< hypro::Halfspace< Number > >", "structstd_1_1hash_3_01hypro_1_1Halfspace_3_01Number_01_4_01_4.html", null ],
+    [ "std::hash< hypro::linearFlow< Number > >", "structstd_1_1hash_3_01hypro_1_1linearFlow_3_01Number_01_4_01_4.html", null ],
     [ "std::hash< hypro::Location< Number > >", "structstd_1_1hash_3_01hypro_1_1Location_3_01Number_01_4_01_4.html", null ],
-    [ "std::hash< hypro::matrix_t< Number > >", "structstd_1_1hash_3_01hypro_1_1matrix__t_3_01Number_01_4_01_4.html", null ],
     [ "hypro::std::hash< hypro::matrix_t< Number > >", "structhypro_1_1std_1_1hash_3_01hypro_1_1matrix__t_3_01Number_01_4_01_4.html", null ],
+    [ "std::hash< hypro::matrix_t< Number > >", "structstd_1_1hash_3_01hypro_1_1matrix__t_3_01Number_01_4_01_4.html", null ],
     [ "std::hash< hypro::Point< Number > >", "structstd_1_1hash_3_01hypro_1_1Point_3_01Number_01_4_01_4.html", null ],
+    [ "std::hash< hypro::rectangularFlow< Number > >", "structstd_1_1hash_3_01hypro_1_1rectangularFlow_3_01Number_01_4_01_4.html", null ],
     [ "std::hash< hypro::Reset< Number > >", "structstd_1_1hash_3_01hypro_1_1Reset_3_01Number_01_4_01_4.html", null ],
     [ "std::hash< hypro::Ridge< Number > >", "structstd_1_1hash_3_01hypro_1_1Ridge_3_01Number_01_4_01_4.html", null ],
     [ "std::hash< hypro::Transition< Number > >", "structstd_1_1hash_3_01hypro_1_1Transition_3_01Number_01_4_01_4.html", null ],
@@ -154,58 +158,60 @@ var hierarchy =
     [ "hypro::HybridAutomaton< Number >", "classhypro_1_1HybridAutomaton.html", null ],
     [ "hypro::HybridAutomatonComp< Number >", "classhypro_1_1HybridAutomatonComp.html", null ],
     [ "hypro::IContext", "classhypro_1_1IContext.html", [
-      [ "hypro::LTIContext< Number >", "classhypro_1_1LTIContext.html", null ]
+      [ "hypro::LTIContext< State >", "classhypro_1_1LTIContext.html", null ]
     ] ],
     [ "hypro::IHandler", "classhypro_1_1IHandler.html", [
       [ "hypro::IBadStateHandler", "classhypro_1_1IBadStateHandler.html", [
-        [ "hypro::ltiBadStateHandler< Representation, Number >", "classhypro_1_1ltiBadStateHandler.html", [
-          [ "hypro::discreteBadStateHandler< Representation, Number >", "classhypro_1_1discreteBadStateHandler.html", null ],
-          [ "hypro::timedBadStateHandler< Representation, Number >", "classhypro_1_1timedBadStateHandler.html", null ]
+        [ "hypro::ltiBadStateHandler< State >", "classhypro_1_1ltiBadStateHandler.html", [
+          [ "hypro::discreteBadStateHandler< State >", "classhypro_1_1discreteBadStateHandler.html", null ],
+          [ "hypro::timedBadStateHandler< State >", "classhypro_1_1timedBadStateHandler.html", null ]
         ] ]
       ] ],
-      [ "hypro::IFirstSegmentHandler< Number >", "classhypro_1_1IFirstSegmentHandler.html", [
-        [ "hypro::ltiFirstSegmentHandler< Representation, Number >", "classhypro_1_1ltiFirstSegmentHandler.html", [
-          [ "hypro::timedElapseFirstSegmentHandler< Representation, Number >", "classhypro_1_1timedElapseFirstSegmentHandler.html", null ],
-          [ "hypro::timedFirstSegmentHandler< Representation, Number >", "classhypro_1_1timedFirstSegmentHandler.html", null ]
+      [ "hypro::IFirstSegmentHandler< State >", "classhypro_1_1IFirstSegmentHandler.html", [
+        [ "hypro::ltiFirstSegmentHandler< State >", "classhypro_1_1ltiFirstSegmentHandler.html", [
+          [ "hypro::timedElapseFirstSegmentHandler< State >", "classhypro_1_1timedElapseFirstSegmentHandler.html", null ],
+          [ "hypro::timedFirstSegmentHandler< State >", "classhypro_1_1timedFirstSegmentHandler.html", null ]
         ] ]
       ] ],
-      [ "hypro::IGuardHandler< Number >", "classhypro_1_1IGuardHandler.html", [
-        [ "hypro::ltiGuardHandler< Representation, Number >", "classhypro_1_1ltiGuardHandler.html", [
-          [ "hypro::discreteGuardHandler< Representation, Number >", "classhypro_1_1discreteGuardHandler.html", null ],
-          [ "hypro::timedGuardHandler< Representation, Number >", "classhypro_1_1timedGuardHandler.html", null ]
+      [ "hypro::IGuardHandler< State >", "classhypro_1_1IGuardHandler.html", [
+        [ "hypro::ltiGuardHandler< State >", "classhypro_1_1ltiGuardHandler.html", [
+          [ "hypro::discreteGuardHandler< State >", "classhypro_1_1discreteGuardHandler.html", null ],
+          [ "hypro::timedGuardHandler< State >", "classhypro_1_1timedGuardHandler.html", null ]
         ] ]
       ] ],
       [ "hypro::IInvariantHandler", "classhypro_1_1IInvariantHandler.html", [
-        [ "hypro::ltiInvariantHandler< Representation, Number >", "classhypro_1_1ltiInvariantHandler.html", [
-          [ "hypro::discreteInvariantHandler< Representation, Number >", "classhypro_1_1discreteInvariantHandler.html", null ],
-          [ "hypro::timedInvariantHandler< Representation, Number >", "classhypro_1_1timedInvariantHandler.html", null ]
+        [ "hypro::ltiInvariantHandler< State >", "classhypro_1_1ltiInvariantHandler.html", [
+          [ "hypro::discreteInvariantHandler< State >", "classhypro_1_1discreteInvariantHandler.html", null ],
+          [ "hypro::timedInvariantHandler< State >", "classhypro_1_1timedInvariantHandler.html", null ]
         ] ]
       ] ],
       [ "hypro::IJumpHandler", "classhypro_1_1IJumpHandler.html", [
-        [ "hypro::ltiJumpHandler< Number >", "classhypro_1_1ltiJumpHandler.html", null ]
+        [ "hypro::ltiJumpHandler< State >", "classhypro_1_1ltiJumpHandler.html", null ]
       ] ],
       [ "hypro::IResetHandler", "classhypro_1_1IResetHandler.html", [
-        [ "hypro::ltiResetHandler< Representation, Number >", "classhypro_1_1ltiResetHandler.html", [
-          [ "hypro::discreteResetHandler< Representation, Number >", "classhypro_1_1discreteResetHandler.html", null ],
-          [ "hypro::timedResetHandler< Representation, Number >", "classhypro_1_1timedResetHandler.html", null ]
+        [ "hypro::ltiResetHandler< State >", "classhypro_1_1ltiResetHandler.html", [
+          [ "hypro::discreteResetHandler< State >", "classhypro_1_1discreteResetHandler.html", null ],
+          [ "hypro::timedResetHandler< State >", "classhypro_1_1timedResetHandler.html", null ]
         ] ]
       ] ],
       [ "hypro::ITimeEvolutionHandler", "classhypro_1_1ITimeEvolutionHandler.html", [
         [ "hypro::discreteTimeEvolutionHandler", "classhypro_1_1discreteTimeEvolutionHandler.html", null ],
-        [ "hypro::ltiTimeEvolutionHandler< Representation, Number >", "classhypro_1_1ltiTimeEvolutionHandler.html", [
-          [ "hypro::timedElapseAfterTickTimeEvolutionHandler< Representation, Number >", "classhypro_1_1timedElapseAfterTickTimeEvolutionHandler.html", null ],
-          [ "hypro::timedElapseTimeEvolutionHandler< Representation, Number >", "classhypro_1_1timedElapseTimeEvolutionHandler.html", null ],
-          [ "hypro::timedTickTimeEvolutionHandler< Representation, Number >", "classhypro_1_1timedTickTimeEvolutionHandler.html", null ]
+        [ "hypro::ltiTimeEvolutionHandler< State >", "classhypro_1_1ltiTimeEvolutionHandler.html", [
+          [ "hypro::timedElapseAfterTickTimeEvolutionHandler< State >", "classhypro_1_1timedElapseAfterTickTimeEvolutionHandler.html", null ],
+          [ "hypro::timedElapseTimeEvolutionHandler< State >", "classhypro_1_1timedElapseTimeEvolutionHandler.html", null ],
+          [ "hypro::timedTickTimeEvolutionHandler< State >", "classhypro_1_1timedTickTimeEvolutionHandler.html", null ]
         ] ]
-      ] ]
+      ] ],
+      [ "hypro::IFirstSegmentHandler< hypro::State >", "classhypro_1_1IFirstSegmentHandler.html", null ],
+      [ "hypro::IGuardHandler< hypro::State >", "classhypro_1_1IGuardHandler.html", null ]
     ] ],
     [ "Independent_part_funct", "structIndependent__part__funct.html", null ],
     [ "Input_equation", "structInput__equation.html", null ],
     [ "hypro::intersectionContent< Number, Setting >", "structhypro_1_1intersectionContent.html", null ],
     [ "Invariants", "structInvariants.html", null ],
-    [ "hypro::IWorker< Workable, Number >", "classhypro_1_1IWorker.html", null ],
-    [ "hypro::IWorker< std::shared_ptr< Task< Number > >, Number >", "classhypro_1_1IWorker.html", [
-      [ "hypro::ContextBasedReachabilityWorker< Number >", "classhypro_1_1ContextBasedReachabilityWorker.html", null ]
+    [ "hypro::IWorker< Workable, State >", "classhypro_1_1IWorker.html", null ],
+    [ "hypro::IWorker< std::shared_ptr< Task< State > >, State >", "classhypro_1_1IWorker.html", [
+      [ "hypro::ContextBasedReachabilityWorker< State >", "classhypro_1_1ContextBasedReachabilityWorker.html", null ]
     ] ],
     [ "hypro::Label", "classhypro_1_1Label.html", null ],
     [ "Lexer", null, [
@@ -216,6 +222,9 @@ var hierarchy =
       [ "InputOutputLexer", "classInputOutputLexer.html", null ]
     ] ],
     [ "ZUtility::Line_t< Number >", "structZUtility_1_1Line__t.html", null ],
+    [ "hypro::linearFlow< Number >", "classhypro_1_1linearFlow.html", [
+      [ "hypro::affineFlow< Number >", "classhypro_1_1affineFlow.html", null ]
+    ] ],
     [ "hypro::lintrafoParameters< Number >", "structhypro_1_1lintrafoParameters.html", null ],
     [ "hypro::Location< Number >", "classhypro_1_1Location.html", null ],
     [ "hypro::LockableBase", "classhypro_1_1LockableBase.html", [
@@ -225,9 +234,9 @@ var hierarchy =
     [ "hypro::locPtrComp< Number >", "structhypro_1_1locPtrComp.html", null ],
     [ "hypro::LRUCache< Key, Value >", "classhypro_1_1LRUCache.html", null ],
     [ "hypro::NeighborhoodContainer", "classhypro_1_1NeighborhoodContainer.html", null ],
-    [ "hypro::nodeUpdater< Number >", "structhypro_1_1nodeUpdater.html", null ],
-    [ "Eigen::NumTraits< carl::FLOAT_T< Number > >", "structEigen_1_1NumTraits_3_01carl_1_1FLOAT__T_3_01Number_01_4_01_4.html", null ],
+    [ "hypro::nodeUpdater< State >", "structhypro_1_1nodeUpdater.html", null ],
     [ "hypro::Eigen::NumTraits< carl::FLOAT_T< Number > >", "structhypro_1_1Eigen_1_1NumTraits_3_01carl_1_1FLOAT__T_3_01Number_01_4_01_4.html", null ],
+    [ "Eigen::NumTraits< carl::FLOAT_T< Number > >", "structEigen_1_1NumTraits_3_01carl_1_1FLOAT__T_3_01Number_01_4_01_4.html", null ],
     [ "hypro::Optimizer< Number >", "classhypro_1_1Optimizer.html", null ],
     [ "hypro::OrthogonalPolyhedron< Number, NEIGHBORHOOD >", "classhypro_1_1OrthogonalPolyhedron.html", null ],
     [ "hypro::OrthogonalPolyhedronT< Number, Converter, Setting, Type >", "classhypro_1_1OrthogonalPolyhedronT.html", null ],
@@ -620,8 +629,8 @@ var hierarchy =
       [ "InputOutputParser::UnaryExpressionContext", "classInputOutputParser_1_1UnaryExpressionContext.html", null ]
     ] ],
     [ "hypro::Path< Number, tNumber >", "classhypro_1_1Path.html", null ],
-    [ "hypro::hypro::Permutator", "classhypro_1_1hypro_1_1Permutator.html", null ],
     [ "hypro::Permutator", "classhypro_1_1Permutator.html", null ],
+    [ "hypro::hypro::Permutator", "classhypro_1_1hypro_1_1Permutator.html", null ],
     [ "hypro::PlotData< Number >", "structhypro_1_1PlotData.html", null ],
     [ "hypro::Point< Number >", "classhypro_1_1Point.html", null ],
     [ "hypro::Point< int >", "classhypro_1_1Point.html", null ],
@@ -634,8 +643,12 @@ var hierarchy =
     [ "hypro::projectionContent< Number, Setting >", "structhypro_1_1projectionContent.html", null ],
     [ "hypro::Range< Number >", "classhypro_1_1Range.html", null ],
     [ "hypro::ReachabilitySettings", "structhypro_1_1ReachabilitySettings.html", null ],
-    [ "hypro::ReachTree< Number >", "classhypro_1_1ReachTree.html", null ],
-    [ "hypro::RefinementSetting< Number >", "structhypro_1_1RefinementSetting.html", null ],
+    [ "hypro::ReachTree< State >", "classhypro_1_1ReachTree.html", null ],
+    [ "hypro::ReachTree< hypro::State >", "classhypro_1_1ReachTree.html", null ],
+    [ "hypro::rectangularFlow< Number >", "classhypro_1_1rectangularFlow.html", null ],
+    [ "hypro::RefinementSetting< State >", "structhypro_1_1RefinementSetting.html", null ],
+    [ "hypro::RefinementSetting< hypro::hypro::State >", "structhypro_1_1RefinementSetting.html", null ],
+    [ "hypro::RefinementSetting< hypro::State >", "structhypro_1_1RefinementSetting.html", null ],
     [ "hypro::Reset< Number >", "classhypro_1_1Reset.html", null ],
     [ "hypro::parser::ErrorHandler::result< typename >", "structhypro_1_1parser_1_1ErrorHandler_1_1result.html", null ],
     [ "hypro::Ridge< Number >", "classhypro_1_1Ridge.html", null ],
@@ -646,13 +659,13 @@ var hierarchy =
       [ "hypro::detail::gen_seq< 0, Is...>", "structhypro_1_1detail_1_1gen__seq_3_010_00_01Is_8_8_8_4.html", null ]
     ] ],
     [ "Singleton", null, [
-      [ "hypro::ContextFactory< Number >", "classhypro_1_1ContextFactory.html", null ],
+      [ "hypro::ContextFactory< State >", "classhypro_1_1ContextFactory.html", null ],
       [ "hypro::DecisionEntity< Number >", "classhypro_1_1DecisionEntity.html", null ],
       [ "hypro::EventTimingProvider< Number >", "classhypro_1_1EventTimingProvider.html", null ],
-      [ "hypro::HandlerFactory< Number >", "classhypro_1_1HandlerFactory.html", null ],
-      [ "hypro::NodeManager< Number >", "classhypro_1_1NodeManager.html", null ],
+      [ "hypro::HandlerFactory< State >", "classhypro_1_1HandlerFactory.html", null ],
+      [ "hypro::NodeManager< State >", "classhypro_1_1NodeManager.html", null ],
       [ "hypro::Plotter< Number >", "classhypro_1_1Plotter.html", null ],
-      [ "hypro::SettingsProvider< Number >", "classhypro_1_1SettingsProvider.html", null ],
+      [ "hypro::SettingsProvider< State >", "classhypro_1_1SettingsProvider.html", null ],
       [ "hypro::VariablePool", "classhypro_1_1VariablePool.html", null ]
     ] ],
     [ "hypro::Spinlock", "classhypro_1_1Spinlock.html", null ],
@@ -663,6 +676,11 @@ var hierarchy =
     [ "static_visitor", null, [
       [ "hypro::detail::getParametersVisitor", "structhypro_1_1detail_1_1getParametersVisitor.html", null ],
       [ "hypro::detail::strategyConversionVisitor< State >", "structhypro_1_1detail_1_1strategyConversionVisitor.html", null ],
+      [ "hypro::flowDimensionVisitor", "structhypro_1_1flowDimensionVisitor.html", null ],
+      [ "hypro::flowHashVisitor", "structhypro_1_1flowHashVisitor.html", null ],
+      [ "hypro::flowIsDiscreteVisitor", "structhypro_1_1flowIsDiscreteVisitor.html", null ],
+      [ "hypro::flowIsTimedVisitor", "structhypro_1_1flowIsTimedVisitor.html", null ],
+      [ "hypro::flowTypeVisitor", "structhypro_1_1flowTypeVisitor.html", null ],
       [ "hypro::genericAffineTransformationVisitor< T, Number >", "classhypro_1_1genericAffineTransformationVisitor.html", null ],
       [ "hypro::genericCompareVisitor", "classhypro_1_1genericCompareVisitor.html", null ],
       [ "hypro::genericConversionVisitor< T, To >", "classhypro_1_1genericConversionVisitor.html", null ],
@@ -678,11 +696,13 @@ var hierarchy =
       [ "hypro::genericSupremumVisitor< T >", "classhypro_1_1genericSupremumVisitor.html", null ],
       [ "hypro::genericTypeVisitor", "classhypro_1_1genericTypeVisitor.html", null ],
       [ "hypro::genericUniteVisitor< T >", "classhypro_1_1genericUniteVisitor.html", null ],
-      [ "hypro::genericVerticesVisitor< Number >", "classhypro_1_1genericVerticesVisitor.html", null ]
+      [ "hypro::genericVerticesVisitor< Number >", "classhypro_1_1genericVerticesVisitor.html", null ],
+      [ "hypro::setCreationVisitor< State >", "structhypro_1_1setCreationVisitor.html", null ]
     ] ],
     [ "hypro::STflowpipeSegment< Number >", "structhypro_1_1STflowpipeSegment.html", null ],
     [ "hypro::STindependentFunct< Number >", "structhypro_1_1STindependentFunct.html", null ],
     [ "hypro::Strategy< StateType >", "classhypro_1_1Strategy.html", null ],
+    [ "hypro::Strategy< hypro::State >", "classhypro_1_1Strategy.html", null ],
     [ "hypro::StrategyNode< Representation >", "structhypro_1_1StrategyNode.html", null ],
     [ "hypro::StrategyParameters", "structhypro_1_1StrategyParameters.html", null ],
     [ "hypro::detail::StrategyVariant< T >", "structhypro_1_1detail_1_1StrategyVariant.html", null ],
@@ -701,7 +721,7 @@ var hierarchy =
     [ "symbols", null, [
       [ "hypro::parser::aggregation_", "structhypro_1_1parser_1_1aggregation__.html", null ]
     ] ],
-    [ "hypro::Task< Number >", "structhypro_1_1Task.html", null ],
+    [ "hypro::Task< State >", "structhypro_1_1Task.html", null ],
     [ "hypro::TaylorModel< Number >", "classhypro_1_1TaylorModel.html", null ],
     [ "hypro::TaylorModelVec< Number >", "classhypro_1_1TaylorModelVec.html", null ],
     [ "hypro::TBacktrackingInfo< Number >", "structhypro_1_1TBacktrackingInfo.html", null ],
@@ -714,11 +734,20 @@ var hierarchy =
     [ "hypro::TreeNode< EventTimingNode< Number > >", "classhypro_1_1TreeNode.html", [
       [ "hypro::EventTimingNode< Number >", "classhypro_1_1EventTimingNode.html", null ]
     ] ],
-    [ "hypro::TreeNode< ReachTreeNode< Number > >", "classhypro_1_1TreeNode.html", [
-      [ "hypro::ReachTreeNode< Number >", "classhypro_1_1ReachTreeNode.html", null ]
+    [ "hypro::TreeNode< ReachTreeNode< hypro::hypro::State > >", "classhypro_1_1TreeNode.html", [
+      [ "hypro::ReachTreeNode< hypro::hypro::State >", "classhypro_1_1ReachTreeNode.html", null ]
+    ] ],
+    [ "hypro::TreeNode< ReachTreeNode< hypro::State > >", "classhypro_1_1TreeNode.html", [
+      [ "hypro::ReachTreeNode< hypro::State >", "classhypro_1_1ReachTreeNode.html", null ]
+    ] ],
+    [ "hypro::TreeNode< ReachTreeNode< State > >", "classhypro_1_1TreeNode.html", [
+      [ "hypro::ReachTreeNode< State >", "classhypro_1_1ReachTreeNode.html", null ]
     ] ],
     [ "hypro::TreeStatistic", "structhypro_1_1TreeStatistic.html", null ],
     [ "true_type", null, [
+      [ "hypro::is_flow< affineFlow< N > >", "structhypro_1_1is__flow_3_01affineFlow_3_01N_01_4_01_4.html", null ],
+      [ "hypro::is_flow< linearFlow< N > >", "structhypro_1_1is__flow_3_01linearFlow_3_01N_01_4_01_4.html", null ],
+      [ "hypro::is_flow< rectangularFlow< N > >", "structhypro_1_1is__flow_3_01rectangularFlow_3_01N_01_4_01_4.html", null ],
       [ "hypro::is_shared_ptr< std::shared_ptr< T > >", "structhypro_1_1is__shared__ptr_3_01std_1_1shared__ptr_3_01T_01_4_01_4.html", null ],
       [ "hypro::is_unique_ptr< std::unique_ptr< T, D > >", "structhypro_1_1is__unique__ptr_3_01std_1_1unique__ptr_3_01T_00_01D_01_4_01_4.html", null ]
     ] ],
@@ -738,7 +767,7 @@ var hierarchy =
     [ "hypro::WorkQueueDefaultSetting", "structhypro_1_1WorkQueueDefaultSetting.html", null ],
     [ "hypro::WorkQueueManager< Workable >", "classhypro_1_1WorkQueueManager.html", null ],
     [ "hypro::WorkQueueT< Workable, Setting >", "classhypro_1_1WorkQueueT.html", null ],
-    [ "hypro::WorkQueueT< std::shared_ptr< hypro::Task< Number > > >", "classhypro_1_1WorkQueueT.html", null ],
+    [ "hypro::WorkQueueT< std::shared_ptr< hypro::Task< hypro::State > > >", "classhypro_1_1WorkQueueT.html", null ],
     [ "hypro::WorkQueueT< Workable >", "classhypro_1_1WorkQueueT.html", null ],
     [ "hypro::ZonotopeSetting", "structhypro_1_1ZonotopeSetting.html", null ]
 ];

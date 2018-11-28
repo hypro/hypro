@@ -1,7 +1,7 @@
 var structhypro_1_1nodeUpdater =
 [
-    [ "nodeUpdater", "structhypro_1_1nodeUpdater.html#adc87c1f0e3dbbfb763e7630ec4b33568", null ],
-    [ "createAndRaiseRefinementTask", "structhypro_1_1nodeUpdater.html#a7bf27bf90ed24f85d7b341d20ee107df", null ],
-    [ "createAndRaiseTask", "structhypro_1_1nodeUpdater.html#aa6a714030dc90a98ca01278b7d55889a", null ],
-    [ "operator()", "structhypro_1_1nodeUpdater.html#a5170a81e17962d4ca439dddd286725c5", null ]
+    [ "nodeUpdater", "structhypro_1_1nodeUpdater.html#a055f94f3cb3cf5af9dca95d9c85dfcbb", null ],
+    [ "createAndRaiseRefinementTask", "structhypro_1_1nodeUpdater.html#ac0603088d907413778945e8ea884cd75", null ],
+    [ "createAndRaiseTask", "structhypro_1_1nodeUpdater.html#a020fca8220b1a6fa692280748bcd17d4", null ],
+    [ "operator()", "structhypro_1_1nodeUpdater.html#a3e14b62186f16f0e53280742371ee92e", null ]
 ];

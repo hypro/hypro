@@ -82,6 +82,7 @@ var group__geoState =
       [ "intersect", "classhypro_1_1ConstraintSetT.html#a6e74ee952fa9371ea2d5ed1b143f550a", null ],
       [ "intersectHalfspace", "classhypro_1_1ConstraintSetT.html#a50732ff66f62c927b5af838c1e217164", null ],
       [ "intersectHalfspaces", "classhypro_1_1ConstraintSetT.html#aee0fba53fa5c9997fef9b31bc8afd592", null ],
+      [ "isAxisAligned", "classhypro_1_1ConstraintSetT.html#a9524890fc455c2b73e8a00b482fae62c", null ],
       [ "linearTransformation", "classhypro_1_1ConstraintSetT.html#af85185b51bc14a06b8bff68515c44260", null ],
       [ "matrix", "classhypro_1_1ConstraintSetT.html#af8030b44ff53fe232c73fd8c59baf31c", null ],
       [ "minkowskiSum", "classhypro_1_1ConstraintSetT.html#a95c511dceb1c200f42c60387fe4ecfd8", null ],
@@ -103,7 +104,8 @@ var group__geoState =
       [ "operator<<", "classhypro_1_1ConstraintSetT.html#a3453b7fe6a128f689ec91dc3414af678", null ],
       [ "operator==", "classhypro_1_1ConstraintSetT.html#a99c40d6103b8e7478fabadaf7dcdb34c", null ],
       [ "mConstants", "classhypro_1_1ConstraintSetT.html#ac9b88f037f25c73bb931a664ca7b7e89", null ],
-      [ "mConstraints", "classhypro_1_1ConstraintSetT.html#aa989ad1dd0ed9ffde9af6e67e4a04d03", null ]
+      [ "mConstraints", "classhypro_1_1ConstraintSetT.html#aa989ad1dd0ed9ffde9af6e67e4a04d03", null ],
+      [ "mIsBox", "classhypro_1_1ConstraintSetT.html#a4445cd55b72fbbe8ca70b6a7dc356ce7", null ]
     ] ],
     [ "GeometricObject", "classhypro_1_1GeometricObject.html", [
       [ "NumberType", "classhypro_1_1GeometricObject.html#a90226c553b38c46eb616d3674f7926dd", null ],

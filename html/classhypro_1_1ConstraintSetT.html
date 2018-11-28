@@ -165,6 +165,9 @@ const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a"
 <tr class="memitem:a49cb2b3c533123cee5b5168fda8cd054"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a49cb2b3c533123cee5b5168fda8cd054"></a>
 <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>rVector</b> ()</td></tr>
 <tr class="separator:a49cb2b3c533123cee5b5168fda8cd054"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9524890fc455c2b73e8a00b482fae62c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9524890fc455c2b73e8a00b482fae62c"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>isAxisAligned</b> () const </td></tr>
+<tr class="separator:a9524890fc455c2b73e8a00b482fae62c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a433ab7ade160ef5b0eddf6e549bdc851"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ConstraintSetT.html#a433ab7ade160ef5b0eddf6e549bdc851">empty</a> () const </td></tr>
 <tr class="memdesc:a433ab7ade160ef5b0eddf6e549bdc851"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines if the current constraintSet is empty.  <a href="#a433ab7ade160ef5b0eddf6e549bdc851">More...</a><br/></td></tr>
 <tr class="separator:a433ab7ade160ef5b0eddf6e549bdc851"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -255,6 +258,9 @@ Protected Attributes</h2></td></tr>
 <tr class="separator:aa989ad1dd0ed9ffde9af6e67e4a04d03"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac9b88f037f25c73bb931a664ca7b7e89"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1ConstraintSetT.html#ac9b88f037f25c73bb931a664ca7b7e89">mConstants</a></td></tr>
 <tr class="separator:ac9b88f037f25c73bb931a664ca7b7e89"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4445cd55b72fbbe8ca70b6a7dc356ce7"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4445cd55b72fbbe8ca70b6a7dc356ce7"></a>
+<a class="el" href="namespacehypro.html#aadba9c45e18a68d4ad85d2032811081d">TRIBOOL</a>&#160;</td><td class="memItemRight" valign="bottom"><b>mIsBox</b> = TRIBOOL::NSET</td></tr>
+<tr class="separator:a4445cd55b72fbbe8ca70b6a7dc356ce7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
 Friends</h2></td></tr>
@@ -282,7 +288,7 @@ class hypro::ConstraintSetT&lt; Number, S &gt;</h3>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="ConstraintSet_8h_source.html#l00027">27</a> of file <a class="el" href="ConstraintSet_8h_source.html">ConstraintSet.h</a>.</p>
+<p>Definition at line <a class="el" href="ConstraintSet_8h_source.html#l00028">28</a> of file <a class="el" href="ConstraintSet_8h_source.html">ConstraintSet.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="a4dafbff04cfbeea78a719d69e3f2f492"></a>
 <div class="memitem">
@@ -310,7 +316,7 @@ template&lt;typename Number, typename S = ConstraintSetSettings&gt; </div>
 <p>Creates an empty constraintSet. </p>
 <p>The empty constraintSet is represented by a zero-dimensional point pair. </p>
 
-<p>Definition at line <a class="el" href="ConstraintSet_8h_source.html#l00049">49</a> of file <a class="el" href="ConstraintSet_8h_source.html">ConstraintSet.h</a>.</p>
+<p>Definition at line <a class="el" href="ConstraintSet_8h_source.html#l00051">51</a> of file <a class="el" href="ConstraintSet_8h_source.html">ConstraintSet.h</a>.</p>
 
 </div>
 </div>
@@ -346,7 +352,7 @@ template&lt;typename Number, typename S = ConstraintSetSettings&gt; </div>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="ConstraintSet_8h_source.html#l00058">58</a> of file <a class="el" href="ConstraintSet_8h_source.html">ConstraintSet.h</a>.</p>
+<p>Definition at line <a class="el" href="ConstraintSet_8h_source.html#l00060">60</a> of file <a class="el" href="ConstraintSet_8h_source.html">ConstraintSet.h</a>.</p>
 
 </div>
 </div>
@@ -428,7 +434,7 @@ template&lt;typename Number, typename S = ConstraintSetSettings&gt; </div>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="ConstraintSet_8h_source.html#l00076">76</a> of file <a class="el" href="ConstraintSet_8h_source.html">ConstraintSet.h</a>.</p>
+<p>Definition at line <a class="el" href="ConstraintSet_8h_source.html#l00078">78</a> of file <a class="el" href="ConstraintSet_8h_source.html">ConstraintSet.h</a>.</p>
 
 </div>
 </div>
@@ -466,7 +472,7 @@ template&lt;typename Number, typename S = ConstraintSetSettings&gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True, if the given constraintSet is contained in the current constraintSet, false otherwise. </dd></dl>
 
-<p>Definition at line <a class="el" href="ConstraintSet_8h_source.html#l00232">232</a> of file <a class="el" href="ConstraintSet_8h_source.html">ConstraintSet.h</a>.</p>
+<p>Definition at line <a class="el" href="ConstraintSet_8h_source.html#l00242">242</a> of file <a class="el" href="ConstraintSet_8h_source.html">ConstraintSet.h</a>.</p>
 
 </div>
 </div>
@@ -496,7 +502,7 @@ template&lt;typename Number, typename S = ConstraintSetSettings&gt; </div>
 <p>Getter for the space dimension. </p>
 <dl class="section return"><dt>Returns</dt><dd>The dimension of the space. </dd></dl>
 
-<p>Definition at line <a class="el" href="ConstraintSet_8h_source.html#l00183">183</a> of file <a class="el" href="ConstraintSet_8h_source.html">ConstraintSet.h</a>.</p>
+<p>Definition at line <a class="el" href="ConstraintSet_8h_source.html#l00193">193</a> of file <a class="el" href="ConstraintSet_8h_source.html">ConstraintSet.h</a>.</p>
 
 </div>
 </div>
@@ -527,7 +533,7 @@ template&lt;typename Number, typename S = ConstraintSetSettings&gt; </div>
 <p>The method invokes the linear optimizer to check for the existence of a solution. </p>
 <dl class="section return"><dt>Returns</dt><dd>True, if the represented set is empty, False otherwise. </dd></dl>
 
-<p>Definition at line <a class="el" href="ConstraintSet_8h_source.html#l00101">101</a> of file <a class="el" href="ConstraintSet_8h_source.html">ConstraintSet.h</a>.</p>
+<p>Definition at line <a class="el" href="ConstraintSet_8h_source.html#l00110">110</a> of file <a class="el" href="ConstraintSet_8h_source.html">ConstraintSet.h</a>.</p>
 
 </div>
 </div>
@@ -564,7 +570,7 @@ template&lt;typename Number, typename S = ConstraintSetSettings&gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The resulting constraintSet. </dd></dl>
 
-<p>Definition at line <a class="el" href="ConstraintSet_8h_source.html#l00221">221</a> of file <a class="el" href="ConstraintSet_8h_source.html">ConstraintSet.h</a>.</p>
+<p>Definition at line <a class="el" href="ConstraintSet_8h_source.html#l00231">231</a> of file <a class="el" href="ConstraintSet_8h_source.html">ConstraintSet.h</a>.</p>
 
 </div>
 </div>
@@ -669,7 +675,7 @@ template&lt;typename Number, typename S = ConstraintSetSettings&gt; </div>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="ConstraintSet_8h_source.html#l00205">205</a> of file <a class="el" href="ConstraintSet_8h_source.html">ConstraintSet.h</a>.</p>
+<p>Definition at line <a class="el" href="ConstraintSet_8h_source.html#l00215">215</a> of file <a class="el" href="ConstraintSet_8h_source.html">ConstraintSet.h</a>.</p>
 
 </div>
 </div>
@@ -699,7 +705,7 @@ template&lt;typename Number, typename S = ConstraintSetSettings&gt; </div>
 <p>Storage size determination. </p>
 <dl class="section return"><dt>Returns</dt><dd>Size of the required memory. </dd></dl>
 
-<p>Definition at line <a class="el" href="ConstraintSet_8h_source.html#l00194">194</a> of file <a class="el" href="ConstraintSet_8h_source.html">ConstraintSet.h</a>.</p>
+<p>Definition at line <a class="el" href="ConstraintSet_8h_source.html#l00204">204</a> of file <a class="el" href="ConstraintSet_8h_source.html">ConstraintSet.h</a>.</p>
 
 </div>
 </div>
@@ -736,7 +742,7 @@ template&lt;typename Number, typename S = ConstraintSetSettings&gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The resulting constraintSet. </dd></dl>
 
-<p>Definition at line <a class="el" href="ConstraintSet_8h_source.html#l00239">239</a> of file <a class="el" href="ConstraintSet_8h_source.html">ConstraintSet.h</a>.</p>
+<p>Definition at line <a class="el" href="ConstraintSet_8h_source.html#l00249">249</a> of file <a class="el" href="ConstraintSet_8h_source.html">ConstraintSet.h</a>.</p>
 
 </div>
 </div>
@@ -773,7 +779,7 @@ template&lt;typename Number, typename S = ConstraintSetSettings&gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The resulting constraintSet. </dd></dl>
 
-<p>Definition at line <a class="el" href="ConstraintSet_8h_source.html#l00246">246</a> of file <a class="el" href="ConstraintSet_8h_source.html">ConstraintSet.h</a>.</p>
+<p>Definition at line <a class="el" href="ConstraintSet_8h_source.html#l00256">256</a> of file <a class="el" href="ConstraintSet_8h_source.html">ConstraintSet.h</a>.</p>
 
 </div>
 </div>
@@ -805,7 +811,7 @@ template&lt;typename Number, typename S = ConstraintSetSettings&gt; </div>
 <p>Not implemented. </p>
 <dl class="section return"><dt>Returns</dt><dd>An empty vector of points. </dd></dl>
 
-<p>Definition at line <a class="el" href="ConstraintSet_8h_source.html#l00126">126</a> of file <a class="el" href="ConstraintSet_8h_source.html">ConstraintSet.h</a>.</p>
+<p>Definition at line <a class="el" href="ConstraintSet_8h_source.html#l00136">136</a> of file <a class="el" href="ConstraintSet_8h_source.html">ConstraintSet.h</a>.</p>
 
 </div>
 </div>
@@ -854,7 +860,7 @@ template&lt;typename Number, typename S = ConstraintSetSettings&gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>False, if both constraintSets are equal. </dd></dl>
 
-<p>Definition at line <a class="el" href="ConstraintSet_8h_source.html#l00147">147</a> of file <a class="el" href="ConstraintSet_8h_source.html">ConstraintSet.h</a>.</p>
+<p>Definition at line <a class="el" href="ConstraintSet_8h_source.html#l00157">157</a> of file <a class="el" href="ConstraintSet_8h_source.html">ConstraintSet.h</a>.</p>
 
 </div>
 </div>
@@ -901,7 +907,7 @@ template&lt;typename Number, typename S = ConstraintSetSettings&gt; </div>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="ConstraintSet_8h_source.html#l00167">167</a> of file <a class="el" href="ConstraintSet_8h_source.html">ConstraintSet.h</a>.</p>
+<p>Definition at line <a class="el" href="ConstraintSet_8h_source.html#l00177">177</a> of file <a class="el" href="ConstraintSet_8h_source.html">ConstraintSet.h</a>.</p>
 
 </div>
 </div>
@@ -949,7 +955,7 @@ template&lt;typename Number, typename S = ConstraintSetSettings&gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True, if they are equal. </dd></dl>
 
-<p>Definition at line <a class="el" href="ConstraintSet_8h_source.html#l00134">134</a> of file <a class="el" href="ConstraintSet_8h_source.html">ConstraintSet.h</a>.</p>
+<p>Definition at line <a class="el" href="ConstraintSet_8h_source.html#l00144">144</a> of file <a class="el" href="ConstraintSet_8h_source.html">ConstraintSet.h</a>.</p>
 
 </div>
 </div>
@@ -975,9 +981,9 @@ template&lt;typename Number, typename S = ConstraintSetSettings&gt; </div>
 </div><div class="memdoc">
 <p>Vector describing the constant parts for the respective constraints. </p>
 
-<p>Definition at line <a class="el" href="ConstraintSet_8h_source.html#l00038">38</a> of file <a class="el" href="ConstraintSet_8h_source.html">ConstraintSet.h</a>.</p>
+<p>Definition at line <a class="el" href="ConstraintSet_8h_source.html#l00039">39</a> of file <a class="el" href="ConstraintSet_8h_source.html">ConstraintSet.h</a>.</p>
 
-<p>Referenced by <a class="el" href="ConstraintSet_8h_source.html#l00101">hypro::ConstraintSetT&lt; Number &gt;::empty()</a>.</p>
+<p>Referenced by <a class="el" href="ConstraintSet_8h_source.html#l00110">hypro::ConstraintSetT&lt; Number &gt;::empty()</a>.</p>
 
 </div>
 </div>
@@ -1002,9 +1008,9 @@ template&lt;typename Number, typename S = ConstraintSetSettings&gt; </div>
 </div><div class="memdoc">
 <p>Matrix describing the linear constraints. </p>
 
-<p>Definition at line <a class="el" href="ConstraintSet_8h_source.html#l00037">37</a> of file <a class="el" href="ConstraintSet_8h_source.html">ConstraintSet.h</a>.</p>
+<p>Definition at line <a class="el" href="ConstraintSet_8h_source.html#l00038">38</a> of file <a class="el" href="ConstraintSet_8h_source.html">ConstraintSet.h</a>.</p>
 
-<p>Referenced by <a class="el" href="ConstraintSet_8h_source.html#l00183">hypro::ConstraintSetT&lt; Number &gt;::dimension()</a>, and <a class="el" href="ConstraintSet_8h_source.html#l00101">hypro::ConstraintSetT&lt; Number &gt;::empty()</a>.</p>
+<p>Referenced by <a class="el" href="ConstraintSet_8h_source.html#l00193">hypro::ConstraintSetT&lt; Number &gt;::dimension()</a>, and <a class="el" href="ConstraintSet_8h_source.html#l00110">hypro::ConstraintSetT&lt; Number &gt;::empty()</a>.</p>
 
 </div>
 </div>

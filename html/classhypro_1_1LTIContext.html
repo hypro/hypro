@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.6"/>
-<title>HyPro: hypro::LTIContext&lt; Number &gt; Class Template Reference</title>
+<title>HyPro: hypro::LTIContext&lt; State &gt; Class Template Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -114,69 +114,69 @@ $(document).ready(function(){initNavTree('classhypro_1_1LTIContext.html','');});
 <a href="#pro-attribs">Protected Attributes</a> &#124;
 <a href="classhypro_1_1LTIContext-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">hypro::LTIContext&lt; Number &gt; Class Template Reference</div>  </div>
+<div class="title">hypro::LTIContext&lt; State &gt; Class Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:abf4e873ff5340ea52ebd618d4769c27d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="abf4e873ff5340ea52ebd618d4769c27d"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>LTIContext</b> (const std::shared_ptr&lt; <a class="el" href="structhypro_1_1Task.html">Task</a>&lt; Number &gt;&gt; &amp;t, const std::vector&lt; <a class="el" href="structhypro_1_1StrategyNode.html">StrategyNode</a> &gt; &amp;strat, <a class="el" href="classhypro_1_1WorkQueueT.html">WorkQueue</a>&lt; std::shared_ptr&lt; <a class="el" href="structhypro_1_1Task.html">Task</a>&lt; Number &gt;&gt;&gt; *localQueue, <a class="el" href="classhypro_1_1WorkQueueT.html">WorkQueue</a>&lt; std::shared_ptr&lt; <a class="el" href="structhypro_1_1Task.html">Task</a>&lt; Number &gt;&gt;&gt; *localCEXQueue, std::vector&lt; <a class="el" href="structhypro_1_1PlotData.html">PlotData</a>&lt; Number &gt;&gt; *localSegments, <a class="el" href="structhypro_1_1ReachabilitySettings.html">ReachabilitySettings</a> &amp;settings)</td></tr>
-<tr class="separator:abf4e873ff5340ea52ebd618d4769c27d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8d6885448341c48a5b27d3916d4b25d4"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8d6885448341c48a5b27d3916d4b25d4"></a>
+<tr class="memitem:ab326895bb9a84b5db43230999684f56f"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab326895bb9a84b5db43230999684f56f"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>LTIContext</b> (const std::shared_ptr&lt; <a class="el" href="structhypro_1_1Task.html">Task</a>&lt; <a class="el" href="classhypro_1_1State.html">State</a> &gt;&gt; &amp;t, const <a class="el" href="classhypro_1_1Strategy.html">Strategy</a>&lt; <a class="el" href="classhypro_1_1State.html">State</a> &gt; &amp;strat, <a class="el" href="classhypro_1_1WorkQueueT.html">WorkQueue</a>&lt; std::shared_ptr&lt; <a class="el" href="structhypro_1_1Task.html">Task</a>&lt; <a class="el" href="classhypro_1_1State.html">State</a> &gt;&gt;&gt; *localQueue, <a class="el" href="classhypro_1_1WorkQueueT.html">WorkQueue</a>&lt; std::shared_ptr&lt; <a class="el" href="structhypro_1_1Task.html">Task</a>&lt; <a class="el" href="classhypro_1_1State.html">State</a> &gt;&gt;&gt; *localCEXQueue, std::vector&lt; <a class="el" href="structhypro_1_1PlotData.html">PlotData</a>&lt; Number &gt;&gt; *localSegments, <a class="el" href="structhypro_1_1ReachabilitySettings.html">ReachabilitySettings</a> &amp;settings)</td></tr>
+<tr class="separator:ab326895bb9a84b5db43230999684f56f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6d6a75161db0409ec835607f596feee0"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6d6a75161db0409ec835607f596feee0"></a>
 virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>execOnStart</b> () override</td></tr>
-<tr class="separator:a8d6885448341c48a5b27d3916d4b25d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a68ef512fa58906732f0a4aa09d66f648"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a68ef512fa58906732f0a4aa09d66f648"></a>
+<tr class="separator:a6d6a75161db0409ec835607f596feee0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9a64a467a94c3dd76024c661a839941a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9a64a467a94c3dd76024c661a839941a"></a>
 virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>execBeforeFirstSegment</b> () override</td></tr>
-<tr class="separator:a68ef512fa58906732f0a4aa09d66f648"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a73a46bdadb3854d8fa3776fca3f0205e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a73a46bdadb3854d8fa3776fca3f0205e"></a>
+<tr class="separator:a9a64a467a94c3dd76024c661a839941a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1718c88030aaf329a5a956e88da57dcc"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1718c88030aaf329a5a956e88da57dcc"></a>
 virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>firstSegment</b> () override</td></tr>
-<tr class="separator:a73a46bdadb3854d8fa3776fca3f0205e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a63cb7be16ea2604db77c82bf812c18f2"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a63cb7be16ea2604db77c82bf812c18f2"></a>
+<tr class="separator:a1718c88030aaf329a5a956e88da57dcc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a20afc8a56fcaf3992b9456f604253819"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a20afc8a56fcaf3992b9456f604253819"></a>
 virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>checkInvariant</b> () override</td></tr>
-<tr class="separator:a63cb7be16ea2604db77c82bf812c18f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae805542d12803521b09d3d5c76ef2c7f"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae805542d12803521b09d3d5c76ef2c7f"></a>
+<tr class="separator:a20afc8a56fcaf3992b9456f604253819"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6a727b40c19a3978430c7ee5c32598d3"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6a727b40c19a3978430c7ee5c32598d3"></a>
 virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>intersectBadStates</b> () override</td></tr>
-<tr class="separator:ae805542d12803521b09d3d5c76ef2c7f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3ed2a101c34cc942c034fa84b0fbd24f"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3ed2a101c34cc942c034fa84b0fbd24f"></a>
+<tr class="separator:a6a727b40c19a3978430c7ee5c32598d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac141b8a8578bd71a31f7b72e4e8c94ad"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac141b8a8578bd71a31f7b72e4e8c94ad"></a>
 virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>execBeforeLoop</b> () override</td></tr>
-<tr class="separator:a3ed2a101c34cc942c034fa84b0fbd24f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a04764b9bb2fbdd6d0e7e9abe7413c3b0"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a04764b9bb2fbdd6d0e7e9abe7413c3b0"></a>
+<tr class="separator:ac141b8a8578bd71a31f7b72e4e8c94ad"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5df39bcf8fac1bd6b9e823b43438bb2a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5df39bcf8fac1bd6b9e823b43438bb2a"></a>
 virtual bool&#160;</td><td class="memItemRight" valign="bottom"><b>doneCondition</b> () override</td></tr>
-<tr class="separator:a04764b9bb2fbdd6d0e7e9abe7413c3b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6b6ba2bfaf79b920828cd24f3986caea"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6b6ba2bfaf79b920828cd24f3986caea"></a>
+<tr class="separator:a5df39bcf8fac1bd6b9e823b43438bb2a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4e0ac396305d037284cbeab4fbeb6ad4"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4e0ac396305d037284cbeab4fbeb6ad4"></a>
 virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>checkTransition</b> () override</td></tr>
-<tr class="separator:a6b6ba2bfaf79b920828cd24f3986caea"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af23453451bc12cb7341367beaf381d6e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af23453451bc12cb7341367beaf381d6e"></a>
+<tr class="separator:a4e0ac396305d037284cbeab4fbeb6ad4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8353d808ec45042f3b408ac9dc0ac6a4"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8353d808ec45042f3b408ac9dc0ac6a4"></a>
 virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>applyContinuousEvolution</b> () override</td></tr>
-<tr class="separator:af23453451bc12cb7341367beaf381d6e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab2c945fd1311f172d5c4fbfd3c2b4f0e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab2c945fd1311f172d5c4fbfd3c2b4f0e"></a>
+<tr class="separator:a8353d808ec45042f3b408ac9dc0ac6a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa6b93cdeb9d616c7f500d354907506b3"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa6b93cdeb9d616c7f500d354907506b3"></a>
 virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>execOnLoopItExit</b> () override</td></tr>
-<tr class="separator:ab2c945fd1311f172d5c4fbfd3c2b4f0e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aabe1f829af59e31282216f06534b3ecd"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aabe1f829af59e31282216f06534b3ecd"></a>
+<tr class="separator:aa6b93cdeb9d616c7f500d354907506b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6d230bb2639914e611173c6ff7faa39b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6d230bb2639914e611173c6ff7faa39b"></a>
 virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>processDiscreteBehavior</b> () override</td></tr>
-<tr class="separator:aabe1f829af59e31282216f06534b3ecd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3c2c39a26904cfefb96b5c30a151566a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3c2c39a26904cfefb96b5c30a151566a"></a>
+<tr class="separator:a6d230bb2639914e611173c6ff7faa39b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0e8839644cdc129408b3ef4ed463466a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0e8839644cdc129408b3ef4ed463466a"></a>
 virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>execOnEnd</b> () override</td></tr>
-<tr class="separator:a3c2c39a26904cfefb96b5c30a151566a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af8ae862cde1e58bdd7badcaaf8313a72"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af8ae862cde1e58bdd7badcaaf8313a72"></a>
+<tr class="separator:a0e8839644cdc129408b3ef4ed463466a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac91aeaf97e36e95b73bca5a82b234820"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac91aeaf97e36e95b73bca5a82b234820"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>initalizeFirstSegmentHandlers</b> ()</td></tr>
-<tr class="separator:af8ae862cde1e58bdd7badcaaf8313a72"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5477787b747d015b366c56da2daa0e6e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5477787b747d015b366c56da2daa0e6e"></a>
+<tr class="separator:ac91aeaf97e36e95b73bca5a82b234820"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ade937f8bb1a9e7b226e42387c006be12"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ade937f8bb1a9e7b226e42387c006be12"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>initializeInvariantHandlers</b> ()</td></tr>
-<tr class="separator:a5477787b747d015b366c56da2daa0e6e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7c1b8a11c485a57b07dd4e5672381742"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7c1b8a11c485a57b07dd4e5672381742"></a>
+<tr class="separator:ade937f8bb1a9e7b226e42387c006be12"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad49a8ec45a93627e58af31bafab8788b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad49a8ec45a93627e58af31bafab8788b"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>initializeBadStateHandlers</b> ()</td></tr>
-<tr class="separator:a7c1b8a11c485a57b07dd4e5672381742"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a457ed118d6d721456298f42de1a0cf29"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a457ed118d6d721456298f42de1a0cf29"></a>
+<tr class="separator:ad49a8ec45a93627e58af31bafab8788b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab6354c035a5bf30bc31a64459ddb8ff7"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab6354c035a5bf30bc31a64459ddb8ff7"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>initializeGuardHandlers</b> ()</td></tr>
-<tr class="separator:a457ed118d6d721456298f42de1a0cf29"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae1f8b056d22f37eb24ebb8a12a3b111e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae1f8b056d22f37eb24ebb8a12a3b111e"></a>
+<tr class="separator:ab6354c035a5bf30bc31a64459ddb8ff7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4cfb1a189bc39f3d3e02ba5dee01641e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4cfb1a189bc39f3d3e02ba5dee01641e"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>applyBacktracking</b> ()</td></tr>
-<tr class="separator:ae1f8b056d22f37eb24ebb8a12a3b111e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af39f42778a9fc4d97299323fe8a3dfde"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af39f42778a9fc4d97299323fe8a3dfde"></a>
+<tr class="separator:a4cfb1a189bc39f3d3e02ba5dee01641e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9405cf5f5a8307892243eca32899ca22"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9405cf5f5a8307892243eca32899ca22"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>omitTransition</b> (<a class="el" href="classhypro_1_1Transition.html">Transition</a>&lt; Number &gt; *transition)</td></tr>
-<tr class="separator:af39f42778a9fc4d97299323fe8a3dfde"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="separator:a9405cf5f5a8307892243eca32899ca22"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classhypro_1_1IContext"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classhypro_1_1IContext')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classhypro_1_1IContext.html">hypro::IContext</a></td></tr>
 <tr class="memitem:aa6711cd3a0355b4fe7fd2c546c981f5e inherit pub_methods_classhypro_1_1IContext"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa6711cd3a0355b4fe7fd2c546c981f5e"></a>
 virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>execAfterFirstSegment</b> ()</td></tr>
@@ -220,87 +220,87 @@ virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>execAfterProc
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
-<tr class="memitem:adc5618567ce311cd22374f5412fa174e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="adc5618567ce311cd22374f5412fa174e"></a>
-std::shared_ptr&lt; <a class="el" href="structhypro_1_1Task.html">Task</a>&lt; Number &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>mTask</b></td></tr>
-<tr class="separator:adc5618567ce311cd22374f5412fa174e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac2474d41ddfc53cbfacbcc5f187818d5"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac2474d41ddfc53cbfacbcc5f187818d5"></a>
-std::vector&lt; <a class="el" href="structhypro_1_1StrategyNode.html">StrategyNode</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>mStrategy</b></td></tr>
-<tr class="separator:ac2474d41ddfc53cbfacbcc5f187818d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a962a8e8160cb74f4767bcc29e8b9832e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a962a8e8160cb74f4767bcc29e8b9832e"></a>
+<tr class="memitem:aaa7012bba9d4d47faff3ea07cfcb5f20"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aaa7012bba9d4d47faff3ea07cfcb5f20"></a>
+std::shared_ptr&lt; <a class="el" href="structhypro_1_1Task.html">Task</a>&lt; <a class="el" href="classhypro_1_1State.html">State</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>mTask</b></td></tr>
+<tr class="separator:aaa7012bba9d4d47faff3ea07cfcb5f20"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6d0f5d9bac1817452324c4466bb98f3e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6d0f5d9bac1817452324c4466bb98f3e"></a>
+<a class="el" href="classhypro_1_1Strategy.html">Strategy</a>&lt; <a class="el" href="classhypro_1_1State.html">State</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>mStrategy</b></td></tr>
+<tr class="separator:a6d0f5d9bac1817452324c4466bb98f3e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a17800032856ae6619cf673250846cadd"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a17800032856ae6619cf673250846cadd"></a>
 <a class="el" href="classhypro_1_1WorkQueueT.html">WorkQueue</a>&lt; std::shared_ptr<br class="typebreak"/>
-&lt; <a class="el" href="structhypro_1_1Task.html">Task</a>&lt; Number &gt; &gt; &gt; *&#160;</td><td class="memItemRight" valign="bottom"><b>mLocalQueue</b></td></tr>
-<tr class="separator:a962a8e8160cb74f4767bcc29e8b9832e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6e6ee346a20060a248a352ac66d6efdb"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6e6ee346a20060a248a352ac66d6efdb"></a>
+&lt; <a class="el" href="structhypro_1_1Task.html">Task</a>&lt; <a class="el" href="classhypro_1_1State.html">State</a> &gt; &gt; &gt; *&#160;</td><td class="memItemRight" valign="bottom"><b>mLocalQueue</b></td></tr>
+<tr class="separator:a17800032856ae6619cf673250846cadd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0a32e45252c0c1febf1abb52d852069b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0a32e45252c0c1febf1abb52d852069b"></a>
 <a class="el" href="classhypro_1_1WorkQueueT.html">WorkQueue</a>&lt; std::shared_ptr<br class="typebreak"/>
-&lt; <a class="el" href="structhypro_1_1Task.html">Task</a>&lt; Number &gt; &gt; &gt; *&#160;</td><td class="memItemRight" valign="bottom"><b>mLocalCEXQueue</b></td></tr>
-<tr class="separator:a6e6ee346a20060a248a352ac66d6efdb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad47ebf7607a1900ce24737e405b1697b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad47ebf7607a1900ce24737e405b1697b"></a>
+&lt; <a class="el" href="structhypro_1_1Task.html">Task</a>&lt; <a class="el" href="classhypro_1_1State.html">State</a> &gt; &gt; &gt; *&#160;</td><td class="memItemRight" valign="bottom"><b>mLocalCEXQueue</b></td></tr>
+<tr class="separator:a0a32e45252c0c1febf1abb52d852069b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abe4cdc0cd75b35a1f32409567660ece8"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="abe4cdc0cd75b35a1f32409567660ece8"></a>
 std::vector&lt; <a class="el" href="structhypro_1_1PlotData.html">PlotData</a>&lt; Number &gt; &gt; *&#160;</td><td class="memItemRight" valign="bottom"><b>mLocalSegments</b></td></tr>
-<tr class="separator:ad47ebf7607a1900ce24737e405b1697b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae5c0c3fae038f0a52b237fb2bce37fe1"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae5c0c3fae038f0a52b237fb2bce37fe1"></a>
+<tr class="separator:abe4cdc0cd75b35a1f32409567660ece8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1ef6c86a76ff9bff892013952451ebaf"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1ef6c86a76ff9bff892013952451ebaf"></a>
 <a class="el" href="structhypro_1_1ReachabilitySettings.html">ReachabilitySettings</a>&#160;</td><td class="memItemRight" valign="bottom"><b>mSettings</b></td></tr>
-<tr class="separator:ae5c0c3fae038f0a52b237fb2bce37fe1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8625797e13fe26f5d5bfe792aa5df517"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8625797e13fe26f5d5bfe792aa5df517"></a>
+<tr class="separator:a1ef6c86a76ff9bff892013952451ebaf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad2ae8a98bd68c156bdd5b2f9f58ffdd4"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad2ae8a98bd68c156bdd5b2f9f58ffdd4"></a>
 <a class="el" href="classhypro_1_1EventTimingContainer.html">EventTimingContainer</a>&lt; Number &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>mLocalTimings</b></td></tr>
-<tr class="separator:a8625797e13fe26f5d5bfe792aa5df517"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a057ab8a48eb4090b1fb7dfc36173bd5d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a057ab8a48eb4090b1fb7dfc36173bd5d"></a>
+<tr class="separator:ad2ae8a98bd68c156bdd5b2f9f58ffdd4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a71a3c21bdd669c5db1b7f61626aac0a1"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a71a3c21bdd669c5db1b7f61626aac0a1"></a>
 <a class="el" href="classhypro_1_1HierarchicalIntervalVector.html">HierarchicalIntervalVector</a><br class="typebreak"/>
 &lt; <a class="el" href="namespacehypro.html#ab7a1dbbbe2d40e57ecab2c9b64b3615d">CONTAINMENT</a>, <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>mTransitionTimings</b></td></tr>
-<tr class="separator:a057ab8a48eb4090b1fb7dfc36173bd5d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2645b06d50cc2515d8f79257f9ee35fd"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2645b06d50cc2515d8f79257f9ee35fd"></a>
+<tr class="separator:a71a3c21bdd669c5db1b7f61626aac0a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afb517c1208cd41b235ff2bf8a7a1da18"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="afb517c1208cd41b235ff2bf8a7a1da18"></a>
 std::vector&lt; boost::tuple<br class="typebreak"/>
 &lt; <a class="el" href="classhypro_1_1Transition.html">Transition</a>&lt; Number &gt;<br class="typebreak"/>
- *, <a class="el" href="classhypro_1_1State.html">State_t</a>&lt; Number &gt; &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>mDiscreteSuccessorBuffer</b></td></tr>
-<tr class="separator:a2645b06d50cc2515d8f79257f9ee35fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af512132d76f0978e4284b5a7c003e90a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af512132d76f0978e4284b5a7c003e90a"></a>
+ *, <a class="el" href="classhypro_1_1State.html">State</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>mDiscreteSuccessorBuffer</b></td></tr>
+<tr class="separator:afb517c1208cd41b235ff2bf8a7a1da18"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9acaf69633925209b41fd97dec78cfbe"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9acaf69633925209b41fd97dec78cfbe"></a>
 std::map&lt; <a class="el" href="classhypro_1_1Transition.html">Transition</a>&lt; Number &gt;<br class="typebreak"/>
- *, <a class="el" href="classhypro_1_1State.html">State_t</a>&lt; Number &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>mPotentialZenoTransitions</b></td></tr>
-<tr class="separator:af512132d76f0978e4284b5a7c003e90a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8de7d9531b507063dba48d15b790fcbc"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8de7d9531b507063dba48d15b790fcbc"></a>
+ *, <a class="el" href="classhypro_1_1State.html">State</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>mPotentialZenoTransitions</b></td></tr>
+<tr class="separator:a9acaf69633925209b41fd97dec78cfbe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af027dc0b231ffa60df8a6354bff215c0"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af027dc0b231ffa60df8a6354bff215c0"></a>
 std::vector&lt; <a class="el" href="classhypro_1_1Transition.html">Transition</a><br class="typebreak"/>
 &lt; Number &gt; * &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>mDisabledTransitions</b></td></tr>
-<tr class="separator:a8de7d9531b507063dba48d15b790fcbc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a01aa89c17b1e4465d315838f628f8292"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a01aa89c17b1e4465d315838f628f8292"></a>
+<tr class="separator:af027dc0b231ffa60df8a6354bff215c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a33f1c41c1ae4e12594706c2f8751d55f"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a33f1c41c1ae4e12594706c2f8751d55f"></a>
 <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a>&#160;</td><td class="memItemRight" valign="bottom"><b>mCurrentLocalTime</b></td></tr>
-<tr class="separator:a01aa89c17b1e4465d315838f628f8292"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa57986a41324757095a9936889a92135"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa57986a41324757095a9936889a92135"></a>
+<tr class="separator:a33f1c41c1ae4e12594706c2f8751d55f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0dfde87fc6a342a482542204aebb68b0"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0dfde87fc6a342a482542204aebb68b0"></a>
 carl::Interval&lt; <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>mCurrentGlobalTimeInterval</b></td></tr>
-<tr class="separator:aa57986a41324757095a9936889a92135"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aecea2a73081b201c15befc1e19295e41"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aecea2a73081b201c15befc1e19295e41"></a>
+<tr class="separator:a0dfde87fc6a342a482542204aebb68b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a673f649fe587be7963c6ddfa58ae2e19"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a673f649fe587be7963c6ddfa58ae2e19"></a>
 carl::Interval&lt; <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>mCurrentTimeInterval</b></td></tr>
-<tr class="separator:aecea2a73081b201c15befc1e19295e41"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4387255396c7b87951521694112c717b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4387255396c7b87951521694112c717b"></a>
-<a class="el" href="classhypro_1_1State.html">State_t</a>&lt; Number &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>mComputationState</b></td></tr>
-<tr class="separator:a4387255396c7b87951521694112c717b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a47b0bcd4a2492ebb6c271eecdc7591e6"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a47b0bcd4a2492ebb6c271eecdc7591e6"></a>
+<tr class="separator:a673f649fe587be7963c6ddfa58ae2e19"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a75acba52c7ed401babce7fd60be375ab"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a75acba52c7ed401babce7fd60be375ab"></a>
+<a class="el" href="classhypro_1_1State.html">State</a>&#160;</td><td class="memItemRight" valign="bottom"><b>mComputationState</b></td></tr>
+<tr class="separator:a75acba52c7ed401babce7fd60be375ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aafdad9c4b1cf85d29e86d94a9757a280"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aafdad9c4b1cf85d29e86d94a9757a280"></a>
 std::vector<br class="typebreak"/>
-&lt; <a class="el" href="classhypro_1_1IFirstSegmentHandler.html">IFirstSegmentHandler</a>&lt; Number &gt; * &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>mFirstSegmentHandlers</b></td></tr>
-<tr class="separator:a47b0bcd4a2492ebb6c271eecdc7591e6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a655a20644e1b13ed3eba1923169d7658"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a655a20644e1b13ed3eba1923169d7658"></a>
+&lt; <a class="el" href="classhypro_1_1IFirstSegmentHandler.html">IFirstSegmentHandler</a>&lt; <a class="el" href="classhypro_1_1State.html">State</a> &gt; * &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>mFirstSegmentHandlers</b></td></tr>
+<tr class="separator:aafdad9c4b1cf85d29e86d94a9757a280"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8c65448b8146115629e23281d4b5625f"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8c65448b8146115629e23281d4b5625f"></a>
 std::vector&lt; <a class="el" href="classhypro_1_1IInvariantHandler.html">IInvariantHandler</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>mInvariantHandlers</b></td></tr>
-<tr class="separator:a655a20644e1b13ed3eba1923169d7658"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a19f7966187cf9c6c3058f11715855b98"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a19f7966187cf9c6c3058f11715855b98"></a>
+<tr class="separator:a8c65448b8146115629e23281d4b5625f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0b37f75dea77af1e29964261b62ec12b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0b37f75dea77af1e29964261b62ec12b"></a>
 std::vector&lt; <a class="el" href="classhypro_1_1IBadStateHandler.html">IBadStateHandler</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>mBadStateHandlers</b></td></tr>
-<tr class="separator:a19f7966187cf9c6c3058f11715855b98"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a184b3b6bbedb08a7e10510e3cd40bb33"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a184b3b6bbedb08a7e10510e3cd40bb33"></a>
+<tr class="separator:a0b37f75dea77af1e29964261b62ec12b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8937f86a087e0048b5cad38e18ca3d5f"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8937f86a087e0048b5cad38e18ca3d5f"></a>
 std::vector<br class="typebreak"/>
 &lt; <a class="el" href="classhypro_1_1ITimeEvolutionHandler.html">ITimeEvolutionHandler</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>mContinuousEvolutionHandlers</b></td></tr>
-<tr class="separator:a184b3b6bbedb08a7e10510e3cd40bb33"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acf26a47dac58cae2e1a9a7847eeaccc0"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="acf26a47dac58cae2e1a9a7847eeaccc0"></a>
+<tr class="separator:a8937f86a087e0048b5cad38e18ca3d5f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac0c9b8d304c94ce29f8a2190bb4f1c0a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac0c9b8d304c94ce29f8a2190bb4f1c0a"></a>
 std::map&lt; <a class="el" href="classhypro_1_1Transition.html">Transition</a>&lt; Number &gt;<br class="typebreak"/>
  *, std::vector&lt; <a class="el" href="classhypro_1_1IGuardHandler.html">IGuardHandler</a><br class="typebreak"/>
-&lt; Number &gt; * &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>mTransitionHandlerMap</b></td></tr>
-<tr class="separator:acf26a47dac58cae2e1a9a7847eeaccc0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5d24b44ce3f19c9a0a8e46e437a0b126"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5d24b44ce3f19c9a0a8e46e437a0b126"></a>
+&lt; <a class="el" href="classhypro_1_1State.html">State</a> &gt; * &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>mTransitionHandlerMap</b></td></tr>
+<tr class="separator:ac0c9b8d304c94ce29f8a2190bb4f1c0a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af884a49d59dcc9653444c18c7b8ff3bf"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af884a49d59dcc9653444c18c7b8ff3bf"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>mEndLoop</b> = false</td></tr>
-<tr class="separator:a5d24b44ce3f19c9a0a8e46e437a0b126"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="separator:af884a49d59dcc9653444c18c7b8ff3bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><h3>template&lt;typename Number&gt;<br/>
-class hypro::LTIContext&lt; Number &gt;</h3>
+<div class="textblock"><h3>template&lt;typename State&gt;<br/>
+class hypro::LTIContext&lt; State &gt;</h3>
 
 
-<p>Definition at line <a class="el" href="LTIContext_8h_source.html#l00020">20</a> of file <a class="el" href="LTIContext_8h_source.html">LTIContext.h</a>.</p>
+<p>Definition at line <a class="el" href="LTIContext_8h_source.html#l00021">21</a> of file <a class="el" href="LTIContext_8h_source.html">LTIContext.h</a>.</p>
 </div><hr/>The documentation for this class was generated from the following file:<ul>
 <li>/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/contexts/<a class="el" href="LTIContext_8h_source.html">LTIContext.h</a></li>
 </ul>
