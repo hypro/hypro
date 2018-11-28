@@ -5,6 +5,7 @@
 #endif
 */
 #include "../types.h"
+#include "../helperMethods/isBox.h"
 #include "../../datastructures/Halfspace.h"
 #include "../../datastructures/Point.h"
 #include "../../util/linearOptimization/Optimizer.h"
@@ -36,6 +37,7 @@ class ConstraintSetT {
   protected:
     matrix_t<Number> mConstraints; /*!< Matrix describing the linear constraints.*/
     vector_t<Number> mConstants; /*!< Vector describing the constant parts for the respective constraints.*/
+	mutable TRIBOOL mIsBox = TRIBOOL::NSET; /*<  Cache to store whether the constraints are axis-aligned. */
 
   public:
 	/***************************************************************************
@@ -93,6 +95,13 @@ class ConstraintSetT {
 	matrix_t<Number>& rMatrix() { return mConstraints; }
 	vector_t<Number>& rVector() { return mConstants; }
 
+	bool isAxisAligned() const {
+		if(mIsBox == TRIBOOL::NSET) {
+			mIsBox = boost::get<0>(isBox(mConstraints, mConstants)) == true ? TRIBOOL::TRUE : TRIBOOL::FALSE;
+		}
+		return mIsBox == TRIBOOL::TRUE;
+	}
+
 	/**
 	 * @brief Determines if the current constraintSet is empty.
 	 * @details The method invokes the linear optimizer to check for the existence of a solution.
@@ -115,6 +124,7 @@ class ConstraintSetT {
 			mConstraints.row(mConstraints.rows()-1) = normal;
 			mConstants(mConstants.rows()-1) = offset;
 		}
+		mIsBox = TRIBOOL::NSET;
 	}
 
 

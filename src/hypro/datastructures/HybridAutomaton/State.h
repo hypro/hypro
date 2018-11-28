@@ -162,6 +162,12 @@ class State
     const Location<Number>* getLocation() const { return mLoc; }
 
     /**
+     * @brief      Gets the location.
+     * @return     The location.
+     */
+    Location<Number>* rGetLocation() { return mLoc; }
+
+    /**
      * @brief      Gets the number of contained sets.
      * @return     The number of sets.
      */
@@ -233,6 +239,13 @@ class State
      */
     template<typename R>
     void setSet(const R& s, std::size_t i = 0);
+
+    /**
+     * @brief     Sets the set at position i.
+     * @param[in]  s     The set.
+     * @param[in]  i     The position.
+     */
+    void setSet(const repVariant& s, std::size_t i = 0);
 
     /**
      * @brief      Sets the set type for the set at position i.

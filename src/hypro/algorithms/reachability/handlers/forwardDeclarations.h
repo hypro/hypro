@@ -2,43 +2,43 @@
 namespace hypro {
 
     // forward declarations
-	template<typename Representation, typename Number>
+	template<typename State>
 	class ltiFirstSegmentHandler;
-	template<typename Representation, typename Number>
+	template<typename State>
 	class timedElapseFirstSegmentHandler;
-	template<typename Representation, typename Number>
+	template<typename State>
 	class timedFirstSegmentHandler;
-	template<typename Representation, typename Number>
+	template<typename State>
 	class discreteInvariantHandler;
-	template<typename Representation, typename Number>
+	template<typename State>
 	class ltiInvariantHandler;
-	template<typename Representation, typename Number>
+	template<typename State>
 	class timedInvariantHandler;
-	template<typename Representation, typename Number>
+	template<typename State>
 	class discreteBadStateHandler;
-	template<typename Representation, typename Number>
+	template<typename State>
 	class ltiBadStateHandler;
-	template<typename Representation, typename Number>
+	template<typename State>
 	class timedBadStateHandler;
-	template<typename Representation, typename Number>
+	template<typename State>
 	class discreteGuardHandler;
-	template<typename Representation, typename Number>
+	template<typename State>
 	class ltiGuardHandler;
-	template<typename Representation, typename Number>
+	template<typename State>
 	class timedGuardHandler;
-	template<typename Representation, typename Number>
+	template<typename State>
 	class ltiTimeEvolutionHandler;
-	template<typename Representation, typename Number>
+	template<typename State>
 	class timedElapseTimeEvolutionHandler;
-	template<typename Representation, typename Number>
+	template<typename State>
 	class timedElapseAfterTickTimeEvolutionHandler;
-	template<typename Representation, typename Number>
+	template<typename State>
 	class timedTickTimeEvolutionHandler;
-	template<typename Representation, typename Number>
+	template<typename State>
 	class ltiResetHandler;
-	template<typename Representation, typename Number>
+	template<typename State>
 	class timedResetHandler;
-	template<typename Number>
+	template<typename State>
 	class ltiJumpHandler;
 
 } // hypro

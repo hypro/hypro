@@ -223,7 +223,7 @@ unsigned HybridAutomaton<Number>::dimension() const
 {
     if (mInitialStates.empty()) return 0;
 
-    return (mInitialStates.begin()->first->getFlow().cols()-1);
+    return (mInitialStates.begin()->first->dimension());
 }
 
 template<typename Number>

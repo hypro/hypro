@@ -1,12 +1,12 @@
 #include "timedBadStateHandler.h"
 
 namespace hypro {
-    template <class Representation,typename Number>
-	void timedBadStateHandler<Representation,Number>::handle() {
+    template<typename State>
+	void timedBadStateHandler<State>::handle() {
 		// iterate over local bad states first.
-		TRACE("hydra.worker.continuous","Having a total of " << SettingsProvider<Number>::getInstance().getHybridAutomaton().getLocalBadStates().size() << " local bad states.");
-		auto localBadState = SettingsProvider<Number>::getInstance().getHybridAutomaton().getLocalBadStates().find(this->mState->getLocation());
-		if(localBadState != SettingsProvider<Number>::getInstance().getHybridAutomaton().getLocalBadStates().end()){
+		TRACE("hydra.worker.continuous","Having a total of " << SettingsProvider<State>::getInstance().getHybridAutomaton().getLocalBadStates().size() << " local bad states.");
+		auto localBadState = SettingsProvider<State>::getInstance().getHybridAutomaton().getLocalBadStates().find(this->mState->getLocation());
+		if(localBadState != SettingsProvider<State>::getInstance().getHybridAutomaton().getLocalBadStates().end()){
 			// it may happen that the constraint set of a local bad state may be empty for our subspace, do not check
 			// these empty constraints because in general, not having constraints implies full containment (eg. for invariants)
 			if(localBadState->second.constraints().at(this->mIndex).dimension() != 0){
@@ -21,8 +21,6 @@ namespace hypro {
 
 				    if(badStatePair.first != CONTAINMENT::NO) {
 				    	DEBUG("hydra.worker","Intersection with local bad states. (intersection type " << badStatePair.first << ")");
-				    	Box<Number> tmp = Converter<Number>::toBox(boost::get<Representation>(this->mState->getSet(this->mIndex)));
-				    	TRACE("hydra.worker", "Intersecting box: " << tmp);
 				    	this->mIntersects = true;
 				    	return;
 				    }
@@ -32,7 +30,7 @@ namespace hypro {
 	    TRACE("hydra.worker.continuous", "No intersection with local, continuous bad states");
 
 	    // check global bad states
-	    for (const auto& badState : SettingsProvider<Number>::getInstance().getHybridAutomaton().getGlobalBadStates()) {
+	    for (const auto& badState : SettingsProvider<State>::getInstance().getHybridAutomaton().getGlobalBadStates()) {
 	    	if(badState.size() != 0){
 	    		matrix_t<Number> constraints = badState.getMatrix(this->mIndex);
 	    		vector_t<Number>	constants = badState.getVector(this->mIndex);

@@ -18,31 +18,31 @@
 namespace hypro
 {
 
-template<typename Number>
-class ContextBasedReachabilityWorker : public IWorker<std::shared_ptr<Task<Number>>,Number>
+template<typename State>
+class ContextBasedReachabilityWorker : public IWorker<std::shared_ptr<Task<State>>,State>
 {
+    using Number = typename State::NumberType;
 public:
-    ContextBasedReachabilityWorker(const hypro::ReachabilitySettings &settings) : IWorker<std::shared_ptr<Task<Number>>,Number>(settings) {
+    ContextBasedReachabilityWorker(const ReachabilitySettings &settings) : IWorker<std::shared_ptr<Task<State>>,State>(settings) {
     }
 
     ~ContextBasedReachabilityWorker() {
     }
 
-    void processTask(const std::shared_ptr<Task<Number>>& t,
-            const std::vector<StrategyNode>& strat,
-            WorkQueue<std::shared_ptr<Task<Number>>>& localQueue,
-            WorkQueue<std::shared_ptr<Task<Number>>>& localCEXQueue,
+    void processTask(const std::shared_ptr<Task<State>>& t,
+            const Strategy<State>& strat,
+            WorkQueue<std::shared_ptr<Task<State>>>& localQueue,
+            WorkQueue<std::shared_ptr<Task<State>>>& localCEXQueue,
             std::vector<PlotData<Number>>* localSegments
             );
-    
 
-    void computeForwardReachability(const std::shared_ptr<Task<Number>>& task,
-                                    const std::vector<StrategyNode>& strat,
-                                    WorkQueue<std::shared_ptr<Task<Number>>>& localQueue,
-                                    WorkQueue<std::shared_ptr<Task<Number>>>& localCEXQueue,
+    void computeForwardReachability(const std::shared_ptr<Task<State>>& task,
+                                    const Strategy<State>& strat,
+                                    WorkQueue<std::shared_ptr<Task<State>>>& localQueue,
+                                    WorkQueue<std::shared_ptr<Task<State>>>& localCEXQueue,
                                     std::vector<PlotData<Number>>* localSegments);
 
-    bool isValidTask(const std::shared_ptr<Task<Number>>& task, WorkQueue<std::shared_ptr<Task<Number>>>& localCEXQueue);
+    bool isValidTask(const std::shared_ptr<Task<State>>& task, WorkQueue<std::shared_ptr<Task<State>>>& localCEXQueue);
 
 private:
     int mWorkerId;

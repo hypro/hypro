@@ -25,9 +25,11 @@ namespace hypro
 template<typename Number>
 using TTransitionTimings = std::map<Transition<Number>*, std::vector<carl::Interval<tNumber>>>;
 
-template<typename Number>
+template<typename State>
 struct RefinementSetting {
-	State_t<Number> initialSet;
+	using Number = typename State::NumberType;
+
+	State initialSet;
 
 	EventTimingContainer<Number> mTimings;
 	carl::Interval<tNumber> entryTimestamp = carl::Interval<tNumber>::emptyInterval(); // The (local) timestamp of entry. TODO: Isn't the semantics like "time spent"?
@@ -38,17 +40,17 @@ struct RefinementSetting {
 	bool hitBadStates = false;	/// denotes that this setup lead to an intersection with the bad states. Currently only used for tree
 	                          	/// plotting.
 
-	RefinementSetting<Number>() = default;
+	RefinementSetting<State>() = default;
 
 	RefinementSetting(const Location<Number>* loc)
-		: initialSet(State_t<Number>(loc))
+		: initialSet(State(loc))
 		, mTimings()
 		, fullyComputed()
 		, isDummy(false)
 		, isEmpty(false)
 	{	}
 
-	RefinementSetting(const State_t<Number>& state)
+	RefinementSetting(const State& state)
 		: initialSet(state)
 		, mTimings()
 		, fullyComputed()
@@ -56,57 +58,14 @@ struct RefinementSetting {
 		, isEmpty(false)
 	{}
 
-	RefinementSetting(representation_name name, const typename State_t<Number>::repVariant& set, const Location<Number>* loc)
-		: initialSet(State_t<Number>(loc))
+	RefinementSetting(representation_name name, const State& set, const Location<Number>* loc)
+		: initialSet(set)
 		, mTimings()
 		, fullyComputed()
 		, isDummy(false)
 		, isEmpty(false)
 	{
 		mTimings.setLocation(loc);
-		TRACE("hydra.datastructures","Create Refinement-Setting for location " << loc->hash() << " with representation " << name);
-		switch(name) {
-			case representation_name::box: {
-				initialSet.setSet(boost::get<Box<Number>>(set));
-				break;
-			}
-			case representation_name::constraint_set: {
-				initialSet.setSet(boost::get<ConstraintSet<Number>>(set));
-				break;
-			}
-			case representation_name::polytope_h: {
-				initialSet.setSet(boost::get<HPolytope<Number>>(set));
-				break;
-			}
-			case representation_name::polytope_v: {
-				initialSet.setSet(boost::get<VPolytope<Number>>(set));
-				break;
-			}
-			#ifdef HYPRO_USE_PPL
-			case representation_name::ppl_polytope: {
-				initialSet.setSet(boost::get<Polytope<Number>>(set));
-				break;
-			}
-			#endif
-			case representation_name::support_function: {
-				initialSet.setSet(boost::get<SupportFunction<Number>>(set));
-				break;
-			}
-			case representation_name::taylor_model: {
-				assert(false);
-				break;
-			}
-			case representation_name::zonotope: {
-				initialSet.setSet(boost::get<Zonotope<Number>>(set));
-				break;
-			}
-            case representation_name::difference_bounds: {
-                initialSet.setSet(boost::get<DifferenceBounds<Number>>(set));
-                break;
-            }
-			default:
-				assert(false);
-		}
 	}
 
 	RefinementSetting& operator=(const RefinementSetting& orig) {
@@ -150,24 +109,25 @@ struct RefinementSetting {
 };
 
 
-template<typename Number>
-class ReachTreeNode : public TreeNode<ReachTreeNode<Number>>
+template<typename State>
+class ReachTreeNode : public TreeNode<ReachTreeNode<State>>
 {
+	using Number = typename State::NumberType;
   protected:
   	Path<Number,tNumber> mPath; /// path cache.
-  	std::vector<RefinementSetting<Number>> mRefinements; /// ordered list of applied refinements.
+  	std::vector<RefinementSetting<State>> mRefinements; /// ordered list of applied refinements.
 
     mutable std::mutex mutex;
 
   public:
 
-  	using Node_t = typename TreeNode<ReachTreeNode<Number>>::Node_t;
-  	using const_Node_t = typename TreeNode<ReachTreeNode<Number>>::const_Node_t;
-  	using NodeList_t = typename TreeNode<ReachTreeNode<Number>>::NodeList_t;
+  	using Node_t = typename TreeNode<ReachTreeNode<State>>::Node_t;
+  	using const_Node_t = typename TreeNode<ReachTreeNode<State>>::const_Node_t;
+  	using NodeList_t = typename TreeNode<ReachTreeNode<State>>::NodeList_t;
 
     //ReachTreeNode() = default;
-    ReachTreeNode(const ReachTreeNode<Number>& orig)
-    	: TreeNode<ReachTreeNode<Number>>(orig)
+    ReachTreeNode(const ReachTreeNode<State>& orig)
+    	: TreeNode<ReachTreeNode<State>>(orig)
     	, mPath(orig.getPath())
     	, mRefinements(orig.getRefinements())
     	//, mTransitionTimings(orig.getTransitionTimings())
@@ -186,27 +146,27 @@ class ReachTreeNode : public TreeNode<ReachTreeNode<Number>>
 
 
     ReachTreeNode()
-        : TreeNode<ReachTreeNode<Number>>()
+        : TreeNode<ReachTreeNode<State>>()
         , mPath()
         , mRefinements()
         //, mTransitionTimings()
     {
     }
 
-    ReachTreeNode(const State_t<Number>& state, unsigned level = 0)
-    	: TreeNode<ReachTreeNode<Number>>()
+    ReachTreeNode(const State& state, unsigned level = 0)
+    	: TreeNode<ReachTreeNode<State>>()
     	, mPath()
     	, mRefinements()
     	//, mTransitionTimings()
     {
     	assert(!state.getTimestamp().isEmpty());
-    	mRefinements[level] = RefinementSetting<Number>(state.getSetType() ,state.getSet(), state.getLocation());
+    	mRefinements[level] = RefinementSetting<State>(state.getSetType(), state, state.getLocation());
     	mRefinements[level].entryTimestamp = state.getTimestamp();
     	mRefinements[level].initialSet = state;
     }
 
-    ReachTreeNode(const State_t<Number>& state, unsigned level, ReachTreeNode<Number>* parent)
-    	: TreeNode<ReachTreeNode<Number>>()
+    ReachTreeNode(const State& state, unsigned level, ReachTreeNode<State>* parent)
+    	: TreeNode<ReachTreeNode<State>>()
     	, mPath()
     	, mRefinements()
     	//, mTransitionTimings()
@@ -214,9 +174,9 @@ class ReachTreeNode : public TreeNode<ReachTreeNode<Number>>
     	assert(!state.getTimestamp().isEmpty());
     	assert(state.getNumberSets() > 0);
     	//std::cout << "Create ReachTreeNode, access to state set of type " << state.getSetType() << std::endl;
-    	auto tmp = RefinementSetting<Number>(state.getSetType(),state.getSet(), state.getLocation());
+    	auto tmp = RefinementSetting<State>(state.getSetType(), state, state.getLocation());
     	while(mRefinements.size() < level) {
-    		mRefinements.push_back(RefinementSetting<Number>());
+    		mRefinements.push_back(RefinementSetting<State>());
     	}
     	mRefinements.push_back(tmp);
     	mRefinements[level].entryTimestamp = state.getTimestamp();
@@ -228,9 +188,9 @@ class ReachTreeNode : public TreeNode<ReachTreeNode<Number>>
 
     const Path<Number,tNumber>& getPath() const { return mPath; }
 
-    const typename State_t<Number>::repVariant& getSetAtLevel(unsigned level) const;
+    const typename State::repVariant& getSetAtLevel(unsigned level) const;
 
-    const State_t<Number>& getStateAtLevel(unsigned level) const;
+    const State& getStateAtLevel(unsigned level) const;
 
     /**
      * @brief      Gets the timestamp of entry (i.e. global timestamp) for a certain level.
@@ -241,9 +201,9 @@ class ReachTreeNode : public TreeNode<ReachTreeNode<Number>>
 
     //const Location<Number>* getLocation() const { return mLoc; }
 
-    const std::vector<RefinementSetting<Number>>& getRefinements() const { return mRefinements; }
+    const std::vector<RefinementSetting<State>>& getRefinements() const { return mRefinements; }
 
-    std::vector<RefinementSetting<Number>>& rGetRefinements() { return mRefinements; }
+    std::vector<RefinementSetting<State>>& rGetRefinements() { return mRefinements; }
 
     //TTransitionTimings getTransitionTimings() const { return mTransitionTimings; }
 
@@ -254,21 +214,21 @@ class ReachTreeNode : public TreeNode<ReachTreeNode<Number>>
 
     void getLevelCnt(std::vector<std::size_t>& levels) const;
 
-    std::vector<ReachTreeNode<Number>*> getChildrenForTransition(Transition<Number>* transition) const;
+    std::vector<ReachTreeNode<State>*> getChildrenForTransition(Transition<Number>* transition) const;
 
     bool isFullyComputedOnSomeLevel() const;
 
-    void updateContent(ReachTreeNode<Number>* updatedNode);
+    void updateContent(ReachTreeNode<State>* updatedNode);
 
-    void addRefinement(const RefinementSetting<Number>& ref);
+    void addRefinement(const RefinementSetting<State>& ref);
 
-    void setNewRefinement(unsigned level, const RefinementSetting<Number>& ref);
+    void setNewRefinement(unsigned level, const RefinementSetting<State>& ref);
 
     void clearRefinements() { mRefinements.clear(); }
 
-    void convertRefinement(unsigned fromLevel, unsigned toLevel, const StrategyNode& toSettings);
+    void convertRefinement(unsigned fromLevel, unsigned toLevel);
 
-    //void setInitSet(const typename State_t<Number>::repVariant& _initSet);
+    //void setInitSet(const typename State::repVariant& _initSet);
 
     void setTimestamp( unsigned level, const carl::Interval<tNumber>& timeInterval);
 
@@ -279,22 +239,22 @@ class ReachTreeNode : public TreeNode<ReachTreeNode<Number>>
 
     void refineIntervals();
 
-    bool hasFixedPoint(const State_t<Number>& s, typename ReachTreeNode<Number>::Node_t skip) const;
+    bool hasFixedPoint(const State& s, typename ReachTreeNode<State>::Node_t skip) const;
 
-    void setParent(ReachTreeNode<Number>* parent);
+    void setParent(ReachTreeNode<State>* parent);
 
     std::size_t getDotRepresentation(std::size_t startIndex, std::string& nodes, std::string& transitions, std::vector<unsigned>& levels) const;
 
-	template<typename N>
-    friend std::ostream& operator<< (std::ostream &out, const ReachTreeNode<N> &reachTreeNode);
+	template<typename S>
+    friend std::ostream& operator<< (std::ostream &out, const ReachTreeNode<S> &reachTreeNode);
 
-	template<typename N>
-    friend bool operator<(const ReachTreeNode<N>& lhs, const ReachTreeNode<N>& rhs) {
+	template<typename S>
+    friend bool operator<(const ReachTreeNode<S>& lhs, const ReachTreeNode<S>& rhs) {
     	return (lhs.getDepth() < rhs.getDepth());
     }
 
-	template<typename N>
-    friend bool operator==(const ReachTreeNode<N>& lhs, const ReachTreeNode<N>& rhs) {
+	template<typename S>
+    friend bool operator==(const ReachTreeNode<S>& lhs, const ReachTreeNode<S>& rhs) {
     	// properties of tree node
     	if(lhs.mDepth != rhs.mDepth ||
     	    lhs.mParent != rhs.mParent ||

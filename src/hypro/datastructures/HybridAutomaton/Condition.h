@@ -9,11 +9,12 @@ namespace hypro {
 template<typename Number>
 class Condition {
 private:
-	std::vector<ConstraintSetT<Number>> mConstraints;
-	mutable std::size_t mHash = 0;
+	std::vector<ConstraintSetT<Number>> mConstraints; /// holds the constraints specifying the condition
+	mutable std::vector<TRIBOOL> mConditionIsBox; /// cache to check whether constraints are axis-aligned
+	mutable std::size_t mHash = 0; /// cache for the hash value
 public:
 	Condition() = default;
-	Condition(const matrix_t<Number>& mat, const vector_t<Number>& vec) : mConstraints( {ConstraintSetT<Number>(mat,vec)} ), mHash(0) {}
+	Condition(const matrix_t<Number>& mat, const vector_t<Number>& vec) : mConstraints( {ConstraintSetT<Number>(mat,vec)} ), mConditionIsBox({TRIBOOL::NSET}), mHash(0) {}
 	Condition(const std::vector<boost::variant<ConstraintSetT<Number>>>& sets);
 	Condition(const Condition& orig) = default;
 	Condition(Condition&& orig) = default;
@@ -27,6 +28,9 @@ public:
 
 	const matrix_t<Number>& getMatrix(std::size_t I = 0) const { assert(mConstraints.size()>I); return mConstraints.at(I).matrix(); }
 	const vector_t<Number>& getVector(std::size_t I = 0) const { assert(mConstraints.size()>I); return mConstraints.at(I).vector(); }
+
+	bool isAxisAligned() const;
+	bool isAxisAligned(std::size_t i) const;
 
 	void setMatrix(const matrix_t<Number>& m, std::size_t I = 0);
 	void setVector(const vector_t<Number>& v, std::size_t I = 0);
@@ -76,6 +80,9 @@ public:
 #endif
 		return out;
 	}
+
+	private:
+	void checkAxisAligned(std::size_t i) const;
 };
 
 template<typename Number>

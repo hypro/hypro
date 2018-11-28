@@ -150,7 +150,7 @@ namespace hypro {
 				}
 			}
 
-			if(it != mIntervals.begin() && timeInterval.intersectsWith(carl::Interval<Number>(std::prev(it,1)->timePoint, it->timePoint)) && it->type == type) {
+			if(it != mIntervals.begin() && set_have_intersection(timeInterval,carl::Interval<Number>(std::prev(it,1)->timePoint, it->timePoint)) && it->type == type) {
 				DEBUG("hydra.datastructures.hiv", "Bound and type match - return true." );
 				return true;
 			}

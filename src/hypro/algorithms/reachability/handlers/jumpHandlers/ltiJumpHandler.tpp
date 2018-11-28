@@ -2,8 +2,8 @@
 
 namespace hypro {
 
-    template<typename Number>
-    void ltiJumpHandler<Number>::handle(){
+    template<typename State>
+    void ltiJumpHandler<State>::handle(){
 		std::size_t targetLevel = mTask->btInfo.btLevel;
 		bool isRefinementTask = mTask->btInfo.btPath.size() > 0;
 
@@ -13,7 +13,7 @@ namespace hypro {
 
 		// holds a mapping of transitions to processed (i.e. aggregated or reduced) states
 		//START_BENCHMARK_OPERATION(FULL_AGGREGATION);
-		std::map<Transition<Number>*, std::vector<State_t<Number>>> processedStates = aggregate(*(mSuccessorBuffer),mTransition,mStrategy);
+		std::map<Transition<Number>*, std::vector<State>> processedStates = aggregate(*(mSuccessorBuffer),mTransition,mStrategy);
 		//EVALUATE_BENCHMARK_RESULT(FULL_AGGREGATION);
 
 		// At this point the state level processing is complete. Set up nodes. Note that each states timestamp corresponds to the enabled
@@ -35,7 +35,7 @@ namespace hypro {
 			}
 
 			// children holds the nodes which need to be added
-			typename ReachTreeNode<Number>::NodeList_t children = createNodesFromStates(transitionStatePair.first, transitionStatePair.second, mRepresentation, targetLevel, coveredTimeInterval, mTask->treeNode);
+			typename ReachTreeNode<State>::NodeList_t children = createNodesFromStates(transitionStatePair.first, transitionStatePair.second, mRepresentation, targetLevel, coveredTimeInterval, mTask->treeNode);
 
 			// Update tree
 			// Note: At this point we have a fresh node with only the refinement set for the dedicated level. In case of a backtrack
@@ -47,7 +47,7 @@ namespace hypro {
 			// Note: There can also be children for this transition, but with a whole different timestamp (wavy trajectories).
 
 
-			if ( !isRefinementTask && isTreeExtension(mTask->treeNode, transitionStatePair.first) ){
+			if ( !isRefinementTask && isTreeExtension<State>(mTask->treeNode, transitionStatePair.first) ){
 				TRACE("hydra.worker.discrete","Regular tree extension.");
 				for(const auto& child : children) {
 					// if the following is set, copy the refinement to level 0
@@ -56,7 +56,7 @@ namespace hypro {
 						for(auto i = 0; i < targetLevel; ++i){
 							if(child->getRefinements()[i].isDummy){
 								TRACE("hydra.worker.discrete","Add refinement for level " << i);
-								child->convertRefinement(targetLevel, i, SettingsProvider<Number>::getInstance().getStrategy().at(i));
+								child->convertRefinement(targetLevel, i, SettingsProvider<State>::getInstance().getStrategy().at(i));
 							}
 						}
 					}
@@ -65,7 +65,7 @@ namespace hypro {
 
 					// timing-tree updates
 					INFO("hydra.worker.discrete","Enqueue Tree node " << child << " in local queue.");
-					std::shared_ptr<Task<Number>> newTask = std::shared_ptr<Task<Number>>(new Task<Number>(child));
+					std::shared_ptr<Task<State>> newTask = std::shared_ptr<Task<State>>(new Task<State>(child));
 					// if we do not reset to level 0, set refinementLevel of task
 					#ifndef RESET_REFINEMENTS_ON_CONTINUE_AFTER_BT_RUN
 					newTask->btInfo.btLevel = targetLevel;
@@ -74,17 +74,17 @@ namespace hypro {
 					if(!isRefinementTask || mTask->btInfo.currentBTPosition == mTask->btInfo.btPath.size()){
 						#ifdef SINGLE_THREAD_FIXED_POINT_TEST
 						if(!child->getPath().hasChatteringZeno()){
-							if(!SettingsProvider<Number>::getInstance().useGlobalQueuesOnly()){
+							if(!SettingsProvider<State>::getInstance().useGlobalQueuesOnly()){
 								mLocalQueue->nonLockingEnqueue(newTask);
 							} else {
 								mLocalQueue->enqueue(newTask);
 							}
 						}
 						#else
-						if(!SettingsProvider<Number>::getInstance().useGlobalQueuesOnly()){
-							mLocalQueue->nonLockingEnqueue(newTask);
+						if(!SettingsProvider<State>::getInstance().useGlobalQueuesOnly()){
+							mLocalQueue->nonLockingEnqueue(std::move(newTask));
 						} else {
-							mLocalQueue->enqueue(newTask);
+							mLocalQueue->enqueue(std::move(newTask));
 						}
 						#endif
 					}
@@ -99,11 +99,11 @@ namespace hypro {
 
 				TRACE("hydra.worker.discrete","Current->treeNode is: " << mTask->treeNode);
 
-				typename ReachTreeNode<Number>::NodeList_t oldChildren = mTask->treeNode->getChildrenForTransition(transitionStatePair.first);
+				typename ReachTreeNode<State>::NodeList_t oldChildren = mTask->treeNode->getChildrenForTransition(transitionStatePair.first);
 
 				// collect the time-spans where the transition to existing child nodes was enabled to map new child nodes (update).
 				std::vector<carl::Interval<tNumber>> oldTimespans;
-				collectTimespansForRefinementLevel<Number>(oldTimespans, oldChildren, targetLevel);
+				collectTimespansForRefinementLevel<State>(oldTimespans, oldChildren, targetLevel);
 
 				DEBUG("hydra.worker.refinement","For transition " << *transitionStatePair.first << " there are " << oldChildren.size() << " existing relevant children and we attempt to add " << children.size() << " new ones.");
 				//DEBUG("hydra.worker.refinement","The pre-defined timespans are " << oldTimespans);
@@ -112,9 +112,9 @@ namespace hypro {
 				// Note: All this relies on the child-nodes to be sorted ascending in their transition timestamps.
 				if(!oldChildren.empty()){
 					assert(!oldTimespans.empty());
-					preProcess<Number>(children, oldTimespans);
+					preProcess<State>(children, oldTimespans);
 					// node updater matches new nodes (children) to existing nodes and creates new Tasks.
-					nodeUpdater<Number> nu(mTask, *(mLocalQueue), *(mLocalCEXQueue), targetLevel);
+					nodeUpdater<State> nu(mTask, *(mLocalQueue), *(mLocalCEXQueue), targetLevel);
 					nu(children, oldChildren, transitionStatePair.first);
 					//matchAndUpdate(children, oldChildren, _current, localCEXQueue);
 				} // old children empty
@@ -126,7 +126,7 @@ namespace hypro {
 				// set the remaining old children for the target level to dummy.
 				if(!oldChildren.empty()){
 					for(auto oldChildIt = oldChildren.begin(); oldChildIt != oldChildren.end(); ++oldChildIt) {
-						RefinementSetting<Number> dummyRefinement;
+						RefinementSetting<State> dummyRefinement;
 						dummyRefinement.isDummy = true;
 						TRACE("hydra.worker.refinement","Old child " << *oldChildIt << " not required. Set level " << mTask->btInfo.btLevel << " to dummy.");
 						(*oldChildIt)->setNewRefinement(mTask->btInfo.btLevel,dummyRefinement);
@@ -154,12 +154,12 @@ namespace hypro {
 		}
 	}
 
-	template<typename Number>
-	std::map<Transition<Number>*, std::vector<State_t<Number>>> ltiJumpHandler<Number>::aggregate(const std::vector<boost::tuple<Transition<Number>*, State_t<Number>>>& states, Transition<Number>* transition, const StrategyNode& strategy){
+	template<typename State>
+	std::map<Transition<typename State::NumberType>*, std::vector<State>> ltiJumpHandler<State>::aggregate(const std::vector<boost::tuple<Transition<Number>*, State>>& states, Transition<Number>* transition, const StrategyParameters& strategy){
 		// holds a mapping of transitions to states which need to be processed (i.e. aggregated)
-		std::map<Transition<Number>*, std::vector<State_t<Number>>> toAggregate;
+		std::map<Transition<Number>*, std::vector<State>> toAggregate;
 		// holds a mapping of transitions to processed (i.e. aggregated or reduced) states
-		std::map<Transition<Number>*, std::vector<State_t<Number>>> processedStates;
+		std::map<Transition<Number>*, std::vector<State>> processedStates;
 		for (const auto& tuple : states) {
 			// only handle sets related to the passed transition, in case any is passed.
 			if(transition == nullptr || boost::get<0>(tuple) == transition) {
@@ -169,7 +169,7 @@ namespace hypro {
 					(strategy.aggregation == AGG_SETTING::MODEL && boost::get<0>(tuple)->getAggregation() == Aggregation::none)) {
 					// copy state - as there is no aggregation, the containing set and timestamp is already valid
 					assert(!boost::get<1>(tuple).getTimestamp().isEmpty());
-					State_t<Number> newState(boost::get<1>(tuple));
+					State newState(boost::get<1>(tuple));
 					// apply reset function
 					int i = 0;
 					for(auto trafo : boost::get<0>(tuple)->getReset().getResetTransformations()){
@@ -181,7 +181,7 @@ namespace hypro {
 						matrix_t<Number> trafo = boost::get<0>(tuple)->getReset().getResetTransformations().at(i).matrix();
 						vector_t<Number> translation = boost::get<0>(tuple)->getReset().getResetTransformations().at(i).vector();
 
-						IResetHandler* ptr = HandlerFactory<Number>::getInstance().buildResetHandler(newState.getSetType(i), &newState, i, trafo,translation);
+						IResetHandler* ptr = HandlerFactory<State>::getInstance().buildResetHandler(newState.getSetType(i), &newState, i, trafo,translation);
 						if(ptr){
 							ptr->handle();
 							DEBUG("hydra.worker","Applied " << ptr->handlerName() << "at pos " << i);
@@ -193,7 +193,7 @@ namespace hypro {
 					bool strictestContainment = true;
 					for(std::size_t i = 0; i < newState.getNumberSets();i++){
 
-						IInvariantHandler* ptr = HandlerFactory<Number>::getInstance().buildInvariantHandler(newState.getSetType(i), &newState, i, false);
+						IInvariantHandler* ptr = HandlerFactory<State>::getInstance().buildInvariantHandler(newState.getSetType(i), &newState, i, false);
 						if(ptr){
 							ptr->handle();
 							DEBUG("hydra.worker","Applied " << ptr->handlerName() << "at pos " << i);
@@ -228,7 +228,7 @@ namespace hypro {
 					// the timestamp in case no aggregation happens.
 
 					if (processedStates.find(boost::get<0>(tuple)) == processedStates.end()) {
-						processedStates[boost::get<0>(tuple)] = std::vector<State_t<Number>>();
+						processedStates[boost::get<0>(tuple)] = std::vector<State>();
 					}
 					processedStates[boost::get<0>(tuple)].emplace_back(newState);
 
@@ -237,7 +237,7 @@ namespace hypro {
 					// some sets in between not satisfying the guard, we still collect all guard satisfying sets for that transition.
 					// Note: Whenever such a "chunk" is complete we call this method. However we need to treat this on node stage.
 					if (toAggregate.find(boost::get<0>(tuple)) == toAggregate.end()) {
-						toAggregate[boost::get<0>(tuple)] = std::vector<State_t<Number>>();
+						toAggregate[boost::get<0>(tuple)] = std::vector<State>();
 					}
 					toAggregate[boost::get<0>(tuple)].emplace_back(boost::get<1>(tuple));
 				}
@@ -249,9 +249,9 @@ namespace hypro {
 		for (const auto& transitionStatePair : toAggregate) {
 			assert(!transitionStatePair.second.empty());
 			TRACE("hydra.worker.discrete",transitionStatePair.second.size() << " sets to aggregate for transition " << transitionStatePair.first->getSource()->getName() << " -> " << transitionStatePair.first->getTarget()->getName());
-			std::vector<State_t<Number>> aggregatedStates;
+			std::vector<State> aggregatedStates;
 			// Aggregate sets by using sequential unite operations (TODO: Implement and make use of multi-unite).
-			State_t<Number> aggregatedState(*transitionStatePair.second.begin());
+			State aggregatedState(*transitionStatePair.second.begin());
 			// counts the number of processed sets - just for debugging.
 			unsigned setCnt = 1;
 			// counts the number of sets in the current cluster.
@@ -259,9 +259,9 @@ namespace hypro {
 			// determines whether there are still sets to be clustered together.
 			bool leftovers = true;
 
-			std::vector<SUBSPACETYPE> types = *(SettingsProvider<Number>::getInstance().getLocationSubspaceTypeMap().find(aggregatedState.getLocation())->second);
+			std::vector<SUBSPACETYPE> types = *(SettingsProvider<State>::getInstance().getLocationSubspaceTypeMap().find(aggregatedState.getLocation())->second);
 			// perform union directly on the current set vector to avoid an extreme amount of consistency checks
-			std::vector<typename State_t<Number>::repVariant> currentSets = aggregatedState.getSets();
+			std::vector<typename State::repVariant> currentSets = aggregatedState.getSets();
 			//START_BENCHMARK_OPERATION(AGGREGATE);
 			for (auto stateIt = ++transitionStatePair.second.begin(); stateIt != transitionStatePair.second.end(); ++stateIt) {
 				assert(!(*stateIt).getTimestamp().isEmpty());
@@ -274,7 +274,7 @@ namespace hypro {
 					}
 					else{
 						//START_BENCHMARK_OPERATION(UNION);
-						currentSets[i] = boost::apply_visitor(genericUniteVisitor<typename State_t<Number>::repVariant>(),currentSets[i], stateIt->getSet(i));
+						currentSets[i] = boost::apply_visitor(genericUniteVisitor<typename State::repVariant>(),currentSets[i], stateIt->getSet(i));
 						//EVALUATE_BENCHMARK_RESULT(UNION);
 					}
 				}
@@ -342,7 +342,7 @@ namespace hypro {
 					matrix_t<Number> trafo = transitionStatePair.first->getReset().getResetTransformations().at(i).matrix();
 					vector_t<Number> translation = transitionStatePair.first->getReset().getResetTransformations().at(i).vector();
 
-					IResetHandler* ptr = HandlerFactory<Number>::getInstance().buildResetHandler(state.getSetType(i), &state, i, trafo,translation);
+					IResetHandler* ptr = HandlerFactory<State>::getInstance().buildResetHandler(state.getSetType(i), &state, i, trafo,translation);
 					if(ptr){
 						ptr->handle();
 						DEBUG("hydra.worker.discrete","Applied " << ptr->handlerName() << "at pos " << i);
@@ -367,7 +367,7 @@ namespace hypro {
 				//START_BENCHMARK_OPERATION(TARGET_INVARIANT);
 				bool strictestContainment = true;
 				for(std::size_t i = 0; i < state.getNumberSets();i++){
-					IInvariantHandler* ptr = HandlerFactory<Number>::getInstance().buildInvariantHandler(state.getSetType(i), &state, i, false);
+					IInvariantHandler* ptr = HandlerFactory<State>::getInstance().buildInvariantHandler(state.getSetType(i), &state, i, false);
 					if(ptr){
 						ptr->handle();
 						DEBUG("hydra.worker.discrete","Applied " << ptr->handlerName() << "at pos " << i);
@@ -410,7 +410,7 @@ namespace hypro {
 				state.setTimestamp(aggregatedTimestamp);
 
 				if (processedStates.find(transitionStatePair.first) == processedStates.end()) {
-					processedStates[transitionStatePair.first] = std::vector<State_t<Number>>();
+					processedStates[transitionStatePair.first] = std::vector<State>();
 				}
 				processedStates[transitionStatePair.first].emplace_back(state);
 			}
@@ -419,20 +419,20 @@ namespace hypro {
 		return processedStates;
 	}
 
-	template<typename Number>
-	typename ReachTreeNode<Number>::NodeList_t ltiJumpHandler<Number>::createNodesFromStates(
-		Transition<Number>* transition, const std::vector<State_t<Number>>& states, 
-		representation_name repName, std::size_t targetLevel, 
-		carl::Interval<tNumber>& coveredTimeInterval, typename ReachTreeNode<Number>::Node_t parent){
+	template<typename State>
+	typename ReachTreeNode<State>::NodeList_t ltiJumpHandler<State>::createNodesFromStates(
+		Transition<Number>* transition, const std::vector<State>& states,
+		representation_name repName, std::size_t targetLevel,
+		carl::Interval<tNumber>& coveredTimeInterval, typename ReachTreeNode<State>::Node_t parent){
 
-		typename ReachTreeNode<Number>::NodeList_t children;
+		typename ReachTreeNode<State>::NodeList_t children;
 		for(const auto& state : states) {
 
 			//fix point test does not seem to work in full timed context
-			if(!SettingsProvider<Number>::getInstance().isFullTimed() && SettingsProvider<Number>::getInstance().getLocationTypeMap().find(transition->getSource())->second != LOCATIONTYPE::TIMEDLOC){
+			if(!SettingsProvider<State>::getInstance().isFullTimed() && SettingsProvider<State>::getInstance().getLocationTypeMap().find(transition->getSource())->second != LOCATIONTYPE::TIMEDLOC){
 				bool reachedFixedPoint = false;
-				if(SettingsProvider<Number>::getInstance().useFixedPointTest()) {
-					for(const auto n : NodeManager<Number>::getInstance().getTree().getRoot()->getChildren()) {
+				if(SettingsProvider<State>::getInstance().useFixedPointTest()) {
+					for(const auto n : NodeManager<State>::getInstance().getTree().getRoot()->getChildren()) {
 						reachedFixedPoint = n->hasFixedPoint(state,parent);
 						if(reachedFixedPoint){
 							std::cout << "Detected fixed point." << std::endl;
@@ -446,7 +446,7 @@ namespace hypro {
 				}
 			}
 
-			typename ReachTreeNode<Number>::Node_t newNode = new ReachTreeNode<Number>(state, targetLevel, parent);
+			typename ReachTreeNode<State>::Node_t newNode = new ReachTreeNode<State>(state, targetLevel, parent);
 
 			// collect covered time interval
 			coveredTimeInterval = coveredTimeInterval.convexHull(state.getTimestamp());
@@ -458,8 +458,8 @@ namespace hypro {
 			newNode->setTimestamp(targetLevel, state.getTimestamp());
 
 			// Todo: In general: switch to in-place modifications for the child-nodes later as well.
-			RefinementSetting<Number> tmpRefinement = newNode->getRefinements().at(targetLevel);
-			if(SettingsProvider<Number>::getInstance().useLocalTiming()) {
+			RefinementSetting<State> tmpRefinement = newNode->getRefinements().at(targetLevel);
+			if(SettingsProvider<State>::getInstance().useLocalTiming()) {
 				tmpRefinement.initialSet.setTimestamp(carl::Interval<tNumber>(0));
 			}
 

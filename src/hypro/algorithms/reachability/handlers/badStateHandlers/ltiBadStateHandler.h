@@ -3,22 +3,23 @@
 
 namespace hypro
 {
-    template<class Representation,typename Number>
+    template<typename State>
 	class ltiBadStateHandler : public IBadStateHandler {
+		using Number = typename State::NumberType;
 	protected:
 		bool mIntersects = false;
-		State_t<Number>*  mState; 
+		State*  mState;
 		bool mNoBadStates = false;
 		size_t mIndex;
 		bool mMarkedForDelete = false;
 
 	public:
 		ltiBadStateHandler() = delete;
-		ltiBadStateHandler(State_t<Number>* state, size_t index){
+		ltiBadStateHandler(State* state, size_t index){
 			mState = state;
 			mIndex = index;
 		}
-		
+
 		void handle();
 		const char* handlerName() {return "ltiBadStateHandler";}
 		// return intersection status

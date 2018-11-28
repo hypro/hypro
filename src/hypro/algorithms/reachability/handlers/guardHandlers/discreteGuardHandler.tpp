@@ -1,23 +1,23 @@
 #include "discreteGuardHandler.h"
 
 namespace hypro {
-    template <class Representation,typename Number>
-	void discreteGuardHandler<Representation,Number>::reinitialize(){
+    template<typename State>
+	void discreteGuardHandler<State>::reinitialize(){
 		// only reinitialize on the first time we come here
 		if(mComputed){
 			return;
 		}
-		ltiGuardHandler<Representation,Number>::reinitialize();
+		ltiGuardHandler<State>::reinitialize();
 	}
 
-	template <class Representation,typename Number>
-	void discreteGuardHandler<Representation,Number>::handle() {
+	template<typename State>
+	void discreteGuardHandler<State>::handle() {
 		if(mComputed){
-			TRACE("hydra.worker.discrete","No flow invariant handler already computed");	
+			TRACE("hydra.worker.discrete","No flow invariant handler already computed");
 			return;
 		}
-		TRACE("hydra.worker.discrete","Applying handler " << this->handlerName());	
-		ltiGuardHandler<Representation,Number>::handle();
+		TRACE("hydra.worker.discrete","Applying handler " << this->handlerName());
+		ltiGuardHandler<State>::handle();
 		mComputed=true;
 	}
 } // hypro

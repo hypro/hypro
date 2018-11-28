@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Settings.h"
+#include "Strategy.h"
 #include "StrategyNode.h"
 #include "../../types.h"
 #include "../HybridAutomaton/HybridAutomaton.h"
@@ -16,11 +17,12 @@ namespace hypro
 /**
  * SettingsProvider is a Singleton class providing meta information about the reachability analysis process.
  */
-template<typename Number>
-class SettingsProvider : public carl::Singleton<SettingsProvider<Number>>
+template<typename State>
+class SettingsProvider : public carl::Singleton<SettingsProvider<State>>
 {
-    friend carl::Singleton<SettingsProvider<Number>>;
-    SettingsProvider<Number>() : treeDotFileWriter("test.dot") {}
+    using Number = typename State::NumberType;
+    friend carl::Singleton<SettingsProvider<State>>;
+    SettingsProvider<State>() : treeDotFileWriter("test.dot") {}
 
   public:
     const HybridAutomaton<Number>& getHybridAutomaton();
@@ -28,8 +30,6 @@ class SettingsProvider : public carl::Singleton<SettingsProvider<Number>>
     ReachabilitySettings &getReachabilitySettings();
 
     unsigned getWorkerThreadCount();
-
-    representation_name getStartingRepresentation();
 
     bool skipPlot() const;
     bool useGlobalQueuesOnly() const;
@@ -57,22 +57,20 @@ class SettingsProvider : public carl::Singleton<SettingsProvider<Number>>
         rsConverted.clustering = rs.clustering;
         mReachabilitySettings = rsConverted;
     }
-    
-    void addStrategyElement(const StrategyNode& node) { mStrategy.push_back(node); }
-    void setStrategy(const std::vector<StrategyNode>& strat) { mStrategy = strat; }
-    const std::vector<StrategyNode>& getStrategy() const { return mStrategy; }
+
+    template<typename Representation>
+    void addStrategyElement(tNumber timeStep, representation_name rep, AGG_SETTING agg, int clustering);
+    void setStrategy(const Strategy<State>& strat) { mStrategy = strat; }
+    const Strategy<State>& getStrategy() const { return mStrategy; }
 
     const LockedFileWriter& getDotFileWriter() const { return treeDotFileWriter; }
 
     bool isFullTimed(){return fullTimed;}
     void setFullTimed(bool timed){fullTimed = timed;}
 
-
-   
-    
-    // experimental feature to switch between standard and fulltimed context. 
+    // experimental feature to switch between standard and fulltimed context.
     bool useContextSwitch(){return contextSwitch;}
-    
+
     const Decomposition& getSubspaceDecomposition() const {return mSubspaceDecomposition;}
     void setSubspaceDecomposition(const Decomposition& decomp) {mSubspaceDecomposition = decomp;}
 
@@ -85,7 +83,7 @@ class SettingsProvider : public carl::Singleton<SettingsProvider<Number>>
   private:
     HybridAutomaton<Number> mHybridAutomaton;
     ReachabilitySettings mReachabilitySettings;
-    std::vector<StrategyNode> mStrategy;
+    Strategy<State> mStrategy;
     bool mGlobalQueuesOnly = false;
     bool mSkipPlot = false;
     bool mUseLocalTiming = false;
@@ -99,11 +97,11 @@ class SettingsProvider : public carl::Singleton<SettingsProvider<Number>>
 
     bool fullTimed = false;
 
-    // experimental feature to switch between standard and fulltimed context. 
+    // experimental feature to switch between standard and fulltimed context.
     bool contextSwitch = false;
 
     // used to decide for the representaion and handlers of each subspace in a location
-    std::map<const Location<Number>*, std::shared_ptr<std::vector<SUBSPACETYPE>>> mLocationSubspaceTypeMap;  
+    std::map<const Location<Number>*, std::shared_ptr<std::vector<SUBSPACETYPE>>> mLocationSubspaceTypeMap;
     std::map<const Location<Number>*, LOCATIONTYPE> mLocationTypeMap;
 };
 

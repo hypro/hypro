@@ -4,11 +4,12 @@
 
 namespace hypro
 {
-    template<class Representation,typename Number>
-	class discreteResetHandler : public ltiResetHandler<Representation,Number>{
+    template<typename State>
+	class discreteResetHandler : public ltiResetHandler<State>{
+		using Number = typename State::NumberType;
 	public:
 		discreteResetHandler() = delete;
-		discreteResetHandler(State_t<Number>* state, size_t index, matrix_t<Number> trafo,vector_t<Number> translation) : ltiResetHandler<Representation,Number>(state, index,trafo, translation){}
+		discreteResetHandler(State* state, size_t index, matrix_t<Number> trafo,vector_t<Number> translation) : ltiResetHandler<State>(state, index,trafo, translation){}
 
 		void handle();
 		const char* handlerName() {return "discreteResetHandler";}

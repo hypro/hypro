@@ -12,20 +12,20 @@
 
 namespace hypro
 {
-template<typename Number>
+template<typename State>
 class ReachTree
 {
   private:
-    ReachTreeNode<Number>* mRoot;
+    ReachTreeNode<State>* mRoot;
 
   public:
-    ReachTree(ReachTreeNode<Number>* _root);
+    ReachTree(ReachTreeNode<State>* _root);
 
     ~ReachTree(){
     	delete mRoot;
     }
 
-    ReachTreeNode<Number>* getRoot() const;
+    ReachTreeNode<State>* getRoot() const;
 
     std::size_t getDepth() const;
 

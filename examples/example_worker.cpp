@@ -13,8 +13,12 @@
 
 int main(int argc, char** argv) {
 
-    // number typedef
+    // typedefs
     using Number = double;
+    using State = hypro::State_t<Number>;
+
+    // settings provider instance as reference for readability
+    hypro::SettingsProvider<State>& settingsProvider = hypro::SettingsProvider<State>::getInstance();
 
     // read file from input
     if(argc != 2) {
@@ -26,7 +30,7 @@ int main(int argc, char** argv) {
     std::cout << "Read input file " << filename << std::endl;
 
     std::pair<hypro::HybridAutomaton<Number>, hypro::ReachabilitySettings> parsedInput = hypro::parseFlowstarFile<Number>(filename);
-    hypro::SettingsProvider<Number>::getInstance().addStrategyElement({mpq_class(1)/mpq_class(100), hypro::representation_name::box});
+    settingsProvider.addStrategyElement<hypro::Box<Number>>(mpq_class(1)/mpq_class(100), hypro::representation_name::box, hypro::AGG_SETTING::AGG, -1);
 
     std::vector<size_t> decomposition;
     for(size_t i = 0; i < parsedInput.first.dimension();i++ ){
@@ -34,94 +38,100 @@ int main(int argc, char** argv) {
     }
     hypro::Decomposition decompositions;
     decompositions.push_back(decomposition);
-    hypro::SettingsProvider<Number>::getInstance().setSubspaceDecomposition(decompositions);
+    settingsProvider.setSubspaceDecomposition(decompositions);
 
-    hypro::SettingsProvider<Number>::getInstance().computeLocationSubspaceTypeMapping(parsedInput.first);
-    hypro::SettingsProvider<Number>::getInstance().computeLocationTypeMapping(parsedInput.first);        
+    settingsProvider.computeLocationSubspaceTypeMapping(parsedInput.first);
+    settingsProvider.computeLocationTypeMapping(parsedInput.first);
 
 
-    hypro::SettingsProvider<Number>::getInstance().setHybridAutomaton(parsedInput.first);
-    hypro::SettingsProvider<Number>::getInstance().setReachabilitySettings(parsedInput.second);
-    hypro::EventTimingProvider<Number>::getInstance().initialize(parsedInput.first);
+    settingsProvider.setHybridAutomaton(parsedInput.first);
+    settingsProvider.setReachabilitySettings(parsedInput.second);
+    hypro::EventTimingProvider<Number>::getInstance().initialize(parsedInput.first, settingsProvider.getReachabilitySettings().timeBound*settingsProvider.getReachabilitySettings().jumpDepth);
 
-    hypro::WorkQueueManager<std::shared_ptr<hypro::Task<Number>>> queueManager;
+    hypro::WorkQueueManager<std::shared_ptr<hypro::Task<State>>> queueManager;
 
     auto& globalCEXQueue = queueManager.addQueue();
     auto& globalQueue = queueManager.addQueue();
 
-    hypro::HybridAutomaton<Number>::locationStateMap initialStates = hypro::SettingsProvider<Number>::getInstance().getHybridAutomaton().getInitialStates();
+    hypro::HybridAutomaton<Number>::locationStateMap initialStates = settingsProvider.getHybridAutomaton().getInitialStates();
     std::vector<hypro::State_t<Number>> initialStateData;
     for (auto stateMapIt = initialStates.begin(); stateMapIt != initialStates.end(); ++stateMapIt) {
-    	assert(!stateMapIt->second.getTimestamp().isEmpty());
 
     	hypro::State_t<Number> copyState;
-    	copyState.setLocation(stateMapIt->second.getLocation());
-    	copyState.setTimestamp(carl::Interval<hypro::tNumber>(stateMapIt->second.getTimestamp().lower(),stateMapIt->second.getTimestamp().upper()));
+    	copyState.setLocation(stateMapIt->first);
+    	copyState.setTimestamp(carl::Interval<hypro::tNumber>(0));
 
-        hypro::representation_name repName = hypro::SettingsProvider<Number>::getInstance().getStartingRepresentation();
-        for(size_t i = 0; i < stateMapIt->second.getNumberSets(); i++){
-            // if the decider is in use - convert subspaces according to mapping
-            if(hypro::SettingsProvider<Number>::getInstance().useDecider()){
-                if(hypro::SettingsProvider<Number>::getInstance().getLocationSubspaceTypeMap().size() > 0){
-                    std::map<const hypro::Location<Number>*,std::shared_ptr<std::vector<hypro::SUBSPACETYPE>>>::iterator it;
-                    it = hypro::SettingsProvider<Number>::getInstance().getLocationSubspaceTypeMap().find(stateMapIt->second.getLocation());
-                    if(it != hypro::SettingsProvider<Number>::getInstance().getLocationSubspaceTypeMap().end()){
-                        if(it->second->at(i) == hypro::SUBSPACETYPE::TIMED){
-                            //timed subspace
-                            repName = hypro::representation_name::difference_bounds;      
-                        }
-                        else{
-                            // standard subspace
-                            repName = hypro::SettingsProvider<Number>::getInstance().getStartingRepresentation();
-                        }
+        // if the decider is in use - convert subspaces according to mapping
+        State::repVariant _temp;
+        if(settingsProvider.useDecider()){
+            if(settingsProvider.getLocationSubspaceTypeMap().size() > 0){
+                std::map<const hypro::Location<Number>*,std::shared_ptr<std::vector<hypro::SUBSPACETYPE>>>::iterator it;
+                it = settingsProvider.getLocationSubspaceTypeMap().find(stateMapIt->first);
+                if(it != settingsProvider.getLocationSubspaceTypeMap().end()){
+                    if(it->second->at(0) == hypro::SUBSPACETYPE::TIMED){
+                        //timed subspace
+                        _temp = hypro::DifferenceBounds<Number>(stateMapIt->second.matrix(), stateMapIt->second.vector());
                     }
                     else{
-                        // no entry in location subspace type map for this location -> compute type
-                        repName = hypro::DecisionEntity<Number>::getInstance().getRepresentationForSubspace(*(stateMapIt->second.getLocation()), i); 
-                        if(repName == hypro::representation_name::UNDEF) {
-                            repName = hypro::SettingsProvider<Number>::getInstance().getStartingRepresentation();
-                        }
+                        // standard subspace
+                        _temp = hypro::Box<Number>(stateMapIt->second.matrix(), stateMapIt->second.vector());
                     }
                 }
-                else{ 
-                    // no location subspace type map -> compute type    
-                    repName = hypro::DecisionEntity<Number>::getInstance().getRepresentationForSubspace(*(stateMapIt->second.getLocation()), i);
+                else{
+                    // no entry in location subspace type map for this location -> compute type
+
+                    // TODO
+
+                    /*
+                    repName = hypro::DecisionEntity<Number>::getInstance().getRepresentationForSubspace(*(stateMapIt->first), 0);
                     if(repName == hypro::representation_name::UNDEF) {
-                        repName = hypro::SettingsProvider<Number>::getInstance().getStartingRepresentation();
+                        _temp = hypro::Box<Number>(stateMapIt->second.matrix(), stateMapIt->second.vector());
                     }
+                    */
                 }
             }
             else{
-                repName = hypro::SettingsProvider<Number>::getInstance().getStartingRepresentation();
-            }
+                // no location subspace type map -> compute type
 
-            hypro::State_t<Number>::repVariant _temp = boost::apply_visitor(hypro::genericConversionVisitor<hypro::State_t<Number>::repVariant,Number>(repName), stateMapIt->second.getSet(i));
-            copyState.setSetDirect(_temp,i);
-            copyState.setSetType(repName,i);
+                // TODO
+
+                /*
+                repName = hypro::DecisionEntity<Number>::getInstance().getRepresentationForSubspace(*(stateMapIt->first), 0);
+                if(repName == hypro::representation_name::UNDEF) {
+                    _temp = hypro::Box<Number>(stateMapIt->second.matrix(), stateMapIt->second.vector());
+                }
+                */
+            }
         }
+        else{
+            _temp = hypro::Box<Number>(stateMapIt->second.matrix(), stateMapIt->second.vector());
+        }
+
+        copyState.setSet(_temp,0);
+
         initialStateData.emplace_back(copyState);
     }
     // setup tree and fill queue
-    hypro::ReachTree<Number> tree = hypro::ReachTree<Number>(new hypro::ReachTreeNode<Number>());
-    std::vector<hypro::ReachTreeNode<Number>*> initialNodes;
+    hypro::ReachTree<State> tree = hypro::ReachTree<State>(new hypro::ReachTreeNode<State>());
+    std::vector<hypro::ReachTreeNode<State>*> initialNodes;
     for(const auto& state : initialStateData) {
-        hypro::ReachTreeNode<Number>* n = new hypro::ReachTreeNode<Number>(state,0,tree.getRoot());
+        hypro::ReachTreeNode<State>* n = new hypro::ReachTreeNode<State>(state,0,tree.getRoot());
         n->setTimestamp(0, carl::Interval<hypro::tNumber>(0));
         initialNodes.push_back(n);
         tree.getRoot()->addChild(n);
     }
-    
+
     for (const auto& initialNode : initialNodes) {
-        globalQueue.enqueue(std::shared_ptr<hypro::Task<Number>>(new hypro::Task<Number>(initialNode)));
+        globalQueue.enqueue(std::shared_ptr<hypro::Task<State>>(new hypro::Task<State>(initialNode)));
     }
 
-    hypro::ContextBasedReachabilityWorker<Number> worker = hypro::ContextBasedReachabilityWorker<Number>(parsedInput.second);
+    hypro::ContextBasedReachabilityWorker<State> worker = hypro::ContextBasedReachabilityWorker<State>(parsedInput.second);
     std::vector<hypro::PlotData<Number>> segments;
 
     while(queueManager.hasWorkable(true)) { // locking access to queues.
         auto task = queueManager.getNextWorkable(true,true); // get next task locked and dequeue from front.
         assert(task!=nullptr);
-        worker.processTask(task,hypro::SettingsProvider<Number>::getInstance().getStrategy(), globalQueue, globalCEXQueue, &segments);
+        worker.processTask(task,settingsProvider.getStrategy(), globalQueue, globalCEXQueue, &segments);
     }
 
 	return 0;

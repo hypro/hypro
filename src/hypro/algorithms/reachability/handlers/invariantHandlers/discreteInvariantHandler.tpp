@@ -1,10 +1,10 @@
 #include "discreteInvariantHandler.h"
 
 namespace hypro {
-    template <class Representation,typename Number>
-	void discreteInvariantHandler<Representation,Number>::handle() {
-		ltiInvariantHandler<Representation,Number>::handle();
+    template<typename State>
+	void discreteInvariantHandler<State>::handle() {
+		ltiInvariantHandler<State>::handle();
 		// only compute once
 		this->mMarkedForDelete = true;
-	}	
+	}
 } // hypro

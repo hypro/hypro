@@ -37,38 +37,41 @@ struct TBacktrackingInfo {
 	}
 };
 
-template<typename Number>
+template<typename State>
 struct Task {
-	ReachTreeNode<Number>* treeNode = nullptr;
+
+	using Number = typename State::NumberType;
+
+	ReachTreeNode<State>* treeNode = nullptr;
 	TBacktrackingInfo<Number> btInfo = TBacktrackingInfo<Number>();
 
-	Task(ReachTreeNode<Number>* node)
+	Task(ReachTreeNode<State>* node)
 		: treeNode(node)
 		, btInfo()
 	{
 		assert(btInfo.btPath.size() <= 0 || btInfo.btLevel > 0);
 	}
 
-	Task(ReachTreeNode<Number>* node, const TBacktrackingInfo<Number>& btI)
+	Task(ReachTreeNode<State>* node, const TBacktrackingInfo<Number>& btI)
 		: treeNode(node)
 		, btInfo(btI)
 	{}
 
-	friend ostream& operator<<(ostream& out, const Task<Number>& task) {
+	friend ostream& operator<<(ostream& out, const Task<State>& task) {
 		//out << *task.treeNode;
 		out << task.treeNode;
 		return out;
 	}
 
-	friend bool operator==(const Task<Number>& lhs, const Task<Number>& rhs) {
+	friend bool operator==(const Task<State>& lhs, const Task<State>& rhs) {
 		return (lhs.treeNode == rhs.treeNode && lhs.btInfo == rhs.btInfo);
 	}
 
-	friend bool operator!=(const Task<Number>& lhs, const Task<Number>& rhs) {
+	friend bool operator!=(const Task<State>& lhs, const Task<State>& rhs) {
 		return !(lhs == rhs);
 	}
 
-	friend bool operator<(const Task<Number>& lhs, const Task<Number>& rhs) {
+	friend bool operator<(const Task<State>& lhs, const Task<State>& rhs) {
 		DEBUG("hypro.workQueue", "Compare " << lhs << " and " << rhs << ": ");
         if (lhs == rhs) { // strict weak ordering requires this, thus rhs is inserted before lhs.
             // however, this should never happen(?)
@@ -104,8 +107,8 @@ struct Task {
 	}
 };
 
-template<typename Number>
-bool operator==(const std::shared_ptr<Task<Number>>& lhs, const std::shared_ptr<Task<Number>>& rhs) {
+template<typename Number, typename State>
+bool operator==(const std::shared_ptr<Task<State>>& lhs, const std::shared_ptr<Task<State>>& rhs) {
 	return *lhs == *rhs;
 }
 

@@ -4,20 +4,21 @@
 
 namespace hypro
 {
-    template<class Representation,typename Number>
-	class timedGuardHandler : public ltiGuardHandler<Representation,Number> {
+    template<typename State>
+	class timedGuardHandler : public ltiGuardHandler<State> {
+		using Number = typename State::NumberType;
 	public:
 		timedGuardHandler() = delete;
-		timedGuardHandler(std::shared_ptr<State_t<Number>> state, size_t index, Transition<Number>* transition) : ltiGuardHandler<Representation,Number>(state,index,transition){
+		timedGuardHandler(std::shared_ptr<State> state, size_t index, Transition<Number>* transition) : ltiGuardHandler<State>(state,index,transition){
 			// 0.1 because standard before timed of same dimension
-			if(SettingsProvider<Number>::getInstance().decomposeAutomaton()){
-				this->mSortIndex = 0.1+SettingsProvider<Number>::getInstance().getSubspaceDecomposition().at(this->mIndex).size();
+			if(SettingsProvider<State>::getInstance().decomposeAutomaton()){
+				this->mSortIndex = 0.1+SettingsProvider<State>::getInstance().getSubspaceDecomposition().at(this->mIndex).size();
 			}
 			else{
 				this->mSortIndex = 0;
 			}
 		}
-		
+
 		void handle();
 		const char* handlerName() {return "timedGuardHandler";}
 		// 1+ because standard before timed of same dimension

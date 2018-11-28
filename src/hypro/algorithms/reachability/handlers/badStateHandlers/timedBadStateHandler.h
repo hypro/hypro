@@ -4,12 +4,13 @@
 
 namespace hypro
 {
-    template<class Representation,typename Number>
-	class timedBadStateHandler : public ltiBadStateHandler<Representation,Number> {
+    template<typename State>
+	class timedBadStateHandler : public ltiBadStateHandler<State> {
+		using Number = typename State::NumberType;
 	public:
 		timedBadStateHandler() = delete;
-		timedBadStateHandler(State_t<Number>* state, size_t index) : ltiBadStateHandler<Representation,Number>(state,index){}
-		
+		timedBadStateHandler(State* state, size_t index) : ltiBadStateHandler<State>(state,index){}
+
 		void handle();
 		const char* handlerName() {return "timedBadStateHandler";}
 	};
