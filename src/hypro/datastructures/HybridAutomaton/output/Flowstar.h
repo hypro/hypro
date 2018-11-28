@@ -97,6 +97,8 @@ namespace hypro {
 	{
 		std::stringstream out;
 		switch (getFlowType(f)) {
+			case DynamicType::timed:
+			case DynamicType::discrete:
 			case DynamicType::linear: {
 				matrix_t<Number> flow = boost::get<linearFlow<Number>>(f).getFlowMatrix();
 				for(Eigen::Index rowI = 0; rowI < flow.rows(); ++rowI) {

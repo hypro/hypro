@@ -64,7 +64,7 @@ void SettingsProvider<State>::setReachabilitySettings(const ReachabilitySettings
 
 template<typename State>
 template<typename Representation>
-void SettingsProvider<State>::addStrategyElement(tNumber timeStep, representation_name rep, AGG_SETTING agg, int clustering) {
+void SettingsProvider<State>::addStrategyElement(tNumber timeStep, AGG_SETTING agg, int clustering) {
     mStrategy.emplace_back(StrategyNode<Representation>(timeStep,agg,clustering));
 }
 

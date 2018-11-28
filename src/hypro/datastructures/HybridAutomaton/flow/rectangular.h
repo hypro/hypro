@@ -29,11 +29,11 @@ public:
     std::size_t dimension() const { return mFlowIntervals.size(); }
 
     bool isTimed() const {
-        return std::count(mFlowIntervals.begin(), mFlowIntervals.end(), carl::Interval<Number>(1)) == mFlowIntervals.size();
+        return std::count(mFlowIntervals.begin(), mFlowIntervals.end(), carl::Interval<Number>(1)) == long(mFlowIntervals.size());
     }
 
     bool isDiscrete() const {
-        return std::count(mFlowIntervals.begin(), mFlowIntervals.end(), carl::Interval<Number>(0)) == mFlowIntervals.size();
+        return std::count(mFlowIntervals.begin(), mFlowIntervals.end(), carl::Interval<Number>(0)) == long(mFlowIntervals.size());
     }
 
     friend ostream& operator<<(ostream& out, const rectangularFlow<Number>& in) {

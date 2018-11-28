@@ -59,7 +59,7 @@ class SettingsProvider : public carl::Singleton<SettingsProvider<State>>
     }
 
     template<typename Representation>
-    void addStrategyElement(tNumber timeStep, representation_name rep, AGG_SETTING agg, int clustering);
+    void addStrategyElement(tNumber timeStep, AGG_SETTING agg, int clustering);
     void setStrategy(const Strategy<State>& strat) { mStrategy = strat; }
     const Strategy<State>& getStrategy() const { return mStrategy; }
 

@@ -58,7 +58,7 @@ struct RefinementSetting {
 		, isEmpty(false)
 	{}
 
-	RefinementSetting(representation_name name, const State& set, const Location<Number>* loc)
+	RefinementSetting(const State& set, const Location<Number>* loc)
 		: initialSet(set)
 		, mTimings()
 		, fullyComputed()
@@ -160,7 +160,7 @@ class ReachTreeNode : public TreeNode<ReachTreeNode<State>>
     	//, mTransitionTimings()
     {
     	assert(!state.getTimestamp().isEmpty());
-    	mRefinements[level] = RefinementSetting<State>(state.getSetType(), state, state.getLocation());
+    	mRefinements[level] = RefinementSetting<State>(state, state.getLocation());
     	mRefinements[level].entryTimestamp = state.getTimestamp();
     	mRefinements[level].initialSet = state;
     }
@@ -174,7 +174,7 @@ class ReachTreeNode : public TreeNode<ReachTreeNode<State>>
     	assert(!state.getTimestamp().isEmpty());
     	assert(state.getNumberSets() > 0);
     	//std::cout << "Create ReachTreeNode, access to state set of type " << state.getSetType() << std::endl;
-    	auto tmp = RefinementSetting<State>(state.getSetType(), state, state.getLocation());
+    	auto tmp = RefinementSetting<State>(state, state.getLocation());
     	while(mRefinements.size() < level) {
     		mRefinements.push_back(RefinementSetting<State>());
     	}

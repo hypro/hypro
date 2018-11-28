@@ -30,7 +30,7 @@ int main(int argc, char** argv) {
     std::cout << "Read input file " << filename << std::endl;
 
     std::pair<hypro::HybridAutomaton<Number>, hypro::ReachabilitySettings> parsedInput = hypro::parseFlowstarFile<Number>(filename);
-    settingsProvider.addStrategyElement<hypro::Box<Number>>(mpq_class(1)/mpq_class(100), hypro::representation_name::box, hypro::AGG_SETTING::AGG, -1);
+    settingsProvider.addStrategyElement<hypro::Box<Number>>(mpq_class(1)/mpq_class(100), hypro::AGG_SETTING::AGG, -1);
 
     std::vector<size_t> decomposition;
     for(size_t i = 0; i < parsedInput.first.dimension();i++ ){
