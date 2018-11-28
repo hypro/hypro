@@ -2,40 +2,40 @@
 
 namespace hypro
 {
-template<typename Number>
-ReachTree<Number>::ReachTree(ReachTreeNode<Number>* _root) : mRoot(_root)
+template<typename State>
+ReachTree<State>::ReachTree(ReachTreeNode<State>* _root) : mRoot(_root)
 {
 }
 
-template<typename Number>
-ReachTreeNode<Number>* ReachTree<Number>::getRoot() const {
+template<typename State>
+ReachTreeNode<State>* ReachTree<State>::getRoot() const {
     return mRoot;
 }
 
-template<typename Number>
-std::size_t ReachTree<Number>::getDepth() const {
+template<typename State>
+std::size_t ReachTree<State>::getDepth() const {
 	return mRoot->getSubtreeDepth();
 }
 
-template<typename Number>
-std::size_t ReachTree<Number>::getNumberNodes() const {
+template<typename State>
+std::size_t ReachTree<State>::getNumberNodes() const {
 	return mRoot->getSubtreeSize();
 }
 
-template<typename Number>
-double ReachTree<Number>::getAvgBranching() const {
+template<typename State>
+double ReachTree<State>::getAvgBranching() const {
 	return mRoot->getAvgSubtreeBranching();
 }
 
-template<typename Number>
-std::vector<std::size_t> ReachTree<Number>::getLevelCnt() const {
+template<typename State>
+std::vector<std::size_t> ReachTree<State>::getLevelCnt() const {
 	std::vector<std::size_t> res;
 	mRoot->getLevelCnt(res);
 	return res;
 }
 
-template<typename Number>
-std::string ReachTree<Number>::getDotRepresentation() const {
+template<typename State>
+std::string ReachTree<State>::getDotRepresentation() const {
 	std::string nodes = "digraph structs \n { node [shape=record];\n";
 	std::string transitions = "";
 	std::string endDelimiter = "}\n";
@@ -56,8 +56,8 @@ std::string ReachTree<Number>::getDotRepresentation() const {
 
 }
 
-template<typename Number>
-TreeStatistic ReachTree<Number>::getTreeStats() const {
+template<typename State>
+TreeStatistic ReachTree<State>::getTreeStats() const {
 	TreeStatistic res;
 	res.nodeCnt = this->getNumberNodes();
 	res.depth = this->getDepth();

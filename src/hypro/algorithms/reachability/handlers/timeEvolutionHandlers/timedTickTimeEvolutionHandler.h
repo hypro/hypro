@@ -5,11 +5,12 @@
 
 namespace hypro
 {
-    template<class Representation,typename Number>
-	class timedTickTimeEvolutionHandler : public ltiTimeEvolutionHandler<Representation,Number>{
+    template<typename State>
+	class timedTickTimeEvolutionHandler : public ltiTimeEvolutionHandler<State>{
+		using Number = typename State::NumberType;
 	public:
 		timedTickTimeEvolutionHandler() = delete;
-		timedTickTimeEvolutionHandler(State_t<Number>* state, size_t index, tNumber timeStep, matrix_t<Number> trafo,vector_t<Number> translation) : ltiTimeEvolutionHandler<Representation,Number>(state, index, timeStep,trafo, translation){}
+		timedTickTimeEvolutionHandler(State* state, size_t index, tNumber timeStep, matrix_t<Number> trafo,vector_t<Number> translation) : ltiTimeEvolutionHandler<State>(state, index, timeStep,trafo, translation){}
 
 		void handle();
 		const char* handlerName() {return "timedTickTimeEvolutionHandler";}

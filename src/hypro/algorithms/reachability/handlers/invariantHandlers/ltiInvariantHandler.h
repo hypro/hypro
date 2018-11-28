@@ -3,21 +3,22 @@
 
 namespace hypro
 {
-    template<class Representation, typename Number>
+    template<typename State>
 	class ltiInvariantHandler : public IInvariantHandler {
+		using Number = typename State::NumberType;
 	protected:
 		CONTAINMENT mContainment = CONTAINMENT::NO;
-		State_t<Number>*  mState; 
+		State*  mState;
 		size_t mIndex;
 		bool mMarkedForDelete = false;
 
 	public:
 		ltiInvariantHandler() = delete;
-		ltiInvariantHandler(State_t<Number>* state, size_t index){
+		ltiInvariantHandler(State* state, size_t index){
 			mState = state;
 			mIndex = index;
 		}
-		
+
 		void handle();
 		const char* handlerName() {return "ltiInvariantHandler";}
 		// return containment status

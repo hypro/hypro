@@ -4,12 +4,13 @@
 
 namespace hypro
 {
-    template<class Representation,typename Number>
-	class timedInvariantHandler : public ltiInvariantHandler<Representation,Number> {
+    template<typename State>
+	class timedInvariantHandler : public ltiInvariantHandler<State> {
+		using Number = typename State::NumberType;
 	public:
 		timedInvariantHandler() = delete;
-		timedInvariantHandler(State_t<Number>* state, size_t index) : ltiInvariantHandler<Representation,Number>(state,index){}
-		
+		timedInvariantHandler(State* state, size_t index) : ltiInvariantHandler<State>(state,index){}
+
 		void handle();
 		const char* handlerName() {return "timedInvariantHandler";}
 

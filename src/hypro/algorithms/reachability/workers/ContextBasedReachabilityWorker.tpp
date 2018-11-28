@@ -4,11 +4,11 @@
 namespace hypro
 {
 
-template<typename Number>
-void ContextBasedReachabilityWorker<Number>::processTask(const std::shared_ptr<Task<Number>>& t,
-                                                const std::vector<StrategyNode>& strat,
-                                                WorkQueue<std::shared_ptr<Task<Number>>>& localQueue,
-                                                WorkQueue<std::shared_ptr<Task<Number>>>& localCEXQueue,
+template<typename State>
+void ContextBasedReachabilityWorker<State>::processTask(const std::shared_ptr<Task<State>>& t,
+                                                const Strategy<State>& strat,
+                                                WorkQueue<std::shared_ptr<Task<State>>>& localQueue,
+                                                WorkQueue<std::shared_ptr<Task<State>>>& localCEXQueue,
                                                 std::vector<PlotData<Number>>* localSegments){
 
     //INFO("hydra.worker",  std::this_thread::get_id() << ": Current btLevel: " << t->btInfo.btLevel << " and refinements size: " << t->treeNode->getRefinements().size());
@@ -16,25 +16,25 @@ void ContextBasedReachabilityWorker<Number>::processTask(const std::shared_ptr<T
         computeForwardReachability(t,strat,localQueue,localCEXQueue,localSegments);
     }
 }
-            
-    
 
-template<typename Number>
-void ContextBasedReachabilityWorker<Number>::computeForwardReachability(const std::shared_ptr<Task<Number>>& task,
-                                                                const std::vector<StrategyNode>& strat,
-                                                                WorkQueue<std::shared_ptr<Task<Number>>>& localQueue,
-                                                                WorkQueue<std::shared_ptr<Task<Number>>>& localCEXQueue,
+
+
+template<typename State>
+void ContextBasedReachabilityWorker<State>::computeForwardReachability(const std::shared_ptr<Task<State>>& task,
+                                                                const Strategy<State>& strat,
+                                                                WorkQueue<std::shared_ptr<Task<State>>>& localQueue,
+                                                                WorkQueue<std::shared_ptr<Task<State>>>& localCEXQueue,
                                                                 std::vector<PlotData<Number>>* localSegments){
 
-    IContext* context = ContextFactory<Number>::getInstance().createContext(task, strat, &localQueue, &localCEXQueue, localSegments, this->mSettings);
-    
+    IContext* context = ContextFactory<State>::getInstance().createContext(task, strat, &localQueue, &localCEXQueue, localSegments, this->mSettings);
+
     try{
         context->execOnStart();
 
         //START_BENCHMARK_OPERATION(FIRST_SEGMENT);
         // compute first segment
-        context->execBeforeFirstSegment();             
-        context->firstSegment();               
+        context->execBeforeFirstSegment();
+        context->firstSegment();
         context->execAfterFirstSegment();
         //EVALUATE_BENCHMARK_RESULT(FIRST_SEGMENT);
 
@@ -88,12 +88,12 @@ void ContextBasedReachabilityWorker<Number>::computeForwardReachability(const st
             // intersect with bad states
             context->execBeforeIntersectBadStates();
             context->intersectBadStates();
-            context->execAfterIntersectBadStates();                    
+            context->execAfterIntersectBadStates();
             //EVALUATE_BENCHMARK_RESULT(INTERSECT_BAD_STATES);
 
-            context->execOnLoopItExit();          
+            context->execOnLoopItExit();
             //EVALUATE_BENCHMARK_RESULT(COMPUTE_TIMESTEP);
-            
+
         }
 
         context->execAfterLoop();
@@ -121,8 +121,8 @@ void ContextBasedReachabilityWorker<Number>::computeForwardReachability(const st
     }
 }
 
-template<typename Number>
-bool ContextBasedReachabilityWorker<Number>::isValidTask(const std::shared_ptr<Task<Number>>& t, WorkQueue<std::shared_ptr<Task<Number>>>& localCEXQueue){
+template<typename State>
+bool ContextBasedReachabilityWorker<State>::isValidTask(const std::shared_ptr<Task<State>>& t, WorkQueue<std::shared_ptr<Task<State>>>& localCEXQueue){
     if(t->treeNode->getRefinements().at(t->btInfo.btLevel).fullyComputed) {
         // This node has already been computed for the required level. This can only happen during concurrent BT-runs.
         DEBUG("hydra.worker",  std::this_thread::get_id() << ": Got node which is already on the desired level.");
@@ -145,16 +145,16 @@ bool ContextBasedReachabilityWorker<Number>::isValidTask(const std::shared_ptr<T
         DEBUG("hydra.worker",  std::this_thread::get_id() << ": Consider child nodes for transition " << *transitionTimingPair.first);
         for(auto child : t->treeNode->getChildrenForTransition(transitionTimingPair.first)) {
             DEBUG("hydra.worker",  std::this_thread::get_id() << ": Consider child " << child);
-            if(child->getLatestBTLevel() >= t->btInfo.btLevel && child->getTimestamp(t->btInfo.btLevel).intersectsWith(transitionTimingPair.second)) {
+            if(child->getLatestBTLevel() >= t->btInfo.btLevel && carl::set_have_intersection(child->getTimestamp(t->btInfo.btLevel), transitionTimingPair.second) ) {
                 DEBUG("hydra.worker",  std::this_thread::get_id() << ": Timestamp matches, create follow-up task.");
-                std::shared_ptr<Task<Number>> newTask(new Task<Number>(child));
+                std::shared_ptr<Task<State>> newTask(new Task<State>(child));
                 newTask->btInfo = t->btInfo;
                 newTask->btInfo.currentBTPosition += 2;
                 DEBUG("hydra.worker","Enqueue follow up child with tree node " << child << " to local CEX queue.");
-                if(!SettingsProvider<Number>::getInstance().useGlobalQueuesOnly()){
-                    localCEXQueue.nonLockingEnqueue(newTask);
+                if(!SettingsProvider<State>::getInstance().useGlobalQueuesOnly()){
+                    localCEXQueue.nonLockingEnqueue(std::move(newTask));
                 } else {
-                    localCEXQueue.enqueue(newTask);
+                    localCEXQueue.enqueue(std::move(newTask));
                 }
 
             }
@@ -163,14 +163,14 @@ bool ContextBasedReachabilityWorker<Number>::isValidTask(const std::shared_ptr<T
         t->treeNode->getMutex().unlock();
         return false;
     }
-        
+
     // If a node is set to empty, skip this node. This can happen, if the number of child-nodes has changed upon refinement - in this case
     // we do not erase subtrees but rather set the particular level to empty.
     if(t->treeNode->getRefinements().at(t->btInfo.btLevel).isEmpty) {
         t->treeNode->getMutex().unlock();
         return false;
     }
-                    
+
     return true;
 }
 } // hypro

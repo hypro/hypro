@@ -4,19 +4,20 @@
 
 namespace hypro
 {
-    template<class Representation, typename Number>
-	class ltiFirstSegmentHandler : public IFirstSegmentHandler<Number> {
+    template<typename State>
+	class ltiFirstSegmentHandler : public IFirstSegmentHandler<State> {
+		using Number = typename State::NumberType;
 	protected:
-		State_t<Number>*  mState; // A state containing the first segment for each subspace
-		matrix_t<Number> mTrafo;
-		vector_t<Number> mTranslation;
+		State*  mState; // A state containing the first segment for each subspace
+		matrix_t<typename State::NumberType> mTrafo;
+		vector_t<typename State::NumberType> mTranslation;
 
 		size_t mIndex;
 		tNumber mTimeStep;
 
 	public:
 		ltiFirstSegmentHandler() = delete;
-		ltiFirstSegmentHandler(State_t<Number>* state, size_t index, tNumber timeStep){
+		ltiFirstSegmentHandler(State* state, size_t index, tNumber timeStep){
 			mState = state;
 			mIndex = index;
 			mTimeStep = timeStep;
@@ -24,10 +25,10 @@ namespace hypro
 
 		void handle();
 		const char* handlerName() {return "ltiFirstSegmentHandler";}
-		matrix_t<Number> computeTrafoMatrix(const Location<Number>* _loc) const;
+		matrix_t<typename State::NumberType> computeTrafoMatrix(const Location<typename State::NumberType>* _loc) const;
 
-		matrix_t<Number> getTrafo(){return mTrafo;}
-		vector_t<Number> getTranslation(){return mTranslation;}
+		const matrix_t<typename State::NumberType>& getTrafo() const { return mTrafo; }
+		const vector_t<typename State::NumberType>& getTranslation() const { return mTranslation; }
 	};
 
 } // hypro

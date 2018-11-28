@@ -11,38 +11,40 @@
 
 namespace hypro {
 
-	template<typename Number>
+	template<typename State>
 	class ltiJumpHandler : public IJumpHandler {
-		std::vector<boost::tuple<Transition<Number>*, State_t<Number>>>* mSuccessorBuffer;
+		using Number = typename State::NumberType;
+
+		std::vector<boost::tuple<Transition<Number>*, State>>* mSuccessorBuffer;
 		representation_name mRepresentation;
-		std::shared_ptr<Task<Number>> mTask;
+		std::shared_ptr<Task<State>> mTask;
 		Transition<Number>* mTransition;
-		StrategyNode mStrategy;
-		WorkQueue<std::shared_ptr<Task<Number>>>* mLocalQueue;
-		WorkQueue<std::shared_ptr<Task<Number>>>* mLocalCEXQueue;
+		StrategyParameters mStrategy;
+		WorkQueue<std::shared_ptr<Task<State>>>* mLocalQueue;
+		WorkQueue<std::shared_ptr<Task<State>>>* mLocalCEXQueue;
 
 	public:
 		ltiJumpHandler() = delete;
-		ltiJumpHandler(std::vector<boost::tuple<Transition<Number>*, State_t<Number>>>* successorBuffer,
+		ltiJumpHandler(std::vector<boost::tuple<Transition<Number>*, State>>* successorBuffer,
 										representation_name representation,
-										std::shared_ptr<Task<Number>> task,
+										std::shared_ptr<Task<State>> task,
 										Transition<Number>* transition,
-										StrategyNode strategy,
-										WorkQueue<std::shared_ptr<Task<Number>>>* localQueue,
-										WorkQueue<std::shared_ptr<Task<Number>>>* localCEXQueue) : mStrategy(strategy){
+										StrategyParameters strategy,
+										WorkQueue<std::shared_ptr<Task<State>>>* localQueue,
+										WorkQueue<std::shared_ptr<Task<State>>>* localCEXQueue) : mStrategy(strategy){
 			mSuccessorBuffer = successorBuffer;
 			mRepresentation = representation;
 			mTask = task;
 			mTransition = transition;
-			//mStrategy = strategy;
+			mStrategy = strategy;
 			mLocalQueue = localQueue;
-			mLocalCEXQueue = localCEXQueue;			
+			mLocalCEXQueue = localCEXQueue;
 		}
-		
+
 		void handle();
 		const char* handlerName() {return "ltiJumpHandler";}
-		std::map<Transition<Number>*, std::vector<State_t<Number>>> aggregate(const std::vector<boost::tuple<Transition<Number>*, State_t<Number>>>& states, Transition<Number>* transition, const StrategyNode& strategy);
-		typename ReachTreeNode<Number>::NodeList_t createNodesFromStates(Transition<Number>* transition, const std::vector<State_t<Number>>& states, representation_name repName, std::size_t targetLevel, carl::Interval<tNumber>& coveredTimeInterval, typename ReachTreeNode<Number>::Node_t parent);
+		std::map<Transition<Number>*, std::vector<State>> aggregate(const std::vector<boost::tuple<Transition<Number>*, State>>& states, Transition<Number>* transition, const StrategyParameters& strategy);
+		typename ReachTreeNode<State>::NodeList_t createNodesFromStates(Transition<Number>* transition, const std::vector<State>& states, representation_name repName, std::size_t targetLevel, carl::Interval<tNumber>& coveredTimeInterval, typename ReachTreeNode<State>::Node_t parent);
 
 	};
 } // hypro

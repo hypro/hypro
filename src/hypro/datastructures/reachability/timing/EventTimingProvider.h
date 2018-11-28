@@ -22,11 +22,11 @@ private:
 	typename EventTimingNode<Number>::Node_t mRoot;
 
 public:
-	
-	void initialize(const HybridAutomaton<Number>& ha);
-	
+
+	void initialize(const HybridAutomaton<Number>& ha, tNumber globalTimeHorizon);
+
 	EventTimingContainer<Number>* getTimings(const Path<Number,tNumber>& path) const;
-	
+
 	void updateTimings(const Path<Number,tNumber>& path, const EventTimingContainer<Number>& update);
 
 	typename EventTimingNode<Number>::Node_t addChildToNode(typename TreeNode<EventTimingNode<Number>>::Node_t parent, tNumber timeHorizon);

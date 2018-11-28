@@ -38,6 +38,23 @@ void State<Number,Representation,Rargs...>::setSet(const R& s, std::size_t i) {
 	assert(checkConsistency());
 }
 
+template<typename Number, typename Representation, typename ...Rargs>
+void State<Number,Representation,Rargs...>::setSet(const State<Number,Representation,Rargs...>::repVariant& s, std::size_t i) {
+	DEBUG("hypro.datastructures","Attempt to set set at pos " << i << ", mSets.size() = " << mSets.size());
+	assert(mSets.size() == mTypes.size());
+	assert(checkConsistency());
+	while(i >= mSets.size()) {
+		mSets.emplace_back(Representation()); // some default set.
+		mTypes.push_back(Representation::type()); // some default set type.
+	}
+	TRACE("hypro.datastructures","Set set to:" << s);
+	mSets[i] = s;
+	mTypes[i] = boost::apply_visitor(genericTypeVisitor(), s);
+	DEBUG("hypro.datastructures","Set set at pos " << i << ", mSets.size() = " << mSets.size());
+	assert(mSets.size() > i);
+	assert(checkConsistency());
+}
+
 
 template<typename Number, typename Representation, typename ...Rargs>
 void State<Number,Representation,Rargs...>::addTimeToClocks(tNumber t) {
@@ -332,7 +349,7 @@ void State<Number,Representation,Rargs...>::partiallyRemoveRedundancy(std::size_
 	//	return boost::get<Representation>(mSets.at(0)).removeRedundancy();
 	//}
 	//For more representations avaiable: use boost visitor
-	return boost::apply_visitor(genericRedundancyVisitor<repVariant,Number>(),mSets.at(I), I);
+	mSets[I] = boost::apply_visitor(genericRedundancyVisitor<repVariant,Number>(),mSets[I]);
 }
 
 template<typename Number, typename Representation, typename ...Rargs>

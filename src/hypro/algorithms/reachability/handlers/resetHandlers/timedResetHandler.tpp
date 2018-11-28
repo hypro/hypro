@@ -1,8 +1,8 @@
 #include "timedResetHandler.h"
 
 namespace hypro {
-    template <class Representation,typename Number>
-	void timedResetHandler<Representation,Number>::handle() { 
+    template<typename State>
+	void timedResetHandler<State>::handle() {
         TRACE("hydra.worker","Applying Reset trafo: \n" << this->mTrafo << "\n Reset translation: \n"<< this->mTranslation << "to" << this->mIndex);
         hypro::DifferenceBounds<Number> dbm = boost::get<hypro::DifferenceBounds<Number>>(this->mState->getSet(this->mIndex));
         for(int i = 0; i < this->mTrafo.rows();i++){

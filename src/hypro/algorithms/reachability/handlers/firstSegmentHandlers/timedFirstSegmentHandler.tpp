@@ -1,9 +1,9 @@
 #include "timedFirstSegmentHandler.h"
 
 namespace hypro {
-    template <class Representation,typename Number>
-    void timedFirstSegmentHandler<Representation,Number>::handle() {
-        
+    template <typename State>
+    void timedFirstSegmentHandler<State>::handle() {
+
         assert(!this->mState->getTimestamp().isEmpty());
         // check if initial Valuation fulfills Invariant
         assert(this->mState->getLocation() != nullptr);
@@ -13,7 +13,7 @@ namespace hypro {
         if(dbmBeforeElapse.dimension() > 0){
             // elapse the dbm
             this->mState->setSet(boost::get<DifferenceBounds<Number>>(this->mState->getSet(this->mIndex)).elapse(),this->mIndex);
-            
+
             // cut it
             DifferenceBounds<Number> dbm = boost::get<DifferenceBounds<Number>>(this->mState->getSet(this->mIndex));
             size_t numclocks = dbm.dimension();
@@ -28,7 +28,7 @@ namespace hypro {
             // set dbm
             this->mState->setSet(dbm,this->mIndex);
             // set trafo and translation
-            int rows = this->mState->getLocation()->getFlow(this->mIndex).rows();
+            int rows = getFlowDimension(this->mState->getLocation()->getFlow(this->mIndex));
             this->mTrafo = matrix_t<Number>::Identity(rows-1,rows-1);
             this->mTranslation = vector_t<Number>::Ones(rows-1)*carl::convert<tNumber,Number>(this->mTimeStep);
         }

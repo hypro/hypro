@@ -1,8 +1,8 @@
 #include "timedTickTimeEvolutionHandler.h"
 
 namespace hypro {
-    template <class Representation,typename Number>
-	void timedTickTimeEvolutionHandler<Representation,Number>::handle() {
+    template<typename State>
+	void timedTickTimeEvolutionHandler<State>::handle() {
 		TRACE("hydra.worker",  "Before Elapse: \n" << boost::get<hypro::DifferenceBounds<Number>>(this->mState->getSet(this->mIndex))  << std::endl);
 		hypro::DifferenceBounds<Number> dbm = boost::get<hypro::DifferenceBounds<Number>>(this->mState->getSet(this->mIndex));
         if(dbm.dimension() > 0){

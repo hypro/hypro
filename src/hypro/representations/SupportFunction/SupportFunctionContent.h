@@ -12,6 +12,7 @@
 
 #pragma once
 
+#include "../helperMethods/isBox.h"
 #include "../../config.h"
 #include "util.h"
 #include "SupportFunctionSetting.h"

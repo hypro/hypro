@@ -8,7 +8,27 @@ Condition<Number>::Condition(const std::vector<boost::variant<ConstraintSetT<Num
 	for(const auto& item : sets) {
 		mConstraints.push_back(boost::get<ConstraintSetT<Number>>(item));
 	}
+	mConditionIsBox = std::vector<TRIBOOL>{mConstraints.size(),TRIBOOL::NSET};
 	mHash = 0;
+}
+
+template<typename Number>
+bool Condition<Number>::isAxisAligned() const {
+	for(std::size_t i = 0; i < mConstraints.size(); ++i) {
+		if(!isAxisAligned(i)) {
+			return false;
+		}
+	}
+	return true;
+}
+
+template<typename Number>
+bool Condition<Number>::isAxisAligned(std::size_t i) const {
+	checkAxisAligned(i);
+	if(mConditionIsBox[i] == TRIBOOL::FALSE) {
+		return false;
+	}
+	return true;
 }
 
 template<typename Number>
@@ -18,6 +38,7 @@ void Condition<Number>::setMatrix(const matrix_t<Number>& m, std::size_t I) {
 	}
 	mConstraints[I].rMatrix() = m;
 	DEBUG("hypro.datastructures","Set matrix at pos " << I << ", mConstraints.size() = " << mConstraints.size());
+	mConditionIsBox = std::vector<TRIBOOL>{mConstraints.size(),TRIBOOL::NSET};
 	mHash = 0;
 }
 
@@ -28,6 +49,7 @@ void Condition<Number>::setVector(const vector_t<Number>& v, std::size_t I) {
 	}
 	mConstraints[I].rVector() = v;
 	DEBUG("hypro.datastructures","Set vector at pos " << I << ", mConstraints.size() = " << mConstraints.size());
+	mConditionIsBox = std::vector<TRIBOOL>{mConstraints.size(),TRIBOOL::NSET};
 	mHash = 0;
 }
 
@@ -109,6 +131,7 @@ void Condition<Number>::decompose(std::vector<std::vector<size_t>> decomposition
 			newCset.push_back(res);
 		}
 		mConstraints = newCset;
+		mConditionIsBox = std::vector<TRIBOOL>{mConstraints.size(),TRIBOOL::NSET};
 		mHash = 0;
 		return;
 	}
@@ -167,7 +190,15 @@ void Condition<Number>::decompose(std::vector<std::vector<size_t>> decomposition
 	}
 
 	mConstraints = newCset;
+	mConditionIsBox = std::vector<TRIBOOL>{mConstraints.size(),TRIBOOL::NSET};
 	mHash = 0;
+}
+
+template<typename Number>
+void Condition<Number>::checkAxisAligned(std::size_t i) const {
+	if(mConditionIsBox[i] == TRIBOOL::NSET) {
+		mConditionIsBox[i] = mConstraints[i].isAxisAligned() == true ? TRIBOOL::TRUE : TRIBOOL::FALSE;
+	}
 }
 
 //template<typename Number>

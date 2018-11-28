@@ -13,9 +13,10 @@
 
 namespace hypro
 {
-template <class Workable, typename Number>
+template <class Workable, typename State>
 class IWorker
 {
+  using Number = typename State::NumberType;
   public:
     /**
      * Constructor responsible for setting the respective EventHandler
@@ -33,9 +34,9 @@ class IWorker
      * can be constructed, which then will be added to the WorkQueue.
      */
     virtual void processTask(const Workable& w,
-    						 const std::vector<StrategyNode>& strategy,
-    						 WorkQueue<std::shared_ptr<Task<Number>>>& localQueue,
-    						 WorkQueue<std::shared_ptr<Task<Number>>>& localCEXQueue,
+    						 const Strategy<State>& strategy,
+    						 WorkQueue<std::shared_ptr<Task<State>>>& localQueue,
+    						 WorkQueue<std::shared_ptr<Task<State>>>& localCEXQueue,
     						 std::vector<PlotData<Number>>* localSegments) = 0;
 
 
@@ -43,6 +44,5 @@ class IWorker
     ReachabilitySettings mSettings;
 };
 
-}  // namespace hydra
+}  // namespace hypro
 
-#include "IWorker.tpp"

@@ -2,77 +2,77 @@
 
 namespace hypro
 {
-template<typename Number>
-const HybridAutomaton<Number>& SettingsProvider<Number>::getHybridAutomaton()
+template<typename State>
+const HybridAutomaton<typename State::NumberType>& SettingsProvider<State>::getHybridAutomaton()
 {
     return mHybridAutomaton;
 }
 
-template<typename Number>
-ReachabilitySettings& SettingsProvider<Number>::getReachabilitySettings()
+template<typename State>
+ReachabilitySettings& SettingsProvider<State>::getReachabilitySettings()
 {
     return mReachabilitySettings;
 }
 
-template<typename Number>
-bool SettingsProvider<Number>::skipPlot() const
+template<typename State>
+bool SettingsProvider<State>::skipPlot() const
 {
     return mSkipPlot;
 }
 
-template<typename Number>
-bool SettingsProvider<Number>::useGlobalQueuesOnly() const
+template<typename State>
+bool SettingsProvider<State>::useGlobalQueuesOnly() const
 {
     return mGlobalQueuesOnly;
 }
 
-template<typename Number>
-bool SettingsProvider<Number>::useDecider()
+template<typename State>
+bool SettingsProvider<State>::useDecider()
 {
     return mUseDecider;
 }
 
-template<typename Number>
-bool SettingsProvider<Number>::decomposeAutomaton()
+template<typename State>
+bool SettingsProvider<State>::decomposeAutomaton()
 {
     return mDoDecomposition;
 }
 
 
-template<typename Number>
-double SettingsProvider<Number>::getQueueBalancingRatio() const {
+template<typename State>
+double SettingsProvider<State>::getQueueBalancingRatio() const {
 	return mBalancingRatio;
 }
 
-template<typename Number>
-unsigned SettingsProvider<Number>::getWorkerThreadCount()
+template<typename State>
+unsigned SettingsProvider<State>::getWorkerThreadCount()
 {
     return mThreadcount;
 }
 
-template<typename Number>
-representation_name SettingsProvider<Number>::getStartingRepresentation()
-{
-    return mStrategy.begin()->representation;
-}
-
-template<typename Number>
-void SettingsProvider<Number>::setHybridAutomaton(const HybridAutomaton<Number>& ha)
+template<typename State>
+void SettingsProvider<State>::setHybridAutomaton(const HybridAutomaton<Number>& ha)
 {
     mHybridAutomaton = ha;
 }
 
-template<typename Number>
-void SettingsProvider<Number>::setReachabilitySettings(const ReachabilitySettings& rs)
+template<typename State>
+void SettingsProvider<State>::setReachabilitySettings(const ReachabilitySettings& rs)
 {
     mReachabilitySettings = rs;
 }
 
-template<typename Number>
-void SettingsProvider<Number>::computeLocationSubspaceTypeMapping(const HybridAutomaton<Number> &ha){
-    assert(SettingsProvider<Number>::getInstance().getSubspaceDecomposition().size() != 0);
+template<typename State>
+template<typename Representation>
+void SettingsProvider<State>::addStrategyElement(tNumber timeStep, AGG_SETTING agg, int clustering) {
+    mStrategy.emplace_back(StrategyNode<Representation>(timeStep,agg,clustering));
+}
 
-    Decomposition decompositions = SettingsProvider<Number>::getInstance().getSubspaceDecomposition();
+template<typename State>
+void SettingsProvider<State>::computeLocationSubspaceTypeMapping(const HybridAutomaton<Number> &ha){
+   // assert(SettingsProvider<State>::getInstance().getSubspaceDecomposition().size() != 0);
+
+    Decomposition decompositions = SettingsProvider<State>::getInstance().getSubspaceDecomposition();
     for(auto location : ha.getLocations()){
         DEBUG("hypro.util", "Subspace types for location " << location->getName()<< ":");
 
@@ -93,8 +93,8 @@ void SettingsProvider<Number>::computeLocationSubspaceTypeMapping(const HybridAu
     }
 }
 
-template<typename Number>
-void SettingsProvider<Number>::computeLocationTypeMapping(const HybridAutomaton<Number> &ha){
+template<typename State>
+void SettingsProvider<State>::computeLocationTypeMapping(const HybridAutomaton<Number> &ha){
     assert(mLocationSubspaceTypeMap.size() != 0);
     for(auto location : ha.getLocations()){
 

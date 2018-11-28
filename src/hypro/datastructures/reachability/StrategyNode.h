@@ -1,4 +1,5 @@
 #pragma once
+#include "../HybridAutomaton/Visitors.h"
 #include "../../types.h"
 #include "../../representations/types.h"
 

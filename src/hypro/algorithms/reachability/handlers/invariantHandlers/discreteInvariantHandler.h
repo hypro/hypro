@@ -4,12 +4,12 @@
 
 namespace hypro
 {
-    template<class Representation,typename Number>
-	class discreteInvariantHandler : public ltiInvariantHandler<Representation,Number> {
+    template<typename State>
+	class discreteInvariantHandler : public ltiInvariantHandler<State> {
 	public:
 		discreteInvariantHandler() = delete;
-		discreteInvariantHandler(State_t<Number>* state, size_t index) : ltiInvariantHandler<Representation,Number>(state,index){}
-		
+		discreteInvariantHandler(State* state, size_t index) : ltiInvariantHandler<State>(state,index){}
+
 		void handle();
 		const char* handlerName() {return "discreteInvariantHandler";}
 

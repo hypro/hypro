@@ -4,10 +4,11 @@
 
 namespace hypro
 {
-    template<class Representation,typename Number>
-	class ltiTimeEvolutionHandler : public ITimeEvolutionHandler {	
-	protected:	
-		State_t<Number>*  mState; // A state containing the first segment for each subspace
+    template<typename State>
+	class ltiTimeEvolutionHandler : public ITimeEvolutionHandler {
+		using Number = typename State::NumberType;
+	protected:
+		State*  mState; // A state containing the first segment for each subspace
 		matrix_t<Number> mTrafo;
 		vector_t<Number> mTranslation;
 
@@ -16,7 +17,7 @@ namespace hypro
 	public:
 
 		ltiTimeEvolutionHandler() = delete;
-		ltiTimeEvolutionHandler(State_t<Number>* state, size_t index, tNumber timeStep, matrix_t<Number> trafo,vector_t<Number> translation){
+		ltiTimeEvolutionHandler(State* state, size_t index, tNumber timeStep, matrix_t<Number> trafo,vector_t<Number> translation){
 			mState = state;
 			mIndex = index;
 			mTimeStep = timeStep;

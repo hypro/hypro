@@ -6,18 +6,18 @@ namespace hypro {
 
 	class IHandler {
 	public:
-		virtual void handle() = 0;		
+		virtual void handle() = 0;
 		virtual const char* handlerName() = 0;
 	};
 
-	template<typename Number>
+	template<typename State>
 	class IFirstSegmentHandler : public IHandler {
 	public:
 		virtual void handle() = 0;
 		virtual const char* handlerName() = 0;
 
-		virtual matrix_t<Number> getTrafo() = 0;
-		virtual vector_t<Number> getTranslation() = 0;
+		virtual const matrix_t<typename State::NumberType>& getTrafo() const = 0;
+		virtual const vector_t<typename State::NumberType>& getTranslation() const = 0;
 	};
 
 	class IInvariantHandler : public IHandler {
@@ -42,7 +42,7 @@ namespace hypro {
 		virtual void setMarkedForDelete(bool toDelete) = 0;
 	};
 
-	template<typename Number>
+	template<typename State>
 	class IGuardHandler : public IHandler {
 	public:
 		virtual ~IGuardHandler(){}
@@ -50,8 +50,8 @@ namespace hypro {
 		virtual const char* handlerName() = 0;
 		// provides information whether the handlers set intersects the transitions guard
 		virtual bool satisfiesGuard() = 0;
-		virtual std::shared_ptr<State_t<Number>> getState()=0;		
-		virtual void setState(std::shared_ptr<State_t<Number>> ptr) =0;
+		virtual std::shared_ptr<State> getState()=0;
+		virtual void setState(std::shared_ptr<State> ptr) =0;
 		virtual void reinitialize()=0;
 		virtual double getSortIndex() = 0;
 		virtual void setSortIndex(double sortIndex) = 0;

@@ -2,8 +2,8 @@
 
 namespace hypro
 {
-    template <class Representation,typename Number>
-	void timedElapseTimeEvolutionHandler<Representation,Number>::handle() {
+    template<typename State>
+	void timedElapseTimeEvolutionHandler<State>::handle() {
 		if(!mComputed){ //only compute once
             hypro::DifferenceBounds<Number> dbmBeforeElapse = boost::get<hypro::DifferenceBounds<Number>>(this->mState->getSet(this->mIndex));
             this->mState->setSet(boost::get<hypro::DifferenceBounds<Number>>(this->mState->getSet(this->mIndex)).elapse(),this->mIndex);

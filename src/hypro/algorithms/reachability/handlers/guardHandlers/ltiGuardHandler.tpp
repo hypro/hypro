@@ -1,12 +1,12 @@
 #include "ltiGuardHandler.h"
 
 namespace hypro {
-    template <class Representation, typename Number>
-	void ltiGuardHandler<Representation,Number>::handle() {
+    template<typename State>
+	void ltiGuardHandler<State>::handle() {
 		assert(!mGuardSatisfyingState->getTimestamp().isEmpty());
 
-		TRACE("hydra.worker.discrete","Applying handler " << this->handlerName());	
-	    std::pair<CONTAINMENT,State_t<Number>> statePair = mGuardSatisfyingState->partiallySatisfies(mTransition->getGuard(), mIndex);
+		TRACE("hydra.worker.discrete","Applying handler " << this->handlerName());
+	    std::pair<CONTAINMENT,State> statePair = mGuardSatisfyingState->partiallySatisfies(mTransition->getGuard(), mIndex);
 
 	    if(statePair.first == CONTAINMENT::NO) {
 	    	mSatisfies = false;
@@ -17,9 +17,9 @@ namespace hypro {
 	    mSatisfies =  true;
 	}
 
-	template <class Representation, typename Number>
-	void ltiGuardHandler<Representation,Number>::reinitialize(){
-		TRACE("hydra.worker.discrete","Reinitializing handler " << this->handlerName());	
+	template<typename State>
+	void ltiGuardHandler<State>::reinitialize(){
+		TRACE("hydra.worker.discrete","Reinitializing handler " << this->handlerName());
 		mSatisfies=false;
 		//mGuardSatisfyingState->setSetDirect(currentState.getSet(mIndex),mIndex);
 		//mGuardSatisfyingState->setSetType(currentState.getSetType(mIndex),mIndex);

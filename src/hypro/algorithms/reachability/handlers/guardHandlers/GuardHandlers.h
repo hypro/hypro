@@ -8,8 +8,8 @@ namespace hypro {
 
     struct guardHandlerSorter{
 
-        template<typename Number>
-		inline bool operator()(IGuardHandler<Number>* lhs, IGuardHandler<Number>* rhs){
+        template<typename State>
+		inline bool operator()(IGuardHandler<State>* lhs, IGuardHandler<State>* rhs){
 			return lhs->getSortIndex() < rhs->getSortIndex();
 		}
 	};

@@ -4,12 +4,13 @@
 
 namespace hypro
 {
-    template<class Representation, typename Number>
-	class timedElapseFirstSegmentHandler : public ltiFirstSegmentHandler<Representation,Number> {
+    template<typename State>
+	class timedElapseFirstSegmentHandler : public ltiFirstSegmentHandler<State> {
+		using Number = typename State::NumberType;
 	public:
 		timedElapseFirstSegmentHandler() = delete;
-		timedElapseFirstSegmentHandler(State_t<Number>* state, size_t index, tNumber timeStep) : ltiFirstSegmentHandler<Representation,Number>(state,index,timeStep){}
-		
+		timedElapseFirstSegmentHandler(State* state, size_t index, tNumber timeStep) : ltiFirstSegmentHandler<State>(state,index,timeStep){}
+
 		void handle();
 		const char* handlerName() {return "timedElapseFirstSegmentHandler";}
 	};

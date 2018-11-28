@@ -1,8 +1,8 @@
 #include "timedElapseAfterTickTimeEvolutionHandler.h"
 
 namespace hypro {
-    template <class Representation,typename Number>
-    void timedElapseAfterTickTimeEvolutionHandler<Representation,Number>::handle() {
+    template<typename State>
+    void timedElapseAfterTickTimeEvolutionHandler<State>::handle() {
         if(!mComputed){ //only compute once
             DifferenceBounds<Number> dbmBeforeElapse = boost::get<DifferenceBounds<Number>>(this->mState->getSet(this->mIndex));
             this->mState->setSet(boost::get<DifferenceBounds<Number>>(this->mState->getSet(this->mIndex)).elapse(),this->mIndex);

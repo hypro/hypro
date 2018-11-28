@@ -60,6 +60,11 @@ namespace hypro {
 	 */
 	enum class LOCATIONTYPE{LTILOC=0,TIMEDLOC=1};
 
+	/**
+	 * @brief classifies the type of dynamics of a flow for a location.
+	 */
+	enum class DynamicType{linear=0, affine, rectangular, timed, discrete};
+
 	enum class AGG_SETTING{MODEL,AGG,NO_AGG};
 
 } // namespace hypro

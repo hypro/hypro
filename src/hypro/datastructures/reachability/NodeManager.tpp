@@ -2,21 +2,21 @@
 
 namespace hypro
 {
-template<typename Number>
-NodeManager<Number>::NodeManager() : mTree(ReachTree<Number>(new ReachTreeNode<Number>()))
+template<typename State>
+NodeManager<State>::NodeManager() : mTree(ReachTree<State>(new ReachTreeNode<State>()))
 {
 }
 
-template<typename Number>
-typename ReachTreeNode<Number>::NodeList_t NodeManager<Number>::setInitialStates(const std::vector<State_t<Number>>& _init_states)
+template<typename State>
+typename ReachTreeNode<State>::NodeList_t NodeManager<State>::setInitialStates(const std::vector<State>& _init_states)
 {
     assert(mTree.getRoot() != nullptr);
-    typename ReachTreeNode<Number>::NodeList_t res;
+    typename ReachTreeNode<State>::NodeList_t res;
     auto initialStatesIt = _init_states.begin();
     while (initialStatesIt != _init_states.end()) {
     	// create node for level 0.
     	//std::cout << "Create initial state from representation type " << initialStatesIt->getSetType(0) << std::endl;
-        typename ReachTreeNode<Number>::Node_t temp(new ReachTreeNode<Number>(*initialStatesIt,0, mTree.getRoot()));
+        typename ReachTreeNode<State>::Node_t temp(new ReachTreeNode<State>(*initialStatesIt,0, mTree.getRoot()));
         temp->setTimestamp(0, carl::Interval<tNumber>(0));
 
         DEBUG("hydra.nodeManager", "Add node " << *temp);
@@ -31,12 +31,12 @@ typename ReachTreeNode<Number>::NodeList_t NodeManager<Number>::setInitialStates
     return res;
 }
 
-template<typename Number>
-typename ReachTreeNode<Number>::Node_t NodeManager<Number>::getNode(const std::vector<unsigned>& _id)
+template<typename State>
+typename ReachTreeNode<State>::Node_t NodeManager<State>::getNode(const std::vector<unsigned>& _id)
 {
     assert(_id.size() > 0 && _id != std::vector<unsigned>(0));
-    typename ReachTreeNode<Number>::Node_t result;
-    typename ReachTreeNode<Number>::Node_t temp = mTree.getRoot();
+    typename ReachTreeNode<State>::Node_t result;
+    typename ReachTreeNode<State>::Node_t temp = mTree.getRoot();
     auto _id_iter = _id.begin();
     // Do one iteration 'manually' due to the fact that the root is
     // a supertype of the childrens' nodes
@@ -49,8 +49,8 @@ typename ReachTreeNode<Number>::Node_t NodeManager<Number>::getNode(const std::v
     return result;
 }
 
-template<typename Number>
-bool NodeManager<Number>::fixedPointReached(const State_t<Number>& s)
+template<typename State>
+bool NodeManager<State>::fixedPointReached(const State& s)
 {
     // Traverse the tree in order to check whether the calculated flowpipe
     // is contained in an already reached state
@@ -62,14 +62,14 @@ bool NodeManager<Number>::fixedPointReached(const State_t<Number>& s)
     return false;
 }
 
-template<typename Number>
-void NodeManager<Number>::printTree()
+template<typename State>
+void NodeManager<State>::printTree()
 {
     printTree(mTree.getRoot());
 }
 
-template<typename Number>
-void NodeManager<Number>::printTree(typename ReachTreeNode<Number>::Node_t )
+template<typename State>
+void NodeManager<State>::printTree(typename ReachTreeNode<State>::Node_t )
 {
 	/*
     std::cout << "Address: " << _node << endl;

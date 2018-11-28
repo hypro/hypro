@@ -9,10 +9,9 @@ namespace hypro {
 	}
 
 	template<typename Number>
-	void EventTimingProvider<Number>::initialize(const HybridAutomaton<Number>& ha) {
-		tNumber timeHorizon = SettingsProvider<Number>::getInstance().getReachabilitySettings().timeBound*SettingsProvider<Number>::getInstance().getReachabilitySettings().jumpDepth;
+	void EventTimingProvider<Number>::initialize(const HybridAutomaton<Number>& ha, tNumber globalTimeHorizon) {
 		for(const auto& state : ha.getInitialStates()) {
-			EventTimingNode<Number>* child = new EventTimingNode<Number>(EventTimingContainer<Number>(timeHorizon));
+			EventTimingNode<Number>* child = new EventTimingNode<Number>(EventTimingContainer<Number>(globalTimeHorizon));
 			child->setParent(mRoot);
 			child->setLocation(state.first);
 			child->setEntryTimestamp(carl::Interval<tNumber>(0));
@@ -21,7 +20,7 @@ namespace hypro {
 		}
 
 		/*
-		ReachabilitySettings& settings = SettingsProvider<Number>::getInstance().getReachabilitySettings();
+		ReachabilitySettings& settings = SettingsProvider<State>::getInstance().getReachabilitySettings();
 		EventTimingContainer empty = EventTimingContainer(settings.timeBound*settings.jumpDepth);
 		empty.insertBadState(std::make_pair(CONTAINMENT::BOT, carl::Interval<tNumber>(Number(0),settings.timeBound*settings.jumpDepth)));
 		for(auto locationPtr : ha.getLocations()) {
@@ -63,7 +62,7 @@ namespace hypro {
 				bool found = false;
 				#endif
 				for(const auto& child : res->getChildren()) {
-					if(child->getEntryTransition() == path.at(pos).transition && child->getEntryTimestamp().intersectsWith(path.at(pos).timeInterval)) {
+					if(child->getEntryTransition() == path.at(pos).transition && set_have_intersection(child->getEntryTimestamp(), (path.at(pos).timeInterval))) {
 						res = child;
 						#ifndef NDEBUG
 						found = true;

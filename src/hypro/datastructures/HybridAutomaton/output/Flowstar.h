@@ -7,47 +7,6 @@
 namespace hypro {
 
 	template<typename Number>
-	std::string toFlowstarFormat(const Condition<Number>& in,
-								const std::map<Eigen::Index, std::string>& varNameMap,
-								const std::string& prefix)
-	{
-		std::stringstream res;
-		if(in.size() > 0) {
-			for(Eigen::Index rowI = 0; rowI < in.getMatrix().rows(); ++rowI) {
-				res << prefix;
-				bool first = true;
-				for(Eigen::Index colI = 0; colI < in.getMatrix().cols(); ++colI) {
-					if(in.getMatrix()(rowI,colI) > 0) {
-						if(!first){
-							res << " +";
-						} else {
-							first = false;
-						}
-						if(in.getMatrix()(rowI,colI) != 1) {
-							res << in.getMatrix()(rowI,colI) << "*";
-						}
-					} else if(in.getMatrix()(rowI,colI) < 0) {
-						res << " " << in.getMatrix()(rowI,colI) << "*";
-					}
-					if(in.getMatrix()(rowI,colI) != 0 && colI != in.getMatrix().cols() && varNameMap.size() > std::size_t(colI)) {
-						res << varNameMap.at(colI);
-					}
-				}
-				res << " <= " << in.getVector()(rowI);
-			}
-		}
-		return res.str();
-	}
-
-	template<typename Number>
-	std::string toFlowstarFormat(const ConstraintSetT<Number>& in,
-								const std::map<Eigen::Index, std::string>& varNameMap,
-								const std::string& prefix)
-	{
-		return toFlowstarFormat(Condition<Number>(in.getMatrix(),in.getVector()), varNameMap, prefix);
-	}
-
-	template<typename Number>
 	std::string toFlowstarFormat(const matrix_t<Number>& in,
 								const std::map<Eigen::Index, std::string>& varNameMap,
 								const std::string& prefix)
@@ -91,6 +50,87 @@ namespace hypro {
 	}
 
 	template<typename Number>
+	std::string toFlowstarFormat(const Condition<Number>& in,
+								const std::map<Eigen::Index, std::string>& varNameMap,
+								const std::string& prefix)
+	{
+		std::stringstream res;
+		if(in.size() > 0) {
+			for(Eigen::Index rowI = 0; rowI < in.getMatrix().rows(); ++rowI) {
+				res << prefix;
+				bool first = true;
+				for(Eigen::Index colI = 0; colI < in.getMatrix().cols(); ++colI) {
+					if(in.getMatrix()(rowI,colI) > 0) {
+						if(!first){
+							res << " +";
+						} else {
+							first = false;
+						}
+						if(in.getMatrix()(rowI,colI) != 1) {
+							res << in.getMatrix()(rowI,colI) << "*";
+						}
+					} else if(in.getMatrix()(rowI,colI) < 0) {
+						res << " " << in.getMatrix()(rowI,colI) << "*";
+					}
+					if(in.getMatrix()(rowI,colI) != 0 && colI != in.getMatrix().cols() && varNameMap.size() > std::size_t(colI)) {
+						res << varNameMap.at(colI);
+					}
+				}
+				res << " <= " << in.getVector()(rowI);
+			}
+		}
+		return res.str();
+	}
+
+	template<typename Number>
+	std::string toFlowstarFormat(const ConstraintSetT<Number>& in,
+								const std::map<Eigen::Index, std::string>& varNameMap,
+								const std::string& prefix)
+	{
+		return toFlowstarFormat(Condition<Number>(in.getMatrix(),in.getVector()), varNameMap, prefix);
+	}
+
+	template<typename Number>
+	std::string toFlowstarFormat(const typename Location<Number>::flowVariant& f,
+								const std::map<Eigen::Index, std::string>& varNameMap,
+								const std::string& prefix)
+	{
+		std::stringstream out;
+		switch (getFlowType(f)) {
+			case DynamicType::timed:
+			case DynamicType::discrete:
+			case DynamicType::linear: {
+				matrix_t<Number> flow = boost::get<linearFlow<Number>>(f).getFlowMatrix();
+				for(Eigen::Index rowI = 0; rowI < flow.rows(); ++rowI) {
+					std::stringstream tmp;
+					tmp << prefix << "\t\t" << varNameMap.at(rowI) << "' = ";
+					out << toFlowstarFormat(matrix_t<Number>(flow.row(rowI)), varNameMap, tmp.str());
+				}
+				break;
+			}
+			case DynamicType::affine: {
+				matrix_t<Number> flow = boost::get<affineFlow<Number>>(f).getFlowMatrix();
+				vector_t<Number> constPart = boost::get<affineFlow<Number>>(f).getTranslation();
+				for(Eigen::Index rowI = 0; rowI < flow.rows(); ++rowI) {
+					std::stringstream tmp;
+					tmp << prefix << "\t\t" << varNameMap.at(rowI) << "' = ";
+					matrix_t<Number> tmpMatrix = matrix_t<Number>(1,flow.cols()+1);
+					tmpMatrix << flow.row(rowI), constPart(rowI);
+					out << toFlowstarFormat(tmpMatrix, varNameMap, tmp.str());
+				}
+				break;
+			}
+			case DynamicType::rectangular: {
+				std::vector<carl::Interval<Number>> intv = boost::get<rectangularFlow<Number>>(f).getFlowIntervals();
+				for(std::size_t rowI = 0; rowI < boost::get<rectangularFlow<Number>>(f).dimension(); ++rowI) {
+					out << prefix << "\t\t" << varNameMap.at(rowI) << "' = " << intv[rowI] << std::endl;
+				}
+			}
+		}
+		return out.str();
+	}
+
+	template<typename Number>
 	std::string toFlowstarFormat(const Location<Number>* loc,
 								const std::map<Eigen::Index, std::string>& varNameMap,
 								const std::string& prefix) {
@@ -99,15 +139,11 @@ namespace hypro {
 		out << prefix <<loc->getName();
 		out << prefix << "{";
 		if(varNameMap.size() > 0) {
-			assert(varNameMap.size() == std::size_t(loc->getFlow().rows()-1));
+			assert(varNameMap.size() == std::size_t(loc->dimension()));
 			// flow
 			out << prefix << "\tpoly ode 1";
 			out << prefix << "\t{";
-			for(Eigen::Index rowI = 0; rowI < loc->getFlow().rows()-1; ++rowI) {
-				std::stringstream tmp;
-				tmp << prefix << "\t\t" << varNameMap.at(rowI) << "' = ";
-				out << toFlowstarFormat(matrix_t<Number>(loc->getFlow().row(rowI)), varNameMap, tmp.str());
-			}
+			out << toFlowstarFormat<Number>(loc->getFlow(), varNameMap, prefix);
 			out << prefix << "\t}";
 			// invariant
 			out << prefix << "\tinv";
