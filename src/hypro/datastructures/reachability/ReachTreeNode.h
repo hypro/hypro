@@ -6,6 +6,7 @@
  */
 #pragma once
 
+#include "SettingsProvider.h"
 #include "TreeNode.h"
 #include "timing/EventTimingContainer.h"
 #include "../HybridAutomaton/Location.h"

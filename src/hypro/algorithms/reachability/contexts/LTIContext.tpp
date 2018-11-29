@@ -5,18 +5,19 @@ namespace hypro
 	template<typename State>
 	LTIContext<State>::LTIContext(const std::shared_ptr<Task<State>>& t,
 	                    const Strategy<State>& strat,
-	                    WorkQueue<std::shared_ptr<Task<State>>>* localQueue,
-	                    WorkQueue<std::shared_ptr<Task<State>>>* localCEXQueue,
-	                    std::vector<PlotData<Number>>* localSegments,
-	                    ReachabilitySettings &settings) : mTransitionTimings(HierarchicalIntervalVector<CONTAINMENT, tNumber>(std::vector<CONTAINMENT>({CONTAINMENT::BOT, CONTAINMENT::FULL, CONTAINMENT::NO, CONTAINMENT::YES})))
+	                    WorkQueue<std::shared_ptr<Task<State>>>& localQueue,
+	                    WorkQueue<std::shared_ptr<Task<State>>>& localCEXQueue,
+	                    std::vector<PlotData<State>>* localSegments,
+	                    ReachabilitySettings &settings)
+		: mTask(t)
+		, mStrategy(strat)
+		, mLocalQueue(localQueue)
+		, mLocalCEXQueue(localCEXQueue)
+		, mLocalSegments(localSegments)
+		, mSettings(settings)
+		, mTransitionTimings(HierarchicalIntervalVector<CONTAINMENT, tNumber>(std::vector<CONTAINMENT>({CONTAINMENT::BOT, CONTAINMENT::FULL, CONTAINMENT::NO, CONTAINMENT::YES})))
 	{
-		mTask = t;
-		mStrategy = strat;
-		mLocalQueue = localQueue;
-		mLocalCEXQueue = localCEXQueue;
-	    mLocalSegments = localSegments;
     	mTransitionTimings.initialize(CONTAINMENT::BOT, SettingsProvider<State>::getInstance().getReachabilitySettings().timeBound*SettingsProvider<State>::getInstance().getReachabilitySettings().jumpDepth);
-		mSettings = settings;
 		mComputationState = State(mTask->treeNode->getStateAtLevel(mTask->btInfo.btLevel));
 	}
 
@@ -109,7 +110,7 @@ namespace hypro
 		DEBUG("hypro.worker.refinement","Target btLevel: " << targetLevel);
 		ReachTreeNode<State>* btNode = mTask->treeNode;
 		DEBUG("hypro.worker.refinement","Find backtrack entry node.");
-		DEBUG("hypro.worker.refinement", std::this_thread::get_id() << ": Local CEX-Queue size: " << mLocalCEXQueue->size() << "localCEXQueue is now:\n" << *(mLocalCEXQueue));
+		DEBUG("hypro.worker.refinement", std::this_thread::get_id() << ": Local CEX-Queue size: " << mLocalCEXQueue.size() << "localCEXQueue is now:\n" << (mLocalCEXQueue));
 		btNode->getMutex().unlock();
 
 		// backtrack to the root node.
@@ -153,16 +154,16 @@ namespace hypro
 		DEBUG("hypro.worker.refinement","BT-Path: " << taskPtr->btInfo.btPath);
 		// add task
 		DEBUG("hypro.worker.refinement", std::this_thread::get_id() << ": Create new CEX-Task (local) with tree node " << taskPtr->treeNode);
-		mLocalCEXQueue->nonLockingEnqueue(std::move(taskPtr));
+		mLocalCEXQueue.nonLockingEnqueue(std::move(taskPtr));
 		//DEBUG("hypro.worker", std::this_thread::get_id() << ": Local CEX-Queue size: " << localCEXQueue.size());
-		DEBUG("hypro.worker.refinement", std::this_thread::get_id() << ": Local CEX-Queue size: " << mLocalCEXQueue->size() << "localCEXQueue is now:\n" << mLocalCEXQueue);
+		DEBUG("hypro.worker.refinement", std::this_thread::get_id() << ": Local CEX-Queue size: " << mLocalCEXQueue.size() << "localCEXQueue is now:\n" << mLocalCEXQueue);
 	}
 
 	template<typename State>
 	void LTIContext<State>::execOnStart(){
 		INFO("hypro.worker",  std::this_thread::get_id() << ": Compute flow in location " << mTask->treeNode->getStateAtLevel(mTask->btInfo.btLevel).getLocation()->getName() << "(" << mTask->treeNode->getStateAtLevel(mTask->btInfo.btLevel).getLocation()->hash() << ") on strategy level " << mTask->btInfo.btLevel);
 		DEBUG("hypro.worker",  std::this_thread::get_id() << ": Process Node address:" << mTask->treeNode);
-		DEBUG("hypro.worker",  std::this_thread::get_id() << ": WorkQueue size:" << mLocalQueue->size());
+		DEBUG("hypro.worker",  std::this_thread::get_id() << ": WorkQueue size:" << mLocalQueue.size());
 		DEBUG("hypro.worker",  std::this_thread::get_id() << ": Node path:" << mTask->treeNode->getPath());
 	    assert(!mTask->treeNode->getTimestamp(mTask->btInfo.btLevel).isEmpty());
 	    bool isRefinementTask = (mTask->btInfo.btPath.size() > 0);
@@ -364,7 +365,7 @@ namespace hypro
 		// For plotting.
 		//#ifdef HYDRA_ENABLE_PLOT
 		TRACE("hypro.worker.plot","Add "<<  mComputationState.getSets().size() << "segments for plotting of type " << mComputationState.getSetType() << " and refinement level " << mTask->btInfo.btLevel);
-        mLocalSegments->push_back(PlotData<Number>(mComputationState.getSets(), mTask->btInfo.btLevel));
+        mLocalSegments->push_back(PlotData<State>(mComputationState, mTask->btInfo.btLevel));
 		//#endif
     }
 

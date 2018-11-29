@@ -9,7 +9,7 @@ void ContextBasedReachabilityWorker<State>::processTask(const std::shared_ptr<Ta
                                                 const Strategy<State>& strat,
                                                 WorkQueue<std::shared_ptr<Task<State>>>& localQueue,
                                                 WorkQueue<std::shared_ptr<Task<State>>>& localCEXQueue,
-                                                std::vector<PlotData<Number>>* localSegments){
+                                                std::vector<PlotData<State>>* localSegments){
 
     //INFO("hydra.worker",  std::this_thread::get_id() << ": Current btLevel: " << t->btInfo.btLevel << " and refinements size: " << t->treeNode->getRefinements().size());
     if(isValidTask(t,localCEXQueue)){
@@ -24,9 +24,9 @@ void ContextBasedReachabilityWorker<State>::computeForwardReachability(const std
                                                                 const Strategy<State>& strat,
                                                                 WorkQueue<std::shared_ptr<Task<State>>>& localQueue,
                                                                 WorkQueue<std::shared_ptr<Task<State>>>& localCEXQueue,
-                                                                std::vector<PlotData<Number>>* localSegments){
+                                                                std::vector<PlotData<State>>* localSegments){
 
-    IContext* context = ContextFactory<State>::getInstance().createContext(task, strat, &localQueue, &localCEXQueue, localSegments, this->mSettings);
+    IContext* context = ContextFactory<State>::getInstance().createContext(task, strat, localQueue, localCEXQueue, localSegments, this->mSettings);
 
     try{
         context->execOnStart();

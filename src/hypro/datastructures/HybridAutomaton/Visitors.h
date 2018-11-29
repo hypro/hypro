@@ -40,6 +40,13 @@ public:
 		return lhs;
 	}
 
+	template<template<typename,typename,typename> typename A, typename S1, typename S2, typename N, typename C>
+	inline T operator()(const A<N,C,S1>& lhs, const A<N,C,S2>& rhs) const {
+		A<N,C,S1> tmp{rhs};
+		return lhs.minkowskiSum(tmp);
+	}
+
+	/*
 	template<typename A>
     inline T operator()(const A& lhs, const A& rhs) const {
     	//auto tmpHPoly = Converter<Number>::toHPolytope(lhs);
@@ -48,6 +55,7 @@ public:
 		//TRACE("hydra.datastructures","Union visitor rhs " << tmpHPoly);
  		return lhs.minkowskiSum(rhs);
     }
+	*/
 };
 
 template<typename T>

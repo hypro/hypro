@@ -189,8 +189,8 @@ namespace hypro
 										std::shared_ptr<Task<State>> task,
 										Transition<Number>* transition,
 										StrategyParameters sPars,
-										WorkQueue<std::shared_ptr<Task<State>>>* localQueue,
-										WorkQueue<std::shared_ptr<Task<State>>>* localCEXQueue){
+										WorkQueue<std::shared_ptr<Task<State>>>& localQueue,
+										WorkQueue<std::shared_ptr<Task<State>>>& localCEXQueue){
 		return new ltiJumpHandler<State>(successorBuffer, representation, task,transition, sPars, localQueue, localCEXQueue);
 	}
 

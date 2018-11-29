@@ -19,9 +19,9 @@ namespace hypro
     public:
         IContext* createContext(const std::shared_ptr<Task<State>>& t,
 		                    const Strategy<State>& strat,
-		                    WorkQueue<std::shared_ptr<Task<State>>>* localQueue,
-		                    WorkQueue<std::shared_ptr<Task<State>>>* localCEXQueue,
-		                    std::vector<PlotData<Number>>* localSegments,
+		                    WorkQueue<std::shared_ptr<Task<State>>>& localQueue,
+		                    WorkQueue<std::shared_ptr<Task<State>>>& localCEXQueue,
+		                    std::vector<PlotData<State>>* localSegments,
 		                    hypro::ReachabilitySettings &settings);
 
 

@@ -23,9 +23,9 @@ namespace hypro
 	protected:
 		std::shared_ptr<Task<State>> mTask;
 		Strategy<State> mStrategy;
-		WorkQueue<std::shared_ptr<Task<State>>>* mLocalQueue;
-		WorkQueue<std::shared_ptr<Task<State>>>* mLocalCEXQueue;
-	    std::vector<PlotData<Number>>* mLocalSegments;
+		WorkQueue<std::shared_ptr<Task<State>>>& mLocalQueue;
+		WorkQueue<std::shared_ptr<Task<State>>>& mLocalCEXQueue;
+	    std::vector<PlotData<State>>* mLocalSegments;
 	    ReachabilitySettings mSettings;
 
 	    EventTimingContainer<Number> mLocalTimings;
@@ -61,9 +61,9 @@ namespace hypro
 		~LTIContext(){}
 		LTIContext(const std::shared_ptr<Task<State>>& t,
 	                    const Strategy<State>& strat,
-	                    WorkQueue<std::shared_ptr<Task<State>>>* localQueue,
-	                    WorkQueue<std::shared_ptr<Task<State>>>* localCEXQueue,
-	                    std::vector<PlotData<Number>>* localSegments,
+	                    WorkQueue<std::shared_ptr<Task<State>>>& localQueue,
+	                    WorkQueue<std::shared_ptr<Task<State>>>& localCEXQueue,
+	                    std::vector<PlotData<State>>* localSegments,
 	                    ReachabilitySettings &settings);
 
 		virtual void execOnStart() override ;

@@ -75,16 +75,16 @@ namespace hypro {
 						#ifdef SINGLE_THREAD_FIXED_POINT_TEST
 						if(!child->getPath().hasChatteringZeno()){
 							if(!SettingsProvider<State>::getInstance().useGlobalQueuesOnly()){
-								mLocalQueue->nonLockingEnqueue(newTask);
+								mLocalQueue.nonLockingEnqueue(newTask);
 							} else {
-								mLocalQueue->enqueue(newTask);
+								mLocalQueue.enqueue(newTask);
 							}
 						}
 						#else
 						if(!SettingsProvider<State>::getInstance().useGlobalQueuesOnly()){
-							mLocalQueue->nonLockingEnqueue(std::move(newTask));
+							mLocalQueue.nonLockingEnqueue(std::move(newTask));
 						} else {
-							mLocalQueue->enqueue(std::move(newTask));
+							mLocalQueue.enqueue(std::move(newTask));
 						}
 						#endif
 					}
@@ -114,7 +114,7 @@ namespace hypro {
 					assert(!oldTimespans.empty());
 					preProcess<State>(children, oldTimespans);
 					// node updater matches new nodes (children) to existing nodes and creates new Tasks.
-					nodeUpdater<State> nu(mTask, *(mLocalQueue), *(mLocalCEXQueue), targetLevel);
+					nodeUpdater<State> nu(mTask, mLocalQueue, mLocalCEXQueue, targetLevel);
 					nu(children, oldChildren, transitionStatePair.first);
 					//matchAndUpdate(children, oldChildren, _current, localCEXQueue);
 				} // old children empty
@@ -134,7 +134,7 @@ namespace hypro {
 				}
 
 				// in case there are more new children than old children have been, add new ones as fresh nodes.
-				insertAndCreateTask(children, mTask, *(mLocalQueue), *(mLocalCEXQueue), targetLevel);
+				insertAndCreateTask(children, mTask, mLocalQueue, mLocalCEXQueue, targetLevel);
 
 			} // case when there are already children in the tree which need to be updated and mapped.
 		} // loop over processed states

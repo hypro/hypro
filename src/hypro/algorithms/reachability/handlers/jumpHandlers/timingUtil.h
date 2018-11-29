@@ -1,5 +1,6 @@
 #pragma once
 #include "../../../../datastructures/reachability/timing/EventTimingContainer.h"
+#include "../../../../datastructures/reachability/timing/EventTimingProvider.h"
 
 namespace hypro {
 
