@@ -53,7 +53,8 @@ class TrafoOp : public RootGrowNode<Number,Setting> {
 		
 		parameters = std::make_shared<const LinTrafoParameters<Number,Setting>>(A,b);
 
-		origin.addUnaryOp(this);
+		//origin.addUnaryOp(this);
+		origin.addOperation(this);
 		assert(this->getChildren().size() == 1);
 		
 		// Determine, if we need to create new parameters or if this matrix and vector pair has already been used (recursive).

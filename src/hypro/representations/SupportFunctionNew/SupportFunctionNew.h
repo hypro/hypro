@@ -28,6 +28,8 @@
 #include "TrafoOp.h"
 #include "ScaleOp.h"
 #include "ProjectOp.h"
+#include "IntersectOp.h"
+#include "UnionOp.h"
 
 namespace hypro {
 
@@ -60,6 +62,8 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
   friend class TrafoOp<Number,Converter,Setting>;
   friend class ScaleOp<Number,Converter,Setting>;
   friend class ProjectOp<Number,Converter,Setting>;
+  friend class IntersectOp<Number,Converter,Setting>;
+  friend class UnionOp<Number,Converter,Setting>;
 
   protected:
 
@@ -81,7 +85,7 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
 
   	//constructor for adding a new node
   	SupportFunctionNewT( const std::shared_ptr<RootGrowNode<Number,Setting>>& root ) : mRoot(root) {
-  		std::cout << "SupportFunctionNewT::shared_RGN constructor, address: " << this << std::endl;
+  		//std::cout << "SupportFunctionNewT::shared_RGN constructor, address: " << this << std::endl;
   	}
 
   public:
@@ -114,19 +118,16 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
 	//leaf constructor
 	template<typename Representation>
 	SupportFunctionNewT( GeometricObject<Number,Representation>* r) : mRoot(std::make_shared<Leaf<Number,Setting,Representation>>(dynamic_cast<Representation*>(r))) { 
-		std::cout << "SupportFunctionNewT::Leaf constructor, address " << this << std::endl;
-		std::cout << "Ref count of mRoot: " << mRoot.use_count() << std::endl;	
+		//std::cout << "SupportFunctionNewT::Leaf constructor, address " << this << std::endl;
+		//std::cout << "Ref count of mRoot: " << mRoot.use_count() << std::endl;	
 	}
 
 	/**
 	 * @brief Destructor.
 	 */
 	~SupportFunctionNewT() {
-		std::cout << "SupportFunctionNewT::~SupportFunctionNewT, address: " << this << std::endl;
-		std::cout << "Ref count of mRoot: " << mRoot.use_count() << std::endl;	
-		//mRoot ptr deleted via unique_ptr	
-		//mRoot itself deleted via unique_ptr
-		//mRoot->children deleted as member of mRoot
+		//std::cout << "SupportFunctionNewT::~SupportFunctionNewT, address: " << this << std::endl;
+		//std::cout << "Ref count of mRoot: " << mRoot.use_count() << std::endl;	
 	}
 
 	/***************************************************************************
@@ -135,12 +136,11 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
 
   private:
 
-  	void addUnaryOp(RootGrowNode<Number,Setting>* unary) const;
+  	//void addUnaryOp(RootGrowNode<Number,Setting>* unary) const;
+  	//void addBinaryOp(RootGrowNode<Number,Setting>* binary, const SupportFunctionNewT<Number,Converter,Setting>& rhs) const;
 
-  	void addBinaryOp(RootGrowNode<Number,Setting>* binary, const SupportFunctionNewT<Number,Converter,Setting>& rhs) const;
-
-  	//template<typename Node, typename ...Rargs>
-  	//SupportFunctionNewT<Number,Converter,Setting> create(const SupportFunctionNewT<Number,Converter,Setting>* pThis, const Rargs&... args) const;
+  	void addOperation(RootGrowNode<Number,Setting>* newRoot) const;
+  	void addOperation(RootGrowNode<Number,Setting>* newRoot, const std::vector<SupportFunctionNewT<Number,Converter,Setting>>& rhs) const;
 
   public:
 
@@ -337,6 +337,7 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
 	SupportFunctionNewT<Number,Converter,Setting> linearTransformation( const matrix_t<Number>& A ) const;
 	SupportFunctionNewT<Number,Converter,Setting> affineTransformation( const matrix_t<Number>& A, const vector_t<Number>& b ) const;
 	SupportFunctionNewT<Number,Converter,Setting> minkowskiSum( const SupportFunctionNewT<Number,Converter,Setting>& rhs ) const;
+	SupportFunctionNewT<Number,Converter,Setting> minkowskiSum( const std::vector<SupportFunctionNewT<Number,Converter,Setting>>& rhs ) const;
 	SupportFunctionNewT<Number,Converter,Setting> scale( const Number& _factor = 1 ) const;
 
 	/**
@@ -345,6 +346,7 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
 	 * @return     The resulting SupportFunctionNew.
 	 */
 	SupportFunctionNewT<Number,Converter,Setting> intersect( const SupportFunctionNewT<Number,Converter,Setting>& rhs ) const;
+	SupportFunctionNewT<Number,Converter,Setting> intersect( const std::vector<SupportFunctionNewT<Number,Converter,Setting>>& rhs ) const;
 
 	SupportFunctionNewT<Number,Converter,Setting> intersectHalfspace( const Halfspace<Number>& hspace ) const;
 	SupportFunctionNewT<Number,Converter,Setting> intersectHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const;
@@ -369,7 +371,7 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
 	 * @param[in]  SupportFunctionNewes  The SupportFunctionNewes.
 	 * @return     The resulting SupportFunctionNew.
 	 */
-	static SupportFunctionNewT<Number,Converter,Setting> unite( const std::vector<SupportFunctionNewT<Number,Converter,Setting>>& SupportFunctionNewes );
+	SupportFunctionNewT<Number,Converter,Setting> unite( const std::vector<SupportFunctionNewT<Number,Converter,Setting>>& rhs ) const;
 
 	/**
 	 * @brief      Reduces the representation of the current SupportFunctionNew.

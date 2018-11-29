@@ -7,6 +7,7 @@
 #include "../../hypro/representations/GeometricObject.h"
 #include "gtest/gtest.h"
 #include "../defines.h"
+#include <cmath>
 
 using namespace hypro;
 
@@ -302,6 +303,140 @@ TYPED_TEST(SupportFunctionNewTest, ProjectOp){
 	EXPECT_TRUE(res.at(1).supportValue == TypeParam(1));
 	EXPECT_TRUE(res.at(2).supportValue == TypeParam(0));
 	
+}
+
+TYPED_TEST(SupportFunctionNewTest, SumOp){
+
+	//2d box
+	Box<TypeParam> box (std::make_pair(Point<TypeParam>({TypeParam(0),TypeParam(0)}), Point<TypeParam>({TypeParam(1),TypeParam(1)})));
+	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sf(&box);	
+	
+	//Sum has only 2 children
+	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sfSum = sf.minkowskiSum(sf);
+	EXPECT_TRUE(sfSum.getRoot()->getType() == SFNEW_TYPE::SUMOP);
+	EXPECT_EQ(sfSum.getRoot()->getOriginCount(), 2);
+	EXPECT_EQ(sfSum.getRoot()->getChildren().size(), 2);
+	EXPECT_EQ(sfSum.getRoot().use_count(), 1);
+	
+	//Check with Evaluation value
+	matrix_t<TypeParam> directions = matrix_t<TypeParam>::Identity(2,2);
+	std::vector<EvaluationResult<TypeParam>> res = sfSum.multiEvaluate(directions,true);
+	EXPECT_EQ(res.at(0).errorCode, hypro::SOLUTION::FEAS);
+	EXPECT_EQ(res.at(0).supportValue, TypeParam(2));
+	EXPECT_EQ(res.at(1).supportValue, TypeParam(2));
+
+	//Sum2 will have 5 children, which are all sf
+	std::vector<SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>> sfVec(4,sf);
+	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sfSum2 = sf.minkowskiSum(sfVec);
+	EXPECT_TRUE(sfSum2.getRoot()->getType() == SFNEW_TYPE::SUMOP);
+	EXPECT_EQ(sfSum2.getRoot()->getOriginCount(), 2);
+	EXPECT_EQ(sfSum2.getRoot()->getChildren().size(), 5);
+	EXPECT_EQ(sfSum2.getRoot().use_count(), 1);
+
+	//Check with Evaluation value
+	res = sfSum2.multiEvaluate(directions,true);
+	EXPECT_EQ(res.at(0).errorCode, hypro::SOLUTION::FEAS);
+	EXPECT_EQ(res.at(0).supportValue, TypeParam(5));
+	EXPECT_EQ(res.at(1).supportValue, TypeParam(5));
+}
+
+TYPED_TEST(SupportFunctionNewTest, IntersectOp){
+
+	//Two overlapping boxes, the overlapping box is (0,0) to (1,1)
+	Box<TypeParam> upRight (std::make_pair(Point<TypeParam>({TypeParam(0),TypeParam(0)}), Point<TypeParam>({TypeParam(2),TypeParam(2)})));
+	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> uR(&upRight);	
+	Box<TypeParam> downLeft (std::make_pair(Point<TypeParam>({TypeParam(-1),TypeParam(-1)}), Point<TypeParam>({TypeParam(1),TypeParam(1)})));
+	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> dL(&downLeft);
+
+	//Intersect with only two boxes 
+	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sfIntersect = uR.intersect(dL);
+	EXPECT_TRUE(sfIntersect.getRoot()->getType() == SFNEW_TYPE::INTERSECTOP);
+	EXPECT_EQ(sfIntersect.getRoot()->getOriginCount(), unsigned(2));
+	EXPECT_EQ(sfIntersect.getRoot()->getChildren().size(), 2);
+	EXPECT_EQ(sfIntersect.getRoot().use_count(), 1);
+
+	//Evaluate with directions (1,0) and (0,1) - This tests INFTY evaluation results
+	matrix_t<TypeParam> directions = matrix_t<TypeParam>::Identity(2,2);
+	std::vector<EvaluationResult<TypeParam>> res = sfIntersect.multiEvaluate(directions,true);
+	EXPECT_EQ(res.at(0).errorCode, hypro::SOLUTION::FEAS);
+	EXPECT_EQ(res.at(0).supportValue, TypeParam(1)); 
+	EXPECT_EQ(res.at(1).errorCode, hypro::SOLUTION::FEAS);
+	EXPECT_EQ(res.at(1).supportValue, TypeParam(1)); 
+
+	//Evaluate with directions (1,1) and (-1,-1) - get the overlapping box diagonal length
+	matrix_t<TypeParam> directions2(2,2);
+	directions2 << 1, 1, -1, -1;
+	res = sfIntersect.multiEvaluate(directions2,true);
+	EXPECT_EQ(res.at(0).errorCode, hypro::SOLUTION::FEAS);
+	EXPECT_EQ(res.at(0).supportValue, TypeParam(2)); 
+	EXPECT_EQ(res.at(1).errorCode, hypro::SOLUTION::FEAS);
+	EXPECT_EQ(res.at(1).supportValue, TypeParam(0)); 
+
+	//Intersect first two with two other boxes, overlapping region should still be the box (0,0) to (1,1)
+	Box<TypeParam> upLeft (std::make_pair(Point<TypeParam>({TypeParam(-1),TypeParam(0)}), Point<TypeParam>({TypeParam(1),TypeParam(2)})));
+	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> uL(&upLeft);	
+	Box<TypeParam> downRight (std::make_pair(Point<TypeParam>({TypeParam(0),TypeParam(-1)}), Point<TypeParam>({TypeParam(2),TypeParam(1)})));
+	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> dR(&downRight);
+
+	//Evaluate with the four boxes with directions (0,1) and (1,0)
+	std::vector<SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>> sfVec{dL, uL, dR};
+	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sfIntersect2 = uR.intersect(sfVec);
+	EXPECT_EQ(sfIntersect2.getRoot()->getChildren().size(), 4);
+	res = sfIntersect2.multiEvaluate(directions,true);
+	EXPECT_EQ(res.at(0).errorCode, hypro::SOLUTION::FEAS);
+	EXPECT_EQ(res.at(0).supportValue, TypeParam(1)); 
+	EXPECT_EQ(res.at(1).errorCode, hypro::SOLUTION::FEAS);
+	EXPECT_EQ(res.at(1).supportValue, TypeParam(1)); 
+
+}
+
+TYPED_TEST(SupportFunctionNewTest, UnionOp){
+
+	//Two overlapping boxes, the overlapping box is (0,0) to (1,1)
+	Box<TypeParam> upRight (std::make_pair(Point<TypeParam>({TypeParam(0),TypeParam(0)}), Point<TypeParam>({TypeParam(2),TypeParam(2)})));
+	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> uR(&upRight);	
+	Box<TypeParam> downLeft (std::make_pair(Point<TypeParam>({TypeParam(-1),TypeParam(-1)}), Point<TypeParam>({TypeParam(1),TypeParam(1)})));
+	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> dL(&downLeft);
+
+	//Intersect with only two boxes 
+	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sfUnion = uR.unite(dL);
+	EXPECT_TRUE(sfUnion.getRoot()->getType() == SFNEW_TYPE::UNIONOP);
+	EXPECT_EQ(sfUnion.getRoot()->getOriginCount(), unsigned(2));
+	EXPECT_EQ(sfUnion.getRoot()->getChildren().size(), 2);
+	EXPECT_EQ(sfUnion.getRoot().use_count(), 1);
+
+	//Evaluate with directions (0,1) and (1,0) - This tests INFTY evaluation results
+	matrix_t<TypeParam> directions = matrix_t<TypeParam>::Identity(2,2);
+	std::vector<EvaluationResult<TypeParam>> res = sfUnion.multiEvaluate(directions,true);
+	EXPECT_EQ(res.at(0).errorCode, hypro::SOLUTION::FEAS);
+	EXPECT_EQ(res.at(0).supportValue, TypeParam(2)); 
+	EXPECT_EQ(res.at(1).errorCode, hypro::SOLUTION::FEAS);
+	EXPECT_EQ(res.at(1).supportValue, TypeParam(2)); 
+
+	//Evaluate with directions (1,1) and (-1,-1) - get the overlapping box
+	matrix_t<TypeParam> directions2(2,2);
+	directions2 << 1, 1, -1, -1;
+	res = sfUnion.multiEvaluate(directions2,true);
+	EXPECT_EQ(res.at(0).errorCode, hypro::SOLUTION::FEAS);
+	EXPECT_EQ(res.at(0).supportValue, TypeParam(4)); 
+	EXPECT_EQ(res.at(1).errorCode, hypro::SOLUTION::FEAS);
+	EXPECT_EQ(res.at(1).supportValue, TypeParam(2)); 
+
+	//Intersect first two with two other boxes, overlapping region should still be the box (0,0) to (1,1)
+	Box<TypeParam> upLeft (std::make_pair(Point<TypeParam>({TypeParam(-1),TypeParam(0)}), Point<TypeParam>({TypeParam(1),TypeParam(2)})));
+	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> uL(&upLeft);	
+	Box<TypeParam> downRight (std::make_pair(Point<TypeParam>({TypeParam(0),TypeParam(-1)}), Point<TypeParam>({TypeParam(2),TypeParam(1)})));
+	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> dR(&downRight);
+
+	//Evaluate with the four boxes with directions (0,1) and (1,0)
+	std::vector<SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>> sfVec{dL, uL, dR};
+	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sfUnion2 = uR.unite(sfVec);
+	EXPECT_EQ(sfUnion2.getRoot()->getChildren().size(), 4);
+	res = sfUnion2.multiEvaluate(directions,true);
+	EXPECT_EQ(res.at(0).errorCode, hypro::SOLUTION::FEAS);
+	EXPECT_EQ(res.at(0).supportValue, TypeParam(2)); //3
+	EXPECT_EQ(res.at(1).errorCode, hypro::SOLUTION::FEAS);
+	EXPECT_EQ(res.at(1).supportValue, TypeParam(2)); //3
 }
 
 TYPED_TEST(SupportFunctionNewTest, Constructors){

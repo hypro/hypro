@@ -28,7 +28,7 @@
 namespace hypro {
 
 //Type of nodes. Needed to fast determine which node subclass is actually calling a function. 
-enum SFNEW_TYPE { NODE = 0, LEAF, TRAFO, SCALEOP, PROJECTOP, SUMOP};
+enum SFNEW_TYPE { NODE = 0, LEAF, TRAFO, SCALEOP, PROJECTOP, SUMOP, INTERSECTOP, UNIONOP};
 
 template<typename Number, typename Setting>
 class RootGrowNode {
@@ -42,7 +42,7 @@ class RootGrowNode {
 	////// Members
 
 	SFNEW_TYPE mType = NODE;							//NONE since RootGrowNode should later be an abstract class
-	unsigned originCount = 0;							//Amount of children needed to function properly
+	unsigned originCount = 0;							//Least amount of children needed to function properly
 	PointerVec mChildren = PointerVec();				//vector of all current children
 	
   public:

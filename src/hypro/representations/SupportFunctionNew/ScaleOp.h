@@ -45,7 +45,8 @@ class ScaleOp : public RootGrowNode<Number,Setting> {
   	ScaleOp() = delete;
 
   	ScaleOp(const SupportFunctionNewT<Number,Converter,Setting>& origin, const Number& scale) : factor(scale) { 
-  		origin.addUnaryOp(this); 
+  		//origin.addUnaryOp(this); 
+  		origin.addOperation(this); 
   	}
 
   	~ScaleOp(){}
@@ -87,7 +88,7 @@ class ScaleOp : public RootGrowNode<Number,Setting> {
 	}
 
 	//Is handled in TrafoOp::hasTrafo() and SFNew::hasTrafo()
-	bool hasTrafo(std::shared_ptr<const LinTrafoParameters<Number,Setting>>& ltParam, const matrix_t<Number>& A, const vector_t<Number>& b){
+	bool hasTrafo(std::shared_ptr<const LinTrafoParameters<Number,Setting>>& , const matrix_t<Number>& , const vector_t<Number>& ){
 		assert(false && "ScaleOp::hasTrafo should never be called\n");
 		return false;
 	}

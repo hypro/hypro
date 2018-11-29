@@ -45,7 +45,7 @@ class ProjectOp : public RootGrowNode<Number,Setting> {
   	ProjectOp() = delete;
 
   	ProjectOp(const SupportFunctionNewT<Number,Converter,Setting>& origin, const std::vector<std::size_t>& dims) : dimensions(dims) { 
-  		origin.addUnaryOp(this); 
+  		origin.addOperation(this); 
   	}
 
   	~ProjectOp(){}
@@ -64,12 +64,12 @@ class ProjectOp : public RootGrowNode<Number,Setting> {
 		Eigen::Index entryIndex = 0;
 		for(const auto& entry : dimensions) {
 			TRACE("hypro.representations.supportFunction","Entry: " << entry)
-			if(entry < param.cols()){ 
+			if(int(entry) < param.cols()){ 
 				projectedParameters.col(entry) = param.col(entry);
 				++entryIndex;
 			}
 		}
-		assert(entryIndex == dimensions.size());
+		assert(std::size_t(entryIndex) == dimensions.size());
 		return projectedParameters;
 	}
 
@@ -86,7 +86,7 @@ class ProjectOp : public RootGrowNode<Number,Setting> {
 	}
 
 	//Is handled in TrafoOp::hasTrafo() and SFNew::hasTrafo()
-	bool hasTrafo(std::shared_ptr<const LinTrafoParameters<Number,Setting>>& ltParam, const matrix_t<Number>& A, const vector_t<Number>& b){
+	bool hasTrafo(std::shared_ptr<const LinTrafoParameters<Number,Setting>>& , const matrix_t<Number>& , const vector_t<Number>& ){
 		assert(false && "ProjectOp::hasTrafo should never be called\n");
 		return false;
 	}

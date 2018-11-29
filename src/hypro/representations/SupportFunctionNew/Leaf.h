@@ -35,9 +35,9 @@ class Leaf : public RootGrowNode<Number,Setting> {
 
 	Leaf(){}
 
-	Leaf(Representation* r) : rep(r) { std::cout << "Leaf::Leaf(r)" << std::endl; }
+	Leaf(Representation* r) : rep(r) {}//std::cout << "Leaf::Leaf(r)" << std::endl; }
 
-	~Leaf(){ std::cout << "Leaf::~Leaf" << std::endl; }
+	~Leaf(){} //std::cout << "Leaf::~Leaf" << std::endl; }
 
 	////// Getters & Setters
 
