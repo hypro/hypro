@@ -46,16 +46,6 @@ public:
 		return lhs.minkowskiSum(tmp);
 	}
 
-	/*
-	template<typename A>
-    inline T operator()(const A& lhs, const A& rhs) const {
-    	//auto tmpHPoly = Converter<Number>::toHPolytope(lhs);
-		//TRACE("hydra.datastructures","Union visitor lhs " << tmpHPoly);
-		//tmpHPoly = Converter<Number>::toHPolytope(rhs);
-		//TRACE("hydra.datastructures","Union visitor rhs " << tmpHPoly);
- 		return lhs.minkowskiSum(rhs);
-    }
-	*/
 };
 
 template<typename T>
@@ -107,62 +97,43 @@ public:
 		To tmp;
 		convert<typename To::NumberType,typename To::Settings, B>(lhs, tmp);
 		return tmp;
-		/*
- 		switch(To::type()){
- 			case representation_name::box: {
- 				To tmp = Converter<Number>:: template toBox<BoxLinearOptimizationOn>(lhs);
- 				return tmp;
- 				break;
- 			}
- 			case representation_name::polytope_h: {
- 				To tmp = Converter<Number>::toHPolytope(lhs);
- 				return tmp;
- 				break;
- 			}
- 			case representation_name::polytope_v: {
- 				To tmp = Converter<Number>::toVPolytope(lhs);
- 				return tmp;
- 				break;
- 			}
- 			case representation_name::zonotope: {
- 				To tmp = Converter<Number>::toZonotope(lhs);
- 				return tmp;
- 				break;
- 			}
- 			case representation_name::support_function: {
- 				To tmp = Converter<Number>::toSupportFunction(lhs);
- 				return tmp;
- 				break;
- 			}
- 			case representation_name::difference_bounds: {
- 				To tmp = Converter<Number>::toDifferenceBounds(lhs);
- 				return tmp;
- 				break;
- 			}
- 			case representation_name::ppl_polytope: {
- 				#ifdef HYPRO_USE_PPL
- 					To tmp = Converter<Number>::toPolytope(lhs);
- 					return tmp;
- 					break;
- 				#else
- 					assert(false && "CANNOT CONVERT TO TYPE PPL POLYTOPE. Maybe set HYPRO_USE_PPL to true?");
- 				#endif
- 			}
+    }
+};
 
- 			case representation_name::constraint_set: {
- 				To tmp = Converter<Number>::toConstraintSet(lhs);
- 				return tmp;
- 				break;
- 			}
- 			case representation_name::taylor_model:
- 				assert(false && "CANNOT CONVERT TO TYPE TAYLOR MODEL.");
+template<typename T, typename Ext>
+class genericInternalConversionVisitor
+    : public boost::static_visitor<T>
+{
+protected:
+	Ext mExt;
 
-			case representation_name::UNDEF:
-				assert(false && "CANNOT CONVERT TO TYPE UNDEF.");
- 		}
- 		assert(false && "SHOULD NEVER REACH THIS");
- 		return T();
-		*/
+public:
+	genericInternalConversionVisitor() = delete;
+	genericInternalConversionVisitor(const Ext& in)
+		: mExt(in)
+	{}
+
+	template<typename B>
+    inline T operator()(const B&) const {
+		B tmp;
+		convert<typename B::NumberType,typename B::Settings, Ext>(mExt, tmp);
+		return tmp;
+    }
+};
+
+template<typename OutType>
+class genericConvertAndGetVisitor
+    : public boost::static_visitor<OutType>
+{
+protected:
+
+public:
+
+	template<typename B>
+    inline OutType operator()(const B& in) const {
+		OutType tmp;
+		convert<typename OutType::NumberType,typename OutType::Settings, B>(in, tmp);
+		return tmp;
     }
 };
 

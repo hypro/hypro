@@ -309,7 +309,7 @@ namespace hypro
 		//SettingsProvider<State>::getInstance().setSubspaceDecomposition(decomposition);
 		if(decomposition.size() <= 1){
 			// decomposing failed/was already done(0-case) or decomposition is all variables (1 case)
-			return automaton;
+			return std::make_pair(automaton,decomposition);
 		}
 		printDecomposition(decomposition);
 		TRACE("hypro.decisionEntity", "Automaton before decomposition: " << automaton);

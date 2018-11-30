@@ -2,11 +2,12 @@
 
 namespace hypro
 {
-
+/*
 template<typename Number, typename OutSettings, typename In>
 void convert(BoxT<Number,Converter<Number>,OutSettings>& out, const In& in) {
     out = Converter<Number>::template toBox<OutSettings>(in);
 }
+*/
 
 template<typename Number, typename OutSettings, typename In>
 void convert(const In& in, BoxT<Number,Converter<Number>,OutSettings>& out) {

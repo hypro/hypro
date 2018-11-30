@@ -6,6 +6,7 @@ namespace hypro {
     template <typename State>
 	State bloatBox( const State& in, const hypro::Box<typename State::NumberType>& bloatBox , size_t index) {
         State bloatState;
+        /*
         switch(in.getSetType(index)) {
             case hypro::representation_name::box: {
                 bloatState.setSet(hypro::Converter<typename State::NumberType>::toBox(bloatBox), index);
@@ -32,6 +33,8 @@ namespace hypro {
                 break;
             }
         }
+        */
+        bloatState.setSet(boost::apply_visitor(genericInternalConversionVisitor<typename State::repVariant,hypro::Box<typename State::NumberType>>(bloatBox), bloatState.rGetSet(index)));
         return in.partiallyMinkowskiSum(bloatState, index);
     }
 } // hypro

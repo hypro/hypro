@@ -215,9 +215,11 @@ namespace hypro {
 					// TODO why does the reduction visitor not work for multi sets?
 					for(size_t i = 0; i < newState.getNumberSets(); i++){
 						if(newState.getSetType(i) == representation_name::support_function){
-							auto tmpHPoly = Converter<Number>::toHPolytope(boost::get<SupportFunction<Number>>(newState.getSet(i)));
+							auto tmpHPoly = boost::apply_visitor(genericConvertAndGetVisitor<HPolytope<typename State::NumberType>>(), newState.getSet(i));
+							//auto tmpHPoly = Converter<Number>::toHPolytope(boost::get<SupportFunction<Number>>(newState.getSet(i)));
 							SupportFunction<Number> newSet(tmpHPoly.matrix(), tmpHPoly.vector());
-							newState.setSet(newSet,i);
+							// convert to actual support function inside the state, which might have different settings == different type.
+							newState.setSet(boost::apply_visitor(genericInternalConversionVisitor<typename State::repVariant, SupportFunction<Number>>(newSet), newState.getSet(i)),i);
 						}
 					}
 
@@ -392,9 +394,10 @@ namespace hypro {
 				// TODO why does the reduction visitor not work for multi sets?
 				for(size_t i = 0; i < state.getNumberSets(); i++){
 					if(state.getSetType(i) == representation_name::support_function){
-						auto tmpHPoly = Converter<Number>::toHPolytope(boost::get<SupportFunction<Number>>(state.getSet(i)));
+						auto tmpHPoly = boost::apply_visitor(genericConvertAndGetVisitor<HPolytope<typename State::NumberType>>(), state.getSet(i));
 						SupportFunction<Number> newSet(tmpHPoly.matrix(), tmpHPoly.vector());
-						state.setSet(newSet,i);
+						// convert to actual support function inside the state, which might have different settings == different type.
+						state.setSet(boost::apply_visitor(genericInternalConversionVisitor<typename State::repVariant, SupportFunction<Number>>(newSet), state.getSet(i)),i);
 					}
 				}
 
