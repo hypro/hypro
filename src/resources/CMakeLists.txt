@@ -37,6 +37,11 @@ if(NOT UUID_FOUND)
 	message(SEND_ERROR "Package uuid-dev required to build antlr.")
 endif()
 
+if(HYPRO_MATLAB_BINDINGS)
+	include(matlab.cmake)
+endif()
+
+
 
 #set variable pointing to antlr tool
 #set(ANTLR4CPP_JAR_LOCATION ${PROJECT_SOURCE_DIR}/src/resources/antlr-4.7-complete.jar)
