@@ -2,7 +2,7 @@ var searchData=
 [
   ['gbadstatecontext',['GbadstateContext',['../classHybridAutomatonParser_1_1GbadstateContext.html',1,'HybridAutomatonParser']]],
   ['gen_5fseq',['gen_seq',['../structhypro_1_1detail_1_1gen__seq.html',1,'hypro::detail']]],
-  ['gen_5fseq_3c_200_2c_20is_2e_2e_2e_3e',['gen_seq&lt; 0, Is...&gt;',['../structhypro_1_1detail_1_1gen__seq_3_010_00_01Is_8_8_8_4.html',1,'hypro::detail']]],
+  ['gen_5fseq_3c_200_2c_20is_2e_2e_2e_20_3e',['gen_seq&lt; 0, Is... &gt;',['../structhypro_1_1detail_1_1gen__seq_3_010_00_01Is_8_8_8_01_4.html',1,'hypro::detail']]],
   ['genericaffinetransformationvisitor',['genericAffineTransformationVisitor',['../classhypro_1_1genericAffineTransformationVisitor.html',1,'hypro']]],
   ['genericcomparevisitor',['genericCompareVisitor',['../classhypro_1_1genericCompareVisitor.html',1,'hypro']]],
   ['genericconversionvisitor',['genericConversionVisitor',['../classhypro_1_1genericConversionVisitor.html',1,'hypro']]],
@@ -49,6 +49,7 @@ var searchData=
   ['getsettype',['getSetType',['../classhypro_1_1State.html#a3965ed577f394957ef076c8a86333c1a',1,'hypro::State']]],
   ['getsubspacedecomposition',['getSubspaceDecomposition',['../classhypro_1_1DecisionEntity.html#a94aa2d360ceea7af839ab8683b372d40',1,'hypro::DecisionEntity']]],
   ['gettimestamp',['getTimestamp',['../classhypro_1_1State.html#a060eaaf2487442c87d3f8f8062c34ea1',1,'hypro::State::getTimestamp()'],['../classhypro_1_1ReachTreeNode.html#a2a90e36bd25f3c6f1a1e79913592f3a9',1,'hypro::ReachTreeNode::getTimestamp()']]],
+  ['getting_20started',['Getting started',['../gettingStarted.html',1,'']]],
   ['gettransitions',['getTransitions',['../classhypro_1_1HybridAutomaton.html#a38e3d7960dfba11a02469403c5ede7ef',1,'hypro::HybridAutomaton']]],
   ['gettypes',['getTypes',['../classhypro_1_1State.html#a45b310b941c444d30bb09baff76c95d3',1,'hypro::State']]],
   ['getvariables',['getVariables',['../classhypro_1_1HybridAutomaton.html#a20912e1e9b6f5e6bc566cc5035c472ea',1,'hypro::HybridAutomaton']]],
@@ -60,6 +61,5 @@ var searchData=
   ['groupbodycontext',['GroupBodyContext',['../classHybridSystemParser_1_1GroupBodyContext.html',1,'HybridSystemParser']]],
   ['groupdeclcontext',['GroupDeclContext',['../classHybridSystemParser_1_1GroupDeclContext.html',1,'HybridSystemParser']]],
   ['guardcontext',['GuardContext',['../classHybridAutomatonParser_1_1GuardContext.html',1,'HybridAutomatonParser']]],
-  ['guardhandlersorter',['guardHandlerSorter',['../structhypro_1_1guardHandlerSorter.html',1,'hypro']]],
-  ['getting_20started',['Getting started',['../md__home_travis_build_hypro_hypro_doc_markdown_gettingStarted.html',1,'']]]
+  ['guardhandlersorter',['guardHandlerSorter',['../structhypro_1_1guardHandlerSorter.html',1,'hypro']]]
 ];

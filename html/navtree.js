@@ -1,83 +1,3 @@
-var NAVTREE =
-[
-  [ "HyPro", "index.html", [
-    [ "Installation", "md__home_travis_build_hypro_hypro_doc_markdown_gettingStarted_installation.html", null ],
-    [ "Getting started", "md__home_travis_build_hypro_hypro_doc_markdown_gettingStarted.html", "md__home_travis_build_hypro_hypro_doc_markdown_gettingStarted" ],
-    [ "State set representations", "md__home_travis_build_hypro_hypro_doc_markdown_stateSetRepresentations_generalStateSets.html", null ],
-    [ "Usage", "md__home_travis_build_hypro_hypro_doc_markdown_stateSetRepresentations_usage.html", null ],
-    [ "State set representations", "md__home_travis_build_hypro_hypro_doc_markdown_stateSets.html", null ],
-    [ "Utility functions", "md__home_travis_build_hypro_hypro_doc_markdown_utilityFunctions.html", "md__home_travis_build_hypro_hypro_doc_markdown_utilityFunctions" ],
-    [ "Bibliography", "citelist.html", null ],
-    [ "Modules", "modules.html", "modules" ],
-    [ "Namespaces", null, [
-      [ "Namespace List", "namespaces.html", "namespaces" ],
-      [ "Namespace Members", "namespacemembers.html", [
-        [ "All", "namespacemembers.html", null ],
-        [ "Functions", "namespacemembers_func.html", null ],
-        [ "Typedefs", "namespacemembers_type.html", null ],
-        [ "Enumerations", "namespacemembers_enum.html", null ]
-      ] ]
-    ] ],
-    [ "Classes", null, [
-      [ "Class List", "annotated.html", "annotated" ],
-      [ "Class Index", "classes.html", null ],
-      [ "Class Hierarchy", "hierarchy.html", "hierarchy" ],
-      [ "Class Members", "functions.html", [
-        [ "All", "functions.html", "functions_dup" ],
-        [ "Functions", "functions_func.html", "functions_func" ],
-        [ "Variables", "functions_vars.html", null ],
-        [ "Typedefs", "functions_type.html", null ],
-        [ "Related Functions", "functions_rela.html", null ]
-      ] ]
-    ] ],
-    [ "Files", null, [
-      [ "File List", "files.html", "files" ]
-    ] ],
-    [ "Examples", "examples.html", "examples" ]
-  ] ]
-];
-
-var NAVTREEINDEX =
-[
-".html",
-"algorithms_2reachability_2handlers_2jumpHandlers_2util_8h_source.html",
-"classCIFLocationParser.html#a28ba184413479bd6c4d5ec200a7675cfa5f6cb3663e5648f57c8d86d505290954",
-"classCIFLocationParser_1_1EquationDerivateContext.html#ad1a0d402d03fd610a3f3978a4ac78bb6",
-"classCIFLocationParser_1_1OptElifUpdatesContext.html#a05a074798fa0634fc7f4b5740f55f282",
-"classExpressionsLexer.html#a06c5a79300c07d88d9ccad64941aae20a1f02c14245b5876a9d5b9fac39421263",
-"classExpressionsParser_1_1AddExpressionContext.html#a956eb3d2b3814893d1d54d9207b3fbde",
-"classExpressionsVisitor.html#a810a7e63d3a863721d98b132fec46eb0",
-"classHybridAutomatonParser.html#af3b96e64e8ca3c69c222731218527310a7f476e9b9b46d176425a624a7e9e3808",
-"classHybridAutomatonParser_1_1ResetfctContext.html",
-"classHybridSystemBaseVisitor.html#ad0dc9daba6e0e6af4fb5104d12db15aa",
-"classHybridSystemParser.html#aa6941646615d567ee1d0803fb3ab5829",
-"classHybridSystemParser.html#aca27e446d5854e5ecd4edfcc0569d343ad9bbfb53278f28c173086157db32a032",
-"classHybridSystemParser_1_1ExprFactContext.html#a1643e241d5dea35abd794149515060ef",
-"classHybridSystemParser_1_1LocElemInvContext.html#abf93343f53538aa211333a32e5f8b203",
-"classHybridSystemParser_1_1StdLibFunctionContext.html",
-"classHybridSystemVisitor.html#abfa1fdf87f253de83103b67060f8b899",
-"classInputOutputParser.html#a2f5e17e9ee0d9f05a3c0b2e912563bf3a7feb9fa0868fc78876e89937bd31ab3a",
-"classInputOutputParser_1_1FuncExpressionContext.html",
-"classInputOutputParser_1_1UnaryExpressionContext.html#a4dfb4b7c2dd430930b977ae3a332367f",
-"classhypro_1_1ConstrainSet.html#aeb767c6f41fe577f5f8ec371799dc62d",
-"classhypro_1_1ErrorListener.html",
-"classhypro_1_1HPolytopeT.html#a8548059687ce0a028d5d223a384df051",
-"classhypro_1_1IResetHandler.html#af487842649c29c6646780c17c10a6bf9",
-"classhypro_1_1Path.html#a03c3ffb7955c296e7553c8d0d87ec036",
-"classhypro_1_1Reset.html#a4dc6876b6b7de4d1b463be8034844997",
-"classhypro_1_1SupportFunctionT.html#ad7c0764f73223b62178fa9018223b8e4",
-"classhypro_1_1Vertex.html#a0a60f2a99a0abee97fef31ac0e9c9f8e",
-"classhypro_1_1genericSatisfiesHalfspacesVisitor.html#a7ad35add816e7527712b7c9ab0127259",
-"dir_cd26ada81136b69cef2727f805d38fd4.html",
-"structZUtility_1_1Line__t.html#addc58f7867d007f5f57c1f5adc1ec6ab",
-"structhypro_1_1hypro_1_1typeName_3_01double_01_4.html",
-"structhypro_1_1plotting_1_1gnuplotSettings.html#a50a13c98532eef47b41211361ed19303"
-];
-
-var SYNCONMSG = 'click to disable panel synchronisation';
-var SYNCOFFMSG = 'click to enable panel synchronisation';
-var SYNCONMSG = 'click to disable panel synchronisation';
-var SYNCOFFMSG = 'click to enable panel synchronisation';
 var navTreeSubIndices = new Array();
 
 function getData(varName)
@@ -98,6 +18,21 @@ function stripPath2(uri)
   var s = uri.substring(i+1);
   var m = uri.substring(0,i+1).match(/\/d\w\/d\w\w\/$/);
   return m ? uri.substring(i-6) : s;
+}
+
+function hashValue()
+{
+  return $(location).attr('hash').substring(1).replace(/[^\w\-]/g,'');
+}
+
+function hashUrl()
+{
+  return '#'+hashValue();
+}
+
+function pathName()
+{
+  return $(location).attr('pathname').replace(/[^-A-Za-z0-9+&@#/%?=~_|!:,.;\(\)]/g, '');
 }
 
 function localStorageSupported()
@@ -122,7 +57,7 @@ function deleteLink()
 {
   if (localStorageSupported()) {
     window.localStorage.setItem('navpath','');
-  } 
+  }
 }
 
 function cachedLink()
@@ -170,7 +105,7 @@ function createIndent(o,domNode,node,level)
     node.expandToggle.onclick = function() {
       if (node.expanded) {
         $(node.getChildrenUL()).slideUp("fast");
-        node.plus_img.src = node.relpath+"ftv2pnode.png";
+        node.plus_img.src = node.relpath+"arrowright.png";
         node.expanded = false;
       } else {
         expandNode(o, node, false, false);
@@ -178,7 +113,7 @@ function createIndent(o,domNode,node,level)
     }
     node.expandToggle.appendChild(imgNode);
     domNode.appendChild(node.expandToggle);
-    imgNode.src = node.relpath+"ftv2pnode.png";
+    imgNode.src = node.relpath+"arrowright.png";
   } else {
     var span = document.createElement("span");
     span.style.display = 'inline-block';
@@ -194,11 +129,13 @@ var animationInProgress = false;
 function gotoAnchor(anchor,aname,updateLocation)
 {
   var pos, docContent = $('#doc-content');
-  if (anchor.parent().attr('class')=='memItemLeft' ||
-      anchor.parent().attr('class')=='fieldtype' ||
-      anchor.parent().is(':header')) 
+  var ancParent = $(anchor.parent());
+  if (ancParent.hasClass('memItemLeft') ||
+      ancParent.hasClass('fieldname') ||
+      ancParent.hasClass('fieldtype') ||
+      ancParent.is(':header'))
   {
-    pos = anchor.parent().position().top;
+    pos = ancParent.position().top;
   } else if (anchor.position()) {
     pos = anchor.position().top;
   }
@@ -256,7 +193,7 @@ function newNode(o, po, text, link, childrenData, lastNode)
     a.className = stripPath(link.replace('#',':'));
     if (link.indexOf('#')!=-1) {
       var aname = '#'+link.split('#')[1];
-      var srcPage = stripPath($(location).attr('pathname'));
+      var srcPage = stripPath(pathName());
       var targetPage = stripPath(link.split('#')[0]);
       a.href = srcPage!=targetPage ? url : "javascript:void(0)"; 
       a.onclick = function(){
@@ -332,9 +269,9 @@ function expandNode(o, node, imm, showRoot)
         $(node.getChildrenUL()).slideDown("fast");
       }
       if (node.isLast) {
-        node.plus_img.src = node.relpath+"ftv2mlastnode.png";
+        node.plus_img.src = node.relpath+"arrowdown.png";
       } else {
-        node.plus_img.src = node.relpath+"ftv2mnode.png";
+        node.plus_img.src = node.relpath+"arrowdown.png";
       }
       node.expanded = true;
     }
@@ -350,14 +287,13 @@ function glowEffect(n,duration)
 
 function highlightAnchor()
 {
-  var aname = $(location).attr('hash');
+  var aname = hashUrl();
   var anchor = $(aname);
   if (anchor.parent().attr('class')=='memItemLeft'){
-    var rows = $('.memberdecls tr[class$="'+
-               window.location.hash.substring(1)+'"]');
+    var rows = $('.memberdecls tr[class$="'+hashValue()+'"]');
     glowEffect(rows.children(),300); // member without details
-  } else if (anchor.parents().slice(2).prop('tagName')=='TR') {
-    glowEffect(anchor.parents('div.memitem'),1000); // enum value
+  } else if (anchor.parent().attr('class')=='fieldname'){
+    glowEffect(anchor.parent().parent(),1000); // enum value
   } else if (anchor.parent().attr('class')=='fieldtype'){
     glowEffect(anchor.parent().parent(),1000); // struct field
   } else if (anchor.parent().is(":header")) {
@@ -372,7 +308,7 @@ function selectAndHighlight(hash,n)
 {
   var a;
   if (hash) {
-    var link=stripPath($(location).attr('pathname'))+':'+hash.substring(1);
+    var link=stripPath(pathName())+':'+hash.substring(1);
     a=$('.item a[class$="'+link+'"]');
   }
   if (a && a.length) {
@@ -405,11 +341,7 @@ function showNode(o, node, index, hash)
         getNode(o, node);
       }
       $(node.getChildrenUL()).css({'display':'block'});
-      if (node.isLast) {
-        node.plus_img.src = node.relpath+"ftv2mlastnode.png";
-      } else {
-        node.plus_img.src = node.relpath+"ftv2mnode.png";
-      }
+      node.plus_img.src = node.relpath+"arrowdown.png";
       node.expanded = true;
       var n = node.children[o.breadcrumbs[index]];
       if (index+1<o.breadcrumbs.length) {
@@ -483,14 +415,13 @@ function navTo(o,root,hash,relpath)
   if (link) {
     var parts = link.split('#');
     root = parts[0];
-    if (parts.length>1) hash = '#'+parts[1];
+    if (parts.length>1) hash = '#'+parts[1].replace(/[^\w\-]/g,'');
     else hash='';
   }
   if (hash.match(/^#l\d+$/)) {
     var anchor=$('a[name='+hash.substring(1)+']');
     glowEffect(anchor.parent(),1000); // line number
     hash=''; // strip line number anchors
-    //root=root.replace(/_source\./,'.'); // source link to doc link
   }
   var url=root+hash;
   var i=-1;
@@ -524,7 +455,7 @@ function toggleSyncButton(relpath)
   if (navSync.hasClass('sync')) {
     navSync.removeClass('sync');
     showSyncOff(navSync,relpath);
-    storeLink(stripPath2($(location).attr('pathname'))+$(location).attr('hash'));
+    storeLink(stripPath2(pathName())+hashUrl());
   } else {
     navSync.addClass('sync');
     showSyncOn(navSync,relpath);
@@ -548,7 +479,7 @@ function initNavTree(toroot,relpath)
   o.node.expanded = false;
   o.node.isLast = true;
   o.node.plus_img = document.createElement("img");
-  o.node.plus_img.src = relpath+"ftv2pnode.png";
+  o.node.plus_img.src = relpath+"arrowright.png";
   o.node.plus_img.width = 16;
   o.node.plus_img.height = 22;
 
@@ -564,7 +495,7 @@ function initNavTree(toroot,relpath)
   }
 
   $(window).load(function(){
-    navTo(o,toroot,window.location.hash,relpath);
+    navTo(o,toroot,hashUrl(),relpath);
     showRoot();
   });
 
@@ -572,21 +503,20 @@ function initNavTree(toroot,relpath)
      if (window.location.hash && window.location.hash.length>1){
        var a;
        if ($(location).attr('hash')){
-         var clslink=stripPath($(location).attr('pathname'))+':'+
-                               $(location).attr('hash').substring(1);
-         a=$('.item a[class$="'+clslink+'"]');
+         var clslink=stripPath(pathName())+':'+hashValue();
+         a=$('.item a[class$="'+clslink.replace(/</g,'\\3c ')+'"]');
        }
        if (a==null || !$(a).parent().parent().hasClass('selected')){
          $('.item').removeClass('selected');
          $('.item').removeAttr('id');
        }
-       var link=stripPath2($(location).attr('pathname'));
-       navTo(o,link,$(location).attr('hash'),relpath);
+       var link=stripPath2(pathName());
+       navTo(o,link,hashUrl(),relpath);
      } else if (!animationInProgress) {
        $('#doc-content').scrollTop(0);
        $('.item').removeClass('selected');
        $('.item').removeAttr('id');
-       navTo(o,toroot,window.location.hash,relpath);
+       navTo(o,toroot,hashUrl(),relpath);
      }
   })
 }

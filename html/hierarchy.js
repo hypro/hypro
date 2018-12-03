@@ -629,8 +629,8 @@ var hierarchy =
       [ "InputOutputParser::UnaryExpressionContext", "classInputOutputParser_1_1UnaryExpressionContext.html", null ]
     ] ],
     [ "hypro::Path< Number, tNumber >", "classhypro_1_1Path.html", null ],
-    [ "hypro::Permutator", "classhypro_1_1Permutator.html", null ],
     [ "hypro::hypro::Permutator", "classhypro_1_1hypro_1_1Permutator.html", null ],
+    [ "hypro::Permutator", "classhypro_1_1Permutator.html", null ],
     [ "hypro::PlotData< Number >", "structhypro_1_1PlotData.html", null ],
     [ "hypro::Point< Number >", "classhypro_1_1Point.html", null ],
     [ "hypro::Point< int >", "classhypro_1_1Point.html", null ],
@@ -655,8 +655,8 @@ var hierarchy =
     [ "hypro::scaleContent< Number, Setting >", "structhypro_1_1scaleContent.html", null ],
     [ "ScopedLock< Lockable >", "classScopedLock.html", null ],
     [ "hypro::detail::seq< Is >", "structhypro_1_1detail_1_1seq.html", null ],
-    [ "hypro::detail::seq< Is...>", "structhypro_1_1detail_1_1seq.html", [
-      [ "hypro::detail::gen_seq< 0, Is...>", "structhypro_1_1detail_1_1gen__seq_3_010_00_01Is_8_8_8_4.html", null ]
+    [ "hypro::detail::seq< Is... >", "structhypro_1_1detail_1_1seq.html", [
+      [ "hypro::detail::gen_seq< 0, Is... >", "structhypro_1_1detail_1_1gen__seq_3_010_00_01Is_8_8_8_01_4.html", null ]
     ] ],
     [ "Singleton", null, [
       [ "hypro::ContextFactory< State >", "classhypro_1_1ContextFactory.html", null ],
@@ -706,7 +706,7 @@ var hierarchy =
     [ "hypro::StrategyNode< Representation >", "structhypro_1_1StrategyNode.html", null ],
     [ "hypro::StrategyParameters", "structhypro_1_1StrategyParameters.html", null ],
     [ "hypro::detail::StrategyVariant< T >", "structhypro_1_1detail_1_1StrategyVariant.html", null ],
-    [ "hypro::detail::StrategyVariant< boost::variant< Ts...> >", "structhypro_1_1detail_1_1StrategyVariant_3_01boost_1_1variant_3_01Ts_8_8_8_4_01_4.html", null ],
+    [ "hypro::detail::StrategyVariant< boost::variant< Ts... > >", "structhypro_1_1detail_1_1StrategyVariant_3_01boost_1_1variant_3_01Ts_8_8_8_01_4_01_4.html", null ],
     [ "hypro::sumContent< Number, Setting >", "structhypro_1_1sumContent.html", null ],
     [ "hypro::SupportFunctionContent< Number, Setting >", "classhypro_1_1SupportFunctionContent.html", [
       [ "hypro::NonLinearOmega0Supportfunction< Setting >", "classhypro_1_1NonLinearOmega0Supportfunction.html", null ]
@@ -755,8 +755,8 @@ var hierarchy =
     [ "hypro::typeName< T >", "structhypro_1_1typeName.html", null ],
     [ "hypro::hypro::typeName< double >", "structhypro_1_1hypro_1_1typeName_3_01double_01_4.html", null ],
     [ "hypro::typeName< double >", "structhypro_1_1typeName_3_01double_01_4.html", null ],
-    [ "hypro::typeName< mpq_class >", "structhypro_1_1typeName_3_01mpq__class_01_4.html", null ],
     [ "hypro::hypro::typeName< mpq_class >", "structhypro_1_1hypro_1_1typeName_3_01mpq__class_01_4.html", null ],
+    [ "hypro::typeName< mpq_class >", "structhypro_1_1typeName_3_01mpq__class_01_4.html", null ],
     [ "hypro::unionContent< Number, Setting >", "structhypro_1_1unionContent.html", null ],
     [ "hypro::UtilSetting", "structhypro_1_1UtilSetting.html", null ],
     [ "hypro::Vertex< Number >", "classhypro_1_1Vertex.html", null ],

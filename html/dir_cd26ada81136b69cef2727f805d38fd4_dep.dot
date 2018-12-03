@@ -1,9 +1,0 @@
-digraph "/home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/workQueue" {
-  compound=true
-  node [ fontsize="10", fontname="Helvetica"];
-  edge [ labelfontsize="10", labelfontname="Helvetica"];
-  subgraph clusterdir_f695c0e486b1567b2450488137a0ccfa {
-    graph [ bgcolor="#ddddee", pencolor="black", label="reachability" fontname="Helvetica", fontsize="10", URL="dir_f695c0e486b1567b2450488137a0ccfa.html"]
-  dir_cd26ada81136b69cef2727f805d38fd4 [shape=box, label="workQueue", style="filled", fillcolor="#eeeeff", pencolor="black", URL="dir_cd26ada81136b69cef2727f805d38fd4.html"];
-  }
-}

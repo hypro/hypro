@@ -15,8 +15,6 @@ var classhypro_1_1Condition =
     [ "hash", "classhypro_1_1Condition.html#af8bd74ed896c7fa3b165cd4ab072ef09", null ],
     [ "isAxisAligned", "classhypro_1_1Condition.html#aab672b622f3be0ae1f2c38877b00a3de", null ],
     [ "isAxisAligned", "classhypro_1_1Condition.html#a9794b8a0dc13e04d12efe99e592a2f9c", null ],
-    [ "mConditionIsBox", "classhypro_1_1Condition.html#a92ec0fd57bb8cac287a394fa3574771d", null ],
-    [ "mHash", "classhypro_1_1Condition.html#a8661f9bb6fb0161357d372e13ee594a2", null ],
     [ "operator=", "classhypro_1_1Condition.html#a35c491a0a81a332ce494621742342e12", null ],
     [ "operator=", "classhypro_1_1Condition.html#a144d5d8db524f90defe0736b6bb5da69", null ],
     [ "setMatrix", "classhypro_1_1Condition.html#add11f93457d50b3916af86566e39a66d", null ],
