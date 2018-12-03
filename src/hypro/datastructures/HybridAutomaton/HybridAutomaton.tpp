@@ -403,7 +403,7 @@ std::string HybridAutomaton<Number>::getDotRepresentation() const {
 }
 
 template<typename Number>
-void HybridAutomaton<Number>::decompose(std::vector<std::vector<size_t>> decomposition){
+void HybridAutomaton<Number>::decompose(const Decomposition& decomposition){
 	// decompose locations (flow (affine trafo) and invariant(condition))
     for(auto& location : mLocations){
     	location->decompose(decomposition);
@@ -425,7 +425,7 @@ void HybridAutomaton<Number>::decompose(std::vector<std::vector<size_t>> decompo
 	}
 	// decompose intial states (state sets)
 	for(typename std::multimap<const Location<Number>*, ConstraintSetT<Number>>::iterator it = mInitialStates.begin(); it != mInitialStates.end(); ++it){
-		it->second.decompose(decomposition);
+		decomposeConstraintSet(it->second,decomposition);
 	}
 }
 

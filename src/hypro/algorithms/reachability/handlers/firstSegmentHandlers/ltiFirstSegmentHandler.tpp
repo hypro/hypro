@@ -53,7 +53,7 @@ namespace hypro
                                                        Point<Number>(vector_t<Number>::Zero(dimension))));
 
         std::vector<Box<Number>> errorBoxVector =
-              errorBoxes(carl::convert<tNumber,Number>(mTimeStep), boost::get<affineFlow<Number>>(mState->getLocation()->getFlow(mIndex)), *mState, trafoMatrix, externalInput);
+              errorBoxes(carl::convert<tNumber,Number>(mTimeStep), boost::get<linearFlow<Number>>(mState->getLocation()->getFlow(mIndex)), *mState, trafoMatrix, externalInput);
 
         firstSegment = deltaValuation.unite(*(mState));
 

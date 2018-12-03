@@ -140,7 +140,7 @@ namespace hypro {
 		return mBadStateEvents;
 	}
 
-	/*
+
 	template<typename Number>
 	std::size_t EventTimingContainer<Number>::getDotRepresentation(std::size_t startIndex, std::string& nodes, std::string& transitions, std::vector<unsigned>& levels) const {
 		std::stringstream s;
@@ -162,6 +162,7 @@ namespace hypro {
 		s << "</TABLE>>];" << std::endl;
 		nodes += s.str();
 		std::size_t offset = ++startIndex;
+		/*
 		if(!mChildren.empty()){
 			for(const auto& child : mChildren) {
 				std::stringstream t;
@@ -173,8 +174,9 @@ namespace hypro {
 				offset = child->getDotRepresentation(offset,nodes,transitions,levels);
 			}
 		}
+		*/
+		assert(false && "Not implented yet.");
 		return offset;
 	}
-	*/
 
-} // namespace hydra
+} // namespace hypro

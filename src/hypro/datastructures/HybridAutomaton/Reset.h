@@ -1,4 +1,5 @@
 #pragma once
+#include "decomposition/Decomposition.h"
 #include "../../types.h"
 #include "../../representations/ConstraintSet/ConstraintSet.h"
 
@@ -40,7 +41,7 @@ public:
      /**
     * decomposes reset
     */
-    void decompose(std::vector<std::vector<size_t>> decomposition);
+    void decompose(const Decomposition& decomposition);
 
 #ifdef HYPRO_LOGGING
     friend std::ostream& operator<<(std::ostream& ostr, const Reset<Number>& a)

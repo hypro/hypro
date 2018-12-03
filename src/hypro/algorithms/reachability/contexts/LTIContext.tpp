@@ -5,8 +5,8 @@ namespace hypro
 	template<typename State>
 	LTIContext<State>::LTIContext(const std::shared_ptr<Task<State>>& t,
 	                    const Strategy<State>& strat,
-	                    WorkQueue<std::shared_ptr<Task<State>>>& localQueue,
-	                    WorkQueue<std::shared_ptr<Task<State>>>& localCEXQueue,
+	                    WorkQueue<std::shared_ptr<Task<State>>>* localQueue,
+	                    WorkQueue<std::shared_ptr<Task<State>>>* localCEXQueue,
 	                    std::vector<PlotData<State>>* localSegments,
 	                    ReachabilitySettings &settings)
 		: mTask(t)
@@ -110,11 +110,12 @@ namespace hypro
 		DEBUG("hypro.worker.refinement","Target btLevel: " << targetLevel);
 		ReachTreeNode<State>* btNode = mTask->treeNode;
 		DEBUG("hypro.worker.refinement","Find backtrack entry node.");
-		DEBUG("hypro.worker.refinement", std::this_thread::get_id() << ": Local CEX-Queue size: " << mLocalCEXQueue.size() << "localCEXQueue is now:\n" << (mLocalCEXQueue));
+		DEBUG("hypro.worker.refinement", std::this_thread::get_id() << ": Local CEX-Queue size: " << mLocalCEXQueue->size() << "localCEXQueue is now:\n" << (*mLocalCEXQueue));
 		btNode->getMutex().unlock();
 
 		// backtrack to the root node.
-		while(btNode->getParent()->getStateAtLevel(mTask->btInfo.btLevel).getLocation() != nullptr){
+		while(btNode->getParent() != nullptr && btNode->getParent()->getStateAtLevel(mTask->btInfo.btLevel).getLocation() != nullptr){
+			TRACE("hypro.worker.refinement","Current node on the way to root: " << btNode << ", parent: " << btNode->getParent());
 			btNode = btNode->getParent();
 		}
 		// reached the root.
@@ -154,16 +155,16 @@ namespace hypro
 		DEBUG("hypro.worker.refinement","BT-Path: " << taskPtr->btInfo.btPath);
 		// add task
 		DEBUG("hypro.worker.refinement", std::this_thread::get_id() << ": Create new CEX-Task (local) with tree node " << taskPtr->treeNode);
-		mLocalCEXQueue.nonLockingEnqueue(std::move(taskPtr));
+		mLocalCEXQueue->nonLockingEnqueue(std::move(taskPtr));
 		//DEBUG("hypro.worker", std::this_thread::get_id() << ": Local CEX-Queue size: " << localCEXQueue.size());
-		DEBUG("hypro.worker.refinement", std::this_thread::get_id() << ": Local CEX-Queue size: " << mLocalCEXQueue.size() << "localCEXQueue is now:\n" << mLocalCEXQueue);
+		DEBUG("hypro.worker.refinement", std::this_thread::get_id() << ": Local CEX-Queue size: " << mLocalCEXQueue->size() << "localCEXQueue is now:\n" << mLocalCEXQueue);
 	}
 
 	template<typename State>
 	void LTIContext<State>::execOnStart(){
 		INFO("hypro.worker",  std::this_thread::get_id() << ": Compute flow in location " << mTask->treeNode->getStateAtLevel(mTask->btInfo.btLevel).getLocation()->getName() << "(" << mTask->treeNode->getStateAtLevel(mTask->btInfo.btLevel).getLocation()->hash() << ") on strategy level " << mTask->btInfo.btLevel);
 		DEBUG("hypro.worker",  std::this_thread::get_id() << ": Process Node address:" << mTask->treeNode);
-		DEBUG("hypro.worker",  std::this_thread::get_id() << ": WorkQueue size:" << mLocalQueue.size());
+		DEBUG("hypro.worker",  std::this_thread::get_id() << ": WorkQueue size:" << mLocalQueue->size());
 		DEBUG("hypro.worker",  std::this_thread::get_id() << ": Node path:" << mTask->treeNode->getPath());
 	    assert(!mTask->treeNode->getTimestamp(mTask->btInfo.btLevel).isEmpty());
 	    bool isRefinementTask = (mTask->btInfo.btPath.size() > 0);
@@ -343,7 +344,7 @@ namespace hypro
 		    DEBUG("hypro.worker.continuous", " " << strictestContainment << std::endl);
 
 		    if (strictestContainment == CONTAINMENT::NO) {
-		    	//throw FinishWithDiscreteProcessingException("Segment does not fulfill invariant! Terminating worker by processing discrete States.");
+		    	throw FinishWithDiscreteProcessingException("Segment does not fulfill invariant! Terminating worker by processing discrete States.");
 		    }
 
 			if(deleteRequested){

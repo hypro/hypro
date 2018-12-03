@@ -14,6 +14,8 @@
 #include "Transition.h"
 #include "Condition.h"
 #include "HybridAutomatonComp.h"
+#include "decomposition/Decomposition.h"
+#include "decomposition/decomposeConstraintSet.h"
 #include "../../types.h"
 //#include "../../representations/GeometricObject.h"
 #include "../../util/adaptions_eigen/adaptions_eigen.h"
@@ -168,7 +170,7 @@ class HybridAutomaton
      *  sets of variables that are at least syntactically
      *  independet to each other.
      */
-    void decompose(std::vector<std::vector<size_t>> decomposition);
+    void decompose(const Decomposition& decomposition);
 
     /**
      * @brief      Reduces the automaton, i.e. removes Locations which are not connected to the automaton by transitions.

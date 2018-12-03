@@ -75,16 +75,16 @@ namespace hypro {
 						#ifdef SINGLE_THREAD_FIXED_POINT_TEST
 						if(!child->getPath().hasChatteringZeno()){
 							if(!SettingsProvider<State>::getInstance().useGlobalQueuesOnly()){
-								mLocalQueue.nonLockingEnqueue(newTask);
+								mLocalQueue->nonLockingEnqueue(newTask);
 							} else {
-								mLocalQueue.enqueue(newTask);
+								mLocalQueue->enqueue(newTask);
 							}
 						}
 						#else
 						if(!SettingsProvider<State>::getInstance().useGlobalQueuesOnly()){
-							mLocalQueue.nonLockingEnqueue(std::move(newTask));
+							mLocalQueue->nonLockingEnqueue(std::move(newTask));
 						} else {
-							mLocalQueue.enqueue(std::move(newTask));
+							mLocalQueue->enqueue(std::move(newTask));
 						}
 						#endif
 					}
@@ -331,10 +331,12 @@ namespace hypro {
 					i++;
 				}
 				// DBG
+				/*
 				for(size_t i = 0; i < state.getNumberSets(); i++){
 					Box<Number> tmp = boost::get<Box<Number>>(boost::apply_visitor(genericConversionVisitor<RepresentationVariant, Number>(representation_name::box),state.getSet(i)));
 					DEBUG("hydra.worker.discrete","Subspace set before reset: " << tmp);
 				}
+				*/
 				#endif
 
 				DEBUG("hydra.worker.discrete","Set before reset: " << state);
@@ -356,10 +358,12 @@ namespace hypro {
 
 				#ifdef HYDRA_USE_LOGGING
 				// DBG
+				/*
 				for(size_t i = 0; i < state.getNumberSets(); i++){
 					Box<Number> tmp = boost::get<Box<Number>>(boost::apply_visitor(genericConversionVisitor<RepresentationVariant, Number>(representation_name::box),state.getSet(i)));
 					DEBUG("hydra.worker.discrete","Subspace set after reset: " << tmp);
 				}
+				*/
 				#endif
 
 
@@ -403,10 +407,12 @@ namespace hypro {
 
 				#ifdef HYDRA_USE_LOGGING
 				// DBG
+				/*
 				for(size_t i = 0; i < state.getNumberSets(); i++){
 					Box<Number> tmp = boost::get<Box<Number>>(boost::apply_visitor(genericConversionVisitor<RepresentationVariant, Number>(representation_name::box),state.getSet(i)));
 					TRACE("hydra.worker.discrete","Subspace set after reduction: " << tmp);
 				}
+				*/
 				#endif
 				// Note: Here we misuse the state's timestamp to carry the transition timing to the next stage
 				// Note 2: If we use global timing, this is correct.

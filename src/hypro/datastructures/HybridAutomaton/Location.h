@@ -8,6 +8,7 @@
 #pragma once
 
 #include "Condition.h"
+#include "decomposition/Decomposition.h"
 #include "flow/operations.h"
 #include "flow/typetraits.h"
 #include "flow/visitors.h"
@@ -110,7 +111,7 @@ public:
     /*
     * decomposes flow and invariant of this location.
     */
-    void decompose(std::vector<std::vector<size_t>> decomposition);
+    void decompose(const Decomposition& decomposition);
 
     inline bool operator<(const Location<Number>& rhs) const {
         if(this->hash() != rhs.hash()){

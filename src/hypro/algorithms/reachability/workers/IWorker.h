@@ -35,8 +35,8 @@ class IWorker
      */
     virtual void processTask(const Workable& w,
     						 const Strategy<State>& strategy,
-    						 WorkQueue<std::shared_ptr<Task<State>>>& localQueue,
-    						 WorkQueue<std::shared_ptr<Task<State>>>& localCEXQueue,
+    						 WorkQueue<std::shared_ptr<Task<State>>>* localQueue,
+    						 WorkQueue<std::shared_ptr<Task<State>>>* localCEXQueue,
     						 std::vector<PlotData<State>>* localSegments) = 0;
 
 

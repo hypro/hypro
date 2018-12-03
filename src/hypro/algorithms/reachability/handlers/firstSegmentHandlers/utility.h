@@ -5,7 +5,7 @@
 namespace hypro {
     template <typename State>
 	State bloatBox( const State& in, const hypro::Box<typename State::NumberType>& bloatBox , size_t index) {
-        State bloatState;
+        State bloatState{in}; // Todo: this is clumsy, as we just require SOME state set in the state.
         /*
         switch(in.getSetType(index)) {
             case hypro::representation_name::box: {

@@ -408,15 +408,22 @@ std::unique_ptr<Location<Number>> parallelCompose(const Location<Number>* lhs
 */
 
 template<typename Number>
-void Location<Number>::decompose(std::vector<std::vector<size_t>> decomposition){
+void Location<Number>::decompose(const Decomposition& decomposition){
 	if(mFlows.size() > 1 || mInvariant.size() > 1){
 		//already decomposed
 		return;
 	}
 	DEBUG("hypro.datastructures","Flow Matrix before: \n " << mFlows.at(0));
 	// decompose flow
-	matrix_t<Number> oldFlow(mFlows.at(0));
-	std::vector<matrix_t<Number>> newFlows;
+	matrix_t<Number> oldFlow;
+	if(getFlowType(mFlows.at(0)) == DynamicType::linear) {
+		oldFlow = boost::get<linearFlow<Number>>(mFlows.at(0)).getFlowMatrix();
+	} else {
+		std::cout << "Not a linear flow, no decomposition. Not yet implemented." << std::endl;
+		assert(false);
+	}
+
+	std::vector<linearFlow<Number>> newFlows;
 	// for each set {i,j,..., k} select the i-th,j-th,...,k-th vector into a new square matrix
 	for(auto set : decomposition){
 		#ifdef HYPRO_LOGGING
@@ -444,10 +451,10 @@ void Location<Number>::decompose(std::vector<std::vector<size_t>> decomposition)
 		}
 		finMat.col(finMat.cols()-1) = rowMat.col(rowMat.cols()-1);
 		DEBUG("hypro.datastructures", "Final decomposed Flow: \n" << finMat );
-		newFlows.push_back(finMat);
+		newFlows.push_back(linearFlow<Number>(finMat));
 	}
-
-	mFlows = newFlows;
+	mFlows.clear();
+	std::for_each(newFlows.begin(), newFlows.end(), [&](linearFlow<Number>& f){ mFlows.emplace_back(std::move(f));});
 	// decompose invariant
 	mInvariant.decompose(decomposition);
 }

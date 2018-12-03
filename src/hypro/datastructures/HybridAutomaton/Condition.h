@@ -1,4 +1,5 @@
 #pragma once
+#include "decomposition/Decomposition.h"
 #include "../../representations/ConstraintSet/ConstraintSet.h"
 #include "../../representations/types.h"
 #include <iostream>
@@ -44,7 +45,7 @@ public:
     /**
     * decomposes constraint set of this condition
     */
-    void decompose(std::vector<std::vector<size_t>> decomposition);
+    void decompose(const Decomposition& decomposition);
 
 	// helper methods
 	//template<typename Representation, typename ...Rargs>

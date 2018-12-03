@@ -177,6 +177,9 @@ namespace hypro
 
 	template<typename Number>
 	bool DecisionEntity<Number>::checkDecomposed(const HybridAutomaton<Number> &automaton){
+		// return false, as we currently do not split a priori
+		return false;
+		/*
 		typename HybridAutomaton<Number>::locationStateMap initialStates = automaton.getInitialStates();
 		for (auto stateMapIt = initialStates.begin(); stateMapIt != initialStates.end(); ++stateMapIt) {
 			if(stateMapIt->second.getNumberSets() > 1){
@@ -184,6 +187,7 @@ namespace hypro
 			}
 		}
 		return false;
+		*/
 	}
 
 
@@ -265,14 +269,16 @@ namespace hypro
 		//check flow and invariant of locations
 		std::set<Location<Number>*> locations = automaton.getLocations();
 		for(auto loc : locations){
-			addEdgesForAffineTrafo(loc->getFlow(), G);
+			if(getFlowType(loc->getFlow()) == DynamicType::linear){
+				addEdgesForAffineTrafo(boost::get<linearFlow<Number>>(loc->getFlow()).getFlowMatrix(), G);
+			}
+			// TODO: add further flow types
 			addEdgesForCondition(loc->getInvariant(),G);
 		}
 
 		//check reset and guards of transitions
 		std::set<Transition<Number>*> transitions = automaton.getTransitions();
 		for(auto transition : transitions){
-
 			addEdgesForLinTrafo(transition->getReset().getMatrix(), G);
 			addEdgesForCondition(transition->getGuard(),G);
 		}

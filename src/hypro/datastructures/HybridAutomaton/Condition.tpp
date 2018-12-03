@@ -118,7 +118,7 @@ Condition<Number> combine(
 
 
 template<typename Number>
-void Condition<Number>::decompose(std::vector<std::vector<size_t>> decomposition){
+void Condition<Number>::decompose(const Decomposition& decomposition){
 	if(mConstraints.size() > 1){
 		//already decomposed/empty constraints
 		return;

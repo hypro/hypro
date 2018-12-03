@@ -390,7 +390,7 @@ void State<Number,Representation,Rargs...>::setSetsSave(const std::vector<boost:
 }
 
 template<typename Number, typename Representation, typename ...Rargs>
-void State<Number,Representation,Rargs...>::decompose(std::vector<std::vector<size_t>> decomposition){
+void State<Number,Representation,Rargs...>::decompose(const Decomposition& decomposition){
 	if(decomposition.size() == 1 || mSets.size() != 1){
 		// no decomposition/already decomposed
 	}

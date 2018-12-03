@@ -64,7 +64,7 @@ inline void preProcess(typename ReachTreeNode<State>::NodeList_t& toMatch, const
 
 template<typename State>
 struct nodeUpdater{
-	nodeUpdater(const std::shared_ptr<Task<State>>& currentTask, WorkQueue<std::shared_ptr<Task<State>>>& localQueue, WorkQueue<std::shared_ptr<Task<State>>>& localCEXQueue, std::size_t targetLevel)
+	nodeUpdater(const std::shared_ptr<Task<State>>& currentTask, WorkQueue<std::shared_ptr<Task<State>>>* localQueue, WorkQueue<std::shared_ptr<Task<State>>>* localCEXQueue, std::size_t targetLevel)
 		: mTask(currentTask)
 		, mLocalQueue(localQueue)
 		, mLocalCEXQueue(localCEXQueue)
@@ -93,11 +93,11 @@ struct nodeUpdater{
 		assert(newTask->treeNode->getRefinements().at(newTask->btInfo.btLevel).isDummy == false);
 		DEBUG("hydra.worker.refinement", std::this_thread::get_id() << ": Create new CEX-Task<State> (local) with tree node " << newTask->treeNode);
 		if(!SettingsProvider<State>::getInstance().useGlobalQueuesOnly()){
-			mLocalCEXQueue.nonLockingEnqueue(std::move(newTask));
+			mLocalCEXQueue->nonLockingEnqueue(std::move(newTask));
 		} else {
-			mLocalCEXQueue.enqueue(std::move(newTask));
+			mLocalCEXQueue->enqueue(std::move(newTask));
 		}
-		DEBUG("hydra.worker.refinement", std::this_thread::get_id() << ": Local CEX-Queue size: " << mLocalCEXQueue.nonLockingSize() << "localCEXQueue is now:\n" << mLocalCEXQueue);
+		DEBUG("hydra.worker.refinement", std::this_thread::get_id() << ": Local CEX-Queue size: " << mLocalCEXQueue->nonLockingSize() << "localCEXQueue is now:\n" << mLocalCEXQueue);
 	}
 
 	inline void createAndRaiseTask(typename ReachTreeNode<State>::Node_t node, typename ReachTreeNode<State>::Node_t update, bool isRefinement) {
@@ -178,13 +178,13 @@ struct nodeUpdater{
 
 private:
 	const std::shared_ptr<Task<State>>& mTask;
-	WorkQueue<std::shared_ptr<Task<State>>>& mLocalQueue;
-	WorkQueue<std::shared_ptr<Task<State>>>& mLocalCEXQueue;
+	WorkQueue<std::shared_ptr<Task<State>>>* mLocalQueue;
+	WorkQueue<std::shared_ptr<Task<State>>>* mLocalCEXQueue;
 	std::size_t mTargetLevel;
 };
 
 template<typename State>
-inline void insertAndCreateTask(typename ReachTreeNode<State>::NodeList_t& toInsert, const std::shared_ptr<Task<State>>& currentTask, WorkQueue<std::shared_ptr<Task<State>>>& localQueue, WorkQueue<std::shared_ptr<Task<State>>>& localCEXQueue, std::size_t targetLevel) {
+inline void insertAndCreateTask(typename ReachTreeNode<State>::NodeList_t& toInsert, const std::shared_ptr<Task<State>>& currentTask, WorkQueue<std::shared_ptr<Task<State>>>* localQueue, WorkQueue<std::shared_ptr<Task<State>>>* localCEXQueue, std::size_t targetLevel) {
 	auto nodeIt = toInsert.begin();
 	while(nodeIt != toInsert.end()) {
 		// tree update
@@ -204,11 +204,11 @@ inline void insertAndCreateTask(typename ReachTreeNode<State>::NodeList_t& toIns
 			assert(!newTask->treeNode->getRefinements().at(newTask->btInfo.btLevel).entryTimestamp.isEmpty());
 			DEBUG("hydra.worker.refinement", std::this_thread::get_id() << ": Create new CEX-Task<State> (local) with tree node " << newTask->treeNode);
 			if(!SettingsProvider<State>::getInstance().useGlobalQueuesOnly()){
-				localCEXQueue.nonLockingEnqueue(std::move(newTask));
+				localCEXQueue->nonLockingEnqueue(std::move(newTask));
 			} else {
-				localCEXQueue.enqueue(std::move(newTask));
+				localCEXQueue->enqueue(std::move(newTask));
 			}
-			DEBUG("hydra.worker.refinement", std::this_thread::get_id() << ": Local CEX-Queue size: " << localCEXQueue.nonLockingSize() << "localCEXQueue is now:\n" << localCEXQueue);
+			DEBUG("hydra.worker.refinement", std::this_thread::get_id() << ": Local CEX-Queue size: " << localCEXQueue->nonLockingSize() << "localCEXQueue is now:\n" << localCEXQueue);
 		} else {
 			#ifdef RESET_REFINEMENTS_ON_CONTINUE_AFTER_BT_RUN
         	if(targetLevel > 0) {
@@ -230,11 +230,11 @@ inline void insertAndCreateTask(typename ReachTreeNode<State>::NodeList_t& toIns
 			assert(newTask->btInfo.btPath.size() == 0);
 			DEBUG("hydra.worker.refinement", std::this_thread::get_id() << ": Refinement finished, create new Task<State> (local) with tree node " << newTask->treeNode);
 			if(!SettingsProvider<State>::getInstance().useGlobalQueuesOnly()){
-				localQueue.nonLockingEnqueue(std::move(newTask));
+				localQueue->nonLockingEnqueue(std::move(newTask));
 			} else {
-				localQueue.enqueue(std::move(newTask));
+				localQueue->enqueue(std::move(newTask));
 			}
-			DEBUG("hydra.worker.refinement", std::this_thread::get_id() << ": Local queue size: " << localQueue.nonLockingSize() << "localQueue is now:\n" << localQueue);
+			DEBUG("hydra.worker.refinement", std::this_thread::get_id() << ": Local queue size: " << localQueue->nonLockingSize() << "localQueue is now:\n" << localQueue);
 		}
 		++nodeIt;
 	}

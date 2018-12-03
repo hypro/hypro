@@ -417,7 +417,7 @@ class State
     /**
     * decomposes state set by projection
     */
-    void decompose(std::vector<std::vector<size_t>> decomposition);
+    void decompose(const Decomposition& decomposition);
 
     /**
      * @brief      Outstream operator.
