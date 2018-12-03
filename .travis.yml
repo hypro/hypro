@@ -29,12 +29,12 @@ notifications:
 
 sudo: required
 
-cache:
-  apt: true
-  directories:
-    - $HOME/usr/
-    - $HOME/.sonar/cache
-    - build/resources
+#cache:
+#  apt: true
+#  directories:
+#    - $HOME/usr/
+#    - $HOME/.sonar/cache
+#    - build/resources
 
 addons:
   apt:
