@@ -83,7 +83,7 @@ matrix:
       addons:
         apt:
           sources: [*sources_base, llvm-toolchain-xenial-7]
-          packages: [*packages_base, clang-7.0 libc++abi-dev libstdc++-8-dev]
+          packages: [*packages_base, clang-7 libc++abi-dev libstdc++-8-dev]
       env: COMPILER=clang++-7.0
     #- os: osx
     #  osx_image: xcode6.4
