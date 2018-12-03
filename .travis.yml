@@ -39,13 +39,8 @@ cache:
 addons:
   apt:
     sources: &sources_base
-      - boost-latest
       - ubuntu-toolchain-r-test
     packages: &packages_base
-      - libboost1.55-all-dev
-      - libeigen3-dev
-      - libgmp-dev
-      - libgtest-dev
       - uuid-dev
       - openjdk-9-jre
 
