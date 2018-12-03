@@ -1,3 +1,4 @@
+dist: xenial
 env:
   global:
    - secure: "VrgSZAgTRTdH1rq0OHXHtArOA5SyLsJX9YA9O5c+PSXI/drMjc3pGsTIK3NA7xcyGaEIT+DjzV36yxvAz/3uurYkFtiz/sl1suziy6nSNBqvQSE01lBU9GnqHpkPg6/alnijG0Bf3KvXTdw5MmRaK+f9corNJAa+s1sP0rP7WMQ="
@@ -72,21 +73,21 @@ matrix:
           token:
             secure: "ISgh4qcPIZhB/oVqkvRVHwYTwpD0HqxkmOP3nETL3Sy06UFQmHkZCsnkZ30w5bBquMqPQ4vvIUKGatIAHXjtQiv8tqSwTAQ2r9iG+hrHpnEXZRB/7ZH4f26zqUCe7tkAf8fFz3O0lZ7Njkt6EDj/ynBtq82RMyPtBsQH/tzCel0UB1jhbK9AAepn4Aq5oW5wxBjXXxrPIqBIUddgbHr48IVfTtB4G0SpEqKhm56FHWG5vcsaB4+cH+v67OYs/3+HfrFZD2kkGPGxj4317Q83ZlcIp/bwKiETV8ez+8z8YRD/J/QKbmrole0M5T5KeNAOdetS9d0RhNKnygFMx75cDSfE7OXys5fhheOdXsLljgvoWqP3FOc7HMeAs/rn/SLrbZlQe5DucyyeQI9u2/elKntmuPfLOQvvX6suwJM7avSEndhrGcdE5x9Z9Shy4GDU4YCmpxRYlfcRpwQK7dn5KpkRLUB9FrgtGRroGdW7XRbFFmXNMJKmDUXLqWx5Ses8pEFY37rBpGi50NcRHzl/ZCAkXboYSS7x1b6hcwNL3w0SfWXbCkuna8/DFwdX7hvDNxiafyZX3GdsXpvQffgbtlZZUSlPbWakzVhV6cZptcV0V0/2HVP+m+azMRt3lbI3l2dfmWhq8l3fJJfkD/D0FsKMD3xVfqZT+xZIYxyWMy0="
         apt:
-          sources: [*sources_base, llvm-toolchain-trusty-5.0]
+          sources: [*sources_base, llvm-toolchain-xenial-5.0]
           packages: [*packages_base, clang-5.0 lcov libstdc++-8-dev libc++abi-dev]
       env: COMPILER=clang++-5.0 TASK=sonarcloud FLAGS=-DHYPRO_COVERAGE=ON
     - os: linux
       compiler: clang++-6.0
       addons:
         apt:
-          sources: [*sources_base, llvm-toolchain-trusty-6.0]
+          sources: [*sources_base, llvm-toolchain-xenial-6.0]
           packages: [*packages_base, clang-6.0 libc++abi-dev libstdc++-8-dev]
       env: COMPILER=clang++-6.0
     - os: linux
       compiler: clang++-7.0
       addons:
         apt:
-          sources: [*sources_base, llvm-toolchain-trusty-7]
+          sources: [*sources_base, llvm-toolchain-xenial-7]
           packages: [*packages_base, clang-7.0 libc++abi-dev libstdc++-8-dev]
       env: COMPILER=clang++-7.0
     #- os: osx

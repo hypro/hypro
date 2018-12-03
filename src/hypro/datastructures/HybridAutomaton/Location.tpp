@@ -24,7 +24,7 @@ Location<Number>::Location(unsigned _id, const matrix_t<Number>& _mat) : mFlows(
 
 template<typename Number>
 Location<Number>::Location(unsigned _id, const matrix_t<Number>& _mat, const typename Location<Number>::transitionSet& _trans, const Condition<Number>& _inv)
-    : mFlows(), mExternalInput(), mTransitions(_trans), mInvariant(_inv), mId(_id), mExternalInput()
+    : mFlows(), mExternalInput(), mTransitions(_trans), mInvariant(_inv), mId(_id)
 {
 	mFlows.push_back(linearFlow<Number>(_mat));
 	mHasExternalInput = false;
