@@ -77,7 +77,7 @@ template<typename Number>
 void Location<Number>::setFlow(const flowVariant& f, std::size_t I) {
 	matrix_t<Number> dummy = matrix_t<Number>::Identity(getFlowDimension(f), getFlowDimension(f));
 	while(mFlows.size() <= I) {
-		mFlows.push_back(linearFlow(dummy));
+		mFlows.push_back(linearFlow<Number>(dummy));
 	}
 	mFlows[I] = f;
 	mHash = 0;
