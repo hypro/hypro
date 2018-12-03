@@ -17,7 +17,6 @@
 #include "decomposition/Decomposition.h"
 #include "decomposition/decomposeConstraintSet.h"
 #include "../../types.h"
-//#include "../../representations/GeometricObject.h"
 #include "../../util/adaptions_eigen/adaptions_eigen.h"
 
 #include <map>
