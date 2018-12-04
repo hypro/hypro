@@ -210,20 +210,23 @@ inline void insertAndCreateTask(typename ReachTreeNode<State>::NodeList_t& toIns
 			}
 			DEBUG("hydra.worker.refinement", std::this_thread::get_id() << ": Local CEX-Queue size: " << localCEXQueue->nonLockingSize() << "localCEXQueue is now:\n" << localCEXQueue);
 		} else {
-			#ifdef RESET_REFINEMENTS_ON_CONTINUE_AFTER_BT_RUN
+			assert((*nodeIt)->rGetRefinements()[targetLevel].initialSet.getLocation() != nullptr);
+			// Current setting: We override all dummy settings to make sure everything is set properly
+			// Todo: We could think of a less-agressive way in which only the required levels are set.
+			//#ifdef RESET_REFINEMENTS_ON_CONTINUE_AFTER_BT_RUN
         	if(targetLevel > 0) {
-        		// move refinement to level 0, convert type in case necessary
-        		(*nodeIt)->convertRefinement(targetLevel, 0, SettingsProvider<State>::getInstance().getStrategy().at(0));
-	        	// also set intermediate refinements
+	        	// also set intermediate refinements which are not already set.
+				const Location<typename State::NumberType>* loc = (*nodeIt)->getRefinements()[targetLevel].initialSet.getLocation();
 				for(std::size_t i = 0; i < (*nodeIt)->getRefinements().size(); ++i) {
 					// convert, in case this is necessary
 					if((*nodeIt)->getRefinements()[i].isDummy) {
-						(*nodeIt)->convertRefinement(targetLevel,i,SettingsProvider<State>::getInstance().getStrategy()[i]);
+						SettingsProvider<State>::getInstance().getStrategy().advanceToLevel((*nodeIt)->rGetRefinements()[targetLevel].initialSet, i);
 						(*nodeIt)->rGetRefinements()[i].isDummy = false;
+						(*nodeIt)->rGetRefinements()[i].initialSet.setLocation(loc);
 					}
 				}
         	}
-        	#endif
+        	//#endif
 
 			std::shared_ptr<Task<State>> newTask(new Task<State>(*nodeIt));
 			TRACE("hydra.worker.refinement","Created task from fresh child node. Bt-Level: " << newTask->btInfo.btLevel << ", bt-path: " << newTask->btInfo.btPath);

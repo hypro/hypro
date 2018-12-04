@@ -444,6 +444,7 @@ namespace hypro {
 		typename ReachTreeNode<State>::NodeList_t children;
 		for(const auto& state : states) {
 			TRACE("hydra.worker.discrete","Consider " << states.size() << " states.");
+			assert(state.getLocation() != nullptr);
 
 			// TODO: This fixed-point test should only consider the current refinement level.
 			//fix point test does not seem to work in full timed context
@@ -480,6 +481,7 @@ namespace hypro {
 
 			// Todo: In general: switch to in-place modifications for the child-nodes later as well.
 			RefinementSetting<State> tmpRefinement = newNode->getRefinements().at(targetLevel);
+			assert(tmpRefinement.initialSet.getLocation() != nullptr);
 			if(SettingsProvider<State>::getInstance().useLocalTiming()) {
 				tmpRefinement.initialSet.setTimestamp(carl::Interval<tNumber>(0));
 			}
