@@ -102,7 +102,7 @@ void ContextBasedReachabilityWorker<State>::computeForwardReachability(const std
         // create discrete successor states
         context->execBeforeProcessDiscreteBehavior();
         context->processDiscreteBehavior();
-        context->execBeforeProcessDiscreteBehavior();
+        //context->execBeforeProcessDiscreteBehavior();
         //EVALUATE_BENCHMARK_RESULT(DISCRETE_SUCCESSORS);
 
         context->execOnEnd();
@@ -116,8 +116,9 @@ void ContextBasedReachabilityWorker<State>::computeForwardReachability(const std
         // finish creating discrete successor states
         context->execBeforeProcessDiscreteBehavior();
         context->processDiscreteBehavior();
-        context->execBeforeProcessDiscreteBehavior();
+        //context->execBeforeProcessDiscreteBehavior();
         //EVALUATE_BENCHMARK_RESULT(DISCRETE_SUCCESSORS);
+        context->execOnEnd();
     }
 }
 

@@ -98,6 +98,7 @@ namespace hypro
 			INFO("benchmark", "Model could NOT be verified as SAFE.");
 			DEBUG("hypro.worker","Final bt-level already reached - abort.");
 			std::cout << "Model cannot be verified as being safe." << std::endl;
+			TRACE("hypro.worker","Unlock node " << mTask->treeNode);
 			mTask->treeNode->getMutex().unlock();
 			return;
 		}
@@ -111,11 +112,14 @@ namespace hypro
 		ReachTreeNode<State>* btNode = mTask->treeNode;
 		DEBUG("hypro.worker.refinement","Find backtrack entry node.");
 		DEBUG("hypro.worker.refinement", std::this_thread::get_id() << ": Local CEX-Queue size: " << mLocalCEXQueue->size() << "localCEXQueue is now:\n" << (*mLocalCEXQueue));
+		TRACE("hypro.worker","Unlock node " << mTask->treeNode);
 		btNode->getMutex().unlock();
 
-		// backtrack to the root node.
-		while(btNode->getParent() != nullptr && btNode->getParent()->getStateAtLevel(mTask->btInfo.btLevel).getLocation() != nullptr){
+		// backtrack to the root node. Note that the first processed node is the child of an empty node which collects
+		// all initial states. This very root node does have 0 refinements.
+		while(btNode->getParent()->getRefinements().size() > 0){
 			TRACE("hypro.worker.refinement","Current node on the way to root: " << btNode << ", parent: " << btNode->getParent());
+			TRACE("hypro.worker.refinement", "Parent has " << btNode->getParent()->getRefinements().size() << " refinements.");
 			btNode = btNode->getParent();
 		}
 		// reached the root.
@@ -131,6 +135,8 @@ namespace hypro
 		if(btNode->getRefinements().size() == targetLevel) {
 			// add a new refinement
 			RefinementSetting<State> newSetting(btNode->getStateAtLevel(mTask->btInfo.btLevel).getLocation());
+			// use initial set of previous run for new level and convert it to new representation.
+			newSetting.initialSet = btNode->getStateAtLevel(targetLevel-1);
 			for(std::size_t i = 0; i < btNode->getRefinements().at(targetLevel-1).initialSet.getNumberSets(); i++){
 				mStrategy.advanceToLevel(newSetting.initialSet, targetLevel);
 			}
@@ -138,6 +144,8 @@ namespace hypro
 			newSetting.initialSet.setTimestamp(carl::Interval<tNumber>(0));
 			newSetting.isDummy = false;
 			newSetting.fullyComputed = false;
+			// lock node for modification.
+			std::lock_guard<std::mutex> lock(btNode->getMutex());
 			btNode->setNewRefinement(targetLevel, newSetting);
 			// Todo: re-check -> global timing.
 			btNode->setTimestamp(targetLevel, carl::Interval<tNumber>(0));
@@ -254,8 +262,9 @@ namespace hypro
 	        // If at least one urgent transition is enabled, skip flow computation.
 	        if (locallyUrgent) {
 	            TRACE("hypro.worker.discrete", "The location is urgent, skip flowpipe computation.");
+				TRACE("hypro.worker","Unlock node " << mTask->treeNode);
 	            mTask->treeNode->getMutex().unlock();
-	            //throw FinishWithDiscreteProcessingException("Urgent transition enabled. Leaving location!");
+	            throw FinishWithDiscreteProcessingException("Urgent transition enabled. Leaving location!");
 	        }
 	    }
 
@@ -395,7 +404,7 @@ namespace hypro
 
 		    	// Invoke backtracking. Unlocks the node, so no manual unlocking required
 	            applyBacktracking();
-	           	//throw HardTerminateException("Bad states hit! Terminating this worker!");
+	           	throw HardTerminateException("Bad states hit! Terminating this worker!");
 	        }
 
 	        if(deleteRequested){
@@ -610,7 +619,7 @@ namespace hypro
         if (urgentTransitionEnabled) {
             // quit loop after firing time triggered transition -> time triggered transitions are handled as urgent.
             TRACE("hypro.worker.discrete", "Urgent transition enabled, quit flowpipe computation immediately." << std::endl);
-            //throw FinishWithDiscreteProcessingException("Urgent transition enabled, quit flowpipe computation immediately.");
+            throw FinishWithDiscreteProcessingException("Urgent transition enabled, quit flowpipe computation immediately.");
         }
     }
 
@@ -692,7 +701,7 @@ namespace hypro
 		}
 
 		TRACE("hypro.worker.refinement","Done printing refinements.");
-
+		TRACE("hypro.worker","Unlock node " << mTask->treeNode);
 		mTask->treeNode->getMutex().unlock();
     }
 

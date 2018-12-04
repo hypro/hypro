@@ -12,6 +12,7 @@ const typename State::repVariant& ReachTreeNode<State>::getSetAtLevel(unsigned l
 
 template<typename State>
 const State& ReachTreeNode<State>::getStateAtLevel(unsigned level) const {
+	TRACE("hypro.datastructures","Access level " << level << " on a node with " << mRefinements.size() << " refinements.");
 	assert(mRefinements.size() > level);
 	assert(!mRefinements.at(level).isDummy);
 	return mRefinements.at(level).initialSet;
@@ -27,7 +28,7 @@ const carl::Interval<tNumber>& ReachTreeNode<State>::getTimestamp(unsigned level
 /*
 template<typename State>
 std::vector<carl::Interval<tNumber>> ReachTreeNode<State>::getTimeIntervals(hypro::Transition<Number>* t) const {
-	TRACE("hydra.datastructures","Has " << mTransitionTimings.size() << " stored timings in total.");
+	TRACE("hypro.datastructures","Has " << mTransitionTimings.size() << " stored timings in total.");
 	auto intvIt = mTransitionTimings.find(t);
 	if( intvIt == mTransitionTimings.end() ){
 		return std::vector<carl::Interval<tNumber>>();
@@ -76,13 +77,13 @@ std::vector<ReachTreeNode<State>*> ReachTreeNode<State>::getChildrenForTransitio
 	// get all children
 	ReachTreeNode<State>::NodeList_t children = this->getChildren();
 	std::vector<ReachTreeNode<State>*> res;
-	TRACE("hydra.datastructures", "Total number of children: " << children.size() << ", transition: " << transition);
+	TRACE("hypro.datastructures", "Total number of children: " << children.size() << ", transition: " << transition);
 	// delete all children not being a result of the transition
 	for(auto childIt = children.begin(); childIt != children.end(); ++childIt) {
 		// Note: The offset -1 for the depth results from the additional root node.
 		ReachTreeNode<State>* castChild = *childIt;
 		if(castChild->getPath().getTransitionSequence(castChild->getPath().begin(), castChild->getPath().end()).back() == transition ) {
-			TRACE("hydra.datastructures", "Transition: " << castChild->getPath().getTransitionSequence(castChild->getPath().begin(), castChild->getPath().end()).back() << " == " << transition);
+			TRACE("hypro.datastructures", "Transition: " << castChild->getPath().getTransitionSequence(castChild->getPath().begin(), castChild->getPath().end()).back() << " == " << transition);
 			res.emplace_back(castChild);
 		}
 	}
@@ -101,13 +102,13 @@ bool ReachTreeNode<State>::isFullyComputedOnSomeLevel() const {
 
 template<typename State>
 void ReachTreeNode<State>::updateContent(ReachTreeNode<State>* updatedNode) {
-	TRACE("hydra.datastructure","Update refinements: ");
+	TRACE("hypro.datastructure","Update refinements: ");
 	for(const auto ref: mRefinements) {
-		TRACE("hydra.datastructure", ref);
+		TRACE("hypro.datastructure", ref);
 	}
-	TRACE("hydra.datastructures","With new refinements: ");
+	TRACE("hypro.datastructures","With new refinements: ");
 	for(const auto ref: updatedNode->getRefinements()) {
-		TRACE("hydra.datastructure", ref);
+		TRACE("hypro.datastructure", ref);
 	}
 	mPath = updatedNode->getPath();
 	//mLoc = updatedNode->getLocation();
@@ -120,10 +121,10 @@ void ReachTreeNode<State>::updateContent(ReachTreeNode<State>* updatedNode) {
 			if(mRefinements.size() <= refPos){
 				//assert(mRefinements.size() == refPos); // indirectly the difference cannot be more than one here.
 				//Note: The difference can be more than one since the order the tasks are worked on is not predictable.
-				TRACE("hydra.datastructures","Refinements are extended to level " << refPos << " by " << updatedNode->getRefinements().at(refPos));
+				TRACE("hypro.datastructures","Refinements are extended to level " << refPos << " by " << updatedNode->getRefinements().at(refPos));
 				mRefinements.push_back(updatedNode->getRefinements().at(refPos));
 			} else {
-				TRACE("hydra.datastructures","Ref @" << refPos << ": " << mRefinements[refPos] << " is replaced by " << updatedNode->getRefinements().at(refPos));
+				TRACE("hypro.datastructures","Ref @" << refPos << ": " << mRefinements[refPos] << " is replaced by " << updatedNode->getRefinements().at(refPos));
 				mRefinements[refPos] = updatedNode->getRefinements().at(refPos);
 			}
 		}
@@ -148,7 +149,7 @@ void ReachTreeNode<State>::setNewRefinement(unsigned level, const RefinementSett
 		}
 		mRefinements.push_back(ref);
 	}
-	DEBUG("hydra.datastructures","Set new refinement for level " << level << " for this " << this );
+	DEBUG("hypro.datastructures","Set new refinement for level " << level << " for this " << this );
 	assert(mRefinements.at(level) == ref);
 }
 
@@ -185,7 +186,7 @@ void ReachTreeNode<State>::setTimestamp( unsigned level, const carl::Interval<tN
 template<typename State>
 void ReachTreeNode<State>::addTransitionInterval(hypro::Transition<Number>* _trans, const carl::Interval<tNumber>& _timeInterval)
 {
-	TRACE("hydra.datastructures","Add timing interval " <<  _timeInterval << " for transition " << _trans);
+	TRACE("hypro.datastructures","Add timing interval " <<  _timeInterval << " for transition " << _trans);
 
 	// check, if there is already an entry for the respective transition
     auto timingIt = mTransitionTimings.find(_trans);
@@ -193,7 +194,7 @@ void ReachTreeNode<State>::addTransitionInterval(hypro::Transition<Number>* _tra
     	// if there is no entry, create a new one.
     	mTransitionTimings[_trans] = std::vector<carl::Interval<tNumber>>();
     	mTransitionTimings[_trans].push_back(_timeInterval);
-    	TRACE("hydra.datastructures","Added timing interval to fresh node.");
+    	TRACE("hypro.datastructures","Added timing interval to fresh node.");
     } else {
     	// if there is already an entry, check whether the current interval improves the existing intervals.
     	// If yes, override, otherwise do nothing (keep old information, as it is better).
@@ -207,7 +208,7 @@ void ReachTreeNode<State>::addTransitionInterval(hypro::Transition<Number>* _tra
     			// update the mapping (erase old, insert new at same pos).
 				intervalIt = mTransitionTimings[_trans].erase(intervalIt);
 				auto tmp = mTransitionTimings[_trans].insert(intervalIt, newInterval);
-				TRACE("hydra.datastructures","Extended timing map by union with existing interval to " << *tmp);
+				TRACE("hypro.datastructures","Extended timing map by union with existing interval to " << *tmp);
 				break;
     		} else if( intervalIt->lower() > _timeInterval.upper() ) {
     			// in case the intervals do not intersect, keep track of the boundaries to keep the interval vector ordered.
@@ -218,7 +219,7 @@ void ReachTreeNode<State>::addTransitionInterval(hypro::Transition<Number>* _tra
     	// if no intersection at all happened, use the possibly updated position of insertion to insert.
     	if(completelyNewTimeInterval) {
     		mTransitionTimings[_trans].insert(insertionPosition, _timeInterval);
-    		TRACE("hydra.datastructures","Extended timing map with new, disjunct interval.");
+    		TRACE("hypro.datastructures","Extended timing map with new, disjunct interval.");
     	}
     }
 }
@@ -238,7 +239,7 @@ void ReachTreeNode<State>::refineIntervals()
                 if (iter_inter->contains(*iter_inter_next)) {
                     iter_inter = iter_map->second.erase(iter_inter);
                     deletion = true;
-                    TRACE("hydra.datastructures","Refinement deleted timings.");
+                    TRACE("hypro.datastructures","Refinement deleted timings.");
                     break;
                 }
                 ++iter_inter_next;

@@ -23,6 +23,7 @@ namespace hypro {
 		//
 		// This stage creates tree nodes and adds them to the tree. The relevant nodes which require further processing will be added as
 		// tasks to the corresponding queue.
+		TRACE("hydra.worker.discrete","Process " << processedStates.size() << " aggregated transitions.");
 		for(const auto& transitionStatePair : processedStates) {
 
 			carl::Interval<tNumber> coveredTimeInterval = transitionStatePair.second.begin()->getTimestamp();
@@ -34,8 +35,12 @@ namespace hypro {
 				collectedTimeInterval = collectedTimeInterval.convexHull(s.getTimestamp());
 			}
 
+			TRACE("hydra.worker.discrete","Transition covers time " << collectedTimeInterval);
+
 			// children holds the nodes which need to be added
 			typename ReachTreeNode<State>::NodeList_t children = createNodesFromStates(transitionStatePair.first, transitionStatePair.second, mRepresentation, targetLevel, coveredTimeInterval, mTask->treeNode);
+
+			TRACE("hydra.worker.discrete","Created " << children.size() << " new nodes which have to be added to the tree.");
 
 			// Update tree
 			// Note: At this point we have a fresh node with only the refinement set for the dedicated level. In case of a backtrack
@@ -62,6 +67,8 @@ namespace hypro {
 					}
 					#endif
 					mTask->treeNode->addChild(child);
+					TRACE("hydra.worker.discrete", "Add node " << child << " as child to node " << mTask->treeNode << " which has " << mTask->treeNode->getRefinements().size() << " refinements." );
+					assert(child->getParent() == mTask->treeNode);
 
 					// timing-tree updates
 					INFO("hydra.worker.discrete","Enqueue Tree node " << child << " in local queue.");
@@ -436,8 +443,11 @@ namespace hypro {
 
 		typename ReachTreeNode<State>::NodeList_t children;
 		for(const auto& state : states) {
+			TRACE("hydra.worker.discrete","Consider " << states.size() << " states.");
 
+			// TODO: This fixed-point test should only consider the current refinement level.
 			//fix point test does not seem to work in full timed context
+			/*
 			if(!SettingsProvider<State>::getInstance().isFullTimed() && SettingsProvider<State>::getInstance().getLocationTypeMap().find(transition->getSource())->second != LOCATIONTYPE::TIMEDLOC){
 				bool reachedFixedPoint = false;
 				if(SettingsProvider<State>::getInstance().useFixedPointTest()) {
@@ -445,6 +455,7 @@ namespace hypro {
 						reachedFixedPoint = n->hasFixedPoint(state,parent);
 						if(reachedFixedPoint){
 							std::cout << "Detected fixed point." << std::endl;
+							TRACE("hydra.worker.discrete", "Do not create successor nodes as fixed-point has been detected.");
 							break;
 						}
 					}
@@ -454,6 +465,7 @@ namespace hypro {
 					continue;
 				}
 			}
+			*/
 
 			typename ReachTreeNode<State>::Node_t newNode = new ReachTreeNode<State>(state, targetLevel, parent);
 
