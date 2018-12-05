@@ -37,7 +37,10 @@ class SettingsProvider : public carl::Singleton<SettingsProvider<State>>
     double getQueueBalancingRatio() const;
     bool useLocalTiming() const { return mUseLocalTiming; }
     bool useDecider();
+    void setUseDecider(bool useDecider) { mUseDecider = useDecider;}
     bool decomposeAutomaton();
+    void setDecomposeAutomaton(bool decompose) { mDoDecomposition = decompose; }
+
 
     void setHybridAutomaton(const HybridAutomaton<Number> &ha);
 
