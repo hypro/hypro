@@ -7,11 +7,11 @@
 #include "../defines.h"
 //#include "datastructures/HybridAutomaton/LocationManager.h"
 #include "datastructures/HybridAutomaton/HybridAutomaton.h"
+#include "datastructures/HybridAutomaton/State.h"
 #include "representations/GeometricObject.h"
 
 
 using namespace hypro;
-using namespace carl;
 
 template <typename Number>
 using valuation_t = VPolytope<Number>;
@@ -99,12 +99,10 @@ protected:
     	poly = valuation_t<Number>(vecSet);
 		auto hpoly = Converter<Number>::toHPolytope(poly);
 
-		hybrid.setLocations(std::move(locSet));
 		for(auto loc : initLocSet) {
-			State_t<Number> initState(loc);
-			initState.setSet(ConstraintSet<Number>(hpoly.matrix(), hpoly.vector()));
-			hybrid.addInitialState(initState);
+			hybrid.addInitialState(loc, ConstraintSet<Number>(hpoly.matrix(), hpoly.vector()));
 		}
+		hybrid.setLocations(std::move(locSet));
 		transSet.insert(std::move(copyOfTrans));
 		ptrSet.insert(transSet.begin()->get());
 		hybrid.setTransitions(std::move(transSet));
@@ -213,14 +211,14 @@ TYPED_TEST(HybridAutomataTest, LocationTest)
 	EXPECT_NE(this->loc1->getInvariant().getMatrix(), invariantMat2);
 
 	//location: matrix
-	EXPECT_EQ(this->loc1->getFlow(), this->locationMat);
+	EXPECT_EQ(boost::get<hypro::linearFlow<TypeParam>>(this->loc1->getFlow()).getFlowMatrix(), this->locationMat);
 
 	matrix_t<TypeParam> locationMat2(2,2);
 	locationMat2(0,0) = 1;
 	locationMat2(0,1) = 0;
 	locationMat2(1,0) = 0;
 	locationMat2(1,1) = 1;
-	EXPECT_NE(this->loc1->getFlow(), locationMat2);
+	EXPECT_NE(boost::get<hypro::linearFlow<TypeParam>>(this->loc1->getFlow()).getFlowMatrix(), locationMat2);
 
 	//location: set of outgoing transitions
 	EXPECT_EQ(this->loc1->getTransitions(), this->ptrSet);
@@ -231,6 +229,7 @@ TYPED_TEST(HybridAutomataTest, LocationTest)
 	EXPECT_TRUE(locPtrComp<TypeParam>()(this->loc1, this->loc2) || locPtrComp<TypeParam>()(this->loc2, this->loc1));
 }
 
+/*
 TYPED_TEST(HybridAutomataTest, LocationParallelcompositionTest)
 {
 	std::unique_ptr<Location<TypeParam>> l1 = std::make_unique<Location<TypeParam>>();
@@ -274,6 +273,7 @@ TYPED_TEST(HybridAutomataTest, LocationParallelcompositionTest)
 						0,0,0,0,0;
 	EXPECT_EQ(res2->getFlow(),expectedResult2);
 }
+*/
 
 /**
  * Transition Test
@@ -352,10 +352,7 @@ TYPED_TEST(HybridAutomataTest, HybridAutomatonTest)
 	vector_t<TypeParam> vec = vector_t<TypeParam>(2);
 	vec << 1,2;
 
-	State_t<TypeParam> s(this->loc1.get());
-	s.setSet(ConstraintSet<TypeParam>(matr, vec));
-
-	h1.addInitialState(s);
+	h1.addInitialState(this->loc1.get(), ConstraintSet<TypeParam>(matr, vec));
 
 	//Copy constructor;
 	/*

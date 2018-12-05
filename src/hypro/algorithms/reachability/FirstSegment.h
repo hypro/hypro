@@ -1,6 +1,8 @@
 #pragma once
 #include "util.h"
 #include "../../representations/GeometricObject.h"
+#include "../../datastructures/HybridAutomaton/Location.h"
+#include "../../datastructures/HybridAutomaton/State.h"
 #include <boost/tuple/tuple.hpp>
 
 namespace hypro{
@@ -9,10 +11,11 @@ namespace reachability{
 template <typename Number>
 matrix_t<Number> computeTrafoMatrix(const Location<Number>* _loc, Number timeStep)
 {
-    matrix_t<Number> deltaMatrix(_loc->getFlow().rows(), _loc->getFlow().cols());
-    deltaMatrix = _loc->getFlow() * timeStep;
+    auto flowMatrix = boost::get<linearFlow<Number>>(_loc->getFlow()).getFlowMatrix();
+    matrix_t<Number> deltaMatrix(flowMatrix.rows(), flowMatrix.cols());
+    deltaMatrix = flowMatrix * timeStep;
 
-    TRACE("hypro.reachability", "Flowmatrix:\n" << _loc->getFlow() << "\nmultiplied with time step: " << timeStep);
+    TRACE("hypro.reachability", "Flowmatrix:\n" << flowMatrix << "\nmultiplied with time step: " << timeStep);
     TRACE("hypro.reachability", "delta Matrix: " << std::endl);
     TRACE("hypro.reachability", deltaMatrix << std::endl);
     TRACE("hypro.reachability", "------" << std::endl);
@@ -82,15 +85,27 @@ void bloatBox(State& in, const Box<Number>& bloatBox) {
 			assert(false && "CANNOT CONVERT TO TYPE TAYLOR MODEL.");
 			break;
 		}
+        default:
+            assert(false && "STATE SET TYPE UNDEF.");
+            break;
 	}
 }
 
-template <typename Number, typename tNumber, typename State>
+template <typename Number, typename State>
 boost::tuple<CONTAINMENT, State, matrix_t<Number>, vector_t<Number>, Box<Number>> computeFirstSegment(const State& _state, tNumber timeStep)
 {
     assert(!_state.getTimestamp().isEmpty());
     // check if initial Valuation fulfills Invariant
     assert(_state.getLocation() != nullptr);
+
+    #ifdef HYPRO_LOGGING
+        TRACE("hypro.reachability", "Location: " << _state.getLocation()->getName() << std::endl);
+        double convertedTimeStep =carl::convert<tNumber,double>(timeStep);
+        TRACE("hypro.reachability", "Time step size: " << timeStep << "(" << convertedTimeStep << ")" << std::endl);
+        TRACE("hypro.reachability", "------" << std::endl);
+        #endif
+
+
     DEBUG("hypro.reachability","Check invariant: " << _state.getLocation()->getInvariant() << " for set " << _state);
     std::pair<CONTAINMENT,State> initialPair = _state.satisfies(_state.getLocation()->getInvariant());
 
@@ -99,12 +114,12 @@ boost::tuple<CONTAINMENT, State, matrix_t<Number>, vector_t<Number>, Box<Number>
     //TRACE("hypro.reachability","Initial pair segment: " << tmp3);
     #endif
 
-    if (initialPair.first) {
+    if (initialPair.first != CONTAINMENT::NO) {
 
     	// if the location has no flow, stop computation and exit.
-        if (_state.getLocation()->getFlow() == matrix_t<Number>::Zero(_state.getLocation()->getFlow(0).rows(), _state.getLocation()->getFlow(0).cols())) {
+        if (isDiscrete(_state.getLocation()->getFlow(0))) {
             // TRACE("Avoid further computation as the flow is zero." << std::endl);
-            int rows =_state.getLocation()->getFlow(0).rows();
+            int rows = getFlowDimension( _state.getLocation()->getFlow(0));
             //std::cout << "Attention, external input not yet captured in locations with no flow." << std::endl;
             unsigned dimension = initialPair.second.getDimension(0);
             Box<Number> externalInputTmp(std::make_pair(Point<Number>(vector_t<Number>::Zero(dimension+1)),
@@ -144,10 +159,10 @@ boost::tuple<CONTAINMENT, State, matrix_t<Number>, vector_t<Number>, Box<Number>
         if(_state.getLocation()->getExternalInput().empty()) {
         	Box<Number> externalInputTmp(std::make_pair(Point<Number>(vector_t<Number>::Zero(dimension+1)),
                                                         Point<Number>(vector_t<Number>::Zero(dimension+1))));
-        	errorBoxVector = errorBoxes(carl::convert<tNumber,Number>(timeStep), _state.getLocation()->getFlow(), initialPair.second, trafoMatrix, externalInputTmp);
+        	errorBoxVector = errorBoxes(carl::convert<tNumber,Number>(timeStep), boost::get<linearFlow<Number>>(_state.getLocation()->getFlow()), initialPair.second, trafoMatrix, externalInputTmp);
         } else {
         	//std::cout << "Model has external input: " << _state.getLocation()->getExternalInput() << std::endl;
-        	errorBoxVector = errorBoxes(carl::convert<tNumber,Number>(timeStep), _state.getLocation()->getFlow(), initialPair.second, trafoMatrix, _state.getLocation()->getExternalInput());
+        	errorBoxVector = errorBoxes(carl::convert<tNumber,Number>(timeStep), boost::get<linearFlow<Number>>(_state.getLocation()->getFlow()), initialPair.second, trafoMatrix, Box<Number>{_state.getLocation()->getExternalInput()});
         }
 
 
@@ -230,7 +245,7 @@ boost::tuple<CONTAINMENT, State, matrix_t<Number>, vector_t<Number>, Box<Number>
         TRACE("hypro.reachability","Check invariant.");
         std::pair<CONTAINMENT, State> fullSegment = firstSegment.satisfies(_state.getLocation()->getInvariant());
         TRACE("hypro.reachability","Check invariant - done.");
-        if (fullSegment.first) {
+        if (fullSegment.first != CONTAINMENT::NO) {
         	//fullSegment.second.setTimestamp(carl::Interval<tNumber>(fullSegment.second.getTimestamp().lower(),fullSegment.second.getTimestamp().upper() + timeStep));
         	#ifdef HYPRO_LOGGING
         	// DBG

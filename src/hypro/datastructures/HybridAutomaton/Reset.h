@@ -1,14 +1,13 @@
 #pragma once
-#include "State.h"
-#include "Visitors.h"
 #include "../../types.h"
+#include "../../representations/ConstraintSet/ConstraintSet.h"
 
 namespace hypro {
 
 template<typename Number>
 class Reset {
 protected:
-	std::vector<ConstraintSet<Number>> mResets;
+	std::vector<ConstraintSetT<Number>> mResets;
     mutable std::size_t mHash = 0;
 
 public:
@@ -28,15 +27,12 @@ public:
 	matrix_t<Number>& rGetMatrix(std::size_t I = 0) { return mResets[I].rMatrix(); }
 	vector_t<Number>& rGetVector(std::size_t I = 0) { return mResets[I].rVector(); }
 
-	ConstraintSet<Number> getReset(std::size_t I = 0) const { return mResets.at(I); }
-	ConstraintSet<Number>& rGetReset(std::size_t I = 0) const { return mResets[I]; }
-	const std::vector<ConstraintSet<Number>>& getResetTransformations() const { return mResets; }
+	ConstraintSetT<Number> getReset(std::size_t I = 0) const { return mResets.at(I); }
+	ConstraintSetT<Number>& rGetReset(std::size_t I = 0) const { return mResets[I]; }
+	const std::vector<ConstraintSetT<Number>>& getResetTransformations() const { return mResets; }
 
 	void setVector(const vector_t<Number>& in, std::size_t I = 0);
 	void setMatrix(const matrix_t<Number>& in, std::size_t I = 0);
-
-	template<typename Representation, typename ...Rargs>
-	State<Number,Representation,Rargs...> applyReset(const State<Number,Representation,Rargs...>& inState) const;
 
 	bool isIdentity() const;
 

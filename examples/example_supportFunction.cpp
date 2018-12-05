@@ -1,6 +1,6 @@
 
 #include "../src/hypro/representations/GeometricObject.h"
-#include "../src/hypro/util/Plotter.h"
+#include "../src/hypro/util/plotting/Plotter.h"
 #include <carl/numbers/numbers.h>
 
 using namespace hypro;
@@ -32,7 +32,7 @@ int main(int argc, char** argv) {
 		1,0,
 		0,-1,
 		-1,0;
-	distances << 1,carl::rationalize<Number>(5),carl::rationalize<Number>(1),-4;
+	distances << 1,carl::rationalize<Number>(5),carl::rationalize<Number>(.5),-4;
 
 	/*
 	matrix_t<Number> matrix2 = matrix_t<Number>(3,2);

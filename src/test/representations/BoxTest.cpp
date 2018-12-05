@@ -391,9 +391,9 @@ TYPED_TEST(BoxTest, Intersection)
 	carl::Interval<TypeParam> c = carl::Interval<TypeParam>(-2,3);
 
 	hypro::Box<TypeParam> res = this->b1.intersect(this->b4);
-	carl::Interval<TypeParam> i = x.intersect(a);
-	carl::Interval<TypeParam> j = y.intersect(b);
-	carl::Interval<TypeParam> k = z.intersect(c);
+	carl::Interval<TypeParam> i = set_intersection(x,a);
+	carl::Interval<TypeParam> j = set_intersection(y,b);
+	carl::Interval<TypeParam> k = set_intersection(z,c);
 	std::vector<carl::Interval<TypeParam>> intervals;
 	intervals.push_back(i);
 	intervals.push_back(j);
@@ -498,7 +498,7 @@ TYPED_TEST(BoxTest, SatisfiesHalfspace)
 	EXPECT_EQ(box.satisfiesHalfspace(hsp1).first, hypro::CONTAINMENT::FULL);
 	EXPECT_EQ(box.satisfiesHalfspace(hsp2).first, hypro::CONTAINMENT::NO);
 	EXPECT_EQ(box.satisfiesHalfspace(hsp3).first, hypro::CONTAINMENT::PARTIAL);
-	EXPECT_TRUE(box.satisfiesHalfspaces(hypro::matrix_t<TypeParam>(), hypro::vector_t<TypeParam>()).first);
+	EXPECT_TRUE(box.satisfiesHalfspaces(hypro::matrix_t<TypeParam>(), hypro::vector_t<TypeParam>()).first != hypro::CONTAINMENT::NO);
 	hypro::matrix_t<TypeParam> mat = hypro::matrix_t<TypeParam>(2,1);
 	mat << 1,-1;
 	hypro::vector_t<TypeParam> vec = hypro::vector_t<TypeParam>(2);

@@ -6,12 +6,13 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
 
     add_executable(runAlgorithmTests
     		#BoxReachabilityTest.cpp
-    		FacetEnumerationTest.cpp
+    		#FacetEnumerationTest.cpp
     		#ForwardReachabilityTest.cpp
 			#HyReachTest.cpp
             #MinkowskiSumTest.cpp
             #SumPerformanceTest.cpp
               # rahsTwoTankTest.cpp
+            FourierMotzkinQETest.cpp
             VertexEnumerationTest.cpp
             UtilityTest.cpp
     )

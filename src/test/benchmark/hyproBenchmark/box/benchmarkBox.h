@@ -14,6 +14,7 @@
 #include <flags.h>
 #include <representations/GeometricObject.h>
 #include <iostream>
+#include <future>
 #include <random>
 #ifdef HYPRO_USE_PPL
 #include "pplStructs.h"
@@ -23,9 +24,10 @@
 namespace benchmark {
 namespace box
 {
-    Results<int> intersectHalfspaces(const Settings& settings);
-    Results<int> satisfiesHalfspaces(const Settings& settings);
-    Results<int> run(const Settings& settings);
-
+    Results<std::size_t> intersectHalfspace(const Settings& settings);
+    Results<std::size_t> affineTransformation(const Settings& settings);
+    Results<std::size_t> unite(const Settings& settings);
+    Results<std::size_t> intersect(const Settings& settings);
+    Results<std::size_t> run(const Settings& settings);
 } // box
 } // namespace benchmark

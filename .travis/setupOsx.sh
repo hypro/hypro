@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 #set -ev
 brew update --quiet
-brew install doxygen eigen
+brew update cmake
+brew install llvm
 
 if [[ ${COMPILER} == "g++-4.8" ]]; then
 	echo "g++-4.8 is not supported"

@@ -3,8 +3,8 @@
 namespace benchmark {
 namespace box {
 
-  Results<int> affineTransformation(const Settings& settings) {
-        Results<int> ress;
+  Results<std::size_t> affineTransformation(const Settings& settings) {
+        Results<std::size_t> ress;
         hypro::Box<::benchmark::Number> box;
         // benchmark against PPL
         #ifdef HYPRO_USE_PPL
@@ -20,57 +20,33 @@ namespace box {
         // iterate over dimensions
         for(std::size_t d = 1; d < settings.maxDimension; ++d) {
             // create instances
-            std::vector<hypro::Halfspace<::benchmark::Number>> hsps;
-            #ifdef HYPRO_USE_PPL
-            std::vector<Parma_Polyhedra_Library::Constraint> pplHsps;
-            #endif
+            std::vector<hypro::matrix_t<::benchmark::Number>> matrices;
+            std::vector<hypro::vector_t<::benchmark::Number>> vectors;
             Timer creationTimer;
             for(std::size_t i = 0; i < settings.iterations; ++i) {
-                hypro::vector_t<::benchmark::Number> normal = hypro::vector_t<::benchmark::Number>(d);
-                for(std::size_t id = 0; id < d; ++id) {
-                    normal(id) = dist(generator);
+                hypro::matrix_t<::benchmark::Number> matrix = hypro::matrix_t<::benchmark::Number>(d,d);
+                hypro::vector_t<::benchmark::Number> vector = hypro::vector_t<::benchmark::Number>(d);
+                for(std::size_t row = 0; row < d; ++row) {
+                    for(std::size_t col = 0; col < d; ++col) {
+                        matrix(row,col) = dist(generator);
+                    }
+                    vector(row) = dist(generator);
                 }
-                hsps.emplace_back(hypro::Halfspace<::benchmark::Number>(normal,0));
-                // create same constraint for PPL.
-                #ifdef HYPRO_USE_PPL
-                Parma_Polyhedra_Library::Constraint c;
-                Parma_Polyhedra_Library::Linear_Expression e;
-                for (dimension_type i = 0; i < d; ++i )
-                    e += hsps.back().normal()(i) * Variable(i);
-                e += -hsps.back().offset();
-                c = e <= 0;
-                pplHsps.emplace_back(c);
-                #endif
+                matrices.emplace_back(std::move(matrix));
+                vectors.emplace_back(std::move(vector));
             }
             auto creationTime = creationTimer.elapsed();
-            std::cout << "Dimension " << d << ": Creation took " << creationTime.count() << " sec." << std::endl;
+            //std::cout << "Dimension " << d << ": Creation took " << creationTime.count() << " sec." << std::endl;
             ress.mCreationTime += creationTime;
 
             // run instances
             Timer runTimerHyPro;
             for(std::size_t i = 0; i < settings.iterations; ++i) {
-                box.intersectHalfspace(hsps[i]);
+                box.affineTransformation(matrices[i], vectors[i]);
             }
             auto runningTime = runTimerHyPro.elapsed();
-            std::cout << "Dimension " << d << ":  Running took " << runningTime.count() << " sec." << std::endl;
-
-            #ifdef HYPRO_USE_PPL
-            std::chrono::duration<double> pplRT = std::chrono::duration<double>::zero();
-            for(std::size_t i = 0; i < settings.iterations; ++i) {
-                // construct fresh box
-                pplbox b = pplbox(d);
-                for(Parma_Polyhedra_Library::dimension_type id = 0; id < d; ++id) {
-                    pplItv itv;
-                    itv.lower() = -1;
-                    itv.upper() = 1;
-                    b.set_interval(Parma_Polyhedra_Library::Variable(id),itv);
-                }
-                Timer runTimerPPL;
-                b.refine_with_constraint(pplHsps[i]);
-                pplRT += runTimerPPL.elapsed();
-            }
-            std::cout << "Dimension " << d << ":  Running took " << pplRT.count() << " sec (PPL)." << std::endl;
-            #endif
+            ress.emplace_back({"affineTransformation",runningTime/settings.iterations,static_cast<int>(d)});
+            //std::cout << "Dimension " << d << ":  Running took " << runningTime.count() << " sec." << std::endl;
 
             ress.mRunningTime += runningTime;
 
@@ -82,4 +58,3 @@ namespace box {
 
 } // box
 } // benchmark
-

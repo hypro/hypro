@@ -43,7 +43,7 @@ namespace hypro {
 			res = EvaluationResult<Number>( 1, INFTY );
 		} else {
 			assert(valuation.isRational());
-			res = EvaluationResult<Number>( carl::convert<smtrat::Rational, Number>(valuation.asRational()), FEAS );
+			res = EvaluationResult<Number>( carl::convert<smtrat::Rational, Number>(valuation.asRational()),SOLUTION::FEAS );
 			smtrat::Model assignment = solver.model();
 			vector_t<Number> point = vector_t<Number>(dimension);
 			for(unsigned d = 0; d < dimension; ++d){

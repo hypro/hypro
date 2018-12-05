@@ -1,6 +1,6 @@
 #include "gtest/gtest.h"
 #include "types.h"
-#include "util/Plotter.h"
+#include "util/plotting/Plotter.h"
 
 using namespace hypro;
 

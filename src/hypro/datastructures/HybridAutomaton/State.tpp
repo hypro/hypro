@@ -3,8 +3,8 @@
 namespace hypro
 {
 
-template<typename Number, typename tNumber, typename Representation, typename ...Rargs>
-const boost::variant<Representation,Rargs...>& State<Number,tNumber,Representation,Rargs...>::getSet(std::size_t i) const {
+template<typename Number, typename Representation, typename ...Rargs>
+const boost::variant<Representation,Rargs...>& State<Number,Representation,Rargs...>::getSet(std::size_t i) const {
 	DEBUG("hypro.datastructures","Attempt to get set at pos " << i << ", mSets.size() = " << mSets.size() << ", mTypes.size() = " << mTypes.size());
 	assert(mTypes.size() == mSets.size());
 	assert(i < mSets.size());
@@ -12,17 +12,17 @@ const boost::variant<Representation,Rargs...>& State<Number,tNumber,Representati
 	return mSets.at(i);
 }
 
-template<typename Number, typename tNumber, typename Representation, typename ...Rargs>
-boost::variant<Representation,Rargs...>& State<Number,tNumber,Representation,Rargs...>::rGetSet(std::size_t i) {
+template<typename Number, typename Representation, typename ...Rargs>
+boost::variant<Representation,Rargs...>& State<Number,Representation,Rargs...>::rGetSet(std::size_t i) {
 	DEBUG("hypro.datastructures","Attempt to get set reference at pos " << i << ", mSets.size() = " << mSets.size());
 	assert(mTypes.size() == mSets.size());
 	assert(checkConsistency());
 	return mSets.at(i);
 }
 
-template<typename Number, typename tNumber, typename Representation, typename ...Rargs>
+template<typename Number, typename Representation, typename ...Rargs>
 template<typename R>
-void State<Number,tNumber,Representation,Rargs...>::setSet(const R& s, std::size_t i) {
+void State<Number,Representation,Rargs...>::setSet(const R& s, std::size_t i) {
 	DEBUG("hypro.datastructures","Attempt to set set at pos " << i << ", mSets.size() = " << mSets.size());
 	assert(mSets.size() == mTypes.size());
 	assert(checkConsistency());
@@ -38,9 +38,26 @@ void State<Number,tNumber,Representation,Rargs...>::setSet(const R& s, std::size
 	assert(checkConsistency());
 }
 
+template<typename Number, typename Representation, typename ...Rargs>
+void State<Number,Representation,Rargs...>::setSet(const State<Number,Representation,Rargs...>::repVariant& s, std::size_t i) {
+	DEBUG("hypro.datastructures","Attempt to set set at pos " << i << ", mSets.size() = " << mSets.size());
+	assert(mSets.size() == mTypes.size());
+	assert(checkConsistency());
+	while(i >= mSets.size()) {
+		mSets.emplace_back(Representation()); // some default set.
+		mTypes.push_back(Representation::type()); // some default set type.
+	}
+	TRACE("hypro.datastructures","Set set to:" << s);
+	mSets[i] = s;
+	mTypes[i] = boost::apply_visitor(genericTypeVisitor(), s);
+	DEBUG("hypro.datastructures","Set set at pos " << i << ", mSets.size() = " << mSets.size());
+	assert(mSets.size() > i);
+	assert(checkConsistency());
+}
 
-template<typename Number, typename tNumber, typename Representation, typename ...Rargs>
-void State<Number,tNumber,Representation,Rargs...>::addTimeToClocks(tNumber t) {
+
+template<typename Number, typename Representation, typename ...Rargs>
+void State<Number,Representation,Rargs...>::addTimeToClocks(tNumber t) {
 	TRACE("hypro.datastructures","Add timestep of size " << t << " to clocks.");
 	//if(mHasClocks) {
 	//	matrix_t<Number> identity = matrix_t<Number>::Identity(mClockAssignment.dimension(), mClockAssignment.dimension());
@@ -52,9 +69,9 @@ void State<Number,tNumber,Representation,Rargs...>::addTimeToClocks(tNumber t) {
 	mTimestamp += t;
 }
 
-template<typename Number, typename tNumber, typename Representation, typename ...Rargs>
-State<Number,tNumber,Representation,Rargs...> State<Number,tNumber,Representation,Rargs...>::unite(const State<Number,tNumber,Representation,Rargs...>& in) const {
-	State<Number,tNumber,Representation,Rargs...> res(*this);
+template<typename Number, typename Representation, typename ...Rargs>
+State<Number,Representation,Rargs...> State<Number,Representation,Rargs...>::unite(const State<Number,Representation,Rargs...>& in) const {
+	State<Number,Representation,Rargs...> res(*this);
 
 	TRACE("hypro.datastructures","Union with " << mSets.size() << " sets.");
 
@@ -72,8 +89,8 @@ State<Number,tNumber,Representation,Rargs...> State<Number,tNumber,Representatio
 	return res;
 }
 
-template<typename Number, typename tNumber, typename Representation, typename ...Rargs>
-std::pair<CONTAINMENT,State<Number,tNumber,Representation,Rargs...>> State<Number,tNumber,Representation,Rargs...>::satisfies(const Condition<Number>& in) const {
+template<typename Number, typename Representation, typename ...Rargs>
+std::pair<CONTAINMENT,State<Number,Representation,Rargs...>> State<Number,Representation,Rargs...>::satisfies(const Condition<Number>& in) const {
 	//DEBUG("hypro.datastructures","this rep name: " << mSetRepresentationName << " vs " << in.getSetRepresentation());
 	//assert(mSetRepresentationName == in.getSetRepresentation());
 
@@ -87,7 +104,7 @@ std::pair<CONTAINMENT,State<Number,tNumber,Representation,Rargs...>> State<Numbe
 	TRACE("hypro.datastructures","Condition matrix: " << std::endl << in.getMatrix() << std::endl << "Vector: " << std::endl << in.getVector());
 	assert(in.size() == mSets.size());
 
-	State<Number,tNumber,Representation,Rargs...> res(*this);
+	State<Number,Representation,Rargs...> res(*this);
 
 	CONTAINMENT strictestContainment = CONTAINMENT::FULL;
 
@@ -98,7 +115,7 @@ std::pair<CONTAINMENT,State<Number,tNumber,Representation,Rargs...>> State<Numbe
 
 		res.setSetDirect(resultPair.second, i);
 
-		if(!resultPair.first) {
+		if(resultPair.first == CONTAINMENT::NO) {
 			TRACE("hypro.datastructures","State set " << i << "(type " << mTypes.at(i) << ") failed the condition - return empty.");
 			strictestContainment = resultPair.first;
 			break;
@@ -109,8 +126,8 @@ std::pair<CONTAINMENT,State<Number,tNumber,Representation,Rargs...>> State<Numbe
 	return std::make_pair(strictestContainment, res);
 }
 
-template<typename Number, typename tNumber, typename Representation, typename ...Rargs>
-std::pair<CONTAINMENT,State<Number,tNumber,Representation,Rargs...>> State<Number,tNumber,Representation,Rargs...>::satisfiesHalfspaces(const matrix_t<Number>& constraints, const vector_t<Number>& constants) const {
+template<typename Number, typename Representation, typename ...Rargs>
+std::pair<CONTAINMENT,State<Number,Representation,Rargs...>> State<Number,Representation,Rargs...>::satisfiesHalfspaces(const matrix_t<Number>& constraints, const vector_t<Number>& constants) const {
 	if(constraints.rows() == 0) {
 		return std::make_pair(CONTAINMENT::FULL,*this);
 	}
@@ -118,8 +135,8 @@ std::pair<CONTAINMENT,State<Number,tNumber,Representation,Rargs...>> State<Numbe
 	return partiallySatisfies(Condition<Number>(constraints,constants), 0);
 }
 
-template<typename Number, typename tNumber, typename Representation, typename ...Rargs>
-std::pair<CONTAINMENT,State<Number,tNumber,Representation,Rargs...>> State<Number,tNumber,Representation,Rargs...>::partiallySatisfies(const Condition<Number>& in, std::size_t I) const {
+template<typename Number, typename Representation, typename ...Rargs>
+std::pair<CONTAINMENT,State<Number,Representation,Rargs...>> State<Number,Representation,Rargs...>::partiallySatisfies(const Condition<Number>& in, std::size_t I) const {
 	TRACE("hypro.datastructures","Check Condition of size " << in.size() << " against set at pos " << I);
 	assert(checkConsistency());
 
@@ -129,7 +146,7 @@ std::pair<CONTAINMENT,State<Number,tNumber,Representation,Rargs...>> State<Numbe
 	}
 	assert(in.size() == mSets.size());
 
-	State<Number,tNumber,Representation,Rargs...> res(*this);
+	State<Number,Representation,Rargs...> res(*this);
 	assert(res.getTimestamp() == this->getTimestamp());
 
 	TRACE("hypro.datastructures","Invoking satisfiesHalfspaces visitor.");
@@ -144,9 +161,9 @@ std::pair<CONTAINMENT,State<Number,tNumber,Representation,Rargs...>> State<Numbe
 }
 
 
-template<typename Number, typename tNumber, typename Representation, typename ...Rargs>
-State<Number,tNumber,Representation,Rargs...> State<Number,tNumber,Representation,Rargs...>::applyTimeStep(const std::vector<std::pair<const matrix_t<Number>&, const vector_t<Number>&>>& flows, tNumber timeStepSize ) const {
-	State<Number,tNumber,Representation,Rargs...> res(*this);
+template<typename Number, typename Representation, typename ...Rargs>
+State<Number,Representation,Rargs...> State<Number,Representation,Rargs...>::applyTimeStep(const std::vector<std::pair<const matrix_t<Number>&, const vector_t<Number>&>>& flows, tNumber timeStepSize ) const {
+	State<Number,Representation,Rargs...> res(*this);
 	TRACE("hypro.datastructures","Apply timestep of size " << timeStepSize);
 	//res.setSet(mSet.affineTransformation(trafoMatrix,trafoVector));
 	assert(flows.size() == mSets.size());
@@ -158,9 +175,9 @@ State<Number,tNumber,Representation,Rargs...> State<Number,tNumber,Representatio
 	return res;
 }
 
-template<typename Number, typename tNumber, typename Representation, typename ...Rargs>
-State<Number,tNumber,Representation,Rargs...> State<Number,tNumber,Representation,Rargs...>::partiallyApplyTimeStep(const ConstraintSet<Number>& flow, tNumber timeStepSize, std::size_t I ) const {
-	State<Number,tNumber,Representation,Rargs...> res(*this);
+template<typename Number, typename Representation, typename ...Rargs>
+State<Number,Representation,Rargs...> State<Number,Representation,Rargs...>::partiallyApplyTimeStep(const ConstraintSet<Number>& flow, tNumber timeStepSize, std::size_t I ) const {
+	State<Number,Representation,Rargs...> res(*this);
 	assert(I < mSets.size());
 	assert(checkConsistency());
 	res.setSetDirect(boost::apply_visitor(genericAffineTransformationVisitor<repVariant, Number>(flow.matrix(), flow.vector()), mSets.at(I)), I);
@@ -169,9 +186,9 @@ State<Number,tNumber,Representation,Rargs...> State<Number,tNumber,Representatio
 	return res;
 }
 
-template<typename Number, typename tNumber, typename Representation, typename ...Rargs>
-State<Number,tNumber,Representation,Rargs...> State<Number,tNumber,Representation,Rargs...>::applyTransformation(const std::vector<ConstraintSet<Number>>& trafos ) const {
-	State<Number,tNumber,Representation,Rargs...> res(*this);
+template<typename Number, typename Representation, typename ...Rargs>
+State<Number,Representation,Rargs...> State<Number,Representation,Rargs...>::applyTransformation(const std::vector<ConstraintSet<Number>>& trafos ) const {
+	State<Number,Representation,Rargs...> res(*this);
 	TRACE("hypro.datastructures","Apply transformation of " << mSets.size() << " sets (" << trafos.size() << " transformations).");
 	assert(trafos.size() == mSets.size());
 	assert(checkConsistency());
@@ -181,9 +198,9 @@ State<Number,tNumber,Representation,Rargs...> State<Number,tNumber,Representatio
 	return res;
 }
 
-template<typename Number, typename tNumber, typename Representation, typename ...Rargs>
-State<Number,tNumber,Representation,Rargs...> State<Number,tNumber,Representation,Rargs...>::applyTransformation(const ConstraintSet<Number>& trafo ) const {
-	State<Number,tNumber,Representation,Rargs...> res(*this);
+template<typename Number, typename Representation, typename ...Rargs>
+State<Number,Representation,Rargs...> State<Number,Representation,Rargs...>::applyTransformation(const ConstraintSet<Number>& trafo ) const {
+	State<Number,Representation,Rargs...> res(*this);
 	TRACE("hypro.datastructures","Apply transformation of " << mSets.size() << " sets (" << trafo.size() << " transformations).");
 	assert(mSets.size() == 1);
 	assert(checkConsistency());
@@ -193,22 +210,22 @@ State<Number,tNumber,Representation,Rargs...> State<Number,tNumber,Representatio
 	return res;
 }
 
-template<typename Number, typename tNumber, typename Representation, typename ...Rargs>
-State<Number,tNumber,Representation,Rargs...> State<Number,tNumber,Representation,Rargs...>::linearTransformation(const matrix_t<Number>& matrix) const {
+template<typename Number, typename Representation, typename ...Rargs>
+State<Number,Representation,Rargs...> State<Number,Representation,Rargs...>::linearTransformation(const matrix_t<Number>& matrix) const {
 	assert(checkConsistency());
 	return partiallyApplyTransformation(ConstraintSet<Number>(matrix, vector_t<Number>::Zero(matrix.rows())), 0);
 }
 
-template<typename Number, typename tNumber, typename Representation, typename ...Rargs>
-State<Number,tNumber,Representation,Rargs...> State<Number,tNumber,Representation,Rargs...>::affineTransformation(const matrix_t<Number>& matrix, const vector_t<Number>& vector) const {
+template<typename Number, typename Representation, typename ...Rargs>
+State<Number,Representation,Rargs...> State<Number,Representation,Rargs...>::affineTransformation(const matrix_t<Number>& matrix, const vector_t<Number>& vector) const {
 	assert(checkConsistency());
 	return partiallyApplyTransformation(ConstraintSet<Number>(matrix, vector), 0);
 }
 
 
-template<typename Number, typename tNumber, typename Representation, typename ...Rargs>
-State<Number,tNumber,Representation,Rargs...> State<Number,tNumber,Representation,Rargs...>::partiallyApplyTransformation(const std::vector<ConstraintSet<Number>>& trafos, const std::vector<std::size_t>& sets ) const {
-	State<Number,tNumber,Representation,Rargs...> res(*this);
+template<typename Number, typename Representation, typename ...Rargs>
+State<Number,Representation,Rargs...> State<Number,Representation,Rargs...>::partiallyApplyTransformation(const std::vector<ConstraintSet<Number>>& trafos, const std::vector<std::size_t>& sets ) const {
+	State<Number,Representation,Rargs...> res(*this);
 	assert(trafos.size() == sets.size());
 	assert(checkConsistency());
 	for(std::size_t i = 0; i < sets.size(); ++i) {
@@ -218,9 +235,9 @@ State<Number,tNumber,Representation,Rargs...> State<Number,tNumber,Representatio
 	return res;
 }
 
-template<typename Number, typename tNumber, typename Representation, typename ...Rargs>
-State<Number,tNumber,Representation,Rargs...> State<Number,tNumber,Representation,Rargs...>::partiallyApplyTransformation(const ConstraintSet<Number>& trafo, std::size_t I ) const {
-	State<Number,tNumber,Representation,Rargs...> res(*this);
+template<typename Number, typename Representation, typename ...Rargs>
+State<Number,Representation,Rargs...> State<Number,Representation,Rargs...>::partiallyApplyTransformation(const ConstraintSet<Number>& trafo, std::size_t I ) const {
+	State<Number,Representation,Rargs...> res(*this);
 	assert(I < mSets.size());
 	assert(checkConsistency());
 	res.setSetDirect(boost::apply_visitor(genericAffineTransformationVisitor<repVariant, Number>(trafo.matrix(), trafo.vector()), mSets.at(I)), I);
@@ -229,14 +246,14 @@ State<Number,tNumber,Representation,Rargs...> State<Number,tNumber,Representatio
 }
 
 
-template<typename Number, typename tNumber, typename Representation, typename ...Rargs>
-State<Number,tNumber,Representation,Rargs...> State<Number,tNumber,Representation,Rargs...>::minkowskiSum(const State<Number,tNumber,Representation,Rargs...>& rhs) const {
+template<typename Number, typename Representation, typename ...Rargs>
+State<Number,Representation,Rargs...> State<Number,Representation,Rargs...>::minkowskiSum(const State<Number,Representation,Rargs...>& rhs) const {
 	//If only one representation given: avoid boost visitor
 	//if(mTypes.size() == 1){
 	//	return boost::get<Representation>(mSets.at(0)).minkowskiSum(rhs);
 	//}
 	//For more representations: use boost visitor
-	State<Number,tNumber,Representation,Rargs...> res(*this);
+	State<Number,Representation,Rargs...> res(*this);
 	assert(mSets.size() == rhs.getSets().size());
 	assert(checkConsistency());
 	for(std::size_t i=0; i < rhs.getSets().size(); i++){
@@ -245,8 +262,8 @@ State<Number,tNumber,Representation,Rargs...> State<Number,tNumber,Representatio
 	return res;
 }
 
-template<typename Number, typename tNumber, typename Representation, typename ...Rargs>
-State<Number,tNumber,Representation,Rargs...> State<Number,tNumber,Representation,Rargs...>::partiallyMinkowskiSum(const State<Number,tNumber,Representation,Rargs...>& rhs, std::size_t I ) const {
+template<typename Number, typename Representation, typename ...Rargs>
+State<Number,Representation,Rargs...> State<Number,Representation,Rargs...>::partiallyMinkowskiSum(const State<Number,Representation,Rargs...>& rhs, std::size_t I ) const {
 	assert(I < mSets.size());
 	assert(I < rhs.getSets().size());
 	assert(checkConsistency());
@@ -255,39 +272,38 @@ State<Number,tNumber,Representation,Rargs...> State<Number,tNumber,Representatio
 	//	return boost::get<Representation>(mSets.at(0)).minkowskiSum(rhs);
 	//}
 	//For more representations avaiable: use boost visitor
-	State<Number,tNumber,Representation,Rargs...> res(*this);
+	State<Number,Representation,Rargs...> res(*this);
 	res.setSetDirect(boost::apply_visitor(genericMinkowskiSumVisitor<repVariant>(),mSets.at(I), rhs.getSet(I)), I);
 	return res;
 }
 
-template<typename Number, typename tNumber, typename Representation, typename ...Rargs>
-bool State<Number,tNumber,Representation,Rargs...>::contains(const State<Number,tNumber,Representation,Rargs...>& rhs) const {
+template<typename Number, typename Representation, typename ...Rargs>
+bool State<Number,Representation,Rargs...>::contains(const State<Number,Representation,Rargs...>& rhs) const {
 	assert(checkConsistency());
 	assert(rhs.getNumberSets() == this->getNumberSets());
 	for(std::size_t i=0; i < this->getNumberSets(); ++i){
-		auto tmp = boost::apply_visitor(genericConversionVisitor<boost::variant<Representation,Rargs...>, Number>(mTypes.at(i)), rhs.getSet(i));
-		if(!boost::apply_visitor(genericSetContainsVisitor(), this->getSet(i), tmp)) {
+		if(!boost::apply_visitor(genericSetContainsVisitor(), this->getSet(i), rhs.getSet(i))) {
 			return false;
 		}
 	}
 	return true;
 }
 
-template<typename Number, typename tNumber, typename Representation, typename ...Rargs>
-std::vector<Point<Number>> State<Number,tNumber,Representation,Rargs...>::vertices(std::size_t I) const {
+template<typename Number, typename Representation, typename ...Rargs>
+std::vector<Point<Number>> State<Number,Representation,Rargs...>::vertices(std::size_t I) const {
 	assert(checkConsistency());
 	return boost::apply_visitor(genericVerticesVisitor<Number>(), mSets.at(I));
 }
 
-template<typename Number, typename tNumber, typename Representation, typename ...Rargs>
-State<Number,tNumber,Representation,Rargs...> State<Number,tNumber,Representation,Rargs...>::project(const std::vector<std::size_t>& dimensions, std::size_t I) const {
+template<typename Number, typename Representation, typename ...Rargs>
+State<Number,Representation,Rargs...> State<Number,Representation,Rargs...>::project(const std::vector<std::size_t>& dimensions, std::size_t I) const {
 	State res(*this);
 	res.setSetDirect(boost::apply_visitor(genericProjectionVisitor<repVariant>(dimensions), mSets.at(I)));
 	return res;
 }
 
-template<typename Number, typename tNumber, typename Representation, typename ...Rargs>
-std::size_t State<Number,tNumber,Representation,Rargs...>::getDimension(std::size_t I) const {
+template<typename Number, typename Representation, typename ...Rargs>
+std::size_t State<Number,Representation,Rargs...>::getDimension(std::size_t I) const {
 	assert(I < mSets.size());
 	assert(checkConsistency());
 	//If only one representation given: avoid boost visitor
@@ -298,8 +314,8 @@ std::size_t State<Number,tNumber,Representation,Rargs...>::getDimension(std::siz
 	return boost::apply_visitor(genericDimensionVisitor(), mSets.at(I));
 }
 
-template<typename Number, typename tNumber, typename Representation, typename ...Rargs>
-Number State<Number,tNumber,Representation,Rargs...>::getSupremum(std::size_t I) const {
+template<typename Number, typename Representation, typename ...Rargs>
+Number State<Number,Representation,Rargs...>::getSupremum(std::size_t I) const {
 	assert(I < mSets.size());
 	assert(checkConsistency());
 	//If only one representation given: avoid boost visitor
@@ -310,22 +326,22 @@ Number State<Number,tNumber,Representation,Rargs...>::getSupremum(std::size_t I)
 	return boost::apply_visitor(genericSupremumVisitor<Number>(),mSets.at(I));
 }
 
-template<typename Number, typename tNumber, typename Representation, typename ...Rargs>
-void State<Number,tNumber,Representation,Rargs...>::removeRedundancy(){
+template<typename Number, typename Representation, typename ...Rargs>
+void State<Number,Representation,Rargs...>::removeRedundancy(){
 	//If only one representation given: avoid boost visitor
 	//if(mTypes.size() == 1){
 	//	return boost::get<Representation>(mSets.at(0)).removeRedundancy();
 	//}
 	//For more representations avaiable: use boost visitor
 	assert(checkConsistency());
-	State<Number,tNumber,Representation,Rargs...> res(*this);
+	State<Number,Representation,Rargs...> res(*this);
 	for(std::size_t i=0; i < mSets.size(); i++){
 		res.setSetDirect(boost::apply_visitor(genericRedundancyVisitor<repVariant,Number>(), mSets.at(i)), i);
 	}
 }
 
-template<typename Number, typename tNumber, typename Representation, typename ...Rargs>
-void State<Number,tNumber,Representation,Rargs...>::partiallyRemoveRedundancy(std::size_t I){
+template<typename Number, typename Representation, typename ...Rargs>
+void State<Number,Representation,Rargs...>::partiallyRemoveRedundancy(std::size_t I){
 	assert(I < mSets.size());
 	assert(checkConsistency());
 	//If only one representation given: avoid boost visitor
@@ -333,19 +349,19 @@ void State<Number,tNumber,Representation,Rargs...>::partiallyRemoveRedundancy(st
 	//	return boost::get<Representation>(mSets.at(0)).removeRedundancy();
 	//}
 	//For more representations avaiable: use boost visitor
-	return boost::apply_visitor(genericRedundancyVisitor<repVariant,Number>(),mSets.at(I), I);
+	mSets[I] = boost::apply_visitor(genericRedundancyVisitor<repVariant,Number>(),mSets[I]);
 }
 
-template<typename Number, typename tNumber, typename Representation, typename ...Rargs>
-void State<Number,tNumber,Representation,Rargs...>::reduceRepresentation() {
+template<typename Number, typename Representation, typename ...Rargs>
+void State<Number,Representation,Rargs...>::reduceRepresentation() {
 	assert(checkConsistency());
 	for(std::size_t i=0; i < mSets.size(); i++){
 		this->setSetDirect(boost::apply_visitor(genericReductionVisitor<repVariant,Number>(), mSets.at(i)), i);
 	}
 }
 
-template<typename Number, typename tNumber, typename Representation, typename ...Rargs>
-bool State<Number,tNumber,Representation,Rargs...>::checkConsistency() const {
+template<typename Number, typename Representation, typename ...Rargs>
+bool State<Number,Representation,Rargs...>::checkConsistency() const {
 	if(mSets.size() != mTypes.size()){
 		std::cout << "Inconsistent size!" << std::endl;
 		return false;
@@ -362,8 +378,8 @@ bool State<Number,tNumber,Representation,Rargs...>::checkConsistency() const {
 	return true;
 }
 
-template<typename Number, typename tNumber, typename Representation, typename ...Rargs>
-void State<Number,tNumber,Representation,Rargs...>::setSetsSave(const std::vector<boost::variant<Representation,Rargs...>>& sets){
+template<typename Number, typename Representation, typename ...Rargs>
+void State<Number,Representation,Rargs...>::setSetsSave(const std::vector<boost::variant<Representation,Rargs...>>& sets){
 	assert(checkConsistency());
 	//std::cout << "mSets.size(): " << mSets.size() << " mTypes.size(): " << mTypes.size() << " sets.size(): " << sets.size() << std::endl;
 	for(std::size_t i=0; i < sets.size(); i++){
@@ -373,8 +389,8 @@ void State<Number,tNumber,Representation,Rargs...>::setSetsSave(const std::vecto
 	assert(checkConsistency());
 }
 
-template<typename Number, typename tNumber, typename Representation, typename ...Rargs>
-void State<Number,tNumber,Representation,Rargs...>::decompose(std::vector<std::vector<size_t>> decomposition){
+template<typename Number, typename Representation, typename ...Rargs>
+void State<Number,Representation,Rargs...>::decompose(std::vector<std::vector<size_t>> decomposition){
 	if(decomposition.size() == 1 || mSets.size() != 1){
 		// no decomposition/already decomposed
 	}
@@ -415,19 +431,19 @@ void State<Number,tNumber,Representation,Rargs...>::decompose(std::vector<std::v
 		if(indicesToAdd.size() > 0){
 			// create a row matrix with numIndicesToAdd many rows
 			matrix_t<Number> rowMat = matrix_t<Number>::Zero(indicesToAdd.size(), constraintsOld.cols());
-			for(size_t index = 0; index < rowMat.rows(); index++){
+			for(Eigen::Index index = 0; index < rowMat.rows(); index++){
 				// copy over preselected rows
 				rowMat.row(index) = constraintsOld.row(indicesToAdd[index]);
 			}
 			// create final matrix that does not contain columns not in this set
 			matrix_t<Number> finMat = matrix_t<Number>::Zero(rowMat.rows(), decomp.size());
 			// -1 for constant column
-			for(size_t index = 0; index < finMat.cols(); index++){
+			for(Eigen::Index index = 0; index < finMat.cols(); index++){
 				finMat.col(index) = rowMat.col(decomp[index]);
 			}
 			// create final constant vector
 			vector_t<Number> finVec =  vector_t<Number>::Zero(indicesToAdd.size());
-			for(size_t index=0; index < finVec.rows(); index++){
+			for(Eigen::Index index=0; index < finVec.rows(); index++){
 				finVec(index) = constantsOld(indicesToAdd[index]);
 			}
 
@@ -448,16 +464,15 @@ void State<Number,tNumber,Representation,Rargs...>::decompose(std::vector<std::v
 }
 
 
-template<typename Number, typename tNumber, typename Representation, typename ...Rargs>
-void State<Number,tNumber,Representation,Rargs...>::setAndConvertType( representation_name to, std::size_t I ){
+template<typename Number, typename Representation, typename ...Rargs>
+template<typename To>
+void State<Number,Representation,Rargs...>::setAndConvertType( std::size_t I ){
 	assert(checkConsistency());
 	assert(I < mTypes.size());
-	// skip, if type is already correct.
-	if(mTypes[I] == to) return;
 
 	// convert set to type
-	mSets[I] = boost::apply_visitor(genericConversionVisitor<repVariant,Number>(to), mSets[I]);
-	mTypes[I] = to;
+	mSets[I] = boost::apply_visitor(genericConversionVisitor<repVariant,To>(To::type()), mSets[I]);
+	mTypes[I] = To::type();
 
 	assert(checkConsistency());
 }

@@ -35,6 +35,9 @@ template<typename Number, typename DerivedShape>
 class GeometricObject {
 
 public:
+
+	typedef Number NumberType;
+
 	/**
 	 * @brief      Destroys the object.
 	 */

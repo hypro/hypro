@@ -10,13 +10,12 @@
 #pragma once
 
 #include "Location.h"
-#include "LocationManager.h"
-#include "State.h"
+//#include "State.h"
 #include "Transition.h"
 #include "Condition.h"
 #include "HybridAutomatonComp.h"
 #include "../../types.h"
-#include "../../representations/GeometricObject.h"
+//#include "../../representations/GeometricObject.h"
 #include "../../util/adaptions_eigen/adaptions_eigen.h"
 
 #include <map>
@@ -31,13 +30,14 @@ namespace hypro
  			   can only be added as unique pointers. If another class/object requests a location/transition,
  			   then only normal pointers are returned.
  */
-template <typename Number, typename State = State_t<Number,Number>>
+//template <typename Number, typename State = State_t<Number>>
+template <typename Number>
 class HybridAutomaton
 {
   public:
     using locationSet = std::set<std::unique_ptr<Location<Number>>, locPtrComp<Number>>; /// Set of unique location pointers.
     using transitionSet = std::set<std::unique_ptr<Transition<Number>>>; /// Set of unique transition pointers.
-    using locationStateMap = std::multimap<const Location<Number>*, State>; /// Multi-map from location pointers to states.
+    using locationStateMap = std::multimap<const Location<Number>*, ConstraintSetT<Number>>; /// Multi-map from location pointers to states.
     using locationConditionMap = std::map<const Location<Number>*, Condition<Number>>; /// Map from location pointers to conditions.
     using conditionVector = std::vector<Condition<Number>>; /// Vector of conditions.
     using variableVector = std::vector<std::string>; /// Vector of variables
@@ -62,14 +62,14 @@ class HybridAutomaton
      * @param[in]  	hybrid  The original hybrid automaton.
      * @details 	This operation is costly as it performs deep copies
      */
-    HybridAutomaton(const HybridAutomaton<Number,State>& hybrid);
+    HybridAutomaton(const HybridAutomaton<Number>& hybrid);
 
     /**
      * @brief      	Move constructor.
      *
      * @param[in]  	hybrid  The original hybrid automaton.
      */
-    HybridAutomaton(HybridAutomaton<Number,State>&& hybrid);
+    HybridAutomaton(HybridAutomaton<Number>&& hybrid);
 
     /**
      * @brief 		Constructor from locations, transitions and initial states
@@ -90,14 +90,14 @@ class HybridAutomaton
      * @param[in]	rhs 	The original hybrid automaton
      * @details 	This operation is costly as it performs deep copies
      */
-    HybridAutomaton& operator=(const HybridAutomaton<Number,State>& rhs);
+    HybridAutomaton& operator=(const HybridAutomaton<Number>& rhs);
 
     /**
      * @brief 		Move Assignment
      *
      * @param[in]	rhs 	The original hybrid automaton
      */
-    HybridAutomaton& operator=(HybridAutomaton<Number,State>&& rhs);
+    HybridAutomaton& operator=(HybridAutomaton<Number>&& rhs);
 
     /**
      * @brief      Getter function.
@@ -155,7 +155,7 @@ class HybridAutomaton
     void addLocation(std::unique_ptr<Location<Number>>&& location);
     void addTransition(const Transition<Number>& transition);
     void addTransition(std::unique_ptr<Transition<Number>>&& transition);
-    void addInitialState(const State& state) { mInitialStates.emplace(std::make_pair(state.getLocation(),state)); }
+    void addInitialState(const Location<Number>* loc, const ConstraintSetT<Number>& state) { mInitialStates.emplace(std::make_pair(loc,state)); }
     void addLocalBadState(const Location<Number>* loc, const Condition<Number>& condition) { mLocalBadStates.emplace(std::make_pair(loc,condition)); }
     void addGlobalBadState(const Condition<Number>& state) { mGlobalBadStates.push_back(state); }
     ///@}
@@ -183,7 +183,7 @@ class HybridAutomaton
      * @param rhs Automaton which can be a component of this.
      * @return True, if this is composed of rhs and some (possibly empty) rest.
      */
-    bool isComposedOf(const HybridAutomaton<Number,State>& rhs) const;
+    bool isComposedOf(const HybridAutomaton<Number>& rhs) const;
 
     std::string getDotRepresentation() const;
 
@@ -218,7 +218,7 @@ class HybridAutomaton
      * @param[in]  rhs   The right hand side.
      * @return     True, if both automata are equal, false otherwise.
      */
-    friend bool operator==( const HybridAutomaton<Number,State>& lhs, const HybridAutomaton<Number,State>& rhs ) {
+    friend bool operator==( const HybridAutomaton<Number>& lhs, const HybridAutomaton<Number>& rhs ) {
         if(!(lhs.equals(lhs.getLocations(),rhs.getLocations()))){
             TRACE("hypro.datastructures.hybridAutomaton", "no equality of locations.");
             return false;
@@ -260,7 +260,7 @@ class HybridAutomaton
         return true;
     }
 
-    friend bool operator!=( const HybridAutomaton<Number,State>& lhs, const HybridAutomaton<Number,State>& rhs ) {
+    friend bool operator!=( const HybridAutomaton<Number>& lhs, const HybridAutomaton<Number>& rhs ) {
     	return !(lhs == rhs);
     }
 
@@ -272,25 +272,25 @@ class HybridAutomaton
      */
     //This template is needed or else gcc spits out the warning -Wno-non-template-friend
     //Num represents Number and Stat represents State
-    template<typename Num, typename Stat>
-	friend HybridAutomaton<Num, Stat> operator||(const HybridAutomaton<Num, Stat>& lhs, const HybridAutomaton<Num, Stat>& rhs);
+    template<typename Num>
+	friend HybridAutomaton<Num> operator||(const HybridAutomaton<Num>& lhs, const HybridAutomaton<Num>& rhs);
     /**
      * @brief      Combination Operator.
      * @param[in]  lhs   The left hand side.
      * @param[in]  rhs   The right hand side.
      * @return     Return compositional Automata of two Automata.
      */
-    friend HybridAutomatonComp<Number, State> operator+(const HybridAutomaton<Number, State>& lhs, const HybridAutomaton<Number, State>& rhs) {
-		HybridAutomatonComp<Number, State> hac;
+    friend HybridAutomatonComp<Number> operator+(const HybridAutomaton<Number>& lhs, const HybridAutomaton<Number>& rhs) {
+		HybridAutomatonComp<Number> hac;
 		hac.addAutomata(lhs);
 		hac.addAutomata(rhs);
 		return hac;
     }
 
 #ifdef HYPRO_LOGGING
-    friend std::ostream& operator<<(std::ostream& ostr, const HybridAutomaton<Number,State>& a)
+    friend std::ostream& operator<<(std::ostream& ostr, const HybridAutomaton<Number>& a)
 #else
-    friend std::ostream& operator<<(std::ostream& ostr, const HybridAutomaton<Number,State>&)
+    friend std::ostream& operator<<(std::ostream& ostr, const HybridAutomaton<Number>&)
 #endif
     {
 #ifdef HYPRO_LOGGING

@@ -87,63 +87,61 @@ public:
     }
 };
 
-template<typename T, typename Number>
+template<typename T, typename To>
 class genericConversionVisitor
     : public boost::static_visitor<T>
 {
-protected:
-	representation_name toType;
 
 public:
-	genericConversionVisitor() = delete;
-	genericConversionVisitor(representation_name to) :
-		toType(to)
-	{}
 
 	template<typename B>
     inline T operator()(const B& lhs) const {
- 		switch(toType){
+		To tmp;
+		convert<typename To::NumberType,typename To::Settings, B>(lhs, tmp);
+		return tmp;
+		/*
+ 		switch(To::type()){
  			case representation_name::box: {
- 				Box<Number> tmp = Converter<Number>::toBox(lhs);
+ 				To tmp = Converter<Number>:: template toBox<BoxLinearOptimizationOn>(lhs);
  				return tmp;
  				break;
  			}
  			case representation_name::polytope_h: {
- 				HPolytope<Number> tmp = Converter<Number>::toHPolytope(lhs);
+ 				To tmp = Converter<Number>::toHPolytope(lhs);
  				return tmp;
  				break;
  			}
  			case representation_name::polytope_v: {
- 				VPolytope<Number> tmp = Converter<Number>::toVPolytope(lhs);
+ 				To tmp = Converter<Number>::toVPolytope(lhs);
  				return tmp;
  				break;
  			}
  			case representation_name::zonotope: {
- 				Zonotope<Number> tmp = Converter<Number>::toZonotope(lhs);
+ 				To tmp = Converter<Number>::toZonotope(lhs);
  				return tmp;
  				break;
  			}
  			case representation_name::support_function: {
- 				SupportFunction<Number> tmp = Converter<Number>::toSupportFunction(lhs);
+ 				To tmp = Converter<Number>::toSupportFunction(lhs);
  				return tmp;
  				break;
  			}
  			case representation_name::difference_bounds: {
- 				DifferenceBounds<Number> tmp = Converter<Number>::toDifferenceBounds(lhs);
+ 				To tmp = Converter<Number>::toDifferenceBounds(lhs);
  				return tmp;
  				break;
  			}
  			case representation_name::ppl_polytope: {
  				#ifdef HYPRO_USE_PPL
- 					Polytope<Number> tmp = Converter<Number>::toPolytope(lhs);
+ 					To tmp = Converter<Number>::toPolytope(lhs);
  					return tmp;
  					break;
  				#else
  					assert(false && "CANNOT CONVERT TO TYPE PPL POLYTOPE. Maybe set HYPRO_USE_PPL to true?");
  				#endif
- 			}	
+ 			}
  			case representation_name::constraint_set: {
- 				ConstraintSet<Number> tmp = Converter<Number>::toConstraintSet(lhs);
+ 				To tmp = Converter<Number>::toConstraintSet(lhs);
  				return tmp;
  				break;
  			}
@@ -152,9 +150,13 @@ public:
  			}
  			case representation_name::taylor_model:
  				assert(false && "CANNOT CONVERT TO TYPE TAYLOR MODEL.");
+
+			case representation_name::UNDEF:
+				assert(false && "CANNOT CONVERT TO TYPE UNDEF.");
  		}
  		assert(false && "SHOULD NEVER REACH THIS");
  		return T();
+		*/
     }
 };
 

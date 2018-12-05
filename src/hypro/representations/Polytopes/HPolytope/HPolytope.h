@@ -47,6 +47,8 @@ public:
 
 	using HalfspaceVector = std::vector<Halfspace<Number>>;
 
+	typedef Setting Settings;
+
   private:
 	mutable HalfspaceVector mHPlanes;
 	std::size_t mDimension;
@@ -416,5 +418,3 @@ HPolytopeT<To,Converter,Setting> convert(const HPolytopeT<From,Converter,Setting
 
 #include "HPolytope.tpp"
 #include "reduction.tpp"
-
-

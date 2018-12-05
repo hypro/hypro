@@ -3,8 +3,8 @@
 namespace benchmark {
 namespace box {
 
-  Results<int> satisfiesHalfspaces(const Settings& settings) {
-        Results<int> ress;
+  Results<std::size_t> satisfiesHalfspaces(const Settings& settings) {
+        Results<std::size_t> ress;
         hypro::Box<::benchmark::Number> box;
         // benchmark against PPL
         #ifdef HYPRO_USE_PPL
@@ -43,7 +43,7 @@ namespace box {
                 #endif
             }
             auto creationTime = creationTimer.elapsed();
-            std::cout << __func__ << " Dimension " << d << ": Creation took " << creationTime.count() << " sec." << std::endl;
+            //std::cout << "Dimension " << d << ": Creation took " << creationTime.count() << " sec." << std::endl;
             ress.mCreationTime += creationTime;
 
             // run instances
@@ -52,7 +52,7 @@ namespace box {
                 box.satisfiesHalfspace(hsps[i]);
             }
             auto runningTime = runTimerHyPro.elapsed();
-            std::cout << __func__ << " Dimension " << d << ":  Running took " << runningTime.count() << " sec." << std::endl;
+            //std::cout << "Dimension " << d << ":  Running took " << runningTime.count() << " sec." << std::endl;
 
             #ifdef HYPRO_USE_PPL
             std::chrono::duration<double> pplRT = std::chrono::duration<double>::zero();
@@ -70,7 +70,7 @@ namespace box {
                 bool a = b.is_empty();
                 pplRT += runTimerPPL.elapsed();
             }
-            std::cout << __func__ << " Dimension " << d << ":  Running took " << pplRT.count() << " sec (PPL)." << std::endl;
+            //std::cout << "Dimension " << d << ":  Running took " << pplRT.count() << " sec (PPL)." << std::endl;
             #endif
 
             ress.mRunningTime += runningTime;

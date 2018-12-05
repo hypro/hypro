@@ -24,6 +24,8 @@ public:
         INFTY,
     };
 
+    typedef Setting Settings;
+
     class DBMEntry : public std::pair<Number, BOUND_TYPE>{
     public:
         using std::pair<Number, BOUND_TYPE>::first;

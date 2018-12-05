@@ -91,15 +91,28 @@ std::vector<Point<Number>> BoxSupportFunction<Number,Setting>::vertices() const 
 
 	for ( std::size_t bitCount = 0; bitCount < limit; ++bitCount ) {
 		vector_t<Number> coord = vector_t<Number>( this->dimension() );
+		bool isVertex = true;
 		for ( std::size_t dimension = 0; dimension < this->dimension(); ++dimension ) {
 			std::size_t pos = ( 1 << dimension );
 			if ( bitCount & pos ) {
-				coord( dimension ) = mBox[dimension].upper();
+				if(mBox[dimension].upperBoundType() != carl::BoundType::INFTY){
+					coord( dimension ) = mBox[dimension].upper();
+				} else {
+					isVertex = false;
+					break;
+				}
 			} else {
-				coord( dimension ) = mBox[dimension].lower();
+				if(mBox[dimension].lowerBoundType() != carl::BoundType::INFTY){
+					coord( dimension ) = mBox[dimension].lower();
+				} else {
+					isVertex = false;
+					break;
+				}
 			}
 		}
-		result.push_back( Point<Number>( coord ) );
+		if(isVertex){
+			result.push_back( Point<Number>( coord ) );
+		}
 	}
 	return result;
 }
@@ -124,9 +137,21 @@ EvaluationResult<Number> BoxSupportFunction<Number,Setting>::evaluate( const vec
 	}
 
 	// find the point, which represents the maximum towards the direction - compare signs.
-	vector_t<Number> furthestPoint = vector_t<Number>(this->dimension());
+	vector_t<Number> furthestPoint = vector_t<Number>::Zero(this->dimension());
 	for(Eigen::Index i = 0; i < furthestPoint.rows(); ++i) {
-		furthestPoint(i) = l(i) >= 0 ? mBox[i].upper() : mBox[i].lower();
+		if(l(i) > 0) {
+			if(mBox[i].upperBoundType() == carl::BoundType::INFTY) {
+				return EvaluationResult<Number>(0,furthestPoint, SOLUTION::INFTY);
+			} else {
+				furthestPoint(i) = mBox[i].upper();
+			}
+		} else if(l(i) < 0) {
+			if(mBox[i].lowerBoundType() == carl::BoundType::INFTY) {
+				return EvaluationResult<Number>(0,furthestPoint, SOLUTION::INFTY);
+			} else {
+				furthestPoint(i) = mBox[i].lower();
+			}
+		}
 	}
 	TRACE("hypro.representations.supportFunction","Have result, return.");
 	return EvaluationResult<Number>(furthestPoint.dot(l),furthestPoint,SOLUTION::FEAS);

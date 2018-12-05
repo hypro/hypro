@@ -3,31 +3,53 @@
 namespace hypro {
 
 template<typename Number>
-Condition<Number>::Condition(const std::vector<boost::variant<ConstraintSet<Number>>>& sets)
+Condition<Number>::Condition(const std::vector<boost::variant<ConstraintSetT<Number>>>& sets)
 {
 	for(const auto& item : sets) {
-		mConstraints.push_back(boost::get<ConstraintSet<Number>>(item));
+		mConstraints.push_back(boost::get<ConstraintSetT<Number>>(item));
 	}
+	mConditionIsBox = std::vector<TRIBOOL>{mConstraints.size(),TRIBOOL::NSET};
 	mHash = 0;
+}
+
+template<typename Number>
+bool Condition<Number>::isAxisAligned() const {
+	for(std::size_t i = 0; i < mConstraints.size(); ++i) {
+		if(!isAxisAligned(i)) {
+			return false;
+		}
+	}
+	return true;
+}
+
+template<typename Number>
+bool Condition<Number>::isAxisAligned(std::size_t i) const {
+	checkAxisAligned(i);
+	if(mConditionIsBox[i] == TRIBOOL::FALSE) {
+		return false;
+	}
+	return true;
 }
 
 template<typename Number>
 void Condition<Number>::setMatrix(const matrix_t<Number>& m, std::size_t I) {
 	while (I >= mConstraints.size()) {
-		mConstraints.push_back(ConstraintSet<Number>());
+		mConstraints.push_back(ConstraintSetT<Number>());
 	}
 	mConstraints[I].rMatrix() = m;
 	DEBUG("hypro.datastructures","Set matrix at pos " << I << ", mConstraints.size() = " << mConstraints.size());
+	mConditionIsBox = std::vector<TRIBOOL>{mConstraints.size(),TRIBOOL::NSET};
 	mHash = 0;
 }
 
 template<typename Number>
 void Condition<Number>::setVector(const vector_t<Number>& v, std::size_t I) {
 	while (I > mConstraints.size()) {
-		mConstraints.push_back(ConstraintSet<Number>());
+		mConstraints.push_back(ConstraintSetT<Number>());
 	}
 	mConstraints[I].rVector() = v;
 	DEBUG("hypro.datastructures","Set vector at pos " << I << ", mConstraints.size() = " << mConstraints.size());
+	mConditionIsBox = std::vector<TRIBOOL>{mConstraints.size(),TRIBOOL::NSET};
 	mHash = 0;
 }
 
@@ -103,23 +125,24 @@ void Condition<Number>::decompose(std::vector<std::vector<size_t>> decomposition
 	}
 	else if(mConstraints.size() == 0 && decomposition.size() > 0){
 		//fill mConstaints with empty constraint sets
-		std::vector<ConstraintSet<Number>> newCset;
-		for(int i = 0; i < decomposition.size(); i++){
-			ConstraintSet<Number> res = ConstraintSet<Number>();
+		std::vector<ConstraintSetT<Number>> newCset;
+		for(std::size_t i = 0; i < decomposition.size(); i++){
+			ConstraintSetT<Number> res = ConstraintSetT<Number>();
 			newCset.push_back(res);
 		}
 		mConstraints = newCset;
+		mConditionIsBox = std::vector<TRIBOOL>{mConstraints.size(),TRIBOOL::NSET};
 		mHash = 0;
 		return;
 	}
 
-	ConstraintSet<Number> cset = mConstraints.at(0);
+	ConstraintSetT<Number> cset = mConstraints.at(0);
 	DEBUG("hypro.datastructures", "Constraint Set before: \n " << cset );
 
 	matrix_t<Number> constraintsOld(cset.matrix());
 	vector_t<Number> constantsOld(cset.vector());
 
-	std::vector<ConstraintSet<Number>> newCset;
+	std::vector<ConstraintSetT<Number>> newCset;
 	// for each set {i,j,..., k} select each constraint that defines over {i,j,k etc.}
 	for(auto set : decomposition){
 		DEBUG("hypro.datastructures", "decompose constraint for set: {");
@@ -130,11 +153,11 @@ void Condition<Number>::decompose(std::vector<std::vector<size_t>> decomposition
 
 		// for each row of the constraints check if it contains an entry for one of the variables of the set
 		// and add the corresponding rows to a list of indices that are later added to a matrix
-		std::vector<int> indicesToAdd;
-		for(int i = 0; i < constraintsOld.rows(); i++){
+		std::vector<Eigen::Index> indicesToAdd;
+		for(Eigen::Index i = 0; i < constraintsOld.rows(); i++){
 			vector_t<Number> row = constraintsOld.row(i);
 			bool containsVar = false;
-			for(int j = 0; j < row.rows(); j++){
+			for(Eigen::Index j = 0; j < row.rows(); j++){
 				if(row(j,0) != 0){
 					if(std::find(set.begin(),set.end(), j) != set.end()){
 						//set contains variable j, which is also contained in this constraint
@@ -155,19 +178,27 @@ void Condition<Number>::decompose(std::vector<std::vector<size_t>> decomposition
 			// create final constant vector
 			vector_t<Number> newVec = selectRows(constantsOld, indicesToAdd);
 
-			ConstraintSet<Number> res(newMatrix,newVec);
+			ConstraintSetT<Number> res(newMatrix,newVec);
 			DEBUG("hypro.datastructures","Final decomposed ConstraintSet: \n" << res);
 			newCset.push_back(res);
 		}
 		else {
 			DEBUG("hypro.datastructures", "No constraints for set found.");
-			ConstraintSet<Number> res = ConstraintSet<Number>();
+			ConstraintSetT<Number> res = ConstraintSetT<Number>();
 			newCset.push_back(res);
 		}
 	}
 
 	mConstraints = newCset;
+	mConditionIsBox = std::vector<TRIBOOL>{mConstraints.size(),TRIBOOL::NSET};
 	mHash = 0;
+}
+
+template<typename Number>
+void Condition<Number>::checkAxisAligned(std::size_t i) const {
+	if(mConditionIsBox[i] == TRIBOOL::NSET) {
+		mConditionIsBox[i] = mConstraints[i].isAxisAligned() == true ? TRIBOOL::TRUE : TRIBOOL::FALSE;
+	}
 }
 
 //template<typename Number>

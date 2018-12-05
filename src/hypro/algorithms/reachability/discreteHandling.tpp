@@ -1,9 +1,9 @@
 
 namespace hypro {
 namespace reachability {
-	template<typename Number>
-	bool Reach<Number>::intersectGuard( Transition<Number>* _trans, const State_t<Number>& _state,
-							   State_t<Number>& result ) const {
+	template<typename Number, typename ReacherSettings, typename State>
+	bool Reach<Number,ReacherSettings,State>::intersectGuard( Transition<Number>* _trans, const State& _state,
+							   State& result ) const {
 
 		assert(!_state.getTimestamp().isUnbounded());
 		result = _state;
@@ -11,12 +11,12 @@ namespace reachability {
 		//std::cout << "------ start intersecting guard!" << std::endl;
 
 		// check for continuous set guard intersection
-		std::pair<bool, State_t<Number>> guardSatisfyingSet = _state.satisfies( _trans->getGuard() );
+		std::pair<CONTAINMENT, State> guardSatisfyingSet = _state.satisfies( _trans->getGuard() );
 
 		//std::cout << "------ guard satisfied? " << guardSatisfyingSet.first << std::endl;
 
 		// check if the intersection is empty
-		if ( guardSatisfyingSet.first ) {
+		if ( guardSatisfyingSet.first != CONTAINMENT::NO ) {
 			#ifdef REACH_DEBUG
 			INFO("hypro.reacher", "Transition enabled at timestamp " << _state.getTimestamp() << "!");
 			#endif
@@ -37,38 +37,29 @@ namespace reachability {
 		}
 	}
 
-	template<typename Number>
-	void Reach<Number>::processDiscreteBehaviour( const std::vector<boost::tuple<Transition<Number>*, State_t<Number>>>& _newInitialSets ) {
-		std::map<Transition<Number>*, std::vector<State_t<Number>>> toAggregate;
+	template<typename Number,typename ReacherSettings, typename State>
+	void Reach<Number,ReacherSettings,State>::processDiscreteBehaviour( const std::vector<boost::tuple<Transition<Number>*, State>>& _newInitialSets ) {
+		std::map<Transition<Number>*, std::vector<State>> toAggregate;
 
 		for(const auto& tuple : _newInitialSets ) {
 			if(boost::get<0>(tuple)->getAggregation() == Aggregation::none){
 				TRACE("hypro.reacher","No aggregation.");
 				// copy state - as there is no aggregation, the containing set and timestamp is already valid
-				State_t<Number> s = boost::get<1>(tuple);
+				State s = boost::get<1>(tuple);
 				assert(!s.getTimestamp().isUnbounded());
 				s.setLocation(boost::get<0>(tuple)->getTarget());
-				bool duplicate = false;
-				for(const auto stateTuple : mWorkingQueue) {
-					if(boost::get<1>(stateTuple) == s){
-						duplicate = true;
-						break;
-					}
-				}
-				if(!duplicate){
 
-					s = boost::get<0>(tuple)->getReset().applyReset(s);
-					std::pair<bool,State_t<Number>> invariantPair = s.satisfies(boost::get<0>(tuple)->getTarget()->getInvariant());
-					if(invariantPair.first){
-						TRACE("hypro.reacher","Enqueue " << invariantPair.second << " for level " << mCurrentLevel+1 << ", current queue size (before) is " << mWorkingQueue.size());
-						mWorkingQueue.emplace_back(mCurrentLevel+1, invariantPair.second);
-					}
+				s = applyReset(s,boost::get<0>(tuple)->getReset());
+				std::pair<CONTAINMENT,State> invariantPair = s.satisfies(boost::get<0>(tuple)->getTarget()->getInvariant());
+				if(invariantPair.first != CONTAINMENT::NO){
+					TRACE("hypro.reacher","Enqueue " << invariantPair.second << " for level " << mCurrentLevel+1 << ", current queue size (before) is " << mWorkingQueue.size());
+					mWorkingQueue.enqueue(std::make_unique<TaskType>(std::make_pair(mCurrentLevel+1, invariantPair.second)));
 				}
 			} else { // aggregate all
 				// TODO: Note that all sets are collected for one transition, i.e. currently, if we intersect the guard for one transition twice with
 				// some sets in between not satisfying the guard, we still collect all guard satisfying sets for that transition.
 				if(toAggregate.find(boost::get<0>(tuple)) == toAggregate.end()){
-					toAggregate[boost::get<0>(tuple)] = std::vector<State_t<Number>>();
+					toAggregate[boost::get<0>(tuple)] = std::vector<State>();
 				}
 				toAggregate[boost::get<0>(tuple)].push_back(boost::get<1>(tuple));
 
@@ -81,9 +72,9 @@ namespace reachability {
 			INFO("hypro.reacher", "-- Entered aggregation loop");
 
 			assert(!aggregationPair.second.empty());
-			carl::Interval<Number> aggregatedTimestamp = aggregationPair.second.begin()->getTimestamp();
+			carl::Interval<tNumber> aggregatedTimestamp = aggregationPair.second.begin()->getTimestamp();
 			//std::cout << "Aggregated timestamp before aggregation " << aggregatedTimestamp << std::endl;
-			State_t<Number> collectedSets = *aggregationPair.second.begin();
+			State collectedSets = *aggregationPair.second.begin();
 			for(auto stateIt = ++aggregationPair.second.begin(); stateIt != aggregationPair.second.end(); ++stateIt){
 				assert(!stateIt->getTimestamp().isUnbounded());
 				aggregatedTimestamp = aggregatedTimestamp.convexHull(stateIt->getTimestamp());
@@ -99,13 +90,17 @@ namespace reachability {
 			//}
 			#endif
 
-			State_t<Number> s;
+			State s;
 			s.setLocation(aggregationPair.first->getTarget());
 
 			// reduce new initial sets.
 			//collectedSets.removeRedundancy();
 			#ifdef USE_SMART_AGGREGATION
 			collectedSets.removeRedundancy();
+			if(collectedSets.getSetType(0) == representation_name::support_function) {
+				// Forced reduction to a box template.
+				applyReduction<Number>(boost::get<hypro::SupportFunction<Number>>(collectedSets.rGetSet(0)));
+			}
 			//aggregationReduction(collectedSets, aggregationPair.first, mSettings.timeBound, mSettings.timeStep);
 			#endif
 
@@ -122,14 +117,14 @@ namespace reachability {
 			//std::cout << "Aggregated timestamp: " << aggregatedTimestamp << std::endl;
 
 			// Perform resets.
-			State_t<Number> tmp = aggregationPair.first->getReset().applyReset(collectedSets);
+			State tmp = applyReset(collectedSets, aggregationPair.first->getReset());
 			//std::cout << "Vertices after reset: " << std::endl;
 			//for(const auto& vertex : tmp.vertices()) {
 			//	std::cout << convert<Number,double>(vertex) << std::endl;
 			//}
 
-			std::pair<bool, State_t<Number>> invariantSatisfyingSet = tmp.satisfies(aggregationPair.first->getTarget()->getInvariant());
-			if(invariantSatisfyingSet.first){
+			std::pair<CONTAINMENT, State> invariantSatisfyingSet = tmp.satisfies(aggregationPair.first->getTarget()->getInvariant());
+			if(invariantSatisfyingSet.first != CONTAINMENT::NO){
 				//unsigned tmp = Plotter<Number>::getInstance().addObject(invariantSatisfyingSet.second.vertices());
 				//Plotter<Number>::getInstance().setObjectColor(tmp, colors[orange]);
 				//s.setSets(invariantSatisfyingSet.second.getSets());
@@ -139,27 +134,17 @@ namespace reachability {
 				continue;
 			}
 
-			// find duplicate entries in work queue.
-			bool duplicate = false;
-			for(const auto stateTuple : mWorkingQueue) {
-				if(boost::get<1>(stateTuple) == s){
-					duplicate = true;
-					break;
-				}
-			}
-			if(!duplicate){
-				TRACE("hypro.reacher", "Enqueue " << s << " for level " << mCurrentLevel+1 << ", current queue size (before) is " << mWorkingQueue.size());
-				mWorkingQueue.emplace_back(mCurrentLevel+1, s);
-			}
+			TRACE("hypro.reacher", "Enqueue " << s << " for level " << mCurrentLevel+1 << ", current queue size (before) is " << mWorkingQueue.size());
+			mWorkingQueue.enqueue(std::make_unique<TaskType>(std::make_pair(mCurrentLevel+1, s)));
 		}
 
 		INFO("hypro.reacher", "After aggregation loop");
 	}
 
-	template<typename Number>
-	bool Reach<Number>::checkTransitions(const State_t<Number>& state, const carl::Interval<Number>& , std::vector<boost::tuple<Transition<Number>*, State_t<Number>>>& nextInitialSets) const {
+	template<typename Number,typename ReacherSettings, typename State>
+	bool Reach<Number,ReacherSettings,State>::checkTransitions(const State& state, const carl::Interval<tNumber>& , std::vector<boost::tuple<Transition<Number>*, State>>& nextInitialSets) const {
 
-		State_t<Number> guardSatisfyingState;
+		State guardSatisfyingState;
 		bool transitionEnabled = false;
 		//std::cout << "------ how many transitions do we have? " << state.getLocation()->getTransitions().size() << std::endl;
 		for( auto transition : state.getLocation()->getTransitions() ){

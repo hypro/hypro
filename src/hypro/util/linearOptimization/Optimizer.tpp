@@ -117,7 +117,7 @@ namespace hypro {
 		res = glpkOptimizeLinear(mGlpkContext[std::this_thread::get_id()].lp,_direction,mConstraintMatrix,mConstraintVector,useExactGlpk);
 		#else
 		assert(mGlpkContext.find(std::this_thread::get_id()) != mGlpkContext.end());
-		return glpkOptimizeLinear(mGlpkContext[std::this_thread::get_id()].lp,_direction,mConstraintMatrix,mConstraintVector,useExactGlpk);
+		return glpkOptimizeLinear(mGlpkContext[std::this_thread::get_id()],_direction,mConstraintMatrix,mConstraintVector,useExactGlpk);
 		#endif
 
 		#if defined(HYPRO_USE_SMTRAT) || defined(HYPRO_USE_Z3) || defined(HYPRO_USE_SOPLEX)
@@ -197,9 +197,9 @@ namespace hypro {
 		}
 
 		// if there is a valid solution (FEAS), it implies the optimumValue is set.
-		//assert(res.errorCode  != FEAS || (res.optimumValue.rows() > 1 || (res.optimumValue != vector_t<Number>::Zero(0) && res.supportValue > 0 )));
+		//assert(res.errorCode  !=SOLUTION::FEAS || (res.optimumValue.rows() > 1 || (res.optimumValue != vector_t<Number>::Zero(0) && res.supportValue > 0 )));
 		//std::cout << "Point: " << res.optimumValue << " contained: " << checkPoint(Point<Number>(res.optimumValue)) << ", Solution is feasible: " << (res.errorCode==SOLUTION::FEAS) << std::endl;
-		//assert(res.errorCode  != FEAS || checkPoint(Point<Number>(res.optimumValue)));
+		//assert(res.errorCode  !=SOLUTION::FEAS || checkPoint(Point<Number>(res.optimumValue)));
 		#ifdef DEBUG_MSG
 		//std::cout << "Final solution distance: " << res.supportValue << std::endl;
 		#endif
@@ -232,8 +232,8 @@ namespace hypro {
 		#else // use glpk
 		if(!mConsistencyChecked){
 			//TRACE("hypro.optimizer","Use glpk for consistency check.");
-			glp_simplex( mGlpkContext[std::this_thread::get_id()].lp, NULL);
-			glp_exact( mGlpkContext[std::this_thread::get_id()].lp, NULL );
+			glp_simplex( mGlpkContext[std::this_thread::get_id()].lp, &mGlpkContext[std::this_thread::get_id()].parm);
+			glp_exact( mGlpkContext[std::this_thread::get_id()].lp, &mGlpkContext[std::this_thread::get_id()].parm );
 			mLastConsistencyAnswer = glp_get_status(mGlpkContext[std::this_thread::get_id()].lp) == GLP_NOFEAS ? SOLUTION::INFEAS : SOLUTION::FEAS;
 			mConsistencyChecked = true;
 		}
@@ -259,7 +259,7 @@ namespace hypro {
 		#elif defined(HYPRO_USE_SOPLEX)
 		return soplexCheckPoint(mConstraintMatrix, mConstraintVector, _point);
 		#else
-		return glpkCheckPoint(mGlpkContext[std::this_thread::get_id()].lp, mConstraintMatrix, mConstraintVector, _point);
+		return glpkCheckPoint(mGlpkContext[std::this_thread::get_id()], mConstraintMatrix, mConstraintVector, _point);
 		#endif
 	}
 
@@ -282,7 +282,7 @@ namespace hypro {
 		mLastConsistencyAnswer = res.errorCode;
 		#else
 
-		res = glpkGetInternalPoint<Number>(mGlpkContext[std::this_thread::get_id()].lp, mConstraintMatrix.cols(), false);
+		res = glpkGetInternalPoint<Number>(mGlpkContext[std::this_thread::get_id()], mConstraintMatrix.cols(), false);
 		mConsistencyChecked = true;
 		mLastConsistencyAnswer = res.errorCode;
 
@@ -305,7 +305,7 @@ namespace hypro {
 		#elif defined(HYPRO_USE_SMTRAT) // else if HYPRO_USE_SMTRAT
 		res = smtratRedundantConstraints(mConstraintMatrix, mConstraintVector);
 		#else
-		res = glpkRedundantConstraints( mGlpkContext[std::this_thread::get_id()].lp, mConstraintMatrix, mConstraintVector);
+		res = glpkRedundantConstraints( mGlpkContext[std::this_thread::get_id()], mConstraintMatrix, mConstraintVector);
 		#endif
 
 		std::sort(res.begin(), res.end());
@@ -344,7 +344,6 @@ namespace hypro {
 			mGlpkContext.emplace(std::this_thread::get_id(), glpk_context());
 		}
 		assert(hasContext(std::this_thread::get_id()));
-
 		mGlpkContext[std::this_thread::get_id()].createLPInstance();
 
 		TRACE("hypro.optimizer","Done.");

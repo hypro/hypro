@@ -143,7 +143,7 @@ class Transition
     void decompose(std::vector<std::vector<size_t>> decomposition){
         mGuard.decompose(decomposition);
         mReset.decompose(decomposition);
-        mHash = 0; 
+        mHash = 0;
     }
 
     /**
@@ -223,18 +223,20 @@ class Transition
     }
 };
 
-template<typename Number, typename State>
+/*
+template<typename Number>
 //std::unique_ptr<Transition<Number>> parallelCompose(const std::unique_ptr<Transition<Number>>& lhsT
 //                                , const std::unique_ptr<Transition<Number>>& rhsT
+
 std::unique_ptr<Transition<Number>> parallelCompose(const Transition<Number>* lhsT
                                                     , const Transition<Number>* rhsT
                                                     , const std::vector<std::string>& lhsVar
                                                     , const std::vector<std::string>& rhsVar
                                                     , const std::vector<std::string>& haVar
-                                                    , const HybridAutomaton<Number, State>& ha
+                                                    , const HybridAutomaton<Number>& ha
                                                     , const std::set<Label> lhsLabels
                                                     , const std::set<Label> rhsLabels);
-
+*/
 }  // namespace hypro
 
 namespace std {

@@ -11,7 +11,7 @@
 #include "Box.h"
 
 namespace hypro {
-	
+
 	template<typename Number, typename Converter, class Setting>
 	BoxT<Number,Converter,Setting>::BoxT( const matrix_t<Number>& _constraints, const vector_t<Number>& _constants )
 	{
@@ -100,7 +100,7 @@ namespace hypro {
 
 			// convert box to a set of constraints, add other halfspaces and evaluate in box main directions to get new intervals.
 			std::vector<vector_t<Number>> tpl = computeTemplate<Number>(_constraints.cols(), 4);
-			
+
 			// evaluate in box directions.
 			Optimizer<Number> opt(_constraints,_constants);
 			std::vector<EvaluationResult<Number>> results;
@@ -392,7 +392,6 @@ BoxT<Number,Converter,Setting> BoxT<Number,Converter,Setting>::linearTransformat
 	//matrix_t<Number> bx(A);
 	Point<Number> min(vector_t<Number>::Zero(this->dimension()));
 	Point<Number> max(vector_t<Number>::Zero(this->dimension()));
-
 	for (int k = 0; k < A.rows(); ++k) {
 		for (int j = 0; j < A.cols(); ++j) {
 			Number a = mLimits[j].lower()*A(k,j);
@@ -440,9 +439,9 @@ BoxT<Number,Converter,Setting> BoxT<Number,Converter,Setting>::affineTransformat
 	if(this->empty()){
 		return *this;
 	}
-	TRACE("hypro.representations.box","This: " << *this << ", A: " << A << "b: " << b);
+	//TRACE("hypro.representations.box","This: " << *this << ", A: " << A << "b: " << b);
 	BoxT<Number,Converter,Setting> res = this->linearTransformation(A);
-	TRACE("hypro.representations.box","Result of linear trafo: " << res);
+	//TRACE("hypro.representations.box","Result of linear trafo: " << res);
 	return BoxT<Number,Converter,Setting>( std::make_pair(res.min()+b, res.max()+b) );
 }
 
@@ -478,7 +477,7 @@ BoxT<Number,Converter,Setting> BoxT<Number,Converter,Setting>::intersect( const 
 	for(std::size_t d = 0; d < this->dimension(); ++d) {
 		// intersection if both agree on the dimension
 		if(d < rdim)
-			newIntervals.emplace_back(mLimits[d].intersect(rhs.interval(d)));
+			newIntervals.emplace_back(set_intersection(mLimits[d],rhs.interval(d)));
 		else // if this->dimension() > rdim use projection
 			newIntervals.emplace_back(mLimits[d]);
 	}
@@ -486,7 +485,7 @@ BoxT<Number,Converter,Setting> BoxT<Number,Converter,Setting>::intersect( const 
 	if(rdim > dim) {
 		for(std::size_t d = dim; d < rdim; ++d) {
 			newIntervals.emplace_back(rhs.interval(d));
-		}	
+		}
 	}
 	return BoxT<Number,Converter,Setting>(newIntervals);
 }

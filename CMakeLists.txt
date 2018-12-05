@@ -9,15 +9,6 @@
 # Credit: Sebastian Junges, Gereon Kremer
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
-
-# # # # # # # # # # # # # # # # # # # # # #
-# A. Project properties.
-# B. Options.
-# C. Find system tools and libraries.
-# D. Invoke subdirectories.
-# E. Export Compile Information.
-# # # # # # # # # # # # # # # # # # # # # #
-
 cmake_minimum_required(VERSION 2.8.7 FATAL_ERROR)
 
 # # # # # # # # # # # # # # # # # # # # # #
@@ -108,55 +99,7 @@ endforeach()
 
 ###########################################################################################
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17 -DGTEST_USE_OWN_TR1_TUPLE=1")
-
-if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
-	#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libstdc++ -isystem\ /usr/include/libcxxabi/ -D__STRICT_ANSI__")
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++")
-	if (APPLE)
-		message("-- Using clang on apple")
-		set(CMAKE_MACOSX_RPATH 1)
-
-		if(${STATICLIB_SWITCH} STREQUAL "OFF")
-			set(CMAKE_MACOSX_RPATH 1)
-		endif()
-	else()
-		message("-- Using clang")
-	endif()
-	set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3")
-	set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g -O0")
-	set(USE_CLANG PARENT SCOPE)
-elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
-	message("-- Using g++")
-	set(CMAKE_CXX_DEBUG_FLAGS "${CMAKE_CXX_DEBUG_FLAGS} -g -O1")
-	if(CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 4.9)
-		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fdiagnostics-color=auto")
-	endif()
-else()
-	message("-- Possibly unsupported compiler")
-endif()
-
-if(HYPRO_COVERAGE)
-	include(CodeCoverage)
-	APPEND_COVERAGE_COMPILER_FLAGS()
-	setup_target_for_coverage(hypro_coverage test ${PROJECT_NAME})
-endif()
-
-# general compiler and linker settings
-
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wno-attributes -pedantic -fPIC -ftemplate-backtrace-limit=0")
-if(STATICLIB_SWITCH)
-	set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static -pthread -Wl,--whole-archive -lpthread -Wl,--no-whole-archive")
-	set(CMAKE_FIND_LIBRARY_SUFFIXES ".a")
-	SET(BUILD_SHARED_LIBRARIES OFF)
-else()
-	set(CMAKE_FIND_LIBRARY_SUFFIXES ".so;.dylib")
-	SET(BUILD_SHARED_LIBRARIES ON)
-endif()
-
-if(DEVELOPER)
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wswitch -Wno-deprecated-declarations -Wempty-body -Wconversion -Wreturn-type -Wparentheses -Wno-format -Wuninitialized -Wunreachable-code -Wunused-function -Wunused-value -Wunused-variable")
-endif()
+include(compiler-settings)
 
 # # # # # # # # # # # # # # # # # # # # # #
 # C. Find system tools and libraries.
@@ -173,20 +116,11 @@ endif()
 # initialize lists for include directories and library files
 set(${PROJECT_NAME}_INCLUDE_DIRS "" CACHE STRING "Include directories var")
 
-#load_library(${PROJECT_NAME} Boost 1.55.0 COMPONENTS system)
-#set(Boost_USE_STATIC_LIBS        ON) # only find static libs
-#set(Boost_USE_MULTITHREADED      ON)
-#set(Boost_USE_STATIC_RUNTIME    OFF)
-
 load_library(${PROJECT_NAME} GTest 0)
 
-# required, as carl also defines targets "resources" and "runCoreTests"
-#set(ALLOW_DUPLICATE_CUSTOM_TARGETS TRUE)
 load_library(${PROJECT_NAME} carl 0)
-#find_package(carl REQUIRED)
 
 add_subdirectory(src/resources)
-
 
 if(CLANG_TIDY)
 	set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
@@ -265,6 +199,5 @@ add_subdirectory(examples EXCLUDE_FROM_ALL)
 # # # # # # # # # # # # # # # # # # # # # #
 # E. Export Compile Information.
 # # # # # # # # # # # # # # # # # # # # # #
-
 
 include(export)

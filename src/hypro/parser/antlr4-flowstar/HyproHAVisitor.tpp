@@ -25,7 +25,7 @@ namespace hypro {
 		//3.Calls visit(ctx->modes()) to get locSet
 		HyproLocationVisitor<Number> locVisitor = HyproLocationVisitor<Number>(varVec);
 		std::set<Location<Number>*> locSet = locVisitor.visit(ctx->modes()).template as<std::set<Location<Number>*>>();
-		
+
 		//4.2.Make a set of unique ptrs to Locations
 		std::set<std::unique_ptr<Location<Number>>, locPtrComp<Number>> uniquePtrLocSet;
 		for(auto& l : locSet){
@@ -36,12 +36,12 @@ namespace hypro {
 			locSet.emplace(l.get());
 		}
 		std::set<Location<Number>*>& rLocSet = locSet;
-		
+
 		//4.Calls visit to get transitions
 		//NOTE: the transVisitor will modify locSet as every location has its own set of transitions that must be added here.
 		HyproTransitionVisitor<Number> transVisitor = HyproTransitionVisitor<Number>(varVec, rLocSet);
 		std::set<Transition<Number>*> tSet = transVisitor.visit(ctx->jumps()).template as<std::set<Transition<Number>*>>();
-		
+
 		//4.1.Make a set of unique ptrs to transitions
 		std::set<std::unique_ptr<Transition<Number>>> transSet;
 		for(auto& t : tSet){
@@ -53,17 +53,17 @@ namespace hypro {
 				if(t->getSource()->hash() == l->hash()){
 					l->addTransition(t.get());
 				}
-			}	
+			}
 		}
-		
-		assert(*(transSet.begin()) != NULL);
+
+		//assert(*(transSet.begin()) != NULL);
 
 		//5.Calls visit to get all initial states
-		typename HybridAutomaton<Number, State_t<Number,Number>>::locationStateMap initSet;
+		typename HybridAutomaton<Number>::locationStateMap initSet;
 		//HyproInitialSetVisitor<Number> initVisitor = HyproInitialSetVisitor<Number>(varVec, rLocSet);
 		HyproInitialSetVisitor<Number> initVisitor = HyproInitialSetVisitor<Number>(varVec, locSet);
 		for(auto& initState : ctx->init()){
-			typename HybridAutomaton<Number,State_t<Number,Number>>::locationStateMap oneInitialState = initVisitor.visit(initState).template as<typename HybridAutomaton<Number,State_t<Number,Number>>::locationStateMap>();
+			typename HybridAutomaton<Number>::locationStateMap oneInitialState = initVisitor.visit(initState).template as<typename HybridAutomaton<Number>::locationStateMap>();
 			//initSet.insert(oneInitialState.begin(), oneInitialState.end());
 			for(auto& is : oneInitialState){
 				initSet.emplace(is);
@@ -71,11 +71,11 @@ namespace hypro {
 		}
 
 		//6.Calls visit(ctx->unsafeset()) to get local and global badStates
-		typename HybridAutomaton<Number,State_t<Number,Number>>::locationConditionMap lBadStates;
+		typename HybridAutomaton<Number>::locationConditionMap lBadStates;
 		std::vector<Condition<Number>> gBadStates;
 		if(ctx->unsafeset() != NULL && (ctx->unsafeset()->lbadstate().size() > 0 || ctx->unsafeset()->gbadstate().size() > 0)){
 			HyproBadStatesVisitor<Number> bStateVisitor = HyproBadStatesVisitor<Number>(varVec, rLocSet);
-			lBadStates = bStateVisitor.visit(ctx->unsafeset()).template as<typename HybridAutomaton<Number, State_t<Number,Number>>::locationConditionMap>();
+			lBadStates = bStateVisitor.visit(ctx->unsafeset()).template as<typename HybridAutomaton<Number>::locationConditionMap>();
 			gBadStates = bStateVisitor.getGlobalBadStates();
 		}
 
@@ -108,7 +108,7 @@ namespace hypro {
 
 #endif
 		//7.Build HybridAutomaton, return it
-		HybridAutomaton<Number,State_t<Number,Number>> ha;
+		HybridAutomaton<Number> ha;
 		ha.setLocations(std::move(uniquePtrLocSet));
 		ha.setTransitions(std::move(transSet));
 		ha.setInitialStates(initSet);

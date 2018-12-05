@@ -1,7 +1,8 @@
 #pragma once
 #include "TrafoParameters.h"
 #include "../../representations/GeometricObject.h"
-#include "../../util/Plotter.h"
+#include "../../datastructures/HybridAutomaton/State.h"
+#include "../../datastructures/HybridAutomaton/flow/flow.h"
 #include <carl/util/SFINAE.h>
 
 namespace hypro {
@@ -12,6 +13,7 @@ void applyReduction( Representation& ) {
 
 template<typename Number, typename Representation, carl::EnableIf< std::is_same<Representation, SupportFunction<Number> > > = carl::dummy>
 void applyReduction( Representation& _in) {
+    _in.evaluateTemplate(4,false); // temporary, forces reduction to box.
 	_in.forceLinTransReduction();
 }
 
@@ -69,7 +71,7 @@ Number hausdorffError( const Number& delta, const matrix_t<Number>& matrix, cons
 }
 
 template <typename Number, typename State>
-std::vector<Box<Number>> errorBoxes(const Number& delta, const matrix_t<Number>& flow, const State& initialSet,
+std::vector<Box<Number>> errorBoxes(const Number& delta, const linearFlow<Number>& flow, const State& initialSet,
                                            const matrix_t<Number>& trafoMatrix, const Box<Number>& externalInput)
 {
 	if(initialSet.isEmpty()) {
@@ -78,11 +80,11 @@ std::vector<Box<Number>> errorBoxes(const Number& delta, const matrix_t<Number>&
 	assert(initialSet.getDimension() == externalInput.dimension());
 
     std::vector<Box<Number>> res;
-    unsigned dim = flow.cols();
+    unsigned dim = flow.dimension();
     //std::cout << "Dim: " << dim << std::endl;
     //std::cout << "Delta: " << delta << std::endl;
     matrix_t<Number> matrixBlock = matrix_t<Number>::Zero(3 * dim, 3 * dim);
-    matrixBlock.block(0, 0, dim, dim) = abs(flow);
+    matrixBlock.block(0, 0, dim, dim) = abs(flow.getFlowMatrix());
     matrixBlock.block(0, dim, dim, dim) = matrix_t<Number>::Identity(dim, dim);
     matrixBlock.block(dim, 2 * dim, dim, dim) = matrix_t<Number>::Identity(dim, dim);
     //std::cout << "MatrixBlock: " << matrixBlock << std::endl;
@@ -95,14 +97,14 @@ std::vector<Box<Number>> errorBoxes(const Number& delta, const matrix_t<Number>&
     matrixBlock = convert<double, Number>(convertedBlock);
 
     // TODO: Introduce better variable naming!
-    matrix_t<Number> tmpMatrix = flow * (matrix_t<Number>::Identity(dim, dim) - trafoMatrix);
+    matrix_t<Number> tmpMatrix = flow.getFlowMatrix() * (matrix_t<Number>::Identity(dim, dim) - trafoMatrix);
     // std::cout << "Flow: " << flow << std::endl << "trafoMatrix: " << trafoMatrix << std::endl;
     //std::cout << __func__ << " TmpMtrix: " << std::endl << tmpMatrix << std::endl;
     // assert(tmpMatrix.row(dim-1).nonZeros() == 0);
     State transformedInitialSet =
           initialSet.affineTransformation(matrix_t<Number>(tmpMatrix.block(0, 0, dim - 1, dim - 1)),
                                                                                vector_t<Number>(tmpMatrix.block(0, dim - 1, dim - 1, 1)));
-    auto b1 = boost::get<Box<Number>>( boost::apply_visitor( genericConversionVisitor<typename State::repVariant,Number>(representation_name::box), transformedInitialSet.getSet(0)));
+    auto b1 = boost::get<Box<Number>>( boost::apply_visitor( genericConversionVisitor<typename State::repVariant,Box<Number>>(), transformedInitialSet.getSet(0)));
     if(b1.empty()) {
     	return std::vector<Box<Number>>{};
     }
@@ -120,7 +122,7 @@ std::vector<Box<Number>> errorBoxes(const Number& delta, const matrix_t<Number>&
     b1 = b1.linearTransformation(matrixBlock.block(0, dim, dim, dim));
     // std::cout << "B1: " << std::endl << b1 << std::endl;
 
-    matrix_t<Number> fullTransformationMatrix = (flow * flow * trafoMatrix);
+    matrix_t<Number> fullTransformationMatrix = (flow.getFlowMatrix() * flow.getFlowMatrix() * trafoMatrix);
     // assert(fullTransformationMatrix.row(dim-1).nonZeros() == 0);
     matrix_t<Number> tmpTrafo = fullTransformationMatrix.block(0, 0, dim - 1, dim - 1);
     vector_t<Number> tmpTrans = fullTransformationMatrix.block(0, dim - 1, dim - 1, 1);
@@ -128,7 +130,7 @@ std::vector<Box<Number>> errorBoxes(const Number& delta, const matrix_t<Number>&
     // std::cout << "TmpTrafo Matrix: " << std::endl << tmpTrafo << std::endl;
     State tmp = initialSet.affineTransformation(tmpTrafo, tmpTrans);
     // Box<Number> b2 = Box<Number>(tmp.matrix(), tmp.vector());
-    auto b2 = boost::get<Box<Number>>( boost::apply_visitor( genericConversionVisitor<typename State::repVariant,Number>(representation_name::box), tmp.getSet(0)));
+    auto b2 = boost::get<Box<Number>>( boost::apply_visitor( genericConversionVisitor<typename State::repVariant,Box<Number>>(), tmp.getSet(0)));
     augmentedUpperLimit.block(0, 0, dim - 1, 1) = b2.max().rawCoordinates();
     augmentedLowerLimit.block(0, 0, dim - 1, 1) = b2.min().rawCoordinates();
     b2 = Box<Number>(std::make_pair(Point<Number>(augmentedLowerLimit), Point<Number>(augmentedUpperLimit)));
@@ -143,7 +145,7 @@ std::vector<Box<Number>> errorBoxes(const Number& delta, const matrix_t<Number>&
 
     //std::cout << "External Input: " << externalInput << std::endl;
     //Box<Number> errorBoxExternalInput = externalInput.affineTransformation(flow.block(0,0,dim-1,dim-1), vector_t<Number>(flow.block(0,dim-1,dim-1,1)));
-    Box<Number> errorBoxExternalInput = externalInput.linearTransformation(flow.block(0,0,dim-1,dim-1));
+    Box<Number> errorBoxExternalInput = externalInput.linearTransformation(flow.getFlowMatrix().block(0,0,dim-1,dim-1));
     //std::cout << "Errorbox first linear transformation: " << convert<Number,double>(matrix_t<Number>(flow.block(0,0,dim-1,dim-1))) << " and b: " <<
     //convert<Number,double>(vector_t<Number>(flow.block(0,dim-1,dim-1,1))) << std::endl;
     errorBoxExternalInput.makeSymmetric();

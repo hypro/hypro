@@ -113,7 +113,7 @@ int main(int argc, char** argv)
     //HyDRA not working: rod_reactor
     //bouncing_ball_inhomogen.model  rod_reactor.model switching_5.model
     //filtered_oscillator_4.model bouncing_ball_inhomogen.model missing: GearBox ARCH17, Comp3
-	std::pair<HybridAutomaton<Number>, ReachabilitySettings<Number>> ha = parseFlowstarFile<Number>(filename);
+	std::pair<HybridAutomaton<Number>, ReachabilitySettings> ha = parseFlowstarFile<Number>(filename);
     HybridAutomaton<Number> original_ha = ha.first;
     Transformation<Number> trafo = Transformation<Number>(original_ha);
     std::cout << "----------    END OF TRANSFORMATION   ------------\n";

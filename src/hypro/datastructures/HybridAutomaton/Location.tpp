@@ -15,24 +15,18 @@ Location<Number>::Location(unsigned _id, const Location<Number>& _loc)
 {}
 
 template<typename Number>
-Location<Number>::Location(unsigned _id, const matrix_t<Number>& _mat) : mFlows(), mId(_id)
+Location<Number>::Location(unsigned _id, const matrix_t<Number>& _mat) : mFlows(), mId(_id), mExternalInput()
 {
-	mFlows.push_back(_mat);
-	std::vector<Point<Number>> point;
-	point.push_back(Point<Number>(vector_t<Number>::Zero(_mat.cols() -1 )));
-	mExternalInput = Box<Number>(point);
+	mFlows.push_back(linearFlow<Number>(_mat));
 	mHasExternalInput = false;
 	mHash = 0;
 }
 
 template<typename Number>
 Location<Number>::Location(unsigned _id, const matrix_t<Number>& _mat, const typename Location<Number>::transitionSet& _trans, const Condition<Number>& _inv)
-    : mFlows(), mExternalInput(), mTransitions(_trans), mInvariant(_inv), mId(_id)
+    : mFlows(), mExternalInput(), mTransitions(_trans), mInvariant(_inv), mId(_id), mExternalInput()
 {
-	mFlows.push_back(_mat);
-	std::vector<Point<Number>> point;
-	point.push_back(Point<Number>(vector_t<Number>::Zero(_mat.cols() -1 )));
-	mExternalInput = Box<Number>(point);
+	mFlows.push_back(linearFlow<Number>(_mat));
 	mHasExternalInput = false;
 	mHash = 0;
 }
@@ -49,12 +43,9 @@ Location<Number>::Location(const Location<Number>& _loc)
 {}
 
 template<typename Number>
-Location<Number>::Location(const matrix_t<Number>& _mat) : mFlows(), mId()
+Location<Number>::Location(const matrix_t<Number>& _mat) : mFlows(), mId(), mExternalInput()
 {
-	mFlows.push_back(_mat);
-	std::vector<Point<Number>> point;
-	point.push_back(Point<Number>(vector_t<Number>::Zero(_mat.cols() -1 )));
-	mExternalInput = Box<Number>(point);
+	mFlows.push_back(linearFlow<Number>(_mat));
 	mHasExternalInput = false;
 	mHash = 0;
 }
@@ -63,25 +54,32 @@ template<typename Number>
 Location<Number>::Location(const matrix_t<Number>& _mat, const typename Location<Number>::transitionSet& _trans, const Condition<Number>& _inv)
     : mFlows(), mExternalInput(), mTransitions(_trans), mInvariant(_inv), mId()
 {
-	mFlows.push_back(_mat);
-	std::vector<Point<Number>> point;
-	point.push_back(Point<Number>(vector_t<Number>::Zero(_mat.cols() -1 )));
-	mExternalInput = Box<Number>(point);
+	mFlows.push_back(linearFlow<Number>(_mat));
 	mHasExternalInput = false;
 	mHash = 0;
 }
 
 template<typename Number>
-void Location<Number>::setFlow(const matrix_t<Number>& mat, std::size_t I) {
-	while(I < mFlows.size()) {
-		mFlows.push_back(matrix_t<Number>::Identity(mat.rows(),mat.cols()));
+std::size_t Location<Number>::dimension() const {
+	std::size_t res = 0;
+	for(const auto& f : mFlows) {
+		res += boost::apply_visitor(flowDimensionVisitor(), f);
 	}
-	mFlows.push_back(mat);
-	if(!mHasExternalInput) {
-		std::vector<Point<Number>> point;
-		point.push_back(Point<Number>(vector_t<Number>::Zero(mat.cols() -1 )));
-		mExternalInput = Box<Number>(point);
+	return res;
+}
+
+template<typename Number>
+std::size_t Location<Number>::dimension(std::size_t i) const {
+	return boost::apply_visitor(flowDimensionVisitor(), mFlows.at(i));
+}
+
+template<typename Number>
+void Location<Number>::setFlow(const flowVariant& f, std::size_t I) {
+	matrix_t<Number> dummy = matrix_t<Number>::Identity(getFlowDimension(f), getFlowDimension(f));
+	while(mFlows.size() <= I) {
+		mFlows.push_back(linearFlow(dummy));
 	}
+	mFlows[I] = f;
 	mHash = 0;
 }
 
@@ -99,10 +97,10 @@ void Location<Number>::updateTransition(Transition<Number>* original, Transition
 }
 
 template<typename Number>
-void Location<Number>::setExtInput(const Box<Number>& b) {
+void Location<Number>::setExtInput(const std::vector<carl::Interval<Number>>& b) {
 	mExternalInput = b;
-	for(std::size_t i = 0; i < b.dimension(); ++i) {
-		if(b.min()[i] != 0 || b.max()[i] != 0) {
+	for(std::size_t i = 0; i < b.size(); ++i) {
+		if(b[i] != carl::Interval<Number>(0)) {
 			mHasExternalInput = true;
 			break;
 		}
@@ -250,6 +248,7 @@ bool Location<Number>::isComposedOf(const Location<Number>& rhs, const std::vect
 	return true;
 }
 
+/*
 template<typename Number>
 //std::unique_ptr<Location<Number>> parallelCompose(const std::unique_ptr<Location<Number>>& lhs
 //                                , const std::unique_ptr<Location<Number>>& rhs
@@ -301,12 +300,12 @@ std::unique_ptr<Location<Number>> parallelCompose(const Location<Number>* lhs
 				//std::cout << "lhsIC: " << lhsIC << std::endl;
 				//std::cout << "rhsIC: " << rhsIC << std::endl;
 				if(rhsVar[rhsIC] == haVar[colI]) {
-					// TODO: the check is not entirely correct, since the flow can be non-admissible but set to 0 in lhs and something != 0 in rhs.					
+					// TODO: the check is not entirely correct, since the flow can be non-admissible but set to 0 in lhs and something != 0 in rhs.
 					if(haFlow(rowI,colI) != 0 && rhs->getFlow()(rhsIR,rhsIC) != haFlow(rowI,colI)) {
 						admissible = false;
 						break;
 					}
-					
+
 					//std::cout << "haFlow sizes: " << haFlow.rows() << "x" << haFlow.cols() << std::endl;
 					//std::cout << "rhs->getFlow() sizes: " << rhs->getFlow().rows() << "x" << rhs->getFlow().cols() << std::endl;
 					//std::cout << "rowI: " << rowI << " colI " << colI << " rhsIR " << rhsIR << " rhsIC " << rhsIC << std::endl;
@@ -406,6 +405,7 @@ std::unique_ptr<Location<Number>> parallelCompose(const Location<Number>* lhs
 	//return std::unique_ptr<Location<Number>>(res);
 	return res;
 }
+*/
 
 template<typename Number>
 void Location<Number>::decompose(std::vector<std::vector<size_t>> decomposition){
@@ -429,7 +429,7 @@ void Location<Number>::decompose(std::vector<std::vector<size_t>> decomposition)
 		// +1 row for last-row of affine transformation
 		matrix_t<Number> rowMat = matrix_t<Number>::Zero(set.size()+1, oldFlow.cols());
 		// -1 because of last-row
-		for(size_t index = 0; index < rowMat.rows()-1; index++){
+		for(Eigen::Index index = 0; index < rowMat.rows()-1; index++){
 			// select the specific rows into rowMat
 			rowMat.row(index) = oldFlow.row(set[index]);
 		}
@@ -439,7 +439,7 @@ void Location<Number>::decompose(std::vector<std::vector<size_t>> decomposition)
 		// +1 for constant column
 		matrix_t<Number> finMat = matrix_t<Number>::Zero(rowMat.rows(), set.size()+1);
 		// -1 for constant column
-		for(size_t index = 0; index < finMat.cols()-1; index++){
+		for(Eigen::Index index = 0; index < finMat.cols()-1; index++){
 			finMat.col(index) = rowMat.col(set[index]);
 		}
 		finMat.col(finMat.cols()-1) = rowMat.col(rowMat.cols()-1);
@@ -453,4 +453,3 @@ void Location<Number>::decompose(std::vector<std::vector<size_t>> decomposition)
 }
 
 }  // namespace hypro
-

@@ -37,6 +37,10 @@ namespace hypro {
  */
 template<typename Number, typename Converter, typename Setting>
 class ZonotopeT : public GeometricObject<Number, ZonotopeT<Number,Converter,Setting>> {
+  public:
+
+	typedef Setting Settings;
+
   private:
 	std::size_t mDimension;
 	vector_t<Number> mCenter;

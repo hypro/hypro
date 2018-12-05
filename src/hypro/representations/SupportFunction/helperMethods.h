@@ -10,61 +10,6 @@
 //#define HELPER_METHODS_VERBOSE
 namespace hypro {
 
-/**
- * @brief      Determines if a constraint set represented by a matrix and a vector in fact defines a box.
- * @param[in]  constraints  The constraints.
- * @param[in]  constants    The constants.
- * @tparam     Number       The used number type.
- * @return     True if box, False otherwise.
- */
-template<typename Number>
-boost::tuple<bool,std::vector<carl::Interval<Number>>> isBox(const matrix_t<Number>& constraints, const vector_t<Number>& constants) {
-	if(constraints.rows() != constants.rows()) {
-		//std::cout << "Rows do not match." << std::endl;
-		//return false;
-		return boost::tuple<bool,std::vector<carl::Interval<Number>>>(false);
-	}
-	Eigen::Index dimension = constraints.cols();
-	if(constraints.rows() != 2*dimension) {
-		//std::cout << "Too little or too many rows." << std::endl;
-		//return false;
-		return boost::tuple<bool,std::vector<carl::Interval<Number>>>(false);
-	}
-	std::vector<carl::Interval<Number>> boundsDefined = std::vector<carl::Interval<Number>>(dimension, carl::Interval<Number>::unboundedInterval());
-	for(Eigen::Index r = 0; r < constraints.rows(); ++r) {
-		std::size_t posNonZeroCoeff = 0;
-		std::size_t negNonZeroCoeff = 0;
-		for(Eigen::Index c = 0; c < constraints.cols(); ++c) {
-			if(constraints(r,c) > carl::constant_zero<Number>().get()) {
-				++posNonZeroCoeff;
-				if(boundsDefined[c].upperBoundType() == carl::BoundType::INFTY) {
-					//std::cout << "Set upper bound to " << Number(constants(r)/constraints(r,c)) << std::endl;
-					boundsDefined[c].setUpperBound(constants(r)/constraints(r,c), carl::BoundType::WEAK);
-				} else {
-					//std::cout << "Set upper bound twice." << std::endl;
-					return boost::tuple<bool,std::vector<carl::Interval<Number>>>(false);
-				}
-			} else if (constraints(r,c) < carl::constant_zero<Number>().get()) {
-				++negNonZeroCoeff;
-				if(boundsDefined[c].lowerBoundType() == carl::BoundType::INFTY) {
-					//std::cout << "Set lower bound to " << Number(constants(r)/constraints(r,c)) << std::endl;
-					boundsDefined[c].setLowerBound(constants(r)/constraints(r,c), carl::BoundType::WEAK);
-				} else {
-					//std::cout << "Set lower bound twice." << std::endl;
-					return boost::tuple<bool,std::vector<carl::Interval<Number>>>(false);
-				}
-			}
-			if(posNonZeroCoeff + negNonZeroCoeff > 1) {
-				//std::cout << "Too many coefficients." << std::endl;
-				return boost::tuple<bool,std::vector<carl::Interval<Number>>>(false);
-			}
-		}
-	}
-	//std::cout << "Return true." << std::endl;
-	return boost::tuple<bool,std::vector<carl::Interval<Number>>>(true,boundsDefined);
-}
-
-
 /*
 * Checks wether the list contains the specified direction
 */

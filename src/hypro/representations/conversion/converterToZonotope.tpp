@@ -36,13 +36,15 @@ vector_t<Number> computeArithmeticMeanPoint(const std::vector<Point<Number>>& po
 
 //conversion from Zonotope to Zonotope (no differentiation between conversion modes - always EXACT)
 template <typename Number>
-typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const Zonotope& _source, const CONV_MODE  ){
+template<typename ZonotopeSetting, typename inSetting>
+ZonotopeT<Number,Converter<Number>,ZonotopeSetting> Converter<Number>::toZonotope( const ZonotopeT<Number,Converter<Number>,inSetting>& _source, const CONV_MODE  ){
     return _source;
 }
 
 
 template <typename Number>
-typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const Ellipsoid& _source, const CONV_MODE  ){
+template<typename ZonotopeSetting>
+ZonotopeT<Number,Converter<Number>,ZonotopeSetting> Converter<Number>::toZonotope( const Ellipsoid& _source, const CONV_MODE  ){
     /*
     vector_t<Number> l(_source.dimension());
 	l.setZero();
@@ -66,7 +68,8 @@ typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const Ellips
 
 //conversion from H-Polytope to Zonotope (no differentiation between conversion modes - always OVER)
 template <typename Number>
-typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const HPolytope& _source, const CONV_MODE mode ){
+template<typename ZonotopeSetting, typename inSetting>
+ZonotopeT<Number,Converter<Number>,ZonotopeSetting> Converter<Number>::toZonotope( const HPolytopeT<Number,Converter<Number>,inSetting>& _source, const CONV_MODE mode ){
     //converts source object into a v-polytope
     auto temp = toVPolytope(_source, mode);
 
@@ -77,7 +80,8 @@ typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const HPolyt
 }
 
 template <typename Number>
-typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const ConstraintSet& _source, const CONV_MODE mode ){
+template<typename ZonotopeSetting, typename inSetting>
+ZonotopeT<Number,Converter<Number>,ZonotopeSetting> Converter<Number>::toZonotope( const ConstraintSetT<Number,inSetting>& _source, const CONV_MODE mode ){
     //converts source object into a v-polytope
     auto temp = toHPolytope(_source, mode);
 
@@ -89,7 +93,8 @@ typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const Constr
 
 //conversion from Box to Zonotope (no differentiation between conversion modes - always EXACT)
 template <typename Number>
-typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const Box& _source, const CONV_MODE  ){
+template<typename ZonotopeSetting, typename inSetting>
+ZonotopeT<Number,Converter<Number>,ZonotopeSetting> Converter<Number>::toZonotope( const BoxT<Number,Converter<Number>,inSetting>& _source, const CONV_MODE  ){
     std::size_t dim = _source.dimension();                                             //gets dimension from source object
     std::vector<carl::Interval<Number>> intervals = _source.intervals();           //gets intervals from source object
     matrix_t<Number> generators = matrix_t<Number>::Zero(dim, dim);                 //defines an empty generator matrix for dim generators
@@ -109,14 +114,15 @@ typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const Box& _
 
 //conversion from V-Polytope to Zonotope (no differentiation between conversion modes - always OVER)
 template <typename Number>
-typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const VPolytope& _source, const CONV_MODE mode ){
+template<typename ZonotopeSetting, typename inSetting>
+ZonotopeT<Number,Converter<Number>,ZonotopeSetting> Converter<Number>::toZonotope( const VPolytopeT<Number,Converter<Number>,inSetting>& _source, const CONV_MODE mode ){
     //overapproximation
     //if( mode == OVER){
         //gets dimension from source object
         std::size_t dim = _source.dimension();
 
         //gets vertices from source object
-        typename VPolytopeT<Number,Converter>::pointVector vertices = _source.vertices();
+        typename VPolytopeT<Number,Converter<Number>,inSetting>::pointVector vertices = _source.vertices();
 
         //computes an oriented Box as special Zonotope around the source object (returns Halfspaces)
         PrincipalComponentAnalysis<Number> pca(vertices);
@@ -127,7 +133,7 @@ typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const VPolyt
         auto vpoly = toVPolytope(hpoly, mode);
 
         //gets vertices of box
-        typename VPolytopeT<Number,Converter>::pointVector newVertices = vpoly.vertices();
+        typename VPolytopeT<Number,Converter<Number>,inSetting>::pointVector newVertices = vpoly.vertices();
 
         //defines empty generator matrix and center vector
         matrix_t<Number> generators = matrix_t<Number>::Zero(dim, dim);
@@ -206,7 +212,8 @@ typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const VPolyt
 //conversion from Support Function to Zonotope (OVER or ALTERNATIVE)
 //ALTERNATIVE computes a set of boundary points which then go to pca for an oriented rectangular hull before checking whether the source object is really in that box and maybe expanding it)
 template <typename Number>
-typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const SupportFunction& _source, const CONV_MODE mode, std::size_t numberOfDirections){
+template<typename ZonotopeSetting, typename inSetting>
+ZonotopeT<Number,Converter<Number>,ZonotopeSetting> Converter<Number>::toZonotope( const SupportFunctionT<Number,Converter<Number>,inSetting>& _source, const CONV_MODE mode, std::size_t numberOfDirections){
     Zonotope res;
     if (mode == OVER) {
          //gets dimension of source object
@@ -332,7 +339,7 @@ typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const Suppor
         //converts computed box H -> V
         auto vpoly = toVPolytope(hpoly, mode);
         //gets vertices of box
-        typename VPolytopeT<Number,Converter>::pointVector newVertices = vpoly.vertices();
+        typename VPolytopeT<Number,Converter<Number>,inSetting>::pointVector newVertices = vpoly.vertices();
 
         //defines empty generator matrix and center vector
         matrix_t<Number> generators = matrix_t<Number>::Zero(dim, dim);
@@ -411,13 +418,15 @@ typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const Suppor
 
 #ifdef HYPRO_USE_PPL
 template<typename Number>
-typename Converter<Number>::Zonotope Converter<Number>::toZonotope(const Polytope& source, const CONV_MODE mode){
+template<typename ZonotopeSetting, typename inSetting>
+ZonotopeT<Number,Converter<Number>,ZonotopeSetting> Converter<Number>::toZonotope(const PolytopeT<Number,Converter<Number>,inSetting>& source, const CONV_MODE mode){
     auto tmp = toVPolytope(source);
     return Converter<Number>::toZonotope(tmp, mode);
 }
 #endif
 
 template<typename Number>
-typename Converter<Number>::Zonotope Converter<Number>::toZonotope( const DifferenceBounds& _source, const CONV_MODE mode ) {
+template<typename ZonotopeSetting, typename inSetting>
+ZonotopeT<Number,Converter<Number>,ZonotopeSetting> Converter<Number>::toZonotope( const DifferenceBoundsT<Number,Converter<Number>,inSetting>& _source, const CONV_MODE mode ) {
     return toZonotope(toHPolytope(_source, mode));
 }

@@ -14,21 +14,21 @@ ExternalProject_Add(
 	CArL-EP
 	DOWNLOAD_COMMAND ""
 	CONFIGURE_COMMAND ""
-	BUILD_COMMAND ${CMAKE_MAKE_PROGRAM} lib_carl lib_carl_static
+	BUILD_COMMAND ${CMAKE_MAKE_PROGRAM} carl
 	INSTALL_COMMAND ${CMAKE_MAKE_PROGRAM} install/fast
 )
 
 include(${CMAKE_BINARY_DIR}/resources/src/CArL-EP-build/carlConfig.cmake)
 message("Include ${CMAKE_BINARY_DIR}/resources/src/CArL-EP-build/carlConfig.cmake")
-add_dependencies(lib_carl CArL-EP)
-add_dependencies(lib_carl_static CArL-EP)
-add_dependencies(resources lib_carl lib_carl_static)
+add_dependencies(carl-shared CArL-EP)
+add_dependencies(carl-static CArL-EP)
+add_dependencies(resources carl-static carl-shared)
 
 #ExternalProject_Add(
 #	carl
 #	GIT_REPOSITORY http://github.com/smtrat/carl.git
 #	#GIT_TAG "17.04"
-#	BUILD_COMMAND make lib_carl
+#	BUILD_COMMAND make carl
 #	INSTALL_COMMAND "")
 #
 #ExternalProject_Add_Step(carl ReloadCMake
@@ -41,14 +41,14 @@ add_dependencies(resources lib_carl lib_carl_static)
 #
 #
 ##Todo: Re-check, it should be possible to use load_library() afterwards, shouldn't it? Otherwise: Update lists
-#add_imported_library(lib_carl SHARED "${carl_LIBRARIES}" "${carl_INCLUDE_DIR}")
+#add_imported_library(carl SHARED "${carl_LIBRARIES}" "${carl_INCLUDE_DIR}")
 #add_imported_library(lib_carl_static STATIC "${carl_LIBRARIES}" "${carl_INCLUDE_DIR}")
 #list(APPEND ${PROJECT_NAME}_LIBRARIES_STATIC ${carl_LIBRARIES})
 #list(APPEND ${PROJECT_NAME}_INCLUDE_DIRS ${carl_INCLUDE_DIR})
 #set(${PROJECT_NAME}_INCLUDE_DIRS ${${PROJECT_NAME}_INCLUDE_DIRS} PARENT_SCOPE)
 #set(${PROJECT_NAME}_LIBRARIES_STATIC ${${PROJECT_NAME}_LIBRARIES_STATIC} PARENT_SCOPE)
 #
-#add_dependencies(lib_carl carl)
+#add_dependencies(carl carl)
 #add_dependencies(lib_carl_static carl)
-#add_dependencies(resources lib_carl)
+#add_dependencies(resources carl)
 #add_dependencies(resources lib_carl_static)

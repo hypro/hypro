@@ -713,7 +713,7 @@ int main(int argc, char** argv) {
 	componentCount = atoi(argv[1]);
 
 	// settings to be used for flowstar format output
-	ReachabilitySettings<Number> settings;
+	ReachabilitySettings settings;
 	settings.jumpDepth=20;
 	settings.timeBound = 110;
 	settings.timeStep = 0.01;

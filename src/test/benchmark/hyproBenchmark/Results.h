@@ -8,7 +8,11 @@
 #pragma once
 
 #include "Result.h"
+#include <util/convenienceOperators.h>
 #include <chrono>
+#include <iostream>
+#include <fstream>
+#include <string>
 #include <vector>
 
 namespace benchmark
@@ -25,6 +29,32 @@ struct Results {
     auto end() {return mResults.end();}
 
     auto push_back(const Result<Data>& in) {return mResults.push_back(in);}
-    auto insert(auto pos, auto inStart, auto inEnd) {return mResults.insert(pos,inStart,inEnd);}
+    auto emplace_back(Result<Data>&& in) {return mResults.emplace_back(std::move(in));}
+    auto insert(typename std::vector<Result<Data>>::iterator pos, typename std::vector<Result<Data>>::iterator inStart, typename std::vector<Result<Data>>::iterator inEnd) 
+    {return mResults.insert(pos,inStart,inEnd);}
+
+    void createCSV(const std::string& filename, const std::string& delimiter = " ", const std::string& filter = "") {
+        std::ofstream fstr;
+        fstr.open(filename);
+        fstr << "dimension" << delimiter << "rt\n";
+        for(const auto& r : mResults) {
+            // if results are filtered, apply filter.
+            if(filter != "") {
+                if(r.mName == filter) {
+                    fstr << r.mDimension << delimiter;
+                    for(const auto& i : r.mContent) 
+                        fstr << i << delimiter;
+                    fstr << r.mRunningTime.count() << "\n";
+                }
+            } else {
+                fstr << r.mDimension << delimiter;
+                for(const auto& i : r.mContent) 
+                    fstr << i << delimiter;
+                fstr << r.mRunningTime.count() << "\n";
+            }
+        }
+
+        fstr.close();
+    }
 };   
 } // benchmark

@@ -4,9 +4,7 @@
 
 #include "representations/GeometricObject.h"
 #include "datastructures/HybridAutomaton/HybridAutomaton.h"
-#include "datastructures/HybridAutomaton/LocationManager.h"
 #include "algorithms/reachability/Reach.h"
-//#include "parser/flowstar/ParserWrapper.h"
 #include "parser/antlr4-flowstar/ParserWrapper.h"
 #include "util/statistics/statistics.h"
 #ifdef HYPRO_USE_LACE
@@ -20,14 +18,15 @@ static void computeReachableStates(const std::string& filename, const hypro::rep
 	using timeunit = std::chrono::microseconds;
 	clock::time_point start = clock::now();
 
-	std::pair<hypro::HybridAutomaton<Number>, hypro::ReachabilitySettings<Number>> ha = std::move(hypro::parseFlowstarFile<Number>(filename)); 
+	std::pair<hypro::HybridAutomaton<Number>, hypro::ReachabilitySettings> ha = std::move(hypro::parseFlowstarFile<Number>(filename));
 	//#ifdef HYPRO_LOGGING
 	//std::cout << "Parsed HybridAutomaton:\n" << ha.first << "Parsed ReachabilitySettings:\n" << ha.second << std::endl;
 	//#endif
 
-	hypro::reachability::Reach<Number> reacher(ha.first, ha.second);
+	hypro::reachability::Reach<Number,hypro::reachability::ReachSettings, hypro::State_t<Number>> reacher(ha.first, ha.second);
 	reacher.setRepresentationType(type);
-	std::vector<std::pair<unsigned, hypro::reachability::flowpipe_t<Number>>> flowpipes = reacher.computeForwardReachability();
+	reacher.initQueue();
+	auto flowpipes = reacher.computeForwardReachability();
 
 	std::cout << "Finished computation of reachable states: " << std::chrono::duration_cast<timeunit>( clock::now() - start ).count()/1000.0 << " ms" << std::endl;
 
@@ -130,7 +129,7 @@ static void computeReachableStates(const std::string& filename, const hypro::rep
 		std::cout << "Finished plotting: " << std::chrono::duration_cast<timeunit>( clock::now() - startPlotting ).count()/1000.0 << " ms" << std::endl;
 
 	}
-	
+
 }
 
 int main(int argc, char** argv) {

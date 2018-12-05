@@ -3,20 +3,14 @@
 #sudo add-apt-repository -y ppa:george-edison55/cmake-3.x
 sudo apt-get update
 
-if [[ ${COMPILER} == "g++-5" ]]; then
-	defCXX gcc-5 g++-5
-elif [[ ${COMPILER} == "g++-6" ]]; then
-	defCXX gcc-6 g++-6
-elif [[ ${COMPILER} == "clang++-3.4" ]]; then
-	defCXX clang-3.4 clang++-3.4
-elif [[ ${COMPILER} == "clang-3.5" ]]; then
-	defCXX clang-3.5 clang++-3.5
-elif [[ ${COMPILER} == "clang++-3.6" ]]; then
-	defCXX clang-3.6 clang++-3.6
-elif [[ ${COMPILER} == "clang++-3.7" ]]; then
-	defCXX clang-3.7 clang++-3.7
-elif [[ ${COMPILER} == "clang++-3.8" ]]; then
-	defCXX clang-3.8 clang++-3.8
+if [[ ${COMPILER} == "g++-7" ]]; then
+	defCXX gcc-7 g++-7
+elif [[ ${COMPILER} == "g++-8" ]]; then
+	defCXX gcc-8 g++-8
+elif [[ ${COMPILER} == "clang++-7.0" ]]; then
+	defCXX clang-7.0 clang++-7.0
+elif [[ ${COMPILER} == "clang-5.0" ]]; then
+	defCXX clang-5.0 clang++-5.0
 fi
 
 if [[ ${FLAGS} == "-DHYPRO_COVERAGE=ON" ]]; then
@@ -39,4 +33,3 @@ if [ ! -f $PREFIX/bin/cmake ]; then
 fi
 
 export PATH="$PREFIX/bin:$PATH"
-

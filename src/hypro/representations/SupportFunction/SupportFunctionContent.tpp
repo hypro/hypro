@@ -104,14 +104,16 @@ SupportFunctionContent<Number,Setting>::SupportFunctionContent( const matrix_t<N
 										  SF_TYPE _type ) {
 	switch ( _type ) {
 		case SF_TYPE::POLY: {
-			boost::tuple<bool,std::vector<carl::Interval<Number>>> intervals = isBox(_directions,_distances);
-
+			boost::tuple<bool,std::vector<carl::Interval<Number>>> intervals;
+			if(Setting::DETECT_BOX){
+				intervals = isBox(_directions,_distances);
+			}
 			if(boost::get<0>(intervals)) {
+				TRACE("hypro.representations.supportFunction","Handed polytope actually is a box, use box representation.")
 				mBox = new BoxSupportFunction<Number,Setting>(boost::get<1>(intervals));
 				mType = SF_TYPE::BOX;
-				TRACE("hypro.representations.supportFunction","Handed polytope is actually a box, use box representation.")
-				//std::cout << "IS A BOX!" << std::endl;
 			} else {
+				TRACE("hypro.representations.supportFunction","Handed polytope indeed is a polytope, use H-representation.")
 				mPolytope = new PolytopeSupportFunction<Number,Setting>( _directions, _distances );
 				mType = SF_TYPE::POLY;
 			}
@@ -121,10 +123,19 @@ SupportFunctionContent<Number,Setting>::SupportFunctionContent( const matrix_t<N
 			break;
 		}
 		case SF_TYPE::BOX: {
-			boost::tuple<bool,std::vector<carl::Interval<Number>>> intervals = isBox(_directions,_distances);
-			assert(boost::get<0>(intervals));
-			mBox = new BoxSupportFunction<Number,Setting>(boost::get<1>(intervals));
-			mType = SF_TYPE::BOX;
+			boost::tuple<bool,std::vector<carl::Interval<Number>>> intervals;
+			if(Setting::DETECT_BOX) {
+				intervals = isBox(_directions,_distances);
+			}
+			if(boost::get<0>(intervals)) {
+				TRACE("hypro.representations.supportFunction","Handed box indeed is a box.")
+				mBox = new BoxSupportFunction<Number,Setting>(boost::get<1>(intervals));
+				mType = SF_TYPE::BOX;
+			} else {
+				TRACE("hypro.representations.supportFunction","Handed box actually is a polytope, use H-representation.")
+				mPolytope = new PolytopeSupportFunction<Number,Setting>( _directions, _distances );
+				mType = SF_TYPE::POLY;
+			}
 			mDimension = std::size_t(_directions.cols());
 			mDepth = 0;
 			mOperationCount = 0;
@@ -415,7 +426,7 @@ EvaluationResult<Number> SupportFunctionContent<Number,Setting>::evaluate( const
 	matrix_t<Number> tmp = matrix_t<Number>::Zero(1,_direction.rows());
 	tmp << _direction.transpose();
 	auto res = multiEvaluate(tmp,useExact).at(0);
-	TRACE("hypro.representations.supportFunctoin","Return result.");
+	//TRACE("hypro.representations.supportFunction","Return result.");
 	return res;
 }
 
@@ -449,7 +460,7 @@ std::vector<EvaluationResult<Number>> SupportFunctionContent<Number,Setting>::mu
 			// special case: When the node is a leaf, we directly return the result.
 			if(currentResult.first == -1) {
 				// we reached the top, exit (or return result or whatever)
-				TRACE("hypro.representations.supportFunction","Is leaf. Evaluate and return.");
+				//TRACE("hypro.representations.supportFunction","Is leaf. Evaluate and return.");
 				switch ( cur->type() ) {
 					case SF_TYPE::ELLIPSOID: {
 						return ellipsoid()->multiEvaluate( currentParam );
@@ -469,7 +480,7 @@ std::vector<EvaluationResult<Number>> SupportFunctionContent<Number,Setting>::mu
 						FATAL("hypro.representations.supportFunction","Wrong type.");
 				}
 			} else {
-				TRACE("hypro.representations.supportFunction","Evaluate and add to results stack.");
+				//TRACE("hypro.representations.supportFunction","Evaluate and add to results stack.");
 				switch ( cur->type() ) {
 					case SF_TYPE::ELLIPSOID: {
 						resultStack.at(currentResult.first).second.emplace_back(cur->ellipsoid()->multiEvaluate( currentParam ));
@@ -493,7 +504,7 @@ std::vector<EvaluationResult<Number>> SupportFunctionContent<Number,Setting>::mu
 						FATAL("hypro.representations.supportFunction","Wrong type.");
 				}
 			}
-			TRACE("hypro.representations.supportFunction","Leave recursive call.");
+			//TRACE("hypro.representations.supportFunction","Leave recursive call.");
 
 			// leave recursive call.
 			callStack.pop_back();
@@ -505,16 +516,16 @@ std::vector<EvaluationResult<Number>> SupportFunctionContent<Number,Setting>::mu
 			// Detect, if this call is finished or new.
 			if(resultStack.back().second.size() == cur->originCount()) {
 				// the call is finished, perform accumulating operations and forward result.
-				TRACE("hypro.representations.supportFunction", ": Accumulate results.");
+				//TRACE("hypro.representations.supportFunction", ": Accumulate results.");
 				// accumulate results - in this case sum.
 				Res accumulatedResult;
 				switch( cur->type() ) {
 					case SF_TYPE::LINTRAFO: {
-						TRACE("hypro.representations.supportFunction", ": LINTRAFO, accumulate results.")
+						//TRACE("hypro.representations.supportFunction", ": LINTRAFO, accumulate results.")
 						assert(resultStack.back().second.size() == 1);
 						const std::pair<matrix_t<Number>, vector_t<Number>>& parameterPair = cur->linearTrafoParameters()->parameters->getParameterSet(cur->linearTrafoParameters()->currentExponent);
-						TRACE("hypro.representations.supportFunction", "Matrix: " << parameterPair.first);
-						TRACE("hypro.representations.supportFunction", "Vector: " << parameterPair.second);
+						//TRACE("hypro.representations.supportFunction", "Matrix: " << parameterPair.first);
+						//TRACE("hypro.representations.supportFunction", "Vector: " << parameterPair.second);
 						if(resultStack.back().second.front().begin()->errorCode != SOLUTION::INFEAS) {
 							unsigned directionCnt = 0;
 							for(auto& entry : resultStack.back().second.front()) {
@@ -522,29 +533,29 @@ std::vector<EvaluationResult<Number>> SupportFunctionContent<Number,Setting>::mu
 								if(entry.errorCode == SOLUTION::INFTY) {
 									entry.supportValue = 1;
 								} else {
-									TRACE("hypro.representations.supportFunction", ": Entry val before trafo: " << entry.optimumValue);
+									//TRACE("hypro.representations.supportFunction", ": Entry val before trafo: " << entry.optimumValue);
 									entry.optimumValue = parameterPair.first * entry.optimumValue + parameterPair.second;
 									// As we know, that the optimal vertex lies on the supporting Halfspace, we can obtain the distance by dot product.
 									entry.supportValue = entry.optimumValue.dot(currentDir);
 								}
 								//auto t = convert<Number,double>(currentParam.row(directionCnt));
-								//TRACE("hypro.representations.supportFunction", "Direction: " << t << ", Entry value: " << entry.supportValue);
+								////TRACE("hypro.representations.supportFunction", "Direction: " << t << ", Entry value: " << entry.supportValue);
 								++directionCnt;
 							}
 						}
-						TRACE("hypro.representations.supportFunction",": LINTRAFO, accumulate results done.");
+						//TRACE("hypro.representations.supportFunction",": LINTRAFO, accumulate results done.");
 						accumulatedResult = resultStack.back().second.front();
 						break;
 					}
 					case SF_TYPE::PROJECTION: {
-						TRACE("hypro.representations.supportFunction", ": PROJECTION, accumulate results.")
+						//TRACE("hypro.representations.supportFunction", ": PROJECTION, accumulate results.")
 						assert(resultStack.back().second.size() == 1);
 						// simply forward the results
 						accumulatedResult = resultStack.back().second.front();
 						break;
 					}
 					case SF_TYPE::SCALE: {
-						TRACE("hypro.representations.supportFunction", ": SCALE, accumulate results.")
+						//TRACE("hypro.representations.supportFunction", ": SCALE, accumulate results.")
 						assert(resultStack.back().second.size() == 1);
 						// if one result is infeasible, the others will be too -> do not process.
 						if(resultStack.back().second.front().begin()->errorCode != SOLUTION::INFEAS){
@@ -560,7 +571,7 @@ std::vector<EvaluationResult<Number>> SupportFunctionContent<Number,Setting>::mu
 						break;
 					}
 					case SF_TYPE::SUM: {
-						TRACE("hypro.representations.supportFunction", ": SUM, accumulate results.")
+						//TRACE("hypro.representations.supportFunction", ": SUM, accumulate results.")
 						assert( resultStack.back().second.size() == 2);
 						assert( resultStack.back().second.at(0).size() == std::size_t(currentParam.rows()));
 						assert( resultStack.back().second.at(0).size() == resultStack.back().second.at(1).size());
@@ -587,7 +598,7 @@ std::vector<EvaluationResult<Number>> SupportFunctionContent<Number,Setting>::mu
 						break;
 					}
 					case SF_TYPE::UNITE: {
-						TRACE("hypro.representations.supportFunction", ": UNITE, accumulate results.")
+						//TRACE("hypro.representations.supportFunction", ": UNITE, accumulate results.")
 						assert(resultStack.back().second.size() > 0);
 						assert(resultStack.back().second.size() == cur->unionParameters()->items.size());
 						accumulatedResult = resultStack.back().second.front();
@@ -610,7 +621,7 @@ std::vector<EvaluationResult<Number>> SupportFunctionContent<Number,Setting>::mu
 						break;
 					}
 					case SF_TYPE::INTERSECT: {
-						TRACE("hypro.representations.supportFunction", ": INTERSECT, accumulate results.")
+						//TRACE("hypro.representations.supportFunction", ": INTERSECT, accumulate results.")
 						assert(resultStack.back().second.size() == 2);
 						Res& resA = resultStack.back().second.at(0);
 						Res& resB = resultStack.back().second.at(1);
@@ -629,19 +640,19 @@ std::vector<EvaluationResult<Number>> SupportFunctionContent<Number,Setting>::mu
 							assert(resA[i].errorCode != SOLUTION::INFEAS && resB[i].errorCode != SOLUTION::INFEAS);
 							EvaluationResult<Number> res;
 							if (resA[i].errorCode == SOLUTION::INFTY) {
-								TRACE("hypro.representations.supportFunction","resA infinite");
+								//TRACE("hypro.representations.supportFunction","resA infinite");
 								res.errorCode = resB[i].errorCode;
 								res.supportValue = resB[i].supportValue;
 								res.optimumValue = resB[i].optimumValue;
 							} else if (resB[i].errorCode == SOLUTION::INFTY) {
-								TRACE("hypro.representations.supportFunction","resB infinite");
+								//TRACE("hypro.representations.supportFunction","resB infinite");
 								assert(resA[i].errorCode == SOLUTION::FEAS);
 								res.errorCode = resA[i].errorCode;
 								res.supportValue = resA[i].supportValue;
 								res.optimumValue = resA[i].optimumValue;
 							} else {
 								assert(resA[i].errorCode == SOLUTION::FEAS && resB[i].errorCode == SOLUTION::FEAS);
-								TRACE("hypro.representations.supportFunction","Both finite: A " << resA[i].supportValue << " vs B " << resB[i].supportValue);
+								//TRACE("hypro.representations.supportFunction","Both finite: A " << resA[i].supportValue << " vs B " << resB[i].supportValue);
 								res.errorCode = SOLUTION::FEAS;
 								if(resA[i].supportValue < resB[i].supportValue){
 									res.supportValue = resA[i].supportValue;
@@ -652,7 +663,7 @@ std::vector<EvaluationResult<Number>> SupportFunctionContent<Number,Setting>::mu
 								}
 							}
 							auto t = convert<Number,double>(res.optimumValue);
-							//TRACE("hypro.representations.supportFunction", ": INTERSECT, accumulated result: " << t << " and value: " << res.supportValue );
+							////TRACE("hypro.representations.supportFunction", ": INTERSECT, accumulated result: " << t << " and value: " << res.supportValue );
 							accumulatedResult.emplace_back(res);
 						}
 						assert(accumulatedResult.size() == std::size_t(currentParam.rows()));
@@ -672,12 +683,12 @@ std::vector<EvaluationResult<Number>> SupportFunctionContent<Number,Setting>::mu
 
 				if(resultStack.back().first == -1) {
 					// we reached the top, exit
-					TRACE("hypro.representations.supportFunction","Return accumulated result.");
+					//TRACE("hypro.representations.supportFunction","Return accumulated result.");
 					return accumulatedResult;
 				}
 
 				// forward result.
-				//TRACE("hypro.representations.supportFunction","Push accumulated result up.");
+				////TRACE("hypro.representations.supportFunction","Push accumulated result up.");
 				resultStack.at(resultStack.back().first).second.emplace_back(accumulatedResult);
 
 				// delete result frame and close recursive call
@@ -687,7 +698,7 @@ std::vector<EvaluationResult<Number>> SupportFunctionContent<Number,Setting>::mu
 
 			} else {
 				// this is the branch for calling recursively
-				TRACE("hypro.representations.supportFunction","Invoke recursive call.");
+				//TRACE("hypro.representations.supportFunction","Invoke recursive call.");
 
 				// here we create the new stack levels.
 				std::size_t callingFrame = callStack.size() - 1 ;
@@ -717,7 +728,7 @@ std::vector<EvaluationResult<Number>> SupportFunctionContent<Number,Setting>::mu
 						matrix_t<Number> projectedParameters = matrix_t<Number>::Zero(_directions.rows(), _directions.cols());
 						Eigen::Index entryIndex = 0;
 						for(const auto& entry : cur->projectionParameters()->dimensions) {
-							TRACE("hypro.representations.supportFunction","Entry: " << entry)
+							//TRACE("hypro.representations.supportFunction","Entry: " << entry)
 							if(entry < mDimension){
 								projectedParameters.col(entry) = currentParam.col(entry);
 								++entryIndex;
@@ -976,7 +987,7 @@ void SupportFunctionContent<Number,Setting>::forceLinTransReduction(){
             }
 			mDepth = origin->depth() + 1;
 			mOperationCount = origin->operationCount() +1;
-            mLinearTrafoParameters = new trafoContent<Number,Setting>( origin, std::make_shared<lintrafoParameters<Number>>(parameterPair.first, parameterPair.second) );
+            mLinearTrafoParameters = new trafoContent<Number,Setting>( origin, parameterPair.first, parameterPair.second );
             break;
         }
         case SF_TYPE::SUM: {
@@ -989,8 +1000,8 @@ void SupportFunctionContent<Number,Setting>::forceLinTransReduction(){
         case SF_TYPE::INTERSECT: {
             intersectionParameters()->rhs->forceLinTransReduction();
             intersectionParameters()->lhs->forceLinTransReduction();
-			mDepth = std::max(summands()->lhs->operationCount(), summands()->rhs->operationCount()) +1;
-			mOperationCount = summands()->lhs->operationCount() + summands()->rhs->operationCount() +1;
+			mDepth = std::max(intersectionParameters()->lhs->operationCount(), intersectionParameters()->rhs->operationCount()) +1;
+			mOperationCount = intersectionParameters()->lhs->operationCount() + intersectionParameters()->rhs->operationCount() +1;
 			break;
         }
         case SF_TYPE::UNITE: {

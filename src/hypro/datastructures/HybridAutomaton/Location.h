@@ -8,10 +8,11 @@
 #pragma once
 
 #include "Condition.h"
-//#include "LocationManager.h"
-//#include "lib/utils/types.h"
-//#include <hypro/types.h>
+#include "flow/operations.h"
+#include "flow/typetraits.h"
+#include "flow/visitors.h"
 #include "../../types.h"
+#include <boost/variant.hpp>
 #include <iostream>
 #include <string>
 
@@ -20,8 +21,8 @@ namespace hypro
 template<typename Number>
 class Transition;
 
-template<typename Number>
-class LocationManager;
+
+
 
 /**
  * @brief      Class for location.
@@ -30,11 +31,11 @@ class LocationManager;
 template<typename Number>
 class Location
 {
-    friend LocationManager<Number>;
+public:
+    using flowVariant = boost::variant<linearFlow<Number>, affineFlow<Number>, rectangularFlow<Number>>;
 
 protected:
     using transitionSet = std::set<Transition<Number>*>;
-
     /**
      * @brief      Constructor
      * @details    Note that locations should only be constructed from the LocationManager.
@@ -52,8 +53,8 @@ protected:
     ///@}
 
 private:
-    mutable std::vector<matrix_t<Number>> mFlows;
-    Box<Number> mExternalInput = Box<Number>::Empty();
+    mutable std::vector<flowVariant> mFlows;
+    std::vector<carl::Interval<Number>> mExternalInput;
     bool mHasExternalInput = false;
     transitionSet mTransitions;
     Condition<Number> mInvariant;
@@ -69,24 +70,26 @@ public:
     ~Location(){}
 
     std::size_t getNumberFlow() const { return mFlows.size(); }
-    matrix_t<Number> getFlow(std::size_t I = 0) const { return mFlows.at(I); }
-    matrix_t<Number>& rGetFlow(std::size_t I = 0) { return mFlows[I]; }
-    const std::vector<matrix_t<Number>>& getFlows() const { return mFlows; }
+    flowVariant getFlow(std::size_t I = 0) const { return mFlows.at(I); }
+    flowVariant& rGetFlow(std::size_t I = 0) { return mFlows[I]; }
+    const std::vector<flowVariant>& getFlows() const { return mFlows; }
     const Condition<Number>& getInvariant() const { return mInvariant; }
     const transitionSet& getTransitions() const { return mTransitions; }
-    const Box<Number>& getExternalInput() const { return mExternalInput; }
+    const std::vector<carl::Interval<Number>>& getExternalInput() const { return mExternalInput; }
     bool hasExternalInput() const { return mHasExternalInput; }
     [[deprecated("use hash() instead")]]
     unsigned getId() const { return mId; }
 	std::string getName() const { return mName; }
+    std::size_t dimension() const;
+    std::size_t dimension(std::size_t i) const;
 
     void setName(const std::string& name) { mName = name; mHash = 0; }
-    void setFlow(const matrix_t<Number>& mat, std::size_t I = 0);
+    void setFlow(const flowVariant& f, std::size_t I = 0);
     void setInvariant(const Condition<Number>& inv) { mInvariant = inv; mHash = 0; }
     void setTransitions(const transitionSet& trans) { mTransitions = trans; mHash = 0; }
     void addTransition(Transition<Number>* trans) { mTransitions.insert(trans); mHash = 0; }
     void updateTransition(Transition<Number>* original, Transition<Number>* newT);
-    void setExtInput(const Box<Number>& b);
+    void setExtInput(const std::vector<carl::Interval<Number>>& b);
 
     std::size_t hash() const;
 
@@ -132,7 +135,7 @@ public:
 	    }
 		ostr << "\t Inv: " << std::endl << l.getInvariant();
 	    //ostr << l.getInvariant().getDiscreteCondition() << std::endl;
-      	ostr << "ExternalInput:\n" << l.getExternalInput() << std::endl;
+      	//ostr << "ExternalInput:\n" << l.getExternalInput() << std::endl;
 	    ostr << "Transitions: " << std::endl;
 	    for (auto transitionPtr : l.getTransitions()) {
 	        ostr << *transitionPtr << std::endl;
@@ -150,6 +153,7 @@ struct locPtrComp {
     bool operator()(const std::unique_ptr<Location<Number>>& lhs, const std::unique_ptr<Location<Number>>& rhs) const { return (*lhs < *rhs); }
 };
 
+/*
 template<typename Number>
 //std::unique_ptr<Location<Number>> parallelCompose(const std::unique_ptr<Location<Number>>& lhs
 //                                , const std::unique_ptr<Location<Number>>& rhs
@@ -158,7 +162,7 @@ std::unique_ptr<Location<Number>> parallelCompose(const Location<Number>* lhs
                                                 , const std::vector<std::string>& lhsVar
                                                 , const std::vector<std::string>& rhsVar
                                                 , const std::vector<std::string>& haVar);
-
+*/
 
 }  // namespace hypro
 
@@ -170,8 +174,8 @@ namespace std {
         {
             //Flows
             std::size_t seed = 0;
-            for(auto& flow : loc.getFlows()){
-                carl::hash_add(seed, std::hash<hypro::matrix_t<Number>>()(flow));
+            for(const auto& f : loc.getFlows()) {
+                carl::hash_add(seed, boost::apply_visitor(hypro::flowHashVisitor(), f));
             }
 
             //Name

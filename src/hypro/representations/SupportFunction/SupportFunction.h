@@ -22,6 +22,10 @@ namespace hypro {
  */
 template <typename Number, typename Converter, typename Setting>
 class SupportFunctionT : public GeometricObject<Number, SupportFunctionT<Number,Converter,Setting>> {
+public:
+
+	typedef Setting Settings;
+
 private:
 
 
@@ -132,8 +136,10 @@ public:
 
 	std::vector<std::size_t> collectProjections() const;
 
+	void evaluateTemplate(std::size_t directionCount = defaultTemplateDirectionCount, bool force = false) const;
+
 private:
-	void evaluateTemplate() const;
+
 };
 
 /** @} */

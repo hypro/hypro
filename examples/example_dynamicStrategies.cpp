@@ -18,7 +18,7 @@ int main() {
 	//std::string filename = "../examples/input/thermostat.model";
 	std::string filename = "../examples/input/bouncing_ball.model";
 
-	std::pair<hypro::HybridAutomaton<Number>, hypro::ReachabilitySettings<Number>> ha = std::move(hypro::parseFlowstarFile<Number>(filename));
+	std::pair<hypro::HybridAutomaton<Number>, hypro::ReachabilitySettings> ha = std::move(hypro::parseFlowstarFile<Number>(filename));
 
 	//hypro::reachability::Reach<Number,boxValuation> boxReach(ha.first, ha.second);
 	//hypro::reachability::Reach<Number,hpValuation> hpReach(ha.first, ha.second);
@@ -28,9 +28,9 @@ int main() {
 	hpReach.setRepresentationType(hpValuation::type());
 	hypro::reachability::Reach<Number> sfReach(ha.first, ha.second);
 	sfReach.setRepresentationType(sfValuation::type());
-	vector<std::pair<unsigned,hypro::reachability::flowpipe_t<Number>>> boxFlowpipes = boxReach.computeForwardReachability();
-	vector<std::pair<unsigned,hypro::reachability::flowpipe_t<Number>>> hpFlowpipes = hpReach.computeForwardReachability();
-	vector<std::pair<unsigned,hypro::reachability::flowpipe_t<Number>>> sfFlowpipes = sfReach.computeForwardReachability();
+	vector<std::pair<unsigned,hypro::reachability::flowpipe_t>> boxFlowpipes = boxReach.computeForwardReachability();
+	vector<std::pair<unsigned,hypro::reachability::flowpipe_t>> hpFlowpipes = hpReach.computeForwardReachability();
+	vector<std::pair<unsigned,hypro::reachability::flowpipe_t>> sfFlowpipes = sfReach.computeForwardReachability();
 
 	//if(boxReach.reachedBadStates()) {
 		//hypro::reachability::Reach<Number,sfValuation> sfReach(ha.first, ha.second);

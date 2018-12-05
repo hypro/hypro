@@ -6,6 +6,9 @@ template<typename Number>
 using Box = typename Converter<Number>::Box;
 
 template<typename Number>
+using CarlPolytope = typename Converter<Number>::CarlPolytope;
+
+template<typename Number>
 using ConstraintSet = typename Converter<Number>::ConstraintSet;
 
 template<typename Number>

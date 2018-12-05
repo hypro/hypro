@@ -10,6 +10,7 @@
 #include <vector>
 
 #include <carl/interval/Interval.h>
+#include <carl/interval/set_theory.h>
 #include <carl/core/MultivariatePolynomial.h>
 #include <carl/core/VariablePool.h>
 
