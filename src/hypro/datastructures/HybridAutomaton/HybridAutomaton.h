@@ -38,7 +38,6 @@ class HybridAutomaton
   public:
     using locationSet = std::set<std::unique_ptr<Location<Number>>, locPtrComp<Number>>; /// Set of unique location pointers.
     using transitionSet = std::set<std::unique_ptr<Transition<Number>>>; /// Set of unique transition pointers.
-    using locationStateMap = std::multimap<const Location<Number>*, ConstraintSetT<Number>>; /// Multi-map from location pointers to states.
     using locationConditionMap = std::map<const Location<Number>*, Condition<Number>>; /// Map from location pointers to conditions.
     using conditionVector = std::vector<Condition<Number>>; /// Vector of conditions.
     using variableVector = std::vector<std::string>; /// Vector of variables
@@ -46,7 +45,7 @@ class HybridAutomaton
   private:
     locationSet mLocations; 				/// The locations of the hybrid automaton.
     transitionSet mTransitions; 			/// The transitions of the hybrid automaton.
-    locationStateMap mInitialStates; 		/// The set of initial states.
+    locationConditionMap mInitialStates; 		/// The set of initial states.
     locationConditionMap mLocalBadStates; 	/// The set of bad states which are bound to locations.
     conditionVector mGlobalBadStates; 		/// The set of bad states which are not bound to any location.
     variableVector mVariables;
@@ -78,7 +77,7 @@ class HybridAutomaton
      * @param[in]	trans 			Set of transitions
      * @param[in] 	initialStates 	Map of initial states
      */
-    HybridAutomaton(const locationSet& locs, const transitionSet& trans, const locationStateMap& initialStates);
+    HybridAutomaton(const locationSet& locs, const transitionSet& trans, const locationConditionMap& initialStates);
 
     /**
      * @brief 		Destructor
@@ -111,7 +110,7 @@ class HybridAutomaton
     //* @return The set of transitions. */
     std::set<Transition<Number>*> getTransitions() const;
     //* @return The set of initial states. */
-    const locationStateMap& getInitialStates() const { return mInitialStates; }
+    const locationConditionMap& getInitialStates() const { return mInitialStates; }
     //* @return The set of bad states bound to locations. */
     const locationConditionMap& getLocalBadStates() const { return mLocalBadStates; }
     //* @return The set of bad states which are not bound to locations. */
@@ -142,7 +141,7 @@ class HybridAutomaton
         mTransitions = std::move(trans);
         assert(checkConsistency());
     }
-    void setInitialStates(const locationStateMap& states) { mInitialStates = states; }
+    void setInitialStates(const locationConditionMap& states) { mInitialStates = states; }
     void setLocalBadStates(const locationConditionMap& states) { mLocalBadStates = states; }
     void setGlobalBadStates(const conditionVector& states) { mGlobalBadStates = states; }
     void setVariables(const variableVector& variables) { mVariables = variables; }
@@ -156,7 +155,7 @@ class HybridAutomaton
     void addLocation(std::unique_ptr<Location<Number>>&& location);
     void addTransition(const Transition<Number>& transition);
     void addTransition(std::unique_ptr<Transition<Number>>&& transition);
-    void addInitialState(const Location<Number>* loc, const ConstraintSetT<Number>& state) { mInitialStates.emplace(std::make_pair(loc,state)); }
+    void addInitialState(const Location<Number>* loc, const Condition<Number>& state) { mInitialStates.emplace(std::make_pair(loc,state)); }
     void addLocalBadState(const Location<Number>* loc, const Condition<Number>& condition) { mLocalBadStates.emplace(std::make_pair(loc,condition)); }
     void addGlobalBadState(const Condition<Number>& state) { mGlobalBadStates.push_back(state); }
     ///@}

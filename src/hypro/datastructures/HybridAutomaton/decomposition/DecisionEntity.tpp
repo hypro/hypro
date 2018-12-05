@@ -39,6 +39,7 @@ namespace hypro
 
 	template<typename Number>
 	bool DecisionEntity<Number>::isDiscreteSubspace(const Location<Number> &loc, size_t index){
+		// TODO: I think this is not enough.
 		return isDiscrete(loc.getFlow(index));
 	}
 
@@ -177,17 +178,13 @@ namespace hypro
 
 	template<typename Number>
 	bool DecisionEntity<Number>::checkDecomposed(const HybridAutomaton<Number> &automaton){
-		// return false, as we currently do not split a priori
-		return false;
-		/*
-		typename HybridAutomaton<Number>::locationStateMap initialStates = automaton.getInitialStates();
+		auto initialStates = automaton.getInitialStates();
 		for (auto stateMapIt = initialStates.begin(); stateMapIt != initialStates.end(); ++stateMapIt) {
-			if(stateMapIt->second.getNumberSets() > 1){
+			if(stateMapIt->second.size() > 1){
 				return true;
 			}
 		}
 		return false;
-		*/
 	}
 
 

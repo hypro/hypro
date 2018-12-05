@@ -100,7 +100,7 @@ protected:
 		auto hpoly = Converter<Number>::toHPolytope(poly);
 
 		for(auto loc : initLocSet) {
-			hybrid.addInitialState(loc, ConstraintSet<Number>(hpoly.matrix(), hpoly.vector()));
+			hybrid.addInitialState(loc, Condition<Number>(hpoly.matrix(), hpoly.vector()));
 		}
 		hybrid.setLocations(std::move(locSet));
 		transSet.insert(std::move(copyOfTrans));
@@ -352,7 +352,7 @@ TYPED_TEST(HybridAutomataTest, HybridAutomatonTest)
 	vector_t<TypeParam> vec = vector_t<TypeParam>(2);
 	vec << 1,2;
 
-	h1.addInitialState(this->loc1.get(), ConstraintSet<TypeParam>(matr, vec));
+	h1.addInitialState(this->loc1.get(), Condition<TypeParam>(matr, vec));
 
 	//Copy constructor;
 	/*

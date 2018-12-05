@@ -43,20 +43,24 @@ HybridAutomaton<Number>::HybridAutomaton(const HybridAutomaton<Number>& hybrid)
 	}
 
 	// get correct location pointer for initial states.
-	for(const auto& locationStatePair : hybrid.getInitialStates()) {
-		// find new location
-		for(auto& ptr : mLocations) {
-			if(*(ptr.get()) == *(locationStatePair.first)) {
-				Location<Number>* tmp = ptr.get();
-				mInitialStates.insert(std::make_pair(tmp,locationStatePair.second));
-				//mInitialStates[tmp] = locationStatePair.second;
+	for(auto otherInitial : hybrid.getInitialStates()) {
+		auto copy = otherInitial.second;
+		// update location
+		#ifndef NDEBUG
+		bool found = false;
+		#endif
+		for(auto& l : mLocations) {
+			if( *l.get() == *otherInitial.first ) {
+				#ifndef NDEBUG
+				found = true;
+				#endif
+				this->addInitialState(l.get(), copy);
 				break;
 			}
 		}
+		assert(found);
 	}
 
-
-	mLocalBadStates.clear();
 	for(auto otherBad : hybrid.getLocalBadStates()) {
 		auto copy = otherBad.second;
 		// update location
@@ -136,16 +140,22 @@ HybridAutomaton<Number>::HybridAutomaton(HybridAutomaton<Number>&& hybrid)
 	}
 
 	// get correct location pointer for initial states.
-	for(const auto& locationStatePair : hybrid.getInitialStates()) {
-		// find new location
-		for(auto& ptr : mLocations) {
-			if(*(ptr.get()) == *(locationStatePair.first)) {
-				Location<Number>* tmp = ptr.get();
-				mInitialStates.insert(std::make_pair(tmp,locationStatePair.second));
-				//mInitialStates[tmp] = locationStatePair.second;
+	for(auto otherInitial : hybrid.getInitialStates()) {
+		auto copy = otherInitial.second;
+		// update location
+		#ifndef NDEBUG
+		bool found = false;
+		#endif
+		for(auto& l : mLocations) {
+			if( *l.get() == *otherInitial.first ) {
+				#ifndef NDEBUG
+				found = true;
+				#endif
+				this->addInitialState(l.get(), copy);
 				break;
 			}
 		}
+		assert(found);
 	}
 
 	TRACE("hypro.datastructures","Hybrid automaton initial states after MOVE construction.");
@@ -439,17 +449,17 @@ void HybridAutomaton<Number>::decompose(const Decomposition& decomposition){
     }
 
 	// decompose local bad states (condition)
-	for(typename std::map<const Location<Number>*, Condition<Number>>::iterator it = mLocalBadStates.begin(); it != mLocalBadStates.end(); ++it){
+	for(auto it = mLocalBadStates.begin(); it != mLocalBadStates.end(); ++it){
 		it->second.decompose(decomposition);
 	}
 
 	// decompose global bad states (conditions)
-	for(typename std::vector<Condition<Number>>::iterator it = mGlobalBadStates.begin(); it != mGlobalBadStates.end(); ++it){
+	for(auto it = mGlobalBadStates.begin(); it != mGlobalBadStates.end(); ++it){
 		it->decompose(decomposition);
 	}
 	// decompose intial states (state sets)
-	for(typename std::multimap<const Location<Number>*, ConstraintSetT<Number>>::iterator it = mInitialStates.begin(); it != mInitialStates.end(); ++it){
-		decomposeConstraintSet(it->second,decomposition);
+	for(auto it = mInitialStates.begin(); it != mInitialStates.end(); ++it){
+		it->second.decompose(decomposition);
 	}
 }
 

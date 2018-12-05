@@ -59,11 +59,11 @@ namespace hypro {
 		//assert(*(transSet.begin()) != NULL);
 
 		//5.Calls visit to get all initial states
-		typename HybridAutomaton<Number>::locationStateMap initSet;
+		typename HybridAutomaton<Number>::locationConditionMap initSet;
 		//HyproInitialSetVisitor<Number> initVisitor = HyproInitialSetVisitor<Number>(varVec, rLocSet);
 		HyproInitialSetVisitor<Number> initVisitor = HyproInitialSetVisitor<Number>(varVec, locSet);
 		for(auto& initState : ctx->init()){
-			typename HybridAutomaton<Number>::locationStateMap oneInitialState = initVisitor.visit(initState).template as<typename HybridAutomaton<Number>::locationStateMap>();
+			typename HybridAutomaton<Number>::locationConditionMap oneInitialState = initVisitor.visit(initState).template as<typename HybridAutomaton<Number>::locationConditionMap>();
 			//initSet.insert(oneInitialState.begin(), oneInitialState.end());
 			for(auto& is : oneInitialState){
 				initSet.emplace(is);

@@ -4,7 +4,7 @@
 namespace hypro {
 
 template<template<typename,typename> typename Rep, typename Number, typename Settings>
-void decomposeConstraintSet(Rep<Number,Settings>& in, const Decomposition& decomposition) {
+void decomposeConstraintSet(Rep<Number,Settings>& in, const Decomposition& decomposition, std::vector<Rep<Number,Settings>>& result) {
     matrix_t<Number> constraintsOld(in.matrix());
 	vector_t<Number> constantsOld(in.vector());
 	int i = 0;
@@ -57,16 +57,15 @@ void decomposeConstraintSet(Rep<Number,Settings>& in, const Decomposition& decom
 				finVec(index) = constantsOld(indicesToAdd[index]);
 			}
 
-			in = Rep<Number,Settings>(finMat,finVec);
-			DEBUG("hypro.datastructures","Final decomposed ConstraintSet: \n" << in);
+			result.emplace_back(Rep<Number,Settings>(finMat,finVec));
+			DEBUG("hypro.datastructures","Final decomposed ConstraintSet: \n" << result.back());
 		}
 		else {
 			DEBUG("hypro.datastructures", "No constraints for set found.");
-			in = Rep<Number,Settings>();
+			// do nothing.
 		}
 		i++;
 	}
-	DEBUG("hypro.datastructures", "State after decomposition: "  << in);
 }
 
 } // hypro

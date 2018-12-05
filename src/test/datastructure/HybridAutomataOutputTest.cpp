@@ -95,7 +95,7 @@ protected:
 		auto hpoly = Converter<double>::toHPolytope(poly);
 
 		for(auto loc : initLocSet) {
-			hybrid.addInitialState(loc, ConstraintSetT<double>(hpoly.matrix(), hpoly.vector()));
+			hybrid.addInitialState(loc, Condition<double>(hpoly.matrix(), hpoly.vector()));
 		}
 
 		ptrSet.insert(trans.get());
