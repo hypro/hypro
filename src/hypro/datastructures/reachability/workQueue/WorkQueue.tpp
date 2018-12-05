@@ -93,7 +93,7 @@ Workable WorkQueueT<Workable,Setting>::nonLockingDequeueFront()
     if (this->nonLockingIsEmpty()) {
         return nullptr;
     }
-    Workable item{mQueue.front()};
+    Workable item{std::move(mQueue.front())};
     mQueue.pop_front();
     assert(item != nullptr);
     return item;
