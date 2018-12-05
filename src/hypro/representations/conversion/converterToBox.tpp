@@ -365,3 +365,10 @@ BoxT<Number,Converter<Number>,BoxSetting> Converter<Number>::toBox( const Differ
 //
 //	return std::move(BoxT<Number,Converter,BoxSetting>( intervals ));
 //}
+
+//TODO
+template<typename Number>
+template<typename BoxSetting, typename inSetting>
+BoxT<Number,Converter<Number>,BoxSetting> Converter<Number>::toBox( const SupportFunctionNewT<Number,Converter<Number>,inSetting>& _source, const CONV_MODE ) {
+	return Converter<Number>::Box();
+}

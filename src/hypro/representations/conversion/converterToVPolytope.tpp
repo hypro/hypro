@@ -342,3 +342,10 @@ template<typename VPolySetting, typename inSetting>
 VPolytopeT<Number,Converter<Number>,VPolySetting> Converter<Number>::toVPolytope( const DifferenceBoundsT<Number,Converter<Number>,inSetting>& _source, const CONV_MODE mode ) {
     return toVPolytope(toHPolytope(_source, mode));
 }
+
+//TODO
+template<typename Number>
+template<typename VPolySetting, typename inSetting>
+VPolytopeT<Number,Converter<Number>,VPolySetting> Converter<Number>::toVPolytope( const SupportFunctionNewT<Number,Converter<Number>,inSetting>& _source, const CONV_MODE mode ) {
+    return VPolytopeT<Number,Converter<Number>,VPolySetting>();
+}

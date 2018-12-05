@@ -70,7 +70,7 @@ class UnionOp : public RootGrowNode<Number,Setting> {
 	}
 
 	//Given two or more result vecs, sum them coefficientwise
-	std::vector<EvaluationResult<Number>> aggregate(std::vector<std::vector<EvaluationResult<Number>>>& resultStackBack, const matrix_t<Number>& currentParam) const {
+	std::vector<EvaluationResult<Number>> aggregate(std::vector<std::vector<EvaluationResult<Number>>>& resultStackBack, const matrix_t<Number>& ) const {
 		TRACE("hypro.representations.supportFunction", ": UNITE, accumulate results.")
 		assert(resultStackBack.size() >= 2);
 		std::vector<EvaluationResult<Number>> accumulatedResult = resultStackBack.front();

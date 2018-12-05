@@ -74,3 +74,11 @@ template<typename PolytopeSetting, typename inSetting>
 PolytopeT<Number,Converter,PolytopeSetting> Converter<Number>::toPolytope(const ZonotopeT<Number,Converter<Number>,inSetting>& source, const CONV_MODE){
 	return PolytopeT<Number,Converter,PolytopeSetting>(source.vertices());
 }
+
+//TODO
+//Conversion from SFN to ppl poly 
+template<typename Number>
+template<typename PolytopeSetting, typename inSetting>
+PolytopeT<Number,Converter,PolytopeSetting> Converter<Number>::toPolytope(const SupportFunctionNewT<Number,Converter<Number>,inSetting>& source, const CONV_MODE){
+	return PolytopeT<Number,Converter,PolytopeSetting>();
+}

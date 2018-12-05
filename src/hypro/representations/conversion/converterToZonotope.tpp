@@ -430,3 +430,10 @@ template<typename ZonotopeSetting, typename inSetting>
 ZonotopeT<Number,Converter<Number>,ZonotopeSetting> Converter<Number>::toZonotope( const DifferenceBoundsT<Number,Converter<Number>,inSetting>& _source, const CONV_MODE mode ) {
     return toZonotope(toHPolytope(_source, mode));
 }
+
+//TODO
+template<typename Number>
+template<typename ZonotopeSetting, typename inSetting>
+ZonotopeT<Number,Converter<Number>,ZonotopeSetting> Converter<Number>::toZonotope( const SupportFunctionNewT<Number,Converter<Number>,inSetting>& _source, const CONV_MODE mode ) {
+    return ZonotopeT<Number,Converter<Number>,ZonotopeSetting>();
+}

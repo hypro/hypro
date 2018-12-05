@@ -117,3 +117,10 @@ DifferenceBoundsT<Number,Converter<Number>,DBSetting> Converter<Number>::toDiffe
     HPolytope tmp = toHPolytope(source);
     return toDifferenceBounds(tmp);
 }
+
+//TODO
+template<typename Number>
+template<typename DBSetting, typename inSetting>
+DifferenceBoundsT<Number,Converter<Number>,DBSetting> Converter<Number>::toDifferenceBounds(const SupportFunctionNewT<Number,Converter<Number>,inSetting>& source, const CONV_MODE ){
+    return DifferenceBoundsT<Number,Converter<Number>,DBSetting>();
+}

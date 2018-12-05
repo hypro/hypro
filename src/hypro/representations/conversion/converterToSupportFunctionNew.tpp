@@ -3,59 +3,70 @@ static_assert(false, "This file may only be included indirectly by Converter.h")
 #endif
 
 template<typename Number>
-typename Converter<Number>::SupportFunctionNew Converter<Number>::toSupportFunctionNew( const SupportFunctionNew& _source, const CONV_MODE  ) {
+template<typename SFNSetting, typename inSetting>
+SupportFunctionNewT<Number,Converter<Number>,SFNSetting> Converter<Number>::toSupportFunctionNew( const SupportFunctionNewT<Number,Converter<Number>,inSetting>& _source, const CONV_MODE ){ 
 	return _source;
 }
 
 template<typename Number>
-typename Converter<Number>::SupportFunctionNew Converter<Number>::toSupportFunctionNew( const Box& _source, const CONV_MODE  ) {
+template<typename SFNSetting, typename inSetting>
+SupportFunctionNewT<Number,Converter<Number>,SFNSetting> Converter<Number>::toSupportFunctionNew( const BoxT<Number,Converter<Number>,inSetting>& _source, const CONV_MODE  ) {
 	return Converter<Number>::SupportFunctionNew();
 }
 
 template<typename Number>
-typename Converter<Number>::SupportFunctionNew Converter<Number>::toSupportFunctionNew( const ConstraintSet& _source, const CONV_MODE  ) {
+template<typename SFNSetting, typename inSetting>
+SupportFunctionNewT<Number,Converter<Number>,SFNSetting> Converter<Number>::toSupportFunctionNew( const ConstraintSetT<Number,inSetting>& _source, const CONV_MODE  ) {
 	return Converter<Number>::SupportFunctionNew();
 }
 
 template<typename Number>
-typename Converter<Number>::SupportFunctionNew Converter<Number>::toSupportFunctionNew( const Ellipsoid& _source, const CONV_MODE  ) {
+template<typename SFNSetting>
+SupportFunctionNewT<Number,Converter<Number>,SFNSetting> Converter<Number>::toSupportFunctionNew( const Ellipsoid& _source, const CONV_MODE  ) {
 	return Converter<Number>::SupportFunctionNew();
 }
 
 template<typename Number>
-typename Converter<Number>::SupportFunctionNew Converter<Number>::toSupportFunctionNew( const HPolytope& _source, const CONV_MODE  ) {
+template<typename SFNSetting, typename inSetting>
+SupportFunctionNewT<Number,Converter<Number>,SFNSetting> Converter<Number>::toSupportFunctionNew( const HPolytopeT<Number,Converter<Number>,inSetting>& _source, const CONV_MODE  ) {
 	return Converter<Number>::SupportFunctionNew();
 }
 
-template<typename Number>
-typename Converter<Number>::SupportFunctionNew Converter<Number>::toSupportFunctionNew( const OrthogonalPolyhedron& _source, const CONV_MODE  ) {
-	return Converter<Number>::SupportFunctionNew();
-}
+//template<typename Number>
+//template<typename SFNSetting, typename inSetting>
+//SupportFunctionNewT<Number,Converter<Number>,SFNSetting> Converter<Number>::toSupportFunctionNew( const OrthogonalPolyhedronT<Number,Converter<Number>,inSetting>& _source, const CONV_MODE  ) {
+//	return Converter<Number>::SupportFunctionNew();
+//}
 
 template<typename Number>
-typename Converter<Number>::SupportFunctionNew Converter<Number>::toSupportFunctionNew( const VPolytope& _source, const CONV_MODE  ) {
+template<typename SFNSetting, typename inSetting>
+SupportFunctionNewT<Number,Converter<Number>,SFNSetting> Converter<Number>::toSupportFunctionNew( const VPolytopeT<Number,Converter<Number>,inSetting>& _source, const CONV_MODE  ) {
 	return Converter<Number>::SupportFunctionNew();
 }
 
 template<typename Number>	
-typename Converter<Number>::SupportFunctionNew Converter<Number>::toSupportFunctionNew( const DifferenceBounds& _source, const CONV_MODE  ) {
+template<typename SFNSetting, typename inSetting>
+SupportFunctionNewT<Number,Converter<Number>,SFNSetting> Converter<Number>::toSupportFunctionNew( const DifferenceBoundsT<Number,Converter<Number>,inSetting>& _source, const CONV_MODE  ) {
 	return Converter<Number>::SupportFunctionNew();
 }
 
 #ifdef HYPRO_USE_PPL
 template<typename Number>
-typename Converter<Number>::SupportFunctionNew Converter<Number>::toSupportFunctionNew( const Polytope& _source, const CONV_MODE  ) {
+template<typename SFNSetting, typename inSetting>
+SupportFunctionNewT<Number,Converter<Number>,SFNSetting> Converter<Number>::toSupportFunctionNew( const PolytopeT<Number,Converter<Number>,inSetting>& _source, const CONV_MODE  ) {
 	return Converter<Number>::SupportFunctionNew();
 }
 #endif
 
 template<typename Number>
-typename Converter<Number>::SupportFunctionNew Converter<Number>::toSupportFunctionNew( const SupportFunction& _source, const CONV_MODE  ) {
+template<typename SFNSetting, typename inSetting>
+SupportFunctionNewT<Number,Converter<Number>,SFNSetting> Converter<Number>::toSupportFunctionNew( const SupportFunctionT<Number,Converter<Number>,inSetting>& _source, const CONV_MODE  ) {
 	return Converter<Number>::SupportFunctionNew();
 }
 
 template<typename Number>
-typename Converter<Number>::SupportFunctionNew Converter<Number>::toSupportFunctionNew( const Zonotope& _source, const CONV_MODE  ) {
+template<typename SFNSetting, typename inSetting>
+SupportFunctionNewT<Number,Converter<Number>,SFNSetting> Converter<Number>::toSupportFunctionNew( const ZonotopeT<Number,Converter<Number>,inSetting>& _source, const CONV_MODE  ) {
 	return Converter<Number>::SupportFunctionNew();
 }
 

@@ -58,12 +58,21 @@ struct Parameters {
 template <typename Number, typename Converter, class Setting>
 class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<Number,Converter,Setting>> {
 
-  friend class SumOp<Number,Converter,Setting>;
-  friend class TrafoOp<Number,Converter,Setting>;
-  friend class ScaleOp<Number,Converter,Setting>;
-  friend class ProjectOp<Number,Converter,Setting>;
-  friend class IntersectOp<Number,Converter,Setting>;
-  friend class UnionOp<Number,Converter,Setting>;
+	/***************************************************************************
+	 * Friends, Usings, typedefs 
+	 **************************************************************************/
+
+  	friend class SumOp<Number,Converter,Setting>;
+  	friend class TrafoOp<Number,Converter,Setting>;
+  	friend class ScaleOp<Number,Converter,Setting>;
+  	friend class ProjectOp<Number,Converter,Setting>;
+  	friend class IntersectOp<Number,Converter,Setting>;
+  	friend class UnionOp<Number,Converter,Setting>;
+
+  public:
+
+  	//Needed for Converter.h
+  	typedef Setting Settings;
 
   protected:
 
@@ -71,7 +80,7 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
 	 * Members
 	 **************************************************************************/
 
-  	//A pointer of shared ownership pointing to a node in the whole tree. This node is the root for this upportfunction, the nodes above root are not known.
+  	//A pointer of shared ownership pointing to a node in the whole tree. This node is the root for this supportfunction, the nodes above root are not known.
   	mutable std::shared_ptr<RootGrowNode<Number,Setting>> mRoot = nullptr;
 
   	//The dimension of the operations and representations
