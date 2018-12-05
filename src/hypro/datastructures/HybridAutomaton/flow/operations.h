@@ -19,13 +19,25 @@ std::size_t getFlowDimension( const T& f) {
 }
 
 template<typename T>
-std::size_t isTimed( const T& f) {
+bool isTimed( const T& f) {
+    #ifdef HYPRO_LOGGING
+    bool timed = boost::apply_visitor( flowIsTimedVisitor(), f);
+    DEBUG("hypro.flow",": "<< timed);
+    return timed;
+    #else
     return boost::apply_visitor( flowIsTimedVisitor(), f);
+    #endif
 }
 
 template<typename T>
-std::size_t isDiscrete( const T& f) {
+bool isDiscrete( const T& f) {
+    #ifdef HYPRO_LOGGING
+    bool discrete = boost::apply_visitor( flowIsDiscreteVisitor(), f);
+    DEBUG("hypro.flow",": "<< discrete);
+    return discrete;
+    #else
     return boost::apply_visitor( flowIsDiscreteVisitor(), f);
+    #endif
 }
 
 } //

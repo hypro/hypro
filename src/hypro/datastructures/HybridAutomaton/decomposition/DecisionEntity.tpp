@@ -59,6 +59,7 @@ namespace hypro
 		// check if the constraints of the invariant set only contain 0s and one entry 1/-1 at most
 		if(loc.getInvariant().size() > 0){
 			if(!loc.getInvariant().isAxisAligned(index)) {
+				TRACE("hypro.decisionEntity", "Invariant is not axis-aligned.");
 				return false;
 			}
 		}
@@ -71,6 +72,7 @@ namespace hypro
 
 			if(transition->getGuard().size() > 0){
 				if(!transition->getGuard().isAxisAligned(index)){
+					TRACE("hypro.decisionEntity", "Guard is not axis-aligned.");
 					return false;
 				}
 			}
@@ -118,12 +120,14 @@ namespace hypro
 		//  0 ....0 0
 		for(size_t i = 0; i < loc.getNumberFlow();i++){
 			if(!isTimed(loc.getFlow(i))){
+				TRACE("hypro.decisionEntity","Flow is not timed.");
 				return false;
 			}
 		}
 
 		// check if the constraints of the invariant set only contain 0s and one entry 1/-1 at most
 		if(!loc.getInvariant().isAxisAligned()) {
+			TRACE("hypro.decisionEntity","Invariant is not axis-aligned.");
 			return false;
 		}
 
@@ -133,6 +137,7 @@ namespace hypro
 
 			// for each transitions check if the constraints of the guard set only only contain 0s and one entry 1/-1 at most
 			if(!transition->getGuard().isAxisAligned()) {
+				TRACE("hypro.decisionEntity","Guard is not axis-aligned.");
 				return false;
 			}
 
@@ -149,6 +154,7 @@ namespace hypro
 					matrix_t<Number> expected1 = matrix_t<Number>::Zero(1, reset.cols());
 					expected1(0,i) = Number(1.0);
 					if(!(reset.row(i) == expected0 || reset.row(i) == expected1)){
+						TRACE("hypro.decisionEntity","Reset is not timed.");
 						return false;
 					}
 				}
@@ -157,6 +163,7 @@ namespace hypro
 			for(size_t i=0; i< transition->getReset().size(); i++){
 				matrix_t<Number> reset = transition->getReset().getVector(i);
 				if(reset != matrix_t<Number>::Zero(reset.rows(), 1)){
+					TRACE("hypro.decisionEntity","Reset is not timed.");
 					return false;
 				}
 			}
