@@ -258,24 +258,29 @@ namespace hypro {
 			HyproHAVisitor<double> visitor;
 
 			//HybridAutomaton<double> h = (visitor.visit(tree)).antlrcpp::Any::as<HybridAutomaton<double>>();
-			HybridAutomaton<double> h { std::move((visitor.visit(tree)).antlrcpp::Any::as<HybridAutomaton<double>>()) };
+			HybridAutomaton<double> h { (visitor.visit(tree)).antlrcpp::Any::as<HybridAutomaton<double>>() };
+
+			TRACE("hypro.datastructures","Parsed hybrid automaton initial states");
+			for(const auto& iPair : h.getInitialStates()) {
+				TRACE("hypro.datastructures","Initial state in loc " << iPair.first->getName());
+			}
 
 			delete errListener;
 
 			//return boost::tuple<HybridAutomaton<double>&, ReachabilitySettings>(h, visitor.getSettings());
-			return std::make_pair(std::move(h), visitor.getSettings());
+			return std::make_pair(h, visitor.getSettings());
 
 		} else {
 
 			HyproHAVisitor<double> visitor;
 
-			HybridAutomaton<double> h { std::move((visitor.visit(tree)).antlrcpp::Any::as<HybridAutomaton<double>>()) };
+			HybridAutomaton<double> h { (visitor.visit(tree)).antlrcpp::Any::as<HybridAutomaton<double>>() };
 			//HybridAutomaton<double> h = std::move((visitor.visit(tree)).antlrcpp::Any::as<HybridAutomaton<double>>());
 
 			delete errListener;
 
 			//return boost::tuple<HybridAutomaton<double>&, ReachabilitySettings>(h, visitor.getSettings());
-			return std::make_pair(std::move(h), visitor.getSettings());
+			return std::make_pair(h, visitor.getSettings());
 		}
 	}
 

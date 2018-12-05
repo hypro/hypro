@@ -8,7 +8,6 @@ template<typename Number>
 HybridAutomaton<Number>::HybridAutomaton(const HybridAutomaton<Number>& hybrid)
 	: mLocations()
 	, mTransitions()
-	//, mInitialStates(hybrid.getInitialStates())
 	//, mLocalBadStates(hybrid.getLocalBadStates())
 	, mGlobalBadStates(hybrid.getGlobalBadStates())
 	, mVariables(hybrid.getVariables())
@@ -17,10 +16,12 @@ HybridAutomaton<Number>::HybridAutomaton(const HybridAutomaton<Number>& hybrid)
 
 	// Stef: We create actual copies of the locations, what remains to do is to update the initial and bad states
 	// accordingly.
-	for(auto& l : hybrid.getLocations()){
+	std::map<Location<Number>*, std::size_t> oldToNewLocationsMapping;
+	for(auto l : hybrid.getLocations()){
 		Location<Number> tmp = Location<Number>(*l);
 		tmp.setTransitions(std::set<Transition<Number>*>());
     	mLocations.emplace(std::make_unique<Location<Number>>(tmp));
+		oldToNewLocationsMapping[l] = mLocations.size() -1; // store index of new location
    	}
 	for(auto& t : hybrid.getTransitions()){
 		mTransitions.emplace(std::make_unique<Transition<Number>>(Transition<Number>(*t)));
@@ -43,8 +44,19 @@ HybridAutomaton<Number>::HybridAutomaton(const HybridAutomaton<Number>& hybrid)
 		}
 	}
 
-	//update initial sets
-	mInitialStates = hybrid.getInitialStates();
+	// use mapping to get correct location pointer for initial states.
+	for(const auto& locationStatePair : hybrid.getInitialStates()) {
+		// find new location
+		for(auto& ptr : mLocations) {
+			if(*(ptr.get()) == *(locationStatePair.first)) {
+				Location<Number>* tmp = ptr.get();
+				mInitialStates.insert(std::make_pair(tmp,locationStatePair.second));
+				//mInitialStates[tmp] = locationStatePair.second;
+				break;
+			}
+		}
+	}
+
 
 	mLocalBadStates.clear();
 	for(auto otherBad : hybrid.getLocalBadStates()) {
@@ -107,9 +119,6 @@ HybridAutomaton<Number>::HybridAutomaton(HybridAutomaton<Number>&& hybrid)
 		}
 	}
 
-	//update initial sets
-	mInitialStates = std::move(hybrid.getInitialStates());
-
 	mLocalBadStates.clear();
 	for(auto otherBad : hybrid.getLocalBadStates()) {
 		auto copy = otherBad.second;
@@ -127,6 +136,16 @@ HybridAutomaton<Number>::HybridAutomaton(HybridAutomaton<Number>&& hybrid)
 			}
 		}
 		assert(found);
+	}
+
+	mInitialStates.clear();
+	for(const auto& iPair : hybrid.getInitialStates()) {
+		mInitialStates.insert(iPair);
+	}
+
+	TRACE("hypro.datastructures","Hybrid automaton initial states after MOVE construction.");
+	for(const auto& iPair : mInitialStates) {
+		TRACE("hypro.datastructures","Initial state in loc " << iPair.first->getName());
 	}
 }
 
