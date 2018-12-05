@@ -1,5 +1,6 @@
 var NAVTREEINDEX1 =
 {
+"affine_8h_source.html":[7,0,1,0,1,0,1,0],
 "algorithms_2reachability_2handlers_2jumpHandlers_2util_8h_source.html":[7,0,1,0,0,3,1,4,3],
 "algorithms_2reachability_2util_8h_source.html":[7,0,1,0,0,3,6],
 "annotated.html":[6,0],
@@ -248,6 +249,5 @@ var NAVTREEINDEX1 =
 "classCIFLocationParser.html#a28ba184413479bd6c4d5ec200a7675cfaa5f01a2bfd2a215e01e9822d9daab849":[6,0,6,193],
 "classCIFLocationParser.html#a28ba184413479bd6c4d5ec200a7675cfaa97e318068b53e4e1227acba6d9da0d6":[6,0,6,219],
 "classCIFLocationParser.html#a28ba184413479bd6c4d5ec200a7675cfaaaed47ecbdb2173da66c42626b05005a":[6,0,6,216],
-"classCIFLocationParser.html#a28ba184413479bd6c4d5ec200a7675cfaab6a67f74788015284b8735d83bfd726":[6,0,6,197],
-"classCIFLocationParser.html#a28ba184413479bd6c4d5ec200a7675cfab1ff0a1d28821649b97f56d0c770a5b8":[6,0,6,205]
+"classCIFLocationParser.html#a28ba184413479bd6c4d5ec200a7675cfaab6a67f74788015284b8735d83bfd726":[6,0,6,197]
 };

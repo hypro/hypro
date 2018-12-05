@@ -2,7 +2,7 @@ var searchData=
 [
   ['halfspace',['Halfspace',['../classhypro_1_1Halfspace.html',1,'hypro']]],
   ['handlerfactory',['HandlerFactory',['../classhypro_1_1HandlerFactory.html',1,'hypro']]],
-  ['hardterminateexception',['HardTerminateException',['../classHardTerminateException.html',1,'']]],
+  ['hardterminateexception',['HardTerminateException',['../classhypro_1_1HardTerminateException.html',1,'hypro']]],
   ['hash_3c_20hypro_3a_3aaffineflow_3c_20number_20_3e_20_3e',['hash&lt; hypro::affineFlow&lt; Number &gt; &gt;',['../structstd_1_1hash_3_01hypro_1_1affineFlow_3_01Number_01_4_01_4.html',1,'std']]],
   ['hash_3c_20hypro_3a_3acacheable_3c_20content_20_3e_20_3e',['hash&lt; hypro::Cacheable&lt; Content &gt; &gt;',['../structstd_1_1hash_3_01hypro_1_1Cacheable_3_01Content_01_4_01_4.html',1,'std']]],
   ['hash_3c_20hypro_3a_3acondition_3c_20number_20_3e_20_3e',['hash&lt; hypro::Condition&lt; Number &gt; &gt;',['../structstd_1_1hash_3_01hypro_1_1Condition_3_01Number_01_4_01_4.html',1,'std']]],

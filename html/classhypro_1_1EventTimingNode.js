@@ -5,6 +5,7 @@ var classhypro_1_1EventTimingNode =
     [ "NodeList_t", "classhypro_1_1EventTimingNode.html#a6fd3b63c955f5b3f0b01be239ac0d510", null ],
     [ "EventTimingNode", "classhypro_1_1EventTimingNode.html#af2562568b188548dc7d968a032610f63", null ],
     [ "EventTimingNode", "classhypro_1_1EventTimingNode.html#aaeaebcc808e7c532009738505d971500", null ],
+    [ "getDotRepresentation", "classhypro_1_1EventTimingNode.html#abceeeb3a9261c249b0e0d5fa16cd71f8", null ],
     [ "getSettings", "classhypro_1_1EventTimingNode.html#ae3b22940bc47f4559572ac2ea843d1f9", null ],
     [ "setEntryTimestamp", "classhypro_1_1EventTimingNode.html#a784bdfa7528157a10d3478f8bbfed78d", null ],
     [ "setLocation", "classhypro_1_1EventTimingNode.html#a92d863c1c137ed73910c53e824a68a9c", null ],

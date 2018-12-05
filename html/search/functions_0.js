@@ -2,7 +2,7 @@ var searchData=
 [
   ['addgenerators',['addGenerators',['../classhypro_1_1ZonotopeT.html#a9f59e04172b514229a25d8c9946f1355',1,'hypro::ZonotopeT']]],
   ['addglobalbadstate',['addGlobalBadState',['../classhypro_1_1HybridAutomaton.html#af9210469bda0406b9b1cf0c3c0b12c4c',1,'hypro::HybridAutomaton']]],
-  ['addinitialstate',['addInitialState',['../classhypro_1_1HybridAutomaton.html#a2f75aa35a38e4841958209ab694d925c',1,'hypro::HybridAutomaton']]],
+  ['addinitialstate',['addInitialState',['../classhypro_1_1HybridAutomaton.html#a8ac7f2ccb4c6825394189c0988d5b629',1,'hypro::HybridAutomaton']]],
   ['addlinealtyconstrains',['addLinealtyConstrains',['../classhypro_1_1VertexEnumeration.html#a030c826a5cd6853cc8ae5374b684e964',1,'hypro::VertexEnumeration']]],
   ['addlocalbadstate',['addLocalBadState',['../classhypro_1_1HybridAutomaton.html#a74ac817654b2a3e73f68cc7db26c6096',1,'hypro::HybridAutomaton']]],
   ['addlocation',['addLocation',['../classhypro_1_1HybridAutomaton.html#a9d779e0f0df0cf6b0e12f04b3b4aa70a',1,'hypro::HybridAutomaton::addLocation(const Location&lt; Number &gt; &amp;location)'],['../classhypro_1_1HybridAutomaton.html#a65dfa2414e4ce28c3de4ecf4c501fbb6',1,'hypro::HybridAutomaton::addLocation(std::unique_ptr&lt; Location&lt; Number &gt;&gt; &amp;&amp;location)']]],

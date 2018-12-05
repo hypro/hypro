@@ -3,7 +3,7 @@ var searchData=
   ['get',['get',['../classhypro_1_1Dictionary.html#a18ee536c203d3ec1efadc70f99637e34',1,'hypro::Dictionary']]],
   ['getglobalbadstates',['getGlobalBadStates',['../classhypro_1_1HybridAutomaton.html#a2b31e1b3a0a8674f187c7905d08ba5b6',1,'hypro::HybridAutomaton']]],
   ['gethash',['getHash',['../classhypro_1_1VertexContainer.html#a144e240d9723fb1352dd222f1e15c722',1,'hypro::VertexContainer']]],
-  ['getinitialstates',['getInitialStates',['../classhypro_1_1HybridAutomaton.html#a8a14256ee2e7b593e8b8a061cfeba600',1,'hypro::HybridAutomaton']]],
+  ['getinitialstates',['getInitialStates',['../classhypro_1_1HybridAutomaton.html#add2a3c35a2df09a11a668a5583695680',1,'hypro::HybridAutomaton']]],
   ['getinternalpoint',['getInternalPoint',['../classhypro_1_1Optimizer.html#a30e10c735ed9c4fce9184f62625aaeb7',1,'hypro::Optimizer']]],
   ['getlabels',['getLabels',['../classhypro_1_1HybridAutomaton.html#a556d8ec584917a00687376a10f7ebf37',1,'hypro::HybridAutomaton']]],
   ['getlocalbadstates',['getLocalBadStates',['../classhypro_1_1HybridAutomaton.html#a42cce9a2f6cc60afcf0be056c4161e9a',1,'hypro::HybridAutomaton']]],

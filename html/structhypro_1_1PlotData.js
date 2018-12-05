@@ -1,8 +1,7 @@
 var structhypro_1_1PlotData =
 [
-    [ "PlotData", "structhypro_1_1PlotData.html#af9890b496365fded665eb37a7c446f10", null ],
-    [ "PlotData", "structhypro_1_1PlotData.html#a560b3237ed76c3d3a06e12d978746d5b", null ],
-    [ "refinementLevel", "structhypro_1_1PlotData.html#a57b4bf99b8eff05a48dbc0fa115c90dd", null ],
-    [ "segments", "structhypro_1_1PlotData.html#a2e3d062cb8337e56f23ce8ec088205a5", null ],
-    [ "threadId", "structhypro_1_1PlotData.html#a9f29d8be44c69ace40a6b20191f9039a", null ]
+    [ "PlotData", "structhypro_1_1PlotData.html#ae3c84bb6e57f67248f150822895305c6", null ],
+    [ "refinementLevel", "structhypro_1_1PlotData.html#a927ff26b1abd864352bf99a642386a25", null ],
+    [ "sets", "structhypro_1_1PlotData.html#a163b67a2d26ae415126e3611b3b1b6c3", null ],
+    [ "threadId", "structhypro_1_1PlotData.html#aac8564fd747a04a6da1c450491dd58ee", null ]
 ];

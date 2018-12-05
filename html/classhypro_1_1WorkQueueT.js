@@ -1,7 +1,7 @@
 var classhypro_1_1WorkQueueT =
 [
     [ "WorkQueueT", "classhypro_1_1WorkQueueT.html#a1e7a3571755a19ce1212d6e155fc8e54", null ],
-    [ "WorkQueueT", "classhypro_1_1WorkQueueT.html#a5ce4502419daff1892e110c80c2f9105", null ],
+    [ "WorkQueueT", "classhypro_1_1WorkQueueT.html#ae5ac9fcf41936a1f2383c87471848d36", null ],
     [ "WorkQueueT", "classhypro_1_1WorkQueueT.html#adf3b335ac5ed585c7db538f891d1956c", null ],
     [ "~WorkQueueT", "classhypro_1_1WorkQueueT.html#a57ee87bd75ed2aa560fc67a9c979f245", null ],
     [ "dequeueBack", "classhypro_1_1WorkQueueT.html#a4bc20c70a66af9c2589331ae514cf27d", null ],
