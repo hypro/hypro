@@ -217,12 +217,18 @@ inline void insertAndCreateTask(typename ReachTreeNode<State>::NodeList_t& toIns
         	if(targetLevel > 0) {
 	        	// also set intermediate refinements which are not already set.
 				const Location<typename State::NumberType>* loc = (*nodeIt)->getRefinements()[targetLevel].initialSet.getLocation();
-				for(std::size_t i = 0; i < (*nodeIt)->getRefinements().size(); ++i) {
+				carl::Interval<tNumber> timestamp = (*nodeIt)->getTimestamp(targetLevel);
+				for(std::size_t i = 0; i < targetLevel; ++i) {
 					// convert, in case this is necessary
+					TRACE("hydra.worker.refinement","Set childs refinement for level " << i);
 					if((*nodeIt)->getRefinements()[i].isDummy) {
-						SettingsProvider<State>::getInstance().getStrategy().advanceToLevel((*nodeIt)->rGetRefinements()[targetLevel].initialSet, i);
+						State tmp = (*nodeIt)->rGetRefinements()[targetLevel].initialSet;
+						SettingsProvider<State>::getInstance().getStrategy().advanceToLevel(tmp, i);
 						(*nodeIt)->rGetRefinements()[i].isDummy = false;
+						(*nodeIt)->rGetRefinements()[i].initialSet = tmp;
 						(*nodeIt)->rGetRefinements()[i].initialSet.setLocation(loc);
+						(*nodeIt)->rGetRefinements()[i].entryTimestamp = timestamp;
+						(*nodeIt)->setTimestamp(i, timestamp);
 					}
 				}
         	}

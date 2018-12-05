@@ -24,8 +24,8 @@ namespace detail{
 
 		template<typename Node>
 		void operator()(Node& ) const {
-			mState.setSetDirect(boost::apply_visitor(::hypro::genericConversionVisitor<typename State::repVariant, typename Node::representationType>(), mState.getSet(mSubsetIndex)));
-			mState.setSetType(Node::representationType::type());
+			mState.setSet(boost::apply_visitor(::hypro::genericConversionVisitor<typename State::repVariant, typename Node::representationType>(), mState.getSet(mSubsetIndex)));
+			//mState.setSetType(Node::representationType::type());
 		}
 	};
 
