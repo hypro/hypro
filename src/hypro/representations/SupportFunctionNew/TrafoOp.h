@@ -86,13 +86,9 @@ class TrafoOp : public RootGrowNode<Number,Setting> {
 			} while (reduced == true);
 			//assert(mChildren.at(0)->checkTreeValidity());
 		}
-
-		std::cout << "Constructed TrafoOp!" << std::endl;
 	}
 
-	~TrafoOp(){ 
-		std::cout << "TrafoOp::~TrafoOp" << std::endl; 
-	}
+	~TrafoOp(){ }
 
 	////// Getters & Setters
 

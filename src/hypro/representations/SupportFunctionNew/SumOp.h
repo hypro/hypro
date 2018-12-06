@@ -82,9 +82,9 @@ class SumOp : public RootGrowNode<Number,Setting> {
 			if(res.begin()->errorCode == SOLUTION::INFEAS) return accumulatedResult;
 		}
 
-		for(unsigned index = 0; index < resultStackBack.at(0).size(); ++index){
+		for(unsigned index = 0; index < resultStackBack.front().size(); ++index){
 			EvaluationResult<Number> r;
-			r.optimumValue = vector_t<Number>::Zero(resultStackBack.at(0).size());
+			r.optimumValue = vector_t<Number>::Zero(resultStackBack.front().front().optimumValue.rows());
 			for(const auto& res : resultStackBack){
 				assert(res[index].errorCode != SOLUTION::INFEAS);
 				if(res[index].errorCode == SOLUTION::INFTY){

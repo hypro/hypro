@@ -648,6 +648,7 @@ TYPED_TEST(SupportFunctionNewTest, Evaluate){
 	EXPECT_TRUE(sfWithTrafo.getRoot()->getType() == SFNEW_TYPE::TRAFO);
 	EXPECT_TRUE(sfWithTrafo.getRoot()->getChildren().size() == 1);
 	
+	//Build a sumOp
 	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sum = sfWithTrafo.minkowskiSum(sf2);
 	
 	EXPECT_TRUE(sum.getRoot()->getType() == SFNEW_TYPE::SUMOP);
@@ -724,18 +725,17 @@ TYPED_TEST(SupportFunctionNewTest, Supremum){
 	EXPECT_EQ(sup, TypeParam(15));	
 
 	//Supremum for SumOp
-	std::vector<SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>> sfVec({uR, dL});
-	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sumOp = uR.minkowskiSum(sfVec);
+	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sumOp = uR.minkowskiSum(dL);
 	sup = sumOp.supremum();
 	EXPECT_EQ(sup, TypeParam(5));	
 
 	//Supremum for IntersectOp
-	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> intersectOp = uR.intersect(sfVec);
+	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> intersectOp = uR.intersect(dL);
 	sup = intersectOp.supremum();
 	EXPECT_EQ(sup, TypeParam(2));
 
 	//Supremum for UnionOp	
-	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> uniteOp = uR.unite(sfVec);
+	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> uniteOp = uR.unite(dL);
 	sup = uniteOp.supremum();
 	EXPECT_EQ(sup, TypeParam(3));
 

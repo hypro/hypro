@@ -229,8 +229,8 @@ namespace hypro {
 			};
 
 		//operations call their own supremum functions
-		std::function<Point<Number>(RootGrowNode<Number,Setting>*, std::vector<Point<Number>>&)> supremumPointOp =
-			[](RootGrowNode<Number,Setting>* n, std::vector<Point<Number>>& v) -> Point<Number> {
+		std::function<Point<Number>(RootGrowNode<Number,Setting>*, std::vector<Point<Number>>)> supremumPointOp =
+			[](RootGrowNode<Number,Setting>* n, std::vector<Point<Number>> v) -> Point<Number> {
 				return n->supremumPoint(v);
 			};
 	
@@ -246,15 +246,14 @@ namespace hypro {
 
 	template<typename Number, typename Converter, typename Setting>
 	EvaluationResult<Number> SupportFunctionNewT<Number,Converter,Setting>::evaluate( const vector_t<Number>& _direction, bool useExact) const {
-		matrix_t<Number> dirAsMatrix = matrix_t<Number>::Zero(_direction.rows(), 1);
-		dirAsMatrix.col(0) = _direction;
-		std::cout << "evaluate::dirAsMatrix is: \n" << dirAsMatrix << std::endl;
+		matrix_t<Number> dirAsMatrix = matrix_t<Number>::Zero(1,_direction.rows());
+		dirAsMatrix.row(0) = _direction;
 		return multiEvaluate(dirAsMatrix, useExact).front();
 	}
 
 	template<typename Number, typename Converter, typename Setting>
 	std::vector<EvaluationResult<Number>> SupportFunctionNewT<Number,Converter,Setting>::multiEvaluate( const matrix_t<Number>& _directions, bool useExact ) const {
-
+		
 		//Define lambda functions that will call the functions transform, compute and aggregate dependent on the current node type
 		std::function<Parameters<matrix_t<Number>>(RootGrowNode<Number,Setting>*, Parameters<matrix_t<Number>>)> trans = 
 			[](RootGrowNode<Number,Setting>* n, Parameters<matrix_t<Number>> param) -> Parameters<matrix_t<Number>> { 
