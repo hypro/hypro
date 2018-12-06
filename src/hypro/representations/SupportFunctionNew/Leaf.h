@@ -66,12 +66,17 @@ class Leaf : public RootGrowNode<Number,Setting> {
 		return std::vector<EvaluationResult<Number>>();
 	}
 
-	bool hasTrafo(std::shared_ptr<const LinTrafoParameters<Number,Setting>>& , const matrix_t<Number>& , const vector_t<Number>& ){
-		assert(false && "Leaf::hasTrafo should never be called\n");
-		return false;
-	}
-
+	//Leaves call empty function of the representation
 	bool empty() const { return rep->empty(); }
+
+	//Compute the point that is the supremum of the representation
+	Point<Number> supremumPoint() const { 
+		Point<Number> max = Point<Number>::Zero(rep->dimension());
+		for(auto& point : rep->vertices()){
+			max = Point<Number>::inftyNorm(max) > Point<Number>::inftyNorm(point) ? max : point;
+		}
+		return max;
+	}
 
 };
 

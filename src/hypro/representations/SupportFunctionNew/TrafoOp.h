@@ -147,15 +147,18 @@ class TrafoOp : public RootGrowNode<Number,Setting> {
 	//Compares the parameters from the current TrafoOp with the parameters A and b from other LinTrafoParameters
 	//and sets the generally used LinTrafoParameters to parameters if they are the same
 	bool hasTrafo(std::shared_ptr<const LinTrafoParameters<Number,Setting>>& ltParam, const matrix_t<Number>& A, const vector_t<Number>& b){
-		if(parameters->matrix() == A && parameters->vector() == b){
-			ltParam = parameters;
-		} 
-		return true;
+	    if(parameters->matrix() == A && parameters->vector() == b){
+	            ltParam = parameters;
+	    } 
+	    return true;
 	}
 
-	bool empty() const { 
-		assert(false && "TrafoOp::empty should never be called\n"); 
-		return false; 
+	//Transform the supremum
+	Point<Number> supremumPoint(std::vector<Point<Number>>& points) const {
+		assert(points.size() == 1);
+		if(points.front().dimension() == 0) return points.front();
+		std::pair<matrix_t<Number>, vector_t<Number>> parameterPair = parameters->getParameterSet(currentExponent);
+		return Point<Number>(parameterPair.first * points.front().rawCoordinates() + parameterPair.second);
 	}
 
 };

@@ -28,32 +28,18 @@ namespace hypro {
 		orig.setRootToNull();
 	}
 
-	//copy assign 
-
-	//move assign 
-
 	/***************************************************************************
 	 * Getters & setters
 	 **************************************************************************/
 
 	template<typename Number, typename Converter, typename Setting>
-	void SupportFunctionNewT<Number,Converter,Setting>::addOperation(RootGrowNode<Number,Setting>* unary) const {
-		assert(unary->getOriginCount() == 1);
-		if(unary){
-			unary->addToChildren(mRoot);
-			assert(unary->getChildren().size() == 1);
+	void SupportFunctionNewT<Number,Converter,Setting>::addOperation(RootGrowNode<Number,Setting>* newRoot) const {
+		assert(newRoot->getOriginCount() == 1);
+		if(newRoot){
+			newRoot->addToChildren(mRoot);
+			assert(newRoot->getChildren().size() == 1);
 		}
 	}
-/*
-	template<typename Number, typename Converter, typename Setting>
-	void SupportFunctionNewT<Number,Converter,Setting>::addBinaryOp(RootGrowNode<Number,Setting>* binary, const SupportFunctionNewT<Number,Converter,Setting>& rhs) const {
-		assert(binary != nullptr);
-		assert(binary->getOriginCount() == 2);
-		binary->addToChildren(mRoot);
-		binary->addToChildren(rhs.getRoot());
-		assert(binary->getChildren().size() == 2);
-	}
-*/
 
 	template<typename Number, typename Converter, typename Setting>
 	void SupportFunctionNewT<Number,Converter,Setting>::addOperation(RootGrowNode<Number,Setting>* newRoot, const std::vector<SupportFunctionNewT<Number,Converter,Setting>>& rhs) const {
@@ -232,16 +218,38 @@ namespace hypro {
 	template<typename Number, typename Converter, typename Setting>
 	Number SupportFunctionNewT<Number,Converter,Setting>::supremum() const {
 
+		//first function - parameters are not transformed
+		std::function<void(RootGrowNode<Number,Setting>*)> doNothing = [](RootGrowNode<Number,Setting>* ){ };
+
+		//leaves compute the supremum point
+		std::function<Point<Number>(RootGrowNode<Number,Setting>*)> supremumPointLeaf = 
+			[](RootGrowNode<Number,Setting>* n) -> Point<Number> {
+				assert(n->getType() == SFNEW_TYPE::LEAF);
+				return n->supremumPoint();
+			};
+
+		//operations call their own supremum functions
+		std::function<Point<Number>(RootGrowNode<Number,Setting>*, std::vector<Point<Number>>&)> supremumPointOp =
+			[](RootGrowNode<Number,Setting>* n, std::vector<Point<Number>>& v) -> Point<Number> {
+				return n->supremumPoint(v);
+			};
+	
+		Point<Number> res = traverse(doNothing, supremumPointLeaf, supremumPointOp);
+		Number resNorm = Point<Number>::inftyNorm(res);
+		return resNorm;
 	}
 
 	template<typename Number, typename Converter, typename Setting>
 	std::vector<Point<Number>> SupportFunctionNewT<Number,Converter,Setting>::vertices( const matrix_t<Number>& m ) const {
-
+		//converterToHPolytope
 	}
 
 	template<typename Number, typename Converter, typename Setting>
-	EvaluationResult<Number> SupportFunctionNewT<Number,Converter,Setting>::evaluate( const vector_t<Number>& _direction, bool ) const {
-
+	EvaluationResult<Number> SupportFunctionNewT<Number,Converter,Setting>::evaluate( const vector_t<Number>& _direction, bool useExact) const {
+		matrix_t<Number> dirAsMatrix = matrix_t<Number>::Zero(_direction.rows(), 1);
+		dirAsMatrix.col(0) = _direction;
+		std::cout << "evaluate::dirAsMatrix is: \n" << dirAsMatrix << std::endl;
+		return multiEvaluate(dirAsMatrix, useExact).front();
 	}
 
 	template<typename Number, typename Converter, typename Setting>
@@ -252,12 +260,10 @@ namespace hypro {
 			[](RootGrowNode<Number,Setting>* n, Parameters<matrix_t<Number>> param) -> Parameters<matrix_t<Number>> { 
 				return Parameters<matrix_t<Number>>(n->transform(std::get<0>(param.args))); 
 			};
-
 		std::function<std::vector<EvaluationResult<Number>>(RootGrowNode<Number,Setting>*, Parameters<matrix_t<Number>>)> comp = 
 			[&](RootGrowNode<Number,Setting>* n, Parameters<matrix_t<Number>> dir) -> std::vector<EvaluationResult<Number>> { 
 				return n->compute(std::get<0>(dir.args), useExact); 
 			};
-
 		std::function<std::vector<EvaluationResult<Number>>(RootGrowNode<Number,Setting>*, std::vector<std::vector<EvaluationResult<Number>>>, Parameters<matrix_t<Number>>)> agg = 
 			[](RootGrowNode<Number,Setting>* n, std::vector<std::vector<EvaluationResult<Number>>> resultStackBack, Parameters<matrix_t<Number>> currentParam) -> std::vector<EvaluationResult<Number>> { 
 				return n->aggregate(resultStackBack, std::get<0>(currentParam.args)); 
@@ -285,7 +291,7 @@ namespace hypro {
 		std::function<bool(RootGrowNode<Number,Setting>*, std::vector<bool>)> checkAndUpdateTrafo =
 			[&](RootGrowNode<Number,Setting>* n, std::vector<bool> haveSubtreesTrafo) -> bool {
 				if(n->getType() == SFNEW_TYPE::TRAFO){
-					return n->hasTrafo(ltParam, A, b);
+					return static_cast<TrafoOp<Number,Converter,Setting>*>(n)->hasTrafo(ltParam, A, b);
 				} else {
 					for(auto hasSubTreeTrafo : haveSubtreesTrafo){
 						if(hasSubTreeTrafo){

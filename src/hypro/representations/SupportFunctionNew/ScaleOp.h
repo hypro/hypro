@@ -87,16 +87,15 @@ class ScaleOp : public RootGrowNode<Number,Setting> {
 		return resultStackBack.front();
 	}
 
-	//Is handled in TrafoOp::hasTrafo() and SFNew::hasTrafo()
-	bool hasTrafo(std::shared_ptr<const LinTrafoParameters<Number,Setting>>& , const matrix_t<Number>& , const vector_t<Number>& ){
-		assert(false && "ScaleOp::hasTrafo should never be called\n");
-		return false;
-	}
-
-	//Is handled in SFNew::empty()
-	bool empty() const { 
-		assert(false && "TrafoOp::empty should never be called\n"); 
-		return false; 
+	//Multiply supremumPoint by factor
+	Point<Number> supremumPoint(std::vector<Point<Number>>& points) const {
+		assert(points.size() == 1);
+		if(factor == 0){
+			return Point<Number>::Zero(points.front().dimension());
+		} else {
+			if(points.front().dimension() == 0) return points.front();
+			return factor * points.front();
+		}		
 	}
 
 };

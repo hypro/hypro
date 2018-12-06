@@ -102,15 +102,14 @@ class SumOp : public RootGrowNode<Number,Setting> {
 		return accumulatedResult;
 	}
 
-	//Should not be called
-	bool hasTrafo(std::shared_ptr<const LinTrafoParameters<Number,Setting>>& , const matrix_t<Number>& , const vector_t<Number>& ){
-		assert(false && "SumOp::hasTrafo should never be called\n");
-		return false;
-	}
-
-	bool empty() const { 
-		assert(false && "SumOp::empty should never be called\n"); 
-		return false; 
+	//Sum all suprema together
+	Point<Number> supremumPoint(std::vector<Point<Number>>& points) const {
+		Point<Number> res = Point<Number>::Zero(points.front().dimension());
+		for(const auto& p : points){
+			if(p.dimension() == 0) return p;
+			res += p;
+		}
+		return res;
 	}
 };
 

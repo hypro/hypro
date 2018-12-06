@@ -92,15 +92,15 @@ class UnionOp : public RootGrowNode<Number,Setting> {
 		return accumulatedResult;
 	}
 
-	//Should not be called
-	bool hasTrafo(std::shared_ptr<const LinTrafoParameters<Number,Setting>>& , const matrix_t<Number>& , const vector_t<Number>& ){
-		assert(false && "UnionOp::hasTrafo should never be called\n");
-		return false;
-	}
-
-	bool empty() const { 
-		assert(false && "UnionOp::empty should never be called\n"); 
-		return false; 
+	//Transform the supremum
+	Point<Number> supremumPoint(std::vector<Point<Number>>& points) const {
+		assert(points.size() > 0);
+		Point<Number> biggestInftyNorm = points.front();
+		for(const auto& p : points){
+			if(p.dimension() == 0) return p;
+			biggestInftyNorm = Point<Number>::inftyNorm(biggestInftyNorm) > Point<Number>::inftyNorm(p) ? biggestInftyNorm : p;
+		}
+		return biggestInftyNorm;
 	}
 };
 

@@ -114,15 +114,14 @@ class IntersectOp : public RootGrowNode<Number,Setting> {
 		return accumulatedResult;
 	}
 
-	//Should not be called
-	bool hasTrafo(std::shared_ptr<const LinTrafoParameters<Number,Setting>>& , const matrix_t<Number>& , const vector_t<Number>& ){
-		assert(false && "IntersectOp::hasTrafo should never be called\n");
-		return false;
-	}
-
-	bool empty() const { 
-		assert(false && "IntersectOp::empty should never be called\n"); 
-		return false; 
+	//Select smallest supremum of given suprema
+	Point<Number> supremumPoint(std::vector<Point<Number>>& points) const {
+		Point<Number> smallestInftyNorm = points.front();
+		for(auto& p : points){
+			if(p.dimension() == 0) return p;
+			smallestInftyNorm = Point<Number>::inftyNorm(smallestInftyNorm) < Point<Number>::inftyNorm(p) ? smallestInftyNorm : p;
+		}
+		return smallestInftyNorm;
 	}
 };
 

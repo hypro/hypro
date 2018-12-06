@@ -85,16 +85,16 @@ class ProjectOp : public RootGrowNode<Number,Setting> {
 		return resultStackBack.front();
 	}
 
-	//Is handled in TrafoOp::hasTrafo() and SFNew::hasTrafo()
-	bool hasTrafo(std::shared_ptr<const LinTrafoParameters<Number,Setting>>& , const matrix_t<Number>& , const vector_t<Number>& ){
-		assert(false && "ProjectOp::hasTrafo should never be called\n");
-		return false;
-	}
-
-	//Is handled in SFNew::empty()
-	bool empty() const { 
-		assert(false && "TrafoOp::empty should never be called\n"); 
-		return false; 
+	//Set all unwanted dimensions to zero 
+	Point<Number> supremumPoint(std::vector<Point<Number>>& points) const {
+		assert(points.size() == 1);
+		vector_t<Number> tmp = vector_t<Number>::Zero(points.front().dimension());
+		for(const auto& entry : dimensions){
+			if(entry < points.front().dimension()) {
+				tmp(entry) = points.front().at(entry);
+			}
+		}
+		return Point<Number>(tmp);
 	}
 
 };

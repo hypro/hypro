@@ -14,32 +14,8 @@ using namespace hypro;
 template<typename Number>
 class SupportFunctionNewTest : public ::testing::Test {
 protected:
-	virtual void SetUp() {
-
-		////Construct leaf nodes
-		//box1 = Box<TypeParam>(std::make_pair(Point<TypeParam>({TypeParam(0),TypeParam(-1)}), Point<TypeParam>({TypeParam(1), TypeParam(2)})));
-		//box2 = Box<TypeParam>(std::make_pair(Point<TypeParam>({TypeParam(0),TypeParam(0)}), Point<TypeParam>({TypeParam(2), TypeParam(2)})));
-		////Assemble them to a tree 
-		//sfl1 = SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>(&box1);
-		//sfl2 = SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>(&box2);
-		////Build trafop
-		//matrix_t<TypeParam> trafoMat = matrix_t<TypeParam>::Identity(2,2);
-		//vector_t<TypeParam> trafoVec = vector_t<TypeParam>::Zero(2);
-		//sfWithTrafo = sfl1.affineTransformation(trafoMat, trafoVec);
-		////Build sum operation as root 
-		//sum = sfWithTrafo.minkowskiSum(sf2);
-		
-	}
-
+	virtual void SetUp() { }
 	virtual void TearDown() {}	
-
-	//Box<TypeParam> box1;
-	//Box<TypeParam> box2;
-	//SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sf1;
-	//SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sf2;
-	//SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sfWithTrafo;
-	//SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sum;
-
 };
 
 ////// Data Structure Tests
@@ -679,21 +655,27 @@ TYPED_TEST(SupportFunctionNewTest, Evaluate){
 	std::cout << sum << std::endl;
 
 	//Evaluate
-	matrix_t<TypeParam> directions = matrix_t<TypeParam>::Zero(2,2);
-	directions(0,0) = TypeParam(1);
-	directions(1,1) = TypeParam(1);
-	//std::cout << "START EVALUATION\n"; 
+	matrix_t<TypeParam> directions = matrix_t<TypeParam>::Identity(2,2);
+	std::cout << "START MULTIEVALUATION\n"; 
 	std::vector<EvaluationResult<TypeParam>> res = sum.multiEvaluate(directions,true);
-	//std::cout << "END EVALUATION\n";
-	//std::cout << "Result of Evaluation is:\n";
-	//for(auto& eRes : res){
-	//	std::cout << eRes << std::endl;
-	//}
-	
+	std::cout << "END MULTIEVALUATION\n";
+	std::cout << "Result of Multievaluation is:\n";
+	for(auto& eRes : res){
+		std::cout << eRes << std::endl;
+	}
+
+	//Test Evaluation with only one direction
+	vector_t<TypeParam> dir = vector_t<TypeParam>::Zero(2);
+	dir(0) = TypeParam(1);
+	std::cout << "START EVALUATION\n"; 
+	EvaluationResult<TypeParam> resOnlyOneDir = sum.evaluate(dir,true);
+	std::cout << "END MULTIEVALUATION\n";
+	std::cout << "Result of evaluation is:\n";
+	std::cout << resOnlyOneDir << std::endl;
+	EXPECT_TRUE(resOnlyOneDir.supportValue == res.at(0).supportValue);
 }
 
 TYPED_TEST(SupportFunctionNewTest, Emptyness){
-
 
 	Box<TypeParam> box1 = Box<TypeParam>::Empty(2);
 	Box<TypeParam> box2 (std::make_pair(Point<TypeParam>({TypeParam(0),TypeParam(0)}), Point<TypeParam>({TypeParam(2), TypeParam(2)})));
@@ -709,4 +691,52 @@ TYPED_TEST(SupportFunctionNewTest, Emptyness){
 
 	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sum = trafo.minkowskiSum(sf2);
 	EXPECT_TRUE(sum.empty());
+}
+
+TYPED_TEST(SupportFunctionNewTest, Supremum){
+
+	//Two overlapping boxes as leaves, the overlapping box is (0,1) to (1,2)
+	Box<TypeParam> upRight (std::make_pair(Point<TypeParam>({TypeParam(0),TypeParam(1)}), Point<TypeParam>({TypeParam(2),TypeParam(3)})));
+	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> uR(&upRight);	
+	Box<TypeParam> downLeft (std::make_pair(Point<TypeParam>({TypeParam(-2),TypeParam(0)}), Point<TypeParam>({TypeParam(1),TypeParam(2)})));
+	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> dL(&downLeft);
+
+	//Supremum for Leaf
+	TypeParam sup = uR.supremum();
+	EXPECT_EQ(sup, TypeParam(3));
+
+	//Supremum for TrafoOp
+	matrix_t<TypeParam> mat = 2*matrix_t<TypeParam>::Identity(2,2);
+	vector_t<TypeParam> vec = vector_t<TypeParam>::Zero(2);
+	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> trafo = uR.affineTransformation(mat, vec);
+	sup = trafo.supremum();
+	EXPECT_EQ(sup, TypeParam(6));
+
+	//Supremum for ProjectOp
+	std::vector<std::size_t> dims({0});
+	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> proj = uR.project(dims);
+	sup = proj.supremum();
+	EXPECT_EQ(sup, TypeParam(2));
+
+	//Supremum for ScaleOp
+	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> scale = uR.scale(TypeParam(5));
+	sup = scale.supremum();
+	EXPECT_EQ(sup, TypeParam(15));	
+
+	//Supremum for SumOp
+	std::vector<SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>> sfVec({uR, dL});
+	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sumOp = uR.minkowskiSum(sfVec);
+	sup = sumOp.supremum();
+	EXPECT_EQ(sup, TypeParam(5));	
+
+	//Supremum for IntersectOp
+	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> intersectOp = uR.intersect(sfVec);
+	sup = intersectOp.supremum();
+	EXPECT_EQ(sup, TypeParam(2));
+
+	//Supremum for UnionOp	
+	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> uniteOp = uR.unite(sfVec);
+	sup = uniteOp.supremum();
+	EXPECT_EQ(sup, TypeParam(3));
+
 }

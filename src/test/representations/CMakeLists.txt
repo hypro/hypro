@@ -6,9 +6,10 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
 
 	if(HYPRO_USE_PPL)
 		add_executable(runRepresentationTests
-			BoxTest.cpp
-			CarlPolytopeTest.cpp
-			ConverterTest.cpp
+
+			#BoxTest.cpp
+			#CarlPolytopeTest.cpp
+			#ConverterTest.cpp
 			#DifferenceBoundsTest.cpp
 			#GridTest.cpp
 			#HPolytopeTest.cpp
@@ -17,7 +18,7 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
 			#PolytopeTest.cpp
 			#PolytopeUtilTest.cpp
 			#PolytopeSupportFunctionTest.cpp
-			SupportFunctionTest.cpp
+			#SupportFunctionTest.cpp
 			##TaylorModelTest.cpp
 			#VPolytopeTest.cpp
 			#ZonotopeTest.cpp
@@ -25,16 +26,16 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
 		)
 	else()
 		add_executable(runRepresentationTests
-			BoxTest.cpp
-			CarlPolytopeTest.cpp
-			ConverterTest.cpp
+			#BoxTest.cpp
+			#CarlPolytopeTest.cpp
+			#ConverterTest.cpp
 			#DifferenceBoundsTest.cpp
 			#GridTest.cpp
 			#HPolytopeTest.cpp
 			#NeighborhoodContainerTest.cpp
 			#OrthogonalPolyhedronTest.cpp
 			#PolytopeSupportFunctionTest.cpp
-			SupportFunctionTest.cpp
+			#SupportFunctionTest.cpp
 			##TaylorModelTest.cpp
 			#VPolytopeTest.cpp
 			#ZonotopeTest.cpp

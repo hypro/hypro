@@ -98,14 +98,11 @@ class RootGrowNode {
 	//For operations - aggregate
 	virtual std::vector<EvaluationResult<Number>> aggregate(std::vector<std::vector<EvaluationResult<Number>>>& resultStackBack, const matrix_t<Number>& currentParam) const = 0;
 
-	//For hasTrafo - should only be called by trafoOp objects
-	virtual bool hasTrafo(std::shared_ptr<const LinTrafoParameters<Number,Setting>>& ltParam, const matrix_t<Number>& A, const vector_t<Number>& b) = 0;
-
 	////// Functions for SupportFunctionNew
 	
-	virtual bool empty() const = 0;
-
-	//virtual Number supremum() const = 0;
+	virtual bool empty() const { assert(false && "This should only be called by Leaf\n"); return false; }
+	virtual Point<Number> supremumPoint() const { assert(false && "supremumPoint() should only be called by Leaf\n"); return Point<Number>(); }
+	virtual Point<Number> supremumPoint(std::vector<Point<Number>>& points) const { assert(false && "supremumPoint(vector) should only be called by operations\n"); return Point<Number>(); }
 };
 
 } //namespace hypro

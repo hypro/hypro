@@ -145,9 +145,6 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
 
   private:
 
-  	//void addUnaryOp(RootGrowNode<Number,Setting>* unary) const;
-  	//void addBinaryOp(RootGrowNode<Number,Setting>* binary, const SupportFunctionNewT<Number,Converter,Setting>& rhs) const;
-
   	void addOperation(RootGrowNode<Number,Setting>* newRoot) const;
   	void addOperation(RootGrowNode<Number,Setting>* newRoot, const std::vector<SupportFunctionNewT<Number,Converter,Setting>>& rhs) const;
 
