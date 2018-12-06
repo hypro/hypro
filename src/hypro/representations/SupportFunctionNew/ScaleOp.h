@@ -33,6 +33,8 @@ class ScaleOp : public RootGrowNode<Number,Setting> {
 	SFNEW_TYPE type = SFNEW_TYPE::SCALEOP;
 	unsigned originCount = 1;
 	PointerVec mChildren = PointerVec(1,nullptr);
+	std::size_t mDimension = 0;
+	
 
 	////// Members for this class
 
@@ -44,8 +46,7 @@ class ScaleOp : public RootGrowNode<Number,Setting> {
 
   	ScaleOp() = delete;
 
-  	ScaleOp(const SupportFunctionNewT<Number,Converter,Setting>& origin, const Number& scale) : factor(scale) { 
-  		//origin.addUnaryOp(this); 
+  	ScaleOp(const SupportFunctionNewT<Number,Converter,Setting>& origin, const Number& scale) : mDimension(origin.dimension()), factor(scale) { 
   		origin.addOperation(this); 
   	}
 
@@ -55,6 +56,7 @@ class ScaleOp : public RootGrowNode<Number,Setting> {
 
 	SFNEW_TYPE getType() const { return type; }
 	unsigned getOriginCount() const { return originCount; }
+	std::size_t getDimension() const { return mDimension; }
 	Number getFactor() const { return factor; }
 
 	////// RootGrowNode Interface

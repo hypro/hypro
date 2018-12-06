@@ -24,27 +24,30 @@ class Leaf : public RootGrowNode<Number,Setting> {
 
 	SFNEW_TYPE type = SFNEW_TYPE::LEAF;
 	unsigned originCount = 0;				//A leaf cannot have children
+	std::size_t mDimension = 0;
 
 	////// Members for this class
 
 	Representation* rep = nullptr;
+	mutable bool isNotRedundant = false; 	//A flag that tells us if removeRedundancy() been used on the representation
 	
   public:
 
 	////// Constructors & Destructors
 
-	Leaf(){}
+	Leaf() : mDimension(std::size_t(0)) {}
 
-	Leaf(Representation* r) : rep(r) {}//std::cout << "Leaf::Leaf(r)" << std::endl; }
+	Leaf(Representation* r) : mDimension(r->dimension()), rep(r) {}
 
-	~Leaf(){} //std::cout << "Leaf::~Leaf" << std::endl; }
+	~Leaf(){} 
 
 	////// Getters & Setters
 
 	SFNEW_TYPE getType() const { return type; }
 	unsigned getOriginCount() const { return originCount; }
+	std::size_t getDimension() const { return mDimension; }
 	Representation* getRepresentation() const { return rep; }
-	void setRepresentation(Representation* r){ rep = r; }
+	void setRepresentation(Representation* r){ rep = r; mDimension = r->dimension(); }
 
 	////// RootGrowNode Interface
 
@@ -57,6 +60,11 @@ class Leaf : public RootGrowNode<Number,Setting> {
 	//Evaluate leaf via multiEvaluate function of the representation
 	std::vector<EvaluationResult<Number>> compute(const matrix_t<Number>& param, bool useExact) const { 
 		assert(rep != nullptr);
+		//Optimization: Remove redundancy only when rep is being evaluated the first time
+		if(!isNotRedundant){
+			rep->removeRedundancy();
+			isNotRedundant = true;
+		}
 		return rep->multiEvaluate(param, useExact);
 	}
 

@@ -83,9 +83,6 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
   	//A pointer of shared ownership pointing to a node in the whole tree. This node is the root for this supportfunction, the nodes above root are not known.
   	mutable std::shared_ptr<RootGrowNode<Number,Setting>> mRoot = nullptr;
 
-  	//The dimension of the operations and representations
-  	std::size_t mDimension; 
-
 	/***************************************************************************
 	 * Constructors
 	 **************************************************************************/

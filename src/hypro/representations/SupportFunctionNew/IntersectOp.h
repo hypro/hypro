@@ -31,6 +31,7 @@ class IntersectOp : public RootGrowNode<Number,Setting> {
 	SFNEW_TYPE type = SFNEW_TYPE::INTERSECTOP;
 	unsigned originCount = 2;
 	PointerVec mChildren;
+	std::size_t mDimension = 0;
 
 	////// Special members of this class
 
@@ -41,10 +42,16 @@ class IntersectOp : public RootGrowNode<Number,Setting> {
 	IntersectOp() = delete;
 
 	IntersectOp(const SupportFunctionNewT<Number,Converter,Setting>& lhs, const SupportFunctionNewT<Number,Converter,Setting>& rhs){ 
+		assert(lhs.dimension() == rhs.dimension());
+		mDimension = lhs.dimension();
 		lhs.addOperation(this, std::vector<SupportFunctionNewT<Number,Converter,Setting>>{rhs}); 
 	}
 
 	IntersectOp(const SupportFunctionNewT<Number,Converter,Setting>& lhs, const std::vector<SupportFunctionNewT<Number,Converter,Setting>>& rhs){ 
+		for(const auto& sf : rhs){
+			assert(lhs.dimension() == sf.dimension());
+		}
+		mDimension = lhs.dimension();
 		lhs.addOperation(this, rhs); 
 	}
 
@@ -54,6 +61,7 @@ class IntersectOp : public RootGrowNode<Number,Setting> {
 
 	SFNEW_TYPE getType() const override { return type; }
 	unsigned getOriginCount() const { return originCount; }
+	std::size_t getDimension() const { return mDimension; }
 
 	////// RootGrowNode Interface
 

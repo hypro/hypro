@@ -33,10 +33,11 @@ class ProjectOp : public RootGrowNode<Number,Setting> {
 	SFNEW_TYPE type = SFNEW_TYPE::PROJECTOP;
 	unsigned originCount = 1;
 	PointerVec mChildren = PointerVec(1,nullptr);
+	std::size_t mDimension = 0;
 
 	////// Members for this class
 
-	std::vector<std::size_t> dimensions;
+	std::vector<std::size_t> dimensions;		//Vector of all indices that should not be projected to 0
 
   public: 
 
@@ -44,7 +45,7 @@ class ProjectOp : public RootGrowNode<Number,Setting> {
 
   	ProjectOp() = delete;
 
-  	ProjectOp(const SupportFunctionNewT<Number,Converter,Setting>& origin, const std::vector<std::size_t>& dims) : dimensions(dims) { 
+  	ProjectOp(const SupportFunctionNewT<Number,Converter,Setting>& origin, const std::vector<std::size_t>& dims) : mDimension(origin.dimension()), dimensions(dims) { 
   		origin.addOperation(this); 
   	}
 
@@ -54,6 +55,7 @@ class ProjectOp : public RootGrowNode<Number,Setting> {
 
 	SFNEW_TYPE getType() const { return type; }
 	unsigned getOriginCount() const { return originCount; }
+	std::size_t getDimension() const { return mDimension; }
 	std::vector<std::size_t> getDimensions() const { return dimensions; }
 
 	////// RootGrowNode Interface

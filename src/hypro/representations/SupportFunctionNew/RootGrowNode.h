@@ -44,6 +44,7 @@ class RootGrowNode {
 	SFNEW_TYPE mType = NODE;							//NONE since RootGrowNode should later be an abstract class
 	unsigned originCount = 0;							//Least amount of children needed to function properly
 	PointerVec mChildren = PointerVec();				//vector of all current children
+	std::size_t mDimension = 0;							//The dimension of the operations and representations
 	
   public:
 
@@ -57,6 +58,7 @@ class RootGrowNode {
 	virtual SFNEW_TYPE getType() const { return mType; }
 	virtual unsigned getOriginCount() const { return originCount; }
 	virtual PointerVec getChildren() const { return mChildren; }
+	virtual std::size_t getDimension() const { return mDimension; }
 	
 	////// Modifiers
 

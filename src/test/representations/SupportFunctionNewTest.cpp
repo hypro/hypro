@@ -290,8 +290,8 @@ TYPED_TEST(SupportFunctionNewTest, SumOp){
 	//Sum has only 2 children
 	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sfSum = sf.minkowskiSum(sf);
 	EXPECT_TRUE(sfSum.getRoot()->getType() == SFNEW_TYPE::SUMOP);
-	EXPECT_EQ(sfSum.getRoot()->getOriginCount(), 2);
-	EXPECT_EQ(sfSum.getRoot()->getChildren().size(), 2);
+	EXPECT_EQ(sfSum.getRoot()->getOriginCount(), unsigned(2));
+	EXPECT_EQ(sfSum.getRoot()->getChildren().size(), std::size_t(2));
 	EXPECT_EQ(sfSum.getRoot().use_count(), 1);
 	
 	//Check with Evaluation value
@@ -674,6 +674,13 @@ TYPED_TEST(SupportFunctionNewTest, Evaluate){
 	std::cout << "Result of evaluation is:\n";
 	std::cout << resOnlyOneDir << std::endl;
 	EXPECT_TRUE(resOnlyOneDir.supportValue == res.at(0).supportValue);
+
+	//Test Evaluation of empty sf
+	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sfEmpty;
+	res = sfEmpty.multiEvaluate(directions,true);
+	EXPECT_TRUE(res == std::vector<EvaluationResult<TypeParam>>());
+	resOnlyOneDir = sfEmpty.evaluate(dir,true);
+	EXPECT_TRUE(resOnlyOneDir == EvaluationResult<TypeParam>());
 }
 
 TYPED_TEST(SupportFunctionNewTest, Emptyness){
@@ -694,6 +701,57 @@ TYPED_TEST(SupportFunctionNewTest, Emptyness){
 	EXPECT_TRUE(sum.empty());
 }
 
+TYPED_TEST(SupportFunctionNewTest, Dimension){
+
+	//Two overlapping boxes as leaves, the overlapping box is (0,1) to (1,2)
+	Box<TypeParam> upRight (std::make_pair(Point<TypeParam>({TypeParam(0),TypeParam(1)}), Point<TypeParam>({TypeParam(2),TypeParam(3)})));
+	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> uR(&upRight);	
+	Box<TypeParam> downLeft (std::make_pair(Point<TypeParam>({TypeParam(-2),TypeParam(0)}), Point<TypeParam>({TypeParam(1),TypeParam(2)})));
+	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> dL(&downLeft);
+
+	//Dimension of empty SF
+	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sf;
+	TypeParam dim = sf.dimension();
+	EXPECT_EQ(dim, std::size_t(0));
+
+	//Dimension for Leaf
+	dim = uR.dimension();
+	EXPECT_EQ(dim, std::size_t(2));
+
+	//Dimension for TrafoOp
+	matrix_t<TypeParam> mat = 2*matrix_t<TypeParam>::Identity(2,2);
+	vector_t<TypeParam> vec = vector_t<TypeParam>::Zero(2);
+	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> trafo = uR.affineTransformation(mat, vec);
+	dim = trafo.dimension();
+	EXPECT_EQ(dim, std::size_t(2));
+
+	//Dimension for ProjectOp
+	std::vector<std::size_t> dims({0});
+	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> proj = uR.project(dims);
+	dim = proj.dimension();
+	EXPECT_EQ(dim, std::size_t(2));
+
+	//Dimension for ScaleOp
+	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> scale = uR.scale(TypeParam(5));
+	dim = scale.dimension();
+	EXPECT_EQ(dim, std::size_t(2));	
+
+	//Dimension for SumOp
+	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sumOp = uR.minkowskiSum(dL);
+	dim = sumOp.dimension();
+	EXPECT_EQ(dim, std::size_t(2));	
+
+	//Dimension for IntersectOp
+	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> intersectOp = uR.intersect(dL);
+	dim = intersectOp.dimension();
+	EXPECT_EQ(dim, std::size_t(2));
+
+	//Dimension for UnionOp	
+	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> uniteOp = uR.unite(dL);
+	dim = uniteOp.dimension();
+	EXPECT_EQ(dim, std::size_t(2));
+}
+
 TYPED_TEST(SupportFunctionNewTest, Supremum){
 
 	//Two overlapping boxes as leaves, the overlapping box is (0,1) to (1,2)
@@ -702,8 +760,13 @@ TYPED_TEST(SupportFunctionNewTest, Supremum){
 	Box<TypeParam> downLeft (std::make_pair(Point<TypeParam>({TypeParam(-2),TypeParam(0)}), Point<TypeParam>({TypeParam(1),TypeParam(2)})));
 	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> dL(&downLeft);
 
+	//Supremum of empty SF
+	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sf;
+	TypeParam sup = sf.supremum();
+	EXPECT_EQ(sup, std::size_t(0));
+
 	//Supremum for Leaf
-	TypeParam sup = uR.supremum();
+	sup = uR.supremum();
 	EXPECT_EQ(sup, TypeParam(3));
 
 	//Supremum for TrafoOp
@@ -739,4 +802,43 @@ TYPED_TEST(SupportFunctionNewTest, Supremum){
 	sup = uniteOp.supremum();
 	EXPECT_EQ(sup, TypeParam(3));
 
+}
+
+TYPED_TEST(SupportFunctionNewTest, StorageSize){
+
+	//Empty SF
+	try {
+		SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sf;	
+		std::cout << "Size of empty sf: " << sf.size() << std::endl;
+	} catch(const std::runtime_error& e) {
+		FAIL();
+	}
+	
+	//Size of a tree consisting of n-ary, unary and leaves
+	//Construct leaf nodes
+	Box<TypeParam> box1 (std::make_pair(Point<TypeParam>({TypeParam(0),TypeParam(-1)}), Point<TypeParam>({TypeParam(1), TypeParam(2)})));
+	Box<TypeParam> box2 (std::make_pair(Point<TypeParam>({TypeParam(0),TypeParam(0)}), Point<TypeParam>({TypeParam(2), TypeParam(2)})));
+	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sf1(&box1);
+	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sf2(&box2);
+	
+	//Build trafop
+	matrix_t<TypeParam> trafoMat = matrix_t<TypeParam>::Identity(2,2);
+	vector_t<TypeParam> trafoVec = vector_t<TypeParam>::Zero(2);
+	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sfWithTrafo = sf1.affineTransformation(trafoMat, trafoVec);
+	
+	//Build SumOp
+	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sum = sfWithTrafo.minkowskiSum(sf2);
+	EXPECT_TRUE(sum.getRoot()->getType() == SFNEW_TYPE::SUMOP);
+	EXPECT_TRUE(sum.getRoot()->getOriginCount() == sum.getRoot()->getChildren().size());
+
+	try {
+		std::cout << "Size of sf1: " << sf1.size() << std::endl;
+		std::cout << "Size of sf2: " << sf2.size() << std::endl;
+		std::cout << "Size of sfWithTrafo: " << sfWithTrafo.size() << std::endl;
+		std::cout << "Size of sum: " << sum.size() << std::endl;
+	} catch(const std::runtime_error& e) {
+		FAIL();
+	}	
+
+	SUCCEED();
 }

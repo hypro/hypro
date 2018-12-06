@@ -32,6 +32,7 @@ class TrafoOp : public RootGrowNode<Number,Setting> {
 	SFNEW_TYPE type = SFNEW_TYPE::TRAFO;
 	unsigned originCount = 1;
 	PointerVec mChildren = PointerVec(1,nullptr);
+	std::size_t mDimension = 0;
 
 	////// Members for this class
 
@@ -49,11 +50,10 @@ class TrafoOp : public RootGrowNode<Number,Setting> {
 	//Set new trafoOp object as parent of origin.
 	//During construction, find out how many TrafoOps with the same parameters are chained successively in the tree 
 	//and summarize groups of 2^power linear transformations for optimization
-	TrafoOp(const SupportFunctionNewT<Number,Converter,Setting>& origin, const matrix_t<Number>& A, const vector_t<Number>& b) : currentExponent(1) {
+	TrafoOp(const SupportFunctionNewT<Number,Converter,Setting>& origin, const matrix_t<Number>& A, const vector_t<Number>& b) : mDimension(origin.dimension()), currentExponent(1) {
 		
 		parameters = std::make_shared<const LinTrafoParameters<Number,Setting>>(A,b);
-
-		//origin.addUnaryOp(this);
+		
 		origin.addOperation(this);
 		assert(this->getChildren().size() == 1);
 		
@@ -94,6 +94,7 @@ class TrafoOp : public RootGrowNode<Number,Setting> {
 
 	SFNEW_TYPE getType() const { return type; }
 	unsigned getOriginCount() const { return originCount; }
+	std::size_t getDimension() const { return mDimension; }
 	unsigned getCurrentExponent() const { return currentExponent; }
 	std::size_t getSuccessiveTransformations() const { return successiveTransformations; }
 	std::shared_ptr<const LinTrafoParameters<Number,Setting>> getParameters() const { return parameters; }
@@ -114,7 +115,6 @@ class TrafoOp : public RootGrowNode<Number,Setting> {
 
 	//Given the results, return vector of evaluation results (here only first place needed, since unary op), here, we also modify
 	std::vector<EvaluationResult<Number>> aggregate(std::vector<std::vector<EvaluationResult<Number>>>& resultStackBack, const matrix_t<Number>& currentParam) const {
-		//std::cout << "TrafoOp::aggregate" << std::endl;
 		assert(resultStackBack.size() == 1); 
 		const std::pair<matrix_t<Number>, vector_t<Number>>& parameterPair = parameters->getParameterSet(currentExponent);
 		if(resultStackBack.front().begin()->errorCode != SOLUTION::INFEAS){
@@ -129,14 +129,10 @@ class TrafoOp : public RootGrowNode<Number,Setting> {
 					// As we know, that the optimal vertex lies on the supporting Halfspace, we can obtain the distance by dot product.
 					entry.supportValue = entry.optimumValue.dot(currentDir);
 				}
-				//auto t = convert<Number,double>(currentParam.row(directionCnt));
 				//TRACE("hypro.representations.supportFunction", "Direction: " << t << ", Entry value: " << entry.supportValue);
 				++directionCnt;
 			}
 		}
-		//for(auto& e : resultStackBack.front()){
-		//	std::cout << e << std::endl;
-		//}
 		return resultStackBack.front();
 	}
 

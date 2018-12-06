@@ -218,6 +218,8 @@ namespace hypro {
 	template<typename Number, typename Converter, typename Setting>
 	Number SupportFunctionNewT<Number,Converter,Setting>::supremum() const {
 
+		if(mRoot == nullptr) return Number(0);
+
 		//first function - parameters are not transformed
 		std::function<void(RootGrowNode<Number,Setting>*)> doNothing = [](RootGrowNode<Number,Setting>* ){ };
 
@@ -246,6 +248,7 @@ namespace hypro {
 
 	template<typename Number, typename Converter, typename Setting>
 	EvaluationResult<Number> SupportFunctionNewT<Number,Converter,Setting>::evaluate( const vector_t<Number>& _direction, bool useExact) const {
+		if(mRoot == nullptr) return EvaluationResult<Number>();
 		matrix_t<Number> dirAsMatrix = matrix_t<Number>::Zero(1,_direction.rows());
 		dirAsMatrix.row(0) = _direction;
 		return multiEvaluate(dirAsMatrix, useExact).front();
@@ -253,7 +256,9 @@ namespace hypro {
 
 	template<typename Number, typename Converter, typename Setting>
 	std::vector<EvaluationResult<Number>> SupportFunctionNewT<Number,Converter,Setting>::multiEvaluate( const matrix_t<Number>& _directions, bool useExact ) const {
-		
+
+		if(mRoot == nullptr) return std::vector<EvaluationResult<Number>>();
+
 		//Define lambda functions that will call the functions transform, compute and aggregate dependent on the current node type
 		std::function<Parameters<matrix_t<Number>>(RootGrowNode<Number,Setting>*, Parameters<matrix_t<Number>>)> trans = 
 			[](RootGrowNode<Number,Setting>* n, Parameters<matrix_t<Number>> param) -> Parameters<matrix_t<Number>> { 
@@ -276,6 +281,8 @@ namespace hypro {
 	//Find out if tree has at least one trafoOp and if yes, update the linTrafoParameters
 	template<typename Number, typename Converter, typename Setting>
 	bool SupportFunctionNewT<Number,Converter,Setting>::hasTrafo(std::shared_ptr<const LinTrafoParameters<Number,Setting>>& ltParam, const matrix_t<Number>& A, const vector_t<Number>& b) const {
+
+		if(mRoot == nullptr) return false;
 
 		//first function - parameters are not transformed
 		std::function<void(RootGrowNode<Number,Setting>*)> doNothing = [](RootGrowNode<Number,Setting>* ){ };
@@ -310,17 +317,41 @@ namespace hypro {
 
 	template<typename Number, typename Converter, typename Setting>
 	std::size_t SupportFunctionNewT<Number,Converter,Setting>::dimension() const {
-		return mDimension;
+		if(mRoot == nullptr) return std::size_t(0);
+		return mRoot->getDimension();
 	}
 
 	template<typename Number, typename Converter, typename Setting>
 	void SupportFunctionNewT<Number,Converter,Setting>::removeRedundancy() {
-
+		// Support functions are already non-redundant (Polytope support functions are made non-redundant upon construction).
 	}
 
 	template<typename Number, typename Converter, typename Setting>
 	std::size_t SupportFunctionNewT<Number,Converter,Setting>::size() const {
-		return std::size_t(1);
+
+		if(mRoot == nullptr) return std::size_t(0);
+		
+		//first function - parameters are not transformed
+		std::function<void(RootGrowNode<Number,Setting>*)> doNothing = [](RootGrowNode<Number,Setting>* ){ };
+
+		//leaves compute their storage size
+		std::function<std::size_t(RootGrowNode<Number,Setting>*)> sizeofLeaf = 
+			[](RootGrowNode<Number,Setting>* n) -> std::size_t {
+				assert(n->getType() == SFNEW_TYPE::LEAF);
+				return sizeof(*n);
+			};
+
+		//operations compute their storage size and add it to the ones of their children
+		std::function<std::size_t(RootGrowNode<Number,Setting>*, std::vector<std::size_t>)> sizeofOp =
+			[](RootGrowNode<Number,Setting>* n, std::vector<std::size_t> v) -> std::size_t {
+				std::size_t storage = 0;
+				for(const auto& childStorageSize : v){
+					storage += childStorageSize;
+				}
+				return storage + sizeof(*n);
+			};
+	
+		return traverse(doNothing, sizeofLeaf, sizeofOp);
 	}
 
 	template<typename Number, typename Converter, typename Setting>
@@ -340,6 +371,9 @@ namespace hypro {
 
 	template<typename Number, typename Converter, typename Setting>
 	SupportFunctionNewT<Number,Converter,Setting> SupportFunctionNewT<Number,Converter,Setting>::project(const std::vector<std::size_t>& dimensions) const {
+		
+		if(mRoot == nullptr) return SupportFunctionNewT<Number,Converter,Setting>();
+
 		// check for full projection
 		bool fullProjection = true;
 		if(dimensions.size() == this->dimension()) {
@@ -354,13 +388,13 @@ namespace hypro {
 		}
 
 		if(!fullProjection){
-			DEBUG("hypro.represetations.supportFunction", "No full projection, create.");
+			DEBUG("hypro.representations.supportFunction", "No full projection, create.");
 			std::shared_ptr<ProjectOp<Number,Converter,Setting>> proj = std::make_shared<ProjectOp<Number,Converter,Setting>>(*this, dimensions);
 			std::shared_ptr<RootGrowNode<Number,Setting>> projPtr = std::static_pointer_cast<RootGrowNode<Number,Setting>>(proj);
 			SupportFunctionNewT<Number,Converter,Setting> sf = SupportFunctionNewT<Number,Converter,Setting>(projPtr);
 			return sf;
 		}
-		DEBUG("hypro.represetations.supportFunction", "Full projection, copy.");
+		DEBUG("hypro.representations.supportFunction", "Full projection, copy.");
 		return *this;
 	}
 
