@@ -39,8 +39,16 @@ Location<Number>::Location() : mFlows(), mExternalInput(), mTransitions(), mInva
 
 template<typename Number>
 Location<Number>::Location(const Location<Number>& _loc)
-	: mFlows(_loc.getFlows()), mExternalInput(_loc.getExternalInput()), mTransitions(_loc.getTransitions()), mInvariant(_loc.getInvariant()), mName(_loc.getName()), mId(), mHash(0)
-{}
+	: mExternalInput(_loc.getExternalInput()), mTransitions(_loc.getTransitions()), mInvariant(_loc.getInvariant()), mName(_loc.getName()), mId(), mHash(0)
+{
+	for(const auto& f : _loc.getFlows()){
+		TRACE("hypro.datastructures","Add flow with hash " << boost::apply_visitor(hypro::flowHashVisitor(), f) );
+		mFlows.push_back(f);
+	}
+	TRACE("hypro.datastructures","Old location hash: " << _loc.hash());
+	TRACE("hypro.datastructures","New location hash: " << this->hash());
+	assert(this->hash() == _loc.hash());
+}
 
 template<typename Number>
 Location<Number>::Location(const matrix_t<Number>& _mat) : mFlows(), mId(), mExternalInput()
@@ -457,6 +465,7 @@ void Location<Number>::decompose(const Decomposition& decomposition){
 	std::for_each(newFlows.begin(), newFlows.end(), [&](linearFlow<Number>& f){ mFlows.emplace_back(std::move(f));});
 	// decompose invariant
 	mInvariant.decompose(decomposition);
+	mHash = 0;
 }
 
 }  // namespace hypro

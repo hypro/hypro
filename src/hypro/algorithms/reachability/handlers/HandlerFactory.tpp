@@ -7,13 +7,6 @@ namespace hypro
 	IFirstSegmentHandler<State>* HandlerFactory<State>::buildFirstSegmentHandler(representation_name name, State* state, size_t index, tNumber timeStep){
 
 		switch(name){
- 			case representation_name::box:
- 			case representation_name::polytope_h:
- 			case representation_name::polytope_v:
- 			case representation_name::zonotope:
- 			case representation_name::support_function:
- 				return new ltiFirstSegmentHandler<State>(state,index,timeStep);
-				break;
  			case representation_name::difference_bounds: {
 				if(SettingsProvider<State>::getInstance().useDecider() && SettingsProvider<State>::getInstance().getLocationTypeMap().find(state->getLocation())->second == LOCATIONTYPE::TIMEDLOC){
  					if(SettingsProvider<State>::getInstance().isFullTimed() ){
@@ -22,9 +15,10 @@ namespace hypro
  				}
  				return new timedFirstSegmentHandler<State>(state,index,timeStep);
  			}
+			default:
+ 				return new ltiFirstSegmentHandler<State>(state,index,timeStep);
+				break;
  		}
- 		assert(false && "SHOULD NEVER REACH THIS");
- 		return nullptr;
 	}
 
 
@@ -37,22 +31,18 @@ namespace hypro
 		}
 
 		switch(name){
- 			case representation_name::box:
- 			case representation_name::polytope_h:
- 			case representation_name::polytope_v:
- 			case representation_name::zonotope:
- 			case representation_name::support_function:
- 				if(noFlow){
- 					return new discreteInvariantHandler<State>(state,index);
- 				}
- 				return new ltiInvariantHandler<State>(state,index);
-				break;
  			case representation_name::difference_bounds: {
  				if(noFlow){
  					return new discreteInvariantHandler<State>(state,index);
  				}
  				return new timedInvariantHandler<State>(state,index);
  			}
+			default:
+ 				if(noFlow){
+ 					return new discreteInvariantHandler<State>(state,index);
+ 				}
+ 				return new ltiInvariantHandler<State>(state,index);
+				break;
  		}
  		assert(false && "SHOULD NEVER REACH THIS");
  		return nullptr;
@@ -78,22 +68,18 @@ namespace hypro
 	    }
 
 		switch(name){
- 			case representation_name::box:
- 			case representation_name::polytope_h:
- 			case representation_name::polytope_v:
- 			case representation_name::zonotope:
- 			case representation_name::support_function:
- 				if(noFlow){
- 					return new discreteBadStateHandler<State>(state,index);
- 				}
- 				return new ltiBadStateHandler<State>(state,index);
-
  			case representation_name::difference_bounds: {
  				if(noFlow){
  					return new discreteBadStateHandler<State>(state,index);
  				}
  				return new timedBadStateHandler<State>(state,index);
  			}
+			default:
+ 				if(noFlow){
+ 					return new discreteBadStateHandler<State>(state,index);
+ 				}
+ 				return new ltiBadStateHandler<State>(state,index);
+
  		}
  		assert(false && "SHOULD NEVER REACH THIS");
  		return nullptr;
@@ -107,22 +93,18 @@ namespace hypro
 		}
 
 		switch(name){
- 			case representation_name::box:
- 			case representation_name::polytope_h:
- 			case representation_name::polytope_v:
- 			case representation_name::zonotope:
- 			case representation_name::support_function:
- 				if(noFlow){
- 					return new discreteGuardHandler<State>(state,index,transition);
- 				}
- 				return new ltiGuardHandler<State>(state,index,transition);
-
  			case representation_name::difference_bounds: {
  				if(noFlow){
  					return new discreteGuardHandler<State>(state,index,transition);
  				}
  				return new timedGuardHandler<State>(state,index,transition);
  			}
+			default:
+ 				if(noFlow){
+ 					return new discreteGuardHandler<State>(state,index,transition);
+ 				}
+ 				return new ltiGuardHandler<State>(state,index,transition);
+
  		}
  		assert(false && "SHOULD NEVER REACH THIS");
  		return nullptr;
@@ -135,13 +117,6 @@ namespace hypro
 		}
 
 		switch(name){
- 			case representation_name::box:
- 			case representation_name::polytope_h:
- 			case representation_name::polytope_v:
- 			case representation_name::zonotope:
- 			case representation_name::support_function:
- 				return new ltiTimeEvolutionHandler<State>(state,index,timeStep,trafo,translation);
-
  			case representation_name::difference_bounds: {
  				if(SettingsProvider<State>::getInstance().useDecider() && SettingsProvider<State>::getInstance().getLocationTypeMap().find(state->getLocation())->second == LOCATIONTYPE::TIMEDLOC){
 					if(SettingsProvider<State>::getInstance().isFullTimed()){
@@ -154,6 +129,8 @@ namespace hypro
 				}
  				return new timedTickTimeEvolutionHandler<State>(state,index,timeStep,trafo,translation);
  			}
+			default:
+ 				return new ltiTimeEvolutionHandler<State>(state,index,timeStep,trafo,translation);
  		}
  		assert(false && "SHOULD NEVER REACH THIS");
  		return nullptr;
@@ -166,16 +143,11 @@ namespace hypro
 		}
 
 		switch(name){
- 			case representation_name::box:
- 			case representation_name::polytope_h:
- 			case representation_name::polytope_v:
- 			case representation_name::zonotope:
- 			case representation_name::support_function:
- 				return new ltiResetHandler<State>(state,index,trafo,translation);
-
  			case representation_name::difference_bounds: {
  				return new timedResetHandler<State>(state,index,trafo,translation);
  			}
+			default:
+ 				return new ltiResetHandler<State>(state,index,trafo,translation);
  		}
  		assert(false && "SHOULD NEVER REACH THIS");
  		return nullptr;

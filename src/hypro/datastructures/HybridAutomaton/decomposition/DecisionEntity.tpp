@@ -313,9 +313,8 @@ namespace hypro
 	}
 
 	template<typename Number>
-	std::pair<HybridAutomaton<Number>, Decomposition> DecisionEntity<Number>::decomposeAutomaton(HybridAutomaton<Number> &automaton){
+	std::pair<HybridAutomaton<Number>, Decomposition> DecisionEntity<Number>::decomposeAutomaton(const HybridAutomaton<Number> &automaton){
 		Decomposition decomposition = getSubspaceDecomposition(automaton);
-		printDecomposition(decomposition);
 		//SettingsProvider<State>::getInstance().setSubspaceDecomposition(decomposition);
 		if(decomposition.size() <= 1){
 			// decomposing failed/was already done(0-case) or decomposition is all variables (1 case)
@@ -323,9 +322,10 @@ namespace hypro
 		}
 		printDecomposition(decomposition);
 		TRACE("hypro.decisionEntity", "Automaton before decomposition: " << automaton);
-		automaton.decompose(decomposition);
-		TRACE("hypro.decisionEntity", "Automaton after decomposition: " << automaton);
-		return std::make_pair(automaton,decomposition);
+		auto automatonCopy = automaton;
+		automatonCopy.decompose(decomposition);
+		TRACE("hypro.decisionEntity", "Automaton after decomposition: " << automatonCopy);
+		return std::make_pair(automatonCopy,decomposition);
 	}
 
 } // hypro

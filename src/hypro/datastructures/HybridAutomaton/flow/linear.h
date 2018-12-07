@@ -66,6 +66,14 @@ public:
         return hasNoFlow();
     }
 
+    friend bool operator==(const linearFlow<Number>& lhs, const linearFlow<Number>& rhs) {
+        return lhs.getFlowMatrix() == rhs.getFlowMatrix();
+    }
+
+    friend bool operator!=(const linearFlow<Number>& lhs, const linearFlow<Number>& rhs) {
+        return !(lhs == rhs);
+    }
+
     friend ostream& operator<<(ostream& out, const linearFlow<Number>& in) {
         return out << in.mFlowMatrix;
     }

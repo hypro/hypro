@@ -124,8 +124,58 @@ public:
         }
     }
 
-    inline bool operator==(const Location<Number>& rhs) const { return (this->hash() == rhs.hash()); }
-    inline bool operator!=(const Location<Number>& rhs) const { return (this->hash() != rhs.hash()); }
+    inline bool operator==(const Location<Number>& rhs) const {
+        //TRACE("hypro.datastructures","Comparison of " << *this << " and " << rhs);
+        if(this->hash() != rhs.hash()) {
+            //TRACE("hypro.datastructures","Hash " << this->hash() << " and " << rhs.hash() << " not equal.");
+            return false;
+        }
+        if(mName != rhs.getName()) {
+            //TRACE("hypro.datastructures","Name not equal.");
+            return false;
+        }
+        if(mInvariant != rhs.getInvariant()) {
+            //TRACE("hypro.datastructures","Invariants not equal.");
+            return false;
+        }
+        if(mFlows.size() != rhs.getFlows().size()) {
+            //TRACE("hypro.datastructures","Number of flows not equal.");
+            return false;
+        }
+        for(std::size_t i = 0; i < mFlows.size(); ++i) {
+            if(mFlows[i] != rhs.getFlows()[i]) {
+                //TRACE("hypro.datastructures","Flows not equal.");
+                return false;
+            }
+        }
+        if(mExternalInput != rhs.getExternalInput()) {
+            //TRACE("hypro.datastructures","External input not equal.");
+            return false;
+        }
+        /*
+        if(mTransitions.size() != rhs.getTransitions().size()) {
+            TRACE("hypro.datastructures","Number of transitions not equal.");
+            return false;
+        }
+        for(auto lhsIt = mTransitions.begin(); lhsIt != mTransitions.end(); ++lhsIt) {
+            bool found = false;
+            for(auto rhsIt = rhs.getTransitions().begin(); rhsIt != rhs.getTransitions().end(); ++rhsIt) {
+                if(**lhsIt == **rhsIt) {
+                    found = true;
+                    break;
+                }
+            }
+            if(!found){
+                TRACE("hypro.datastructures","Transition not equal.");
+                return false;
+            }
+        }
+        */
+        //TRACE("hypro.datastructures","Equal.");
+        return true;
+    }
+
+    inline bool operator!=(const Location<Number>& rhs) const { return !(*this == rhs); }
 
     friend std::ostream& operator<<(std::ostream& ostr, const Location<Number>& l) {
 
@@ -173,13 +223,16 @@ namespace std {
     struct hash<hypro::Location<Number>> {
         std::size_t operator()(const hypro::Location<Number>& loc) const
         {
+            TRACE("hypro.datastructures","Hash for location " << loc.getName());
             //Flows
             std::size_t seed = 0;
             for(const auto& f : loc.getFlows()) {
+                //TRACE("hypro.datastructures","Add flow hash " << (boost::apply_visitor(hypro::flowHashVisitor(), f)) );
                 carl::hash_add(seed, boost::apply_visitor(hypro::flowHashVisitor(), f));
             }
 
             //Name
+            //TRACE("hypro.datastructures","Add name hash " << std::hash<std::string>()(loc.getName()));
             carl::hash_add(seed, std::hash<std::string>()(loc.getName()));
 
             ////Transitions
@@ -193,8 +246,10 @@ namespace std {
             //}
 
             ////Imvariant
+            //TRACE("hypro.datastructures","Add invariant hash " << loc.getInvariant().hash());
             carl::hash_add(seed, loc.getInvariant().hash());
 
+            TRACE("hypro.datastructures","Resulting hash " << seed);
             return seed;
         }
     };

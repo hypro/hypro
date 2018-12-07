@@ -36,7 +36,8 @@ public:
 
 	template<typename A, typename B>
 	inline T operator()(const A& lhs, const B&) const {
-		assert(false && "MinkowskiSum OF DIFFERENT TYPES.");
+		TRACE("hypro.utility","Type lhs: " << A::type() << " and type rhs: " << B::type());
+		assert(false && "MinkowskiSum OF DIFFERENT TYPES");
 		return lhs;
 	}
 

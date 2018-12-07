@@ -32,7 +32,7 @@ class DecisionEntity : public carl::Singleton<DecisionEntity<Number>>
     */
     Decomposition getSubspaceDecomposition(const HybridAutomaton<Number> &automaton);
     bool checkDecomposed(const HybridAutomaton<Number> &automaton);
-    std::pair<HybridAutomaton<Number>,Decomposition> decomposeAutomaton(HybridAutomaton<Number> &automaton);
+    std::pair<HybridAutomaton<Number>,Decomposition> decomposeAutomaton(const HybridAutomaton<Number>& automaton);
 
     void addEdgesForLinTrafo(matrix_t<Number> linTrafo, boost::adjacency_list<boost::vecS, boost::vecS, boost::undirectedS>& graph);
     void addEdgesForAffineTrafo(matrix_t<Number> affineTrafo, boost::adjacency_list<boost::vecS, boost::vecS, boost::undirectedS>& graph);

@@ -155,17 +155,18 @@ void Condition<Number>::decompose(const Decomposition& decomposition){
 		// and add the corresponding rows to a list of indices that are later added to a matrix
 		std::vector<Eigen::Index> indicesToAdd;
 		for(Eigen::Index i = 0; i < constraintsOld.rows(); i++){
-			vector_t<Number> row = constraintsOld.row(i);
 			bool containsVar = false;
-			for(Eigen::Index j = 0; j < row.rows(); j++){
-				if(row(j,0) != 0){
+			for(Eigen::Index j = 0; j < constraintsOld.cols(); j++){
+				if(constraintsOld(i,j) != 0){
 					if(std::find(set.begin(),set.end(), j) != set.end()){
 						//set contains variable j, which is also contained in this constraint
 						containsVar = true;
+						break;
 					}
 				}
 			}
 			if(containsVar){
+				TRACE("hypro.datastructures","Row " << i << " is used in constraint " << constraintsOld.row(i) << " for the current set.");
 				indicesToAdd.push_back(i);
 			}
 		}
@@ -173,7 +174,7 @@ void Condition<Number>::decompose(const Decomposition& decomposition){
 		if(indicesToAdd.size() > 0){
 			// create a row matrix with numIndicesToAdd many rows
 			matrix_t<Number> newMatrix = selectRows(constraintsOld, indicesToAdd);
-			newMatrix = selectCols(constraintsOld, set);
+			newMatrix = selectCols(newMatrix, set);
 
 			// create final constant vector
 			vector_t<Number> newVec = selectRows(constantsOld, indicesToAdd);
@@ -192,6 +193,7 @@ void Condition<Number>::decompose(const Decomposition& decomposition){
 	mConstraints = newCset;
 	mConditionIsBox = std::vector<TRIBOOL>{mConstraints.size(),TRIBOOL::NSET};
 	mHash = 0;
+	DEBUG("hypro.datastructures", "Decomposed Condition, created " << mConstraints.size() << " new constraint sets.");
 }
 
 template<typename Number>

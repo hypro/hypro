@@ -30,7 +30,7 @@ void State<Number,Representation,Rargs...>::setSet(const R& s, std::size_t i) {
 		mSets.emplace_back(Representation()); // some default set.
 		mTypes.push_back(Representation::type()); // some default set type.
 	}
-	TRACE("hypro.datastructures","Set set to:" << s);
+	TRACE("hypro.datastructures","Set set to:" << s << ", type: " << R::type());
 	mSets[i] = s;
 	mTypes[i] = R::type();
 	DEBUG("hypro.datastructures","Set set at pos " << i << ", mSets.size() = " << mSets.size());
@@ -47,9 +47,9 @@ void State<Number,Representation,Rargs...>::setSet(const State<Number,Representa
 		mSets.emplace_back(Representation()); // some default set.
 		mTypes.push_back(Representation::type()); // some default set type.
 	}
-	TRACE("hypro.datastructures","Set set to:" << s);
 	mSets[i] = s;
 	mTypes[i] = boost::apply_visitor(genericTypeVisitor(), s);
+	TRACE("hypro.datastructures","Set set to:" << s << ", type: " << mTypes[i]);
 	DEBUG("hypro.datastructures","Set set at pos " << i << ", mSets.size() = " << mSets.size());
 	assert(mSets.size() > i);
 	assert(checkConsistency());

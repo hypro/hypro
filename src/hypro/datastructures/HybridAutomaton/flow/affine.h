@@ -46,6 +46,15 @@ public:
         return linearFlow<Number>::hasNoFlow() && !hasTranslation();
     }
 
+    friend bool operator==(const affineFlow<Number>& lhs, const affineFlow<Number>& rhs) {
+        return (lhs.getFlowMatrix() == rhs.getFlowMatrix()
+                && lhs.getTranslation() == rhs.getTranslation());
+    }
+
+    friend bool operator!=(const affineFlow<Number>& lhs, const affineFlow<Number>& rhs) {
+        return !(lhs == rhs);
+    }
+
     friend ostream& operator<<(ostream& out, const affineFlow<Number>& in) {
         return out << in.getFlowMatrix() << ", " << in.getTranslation();
     }

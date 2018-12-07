@@ -299,21 +299,21 @@ class HybridAutomaton
             ostr << ( *initialIT ).first->id() << ": " << ( *initialIT ).second.first
                   << " <= " << ( *initialIT ).second.second << std::endl;
         }*/  // TODO
-        ostr << "initial states: " << std::endl;
+        ostr << "initial states (" << a.getInitialStates().size() << "): " << std::endl;
         for(auto initialIt = a.getInitialStates().begin(); initialIt != a.getInitialStates().end(); ++initialIt){
-            ostr << *((*initialIt).first) << ": " << (*initialIt).second << std::endl;
+            ostr << ((*initialIt).first)->getName() << ": " << (*initialIt).second << std::endl;
         }
-        ostr << "locations: " << std::endl;
+        ostr << "locations ("<< a.getLocations().size() << "): " << std::endl;
         for (auto l : a.getLocations()) {
             ostr << *l << std::endl;
         }
-        ostr << "transitions: " << std::endl;
+        ostr << "transitions ("<< a.getTransitions().size() << "): " << std::endl;
         for (const auto& transition : a.getTransitions()) {
             ostr << *transition << std::endl;
         }
-        ostr << "local bad states: " << std::endl;
+        ostr << "local bad states ("<< a.getLocalBadStates().size() << "): " << std::endl;
         for(auto badStateIt = a.getLocalBadStates().begin(); badStateIt != a.getLocalBadStates().end(); ++badStateIt){
-            ostr << *((*badStateIt).first) << ": " << (*badStateIt).second << std::endl;
+            ostr << ((*badStateIt).first)->getName() << ": " << (*badStateIt).second << std::endl;
         }
 #endif
         return ostr;

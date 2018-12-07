@@ -20,6 +20,7 @@ HybridAutomaton<Number>::HybridAutomaton(const HybridAutomaton<Number>& hybrid)
 		Location<Number> tmp = Location<Number>(*l);
 		tmp.setTransitions(std::set<Transition<Number>*>());
     	mLocations.emplace(std::make_unique<Location<Number>>(tmp));
+		assert(tmp.hash() == l->hash());
    	}
 	for(auto& t : hybrid.getTransitions()){
 		mTransitions.emplace(std::make_unique<Transition<Number>>(Transition<Number>(*t)));
@@ -43,14 +44,16 @@ HybridAutomaton<Number>::HybridAutomaton(const HybridAutomaton<Number>& hybrid)
 	}
 
 	// get correct location pointer for initial states.
-	for(auto otherInitial : hybrid.getInitialStates()) {
+	for(auto& otherInitial : hybrid.getInitialStates()) {
 		auto copy = otherInitial.second;
 		// update location
 		#ifndef NDEBUG
 		bool found = false;
 		#endif
 		for(auto& l : mLocations) {
+			DEBUG("hypro.datastructures","Compare locations for initial state: " << otherInitial.first->getName() << " and " << l->getName());
 			if( *l.get() == *otherInitial.first ) {
+				DEBUG("hypro.datastructures","Equal.");
 				#ifndef NDEBUG
 				found = true;
 				#endif
@@ -61,7 +64,7 @@ HybridAutomaton<Number>::HybridAutomaton(const HybridAutomaton<Number>& hybrid)
 		assert(found);
 	}
 
-	for(auto otherBad : hybrid.getLocalBadStates()) {
+	for(auto& otherBad : hybrid.getLocalBadStates()) {
 		auto copy = otherBad.second;
 		// update location
 		#ifndef NDEBUG
@@ -77,6 +80,11 @@ HybridAutomaton<Number>::HybridAutomaton(const HybridAutomaton<Number>& hybrid)
 			}
 		}
 		assert(found);
+	}
+
+	DEBUG("hypro.datastructures","Hybrid automaton initial states after COPY construction.");
+	for(const auto& iPair : mInitialStates) {
+		DEBUG("hypro.datastructures","Initial state in loc " << iPair.first->getName());
 	}
 }
 
@@ -158,9 +166,9 @@ HybridAutomaton<Number>::HybridAutomaton(HybridAutomaton<Number>&& hybrid)
 		assert(found);
 	}
 
-	TRACE("hypro.datastructures","Hybrid automaton initial states after MOVE construction.");
+	DEBUG("hypro.datastructures","Hybrid automaton initial states after MOVE construction.");
 	for(const auto& iPair : mInitialStates) {
-		TRACE("hypro.datastructures","Initial state in loc " << iPair.first->getName());
+		DEBUG("hypro.datastructures","Initial state in loc " << iPair.first->getName());
 	}
 }
 
@@ -458,9 +466,11 @@ void HybridAutomaton<Number>::decompose(const Decomposition& decomposition){
 		it->decompose(decomposition);
 	}
 	// decompose intial states (state sets)
+	DEBUG("hypro.datastructures","Decompose initial states.");
 	for(auto it = mInitialStates.begin(); it != mInitialStates.end(); ++it){
 		it->second.decompose(decomposition);
 	}
+	DEBUG("hypro.datastructures","Decompose initial states done. Having " << mInitialStates.size() << " initial states.");
 }
 
 template<typename Number>
