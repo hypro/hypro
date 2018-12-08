@@ -29,6 +29,7 @@ void State<Number,Representation,Rargs...>::setSet(const R& s, std::size_t i) {
 	while(i >= mSets.size()) {
 		mSets.emplace_back(Representation()); // some default set.
 		mTypes.push_back(Representation::type()); // some default set type.
+		TRACE("hypro.datastructures","Add empty dummy set of type " << mTypes.back() << " at index " << mSets.size());
 	}
 	TRACE("hypro.datastructures","Set set to:" << s << ", type: " << R::type());
 	mSets[i] = s;
