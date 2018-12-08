@@ -46,9 +46,9 @@ namespace hypro
         this->mCurrentGlobalTimeInterval = entryTimeStamp + this->mComputationState.getTimestamp();
 
         // intersect with transition guards
-        execBeforeCheckTransition();
+        // execBeforeCheckTransition(); // TODO: Was uncommented
         checkTransition();
-        execAfterCheckTransition();
+        LTIContext<State>::execAfterCheckTransition();
         // </FULLTIME-SPECIFIC>
 	}
 
@@ -102,7 +102,7 @@ namespace hypro
 		// For plotting.
 		#ifdef HYDRA_ENABLE_PLOT
 		TRACE("hydra.worker.plot","Add "<<  this->mComputationState.getSets().size() << "segments for plotting of type " << this->mComputationState.getSetType() << " and refinement level " << this->mTask->btInfo.btLevel);
-        this->mLocalSegments->push_back(PlotData(this->mComputationState.getTypes(), this->mComputationState.getSets(),this->mTask->btInfo.btLevel));
+        this->mLocalSegments->push_back(PlotData<State>(this->mComputationState,this->mTask->btInfo.btLevel));
 		#endif
 	}
 
@@ -126,7 +126,7 @@ namespace hypro
         	}
 			#endif
 
-        	if(!it->first->isUrgent() && omitTransition(it->first)){
+        	if(!it->first->isUrgent() && LTIContext<State>::omitTransition(it->first)){
         		// store that transition was not enabled for this time interval
             	this->mTask->treeNode->rGetRefinements().at(this->mTask->btInfo.btLevel).mTimings.insertTransition(it->first,this->mCurrentGlobalTimeInterval, hypro::CONTAINMENT::NO);
         		continue;
@@ -181,7 +181,7 @@ namespace hypro
 		            TRACE("hydra.worker.discrete","hybrid transition enabled with timestamp " << guardStatePtr->getTimestamp());
 		            TRACE("hydra.worker.discrete","Enqueued state: " << *(guardStatePtr));
 		            this->mDiscreteSuccessorBuffer.push_back(boost::tuple<hypro::Transition<Number>*, State>(it->first, *(guardStatePtr)));
-		            if(SettingsProvider::getInstance().useLocalTiming()){
+		            if(SettingsProvider<State>::getInstance().useLocalTiming()){
 		               carl::Interval<tNumber> entryTimeStamp = this->mTask->treeNode->getStateAtLevel(this->mTask->btInfo.btLevel).getTimestamp();
 		               carl::Interval<tNumber> guardSatTimeStamp = entryTimeStamp + guardStatePtr->getTimestamp();
 		               this->mTask->treeNode->rGetRefinements().at(this->mTask->btInfo.btLevel).mTimings.insertTransition(it->first, guardSatTimeStamp, hypro::CONTAINMENT::YES);
@@ -226,7 +226,7 @@ namespace hypro
         			return carl::Interval<tNumber>(tNumber(0.0));
         		}
         		else if(vert.size() < 2){
-        			hypro::Point<Number> origin = hypro::Point<Number>(Vector::Zero(1));
+        			hypro::Point<Number> origin = hypro::Point<Number>(vector_t<Number>::Zero(1));
         			Number timePoint = origin.distance(vert[0]);
         			if(abs(timePoint) > 0 && abs(timePoint) < 0.000000000001){
         				timePoint = Number(0);
@@ -237,7 +237,7 @@ namespace hypro
         		assert(vert.size() == 2);
 
         		// compute diameter of interval
-        		hypro::Point<Number> origin = hypro::Point<Number>(Vector::Zero(1));
+        		hypro::Point<Number> origin = hypro::Point<Number>(vector_t<Number>::Zero(1));
         		Number timePoint1 = origin.distance(vert[0]);
         		if(abs(timePoint1) > 0 && abs(timePoint1) < 0.000000000001){
         			timePoint1 = Number(0);
@@ -264,13 +264,13 @@ namespace hypro
     template<typename State>
 	carl::Interval<tNumber> TimedContext<State>::handshakeTimestamps(State& preOp, State& postOp){
     	assert(preOp.getNumberSets() == postOp.getNumberSets());
-		std::map<const hypro::Location<Number>*, std::shared_ptr<std::vector<hydra::SUBSPACETYPE>>> map = SettingsProvider::getInstance().getLocationSubspaceTypeMap();
-		std::vector<hydra::SUBSPACETYPE> types = *(map.find(preOp.getLocation())->second);
+		auto map = SettingsProvider<State>::getInstance().getLocationSubspaceTypeMap();
+		std::vector<hypro::SUBSPACETYPE> types = *(map.find(preOp.getLocation())->second);
 
 		// for each timed subspace compute its minimal elapsed time interval before the operation happened
 		std::map<size_t, carl::Interval<tNumber>> preOpTimeIntervals;
 		for(size_t index = 0; index < preOp.getNumberSets(); index++){
-			if(types.at(index) != hydra::SUBSPACETYPE::TIMED){
+			if(types.at(index) != hypro::SUBSPACETYPE::TIMED){
 				// only compute for timed subspaces
 				continue;
 			}
@@ -280,7 +280,7 @@ namespace hypro
 		// for each timed subspace compute its minimal elapsed time interval before the operation happened
 		std::map<size_t, carl::Interval<tNumber>> postOpTimeIntervals;
 		for(size_t index = 0; index < postOp.getNumberSets(); index++){
-			if(types.at(index) != hydra::SUBSPACETYPE::TIMED){
+			if(types.at(index) != hypro::SUBSPACETYPE::TIMED){
 				// only compute for timed subspaces
 				continue;
 			}
@@ -309,7 +309,7 @@ namespace hypro
 			}
 			else{
 				// intersect timestamps
-				agreedTimeStamp = agreedTimeStamp.intersect(it->second);
+				agreedTimeStamp = carl::set_intersection(agreedTimeStamp, it->second);
 			}
 		}
 
@@ -320,7 +320,7 @@ namespace hypro
 		}
 		for(size_t index = 0; index < postOp.getNumberSets(); index++){
 
-			if(types.at(index) != hydra::SUBSPACETYPE::TIMED){
+			if(types.at(index) != hypro::SUBSPACETYPE::TIMED){
 				// only compute for timed subspaces
 				continue;
 			}
@@ -335,9 +335,9 @@ namespace hypro
 				Number newLowerBound = lowerBound - carl::convert<tNumber,Number>(agreedTimeStamp.lower());
 				Number newUpperBound = abs(lowerBound) + carl::convert<tNumber,Number>(agreedTimeStamp.upper());
 				 // cut with x-0 <= c
-                postOpDBM = postOpDBM.intersectConstraint(i,0,hypro::DifferenceBounds<Number>::DBMEntry(newUpperBound,hypro::DifferenceBounds<Number>::BOUND_TYPE::SMALLER_EQ));
+                postOpDBM = postOpDBM.intersectConstraint(i,0,typename hypro::DifferenceBounds<Number>::DBMEntry(newUpperBound,hypro::DifferenceBounds<Number>::BOUND_TYPE::SMALLER_EQ));
                 // cut with 0-x <= c
-                postOpDBM = postOpDBM.intersectConstraint(0,i,hypro::DifferenceBounds<Number>::DBMEntry(newLowerBound,hypro::DifferenceBounds<Number>::BOUND_TYPE::SMALLER_EQ));
+                postOpDBM = postOpDBM.intersectConstraint(0,i,typename hypro::DifferenceBounds<Number>::DBMEntry(newLowerBound,hypro::DifferenceBounds<Number>::BOUND_TYPE::SMALLER_EQ));
 
 			}
 			postOp.setSet(postOpDBM, index);
