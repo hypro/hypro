@@ -268,7 +268,10 @@ namespace hypro {
 			// determines whether there are still sets to be clustered together.
 			bool leftovers = true;
 
-			std::vector<SUBSPACETYPE> types = *(SettingsProvider<State>::getInstance().getLocationSubspaceTypeMap().find(aggregatedState.getLocation())->second);
+			auto subspaceTypesIt = SettingsProvider<State>::getInstance().getLocationSubspaceTypeMap().find(aggregatedState.getLocation());
+			TRACE("hydra.worker.discrete","Find subspace mapping for loc " << aggregatedState.getLocation()->getName());
+			assert(subspaceTypesIt != SettingsProvider<State>::getInstance().getLocationSubspaceTypeMap().end());
+			std::vector<SUBSPACETYPE> types = *(subspaceTypesIt->second);
 			// perform union directly on the current set vector to avoid an extreme amount of consistency checks
 			std::vector<typename State::repVariant> currentSets = aggregatedState.getSets();
 			//START_BENCHMARK_OPERATION(AGGREGATE);
