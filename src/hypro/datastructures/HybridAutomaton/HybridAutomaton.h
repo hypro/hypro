@@ -36,16 +36,16 @@ template <typename Number>
 class HybridAutomaton
 {
   public:
-    using locationSet = std::set<std::unique_ptr<Location<Number>>, locPtrComp<Number>>; /// Set of unique location pointers.
-    using transitionSet = std::set<std::unique_ptr<Transition<Number>>>; /// Set of unique transition pointers.
-    using locationConditionMap = std::map<const Location<Number>*, Condition<Number>>; /// Map from location pointers to conditions.
-    using conditionVector = std::vector<Condition<Number>>; /// Vector of conditions.
-    using variableVector = std::vector<std::string>; /// Vector of variables
+    using locationVector = std::vector<std::unique_ptr<Location<Number>>>;
+    using transitionVector = std::vector<std::unique_ptr<Transition<Number>>>;
+    using locationConditionMap = std::map<const Location<Number>*, Condition<Number>>;
+    using conditionVector = std::vector<Condition<Number>>;
+    using variableVector = std::vector<std::string>;
 
   private:
-    locationSet mLocations; 				/// The locations of the hybrid automaton.
-    transitionSet mTransitions; 			/// The transitions of the hybrid automaton.
-    locationConditionMap mInitialStates; 		/// The set of initial states.
+    locationVector mLocations; 				/// The locations of the hybrid automaton.
+    transitionVector mTransitions; 			/// The transitions of the hybrid automaton.
+    locationConditionMap mInitialStates; 	/// The set of initial states.
     locationConditionMap mLocalBadStates; 	/// The set of bad states which are bound to locations.
     conditionVector mGlobalBadStates; 		/// The set of bad states which are not bound to any location.
     variableVector mVariables;
@@ -77,7 +77,7 @@ class HybridAutomaton
      * @param[in]	trans 			Set of transitions
      * @param[in] 	initialStates 	Map of initial states
      */
-    HybridAutomaton(const locationSet& locs, const transitionSet& trans, const locationConditionMap& initialStates);
+    HybridAutomaton(const locationVector& locs, const transitionVector& trans, const locationConditionMap& initialStates);
 
     /**
      * @brief 		Destructor
@@ -104,11 +104,11 @@ class HybridAutomaton
      */
     ///@{
     //* @return The set of locations. */
-    std::set<Location<Number>*> getLocations() const;
+    std::vector<Location<Number>*> getLocations() const;
     Location<Number>* getLocation(const std::size_t hash) const;
     Location<Number>* getLocation(const std::string& name) const;
     //* @return The set of transitions. */
-    std::set<Transition<Number>*> getTransitions() const;
+    std::vector<Transition<Number>*> getTransitions() const;
     //* @return The set of initial states. */
     const locationConditionMap& getInitialStates() const { return mInitialStates; }
     //* @return The set of bad states bound to locations. */
@@ -127,15 +127,15 @@ class HybridAutomaton
      * @brief      Setter function.
      */
     ///@{
-    //void setLocations(locationSet& locs) { mLocations.swap(locs); }
-    void setLocations(locationSet&& locs) {
+    //void setLocations(locationVector& locs) { mLocations.swap(locs); }
+    void setLocations(locationVector&& locs) {
         assert(checkConsistency());
         mLocations.clear();
         mLocations = std::move(locs);
         assert(checkConsistency());
     }
-    //void setTransitions(transitionSet& trans) { mTransitions.swap(trans); }
-    void setTransitions(transitionSet&& trans) {
+    //void setTransitions(transitionVector& trans) { mTransitions.swap(trans); }
+    void setTransitions(transitionVector&& trans) {
         assert(checkConsistency());
         mTransitions.clear();
         mTransitions = std::move(trans);
@@ -192,7 +192,7 @@ class HybridAutomaton
     //TODO: replace this with operator== for sets of pointers to loc (if implemented this way, standard == operator of set is used,
     //which does not compare correctly
     template<typename T>
-    bool equals(const std::set<T*>& lhs, const std::set<T*>& rhs) const {
+    bool equals(const std::vector<T*>& lhs, const std::vector<T*>& rhs) const {
 
         if(lhs.size() != rhs.size()) return false;
         for(auto lhsIt = lhs.begin(); lhsIt != lhs.end(); ++lhsIt){

@@ -79,10 +79,10 @@ protected:
 		 * Hybrid Automaton Setup
 		 */
 
-		initLocSet.insert(loc1.get());
+		initLocSet.push_back(loc1.get());
 
-		locSet.insert(std::move(loc1));
-		locSet.insert(std::move(loc2));
+		locSet.emplace_back(std::move(loc1));
+		locSet.emplace_back(std::move(loc2));
 		hybrid.setLocations(std::move(locSet));
 
 		//Polytope for InitialValuation & Guard Assignment
@@ -98,8 +98,8 @@ protected:
 			hybrid.addInitialState(loc, Condition<double>(hpoly.matrix(), hpoly.vector()));
 		}
 
-		ptrSet.insert(trans.get());
-		transSet.insert(std::move(trans));
+		ptrSet.push_back(trans.get());
+		transSet.emplace_back(std::move(trans));
 
 		hybrid.getLocation("Location1")->setTransitions(ptrSet);
 		//loc1->setTransitions(ptrSet);
@@ -131,12 +131,12 @@ protected:
 
     Reset<double> reset;
 
-    std::set<std::unique_ptr<Location<double>>, locPtrComp<double>> locSet;
+    std::vector<std::unique_ptr<Location<double>>> locSet;
 
-	std::set<Location<double>*> initLocSet;
+	std::vector<Location<double>*> initLocSet;
 
-	std::set<std::unique_ptr<Transition<double>>> transSet;
-    std::set<Transition<double>*> ptrSet;
+	std::vector<std::unique_ptr<Transition<double>>> transSet;
+    std::vector<Transition<double>*> ptrSet;
 
 	vector_t<double> coordinates = vector_t<double>(2,1);
     valuation_t poly;

@@ -64,8 +64,7 @@ namespace hypro
 			}
 		}
 
-		std::set<Transition<Number>*> transitions = loc.getTransitions();
-		for(auto transition : transitions){
+		for(auto transition : loc.getTransitions()){
 			TRACE("hypro.decisionEntity", "Investigating " << transition->getSource()->getName() << " -> " << transition->getTarget()->getName());
 
 			// for each transitions check if the constraints of the guard set only only contain 0s and one entry 1/-1 at most
@@ -131,8 +130,7 @@ namespace hypro
 			return false;
 		}
 
-		std::set<Transition<Number>*> transitions = loc.getTransitions();
-		for(auto transition : transitions){
+		for(auto transition : loc.getTransitions()){
 			TRACE("hypro.decisionEntity", "Investigating " << transition->getSource()->getName() << " -> " << transition->getTarget()->getName());
 
 			// for each transitions check if the constraints of the guard set only only contain 0s and one entry 1/-1 at most
@@ -271,8 +269,7 @@ namespace hypro
 		Graph G(automaton.dimension()-1);
 
 		//check flow and invariant of locations
-		std::set<Location<Number>*> locations = automaton.getLocations();
-		for(auto loc : locations){
+		for(auto loc : automaton.getLocations()){
 			if(getFlowType(loc->getFlow()) == DynamicType::linear){
 				addEdgesForAffineTrafo(boost::get<linearFlow<Number>>(loc->getFlow()).getFlowMatrix(), G);
 			}
@@ -281,8 +278,7 @@ namespace hypro
 		}
 
 		//check reset and guards of transitions
-		std::set<Transition<Number>*> transitions = automaton.getTransitions();
-		for(auto transition : transitions){
+		for(auto transition : automaton.getTransitions()){
 			addEdgesForLinTrafo(transition->getReset().getMatrix(), G);
 			addEdgesForCondition(transition->getGuard(),G);
 		}

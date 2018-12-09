@@ -27,9 +27,9 @@ namespace hypro {
 		std::set<Location<Number>*> locSet = locVisitor.visit(ctx->modes()).template as<std::set<Location<Number>*>>();
 
 		//4.2.Make a set of unique ptrs to Locations
-		std::set<std::unique_ptr<Location<Number>>, locPtrComp<Number>> uniquePtrLocSet;
+		std::vector<std::unique_ptr<Location<Number>>> uniquePtrLocSet;
 		for(auto& l : locSet){
-			uniquePtrLocSet.emplace(std::unique_ptr<Location<Number>>(std::move(l)));
+			uniquePtrLocSet.emplace_back(std::unique_ptr<Location<Number>>(std::move(l)));
 		}
 		assert(*(locSet.begin()) != NULL);
 		for(auto& l : uniquePtrLocSet){
@@ -43,9 +43,9 @@ namespace hypro {
 		std::set<Transition<Number>*> tSet = transVisitor.visit(ctx->jumps()).template as<std::set<Transition<Number>*>>();
 
 		//4.1.Make a set of unique ptrs to transitions
-		std::set<std::unique_ptr<Transition<Number>>> transSet;
+		std::vector<std::unique_ptr<Transition<Number>>> transSet;
 		for(auto& t : tSet){
-			transSet.emplace(std::unique_ptr<Transition<Number>>(std::move(t)));
+			transSet.emplace_back(std::unique_ptr<Transition<Number>>(std::move(t)));
 		}
 		for(auto& l : uniquePtrLocSet){
 			for(auto& t : transSet){

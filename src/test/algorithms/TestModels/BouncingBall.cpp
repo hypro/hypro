@@ -3,17 +3,17 @@
 HybridAutomaton<double>* createBB()
 {
     hypro::valuation_t<double> valuation;   // stays empty
-    
-    
-    locationSet<double>* locs = new locationSet();
-    locationSet<double>* initLocations = locs;    // all locations are initial locations
-    transitionSet<double>* trans = new transitionSet();
-    
+
+
+    locationVector<double>* locs = new locationVector();
+    locationVector<double>* initLocations = locs;    // all locations are initial locations
+    transitionVector<double>* trans = new transitionVector();
+
     Location<double>* l1 = new Location<double>();
     Transition<double>* t1 = new Transition<double>();
-    
+
     // TODO: set values of location and transition correspondent to the exmaple bouncingball.m
-    
+
     // location:
     // A
     matrix_t<double> A(2,2);
@@ -21,14 +21,14 @@ HybridAutomaton<double>* createBB()
     A(0,1) = 1;
     A(1,0) = 0;
     A(1,1) = 0;
-    
+
     // b
     vector_t<double> b(2);
     b(0) = 0;
     b(1) = -9.81;
-    
-    
-    
+
+
+
     // transition:
     // R
     matrix_t<double> R(2,2);
@@ -85,8 +85,8 @@ HybridAutomaton<double, valuation_t<double>>* createBB()
 	//vector_t<double> coordinates = vector_t<double>(2,1);
     //Point<double> p1;
     //hypro::Polytope<double> poly;
-    
-    
+
+
          /*
 		 * Location
 		 */
@@ -119,23 +119,23 @@ HybridAutomaton<double, valuation_t<double>>* createBB()
         vector_t<double> b(2);
         b(0) = 0;
         b(1) = -9.81;
-    
+
 		loc1->setActivityMat(A);
         loc1->setActivityVec(b);
-        
+
         // B
         matrix_t<double> B(2,2);
         B(0,0) = 1;
         B(0,1) = 0;
         B(1,0) = 0;
         B(1,1) = 1;
-        
+
         loc1->setExtInputMat(B);
-        
+
 		/*
 		 * Transition
 		 */
-		
+
 		// transition:
         // R
         matrix_t<double> R(2,2);
@@ -143,22 +143,22 @@ HybridAutomaton<double, valuation_t<double>>* createBB()
         R(0,1) = 0;
         R(1,0) = 0;
         R(1,1) = -0.6;
-        
+
         // w
         vector_t<double> w(2);
         w(0) = 0;
         w(1) = 0;
-    
+
         matrix_t<double> G(3,2);
         G(0,0) = 1; G(0,1) = 0;
         G(1,0) = -1; G(1,1) = 0;
         G(2,0) = 0; G(2,1) = 1;
-        
+
         vector_t<double> g(3);
         g(0) = 0;
         g(1) = 0;
         g(2) = 0;
-        
+
 		guard.mat = G;
 		guard.op = operator_e::LEQ;
 		guard.vec = g;
@@ -210,6 +210,6 @@ HybridAutomaton<double, valuation_t<double>>* createBB()
 		*/
 
 		//hybrid.setValuation(poly);
-		
+
 		return hybrid;
 }

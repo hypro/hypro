@@ -36,7 +36,7 @@ public:
     using flowVariant = boost::variant<linearFlow<Number>, affineFlow<Number>, rectangularFlow<Number>>;
 
 protected:
-    using transitionSet = std::set<Transition<Number>*>;
+    using transitionVector = std::vector<Transition<Number>*>;
     /**
      * @brief      Constructor
      * @details    Note that locations should only be constructed from the LocationManager.
@@ -50,14 +50,14 @@ protected:
      */
     Location(unsigned id, const Location& loc);
     Location(unsigned id, const matrix_t<Number>& mat);
-    Location(unsigned id, const matrix_t<Number>& mat, const transitionSet& trans, const Condition<Number>& inv);
+    Location(unsigned id, const matrix_t<Number>& mat, const transitionVector& trans, const Condition<Number>& inv);
     ///@}
 
 private:
     mutable std::vector<flowVariant> mFlows;
     std::vector<carl::Interval<Number>> mExternalInput;
     bool mHasExternalInput = false;
-    transitionSet mTransitions;
+    transitionVector mTransitions;
     Condition<Number> mInvariant;
     std::string mName;
     unsigned mId;
@@ -67,7 +67,7 @@ public:
     Location();
     Location(const Location& loc);
     Location(const matrix_t<Number>& mat);
-    Location(const matrix_t<Number>& mat, const transitionSet& trans, const Condition<Number>& inv);
+    Location(const matrix_t<Number>& mat, const transitionVector& trans, const Condition<Number>& inv);
     ~Location(){}
 
     std::size_t getNumberFlow() const { return mFlows.size(); }
@@ -75,7 +75,7 @@ public:
     flowVariant& rGetFlow(std::size_t I = 0) { return mFlows[I]; }
     const std::vector<flowVariant>& getFlows() const { return mFlows; }
     const Condition<Number>& getInvariant() const { return mInvariant; }
-    const transitionSet& getTransitions() const { return mTransitions; }
+    const transitionVector& getTransitions() const { return mTransitions; }
     const std::vector<carl::Interval<Number>>& getExternalInput() const { return mExternalInput; }
     bool hasExternalInput() const { return mHasExternalInput; }
     [[deprecated("use hash() instead")]]
@@ -87,8 +87,8 @@ public:
     void setName(const std::string& name) { mName = name; mHash = 0; }
     void setFlow(const flowVariant& f, std::size_t I = 0);
     void setInvariant(const Condition<Number>& inv) { mInvariant = inv; mHash = 0; }
-    void setTransitions(const transitionSet& trans) { mTransitions = trans; mHash = 0; }
-    void addTransition(Transition<Number>* trans) { mTransitions.insert(trans); mHash = 0; }
+    void setTransitions(const transitionVector& trans) { mTransitions = trans; mHash = 0; }
+    void addTransition(Transition<Number>* trans) { mTransitions.push_back(trans); mHash = 0; }
     void updateTransition(Transition<Number>* original, Transition<Number>* newT);
     void setExtInput(const std::vector<carl::Interval<Number>>& b);
 

@@ -87,9 +87,9 @@ protected:
 		 * Hybrid Automaton Setup
 		 */
 
-		initLocSet.insert(loc1.get());
-		locSet.insert(std::move(copyOfLoc1));
-		locSet.insert(std::move(copyOfLoc2));
+		initLocSet.push_back(loc1.get());
+		locSet.emplace_back(std::move(copyOfLoc1));
+		locSet.emplace_back(std::move(copyOfLoc2));
 
 		//Polytope for InitialValuation & Guard Assignment
 		coordinates(0) = 2;
@@ -103,8 +103,8 @@ protected:
 			hybrid.addInitialState(loc, Condition<Number>(hpoly.matrix(), hpoly.vector()));
 		}
 		hybrid.setLocations(std::move(locSet));
-		transSet.insert(std::move(copyOfTrans));
-		ptrSet.insert(transSet.begin()->get());
+		transSet.emplace_back(std::move(copyOfTrans));
+		ptrSet.push_back(transSet.begin()->get());
 		hybrid.setTransitions(std::move(transSet));
 		loc1->setTransitions(ptrSet);
     }
@@ -136,19 +136,19 @@ protected:
 
     Reset<Number> reset;
 
-    std::set<std::unique_ptr<Location<Number>>, locPtrComp<Number>> locSet;
+    std::vector<std::unique_ptr<Location<Number>>> locSet;
 
-    std::set<Location<Number>*> initLocSet;
+    std::vector<Location<Number>*> initLocSet;
 
-    std::set<std::unique_ptr<Transition<Number>>> transSet;
-    std::set<Transition<Number>*> ptrSet;
+    std::vector<std::unique_ptr<Transition<Number>>> transSet;
+    std::vector<Transition<Number>*> ptrSet;
 
 	vector_t<Number> coordinates = vector_t<Number>(2,1);
     valuation_t<Number> poly;
 
   public:
 
-  	bool find(const Location<Number>* loc, const std::set<Location<Number>*>& locSet) const {
+  	bool find(const Location<Number>* loc, const std::vector<Location<Number>*>& locSet) const {
   		if(loc == nullptr || locSet.empty()){
   			//std::cout << "loc was nullptr or locSet was empty\n";
   			return false;
@@ -166,7 +166,7 @@ protected:
 		return false;
   	}
 
-  	bool find(const Transition<Number>* trans, const std::set<Transition<Number>*>& transSet) const {
+  	bool find(const Transition<Number>* trans, const std::vector<Transition<Number>*>& transSet) const {
   		if(trans == nullptr || transSet.empty())
   			return false;
 		for(auto& ptrToTrans : transSet){

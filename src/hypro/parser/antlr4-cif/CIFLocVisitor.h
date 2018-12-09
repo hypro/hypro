@@ -25,7 +25,7 @@ class CIFLocVisitor : public HybridSystemBaseVisitor {
 		LocationManager<Number>& manager = LocationManager<Number>::getInstance();
 		std::set< std::pair<Transition<Number>*,string> > transWithTargets;
 		Location<Number>* actualLocation;
-		std::set<Transition<Number>*> transitionSet;
+		std::vector<Transition<Number>*> transitionVector;
 
 
 		//antlrcpp::Any visitLoc(HybridSystemParser::LocContext *ctx) override;
@@ -55,12 +55,12 @@ class CIFLocVisitor : public HybridSystemBaseVisitor {
 		antlrcpp::Any visitSupKind(HybridSystemParser::SupKindContext *ctx) override;
 		antlrcpp::Any visitUpdateIf(HybridSystemParser::UpdateIfContext *ctx) override;
 		//antlrcpp::Any visit***(HybridSystemParser::***Context *ctx) override;
-		
+
 	public:
 
 		CIFLocVisitor(std::vector<std::string> varVec);
 		~CIFLocVisitor();
-		
+
 		antlrcpp::Any visitLocations(HybridSystemParser::LocationsContext *ctx) override;
 
 };
