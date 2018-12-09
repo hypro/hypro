@@ -42,7 +42,7 @@ class SettingsProvider : public carl::Singleton<SettingsProvider<State>>
     void setDecomposeAutomaton(bool decompose) { mDoDecomposition = decompose; }
 
 
-    void setHybridAutomaton(const HybridAutomaton<Number> &ha);
+    void setHybridAutomaton(HybridAutomaton<Number>&& ha);
 
     void setReachabilitySettings(const ReachabilitySettings &rs);
 

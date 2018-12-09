@@ -51,9 +51,9 @@ unsigned SettingsProvider<State>::getWorkerThreadCount()
 }
 
 template<typename State>
-void SettingsProvider<State>::setHybridAutomaton(const HybridAutomaton<Number>& ha)
+void SettingsProvider<State>::setHybridAutomaton(HybridAutomaton<Number>&& ha)
 {
-    mHybridAutomaton = ha;
+    mHybridAutomaton = std::move(ha);
 }
 
 template<typename State>
