@@ -39,6 +39,11 @@ public:
     }
 
     bool isTimed() const {
+        TRACE("hypro.decisionEntity","Flowmatrix: " << linearFlow<Number>::getFlowMatrix());
+        if(linearFlow<Number>::isTimed()){
+            // TODO: we need to remove distinguishing of linear and affine flow.
+            return true;
+        }
         return linearFlow<Number>::hasNoFlow() && mTranslation == vector_t<Number>::Ones(mTranslation.rows());
     }
 
