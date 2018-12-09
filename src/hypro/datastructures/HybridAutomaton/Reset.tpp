@@ -185,7 +185,7 @@ namespace hypro {
 			if(indicesToAdd.size() > 0){
 				// create a row matrix with numIndicesToAdd many rows
 				matrix_t<Number> newMatrix = selectRows(constraintsOld, indicesToAdd);
-				newMatrix = selectCols(constraintsOld, set);
+				newMatrix = selectCols(newMatrix, set);
 
 				// create final constant vector
 				vector_t<Number> newVec = selectRows(constantsOld, indicesToAdd);

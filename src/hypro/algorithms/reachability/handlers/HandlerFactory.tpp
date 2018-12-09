@@ -137,7 +137,9 @@ namespace hypro
 	}
 
 	template<typename State>
-	IResetHandler* HandlerFactory<State>::buildResetHandler(representation_name name, State* state, size_t index,matrix_t<Number> trafo, vector_t<Number> translation){
+	IResetHandler* HandlerFactory<State>::buildResetHandler(representation_name name, State* state, size_t index,matrix_t<Number> trafo, vector_t<Number> translation) {
+		DEBUG("hypro.utility","Reset transformation A = " << trafo << ", b = " << translation);
+
 		if(trafo.rows() == 0 || (trafo == matrix_t<Number>::Identity(trafo.rows(),trafo.rows()) && translation == vector_t<Number>::Zero(translation.rows()))){
 			return nullptr;
 		}
