@@ -6,7 +6,6 @@ var classhypro_1_1EventTimingContainer =
     [ "EventTimingContainer", "classhypro_1_1EventTimingContainer.html#aa84f599087fff59b87d539a1780d9a56", null ],
     [ "~EventTimingContainer", "classhypro_1_1EventTimingContainer.html#ade880f6cae8bbdd560218fe7e4416918", null ],
     [ "getBadStateTimings", "classhypro_1_1EventTimingContainer.html#a9373a171bff24841160e3417a55dc820", null ],
-    [ "getDotRepresentation", "classhypro_1_1EventTimingContainer.html#a7a8a699af18a2a95909237ac94740bb7", null ],
     [ "getEntryTimestamp", "classhypro_1_1EventTimingContainer.html#a12dd387275a9b12b7dd5518ca62283ed", null ],
     [ "getEntryTransition", "classhypro_1_1EventTimingContainer.html#a015fd53554f24a49b01082ac82572a07", null ],
     [ "getInvariantTimings", "classhypro_1_1EventTimingContainer.html#aa5028151fab08e5d3ca943446d6e0ce7", null ],

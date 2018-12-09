@@ -15,7 +15,7 @@ var searchData=
   ['setfilename',['setFilename',['../classhypro_1_1Plotter.html#a52ef9dfe2f19bc99090df94327f206fd',1,'hypro::Plotter']]],
   ['setgenerators',['setGenerators',['../classhypro_1_1ZonotopeT.html#a0ab6fef12544bece1aa9df4270499888',1,'hypro::ZonotopeT']]],
   ['setglobalbadstates',['setGlobalBadStates',['../classhypro_1_1HybridAutomaton.html#a4b0f453ca49d85d8b1ada88af4f3aae3',1,'hypro::HybridAutomaton']]],
-  ['setinitialstates',['setInitialStates',['../classhypro_1_1HybridAutomaton.html#a6f0ad0f1b1601118bee37c4bc39f35c8',1,'hypro::HybridAutomaton']]],
+  ['setinitialstates',['setInitialStates',['../classhypro_1_1HybridAutomaton.html#aea731551c8e1a5f0859d38aada55b368',1,'hypro::HybridAutomaton']]],
   ['setlocalbadstates',['setLocalBadStates',['../classhypro_1_1HybridAutomaton.html#a26e555c71753ec2bbba2c1acd5374dd4',1,'hypro::HybridAutomaton']]],
   ['setlocation',['setLocation',['../classhypro_1_1State.html#abb008fc5c656cce853a2548febafad0e',1,'hypro::State']]],
   ['setlocations',['setLocations',['../classhypro_1_1HybridAutomaton.html#aec17f146145c599f9b74f9fee97578e1',1,'hypro::HybridAutomaton']]],

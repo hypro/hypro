@@ -3,5 +3,5 @@ digraph "Graphical Class Hierarchy"
   edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
   node [fontname="Helvetica",fontsize="10",shape=record];
   rankdir="LR";
-  Node1 [label="hypro::PlotData\< State \>",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$structhypro_1_1PlotData.html",tooltip="Class that contains a raw segment for plotting. Note that a segment can be composed of several sub-se..."];
+  Node1 [label="hypro::plotting::gnuplot\lSettings",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$structhypro_1_1plotting_1_1gnuplotSettings.html",tooltip="A struct holding a basic set of options for the gnuplot plotting. "];
 }

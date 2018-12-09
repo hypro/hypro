@@ -65,8 +65,8 @@ var hierarchy =
     [ "hypro::EvaluationResult< Number >", "structhypro_1_1EvaluationResult.html", null ],
     [ "hypro::EventTimingContainer< Number >", "classhypro_1_1EventTimingContainer.html", null ],
     [ "exception", null, [
-      [ "hypro::FinishWithDiscreteProcessingException", "classhypro_1_1FinishWithDiscreteProcessingException.html", null ],
-      [ "hypro::HardTerminateException", "classhypro_1_1HardTerminateException.html", null ]
+      [ "FinishWithDiscreteProcessingException", "classFinishWithDiscreteProcessingException.html", null ],
+      [ "HardTerminateException", "classHardTerminateException.html", null ]
     ] ],
     [ "hypro::Facet< Number >", "classhypro_1_1Facet.html", null ],
     [ "false_type", null, [
@@ -158,9 +158,7 @@ var hierarchy =
     [ "hypro::HybridAutomaton< Number >", "classhypro_1_1HybridAutomaton.html", null ],
     [ "hypro::HybridAutomatonComp< Number >", "classhypro_1_1HybridAutomatonComp.html", null ],
     [ "hypro::IContext", "classhypro_1_1IContext.html", [
-      [ "hypro::LTIContext< State >", "classhypro_1_1LTIContext.html", [
-        [ "hypro::TimedContext< State >", "classhypro_1_1TimedContext.html", null ]
-      ] ]
+      [ "hypro::LTIContext< State >", "classhypro_1_1LTIContext.html", null ]
     ] ],
     [ "hypro::IHandler", "classhypro_1_1IHandler.html", [
       [ "hypro::IBadStateHandler", "classhypro_1_1IBadStateHandler.html", [
@@ -633,8 +631,7 @@ var hierarchy =
     [ "hypro::Path< Number, tNumber >", "classhypro_1_1Path.html", null ],
     [ "hypro::hypro::Permutator", "classhypro_1_1hypro_1_1Permutator.html", null ],
     [ "hypro::Permutator", "classhypro_1_1Permutator.html", null ],
-    [ "hypro::PlotData< State >", "structhypro_1_1PlotData.html", null ],
-    [ "hypro::PlotData< hypro::State >", "structhypro_1_1PlotData.html", null ],
+    [ "hypro::PlotData< Number >", "structhypro_1_1PlotData.html", null ],
     [ "hypro::Point< Number >", "classhypro_1_1Point.html", null ],
     [ "hypro::Point< int >", "classhypro_1_1Point.html", null ],
     [ "hypro::Point< std::size_t >", "classhypro_1_1Point.html", null ],
@@ -674,6 +671,7 @@ var hierarchy =
     [ "hypro::Spinlock", "classhypro_1_1Spinlock.html", null ],
     [ "hypro::STallValues< Number >", "structhypro_1_1STallValues.html", null ],
     [ "hypro::State< Number, Representation, Rargs >", "classhypro_1_1State.html", null ],
+    [ "hypro::State< Number >", "classhypro_1_1State.html", null ],
     [ "hypro::State< Number, ConstraintSet< Number > >", "classhypro_1_1State.html", null ],
     [ "static_visitor", null, [
       [ "hypro::detail::getParametersVisitor", "structhypro_1_1detail_1_1getParametersVisitor.html", null ],
@@ -686,9 +684,7 @@ var hierarchy =
       [ "hypro::genericAffineTransformationVisitor< T, Number >", "classhypro_1_1genericAffineTransformationVisitor.html", null ],
       [ "hypro::genericCompareVisitor", "classhypro_1_1genericCompareVisitor.html", null ],
       [ "hypro::genericConversionVisitor< T, To >", "classhypro_1_1genericConversionVisitor.html", null ],
-      [ "hypro::genericConvertAndGetVisitor< OutType >", "classhypro_1_1genericConvertAndGetVisitor.html", null ],
       [ "hypro::genericDimensionVisitor", "classhypro_1_1genericDimensionVisitor.html", null ],
-      [ "hypro::genericInternalConversionVisitor< T, Ext >", "classhypro_1_1genericInternalConversionVisitor.html", null ],
       [ "hypro::genericIntersectVisitor< T >", "classhypro_1_1genericIntersectVisitor.html", null ],
       [ "hypro::genericMinkowskiSumVisitor< T >", "classhypro_1_1genericMinkowskiSumVisitor.html", null ],
       [ "hypro::genericOutstreamVisitor", "classhypro_1_1genericOutstreamVisitor.html", null ],
@@ -757,8 +753,8 @@ var hierarchy =
     ] ],
     [ "hypro::hypro::typeName< T >", "structhypro_1_1hypro_1_1typeName.html", null ],
     [ "hypro::typeName< T >", "structhypro_1_1typeName.html", null ],
-    [ "hypro::typeName< double >", "structhypro_1_1typeName_3_01double_01_4.html", null ],
     [ "hypro::hypro::typeName< double >", "structhypro_1_1hypro_1_1typeName_3_01double_01_4.html", null ],
+    [ "hypro::typeName< double >", "structhypro_1_1typeName_3_01double_01_4.html", null ],
     [ "hypro::hypro::typeName< mpq_class >", "structhypro_1_1hypro_1_1typeName_3_01mpq__class_01_4.html", null ],
     [ "hypro::typeName< mpq_class >", "structhypro_1_1typeName_3_01mpq__class_01_4.html", null ],
     [ "hypro::unionContent< Number, Setting >", "structhypro_1_1unionContent.html", null ],
