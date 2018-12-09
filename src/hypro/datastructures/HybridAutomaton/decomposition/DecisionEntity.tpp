@@ -45,7 +45,7 @@ namespace hypro
 
 	template<typename Number>
 	bool DecisionEntity<Number>::isTimedSubspace(const Location<Number> &loc, size_t index){
-		TRACE("hypro.decisionEntity", "Investigating " << loc.getName());
+		TRACE("hypro.decisionEntity", "Investigating " << loc.getName() << ", subspace " << index);
 		// check if flow is of the form
 		//	0 ... 0 1
 		//  .........
@@ -53,6 +53,7 @@ namespace hypro
 		//  0 ....0 0
 
 		if(! isTimed(loc.getFlow(index))) {
+			TRACE("hypro.decisionEntity", "Flow is not timed.");
 			return false;
 		}
 
