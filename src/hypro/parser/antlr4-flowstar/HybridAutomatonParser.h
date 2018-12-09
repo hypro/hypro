@@ -189,6 +189,8 @@ public:
     antlr4::tree::TerminalNode *LINEAR();
     std::vector<EquationContext *> equation();
     EquationContext* equation(size_t i);
+    std::vector<IntervalexprContext *> intervalexpr();
+    IntervalexprContext* intervalexpr(size_t i);
 
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
    
@@ -226,9 +228,9 @@ public:
 
   class  ConstantexprContext : public antlr4::ParserRuleContext {
   public:
-    antlr4::Token *constantToken = nullptr;
-    antlr4::Token *minusToken = nullptr;
-    antlr4::Token *numberToken = nullptr;
+    antlr4::Token *constantToken = nullptr;;
+    antlr4::Token *minusToken = nullptr;;
+    antlr4::Token *numberToken = nullptr;;
     ConstantexprContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
     antlr4::tree::TerminalNode *CONSTANT();

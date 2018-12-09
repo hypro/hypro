@@ -36,21 +36,21 @@ HybridAutomaton<double>* createBB()
     R(0,1) = 0;
     R(1,0) = 0;
     R(1,1) = -0.6;
-    
+
     // w
     vector_t<double> w(2);
     w(0) = 0;
     w(1) = 0;
-    
+
     locs->insert(l1);
     trans->insert(t1);
-            
+
     locations[0] = loc1;
 		locations[1] = loc2;
 
-	locSet = std::set<hypro::Location<double>*>(locations, locations+2);     
+	locSet = std::set<hypro::Location<double>*>(locations, locations+2);
     HybridAutomaton<double>* model = new HybridAutomaton<double>(*initLocations, *locs, *trans, valuation);
-    return model;                    
+    return model;
 }
 
 // provide method to free memory?
