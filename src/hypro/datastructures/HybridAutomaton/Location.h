@@ -86,6 +86,7 @@ public:
 
     void setName(const std::string& name) { mName = name; mHash = 0; }
     void setFlow(const flowVariant& f, std::size_t I = 0);
+    void setFlow(const std::vector<flowVariant>& flows) { mFlows = flows; mHash = 0; };
     void setInvariant(const Condition<Number>& inv) { mInvariant = inv; mHash = 0; }
     void setTransitions(const transitionVector& trans) { mTransitions = trans; mHash = 0; }
     void addTransition(Transition<Number>* trans) { mTransitions.push_back(trans); mHash = 0; }
