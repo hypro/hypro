@@ -22,11 +22,13 @@ public:
         assert(this->size() > dim);
         mFlowIntervals[dim] = intv;
     }
+    void addFlowInterval(const carl::Interval<Number>& intv) { mFlowIntervals.push_back(intv); }
 
     const std::vector<carl::Interval<Number>>& getFlowIntervals() const { return mFlowIntervals; }
     const carl::Interval<Number>& getFlowIntervalForDimension(std::size_t dim) const { assert(this->dimension() > dim); return mFlowIntervals[dim]; }
 
     std::size_t dimension() const { return mFlowIntervals.size(); }
+    std::size_t size() const { return mFlowIntervals.size(); }
 
     bool isTimed() const {
         return std::count(mFlowIntervals.begin(), mFlowIntervals.end(), carl::Interval<Number>(1)) == long(mFlowIntervals.size());
@@ -71,6 +73,7 @@ namespace std {
         {
             std::size_t seed = 0;
             for(const auto& i : f.getFlowIntervals()) {
+
                 carl::hash_add(seed, std::hash<carl::Interval<Number>>()(i));
             }
             return seed;
