@@ -269,7 +269,7 @@ namespace hypro {
 			bool leftovers = true;
 
 			auto subspaceTypesIt = SettingsProvider<State>::getInstance().getLocationSubspaceTypeMap().find(aggregatedState.getLocation());
-			TRACE("hydra.worker.discrete","Find subspace mapping for loc " << aggregatedState.getLocation()->getName());
+			TRACE("hydra.worker.discrete","Find subspace mapping for loc " << aggregatedState.getLocation()->getName() << " (" << aggregatedState.getLocation() << ")");
 			assert(subspaceTypesIt != SettingsProvider<State>::getInstance().getLocationSubspaceTypeMap().end());
 			std::vector<SUBSPACETYPE> types = *(subspaceTypesIt->second);
 			// perform union directly on the current set vector to avoid an extreme amount of consistency checks
