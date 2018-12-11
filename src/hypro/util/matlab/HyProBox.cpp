@@ -48,22 +48,33 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
 
     // Create box from an interval
     if(!strcmp("new", cmd)){
-        if(nlhs != 1){
-            mexErrMsgTxt("New: One output expected.");
-        }
-        mxArray *m_interval_list = mxDuplicateArray(prhs[1]);
+        // if(nlhs != 2){
+        //     mexErrMsgTxt("New: One output expected.");
+        // }
+        mxArray *m_in_intervals;
         const mwSize *dims;
+        double *in;
+        int dimx, dimy, numdims;
+
+        m_in_intervals = mxDuplicateArray(prhs[1]);
+
         dims = mxGetDimensions(prhs[1]);
-        int numdims = mxGetNumberOfDimensions(prhs[0]);
-        assert(numdims==2);
-        int dimy = (int)dims[0];
-        int dimx = (int)dims[1];
-        assert(dimx==2);
-        const double *interval_list = mxGetPr(m_interval_list);
+        numdims = mxGetNumberOfDimensions(prhs[1]);
+        dimy = (int) dims[0];
+        dimx = (int) dims[1];
+
+        // Ensure that the user entered a list of intervals
+        if(dimx != 2){
+            mexErrMsgTxt("You have to enter a nx2-matrix! (e.g.:[lower_1 upper_1; lower_2 upper_2])");
+        }
+        in = mxGetPr(m_in_intervals);
+        
+
         ObjectHandle objHandle;
-        std::vector<carl::Interval<double>> interval = objHandle.mInterval2HyProInterval(interval_list, dimy);
-        hypro::Box<double>* box = new hypro::Box<double>(interval);
+        std::vector<carl::Interval<double>> intervals = objHandle.mInterval2HyProInterval(m_in_intervals, dimx, dimy);
+        hypro::Box<double>* box = new hypro::Box<double>(intervals);
         plhs[0] = convertPtr2Mat<hypro::Box<double>>(box);
+        return;
     }
 
     // Delete
@@ -79,30 +90,42 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
     // Get the Box instance pointer from the second input
     hypro::Box<double>* box = convertMat2Ptr<hypro::Box<double>>(prhs[1]);
     
-    // Call the various Box methods
+    // // Call the various Box methods
 
-    /***************************************************************************
-	 * Getters & setters
-	 **************************************************************************/   
-    if (!strcmp("getSettings", cmd)){
-        // Check parameters
-        if (nlhs < 0 || nrhs < 2)
-            mexErrMsgTxt("Test: Unexpected arguments.");
-        // Call the method
-        box->getSettings();
-        return;
-    }
+    // /***************************************************************************
+	//  * Getters & setters
+	//  **************************************************************************/   
+    // ObjectHandle obj_handle;
+    // if (!strcmp("getSettings", cmd)){
+    //     // Check parameters
+    //     if (nlhs < 0 || nrhs < 2)
+    //         mexErrMsgTxt("Test: Unexpected arguments.");
+    //     // Call the method
+    //     box->getSettings();
+    //     return;
+    // }
     if(!strcmp("intervals", cmd)){
-         if (nlhs < 0 || nrhs < 2)
+        if (nlhs < 0 || nrhs < 2){
             mexErrMsgTxt("Test: Unexpected arguments.");
-        // Call the method
+        }   
+        mxArray* m_out_intervals;
+        double* out;
+        ObjectHandle obj_handle;
+        int dimy, dimx;
+
         std::vector<carl::Interval<double>> intervals = box->intervals();
-        plhs[0] = hyProInterval2mInterval(intervals);
+
+        dimy = intervals.size();
+        dimx = 2;
+        m_out_intervals = plhs[0] = mxCreateDoubleMatrix(dimy, dimx, mxREAL);
+        out = mxGetPr(m_out_intervals);
+
+        obj_handle.hyProInterval2mInterval(intervals, out, dimx, dimy);
         return;
     }
     
     // Got here, so command not recognized
-    mexErrMsgTxt("Command not recognized.");
+    mexErrMsgTxt("Command not recognized");
 }
 
 
