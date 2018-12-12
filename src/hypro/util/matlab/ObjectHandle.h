@@ -4,6 +4,8 @@
 #include <typeinfo>
 #include <carl/interval/Interval.h>
 #include <mex.h>
+#include "../../types.h"
+
 
 class ObjectHandle{
     public:
@@ -11,7 +13,11 @@ class ObjectHandle{
         static void hyProIntervals2mIntervals(const std::vector<carl::Interval<double>>, double*, int, int);
         static std::vector<carl::Interval<double>>& mPoints2HyProIntervals(double*);
         static carl::Interval<double>& mInterval2HyproInterval(double*);
-        static carl::Interval<double>& mInterval2Point(double*); // Makas it sense?
+        //static hypro::Point<double>& mInterval2Point(double*); // Makes this sense?
+        static hypro::matrix_t<double>& mMatrix2HyProMatrix(double*, int, int);
+        static void hyProMatrix2mMatrix(hypro::matrix_t<double>&, double*, int, int);
+        static hypro::vector_t<double>& mVector2HyProVector(double*, int);
+        static void hyProVector2mVector(hypro::vector_t<double>&, double*, int);
     private:
 };
 
@@ -31,7 +37,6 @@ class ObjectHandle{
     return *hyPro_intervals;
  }
 
-
 /**
  *  @brief Converts a single Matlab interval into a HyPro interval
  *  @param Pointer to the matlab input interval
@@ -41,11 +46,10 @@ carl::Interval<double>& ObjectHandle::mInterval2HyproInterval(double* interval){
     return *hyPro_interval;
 }
 
-
 /**
  *  @brief Converts a HyPro interval into a Matlab interval
  *  @param interval_list A list of HyPro intervals
- *  @param out A pointer to the output Matlab matrix
+ *  @param out Pointer to the output Matlab matrix
  *  @param dimx Number of rows
  *  @parma dimy Number of columns
  **/
@@ -66,6 +70,61 @@ std::vector<carl::Interval<double>>& ObjectHandle::mPoints2HyProIntervals(double
     hyPro_intervals->emplace_back(carl::Interval<double>(points[1], points[3]));
     return *hyPro_intervals;
 }
+
+/**
+ * @brief Converts a Matlab matrix into HyPro matrix_t<double>
+ * @param m_matrix Pointer to the Matlab matrix
+ * @param dimx, dimy The dimensions of the matrix
+ **/
+hypro::matrix_t<double>& ObjectHandle::mMatrix2HyProMatrix(double* m_matrix, int dimx, int dimy){
+    hypro::matrix_t<double> *hypro_matrix = new hypro::matrix_t<double>(dimx,dimy);
+    for(int i = 0; i < dimx; i++){
+        for(int j = 0; j < dimy; j++){
+            (*hypro_matrix)(j,i) = m_matrix[i*dimy+j];
+        }
+    }
+    return *hypro_matrix;
+}
+
+/**
+ * @brief Converts a HyPro matrix into Matalb  matrix
+ * @param matrix HyPro matrix
+ * @param out Pointer to the output matlab matrix
+ * @param dimx, dimy The dimensions of the matrix
+ **/
+void ObjectHandle::hyProMatrix2mMatrix(hypro::matrix_t<double>& matrix, double *out, int dimx, int dimy){
+    for(int i = 0; i < dimx; i++){
+        for(int j = 0; j < dimy; j++){
+            out[i*dimy+j] = matrix(j,i);
+        }
+    }
+}
+
+/**
+ * @brief Converts a Matlab vector into HyPro vector
+ * @param m_vector Pointer to the Matlab vector
+ * @parma v_len Length of the vector
+ **/
+hypro::vector_t<double>& ObjectHandle::mVector2HyProVector(double* m_vector, int v_len){
+    hypro::vector_t<double> *vector = new hypro::vector_t<double>(v_len);
+    for(int i = 0; i < v_len; i++){
+        (*vector)(i) = m_vector[i];
+    }
+    return *vector;
+}
+
+/**
+ * @brief Converts a HyPro vector into Matlab vector
+ * @param vect The HyPro vector
+ * @param out Pointer to the output Matlab vector
+ * @param v_len Length of the vector
+ **/
+void ObjectHandle::hyProVector2mVector(hypro::vector_t<double>& vec, double *out, int v_len){
+    for(int i = 0; i < v_len; i++){
+        out[i] = vec(i);
+    }
+}
+
 
 
  
