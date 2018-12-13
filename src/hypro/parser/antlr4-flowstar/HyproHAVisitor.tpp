@@ -27,31 +27,29 @@ namespace hypro {
 		std::set<Location<Number>*> locSet = locVisitor.visit(ctx->modes()).template as<std::set<Location<Number>*>>();
 
 		//4.2.Make a set of unique ptrs to Locations
-		std::set<std::unique_ptr<Location<Number>>, locPtrComp<Number>> uniquePtrLocSet;
+		std::vector<std::unique_ptr<Location<Number>>> uniquePtrLocSet;
 		for(auto& l : locSet){
-			uniquePtrLocSet.emplace(std::unique_ptr<Location<Number>>(std::move(l)));
+			uniquePtrLocSet.emplace_back(std::unique_ptr<Location<Number>>(std::move(l)));
 		}
-		assert(*(locSet.begin()) != NULL);
+		locSet.clear();
 		for(auto& l : uniquePtrLocSet){
 			locSet.emplace(l.get());
 		}
-		std::set<Location<Number>*>& rLocSet = locSet;
 
 		//4.Calls visit to get transitions
 		//NOTE: the transVisitor will modify locSet as every location has its own set of transitions that must be added here.
-		HyproTransitionVisitor<Number> transVisitor = HyproTransitionVisitor<Number>(varVec, rLocSet);
+		HyproTransitionVisitor<Number> transVisitor = HyproTransitionVisitor<Number>(varVec, locSet);
 		std::set<Transition<Number>*> tSet = transVisitor.visit(ctx->jumps()).template as<std::set<Transition<Number>*>>();
 
 		//4.1.Make a set of unique ptrs to transitions
-		std::set<std::unique_ptr<Transition<Number>>> transSet;
+		std::vector<std::unique_ptr<Transition<Number>>> transSet;
 		for(auto& t : tSet){
-			transSet.emplace(std::unique_ptr<Transition<Number>>(std::move(t)));
+			transSet.emplace_back(std::unique_ptr<Transition<Number>>(std::move(t)));
 		}
 		for(auto& l : uniquePtrLocSet){
 			for(auto& t : transSet){
-				t->getSource()->addTransition(t.get());
-				if(t->getSource()->hash() == l->hash()){
-					l->addTransition(t.get());
+				if(t->getSource() == l.get()) {
+					l->addTransition(std::move(t));
 				}
 			}
 		}
@@ -74,7 +72,7 @@ namespace hypro {
 		typename HybridAutomaton<Number>::locationConditionMap lBadStates;
 		std::vector<Condition<Number>> gBadStates;
 		if(ctx->unsafeset() != NULL && (ctx->unsafeset()->lbadstate().size() > 0 || ctx->unsafeset()->gbadstate().size() > 0)){
-			HyproBadStatesVisitor<Number> bStateVisitor = HyproBadStatesVisitor<Number>(varVec, rLocSet);
+			HyproBadStatesVisitor<Number> bStateVisitor = HyproBadStatesVisitor<Number>(varVec, locSet);
 			lBadStates = bStateVisitor.visit(ctx->unsafeset()).template as<typename HybridAutomaton<Number>::locationConditionMap>();
 			gBadStates = bStateVisitor.getGlobalBadStates();
 		}
@@ -85,14 +83,14 @@ namespace hypro {
 		COUT("================================\n");
 		COUT("Parsed variables: " << vars << std::endl);
 		COUT("Reachability settings:\n" << reachSettings);
-		COUT("All locations:\n");COUT("Size:"); COUT(rLocSet.size());
-		for(auto it = rLocSet.begin(); it != rLocSet.end(); ++it){
+		COUT("All locations:\n");COUT("Size:"); COUT(locSet.size());
+		for(auto it = locSet.begin(); it != locSet.end(); ++it){
 			COUT(**it);
 		}
-		COUT("All Transitions:\n");
-		for(auto it = transSet.begin(); it != transSet.end(); ++it){
-			COUT(**it);
-		}
+		//COUT("All Transitions:\n");
+		//for(auto it = transSet.begin(); it != transSet.end(); ++it){
+		//	COUT(**it);
+		//}
 		COUT("Initial state:\n");
 		for(auto it = initSet.begin(); it != initSet.end(); ++it){
 			COUT("Initial Location: " << it->first->getName() << " and initial state: " << it->second);
@@ -110,7 +108,7 @@ namespace hypro {
 		//7.Build HybridAutomaton, return it
 		HybridAutomaton<Number> ha;
 		ha.setLocations(std::move(uniquePtrLocSet));
-		ha.setTransitions(std::move(transSet));
+		//ha.setTransitions(std::move(transSet));
 		ha.setInitialStates(initSet);
 		ha.setLocalBadStates(lBadStates);
 		ha.setGlobalBadStates(gBadStates);
@@ -126,6 +124,8 @@ namespace hypro {
 		for(tree::TerminalNode* variable : ctx->VARIABLE()){
 			//NOTE: the respective position in the vars vector is the assigned id to the variable!
 			varVec.push_back(variable->getText());
+			// add variable entry to variable pool
+			VariablePool::getInstance().carlVarByIndex(varVec.size() - 1);
 		}
 		if(varVec.size() == 0){
 			std::cerr << "ERROR: No variables were defined" << std::endl;

@@ -128,7 +128,10 @@ class VariablePool : public carl::Singleton<VariablePool> {
 		DEBUG("hypro.variablePool", "mCarlVariables.size(): " << int(mCarlVariables.size()) << ", mPplVariables.size(): " << int(mPplVariables.size()) << ", pplId: " << int(mPplId) );
 		assert( mPplVariables.size() == mPplId );
 		#endif
-		carl::Variable cVar = carl::freshRealVariable( _name );
+		carl::Variable cVar = carl::VariablePool::getInstance().findVariableWithName( _name );
+		if(cVar == carl::Variable::NO_VARIABLE) {
+			cVar = carl::freshRealVariable( _name );
+		}
 		mCarlVariables.push_back( cVar );
 		#ifdef HYPRO_USE_PPL
 		Parma_Polyhedra_Library::Variable pVar = Parma_Polyhedra_Library::Variable( mPplId++ );

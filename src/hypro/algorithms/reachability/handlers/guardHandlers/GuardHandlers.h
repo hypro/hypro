@@ -2,6 +2,7 @@
 
 #include "discreteGuardHandler.h"
 #include "ltiGuardHandler.h"
+#include "rectangularGuardHandler.h"
 #include "timedGuardHandler.h"
 
 namespace hypro {

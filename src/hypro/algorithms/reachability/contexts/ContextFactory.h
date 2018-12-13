@@ -1,6 +1,7 @@
 #pragma once
 #include "IContext.h"
 #include "LTIContext.h"
+#include "TimedContext.h"
 #include "../workers/IWorker.h"
 #include "../../../datastructures/reachability/Settings.h"
 #include "../../../datastructures/reachability/Strategy.h"

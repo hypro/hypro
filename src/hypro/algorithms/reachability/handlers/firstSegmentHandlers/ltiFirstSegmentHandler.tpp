@@ -23,9 +23,9 @@ namespace hypro
         matrix_t<Number> trafoMatrix = computeTrafoMatrix(mState->getLocation());
 
         #ifdef HYDRA_USE_LOGGING
-        TRACE("hydra.worker", "e^(deltaMatrix): " << std::endl);
-        TRACE("hydra.worker", trafoMatrix << std::endl);
-        TRACE("hydra.worker", "------" << std::endl);
+        TRACE("hypro.worker", "e^(deltaMatrix): " << std::endl);
+        TRACE("hypro.worker", trafoMatrix << std::endl);
+        TRACE("hypro.worker", "------" << std::endl);
         #endif
 
         // e^(At)*X0 = polytope at t=delta
@@ -44,7 +44,7 @@ namespace hypro
         State deltaValuation = mState->partiallyApplyTimeStep(ConstraintSet<Number>(mTrafo, mTranslation), mTimeStep,mIndex);
 
         #ifdef HYDRA_USE_LOGGING
-        TRACE("hydra.worker", "Polytope at t=delta: " << deltaValuation);
+        TRACE("hypro.worker", "Polytope at t=delta: " << deltaValuation);
         #endif
 
         State firstSegment{mState->getLocation()};
@@ -57,16 +57,21 @@ namespace hypro
 
         firstSegment = deltaValuation.unite(*(mState));
 
+        #ifdef HYDRA_USE_LOGGING
+        TRACE("hypro.worker", "Union of initial set and set after first step: " << firstSegment);
+        #endif
+
     	#ifdef HYDRA_USE_LOGGING
-        TRACE("hydra.worker", "Errorbox X_0: " << errorBoxVector[0] << " with dimension " << errorBoxVector[0].dimension() << " and d: " << dimension);
+        TRACE("hypro.worker", "Errorbox X_0: " << errorBoxVector[0] << " with dimension " << errorBoxVector[0].dimension() << " and d: " << dimension);
+        TRACE("hypro.worker", "Errorbox for bloating: " << errorBoxVector[2] << " with dimension " << errorBoxVector[2].dimension() << " and d: " << dimension);
         #endif
 
 		firstSegment = bloatBox(firstSegment, Number(Number(1) / Number(4)) * errorBoxVector[2], mIndex);
 
-        TRACE("hydra.worker","Epsilon errorbox: " << errorBoxVector[2]);
+        TRACE("hypro.worker","Epsilon errorbox: " << errorBoxVector[2]);
 
         #ifdef HYDRA_USE_LOGGING
-        TRACE("hydra.worker", "first Flowpipe Segment (after minkowski Sum): " << firstSegment);
+        TRACE("hypro.worker", "first Flowpipe Segment (after minkowski Sum): " << firstSegment);
         #endif
 
         firstSegment.partiallyRemoveRedundancy(mIndex);
@@ -79,10 +84,10 @@ namespace hypro
 	   matrix_t<Number> deltaMatrix(getFlowDimension(_loc->getFlow()), getFlowDimension(_loc->getFlow()));
 	    deltaMatrix = boost::get<linearFlow<Number>>(_loc->getFlow(mIndex)).getFlowMatrix() * carl::convert<tNumber,Number>(mTimeStep);
 	#ifdef REACH_DEBUG
-	    TRACE("hydra.worker", "Flowmatrix:\n" << _loc->getFlow(mIndex) << "\nmultiplied with time step: " << mTimeStep);
-	    TRACE("hydra.worker", "delta matrix_t<Number>: " << std::endl);
-	    TRACE("hydra.worker", deltaMatrix << std::endl);
-	    TRACE("hydra.worker", "------" << std::endl);
+	    TRACE("hypro.worker", "Flowmatrix:\n" << _loc->getFlow(mIndex) << "\nmultiplied with time step: " << mTimeStep);
+	    TRACE("hypro.worker", "delta matrix_t<Number>: " << std::endl);
+	    TRACE("hypro.worker", deltaMatrix << std::endl);
+	    TRACE("hypro.worker", "------" << std::endl);
 	#endif
 
 
@@ -97,15 +102,15 @@ namespace hypro
 	   matrix_t<double> expMatrix(deltaMatrix.rows(), deltaMatrix.cols());
 	    doubleMatrix =convert<Number, double>(deltaMatrix);
 
-	    TRACE("hydra.worker","transformed matrix: " << doubleMatrix);
+	    TRACE("hypro.worker","transformed matrix: " << doubleMatrix);
 
 	    expMatrix = doubleMatrix.exp();
 
-	    TRACE("hydra.worker","exp matrix: " << expMatrix);
+	    TRACE("hypro.worker","exp matrix: " << expMatrix);
 
 	    resultMatrix =convert<double, Number>(expMatrix);
 
-		TRACE("hydra.worker","transformed matrix: " << resultMatrix);
+		TRACE("hypro.worker","transformed matrix: " << resultMatrix);
 
 	    return resultMatrix;
 

@@ -121,9 +121,9 @@ namespace hypro {
 				break;
 			}
 			case DynamicType::rectangular: {
-				std::vector<carl::Interval<Number>> intv = boost::get<rectangularFlow<Number>>(f).getFlowIntervals();
-				for(std::size_t rowI = 0; rowI < boost::get<rectangularFlow<Number>>(f).dimension(); ++rowI) {
-					out << prefix << "\t\t" << varNameMap.at(rowI) << "' = " << intv[rowI] << std::endl;
+				auto flow = boost::get<rectangularFlow<Number>>(f).getFlowIntervals();
+				for(const auto& vFlowPair : flow) {
+					out << prefix << "\t\t" << vFlowPair.first << "' = " << vFlowPair.second << std::endl;
 				}
 			}
 		}

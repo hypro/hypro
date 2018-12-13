@@ -13,7 +13,7 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
 		StateVisitorTest.cpp
 		StrategyTest.cpp
 		HybridAutomataTest.cpp
-		HybridAutomataOutputTest.cpp
+		#HybridAutomataOutputTest.cpp
 		WorkQueueTest.cpp
 		#HybridAutomataParallelCompositionTest.cpp
 	)

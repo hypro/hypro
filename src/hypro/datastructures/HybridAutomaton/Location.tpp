@@ -11,11 +11,16 @@ Location<Number>::Location(unsigned _id) : mFlows(), mExternalInput(), mTransiti
 
 template<typename Number>
 Location<Number>::Location(unsigned _id, const Location<Number>& _loc)
-	: mFlows(_loc.getFlows()), mExternalInput(_loc.getExternalInput()), mTransitions(_loc.getTransitions()), mInvariant(_loc.getInvariant()), mId(_id), mHash(0)
-{}
+	: mFlows(_loc.getFlows()), mExternalInput(_loc.getExternalInput()), mTransitions(), mInvariant(_loc.getInvariant()), mId(_id), mHash(0)
+{
+	for(auto& t : _loc.getTransitions()) {
+		mTransitions.emplace_back(std::make_unique<Transition<Number>>(*t));
+		mTransitions.back()->setSource(this);
+	}
+}
 
 template<typename Number>
-Location<Number>::Location(unsigned _id, const matrix_t<Number>& _mat) : mFlows(), mId(_id), mExternalInput()
+Location<Number>::Location(unsigned _id, const matrix_t<Number>& _mat) : mFlows(), mId(_id), mExternalInput(), mTransitions()
 {
 	mFlows.push_back(linearFlow<Number>(_mat));
 	mHasExternalInput = false;
@@ -23,9 +28,17 @@ Location<Number>::Location(unsigned _id, const matrix_t<Number>& _mat) : mFlows(
 }
 
 template<typename Number>
+<<<<<<< HEAD
 Location<Number>::Location(unsigned _id, const matrix_t<Number>& _mat, const typename Location<Number>::transitionSet& _trans, const Condition<Number>& _inv)
     : mFlows(), mExternalInput(), mTransitions(_trans), mInvariant(_inv), mId(_id)
+=======
+Location<Number>::Location(unsigned _id, const matrix_t<Number>& _mat, typename Location<Number>::transitionVector&& _trans, const Condition<Number>& _inv)
+    : mFlows(), mExternalInput(), mTransitions(std::move(_trans)), mInvariant(_inv), mId(_id), mExternalInput()
+>>>>>>> adaptionsHydra
 {
+	for(auto& t : mTransitions) {
+		t->setSource(this);
+	}
 	mFlows.push_back(linearFlow<Number>(_mat));
 	mHasExternalInput = false;
 	mHash = 0;
@@ -39,11 +52,25 @@ Location<Number>::Location() : mFlows(), mExternalInput(), mTransitions(), mInva
 
 template<typename Number>
 Location<Number>::Location(const Location<Number>& _loc)
-	: mFlows(_loc.getFlows()), mExternalInput(_loc.getExternalInput()), mTransitions(_loc.getTransitions()), mInvariant(_loc.getInvariant()), mName(_loc.getName()), mId(), mHash(0)
-{}
+	: mExternalInput(_loc.getExternalInput()), mTransitions(), mInvariant(_loc.getInvariant()), mName(_loc.getName()), mId(), mHash(0)
+{
+	// update copied transitions
+	for(auto& t : _loc.getTransitions()) {
+		mTransitions.emplace_back(std::make_unique<Transition<Number>>(*t));
+		mTransitions.back()->setSource(this);
+	}
+
+	for(const auto& f : _loc.getFlows()){
+		TRACE("hypro.datastructures","Add flow with hash " << boost::apply_visitor(hypro::flowHashVisitor(), f) );
+		mFlows.push_back(f);
+	}
+	TRACE("hypro.datastructures","Old location hash: " << _loc.hash());
+	TRACE("hypro.datastructures","New location hash: " << this->hash());
+	assert(this->hash() == _loc.hash());
+}
 
 template<typename Number>
-Location<Number>::Location(const matrix_t<Number>& _mat) : mFlows(), mId(), mExternalInput()
+Location<Number>::Location(const matrix_t<Number>& _mat) : mFlows(), mId(), mExternalInput(), mTransitions()
 {
 	mFlows.push_back(linearFlow<Number>(_mat));
 	mHasExternalInput = false;
@@ -51,9 +78,12 @@ Location<Number>::Location(const matrix_t<Number>& _mat) : mFlows(), mId(), mExt
 }
 
 template<typename Number>
-Location<Number>::Location(const matrix_t<Number>& _mat, const typename Location<Number>::transitionSet& _trans, const Condition<Number>& _inv)
-    : mFlows(), mExternalInput(), mTransitions(_trans), mInvariant(_inv), mId()
+Location<Number>::Location(const matrix_t<Number>& _mat, typename Location<Number>::transitionVector&& _trans, const Condition<Number>& _inv)
+    : mFlows(), mExternalInput(), mTransitions(std::move(_trans)), mInvariant(_inv), mId()
 {
+	for(auto& t : mTransitions) {
+		t->setSource(this);
+	}
 	mFlows.push_back(linearFlow<Number>(_mat));
 	mHasExternalInput = false;
 	mHash = 0;
@@ -84,7 +114,29 @@ void Location<Number>::setFlow(const flowVariant& f, std::size_t I) {
 }
 
 template<typename Number>
+void Location<Number>::setTransitions(transitionVector&& trans) {
+	#ifndef NDEBUG
+	for(const auto& t : trans) {
+		// lightweight test - hash is not collosion-free
+		assert(t->getSource() == this);
+	}
+	#endif
+	mTransitions = std::move(trans);
+	mHash = 0;
+}
+
+template<typename Number>
+void Location<Number>::addTransition(std::unique_ptr<Transition<Number>>&& trans) {
+	std::cout << "add transition from " << trans->getSource() << " to " << trans->getTarget() << ", this is " << this << std::endl;
+	assert(trans->getSource() == this);
+	mTransitions.emplace_back(std::move(trans));
+	mHash = 0;
+}
+
+/*
+template<typename Number>
 void Location<Number>::updateTransition(Transition<Number>* original, Transition<Number>* newT) {
+	assert(newT->getSource() == this);
 	auto tPos = std::find(mTransitions.begin(), mTransitions.end(), original);
 	if( tPos == mTransitions.end()) {
 		TRACE("hypro.datastructures.hybridAutomaton","Attempted to update non-existing transition @" << original);
@@ -92,9 +144,10 @@ void Location<Number>::updateTransition(Transition<Number>* original, Transition
 	}
 	assert(newT != nullptr);
 	mTransitions.erase(tPos);
-	mTransitions.insert(newT);
+	mTransitions.emplace_back(newT);
 	mHash = 0;
 }
+*/
 
 template<typename Number>
 void Location<Number>::setExtInput(const std::vector<carl::Interval<Number>>& b) {
@@ -457,6 +510,7 @@ void Location<Number>::decompose(const Decomposition& decomposition){
 	std::for_each(newFlows.begin(), newFlows.end(), [&](linearFlow<Number>& f){ mFlows.emplace_back(std::move(f));});
 	// decompose invariant
 	mInvariant.decompose(decomposition);
+	mHash = 0;
 }
 
 }  // namespace hypro

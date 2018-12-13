@@ -33,6 +33,7 @@ public:
     const StrategyNodeVariant<StateType>& operator[](std::size_t i) const {return mStrategy[i];}
 
     void advanceToLevel( StateType& state, std::size_t lvl, std::size_t subset=0) const {
+        DEBUG("hypro.datastructures","Call to set state subset " << subset << " to strategy level " << lvl);
         boost::apply_visitor(detail::strategyConversionVisitor<StateType>(state,subset), mStrategy[lvl]);
     }
 

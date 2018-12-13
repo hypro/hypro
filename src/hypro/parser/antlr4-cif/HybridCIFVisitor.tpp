@@ -44,9 +44,9 @@ namespace hypro {
 
 		//locations, also containing edge information
 		CIFLocVisitor<Number> locVisitor = CIFLocVisitor<Number>(vars);
-		std::pair< std::set<Location<Number>*>, std::set<Transition<Number>*> > result = locVisitor.visit(ctx->locations());
+		std::pair< std::vector<Location<Number>*>, std::vector<Transition<Number>*> > result = locVisitor.visit(ctx->locations());
 		locSet = result.first;
-		transitionSet = result.second;
+		transitionVector = result.second;
 
 
 		//IO Delcarations

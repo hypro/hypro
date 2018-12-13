@@ -45,7 +45,7 @@ namespace hypro
 
 	template<typename Number>
 	bool DecisionEntity<Number>::isTimedSubspace(const Location<Number> &loc, size_t index){
-		TRACE("hypro.decisionEntity", "Investigating " << loc.getName());
+		TRACE("hypro.decisionEntity", "Investigating " << loc.getName() << ", subspace " << index);
 		// check if flow is of the form
 		//	0 ... 0 1
 		//  .........
@@ -53,6 +53,7 @@ namespace hypro
 		//  0 ....0 0
 
 		if(! isTimed(loc.getFlow(index))) {
+			TRACE("hypro.decisionEntity", "Flow is not timed.");
 			return false;
 		}
 
@@ -64,8 +65,7 @@ namespace hypro
 			}
 		}
 
-		std::set<Transition<Number>*> transitions = loc.getTransitions();
-		for(auto transition : transitions){
+		for(auto transition : loc.getTransitions()){
 			TRACE("hypro.decisionEntity", "Investigating " << transition->getSource()->getName() << " -> " << transition->getTarget()->getName());
 
 			// for each transitions check if the constraints of the guard set only only contain 0s and one entry 1/-1 at most
@@ -131,8 +131,7 @@ namespace hypro
 			return false;
 		}
 
-		std::set<Transition<Number>*> transitions = loc.getTransitions();
-		for(auto transition : transitions){
+		for(auto transition : loc.getTransitions()){
 			TRACE("hypro.decisionEntity", "Investigating " << transition->getSource()->getName() << " -> " << transition->getTarget()->getName());
 
 			// for each transitions check if the constraints of the guard set only only contain 0s and one entry 1/-1 at most
@@ -271,8 +270,7 @@ namespace hypro
 		Graph G(automaton.dimension()-1);
 
 		//check flow and invariant of locations
-		std::set<Location<Number>*> locations = automaton.getLocations();
-		for(auto loc : locations){
+		for(auto loc : automaton.getLocations()){
 			if(getFlowType(loc->getFlow()) == DynamicType::linear){
 				addEdgesForAffineTrafo(boost::get<linearFlow<Number>>(loc->getFlow()).getFlowMatrix(), G);
 			}
@@ -281,8 +279,7 @@ namespace hypro
 		}
 
 		//check reset and guards of transitions
-		std::set<Transition<Number>*> transitions = automaton.getTransitions();
-		for(auto transition : transitions){
+		for(auto transition : automaton.getTransitions()){
 			addEdgesForLinTrafo(transition->getReset().getMatrix(), G);
 			addEdgesForCondition(transition->getGuard(),G);
 		}
@@ -313,9 +310,8 @@ namespace hypro
 	}
 
 	template<typename Number>
-	std::pair<HybridAutomaton<Number>, Decomposition> DecisionEntity<Number>::decomposeAutomaton(HybridAutomaton<Number> &automaton){
+	std::pair<HybridAutomaton<Number>, Decomposition> DecisionEntity<Number>::decomposeAutomaton(const HybridAutomaton<Number> &automaton){
 		Decomposition decomposition = getSubspaceDecomposition(automaton);
-		printDecomposition(decomposition);
 		//SettingsProvider<State>::getInstance().setSubspaceDecomposition(decomposition);
 		if(decomposition.size() <= 1){
 			// decomposing failed/was already done(0-case) or decomposition is all variables (1 case)
@@ -323,9 +319,10 @@ namespace hypro
 		}
 		printDecomposition(decomposition);
 		TRACE("hypro.decisionEntity", "Automaton before decomposition: " << automaton);
-		automaton.decompose(decomposition);
-		TRACE("hypro.decisionEntity", "Automaton after decomposition: " << automaton);
-		return std::make_pair(automaton,decomposition);
+		auto automatonCopy = automaton;
+		automatonCopy.decompose(decomposition);
+		TRACE("hypro.decisionEntity", "Automaton after decomposition: " << automatonCopy);
+		return std::make_pair(automatonCopy,decomposition);
 	}
 
 } // hypro

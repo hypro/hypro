@@ -21,7 +21,7 @@ Transformation<Number>::Transformation (const HybridAutomaton<Number>& _hybrid) 
     Matrix<Number> A_nonlinear;
     Vector<Number> b_nonlinear;
     LocationManager<Number>& locationManager = LocationManager<Number>::getInstance();
-    typename HybridAutomaton<Number>::locationSet locations;
+    typename HybridAutomaton<Number>::locationVector locations;
     Location<Number>* PtrtoNewLoc;
     mTransformedHA = HybridAutomaton<Number>();
 //LOCATIONS
@@ -128,7 +128,7 @@ Transformation<Number>::Transformation (const HybridAutomaton<Number>& _hybrid) 
     }
     mTransformedHA.setLocations(std::move(locations));
     //TRANSITIONS
-    typename HybridAutomaton<Number>::transitionSet transitions;
+    typename HybridAutomaton<Number>::transitionVector transitions;
     for (Transition<Number>* TransPtr : _hybrid.getTransitions() ) {
         std::unique_ptr<Transition<Number>> NewTransPtr = std::make_unique<Transition<Number>>(*TransPtr);
         //TODO transitionManager? transitions not freed, shared_ptr too costly in multithreaded context
@@ -203,7 +203,7 @@ Transformation<Number>::Transformation (const HybridAutomaton<Number>& _hybrid) 
 //eigen decompositions from eigen with complex eigenvalues seem to result in wrong results (V even not invertible)
 //LOOP through all locations checking V,D,Vinv for NaN, Inf, -Inf (implicitly also sNan, qNaN)
     //bool outOfRange = false;
-    //for (typename locationSet::const_iterator locIt=mTransformedHA.getLocations().begin();
+    //for (typename locationVector::const_iterator locIt=mTransformedHA.getLocations().begin();
     //  locIt!=mTransformedHA.getLocations().end(); ++locIt) {
     //    STflowpipeSegment<Number>& segmentinfo   = mLocPtrtoComputationvaluesMap[*locIt].mSTflowpipeSegment;
     //    STindependentFunct<Number>& indepentinfo = mLocPtrtoComputationvaluesMap[*locIt].mSTindependentFunct;
@@ -226,7 +226,7 @@ void Transformation<Number>::addGlobalBadStates
     assert( _hybrid.getLocations().size() == mLocationPtrsMap.size() );
     typename locationPtrMap::const_iterator locIt = mLocationPtrsMap.begin();
     typename locationPtrMap::const_iterator endLocIt = mLocationPtrsMap.end();
-    for (typename locationSet::iterator origIt=_hybrid.getLocations().begin();
+    for (typename locationVector::iterator origIt=_hybrid.getLocations().begin();
       origIt!=_hybrid.getLocations().end(); ++origIt) {
         //locations is set -> value is ptrs to origLoc, in map key is ptrs to origLoc
         assert( *origIt == locIt->first );

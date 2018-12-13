@@ -42,7 +42,7 @@ class SettingsProvider : public carl::Singleton<SettingsProvider<State>>
     void setDecomposeAutomaton(bool decompose) { mDoDecomposition = decompose; }
 
 
-    void setHybridAutomaton(const HybridAutomaton<Number> &ha);
+    void setHybridAutomaton(HybridAutomaton<Number>&& ha);
 
     void setReachabilitySettings(const ReachabilitySettings &rs);
 
@@ -77,7 +77,7 @@ class SettingsProvider : public carl::Singleton<SettingsProvider<State>>
     const Decomposition& getSubspaceDecomposition() const {return mSubspaceDecomposition;}
     void setSubspaceDecomposition(const Decomposition& decomp) {mSubspaceDecomposition = decomp;}
 
-    std::map<const Location<Number>*, std::shared_ptr<std::vector<SUBSPACETYPE>>> getLocationSubspaceTypeMap(){return mLocationSubspaceTypeMap;}
+    const std::map<const Location<Number>*, std::shared_ptr<std::vector<SUBSPACETYPE>>>& getLocationSubspaceTypeMap() const {return mLocationSubspaceTypeMap;}
     void computeLocationSubspaceTypeMapping(const HybridAutomaton<Number> &ha);
 
     std::map<const Location<Number>*, LOCATIONTYPE> getLocationTypeMap(){return mLocationTypeMap;}

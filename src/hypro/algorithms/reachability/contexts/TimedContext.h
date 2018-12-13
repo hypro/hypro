@@ -19,8 +19,9 @@
 namespace hypro
 {
     template<typename State>
-	class TimedContext : public LTIContext{
-	protected:
+	class TimedContext : public LTIContext<State> {
+        using Number = typename State::NumberType;
+	private:
 		bool mElapsed;
 		State mPreOpState; //used for comparison with postOpState to determine timings
 	public:
@@ -30,8 +31,8 @@ namespace hypro
 	                    const Strategy<State>& strat,
 	                    WorkQueue<std::shared_ptr<Task<State>>>* localQueue,
 	                    WorkQueue<std::shared_ptr<Task<State>>>* localCEXQueue,
-	                    std::vector<PlotData>* localSegments,
-	                    ReachabilitySettings &settings) : LTIContext(t,strat,localQueue,localCEXQueue,localSegments,settings){
+	                    std::vector<PlotData<State>>* localSegments,
+	                    ReachabilitySettings &settings) : LTIContext<State>(t,strat,localQueue,localCEXQueue,localSegments,settings){
 			mElapsed = false;
 		}
 

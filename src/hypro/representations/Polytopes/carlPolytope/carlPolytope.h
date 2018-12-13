@@ -57,16 +57,20 @@ public:
     void addConstraints(const std::vector<ConstraintT<Number>>& constraints);
     void substituteVariable(carl::Variable oldVar, carl::Variable newVar);
 
+    std::vector<carl::Variable> getVariables() const;
     void eliminateVariable(carl::Variable var);
     void eliminateVariables(const std::vector<carl::Variable>& vars);
+    void eliminateVariables(const QEQuery& vars);
 
     std::vector<Point<Number>> vertices() const;
     matrix_t<Number> matrix() const;
     vector_t<Number> vector() const;
     std::size_t size() const { return mFormula.size(); }
     bool empty() const;
+    static representation_name type() { return representation_name::carl_polytope; }
 
     void reduceRepresentation();
+    void choseOrder(QEQuery& in) {/* right now do nothing - add heuristics later. */}
 
     friend std::ostream& operator<<(std::ostream& out, const CarlPolytopeT<Number,Converter,Settings>& in ) {
         out << in.getFormula();

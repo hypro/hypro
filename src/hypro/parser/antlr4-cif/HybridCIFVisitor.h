@@ -24,8 +24,8 @@ class HybridCIFVisitor : public HybridSystemBaseVisitor {
 		//A vector of all variables which are defined
 		std::vector<std::string> vars;
 		int numberOfLocationsWithoutAName = 0;
-		std::set<Location<Number>*> locSet;
-		std::set<Transition<Number>*> transitionSet;
+		std::vector<Location<Number>*> locSet;
+		std::vector<Transition<Number>*> transitionVector;
 
 		antlrcpp::Any visitDiscDecl(HybridSystemParser::DiscDeclContext *ctx) override;
 		antlrcpp::Any visitAutomatonBody(HybridSystemParser::AutomatonBodyContext *ctx) override;
@@ -35,7 +35,7 @@ class HybridCIFVisitor : public HybridSystemBaseVisitor {
 		antlrcpp::Any visitEvents(HybridSystemParser::EventsContext *ctx) override;
 		antlrcpp::Any visitEdgeEvent(HybridSystemParser::EdgeEventContext *ctx) override;
 		antlrcpp::Any visitIoDecls(HybridSystemParser::IoDeclsContext *ctx) override;
-		
+
 	public:
 
 		HybridCIFVisitor();

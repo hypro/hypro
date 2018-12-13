@@ -43,8 +43,8 @@ namespace hypro {
 	template<typename Number>
 	antlrcpp::Any HyproLocationVisitor<Number>::visitLocation(HybridAutomatonParser::LocationContext *ctx){
 
-		//1.Calls visit(ctx->activities()) to get flowmatrix and externalInputBox
-		std::pair<matrix_t<Number>,std::vector<carl::Interval<Number>>> flowAndExtInput = visit(ctx->activities());
+		//1.Calls visit(ctx->activities()) to get flow (as a variant) and externalInputBox
+		std::pair<std::vector<typename Location<Number>::flowVariant>,std::vector<carl::Interval<Number>>> flowAndExtInput = visit(ctx->activities());
 		//std::cout << "---- Flow matrix is:\n" << flowAndExtInput.first << std::endl;
 		//std::cout << "---- externalInputBox is:\n" << flowAndExtInput.second << std::endl;
 
@@ -112,36 +112,85 @@ namespace hypro {
 		//}
 
 		//1.Calls iteratively visit(ctx->equation()) to get vector, store them
-		matrix_t<Number> tmpMatrix = matrix_t<Number>::Zero(vars.size()+1, vars.size()+1);
+		// maps used to deduce subspaces
+		std::map<std::size_t, vector_t<Number>> linearFlows;
+		std::map<std::size_t, carl::Interval<Number>> rectangularFlows;
+
 		std::vector<carl::Interval<Number>> extInputVec(vars.size(), carl::Interval<Number>());
 		//std::cout << "extInputVec has been made!\n";
-		HyproFormulaVisitor<Number> visitor(vars);
+		HyproFormulaVisitor<Number> equationVisitor(vars);
 		for(unsigned i=0; i < ctx->equation().size(); i++){
-
+			//std::cout << "Try to parse linear flow." << std::endl;
 			//insert into row according to state var order
-			vector_t<Number> tmpRow = visitor.visit(ctx->equation()[i]);
+			vector_t<Number> tmpRow = equationVisitor.visit(ctx->equation()[i]);
 			for(unsigned j=0; j < vars.size(); j++){
 				if(ctx->equation()[i]->VARIABLE()->getText() == (vars[j] + "'")){
-					tmpMatrix.row(j) = tmpRow;
+					//std::cout << "Linear flow for variable " << j << ", row: " << tmpRow << std::endl;
+					linearFlows[j] = tmpRow;
 					if(ctx->equation(i)->interval() != NULL){
-						carl::Interval<Number> intervalValues = visitor.visit(ctx->equation(i)->interval());
+						carl::Interval<Number> intervalValues = equationVisitor.visit(ctx->equation(i)->interval());
 						extInputVec[j] = intervalValues;
 						//std::cout << "internalValues are: " << intervalValues << std::endl;
 					}
 					//std::cout << "extInputVec is at pos " << j << "is now:\n" << extInputVec[j] << std::endl;
+					break;
+				}
+			}
+		}
+		// check if rectangular-dynamics exists and create flow
+		HyproFormulaVisitor<Number> intervalVisitor(vars);
+		for(unsigned i=0; i < ctx->intervalexpr().size(); i++){
+			//std::cout << "Try to parse rectangular flow." << std::endl;
+			// parse interval
+			carl::Interval<Number> tmpintv = intervalVisitor.visit(ctx->intervalexpr(i)->interval());
+			// find according variable and store in mapping
+			for(unsigned j=0; j < vars.size(); j++){
+				if(ctx->intervalexpr()[i]->VARIABLE()->getText() == (vars[j])){
+					//std::cout << "Rectangular flow for variable " << j <<  ", interval: " << tmpintv << std::endl;
+					rectangularFlows[j] = tmpintv;
+					break;
 				}
 			}
 		}
 
-		//3.Syntax check - Last row completely 0's?
-		if(vector_t<Number>(tmpMatrix.row(tmpMatrix.rows()-1)) != vector_t<Number>::Zero(tmpMatrix.cols())){
-			//std::cout << "Last row of tmpMatrix is:\n " << tmpMatrix.row(tmpMatrix.rows()-1) << std::endl;
-			std::cerr << "ERROR: Last row of tmpMatrix was not completely zero!" << std::endl;
-			exit(0);
+		// 2. assemble flow variant
+		std::vector<typename Location<Number>::flowVariant> flows;
+		linearFlow<Number> tmpLinearFlow;
+		rectangularFlow<Number> tmpRectangularFlow;
+		for(std::size_t i = 0; i < vars.size(); ++i) {
+			// per variable construct subspaces. Push to vector, whenever type changes.
+			if(linearFlows.count(i) != 0) {
+				assert(rectangularFlows.count(i) == 0);
+				tmpLinearFlow.addRow(linearFlows[i]);
+				if(tmpRectangularFlow.size() != 0) {
+					flows.emplace_back(tmpRectangularFlow);
+					tmpRectangularFlow = rectangularFlow<Number>{};
+				}
+			} else {
+				assert(linearFlows.count(i) == 0);
+				tmpRectangularFlow.setFlowIntervalForDimension(rectangularFlows[i], VariablePool::getInstance().carlVarByIndex(i));
+				if(tmpLinearFlow.size() != 0) {
+					// add a final row of all zeros
+					tmpLinearFlow.addRow(vector_t<Number>::Zero(tmpLinearFlow.dimension()));
+					flows.emplace_back(tmpLinearFlow);
+					tmpLinearFlow = linearFlow<Number>{};
+				}
+			}
 		}
 
-		//4.Returns a flowmatrix and a externalInputBox
-		return std::pair<matrix_t<Number>,std::vector<carl::Interval<Number>>>(tmpMatrix, extInputVec);
+		// final cleanup (i.e. add the last flow not yet added)
+		if(tmpLinearFlow.size() != 0) {
+			assert(tmpRectangularFlow.size() == 0);
+			tmpLinearFlow.addRow(vector_t<Number>::Zero(tmpLinearFlow.dimension()));
+			flows.emplace_back(tmpLinearFlow);
+		} else {
+			assert(tmpRectangularFlow.size() > 0);
+			assert(tmpLinearFlow.size() == 0); // for future extensions, right now this does not make sense.
+			flows.emplace_back(tmpRectangularFlow);
+		}
+
+		//4.Returns a vector of flowvariant and a externalInputBox
+		return std::make_pair(flows, extInputVec);
 	}
 
 	template<typename Number>

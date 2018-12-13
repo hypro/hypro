@@ -51,9 +51,9 @@ unsigned SettingsProvider<State>::getWorkerThreadCount()
 }
 
 template<typename State>
-void SettingsProvider<State>::setHybridAutomaton(const HybridAutomaton<Number>& ha)
+void SettingsProvider<State>::setHybridAutomaton(HybridAutomaton<Number>&& ha)
 {
-    mHybridAutomaton = ha;
+    mHybridAutomaton = std::move(ha);
 }
 
 template<typename State>
@@ -73,8 +73,9 @@ void SettingsProvider<State>::computeLocationSubspaceTypeMapping(const HybridAut
    // assert(SettingsProvider<State>::getInstance().getSubspaceDecomposition().size() != 0);
 
     Decomposition decompositions = SettingsProvider<State>::getInstance().getSubspaceDecomposition();
+    TRACE("hypro.utility","Having " << decompositions.size() << " decompositions.");
     for(auto location : ha.getLocations()){
-        DEBUG("hypro.util", "Subspace types for location " << location->getName()<< ":");
+        DEBUG("hypro.utility", "Subspace types for location " << location->getName() << " (" << location << "):");
 
         std::vector<SUBSPACETYPE> vec;
         for(std::size_t i = 0; i < decompositions.size(); i++){
@@ -87,7 +88,7 @@ void SettingsProvider<State>::computeLocationSubspaceTypeMapping(const HybridAut
             else {
                 vec.push_back(SUBSPACETYPE::LTI);
             }
-             //DEBUG("hypro.util",  "" << i << ": " << vec.at(i));
+            DEBUG("hypro.utility",  "Decomposition " << i << ": " << vec.at(i));
         }
         mLocationSubspaceTypeMap.insert(std::make_pair(location, std::make_shared<std::vector<SUBSPACETYPE>>(vec)));
     }
@@ -116,7 +117,7 @@ void SettingsProvider<State>::computeLocationTypeMapping(const HybridAutomaton<N
             mLocationTypeMap.insert(std::make_pair(location, LOCATIONTYPE::LTILOC));
         }
 
-        DEBUG("hypro.util", "Types for location " << location->getName()<< ":" << mLocationTypeMap.find(location)->second);
+        DEBUG("hypro.utility", "Types for location " << location->getName()<< ":" << mLocationTypeMap.find(location)->second);
     }
 }
 
