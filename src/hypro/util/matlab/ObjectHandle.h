@@ -13,11 +13,12 @@ class ObjectHandle{
         static void hyProIntervals2mIntervals(const std::vector<carl::Interval<double>>, double*, int, int);
         static std::vector<carl::Interval<double>>& mPoints2HyProIntervals(double*);
         static carl::Interval<double>& mInterval2HyproInterval(double*);
-        //static hypro::Point<double>& mInterval2Point(double*); // Makes this sense?
         static hypro::matrix_t<double>& mMatrix2HyProMatrix(double*, int, int);
         static void hyProMatrix2mMatrix(hypro::matrix_t<double>&, double*, int, int);
         static hypro::vector_t<double>& mVector2HyProVector(double*, int);
         static void hyProVector2mVector(hypro::vector_t<double>&, double*, int);
+        static hypro::Point<double>& mPoint2HyProPoint(double*, int);
+        static std::pair<hypro::Point<double>, hypro::Point<double>>& mPointPair2HyProPointPair(double*);
     private:
 };
 
@@ -125,6 +126,38 @@ void ObjectHandle::hyProVector2mVector(hypro::vector_t<double>& vec, double *out
     }
 }
 
+/**
+ * @brief Converts a Matlab vector into HyPro Point
+ * @param vec Pointer to the vector of coordinates
+ * @param dimy Lenght of the vector
+ **/
+hypro::Point<double>& mPoint2HyProPoint(double* vec, int dimy){
+    std::vector<double> temp;
+    for(int i = 0; i < dimy; i++){
+        temp.emplace_back(vec[i]);
+    }
+    hypro::Point<double> *point = new hypro::Point<double>(temp);
+    return *point;
+}
+
+/**
+ * @brief Converts a 2x2 Matlab matrix into pair of HyPro points
+ * @param mat Pointer to the matrix
+ **/
+std::pair<hypro::Point<double>, hypro::Point<double>>& mPointPair2HyProPointPair(double* mat){
+    std::vector<double> temp_one;
+    std::vector<double> temp_two;
+    temp_one.emplace_back(mat[0]);
+    temp_one.emplace_back(mat[2]);
+    temp_two.emplace_back(mat[1]);
+    temp_two.emplace_back(mat[3]);
+
+    hypro::Point<double> *point_one = new hypro::Point<double>(temp_one);
+    hypro::Point<double> *point_two = new hypro::Point<double>(temp_one);
+
+    std::pair<hypro::Point<double>,hypro::Point<double>> pair = std::make_pair(point_one,point_two);
+    return pair;
+}
 
 
  
