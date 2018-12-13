@@ -15,6 +15,9 @@ namespace hypro
  				}
  				return new timedFirstSegmentHandler<State>(state,index,timeStep);
  			}
+			case representation_name::carl_polytope: {
+				return new rectangularFirstSegmentHandler<State>();
+			}
 			default:
  				return new ltiFirstSegmentHandler<State>(state,index,timeStep);
 				break;
@@ -37,6 +40,9 @@ namespace hypro
  				}
  				return new timedInvariantHandler<State>(state,index);
  			}
+			case representation_name::carl_polytope: {
+				return new rectangularInvariantHandler<State>(state,index);
+			}
 			default:
  				if(noFlow){
  					return new discreteInvariantHandler<State>(state,index);
@@ -74,6 +80,9 @@ namespace hypro
  				}
  				return new timedBadStateHandler<State>(state,index);
  			}
+			case representation_name::carl_polytope: {
+				return new rectangularBadStateHandler<State>(state,index);
+			}
 			default:
  				if(noFlow){
  					return new discreteBadStateHandler<State>(state,index);
@@ -92,17 +101,18 @@ namespace hypro
 			return nullptr;
 		}
 
+		if(noFlow) {
+			return new discreteGuardHandler<State>(state,index,transition);
+		}
+
 		switch(name){
  			case representation_name::difference_bounds: {
- 				if(noFlow){
- 					return new discreteGuardHandler<State>(state,index,transition);
- 				}
  				return new timedGuardHandler<State>(state,index,transition);
  			}
+			case representation_name::carl_polytope: {
+ 				return new rectangularGuardHandler<State>(state,index,transition);
+			}
 			default:
- 				if(noFlow){
- 					return new discreteGuardHandler<State>(state,index,transition);
- 				}
  				return new ltiGuardHandler<State>(state,index,transition);
 
  		}
@@ -111,15 +121,19 @@ namespace hypro
 	}
 
 	template<typename State>
-	ITimeEvolutionHandler* HandlerFactory<State>::buildContinuousEvolutionHandler(representation_name name, State* state, size_t index, tNumber timeStep, tNumber timeBound, matrix_t<Number> trafo, vector_t<Number> translation){
+	ITimeEvolutionHandler* HandlerFactory<State>::buildContinuousEvolutionHandler(representation_name name, State* state, size_t index, tNumber timeStep, tNumber timeBound, typename Location<State>::flowVariant flow){
 		if(trafo == matrix_t<Number>::Identity(trafo.rows(),trafo.rows()) && translation == vector_t<Number>::Zero(trafo.rows())){
 			return nullptr;
 		}
+
+		enum class DynamicType{linear=0, affine, rectangular, timed, discrete};
 
 		switch(name){
  			case representation_name::difference_bounds: {
  				if(SettingsProvider<State>::getInstance().useDecider() && SettingsProvider<State>::getInstance().getLocationTypeMap().find(state->getLocation())->second == LOCATIONTYPE::TIMEDLOC){
 					if(SettingsProvider<State>::getInstance().isFullTimed()){
+						assert(boost::apply_visitor(flowTypeVisitor(), flow) == DynamicType::timed)
+						auto tmp = boost::get<linearFlow<typename State::NumberType>(flow);
 						return new timedElapseTimeEvolutionHandler<State>(state,index,timeStep,timeBound,trafo,translation);
 					}
 					// on mixed contexts a first segment with tick was computed
@@ -129,6 +143,10 @@ namespace hypro
 				}
  				return new timedTickTimeEvolutionHandler<State>(state,index,timeStep,trafo,translation);
  			}
+			case representation_name::carl_polytope: {
+				// TODO!!
+ 				return new rectangularTimeEvolutionHandler<State>(state,index,boost::get<rectangularFlow<Number>>());
+			}
 			default:
  				return new ltiTimeEvolutionHandler<State>(state,index,timeStep,trafo,translation);
  		}
@@ -148,6 +166,9 @@ namespace hypro
  			case representation_name::difference_bounds: {
  				return new timedResetHandler<State>(state,index,trafo,translation);
  			}
+			case representation_name::carl_polytope: {
+ 				return new rectangularResetHandler<State>(state,index,trafo,translation);
+			}
 			default:
  				return new ltiResetHandler<State>(state,index,trafo,translation);
  		}

@@ -1,6 +1,7 @@
 #pragma once
 #include "IHandler.h"
 #include "forwardDeclarations.h"
+#include "../../../datastructures/HybridAutomaton/Location.h"
 
 namespace hypro
 {
@@ -16,7 +17,7 @@ namespace hypro
 		IInvariantHandler* buildInvariantHandler(representation_name name, State* state, size_t index, bool noFlow);
 		IBadStateHandler* buildBadStateHandler(representation_name name, State* state, size_t index, bool noFlow);
 		IGuardHandler<State>* buildGuardHandler(representation_name name, std::shared_ptr<State> state, size_t index, Transition<Number>* transition, bool noFlow);
-		ITimeEvolutionHandler* buildContinuousEvolutionHandler(representation_name name, State* state, size_t index, tNumber timeStep, tNumber timeBound, matrix_t<Number> trafo, vector_t<Number> translation);
+		ITimeEvolutionHandler* buildContinuousEvolutionHandler(representation_name name, State* state, size_t index, tNumber timeStep, tNumber timeBound, typename Location<State>::flowVariant flow);
 		IResetHandler* buildResetHandler(representation_name name, State* state, size_t index, matrix_t<Number> trafo, vector_t<Number> translation);
 
 		IJumpHandler* buildDiscreteSuccessorHandler(std::vector<boost::tuple<Transition<Number>*, State>>* successorBuffer,
