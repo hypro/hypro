@@ -28,13 +28,8 @@ Location<Number>::Location(unsigned _id, const matrix_t<Number>& _mat) : mFlows(
 }
 
 template<typename Number>
-<<<<<<< HEAD
-Location<Number>::Location(unsigned _id, const matrix_t<Number>& _mat, const typename Location<Number>::transitionSet& _trans, const Condition<Number>& _inv)
-    : mFlows(), mExternalInput(), mTransitions(_trans), mInvariant(_inv), mId(_id)
-=======
 Location<Number>::Location(unsigned _id, const matrix_t<Number>& _mat, typename Location<Number>::transitionVector&& _trans, const Condition<Number>& _inv)
     : mFlows(), mExternalInput(), mTransitions(std::move(_trans)), mInvariant(_inv), mId(_id), mExternalInput()
->>>>>>> adaptionsHydra
 {
 	for(auto& t : mTransitions) {
 		t->setSource(this);
