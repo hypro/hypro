@@ -6,6 +6,21 @@
 namespace hypro {
 
     template<typename N>
+    inline FormulasT<N> halfspacesToConstraints(const matrix_t<N>& constraints, const vector_t<N>& constants) {
+        FormulasT<N> newConstraints;
+
+        for(Eigen::Index row = 0; row < constraints.rows(); ++row) {
+            PolyT<N> p;
+            for(Eigen::Index col = 0; col < constraints.cols(); ++col) {
+                p += constraints(row,col)*PolyT<N>(VariablePool::getInstance().carlVarByIndex(col));
+            }
+            p -= constants(row);
+            newConstraints.emplace_back(FormulaT<N>(ConstraintT<N>(p, carl::Relation::LEQ)));
+        }
+        return newConstraints;
+    }
+
+    template<typename N>
     inline FormulasT<N> constraintsToFormulas(const std::vector<ConstraintT<N>>& in) {
         FormulasT<N> res;
         std::for_each(in.begin(),in.end(), [&](auto in){res.emplace_back(FormulaT<N>(in));});

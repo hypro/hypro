@@ -5,16 +5,7 @@ namespace hypro {
     template<typename Number, typename Converter, typename Settings>
     CarlPolytopeT<Number,Converter,Settings>::CarlPolytopeT(const matrix_t<Number>& constraints, const vector_t<Number>& constants) {
         TRACE("hypro.representations.carlPolytope","Construct P from " << constraints << " and " << constants);
-        FormulasT<Number> newConstraints;
-
-        for(Eigen::Index row = 0; row < constraints.rows(); ++row) {
-            PolyT<Number> p;
-            for(Eigen::Index col = 0; col < constraints.cols(); ++col) {
-                p += constraints(row,col)*PolyT<Number>(VariablePool::getInstance().carlVarByIndex(col));
-            }
-            p -= constants(row);
-            newConstraints.emplace_back(FormulaT<Number>(ConstraintT<Number>(p, carl::Relation::LEQ)));
-        }
+        FormulasT<Number> newConstraints = halfspacesToConstraints(constraints,constants);
 
         mFormula = FormulaT<Number>{carl::FormulaType::AND, newConstraints};
         TRACE("hypro.representations.carlPolytope","Result formula: " << mFormula);
@@ -110,6 +101,11 @@ namespace hypro {
     }
 
     template<typename Number, typename Converter, typename Settings>
+    std::vector<carl::Variable> CarlPolytopeT<Number,Converter,Settings>::getVariables() const {
+        return std::vector<carl::Variable>{mFormula.variables().begin(), mFormula.variables().end()};
+    }
+
+    template<typename Number, typename Converter, typename Settings>
     void CarlPolytopeT<Number,Converter,Settings>::eliminateVariable(carl::Variable var) {
         DEBUG("hypro.representations.carlPolytope","Eliminate variable " << var);
         QEQuery query;
@@ -124,6 +120,13 @@ namespace hypro {
         QEQuery query;
         query.emplace_back(std::make_pair(QuantifierType::EXISTS, vars));
         mFormula = eliminateQuantifiers(mFormula, query);
+        detectDimension();
+    }
+
+    template<typename Number, typename Converter, typename Settings>
+    void CarlPolytopeT<Number,Converter,Settings>::eliminateVariables(const QEQuery& vars) {
+        DEBUG("hypro.representations.carlPolytope","Eliminate variables..");
+        mFormula = eliminateQuantifiers(mFormula, vars);
         detectDimension();
     }
 
