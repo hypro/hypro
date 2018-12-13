@@ -13,7 +13,7 @@ template<typename Number>
 Location<Number>::Location(unsigned _id, const Location<Number>& _loc)
 	: mFlows(_loc.getFlows()), mExternalInput(_loc.getExternalInput()), mTransitions(), mInvariant(_loc.getInvariant()), mId(_id), mHash(0)
 {
-	for(auto& t : _loc.getTransitions()) {
+	for(auto& t : _loc.rGetTransitions()) {
 		mTransitions.emplace_back(std::make_unique<Transition<Number>>(*t));
 		mTransitions.back()->setSource(this);
 	}
@@ -50,7 +50,7 @@ Location<Number>::Location(const Location<Number>& _loc)
 	: mExternalInput(_loc.getExternalInput()), mTransitions(), mInvariant(_loc.getInvariant()), mName(_loc.getName()), mId(), mHash(0)
 {
 	// update copied transitions
-	for(auto& t : _loc.getTransitions()) {
+	for(auto t : _loc.getTransitions()) {
 		mTransitions.emplace_back(std::make_unique<Transition<Number>>(*t));
 		mTransitions.back()->setSource(this);
 	}
@@ -82,6 +82,13 @@ Location<Number>::Location(const matrix_t<Number>& _mat, typename Location<Numbe
 	mFlows.push_back(linearFlow<Number>(_mat));
 	mHasExternalInput = false;
 	mHash = 0;
+}
+
+template<typename Number>
+std::vector<Transition<Number>*> Location<Number>::getTransitions() const {
+	std::vector<Transition<Number>*> res;
+	std::for_each(mTransitions.begin(),mTransitions.end(), [&res](const auto& in){ res.emplace_back(in.get()); });
+	return res;
 }
 
 template<typename Number>

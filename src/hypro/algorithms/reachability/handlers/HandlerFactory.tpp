@@ -122,33 +122,37 @@ namespace hypro
 
 	template<typename State>
 	ITimeEvolutionHandler* HandlerFactory<State>::buildContinuousEvolutionHandler(representation_name name, State* state, size_t index, tNumber timeStep, tNumber timeBound, typename Location<State>::flowVariant flow){
+
+		/*
 		if(trafo == matrix_t<Number>::Identity(trafo.rows(),trafo.rows()) && translation == vector_t<Number>::Zero(trafo.rows())){
 			return nullptr;
 		}
+		*/
 
 		enum class DynamicType{linear=0, affine, rectangular, timed, discrete};
 
 		switch(name){
  			case representation_name::difference_bounds: {
+				auto tmp = boost::get<linearFlow<typename State::NumberType>>(flow);
  				if(SettingsProvider<State>::getInstance().useDecider() && SettingsProvider<State>::getInstance().getLocationTypeMap().find(state->getLocation())->second == LOCATIONTYPE::TIMEDLOC){
 					if(SettingsProvider<State>::getInstance().isFullTimed()){
-						assert(boost::apply_visitor(flowTypeVisitor(), flow) == DynamicType::timed)
-						auto tmp = boost::get<linearFlow<typename State::NumberType>(flow);
-						return new timedElapseTimeEvolutionHandler<State>(state,index,timeStep,timeBound,trafo,translation);
+						assert(boost::apply_visitor(flowTypeVisitor(), flow) == DynamicType::timed);
+						return new timedElapseTimeEvolutionHandler<State>(state,index,timeStep,timeBound,tmp.getFlowMatrix(),tmp.getTranslation());
 					}
 					// on mixed contexts a first segment with tick was computed
 					else if(SettingsProvider<State>::getInstance().useContextSwitch()){
-						return new timedElapseAfterTickTimeEvolutionHandler<State>(state,index,timeStep,timeBound,trafo,translation);
+						return new timedElapseAfterTickTimeEvolutionHandler<State>(state,index,timeStep,timeBound,tmp.getFlowMatrix(),tmp.getTranslation());
 					}
 				}
- 				return new timedTickTimeEvolutionHandler<State>(state,index,timeStep,trafo,translation);
+ 				return new timedTickTimeEvolutionHandler<State>(state,index,timeStep,tmp.getFlowMatrix(),tmp.getTranslation());
  			}
 			case representation_name::carl_polytope: {
 				// TODO!!
- 				return new rectangularTimeEvolutionHandler<State>(state,index,boost::get<rectangularFlow<Number>>());
+ 				return new rectangularTimeEvolutionHandler<State>(state,index,boost::get<rectangularFlow<Number>>(flow));
 			}
 			default:
- 				return new ltiTimeEvolutionHandler<State>(state,index,timeStep,trafo,translation);
+				auto tmp = boost::get<linearFlow<typename State::NumberType>>(flow);
+ 				return new ltiTimeEvolutionHandler<State>(state,index,timeStep,tmp.getFlowMatrix(),tmp.getTranslation());
  		}
  		assert(false && "SHOULD NEVER REACH THIS");
  		return nullptr;

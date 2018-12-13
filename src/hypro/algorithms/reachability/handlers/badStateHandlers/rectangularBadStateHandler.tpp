@@ -14,7 +14,7 @@ namespace hypro {
 
 			// create constraints for invariant. Note that we need to properly match dimension indices with variable names at some point.
 			// create carlPolytope, as intersection is defined for those
-			CarlPolytopeT<typename State::NumberType> badStateConstraints{localBadState->second.getMatrix(mIndex), localBadState->second.getVector(mIndex)};
+			CarlPolytope<typename State::NumberType> badStateConstraints{localBadState->second.getMatrix(mIndex), localBadState->second.getVector(mIndex)};
 			// substitute variables in the formulas by the correct ones in the subspace of the state
 			// 1. Determine offset
 			std::size_t dimensionOffset = mState->getDimensionOffset(mIndex);
@@ -24,7 +24,7 @@ namespace hypro {
 			}
 
 			// intersect
-			auto resultingSet = boost::get<CarlPolytopeT<typename State::NumberType>>(mState->getSet(mIndex)).intersect(badStateConstraints);
+			auto resultingSet = boost::get<CarlPolytope<typename State::NumberType>>(mState->getSet(mIndex)).intersect(badStateConstraints);
 
 			// reduction
 			resultingSet.reduceRepresentation();
@@ -50,7 +50,7 @@ namespace hypro {
 	    		// at least one global bad state in this subspace
 		        // create constraints for invariant. Note that we need to properly match dimension indices with variable names at some point.
 				// create carlPolytope, as intersection is defined for those
-				CarlPolytopeT<typename State::NumberType> badStateConstraints{badState.getMatrix(mIndex), badState.getVector(mIndex)};
+				CarlPolytope<typename State::NumberType> badStateConstraints{badState.getMatrix(mIndex), badState.getVector(mIndex)};
 				// substitute variables in the formulas by the correct ones in the subspace of the state
 				// 1. Determine offset
 				std::size_t dimensionOffset = mState->getDimensionOffset(mIndex);
@@ -60,7 +60,7 @@ namespace hypro {
 				}
 
 				// intersect
-				auto resultingSet = boost::get<CarlPolytopeT<typename State::NumberType>>(mState->getSet(mIndex)).intersect(badStateConstraints);
+				auto resultingSet = boost::get<CarlPolytope<typename State::NumberType>>(mState->getSet(mIndex)).intersect(badStateConstraints);
 
 				// reduction
 				resultingSet.reduceRepresentation();

@@ -322,7 +322,7 @@ bool HybridAutomaton<Number>::isComposedOf(const HybridAutomaton<Number>& rhs) c
 			}
 		}
 		if(!loop) {
-			for(auto& rhsTransPtr : rhs.getTransitions()) {
+			for(const auto rhsTransPtr : rhs.getTransitions()) {
 				//std::cout << "consider " << rhsTransPtr->getSource()->getName() << " -> " << rhsTransPtr->getTarget()->getName() << std::endl;
 				if(transPtr->isComposedOf(*rhsTransPtr, rhs.getVariables(), this->getVariables())) {
 					//std::cout << "Found " << rhsTransPtr->getSource()->getName() << " -> " << rhsTransPtr->getTarget()->getName() << std::endl;
@@ -498,8 +498,8 @@ HybridAutomaton<Number> operator||(const HybridAutomaton<Number>& lhs, const Hyb
 	//build transisitons
 	std::set<Label> lhsLabels = lhs.getLabels();
 	std::set<Label> rhsLabels = rhs.getLabels();
-	for(const auto& lhsT: lhs.getTransitions()) {
-		for(const auto& rhsT: rhs.getTransitions()) {
+	for(const auto lhsT: lhs.getTransitions()) {
+		for(const auto rhsT: rhs.getTransitions()) {
 			//Transition<Number>* t = parallelCompose(lhsT, rhsT, lhsVar, rhsVar, haVar, ha, lhsLabels, rhsLabels);
 			std::unique_ptr<Transition<Number>> t = parallelCompose(lhsT, rhsT, lhsVar, rhsVar, haVar, ha, lhsLabels, rhsLabels);
 			if(t) {
@@ -512,7 +512,7 @@ HybridAutomaton<Number> operator||(const HybridAutomaton<Number>& lhs, const Hyb
 	// non-synchronizing transitions in each component
 	// fix rhs first
 	//std::cout << "Fix rhs." << std::endl;
-	for(const auto& lhsT: lhs.getTransitions()) {
+	for(const auto lhsT: lhs.getTransitions()) {
 		if(lhsT->getLabels().empty()) {
 			for(const auto& loc : rhs.getLocations()) {
 				//std::cout << "Potential transition " << lhsT->getSource()->getName() << "_" << loc->getName() << " -> " << lhsT->getTarget()->getName() << "_" << loc->getName() << std::endl;
@@ -555,7 +555,7 @@ HybridAutomaton<Number> operator||(const HybridAutomaton<Number>& lhs, const Hyb
 	}
 	// fix lhs
 	//std::cout << "Fix lhs." << std::endl;
-	for(const auto& rhsT: rhs.getTransitions()) {
+	for(const auto rhsT: rhs.getTransitions()) {
 		if(rhsT->getLabels().empty()) {
 			for(const auto& loc : lhs.getLocations()) {
 				//std::cout << "Potential transition " << loc->getName()<< "_" << rhsT->getSource()->getName() << " -> " << loc->getName() << "_" << rhsT->getTarget()->getName() << std::endl;

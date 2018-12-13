@@ -3,13 +3,15 @@
 namespace hypro {
     template<typename State>
 	void rectangularGuardHandler<State>::handle() {
-		assert(!mGuardSatisfyingState->getTimestamp().isEmpty());
+		assert(!mState->getTimestamp().isEmpty());
 
 		TRACE("hydra.worker.discrete","Applying handler " << this->handlerName());
 
+		auto vpool = VariablePool::getInstance();
+
 		// create constraints for invariant. Note that we need to properly match dimension indices with variable names at some point.
 		// create carlPolytope, as intersection is defined for those
-		CarlPolytopeT<typename State::NumberType> guardConstraints{mTransition->getGuard().getMatrix(mIndex), mTransition->getGuard().getVector(mIndex)};
+		CarlPolytope<typename State::NumberType> guardConstraints{mTransition->getGuard().getMatrix(mIndex), mTransition->getGuard().getVector(mIndex)};
 		// substitute variables in the formulas by the correct ones in the subspace of the state
 		// 1. Determine offset
 		std::size_t dimensionOffset = mState->getDimensionOffset(mIndex);
@@ -19,10 +21,10 @@ namespace hypro {
 		}
 
 		// intersect
-		auto resultingSet = boost::get<CarlPolytopeT<typename State::NumberType>>(mState->getSet(mIndex)).intersect(guardConstraints);
+		auto resultingSet = boost::get<CarlPolytope<typename State::NumberType>>(mState->getSet(mIndex)).intersect(guardConstraints);
 
 		// determine full vs. partial containment
-		if(resultingSet == boost::get<CarlPolytopeT<typename State::NumberType>>(mState->getSet(mIndex))) {
+		if(resultingSet == boost::get<CarlPolytope<typename State::NumberType>>(mState->getSet(mIndex))) {
 			mContainment = CONTAINMENT::FULL;
 		}
 
@@ -33,7 +35,7 @@ namespace hypro {
 		if(resultingSet.empty()) {
 			mContainment = CONTAINMENT::NO;
 		} else {
-			assert(resultingSet != boost::get<CarlPolytopeT<typename State::NumberType>>(mState->getSet(mIndex)));
+			assert(resultingSet != boost::get<CarlPolytope<typename State::NumberType>>(mState->getSet(mIndex)));
 			mContainment = CONTAINMENT::PARTIAL;
 		}
 		mState->setSet(resultingSet, mIndex);
@@ -42,7 +44,6 @@ namespace hypro {
 	template<typename State>
 	void rectangularGuardHandler<State>::reinitialize(){
 		TRACE("hydra.worker.discrete","Reinitializing handler " << this->handlerName());
-		mSatisfies=false;
-		mContained = CONTAINMENT::NO;
+		mContainment = CONTAINMENT::NO;
 	}
 } // hypro

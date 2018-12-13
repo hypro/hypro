@@ -12,7 +12,7 @@ namespace hypro {
 
 		// create constraints for invariant. Note that we need to properly match dimension indices with variable names at some point.
 		// create carlPolytope, as intersection is defined for those
-		CarlPolytopeT<typename State::NumberType> invariantConstraints{mState->getLocation()->getInvariant().getMatrix(mIndex), mState->getLocation()->getInvariant().getVector(mIndex)};
+		CarlPolytope<typename State::NumberType> invariantConstraints{mState->getLocation()->getInvariant().getMatrix(mIndex), mState->getLocation()->getInvariant().getVector(mIndex)};
 		// substitute variables in the formulas by the correct ones in the subspace of the state
 		// 1. Determine offset
 		std::size_t dimensionOffset = mState->getDimensionOffset(mIndex);
@@ -22,10 +22,10 @@ namespace hypro {
 		}
 
 		// intersect
-		auto resultingSet = boost::get<CarlPolytopeT<typename State::NumberType>>(mState->getSet(mIndex)).intersect(invariantConstraints);
+		auto resultingSet = boost::get<CarlPolytope<typename State::NumberType>>(mState->getSet(mIndex)).intersect(invariantConstraints);
 
 		// determine full vs. partial containment
-		if(resultingSet == boost::get<CarlPolytopeT<typename State::NumberType>>(mState->getSet(mIndex))) {
+		if(resultingSet == boost::get<CarlPolytope<typename State::NumberType>>(mState->getSet(mIndex))) {
 			mContainment = CONTAINMENT::FULL;
 		}
 
@@ -36,7 +36,7 @@ namespace hypro {
 		if(resultingSet.empty()) {
 			mContainment = CONTAINMENT::NO;
 		} else {
-			assert(resultingSet != boost::get<CarlPolytopeT<typename State::NumberType>>(mState->getSet(mIndex)));
+			assert(resultingSet != boost::get<CarlPolytope<typename State::NumberType>>(mState->getSet(mIndex)));
 			mContainment = CONTAINMENT::PARTIAL;
 		}
 

@@ -149,10 +149,10 @@ namespace reachability {
 		State guardSatisfyingState;
 		bool transitionEnabled = false;
 		//std::cout << "------ how many transitions do we have? " << state.getLocation()->getTransitions().size() << std::endl;
-		for( auto& transition : state.getLocation()->getTransitions() ){
-			DEBUG("hypro.reacher","Check transition " << transition->getSource()->getName() << " -> " << transition->getTarget()->getName() << " (@ "<< transition.get() << ")." );
+		for( auto transition : state.getLocation()->getTransitions() ){
+			DEBUG("hypro.reacher","Check transition " << transition->getSource()->getName() << " -> " << transition->getTarget()->getName() << " (@ "<< transition << ")." );
 			// handle time-triggered transitions
-			if(intersectGuard(transition.get(), state, guardSatisfyingState)){
+			if(intersectGuard(transition, state, guardSatisfyingState)){
 				INFO("hypro.reacher", "hybrid transition enabled");
 				assert(guardSatisfyingState.getTimestamp() == state.getTimestamp());
 				// when a guard is satisfied here, as we do not have dynamic behaviour, avoid calculation of flowpipe
@@ -160,7 +160,7 @@ namespace reachability {
 				#ifdef USE_FORCE_REDUCTION
 				applyReduction(guardSatisfyingState);
 				#endif
-				nextInitialSets.emplace_back(transition.get(), guardSatisfyingState);
+				nextInitialSets.emplace_back(transition, guardSatisfyingState);
 				transitionEnabled = true;
 			}
 		}
