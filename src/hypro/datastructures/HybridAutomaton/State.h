@@ -5,7 +5,6 @@
 #include "Visitors.h"
 #include "../../representations/types.h"
 #include "../../representations/GeometricObject.h"
-//#include "../../util/tuple_expansion/for_each.h"
 #include <carl/util/tuple_util.h>
 #include <carl/interval/Interval.h>
 
@@ -364,6 +363,7 @@ class State
      * @return     A state where each set has been transformed by the corresponding ConstraintSet.
      */
     State<Number,Representation,Rargs...> applyTransformation(const std::vector<ConstraintSet<Number>>& trafos ) const;
+    State<Number,Representation,Rargs...> applyTransformation(const ConstraintSet<Number>& trafo, std::size_t I=0 ) const;
     State<Number,Representation,Rargs...> linearTransformation(const matrix_t<Number>& matrix) const;
     State<Number,Representation,Rargs...> affineTransformation(const matrix_t<Number>& matrix, const vector_t<Number>& vector) const;
 
@@ -405,6 +405,7 @@ class State
     State<Number,Representation,Rargs...> project(const std::vector<std::size_t>& dimensions, std::size_t I = 0) const;
 
     std::size_t getDimension(std::size_t I = 0) const;
+    std::size_t getDimensionOffset(std::size_t I) const;
 
     Number getSupremum(std::size_t I) const;
 

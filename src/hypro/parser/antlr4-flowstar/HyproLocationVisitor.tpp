@@ -168,7 +168,7 @@ namespace hypro {
 				}
 			} else {
 				assert(linearFlows.count(i) == 0);
-				tmpRectangularFlow.addFlowInterval(rectangularFlows[i]);
+				tmpRectangularFlow.setFlowIntervalForDimension(rectangularFlows[i], VariablePool::getInstance().carlVarByIndex(i));
 				if(tmpLinearFlow.size() != 0) {
 					// add a final row of all zeros
 					tmpLinearFlow.addRow(vector_t<Number>::Zero(tmpLinearFlow.dimension()));

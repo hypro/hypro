@@ -37,14 +37,14 @@ class HybridAutomaton
 {
   public:
     using locationVector = std::vector<std::unique_ptr<Location<Number>>>;
-    using transitionVector = std::vector<std::unique_ptr<Transition<Number>>>;
+    //using transitionVector = std::vector<std::unique_ptr<Transition<Number>>>;
     using locationConditionMap = std::map<const Location<Number>*, Condition<Number>>;
     using conditionVector = std::vector<Condition<Number>>;
     using variableVector = std::vector<std::string>;
 
   private:
     locationVector mLocations; 				/// The locations of the hybrid automaton.
-    transitionVector mTransitions; 			/// The transitions of the hybrid automaton.
+    //transitionVector mTransitions; 			/// The transitions of the hybrid automaton.
     locationConditionMap mInitialStates; 	/// The set of initial states.
     locationConditionMap mLocalBadStates; 	/// The set of bad states which are bound to locations.
     conditionVector mGlobalBadStates; 		/// The set of bad states which are not bound to any location.
@@ -69,7 +69,7 @@ class HybridAutomaton
      *
      * @param[in]  	hybrid  The original hybrid automaton.
      */
-    HybridAutomaton(HybridAutomaton<Number>&& hybrid);
+    //HybridAutomaton(HybridAutomaton<Number>&& hybrid);
 
     /**
      * @brief 		Constructor from locations, transitions and initial states
@@ -77,7 +77,8 @@ class HybridAutomaton
      * @param[in]	trans 			Set of transitions
      * @param[in] 	initialStates 	Map of initial states
      */
-    HybridAutomaton(const locationVector& locs, const transitionVector& trans, const locationConditionMap& initialStates);
+    //HybridAutomaton(const locationVector& locs, const transitionVector& trans, const locationConditionMap& initialStates);
+    HybridAutomaton(const locationVector& locs, const locationConditionMap& initialStates);
 
     /**
      * @brief 		Destructor
@@ -108,7 +109,7 @@ class HybridAutomaton
     Location<Number>* getLocation(const std::size_t hash) const;
     Location<Number>* getLocation(const std::string& name) const;
     //* @return The set of transitions. */
-    std::vector<Transition<Number>*> getTransitions() const;
+    //std::vector<Transition<Number>*> getTransitions() const;
     //* @return The set of initial states. */
     const locationConditionMap& getInitialStates() const { return mInitialStates; }
     //* @return The set of bad states bound to locations. */
@@ -135,12 +136,12 @@ class HybridAutomaton
         assert(checkConsistency());
     }
     //void setTransitions(transitionVector& trans) { mTransitions.swap(trans); }
-    void setTransitions(transitionVector&& trans) {
-        assert(checkConsistency());
-        mTransitions.clear();
-        mTransitions = std::move(trans);
-        assert(checkConsistency());
-    }
+    //void setTransitions(transitionVector&& trans) {
+    //    assert(checkConsistency());
+    //    mTransitions.clear();
+    //    mTransitions = std::move(trans);
+    //    assert(checkConsistency());
+    //}
     void setInitialStates(const locationConditionMap& states) { mInitialStates = states; }
     void setLocalBadStates(const locationConditionMap& states) { mLocalBadStates = states; }
     void setGlobalBadStates(const conditionVector& states) { mGlobalBadStates = states; }
@@ -153,14 +154,14 @@ class HybridAutomaton
     ///@{
     void addLocation(const Location<Number>& location);
     void addLocation(std::unique_ptr<Location<Number>>&& location);
-    void addTransition(const Transition<Number>& transition);
-    void addTransition(std::unique_ptr<Transition<Number>>&& transition);
+    //void addTransition(const Transition<Number>& transition);
+    //void addTransition(std::unique_ptr<Transition<Number>>&& transition);
     void addInitialState(const Location<Number>* loc, const Condition<Number>& state) { mInitialStates.emplace(std::make_pair(loc,state)); }
     void addLocalBadState(const Location<Number>* loc, const Condition<Number>& condition) { mLocalBadStates.emplace(std::make_pair(loc,condition)); }
     void addGlobalBadState(const Condition<Number>& state) { mGlobalBadStates.push_back(state); }
     ///@}
 
-    void removeTransition(Transition<Number>* toRemove);
+    //void removeTransition(Transition<Number>* toRemove);
 
     /**
      * @brief Decomposes an automaton into the components
@@ -223,10 +224,10 @@ class HybridAutomaton
             TRACE("hypro.datastructures.hybridAutomaton", "no equality of locations.");
             return false;
         }
-        if(!(lhs.equals(lhs.getTransitions(),rhs.getTransitions()))){
-            TRACE("hypro.datastructures.hybridAutomaton", "no equality of transitions.");
-            return false;
-        }
+        //if(!(lhs.equals(lhs.getTransitions(),rhs.getTransitions()))){
+        //    TRACE("hypro.datastructures.hybridAutomaton", "no equality of transitions.");
+        //    return false;
+        //}
         if(lhs.getInitialStates().size() != rhs.getInitialStates().size()){
             TRACE("hypro.datastructures.hybridAutomaton", "initial set sizes were different.");
             return false;
@@ -307,10 +308,10 @@ class HybridAutomaton
         for (auto l : a.getLocations()) {
             ostr << *l << std::endl;
         }
-        ostr << "transitions ("<< a.getTransitions().size() << "): " << std::endl;
-        for (const auto& transition : a.getTransitions()) {
-            ostr << *transition << std::endl;
-        }
+        //ostr << "transitions ("<< a.getTransitions().size() << "): " << std::endl;
+        //for (const auto& transition : a.getTransitions()) {
+        //    ostr << *transition << std::endl;
+        //}
         ostr << "local bad states ("<< a.getLocalBadStates().size() << "): " << std::endl;
         for(auto badStateIt = a.getLocalBadStates().begin(); badStateIt != a.getLocalBadStates().end(); ++badStateIt){
             ostr << ((*badStateIt).first)->getName() << ": " << (*badStateIt).second << std::endl;

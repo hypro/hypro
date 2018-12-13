@@ -98,12 +98,12 @@ protected:
 			hybrid.addInitialState(loc, Condition<double>(hpoly.matrix(), hpoly.vector()));
 		}
 
-		ptrSet.push_back(trans.get());
-		transSet.emplace_back(std::move(trans));
+		ptrSet.emplace_back(std::move(trans));
+		//transSet.emplace_back(std::move(trans));
 
-		hybrid.getLocation("Location1")->setTransitions(ptrSet);
+		hybrid.getLocation("Location1")->setTransitions(std::move(ptrSet));
 		//loc1->setTransitions(ptrSet);
-		hybrid.setTransitions(std::move(transSet));
+		//hybrid.setTransitions(std::move(transSet));
 
     }
 
@@ -136,7 +136,7 @@ protected:
 	std::vector<Location<double>*> initLocSet;
 
 	std::vector<std::unique_ptr<Transition<double>>> transSet;
-    std::vector<Transition<double>*> ptrSet;
+    std::vector<std::unique_ptr<Transition<double>>> ptrSet;
 
 	vector_t<double> coordinates = vector_t<double>(2,1);
     valuation_t poly;

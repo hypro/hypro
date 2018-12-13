@@ -102,7 +102,7 @@ std::pair<CONTAINMENT,State<Number,Representation,Rargs...>> State<Number,Repres
 	}
 
 	DEBUG("hypro.datastructures","This size: " << mSets.size() << ", condition size: " << in.size());
-	TRACE("hypro.datastructures","Condition matrix: " << std::endl << in.getMatrix() << std::endl << "Vector: " << std::endl << in.getVector());
+	DEBUG("hypro.datastructures","Condition matrix: " << std::endl << in.getMatrix() << std::endl << "Vector: " << std::endl << in.getVector());
 	assert(in.size() == mSets.size());
 
 	State<Number,Representation,Rargs...> res(*this);
@@ -117,7 +117,7 @@ std::pair<CONTAINMENT,State<Number,Representation,Rargs...>> State<Number,Repres
 		res.setSetDirect(resultPair.second, i);
 
 		if(resultPair.first == CONTAINMENT::NO) {
-			TRACE("hypro.datastructures","State set " << i << "(type " << mTypes.at(i) << ") failed the condition - return empty.");
+			DEBUG("hypro.datastructures","State set " << i << "(type " << mTypes.at(i) << ") failed the condition - return empty.");
 			strictestContainment = resultPair.first;
 			break;
 		} else if(resultPair.first == CONTAINMENT::PARTIAL) {
@@ -196,6 +196,16 @@ State<Number,Representation,Rargs...> State<Number,Representation,Rargs...>::app
 	for(std::size_t i = 0; i < mSets.size(); ++i) {
 		res.setSetDirect(boost::apply_visitor(genericAffineTransformationVisitor<repVariant, Number>(trafos.at(i).matrix(), trafos.at(i).vector()), mSets.at(i)), i);
 	}
+	return res;
+}
+
+template<typename Number, typename Representation, typename ...Rargs>
+State<Number,Representation,Rargs...> State<Number,Representation,Rargs...>::applyTransformation(const ConstraintSet<Number>& trafo, std::size_t I ) const {
+	State<Number,Representation,Rargs...> res(*this);
+	assert(I < mSets.size());
+	assert(checkConsistency());
+	INFO("hypro.datastructures","Apply transformation of set at pos " << I << ", using transformation " << trafo);
+	res.setSet(boost::apply_visitor(genericAffineTransformationVisitor<repVariant, Number>(trafo.matrix(), trafo.vector()), mSets.at(I)), I);
 	return res;
 }
 
@@ -307,12 +317,18 @@ template<typename Number, typename Representation, typename ...Rargs>
 std::size_t State<Number,Representation,Rargs...>::getDimension(std::size_t I) const {
 	assert(I < mSets.size());
 	assert(checkConsistency());
-	//If only one representation given: avoid boost visitor
-	//if(mTypes.size() == 1){
-	//	return boost::get<Representation>(mSets.at(0)).dimension();
-	//}
-	//For more representations avaiable: use boost visitor
 	return boost::apply_visitor(genericDimensionVisitor(), mSets.at(I));
+}
+
+template<typename Number, typename Representation, typename ...Rargs>
+std::size_t State<Number,Representation,Rargs...>::getDimensionOffset(std::size_t I) const {
+	assert(I < mSets.size());
+	assert(checkConsistency());
+	std::size_t res = 0;
+	for(std::size_t i = 0; i < I; ++i) {
+		res += this->getDimension(i);
+	}
+	return res;
 }
 
 template<typename Number, typename Representation, typename ...Rargs>

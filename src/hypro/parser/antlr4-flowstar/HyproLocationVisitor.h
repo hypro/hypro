@@ -16,6 +16,7 @@
 #include "../../types.h"
 #include "../../datastructures/HybridAutomaton/Location.h"
 #include "../../datastructures/HybridAutomaton/Condition.h"
+#include "../../util/VariablePool.h"
 
 using namespace antlr4;
 

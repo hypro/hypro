@@ -23,6 +23,7 @@
 #include "../../datastructures/HybridAutomaton/HybridAutomaton.h"
 #include "../../datastructures/reachability/Settings.h"
 #include "../../util/logging/Logger.h"
+#include "../../util/VariablePool.h"
 
 using namespace antlr4;
 

@@ -18,10 +18,10 @@ protected:
     virtual void SetUp()
     {
 		pool.clear();
-		x = pool.newCarlVariable();
-		y = pool.newCarlVariable();
-		a = pool.newCarlVariable();
-		b = pool.newCarlVariable();
+		x = pool.carlVarByIndex(0);
+		y = pool.carlVarByIndex(1);
+		a = pool.carlVarByIndex(2);
+		b = pool.carlVarByIndex(3);
         // p1
         p1 = Point<Number>({2,5});
 
@@ -316,4 +316,3 @@ TYPED_TEST(PointTest, Addition)
 	Point<TypeParam> p3({-1,-2});
 	EXPECT_EQ(p1+p3, Point<TypeParam>({0,0}));
 }
-

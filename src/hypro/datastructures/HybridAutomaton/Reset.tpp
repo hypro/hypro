@@ -10,11 +10,63 @@ namespace hypro {
 	}
 
 	template<typename Number>
+	const vector_t<Number>& Reset<Number>::getVector(std::size_t I) const {
+		auto visitor = detail::make_reset_visitor<ResetType>([](const auto& in){ return detail::getType(in); });
+		assert(boost::apply_visitor(visitor, mResets[I]) == ResetType::affine);
+		return boost::get<AffineTransformation<Number>>(mResets[I]).mTransformation.vector();
+	}
+
+	template<typename Number>
+	const matrix_t<Number>& Reset<Number>::getMatrix(std::size_t I) const {
+		auto visitor = detail::make_reset_visitor<ResetType>([](const auto& in){ return detail::getType(in); });
+		assert(boost::apply_visitor(visitor, mResets[I]) == ResetType::affine);
+		return boost::get<AffineTransformation<Number>>(mResets[I]).mTransformation.matrix();
+	}
+
+	template<typename Number>
+	matrix_t<Number>& Reset<Number>::rGetMatrix(std::size_t I) {
+		auto visitor = detail::make_reset_visitor<ResetType>([](const auto& in){ return detail::getType(in); });
+		assert(boost::apply_visitor(visitor, mResets[I]) == ResetType::affine);
+		return boost::get<AffineTransformation<Number>>(mResets[I]).mTransformation.matrix();
+	}
+
+	template<typename Number>
+	vector_t<Number>& Reset<Number>::rGetVector(std::size_t I) {
+		auto visitor = detail::make_reset_visitor<ResetType>([](const auto& in){ return detail::getType(in); });
+		assert(boost::apply_visitor(visitor, mResets[I]) == ResetType::affine);
+		return boost::get<AffineTransformation<Number>>(mResets[I]).mTransformation.vector();
+	}
+
+	template<typename Number>
+	const std::vector<carl::Interval<Number>>& Reset<Number>::getIntervals(std::size_t I) const {
+		auto visitor = detail::make_reset_visitor<ResetType>([](const auto& in){ return detail::getType(in); });
+		assert(boost::apply_visitor(visitor, mResets[I]) == ResetType::interval);
+		return boost::get<IntervalAssignment<Number>>(mResets[I]).mIntervals;
+	}
+
+	template<typename Number>
+	std::vector<carl::Interval<Number>>& Reset<Number>::rGetIntervals(std::size_t I) {
+		auto visitor = detail::make_reset_visitor<ResetType>([](const auto& in){ return detail::getType(in); });
+		assert(boost::apply_visitor(visitor, mResets[I]) == ResetType::interval);
+		return boost::get<IntervalAssignment<Number>>(mResets[I]).mIntervals;
+	}
+
+	template<typename Number>
+	const typename Reset<Number>::ResetVariant& Reset<Number>::getReset(std::size_t I) const {
+		return mResets[I];
+	}
+
+	template<typename Number>
+	typename Reset<Number>::ResetVariant& Reset<Number>::rGetReset(std::size_t I) const {
+		return mResets[I];
+	}
+
+	template<typename Number>
 	void Reset<Number>::setVector(const vector_t<Number>& in, std::size_t I) {
 		while (mResets.size() < I+1) {
-			mResets.push_back(ConstraintSetT<Number>());
+			mResets.push_back(AffineTransformation<Number>());
 		}
-		mResets[I].rVector() = in;
+		boost::get<AffineTransformation<Number>>(mResets[I]).mTransformation.rVector() = in;
 		mHash = 0;
 	}
 
@@ -22,19 +74,17 @@ namespace hypro {
 	void Reset<Number>::setMatrix(const matrix_t<Number>& in, std::size_t I) {
 		assert(in.rows() == in.cols());
 		while (mResets.size() < I+1) {
-			mResets.push_back(ConstraintSetT<Number>());
+			mResets.push_back(AffineTransformation<Number>());
 		}
-		mResets[I].rMatrix() = in;
+		boost::get<AffineTransformation<Number>>(mResets[I]).mTransformation.rMatrix() = in;
 		mHash = 0;
 	}
 
 	template<typename Number>
 	bool Reset<Number>::isIdentity() const {
+		auto visitor = detail::make_reset_visitor<bool>([](const auto& in){ return in.isIdentity();});
 		for(const auto& cset : mResets) {
-			if( cset.matrix() != matrix_t<Number>::Identity(cset.matrix().rows(),cset.matrix().rows())
-				|| cset.vector() != vector_t<Number>::Zero(cset.vector().rows()) ) {
-				return false;
-			}
+			bool tmp = boost::apply_visitor(visitor, cset);
 		}
 		return true;
 	}
@@ -154,55 +204,72 @@ namespace hypro {
 
 	template<typename Number>
 	void Reset<Number>::decompose(const Decomposition& decomposition){
-		if(mResets.size() != 1){
-			//already decomposed/empty constraints
+		if(mResets.size() == 0 || mDecomposed){
+			//empty constraints
 			return;
 		}
-		ConstraintSetT<Number> cset = mResets.at(0);
-		DEBUG("hypro.datastructures", "Constraint Set before: \n " << cset );
 
-		matrix_t<Number> constraintsOld(cset.matrix());
-		vector_t<Number> constantsOld(cset.vector());
+		INFO("hypro.datastructures","In the current state we assume that rectangular subspaces will not be decomposed.");
+		assert(mResets.size() <= 2);
+		for(auto& reset : mResets) {
+			auto visitor = detail::make_reset_visitor<ResetType>([](const auto& in){ return detail::getType(in); });
+			ResetType type = boost::apply_visitor(visitor, reset);
 
-		std::vector<ConstraintSetT<Number>> newCset;
-		// select constrains i,j,k into new constraint vector
-		for(auto set : decomposition){
-			#ifdef HYPRO_LOGGING
-			DEBUG("hypro.datastructures", "decompose constraint for set: {");
-			for(auto entry : set){
-				DEBUG("hypro.datastructures", "" <<  entry << ", ");
-			}
-			DEBUG("hypro.datastructures", "}");
-			#endif
+			if(type == ResetType::interval) {
+				// currently we do not decompose interval assignments
+				continue;
+			} else if ( type == ResetType::affine ){
+				ConstraintSetT<Number> cset = boost::get<AffineTransformation<Number>>(reset).mTransformation;
+				DEBUG("hypro.datastructures", "Constraint Set before: \n " << cset );
 
-			// for each row of the constraints check if it contains an entry for one of the variables of the set
-			// and add the corresponding rows to a list of indices that are later added to a matrix
-			std::vector<Eigen::Index> indicesToAdd;
-			for(auto entry : set){
-				indicesToAdd.push_back(Eigen::Index(entry));
-			}
+				matrix_t<Number> constraintsOld(cset.matrix());
+				vector_t<Number> constantsOld(cset.vector());
 
-			if(indicesToAdd.size() > 0){
-				// create a row matrix with numIndicesToAdd many rows
-				matrix_t<Number> newMatrix = selectRows(constraintsOld, indicesToAdd);
-				newMatrix = selectCols(newMatrix, set);
+				std::vector<ConstraintSetT<Number>> newCset;
+				// select constrains i,j,k into new constraint vector
+				for(auto set : decomposition){
+					#ifdef HYPRO_LOGGING
+					DEBUG("hypro.datastructures", "decompose constraint for set: {");
+					for(auto entry : set){
+						DEBUG("hypro.datastructures", "" <<  entry << ", ");
+					}
+					DEBUG("hypro.datastructures", "}");
+					#endif
 
-				// create final constant vector
-				vector_t<Number> newVec = selectRows(constantsOld, indicesToAdd);
+					// for each row of the constraints check if it contains an entry for one of the variables of the set
+					// and add the corresponding rows to a list of indices that are later added to a matrix
+					std::vector<Eigen::Index> indicesToAdd;
+					for(auto entry : set){
+						indicesToAdd.push_back(Eigen::Index(entry));
+					}
 
-				ConstraintSetT<Number> res(newMatrix,newVec);
-				DEBUG("hypro.datastructures", "Final decomposed ConstraintSetT: \n" << res);
-				newCset.push_back(res);
-			}
-			else {
-				DEBUG("hypro.datastructures", "No constraints for set found.");
-				// add identity constraints
-				ConstraintSetT<Number> res = ConstraintSetT<Number>();
-				newCset.push_back(res);
+					if(indicesToAdd.size() > 0){
+						// create a row matrix with numIndicesToAdd many rows
+						matrix_t<Number> newMatrix = selectRows(constraintsOld, indicesToAdd);
+						newMatrix = selectCols(newMatrix, set);
+
+						// create final constant vector
+						vector_t<Number> newVec = selectRows(constantsOld, indicesToAdd);
+
+						ConstraintSetT<Number> res(newMatrix,newVec);
+						DEBUG("hypro.datastructures", "Final decomposed ConstraintSetT: \n" << res);
+						newCset.push_back(res);
+					}
+					else {
+						DEBUG("hypro.datastructures", "No constraints for set found.");
+						// add identity constraints
+						ConstraintSetT<Number> res = ConstraintSetT<Number>();
+						newCset.push_back(res);
+					}
+				}
+
+				reset = AffineTransformation<Number>{newCset};
+				mDecomposed = true;
+				mHash = 0;
+			} else {
+				assert(false && "NOT IMPLEMENTED.");
 			}
 		}
 
-		mResets = newCset;
-		mHash = 0;
 	}
 } // namespace

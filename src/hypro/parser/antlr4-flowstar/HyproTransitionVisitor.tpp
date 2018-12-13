@@ -5,7 +5,7 @@ namespace hypro {
 	//////////// Constructor and Destructor
 
 	template<typename Number>
-	HyproTransitionVisitor<Number>::HyproTransitionVisitor(std::vector<std::string>& varVec, std::set<Location<Number>*>& lSet) :
+	HyproTransitionVisitor<Number>::HyproTransitionVisitor(std::vector<std::string>& varVec, const std::set<Location<Number>*>& lSet) :
 		vars(varVec),
 		locSet(lSet)
 	{ }
@@ -27,7 +27,7 @@ namespace hypro {
 				Transition<Number>* t = visit(tr);//.antlrcpp::Any::as<Transition<Number>*>();
 				//trSet.insert(t);
 				trSet.emplace(t);
-				(t->getSource())->addTransition(t);
+				//(t->getSource())->addTransition(t);
 			}
 			return trSet;
 			//return std::move(trSet);
@@ -96,7 +96,7 @@ namespace hypro {
 		bool foundLeft = false;
 		bool foundRight = false;
 		std::pair<Location<Number>*,Location<Number>*> fromTo;
-		for(auto& loc : locSet){
+		for(const auto& loc : locSet){
 			//std::cout << "---- Name of loc: " << loc->getName() << " name of variable 0: " << ctx->VARIABLE()[0]->getText() << " name of variable 1: " << ctx->VARIABLE()[1]->getText() << std::endl;
 			if(loc->getName() == ctx->VARIABLE()[0]->getText()){
 				foundLeft = true;
@@ -213,5 +213,3 @@ namespace hypro {
 	}
 
 }
-
-
