@@ -109,8 +109,8 @@ void boxFromPoints(int nlhs, mxArray *plhs[], const mxArray *prhs[]){
 
 
     //std::vector<carl::Interval<double>> intervals = ObjectHandle::mPoints2HyProIntervals(in);
-    hypro::Box<double>* box = new hypro::Box<double>(intervals);
-    plhs[0] =  convertPtr2Mat<hypro::Box<double>>(box);
+    // hypro::Box<double>* box = new hypro::Box<double>(intervals);
+    // plhs[0] =  convertPtr2Mat<hypro::Box<double>>(box);
 }
 
 /**
