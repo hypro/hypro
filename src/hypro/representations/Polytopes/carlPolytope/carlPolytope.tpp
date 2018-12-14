@@ -5,9 +5,9 @@ namespace hypro {
     template<typename Number, typename Converter, typename Settings>
     CarlPolytopeT<Number,Converter,Settings>::CarlPolytopeT(const matrix_t<Number>& constraints, const vector_t<Number>& constants) {
         TRACE("hypro.representations.carlPolytope","Construct P from " << constraints << " and " << constants);
-        FormulasT<Number> newConstraints = halfspacesToConstraints(constraints,constants);
+        FormulasT<tNumber> newConstraints = halfspacesToConstraints<tNumber,Number>(constraints,constants);
 
-        mFormula = FormulaT<Number>{carl::FormulaType::AND, newConstraints};
+        mFormula = FormulaT<tNumber>{carl::FormulaType::AND, newConstraints};
         TRACE("hypro.representations.carlPolytope","Result formula: " << mFormula);
         detectDimension();
     }
@@ -15,13 +15,13 @@ namespace hypro {
     template<typename Number, typename Converter, typename Settings>
     CarlPolytopeT<Number,Converter,Settings>::CarlPolytopeT(const std::vector<carl::Interval<Number>>& intervals) {
         TRACE("hypro.representations.carlPolytope","Construct P from interval vector.");
-        FormulasT<Number> newConstraints;
+        FormulasT<tNumber> newConstraints;
 
         for(std::size_t i = 0; i < intervals.size(); ++i) {
-            auto tmp = intervalToFormulas(intervals[i], i);
+            auto tmp = intervalToFormulas<tNumber,Number>(intervals[i], i);
             newConstraints.insert(newConstraints.end(),tmp.begin(),tmp.end());
         }
-        mFormula = FormulaT<Number>{carl::FormulaType::AND, newConstraints};
+        mFormula = FormulaT<tNumber>{carl::FormulaType::AND, newConstraints};
         TRACE("hypro.representations.carlPolytope","Result formula: " << mFormula);
         detectDimension();
     }
@@ -44,7 +44,7 @@ namespace hypro {
         }
 
         // collect constraints
-        std::vector<ConstraintT<Number>> newConstraints;
+        std::vector<ConstraintT<tNumber>> newConstraints;
         mFormula.getConstraints(newConstraints);
         rhs.getFormula().getConstraints(newConstraints);
 
@@ -54,14 +54,14 @@ namespace hypro {
     template<typename Number, typename Converter, typename Settings>
     const std::vector<Halfspace<Number>>& CarlPolytopeT<Number,Converter,Settings>::getHalfspaces() const {
         if(mHalfspaces.empty()) {
-            mHalfspaces = computeHalfspaces(mFormula, this->dimension());
+            mHalfspaces = computeHalfspaces<tNumber,Number>(mFormula, this->dimension());
         }
         TRACE("hypro.representations.carlPolytope","Computed halfspaces..");
         return mHalfspaces;
     }
 
     template<typename Number, typename Converter, typename Settings>
-    void CarlPolytopeT<Number,Converter,Settings>::addConstraint(const ConstraintT<Number>& constraint) {
+    void CarlPolytopeT<Number,Converter,Settings>::addConstraint(const ConstraintT<tNumber>& constraint) {
         // reset Half-space cache
         mHalfspaces.clear();
         // if not empty, reset cache
@@ -69,15 +69,15 @@ namespace hypro {
             mEmpty = TRIBOOL::NSET;
         }
         // add constraint to formula
-        std::vector<ConstraintT<Number>> constraints;
+        std::vector<ConstraintT<tNumber>> constraints;
         mFormula.getConstraints(constraints);
         constraints.push_back(constraint);
-        mFormula = FormulaT<Number>(carl::FormulaType::AND, constraintsToFormulas(constraints));
+        mFormula = FormulaT<tNumber>(carl::FormulaType::AND, constraintsToFormulas(constraints));
         detectDimension();
     }
 
     template<typename Number, typename Converter, typename Settings>
-    void CarlPolytopeT<Number,Converter,Settings>::addConstraints(const std::vector<ConstraintT<Number>>& constraints) {
+    void CarlPolytopeT<Number,Converter,Settings>::addConstraints(const std::vector<ConstraintT<tNumber>>& constraints) {
         // reset Half-space cache
         mHalfspaces.clear();
         // if not empty, reset cache
@@ -87,7 +87,7 @@ namespace hypro {
         // add constraints to formula
         auto cCopy = constraints;
         mFormula.getConstraints(cCopy);
-        mFormula = FormulaT<Number>(carl::FormulaType::AND, cCopy);
+        mFormula = FormulaT<tNumber>(carl::FormulaType::AND, cCopy);
         detectDimension();
     }
 
@@ -140,16 +140,16 @@ namespace hypro {
     matrix_t<Number> CarlPolytopeT<Number,Converter,Settings>::matrix() const {
         assert(dimensionWasCorrectlySet());
         matrix_t<Number> res = matrix_t<Number>(mFormula.size(),dimension());
-        std::vector<ConstraintT<Number>> constraints;
+        std::vector<ConstraintT<tNumber>> constraints;
         mFormula.getConstraints(constraints);
         std::size_t i = 0;
         for(const auto& c : constraints) {
-            res.row(i) = constraintNormal(c,dimension());
+            res.row(i) = constraintNormal<tNumber,Number>(c,dimension());
             if(c.relation() == carl::Relation::EQ) {
                 //res.conservativeResize(res.rows()+1, Eigen::NoChange_t);
                 res.conservativeResize(res.rows()+1, res.cols());
                 ++i;
-                res.row(i) = -constraintNormal(c,dimension());
+                res.row(i) = -constraintNormal<tNumber,Number>(c,dimension());
             }
             ++i;
         }
@@ -160,15 +160,15 @@ namespace hypro {
     vector_t<Number> CarlPolytopeT<Number,Converter,Settings>::vector() const {
         assert(dimensionWasCorrectlySet());
         vector_t<Number> res = vector_t<Number>(mFormula.size());
-        std::vector<ConstraintT<Number>> constraints;
+        std::vector<ConstraintT<tNumber>> constraints;
         mFormula.getConstraints(constraints);
         std::size_t i = 0;
         for(const auto& c : constraints) {
-            res(i) = normalizedOffset(c);
+            res(i) = normalizedOffset<tNumber,Number>(c);
             if(c.relation() == carl::Relation::EQ) {
                 res.conservativeResize(res.rows()+1);
                 ++i;
-                res(i) = -normalizedOffset(c);
+                res(i) = -normalizedOffset<tNumber,Number>(c);
             }
             ++i;
         }
@@ -194,13 +194,13 @@ namespace hypro {
             return;
         }
         Optimizer<Number> opt = Optimizer<Number>(this->matrix(), this->vector());
-        std::vector<ConstraintT<Number>> constraints;
+        std::vector<ConstraintT<tNumber>> constraints;
         mFormula.getConstraints(constraints);
         auto redundantConstraints = opt.redundantConstraints();
         for(auto it = redundantConstraints.rbegin(); it != redundantConstraints.rend(); ++it ) {
             constraints.erase(constraints.begin() + *it);
         }
-        mFormula = FormulaT<Number>(carl::FormulaType::AND, constraintsToFormulas(constraints));
+        mFormula = FormulaT<tNumber>(carl::FormulaType::AND, constraintsToFormulas(constraints));
     }
 
     template<typename Number, typename Converter, typename Settings>

@@ -17,7 +17,7 @@ public:
     // typedefs
 
 private:
-    FormulaT<Number> mFormula; /// The description of the polytope as a conjunction of linear constraints.
+    FormulaT<tNumber> mFormula; /// The description of the polytope as a conjunction of linear constraints.
     mutable std::vector<Halfspace<Number>> mHalfspaces; /// Caches transformed half-spaces.
     mutable std::size_t mDimension = 0; /// Stores the state space dimension the polytope resides in.
     mutable TRIBOOL mEmpty = TRIBOOL::NSET; /// Caches whether the polytope is empty.
@@ -28,7 +28,7 @@ public:
         , mHalfspaces()
     {}
 
-    CarlPolytopeT(const FormulaT<Number>& formula, std::size_t dimension = 0)
+    CarlPolytopeT(const FormulaT<tNumber>& formula, std::size_t dimension = 0)
         : mFormula(formula)
         , mHalfspaces()
         , mDimension(dimension)
@@ -49,12 +49,12 @@ public:
     CarlPolytopeT<Number,Converter,Settings> intersect(const CarlPolytopeT<Number,Converter,Settings>& rhs) const;
 
     std::size_t dimension() const { return mDimension; }
-    const FormulaT<Number>& getFormula() const { return mFormula; }
+    const FormulaT<tNumber>& getFormula() const { return mFormula; }
     const std::vector<Halfspace<Number>>& getHalfspaces() const;
 
     void setDimension(std::size_t d) { mDimension = d; }
-    void addConstraint(const ConstraintT<Number>& constraint);
-    void addConstraints(const std::vector<ConstraintT<Number>>& constraints);
+    void addConstraint(const ConstraintT<tNumber>& constraint);
+    void addConstraints(const std::vector<ConstraintT<tNumber>>& constraints);
     void substituteVariable(carl::Variable oldVar, carl::Variable newVar);
 
     std::vector<carl::Variable> getVariables() const;
@@ -75,6 +75,14 @@ public:
     friend std::ostream& operator<<(std::ostream& out, const CarlPolytopeT<Number,Converter,Settings>& in ) {
         out << in.getFormula();
         return out;
+    }
+
+    friend bool operator==(const CarlPolytopeT<Number,Converter,Settings>& lhs, const CarlPolytopeT<Number,Converter,Settings>& rhs) {
+        return lhs.mFormula == rhs.mFormula;
+    }
+
+    friend bool operator!=(const CarlPolytopeT<Number,Converter,Settings>& lhs, const CarlPolytopeT<Number,Converter,Settings>& rhs) {
+        return !(lhs.mFormula == rhs.mFormula);
     }
 
 private:
