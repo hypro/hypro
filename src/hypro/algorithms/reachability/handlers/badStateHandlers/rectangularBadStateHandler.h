@@ -9,7 +9,7 @@ namespace hypro
 	protected:
 		State*  mState;
 		size_t mIndex;
-		CONTAINMENT mContainment = false;
+		CONTAINMENT mContainment = CONTAINMENT::NO;
 		bool mNoBadStates = false;
 		bool mMarkedForDelete = false;
 

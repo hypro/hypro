@@ -5,17 +5,22 @@
 namespace hypro
 {
     template<typename State>
-	class rectangularFirstSegmentHandler {
+	class rectangularFirstSegmentHandler : public IFirstSegmentHandler<State> {
 		using Number = typename State::NumberType;
-
-		rectangularFlow<Number> mFlow;
+		State* mState;
+		flowVariant<Number> mFlow;
+		std::size_t mIndex;
 	public:
-		rectangularFirstSegmentHandler(const rectangularFlow<Number>& flow ) : mFlow(flow) {}
+		rectangularFirstSegmentHandler(State* state, std::size_t index)
+			: mState(state)
+			, mFlow()
+			, mIndex(index)
+		{}
 
 		void handle();
 		const char* handlerName() {return "rectangularFirstSegmentHandler";}
 
-		const flowVariant<typename State::NumberType> getTransformation() const { return mFlow; }
+		const flowVariant<typename State::NumberType>& getTransformation() const { return mFlow; }
 	};
 } // hypro
 

@@ -16,7 +16,7 @@ namespace hypro
  				return new timedFirstSegmentHandler<State>(state,index,timeStep);
  			}
 			case representation_name::carl_polytope: {
-				return new rectangularFirstSegmentHandler<State>();
+				return new rectangularFirstSegmentHandler<State>(state,index);
 			}
 			default:
  				return new ltiFirstSegmentHandler<State>(state,index,timeStep);
@@ -128,8 +128,6 @@ namespace hypro
 			return nullptr;
 		}
 		*/
-
-		enum class DynamicType{linear=0, affine, rectangular, timed, discrete};
 
 		switch(name){
  			case representation_name::difference_bounds: {
