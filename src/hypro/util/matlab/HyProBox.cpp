@@ -106,11 +106,10 @@ void boxFromPoints(int nlhs, mxArray *plhs[], const mxArray *prhs[]){
 
     in = mxGetPr(m_in_points);
     
-
-
-    //std::vector<carl::Interval<double>> intervals = ObjectHandle::mPoints2HyProIntervals(in);
-    // hypro::Box<double>* box = new hypro::Box<double>(intervals);
-    // plhs[0] =  convertPtr2Mat<hypro::Box<double>>(box);
+    std::pair<hypro::Point<double>, hypro::Point<double>> pair = ObjectHandle::mPointPair2HyProPointPair(in);
+    hypro::Box<double>* box = new hypro::Box<double>(pair);
+    plhs[0] =  convertPtr2Mat<hypro::Box<double>>(box);
+    return;
 }
 
 /**
@@ -174,8 +173,6 @@ void getSettings(int nlhs, mxArray *plhs[], const mxArray *prhs[]){
  **/
 void empty(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
     mexErrMsgTxt("NOT IMPLEMENTED");
-    // if(nlhs != 1)
-    //     mexErrMsgTxt("empty: Expecting an output!");
     // if(nrhs < 2)
     //     mexErrMsgTxt("empty: One or more arguments are missing!");
 
@@ -184,11 +181,11 @@ void empty(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
     // const mwSize *dims;
     // int dimy, dimx;
 
-    // int in = (size_t)*mxGetPr(m_in_dim);
-    
-    //mexPrintf("bla %d",in);
-    //hypro::Box<double>* box = new hypro::Box<double>(3);
-    //plhs[0] =  convertPtr2Mat<hypro::Box<double>>(box);
+    // size_t in = (size_t) mxGetScalar(prhs[1]);
+
+    // hypro::Box<double>* box = convertMat2Ptr<hypro::Box<double>>(prhs[1]);
+    // box->Empty(in);
+    // //plhs[0] =  convertPtr2Mat<hypro::Box<double>>(box);
 }
 
 /**
@@ -217,9 +214,6 @@ void intervals(int nlhs, mxArray *plhs[], const mxArray *prhs[]){
  * @brief Extends a box by a further interval
  **/
 void insert(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
-    if(nlhs < 1){
-        mexErrMsgTxt("insert: Expecting an output!");
-    }
     if(nrhs < 3){
         mexErrMsgTxt("insert: One argument is missing!");
     }
@@ -251,7 +245,23 @@ void insert(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
  * @brief
  **/
 void limits(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
-    mexErrMsgTxt("NOT IMPLEMENTED");
+    if(nlhs < 1){
+        mexErrMsgTxt("limits: Expecting output!");
+    }
+    if(nrhs < 2){
+        mexErrMsgTxt("limits: One argument is missing!");
+    }
+    
+    mxArray* m_out;
+    double* out;
+
+    hypro::Box<double>* box = convertMat2Ptr<hypro::Box<double>>(prhs[1]);
+    std::pair<hypro::Point<double>, hypro::Point<double>> p = box->limits();
+    
+    m_out = plhs[0] = mxCreateDoubleMatrix(2, 2, mxREAL);
+    out = mxGetPr(m_out);
+    ObjectHandle::hyProPointPair2mPointPair(p, out);
+
 }
 
 /**
@@ -265,56 +275,158 @@ void constraints(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
  * @brief
  **/
 void interval(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
-    mexErrMsgTxt("NOT IMPLEMENTED");
+    if(nlhs < 1){
+        mexErrMsgTxt("interval: Expecting an output!");
+    }
+    if(nrhs < 3){
+        mexErrMsgTxt("interval: One or more arguments are missing!");
+    }
+
+    mxArray *m_in_dim, *m_out;
+    double *in, *out;
+
+    size_t dim = (size_t) mxGetScalar(prhs[2]);
+
+    hypro::Box<double>* box = convertMat2Ptr<hypro::Box<double>>(prhs[1]);
+    const carl::Interval<double> inter = box->interval(dim);
+    
+    m_out = plhs[0] = mxCreateDoubleMatrix(1, 2, mxREAL);
+    out = mxGetPr(m_out);
+    ObjectHandle::hyproInterval2mInterval(inter, out);
 }
 
 /**
  * @brief
  **/
 void at(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
-    mexErrMsgTxt("NOT IMPLEMENTED");
+    if(nlhs < 1){
+        mexErrMsgTxt("at: Expecting an output!");
+    }
+    if(nrhs < 3){
+        mexErrMsgTxt("at: One or more arguments are missing!");
+    }
+
+    mxArray *m_in_dim, *m_out;
+    double* out;
+
+    size_t dim = (size_t) mxGetScalar(prhs[2]);
+    hypro::Box<double>* box = convertMat2Ptr<hypro::Box<double>>(prhs[1]);
+    const carl::Interval<double> inter = box->at(dim);
+
+    m_out = plhs[0] = mxCreateDoubleMatrix(1, 2, mxREAL);
+    out = mxGetPr(m_out);
+    ObjectHandle::hyproInterval2mInterval(inter, out);
 }
 
 /**
  * @brief
  **/
 void is_empty_box(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
-    mexErrMsgTxt("NOT IMPLEMENTED");
+    if(nlhs < 1){
+        mexErrMsgTxt("isEmpty: Expecting an output!");
+    }
+    if(nrhs < 2){
+        mexErrMsgTxt("isEmpty: One argument missing!");
+    }
+    hypro::Box<double>* box = convertMat2Ptr<hypro::Box<double>>(prhs[1]);
+    const bool empty = box->empty();
+    mxLogical a = empty;
+    plhs[0] = mxCreateLogicalScalar(empty);
 }
 
 /**
  * @brief
  **/
 void is_symmetric(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
-    mexErrMsgTxt("NOT IMPLEMENTED");
+    if(nlhs < 1){
+        mexErrMsgTxt("isSymmetric: Expecting an output!");
+    }
+    if(nrhs < 2){
+        mexErrMsgTxt("isSymmetric: One argument missing!");
+    }
+    hypro::Box<double>* box = convertMat2Ptr<hypro::Box<double>>(prhs[1]);
+    const bool empty = box->isSymmetric();
+    mxLogical a = empty;
+    plhs[0] = mxCreateLogicalScalar(empty);
 }
 
 /**
  * @brief
  **/
 void max(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
-    mexErrMsgTxt("NOT IMPLEMENTED");
+    if(nlhs < 1){
+        mexErrMsgTxt("max: Expecting an output!");
+    }
+    if(nrhs < 2){
+        mexErrMsgTxt("max: One argument missing!");
+    }
+    mxArray *m_out;
+    double* out;
+
+    hypro::Box<double>* box = convertMat2Ptr<hypro::Box<double>>(prhs[1]);
+    hypro::Point<double> m = box->max();
+    int dim = m.rawCoordinates().size();
+    m_out = plhs[0] = mxCreateDoubleMatrix(1, 2, mxREAL);
+    out = mxGetPr(m_out);
+    ObjectHandle::hyProPoint2mPoint(m, out, dim);
 }
 
 /**
  * @brief
  **/
 void min(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
-    mexErrMsgTxt("NOT IMPLEMENTED");
+   if(nlhs < 1){
+        mexErrMsgTxt("min: Expecting an output!");
+    }
+    if(nrhs < 2){
+        mexErrMsgTxt("min: One argument missing!");
+    }
+    mxArray *m_out;
+    double* out;
+
+    hypro::Box<double>* box = convertMat2Ptr<hypro::Box<double>>(prhs[1]);
+    hypro::Point<double> m = box->min();
+    int dim = m.rawCoordinates().size();
+    m_out = plhs[0] = mxCreateDoubleMatrix(1, 2, mxREAL);
+    out = mxGetPr(m_out);
+    ObjectHandle::hyProPoint2mPoint(m, out, dim);
 }
 
 /**
  * @brief
  **/
 void supremum(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
-    mexErrMsgTxt("NOT IMPLEMENTED");
+    if(nlhs < 1){
+        mexErrMsgTxt("supremum: Expecting an output!");
+    }
+    if(nrhs < 2){
+        mexErrMsgTxt("supremum: One argument missing!");
+    }
+    hypro::Box<double>* box = convertMat2Ptr<hypro::Box<double>>(prhs[1]);
+    double supremum = box->supremum();
+    plhs[0] = mxCreateDoubleScalar(supremum);
 }
 
 /**
  * @brief
  **/
 void vertices(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
-    mexErrMsgTxt("NOT IMPLEMENTED");
+    if(nlhs < 1){
+        mexErrMsgTxt("vertices: Expecting an output!");
+    }
+    if(nrhs < 2){
+        mexErrMsgTxt("vertices: One argument missing!");
+    }
+    hypro::Box<double>* box = convertMat2Ptr<hypro::Box<double>>(prhs[1]);
+    std::vector<hypro::Point<double>> vertices = box->vertices();
+
+    mxArray* m_out_vertices;
+    double* out;
+    int dimy = vertices.size();
+    int dimx = vertices[0].dimension();
+    m_out_vertices = plhs[0] = mxCreateDoubleMatrix(dimy, dimx, mxREAL);
+    out = mxGetPr(m_out_vertices);
+    ObjectHandle::hyProPointsVector2mPointsVector(vertices, out);
 }
 
 /**
@@ -335,14 +447,38 @@ void multiEvaluate(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
  * @brief
  **/
 void equals(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
-    mexErrMsgTxt("NOT IMPLEMENTED");
+    if(nlhs < 1){
+        mexErrMsgTxt("==: Expecting an output!");
+    }
+    if(nrhs < 3){
+        mexErrMsgTxt("==: One or more arguments are missing!");
+    }
+    hypro::Box<double>* box_1 = convertMat2Ptr<hypro::Box<double>>(prhs[1]);
+    hypro::Box<double>* box_2 = convertMat2Ptr<hypro::Box<double>>(prhs[2]);
+    mxLogical ans = false;
+    if(*box_1 == *box_2){
+        ans = true;
+    }
+    plhs[0] = mxCreateLogicalScalar(ans);
 }
 
 /**
  * @brief
  **/
 void unequal(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
-    mexErrMsgTxt("NOT IMPLEMENTED");
+    if(nlhs < 1){
+        mexErrMsgTxt("!=: Expecting an output!");
+    }
+    if(nrhs < 3){
+        mexErrMsgTxt("!=: One or more arguments are missing!");
+    }
+    hypro::Box<double>* box_1 = convertMat2Ptr<hypro::Box<double>>(prhs[1]);
+    hypro::Box<double>* box_2 = convertMat2Ptr<hypro::Box<double>>(prhs[2]);
+    mxLogical ans = false;
+    if(*box_1 != *box_2){
+        ans = true;
+    }      
+    plhs[0] = mxCreateLogicalScalar(ans);
 }
 
 /**
@@ -350,27 +486,69 @@ void unequal(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
  **/
 void multiply(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
     mexErrMsgTxt("NOT IMPLEMENTED");
+    if(nlhs < 1){
+        mexErrMsgTxt("*: Expecting an output!");
+    }
+    if(nrhs < 3){
+        mexErrMsgTxt("*: One or more arguments are missing!");
+    }
+    hypro::Box<double>* box_1 = convertMat2Ptr<hypro::Box<double>>(prhs[1]);
+    const double factor = (double) mxGetScalar(prhs[2]);
+    // hypro::BoxT<double> box_2 =  box_1->operator*(factor);
+    // plhs[0] = convertPtr2Mat<hypro::Box<double>>(&box_2);
 }
+
+/**
+ * @brief
+ **/
+void outstream(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
+    mexErrMsgTxt("NOT IMPLEMENTED");
+}
+
 
 /**
  * @brief
  **/
 void dimension(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
-    mexErrMsgTxt("NOT IMPLEMENTED");
+    if(nlhs < 1){
+        mexErrMsgTxt("dimension: Expecting an output!");
+    }
+    if(nrhs < 2){
+        mexErrMsgTxt("dimension: One or more arguments are missing!");
+    }
+    hypro::Box<double>* box = convertMat2Ptr<hypro::Box<double>>(prhs[1]);
+    std::size_t dim = box->dimension();
+    plhs[0] = mxCreateDoubleScalar(dim);
 }
 
 /**
- * @brief
+ * @brief NOT TESTED FROM HERE ON
  **/
 void removeRedundancy(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
-    mexErrMsgTxt("NOT IMPLEMENTED");
+    if(nlhs < 1){
+        mexErrMsgTxt("removeRedundancy: Expecting an output!");
+    }
+    if(nrhs < 2){
+        mexErrMsgTxt("removeRedundancy: One or more arguments are missing!");
+    }
+    hypro::Box<double>* box = convertMat2Ptr<hypro::Box<double>>(prhs[1]);
+    box->removeRedundancy();
 }
 
 /**
  * @brief
  **/
 void box_size(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
-    mexErrMsgTxt("NOT IMPLEMENTED");
+    if(nlhs < 1){
+        mexErrMsgTxt("size: Expecting an output!");
+    }
+    if(nrhs < 2){
+        mexErrMsgTxt("size: One or more arguments are missing!");
+    }
+    hypro::Box<double>* box = convertMat2Ptr<hypro::Box<double>>(prhs[1]);
+    std::size_t dim = box->size();
+    
+    plhs[0] = mxCreateDoubleScalar(dim);
 }
 
 /**
@@ -384,6 +562,60 @@ void reduceNumberRepresentation(int nlhs, mxArray *plhs[], int nrhs, const mxArr
  * @brief
  **/
 void makeSymmetric(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
+    if(nlhs < 1){
+        mexErrMsgTxt("makeSymmetric: Expecting an output!");
+    }
+    if(nrhs < 2){
+        mexErrMsgTxt("makeSymmetric: One or more arguments are missing!");
+    }
+    hypro::Box<double>* box = convertMat2Ptr<hypro::Box<double>>(prhs[1]);
+    box->makeSymmetric();
+}
+
+/**
+ * @brief
+ **/
+void satisfiesHalfspace(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
+    if(nlhs < 1){
+        mexErrMsgTxt("makeSymmetric: Expecting an output!");
+    }
+    if(nrhs < 3){
+        mexErrMsgTxt("makeSymmetric: One or more arguments are missing!");
+    }
+
+    if(nrhs == 2){
+        //Make sth.
+    }else{
+        //Make sth. else
+    }
+
+}
+
+/**
+ * @brief
+ **/
+void project(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
+    mexErrMsgTxt("NOT IMPLEMENTED");
+}
+
+/**
+ * @brief
+ **/
+void linearTransformation(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
+    mexErrMsgTxt("NOT IMPLEMENTED");
+}
+
+/**
+ * @brief
+ **/
+void affineTransformation(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
+    mexErrMsgTxt("NOT IMPLEMENTED");
+}
+
+/**
+ * @brief
+ **/
+void minkowskiSum(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
     mexErrMsgTxt("NOT IMPLEMENTED");
 }
 
@@ -584,18 +816,23 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
         return;
     }
 
-    if(!strcmp("equals", cmd)){
+    if(!strcmp("==", cmd)){
         equals(nlhs, plhs, nrhs, prhs);
         return;
     }
 
-    if(!strcmp("unequals", cmd)){
+    if(!strcmp("!=", cmd)){
         unequal(nlhs, plhs, nrhs, prhs);
         return;
     }
 
     if(!strcmp("*", cmd)){
         multiply(nlhs, plhs, nrhs, prhs);
+        return;
+    }
+
+    if(!strcmp("<<", cmd)){
+        outstream(nlhs, plhs, nrhs, prhs);
         return;
     }
 
@@ -625,6 +862,31 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
 
     if(!strcmp("makeSymmetric", cmd)){
         makeSymmetric(nlhs, plhs, nrhs, prhs);
+        return;
+    }
+
+    if(!strcmp("satisfiesHalfspace", cmd)){
+        satisfiesHalfspace(nlhs, plhs, nrhs, prhs);
+        return;
+    }
+
+    if(!strcmp("project", cmd)){
+        project(nlhs, plhs, nrhs, prhs);
+        return;
+    }
+
+    if(!strcmp("linearTransformation", cmd)){
+        linearTransformation(nlhs, plhs, nrhs, prhs);
+        return;
+    }
+
+    if(!strcmp("affineTransformation", cmd)){
+        affineTransformation(nlhs, plhs, nrhs, prhs);
+        return;
+    }
+
+    if(!strcmp("minkowskiSum", cmd)){
+        minkowskiSum(nlhs, plhs, nrhs, prhs);
         return;
     }
 
@@ -669,7 +931,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
     }
 
     
-    
+    //TODO make a delete routine for this
     mexErrMsgTxt("Command not recognized");
 }
 
