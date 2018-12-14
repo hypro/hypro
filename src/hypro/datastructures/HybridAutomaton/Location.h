@@ -22,8 +22,8 @@ namespace hypro
 template<typename Number>
 class Transition;
 
-
-
+template<typename Number>
+using flowVariant = boost::variant<linearFlow<Number>, affineFlow<Number>, rectangularFlow<Number>>;
 
 /**
  * @brief      Class for location.
@@ -33,7 +33,7 @@ template<typename Number>
 class Location
 {
 public:
-    using flowVariant = boost::variant<linearFlow<Number>, affineFlow<Number>, rectangularFlow<Number>>;
+
     using transitionVector = std::vector<std::unique_ptr<Transition<Number>>>;
 
 protected:
@@ -54,7 +54,7 @@ protected:
     ///@}
 
 private:
-    mutable std::vector<flowVariant> mFlows;
+    mutable std::vector<flowVariant<Number>> mFlows;
     std::vector<carl::Interval<Number>> mExternalInput;
     bool mHasExternalInput = false;
     transitionVector mTransitions;
@@ -71,9 +71,9 @@ public:
     ~Location(){}
 
     std::size_t getNumberFlow() const { return mFlows.size(); }
-    flowVariant getFlow(std::size_t I = 0) const { return mFlows.at(I); }
-    flowVariant& rGetFlow(std::size_t I = 0) { return mFlows[I]; }
-    const std::vector<flowVariant>& getFlows() const { return mFlows; }
+    flowVariant<Number> getFlow(std::size_t I = 0) const { return mFlows.at(I); }
+    flowVariant<Number>& rGetFlow(std::size_t I = 0) { return mFlows[I]; }
+    const std::vector<flowVariant<Number>>& getFlows() const { return mFlows; }
     const Condition<Number>& getInvariant() const { return mInvariant; }
     std::vector<Transition<Number>*> getTransitions() const;
     transitionVector& rGetTransitions() { return mTransitions; }
@@ -86,8 +86,8 @@ public:
     std::size_t dimension(std::size_t i) const;
 
     void setName(const std::string& name) { mName = name; mHash = 0; }
-    void setFlow(const flowVariant& f, std::size_t I = 0);
-    void setFlow(const std::vector<flowVariant>& flows) { mFlows = flows; mHash = 0; };
+    void setFlow(const flowVariant<Number>& f, std::size_t I = 0);
+    void setFlow(const std::vector<flowVariant<Number>>& flows) { mFlows = flows; mHash = 0; };
     void setInvariant(const Condition<Number>& inv) { mInvariant = inv; mHash = 0; }
     void setTransitions(transitionVector&& trans);
     void addTransition(std::unique_ptr<Transition<Number>>&& trans);

@@ -16,8 +16,7 @@ namespace hypro {
 		virtual void handle() = 0;
 		virtual const char* handlerName() = 0;
 
-		virtual const matrix_t<typename State::NumberType>& getTrafo() const = 0;
-		virtual const vector_t<typename State::NumberType>& getTranslation() const = 0;
+		virtual const flowVariant<typename State::NumberType>& getTransformation() const = 0;
 	};
 
 	class IInvariantHandler : public IHandler {

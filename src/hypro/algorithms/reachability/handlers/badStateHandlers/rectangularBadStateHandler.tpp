@@ -37,7 +37,7 @@ namespace hypro {
 			}
 
 			if(mContainment != hypro::CONTAINMENT::NO) {
-		    	DEBUG("hydra.worker","Intersection with local bad states. (intersection type " << badStatePair.first << ")");
+		    	DEBUG("hydra.worker","Intersection with local bad states. (intersection type " << mContainment << ")");
 		    	return;
 		    }
 		}

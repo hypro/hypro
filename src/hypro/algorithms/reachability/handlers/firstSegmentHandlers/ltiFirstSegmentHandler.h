@@ -11,6 +11,7 @@ namespace hypro
 		State*  mState; // A state containing the first segment for each subspace
 		matrix_t<typename State::NumberType> mTrafo;
 		vector_t<typename State::NumberType> mTranslation;
+		affineFlow<Number> mFlow;
 
 		size_t mIndex;
 		tNumber mTimeStep;
@@ -27,8 +28,9 @@ namespace hypro
 		const char* handlerName() {return "ltiFirstSegmentHandler";}
 		matrix_t<typename State::NumberType> computeTrafoMatrix(const Location<typename State::NumberType>* _loc) const;
 
-		const matrix_t<typename State::NumberType>& getTrafo() const { return mTrafo; }
-		const vector_t<typename State::NumberType>& getTranslation() const { return mTranslation; }
+		const matrix_t<typename State::NumberType>& getTrafo() const { return mFlow.getTranslation(); }
+		const vector_t<typename State::NumberType>& getTranslation() const { return mFlow.getFlowMatrix(); }
+		const flowVariant<typename State::NumberType>& getTransformation() const { return mFlow; }
 	};
 
 } // hypro

@@ -91,7 +91,7 @@ namespace hypro {
 	}
 
 	template<typename Number>
-	std::string toFlowstarFormat(const typename Location<Number>::flowVariant& f,
+	std::string toFlowstarFormat(const flowVariant<Number>& f,
 								const std::map<Eigen::Index, std::string>& varNameMap,
 								const std::string& prefix)
 	{

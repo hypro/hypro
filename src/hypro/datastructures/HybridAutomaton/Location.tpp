@@ -29,7 +29,7 @@ Location<Number>::Location(unsigned _id, const matrix_t<Number>& _mat) : mFlows(
 
 template<typename Number>
 Location<Number>::Location(unsigned _id, const matrix_t<Number>& _mat, typename Location<Number>::transitionVector&& _trans, const Condition<Number>& _inv)
-    : mFlows(), mExternalInput(), mTransitions(std::move(_trans)), mInvariant(_inv), mId(_id), mExternalInput()
+    : mFlows(), mExternalInput(), mTransitions(std::move(_trans)), mInvariant(_inv), mId(_id)
 {
 	for(auto& t : mTransitions) {
 		t->setSource(this);
@@ -106,7 +106,7 @@ std::size_t Location<Number>::dimension(std::size_t i) const {
 }
 
 template<typename Number>
-void Location<Number>::setFlow(const flowVariant& f, std::size_t I) {
+void Location<Number>::setFlow(const flowVariant<Number>& f, std::size_t I) {
 	matrix_t<Number> dummy = matrix_t<Number>::Identity(getFlowDimension(f), getFlowDimension(f));
 	while(mFlows.size() <= I) {
 		mFlows.push_back(linearFlow<Number>(dummy));

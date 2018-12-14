@@ -36,12 +36,12 @@ namespace hypro
         trafoMatrixResized = trafoMatrix.block(0, 0, rows - 1, cols - 1);
         translation.conservativeResize(rows - 1);
 
-        mTrafo = trafoMatrixResized;
-        mTranslation = translation;
+        mFlow = affineFlow<Number>{trafoMatrixResized, translation};
+
         // update flow type
         //mState->rGetLocation()->setFlow(mIndex,affineFlow<Number>(mTrafo,mTranslation));
 
-        State deltaValuation = mState->partiallyApplyTimeStep(ConstraintSet<Number>(mTrafo, mTranslation), mTimeStep,mIndex);
+        State deltaValuation = mState->partiallyApplyTimeStep(ConstraintSet<Number>(mFlow.getFlowMatrix(), mFlow.getTranslation()), mTimeStep,mIndex);
 
         #ifdef HYDRA_USE_LOGGING
         TRACE("hypro.worker", "Polytope at t=delta: " << deltaValuation);

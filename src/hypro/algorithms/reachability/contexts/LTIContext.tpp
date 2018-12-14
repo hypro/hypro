@@ -35,8 +35,9 @@ namespace hypro
 		TRACE("hypro.worker","Initializing " << mComputationState.getNumberSets() <<" invariant handlers");
 		// initialize invariant handlers
 		for(std::size_t i = 0; i < mComputationState.getNumberSets();i++){
-			matrix_t<Number> trafo = mFirstSegmentHandlers.at(i)->getTrafo();
-			vector_t<Number> translation = mFirstSegmentHandlers.at(i)->getTranslation();
+			auto flow = boost::get<affineFlow<Number>>(mFirstSegmentHandlers.at(i)->getTransformation());
+			matrix_t<Number> trafo = flow.getFlowMatrix();
+			vector_t<Number> translation = flow.getTranslation();
 			bool noFlow = (trafo == matrix_t<Number>::Identity(trafo.rows(),trafo.rows()) && translation == vector_t<Number>::Zero(trafo.rows()));
 			IInvariantHandler* ptr = HandlerFactory<State>::getInstance().buildInvariantHandler(mComputationState.getSetType(i), &mComputationState, i, noFlow);
 			if(ptr){
@@ -51,8 +52,9 @@ namespace hypro
 		TRACE("hypro.worker","Initializing " << mComputationState.getNumberSets() <<" bad state handlers");
 		// initalize bad state handlers
 		for(std::size_t i = 0; i < mComputationState.getNumberSets();i++){
-			matrix_t<Number> trafo = mFirstSegmentHandlers.at(i)->getTrafo();
-			vector_t<Number> translation = mFirstSegmentHandlers.at(i)->getTranslation();
+			auto flow = boost::get<affineFlow<Number>>(mFirstSegmentHandlers.at(i)->getTransformation());
+			matrix_t<Number> trafo = flow.getFlowMatrix();
+			vector_t<Number> translation = flow.getTranslation();
 			bool noFlow = (trafo == matrix_t<Number>::Identity(trafo.rows(),trafo.rows()) && translation == vector_t<Number>::Zero(trafo.rows()));
 			IBadStateHandler* ptr = HandlerFactory<State>::getInstance().buildBadStateHandler(mComputationState.getSetType(i), &mComputationState, i, noFlow);
 			if(ptr){
@@ -71,8 +73,9 @@ namespace hypro
 			State* guardStatePtr = new State(mComputationState);
     		std::shared_ptr<State> shGuardPtr= std::shared_ptr<State>(guardStatePtr);
 			for(std::size_t i = 0; i < mComputationState.getNumberSets();i++){
-				matrix_t<Number> trafo = mFirstSegmentHandlers.at(i)->getTrafo();
-				vector_t<Number> translation = mFirstSegmentHandlers.at(i)->getTranslation();
+				auto flow = boost::get<affineFlow<Number>>(mFirstSegmentHandlers.at(i)->getTransformation());
+				matrix_t<Number> trafo = flow.getFlowMatrix();
+				vector_t<Number> translation = flow.getTranslation();
 				bool noFlow = (trafo == matrix_t<Number>::Identity(trafo.rows(),trafo.rows()) && translation == vector_t<Number>::Zero(trafo.rows()));
 				IGuardHandler<State>* ptr = HandlerFactory<State>::getInstance().buildGuardHandler(guardStatePtr->getSetType(i), shGuardPtr, i, transition, noFlow);
 				if(ptr){
@@ -445,7 +448,7 @@ namespace hypro
 	    // initialize invariant handlers
 	    TRACE("hypro.worker","Initializing " << mComputationState.getNumberSets() <<" continuous evolution handlers");
 		for(std::size_t i = 0; i < mComputationState.getNumberSets();i++){
-			ITimeEvolutionHandler* ptr = HandlerFactory<State>::getInstance().buildContinuousEvolutionHandler(mComputationState.getSetType(i), &mComputationState, i, mStrategy.getParameters(mTask->btInfo.btLevel).timeStep, mSettings.timeBound, mFirstSegmentHandlers.at(i)->getTrafo(), mFirstSegmentHandlers.at(i)->getTranslation());
+			ITimeEvolutionHandler* ptr = HandlerFactory<State>::getInstance().buildContinuousEvolutionHandler(mComputationState.getSetType(i), &mComputationState, i, mStrategy.getParameters(mTask->btInfo.btLevel).timeStep, mSettings.timeBound, mFirstSegmentHandlers.at(i)->getTransformation());
 			if(ptr){
 				mContinuousEvolutionHandlers.push_back(ptr);
 				DEBUG("hypro.worker","Built " << ptr->handlerName());

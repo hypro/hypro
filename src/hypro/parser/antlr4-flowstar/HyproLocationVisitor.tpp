@@ -44,7 +44,7 @@ namespace hypro {
 	antlrcpp::Any HyproLocationVisitor<Number>::visitLocation(HybridAutomatonParser::LocationContext *ctx){
 
 		//1.Calls visit(ctx->activities()) to get flow (as a variant) and externalInputBox
-		std::pair<std::vector<typename Location<Number>::flowVariant>,std::vector<carl::Interval<Number>>> flowAndExtInput = visit(ctx->activities());
+		std::pair<std::vector<flowVariant<Number>>,std::vector<carl::Interval<Number>>> flowAndExtInput = visit(ctx->activities());
 		//std::cout << "---- Flow matrix is:\n" << flowAndExtInput.first << std::endl;
 		//std::cout << "---- externalInputBox is:\n" << flowAndExtInput.second << std::endl;
 
@@ -154,7 +154,7 @@ namespace hypro {
 		}
 
 		// 2. assemble flow variant
-		std::vector<typename Location<Number>::flowVariant> flows;
+		std::vector<flowVariant<Number>> flows;
 		linearFlow<Number> tmpLinearFlow;
 		rectangularFlow<Number> tmpRectangularFlow;
 		for(std::size_t i = 0; i < vars.size(); ++i) {
