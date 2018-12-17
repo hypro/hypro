@@ -198,16 +198,16 @@ disp('Box 29 dimension: ');
 disp(dim);
 HyProBox('delete', box_29);
 
-disp('Make Symmetric');
-box_30 = HyProBox('new_intervals',[1 2; 1 4]);
-old_intervals = HyProBox('intervals',box_30);
-disp('Old intervals:');
-disp(old_intervals);
-HyProBox('makeSymmetric',box_30);
-new_intervals = HyProBox('intervals',box_30);
-disp('New intervals:');
-disp(new_intervals);
-HyProBox('delete', box_30);
+% disp('Make Symmetric');
+% box_30 = HyProBox('new_intervals',[1 2; 1 4]);
+% old_intervals = HyProBox('intervals',box_30);
+% disp('Old intervals:');
+% disp(old_intervals);
+% HyProBox('makeSymmetric',box_30);
+% new_intervals = HyProBox('intervals',box_30);
+% disp('New intervals:');
+% disp(new_intervals);
+% HyProBox('delete', box_30);
 
 
 

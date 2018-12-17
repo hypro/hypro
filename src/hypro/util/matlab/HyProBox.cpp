@@ -197,17 +197,17 @@ void intervals(int nlhs, mxArray *plhs[], const mxArray *prhs[]){
     }   
     mxArray* m_out_intervals;
     double* out;
-    int dimy, dimx;
 
     hypro::Box<double>* box = convertMat2Ptr<hypro::Box<double>>(prhs[1]);
 
     std::vector<carl::Interval<double>> intervals = box->intervals();
 
-    dimy = intervals.size();
-    dimx = 2;
+    const int dimy = intervals.size();
+    const int dimx = 2;
     m_out_intervals = plhs[0] = mxCreateDoubleMatrix(dimy, dimx, mxREAL);
     out = mxGetPr(m_out_intervals);
-    ObjectHandle::hyProIntervals2mIntervals(intervals, out, dimx, dimy);
+    //ObjectHandle::hyProIntervals2mIntervals(intervals, out, dimx, dimy);  
+    vector2mVector(intervals, out, dimx, dimy);
 }
 
 /**
@@ -260,7 +260,8 @@ void limits(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
     
     m_out = plhs[0] = mxCreateDoubleMatrix(2, 2, mxREAL);
     out = mxGetPr(m_out);
-    ObjectHandle::hyProPointPair2mPointPair(p, out);
+    //ObjectHandle::hyProPointPair2mPointPair(p, out);
+    pair2matlab(p, out, 1, 2);
 
 }
 
@@ -292,7 +293,8 @@ void interval(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
     
     m_out = plhs[0] = mxCreateDoubleMatrix(1, 2, mxREAL);
     out = mxGetPr(m_out);
-    ObjectHandle::hyproInterval2mInterval(inter, out);
+    ObjectHandle::convert2matlab(inter, out, 1, 2);
+
 }
 
 /**
@@ -315,7 +317,7 @@ void at(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
 
     m_out = plhs[0] = mxCreateDoubleMatrix(1, 2, mxREAL);
     out = mxGetPr(m_out);
-    ObjectHandle::hyproInterval2mInterval(inter, out);
+    ObjectHandle::convert2matlab(inter, out, 1, 2);
 }
 
 /**
@@ -368,7 +370,8 @@ void max(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
     int dim = m.rawCoordinates().size();
     m_out = plhs[0] = mxCreateDoubleMatrix(1, 2, mxREAL);
     out = mxGetPr(m_out);
-    ObjectHandle::hyProPoint2mPoint(m, out, dim);
+    //ObjectHandle::hyProPoint2mPoint(m, out, dim);
+    ObjectHandle::convert2matlab(m, out, 1, dim);
 }
 
 /**
@@ -389,7 +392,8 @@ void min(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
     int dim = m.rawCoordinates().size();
     m_out = plhs[0] = mxCreateDoubleMatrix(1, 2, mxREAL);
     out = mxGetPr(m_out);
-    ObjectHandle::hyProPoint2mPoint(m, out, dim);
+    //ObjectHandle::hyProPoint2mPoint(m, out, dim);
+    ObjectHandle::convert2matlab(m, out, 1, dim);
 }
 
 /**
@@ -426,7 +430,8 @@ void vertices(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
     int dimx = vertices[0].dimension();
     m_out_vertices = plhs[0] = mxCreateDoubleMatrix(dimy, dimx, mxREAL);
     out = mxGetPr(m_out_vertices);
-    ObjectHandle::hyProPointsVector2mPointsVector(vertices, out);
+    //ObjectHandle::hyProPointsVector2mPointsVector(vertices, out);
+    vector2mVector<hypro::Point<double>>(vertices, out, dimx, dimy);
 }
 
 /**
