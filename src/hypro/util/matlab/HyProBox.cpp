@@ -206,7 +206,6 @@ void intervals(int nlhs, mxArray *plhs[], const mxArray *prhs[]){
     const int dimx = 2;
     m_out_intervals = plhs[0] = mxCreateDoubleMatrix(dimy, dimx, mxREAL);
     out = mxGetPr(m_out_intervals);
-    //ObjectHandle::hyProIntervals2mIntervals(intervals, out, dimx, dimy);  
     vector2mVector(intervals, out, dimx, dimy);
 }
 
@@ -290,10 +289,9 @@ void interval(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
 
     hypro::Box<double>* box = convertMat2Ptr<hypro::Box<double>>(prhs[1]);
     const carl::Interval<double> inter = box->interval(dim);
-    
     m_out = plhs[0] = mxCreateDoubleMatrix(1, 2, mxREAL);
     out = mxGetPr(m_out);
-    ObjectHandle::convert2matlab(inter, out, 1, 2);
+    ObjectHandle::convert2matlab(inter, out, 2, 1);
 
 }
 
@@ -317,7 +315,7 @@ void at(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
 
     m_out = plhs[0] = mxCreateDoubleMatrix(1, 2, mxREAL);
     out = mxGetPr(m_out);
-    ObjectHandle::convert2matlab(inter, out, 1, 2);
+    ObjectHandle::convert2matlab(inter, out, 2, 1);
 }
 
 /**

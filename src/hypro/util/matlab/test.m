@@ -99,7 +99,7 @@ HyProBox('delete', box_11);
 
 disp('At');
 box_12 = HyProBox('new_intervals',inter);
-inter_12 = HyProBox('at', box_12, 2);
+inter_12 = HyProBox('at', box_12, 3);
 disp('Box 12 interval at position 3:');
 disp(inter_12);
 HyProBox('delete', box_12);

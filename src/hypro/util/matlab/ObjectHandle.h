@@ -31,9 +31,7 @@ class ObjectHandle{
         static hypro::Halfspace<double> mHalfspace2Hypro(double*, const int, const int);
         // static hypro::EvaluationResult<double> mEvaluationResult2Hypro(double*);
 
-
         static std::vector<carl::Interval<double>> mIntervals2HyProIntervals(double*, int, int);
-        //static void hyProIntervals2mIntervals(const std::vector<carl::Interval<double>>, double*, int, int);
         static std::vector<carl::Interval<double>>& mPoints2HyProIntervals(double*);
         static carl::Interval<double>& mInterval2HyproInterval(double*);
         //static void hyproInterval2mInterval(const carl::Interval<double>&, double*);
@@ -67,7 +65,7 @@ class ObjectHandle{
 template<typename T>
 void vector2mVector(const std::vector<T>& vec, double* out, const int dimx, const int dimy){
     for(int i = 0; i < dimy; i++){
-        ObjectHandle::convert2matlab(vec[i], &out[i], dimx, dimy, i);
+        ObjectHandle::convert2matlab(vec[i], out, dimx, dimy, i);
     }
 }
 
@@ -78,8 +76,8 @@ void vector2mVector(const std::vector<T>& vec, double* out, const int dimx, cons
  **/
 template<typename T>
 void pair2matlab(const std::pair<T,T> p, double* out, const int dimx, const int dimy){
-    ObjectHandle::convert2matlab(p.first, &out[0], dimx, dimy);
-    ObjectHandle::convert2matlab(p.second, &out[1], dimx , dimy);
+    ObjectHandle::convert2matlab(p.first, out, dimx, dimy);
+    ObjectHandle::convert2matlab(p.second, out, dimx, dimy,1);
 }
 
 /**
@@ -91,7 +89,6 @@ void pair2matlab(const std::pair<T,T> p, double* out, const int dimx, const int 
 void ObjectHandle::convert2matlab(const carl::Interval<double>& inter, double *out, const int dimx, const int dimy, const int index){
     out[index] = inter.lower();
     out[index + dimy] = inter.upper();
-    mexPrintf("lower: %f upper: %f\n",out[index], out[index +dimy]);
 }
 
 /**
@@ -127,14 +124,11 @@ void ObjectHandle::convert2matlab(const hypro::vector_t<double>& vec, double *ou
  * @param dimx,dimy The dimensions
  **/
 void ObjectHandle::convert2matlab(const hypro::Point<double>& p, double *out, const int dimx, const int dimy, const int index){
-    for(int i = 0; i < dimy; i++){
-        out[i] = p.coordinate(i);
+    hypro::vector_t<double> vec_one =  p.rawCoordinates();
+    for(int i = 0; i < vec_one.size(); i++){
+        out[i*dimy + index] = vec_one[i];
     }
 }
-
-
-
-
 
 /**
  * @brief Converts Matlab intervals (in form of a matrix) into a vector of HyPro intervals
@@ -160,22 +154,6 @@ carl::Interval<double>& ObjectHandle::mInterval2HyproInterval(double* interval){
     carl::Interval<double> *hyPro_interval = new carl::Interval<double>(interval[0], interval[1]);
     return *hyPro_interval;
 }
-
-
-
-// /**
-//  *  @brief Converts a HyPro interval into a Matlab interval
-//  *  @param interval_list A list of HyPro intervals
-//  *  @param out Pointer to the output Matlab matrix
-//  *  @param dimx Number of rows
-//  *  @parma dimy Number of columns
-//  **/
-// void ObjectHandle::hyProIntervals2mIntervals(std::vector<carl::Interval<double>> interval_list, double *out, int dimx, int dimy){
-//     for(int i = 0; i < interval_list.size(); i++){
-//         out[i] = interval_list[i].lower();
-//         out[i + dimy] = interval_list[i].upper();
-//     }
-// }
 
 /**
  *  @brief Converts a pair of points defined in matlab into hyPro intervals
@@ -203,8 +181,6 @@ hypro::matrix_t<double>& ObjectHandle::mMatrix2HyProMatrix(double* m_matrix, int
     return *hypro_matrix;
 }
 
-
-
 /**
  * @brief Converts a Matlab vector into HyPro vector
  * @param m_vector Pointer to the Matlab vector
@@ -217,8 +193,6 @@ hypro::vector_t<double>& ObjectHandle::mVector2HyProVector(double* m_vector, int
     }
     return *vector;
 }
-
-
 
 /**
  * @brief Converts a Matlab vector into HyPro Point
@@ -233,7 +207,6 @@ hypro::Point<double>& ObjectHandle::mPoint2HyProPoint(double* vec, int dimy){
     hypro::Point<double> *point = new hypro::Point<double>(temp);
     return *point;
 }
-
 
 /**
  * @brief Converts a 2x2 Matlab matrix into pair of HyPro points
