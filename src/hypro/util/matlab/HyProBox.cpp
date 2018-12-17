@@ -428,7 +428,6 @@ void vertices(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
     int dimx = vertices[0].dimension();
     m_out_vertices = plhs[0] = mxCreateDoubleMatrix(dimy, dimx, mxREAL);
     out = mxGetPr(m_out_vertices);
-    //ObjectHandle::hyProPointsVector2mPointsVector(vertices, out);
     vector2mVector<hypro::Point<double>>(vertices, out, dimx, dimy);
 }
 

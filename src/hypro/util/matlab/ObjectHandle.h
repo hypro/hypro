@@ -34,7 +34,6 @@ class ObjectHandle{
         static std::vector<carl::Interval<double>> mIntervals2HyProIntervals(double*, int, int);
         static std::vector<carl::Interval<double>>& mPoints2HyProIntervals(double*);
         static carl::Interval<double>& mInterval2HyproInterval(double*);
-        //static void hyproInterval2mInterval(const carl::Interval<double>&, double*);
         static hypro::matrix_t<double>& mMatrix2HyProMatrix(double*, int, int);
         //static void hyProMatrix2mMatrix(hypro::matrix_t<double>&, double*, int, int);
         static hypro::vector_t<double>& mVector2HyProVector(double*, int);
