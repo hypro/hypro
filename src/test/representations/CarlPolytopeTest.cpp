@@ -237,7 +237,7 @@ TYPED_TEST(CarlPolytopeTest, RedundantConstraints) {
 
     EXPECT_EQ(std::size_t(6), c1.size());
 
-    c1.reduceRepresentation();
+    c1.removeRedundancy();
 
     EXPECT_EQ(std::size_t(4), c1.size());
 

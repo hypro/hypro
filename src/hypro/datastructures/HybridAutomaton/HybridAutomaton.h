@@ -109,7 +109,7 @@ class HybridAutomaton
     Location<Number>* getLocation(const std::size_t hash) const;
     Location<Number>* getLocation(const std::string& name) const;
     //* @return The set of transitions. */
-    //std::vector<Transition<Number>*> getTransitions() const;
+    std::vector<Transition<Number>*> getTransitions() const;
     //* @return The set of initial states. */
     const locationConditionMap& getInitialStates() const { return mInitialStates; }
     //* @return The set of bad states bound to locations. */

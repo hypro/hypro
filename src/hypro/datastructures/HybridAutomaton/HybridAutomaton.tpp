@@ -192,16 +192,17 @@ Location<Number>* HybridAutomaton<Number>::getLocation(const std::string& name) 
 	return nullptr;
 }
 
-/*
+
 template<typename Number>
 std::vector<Transition<Number>*> HybridAutomaton<Number>::getTransitions() const {
 	std::vector<Transition<Number>*> res;
-	for(const auto& t : mTransitions){
-		res.emplace_back(t.get());
+	for(const auto& loc : mLocations){
+		for(auto tPtr : loc->getTransitions()) {
+			res.emplace_back(tPtr);
+		}
 	}
 	return res;
 }
-*/
 
 template<typename Number>
 unsigned HybridAutomaton<Number>::dimension() const

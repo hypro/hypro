@@ -676,10 +676,18 @@ HPolytopeT<Number, Converter, Setting> HPolytopeT<Number, Converter, Setting>::p
 		return Empty();
 	}
 
+	// projection by means of a linear transformation
+	matrix_t<Number> projectionMatrix = matrix_t<Number>::Zero(this->dimension(), this->dimension());
+	for(auto i : dimensions) {
+		projectionMatrix(i,i) = 1;
+	}
+
+	/*
 	auto vpoly = Converter::toVPolytope(*this);
 	vpoly = vpoly.project(dimensions);
-
 	return Converter::toHPolytope(vpoly);
+	*/
+	return this->linearTransformation(projectionMatrix);
 }
 
 template <typename Number, typename Converter, class Setting>
