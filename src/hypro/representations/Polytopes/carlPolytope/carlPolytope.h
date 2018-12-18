@@ -11,11 +11,12 @@
 
 namespace hypro {
 
-template<typename Number, typename Converter, typename Settings>
+template<typename Number, typename Converter, typename Setting>
 class CarlPolytopeT {
 public:
     // typedefs
-
+    using Settings = Setting;
+    using NumberType = Number;
 private:
     FormulaT<tNumber> mFormula; /// The description of the polytope as a conjunction of linear constraints.
     mutable std::vector<Halfspace<Number>> mHalfspaces; /// Caches transformed half-spaces.
@@ -44,9 +45,23 @@ public:
 
     CarlPolytopeT(const std::vector<carl::Interval<Number>>& intervals);
 
-    static CarlPolytopeT<Number,Converter,Settings> Empty();
+    static CarlPolytopeT<Number,Converter,Setting> Empty();
 
-    CarlPolytopeT<Number,Converter,Settings> intersect(const CarlPolytopeT<Number,Converter,Settings>& rhs) const;
+    CarlPolytopeT<Number,Converter,Setting> intersect(const CarlPolytopeT<Number,Converter,Setting>& rhs) const;
+
+    CarlPolytopeT<Number,Converter,Setting> project(const std::vector<std::size_t>& dimensions) const;
+
+    CarlPolytopeT<Number,Converter,Setting> linearTransformation( const matrix_t<Number> &A ) const;
+
+    CarlPolytopeT<Number,Converter,Setting> minkowskiSum(const CarlPolytopeT<Number,Converter,Setting>& rhs) const { assert(false && "NOT IMPLEMENTED"); }
+
+    CarlPolytopeT<Number,Converter,Setting> unite(const CarlPolytopeT<Number,Converter,Setting>& rhs) const { assert(false && "NOT IMPLEMENTED"); }
+
+    CarlPolytopeT<Number,Converter,Setting> affineTransformation(const matrix_t<Number>& A, const vector_t<Number>& b) const { assert(false && "NOT IMPLEMENTED"); }
+
+    std::pair<CONTAINMENT, CarlPolytopeT<Number,Converter,Setting>> satisfiesHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const;
+
+    bool contains(const CarlPolytopeT<Number,Converter,Setting>& rhs) const { assert(false && "NOT IMPLEMENTED"); }
 
     std::size_t dimension() const { return mDimension; }
     const FormulaT<tNumber>& getFormula() const { return mFormula; }
@@ -72,16 +87,16 @@ public:
     void removeRedundancy();
     void choseOrder(QEQuery& in) {/* right now do nothing - add heuristics later. */}
 
-    friend std::ostream& operator<<(std::ostream& out, const CarlPolytopeT<Number,Converter,Settings>& in ) {
+    friend std::ostream& operator<<(std::ostream& out, const CarlPolytopeT<Number,Converter,Setting>& in ) {
         out << in.getFormula();
         return out;
     }
 
-    friend bool operator==(const CarlPolytopeT<Number,Converter,Settings>& lhs, const CarlPolytopeT<Number,Converter,Settings>& rhs) {
+    friend bool operator==(const CarlPolytopeT<Number,Converter,Setting>& lhs, const CarlPolytopeT<Number,Converter,Setting>& rhs) {
         return lhs.mFormula == rhs.mFormula;
     }
 
-    friend bool operator!=(const CarlPolytopeT<Number,Converter,Settings>& lhs, const CarlPolytopeT<Number,Converter,Settings>& rhs) {
+    friend bool operator!=(const CarlPolytopeT<Number,Converter,Setting>& lhs, const CarlPolytopeT<Number,Converter,Setting>& rhs) {
         return !(lhs.mFormula == rhs.mFormula);
     }
 
