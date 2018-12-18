@@ -15,6 +15,11 @@ void convert(const In& in, BoxT<Number,Converter<Number>,OutSettings>& out) {
 }
 
 template<typename Number, typename OutSettings, typename In>
+void convert(const In& in, CarlPolytopeT<Number,Converter<Number>,OutSettings>& out) {
+    out = Converter<Number>::template toCarlPolytope<OutSettings>(in);
+}
+
+template<typename Number, typename OutSettings, typename In>
 void convert(const In& in, ConstraintSetT<Number,OutSettings>& out) {
     out = Converter<Number>::template toConstraintSet<OutSettings>(in);
 }
