@@ -69,7 +69,7 @@ public:
     bool empty() const;
     static representation_name type() { return representation_name::carl_polytope; }
 
-    void reduceRepresentation();
+    void removeRedundancy();
     void choseOrder(QEQuery& in) {/* right now do nothing - add heuristics later. */}
 
     friend std::ostream& operator<<(std::ostream& out, const CarlPolytopeT<Number,Converter,Settings>& in ) {

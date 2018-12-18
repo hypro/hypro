@@ -29,7 +29,7 @@ namespace hypro {
 		}
 
 		// reduction
-		resultingSet.reduceRepresentation();
+		resultingSet.removeRedundancy();
 
 		// set containment information
 		if(resultingSet.empty()) {

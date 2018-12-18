@@ -27,7 +27,7 @@ namespace hypro {
 			auto resultingSet = boost::get<CarlPolytope<typename State::NumberType>>(mState->getSet(mIndex)).intersect(badStateConstraints);
 
 			// reduction
-			resultingSet.reduceRepresentation();
+			resultingSet.removeRedundancy();
 
 			// set containment information
 			if(resultingSet.empty()) {
@@ -63,7 +63,7 @@ namespace hypro {
 				auto resultingSet = boost::get<CarlPolytope<typename State::NumberType>>(mState->getSet(mIndex)).intersect(badStateConstraints);
 
 				// reduction
-				resultingSet.reduceRepresentation();
+				resultingSet.removeRedundancy();
 
 				// set containment information
 				if(resultingSet.empty()) {

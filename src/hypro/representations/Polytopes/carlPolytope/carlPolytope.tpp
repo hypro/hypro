@@ -188,8 +188,8 @@ namespace hypro {
         return mEmpty == TRIBOOL::TRUE;
     }
 
-    template<typename Number, typename Converter, typename Settings>
-    void CarlPolytopeT<Number,Converter,Settings>::reduceRepresentation() {
+    template<typename Number, typename Converter, typename Setting>
+    void CarlPolytopeT<Number,Converter,Setting>::removeRedundancy() {
         if(mFormula.size() <= 1) {
             return;
         }
