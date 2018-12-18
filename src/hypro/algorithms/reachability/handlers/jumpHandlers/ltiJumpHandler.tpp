@@ -30,15 +30,18 @@ namespace hypro {
 
 			// the collected time interval is required for the timing updates and spans the time interval the transition was enabled
 			// irregardless of aggregation settings.
+			/*
 			carl::Interval<tNumber> collectedTimeInterval = transitionStatePair.second.begin()->getTimestamp();
 			for(const auto& s : transitionStatePair.second) {
 				collectedTimeInterval = collectedTimeInterval.convexHull(s.getTimestamp());
 			}
 
 			TRACE("hydra.worker.discrete","Transition covers time " << collectedTimeInterval);
+			*/
+
 
 			// children holds the nodes which need to be added
-			typename ReachTreeNode<State>::NodeList_t children = createNodesFromStates(transitionStatePair.first, transitionStatePair.second, mRepresentation, targetLevel, coveredTimeInterval, mTask->treeNode);
+			typename ReachTreeNode<State>::NodeList_t children = createNodesFromStates(transitionStatePair.first, transitionStatePair.second, currentTargetLevel, coveredTimeInterval, mTask->treeNode);
 
 			TRACE("hydra.worker.discrete","Created " << children.size() << " new nodes which have to be added to the tree.");
 
@@ -328,121 +331,23 @@ namespace hypro {
 				aggregatedStates.emplace_back(aggregatedState);
 			}
 
-			// handle resets and invariant checks for the new location for each cluster independently.
+			// add to final mapping.
 			for(auto& state : aggregatedStates) {
-				DEBUG("hydra.worker.discrete", "Aggregated timestamp after aggregation " << state.getTimestamp());
-				carl::Interval<tNumber> aggregatedTimestamp = state.getTimestamp();
-
-
-				#ifdef HYDRA_USE_LOGGING
-				int i = 0;
-				for(auto trafo : transitionStatePair.first->getReset().getResetTransformations()){
-					TRACE("hydra.worker.discrete","Reset transformation " << i << ": " << trafo );
-					i++;
-				}
-				// DBG
-				/*
-				for(size_t i = 0; i < state.getNumberSets(); i++){
-					Box<Number> tmp = boost::get<Box<Number>>(boost::apply_visitor(genericConversionVisitor<RepresentationVariant, Number>(representation_name::box),state.getSet(i)));
-					DEBUG("hydra.worker.discrete","Subspace set before reset: " << tmp);
-				}
-				*/
-				#endif
-
-				DEBUG("hydra.worker.discrete","Set before reset: " << state);
-				//START_BENCHMARK_OPERATION(RESET);
-				// apply resets to aggregated state
-				for(size_t i = 0; i < state.getNumberSets(); i++){
-					matrix_t<Number> trafo = transitionStatePair.first->getReset().getResetTransformations().at(i).matrix();
-					vector_t<Number> translation = transitionStatePair.first->getReset().getResetTransformations().at(i).vector();
-
-					IResetHandler* ptr = HandlerFactory<State>::getInstance().buildResetHandler(state.getSetType(i), &state, i, trafo,translation);
-					if(ptr){
-						ptr->handle();
-						DEBUG("hydra.worker.discrete","Applied " << ptr->handlerName() << "at pos " << i);
-					}
-				}
-				//EVALUATE_BENCHMARK_RESULT(RESET);
-				DEBUG("hydra.worker.discrete","Set after reset: " << state);
-
-
-				#ifdef HYDRA_USE_LOGGING
-				// DBG
-				/*
-				for(size_t i = 0; i < state.getNumberSets(); i++){
-					Box<Number> tmp = boost::get<Box<Number>>(boost::apply_visitor(genericConversionVisitor<RepresentationVariant, Number>(representation_name::box),state.getSet(i)));
-					DEBUG("hydra.worker.discrete","Subspace set after reset: " << tmp);
-				}
-				*/
-				#endif
-
-
-				// check if invariant is satisfied in the target location.
-				state.setLocation(transitionStatePair.first->getTarget());
-
-				//START_BENCHMARK_OPERATION(TARGET_INVARIANT);
-				bool strictestContainment = true;
-				for(std::size_t i = 0; i < state.getNumberSets();i++){
-					IInvariantHandler* ptr = HandlerFactory<State>::getInstance().buildInvariantHandler(state.getSetType(i), &state, i, false);
-					if(ptr){
-						ptr->handle();
-						DEBUG("hydra.worker.discrete","Applied " << ptr->handlerName() << "at pos " << i);
-						if(ptr->getContainment() == CONTAINMENT::NO) {
-							TRACE("hydra.worker.discrete","State set " << i << "(type " << state.getSetType(i) << ") failed the condition - return empty.");
-							strictestContainment = false;
-							break;
-						}
-					}
-				}
-
-				//std::pair<bool,State> validStatePair = state.satisfies(transitionStatePair.first->getTarget()->getInvariant());
-
-				if(strictestContainment == false) {
-					state.setLocation(transitionStatePair.first->getSource());
-					TRACE("hydra.worker.discrete","Transition disabled as the new initial set does not satisfy the invariant of the target location.")
-					continue;
-				}
-				//EVALUATE_BENCHMARK_RESULT(TARGET_INVARIANT);
-
-					// apply reduction if possible (currently only support function -> see visitor implementation in Visitor.h)
-				// TODO why does the reduction visitor not work for multi sets?
-				for(size_t i = 0; i < state.getNumberSets(); i++){
-					if(state.getSetType(i) == representation_name::support_function){
-						auto tmpHPoly = boost::apply_visitor(genericConvertAndGetVisitor<HPolytope<typename State::NumberType>>(), state.getSet(i));
-						SupportFunction<Number> newSet(tmpHPoly.matrix(), tmpHPoly.vector());
-						// convert to actual support function inside the state, which might have different settings == different type.
-						state.setSet(boost::apply_visitor(genericInternalConversionVisitor<typename State::repVariant, SupportFunction<Number>>(newSet), state.getSet(i)),i);
-					}
-				}
-
-				#ifdef HYDRA_USE_LOGGING
-				// DBG
-				/*
-				for(size_t i = 0; i < state.getNumberSets(); i++){
-					Box<Number> tmp = boost::get<Box<Number>>(boost::apply_visitor(genericConversionVisitor<RepresentationVariant, Number>(representation_name::box),state.getSet(i)));
-					TRACE("hydra.worker.discrete","Subspace set after reduction: " << tmp);
-				}
-				*/
-				#endif
-				// Note: Here we misuse the state's timestamp to carry the transition timing to the next stage
-				// Note 2: If we use global timing, this is correct.
-				state.setTimestamp(aggregatedTimestamp);
-
 				if (processedStates.find(transitionStatePair.first) == processedStates.end()) {
 					processedStates[transitionStatePair.first] = std::vector<State>();
 				}
 				processedStates[transitionStatePair.first].emplace_back(state);
 			}
 		}
-
-		return processedStates;
 	}
 
 	template<typename State>
 	typename ReachTreeNode<State>::NodeList_t ltiJumpHandler<State>::createNodesFromStates(
-		Transition<Number>* transition, const std::vector<State>& states,
-		representation_name repName, std::size_t targetLevel,
-		carl::Interval<tNumber>& coveredTimeInterval, typename ReachTreeNode<State>::Node_t parent){
+		Transition<Number>* transition,
+		const std::vector<State>& states,
+		std::size_t currentTargetLevel,
+		carl::Interval<tNumber>& coveredTimeInterval,
+		typename ReachTreeNode<State>::Node_t parent){
 
 		typename ReachTreeNode<State>::NodeList_t children;
 		for(const auto& state : states) {

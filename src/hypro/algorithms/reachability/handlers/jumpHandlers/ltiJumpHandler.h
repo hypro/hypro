@@ -16,7 +16,6 @@ namespace hypro {
 		using Number = typename State::NumberType;
 
 		std::vector<boost::tuple<Transition<Number>*, State>>* mSuccessorBuffer;
-		representation_name mRepresentation;
 		std::shared_ptr<Task<State>> mTask;
 		Transition<Number>* mTransition;
 		StrategyParameters mStrategy;
@@ -26,14 +25,12 @@ namespace hypro {
 	public:
 		ltiJumpHandler() = delete;
 		ltiJumpHandler(std::vector<boost::tuple<Transition<Number>*, State>>* successorBuffer,
-										representation_name representation,
 										std::shared_ptr<Task<State>> task,
 										Transition<Number>* transition,
 										StrategyParameters strategy,
 										WorkQueue<std::shared_ptr<Task<State>>>* localQueue,
 										WorkQueue<std::shared_ptr<Task<State>>>* localCEXQueue)
 			: mSuccessorBuffer(successorBuffer)
-			, mRepresentation(representation)
 			, mTask(task)
 			, mTransition(transition)
 			, mStrategy(strategy)
@@ -43,8 +40,9 @@ namespace hypro {
 
 		void handle();
 		const char* handlerName() {return "ltiJumpHandler";}
-		std::map<Transition<Number>*, std::vector<State>> aggregate(const std::vector<boost::tuple<Transition<Number>*, State>>& states, Transition<Number>* transition, const StrategyParameters& strategy);
-		typename ReachTreeNode<State>::NodeList_t createNodesFromStates(Transition<Number>* transition, const std::vector<State>& states, representation_name repName, std::size_t targetLevel, carl::Interval<tNumber>& coveredTimeInterval, typename ReachTreeNode<State>::Node_t parent);
+		std::map<Transition<Number>*, std::vector<State>> applyJump(const std::vector<boost::tuple<Transition<Number>*, State>>& states, Transition<Number>* transition, const StrategyParameters& strategy);
+		void aggregate(std::map<Transition<Number>*, std::vector<State>>& processedStates, const std::map<Transition<Number>*, std::vector<State>>& toAggregate, const StrategyParameters& strategy) const;
+		typename ReachTreeNode<State>::NodeList_t createNodesFromStates(Transition<Number>* transition, const std::vector<State>& states, std::size_t targetLevel, carl::Interval<tNumber>& coveredTimeInterval, typename ReachTreeNode<State>::Node_t parent);
 
 	};
 } // hypro
