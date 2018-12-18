@@ -41,7 +41,7 @@ namespace hypro
         // update flow type
         //mState->rGetLocation()->setFlow(mIndex,affineFlow<Number>(mTrafo,mTranslation));
 
-        State deltaValuation = mState->partiallyApplyTimeStep(ConstraintSet<Number>(mFlow.getFlowMatrix(), mFlow.getTranslation()), mTimeStep,mIndex);
+        State deltaValuation = mState->partiallyApplyTimeStep(ConstraintSet<Number>(trafoMatrixResized, translation), mTimeStep,mIndex);
 
         #ifdef HYDRA_USE_LOGGING
         TRACE("hypro.worker", "Polytope at t=delta: " << deltaValuation);

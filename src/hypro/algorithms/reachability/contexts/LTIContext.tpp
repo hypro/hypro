@@ -35,6 +35,7 @@ namespace hypro
 		TRACE("hypro.worker","Initializing " << mComputationState.getNumberSets() <<" invariant handlers");
 		// initialize invariant handlers
 		for(std::size_t i = 0; i < mComputationState.getNumberSets();i++){
+			assert(getFlowType(mFirstSegmentHandlers.at(i)->getTransformation()) == DynamicType::affine);
 			auto flow = boost::get<affineFlow<Number>>(mFirstSegmentHandlers.at(i)->getTransformation());
 			matrix_t<Number> trafo = flow.getFlowMatrix();
 			vector_t<Number> translation = flow.getTranslation();
