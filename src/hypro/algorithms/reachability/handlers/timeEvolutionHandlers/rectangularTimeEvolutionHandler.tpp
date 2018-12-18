@@ -26,7 +26,8 @@ namespace hypro {
                 // store var to eliminate later
                 variablesToEliminate.push_back(newV);
                 // add flow conditions for new variables, we use the variable mapping provided by the flow
-                initial.addConstraints(createFlowConstraints(v,newV, t, mFlow.getFlowIntervalForDimension(v)));
+                std::vector<ConstraintT<hypro::tNumber>> flowConstraints = createFlowConstraints<hypro::tNumber,typename State::NumberType>(v,newV, t, mFlow.getFlowIntervalForDimension(v));
+                initial.addConstraints(flowConstraints);
             }
 
             // create variables to eliminate
