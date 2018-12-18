@@ -245,12 +245,11 @@ void insert(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
  **/
 void limits(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
     if(nlhs < 1){
-        mexErrMsgTxt("limits: Expecting output!");
+        mexErrMsgTxt("limits: Expecting an output!");
     }
     if(nrhs < 2){
         mexErrMsgTxt("limits: One argument is missing!");
     }
-    
     mxArray* m_out;
     double* out;
 
@@ -259,16 +258,33 @@ void limits(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
     
     m_out = plhs[0] = mxCreateDoubleMatrix(2, 2, mxREAL);
     out = mxGetPr(m_out);
-    //ObjectHandle::hyProPointPair2mPointPair(p, out);
     pair2matlab(p, out, 1, 2);
-
 }
 
 /**
  * @brief
  **/
 void constraints(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
-    mexErrMsgTxt("NOT IMPLEMENTED");
+    if(nlhs < 1){
+        mexErrMsgTxt("constraints: Expecting an output!");
+    }
+    if(nrhs < 2){
+        mexErrMsgTxt("constraints: One argument is missing!");
+    }
+    mxArray* m_out;
+    double* out;
+
+    hypro::Box<double>* box = convertMat2Ptr<hypro::Box<double>>(prhs[1]);
+    std::vector<hypro::Halfspace<double>> hSpaces = box->constraints();
+
+    int dimx = 1;
+    int dimy = hSpaces.size();
+    const char *field_names[] = {"normal", "offset"};
+
+    m_out = plhs[0] = mxCreateStructArray(dimy, dimx, 2, field_names);
+    out = mxGetPr(m_out);
+
+    vector2mVector(hSpaces, out, dimx, dimy);
 }
 
 /**

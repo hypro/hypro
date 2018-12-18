@@ -209,6 +209,16 @@ HyProBox('delete', box_29);
 % disp(new_intervals);
 % HyProBox('delete', box_30);
 
+disp('Constraints');
+box_31 = HyProBox('new_intervals', inter);
+const = HyProBox('constraints', box_31);
+disp('Box 31 constrains:');
+disp('normal:');
+disp(const.normal);
+disp('offset:');
+disp(const.offset);
+HyProBox('delete', box_31);
+
 
 
 
