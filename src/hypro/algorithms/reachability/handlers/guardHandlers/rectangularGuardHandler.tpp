@@ -7,7 +7,7 @@ namespace hypro {
 
 		TRACE("hydra.worker.discrete","Applying handler " << this->handlerName());
 
-		auto vpool = VariablePool::getInstance();
+		auto& vpool = VariablePool::getInstance();
 
 		// create constraints for invariant. Note that we need to properly match dimension indices with variable names at some point.
 		// create carlPolytope, as intersection is defined for those
