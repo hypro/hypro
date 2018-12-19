@@ -88,6 +88,36 @@ TYPED_TEST(AntlrParserTest, JustTesting){
 
 }
 
+TYPED_TEST(AntlrParserTest, PlainRectangular){
+
+	std::string path("../../../../src/test/core/examples/test_plain_rectangular.txt");
+
+	this->cwd();
+	try{
+		std::pair<HybridAutomaton<TypeParam>, ReachabilitySettings> h = parseFlowstarFile<TypeParam>(path);
+		SUCCEED();
+	}catch (const std::runtime_error& e){
+		std::cout << e.what() << std::endl;
+		FAIL();
+	}
+
+}
+
+TYPED_TEST(AntlrParserTest, MixedRectangular){
+
+	std::string path("../../../../src/test/core/examples/test_mixed_rectangular.txt");
+
+	this->cwd();
+	try{
+		std::pair<HybridAutomaton<TypeParam>, ReachabilitySettings> h = parseFlowstarFile<TypeParam>(path);
+		SUCCEED();
+	}catch (const std::runtime_error& e){
+		std::cout << e.what() << std::endl;
+		FAIL();
+	}
+
+}
+
 TYPED_TEST(AntlrParserTest, EmptyFile){
 
 	std::string path("../../../../src/test/core/examples/test_empty_file.txt");
