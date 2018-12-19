@@ -42,19 +42,19 @@ namespace hypro {
 		std::set<Transition<Number>*> tSet = transVisitor.visit(ctx->jumps()).template as<std::set<Transition<Number>*>>();
 
 		//4.1.Make a set of unique ptrs to transitions
-		std::vector<std::unique_ptr<Transition<Number>>> transSet;
-		for(auto& t : tSet){
-			transSet.emplace_back(std::unique_ptr<Transition<Number>>(std::move(t)));
-		}
-		for(auto& l : uniquePtrLocSet){
-			for(auto& t : transSet){
+		for(auto t : tSet){
+			assert(t != nullptr);
+			std::cout << "Transition from " << t->getSource() << "("<< t->getSource()->getName() << ")" << " to " << t->getTarget() << "(" << t->getTarget()->getName() << ")"<< std::endl;
+			for(auto& l : uniquePtrLocSet){
+				std::cout << "Location raw: " << l.get() <<  "(" << l->getName() << ")" << std::endl;
+				assert(t != nullptr);
 				if(t->getSource() == l.get()) {
-					l->addTransition(std::move(t));
+					l->addTransition(std::move(std::make_unique<Transition<Number>>(*t)));
+					std::cout << "Added." << std::endl;
+					break;
 				}
 			}
 		}
-
-		//assert(*(transSet.begin()) != NULL);
 
 		//5.Calls visit to get all initial states
 		typename HybridAutomaton<Number>::locationConditionMap initSet;
