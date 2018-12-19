@@ -66,6 +66,7 @@ public:
     std::size_t dimension() const { return mDimension; }
     const FormulaT<tNumber>& getFormula() const { return mFormula; }
     const std::vector<Halfspace<Number>>& getHalfspaces() const;
+    std::vector<carl::Interval<Number>> getIntervals() const;
 
     void setDimension(std::size_t d) { mDimension = d; }
     void addConstraint(const ConstraintT<tNumber>& constraint);
@@ -83,6 +84,8 @@ public:
     std::size_t size() const { return mFormula.size(); }
     bool empty() const;
     static representation_name type() { return representation_name::carl_polytope; }
+
+    CarlPolytopeT<Number,Converter,Setting> make_rectangular() const;
 
     void removeRedundancy();
     void choseOrder(QEQuery& in) {/* right now do nothing - add heuristics later. */}

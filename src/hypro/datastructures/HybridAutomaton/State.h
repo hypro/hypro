@@ -366,6 +366,7 @@ class State
     State<Number,Representation,Rargs...> applyTransformation(const ConstraintSet<Number>& trafo, std::size_t I=0 ) const;
     State<Number,Representation,Rargs...> linearTransformation(const matrix_t<Number>& matrix) const;
     State<Number,Representation,Rargs...> affineTransformation(const matrix_t<Number>& matrix, const vector_t<Number>& vector) const;
+    State<Number,Representation,Rargs...> partialIntervalAssignment(const std::vector<carl::Interval<Number>>& assignments, std::size_t I) const;
 
     State<Number,Representation,Rargs...> applyTransformation(const ConstraintSet<Number>& trafo ) const;
 

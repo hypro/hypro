@@ -233,6 +233,16 @@ State<Number,Representation,Rargs...> State<Number,Representation,Rargs...>::aff
 	return partiallyApplyTransformation(ConstraintSet<Number>(matrix, vector), 0);
 }
 
+template<typename Number, typename Representation, typename ...Rargs>
+State<Number,Representation,Rargs...> State<Number,Representation,Rargs...>::partialIntervalAssignment(const std::vector<carl::Interval<Number>>& assignments, std::size_t I) const {
+	assert(checkConsistency());
+	State<Number,Representation,Rargs...> res(*this);
+	TRACE("hypro.datastructures","Apply interval assignment for subspace " << I << ".");
+	// Note: We abuse empty intervals to indicate identity assignments -> change to a map later! (TODO)
+	res.setSetDirect(boost::apply_visitor(genericIntervalAssignmentVisitor<repVariant, Number>(assignments), mSets.at(I)), I);
+	return res;
+}
+
 
 template<typename Number, typename Representation, typename ...Rargs>
 State<Number,Representation,Rargs...> State<Number,Representation,Rargs...>::partiallyApplyTransformation(const std::vector<ConstraintSet<Number>>& trafos, const std::vector<std::size_t>& sets ) const {

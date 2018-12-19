@@ -120,6 +120,24 @@ namespace hypro {
     }
 
     template<typename Number, typename Converter, typename Setting>
+    std::vector<carl::Interval<Number>> CarlPolytopeT<Number,Converter,Setting>::getIntervals() const {
+        // Note: Alternatively use FM-elimination.
+        Optimizer<Number> opt{this->matrix(), this->vector()};
+        auto dim = this->dimension();
+        // use box-template, first normal points towards dimension, then negative
+        auto directions = combineRows(computeTemplate(dim,4));
+        auto evalResult = opt.multiEvaluate(directions);
+        std::vector<carl::Interval<Number>> res;
+
+        // assemble intervals from evaluation results
+        assert(evalResult.size() == 2*dim );
+        for(Eigen::Index d = 0; d < dim; ++d) {
+            res.emplace_back(-evalResult[2*d + 1].supportValue, evalResult[2*d].supportValue);
+        }
+        return res;
+    }
+
+    template<typename Number, typename Converter, typename Setting>
     void CarlPolytopeT<Number,Converter,Setting>::addConstraint(const ConstraintT<tNumber>& constraint) {
         // reset Half-space cache
         mHalfspaces.clear();
@@ -245,6 +263,24 @@ namespace hypro {
             mEmpty = opt.checkConsistency() ? TRIBOOL::FALSE : TRIBOOL::TRUE;
         }
         return mEmpty == TRIBOOL::TRUE;
+    }
+
+    template<typename Number, typename Converter, typename Setting>
+    CarlPolytopeT<Number,Converter,Setting> CarlPolytopeT<Number,Converter,Setting>::make_rectangular() const {
+        // Idea: Use FM-elimination to obtain all intervals for all variables consecutively.
+        // Alternative: Use optimizer (current version).
+
+        Optimizer<Number> opt{this->matrix(), this->vector()};
+        // use box-template
+        auto directions = combineRows(computeTemplate(this->dimension(),4));
+        auto evalResult = opt.multiEvaluate(directions);
+        vector_t<Number> constants = vector_t<Number>(directions.rows());
+        Eigen::Index pos = 0;
+        for(const auto& res : evalResult) {
+            constants(pos) = res.supportValue;
+            ++pos;
+        }
+        return CarlPolytopeT<Number,Converter,Setting>(directions,constants);
     }
 
     template<typename Number, typename Converter, typename Setting>

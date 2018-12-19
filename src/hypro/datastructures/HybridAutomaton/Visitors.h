@@ -297,4 +297,38 @@ public:
     }
 };
 
+template<typename T, typename Number>
+class genericIntervalAssignmentVisitor
+	: public boost::static_visitor<T>
+{
+	const std::vector<carl::Interval<Number>>& mAssignments;
+
+	public:
+	genericIntervalAssignmentVisitor() = delete;
+	genericIntervalAssignmentVisitor(const std::vector<carl::Interval<Number>>& assignments) : mAssignments(assignments) {}
+
+	// TODO: Add SFINAE mechanism to ensure N=Number
+	template<typename N, typename C, typename S>
+    inline T operator()(const CarlPolytopeT<N,C,S>& lhs) const {
+		DEBUG("hypro.datastructures","Interval assignment.");
+		auto intervals = lhs.getIntervals();
+		std::size_t pos = 0;
+		for(const auto& ass : mAssignments) {
+			if(ass != carl::Interval<N>::emptyInterval()) {
+				intervals[pos] = ass;
+			}
+			++pos;
+		}
+ 		return CarlPolytopeT<N,C,S>{intervals};
+    }
+
+	template<typename B>
+    inline T operator()(const B& lhs) const {
+		DEBUG("hypro.datastructures","INTERVAL ASSIGNMENT NOT IMPLEMENTED FOR THIS TYPE.");
+		std::cout << "Inteval assignment not implemented for this type." << std::endl;
+ 		return lhs;
+    }
+
+};
+
 } // namespace
