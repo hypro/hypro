@@ -512,6 +512,10 @@ void Location<Number>::decompose(const Decomposition& decomposition){
 	std::for_each(newFlows.begin(), newFlows.end(), [&](linearFlow<Number>& f){ mFlows.emplace_back(std::move(f));});
 	// decompose invariant
 	mInvariant.decompose(decomposition);
+	// decompose transitions
+	for(auto& transition : mTransitions){
+    	transition->decompose(decomposition);
+    }
 	mHash = 0;
 }
 
