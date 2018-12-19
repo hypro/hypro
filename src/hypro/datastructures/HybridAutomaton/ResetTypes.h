@@ -5,7 +5,7 @@
 
 namespace hypro {
 
-    enum class ResetType{ affine=0, interval };
+    enum class ResetType{ affine=0, interval, none };
 
     template<typename Number>
     struct AffineTransformation {
@@ -63,6 +63,28 @@ namespace hypro {
         }
     };
 
+    struct NoneAssignment {
+
+        std::size_t mDimensions = 1;
+
+        static ResetType type() { return ResetType::none; }
+
+        std::size_t size() const {return mDimensions;}
+
+        bool isIdentity() const {
+            return false;
+        }
+
+        friend std::ostream& operator<<(std::ostream& out, const NoneAssignment& in) {
+            out << "NONE " << in.mDimensions;
+            return out;
+        }
+
+        friend bool operator==(const NoneAssignment& lhs, const NoneAssignment& rhs) {
+            return lhs.size() == rhs.size();
+        }
+    };
+
     namespace detail {
 
         template<typename T>
@@ -90,6 +112,15 @@ namespace std {
         std::size_t operator()(const hypro::IntervalAssignment<Number>& reset) const {
             std::size_t seed = 0;
             carl::hash_add(seed, reset.mIntervals);
+            return seed;
+        }
+    };
+
+    template<>
+    struct hash<hypro::NoneAssignment>{
+        std::size_t operator()(const hypro::NoneAssignment& reset) const {
+            std::size_t seed = 0;
+            carl::hash_add(seed, reset.mDimensions);
             return seed;
         }
     };
