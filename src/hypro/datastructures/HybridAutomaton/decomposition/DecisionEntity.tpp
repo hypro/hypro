@@ -52,7 +52,7 @@ namespace hypro
 		//	0 ... 0 1
 		//  0 ....0 0
 
-		if(! isTimed(loc.getFlow(index))) {
+		if(! (loc.getLinearFlow(index)).isTimed() ) {
 			TRACE("hypro.decisionEntity", "Flow is not timed.");
 			return false;
 		}
@@ -119,7 +119,7 @@ namespace hypro
 		//	0 ... 0 1
 		//  0 ....0 0
 		for(size_t i = 0; i < loc.getNumberFlow();i++){
-			if(!isTimed(loc.getFlow(i))){
+			if(!loc.getLinearFlow(i).isTimed()){
 				TRACE("hypro.decisionEntity","Flow is not timed.");
 				return false;
 			}
@@ -239,7 +239,7 @@ namespace hypro
 		for(const auto& keyValPair1 : map) {
 			for(const auto& keyValPair2 : map) {
 				if(keyValPair1.first != keyValPair2.first) {
-					boost::add_edge(vpool.id(keyValPair1.second), vpool.id(keyvalpair2.second));
+					boost::add_edge(vpool.id(keyValPair1.first), vpool.id(keyValPair2.first), graph);
 				}
 			}
 		}
@@ -296,14 +296,10 @@ namespace hypro
 
 		//check flow and invariant of locations
 		for(auto loc : automaton.getLocations()){
-			for(const auto& flowVar : loc->getFlows()) {
-				if(getFlowType(loc->getFlow()) == DynamicType::linear){
-					addEdgesForAffineTrafo(boost::get<linearFlow<Number>>(flowVar).getFlowMatrix(), G);
-				} else if (getFlowType(loc->getFlow()) == DynamicType::rectangular) {
-					addEdgesForRectMap(boost::get<rectangularFlow<Number>>(flowVar).getFlowIntervals(), G);
-				}
+			for(std::size_t i = 0; i < loc->getNumberFlow(); ++i){
+				addEdgesForAffineTrafo(loc->getLinearFlow(i).getFlowMatrix(), G);
+				addEdgesForRectMap(loc->getRectangularFlow(i).getFlowIntervals(), G);
 			}
-
 			// TODO: add further flow types
 			addEdgesForCondition(loc->getInvariant(),G);
 		}
