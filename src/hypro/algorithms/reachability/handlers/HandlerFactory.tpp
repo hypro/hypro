@@ -161,6 +161,7 @@ namespace hypro
 		DEBUG("hypro.utility","Reset transformation A = " << trafo << ", b = " << translation);
 
 		if(trafo.rows() == 0 || (trafo == matrix_t<Number>::Identity(trafo.rows(),trafo.rows()) && translation == vector_t<Number>::Zero(translation.rows()))){
+			TRACE("hypro.utility","Return null, as no rows or reset is identity.");
 			return nullptr;
 		}
 
@@ -169,10 +170,27 @@ namespace hypro
  				return new timedResetHandler<State>(state,index,trafo,translation);
  			}
 			case representation_name::carl_polytope: {
- 				return new rectangularResetHandler<State>(state,index,trafo,translation);
+				assert(false);
+ 				return nullptr;
 			}
 			default:
  				return new ltiResetHandler<State>(state,index,trafo,translation);
+ 		}
+ 		assert(false && "SHOULD NEVER REACH THIS");
+ 		return nullptr;
+	}
+
+	template<typename State>
+	IResetHandler* HandlerFactory<State>::buildResetHandler(representation_name name, State* state, size_t index, const std::vector<carl::Interval<Number>>& assignments) {
+		DEBUG("hypro.utility","Reset transformation to intervals.");
+
+		switch(name){
+			case representation_name::carl_polytope: {
+				return new rectangularResetHandler<State>(state,index,assignments);
+			}
+			default:
+ 				assert(false);
+				return nullptr;
  		}
  		assert(false && "SHOULD NEVER REACH THIS");
  		return nullptr;

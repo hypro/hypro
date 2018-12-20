@@ -200,8 +200,11 @@ namespace hypro {
 		// aggregate all sets marked for aggregation
 		aggregate(toProcess, toAggregate, strategy);
 
+		DEBUG("hydra.worker","Apply jump on " << toProcess.size() << " transitions.");
+
 		for(const auto& transitionStatesPair : toProcess) {
 			auto transitionPtr = transitionStatesPair.first;
+			DEBUG("hydra.worker","Apply jump on " << transitionStatesPair.second.size() << " states.");
 			for(const auto& state: transitionStatesPair.second) {
 				// copy state - as there is no aggregation, the containing set and timestamp is already valid
 				assert(!state.getTimestamp().isEmpty());
@@ -209,14 +212,24 @@ namespace hypro {
 
 				// apply reset function
 				for(size_t i = 0; i < newState.getNumberSets(); i++){
-					AffineTransformation<Number> reset = boost::get<AffineTransformation<Number>>(transitionPtr->getReset().getResetTransformations().at(i));
-					matrix_t<Number> trafo = reset.mTransformation.matrix();
-					vector_t<Number> translation = reset.mTransformation.vector();
+					if(newState.getSetType(i) == representation_name::carl_polytope) {
+						IntervalAssignment<Number> intervalReset = transitionPtr->getReset().getIntervalReset(i);
 
-					IResetHandler* ptr = HandlerFactory<State>::getInstance().buildResetHandler(newState.getSetType(i), &newState, i, trafo,translation);
-					if(ptr){
-						ptr->handle();
-						DEBUG("hydra.worker","Applied " << ptr->handlerName() << "at pos " << i);
+						IResetHandler* ptr2 = HandlerFactory<State>::getInstance().buildResetHandler(newState.getSetType(i), &newState, i, intervalReset.mIntervals);
+						if(ptr2){
+							ptr2->handle();
+							DEBUG("hydra.worker","Applied " << ptr2->handlerName() << "at pos " << i);
+						}
+					} else {
+						AffineTransformation<Number> reset = transitionPtr->getReset().getAffineReset(i);
+						matrix_t<Number> trafo = reset.mTransformation.matrix();
+						vector_t<Number> translation = reset.mTransformation.vector();
+
+						IResetHandler* ptr = HandlerFactory<State>::getInstance().buildResetHandler(newState.getSetType(i), &newState, i, trafo,translation);
+						if(ptr){
+							ptr->handle();
+							DEBUG("hydra.worker","Applied " << ptr->handlerName() << "at pos " << i);
+						}
 					}
 				}
 
