@@ -53,7 +53,7 @@ Location<Number>::Location(const Location<Number>& _loc)
 {
 	// update copied transitions
 	for(auto t : _loc.getTransitions()) {
-		mTransitions.emplace_back(std::make_unique<Transition<Number>>(*t));
+		mTransitions.emplace_back(std::make_unique<Transition<Number>>(Transition<Number>(*t)));
 		mTransitions.back()->setSource(this);
 	}
 
