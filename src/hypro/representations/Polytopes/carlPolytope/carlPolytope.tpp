@@ -125,8 +125,12 @@ namespace hypro {
         Optimizer<Number> opt{this->matrix(), this->vector()};
         auto dim = this->dimension();
         // use box-template, first normal points towards dimension, then negative
-        auto directions = combineRows(computeTemplate(dim,4));
-        auto evalResult = opt.multiEvaluate(directions);
+        auto directions = computeTemplate<Number>(dim,4);
+        std::vector<EvaluationResult<Number>> evalResult;
+        std::for_each(directions.begin(), directions.end(),
+            [&evalResult, &opt](const auto& in){ evalResult.emplace_back(std::move(opt.evaluate(in,true)));}
+        );
+
         std::vector<carl::Interval<Number>> res;
 
         // assemble intervals from evaluation results
@@ -272,8 +276,11 @@ namespace hypro {
 
         Optimizer<Number> opt{this->matrix(), this->vector()};
         // use box-template
-        auto directions = combineRows(computeTemplate(this->dimension(),4));
-        auto evalResult = opt.multiEvaluate(directions);
+        auto directions = computeTemplate<Number>(this->dimension(),4);
+        std::vector<EvaluationResult<Number>> evalResult;
+        for(const auto& dir : directions) {
+            evalResult.emplace_back(std::move(opt.evaluate(dir,true)));
+        }
         vector_t<Number> constants = vector_t<Number>(directions.rows());
         Eigen::Index pos = 0;
         for(const auto& res : evalResult) {
