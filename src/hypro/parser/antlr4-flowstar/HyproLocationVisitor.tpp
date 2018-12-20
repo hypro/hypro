@@ -44,7 +44,7 @@ namespace hypro {
 	antlrcpp::Any HyproLocationVisitor<Number>::visitLocation(HybridAutomatonParser::LocationContext *ctx){
 
 		//1.Calls visit(ctx->activities()) to get flow (as a variant) and externalInputBox
-		std::pair<std::vector<flowVariant<Number>>,std::vector<carl::Interval<Number>>> flowAndExtInput = visit(ctx->activities());
+		std::tuple<linearFlow<Number>, rectangularFlow<Number>,std::vector<carl::Interval<Number>>> flowAndExtInput = visit(ctx->activities());
 		//std::cout << "---- Flow matrix is:\n" << flowAndExtInput.first << std::endl;
 		//std::cout << "---- externalInputBox is:\n" << flowAndExtInput.second << std::endl;
 
@@ -91,20 +91,21 @@ namespace hypro {
 		//3.Returns a ptr to location
 		Location<Number>* loc = new Location<Number>();
 		loc->setName(ctx->VARIABLE()->getText());
-		loc->setFlow(flowAndExtInput.first);
+		loc->setLinearFlow(std::get<0>(flowAndExtInput));
+		loc->setRectangularFlow(std::get<1>(flowAndExtInput));
 		loc->setInvariant(inv);
 
 		// only set external input, if it is different from zero
-		if(!flowAndExtInput.second.empty()) {
+		if(!std::get<2>(flowAndExtInput).empty()) {
 			//std::cout << "Set external input to " << flowAndExtInput.second << " which is not equal to " << Box<Number>(std::make_pair(Point<Number>(vector_t<Number>::Zero(flowAndExtInput.first.cols()-1)), Point<Number>(vector_t<Number>::Zero(flowAndExtInput.first.cols()-1)))) << std::endl;
-			loc->setExtInput(flowAndExtInput.second);
+			loc->setExtInput(std::get<2>(flowAndExtInput));
 		}
 		return loc;
 	}
 
 	template<typename Number>
 	antlrcpp::Any HyproLocationVisitor<Number>::visitActivities(HybridAutomatonParser::ActivitiesContext *ctx){
-
+		auto& vpool = VariablePool::getInstance();
 		//0.Syntax check - Are there vars.size() equations?
 		//if(vars.size() != ctx->equation().size()){
 		//	std::cerr << "ERROR: Wrong amount of activites for current location!" << std::endl;
@@ -114,7 +115,7 @@ namespace hypro {
 		//1.Calls iteratively visit(ctx->equation()) to get vector, store them
 		// maps used to deduce subspaces
 		std::map<std::size_t, vector_t<Number>> linearFlows;
-		std::map<std::size_t, carl::Interval<Number>> rectangularFlows;
+		std::map<carl::Variable, carl::Interval<Number>> rectangularFlows;
 
 		std::vector<carl::Interval<Number>> extInputVec(vars.size(), carl::Interval<Number>());
 		//std::cout << "extInputVec has been made!\n";
@@ -147,50 +148,25 @@ namespace hypro {
 			for(unsigned j=0; j < vars.size(); j++){
 				if(ctx->intervalexpr()[i]->VARIABLE()->getText() == (vars[j])){
 					//std::cout << "Rectangular flow for variable " << j <<  ", interval: " << tmpintv << std::endl;
-					rectangularFlows[j] = tmpintv;
+					rectangularFlows[vpool.carlVarByIndex(j)] = tmpintv;
 					break;
 				}
 			}
 		}
 
-		// 2. assemble flow variant
-		std::vector<flowVariant<Number>> flows;
-		linearFlow<Number> tmpLinearFlow;
-		rectangularFlow<Number> tmpRectangularFlow;
-		for(std::size_t i = 0; i < vars.size(); ++i) {
-			// per variable construct subspaces. Push to vector, whenever type changes.
-			if(linearFlows.count(i) != 0) {
-				assert(rectangularFlows.count(i) == 0);
-				tmpLinearFlow.addRow(linearFlows[i]);
-				if(tmpRectangularFlow.size() != 0) {
-					flows.emplace_back(tmpRectangularFlow);
-					tmpRectangularFlow = rectangularFlow<Number>{};
-				}
-			} else {
-				assert(linearFlows.count(i) == 0);
-				tmpRectangularFlow.setFlowIntervalForDimension(rectangularFlows[i], VariablePool::getInstance().carlVarByIndex(i));
-				if(tmpLinearFlow.size() != 0) {
-					// add a final row of all zeros
-					tmpLinearFlow.addRow(vector_t<Number>::Zero(tmpLinearFlow.dimension()));
-					flows.emplace_back(tmpLinearFlow);
-					tmpLinearFlow = linearFlow<Number>{};
-				}
-			}
+		// 2. assemble linear Flow
+		matrix_t<Number> flowMatrix = matrix_t<Number>::Zero(vars.size()+1,vars.size()+1);
+		for(const auto f : linearFlows) {
+			flowMatrix.row(f.first) = f.second;
 		}
 
-		// final cleanup (i.e. add the last flow not yet added)
-		if(tmpLinearFlow.size() != 0) {
-			assert(tmpRectangularFlow.size() == 0);
-			tmpLinearFlow.addRow(vector_t<Number>::Zero(tmpLinearFlow.dimension()));
-			flows.emplace_back(tmpLinearFlow);
-		} else {
-			assert(tmpRectangularFlow.size() > 0);
-			assert(tmpLinearFlow.size() == 0); // for future extensions, right now this does not make sense.
-			flows.emplace_back(tmpRectangularFlow);
-		}
-
-		//4.Returns a vector of flowvariant and a externalInputBox
-		return std::make_pair(flows, extInputVec);
+		//4.Returns a tuple of flows and a externalInputBox
+		rectangularFlow<Number> rFlow;
+		rFlow.setFlowIntervals(rectangularFlows);
+		linearFlow<Number> lFlow;
+		lFlow.setFlowMatrix(flowMatrix);
+		std::tuple<linearFlow<Number>, rectangularFlow<Number>,std::vector<carl::Interval<Number>>> res{lFlow,rFlow,extInputVec};
+		return res;
 	}
 
 	template<typename Number>

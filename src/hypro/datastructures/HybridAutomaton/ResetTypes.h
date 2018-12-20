@@ -5,11 +5,20 @@
 
 namespace hypro {
 
-    enum class ResetType{ affine=0, interval };
+    enum class ResetType{ affine=0, interval, none };
 
     template<typename Number>
     struct AffineTransformation {
         ConstraintSetT<Number> mTransformation;
+
+        AffineTransformation() = default;
+        AffineTransformation(const AffineTransformation<Number>& orig) = default;
+        AffineTransformation(AffineTransformation<Number>&& orig) = default;
+        AffineTransformation<Number>& operator=(const AffineTransformation<Number>& rhs) = default;
+        AffineTransformation<Number>& operator=(AffineTransformation<Number>&& rhs) = default;
+        ~AffineTransformation() {}
+
+        AffineTransformation(const ConstraintSetT<Number>& r) : mTransformation(r) {}
 
         static ResetType type() { return ResetType::affine; }
 
@@ -37,6 +46,13 @@ namespace hypro {
     struct IntervalAssignment {
         std::vector<carl::Interval<Number>> mIntervals;
 
+        IntervalAssignment() = default;
+        IntervalAssignment(const IntervalAssignment<Number>& orig) = default;
+        IntervalAssignment(const std::vector<carl::Interval<Number>>& i) : mIntervals(i) {}
+        IntervalAssignment& operator=(const IntervalAssignment<Number>& rhs) = default;
+        IntervalAssignment& operator=(IntervalAssignment<Number>&& rhs) = default;
+        ~IntervalAssignment(){}
+
         static ResetType type() { return ResetType::interval; }
 
         std::size_t size() {return mIntervals.size();}
@@ -60,6 +76,28 @@ namespace hypro {
                 if(lhs.mIntervals[i] != rhs.mIntervals[i]) return false;
             }
             return true;
+        }
+    };
+
+    struct NoneAssignment {
+
+        std::size_t mDimensions = 1;
+
+        static ResetType type() { return ResetType::none; }
+
+        std::size_t size() const {return mDimensions;}
+
+        bool isIdentity() const {
+            return false;
+        }
+
+        friend std::ostream& operator<<(std::ostream& out, const NoneAssignment& in) {
+            out << "NONE " << in.mDimensions;
+            return out;
+        }
+
+        friend bool operator==(const NoneAssignment& lhs, const NoneAssignment& rhs) {
+            return lhs.size() == rhs.size();
         }
     };
 
@@ -90,6 +128,15 @@ namespace std {
         std::size_t operator()(const hypro::IntervalAssignment<Number>& reset) const {
             std::size_t seed = 0;
             carl::hash_add(seed, reset.mIntervals);
+            return seed;
+        }
+    };
+
+    template<>
+    struct hash<hypro::NoneAssignment>{
+        std::size_t operator()(const hypro::NoneAssignment& reset) const {
+            std::size_t seed = 0;
+            carl::hash_add(seed, reset.mDimensions);
             return seed;
         }
     };

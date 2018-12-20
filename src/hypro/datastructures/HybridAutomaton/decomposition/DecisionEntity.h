@@ -37,6 +37,8 @@ class DecisionEntity : public carl::Singleton<DecisionEntity<Number>>
     void addEdgesForLinTrafo(matrix_t<Number> linTrafo, boost::adjacency_list<boost::vecS, boost::vecS, boost::undirectedS>& graph);
     void addEdgesForAffineTrafo(matrix_t<Number> affineTrafo, boost::adjacency_list<boost::vecS, boost::vecS, boost::undirectedS>& graph);
     void addEdgesForCondition(Condition<Number> condition, boost::adjacency_list<boost::vecS, boost::vecS, boost::undirectedS>& graph);
+	  void addEdgesForRectTrafo(const std::vector<carl::Interval<Number>>& intervals, boost::adjacency_list<boost::vecS, boost::vecS, boost::undirectedS>& graph);
+	  void addEdgesForRectMap(const std::map<carl::Variable, carl::Interval<Number>>& map, boost::adjacency_list<boost::vecS, boost::vecS, boost::undirectedS>& graph);
 
     void printDecomposition(const Decomposition& decomposition);
 

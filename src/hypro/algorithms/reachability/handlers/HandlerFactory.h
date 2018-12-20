@@ -19,6 +19,7 @@ namespace hypro
 		IGuardHandler<State>* buildGuardHandler(representation_name name, std::shared_ptr<State> state, size_t index, Transition<Number>* transition, bool noFlow);
 		ITimeEvolutionHandler* buildContinuousEvolutionHandler(representation_name name, State* state, size_t index, tNumber timeStep, tNumber timeBound, flowVariant<Number> flow);
 		IResetHandler* buildResetHandler(representation_name name, State* state, size_t index, matrix_t<Number> trafo, vector_t<Number> translation);
+		IResetHandler* buildResetHandler(representation_name name, State* state, size_t index, const std::vector<carl::Interval<Number>>& assignments);
 
 		IJumpHandler* buildDiscreteSuccessorHandler(std::vector<boost::tuple<Transition<Number>*, State>>* successorBuffer,
 										representation_name representation,

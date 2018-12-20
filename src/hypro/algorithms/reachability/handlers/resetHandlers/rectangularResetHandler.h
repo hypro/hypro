@@ -8,19 +8,17 @@ namespace hypro
 		using Number = typename State::NumberType;
 	protected:
 		State*  mState; // A state containing the first segment for each subspace
-		matrix_t<Number> mTrafo;
-		vector_t<Number> mTranslation;
+		std::vector<carl::Interval<Number>> mIntervalResets;
 
 		size_t mIndex;
 	public:
 
 		rectangularResetHandler() = delete;
-		rectangularResetHandler(State* state, size_t index, matrix_t<Number> trafo,vector_t<Number> translation){
-			mState = state;
-			mIndex = index;
-			mTrafo = trafo;
-			mTranslation = translation;
-		}
+		rectangularResetHandler(State* state, size_t index, const std::vector<carl::Interval<Number>>& intervalResets)
+			: mState(state)
+			, mIntervalResets(intervalResets)
+			, mIndex(index)
+		{}
 
 		void handle();
 		const char* handlerName() {return "rectangularResetHandler";}

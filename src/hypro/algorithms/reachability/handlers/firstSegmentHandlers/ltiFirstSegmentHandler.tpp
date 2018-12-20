@@ -8,10 +8,10 @@ namespace hypro
 	    // check if initial Valuation fulfills Invariant
 	    assert(mState->getLocation() != nullptr);
 
-        std::size_t dim = getFlowDimension(mState->getLocation()->getFlow(mIndex));
+        std::size_t dim = mState->getLocation()->getLinearFlow(mIndex).dimension();
 
     	// if the location has no flow, stop computation and exit.
-        if (isDiscrete(mState->getLocation()->getFlow(mIndex))) {
+        if (mState->getLocation()->getLinearFlow(mIndex).isDiscrete()) {
             // TRACE("Avoid further computation as the flow is zero." << std::endl);
             mTrafo = matrix_t<Number>::Identity(dim-1,dim-1);
             mTranslation = vector_t<Number>::Zero(dim-1);
@@ -53,7 +53,7 @@ namespace hypro
                                                        Point<Number>(vector_t<Number>::Zero(dimension))));
 
         std::vector<Box<Number>> errorBoxVector =
-              errorBoxes(carl::convert<tNumber,Number>(mTimeStep), boost::get<linearFlow<Number>>(mState->getLocation()->getFlow(mIndex)), *mState, trafoMatrix, externalInput);
+              errorBoxes(carl::convert<tNumber,Number>(mTimeStep), mState->getLocation()->getLinearFlow(mIndex), *mState, trafoMatrix, externalInput);
 
         firstSegment = deltaValuation.unite(*(mState));
 
@@ -81,8 +81,8 @@ namespace hypro
     template <typename State>
 	matrix_t<typename State::NumberType> ltiFirstSegmentHandler<State>::computeTrafoMatrix(const Location<Number>* _loc) const
 	{
-	   matrix_t<Number> deltaMatrix(getFlowDimension(_loc->getFlow()), getFlowDimension(_loc->getFlow()));
-	    deltaMatrix = boost::get<linearFlow<Number>>(_loc->getFlow(mIndex)).getFlowMatrix() * carl::convert<tNumber,Number>(mTimeStep);
+	   matrix_t<Number> deltaMatrix(_loc->getLinearFlow().dimension(), _loc->getLinearFlow().dimension());
+	    deltaMatrix = _loc->getLinearFlow(mIndex).getFlowMatrix() * carl::convert<tNumber,Number>(mTimeStep);
 	#ifdef REACH_DEBUG
 	    TRACE("hypro.worker", "Flowmatrix:\n" << _loc->getFlow(mIndex) << "\nmultiplied with time step: " << mTimeStep);
 	    TRACE("hypro.worker", "delta matrix_t<Number>: " << std::endl);

@@ -54,7 +54,8 @@ protected:
     ///@}
 
 private:
-    mutable std::vector<flowVariant<Number>> mFlows;
+    mutable std::vector<linearFlow<Number>> mLinearFlows;
+    mutable std::vector<rectangularFlow<Number>> mRectangularFlows;
     std::vector<carl::Interval<Number>> mExternalInput;
     bool mHasExternalInput = false;
     transitionVector mTransitions;
@@ -70,10 +71,15 @@ public:
     Location(const matrix_t<Number>& mat, transitionVector&& trans, const Condition<Number>& inv);
     ~Location(){}
 
-    std::size_t getNumberFlow() const { return mFlows.size(); }
-    flowVariant<Number> getFlow(std::size_t I = 0) const { return mFlows.at(I); }
-    flowVariant<Number>& rGetFlow(std::size_t I = 0) { return mFlows[I]; }
-    const std::vector<flowVariant<Number>>& getFlows() const { return mFlows; }
+    std::size_t getNumberFlow() const { return mLinearFlows.size(); }
+    linearFlow<Number> getLinearFlow(std::size_t I = 0) const { return mLinearFlows.at(I); }
+    linearFlow<Number>& rGetLinearFlow(std::size_t I = 0) { return mLinearFlows[I]; }
+    rectangularFlow<Number> getRectangularFlow(std::size_t I = 0) const { return mRectangularFlows.at(I); }
+    rectangularFlow<Number>& rGetRectangularFlow(std::size_t I = 0) { return mRectangularFlows[I]; }
+
+    const std::vector<linearFlow<Number>>& getLinearFlows() const { return mLinearFlows; }
+    const std::vector<rectangularFlow<Number>>& getRectangularFlows() const { return mRectangularFlows; }
+
     const Condition<Number>& getInvariant() const { return mInvariant; }
     std::vector<Transition<Number>*> getTransitions() const;
     transitionVector& rGetTransitions() { return mTransitions; }
@@ -86,8 +92,10 @@ public:
     std::size_t dimension(std::size_t i) const;
 
     void setName(const std::string& name) { mName = name; mHash = 0; }
-    void setFlow(const flowVariant<Number>& f, std::size_t I = 0);
-    void setFlow(const std::vector<flowVariant<Number>>& flows) { mFlows = flows; mHash = 0; };
+    void setLinearFlow(const linearFlow<Number>& f, std::size_t I = 0);
+    void setRectangularFlow(const rectangularFlow<Number>& f, std::size_t I = 0);
+    void setLinearFlow(const std::vector<linearFlow<Number>>& flows) { mLinearFlows = flows; mHash = 0; };
+    void setRectangularFlow(const std::vector<rectangularFlow<Number>>& flows) { mRectangularFlows = flows; mHash = 0; };
     void setInvariant(const Condition<Number>& inv) { mInvariant = inv; mHash = 0; }
     void setTransitions(transitionVector&& trans);
     void addTransition(std::unique_ptr<Transition<Number>>&& trans);
@@ -140,12 +148,16 @@ public:
             //TRACE("hypro.datastructures","Invariants not equal.");
             return false;
         }
-        if(mFlows.size() != rhs.getFlows().size()) {
+        if(mLinearFlows.size() != rhs.getLinearFlows().size()) {
             //TRACE("hypro.datastructures","Number of flows not equal.");
             return false;
         }
-        for(std::size_t i = 0; i < mFlows.size(); ++i) {
-            if(mFlows[i] != rhs.getFlows()[i]) {
+        for(std::size_t i = 0; i < mLinearFlows.size(); ++i) {
+            if(mLinearFlows[i] != rhs.getLinearFlow(i)) {
+                //TRACE("hypro.datastructures","Flows not equal.");
+                return false;
+            }
+            if(mRectangularFlows[i] != rhs.getRectangularFlow(i)) {
                 //TRACE("hypro.datastructures","Flows not equal.");
                 return false;
             }
@@ -184,7 +196,7 @@ public:
     #ifdef HYPRO_LOGGING
 	    ostr << "location " << l.getName() << " ptr "<< &l  << " (id: " << l.hash() << ")"<< std::endl << "\t Flow: " << std::endl;
 	    for(size_t i = 0; i < l.getNumberFlow();i++){
-	    	ostr << i << ": " << l.getFlow(i) << std::endl;
+	    	ostr << i << ": " << l.getLinearFlow(i) << ", rect.: " << l.getRectangularFlow(i) << std::endl;
 	    }
 		ostr << "\t Inv: " << std::endl << l.getInvariant();
 	    //ostr << l.getInvariant().getDiscreteCondition() << std::endl;
@@ -228,9 +240,13 @@ namespace std {
             TRACE("hypro.datastructures","Hash for location " << loc.getName());
             //Flows
             std::size_t seed = 0;
-            for(const auto& f : loc.getFlows()) {
+            for(const auto& f : loc.getLinearFlows()) {
                 //TRACE("hypro.datastructures","Add flow hash " << (boost::apply_visitor(hypro::flowHashVisitor(), f)) );
-                carl::hash_add(seed, boost::apply_visitor(hypro::flowHashVisitor(), f));
+                carl::hash_add(seed, std::hash<hypro::linearFlow<Number>>()(f));
+            }
+            for(const auto& f : loc.getRectangularFlows()) {
+                //TRACE("hypro.datastructures","Add flow hash " << (boost::apply_visitor(hypro::flowHashVisitor(), f)) );
+                carl::hash_add(seed, std::hash<hypro::rectangularFlow<Number>>()(f));
             }
 
             //Name
