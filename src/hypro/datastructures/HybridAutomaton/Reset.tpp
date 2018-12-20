@@ -71,7 +71,7 @@ namespace hypro {
 			mAffineResets.emplace_back(AffineTransformation<Number>());
 			mIntervalResets.emplace_back(IntervalAssignment<Number>());
 		}
-		mAffineResets[I].mTransformation.setMatrix(matrix_t<Number>::Zero(intervals.size(),intervals.size()));
+		mAffineResets[I].mTransformation.setMatrix(matrix_t<Number>::Identity(intervals.size(),intervals.size()));
 		mAffineResets[I].mTransformation.setVector(vector_t<Number>::Zero(intervals.size()));
 		mIntervalResets[I].mIntervals = intervals;
 		mHash = 0;

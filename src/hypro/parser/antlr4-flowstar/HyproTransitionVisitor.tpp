@@ -202,8 +202,8 @@ namespace hypro {
 				++affineAssignmentCnt;
 			} else {
 				assert(valuesNPos.first.type() == typeid(carl::Interval<Number>));
-				resetMatrix.row(valuesNPos.second) = vector_t<Number>::Zero(vars.size());
-				resetVector(valuesNPos.second) = 0;
+				//resetMatrix.row(valuesNPos.second) = vector_t<Number>::Zero(vars.size());
+				//resetVector(valuesNPos.second) = 0;
 				intervalResets[valuesNPos.second] = boost::get<carl::Interval<Number>>(valuesNPos.first);
 				++intervalAssignmentCnt;
 			}
