@@ -189,6 +189,7 @@ namespace hypro {
 		for(unsigned i=0; i < ctx->allocation().size(); i++){
 			std::pair<allocVariant,unsigned> valuesNPos = visit(ctx->allocation()[i]);
 			if(valuesNPos.first.type() == typeid(vector_t<Number>)) {
+				std::cout << "Parsed reset vector " << std::endl;
 				auto assignment = boost::get<vector_t<Number>>(valuesNPos.first);
 				if(static_cast<unsigned>(assignment.rows()) != vars.size()+1){
 					std::cerr << "ERROR: Visiting Allocation brought forth vec of size: " << assignment.rows() << " but we need: " << vars.size() << std::endl;
@@ -201,6 +202,7 @@ namespace hypro {
 				intervalResets[valuesNPos.second] = carl::Interval<Number>::emptyInterval(); // not really neccessary
 				++affineAssignmentCnt;
 			} else {
+				std::cout << "Parsed interval reset" << std::endl;
 				assert(valuesNPos.first.type() == typeid(carl::Interval<Number>));
 				//resetMatrix.row(valuesNPos.second) = vector_t<Number>::Zero(vars.size());
 				//resetVector(valuesNPos.second) = 0;
