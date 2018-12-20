@@ -11,6 +11,15 @@ namespace hypro {
     struct AffineTransformation {
         ConstraintSetT<Number> mTransformation;
 
+        AffineTransformation() = default;
+        AffineTransformation(const AffineTransformation<Number>& orig) = default;
+        AffineTransformation(AffineTransformation<Number>&& orig) = default;
+        AffineTransformation<Number>& operator=(const AffineTransformation<Number>& rhs) = default;
+        AffineTransformation<Number>& operator=(AffineTransformation<Number>&& rhs) = default;
+        ~AffineTransformation() {}
+
+        AffineTransformation(const ConstraintSetT<Number>& r) : mTransformation(r) {}
+
         static ResetType type() { return ResetType::affine; }
 
         std::size_t size() {return mTransformation.size();}
@@ -36,6 +45,13 @@ namespace hypro {
     template<typename Number>
     struct IntervalAssignment {
         std::vector<carl::Interval<Number>> mIntervals;
+
+        IntervalAssignment() = default;
+        IntervalAssignment(const IntervalAssignment<Number>& orig) = default;
+        IntervalAssignment(const std::vector<carl::Interval<Number>>& i) : mIntervals(i) {}
+        IntervalAssignment& operator=(const IntervalAssignment<Number>& rhs) = default;
+        IntervalAssignment& operator=(IntervalAssignment<Number>&& rhs) = default;
+        ~IntervalAssignment(){}
 
         static ResetType type() { return ResetType::interval; }
 
