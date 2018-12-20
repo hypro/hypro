@@ -58,8 +58,8 @@ protected:
 		locationMat(1,0) = 0;
 		locationMat(1,1) = 1;
 
-		loc1->setFlow(locationMat);
-		loc2->setFlow(locationMat);
+		loc1->setLinearFlow(locationMat);
+		loc2->setLinearFlow(locationMat);
 
 		copyOfLoc1 = std::unique_ptr<Location<Number>>(new Location<Number>(*loc1));
 		copyOfLoc2 = std::unique_ptr<Location<Number>>(new Location<Number>(*loc2));
@@ -214,14 +214,14 @@ TYPED_TEST(HybridAutomataTest, LocationTest)
 	EXPECT_NE(this->loc1->getInvariant().getMatrix(), invariantMat2);
 
 	//location: matrix
-	EXPECT_EQ(boost::get<hypro::linearFlow<TypeParam>>(this->loc1->getFlow()).getFlowMatrix(), this->locationMat);
+	EXPECT_EQ(this->loc1->getLinearFlow().getFlowMatrix(), this->locationMat);
 
 	matrix_t<TypeParam> locationMat2(2,2);
 	locationMat2(0,0) = 1;
 	locationMat2(0,1) = 0;
 	locationMat2(1,0) = 0;
 	locationMat2(1,1) = 1;
-	EXPECT_NE(boost::get<hypro::linearFlow<TypeParam>>(this->loc1->getFlow()).getFlowMatrix(), locationMat2);
+	EXPECT_NE(this->loc1->getLinearFlow().getFlowMatrix(), locationMat2);
 
 	//location: set of outgoing transitions
 	//EXPECT_EQ(this->loc1->getTransitions(), this->ptrSet);
@@ -251,8 +251,8 @@ TYPED_TEST(HybridAutomataTest, LocationParallelcompositionTest)
 				3,4,0,
 				0,0,0;
 
-	l1->setFlow(l1Flow);
-	l2->setFlow(l2Flow);
+	l1->setLinearFlow(l1Flow);
+	l2->setLinearFlow(l2Flow);
 
 	std::unique_ptr<Location<TypeParam>> res1 = parallelCompose(l1.get(),l2.get(),l1Vars,l2Vars,haVars);
 	matrix_t<TypeParam> expectedResult1 = matrix_t<TypeParam>::Zero(haVars.size()+1, haVars.size()+1);
@@ -260,7 +260,7 @@ TYPED_TEST(HybridAutomataTest, LocationParallelcompositionTest)
 						0,1,2,0,
 						3,3,4,0,
 						0,0,0,0;
-	EXPECT_EQ(res1->getFlow(),expectedResult1);
+	EXPECT_EQ(res1->getLinearFlow(),expectedResult1);
 
 
 	l1Vars = {"a","b"};
@@ -274,7 +274,7 @@ TYPED_TEST(HybridAutomataTest, LocationParallelcompositionTest)
 						0,0,1,2,0,
 						0,0,3,4,0,
 						0,0,0,0,0;
-	EXPECT_EQ(res2->getFlow(),expectedResult2);
+	EXPECT_EQ(res2->getLinearFlow(),expectedResult2);
 }
 */
 
@@ -396,7 +396,7 @@ TYPED_TEST(HybridAutomataTest, LocationManagerTest)
 {
 	matrix_t<TypeParam> flow = matrix_t<TypeParam>::Identity(2,2);
 	Location<TypeParam>* loc = this->locMan.create(flow);
-	EXPECT_EQ(loc->getFlow(), flow);
+	EXPECT_EQ(loc->getLinearFlow(), flow);
 
 	unsigned id = this->locMan.id(loc);
 	EXPECT_EQ(this->locMan.location(id), loc);

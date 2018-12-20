@@ -11,14 +11,10 @@ namespace hypro {
 			return inState;
 		}
 		auto res = inState;
-		auto visitor = detail::make_reset_visitor<ResetType>([](const auto& in){ return detail::getType(in); });
 		std::size_t pos = 0;
-		for(const auto& reset : reset.getResetTransformations()) {
-			DEBUG("hypro.datastructures","Apply reset for subspace " << pos);
-			if(boost::apply_visitor(visitor, reset) == ResetType::affine ) {
-				res = res.applyTransformation(boost::get<AffineTransformation<Number>>(reset).mTransformation, pos);
-			}
-			++pos;
+		for(std::size_t pos = 0; pos < reset.size(); ++pos) {
+			res = res.applyTransformation(reset.getAffineReset(pos).mTransformation, pos);
+			res = res.partialIntervalAssignment(reset.getIntervalReset(pos).mIntervals, pos);
 		}
 
 		return res;

@@ -220,6 +220,31 @@ namespace hypro
 		}
     }
 
+	template<typename Number>
+	void DecisionEntity<Number>::addEdgesForRectTrafo(const std::vector<carl::Interval<Number>>& intervals, boost::adjacency_list<boost::vecS, boost::vecS, boost::undirectedS>& graph) {
+		for(size_t i = 0; i < intervals.size(); i++){
+			for(size_t j = 0; j < intervals.size(); j++){
+				if(i != j
+					&& intervals[i] != carl::Interval<Number>::emptyInterval()
+					&& intervals[j] != carl::Interval<Number>::emptyInterval()){
+					boost::add_edge(i,j,graph);
+				}
+			}
+		}
+	}
+
+	template<typename Number>
+	void DecisionEntity<Number>::addEdgesForRectMap(const std::map<carl::Variable, carl::Interval<Number>>& map, boost::adjacency_list<boost::vecS, boost::vecS, boost::undirectedS>& graph) {
+		auto& vpool = VariablePool::getInstance();
+		for(const auto& keyValPair1 : map) {
+			for(const auto& keyValPair2 : map) {
+				if(keyValPair1.first != keyValPair2.first) {
+					boost::add_edge(vpool.id(keyValPair1.second), vpool.id(keyvalpair2.second));
+				}
+			}
+		}
+	}
+
     template<typename Number>
 	void DecisionEntity<Number>::addEdgesForCondition(Condition<Number> condition,boost::adjacency_list<boost::vecS, boost::vecS, boost::undirectedS>& graph){
     	if(!(condition.size() > 0)){
@@ -271,9 +296,14 @@ namespace hypro
 
 		//check flow and invariant of locations
 		for(auto loc : automaton.getLocations()){
-			if(getFlowType(loc->getFlow()) == DynamicType::linear){
-				addEdgesForAffineTrafo(boost::get<linearFlow<Number>>(loc->getFlow()).getFlowMatrix(), G);
+			for(const auto& flowVar : loc->getFlows()) {
+				if(getFlowType(loc->getFlow()) == DynamicType::linear){
+					addEdgesForAffineTrafo(boost::get<linearFlow<Number>>(flowVar).getFlowMatrix(), G);
+				} else if (getFlowType(loc->getFlow()) == DynamicType::rectangular) {
+					addEdgesForRectMap(boost::get<rectangularFlow<Number>>(flowVar).getFlowIntervals(), G);
+				}
 			}
+
 			// TODO: add further flow types
 			addEdgesForCondition(loc->getInvariant(),G);
 		}
@@ -281,6 +311,7 @@ namespace hypro
 		//check reset and guards of transitions
 		for(const auto transition : automaton.getTransitions()){
 			addEdgesForLinTrafo(transition->getReset().getMatrix(), G);
+			addEdgesForRectTrafo(transition->getReset().getIntervals(), G);
 			addEdgesForCondition(transition->getGuard(),G);
 		}
 
