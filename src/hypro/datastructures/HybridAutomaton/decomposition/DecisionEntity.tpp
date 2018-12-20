@@ -39,8 +39,7 @@ namespace hypro
 
 	template<typename Number>
 	bool DecisionEntity<Number>::isDiscreteSubspace(const Location<Number> &loc, size_t index){
-		// TODO: I think this is not enough.
-		return isDiscrete(loc.getFlow(index));
+		return loc.getLinearFlow(index).isDiscrete() && loc.getRectangularFlow(index).isDiscrete();
 	}
 
 	template<typename Number>
