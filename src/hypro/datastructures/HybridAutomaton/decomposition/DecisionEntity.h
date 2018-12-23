@@ -43,10 +43,13 @@ class DecisionEntity : public carl::Singleton<DecisionEntity<Number>>
     void printDecomposition(const Decomposition& decomposition);
 
   	bool isTimedAutomaton(const HybridAutomaton<Number> &ha);
+    bool isRectangularAutomaton(const HybridAutomaton<Number> &ha);
 
   	bool isTimedLocation(const Location<Number> &loc);
+    bool isRectangularLocation(const Location<Number> &loc);
 
     bool isTimedSubspace(const Location<Number> &loc, size_t index);
+    bool isRectangularSubspace(const Location<Number> &loc, size_t index);
     bool isDiscreteSubspace(const Location<Number> &loc, size_t index);
 
 };

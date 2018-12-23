@@ -110,6 +110,54 @@ namespace hypro
 	}
 
 	template<typename Number>
+	bool DecisionEntity<Number>::isRectangularSubspace(const Location<Number> &loc, size_t index){
+		TRACE("hypro.decisionEntity", "Investigating " << loc.getName() << ", subspace " << index);
+
+		if(! (loc.getLinearFlow(index).hasNoFlow() && !loc.getRectangularFlow(index).empty()) ) {
+			TRACE("hypro.decisionEntity", "Flow is not rectangular.");
+			return false;
+		}
+
+		// check if the constraints of the invariant set only contain 0s and one entry 1/-1 at most
+		if(loc.getInvariant().size() > 0){
+			if(!loc.getInvariant().isAxisAligned(index)) {
+				TRACE("hypro.decisionEntity", "Invariant is not axis-aligned.");
+				return false;
+			}
+		}
+
+		for(const auto transition : loc.getTransitions()){
+			TRACE("hypro.decisionEntity", "Investigating " << transition->getSource()->getName() << " -> " << transition->getTarget()->getName());
+
+			// for each transitions check if the constraints of the guard set only only contain 0s and one entry 1/-1 at most
+
+			if(transition->getGuard().size() > 0){
+				if(!transition->getGuard().isAxisAligned(index)){
+					TRACE("hypro.decisionEntity", "Guard is not axis-aligned.");
+					return false;
+				}
+			}
+
+			// check if for each transition the reset function is of the form
+			//
+			//	0/1	 0  ...  0 | 0
+			//	0  0/1 0 ... 0 | 0
+			//	..................
+			//  0 ...... 0 0/1 | 0
+			if(transition->getReset().size() > 0){
+				if(! transition->getReset().getAffineReset(index).isIdentity()) {
+					TRACE("hypro.decisionEntity", "Reset is not interval-based.");
+					return false;
+				}
+
+			}
+
+		}
+		TRACE("hypro.decisionEntitiy","Is rectangular.");
+		return true;
+	}
+
+	template<typename Number>
 	bool DecisionEntity<Number>::isTimedLocation(const Location<Number> &loc){
 		TRACE("hypro.decisionEntity", "Investigating " << loc.getName());
 		// check if flow is of the form
@@ -172,9 +220,31 @@ namespace hypro
 	}
 
 	template<typename Number>
+	bool DecisionEntity<Number>::isRectangularLocation(const Location<Number> &loc){
+		TRACE("hypro.decisionEntity", "Investigating " << loc.getName());
+		for(size_t i = 0; i < loc.getNumberFlow();i++){
+			if(!isRectangularSubspace(loc,i)){
+				TRACE("hypro.decisionEntity","Subspace " << i << " is not rectangular.");
+				return false;
+			}
+		}
+		return true;
+	}
+
+	template<typename Number>
 	bool DecisionEntity<Number>::isTimedAutomaton(const HybridAutomaton<Number> &ha){
 		for(auto location : ha.getLocations()){
 			if(!isTimedLocation(*location)){
+				return false;
+			}
+		}
+		return true;
+	}
+
+	template<typename Number>
+	bool DecisionEntity<Number>::isRectangularAutomaton(const HybridAutomaton<Number> &ha){
+		for(auto location : ha.getLocations()){
+			if(!isRectangularLocation(*location)){
 				return false;
 			}
 		}

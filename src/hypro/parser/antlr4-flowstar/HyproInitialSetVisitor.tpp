@@ -39,6 +39,7 @@ namespace hypro {
 			//1.Get ConstraintSet, build State and add to localStateMap
 			ConstraintSetT<Number> conSet = visit(initStateCtx);
 			assert(initialLoc != NULL);
+			std::cout << "Parsed initial state description: " << conSet.matrix() << " <= " << conSet.vector() << std::endl;
 			initialState.emplace(std::make_pair(initialLoc, Condition<Number>(conSet.matrix(), conSet.vector())));
 		}
 

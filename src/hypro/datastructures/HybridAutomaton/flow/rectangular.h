@@ -28,6 +28,7 @@ public:
 
     std::size_t dimension() const { return mFlowIntervals.size(); }
     std::size_t size() const { return mFlowIntervals.size(); }
+    bool empty() const { return mFlowIntervals.empty(); }
 
     bool isTimed() const {
         for(const auto& keyVal : mFlowIntervals) {

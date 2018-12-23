@@ -84,6 +84,8 @@ void SettingsProvider<State>::computeLocationSubspaceTypeMapping(const HybridAut
             }
             else if(DecisionEntity<Number>::getInstance().isDiscreteSubspace(*location, i)){
                 vec.push_back(SUBSPACETYPE::DISCRETE);
+            } else if(DecisionEntity<Number>::getInstance().isRectangularSubspace(*location, i)) {
+               vec.push_back(SUBSPACETYPE::RECTANGULAR);
             }
             else {
                 vec.push_back(SUBSPACETYPE::LTI);
@@ -103,15 +105,29 @@ void SettingsProvider<State>::computeLocationTypeMapping(const HybridAutomaton<N
         std::vector<SUBSPACETYPE> subspacetypes = *subspacetypesptr;
 
         bool timed = true;
+        bool rectangular = true;
+        bool lti = true;
         for(std::size_t i = 0; i < subspacetypes.size(); i++){
             if(subspacetypes.at(i) == SUBSPACETYPE::LTI){
                 timed = false;
+                rectangular = false;
+                break;
+            } else if (subspacetypes.at(i) == SUBSPACETYPE::TIMED) {
+                rectangular = false;
+                lti = true;
+            } else if (subspacetypes.at(i) == SUBSPACETYPE::RECTANGULAR) {
+                timed = false;
+                lti = false;
+                rectangular = true;
                 break;
             }
         }
 
         if(timed){
             mLocationTypeMap.insert(std::make_pair(location, LOCATIONTYPE::TIMEDLOC));
+        }
+        else if (rectangular) {
+            mLocationTypeMap.insert(std::make_pair(location, LOCATIONTYPE::RECTANGULARLOC));
         }
         else{
             mLocationTypeMap.insert(std::make_pair(location, LOCATIONTYPE::LTILOC));

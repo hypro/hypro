@@ -15,6 +15,7 @@ namespace hypro
             // TRACE("Avoid further computation as the flow is zero." << std::endl);
             mTrafo = matrix_t<Number>::Identity(dim-1,dim-1);
             mTranslation = vector_t<Number>::Zero(dim-1);
+            mFlow = affineFlow<Number>{mTrafo,mTranslation};
             return ;
         }
 
