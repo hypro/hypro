@@ -16,28 +16,28 @@
 class  HybridAutomatonParser : public antlr4::Parser {
 public:
   enum {
-    T__0 = 1, T__1 = 2, T__2 = 3, T__3 = 4, T__4 = 5, T__5 = 6, T__6 = 7, 
-    T__7 = 8, T__8 = 9, T__9 = 10, T__10 = 11, T__11 = 12, T__12 = 13, T__13 = 14, 
-    T__14 = 15, T__15 = 16, T__16 = 17, T__17 = 18, POLY = 19, LINEAR = 20, 
-    ODE = 21, IN = 22, TRUE = 23, FALSE = 24, PAR = 25, JUMPS = 26, URGENT = 27, 
-    GUARD = 28, RESET = 29, PARALLELOTOPE = 30, BOX = 31, JUMP = 32, DEFINE = 33, 
-    COMMENT = 34, EQUALS = 35, BOOLRELATION = 36, PLUS = 37, MINUS = 38, 
-    TIMES = 39, SBOPEN = 40, SBCLOSE = 41, CBOPEN = 42, CBCLOSE = 43, COMMA = 44, 
-    NUMBER = 45, CONSTANT = 46, VARIABLE = 47, WS = 48, INTERVALAGG = 49, 
+    T__0 = 1, T__1 = 2, T__2 = 3, T__3 = 4, T__4 = 5, T__5 = 6, T__6 = 7,
+    T__7 = 8, T__8 = 9, T__9 = 10, T__10 = 11, T__11 = 12, T__12 = 13, T__13 = 14,
+    T__14 = 15, T__15 = 16, T__16 = 17, T__17 = 18, POLY = 19, LINEAR = 20,
+    ODE = 21, IN = 22, TRUE = 23, FALSE = 24, PAR = 25, JUMPS = 26, URGENT = 27,
+    GUARD = 28, RESET = 29, PARALLELOTOPE = 30, BOX = 31, JUMP = 32, DEFINE = 33,
+    COMMENT = 34, EQUALS = 35, BOOLRELATION = 36, PLUS = 37, MINUS = 38,
+    TIMES = 39, SBOPEN = 40, SBCLOSE = 41, CBOPEN = 42, CBCLOSE = 43, COMMA = 44,
+    NUMBER = 45, CONSTANT = 46, VARIABLE = 47, WS = 48, INTERVALAGG = 49,
     EXPONENTIAL = 50
   };
 
   enum {
-    RuleStart = 0, RuleVardeclaration = 1, RuleConstantdeclaration = 2, 
-    RuleModes = 3, RuleLocation = 4, RuleActivities = 5, RuleInvariants = 6, 
-    RuleReplacedexpr = 7, RuleConstantexpr = 8, RuleConnector = 9, RuleTerm = 10, 
-    RulePolynom = 11, RuleInterval = 12, RuleEquation = 13, RuleConstraint = 14, 
-    RuleIntervalexpr = 15, RuleConstrset = 16, RuleInit = 17, RuleInitstate = 18, 
-    RuleUnsafeset = 19, RuleLbadstate = 20, RuleGbadstate = 21, RuleJumps = 22, 
-    RuleTransition = 23, RuleFromto = 24, RuleUrgent = 25, RuleGuard = 26, 
-    RuleAllocation = 27, RuleResetfct = 28, RuleAggregation = 29, RuleSetting = 30, 
-    RuleFixedsteps = 31, RuleTime = 32, RulePlotsetting = 33, RuleFilename = 34, 
-    RuleMaxjumps = 35, RulePrint = 36, RuleRemainder = 37, RuleIdentity = 38, 
+    RuleStart = 0, RuleVardeclaration = 1, RuleConstantdeclaration = 2,
+    RuleModes = 3, RuleLocation = 4, RuleActivities = 5, RuleInvariants = 6,
+    RuleReplacedexpr = 7, RuleConstantexpr = 8, RuleConnector = 9, RuleTerm = 10,
+    RulePolynom = 11, RuleInterval = 12, RuleEquation = 13, RuleConstraint = 14,
+    RuleIntervalexpr = 15, RuleConstrset = 16, RuleInit = 17, RuleInitstate = 18,
+    RuleUnsafeset = 19, RuleLbadstate = 20, RuleGbadstate = 21, RuleJumps = 22,
+    RuleTransition = 23, RuleFromto = 24, RuleUrgent = 25, RuleGuard = 26,
+    RuleAllocation = 27, RuleResetfct = 28, RuleAggregation = 29, RuleSetting = 30,
+    RuleFixedsteps = 31, RuleTime = 32, RulePlotsetting = 33, RuleFilename = 34,
+    RuleMaxjumps = 35, RulePrint = 36, RuleRemainder = 37, RuleIdentity = 38,
     RuleFixedorders = 39, RuleCutoff = 40, RulePrecision = 41
   };
 
@@ -95,7 +95,7 @@ public:
   class IdentityContext;
   class FixedordersContext;
   class CutoffContext;
-  class PrecisionContext; 
+  class PrecisionContext;
 
   class  StartContext : public antlr4::ParserRuleContext {
   public:
@@ -221,16 +221,16 @@ public:
     antlr4::tree::TerminalNode* MINUS(size_t i);
 
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
-   
+
   };
 
   ReplacedexprContext* replacedexpr();
 
   class  ConstantexprContext : public antlr4::ParserRuleContext {
   public:
-    antlr4::Token *constantToken = nullptr;;
-    antlr4::Token *minusToken = nullptr;;
-    antlr4::Token *numberToken = nullptr;;
+    antlr4::Token *constantToken = nullptr;
+    antlr4::Token *minusToken = nullptr;
+    antlr4::Token *numberToken = nullptr;
     ConstantexprContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
     antlr4::tree::TerminalNode *CONSTANT();

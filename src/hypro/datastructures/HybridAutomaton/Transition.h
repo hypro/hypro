@@ -112,7 +112,7 @@ class Transition
     std::vector<Label> getLabels() const { return mLabels; }
     std::size_t hash() const;
 
-    void setSource(Location<Number>* source) { mSource = source; mHash = 0; std::cout << "Set source to " << source << std::endl;}
+    void setSource(Location<Number>* source) { mSource = source; mHash = 0; }
     void setTarget(Location<Number>* target) { mTarget = target; mHash = 0; }
     void setSource(std::unique_ptr<Location<Number>>& source) { mSource = source.get(); mHash = 0; }
     void setTarget(std::unique_ptr<Location<Number>>& target) { mTarget = target.get(); mHash = 0; }

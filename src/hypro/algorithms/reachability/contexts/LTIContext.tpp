@@ -235,7 +235,7 @@ namespace hypro
 	    	tNumber tBound = SettingsProvider<State>::getInstance().getReachabilitySettings().timeBound*SettingsProvider<State>::getInstance().getReachabilitySettings().jumpDepth;
 	    	mLocalTimings.initialize(tBound);
 	    	for(const auto child : mTask->treeNode->getChildren()) {
-	    		unsigned latestLevel = child->getLatestFullyComputedLevel();
+	    		//unsigned latestLevel = child->getLatestFullyComputedLevel();
 	    		assert(child->getPath().back().isDiscreteStep());
 	    		mLocalTimings.insertTransition(child->getPath().back().transition, carl::Interval<tNumber>(0,tBound), CONTAINMENT::NO);
 	    		mLocalTimings.insertTransition(child->getPath().back().transition, child->getPath().back().timeInterval, CONTAINMENT::YES);

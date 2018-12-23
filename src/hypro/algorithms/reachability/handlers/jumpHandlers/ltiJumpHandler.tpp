@@ -312,8 +312,10 @@ namespace hypro {
 				TRACE("hydra.worker.discrete","Agg. aggState and set " << setCnt);
 				// actual aggregation.
 				for(std::size_t i = 0; i < aggregatedState.getNumberSets(); i++){
-					if(types.at(i) == SUBSPACETYPE::DISCRETE){
-						// in discrete subspaces, the set does not change
+					if(types.at(i) == SUBSPACETYPE::DISCRETE || types.at(i) == SUBSPACETYPE::RECTANGULAR){
+						// in discrete subspaces, the set does not change, rectangular states do only have 1 set (currently multiple times).
+						// Todo: Check that all sets are equal
+						// TODO2: Make sure sets get only computed once.
 						continue;
 					}
 					else{

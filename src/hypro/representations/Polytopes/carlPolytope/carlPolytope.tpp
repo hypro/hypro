@@ -123,7 +123,7 @@ namespace hypro {
     std::vector<carl::Interval<Number>> CarlPolytopeT<Number,Converter,Setting>::getIntervals() const {
         // Note: Alternatively use FM-elimination.
         Optimizer<Number> opt{this->matrix(), this->vector()};
-        auto dim = this->dimension();
+        auto dim = Eigen::Index(this->dimension());
         // use box-template, first normal points towards dimension, then negative
         auto directions = computeTemplate<Number>(dim,4);
         std::vector<EvaluationResult<Number>> evalResult;
