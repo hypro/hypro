@@ -35,8 +35,7 @@ namespace hypro {
 		// set containment information
 		if(resultingSet.empty()) {
 			mContainment = CONTAINMENT::NO;
-		} else {
-			assert(resultingSet != boost::get<CarlPolytope<typename State::NumberType>>(mState->getSet(mIndex)));
+		} else if( mContainment != CONTAINMENT::FULL ) {
 			mContainment = CONTAINMENT::PARTIAL;
 		}
 

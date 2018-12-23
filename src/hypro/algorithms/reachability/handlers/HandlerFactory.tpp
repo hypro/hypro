@@ -33,20 +33,18 @@ namespace hypro
 			return nullptr;
 		}
 
+		if(noFlow){
+			return new discreteInvariantHandler<State>(state,index);
+		}
+
 		switch(name){
  			case representation_name::difference_bounds: {
- 				if(noFlow){
- 					return new discreteInvariantHandler<State>(state,index);
- 				}
  				return new timedInvariantHandler<State>(state,index);
  			}
 			case representation_name::carl_polytope: {
 				return new rectangularInvariantHandler<State>(state,index);
 			}
 			default:
- 				if(noFlow){
- 					return new discreteInvariantHandler<State>(state,index);
- 				}
  				return new ltiInvariantHandler<State>(state,index);
 				break;
  		}
@@ -200,7 +198,6 @@ namespace hypro
 
 	template<typename State>
 	IJumpHandler* HandlerFactory<State>::buildDiscreteSuccessorHandler(std::vector<boost::tuple<Transition<Number>*, State>>* successorBuffer,
-										representation_name representation,
 										std::shared_ptr<Task<State>> task,
 										Transition<Number>* transition,
 										StrategyParameters sPars,

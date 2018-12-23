@@ -35,7 +35,7 @@ namespace hypro
 		TRACE("hypro.worker","Initializing " << mComputationState.getNumberSets() <<" invariant handlers");
 		// initialize invariant handlers
 		for(std::size_t i = 0; i < mComputationState.getNumberSets();i++){
-			assert(getFlowType(mFirstSegmentHandlers.at(i)->getTransformation()) == DynamicType::affine);
+			if(getFlowType(mFirstSegmentHandlers.at(i)->getTransformation()) == DynamicType::affine) {
 			auto flow = boost::get<affineFlow<Number>>(mFirstSegmentHandlers.at(i)->getTransformation());
 			matrix_t<Number> trafo = flow.getFlowMatrix();
 			vector_t<Number> translation = flow.getTranslation();
@@ -45,6 +45,15 @@ namespace hypro
 				mInvariantHandlers.push_back(ptr);
 				DEBUG("hypro.worker","Built " << ptr->handlerName() << "at pos " << i);
 			}
+
+			} else if (getFlowType(mFirstSegmentHandlers.at(i)->getTransformation()) == DynamicType::rectangular) {
+				bool noFlow = boost::get<rectangularFlow<Number>>(mFirstSegmentHandlers.at(i)->getTransformation()).isDiscrete();
+				IInvariantHandler* ptr = HandlerFactory<State>::getInstance().buildInvariantHandler(mComputationState.getSetType(i), &mComputationState, i, noFlow);
+				if(ptr){
+					mInvariantHandlers.push_back(ptr);
+					DEBUG("hypro.worker","Built " << ptr->handlerName() << "at pos " << i);
+				}
+			}
 		}
 	}
 
@@ -53,14 +62,23 @@ namespace hypro
 		TRACE("hypro.worker","Initializing " << mComputationState.getNumberSets() <<" bad state handlers");
 		// initalize bad state handlers
 		for(std::size_t i = 0; i < mComputationState.getNumberSets();i++){
-			auto flow = boost::get<affineFlow<Number>>(mFirstSegmentHandlers.at(i)->getTransformation());
-			matrix_t<Number> trafo = flow.getFlowMatrix();
-			vector_t<Number> translation = flow.getTranslation();
-			bool noFlow = (trafo == matrix_t<Number>::Identity(trafo.rows(),trafo.rows()) && translation == vector_t<Number>::Zero(trafo.rows()));
-			IBadStateHandler* ptr = HandlerFactory<State>::getInstance().buildBadStateHandler(mComputationState.getSetType(i), &mComputationState, i, noFlow);
-			if(ptr){
-				mBadStateHandlers.push_back(ptr);
-				DEBUG("hypro.worker","Built " << ptr->handlerName() << "at pos " << i);
+			if(getFlowType(mFirstSegmentHandlers.at(i)->getTransformation()) == DynamicType::affine) {
+				auto flow = boost::get<affineFlow<Number>>(mFirstSegmentHandlers.at(i)->getTransformation());
+				matrix_t<Number> trafo = flow.getFlowMatrix();
+				vector_t<Number> translation = flow.getTranslation();
+				bool noFlow = (trafo == matrix_t<Number>::Identity(trafo.rows(),trafo.rows()) && translation == vector_t<Number>::Zero(trafo.rows()));
+				IBadStateHandler* ptr = HandlerFactory<State>::getInstance().buildBadStateHandler(mComputationState.getSetType(i), &mComputationState, i, noFlow);
+				if(ptr){
+					mBadStateHandlers.push_back(ptr);
+					DEBUG("hypro.worker","Built " << ptr->handlerName() << "at pos " << i);
+				}
+			} else if (getFlowType(mFirstSegmentHandlers.at(i)->getTransformation()) == DynamicType::rectangular) {
+				bool noFlow = boost::get<rectangularFlow<Number>>(mFirstSegmentHandlers.at(i)->getTransformation()).isDiscrete();
+				IBadStateHandler* ptr = HandlerFactory<State>::getInstance().buildBadStateHandler(mComputationState.getSetType(i), &mComputationState, i, noFlow);
+				if(ptr){
+					mBadStateHandlers.push_back(ptr);
+					DEBUG("hypro.worker","Built " << ptr->handlerName() << "at pos " << i);
+				}
 			}
 		}
 	}
@@ -74,14 +92,23 @@ namespace hypro
 			State* guardStatePtr = new State(mComputationState);
     		std::shared_ptr<State> shGuardPtr= std::shared_ptr<State>(guardStatePtr);
 			for(std::size_t i = 0; i < mComputationState.getNumberSets();i++){
-				auto flow = boost::get<affineFlow<Number>>(mFirstSegmentHandlers.at(i)->getTransformation());
-				matrix_t<Number> trafo = flow.getFlowMatrix();
-				vector_t<Number> translation = flow.getTranslation();
-				bool noFlow = (trafo == matrix_t<Number>::Identity(trafo.rows(),trafo.rows()) && translation == vector_t<Number>::Zero(trafo.rows()));
-				IGuardHandler<State>* ptr = HandlerFactory<State>::getInstance().buildGuardHandler(guardStatePtr->getSetType(i), shGuardPtr, i, transition, noFlow);
-				if(ptr){
-					guardHandlers.push_back(ptr);
-					DEBUG("hypro.worker","Built " << ptr->handlerName() << "at pos " << i << " for transition " << transition->getSource()->hash() << " -> " << transition->getTarget()->hash());
+				if(getFlowType(mFirstSegmentHandlers.at(i)->getTransformation()) == DynamicType::affine) {
+					auto flow = boost::get<affineFlow<Number>>(mFirstSegmentHandlers.at(i)->getTransformation());
+					matrix_t<Number> trafo = flow.getFlowMatrix();
+					vector_t<Number> translation = flow.getTranslation();
+					bool noFlow = (trafo == matrix_t<Number>::Identity(trafo.rows(),trafo.rows()) && translation == vector_t<Number>::Zero(trafo.rows()));
+					IGuardHandler<State>* ptr = HandlerFactory<State>::getInstance().buildGuardHandler(guardStatePtr->getSetType(i), shGuardPtr, i, transition, noFlow);
+					if(ptr){
+						guardHandlers.push_back(ptr);
+						DEBUG("hypro.worker","Built " << ptr->handlerName() << "at pos " << i << " for transition " << transition->getSource()->hash() << " -> " << transition->getTarget()->hash());
+					}
+				} else if (getFlowType(mFirstSegmentHandlers.at(i)->getTransformation()) == DynamicType::rectangular) {
+					bool noFlow = boost::get<rectangularFlow<Number>>(mFirstSegmentHandlers.at(i)->getTransformation()).isDiscrete();
+					IGuardHandler<State>* ptr = HandlerFactory<State>::getInstance().buildGuardHandler(guardStatePtr->getSetType(i), shGuardPtr, i, transition, noFlow);
+					if(ptr){
+						guardHandlers.push_back(ptr);
+						DEBUG("hypro.worker","Built " << ptr->handlerName() << "at pos " << i << " for transition " << transition->getSource()->hash() << " -> " << transition->getTarget()->hash());
+					}
 				}
 			}
 
@@ -650,7 +677,7 @@ namespace hypro
     	DEBUG("hypro.worker",  std::this_thread::get_id() << ": --- Loop left ---" << std::endl);
         DEBUG("hypro.worker.discrete",  std::this_thread::get_id() << ": Process " << mDiscreteSuccessorBuffer.size() << " new initial sets which are leftover." << std::endl);
         TRACE("hypro.worker","Initializing discrete successor handler");
-		IJumpHandler* handler = HandlerFactory<State>::getInstance().buildDiscreteSuccessorHandler(&mDiscreteSuccessorBuffer, mTask->treeNode->getRefinements().at(mTask->btInfo.btLevel).initialSet.getSetType(), mTask, nullptr, mStrategy.getParameters(mTask->btInfo.btLevel), mLocalQueue, mLocalCEXQueue);
+		IJumpHandler* handler = HandlerFactory<State>::getInstance().buildDiscreteSuccessorHandler(&mDiscreteSuccessorBuffer, mTask, nullptr, mStrategy.getParameters(mTask->btInfo.btLevel), mLocalQueue, mLocalCEXQueue);
 		TRACE("hypro.worker","Built discrete successor handler of type: " << handler->handlerName());
 		handler->handle();
     }
