@@ -43,7 +43,11 @@ protected:
 
 public:
 	Reset() = default;
-	Reset(const Reset& orig) = default;
+	Reset(const Reset& orig)
+		: mAffineResets(orig.getAffineResets())
+		, mIntervalResets(orig.getIntervalResets())
+	{}
+
 	Reset(Reset&& orig) = default;
 	Reset& operator=(const Reset<Number>& orig) = default;
 	Reset& operator=(Reset<Number>&& orig) = default;
@@ -62,7 +66,9 @@ public:
 	std::vector<carl::Interval<Number>>& rGetIntervals(std::size_t I = 0);
 
 	const AffineTransformation<Number>& getAffineReset(std::size_t I = 0) const { return mAffineResets[I]; }
+	const std::vector<AffineTransformation<Number>>& getAffineResets() const { return mAffineResets; }
 	const IntervalAssignment<Number>& getIntervalReset(std::size_t I = 0) const { return mIntervalResets[I]; }
+	const std::vector<IntervalAssignment<Number>>& getIntervalResets() const { return mIntervalResets; }
 
 	void setVector(const vector_t<Number>& in, std::size_t I = 0);
 	void setMatrix(const matrix_t<Number>& in, std::size_t I = 0);

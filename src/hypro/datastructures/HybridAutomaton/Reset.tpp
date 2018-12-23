@@ -42,37 +42,37 @@ namespace hypro {
 
 	template<typename Number>
 	void Reset<Number>::setVector(const vector_t<Number>& in, std::size_t I) {
+		assert(mAffineResets.size() == mIntervalResets.size());
 		while (mAffineResets.size() < I+1) {
 			mAffineResets.emplace_back(AffineTransformation<Number>());
 			mIntervalResets.emplace_back(IntervalAssignment<Number>());
 		}
+		assert(mAffineResets.size() == mIntervalResets.size());
 		mAffineResets[I].mTransformation.rVector() = in;
-		mIntervalResets[I].mIntervals = std::vector<carl::Interval<Number>>(in.rows(), carl::Interval<Number>::emptyInterval());
 		mHash = 0;
 	}
 
 	template<typename Number>
 	void Reset<Number>::setMatrix(const matrix_t<Number>& in, std::size_t I) {
-		std::cout << "Reset setMatrix: " << in << std::endl;
+		assert(mAffineResets.size() == mIntervalResets.size());
 		assert(in.rows() == in.cols());
 		while (mAffineResets.size() < I+1) {
 			mAffineResets.emplace_back(AffineTransformation<Number>());
 			mIntervalResets.emplace_back(IntervalAssignment<Number>());
 		}
-		mAffineResets[I].mTransformation.rMatrix() = in;
-		mIntervalResets[I].mIntervals = std::vector<carl::Interval<Number>>(in.rows(), carl::Interval<Number>::emptyInterval());
+		assert(mAffineResets.size() == mIntervalResets.size());
+		mAffineResets[I].mTransformation.setMatrix(in);
 		mHash = 0;
 	}
 
 	template<typename Number>
 	void Reset<Number>::setIntervals(const std::vector<carl::Interval<Number>>& intervals, std::size_t I) {
-		std::cout << "Reset setIntervals number: " << intervals.size() << std::endl;
+		assert(mAffineResets.size() == mIntervalResets.size());
 		while (mIntervalResets.size() < I+1) {
 			mAffineResets.emplace_back(AffineTransformation<Number>());
 			mIntervalResets.emplace_back(IntervalAssignment<Number>());
 		}
-		mAffineResets[I].mTransformation.setMatrix(matrix_t<Number>::Identity(intervals.size(),intervals.size()));
-		mAffineResets[I].mTransformation.setVector(vector_t<Number>::Zero(intervals.size()));
+		assert(mAffineResets.size() == mIntervalResets.size());
 		mIntervalResets[I].mIntervals = intervals;
 		mHash = 0;
 	}

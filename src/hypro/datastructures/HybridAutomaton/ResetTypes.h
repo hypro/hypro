@@ -58,7 +58,12 @@ namespace hypro {
         std::size_t size() {return mIntervals.size();}
 
         bool isIdentity() const {
-            return mIntervals.empty();
+            for(const auto& i : mIntervals) {
+                if(i != carl::Interval<Number>::emptyInterval()) {
+                    return false;
+                }
+            }
+            return true;
         }
 
         friend std::ostream& operator<<(std::ostream& out, const IntervalAssignment<Number>& in) {
