@@ -169,19 +169,23 @@ namespace hypro {
 
     template<typename Number>
     PolyT<Number> FourierMotzkinQE<Number>::getRemainder(const ConstraintT<Number>& c, carl::Variable v, bool isLowerBnd) {
+        auto tmp = c.lhs() / c.coefficient(v,1); // now v has the coefficient 1.
+        return -tmp;
+        /*
         if(isLowerBnd) {
             if(c.relation() == carl::Relation::LESS || c.relation() == carl::Relation::LEQ) {
-                return c.lhs() - c.coefficient(v,1)*v;
+                return (c.lhs() - c.coefficient(v,1)*v)/c.coefficient(v,1);
             } else {
-                return -(c.lhs() - c.coefficient(v,1)*v);
+                return -((c.lhs() - c.coefficient(v,1)*v)/c.coefficient(v,1));
             }
         } else {
             if(c.relation() == carl::Relation::LESS || c.relation() == carl::Relation::LEQ) {
-                return -(c.lhs() - c.coefficient(v,1)*v);
+                return -((c.lhs() - c.coefficient(v,1)*v)/c.coefficient(v,1));
             } else {
-                return c.lhs() - c.coefficient(v,1)*v;
+                return (c.lhs() - c.coefficient(v,1)*v)/c.coefficient(v,1);
             }
         }
+        */
     }
 
     template<typename Number>
