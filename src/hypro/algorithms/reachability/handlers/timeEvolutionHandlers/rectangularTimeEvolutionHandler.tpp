@@ -4,7 +4,7 @@ namespace hypro {
     template<typename State>
 	void rectangularTimeEvolutionHandler<State>::handle() {
         if(!mComputed) {
-            TRACE("hydra.worker","Applying timestep to " << mState->getSet(mIndex));
+            DEBUG("hydra.worker","Applying timestep to " << mState->getSet(mIndex));
             auto& vpool = hypro::VariablePool::getInstance();
             // get initial state
             CarlPolytope<Number> initial = boost::get<CarlPolytope<Number>>(mState->getSet(mIndex));
@@ -38,6 +38,8 @@ namespace hypro {
 
             // eliminate vars
             initial.eliminateVariables(quOrder);
+
+            DEBUG("hydra.worker","State set after time elapse: " << initial);
 
             // update internal state
             mState->setSetDirect(initial,mIndex);

@@ -36,8 +36,8 @@ namespace hypro {
     template<typename Number, typename Converter, typename Setting>
     CarlPolytopeT<Number,Converter,Setting> CarlPolytopeT<Number,Converter,Setting>::intersect(const CarlPolytopeT<Number,Converter,Setting>& rhs) const {
         TRACE("hypro.representations.carlPolytope","Intersect " << *this << " and " << rhs);
-        assert(mFormula.isConstraintConjunction());
-        assert(rhs.getFormula().isConstraintConjunction());
+        //assert(mFormula.isConstraintConjunction());
+        //assert(rhs.getFormula().isConstraintConjunction());
         // test for emptiness
         if(this->empty() || rhs.empty()) {
             return Empty();
@@ -154,6 +154,7 @@ namespace hypro {
         mFormula.getConstraints(constraints);
         constraints.push_back(constraint);
         mFormula = FormulaT<tNumber>(carl::FormulaType::AND, constraintsToFormulas(constraints));
+        TRACE("hypro.representations.CarlPolytope","After adding a constraint " << *this);
         detectDimension();
     }
 
@@ -169,6 +170,7 @@ namespace hypro {
         auto cCopy = constraints;
         mFormula.getConstraints(cCopy);
         mFormula = FormulaT<tNumber>(carl::FormulaType::AND, constraintsToFormulas(cCopy));
+        TRACE("hypro.representations.CarlPolytope","After adding constraints " << *this);
         detectDimension();
     }
 
@@ -178,6 +180,7 @@ namespace hypro {
         mHalfspaces.clear();
         // substitute
         mFormula = mFormula.substitute(oldVar, PolyT<tNumber>(newVar));
+        TRACE("hypro.representations.CarlPolytope","After substituting " << oldVar << " by " << newVar << ": " << *this);
         detectDimension();
     }
 
