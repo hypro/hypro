@@ -134,7 +134,7 @@ namespace hypro {
         std::vector<carl::Interval<Number>> res;
 
         // assemble intervals from evaluation results
-        assert(evalResult.size() == 2*dim );
+        assert(Eigen::Index(evalResult.size()) == 2*dim );
         for(Eigen::Index d = 0; d < dim; ++d) {
             res.emplace_back(-evalResult[2*d + 1].supportValue, evalResult[2*d].supportValue);
         }

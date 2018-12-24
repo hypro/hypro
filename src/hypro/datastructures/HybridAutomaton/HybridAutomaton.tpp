@@ -35,9 +35,9 @@ HybridAutomaton<Number>::HybridAutomaton(const HybridAutomaton<Number>& hybrid)
 
 	//update locations of transitions and transitions of locations
 	for(auto& l : mLocations) {
-		std::cout << "consider new location " << l->getName() << "(" << l.get() << ")" << std::endl;
+		//std::cout << "consider new location " << l->getName() << "(" << l.get() << ")" << std::endl;
 		for(auto& t : l->rGetTransitions()) {
-			std::cout << "consider copied transition " << t->getSource()->getName() << " (" << t->getSource() << ") --> " << t->getTarget()->getName() << " (" << t->getTarget() << ")" << std::endl;
+			//std::cout << "consider copied transition " << t->getSource()->getName() << " (" << t->getSource() << ") --> " << t->getTarget()->getName() << " (" << t->getTarget() << ")" << std::endl;
 			// verify that the source of the location already corresponds to the new location.
 			assert(t->getSource() == l.get());
 
@@ -134,7 +134,7 @@ HybridAutomaton<Number>::HybridAutomaton(HybridAutomaton<Number>&& hybrid)
 //Copy assignment
 template<typename Number>
 HybridAutomaton<Number>& HybridAutomaton<Number>::operator=(const HybridAutomaton<Number>& rhs){
-	std::cout << "In HA copy assignment!\n";
+	//std::cout << "In HA copy assignment!\n";
    	if(this != &rhs){
 		auto copy{rhs};
 		*this = std::move(copy);
@@ -145,7 +145,7 @@ HybridAutomaton<Number>& HybridAutomaton<Number>::operator=(const HybridAutomato
 //Move Assignment
 template<typename Number>
 HybridAutomaton<Number>& HybridAutomaton<Number>::operator=(HybridAutomaton<Number>&& rhs){
-	std::cout << "In HA move assignment!\n";
+	//std::cout << "In HA move assignment!\n";
    	if(this != &rhs){
     	//std::swap(rhs.mLocations, mLocations);
     	//std::swap(rhs.mTransitions, mTransitions);

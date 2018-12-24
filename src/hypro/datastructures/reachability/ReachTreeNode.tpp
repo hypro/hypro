@@ -327,7 +327,7 @@ std::size_t ReachTreeNode<State>::getDotRepresentation(std::size_t startIndex, s
 			//if(ref.eventTimings.hasInvariantEvent(hypro::CONTAINMENT::FULL)) {
 			//	s <<  cnt << "<BR/>inv(f): " << ref.eventTimings.getInvariantTimings(hypro::CONTAINMENT::FULL);
 			//} else {
-				s << cnt << " (" << ref.initialSet.getLocation()->getId() << ")";
+				s << cnt << " (" << ref.initialSet.getLocation()->hash() << ")";
 			//}
 		}
 		if(ref.hitBadStates){

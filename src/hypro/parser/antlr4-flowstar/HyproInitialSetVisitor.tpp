@@ -80,6 +80,7 @@ namespace hypro {
   		//1.Call HyproFormulaVisitor and get pair of matrix and vector
 		HyproFormulaVisitor<Number> visitor(vars);
 		std::pair<matrix_t<Number>,vector_t<Number>> result = visitor.visit(ctx->constrset());
+		std::cout << "In visit init: " << result.first << " <= " << result.second << std::endl;
 
 		//2.Build ConstraintSet and return it
 		return ConstraintSetT<Number>(result.first, result.second);

@@ -168,7 +168,7 @@ namespace hypro {
     }
 
     template<typename Number>
-    PolyT<Number> FourierMotzkinQE<Number>::getRemainder(const ConstraintT<Number>& c, carl::Variable v, bool isLowerBnd) {
+    PolyT<Number> FourierMotzkinQE<Number>::getRemainder(const ConstraintT<Number>& c, carl::Variable v, bool ) {
         auto tmp = c.lhs() / c.coefficient(v,1); // now v has the coefficient 1.
         return -tmp;
         /*

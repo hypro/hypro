@@ -1,3 +1,4 @@
+#pragma once
 
 template<typename Number>
 using Box = typename Converter<Number>::Box;

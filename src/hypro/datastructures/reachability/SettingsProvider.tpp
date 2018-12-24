@@ -106,7 +106,7 @@ void SettingsProvider<State>::computeLocationTypeMapping(const HybridAutomaton<N
 
         bool timed = true;
         bool rectangular = true;
-        bool lti = true;
+        //bool lti = true;
         for(std::size_t i = 0; i < subspacetypes.size(); i++){
             if(subspacetypes.at(i) == SUBSPACETYPE::LTI){
                 timed = false;
@@ -114,10 +114,10 @@ void SettingsProvider<State>::computeLocationTypeMapping(const HybridAutomaton<N
                 break;
             } else if (subspacetypes.at(i) == SUBSPACETYPE::TIMED) {
                 rectangular = false;
-                lti = true;
+                //lti = true;
             } else if (subspacetypes.at(i) == SUBSPACETYPE::RECTANGULAR) {
                 timed = false;
-                lti = false;
+                //lti = false;
                 rectangular = true;
                 break;
             }
