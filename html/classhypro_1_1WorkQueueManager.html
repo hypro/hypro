@@ -122,15 +122,12 @@ $(document).ready(function(){initNavTree('classhypro_1_1WorkQueueManager.html','
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a66e053f114061812811f4c306766ccb5"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a66e053f114061812811f4c306766ccb5"></a>
-<a class="el" href="classhypro_1_1WorkQueueT.html">WorkQueue</a>&lt; Workable &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>addQueue</b> ()</td></tr>
-<tr class="separator:a66e053f114061812811f4c306766ccb5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a066edf1ccdb435ec0ea010a50cdef03d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a066edf1ccdb435ec0ea010a50cdef03d"></a>
-<a class="el" href="classhypro_1_1WorkQueueT.html">WorkQueue</a>&lt; Workable &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>addQueue</b> (<a class="el" href="classhypro_1_1WorkQueueT.html">WorkQueue</a>&lt; Workable &gt; &amp;&amp;queue)</td></tr>
-<tr class="separator:a066edf1ccdb435ec0ea010a50cdef03d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2b6db48b0afc80684f68dce039fbbfdc"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2b6db48b0afc80684f68dce039fbbfdc"></a>
-<a class="el" href="classhypro_1_1WorkQueueT.html">WorkQueue</a>&lt; Workable &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getQueue</b> (std::size_t index)</td></tr>
-<tr class="separator:a2b6db48b0afc80684f68dce039fbbfdc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af777c4e5d6088a161521741aa747c3fc"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af777c4e5d6088a161521741aa747c3fc"></a>
+<a class="el" href="classhypro_1_1WorkQueueT.html">WorkQueue</a>&lt; Workable &gt; *&#160;</td><td class="memItemRight" valign="bottom"><b>addQueue</b> ()</td></tr>
+<tr class="separator:af777c4e5d6088a161521741aa747c3fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a68ed261f0226beda1bf43608ed4a4f82"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a68ed261f0226beda1bf43608ed4a4f82"></a>
+<a class="el" href="classhypro_1_1WorkQueueT.html">WorkQueue</a>&lt; Workable &gt; *&#160;</td><td class="memItemRight" valign="bottom"><b>getQueue</b> (std::size_t index)</td></tr>
+<tr class="separator:a68ed261f0226beda1bf43608ed4a4f82"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ade7cd8a7e71d5a8083f89ebcba1916e0"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ade7cd8a7e71d5a8083f89ebcba1916e0"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>hasWorkable</b> (bool lockedAcces) const </td></tr>
 <tr class="separator:ade7cd8a7e71d5a8083f89ebcba1916e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -140,9 +137,9 @@ Workable&#160;</td><td class="memItemRight" valign="bottom"><b>getNextWorkable</
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
-<tr class="memitem:a99bfefefb67fa11a27f21f01238aa5f9"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a99bfefefb67fa11a27f21f01238aa5f9"></a>
-std::vector&lt; <a class="el" href="classhypro_1_1WorkQueueT.html">WorkQueue</a>&lt; Workable &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>mQueues</b></td></tr>
-<tr class="separator:a99bfefefb67fa11a27f21f01238aa5f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5dd1bbeffecc7eaaed575c78e3c97fbe"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5dd1bbeffecc7eaaed575c78e3c97fbe"></a>
+std::vector&lt; std::unique_ptr&lt; <a class="el" href="classhypro_1_1WorkQueueT.html">WorkQueue</a>&lt; Workable &gt; &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>mQueues</b></td></tr>
+<tr class="separator:a5dd1bbeffecc7eaaed575c78e3c97fbe"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><h3>template&lt;typename Workable&gt;<br />

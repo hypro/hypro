@@ -125,7 +125,7 @@ $(document).ready(function(){initNavTree('structhypro_1_1RefinementSetting.html'
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
 <tr class="memitem:a5aabc29003c8c7e326bd4331a14832b3"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5aabc29003c8c7e326bd4331a14832b3"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>Number</b> = typename <a class="el" href="classhypro_1_1State.html#a8596fb990ea3ae3528b1ed522e0bc574">State::NumberType</a></td></tr>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>Number</b> = typename State::NumberType</td></tr>
 <tr class="separator:a5aabc29003c8c7e326bd4331a14832b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
@@ -136,10 +136,10 @@ Public Member Functions</h2></td></tr>
 &#160;</td><td class="memItemRight" valign="bottom"><b>RefinementSetting</b> (const <a class="el" href="classhypro_1_1Location.html">Location</a>&lt; Number &gt; *loc)</td></tr>
 <tr class="separator:a1976676ce5f63d1bc5c1fab1a848d910"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abbd9ae816a0c61ff34f271b64605619a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="abbd9ae816a0c61ff34f271b64605619a"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>RefinementSetting</b> (const <a class="el" href="classhypro_1_1State.html">State</a> &amp;state)</td></tr>
+&#160;</td><td class="memItemRight" valign="bottom"><b>RefinementSetting</b> (const State &amp;state)</td></tr>
 <tr class="separator:abbd9ae816a0c61ff34f271b64605619a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1734f2ae5f25c39ec4f2410f25837e9e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1734f2ae5f25c39ec4f2410f25837e9e"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>RefinementSetting</b> (const <a class="el" href="classhypro_1_1State.html">State</a> &amp;set, const <a class="el" href="classhypro_1_1Location.html">Location</a>&lt; Number &gt; *loc)</td></tr>
+&#160;</td><td class="memItemRight" valign="bottom"><b>RefinementSetting</b> (const State &amp;set, const <a class="el" href="classhypro_1_1Location.html">Location</a>&lt; Number &gt; *loc)</td></tr>
 <tr class="separator:a1734f2ae5f25c39ec4f2410f25837e9e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2fe0bdf82691817eae8cf98758171f4c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2fe0bdf82691817eae8cf98758171f4c"></a>
 <a class="el" href="structhypro_1_1RefinementSetting.html">RefinementSetting</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator=</b> (const <a class="el" href="structhypro_1_1RefinementSetting.html">RefinementSetting</a> &amp;orig)</td></tr>
@@ -148,7 +148,7 @@ Public Member Functions</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr class="memitem:a4e7926b0e7047f50a04733ccd803dfd8"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4e7926b0e7047f50a04733ccd803dfd8"></a>
-<a class="el" href="classhypro_1_1State.html">State</a>&#160;</td><td class="memItemRight" valign="bottom"><b>initialSet</b></td></tr>
+State&#160;</td><td class="memItemRight" valign="bottom"><b>initialSet</b></td></tr>
 <tr class="separator:a4e7926b0e7047f50a04733ccd803dfd8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0b63b1680c1a01011f3ffef30e1e4a39"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0b63b1680c1a01011f3ffef30e1e4a39"></a>
 <a class="el" href="classhypro_1_1EventTimingContainer.html">EventTimingContainer</a>&lt; Number &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>mTimings</b></td></tr>
@@ -186,19 +186,19 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator!=</b> (const
 struct hypro::RefinementSetting&lt; State &gt;</h3>
 
 
-<p>Definition at line <a class="el" href="ReachTreeNode_8h_source.html#l00029">29</a> of file <a class="el" href="ReachTreeNode_8h_source.html">ReachTreeNode.h</a>.</p>
+<p>Definition at line <a class="el" href="ReachTreeNode_8h_source.html#l00030">30</a> of file <a class="el" href="ReachTreeNode_8h_source.html">ReachTreeNode.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="aef4ab59d09d621981204dd0c3533cc38"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename State&gt; </div>
+template&lt;typename State &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="structhypro_1_1RefinementSetting.html">hypro::RefinementSetting</a>&lt; <a class="el" href="classhypro_1_1State.html">State</a> &gt;::<a class="el" href="structhypro_1_1RefinementSetting.html">RefinementSetting</a> </td>
+          <td class="memname"><a class="el" href="structhypro_1_1RefinementSetting.html">hypro::RefinementSetting</a>&lt; State &gt;::<a class="el" href="structhypro_1_1RefinementSetting.html">RefinementSetting</a> </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>

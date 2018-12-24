@@ -108,75 +108,12 @@ $(document).ready(function(){initNavTree('Box_8h.html','');});
 </div>
 
 <div class="header">
-  <div class="summary">
-<a href="#nested-classes">Classes</a> &#124;
-<a href="#namespaces">Namespaces</a> &#124;
-<a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
 <div class="title">Box.h File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><code>#include &quot;intervalMethods.h&quot;</code><br />
-<code>#include &quot;BoxSetting.h&quot;</code><br />
-<code>#include &quot;<a class="el" href="Halfspace_8h_source.html">../../datastructures/Halfspace.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="Point_8h_source.html">../../datastructures/Point.h</a>&quot;</code><br />
-<code>#include &quot;../../util/Permutator.h&quot;</code><br />
-<code>#include &quot;../../util/templateDirections.h&quot;</code><br />
-<code>#include &quot;../../util/linearOptimization/Optimizer.h&quot;</code><br />
-<code>#include &quot;../../util/logging/Logger.h&quot;</code><br />
-<code>#include &lt;carl/interval/Interval.h&gt;</code><br />
-<code>#include &lt;carl/interval/set_theory.h&gt;</code><br />
-<code>#include &lt;cassert&gt;</code><br />
-<code>#include &lt;map&gt;</code><br />
-<code>#include &lt;set&gt;</code><br />
-<code>#include &lt;vector&gt;</code><br />
-<code>#include &lt;queue&gt;</code><br />
-<code>#include &quot;Box.tpp&quot;</code><br />
-</div><div class="textblock"><div class="dynheader">
-Include dependency graph for Box.h:</div>
-<div class="dyncontent">
-<div class="center"><img src="Box_8h__incl.png" border="0" usemap="#_2home_2travis_2build_2hypro_2hypro_2src_2hypro_2representations_2Box_2Box_8h" alt=""/></div>
-<map name="_2home_2travis_2build_2hypro_2hypro_2src_2hypro_2representations_2Box_2Box_8h" id="_2home_2travis_2build_2hypro_2hypro_2src_2hypro_2representations_2Box_2Box_8h">
-</map>
-</div>
-</div><div class="textblock"><div class="dynheader">
-This graph shows which files directly or indirectly include this file:</div>
-<div class="dyncontent">
-<div class="center"><img src="Box_8h__dep__incl.png" border="0" usemap="#_2home_2travis_2build_2hypro_2hypro_2src_2hypro_2representations_2Box_2Box_8hdep" alt=""/></div>
-<map name="_2home_2travis_2build_2hypro_2hypro_2src_2hypro_2representations_2Box_2Box_8hdep" id="_2home_2travis_2build_2hypro_2hypro_2src_2hypro_2representations_2Box_2Box_8hdep">
-</map>
-</div>
-</div>
+
 <p><a href="Box_8h_source.html">Go to the source code of this file.</a></p>
-<table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
-Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Vertex.html">hypro::Vertex&lt; Number &gt;</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Location.html">hypro::Location&lt; Number &gt;</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Class for location.  <a href="classhypro_1_1Location.html#details">More...</a><br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1BoxT.html">hypro::BoxT&lt; Number, Converter, Setting &gt;</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">The class which represents a box.  <a href="classhypro_1_1BoxT.html#details">More...</a><br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
-Namespaces</h2></td></tr>
-<tr class="memitem:namespacehypro"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehypro.html">hypro</a></td></tr>
-<tr class="memdesc:namespacehypro"><td class="mdescLeft">&#160;</td><td class="mdescRight">The most general namespace for the HyPro library. <br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
-Functions</h2></td></tr>
-<tr class="memitem:aa78d21b35ed555d7bb6cf29c782b63f8"><td class="memTemplParams" colspan="2">template&lt;typename Number , typename Converter , class Setting &gt; </td></tr>
-<tr class="memitem:aa78d21b35ed555d7bb6cf29c782b63f8"><td class="memTemplItemLeft" align="right" valign="top">BoxT&lt; Number, Converter, Setting &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacehypro.html#aa78d21b35ed555d7bb6cf29c782b63f8">hypro::operator*</a> (Number factor, const BoxT&lt; Number, Converter, Setting &gt; &amp;in)</td></tr>
-<tr class="memdesc:aa78d21b35ed555d7bb6cf29c782b63f8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Operator for scaling a box.  <a href="namespacehypro.html#aa78d21b35ed555d7bb6cf29c782b63f8">More...</a><br /></td></tr>
-<tr class="separator:aa78d21b35ed555d7bb6cf29c782b63f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa9de495215c4e14a55d1f389a06e3bc9"><td class="memTemplParams" colspan="2">template&lt;typename From , typename To , typename Converter , class Setting &gt; </td></tr>
-<tr class="memitem:aa9de495215c4e14a55d1f389a06e3bc9"><td class="memTemplItemLeft" align="right" valign="top">BoxT&lt; To, Converter, Setting &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacehypro.html#aa9de495215c4e14a55d1f389a06e3bc9">hypro::convert</a> (const BoxT&lt; From, Converter, Setting &gt; &amp;in)</td></tr>
-<tr class="memdesc:aa9de495215c4e14a55d1f389a06e3bc9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Conversion function for different number types.  <a href="namespacehypro.html#aa9de495215c4e14a55d1f389a06e3bc9">More...</a><br /></td></tr>
-<tr class="separator:aa9de495215c4e14a55d1f389a06e3bc9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table>
 </div><!-- contents -->
 </div><!-- doc-content -->
 <!-- HTML footer for doxygen 1.8.12-->

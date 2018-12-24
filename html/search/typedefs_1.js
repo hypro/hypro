@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['differencebounds',['DifferenceBounds',['../namespacehypro.html#a81a6782100a8fb335147ba9a67e18c65',1,'hypro']]]
+  ['node_5ft',['Node_t',['../classhypro_1_1TreeNode.html#a7e90cd205cd7fdca8aa3e8045eb68bf1',1,'hypro::TreeNode']]]
 ];

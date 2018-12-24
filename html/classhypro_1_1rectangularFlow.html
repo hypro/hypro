@@ -127,24 +127,30 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a707a85c49a0edccff1f64e7c928238b2"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a707a85c49a0edccff1f64e7c928238b2"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>rectangularFlow</b> (const <a class="el" href="classhypro_1_1rectangularFlow.html">rectangularFlow</a>&lt; Number &gt; &amp;in)=default</td></tr>
 <tr class="separator:a707a85c49a0edccff1f64e7c928238b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7dd090de402833361dc9e1c43c4c167f"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7dd090de402833361dc9e1c43c4c167f"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>rectangularFlow</b> (const std::vector&lt; carl::Interval&lt; Number &gt;&gt; &amp;intervals)</td></tr>
-<tr class="separator:a7dd090de402833361dc9e1c43c4c167f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a94ffeb50b98cf900823a076fea164a58"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a94ffeb50b98cf900823a076fea164a58"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>setFlowIntervals</b> (const std::vector&lt; carl::Interval&lt; Number &gt;&gt; &amp;in)</td></tr>
-<tr class="separator:a94ffeb50b98cf900823a076fea164a58"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adad3a8ef5dfda40663f8b77ea31a8d98"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="adad3a8ef5dfda40663f8b77ea31a8d98"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>setFlowIntervalForDimension</b> (const carl::Interval&lt; Number &gt; &amp;intv, std::size_t dim)</td></tr>
-<tr class="separator:adad3a8ef5dfda40663f8b77ea31a8d98"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a10bd2daffd935c3311bb2a987815f8df"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a10bd2daffd935c3311bb2a987815f8df"></a>
-const std::vector&lt; carl::Interval&lt; Number &gt; &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getFlowIntervals</b> () const </td></tr>
-<tr class="separator:a10bd2daffd935c3311bb2a987815f8df"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af600e9016d5f6bcedfba6fb1214cb499"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af600e9016d5f6bcedfba6fb1214cb499"></a>
-const carl::Interval&lt; Number &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getFlowIntervalForDimension</b> (std::size_t dim)</td></tr>
-<tr class="separator:af600e9016d5f6bcedfba6fb1214cb499"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a68a54c5bc5dedb0862d5806cea1c442f"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a68a54c5bc5dedb0862d5806cea1c442f"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>rectangularFlow</b> (const std::map&lt; carl::Variable, carl::Interval&lt; Number &gt;&gt; &amp;intervals)</td></tr>
+<tr class="separator:a68a54c5bc5dedb0862d5806cea1c442f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a10f9f0cabace1c550d2b3f1bf7bc2d4c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a10f9f0cabace1c550d2b3f1bf7bc2d4c"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setFlowIntervals</b> (const std::map&lt; carl::Variable, carl::Interval&lt; Number &gt;&gt; &amp;in)</td></tr>
+<tr class="separator:a10f9f0cabace1c550d2b3f1bf7bc2d4c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aace63d2eee9c3a1261f298a10bf86c26"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aace63d2eee9c3a1261f298a10bf86c26"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setFlowIntervalForDimension</b> (const carl::Interval&lt; Number &gt; &amp;intv, carl::Variable dim)</td></tr>
+<tr class="separator:aace63d2eee9c3a1261f298a10bf86c26"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa3223972416d7b0497ad7d5358beea3c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa3223972416d7b0497ad7d5358beea3c"></a>
+const std::map&lt; carl::Variable, carl::Interval&lt; Number &gt; &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getFlowIntervals</b> () const </td></tr>
+<tr class="separator:aa3223972416d7b0497ad7d5358beea3c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a905d518a4f11e02e05171efe7d7b2b1f"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a905d518a4f11e02e05171efe7d7b2b1f"></a>
+const carl::Interval&lt; Number &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getFlowIntervalForDimension</b> (carl::Variable dim) const </td></tr>
+<tr class="separator:a905d518a4f11e02e05171efe7d7b2b1f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abb4d1b21090b2766d08b141a156bd7e9"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="abb4d1b21090b2766d08b141a156bd7e9"></a>
 std::size_t&#160;</td><td class="memItemRight" valign="bottom"><b>dimension</b> () const </td></tr>
 <tr class="separator:abb4d1b21090b2766d08b141a156bd7e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a77621b4974fd7926aa58b59fa09d03eb"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a77621b4974fd7926aa58b59fa09d03eb"></a>
+std::size_t&#160;</td><td class="memItemRight" valign="bottom"><b>size</b> () const </td></tr>
+<tr class="separator:a77621b4974fd7926aa58b59fa09d03eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab872f0feddd2117b7444d23d6404d201"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab872f0feddd2117b7444d23d6404d201"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>empty</b> () const </td></tr>
+<tr class="separator:ab872f0feddd2117b7444d23d6404d201"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a498f81029f322e0995dec0e0dd143638"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a498f81029f322e0995dec0e0dd143638"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>isTimed</b> () const </td></tr>
 <tr class="separator:a498f81029f322e0995dec0e0dd143638"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -160,12 +166,18 @@ static <a class="el" href="namespacehypro.html#ade3e42b7b774f60999db5eb776027882
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
-<tr class="memitem:ad8a1d886f2007c7c33dcc7f48d5385fd"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad8a1d886f2007c7c33dcc7f48d5385fd"></a>
-std::vector&lt; carl::Interval&lt; Number &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>mFlowIntervals</b></td></tr>
-<tr class="separator:ad8a1d886f2007c7c33dcc7f48d5385fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a578ed7449eb6b14fec50bc463ac41ed0"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a578ed7449eb6b14fec50bc463ac41ed0"></a>
+std::map&lt; carl::Variable, carl::Interval&lt; Number &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>mFlowIntervals</b></td></tr>
+<tr class="separator:a578ed7449eb6b14fec50bc463ac41ed0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
 Friends</h2></td></tr>
+<tr class="memitem:ad0c7c8f7ce9937b5c60fec2a6d72ff1a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad0c7c8f7ce9937b5c60fec2a6d72ff1a"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator==</b> (const <a class="el" href="classhypro_1_1rectangularFlow.html">rectangularFlow</a>&lt; Number &gt; &amp;lhs, const <a class="el" href="classhypro_1_1rectangularFlow.html">rectangularFlow</a>&lt; Number &gt; &amp;rhs)</td></tr>
+<tr class="separator:ad0c7c8f7ce9937b5c60fec2a6d72ff1a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8f30687c1bea5fdc69bcc8f3309726f3"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8f30687c1bea5fdc69bcc8f3309726f3"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator!=</b> (const <a class="el" href="classhypro_1_1rectangularFlow.html">rectangularFlow</a>&lt; Number &gt; &amp;lhs, const <a class="el" href="classhypro_1_1rectangularFlow.html">rectangularFlow</a>&lt; Number &gt; &amp;rhs)</td></tr>
+<tr class="separator:a8f30687c1bea5fdc69bcc8f3309726f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a95641fe4df3f4d5a12e445cfa9bf40ab"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a95641fe4df3f4d5a12e445cfa9bf40ab"></a>
 ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator&lt;&lt;</b> (ostream &amp;out, const <a class="el" href="classhypro_1_1rectangularFlow.html">rectangularFlow</a>&lt; Number &gt; &amp;in)</td></tr>
 <tr class="separator:a95641fe4df3f4d5a12e445cfa9bf40ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -175,7 +187,7 @@ ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator&lt;
 class hypro::rectangularFlow&lt; Number &gt;</h3>
 
 
-<p>Definition at line <a class="el" href="rectangular_8h_source.html#l00008">8</a> of file <a class="el" href="rectangular_8h_source.html">rectangular.h</a>.</p>
+<p>Definition at line <a class="el" href="rectangular_8h_source.html#l00009">9</a> of file <a class="el" href="rectangular_8h_source.html">rectangular.h</a>.</p>
 </div><hr/>The documentation for this class was generated from the following file:<ul>
 <li>/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/<a class="el" href="rectangular_8h_source.html">rectangular.h</a></li>
 </ul>

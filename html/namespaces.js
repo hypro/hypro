@@ -1,6 +1,6 @@
 var namespaces =
 [
-    [ "hypro", "namespacehypro.html", "namespacehypro" ],
+    [ "hypro", "namespacehypro.html", null ],
     [ "parser", "namespaceparser.html", null ],
     [ "plotting", "namespaceplotting.html", null ],
     [ "reachability", "namespacereachability.html", null ],

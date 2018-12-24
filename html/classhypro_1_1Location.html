@@ -114,7 +114,6 @@ $(document).ready(function(){initNavTree('classhypro_1_1Location.html','');});
   <div class="summary">
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pro-types">Protected Types</a> &#124;
 <a href="#pro-methods">Protected Member Functions</a> &#124;
 <a href="#friends">Friends</a> &#124;
 <a href="classhypro_1_1Location-members.html">List of all members</a>  </div>
@@ -130,9 +129,9 @@ $(document).ready(function(){initNavTree('classhypro_1_1Location.html','');});
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
-<tr class="memitem:a99ec4a8ecc47b7c6b97365b543829ccc"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a99ec4a8ecc47b7c6b97365b543829ccc"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>flowVariant</b> = boost::variant&lt; <a class="el" href="classhypro_1_1linearFlow.html">linearFlow</a>&lt; Number &gt;, <a class="el" href="classhypro_1_1affineFlow.html">affineFlow</a>&lt; Number &gt;, <a class="el" href="classhypro_1_1rectangularFlow.html">rectangularFlow</a>&lt; Number &gt;&gt;</td></tr>
-<tr class="separator:a99ec4a8ecc47b7c6b97365b543829ccc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5b1c1bd231cc31fcf7bda4bf2752ac75"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5b1c1bd231cc31fcf7bda4bf2752ac75"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>transitionVector</b> = std::vector&lt; std::unique_ptr&lt; <a class="el" href="classhypro_1_1Transition.html">Transition</a>&lt; Number &gt;&gt;&gt;</td></tr>
+<tr class="separator:a5b1c1bd231cc31fcf7bda4bf2752ac75"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -142,27 +141,39 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aeffc26c683ac9afcc6850a6c03e85df7"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aeffc26c683ac9afcc6850a6c03e85df7"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>Location</b> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;mat)</td></tr>
 <tr class="separator:aeffc26c683ac9afcc6850a6c03e85df7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa3c33cc27e279f45034e50019f2f2bfa"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa3c33cc27e279f45034e50019f2f2bfa"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>Location</b> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;mat, const transitionSet &amp;trans, const <a class="el" href="classhypro_1_1Condition.html">Condition</a>&lt; Number &gt; &amp;inv)</td></tr>
-<tr class="separator:aa3c33cc27e279f45034e50019f2f2bfa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae636049e31a377d3268934a3458ad0d7"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae636049e31a377d3268934a3458ad0d7"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>Location</b> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;mat, transitionVector &amp;&amp;trans, const Condition&lt; Number &gt; &amp;inv)</td></tr>
+<tr class="separator:ae636049e31a377d3268934a3458ad0d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7d8a180b8b08d3cd7abdd95d0bec5dde"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7d8a180b8b08d3cd7abdd95d0bec5dde"></a>
 std::size_t&#160;</td><td class="memItemRight" valign="bottom"><b>getNumberFlow</b> () const </td></tr>
 <tr class="separator:a7d8a180b8b08d3cd7abdd95d0bec5dde"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4b00c9e6ba176a620c26aeeb63c99d0c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4b00c9e6ba176a620c26aeeb63c99d0c"></a>
-flowVariant&#160;</td><td class="memItemRight" valign="bottom"><b>getFlow</b> (std::size_t I=0) const </td></tr>
-<tr class="separator:a4b00c9e6ba176a620c26aeeb63c99d0c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae2710145f38379a1de7c462d529eb0d0"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae2710145f38379a1de7c462d529eb0d0"></a>
-flowVariant &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>rGetFlow</b> (std::size_t I=0)</td></tr>
-<tr class="separator:ae2710145f38379a1de7c462d529eb0d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6822984a4635d8c19e34577322bc1deb"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6822984a4635d8c19e34577322bc1deb"></a>
-const std::vector&lt; flowVariant &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getFlows</b> () const </td></tr>
-<tr class="separator:a6822984a4635d8c19e34577322bc1deb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a28f7638baf501fbe69df1e773ab51ac7"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a28f7638baf501fbe69df1e773ab51ac7"></a>
+<a class="el" href="classhypro_1_1linearFlow.html">linearFlow</a>&lt; Number &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getLinearFlow</b> (std::size_t I=0) const </td></tr>
+<tr class="separator:a28f7638baf501fbe69df1e773ab51ac7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2aea8b94a29b2e2b0874118c7414a0ce"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2aea8b94a29b2e2b0874118c7414a0ce"></a>
+<a class="el" href="classhypro_1_1linearFlow.html">linearFlow</a>&lt; Number &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>rGetLinearFlow</b> (std::size_t I=0)</td></tr>
+<tr class="separator:a2aea8b94a29b2e2b0874118c7414a0ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a90c6d2414f91e16f6bfe76d4a1891eff"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a90c6d2414f91e16f6bfe76d4a1891eff"></a>
+<a class="el" href="classhypro_1_1rectangularFlow.html">rectangularFlow</a>&lt; Number &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getRectangularFlow</b> (std::size_t I=0) const </td></tr>
+<tr class="separator:a90c6d2414f91e16f6bfe76d4a1891eff"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7154d06faf592373da5ee9286842fd5a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7154d06faf592373da5ee9286842fd5a"></a>
+<a class="el" href="classhypro_1_1rectangularFlow.html">rectangularFlow</a>&lt; Number &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>rGetRectangularFlow</b> (std::size_t I=0)</td></tr>
+<tr class="separator:a7154d06faf592373da5ee9286842fd5a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abdb23ef6ad7fd8db30e6edc9e8597be1"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="abdb23ef6ad7fd8db30e6edc9e8597be1"></a>
+const std::vector&lt; <a class="el" href="classhypro_1_1linearFlow.html">linearFlow</a>&lt; Number &gt; &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getLinearFlows</b> () const </td></tr>
+<tr class="separator:abdb23ef6ad7fd8db30e6edc9e8597be1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6b118c4f3458ccbf0dc597260f1b2595"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6b118c4f3458ccbf0dc597260f1b2595"></a>
+const std::vector&lt; <a class="el" href="classhypro_1_1rectangularFlow.html">rectangularFlow</a>&lt; Number &gt; &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getRectangularFlows</b> () const </td></tr>
+<tr class="separator:a6b118c4f3458ccbf0dc597260f1b2595"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acf2a88e7cce8962765ae1f2468934952"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="acf2a88e7cce8962765ae1f2468934952"></a>
-const <a class="el" href="classhypro_1_1Condition.html">Condition</a>&lt; Number &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getInvariant</b> () const </td></tr>
+const Condition&lt; Number &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getInvariant</b> () const </td></tr>
 <tr class="separator:acf2a88e7cce8962765ae1f2468934952"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5df716358559a72d9a66644c6594bcce"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5df716358559a72d9a66644c6594bcce"></a>
-const transitionSet &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getTransitions</b> () const </td></tr>
-<tr class="separator:a5df716358559a72d9a66644c6594bcce"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afc1f23d7c9f9bd11f3cb21744332a416"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="afc1f23d7c9f9bd11f3cb21744332a416"></a>
+std::vector&lt; <a class="el" href="classhypro_1_1Transition.html">Transition</a>&lt; Number &gt; * &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getTransitions</b> () const </td></tr>
+<tr class="separator:afc1f23d7c9f9bd11f3cb21744332a416"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a71ed6bfd985e5c9410b58a99b645212a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a71ed6bfd985e5c9410b58a99b645212a"></a>
+transitionVector &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>rGetTransitions</b> ()</td></tr>
+<tr class="separator:a71ed6bfd985e5c9410b58a99b645212a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a385adc86c40a3c7c44017bd22ea06370"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a385adc86c40a3c7c44017bd22ea06370"></a>
 const std::vector&lt; carl::Interval&lt; Number &gt; &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getExternalInput</b> () const </td></tr>
 <tr class="separator:a385adc86c40a3c7c44017bd22ea06370"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -184,21 +195,27 @@ std::size_t&#160;</td><td class="memItemRight" valign="bottom"><b>dimension</b> 
 <tr class="memitem:a3f49334e8502bfee63c7e9448820c5e1"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3f49334e8502bfee63c7e9448820c5e1"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>setName</b> (const std::string &amp;name)</td></tr>
 <tr class="separator:a3f49334e8502bfee63c7e9448820c5e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8401af3e42196b2633c08dafeefcb1a3"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8401af3e42196b2633c08dafeefcb1a3"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>setFlow</b> (const flowVariant &amp;f, std::size_t I=0)</td></tr>
-<tr class="separator:a8401af3e42196b2633c08dafeefcb1a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a28a124f21961be493e3c7f01e9b838f1"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a28a124f21961be493e3c7f01e9b838f1"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setLinearFlow</b> (const <a class="el" href="classhypro_1_1linearFlow.html">linearFlow</a>&lt; Number &gt; &amp;f, std::size_t I=0)</td></tr>
+<tr class="separator:a28a124f21961be493e3c7f01e9b838f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa96f7b9bf000373b460fc2c68e981c3f"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa96f7b9bf000373b460fc2c68e981c3f"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setRectangularFlow</b> (const <a class="el" href="classhypro_1_1rectangularFlow.html">rectangularFlow</a>&lt; Number &gt; &amp;f, std::size_t I=0)</td></tr>
+<tr class="separator:aa96f7b9bf000373b460fc2c68e981c3f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a588c962b39fa8f92c14be75ccad9d6ab"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a588c962b39fa8f92c14be75ccad9d6ab"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setLinearFlow</b> (const std::vector&lt; <a class="el" href="classhypro_1_1linearFlow.html">linearFlow</a>&lt; Number &gt;&gt; &amp;flows)</td></tr>
+<tr class="separator:a588c962b39fa8f92c14be75ccad9d6ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaada6f869ad7e4e4c3a49b8909ef3fe5"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aaada6f869ad7e4e4c3a49b8909ef3fe5"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setRectangularFlow</b> (const std::vector&lt; <a class="el" href="classhypro_1_1rectangularFlow.html">rectangularFlow</a>&lt; Number &gt;&gt; &amp;flows)</td></tr>
+<tr class="separator:aaada6f869ad7e4e4c3a49b8909ef3fe5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a031f5c93b7979bea0582283618ea8a00"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a031f5c93b7979bea0582283618ea8a00"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>setInvariant</b> (const <a class="el" href="classhypro_1_1Condition.html">Condition</a>&lt; Number &gt; &amp;inv)</td></tr>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setInvariant</b> (const Condition&lt; Number &gt; &amp;inv)</td></tr>
 <tr class="separator:a031f5c93b7979bea0582283618ea8a00"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6c854c08a0e6f94dfb89f32284dd9597"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6c854c08a0e6f94dfb89f32284dd9597"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>setTransitions</b> (const transitionSet &amp;trans)</td></tr>
-<tr class="separator:a6c854c08a0e6f94dfb89f32284dd9597"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afca89b8e15d30121aaff7b2224af45cc"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="afca89b8e15d30121aaff7b2224af45cc"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>addTransition</b> (<a class="el" href="classhypro_1_1Transition.html">Transition</a>&lt; Number &gt; *trans)</td></tr>
-<tr class="separator:afca89b8e15d30121aaff7b2224af45cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af8dc5754d664496dd99c57dfcaa10fec"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af8dc5754d664496dd99c57dfcaa10fec"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>updateTransition</b> (<a class="el" href="classhypro_1_1Transition.html">Transition</a>&lt; Number &gt; *original, <a class="el" href="classhypro_1_1Transition.html">Transition</a>&lt; Number &gt; *newT)</td></tr>
-<tr class="separator:af8dc5754d664496dd99c57dfcaa10fec"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac8e24ada4c8befd84cff0032718cfa13"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac8e24ada4c8befd84cff0032718cfa13"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setTransitions</b> (transitionVector &amp;&amp;trans)</td></tr>
+<tr class="separator:ac8e24ada4c8befd84cff0032718cfa13"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa7410f1fadba495a97262f8e10087c64"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa7410f1fadba495a97262f8e10087c64"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>addTransition</b> (std::unique_ptr&lt; <a class="el" href="classhypro_1_1Transition.html">Transition</a>&lt; Number &gt;&gt; &amp;&amp;trans)</td></tr>
+<tr class="separator:aa7410f1fadba495a97262f8e10087c64"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8284f6bdb0295e1e654bd10869a82ff4"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8284f6bdb0295e1e654bd10869a82ff4"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>setExtInput</b> (const std::vector&lt; carl::Interval&lt; Number &gt;&gt; &amp;b)</td></tr>
 <tr class="separator:a8284f6bdb0295e1e654bd10869a82ff4"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -211,9 +228,9 @@ std::size_t&#160;</td><td class="memItemRight" valign="bottom"><b>hash</b> () co
 <tr class="memitem:a00e08686c4582cda2df4c2084dcabf9a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a00e08686c4582cda2df4c2084dcabf9a"></a>
 std::string&#160;</td><td class="memItemRight" valign="bottom"><b>getDotRepresentation</b> (const std::vector&lt; std::string &gt; &amp;vars) const </td></tr>
 <tr class="separator:a00e08686c4582cda2df4c2084dcabf9a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab5da19a9be3af5a9ca650288324a8028"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab5da19a9be3af5a9ca650288324a8028"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>decompose</b> (std::vector&lt; std::vector&lt; size_t &gt;&gt; decomposition)</td></tr>
-<tr class="separator:ab5da19a9be3af5a9ca650288324a8028"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae2072188d156cafa50e0c0bcc4809c27"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae2072188d156cafa50e0c0bcc4809c27"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>decompose</b> (const <a class="el" href="structhypro_1_1Decomposition.html">Decomposition</a> &amp;decomposition)</td></tr>
+<tr class="separator:ae2072188d156cafa50e0c0bcc4809c27"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8f33a74a18d96cf7bd207ad4491ee815"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8f33a74a18d96cf7bd207ad4491ee815"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator&lt;</b> (const <a class="el" href="classhypro_1_1Location.html">Location</a>&lt; Number &gt; &amp;rhs) const </td></tr>
 <tr class="separator:a8f33a74a18d96cf7bd207ad4491ee815"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -223,12 +240,6 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator==</b> (const
 <tr class="memitem:a7ec7a51dc8ec407509089a585b583f4b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7ec7a51dc8ec407509089a585b583f4b"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator!=</b> (const <a class="el" href="classhypro_1_1Location.html">Location</a>&lt; Number &gt; &amp;rhs) const </td></tr>
 <tr class="separator:a7ec7a51dc8ec407509089a585b583f4b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-types"></a>
-Protected Types</h2></td></tr>
-<tr class="memitem:a3b37e0dfcaa509cf7a46d51ed512d454"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3b37e0dfcaa509cf7a46d51ed512d454"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>transitionSet</b> = std::set&lt; <a class="el" href="classhypro_1_1Transition.html">Transition</a>&lt; Number &gt; * &gt;</td></tr>
-<tr class="separator:a3b37e0dfcaa509cf7a46d51ed512d454"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
@@ -240,8 +251,8 @@ Protected Member Functions</h2></td></tr>
 <tr class="separator:ad5a8502815ab1b69bf812ec6c9539330"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0db96e5ecd37ac0591ee8e81643c8354"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Location.html#a0db96e5ecd37ac0591ee8e81643c8354">Location</a> (unsigned id, const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;mat)</td></tr>
 <tr class="separator:a0db96e5ecd37ac0591ee8e81643c8354"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa48a2d4286320d28ff981703c8e2723e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Location.html#aa48a2d4286320d28ff981703c8e2723e">Location</a> (unsigned id, const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;mat, const transitionSet &amp;trans, const <a class="el" href="classhypro_1_1Condition.html">Condition</a>&lt; Number &gt; &amp;inv)</td></tr>
-<tr class="separator:aa48a2d4286320d28ff981703c8e2723e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7cad23114db8cec2b84a8d9315b6f5ac"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Location.html#a7cad23114db8cec2b84a8d9315b6f5ac">Location</a> (unsigned id, const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;mat, transitionVector &amp;&amp;trans, const Condition&lt; Number &gt; &amp;inv)</td></tr>
+<tr class="separator:a7cad23114db8cec2b84a8d9315b6f5ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
 Friends</h2></td></tr>
@@ -261,7 +272,7 @@ class hypro::Location&lt; Number &gt;</h3>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="Transition_8h_source.html#l00023">23</a> of file <a class="el" href="Transition_8h_source.html">Transition.h</a>.</p>
+<p>Definition at line <a class="el" href="Location_8h_source.html#l00033">33</a> of file <a class="el" href="Location_8h_source.html">Location.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="a6e7ef40440fc9e460618e7fdf47ea41f"></a>
 <div class="memitem">
@@ -383,7 +394,7 @@ template&lt;typename Number &gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="aa48a2d4286320d28ff981703c8e2723e"></a>
+<a class="anchor" id="a7cad23114db8cec2b84a8d9315b6f5ac"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
@@ -407,13 +418,13 @@ template&lt;typename Number &gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const transitionSet &amp;&#160;</td>
+          <td class="paramtype">transitionVector &amp;&amp;&#160;</td>
           <td class="paramname"><em>trans</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="classhypro_1_1Condition.html">Condition</a>&lt; Number &gt; &amp;&#160;</td>
+          <td class="paramtype">const Condition&lt; Number &gt; &amp;&#160;</td>
           <td class="paramname"><em>inv</em>&#160;</td>
         </tr>
         <tr>
@@ -485,8 +496,7 @@ template&lt;typename Number &gt; </div>
 
 </div>
 </div>
-<hr/>The documentation for this class was generated from the following files:<ul>
-<li>/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/<a class="el" href="Transition_8h_source.html">Transition.h</a></li>
+<hr/>The documentation for this class was generated from the following file:<ul>
 <li>/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/<a class="el" href="Location_8h_source.html">Location.h</a></li>
 </ul>
 </div><!-- contents -->

@@ -6,14 +6,19 @@ var annotated_dup =
       [ "NumTraits< mpq_class >", "structEigen_1_1NumTraits_3_01mpq__class_01_4.html", "structEigen_1_1NumTraits_3_01mpq__class_01_4" ]
     ] ],
     [ "hypro", "namespacehypro.html", "namespacehypro" ],
+    [ "smtrat", null, [
+      [ "SimplexSolver", "classsmtrat_1_1SimplexSolver.html", "classsmtrat_1_1SimplexSolver" ]
+    ] ],
     [ "std", null, [
       [ "hash< hypro::affineFlow< Number > >", "structstd_1_1hash_3_01hypro_1_1affineFlow_3_01Number_01_4_01_4.html", "structstd_1_1hash_3_01hypro_1_1affineFlow_3_01Number_01_4_01_4" ],
+      [ "hash< hypro::AffineTransformation< Number > >", "structstd_1_1hash_3_01hypro_1_1AffineTransformation_3_01Number_01_4_01_4.html", "structstd_1_1hash_3_01hypro_1_1AffineTransformation_3_01Number_01_4_01_4" ],
       [ "hash< hypro::Cacheable< Content > >", "structstd_1_1hash_3_01hypro_1_1Cacheable_3_01Content_01_4_01_4.html", "structstd_1_1hash_3_01hypro_1_1Cacheable_3_01Content_01_4_01_4" ],
-      [ "hash< hypro::Condition< Number > >", "structstd_1_1hash_3_01hypro_1_1Condition_3_01Number_01_4_01_4.html", "structstd_1_1hash_3_01hypro_1_1Condition_3_01Number_01_4_01_4" ],
       [ "hash< hypro::Halfspace< Number > >", "structstd_1_1hash_3_01hypro_1_1Halfspace_3_01Number_01_4_01_4.html", "structstd_1_1hash_3_01hypro_1_1Halfspace_3_01Number_01_4_01_4" ],
+      [ "hash< hypro::IntervalAssignment< Number > >", "structstd_1_1hash_3_01hypro_1_1IntervalAssignment_3_01Number_01_4_01_4.html", "structstd_1_1hash_3_01hypro_1_1IntervalAssignment_3_01Number_01_4_01_4" ],
       [ "hash< hypro::linearFlow< Number > >", "structstd_1_1hash_3_01hypro_1_1linearFlow_3_01Number_01_4_01_4.html", "structstd_1_1hash_3_01hypro_1_1linearFlow_3_01Number_01_4_01_4" ],
       [ "hash< hypro::Location< Number > >", "structstd_1_1hash_3_01hypro_1_1Location_3_01Number_01_4_01_4.html", "structstd_1_1hash_3_01hypro_1_1Location_3_01Number_01_4_01_4" ],
       [ "hash< hypro::matrix_t< Number > >", "structstd_1_1hash_3_01hypro_1_1matrix__t_3_01Number_01_4_01_4.html", "structstd_1_1hash_3_01hypro_1_1matrix__t_3_01Number_01_4_01_4" ],
+      [ "hash< hypro::NoneAssignment >", "structstd_1_1hash_3_01hypro_1_1NoneAssignment_01_4.html", "structstd_1_1hash_3_01hypro_1_1NoneAssignment_01_4" ],
       [ "hash< hypro::Point< Number > >", "structstd_1_1hash_3_01hypro_1_1Point_3_01Number_01_4_01_4.html", "structstd_1_1hash_3_01hypro_1_1Point_3_01Number_01_4_01_4" ],
       [ "hash< hypro::rectangularFlow< Number > >", "structstd_1_1hash_3_01hypro_1_1rectangularFlow_3_01Number_01_4_01_4.html", "structstd_1_1hash_3_01hypro_1_1rectangularFlow_3_01Number_01_4_01_4" ],
       [ "hash< hypro::Reset< Number > >", "structstd_1_1hash_3_01hypro_1_1Reset_3_01Number_01_4_01_4.html", "structstd_1_1hash_3_01hypro_1_1Reset_3_01Number_01_4_01_4" ],
@@ -38,10 +43,8 @@ var annotated_dup =
     [ "ExpressionsLexer", "classExpressionsLexer.html", "classExpressionsLexer" ],
     [ "ExpressionsParser", "classExpressionsParser.html", "classExpressionsParser" ],
     [ "ExpressionsVisitor", "classExpressionsVisitor.html", "classExpressionsVisitor" ],
-    [ "FinishWithDiscreteProcessingException", "classFinishWithDiscreteProcessingException.html", "classFinishWithDiscreteProcessingException" ],
     [ "Flags", "structFlags.html", "structFlags" ],
     [ "Flowpipe_segment", "structFlowpipe__segment.html", "structFlowpipe__segment" ],
-    [ "HardTerminateException", "classHardTerminateException.html", "classHardTerminateException" ],
     [ "HybridAutomatonBaseVisitor", "classHybridAutomatonBaseVisitor.html", "classHybridAutomatonBaseVisitor" ],
     [ "HybridAutomatonLexer", "classHybridAutomatonLexer.html", "classHybridAutomatonLexer" ],
     [ "HybridAutomatonParser", "classHybridAutomatonParser.html", "classHybridAutomatonParser" ],

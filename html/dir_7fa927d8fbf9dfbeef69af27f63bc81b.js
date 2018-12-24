@@ -12,7 +12,11 @@ var dir_7fa927d8fbf9dfbeef69af27f63bc81b =
     [ "SupportFunction", "dir_5cc8785239517cfd59e944398d6252f9.html", "dir_5cc8785239517cfd59e944398d6252f9" ],
     [ "TaylorModel", "dir_f299c51bddf4791e0a4b318d117b72c2.html", "dir_f299c51bddf4791e0a4b318d117b72c2" ],
     [ "Zonotope", "dir_97de49a5bc6f4f4b12a8405ff97bd656.html", "dir_97de49a5bc6f4f4b12a8405ff97bd656" ],
-    [ "GeometricObject.h", "GeometricObject_8h.html", "GeometricObject_8h" ],
+    [ "GeometricObject.h", "GeometricObject_8h.html", [
+      [ "Point", "classhypro_1_1Point.html", "classhypro_1_1Point" ],
+      [ "Halfspace", "classhypro_1_1Halfspace.html", "classhypro_1_1Halfspace" ],
+      [ "Location", "classhypro_1_1Location.html", "classhypro_1_1Location" ]
+    ] ],
     [ "types.h", "representations_2types_8h_source.html", null ],
     [ "volumeApproximation.h", "volumeApproximation_8h_source.html", null ]
 ];

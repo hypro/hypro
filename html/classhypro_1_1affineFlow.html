@@ -158,9 +158,15 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>isDiscrete</b> () con
 <tr class="memitem:acd0be0bc254458dd3c8be0fb4bf3a197 inherit pub_methods_classhypro_1_1linearFlow"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="acd0be0bc254458dd3c8be0fb4bf3a197"></a>
 std::size_t&#160;</td><td class="memItemRight" valign="bottom"><b>dimension</b> () const </td></tr>
 <tr class="separator:acd0be0bc254458dd3c8be0fb4bf3a197 inherit pub_methods_classhypro_1_1linearFlow"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a73849edbd308478137295a765e4e5161 inherit pub_methods_classhypro_1_1linearFlow"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a73849edbd308478137295a765e4e5161"></a>
+std::size_t&#160;</td><td class="memItemRight" valign="bottom"><b>size</b> () const </td></tr>
+<tr class="separator:a73849edbd308478137295a765e4e5161 inherit pub_methods_classhypro_1_1linearFlow"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abdf3c1df01ca0bdc84edb01242493eca inherit pub_methods_classhypro_1_1linearFlow"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="abdf3c1df01ca0bdc84edb01242493eca"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>setFlowMatrix</b> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;newA)</td></tr>
 <tr class="separator:abdf3c1df01ca0bdc84edb01242493eca inherit pub_methods_classhypro_1_1linearFlow"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a581893c8ca52d55ade304fa613db1615 inherit pub_methods_classhypro_1_1linearFlow"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a581893c8ca52d55ade304fa613db1615"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>addRow</b> (const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;row)</td></tr>
+<tr class="separator:a581893c8ca52d55ade304fa613db1615 inherit pub_methods_classhypro_1_1linearFlow"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5f8f51f955e66be0e45f897e1411c190 inherit pub_methods_classhypro_1_1linearFlow"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5f8f51f955e66be0e45f897e1411c190"></a>
 const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getFlowMatrix</b> () const </td></tr>
 <tr class="separator:a5f8f51f955e66be0e45f897e1411c190 inherit pub_methods_classhypro_1_1linearFlow"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -197,7 +203,7 @@ Protected Attributes</h2></td></tr>
 <tr class="separator:a9f38ac508c0b8066d1d63b5d71b8db81"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_attribs_classhypro_1_1linearFlow"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_classhypro_1_1linearFlow')"><img src="closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="classhypro_1_1linearFlow.html">hypro::linearFlow&lt; Number &gt;</a></td></tr>
 <tr class="memitem:a6d4bf0a1cbd6a6412d9c285d02432dc6 inherit pro_attribs_classhypro_1_1linearFlow"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6d4bf0a1cbd6a6412d9c285d02432dc6"></a>
-<a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>mFlowMatrix</b></td></tr>
+<a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>mFlowMatrix</b> = <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt;Number&gt;(0,0)</td></tr>
 <tr class="separator:a6d4bf0a1cbd6a6412d9c285d02432dc6 inherit pro_attribs_classhypro_1_1linearFlow"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad60b5888340b1808a5ec339d1f6e16fe inherit pro_attribs_classhypro_1_1linearFlow"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad60b5888340b1808a5ec339d1f6e16fe"></a>
 <a class="el" href="namespacehypro.html#aadba9c45e18a68d4ad85d2032811081d">TRIBOOL</a>&#160;</td><td class="memItemRight" valign="bottom"><b>mIsIdentity</b> = TRIBOOL::NSET</td></tr>
@@ -208,6 +214,12 @@ Protected Attributes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
 Friends</h2></td></tr>
+<tr class="memitem:a0a4ba50f12a3533c4748be2fa9c468b1"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0a4ba50f12a3533c4748be2fa9c468b1"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator==</b> (const <a class="el" href="classhypro_1_1affineFlow.html">affineFlow</a>&lt; Number &gt; &amp;lhs, const <a class="el" href="classhypro_1_1affineFlow.html">affineFlow</a>&lt; Number &gt; &amp;rhs)</td></tr>
+<tr class="separator:a0a4ba50f12a3533c4748be2fa9c468b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aee73ad22e945a308aeccb00859594381"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aee73ad22e945a308aeccb00859594381"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator!=</b> (const <a class="el" href="classhypro_1_1affineFlow.html">affineFlow</a>&lt; Number &gt; &amp;lhs, const <a class="el" href="classhypro_1_1affineFlow.html">affineFlow</a>&lt; Number &gt; &amp;rhs)</td></tr>
+<tr class="separator:aee73ad22e945a308aeccb00859594381"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a194ca53cffd4ce8f1d9cc86025b6eb85"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a194ca53cffd4ce8f1d9cc86025b6eb85"></a>
 ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator&lt;&lt;</b> (ostream &amp;out, const <a class="el" href="classhypro_1_1affineFlow.html">affineFlow</a>&lt; Number &gt; &amp;in)</td></tr>
 <tr class="separator:a194ca53cffd4ce8f1d9cc86025b6eb85"><td class="memSeparator" colspan="2">&#160;</td></tr>

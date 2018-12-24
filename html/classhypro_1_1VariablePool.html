@@ -122,6 +122,15 @@ $(document).ready(function(){initNavTree('classhypro_1_1VariablePool.html','');}
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
+<tr class="memitem:a30b975e5a0a6a1116e15bd2393d0e4e2"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a30b975e5a0a6a1116e15bd2393d0e4e2"></a>
+const carl::Variable &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>variable</b> (const Parma_Polyhedra_Library::Variable &amp;_var) const </td></tr>
+<tr class="separator:a30b975e5a0a6a1116e15bd2393d0e4e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a68470cb3e82879165953a04f5fa65591"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a68470cb3e82879165953a04f5fa65591"></a>
+const Parma_Polyhedra_Library::Variable &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>variable</b> (const carl::Variable &amp;_var) const </td></tr>
+<tr class="separator:a68470cb3e82879165953a04f5fa65591"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad07b9b8424e2efecb50e54d1ab5da0f8"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad07b9b8424e2efecb50e54d1ab5da0f8"></a>
+const Parma_Polyhedra_Library::Variable &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>pplVarByIndex</b> (std::size_t _index)</td></tr>
+<tr class="separator:ad07b9b8424e2efecb50e54d1ab5da0f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5158d61d6298633ac3f13110f2a155bf"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5158d61d6298633ac3f13110f2a155bf"></a>
 const carl::Variable &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>carlVarByIndex</b> (std::size_t _index)</td></tr>
 <tr class="separator:a5158d61d6298633ac3f13110f2a155bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -131,15 +140,24 @@ const carl::Variable &amp;&#160;</td><td class="memItemRight" valign="bottom"><b
 <tr class="memitem:aae69aee728f5af9f610068696759fab9"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aae69aee728f5af9f610068696759fab9"></a>
 std::size_t&#160;</td><td class="memItemRight" valign="bottom"><b>addCarlVariable</b> (carl::Variable var)</td></tr>
 <tr class="separator:aae69aee728f5af9f610068696759fab9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6a7be803481968266e3c8579e3079faf"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6a7be803481968266e3c8579e3079faf"></a>
+const Parma_Polyhedra_Library::Variable &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>newPplVariable</b> ()</td></tr>
+<tr class="separator:a6a7be803481968266e3c8579e3079faf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a78b18a4443b22b416ee1fa4e746445ac"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a78b18a4443b22b416ee1fa4e746445ac"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>hasDimension</b> (const carl::Variable &amp;_var) const </td></tr>
 <tr class="separator:a78b18a4443b22b416ee1fa4e746445ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5bb609f45308be2f913dcd1f3dbe1821"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5bb609f45308be2f913dcd1f3dbe1821"></a>
+std::size_t&#160;</td><td class="memItemRight" valign="bottom"><b>id</b> (const Parma_Polyhedra_Library::Variable &amp;_var) const </td></tr>
+<tr class="separator:a5bb609f45308be2f913dcd1f3dbe1821"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8b19d4de2de02976db76e9a4519ea08d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8b19d4de2de02976db76e9a4519ea08d"></a>
 std::size_t&#160;</td><td class="memItemRight" valign="bottom"><b>id</b> (const carl::Variable &amp;_var)</td></tr>
 <tr class="separator:a8b19d4de2de02976db76e9a4519ea08d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9abb8865a117b7d06c7076ae2a29a419"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9abb8865a117b7d06c7076ae2a29a419"></a>
 std::vector&lt; carl::Variable &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>carlVariables</b> () const </td></tr>
 <tr class="separator:a9abb8865a117b7d06c7076ae2a29a419"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a266bd2876a226bdafb1ed7d045c9fb78"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a266bd2876a226bdafb1ed7d045c9fb78"></a>
+std::vector&lt; Parma_Polyhedra_Library::Variable &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>pplVariables</b> () const </td></tr>
+<tr class="separator:a266bd2876a226bdafb1ed7d045c9fb78"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa5b7c94844168c1b9371ed2004b7982e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa5b7c94844168c1b9371ed2004b7982e"></a>
 std::size_t&#160;</td><td class="memItemRight" valign="bottom"><b>size</b> () const </td></tr>
 <tr class="separator:aa5b7c94844168c1b9371ed2004b7982e"><td class="memSeparator" colspan="2">&#160;</td></tr>

@@ -133,9 +133,15 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:acd0be0bc254458dd3c8be0fb4bf3a197"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="acd0be0bc254458dd3c8be0fb4bf3a197"></a>
 std::size_t&#160;</td><td class="memItemRight" valign="bottom"><b>dimension</b> () const </td></tr>
 <tr class="separator:acd0be0bc254458dd3c8be0fb4bf3a197"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a73849edbd308478137295a765e4e5161"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a73849edbd308478137295a765e4e5161"></a>
+std::size_t&#160;</td><td class="memItemRight" valign="bottom"><b>size</b> () const </td></tr>
+<tr class="separator:a73849edbd308478137295a765e4e5161"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abdf3c1df01ca0bdc84edb01242493eca"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="abdf3c1df01ca0bdc84edb01242493eca"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>setFlowMatrix</b> (const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;newA)</td></tr>
 <tr class="separator:abdf3c1df01ca0bdc84edb01242493eca"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a581893c8ca52d55ade304fa613db1615"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a581893c8ca52d55ade304fa613db1615"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>addRow</b> (const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;row)</td></tr>
+<tr class="separator:a581893c8ca52d55ade304fa613db1615"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5f8f51f955e66be0e45f897e1411c190"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5f8f51f955e66be0e45f897e1411c190"></a>
 const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getFlowMatrix</b> () const </td></tr>
 <tr class="separator:a5f8f51f955e66be0e45f897e1411c190"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -161,7 +167,7 @@ static <a class="el" href="namespacehypro.html#ade3e42b7b774f60999db5eb776027882
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
 <tr class="memitem:a6d4bf0a1cbd6a6412d9c285d02432dc6"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6d4bf0a1cbd6a6412d9c285d02432dc6"></a>
-<a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>mFlowMatrix</b></td></tr>
+<a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>mFlowMatrix</b> = <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt;Number&gt;(0,0)</td></tr>
 <tr class="separator:a6d4bf0a1cbd6a6412d9c285d02432dc6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad60b5888340b1808a5ec339d1f6e16fe"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad60b5888340b1808a5ec339d1f6e16fe"></a>
 <a class="el" href="namespacehypro.html#aadba9c45e18a68d4ad85d2032811081d">TRIBOOL</a>&#160;</td><td class="memItemRight" valign="bottom"><b>mIsIdentity</b> = TRIBOOL::NSET</td></tr>
@@ -172,6 +178,12 @@ Protected Attributes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
 Friends</h2></td></tr>
+<tr class="memitem:a190a2b767ba21a0bfd1a667cc9b0c597"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a190a2b767ba21a0bfd1a667cc9b0c597"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator==</b> (const <a class="el" href="classhypro_1_1linearFlow.html">linearFlow</a>&lt; Number &gt; &amp;lhs, const <a class="el" href="classhypro_1_1linearFlow.html">linearFlow</a>&lt; Number &gt; &amp;rhs)</td></tr>
+<tr class="separator:a190a2b767ba21a0bfd1a667cc9b0c597"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a80e6d721a1fcf6a541b6fe76b8e6a7e3"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a80e6d721a1fcf6a541b6fe76b8e6a7e3"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator!=</b> (const <a class="el" href="classhypro_1_1linearFlow.html">linearFlow</a>&lt; Number &gt; &amp;lhs, const <a class="el" href="classhypro_1_1linearFlow.html">linearFlow</a>&lt; Number &gt; &amp;rhs)</td></tr>
+<tr class="separator:a80e6d721a1fcf6a541b6fe76b8e6a7e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3f594674486ba2b8de9993bbd0cdfdc5"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3f594674486ba2b8de9993bbd0cdfdc5"></a>
 ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator&lt;&lt;</b> (ostream &amp;out, const <a class="el" href="classhypro_1_1linearFlow.html">linearFlow</a>&lt; Number &gt; &amp;in)</td></tr>
 <tr class="separator:a3f594674486ba2b8de9993bbd0cdfdc5"><td class="memSeparator" colspan="2">&#160;</td></tr>

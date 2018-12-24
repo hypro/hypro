@@ -17,6 +17,6 @@ var dir_d21d851d43d9af6e0004f77727cc1ce2 =
     [ "HyproLocationVisitor.h", "HyproLocationVisitor_8h_source.html", null ],
     [ "HyproSettingVisitor.h", "HyproSettingVisitor_8h_source.html", null ],
     [ "HyproTransitionVisitor.h", "HyproTransitionVisitor_8h_source.html", null ],
-    [ "ParserWrapper.cpp", "antlr4-flowstar_2ParserWrapper_8cpp_source.html", null ],
-    [ "ParserWrapper.h", "antlr4-flowstar_2ParserWrapper_8h_source.html", null ]
+    [ "ParserWrapper.cpp", "ParserWrapper_8cpp_source.html", null ],
+    [ "ParserWrapper.h", "ParserWrapper_8h_source.html", null ]
 ];
