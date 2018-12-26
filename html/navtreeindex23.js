@@ -1,5 +1,7 @@
 var NAVTREEINDEX23 =
 {
+"classhypro_1_1OrthogonalPolyhedron.html#a63c7927ef01eb5d52a04a78334d41227":[6,0,1,137,14],
+"classhypro_1_1OrthogonalPolyhedron.html#a6d850369eca2a8d0fb96281961e5a6e7":[6,0,1,137,34],
 "classhypro_1_1OrthogonalPolyhedron.html#a7650671c24ef74c2715962dc9c4dec7b":[6,0,1,137,16],
 "classhypro_1_1OrthogonalPolyhedron.html#a8431cb1d0fa19414860e262f2060a1e2":[6,0,1,137,3],
 "classhypro_1_1OrthogonalPolyhedron.html#a8d65de654244d086265b6af247a76fa9":[6,0,1,137,17],
@@ -247,7 +249,5 @@ var NAVTREEINDEX23 =
 "classhypro_1_1PolytopeT.html#a65ce61fc8310b896afe7a505dff7dc73":[6,0,1,149,30],
 "classhypro_1_1PolytopeT.html#a66f3d8565ba6a9f0bf4cde22a34bd9e3":[6,0,1,149,24],
 "classhypro_1_1PolytopeT.html#a6c2716db5c0ac9e2a0b3e829f90b8c50":[6,0,1,149,39],
-"classhypro_1_1PolytopeT.html#a732b19318a1852394ea5887e8bb9ab06":[6,0,1,149,22],
-"classhypro_1_1PolytopeT.html#a7c50fdc6ee819bb15bc6dae550c329ce":[6,0,1,149,37],
-"classhypro_1_1PolytopeT.html#a8578330eed9e5f33a00c1cae1b53cbce":[6,0,1,149,36]
+"classhypro_1_1PolytopeT.html#a732b19318a1852394ea5887e8bb9ab06":[6,0,1,149,22]
 };
