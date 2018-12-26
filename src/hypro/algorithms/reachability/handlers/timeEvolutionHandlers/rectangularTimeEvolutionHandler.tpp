@@ -57,6 +57,7 @@ namespace hypro {
             mState->setSetDirect(initial,mIndex);
             // set computed flag
             mComputed = true;
+            mMarkedForDelete = true;
         }
     }
 } // hypro

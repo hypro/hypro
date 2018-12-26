@@ -16,6 +16,7 @@ namespace hypro
         rectangularFlow<Number> mFlow;
         bool mComputed = false;
 		size_t mIndex;
+		bool mMarkedForDelete = false;
 	public:
 
 		rectangularTimeEvolutionHandler() = delete;
@@ -27,7 +28,8 @@ namespace hypro
 
 		void handle();
 		const char* handlerName() {return "rectangularTimeEvolutionHandler";}
-
+		void setMarkedForDelete(bool del) {mMarkedForDelete = del;}
+		bool getMarkedForDelete() { return mMarkedForDelete; }
 	};
 } // hypro
 

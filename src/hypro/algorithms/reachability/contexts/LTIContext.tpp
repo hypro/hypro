@@ -661,6 +661,16 @@ namespace hypro
 			mContinuousEvolutionHandlers.at(i)->handle();
 		}
 		mComputationState.setTimestamp(mComputationState.getTimestamp()+mStrategy.getParameters(mTask->btInfo.btLevel).timeStep);
+
+		for(auto it = mContinuousEvolutionHandlers.begin(); it != mContinuousEvolutionHandlers.end(); ){
+			if((*it)->getMarkedForDelete()) {
+				delete *it;
+				it = mContinuousEvolutionHandlers.erase(it);
+			} else {
+				++it;
+			}
+		}
+
 		DEBUG("hypro.worker","State after timestep: " << mComputationState);
     }
 

@@ -62,6 +62,8 @@ namespace hypro {
 	public:
 		virtual void handle() = 0;
 		virtual const char* handlerName() = 0;
+		virtual bool getMarkedForDelete() = 0;
+		virtual void setMarkedForDelete(bool toDelete) = 0;
 	};
 
 	class IResetHandler : public IHandler {

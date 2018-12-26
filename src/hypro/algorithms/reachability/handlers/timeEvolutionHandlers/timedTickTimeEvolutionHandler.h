@@ -14,6 +14,8 @@ namespace hypro
 
 		void handle();
 		const char* handlerName() {return "timedTickTimeEvolutionHandler";}
+		bool getMarkedForDelete() {return false;};
+		void setMarkedForDelete(bool ) {/*no op*/};
 	};
 } // hypro
 
