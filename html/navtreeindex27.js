@@ -1,5 +1,6 @@
 var NAVTREEINDEX27 =
 {
+"classhypro_1_1affineFlow.html#a3a8acb42bc0040a6f588a427d4a01b2f":[6,0,1,3,7],
 "classhypro_1_1affineFlow.html#a64f63c4e4b5c18f8d2665a5834b41b6a":[6,0,1,3,14],
 "classhypro_1_1affineFlow.html#a6e443a875c180689388814148c084138":[6,0,1,3,4],
 "classhypro_1_1affineFlow.html#a9f38ac508c0b8066d1d63b5d71b8db81":[6,0,1,3,13],
@@ -248,6 +249,5 @@ var NAVTREEINDEX27 =
 "classhypro_1_1rectangularGuardHandler.html":[6,0,1,159],
 "classhypro_1_1rectangularGuardHandler.html#a011f0166a2344d8a2b4d7c4d4423e206":[6,0,1,159,10],
 "classhypro_1_1rectangularGuardHandler.html#a05cf75223b14b1f79334691fe0a3b125":[6,0,1,159,0],
-"classhypro_1_1rectangularGuardHandler.html#a16d351bdb1d1c47b0805cdf50d846d9f":[6,0,1,159,17],
-"classhypro_1_1rectangularGuardHandler.html#a3188a51df33bfc90466802e4ad26575e":[6,0,1,159,12]
+"classhypro_1_1rectangularGuardHandler.html#a16d351bdb1d1c47b0805cdf50d846d9f":[6,0,1,159,17]
 };

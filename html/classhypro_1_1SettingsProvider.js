@@ -8,6 +8,7 @@ var classhypro_1_1SettingsProvider =
     [ "getHybridAutomaton", "classhypro_1_1SettingsProvider.html#a8740961a8ffac294fe33709eb0862fe9", null ],
     [ "getLocationSubspaceTypeMap", "classhypro_1_1SettingsProvider.html#a98cb885e2ba16c789b588026549758d8", null ],
     [ "getLocationTypeMap", "classhypro_1_1SettingsProvider.html#a4a0c2b8d8ddc4173096e3f7883aa0815", null ],
+    [ "getNumberVariables", "classhypro_1_1SettingsProvider.html#a8e8b1acb93525a95cb265f7dd7edfd4b", null ],
     [ "getQueueBalancingRatio", "classhypro_1_1SettingsProvider.html#ae126d5616dc276ab3e65bd56ba847069", null ],
     [ "getReachabilitySettings", "classhypro_1_1SettingsProvider.html#afd122528abe30302ed354f7fcfefc1a9", null ],
     [ "getStrategy", "classhypro_1_1SettingsProvider.html#a6c434e36bee4e38fd9db32c40c95e474", null ],
