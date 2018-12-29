@@ -69,16 +69,17 @@ disp('New intervals:');
 disp(new_intervals);
 HyProBox('delete', box_7);
 
-% disp('Empty'); 
-% box_8 = HyProBox('new_intervals',inter);
-% old_intervals = HyProBox('intervals',box_8);
-% disp('Old intervals:');
-% disp(old_intervals);
-% HyProBox('empty',box_8, 2);
-% new_intervals = HyProBox('intervals',box_8);
-% disp('New intervals:');
-% disp(new_intervals);
-% HyProBox('delete', box_8);
+disp('Empty'); 
+box_8 = HyProBox('new_intervals',inter);
+old_intervals = HyProBox('intervals',box_8);
+disp('Old intervals:');
+disp(old_intervals);
+box_8_1 = HyProBox('empty',box_8, 2);
+new_intervals = HyProBox('intervals',box_8_1);
+disp('New intervals:');
+disp(new_intervals);
+HyProBox('delete', box_8);
+HyProBox('delete', box_8_1);
 
 disp('Limits');
 box_9 = HyProBox('new_intervals',inter);
@@ -157,11 +158,16 @@ disp('Box 20 vertices:');
 disp(m);
 HyProBox('delete', box_20);
 
-disp('Evaluate');
-%box_21
-
-disp('MutliEvaluate');
-%box_22
+% disp('Evaluate');
+% box_21 = HyProBox('new_intervals', [1 5; 2 7]);
+% vec = [1 0];
+% dir = 0;
+% eval = HyProBox('evaluate', box_21, vec, dir);
+% HyProBox('delete', box_21);
+% One has to delete eval again!
+% 
+% disp('MutliEvaluate');
+% %box_22
 
 disp('==');
 box_23 = HyProBox('new_intervals', [1 2; 1 2]);
@@ -198,26 +204,198 @@ disp('Box 29 dimension: ');
 disp(dim);
 HyProBox('delete', box_29);
 
-% disp('Make Symmetric');
-% box_30 = HyProBox('new_intervals',[1 2; 1 4]);
-% old_intervals = HyProBox('intervals',box_30);
-% disp('Old intervals:');
-% disp(old_intervals);
-% HyProBox('makeSymmetric',box_30);
-% new_intervals = HyProBox('intervals',box_30);
-% disp('New intervals:');
-% disp(new_intervals);
-% HyProBox('delete', box_30);
+disp('Make Symmetric');
+box_30 = HyProBox('new_intervals',[1 2; 1 4]);
+old_intervals = HyProBox('intervals',box_30);
+disp('Old intervals:');
+disp(old_intervals);
+HyProBox('makeSymmetric',box_30);
+new_intervals = HyProBox('intervals',box_30);
+disp('New intervals:');
+disp(new_intervals);
+HyProBox('delete', box_30);
 
 disp('Constraints');
-box_31 = HyProBox('new_intervals', inter);
-const = HyProBox('constraints', box_31);
-disp('Box 31 constrains:');
-disp('normal:');
-disp(const.normal);
-disp('offset:');
-disp(const.offset);
+box_31 = HyProBox('new_intervals', [3 5; 2 4]);
+[normal_vecs, offsets] = HyProBox('constraints', box_31);
+disp(normal_vecs);
+disp(offsets);
 HyProBox('delete', box_31);
+
+disp('Satisfies Halfspace');
+box_32 = HyProBox('new_intervals', [3 5; 2 4]);
+hs_normal = [1 0];
+hs_offset = 2;
+[containment, box] = HyProBox('satisfiesHalfspace',box_32, hs_normal, hs_offset);
+disp('containment:');
+disp(containment);
+HyProBox('delete', box_32);
+HyProBox('delete', box);
+
+disp('Satisfies Halfspaces');
+box_33 = HyProBox('new_intervals', [3 5; 2 4]);
+mat = [1 0; 0 1];
+vec = [2 3];
+[containment, box] = HyProBox('satisfiesHalfspaces',box_33, mat, vec);
+disp('containment:');
+disp(containment);
+HyProBox('delete', box_33);
+HyProBox('delete', box);
+
+disp('Project');
+box_34 = HyProBox('new_intervals', [3 5; 2 4; 1 2]);
+dims = 2;
+box = HyProBox('project', box_34, dims);
+inter = HyProBox('intervals', box);
+disp('Intervals of the new box:');
+disp(inter);
+HyProBox('delete', box_34);
+HyProBox('delete', box);
+
+disp('Linear Transformation');
+box_35 = HyProBox('new_intervals', [3 5; 2 4]);
+mat = [2 0; 0 4];
+box = HyProBox('linearTransformation', box_35, mat);
+inter = HyProBox('intervals', box);
+disp('Intervals of the transformed box:');
+disp(inter);
+HyProBox('delete', box_35);
+HyProBox('delete', box);
+
+disp('Affine Transformation');
+box_36 = HyProBox('new_intervals', [3 5; 2 4]);
+mat = [2 0; 0 4];
+vec = [2 1];
+box = HyProBox('affineTransformation', box_36, mat, vec);
+inter = HyProBox('intervals', box);
+disp('Intervals of the transformed box:');
+disp(inter);
+HyProBox('delete', box_36);
+HyProBox('delete', box);
+
+disp('Minkowski Sum');
+box_37 = HyProBox('new_intervals', [1 3; 1 3]);
+box_38 = HyProBox('new_intervals', [4 6; 3 5]);
+mSum = HyProBox('minkowskiSum', box_37, box_38);
+inter = HyProBox('intervals', mSum);
+disp('Intervals of the sum:');
+disp(inter);
+HyProBox('delete', box_37);
+HyProBox('delete', box_38);
+HyProBox('delete', mSum);
+
+disp('Minkowski Decomposition');
+box_39 = HyProBox('new_intervals', [1 3; 1 3]);
+box_40 = HyProBox('new_intervals', [4 6; 3 5]);
+mDec = HyProBox('minkowskiDecomposition', box_39, box_40);
+inter = HyProBox('intervals', mDec);
+disp('Intervals:');
+disp(inter);
+HyProBox('delete', box_39);
+HyProBox('delete', box_40);
+HyProBox('delete', mDec);
+
+disp('Intersect');
+box_41 = HyProBox('new_intervals', [1 3; 1 3]);
+box_42 = HyProBox('new_intervals', [4 6; 3 5]);
+intersected = HyProBox('minkowskiDecomposition', box_41, box_42);
+inter = HyProBox('intervals', intersected);
+disp('Intervals:');
+disp(inter);
+HyProBox('delete', box_41);
+HyProBox('delete', box_42);
+HyProBox('delete', intersected);
+
+disp('Intersect Halfspace');
+box_43 = HyProBox('new_intervals', [1 3; 1 3]);
+nor = [1 0];
+off = 2;
+intersected = HyProBox('intersectHalfspace', box_43,nor,off);
+inter = HyProBox('intervals', intersected);
+disp('Intervals:');
+disp(inter);
+HyProBox('delete', box_43);
+HyProBox('delete', intersected);
+
+disp('Intersect Halfspaces');
+box_44 = HyProBox('new_intervals', [1 3; 1 3]);
+mat = [1 0; 0 1];
+vec = [2 3];
+intersected = HyProBox('intersectHalfspace', box_44,mat,vec);
+inter = HyProBox('intervals', intersected);
+disp('Intervals:');
+disp(inter);
+HyProBox('delete', box_44);
+HyProBox('delete', intersected);
+
+disp('Contains Point');
+box_45 = HyProBox('new_intervals', [1 3; 2 5]);
+point = [2; 3];
+contains = HyProBox('contains_point', box_45, point);
+disp('Box 45 contains point (2, 3):');
+disp(contains);
+HyProBox('delete', box_45);
+
+disp('Contains Box');
+box_46 = HyProBox('new_intervals', [1 5; 1 7]);
+box_47 = HyProBox('new_intervals', [2 4; 2 3]);
+contains = HyProBox('contains_box', box_46, box_47);
+disp('Box 46 contains box 47:');
+disp(contains);
+HyProBox('delete', box_46);
+HyProBox('delete', box_47);
+
+disp('Unite Box');
+box_48 = HyProBox('new_intervals', [1 5; 1 7]);
+box_49 = HyProBox('new_intervals', [2 7; -1 9]);
+uni = HyProBox('unite_box', box_48, box_49);
+disp('Unite boxes 48 and 49:');
+inter = HyProBox('intervals', uni);
+disp('Intervals:');
+disp(inter);
+HyProBox('delete', box_48);
+HyProBox('delete', box_49);
+HyProBox('delete', uni);
+
+% disp('Unite Boxes');
+% box_50 = HyProBox('new_intervals', [1 5; 1 7]);
+% box_51 = HyProBox('new_intervals', [2 7; -1 9]);
+% box_52 = HyProBox('new_intervals', [0 1; 9 10]);
+% uni = HyProBox('unite_boxes', box_50, boxes);
+% disp('Unite boxes 50, 51, and 52:');
+% inter = HyProBox('intervals', uni);
+% disp('Intervals:');
+% disp(inter);
+% HyProBox('delete', box_50);
+% HyProBox('delete', box_51);
+% HyProBox('delete', box_52);
+% HyProBox('delete', uni);
+
+disp('* (Multiply)');
+box_53 = HyProBox('new_intervals', [1 5; 1 7]);
+box_54 = HyProBox('*', box_53, 3);
+inter = HyProBox('intervals', box_54);
+disp('Intervals:');
+disp(inter);
+HyProBox('delete', box_53);
+HyProBox('delete', box_54);
+
+disp('<<');
+box_54 = HyProBox('new_intervals', [1 5; 1 7]);
+HyProBox('<<', box_54);
+HyProBox('delete', box_54);
+
+disp('reduceNumberRepresentation');
+box_55 = HyProBox('new_intervals', [1 5; 1 7; 1 2; 2 3]);
+box_56 = HyProBox('reduceNumberRepresentation', box_55);
+inter = HyProBox('intervals', box_56);
+disp('Intervals:');
+disp(inter);
+HyProBox('delete', box_55);
+HyProBox('delete', box_56);
+
+
+disp('STOP');
 
 
 

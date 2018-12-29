@@ -8,6 +8,7 @@
 #include "../../datastructures/Point.h"
 #include "../../datastructures/Halfspace.h"
 #include "../linearOptimization/EvaluationResult.h"
+#include "../../representations/GeometricObject.h"
 
 
 class ObjectHandle{
@@ -22,34 +23,26 @@ class ObjectHandle{
         static void convert2matlab(const hypro::matrix_t<double>&, double*, const int, const int, const int = 0);
         static void convert2matlab(const hypro::vector_t<double>&, double*, const int, const int, const int = 0);
         static void convert2matlab(const hypro::Point<double>&, double*, const int, const int, const int = 0);
-        static void convert2matlab(const hypro::Halfspace<double>&, double*, const int, const int, const int = 0);
         static void convert2matlab(const hypro::EvaluationResult<double>&, double*, const int, const int, const int = 0 );
+        static void convert2matlab(const hypro::Halfspace<double>&, double*, double*, const int, const int, const int = 0 );
+        static void convert2matlab(const hypro::CONTAINMENT& cont, std::string&);
 
         static carl::Interval<double> mInterval2Hypro(double*);
         static hypro::matrix_t<double> mMatrix2Hypro(double*, const int, const int);
         static hypro::vector_t<double> mVector2Hypro(double*, const int);
         static hypro::Point<double> mPoint2Hypro(double*, const int);
-        static hypro::Halfspace<double> mHalfspace2Hypro(double*, const int, const int);
+        static hypro::Halfspace<double> mHalfspace2Hypro(double*, const int, double&);
         static hypro::EvaluationResult<double> mEvaluationResult2Hypro(double*);
 
-        static std::vector<carl::Interval<double>> mIntervals2HyProIntervals(double*, int, int);
-        static std::vector<carl::Interval<double>>& mPoints2HyProIntervals(double*);
-        static carl::Interval<double>& mInterval2HyproInterval(double*);
-        static hypro::matrix_t<double>& mMatrix2HyProMatrix(double*, int, int);
-        static hypro::vector_t<double>& mVector2HyProVector(double*, int);
-        static hypro::Point<double>& mPoint2HyProPoint(double*, int);
-        static std::pair<hypro::Point<double>, hypro::Point<double>> mPointPair2HyProPointPair(double*);
-        static std::vector<hypro::Point<double>> mPointsVector2HyProPointsVector(double*, int&);
-        static hypro::Halfspace<double> mHalfspace2hyProHalfspace(double*, int, double&);
-        static std::vector<hypro::Halfspace<double>> mHalfspaceVector2hyProHalfspaceVector(double*);
-        static hypro::EvaluationResult<double> mEvaluationStruct2hyProEvaluationResult(double*);
-        static std::vector<hypro::EvaluationResult<double>> mMultiEvaluationStruct2hyProMultiEvaluation(double*);
+        static std::vector<std::size_t> mSizeVector2Hypro(double*, const int);
+        static std::vector<carl::Interval<double>> mIntervals2Hypro(double*, const int, const int);
+        static std::vector<carl::Interval<double>> mPoints2Hypro(double*);
+        static std::pair<hypro::Point<double>, hypro::Point<double>> mPointPair2Hypro(double*);
+        static std::vector<hypro::Point<double>> mPointsVector2Hypro(double*, int);
+        static std::vector<hypro::Halfspace<double>> mHalfspaceVector2Hypro(double*);
+        static std::vector<hypro::EvaluationResult<double>> mMultiEvaluationStruct2Hypro(double*);
+        
     private:
-};
-
-struct matlabHalfspace{
-    hypro::vector_t<double> normal;
-    double offset;
 };
 
 /********************************************************************************************************
@@ -65,6 +58,13 @@ template<typename T>
 void vector2mVector(const std::vector<T>& vec, double* out, const int dimx, const int dimy){
     for(int i = 0; i < dimy; i++){
         ObjectHandle::convert2matlab(vec[i], out, dimx, dimy, i);
+    }
+}
+
+template<typename T>
+void vector2mVector(const std::vector<T>& vec, double* out_1, double* out_2, const int dimx, const int dimy){
+    for(int i = 0; i < dimy; i++){
+        ObjectHandle::convert2matlab(vec[i], out_1, out_2, dimx, dimy, i);
     }
 }
 
@@ -137,34 +137,15 @@ void ObjectHandle::convert2matlab(const hypro::Point<double>& p, double *out, co
  * @param dimx,dimy
  * @param index
  **/
-void ObjectHandle::convert2matlab(const hypro::Halfspace<double>& h, double *out, const int dimx, const int dimy, const int index){
+void ObjectHandle::convert2matlab(const hypro::Halfspace<double>& h, double *normal_out, double *offset_out, const int dimx, const int dimy, const int index){
     hypro::vector_t<double> nVector = h.normal();
     double offset = h.offset();
-
-    const char *field_names[] = {"normal", "offset"};
-    struct matlabHalfspace hSpace = {nVector, offset};
-    mwSize dims[2] = {1,1};
-
-
-    mxArray *m_normal = mxCreateDoubleMatrix(nVector.size(), 1, mxREAL);
-    double *normal_out = mxGetPr(m_normal);
 
     for(int i = 0; i < nVector.size(); i++){
         normal_out[i] = nVector[i];
     }
+    offset_out = &offset;
 
-    mxArray *m_offset = mxCreateDoubleScalar(offset);
-
-    mxArray *entry = mxCreateStructArray(2,2,2,field_names);
-    mxSetFieldByNumber(entry, 0, 0, m_normal);
-    mxSetFieldByNumber(entry, 0, 1, m_offset);
-
-    double* p = mxGetPr(entry);
-    out[index] = p;
-
-    // hypro::vector_t<double> temp(1,1);
-    // nVector.conservativeResize(nVector.rows() + 1, nVector.cols());
-    // nVector(nVector.rows()-1,1) = offset;
 }
 
 /**
@@ -175,19 +156,50 @@ void ObjectHandle::convert2matlab(const hypro::Halfspace<double>& h, double *out
  * @param index
  **/
 void ObjectHandle::convert2matlab(const hypro::EvaluationResult<double>& h, double *out, const int dimx, const int dimy, const int index){
- 
+
+}
+
+/**
+ * @brief
+ * @param
+ **/
+void ObjectHandle::convert2matlab(const hypro::CONTAINMENT& cont, std::string& out){
+    if (cont == hypro::CONTAINMENT::NO){
+        out = "NO";
+    }else if (cont == hypro::CONTAINMENT::FULL){
+        out = "FULL";
+    }else if (cont == hypro::CONTAINMENT::BOT){
+        out = "BOT";
+    }else if (cont == hypro::CONTAINMENT::PARTIAL){
+        out = "PARTIAL";
+    }else if (cont == hypro::CONTAINMENT::YES){
+        out = "YES";
+    }
 }
 
 /********************************************************************************************************
  *  Matlab Objects to HyPro
  *******************************************************************************************************/
 
+/**
+ * @brief Converts a Matlab vector of ints into standard vector
+ * @param sizes Pointer to the Matlab vector
+ * @param v_len Length of the vector
+ **/
+std::vector<std::size_t> ObjectHandle::mSizeVector2Hypro(double* sizes, const int v_len){
+    std::vector<std::size_t> vec;
+    for(int i = 0; i < v_len; i++){
+        vec.emplace_back(sizes[i]);
+    }
+    return vec;
+}
+
 
 /**
  * @brief Converts Matlab intervals (in form of a matrix) into a vector of HyPro intervals
  * @param m_interval_list A list of Matlab intervals (represented as arrays)
  **/
- std::vector<carl::Interval<double>> ObjectHandle::mIntervals2HyProIntervals(double* intervals, int dimx, int dimy){
+std::vector<carl::Interval<double>> ObjectHandle::mIntervals2Hypro(double* intervals, int dimx, int dimy){
     std::vector<carl::Interval<double>> hyPro_intervals;
     int counter = 0;
     for(int i = 0; i < dimx; i++){
@@ -197,13 +209,13 @@ void ObjectHandle::convert2matlab(const hypro::EvaluationResult<double>& h, doub
         i++;
     }
     return hyPro_intervals;
- }
+}
 
 /**
  *  @brief Converts a single Matlab interval into a HyPro interval
  *  @param Pointer to the matlab input interval
  **/
-carl::Interval<double>& ObjectHandle::mInterval2HyproInterval(double* interval){
+carl::Interval<double> ObjectHandle::mInterval2Hypro(double* interval){
     carl::Interval<double> *hyPro_interval = new carl::Interval<double>(interval[0], interval[1]);
     return *hyPro_interval;
 }
@@ -212,7 +224,7 @@ carl::Interval<double>& ObjectHandle::mInterval2HyproInterval(double* interval){
  *  @brief Converts a pair of points defined in matlab into hyPro intervals
  *  @param points A pointer to the input Matlab matrix
  **/
-std::vector<carl::Interval<double>>& ObjectHandle::mPoints2HyProIntervals(double* points){
+std::vector<carl::Interval<double>> ObjectHandle::mPoints2Hypro(double* points){
     std::vector<carl::Interval<double>> *hyPro_intervals = new std::vector<carl::Interval<double>>;
     hyPro_intervals->emplace_back(carl::Interval<double>(points[0], points[2]));
     hyPro_intervals->emplace_back(carl::Interval<double>(points[1], points[3]));
@@ -224,7 +236,7 @@ std::vector<carl::Interval<double>>& ObjectHandle::mPoints2HyProIntervals(double
  * @param m_matrix Pointer to the Matlab matrix
  * @param dimx, dimy The dimensions of the matrix
  **/
-hypro::matrix_t<double>& ObjectHandle::mMatrix2HyProMatrix(double* m_matrix, int dimx, int dimy){
+hypro::matrix_t<double> ObjectHandle::mMatrix2Hypro(double* m_matrix, const int dimx, const int dimy){
     hypro::matrix_t<double> *hypro_matrix = new hypro::matrix_t<double>(dimx,dimy);
     for(int i = 0; i < dimx; i++){
         for(int j = 0; j < dimy; j++){
@@ -239,7 +251,7 @@ hypro::matrix_t<double>& ObjectHandle::mMatrix2HyProMatrix(double* m_matrix, int
  * @param m_vector Pointer to the Matlab vector
  * @parma v_len Length of the vector
  **/
-hypro::vector_t<double>& ObjectHandle::mVector2HyProVector(double* m_vector, int v_len){
+hypro::vector_t<double> ObjectHandle::mVector2Hypro(double* m_vector, const int v_len){
     hypro::vector_t<double> *vector = new hypro::vector_t<double>(v_len);
     for(int i = 0; i < v_len; i++){
         (*vector)(i) = m_vector[i];
@@ -252,7 +264,7 @@ hypro::vector_t<double>& ObjectHandle::mVector2HyProVector(double* m_vector, int
  * @param vec Pointer to the vector of coordinates
  * @param dimy Lenght of the vector
  **/
-hypro::Point<double>& ObjectHandle::mPoint2HyProPoint(double* vec, int dimy){
+hypro::Point<double> ObjectHandle::mPoint2Hypro(double* vec, int dimy){
     std::vector<double> temp;
     for(int i = 0; i < dimy; i++){
         temp.emplace_back(vec[i]);
@@ -262,10 +274,10 @@ hypro::Point<double>& ObjectHandle::mPoint2HyProPoint(double* vec, int dimy){
 }
 
 /**
- * @brief Converts a 2x2 Matlab matrix into pair of HyPro points
- * @param mat Pointer to the matrix
- **/
-std::pair<hypro::Point<double>, hypro::Point<double>> ObjectHandle::mPointPair2HyProPointPair(double* mat){
+* @brief Converts a 2x2 Matlab matrix into pair of HyPro points
+* @param mat Pointer to the matrix
+**/
+std::pair<hypro::Point<double>, hypro::Point<double>> ObjectHandle::mPointPair2Hypro(double* mat){
     std::vector<double> temp_one{mat[0],mat[1]};
     std::vector<double> temp_two{mat[2],mat[3]};
 
@@ -277,11 +289,11 @@ std::pair<hypro::Point<double>, hypro::Point<double>> ObjectHandle::mPointPair2H
 }
 
 /**
- * @brief Converts a Matlab matrix into vector of HyPro Points
- * @param vec Pointer to the Matlab matrix
- * @parma dim Length of the vector
- **/
-std::vector<hypro::Point<double>> ObjectHandle::mPointsVector2HyProPointsVector(double* vec, int& dim){
+* @brief Converts a Matlab matrix into vector of HyPro Points
+* @param vec Pointer to the Matlab matrix
+* @parma dim Length of the vector
+**/
+std::vector<hypro::Point<double>> ObjectHandle::mPointsVector2Hypro(double* vec, int dim){
     std::vector<hypro::Point<double>> hypro_vec(dim);
 
     for(int i = 0; i < dim; i++){
@@ -292,32 +304,17 @@ std::vector<hypro::Point<double>> ObjectHandle::mPointsVector2HyProPointsVector(
 }
 
 /**
- * @brief Converts a Maltab normal vector and offset into HyPro halfspace
- * @param mNormal The normal vector 
- * @param offset The offset
- **/
-hypro::Halfspace<double> ObjectHandle::mHalfspace2hyProHalfspace(double* mNormal, int len, double& offset){
-    hypro::vector_t<double> normalVec = ObjectHandle::mVector2HyProVector(mNormal, len);
+* @brief Converts a Maltab normal vector and offset into HyPro halfspace
+* @param mNormal The normal vector 
+* @param offset The offset
+**/
+hypro::Halfspace<double> ObjectHandle::mHalfspace2Hypro(double* mNormal, const int len, double& offset){
+    hypro::vector_t<double> normalVec = ObjectHandle::mVector2Hypro(mNormal, len);
     hypro::Halfspace<double> hSpace = hypro::Halfspace<double>(normalVec, offset);
     return hSpace;
 }
 
-// /**
-//  * @brief
-//  * @param
-//  **/
-hypro::EvaluationResult<double> mEvaluationStruct2hyProEvaluationResult(double*){}
-
-// /**
-//  * @brief
-//  * @param
-//  **/
-std::vector<hypro::EvaluationResult<double>> mMultiEvaluationStruct2hyProMultiEvaluation(double*){
-
-}
-  
 
 
- 
- 
+
 

@@ -1,7 +1,7 @@
 srcFile = "HyProBox.cpp";
 ipaths = {};
 if isfile('matlabInput')
-    %Load the sved paths
+    %Load the saved paths
     load('matlabInput');
     ipaths = {mat_str, antl_str, misc_str, atn_str, dfa_str, tree_str,...
                     supp_str, hypro_str, carl_str, loc_str, c_res_str,...
@@ -9,30 +9,77 @@ if isfile('matlabInput')
 else
    %Create the file
     if ismac
-        %Mac
-    %     matlab = dir(fullfile('/Applications','**','mex.h'));
-    %     antlr4_runtime = dir(fullfile('/Users','**','/hypro/build/resources/antlr_build/include/antlr4-runtime/antlr4-common.h'));
-    %     misc = dir(fullfile('/Users','**','/hypro/build/resources/antlr_build/include/antlr4-runtime/misc/Interval.h'));
-    %     atn = dir(fullfile('/Users','**','/hypro/build/resources/antlr_build/include/antlr4-runtime/atn/ATN.h'));  
-    %     dfa = dir(fullfile('/Users','**','/hypro/build/resources/antlr_build/include/antlr4-runtime/dfa/DFA.h')); 
-    %     tree = dir(fullfile('/Usershome','**','/hypro/build/resources/antlr_build/include/antlr4-runtime/tree/Trees.h'));
-    %     support = dir(fullfile('/Users','**','/hypro/build/resources/antlr_build/include/antlr4-runtime/support/Any.h'));
-    %     hypro = dir(fullfile('/Users','**','/hypro/src/hypro/types.h'));
-    %     carl = dir(fullfile('/Users','**','/carl/src/CMakeLists.txt'));
-    %     local_include = '/usr/local/include';
-    %     carl_resources = dir(fullfile('/Users','**','/carl/build/resources/include/gmp.h'));
-    %     compiler = '/usr/local/opt/llvm/include/c++/v1/';
-    %     hypro_build = dir(fullfile('/Users','**','/hypro/build/CMakeCache.txt'));
-    %     hypro_lib = dir(fullfile('/Users','**','/hypro/build/libhypro.so'));
-    %     dgtest = '-DGTEST_USE_OWN_TR1_TUPLE=1 -std=c++17 -stdlib=libc++';
-    %     llvm = '/usr/local/opt/llvm/lib';
-    %     ipaths={strcat('-I', matlab.folder),strcat('-I', antlr4_runtime.folder),...
-    %     strcat('-I', misc.folder), strcat('-I', atn.folder), strcat('-I', dfa.folder),...
-    %     strcat('-I', tree.folder), strcat('-I', support.folder), strcat('-I', hypro.folder),...
-    %     strcat('-I', carl.folder), strcat('-I', local_include), strcat('-I', carl_resources.folder),...
-    %     strcat('-I', compiler), strcat('-L', hypro_build.folder), dgtest, strcat('-L', llvm),...
-    %     '-lhypro',  strcat('LDFLAGS=$LDFLAGS -Wl -rpath ', hypro_build.folder),...
-    %     'COMPFLAGS=$COMPFLAGS -std=c++17', 'CXXFLAGS=\$CXXFLAGS -std=c++17';};
+%         %Mac
+%         matlab = dir(fullfile('/Applications','**','mex.h'));
+%         antlr4_runtime = dir(fullfile('/Users','**','/hypro/build/resources/antlr_build/include/antlr4-runtime/antlr4-common.h'));
+%         misc = dir(fullfile('/Users','**','/hypro/build/resources/antlr_build/include/antlr4-runtime/misc/Interval.h'));
+%         atn = dir(fullfile('/Users','**','/hypro/build/resources/antlr_build/include/antlr4-runtime/atn/ATN.h'));  
+%         dfa = dir(fullfile('/Users','**','/hypro/build/resources/antlr_build/include/antlr4-runtime/dfa/DFA.h')); 
+%         tree = dir(fullfile('/Usershome','**','/hypro/build/resources/antlr_build/include/antlr4-runtime/tree/Trees.h'));
+%         support = dir(fullfile('/Users','**','/hypro/build/resources/antlr_build/include/antlr4-runtime/support/Any.h'));
+%         hypro = dir(fullfile('/Users','**','/hypro/src/hypro/types.h'));
+%         carl = dir(fullfile('/Users','**','/carl/src/CMakeLists.txt'));
+%         local_include = '/usr/local/include';
+%         carl_resources = dir(fullfile('/Users','**','/carl/build/resources/include/gmp.h'));
+%         compiler = '/usr/local/opt/llvm/include/c++/v1/';
+%         hypro_build = dir(fullfile('/Users','**','/hypro/build/CMakeCache.txt'));
+%         %hypro_lib = dir(fullfile('/Users','**','/hypro/build/libhypro.so'));
+%         dgtest = '-DGTEST_USE_OWN_TR1_TUPLE=1 -std=c++17 -stdlib=libc++';
+%         %llvm = '-L/usr/local/opt/llvm/lib';
+%         %hypro_lib_flag = '-hypro';
+%         %ld_flag = strcat('LDFLAGS=$LDFLAGS -Wl -rpath', hy_build.folder);
+%         
+%         mat_str = strcat('-I', matlab.folder);
+%         antl_str = strcat('-I', antlr4_runtime.folder);
+%         misc_str = strcat('-I', misc.folder);
+%         atn_str = strcat('-I', ant.folder);
+%         dfa_str = strcat('-I', dfa.folder);
+%         tree_str = strcat('-I', tree.folder);
+%         supp_str = strcat('-I', support.folder);
+%         hypro_str = strcat('-I', hypro.folder);
+%         carl_str = strcat('-I', carl.folder);
+%         loc_str = strcat('-I', local_include.folder);
+%         c_res_str = strcat('-I', carl_resources.folder);
+%         comp_str = strcat('-L', compiler.folder);
+%         hy_bu_str = strcat('-L', hypro_build.folder);
+%         llvm_str = '-L/usr/local/opt/llvm/lib';
+%         hy_lib_str = '-hypro';
+%         ld_fl_str = strcat('LDFLAGS=$LDFLAGS -Wl -rpath', hy_build.folder);
+%         cmp_flag = 'COMPFLAGS=$COMPFLAGS -std=c++17';
+%         cxx_flag = 'CXXFLAGS=\$CXXFLAGS -std=c++17';
+%         
+%         %Save the found paths
+%         save 'matlabInput' mat_str;
+%         save 'matlabInput' antl_str;
+%         save 'matlabInput' misc_str;
+%         save 'matlabInput' atn_str;
+%         save 'matlabInput' dfa_str;
+%         save 'matlabInput' tree_str;
+%         save 'matlabInput' supp_str;
+%         save 'matlabInput' hypro_str;
+%         save 'matlabInput' carl_str;
+%         save 'matlabInput' loc_str;
+%         save 'matlabInput' c_res_str;
+%         save 'matlabInput' comp_str;
+%         save 'matlabInput' hy_bu_str;
+%         save 'matlabInput' hy_lib_str;
+%         save 'matlabInput' llvm_str;
+%         save 'matlabInput' 'ld_fl_str';
+%         save 'matlabInput' cmp_flag;
+%         save 'matlabInput' 'cxx_flag';
+%         
+%         ipaths = {mat_str, antl_str, misc_str, atn_str, dfa_str, tree_str,...
+%                     supp_str, hypro_str, carl_str, loc_str, c_res_str,...
+%                     comp_str, hy_bu_str, hy_lib_str, cmp_flag, cxx_flag;};
+        
+        
+%         ipaths={strcat('-I', matlab.folder),strcat('-I', antlr4_runtime.folder),...
+%         strcat('-I', misc.folder), strcat('-I', atn.folder), strcat('-I', dfa.folder),...
+%         strcat('-I', tree.folder), strcat('-I', support.folder), strcat('-I', hypro.folder),...
+%         strcat('-I', carl.folder), strcat('-I', local_include), strcat('-I', carl_resources.folder),...
+%         strcat('-I', compiler), strcat('-L', hypro_build.folder), dgtest, strcat('-L', llvm),...
+%         '-lhypro',  strcat('LDFLAGS=$LDFLAGS -Wl -rpath ', hypro_build.folder),...
+%         'COMPFLAGS=$COMPFLAGS -std=c++17', 'CXXFLAGS=\$CXXFLAGS -std=c++17';};
 
         ipaths = {'-I/Applications/MATLAB_R2018b.app/extern/include',...
         '-I/Users/marta/hypro/build/resources/antlr_build/include/antlr4-runtime',...
@@ -120,8 +167,8 @@ end
 
     
 mex -setup c++;
-%mex('-v',ipaths{:},'CC=/usr/local/opt/llvm/bin/clang','CXX=/usr/local/opt/llvm/bin/clang++','COMPFLAGS=$COMPFLAGS -std=c++17', 'CXXFLAGS=\$CXXFLAGS -std=c++17',srcFile);
-mex('-v',ipaths{:},srcFile)
+mex('-v',ipaths{:},'CC=/usr/local/opt/llvm/bin/clang','CXX=/usr/local/opt/llvm/bin/clang++','COMPFLAGS=$COMPFLAGS -std=c++17', 'CXXFLAGS=\$CXXFLAGS -std=c++17',srcFile);
+%mex('-v',ipaths{:},srcFile)
 
 
 
