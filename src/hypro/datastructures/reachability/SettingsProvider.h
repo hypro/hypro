@@ -40,6 +40,7 @@ class SettingsProvider : public carl::Singleton<SettingsProvider<State>>
     void setUseDecider(bool useDecider) { mUseDecider = useDecider;}
     bool decomposeAutomaton();
     void setDecomposeAutomaton(bool decompose) { mDoDecomposition = decompose; }
+    std::size_t getNumberVariables() const { return mHybridAutomaton.getVariables().size(); }
 
 
     void setHybridAutomaton(HybridAutomaton<Number>&& ha);
