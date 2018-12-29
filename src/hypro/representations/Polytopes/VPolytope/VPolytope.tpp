@@ -73,7 +73,7 @@ VPolytopeT<Number, Converter, S>::VPolytopeT( const matrix_t<Number> &_constrain
 		if ( intersection.fullPivLu().rank() == intersection.cols() ) {
 			vector_t<Number> vertex = intersection.fullPivLu().solve( intersectionConstants );
 			assert(vertex.rows() == _constraints.cols());
-			assert(insidePlanes(vertex, intersection, intersectionConstants));
+			//assert(insidePlanes(vertex, intersection, intersectionConstants));
 			// avoid duplicate entries
 			if(std::find(possibleVertices.begin(), possibleVertices.end(),vertex) == possibleVertices.end()) {
 				possibleVertices.emplace( std::move(vertex) );
