@@ -222,7 +222,8 @@ namespace hypro {
 
     template<typename Number, typename Converter, typename Setting>
     matrix_t<Number> CarlPolytopeT<Number,Converter,Setting>::matrix() const {
-        assert(dimensionWasCorrectlySet());
+        //assert(dimensionWasCorrectlySet());
+        detectDimension();
         matrix_t<Number> res = matrix_t<Number>(mFormula.size(),dimension());
         std::vector<ConstraintT<tNumber>> constraints;
         mFormula.getConstraints(constraints);
@@ -242,7 +243,8 @@ namespace hypro {
 
     template<typename Number, typename Converter, typename Setting>
     vector_t<Number> CarlPolytopeT<Number,Converter,Setting>::vector() const {
-        assert(dimensionWasCorrectlySet());
+        //assert(dimensionWasCorrectlySet());
+        detectDimension();
         vector_t<Number> res = vector_t<Number>(mFormula.size());
         std::vector<ConstraintT<tNumber>> constraints;
         mFormula.getConstraints(constraints);
@@ -318,11 +320,13 @@ namespace hypro {
 
     template<typename Number, typename Converter, typename Setting>
     void CarlPolytopeT<Number,Converter,Setting>::detectDimension() const {
-        std::size_t d = 0;
-        // get maximal state space dimension based on the variables used in mFormula.
-        std::for_each(mFormula.variables().begin(),mFormula.variables().end(), [&](const carl::Variable& v){ d = std::max(d,VariablePool::getInstance().id(v));});
-        mDimension = d+1; // add one as we start counting from zero.
-        TRACE("hypro.representations.carlPolytope","Set dimension to " << mDimension );
+        if(!mSpaceDimensionSet) {
+            std::size_t d = 0;
+            // get maximal state space dimension based on the variables used in mFormula.
+            std::for_each(mFormula.variables().begin(),mFormula.variables().end(), [&](const carl::Variable& v){ d = std::max(d,VariablePool::getInstance().id(v));});
+            mDimension = d+1; // add one as we start counting from zero.
+            TRACE("hypro.representations.carlPolytope","Set dimension to " << mDimension );
+        }
     }
 
     template<typename Number, typename Converter, typename Setting>
@@ -330,8 +334,12 @@ namespace hypro {
         bool res = true;
         #ifndef NDEBUG
         auto tmpDim = mDimension;
-        detectDimension();
-        if(tmpDim != mDimension) {
+        std::size_t d = 0;
+        // get maximal state space dimension based on the variables used in mFormula.
+        std::for_each(mFormula.variables().begin(),mFormula.variables().end(), [&](const carl::Variable& v){ d = std::max(d,VariablePool::getInstance().id(v));});
+        ++d;
+        if(tmpDim < d) {
+            std::cout << "Dimension of this " << *this << " was set to " << tmpDim << " but actually is " << d << std::endl;
             return false;
         }
         #endif

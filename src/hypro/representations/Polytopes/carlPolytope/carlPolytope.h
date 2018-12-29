@@ -22,6 +22,7 @@ private:
     mutable std::vector<Halfspace<Number>> mHalfspaces; /// Caches transformed half-spaces.
     mutable std::size_t mDimension = 0; /// Stores the state space dimension the polytope resides in.
     mutable TRIBOOL mEmpty = TRIBOOL::NSET; /// Caches whether the polytope is empty.
+    mutable bool mSpaceDimensionSet = false; /// used to indicate that the space dimension has been set externally, which overrides anything else.
 public:
 
     CarlPolytopeT()
@@ -68,7 +69,7 @@ public:
     const std::vector<Halfspace<Number>>& getHalfspaces() const;
     std::vector<carl::Interval<Number>> getIntervals() const;
 
-    void setDimension(std::size_t d) { mDimension = d; }
+    void setDimension(std::size_t d) { mDimension = d; mSpaceDimensionSet = true; }
     void addConstraint(const ConstraintT<tNumber>& constraint);
     void addConstraints(const std::vector<ConstraintT<tNumber>>& constraints);
     void substituteVariable(carl::Variable oldVar, carl::Variable newVar);
