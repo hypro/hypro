@@ -1,3 +1,7 @@
+#ifndef OBJECT_HANDLE_H
+#define OBJECT_HANDLE_H
+
+
 #include <stdint.h>
 #include <string>
 #include <cstring>
@@ -25,8 +29,10 @@ class ObjectHandle{
         static void convert2matlab(const hypro::Point<double>&, double*, const int, const int, const int = 0);
         static void convert2matlab(const hypro::EvaluationResult<double>&, double*, const int, const int, const int = 0 );
         static void convert2matlab(const hypro::Halfspace<double>&, double*, double*, const int, const int, const int = 0 );
-        static void convert2matlab(const hypro::CONTAINMENT& cont, std::string&);
+        static void convert2matlab(const hypro::CONTAINMENT&, std::string&);
+        static void convert2matlab(const hypro::SOLUTION&, std::string&);
 
+        static hypro::SOLUTION mSolution2Hypro(char*);
         static carl::Interval<double> mInterval2Hypro(double*);
         static hypro::matrix_t<double> mMatrix2Hypro(double*, const int, const int);
         static hypro::vector_t<double> mVector2Hypro(double*, const int);
@@ -160,8 +166,9 @@ void ObjectHandle::convert2matlab(const hypro::EvaluationResult<double>& h, doub
 }
 
 /**
- * @brief
- * @param
+ * @brief Converts the HyPro containment enum into matlab
+ * @param cont Containment value
+ * @param out Pointer to the Matlab output
  **/
 void ObjectHandle::convert2matlab(const hypro::CONTAINMENT& cont, std::string& out){
     if (cont == hypro::CONTAINMENT::NO){
@@ -176,6 +183,25 @@ void ObjectHandle::convert2matlab(const hypro::CONTAINMENT& cont, std::string& o
         out = "YES";
     }
 }
+
+/**
+ * @brief Converts the HyPro solution enum into matlab
+ * @param cont Solution value
+ * @param out Pointer to the Matlab output
+ **/
+void ObjectHandle::convert2matlab(const hypro::SOLUTION& sol, std::string& out){
+    if (sol == hypro::SOLUTION::FEAS){
+        out = "FEAS";
+    }else if (sol == hypro::SOLUTION::INFEAS){
+        out = "INFEAS";
+    }else if (sol == hypro::SOLUTION::INFTY){
+        out = "INFTY";
+    }else if (sol == hypro::SOLUTION::UNKNOWN){
+        out = "UNKNOWN";
+    }
+}
+
+enum class SOLUTION { FEAS = 0, INFEAS, INFTY, UNKNOWN };
 
 /********************************************************************************************************
  *  Matlab Objects to HyPro
@@ -314,7 +340,20 @@ hypro::Halfspace<double> ObjectHandle::mHalfspace2Hypro(double* mNormal, const i
     return hSpace;
 }
 
+/**
+* @brief Converts a Maltab solution into HyPro SOLUTION enum value 
+* @param mSol The solution
+**/
+hypro::SOLUTION ObjectHandle::mSolution2Hypro(char* mSol){
+    if(!strcmp(mSol, "FEAS") || !strcmp(mSol, "feas")){
+        return hypro::SOLUTION::FEAS;
+    }else if(!strcmp(mSol,"INFEAS") || !strcmp(mSol,"infeas")){
+        return hypro::SOLUTION::INFEAS;
+    }else if(!strcmp(mSol, "INFTY") || !strcmp(mSol, "infty")){
+        return hypro::SOLUTION::INFTY;
+    }else if(!strcmp(mSol, "UNKNOWN") || !strcmp(mSol, "unknown")){
+        return hypro::SOLUTION::UNKNOWN;
+    }
+}
 
-
-
-
+#endif

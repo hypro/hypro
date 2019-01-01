@@ -1,5 +1,6 @@
-// #ifndef __CLASS_HANDLE_H__
-// #define __CLASS_HANDLE_H__
+#ifndef CLASS_HANDLE_H
+#define CLASS_HANDLE_H
+
 #include <stdint.h>
 #include <string>
 #include <cstring>
@@ -45,4 +46,4 @@ template<class T> inline void destroyObject(const mxArray *in){
     mexUnlock();
 }
 
-//#endif // __CLASS_HANDLE_H__
+#endif 
