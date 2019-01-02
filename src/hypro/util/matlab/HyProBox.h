@@ -1085,12 +1085,11 @@ void HyProBox::unite_box(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prh
  * @brief Computes the union of the current box with a set of boxes.
  **/
 void HyProBox::unite_boxes(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
-    mexErrMsgTxt("Something is wrong here!");
     if(nlhs < 1)
         mexErrMsgTxt("Box - unite_boxes: Expecting one output value!");
     if(nrhs < 4)
         mexErrMsgTxt("Box - unite_boxes: One or more arguments are missing!");
-
+    
     mxArray* m_in_boxes;
     double* in_boxes;
     const mwSize *dims;
@@ -1108,7 +1107,7 @@ void HyProBox::unite_boxes(int nlhs, mxArray *plhs[], int nrhs, const mxArray *p
         hy_boxes.emplace_back(*b);
     }
 
-    // hypro::Box<double> united = box->unite(hy_boxes); HERE IS A PROBLEM
+    // hypro::Box<double> united = box->unite(hy_boxes); HERE IS SOMETHING WRONG
     // hypro::Box<double>* b = new hypro::Box<double>(united);
     // plhs[0] = convertPtr2Mat<hypro::Box<double>>(b);
 }
@@ -1409,17 +1408,17 @@ void HyProBox::process(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[
         return;
     }
 
-    if(!strcmp("contains_box", cmd)){
+    if(!strcmp("contains", cmd)){
         contains_box(nlhs, plhs, nrhs, prhs);
         return;
     }
 
-    if(!strcmp("unite_box", cmd)){
+    if(!strcmp("unite", cmd)){
         unite_box(nlhs, plhs, nrhs, prhs);
         return;
     }
 
-    if(!strcmp("unite_boxes", cmd)){
+    if(!strcmp("unite_objects", cmd)){
         unite_boxes(nlhs, plhs, nrhs, prhs);
         return;
     }

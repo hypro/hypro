@@ -1,7 +1,6 @@
 #ifndef OBJECT_HANDLE_H
 #define OBJECT_HANDLE_H
 
-
 #include <stdint.h>
 #include <string>
 #include <cstring>
@@ -13,6 +12,7 @@
 #include "../../datastructures/Halfspace.h"
 #include "../linearOptimization/EvaluationResult.h"
 #include "../../representations/GeometricObject.h"
+#include "ClassHandle.h"
 
 
 class ObjectHandle{
@@ -47,7 +47,7 @@ class ObjectHandle{
         static std::vector<hypro::Point<double>> mPointsVector2Hypro(double*, int);
         static std::vector<hypro::Halfspace<double>> mHalfspaceVector2Hypro(double*);
         static std::vector<hypro::EvaluationResult<double>> mMultiEvaluationStruct2Hypro(double*);
-        
+
     private:
 };
 

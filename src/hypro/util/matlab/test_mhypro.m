@@ -62,15 +62,15 @@ new_intervals = box_7.intervals();
 disp('New intervals:');
 disp(new_intervals);
 
-% disp('Empty'); TODO
-% box_8 = HyProObject('Box','new_intervals',inter);
-% old_intervals = box_8.intervals();
-% disp('Old intervals:');
-% disp(old_intervals);
-% box_8_1 = box_8.empty_dim(2);
-% new_intervals = box_8_1.intervals();
-% disp('New intervals:');
-% disp(new_intervals);
+disp('Empty');
+box_8 = HyProObject('Box','new_intervals',inter);
+old_intervals = box_8.intervals();
+disp('Old intervals:');
+disp(old_intervals);
+box_8_1 = box_8.empty(2);
+new_intervals = box_8_1.intervals();
+disp('New intervals:');
+disp(new_intervals);
 
 disp('Limits');
 box_9 = HyProObject('Box','new_intervals',inter);
@@ -93,15 +93,15 @@ inter_12 = box_12.at(3);
 disp('Box 12 interval at position 3:');
 disp(inter_12);
 
-% disp('Is Empty');
-% box_13 = HyProObject('Box', 'new_intervals',inter);
-% a = box_13.empty();
-% disp('Is box 13 empty? :');
-% disp(a);
-% box_14 = HyProObject('Box', 'new_empty');
-% b = box_14.empty();
-% disp('Is box 14 empty? :');
-% disp(b);
+disp('Is Empty');
+box_13 = HyProObject('Box', 'new_intervals',inter);
+a = box_13.is_empty();
+disp('Is box 13 empty? :');
+disp(a);
+box_14 = HyProObject('Box', 'new_empty');
+b = box_14.is_empty();
+disp('Is box 14 empty? :');
+disp(b);
 
 disp('Is Symmetric');
 box_15 = HyProObject('Box','new_intervals', [1 2; 1 2]);
@@ -274,34 +274,36 @@ inter = intersected.intervals();
 disp('Intervals:');
 disp(inter);
 
-% disp('Contains Point'); TODO
-% box_45 = HyProObject('Box','new_intervals', [1 3; 2 5]);
-% point = [2; 3];
-% contains = box_45.contains(point);
-% disp('Box 45 contains point (2, 3):');
-% disp(contains);
+disp('Contains Point');
+box_45 = HyProObject('Box','new_intervals', [1 3; 2 5]);
+point = [2; 3];
+contains = box_45.contains(point);
+disp('Box 45 contains point (2, 3):');
+disp(contains);
 
-% disp('Contains Box'); TODO
-% box_46 = HyProObject('new_intervals', [1 5; 1 7]);
-% box_47 = HyProObject('new_intervals', [2 4; 2 3]);
-% contains = box_46.contains(box_47);
-% disp('Box 46 contains box 47:');
-% disp(contains);
+disp('Contains Box');
+box_46 = HyProObject('Box', 'new_intervals', [1 5; 1 7]);
+box_47 = HyProObject('Box', 'new_intervals', [2 4; 2 3]);
+contains = box_46.contains(box_47);
+disp('Box 46 contains box 47:');
+disp(contains);
 
-% disp('Unite Box');
-% box_48 = HyProObject('Box', 'new_intervals', [1 5; 1 7]);
-% box_49 = HyProObject('Box', 'new_intervals', [2 7; -1 9]);
-% uni = box_48.unite(box_49);
-% disp('Unite boxes 48 and 49:');
-% inter = uni.intervals();
-% disp('Intervals:');
-% disp(inter);
-% 
+disp('Unite Box');
+box_48 = HyProObject('Box', 'new_intervals', [1 5; 1 7]);
+box_49 = HyProObject('Box', 'new_intervals', [2 7; -1 9]);
+uni = box_48.unite(box_49);
+disp('Unite boxes 48 and 49:');
+inter = uni.intervals();
+disp('Intervals:');
+disp(inter);
+
 % disp('Unite Boxes');
-% box_50 = HyProObject('new_intervals', [1 5; 1 7]);
-% box_51 = HyProObject('new_intervals', [2 7; -1 9]);
-% box_52 = HyProObject('new_intervals', [0 1; 9 10]);
-% uni = HyProObject('unite_boxes', box_50, boxes);
+% box_50 = HyProObject('Box','new_intervals', [1 5; 1 7]);
+% box_51 = HyProObject('Box','new_intervals', [2 7; -1 9]);
+% box_52 = HyProObject('Box','new_intervals', [0 1; 9 10]);
+% boxes = {box_51, box_52};
+% box_50.unite(boxes);
+% out = HyProObject('unite_boxes', box_50, boxes);
 % disp('Unite boxes 50, 51, and 52:');
 % inter = HyProObject('intervals', uni);
 % disp('Intervals:');
