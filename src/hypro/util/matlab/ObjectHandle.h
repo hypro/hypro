@@ -12,7 +12,6 @@
 #include "../../datastructures/Halfspace.h"
 #include "../linearOptimization/EvaluationResult.h"
 #include "../../representations/GeometricObject.h"
-#include "ClassHandle.h"
 
 
 class ObjectHandle{

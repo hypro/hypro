@@ -1,5 +1,6 @@
 #include "HyProBox.h"
 #include "HyProEvaluationResult.h"
+#include "HyProTaylorModel.h"
 #include <iostream>
 #include "mex.h"
 #include "matrix.h"

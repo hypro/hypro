@@ -1,6 +1,4 @@
-#ifndef HYPROEVALUATIONRESULT_H
-#define HYPROEVALUATIONRESULT_H
-
+#pragma once
 
 #include "../../representations/GeometricObject.h"
 #include <iostream>
@@ -92,6 +90,3 @@ void HyProEvaluationResult::process(int nlhs, mxArray *plhs[], int nrhs, const m
 
     mexErrMsgTxt("Command not recognized");
 }
-
-
-#endif
