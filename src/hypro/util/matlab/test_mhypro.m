@@ -323,7 +323,12 @@ disp(inter);
 disp('<<');
 box_54 = HyProObject('Box', 'new_intervals', [1 5; 1 7]);
 box_54.ostream();
-
+m = box_54.matrix();
+disp('Matrix of box_54');
+disp(m);
+v = box_54.vector();
+disp('Vector of box_54');
+disp(v);
 % disp('reduceNumberRepresentation');
 % box_55 = HyProObject('Box', 'new_intervals', [1 5; 1 7; 1 2; 2 3]);
 % box_56 = box_55.reduceNumberRepresentation();

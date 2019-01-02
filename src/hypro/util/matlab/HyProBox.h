@@ -73,7 +73,7 @@ class HyProBox{
  **/
 void HyProBox::emptyBox(int nlhs, mxArray *plhs[], const mxArray *prhs[]){
     if(nlhs != 1){
-        mexErrMsgTxt("Box - new_empty: One output expected.");
+        mexErrMsgTxt("HyProBox - new_empty: One output expected.");
     }
     plhs[0] = convertPtr2Mat<hypro::Box<double>>(new hypro::Box<double>);
 }
@@ -83,7 +83,7 @@ void HyProBox::emptyBox(int nlhs, mxArray *plhs[], const mxArray *prhs[]){
  **/
 void HyProBox::copyBox(int nlhs, mxArray *plhs[], const mxArray *prhs[]){
     if(nlhs != 1){
-        mexErrMsgTxt("Box - copy: One output expected.");
+        mexErrMsgTxt("HyProBox - copy: One output expected.");
     }
     hypro::Box<double> *origin = convertMat2Ptr<hypro::Box<double>>(prhs[2]);
     plhs[0] = convertPtr2Mat<hypro::Box<double>>(new hypro::Box<double>(*origin));
@@ -94,7 +94,7 @@ void HyProBox::copyBox(int nlhs, mxArray *plhs[], const mxArray *prhs[]){
  **/
 void HyProBox::boxFromSingleInterval(int nlhs, mxArray *plhs[], const mxArray *prhs[]){
     if(nlhs != 1){
-            mexErrMsgTxt("Box - new_interval: One output expected."); 
+            mexErrMsgTxt("HyProBox - new_interval: One output expected."); 
     }
     mxArray *m_in_interval;
     const mwSize *dims;
@@ -107,7 +107,7 @@ void HyProBox::boxFromSingleInterval(int nlhs, mxArray *plhs[], const mxArray *p
     dimy = (int) dims[0];
     dimx = (int) dims[1];
     if(dimy != 1 || dimx > 2){
-        mexErrMsgTxt("Box - new_interval: You have to input a 1x2-matrix!");
+        mexErrMsgTxt("HyProBox - new_interval: You have to input a 1x2-matrix!");
     }
 
     in = mxGetPr(m_in_interval);
@@ -121,7 +121,7 @@ void HyProBox::boxFromSingleInterval(int nlhs, mxArray *plhs[], const mxArray *p
  **/
 void HyProBox::boxFromIntervals(int nlhs, mxArray *plhs[], const mxArray *prhs[]){
     if(nlhs != 1){
-        mexErrMsgTxt("Box - new_intervals: One output expected.");
+        mexErrMsgTxt("HyProBox - new_intervals: One output expected.");
     }
     mxArray *m_in_intervals;
     const mwSize *dims;
@@ -135,7 +135,7 @@ void HyProBox::boxFromIntervals(int nlhs, mxArray *plhs[], const mxArray *prhs[]
     dimx = (int) dims[1];
     // Ensure that the user entered a list of intervals
     if(dimx != 2){
-        mexErrMsgTxt("Box - new_intervals: You have to enter a nx2-matrix! (e.g.:[lower_1 upper_1; lower_2 upper_2])");
+        mexErrMsgTxt("HyProBox - new_intervals: You have to enter a nx2-matrix! (e.g.:[lower_1 upper_1; lower_2 upper_2])");
     }
 
     in = mxGetPr(m_in_intervals);
@@ -150,7 +150,7 @@ void HyProBox::boxFromIntervals(int nlhs, mxArray *plhs[], const mxArray *prhs[]
  **/
 void HyProBox::boxFromPoints(int nlhs, mxArray *plhs[], const mxArray *prhs[]){
     if(nlhs != 1){
-        mexErrMsgTxt("Box - new_points: One output expected.");
+        mexErrMsgTxt("HyProBox - new_points: One output expected.");
     }
     mxArray *m_in_points;
     const mwSize *dims;
@@ -164,7 +164,7 @@ void HyProBox::boxFromPoints(int nlhs, mxArray *plhs[], const mxArray *prhs[]){
     dimy = (int) dims[0];
     dimx = (int) dims[1];
     if(numdims > 2 || dimy != 2 || dimx != 2){
-        mexErrMsgTxt("Box - new_points: You have to input a 2x2-matrix containing the min. and max. point!");
+        mexErrMsgTxt("HyProBox - new_points: You have to input a 2x2-matrix containing the min. and max. point!");
     }
 
     in = mxGetPr(m_in_points);
@@ -180,10 +180,10 @@ void HyProBox::boxFromPoints(int nlhs, mxArray *plhs[], const mxArray *prhs[]){
  **/
 void HyProBox::boxFromMatrix(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
     if(nlhs != 1){
-        mexErrMsgTxt("Box - new_matrix: Expecting an output!");
+        mexErrMsgTxt("HyProBox - new_matrix: Expecting an output!");
     }
     if(nrhs != 4){
-        mexErrMsgTxt("Box - new_matrix: One or more arguments are missing!");
+        mexErrMsgTxt("HyProBox - new_matrix: One or more arguments are missing!");
     }
     mxArray *m_in_matrix, *m_in_vector;
     double *in_matrix, *in_vector;
@@ -217,7 +217,7 @@ void HyProBox::deleteBox(int nlhs, int nrhs, const mxArray *prhs[]){
     destroyObject<hypro::Box<double>>(prhs[2]);
     // Warn if other commands were ignored
     if (nlhs != 0 || nrhs != 3)
-        mexWarnMsgTxt("Box - delete: Unexpected arguments ignored.");
+        mexWarnMsgTxt("HyProBox - delete: Unexpected arguments ignored.");
 }
 
 /**
@@ -227,7 +227,7 @@ void HyProBox::getSettings(int nlhs, mxArray *plhs[], const mxArray *prhs[]){
     mexPrintf("getSettings: Not finished yet!");
     hypro::Box<double>* box = convertMat2Ptr<hypro::Box<double>>(prhs[2]);
     if(nlhs != 1)
-        mexErrMsgTxt("Box - getSettings: Expecting an output!");
+        mexErrMsgTxt("HyProBox - getSettings: Expecting an output!");
     box->getSettings();
 }
 
@@ -236,9 +236,9 @@ void HyProBox::getSettings(int nlhs, mxArray *plhs[], const mxArray *prhs[]){
  **/
 void HyProBox::empty(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
     if(nlhs < 1)
-        mexErrMsgTxt("Box - empty: Expecting one output!");
+        mexErrMsgTxt("HyProBox - empty: Expecting one output!");
     if(nrhs < 3)
-        mexErrMsgTxt("Box - empty: One or more arguments are missing!");
+        mexErrMsgTxt("HyProBox - empty: One or more arguments are missing!");
 
     mxArray *m_in_dim, *m_out_box;
     double *out;
@@ -259,7 +259,7 @@ void HyProBox::empty(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
  **/
 void HyProBox::intervals(int nlhs, mxArray *plhs[], const mxArray *prhs[]){
     if(nlhs < 1){
-        mexErrMsgTxt("Box - intervals: Expecting an output!");
+        mexErrMsgTxt("HyProBox - intervals: Expecting an output!");
     }   
     mxArray* m_out_intervals;
     double* out;
@@ -280,7 +280,7 @@ void HyProBox::intervals(int nlhs, mxArray *plhs[], const mxArray *prhs[]){
  **/
 void HyProBox::insert(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
     if(nrhs < 4){
-        mexErrMsgTxt("Box - insert: One argument is missing!");
+        mexErrMsgTxt("HyProBox - insert: One argument is missing!");
     }
     mxArray *m_in_box, *m_in_interval;
     const mwSize *dims;
@@ -297,7 +297,7 @@ void HyProBox::insert(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]
     dimy = (int) dims[0];
     dimx = (int) dims[1];
     if(numdims > 2 || dimy != 1 || dimx != 2){
-        mexErrMsgTxt("Box - insert: You have to input a 1x2-matrix!");
+        mexErrMsgTxt("HyProBox - insert: You have to input a 1x2-matrix!");
     }
 
     in_box = mxGetPr(m_in_box);
@@ -311,10 +311,10 @@ void HyProBox::insert(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]
  **/
 void HyProBox::limits(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
     if(nlhs < 1){
-        mexErrMsgTxt("Box - limits: Expecting an output!");
+        mexErrMsgTxt("HyProBox - limits: Expecting an output!");
     }
     if(nrhs < 3){
-        mexErrMsgTxt("Box - limits: One argument is missing!");
+        mexErrMsgTxt("HyProBox - limits: One argument is missing!");
     }
     mxArray* m_out;
     double* out;
@@ -332,9 +332,9 @@ void HyProBox::limits(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]
  **/
 void HyProBox::constraints(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
     if(nlhs < 2)
-        mexErrMsgTxt("Box - constraints: Expecting two output values!");
+        mexErrMsgTxt("HyProBox - constraints: Expecting two output values!");
     if(nrhs < 3)
-        mexErrMsgTxt("Box - constraints: One argument is missing!");
+        mexErrMsgTxt("HyProBox - constraints: One argument is missing!");
 
     hypro::Box<double>* box = convertMat2Ptr<hypro::Box<double>>(prhs[2]);
     std::vector<hypro::Halfspace<double>> hSpaces = box->constraints();
@@ -357,10 +357,10 @@ void HyProBox::constraints(int nlhs, mxArray *plhs[], int nrhs, const mxArray *p
  **/
 void HyProBox::interval(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
     if(nlhs < 1){
-        mexErrMsgTxt("Box - interval: Expecting an output!");
+        mexErrMsgTxt("HyProBox - interval: Expecting an output!");
     }
     if(nrhs < 4){
-        mexErrMsgTxt("Box - interval: One or more arguments are missing!");
+        mexErrMsgTxt("HyProBox - interval: One or more arguments are missing!");
     }
 
     mxArray *m_in_dim, *m_out;
@@ -380,10 +380,10 @@ void HyProBox::interval(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs
  **/
 void HyProBox::at(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
     if(nlhs < 1){
-        mexErrMsgTxt("Box - at: Expecting an output!");
+        mexErrMsgTxt("HyProBox - at: Expecting an output!");
     }
     if(nrhs < 4){
-        mexErrMsgTxt("Box - at: One or more arguments are missing!");
+        mexErrMsgTxt("HyProBox - at: One or more arguments are missing!");
     }
 
     mxArray *m_in_dim, *m_out;
@@ -403,10 +403,10 @@ void HyProBox::at(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
  **/
 void HyProBox::is_empty(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
     if(nlhs < 1){
-        mexErrMsgTxt("Box - isEmpty: Expecting an output!");
+        mexErrMsgTxt("HyProBox - isEmpty: Expecting an output!");
     }
     if(nrhs < 3){
-        mexErrMsgTxt("Box - isEmpty: One argument missing!");
+        mexErrMsgTxt("HyProBox - isEmpty: One argument missing!");
     }
     hypro::Box<double>* box = convertMat2Ptr<hypro::Box<double>>(prhs[2]);
     const bool empty = box->empty();
@@ -419,10 +419,10 @@ void HyProBox::is_empty(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs
  **/
 void HyProBox::is_symmetric(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
     if(nlhs < 1){
-        mexErrMsgTxt("Box - isSymmetric: Expecting an output!");
+        mexErrMsgTxt("HyProBox - isSymmetric: Expecting an output!");
     }
     if(nrhs < 3){
-        mexErrMsgTxt("Box - isSymmetric: One argument missing!");
+        mexErrMsgTxt("HyProBox - isSymmetric: One argument missing!");
     }
     hypro::Box<double>* box = convertMat2Ptr<hypro::Box<double>>(prhs[2]);
     const bool empty = box->isSymmetric();
@@ -435,10 +435,10 @@ void HyProBox::is_symmetric(int nlhs, mxArray *plhs[], int nrhs, const mxArray *
  **/
 void HyProBox::max(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
     if(nlhs < 1){
-        mexErrMsgTxt("Box - max: Expecting an output!");
+        mexErrMsgTxt("HyProBox - max: Expecting an output!");
     }
     if(nrhs < 3){
-        mexErrMsgTxt("Box - max: One argument missing!");
+        mexErrMsgTxt("HyProBox - max: One argument missing!");
     }
     mxArray *m_out;
     double* out;
@@ -456,10 +456,10 @@ void HyProBox::max(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
  **/
 void HyProBox::min(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
 if(nlhs < 1){
-        mexErrMsgTxt("Box - min: Expecting an output!");
+        mexErrMsgTxt("HyProBox - min: Expecting an output!");
     }
     if(nrhs < 3){
-        mexErrMsgTxt("Box - min: One argument missing!");
+        mexErrMsgTxt("HyProBox - min: One argument missing!");
     }
     mxArray *m_out;
     double* out;
@@ -477,10 +477,10 @@ if(nlhs < 1){
  **/
 void HyProBox::supremum(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
     if(nlhs < 1){
-        mexErrMsgTxt("Box - supremum: Expecting an output!");
+        mexErrMsgTxt("HyProBox - supremum: Expecting an output!");
     }
     if(nrhs < 3){
-        mexErrMsgTxt("Box - supremum: One argument missing!");
+        mexErrMsgTxt("HyProBox - supremum: One argument missing!");
     }
     hypro::Box<double>* box = convertMat2Ptr<hypro::Box<double>>(prhs[2]);
     double supremum = box->supremum();
@@ -492,10 +492,10 @@ void HyProBox::supremum(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs
  **/
 void HyProBox::vertices(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
     if(nlhs < 1){
-        mexErrMsgTxt("Box - vertices: Expecting an output!");
+        mexErrMsgTxt("HyProBox - vertices: Expecting an output!");
     }
     if(nrhs < 3){
-        mexErrMsgTxt("Box - vertices: One argument is missing!");
+        mexErrMsgTxt("HyProBox - vertices: One argument is missing!");
     }
     hypro::Box<double>* box = convertMat2Ptr<hypro::Box<double>>(prhs[2]);
     std::vector<hypro::Point<double>> vertices = box->vertices();
@@ -514,9 +514,9 @@ void HyProBox::vertices(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs
  **/
 void HyProBox::evaluate(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
     if(nlhs < 1)
-        mexErrMsgTxt("Box - evaluate: Expecting an output!");
+        mexErrMsgTxt("HyProBox - evaluate: Expecting an output!");
     if(nrhs < 5)
-        mexErrMsgTxt("Box - evaluate: One or more arguments are missing!");
+        mexErrMsgTxt("HyProBox - evaluate: One or more arguments are missing!");
     mxArray *m_in_vector;
     double *in_vector;
     const mwSize *dims_vec;
@@ -539,7 +539,7 @@ void HyProBox::evaluate(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs
     }else if (dir == 1){
         ans = true;
     }else{
-        mexErrMsgTxt("Box - evaluate: The direction must be either 0 or 1!");
+        mexErrMsgTxt("HyProBox - evaluate: The direction must be either 0 or 1!");
     }
     
     hypro::EvaluationResult<double> eval = box->evaluate(vec, ans);
@@ -551,9 +551,9 @@ void HyProBox::evaluate(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs
  **/
 void HyProBox::multiEvaluate(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
     if(nlhs < 1)
-        mexErrMsgTxt("Box - multiEvaluate: Expecting an output!");
+        mexErrMsgTxt("HyProBox - multiEvaluate: Expecting an output!");
     if(nrhs < 5)
-        mexErrMsgTxt("Box - multiEvaluate: One or more arguments are missing!");
+        mexErrMsgTxt("HyProBox - multiEvaluate: One or more arguments are missing!");
     mxArray *m_in_vector;
     double *in_vector;
     const mwSize *dims;
@@ -577,7 +577,7 @@ void HyProBox::multiEvaluate(int nlhs, mxArray *plhs[], int nrhs, const mxArray 
     }else if (dir == 1){
         ans = true;
     }else{
-        mexErrMsgTxt("Box - evaluate: The direction must be either 0 or 1!");
+        mexErrMsgTxt("HyProBox - evaluate: The direction must be either 0 or 1!");
     }
     
     //Does this make sense?
@@ -590,10 +590,10 @@ void HyProBox::multiEvaluate(int nlhs, mxArray *plhs[], int nrhs, const mxArray 
  **/
 void HyProBox::equals(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
     if(nlhs < 1){
-        mexErrMsgTxt("Box - ==: Expecting an output!");
+        mexErrMsgTxt("HyProBox - ==: Expecting an output!");
     }
     if(nrhs < 4){
-        mexErrMsgTxt("Box - ==: One or more arguments are missing!");
+        mexErrMsgTxt("HyProBox - ==: One or more arguments are missing!");
     }
     hypro::Box<double>* box_1 = convertMat2Ptr<hypro::Box<double>>(prhs[2]);
     hypro::Box<double>* box_2 = convertMat2Ptr<hypro::Box<double>>(prhs[3]);
@@ -609,10 +609,10 @@ void HyProBox::equals(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]
  **/
 void HyProBox::unequal(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
     if(nlhs < 1){
-        mexErrMsgTxt("Box - !=: Expecting an output!");
+        mexErrMsgTxt("HyProBox - !=: Expecting an output!");
     }
     if(nrhs < 4){
-        mexErrMsgTxt("Box - !=: One or more arguments are missing!");
+        mexErrMsgTxt("HyProBox - !=: One or more arguments are missing!");
     }
     hypro::Box<double>* box_1 = convertMat2Ptr<hypro::Box<double>>(prhs[2]);
     hypro::Box<double>* box_2 = convertMat2Ptr<hypro::Box<double>>(prhs[3]);
@@ -628,9 +628,9 @@ void HyProBox::unequal(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[
  **/
 void HyProBox::multiply(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
     if(nlhs < 1)
-        mexErrMsgTxt("Box - *: Expecting an output!");
+        mexErrMsgTxt("HyProBox - *: Expecting an output!");
     if(nrhs < 4)
-        mexErrMsgTxt("Box - *: One or more arguments are missing!");
+        mexErrMsgTxt("HyProBox - *: One or more arguments are missing!");
     hypro::Box<double>* box_1 = convertMat2Ptr<hypro::Box<double>>(prhs[2]);
     const double factor = (double) mxGetScalar(prhs[3]);
     
@@ -644,7 +644,7 @@ void HyProBox::multiply(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs
  **/
 void HyProBox::outstream(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
     if(nrhs < 3)
-        mexErrMsgTxt("Box - <<: One or more arguments are missing!");
+        mexErrMsgTxt("HyProBox - <<: One or more arguments are missing!");
 
     hypro::Box<double>* box = convertMat2Ptr<hypro::Box<double>>(prhs[2]);
     if(!box->empty()){
@@ -669,10 +669,10 @@ void HyProBox::outstream(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prh
  **/
 void HyProBox::dimension(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
     if(nlhs < 1){
-        mexErrMsgTxt("Box - dimension: Expecting an output!");
+        mexErrMsgTxt("HyProBox - dimension: Expecting an output!");
     }
     if(nrhs < 3){
-        mexErrMsgTxt("Box - dimension: One or more arguments are missing!");
+        mexErrMsgTxt("HyProBox - dimension: One or more arguments are missing!");
     }
     hypro::Box<double>* box = convertMat2Ptr<hypro::Box<double>>(prhs[2]);
     std::size_t dim = box->dimension();
@@ -684,10 +684,10 @@ void HyProBox::dimension(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prh
  **/
 void HyProBox::removeRedundancy(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
     if(nlhs < 1){
-        mexErrMsgTxt("Box - removeRedundancy: Expecting an output!");
+        mexErrMsgTxt("HyProBox - removeRedundancy: Expecting an output!");
     }
     if(nrhs < 3){
-        mexErrMsgTxt("Box - removeRedundancy: One or more arguments are missing!");
+        mexErrMsgTxt("HyProBox - removeRedundancy: One or more arguments are missing!");
     }
     hypro::Box<double>* box = convertMat2Ptr<hypro::Box<double>>(prhs[2]);
     box->removeRedundancy();
@@ -698,9 +698,9 @@ void HyProBox::removeRedundancy(int nlhs, mxArray *plhs[], int nrhs, const mxArr
  **/
 void HyProBox::box_size(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
     if(nlhs < 1)
-        mexErrMsgTxt("Box - size: Expecting an output!");
+        mexErrMsgTxt("HyProBox - size: Expecting an output!");
     if(nrhs < 3)
-        mexErrMsgTxt("Box - size: One or more arguments are missing!");
+        mexErrMsgTxt("HyProBox - size: One or more arguments are missing!");
 
     hypro::Box<double>* box = convertMat2Ptr<hypro::Box<double>>(prhs[2]);
     std::size_t dim = box->size();
@@ -720,9 +720,9 @@ void HyProBox::type(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
  **/
 void HyProBox::reduceNumberRepresentation(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
     if(nlhs < 1)
-        mexErrMsgTxt("Box - reduceNumberRepresentation: Expecting an output!");
+        mexErrMsgTxt("HyProBox - reduceNumberRepresentation: Expecting an output!");
     if(nrhs < 3)
-        mexErrMsgTxt("Box - reduceNumberRepresentation: One or more arguments are missing!");
+        mexErrMsgTxt("HyProBox - reduceNumberRepresentation: One or more arguments are missing!");
     
     hypro::Box<double>* box = convertMat2Ptr<hypro::Box<double>>(prhs[2]);
     hypro::Box<double> temp = box->reduceNumberRepresentation();
@@ -735,7 +735,7 @@ void HyProBox::reduceNumberRepresentation(int nlhs, mxArray *plhs[], int nrhs, c
  **/
 void HyProBox::makeSymmetric(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
     if(nrhs < 3){
-        mexErrMsgTxt("Box - makeSymmetric: One or more arguments are missing!");
+        mexErrMsgTxt("HyProBox - makeSymmetric: One or more arguments are missing!");
     }
     hypro::Box<double>* box = convertMat2Ptr<hypro::Box<double>>(prhs[2]);
     box->makeSymmetric();
@@ -746,9 +746,9 @@ void HyProBox::makeSymmetric(int nlhs, mxArray *plhs[], int nrhs, const mxArray 
  **/
 void HyProBox::satisfiesHalfspace(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
     if(nlhs < 2)
-        mexErrMsgTxt("Box - satisfiesHalfspace: Expecting two output values!");
+        mexErrMsgTxt("HyProBox - satisfiesHalfspace: Expecting two output values!");
     if(nrhs < 5)
-        mexErrMsgTxt("Box - satisfiesHalfspace: One or more arguments are missing!");
+        mexErrMsgTxt("HyProBox - satisfiesHalfspace: One or more arguments are missing!");
 
     mxArray* m_in_normal, *out_box, *out_cont;
     const mwSize *dims;
@@ -782,9 +782,9 @@ void HyProBox::satisfiesHalfspace(int nlhs, mxArray *plhs[], int nrhs, const mxA
  **/
 void HyProBox::satisfiesHalfspaces(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
     if(nlhs < 2)
-        mexErrMsgTxt("Box - satisfiesHalfspaces: Expecting two output values!");
+        mexErrMsgTxt("HyProBox - satisfiesHalfspaces: Expecting two output values!");
     if(nrhs < 5)
-        mexErrMsgTxt("Box - satisfiesHalfspaces: One or more arguments are missing!");
+        mexErrMsgTxt("HyProBox - satisfiesHalfspaces: One or more arguments are missing!");
 
     mxArray *m_in_matrix, *m_in_vector, *out_box, *out_cont;
     const mwSize *mat_dims, *vec_dims;
@@ -819,9 +819,9 @@ void HyProBox::satisfiesHalfspaces(int nlhs, mxArray *plhs[], int nrhs, const mx
  **/
 void HyProBox::project(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
     if(nlhs < 1)
-        mexErrMsgTxt("Box - project: Expecting one output value!");
+        mexErrMsgTxt("HyProBox - project: Expecting one output value!");
     if(nrhs < 4)
-        mexErrMsgTxt("Box - project: One or more arguments are missing!");
+        mexErrMsgTxt("HyProBox - project: One or more arguments are missing!");
     
     mxArray *m_in_dimensions;
     const mwSize *dims;
@@ -847,9 +847,9 @@ void HyProBox::project(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[
  **/
 void HyProBox::linearTransformation(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
     if(nlhs < 1)
-        mexErrMsgTxt("Box - linearTransformation: Expecting one output value!");
+        mexErrMsgTxt("HyProBox - linearTransformation: Expecting one output value!");
     if(nrhs < 4)
-        mexErrMsgTxt("Box - linearTransformation: One or more arguments are missing!");
+        mexErrMsgTxt("HyProBox - linearTransformation: One or more arguments are missing!");
     
     mxArray *m_in_matrix;
     const mwSize *dims;
@@ -875,9 +875,9 @@ void HyProBox::linearTransformation(int nlhs, mxArray *plhs[], int nrhs, const m
  **/
 void HyProBox::affineTransformation(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
     if(nlhs < 1)
-        mexErrMsgTxt("Box - affineTransformation: Expecting one output value!");
+        mexErrMsgTxt("HyProBox - affineTransformation: Expecting one output value!");
     if(nrhs < 5)
-        mexErrMsgTxt("Box - affineTransformation: One or more arguments are missing!");
+        mexErrMsgTxt("HyProBox - affineTransformation: One or more arguments are missing!");
     
     mxArray *m_in_matrix, *m_in_vector;
     const mwSize *mat_dims, *vec_dims;
@@ -910,9 +910,9 @@ void HyProBox::affineTransformation(int nlhs, mxArray *plhs[], int nrhs, const m
  **/
 void HyProBox::minkowskiSum(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
     if(nlhs < 1)
-        mexErrMsgTxt("Box - minkowskiSum: Expecting one output value!");
+        mexErrMsgTxt("HyProBox - minkowskiSum: Expecting one output value!");
     if(nrhs < 4)
-        mexErrMsgTxt("Box - minkowskiSum: One or more arguments are missing!");
+        mexErrMsgTxt("HyProBox - minkowskiSum: One or more arguments are missing!");
     
     hypro::Box<double>* box = convertMat2Ptr<hypro::Box<double>>(prhs[2]);
     hypro::BoxT<double, hypro::Converter<double>, hypro::BoxLinearOptimizationOn>* box_rhs = convertMat2Ptr<hypro::BoxT<double, hypro::Converter<double>, hypro::BoxLinearOptimizationOn>>(prhs[3]);
@@ -927,9 +927,9 @@ void HyProBox::minkowskiSum(int nlhs, mxArray *plhs[], int nrhs, const mxArray *
  **/
 void HyProBox::minkowskiDecomposition(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
     if(nlhs < 1)
-        mexErrMsgTxt("Box - minkowskiDecomposition: Expecting one output value!");
+        mexErrMsgTxt("HyProBox - minkowskiDecomposition: Expecting one output value!");
     if(nrhs < 4)
-        mexErrMsgTxt("Box - minkowskiDecomposition: One or more arguments are missing!");
+        mexErrMsgTxt("HyProBox - minkowskiDecomposition: One or more arguments are missing!");
     
     hypro::Box<double>* box = convertMat2Ptr<hypro::Box<double>>(prhs[2]);
     hypro::BoxT<double, hypro::Converter<double>, hypro::BoxLinearOptimizationOn>* box_rhs = convertMat2Ptr<hypro::BoxT<double, hypro::Converter<double>, hypro::BoxLinearOptimizationOn>>(prhs[3]);
@@ -944,9 +944,9 @@ void HyProBox::minkowskiDecomposition(int nlhs, mxArray *plhs[], int nrhs, const
  **/
 void HyProBox::intersect(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
     if(nlhs < 1)
-        mexErrMsgTxt("Box - intersect: Expecting one output value!");
+        mexErrMsgTxt("HyProBox - intersect: Expecting one output value!");
     if(nrhs < 4)
-        mexErrMsgTxt("Box - intersect: One or more arguments are missing!");
+        mexErrMsgTxt("HyProBox - intersect: One or more arguments are missing!");
     
     hypro::Box<double>* box = convertMat2Ptr<hypro::Box<double>>(prhs[2]);
     hypro::BoxT<double, hypro::Converter<double>, hypro::BoxLinearOptimizationOn>* box_rhs = convertMat2Ptr<hypro::BoxT<double, hypro::Converter<double>, hypro::BoxLinearOptimizationOn>>(prhs[3]);
@@ -961,9 +961,9 @@ void HyProBox::intersect(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prh
  **/
 void HyProBox::intersectHalfspace(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
     if(nlhs < 1)
-        mexErrMsgTxt("Box - intersectHalfspace: Expecting two output values!");
+        mexErrMsgTxt("HyProBox - intersectHalfspace: Expecting two output values!");
     if(nrhs < 5)
-        mexErrMsgTxt("Box - intersectHalfspace: One or more arguments are missing!");
+        mexErrMsgTxt("HyProBox - intersectHalfspace: One or more arguments are missing!");
 
     mxArray* m_in_normal, *out_box, *out_cont;
     const mwSize *dims;
@@ -992,9 +992,9 @@ void HyProBox::intersectHalfspace(int nlhs, mxArray *plhs[], int nrhs, const mxA
  **/
 void HyProBox::intersectHalfspaces(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
     if(nlhs < 1)
-        mexErrMsgTxt("Box - intersectHalfspaces: Expecting one output value!");
+        mexErrMsgTxt("HyProBox - intersectHalfspaces: Expecting one output value!");
     if(nrhs < 5)
-        mexErrMsgTxt("Box - intersectHalfspaces: One or more arguments are missing!");
+        mexErrMsgTxt("HyProBox - intersectHalfspaces: One or more arguments are missing!");
     
     mxArray *m_in_matrix, *m_in_vector;
     const mwSize *mat_dims, *vec_dims;
@@ -1027,9 +1027,9 @@ void HyProBox::intersectHalfspaces(int nlhs, mxArray *plhs[], int nrhs, const mx
 **/
 void HyProBox::contains_point(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
     if(nlhs < 1)
-        mexErrMsgTxt("Box - contains_point: Expecting one output value!");
+        mexErrMsgTxt("HyProBox - contains_point: Expecting one output value!");
     if(nrhs < 4)
-        mexErrMsgTxt("Box - contains_point: One or more arguments are missing!");
+        mexErrMsgTxt("HyProBox - contains_point: One or more arguments are missing!");
 
     mxArray* m_in_point;
     double* in_point;
@@ -1053,9 +1053,9 @@ void HyProBox::contains_point(int nlhs, mxArray *plhs[], int nrhs, const mxArray
  **/
 void HyProBox::contains_box(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
     if(nlhs < 1)
-        mexErrMsgTxt("Box - contains_box: Expecting one output value!");
+        mexErrMsgTxt("HyProBox - contains_box: Expecting one output value!");
     if(nrhs < 4)
-        mexErrMsgTxt("Box - contains_box: One or more arguments are missing!");
+        mexErrMsgTxt("HyProBox - contains_box: One or more arguments are missing!");
 
     hypro::Box<double>* box = convertMat2Ptr<hypro::Box<double>>(prhs[2]);
     hypro::Box<double>* box_arg = convertMat2Ptr<hypro::Box<double>>(prhs[3]);
@@ -1069,9 +1069,9 @@ void HyProBox::contains_box(int nlhs, mxArray *plhs[], int nrhs, const mxArray *
  **/
 void HyProBox::unite_box(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
     if(nlhs < 1)
-        mexErrMsgTxt("Box - unite_box: Expecting one output value!");
+        mexErrMsgTxt("HyProBox - unite_box: Expecting one output value!");
     if(nrhs < 4)
-        mexErrMsgTxt("Box - unite_box: One or more arguments are missing!");
+        mexErrMsgTxt("HyProBox - unite_box: One or more arguments are missing!");
     
     hypro::Box<double>* box = convertMat2Ptr<hypro::Box<double>>(prhs[3]);
     hypro::BoxT<double, hypro::Converter<double>, hypro::BoxLinearOptimizationOn>* box_rhs = convertMat2Ptr<hypro::BoxT<double, hypro::Converter<double>, hypro::BoxLinearOptimizationOn>>(prhs[3]);
@@ -1086,9 +1086,9 @@ void HyProBox::unite_box(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prh
  **/
 void HyProBox::unite_boxes(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
     if(nlhs < 1)
-        mexErrMsgTxt("Box - unite_boxes: Expecting one output value!");
+        mexErrMsgTxt("HyProBox - unite_boxes: Expecting one output value!");
     if(nrhs < 4)
-        mexErrMsgTxt("Box - unite_boxes: One or more arguments are missing!");
+        mexErrMsgTxt("HyProBox - unite_boxes: One or more arguments are missing!");
     
     mxArray* m_in_boxes;
     double* in_boxes;
@@ -1117,18 +1117,18 @@ void HyProBox::unite_boxes(int nlhs, mxArray *plhs[], int nrhs, const mxArray *p
  **/
 void HyProBox::reduceRepresentation(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
     if(nrhs < 3)
-        mexErrMsgTxt("Box - reduceRepresentation: One or more arguments are missing!");
+        mexErrMsgTxt("HyProBox - reduceRepresentation: One or more arguments are missing!");
 
     hypro::Box<double>* box = convertMat2Ptr<hypro::Box<double>>(prhs[2]);
     box->reduceRepresentation();
 }
 
 /**
- * @brief Reduces the box - only in case rational types are used, the number representation is optimized.
+ * @brief Reduces the HyProBox - only in case rational types are used, the number representation is optimized.
  **/
 void HyProBox::clear_box(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
     if(nrhs < 3)
-        mexErrMsgTxt("Box - clear_box: One or more arguments are missing!");
+        mexErrMsgTxt("HyProBox - clear_box: One or more arguments are missing!");
 
     hypro::Box<double>* box = convertMat2Ptr<hypro::Box<double>>(prhs[2]);
     box->clear();
@@ -1138,14 +1138,42 @@ void HyProBox::clear_box(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prh
  * @brief
  **/
 void HyProBox::matrix(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
-    mexErrMsgTxt("NOT IMPLEMENTED!");
+    if(nrhs < 3)
+        mexErrMsgTxt("HyProBox - matrix: One or more arguments are missing!");
+    if(nlhs < 1)
+        mexErrMsgTxt("HyProBox - matrix: One output expected!");
+
+    hypro::Box<double>* box = convertMat2Ptr<hypro::Box<double>>(prhs[2]);
+    hypro::matrix_t<double> mat = box->matrix();
+
+    mxArray* m_out;
+    double* out;
+
+    m_out = plhs[0] = mxCreateDoubleMatrix(mat.rows(), mat.cols(), mxREAL);
+    out = mxGetPr(m_out);
+
+    ObjectHandle::convert2matlab(mat, out, mat.cols(), mat.rows());
 }
 
 /**
  * @brief
  **/
 void HyProBox::vector(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
-    mexErrMsgTxt("NOT IMPLEMENTED!");
+    if(nrhs < 3)
+        mexErrMsgTxt("HyProBox - vector: One or more arguments are missing!");
+    if(nlhs < 1)
+        mexErrMsgTxt("HyProBox - vector: One output expected!");
+
+    hypro::Box<double>* box = convertMat2Ptr<hypro::Box<double>>(prhs[2]);
+    hypro::vector_t<double> vec = box->vector();
+
+    mxArray* m_out;
+    double* out;
+
+    m_out = plhs[0] = mxCreateDoubleMatrix(vec.rows(), 1, mxREAL);
+    out = mxGetPr(m_out);
+
+    ObjectHandle::convert2matlab(vec, out, 1, vec.rows());
 }
 
 /**
@@ -1159,7 +1187,7 @@ void HyProBox::process(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[
     // Get the command string
     char cmd[64];
     if (nrhs < 1 || mxGetString(prhs[1], cmd, sizeof(cmd)))
-        mexErrMsgTxt("Box - First input should be a command string less than 64 characters long.");
+        mexErrMsgTxt("HyProBox - First input should be a command string less than 64 characters long.");
     
     /***************************************************************************
      * Constructors
@@ -1433,7 +1461,7 @@ void HyProBox::process(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[
         return;
     }
 
-    mexErrMsgTxt("HyProBox - Command not recognized.");
+    mexErrMsgTxt("HyProHyProBox - Command not recognized.");
 }
 
 
