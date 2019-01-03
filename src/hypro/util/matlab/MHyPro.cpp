@@ -1,6 +1,7 @@
 #include "HyProBox.h"
 #include "HyProEvaluationResult.h"
 #include "HyProTaylorModel.h"
+#include "HyProEllipsoid.h"
 #include <iostream>
 #include "mex.h"
 #include "matrix.h"
@@ -13,6 +14,8 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
 
     if(!strcmp(type, "Box")){
         HyProBox::process(nlhs, plhs, nrhs, prhs);
+    }else if(!strcmp(type, "Ellipsoid")){
+        HyProEllipsoid::process(nlhs, plhs, nrhs, prhs);
     }else if(!strcmp(type, "EvaluationResult")){
         HyProEvaluationResult::process(nlhs, plhs, nrhs, prhs);
     }else{

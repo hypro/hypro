@@ -125,7 +125,7 @@ classdef HyProObject < handle
             end 
         end
         
-        function out = minkowskiSum(obj, rhs)
+        function out = plus(obj, rhs)
             if isa(rhs, 'HyProObject')
                 ptr = MHyPro(obj.Type, 'minkowskiSum', obj.Pointer, rhs.Pointer);
                 out = HyProObject(obj.Type, ptr);
@@ -177,13 +177,37 @@ classdef HyProObject < handle
             MHyPro(obj.Type, '<<', obj.Pointer);
         end
         
+        function plot(obj, dim)
+            if strcmp(obj.Type, 'Box')
+                ptr = MHyPro(obj.Type, 'project', obj.Pointer, dim);
+                inter = MHyPro('Box', intervals, ptr);
+                %TODO  
+            end
+        end
+        
+        function out = eq(obj, rhs)
+            if isa(rhs, 'HyProObject')
+                out = MHyPro(obj.Type, '==', obj.Pointer, rhs.Pointer);
+            else
+                error('HyProObject - equal: Not allowed for this type of HyProObject or wrong type of argument.');
+            end
+        end
+        
+        function out = ne(obj, rhs)
+            if isa(rhs, 'HyProObject')
+                out = MHyPro(obj.Type, '!=', obj.Pointer, rhs.Pointer);
+            else
+                error('HyProObject - unequal: Not allowed for this type of HyProObject or wrong type of argument.');
+            end
+        end
+        
         %******************************************************************
         %               Object Specific Functions
         %******************************************************************
         
         % BOX
-        function out = is_empty(obj)
-            if strcmp(obj.Type, 'Box')
+        function out = isempty(obj)
+            if strcmp(obj.Type, 'Box') || strcmp(obj.Type, 'Ellipsoid')
                 out = MHyPro(obj.Type, 'isEmpty', obj.Pointer);
             else
                 error('HyProObject - empty: Not allowed for this type of HyProObject or wrong type of argument.');
@@ -207,7 +231,7 @@ classdef HyProObject < handle
         end
         
         function out = matrix(obj)
-            if strcmp(obj.Type, 'Box')
+            if strcmp(obj.Type, 'Box') || strcmp(obj.Type, 'Ellipsoid')
                 out = MHyPro(obj.Type, 'matrix', obj.Pointer);
             else
                 error('HyProObject - matrix: Not allowed for this type of HyProObject.');
@@ -302,23 +326,7 @@ classdef HyProObject < handle
             end
         end
         
-        function out = equal(obj, rhs)
-            if strcmp(obj.Type, 'Box') && isa(rhs, 'HyProObject') && strcmp(rhs.Type, 'Box')
-                out = MHyPro(obj.Type, '==', obj.Pointer, rhs.Pointer);
-            else
-                error('HyProObject - equal: Not allowed for this type of HyProObject or wrong type of argument.');
-            end
-        end
-        
-        function out = unequal(obj, rhs)
-            if strcmp(obj.Type, 'Box') && isa(rhs, 'HyProObject') && strcmp(rhs.Type, 'Box')
-                out = MHyPro(obj.Type, '!=', obj.Pointer, rhs.Pointer);
-            else
-                error('HyProObject - unequal: Not allowed for this type of HyProObject or wrong type of argument.');
-            end
-        end
-        
-        function out = scale(obj, scalar)
+        function out = mtimes(obj, scalar)
             if strcmp(obj.Type, 'Box') && isreal(scalar)
                 ptr = MHyPro(obj.Type, '*', obj.Pointer, scalar);
                 out = HyProObject('Box', ptr);
@@ -345,7 +353,8 @@ classdef HyProObject < handle
         
         function out = reduceNumberRepresentation(obj)
             if strcmp(obj.Type, 'Box')
-                out = MHyPro(obj.Type, 'reduceNumberRepresentation', obj.Pointer);
+                ptr = MHyPro(obj.Type, 'reduceNumberRepresentation', obj.Pointer);
+                out = HyProObject('Box', ptr);
             else
                 error('HyProObject - reduceNumberRepresentation: Not allowed for this type of HyProObject.');
             end
@@ -383,6 +392,15 @@ classdef HyProObject < handle
             else
                 error('HyProObject - clear: Not allowed for this type of HyProObject or wrong type of argument.');
             end
-       end               
+       end  
+       
+       % Ellipsoid
+       function out = approxEllipsoidMatrix(obj, mat)
+           if strcmp(obj.Type, 'Ellipsoid')
+               out = MHyPro('Ellipsoid', 'approxEllipsoidTMatrix', obj.Pointer, mat);
+           else
+                error('HyProObject - approxEllipsoidMatrix: Not allowed for this type of HyProObject or wrong type of argument.');
+           end
+       end
     end
 end

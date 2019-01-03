@@ -95,11 +95,11 @@ disp(inter_12);
 
 disp('Is Empty');
 box_13 = HyProObject('Box', 'new_intervals',inter);
-a = box_13.is_empty();
+a = box_13.isempty();
 disp('Is box 13 empty? :');
 disp(a);
 box_14 = HyProObject('Box', 'new_empty');
-b = box_14.is_empty();
+b = box_14.isempty();
 disp('Is box 14 empty? :');
 disp(b);
 
@@ -151,22 +151,22 @@ disp('==');
 box_23 = HyProObject('Box', 'new_intervals', [1 2; 1 2]);
 box_24 = HyProObject('Box','new_intervals', [1 2; 1 2]);
 disp('Are box 23 and box 24 equal? :');
-a = box_23.equal(box_24);
+a = (box_23 == box_24);
 disp(a);
 box_25 = HyProObject('Box','new_intervals', [1 2; 2 5; 1 2]);
 disp('Are box 23 and box 25 equal? :');
-a = box_23.equal(box_25);
+a = box_23.eq(box_25);
 disp(a);
 
 disp('!=');
 box_26 = HyProObject('Box','new_intervals', [1 2; 1 2]);
 box_27 = HyProObject('Box','new_intervals', [1 2; 1 2]);
 disp('Are box 26 and box 27 unequal? :');
-a = box_26.unequal(box_27);
+a = (box_26 ~= box_27);
 disp(a);
 box_28 = HyProObject('Box','new_intervals', [1 2; 2 5; 2 3]);
 disp('Are box 26 and box 28 unequal? :');
-a = box_26.unequal(box_28);
+a = (box_26 ~= box_28);
 disp(a);
 
 disp('Dimension');
@@ -185,11 +185,11 @@ new_intervals = box_30.intervals();
 disp('New intervals:');
 disp(new_intervals);
 
-disp('Constraints');
-box_31 = HyProObject('Box','new_intervals', [3 5; 2 4]);
-[normal_vecs, offsets] = box_31.constraints();
-disp(normal_vecs);
-disp(offsets);
+% disp('Constraints');
+% box_31 = HyProObject('Box','new_intervals', [3 5; 2 4]);
+% [normal_vecs, offsets] = box_31.constraints();
+% disp(normal_vecs);
+% disp(offsets);
 
 disp('Satisfies Halfspace');
 box_32 = HyProObject('Box','new_intervals', [3 5; 2 4]);
@@ -235,7 +235,7 @@ disp(inter);
 disp('Minkowski Sum');
 box_37 = HyProObject('Box','new_intervals', [1 3; 1 3]);
 box_38 = HyProObject('Box', 'new_intervals', [4 6; 3 5]);
-mSum = box_37.minkowskiSum(box_38);
+mSum = box_3 + box_38;
 inter = mSum.intervals();
 disp('Intervals of the sum:');
 disp(inter);
@@ -315,7 +315,7 @@ disp(inter);
 
 disp('* (Scale)');
 box_53 = HyProObject('Box', 'new_intervals', [1 5; 1 7]);
-box_54 = box_53.scale(3);
+box_54 = box_53 * 3;
 inter = box_54.intervals();
 disp('Intervals:');
 disp(inter);
@@ -329,13 +329,71 @@ disp(m);
 v = box_54.vector();
 disp('Vector of box_54');
 disp(v);
-% disp('reduceNumberRepresentation');
-% box_55 = HyProObject('Box', 'new_intervals', [1 5; 1 7; 1 2; 2 3]);
-% box_56 = box_55.reduceNumberRepresentation();
-% inter = box_56.intervals();
-% disp('Intervals:');
-% disp(inter);
 
+disp('reduceNumberRepresentation');
+box_55 = HyProObject('Box', 'new_intervals', [1 5; 1 7; 1 2; 2 3]);
+box_56 = box_55.reduceNumberRepresentation();
+inter = box_56.intervals();
+disp('Intervals:');
+disp(inter);
+
+%**************************************************************************
+% Tests for HyPro Ellipsoids
+%**************************************************************************
+
+eli_1 = HyProObject('Ellipsoid', 'ellipsoid', 2, 2);
+eli_2 = HyProObject('Ellipsoid', 'copy', eli_1);
+eli_3 = HyProObject('Ellipsoid', 'ellipsoid_mat', [1 2 3; 4 5 6; 7 8 9]);
+
+disp("Is ellipse 1 empty?: ");
+disp(eli_1.isempty());
+
+disp("Ellipse 3 matrix:");
+disp(eli_3.matrix());
+
+disp("Ellipse 3 dimension:");
+disp(eli_3.dimension());
+
+disp("Are ellipsoids 1 and 3 equal?");
+disp(eli_3 == eli_1);
+
+disp("Are ellipsoids 2 and 1 equal?");
+disp(eli_1 == eli_2);
+
+disp("Are ellipsoids 1 and 3 unequal?");
+disp(eli_3 ~= eli_1);
+
+disp("Are ellipsoids 2 and 1 unequal?");
+disp(eli_1 ~= eli_2);
+
+disp("Ellipse 3:");
+eli_3.ostream();
+
+disp('Linear Transformation');
+mat = [2 0; 3 4];
+eli_4 = eli_3.linearTransformation(mat);
+mat = eli_4.matrix();
+disp('Matrix of the transformed ellipsoid:');
+disp(mat);
+
+disp('Affine Transformation');
+mat = [2 2; 0 4];
+vec = [2 1];
+eli_5 = eli_3.affineTransformation(mat, vec);
+mat = eli_5.matrix();
+disp('Matrix of the transformed ellipsoid:');
+disp(mat);
+
+disp('Minkowski sum');
+eli_6 = eli_4 + eli_5;
+mat = eli_6.matrix();
+disp('Minkowski sum of eli_4 and eli_5:');
+disp(mat);
+
+disp('ApproxEllipsoidMatrix');
+mat = eli_6.approxEllipsoidMatrix([4 2; 0 8]);
+disp('Matrix app. of ellipsoid 6:');
+disp(mat);
 
 disp('STOP');
 

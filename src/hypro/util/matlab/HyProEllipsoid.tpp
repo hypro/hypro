@@ -141,7 +141,24 @@
   * @brief
   **/
  void HyProEllipsoid::ostream(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
-     mexErrMsgTxt("NOT IMPLEMENTED");
+    if(nrhs < 3)
+        mexErrMsgTxt("HyProEllipsoid - ostream: One or more input arguments are missing.");
+
+    hypro::Ellipsoid<double>* ellipse = convertMat2Ptr<hypro::Ellipsoid<double>>(prhs[2]);
+    hypro::matrix_t<double> mat = ellipse->matrix();
+
+    int rows = mat.rows();
+    int cols = mat.cols();
+
+    mexPrintf("Matrix: [");
+    for(int i = 0; i < rows; i++){
+        for(int j = 0; j < cols; j++){
+            mexPrintf("%f ", mat(i,j));
+        }
+        mexPrintf("\n");
+    }
+    mexPrintf("]\n");
+
  }
  /**
   * @brief
@@ -175,7 +192,7 @@
   * @brief
   **/
  void HyProEllipsoid::affineTransformation(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
-     if(nlhs < 1)
+    if(nlhs < 1)
         mexErrMsgTxt("HyProEllipse - affineTransformation: Expecting one output value!");
     if(nrhs < 5)
         mexErrMsgTxt("HyProEllipse - affineTransformation: One or more arguments are missing!");
@@ -266,7 +283,30 @@
   * @brief
   **/
  void HyProEllipsoid::approxEllipsoidTMatrix(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
-     mexErrMsgTxt("NOT IMPLEMENTED");
+    if(nlhs < 1)
+        mexErrMsgTxt("HyProEllipse - approxEllipsoidTMatrix: Expecting one output value!");
+    if(nrhs < 4)
+        mexErrMsgTxt("HyProEllipse - approxEllipsoidTMatrix: One or more arguments are missing!");
+    
+    mxArray *m_in_matrix, *m_out;
+    const mwSize *dims;
+    double *in_matrix, *out;;
+    int dimx, dimy;
+
+    hypro::Ellipsoid<double>* ellipse = convertMat2Ptr<hypro::Ellipsoid<double>>(prhs[2]);
+    m_in_matrix = mxDuplicateArray(prhs[3]);
+    dims = mxGetDimensions(prhs[3]);
+    dimy = (int) dims[0];
+    dimx = (int) dims[1];
+
+    in_matrix = mxGetPr(m_in_matrix);
+    hypro::matrix_t<double> mat = ObjectHandle::mMatrix2Hypro(in_matrix, dimx, dimy);
+
+    hypro::matrix_t<double> out_mat = ellipse->approxEllipsoidTMatrix(mat);
+    m_out = plhs[0] = mxCreateDoubleMatrix(out_mat.rows(), out_mat.cols(), mxREAL);
+    out = mxGetPr(m_out);
+
+    ObjectHandle::convert2matlab(out_mat, out, out_mat.cols(), out_mat.rows());
  }
 
 
@@ -287,22 +327,16 @@ void HyProEllipsoid::process(int nlhs, mxArray *plhs[], int nrhs, const mxArray 
      * Constructors
      **************************************************************************/
 
-    if (!strcmp("ellipsoid", cmd) && nrhs == 2){  
+    if (!strcmp("ellipsoid", cmd) && nrhs == 4){  
         ellipsoid_rad(nlhs, plhs, nrhs, prhs);
         return;
     }
 
-    if (!strcmp("ellipsoid_mat", cmd) && nrhs == 2){  
+    if (!strcmp("ellipsoid_mat", cmd) && nrhs == 3){  
         ellipsoid_mat(nlhs, plhs, nrhs, prhs);
         return;
     }
 
-    
-    // Check if there is a second input, which should be the class instance handle
-    if (nrhs < 2){
-        mexErrMsgTxt("Second input should be a Ellipsoid instance handle.");
-    }
-    
     if(!strcmp("copy", cmd)){
         copy(nlhs, plhs, nrhs, prhs);
         return;
@@ -317,7 +351,7 @@ void HyProEllipsoid::process(int nlhs, mxArray *plhs[], int nrhs, const mxArray 
      * Getters & setters
      **************************************************************************/ 
 
-    if(!strcmp("is_empty", cmd)){
+    if(!strcmp("isEmpty", cmd)){
         is_empty(nlhs, plhs, nrhs, prhs);
         return;
     }
@@ -327,7 +361,7 @@ void HyProEllipsoid::process(int nlhs, mxArray *plhs[], int nrhs, const mxArray 
         return;
     }
 
-    if(!strcmp("isEqual", cmd)){
+    if(!strcmp("==", cmd)){
         equal(nlhs, plhs, nrhs, prhs);
         return;
     }
@@ -347,12 +381,12 @@ void HyProEllipsoid::process(int nlhs, mxArray *plhs[], int nrhs, const mxArray 
         return;
     }
 
-    if(!strcmp("unequal", cmd)){
+    if(!strcmp("!=", cmd)){
         unequal(nlhs, plhs, nrhs, prhs);
         return;
     }
 
-    if(!strcmp("ostream", cmd)){
+    if(!strcmp("<<", cmd)){
         ostream(nlhs, plhs, nrhs, prhs);
         return;
     }
