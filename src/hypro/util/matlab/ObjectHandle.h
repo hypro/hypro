@@ -6,6 +6,9 @@
 #include <cstring>
 #include <typeinfo>
 #include <carl/interval/Interval.h>
+#include <carl/interval/set_theory.h>
+#include <carl/core/MultivariatePolynomial.h>
+#include <carl/core/VariablePool.h>
 #include <mex.h>
 #include "../../types.h"
 #include "../../datastructures/Point.h"

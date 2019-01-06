@@ -349,12 +349,11 @@ void HyProBox::is_empty(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs
  * @brief Determines if the current box is symmetric.
  **/
 void HyProBox::is_symmetric(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
-    if(nlhs < 1){
+    if(nlhs < 1)
         mexErrMsgTxt("HyProBox - isSymmetric: Expecting an output!");
-    }
-    if(nrhs < 3){
+    if(nrhs < 3)
         mexErrMsgTxt("HyProBox - isSymmetric: One argument missing!");
-    }
+
     hypro::Box<double>* box = convertMat2Ptr<hypro::Box<double>>(prhs[2]);
     const bool empty = box->isSymmetric();
     mxLogical a = empty;

@@ -1,5 +1,5 @@
 classdef HyProObject < handle
-    properties (Access = public)
+    properties (SetAccess = public, GetAccess = public)
         Type
         Pointer
     end
@@ -177,12 +177,10 @@ classdef HyProObject < handle
             MHyPro(obj.Type, '<<', obj.Pointer);
         end
         
-        function plot(obj, dim)
-            if strcmp(obj.Type, 'Box')
-                ptr = MHyPro(obj.Type, 'project', obj.Pointer, dim);
-                inter = MHyPro('Box', intervals, ptr);
-                %TODO  
-            end
+        function plot(obj)
+            ver = MHyPro('Box', 'vertices', obj.Pointer);
+            pgon = polyshape(ver);
+            plot(pgon);
         end
         
         function out = eq(obj, rhs)
