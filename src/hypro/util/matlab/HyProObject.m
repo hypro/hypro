@@ -177,10 +177,47 @@ classdef HyProObject < handle
             MHyPro(obj.Type, '<<', obj.Pointer);
         end
         
-        function plot(obj)
-            ver = MHyPro('Box', 'vertices', obj.Pointer);
-            pgon = polyshape(ver);
-            plot(pgon);
+        function plot(obj, dims)
+            if strcmp(obj.Type, 'Box')
+                isempty = MHyPro(obj.Type, 'isEmpty', obj.Pointer);
+                if isempty
+                    warning('HyProObject - plot: It is not possible to plot an empty object.');
+                else
+                    %ver = MHyPro('Box', 'vertices', obj.Pointer);
+                    
+                    
+                    
+                    intervals = MHyPro('Box', 'intervals', obj.Pointer);
+                    inter_1 = intervals(dims(1),:);
+                    inter_2 = intervals(dims(2),:);
+                    [dimy, dimx] = size(inter_1);
+                    ver = zeros(dimx*2, 2);
+                    counter = 0;
+                    
+                    for i = 1:(dimx)
+                        for j = 1:(dimx)
+                            ver(j+counter,1) = inter_1(i);
+                            ver(j+counter,2) = inter_2(j);
+                        end
+                        counter = counter + dimx;
+                    end
+                    
+                    % Sort the vertices clocwise
+                    ver_x = ver(:,1).';
+                    ver_y = ver(:,2).';
+                    cx = mean(ver_x);
+                    cy = mean(ver_y);
+                    a = atan2(ver_y - cy, ver_x - cx);
+                    [~, order] = sort(a);
+                    ver_x = ver_x(order);
+                    ver_y = ver_y(order);
+                    
+                    pgon = polyshape(ver_x, ver_y);
+                    plot(pgon);                
+                end
+            else
+                warning('HyProObject - plot: Not implemented yet.');
+            end
         end
         
         function out = eq(obj, rhs)
