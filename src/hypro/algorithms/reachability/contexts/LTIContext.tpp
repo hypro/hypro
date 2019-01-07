@@ -404,10 +404,10 @@ namespace hypro
     	DEBUG("hypro.worker","State after intersection with invariant: " << mComputationState);
 
 		// For plotting.
-		//#ifdef HYDRA_ENABLE_PLOT
-		TRACE("hypro.worker.plot","Add "<<  mComputationState.getSets().size() << "segments for plotting of type " << mComputationState.getSetType() << " and refinement level " << mTask->btInfo.btLevel);
-        mLocalSegments->push_back(PlotData<State>(mComputationState, mTask->btInfo.btLevel));
-		//#endif
+		if(!SettingsProvider<State>::getInstance().skipPlot()) {
+			TRACE("hypro.worker.plot","Add "<<  mComputationState.getSets().size() << "segments for plotting of type " << mComputationState.getSetType() << " and refinement level " << mTask->btInfo.btLevel);
+        	mLocalSegments->push_back(PlotData<State>(mComputationState, mTask->btInfo.btLevel));
+		}
     }
 
     template<typename State>
