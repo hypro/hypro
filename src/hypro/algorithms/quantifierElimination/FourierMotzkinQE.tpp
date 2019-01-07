@@ -105,6 +105,14 @@ namespace hypro {
             }
         }
 
+        // copy the rest
+        for(const auto& c : bounds[2]) {
+            constraints.emplace_back(c);
+        }
+        for(const auto& c : bounds[3]) {
+            constraints.emplace_back(c);
+        }
+
         return constraints;
     }
 
