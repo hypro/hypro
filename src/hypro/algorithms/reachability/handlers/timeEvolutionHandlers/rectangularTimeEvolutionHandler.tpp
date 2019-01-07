@@ -12,7 +12,6 @@ namespace hypro {
             std::vector<carl::Variable> variablesToEliminate;
             // add variable for time elapse
             carl::Variable t = vpool.newCarlVariable("t");
-            variablesToEliminate.push_back(t);
             // add constraint t >= 0
             initial.addConstraint(ConstraintT<hypro::tNumber>(PolyT<hypro::tNumber>(t), carl::Relation::GEQ));
 
@@ -41,6 +40,9 @@ namespace hypro {
                     initial.addConstraints(flowConstraints);
                 }
             }
+
+            // add t to eliminate at latest
+            variablesToEliminate.push_back(t);
 
             // create variables to eliminate
             QEQuery quOrder;
