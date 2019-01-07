@@ -13,6 +13,7 @@ namespace hypro {
 	template<typename State>
 	class IFirstSegmentHandler : public IHandler {
 	public:
+		virtual ~IFirstSegmentHandler(){}
 		virtual void handle() = 0;
 		virtual const char* handlerName() = 0;
 
@@ -60,6 +61,7 @@ namespace hypro {
 
 	class ITimeEvolutionHandler : public IHandler {
 	public:
+		virtual ~ITimeEvolutionHandler(){}
 		virtual void handle() = 0;
 		virtual const char* handlerName() = 0;
 		virtual bool getMarkedForDelete() = 0;
@@ -68,12 +70,14 @@ namespace hypro {
 
 	class IResetHandler : public IHandler {
 	public:
+		virtual ~IResetHandler(){}
 		virtual void handle() = 0;
 		virtual const char* handlerName() = 0;
 	};
 
 	class IJumpHandler : public IHandler{
 	public:
+		virtual ~IJumpHandler(){}
 		virtual void handle() = 0;
 		virtual const char* handlerName() = 0;
 	};
