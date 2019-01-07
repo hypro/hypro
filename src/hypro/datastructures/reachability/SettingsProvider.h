@@ -30,7 +30,7 @@ class SettingsProvider : public carl::Singleton<SettingsProvider<State>>
     ReachabilitySettings &getReachabilitySettings();
 
     unsigned getWorkerThreadCount();
-
+    void setSkipPlot(bool skip) { mSkipPlot = skip; }
     bool skipPlot() const;
     bool useGlobalQueuesOnly() const;
     bool useFixedPointTest() const { return mUseFixedPointTest; }
