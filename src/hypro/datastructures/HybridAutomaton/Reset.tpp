@@ -232,15 +232,16 @@ namespace hypro {
 			DEBUG("hypro.datastructures", "}");
 			#endif
 
-			// new interval assignments
-			std::vector<carl::Interval<Number>> newIntervals;
+			// new interval assignments are just copied, as we do not store the variable
+			//std::vector<carl::Interval<Number>> newIntervals;
+			std::vector<carl::Interval<Number>> newIntervals = oldIntervalAssignments;
 
 			// for each row of the constraints check if it contains an entry for one of the variables of the set
 			// and add the corresponding rows to a list of indices that are later added to a matrix
 			std::vector<Eigen::Index> indicesToAdd;
 			for(auto entry : set){
 				indicesToAdd.emplace_back(Eigen::Index(entry));
-				newIntervals.emplace_back(oldIntervalAssignments[entry]);
+				//newIntervals.emplace_back(oldIntervalAssignments[entry]);
 			}
 
 			// create a row matrix with numIndicesToAdd many rows

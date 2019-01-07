@@ -51,6 +51,10 @@ namespace hypro {
             // eliminate vars
             initial.eliminateVariables(quOrder);
 
+            //for(auto var : variablesToEliminate) {
+            //    initial.eliminateVariable(var);
+            //}
+
             DEBUG("hydra.worker","State set after time elapse: " << initial);
 
             // update internal state

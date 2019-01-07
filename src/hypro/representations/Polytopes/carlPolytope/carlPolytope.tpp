@@ -55,12 +55,18 @@ namespace hypro {
     CarlPolytopeT<Number,Converter,Setting> CarlPolytopeT<Number,Converter,Setting>::project(const std::vector<std::size_t>& dimensions) const {
         TRACE("hypro.representations.carlPolytope","This: " << *this << " on dimensions " << dimensions);
 
-        // projection by means of a linear transformation
-        matrix_t<Number> projectionMatrix = matrix_t<Number>::Zero(this->dimension(), this->dimension());
-        for(auto i : dimensions) {
-            projectionMatrix(i,i) = 1;
+        // make sure the number of constraints allows for a projection via v-poly conversion
+        matrix_t<Number> constraints = this->matrix();
+        if(constraints.rows() < constraints.cols()) {
+            assert(false);
+        } else {
+            // projection by means of a linear transformation
+            matrix_t<Number> projectionMatrix = matrix_t<Number>::Zero(this->dimension(), this->dimension());
+            for(auto i : dimensions) {
+                projectionMatrix(i,i) = 1;
+            }
+            return this->linearTransformation(projectionMatrix);
         }
-        return this->linearTransformation(projectionMatrix);
     }
 
     template <typename Number, typename Converter, typename Setting>
@@ -272,11 +278,12 @@ namespace hypro {
         mFormula.getConstraints(constraints);
         std::size_t i = 0;
         for(const auto& c : constraints) {
-            res(i) = normalizedOffset<tNumber,Number>(c);
+            // widening: check if origin contained. If so, increase abs of offset, else, reduce abs. value.
+            res(i) = normalizedOffset<tNumber,Number>(c);// + computeWidening<tNumber,Number>(c);
             if(c.relation() == carl::Relation::EQ) {
                 res.conservativeResize(res.rows()+1);
                 ++i;
-                res(i) = -normalizedOffset<tNumber,Number>(c);
+                res(i) = -normalizedOffset<tNumber,Number>(c);// - computeWidening<tNumber,Number>(c);
             }
             ++i;
         }
@@ -330,6 +337,23 @@ namespace hypro {
             constraints.erase(constraints.begin() + *it);
         }
         mFormula = FormulaT<tNumber>(carl::FormulaType::AND, constraintsToFormulas(constraints));
+    }
+
+    template<typename Number, typename Converter, typename Setting>
+    void CarlPolytopeT<Number,Converter,Setting>::reduceRepresentation() {
+
+        Optimizer<Number> opt = Optimizer<Number>(this->matrix(), this->vector());
+        auto directions = computeTemplate<Number>(this->dimension(), 4);
+        matrix_t<Number> constraints = combineRows(directions);
+        vector_t<Number> constants = vector_t<Number>(constraints.rows());
+        Eigen::Index row = 0;
+        for(const auto& d : directions) {
+            constants(row) = opt.evaluate(vector_t<Number>(d), false).supportValue;
+        }
+        FormulasT<tNumber> newConstraints = halfspacesToConstraints<tNumber,Number>(constraints,constants);
+
+        mFormula = FormulaT<tNumber>{carl::FormulaType::AND, newConstraints};
+        TRACE("hypro.representations.carlPolytope","Result formula: " << mFormula);
     }
 
     template<typename Number, typename Converter, typename Setting>

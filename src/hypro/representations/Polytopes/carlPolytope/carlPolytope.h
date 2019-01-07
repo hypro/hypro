@@ -64,14 +64,15 @@ public:
 
     bool contains(const CarlPolytopeT<Number,Converter,Setting>& ) const { assert(false && "NOT IMPLEMENTED"); }
 
-    std::size_t dimension() const { return mDimension; }
+    std::size_t dimension() const { TRACE("hypro.representations.carlPolytope","Dimension " << mDimension << ". forced: " << mSpaceDimensionSet); return mDimension; }
     const FormulaT<tNumber>& getFormula() const { return mFormula; }
     const std::vector<Halfspace<Number>>& getHalfspaces() const;
     std::vector<carl::Interval<Number>> getIntervals() const;
 
-    void setDimension(std::size_t d) { mDimension = d; mSpaceDimensionSet = true; }
+    void setDimension(std::size_t d) { TRACE("hypro.representations.carlPolytope","Set dimension to " << d); mDimension = d; mSpaceDimensionSet = true; }
     void addConstraint(const ConstraintT<tNumber>& constraint);
     void addConstraints(const std::vector<ConstraintT<tNumber>>& constraints);
+    void addIntervalConstraints(const carl::Interval<Number>& intv, const carl::Variable& var);
     void substituteVariable(carl::Variable oldVar, carl::Variable newVar);
 
     std::vector<carl::Variable> getVariables() const;
@@ -89,6 +90,7 @@ public:
     CarlPolytopeT<Number,Converter,Setting> make_rectangular() const;
 
     void removeRedundancy();
+    void reduceRepresentation();
     void choseOrder(QEQuery& ) {/* right now do nothing - add heuristics later. */}
 
     friend std::ostream& operator<<(std::ostream& out, const CarlPolytopeT<Number,Converter,Setting>& in ) {

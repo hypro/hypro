@@ -28,12 +28,18 @@ namespace hypro {
     }
 
     template<typename N, typename D>
+    FormulasT<N> intervalToFormulas(const carl::Interval<D>& interval, const carl::Variable& var) {
+        TRACE("hypro.representations.carlPolytope","Create interval constraints for variable " << var);
+        FormulasT<N> res;
+        res.emplace_back(ConstraintT<N>(PolyT<N>(var) - PolyT<N>(carl::convert<D,N>(interval.lower())), carl::Relation::GEQ));
+        res.emplace_back(ConstraintT<N>(PolyT<N>(var) - PolyT<N>(carl::convert<D,N>(interval.upper())), carl::Relation::LEQ));
+        return res;
+    }
+
+    template<typename N, typename D>
     FormulasT<N> intervalToFormulas(const carl::Interval<D>& interval, std::size_t variableIndex) {
         TRACE("hypro.representations.carlPolytope","Create interval constraints for variable index " << variableIndex);
-        FormulasT<N> res;
-        res.emplace_back(ConstraintT<N>(PolyT<N>(VariablePool::getInstance().carlVarByIndex(variableIndex)) - PolyT<N>(carl::convert<D,N>(interval.lower())), carl::Relation::GEQ));
-        res.emplace_back(ConstraintT<N>(PolyT<N>(VariablePool::getInstance().carlVarByIndex(variableIndex)) - PolyT<N>(carl::convert<D,N>(interval.upper())), carl::Relation::LEQ));
-        return res;
+        return intervalToFormulas(interval, VariablePool::getInstance().carlVarByIndex(variableIndex));
     }
 
     template<typename N, typename D>
@@ -64,7 +70,7 @@ namespace hypro {
     }
 
     template<typename N, typename D>
-    std::vector<Halfspace<D>> constraintToHalfspace(const ConstraintT<N> constraint, std::size_t dim) {
+    std::vector<Halfspace<D>> constraintToHalfspace(const ConstraintT<N>& constraint, std::size_t dim) {
         TRACE("hypro.representations.carlPolytope","Compute half-spaces from " << constraint << " with dimension " << dim);
         std::vector<Halfspace<D>> res;
 
@@ -96,6 +102,35 @@ namespace hypro {
         }
 
         return res;
+    }
+
+    template<typename N, typename D>
+    D computeWidening(const ConstraintT<N>& constraint) {
+        if(constraint.lhs().constantPart() == carl::constant_zero<N>().get()) {
+            return 0;
+        }
+
+        // check if origin contained
+        bool originContained = constraint.lhs().constantPart() > 0;
+        D widening = 0.0001;
+        D normOff = normalizedOffset<N,D>(constraint);
+
+        // if origin contained, increase abs. value of offset
+        if(originContained) {
+            if(normOff > 0) {
+                return widening;
+            } else {
+                return - widening;
+            }
+        }
+        // else reduce abs value of offset
+
+        if(normOff > 0) {
+            return -widening;
+        } else {
+            return widening;
+        }
+
     }
 
 } // hypro
