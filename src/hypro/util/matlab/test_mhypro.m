@@ -419,7 +419,10 @@ set_3.addConstraint(vec, 2);
 disp('Set 3 with new constraint:');
 set_3.ostream();
 
-
+disp('Minkowski sum');
+sum = set_1 + set_3;
+disp('Sum of set 1 and set 3:');
+sum.ostream();
 
 
 

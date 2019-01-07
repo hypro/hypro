@@ -22,14 +22,6 @@ class HyProSupportFunction: public HyProGeometricObject<hypro::SupportFunction<d
         static void type(int, mxArray**, int, const mxArray**);
         static void depth(int, mxArray**, int, const mxArray**);
         static void operationCount(int, mxArray**, int, const mxArray**);
-        static void summands(int, mxArray**, int, const mxArray**);
-        static void scaleParameters(int, mxArray**, int, const mxArray**);
-        static void linearTrafoParameters(int, mxArray**, int, const mxArray**);
-        static void unionParameters(int, mxArray**, int, const mxArray**);
-        static void intersectionParameters(int, mxArray**, int, const mxArray**);
-        static void polytope(int, mxArray**, int, const mxArray**);
-        static void ball(int, mxArray**, int, const mxArray**);
-        static void ellipsoid(int, mxArray**, int, const mxArray**);
         static void supremum(int, mxArray**, int, const mxArray**);
         static void contains_vec(int, mxArray**, int, const mxArray**);
         static void contains_dir(int, mxArray**, int, const mxArray**);
@@ -39,6 +31,9 @@ class HyProSupportFunction: public HyProGeometricObject<hypro::SupportFunction<d
         static void multiplicationsPerEvaluation(int, mxArray**, int, const mxArray**);
         static void cleanUp(int, mxArray**, int, const mxArray**);
         static void collectProjections(int, mxArray**, int, const mxArray**);
+        static void evaluateTemplate(int, mxArray**, int, const mxArray**);
+        static void unequal(int, mxArray**, int, const mxArray**);
+        static void reduceNumberRepresentation(int, mxArray**, int, const mxArray**);
 
 };
 
