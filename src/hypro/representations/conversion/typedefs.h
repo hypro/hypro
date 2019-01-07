@@ -1,6 +1,4 @@
-template<typename Number>
-using SupportFunctionNew = typename Converter<Number>::SupportFunctionNew;
-
+#pragma once
 
 template<typename Number>
 using Box = typename Converter<Number>::Box;
@@ -39,6 +37,9 @@ using Polytope = typename Converter<Number>::Polytope;
  */
 template<typename Number>
 using SupportFunction = typename Converter<Number>::SupportFunction;
+
+template<typename Number>
+using SupportFunctionNew = typename Converter<Number>::SupportFunctionNew;
 
 /**
  * Typedef for ZonotopeT.

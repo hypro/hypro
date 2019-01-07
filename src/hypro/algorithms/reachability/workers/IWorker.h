@@ -16,8 +16,8 @@ namespace hypro
 template <class Workable, typename State>
 class IWorker
 {
-  using Number = typename State::NumberType;
   public:
+    using Number = typename State::NumberType;
     /**
      * Constructor responsible for setting the respective EventHandler
      * and WorkQueue.
@@ -35,9 +35,9 @@ class IWorker
      */
     virtual void processTask(const Workable& w,
     						 const Strategy<State>& strategy,
-    						 WorkQueue<std::shared_ptr<Task<State>>>& localQueue,
-    						 WorkQueue<std::shared_ptr<Task<State>>>& localCEXQueue,
-    						 std::vector<PlotData<Number>>* localSegments) = 0;
+    						 WorkQueue<std::shared_ptr<Task<State>>>* localQueue,
+    						 WorkQueue<std::shared_ptr<Task<State>>>* localCEXQueue,
+    						 std::vector<PlotData<State>>* localSegments) = 0;
 
 
   protected:
@@ -45,4 +45,3 @@ class IWorker
 };
 
 }  // namespace hypro
-

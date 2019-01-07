@@ -27,6 +27,14 @@ DifferenceBoundsT<Number,Converter<Number>,DBSetting> Converter<Number>::toDiffe
 
 template<typename Number>
 template<typename DBSetting, typename inSetting>
+DifferenceBoundsT<Number,Converter<Number>,DBSetting> Converter<Number>::toDifferenceBounds(const CarlPolytopeT<Number,Converter<Number>,inSetting>& source, const CONV_MODE ){
+    // TODO make better, this is just the cheap solution
+    HPolytope tmp = toHPolytope(source);
+    return toDifferenceBounds(tmp);
+}
+
+template<typename Number>
+template<typename DBSetting, typename inSetting>
 DifferenceBoundsT<Number,Converter<Number>,DBSetting> Converter<Number>::toDifferenceBounds(const ConstraintSetT<Number,inSetting>& source, const CONV_MODE ){
     // TODO make better, this is just the cheap solution
     HPolytope tmp = toHPolytope(source);

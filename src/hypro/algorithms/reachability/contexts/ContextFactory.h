@@ -1,6 +1,7 @@
 #pragma once
 #include "IContext.h"
 #include "LTIContext.h"
+#include "TimedContext.h"
 #include "../workers/IWorker.h"
 #include "../../../datastructures/reachability/Settings.h"
 #include "../../../datastructures/reachability/Strategy.h"
@@ -21,7 +22,7 @@ namespace hypro
 		                    const Strategy<State>& strat,
 		                    WorkQueue<std::shared_ptr<Task<State>>>* localQueue,
 		                    WorkQueue<std::shared_ptr<Task<State>>>* localCEXQueue,
-		                    std::vector<PlotData<Number>>* localSegments,
+		                    std::vector<PlotData<State>>* localSegments,
 		                    hypro::ReachabilitySettings &settings);
 
 

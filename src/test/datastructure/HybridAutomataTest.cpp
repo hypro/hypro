@@ -58,8 +58,8 @@ protected:
 		locationMat(1,0) = 0;
 		locationMat(1,1) = 1;
 
-		loc1->setFlow(locationMat);
-		loc2->setFlow(locationMat);
+		loc1->setLinearFlow(locationMat);
+		loc2->setLinearFlow(locationMat);
 
 		copyOfLoc1 = std::unique_ptr<Location<Number>>(new Location<Number>(*loc1));
 		copyOfLoc2 = std::unique_ptr<Location<Number>>(new Location<Number>(*loc2));
@@ -79,17 +79,17 @@ protected:
 		trans->setReset(reset);
 
 		copyOfTrans->setGuard(guard);
-		copyOfTrans->setSource(loc1);
-		copyOfTrans->setTarget(loc2);
+		copyOfTrans->setSource(loc1.get());
+		copyOfTrans->setTarget(loc2.get());
 		copyOfTrans->setReset(reset);
 
 		/*
 		 * Hybrid Automaton Setup
 		 */
 
-		initLocSet.insert(loc1.get());
-		locSet.insert(std::move(copyOfLoc1));
-		locSet.insert(std::move(copyOfLoc2));
+		initLocSet.push_back(loc1.get());
+		locSet.emplace_back(std::move(copyOfLoc1));
+		locSet.emplace_back(std::move(copyOfLoc2));
 
 		//Polytope for InitialValuation & Guard Assignment
 		coordinates(0) = 2;
@@ -100,13 +100,16 @@ protected:
 		auto hpoly = Converter<Number>::toHPolytope(poly);
 
 		for(auto loc : initLocSet) {
-			hybrid.addInitialState(loc, ConstraintSet<Number>(hpoly.matrix(), hpoly.vector()));
+			hybrid.addInitialState(loc, Condition<Number>(hpoly.matrix(), hpoly.vector()));
 		}
+
+		ptrSet.emplace_back(std::move(copyOfTrans));
+		loc1->setTransitions(std::move(ptrSet));
 		hybrid.setLocations(std::move(locSet));
-		transSet.insert(std::move(copyOfTrans));
-		ptrSet.insert(transSet.begin()->get());
-		hybrid.setTransitions(std::move(transSet));
-		loc1->setTransitions(ptrSet);
+		//transSet.emplace_back(std::move(copyOfTrans));
+
+		//hybrid.setTransitions(std::move(transSet));
+
     }
 
     virtual void TearDown()
@@ -136,19 +139,19 @@ protected:
 
     Reset<Number> reset;
 
-    std::set<std::unique_ptr<Location<Number>>, locPtrComp<Number>> locSet;
+    std::vector<std::unique_ptr<Location<Number>>> locSet;
 
-    std::set<Location<Number>*> initLocSet;
+    std::vector<Location<Number>*> initLocSet;
 
-    std::set<std::unique_ptr<Transition<Number>>> transSet;
-    std::set<Transition<Number>*> ptrSet;
+    std::vector<std::unique_ptr<Transition<Number>>> transSet;
+    std::vector<std::unique_ptr<Transition<Number>>> ptrSet;
 
 	vector_t<Number> coordinates = vector_t<Number>(2,1);
     valuation_t<Number> poly;
 
   public:
 
-  	bool find(const Location<Number>* loc, const std::set<Location<Number>*>& locSet) const {
+  	bool find(const Location<Number>* loc, const std::vector<Location<Number>*>& locSet) const {
   		if(loc == nullptr || locSet.empty()){
   			//std::cout << "loc was nullptr or locSet was empty\n";
   			return false;
@@ -166,7 +169,7 @@ protected:
 		return false;
   	}
 
-  	bool find(const Transition<Number>* trans, const std::set<Transition<Number>*>& transSet) const {
+  	bool find(const Transition<Number>* trans, const std::vector<Transition<Number>*>& transSet) const {
   		if(trans == nullptr || transSet.empty())
   			return false;
 		for(auto& ptrToTrans : transSet){
@@ -211,17 +214,17 @@ TYPED_TEST(HybridAutomataTest, LocationTest)
 	EXPECT_NE(this->loc1->getInvariant().getMatrix(), invariantMat2);
 
 	//location: matrix
-	EXPECT_EQ(boost::get<hypro::linearFlow<TypeParam>>(this->loc1->getFlow()).getFlowMatrix(), this->locationMat);
+	EXPECT_EQ(this->loc1->getLinearFlow().getFlowMatrix(), this->locationMat);
 
 	matrix_t<TypeParam> locationMat2(2,2);
 	locationMat2(0,0) = 1;
 	locationMat2(0,1) = 0;
 	locationMat2(1,0) = 0;
 	locationMat2(1,1) = 1;
-	EXPECT_NE(boost::get<hypro::linearFlow<TypeParam>>(this->loc1->getFlow()).getFlowMatrix(), locationMat2);
+	EXPECT_NE(this->loc1->getLinearFlow().getFlowMatrix(), locationMat2);
 
 	//location: set of outgoing transitions
-	EXPECT_EQ(this->loc1->getTransitions(), this->ptrSet);
+	//EXPECT_EQ(this->loc1->getTransitions(), this->ptrSet);
 
 	EXPECT_TRUE(*this->loc1 < *this->loc2 || *this->loc2 < *this->loc1);
 	//EXPECT_FALSE(*this->loc2 < *this->loc1);
@@ -248,8 +251,8 @@ TYPED_TEST(HybridAutomataTest, LocationParallelcompositionTest)
 				3,4,0,
 				0,0,0;
 
-	l1->setFlow(l1Flow);
-	l2->setFlow(l2Flow);
+	l1->setLinearFlow(l1Flow);
+	l2->setLinearFlow(l2Flow);
 
 	std::unique_ptr<Location<TypeParam>> res1 = parallelCompose(l1.get(),l2.get(),l1Vars,l2Vars,haVars);
 	matrix_t<TypeParam> expectedResult1 = matrix_t<TypeParam>::Zero(haVars.size()+1, haVars.size()+1);
@@ -257,7 +260,7 @@ TYPED_TEST(HybridAutomataTest, LocationParallelcompositionTest)
 						0,1,2,0,
 						3,3,4,0,
 						0,0,0,0;
-	EXPECT_EQ(res1->getFlow(),expectedResult1);
+	EXPECT_EQ(res1->getLinearFlow(),expectedResult1);
 
 
 	l1Vars = {"a","b"};
@@ -271,7 +274,7 @@ TYPED_TEST(HybridAutomataTest, LocationParallelcompositionTest)
 						0,0,1,2,0,
 						0,0,3,4,0,
 						0,0,0,0,0;
-	EXPECT_EQ(res2->getFlow(),expectedResult2);
+	EXPECT_EQ(res2->getLinearFlow(),expectedResult2);
 }
 */
 
@@ -316,16 +319,21 @@ TYPED_TEST(HybridAutomataTest, HybridAutomatonTest)
 	// construct a new hybrid automaton.
 	HybridAutomaton<TypeParam> h1;
 
-	Location<TypeParam>* ptrToLoc1 = this->loc1.get();
-	Location<TypeParam>* ptrToLoc2 = this->loc2.get();
-
-	std::unique_ptr<Location<TypeParam>> anotherCopyOfLoc1(new Location<TypeParam>(*ptrToLoc1));
-	std::unique_ptr<Location<TypeParam>> anotherCopyOfLoc2(new Location<TypeParam>(*ptrToLoc2));
+	std::unique_ptr<Location<TypeParam>> anotherCopyOfLoc1 = std::make_unique<Location<TypeParam>>(*this->loc1.get());
+	std::unique_ptr<Location<TypeParam>> anotherCopyOfLoc2 = std::make_unique<Location<TypeParam>>(*this->loc2.get());
 
 	//std::cout << "loc1 name: " << this->loc1->getName() << " hash: " << this->loc1->hash() << std::endl;
 	//std::cout << "loc2 name: " << this->loc2->getName() << " hash: " << this->loc2->hash() << std::endl;
 	//std::cout << "anotherCopyOfLoc1 name: " << anotherCopyOfLoc1->getName() << " hash: " << anotherCopyOfLoc1->hash() << std::endl;
 	//std::cout << "anotherCopyOfLoc2 name: " << anotherCopyOfLoc2->getName() << " hash: " << anotherCopyOfLoc2->hash() << std::endl;
+
+	//Check if trans can be found in h1's transition set after inserting
+	std::unique_ptr<Transition<TypeParam>> aTrans = std::make_unique<Transition<TypeParam>>(*(this->trans));
+	EXPECT_FALSE(aTrans == nullptr);
+
+	aTrans->setSource(anotherCopyOfLoc1.get());
+	aTrans->setTarget(anotherCopyOfLoc2.get());
+	anotherCopyOfLoc1->addTransition(std::move(aTrans));
 
 	h1.addLocation(std::move(anotherCopyOfLoc1));
 	h1.addLocation(std::move(anotherCopyOfLoc2));
@@ -333,26 +341,20 @@ TYPED_TEST(HybridAutomataTest, HybridAutomatonTest)
 	EXPECT_TRUE(this->find(this->loc1.get(), h1.getLocations()));
 	EXPECT_TRUE(this->find(this->loc2.get(), h1.getLocations()));
 
-	//EXPECT_TRUE(std::find(h1.getLocations().begin(), h1.getLocations().end(), this->loc1) != h1.getLocations().end());
-	//EXPECT_TRUE(std::find(h1.getLocations().begin(), h1.getLocations().end(), this->loc2) != h1.getLocations().end());
-
 	EXPECT_TRUE(*(h1.getLocation("Location1")) == *(this->loc1.get()));
 	EXPECT_TRUE(*(h1.getLocation(this->loc1->hash())) == *(this->loc1.get()));
 	EXPECT_TRUE(*(h1.getLocation("Location2")) == *(this->loc2.get()));
 	EXPECT_TRUE(*(h1.getLocation(this->loc2->hash())) == *(this->loc2.get()));
 
-	//Check if trans can be found in h1's transition set after inserting
-	std::unique_ptr<Transition<TypeParam>> aTrans(new Transition<TypeParam>(*(this->trans)));
-	EXPECT_FALSE(aTrans == nullptr);
-	h1.addTransition(std::move(aTrans));
+	//h1.addTransition(std::move(aTrans));
 	EXPECT_TRUE(aTrans == nullptr);
-	EXPECT_TRUE(this->find(this->trans.get(), h1.getTransitions()));
+	//EXPECT_TRUE(this->find(this->trans.get(), h1.getTransitions()));
 
 	matrix_t<TypeParam> matr = matrix_t<TypeParam>::Identity(2,2);
 	vector_t<TypeParam> vec = vector_t<TypeParam>(2);
 	vec << 1,2;
 
-	h1.addInitialState(this->loc1.get(), ConstraintSet<TypeParam>(matr, vec));
+	h1.addInitialState(this->loc1.get(), Condition<TypeParam>(matr, vec));
 
 	//Copy constructor;
 	/*
@@ -394,7 +396,7 @@ TYPED_TEST(HybridAutomataTest, LocationManagerTest)
 {
 	matrix_t<TypeParam> flow = matrix_t<TypeParam>::Identity(2,2);
 	Location<TypeParam>* loc = this->locMan.create(flow);
-	EXPECT_EQ(loc->getFlow(), flow);
+	EXPECT_EQ(loc->getLinearFlow(), flow);
 
 	unsigned id = this->locMan.id(loc);
 	EXPECT_EQ(this->locMan.location(id), loc);

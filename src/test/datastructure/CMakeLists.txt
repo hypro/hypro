@@ -10,9 +10,11 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
 		VertexTest.cpp
 		VertexContainerTest.cpp
 		StateTest.cpp
+		StateVisitorTest.cpp
 		StrategyTest.cpp
 		HybridAutomataTest.cpp
-		HybridAutomataOutputTest.cpp
+		#HybridAutomataOutputTest.cpp
+		WorkQueueTest.cpp
 		#HybridAutomataParallelCompositionTest.cpp
 	)
 

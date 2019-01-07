@@ -49,7 +49,7 @@ VPolytopeT<Number, Converter, S>::VPolytopeT( const std::vector<vector_t<Number>
 template <typename Number, typename Converter, typename S>
 VPolytopeT<Number, Converter, S>::VPolytopeT( const matrix_t<Number> &_constraints, const vector_t<Number> _constants ) {
 	// calculate all possible Halfspace intersections
-
+	TRACE("hypro.representations.vpolytope","Construct from " << _constraints << " <= " << _constants);
 	//std::cout << __func__ << ": matrix: " << _constraints << " and vector: " << _constants << std::endl;
 	assert(_constraints.rows() == _constants.rows());
 	Permutator permutator = Permutator( _constraints.rows(), _constraints.cols() );
@@ -73,7 +73,7 @@ VPolytopeT<Number, Converter, S>::VPolytopeT( const matrix_t<Number> &_constrain
 		if ( intersection.fullPivLu().rank() == intersection.cols() ) {
 			vector_t<Number> vertex = intersection.fullPivLu().solve( intersectionConstants );
 			assert(vertex.rows() == _constraints.cols());
-			assert(insidePlanes(vertex, intersection, intersectionConstants));
+			//assert(insidePlanes(vertex, intersection, intersectionConstants));
 			// avoid duplicate entries
 			if(std::find(possibleVertices.begin(), possibleVertices.end(),vertex) == possibleVertices.end()) {
 				possibleVertices.emplace( std::move(vertex) );

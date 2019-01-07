@@ -26,8 +26,10 @@ else()
 	include(gtest.cmake)
 endif()
 
-include(glpk.cmake)
-#include(glpk_download.cmake)
+include(glpk_download.cmake)
+#if(NOT GLPK_FOUND)
+#	include(glpk.cmake)
+#endif()
 
 #AntLR
 message("-- Use included version of AnTLR")

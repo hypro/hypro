@@ -10,7 +10,7 @@ namespace hypro
         assert(this->mState->getLocation() != nullptr);
 
         // set trafo and translation
-        int rows = getFlowDimension(this->mState->getLocation()->getFlow(this->mIndex));
+        int rows =this->mState->getLocation()->getLinearFlow(this->mIndex).dimension();
         this->mTrafo = matrix_t<Number>::Identity(rows-1,rows-1);
         this->mTranslation = vector_t<Number>::Ones(rows-1)*carl::convert<tNumber,Number>(this->mTimeStep);
     }

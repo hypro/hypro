@@ -1,6 +1,7 @@
 #pragma once
 #include <exception>
 
+namespace hypro {
 /**
 *	These exceptions can be used to terminate Context computation early
 *   WARNING: Only use those if you are 100% certain that computation in the other
@@ -24,7 +25,7 @@ public:
 
 
 // finish computation with processing of discrete transitions
-class FinishWithDiscreteProcessingException : public exception{	
+class FinishWithDiscreteProcessingException : public exception{
 private:
 	const char* m_msg;
 public:
@@ -37,3 +38,5 @@ public:
 		return m_msg;
 	}
 };
+
+} // hypro

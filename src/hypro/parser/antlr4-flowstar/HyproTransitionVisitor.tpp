@@ -5,7 +5,7 @@ namespace hypro {
 	//////////// Constructor and Destructor
 
 	template<typename Number>
-	HyproTransitionVisitor<Number>::HyproTransitionVisitor(std::vector<std::string>& varVec, std::set<Location<Number>*>& lSet) :
+	HyproTransitionVisitor<Number>::HyproTransitionVisitor(std::vector<std::string>& varVec, const std::set<Location<Number>*>& lSet) :
 		vars(varVec),
 		locSet(lSet)
 	{ }
@@ -27,7 +27,7 @@ namespace hypro {
 				Transition<Number>* t = visit(tr);//.antlrcpp::Any::as<Transition<Number>*>();
 				//trSet.insert(t);
 				trSet.emplace(t);
-				(t->getSource())->addTransition(t);
+				//(t->getSource())->addTransition(t);
 			}
 			return trSet;
 			//return std::move(trSet);
@@ -96,7 +96,7 @@ namespace hypro {
 		bool foundLeft = false;
 		bool foundRight = false;
 		std::pair<Location<Number>*,Location<Number>*> fromTo;
-		for(auto& loc : locSet){
+		for(const auto& loc : locSet){
 			//std::cout << "---- Name of loc: " << loc->getName() << " name of variable 0: " << ctx->VARIABLE()[0]->getText() << " name of variable 1: " << ctx->VARIABLE()[1]->getText() << std::endl;
 			if(loc->getName() == ctx->VARIABLE()[0]->getText()){
 				foundLeft = true;
@@ -150,19 +150,24 @@ namespace hypro {
 			exit(0);
 		}
 
+		boost::variant<vector_t<Number>, carl::Interval<Number>> alloc;
+
+		//assert(ctx-polynom() == NULL || ctx->interval() == NULL);
 		//1.Call HyproFormulaVisitor::visitPolynom()
-		vector_t<Number> tmpVector = vector_t<Number>::Zero(vars.size());
 		if(ctx->polynom() != NULL){
 			HyproFormulaVisitor<Number> visitor(vars);
-			tmpVector = visitor.visit(ctx->polynom());
+			vector_t<Number> tmp = visitor.visit(ctx->polynom());
+			alloc = tmp;
 		}
 		//NOTE: Intervals are parsed but not handled yet
 		if(ctx->interval() != NULL){
-			std::cout << "We do not support resets to intervals in this current build." << std::endl;
+			HyproFormulaVisitor<Number> visitor(vars);
+			carl::Interval<Number> tmp = visitor.visit(ctx->interval());
+			alloc = tmp;
 		}
 
 		//3.Return Vector of coefficents and place in matrix
-		return std::make_pair(tmpVector,placeInto);
+		return std::make_pair(alloc,placeInto);
 	}
 
 	template<typename Number>
@@ -174,31 +179,44 @@ namespace hypro {
 		}
 
 		//1.Iteratively call visit(allocation) to get a values for the row of resetMatrix and a value for resetVector
+		using allocVariant = boost::variant<vector_t<Number>, carl::Interval<Number>>;
+
 		matrix_t<Number> resetMatrix = matrix_t<Number>::Identity(vars.size(), vars.size());
 		vector_t<Number> resetVector = vector_t<Number>::Zero(vars.size());
+		std::vector<carl::Interval<Number>> intervalResets = std::vector<carl::Interval<Number>>(vars.size(), carl::Interval<Number>::emptyInterval());
+		std::size_t affineAssignmentCnt = 0;
+		std::size_t intervalAssignmentCnt = 0;
 		for(unsigned i=0; i < ctx->allocation().size(); i++){
-			std::pair<vector_t<Number>,unsigned> valuesNPos = visit(ctx->allocation()[i]);
-			if(static_cast<unsigned>(valuesNPos.first.rows()) != vars.size()+1){
-				std::cerr << "ERROR: Visiting Allocation brought forth vec of size: " << valuesNPos.first.rows() << " but we need: " << vars.size() << std::endl;
-				exit(0);
+			std::pair<allocVariant,unsigned> valuesNPos = visit(ctx->allocation()[i]);
+			if(valuesNPos.first.type() == typeid(vector_t<Number>)) {
+				auto assignment = boost::get<vector_t<Number>>(valuesNPos.first);
+				if(static_cast<unsigned>(assignment.rows()) != vars.size()+1){
+					std::cerr << "ERROR: Visiting Allocation brought forth vec of size: " << assignment.rows() << " but we need: " << vars.size() << std::endl;
+					exit(0);
+				}
+				auto rowNumber = assignment.rows();
+				//1.2.Find out into which row according to vars we have to place the row
+				resetMatrix.row(valuesNPos.second) = assignment.head(vars.size());
+				resetVector(valuesNPos.second) = assignment(rowNumber-1);
+				intervalResets[valuesNPos.second] = carl::Interval<Number>::emptyInterval(); // not really neccessary
+				++affineAssignmentCnt;
+			} else {
+				assert(valuesNPos.first.type() == typeid(carl::Interval<Number>));
+				//resetMatrix.row(valuesNPos.second) = vector_t<Number>::Zero(vars.size());
+				//resetVector(valuesNPos.second) = 0;
+				intervalResets[valuesNPos.second] = boost::get<carl::Interval<Number>>(valuesNPos.first);
+				++intervalAssignmentCnt;
 			}
-			//1.2.Find out into which row according to vars we have to place the row
-			resetMatrix.row(valuesNPos.second) = valuesNPos.first.head(vars.size());
-			resetVector(valuesNPos.second) = valuesNPos.first(valuesNPos.first.rows()-1);
 		}
-		/**
-		* TODO WHY THO
-		if(resetMatrix == matrix_t<Number>::Zero(vars.size(), vars.size())){
-			resetMatrix = matrix_t<Number>::Identity(vars.size(), vars.size());
-		}
-		*/
-		//std::cout << "---- resetMatrix:\n" << resetMatrix << "\n and resetVector:\n" << resetVector << std::endl;
 
-		//2.return a Reset - 0 in the setter arguments is for the position within the vector of ConstraintSets
-		Reset<Number> r;
-		r.setMatrix(resetMatrix, 0);
-		r.setVector(resetVector, 0);
-		return r;
+		//2. decompose reset matrix according to interval assignments
+		Reset<Number> res;
+		res.setMatrix(resetMatrix, 0);
+		res.setVector(resetVector, 0);
+		res.setIntervals(intervalResets,0);
+
+		//3.return a Reset
+		return res;
 	}
 
 	template<typename Number>
@@ -213,5 +231,3 @@ namespace hypro {
 	}
 
 }
-
-

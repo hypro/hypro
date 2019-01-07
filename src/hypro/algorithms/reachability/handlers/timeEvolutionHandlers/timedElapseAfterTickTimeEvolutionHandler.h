@@ -24,6 +24,8 @@ namespace hypro
 
 		void handle();
 		const char* handlerName() {return "timedElapseContinuousEvolutionHandler";}
+		bool getMarkedForDelete() {return false;};
+		void setMarkedForDelete(bool ) {/*no op*/};
 	};
 } // hypro
 

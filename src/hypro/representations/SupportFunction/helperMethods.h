@@ -5,7 +5,9 @@
  */
 
 #pragma once
+#include "../../types.h"
 #include <boost/tuple/tuple.hpp>
+#include <vector>
 
 //#define HELPER_METHODS_VERBOSE
 namespace hypro {

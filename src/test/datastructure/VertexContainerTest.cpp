@@ -24,8 +24,8 @@ protected:
 	virtual void SetUp()
 	{
 		pool.clear();
-		x = pool.newCarlVariable();
-		y = pool.newCarlVariable();
+		x = pool.carlVarByIndex(0);
+		y = pool.carlVarByIndex(1);
 
 		p1 = Point<Number>({Number(2),Number(5)});
         p2 = Point<Number>({Number(7),Number(8)});

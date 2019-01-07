@@ -13,7 +13,7 @@ namespace hypro {
 	template<typename Number>
 	antlrcpp::Any CIFLocVisitor<Number>::visitLocations(HybridSystemParser::LocationsContext *ctx){
 
-		std::set<Location<Number>*> locSet;
+		std::vector<Location<Number>*> locSet;
 
 		size_t n = ctx->children.size();
 		for (size_t i = 0; i < n; i++) {
@@ -26,20 +26,20 @@ namespace hypro {
 			}*/
 
 			Location<Number>* loc = visit(ctx->children[i]);
-			locSet.insert(loc);
+			locSet.push_back(loc);
 		}
 
 		for( std::pair<Transition<Number>*,string> ts : transWithTargets){
 			Transition<Number>* tmp = ts.first;
 			tmp->setTarget(manager.location(ts.second));
 			tmp->getSource()->addTransition(tmp);
-			transitionSet.insert(tmp);
+			transitionVector.push_back(tmp);
 		}
 
 
-		std::pair< std::set<Location<Number>*>, std::set<Transition<Number>*> > result;
+		std::pair< std::vector<Location<Number>*>, std::vector<Transition<Number>*> > result;
 		result.first = locSet;
-		result.second = transitionSet;
+		result.second = transitionVector;
 		return result;
 
 	}
@@ -145,7 +145,7 @@ namespace hypro {
 		visit(ctx->coreEdge());
 
 		actualLocation->addTransition(trans);
-		transitionSet.insert(trans);
+		transitionVector.push_back(trans);
 
 		return trans;
 	}

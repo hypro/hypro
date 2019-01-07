@@ -297,7 +297,12 @@ BoxT<Number,Converter,Setting> BoxT<Number,Converter,Setting>::makeSymmetric() c
 	}
 	std::vector<carl::Interval<Number>> newIntervals;
 	for(const auto& i : mLimits) {
-		newIntervals.emplace_back(-i.upper(),i.upper());
+		// find the maximal bound (absolute value) to make box symmetric to the origin.
+		Number lbabs = carl::abs(i.lower());
+		Number ubabs = carl::abs(i.upper());
+		Number bound =  lbabs < ubabs ? ubabs : lbabs;
+		// create symmetric interval
+		newIntervals.emplace_back(-bound,bound);
 	}
 	return BoxT<Number,Converter,Setting>(newIntervals);
 }

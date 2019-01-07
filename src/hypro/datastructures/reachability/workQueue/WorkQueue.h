@@ -29,9 +29,7 @@ class WorkQueueT
   public:
 
     WorkQueueT() = default;
-    WorkQueueT(WorkQueueT<Workable,Setting>&& in)
-        :mQueue(std::move(in.mQueue))
-    {}
+    WorkQueueT(WorkQueueT<Workable,Setting>&& in) = delete;
     WorkQueueT(const WorkQueueT<Workable,Setting>& in) = delete;
 
     /**

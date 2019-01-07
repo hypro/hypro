@@ -7,7 +7,7 @@ template<typename Number>
 class linearFlow {
 public:
 protected:
-    matrix_t<Number> mFlowMatrix;
+    matrix_t<Number> mFlowMatrix = matrix_t<Number>(0,0);
     mutable TRIBOOL mIsIdentity = TRIBOOL::NSET;
     mutable TRIBOOL mNoFlow = TRIBOOL::NSET;
 public:
@@ -18,12 +18,26 @@ public:
 
     static DynamicType type() { return DynamicType::linear; }
     std::size_t dimension() const { return mFlowMatrix.cols(); }
+    std::size_t size() const { return mFlowMatrix.rows(); }
 
     void setFlowMatrix(const matrix_t<Number>& newA) {
         mFlowMatrix = newA;
         mIsIdentity = TRIBOOL::NSET;
         mNoFlow = TRIBOOL::NSET;
     }
+
+    void addRow(const vector_t<Number>& row) {
+        //std::cout << "try to add row " << row << std::endl;
+        assert(mFlowMatrix.rows() == 0 || row.rows() == mFlowMatrix.cols());
+        if(mFlowMatrix.rows() == 0) {
+            mFlowMatrix = matrix_t<Number>(1,row.rows());
+            mFlowMatrix.row(0) = row;
+        } else {
+            mFlowMatrix.conservativeResize(mFlowMatrix.rows()+1, mFlowMatrix.cols());
+            mFlowMatrix.row(mFlowMatrix.rows()-1) = row;
+        }
+    }
+
     const matrix_t<Number>& getFlowMatrix() const { return mFlowMatrix;}
 
     bool isIdentity() const {
@@ -59,11 +73,26 @@ public:
     }
 
     bool isTimed() const {
+        TRACE("hypro.decisionEntity","Flowmatrix: " << mFlowMatrix);
+        Eigen::Index rows = mFlowMatrix.rows();
+        if(mFlowMatrix.block(0,0,rows-1,rows-1) == matrix_t<Number>::Zero(rows-1,rows-1)){
+            if(mFlowMatrix.block(0,rows-1,rows-1,1) == vector_t<Number>::Ones(rows-1)){
+                return true;
+            }
+        }
         return false;
     }
 
     bool isDiscrete() const {
         return hasNoFlow();
+    }
+
+    friend bool operator==(const linearFlow<Number>& lhs, const linearFlow<Number>& rhs) {
+        return lhs.getFlowMatrix() == rhs.getFlowMatrix();
+    }
+
+    friend bool operator!=(const linearFlow<Number>& lhs, const linearFlow<Number>& rhs) {
+        return !(lhs == rhs);
     }
 
     friend ostream& operator<<(ostream& out, const linearFlow<Number>& in) {

@@ -6,27 +6,37 @@ namespace hypro
 ////// Deprecated Versions //////
 
 template<typename Number>
-Location<Number>::Location(unsigned _id) : mFlows(), mExternalInput(), mTransitions(), mInvariant(), mId(_id), mHash(0)
+Location<Number>::Location(unsigned _id) : mLinearFlows(), mRectangularFlows(), mExternalInput(), mTransitions(), mInvariant(), mId(_id), mHash(0)
 {}
 
 template<typename Number>
 Location<Number>::Location(unsigned _id, const Location<Number>& _loc)
-	: mFlows(_loc.getFlows()), mExternalInput(_loc.getExternalInput()), mTransitions(_loc.getTransitions()), mInvariant(_loc.getInvariant()), mId(_id), mHash(0)
-{}
+	: mLinearFlows(_loc.getLinearFlows()), mRectangularFlows(_loc.getRectangularFlows()), mExternalInput(_loc.getExternalInput()), mTransitions(), mInvariant(_loc.getInvariant()), mId(_id), mHash(0)
+{
+	for(auto& t : _loc.rGetTransitions()) {
+		mTransitions.emplace_back(std::make_unique<Transition<Number>>(*t));
+		mTransitions.back()->setSource(this);
+	}
+}
 
 template<typename Number>
-Location<Number>::Location(unsigned _id, const matrix_t<Number>& _mat) : mFlows(), mId(_id), mExternalInput()
+Location<Number>::Location(unsigned _id, const matrix_t<Number>& _mat) : mLinearFlows(), mRectangularFlows(), mId(_id), mExternalInput(), mTransitions()
 {
-	mFlows.push_back(linearFlow<Number>(_mat));
+	mLinearFlows.emplace_back(linearFlow<Number>(_mat));
+	mRectangularFlows.emplace_back(rectangularFlow<Number>());
 	mHasExternalInput = false;
 	mHash = 0;
 }
 
 template<typename Number>
-Location<Number>::Location(unsigned _id, const matrix_t<Number>& _mat, const typename Location<Number>::transitionSet& _trans, const Condition<Number>& _inv)
-    : mFlows(), mExternalInput(), mTransitions(_trans), mInvariant(_inv), mId(_id), mExternalInput()
+Location<Number>::Location(unsigned _id, const matrix_t<Number>& _mat, typename Location<Number>::transitionVector&& _trans, const Condition<Number>& _inv)
+    : mLinearFlows(), mRectangularFlows(), mExternalInput(), mTransitions(std::move(_trans)), mInvariant(_inv), mId(_id)
 {
-	mFlows.push_back(linearFlow<Number>(_mat));
+	for(auto& t : mTransitions) {
+		t->setSource(this);
+	}
+	mLinearFlows.emplace_back(linearFlow<Number>(_mat));
+	mRectangularFlows.emplace_back(rectangularFlow<Number>());
 	mHasExternalInput = false;
 	mHash = 0;
 }
@@ -34,57 +44,118 @@ Location<Number>::Location(unsigned _id, const matrix_t<Number>& _mat, const typ
 /////// New Versions ///////
 
 template<typename Number>
-Location<Number>::Location() : mFlows(), mExternalInput(), mTransitions(), mInvariant(), mId(), mHash(0)
+Location<Number>::Location() : mLinearFlows(), mRectangularFlows(), mExternalInput(), mTransitions(), mInvariant(), mId(), mHash(0)
 {}
 
 template<typename Number>
 Location<Number>::Location(const Location<Number>& _loc)
-	: mFlows(_loc.getFlows()), mExternalInput(_loc.getExternalInput()), mTransitions(_loc.getTransitions()), mInvariant(_loc.getInvariant()), mName(_loc.getName()), mId(), mHash(0)
-{}
+	: mExternalInput(_loc.getExternalInput()), mTransitions(), mInvariant(_loc.getInvariant()), mName(_loc.getName()), mId(), mHash(0)
+{
+	// update copied transitions
+	for(auto t : _loc.getTransitions()) {
+		mTransitions.emplace_back(std::make_unique<Transition<Number>>(Transition<Number>(*t)));
+		mTransitions.back()->setSource(this);
+	}
+
+	for(const auto& f : _loc.getLinearFlows()){
+		mLinearFlows.emplace_back(f);
+	}
+	for(const auto& f : _loc.getRectangularFlows()){
+		mRectangularFlows.emplace_back(f);
+	}
+	TRACE("hypro.datastructures","Old location hash: " << _loc.hash());
+	TRACE("hypro.datastructures","New location hash: " << this->hash());
+	assert(this->hash() == _loc.hash());
+}
 
 template<typename Number>
-Location<Number>::Location(const matrix_t<Number>& _mat) : mFlows(), mId(), mExternalInput()
+Location<Number>::Location(const matrix_t<Number>& _mat) : mLinearFlows(), mRectangularFlows(), mId(), mExternalInput(), mTransitions()
 {
-	mFlows.push_back(linearFlow<Number>(_mat));
+	mLinearFlows.push_back(linearFlow<Number>(_mat));
+	mRectangularFlows.emplace_back(rectangularFlow<Number>());
 	mHasExternalInput = false;
 	mHash = 0;
 }
 
 template<typename Number>
-Location<Number>::Location(const matrix_t<Number>& _mat, const typename Location<Number>::transitionSet& _trans, const Condition<Number>& _inv)
-    : mFlows(), mExternalInput(), mTransitions(_trans), mInvariant(_inv), mId()
+Location<Number>::Location(const matrix_t<Number>& _mat, typename Location<Number>::transitionVector&& _trans, const Condition<Number>& _inv)
+    : mLinearFlows(), mRectangularFlows(), mExternalInput(), mTransitions(std::move(_trans)), mInvariant(_inv), mId()
 {
-	mFlows.push_back(linearFlow<Number>(_mat));
+	for(auto& t : mTransitions) {
+		t->setSource(this);
+	}
+	mLinearFlows.push_back(linearFlow<Number>(_mat));
+	mRectangularFlows.emplace_back(rectangularFlow<Number>());
 	mHasExternalInput = false;
 	mHash = 0;
+}
+
+template<typename Number>
+std::vector<Transition<Number>*> Location<Number>::getTransitions() const {
+	std::vector<Transition<Number>*> res;
+	std::for_each(mTransitions.begin(),mTransitions.end(), [&res](const auto& in){ res.emplace_back(in.get()); });
+	return res;
 }
 
 template<typename Number>
 std::size_t Location<Number>::dimension() const {
 	std::size_t res = 0;
-	for(const auto& f : mFlows) {
-		res += boost::apply_visitor(flowDimensionVisitor(), f);
+	for(const auto& f : mLinearFlows) {
+		res += f.dimension();
 	}
 	return res;
 }
 
 template<typename Number>
 std::size_t Location<Number>::dimension(std::size_t i) const {
-	return boost::apply_visitor(flowDimensionVisitor(), mFlows.at(i));
+	assert(i < mLinearFlows.size());
+	return mLinearFlows[i].dimension();
 }
 
 template<typename Number>
-void Location<Number>::setFlow(const flowVariant& f, std::size_t I) {
-	matrix_t<Number> dummy = matrix_t<Number>::Identity(getFlowDimension(f), getFlowDimension(f));
-	while(mFlows.size() <= I) {
-		mFlows.push_back(linearFlow(dummy));
+void Location<Number>::setLinearFlow(const linearFlow<Number>& f, std::size_t I) {
+	while(mLinearFlows.size() <= I) {
+		mLinearFlows.push_back(linearFlow<Number>());
+		mRectangularFlows.push_back(rectangularFlow<Number>());
 	}
-	mFlows[I] = f;
+	mLinearFlows[I] = f;
 	mHash = 0;
 }
 
 template<typename Number>
+void Location<Number>::setRectangularFlow(const rectangularFlow<Number>& f, std::size_t I) {
+	while(mLinearFlows.size() <= I) {
+		mLinearFlows.push_back(linearFlow<Number>());
+		mRectangularFlows.push_back(rectangularFlow<Number>());
+	}
+	mRectangularFlows[I] = f;
+	mHash = 0;
+}
+
+template<typename Number>
+void Location<Number>::setTransitions(transitionVector&& trans) {
+	#ifndef NDEBUG
+	for(const auto& t : trans) {
+		// lightweight test - hash is not collosion-free
+		assert(t->getSource() == this);
+	}
+	#endif
+	mTransitions = std::move(trans);
+	mHash = 0;
+}
+
+template<typename Number>
+void Location<Number>::addTransition(std::unique_ptr<Transition<Number>>&& trans) {
+	//std::cout << "add transition from " << trans->getSource() << " to " << trans->getTarget() << ", this is " << this << std::endl;
+	assert(trans->getSource() == this);
+	mTransitions.emplace_back(std::move(trans));
+	mHash = 0;
+}
+
+/*
+template<typename Number>
 void Location<Number>::updateTransition(Transition<Number>* original, Transition<Number>* newT) {
+	assert(newT->getSource() == this);
 	auto tPos = std::find(mTransitions.begin(), mTransitions.end(), original);
 	if( tPos == mTransitions.end()) {
 		TRACE("hypro.datastructures.hybridAutomaton","Attempted to update non-existing transition @" << original);
@@ -92,9 +163,10 @@ void Location<Number>::updateTransition(Transition<Number>* original, Transition
 	}
 	assert(newT != nullptr);
 	mTransitions.erase(tPos);
-	mTransitions.insert(newT);
+	mTransitions.emplace_back(newT);
 	mHash = 0;
 }
+*/
 
 template<typename Number>
 void Location<Number>::setExtInput(const std::vector<carl::Interval<Number>>& b) {
@@ -123,7 +195,7 @@ std::string Location<Number>::getDotRepresentation(const std::vector<std::string
 	o << "<TABLE>";
 	o << "<TR><TD>" << this->getName() << " (" << this->hash() << ") </TD></TR>";
 	// flow
-	matrix_t<Number>& flow = *mFlows.begin();
+	matrix_t<Number>& flow = mLinearFlows.begin()->getFlowMatrix();
 	o << "<TR><TD ROWSPAN=\"" << flow.rows() << "\">";
 	for(unsigned i = 0; i < flow.rows()-1; ++i) {
 		o << vars[i] << "' = ";
@@ -169,8 +241,8 @@ bool Location<Number>::isComposedOf(const Location<Number>& rhs, const std::vect
 	// The check searches for matching variables - the *I indices refer to the rhs-related indices
 	// while the *Pos indices refer to this.
 
-	//std::cout << "compare flows " << mFlows[0] << " and " << rhs.getFlow() << std::endl;
-	for(Eigen::Index rowI = 0; rowI != rhs.getFlow().rows()-1; ++rowI) {
+	//std::cout << "compare flows " << mLinearFlows[0] << " and " << rhs.getFlow() << std::endl;
+	for(Eigen::Index rowI = 0; rowI != rhs.getLinearFlow().getFlowMatrix().rows()-1; ++rowI) {
 		// find according row in this.
 		Eigen::Index rowPos = 0;
 		//std::cout << "Search for: " << rhsVars[rowI] << std::endl;
@@ -188,12 +260,12 @@ bool Location<Number>::isComposedOf(const Location<Number>& rhs, const std::vect
 				Eigen::Index colPos = 0;
 				while(thisVars[colPos] != rhsVars[colI]) ++colPos;
 				//std::cout << "rowPos " << rowPos << ", rowI " << rowI << ", colPos " << colPos << ", colI " << colI << std::endl;
-				if(mFlows[0](rowPos,colPos) != rhs.getFlow()(rowI,colI)) {
+				if(mLinearFlows[0].getFlowMatrix()(rowPos,colPos) != rhs.getLinearFlow().getFlowMatrix()(rowI,colI)) {
 					//std::cout << "flows do not match." << std::endl;
 					return false;
 				}
 			} else {
-				if(mFlows[0](rowPos, mFlows[0].cols()-1) != rhs.getFlow()(rowI,colI)) {
+				if(mLinearFlows[0].getFlowMatrix()(rowPos, mLinearFlows[0].getFlowMatrix().cols()-1) != rhs.getLinearFlow(0).getFlowMatrix()(rowI,colI)) {
 					//std::cout << "constant parts of flow does not match." << std::endl;
 					return false;
 				}
@@ -408,15 +480,20 @@ std::unique_ptr<Location<Number>> parallelCompose(const Location<Number>* lhs
 */
 
 template<typename Number>
-void Location<Number>::decompose(std::vector<std::vector<size_t>> decomposition){
-	if(mFlows.size() > 1 || mInvariant.size() > 1){
+void Location<Number>::decompose(const Decomposition& decomposition){
+	if(mLinearFlows.size() > 1 || mInvariant.size() > 1){
 		//already decomposed
 		return;
 	}
-	DEBUG("hypro.datastructures","Flow Matrix before: \n " << mFlows.at(0));
+	DEBUG("hypro.datastructures","Flow Matrix before: \n " << mLinearFlows.at(0).getFlowMatrix());
+	auto& vpool = VariablePool::getInstance();
+
 	// decompose flow
-	matrix_t<Number> oldFlow(mFlows.at(0));
-	std::vector<matrix_t<Number>> newFlows;
+	matrix_t<Number> oldFlow = mLinearFlows[0].getFlowMatrix();
+	auto oldIntervals = mRectangularFlows[0].getFlowIntervals();
+
+	std::vector<linearFlow<Number>> newFlows;
+	std::vector<rectangularFlow<Number>> newRectangularFlows;
 	// for each set {i,j,..., k} select the i-th,j-th,...,k-th vector into a new square matrix
 	for(auto set : decomposition){
 		#ifdef HYPRO_LOGGING
@@ -444,12 +521,27 @@ void Location<Number>::decompose(std::vector<std::vector<size_t>> decomposition)
 		}
 		finMat.col(finMat.cols()-1) = rowMat.col(rowMat.cols()-1);
 		DEBUG("hypro.datastructures", "Final decomposed Flow: \n" << finMat );
-		newFlows.push_back(finMat);
-	}
+		newFlows.emplace_back(linearFlow<Number>(finMat));
 
-	mFlows = newFlows;
+		rectangularFlow<Number> newRectFlow;
+		for(auto entry : set){
+			auto it = oldIntervals.find(vpool.carlVarByIndex(entry));
+			if( it != oldIntervals.end() ) {
+				newRectFlow.setFlowIntervalForDimension(it->second,it->first);
+			}
+		}
+		newRectangularFlows.emplace_back(newRectFlow);
+	}
+	mLinearFlows = std::move(newFlows);
+	mRectangularFlows = std::move(newRectangularFlows);
+
 	// decompose invariant
 	mInvariant.decompose(decomposition);
+	// decompose transitions
+	for(auto& transition : mTransitions){
+    	transition->decompose(decomposition);
+    }
+	mHash = 0;
 }
 
 }  // namespace hypro

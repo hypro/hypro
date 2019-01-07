@@ -39,11 +39,25 @@ public:
     }
 
     bool isTimed() const {
+        TRACE("hypro.decisionEntity","Flowmatrix: " << linearFlow<Number>::getFlowMatrix());
+        if(linearFlow<Number>::isTimed()){
+            // TODO: we need to remove distinguishing of linear and affine flow.
+            return true;
+        }
         return linearFlow<Number>::hasNoFlow() && mTranslation == vector_t<Number>::Ones(mTranslation.rows());
     }
 
     bool isDiscrete() const {
         return linearFlow<Number>::hasNoFlow() && !hasTranslation();
+    }
+
+    friend bool operator==(const affineFlow<Number>& lhs, const affineFlow<Number>& rhs) {
+        return (lhs.getFlowMatrix() == rhs.getFlowMatrix()
+                && lhs.getTranslation() == rhs.getTranslation());
+    }
+
+    friend bool operator!=(const affineFlow<Number>& lhs, const affineFlow<Number>& rhs) {
+        return !(lhs == rhs);
     }
 
     friend ostream& operator<<(ostream& out, const affineFlow<Number>& in) {

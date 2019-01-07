@@ -53,12 +53,12 @@ namespace hypro {
 	/**
 	 * @brief classifies the type of subspace in case subspace decomposition is used.
 	 */
-	enum class SUBSPACETYPE{LTI=0,TIMED=1,DISCRETE=2};
+	enum class SUBSPACETYPE{LTI=0,TIMED=1,DISCRETE=2,RECTANGULAR=3};
 
 	/**
 	 * @brief classifies the type of location, which reflects the dynamics in case we dynamically detect subspaces.
 	 */
-	enum class LOCATIONTYPE{LTILOC=0,TIMEDLOC=1};
+	enum class LOCATIONTYPE{LTILOC=0,TIMEDLOC=1,RECTANGULARLOC=2};
 
 	/**
 	 * @brief classifies the type of dynamics of a flow for a location.

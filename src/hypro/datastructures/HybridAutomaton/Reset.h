@@ -1,38 +1,78 @@
 #pragma once
+#include "ResetTypes.h"
+#include "decomposition/Decomposition.h"
 #include "../../types.h"
 #include "../../representations/ConstraintSet/ConstraintSet.h"
+#include <boost/variant.hpp>
+#include <functional>
 
 namespace hypro {
 
+namespace detail {
+
+	template<typename ReturnType, typename Function>
+	struct ResetVisitor : public boost::static_visitor<ReturnType> {
+		Function function;
+
+		ResetVisitor() = delete;
+		ResetVisitor(const Function& c) : function(c) {}
+
+		template<typename In>
+		ReturnType operator()(In&& reset) {
+			return function(std::forward<In>(reset));
+		}
+
+	};
+
+	template<class Result, class Func>
+	ResetVisitor<Result,  std::decay_t<Func> > make_reset_visitor(Func && func)
+	{
+		return {std::forward<Func>(func)};
+	}
+
+}
+
 template<typename Number>
 class Reset {
+
 protected:
-	std::vector<ConstraintSetT<Number>> mResets;
+	std::vector<AffineTransformation<Number>> mAffineResets;
+	std::vector<IntervalAssignment<Number>> mIntervalResets;
     mutable std::size_t mHash = 0;
+	bool mDecomposed = false;
 
 public:
 	Reset() = default;
-	Reset(const Reset& orig) = default;
+	Reset(const Reset& orig)
+		: mAffineResets(orig.getAffineResets())
+		, mIntervalResets(orig.getIntervalResets())
+	{}
+
 	Reset(Reset&& orig) = default;
 	Reset& operator=(const Reset<Number>& orig) = default;
 	Reset& operator=(Reset<Number>&& orig) = default;
 	Reset(const matrix_t<Number>& mat, const vector_t<Number>& vec);
+	Reset(const std::vector<carl::Interval<Number>>& intervals);
 	~Reset() {}
 
-	bool empty() const { return mResets.empty(); }
-	std::size_t size() const { return mResets.size(); }
+	bool empty() const { return mAffineResets.empty(); }
+	std::size_t size() const { return mAffineResets.size(); }
 
-	const vector_t<Number>& getVector(std::size_t I = 0) const { return mResets.at(I).vector(); }
-	const matrix_t<Number>& getMatrix(std::size_t I = 0) const { return mResets.at(I).matrix(); }
-	matrix_t<Number>& rGetMatrix(std::size_t I = 0) { return mResets[I].rMatrix(); }
-	vector_t<Number>& rGetVector(std::size_t I = 0) { return mResets[I].rVector(); }
+	const vector_t<Number>& getVector(std::size_t I = 0) const;
+	const matrix_t<Number>& getMatrix(std::size_t I = 0) const;
+	matrix_t<Number>& rGetMatrix(std::size_t I = 0);
+	vector_t<Number>& rGetVector(std::size_t I = 0);
+	const std::vector<carl::Interval<Number>>& getIntervals(std::size_t I = 0) const;
+	std::vector<carl::Interval<Number>>& rGetIntervals(std::size_t I = 0);
 
-	ConstraintSetT<Number> getReset(std::size_t I = 0) const { return mResets.at(I); }
-	ConstraintSetT<Number>& rGetReset(std::size_t I = 0) const { return mResets[I]; }
-	const std::vector<ConstraintSetT<Number>>& getResetTransformations() const { return mResets; }
+	const AffineTransformation<Number>& getAffineReset(std::size_t I = 0) const { return mAffineResets[I]; }
+	const std::vector<AffineTransformation<Number>>& getAffineResets() const { return mAffineResets; }
+	const IntervalAssignment<Number>& getIntervalReset(std::size_t I = 0) const { return mIntervalResets[I]; }
+	const std::vector<IntervalAssignment<Number>>& getIntervalResets() const { return mIntervalResets; }
 
 	void setVector(const vector_t<Number>& in, std::size_t I = 0);
 	void setMatrix(const matrix_t<Number>& in, std::size_t I = 0);
+	void setIntervals(const std::vector<carl::Interval<Number>>& intervals, std::size_t I = 0);
 
 	bool isIdentity() const;
 
@@ -40,7 +80,7 @@ public:
      /**
     * decomposes reset
     */
-    void decompose(std::vector<std::vector<size_t>> decomposition);
+    void decompose(const Decomposition& decomposition);
 
 #ifdef HYPRO_LOGGING
     friend std::ostream& operator<<(std::ostream& ostr, const Reset<Number>& a)
@@ -50,9 +90,12 @@ public:
     {
 #ifdef HYPRO_LOGGING
     	ostr << "Resets: " << std::endl;
-    	for(const auto& r : a.getResetTransformations()) {
-    		ostr << r;
-    	}
+    	for(std::size_t i = 0; i < a.size(); ++i) {
+			ostr << a.getMatrix(i) << ", " << a.getVector(i) << ", intervals: ";
+			for(const auto& i : a.getIntervals(i)) {
+				ostr << i << ", ";
+			}
+		}
 #endif
         return ostr;
     }
@@ -63,9 +106,12 @@ public:
     	}
 
     	for(std::size_t i = 0; i < lhs.size(); ++i) {
-    		if(lhs.getReset(i) != rhs.getReset(i)) {
+    		if(lhs.getAffineReset(i) != rhs.getAffineReset(i)) {
     			return false;
     		}
+			if(lhs.getIntervals(i) != rhs.getIntervals(i)) {
+				return false;
+			}
     	}
     	return true;
     }
@@ -85,13 +131,14 @@ Reset<Number> combine(
 
 namespace std {
 
+
     template<typename Number>
     struct hash<hypro::Reset<Number>>{
         std::size_t operator()(const hypro::Reset<Number>& reset) const {
             std::size_t seed = 0;
-            for(auto conSet : reset.getResetTransformations()){
-                carl::hash_add(seed, std::hash<hypro::matrix_t<Number>>()(conSet.matrix()));
-                carl::hash_add(seed, std::hash<hypro::vector_t<Number>>()(conSet.vector()));
+			for(std::size_t i = 0; i < reset.size(); ++i){
+				carl::hash_add(seed, reset.getAffineReset(i));
+				carl::hash_add(seed, reset.getIntervalReset(i));
             }
             return seed;
         }
