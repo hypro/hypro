@@ -1,5 +1,13 @@
 var NAVTREEINDEX31 =
 {
+"structhypro_1_1sumContent.html#ae84b4889ea909f653e9adb7ef695cf84":[6,0,1,177,4],
+"structhypro_1_1trafoContent.html":[6,0,1,196],
+"structhypro_1_1trafoContent.html#a07b78ff86f1c003d4426dc1a8e3505ab":[6,0,1,196,1],
+"structhypro_1_1trafoContent.html#a221c558911b5edd1d6a3f00636b6ad58":[6,0,1,196,5],
+"structhypro_1_1trafoContent.html#a52345918b06b2be7a130f1ffe0fc88e6":[6,0,1,196,0],
+"structhypro_1_1trafoContent.html#a6bd08ad999f18d446b1e9b14882416fc":[6,0,1,196,4],
+"structhypro_1_1trafoContent.html#a8bfdfe3a9e4fcce698a08f7c7602f32f":[6,0,1,196,7],
+"structhypro_1_1trafoContent.html#a9488650341da5f7093a0f075067c5b6a":[6,0,1,196,6],
 "structhypro_1_1trafoContent.html#aadfca57d1f3e44a3b33922073b574cce":[6,0,1,196,3],
 "structhypro_1_1trafoContent.html#ac1c00486451cee326a407c25d4b0162f":[6,0,1,196,2],
 "structhypro_1_1typeName.html":[6,0,1,202],

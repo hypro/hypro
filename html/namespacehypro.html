@@ -33,7 +33,7 @@
   <td id="projectlogo"><img alt="Logo" src="hypro_Logo.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HyPro
-   &#160;<span id="projectnumber">18.12</span>
+   &#160;<span id="projectnumber">19.01</span>
    </div>
    <div id="projectbrief">A Toolbox for the Reachability Analysis of Hybrid Systems using Geometric Approximations</div>
   </td>
@@ -623,6 +623,10 @@ template&lt;typename Number &gt; </td></tr>
 template&lt;typename Number &gt; </td></tr>
 <tr class="memitem:a87103f4ed267ba1c5ccdda3378aaa830"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><b>ConstraintT</b> = carl::Constraint&lt; PolyT&lt; Number &gt;&gt;</td></tr>
 <tr class="separator:a87103f4ed267ba1c5ccdda3378aaa830"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac34fbd10b143b28ff60c737f65bf9b7b"><td class="memTemplParams" colspan="2"><a class="anchor" id="ac34fbd10b143b28ff60c737f65bf9b7b"></a>
+template&lt;typename Number &gt; </td></tr>
+<tr class="memitem:ac34fbd10b143b28ff60c737f65bf9b7b"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><b>ConstraintsT</b> = std::vector&lt; ConstraintT&lt; Number &gt;&gt;</td></tr>
+<tr class="separator:ac34fbd10b143b28ff60c737f65bf9b7b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac4bb591cb813ff89756a305728a2ed0a"><td class="memTemplParams" colspan="2"><a class="anchor" id="ac4bb591cb813ff89756a305728a2ed0a"></a>
 template&lt;typename Number &gt; </td></tr>
 <tr class="memitem:ac4bb591cb813ff89756a305728a2ed0a"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><b>FormulaT</b> = carl::Formula&lt; PolyT&lt; Number &gt;&gt;</td></tr>
@@ -1116,6 +1120,10 @@ template&lt;typename N , typename D &gt; </td></tr>
 template&lt;typename N &gt; </td></tr>
 <tr class="memitem:adb9dc35d36c51f524a6f8d4d9684d3c8"><td class="memTemplItemLeft" align="right" valign="top">FormulasT&lt; N &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>constraintsToFormulas</b> (const std::vector&lt; ConstraintT&lt; N &gt;&gt; &amp;in)</td></tr>
 <tr class="separator:adb9dc35d36c51f524a6f8d4d9684d3c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4cecc1d8703fcf52ec7cb57a07be30bf"><td class="memTemplParams" colspan="2"><a class="anchor" id="a4cecc1d8703fcf52ec7cb57a07be30bf"></a>
+template&lt;typename N , typename D &gt; </td></tr>
+<tr class="memitem:a4cecc1d8703fcf52ec7cb57a07be30bf"><td class="memTemplItemLeft" align="right" valign="top">FormulasT&lt; N &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>intervalToFormulas</b> (const carl::Interval&lt; D &gt; &amp;interval, const carl::Variable &amp;var)</td></tr>
+<tr class="separator:a4cecc1d8703fcf52ec7cb57a07be30bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad9206abd8852942714a6cd4ffc64728f"><td class="memTemplParams" colspan="2"><a class="anchor" id="ad9206abd8852942714a6cd4ffc64728f"></a>
 template&lt;typename N , typename D &gt; </td></tr>
 <tr class="memitem:ad9206abd8852942714a6cd4ffc64728f"><td class="memTemplItemLeft" align="right" valign="top">FormulasT&lt; N &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>intervalToFormulas</b> (const carl::Interval&lt; D &gt; &amp;interval, std::size_t variableIndex)</td></tr>
@@ -1128,14 +1136,18 @@ template&lt;typename N , typename D &gt; </td></tr>
 template&lt;typename N , typename D &gt; </td></tr>
 <tr class="memitem:a3c4de19a152992343ab533ff3153068a"><td class="memTemplItemLeft" align="right" valign="top">D&#160;</td><td class="memTemplItemRight" valign="bottom"><b>normalizedOffset</b> (const ConstraintT&lt; N &gt; &amp;c)</td></tr>
 <tr class="separator:a3c4de19a152992343ab533ff3153068a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8367ca50229b84449dff52df13d9d052"><td class="memTemplParams" colspan="2"><a class="anchor" id="a8367ca50229b84449dff52df13d9d052"></a>
+<tr class="memitem:a924376207c20a5bd1a0e5ca2cab6190c"><td class="memTemplParams" colspan="2"><a class="anchor" id="a924376207c20a5bd1a0e5ca2cab6190c"></a>
 template&lt;typename N , typename D &gt; </td></tr>
-<tr class="memitem:a8367ca50229b84449dff52df13d9d052"><td class="memTemplItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classhypro_1_1Halfspace.html">Halfspace</a>&lt; D &gt; &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>constraintToHalfspace</b> (const ConstraintT&lt; N &gt; constraint, std::size_t dim)</td></tr>
-<tr class="separator:a8367ca50229b84449dff52df13d9d052"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a924376207c20a5bd1a0e5ca2cab6190c"><td class="memTemplItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classhypro_1_1Halfspace.html">Halfspace</a>&lt; D &gt; &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>constraintToHalfspace</b> (const ConstraintT&lt; N &gt; &amp;constraint, std::size_t dim)</td></tr>
+<tr class="separator:a924376207c20a5bd1a0e5ca2cab6190c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae7ed77f8299bd92b4a64357f97c1e9c8"><td class="memTemplParams" colspan="2"><a class="anchor" id="ae7ed77f8299bd92b4a64357f97c1e9c8"></a>
 template&lt;typename N , typename D &gt; </td></tr>
 <tr class="memitem:ae7ed77f8299bd92b4a64357f97c1e9c8"><td class="memTemplItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classhypro_1_1Halfspace.html">Halfspace</a>&lt; D &gt; &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>computeHalfspaces</b> (const FormulaT&lt; N &gt; &amp;formula, std::size_t dim)</td></tr>
 <tr class="separator:ae7ed77f8299bd92b4a64357f97c1e9c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a10f09edf869c720ff3e970230a9d10be"><td class="memTemplParams" colspan="2"><a class="anchor" id="a10f09edf869c720ff3e970230a9d10be"></a>
+template&lt;typename N , typename D &gt; </td></tr>
+<tr class="memitem:a10f09edf869c720ff3e970230a9d10be"><td class="memTemplItemLeft" align="right" valign="top">D&#160;</td><td class="memTemplItemRight" valign="bottom"><b>computeWidening</b> (const ConstraintT&lt; N &gt; &amp;constraint)</td></tr>
+<tr class="separator:a10f09edf869c720ff3e970230a9d10be"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a463bd044aca4432fc987a57f1d5ceb4e"><td class="memTemplParams" colspan="2"><a class="anchor" id="a463bd044aca4432fc987a57f1d5ceb4e"></a>
 template&lt;typename Number &gt; </td></tr>
 <tr class="memitem:a463bd044aca4432fc987a57f1d5ceb4e"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><b>operator&lt;</b> (std::shared_ptr&lt; <a class="el" href="classhypro_1_1Halfspace.html">Halfspace</a>&lt; Number &gt;&gt; _lhs, std::shared_ptr&lt; <a class="el" href="classhypro_1_1Halfspace.html">Halfspace</a>&lt; Number &gt;&gt; _rhs)</td></tr>

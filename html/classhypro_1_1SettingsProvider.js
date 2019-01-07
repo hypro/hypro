@@ -20,6 +20,7 @@ var classhypro_1_1SettingsProvider =
     [ "setHybridAutomaton", "classhypro_1_1SettingsProvider.html#a8351186104366c46eb6ab2eacd5ff6a5", null ],
     [ "setReachabilitySettings", "classhypro_1_1SettingsProvider.html#a68535b7fe45d5cd3e9aaa8a6b892e13f", null ],
     [ "setReachabilitySettings", "classhypro_1_1SettingsProvider.html#a670e1cb8b5b0f8ad1527c330e948b6c5", null ],
+    [ "setSkipPlot", "classhypro_1_1SettingsProvider.html#ac597ae0467a4b5e3b668d049644be31f", null ],
     [ "setStrategy", "classhypro_1_1SettingsProvider.html#a88c9bf1d08ac42ca41034d9016020c8d", null ],
     [ "setSubspaceDecomposition", "classhypro_1_1SettingsProvider.html#a66129a10243ad1f0ac26805fedbe3e24", null ],
     [ "setUseDecider", "classhypro_1_1SettingsProvider.html#aa8e375a122815e4689d9dd787c4d886f", null ],
