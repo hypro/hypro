@@ -401,6 +401,13 @@ void State<Number,Representation,Rargs...>::reduceRepresentation() {
 }
 
 template<typename Number, typename Representation, typename ...Rargs>
+void State<Number,Representation,Rargs...>::partiallyReduceRepresentation(std::size_t I) {
+	assert(I < mSets.size());
+	assert(checkConsistency());
+	this->setSetDirect(boost::apply_visitor(genericReductionVisitor<repVariant,Number>(), mSets.at(I)), I);
+}
+
+template<typename Number, typename Representation, typename ...Rargs>
 bool State<Number,Representation,Rargs...>::checkConsistency() const {
 	if(mSets.size() != mTypes.size()){
 		std::cout << "Inconsistent size!" << std::endl;

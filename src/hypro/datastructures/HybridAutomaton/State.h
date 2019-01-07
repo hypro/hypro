@@ -418,6 +418,8 @@ class State
 
     void reduceRepresentation();
 
+    void partiallyReduceRepresentation(std::size_t I);
+
     /**
     * decomposes state set by projection
     */
