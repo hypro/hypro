@@ -88,6 +88,9 @@ namespace hypro {
 	// interprets all vectors as row-vectors and creates a matrix
 	template<typename Number>
 	static matrix_t<Number> combineRows(const std::vector<vector_t<Number>>& vectors) {
+		if(vectors.empty()) {
+			return matrix_t<Number>(0,0);
+		}
 		matrix_t<Number> res = matrix_t<Number>(vectors.size(),vectors.begin()->rows());
 
 		Eigen::Index rowCount = 0;
