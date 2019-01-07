@@ -39,7 +39,7 @@ namespace hypro {
     template<typename N, typename D>
     FormulasT<N> intervalToFormulas(const carl::Interval<D>& interval, std::size_t variableIndex) {
         TRACE("hypro.representations.carlPolytope","Create interval constraints for variable index " << variableIndex);
-        return intervalToFormulas(interval, VariablePool::getInstance().carlVarByIndex(variableIndex));
+        return intervalToFormulas<N,D>(interval, VariablePool::getInstance().carlVarByIndex(variableIndex));
     }
 
     template<typename N, typename D>
