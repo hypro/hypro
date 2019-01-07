@@ -8,8 +8,8 @@ ExternalProject_Add(
     LOG_DOWNLOAD true
     LOG_CONFIGURE true
     LOG_BUILD true
-    TIMEOUT 60
-	URL ftp://ftp.gnu.org/gnu/glpk/glpk-${glpk_version}.tar.gz
+    TIMEOUT 10
+	URL https://ftp.gnu.org/gnu/glpk/glpk-${glpk_version}.tar.gz
 	#SOURCE_DIR "${CMAKE_BINARY_DIR}/resources/glpk-${glpk_version}"
     CONFIGURE_COMMAND ./configure --prefix=${CMAKE_BINARY_DIR}/resources/src/glpk_download --with-gmp --with-pic CPPFLAGS=-fPIC --disable-shared --disable-dl --enable-static
     #CONFIGURE_COMMAND ./configure --with-gmp --with-pic CPPFLAGS=-fPIC --disable-shared --disable-dl --enable-static
@@ -32,3 +32,5 @@ list(APPEND ${PROJECT_NAME}_INCLUDE_DIRS ${GLPK_INCLUDE_DIR})
 set(${PROJECT_NAME}_LIBRARIES_DYNAMIC ${${PROJECT_NAME}_LIBRARIES_DYNAMIC} PARENT_SCOPE)
 
 add_dependencies(resources glpk_download)
+
+set(GLPK_FOUND TRUE PARENT_SCOPE)
