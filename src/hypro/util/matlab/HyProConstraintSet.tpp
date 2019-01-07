@@ -1,0 +1,275 @@
+#include "HyProConstraintSet.h"
+
+/**
+ * @brief
+ **/
+void HyProConstraintSet::isAxisAligned(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
+    if(nlhs < 1){
+        mexErrMsgTxt("HyProConstraintSet - isAxisAligned: Expecting an output!");
+    }
+    if(nrhs < 3){
+        mexErrMsgTxt("HyProConstraintSet - isAxisAligned: One argument missing!");
+    }
+    hypro::ConstraintSet<double>* temp = convertMat2Ptr<hypro::ConstraintSet<double>>(prhs[2]);
+    const bool empty = temp->isAxisAligned();
+    plhs[0] = mxCreateLogicalScalar(empty);
+}
+
+/**
+ * @brief
+ **/
+void HyProConstraintSet::addConstraint(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
+    if(nrhs < 5)
+        mexErrMsgTxt("HyProConstraintSet - addConstraint: One or more arguments are missing!");
+
+    mxArray* m_in_vector;
+    const mwSize *dims;
+    double *in_vector, *cont;
+    int dimx, dimy;
+
+    hypro::ConstraintSet<double>* temp = convertMat2Ptr<hypro::ConstraintSet<double>>(prhs[2]);
+    m_in_vector = mxDuplicateArray(prhs[3]);
+    const double offset = (const double) mxGetScalar(prhs[4]);
+    dims = mxGetDimensions(prhs[3]);
+    dimy = (int) dims[0];
+    dimx = (int) dims[1];
+
+    in_vector = mxGetPr(m_in_vector);
+    const hypro::vector_t<double> hy_vec = ObjectHandle::mVector2Hypro(in_vector, dimy);
+
+    temp->addConstraint(hy_vec, offset);
+}
+
+/**
+ * @brief
+ **/
+void HyProConstraintSet::type(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
+    mexPrintf("ConstraintSet");
+}
+
+// /**
+//  * @brief
+//  **/
+// template<typename From, typename To, typename S>
+// void HyProConstraintSet::convert(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
+//     if(nlhs != 1)
+//         mexErrMsgTxt("HyProConstraintSet - convert: One output is expected.");
+//     if(nrhs < 6)
+//         mexErrMsgTxt("HyProConstraintSet - convert: One or more arguments are missing.");
+    
+//     char from[64];
+//     char to[64];
+//     char s[64];
+//     mxGetString(prhs[3], from, sizeof(from));
+//     mxGetString(prhs[4], to, sizeof(to));
+//     mxGetString(prhs[5], s, sizeof(s));
+
+//     hypro::ConstraintSet<double> 
+
+//     hypro::ConstraintSet<to,s> con = 
+
+// }
+
+
+/**
+* @brief The entry point to the HyPro Constraint Set class for Matalb.
+* @param nlhs Number of items in plhs 
+* @param plhs Array of mxArray pointers to the output variables
+* @param nrhs Number of items in prhs
+* @param prhs Array of mxArray pointers to the input variables
+**/
+void HyProConstraintSet::process(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
+    // Get the command string
+    char cmd[64];
+    if (nrhs < 1 || mxGetString(prhs[1], cmd, sizeof(cmd)))
+        mexErrMsgTxt("HyProConstraintSet - First input should be a command string less than 64 characters long.");
+    
+    /***************************************************************************
+     * Constructors
+     **************************************************************************/
+
+    if (!strcmp("new_matrix", cmd) && nrhs == 2){  
+        new_matrix(nlhs, plhs, nrhs ,prhs);
+        return;
+    }
+
+    if (!strcmp("new_vector", cmd) && nrhs == 2){  
+        new_vector(nlhs, plhs, nrhs, prhs);
+        return;
+    }
+
+    if (!strcmp("new_mat_vec", cmd) && nrhs == 2){  
+        new_mat_vec(nlhs, plhs, nrhs, prhs);
+        return;
+    }
+    
+    // Check if there is a second input, which should be the class instance handle
+    if (nrhs < 2){
+        mexErrMsgTxt("Second input should be a Box instance handle.");
+    }
+    
+    if(!strcmp("copy", cmd)){
+        copyObj(nlhs, plhs, nrhs, prhs);
+        return;
+    }
+
+    if (!strcmp("delete", cmd)) {
+        deleteObject(nlhs, plhs, nrhs, prhs);
+        return;
+    }
+    
+    /***************************************************************************
+     * Getters & setters
+     **************************************************************************/ 
+
+    if(!strcmp("matrix", cmd)){
+        matrix(nlhs, plhs, nrhs, prhs);
+        return;
+    }
+
+    if(!strcmp("vector", cmd)){
+        vector(nlhs, plhs, nrhs, prhs);
+        return;
+    }
+
+    if(!strcmp("isAxisAligned", cmd)){
+        isAxisAligned(nlhs, plhs, nrhs, prhs);
+        return;
+    }
+
+    if(!strcmp("addConstraint", cmd)){
+        addConstraint(nlhs, plhs, nrhs, prhs);
+        return;
+    }
+
+    if(!strcmp("isEmpty", cmd)){
+        is_empty(nlhs, plhs, nrhs, prhs);
+        return;
+    }
+
+    if(!strcmp("vertices", cmd)){
+        vertices(nlhs, plhs, nrhs, prhs);
+        return;
+    }
+
+    if(!strcmp("==", cmd)){
+        equal(nlhs, plhs, nrhs, prhs);
+        return;
+    }
+
+    if(!strcmp("!=", cmd)){
+        unequal(nlhs, plhs, nrhs, prhs);
+        return;
+    }
+
+    if(!strcmp("<<", cmd)){
+        ostream(nlhs, plhs, nrhs, prhs);
+        return;
+    }
+
+    /**************************************************************************
+     * General interface
+    **************************************************************************/
+    
+    if(!strcmp("dimension", cmd)){
+        dimension(nlhs, plhs, nrhs, prhs);
+        return;
+    }
+
+    if(!strcmp("removeRedundancy", cmd)){
+        removeRedundancy(nlhs, plhs, nrhs, prhs);
+        return;
+    }
+
+    if(!strcmp("size", cmd)){
+        size(nlhs, plhs, nrhs, prhs);
+        return;
+    }
+
+    if(!strcmp("type", cmd)){
+        type(nlhs, plhs, nrhs, prhs);
+        return;
+    }
+
+    if(!strcmp("reduceNumberRepresentation", cmd)){
+        reduceNumberRepresentation(nlhs, plhs, nrhs, prhs);
+        return;
+    }
+
+    if(!strcmp("satisfiesHalfspace", cmd)){
+        satisfiesHalfspace(nlhs, plhs, nrhs, prhs);
+        return;
+    }
+
+    if(!strcmp("satisfiesHalfspaces", cmd)){
+        satisfiesHalfspaces(nlhs, plhs, nrhs, prhs);
+        return;
+    }
+
+    if(!strcmp("project", cmd)){
+        project(nlhs, plhs, nrhs, prhs);
+        return;
+    }
+
+    if(!strcmp("linearTransformation", cmd)){
+        linearTransformation(nlhs, plhs, nrhs, prhs);
+        return;
+    }
+
+    if(!strcmp("affineTransformation", cmd)){
+        affineTransformation(nlhs, plhs, nrhs, prhs);
+        return;
+    }
+
+    if(!strcmp("minkowskiSum", cmd)){
+        minkowskiSum(nlhs, plhs, nrhs, prhs);
+        return;
+    }
+
+    if(!strcmp("intersect", cmd)){
+        intersect(nlhs, plhs, nrhs, prhs);
+        return;
+    }
+
+    if(!strcmp("intersectHalfspace", cmd)){
+        intersectHalfspace(nlhs, plhs, nrhs, prhs);
+        return;
+    }
+
+    if(!strcmp("intersectHalfspaces", cmd)){
+        reduceNumberRepresentation(nlhs, plhs, nrhs, prhs);
+        return;
+    }
+
+    if(!strcmp("contains_point", cmd)){
+        contains_point(nlhs, plhs, nrhs, prhs);
+        return;
+    }
+
+    if(!strcmp("contains_set", cmd)){
+        contains_object(nlhs, plhs, nrhs, prhs);
+        return;
+    }
+
+    if(!strcmp("unite", cmd)){
+        unite_single(nlhs, plhs, nrhs, prhs);
+        return;
+    }
+
+    if(!strcmp("unite_objects", cmd)){
+        unite_vec(nlhs, plhs, nrhs, prhs);
+        return;
+    }
+
+    if(!strcmp("reduceRepresentation", cmd)){
+        reduceRepresentation(nlhs, plhs, nrhs, prhs);
+        return;
+    }
+
+    if(!strcmp("clear", cmd)){
+        clear(nlhs, plhs, nrhs, prhs);
+        return;
+    }
+
+    mexErrMsgTxt("HyProHyProConstraintSet - Command not recognized.");
+}

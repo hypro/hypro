@@ -51,6 +51,8 @@ classdef HyProObject < handle
                 obj.Pointer = MHyPro(varargin{1}, varargin{2}, varargin{3}, varargin{4});
             elseif nargin == 5
                 obj.Pointer = MHyPro(varargin{1}, varargin{2}, varargin{3}, varargin{4}, varargin{5});
+            elseif nargin == 6
+                obj.Pointer = MHyPro(varargin{1}, varargin{2}, varargin{3}, varargin{4}, varargin{5}, varargin{6});
             end
         end
 
@@ -64,7 +66,11 @@ classdef HyProObject < handle
         end
         
         function out = getSettings(obj)
-            out = MHyPro(obj.Type, 'getSettings', obj.Pointer);
+            if strcmp(obj.Type, 'Box')
+                out = MHyPro(obj.Type, 'getSettings', obj.Pointer);
+            else
+                error('HyProObject - getSetting: Not allowed for this type of HyProObject');
+            end
         end
         
         function out = empty(obj,dim)
@@ -236,19 +242,41 @@ classdef HyProObject < handle
             end
         end
         
+        function out = matrix(obj)
+            out = MHyPro(obj.Type, 'matrix', obj.Pointer);
+        end
+        
+        function out = vector(obj)
+            out = MHyPro(obj.Type, 'vector', obj.Pointer);
+        end
+        
+        function out = isempty(obj)
+            out = MHyPro(obj.Type, 'isEmpty', obj.Pointer);
+        end
+        
+        function out = removeRedundancy(obj)
+            out = MHyPro(obj.Type, 'removeRedundancy', obj.Pointer);
+        end
+        
+        function out = type(obj)
+            out = MHyPro(obj.Type, 'type', obj.Pointer);
+        end
+        
+        function out = reduceNumberRepresentation(obj)
+            ptr = MHyPro(obj.Type, 'reduceNumberRepresentation', obj.Pointer);
+            out = HyProObject('Box', ptr);
+        end
+        
+        function out = clear(obj)
+            out = MHyPro(obj.Type, 'clear', obj.Pointer, rhs.Pointer);
+        end  
+        
         %******************************************************************
         %               Object Specific Functions
         %******************************************************************
         
         % BOX
-        function out = isempty(obj)
-            if strcmp(obj.Type, 'Box') || strcmp(obj.Type, 'Ellipsoid')
-                out = MHyPro(obj.Type, 'isEmpty', obj.Pointer);
-            else
-                error('HyProObject - empty: Not allowed for this type of HyProObject or wrong type of argument.');
-            end
-        end
-        
+       
         function out = intervals(obj)
             if strcmp(obj.Type, 'Box')
                 out = MHyPro(obj.Type, 'intervals', obj.Pointer);
@@ -262,22 +290,6 @@ classdef HyProObject < handle
                 out = MHyPro(obj.Type, 'limits', obj.Pointer);
             else
                 error('HyProObject - limits: Not allowed for this type of HyProObject.');
-            end
-        end
-        
-        function out = matrix(obj)
-            if strcmp(obj.Type, 'Box') || strcmp(obj.Type, 'Ellipsoid')
-                out = MHyPro(obj.Type, 'matrix', obj.Pointer);
-            else
-                error('HyProObject - matrix: Not allowed for this type of HyProObject.');
-            end
-        end
-        
-        function out = vector(obj)
-            if strcmp(obj.Type, 'Box')
-                out = MHyPro(obj.Type, 'vector', obj.Pointer);
-            else
-                error('HyProObject - vector: Not allowed for this type of HyProObject.');
             end
         end
         
@@ -370,31 +382,6 @@ classdef HyProObject < handle
             end
         end
         
-        function out = removeRedundancy(obj)
-            if strcmp(obj.Type, 'Box')
-                out = MHyPro(obj.Type, 'removeRedundancy', obj.Pointer);
-            else
-                error('HyProObject - removeRedundancy: Not allowed for this type of HyProObject.');
-            end
-        end
-        
-        function out = type(obj)
-            if strcmp(obj.Type, 'Box')
-                out = MHyPro(obj.Type, 'type', obj.Pointer);
-            else
-                error('HyProObject - type: Not allowed for this type of HyProObject.');
-            end
-        end
-        
-        function out = reduceNumberRepresentation(obj)
-            if strcmp(obj.Type, 'Box')
-                ptr = MHyPro(obj.Type, 'reduceNumberRepresentation', obj.Pointer);
-                out = HyProObject('Box', ptr);
-            else
-                error('HyProObject - reduceNumberRepresentation: Not allowed for this type of HyProObject.');
-            end
-        end
-        
         function makeSymmetric(obj)
             if strcmp(obj.Type, 'Box')
                 MHyPro(obj.Type, 'makeSymmetric', obj.Pointer);
@@ -421,15 +408,10 @@ classdef HyProObject < handle
             end
         end
         
-       function out = clear(obj)
-            if strcmp(obj.Type, 'Box')
-                out = MHyPro(obj.Type, 'clear', obj.Pointer, rhs.Pointer);
-            else
-                error('HyProObject - clear: Not allowed for this type of HyProObject or wrong type of argument.');
-            end
-       end  
        
-       % Ellipsoid
+       
+       % ELLIPSOID
+       
        function out = approxEllipsoidMatrix(obj, mat)
            if strcmp(obj.Type, 'Ellipsoid')
                out = MHyPro('Ellipsoid', 'approxEllipsoidTMatrix', obj.Pointer, mat);
@@ -437,5 +419,33 @@ classdef HyProObject < handle
                 error('HyProObject - approxEllipsoidMatrix: Not allowed for this type of HyProObject or wrong type of argument.');
            end
        end
+       
+       % CONSTRAINT SET
+       
+       function out = isAxisAligned(obj)
+           if strcmp(obj.Type, 'ConstraintSet')
+               out = MHyPro('ConstraintSet', 'isAxisAligned', obj.Pointer);
+           else
+               error('HyProObject - isAxisAligned: Not allowed for this type of HyProObject.');
+           end
+       end
+       
+       function addConstraint(obj, vec, off)
+           if strcmp(obj.Type, 'ConstraintSet') && isreal(vec) && isreal(off)
+                MHyPro('ConstraintSet', 'addConstraint', obj.Pointer, vec, off);
+           else
+                error('HyProObject - isAxisAligned: Not allowed for this type of HyProObject.');
+           end
+       end
+       
+%        function convert(obj, from, to, s)
+%            if strcmp(obj.Type, 'ConstraintSet')
+%                MHyPro('ConstraintSet', 'convert', obj.Pointer, from, to, s)
+%            else
+%                error('HyProObject - isAxisAligned: Not allowed for this type of HyProObject.');
+%            end
+%        end
+       
+       
     end
 end

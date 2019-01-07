@@ -11,17 +11,18 @@
 #include "ObjectHandle.h"
 #include "HyProGeometricObject.h"
 
-
-class HyProEllipsoid: public HyProGeometricObject<hypro::Ellipsoid<double>>{
+class HyProConstraintSet: public HyProGeometricObject<hypro::ConstraintSet<double>>{
     public:
         static void process(int, mxArray**, int, const mxArray**);
     private:
-        static void ellipsoid_rad(int, mxArray**, int, const mxArray**);
-        static void ellipsoid_mat(int, mxArray**, int, const mxArray**);
+        static void isAxisAligned(int, mxArray**, int, const mxArray**);
+        static void addConstraint(int, mxArray**, int, const mxArray**);
         static void ostream(int, mxArray**, int, const mxArray**);
-        static void evaluate(int, mxArray**, int, const mxArray**);
-        static void approxEllipsoidTMatrix(int, mxArray**, int, const mxArray**);
+        static void type(int, mxArray**, int, const mxArray**);
+
+        template<typename From, typename To, typename S>
+        //static void convert(int, mxArray**, int, const mxArray**);
         
 };
 
-#include "HyProEllipsoid.tpp"
+#include "HyProConstraintSet.tpp"

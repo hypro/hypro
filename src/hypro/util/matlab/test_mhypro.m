@@ -137,16 +137,6 @@ m = box_20.vertices();
 disp('Box 20 vertices:');
 disp(m);
 
-% disp('Evaluate');
-% box_21 = HyProObject('Box','new_intervals', [1 5; 2 7]);
-% vec = [1 0];
-% dir = 0;
-% eval = box_21.evaluate(vec, dir);
-% One has to delete eval again! - Destructor needed
-% 
-% disp('MutliEvaluate');
-% %box_22
-
 disp('==');
 box_23 = HyProObject('Box', 'new_intervals', [1 2; 1 2]);
 box_24 = HyProObject('Box','new_intervals', [1 2; 1 2]);
@@ -395,7 +385,7 @@ mat = eli_6.approxEllipsoidMatrix([4 2; 0 8]);
 disp('Matrix app. of ellipsoid 6:');
 disp(mat);
 
-disp('STOP');
+disp('PASSED');
 
 
 

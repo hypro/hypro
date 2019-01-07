@@ -11,17 +11,6 @@ void HyProBox::emptyBox(int nlhs, mxArray *plhs[], const mxArray *prhs[]){
 }
 
 /**
- * @brief Makes a copy of existing box
- **/
-void HyProBox::copyBox(int nlhs, mxArray *plhs[], const mxArray *prhs[]){
-    if(nlhs != 1){
-        mexErrMsgTxt("HyProBox - copy: One output expected.");
-    }
-    hypro::Box<double> *origin = convertMat2Ptr<hypro::Box<double>>(prhs[2]);
-    plhs[0] = convertPtr2Mat<hypro::Box<double>>(new hypro::Box<double>(*origin));
-}
-
-/**
  * @brief Creates a box from a single interval
  **/
 void HyProBox::boxFromSingleInterval(int nlhs, mxArray *plhs[], const mxArray *prhs[]){
@@ -105,51 +94,6 @@ void HyProBox::boxFromPoints(int nlhs, mxArray *plhs[], const mxArray *prhs[]){
     hypro::Box<double>* box = new hypro::Box<double>(pair);
     plhs[0] =  convertPtr2Mat<hypro::Box<double>>(box);
     return;
-}
-
-/**
- * @brief Creates a box from a matrix and a vector
- **/
-void HyProBox::boxFromMatrix(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
-    if(nlhs != 1){
-        mexErrMsgTxt("HyProBox - new_matrix: Expecting an output!");
-    }
-    if(nrhs != 4){
-        mexErrMsgTxt("HyProBox - new_matrix: One or more arguments are missing!");
-    }
-    mxArray *m_in_matrix, *m_in_vector;
-    double *in_matrix, *in_vector;
-    const mwSize *mat_dims, *vec_dims;
-    int mat_dimx, mat_dimy, vec_dimy;
-
-    m_in_matrix = mxDuplicateArray(prhs[2]);
-    m_in_vector = mxDuplicateArray(prhs[3]);
-
-    mat_dims = mxGetDimensions(prhs[2]);
-    mat_dimy = (int) mat_dims[0];
-    mat_dimx = (int) mat_dims[1];
-    vec_dims = mxGetDimensions(prhs[3]);
-    vec_dimy = (int) vec_dims[0];
-    
-    in_matrix = mxGetPr(m_in_matrix);
-    in_vector = mxGetPr(m_in_vector);
-
-    hypro::matrix_t<double> matrix = ObjectHandle::mMatrix2Hypro(in_matrix, mat_dimx, mat_dimy);
-    hypro::vector_t<double> vector = ObjectHandle::mVector2Hypro(in_vector, vec_dimy);
-
-    hypro::Box<double>* box = new hypro::Box<double>(matrix, vector);
-    plhs[0] =  convertPtr2Mat<hypro::Box<double>>(box);
-}
-
-/**
- * @brief Deletes a box
- **/
-void HyProBox::deleteBox(int nlhs, int nrhs, const mxArray *prhs[]){
-    // Destroy the Box object
-    destroyObject<hypro::Box<double>>(prhs[2]);
-    // Warn if other commands were ignored
-    if (nlhs != 0 || nrhs != 3)
-        mexWarnMsgTxt("HyProBox - delete: Unexpected arguments ignored.");
 }
 
 /**
@@ -331,21 +275,6 @@ void HyProBox::at(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
 }
 
 /**
- * @brief Determines if the current box is empty.
- **/
-void HyProBox::is_empty(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
-    if(nlhs < 1){
-        mexErrMsgTxt("HyProBox - isEmpty: Expecting an output!");
-    }
-    if(nrhs < 3){
-        mexErrMsgTxt("HyProBox - isEmpty: One argument missing!");
-    }
-    hypro::Box<double>* box = convertMat2Ptr<hypro::Box<double>>(prhs[2]);
-    const bool empty = box->empty();
-    plhs[0] = mxCreateLogicalScalar(empty);
-}
-
-/**
  * @brief Determines if the current box is symmetric.
  **/
 void HyProBox::is_symmetric(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
@@ -415,28 +344,6 @@ void HyProBox::supremum(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs
     hypro::Box<double>* box = convertMat2Ptr<hypro::Box<double>>(prhs[2]);
     double supremum = box->supremum();
     plhs[0] = mxCreateDoubleScalar(supremum);
-}
-
-/**
- * @brief Getter for a vertex-representation of the current box.
- **/
-void HyProBox::vertices(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
-    if(nlhs < 1){
-        mexErrMsgTxt("HyProBox - vertices: Expecting an output!");
-    }
-    if(nrhs < 3){
-        mexErrMsgTxt("HyProBox - vertices: One argument is missing!");
-    }
-    hypro::Box<double>* box = convertMat2Ptr<hypro::Box<double>>(prhs[2]);
-    std::vector<hypro::Point<double>> vertices = box->vertices();
-
-    mxArray* m_out_vertices;
-    double* out;
-    int dimy = vertices.size();
-    int dimx = vertices[0].dimension();
-    m_out_vertices = plhs[0] = mxCreateDoubleMatrix(dimy, dimx, mxREAL);
-    out = mxGetPr(m_out_vertices);
-    vector2mVector<hypro::Point<double>>(vertices, out, dimx, dimy);
 }
 
 /**
@@ -516,44 +423,6 @@ void HyProBox::multiEvaluate(int nlhs, mxArray *plhs[], int nrhs, const mxArray 
 }
 
 /**
- * @brief Checks if two boxes are equal.
- **/
-void HyProBox::equals(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
-    if(nlhs < 1){
-        mexErrMsgTxt("HyProBox - ==: Expecting an output!");
-    }
-    if(nrhs < 4){
-        mexErrMsgTxt("HyProBox - ==: One or more arguments are missing!");
-    }
-    hypro::Box<double>* box_1 = convertMat2Ptr<hypro::Box<double>>(prhs[2]);
-    hypro::Box<double>* box_2 = convertMat2Ptr<hypro::Box<double>>(prhs[3]);
-    mxLogical ans = false;
-    if(*box_1 == *box_2){
-        ans = true;
-    }
-    plhs[0] = mxCreateLogicalScalar(ans);
-}
-
-/**
- * @brief Determines inequality of two boxes.
- **/
-void HyProBox::unequal(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
-    if(nlhs < 1){
-        mexErrMsgTxt("HyProBox - !=: Expecting an output!");
-    }
-    if(nrhs < 4){
-        mexErrMsgTxt("HyProBox - !=: One or more arguments are missing!");
-    }
-    hypro::Box<double>* box_1 = convertMat2Ptr<hypro::Box<double>>(prhs[2]);
-    hypro::Box<double>* box_2 = convertMat2Ptr<hypro::Box<double>>(prhs[3]);
-    mxLogical ans = false;
-    if(*box_1 != *box_2){
-        ans = true;
-    }      
-    plhs[0] = mxCreateLogicalScalar(ans);
-}
-
-/**
  * @brief Scaling operator.
  **/
 void HyProBox::multiply(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
@@ -595,35 +464,6 @@ void HyProBox::outstream(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prh
 }
 
 /**
- * @brief Getter for the space dimension.
- **/
-void HyProBox::dimension(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
-    if(nlhs < 1){
-        mexErrMsgTxt("HyProBox - dimension: Expecting an output!");
-    }
-    if(nrhs < 3){
-        mexErrMsgTxt("HyProBox - dimension: One or more arguments are missing!");
-    }
-    hypro::Box<double>* box = convertMat2Ptr<hypro::Box<double>>(prhs[2]);
-    std::size_t dim = box->dimension();
-    plhs[0] = mxCreateDoubleScalar(dim);
-}
-
-/**
- * @brief Removes redundancy (part of the general interface. Does nothing for boxes.)
- **/
-void HyProBox::removeRedundancy(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
-    if(nlhs < 1){
-        mexErrMsgTxt("HyProBox - removeRedundancy: Expecting an output!");
-    }
-    if(nrhs < 3){
-        mexErrMsgTxt("HyProBox - removeRedundancy: One or more arguments are missing!");
-    }
-    hypro::Box<double>* box = convertMat2Ptr<hypro::Box<double>>(prhs[2]);
-    box->removeRedundancy();
-}
-
-/**
  * @brief Storage size determination.
  **/
 void HyProBox::box_size(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
@@ -646,21 +486,6 @@ void HyProBox::type(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
 }
 
 /**
- * @brief Function to reduce the number representation (over-approximate).
- **/
-void HyProBox::reduceNumberRepresentation(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
-    if(nlhs < 1)
-        mexErrMsgTxt("HyProBox - reduceNumberRepresentation: Expecting an output!");
-    if(nrhs < 3)
-        mexErrMsgTxt("HyProBox - reduceNumberRepresentation: One or more arguments are missing!");
-    
-    hypro::Box<double>* box = convertMat2Ptr<hypro::Box<double>>(prhs[2]);
-    hypro::Box<double> temp = box->reduceNumberRepresentation();
-    hypro::Box<double>* b = new hypro::Box<double>(temp);
-    plhs[0] = convertPtr2Mat<hypro::Box<double>>(b);
-}
-
-/**
  * @brief Makes a symmetric box from the current box.
  **/
 void HyProBox::makeSymmetric(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
@@ -669,187 +494,6 @@ void HyProBox::makeSymmetric(int nlhs, mxArray *plhs[], int nrhs, const mxArray 
     }
     hypro::Box<double>* box = convertMat2Ptr<hypro::Box<double>>(prhs[2]);
     box->makeSymmetric();
-}
-
-/**
- * @brief Checks if a box lies in the specified halfspace.
- **/
-void HyProBox::satisfiesHalfspace(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
-    if(nlhs < 2)
-        mexErrMsgTxt("HyProBox - satisfiesHalfspace: Expecting two output values!");
-    if(nrhs < 5)
-        mexErrMsgTxt("HyProBox - satisfiesHalfspace: One or more arguments are missing!");
-
-    mxArray* m_in_normal, *out_box, *out_cont;
-    const mwSize *dims;
-    double *in_normal, *cont;
-    int dimx, dimy;
-
-    hypro::Box<double>* box = convertMat2Ptr<hypro::Box<double>>(prhs[2]);
-    m_in_normal = mxDuplicateArray(prhs[3]);
-    const int offset = (const int) mxGetScalar(prhs[4]);
-    dims = mxGetDimensions(prhs[3]);
-    dimy = (int) dims[0];
-    dimx = (int) dims[1];
-
-    in_normal = mxGetPr(m_in_normal);
-
-    const hypro::vector_t<double> hy_normal = ObjectHandle::mVector2Hypro(in_normal, dimy);
-    const hypro::Halfspace<double> hSpace = hypro::Halfspace<double>(hy_normal,offset);
-
-    std::pair<hypro::CONTAINMENT, hypro::Box<double>> p = box->satisfiesHalfspace(hSpace);
-
-    std::string ans = "";
-    ObjectHandle::convert2matlab(p.first, ans);
-    out_cont = plhs[0] = mxCreateString(ans.c_str());
-    hypro::Box<double>* b = new hypro::Box<double>(p.second);
-    plhs[1] = convertPtr2Mat<hypro::Box<double>>(b);
-    
-}
-
-/**
- * @brief Checks if a box lies in the specified halfspaces.
- **/
-void HyProBox::satisfiesHalfspaces(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
-    if(nlhs < 2)
-        mexErrMsgTxt("HyProBox - satisfiesHalfspaces: Expecting two output values!");
-    if(nrhs < 5)
-        mexErrMsgTxt("HyProBox - satisfiesHalfspaces: One or more arguments are missing!");
-
-    mxArray *m_in_matrix, *m_in_vector, *out_box, *out_cont;
-    const mwSize *mat_dims, *vec_dims;
-    double *in_matrix, *in_vector, *cont;
-    int mat_dimx, mat_dimy, vec_len;
-
-    hypro::Box<double>* box = convertMat2Ptr<hypro::Box<double>>(prhs[2]);
-    m_in_matrix = mxDuplicateArray(prhs[3]);
-    m_in_vector = mxDuplicateArray(prhs[4]);
-    mat_dims = mxGetDimensions(prhs[3]);
-    vec_dims = mxGetDimensions(prhs[4]);
-    mat_dimy = (int) mat_dims[0];
-    mat_dimx = (int) mat_dims[1];
-    vec_len = (int) vec_dims[0];
-
-    in_matrix = mxGetPr(m_in_matrix);
-    in_vector = mxGetPr(m_in_vector);
-
-    const hypro::matrix_t<double> hy_matrix = ObjectHandle::mMatrix2Hypro(in_matrix, mat_dimx, mat_dimy);
-    const hypro::vector_t<double> hy_vector = ObjectHandle::mVector2Hypro(in_vector, vec_len);
-    std::pair<hypro::CONTAINMENT, hypro::Box<double>> p = box->satisfiesHalfspaces(hy_matrix, hy_vector);
-
-    std::string ans = "";
-    ObjectHandle::convert2matlab(p.first, ans);
-    out_cont = plhs[0] = mxCreateString(ans.c_str());
-    hypro::Box<double>* b = new hypro::Box<double>(p.second);
-    plhs[1] = convertPtr2Mat<hypro::Box<double>>(b);
-}
-
-/**
- * @brief Projects a box on a specified dimension.
- **/
-void HyProBox::project(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
-    if(nlhs < 1)
-        mexErrMsgTxt("HyProBox - project: Expecting one output value!");
-    if(nrhs < 4)
-        mexErrMsgTxt("HyProBox - project: One or more arguments are missing!");
-    
-    mxArray *m_in_dimensions;
-    const mwSize *dims;
-    double *in_dimensions;
-    int dimy;
-
-    hypro::Box<double>* box = convertMat2Ptr<hypro::Box<double>>(prhs[2]);
-    m_in_dimensions = mxDuplicateArray(prhs[3]);
-    dims = mxGetDimensions(prhs[3]);
-    dimy = (int) dims[0];
-
-    in_dimensions = mxGetPr(m_in_dimensions);
-
-    std::vector<std::size_t> hy_dimensions = ObjectHandle::mSizeVector2Hypro(in_dimensions,dimy);
-
-    hypro::Box<double> temp = box->project(hy_dimensions);
-    hypro::Box<double>* b = new hypro::Box<double>(temp);
-    plhs[0] = convertPtr2Mat<hypro::Box<double>>(b);
-}
-
-/**
- * @brief Makes a linear transformation of a box.
- **/
-void HyProBox::linearTransformation(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
-    if(nlhs < 1)
-        mexErrMsgTxt("HyProBox - linearTransformation: Expecting one output value!");
-    if(nrhs < 4)
-        mexErrMsgTxt("HyProBox - linearTransformation: One or more arguments are missing!");
-    
-    mxArray *m_in_matrix;
-    const mwSize *dims;
-    double *in_matrix;
-    int dimx, dimy;
-
-    hypro::Box<double>* box = convertMat2Ptr<hypro::Box<double>>(prhs[2]);
-    m_in_matrix = mxDuplicateArray(prhs[3]);
-    dims = mxGetDimensions(prhs[3]);
-    dimy = (int) dims[0];
-    dimx = (int) dims[1];
-
-    in_matrix = mxGetPr(m_in_matrix);
-    hypro::matrix_t<double> mat = ObjectHandle::mMatrix2Hypro(in_matrix, dimx, dimy);
-
-    hypro::Box<double> temp = box->linearTransformation(mat);
-    hypro::Box<double>* b = new hypro::Box<double>(temp);
-    plhs[0] = convertPtr2Mat<hypro::Box<double>>(b);
-}
-
-/**
- * @brief Makes an affine transformation of a box.
- **/
-void HyProBox::affineTransformation(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
-    if(nlhs < 1)
-        mexErrMsgTxt("HyProBox - affineTransformation: Expecting one output value!");
-    if(nrhs < 5)
-        mexErrMsgTxt("HyProBox - affineTransformation: One or more arguments are missing!");
-    
-    mxArray *m_in_matrix, *m_in_vector;
-    const mwSize *mat_dims, *vec_dims;
-    double *in_matrix, *in_vector;
-    int mat_dimx, mat_dimy, vec_len;
-
-    hypro::Box<double>* box = convertMat2Ptr<hypro::Box<double>>(prhs[2]);
-    m_in_matrix = mxDuplicateArray(prhs[3]);
-    m_in_vector = mxDuplicateArray(prhs[4]);
-    mat_dims = mxGetDimensions(prhs[3]);
-    vec_dims = mxGetDimensions(prhs[4]);
-    mat_dimy = (int) mat_dims[0];
-    mat_dimx = (int) mat_dims[1];
-    vec_len = (int) vec_dims[0];
-
-    in_matrix = mxGetPr(m_in_matrix);
-    in_vector = mxGetPr(m_in_vector);
-
-    hypro::matrix_t<double> mat = ObjectHandle::mMatrix2Hypro(in_matrix, mat_dimx, mat_dimy);
-    hypro::vector_t<double> vec = ObjectHandle::mVector2Hypro(in_vector, vec_len);
-
-
-    hypro::Box<double> temp = box->affineTransformation(mat, vec);
-    hypro::Box<double>* b = new hypro::Box<double>(temp);
-    plhs[0] = convertPtr2Mat<hypro::Box<double>>(b);
-}
-
-/**
- * @brief Performs Minkowski sum of two boxes.
- **/
-void HyProBox::minkowskiSum(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
-    if(nlhs < 1)
-        mexErrMsgTxt("HyProBox - minkowskiSum: Expecting one output value!");
-    if(nrhs < 4)
-        mexErrMsgTxt("HyProBox - minkowskiSum: One or more arguments are missing!");
-    
-    hypro::Box<double>* box = convertMat2Ptr<hypro::Box<double>>(prhs[2]);
-    hypro::BoxT<double, hypro::Converter<double>, hypro::BoxLinearOptimizationOn>* box_rhs = convertMat2Ptr<hypro::BoxT<double, hypro::Converter<double>, hypro::BoxLinearOptimizationOn>>(prhs[3]);
-
-    hypro::Box<double> sum = box->minkowskiSum(*box_rhs);
-    hypro::Box<double>* b = new hypro::Box<double>(sum);
-    plhs[0] = convertPtr2Mat<hypro::Box<double>>(b);
 }
 
 /**
@@ -867,243 +511,6 @@ void HyProBox::minkowskiDecomposition(int nlhs, mxArray *plhs[], int nrhs, const
     hypro::Box<double> sum = box->minkowskiDecomposition(*box_rhs);
     hypro::Box<double>* b = new hypro::Box<double>(sum);
     plhs[0] = convertPtr2Mat<hypro::Box<double>>(b);
-}
-
-/**
- * @brief Computes the Minkowski decomposition of the current box by the given box.
- **/
-void HyProBox::intersect(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
-    if(nlhs < 1)
-        mexErrMsgTxt("HyProBox - intersect: Expecting one output value!");
-    if(nrhs < 4)
-        mexErrMsgTxt("HyProBox - intersect: One or more arguments are missing!");
-    
-    hypro::Box<double>* box = convertMat2Ptr<hypro::Box<double>>(prhs[2]);
-    hypro::BoxT<double, hypro::Converter<double>, hypro::BoxLinearOptimizationOn>* box_rhs = convertMat2Ptr<hypro::BoxT<double, hypro::Converter<double>, hypro::BoxLinearOptimizationOn>>(prhs[3]);
-
-    hypro::Box<double> sum = box->intersect(*box_rhs);
-    hypro::Box<double>* b = new hypro::Box<double>(sum);
-    plhs[0] = convertPtr2Mat<hypro::Box<double>>(b);
-}
-
-/**
- * @brief Checks if a box intersects a given halfspace.
- **/
-void HyProBox::intersectHalfspace(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
-    if(nlhs < 1)
-        mexErrMsgTxt("HyProBox - intersectHalfspace: Expecting two output values!");
-    if(nrhs < 5)
-        mexErrMsgTxt("HyProBox - intersectHalfspace: One or more arguments are missing!");
-
-    mxArray* m_in_normal, *out_box, *out_cont;
-    const mwSize *dims;
-    double *in_normal, *cont;
-    int dimx, dimy;
-
-    hypro::Box<double>* box = convertMat2Ptr<hypro::Box<double>>(prhs[2]);
-    m_in_normal = mxDuplicateArray(prhs[3]);
-    const int offset = (const int) mxGetScalar(prhs[4]);
-    dims = mxGetDimensions(prhs[3]);
-    dimy = (int) dims[0];
-    dimx = (int) dims[1];
-
-    in_normal = mxGetPr(m_in_normal);
-
-    const hypro::vector_t<double> hy_normal = ObjectHandle::mVector2Hypro(in_normal, dimy);
-    const hypro::Halfspace<double> hSpace = hypro::Halfspace<double>(hy_normal,offset);
-
-    hypro::Box<double> temp = box->intersectHalfspace(hSpace);
-    hypro::Box<double>* inter = new hypro::Box<double>(temp);
-    plhs[0] = convertPtr2Mat<hypro::Box<double>>(inter);
-}
-
-/**
- * @brief Checks if a box intersects given halfspaces.
- **/
-void HyProBox::intersectHalfspaces(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
-    if(nlhs < 1)
-        mexErrMsgTxt("HyProBox - intersectHalfspaces: Expecting one output value!");
-    if(nrhs < 5)
-        mexErrMsgTxt("HyProBox - intersectHalfspaces: One or more arguments are missing!");
-    
-    mxArray *m_in_matrix, *m_in_vector;
-    const mwSize *mat_dims, *vec_dims;
-    double *in_matrix, *in_vector;
-    int mat_dimx, mat_dimy, vec_len;
-
-    hypro::Box<double>* box = convertMat2Ptr<hypro::Box<double>>(prhs[2]);
-    m_in_matrix = mxDuplicateArray(prhs[3]);
-    m_in_vector = mxDuplicateArray(prhs[4]);
-    mat_dims = mxGetDimensions(prhs[3]);
-    vec_dims = mxGetDimensions(prhs[4]);
-    mat_dimy = (int) mat_dims[0];
-    mat_dimx = (int) mat_dims[1];
-    vec_len = (int) vec_dims[0];
-
-    in_matrix = mxGetPr(m_in_matrix);
-    in_vector = mxGetPr(m_in_vector);
-
-    hypro::matrix_t<double> mat = ObjectHandle::mMatrix2Hypro(in_matrix, mat_dimx, mat_dimy);
-    hypro::vector_t<double> vec = ObjectHandle::mVector2Hypro(in_vector, vec_len);
-
-
-    hypro::Box<double> temp = box->intersectHalfspaces(mat, vec);
-    hypro::Box<double>* b = new hypro::Box<double>(temp);
-    plhs[0] = convertPtr2Mat<hypro::Box<double>>(b);
-}
-
-/**
-* @brief Checks if a box contains a given point.
-**/
-void HyProBox::contains_point(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
-    if(nlhs < 1)
-        mexErrMsgTxt("HyProBox - contains_point: Expecting one output value!");
-    if(nrhs < 4)
-        mexErrMsgTxt("HyProBox - contains_point: One or more arguments are missing!");
-
-    mxArray* m_in_point;
-    double* in_point;
-    const mwSize *dims;
-    int point_len;
-    
-    hypro::Box<double>* box = convertMat2Ptr<hypro::Box<double>>(prhs[2]);
-    m_in_point = mxDuplicateArray(prhs[3]);
-    in_point = mxGetPr(m_in_point);
-    dims = mxGetDimensions(prhs[3]);
-    point_len = (int) dims[0];
-
-    hypro::Point<double> hy_point = ObjectHandle::mPoint2Hypro(in_point, point_len);
-
-    const bool ans = box->contains(hy_point);
-    plhs[0] = mxCreateLogicalScalar(ans);
-}
-
-/**
- * @brief Checks if the current box contains a given box.
- **/
-void HyProBox::contains_box(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
-    if(nlhs < 1)
-        mexErrMsgTxt("HyProBox - contains_box: Expecting one output value!");
-    if(nrhs < 4)
-        mexErrMsgTxt("HyProBox - contains_box: One or more arguments are missing!");
-
-    hypro::Box<double>* box = convertMat2Ptr<hypro::Box<double>>(prhs[2]);
-    hypro::Box<double>* box_arg = convertMat2Ptr<hypro::Box<double>>(prhs[3]);
-
-    const bool ans = box->contains(*box_arg);
-    plhs[0] = mxCreateLogicalScalar(ans);
-}
-
-/**
- * @brief Computes the union of two boxes.
- **/
-void HyProBox::unite_box(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
-    if(nlhs < 1)
-        mexErrMsgTxt("HyProBox - unite_box: Expecting one output value!");
-    if(nrhs < 4)
-        mexErrMsgTxt("HyProBox - unite_box: One or more arguments are missing!");
-    
-    hypro::Box<double>* box = convertMat2Ptr<hypro::Box<double>>(prhs[3]);
-    hypro::BoxT<double, hypro::Converter<double>, hypro::BoxLinearOptimizationOn>* box_rhs = convertMat2Ptr<hypro::BoxT<double, hypro::Converter<double>, hypro::BoxLinearOptimizationOn>>(prhs[3]);
-
-    hypro::Box<double> temp = box->unite(*box_rhs);
-    hypro::Box<double>* b = new hypro::Box<double>(temp);
-    plhs[0] = convertPtr2Mat<hypro::Box<double>>(b);
-}
-
-/**
- * @brief Computes the union of the current box with a set of boxes.
- **/
-void HyProBox::unite_boxes(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
-    if(nlhs < 1)
-        mexErrMsgTxt("HyProBox - unite_boxes: Expecting one output value!");
-    if(nrhs < 4)
-        mexErrMsgTxt("HyProBox - unite_boxes: One or more arguments are missing!");
-    
-    mxArray* m_in_boxes;
-    double* in_boxes;
-    const mwSize *dims;
-    int dimy;
-    std::vector<hypro::Box<double>> hy_boxes;
-
-    hypro::Box<double>* box = convertMat2Ptr<hypro::Box<double>>(prhs[2]);
-    m_in_boxes = mxDuplicateArray(prhs[3]);
-    in_boxes = mxGetPr(m_in_boxes);
-    dims = mxGetDimensions(prhs[3]);
-    dimy = dims[0];
-
-    for(int i = 3; i < nrhs; i++){
-        hypro::Box<double>* b = convertMat2Ptr<hypro::Box<double>>(prhs[i]);
-        hy_boxes.emplace_back(*b);
-    }
-
-    // hypro::Box<double> united = box->unite(hy_boxes); HERE IS SOMETHING WRONG
-    // hypro::Box<double>* b = new hypro::Box<double>(united);
-    // plhs[0] = convertPtr2Mat<hypro::Box<double>>(b);
-}
-
-/**
- * @brief
- **/
-void HyProBox::reduceRepresentation(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
-    if(nrhs < 3)
-        mexErrMsgTxt("HyProBox - reduceRepresentation: One or more arguments are missing!");
-
-    hypro::Box<double>* box = convertMat2Ptr<hypro::Box<double>>(prhs[2]);
-    box->reduceRepresentation();
-}
-
-/**
- * @brief Reduces the HyProBox - only in case rational types are used, the number representation is optimized.
- **/
-void HyProBox::clear_box(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
-    if(nrhs < 3)
-        mexErrMsgTxt("HyProBox - clear_box: One or more arguments are missing!");
-
-    hypro::Box<double>* box = convertMat2Ptr<hypro::Box<double>>(prhs[2]);
-    box->clear();
-}
-
-/**
- * @brief
- **/
-void HyProBox::matrix(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
-    if(nrhs < 3)
-        mexErrMsgTxt("HyProBox - matrix: One or more arguments are missing!");
-    if(nlhs < 1)
-        mexErrMsgTxt("HyProBox - matrix: One output expected!");
-
-    hypro::Box<double>* box = convertMat2Ptr<hypro::Box<double>>(prhs[2]);
-    hypro::matrix_t<double> mat = box->matrix();
-
-    mxArray* m_out;
-    double* out;
-
-    m_out = plhs[0] = mxCreateDoubleMatrix(mat.rows(), mat.cols(), mxREAL);
-    out = mxGetPr(m_out);
-
-    ObjectHandle::convert2matlab(mat, out, mat.cols(), mat.rows());
-}
-
-/**
- * @brief
- **/
-void HyProBox::vector(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
-    if(nrhs < 3)
-        mexErrMsgTxt("HyProBox - vector: One or more arguments are missing!");
-    if(nlhs < 1)
-        mexErrMsgTxt("HyProBox - vector: One output expected!");
-
-    hypro::Box<double>* box = convertMat2Ptr<hypro::Box<double>>(prhs[2]);
-    hypro::vector_t<double> vec = box->vector();
-
-    mxArray* m_out;
-    double* out;
-
-    m_out = plhs[0] = mxCreateDoubleMatrix(vec.rows(), 1, mxREAL);
-    out = mxGetPr(m_out);
-
-    ObjectHandle::convert2matlab(vec, out, 1, vec.rows());
 }
 
 /**
@@ -1134,7 +541,7 @@ void HyProBox::process(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[
     }
     
     if(!strcmp("copy", cmd)){
-        copyBox(nlhs, plhs, prhs);
+        copyObj(nlhs, plhs, nrhs, prhs);
         return;
     }
 
@@ -1154,12 +561,14 @@ void HyProBox::process(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[
     }
 
     if(!strcmp("new_matrix",cmd)){
-        boxFromMatrix(nlhs, plhs, nrhs, prhs);
+        //boxFromMatrix(nlhs, plhs, nrhs, prhs);
+        new_mat_vec(nlhs, plhs, nrhs, prhs);
         return;
     }
 
     if (!strcmp("delete", cmd)) {
-        deleteBox(nlhs, nrhs, prhs);
+        // deleteBox(nlhs, nrhs, prhs);
+        deleteObject(nlhs, plhs, nrhs, prhs);
         return;
     }
     
@@ -1258,7 +667,7 @@ void HyProBox::process(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[
     }
 
     if(!strcmp("==", cmd)){
-        equals(nlhs, plhs, nrhs, prhs);
+        equal(nlhs, plhs, nrhs, prhs);
         return;
     }
 
@@ -1367,17 +776,17 @@ void HyProBox::process(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[
     }
 
     if(!strcmp("contains", cmd)){
-        contains_box(nlhs, plhs, nrhs, prhs);
+        contains_object(nlhs, plhs, nrhs, prhs);
         return;
     }
 
     if(!strcmp("unite", cmd)){
-        unite_box(nlhs, plhs, nrhs, prhs);
+        unite_single(nlhs, plhs, nrhs, prhs);
         return;
     }
 
     if(!strcmp("unite_objects", cmd)){
-        unite_boxes(nlhs, plhs, nrhs, prhs);
+        unite_vec(nlhs, plhs, nrhs, prhs);
         return;
     }
 
@@ -1387,7 +796,7 @@ void HyProBox::process(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[
     }
 
     if(!strcmp("clear", cmd)){
-        clear_box(nlhs, plhs, nrhs, prhs);
+        clear(nlhs, plhs, nrhs, prhs);
         return;
     }
 

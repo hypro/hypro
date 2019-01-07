@@ -33,6 +33,7 @@ class ObjectHandle{
         static void convert2matlab(const hypro::Halfspace<double>&, double*, double*, const int, const int, const int = 0 );
         static void convert2matlab(const hypro::CONTAINMENT&, std::string&);
         static void convert2matlab(const hypro::SOLUTION&, std::string&);
+        static void convert2matlab(const carl::Term<double>&, double*, const int, const int);
 
         static hypro::SOLUTION mSolution2Hypro(char*);
         static carl::Interval<double> mInterval2Hypro(double*);
@@ -49,6 +50,7 @@ class ObjectHandle{
         static std::vector<hypro::Point<double>> mPointsVector2Hypro(double*, int);
         static std::vector<hypro::Halfspace<double>> mHalfspaceVector2Hypro(double*);
         static std::vector<hypro::EvaluationResult<double>> mMultiEvaluationStruct2Hypro(double*);
+        static std::vector<carl::Term<double>> mMultivariatePoly2Hypro(double*);
 
     private:
 };
@@ -203,7 +205,14 @@ void ObjectHandle::convert2matlab(const hypro::SOLUTION& sol, std::string& out){
     }
 }
 
-enum class SOLUTION { FEAS = 0, INFEAS, INFTY, UNKNOWN };
+
+/**
+ * @breif
+ * 
+ **/
+void ObjectHandle::convert2matlab(const carl::Term<double>& term, double* out, const int dimx, const int dimy){
+
+}
 
 /********************************************************************************************************
  *  Matlab Objects to HyPro
@@ -356,6 +365,14 @@ hypro::SOLUTION ObjectHandle::mSolution2Hypro(char* mSol){
     }else if(!strcmp(mSol, "UNKNOWN") || !strcmp(mSol, "unknown")){
         return hypro::SOLUTION::UNKNOWN;
     }
+}
+
+/**
+ * @brief
+ *
+ **/
+std::vector<carl::Term<double>> ObjectHandle::mMultivariatePoly2Hypro(double*){
+    
 }
 
 #endif

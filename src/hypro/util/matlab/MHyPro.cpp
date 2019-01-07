@@ -1,5 +1,5 @@
 #include "HyProBox.h"
-#include "HyProEvaluationResult.h"
+#include "HyProConstraintSet.h"
 #include "HyProTaylorModel.h"
 #include "HyProEllipsoid.h"
 #include <iostream>
@@ -16,8 +16,10 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
         HyProBox::process(nlhs, plhs, nrhs, prhs);
     }else if(!strcmp(type, "Ellipsoid")){
         HyProEllipsoid::process(nlhs, plhs, nrhs, prhs);
-    }else if(!strcmp(type, "EvaluationResult")){
-        HyProEvaluationResult::process(nlhs, plhs, nrhs, prhs);
+    }else if(!strcmp(type, "ConstraintSet")){
+        HyProConstraintSet::process(nlhs, plhs, nrhs, prhs);
+    }else if(!strcmp(type, "SupportFunction")){
+       // HyProSupportFunction::process(nlhs, plhs, nrhs, prhs);
     }else{
         mexErrMsgTxt("MHyPro - Unknown type.");
     }
