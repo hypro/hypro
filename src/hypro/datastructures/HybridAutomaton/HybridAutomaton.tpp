@@ -12,7 +12,7 @@ HybridAutomaton<Number>::HybridAutomaton(const HybridAutomaton<Number>& hybrid)
 	, mGlobalBadStates(hybrid.getGlobalBadStates())
 	, mVariables(hybrid.getVariables())
 {
-	std::cout << "Copy construct hybrid automaton" << std::endl;
+	//std::cout << "Copy construct hybrid automaton" << std::endl;
 	// mappings to update nested datastructures (transitions sets of locations and source/target locations of transitions).
 	std::map<const Location<Number>*, std::size_t> locationMapping; // maps to position in new vector.
 	std::map<Transition<Number>*, std::size_t> transitionMapping; // maps to position in new vector.
@@ -59,10 +59,12 @@ HybridAutomaton<Number>::HybridAutomaton(const HybridAutomaton<Number>& hybrid)
 		this->addLocalBadState(mLocations[locationMapping[otherBad.first]].get(), copy);
 	}
 
+	#ifdef HYPRO_LOGGING
 	DEBUG("hypro.datastructures","Hybrid automaton initial states after COPY construction.");
 	for(const auto& iPair : mInitialStates) {
 		DEBUG("hypro.datastructures","Initial state in loc " << iPair.first->getName());
 	}
+	#endif
 }
 
 /*

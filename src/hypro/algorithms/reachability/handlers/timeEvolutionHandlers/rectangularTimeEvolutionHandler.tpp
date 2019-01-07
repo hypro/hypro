@@ -8,11 +8,11 @@ namespace hypro {
             auto& vpool = hypro::VariablePool::getInstance();
             // get initial state
             CarlPolytope<Number> initial = boost::get<CarlPolytope<Number>>(mState->getSet(mIndex));
+            std::size_t originalDimension = initial.dimension();
             // storage to build elimination query
             std::vector<carl::Variable> variablesToEliminate;
             // add variable for time elapse
             carl::Variable t = vpool.newCarlVariable("t");
-            variablesToEliminate.push_back(t);
             // add constraint t >= 0
             initial.addConstraint(ConstraintT<hypro::tNumber>(PolyT<hypro::tNumber>(t), carl::Relation::GEQ));
 
@@ -42,6 +42,12 @@ namespace hypro {
                 }
             }
 
+            // add t to eliminate at latest
+            variablesToEliminate.push_back(t);
+
+            // update dimension
+            //initial.setDimension(2*originalDimension + 1);
+
             // create variables to eliminate
             QEQuery quOrder;
             quOrder.push_back(std::make_pair(QuantifierType::EXISTS, variablesToEliminate));
@@ -50,6 +56,13 @@ namespace hypro {
 
             // eliminate vars
             initial.eliminateVariables(quOrder);
+
+            //for(auto var : variablesToEliminate) {
+            //    initial.eliminateVariable(var);
+            //}
+
+            // reset dimension
+            //initial.setDimension(originalDimension);
 
             DEBUG("hydra.worker","State set after time elapse: " << initial);
 

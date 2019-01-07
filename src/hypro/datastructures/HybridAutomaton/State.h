@@ -339,6 +339,8 @@ class State
      */
     std::pair<CONTAINMENT,State<Number,Representation,Rargs...>> partiallySatisfies(const Condition<Number>& in, std::size_t I) const;
 
+    State<Number,Representation,Rargs...> intersectHalfspaces(const matrix_t<Number>& constraints, const vector_t<Number>& constants, std::size_t I = 0) const;
+
     /**
      * @brief      Meta-function which can be used to transform all contained sets at once with the passed parameters and adjust the
      * timestamp as well.
@@ -415,6 +417,8 @@ class State
     void partiallyRemoveRedundancy(std::size_t I);
 
     void reduceRepresentation();
+
+    void partiallyReduceRepresentation(std::size_t I);
 
     /**
     * decomposes state set by projection

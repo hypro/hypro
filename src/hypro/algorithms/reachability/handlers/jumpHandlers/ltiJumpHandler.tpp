@@ -265,6 +265,9 @@ namespace hypro {
 						// convert to actual support function inside the state, which might have different settings == different type.
 						newState.setSet(boost::apply_visitor(genericInternalConversionVisitor<typename State::repVariant, SupportFunction<Number>>(newSet), newState.getSet(i)),i);
 					}
+					if(newState.getSetType(i) == representation_name::support_function) {
+						newState.partiallyReduceRepresentation(i);
+					}
 				}
 
 

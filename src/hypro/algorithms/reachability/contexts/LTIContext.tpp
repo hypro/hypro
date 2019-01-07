@@ -36,15 +36,15 @@ namespace hypro
 		// initialize invariant handlers
 		for(std::size_t i = 0; i < mComputationState.getNumberSets();i++){
 			if(getFlowType(mFirstSegmentHandlers.at(i)->getTransformation()) == DynamicType::affine) {
-			auto flow = boost::get<affineFlow<Number>>(mFirstSegmentHandlers.at(i)->getTransformation());
-			matrix_t<Number> trafo = flow.getFlowMatrix();
-			vector_t<Number> translation = flow.getTranslation();
-			bool noFlow = (trafo == matrix_t<Number>::Identity(trafo.rows(),trafo.rows()) && translation == vector_t<Number>::Zero(trafo.rows()));
-			IInvariantHandler* ptr = HandlerFactory<State>::getInstance().buildInvariantHandler(mComputationState.getSetType(i), &mComputationState, i, noFlow);
-			if(ptr){
-				mInvariantHandlers.push_back(ptr);
-				DEBUG("hypro.worker","Built " << ptr->handlerName() << "at pos " << i);
-			}
+				auto flow = boost::get<affineFlow<Number>>(mFirstSegmentHandlers.at(i)->getTransformation());
+				matrix_t<Number> trafo = flow.getFlowMatrix();
+				vector_t<Number> translation = flow.getTranslation();
+				bool noFlow = (trafo == matrix_t<Number>::Identity(trafo.rows(),trafo.rows()) && translation == vector_t<Number>::Zero(trafo.rows()));
+				IInvariantHandler* ptr = HandlerFactory<State>::getInstance().buildInvariantHandler(mComputationState.getSetType(i), &mComputationState, i, noFlow);
+				if(ptr){
+					mInvariantHandlers.push_back(ptr);
+					DEBUG("hypro.worker","Built " << ptr->handlerName() << "at pos " << i);
+				}
 
 			} else if (getFlowType(mFirstSegmentHandlers.at(i)->getTransformation()) == DynamicType::rectangular) {
 				bool noFlow = boost::get<rectangularFlow<Number>>(mFirstSegmentHandlers.at(i)->getTransformation()).isDiscrete();
@@ -159,7 +159,6 @@ namespace hypro
 		TRACE("hypro.worker.refinement","Num refinements so far: " << btNode->getRefinements().size());
 		TRACE("hypro.worker.refinement","Prev. refinement type: " << btNode->getRefinements().at(targetLevel-1).initialSet.getSetType(0));
 		TRACE("hypro.worker.refinement","Target representation: " << mStrategy.getParameters(targetLevel).representation_type);
-
 
 		assert(btNode->getRefinements().size() >= targetLevel);
 
@@ -405,10 +404,10 @@ namespace hypro
     	DEBUG("hypro.worker","State after intersection with invariant: " << mComputationState);
 
 		// For plotting.
-		//#ifdef HYDRA_ENABLE_PLOT
-		TRACE("hypro.worker.plot","Add "<<  mComputationState.getSets().size() << "segments for plotting of type " << mComputationState.getSetType() << " and refinement level " << mTask->btInfo.btLevel);
-        mLocalSegments->push_back(PlotData<State>(mComputationState, mTask->btInfo.btLevel));
-		//#endif
+		if(!SettingsProvider<State>::getInstance().skipPlot()) {
+			TRACE("hypro.worker.plot","Add "<<  mComputationState.getSets().size() << "segments for plotting of type " << mComputationState.getSetType() << " and refinement level " << mTask->btInfo.btLevel);
+        	mLocalSegments->push_back(PlotData<State>(mComputationState, mTask->btInfo.btLevel));
+		}
     }
 
     template<typename State>

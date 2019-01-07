@@ -311,15 +311,19 @@ class genericIntervalAssignmentVisitor
 	template<typename N, typename C, typename S>
     inline T operator()(const CarlPolytopeT<N,C,S>& lhs) const {
 		DEBUG("hypro.datastructures","Interval assignment.");
-		auto intervals = lhs.getIntervals();
-		std::size_t pos = 0;
-		for(const auto& ass : mAssignments) {
-			if(ass != carl::Interval<N>::emptyInterval()) {
-				intervals[pos] = ass;
+		assert(mAssignments.size() >= lhs.dimension());
+		auto res{lhs};
+		for(std::size_t i = 0; i < mAssignments.size(); ++i) {
+			// the empty interval is used to encode identity resets.
+			if(!mAssignments[i].isEmpty()) {
+				assert(VariablePool::getInstance().hasDimension(i));
+				TRACE("hypro.datastructures","Assign " << mAssignments[i] << " to variable " << VariablePool::getInstance().carlVarByIndex(i));
+				res.eliminateVariable(VariablePool::getInstance().carlVarByIndex(i));
+				res.addIntervalConstraints(mAssignments[i], VariablePool::getInstance().carlVarByIndex(i));
 			}
-			++pos;
 		}
- 		return CarlPolytopeT<N,C,S>{intervals};
+		DEBUG("hypro.datastructures","Result: " << res);
+ 		return res;
     }
 
 	template<typename B>

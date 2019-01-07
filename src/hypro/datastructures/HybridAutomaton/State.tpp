@@ -161,6 +161,19 @@ std::pair<CONTAINMENT,State<Number,Representation,Rargs...>> State<Number,Repres
 	return std::make_pair(resultPair.first, res);
 }
 
+template<typename Number, typename Representation, typename ...Rargs>
+State<Number,Representation,Rargs...> State<Number,Representation,Rargs...>::intersectHalfspaces(const matrix_t<Number>& constraints, const vector_t<Number>& constants, std::size_t I) const {
+	assert(checkConsistency());
+
+	State<Number,Representation,Rargs...> res(*this);
+	assert(res.getTimestamp() == this->getTimestamp());
+	assert(mSets.size() > I);
+
+	auto resultPair = boost::apply_visitor(genericSatisfiesHalfspacesVisitor<repVariant, Number>(constraints, constants), mSets.at(I));
+	res.setSetDirect(resultPair.second, I);
+
+	return res;
+}
 
 template<typename Number, typename Representation, typename ...Rargs>
 State<Number,Representation,Rargs...> State<Number,Representation,Rargs...>::applyTimeStep(const std::vector<std::pair<const matrix_t<Number>&, const vector_t<Number>&>>& flows, tNumber timeStepSize ) const {
@@ -385,6 +398,13 @@ void State<Number,Representation,Rargs...>::reduceRepresentation() {
 	for(std::size_t i=0; i < mSets.size(); i++){
 		this->setSetDirect(boost::apply_visitor(genericReductionVisitor<repVariant,Number>(), mSets.at(i)), i);
 	}
+}
+
+template<typename Number, typename Representation, typename ...Rargs>
+void State<Number,Representation,Rargs...>::partiallyReduceRepresentation(std::size_t I) {
+	assert(I < mSets.size());
+	assert(checkConsistency());
+	this->setSetDirect(boost::apply_visitor(genericReductionVisitor<repVariant,Number>(), mSets.at(I)), I);
 }
 
 template<typename Number, typename Representation, typename ...Rargs>

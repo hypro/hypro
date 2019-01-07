@@ -195,6 +195,14 @@ class VariablePool : public carl::Singleton<VariablePool> {
 		return false;
 	}
 
+	bool hasDimension( std::size_t i ) const {
+		assert( mCarlVariables.size() == mPplId );
+		#ifdef HYPRO_USE_PPL
+		assert( mPplVariables.size() == mPplId );
+		#endif
+		return mCarlVariables.size() > i;
+	}
+
 	#ifdef HYPRO_USE_PPL
 	std::size_t inline id( const Parma_Polyhedra_Library::Variable& _var ) const {
 		assert( mCarlVariables.size() == mPplId );

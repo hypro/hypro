@@ -53,24 +53,27 @@ namespace hypro {
 
     template<typename Number, typename Converter, typename Setting>
     CarlPolytopeT<Number,Converter,Setting> CarlPolytopeT<Number,Converter,Setting>::project(const std::vector<std::size_t>& dimensions) const {
-        TRACE("hypro.representations.CarlPolytope","on dimensions " << dimensions);
-        /*
-        if(dimensions.empty()) {
+        TRACE("hypro.representations.carlPolytope","This: " << *this << " on dimensions " << dimensions);
+        if(this->empty()) {
             return Empty();
         }
-        */
-
-        // projection by means of a linear transformation
-        matrix_t<Number> projectionMatrix = matrix_t<Number>::Zero(this->dimension(), this->dimension());
-        for(auto i : dimensions) {
-            projectionMatrix(i,i) = 1;
+        // make sure the number of constraints allows for a projection via v-poly conversion
+        matrix_t<Number> constraints = this->matrix();
+        if(constraints.rows() < constraints.cols()) {
+            assert(false);
+        } else {
+            // projection by means of a linear transformation
+            matrix_t<Number> projectionMatrix = matrix_t<Number>::Zero(this->dimension(), this->dimension());
+            for(auto i : dimensions) {
+                projectionMatrix(i,i) = 1;
+            }
+            return this->linearTransformation(projectionMatrix);
         }
-        return this->linearTransformation(projectionMatrix);
     }
 
     template <typename Number, typename Converter, typename Setting>
     CarlPolytopeT<Number,Converter,Setting> CarlPolytopeT<Number,Converter,Setting>::linearTransformation( const matrix_t<Number> &A ) const {
-        TRACE("hypro.representations.CarlPolytope","P' = A*P, A:" << std::endl << A);
+        TRACE("hypro.representations.carlPolytope","P' = A*P, A:" << std::endl << A << ", P: " << *this);
         if(A.nonZeros() == 0) {
             return CarlPolytopeT<Number,Converter,Setting>::Empty();
         }
@@ -78,13 +81,13 @@ namespace hypro {
             Eigen::FullPivLU<matrix_t<Number>> lu(A);
             // if A has full rank, we can simply re-transform, otherwise use v-representation.
             if(lu.rank() == A.rows()) {
-                TRACE("hypro.representations.HPolytope","A has full rank - do not use v-conversion.");
+                TRACE("hypro.representations.carlPolytope","A has full rank - do not use v-conversion.");
                 matrix_t<Number> constraints = this->matrix();
                 vector_t<Number> constants = this->vector();
                 assert( (CarlPolytopeT<Number,Converter,Setting>(constraints*A.inverse(), constants).size() == this->size()) );
                 return CarlPolytopeT<Number,Converter,Setting>(constraints*A.inverse(), constants);
             } else {
-                TRACE("hypro.representations.HPolytope","Use V-Conversion for linear transformation.");
+                TRACE("hypro.representations.carlPolytope","Use V-Conversion for linear transformation.");
                 auto intermediate = Converter::toVPolytope( *this );
                 intermediate = intermediate.linearTransformation( A );
                 auto res = Converter::toCarlPolytope(intermediate);
@@ -97,8 +100,11 @@ namespace hypro {
 
     template<typename Number, typename Converter, typename Setting>
     std::pair<CONTAINMENT, CarlPolytopeT<Number,Converter,Setting>> CarlPolytopeT<Number,Converter,Setting>::satisfiesHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const {
+        DEBUG("hypro.representations.carlPolytope","Hsps " << _mat << std::endl << _vec << " and this " << *this);
         auto resPoly = this->intersect(CarlPolytopeT<Number,Converter,Setting>(_mat,_vec));
-        resPoly.removeRedundancy();
+        //resPoly.removeRedundancy();
+
+        TRACE("hypro.representations.carlPolytope","Resulting polytope " << resPoly);
 
         if(resPoly == *this) {
             return std::make_pair(CONTAINMENT::FULL, *this);
@@ -112,6 +118,12 @@ namespace hypro {
 
     template<typename Number, typename Converter, typename Setting>
     const std::vector<Halfspace<Number>>& CarlPolytopeT<Number,Converter,Setting>::getHalfspaces() const {
+        if(this->empty()) {
+            mHalfspaces.clear();
+            vector_t<Number> normal = vector_t<Number>::Ones(1);
+            mHalfspaces.emplace_back(normal,Number(1));
+            mHalfspaces.emplace_back(-normal,Number(-2));
+        }
         if(mHalfspaces.empty()) {
             mHalfspaces = computeHalfspaces<tNumber,Number>(mFormula, this->dimension());
         }
@@ -121,6 +133,11 @@ namespace hypro {
 
     template<typename Number, typename Converter, typename Setting>
     std::vector<carl::Interval<Number>> CarlPolytopeT<Number,Converter,Setting>::getIntervals() const {
+        if(this->empty()) {
+            std::vector<carl::Interval<Number>> res;
+            res.emplace_back(carl::Interval<Number>::emptyInterval());
+            return res;
+        }
         // Note: Alternatively use FM-elimination.
         Optimizer<Number> opt{this->matrix(), this->vector()};
         auto dim = Eigen::Index(this->dimension());
@@ -148,13 +165,16 @@ namespace hypro {
         // if not empty, reset cache
         if(mEmpty != TRIBOOL::TRUE) {
             mEmpty = TRIBOOL::NSET;
+        } else {
+            return;
         }
         // add constraint to formula
         std::vector<ConstraintT<tNumber>> constraints;
         mFormula.getConstraints(constraints);
         constraints.push_back(constraint);
         mFormula = FormulaT<tNumber>(carl::FormulaType::AND, constraintsToFormulas(constraints));
-        TRACE("hypro.representations.CarlPolytope","After adding a constraint " << *this);
+        TRACE("hypro.representations.carlPolytope","After adding a constraint " << *this);
+        mSpaceDimensionSet = false;
         detectDimension();
     }
 
@@ -165,22 +185,44 @@ namespace hypro {
         // if not empty, reset cache
         if(mEmpty != TRIBOOL::TRUE) {
             mEmpty = TRIBOOL::NSET;
+        } else {
+            return;
         }
         // add constraints to formula
         auto cCopy = constraints;
         mFormula.getConstraints(cCopy);
         mFormula = FormulaT<tNumber>(carl::FormulaType::AND, constraintsToFormulas(cCopy));
-        TRACE("hypro.representations.CarlPolytope","After adding constraints " << *this);
+        TRACE("hypro.representations.carlPolytope","After adding constraints " << *this);
+        mSpaceDimensionSet = false;
         detectDimension();
     }
 
     template<typename Number, typename Converter, typename Setting>
+    void CarlPolytopeT<Number,Converter,Setting>::addIntervalConstraints(const carl::Interval<Number>& intv, const carl::Variable& var) {
+        TRACE("hypro.representations.carlPolytope","Input interval " << intv << " for variable " << var);
+        auto tmp = intervalToFormulas<tNumber,Number>(intv,var);
+        ConstraintsT<tNumber> newConstraints;
+        for(const auto& f : tmp) {
+            ConstraintsT<tNumber> tmpConstraints;
+            f.getConstraints(tmpConstraints);
+            for(const auto& c : tmpConstraints) {
+                newConstraints.emplace_back(c);
+                TRACE("hypro.representations.carlPolytope","Add new interval constraint " << c);
+            }
+        }
+        this->addConstraints(newConstraints);
+    }
+
+    template<typename Number, typename Converter, typename Setting>
     void CarlPolytopeT<Number,Converter,Setting>::substituteVariable(carl::Variable oldVar, carl::Variable newVar) {
+        if(this->empty()) {
+            return;
+        }
         // reset half-space cache
         mHalfspaces.clear();
         // substitute
         mFormula = mFormula.substitute(oldVar, PolyT<tNumber>(newVar));
-        TRACE("hypro.representations.CarlPolytope","After substituting " << oldVar << " by " << newVar << ": " << *this);
+        TRACE("hypro.representations.carlPolytope","After substituting " << oldVar << " by " << newVar << ": " << *this);
         detectDimension();
     }
 
@@ -191,16 +233,26 @@ namespace hypro {
 
     template<typename Number, typename Converter, typename Setting>
     void CarlPolytopeT<Number,Converter,Setting>::eliminateVariable(carl::Variable var) {
-        DEBUG("hypro.representations.carlPolytope","Eliminate variable " << var);
+        DEBUG("hypro.representations.carlPolytope","Eliminate variable " << var << " in " << mFormula);
+        if(this->empty()) {
+            return;
+        }
         QEQuery query;
         query.emplace_back(std::make_pair(QuantifierType::EXISTS, std::vector<carl::Variable>({var})));
+        //std::cout << "Eliminate ... ";
         mFormula = eliminateQuantifiers(mFormula, query);
+        //std::cout << "done. Remove redundancy ... ";
+        //this->removeRedundancy();
+        //std::cout << "done." << std::endl;
         detectDimension();
     }
 
     template<typename Number, typename Converter, typename Setting>
     void CarlPolytopeT<Number,Converter,Setting>::eliminateVariables(const std::vector<carl::Variable>& vars) {
-        DEBUG("hypro.representations.carlPolytope","Eliminate variables..");
+        DEBUG("hypro.representations.carlPolytope","Eliminate variables in " << mFormula);
+        if(this->empty()) {
+            return;
+        }
         QEQuery query;
         query.emplace_back(std::make_pair(QuantifierType::EXISTS, vars));
         mFormula = eliminateQuantifiers(mFormula, query);
@@ -209,20 +261,34 @@ namespace hypro {
 
     template<typename Number, typename Converter, typename Setting>
     void CarlPolytopeT<Number,Converter,Setting>::eliminateVariables(const QEQuery& vars) {
-        DEBUG("hypro.representations.carlPolytope","Eliminate variables..");
+        DEBUG("hypro.representations.carlPolytope","Eliminate variables in " << mFormula);
+        if(this->empty()) {
+            return;
+        }
+        //std::cout << "Eliminate ... ";
         mFormula = eliminateQuantifiers(mFormula, vars);
+        //std::cout << "done." << std::endl;
         detectDimension();
     }
 
     template<typename Number, typename Converter, typename Setting>
     std::vector<Point<Number>> CarlPolytopeT<Number,Converter,Setting>::vertices() const {
+        DEBUG("hypro.representations.carlPolytope","Compute vertices from " << *this);
+        if(this->empty()) {
+            return std::vector<Point<Number>>{};
+        }
         auto hpoly = Converter::toHPolytope(*this);
+        DEBUG("hypro.representations.carlPolytope","As H-polytope: " << hpoly);
         return hpoly.vertices();
     }
 
     template<typename Number, typename Converter, typename Setting>
     matrix_t<Number> CarlPolytopeT<Number,Converter,Setting>::matrix() const {
-        assert(dimensionWasCorrectlySet());
+        if(mFormula.isFalse()) {
+            return matrix_t<Number>(0,0);
+        }
+        //assert(dimensionWasCorrectlySet());
+        detectDimension();
         matrix_t<Number> res = matrix_t<Number>(mFormula.size(),dimension());
         std::vector<ConstraintT<tNumber>> constraints;
         mFormula.getConstraints(constraints);
@@ -242,17 +308,22 @@ namespace hypro {
 
     template<typename Number, typename Converter, typename Setting>
     vector_t<Number> CarlPolytopeT<Number,Converter,Setting>::vector() const {
-        assert(dimensionWasCorrectlySet());
+        if(mFormula.isFalse()) {
+            return vector_t<Number>(0);
+        }
+        //assert(dimensionWasCorrectlySet());
+        detectDimension();
         vector_t<Number> res = vector_t<Number>(mFormula.size());
         std::vector<ConstraintT<tNumber>> constraints;
         mFormula.getConstraints(constraints);
         std::size_t i = 0;
         for(const auto& c : constraints) {
-            res(i) = normalizedOffset<tNumber,Number>(c);
+            // widening: check if origin contained. If so, increase abs of offset, else, reduce abs. value.
+            res(i) = normalizedOffset<tNumber,Number>(c);// + computeWidening<tNumber,Number>(c);
             if(c.relation() == carl::Relation::EQ) {
                 res.conservativeResize(res.rows()+1);
                 ++i;
-                res(i) = -normalizedOffset<tNumber,Number>(c);
+                res(i) = -normalizedOffset<tNumber,Number>(c);// - computeWidening<tNumber,Number>(c);
             }
             ++i;
         }
@@ -261,11 +332,15 @@ namespace hypro {
 
     template<typename Number, typename Converter, typename Setting>
     bool CarlPolytopeT<Number,Converter,Setting>::empty() const {
-        if(mFormula.size() <= 1) {
-            return false;
-        }
-
         if(mEmpty == TRIBOOL::NSET) {
+            if(mFormula.isFalse()) {
+                mEmpty = TRIBOOL::TRUE;
+                return true;
+            }
+            // Attention, we assume the formula is only one constraint.
+            if(mFormula.size() <= 1) {
+                return false;
+            }
             Optimizer<Number> opt = Optimizer<Number>(this->matrix(), this->vector());
             mEmpty = opt.checkConsistency() ? TRIBOOL::FALSE : TRIBOOL::TRUE;
         }
@@ -295,7 +370,7 @@ namespace hypro {
 
     template<typename Number, typename Converter, typename Setting>
     void CarlPolytopeT<Number,Converter,Setting>::removeRedundancy() {
-        if(mFormula.size() <= 1) {
+        if(mFormula.size() <= 1 || this->empty()) {
             return;
         }
         Optimizer<Number> opt = Optimizer<Number>(this->matrix(), this->vector());
@@ -309,6 +384,39 @@ namespace hypro {
     }
 
     template<typename Number, typename Converter, typename Setting>
+    void CarlPolytopeT<Number,Converter,Setting>::reduceRepresentation() {
+        if(this->empty()) {
+            return;
+        }
+        Optimizer<Number> opt = Optimizer<Number>(this->matrix(), this->vector());
+        auto directions = computeTemplate<Number>(this->dimension(), 4);
+        matrix_t<Number> constraints = combineRows(directions);
+        vector_t<Number> constants = vector_t<Number>(constraints.rows());
+        Eigen::Index row = 0;
+        for(const auto& d : directions) {
+            auto evalRes = opt.evaluate(vector_t<Number>(d), false);
+            assert(evalRes.errorCode != SOLUTION::UNKNOWN);
+            // if the polytope is empty, directly return empty polytope.
+            if(evalRes.errorCode == SOLUTION::INFEAS) {
+                mEmpty = TRIBOOL::TRUE;
+                return;
+            }
+            // if the polytope is unbounded, remove constraint.
+            if(evalRes.errorCode == SOLUTION::INFTY) {
+                constraints.conservativeResize(constraints.rows()-1, constraints.cols());
+                constants.conservativeResize(constants.rows()-1);
+                continue;
+            }
+            assert(evalRes.errorCode == SOLUTION::FEAS);
+            constants(row) = evalRes.supportValue;
+        }
+        FormulasT<tNumber> newConstraints = halfspacesToConstraints<tNumber,Number>(constraints,constants);
+
+        mFormula = FormulaT<tNumber>{carl::FormulaType::AND, newConstraints};
+        TRACE("hypro.representations.carlPolytope","Result formula: " << mFormula);
+    }
+
+    template<typename Number, typename Converter, typename Setting>
     void CarlPolytopeT<Number,Converter,Setting>::clearCache() const {
         // reset half-space cache
         mHalfspaces.clear();
@@ -318,11 +426,13 @@ namespace hypro {
 
     template<typename Number, typename Converter, typename Setting>
     void CarlPolytopeT<Number,Converter,Setting>::detectDimension() const {
-        std::size_t d = 0;
-        // get maximal state space dimension based on the variables used in mFormula.
-        std::for_each(mFormula.variables().begin(),mFormula.variables().end(), [&](const carl::Variable& v){ d = std::max(d,VariablePool::getInstance().id(v));});
-        mDimension = d+1; // add one as we start counting from zero.
-        TRACE("hypro.representations.carlPolytope","Set dimension to " << mDimension );
+        if(!mSpaceDimensionSet) {
+            std::size_t d = 0;
+            // get maximal state space dimension based on the variables used in mFormula.
+            std::for_each(mFormula.variables().begin(),mFormula.variables().end(), [&](const carl::Variable& v){ d = std::max(d,VariablePool::getInstance().id(v));});
+            mDimension = d+1; // add one as we start counting from zero.
+            TRACE("hypro.representations.carlPolytope","Set dimension to " << mDimension );
+        }
     }
 
     template<typename Number, typename Converter, typename Setting>
@@ -330,8 +440,12 @@ namespace hypro {
         bool res = true;
         #ifndef NDEBUG
         auto tmpDim = mDimension;
-        detectDimension();
-        if(tmpDim != mDimension) {
+        std::size_t d = 0;
+        // get maximal state space dimension based on the variables used in mFormula.
+        std::for_each(mFormula.variables().begin(),mFormula.variables().end(), [&](const carl::Variable& v){ d = std::max(d,VariablePool::getInstance().id(v));});
+        ++d;
+        if(tmpDim < d) {
+            //std::cout << "Dimension of this " << *this << " was set to " << tmpDim << " but actually is " << d << std::endl;
             return false;
         }
         #endif
