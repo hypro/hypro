@@ -3,7 +3,7 @@
 namespace hypro {
     template<typename Number>
     FormulaT<Number> FourierMotzkinQE<Number>::eliminateQuantifiers() {
-        TRACE("hypro.algorithms.qe", "Eliminate in: " << mFormula );
+        DEBUG("hypro.algorithms.qe", "Eliminate in: " << mFormula );
         // iterate over query
         for(const auto& QuantifierVariablesPair : mQuery) {
             // we are ignoring the quantifier type
@@ -11,16 +11,16 @@ namespace hypro {
 
             // eliminate one variable after the other
             for(const auto& var : QuantifierVariablesPair.second) {
-                TRACE("hypro.algorithms.qe", "Elimiate " << var );
+                DEBUG("hypro.algorithms.qe", "Elimiate " << var );
 
                 auto bounds = findBounds(var);
                 // combine all lower-upper bound pairs.
                 FormulasT<Number> newConstraints;
                 if(!bounds[2].empty()) {
-                    TRACE("hypro.algorithms.qe", "Found equation(s), substitute." );
+                    DEBUG("hypro.algorithms.qe", "Found equation(s), substitute." );
                     newConstraints = substituteEquations(bounds,var);
                 } else {
-                    TRACE("hypro.algorithms.qe", "Create lower-upper bound pairs." );
+                    DEBUG("hypro.algorithms.qe", "Create lower-upper bound pairs." );
                     newConstraints = createNewConstraints(bounds, var);
                 }
 
@@ -32,10 +32,11 @@ namespace hypro {
 
                 // assemble new formula
                 mFormula = FormulaT<Number>(carl::FormulaType::AND, newConstraints);
+                DEBUG("hypro.algorithms.qe", "Done elimiating " << var << ", new formula size: " << mFormula.size() );
             }
         }
 
-        TRACE("hypro.algorithms.qe", "Formula after elimination: " << mFormula );
+        DEBUG("hypro.algorithms.qe", "Formula after elimination: " << mFormula );
 
         return mFormula;
     }

@@ -39,7 +39,7 @@ namespace hypro {
 			//1.Get ConstraintSet, build State and add to localStateMap
 			ConstraintSetT<Number> conSet = visit(initStateCtx);
 			assert(initialLoc != NULL);
-			std::cout << "Parsed initial state description: " << conSet.matrix() << " <= " << conSet.vector() << std::endl;
+			//std::cout << "Parsed initial state description: " << conSet.matrix() << " <= " << conSet.vector() << std::endl;
 			initialState.emplace(std::make_pair(initialLoc, Condition<Number>(conSet.matrix(), conSet.vector())));
 		}
 
@@ -80,7 +80,7 @@ namespace hypro {
   		//1.Call HyproFormulaVisitor and get pair of matrix and vector
 		HyproFormulaVisitor<Number> visitor(vars);
 		std::pair<matrix_t<Number>,vector_t<Number>> result = visitor.visit(ctx->constrset());
-		std::cout << "In visit init: " << result.first << " <= " << result.second << std::endl;
+		//std::cout << "In visit init: " << result.first << " <= " << result.second << std::endl;
 
 		//2.Build ConstraintSet and return it
 		return ConstraintSetT<Number>(result.first, result.second);
