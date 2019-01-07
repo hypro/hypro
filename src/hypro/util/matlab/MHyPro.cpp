@@ -2,6 +2,7 @@
 #include "HyProConstraintSet.h"
 #include "HyProTaylorModel.h"
 #include "HyProEllipsoid.h"
+#include "HyProSupportFunction.h"
 #include <iostream>
 #include "mex.h"
 #include "matrix.h"
@@ -19,7 +20,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
     }else if(!strcmp(type, "ConstraintSet")){
         HyProConstraintSet::process(nlhs, plhs, nrhs, prhs);
     }else if(!strcmp(type, "SupportFunction")){
-       // HyProSupportFunction::process(nlhs, plhs, nrhs, prhs);
+        HyProSupportFunction::process(nlhs, plhs, nrhs, prhs);
     }else{
         mexErrMsgTxt("MHyPro - Unknown type.");
     }

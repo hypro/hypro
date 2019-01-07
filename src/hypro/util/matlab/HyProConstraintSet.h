@@ -17,12 +17,8 @@ class HyProConstraintSet: public HyProGeometricObject<hypro::ConstraintSet<doubl
     private:
         static void isAxisAligned(int, mxArray**, int, const mxArray**);
         static void addConstraint(int, mxArray**, int, const mxArray**);
-        static void ostream(int, mxArray**, int, const mxArray**);
         static void type(int, mxArray**, int, const mxArray**);
-
-        template<typename From, typename To, typename S>
-        //static void convert(int, mxArray**, int, const mxArray**);
-        
+        static void reduceNumberRepresentation(int, mxArray**, int, const mxArray**);
 };
 
 #include "HyProConstraintSet.tpp"

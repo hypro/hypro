@@ -47,6 +47,22 @@ void HyProConstraintSet::type(int nlhs, mxArray* plhs[], int nrhs, const mxArray
     mexPrintf("ConstraintSet");
 }
 
+/**
+ * @brief
+ **/
+void HyProConstraintSet::reduceNumberRepresentation(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
+    if(nlhs < 1)
+        mexErrMsgTxt("HyProGeometricObject - reduceNumberRepresentation: Expecting an output!");
+    if(nrhs < 4)
+        mexErrMsgTxt("HyProGeometricObject - reduceNumberRepresentation: One or more arguments are missing!");
+    
+    hypro::ConstraintSet<double>* temp = convertMat2Ptr<hypro::ConstraintSet<double>>(prhs[2]);
+    const unsigned u = (const unsigned) mxGetScalar(prhs[3]);
+    hypro::ConstraintSet<double> obj = temp->reduceNumberRepresentation(u);
+    hypro::ConstraintSet<double>* b = new hypro::ConstraintSet<double>(obj);
+    plhs[0] = convertPtr2Mat<hypro::ConstraintSet<double>>(b);
+}
+
 // /**
 //  * @brief
 //  **/
@@ -88,17 +104,7 @@ void HyProConstraintSet::process(int nlhs, mxArray *plhs[], int nrhs, const mxAr
      * Constructors
      **************************************************************************/
 
-    if (!strcmp("new_matrix", cmd) && nrhs == 2){  
-        new_matrix(nlhs, plhs, nrhs ,prhs);
-        return;
-    }
-
-    if (!strcmp("new_vector", cmd) && nrhs == 2){  
-        new_vector(nlhs, plhs, nrhs, prhs);
-        return;
-    }
-
-    if (!strcmp("new_mat_vec", cmd) && nrhs == 2){  
+    if (!strcmp("new_mat_vec", cmd)){  
         new_mat_vec(nlhs, plhs, nrhs, prhs);
         return;
     }
@@ -237,7 +243,7 @@ void HyProConstraintSet::process(int nlhs, mxArray *plhs[], int nrhs, const mxAr
     }
 
     if(!strcmp("intersectHalfspaces", cmd)){
-        reduceNumberRepresentation(nlhs, plhs, nrhs, prhs);
+        intersectHalfspaces(nlhs, plhs, nrhs, prhs);
         return;
     }
 
@@ -271,5 +277,5 @@ void HyProConstraintSet::process(int nlhs, mxArray *plhs[], int nrhs, const mxAr
         return;
     }
 
-    mexErrMsgTxt("HyProHyProConstraintSet - Command not recognized.");
+    mexErrMsgTxt("HyProConstraintSet - Command not recognized.");
 }

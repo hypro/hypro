@@ -247,7 +247,11 @@ classdef HyProObject < handle
         end
         
         function out = vector(obj)
-            out = MHyPro(obj.Type, 'vector', obj.Pointer);
+            if ~strcmp(obj.Type, 'Ellipse')
+                out = MHyPro(obj.Type, 'vector', obj.Pointer);
+            else
+                error('HyProObject - insert: Not allowed for this type of HyProObject');
+            end
         end
         
         function out = isempty(obj)

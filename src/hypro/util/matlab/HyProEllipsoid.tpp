@@ -83,6 +83,30 @@
     ObjectHandle::convert2matlab(out_mat, out, out_mat.cols(), out_mat.rows());
  }
 
+ /**
+ * @brief
+ **/
+ void HyProEllipsoid::ostream(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
+     if(nrhs < 3)
+        mexErrMsgTxt("HyProEllipsoid - ostream: One or more input arguments are missing.");
+
+    hypro::Ellipsoid<double>* obj = convertMat2Ptr<hypro::Ellipsoid<double>>(prhs[2]);
+    hypro::matrix_t<double> mat = obj->matrix();
+
+    int rows = mat.rows();
+    int cols = mat.cols();
+
+    mexPrintf("Matrix: [");
+    for(int i = 0; i < rows; i++){
+        for(int j = 0; j < cols; j++){
+            mexPrintf("%f ", mat(i,j));
+        }
+        mexPrintf("\n");
+    }
+    mexPrintf("]\n");
+ }
+
+
 
 /**
 * @brief The entry point to the HyPro Ellipsoid class for Matalb.

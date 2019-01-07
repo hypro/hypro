@@ -385,7 +385,40 @@ mat = eli_6.approxEllipsoidMatrix([4 2; 0 8]);
 disp('Matrix app. of ellipsoid 6:');
 disp(mat);
 
-disp('PASSED');
+
+%**************************************************************************
+% Tests for HyPro Constraint Sets
+%**************************************************************************
+
+mat = [1 2 3; 4 5 6; 7 8 9];
+vec = [1;0;1];
+set_1 = HyProObject('ConstraintSet', 'new_mat_vec', mat, vec);
+set_2 = HyProObject('ConstraintSet', 'copy', set_1);
+
+disp('Get matrix and vector');
+matrix = set_1.matrix();
+vector = set_2.vector();
+disp('Matrix:');
+disp(matrix);
+disp('Vector:');
+disp(vector);
+
+disp('Is set 1 axis aligned?');
+al = set_1.isAxisAligned();
+disp(al);
+
+set_3 = HyProObject('ConstraintSet', 'new_mat_vec', [1 0 0; 0 1 0; 0 0 1], [0;0;0]);
+al = set_3.isAxisAligned();
+disp('Is set 3 axis aligned?');
+disp(al);
+
+
+disp('Add constraint');
+vec = [1; 2; 3];
+set_3.addConstraint(vec, 2);
+disp('Set 3 with new constraint:');
+set_3.ostream();
+
 
 
 
