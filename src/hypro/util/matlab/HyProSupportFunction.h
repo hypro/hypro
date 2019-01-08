@@ -15,7 +15,7 @@ class HyProSupportFunction: public HyProGeometricObject<hypro::SupportFunction<d
     public:
         static void process(int, mxArray**, int, const mxArray**);
     private:
-        static void new_points(int, mxArray**, int, const mxArray**);
+        // static void new_points(int, mxArray**, int, const mxArray**);
         static void new_intervals(int, mxArray**, int, const mxArray**);
         static void new_halfspaces(int, mxArray**, int, const mxArray**);
         static void type(int, mxArray**, int, const mxArray**);
@@ -30,6 +30,7 @@ class HyProSupportFunction: public HyProGeometricObject<hypro::SupportFunction<d
         static void cleanUp(int, mxArray**, int, const mxArray**);
         static void collectProjections(int, mxArray**, int, const mxArray**);
         static void evaluateTemplate(int, mxArray**, int, const mxArray**);
+        static void reduceNumberRepresentation(int, mxArray**, int, const mxArray**);
 
 };
 

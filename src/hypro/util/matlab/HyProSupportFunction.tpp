@@ -1,28 +1,29 @@
 #include "HyProSupportFunction.h"
 
-/**
- * @brief
- **/
-void HyProSupportFunction::new_points(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
-    if(nlhs != 1)
-        mexErrMsgTxt("HyProSupportFunction - new_points: One output is expected.");
-    if(nrhs < 3)
-        mexErrMsgTxt("HyProSupportFunction - new_points: At least one argument is missing.");
+// /**
+//  * @brief
+//  **/
+// void HyProSupportFunction::new_points(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
+//     if(nlhs != 1)
+//         mexErrMsgTxt("HyProSupportFunction - new_points: One output is expected.");
+//     if(nrhs < 3)
+//         mexErrMsgTxt("HyProSupportFunction - new_points: At least one argument is missing.");
     
-    mxArray *m_in_points;
-    double *in_points;
-    const mwSize *dims;
-    int dimy;
+//     mxArray *m_in_points;
+//     double *in_points;
+//     const mwSize *dims;
+//     int dimy;
 
-    dims = mxGetDimensions(prhs[2]);
-    dimy = (const int) dims[0];
-    m_in_points = mxDuplicateArray(prhs[2]);
-    in_points = mxGetPr(m_in_points);
+//     dims = mxGetDimensions(prhs[2]);
+//     dimy = (const int) dims[0];
+//     m_in_points = mxDuplicateArray(prhs[2]);
+//     in_points = mxGetPr(m_in_points);
 
-    std::vector<hypro::Point<double>> points = ObjectHandle::mPointsVector2Hypro(in_points, dimy);
-    plhs[0] = convertPtr2Mat<hypro::SupportFunction<double>>(new hypro::SupportFunction<double>(points));
+//     const std::vector<hypro::Point<double>> points = ObjectHandle::mPointsVector2Hypro(in_points, dimy);
+//     hypro::SupportFunction<double>* temp = new hypro::SupportFunction<double>(points);
+//     plhs[0] = convertPtr2Mat<hypro::SupportFunction<double>>(temp);
 
-}
+// }
 
 /**
  * @brief
@@ -242,7 +243,7 @@ void HyProSupportFunction::collectProjections(int nlhs, mxArray* plhs[], int nrh
 
     m_out = plhs[0] = mxCreateDoubleMatrix(vec.size(), 1, mxREAL);
     out = mxGetPr(m_out);
-    ObjectHandle::convert2matlab(vec, out, 1, (int)vec.size());
+    ObjectHandle::vector2matlab(vec, out, 1, (int)vec.size());
 }
 
 /**
@@ -256,12 +257,24 @@ void HyProSupportFunction::evaluateTemplate(int nlhs, mxArray* plhs[], int nrhs,
     hypro::SupportFunction<double>* sfct = convertMat2Ptr<hypro::SupportFunction<double>>(prhs[2]);
     std::size_t directions = (std::size_t) mxGetScalar(prhs[3]);
     const int force = (const int) mxGetScalar(prhs[4]);
-    const bool f = false;
+    bool f = false;
     if(force == 1)
         f = true;
     sfct->evaluateTemplate(directions, f);
 }
 
+/**
+ * @brief
+ **/
+void HyProSupportFunction::reduceNumberRepresentation(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
+    if(nlhs < 1)
+        mexErrMsgTxt("HyProSupportFunction - reduceNumberRepresentation: Expecting an output!");
+    if(nrhs < 3)
+        mexErrMsgTxt("HyProSupportFunction - reduceNumberRepresentation: One or more arguments are missing!");
+    
+    hypro::SupportFunction<double>* temp = convertMat2Ptr<hypro::SupportFunction<double>>(prhs[2]);
+    temp->reduceNumberRepresentation();
+}
 
 
 /**
@@ -291,6 +304,9 @@ void HyProSupportFunction::process(int nlhs, mxArray *plhs[], int nrhs, const mx
         return;
     }
     
+    // if (!strcmp("new_points", cmd)){
+    //     new_points(nlhs, plhs, nrhs, prhs);
+    // }
 
 
     // Check if there is a second input, which should be the class instance handle
