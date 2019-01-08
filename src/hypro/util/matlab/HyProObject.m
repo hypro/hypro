@@ -450,6 +450,9 @@ classdef HyProObject < handle
 %            end
 %        end
        
+       % SUPPORT FUNCTIONS
+       
+        
        
     end
 end

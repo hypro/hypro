@@ -48,7 +48,7 @@ class ObjectHandle{
         static std::vector<carl::Interval<double>> mPoints2Hypro(double*);
         static std::pair<hypro::Point<double>, hypro::Point<double>> mPointPair2Hypro(double*);
         static std::vector<hypro::Point<double>> mPointsVector2Hypro(double*, int);
-        static std::vector<hypro::Halfspace<double>> mHalfspaceVector2Hypro(double*);
+        static std::vector<hypro::Halfspace<double>> mHalfspaces2Hypro(double*, double*, const int, const int, const int);
         static std::vector<hypro::EvaluationResult<double>> mMultiEvaluationStruct2Hypro(double*);
         static std::vector<carl::Term<double>> mMultivariatePoly2Hypro(double*);
 
@@ -373,6 +373,28 @@ hypro::SOLUTION ObjectHandle::mSolution2Hypro(char* mSol){
  **/
 std::vector<carl::Term<double>> ObjectHandle::mMultivariatePoly2Hypro(double*){
     
+}
+
+/**
+ * @brief Converts a Matlab matrix and vector into a vector of halfspaces.
+ * Each column of the matrix is a normal vector. The corresponding offset
+ * is saved in the vector
+ * 
+ **/
+std::vector<hypro::Halfspace<double>> ObjectHandle::mHalfspaces2Hypro(double* matrix, double* offsets, const int dimx, const int dimy, const int len){
+    std::vector<hypro::Halfspace<double>> hypro_vec(len);
+    
+    hypro::matrix_t<double> mat = mMatrix2Hypro(matrix, dimx, dimy);
+    hypro::vector_t<double> vec = mVector2Hypro(offsets, len);
+
+    for(int i = 0; i < dimx; i++){
+        const hypro::vector_t<double> normal = mat.col(i);
+        const double offset = vec(0,i);
+        hypro::Halfspace<double>* h = new hypro::Halfspace<double>(normal, offset);
+        hypro_vec.emplace_back(*h);
+    }
+
+    return hypro_vec;
 }
 
 #endif

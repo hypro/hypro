@@ -424,6 +424,11 @@ sum = set_1 + set_3;
 disp('Sum of set 1 and set 3:');
 sum.ostream();
 
+%**************************************************************************
+% Tests for HyPro Support Functions
+%**************************************************************************
 
+mat = [1 2 3; 4 5 6; 7 8 9];
+supf = HyProObject('SupportFunction', 'new_matrx', mat);
 
 res = 1;

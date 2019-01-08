@@ -20,8 +20,7 @@
 //     in_points = mxGetPr(m_in_points);
 
 //     const std::vector<hypro::Point<double>> points = ObjectHandle::mPointsVector2Hypro(in_points, dimy);
-//     hypro::SupportFunction<double>* temp = new hypro::SupportFunction<double>(points);
-//     plhs[0] = convertPtr2Mat<hypro::SupportFunction<double>>(temp);
+//     plhs[0] = convertPtr2Mat<hypro::SupportFunction<double>>(new hypro::SupportFunction<double>(points));
 
 // }
 
@@ -54,20 +53,25 @@ void HyProSupportFunction::new_intervals(int nlhs, mxArray* plhs[], int nrhs, co
 void HyProSupportFunction::new_halfspaces(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
     if(nlhs != 1)
         mexErrMsgTxt("HyProSupportFunction - new_halfspaces: One output is expected.");
-    if(nrhs < 3)
+    if(nrhs < 4)
         mexErrMsgTxt("HyProSupportFunction - new_halfspaces: At least one argument is missing.");
     
-    mxArray *m_in_halfspaces;
-    double *in_halfspaces;
-    const mwSize *dims;
-    int dimy;
+    mxArray *m_in_matrix, *m_in_vector;
+    double *in_matrix, *in_vector;
+    const mwSize *mat_dims, *vec_dims;
+    int mat_dimy, mat_dimx, vec_len;
 
-    dims = mxGetDimensions(prhs[2]);
-    dimy = (const int) dims[0];
-    m_in_halfspaces = mxDuplicateArray(prhs[2]);
-    in_halfspaces = mxGetPr(m_in_halfspaces);
+    mat_dims = mxGetDimensions(prhs[2]);
+    vec_dims = mxGetDimensions(prhs[3]);
+    mat_dimy = (int) mat_dims[0];
+    mat_dimx = (int) mat_dims[1];
+    vec_len = (int) vec_dims[0];
+    m_in_matrix = mxDuplicateArray(prhs[2]);
+    m_in_vector = mxDuplicateArray(prhs[3]);
+    in_matrix = mxGetPr(m_in_matrix);
+    in_vector = mxGetPr(m_in_vector);
 
-    std::vector<hypro::Halfspace<double>> halfspaces = ObjectHandle::mHalfspaceVector2Hypro(in_halfspaces);
+    std::vector<hypro::Halfspace<double>> halfspaces = ObjectHandle::mHalfspaces2Hypro(in_matrix, in_vector, mat_dimx, mat_dimy, vec_len);
     plhs[0] = convertPtr2Mat<hypro::SupportFunction<double>>(new hypro::SupportFunction<double>(halfspaces));
 }
 /**
@@ -243,7 +247,9 @@ void HyProSupportFunction::collectProjections(int nlhs, mxArray* plhs[], int nrh
 
     m_out = plhs[0] = mxCreateDoubleMatrix(vec.size(), 1, mxREAL);
     out = mxGetPr(m_out);
-    ObjectHandle::vector2matlab(vec, out, 1, (int)vec.size());
+    for(int i = 0; i < vec.size(); i++){
+        out[i] = vec[i];
+    }
 }
 
 /**
@@ -294,14 +300,18 @@ void HyProSupportFunction::process(int nlhs, mxArray *plhs[], int nrhs, const mx
      * Constructors
      **************************************************************************/
 
-    if (!strcmp("new_matrix", cmd) && nrhs == 2){  
+    if (!strcmp("new_matrix", cmd)){  
         new_matrix(nlhs, plhs, nrhs ,prhs);
         return;
     }
 
-    if (!strcmp("new_mat_vec", cmd) && nrhs == 2){  
+    if (!strcmp("new_mat_vec", cmd)){  
         new_mat_vec(nlhs, plhs, nrhs, prhs);
         return;
+    }
+
+    if(!strcmp("new_halfspaces", cmd)){
+        new_halfspaces(nlhs, plhs, nrhs, prhs);
     }
     
     // if (!strcmp("new_points", cmd)){
