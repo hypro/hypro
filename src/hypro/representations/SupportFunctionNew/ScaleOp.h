@@ -100,6 +100,19 @@ class ScaleOp : public RootGrowNode<Number,Setting> {
 		}		
 	}
 
+	//divide by factor
+	vector_t<Number> reverseOp(const vector_t<Number>& point) const { 
+		if(factor == 0) return vector_t<Number>::Zero(point.rows());
+		return point / factor;
+	} 
+
+	//If child contains p, then scaled version will contain it too
+	bool contains(const std::vector<bool>& v) const {
+		assert(v.size() == 1);
+		if(v.front()) return true;
+		return false;
+	}
+
 };
 
 } //namespace hypro

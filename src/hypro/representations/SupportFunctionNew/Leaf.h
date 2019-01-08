@@ -86,6 +86,9 @@ class Leaf : public RootGrowNode<Number,Setting> {
 		return max;
 	}
 
+	//Calls contains function of given representation
+	bool contains(const vector_t<Number>& point) const { return rep->contains(Point<Number>(point)); }
+
 };
 
 } //namespace hypro

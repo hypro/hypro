@@ -99,6 +99,18 @@ class ProjectOp : public RootGrowNode<Number,Setting> {
 		return Point<Number>(tmp);
 	}
 
+	//TODO: if wildcard values in vectors avaiable, then implement smth correct here
+	vector_t<Number> reverseOp(const vector_t<Number>& point) const { 
+		return point;
+	} 
+
+	//If child contains p, then projected version will contain it too
+	bool contains(const std::vector<bool>& v) const {
+		assert(v.size() == 1);
+		if(v.front()) return true;
+		return false;
+	}
+
 };
 
 } //namespace hypro

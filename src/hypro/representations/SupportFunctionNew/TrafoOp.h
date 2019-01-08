@@ -153,6 +153,20 @@ class TrafoOp : public RootGrowNode<Number,Setting> {
 		return Point<Number>(parameterPair.first * points.front().rawCoordinates() + parameterPair.second);
 	}
 
+	//Invert transformation
+	vector_t<Number> reverseOp(const vector_t<Number>& point) const { 
+		std::pair<matrix_t<Number>, vector_t<Number>> parameterPair = parameters->getParameterSet(currentExponent);
+		vector_t<Number> tmp = (parameterPair.first.inverse() * point) - parameterPair.second;	
+		return tmp;
+	} 
+
+	//If child contains p, then scaled version will contain it too
+	bool contains(const std::vector<bool>& v) const {
+		assert(v.size() == 1);
+		if(v.front()) return true;
+		return false;
+	}
+
 };
 
 } //namespace hypro

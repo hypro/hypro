@@ -386,7 +386,6 @@ namespace hypro {
 		} else {
 			fullProjection = false;
 		}
-
 		if(!fullProjection){
 			DEBUG("hypro.representations.supportFunction", "No full projection, create.");
 			std::shared_ptr<ProjectOp<Number,Converter,Setting>> proj = std::make_shared<ProjectOp<Number,Converter,Setting>>(*this, dimensions);
@@ -465,13 +464,50 @@ namespace hypro {
 	}
 
 	template<typename Number, typename Converter, typename Setting>
-	bool SupportFunctionNewT<Number,Converter,Setting>::contains( const Point<Number>& point ) const {
-		return true;
+	bool SupportFunctionNewT<Number,Converter,Setting>::contains( const vector_t<Number>& point ) const {
+
+		if(mRoot == nullptr) return false;
+
+		//first function - parameters are backtransformed into the domain space of the given operation
+		std::function<Parameters<vector_t<Number>>(RootGrowNode<Number,Setting>*, Parameters<vector_t<Number>>)> reverseOp = 
+			[](RootGrowNode<Number,Setting>* n, Parameters<vector_t<Number>> p) -> Parameters<vector_t<Number>> { 
+				return Parameters<vector_t<Number>>(n->reverseOp(std::get<0>(p.args)));
+			};
+
+		//second function - calls contains() of leaf
+		std::function<bool(RootGrowNode<Number,Setting>*, Parameters<vector_t<Number>>)> doesLeafContain = 
+			[](RootGrowNode<Number,Setting>* n, Parameters<vector_t<Number>> p) -> bool {
+				return n->contains(std::get<0>(p.args));
+			};
+
+		std::function<bool(RootGrowNode<Number,Setting>*, std::vector<bool>, Parameters<vector_t<Number>>)> aggregate =
+			[](RootGrowNode<Number,Setting>* n, std::vector<bool> v, Parameters<vector_t<Number>> ){
+				return n->contains(v);
+			};
+
+		Parameters<vector_t<Number>> initParams = Parameters<vector_t<Number>>(point);
+		return traverse(reverseOp, doesLeafContain, aggregate, initParams);
 	}
 
 	template<typename Number, typename Converter, typename Setting>
-	bool SupportFunctionNewT<Number,Converter,Setting>::contains( const SupportFunctionNewT<Number,Converter,Setting>& SupportFunctionNew ) const {
-		return true;
+	bool SupportFunctionNewT<Number,Converter,Setting>::contains( const Point<Number>& point ) const {
+		return contains(point.rawCoordinates());
+	}
+
+	template<typename Number, typename Converter, typename Setting>
+    bool SupportFunctionNewT<Number,Converter,Setting>::contains( const SupportFunctionNewT<Number,Converter,Setting>& rhs, std::size_t directions ) const {
+    	std::vector<vector_t<Number>> templateDirections = computeTemplate<Number>(this->dimension(), directions);
+    	for(const auto& direction : templateDirections) {
+    		if(this->evaluate(direction,true).supportValue < rhs.evaluate(direction,true).supportValue){
+				return false;
+			}
+    	}
+    	return true;
+    }
+
+	template<typename Number, typename Converter, typename Setting>
+	bool SupportFunctionNewT<Number,Converter,Setting>::contains( const SupportFunctionNewT<Number,Converter,Setting>& rhs ) const {
+		return contains(rhs, 8);
 	}
 
 	template<typename Number, typename Converter, typename Setting>

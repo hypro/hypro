@@ -131,6 +131,14 @@ class IntersectOp : public RootGrowNode<Number,Setting> {
 		}
 		return smallestInftyNorm;
 	}
+
+	//Only return true if all children contained the point before	
+	bool contains(const std::vector<bool>& v) const {
+		for(auto containedInChild : v){
+			if(!containedInChild) return false;
+		}
+		return true;
+	}
 };
 
 } //namespace hypro

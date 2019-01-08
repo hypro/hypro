@@ -110,6 +110,14 @@ class UnionOp : public RootGrowNode<Number,Setting> {
 		}
 		return biggestInftyNorm;
 	}
+
+	//Only return true if all children contained the point before	
+	bool contains(const std::vector<bool>& v) const {
+		for(auto containedInChild : v){
+			if(containedInChild) return true;
+		}
+		return false;
+	}
 };
 
 } //namespace hypro

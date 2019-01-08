@@ -305,9 +305,9 @@ TYPED_TEST(SupportFunctionNewTest, SumOp){
 	std::vector<SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>> sfVec(4,sf);
 	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sfSum2 = sf.minkowskiSum(sfVec);
 	EXPECT_TRUE(sfSum2.getRoot()->getType() == SFNEW_TYPE::SUMOP);
-	EXPECT_EQ(sfSum2.getRoot()->getOriginCount(), 2);
-	EXPECT_EQ(sfSum2.getRoot()->getChildren().size(), 5);
-	EXPECT_EQ(sfSum2.getRoot().use_count(), 1);
+	EXPECT_EQ(sfSum2.getRoot()->getOriginCount(), unsigned(2));
+	EXPECT_EQ(sfSum2.getRoot()->getChildren().size(), std::size_t(5));
+	EXPECT_EQ(sfSum2.getRoot().use_count(), long(1));
 
 	//Check with Evaluation value
 	res = sfSum2.multiEvaluate(directions,true);
@@ -842,3 +842,109 @@ TYPED_TEST(SupportFunctionNewTest, StorageSize){
 
 	SUCCEED();
 }
+
+TYPED_TEST(SupportFunctionNewTest, Containment){
+
+	//Two overlapping boxes as leaves, the overlapping box is (0,1) to (1,2)
+	Box<TypeParam> upRight (std::make_pair(Point<TypeParam>({TypeParam(0),TypeParam(1)}), Point<TypeParam>({TypeParam(2),TypeParam(3)})));
+	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> uR(&upRight);	
+	Box<TypeParam> downLeft (std::make_pair(Point<TypeParam>({TypeParam(-2),TypeParam(0)}), Point<TypeParam>({TypeParam(1),TypeParam(2)})));
+	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> dL(&downLeft);
+	
+	//Points to test for containment
+	Point<TypeParam> inUR{TypeParam(2),TypeParam(2)};
+	Point<TypeParam> inDL{TypeParam(-1),TypeParam(0)};
+	Point<TypeParam> inBoth{TypeParam(0),TypeParam(1)};
+
+	//Contains of empty SF
+	std::cout << "empty" << std::endl;
+	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sf;
+	bool resUR = sf.contains(inUR);
+	bool resDL = sf.contains(inDL);
+	bool resBoth = sf.contains(inBoth);
+	EXPECT_FALSE(resUR);
+	EXPECT_FALSE(resDL);
+	EXPECT_FALSE(resBoth);
+
+	//Contains for Leaf
+	std::cout << "leaf" << std::endl;
+	resUR = uR.contains(inUR);
+	resDL = uR.contains(inDL);
+	resBoth = uR.contains(inBoth);
+	EXPECT_TRUE(resUR);
+	EXPECT_FALSE(resDL);
+	EXPECT_TRUE(resBoth);
+
+	//Contains for TrafoOp
+	std::cout << "trafo" << std::endl;
+	matrix_t<TypeParam> mat = 2*matrix_t<TypeParam>::Identity(2,2);
+	vector_t<TypeParam> vec = vector_t<TypeParam>::Zero(2);
+	//trafo scales the boxes by 2, so uR = box made of [(0.2),(2,4)]
+	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> trafo = uR.affineTransformation(mat, vec);
+	//To not get confused with the spaces, we double the points to test also, and let them get halved within the contains function
+	inUR *= 2;
+	inDL *= 2;
+	inBoth *= 2;
+	resUR = trafo.contains(inUR);
+	resDL = trafo.contains(inDL);
+	resBoth = trafo.contains(inBoth);
+	EXPECT_TRUE(resUR);
+	EXPECT_FALSE(resDL);
+	EXPECT_TRUE(resBoth);
+	inUR /= 2;
+	inDL /= 2;
+	inBoth /= 2;
+	
+	//Contains for ProjectOp
+	//std::vector<std::size_t> dims({0});
+	//SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> proj = uR.project(dims);
+	//No testing since not correct	
+
+	//Contains for ScaleOp
+	std::cout << "scale" << std::endl;
+	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> scale = uR.scale(TypeParam(5));
+	//To not get confused with the spaces, we multiply the points to test also by 5, and let them get resized within the contains function
+	inUR *= 5;
+	inDL *= 5;
+	inBoth *= 5;
+	resUR = scale.contains(inUR);
+	resDL = scale.contains(inDL);
+	resBoth = scale.contains(inBoth);
+	EXPECT_TRUE(resUR);
+	EXPECT_FALSE(resDL);
+	EXPECT_TRUE(resBoth);
+	inUR /= 5;
+	inDL /= 5;
+	inBoth /= 5;
+	
+	//Contains for SumOp
+	std::cout << "sum" << std::endl;
+	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sumOp = uR.minkowskiSum(dL);
+	resUR = sumOp.contains(inUR);
+	resDL = sumOp.contains(inDL);
+	resBoth = sumOp.contains(inBoth);
+	EXPECT_TRUE(resUR);
+	EXPECT_TRUE(resDL);
+	EXPECT_TRUE(resBoth);
+
+	//Contains for IntersectOp
+	std::cout << "intersect" << std::endl;
+	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> intersectOp = uR.intersect(dL);
+	resUR = intersectOp.contains(inUR);
+	resDL = intersectOp.contains(inDL);
+	resBoth = intersectOp.contains(inBoth);
+	EXPECT_FALSE(resUR);
+	EXPECT_FALSE(resDL);
+	EXPECT_TRUE(resBoth);
+
+	//Contains for UnionOp	
+	std::cout << "union" << std::endl;
+	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> uniteOp = uR.unite(dL);
+	resUR = uniteOp.contains(inUR);
+	resDL = uniteOp.contains(inDL);
+	resBoth = uniteOp.contains(inBoth);
+	EXPECT_TRUE(resUR);
+	EXPECT_TRUE(resDL);
+	EXPECT_TRUE(resBoth);
+}
+

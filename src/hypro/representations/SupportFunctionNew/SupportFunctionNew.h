@@ -23,6 +23,7 @@
 #include "SupportFunctionNewSetting.h"
 #include "../../util/linearOptimization/Optimizer.h"
 #include "../../util/logging/Logger.h"
+#include "../../util/templateDirections.h"
 #include "Leaf.h"
 #include "SumOp.h"
 #include "TrafoOp.h"
@@ -112,7 +113,7 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
 	 */
 	template<typename SettingRhs, carl::DisableIf< std::is_same<Setting, SettingRhs> > = carl::dummy>
 	SupportFunctionNewT(const SupportFunctionNewT<Number,Converter,SettingRhs>& orig) {
-
+		//TODO
 	}
 
 	/**
@@ -236,7 +237,7 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
 	 * @param[in]  _direction  The direction/cost function.
 	 * @return     Maximum towards _direction.
 	 */
-	EvaluationResult<Number> evaluate( const vector_t<Number>& _direction, bool ) const;
+	EvaluationResult<Number> evaluate( const vector_t<Number>& _direction, bool useExact = true) const;
 
 	/**
 	 * @brief      Multi-evaluation function (convex linear optimization).
@@ -333,14 +334,43 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
 	 */
 	const SupportFunctionNewT<Number,Converter,Setting>& reduceNumberRepresentation();
 
-
+	/**
+	 * @brief      Computes the region of the SupportFunction that is contained in the halfspace and how much is contained
+	 * @param[in]  rhs   The halfspace to intersect with
+	 * @return     How much of the current SupportFunction is contained and the resulting SupportFunctionNew 
+	 */
 	std::pair<CONTAINMENT, SupportFunctionNewT> satisfiesHalfspace( const Halfspace<Number>& rhs ) const;
 	std::pair<CONTAINMENT, SupportFunctionNewT> satisfiesHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const;
+
+	/**
+	 * @brief	   Computes the projection of the SupportFunction onto the given dimensions
+	 * @param[in]  dimensions  The dimensions to project onto, all other dimensions will be ignored
+	 * @return 	   The projected SupportFunction
+	 */
 	SupportFunctionNewT<Number,Converter,Setting> project(const std::vector<std::size_t>& dimensions) const;
+
+	/**
+	 * @brief	   Computes a affine transformation of the SupportFunction
+	 * @param[in]  A 	The transformation matrix
+	 * @param[in]  b 	The transformation vector
+	 * @return 	   The transformed SupportFunction
+	 */
 	SupportFunctionNewT<Number,Converter,Setting> linearTransformation( const matrix_t<Number>& A ) const;
 	SupportFunctionNewT<Number,Converter,Setting> affineTransformation( const matrix_t<Number>& A, const vector_t<Number>& b ) const;
+
+	/**
+	 * @brief	   Computes the minkowskiSum with one or more SupportFunctionNew
+	 * @param[in]  rhs   The right had side SupportFunctionNew
+	 * @return 	   The resulting minkowskiSum
+	 */
 	SupportFunctionNewT<Number,Converter,Setting> minkowskiSum( const SupportFunctionNewT<Number,Converter,Setting>& rhs ) const;
 	SupportFunctionNewT<Number,Converter,Setting> minkowskiSum( const std::vector<SupportFunctionNewT<Number,Converter,Setting>>& rhs ) const;
+
+	/**
+	 * @brief	   Scales the SupportFunctionNew by the given factor
+	 * @param[in]  factor  The scaling factor
+	 * @return 	   The scaled SupportFunction
+	 */
 	SupportFunctionNewT<Number,Converter,Setting> scale( const Number& _factor = 1 ) const;
 
 	/**
@@ -351,8 +381,20 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
 	SupportFunctionNewT<Number,Converter,Setting> intersect( const SupportFunctionNewT<Number,Converter,Setting>& rhs ) const;
 	SupportFunctionNewT<Number,Converter,Setting> intersect( const std::vector<SupportFunctionNewT<Number,Converter,Setting>>& rhs ) const;
 
+	/**
+	 * @brief      Computes the intersection of a SupportFunctionNew with a Halfspace.
+	 * @param[in]  hspace   The Halfspace to intersect with
+	 * @return     The resulting SupportFunctionNew.
+	 */
 	SupportFunctionNewT<Number,Converter,Setting> intersectHalfspace( const Halfspace<Number>& hspace ) const;
 	SupportFunctionNewT<Number,Converter,Setting> intersectHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const;
+
+	/**
+	 * @brief      Containment check for a point.
+	 * @param[in]  point 	The point to check containment for.
+	 * @return     True, if the given point is contained in the current SupportFunctionNew, false otherwise.
+	 */
+	bool contains( const vector_t<Number>& point ) const;
 	bool contains( const Point<Number>& point ) const;
 
 	/**
@@ -360,7 +402,8 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
 	 * @param[in]  SupportFunctionNew   The SupportFunctionNew.
 	 * @return     True, if the given SupportFunctionNew is contained in the current SupportFunctionNew, false otherwise.
 	 */
-	bool contains( const SupportFunctionNewT<Number,Converter,Setting>& SupportFunctionNew ) const;
+	bool contains( const SupportFunctionNewT<Number,Converter,Setting>& rhs ) const;
+	bool contains( const SupportFunctionNewT<Number,Converter,Setting>& rhs, std::size_t directions) const;
 
 	/**
 	 * @brief      Computes the union of two SupportFunctionNewes.

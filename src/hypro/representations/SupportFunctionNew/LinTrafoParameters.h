@@ -21,7 +21,6 @@ struct LinTrafoParameters {
 	// 2^power operations are collected
 	// 2^power defines the max. number of successive lin.trans before reducing the SF
 	
-
 	////// Constructors & Destructors
 
 	LinTrafoParameters() = delete;
@@ -61,7 +60,7 @@ struct LinTrafoParameters {
 		}
 		assert(parameters.find(exponent) != parameters.end());
 		return parameters.at(exponent);
-	};
+	}
 
 	vector_t<Number> getTransformedDirection(const vector_t<Number>& inDirection, unsigned exponent) const {
 		matrix_t<Number> tmp = getParameterSet(exponent).first.transpose();
