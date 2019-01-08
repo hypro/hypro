@@ -25,7 +25,7 @@ namespace hypro {
 	SupportFunctionNewT<Number,Converter,Setting>::SupportFunctionNewT( SupportFunctionNewT<Number,Converter,Setting>&& orig ) {
 		//std::cout << "SF move constructor, move from " << &orig << " creating " << this << std::endl;
 		mRoot = std::move(orig.getRoot());
-		orig.setRootToNull();
+		orig.clear();
 	}
 
 	/***************************************************************************
@@ -354,19 +354,108 @@ namespace hypro {
 		return traverse(doNothing, sizeofLeaf, sizeofOp);
 	}
 
-	template<typename Number, typename Converter, typename Setting>
-	const SupportFunctionNewT<Number,Converter,Setting>& SupportFunctionNewT<Number,Converter,Setting>::reduceNumberRepresentation() {
-
-	}
+	//template<typename Number, typename Converter, typename Setting>
+	//const SupportFunctionNewT<Number,Converter,Setting>& SupportFunctionNewT<Number,Converter,Setting>::reduceNumberRepresentation() { }
 
 	template<typename Number, typename Converter, typename Setting>
 	std::pair<CONTAINMENT, SupportFunctionNewT<Number,Converter,Setting>> SupportFunctionNewT<Number,Converter,Setting>::satisfiesHalfspace( const Halfspace<Number>& rhs ) const {
-
+		bool limiting = false;
+    	EvaluationResult<Number> planeEvalRes = this->evaluate(rhs.normal(), false);
+    	if(planeEvalRes.errorCode == SOLUTION::INFEAS){
+			//std::cout << "Is infeasible (should not happen)." << std::endl;
+			//std::cout << "Set is (Hpoly): " << std::endl << Converter::toHPolytope(*this) << std::endl;
+			//assert(Converter::toHPolytope(*this).empty());
+    		return std::make_pair(CONTAINMENT::NO, *this);
+    	} else if(planeEvalRes.supportValue > rhs.offset()){
+			//std::cout << "Object will be limited. " << std::endl;
+    		// the actual object will be limited by the new plane
+    		limiting = true;
+			// std::cout << "evaluate(" << convert<Number,double>(-(_mat.row(rowI))) << ") <=  " << -(_vec(rowI)) << ": " << this->evaluate(-(_mat.row(rowI))).supportValue << " <= " << -(_vec(rowI)) << std::endl;
+    		// std::cout << __func__ <<  ": Limiting plane " << convert<Number,double>(_mat.row(rowI)).transpose() << " <= " << carl::toDouble(_vec(rowI)) << std::endl;
+            if(this->evaluate(-(rhs.normal()), false ).supportValue < -(rhs.offset())){
+				//std::cout << "fullyOutside" << std::endl;
+                // the object lies fully outside one of the planes -> return false
+                return std::make_pair(CONTAINMENT::NO, this->intersectHalfspace(rhs));
+            }
+    	}
+    	if(limiting){
+        	return std::make_pair(CONTAINMENT::PARTIAL, this->intersectHalfspace(rhs));
+    	} else {
+    		return std::make_pair(CONTAINMENT::FULL, *this);
+    	}
 	}
 
 	template<typename Number, typename Converter, typename Setting>
 	std::pair<CONTAINMENT, SupportFunctionNewT<Number,Converter,Setting>> SupportFunctionNewT<Number,Converter,Setting>::satisfiesHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const {
+		TRACE("hypro.representations.supportFunction","Matrix: " << _mat << std::endl << " <= " << _vec );
+		if(_mat.rows() == 0) {
+			return std::make_pair(CONTAINMENT::FULL, *this);
+		}
+		assert(_mat.rows() == _vec.rows());
+        std::vector<unsigned> limitingPlanes;
+        for(unsigned rowI = 0; rowI < _mat.rows(); ++rowI) {
+        	TRACE("hypro.representations.supportFunction", "Evaluate against plane " << rowI );
+        	EvaluationResult<Number> planeEvalRes = this->evaluate(_mat.row(rowI), false);
+        	TRACE("hypro.representations.supportFunction", "Return from evaluate." );
+        	if(planeEvalRes.errorCode == SOLUTION::INFEAS){
+				TRACE("hypro.representations.supportFunction", "Is infeasible (should not happen)." );
+				//TRACE("hypro.representations.supportFunction", "Set is (Hpoly): " << std::endl << Converter::toHPolytope(*this) );
+        		return std::make_pair(CONTAINMENT::NO, *this);
+        	//} else if(!carl::AlmostEqual2sComplement(planeEvalRes.supportValue, _vec(rowI), 2) && planeEvalRes.supportValue > _vec(rowI)){
+        	} else if(planeEvalRes.supportValue > _vec(rowI)){
+				TRACE("hypro.representations.supportFunction", "Object will be limited, as " << planeEvalRes.supportValue << " > " << _vec(rowI));
+        		// the actual object will be limited by the new plane
+        		limitingPlanes.push_back(rowI);
+				Number invDirVal = this->evaluate(-(_mat.row(rowI)), false).supportValue;
+				//TRACE("hypro.representations.supportFunction", "evaluate(" << -(_mat.row(rowI)) << ") <=  " << -(_vec(rowI)) << ": " << invDirVal << " <= " << -(_vec(rowI)));
+        		//TRACE("hypro.representations.supportFunction", ": Limiting plane " << _mat.row(rowI).transpose() << " <= " << carl::toDouble(_vec(rowI)));
 
+	            //if(!carl::AlmostEqual2sComplement(invDirVal, Number(-(_vec(rowI))), 2) && invDirVal < -(_vec(rowI))) {
+	            if(invDirVal < -(_vec(rowI))) {
+	            	// exact verification in case the values are close to each other
+	            	if(carl::AlmostEqual2sComplement(Number(-invDirVal), planeEvalRes.supportValue, 16)) {
+	            		EvaluationResult<Number> secndPosEval = this->evaluate(_mat.row(rowI), true);
+	            		if(secndPosEval.supportValue > _vec(rowI)) {
+	            			EvaluationResult<Number> secndNegEval = this->evaluate(-(_mat.row(rowI)), true);
+	            			if(secndNegEval.supportValue < -(_vec(rowI))) {
+	            				TRACE("hypro.representations.supportFunction", "fullyOutside" );
+				                // the object lies fully outside one of the planes -> return false
+				                return std::make_pair(CONTAINMENT::NO, this->intersectHalfspaces(_mat,_vec) );
+	            			}
+	            		}
+	            	} else {
+	            		// the values are far enough away from each other to make this result a false negative.
+	            		TRACE("hypro.representations.supportFunction", "fullyOutside, as " << invDirVal << " >= " << -(_vec(rowI)) );
+		                // the object lies fully outside one of the planes -> return false
+		                return std::make_pair(CONTAINMENT::NO, this->intersectHalfspaces(_mat,_vec) );
+	            	}
+	            }
+        	}
+        }
+    	if(limitingPlanes.size() < unsigned(_mat.rows())){
+    		if(limitingPlanes.size() == 0 ){
+    			TRACE("hypro.representations.supportFunction", " Object will stay the same");
+    			return std::make_pair(CONTAINMENT::FULL, *this);
+    		}
+    		TRACE("hypro.representations.supportFunction", " Object will be limited but not empty (" << limitingPlanes.size() << " planes)");
+    		// if the result is not fullyOutside, only add planes, which affect the object
+        	matrix_t<Number> planes = matrix_t<Number>(limitingPlanes.size(), _mat.cols());
+        	vector_t<Number> distances = vector_t<Number>(limitingPlanes.size());
+        	for(unsigned i = 0; i < distances.rows(); ++i){
+        		// std::cout << "Set row " << i << " to plane " << limitingPlanes.back() << std::endl;
+        		planes.row(i) = _mat.row(limitingPlanes.back());
+        		distances(i) = _vec(limitingPlanes.back());
+        		limitingPlanes.pop_back();
+        	}
+			assert(limitingPlanes.empty());
+        	TRACE("hypro.representations.supportFunction", "Intersect with " << planes << ", " << distances);
+        	return std::make_pair(CONTAINMENT::PARTIAL, this->intersectHalfspaces(planes,distances));
+    	} else {
+    		TRACE("hypro.representations.supportFunction", " Object will be fully limited but not empty");
+    		assert(limitingPlanes.size() == unsigned(_mat.rows()));
+    		TRACE("hypro.representations.supportFunction", "Intersect with " << _mat << ", " << _vec);
+    		return std::make_pair(CONTAINMENT::PARTIAL, this->intersectHalfspaces(_mat,_vec));
+    	}
 	}
 
 	template<typename Number, typename Converter, typename Setting>
@@ -455,12 +544,21 @@ namespace hypro {
 
 	template<typename Number, typename Converter, typename Setting>
 	SupportFunctionNewT<Number,Converter,Setting> SupportFunctionNewT<Number,Converter,Setting>::intersectHalfspace( const Halfspace<Number>& hspace ) const {
-
+		/*
+		matrix_t<Number> mat = matrix_t<Number>(1,hspace.normal().rows());
+    	for(unsigned i = 0; i < hspace.normal().rows(); ++i){
+    		mat(0,i) = hspace.normal()(i);
+    	}
+    	vector_t<Number> vec = vector_t<Number>(1);
+    	vec(0) = hspace.offset();
+    	//Das erstellen einer neuen SF muss anders geschehen -> wird ein Poly werden
+        return intersect(SupportFunctionNewT<Number,Converter,Setting>(mat,vec));
+        */
 	}
 
 	template<typename Number, typename Converter, typename Setting>
 	SupportFunctionNewT<Number,Converter,Setting> SupportFunctionNewT<Number,Converter,Setting>::intersectHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const {
-
+		//return intersect(SupportFunctionNewT<Number,Converter,Setting>(_mat,_vec));	
 	}
 
 	template<typename Number, typename Converter, typename Setting>
@@ -495,7 +593,7 @@ namespace hypro {
 	}
 
 	template<typename Number, typename Converter, typename Setting>
-    bool SupportFunctionNewT<Number,Converter,Setting>::contains( const SupportFunctionNewT<Number,Converter,Setting>& rhs, std::size_t directions ) const {
+    bool SupportFunctionNewT<Number,Converter,Setting>::contains( const SupportFunctionNewT<Number,Converter,Setting>& rhs, std::size_t directions) const {
     	std::vector<vector_t<Number>> templateDirections = computeTemplate<Number>(this->dimension(), directions);
     	for(const auto& direction : templateDirections) {
     		if(this->evaluate(direction,true).supportValue < rhs.evaluate(direction,true).supportValue){
@@ -526,14 +624,14 @@ namespace hypro {
 		return sf;
 	}
 
-	template<typename Number, typename Converter, typename Setting>
-	void SupportFunctionNewT<Number,Converter,Setting>::reduceRepresentation() {
+	//template<typename Number, typename Converter, typename Setting>
+	//void SupportFunctionNewT<Number,Converter,Setting>::reduceRepresentation() {
+	//	//Do nothing
+	//}
 
-	}
-
-	template<typename Number, typename Converter, typename Setting>
-	void SupportFunctionNewT<Number,Converter,Setting>::clear() {
-
-	}
+	//template<typename Number, typename Converter, typename Setting>
+	//void SupportFunctionNewT<Number,Converter,Setting>::clear() {
+	//	mRoot = nullptr;
+	//}
 
 } // namespace hypro

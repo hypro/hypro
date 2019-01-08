@@ -28,7 +28,7 @@ TYPED_TEST(SupportFunctionNewTest, LeafTest){
 	EXPECT_TRUE(sf.getRoot()->getType() == SFNEW_TYPE::LEAF);
 	EXPECT_EQ(sf.getRoot()->getOriginCount(), 0);
 	EXPECT_EQ(sf.getRoot()->getChildren().size(), 0);
-	EXPECT_EQ(sf.getRoot().use_count(), 1);
+	EXPECT_EQ(sf.getRoot().use_count(), long(1));
 	EXPECT_EQ(*(dynamic_cast<Leaf<TypeParam,SupportFunctionNewDefault,Box<TypeParam>>*>(sf.getRoot().get())->getRepresentation()), box);
 
 	//Change representation of same type
@@ -79,11 +79,9 @@ TYPED_TEST(SupportFunctionNewTest, TrafoOp){
 	EXPECT_TRUE(sf1.getRoot()->getChildren().size() == 1);
 	EXPECT_EQ((dynamic_cast<TrafoOp<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>*>(sf1.getRoot().get()))->getCurrentExponent(), 1);
 	EXPECT_EQ((dynamic_cast<TrafoOp<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>*>(sf1.getRoot().get()))->getSuccessiveTransformations(), 0);
-	std::cout << "Constructed trafo1" << std::endl;
 
 	//Fill trafo0Params
 	trafo0Params = (dynamic_cast<TrafoOp<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>*>(sf1.getRoot().get()))->getParameters();
-	std::cout << "saved trafo0Params with address " << trafo0Params << std::endl;
 
 	//sf2
 	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sf2 = sf1.affineTransformation(tMat, tVec); 
@@ -91,15 +89,12 @@ TYPED_TEST(SupportFunctionNewTest, TrafoOp){
 	EXPECT_TRUE(sf2.getRoot()->getChildren().size() == 1);
 	EXPECT_EQ((dynamic_cast<TrafoOp<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>*>(sf2.getRoot().get()))->getCurrentExponent(), 1);
 	EXPECT_EQ((dynamic_cast<TrafoOp<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>*>(sf2.getRoot().get()))->getSuccessiveTransformations(), 1);
-	std::cout << "Constructed trafo2" << std::endl;
 
 	//Check whether parameter object remained the same (whether both point to the same address)
 	EXPECT_EQ(trafo0Params, (dynamic_cast<TrafoOp<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>*>(sf2.getRoot().get())->getParameters()));
 
 	//Evaluate
-	std::cout << "START EVALUATION FOR 2 TRAFOS\n"; 
 	std::vector<EvaluationResult<TypeParam>> res = sf2.multiEvaluate(directions,true);
-	std::cout << "END EVALUATION\n";
 
 	//Check if the supportvalues were right
 	//Should be [1 + #trafos , 1] everywhere
@@ -112,7 +107,6 @@ TYPED_TEST(SupportFunctionNewTest, TrafoOp){
 	EXPECT_TRUE(sf3.getRoot()->getChildren().size() == 1);
 	EXPECT_EQ((dynamic_cast<TrafoOp<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>*>(sf3.getRoot().get()))->getCurrentExponent(), 1);
 	EXPECT_EQ((dynamic_cast<TrafoOp<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>*>(sf3.getRoot().get()))->getSuccessiveTransformations(), 2);
-	std::cout << "Constructed trafo3" << std::endl;
 
 	//sf4
 	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sf4 = sf3.affineTransformation(tMat, tVec); 
@@ -120,15 +114,12 @@ TYPED_TEST(SupportFunctionNewTest, TrafoOp){
 	EXPECT_TRUE(sf4.getRoot()->getChildren().size() == 1);
 	EXPECT_EQ((dynamic_cast<TrafoOp<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>*>(sf4.getRoot().get()))->getCurrentExponent(), 4);
 	EXPECT_EQ((dynamic_cast<TrafoOp<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>*>(sf4.getRoot().get()))->getSuccessiveTransformations(), 0);
-	std::cout << "Constructed trafo4" << std::endl;
 
 	//Check whether parameter object remained the same (whether both point to the same address)
 	EXPECT_EQ(trafo0Params, (dynamic_cast<TrafoOp<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>*>(sf4.getRoot().get())->getParameters()));
 
 	//Evaluate
-	std::cout << "START EVALUATION FOR 4 TRAFOS\n"; 
 	res = sf4.multiEvaluate(directions,true);
-	std::cout << "END EVALUATION\n";
 
 	//Check if the supportvalues were right
 	//Should be [1 + #trafos , 1] everywhere
@@ -141,7 +132,6 @@ TYPED_TEST(SupportFunctionNewTest, TrafoOp){
 	EXPECT_TRUE(sf5.getRoot()->getChildren().size() == 1);
 	EXPECT_EQ((dynamic_cast<TrafoOp<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>*>(sf5.getRoot().get()))->getCurrentExponent(), 1);
 	EXPECT_EQ((dynamic_cast<TrafoOp<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>*>(sf5.getRoot().get()))->getSuccessiveTransformations(), 0);
-	std::cout << "Constructed trafo5" << std::endl;
 
 	//sf6
 	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sf6 = sf5.affineTransformation(tMat, tVec); 
@@ -149,7 +139,6 @@ TYPED_TEST(SupportFunctionNewTest, TrafoOp){
 	EXPECT_TRUE(sf6.getRoot()->getChildren().size() == 1);
 	EXPECT_EQ((dynamic_cast<TrafoOp<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>*>(sf6.getRoot().get()))->getCurrentExponent(), 1);
 	EXPECT_EQ((dynamic_cast<TrafoOp<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>*>(sf6.getRoot().get()))->getSuccessiveTransformations(), 1);
-	std::cout << "Constructed trafo6" << std::endl;
 
 	//sf7
 	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sf7 = sf6.affineTransformation(tMat, tVec); 
@@ -157,7 +146,6 @@ TYPED_TEST(SupportFunctionNewTest, TrafoOp){
 	EXPECT_TRUE(sf7.getRoot()->getChildren().size() == 1);
 	EXPECT_EQ((dynamic_cast<TrafoOp<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>*>(sf7.getRoot().get()))->getCurrentExponent(), 1);
 	EXPECT_EQ((dynamic_cast<TrafoOp<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>*>(sf7.getRoot().get()))->getSuccessiveTransformations(), 2);
-	std::cout << "Constructed trafo7" << std::endl;
 
 	//sf8
 	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sf8 = sf7.affineTransformation(tMat, tVec); 
@@ -165,15 +153,12 @@ TYPED_TEST(SupportFunctionNewTest, TrafoOp){
 	EXPECT_TRUE(sf8.getRoot()->getChildren().size() == 1);
 	EXPECT_EQ((dynamic_cast<TrafoOp<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>*>(sf8.getRoot().get()))->getCurrentExponent(), 4);
 	EXPECT_EQ((dynamic_cast<TrafoOp<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>*>(sf8.getRoot().get()))->getSuccessiveTransformations(), 1);
-	std::cout << "Constructed trafo8" << std::endl;
 
 	//Check whether parameter object remained the same (whether both point to the same address)
 	EXPECT_EQ(trafo0Params, (dynamic_cast<TrafoOp<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>*>(sf8.getRoot().get())->getParameters()));
 
 	//Evaluate
-	std::cout << "START EVALUATION FOR 8 TRAFOS\n"; 
 	res = sf8.multiEvaluate(directions,true);
-	std::cout << "END EVALUATION\n";
 
 	//Check if the supportvalues were right
 	//Should be [1 + #trafos , 1] everywhere
@@ -186,15 +171,12 @@ TYPED_TEST(SupportFunctionNewTest, TrafoOp){
 	EXPECT_TRUE(sf9.getRoot()->getChildren().size() == 1);
 	EXPECT_EQ((dynamic_cast<TrafoOp<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>*>(sf9.getRoot().get()))->getCurrentExponent(), 1);
 	EXPECT_EQ((dynamic_cast<TrafoOp<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>*>(sf9.getRoot().get()))->getSuccessiveTransformations(), 0);
-	std::cout << "Constructed trafo9" << std::endl;
 
 	//Check whether parameter object remained the same (whether both point to the same address)
 	EXPECT_EQ(trafo0Params, (dynamic_cast<TrafoOp<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>*>(sf9.getRoot().get())->getParameters()));
 
 	//Evaluate
-	std::cout << "START EVALUATION FOR 9 TRAFOS\n"; 
 	res = sf9.multiEvaluate(directions,true);
-	std::cout << "END EVALUATION\n";
 
 	//Check if the supportvalues were right
 	//Should be [1 + #trafos , 1] everywhere
@@ -211,7 +193,7 @@ TYPED_TEST(SupportFunctionNewTest, TrafoOp){
 		EXPECT_TRUE(sf.getRoot()->getChildren().size() == 1);
 		EXPECT_EQ((dynamic_cast<TrafoOp<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>*>(sf.getRoot().get()))->getCurrentExponent(), 1);
 		EXPECT_EQ((dynamic_cast<TrafoOp<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>*>(sf.getRoot().get()))->getSuccessiveTransformations(), 0);
-		std::cout << "Constructed trafo" << i << std::endl;
+		std::cout << "Constructed trafo " << i << std::endl;
 		
 		if(i == 0){
 			//Save pointer to parameters for later, checking if it remains the same object 
@@ -246,7 +228,7 @@ TYPED_TEST(SupportFunctionNewTest, ScaleOp){
 	EXPECT_TRUE(sfScale.getRoot()->getType() == SFNEW_TYPE::SCALEOP);
 	EXPECT_EQ(sfScale.getRoot()->getOriginCount(), unsigned(1));
 	EXPECT_EQ(sfScale.getRoot()->getChildren().size(), std::size_t(1));
-	EXPECT_EQ(sfScale.getRoot().use_count(), 1);
+	EXPECT_EQ(sfScale.getRoot().use_count(), long(1));
 	EXPECT_EQ((dynamic_cast<ScaleOp<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>*>(sfScale.getRoot().get())->getFactor()), TypeParam(10));
 
 	//Evaluate
@@ -269,7 +251,7 @@ TYPED_TEST(SupportFunctionNewTest, ProjectOp){
 	EXPECT_TRUE(sfProject.getRoot()->getType() == SFNEW_TYPE::PROJECTOP);
 	EXPECT_EQ(sfProject.getRoot()->getOriginCount(), 1);
 	EXPECT_EQ(sfProject.getRoot()->getChildren().size(), 1);
-	EXPECT_EQ(sfProject.getRoot().use_count(), 1);
+	EXPECT_EQ(sfProject.getRoot().use_count(), long(1));
 	EXPECT_EQ((dynamic_cast<ProjectOp<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>*>(sfProject.getRoot().get())->getDimensions().at(0)), std::size_t(1));
 
 	//Evaluate
@@ -292,7 +274,7 @@ TYPED_TEST(SupportFunctionNewTest, SumOp){
 	EXPECT_TRUE(sfSum.getRoot()->getType() == SFNEW_TYPE::SUMOP);
 	EXPECT_EQ(sfSum.getRoot()->getOriginCount(), unsigned(2));
 	EXPECT_EQ(sfSum.getRoot()->getChildren().size(), std::size_t(2));
-	EXPECT_EQ(sfSum.getRoot().use_count(), 1);
+	EXPECT_EQ(sfSum.getRoot().use_count(), long(1));
 	
 	//Check with Evaluation value
 	matrix_t<TypeParam> directions = matrix_t<TypeParam>::Identity(2,2);
@@ -328,8 +310,8 @@ TYPED_TEST(SupportFunctionNewTest, IntersectOp){
 	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sfIntersect = uR.intersect(dL);
 	EXPECT_TRUE(sfIntersect.getRoot()->getType() == SFNEW_TYPE::INTERSECTOP);
 	EXPECT_EQ(sfIntersect.getRoot()->getOriginCount(), unsigned(2));
-	EXPECT_EQ(sfIntersect.getRoot()->getChildren().size(), 2);
-	EXPECT_EQ(sfIntersect.getRoot().use_count(), 1);
+	EXPECT_EQ(sfIntersect.getRoot()->getChildren().size(), std::size_t(2));
+	EXPECT_EQ(sfIntersect.getRoot().use_count(), long(1));
 
 	//Evaluate with directions (1,0) and (0,1) - This tests INFTY evaluation results
 	matrix_t<TypeParam> directions = matrix_t<TypeParam>::Identity(2,2);
@@ -357,7 +339,7 @@ TYPED_TEST(SupportFunctionNewTest, IntersectOp){
 	//Evaluate with the four boxes with directions (0,1) and (1,0)
 	std::vector<SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>> sfVec{dL, uL, dR};
 	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sfIntersect2 = uR.intersect(sfVec);
-	EXPECT_EQ(sfIntersect2.getRoot()->getChildren().size(), 4);
+	EXPECT_EQ(sfIntersect2.getRoot()->getChildren().size(), std::size_t(4));
 	res = sfIntersect2.multiEvaluate(directions,true);
 	EXPECT_EQ(res.at(0).errorCode, hypro::SOLUTION::FEAS);
 	EXPECT_EQ(res.at(0).supportValue, TypeParam(1)); 
@@ -378,8 +360,8 @@ TYPED_TEST(SupportFunctionNewTest, UnionOp){
 	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sfUnion = uR.unite(dL);
 	EXPECT_TRUE(sfUnion.getRoot()->getType() == SFNEW_TYPE::UNIONOP);
 	EXPECT_EQ(sfUnion.getRoot()->getOriginCount(), unsigned(2));
-	EXPECT_EQ(sfUnion.getRoot()->getChildren().size(), 2);
-	EXPECT_EQ(sfUnion.getRoot().use_count(), 1);
+	EXPECT_EQ(sfUnion.getRoot()->getChildren().size(), std::size_t(2));
+	EXPECT_EQ(sfUnion.getRoot().use_count(), long(1));
 
 	//Evaluate with directions (0,1) and (1,0) - This tests INFTY evaluation results
 	matrix_t<TypeParam> directions = matrix_t<TypeParam>::Identity(2,2);
@@ -407,77 +389,72 @@ TYPED_TEST(SupportFunctionNewTest, UnionOp){
 	//Evaluate with the four boxes with directions (0,1) and (1,0)
 	std::vector<SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>> sfVec{dL, uL, dR};
 	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sfUnion2 = uR.unite(sfVec);
-	EXPECT_EQ(sfUnion2.getRoot()->getChildren().size(), 4);
+	EXPECT_EQ(sfUnion2.getRoot()->getChildren().size(), std::size_t(4));
 	res = sfUnion2.multiEvaluate(directions,true);
 	EXPECT_EQ(res.at(0).errorCode, hypro::SOLUTION::FEAS);
-	EXPECT_EQ(res.at(0).supportValue, TypeParam(2)); //3
+	EXPECT_EQ(res.at(0).supportValue, TypeParam(2)); 
 	EXPECT_EQ(res.at(1).errorCode, hypro::SOLUTION::FEAS);
-	EXPECT_EQ(res.at(1).supportValue, TypeParam(2)); //3
+	EXPECT_EQ(res.at(1).supportValue, TypeParam(2)); 
 }
 
 TYPED_TEST(SupportFunctionNewTest, Constructors){
 
 	//Empty constructor
-	std::cout << "Empty constructor test" << std::endl;
 	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sfEmpty;
 	EXPECT_TRUE(sfEmpty.empty());
 	EXPECT_TRUE(sfEmpty.getRoot() == nullptr);
 
 	//First make a small sf
-	std::cout << "Construct leaf" << std::endl;
 	Box<TypeParam> box1 (std::make_pair(Point<TypeParam>({TypeParam(0),TypeParam(-1)}), Point<TypeParam>({TypeParam(1), TypeParam(2)})));
 	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sf(&box1);
-	EXPECT_EQ(sf.getRoot().use_count(), 1);
+	EXPECT_EQ(sf.getRoot().use_count(), long(1));
 	
-	std::cout << "Construct sftrafo" << std::endl;
+	//Then build a TrafoOp on top
 	matrix_t<TypeParam> trafoMat = matrix_t<TypeParam>::Identity(2,2);
 	vector_t<TypeParam> trafoVec = vector_t<TypeParam>::Zero(2);
 	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sfTrafo = sf.affineTransformation(trafoMat, trafoVec);
-	EXPECT_EQ(sfTrafo.getRoot()->getChildren().size(), 1);
+	EXPECT_EQ(sfTrafo.getRoot()->getChildren().size(), std::size_t(1));
 	EXPECT_TRUE(&(*(sfTrafo.getRoot()->getChildren().at(0))) == &(*(sf.getRoot())));
-	EXPECT_EQ(sfTrafo.getRoot().use_count(), 1);
-	EXPECT_EQ(sf.getRoot().use_count(), 2);
+	EXPECT_EQ(sfTrafo.getRoot().use_count(), long(1));
+	EXPECT_EQ(sf.getRoot().use_count(), long(2));
 
 	//Copy constructor - copy sfTrafo. the copy should point to the same object sfTrafo points to
-	std::cout << "Copy constructor test" << std::endl;
 	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sfCopy(sfTrafo);
 	EXPECT_TRUE(&(*(sfCopy.getRoot())) == &(*(sfTrafo.getRoot())));	
-	EXPECT_EQ(sfCopy.getRoot()->getChildren().size(), 1);
-	EXPECT_EQ(sfTrafo.getRoot()->getChildren().size(), 1);
+	EXPECT_EQ(sfCopy.getRoot()->getChildren().size(), std::size_t(1));
+	EXPECT_EQ(sfTrafo.getRoot()->getChildren().size(), std::size_t(1));
 	EXPECT_TRUE(sfCopy.getRoot()->getChildren().at(0) == sfTrafo.getRoot()->getChildren().at(0));
-	EXPECT_EQ(sfTrafo.getRoot().use_count(), 2); 
-	EXPECT_EQ(sf.getRoot().use_count(), 2); 
+	EXPECT_EQ(sfTrafo.getRoot().use_count(), long(2)); 
+	EXPECT_EQ(sf.getRoot().use_count(), long(2)); 
 
 	//Copy assign - set sfCopy to sf. Both sf and sfCopy will then point to the leaf object. 
-	std::cout << "Copy Assign test" << std::endl;
 	sfCopy = sf;
 	EXPECT_TRUE(&(*(sfCopy.getRoot())) == &(*(sf.getRoot())));	
-	EXPECT_TRUE(sfCopy.getRoot()->getChildren().size() == 0);
-	EXPECT_EQ(sfTrafo.getRoot().use_count(), 1); 
-	EXPECT_EQ(sf.getRoot().use_count(), 3); 
+	EXPECT_TRUE(sfCopy.getRoot()->getChildren().size() == std::size_t(0));
+	EXPECT_EQ(sfTrafo.getRoot().use_count(), long(1)); 
+	EXPECT_EQ(sf.getRoot().use_count(), long(3)); 
 
 	//Move constructor - 
-	std::cout << "Move constructor test" << std::endl;
 	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sfMove(std::move(sfCopy));
 	EXPECT_TRUE(sfCopy.getRoot() == nullptr); 
 	EXPECT_TRUE(&(*(sfMove.getRoot())) == &(*(sf.getRoot())));	
-	EXPECT_TRUE(sfMove.getRoot()->getChildren().size() == 0);
-	EXPECT_EQ(sfTrafo.getRoot().use_count(), 1); 
-	EXPECT_EQ(sf.getRoot().use_count(), 3); 
+	EXPECT_TRUE(sfMove.getRoot()->getChildren().size() == std::size_t(0));
+	EXPECT_EQ(sfTrafo.getRoot().use_count(), long(1));
+	EXPECT_EQ(sf.getRoot().use_count(), long(3)); 
 	//std::cout << "Address of sf root ptr: " << sf.getRoot() << std::endl;
 	//std::cout << "Address of sfTrafo root ptr: " << sfTrafo.getRoot() << std::endl;
 	//std::cout << "Address of sfCopy root ptr: " << sfCopy.getRoot() << std::endl;
 	//std::cout << "Address of sfMove root ptr: " << sfMove.getRoot() << std::endl;
 
 	//Move assign
-	std::cout << "Move Assign test" << std::endl;
 	sfMove = std::move(sfTrafo);
 	EXPECT_TRUE(sfTrafo.getRoot() == nullptr);
 	EXPECT_TRUE(sfMove.getRoot() != nullptr);
 	EXPECT_TRUE(&(*(sfMove.getRoot()->getChildren().at(0))) == &(*(sf.getRoot())));
-	EXPECT_EQ(sfMove.getRoot().use_count(), 1); 
-	EXPECT_EQ(sf.getRoot().use_count(), 2); 
+	EXPECT_EQ(sfMove.getRoot().use_count(), long(1));
+	EXPECT_EQ(sf.getRoot().use_count(), long(2));
 
+	//Settings constructor
 }
 
 TYPED_TEST(SupportFunctionNewTest, Deletion){
@@ -498,7 +475,6 @@ TYPED_TEST(SupportFunctionNewTest, Deletion){
 		sf2Copy = sf2;
 		{
 			//Build trafop
-			std::cout << "Building trafoOp" << std::endl;
 			matrix_t<TypeParam> trafoMat = matrix_t<TypeParam>::Zero(2,2);
 			trafoMat(0,0) = TypeParam(2);
 			trafoMat(1,1) = TypeParam(2);
@@ -510,15 +486,13 @@ TYPED_TEST(SupportFunctionNewTest, Deletion){
 			sfTrafoCopy = sfTrafoPtr;
 
 			EXPECT_TRUE(sfTrafo.getRoot()->getType() == SFNEW_TYPE::TRAFO);
-			EXPECT_TRUE(sfTrafo.getRoot()->getChildren().size() == 1);		
+			EXPECT_TRUE(sfTrafo.getRoot()->getChildren().size() == std::size_t(1));		
 
 			{
 				//Build SumOp
-				std::cout << "Building sumOp" << std::endl;
 				SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sum = sfTrafo.minkowskiSum(*sf2);
 				//std::shared_ptr<SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>> sumPtr = std::shared_ptr<SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>>(&sum);
 				std::shared_ptr<SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>> sumPtr = std::make_shared<SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>>(&sum);
-				std::cout << "copying shared_ptr" << std::endl;
 				sfSumCopy = sumPtr;
 				EXPECT_TRUE(sum.getRoot()->getType() == SFNEW_TYPE::SUMOP);
 				EXPECT_TRUE(sum.getRoot()->getOriginCount() == sum.getRoot()->getChildren().size());
@@ -529,17 +503,13 @@ TYPED_TEST(SupportFunctionNewTest, Deletion){
 			EXPECT_TRUE(!sfTrafoCopy.expired());
 			EXPECT_TRUE(!sf1Copy.expired());
 			EXPECT_TRUE(!sf2Copy.expired());
-			std::cout << "SumOp expired" << std::endl;
 		}	
 		EXPECT_TRUE(sfTrafoCopy.expired());
 		EXPECT_TRUE(!sf1Copy.expired());
 		EXPECT_TRUE(!sf2Copy.expired());	
-		std::cout << "TrafoOp expired" << std::endl;
 	}
 	EXPECT_TRUE(sf1Copy.expired());
-	std::cout << "sf1 expired" << std::endl;
 	EXPECT_TRUE(sf2Copy.expired());
-	std::cout << "sf2 expired" << std::endl;
 }
 
 /*
@@ -572,7 +542,6 @@ TYPED_TEST(SupportFunctionNewTest, IntermediateDeletion){
 	EXPECT_TRUE(sum.getRoot()->getOriginCount() == sum.getRoot()->getChildren().size());	
 	
 	//Vector where all supportFunctions are saved - sf's are saved in deletion order, last one deleted first
-	std::cout << "fill sfVec" << std::endl;
 	std::vector<SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>> sfVec;
 	sfVec.emplace_back(std::move(sf1));
 	sfVec.emplace_back(std::move(sum));
@@ -584,17 +553,10 @@ TYPED_TEST(SupportFunctionNewTest, IntermediateDeletion){
 	EXPECT_TRUE(sf2.getRoot() == nullptr);
 
 	//Evaluate
-	std::cout << "START EVALUATION\n"; 
 	matrix_t<TypeParam> directions = matrix_t<TypeParam>::Identity(2,2);
 	std::vector<EvaluationResult<TypeParam>> res = sfVec.at(1).multiEvaluate(directions,true);
-	//std::cout << "Result of Evaluation is:\n";
-	//for(auto& eRes : res){
-	//	std::cout << eRes << std::endl;
-	//}
-	std::cout << "END EVALUATION\n";
 
 	//Now delete leaf2
-	std::cout << "=== Now delete leaf2" << std::endl;
 	sfVec.pop_back();
 	EXPECT_EQ(sfVec.size(), 3);
 	EXPECT_TRUE(sfVec.at(1).getRoot()->getChildren().at(1) != nullptr);
@@ -605,7 +567,6 @@ TYPED_TEST(SupportFunctionNewTest, IntermediateDeletion){
 	}
 
 	//Now delete a intermediate node
-	std::cout << "=== Now delete trafo" << std::endl;
 	sfVec.pop_back();
 	EXPECT_EQ(sfVec.size(), 2);
 	EXPECT_TRUE(sfVec.at(1).getRoot()->getChildren().at(0) != nullptr);
@@ -616,7 +577,6 @@ TYPED_TEST(SupportFunctionNewTest, IntermediateDeletion){
 	}	
 	
 	//Now delete root - this should delete sum, trafo and leaf 2, leaving only leaf1, thus the evaluation result should change
-	std::cout << "=== Now delete sum" << std::endl;
 	sfVec.pop_back();
 	EXPECT_EQ(sfVec.size(), 1);
 	res2 = sfVec.at(0).multiEvaluate(directions,true);
@@ -657,22 +617,12 @@ TYPED_TEST(SupportFunctionNewTest, Evaluate){
 
 	//Evaluate
 	matrix_t<TypeParam> directions = matrix_t<TypeParam>::Identity(2,2);
-	std::cout << "START MULTIEVALUATION\n"; 
 	std::vector<EvaluationResult<TypeParam>> res = sum.multiEvaluate(directions,true);
-	std::cout << "END MULTIEVALUATION\n";
-	std::cout << "Result of Multievaluation is:\n";
-	for(auto& eRes : res){
-		std::cout << eRes << std::endl;
-	}
 
 	//Test Evaluation with only one direction
 	vector_t<TypeParam> dir = vector_t<TypeParam>::Zero(2);
 	dir(0) = TypeParam(1);
-	std::cout << "START EVALUATION\n"; 
 	EvaluationResult<TypeParam> resOnlyOneDir = sum.evaluate(dir,true);
-	std::cout << "END MULTIEVALUATION\n";
-	std::cout << "Result of evaluation is:\n";
-	std::cout << resOnlyOneDir << std::endl;
 	EXPECT_TRUE(resOnlyOneDir.supportValue == res.at(0).supportValue);
 
 	//Test Evaluation of empty sf
@@ -809,7 +759,6 @@ TYPED_TEST(SupportFunctionNewTest, StorageSize){
 	//Empty SF
 	try {
 		SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sf;	
-		std::cout << "Size of empty sf: " << sf.size() << std::endl;
 	} catch(const std::runtime_error& e) {
 		FAIL();
 	}
@@ -857,7 +806,6 @@ TYPED_TEST(SupportFunctionNewTest, Containment){
 	Point<TypeParam> inBoth{TypeParam(0),TypeParam(1)};
 
 	//Contains of empty SF
-	std::cout << "empty" << std::endl;
 	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sf;
 	bool resUR = sf.contains(inUR);
 	bool resDL = sf.contains(inDL);
@@ -867,7 +815,6 @@ TYPED_TEST(SupportFunctionNewTest, Containment){
 	EXPECT_FALSE(resBoth);
 
 	//Contains for Leaf
-	std::cout << "leaf" << std::endl;
 	resUR = uR.contains(inUR);
 	resDL = uR.contains(inDL);
 	resBoth = uR.contains(inBoth);
@@ -876,7 +823,6 @@ TYPED_TEST(SupportFunctionNewTest, Containment){
 	EXPECT_TRUE(resBoth);
 
 	//Contains for TrafoOp
-	std::cout << "trafo" << std::endl;
 	matrix_t<TypeParam> mat = 2*matrix_t<TypeParam>::Identity(2,2);
 	vector_t<TypeParam> vec = vector_t<TypeParam>::Zero(2);
 	//trafo scales the boxes by 2, so uR = box made of [(0.2),(2,4)]
@@ -901,7 +847,6 @@ TYPED_TEST(SupportFunctionNewTest, Containment){
 	//No testing since not correct	
 
 	//Contains for ScaleOp
-	std::cout << "scale" << std::endl;
 	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> scale = uR.scale(TypeParam(5));
 	//To not get confused with the spaces, we multiply the points to test also by 5, and let them get resized within the contains function
 	inUR *= 5;
@@ -918,7 +863,6 @@ TYPED_TEST(SupportFunctionNewTest, Containment){
 	inBoth /= 5;
 	
 	//Contains for SumOp
-	std::cout << "sum" << std::endl;
 	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sumOp = uR.minkowskiSum(dL);
 	resUR = sumOp.contains(inUR);
 	resDL = sumOp.contains(inDL);
@@ -928,7 +872,6 @@ TYPED_TEST(SupportFunctionNewTest, Containment){
 	EXPECT_TRUE(resBoth);
 
 	//Contains for IntersectOp
-	std::cout << "intersect" << std::endl;
 	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> intersectOp = uR.intersect(dL);
 	resUR = intersectOp.contains(inUR);
 	resDL = intersectOp.contains(inDL);
@@ -938,7 +881,6 @@ TYPED_TEST(SupportFunctionNewTest, Containment){
 	EXPECT_TRUE(resBoth);
 
 	//Contains for UnionOp	
-	std::cout << "union" << std::endl;
 	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> uniteOp = uR.unite(dL);
 	resUR = uniteOp.contains(inUR);
 	resDL = uniteOp.contains(inDL);
@@ -946,5 +888,60 @@ TYPED_TEST(SupportFunctionNewTest, Containment){
 	EXPECT_TRUE(resUR);
 	EXPECT_TRUE(resDL);
 	EXPECT_TRUE(resBoth);
+
+	//Contains for SupportFunctions
+	EXPECT_FALSE(uR.contains(dL));
+	Box<TypeParam> overlapBox (std::make_pair(Point<TypeParam>({TypeParam(0),TypeParam(1)}), Point<TypeParam>({TypeParam(1),TypeParam(2)})));
+	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> overlapSF(&overlapBox);
+	EXPECT_TRUE(uR.contains(overlapSF));
+}
+
+//TODO: intersectHalfspaces only works when we can put VPolytopes and HPolytopes into leaves!!! -> Need converter to HPoly and VPoly
+
+//TODO: This test only works if intersectHalfspaces has been implemented!!!!!
+TYPED_TEST(SupportFunctionNewTest, SatisfiesHalfspaces){
+/*
+	Box<TypeParam> box (std::make_pair(Point<TypeParam>({TypeParam(0.1),TypeParam(0.1)}), Point<TypeParam>({TypeParam(2), TypeParam(2)})));
+	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sf1(&box);
+
+	//Halfspaces to test - belowBox does not contain, within box partially, aboveBox fully
+	Halfspace<TypeParam> belowBox ({TypeParam(0),TypeParam(1)}, TypeParam(0));
+	Halfspace<TypeParam> withinBox ({TypeParam(0),TypeParam(1)}, TypeParam(1));
+	Halfspace<TypeParam> aboveBox ({TypeParam(0),TypeParam(1)}, TypeParam(2));
+
+	//Test with empty sf
+	std::cout << "empty" << std::endl;
+	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sfEmpty;
+	std::pair<CONTAINMENT, SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>> emptySatisfy = sfEmpty.satisfiesHalfspace(belowBox);		
+	EXPECT_TRUE(emptySatisfy.first == hypro::CONTAINMENT::NO);
+	EXPECT_TRUE(emptySatisfy.second.empty());
+	EXPECT_TRUE(emptySatisfy.second == sfEmpty);
+
+	//Test with belowBox
+	std::cout << "below" << std::endl;
+	std::pair<CONTAINMENT, SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>> belowSatisfy = sf1.satisfiesHalfspace(belowBox);
+	std::cout << "1" << std::endl;
+	EXPECT_TRUE(belowSatisfy.first == hypro::CONTAINMENT::NO);
+	std::cout << "2" << std::endl;
+	EXPECT_TRUE(belowSatisfy.second == sf1);
+	std::cout << "3" << std::endl;
+	EXPECT_TRUE(belowSatisfy.second == sfEmpty);
+
+	//Test with withinBox
+	std::cout << "within" << std::endl;
+	std::pair<CONTAINMENT, SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>> withinSatisfy = sf1.satisfiesHalfspace(withinBox);
+	EXPECT_TRUE(withinSatisfy.first == hypro::CONTAINMENT::PARTIAL);
+	EXPECT_TRUE(!withinSatisfy.second.empty());
+	Box<TypeParam> boxWithin (std::make_pair(Point<TypeParam>({TypeParam(0),TypeParam(0)}), Point<TypeParam>({TypeParam(1), TypeParam(1)})));
+	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sfWithin(&boxWithin);
+	EXPECT_TRUE(withinSatisfy.second.intersect(sfWithin) == withinSatisfy.second);
+
+	//Test with aboveBox
+	std::cout << "above" << std::endl;
+	std::pair<CONTAINMENT, SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>> aboveSatisfy = sf1.satisfiesHalfspace(aboveBox);
+	EXPECT_TRUE(aboveSatisfy.first == hypro::CONTAINMENT::FULL);
+	EXPECT_TRUE(!aboveSatisfy.second.empty());
+	EXPECT_TRUE(aboveSatisfy.second == sf1);	
+*/
 }
 

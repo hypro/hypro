@@ -152,8 +152,6 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
 
 	inline std::shared_ptr<RootGrowNode<Number,Setting>>& getRoot() const { return mRoot; }
 
-	inline void setRootToNull() { mRoot = nullptr; }
-
 	 /**
 	  * @brief Static method for the construction of an empty SupportFunctionNew of required dimension.
 	  * @param dimension Required dimension.
@@ -268,7 +266,7 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
 	 */
 	template<class SettingRhs>
 	friend bool operator==( const SupportFunctionNewT<Number,Converter,Setting>& b1, const SupportFunctionNewT<Number,Converter,SettingRhs>& b2 ) {
-		return false;
+		return b1.getRoot() == b2.getRoot();
 	}
 
 	/**
@@ -332,7 +330,7 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
 	 * @brief      Function to reduce the number representation (over-approximate).
 	 * @param[in]  limit      The limit
 	 */
-	const SupportFunctionNewT<Number,Converter,Setting>& reduceNumberRepresentation();
+	const SupportFunctionNewT<Number,Converter,Setting>& reduceNumberRepresentation(){ return *this; }
 
 	/**
 	 * @brief      Computes the region of the SupportFunction that is contained in the halfspace and how much is contained
@@ -398,12 +396,12 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
 	bool contains( const Point<Number>& point ) const;
 
 	/**
-	 * @brief      Containment check for a SupportFunctionNew.
+	 * @brief      Checks whether a given SupportFunction is fully contained in the current SupportFunctionNew
 	 * @param[in]  SupportFunctionNew   The SupportFunctionNew.
 	 * @return     True, if the given SupportFunctionNew is contained in the current SupportFunctionNew, false otherwise.
 	 */
 	bool contains( const SupportFunctionNewT<Number,Converter,Setting>& rhs ) const;
-	bool contains( const SupportFunctionNewT<Number,Converter,Setting>& rhs, std::size_t directions) const;
+	bool contains( const SupportFunctionNewT<Number,Converter,Setting>& rhs, std::size_t directions) const;	
 
 	/**
 	 * @brief      Computes the union of two SupportFunctionNewes.
@@ -422,12 +420,12 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
 	/**
 	 * @brief      Reduces the representation of the current SupportFunctionNew.
 	 */
-	void reduceRepresentation();
+	void reduceRepresentation(){ }
 
 	/**
 	 * @brief      Makes this SupportFunctionNew equal to the empty SupportFunctionNew.
 	 */
-	void clear();
+	inline void clear(){ mRoot = nullptr; }
 
 };
 /** @} */
