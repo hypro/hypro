@@ -34,6 +34,7 @@ class ObjectHandle{
         static void convert2matlab(const hypro::CONTAINMENT&, std::string&);
         static void convert2matlab(const hypro::SOLUTION&, std::string&);
         static void convert2matlab(const carl::Term<double>&, double*, const int, const int);
+        static void convert2matlab(const std::vector<std::size_t>&);
 
         static hypro::SOLUTION mSolution2Hypro(char*);
         static carl::Interval<double> mInterval2Hypro(double*);

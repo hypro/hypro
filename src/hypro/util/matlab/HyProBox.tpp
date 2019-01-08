@@ -331,20 +331,6 @@ if(nlhs < 1){
     ObjectHandle::convert2matlab(m, out, 1, dim);
 }
 
-/**
- * @brief Method returning the supremum point of the box, i.e. the maximal point.
- **/
-void HyProBox::supremum(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
-    if(nlhs < 1){
-        mexErrMsgTxt("HyProBox - supremum: Expecting an output!");
-    }
-    if(nrhs < 3){
-        mexErrMsgTxt("HyProBox - supremum: One argument missing!");
-    }
-    hypro::Box<double>* box = convertMat2Ptr<hypro::Box<double>>(prhs[2]);
-    double supremum = box->supremum();
-    plhs[0] = mxCreateDoubleScalar(supremum);
-}
 
 /**
  * @brief Evaluation function (convex linear optimization).

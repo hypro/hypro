@@ -241,6 +241,24 @@ void HyProGeometricObject<T>::unequal(int nlhs, mxArray* plhs[], int nrhs, const
 }
 
 /**
+ * @brief Method returning the supremum point of the box, i.e. the maximal point.
+ **/
+template<class T>
+void HyProGeometricObject<T>::supremum(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
+    if(nlhs < 1){
+        mexErrMsgTxt("HyProGeometricObject - supremum: Expecting an output!");
+    }
+    if(nrhs < 3){
+        mexErrMsgTxt("HyProGeometricObject - supremum: One argument missing!");
+    }
+    T* obj = convertMat2Ptr<T>(prhs[2]);
+    double supremum = obj->supremum();
+    plhs[0] = mxCreateDoubleScalar(supremum);
+}
+
+
+
+/**
  * @brief
  **/
 template<class T>

@@ -43,6 +43,7 @@ template<class T> class HyProGeometricObject{
         static void reduceRepresentation(int, mxArray**, int, const mxArray**);
         static void clear(int, mxArray**, int, const mxArray**);   
         static void ostream(int, mxArray**, int, const mxArray**);
+        static void supremum(int, mxArray**, int, const mxArray**);
 };
 
 #include "HyProGeometricObject.tpp"

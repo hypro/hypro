@@ -28,7 +28,6 @@ class HyProBox: public HyProGeometricObject<hypro::Box<double>>{
         static void is_symmetric(int, mxArray**, int, const mxArray**);
         static void max(int, mxArray**, int, const mxArray**);
         static void min(int, mxArray**, int, const mxArray**);
-        static void supremum(int, mxArray**, int, const mxArray**);
         static void evaluate(int, mxArray**, int, const mxArray**);
         static void multiEvaluate(int, mxArray**, int, const mxArray**);
         static void multiply(int, mxArray**, int, const mxArray**);
