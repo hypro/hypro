@@ -445,9 +445,16 @@ BoxT<Number,Converter,Setting> BoxT<Number,Converter,Setting>::affineTransformat
 		return *this;
 	}
 	//TRACE("hypro.representations.box","This: " << *this << ", A: " << A << "b: " << b);
+	//std::cout << "Linear trafo ";
 	BoxT<Number,Converter,Setting> res = this->linearTransformation(A);
+	//std::cout << "done. Affine translation";
 	//TRACE("hypro.representations.box","Result of linear trafo: " << res);
-	return BoxT<Number,Converter,Setting>( std::make_pair(res.min()+b, res.max()+b) );
+	// apply translation
+	for(Eigen::Index i = 0; i < b.rows(); ++i) {
+		res.rIntervals()[i] += b(i);
+	}
+	//std::cout << " done." << std::endl;
+	return res;
 }
 
 template<typename Number, typename Converter, class Setting>

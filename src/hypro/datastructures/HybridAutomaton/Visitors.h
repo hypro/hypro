@@ -82,8 +82,6 @@ public:
 
 	template<typename B>
     inline T operator()(const B& lhs) const {
-		auto tmp = lhs.affineTransformation(mat, vec);
-		DEBUG("hypro.datastructures","Result of transformation: " << tmp);
  		return lhs.affineTransformation(mat, vec);
     }
 };
