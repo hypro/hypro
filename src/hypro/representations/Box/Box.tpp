@@ -116,6 +116,7 @@ namespace hypro {
 			assert(Eigen::Index(results.size()) == tpl.size());
 
 			// re-construct box from results.
+			mLimits = std::vector<carl::Interval<Number>>(_constraints.cols(), carl::Interval<Number>(0));
 			for(Eigen::Index rowIndex = 0; rowIndex < tpl.size(); ++rowIndex) {
 				for(Eigen::Index colIndex = 0; colIndex < _constraints.cols(); ++colIndex) {
 					if(tpl[rowIndex](colIndex) > 0) {
