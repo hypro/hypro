@@ -61,6 +61,8 @@ namespace hypro {
         matrix_t<Number> constraints = this->matrix();
         if(constraints.rows() < constraints.cols()) {
             assert(false);
+            std::cout <<  "SHOULD NOT BE REACHABLE" << std::endl;
+            return Empty();
         } else {
             // projection by means of a linear transformation
             matrix_t<Number> projectionMatrix = matrix_t<Number>::Zero(this->dimension(), this->dimension());
