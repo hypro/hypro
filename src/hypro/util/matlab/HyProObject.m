@@ -153,7 +153,7 @@ classdef HyProObject < handle
             if isreal(arg)
                 out = MHyPro(obj.Type, 'contains_point', obj.Pointer, arg);
             elseif isa(arg, 'HyProObject')
-                out = MHyPro(obj.Type, 'contains', obj.Pointer, arg.Pointer);
+                out = MHyPro(obj.Type, 'contains_set', obj.Pointer, arg.Pointer);
             else
                 error('HyProObject - contains: Wrong type of input argument.');
             end
@@ -163,7 +163,7 @@ classdef HyProObject < handle
             if isa(rhs, 'HyProObject') && strcmp(obj.Type, rhs.Type)
                 ptr = MHyPro(obj.Type, 'unite', obj.Pointer, rhs.Pointer);
                 out = HyProObject(obj.Type, ptr);
-            elseif strcmp(obj.Type, 'Box') && iscell(rhs)
+            elseif iscell(rhs)
                 objects = uint64.empty(length(rhs),0);
                 for i = 1:length(rhs)
                     objects{i} = rhs{i}.Pointer;
@@ -226,6 +226,10 @@ classdef HyProObject < handle
             end
         end
         
+        function out = size(obj)
+            out = MHyPro(obj.Type, 'size', obj.Pointer);
+        end
+        
         function out = eq(obj, rhs)
             if isa(rhs, 'HyProObject')
                 out = MHyPro(obj.Type, '==', obj.Pointer, rhs.Pointer);
@@ -235,7 +239,7 @@ classdef HyProObject < handle
         end
         
         function out = ne(obj, rhs)
-            if isa(rhs, 'HyProObject')
+            if ~strcmp(obj.Type, 'SupportFunction') &&isa(rhs, 'HyProObject')
                 out = MHyPro(obj.Type, '!=', obj.Pointer, rhs.Pointer);
             else
                 error('HyProObject - unequal: Not allowed for this type of HyProObject or wrong type of argument.');
@@ -268,7 +272,7 @@ classdef HyProObject < handle
         
         function out = reduceNumberRepresentation(obj)
             ptr = MHyPro(obj.Type, 'reduceNumberRepresentation', obj.Pointer);
-            out = HyProObject('Box', ptr);
+            out = HyProObject(obj.Type, ptr);
         end
         
         function out = clear(obj)
@@ -354,7 +358,7 @@ classdef HyProObject < handle
         end
         
         function out = supremum(obj)
-            if strcmp(obj.Type, 'Box')
+            if strcmp(obj.Type, 'Box') || strcmp(obj.Type, 'SupportFunction')
                 out = MHyPro(obj.Type, 'supremum', obj.Pointer);
             else
                 error('HyProObject - supremum: Not allowed for this type of HyProObject.');
@@ -378,9 +382,9 @@ classdef HyProObject < handle
         end
         
         function out = mtimes(obj, scalar)
-            if strcmp(obj.Type, 'Box') && isreal(scalar)
+            if (strcmp(obj.Type, 'Box') || strcmp(obj.Type, 'SupportFunction')) && isreal(scalar)
                 ptr = MHyPro(obj.Type, '*', obj.Pointer, scalar);
-                out = HyProObject('Box', ptr);
+                out = HyProObject(obj.Type, ptr);
             else
                 error('HyProObject - scale: Not allowed for this type of HyProObject or wrong type of argument.');
             end
@@ -404,9 +408,9 @@ classdef HyProObject < handle
         end
         
         function out = intersect(obj, rhs)
-            if strcmp(obj.Type, 'Box') && isa(rhs, 'HyProObject') && strcmp(rhs.Type, 'Box')
+            if (strcmp(obj.Type, 'Box') || strcmp(obj.Type, 'SupportFunction')) && isa(rhs, 'HyProObject') && (strcmp(rhs.Type, 'Box')|| strcmp(rhs.Type, 'SupportFunction'))
                 ptr = MHyPro(obj.Type, 'intersect', obj.Pointer, rhs.Pointer);
-                out = HyProObject('Box', ptr);
+                out = HyProObject(obj.Type, ptr);
             else
                 error('HyProObject - intersect: Not allowed for this type of HyProObject or wrong type of argument.');
             end
@@ -452,7 +456,87 @@ classdef HyProObject < handle
        
        % SUPPORT FUNCTIONS
        
-        
+       function cleanUp(obj)
+           if strcmp(obj.Type, 'SupportFunction')
+                MHyPro('SupportFunction', 'cleanUp', obj.Pointer);
+           else
+                error('HyProObject - cleanUp: Not allowed for this type of HyProObject.');
+           end
+       end
+       
+       function out = depth(obj)
+           if strcmp(obj.Type, 'SupportFunction')
+                out = MHyPro('SupportFunction', 'depth', obj.Pointer);
+           else
+                error('HyProObject - depth: Not allowed for this type of HyProObject.');
+           end
+       end
+       
+       function out = operationCount(obj)
+           if strcmp(obj.Type, 'SupportFunction')
+                out = MHyPro('SupportFunction', 'operationCount', obj.Pointer);
+           else
+                error('HyProObject - operationCount: Not allowed for this type of HyProObject.');
+           end
+       end
+      
+       function out = contains_vec(obj, vec)
+           if strcmp(obj.Type, 'SupportFunction') && isreal(vec)
+                out = MHyPro(obj.Type, 'contains_vec', obj.Pointer, vec);
+           else
+                error('HyProObject - contains_vec: Not allowed for this type of HyProObject or wrong argument.');
+           end
+       end
+       
+       function out = contains_dir(obj,rhs, dir)
+           if strcmp(obj.Type, 'SupportFunction') && isa(rhs,'HyProObject') && strcmp(rhs.Type, 'SupportFunction') && isreal(dir)
+                out = MHyPro(obj.Type, 'contains_dir', obj.Pointer, rhs.Pointer, dir);
+           else
+                error('HyProObject - contains_dir: Not allowed for this type of HyProObject.');
+           end
+       end
+       
+       function swap(obj, rhs1, rhs2)
+           if strcmp(obj.Type, 'SupportFunction') && isa(rhs1, 'HyProObject') && strcmp(rhs1.Type, 'SupportFunction')...
+                   && isa(rhs2, 'HyProObject') && strcmp(rhs2.Type, 'SupportFunction')
+                MHyPro(obj.Type, 'swap', obj.Pointer, rhs1.Pointer, rhs2.Pointer);
+           else
+                error('HyProObject - swap: Not allowed for this type of HyProObject.');
+           end
+       end
+       
+       function forceLinTransReduction(obj)
+           if strcmp(obj.Type, 'SupportFunction')
+                MHyPro(obj.Type, 'forceLinTransReduction', obj.Pointer);
+           else
+                error('HyProObject - forceLinTransReduction: Not allowed for this type of HyProObject.');
+           end
+       end
+       
+       function out = multiplicationsPerEvaluation(obj)
+           if strcmp(obj.Type, 'SupportFunction')
+                MHyPro(obj.Type, 'multiplicationsPerEvaluation', obj.Pointer);
+                out = 1;
+           else
+                error('HyProObject - multiplicationsPerEvaluation: Not allowed for this type of HyProObject.');
+           end
+       end
+       
+       function out = collectProjections(obj)
+           if strcmp(obj.Type, 'SupportFunction')
+                out = MHyPro(obj.Type, 'collectProjections', obj.Pointer);
+           else
+                error('HyProObject - collectProjections: Not allowed for this type of HyProObject.');
+           end
+       end
+       
+       function evaluateTemplate(obj)
+           if strcmp(obj.Type, 'SupportFunction')
+                MHyPro(obj.Type, 'evaluateTemplate', obj.Pointer);
+           else
+                error('HyProObject - evaluateTemplate: Not allowed for this type of HyProObject.');
+           end
+       end
        
     end
 end

@@ -140,6 +140,24 @@ void HyProGeometricObject<T>::matrix(int nlhs, mxArray* plhs[], int nrhs, const 
 }
 
 /**
+ * @brief Scaling operator.
+ **/
+template<class T>
+void HyProGeometricObject<T>::scale(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
+    if(nlhs < 1)
+        mexErrMsgTxt("HyProGeometricObject - scale: Expecting an output!");
+    if(nrhs < 4)
+        mexErrMsgTxt("HyProGeometricObject - scale: One or more arguments are missing!");
+        
+    T* obj = convertMat2Ptr<T>(prhs[2]);
+    const double factor = (double) mxGetScalar(prhs[3]);
+    
+    T temp = obj->operator*(factor);
+    T* b = new T(temp);
+    plhs[0] = convertPtr2Mat<T>(b);
+}
+
+/**
  * @brief
  **/
 template<class T>
@@ -745,5 +763,5 @@ void HyProGeometricObject<T>::clear(int nlhs, mxArray* plhs[], int nrhs, const m
     for(int i = 0; i < len; i++){
         mexPrintf("%f ", vec(i));
     }
-    mexPrintf("]");
+    mexPrintf("]\n\n");
  }

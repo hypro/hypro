@@ -30,7 +30,6 @@ class HyProBox: public HyProGeometricObject<hypro::Box<double>>{
         static void min(int, mxArray**, int, const mxArray**);
         static void evaluate(int, mxArray**, int, const mxArray**);
         static void multiEvaluate(int, mxArray**, int, const mxArray**);
-        static void multiply(int, mxArray**, int, const mxArray**);
         static void outstream(int, mxArray**, int, const mxArray**);
         static void box_size(int, mxArray**, int, const mxArray**);
         static void type(int, mxArray**, int, const mxArray**);

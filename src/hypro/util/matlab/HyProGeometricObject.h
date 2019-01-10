@@ -18,6 +18,7 @@ template<class T> class HyProGeometricObject{
         static void new_mat_vec(int, mxArray**, int, const mxArray**);
         static void deleteObject(int, mxArray**, int, const mxArray**);
         static void matrix(int, mxArray**, int, const mxArray**);
+        static void scale(int, mxArray**, int, const mxArray**);
         static void vector(int, mxArray**, int, const mxArray**);
         static void is_empty(int, mxArray**, int, const mxArray**);
         static void vertices(int, mxArray**, int, const mxArray**);

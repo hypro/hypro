@@ -21,7 +21,6 @@
 
 //     const std::vector<hypro::Point<double>> points = ObjectHandle::mPointsVector2Hypro(in_points, dimy);
 //     plhs[0] = convertPtr2Mat<hypro::SupportFunction<double>>(new hypro::SupportFunction<double>(points));
-
 // }
 
 /**
@@ -153,7 +152,7 @@ void HyProSupportFunction::contains_vec(int nlhs, mxArray* plhs[], int nrhs, con
 void HyProSupportFunction::contains_dir(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
     if(nlhs < 1)
         mexErrMsgTxt("HyProSupportFunction - contains_dir: Expecting one output value!");
-    if(nrhs < 5)
+    if(nrhs < 4)
         mexErrMsgTxt("HyProSupportFunction - contains_dir: One or more arguments are missing!");
     
     hypro::SupportFunction<double>* sfct_1 = convertMat2Ptr<hypro::SupportFunction<double>>(prhs[2]);
@@ -170,23 +169,15 @@ void HyProSupportFunction::contains_dir(int nlhs, mxArray* plhs[], int nrhs, con
 void HyProSupportFunction::scale(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
     if(nlhs < 1)
         mexErrMsgTxt("HyProSupportFunction - scale: Expecting one output value!");
-    if(nrhs < 4)
+    if(nrhs < 3)
         mexErrMsgTxt("HyProSupportFunction - scale: One or more arguments are missing!");
+
+    hypro::SupportFunction<double>* obj = convertMat2Ptr<hypro::SupportFunction<double>>(prhs[2]);
+    const double factor = (double) mxGetScalar(prhs[3]);
     
-    mxArray *m_in_point;
-    double *in_point;
-    const mwSize *dims;
-    int len;
-
-    hypro::SupportFunction<double>* sfct = convertMat2Ptr<hypro::SupportFunction<double>>(prhs[2]);
-    m_in_point = mxDuplicateArray(prhs[3]);
-    dims = mxGetDimensions(prhs[3]);
-    len = dims[0];
-    in_point = mxGetPr(m_in_point);
-    hypro::Point<double> point = ObjectHandle::mPoint2Hypro(in_point, len);
-
-    const bool ans = sfct->contains(point);
-    plhs[0] = mxCreateLogicalScalar(ans);
+    hypro::SupportFunction<double> temp = obj->scale(factor);
+    hypro::SupportFunction<double>* b = new hypro::SupportFunction<double>(temp);
+    plhs[0] = convertPtr2Mat<hypro::SupportFunction<double>>(b);
 }
 
 /**
@@ -207,8 +198,6 @@ void HyProSupportFunction::swap(int nlhs, mxArray* plhs[], int nrhs, const mxArr
  * @brief
  **/
 void HyProSupportFunction::forceLinTransReduction(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
-    if(nlhs < 1)
-        mexErrMsgTxt("HyProSupportFunction - forcedLinTransReduction: Expecting one output value!");
     if(nrhs < 3)
         mexErrMsgTxt("HyProSupportFunction - forcedLinTransReduction: One or more arguments are missing!");
     
@@ -220,14 +209,15 @@ void HyProSupportFunction::forceLinTransReduction(int nlhs, mxArray* plhs[], int
  * @brief
  **/
 void HyProSupportFunction::multiplicationsPerEvaluation(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
-    if(nlhs < 1)
-        mexErrMsgTxt("HyProSupportFunction - muliplicationsPerEvaluation: Expecting one output value!");
+    // if(nlhs < 1)
+    //     mexErrMsgTxt("HyProSupportFunction - muliplicationsPerEvaluation: Expecting one output value!");
     if(nrhs < 3)
         mexErrMsgTxt("HyProSupportFunction - muliplicationsPerEvaluation: One or more arguments are missing!");
     
     hypro::SupportFunction<double>* sfct = convertMat2Ptr<hypro::SupportFunction<double>>(prhs[2]);
     const unsigned ans = sfct->multiplicationsPerEvaluation();
-    plhs[0] = mxCreateLogicalScalar(ans);
+    // double temp = (double) ans;
+    // plhs[0] = mxCreateDoubleScalar(temp);
 }
 
 /**
@@ -257,8 +247,7 @@ void HyProSupportFunction::collectProjections(int nlhs, mxArray* plhs[], int nrh
  **/
 void HyProSupportFunction::evaluateTemplate(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
     if(nrhs < 5)
-        mexErrMsgTxt("HyProSupportFunction - evaluateTemplate: One or more arguments are missing!");
-    
+        mexErrMsgTxt("HyProSupportFunction - evaluateTemplate: One or more arguments are missing!");   
 
     hypro::SupportFunction<double>* sfct = convertMat2Ptr<hypro::SupportFunction<double>>(prhs[2]);
     std::size_t directions = (std::size_t) mxGetScalar(prhs[3]);
@@ -294,7 +283,7 @@ void HyProSupportFunction::process(int nlhs, mxArray *plhs[], int nrhs, const mx
     // Get the command string
     char cmd[64];
     if (nrhs < 1 || mxGetString(prhs[1], cmd, sizeof(cmd)))
-        mexErrMsgTxt("HyProConstraintSet - First input should be a command string less than 64 characters long.");
+        mexErrMsgTxt("HyProSupportFunction - First input should be a command string less than 64 characters long.");
     
     /***************************************************************************
      * Constructors
@@ -312,17 +301,13 @@ void HyProSupportFunction::process(int nlhs, mxArray *plhs[], int nrhs, const mx
 
     if(!strcmp("new_halfspaces", cmd)){
         new_halfspaces(nlhs, plhs, nrhs, prhs);
+        return;
     }
     
     // if (!strcmp("new_points", cmd)){
     //     new_points(nlhs, plhs, nrhs, prhs);
+    //     return;
     // }
-
-
-    // Check if there is a second input, which should be the class instance handle
-    if (nrhs < 2){
-        mexErrMsgTxt("Second input should be a Box instance handle.");
-    }
     
     if(!strcmp("copy", cmd)){
         copyObj(nlhs, plhs, nrhs, prhs);
@@ -457,6 +442,11 @@ void HyProSupportFunction::process(int nlhs, mxArray *plhs[], int nrhs, const mx
         return;
     }
 
+    if(!strcmp("contains_vec", cmd)){
+        contains_vec(nlhs, plhs, nrhs, prhs);
+        return;
+    }
+
     if(!strcmp("unite", cmd)){
         unite_single(nlhs, plhs, nrhs, prhs);
         return;
@@ -477,5 +467,50 @@ void HyProSupportFunction::process(int nlhs, mxArray *plhs[], int nrhs, const mx
         return;
     }
 
-    mexErrMsgTxt("HyProHyProConstraintSet - Command not recognized.");
+    if(!strcmp("depth", cmd)){
+        depth(nlhs, plhs, nrhs, prhs);
+        return;
+    }
+
+    if(!strcmp("operationCount", cmd)){
+        operationCount(nlhs, plhs, nrhs, prhs);
+        return;
+    }
+
+    if(!strcmp("contains_dir", cmd)){
+        contains_dir(nlhs, plhs, nrhs, prhs);
+        return;
+    }
+
+    if(!strcmp("*", cmd)){
+        scale(nlhs, plhs, nrhs, prhs);
+        return;
+    }
+
+    if(!strcmp("swap", cmd)){
+        swap(nlhs, plhs, nrhs, prhs);
+        return;
+    }
+
+    if(!strcmp("forceLinTransReduction", cmd)){
+        forceLinTransReduction(nlhs, plhs, nrhs, prhs);
+        return;
+    }
+
+    if(!strcmp("multiplicationsPerEvaluation", cmd)){
+        multiplicationsPerEvaluation(nlhs, plhs, nrhs, prhs);
+        return;
+    }
+
+    if(!strcmp("collectProjections", cmd)){
+        collectProjections(nlhs, plhs, nrhs, prhs);
+        return;
+    }
+
+    if(!strcmp("evaluateTemplate", cmd)){
+        evaluateTemplate(nlhs, plhs, nrhs, prhs);
+        return;
+    }
+
+    mexErrMsgTxt("HyProSupportFunction - Command not recognized.");
 }

@@ -409,22 +409,6 @@ void HyProBox::multiEvaluate(int nlhs, mxArray *plhs[], int nrhs, const mxArray 
 }
 
 /**
- * @brief Scaling operator.
- **/
-void HyProBox::multiply(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
-    if(nlhs < 1)
-        mexErrMsgTxt("HyProBox - *: Expecting an output!");
-    if(nrhs < 4)
-        mexErrMsgTxt("HyProBox - *: One or more arguments are missing!");
-    hypro::Box<double>* box_1 = convertMat2Ptr<hypro::Box<double>>(prhs[2]);
-    const double factor = (double) mxGetScalar(prhs[3]);
-    
-    hypro::Box<double> temp = box_1->operator*(factor);
-    hypro::Box<double>* b = new hypro::Box<double>(temp);
-    plhs[0] = convertPtr2Mat<hypro::Box<double>>(b);
-}
-
-/**
  * @brief Outstream operator.
  **/
 void HyProBox::outstream(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
@@ -663,7 +647,7 @@ void HyProBox::process(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[
     }
 
     if(!strcmp("*", cmd)){
-        multiply(nlhs, plhs, nrhs, prhs);
+        scale(nlhs, plhs, nrhs, prhs);
         return;
     }
 
@@ -761,7 +745,7 @@ void HyProBox::process(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[
         return;
     }
 
-    if(!strcmp("contains", cmd)){
+    if(!strcmp("contains_set", cmd)){
         contains_object(nlhs, plhs, nrhs, prhs);
         return;
     }

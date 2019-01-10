@@ -386,11 +386,19 @@ std::vector<hypro::Halfspace<double>> ObjectHandle::mHalfspaces2Hypro(double* ma
     
     hypro::matrix_t<double> mat = mMatrix2Hypro(matrix, dimx, dimy);
     hypro::vector_t<double> vec = mVector2Hypro(offsets, len);
-
+    mexPrintf("dimx: %d dimy: %d\n", dimx, dimy);
     for(int i = 0; i < dimx; i++){
         const hypro::vector_t<double> normal = mat.col(i);
-        const double offset = vec(0,i);
+         
+        const double offset = vec(i,0);  
         hypro::Halfspace<double>* h = new hypro::Halfspace<double>(normal, offset);
+        // hypro::vector_t<double> n = h->normal();
+        // const double o = h->offset();
+        // mexPrintf("normal : [");
+        // for(int j = 0; j < len; j++){
+        //     mexPrintf("%f ", n(j,0));
+        // }
+        // mexPrintf("] offset: %f\n", o);  
         hypro_vec.emplace_back(*h);
     }
 

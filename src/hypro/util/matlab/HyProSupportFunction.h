@@ -23,8 +23,8 @@ class HyProSupportFunction: public HyProGeometricObject<hypro::SupportFunction<d
         static void operationCount(int, mxArray**, int, const mxArray**);
         static void contains_vec(int, mxArray**, int, const mxArray**);
         static void contains_dir(int, mxArray**, int, const mxArray**);
-        static void scale(int, mxArray**, int, const mxArray**);
         static void swap(int, mxArray**, int, const mxArray**);
+        static void scale(int, mxArray**, int, const mxArray**);
         static void forceLinTransReduction(int, mxArray**, int, const mxArray**);
         static void multiplicationsPerEvaluation(int, mxArray**, int, const mxArray**);
         static void cleanUp(int, mxArray**, int, const mxArray**);

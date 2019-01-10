@@ -10,7 +10,6 @@ mat = [1 0 0; 0 1 0; 0 0 1];
 vec = [1; 2; 3];
 single_inter = [2 4];
 
-
 %****************************Constructors**********************************
 
 disp('Construct empty box');
@@ -396,6 +395,7 @@ set_1 = HyProObject('ConstraintSet', 'new_mat_vec', mat, vec);
 set_2 = HyProObject('ConstraintSet', 'copy', set_1);
 
 disp('Get matrix and vector');
+set_1.ostream();
 matrix = set_1.matrix();
 vector = set_2.vector();
 disp('Matrix:');
@@ -412,7 +412,6 @@ al = set_3.isAxisAligned();
 disp('Is set 3 axis aligned?');
 disp(al);
 
-
 disp('Add constraint');
 vec = [1; 2; 3];
 set_3.addConstraint(vec, 2);
@@ -428,7 +427,54 @@ sum.ostream();
 % Tests for HyPro Support Functions
 %**************************************************************************
 
-mat = [1 2 3; 4 5 6; 7 8 9];
-supf = HyProObject('SupportFunction', 'new_matrx', mat);
+mat = [1 0 0; 0 1 0; 0 0 1];
+vec = [1;2;1];
+supf_1 = HyProObject('SupportFunction', 'new_matrix', mat);
+supf_2 = HyProObject('SupportFunction', 'new_mat_vec', mat, vec);
+
+% Columns are the normal vectors
+halfspaces_normal = [1 0 0; 0 1 0; 0 0 1];
+halfspaces_offsets = [10;3;4];
+supf_3 = HyProObject('SupportFunction', 'new_halfspaces', halfspaces_normal, halfspaces_offsets);
+disp('Support Function 3:');
+mat = supf_3.matrix();
+vec = supf_3.vector();
+disp(mat);
+disp(vec);
+
+disp('Depth');
+depth = supf_2.depth();
+disp(depth);
+
+disp('Operation Count');
+opC = supf_1.operationCount();
+disp(opC);
+
+disp('Contains Vector?');
+out = supf_2.contains_vec([1;0;0]);
+disp('[1;0;0]');
+disp(out);
+disp('[1;2;3]');
+out = supf_3.contains_vec([1;2;3]);
+disp(out);
+
+disp('Contains direction?');
+out = supf_1.contains_dir(supf_3, 1);
+disp('direction: 1');
+disp(out);
+
+disp('Scale');
+out = supf_3 * 2;
+out.ostream();
+
+disp('Swap');
+supf_1.swap(supf_2, supf_3);
+
+disp('forceLinTransReduction');
+supf_2.forceLinTransReduction();
+
+disp('multiplicationsPerEvaluation');
+out = supf_1.multiplicationsPerEvaluation();
+disp(out);
 
 res = 1;
