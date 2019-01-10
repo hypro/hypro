@@ -29,7 +29,8 @@ class SettingsProvider : public carl::Singleton<SettingsProvider<State>>
 
     ReachabilitySettings &getReachabilitySettings();
 
-    unsigned getWorkerThreadCount();
+    unsigned getWorkerThreadCount() const;
+    void setWorkerThreadCount(std::size_t c);
     void setSkipPlot(bool skip) { mSkipPlot = skip; }
     bool skipPlot() const;
     bool useGlobalQueuesOnly() const;

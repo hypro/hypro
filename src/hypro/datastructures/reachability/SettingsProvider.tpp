@@ -45,9 +45,15 @@ double SettingsProvider<State>::getQueueBalancingRatio() const {
 }
 
 template<typename State>
-unsigned SettingsProvider<State>::getWorkerThreadCount()
+unsigned SettingsProvider<State>::getWorkerThreadCount() const
 {
     return mThreadcount;
+}
+
+template<typename State>
+void SettingsProvider<State>::setWorkerThreadCount(std::size_t c)
+{
+    mThreadcount = c;
 }
 
 template<typename State>
