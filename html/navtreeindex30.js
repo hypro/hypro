@@ -1,5 +1,6 @@
 var NAVTREEINDEX30 =
 {
+"structhypro_1_1IntervalAssignment.html#af0ad803294d2e26c022bd5f8764bd869":[6,0,1,98,7],
 "structhypro_1_1NoBoxDetection.html":[6,0,1,128],
 "structhypro_1_1NoBoxReduction.html":[6,0,1,129],
 "structhypro_1_1NoReduction.html":[6,0,1,134],
@@ -248,6 +249,5 @@ var NAVTREEINDEX30 =
 "structhypro_1_1sumContent.html":[6,0,1,177],
 "structhypro_1_1sumContent.html#a127bfafd1eec8697881462f082c124ac":[6,0,1,177,2],
 "structhypro_1_1sumContent.html#a14d2fbd8569ba786df30006e23f780cb":[6,0,1,177,0],
-"structhypro_1_1sumContent.html#a16fa94ee404fa7265f905f1f229ff990":[6,0,1,177,1],
-"structhypro_1_1sumContent.html#ab3e7f102b6b4ad65349dc23785c863f1":[6,0,1,177,3]
+"structhypro_1_1sumContent.html#a16fa94ee404fa7265f905f1f229ff990":[6,0,1,177,1]
 };
