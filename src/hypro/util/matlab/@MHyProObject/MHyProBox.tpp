@@ -4,9 +4,9 @@
  * @brief Creates an empty box
  **/
 void MHyProBox::emptyBox(int nlhs, mxArray *plhs[], const mxArray *prhs[]){
-    if(nlhs != 1){
+    if(nlhs != 1)
         mexErrMsgTxt("MHyProBox - new_empty: One output expected.");
-    }
+
     plhs[0] = convertPtr2Mat<hypro::Box<double>>(new hypro::Box<double>);
 }
 
@@ -14,9 +14,9 @@ void MHyProBox::emptyBox(int nlhs, mxArray *plhs[], const mxArray *prhs[]){
  * @brief Creates a box from a single interval
  **/
 void MHyProBox::boxFromSingleInterval(int nlhs, mxArray *plhs[], const mxArray *prhs[]){
-    if(nlhs != 1){
-            mexErrMsgTxt("MHyProBox - new_interval: One output expected."); 
-    }
+    if(nlhs != 1)
+        mexErrMsgTxt("MHyProBox - new_interval: One output expected."); 
+ 
     mxArray *m_in_interval;
     const mwSize *dims;
     double *in;
@@ -41,9 +41,9 @@ void MHyProBox::boxFromSingleInterval(int nlhs, mxArray *plhs[], const mxArray *
  * @brief Creates a box from a list of intervals
  **/
 void MHyProBox::boxFromIntervals(int nlhs, mxArray *plhs[], const mxArray *prhs[]){
-    if(nlhs != 1){
+    if(nlhs != 1)
         mexErrMsgTxt("MHyProBox - new_intervals: One output expected.");
-    }
+ 
     mxArray *m_in_intervals;
     const mwSize *dims;
     double *in;
@@ -70,9 +70,9 @@ void MHyProBox::boxFromIntervals(int nlhs, mxArray *plhs[], const mxArray *prhs[
  * @brief Creates a box from a minimal and maximal point limiting the box
  **/
 void MHyProBox::boxFromPoints(int nlhs, mxArray *plhs[], const mxArray *prhs[]){
-    if(nlhs != 1){
+    if(nlhs != 1)
         mexErrMsgTxt("MHyProBox - new_points: One output expected.");
-    }
+
     mxArray *m_in_points;
     const mwSize *dims;
     double *in;
@@ -134,9 +134,9 @@ void MHyProBox::empty(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]
  * @brief Returns the intervals from which the box is constructed
  **/
 void MHyProBox::intervals(int nlhs, mxArray *plhs[], const mxArray *prhs[]){
-    if(nlhs < 1){
+    if(nlhs < 1)
         mexErrMsgTxt("MHyProBox - intervals: Expecting an output!");
-    }   
+      
     mxArray* m_out_intervals;
     double* out;
 
@@ -155,9 +155,9 @@ void MHyProBox::intervals(int nlhs, mxArray *plhs[], const mxArray *prhs[]){
  * @brief Extends a box by a further interval
  **/
 void MHyProBox::insert(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
-    if(nrhs < 4){
+    if(nrhs < 4)
         mexErrMsgTxt("MHyProBox - insert: One argument is missing!");
-    }
+    
     mxArray *m_in_box, *m_in_interval;
     const mwSize *dims;
     double *in_box, *in_interval, *out;
@@ -186,12 +186,11 @@ void MHyProBox::insert(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[
  * @brief Getter for the limiting points.
  **/
 void MHyProBox::limits(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
-    if(nlhs < 1){
+    if(nlhs < 1)
         mexErrMsgTxt("MHyProBox - limits: Expecting an output!");
-    }
-    if(nrhs < 3){
+    if(nrhs < 3)
         mexErrMsgTxt("MHyProBox - limits: One argument is missing!");
-    }
+    
     mxArray* m_out;
     double* out;
 
@@ -232,12 +231,10 @@ void MHyProBox::constraints(int nlhs, mxArray *plhs[], int nrhs, const mxArray *
  * @brief Getter for an interval representation of one specific dimension.
  **/
 void MHyProBox::interval(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
-    if(nlhs < 1){
+    if(nlhs < 1)
         mexErrMsgTxt("MHyProBox - interval: Expecting an output!");
-    }
-    if(nrhs < 4){
+    if(nrhs < 4)
         mexErrMsgTxt("MHyProBox - interval: One or more arguments are missing!");
-    }
 
     mxArray *m_in_dim, *m_out;
     double *in, *out;
@@ -255,12 +252,10 @@ void MHyProBox::interval(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prh
  * @brief Getter for an interval representation of one specific dimension.
  **/
 void MHyProBox::at(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
-    if(nlhs < 1){
+    if(nlhs < 1)
         mexErrMsgTxt("MHyProBox - at: Expecting an output!");
-    }
-    if(nrhs < 4){
+    if(nrhs < 4)
         mexErrMsgTxt("MHyProBox - at: One or more arguments are missing!");
-    }
 
     mxArray *m_in_dim, *m_out;
     double* out;
@@ -293,12 +288,11 @@ void MHyProBox::is_symmetric(int nlhs, mxArray *plhs[], int nrhs, const mxArray 
  * @brief Getter for the maximal point.
  **/
 void MHyProBox::max(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
-    if(nlhs < 1){
+    if(nlhs < 1)
         mexErrMsgTxt("MHyProBox - max: Expecting an output!");
-    }
-    if(nrhs < 3){
+    if(nrhs < 3)
         mexErrMsgTxt("MHyProBox - max: One argument missing!");
-    }
+    
     mxArray *m_out;
     double* out;
 
@@ -314,12 +308,11 @@ void MHyProBox::max(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
  * @brief Getter for the minimal point.
  **/
 void MHyProBox::min(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
-if(nlhs < 1){
+    if(nlhs < 1)
         mexErrMsgTxt("MHyProBox - min: Expecting an output!");
-    }
-    if(nrhs < 3){
+    if(nrhs < 3)
         mexErrMsgTxt("MHyProBox - min: One argument missing!");
-    }
+    
     mxArray *m_out;
     double* out;
 
@@ -377,6 +370,7 @@ void MHyProBox::multiEvaluate(int nlhs, mxArray *plhs[], int nrhs, const mxArray
         mexErrMsgTxt("MHyProBox - multiEvaluate: Expecting an output!");
     if(nrhs < 5)
         mexErrMsgTxt("MHyProBox - multiEvaluate: One or more arguments are missing!");
+
     mxArray *m_in_vector;
     double *in_vector;
     const mwSize *dims;
@@ -459,9 +453,9 @@ void MHyProBox::type(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
  * @brief Makes a symmetric box from the current box.
  **/
 void MHyProBox::makeSymmetric(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
-    if(nrhs < 3){
+    if(nrhs < 3)
         mexErrMsgTxt("MHyProBox - makeSymmetric: One or more arguments are missing!");
-    }
+
     hypro::Box<double>* box = convertMat2Ptr<hypro::Box<double>>(prhs[2]);
     box->makeSymmetric();
 }

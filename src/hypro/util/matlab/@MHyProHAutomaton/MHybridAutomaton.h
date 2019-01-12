@@ -54,7 +54,7 @@ class MHybridAutomaton{
         static void or_operator(int, mxArray**, int, const mxArray**);
         static void plus(int, mxArray**, int, const mxArray**);
         static void outstream(int, mxArray**, int, const mxArray**);
-        static void checkConsistnecy(int, mxArray**, int, const mxArray**);
+        static void checkConsistency(int, mxArray**, int, const mxArray**);
 };
 
 #include "MHybridAutomaton.tpp"

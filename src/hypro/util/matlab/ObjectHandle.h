@@ -15,6 +15,10 @@
 #include "../../datastructures/Halfspace.h"
 #include "../linearOptimization/EvaluationResult.h"
 #include "../../representations/GeometricObject.h"
+#include "../../datastructures/HybridAutomaton/Location.h"
+#include "../../datastructures/HybridAutomaton/Transition.h"
+#include "../../datastructures/HybridAutomaton/Condition.h"
+#include "../../datastructures/HybridAutomaton/HybridAutomatonComp.h"
 
 
 class ObjectHandle{
@@ -34,6 +38,9 @@ class ObjectHandle{
         static void convert2matlab(const hypro::CONTAINMENT&, std::string&);
         static void convert2matlab(const hypro::SOLUTION&, std::string&);
         static void convert2matlab(const carl::Term<double>&, double*, const int, const int);
+        static void convert2matlab(const hypro::Location<double>&, double*);
+        static void convert2matlab(const hypro::Transition<double>&, double*);
+        static void convert2matlab(const hypro::Condition<double>&, double*);
 
         static hypro::SOLUTION mSolution2Hypro(char*);
         static carl::Interval<double> mInterval2Hypro(double*);
@@ -42,6 +49,9 @@ class ObjectHandle{
         static hypro::Point<double> mPoint2Hypro(double*, const int);
         static hypro::Halfspace<double> mHalfspace2Hypro(double*, const int, double&);
         static hypro::EvaluationResult<double> mEvaluationResult2Hypro(double*);
+        static hypro::Location<double> mLocation2Hypro(double*);
+        static hypro::Transition<double> mTransition2Hypro(double*);
+        static hypro::Condition<double> mCondition2Hypro(double*);
 
         static std::vector<std::size_t> mSizeVector2Hypro(double*, const int);
         static std::vector<carl::Interval<double>> mIntervals2Hypro(double*, const int, const int);
@@ -51,6 +61,7 @@ class ObjectHandle{
         static std::vector<hypro::Halfspace<double>> mHalfspaces2Hypro(double*, double*, const int, const int, const int);
         static std::vector<hypro::EvaluationResult<double>> mMultiEvaluationStruct2Hypro(double*);
         static std::vector<carl::Term<double>> mMultivariatePoly2Hypro(double*);
+
 
     private:
 };
@@ -205,7 +216,6 @@ void ObjectHandle::convert2matlab(const hypro::SOLUTION& sol, std::string& out){
     }
 }
 
-
 /**
  * @breif
  * 
@@ -213,6 +223,28 @@ void ObjectHandle::convert2matlab(const hypro::SOLUTION& sol, std::string& out){
 void ObjectHandle::convert2matlab(const carl::Term<double>& term, double* out, const int dimx, const int dimy){
 
 }
+
+/**
+ * @brief
+ **/
+void ObjectHandle::convert2matlab(const hypro::Location<double>& loc, double* out){
+    //TODO
+}
+
+/**
+ * @brief
+ **/
+void ObjectHandle::convert2matlab(const hypro::Transition<double>& tran, double* out){
+    //TODO
+}
+
+/**
+ * @brief
+ **/
+void ObjectHandle::convert2matlab(const hypro::Condition<double>&, double*){
+    //TODO
+}
+
 
 /********************************************************************************************************
  *  Matlab Objects to HyPro
@@ -403,6 +435,27 @@ std::vector<hypro::Halfspace<double>> ObjectHandle::mHalfspaces2Hypro(double* ma
     }
 
     return hypro_vec;
+}
+
+/**
+ * @brief
+ **/
+hypro::Location<double> ObjectHandle::mLocation2Hypro(double* in){
+    //TODO
+}
+
+/**
+ * @brief
+ **/
+hypro::Transition<double> ObjectHandle::mTransition2Hypro(double* in){
+    //TODO
+}
+
+/**
+ * @brief
+ **/
+hypro::Condition<double> ObjectHandle::mCondition2Hypro(double* in){
+    //TODO
 }
 
 #endif
