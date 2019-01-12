@@ -1,8 +1,9 @@
-#include "HyProBox.h"
-#include "HyProConstraintSet.h"
-#include "HyProTaylorModel.h"
-#include "HyProEllipsoid.h"
-#include "HyProSupportFunction.h"
+#include "@MHyProObject/MHyProBox.h"
+#include "@MHyProObject/MHyProConstraintSet.h"
+#include "@MHyProObject/MHyProTaylorModel.h"
+#include "@MHyProObject/MHyProEllipsoid.h"
+#include "@MHyProObject/MHyProSupportFunction.h"
+#include "@MHyProHAutomaton/MHybridAutomaton.h"
 #include <iostream>
 #include "mex.h"
 #include "matrix.h"
@@ -14,13 +15,17 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
     mxGetString(prhs[0], type, sizeof(type));
 
     if(!strcmp(type, "Box")){
-        HyProBox::process(nlhs, plhs, nrhs, prhs);
+        MHyProBox::process(nlhs, plhs, nrhs, prhs);
     }else if(!strcmp(type, "Ellipsoid")){
-        HyProEllipsoid::process(nlhs, plhs, nrhs, prhs);
+        MHyProEllipsoid::process(nlhs, plhs, nrhs, prhs);
     }else if(!strcmp(type, "ConstraintSet")){
-        HyProConstraintSet::process(nlhs, plhs, nrhs, prhs);
+        MHyProConstraintSet::process(nlhs, plhs, nrhs, prhs);
     }else if(!strcmp(type, "SupportFunction")){
-        HyProSupportFunction::process(nlhs, plhs, nrhs, prhs);
+        MHyProSupportFunction::process(nlhs, plhs, nrhs, prhs);
+    }else if(!strcmp(type, "TaylorModel")){
+        // MHyProTaylorModel::process(nlhs, plhs, nrhs, prhs);
+    }else if(!strcmp(type, "HybridAutomaton")){
+        MHybridAutomaton::process(nlhs, plhs, nrhs, prhs);
     }else{
         mexErrMsgTxt("MHyPro - Unknown type.");
     }
