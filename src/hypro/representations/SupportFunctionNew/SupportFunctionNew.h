@@ -430,6 +430,12 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
 	 */
 	inline void clear(){ mRoot = nullptr; }
 
+	/**
+	 * @brief	   Traverses the tree and computes dimensions remaining after all projection operations considered.
+	 * @return 	   A vector containing the indices of the dimensions remaining  
+	 */
+	std::vector<std::size_t> collectProjections() const;
+
 };
 /** @} */
 

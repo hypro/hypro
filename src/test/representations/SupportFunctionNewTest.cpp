@@ -1029,3 +1029,59 @@ TYPED_TEST(SupportFunctionNewTest, IntersectAndSatisfiesHalfspace){
 	EXPECT_TRUE(fullOverlap.second == sf1);
 }
 
+/* CollectProjections Test Setup:
+ *
+ *	   	  intersect
+ *	  /		 |			\
+ *	 |		 |	 		sum		
+ *	 |		 |		/			\
+ *	 |		 |		|		  union
+ *	 |		 |		|		 /		\
+ *	Proj4  Proj3  Proj2   Proj1	 	 |
+ *   |		 |		 |		 |		 |
+ *	sf 	 	sf		sf  	sf  	sf
+ */
+TYPED_TEST(SupportFunctionNewTest, CollectProjections){
+
+	//Make a 5-dim box
+	Point<TypeParam> p1 {TypeParam(0), TypeParam(1), TypeParam(2), TypeParam(3), TypeParam(4)};
+	Point<TypeParam> p2 {TypeParam(-2), TypeParam(-1), TypeParam(0), TypeParam(1), TypeParam(2)};
+	Box<TypeParam> box(std::make_pair(p1,p2));
+	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sf(&box);
+
+	//Proj1 - projects away dimension 5
+	std::vector<std::size_t> proj1Dims ({0,1,2,3});
+	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> proj1 = sf.project(proj1Dims);
+	EXPECT_EQ(proj1.dimension(), std::size_t(5)); //the 5th dimension is only projected away in other functions like collectProjections
+	EXPECT_EQ(proj1.collectProjections(), proj1Dims);
+
+	//Union - should leave out dimension 5 as it is not in both proj1 and sf
+	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> unio = proj1.unite(sf);
+	EXPECT_EQ(unio.collectProjections(), proj1Dims);
+
+	//Proj2 - projects away dimension 2 and 3
+	std::vector<std::size_t> proj2Dims ({0,3,4});
+	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> proj2 = sf.project(proj2Dims);
+	EXPECT_EQ(proj2.dimension(), std::size_t(5)); //the 5th dimension is only projected away in other functions like collectProjections
+	EXPECT_EQ(proj2.collectProjections(), proj2Dims);	
+
+	//Sum - Should return intersection of proj1Dims and proj2Dims
+	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sum = proj2.minkowskiSum(unio);
+	EXPECT_EQ(sum.collectProjections(), std::vector<std::size_t>({0,3}));
+
+	//Proj3 - projects away dimension 1
+	std::vector<std::size_t> proj3Dims ({1,2,3,4});
+	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> proj3 = sf.project(proj3Dims);
+	EXPECT_EQ(proj3.collectProjections(), proj3Dims);
+
+	//Proj4 - projects away dimension 4
+	std::vector<std::size_t> proj4Dims ({0,1,2,4});
+	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> proj4 = sf.project(proj4Dims);
+	EXPECT_EQ(proj4.collectProjections(), proj4Dims);	
+
+	//Intersect - no dimension should be left
+	std::vector<SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>> children({proj3,sum});
+	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> inter = proj4.intersect(children);
+	EXPECT_EQ(inter.collectProjections(), std::vector<std::size_t>());
+}
+

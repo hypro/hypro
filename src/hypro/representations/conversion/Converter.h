@@ -153,7 +153,7 @@ class Converter {
 		template<typename HPolySetting = typename HPolytope::Settings, typename inSetting>
 		static HPolytopeT<Number,Converter<Number>,HPolySetting> toHPolytope(const CarlPolytopeT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);
 		template<typename HPolySetting = typename HPolytope::Settings, typename inSetting>
-		static HPolytopeT<Number,Converter<Number>,HPolySetting> toHPolytope(const SupportFunctionNewT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);
+		static HPolytopeT<Number,Converter<Number>,HPolySetting> toHPolytope(const SupportFunctionNewT<Number,Converter<Number>,inSetting>& source, const std::vector<vector_t<Number>>& additionalDirections = std::vector<vector_t<Number>>(), const CONV_MODE = CONV_MODE::OVER, std::size_t numberOfDirections = defaultTemplateDirectionCount );
 
 		template<typename VPolySetting = typename VPolytope::Settings, typename inSetting>
 		static VPolytopeT<Number,Converter<Number>,VPolySetting> toVPolytope(const BoxT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);

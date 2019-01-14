@@ -293,12 +293,6 @@ HPolytopeT<Number,Converter<Number>,HPolySetting> Converter<Number>::toHPolytope
 
 template<typename Number>
 template<typename HPolySetting, typename inSetting>
-HPolytopeT<Number,Converter<Number>,HPolySetting> Converter<Number>::toHPolytope(const SupportFunctionNewT<Number,Converter<Number>,inSetting>& _source, const CONV_MODE){
-	return HPolytopeT<Number,Converter<Number>,HPolySetting>();
-}
-/*
-template<typename Number>
-template<typename HPolySetting, typename inSetting>
 HPolytopeT<Number,Converter<Number>,HPolySetting> Converter<Number>::toHPolytope(const SupportFunctionNewT<Number,Converter<Number>,inSetting>& _source, const std::vector<vector_t<Number>>& additionalDirections, const CONV_MODE, std::size_t numberOfDirections){
 	
 	//gets dimension of source object
@@ -410,4 +404,3 @@ HPolytopeT<Number,Converter<Number>,HPolySetting> Converter<Number>::toHPolytope
     	return HPolytope(constraints, constants);
 	}
 }
-*/

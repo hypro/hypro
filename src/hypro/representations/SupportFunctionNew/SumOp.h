@@ -132,6 +132,31 @@ class SumOp : public RootGrowNode<Number,Setting> {
 		}
 		return false;
 	}
+
+	//Erases all dimensions from a copy of dimensions that are denoted in dims
+	std::vector<std::size_t> intersectDims(const std::vector<std::vector<std::size_t>>& dims) const {
+		
+		// we create the intersection of all results. Therefore we iterate over the first vector and check the other
+		// result vectors, if the respective element is contained. Iterating over the first is sufficient, as elements
+		// not in the first vector will not be in the intersection anyways.
+		std::vector<std::size_t> accumulatedResult;
+		for(unsigned pos = 0; pos < dims.begin()->size(); ++pos){
+			std::size_t element = dims.begin()->at(pos);
+			bool elementInAllVectors = true;
+			for(unsigned resIndex = 1; resIndex < dims.size(); ++resIndex) {
+				if(std::find(dims.at(resIndex).begin(), dims.at(resIndex).end(), element) == dims.at(resIndex).end()){
+					elementInAllVectors = false;
+					break;
+				}
+			}
+			if(elementInAllVectors){
+				// if this is a projection, we need to remove non-projected dimensions -> we could not have been in a projection since
+				// since this part of the function was only executed if a node had more than 2 children
+				accumulatedResult.emplace_back(element);
+			}
+		}
+		return accumulatedResult;
+	}
 };
 
 } //namespace hypro

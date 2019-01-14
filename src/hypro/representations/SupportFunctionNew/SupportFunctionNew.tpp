@@ -634,4 +634,32 @@ namespace hypro {
 	//	mRoot = nullptr;
 	//}
 
+	template<typename Number, typename Converter, typename Setting>
+	std::vector<std::size_t> SupportFunctionNewT<Number,Converter,Setting>::collectProjections() const {
+
+		//TODO: Check if right
+		if(mRoot == nullptr) return std::vector<std::size_t>();
+		
+		//first function - do nothing
+		std::function<void(RootGrowNode<Number,Setting>*)> doNothing = [](RootGrowNode<Number,Setting>* ){ };
+
+		//second function - leaves return a vector of ascending dimensions
+		std::function<std::vector<std::size_t>(RootGrowNode<Number,Setting>*)> collectLeafDimensions = 
+			[](RootGrowNode<Number,Setting>* n) -> std::vector<std::size_t> {
+				std::vector<std::size_t> res;
+				for(std::size_t i = 0; i < n->getDimension(); ++i){ 
+					res.emplace_back(i);
+				}
+				return res;
+			};
+
+		//third function - call the respective function of the node which sorts out unwanted dimensions
+		std::function<std::vector<std::size_t>(RootGrowNode<Number,Setting>*, std::vector<std::vector<std::size_t>>)> intersectDims =
+			[](RootGrowNode<Number,Setting>* n, std::vector<std::vector<std::size_t>> dims) -> std::vector<std::size_t> {
+				return n->intersectDims(dims);
+			};
+
+		return traverse(doNothing, collectLeafDimensions, intersectDims);
+	}
+
 } // namespace hypro

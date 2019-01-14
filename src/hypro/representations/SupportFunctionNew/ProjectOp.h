@@ -118,6 +118,20 @@ class ProjectOp : public RootGrowNode<Number,Setting> {
 		return false;
 	}
 
+	//Erases all dimensions from a copy of "dimensions" that are denoted in "dims"
+	std::vector<std::size_t> intersectDims(const std::vector<std::vector<std::size_t>>& dims) const {
+		assert(dims.size() == 1);
+		std::vector<std::size_t> tmp = dimensions;
+		for(auto dimIt = dimensions.begin(); dimIt != dimensions.end(); ) {
+			if(std::find(dims.front().begin(), dims.front().end(), *dimIt) == dims.front().end()) {
+				dimIt = tmp.erase(dimIt);
+			} else {
+				++dimIt;
+			}
+		}
+		return tmp;
+	}
+
 };
 
 } //namespace hypro
