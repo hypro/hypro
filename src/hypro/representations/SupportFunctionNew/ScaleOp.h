@@ -89,6 +89,13 @@ class ScaleOp : public RootGrowNode<Number,Setting> {
 		return resultStackBack.front();
 	}
 
+	//Checks emptiness
+	bool empty(const std::vector<bool>& childrenEmpty) const {
+		assert(childrenEmpty.size() == 1);
+		if(childrenEmpty.front()) return true;
+		return false;
+	}
+
 	//Multiply supremumPoint by factor
 	Point<Number> supremumPoint(std::vector<Point<Number>>& points) const {
 		assert(points.size() == 1);

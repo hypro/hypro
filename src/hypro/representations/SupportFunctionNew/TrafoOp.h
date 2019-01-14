@@ -136,6 +136,13 @@ class TrafoOp : public RootGrowNode<Number,Setting> {
 		return resultStackBack.front();
 	}
 
+	//Checks emptiness
+	bool empty(const std::vector<bool>& childrenEmpty) const {
+		assert(childrenEmpty.size() == 1);
+		if(childrenEmpty.front()) return true;
+		return false;
+	}
+
 	//Compares the parameters from the current TrafoOp with the parameters A and b from other LinTrafoParameters
 	//and sets the generally used LinTrafoParameters to parameters if they are the same
 	bool hasTrafo(std::shared_ptr<const LinTrafoParameters<Number,Setting>>& ltParam, const matrix_t<Number>& A, const vector_t<Number>& b){

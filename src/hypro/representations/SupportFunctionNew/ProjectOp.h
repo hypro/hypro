@@ -87,6 +87,13 @@ class ProjectOp : public RootGrowNode<Number,Setting> {
 		return resultStackBack.front();
 	}
 
+	//Checks emptiness
+	bool empty(const std::vector<bool>& childrenEmpty) const {
+		assert(childrenEmpty.size() == 1);
+		if(dimensions.empty() || childrenEmpty.front()) return true;
+		return false;
+	}
+
 	//Set all unwanted dimensions to zero 
 	Point<Number> supremumPoint(std::vector<Point<Number>>& points) const {
 		assert(points.size() == 1);

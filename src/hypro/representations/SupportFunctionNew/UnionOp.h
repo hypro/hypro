@@ -22,16 +22,14 @@ class SupportFunctionNewT;
 template<typename Number, typename Converter, typename Setting>
 class UnionOp : public RootGrowNode<Number,Setting> {
 
-	using PointerVec = typename RootGrowNode<Number,Setting>::PointerVec;
-  
   private:
 	
 	////// General Interface
 
 	SFNEW_TYPE type = SFNEW_TYPE::UNIONOP;
 	unsigned originCount = 2;
-	PointerVec mChildren;
-	std::size_t mDimension = 0;
+	std::size_t mDimension;
+	//PointerVec mChildren;
 
 	////// Special members of this class
 
@@ -41,17 +39,15 @@ class UnionOp : public RootGrowNode<Number,Setting> {
 
 	UnionOp() = delete;
 
-	UnionOp(const SupportFunctionNewT<Number,Converter,Setting>& lhs, const SupportFunctionNewT<Number,Converter,Setting>& rhs){ 
+	UnionOp(const SupportFunctionNewT<Number,Converter,Setting>& lhs, const SupportFunctionNewT<Number,Converter,Setting>& rhs) : mDimension(lhs.dimension()) { 
 		assert(lhs.dimension() == rhs.dimension());
-		mDimension = lhs.dimension();
 		lhs.addOperation(this, std::vector<SupportFunctionNewT<Number,Converter,Setting>>{rhs}); 
 	}
 
-	UnionOp(const SupportFunctionNewT<Number,Converter,Setting>& lhs, const std::vector<SupportFunctionNewT<Number,Converter,Setting>>& rhs){ 
+	UnionOp(const SupportFunctionNewT<Number,Converter,Setting>& lhs, const std::vector<SupportFunctionNewT<Number,Converter,Setting>>& rhs) : mDimension(lhs.dimension()) { 
 		for(const auto& sf : rhs){
 			assert(lhs.dimension() == sf.dimension());
 		}
-		mDimension = lhs.dimension();
 		lhs.addOperation(this, rhs); 
 	}	
 
@@ -98,6 +94,14 @@ class UnionOp : public RootGrowNode<Number,Setting> {
 			}
 		}
 		return accumulatedResult;
+	}
+
+	//Only empty, if all children are empty since union of nonempty smth with empty set equals smth
+	bool empty(const std::vector<bool>& childrenEmpty) const {
+		for(const auto childEmpty : childrenEmpty){
+			if(!childEmpty) return false;
+		}
+		return true;
 	}
 
 	//Transform the supremum

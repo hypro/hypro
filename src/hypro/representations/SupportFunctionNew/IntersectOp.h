@@ -22,16 +22,14 @@ class SupportFunctionNewT;
 template<typename Number, typename Converter, typename Setting>
 class IntersectOp : public RootGrowNode<Number,Setting> {
 
-	using PointerVec = typename RootGrowNode<Number,Setting>::PointerVec;
-  
   private:
 	
 	////// General Interface
 
 	SFNEW_TYPE type = SFNEW_TYPE::INTERSECTOP;
 	unsigned originCount = 2;
-	PointerVec mChildren;
 	std::size_t mDimension = 0;
+	//PointerVec mChildren;
 
 	////// Special members of this class
 
@@ -41,17 +39,15 @@ class IntersectOp : public RootGrowNode<Number,Setting> {
 
 	IntersectOp() = delete;
 
-	IntersectOp(const SupportFunctionNewT<Number,Converter,Setting>& lhs, const SupportFunctionNewT<Number,Converter,Setting>& rhs){ 
+	IntersectOp(const SupportFunctionNewT<Number,Converter,Setting>& lhs, const SupportFunctionNewT<Number,Converter,Setting>& rhs) : mDimension(lhs.dimension()) { 
 		assert(lhs.dimension() == rhs.dimension());
-		mDimension = lhs.dimension();
 		lhs.addOperation(this, std::vector<SupportFunctionNewT<Number,Converter,Setting>>{rhs}); 
 	}
 
-	IntersectOp(const SupportFunctionNewT<Number,Converter,Setting>& lhs, const std::vector<SupportFunctionNewT<Number,Converter,Setting>>& rhs){ 
+	IntersectOp(const SupportFunctionNewT<Number,Converter,Setting>& lhs, const std::vector<SupportFunctionNewT<Number,Converter,Setting>>& rhs) : mDimension(lhs.dimension()) { 
 		for(const auto& sf : rhs){
 			assert(lhs.dimension() == sf.dimension());
 		}
-		mDimension = lhs.dimension();
 		lhs.addOperation(this, rhs); 
 	}
 
@@ -106,7 +102,6 @@ class IntersectOp : public RootGrowNode<Number,Setting> {
 			//actual aggregation loop
 			for(const auto& res : resultStackBack){
 				assert(res[i].errorCode != SOLUTION::INFEAS);
-				std::cout << "res[" << i << "] = " << res[i] << "r = " << r << std::endl;
 				if(r.errorCode == SOLUTION::FEAS && res[i].errorCode == SOLUTION::INFTY){
 					r.supportValue = res[i].supportValue;
 					r.optimumValue = res[i].optimumValue;
@@ -120,6 +115,66 @@ class IntersectOp : public RootGrowNode<Number,Setting> {
 			accumulatedResult.emplace_back(r);
 		}
 		return accumulatedResult;
+	}
+
+	/* Problem: Check emptiness of intersection of n convex objects
+	 * Solution 1: Template Evaluation
+	 *	- For each template direction, evaluate every object except one in that direction and the one into the -direction
+	 *	- If -direction is bigger in absolute value, then intersection not empty
+	 *	- Needs n*t*LP worst time, since every evaluate needs to solve a LP
+	 *	- Can stop early if direction directly found -> best time possible time is n*LP
+	 *	- Scales bad in dimension
+	 * Solution 2: Template Evaluation +
+	 *  - Like Solution 1, but parallel evaluation of 2 directions
+	 *	- Needs 0.5*n*t*LP time
+	 * Solution 3: Center of Gravity (COG)
+	 *  - For each object, generate a point within the object
+	 *		- Either on a halfspace (needs an LP, how to choose which halfspace?)
+	 *		- Or the center of gravity ob the object (needs to compute vertices, then averaging -> expensive as hell)
+	 *	- Compute the COG of all points and determine the direction as the vector from the COG to the points
+	 *	- Evaluate all directions -> but how to determine emptiness from that?
+	 *	- Needs n*LP to generate points and n*LPs for evaluation
+	 */
+	bool empty(const std::vector<bool>& childrenEmpty) const {
+
+		//Current implementation uses Solution 1: template evaluation.
+
+		//Quick check
+		for(auto child : childrenEmpty){
+			if(child) return true;
+		}
+
+		//First: select the most negative object
+		vector_t<Number> allNegativeDir = -1*vector_t<Number>::Ones(mDimension);
+		std::vector<SupportFunctionNewT<Number,Converter,Setting>> sfChildren;
+		std::size_t indexOfMostNegativeChild = 0;
+		Number mostNegativeEvalValue = Number(100000000);
+		for(int i = 0; i < this->getChildren().size(); ++i){
+			sfChildren.emplace_back(SupportFunctionNewT<Number,Converter,Setting>(this->getChildren().at(i)));
+			Number childEvalRes = sfChildren.back().evaluate(allNegativeDir,false).supportValue;
+			indexOfMostNegativeChild = childEvalRes < mostNegativeEvalValue ? sfChildren.size()-1 : indexOfMostNegativeChild;
+			mostNegativeEvalValue = childEvalRes < mostNegativeEvalValue ? childEvalRes : mostNegativeEvalValue;
+		}
+		assert(indexOfMostNegativeChild < sfChildren.size());
+
+		//Erase most negative child from sfChildren
+		SupportFunctionNewT<Number,Converter,Setting> mostNegative = sfChildren.at(indexOfMostNegativeChild);
+		sfChildren.erase(sfChildren.begin() + indexOfMostNegativeChild);
+
+		std::vector<vector_t<Number>> directions = computeTemplate<Number>(mDimension, defaultTemplateDirectionCount);
+
+		for(const auto& direction : directions){
+			
+			//Determine reverse direction for mostNegative
+			Number mostNegEvalRes = mostNegative.evaluate(-direction, false).supportValue;
+
+			//Fill evalResults
+			for(const auto& child : sfChildren){
+				Number childEvalRes = child.evaluate(direction, false).supportValue;
+				if(childEvalRes < -mostNegEvalRes) return true;
+			}
+		}
+		return false;
 	}
 
 	//Select smallest supremum of given suprema

@@ -21,8 +21,6 @@ class SupportFunctionNewT;
 //Specialized subclass for sums as example of a binary operator
 template<typename Number, typename Converter, typename Setting>
 class SumOp : public RootGrowNode<Number,Setting> {
-
-	using PointerVec = typename RootGrowNode<Number,Setting>::PointerVec;
   
   private:
 	
@@ -30,8 +28,8 @@ class SumOp : public RootGrowNode<Number,Setting> {
 
 	SFNEW_TYPE type = SFNEW_TYPE::SUMOP;
 	unsigned originCount = 2;
-	PointerVec mChildren;
-	std::size_t mDimension = 0;
+	std::size_t mDimension;
+	//PointerVec mChildren;
 
 	////// Special members of this class
 
@@ -41,17 +39,15 @@ class SumOp : public RootGrowNode<Number,Setting> {
 
 	SumOp() = delete;
 
-	SumOp(const SupportFunctionNewT<Number,Converter,Setting>& lhs, const SupportFunctionNewT<Number,Converter,Setting>& rhs){ 
+	SumOp(const SupportFunctionNewT<Number,Converter,Setting>& lhs, const SupportFunctionNewT<Number,Converter,Setting>& rhs) : mDimension(lhs.dimension()) { 
 		assert(lhs.dimension() == rhs.dimension());
-		mDimension = lhs.dimension();
 		lhs.addOperation(this, std::vector<SupportFunctionNewT<Number,Converter,Setting>>{rhs}); 
 	}
 
-	SumOp(const SupportFunctionNewT<Number,Converter,Setting>& lhs, const std::vector<SupportFunctionNewT<Number,Converter,Setting>>& rhs){ 
+	SumOp(const SupportFunctionNewT<Number,Converter,Setting>& lhs, const std::vector<SupportFunctionNewT<Number,Converter,Setting>>& rhs) : mDimension(lhs.dimension()) { 
 		for(const auto& sf : rhs){
 			assert(lhs.dimension() == sf.dimension());
 		}
-		mDimension = lhs.dimension();
 		lhs.addOperation(this, rhs); 
 	}	
 
@@ -108,6 +104,15 @@ class SumOp : public RootGrowNode<Number,Setting> {
 			accumulatedResult.emplace_back(r);
 		}
 		return accumulatedResult;
+	}
+
+	//Minkowski Sum empty when all operands (children) are empty
+	//Minkowski Sum of an nonempty object with an empty object equals the nonempty object
+	bool empty(const std::vector<bool>& childrenEmpty) const {
+		for(auto childEmpty : childrenEmpty){
+			if(!childEmpty) return false;
+		}
+		return true;
 	}
 
 	//Sum all suprema together

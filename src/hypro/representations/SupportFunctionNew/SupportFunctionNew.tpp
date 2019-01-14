@@ -205,11 +205,12 @@ namespace hypro {
 
 		//if not leaf - not empty if all children not empty
 		std::function<bool(RootGrowNode<Number,Setting>*, std::vector<bool>)> childrenEmpty =
-			[](RootGrowNode<Number,Setting>* , std::vector<bool> childrenEmpty) -> bool {
-				for(auto child : childrenEmpty){
-					if(child) return true;
-				}
-				return false;
+			[](RootGrowNode<Number,Setting>* n, std::vector<bool> childrenEmpty) -> bool {
+				return n->empty(childrenEmpty);
+				//for(auto child : childrenEmpty){
+				//	if(child) return true;
+				//}
+				//return false;
 			};
 
 		return traverse(doNothing, leafEmpty, childrenEmpty);
@@ -321,10 +322,10 @@ namespace hypro {
 		return mRoot->getDimension();
 	}
 
-	template<typename Number, typename Converter, typename Setting>
-	void SupportFunctionNewT<Number,Converter,Setting>::removeRedundancy() {
-		// Support functions are already non-redundant (Polytope support functions are made non-redundant upon construction).
-	}
+	//template<typename Number, typename Converter, typename Setting>
+	//void SupportFunctionNewT<Number,Converter,Setting>::removeRedundancy() {
+	//	// Support functions are already non-redundant (Polytope support functions are made non-redundant upon construction).
+	//}
 
 	template<typename Number, typename Converter, typename Setting>
 	std::size_t SupportFunctionNewT<Number,Converter,Setting>::size() const {
@@ -528,37 +529,36 @@ namespace hypro {
 
 	template<typename Number, typename Converter, typename Setting>
 	SupportFunctionNewT<Number,Converter,Setting> SupportFunctionNewT<Number,Converter,Setting>::intersect( const SupportFunctionNewT<Number,Converter,Setting>& rhs ) const {
-		std::shared_ptr<IntersectOp<Number,Converter,Setting>> scale = std::make_shared<IntersectOp<Number,Converter,Setting>>(*this, rhs);
-		std::shared_ptr<RootGrowNode<Number,Setting>> scalePtr = std::static_pointer_cast<RootGrowNode<Number,Setting>>(scale);
-		SupportFunctionNewT<Number,Converter,Setting> sf = SupportFunctionNewT<Number,Converter,Setting>(scalePtr);
+		std::shared_ptr<IntersectOp<Number,Converter,Setting>> intersec = std::make_shared<IntersectOp<Number,Converter,Setting>>(*this, rhs);
+		std::shared_ptr<RootGrowNode<Number,Setting>> intersecPtr = std::static_pointer_cast<RootGrowNode<Number,Setting>>(intersec);
+		SupportFunctionNewT<Number,Converter,Setting> sf = SupportFunctionNewT<Number,Converter,Setting>(intersecPtr);
 		return sf;	
 	}
 
 	template<typename Number, typename Converter, typename Setting>
 	SupportFunctionNewT<Number,Converter,Setting> SupportFunctionNewT<Number,Converter,Setting>::intersect( const std::vector<SupportFunctionNewT<Number,Converter,Setting>>& rhs ) const {
-		std::shared_ptr<IntersectOp<Number,Converter,Setting>> scale = std::make_shared<IntersectOp<Number,Converter,Setting>>(*this, rhs);
-		std::shared_ptr<RootGrowNode<Number,Setting>> scalePtr = std::static_pointer_cast<RootGrowNode<Number,Setting>>(scale);
-		SupportFunctionNewT<Number,Converter,Setting> sf = SupportFunctionNewT<Number,Converter,Setting>(scalePtr);
+		std::shared_ptr<IntersectOp<Number,Converter,Setting>> intersec = std::make_shared<IntersectOp<Number,Converter,Setting>>(*this, rhs);
+		std::shared_ptr<RootGrowNode<Number,Setting>> intersecPtr = std::static_pointer_cast<RootGrowNode<Number,Setting>>(intersec);
+		SupportFunctionNewT<Number,Converter,Setting> sf = SupportFunctionNewT<Number,Converter,Setting>(intersecPtr);
 		return sf;
 	}
 
 	template<typename Number, typename Converter, typename Setting>
 	SupportFunctionNewT<Number,Converter,Setting> SupportFunctionNewT<Number,Converter,Setting>::intersectHalfspace( const Halfspace<Number>& hspace ) const {
-		/*
 		matrix_t<Number> mat = matrix_t<Number>(1,hspace.normal().rows());
     	for(unsigned i = 0; i < hspace.normal().rows(); ++i){
     		mat(0,i) = hspace.normal()(i);
     	}
     	vector_t<Number> vec = vector_t<Number>(1);
     	vec(0) = hspace.offset();
-    	//Das erstellen einer neuen SF muss anders geschehen -> wird ein Poly werden
-        return intersect(SupportFunctionNewT<Number,Converter,Setting>(mat,vec));
-        */
+    	typename Converter::HPolytope* hpoly = new typename Converter::HPolytope(mat,vec);
+        return intersect(SupportFunctionNewT<Number,Converter,Setting>(hpoly));
 	}
 
 	template<typename Number, typename Converter, typename Setting>
 	SupportFunctionNewT<Number,Converter,Setting> SupportFunctionNewT<Number,Converter,Setting>::intersectHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const {
-		//return intersect(SupportFunctionNewT<Number,Converter,Setting>(_mat,_vec));	
+		typename Converter::HPolytope* hpoly = new typename Converter::HPolytope(_mat,_vec);
+		return intersect(SupportFunctionNewT<Number,Converter,Setting>(hpoly));	
 	}
 
 	template<typename Number, typename Converter, typename Setting>

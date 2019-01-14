@@ -103,6 +103,7 @@ class RootGrowNode {
 	////// Functions for SupportFunctionNew
 	
 	virtual bool empty() const { assert(false && "This should only be called by Leaf\n"); return false; }
+	virtual bool empty(const std::vector<bool>& childrenEmpty) const { assert(false && "This should only be called by operations\n"); return false; }
 	virtual Point<Number> supremumPoint() const { assert(false && "supremumPoint() should only be called by Leaf\n"); return Point<Number>(); }
 	virtual Point<Number> supremumPoint(std::vector<Point<Number>>& ) const { assert(false && "supremumPoint(vector) should only be called by operations\n"); return Point<Number>(); }
 

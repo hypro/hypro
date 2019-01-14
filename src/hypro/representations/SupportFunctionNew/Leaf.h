@@ -47,7 +47,7 @@ class Leaf : public RootGrowNode<Number,Setting> {
 	unsigned getOriginCount() const { return originCount; }
 	std::size_t getDimension() const { return mDimension; }
 	Representation* getRepresentation() const { return rep; }
-	void setRepresentation(Representation* r){ rep = r; mDimension = r->dimension(); }
+	//void setRepresentation(Representation* r){ rep = r; mDimension = r->dimension(); }
 
 	////// RootGrowNode Interface
 

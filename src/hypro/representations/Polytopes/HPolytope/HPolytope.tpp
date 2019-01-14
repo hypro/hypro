@@ -622,6 +622,23 @@ EvaluationResult<Number> HPolytopeT<Number, Converter, Setting>::evaluate( const
 	return opt.evaluate(_direction, true);
 }
 
+template <typename Number, typename Converter, class Setting>
+std::vector<EvaluationResult<Number>> HPolytopeT<Number, Converter, Setting>::multiEvaluate( const matrix_t<Number>& _directions, bool useExact) const {
+	if(mHPlanes.empty()) {
+		return std::vector<EvaluationResult<Number>>(_directions.rows(), EvaluationResult<Number>(Number(1), SOLUTION::INFTY));
+	}
+
+	Optimizer<Number> opt;
+	opt.setMatrix(this->matrix());
+	opt.setVector(this->vector());
+
+	std::vector<EvaluationResult<Number>> res;
+	for(int i = 0; i < _directions.rows(); ++i){
+		res.emplace_back(opt.evaluate(_directions.row(i), useExact));
+	}
+	return res;
+}
+
 /*
  * General interface
  */

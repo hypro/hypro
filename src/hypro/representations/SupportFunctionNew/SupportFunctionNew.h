@@ -35,7 +35,7 @@
 namespace hypro {
 
 //A struct for the parameters.
-//All parameters for a function must be placed inside a parameter object.
+//All parameters for a std::function must be placed inside a Parameters object.
 //Ensures that traversal() gets only one argument instead of 20 or 30!
 template<typename ...Rargs>
 struct Parameters {
@@ -113,7 +113,7 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
 	 */
 	template<typename SettingRhs, carl::DisableIf< std::is_same<Setting, SettingRhs> > = carl::dummy>
 	SupportFunctionNewT(const SupportFunctionNewT<Number,Converter,SettingRhs>& orig) {
-		//TODO
+		//TODO: Maybe traverse whole tree and for every node create a new one with different settings?
 	}
 
 	/**
@@ -122,7 +122,10 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
 	 */
 	SupportFunctionNewT( SupportFunctionNewT&& orig );
 
-	//leaf constructor
+	/**
+	 * @brief      Generic Leaf constructor.
+	 * @param[in]  r 	A pointer to a GeometricObject, i.e. Boxes, HPolytopes, etc.
+	 */
 	template<typename Representation>
 	SupportFunctionNewT( GeometricObject<Number,Representation>* r) : mRoot(std::make_shared<Leaf<Number,Setting,Representation>>(dynamic_cast<Representation*>(r))) { 
 		//std::cout << "SupportFunctionNewT::Leaf constructor, address " << this << std::endl;
@@ -316,7 +319,7 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
 	/**
 	 * @brief      Removes redundancy.
 	 */
-	void removeRedundancy();
+	inline void removeRedundancy() { }
 
 	/**
 	 * @brief      Storage size determination.
@@ -330,7 +333,7 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
 	 * @brief      Function to reduce the number representation (over-approximate).
 	 * @param[in]  limit      The limit
 	 */
-	const SupportFunctionNewT<Number,Converter,Setting>& reduceNumberRepresentation(){ return *this; }
+	inline const SupportFunctionNewT<Number,Converter,Setting>& reduceNumberRepresentation(){ return *this; }
 
 	/**
 	 * @brief      Computes the region of the SupportFunction that is contained in the halfspace and how much is contained
@@ -420,7 +423,7 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
 	/**
 	 * @brief      Reduces the representation of the current SupportFunctionNew.
 	 */
-	void reduceRepresentation(){ }
+	inline void reduceRepresentation(){ }
 
 	/**
 	 * @brief      Makes this SupportFunctionNew equal to the empty SupportFunctionNew.

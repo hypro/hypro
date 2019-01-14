@@ -256,7 +256,6 @@ TYPED_TEST(HPolytopeTest, Evaluate)
 	b(2) = 0;
 	b(3) = 1;
 
-
 	HPolytope<TypeParam> poly = HPolytope<TypeParam>(A,b);
 	vector_t<TypeParam> dir(2);
 	dir(0) = 1;
@@ -393,4 +392,15 @@ TYPED_TEST(HPolytopeTest, Membership)
 
 	Point<TypeParam> p5({carl::rationalize<TypeParam>(2.1), TypeParam(0)});
 	EXPECT_FALSE(hpt1.contains(p5));
+}
+
+TYPED_TEST(HPolytopeTest, MultiEvaluate)
+{
+	HPolytope<TypeParam> hpt1 = HPolytope<TypeParam>(this->planes1);
+	matrix_t<TypeParam> dirs = matrix_t<TypeParam>::Identity(2,2);
+	std::vector<EvaluationResult<TypeParam>> res = hpt1.multiEvaluate(dirs, true);
+	for(auto& r : res){
+		ASSERT_EQ(SOLUTION::FEAS, r.errorCode);	
+		ASSERT_EQ(TypeParam(2), r.supportValue);
+	}
 }
