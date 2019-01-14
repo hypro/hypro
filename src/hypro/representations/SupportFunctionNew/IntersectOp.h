@@ -149,7 +149,7 @@ class IntersectOp : public RootGrowNode<Number,Setting> {
 		std::vector<SupportFunctionNewT<Number,Converter,Setting>> sfChildren;
 		std::size_t indexOfMostNegativeChild = 0;
 		Number mostNegativeEvalValue = Number(100000000);
-		for(int i = 0; i < this->getChildren().size(); ++i){
+		for(std::size_t i = 0; i < this->getChildren().size(); ++i){
 			sfChildren.emplace_back(SupportFunctionNewT<Number,Converter,Setting>(this->getChildren().at(i)));
 			Number childEvalRes = sfChildren.back().evaluate(allNegativeDir,false).supportValue;
 			indexOfMostNegativeChild = childEvalRes < mostNegativeEvalValue ? sfChildren.size()-1 : indexOfMostNegativeChild;

@@ -103,15 +103,15 @@ class RootGrowNode {
 	////// Functions for SupportFunctionNew
 	
 	virtual bool empty() const { assert(false && "This should only be called by Leaf\n"); return false; }
-	virtual bool empty(const std::vector<bool>& childrenEmpty) const { assert(false && "This should only be called by operations\n"); return false; }
+	virtual bool empty(const std::vector<bool>& ) const { assert(false && "This should only be called by operations\n"); return false; }
 	virtual Point<Number> supremumPoint() const { assert(false && "supremumPoint() should only be called by Leaf\n"); return Point<Number>(); }
 	virtual Point<Number> supremumPoint(std::vector<Point<Number>>& ) const { assert(false && "supremumPoint(vector) should only be called by operations\n"); return Point<Number>(); }
 
 	virtual vector_t<Number> reverseOp(const vector_t<Number>& point) const { return point; } //only needed for unary operations 
-	virtual bool contains(const vector_t<Number>& point) const { assert(false && "contains(p) should only be called by Leaf\n"); return true; } 
-	virtual bool contains(const std::vector<bool>& point) const { assert("contains(v) should only be called by operations\n"); return false; }
+	virtual bool contains(const vector_t<Number>& ) const { assert(false && "contains(p) should only be called by Leaf\n"); return true; } 
+	virtual bool contains(const std::vector<bool>& ) const { assert("contains(v) should only be called by operations\n"); return false; }
 
-	virtual std::vector<std::size_t> intersectDims(const std::vector<std::vector<std::size_t>>& dims) const { return std::vector<std::size_t>(); }
+	virtual std::vector<std::size_t> intersectDims(const std::vector<std::vector<std::size_t>>& ) const { return std::vector<std::size_t>(); } 
 };
 
 } //namespace hypro

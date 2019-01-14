@@ -1085,3 +1085,17 @@ TYPED_TEST(SupportFunctionNewTest, CollectProjections){
 	EXPECT_EQ(inter.collectProjections(), std::vector<std::size_t>());
 }
 
+TYPED_TEST(SupportFunctionNewTest, Vertices){
+
+	//3d box
+	Point<TypeParam> p1 = Point<TypeParam>({TypeParam(0),TypeParam(-4),TypeParam(-22)});
+	Point<TypeParam> p2 = Point<TypeParam>({TypeParam(3),TypeParam(6.789),TypeParam(-3.1415)});
+	Box<TypeParam> box (std::make_pair(p1,p2));
+	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sf(&box);	
+	std::vector<Point<TypeParam>> points = sf.vertices();
+	//auto it = points.begin();
+	//EXPECT_TRUE(*(std::find(points.begin(), points.end(), *it)) == p1);
+	//EXPECT_TRUE(*(std::find(points.begin(), points.end(), *it)) == p2);
+	SUCCEED();
+}
+

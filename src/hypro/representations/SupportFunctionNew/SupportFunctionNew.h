@@ -112,8 +112,8 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
 	 * @param[in]  orig  The original.
 	 */
 	template<typename SettingRhs, carl::DisableIf< std::is_same<Setting, SettingRhs> > = carl::dummy>
-	SupportFunctionNewT(const SupportFunctionNewT<Number,Converter,SettingRhs>& orig) {
-		//TODO: Maybe traverse whole tree and for every node create a new one with different settings?
+	SupportFunctionNewT(const SupportFunctionNewT<Number,Converter,SettingRhs>& orig){
+		//TODO!
 	}
 
 	/**
@@ -127,18 +127,12 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
 	 * @param[in]  r 	A pointer to a GeometricObject, i.e. Boxes, HPolytopes, etc.
 	 */
 	template<typename Representation>
-	SupportFunctionNewT( GeometricObject<Number,Representation>* r) : mRoot(std::make_shared<Leaf<Number,Setting,Representation>>(dynamic_cast<Representation*>(r))) { 
-		//std::cout << "SupportFunctionNewT::Leaf constructor, address " << this << std::endl;
-		//std::cout << "Ref count of mRoot: " << mRoot.use_count() << std::endl;	
-	}
+	SupportFunctionNewT( GeometricObject<Number,Representation>* r) : mRoot(std::make_shared<Leaf<Number,Setting,Representation>>(dynamic_cast<Representation*>(r))) { }
 
 	/**
 	 * @brief Destructor.
 	 */
-	~SupportFunctionNewT() {
-		//std::cout << "SupportFunctionNewT::~SupportFunctionNewT, address: " << this << std::endl;
-		//std::cout << "Ref count of mRoot: " << mRoot.use_count() << std::endl;	
-	}
+	~SupportFunctionNewT() { }
 
 	/***************************************************************************
 	 * Getters & setters
@@ -146,13 +140,26 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
 
   private:
 
+  	/**
+	 * @brief      Connects a given node with the current root. mRoot stays the same.
+	 * @param[in]  newRoot  The node to connect the current root with.
+	 * @param[in]  rhs 		Possible siblings of the current root that should also be connected to newRoot
+	 */
   	void addOperation(RootGrowNode<Number,Setting>* newRoot) const;
   	void addOperation(RootGrowNode<Number,Setting>* newRoot, const std::vector<SupportFunctionNewT<Number,Converter,Setting>>& rhs) const;
 
   public:
 
+  	/**
+	  * @brief 	   Returns the Settings
+	  * @return    The current settings of the SupportFunctionNew.
+	  */
 	inline Setting getSettings() const { return Setting{}; }
 
+	/**
+	  * @brief 	   Returns a shared pointer reference to the current root
+	  * @return    A shared pointer reference to the root
+	  */
 	inline std::shared_ptr<RootGrowNode<Number,Setting>>& getRoot() const { return mRoot; }
 
 	 /**
@@ -168,17 +175,17 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
 	 * Tree Traversal
 	 **************************************************************************/
 	/*
-	There are only four possibilities of how void functions and / or functions without parameters can be combined, such that the stack operations 
-	made during the actual traversal still remain valid:
-	- Result = void,	Params = void:	"void transform()" 		&& "void compute()" 	&& "void aggregate()" 					&& no initParams
-	- Result = int, 	Params = void: 	"void transform()" 		&& "int compute()"		&& "int aggregate(vector<int>)" 		&& no initParams
-	- Result = void, 	Params = int:	"int transform(int)" 	&& "void compute(int)" 	&& "void aggregate(int)"				&& initParams
-	- Result = int, 	Params = int: 	"int transform(int)" 	&& "int compute(int)" 	&& "int aggregate(vector<int>, int)" 	&& initParams
-	If the parameter type does not exist (so, Rargs... = empty set), then additional parameters can be left out in all three functions, 
-	and if parameters would be returned, void is returned instead (i.e. transform).
-	If the result type is void, then the vector to be aggregated for the aggregate function can be left out.
-	Below, the four possibilites are implemented, functions returning void or having no additional parameters are wrapped into functions that return 
-	empty parameters & receive one additional parameter.
+	 * There are only four possibilities of how void functions and / or functions without parameters can be combined, such that the stack operations 
+	 * made during the actual traversal still remain valid:
+	 * - Result = void,	Params = void:	"void transform()" 		&& "void compute()" 	&& "void aggregate()" 					&& no initParams
+	 * - Result = int, 	Params = void: 	"void transform()" 		&& "int compute()"		&& "int aggregate(vector<int>)" 		&& no initParams
+	 * - Result = void, Params = int:	"int transform(int)" 	&& "void compute(int)" 	&& "void aggregate(int)"				&& initParams
+	 * - Result = int, 	Params = int: 	"int transform(int)" 	&& "int compute(int)" 	&& "int aggregate(vector<int>, int)" 	&& initParams
+	 * If the parameter type does not exist (so, Rargs... = empty set), then additional parameters can be left out in all three functions, 
+	 * and if parameters would be returned, void is returned instead (i.e. transform).
+	 * If the result type is void, then the vector to be aggregated for the aggregate function can be left out.
+	 * Below, the four possibilites are implemented, functions returning void or having no additional parameters are wrapped into functions that return 
+	 * empty parameters & receive one additional parameter.
 	*/
 
 	//When Result type and Param type = void

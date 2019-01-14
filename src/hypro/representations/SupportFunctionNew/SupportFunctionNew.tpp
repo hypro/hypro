@@ -17,13 +17,11 @@ namespace hypro {
 	template<typename Number, typename Converter, typename Setting>
 	SupportFunctionNewT<Number,Converter,Setting>::SupportFunctionNewT( const SupportFunctionNewT<Number,Converter,Setting>& orig ) : mRoot(orig.getRoot()) {
 		//handled by initializer list
-		//std::cout << "SF copy constructor, copy from " << &orig << " creating " << this << std::endl;
 	}
 
 	//move constructor
 	template<typename Number, typename Converter, typename Setting>
 	SupportFunctionNewT<Number,Converter,Setting>::SupportFunctionNewT( SupportFunctionNewT<Number,Converter,Setting>&& orig ) {
-		//std::cout << "SF move constructor, move from " << &orig << " creating " << this << std::endl;
 		mRoot = std::move(orig.getRoot());
 		orig.clear();
 	}
@@ -243,8 +241,13 @@ namespace hypro {
 	}
 
 	template<typename Number, typename Converter, typename Setting>
-	std::vector<Point<Number>> SupportFunctionNewT<Number,Converter,Setting>::vertices( const matrix_t<Number>& m ) const {
-		//converterToHPolytope
+	std::vector<Point<Number>> SupportFunctionNewT<Number,Converter,Setting>::vertices( const matrix_t<Number>& additionalDirections ) const {
+		std::vector<vector_t<Number>> additionalDirectionVector;
+		for(unsigned rowIndex = 0; rowIndex < additionalDirections.rows(); ++rowIndex){
+			additionalDirectionVector.push_back(vector_t<Number>(additionalDirections.row(rowIndex)));
+		}
+		auto tmp = Converter::toHPolytope(*this, additionalDirectionVector);
+		return tmp.vertices();
 	}
 
 	template<typename Number, typename Converter, typename Setting>
