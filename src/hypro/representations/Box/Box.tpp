@@ -113,10 +113,11 @@ namespace hypro {
 				}
 			}
 			opt.cleanGLPInstance();
-			assert(Eigen::Index(results.size()) == tpl.size());
+			assert(Eigen::Index(results.size()) == Eigen::Index(tpl.size()));
 
 			// re-construct box from results.
-			for(Eigen::Index rowIndex = 0; rowIndex < tpl.size(); ++rowIndex) {
+			mLimits = std::vector<carl::Interval<Number>>(_constraints.cols(), carl::Interval<Number>(0));
+			for(Eigen::Index rowIndex = 0; rowIndex < Eigen::Index(tpl.size()); ++rowIndex) {
 				for(Eigen::Index colIndex = 0; colIndex < _constraints.cols(); ++colIndex) {
 					if(tpl[rowIndex](colIndex) > 0) {
 						mLimits[colIndex].setUpper(results[rowIndex].supportValue);
@@ -297,7 +298,12 @@ BoxT<Number,Converter,Setting> BoxT<Number,Converter,Setting>::makeSymmetric() c
 	}
 	std::vector<carl::Interval<Number>> newIntervals;
 	for(const auto& i : mLimits) {
-		newIntervals.emplace_back(-i.upper(),i.upper());
+		// find the maximal bound (absolute value) to make box symmetric to the origin.
+		Number lbabs = carl::abs(i.lower());
+		Number ubabs = carl::abs(i.upper());
+		Number bound =  lbabs < ubabs ? ubabs : lbabs;
+		// create symmetric interval
+		newIntervals.emplace_back(-bound,bound);
 	}
 	return BoxT<Number,Converter,Setting>(newIntervals);
 }
@@ -440,9 +446,16 @@ BoxT<Number,Converter,Setting> BoxT<Number,Converter,Setting>::affineTransformat
 		return *this;
 	}
 	//TRACE("hypro.representations.box","This: " << *this << ", A: " << A << "b: " << b);
+	//std::cout << "Linear trafo ";
 	BoxT<Number,Converter,Setting> res = this->linearTransformation(A);
+	//std::cout << "done. Affine translation";
 	//TRACE("hypro.representations.box","Result of linear trafo: " << res);
-	return BoxT<Number,Converter,Setting>( std::make_pair(res.min()+b, res.max()+b) );
+	// apply translation
+	for(Eigen::Index i = 0; i < b.rows(); ++i) {
+		res.rIntervals()[i] += b(i);
+	}
+	//std::cout << " done." << std::endl;
+	return res;
 }
 
 template<typename Number, typename Converter, class Setting>

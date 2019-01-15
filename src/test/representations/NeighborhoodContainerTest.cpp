@@ -25,10 +25,10 @@ protected:
     virtual void SetUp()
     {
 		pool.clear();
-		a = pool.newCarlVariable();
-		b = pool.newCarlVariable();
-		c = pool.newCarlVariable();
-		d = pool.newCarlVariable();
+		a = pool.carlVarByIndex(0);
+		b = pool.carlVarByIndex(1);
+		c = pool.carlVarByIndex(2);
+		d = pool.carlVarByIndex(3);
         // p1
         p1 = Point<int>({2,5});
 

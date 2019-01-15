@@ -22,32 +22,32 @@ namespace reachability {
 				s.setLocation(locationConstraintPair.first);
 				switch(mType){
 					case representation_name::box: {
-						s.setSetDirect(Converter<Number>::toBox(locationConstraintPair.second));
+						s.setSetDirect(Box<Number>(locationConstraintPair.second.getMatrix(),locationConstraintPair.second.getVector()));
 						break;
 					}
 					case representation_name::polytope_h: {
-						s.setSetDirect(Converter<Number>::toHPolytope(locationConstraintPair.second));
+						s.setSetDirect(HPolytope<Number>(locationConstraintPair.second.getMatrix(),locationConstraintPair.second.getVector()));
 						break;
 					}
 					case representation_name::polytope_v: {
-						s.setSetDirect(Converter<Number>::toVPolytope(locationConstraintPair.second));
+						s.setSetDirect(VPolytope<Number>(locationConstraintPair.second.getMatrix(),locationConstraintPair.second.getVector()));
 						break;
 					}
 					case representation_name::support_function: {
-						s.setSetDirect(Converter<Number>::toSupportFunction(locationConstraintPair.second));
+						s.setSetDirect(SupportFunction<Number>(locationConstraintPair.second.getMatrix(),locationConstraintPair.second.getVector()));
 						break;
 					}
 					case representation_name::zonotope: {
-						s.setSetDirect(Converter<Number>::toZonotope(locationConstraintPair.second));
+						s.setSetDirect(Zonotope<Number>(locationConstraintPair.second.getMatrix(),locationConstraintPair.second.getVector()));
 						break;
 					}
 					case representation_name::constraint_set: {
-						s.setSetDirect(locationConstraintPair.second);
+						s.setSetDirect(ConstraintSet<Number>(locationConstraintPair.second.getMatrix(),locationConstraintPair.second.getVector()));
 						break;
 					}
 					#ifdef HYPRO_USE_PPL
 					case representation_name::ppl_polytope: {
-						s.setSetDirect(Converter<Number>::toPolytope(locationConstraintPair.second));
+						s.setSetDirect(Polytope<Number>(locationConstraintPair.second.getMatrix(),locationConstraintPair.second.getVector()));
 						break;
 					}
 					#endif

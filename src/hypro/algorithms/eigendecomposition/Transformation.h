@@ -54,8 +54,8 @@ struct STallValues {
 template <typename Number>
 class Transformation {
   public:
-  	using locationSet = std::set<Location<Number>*>;
-	using transitionSet = std::set<Transition<Number>*>;
+  	using locationVector = std::vector<Location<Number>*>;
+	using transitionVector = std::vector<Transition<Number>*>;
     using locationStateMap = typename HybridAutomaton<Number>::locationStateMap;
     using locationConditionMap = std::map<Location<Number>*, Condition<Number>, locPtrComp<Number>>;
     using conditionVector = std::vector<Condition<Number>>; /// Vector of conditions.

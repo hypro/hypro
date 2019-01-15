@@ -29,17 +29,22 @@ class SettingsProvider : public carl::Singleton<SettingsProvider<State>>
 
     ReachabilitySettings &getReachabilitySettings();
 
-    unsigned getWorkerThreadCount();
-
+    unsigned getWorkerThreadCount() const;
+    void setWorkerThreadCount(std::size_t c);
+    void setSkipPlot(bool skip) { mSkipPlot = skip; }
     bool skipPlot() const;
     bool useGlobalQueuesOnly() const;
     bool useFixedPointTest() const { return mUseFixedPointTest; }
     double getQueueBalancingRatio() const;
     bool useLocalTiming() const { return mUseLocalTiming; }
     bool useDecider();
+    void setUseDecider(bool useDecider) { mUseDecider = useDecider;}
     bool decomposeAutomaton();
+    void setDecomposeAutomaton(bool decompose) { mDoDecomposition = decompose; }
+    std::size_t getNumberVariables() const { return mHybridAutomaton.getVariables().size(); }
 
-    void setHybridAutomaton(const HybridAutomaton<Number> &ha);
+
+    void setHybridAutomaton(HybridAutomaton<Number>&& ha);
 
     void setReachabilitySettings(const ReachabilitySettings &rs);
 
@@ -74,7 +79,7 @@ class SettingsProvider : public carl::Singleton<SettingsProvider<State>>
     const Decomposition& getSubspaceDecomposition() const {return mSubspaceDecomposition;}
     void setSubspaceDecomposition(const Decomposition& decomp) {mSubspaceDecomposition = decomp;}
 
-    std::map<const Location<Number>*, std::shared_ptr<std::vector<SUBSPACETYPE>>> getLocationSubspaceTypeMap(){return mLocationSubspaceTypeMap;}
+    const std::map<const Location<Number>*, std::shared_ptr<std::vector<SUBSPACETYPE>>>& getLocationSubspaceTypeMap() const {return mLocationSubspaceTypeMap;}
     void computeLocationSubspaceTypeMapping(const HybridAutomaton<Number> &ha);
 
     std::map<const Location<Number>*, LOCATIONTYPE> getLocationTypeMap(){return mLocationTypeMap;}

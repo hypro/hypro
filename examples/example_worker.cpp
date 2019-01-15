@@ -126,7 +126,7 @@ int main(int argc, char** argv) {
     }
 
     hypro::ContextBasedReachabilityWorker<State> worker = hypro::ContextBasedReachabilityWorker<State>(parsedInput.second);
-    std::vector<hypro::PlotData<Number>> segments;
+    std::vector<hypro::PlotData<State>> segments;
 
     while(queueManager.hasWorkable(true)) { // locking access to queues.
         auto task = queueManager.getNextWorkable(true,true); // get next task locked and dequeue from front.

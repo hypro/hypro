@@ -13,11 +13,11 @@ namespace hypro {
 	template<typename State>
 	class IFirstSegmentHandler : public IHandler {
 	public:
+		virtual ~IFirstSegmentHandler(){}
 		virtual void handle() = 0;
 		virtual const char* handlerName() = 0;
 
-		virtual const matrix_t<typename State::NumberType>& getTrafo() const = 0;
-		virtual const vector_t<typename State::NumberType>& getTranslation() const = 0;
+		virtual const flowVariant<typename State::NumberType>& getTransformation() const = 0;
 	};
 
 	class IInvariantHandler : public IHandler {
@@ -61,18 +61,23 @@ namespace hypro {
 
 	class ITimeEvolutionHandler : public IHandler {
 	public:
+		virtual ~ITimeEvolutionHandler(){}
 		virtual void handle() = 0;
 		virtual const char* handlerName() = 0;
+		virtual bool getMarkedForDelete() = 0;
+		virtual void setMarkedForDelete(bool toDelete) = 0;
 	};
 
 	class IResetHandler : public IHandler {
 	public:
+		virtual ~IResetHandler(){}
 		virtual void handle() = 0;
 		virtual const char* handlerName() = 0;
 	};
 
 	class IJumpHandler : public IHandler{
 	public:
+		virtual ~IJumpHandler(){}
 		virtual void handle() = 0;
 		virtual const char* handlerName() = 0;
 	};

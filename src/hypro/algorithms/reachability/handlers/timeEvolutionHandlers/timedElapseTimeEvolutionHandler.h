@@ -20,6 +20,8 @@ namespace hypro
 
 		void handle();
 		const char* handlerName() {return "timedElapseTimeEvolutionHandler";}
+		bool getMarkedForDelete() {return false;};
+		void setMarkedForDelete(bool ) {/*no op*/};
 	};
 } // hypro
 

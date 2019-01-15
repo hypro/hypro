@@ -9,5 +9,7 @@ namespace hypro
 
 		void handle() {/*no op*/}
 		const char* handlerName() {return "discreteTimeEvolutionHandler";}
+		bool getMarkedForDelete() {return true;};
+		void setMarkedForDelete(bool ) {/*no op*/};
 	};
 } // hypro

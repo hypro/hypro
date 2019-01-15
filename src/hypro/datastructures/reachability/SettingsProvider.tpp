@@ -45,15 +45,21 @@ double SettingsProvider<State>::getQueueBalancingRatio() const {
 }
 
 template<typename State>
-unsigned SettingsProvider<State>::getWorkerThreadCount()
+unsigned SettingsProvider<State>::getWorkerThreadCount() const
 {
     return mThreadcount;
 }
 
 template<typename State>
-void SettingsProvider<State>::setHybridAutomaton(const HybridAutomaton<Number>& ha)
+void SettingsProvider<State>::setWorkerThreadCount(std::size_t c)
 {
-    mHybridAutomaton = ha;
+    mThreadcount = c;
+}
+
+template<typename State>
+void SettingsProvider<State>::setHybridAutomaton(HybridAutomaton<Number>&& ha)
+{
+    mHybridAutomaton = std::move(ha);
 }
 
 template<typename State>
@@ -73,8 +79,9 @@ void SettingsProvider<State>::computeLocationSubspaceTypeMapping(const HybridAut
    // assert(SettingsProvider<State>::getInstance().getSubspaceDecomposition().size() != 0);
 
     Decomposition decompositions = SettingsProvider<State>::getInstance().getSubspaceDecomposition();
+    TRACE("hypro.utility","Having " << decompositions.size() << " decompositions.");
     for(auto location : ha.getLocations()){
-        DEBUG("hypro.util", "Subspace types for location " << location->getName()<< ":");
+        DEBUG("hypro.utility", "Subspace types for location " << location->getName() << " (" << location << "):");
 
         std::vector<SUBSPACETYPE> vec;
         for(std::size_t i = 0; i < decompositions.size(); i++){
@@ -83,11 +90,13 @@ void SettingsProvider<State>::computeLocationSubspaceTypeMapping(const HybridAut
             }
             else if(DecisionEntity<Number>::getInstance().isDiscreteSubspace(*location, i)){
                 vec.push_back(SUBSPACETYPE::DISCRETE);
+            } else if(DecisionEntity<Number>::getInstance().isRectangularSubspace(*location, i)) {
+               vec.push_back(SUBSPACETYPE::RECTANGULAR);
             }
             else {
                 vec.push_back(SUBSPACETYPE::LTI);
             }
-             //DEBUG("hypro.util",  "" << i << ": " << vec.at(i));
+            DEBUG("hypro.utility",  "Decomposition " << i << ": " << vec.at(i));
         }
         mLocationSubspaceTypeMap.insert(std::make_pair(location, std::make_shared<std::vector<SUBSPACETYPE>>(vec)));
     }
@@ -102,9 +111,20 @@ void SettingsProvider<State>::computeLocationTypeMapping(const HybridAutomaton<N
         std::vector<SUBSPACETYPE> subspacetypes = *subspacetypesptr;
 
         bool timed = true;
+        bool rectangular = true;
+        //bool lti = true;
         for(std::size_t i = 0; i < subspacetypes.size(); i++){
             if(subspacetypes.at(i) == SUBSPACETYPE::LTI){
                 timed = false;
+                rectangular = false;
+                break;
+            } else if (subspacetypes.at(i) == SUBSPACETYPE::TIMED) {
+                rectangular = false;
+                //lti = true;
+            } else if (subspacetypes.at(i) == SUBSPACETYPE::RECTANGULAR) {
+                timed = false;
+                //lti = false;
+                rectangular = true;
                 break;
             }
         }
@@ -112,11 +132,14 @@ void SettingsProvider<State>::computeLocationTypeMapping(const HybridAutomaton<N
         if(timed){
             mLocationTypeMap.insert(std::make_pair(location, LOCATIONTYPE::TIMEDLOC));
         }
+        else if (rectangular) {
+            mLocationTypeMap.insert(std::make_pair(location, LOCATIONTYPE::RECTANGULARLOC));
+        }
         else{
             mLocationTypeMap.insert(std::make_pair(location, LOCATIONTYPE::LTILOC));
         }
 
-        DEBUG("hypro.util", "Types for location " << location->getName()<< ":" << mLocationTypeMap.find(location)->second);
+        DEBUG("hypro.utility", "Types for location " << location->getName()<< ":" << mLocationTypeMap.find(location)->second);
     }
 }
 

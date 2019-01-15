@@ -7,16 +7,17 @@ namespace hypro
 	                    const Strategy<State>& strat,
 	                    WorkQueue<std::shared_ptr<Task<State>>>* localQueue,
 	                    WorkQueue<std::shared_ptr<Task<State>>>* localCEXQueue,
-	                    std::vector<PlotData<Number>>* localSegments,
-	                    ReachabilitySettings &settings) : mTransitionTimings(HierarchicalIntervalVector<CONTAINMENT, tNumber>(std::vector<CONTAINMENT>({CONTAINMENT::BOT, CONTAINMENT::FULL, CONTAINMENT::NO, CONTAINMENT::YES})))
+	                    std::vector<PlotData<State>>* localSegments,
+	                    ReachabilitySettings &settings)
+		: mTask(t)
+		, mStrategy(strat)
+		, mLocalQueue(localQueue)
+		, mLocalCEXQueue(localCEXQueue)
+		, mLocalSegments(localSegments)
+		, mSettings(settings)
+		, mTransitionTimings(HierarchicalIntervalVector<CONTAINMENT, tNumber>(std::vector<CONTAINMENT>({CONTAINMENT::BOT, CONTAINMENT::FULL, CONTAINMENT::NO, CONTAINMENT::YES})))
 	{
-		mTask = t;
-		mStrategy = strat;
-		mLocalQueue = localQueue;
-		mLocalCEXQueue = localCEXQueue;
-	    mLocalSegments = localSegments;
     	mTransitionTimings.initialize(CONTAINMENT::BOT, SettingsProvider<State>::getInstance().getReachabilitySettings().timeBound*SettingsProvider<State>::getInstance().getReachabilitySettings().jumpDepth);
-		mSettings = settings;
 		mComputationState = State(mTask->treeNode->getStateAtLevel(mTask->btInfo.btLevel));
 	}
 
@@ -34,13 +35,24 @@ namespace hypro
 		TRACE("hypro.worker","Initializing " << mComputationState.getNumberSets() <<" invariant handlers");
 		// initialize invariant handlers
 		for(std::size_t i = 0; i < mComputationState.getNumberSets();i++){
-			matrix_t<Number> trafo = mFirstSegmentHandlers.at(i)->getTrafo();
-			vector_t<Number> translation = mFirstSegmentHandlers.at(i)->getTranslation();
-			bool noFlow = (trafo == matrix_t<Number>::Identity(trafo.rows(),trafo.rows()) && translation == vector_t<Number>::Zero(trafo.rows()));
-			IInvariantHandler* ptr = HandlerFactory<State>::getInstance().buildInvariantHandler(mComputationState.getSetType(i), &mComputationState, i, noFlow);
-			if(ptr){
-				mInvariantHandlers.push_back(ptr);
-				DEBUG("hypro.worker","Built " << ptr->handlerName() << "at pos " << i);
+			if(getFlowType(mFirstSegmentHandlers.at(i)->getTransformation()) == DynamicType::affine) {
+				auto flow = boost::get<affineFlow<Number>>(mFirstSegmentHandlers.at(i)->getTransformation());
+				matrix_t<Number> trafo = flow.getFlowMatrix();
+				vector_t<Number> translation = flow.getTranslation();
+				bool noFlow = (trafo == matrix_t<Number>::Identity(trafo.rows(),trafo.rows()) && translation == vector_t<Number>::Zero(trafo.rows()));
+				IInvariantHandler* ptr = HandlerFactory<State>::getInstance().buildInvariantHandler(mComputationState.getSetType(i), &mComputationState, i, noFlow);
+				if(ptr){
+					mInvariantHandlers.push_back(ptr);
+					DEBUG("hypro.worker","Built " << ptr->handlerName() << "at pos " << i);
+				}
+
+			} else if (getFlowType(mFirstSegmentHandlers.at(i)->getTransformation()) == DynamicType::rectangular) {
+				bool noFlow = boost::get<rectangularFlow<Number>>(mFirstSegmentHandlers.at(i)->getTransformation()).isDiscrete();
+				IInvariantHandler* ptr = HandlerFactory<State>::getInstance().buildInvariantHandler(mComputationState.getSetType(i), &mComputationState, i, noFlow);
+				if(ptr){
+					mInvariantHandlers.push_back(ptr);
+					DEBUG("hypro.worker","Built " << ptr->handlerName() << "at pos " << i);
+				}
 			}
 		}
 	}
@@ -50,13 +62,23 @@ namespace hypro
 		TRACE("hypro.worker","Initializing " << mComputationState.getNumberSets() <<" bad state handlers");
 		// initalize bad state handlers
 		for(std::size_t i = 0; i < mComputationState.getNumberSets();i++){
-			matrix_t<Number> trafo = mFirstSegmentHandlers.at(i)->getTrafo();
-			vector_t<Number> translation = mFirstSegmentHandlers.at(i)->getTranslation();
-			bool noFlow = (trafo == matrix_t<Number>::Identity(trafo.rows(),trafo.rows()) && translation == vector_t<Number>::Zero(trafo.rows()));
-			IBadStateHandler* ptr = HandlerFactory<State>::getInstance().buildBadStateHandler(mComputationState.getSetType(i), &mComputationState, i, noFlow);
-			if(ptr){
-				mBadStateHandlers.push_back(ptr);
-				DEBUG("hypro.worker","Built " << ptr->handlerName() << "at pos " << i);
+			if(getFlowType(mFirstSegmentHandlers.at(i)->getTransformation()) == DynamicType::affine) {
+				auto flow = boost::get<affineFlow<Number>>(mFirstSegmentHandlers.at(i)->getTransformation());
+				matrix_t<Number> trafo = flow.getFlowMatrix();
+				vector_t<Number> translation = flow.getTranslation();
+				bool noFlow = (trafo == matrix_t<Number>::Identity(trafo.rows(),trafo.rows()) && translation == vector_t<Number>::Zero(trafo.rows()));
+				IBadStateHandler* ptr = HandlerFactory<State>::getInstance().buildBadStateHandler(mComputationState.getSetType(i), &mComputationState, i, noFlow);
+				if(ptr){
+					mBadStateHandlers.push_back(ptr);
+					DEBUG("hypro.worker","Built " << ptr->handlerName() << "at pos " << i);
+				}
+			} else if (getFlowType(mFirstSegmentHandlers.at(i)->getTransformation()) == DynamicType::rectangular) {
+				bool noFlow = boost::get<rectangularFlow<Number>>(mFirstSegmentHandlers.at(i)->getTransformation()).isDiscrete();
+				IBadStateHandler* ptr = HandlerFactory<State>::getInstance().buildBadStateHandler(mComputationState.getSetType(i), &mComputationState, i, noFlow);
+				if(ptr){
+					mBadStateHandlers.push_back(ptr);
+					DEBUG("hypro.worker","Built " << ptr->handlerName() << "at pos " << i);
+				}
 			}
 		}
 	}
@@ -70,13 +92,23 @@ namespace hypro
 			State* guardStatePtr = new State(mComputationState);
     		std::shared_ptr<State> shGuardPtr= std::shared_ptr<State>(guardStatePtr);
 			for(std::size_t i = 0; i < mComputationState.getNumberSets();i++){
-				matrix_t<Number> trafo = mFirstSegmentHandlers.at(i)->getTrafo();
-				vector_t<Number> translation = mFirstSegmentHandlers.at(i)->getTranslation();
-				bool noFlow = (trafo == matrix_t<Number>::Identity(trafo.rows(),trafo.rows()) && translation == vector_t<Number>::Zero(trafo.rows()));
-				IGuardHandler<State>* ptr = HandlerFactory<State>::getInstance().buildGuardHandler(guardStatePtr->getSetType(i), shGuardPtr, i, transition, noFlow);
-				if(ptr){
-					guardHandlers.push_back(ptr);
-					DEBUG("hypro.worker","Built " << ptr->handlerName() << "at pos " << i << " for transition " << transition->getSource()->hash() << " -> " << transition->getTarget()->hash());
+				if(getFlowType(mFirstSegmentHandlers.at(i)->getTransformation()) == DynamicType::affine) {
+					auto flow = boost::get<affineFlow<Number>>(mFirstSegmentHandlers.at(i)->getTransformation());
+					matrix_t<Number> trafo = flow.getFlowMatrix();
+					vector_t<Number> translation = flow.getTranslation();
+					bool noFlow = (trafo == matrix_t<Number>::Identity(trafo.rows(),trafo.rows()) && translation == vector_t<Number>::Zero(trafo.rows()));
+					IGuardHandler<State>* ptr = HandlerFactory<State>::getInstance().buildGuardHandler(guardStatePtr->getSetType(i), shGuardPtr, i, transition, noFlow);
+					if(ptr){
+						guardHandlers.push_back(ptr);
+						DEBUG("hypro.worker","Built " << ptr->handlerName() << "at pos " << i << " for transition " << transition->getSource()->hash() << " -> " << transition->getTarget()->hash());
+					}
+				} else if (getFlowType(mFirstSegmentHandlers.at(i)->getTransformation()) == DynamicType::rectangular) {
+					bool noFlow = boost::get<rectangularFlow<Number>>(mFirstSegmentHandlers.at(i)->getTransformation()).isDiscrete();
+					IGuardHandler<State>* ptr = HandlerFactory<State>::getInstance().buildGuardHandler(guardStatePtr->getSetType(i), shGuardPtr, i, transition, noFlow);
+					if(ptr){
+						guardHandlers.push_back(ptr);
+						DEBUG("hypro.worker","Built " << ptr->handlerName() << "at pos " << i << " for transition " << transition->getSource()->hash() << " -> " << transition->getTarget()->hash());
+					}
 				}
 			}
 
@@ -97,6 +129,7 @@ namespace hypro
 			INFO("benchmark", "Model could NOT be verified as SAFE.");
 			DEBUG("hypro.worker","Final bt-level already reached - abort.");
 			std::cout << "Model cannot be verified as being safe." << std::endl;
+			TRACE("hypro.worker","Unlock node " << mTask->treeNode);
 			mTask->treeNode->getMutex().unlock();
 			return;
 		}
@@ -109,11 +142,15 @@ namespace hypro
 		DEBUG("hypro.worker.refinement","Target btLevel: " << targetLevel);
 		ReachTreeNode<State>* btNode = mTask->treeNode;
 		DEBUG("hypro.worker.refinement","Find backtrack entry node.");
-		DEBUG("hypro.worker.refinement", std::this_thread::get_id() << ": Local CEX-Queue size: " << mLocalCEXQueue->size() << "localCEXQueue is now:\n" << *(mLocalCEXQueue));
+		DEBUG("hypro.worker.refinement", std::this_thread::get_id() << ": Local CEX-Queue size: " << mLocalCEXQueue->size() << "localCEXQueue is now:\n" << (*mLocalCEXQueue));
+		TRACE("hypro.worker","Unlock node " << mTask->treeNode);
 		btNode->getMutex().unlock();
 
-		// backtrack to the root node.
-		while(btNode->getParent()->getStateAtLevel(mTask->btInfo.btLevel).getLocation() != nullptr){
+		// backtrack to the root node. Note that the first processed node is the child of an empty node which collects
+		// all initial states. This very root node does have 0 refinements.
+		while(btNode->getParent()->getRefinements().size() > 0){
+			TRACE("hypro.worker.refinement","Current node on the way to root: " << btNode << ", parent: " << btNode->getParent());
+			TRACE("hypro.worker.refinement", "Parent has " << btNode->getParent()->getRefinements().size() << " refinements.");
 			btNode = btNode->getParent();
 		}
 		// reached the root.
@@ -123,12 +160,13 @@ namespace hypro
 		TRACE("hypro.worker.refinement","Prev. refinement type: " << btNode->getRefinements().at(targetLevel-1).initialSet.getSetType(0));
 		TRACE("hypro.worker.refinement","Target representation: " << mStrategy.getParameters(targetLevel).representation_type);
 
-
 		assert(btNode->getRefinements().size() >= targetLevel);
 
 		if(btNode->getRefinements().size() == targetLevel) {
 			// add a new refinement
 			RefinementSetting<State> newSetting(btNode->getStateAtLevel(mTask->btInfo.btLevel).getLocation());
+			// use initial set of previous run for new level and convert it to new representation.
+			newSetting.initialSet = btNode->getStateAtLevel(targetLevel-1);
 			for(std::size_t i = 0; i < btNode->getRefinements().at(targetLevel-1).initialSet.getNumberSets(); i++){
 				mStrategy.advanceToLevel(newSetting.initialSet, targetLevel);
 			}
@@ -136,6 +174,8 @@ namespace hypro
 			newSetting.initialSet.setTimestamp(carl::Interval<tNumber>(0));
 			newSetting.isDummy = false;
 			newSetting.fullyComputed = false;
+			// lock node for modification.
+			std::lock_guard<std::mutex> lock(btNode->getMutex());
 			btNode->setNewRefinement(targetLevel, newSetting);
 			// Todo: re-check -> global timing.
 			btNode->setTimestamp(targetLevel, carl::Interval<tNumber>(0));
@@ -194,7 +234,7 @@ namespace hypro
 	    	tNumber tBound = SettingsProvider<State>::getInstance().getReachabilitySettings().timeBound*SettingsProvider<State>::getInstance().getReachabilitySettings().jumpDepth;
 	    	mLocalTimings.initialize(tBound);
 	    	for(const auto child : mTask->treeNode->getChildren()) {
-	    		unsigned latestLevel = child->getLatestFullyComputedLevel();
+	    		//unsigned latestLevel = child->getLatestFullyComputedLevel();
 	    		assert(child->getPath().back().isDiscreteStep());
 	    		mLocalTimings.insertTransition(child->getPath().back().transition, carl::Interval<tNumber>(0,tBound), CONTAINMENT::NO);
 	    		mLocalTimings.insertTransition(child->getPath().back().transition, child->getPath().back().timeInterval, CONTAINMENT::YES);
@@ -252,8 +292,9 @@ namespace hypro
 	        // If at least one urgent transition is enabled, skip flow computation.
 	        if (locallyUrgent) {
 	            TRACE("hypro.worker.discrete", "The location is urgent, skip flowpipe computation.");
+				TRACE("hypro.worker","Unlock node " << mTask->treeNode);
 	            mTask->treeNode->getMutex().unlock();
-	            //throw FinishWithDiscreteProcessingException("Urgent transition enabled. Leaving location!");
+	            throw FinishWithDiscreteProcessingException("Urgent transition enabled. Leaving location!");
 	        }
 	    }
 
@@ -302,6 +343,7 @@ namespace hypro
 
     template<typename State>
 	void LTIContext<State>::firstSegment(){
+		DEBUG("hypro.worker","State  before first segment: " << mComputationState);
 
 		// applay handlers to state
 		for(std::size_t i = 0; i < mComputationState.getNumberSets();i++){
@@ -342,7 +384,7 @@ namespace hypro
 		    DEBUG("hypro.worker.continuous", " " << strictestContainment << std::endl);
 
 		    if (strictestContainment == CONTAINMENT::NO) {
-		    	//throw FinishWithDiscreteProcessingException("Segment does not fulfill invariant! Terminating worker by processing discrete States.");
+		    	throw FinishWithDiscreteProcessingException("Segment does not fulfill invariant! Terminating worker by processing discrete States.");
 		    }
 
 			if(deleteRequested){
@@ -362,10 +404,10 @@ namespace hypro
     	DEBUG("hypro.worker","State after intersection with invariant: " << mComputationState);
 
 		// For plotting.
-		//#ifdef HYDRA_ENABLE_PLOT
-		TRACE("hypro.worker.plot","Add "<<  mComputationState.getSets().size() << "segments for plotting of type " << mComputationState.getSetType() << " and refinement level " << mTask->btInfo.btLevel);
-        mLocalSegments->push_back(PlotData<Number>(mComputationState.getSets(), mTask->btInfo.btLevel));
-		//#endif
+		if(!SettingsProvider<State>::getInstance().skipPlot()) {
+			TRACE("hypro.worker.plot","Add "<<  mComputationState.getSets().size() << "segments for plotting of type " << mComputationState.getSetType() << " and refinement level " << mTask->btInfo.btLevel);
+        	mLocalSegments->push_back(PlotData<State>(mComputationState, mTask->btInfo.btLevel));
+		}
     }
 
     template<typename State>
@@ -393,7 +435,7 @@ namespace hypro
 
 		    	// Invoke backtracking. Unlocks the node, so no manual unlocking required
 	            applyBacktracking();
-	           	//throw HardTerminateException("Bad states hit! Terminating this worker!");
+	           	throw HardTerminateException("Bad states hit! Terminating this worker!");
 	        }
 
 	        if(deleteRequested){
@@ -433,7 +475,7 @@ namespace hypro
 	    // initialize invariant handlers
 	    TRACE("hypro.worker","Initializing " << mComputationState.getNumberSets() <<" continuous evolution handlers");
 		for(std::size_t i = 0; i < mComputationState.getNumberSets();i++){
-			ITimeEvolutionHandler* ptr = HandlerFactory<State>::getInstance().buildContinuousEvolutionHandler(mComputationState.getSetType(i), &mComputationState, i, mStrategy.getParameters(mTask->btInfo.btLevel).timeStep, mSettings.timeBound, mFirstSegmentHandlers.at(i)->getTrafo(), mFirstSegmentHandlers.at(i)->getTranslation());
+			ITimeEvolutionHandler* ptr = HandlerFactory<State>::getInstance().buildContinuousEvolutionHandler(mComputationState.getSetType(i), &mComputationState, i, mStrategy.getParameters(mTask->btInfo.btLevel).timeStep, mSettings.timeBound, mFirstSegmentHandlers.at(i)->getTransformation());
 			if(ptr){
 				mContinuousEvolutionHandlers.push_back(ptr);
 				DEBUG("hypro.worker","Built " << ptr->handlerName());
@@ -608,7 +650,7 @@ namespace hypro
         if (urgentTransitionEnabled) {
             // quit loop after firing time triggered transition -> time triggered transitions are handled as urgent.
             TRACE("hypro.worker.discrete", "Urgent transition enabled, quit flowpipe computation immediately." << std::endl);
-            //throw FinishWithDiscreteProcessingException("Urgent transition enabled, quit flowpipe computation immediately.");
+            throw FinishWithDiscreteProcessingException("Urgent transition enabled, quit flowpipe computation immediately.");
         }
     }
 
@@ -618,6 +660,16 @@ namespace hypro
 			mContinuousEvolutionHandlers.at(i)->handle();
 		}
 		mComputationState.setTimestamp(mComputationState.getTimestamp()+mStrategy.getParameters(mTask->btInfo.btLevel).timeStep);
+
+		for(auto it = mContinuousEvolutionHandlers.begin(); it != mContinuousEvolutionHandlers.end(); ){
+			if((*it)->getMarkedForDelete()) {
+				delete *it;
+				it = mContinuousEvolutionHandlers.erase(it);
+			} else {
+				++it;
+			}
+		}
+
 		DEBUG("hypro.worker","State after timestep: " << mComputationState);
     }
 
@@ -634,7 +686,7 @@ namespace hypro
     	DEBUG("hypro.worker",  std::this_thread::get_id() << ": --- Loop left ---" << std::endl);
         DEBUG("hypro.worker.discrete",  std::this_thread::get_id() << ": Process " << mDiscreteSuccessorBuffer.size() << " new initial sets which are leftover." << std::endl);
         TRACE("hypro.worker","Initializing discrete successor handler");
-		IJumpHandler* handler = HandlerFactory<State>::getInstance().buildDiscreteSuccessorHandler(&mDiscreteSuccessorBuffer, mTask->treeNode->getRefinements().at(mTask->btInfo.btLevel).initialSet.getSetType(), mTask, nullptr, mStrategy.getParameters(mTask->btInfo.btLevel), mLocalQueue, mLocalCEXQueue);
+		IJumpHandler* handler = HandlerFactory<State>::getInstance().buildDiscreteSuccessorHandler(&mDiscreteSuccessorBuffer, mTask, nullptr, mStrategy.getParameters(mTask->btInfo.btLevel), mLocalQueue, mLocalCEXQueue);
 		TRACE("hypro.worker","Built discrete successor handler of type: " << handler->handlerName());
 		handler->handle();
     }
@@ -690,7 +742,7 @@ namespace hypro
 		}
 
 		TRACE("hypro.worker.refinement","Done printing refinements.");
-
+		TRACE("hypro.worker","Unlock node " << mTask->treeNode);
 		mTask->treeNode->getMutex().unlock();
     }
 

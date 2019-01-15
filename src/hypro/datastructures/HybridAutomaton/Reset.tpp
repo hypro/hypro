@@ -5,34 +5,83 @@ namespace hypro {
 	template<typename Number>
 	Reset<Number>::Reset(const matrix_t<Number>& mat, const vector_t<Number>& vec) {
 		assert(mat.rows() == mat.cols());
-		mResets.emplace_back(mat,vec);
+		mAffineResets.emplace_back(mat,vec);
+		mIntervalResets.emplace_back(std::vector<carl::Interval<Number>>(mat.rows(), carl::Interval<Number>::emptyInterval()));
 		mHash = 0;
 	}
 
 	template<typename Number>
+	const vector_t<Number>& Reset<Number>::getVector(std::size_t I) const {
+		return mAffineResets[I].mTransformation.vector();
+	}
+
+	template<typename Number>
+	const matrix_t<Number>& Reset<Number>::getMatrix(std::size_t I) const {
+		return mAffineResets[I].mTransformation.matrix();
+	}
+
+	template<typename Number>
+	matrix_t<Number>& Reset<Number>::rGetMatrix(std::size_t I) {
+		return mAffineResets[I].mTransformation.matrix();
+	}
+
+	template<typename Number>
+	vector_t<Number>& Reset<Number>::rGetVector(std::size_t I) {
+		return mAffineResets[I].mTransformation.vector();
+	}
+
+	template<typename Number>
+	const std::vector<carl::Interval<Number>>& Reset<Number>::getIntervals(std::size_t I) const {
+		return mIntervalResets[I].mIntervals;
+	}
+
+	template<typename Number>
+	std::vector<carl::Interval<Number>>& Reset<Number>::rGetIntervals(std::size_t I) {
+		return mIntervalResets[I].mIntervals;
+	}
+
+	template<typename Number>
 	void Reset<Number>::setVector(const vector_t<Number>& in, std::size_t I) {
-		while (mResets.size() < I+1) {
-			mResets.push_back(ConstraintSetT<Number>());
+		assert(mAffineResets.size() == mIntervalResets.size());
+		while (mAffineResets.size() < I+1) {
+			mAffineResets.emplace_back(AffineTransformation<Number>());
+			mIntervalResets.emplace_back(IntervalAssignment<Number>());
 		}
-		mResets[I].rVector() = in;
+		assert(mAffineResets.size() == mIntervalResets.size());
+		mAffineResets[I].mTransformation.rVector() = in;
 		mHash = 0;
 	}
 
 	template<typename Number>
 	void Reset<Number>::setMatrix(const matrix_t<Number>& in, std::size_t I) {
+		assert(mAffineResets.size() == mIntervalResets.size());
 		assert(in.rows() == in.cols());
-		while (mResets.size() < I+1) {
-			mResets.push_back(ConstraintSetT<Number>());
+		while (mAffineResets.size() < I+1) {
+			mAffineResets.emplace_back(AffineTransformation<Number>());
+			mIntervalResets.emplace_back(IntervalAssignment<Number>());
 		}
-		mResets[I].rMatrix() = in;
+		assert(mAffineResets.size() == mIntervalResets.size());
+		mAffineResets[I].mTransformation.setMatrix(in);
+		mHash = 0;
+	}
+
+	template<typename Number>
+	void Reset<Number>::setIntervals(const std::vector<carl::Interval<Number>>& intervals, std::size_t I) {
+		assert(mAffineResets.size() == mIntervalResets.size());
+		while (mIntervalResets.size() < I+1) {
+			mAffineResets.emplace_back(AffineTransformation<Number>());
+			mIntervalResets.emplace_back(IntervalAssignment<Number>());
+		}
+		assert(mAffineResets.size() == mIntervalResets.size());
+		mIntervalResets[I].mIntervals = intervals;
 		mHash = 0;
 	}
 
 	template<typename Number>
 	bool Reset<Number>::isIdentity() const {
-		for(const auto& cset : mResets) {
-			if( cset.matrix() != matrix_t<Number>::Identity(cset.matrix().rows(),cset.matrix().rows())
-				|| cset.vector() != vector_t<Number>::Zero(cset.vector().rows()) ) {
+		for(const auto& cset : mAffineResets) {
+			bool tmp = cset.isIdentity();
+			if(!tmp) {
 				return false;
 			}
 		}
@@ -153,18 +202,26 @@ namespace hypro {
 	}
 
 	template<typename Number>
-	void Reset<Number>::decompose(std::vector<std::vector<size_t>> decomposition){
-		if(mResets.size() != 1){
-			//already decomposed/empty constraints
+	void Reset<Number>::decompose(const Decomposition& decomposition){
+		if(mAffineResets.size() == 0 || mDecomposed){
+			//empty constraints
 			return;
 		}
-		ConstraintSetT<Number> cset = mResets.at(0);
+
+		INFO("hypro.datastructures","In the current state we assume that rectangular subspaces will not be decomposed.");
+		assert(mAffineResets.size() == 1);
+
+		// traverse reset variants to collect all assignments per proposed subspace
+		ConstraintSetT<Number> cset = mAffineResets[0].mTransformation;
 		DEBUG("hypro.datastructures", "Constraint Set before: \n " << cset );
 
 		matrix_t<Number> constraintsOld(cset.matrix());
 		vector_t<Number> constantsOld(cset.vector());
+		auto oldIntervalAssignments = mIntervalResets[0].mIntervals;
 
-		std::vector<ConstraintSetT<Number>> newCset;
+		mAffineResets.clear();
+		mIntervalResets.clear();
+
 		// select constrains i,j,k into new constraint vector
 		for(auto set : decomposition){
 			#ifdef HYPRO_LOGGING
@@ -175,34 +232,31 @@ namespace hypro {
 			DEBUG("hypro.datastructures", "}");
 			#endif
 
+			// new interval assignments are just copied, as we do not store the variable
+			//std::vector<carl::Interval<Number>> newIntervals;
+			std::vector<carl::Interval<Number>> newIntervals = oldIntervalAssignments;
+
 			// for each row of the constraints check if it contains an entry for one of the variables of the set
 			// and add the corresponding rows to a list of indices that are later added to a matrix
 			std::vector<Eigen::Index> indicesToAdd;
 			for(auto entry : set){
-				indicesToAdd.push_back(Eigen::Index(entry));
+				indicesToAdd.emplace_back(Eigen::Index(entry));
+				//newIntervals.emplace_back(oldIntervalAssignments[entry]);
 			}
 
-			if(indicesToAdd.size() > 0){
-				// create a row matrix with numIndicesToAdd many rows
-				matrix_t<Number> newMatrix = selectRows(constraintsOld, indicesToAdd);
-				newMatrix = selectCols(constraintsOld, set);
+			// create a row matrix with numIndicesToAdd many rows
+			matrix_t<Number> newMatrix = selectRows(constraintsOld, indicesToAdd);
+			newMatrix = selectCols(newMatrix, set);
 
-				// create final constant vector
-				vector_t<Number> newVec = selectRows(constantsOld, indicesToAdd);
+			// create final constant vector
+			vector_t<Number> newVec = selectRows(constantsOld, indicesToAdd);
 
-				ConstraintSetT<Number> res(newMatrix,newVec);
-				DEBUG("hypro.datastructures", "Final decomposed ConstraintSetT: \n" << res);
-				newCset.push_back(res);
-			}
-			else {
-				DEBUG("hypro.datastructures", "No constraints for set found.");
-				// add identity constraints
-				ConstraintSetT<Number> res = ConstraintSetT<Number>();
-				newCset.push_back(res);
-			}
+			ConstraintSetT<Number> newConstraintSet(newMatrix,newVec);
+			mAffineResets.emplace_back(std::move(newConstraintSet));
+			mIntervalResets.emplace_back(std::move(newIntervals));
 		}
 
-		mResets = newCset;
+		mDecomposed = true;
 		mHash = 0;
 	}
 } // namespace

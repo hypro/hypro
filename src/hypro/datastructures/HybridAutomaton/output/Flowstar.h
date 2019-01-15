@@ -87,11 +87,11 @@ namespace hypro {
 								const std::map<Eigen::Index, std::string>& varNameMap,
 								const std::string& prefix)
 	{
-		return toFlowstarFormat(Condition<Number>(in.getMatrix(),in.getVector()), varNameMap, prefix);
+		return toFlowstarFormat(Condition<Number>(in.matrix(),in.vector()), varNameMap, prefix);
 	}
 
 	template<typename Number>
-	std::string toFlowstarFormat(const typename Location<Number>::flowVariant& f,
+	std::string toFlowstarFormat(const flowVariant<Number>& f,
 								const std::map<Eigen::Index, std::string>& varNameMap,
 								const std::string& prefix)
 	{
@@ -121,9 +121,9 @@ namespace hypro {
 				break;
 			}
 			case DynamicType::rectangular: {
-				std::vector<carl::Interval<Number>> intv = boost::get<rectangularFlow<Number>>(f).getFlowIntervals();
-				for(std::size_t rowI = 0; rowI < boost::get<rectangularFlow<Number>>(f).dimension(); ++rowI) {
-					out << prefix << "\t\t" << varNameMap.at(rowI) << "' = " << intv[rowI] << std::endl;
+				auto flow = boost::get<rectangularFlow<Number>>(f).getFlowIntervals();
+				for(const auto& vFlowPair : flow) {
+					out << prefix << "\t\t" << vFlowPair.first << "' = " << vFlowPair.second << std::endl;
 				}
 			}
 		}
@@ -249,7 +249,7 @@ namespace hypro {
 				res << "\n\t\t" << s.first->getName();
 				res << "\n\t\t{";
 				auto tmpConstraintSet = s.second;
-				res << toFlowstarFormat(std::move(Condition<Number>(tmpConstraintSet.matrix(), tmpConstraintSet.vector())), vars, "\n\t\t\t" );
+				res << toFlowstarFormat(tmpConstraintSet, vars, "\n\t\t\t" );
 				res << "\n\t\t}";
 			}
 

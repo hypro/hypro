@@ -7,9 +7,17 @@ namespace hypro {
         TRACE("hydra.datastructures","inState #sets: " << inState.getNumberSets() << " and #resets: " << reset.size());
 		assert(reset.empty() || inState.getNumberSets() == reset.size());
 		if(reset.empty()) {
+			DEBUG("hypro.datastructures","Reset is empty.");
 			return inState;
 		}
-		return inState.applyTransformation(reset.getResetTransformations());
+		auto res = inState;
+		std::size_t pos = 0;
+		for(std::size_t pos = 0; pos < reset.size(); ++pos) {
+			res = res.applyTransformation(reset.getAffineReset(pos).mTransformation, pos);
+			res = res.partialIntervalAssignment(reset.getIntervalReset(pos).mIntervals, pos);
+		}
+
+		return res;
     }
 
 } // hypro

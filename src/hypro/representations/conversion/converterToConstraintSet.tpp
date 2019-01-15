@@ -12,6 +12,12 @@ ConstraintSetT<Number,CSSetting> Converter<Number>::toConstraintSet( const BoxT<
 
 template<typename Number>
 template<typename CSSetting, typename inSetting>
+ConstraintSetT<Number,CSSetting> Converter<Number>::toConstraintSet( const CarlPolytopeT<Number,Converter<Number>,inSetting>& _source, const CONV_MODE  ) {
+	return ConstraintSetT<Number,CSSetting>(_source.matrix(), _source.vector());
+}
+
+template<typename Number>
+template<typename CSSetting, typename inSetting>
 ConstraintSetT<Number,CSSetting> Converter<Number>::toConstraintSet( const ConstraintSetT<Number,inSetting>& _source, const CONV_MODE  ) {
 	return _source;
 }

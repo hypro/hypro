@@ -95,6 +95,9 @@ class ConstraintSetT {
 	matrix_t<Number>& rMatrix() { return mConstraints; }
 	vector_t<Number>& rVector() { return mConstants; }
 
+	void setMatrix(const matrix_t<Number>& in ) { mConstraints = in; }
+	void setVector(const vector_t<Number>& in ) { mConstants = in; }
+
 	bool isAxisAligned() const {
 		if(mIsBox == TRIBOOL::NSET) {
 			mIsBox = boost::get<0>(isBox(mConstraints, mConstants)) == true ? TRIBOOL::TRUE : TRIBOOL::FALSE;

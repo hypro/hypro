@@ -15,9 +15,9 @@ import Formula;
 
 modes			: 'modes' '{' location* '}' ;
 
-location 		: VARIABLE '{' activities invariants* '}' ;	
+location 		: VARIABLE '{' activities invariants* '}' ;
 
-activities 		: (POLY ODE NUMBER | LINEAR ODE) '{' equation* '}' ;
+activities 		: (POLY ODE NUMBER | LINEAR ODE) '{' (equation | intervalexpr)* '}' ;
 
 invariants		: 'inv' '{' constrset? '}' ;
 

@@ -10,8 +10,8 @@ namespace hypro {
         mState->setSetType(res.getSetType(mIndex),mIndex);
         #ifdef HYDRA_USE_LOGGING
         // DBG
-        hypro::Box<Number> tmp = hypro::Converter<Number>::toBox(boost::get<Representation>(mState->getSet(mIndex)));
-        DEBUG("hydra.worker","Set after timestep: " << tmp);
+        //hypro::Box<Number> tmp = hypro::Converter<Number>::toBox(boost::get<Representation>(mState->getSet(mIndex)));
+        //DEBUG("hydra.worker","Set after timestep: " << tmp);
         #endif
     }
 } // hypro

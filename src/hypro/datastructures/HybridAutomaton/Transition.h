@@ -11,9 +11,10 @@
 #include "Condition.h"
 #include "Location.h"
 #include "Reset.h"
-#include <carl/interval/Interval.h>
 #include "Label.h"
 #include "HybridAutomaton.h"
+#include "decomposition/Decomposition.h"
+#include <carl/interval/Interval.h>
 
 namespace hypro
 {
@@ -140,7 +141,7 @@ class Transition
      /**
     * decomposes guard  and reset of this transition.
     */
-    void decompose(std::vector<std::vector<size_t>> decomposition){
+    void decompose(const Decomposition& decomposition){
         mGuard.decompose(decomposition);
         mReset.decompose(decomposition);
         mHash = 0;

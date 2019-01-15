@@ -5,7 +5,6 @@
 #include "Visitors.h"
 #include "../../representations/types.h"
 #include "../../representations/GeometricObject.h"
-//#include "../../util/tuple_expansion/for_each.h"
 #include <carl/util/tuple_util.h>
 #include <carl/interval/Interval.h>
 
@@ -340,6 +339,8 @@ class State
      */
     std::pair<CONTAINMENT,State<Number,Representation,Rargs...>> partiallySatisfies(const Condition<Number>& in, std::size_t I) const;
 
+    State<Number,Representation,Rargs...> intersectHalfspaces(const matrix_t<Number>& constraints, const vector_t<Number>& constants, std::size_t I = 0) const;
+
     /**
      * @brief      Meta-function which can be used to transform all contained sets at once with the passed parameters and adjust the
      * timestamp as well.
@@ -364,8 +365,10 @@ class State
      * @return     A state where each set has been transformed by the corresponding ConstraintSet.
      */
     State<Number,Representation,Rargs...> applyTransformation(const std::vector<ConstraintSet<Number>>& trafos ) const;
+    State<Number,Representation,Rargs...> applyTransformation(const ConstraintSet<Number>& trafo, std::size_t I=0 ) const;
     State<Number,Representation,Rargs...> linearTransformation(const matrix_t<Number>& matrix) const;
     State<Number,Representation,Rargs...> affineTransformation(const matrix_t<Number>& matrix, const vector_t<Number>& vector) const;
+    State<Number,Representation,Rargs...> partialIntervalAssignment(const std::vector<carl::Interval<Number>>& assignments, std::size_t I) const;
 
     State<Number,Representation,Rargs...> applyTransformation(const ConstraintSet<Number>& trafo ) const;
 
@@ -405,6 +408,7 @@ class State
     State<Number,Representation,Rargs...> project(const std::vector<std::size_t>& dimensions, std::size_t I = 0) const;
 
     std::size_t getDimension(std::size_t I = 0) const;
+    std::size_t getDimensionOffset(std::size_t I) const;
 
     Number getSupremum(std::size_t I) const;
 
@@ -414,10 +418,12 @@ class State
 
     void reduceRepresentation();
 
+    void partiallyReduceRepresentation(std::size_t I);
+
     /**
     * decomposes state set by projection
     */
-    void decompose(std::vector<std::vector<size_t>> decomposition);
+    void decompose(const Decomposition& decomposition);
 
     /**
      * @brief      Outstream operator.
@@ -453,10 +459,25 @@ class State
      */
     friend bool operator==(const State<Number,Representation,Rargs...>& lhs, const State<Number,Representation,Rargs...>& rhs) {
     	// quick checks first
-    	if (lhs.getNumberSets() != rhs.getNumberSets() || *(lhs.mLoc) != *(rhs.mLoc) || lhs.mTimestamp != rhs.mTimestamp) {
+      if (lhs.getNumberSets() != rhs.getNumberSets() || lhs.mTimestamp != rhs.mTimestamp) {
     		return false;
     	}
+      // location-based checks
+      if(lhs.mLoc != nullptr) {
+        if(rhs.mLoc != nullptr) {
+          if (*(lhs.mLoc) != *(rhs.mLoc)) {
+            return false;
+          }
+        } else {
+          return false;
+        }
+      } else {
+        if( rhs.mLoc != nullptr ) {
+          return false;
+        }
+      }
 
+      // set-based checks
     	for(std::size_t i = 0; i < lhs.getNumberSets(); ++i) {
     		if( lhs.getSetType(i) != rhs.getSetType(i)) {
     			return false;

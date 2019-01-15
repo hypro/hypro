@@ -29,20 +29,21 @@ public:
     ~ContextBasedReachabilityWorker() {
     }
 
+
     void processTask(const std::shared_ptr<Task<State>>& t,
             const Strategy<State>& strat,
-            WorkQueue<std::shared_ptr<Task<State>>>& localQueue,
-            WorkQueue<std::shared_ptr<Task<State>>>& localCEXQueue,
-            std::vector<PlotData<Number>>* localSegments
+            WorkQueue<std::shared_ptr<Task<State>>>* localQueue,
+            WorkQueue<std::shared_ptr<Task<State>>>* localCEXQueue,
+            std::vector<PlotData<State>>* localSegments
             );
 
     void computeForwardReachability(const std::shared_ptr<Task<State>>& task,
                                     const Strategy<State>& strat,
-                                    WorkQueue<std::shared_ptr<Task<State>>>& localQueue,
-                                    WorkQueue<std::shared_ptr<Task<State>>>& localCEXQueue,
-                                    std::vector<PlotData<Number>>* localSegments);
+                                    WorkQueue<std::shared_ptr<Task<State>>>* localQueue,
+                                    WorkQueue<std::shared_ptr<Task<State>>>* localCEXQueue,
+                                    std::vector<PlotData<State>>* localSegments);
 
-    bool isValidTask(const std::shared_ptr<Task<State>>& task, WorkQueue<std::shared_ptr<Task<State>>>& localCEXQueue);
+    bool isValidTask(const std::shared_ptr<Task<State>>& task, WorkQueue<std::shared_ptr<Task<State>>>* localCEXQueue);
 
 private:
     int mWorkerId;

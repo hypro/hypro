@@ -25,6 +25,8 @@ public:
 
     void setLocation(const Location<Number>* loc) {mLocation = loc;}
     void setEntryTimestamp(const carl::Interval<tNumber>& t) {mEntryTimeStamp = t;}
+
+    void getDotRepresentation(int id, std::string& nodes, std::string& transitions, std::vector<unsigned>& levels) const {}
 };
 
 } // hypro

@@ -33,8 +33,8 @@ class HyproTransitionVisitor : public HybridAutomatonBaseVisitor{
 		//A vector of all variables that are defined
 		std::vector<std::string>& vars;
 
-		//The set of possible locations 
-		std::set<Location<Number>*>& locSet;
+		//The set of possible locations
+		const std::set<Location<Number>*>& locSet;
 
 		//Inherited
 		antlrcpp::Any visitTransition(HybridAutomatonParser::TransitionContext *ctx) override;
@@ -47,16 +47,15 @@ class HyproTransitionVisitor : public HybridAutomatonBaseVisitor{
 	public:
 
 		//Constructor and Destructor
-		HyproTransitionVisitor(std::vector<std::string>& varVec, std::set<Location<Number>*>& lSet);
+		HyproTransitionVisitor(std::vector<std::string>& varVec, const std::set<Location<Number>*>& lSet);
 		~HyproTransitionVisitor();
 
 		//Inherited from HybridAutomatonBaseVisitor - stays public for testing/debugging
 		antlrcpp::Any visitJumps(HybridAutomatonParser::JumpsContext *ctx) override;
-		
+
 };
 
 
 } //namespace hypro
 
 #include "HyproTransitionVisitor.tpp"
-

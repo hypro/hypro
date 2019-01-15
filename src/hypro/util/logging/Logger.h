@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../../flags.h"
+#include <carl/io/streamingOperators.h>
 #include <iostream>
 #include <thread>
 

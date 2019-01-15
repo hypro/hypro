@@ -39,37 +39,39 @@ namespace hypro
 
 	template<typename Number>
 	bool DecisionEntity<Number>::isDiscreteSubspace(const Location<Number> &loc, size_t index){
-		return isDiscrete(loc.getFlow(index));
+		return loc.getLinearFlow(index).isDiscrete() && loc.getRectangularFlow(index).isDiscrete();
 	}
 
 	template<typename Number>
 	bool DecisionEntity<Number>::isTimedSubspace(const Location<Number> &loc, size_t index){
-		TRACE("hypro.decisionEntity", "Investigating " << loc.getName());
+		TRACE("hypro.decisionEntity", "Investigating " << loc.getName() << ", subspace " << index);
 		// check if flow is of the form
 		//	0 ... 0 1
 		//  .........
 		//	0 ... 0 1
 		//  0 ....0 0
 
-		if(! isTimed(loc.getFlow(index))) {
+		if(! (loc.getLinearFlow(index)).isTimed() ) {
+			TRACE("hypro.decisionEntity", "Flow is not timed.");
 			return false;
 		}
 
 		// check if the constraints of the invariant set only contain 0s and one entry 1/-1 at most
 		if(loc.getInvariant().size() > 0){
 			if(!loc.getInvariant().isAxisAligned(index)) {
+				TRACE("hypro.decisionEntity", "Invariant is not axis-aligned.");
 				return false;
 			}
 		}
 
-		std::set<Transition<Number>*> transitions = loc.getTransitions();
-		for(auto transition : transitions){
+		for(const auto transition : loc.getTransitions()){
 			TRACE("hypro.decisionEntity", "Investigating " << transition->getSource()->getName() << " -> " << transition->getTarget()->getName());
 
 			// for each transitions check if the constraints of the guard set only only contain 0s and one entry 1/-1 at most
 
 			if(transition->getGuard().size() > 0){
 				if(!transition->getGuard().isAxisAligned(index)){
+					TRACE("hypro.decisionEntity", "Guard is not axis-aligned.");
 					return false;
 				}
 			}
@@ -108,6 +110,54 @@ namespace hypro
 	}
 
 	template<typename Number>
+	bool DecisionEntity<Number>::isRectangularSubspace(const Location<Number> &loc, size_t index){
+		TRACE("hypro.decisionEntity", "Investigating " << loc.getName() << ", subspace " << index);
+
+		if(! (loc.getLinearFlow(index).hasNoFlow() && !loc.getRectangularFlow(index).empty()) ) {
+			TRACE("hypro.decisionEntity", "Flow is not rectangular.");
+			return false;
+		}
+
+		// check if the constraints of the invariant set only contain 0s and one entry 1/-1 at most
+		if(loc.getInvariant().size() > 0){
+			if(!loc.getInvariant().isAxisAligned(index)) {
+				TRACE("hypro.decisionEntity", "Invariant is not axis-aligned.");
+				return false;
+			}
+		}
+
+		for(const auto transition : loc.getTransitions()){
+			TRACE("hypro.decisionEntity", "Investigating " << transition->getSource()->getName() << " -> " << transition->getTarget()->getName());
+
+			// for each transitions check if the constraints of the guard set only only contain 0s and one entry 1/-1 at most
+
+			if(transition->getGuard().size() > 0){
+				if(!transition->getGuard().isAxisAligned(index)){
+					TRACE("hypro.decisionEntity", "Guard is not axis-aligned.");
+					return false;
+				}
+			}
+
+			// check if for each transition the reset function is of the form
+			//
+			//	0/1	 0  ...  0 | 0
+			//	0  0/1 0 ... 0 | 0
+			//	..................
+			//  0 ...... 0 0/1 | 0
+			if(transition->getReset().size() > 0){
+				if(! transition->getReset().getAffineReset(index).isIdentity()) {
+					TRACE("hypro.decisionEntity", "Reset is not interval-based.");
+					return false;
+				}
+
+			}
+
+		}
+		TRACE("hypro.decisionEntitiy","Is rectangular.");
+		return true;
+	}
+
+	template<typename Number>
 	bool DecisionEntity<Number>::isTimedLocation(const Location<Number> &loc){
 		TRACE("hypro.decisionEntity", "Investigating " << loc.getName());
 		// check if flow is of the form
@@ -116,22 +166,24 @@ namespace hypro
 		//	0 ... 0 1
 		//  0 ....0 0
 		for(size_t i = 0; i < loc.getNumberFlow();i++){
-			if(!isTimed(loc.getFlow(i))){
+			if(!loc.getLinearFlow(i).isTimed()){
+				TRACE("hypro.decisionEntity","Flow is not timed.");
 				return false;
 			}
 		}
 
 		// check if the constraints of the invariant set only contain 0s and one entry 1/-1 at most
 		if(!loc.getInvariant().isAxisAligned()) {
+			TRACE("hypro.decisionEntity","Invariant is not axis-aligned.");
 			return false;
 		}
 
-		std::set<Transition<Number>*> transitions = loc.getTransitions();
-		for(auto transition : transitions){
+		for(const auto transition : loc.getTransitions()){
 			TRACE("hypro.decisionEntity", "Investigating " << transition->getSource()->getName() << " -> " << transition->getTarget()->getName());
 
 			// for each transitions check if the constraints of the guard set only only contain 0s and one entry 1/-1 at most
 			if(!transition->getGuard().isAxisAligned()) {
+				TRACE("hypro.decisionEntity","Guard is not axis-aligned.");
 				return false;
 			}
 
@@ -148,6 +200,7 @@ namespace hypro
 					matrix_t<Number> expected1 = matrix_t<Number>::Zero(1, reset.cols());
 					expected1(0,i) = Number(1.0);
 					if(!(reset.row(i) == expected0 || reset.row(i) == expected1)){
+						TRACE("hypro.decisionEntity","Reset is not timed.");
 						return false;
 					}
 				}
@@ -156,12 +209,25 @@ namespace hypro
 			for(size_t i=0; i< transition->getReset().size(); i++){
 				matrix_t<Number> reset = transition->getReset().getVector(i);
 				if(reset != matrix_t<Number>::Zero(reset.rows(), 1)){
+					TRACE("hypro.decisionEntity","Reset is not timed.");
 					return false;
 				}
 			}
 
 		}
 
+		return true;
+	}
+
+	template<typename Number>
+	bool DecisionEntity<Number>::isRectangularLocation(const Location<Number> &loc){
+		TRACE("hypro.decisionEntity", "Investigating " << loc.getName());
+		for(size_t i = 0; i < loc.getNumberFlow();i++){
+			if(!isRectangularSubspace(loc,i)){
+				TRACE("hypro.decisionEntity","Subspace " << i << " is not rectangular.");
+				return false;
+			}
+		}
 		return true;
 	}
 
@@ -176,10 +242,20 @@ namespace hypro
 	}
 
 	template<typename Number>
+	bool DecisionEntity<Number>::isRectangularAutomaton(const HybridAutomaton<Number> &ha){
+		for(auto location : ha.getLocations()){
+			if(!isRectangularLocation(*location)){
+				return false;
+			}
+		}
+		return true;
+	}
+
+	template<typename Number>
 	bool DecisionEntity<Number>::checkDecomposed(const HybridAutomaton<Number> &automaton){
-		typename HybridAutomaton<Number>::locationStateMap initialStates = automaton.getInitialStates();
+		auto initialStates = automaton.getInitialStates();
 		for (auto stateMapIt = initialStates.begin(); stateMapIt != initialStates.end(); ++stateMapIt) {
-			if(stateMapIt->second.getNumberSets() > 1){
+			if(stateMapIt->second.size() > 1){
 				return true;
 			}
 		}
@@ -212,6 +288,31 @@ namespace hypro
 			}
 		}
     }
+
+	template<typename Number>
+	void DecisionEntity<Number>::addEdgesForRectTrafo(const std::vector<carl::Interval<Number>>& intervals, boost::adjacency_list<boost::vecS, boost::vecS, boost::undirectedS>& graph) {
+		for(size_t i = 0; i < intervals.size(); i++){
+			for(size_t j = 0; j < intervals.size(); j++){
+				if(i != j
+					&& intervals[i] != carl::Interval<Number>::emptyInterval()
+					&& intervals[j] != carl::Interval<Number>::emptyInterval()){
+					boost::add_edge(i,j,graph);
+				}
+			}
+		}
+	}
+
+	template<typename Number>
+	void DecisionEntity<Number>::addEdgesForRectMap(const std::map<carl::Variable, carl::Interval<Number>>& map, boost::adjacency_list<boost::vecS, boost::vecS, boost::undirectedS>& graph) {
+		auto& vpool = VariablePool::getInstance();
+		for(const auto& keyValPair1 : map) {
+			for(const auto& keyValPair2 : map) {
+				if(keyValPair1.first != keyValPair2.first) {
+					boost::add_edge(vpool.id(keyValPair1.first), vpool.id(keyValPair2.first), graph);
+				}
+			}
+		}
+	}
 
     template<typename Number>
 	void DecisionEntity<Number>::addEdgesForCondition(Condition<Number> condition,boost::adjacency_list<boost::vecS, boost::vecS, boost::undirectedS>& graph){
@@ -263,17 +364,19 @@ namespace hypro
 		Graph G(automaton.dimension()-1);
 
 		//check flow and invariant of locations
-		std::set<Location<Number>*> locations = automaton.getLocations();
-		for(auto loc : locations){
-			addEdgesForAffineTrafo(loc->getFlow(), G);
+		for(auto loc : automaton.getLocations()){
+			for(std::size_t i = 0; i < loc->getNumberFlow(); ++i){
+				addEdgesForAffineTrafo(loc->getLinearFlow(i).getFlowMatrix(), G);
+				addEdgesForRectMap(loc->getRectangularFlow(i).getFlowIntervals(), G);
+			}
+			// TODO: add further flow types
 			addEdgesForCondition(loc->getInvariant(),G);
 		}
 
 		//check reset and guards of transitions
-		std::set<Transition<Number>*> transitions = automaton.getTransitions();
-		for(auto transition : transitions){
-
+		for(const auto transition : automaton.getTransitions()){
 			addEdgesForLinTrafo(transition->getReset().getMatrix(), G);
+			addEdgesForRectTrafo(transition->getReset().getIntervals(), G);
 			addEdgesForCondition(transition->getGuard(),G);
 		}
 
@@ -303,19 +406,19 @@ namespace hypro
 	}
 
 	template<typename Number>
-	std::pair<HybridAutomaton<Number>, Decomposition> DecisionEntity<Number>::decomposeAutomaton(HybridAutomaton<Number> &automaton){
+	std::pair<HybridAutomaton<Number>, Decomposition> DecisionEntity<Number>::decomposeAutomaton(const HybridAutomaton<Number> &automaton){
 		Decomposition decomposition = getSubspaceDecomposition(automaton);
-		printDecomposition(decomposition);
 		//SettingsProvider<State>::getInstance().setSubspaceDecomposition(decomposition);
 		if(decomposition.size() <= 1){
 			// decomposing failed/was already done(0-case) or decomposition is all variables (1 case)
-			return automaton;
+			return std::make_pair(automaton,decomposition);
 		}
 		printDecomposition(decomposition);
 		TRACE("hypro.decisionEntity", "Automaton before decomposition: " << automaton);
-		automaton.decompose(decomposition);
-		TRACE("hypro.decisionEntity", "Automaton after decomposition: " << automaton);
-		return std::make_pair(automaton,decomposition);
+		auto automatonCopy = automaton;
+		automatonCopy.decompose(decomposition);
+		TRACE("hypro.decisionEntity", "Automaton after decomposition: " << automatonCopy);
+		return std::make_pair(automatonCopy,decomposition);
 	}
 
 } // hypro

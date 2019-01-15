@@ -103,7 +103,7 @@ public:
 
 	friend bool operator!=(const EventTimingContainer& lhs, const EventTimingContainer& rhs) { return !(lhs == rhs); }
 
-	//std::size_t getDotRepresentation(std::size_t startIndex, std::string& nodes, std::string& transitions, std::vector<unsigned>& levels) const;
+	std::size_t getDotRepresentation(std::size_t startIndex, std::string& nodes, std::string& transitions, std::vector<unsigned>& levels) const;
 };
 
 } // hypro
