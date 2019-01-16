@@ -18,7 +18,7 @@ class MHybridAutomaton{
     private:
         static void new_empty(int, mxArray**, int, const mxArray**);
         static void copy(int, mxArray**, int, const mxArray**);
-        static void new_loc(int, mxArray**, int, const mxArray**);
+        static void new_sets(int, mxArray**, int, const mxArray**);
         static void del_automaton(int, mxArray**, int, const mxArray**);
         static void getLocations(int, mxArray**, int, const mxArray**);
         static void getLocation_by_hash(int, mxArray**, int, const mxArray**);

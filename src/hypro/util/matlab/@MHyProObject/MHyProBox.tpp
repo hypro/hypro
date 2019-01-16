@@ -99,12 +99,24 @@ void MHyProBox::boxFromPoints(int nlhs, mxArray *plhs[], const mxArray *prhs[]){
 /**
  * @brief Returns setting of a box
  **/
-void MHyProBox::getSettings(int nlhs, mxArray *plhs[], const mxArray *prhs[]){
-    mexPrintf("getSettings: Not finished yet!");
-    hypro::Box<double>* box = convertMat2Ptr<hypro::Box<double>>(prhs[2]);
-    if(nlhs != 1)
-        mexErrMsgTxt("MHyProBox - getSettings: Expecting an output!");
-    box->getSettings();
+void MHyProBox::test(int nlhs, mxArray *plhs[], const mxArray *prhs[]){
+    
+    const mwSize* dims;
+    dims = mxGetDimensions(prhs[3]);
+    const int dimx = dims[1];
+
+    // uint64_t addr = (uint64_t) mxGetScalar(prhs[2]);
+    // mexPrintf("Matlab address: %zu -> ",addr);
+    // hypro::Box<double>* box = convertMat2Ptr<hypro::Box<double>>(prhs[2]);
+    
+
+    const std::vector<hypro::Box<double>> vec = objArray2Hypro<hypro::Box<double>>(prhs[3],dimx);
+
+    mxArray* m_array_out;
+    int len = vec.size();
+    const mwSize new_dims[2] = {1,(mwSize) len};
+    plhs[0] = m_array_out = mxCreateCellArray(2,new_dims);
+    objArray2Matlab(vec, m_array_out, len);
 }
 
 /**
@@ -540,8 +552,8 @@ void MHyProBox::process(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs
      * Getters & setters
      **************************************************************************/ 
 
-    if(!strcmp("getSettings", cmd)){
-        getSettings(nlhs, plhs,  prhs);
+    if(!strcmp("Test", cmd)){
+        test(nlhs, plhs, prhs);
         return;
     }
 

@@ -3,7 +3,7 @@
 #include "@MHyProObject/MHyProTaylorModel.h"
 #include "@MHyProObject/MHyProEllipsoid.h"
 #include "@MHyProObject/MHyProSupportFunction.h"
-#include "@MHyProHAutomaton/MHybridAutomaton.h"
+//#include "@MHyProHAutomaton/MHybridAutomaton.h"
 #include <iostream>
 #include "mex.h"
 #include "matrix.h"
@@ -25,7 +25,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
     }else if(!strcmp(type, "TaylorModel")){
         // MHyProTaylorModel::process(nlhs, plhs, nrhs, prhs);
     }else if(!strcmp(type, "HybridAutomaton")){
-        MHybridAutomaton::process(nlhs, plhs, nrhs, prhs);
+     //   MHybridAutomaton::process(nlhs, plhs, nrhs, prhs);
     }else{
         mexErrMsgTxt("MHyPro - Unknown type.");
     }

@@ -5,12 +5,11 @@
  **/
 template<typename T>
 void MHyProGeometricObject<T>::new_matrix(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
-    if(nlhs != 1){
+    if(nlhs != 1)
         mexErrMsgTxt("MHyProGeometricObject - new_matrix: Expecting an output!");
-    }
-    if(nrhs != 3){
+    if(nrhs != 3)
         mexErrMsgTxt("MHyProGeometricObject - new_matrix: One or more arguments are missing!");
-    }
+
     mxArray *m_in_matrix;
     double *in_matrix;
     const mwSize *mat_dims;
@@ -35,12 +34,11 @@ void MHyProGeometricObject<T>::new_matrix(int nlhs, mxArray* plhs[], int nrhs, c
  **/
 template<typename T>
 void MHyProGeometricObject<T>::new_vector(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
-    if(nlhs != 1){
+    if(nlhs != 1)
         mexErrMsgTxt("MHyProGeometricObject - new_vector: Expecting an output!");
-    }
-    if(nrhs != 4){
+    if(nrhs != 4)
         mexErrMsgTxt("MHyProGeometricObject - new_vector: One or more arguments are missing!");
-    }
+
     mxArray *m_in_vector;
     double *in_vector;
     const mwSize *vec_dims;
@@ -76,12 +74,11 @@ void MHyProGeometricObject<T>::copyObj(int nlhs, mxArray* plhs[], int nrhs, cons
  **/
 template<typename T>
 void MHyProGeometricObject<T>::new_mat_vec(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
-    if(nlhs != 1){
+    if(nlhs != 1)
         mexErrMsgTxt("MHyProGeometricObject - new_matrix: Expecting an output!");
-    }
-    if(nrhs != 4){
+    if(nrhs != 4)
         mexErrMsgTxt("MHyProGeometricObject - new_matrix: One or more arguments are missing!");
-    }
+
     mxArray *m_in_matrix, *m_in_vector;
     double *in_matrix, *in_vector;
     const mwSize *mat_dims, *vec_dims;
@@ -184,12 +181,11 @@ void MHyProGeometricObject<T>::vector(int nlhs, mxArray* plhs[], int nrhs, const
  **/
 template<class T>
 void MHyProGeometricObject<T>::is_empty(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
-    if(nlhs < 1){
+    if(nlhs < 1)
         mexErrMsgTxt("MHyProGeometricObject - isEmpty: Expecting an output!");
-    }
-    if(nrhs < 3){
+    if(nrhs < 3)
         mexErrMsgTxt("MHyProGeometricObject - isEmpty: One argument missing!");
-    }
+
     T* temp = convertMat2Ptr<T>(prhs[2]);
     const bool empty = temp->empty();
     plhs[0] = mxCreateLogicalScalar(empty);
@@ -200,12 +196,11 @@ void MHyProGeometricObject<T>::is_empty(int nlhs, mxArray* plhs[], int nrhs, con
  **/
 template<class T>
 void MHyProGeometricObject<T>::vertices(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
-    if(nlhs < 1){
+    if(nlhs < 1)
         mexErrMsgTxt("MHyProGeometricObject - vertices: Expecting an output!");
-    }
-    if(nrhs < 3){
+    if(nrhs < 3)
         mexErrMsgTxt("MHyProGeometricObject - vertices: One argument is missing!");
-    }
+
     T* temp = convertMat2Ptr<T>(prhs[2]);
     std::vector<hypro::Point<double>> vertices = temp->vertices();
 
@@ -223,12 +218,11 @@ void MHyProGeometricObject<T>::vertices(int nlhs, mxArray* plhs[], int nrhs, con
  **/
 template<class T>
 void MHyProGeometricObject<T>::equal(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
-    if(nlhs < 1){
+    if(nlhs < 1)
         mexErrMsgTxt("MHyProGeometricObject - ==: Expecting an output!");
-    }
-    if(nrhs < 4){
+    if(nrhs < 4)
         mexErrMsgTxt("MHyProGeometricObject - ==: One or more arguments are missing!");
-    }
+
     T* set_1 = convertMat2Ptr<T>(prhs[2]);
     T* set_2 = convertMat2Ptr<T>(prhs[3]);
     mxLogical ans = false;
@@ -243,12 +237,11 @@ void MHyProGeometricObject<T>::equal(int nlhs, mxArray* plhs[], int nrhs, const 
  **/
 template<class T>
 void MHyProGeometricObject<T>::unequal(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
-    if(nlhs < 1){
+    if(nlhs < 1)
         mexErrMsgTxt("MHyProGeometricObject - !=: Expecting an output!");
-    }
-    if(nrhs < 4){
+    if(nrhs < 4)
         mexErrMsgTxt("MHyProGeometricObject - !=: One or more arguments are missing!");
-    }
+
     T* set_1 = convertMat2Ptr<T>(prhs[2]);
     T* set_2 = convertMat2Ptr<T>(prhs[3]);
     mxLogical ans = false;
@@ -263,12 +256,11 @@ void MHyProGeometricObject<T>::unequal(int nlhs, mxArray* plhs[], int nrhs, cons
  **/
 template<class T>
 void MHyProGeometricObject<T>::supremum(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
-    if(nlhs < 1){
+    if(nlhs < 1)
         mexErrMsgTxt("MHyProGeometricObject - supremum: Expecting an output!");
-    }
-    if(nrhs < 3){
+    if(nrhs < 3)
         mexErrMsgTxt("MHyProGeometricObject - supremum: One argument missing!");
-    }
+
     T* obj = convertMat2Ptr<T>(prhs[2]);
     double supremum = obj->supremum();
     plhs[0] = mxCreateDoubleScalar(supremum);
@@ -281,12 +273,11 @@ void MHyProGeometricObject<T>::supremum(int nlhs, mxArray *plhs[], int nrhs, con
  **/
 template<class T>
 void MHyProGeometricObject<T>::dimension(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
-    if(nlhs < 1){
+    if(nlhs < 1)
         mexErrMsgTxt("MHyProGeometricObject - dimension: Expecting an output!");
-    }
-    if(nrhs < 3){
+    if(nrhs < 3)
         mexErrMsgTxt("MHyProGeometricObject - dimension: One or more arguments are missing!");
-    }
+
     T* temp = convertMat2Ptr<T>(prhs[2]);
     std::size_t dim = temp->dimension();
     plhs[0] = mxCreateDoubleScalar(dim);
@@ -297,12 +288,11 @@ void MHyProGeometricObject<T>::dimension(int nlhs, mxArray* plhs[], int nrhs, co
  **/
 template<class T>
 void MHyProGeometricObject<T>::removeRedundancy(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
-    if(nlhs < 1){
+    if(nlhs < 1)
         mexErrMsgTxt("MHyProGeometricObject - removeRedundancy: Expecting an output!");
-    }
-    if(nrhs < 3){
+    if(nrhs < 3)
         mexErrMsgTxt("MHyProGeometricObject - removeRedundancy: One or more arguments are missing!");
-    }
+
     T* temp = convertMat2Ptr<T>(prhs[2]);
     temp->removeRedundancy();
 }
