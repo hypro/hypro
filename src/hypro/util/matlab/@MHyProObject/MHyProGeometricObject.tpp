@@ -118,7 +118,7 @@ void MHyProGeometricObject<T>::matrix(int nlhs, mxArray* plhs[], int nrhs, const
     T* temp = convertMat2Ptr<T>(prhs[2]);
     hypro::matrix_t<double> mat = temp->matrix();
     plhs[0] = mxCreateDoubleMatrix(mat.rows(), mat.cols(), mxREAL);
-    ObjectHandle::convert2matlab(mat, plhs[0], mat.cols(), mat.rows());
+    ObjectHandle::convert2Matlab(mat, plhs[0], mat.cols(), mat.rows());
 }
 
 /**
@@ -151,7 +151,7 @@ void MHyProGeometricObject<T>::vector(int nlhs, mxArray* plhs[], int nrhs, const
     T* temp = convertMat2Ptr<T>(prhs[2]);
     hypro::vector_t<double> vec = temp->vector();
     plhs[0] = mxCreateDoubleMatrix(vec.rows(), 1, mxREAL);
-    ObjectHandle::convert2matlab(vec, plhs[0], 1, vec.rows());
+    ObjectHandle::convert2Matlab(vec, plhs[0], 1, vec.rows());
 }
 
 /**
@@ -184,7 +184,7 @@ void MHyProGeometricObject<T>::vertices(int nlhs, mxArray* plhs[], int nrhs, con
     int dimy = vertices.size();
     int dimx = vertices[0].dimension();
     plhs[0] = mxCreateDoubleMatrix(dimy, dimx, mxREAL);
-    vector2mVector<hypro::Point<double>>(vertices, plhs[0]);
+    vector2Matlab<hypro::Point<double>>(vertices, plhs[0]);
 }
 
 /**
@@ -333,7 +333,7 @@ void MHyProGeometricObject<T>::satisfiesHalfspace(int nlhs, mxArray* plhs[], int
     std::pair<hypro::CONTAINMENT, T> p = temp->satisfiesHalfspace(hSpace);
 
     std::string ans = "";
-    ObjectHandle::convert2matlab(p.first, ans);
+    ObjectHandle::convert2Matlab(p.first, ans);
     out_cont = plhs[0] = mxCreateString(ans.c_str());
     T* b = new T(p.second);
     plhs[1] = convertPtr2Mat<T>(b);
@@ -371,7 +371,7 @@ void MHyProGeometricObject<T>::satisfiesHalfspaces(int nlhs, mxArray* plhs[], in
     std::pair<hypro::CONTAINMENT, T> p = temp->satisfiesHalfspaces(hy_matrix, hy_vector);
 
     std::string ans = "";
-    ObjectHandle::convert2matlab(p.first, ans);
+    ObjectHandle::convert2Matlab(p.first, ans);
     out_cont = plhs[0] = mxCreateString(ans.c_str());
     T* b = new T(p.second);
     plhs[1] = convertPtr2Mat<T>(b);

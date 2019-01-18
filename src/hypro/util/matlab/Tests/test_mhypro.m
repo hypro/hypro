@@ -427,61 +427,61 @@ sum.ostream();
 % Tests for HyPro Support Functions
 %**************************************************************************
 
-mat = [1 0 0; 0 1 0; 0 0 1];
-vec = [1;2;1];
-supf_1 = MHyProObject('SupportFunction', 'new_matrix', mat);
-supf_2 = MHyProObject('SupportFunction', 'new_mat_vec', mat, vec);
-
-% Columns are the normal vectors
-halfspaces_normal = [1 0 0; 0 1 0; 0 0 1];
-halfspaces_offsets = [10;3;4];
-supf_3 = MHyProObject('SupportFunction', 'new_halfspaces', halfspaces_normal, halfspaces_offsets);
-disp('Support Function 3:');
-mat = supf_3.matrix();
-vec = supf_3.vector();
-disp(mat);
-disp(vec);
-
-disp('Depth');
-depth = supf_2.depth();
-disp(depth);
-
-% disp('Operation Count');
-% opC = supf_1.operationCount();
-% disp(opC);
-
-disp('Contains Vector?');
-out = supf_2.contains_vec([1;0;0]);
-disp('[1;0;0]');
-disp(out);
-disp('[1;2;3]');
-out = supf_3.contains_vec([1;2;3]);
-disp(out);
-
-disp('Contains direction?');
-out = supf_1.contains_dir(supf_3, 1);
-disp('direction: 1');
-disp(out);
-
-disp('Scale');
-out = supf_3 * 2;
-out.ostream();
-
-disp('Swap');
-supf_1.swap(supf_2, supf_3);
-
-disp('forceLinTransReduction');
-supf_2.forceLinTransReduction();
-
-% disp('multiplicationsPerEvaluation');
-% out = supf_1.multiplicationsPerEvaluation();
+% mat = [1 0 0; 0 1 0; 0 0 1];
+% vec = [1;2;1];
+% supf_1 = MHyProObject('SupportFunction', 'new_matrix', mat);
+% supf_2 = MHyProObject('SupportFunction', 'new_mat_vec', mat, vec);
+% 
+% % Columns are the normal vectors
+% halfspaces_normal = [1 0 0; 0 1 0; 0 0 1];
+% halfspaces_offsets = [10;3;4];
+% supf_3 = MHyProObject('SupportFunction', 'new_halfspaces', halfspaces_normal, halfspaces_offsets);
+% disp('Support Function 3:');
+% mat = supf_3.matrix();
+% vec = supf_3.vector();
+% disp(mat);
+% disp(vec);
+% 
+% disp('Depth');
+% depth = supf_2.depth();
+% disp(depth);
+% 
+% % disp('Operation Count');
+% % opC = supf_1.operationCount();
+% % disp(opC);
+% 
+% disp('Contains Vector?');
+% out = supf_2.contains_vec([1;0;0]);
+% disp('[1;0;0]');
 % disp(out);
-
-disp('collectProjections');
-out = supf_3.collectProjections();
-
-disp('evaluateTemplate');
-supf_3.evaluateTemplate(1,2);
+% disp('[1;2;3]');
+% out = supf_3.contains_vec([1;2;3]);
+% disp(out);
+% 
+% disp('Contains direction?');
+% out = supf_1.contains_dir(supf_3, 1);
+% disp('direction: 1');
+% disp(out);
+% 
+% disp('Scale');
+% out = supf_3 * 2;
+% out.ostream();
+% 
+% disp('Swap');
+% supf_1.swap(supf_2, supf_3);
+% 
+% disp('forceLinTransReduction');
+% supf_2.forceLinTransReduction();
+% 
+% % disp('multiplicationsPerEvaluation');
+% % out = supf_1.multiplicationsPerEvaluation();
+% % disp(out);
+% 
+% disp('collectProjections');
+% out = supf_3.collectProjections();
+% 
+% disp('evaluateTemplate');
+% supf_3.evaluateTemplate(1,2);
 
 
 

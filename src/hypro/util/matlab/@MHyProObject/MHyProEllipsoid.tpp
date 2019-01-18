@@ -45,7 +45,7 @@
     
     hypro::vector_t<double> vect = ellipse->evaluate(vec);
     plhs[0] = mxCreateDoubleMatrix(vect.rows(), 1, mxREAL);
-    ObjectHandle::convert2matlab(vect, plhs[0], 1, vect.rows());
+    ObjectHandle::convert2Matlab(vect, plhs[0], 1, vect.rows());
  }
  /**
   * @brief
@@ -71,7 +71,7 @@
 
     hypro::matrix_t<double> out_mat = ellipse->approxEllipsoidTMatrix(mat);
     plhs[0] = mxCreateDoubleMatrix(out_mat.rows(), out_mat.cols(), mxREAL);
-    ObjectHandle::convert2matlab(out_mat, plhs[0], out_mat.cols(), out_mat.rows());
+    ObjectHandle::convert2Matlab(out_mat, plhs[0], out_mat.cols(), out_mat.rows());
  }
 
  /**
