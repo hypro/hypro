@@ -31,18 +31,15 @@ void MHyProSupportFunction::new_intervals(int nlhs, mxArray* plhs[], int nrhs, c
         mexErrMsgTxt("MHyProSupportFunction - new_intervals: One output is expected.");
     if(nrhs < 3)
         mexErrMsgTxt("MHyProSupportFunction - new_intervals: At least one argument is missing.");
+    if(nrhs > 3)
+        mexWarnMsgTxt("MHyProSupportFunction - new_intervals: At least one argument were ignored.");
     
-    mxArray *m_in_intervals;
-    double *in_intervals;
     const mwSize *dims;
     int dimy;
-
     dims = mxGetDimensions(prhs[2]);
     dimy = (const int) dims[0];
-    m_in_intervals = mxDuplicateArray(prhs[2]);
-    in_intervals = mxGetPr(m_in_intervals);
 
-    std::vector<carl::Interval<double>> intervals = ObjectHandle::mIntervals2Hypro(in_intervals, 2, dimy);
+    std::vector<carl::Interval<double>> intervals = ObjectHandle::mIntervals2Hypro(prhs[2], 2, dimy);
     plhs[0] = convertPtr2Mat<hypro::SupportFunction<double>>(new hypro::SupportFunction<double>(intervals));
 }
 
@@ -54,6 +51,8 @@ void MHyProSupportFunction::new_halfspaces(int nlhs, mxArray* plhs[], int nrhs, 
         mexErrMsgTxt("MHyProSupportFunction - new_halfspaces: One output is expected.");
     if(nrhs < 4)
         mexErrMsgTxt("MHyProSupportFunction - new_halfspaces: At least one argument is missing.");
+    if(nrhs > 4)
+        mexWarnMsgTxt("MHyProSupportFunction - new_halfspaces: At least one argument were ignored.");
     
     mxArray *m_in_matrix, *m_in_vector;
     double *in_matrix, *in_vector;
@@ -67,10 +66,8 @@ void MHyProSupportFunction::new_halfspaces(int nlhs, mxArray* plhs[], int nrhs, 
     vec_len = (int) vec_dims[0];
     m_in_matrix = mxDuplicateArray(prhs[2]);
     m_in_vector = mxDuplicateArray(prhs[3]);
-    in_matrix = mxGetPr(m_in_matrix);
-    in_vector = mxGetPr(m_in_vector);
 
-    std::vector<hypro::Halfspace<double>> halfspaces = ObjectHandle::mHalfspaces2Hypro(in_matrix, in_vector, mat_dimx, mat_dimy, vec_len);
+    std::vector<hypro::Halfspace<double>> halfspaces = ObjectHandle::mHalfspaces2Hypro(m_in_matrix, m_in_vector, mat_dimx, mat_dimy, vec_len);
     plhs[0] = convertPtr2Mat<hypro::SupportFunction<double>>(new hypro::SupportFunction<double>(halfspaces));
 }
 /**
@@ -81,6 +78,8 @@ void MHyProSupportFunction::cleanUp(int nlhs, mxArray* plhs[], int nrhs, const m
         mexErrMsgTxt("MHyProSupportFunction - cleanUp: Expecting an output!");
     if(nrhs < 3)
         mexErrMsgTxt("MHyProSupportFunction - cleanUp: One or more arguments are missing!");
+    if(nrhs > 3)
+        mexWarnMsgTxt("MHyProSupportFunction - cleanUp: At least one argument were ignored.");
 
     hypro::SupportFunction<double>* temp = convertMat2Ptr<hypro::SupportFunction<double>>(prhs[2]);
     temp->cleanUp();
@@ -94,6 +93,8 @@ void MHyProSupportFunction::depth(int nlhs, mxArray* plhs[], int nrhs, const mxA
         mexErrMsgTxt("MHyProSupportFunction - depth: Expecting an output!");
     if(nrhs < 3)
         mexErrMsgTxt("MHyProSupportFunction - depth: One or more arguments are missing!");
+    if(nrhs > 3)
+        mexWarnMsgTxt("MHyProSupportFunction - depth: At least one argument were ignored.");
 
     hypro::SupportFunction<double>* temp = convertMat2Ptr<hypro::SupportFunction<double>>(prhs[2]);
     unsigned depth = temp->depth();
@@ -108,6 +109,8 @@ void MHyProSupportFunction::operationCount(int nlhs, mxArray* plhs[], int nrhs, 
         mexErrMsgTxt("MHyProSupportFunction - operationCount: Expecting an output!");
     if(nrhs < 3)
         mexErrMsgTxt("MHyProSupportFunction - operationCount: One or more arguments are missing!");
+    if(nrhs > 3)
+        mexWarnMsgTxt("MHyProSupportFunction - operationCount: At least one argument were ignored.");
 
     hypro::SupportFunction<double>* temp = convertMat2Ptr<hypro::SupportFunction<double>>(prhs[2]);
     unsigned count = temp->operationCount();
@@ -129,19 +132,19 @@ void MHyProSupportFunction::contains_vec(int nlhs, mxArray* plhs[], int nrhs, co
         mexErrMsgTxt("MHyProSupportFunction - contains_vector: Expecting one output value!");
     if(nrhs < 4)
         mexErrMsgTxt("MHyProSupportFunction - contains_vector: One or more arguments are missing!");
+    if(nrhs > 4)
+        mexWarnMsgTxt("MHyProSupportFunction - contains_vector: At least one argument were ignored.");
 
     mxArray* m_in_vector;
-    double* in_vector;
     const mwSize *dims;
     int vec_len;
     
     hypro::SupportFunction<double>* obj = convertMat2Ptr<hypro::SupportFunction<double>>(prhs[2]);
     m_in_vector = mxDuplicateArray(prhs[3]);
-    in_vector = mxGetPr(m_in_vector);
     dims = mxGetDimensions(prhs[3]);
     vec_len = (const int) dims[0];
 
-    const hypro::vector_t<double> hy_vector = ObjectHandle::mVector2Hypro(in_vector, vec_len);
+    const hypro::vector_t<double> hy_vector = ObjectHandle::mVector2Hypro(m_in_vector, vec_len);
     const bool ans = obj->contains(hy_vector);
     plhs[0] = mxCreateLogicalScalar(ans);
 }
@@ -154,6 +157,8 @@ void MHyProSupportFunction::contains_dir(int nlhs, mxArray* plhs[], int nrhs, co
         mexErrMsgTxt("MHyProSupportFunction - contains_dir: Expecting one output value!");
     if(nrhs < 4)
         mexErrMsgTxt("MHyProSupportFunction - contains_dir: One or more arguments are missing!");
+    if(nrhs > 4)    
+        mexWarnMsgTxt("MHyProSupportFunction - contains_dir: At least one argument were ignored.");
     
     hypro::SupportFunction<double>* sfct_1 = convertMat2Ptr<hypro::SupportFunction<double>>(prhs[2]);
     hypro::SupportFunction<double>* sfct_2 = convertMat2Ptr<hypro::SupportFunction<double>>(prhs[3]);
@@ -171,6 +176,8 @@ void MHyProSupportFunction::scale(int nlhs, mxArray* plhs[], int nrhs, const mxA
         mexErrMsgTxt("MHyProSupportFunction - scale: Expecting one output value!");
     if(nrhs < 3)
         mexErrMsgTxt("MHyProSupportFunction - scale: One or more arguments are missing!");
+    if(nrhs > 3)
+        mexWarnMsgTxt("MHyProSupportFunction - scale: At least one argument were ignored.");
 
     hypro::SupportFunction<double>* obj = convertMat2Ptr<hypro::SupportFunction<double>>(prhs[2]);
     const double factor = (double) mxGetScalar(prhs[3]);
@@ -186,6 +193,8 @@ void MHyProSupportFunction::scale(int nlhs, mxArray* plhs[], int nrhs, const mxA
 void MHyProSupportFunction::swap(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
     if(nrhs < 5)
         mexErrMsgTxt("MHyProSupportFunction - swap: One or more arguments are missing!");
+    if(nrhs > 5)
+        mexWarnMsgTxt("MHyProSupportFunction - swap: At least one argument were ignored.");
     
     hypro::SupportFunction<double>* origin = convertMat2Ptr<hypro::SupportFunction<double>>(prhs[2]);
     hypro::SupportFunction<double>* sfct_1 = convertMat2Ptr<hypro::SupportFunction<double>>(prhs[3]);
@@ -200,6 +209,8 @@ void MHyProSupportFunction::swap(int nlhs, mxArray* plhs[], int nrhs, const mxAr
 void MHyProSupportFunction::forceLinTransReduction(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
     if(nrhs < 3)
         mexErrMsgTxt("MHyProSupportFunction - forcedLinTransReduction: One or more arguments are missing!");
+    if(nrhs > 3)
+        mexWarnMsgTxt("MHyProSupportFunction - forcedLinTransReduction: At least one argument were ignored.");
     
     hypro::SupportFunction<double>* sfct = convertMat2Ptr<hypro::SupportFunction<double>>(prhs[2]);
     sfct->forceLinTransReduction();
@@ -210,9 +221,11 @@ void MHyProSupportFunction::forceLinTransReduction(int nlhs, mxArray* plhs[], in
  **/
 void MHyProSupportFunction::multiplicationsPerEvaluation(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
     // if(nlhs < 1)
-    //     mexErrMsgTxt("MHyProSupportFunction - muliplicationsPerEvaluation: Expecting one output value!");
+    //     mexErrMsgTxt("MHyProSupportFunction - multiplicationsPerEvaluation: Expecting one output value!");
     if(nrhs < 3)
-        mexErrMsgTxt("MHyProSupportFunction - muliplicationsPerEvaluation: One or more arguments are missing!");
+        mexErrMsgTxt("MHyProSupportFunction - multiplicationsPerEvaluation: One or more arguments are missing!");
+    if(nrhs > 3)
+        mexWarnMsgTxt("MHyProSupportFunction - multiplicationsPerEvaluation: At least one argument were ignored.");
     
     hypro::SupportFunction<double>* sfct = convertMat2Ptr<hypro::SupportFunction<double>>(prhs[2]);
     const unsigned ans = sfct->multiplicationsPerEvaluation();
@@ -228,6 +241,8 @@ void MHyProSupportFunction::collectProjections(int nlhs, mxArray* plhs[], int nr
         mexErrMsgTxt("MHyProSupportFunction - collectProjections: Expecting one output value!");
     if(nrhs < 3)
         mexErrMsgTxt("MHyProSupportFunction - collectProjections: One or more arguments are missing!");
+    if(nrhs > 3)
+        mexWarnMsgTxt("MHyProSupportFunction - collectProjections: At least one argument were ignored.");
     
     mxArray *m_out;
     double *out;
@@ -247,7 +262,9 @@ void MHyProSupportFunction::collectProjections(int nlhs, mxArray* plhs[], int nr
  **/
 void MHyProSupportFunction::evaluateTemplate(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
     if(nrhs < 5)
-        mexErrMsgTxt("MHyProSupportFunction - evaluateTemplate: One or more arguments are missing!");   
+        mexErrMsgTxt("MHyProSupportFunction - evaluateTemplate: One or more arguments are missing!"); 
+    if(nrhs > 5)
+        mexWarnMsgTxt("MHyProSupportFunction - evaluateTemplate: At least one argument were ignored.");  
 
     hypro::SupportFunction<double>* sfct = convertMat2Ptr<hypro::SupportFunction<double>>(prhs[2]);
     std::size_t directions = (std::size_t) mxGetScalar(prhs[3]);
@@ -266,6 +283,8 @@ void MHyProSupportFunction::reduceNumberRepresentation(int nlhs, mxArray* plhs[]
         mexErrMsgTxt("MHyProSupportFunction - reduceNumberRepresentation: Expecting an output!");
     if(nrhs < 3)
         mexErrMsgTxt("MHyProSupportFunction - reduceNumberRepresentation: One or more arguments are missing!");
+    if(nrhs > 3)
+        mexWarnMsgTxt("MHyProSupportFunction - reduceNumberRepresentation: At least one argument were ignored.");
     
     hypro::SupportFunction<double>* temp = convertMat2Ptr<hypro::SupportFunction<double>>(prhs[2]);
     temp->reduceNumberRepresentation();

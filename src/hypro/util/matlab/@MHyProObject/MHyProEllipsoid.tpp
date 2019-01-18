@@ -21,7 +21,6 @@
     if(nrhs < 5)
         mexErrMsgTxt("MHyProEllipsoid - evaluate: One or more arguments are missing!");
     mxArray *m_in_vector;
-    double *in_vector;
     const mwSize *dims_vec;
     int vec_len;
     bool ans;
@@ -30,12 +29,11 @@
 
     m_in_vector = mxDuplicateArray(prhs[3]);
     const double dir = (double) mxGetScalar(prhs[4]);
-    in_vector = mxGetPr(m_in_vector);
 
     dims_vec = mxGetDimensions(prhs[3]);
     vec_len = (int) dims_vec[0];
 
-    hypro::vector_t<double> vec = ObjectHandle::mVector2Hypro(in_vector, vec_len);
+    hypro::vector_t<double> vec = ObjectHandle::mVector2Hypro(m_in_vector, vec_len);
 
     if(dir == 0){
         ans = false;
@@ -46,12 +44,8 @@
     }
     
     hypro::vector_t<double> vect = ellipse->evaluate(vec);
-    mxArray *m_out;
-    double *out;
-    m_out = plhs[0] = mxCreateDoubleMatrix(vect.rows(), 1, mxREAL);
-    out = mxGetPr(m_out);
-
-    ObjectHandle::convert2matlab(vect, out, 1, vect.rows());
+    plhs[0] = mxCreateDoubleMatrix(vect.rows(), 1, mxREAL);
+    ObjectHandle::convert2matlab(vect, plhs[0], 1, vect.rows());
  }
  /**
   * @brief
@@ -62,9 +56,9 @@
     if(nrhs < 4)
         mexErrMsgTxt("HyProEllipse - approxEllipsoidTMatrix: One or more arguments are missing!");
     
-    mxArray *m_in_matrix, *m_out;
+    mxArray *m_in_matrix;
     const mwSize *dims;
-    double *in_matrix, *out;;
+    double *in_matrix;
     int dimx, dimy;
 
     hypro::Ellipsoid<double>* ellipse = convertMat2Ptr<hypro::Ellipsoid<double>>(prhs[2]);
@@ -73,14 +67,11 @@
     dimy = (int) dims[0];
     dimx = (int) dims[1];
 
-    in_matrix = mxGetPr(m_in_matrix);
-    hypro::matrix_t<double> mat = ObjectHandle::mMatrix2Hypro(in_matrix, dimx, dimy);
+    hypro::matrix_t<double> mat = ObjectHandle::mMatrix2Hypro(m_in_matrix, dimx, dimy);
 
     hypro::matrix_t<double> out_mat = ellipse->approxEllipsoidTMatrix(mat);
-    m_out = plhs[0] = mxCreateDoubleMatrix(out_mat.rows(), out_mat.cols(), mxREAL);
-    out = mxGetPr(m_out);
-
-    ObjectHandle::convert2matlab(out_mat, out, out_mat.cols(), out_mat.rows());
+    plhs[0] = mxCreateDoubleMatrix(out_mat.rows(), out_mat.cols(), mxREAL);
+    ObjectHandle::convert2matlab(out_mat, plhs[0], out_mat.cols(), out_mat.rows());
  }
 
  /**

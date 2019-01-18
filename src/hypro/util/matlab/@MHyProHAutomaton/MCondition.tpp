@@ -34,11 +34,11 @@ void MCondition::new_mat_vec(int nlhs, mxArray* plhs[], int nrhs, const mxArray*
     mat_dimy = mat_dims[0];
     mat_dimx = mat_dims[1];
     vec_len = vec_dims[0];
-    in_matrix = mxGetPr(m_in_matrix);
-    in_vector = mxGetPr(m_in_vector);
+    // in_matrix = mxGetPr(m_in_matrix);
+    // in_vector = mxGetPr(m_in_vector);
 
-    hypro::matrix_t<double> matrix = ObjectHandle::mMatrix2Hypro(in_matrix, mat_dimx, mat_dimy);
-    hypro::vector_t<double> vector = ObjectHandle::mVector2Hypro(in_vector, vec_len);
+    hypro::matrix_t<double> matrix = ObjectHandle::mMatrix2Hypro(m_in_matrix, mat_dimx, mat_dimy);
+    hypro::vector_t<double> vector = ObjectHandle::mVector2Hypro(m_in_vector, vec_len);
     hypro::Condition<double>* cond = new hypro::Condition<double>(matrix, vector);
     plhs[0] = convertPtr2Mat<hypro::Condition<double>>(cond);
 
@@ -125,9 +125,10 @@ void MCondition::getMatrix(int nlhs, mxArray* plhs[], int nrhs, const mxArray* p
 
     mxArray* m_out;
     double* out;
-    m_out = plhs[0] = mxCreateDoubleMatrix(mat.rows(), mat.cols(), mxREAL);
-    out = mxGetPr(m_out);
-    ObjectHandle::convert2matlab(mat, out, mat.cols(), mat.rows());
+    //m_out = 
+    plhs[0] = mxCreateDoubleMatrix(mat.rows(), mat.cols(), mxREAL);
+    //out = mxGetPr(m_out);
+    ObjectHandle::convert2matlab(mat, plhs[0], mat.cols(), mat.rows());
 }
 /**
  * @brief
@@ -146,9 +147,10 @@ void MCondition::getVector(int nlhs, mxArray* plhs[], int nrhs, const mxArray* p
 
     mxArray* m_out;
     double* out;
-    m_out = plhs[0] = mxCreateDoubleMatrix(vec.rows(), 1, mxREAL);
-    out = mxGetPr(m_out);
-    ObjectHandle::convert2matlab(vec, out, 1, vec.rows());
+    //m_out = 
+    plhs[0] = mxCreateDoubleMatrix(vec.rows(), 1, mxREAL);
+    //out = mxGetPr(m_out);
+    ObjectHandle::convert2matlab(vec, plhs[0], 1, vec.rows());
 }
 /**
  * @brief
@@ -199,10 +201,10 @@ void MCondition::setMatrix(int nlhs, mxArray* plhs[], int nrhs, const mxArray* p
     dims = mxGetDimensions(prhs[3]);
     dimx = dims[0];
     dimy = dims[1];
-    in_matrix = mxGetPr(m_in_matrix);
+    //in_matrix = mxGetPr(m_in_matrix);
 
     hypro::Condition<double>* cond = convertMat2Ptr<hypro::Condition<double>>(prhs[2]);
-    hypro::matrix_t<double> mat = ObjectHandle::mMatrix2Hypro(in_matrix, dimx, dimy);
+    hypro::matrix_t<double> mat = ObjectHandle::mMatrix2Hypro(m_in_matrix, dimx, dimy);
     cond->setMatrix(mat);
 
 }
@@ -223,10 +225,10 @@ void MCondition::setVector(int nlhs, mxArray* plhs[], int nrhs, const mxArray* p
     m_in_vector = mxDuplicateArray(prhs[3]);
     dims = mxGetDimensions(prhs[3]);
     len = dims[0];
-    in_vector = mxGetPr(m_in_vector);
+    // in_vector = mxGetPr(m_in_vector);
 
     hypro::Condition<double>* cond = convertMat2Ptr<hypro::Condition<double>>(prhs[2]);
-    hypro::matrix_t<double> vec = ObjectHandle::mVector2Hypro(in_vector, len);
+    hypro::matrix_t<double> vec = ObjectHandle::mVector2Hypro(m_in_vector, len);
     cond->setVector(vec);
 }
 /**

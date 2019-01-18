@@ -34,8 +34,8 @@ void MHyProConstraintSet::addConstraint(int nlhs, mxArray* plhs[], int nrhs, con
     dimy = (int) dims[0];
     dimx = (int) dims[1];
 
-    in_vector = mxGetPr(m_in_vector);
-    const hypro::vector_t<double> hy_vec = ObjectHandle::mVector2Hypro(in_vector, dimy);
+    // in_vector = mxGetPr(m_in_vector);
+    const hypro::vector_t<double> hy_vec = ObjectHandle::mVector2Hypro(m_in_vector, dimy);
 
     temp->addConstraint(hy_vec, offset);
 }

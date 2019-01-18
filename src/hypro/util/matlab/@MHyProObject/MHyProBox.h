@@ -14,13 +14,13 @@ class MHyProBox: public MHyProGeometricObject<hypro::Box<double>>{
     public:
         static void process(int, mxArray**, int, const mxArray**);
     private:
-        static void emptyBox(int, mxArray**, const mxArray**);
-        static void boxFromSingleInterval(int, mxArray**, const mxArray**);
-        static void boxFromIntervals(int, mxArray**, const mxArray**);
-        static void boxFromPoints(int, mxArray**, const mxArray**);
-        static void test(int, mxArray**, const mxArray**);
+        static void emptyBox(int, mxArray**, int, const mxArray**);
+        static void boxFromSingleInterval(int, mxArray**, int, const mxArray**);
+        static void boxFromIntervals(int, mxArray**, int, const mxArray**);
+        static void boxFromPoints(int, mxArray**, int,  const mxArray**);
+        static void test(int, mxArray**, int, const mxArray**);
         static void empty(int, mxArray**, int, const mxArray**);
-        static void intervals(int, mxArray**, const mxArray**);
+        static void intervals(int, mxArray**, int, const mxArray**);
         static void insert(int, mxArray**, int, const mxArray**);
         static void limits(int, mxArray**, int, const mxArray**);
         static void constraints(int, mxArray**, int, const mxArray**);

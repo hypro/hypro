@@ -174,7 +174,7 @@ new_intervals = box_30.intervals();
 disp('New intervals:');
 disp(new_intervals);
 
-% disp('Constraints');
+%disp('Constraints');
 % box_31 = MHyProObject('Box','new_intervals', [3 5; 2 4]);
 % [normal_vecs, offsets] = box_31.constraints();
 % disp(normal_vecs);
@@ -446,9 +446,9 @@ disp('Depth');
 depth = supf_2.depth();
 disp(depth);
 
-disp('Operation Count');
-opC = supf_1.operationCount();
-disp(opC);
+% disp('Operation Count');
+% opC = supf_1.operationCount();
+% disp(opC);
 
 disp('Contains Vector?');
 out = supf_2.contains_vec([1;0;0]);

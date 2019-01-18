@@ -29,12 +29,12 @@ void MLocation::new_matrix(int nlhs, mxArray* plhs[], int nrhs, const mxArray* p
     int dimx, dimy;
 
     m_in_matrix = mxDuplicateArray(prhs[2]);
-    in_matrix = mxGetPr(m_in_matrix);
+    // in_matrix = mxGetPr(m_in_matrix);
     dims = mxGetDimensions(prhs[2]);
     dimy = dims[0];
     dimx = dims[1];
 
-    hypro::matrix_t<double> mat = ObjectHandle::mMatrix2Hypro(in_matrix, dimx, dimy);
+    hypro::matrix_t<double> mat = ObjectHandle::mMatrix2Hypro(m_in_matrix, dimx, dimy);
     hypro::Location<double>* loc = new hypro::Location<double>(mat);
     plhs[0] = convertPtr2Mat<hypro::Location<double>>(loc);
 }
@@ -281,13 +281,13 @@ void MLocation::setExtInput(int nlhs, mxArray* plhs[], int nrhs , const mxArray*
     const mwSize* dims;
     int dimx, dimy;
 
-    m_in_intervals = mxDuplicateArray(prhs[3]);
-    in_intervals = mxGetPr(m_in_intervals);
+    //m_in_intervals = mxDuplicateArray(prhs[3]);
+    //in_intervals = mxGetPr(m_in_intervals);
     dims = mxGetDimensions(prhs[3]);
     dimy = dims[0];
     dimx = dims[1];
     hypro::Location<double>* loc = convertMat2Ptr<hypro::Location<double>>(prhs[2]);
-    std::vector<carl::Interval<double>> ints = ObjectHandle::mIntervals2Hypro(in_intervals, dimx, dimy);
+    std::vector<carl::Interval<double>> ints = ObjectHandle::mIntervals2Hypro(prhs[3], dimx, dimy);
 }
 
 /**
