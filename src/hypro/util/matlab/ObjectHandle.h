@@ -50,8 +50,8 @@ class ObjectHandle{
 
         static hypro::SOLUTION mSolution2Hypro(char*);
         static carl::Interval<double> mInterval2Hypro(const mxArray*);
-        static hypro::matrix_t<double> mMatrix2Hypro(mxArray*, const int, const int);
-        static hypro::vector_t<double> mVector2Hypro(mxArray*, const int);
+        static hypro::matrix_t<double> mMatrix2Hypro(const mxArray*, const int, const int);
+        static hypro::vector_t<double> mVector2Hypro(const mxArray*, const int);
         static hypro::Point<double> mPoint2Hypro(const mxArray*, const int);
         static hypro::Halfspace<double> mHalfspace2Hypro(mxArray*, const int, double&);
 
@@ -120,9 +120,10 @@ std::vector<T> objArray2Hypro(const mxArray* array_ptr, const int len){
 
 template<typename T>
 void objArray2Matlab(const std::vector<T>& vec, mxArray* m_array, const int len){
-    mxArray* cellElement;
+    double* array = mxGetPr(m_array);
     for(int i = 0; i < len; i++){
         auto item = vec[i];
+        // array[i] = convertPtr2Mat<T>(&item);
         mxSetCell(m_array, i, convertPtr2Mat<T>(&item));
     }
 }
@@ -307,7 +308,7 @@ std::vector<carl::Interval<double>> ObjectHandle::mPoints2Hypro(const mxArray* m
  * @param m_matrix Pointer to the Matlab matrix
  * @param dimx, dimy The dimensions of the matrix
  **/
-hypro::matrix_t<double> ObjectHandle::mMatrix2Hypro(mxArray* m_matrix, const int dimx, const int dimy){
+hypro::matrix_t<double> ObjectHandle::mMatrix2Hypro(const mxArray* m_matrix, const int dimx, const int dimy){
     double* matrix = mxGetPr(m_matrix);
     hypro::matrix_t<double> *hypro_matrix = new hypro::matrix_t<double>(dimx,dimy);
     for(int i = 0; i < dimx; i++){
@@ -323,7 +324,7 @@ hypro::matrix_t<double> ObjectHandle::mMatrix2Hypro(mxArray* m_matrix, const int
  * @param m_vector Pointer to the Matlab vector
  * @parma v_len Length of the vector
  **/
-hypro::vector_t<double> ObjectHandle::mVector2Hypro(mxArray* m_vector, const int v_len){
+hypro::vector_t<double> ObjectHandle::mVector2Hypro(const mxArray* m_vector, const int v_len){
     double* vector = mxGetPr(m_vector);
     hypro::vector_t<double> *hypro_vector = new hypro::vector_t<double>(v_len);
     for(int i = 0; i < v_len; i++){

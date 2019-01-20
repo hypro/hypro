@@ -427,26 +427,26 @@ sum.ostream();
 % Tests for HyPro Support Functions
 %**************************************************************************
 
-% mat = [1 0 0; 0 1 0; 0 0 1];
-% vec = [1;2;1];
-% supf_1 = MHyProObject('SupportFunction', 'new_matrix', mat);
-% supf_2 = MHyProObject('SupportFunction', 'new_mat_vec', mat, vec);
-% 
-% % Columns are the normal vectors
-% halfspaces_normal = [1 0 0; 0 1 0; 0 0 1];
-% halfspaces_offsets = [10;3;4];
-% supf_3 = MHyProObject('SupportFunction', 'new_halfspaces', halfspaces_normal, halfspaces_offsets);
-% disp('Support Function 3:');
-% mat = supf_3.matrix();
-% vec = supf_3.vector();
-% disp(mat);
-% disp(vec);
-% 
-% disp('Depth');
-% depth = supf_2.depth();
-% disp(depth);
-% 
-% % disp('Operation Count');
+mat = [1 0 0; 0 1 0; 0 0 1];
+vec = [1;2;1];
+supf_1 = MHyProObject('SupportFunction', 'new_matrix', mat);
+supf_2 = MHyProObject('SupportFunction', 'new_mat_vec', mat, vec);
+
+% Columns are the normal vectors
+halfspaces_normal = [1 0 0; 0 1 0; 0 0 1];
+halfspaces_offsets = [10;3;4];
+supf_3 = MHyProObject('SupportFunction', 'new_halfspaces', halfspaces_normal, halfspaces_offsets);
+disp('Support Function 3:');
+mat = supf_3.matrix();
+vec = supf_3.vector();
+disp(mat);
+disp(vec);
+
+disp('Depth');
+depth = supf_2.depth();
+disp(depth);
+
+% disp('Operation Count');
 % % opC = supf_1.operationCount();
 % % disp(opC);
 % 
