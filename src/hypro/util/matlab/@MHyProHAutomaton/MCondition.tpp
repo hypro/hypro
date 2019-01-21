@@ -22,23 +22,16 @@ void MCondition::new_mat_vec(int nlhs, mxArray* plhs[], int nrhs, const mxArray*
     if(nrhs > 4)
         mexWarnMsgTxt("MCondition - new_mat_vec: One or more input arguments were ignored!");
 
-    mxArray *m_in_matrix, *m_in_vector;
-    double *in_matrix, *in_vector;
     const mwSize *mat_dims, *vec_dims;
     int mat_dimx, mat_dimy, vec_len;
-
-    m_in_matrix = mxDuplicateArray(prhs[2]);
-    m_in_vector = mxDuplicateArray(prhs[3]);
     mat_dims = mxGetDimensions(prhs[2]);
     vec_dims = mxGetDimensions(prhs[3]);
     mat_dimy = mat_dims[0];
     mat_dimx = mat_dims[1];
     vec_len = vec_dims[0];
-    // in_matrix = mxGetPr(m_in_matrix);
-    // in_vector = mxGetPr(m_in_vector);
 
-    hypro::matrix_t<double> matrix = ObjectHandle::mMatrix2Hypro(m_in_matrix, mat_dimx, mat_dimy);
-    hypro::vector_t<double> vector = ObjectHandle::mVector2Hypro(m_in_vector, vec_len);
+    hypro::matrix_t<double> matrix = ObjectHandle::mMatrix2Hypro(prhs[2], mat_dimx, mat_dimy);
+    hypro::vector_t<double> vector = ObjectHandle::mVector2Hypro(prhs[3], vec_len);
     hypro::Condition<double>* cond = new hypro::Condition<double>(matrix, vector);
     plhs[0] = convertPtr2Mat<hypro::Condition<double>>(cond);
 
@@ -128,7 +121,7 @@ void MCondition::getMatrix(int nlhs, mxArray* plhs[], int nrhs, const mxArray* p
     //m_out = 
     plhs[0] = mxCreateDoubleMatrix(mat.rows(), mat.cols(), mxREAL);
     //out = mxGetPr(m_out);
-    ObjectHandle::convert2matlab(mat, plhs[0], mat.cols(), mat.rows());
+    ObjectHandle::convert2Matlab(mat, plhs[0], mat.cols(), mat.rows());
 }
 /**
  * @brief
@@ -147,10 +140,8 @@ void MCondition::getVector(int nlhs, mxArray* plhs[], int nrhs, const mxArray* p
 
     mxArray* m_out;
     double* out;
-    //m_out = 
     plhs[0] = mxCreateDoubleMatrix(vec.rows(), 1, mxREAL);
-    //out = mxGetPr(m_out);
-    ObjectHandle::convert2matlab(vec, plhs[0], 1, vec.rows());
+    ObjectHandle::convert2Matlab(vec, plhs[0], 1, vec.rows());
 }
 /**
  * @brief
@@ -192,19 +183,14 @@ void MCondition::setMatrix(int nlhs, mxArray* plhs[], int nrhs, const mxArray* p
     if(nrhs > 4)
         mexErrMsgTxt("MCondition - setMatrix: One or more arguments were ignored!");
     
-    mxArray* m_in_matrix;
-    double* in_matrix;
     const mwSize* dims;
     int dimx, dimy;
-
-    m_in_matrix = mxDuplicateArray(prhs[3]);
     dims = mxGetDimensions(prhs[3]);
     dimx = dims[0];
     dimy = dims[1];
-    //in_matrix = mxGetPr(m_in_matrix);
 
     hypro::Condition<double>* cond = convertMat2Ptr<hypro::Condition<double>>(prhs[2]);
-    hypro::matrix_t<double> mat = ObjectHandle::mMatrix2Hypro(m_in_matrix, dimx, dimy);
+    hypro::matrix_t<double> mat = ObjectHandle::mMatrix2Hypro(prhs[3], dimx, dimy);
     cond->setMatrix(mat);
 
 }
@@ -217,18 +203,13 @@ void MCondition::setVector(int nlhs, mxArray* plhs[], int nrhs, const mxArray* p
     if(nrhs > 4)
         mexErrMsgTxt("MCondition - setVector: One or more arguments were ignored!");
     
-    mxArray* m_in_vector;
-    double* in_vector;
     const mwSize* dims;
     int len;
-
-    m_in_vector = mxDuplicateArray(prhs[3]);
     dims = mxGetDimensions(prhs[3]);
     len = dims[0];
-    // in_vector = mxGetPr(m_in_vector);
 
     hypro::Condition<double>* cond = convertMat2Ptr<hypro::Condition<double>>(prhs[2]);
-    hypro::matrix_t<double> vec = ObjectHandle::mVector2Hypro(m_in_vector, len);
+    hypro::matrix_t<double> vec = ObjectHandle::mVector2Hypro(prhs[3], len);
     cond->setVector(vec);
 }
 /**
@@ -369,7 +350,7 @@ void MCondition::process(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prh
 // Get the command string
     char cmd[64];
     if (nrhs < 1 || mxGetString(prhs[1], cmd, sizeof(cmd)))
-        mexErrMsgTxt("MHybridAutomaton - First input should be a command string less than 64 characters long.");
+        mexErrMsgTxt("MCondition - First input should be a command string less than 64 characters long.");
 
     if (!strcmp("new_empty", cmd) && nrhs == 2){  
         new_empty(nlhs, plhs, nrhs, prhs);
@@ -390,7 +371,6 @@ void MCondition::process(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prh
         copy(nlhs, plhs, nrhs, prhs);
         return;
     }
-
 
     if (!strcmp("delete_condition", cmd) && nrhs == 2){  
         delete_condition(nlhs, plhs, nrhs, prhs);
@@ -477,6 +457,6 @@ void MCondition::process(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prh
         return;
     }
 
-    mexErrMsgTxt("MHybridAutomaton - Command not recognized.");
+    mexErrMsgTxt("MCondition - Command not recognized.");
 
 }

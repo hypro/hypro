@@ -55,7 +55,6 @@
         mexErrMsgTxt("HyProEllipse - approxEllipsoidTMatrix: One or more arguments are missing!");
     
     const mwSize *dims;
-    double *in_matrix;
     int dimx, dimy;
 
     hypro::Ellipsoid<double>* ellipse = convertMat2Ptr<hypro::Ellipsoid<double>>(prhs[2]);

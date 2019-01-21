@@ -23,12 +23,10 @@ void MLocation::new_matrix(int nlhs, mxArray* plhs[], int nrhs, const mxArray* p
     if(nrhs > 3)
          mexErrMsgTxt("MLocation - new_matrix: One or more arguments were ignored.");
 
-    mxArray* m_in_matrix;
     double* in_matrix;
     const mwSize* dims;
     int dimx, dimy;
 
-    //m_in_matrix = mxDuplicateArray(prhs[2]);
     dims = mxGetDimensions(prhs[2]);
     dimy = dims[0];
     dimx = dims[1];
@@ -91,35 +89,85 @@ void MLocation::getNumberFlow(int nlhs, mxArray* plhs[], int nrhs, const mxArray
  * @brief
  **/
 void MLocation::getLinearFlow(int nlhs, mxArray* plhs[], int nrhs , const mxArray* prhs[]){
-    //TODO
+    if(nlhs != 1)
+         mexErrMsgTxt("MLocation - getLinearFlow: Expecting an output.");
+    if(nrhs < 3)
+         mexErrMsgTxt("MLocation - getLinearFlow: One or more arguments are missing.");
+    if(nrhs > 3)
+         mexErrMsgTxt("MLocation - getLinearFlow: One or more arguments were ignored.");
+
+    hypro::Location<double>* loc = convertMat2Ptr<hypro::Location<double>>(prhs[2]);
+    hypro::linearFlow<double> flow = loc->getLinearFlow();
+    plhs[0] = convertPtr2Mat<hypro::linearFlow<double>>(new hypro::linearFlow<double>(flow));
 }
 
 /**
  * @brief
  **/
 void MLocation::getLinearFlows(int nlhs, mxArray* plhs[], int nrhs , const mxArray* prhs[]){
-    //TODO
+    if(nlhs != 1)
+         mexErrMsgTxt("MLocation - getLinearFlows: Expecting an output.");
+    if(nrhs < 3)
+         mexErrMsgTxt("MLocation - getLinearFlows: One or more arguments are missing.");
+    if(nrhs > 3)
+         mexErrMsgTxt("MLocation - getLinearFlows: One or more arguments were ignored.");
+
+    hypro::Location<double>* loc = convertMat2Ptr<hypro::Location<double>>(prhs[2]);
+    std::vector<hypro::linearFlow<double>> flows = loc->getLinearFlows();
+    int len = flows.size();
+    const mwSize dims[2] = {1, (mwSize) len};
+    plhs[0]  = mxCreateCellArray(2,dims);
+    objArray2Matlab(flows, plhs[0], len);
 }
 
 /**
  * @brief
  **/
 void MLocation::getInvariant(int nlhs, mxArray* plhs[], int nrhs , const mxArray* prhs[]){
+    if(nlhs != 1)
+         mexErrMsgTxt("MLocation - getInvariant: Expecting an output.");
+    if(nrhs < 3)
+         mexErrMsgTxt("MLocation - getInvariant: One or more arguments are missing.");
+    if(nrhs > 3)
+         mexErrMsgTxt("MLocation - getInvariant: One or more arguments were ignored.");
 
+    hypro::Location<double>* loc = convertMat2Ptr<hypro::Location<double>>(prhs[2]);
+    hypro::Condition<double> cond = loc->getInvariant();
+    plhs[0] = convertPtr2Mat<hypro::Condition<double>>(new hypro::Condition<double>(cond));
 }
 
 /**
  * @brief
  **/
 void MLocation::getTransitions(int nlhs, mxArray* plhs[], int nrhs , const mxArray* prhs[]){
+    if(nlhs != 1)
+         mexErrMsgTxt("MLocation - getTransitions: Expecting an output.");
+    if(nrhs < 3)
+         mexErrMsgTxt("MLocation - getTransitions: One or more arguments are missing.");
+    if(nrhs > 3)
+         mexErrMsgTxt("MLocation - getTransitions: One or more arguments were ignored.");
 
+    hypro::Location<double>* loc = convertMat2Ptr<hypro::Location<double>>(prhs[2]);
+    std::vector<hypro::Transition<double>*> transitions = loc->getTransitions();
+    //TODO
+    // plhs[0] = objArray2Matlab(transitions, plhs[0], len);
 }
 
 /**
  * @brief
  **/
 void MLocation::getExternalInput(int nlhs, mxArray* plhs[], int nrhs , const mxArray* prhs[]){
+    if(nlhs != 1)
+         mexErrMsgTxt("MLocation - getExternalInput: Expecting an output.");
+    if(nrhs < 3)
+         mexErrMsgTxt("MLocation - getExternalInput: One or more arguments are missing.");
+    if(nrhs > 3)
+         mexErrMsgTxt("MLocation - getExternalInput: One or more arguments were ignored.");
 
+    hypro::Location<double>* loc = convertMat2Ptr<hypro::Location<double>>(prhs[2]);
+    std::vector<carl::Interval<double>> input = loc->getExternalInput();
+    plhs[0] = mxCreateDoubleMatrix(1, input.size(), mxREAL);
+    vector2Matlab<carl::Interval<double>>(input, plhs[0]);
 }
 
 /**
@@ -221,34 +269,63 @@ void MLocation::setName(int nlhs, mxArray* plhs[], int nrhs , const mxArray* prh
  * @brief
  **/
 void MLocation::setLinearFlow(int nlhs, mxArray* plhs[], int nrhs , const mxArray* prhs[]){
-    if(nrhs < 4)
+    if(nrhs < 5)
          mexErrMsgTxt("MLocation - setFlow: One or more arguments are missing.");
-    if(nrhs > 4)
+    if(nrhs > 5)
          mexErrMsgTxt("MLocation - setFlow: One or more arguments were ignored.");
     
     hypro::Location<double>* loc = convertMat2Ptr<hypro::Location<double>>(prhs[2]);
-    //TODO
+    const hypro::linearFlow<double>* flow = convertMat2Ptr<hypro::linearFlow<double>>(prhs[3]);
+    std::size_t i = (std::size_t) mxGetScalar(prhs[4]);
+    loc->setLinearFlow(*flow, i);
 }
 
 /**
  * @brief
  **/
 void MLocation::setLinearFlow_vec(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
-    
+    if(nrhs < 4)
+         mexErrMsgTxt("MLocation - setFlow_vec: One or more arguments are missing.");
+    if(nrhs > 4)
+         mexErrMsgTxt("MLocation - setFlow_vec: One or more arguments were ignored.");
+
+    const mwSize* dims;
+    int len;
+    dims = mxGetDimensions(prhs[3]);
+    len = dims[0];
+
+    hypro::Location<double>* loc = convertMat2Ptr<hypro::Location<double>>(prhs[2]);
+    const std::vector<hypro::linearFlow<double>> flows = objArray2Hypro<hypro::linearFlow<double>>(prhs[3], len);
+    loc->setLinearFlow(flows);
 }
 
 /**
  * @brief
  **/
 void MLocation::setInvariant(int nlhs, mxArray* plhs[], int nrhs , const mxArray* prhs[]){
+    if(nrhs < 4)
+         mexErrMsgTxt("MLocation - setInvariant: One or more arguments are missing.");
+    if(nrhs > 4)
+         mexErrMsgTxt("MLocation - setInvariant: One or more arguments were ignored.");
 
+    hypro::Location<double>* loc = convertMat2Ptr<hypro::Location<double>>(prhs[2]);
+    hypro::Condition<double>* cond = convertMat2Ptr<hypro::Condition<double>>(prhs[3]);
+    loc->setInvariant(*cond);
 }
 
 /**
  * @brief
  **/
 void MLocation::setTransition(int nlhs, mxArray* plhs[], int nrhs , const mxArray* prhs[]){
+    if(nrhs < 4)
+         mexErrMsgTxt("MLocation - setTransition: One or more arguments are missing.");
+    if(nrhs > 4)
+         mexErrMsgTxt("MLocation - setTransition: One or more arguments were ignored.");
 
+    hypro::Location<double>* loc = convertMat2Ptr<hypro::Location<double>>(prhs[2]);
+    //TODO
+    // hypro::Transition<double>* tran = convertMat2Ptr<hypro::Transition<double>>(prhs[3]);
+    // loc->setTransition(*tran);
 }
 
 /**
@@ -275,13 +352,9 @@ void MLocation::setExtInput(int nlhs, mxArray* plhs[], int nrhs , const mxArray*
     if(nrhs > 4)
          mexErrMsgTxt("MLocation - setExtInput: One or more arguments were ignored.");
 
-    mxArray* m_in_intervals;
-    double* in_intervals;
     const mwSize* dims;
     int dimx, dimy;
 
-    //m_in_intervals = mxDuplicateArray(prhs[3]);
-    //in_intervals = mxGetPr(m_in_intervals);
     dims = mxGetDimensions(prhs[3]);
     dimy = dims[0];
     dimx = dims[1];
@@ -327,42 +400,97 @@ void MLocation::isComposedOf(int nlhs, mxArray* plhs[], int nrhs, const mxArray*
  * @brief
  **/
 void MLocation::getDotRepresentation(int nlhs, mxArray* plhs[], int nrhs , const mxArray* prhs[]){
+    if(nlhs != 1)
+        mexErrMsgTxt("MLocation - getDotRepresentation: Expecting an output!");
+    if(nrhs < 4)
+        mexErrMsgTxt("MLocation - getDotRepresentation: One or more arguments are missing!");
+    if(nrhs > 4)
+        mexWarnMsgTxt("MLocation - getDotRepresentation: One or more arguments were ignored.");
+    
+    const mwSize* dims;
+    int len;
+    dims = mxGetDimensions(prhs[3]);
+    len = dims[0];
 
+    hypro::Location<double>* loc = convertMat2Ptr<hypro::Location<double>>(prhs[2]);
+    std::vector<std::string> vars = ObjectHandle::mStringVector2Hypro(prhs[3], len);
+    std::string rep = loc->getDotRepresentation(vars);
+    plhs[0] = mxCreateString(rep.c_str());
 }
 
 /**
  * @brief
  **/
 void MLocation::decompose(int nlhs, mxArray* plhs[], int nrhs , const mxArray* prhs[]){
-
+    //TODO
 }
 
 /**
  * @brief
  **/
 void MLocation::less(int nlhs, mxArray* plhs[], int nrhs , const mxArray* prhs[]){
+    if(nlhs != 1)
+        mexErrMsgTxt("MLocation - less: Expecting an output!");
+    if(nrhs < 4)
+        mexErrMsgTxt("MLocation - less: One or more arguments are missing!");
+    if(nrhs > 4)
+        mexWarnMsgTxt("MLocation - less: One or more arguments were ignored.");
+    
+    hypro::Location<double>* loc_1 = convertMat2Ptr<hypro::Location<double>>(prhs[2]);
+    hypro::Location<double>* loc_2 = convertMat2Ptr<hypro::Location<double>>(prhs[3]);
 
+    mxLogical ans = false;
+    if(*loc_1 < *loc_2)
+        ans = true;
+    plhs[0] = mxCreateLogicalScalar(ans);
+    
 }
 
 /**
  * @brief
  **/
 void MLocation::equals(int nlhs, mxArray* plhs[], int nrhs , const mxArray* prhs[]){
+    if(nlhs != 1)
+        mexErrMsgTxt("MLocation - equals: Expecting an output!");
+    if(nrhs < 4)
+        mexErrMsgTxt("MLocation - equals: One or more arguments are missing!");
+    if(nrhs > 4)
+        mexWarnMsgTxt("MLocation - equals: One or more arguments were ignored.");
+    
+    hypro::Location<double>* loc_1 = convertMat2Ptr<hypro::Location<double>>(prhs[2]);
+    hypro::Location<double>* loc_2 = convertMat2Ptr<hypro::Location<double>>(prhs[3]);
 
+    mxLogical ans = false;
+    if(*loc_1 == *loc_2)
+        ans = true;
+    plhs[0] = mxCreateLogicalScalar(ans);
 }
 
 /**
  * @brief
  **/
 void MLocation::unequals(int nlhs, mxArray* plhs[], int nrhs , const mxArray* prhs[]){
+    if(nlhs != 1)
+        mexErrMsgTxt("MLocation - unequals: Expecting an output!");
+    if(nrhs < 4)
+        mexErrMsgTxt("MLocation - unequals: One or more arguments are missing!");
+    if(nrhs > 4)
+        mexWarnMsgTxt("MLocation - unequals: One or more arguments were ignored.");
+    
+    hypro::Location<double>* loc_1 = convertMat2Ptr<hypro::Location<double>>(prhs[2]);
+    hypro::Location<double>* loc_2 = convertMat2Ptr<hypro::Location<double>>(prhs[3]);
 
+    mxLogical ans = false;
+    if(*loc_1 != *loc_2)
+        ans = true;
+    plhs[0] = mxCreateLogicalScalar(ans);
 }
 
 /**
  * @brief
  **/
 void MLocation::outstream(int nlhs, mxArray* plhs[], int nrhs , const mxArray* prhs[]){
-
+    //TODO
 }
 
 

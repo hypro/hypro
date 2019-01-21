@@ -18,7 +18,7 @@ void MHyProGeometricObject<T>::new_matrix(int nlhs, mxArray* plhs[], int nrhs, c
     mat_dimx = (int) mat_dims[1];
 
     hypro::matrix_t<double> matrix = ObjectHandle::mMatrix2Hypro(prhs[2], mat_dimx, mat_dimy);
-    plhs[0] =  convertPtr2Mat<T>(new T(matrix));
+    plhs[0] = convertPtr2Mat<T>(new T(matrix));
 }
 
 /**
@@ -40,7 +40,7 @@ void MHyProGeometricObject<T>::new_vector(int nlhs, mxArray* plhs[], int nrhs, c
     hypro::vector_t<double> vector = ObjectHandle::mVector2Hypro(prhs[3], vec_dimy);
 
     T* temp = new T(vector);
-    plhs[0] =  convertPtr2Mat<T>(temp);
+    plhs[0] = convertPtr2Mat<T>(temp);
 }
 
 /**
@@ -87,10 +87,11 @@ void MHyProGeometricObject<T>::new_mat_vec(int nlhs, mxArray* plhs[], int nrhs, 
  **/
 template<class T>
 void MHyProGeometricObject<T>::deleteObject(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
+    if(nrhs < 3)
+        mexErrMsgTxt("MHyProGeometricObject - deleteObject: One or more arguments are missing.");
+    if(nrhs > 3)
+        mexWarnMsgTxt("MHyProGeometricObject - deleteObject: One or more arguments were ignored.");
     destroyObject<T>(prhs[2]);
-    // Warn if other commands were ignored
-    if (nlhs != 0 || nrhs != 3)
-        mexWarnMsgTxt("MHyProGeometricObject - delete: Unexpected arguments ignored.");
 }
 
 /**
@@ -335,7 +336,6 @@ void MHyProGeometricObject<T>::satisfiesHalfspaces(int nlhs, mxArray* plhs[], in
 
     mxArray *out_box, *out_cont;
     const mwSize *mat_dims, *vec_dims;
-    double *in_matrix, *in_vector, *cont;
     int mat_dimx, mat_dimy, vec_len;
 
     T* temp = convertMat2Ptr<T>(prhs[2]);

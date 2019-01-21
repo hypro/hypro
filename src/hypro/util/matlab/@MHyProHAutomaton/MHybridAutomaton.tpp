@@ -8,7 +8,7 @@
             mexErrMsgTxt("MAutomatonComponents - new_empty: Expecting an output.");
 
         hypro::HybridAutomaton<double>* temp = new hypro::HybridAutomaton<double>();
-        plhs[0] =  convertPtr2Mat<hypro::HybridAutomaton<double>>(temp);
+        plhs[0] = convertPtr2Mat<hypro::HybridAutomaton<double>>(temp);
     }
 
     /**
