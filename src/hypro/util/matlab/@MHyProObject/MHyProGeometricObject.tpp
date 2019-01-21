@@ -10,17 +10,14 @@ void MHyProGeometricObject<T>::new_matrix(int nlhs, mxArray* plhs[], int nrhs, c
     if(nrhs != 3)
         mexErrMsgTxt("MHyProGeometricObject - new_matrix: One or more arguments are missing!");
 
-    mxArray *m_in_matrix;
     const mwSize *mat_dims;
     int mat_dimx, mat_dimy;
-
-    m_in_matrix = mxDuplicateArray(prhs[2]);
 
     mat_dims = mxGetDimensions(prhs[2]);
     mat_dimy = (int) mat_dims[0];
     mat_dimx = (int) mat_dims[1];
 
-    hypro::matrix_t<double> matrix = ObjectHandle::mMatrix2Hypro(m_in_matrix, mat_dimx, mat_dimy);
+    hypro::matrix_t<double> matrix = ObjectHandle::mMatrix2Hypro(prhs[2], mat_dimx, mat_dimy);
     plhs[0] =  convertPtr2Mat<T>(new T(matrix));
 }
 
@@ -34,16 +31,13 @@ void MHyProGeometricObject<T>::new_vector(int nlhs, mxArray* plhs[], int nrhs, c
     if(nrhs != 4)
         mexErrMsgTxt("MHyProGeometricObject - new_vector: One or more arguments are missing!");
 
-    mxArray *m_in_vector;
     double *in_vector;
     const mwSize *vec_dims;
     int mat_dimx, mat_dimy, vec_dimy;
-
-    m_in_vector = mxDuplicateArray(prhs[3]);
     vec_dims = mxGetDimensions(prhs[3]);
     vec_dimy = (int) vec_dims[0];
 
-    hypro::vector_t<double> vector = ObjectHandle::mVector2Hypro(m_in_vector, vec_dimy);
+    hypro::vector_t<double> vector = ObjectHandle::mVector2Hypro(prhs[3], vec_dimy);
 
     T* temp = new T(vector);
     plhs[0] =  convertPtr2Mat<T>(temp);
@@ -73,12 +67,8 @@ void MHyProGeometricObject<T>::new_mat_vec(int nlhs, mxArray* plhs[], int nrhs, 
     if(nrhs != 4)
         mexErrMsgTxt("MHyProGeometricObject - new_mat_vec: One or more arguments are missing!");
 
-    mxArray *m_in_matrix, *m_in_vector;
     const mwSize *mat_dims, *vec_dims;
     int mat_dimx, mat_dimy, vec_dimy;
-
-    m_in_matrix = mxDuplicateArray(prhs[2]);
-    m_in_vector = mxDuplicateArray(prhs[3]);
 
     mat_dims = mxGetDimensions(prhs[2]);
     mat_dimy = (int) mat_dims[0];
@@ -86,10 +76,8 @@ void MHyProGeometricObject<T>::new_mat_vec(int nlhs, mxArray* plhs[], int nrhs, 
     vec_dims = mxGetDimensions(prhs[3]);
     vec_dimy = (int) vec_dims[0];
 
-    hypro::matrix_t<double> matrix = ObjectHandle::mMatrix2Hypro(m_in_matrix, mat_dimx, mat_dimy);
-    hypro::vector_t<double> vector = ObjectHandle::mVector2Hypro(m_in_vector, vec_dimy);
-
-    // T* temp = new T(matrix, vector);
+    hypro::matrix_t<double> matrix = ObjectHandle::mMatrix2Hypro(prhs[2], mat_dimx, mat_dimy);
+    hypro::vector_t<double> vector = ObjectHandle::mVector2Hypro(prhs[3], vec_dimy);
     plhs[0] =  convertPtr2Mat<T>(new T(matrix, vector));
 }
 
@@ -313,21 +301,17 @@ void MHyProGeometricObject<T>::satisfiesHalfspace(int nlhs, mxArray* plhs[], int
     if(nrhs < 5)
         mexErrMsgTxt("MHyProGeometricObject - satisfiesHalfspace: One or more arguments are missing!");
 
-    mxArray* m_in_normal, *out_box, *out_cont;
+    mxArray* *out_box, *out_cont;
     const mwSize *dims;
     double *in_normal, *cont;
     int dimx, dimy;
 
     T* temp = convertMat2Ptr<T>(prhs[2]);
-    m_in_normal = mxDuplicateArray(prhs[3]);
     const int offset = (const int) mxGetScalar(prhs[4]);
     dims = mxGetDimensions(prhs[3]);
     dimy = (int) dims[0];
     dimx = (int) dims[1];
-
-    // in_normal = mxGetPr(m_in_normal);
-
-    const hypro::vector_t<double> hy_normal = ObjectHandle::mVector2Hypro(m_in_normal, dimy);
+    const hypro::vector_t<double> hy_normal = ObjectHandle::mVector2Hypro(prhs[3], dimy);
     const hypro::Halfspace<double> hSpace = hypro::Halfspace<double>(hy_normal,offset);
 
     std::pair<hypro::CONTAINMENT, T> p = temp->satisfiesHalfspace(hSpace);
@@ -349,25 +333,20 @@ void MHyProGeometricObject<T>::satisfiesHalfspaces(int nlhs, mxArray* plhs[], in
     if(nrhs < 5)
         mexErrMsgTxt("MHyProGeometricObject - satisfiesHalfspaces: One or more arguments are missing!");
 
-    mxArray *m_in_matrix, *m_in_vector, *out_box, *out_cont;
+    mxArray *out_box, *out_cont;
     const mwSize *mat_dims, *vec_dims;
     double *in_matrix, *in_vector, *cont;
     int mat_dimx, mat_dimy, vec_len;
 
     T* temp = convertMat2Ptr<T>(prhs[2]);
-    m_in_matrix = mxDuplicateArray(prhs[3]);
-    m_in_vector = mxDuplicateArray(prhs[4]);
     mat_dims = mxGetDimensions(prhs[3]);
     vec_dims = mxGetDimensions(prhs[4]);
     mat_dimy = (int) mat_dims[0];
     mat_dimx = (int) mat_dims[1];
     vec_len = (int) vec_dims[0];
 
-    // in_matrix = mxGetPr(m_in_matrix);
-    // in_vector = mxGetPr(m_in_vector);
-
-    const hypro::matrix_t<double> hy_matrix = ObjectHandle::mMatrix2Hypro(m_in_matrix, mat_dimx, mat_dimy);
-    const hypro::vector_t<double> hy_vector = ObjectHandle::mVector2Hypro(m_in_vector, vec_len);
+    const hypro::matrix_t<double> hy_matrix = ObjectHandle::mMatrix2Hypro(prhs[3], mat_dimx, mat_dimy);
+    const hypro::vector_t<double> hy_vector = ObjectHandle::mVector2Hypro(prhs[4], vec_len);
     std::pair<hypro::CONTAINMENT, T> p = temp->satisfiesHalfspaces(hy_matrix, hy_vector);
 
     std::string ans = "";
@@ -416,19 +395,15 @@ void MHyProGeometricObject<T>::linearTransformation(int nlhs, mxArray* plhs[], i
     if(nrhs < 4)
         mexErrMsgTxt("MHyProGeometricObject - linearTransformation: One or more arguments are missing!");
     
-    mxArray *m_in_matrix;
     const mwSize *dims;
     double *in_matrix;
     int dimx, dimy;
 
     T* obj = convertMat2Ptr<T>(prhs[2]);
-    m_in_matrix = mxDuplicateArray(prhs[3]);
     dims = mxGetDimensions(prhs[3]);
     dimy = (int) dims[0];
     dimx = (int) dims[1];
-
-    // in_matrix = mxGetPr(m_in_matrix);
-    hypro::matrix_t<double> mat = ObjectHandle::mMatrix2Hypro(m_in_matrix, dimx, dimy);
+    hypro::matrix_t<double> mat = ObjectHandle::mMatrix2Hypro(prhs[3], dimx, dimy);
 
     T temp = obj->linearTransformation(mat);
     T* b = new T(temp);
@@ -444,27 +419,20 @@ void MHyProGeometricObject<T>::affineTransformation(int nlhs, mxArray* plhs[], i
         mexErrMsgTxt("MHyProGeometricObject - affineTransformation: Expecting one output value!");
     if(nrhs < 5)
         mexErrMsgTxt("MHyProGeometricObject - affineTransformation: One or more arguments are missing!");
-    
-    mxArray *m_in_matrix, *m_in_vector;
+
     const mwSize *mat_dims, *vec_dims;
     double *in_matrix, *in_vector;
     int mat_dimx, mat_dimy, vec_len;
 
     T* obj = convertMat2Ptr<T>(prhs[2]);
-    m_in_matrix = mxDuplicateArray(prhs[3]);
-    m_in_vector = mxDuplicateArray(prhs[4]);
     mat_dims = mxGetDimensions(prhs[3]);
     vec_dims = mxGetDimensions(prhs[4]);
     mat_dimy = (int) mat_dims[0];
     mat_dimx = (int) mat_dims[1];
     vec_len = (int) vec_dims[0];
 
-    // in_matrix = mxGetPr(m_in_matrix);
-    // in_vector = mxGetPr(m_in_vector);
-
-    hypro::matrix_t<double> mat = ObjectHandle::mMatrix2Hypro(m_in_matrix, mat_dimx, mat_dimy);
-    hypro::vector_t<double> vec = ObjectHandle::mVector2Hypro(m_in_vector, vec_len);
-
+    hypro::matrix_t<double> mat = ObjectHandle::mMatrix2Hypro(prhs[3], mat_dimx, mat_dimy);
+    hypro::vector_t<double> vec = ObjectHandle::mVector2Hypro(prhs[4], vec_len);
 
     T temp = obj->affineTransformation(mat, vec);
     T* b = new T(temp);
@@ -518,21 +486,18 @@ void MHyProGeometricObject<T>::intersectHalfspace(int nlhs, mxArray* plhs[], int
     if(nrhs < 5)
         mexErrMsgTxt("MHyProGeometricObject - intersectHalfspace: One or more arguments are missing!");
 
-    mxArray* m_in_normal, *out_box, *out_cont;
+    mxArray *out_box, *out_cont;
     const mwSize *dims;
     double *in_normal, *cont;
     int dimx, dimy;
 
     T* obj = convertMat2Ptr<T>(prhs[2]);
-    m_in_normal = mxDuplicateArray(prhs[3]);
     const int offset = (const int) mxGetScalar(prhs[4]);
     dims = mxGetDimensions(prhs[3]);
     dimy = (int) dims[0];
     dimx = (int) dims[1];
 
-    // in_normal = mxGetPr(m_in_normal);
-
-    const hypro::vector_t<double> hy_normal = ObjectHandle::mVector2Hypro(m_in_normal, dimy);
+    const hypro::vector_t<double> hy_normal = ObjectHandle::mVector2Hypro(prhs[3], dimy);
     const hypro::Halfspace<double> hSpace = hypro::Halfspace<double>(hy_normal,offset);
 
     T temp = obj->intersectHalfspace(hSpace);
@@ -549,27 +514,20 @@ void MHyProGeometricObject<T>::intersectHalfspaces(int nlhs, mxArray* plhs[], in
         mexErrMsgTxt("MHyProGeometricObject - intersectHalfspaces: Expecting one output value!");
     if(nrhs < 5)
         mexErrMsgTxt("MHyProGeometricObject - intersectHalfspaces: One or more arguments are missing!");
-    
-    mxArray *m_in_matrix, *m_in_vector;
+
     const mwSize *mat_dims, *vec_dims;
     double *in_matrix, *in_vector;
     int mat_dimx, mat_dimy, vec_len;
 
     T* obj = convertMat2Ptr<T>(prhs[2]);
-    m_in_matrix = mxDuplicateArray(prhs[3]);
-    m_in_vector = mxDuplicateArray(prhs[4]);
     mat_dims = mxGetDimensions(prhs[3]);
     vec_dims = mxGetDimensions(prhs[4]);
     mat_dimy = (int) mat_dims[0];
     mat_dimx = (int) mat_dims[1];
     vec_len = (int) vec_dims[0];
 
-    // in_matrix = mxGetPr(m_in_matrix);
-    // in_vector = mxGetPr(m_in_vector);
-
-    hypro::matrix_t<double> mat = ObjectHandle::mMatrix2Hypro(m_in_matrix, mat_dimx, mat_dimy);
-    hypro::vector_t<double> vec = ObjectHandle::mVector2Hypro(m_in_vector, vec_len);
-
+    hypro::matrix_t<double> mat = ObjectHandle::mMatrix2Hypro(prhs[3], mat_dimx, mat_dimy);
+    hypro::vector_t<double> vec = ObjectHandle::mVector2Hypro(prhs[4], vec_len);
 
     T temp = obj->intersectHalfspaces(mat, vec);
     T* b = new T(temp);

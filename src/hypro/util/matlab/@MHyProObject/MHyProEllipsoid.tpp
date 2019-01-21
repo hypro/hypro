@@ -20,20 +20,18 @@
         mexErrMsgTxt("MHyProEllipsoid - evaluate: Expecting an output!");
     if(nrhs < 5)
         mexErrMsgTxt("MHyProEllipsoid - evaluate: One or more arguments are missing!");
-    mxArray *m_in_vector;
+
     const mwSize *dims_vec;
     int vec_len;
     bool ans;
 
     hypro::Ellipsoid<double>* ellipse = convertMat2Ptr<hypro::Ellipsoid<double>>(prhs[2]);
-
-    m_in_vector = mxDuplicateArray(prhs[3]);
     const double dir = (double) mxGetScalar(prhs[4]);
 
     dims_vec = mxGetDimensions(prhs[3]);
     vec_len = (int) dims_vec[0];
 
-    hypro::vector_t<double> vec = ObjectHandle::mVector2Hypro(m_in_vector, vec_len);
+    hypro::vector_t<double> vec = ObjectHandle::mVector2Hypro(prhs[3], vec_len);
 
     if(dir == 0){
         ans = false;
@@ -56,18 +54,16 @@
     if(nrhs < 4)
         mexErrMsgTxt("HyProEllipse - approxEllipsoidTMatrix: One or more arguments are missing!");
     
-    mxArray *m_in_matrix;
     const mwSize *dims;
     double *in_matrix;
     int dimx, dimy;
 
     hypro::Ellipsoid<double>* ellipse = convertMat2Ptr<hypro::Ellipsoid<double>>(prhs[2]);
-    m_in_matrix = mxDuplicateArray(prhs[3]);
     dims = mxGetDimensions(prhs[3]);
     dimy = (int) dims[0];
     dimx = (int) dims[1];
 
-    hypro::matrix_t<double> mat = ObjectHandle::mMatrix2Hypro(m_in_matrix, dimx, dimy);
+    hypro::matrix_t<double> mat = ObjectHandle::mMatrix2Hypro(prhs[3], dimx, dimy);
 
     hypro::matrix_t<double> out_mat = ellipse->approxEllipsoidTMatrix(mat);
     plhs[0] = mxCreateDoubleMatrix(out_mat.rows(), out_mat.cols(), mxREAL);

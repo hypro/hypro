@@ -135,16 +135,14 @@ void MHyProSupportFunction::contains_vec(int nlhs, mxArray* plhs[], int nrhs, co
     if(nrhs > 4)
         mexWarnMsgTxt("MHyProSupportFunction - contains_vector: At least one argument were ignored.");
 
-    mxArray* m_in_vector;
     const mwSize *dims;
     int vec_len;
     
     hypro::SupportFunction<double>* obj = convertMat2Ptr<hypro::SupportFunction<double>>(prhs[2]);
-    m_in_vector = mxDuplicateArray(prhs[3]);
     dims = mxGetDimensions(prhs[3]);
     vec_len = (const int) dims[0];
 
-    const hypro::vector_t<double> hy_vector = ObjectHandle::mVector2Hypro(m_in_vector, vec_len);
+    const hypro::vector_t<double> hy_vector = ObjectHandle::mVector2Hypro(prhs[3], vec_len);
     const bool ans = obj->contains(hy_vector);
     plhs[0] = mxCreateLogicalScalar(ans);
 }

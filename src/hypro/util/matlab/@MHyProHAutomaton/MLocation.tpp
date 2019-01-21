@@ -28,13 +28,12 @@ void MLocation::new_matrix(int nlhs, mxArray* plhs[], int nrhs, const mxArray* p
     const mwSize* dims;
     int dimx, dimy;
 
-    m_in_matrix = mxDuplicateArray(prhs[2]);
-    // in_matrix = mxGetPr(m_in_matrix);
+    //m_in_matrix = mxDuplicateArray(prhs[2]);
     dims = mxGetDimensions(prhs[2]);
     dimy = dims[0];
     dimx = dims[1];
 
-    hypro::matrix_t<double> mat = ObjectHandle::mMatrix2Hypro(m_in_matrix, dimx, dimy);
+    hypro::matrix_t<double> mat = ObjectHandle::mMatrix2Hypro(prhs[2], dimx, dimy);
     hypro::Location<double>* loc = new hypro::Location<double>(mat);
     plhs[0] = convertPtr2Mat<hypro::Location<double>>(loc);
 }

@@ -317,19 +317,17 @@ void MHyProBox::evaluate(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prh
     if(nrhs > 5)
          mexWarnMsgTxt("MHyProBox - evaluate: One or more input arguments were ignored."); 
 
-    mxArray *m_in_vector;
     const mwSize *dims_vec;
     int vec_len;
     bool ans;
 
     hypro::Box<double>* box = convertMat2Ptr<hypro::Box<double>>(prhs[2]);
 
-    m_in_vector = mxDuplicateArray(prhs[3]);
     const double dir = (double) mxGetScalar(prhs[4]);
     dims_vec = mxGetDimensions(prhs[3]);
     vec_len = (int) dims_vec[0];
 
-    hypro::vector_t<double> vec = ObjectHandle::mVector2Hypro(m_in_vector, vec_len);
+    hypro::vector_t<double> vec = ObjectHandle::mVector2Hypro(prhs[3], vec_len);
 
     if(dir == 0){
         ans = false;
@@ -353,23 +351,19 @@ void MHyProBox::multiEvaluate(int nlhs, mxArray *plhs[], int nrhs, const mxArray
         mexErrMsgTxt("MHyProBox - multiEvaluate: One or more arguments are missing!");
     if(nrhs > 5)
         mexWarnMsgTxt("MHyProBox - multiEvaluate: One or more input arguments were ignored."); 
-        
-
-    mxArray *m_in_vector;
+ 
     const mwSize *dims;
     int dimx, dimy;
     bool ans;
 
     hypro::Box<double>* box = convertMat2Ptr<hypro::Box<double>>(prhs[2]);
-
-    m_in_vector = mxDuplicateArray(prhs[3]);
     const double dir = (double) mxGetScalar(prhs[4]);
 
     dims = mxGetDimensions(prhs[3]);
     dimy = (int) dims[0];
     dimx = (int) dims[1];
 
-    hypro::matrix_t<double> mat = ObjectHandle::mMatrix2Hypro(m_in_vector, dimx, dimy);
+    hypro::matrix_t<double> mat = ObjectHandle::mMatrix2Hypro(prhs[3], dimx, dimy);
 
     if(dir == 0){
         ans = false;

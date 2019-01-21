@@ -22,21 +22,17 @@ void MHyProConstraintSet::addConstraint(int nlhs, mxArray* plhs[], int nrhs, con
     if(nrhs < 5)
         mexErrMsgTxt("MHyProConstraintSet - addConstraint: One or more arguments are missing!");
 
-    mxArray* m_in_vector;
     const mwSize *dims;
     double *in_vector, *cont;
     int dimx, dimy;
 
     hypro::ConstraintSet<double>* temp = convertMat2Ptr<hypro::ConstraintSet<double>>(prhs[2]);
-    m_in_vector = mxDuplicateArray(prhs[3]);
     const double offset = (const double) mxGetScalar(prhs[4]);
     dims = mxGetDimensions(prhs[3]);
     dimy = (int) dims[0];
     dimx = (int) dims[1];
 
-    // in_vector = mxGetPr(m_in_vector);
-    const hypro::vector_t<double> hy_vec = ObjectHandle::mVector2Hypro(m_in_vector, dimy);
-
+    const hypro::vector_t<double> hy_vec = ObjectHandle::mVector2Hypro(prhs[3], dimy);
     temp->addConstraint(hy_vec, offset);
 }
 
