@@ -1,17 +1,17 @@
 Dependencies {#dependencies}
 ============
 
-The very basic dependencies include the libraries
+The very basic dependencies include the libraries.
 
 - a C++ compiler, g++ (version >= 4.9) or clang++ (version >= 3.6),
 - [gmpxx](https://gmplib.org/) the Gnu Multiprecision library C++ interface,
 - [CMake](https://cmake.org/) (version >= 3.0.0), a build system,
 - [boost](http://www.boost.org/) (version >= 1.55), a collection of C++ libaries,
-- [CaRL](https://github.com/smtrat/carl), a C++ library for arithmetic,
+- [CArL](https://github.com/smtrat/carl), a C++ library for arithmetic,
 - Java JRE (required for the Antlr parser) and
 - uuid-dev (required for the Antlr parser)
 
-The first four dependencies can be obtained as Ubuntu packages or directly downloaded from the referenced websites.
+Note that CArL installs dependencies such as Eigen3, gmp and boost locally in its build folder, so installing Java and uuid-dev along with CArL should be sufficient to be able to build and use HyPro.
 To compile HyPro, a suitable C++ compiler is required, either g++ (at least version 4.9) or clang++ (at least version 3.5).
 
 Additional (optional) dependencies
