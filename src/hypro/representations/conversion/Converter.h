@@ -6,7 +6,6 @@
 #define INCL_FROM_CONVERTERHEADER true
 
 #include "../../flags.h"
-#include "../SupportFunctionNew/SupportFunctionNew.h"
 #include "../Box/Box.h"
 #include "../ConstraintSet/ConstraintSet.h"
 #include "../Ellipsoids/Ellipsoid.h"
@@ -19,6 +18,7 @@
 #include "../Zonotope/Zonotope.h"
 #include "../DifferenceBounds/DifferenceBounds.h"
 #include "../../util/pca.h"
+#include "../SupportFunctionNew/SupportFunctionNew.h"
 
 namespace hypro {
 

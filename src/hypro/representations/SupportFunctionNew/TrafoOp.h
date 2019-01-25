@@ -11,7 +11,6 @@
 #pragma once
 
 #include "RootGrowNode.h"
-#include "SupportFunctionNew.h"
 
 namespace hypro {
 
@@ -19,20 +18,33 @@ namespace hypro {
 template<typename Number, typename Converter, typename Setting>
 class SupportFunctionNewT;	
 
+template<typename Number, typename Converter, typename Setting>
+struct TrafoData : public RGNData {
+	std::shared_ptr<RootGrowNode<Number,Converter,Setting>> origin;
+	unsigned currentExponent;												
+	std::size_t successiveTransformations;									
+	std::shared_ptr<const LinTrafoParameters<Number,Setting>> parameters;
+	TrafoData(const std::shared_ptr<RootGrowNode<Number,Converter,Setting>>& orig, unsigned exp, std::size_t suc, const std::shared_ptr<const LinTrafoParameters<Number,Setting>>& param) 
+		: origin(orig), currentExponent(exp), successiveTransformations(suc), parameters(param) 
+	{
+		std::cout << "TrafoData constructor, parameters are:\n" << parameters->matrix() << "\n" << parameters->vector() << std::endl;
+	}
+}; 
+
 //Specialized subclass for transformations as example of a unary operator
 template<typename Number, typename Converter, typename Setting>
-class TrafoOp : public RootGrowNode<Number,Setting> {
+class TrafoOp : public RootGrowNode<Number,Converter,Setting> {
 
-	using PointerVec = typename RootGrowNode<Number,Setting>::PointerVec;
+	using PointerVec = typename RootGrowNode<Number,Converter,Setting>::PointerVec;
   
   private:
 
 	////// General Interface
 
 	SFNEW_TYPE type = SFNEW_TYPE::TRAFO;
-	unsigned originCount = 1;
-	PointerVec mChildren = PointerVec(1,nullptr);
-	std::size_t mDimension = 0;
+	unsigned originCount;
+	PointerVec mChildren;
+	std::size_t mDimension;
 
 	////// Members for this class
 
@@ -50,8 +62,12 @@ class TrafoOp : public RootGrowNode<Number,Setting> {
 	//Set new trafoOp object as parent of origin.
 	//During construction, find out how many TrafoOps with the same parameters are chained successively in the tree 
 	//and summarize groups of 2^power linear transformations for optimization
-	TrafoOp(const SupportFunctionNewT<Number,Converter,Setting>& origin, const matrix_t<Number>& A, const vector_t<Number>& b) : mDimension(origin.dimension()), currentExponent(1) {
-		
+	TrafoOp(const SupportFunctionNewT<Number,Converter,Setting>& origin, const matrix_t<Number>& A, const vector_t<Number>& b) 
+		: originCount(1)
+		, mChildren(PointerVec(1,nullptr))
+		, mDimension(origin.dimension())
+		, currentExponent(1) 
+	{	
 		parameters = std::make_shared<const LinTrafoParameters<Number,Setting>>(A,b);
 		
 		origin.addOperation(this);
@@ -77,15 +93,34 @@ class TrafoOp : public RootGrowNode<Number,Setting> {
 					reduced = true;
 					currentExponent = currentExponent*(carl::pow(2,parameters->power));
 					for(std::size_t i = 0; i < unsigned(carl::pow(2,parameters->power)-1); i++ ){
-						std::shared_ptr<RootGrowNode<Number,Setting>> grandChild = this->getChildren().at(0)->getChildren().at(0);
+						std::shared_ptr<RootGrowNode<Number,Converter,Setting>> grandChild = this->getChildren().at(0)->getChildren().at(0);
 						this->clearChildren();
 						this->addToChildren(grandChild);
 						assert(this->getChildren().size() == 1);
 					}
 				} 
 			} while (reduced == true);
-			//assert(mChildren.at(0)->checkTreeValidity());
 		}
+	}
+
+	TrafoOp(const TrafoData<Number,Converter,Setting>& d) 
+		: originCount(1)
+		//, mChildren(PointerVec({1,d.origin}))
+		//, mDimension(d.origin->getDimension())
+		, currentExponent(d.currentExponent)
+		, successiveTransformations(d.successiveTransformations)
+		//, parameters(std::make_shared<const LinTrafoParameters<Number,Setting>>(d.parameters->matrix(), d.parameters->vector()))
+	{
+		std::cout << "1" << std::endl;
+		std::cout << "type: " << d.origin->getType() << std::endl;
+		mChildren = PointerVec({1,d.origin});
+		std::cout << "2" << std::endl;
+		mDimension = d.origin->getDimension();
+		std::cout << "3" << std::endl;
+		std::cout << "TrafoOp constructor, gotten parameters are:\n" << d.parameters->matrix() << "\n" << d.parameters->vector() << std::endl;
+		auto tmp = std::make_shared<const LinTrafoParameters<Number,Setting>>(d.parameters->matrix(), d.parameters->vector());
+		assert(tmp != nullptr);
+		std::cout << "TrafoOp constructor, after creation of lintrafoParams parameters are:\n" << tmp->matrix() << "\n" << tmp->vector() << std::endl;
 	}
 
 	~TrafoOp(){ }
@@ -97,7 +132,10 @@ class TrafoOp : public RootGrowNode<Number,Setting> {
 	std::size_t getDimension() const { return mDimension; }
 	unsigned getCurrentExponent() const { return currentExponent; }
 	std::size_t getSuccessiveTransformations() const { return successiveTransformations; }
-	std::shared_ptr<const LinTrafoParameters<Number,Setting>> getParameters() const { return parameters; }
+	const std::shared_ptr<const LinTrafoParameters<Number,Setting>>& getParameters() const { return parameters; }
+	RGNData getData() const { 
+		return static_cast<RGNData>(TrafoData<Number,Converter,Setting>(mChildren.front(), currentExponent, successiveTransformations, parameters)); 
+	}
 
 	////// RootGrowNode Interface
 

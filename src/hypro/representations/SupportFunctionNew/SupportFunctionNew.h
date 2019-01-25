@@ -24,13 +24,8 @@
 #include "../../util/linearOptimization/Optimizer.h"
 #include "../../util/logging/Logger.h"
 #include "../../util/templateDirections.h"
-#include "Leaf.h"
-#include "SumOp.h"
-#include "TrafoOp.h"
-#include "ScaleOp.h"
-#include "ProjectOp.h"
-#include "IntersectOp.h"
-#include "UnionOp.h"
+
+#include "RootGrowNode.h"
 
 namespace hypro {
 
@@ -82,7 +77,7 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
 	 **************************************************************************/
 
   	//A pointer of shared ownership pointing to a node in the whole tree. This node is the root for this supportfunction, the nodes above root are not known.
-  	mutable std::shared_ptr<RootGrowNode<Number,Setting>> mRoot = nullptr;
+  	mutable std::shared_ptr<RootGrowNode<Number,Converter,Setting>> mRoot = nullptr;
 
 	/***************************************************************************
 	 * Constructors
@@ -91,9 +86,7 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
   private:
 
   	//constructor for adding a new node
-  	SupportFunctionNewT( const std::shared_ptr<RootGrowNode<Number,Setting>>& root ) : mRoot(root) {
-  		//std::cout << "SupportFunctionNewT::shared_RGN constructor, address: " << this << std::endl;
-  	}
+  	SupportFunctionNewT( const std::shared_ptr<RootGrowNode<Number,Converter,Setting>>& root ) : mRoot(root) { }
 
   public:
 	/**
@@ -113,7 +106,20 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
 	 */
 	template<typename SettingRhs, carl::DisableIf< std::is_same<Setting, SettingRhs> > = carl::dummy>
 	SupportFunctionNewT(const SupportFunctionNewT<Number,Converter,SettingRhs>& orig){
-		//TODO!
+
+		//if(orig.getRoot() == nullptr){ mRoot == nullptr; }
+		//std::function<>
+
+
+		if(orig.getRoot() != nullptr){
+			mRoot = mRoot->convertSettings(orig.getRoot());				
+		} else {
+			mRoot = nullptr;
+		}
+		//Now for all children? -> Yes since mixed settings would destroy the n-ary nodes
+		//for(auto child : orig->getRoot()->getChildren()){
+		//	SupportFunctionNewT<Number,Converter,settings> tmp = SupportFunctionNewT<Number,Converter,Setting>(*child);
+		//}
 	}
 
 	/**
@@ -127,7 +133,7 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
 	 * @param[in]  r 	A pointer to a GeometricObject, i.e. Boxes, HPolytopes, etc.
 	 */
 	template<typename Representation>
-	SupportFunctionNewT( GeometricObject<Number,Representation>* r) : mRoot(std::make_shared<Leaf<Number,Setting,Representation>>(dynamic_cast<Representation*>(r))) { }
+	SupportFunctionNewT( GeometricObject<Number,Representation>* r) : mRoot(std::make_shared<Leaf<Number,Converter,Setting,Representation>>(dynamic_cast<Representation*>(r))) { }
 
 	/**
 	 * @brief Destructor.
@@ -145,8 +151,8 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
 	 * @param[in]  newRoot  The node to connect the current root with.
 	 * @param[in]  rhs 		Possible siblings of the current root that should also be connected to newRoot
 	 */
-  	void addOperation(RootGrowNode<Number,Setting>* newRoot) const;
-  	void addOperation(RootGrowNode<Number,Setting>* newRoot, const std::vector<SupportFunctionNewT<Number,Converter,Setting>>& rhs) const;
+  	void addOperation(RootGrowNode<Number,Converter,Setting>* newRoot) const;
+  	void addOperation(RootGrowNode<Number,Converter,Setting>* newRoot, const std::vector<SupportFunctionNewT<Number,Converter,Setting>>& rhs) const;
 
   public:
 
@@ -160,7 +166,7 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
 	  * @brief 	   Returns a shared pointer reference to the current root
 	  * @return    A shared pointer reference to the root
 	  */
-	inline std::shared_ptr<RootGrowNode<Number,Setting>>& getRoot() const { return mRoot; }
+	inline std::shared_ptr<RootGrowNode<Number,Converter,Setting>>& getRoot() const { return mRoot; }
 
 	 /**
 	  * @brief Static method for the construction of an empty SupportFunctionNew of required dimension.
@@ -175,6 +181,16 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
 	 * Tree Traversal
 	 **************************************************************************/
 	/*
+	 * Three functions are needed: transform, compute and aggregate.
+	 * - transform will be called by every node
+	 * - compute will only be called once by leaf nodes
+	 * - aggregate will only be called once by all non leaf nodes
+	 * 
+	 * Order of calling:
+	 * 1) From top to bottom, all nodes call transform
+	 * 2) When arriving at the lowest level, leaf nodes first call transform, then call compute
+	 * 3) From bottom to top, each node that is not a leaf node calls aggregate
+	 *
 	 * There are only four possibilities of how void functions and / or functions without parameters can be combined, such that the stack operations 
 	 * made during the actual traversal still remain valid:
 	 * - Result = void,	Params = void:	"void transform()" 		&& "void compute()" 	&& "void aggregate()" 					&& no initParams
@@ -190,32 +206,32 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
 
 	//When Result type and Param type = void
 	//Wrap given functions into other functions that take Parameter (or smth else) additionally as input
-	void traverse(	std::function<void(RootGrowNode<Number,Setting>*)>& transform,
-					std::function<void(RootGrowNode<Number,Setting>*)>& compute, 	
-					std::function<void(RootGrowNode<Number,Setting>*)>& aggregate) const;
+	void traverse(	std::function<void(RootGrowNode<Number,Converter,Setting>*)>& transform,
+					std::function<void(RootGrowNode<Number,Converter,Setting>*)>& compute, 	
+					std::function<void(RootGrowNode<Number,Converter,Setting>*)>& aggregate) const;
 
 	//When Param type = void, but Result type not
 	//Wrap transform and compute into other functions that take Parameter (or smth else) additionally as input
 	template<typename Result>
-	Result traverse(std::function<void(RootGrowNode<Number,Setting>*)>& transform,
-					std::function<Result(RootGrowNode<Number,Setting>*)>& compute, 
-					std::function<Result(RootGrowNode<Number,Setting>*, std::vector<Result>)>& aggregate) const;
+	Result traverse(std::function<void(RootGrowNode<Number,Converter,Setting>*)>& transform,
+					std::function<Result(RootGrowNode<Number,Converter,Setting>*)>& compute, 
+					std::function<Result(RootGrowNode<Number,Converter,Setting>*, std::vector<Result>)>& aggregate) const;
 
 	//When Result type = void, but Param type not
 	//Wrap aggregate and compute into other functions that take Parameter (or smth else) additionally as input
 	template<typename ...Rargs>
-	void traverse(	std::function<Parameters<Rargs...>(RootGrowNode<Number,Setting>*, Parameters<Rargs...>)>& transform,
-					std::function<void(RootGrowNode<Number,Setting>*, Parameters<Rargs...>)>& compute, 
-					std::function<void(RootGrowNode<Number,Setting>*, Parameters<Rargs...>)>& aggregate,
+	void traverse(	std::function<Parameters<Rargs...>(RootGrowNode<Number,Converter,Setting>*, Parameters<Rargs...>)>& transform,
+					std::function<void(RootGrowNode<Number,Converter,Setting>*, Parameters<Rargs...>)>& compute, 
+					std::function<void(RootGrowNode<Number,Converter,Setting>*, Parameters<Rargs...>)>& aggregate,
 					Parameters<Rargs...>& initParams) const;
 
 	//Actual traverse function
 	//Since all cases where Result or Rargs are void / empty are handled by the overloaded versions of this function above,
 	//we can assume that we do not get functions returning void / that have no parameters
 	template<typename Result, typename ...Rargs>
-	Result traverse(std::function<Parameters<Rargs...>(RootGrowNode<Number,Setting>*, Parameters<Rargs...>)>& transform,
-					std::function<Result(RootGrowNode<Number,Setting>*, Parameters<Rargs...>)>& compute, 
-					std::function<Result(RootGrowNode<Number,Setting>*, std::vector<Result>, Parameters<Rargs...>)>& aggregate, 
+	Result traverse(std::function<Parameters<Rargs...>(RootGrowNode<Number,Converter,Setting>*, Parameters<Rargs...>)>& transform,
+					std::function<Result(RootGrowNode<Number,Converter,Setting>*, Parameters<Rargs...>)>& compute, 
+					std::function<Result(RootGrowNode<Number,Converter,Setting>*, std::vector<Result>, Parameters<Rargs...>)>& aggregate, 
 					Parameters<Rargs...>& initParams) const;
 
 	/***************************************************************************

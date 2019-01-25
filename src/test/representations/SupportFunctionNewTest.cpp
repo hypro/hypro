@@ -29,7 +29,7 @@ TYPED_TEST(SupportFunctionNewTest, LeafTest){
 	EXPECT_EQ(sf.getRoot()->getOriginCount(), unsigned(0));
 	EXPECT_EQ(sf.getRoot()->getChildren().size(), std::size_t(0));
 	EXPECT_EQ(sf.getRoot().use_count(), long(1));
-	EXPECT_EQ(*(dynamic_cast<Leaf<TypeParam,SupportFunctionNewDefault,Box<TypeParam>>*>(sf.getRoot().get())->getRepresentation()), box);
+	EXPECT_EQ(*(dynamic_cast<Leaf<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault,Box<TypeParam>>*>(sf.getRoot().get())->getRepresentation()), box);
 
 	//Test with HPoly
 	HPolytope<TypeParam> hpoly;
@@ -38,7 +38,7 @@ TYPED_TEST(SupportFunctionNewTest, LeafTest){
 	EXPECT_EQ(sfHpoly.getRoot()->getOriginCount(), unsigned(0));
 	EXPECT_EQ(sfHpoly.getRoot()->getChildren().size(), std::size_t(0));
 	EXPECT_EQ(sfHpoly.getRoot().use_count(), long(1));
-	EXPECT_EQ(*(dynamic_cast<Leaf<TypeParam,SupportFunctionNewDefault,HPolytope<TypeParam>>*>(sfHpoly.getRoot().get())->getRepresentation()), hpoly);
+	EXPECT_EQ(*(dynamic_cast<Leaf<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault,HPolytope<TypeParam>>*>(sfHpoly.getRoot().get())->getRepresentation()), hpoly);
 
 /*	WAIT UNTIL VPOLY::MULTIEVALUATE IMPLEMENTED
 	VPolytope<TypeParam> vpoly;
@@ -1099,3 +1099,57 @@ TYPED_TEST(SupportFunctionNewTest, Vertices){
 	SUCCEED();
 }
 
+TYPED_TEST(SupportFunctionNewTest, SettingsConversion){
+
+	Point<TypeParam> p1 = Point<TypeParam>({TypeParam(0),TypeParam(-4),TypeParam(-22)});
+	Point<TypeParam> p2 = Point<TypeParam>({TypeParam(3),TypeParam(6.789),TypeParam(-3.1415)});
+	Box<TypeParam> box (std::make_pair(p1,p2));
+	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sf(&box);	
+
+	//Leaf
+	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewNoReduction> sf2(sf);		
+	EXPECT_EQ(*(dynamic_cast<Leaf<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault,Box<TypeParam>>*>(sf.getRoot().get())->getRepresentation()), *(dynamic_cast<Leaf<TypeParam,Converter<TypeParam>,SupportFunctionNewNoReduction,Box<TypeParam>>*>(sf2.getRoot().get())->getRepresentation()));
+	EXPECT_EQ((dynamic_cast<Leaf<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault,Box<TypeParam>>*>(sf.getRoot().get())->isRedundant()), (dynamic_cast<Leaf<TypeParam,Converter<TypeParam>,SupportFunctionNewNoReduction,Box<TypeParam>>*>(sf2.getRoot().get())->isRedundant()));
+	
+	//TrafoOp
+	//matrix_t<TypeParam> mat = 2*matrix_t<TypeParam>::Identity(2,2);
+	//vector_t<TypeParam> vec = vector_t<TypeParam>::Zero(2);
+	//SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> trafo = sf.affineTransformation(mat,vec);	
+	//SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewNoReduction> trafo2(trafo);
+	//TrafoOp<TypeParam,Converter<TypeParam>,SupportFunctionNewNoReduction>* trafo2Node = dynamic_cast<TrafoOp<TypeParam,Converter<TypeParam>,SupportFunctionNewNoReduction>*>(trafo2.getRoot().get());
+	//EXPECT_EQ((dynamic_cast<TrafoOp<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>*>(trafo.getRoot().get())->getParameters()->power), unsigned(2));
+	//EXPECT_TRUE((trafo2Node != nullptr));
+	//EXPECT_TRUE((trafo2Node->getParameters() != nullptr));
+	//EXPECT_EQ((trafo2Node->getParameters()->power), unsigned(1));
+	/*
+	try {
+
+		//ProjectOp
+		std::vector<std::size_t> dims({0});
+		SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> proj = sf.project(dims);
+		SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewNoReduction> proj2(proj);
+
+		//ScaleOp
+		SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> scale = sf.scale(TypeParam(5));
+		SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewNoReduction> scale2(scale);
+
+		//SumOp
+		SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sumOp = sf.minkowskiSum(scale);
+		SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewNoReduction> sum2(sumOp);
+
+		//IntersectOp
+		SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> intersectOp = sf.intersect(scale);
+		SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewNoReduction> inter2(intersectOp);
+
+		//UnionOp	
+		SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> uniteOp = sf.unite(scale);
+		SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewNoReduction> unite2(uniteOp);
+
+	} catch(std::runtime_error& e){
+		FAIL();
+	}
+	*/
+	
+	SUCCEED();
+}
+	

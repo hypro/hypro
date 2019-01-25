@@ -4,9 +4,6 @@
 
 namespace hypro {
 
-//NOTE: set magic number of power as Settings constant! 
-//Right now with _power = 2, we have 4-groups of transformations before reducing them
-
 /**
  * @brief      Struct holding linear and affine transformation parameters.
  * @tparam     Number  The used number type.

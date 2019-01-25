@@ -11,7 +11,6 @@
 #pragma once
 
 #include "RootGrowNode.h"
-#include "SupportFunctionNew.h"
 
 namespace hypro {
 
@@ -20,20 +19,29 @@ template<typename Number, typename Converter, typename Setting>
 class SupportFunctionNewT;	
 
 template<typename Number, typename Converter, typename Setting>
-class ScaleOp : public RootGrowNode<Number,Setting> {
+struct ScaleData : public RGNData {
+	std::shared_ptr<RootGrowNode<Number,Converter,Setting>> origin;	
+	Number factor;
+	ScaleData(const std::shared_ptr<RootGrowNode<Number,Converter,Setting>>& orig, const Number& fac)
+		: origin(orig), factor(fac)
+	{}
+};
+
+template<typename Number, typename Converter, typename Setting>
+class ScaleOp : public RootGrowNode<Number,Converter,Setting> {
 
   private:
 
   	////// Usings
 
-	using PointerVec = typename RootGrowNode<Number,Setting>::PointerVec;
+	using PointerVec = typename RootGrowNode<Number,Converter,Setting>::PointerVec;
 
 	////// General Interface
 
 	SFNEW_TYPE type = SFNEW_TYPE::SCALEOP;
-	unsigned originCount = 1;
-	PointerVec mChildren = PointerVec(1,nullptr);
-	std::size_t mDimension = 0;
+	unsigned originCount;
+	PointerVec mChildren;
+	std::size_t mDimension;
 	
 
 	////// Members for this class
@@ -46,9 +54,21 @@ class ScaleOp : public RootGrowNode<Number,Setting> {
 
   	ScaleOp() = delete;
 
-  	ScaleOp(const SupportFunctionNewT<Number,Converter,Setting>& origin, const Number& scale) : mDimension(origin.dimension()), factor(scale) { 
+  	ScaleOp(const SupportFunctionNewT<Number,Converter,Setting>& origin, const Number& scale) 
+  		: originCount(1)
+  		, mChildren(PointerVec(1,nullptr))
+  		, mDimension(origin.dimension())
+  		, factor(scale) 
+  	{ 
   		origin.addOperation(this); 
   	}
+
+  	ScaleOp(const ScaleData<Number,Converter,Setting>& d) 
+  		: originCount(1)
+  		, mChildren(PointerVec({1,d.origin}))
+  		, mDimension(d.origin->getDimension())
+  		, factor(d.factor)
+  	{}
 
   	~ScaleOp(){}
 
@@ -58,6 +78,9 @@ class ScaleOp : public RootGrowNode<Number,Setting> {
 	unsigned getOriginCount() const { return originCount; }
 	std::size_t getDimension() const { return mDimension; }
 	Number getFactor() const { return factor; }
+	RGNData getData() const { 
+		return static_cast<RGNData>(ScaleData<Number,Converter,Setting>(mChildren.front(), factor)); 
+	}
 
 	////// RootGrowNode Interface
 

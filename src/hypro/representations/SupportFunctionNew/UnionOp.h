@@ -10,7 +10,6 @@
 #pragma once
 
 #include "RootGrowNode.h"
-#include "SupportFunctionNew.h"
 
 namespace hypro {
 
@@ -18,9 +17,15 @@ namespace hypro {
 template<typename Number, typename Converter, typename Setting>
 class SupportFunctionNewT;	
 
+template<typename Number, typename Converter, typename Setting>
+struct UnionData : public RGNData { 
+	std::vector<std::shared_ptr<RootGrowNode<Number,Converter,Setting>>> children;
+	UnionData(const std::vector<std::shared_ptr<RootGrowNode<Number,Converter,Setting>>>& c) : children(c) {}
+}; 
+
 //Specialized subclass for sums as example of a binary operator
 template<typename Number, typename Converter, typename Setting>
-class UnionOp : public RootGrowNode<Number,Setting> {
+class UnionOp : public RootGrowNode<Number,Converter,Setting> {
 
   private:
 	
@@ -29,6 +34,7 @@ class UnionOp : public RootGrowNode<Number,Setting> {
 	SFNEW_TYPE type = SFNEW_TYPE::UNIONOP;
 	unsigned originCount = 2;
 	std::size_t mDimension;
+	std::vector<std::shared_ptr<RootGrowNode<Number,Converter,Setting>>> mChildren;
 	//PointerVec mChildren;
 
 	////// Special members of this class
@@ -51,6 +57,8 @@ class UnionOp : public RootGrowNode<Number,Setting> {
 		lhs.addOperation(this, rhs); 
 	}	
 
+	UnionOp(const UnionData<Number,Converter,Setting>& d) : mDimension(d.children.front()->getDimension()), mChildren(d.children) {}
+
 	~UnionOp(){}
 
 	////// Getters and Setters
@@ -58,6 +66,7 @@ class UnionOp : public RootGrowNode<Number,Setting> {
 	SFNEW_TYPE getType() const override { return type; }
 	unsigned getOriginCount() const { return originCount; }
 	std::size_t getDimension() const { return mDimension; }
+	RGNData getData() const { return static_cast<RGNData>(UnionData<Number,Converter,Setting>(this->getChildren())); }
 
 	////// RootGrowNode Interface
 

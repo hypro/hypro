@@ -10,13 +10,30 @@
 
 #pragma once
 
-#include "RootGrowNode.h"
+#include "../../types.h"
 
 namespace hypro {
 
+//struct RGNData;
+template<typename Number, typename Converter, typename Setting>
+class RootGrowNode;
+
+//A data struct for leaves, containing all needed info to construct a leaf from it
+struct LeafData : public RGNData {
+	uintptr_t addressToRep;
+	representation_name typeOfRep;
+	bool isNotRedundant;
+	LeafData(){};
+	LeafData(const uintptr_t addr, const representation_name rep, const bool redundancy) 
+		: addressToRep(addr), typeOfRep(rep), isNotRedundant(redundancy)
+	{ 
+		std::cout << "We got addressToRep: " << addressToRep << " and type: " << typeOfRep << std::endl;
+	}
+};
+
 //Subclass of RootGrowNode, is a node with a representation of a state
-template<typename Number, typename Setting, typename Representation> 
-class Leaf : public RootGrowNode<Number,Setting> {
+template<typename Number, typename Converter, typename Setting, typename Representation> 
+class Leaf : public RootGrowNode<Number,Converter,Setting> {
   
   private:
 	
@@ -28,16 +45,26 @@ class Leaf : public RootGrowNode<Number,Setting> {
 
 	////// Members for this class
 
-	Representation* rep = nullptr;
-	mutable bool isNotRedundant = false; 	//A flag that tells us if removeRedundancy() been used on the representation
+	Representation* rep;
+	mutable bool isNotRedundant = false; 	//A flag that tells us if removeRedundancy() has been used on the representation
 	
   public:
 
 	////// Constructors & Destructors
 
-	Leaf() : mDimension(std::size_t(0)) {}
+	Leaf() : mDimension(std::size_t(0)), rep(nullptr) {}
 
 	Leaf(Representation* r) : mDimension(r->dimension()), rep(r) {}
+
+	Leaf(const LeafData& d){
+		std::cout << "Construct leaf from leafdata" << std::endl;
+		assert(Representation::type() == d.typeOfRep);
+		rep = reinterpret_cast<Representation*>(d.addressToRep);
+		assert(rep != nullptr);
+		std::cout << "rep dim: " << rep->dimension() << "rep: " << rep << std::endl;
+		mDimension = rep->dimension();
+		isNotRedundant = d.isNotRedundant;
+	}
 
 	~Leaf(){} 
 
@@ -47,8 +74,12 @@ class Leaf : public RootGrowNode<Number,Setting> {
 	unsigned getOriginCount() const { return originCount; }
 	std::size_t getDimension() const { return mDimension; }
 	Representation* getRepresentation() const { return rep; }
-	//void setRepresentation(Representation* r){ rep = r; mDimension = r->dimension(); }
-
+	bool isRedundant() const { return !isNotRedundant; }
+	RGNData getData() const { return LeafData(); }
+	LeafData getLeafData() const {
+		return LeafData(reinterpret_cast<uintptr_t>(rep), rep->type(), isNotRedundant);
+	}
+	
 	////// RootGrowNode Interface
 
 	//Leaves usually do not transform

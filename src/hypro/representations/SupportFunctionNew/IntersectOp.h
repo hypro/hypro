@@ -10,7 +10,6 @@
 #pragma once
 
 #include "RootGrowNode.h"
-#include "SupportFunctionNew.h"
 
 namespace hypro {
 
@@ -18,9 +17,15 @@ namespace hypro {
 template<typename Number, typename Converter, typename Setting>
 class SupportFunctionNewT;	
 
+template<typename Number, typename Converter, typename Setting>
+struct IntersectData : public RGNData { 
+	std::vector<std::shared_ptr<RootGrowNode<Number,Converter,Setting>>> children;
+	IntersectData(const std::vector<std::shared_ptr<RootGrowNode<Number,Converter,Setting>>>& c) : children(c) {}
+}; 
+
 //Specialized subclass for sums as example of a binary operator
 template<typename Number, typename Converter, typename Setting>
-class IntersectOp : public RootGrowNode<Number,Setting> {
+class IntersectOp : public RootGrowNode<Number,Converter,Setting> {
 
   private:
 	
@@ -29,7 +34,7 @@ class IntersectOp : public RootGrowNode<Number,Setting> {
 	SFNEW_TYPE type = SFNEW_TYPE::INTERSECTOP;
 	unsigned originCount = 2;
 	std::size_t mDimension = 0;
-	//PointerVec mChildren;
+	std::vector<std::shared_ptr<RootGrowNode<Number,Converter,Setting>>> mChildren;
 
 	////// Special members of this class
 
@@ -51,6 +56,8 @@ class IntersectOp : public RootGrowNode<Number,Setting> {
 		lhs.addOperation(this, rhs); 
 	}
 
+	IntersectOp(const IntersectData<Number,Converter,Setting>& d) : mDimension(d.children.front()->getDimension()), mChildren(d.children) {}
+
 	~IntersectOp(){}
 
 	////// Getters and Setters
@@ -58,6 +65,7 @@ class IntersectOp : public RootGrowNode<Number,Setting> {
 	SFNEW_TYPE getType() const override { return type; }
 	unsigned getOriginCount() const { return originCount; }
 	std::size_t getDimension() const { return mDimension; }
+	RGNData getData() const { return static_cast<RGNData>(IntersectData<Number,Converter,Setting>(this->getChildren())); }
 
 	////// RootGrowNode Interface
 
