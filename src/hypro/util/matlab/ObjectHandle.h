@@ -46,9 +46,11 @@ class ObjectHandle{
         static void convert2Matlab(const hypro::Halfspace<double>&, mxArray*, mxArray*, const int, const int, const int = 0 );
         static void convert2Matlab(const hypro::CONTAINMENT&, std::string&);
         static void convert2Matlab(const hypro::SOLUTION&, std::string&);
+        static void convert2Matlab(const hypro::representation_name&, std::string&);
         static void convert2Matlab(const std::vector<std::string>&, mxArray* , const mwSize*);
 
         static hypro::SOLUTION mSolution2Hypro(char*);
+        static hypro::representation_name mRepresentationName2Hypro(char*);
         static carl::Interval<double> mInterval2Hypro(const mxArray*);
         static hypro::matrix_t<double> mMatrix2Hypro(const mxArray*, const int, const int);
         static hypro::vector_t<double> mVector2Hypro(const mxArray*, const int);
@@ -57,7 +59,7 @@ class ObjectHandle{
 
 
         static std::vector<std::size_t> mSizeVector2Hypro(const mxArray*, const int);
-        static std::vector<carl::Interval<double>> mIntervals2Hypro(const mxArray*, const int, const int);
+        static std::vector<carl::Interval<double>> mIntervals2Hypro(const mxArray*, const int = 1, const int = 2);
         static std::vector<carl::Interval<double>> mPoints2Hypro(const mxArray*);
         static std::pair<hypro::Point<double>, hypro::Point<double>> mPointPair2Hypro(const mxArray*);
         static std::vector<hypro::Point<double>> mPointsVector2Hypro(const mxArray*, int);
@@ -240,6 +242,35 @@ void ObjectHandle::convert2Matlab(const hypro::SOLUTION& sol, std::string& out){
 }
 
 /**
+ * @brief Converts representation_name into matlab string
+ **/
+void ObjectHandle::convert2Matlab(const hypro::representation_name& name, std::string& out){
+    if(name == hypro::representation_name::box){
+        out = "box"; return;
+    }else if(name == hypro::representation_name::carl_polytope){
+        out = "carl polytope"; return;
+    }else if(name == hypro::representation_name::constraint_set){
+        out = "constraint set"; return;
+    }else if(name == hypro::representation_name::difference_bounds){
+        out = "difference bounds"; return;
+    }else if(name == hypro::representation_name::polytope_h){
+        out = "polytope_h"; return;
+    }else if(name == hypro::representation_name::polytope_v){
+        out = "polytope_v"; return;
+    }else if(name == hypro::representation_name::ppl_polytope){
+        out = "ppl polytope"; return;
+    }else if(name == hypro::representation_name::support_function){
+        out = "support function"; return;
+    }else if(name == hypro::representation_name::taylor_model){
+        out = "taylor model"; return;
+    }else if (name == hypro::representation_name::zonotope){
+        out = "zonotope"; return;
+    }else{
+        out = "undef";
+    }
+}
+
+/**
  * @brief
  **/
 void ObjectHandle::convert2Matlab(const std::vector<std::string>& strings, mxArray* str_arr, const mwSize* dims){
@@ -405,6 +436,37 @@ hypro::SOLUTION ObjectHandle::mSolution2Hypro(char* mSol){
         return hypro::SOLUTION::UNKNOWN;
     }
 }
+
+/**
+ * @brief Converts a Matlab string containing a representation name
+ * into Hypro enum
+ **/
+hypro::representation_name ObjectHandle::mRepresentationName2Hypro(char* name){
+    if(name == "box"){
+        return hypro::representation_name::box;
+    }else if(name == "carl_polytope"){
+        return hypro::representation_name::carl_polytope;
+    }else if(name == "constraint_set"){
+        return hypro::representation_name::constraint_set;
+    }else if(name == "difference_bounds"){
+        return hypro::representation_name::difference_bounds;
+    }else if(name == "polytope_h"){
+        return hypro::representation_name::polytope_h;
+    }else if(name == "polytope_v"){
+        return hypro::representation_name::polytope_v;
+    }else if(name == "ppl_polytope"){
+        return hypro::representation_name::ppl_polytope;
+    }else if(name == "support_function"){
+        return hypro::representation_name::support_function;
+    }else if(name == "taylor_model"){
+        return hypro::representation_name::taylor_model;
+    }else if (name == "zonotope"){
+        return hypro::representation_name::zonotope;
+    }else{
+        return hypro::representation_name::UNDEF;
+    }
+}
+
 
 /**
  * @brief Converts a Matlab matrix and vector into a vector of halfspaces.

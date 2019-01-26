@@ -352,107 +352,107 @@ void MCondition::process(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prh
     if (nrhs < 1 || mxGetString(prhs[1], cmd, sizeof(cmd)))
         mexErrMsgTxt("MCondition - First input should be a command string less than 64 characters long.");
 
-    if (!strcmp("new_empty", cmd) && nrhs == 2){  
+    if (!strcmp("new_empty", cmd)){  
         new_empty(nlhs, plhs, nrhs, prhs);
         return;
     }
 
-    if (!strcmp("new_constr_set", cmd) && nrhs == 2){  
+    if (!strcmp("new_constr_set", cmd)){  
         copy(nlhs, plhs, nrhs, prhs);
         return;
     }
 
-    if (!strcmp("new_mat_vec", cmd) && nrhs == 2){  
+    if (!strcmp("new_mat_vec", cmd)){  
         new_mat_vec(nlhs, plhs, nrhs, prhs);
         return;
     }
 
-    if (!strcmp("copy", cmd) && nrhs == 2){  
+    if (!strcmp("copy", cmd)){  
         copy(nlhs, plhs, nrhs, prhs);
         return;
     }
 
-    if (!strcmp("delete_condition", cmd) && nrhs == 2){  
+    if (!strcmp("delete_condition", cmd)){  
         delete_condition(nlhs, plhs, nrhs, prhs);
         return;
     }
 
-    if (!strcmp("size", cmd) && nrhs == 2){  
+    if (!strcmp("size", cmd)){  
         size(nlhs, plhs, nrhs, prhs);
         return;
     }
 
-    if (!strcmp("isempty", cmd) && nrhs == 2){  
+    if (!strcmp("isempty", cmd)){  
         isempty(nlhs, plhs, nrhs, prhs);
         return;
     }
 
-    if (!strcmp("getMatrix", cmd) && nrhs == 2){  
+    if (!strcmp("getMatrix", cmd)){  
         getMatrix(nlhs, plhs, nrhs, prhs);
         return;
     }
 
-    if (!strcmp("getVector", cmd) && nrhs == 2){  
+    if (!strcmp("getVector", cmd)){  
         getVector(nlhs, plhs, nrhs, prhs);
         return;
     }
 
-    if (!strcmp("isAxisAligned", cmd) && nrhs == 2){  
+    if (!strcmp("isAxisAligned", cmd)){  
         isAxisAligned(nlhs, plhs, nrhs, prhs);
         return;
     }
 
-    if (!strcmp("isAxisAligned_at", cmd) && nrhs == 2){  
+    if (!strcmp("isAxisAligned_at", cmd)){  
         isAxisAligned_at(nlhs, plhs, nrhs, prhs);
         return;
     }
 
-    if (!strcmp("setMatrix", cmd) && nrhs == 2){  
+    if (!strcmp("setMatrix", cmd)){  
         setMatrix(nlhs, plhs, nrhs, prhs);
         return;
     }
 
-    if (!strcmp("setVector", cmd) && nrhs == 2){  
+    if (!strcmp("setVector", cmd)){  
         setVector(nlhs, plhs, nrhs, prhs);
         return;
     }
 
-    if (!strcmp("constraints", cmd) && nrhs == 2){  
+    if (!strcmp("constraints", cmd)){  
         constraints(nlhs, plhs, nrhs, prhs);
         return;
     }
 
-    if (!strcmp("hash", cmd) && nrhs == 2){  
+    if (!strcmp("hash", cmd)){  
         hash(nlhs, plhs, nrhs, prhs);
         return;
     }
 
-    if (!strcmp("getDotRepresentation", cmd) && nrhs == 2){  
+    if (!strcmp("getDotRepresentation", cmd)){  
         getDotRepresentation(nlhs, plhs, nrhs, prhs);
         return;
     }
 
-    if (!strcmp("decompose", cmd) && nrhs == 2){  
+    if (!strcmp("decompose", cmd)){  
         decompose(nlhs, plhs, nrhs, prhs);
         return;
     }
 
-    if (!strcmp("equals", cmd) && nrhs == 2){  
+    if (!strcmp("equals", cmd)){  
         equals(nlhs, plhs, nrhs, prhs);
         return;
     }
 
-    if (!strcmp("unequals", cmd) && nrhs == 2){  
+    if (!strcmp("unequals", cmd)){  
         unequals(nlhs, plhs, nrhs, prhs);
         return;
     }
 
-    if (!strcmp("outstream", cmd) && nrhs == 2){  
+    if (!strcmp("outstream", cmd)){  
         outstream(nlhs, plhs, nrhs, prhs);
         return;
     }
 
-    if (!strcmp("combine", cmd) && nrhs == 2){  
+    if (!strcmp("combine", cmd)){  
         combine(nlhs, plhs, nrhs, prhs);
         return;
     }

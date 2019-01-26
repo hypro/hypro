@@ -508,147 +508,147 @@ void MLocation::process(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs
         mexErrMsgTxt("MLocation - First input should be a command string less than 64 characters long.");
 
 
-    if (!strcmp("new_empty", cmd) && nrhs == 2){  
+    if (!strcmp("new_empty", cmd)){  
         new_empty(nlhs, plhs, nrhs, prhs);
         return;
     }
 
-    if (!strcmp("new_matrix", cmd) && nrhs == 2){  
+    if (!strcmp("new_matrix", cmd)){  
         new_matrix(nlhs, plhs, nrhs, prhs);
         return;
     }
 
-    if (!strcmp("new_mat_vec", cmd) && nrhs == 2){  
+    if (!strcmp("new_mat_vec", cmd)){  
         new_mat_vec(nlhs, plhs, nrhs, prhs);
         return;
     }
 
-    if (!strcmp("copy", cmd) && nrhs == 2){  
+    if (!strcmp("copy", cmd)){  
         copy(nlhs, plhs, nrhs, prhs);
         return;
     }
 
-    if (!strcmp("delete_loc", cmd) && nrhs == 2){  
+    if (!strcmp("delete_loc", cmd)){  
         delete_loc(nlhs, plhs, nrhs, prhs);
         return;
     }
 
-    if (!strcmp("getNumberFlow", cmd) && nrhs == 2){  
+    if (!strcmp("getNumberFlow", cmd)){  
         getNumberFlow(nlhs, plhs, nrhs, prhs);
         return;
     }
 
-    if (!strcmp("getLinearFlow", cmd) && nrhs == 2){  
+    if (!strcmp("getLinearFlow", cmd)){  
         getLinearFlow(nlhs, plhs, nrhs, prhs);
         return;
     }
 
-    if (!strcmp("getLinearFlows", cmd) && nrhs == 2){  
+    if (!strcmp("getLinearFlows", cmd)){  
         getLinearFlows(nlhs, plhs, nrhs, prhs);
         return;
     }
 
-    if (!strcmp("getInvariant", cmd) && nrhs == 2){  
+    if (!strcmp("getInvariant", cmd)){  
         getInvariant(nlhs, plhs, nrhs, prhs);
         return;
     }
 
-    if (!strcmp("getTransitions", cmd) && nrhs == 2){  
+    if (!strcmp("getTransitions", cmd)){  
         getTransitions(nlhs, plhs, nrhs, prhs);
         return;
     }
 
-    if (!strcmp("getExternalInput", cmd) && nrhs == 2){  
+    if (!strcmp("getExternalInput", cmd)){  
         getExternalInput(nlhs, plhs, nrhs, prhs);
         return;
     }
 
-    if (!strcmp("hasExternalInput", cmd) && nrhs == 2){  
+    if (!strcmp("hasExternalInput", cmd)){  
         hasExternalInput(nlhs, plhs, nrhs, prhs);
         return;
     }
 
-    if (!strcmp("hash", cmd) && nrhs == 2){  
+    if (!strcmp("hash", cmd)){  
         hash(nlhs, plhs, nrhs, prhs);
         return;
     }
 
-    if (!strcmp("getName", cmd) && nrhs == 2){  
+    if (!strcmp("getName", cmd)){  
         getName(nlhs, plhs, nrhs, prhs);
         return;
     }
 
-    if (!strcmp("dimension_at", cmd) && nrhs == 2){  
+    if (!strcmp("dimension_at", cmd)){  
         dimension_at(nlhs, plhs, nrhs, prhs);
         return;
     }
 
-    if (!strcmp("setName", cmd) && nrhs == 2){  
+    if (!strcmp("setName", cmd)){  
         setName(nlhs, plhs, nrhs, prhs);
         return;
     }
 
-    if (!strcmp("setLinearFlow", cmd) && nrhs == 2){  
+    if (!strcmp("setLinearFlow", cmd)){  
         setLinearFlow(nlhs, plhs, nrhs, prhs);
         return;
     }
 
-    if (!strcmp("setLinearFlow_vec", cmd) && nrhs == 2){
+    if (!strcmp("setLinearFlow_vec", cmd)){
         setLinearFlow_vec(nlhs, plhs, nrhs, prhs);
         return;
     }
 
-    if (!strcmp("setInvariant", cmd) && nrhs == 2){  
+    if (!strcmp("setInvariant", cmd)){  
         setInvariant(nlhs, plhs, nrhs, prhs);
         return;
     }
 
-    if (!strcmp("setTransition", cmd) && nrhs == 2){  
+    if (!strcmp("setTransition", cmd)){  
         setTransition(nlhs, plhs, nrhs, prhs);
         return;
     }
 
-    if (!strcmp("addTransition", cmd) && nrhs == 2){  
+    if (!strcmp("addTransition", cmd)){  
         addTransition(nlhs, plhs, nrhs, prhs);
         return;
     }
 
-    if (!strcmp("setExtInput", cmd) && nrhs == 2){  
+    if (!strcmp("setExtInput", cmd)){  
         setExtInput(nlhs, plhs, nrhs, prhs);
         return;
     }
 
-    if (!strcmp("isComposedOf", cmd) && nrhs == 2){  
+    if (!strcmp("isComposedOf", cmd)){  
         isComposedOf(nlhs, plhs, nrhs, prhs);
         return;
     }
 
-    if (!strcmp("getDotRepresentation", cmd) && nrhs == 2){  
+    if (!strcmp("getDotRepresentation", cmd)){  
         getDotRepresentation(nlhs, plhs, nrhs, prhs);
         return;
     }
 
-    if (!strcmp("decompose", cmd) && nrhs == 2){  
+    if (!strcmp("decompose", cmd)){  
         decompose(nlhs, plhs, nrhs, prhs);
         return;
     }
 
-    if (!strcmp("less", cmd) && nrhs == 2){  
+    if (!strcmp("less", cmd)){  
         less(nlhs, plhs, nrhs, prhs);
         return;
     }
 
-    if (!strcmp("equals", cmd) && nrhs == 2){  
+    if (!strcmp("equals", cmd)){  
         equals(nlhs, plhs, nrhs, prhs);
         return;
     }
 
-    if (!strcmp("unequals", cmd) && nrhs == 2){  
+    if (!strcmp("unequals", cmd)){  
         unequals(nlhs, plhs, nrhs, prhs);
         return;
     }
 
-    if (!strcmp("outstream", cmd) && nrhs == 2){  
+    if (!strcmp("outstream", cmd)){  
         outstream(nlhs, plhs, nrhs, prhs);
         return;
     }
