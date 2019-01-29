@@ -1112,26 +1112,28 @@ TYPED_TEST(SupportFunctionNewTest, SettingsConversion){
 	EXPECT_EQ((dynamic_cast<Leaf<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault,Box<TypeParam>>*>(sf.getRoot().get())->isRedundant()), (dynamic_cast<Leaf<TypeParam,Converter<TypeParam>,SupportFunctionNewNoReduction,Box<TypeParam>>*>(sf2.getRoot().get())->isRedundant()));
 	
 	//TrafoOp
-	//matrix_t<TypeParam> mat = 2*matrix_t<TypeParam>::Identity(2,2);
-	//vector_t<TypeParam> vec = vector_t<TypeParam>::Zero(2);
-	//SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> trafo = sf.affineTransformation(mat,vec);	
-	//SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewNoReduction> trafo2(trafo);
-	//TrafoOp<TypeParam,Converter<TypeParam>,SupportFunctionNewNoReduction>* trafo2Node = dynamic_cast<TrafoOp<TypeParam,Converter<TypeParam>,SupportFunctionNewNoReduction>*>(trafo2.getRoot().get());
-	//EXPECT_EQ((dynamic_cast<TrafoOp<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>*>(trafo.getRoot().get())->getParameters()->power), unsigned(2));
-	//EXPECT_TRUE((trafo2Node != nullptr));
-	//EXPECT_TRUE((trafo2Node->getParameters() != nullptr));
-	//EXPECT_EQ((trafo2Node->getParameters()->power), unsigned(1));
-	/*
+	matrix_t<TypeParam> mat = 2*matrix_t<TypeParam>::Identity(2,2);
+	vector_t<TypeParam> vec = vector_t<TypeParam>::Zero(2);
+	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> trafo = sf.affineTransformation(mat,vec);	
+	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewNoReduction> trafo2(trafo);
+	TrafoOp<TypeParam,Converter<TypeParam>,SupportFunctionNewNoReduction>* trafo2Node = dynamic_cast<TrafoOp<TypeParam,Converter<TypeParam>,SupportFunctionNewNoReduction>*>(trafo2.getRoot().get());
+	EXPECT_EQ((dynamic_cast<TrafoOp<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>*>(trafo.getRoot().get())->getParameters()->power), unsigned(2));
+	EXPECT_TRUE((trafo2Node != nullptr));
+	EXPECT_TRUE((trafo2Node->getParameters() != nullptr));
+	EXPECT_EQ((trafo2Node->getParameters()->power), unsigned(1));
+	
 	try {
 
 		//ProjectOp
 		std::vector<std::size_t> dims({0});
 		SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> proj = sf.project(dims);
 		SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewNoReduction> proj2(proj);
-
+		EXPECT_EQ((dynamic_cast<ProjectOp<TypeParam,Converter<TypeParam>,SupportFunctionNewNoReduction>*>(proj2.getRoot().get())->getDimensions().size()), std::size_t(1));
+		
 		//ScaleOp
 		SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> scale = sf.scale(TypeParam(5));
 		SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewNoReduction> scale2(scale);
+		EXPECT_EQ((dynamic_cast<ScaleOp<TypeParam,Converter<TypeParam>,SupportFunctionNewNoReduction>*>(scale2.getRoot().get())->getFactor()), TypeParam(5));
 
 		//SumOp
 		SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sumOp = sf.minkowskiSum(scale);
@@ -1140,7 +1142,7 @@ TYPED_TEST(SupportFunctionNewTest, SettingsConversion){
 		//IntersectOp
 		SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> intersectOp = sf.intersect(scale);
 		SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewNoReduction> inter2(intersectOp);
-
+		
 		//UnionOp	
 		SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> uniteOp = sf.unite(scale);
 		SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewNoReduction> unite2(uniteOp);
@@ -1148,7 +1150,7 @@ TYPED_TEST(SupportFunctionNewTest, SettingsConversion){
 	} catch(std::runtime_error& e){
 		FAIL();
 	}
-	*/
+	
 	
 	SUCCEED();
 }

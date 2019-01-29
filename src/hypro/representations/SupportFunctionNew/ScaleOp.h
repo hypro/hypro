@@ -18,13 +18,10 @@ namespace hypro {
 template<typename Number, typename Converter, typename Setting>
 class SupportFunctionNewT;	
 
-template<typename Number, typename Converter, typename Setting>
+template<typename Number>
 struct ScaleData : public RGNData {
-	std::shared_ptr<RootGrowNode<Number,Converter,Setting>> origin;	
 	Number factor;
-	ScaleData(const std::shared_ptr<RootGrowNode<Number,Converter,Setting>>& orig, const Number& fac)
-		: origin(orig), factor(fac)
-	{}
+	ScaleData(const Number& fac) : factor(fac) {}
 };
 
 template<typename Number, typename Converter, typename Setting>
@@ -63,10 +60,10 @@ class ScaleOp : public RootGrowNode<Number,Converter,Setting> {
   		origin.addOperation(this); 
   	}
 
-  	ScaleOp(const ScaleData<Number,Converter,Setting>& d) 
+  	ScaleOp(const ScaleData<Number>& d) 
   		: originCount(1)
-  		, mChildren(PointerVec({1,d.origin}))
-  		, mDimension(d.origin->getDimension())
+  		, mChildren(PointerVec({1,nullptr}))
+  		//, mDimension(d.origin->getDimension())
   		, factor(d.factor)
   	{}
 
@@ -78,9 +75,7 @@ class ScaleOp : public RootGrowNode<Number,Converter,Setting> {
 	unsigned getOriginCount() const { return originCount; }
 	std::size_t getDimension() const { return mDimension; }
 	Number getFactor() const { return factor; }
-	RGNData getData() const { 
-		return static_cast<RGNData>(ScaleData<Number,Converter,Setting>(mChildren.front(), factor)); 
-	}
+	RGNData* getData() const { return new ScaleData<Number>(factor); }
 
 	////// RootGrowNode Interface
 

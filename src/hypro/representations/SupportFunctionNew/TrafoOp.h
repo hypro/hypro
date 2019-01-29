@@ -18,16 +18,26 @@ namespace hypro {
 template<typename Number, typename Converter, typename Setting>
 class SupportFunctionNewT;	
 
-template<typename Number, typename Converter, typename Setting>
+template<typename Number, typename Setting>
 struct TrafoData : public RGNData {
-	std::shared_ptr<RootGrowNode<Number,Converter,Setting>> origin;
+	
+	//TODO: Do currentExponent and successiveTransformations need to be stored?
+
 	unsigned currentExponent;												
 	std::size_t successiveTransformations;									
 	std::shared_ptr<const LinTrafoParameters<Number,Setting>> parameters;
-	TrafoData(const std::shared_ptr<RootGrowNode<Number,Converter,Setting>>& orig, unsigned exp, std::size_t suc, const std::shared_ptr<const LinTrafoParameters<Number,Setting>>& param) 
-		: origin(orig), currentExponent(exp), successiveTransformations(suc), parameters(param) 
+	
+	TrafoData(unsigned exp, std::size_t suc, const std::shared_ptr<const LinTrafoParameters<Number,Setting>>& param) 
+		: currentExponent(exp), successiveTransformations(suc), parameters(param) 
+	{}
+
+	template<typename SettingRhs, carl::DisableIf< std::is_same<Setting, SettingRhs> > = carl::dummy>
+	TrafoData(const TrafoData<Number,SettingRhs>& rhs)
+		: currentExponent(1)
+		, successiveTransformations(0)
 	{
-		std::cout << "TrafoData constructor, parameters are:\n" << parameters->matrix() << "\n" << parameters->vector() << std::endl;
+		const std::pair<matrix_t<Number>,vector_t<Number>>& parameterPair = rhs.parameters->getParameterSet(rhs.currentExponent);
+		parameters = std::make_shared<const LinTrafoParameters<Number,Setting>>(parameterPair.first, parameterPair.second, Setting::LIN_TRANS_REDUCTION_GROUP_SIZE);
 	}
 }; 
 
@@ -103,25 +113,14 @@ class TrafoOp : public RootGrowNode<Number,Converter,Setting> {
 		}
 	}
 
-	TrafoOp(const TrafoData<Number,Converter,Setting>& d) 
+	TrafoOp(const TrafoData<Number,Setting>& d) 
 		: originCount(1)
-		//, mChildren(PointerVec({1,d.origin}))
+		, mChildren(PointerVec({1,nullptr}))
 		//, mDimension(d.origin->getDimension())
 		, currentExponent(d.currentExponent)
 		, successiveTransformations(d.successiveTransformations)
-		//, parameters(std::make_shared<const LinTrafoParameters<Number,Setting>>(d.parameters->matrix(), d.parameters->vector()))
-	{
-		std::cout << "1" << std::endl;
-		std::cout << "type: " << d.origin->getType() << std::endl;
-		mChildren = PointerVec({1,d.origin});
-		std::cout << "2" << std::endl;
-		mDimension = d.origin->getDimension();
-		std::cout << "3" << std::endl;
-		std::cout << "TrafoOp constructor, gotten parameters are:\n" << d.parameters->matrix() << "\n" << d.parameters->vector() << std::endl;
-		auto tmp = std::make_shared<const LinTrafoParameters<Number,Setting>>(d.parameters->matrix(), d.parameters->vector());
-		assert(tmp != nullptr);
-		std::cout << "TrafoOp constructor, after creation of lintrafoParams parameters are:\n" << tmp->matrix() << "\n" << tmp->vector() << std::endl;
-	}
+		, parameters(std::move(d.parameters))
+	{}
 
 	~TrafoOp(){ }
 
@@ -133,9 +132,7 @@ class TrafoOp : public RootGrowNode<Number,Converter,Setting> {
 	unsigned getCurrentExponent() const { return currentExponent; }
 	std::size_t getSuccessiveTransformations() const { return successiveTransformations; }
 	const std::shared_ptr<const LinTrafoParameters<Number,Setting>>& getParameters() const { return parameters; }
-	RGNData getData() const { 
-		return static_cast<RGNData>(TrafoData<Number,Converter,Setting>(mChildren.front(), currentExponent, successiveTransformations, parameters)); 
-	}
+	RGNData* getData() const { return new TrafoData<Number,Setting>(currentExponent, successiveTransformations, parameters); }
 
 	////// RootGrowNode Interface
 
@@ -185,7 +182,7 @@ class TrafoOp : public RootGrowNode<Number,Converter,Setting> {
 	//and sets the generally used LinTrafoParameters to parameters if they are the same
 	bool hasTrafo(std::shared_ptr<const LinTrafoParameters<Number,Setting>>& ltParam, const matrix_t<Number>& A, const vector_t<Number>& b){
 	    if(parameters->matrix() == A && parameters->vector() == b){
-	            ltParam = parameters;
+	    	ltParam = parameters;
 	    } 
 	    return true;
 	}

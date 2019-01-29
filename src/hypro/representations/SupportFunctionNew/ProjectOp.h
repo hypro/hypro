@@ -18,13 +18,9 @@ namespace hypro {
 template<typename Number, typename Converter, typename Setting>
 class SupportFunctionNewT;	
 
-template<typename Number, typename Converter, typename Setting>
 struct ProjectData : public RGNData {
-	std::shared_ptr<RootGrowNode<Number,Converter,Setting>> origin;	
 	std::vector<std::size_t> dimensions;
-	ProjectData(const std::shared_ptr<RootGrowNode<Number,Converter,Setting>>& orig, const std::vector<std::size_t>& dims)
-		: origin(orig), dimensions(dims)
-	{}
+	ProjectData(const std::vector<std::size_t>& dims) : dimensions(dims) {}
 };
 
 template<typename Number, typename Converter, typename Setting>
@@ -62,10 +58,10 @@ class ProjectOp : public RootGrowNode<Number,Converter,Setting> {
   		origin.addOperation(this); 
   	}
 
-  	ProjectOp(const ProjectData<Number,Converter,Setting>& d) 
+  	ProjectOp(const ProjectData& d) 
   		: originCount(1)
-  		, mChildren(PointerVec({1,d.origin}))
-  		, mDimension(d.origin->getDimension())
+  		, mChildren(PointerVec({1,nullptr}))
+  		//, mDimension(d.origin->getDimension())
   		, dimensions(d.dimensions)
   	{}
 
@@ -77,9 +73,11 @@ class ProjectOp : public RootGrowNode<Number,Converter,Setting> {
 	unsigned getOriginCount() const { return originCount; }
 	std::size_t getDimension() const { return mDimension; }
 	std::vector<std::size_t> getDimensions() const { return dimensions; }
-	RGNData getData() const { 
-		return static_cast<RGNData>(ProjectData<Number,Converter,Setting>(mChildren.front(), dimensions)); 
+	RGNData* getData() const { 
+		std::cout << "ProjectOp getData" << std::endl;
+		return new ProjectData(dimensions);
 	}
+
 
 	////// RootGrowNode Interface
 

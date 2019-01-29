@@ -110,12 +110,14 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
 		//if(orig.getRoot() == nullptr){ mRoot == nullptr; }
 		//std::function<>
 
-
 		if(orig.getRoot() != nullptr){
 			mRoot = mRoot->convertSettings(orig.getRoot());				
 		} else {
 			mRoot = nullptr;
 		}
+
+		//TODO: Children / Linkage between children and parents
+
 		//Now for all children? -> Yes since mixed settings would destroy the n-ary nodes
 		//for(auto child : orig->getRoot()->getChildren()){
 		//	SupportFunctionNewT<Number,Converter,settings> tmp = SupportFunctionNewT<Number,Converter,Setting>(*child);

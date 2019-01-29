@@ -26,9 +26,7 @@ struct LeafData : public RGNData {
 	LeafData(){};
 	LeafData(const uintptr_t addr, const representation_name rep, const bool redundancy) 
 		: addressToRep(addr), typeOfRep(rep), isNotRedundant(redundancy)
-	{ 
-		std::cout << "We got addressToRep: " << addressToRep << " and type: " << typeOfRep << std::endl;
-	}
+	{ }
 };
 
 //Subclass of RootGrowNode, is a node with a representation of a state
@@ -57,11 +55,9 @@ class Leaf : public RootGrowNode<Number,Converter,Setting> {
 	Leaf(Representation* r) : mDimension(r->dimension()), rep(r) {}
 
 	Leaf(const LeafData& d){
-		std::cout << "Construct leaf from leafdata" << std::endl;
 		assert(Representation::type() == d.typeOfRep);
 		rep = reinterpret_cast<Representation*>(d.addressToRep);
 		assert(rep != nullptr);
-		std::cout << "rep dim: " << rep->dimension() << "rep: " << rep << std::endl;
 		mDimension = rep->dimension();
 		isNotRedundant = d.isNotRedundant;
 	}
@@ -75,7 +71,7 @@ class Leaf : public RootGrowNode<Number,Converter,Setting> {
 	std::size_t getDimension() const { return mDimension; }
 	Representation* getRepresentation() const { return rep; }
 	bool isRedundant() const { return !isNotRedundant; }
-	RGNData getData() const { return LeafData(); }
+	RGNData* getData() const { return nullptr; }
 	LeafData getLeafData() const {
 		return LeafData(reinterpret_cast<uintptr_t>(rep), rep->type(), isNotRedundant);
 	}

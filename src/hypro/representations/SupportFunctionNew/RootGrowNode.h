@@ -13,6 +13,7 @@
 
 #pragma once 
 
+#include <ios>
 #include <iostream>
 #include <vector>
 #include <memory>
@@ -82,7 +83,7 @@ class RootGrowNode {
 	virtual std::size_t getDimension() const { return mDimension; }
 
 	//Gets the data from a node subclass that has no extra templates (and is therefore not the Leaf class)
-	virtual RGNData getData() const = 0;
+	virtual RGNData* getData() const = 0;
 
 	//Gets the construction data from the Leaf class only
 	virtual LeafData getLeafData() const { return LeafData(); }
@@ -152,48 +153,46 @@ class RootGrowNode {
 	std::shared_ptr<RootGrowNode<Number,Converter,Setting>> convertSettings(const std::shared_ptr<RootGrowNode<Number,Converter,SettingRhs>>& in) { 
 
 		std::shared_ptr<RootGrowNode<Number,Converter,Setting>> clone;
-		RGNData tmp = in->getData();
-		RGNData* tmpPtr = &tmp;		
+		RGNData* tmpPtr = in->getData();
 		
 		switch(in->getType()){
 			case SFNEW_TYPE::TRAFO: {
-				TrafoData<Number,Converter,Setting>* dataTr = static_cast<TrafoData<Number,Converter,Setting>*>(tmpPtr);
-				assert(dataTr != nullptr);
-				std::cout << dataTr->origin->getType() << std::endl;
-				//std::shared_ptr<TrafoOp<Number,Converter,Setting>> trafo = std::make_shared<TrafoOp<Number,Converter,Setting>>(*dataTr);
-				TrafoOp<Number,Converter,Setting>* trafoObj = new TrafoOp<Number,Converter,Setting>(*dataTr);
-				std::shared_ptr<TrafoOp<Number,Converter,Setting>> trafo = std::shared_ptr<TrafoOp<Number,Converter,Setting>>(trafoObj);
+				TrafoData<Number,SettingRhs>* dataWithSettingRhs = dynamic_cast<TrafoData<Number,SettingRhs>*>(tmpPtr);
+				assert(dataWithSettingRhs != nullptr);
+				TrafoData<Number,Setting> dataTr(*dataWithSettingRhs);
+				std::shared_ptr<TrafoOp<Number,Converter,Setting>> trafo = std::make_shared<TrafoOp<Number,Converter,Setting>>(dataTr);
 				clone = std::static_pointer_cast<RootGrowNode<Number,Converter,Setting>>(trafo);
-				break;
-			}
-			case SFNEW_TYPE::SCALEOP: {
-				ScaleData<Number,Converter,Setting>* dataSc = static_cast<ScaleData<Number,Converter,Setting>*>(tmpPtr);
-				std::shared_ptr<ScaleOp<Number,Converter,Setting>> scale = std::make_shared<ScaleOp<Number,Converter,Setting>>(*dataSc);
-				clone = std::static_pointer_cast<RootGrowNode<Number,Converter,Setting>>(scale);
+				delete tmpPtr;
 				break;
 			}
 			case SFNEW_TYPE::PROJECTOP: {
-				ProjectData<Number,Converter,Setting>* dataPr = static_cast<ProjectData<Number,Converter,Setting>*>(tmpPtr);
-				std::shared_ptr<ProjectOp<Number,Converter,Setting>> project = std::make_shared<ProjectOp<Number,Converter,Setting>>(*dataPr);
+				std::shared_ptr<ProjectOp<Number,Converter,Setting>> project = std::make_shared<ProjectOp<Number,Converter,Setting>>(*(dynamic_cast<ProjectData*>(tmpPtr)));
 				clone = std::static_pointer_cast<RootGrowNode<Number,Converter,Setting>>(project);
-				break;
+				delete tmpPtr;
+				break;	
 			}	
+			case SFNEW_TYPE::SCALEOP: {
+				std::shared_ptr<ScaleOp<Number,Converter,Setting>> scale = std::make_shared<ScaleOp<Number,Converter,Setting>>(*(dynamic_cast<ScaleData<Number>*>(tmpPtr)));
+				clone = std::static_pointer_cast<RootGrowNode<Number,Converter,Setting>>(scale);
+				delete tmpPtr;
+				break;
+			}
 			case SFNEW_TYPE::SUMOP: {
-				SumData<Number,Converter,Setting>* dataSu = static_cast<SumData<Number,Converter,Setting>*>(tmpPtr);
-				std::shared_ptr<SumOp<Number,Converter,Setting>> sum = std::make_shared<SumOp<Number,Converter,Setting>>(*dataSu);
+				std::shared_ptr<SumOp<Number,Converter,Setting>> sum = std::make_shared<SumOp<Number,Converter,Setting>>(*tmpPtr);
 				clone = std::static_pointer_cast<RootGrowNode<Number,Converter,Setting>>(sum);
+				delete tmpPtr;
 				break;
 			}	
 			case SFNEW_TYPE::INTERSECTOP: {
-				IntersectData<Number,Converter,Setting>* dataIn = static_cast<IntersectData<Number,Converter,Setting>*>(tmpPtr);
-				std::shared_ptr<IntersectOp<Number,Converter,Setting>> intersect = std::make_shared<IntersectOp<Number,Converter,Setting>>(*dataIn);
-				clone = std::static_pointer_cast<RootGrowNode<Number,Converter,Setting>>(intersect);
+				std::shared_ptr<IntersectOp<Number,Converter,Setting>> sum = std::make_shared<IntersectOp<Number,Converter,Setting>>(*tmpPtr);
+				clone = std::static_pointer_cast<RootGrowNode<Number,Converter,Setting>>(sum);
+				delete tmpPtr;
 				break;
 			}	
 			case SFNEW_TYPE::UNIONOP: {
-				UnionData<Number,Converter,Setting>* dataUn = static_cast<UnionData<Number,Converter,Setting>*>(tmpPtr);
-				std::shared_ptr<UnionOp<Number,Converter,Setting>> unio = std::make_shared<UnionOp<Number,Converter,Setting>>(*dataUn);
-				clone = std::static_pointer_cast<RootGrowNode<Number,Converter,Setting>>(unio);
+				std::shared_ptr<UnionOp<Number,Converter,Setting>> sum = std::make_shared<UnionOp<Number,Converter,Setting>>(*tmpPtr);
+				clone = std::static_pointer_cast<RootGrowNode<Number,Converter,Setting>>(sum);
+				delete tmpPtr;
 				break;
 			}
 				
@@ -206,6 +205,7 @@ class RootGrowNode {
 
 				std::cout << "we are here" << std::endl;
 
+				delete tmpPtr;
 				LeafData dataLe = in->getLeafData();
 
 				std::cout << "dataLe add: " << dataLe.addressToRep << " type: " << dataLe.typeOfRep << std::endl;

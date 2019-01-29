@@ -17,12 +17,6 @@ namespace hypro {
 template<typename Number, typename Converter, typename Setting>
 class SupportFunctionNewT;	
 
-template<typename Number, typename Converter, typename Setting>
-struct IntersectData : public RGNData { 
-	std::vector<std::shared_ptr<RootGrowNode<Number,Converter,Setting>>> children;
-	IntersectData(const std::vector<std::shared_ptr<RootGrowNode<Number,Converter,Setting>>>& c) : children(c) {}
-}; 
-
 //Specialized subclass for sums as example of a binary operator
 template<typename Number, typename Converter, typename Setting>
 class IntersectOp : public RootGrowNode<Number,Converter,Setting> {
@@ -56,7 +50,7 @@ class IntersectOp : public RootGrowNode<Number,Converter,Setting> {
 		lhs.addOperation(this, rhs); 
 	}
 
-	IntersectOp(const IntersectData<Number,Converter,Setting>& d) : mDimension(d.children.front()->getDimension()), mChildren(d.children) {}
+	IntersectOp(const RGNData& ){}
 
 	~IntersectOp(){}
 
@@ -65,7 +59,7 @@ class IntersectOp : public RootGrowNode<Number,Converter,Setting> {
 	SFNEW_TYPE getType() const override { return type; }
 	unsigned getOriginCount() const { return originCount; }
 	std::size_t getDimension() const { return mDimension; }
-	RGNData getData() const { return static_cast<RGNData>(IntersectData<Number,Converter,Setting>(this->getChildren())); }
+	RGNData* getData() const { return new RGNData(); }
 
 	////// RootGrowNode Interface
 
