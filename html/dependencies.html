@@ -107,17 +107,17 @@ $(document).ready(function(){initNavTree('dependencies.html','');});
 <div class="title">Dependencies </div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p>The very basic dependencies include the libraries</p>
+<div class="textblock"><p>The very basic dependencies include the libraries.</p>
 <ul>
 <li>a C++ compiler, g++ (version &gt;= 4.9) or clang++ (version &gt;= 3.6),</li>
 <li><a href="https://gmplib.org/">gmpxx</a> the Gnu Multiprecision library C++ interface,</li>
 <li><a href="https://cmake.org/">CMake</a> (version &gt;= 3.0.0), a build system,</li>
 <li><a href="http://www.boost.org/">boost</a> (version &gt;= 1.55), a collection of C++ libaries,</li>
-<li><a href="https://github.com/smtrat/carl">CaRL</a>, a C++ library for arithmetic,</li>
+<li><a href="https://github.com/smtrat/carl">CArL</a>, a C++ library for arithmetic,</li>
 <li>Java JRE (required for the Antlr parser) and</li>
 <li>uuid-dev (required for the Antlr parser)</li>
 </ul>
-<p>The first four dependencies can be obtained as Ubuntu packages or directly downloaded from the referenced websites. To compile HyPro, a suitable C++ compiler is required, either g++ (at least version 4.9) or clang++ (at least version 3.5).</p>
+<p>Note that CArL installs dependencies such as Eigen3, gmp and boost locally in its build folder, so installing Java and uuid-dev along with CArL should be sufficient to be able to build and use HyPro. To compile HyPro, a suitable C++ compiler is required, either g++ (at least version 4.9) or clang++ (at least version 3.5).</p>
 <h2>Additional (optional) dependencies </h2>
 <p>Currently HyPro provides an extended interface for linear solving, which allows to <em>additionally</em> add <b>one</b> of the following linear optimizers:</p>
 <ul>
