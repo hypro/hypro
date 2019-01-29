@@ -31,7 +31,7 @@ class MHybridAutomaton{
         static void getVariables(int, mxArray**, int, const mxArray**);
         static void getLabels(int, mxArray**, int, const mxArray**);
         static void setLocations(int, mxArray**, int, const mxArray**);
-        static void setTransitions(int, mxArray**, int, const mxArray**);
+        // static void setTransitions(int, mxArray**, int, const mxArray**);
         static void setInitialStates(int, mxArray**, int, const mxArray**);
         static void setLocalBadStates(int, mxArray**, int, const mxArray**);
         static void setGlobalBadStates(int, mxArray**, int, const mxArray**);

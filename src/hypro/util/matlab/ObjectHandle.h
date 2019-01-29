@@ -52,11 +52,12 @@ class ObjectHandle{
         static hypro::SOLUTION mSolution2Hypro(char*);
         static hypro::representation_name mRepresentationName2Hypro(char*);
         static carl::Interval<double> mInterval2Hypro(const mxArray*);
+        static carl::Interval<hypro::tNumber> mMPQInterval2Hypro(const mxArray*);
         static hypro::matrix_t<double> mMatrix2Hypro(const mxArray*, const int, const int);
         static hypro::vector_t<double> mVector2Hypro(const mxArray*, const int);
         static hypro::Point<double> mPoint2Hypro(const mxArray*, const int);
         static hypro::Halfspace<double> mHalfspace2Hypro(mxArray*, const int, double&);
-
+        static std::map<hypro::Location<double>, hypro::Condition<double>> mlocationConditionMap2Hypro(mxArray*, const int);
 
         static std::vector<std::size_t> mSizeVector2Hypro(const mxArray*, const int);
         static std::vector<carl::Interval<double>> mIntervals2Hypro(const mxArray*, const int = 1, const int = 2);
@@ -323,6 +324,17 @@ carl::Interval<double> ObjectHandle::mInterval2Hypro(const mxArray* m_interval){
 }
 
 /**
+ * @brief Converts a Matlab interval of 
+ **/
+// carl::Interval<hypro::tNumber> ObjectHandle::mMPQInterval2Hypro(const mxArray* m_interval){
+//     double* interval = mxGetPr(m_interval);
+//     hypro::tNumber lower(interval[0]);
+//     hypro::tNumber upper(interval[1]);
+//     carl::Interval<hypro::tNumber>* h_interval = new carl::Interval<hypro::tNumber>(lower, upper);
+//     return *h_interval;
+// }
+
+/**
  *  @brief Converts a pair of points defined in matlab into hyPro intervals
  *  @param points A pointer to the input Matlab matrix
  **/
@@ -442,31 +454,38 @@ hypro::SOLUTION ObjectHandle::mSolution2Hypro(char* mSol){
  * into Hypro enum
  **/
 hypro::representation_name ObjectHandle::mRepresentationName2Hypro(char* name){
-    if(name == "box"){
+    if(!strcmp(name, "box")){
         return hypro::representation_name::box;
-    }else if(name == "carl_polytope"){
+    }else if(!strcmp(name, "carl_polytope")){
         return hypro::representation_name::carl_polytope;
-    }else if(name == "constraint_set"){
+    }else if(!strcmp(name,"constraint_set")){
         return hypro::representation_name::constraint_set;
-    }else if(name == "difference_bounds"){
+    }else if(!strcmp(name,"difference_bounds")){
         return hypro::representation_name::difference_bounds;
-    }else if(name == "polytope_h"){
+    }else if(!strcmp(name,"polytope_h")){
         return hypro::representation_name::polytope_h;
-    }else if(name == "polytope_v"){
+    }else if(!strcmp(name,"polytope_v")){
         return hypro::representation_name::polytope_v;
-    }else if(name == "ppl_polytope"){
+    }else if(!strcmp(name, "ppl_polytope")){
         return hypro::representation_name::ppl_polytope;
-    }else if(name == "support_function"){
+    }else if(!strcmp(name, "support_function")){
         return hypro::representation_name::support_function;
-    }else if(name == "taylor_model"){
+    }else if(!strcmp(name, "taylor_model")){
         return hypro::representation_name::taylor_model;
-    }else if (name == "zonotope"){
+    }else if(!strcmp(name, "zonotope")){
         return hypro::representation_name::zonotope;
     }else{
         return hypro::representation_name::UNDEF;
     }
 }
 
+/**
+ * @brief Converts a Matlab struct conating mapping between locations
+ * and conditions into Hypro.
+ **/
+std::map<hypro::Location<double>, hypro::Condition<double>> ObjectHandle::mlocationConditionMap2Hypro(mxArray*, const int){
+    
+}
 
 /**
  * @brief Converts a Matlab matrix and vector into a vector of halfspaces.

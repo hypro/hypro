@@ -13,6 +13,23 @@
 
     /**
      * @brief
+     **/    
+    void MHybridAutomaton::new_sets(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
+        if(nlhs != 1)
+            mexErrMsgTxt("MHybridAutomaton - new_sets: One output expected.");
+        if(nrhs < 4)
+            mexErrMsgTxt("MHybridAutomaton - new_sets: One or more arguments are missing.");
+        
+        const mwSize *loc_dims;
+        int loc_num;
+        loc_dims = mxGetDimensions(prhs[2]);
+        loc_num = loc_dims[0];
+        std::vector<hypro::Location<double>> locs = objArray2Hypro<hypro::Location<double>>(prhs[2], loc_num);
+        //TODO
+    }
+
+    /**
+     * @brief
      **/
     void MHybridAutomaton::copy(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
         if(nlhs != 1)
@@ -78,39 +95,6 @@
         //obj->decompose();
         // obj->decompose(decomposition);
     }
-
-    /**
-     * @brief
-     **/    
-    void MHybridAutomaton::new_sets(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
-        if(nlhs != 1)
-            mexErrMsgTxt("MHybridAutomaton - new_sets: One output expected.");
-        if(nrhs < 8)
-            mexErrMsgTxt("MHybridAutomaton - new_sets: One or more arguments are missing.");
-        
-        const int num_locations = (int) mxGetScalar(prhs[2]);
-        const int num_transitions = (int) mxGetScalar(prhs[3]);
-        const int num_maps = (int) mxGetScalar(prhs[4]);
-
-        std::set<std::unique_ptr<hypro::Location<double>>, hypro::locPtrComp<double>> locSet;
-        std::set<hypro::Transition<double>> tranSet;
-        std::multimap<const hypro::Location<double>*, hypro::ConstraintSetT<double>> mapping;
-
-        for(int i = 2; i < 2+ num_locations; i++){
-            hypro::Location<double>* loc = convertMat2Ptr<hypro::Location<double>>(prhs[i]);
-            std::unique_ptr<hypro::Location<double>> temp;
-            temp = std::unique_ptr<hypro::Location<double>>(new hypro::Location<double>(*loc));
-            locSet.insert(std::move(temp));
-        }
-
-        for(int i = 2 + num_locations; i < 2 + num_locations + num_transitions; i++){
-            hypro::Transition<double>* tran = convertMat2Ptr<hypro::Transition<double>>(prhs[i]);
-            tranSet.insert(std::move(*tran));
-        }
-        
-        //TODO
-    }
-
 
     /**
      * @brief
@@ -184,12 +168,12 @@
 
     }
 
-    /**
-     * @brief
-     **/    
-    void MHybridAutomaton::setTransitions(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
+    // /**
+    //  * @brief
+    //  **/    
+    // void MHybridAutomaton::setTransitions(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
 
-    }
+    // }
 
     /**
      * @brief
@@ -431,10 +415,10 @@
             return;
         }
 
-        if (!strcmp("setTransitions", cmd) && nrhs == 2){  
-            setTransitions(nlhs, plhs, nrhs, prhs);
-            return;
-        }
+        // if (!strcmp("setTransitions", cmd) && nrhs == 2){  
+        //     setTransitions(nlhs, plhs, nrhs, prhs);
+        //     return;
+        // }
 
         if (!strcmp("setInitialStates", cmd) && nrhs == 2){  
             setInitialStates(nlhs, plhs, nrhs, prhs);

@@ -1,2 +1,0 @@
-classdef HyProHAutomaton < handle
-end
