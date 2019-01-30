@@ -2,6 +2,7 @@
 #include <carl/interval/Interval.h>
 #include <carl/core/Variable.h>
 #include <map>
+#include <iostream>
 
 namespace hypro {
 

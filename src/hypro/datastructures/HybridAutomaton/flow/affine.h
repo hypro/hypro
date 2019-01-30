@@ -1,6 +1,7 @@
 #pragma once
 #include "linear.h"
 #include "../../../types.h"
+#include <iostream>
 
 namespace hypro {
 
