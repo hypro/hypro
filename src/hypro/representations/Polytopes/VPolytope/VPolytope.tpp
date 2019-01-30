@@ -225,6 +225,21 @@ VPolytopeT<Number, Converter, S> VPolytopeT<Number, Converter, S>::intersectHalf
 
 template<typename Number, typename Converter, typename S>
 std::pair<CONTAINMENT, VPolytopeT<Number, Converter, S>> VPolytopeT<Number, Converter, S>::satisfiesHalfspace( const Halfspace<Number>& rhs ) const {
+	// if we want to have fast pre-checks, this is the time to do them
+	if(S::checkVerticesBeforeConversion){
+		// we count the number of vertices satisfying the halfspace to get a first impression about the result type.
+		std::size_t numberVerticesInRhs = numberOfPointsInHalfspace(mVertices,rhs);
+		// no vertex is contained - the result will be empty.
+		if(numberVerticesInRhs == 0) {
+			COUNT("VPolyAvoidConversion");
+			return std::make_pair(CONTAINMENT::NO, VPolytopeT<Number,Converter,S>::Empty());
+		} else if(numberVerticesInRhs == mVertices.size()) {
+		// all vertices are contained - the full set is the result.
+			COUNT("VPolyAvoidConversion");
+			return std::make_pair(CONTAINMENT::FULL, *this);
+		}
+	}
+
 	auto intermediate = Converter::toHPolytope(*this);
 	auto resultPair = intermediate.satisfiesHalfspace(rhs);
 	if(resultPair.first != CONTAINMENT::NO){
@@ -237,12 +252,33 @@ std::pair<CONTAINMENT, VPolytopeT<Number, Converter, S>> VPolytopeT<Number, Conv
 
 template<typename Number, typename Converter, typename S>
 std::pair<CONTAINMENT, VPolytopeT<Number, Converter, S>> VPolytopeT<Number, Converter, S>::satisfiesHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const {
-	//std::cout << typeid(*this).name() << "::" << __func__ << ": Matrix: " << _mat << " and vector: " << _vec << std::endl;
-	//std::cout << "This VPolytope: " << *this << std::endl;
+	// this stores results from pre-checks to reduce the effort of intersections later, if applicable.
+	std::vector<Eigen::Index> halfspacesToAvoid;
+	if(S::checkVerticesBeforeConversion){
+		// we check for each halfspace individually to allow for premature exiting and reductions.
+		for(Eigen::Index rowIndex = 0; rowIndex < _mat.rows(); ++rowIndex) {
+			// we count the number of vertices satisfying the halfspace to get a first impression about the result type.
+			std::size_t numberVerticesInRhs = numberOfPointsInHalfspace(mVertices,Halfspace<Number>(_mat.row(rowIndex), _vec(rowIndex)));
+			// no vertex is contained - the result will be empty.
+			if(numberVerticesInRhs == 0) {
+				COUNT("VPolyAvoidConversion");
+				return std::make_pair(CONTAINMENT::NO, VPolytopeT<Number,Converter,S>::Empty());
+			} else if(numberVerticesInRhs == mVertices.size()) {
+			// all vertices are contained - the full set is the result for this halfspace, we can avoid it.
+				halfspacesToAvoid.push_back(rowIndex);
+			}
+		}
+		// none of the halfspaces cuts the set - return full set.
+		if(halfspacesToAvoid.size() == std::size_t(_mat.rows())) {
+			COUNT("VPolyAvoidConversion");
+			return std::make_pair(CONTAINMENT::FULL, *this);
+		}
+	}
+
 	auto intermediate = Converter::toHPolytope(*this);
 	intermediate.reduceNumberRepresentation(mVertices);
 	//std::cout << typeid(*this).name() << "::" << __func__ << ": Intermediate hpoly: " << intermediate << std::endl;
-	auto resultPair = intermediate.satisfiesHalfspaces(_mat, _vec);
+	auto resultPair = intermediate.satisfiesHalfspaces(removeRows(_mat, halfspacesToAvoid), removeRows(_vec,halfspacesToAvoid));
 	if(resultPair.first != CONTAINMENT::NO){
 		//resultPair.second.removeRedundancy();
 		assert(!resultPair.second.empty());
@@ -263,8 +299,78 @@ bool VPolytopeT<Number, Converter, S>::contains( const Point<Number> &point ) co
 
 template <typename Number, typename Converter, typename S>
 bool VPolytopeT<Number, Converter, S>::contains( const vector_t<Number> &vec ) const {
-	auto tmpHPoly = Converter::toHPolytope(*this);
-	return tmpHPoly.contains(vec);
+	if(S::useLpForPointContainment) {
+		// create LP  Ax = b to solve whether vec can be represented as a convex combination of the vertices.
+		// 1 create matrix from vertices.
+		// 2 use vec as b
+		// 3 set bounds for cols to [0,1]
+		// 4 add constraint stating that all col-values need to sum up to 1.
+
+		// 1 create matrix
+		matrix_t<Number> A = matrix_t<Number>(this->dimension(), mVertices.size());
+		for(Eigen::Index i = 0; i < A.cols(); ++i) {
+			A.col(i) = mVertices[i].rawCoordinates();
+		}
+
+		Optimizer<Number> opt(A,vec);
+
+		// 3 bound cols
+		for(Eigen::Index i = 0; i < A.cols(); ++i) {
+			vector_t<Number> constraint = vector_t<Number>::Zero(A.cols());
+			constraint(i) = 1;
+			opt.addConstraint(constraint, 1, carl::Relation::LEQ);
+			opt.addConstraint(constraint, 0, carl::Relation::GEQ);
+		}
+
+		// 4 add constraint that all coefficients add up to 1
+		vector_t<Number> constraint = vector_t<Number>::Ones(A.cols());
+		opt.addConstraint(constraint, 1, carl::Relation::EQ);
+
+		return opt.checkConsistency();
+
+	} else {
+		// check via conversion
+		auto tmpHPoly = Converter::toHPolytope(*this);
+		return tmpHPoly.contains(vec);
+	}
+}
+
+template <typename Number, typename Converter, typename S>
+bool VPolytopeT<Number, Converter, S>::contains( const std::vector<Point<Number>>& points ) const {
+	if(S::useLpForPointContainment) {
+		// create LP  Ax = b to solve whether vec can be represented as a convex combination of the vertices.
+		// 1 create matrix from vertices.
+		// 2 use vec as b
+		// 3 set bounds for cols to [0,1]
+		// 4 add constraint stating that all col-values need to sum up to 1.
+
+		// 1 create matrix
+		matrix_t<Number> A = matrix_t<Number>(this->dimension(), mVertices.size());
+		for(Eigen::Index i = 0; i < A.cols(); ++i) {
+			A.col(i) = mVertices[i].rawCoordinates();
+		}
+
+		Optimizer<Number> opt(A,vec);
+
+		// 3 bound cols
+		for(Eigen::Index i = 0; i < A.cols(); ++i) {
+			vector_t<Number> constraint = vector_t<Number>::Zero(A.cols());
+			constraint(i) = 1;
+			opt.addConstraint(constraint, 1, carl::Relation::LEQ);
+			opt.addConstraint(constraint, 0, carl::Relation::GEQ);
+		}
+
+		// 4 add constraint that all coefficients add up to 1
+		vector_t<Number> constraint = vector_t<Number>::Ones(A.cols());
+		opt.addConstraint(constraint, 1, carl::Relation::EQ);
+
+		return opt.checkConsistency();
+
+	} else {
+		// check via conversion
+		auto tmpHPoly = Converter::toHPolytope(*this);
+		return tmpHPoly.contains(vec);
+	}
 }
 
 template <typename Number, typename Converter, typename S>
