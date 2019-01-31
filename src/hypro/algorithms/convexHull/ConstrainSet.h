@@ -102,13 +102,13 @@ public:
 	}
 
 	void print() const {
-	cout <<"\n";
+std::cout <<"\n";
 		for(std::size_t i=0;i<constrainSet.size();++i) {
-			cout << i+1 <<": (";
+		std::cout << i+1 <<": (";
 			if(std::get<0>(std::get<0>(constrainSet[i]))) {cout << "-infty";} else {cout << std::get<1>(std::get<0>(constrainSet[i]));}
-			cout << ",";
+		std::cout << ",";
 			if(std::get<0>(std::get<1>(constrainSet[i]))) {cout << "infty";} else {cout << std::get<1>(std::get<1>(constrainSet[i]));}
-			cout << ")    value: " << std::get<2>(constrainSet[i])<<"\n";
+		std::cout << ")    value: " << std::get<2>(constrainSet[i])<<"\n";
 		}
 	}
 
@@ -135,7 +135,7 @@ public:
 	Number diffToLowerBound(std::size_t var) const {
 		return std::get<1>(std::get<0>(constrainSet[var]))-std::get<2>(constrainSet[var]);
 	}
-	
+
 
 	friend bool operator==(const ConstrainSet<Number>& lhs, const ConstrainSet<Number>& rhs) {
 		if(lhs.constrainSet.size() != rhs.constrainSet.size()) {

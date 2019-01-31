@@ -1,6 +1,6 @@
 /**
  * @brief Class wrapping a std::chrono clock.
- * 
+ *
  * @file Clock.h
  * @author Stefan Schupp
  * @date 2018-09-28

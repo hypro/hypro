@@ -31,7 +31,6 @@ namespace hypro
 	    EventTimingContainer<Number> mLocalTimings;
     	HierarchicalIntervalVector<CONTAINMENT, tNumber> mTransitionTimings;
 
-
    		std::vector<boost::tuple<Transition<Number>*, State>> mDiscreteSuccessorBuffer;
 
 	    std::map<Transition<Number>*, State> mPotentialZenoTransitions;

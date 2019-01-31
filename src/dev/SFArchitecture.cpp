@@ -8,17 +8,17 @@ int main(){
 
 	//Operations
 	TrafoOp traOp;
-	cout << "Unary operator traOp evaluates to type: " << traOp.getType() << " and should be 1" << endl;
-	cout << "traOp unary? " << traOp.isItUnary() << endl;
+std::cout << "Unary operator traOp evaluates to type: " << traOp.getType() << " and should be 1" << endl;
+std::cout << "traOp unary? " << traOp.isItUnary() << endl;
 
 	SumOp sumOp;
-	cout << "Binary operator sumOp evaluates to type: " << sumOp.getType() << " and should be 2" << endl;
+std::cout << "Binary operator sumOp evaluates to type: " << sumOp.getType() << " and should be 2" << endl;
 
 	//Leaf test
 	string blub = "blub";
 	Leaf<string> leaf1(blub);
-	cout << "leaf1 evaluates to type: " << leaf1.getType() << " and should be 3" << endl;
-	cout << "leaf1 says: " << leaf1.say() << std::endl;
+std::cout << "leaf1 evaluates to type: " << leaf1.getType() << " and should be 3" << endl;
+std::cout << "leaf1 says: " << leaf1.say() << std::endl;
 
 	//Leat 2
 	string bam = "bam";
@@ -41,27 +41,27 @@ int main(){
 
 	SFC sfc(l1ptr);
 	sfc.addUnaryOp(tptr);
-	
-	//For testing: only make support function with content leaf2. 
+
+	//For testing: only make support function with content leaf2.
 	SFC sfc2(l2ptr);
 	SF sf2(&sfc2);
-	cout << "Made sf2 with only leaf2 of type " << sfc2.getRoot()->getType() << ". underlying tree of sf2 is: ";
+std::cout << "Made sf2 with only leaf2 of type " << sfc2.getRoot()->getType() << ". underlying tree of sf2 is: ";
 	sf2.listUnderlyingTree();
 
 	//Finish building the tree
 	sfc.RootGrowTree::addBinaryOp(sptr, &sfc2);
-	
-	cout << "Made sfc with bigger tree structure. sfc is:\n" << sfc << endl;
-	
+
+std::cout << "Made sfc with bigger tree structure. sfc is:\n" << sfc << endl;
+
 	//Make raw pointers to sumOp and traOp
 	SumOp* sptr2 = &sumOp;
 	TrafoOp* tptr2 = &traOp;
 
 	//Put everything into SFC
 	SF sf(&sfc);
-	cout << "All direct children of sf are of type: \n";
+std::cout << "All direct children of sf are of type: \n";
 	sf.listAllDirectChildren();
-	cout << "underlying tree of sf is: \n";
+std::cout << "underlying tree of sf is: \n";
 	sf.listUnderlyingTree();
 
 	//Traversal Test
@@ -74,7 +74,7 @@ int main(){
 	// - SumOp gets [15,15] from trafoOp and [3,3] from leaf2, so summed up: [18,18]
 	// Endresult: [18,18]
 
-	cout << "TESTING TRAVERSAL \n";
+std::cout << "TESTING TRAVERSAL \n";
 	Matrix mat(3);
 	auto tmp = sfc.evaluate(mat);
 	std::cout << "[";

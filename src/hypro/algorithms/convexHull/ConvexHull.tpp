@@ -75,7 +75,7 @@ namespace hypro {
 		unsigned index = 0;
 		for(auto& point: mPoints) {
 			point.setCoordinates(point.rawCoordinates() - mOffset);
-			
+
 			// small tuning - remove point that lies exactly on the barycenter, as we know it lies inside
 			// Comment: Not neccesaryly true, what if it is the only point?
 			if(point.rawCoordinates().nonZeros() == 0) {
@@ -250,7 +250,7 @@ namespace hypro {
 				if(aux!=zero) {mHsv.push_back(hs);}
 			}
 		} catch(string const& message) {
-			cout << message;
+		std::cout << message;
 		}
 	}
 

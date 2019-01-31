@@ -33,21 +33,21 @@ TEST_F(HyReachTest, VectorgeneratorTest)
 {
 	std::string method = "Vectorgenerator TEST: ";
 
-	cout << method << "Generate matrices to compare\n";
+std::cout << method << "Generate matrices to compare\n";
     	std::vector<matrix_t<double>> actual_directions = vectorgeneratorEXT(3,PI_UP/2,10000);
-	cout << method << "VectorgeneratorEXT: done\n";
+std::cout << method << "VectorgeneratorEXT: done\n";
 
 	std::vector<matrix_t<double>> expected = vectorgenerator(3);
-	cout << method << "Vectorgenerator: done\n";
+std::cout << method << "Vectorgenerator: done\n";
 
-	cout << method << "Start comparison\n";
+std::cout << method << "Start comparison\n";
 	bool result = true;
 	for(auto iterator1 = expected.begin(); iterator1 != expected.end(); ++iterator1)
 	{
 		result &= contains(actual_directions, *iterator1, 3);
 	}
 
-	cout << method << "Comparison completed\n";
+std::cout << method << "Comparison completed\n";
 
     if(result)
 	{
@@ -55,7 +55,7 @@ TEST_F(HyReachTest, VectorgeneratorTest)
 	}
 	else
 	{
-		cout << method << "vectorgeneratorEXT - FAIL\n";
+	std::cout << method << "vectorgeneratorEXT - FAIL\n";
 	}
 }
 
@@ -85,52 +85,52 @@ TEST_F(HyReachTest, SupportfunctionTest)
 	constants(2) = 1;
 	constants(3) = 0;
 
-	cout << "Initialization terminated" <<'\n';
-	cout << "constraints: " << constraints << '\n' << "constants: " << constants << '\n';
+std::cout << "Initialization terminated" <<'\n';
+std::cout << "constraints: " << constraints << '\n' << "constants: " << constants << '\n';
 
     // sp = calcPolytopeSP(constraints,constants,'MediumScale','linprog',[0;0],[],[])
 	operator_e op = LEQ;
 	PolytopeSupportFunction sp(constraints, constants, op, 2);
 
-	cout << "SupportFunctionContent object created" << '\n';
+std::cout << "SupportFunctionContent object created" << '\n';
 	bool success = true;
 
     // check evaluation results along constructive directions
 
     // result = sp(constraints(1,:)')
 	evaluationResult result = sp.evaluate(constraints.row(0).transpose());
-	cout << "Evaluationresult for l=" << '\n' << constraints.row(0).transpose() << '\n' << " : " << result.supportValue << '\n';
+std::cout << "Evaluationresult for l=" << '\n' << constraints.row(0).transpose() << '\n' << " : " << result.supportValue << '\n';
 	// result == 2
 	success &= result.supportValue == 2;
 
-	cout << '\n';
-	cout << '\n';
+std::cout << '\n';
+std::cout << '\n';
 
 
 	// result = sp(constraints(2,:)')
 	result = sp.evaluate(constraints.row(1).transpose());
-	cout << "Evaluationresult for l=" << '\n' << constraints.row(1).transpose() << '\n' << " : " << result.supportValue << '\n';
+std::cout << "Evaluationresult for l=" << '\n' << constraints.row(1).transpose() << '\n' << " : " << result.supportValue << '\n';
 	// result == 1
 	success &= result.supportValue == 1;
 
-	cout << '\n';
-	cout << '\n';
+std::cout << '\n';
+std::cout << '\n';
 
     // result = sp(constraints(3,:)')
 	result = sp.evaluate(constraints.row(2).transpose());
-	cout << "Evaluationresult for l=" << '\n' << constraints.row(2).transpose() << '\n' << " : " << result.supportValue << '\n';
+std::cout << "Evaluationresult for l=" << '\n' << constraints.row(2).transpose() << '\n' << " : " << result.supportValue << '\n';
 	// result == 1
 	success &= result.supportValue == 1;
 
 
 	// result = sp(constraints(4,:)')
 	result = sp.evaluate(constraints.row(3).transpose());
-	cout << "Evaluationresult for l=" << '\n' << constraints.row(3).transpose() << '\n' << " : " << result.supportValue << '\n';
+std::cout << "Evaluationresult for l=" << '\n' << constraints.row(3).transpose() << '\n' << " : " << result.supportValue << '\n';
 	// result == 0
 	success &= result.supportValue == 0;
 
-	cout << '\n';
-	cout << '\n';
+std::cout << '\n';
+std::cout << '\n';
 
 
 	// check evaluation result along axes
@@ -143,14 +143,14 @@ TEST_F(HyReachTest, SupportfunctionTest)
 	{
              // result = sp(L(i,:)')
 	         result = sp.evaluate(*iterator);
-	         cout << "Evaluationresult for l=" << '\n' << *iterator << '\n' << " : " << result.supportValue << '\n';
+	         std::cout << "Evaluationresult for l=" << '\n' << *iterator << '\n' << " : " << result.supportValue << '\n';
     }
     // %return values are correct (checked manually based on output)
 
 
 
     // check multiplication
-    cout << "multiplicationtest -------------------------------------------------------" << '\n' << '\n';
+    std::cout << "multiplicationtest -------------------------------------------------------" << '\n' << '\n';
 
     //B = [2 0;0 2] % will multiply the results with 2
     matrix_t<double> B(2,2);
@@ -158,13 +158,13 @@ TEST_F(HyReachTest, SupportfunctionTest)
     B(0,1) = 0;
     B(1,0) = 0;
     B(1,1) = 2;
-    cout << "B =" << '\n' << B << '\n';
+    std::cout << "B =" << '\n' << B << '\n';
 
 
     //hypro::SupportFunctionContent Bsp = B * (&sp);
     //cout << "Bsp constructed" << '\n';
     MultiplicationSupportfunction* Bsp2 = sp.multiply(B);
-    cout << "start evaluation of multiplication" << '\n';
+    std::cout << "start evaluation of multiplication" << '\n';
     // for i=1:1:size(L,1)
 	for(auto iterator = L.begin(); iterator != L.end(); ++iterator)
 	{
@@ -173,7 +173,7 @@ TEST_F(HyReachTest, SupportfunctionTest)
 	         //cout << "Evaluationresult for l=" << '\n' << *iterator << '\n' << " : " << result.supportValue << '\n';
 
 	         result = Bsp2->evaluate(*iterator);
-	         cout << "Evaluationresult for l=" << '\n' << *iterator << '\n' << " : " << result.supportValue << '\n';
+	         std::cout << "Evaluationresult for l=" << '\n' << *iterator << '\n' << " : " << result.supportValue << '\n';
     }
     //
 
@@ -183,7 +183,7 @@ TEST_F(HyReachTest, SupportfunctionTest)
 	}
 	else
 	{
-		cout << "TEST FAILED!";
+	std::cout << "TEST FAILED!";
 	}
 
 	delete Bsp2;
@@ -191,7 +191,7 @@ TEST_F(HyReachTest, SupportfunctionTest)
 
 TEST_F(HyReachTest, NLOPTtest)
 {
-    cout << "TEST NLOPT" << '\n';
+    std::cout << "TEST NLOPT" << '\n';
 	//NLOPTTEST test;
 	//test.test();
 
@@ -201,20 +201,20 @@ TEST_F(HyReachTest, NLOPTtest)
 	A(0,1) = 1;
 	A(1,0) = 0.5;
 	A(1,1) = -2.5;
-	cout << "A: " << A << '\n';
-	cout << "-------------------" << '\n';
+std::cout << "A: " << A << '\n';
+std::cout << "-------------------" << '\n';
 
 	// L = vectorgenerator(2)
 	// L = L([4;3;2;1],:)
 	std::vector<matrix_t<double>> L = vectorgenerator(2);
-	cout << "L" << '\n';
+std::cout << "L" << '\n';
 
 	matrix_t<double> LAsMatrix = directionList2Matrix(&L);
-	cout << "L matrix" << '\n';
+std::cout << "L matrix" << '\n';
 
 	// V = calcPolytopeSP(L,[0;0;0;0],...)
 	PolytopeSupportFunction V(LAsMatrix,getZeroVector(4),LEQ,2);
-	cout << "V" << '\n';
+std::cout << "V" << '\n';
 
 	// range = [4;2;3;3]
 	matrix_t<double> range(4,1);
@@ -223,26 +223,26 @@ TEST_F(HyReachTest, NLOPTtest)
 	range(2,0) = 3;
 	range(3,0) = 3;
 
-	cout << "box value vector" << '\n';
+std::cout << "box value vector" << '\n';
 	// X0 = calcPolytopeSP(L,range,'MediumScale','linprog',[0;0],[],[])
 	PolytopeSupportFunction X0(LAsMatrix,range,LEQ,2);
 
-    cout << "Basic values initialized" << '\n';
+    std::cout << "Basic values initialized" << '\n';
 
     // omega0 = calcomega0delta()
     NonLinearOmega0Supportfunction omega0(&A, &V, &X0, 1);
 
-    cout << "Omega0 initialized" << '\n';
+    std::cout << "Omega0 initialized" << '\n';
 
     unsigned int count = 0;
 	for (auto iterator = L.begin(); iterator != L.end(); ++iterator)
 	{
-            cout << "TEST: iteration " << count << '\n';
+            std::cout << "TEST: iteration " << count << '\n';
 			matrix_t<double> l = (*iterator);
 
 		    evaluationResult res;
             res = omega0.evaluate(l);
-		    cout << "TEST: res.optimumValue:"<< '\n' << res.optimumValue << '\n' << " leads to the optimum value: "<< '\n' << res.supportValue << '\n';
+		    std::cout << "TEST: res.optimumValue:"<< '\n' << res.optimumValue << '\n' << " leads to the optimum value: "<< '\n' << res.supportValue << '\n';
 		    count++;
 	}
 

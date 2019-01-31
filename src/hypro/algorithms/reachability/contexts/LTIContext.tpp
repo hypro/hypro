@@ -699,7 +699,9 @@ namespace hypro
 		// allows to omit it.
 
 		// temporary for dbg-output
+		#ifdef HYPRO_LOGGING
 		carl::Interval<double> tmp = carl::Interval<double>(carl::toDouble(mCurrentGlobalTimeInterval.lower()), carl::toDouble(mCurrentGlobalTimeInterval.upper()));
+		#endif
 
 		if(mTask->btInfo.currentBTPosition < mTask->btInfo.btPath.size() && mTask->btInfo.btPath.at(mTask->btInfo.currentBTPosition + 1).transition != transition) {
 			TRACE("hypro.worker.discrete","Cannot Omit transition " << transition->getSource()->getName() << " -> " << transition->getTarget()->getName() << " for time interval " << tmp);
