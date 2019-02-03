@@ -25,7 +25,9 @@ public:
 
 	void initialize(const HybridAutomaton<Number>& ha, tNumber globalTimeHorizon);
 
-	EventTimingContainer<Number>* getTimings(const Path<Number,tNumber>& path) const;
+	const EventTimingNode<Number>* getTimingNode(const Path<Number,tNumber>& path) const;
+
+	EventTimingNode<Number>* rGetNode(const Path<Number,tNumber>& path);
 
 	void updateTimings(const Path<Number,tNumber>& path, const EventTimingContainer<Number>& update);
 

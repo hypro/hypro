@@ -66,11 +66,28 @@ namespace hypro {
 						}
 					}
 					#endif
+
+					// add child to current reach tree.
 					mTask->treeNode->addChild(child);
 					TRACE("hydra.worker.discrete", "Add node " << child << " as child to node " << mTask->treeNode << " which has " << mTask->treeNode->getRefinements().size() << " refinements." );
 					assert(child->getParent() == mTask->treeNode);
 
-					// timing-tree updates
+					// timing-tree extension
+					auto& tProvider = EventTimingProvider<typename State::NumberType>::getInstance();
+					// make sure the node does not exist yet
+					TRACE("hypro.datastructures.timing","Regular tree extension, find child.");
+					auto potentialNewNode = tProvider.rGetNode(child->getPath());
+					if(potentialNewNode == nullptr) {
+						auto newNode = tProvider.addChildToNode(mTimingNode, SettingsProvider<State>::getInstance().getGlobalTimeHorizon());
+						newNode->rGetTimings().setEntryTransition(transitionStatePair.first);
+						newNode->setEntryTimestamp(coveredTimeInterval);
+						newNode->setLocation(transitionStatePair.first->getTarget());
+					} else {
+						// timing node already exists, just update entry timestamp
+						potentialNewNode->updateEntryTimestamp(coveredTimeInterval);
+					}
+
+					// create tasks
 					INFO("hydra.worker.discrete","Enqueue Tree node " << child << " in local queue.");
 					std::shared_ptr<Task<State>> newTask = std::make_shared<Task<State>>(child);
 					// if we do not reset to level 0, set refinementLevel of task
@@ -105,8 +122,24 @@ namespace hypro {
 				// be due to some "wavy" trajectory, i.e. the transition can be enabled multiple times with breaks in between.
 				// This goes towards chattering behavior.
 
-
 				TRACE("hydra.worker.discrete","Current->treeNode is: " << mTask->treeNode);
+
+				// potential timing-tree extension, do this for every child
+				TRACE("hypro.datastructures.timing","Refinement tree extension, find children.");
+				auto& tProvider = EventTimingProvider<typename State::NumberType>::getInstance();
+				for(const auto& child : children) {
+					// make sure the node does not exist yet
+					auto potentialNewNode = tProvider.rGetNode(child->getPath());
+					if(potentialNewNode == nullptr) {
+						auto newNode = tProvider.addChildToNode(mTimingNode, SettingsProvider<State>::getInstance().getGlobalTimeHorizon());
+						newNode->rGetTimings().setEntryTransition(transitionStatePair.first);
+						newNode->setEntryTimestamp(coveredTimeInterval);
+						newNode->setLocation(transitionStatePair.first->getTarget());
+					} else {
+						// timing node already exists, just update entry timestamp
+						potentialNewNode->updateEntryTimestamp(coveredTimeInterval);
+					}
+				}
 
 				typename ReachTreeNode<State>::NodeList_t oldChildren = mTask->treeNode->getChildrenForTransition(transitionStatePair.first);
 
@@ -309,9 +342,10 @@ namespace hypro {
 			std::vector<SUBSPACETYPE> types = *(subspaceTypesIt->second);
 			// perform union directly on the current set vector to avoid an extreme amount of consistency checks
 			std::vector<typename State::repVariant> currentSets = aggregatedState.getSets();
+			// contains the aggregated timestamp, initialized with the first timestamp
+			carl::Interval<tNumber> aggregatedTimestamp = (*transitionStatePair.second.begin()).getTimestamp();
 			//START_BENCHMARK_OPERATION(AGGREGATE);
 			for (auto stateIt = ++transitionStatePair.second.begin(); stateIt != transitionStatePair.second.end(); ++stateIt) {
-				assert(!(*stateIt).getTimestamp().isEmpty());
 				TRACE("hydra.worker.discrete","Agg. aggState and set " << setCnt);
 				// actual aggregation.
 				for(std::size_t i = 0; i < aggregatedState.getNumberSets(); i++){
@@ -328,6 +362,10 @@ namespace hypro {
 					}
 				}
 
+				// timestamp handling
+				assert(!(*stateIt).getTimestamp().isEmpty());
+				aggregatedTimestamp = aggregatedTimestamp.convexHull((*stateIt).getTimestamp());
+
 				leftovers = true;
 				++setCnt;
 				++clusterCnt;
@@ -338,6 +376,7 @@ namespace hypro {
 					leftovers = false;
 					if(stateIt+1 != transitionStatePair.second.end()) {
 						aggregatedState = *(++stateIt);
+						aggregatedTimestamp = aggregatedState.getTimestamp();
 						clusterCnt = 1;
 					} else {
 						break;
@@ -350,6 +389,7 @@ namespace hypro {
 					leftovers = false;
 					if(stateIt+1 != transitionStatePair.second.end()) {
 						aggregatedState = *(++stateIt);
+						aggregatedTimestamp = aggregatedState.getTimestamp();
 						clusterCnt = 1;
 					} else {
 						break;
@@ -359,6 +399,9 @@ namespace hypro {
 			}
 			aggregatedState.setSets(currentSets);
 			//EVALUATE_BENCHMARK_RESULT(AGGREGATE);
+
+			// set timestamps accordingly
+			aggregatedState.setTimestamp(aggregatedTimestamp);
 
 			if(strategy.clustering < 1 || leftovers) {
 				TRACE("hydra.worker.discrete","No clustering.");

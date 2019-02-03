@@ -42,6 +42,7 @@ class SettingsProvider : public carl::Singleton<SettingsProvider<State>>
     bool decomposeAutomaton();
     void setDecomposeAutomaton(bool decompose) { mDoDecomposition = decompose; }
     std::size_t getNumberVariables() const { return mHybridAutomaton.getVariables().size(); }
+    tNumber getGlobalTimeHorizon() const { return mReachabilitySettings.timeBound*mReachabilitySettings.jumpDepth; }
 
 
     void setHybridAutomaton(HybridAutomaton<Number>&& ha);

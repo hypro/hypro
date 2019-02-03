@@ -60,7 +60,9 @@ namespace hypro {
 		return (mTransitionEvents.find(transition) != mTransitionEvents.end() &&
 				(mTransitionEvents.at(transition).size() > 1 ||
 						(mTransitionEvents.at(transition).back().type != CONTAINMENT::BOT &&
-						 mTransitionEvents.at(transition).back().type != CONTAINMENT::NO)));
+						 mTransitionEvents.at(transition).back().type != CONTAINMENT::NO)
+				)
+				);
 	}
 
 	template<typename Number>
