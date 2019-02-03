@@ -30,6 +30,8 @@ namespace hypro
 			DEBUG("hypro.worker","Built " << mFirstSegmentHandlers.at(i)->handlerName() << "at pos " << i);
 		}
 	}
+
+
 	template<typename State>
 	void LTIContext<State>::initializeInvariantHandlers(){
 		TRACE("hypro.worker","Initializing " << mComputationState.getNumberSets() <<" invariant handlers");

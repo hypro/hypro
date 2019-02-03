@@ -42,14 +42,14 @@ public:
 		for(std::size_t i=0;i<baseIndices.size()-1;++i) { // iterate over the base indices
 			if( (index==Eigen::Index(constrainSet.size()+1)|| // if nothing found OR
 				baseIndices[i]-1<baseIndices[index]) 		  // What does this mean?
-				&& not(std::get<0>(std::get<0>(constrainSet[baseIndices[i]-1])) || // not ( unbounded lower bound 
+				&& not(std::get<0>(std::get<0>(constrainSet[baseIndices[i]-1])) || // not ( unbounded lower bound
 				std::get<1>(std::get<0>(constrainSet[baseIndices[i]-1]))<=std::get<2>(constrainSet[baseIndices[i]-1])))  // OR lb <= assignment)
 				{
 				index = Eigen::Index(i);
 				diff = std::get<1>(std::get<0>(constrainSet[baseIndices[i]-1]))-std::get<2>(constrainSet[baseIndices[i]-1]);
 			} else if( (index==Eigen::Index(constrainSet.size()+1)|| // if nothing found OR
 						baseIndices[i]-1<baseIndices[index]) 		 // SOMETHING
-						&& not(std::get<0>(std::get<1>(constrainSet[baseIndices[i]-1])) ||	// not (upper unbounded 
+						&& not(std::get<0>(std::get<1>(constrainSet[baseIndices[i]-1])) ||	// not (upper unbounded
 						std::get<1>(std::get<1>(constrainSet[baseIndices[i]-1]))>=std::get<2>(constrainSet[baseIndices[i]-1]))) // OR ub >= assignment
 				{
 				index = Eigen::Index(i);
@@ -78,7 +78,7 @@ public:
 		}
 		return(pivot!=Eigen::Index(constrainSet.size()+1));
 	}
-	
+
 	/**
 	 * @brief modify the assignment of "pivot" by adding "diff" and recomputes the value of the variables in the basis
 	 */

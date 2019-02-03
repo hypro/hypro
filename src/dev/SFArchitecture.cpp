@@ -31,7 +31,7 @@ std::cout << "leaf1 says: " << leaf1.say() << std::endl;
 	Leaf<string>* l2ptr = &leaf2;
 
 	//Put everything into SFC. Tree looks like
-	//		
+	//
 	//		binOp (sum)
 	//    /		 		\
 	// traOp (5x-10)    leaf2 (2)

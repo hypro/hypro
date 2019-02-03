@@ -5,7 +5,7 @@ namespace hypro {
 	template<typename Number>
 	EventTimingProvider<Number>::EventTimingProvider() : mRoot(new EventTimingNode<Number>()){
 		mRoot->setDepth(0);
-		TRACE("hydra.datastructures.timing","Root is " << mRoot);
+		TRACE("hypro.datastructures.timing","Root is " << mRoot);
 	}
 
 	template<typename Number>
@@ -16,7 +16,7 @@ namespace hypro {
 			child->setLocation(state.first);
 			child->setEntryTimestamp(carl::Interval<tNumber>(0));
 			mRoot->addChild(child);
-			TRACE("hydra.datastructures.timing","Add initial node " << child);
+			TRACE("hypro.datastructures.timing","Add initial node " << child);
 		}
 
 		/*
