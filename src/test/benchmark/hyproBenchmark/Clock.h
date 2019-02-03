@@ -13,11 +13,15 @@ class Timer {
 protected:
     std::chrono::high_resolution_clock::time_point mStart;
 public:
-    Timer() : 
+    Timer() :
         mStart(std::chrono::high_resolution_clock::now())
     {}
 
     std::chrono::duration<double> elapsed() const;
     double elapsedMs() const;
+
+    void reset() {
+        mStart = std::chrono::high_resolution_clock::now();
+    }
 };
 } // namespace benchmark
