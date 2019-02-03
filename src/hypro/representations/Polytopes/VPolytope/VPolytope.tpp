@@ -336,44 +336,6 @@ bool VPolytopeT<Number, Converter, S>::contains( const vector_t<Number> &vec ) c
 }
 
 template <typename Number, typename Converter, typename S>
-bool VPolytopeT<Number, Converter, S>::contains( const std::vector<Point<Number>>& points ) const {
-	if(S::useLpForPointContainment) {
-		// create LP  Ax = b to solve whether vec can be represented as a convex combination of the vertices.
-		// 1 create matrix from vertices.
-		// 2 use vec as b
-		// 3 set bounds for cols to [0,1]
-		// 4 add constraint stating that all col-values need to sum up to 1.
-
-		// 1 create matrix
-		matrix_t<Number> A = matrix_t<Number>(this->dimension(), mVertices.size());
-		for(Eigen::Index i = 0; i < A.cols(); ++i) {
-			A.col(i) = mVertices[i].rawCoordinates();
-		}
-
-		Optimizer<Number> opt(A,vec);
-
-		// 3 bound cols
-		for(Eigen::Index i = 0; i < A.cols(); ++i) {
-			vector_t<Number> constraint = vector_t<Number>::Zero(A.cols());
-			constraint(i) = 1;
-			opt.addConstraint(constraint, 1, carl::Relation::LEQ);
-			opt.addConstraint(constraint, 0, carl::Relation::GEQ);
-		}
-
-		// 4 add constraint that all coefficients add up to 1
-		vector_t<Number> constraint = vector_t<Number>::Ones(A.cols());
-		opt.addConstraint(constraint, 1, carl::Relation::EQ);
-
-		return opt.checkConsistency();
-
-	} else {
-		// check via conversion
-		auto tmpHPoly = Converter::toHPolytope(*this);
-		return tmpHPoly.contains(vec);
-	}
-}
-
-template <typename Number, typename Converter, typename S>
 bool VPolytopeT<Number, Converter, S>::contains( const VPolytopeT<Number, Converter, S> &_other ) const {
 	// std::cout << *this<< " " << __func__ << " " << _other << std::endl;
 	for ( const auto &vertex : _other.vertices() ) {
