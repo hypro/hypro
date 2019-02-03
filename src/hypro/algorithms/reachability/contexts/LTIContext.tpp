@@ -194,7 +194,6 @@ namespace hypro
 		// add task
 		DEBUG("hypro.worker.refinement", std::this_thread::get_id() << ": Create new CEX-Task (local) with tree node " << taskPtr->treeNode);
 		mLocalCEXQueue->nonLockingEnqueue(std::move(taskPtr));
-		//DEBUG("hypro.worker", std::this_thread::get_id() << ": Local CEX-Queue size: " << localCEXQueue.size());
 		DEBUG("hypro.worker.refinement", std::this_thread::get_id() << ": Local CEX-Queue size: " << mLocalCEXQueue->size() << "localCEXQueue is now:\n" << mLocalCEXQueue);
 	}
 

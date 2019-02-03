@@ -364,8 +364,8 @@ std::pair<CONTAINMENT, BoxT<Number,Converter,Setting>> BoxT<Number,Converter,Set
 		return std::make_pair(CONTAINMENT::NO, *this);
 	}
 
-	//std::cout << __func__ << " This: " << convert<Number,double>(*this) << std::endl;
-	//std::cout << __func__ << ": input matrix: " << convert<Number,double>(_mat) << std::endl << "input vector: " << convert<Number,double>(_vec) << std::endl;
+	// std::cout << __func__ << " This: " << convert<Number,double>(*this) << std::endl;
+	// std::cout << __func__ << ": input matrix: " << convert<Number,double>(_mat) << std::endl << "input vector: " << convert<Number,double>(_vec) << std::endl;
 	// std::cout << __func__ << ": This->dimension() = " << this->dimension() << std::endl;
 	assert(this->dimension() == unsigned(_mat.cols()));
 	std::vector<unsigned> limitingPlanes;

@@ -1,6 +1,8 @@
 #pragma once
 #include "EventTimingContainer.h"
 #include "../TreeNode.h"
+#include "../../../util/logging/Logger.h"
+#include <ostream>
 
 namespace hypro {
 
