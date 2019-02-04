@@ -14,6 +14,7 @@
 #include "../../datastructures/Point.h"
 #include "../../datastructures/Halfspace.h"
 #include "ConstrainSet.h"
+#include <string>
 
 #define FUKUDA_VERTEX_ENUM_DEBUG
 #define DICT_DBG
@@ -54,7 +55,7 @@ public:
 	 * @return the number in the cell (i,j) of mDictionary.
 	 */
 	Number get (Eigen::Index i,Eigen::Index j) const;
-	
+
 	/**
 	 * @brief set mDicionary(i,j) to val.
 	 */
@@ -89,12 +90,12 @@ public:
 	 * @returns True, if assignment has been updated.
 	 */
 	bool fixOutOfBounds();
-	
+
 	/**
 	 * @brief Puts in i and j the pivot, returns false iff none was sutable.
 	 */
 	bool selectBlandPivot(Eigen::Index& i, Eigen::Index& j) const;
-	
+
 	/**
 	 * @param available indices is the set of indices the pivot is allowed to pick in.
 	 */
@@ -123,7 +124,7 @@ public:
 	 * @brief gives the list of the degenerated constrains in the dictionary.
 	 */
 	std::vector<Eigen::Index> findZeros();
-	
+
 	/**
 	 * @brief put 1 in the last column for the indices provided by @param indices.
 	 */
@@ -135,19 +136,19 @@ public:
 	 * @brief Puts the non slack variable to the basis.
 	 */
 	void nonSlackToBase();
-	
+
 	void nonSlackToBase(std::vector<vector_t<Number>>& linealtySpace);
 
 	/**
 	 * @brief Puts the saturated variable to the cobasis.
 	 */
 	std::set<Eigen::Index> toCobase(const std::set<Eigen::Index>& saturatedIndices);
-	
+
 	/**
 	 * @brief Tries to push the corresponding variable to its bound, if another bound is reached before, pivot around the later.
 	 */
 	void pushToBounds(Eigen::Index colIndex);
-	
+
 	std::set<vector_t<Number>> findCones();
 
 	friend bool operator==(const Dictionary<Number>& lhs, const Dictionary<Number>& rhs) {

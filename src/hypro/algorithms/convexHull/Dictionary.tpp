@@ -213,7 +213,7 @@ namespace hypro {
 			#endif
 			return false;
 		}
-		if(!(mConstrains.getPivot(indexRef,diff,pivotRef,mN,mDictionary))) {throw string("\n WARNING: empty set. \n");}//is there a suitable pivot
+		if(!(mConstrains.getPivot(indexRef,diff,pivotRef,mN,mDictionary))) {throw std::string("\n WARNING: empty set. \n");}//is there a suitable pivot
 		#ifdef DICT_DBG
 		std::cout << "Variable " << indexRef << " is out of bounds by " << diff << std::endl;
 		std::cout << "suitable pivot: " << pivotRef << std::endl;
@@ -581,7 +581,7 @@ namespace hypro {
 						break;
 					}
 				}
-				if(rowIndex==mB.size()-1) {throw(string("WARNING: linealty space found"));}
+				if(rowIndex==mB.size()-1) {throw(std::string("WARNING: linealty space found"));}
 			}
 		}
 	}
