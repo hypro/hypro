@@ -2193,7 +2193,7 @@ Please use a more specific name by including a (larger) part of the path!
 /home/travis/build/hypro/hypro/src/hypro/util/plotting/Plotter.h:73: warning: documented symbol `Singleton< Plotter< Number > >' was not declared or defined.
 /home/travis/build/hypro/hypro/src/hypro/util/statistics/statistics.h:21: warning: documented symbol `Singleton< Statistician >' was not declared or defined.
 /home/travis/build/hypro/hypro/src/hypro/util/VariablePool.h:28: warning: documented symbol `Singleton< VariablePool >' was not declared or defined.
-error opening bib12319.bbl: No such file or directory
+error opening bib12337.bbl: No such file or directory
 bibtex command failed: No such file or directory
 error: Problems running bibtex. Verify that the command 'perl --version' works from the command line. Exit code: 2
 o/hypro/src/hypro/util/statistics/CounterRepository.h...
@@ -4974,5 +4974,5 @@ Running dot for graph 188/190
 Running dot for graph 189/190
 Running dot for graph 190/190
 Patching output file 1/1
-lookup cache used 7017/65536 hits=208449 misses=8115
+lookup cache used 7018/65536 hits=208461 misses=8116
 finished...

@@ -1,5 +1,7 @@
 var NAVTREEINDEX31 =
 {
+"structhypro_1_1setCreationVisitor.html#aba669ba4d3e1646a32a58d3060cc1cbe":[6,0,1,167,0],
+"structhypro_1_1statistics_1_1AtomicOperationCounter.html":[6,0,1,2,0],
 "structhypro_1_1statistics_1_1AtomicOperationCounter.html#abe17acbd77c18880c5948180275efdb7":[6,0,1,2,0,0],
 "structhypro_1_1statistics_1_1OperationCounter.html":[6,0,1,2,2],
 "structhypro_1_1statistics_1_1OperationCounter.html#a1b839d9b188cec738df770f22b290314":[6,0,1,2,2,3],

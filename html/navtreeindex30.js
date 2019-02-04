@@ -1,5 +1,7 @@
 var NAVTREEINDEX30 =
 {
+"structhypro_1_1EvaluationResult.html#adeba850ed63df18f04b910986ecacf86":[6,0,1,38,5],
+"structhypro_1_1EvaluationResult.html#ae03f55adb2f72fd7693e40a8d4ac6799":[6,0,1,38,6],
 "structhypro_1_1HPolytopeSetting.html":[6,0,1,79],
 "structhypro_1_1IntervalAssignment.html":[6,0,1,98],
 "structhypro_1_1IntervalAssignment.html#a0c7347bcd201e9be55feb8582ef03497":[6,0,1,98,9],
@@ -247,7 +249,5 @@ var NAVTREEINDEX30 =
 "structhypro_1_1setCreationVisitor.html#a18838d0f2bedeea0a6860af8dbdb1ecc":[6,0,1,167,4],
 "structhypro_1_1setCreationVisitor.html#a3b0d73434a8e180c0e3228a80c6b4002":[6,0,1,167,1],
 "structhypro_1_1setCreationVisitor.html#a6b76adc221b8d2c0abbd587f4d28e43a":[6,0,1,167,3],
-"structhypro_1_1setCreationVisitor.html#a7e942f769486da26460d3f7606c82b12":[6,0,1,167,2],
-"structhypro_1_1setCreationVisitor.html#aba669ba4d3e1646a32a58d3060cc1cbe":[6,0,1,167,0],
-"structhypro_1_1statistics_1_1AtomicOperationCounter.html":[6,0,1,2,0]
+"structhypro_1_1setCreationVisitor.html#a7e942f769486da26460d3f7606c82b12":[6,0,1,167,2]
 };
