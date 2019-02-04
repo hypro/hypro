@@ -15,6 +15,7 @@ var searchData=
   ['getpredecessorindimension',['getPredecessorInDimension',['../classhypro_1_1Point.html#a71a6dd8a1d77e1b455ac9d184dd14055',1,'hypro::Point::getPredecessorInDimension(const carl::Variable &amp;_d) const '],['../classhypro_1_1Point.html#a8c67930a7d980d4229bfc8a570a6eeba',1,'hypro::Point::getPredecessorInDimension(unsigned _d) const ']]],
   ['getsubspacedecomposition',['getSubspaceDecomposition',['../classhypro_1_1DecisionEntity.html#a94aa2d360ceea7af839ab8683b372d40',1,'hypro::DecisionEntity']]],
   ['gettimestamp',['getTimestamp',['../classhypro_1_1ReachTreeNode.html#a2a90e36bd25f3c6f1a1e79913592f3a9',1,'hypro::ReachTreeNode']]],
+  ['gettimingnode',['getTimingNode',['../classhypro_1_1EventTimingProvider.html#a396524bdf38b5ac392a26c4977e9671d',1,'hypro::EventTimingProvider']]],
   ['gettransitions',['getTransitions',['../classhypro_1_1HybridAutomaton.html#a99d07d08f0d078115e85b419a1824687',1,'hypro::HybridAutomaton']]],
   ['getvariables',['getVariables',['../classhypro_1_1HybridAutomaton.html#a20912e1e9b6f5e6bc566cc5035c472ea',1,'hypro::HybridAutomaton']]],
   ['grid',['Grid',['../classhypro_1_1Grid.html#ade7f4c1b9cd1f2fa92ca2a27024037b9',1,'hypro::Grid']]]

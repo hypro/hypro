@@ -3,7 +3,10 @@ var classhypro_1_1EventTimingProvider =
     [ "EventTimingProvider", "classhypro_1_1EventTimingProvider.html#af9c11ba2436d8a70e6c34d6752006418", null ],
     [ "addChildToNode", "classhypro_1_1EventTimingProvider.html#aabb33b95229c785dfb16e602c1425cc9", null ],
     [ "getDotRepresentation", "classhypro_1_1EventTimingProvider.html#a7e456aaca4272d73d012877f9bebcf53", null ],
-    [ "getTimings", "classhypro_1_1EventTimingProvider.html#a621c5cad1e0840d0c4c3758c63e22923", null ],
+    [ "getName", "classhypro_1_1EventTimingProvider.html#a42d6ed45ea36261cd2595b88975d2363", null ],
+    [ "getTimingNode", "classhypro_1_1EventTimingProvider.html#a396524bdf38b5ac392a26c4977e9671d", null ],
     [ "initialize", "classhypro_1_1EventTimingProvider.html#a1a0eaa11ade2273039ef3e9782eb40b3", null ],
+    [ "rGetNode", "classhypro_1_1EventTimingProvider.html#ab00123a529e843fa3b51eddeadd6d337", null ],
+    [ "setName", "classhypro_1_1EventTimingProvider.html#a73452dcdafeea0419c0a70f6b2545429", null ],
     [ "updateTimings", "classhypro_1_1EventTimingProvider.html#a18b113f04a32c3b395ffee151d2d253b", null ]
 ];

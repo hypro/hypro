@@ -30,6 +30,7 @@ var hierarchy =
       ] ]
     ] ],
     [ "hypro::AffineTransformation< Number >", "structhypro_1_1AffineTransformation.html", null ],
+    [ "hypro::AffineTransformation< typename State::NumberType >", "structhypro_1_1AffineTransformation.html", null ],
     [ "hypro::BallSupportFunction< Number >", "classhypro_1_1BallSupportFunction.html", null ],
     [ "BaseErrorListener", null, [
       [ "hypro::ErrorListener", "classhypro_1_1ErrorListener.html", null ]
@@ -65,6 +66,7 @@ var hierarchy =
     [ "Eval_functions", "structEval__functions.html", null ],
     [ "hypro::EvaluationResult< Number >", "structhypro_1_1EvaluationResult.html", null ],
     [ "hypro::EventTimingContainer< Number >", "classhypro_1_1EventTimingContainer.html", null ],
+    [ "hypro::EventTimingContainer< typename State::NumberType >", "classhypro_1_1EventTimingContainer.html", null ],
     [ "exception", null, [
       [ "hypro::FinishWithDiscreteProcessingException", "classhypro_1_1FinishWithDiscreteProcessingException.html", null ],
       [ "hypro::HardTerminateException", "classhypro_1_1HardTerminateException.html", null ]
@@ -191,6 +193,7 @@ var hierarchy =
     [ "Input_equation", "structInput__equation.html", null ],
     [ "hypro::intersectionContent< Number, Setting >", "structhypro_1_1intersectionContent.html", null ],
     [ "hypro::IntervalAssignment< Number >", "structhypro_1_1IntervalAssignment.html", null ],
+    [ "hypro::IntervalAssignment< typename State::NumberType >", "structhypro_1_1IntervalAssignment.html", null ],
     [ "Invariants", "structInvariants.html", null ],
     [ "hypro::IWorker< Workable, State >", "classhypro_1_1IWorker.html", null ],
     [ "hypro::IWorker< std::shared_ptr< Task< State > >, State >", "classhypro_1_1IWorker.html", [
@@ -208,8 +211,10 @@ var hierarchy =
     [ "hypro::linearFlow< Number >", "classhypro_1_1linearFlow.html", [
       [ "hypro::affineFlow< Number >", "classhypro_1_1affineFlow.html", null ]
     ] ],
+    [ "hypro::linearFlow< typename State::NumberType >", "classhypro_1_1linearFlow.html", null ],
     [ "hypro::lintrafoParameters< Number >", "structhypro_1_1lintrafoParameters.html", null ],
     [ "hypro::Location< Number >", "classhypro_1_1Location.html", null ],
+    [ "hypro::Location< typename State::NumberType >", "classhypro_1_1Location.html", null ],
     [ "hypro::LockableBase", "classhypro_1_1LockableBase.html", [
       [ "hypro::LockedFileWriter", "classhypro_1_1LockedFileWriter.html", null ]
     ] ],
@@ -635,8 +640,10 @@ var hierarchy =
     [ "hypro::ReachabilitySettings", "structhypro_1_1ReachabilitySettings.html", null ],
     [ "hypro::ReachTree< State >", "classhypro_1_1ReachTree.html", null ],
     [ "hypro::rectangularFlow< Number >", "classhypro_1_1rectangularFlow.html", null ],
+    [ "hypro::rectangularFlow< typename State::NumberType >", "classhypro_1_1rectangularFlow.html", null ],
     [ "hypro::RefinementSetting< State >", "structhypro_1_1RefinementSetting.html", null ],
     [ "hypro::Reset< Number >", "classhypro_1_1Reset.html", null ],
+    [ "hypro::Reset< typename State::NumberType >", "classhypro_1_1Reset.html", null ],
     [ "hypro::Ridge< Number >", "classhypro_1_1Ridge.html", null ],
     [ "hypro::scaleContent< Number, Setting >", "structhypro_1_1scaleContent.html", null ],
     [ "ScopedLock< Lockable >", "classScopedLock.html", null ],
@@ -715,9 +722,13 @@ var hierarchy =
     [ "hypro::TrafoParameters< Number >", "classhypro_1_1TrafoParameters.html", null ],
     [ "hypro::Transformation< Number >", "classhypro_1_1Transformation.html", null ],
     [ "hypro::Transition< Number >", "classhypro_1_1Transition.html", null ],
+    [ "hypro::Transition< typename State::NumberType >", "classhypro_1_1Transition.html", null ],
     [ "hypro::TreeNode< Data >", "classhypro_1_1TreeNode.html", null ],
     [ "hypro::TreeNode< EventTimingNode< Number > >", "classhypro_1_1TreeNode.html", [
       [ "hypro::EventTimingNode< Number >", "classhypro_1_1EventTimingNode.html", null ]
+    ] ],
+    [ "hypro::TreeNode< EventTimingNode< typename State::NumberType > >", "classhypro_1_1TreeNode.html", [
+      [ "hypro::EventTimingNode< typename State::NumberType >", "classhypro_1_1EventTimingNode.html", null ]
     ] ],
     [ "hypro::TreeNode< ReachTreeNode< State > >", "classhypro_1_1TreeNode.html", [
       [ "hypro::ReachTreeNode< State >", "classhypro_1_1ReachTreeNode.html", null ]

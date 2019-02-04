@@ -16,6 +16,7 @@ var searchData=
   ['reset',['reset',['../classhypro_1_1DifferenceBoundsT.html#abe61c18a8a34cda3821b0293c73ac8ec',1,'hypro::DifferenceBoundsT']]],
   ['reverse',['reverse',['../classhypro_1_1Dictionary.html#a01733c1d6fece3171d984ed419d7b1e7',1,'hypro::Dictionary']]],
   ['rewind',['rewind',['../classhypro_1_1DifferenceBoundsT.html#a909a0530fdf24274da0939d3dd01c28c',1,'hypro::DifferenceBoundsT']]],
+  ['rgetnode',['rGetNode',['../classhypro_1_1EventTimingProvider.html#ab00123a529e843fa3b51eddeadd6d337',1,'hypro::EventTimingProvider']]],
   ['ridge',['Ridge',['../classhypro_1_1Ridge.html#a563b394933f5fdb507bdd254db984db1',1,'hypro::Ridge']]],
   ['rpoint',['rPoint',['../classhypro_1_1Vertex.html#af7f8ffba7a8fd6b213a457103c4df8ff',1,'hypro::Vertex']]],
   ['rsettings',['rSettings',['../classhypro_1_1Plotter.html#ae7fa3662c313daceb371c9e115d14e9d',1,'hypro::Plotter']]],

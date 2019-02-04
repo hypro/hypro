@@ -33,7 +33,7 @@
   <td id="projectlogo"><img alt="Logo" src="hypro_Logo.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HyPro
-   &#160;<span id="projectnumber">19.01</span>
+   &#160;<span id="projectnumber">19.02</span>
    </div>
    <div id="projectbrief">A Toolbox for the Reachability Analysis of Hybrid Systems using Geometric Approximations</div>
   </td>
@@ -164,6 +164,15 @@ const std::map&lt; std::thread::id, <a class="el" href="structhypro_1_1glpk__con
 <tr class="memitem:a9a40a723d2553a38a480e4ba18ad02db"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Optimizer.html#a9a40a723d2553a38a480e4ba18ad02db">setVector</a> (const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;_vector)</td></tr>
 <tr class="memdesc:a9a40a723d2553a38a480e4ba18ad02db"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the problem vector.  <a href="#a9a40a723d2553a38a480e4ba18ad02db">More...</a><br /></td></tr>
 <tr class="separator:a9a40a723d2553a38a480e4ba18ad02db"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a192502b9b22d8f3a9550c673ff218621"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Optimizer.html#a192502b9b22d8f3a9550c673ff218621">setRelations</a> (const std::vector&lt; carl::Relation &gt; &amp;rels)</td></tr>
+<tr class="memdesc:a192502b9b22d8f3a9550c673ff218621"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the Relations for all constraints.  <a href="#a192502b9b22d8f3a9550c673ff218621">More...</a><br /></td></tr>
+<tr class="separator:a192502b9b22d8f3a9550c673ff218621"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae0f45b33ba78df88b93e2d393823fe42"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Optimizer.html#ae0f45b33ba78df88b93e2d393823fe42">addConstraint</a> (const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;constraint, Number constantPart, carl::Relation rel)</td></tr>
+<tr class="memdesc:ae0f45b33ba78df88b93e2d393823fe42"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add an equality constraint.  <a href="#ae0f45b33ba78df88b93e2d393823fe42">More...</a><br /></td></tr>
+<tr class="separator:ae0f45b33ba78df88b93e2d393823fe42"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aacdf38eaa3ceecf0e3b8fb4b2d941160"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Optimizer.html#aacdf38eaa3ceecf0e3b8fb4b2d941160">setRelation</a> (carl::Relation rel, std::size_t pos)</td></tr>
+<tr class="memdesc:aacdf38eaa3ceecf0e3b8fb4b2d941160"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the Relation for the constraint at position pos.  <a href="#aacdf38eaa3ceecf0e3b8fb4b2d941160">More...</a><br /></td></tr>
+<tr class="separator:aacdf38eaa3ceecf0e3b8fb4b2d941160"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a57d9aea697e3087a60b776d70a942baa"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a57d9aea697e3087a60b776d70a942baa"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Optimizer.html#a57d9aea697e3087a60b776d70a942baa">clear</a> ()</td></tr>
 <tr class="memdesc:a57d9aea697e3087a60b776d70a942baa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clears the problem instance. <br /></td></tr>
@@ -196,7 +205,7 @@ class hypro::Optimizer&lt; Number &gt;</h3>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="Optimizer_8h_source.html#l00046">46</a> of file <a class="el" href="Optimizer_8h_source.html">Optimizer.h</a>.</p>
+<p>Definition at line <a class="el" href="Optimizer_8h_source.html#l00047">47</a> of file <a class="el" href="Optimizer_8h_source.html">Optimizer.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="a1cfdd1e5b90db026835b7c6947a5c290"></a>
 <div class="memitem">
@@ -241,15 +250,58 @@ template&lt;typename Number &gt; </div>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="Optimizer_8h_source.html#l00111">111</a> of file <a class="el" href="Optimizer_8h_source.html">Optimizer.h</a>.</p>
+<p>Definition at line <a class="el" href="Optimizer_8h_source.html#l00114">114</a> of file <a class="el" href="Optimizer_8h_source.html">Optimizer.h</a>.</p>
 
-<p>References <a class="el" href="Optimizer_8h_source.html#l00111">hypro::Optimizer&lt; Number &gt;::Optimizer()</a>.</p>
+<p>References <a class="el" href="Optimizer_8h_source.html#l00114">hypro::Optimizer&lt; Number &gt;::Optimizer()</a>.</p>
 
-<p>Referenced by <a class="el" href="Optimizer_8h_source.html#l00111">hypro::Optimizer&lt; Number &gt;::Optimizer()</a>.</p>
+<p>Referenced by <a class="el" href="Optimizer_8h_source.html#l00114">hypro::Optimizer&lt; Number &gt;::Optimizer()</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a class="anchor" id="ae0f45b33ba78df88b93e2d393823fe42"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classhypro_1_1Optimizer.html">hypro::Optimizer</a>&lt; Number &gt;::addConstraint </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="namespacehypro.html#aa70b7a97ac898c2b28a2af61f4607e3a">vector_t</a>&lt; Number &gt; &amp;&#160;</td>
+          <td class="paramname"><em>constraint</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Number&#160;</td>
+          <td class="paramname"><em>constantPart</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">carl::Relation&#160;</td>
+          <td class="paramname"><em>rel</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Add an equality constraint. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">constraint</td><td></td></tr>
+    <tr><td class="paramname">constantPart</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a class="anchor" id="a9be5c80cccc5a7e6eef6af0c227e10d7"></a>
 <div class="memitem">
 <div class="memproto">
@@ -442,6 +494,68 @@ template&lt;typename Number &gt; </div>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">_matrix</td><td>The matrix. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="aacdf38eaa3ceecf0e3b8fb4b2d941160"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classhypro_1_1Optimizer.html">hypro::Optimizer</a>&lt; Number &gt;::setRelation </td>
+          <td>(</td>
+          <td class="paramtype">carl::Relation&#160;</td>
+          <td class="paramname"><em>rel</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::size_t&#160;</td>
+          <td class="paramname"><em>pos</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Set the Relation for the constraint at position pos. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pos</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="a192502b9b22d8f3a9550c673ff218621"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Number &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classhypro_1_1Optimizer.html">hypro::Optimizer</a>&lt; Number &gt;::setRelations </td>
+          <td>(</td>
+          <td class="paramtype">const std::vector&lt; carl::Relation &gt; &amp;&#160;</td>
+          <td class="paramname"><em>rels</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Set the Relations for all constraints. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">rels</td><td></td></tr>
   </table>
   </dd>
 </dl>

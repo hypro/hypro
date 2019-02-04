@@ -5,6 +5,7 @@ var classhypro_1_1SettingsProvider =
     [ "computeLocationTypeMapping", "classhypro_1_1SettingsProvider.html#af3b59a900cd5c148cf1cce721d00fe36", null ],
     [ "decomposeAutomaton", "classhypro_1_1SettingsProvider.html#a90a58f82e0bdaef637d1263bc31f4acf", null ],
     [ "getDotFileWriter", "classhypro_1_1SettingsProvider.html#a4059805159ddbc7d9d7a06413f237cce", null ],
+    [ "getGlobalTimeHorizon", "classhypro_1_1SettingsProvider.html#ace9713b1703b182cb3d1148ba53ecb72", null ],
     [ "getHybridAutomaton", "classhypro_1_1SettingsProvider.html#a8740961a8ffac294fe33709eb0862fe9", null ],
     [ "getLocationSubspaceTypeMap", "classhypro_1_1SettingsProvider.html#a98cb885e2ba16c789b588026549758d8", null ],
     [ "getLocationTypeMap", "classhypro_1_1SettingsProvider.html#a4a0c2b8d8ddc4173096e3f7883aa0815", null ],

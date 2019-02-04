@@ -323,7 +323,7 @@ error: /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/.
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/representations/conversion/../types.h:2:10: fatal error: 'boost/variant.hpp' file not found [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
-error: /home/travis/build/hypro/hypro/examples/example_plot.cpp:5:10: fatal error: 'util/Plotter.h' file not found [clang]
+error: /usr/include/stdlib.h:32:10: fatal error: 'stddef.h' file not found [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /usr/include/wchar.h:39:11: fatal error: 'stdarg.h' file not found [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
@@ -1424,18 +1424,20 @@ error: /home/travis/build/hypro/hypro/src/hypro/representations/Box/BoxSetting.h
 error: /home/travis/build/hypro/hypro/src/hypro/representations/Box/BoxSetting.h:9:26: error: expected member name or ';' after declaration specifiers [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/representations/Box/BoxSetting.h:11:16: error: unknown type name 'constexpr' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/representations/Box/BoxSetting.h:11:26: error: expected member name or ';' after declaration specifiers [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/representations/Box/BoxSetting.h:16:16: error: unknown type name 'constexpr' [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/representations/Box/BoxSetting.h:16:26: error: expected member name or ';' after declaration specifiers [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/representations/Box/BoxSetting.h:13:16: error: unknown type name 'constexpr' [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/representations/Box/BoxSetting.h:13:26: error: expected member name or ';' after declaration specifiers [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/representations/Box/BoxSetting.h:18:16: error: unknown type name 'constexpr' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/representations/Box/BoxSetting.h:18:26: error: expected member name or ';' after declaration specifiers [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/representations/Box/BoxSetting.h:23:16: error: unknown type name 'constexpr' [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/representations/Box/BoxSetting.h:23:26: error: expected member name or ';' after declaration specifiers [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/representations/Box/BoxSetting.h:20:16: error: unknown type name 'constexpr' [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/representations/Box/BoxSetting.h:20:26: error: expected member name or ';' after declaration specifiers [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/representations/Box/BoxSetting.h:25:16: error: unknown type name 'constexpr' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/representations/Box/BoxSetting.h:25:26: error: expected member name or ';' after declaration specifiers [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/representations/Box/BoxSetting.h:30:16: error: unknown type name 'constexpr' [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/representations/Box/BoxSetting.h:30:26: error: expected member name or ';' after declaration specifiers [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/representations/Box/BoxSetting.h:27:16: error: unknown type name 'constexpr' [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/representations/Box/BoxSetting.h:27:26: error: expected member name or ';' after declaration specifiers [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/representations/Box/BoxSetting.h:32:16: error: unknown type name 'constexpr' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/representations/Box/BoxSetting.h:32:26: error: expected member name or ';' after declaration specifiers [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/representations/Box/BoxSetting.h:34:16: error: unknown type name 'constexpr' [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/representations/Box/BoxSetting.h:34:26: error: expected member name or ';' after declaration specifiers [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/representations/Box/intervalMethods.h:1:9: warning: #pragma once in main file [clang]
 error: /usr/include/wchar.h:39:11: fatal error: 'stdarg.h' file not found [clang]
@@ -1657,13 +1659,18 @@ error: /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolyt
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /usr/include/wchar.h:39:11: fatal error: 'stdarg.h' file not found [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/util.h:1:9: warning: #pragma once in main file [clang]
+error: /usr/include/wchar.h:39:11: fatal error: 'stdarg.h' file not found [clang]
+error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytope.h:5:9: warning: #pragma once in main file [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytope.h:8:5: error: C++ requires a type specifier for all declarations [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytopeSettings.h:7:11: warning: no newline at end of file [-Wnewline-eof] [clang]
 error: /usr/include/wchar.h:39:11: fatal error: 'stdarg.h' file not found [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytopeSettings.h:1:9: warning: #pragma once in main file [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytopeSettings.h:7:11: warning: no newline at end of file [-Wnewline-eof] [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytopeSettings.h:6:12: error: unknown type name 'constexpr' [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytopeSettings.h:6:22: error: expected member name or ';' after declaration specifiers [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytopeSettings.h:7:12: error: unknown type name 'constexpr' [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytopeSettings.h:7:22: error: expected member name or ';' after declaration specifiers [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/BallSupportFunction.h:12:9: warning: #pragma once in main file [clang]
 error: /usr/include/wchar.h:39:11: fatal error: 'stdarg.h' file not found [clang]
@@ -1678,9 +1685,6 @@ error: /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/
 error: /usr/include/wchar.h:39:11: fatal error: 'stdarg.h' file not found [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/NonLinearOmega0Supportfunction.h:14:10: fatal error: 'BoxSupportfunction.h' file not found [clang]
-error: error: invalid value 'c++17' in '-std=c++17' [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/PolytopeSupportFunction.h:12:9: warning: #pragma once in main file [clang]
-error: /usr/include/wchar.h:39:11: fatal error: 'stdarg.h' file not found [clang]
 /hypro/src/hypro/representations/OrthogonalPolyhedron/representations/Neighborhood.h...
 Parsing file /home/travis/build/hypro/hypro/src/hypro/representations/OrthogonalPolyhedron/representations/Neighborhood.h...
 Reading /home/travis/build/hypro/hypro/src/hypro/representations/Polytope/Polytope.h...
@@ -1705,6 +1709,8 @@ Reading /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPoly
 Parsing file /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytopeSetting.h...
 Reading /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/simplex.h...
 Parsing file /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/simplex.h...
+Reading /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/util.h...
+Parsing file /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/util.h...
 Reading /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytope.h...
 Parsing file /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytope.h...
 Reading /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytopeSettings.h...
@@ -1718,9 +1724,10 @@ Parsing file /home/travis/build/hypro/hypro/src/hypro/representations/SupportFun
 Reading /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/helperMethods.h...
 Parsing file /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/helperMethods.h...
 Reading /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/NonLinearOmega0Supportfunction.h...
-Parsing file /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/NonLinearOmega0Supportfunction.h...
-Reading /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/PolytopeSupportFunction.h...
-Parsing file /home/travis/build/hypro/hypro/src/hypro/representations/Serror: error: invalid value 'c++17' in '-std=c++17' [clang]
+Parsing file /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/NonLinearOmega0Supporterror: error: invalid value 'c++17' in '-std=c++17' [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/PolytopeSupportFunction.h:12:9: warning: #pragma once in main file [clang]
+error: /usr/include/wchar.h:39:11: fatal error: 'stdarg.h' file not found [clang]
+error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunction.h:2:9: warning: #pragma once in main file [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunction.h:5:5: error: C++ requires a type specifier for all declarations [clang]
 error: /usr/include/wchar.h:39:11: fatal error: 'stdarg.h' file not found [clang]
@@ -1844,39 +1851,9 @@ error: /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/../loggi
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.h:1:9: warning: #pragma once in main file [clang]
 error: /usr/include/wchar.h:39:11: fatal error: 'stdarg.h' file not found [clang]
-error: error: invalid value 'c++17' in '-std=c++17' [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/smtrat/adaptions_smtrat.h:1:9: warning: #pragma once in main file [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/smtrat/helper_methods.h:3:22: error: use of undeclared identifier 'smtrat' [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/smtrat/helper_methods.h:3:59: error: unknown type name 'EvaluationResult' [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/smtrat/helper_methods.h:3:75: error: expected ')' [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/smtrat/helper_methods.h:5:3: error: unknown type name 'VariablePool' [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/smtrat/helper_methods.h:5:27: error: use of undeclared identifier 'VariablePool' [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/smtrat/helper_methods.h:6:25: error: use of undeclared identifier 'preSolution' [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/smtrat/helper_methods.h:7:7: error: use of undeclared identifier 'direction' [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/smtrat/helper_methods.h:8:5: error: use of undeclared identifier 'smtrat' [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/smtrat/helper_methods.h:8:54: error: use of undeclared identifier 'carl' [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/smtrat/helper_methods.h:8:68: error: 'Number' does not refer to a value [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/smtrat/helper_methods.h:8:75: error: use of undeclared identifier 'smtrat' [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/smtrat/helper_methods.h:8:91: error: expected ';' at end of declaration [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/smtrat/helper_methods.h:9:5: error: use of undeclared identifier 'smtrat' [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/smtrat/helper_methods.h:10:8: error: use of undeclared identifier 'direction' [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/smtrat/helper_methods.h:11:24: error: use of undeclared identifier 'smtrat' [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/smtrat/helper_methods.h:11:48: error: use of undeclared identifier 'carl' [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/smtrat/helper_methods.h:13:24: error: use of undeclared identifier 'smtrat' [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/smtrat/helper_methods.h:13:48: error: use of undeclared identifier 'carl' [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/smtrat/helper_methods.h:22:3: error: use of undeclared identifier 'smtrat' [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/smtrat/helper_methods.h:22:40: error: use of undeclared identifier 'objective' [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/smtrat/helper_methods.h:22:52: error: use of undeclared identifier 'carl' [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/smtrat/helper_methods.h:22:66: error: 'Number' does not refer to a value [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/smtrat/helper_methods.h:22:74: error: use of undeclared identifier 'smtrat' [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/smtrat/helper_methods.h:22:90: error: expected ';' at end of declaration [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/smtrat/helper_methods.h:23:3: error: use of undeclared identifier 'smtrat' [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/smtrat/helper_methods.h:27:17: error: use of undeclared identifier 'preSolutionConstraint' [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/smtrat/helper_methods.h:28:14: error: use of undeclared identifier 'preSolutionConstraint' [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/smtrat/helper_methods.h:32:2: error: unknown type name 'EvaluationResult' [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/smtrat/helper_methods.h:32:18: error: expected unqualified-id [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/smtrat/../../logging/Logger.h:4:10: fatal error: 'carl/io/streamingOperators.h' file not found [clang]
-upportFunction/PolytopeSupportFunction.h...
+function.h...
+Reading /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/PolytopeSupportFunction.h...
+Parsing file /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/PolytopeSupportFunction.h...
 Reading /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunction.h...
 Parsing file /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunction.h...
 Reading /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/SupportFunctionContent.h...
@@ -1918,9 +1895,39 @@ Parsing file /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/gl
 Reading /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/glpk_context.h...
 Parsing file /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/glpk_context.h...
 Reading /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.h...
-Parsing file /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Optimizer.h...
-Reading /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/smtrat/adaptions_smtrat.h...
 Parsing file /home/travis/build/hypro/hypro/src/herror: error: invalid value 'c++17' in '-std=c++17' [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/smtrat/adaptions_smtrat.h:1:9: warning: #pragma once in main file [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/smtrat/helper_methods.h:3:22: error: use of undeclared identifier 'smtrat' [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/smtrat/helper_methods.h:3:59: error: unknown type name 'EvaluationResult' [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/smtrat/helper_methods.h:3:75: error: expected ')' [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/smtrat/helper_methods.h:5:3: error: unknown type name 'VariablePool' [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/smtrat/helper_methods.h:5:27: error: use of undeclared identifier 'VariablePool' [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/smtrat/helper_methods.h:6:25: error: use of undeclared identifier 'preSolution' [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/smtrat/helper_methods.h:7:7: error: use of undeclared identifier 'direction' [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/smtrat/helper_methods.h:8:5: error: use of undeclared identifier 'smtrat' [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/smtrat/helper_methods.h:8:54: error: use of undeclared identifier 'carl' [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/smtrat/helper_methods.h:8:68: error: 'Number' does not refer to a value [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/smtrat/helper_methods.h:8:75: error: use of undeclared identifier 'smtrat' [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/smtrat/helper_methods.h:8:91: error: expected ';' at end of declaration [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/smtrat/helper_methods.h:9:5: error: use of undeclared identifier 'smtrat' [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/smtrat/helper_methods.h:10:8: error: use of undeclared identifier 'direction' [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/smtrat/helper_methods.h:11:24: error: use of undeclared identifier 'smtrat' [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/smtrat/helper_methods.h:11:48: error: use of undeclared identifier 'carl' [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/smtrat/helper_methods.h:13:24: error: use of undeclared identifier 'smtrat' [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/smtrat/helper_methods.h:13:48: error: use of undeclared identifier 'carl' [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/smtrat/helper_methods.h:22:3: error: use of undeclared identifier 'smtrat' [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/smtrat/helper_methods.h:22:40: error: use of undeclared identifier 'objective' [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/smtrat/helper_methods.h:22:52: error: use of undeclared identifier 'carl' [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/smtrat/helper_methods.h:22:66: error: 'Number' does not refer to a value [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/smtrat/helper_methods.h:22:74: error: use of undeclared identifier 'smtrat' [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/smtrat/helper_methods.h:22:90: error: expected ';' at end of declaration [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/smtrat/helper_methods.h:23:3: error: use of undeclared identifier 'smtrat' [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/smtrat/helper_methods.h:27:17: error: use of undeclared identifier 'preSolutionConstraint' [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/smtrat/helper_methods.h:28:14: error: use of undeclared identifier 'preSolutionConstraint' [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/smtrat/helper_methods.h:32:2: error: unknown type name 'EvaluationResult' [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/smtrat/helper_methods.h:32:18: error: expected unqualified-id [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/smtrat/../../logging/Logger.h:4:10: fatal error: 'carl/io/streamingOperators.h' file not found [clang]
+error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/smtrat/convenience.h:4:9: warning: #pragma once in main file [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/smtrat/helper_methods.h:3:25: error: use of undeclared identifier 'smtrat' [clang]
@@ -1971,14 +1978,14 @@ error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/z3/z3Convenience.h:7:9: warning: #pragma once in main file [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/representations/types.h:2:10: fatal error: 'boost/variant.hpp' file not found [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/util/logging/Filewriter.h:1:9: warning: #pragma once in main file [clang]
+error: /usr/lib/gcc/x86_64-linux-gnu/7.4.0/../../../../include/c++/7.4.0/bits/c++0x_warning.h:32:2: error: This file requires compiler and library support for the ISO C++ 2011 standard. This support must be enabled with the -std=c++11 or -std=gnu++11 compiler options. [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/util/logging/../multithreading/LockableBase.h:9:10: error: use of undeclared identifier 'std' [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/util/logging/../multithreading/LockableBase.h:12:2: error: use of undeclared identifier 'std' [clang]
+error: /usr/include/wchar.h:39:11: fatal error: 'stdarg.h' file not found [clang]
+error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/util/logging/Logger.h:1:9: warning: #pragma once in main file [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/util/logging/Logger.h:4:10: fatal error: 'carl/io/streamingOperators.h' file not found [clang]
-error: error: invalid value 'c++17' in '-std=c++17' [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/util/multithreading/Filewriter.h:1:9: warning: #pragma once in main file [clang]
-error: /usr/lib/gcc/x86_64-linux-gnu/7.4.0/../../../../include/c++/7.4.0/bits/c++0x_warning.h:32:2: error: This file requires compiler and library support for the ISO C++ 2011 standard. This support must be enabled with the -std=c++11 or -std=gnu++11 compiler options. [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/util/multithreading/LockableBase.h:9:10: error: use of undeclared identifier 'std' [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/util/multithreading/LockableBase.h:12:2: error: use of undeclared identifier 'std' [clang]
-error: /usr/include/wchar.h:39:11: fatal error: 'stdarg.h' file not found [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/util/multithreading/LockableBase.h:1:9: warning: #pragma once in main file [clang]
 error: /usr/lib/gcc/x86_64-linux-gnu/7.4.0/../../../../include/c++/7.4.0/bits/c++0x_warning.h:32:2: error: This file requires compiler and library support for the ISO C++ 2011 standard. This support must be enabled with the -std=c++11 or -std=gnu++11 compiler options. [clang]
@@ -2024,9 +2031,9 @@ error: /home/travis/build/hypro/hypro/src/hypro/util/statistics/CounterRepositor
 error: /home/travis/build/hypro/hypro/src/hypro/util/statistics/CounterRepository.h:7:5: error: C++ requires a type specifier for all declarations [clang]
 error: /usr/lib/gcc/x86_64-linux-gnu/7.4.0/../../../../include/c++/7.4.0/bits/c++0x_warning.h:32:2: error: This file requires compiler and library support for the ISO C++ 2011 standard. This support must be enabled with the -std=c++11 or -std=gnu++11 compiler options. [clang]
 error: /usr/include/wchar.h:39:11: fatal error: 'stdarg.h' file not found [clang]
-error: error: invalid value 'c++17' in '-std=c++17' [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/util/statistics/OperationCounter.h:1:9: warning: #pragma once in main file [clang]
-ypro/util/linearOptimization/smtrat/adaptions_smtrat.h...
+ypro/util/linearOptimization/Optimizer.h...
+Reading /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/smtrat/adaptions_smtrat.h...
+Parsing file /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/smtrat/adaptions_smtrat.h...
 Reading /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/smtrat/convenience.h...
 Parsing file /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/smtrat/convenience.h...
 Reading /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/smtrat/helper_methods.h...
@@ -2045,10 +2052,10 @@ Reading /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/z3/z3Co
 Parsing file /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/z3/z3Context.h...
 Reading /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/z3/z3Convenience.h...
 Parsing file /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/z3/z3Convenience.h...
+Reading /home/travis/build/hypro/hypro/src/hypro/util/logging/Filewriter.h...
+Parsing file /home/travis/build/hypro/hypro/src/hypro/util/logging/Filewriter.h...
 Reading /home/travis/build/hypro/hypro/src/hypro/util/logging/Logger.h...
 Parsing file /home/travis/build/hypro/hypro/src/hypro/util/logging/Logger.h...
-Reading /home/travis/build/hypro/hypro/src/hypro/util/multithreading/Filewriter.h...
-Parsing file /home/travis/build/hypro/hypro/src/hypro/util/multithreading/Filewriter.h...
 Reading /home/travis/build/hypro/hypro/src/hypro/util/multithreading/LockableBase.h...
 Parsing file /home/travis/build/hypro/hypro/src/hypro/util/multithreading/LockableBase.h...
 Reading /home/travis/build/hypro/hypro/src/hypro/util/multithreading/LockableObjectWrapper.h...
@@ -2070,9 +2077,9 @@ Parsing file /home/travis/build/hypro/hypro/src/hypro/util/plotting/PlotterUtil.
 Reading /home/travis/build/hypro/hypro/src/hypro/util/sampling/sampling.h...
 Parsing file /home/travis/build/hypro/hypro/src/hypro/util/sampling/sampling.h...
 Reading /home/travis/build/hypro/hypro/src/hypro/util/statistics/CounterRepository.h...
-Parsing file /home/travis/build/hypro/hypro/src/hypro/util/statistics/CounterRepository.h...
-Reading /home/travis/build/hypro/hypro/src/hypro/util/statistics/OperationCounter.h...
-Parsing file /home/travis/build/hyproerror: error: invalid value 'c++17' in '-std=c++17' [clang]
+Parsing file /home/travis/build/hyprerror: error: invalid value 'c++17' in '-std=c++17' [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/util/statistics/OperationCounter.h:1:9: warning: #pragma once in main file [clang]
+error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/util/statistics/statistics.h:1:9: warning: #pragma once in main file [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/util/statistics/statistics.h:4:10: fatal error: 'carl/util/Singleton.h' file not found [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
@@ -2156,6 +2163,7 @@ error: /home/travis/build/hypro/hypro/src/hypro/util/logging/Logger.h:4:10: fata
    /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/util.h
    /home/travis/build/hypro/hypro/src/hypro/representations/Polytope/util.h
    /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/carlPolytope/util.h
+   /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/util.h
    /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/util.h
 Please use a more specific name by including a (larger) part of the path!
 /home/travis/build/hypro/hypro/src/hypro/util/templateDirections.h:3: warning: the name `helperFunctions.h' supplied as the second argument in the \file statement is not an input file
@@ -2173,11 +2181,11 @@ Please use a more specific name by including a (larger) part of the path!
 /home/travis/build/hypro/hypro/src/hypro/util/tuple_expansion/for_each.h:16: warning: Detected potential recursive class relation between class hypro::detail::gen_seq and base class gen_seq< N-1, N-1, Is... >!
 
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/contexts/ContextFactory.h:19: warning: documented symbol `Singleton< ContextFactory< State > >' was not declared or defined.
-/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/handlers/HandlerFactory.h:12: warning: documented symbol `Singleton< HandlerFactory< State > >' was not declared or defined.
+/home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/handlers/HandlerFactory.h:14: warning: documented symbol `Singleton< HandlerFactory< State > >' was not declared or defined.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/decomposition/DecisionEntity.h:23: warning: documented symbol `Singleton< DecisionEntity< Number > >' was not declared or defined.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/NodeManager.h:29: warning: documented symbol `Singleton< NodeManager< State > >' was not declared or defined.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/SettingsProvider.h:24: warning: documented symbol `Singleton< SettingsProvider< State > >' was not declared or defined.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/timing/EventTimingProvider.h:16: warning: documented symbol `Singleton< EventTimingProvider< Number > >' was not declared or defined.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/timing/EventTimingProvider.h:19: warning: documented symbol `Singleton< EventTimingProvider< Number > >' was not declared or defined.
 /home/travis/build/hypro/hypro/src/hypro/types.h:35: warning: no matching class member found for 
   template < Number >
   typedef hypro::std::set< vector_t< Number >> vectorSet()
@@ -2185,10 +2193,12 @@ Please use a more specific name by including a (larger) part of the path!
 /home/travis/build/hypro/hypro/src/hypro/util/plotting/Plotter.h:73: warning: documented symbol `Singleton< Plotter< Number > >' was not declared or defined.
 /home/travis/build/hypro/hypro/src/hypro/util/statistics/statistics.h:21: warning: documented symbol `Singleton< Statistician >' was not declared or defined.
 /home/travis/build/hypro/hypro/src/hypro/util/VariablePool.h:28: warning: documented symbol `Singleton< VariablePool >' was not declared or defined.
-error opening bib12377.bbl: No such file or directory
+error opening bib12319.bbl: No such file or directory
 bibtex command failed: No such file or directory
 error: Problems running bibtex. Verify that the command 'perl --version' works from the command line. Exit code: 2
-/hypro/src/hypro/util/statistics/OperationCounter.h...
+o/hypro/src/hypro/util/statistics/CounterRepository.h...
+Reading /home/travis/build/hypro/hypro/src/hypro/util/statistics/OperationCounter.h...
+Parsing file /home/travis/build/hypro/hypro/src/hypro/util/statistics/OperationCounter.h...
 Reading /home/travis/build/hypro/hypro/src/hypro/util/statistics/statistics.h...
 Parsing file /home/travis/build/hypro/hypro/src/hypro/util/statistics/statistics.h...
 Reading /home/travis/build/hypro/hypro/src/hypro/util/statistics/StatisticWrapper.h...
@@ -2269,10 +2279,7 @@ Generating docs for example example_bouncingBall.cpp...
 Generating docs for example example_box.cpp...
 Generating docs for example example_converter.cpp...
 Generating docs for example example_differenceBounds.cpp...
-Generating docs for example example_HPolytope.cpp...
-Generating docs for example example_plot.cpp...
-Generating file sources...
-Generating code for file /home/travis/build/hypro/hypro/examplerror: error: invalid value 'c++17' in '-std=c++17' [clang]
+Generatinerror: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/../../representations/types.h:2:10: fatal error: 'boost/variant.hpp' file not found [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /usr/include/wchar.h:39:11: fatal error: 'stdarg.h' file not found [clang]
@@ -2353,7 +2360,7 @@ error: /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/.
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/representations/conversion/../types.h:2:10: fatal error: 'boost/variant.hpp' file not found [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
-error: /home/travis/build/hypro/hypro/examples/example_plot.cpp:5:10: fatal error: 'util/Plotter.h' file not found [clang]
+error: /usr/include/stdlib.h:32:10: fatal error: 'stddef.h' file not found [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /usr/include/wchar.h:39:11: fatal error: 'stdarg.h' file not found [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
@@ -2384,9 +2391,10 @@ error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/representations/conversion/../types.h:2:10: fatal error: 'boost/variant.hpp' file not found [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /usr/include/wchar.h:39:11: fatal error: 'stdarg.h' file not found [clang]
-error: error: invalid value 'c++17' in '-std=c++17' [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/parser/antlr4-cif/CIFLocationBaseVisitor.h:7:10: fatal error: 'antlr4-runtime.h' file not found [clang]
-es/example_benchmark.cpp...
+g docs for example example_HPolytope.cpp...
+Generating docs for example example_plot.cpp...
+Generating file sources...
+Generating code for file /home/travis/build/hypro/hypro/examples/example_benchmark.cpp...
 Generating code for file /home/travis/build/hypro/hypro/examples/example_bouncingBall.cpp...
 Generating code for file /home/travis/build/hypro/hypro/examples/example_box.cpp...
 Generating code for file /home/travis/build/hypro/hypro/examples/example_boxConversion.cpp...
@@ -2428,8 +2436,9 @@ Generating code for file /home/travis/build/hypro/hypro/examples/INCOMPLETE_exam
 Generating code for file /home/travis/build/hypro/hypro/examples/INCOMPLETE_example_bouncingBall_Plotter.cpp...
 Generating code for file /home/travis/build/hypro/hypro/examples/INCOMPLETE_example_facetEnumeration.cpp...
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/datastructures/Point.cpp...
-Generating code for file /home/travis/build/hypro/hypro/src/hypro/parser/antlr4-cif/CIFLocationBaseVisitor.cpp...
-Generating code for file /home/travis/build/hypro/hypro/src/hypro/parser/antlr4-cif/CIerror: error: invalid value 'c++17' in '-std=c++17' [clang]
+Generating code forerror: error: invalid value 'c++17' in '-std=c++17' [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/parser/antlr4-cif/CIFLocationBaseVisitor.h:7:10: fatal error: 'antlr4-runtime.h' file not found [clang]
+error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/parser/antlr4-cif/CIFLocationLexer.h:7:10: fatal error: 'antlr4-runtime.h' file not found [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/parser/antlr4-cif/CIFLocationVisitor.h:7:10: fatal error: 'antlr4-runtime.h' file not found [clang]
@@ -2489,7 +2498,8 @@ error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /usr/include/unistd.h:229:10: fatal error: 'stddef.h' file not found [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /usr/include/stdlib.h:32:10: fatal error: 'stddef.h' file not found [clang]
-FLocationLexer.cpp...
+ file /home/travis/build/hypro/hypro/src/hypro/parser/antlr4-cif/CIFLocationBaseVisitor.cpp...
+Generating code for file /home/travis/build/hypro/hypro/src/hypro/parser/antlr4-cif/CIFLocationLexer.cpp...
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/parser/antlr4-cif/CIFLocationParser.cpp...
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/parser/antlr4-cif/CIFLocationVisitor.cpp...
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/parser/antlr4-cif/ExpressionsBaseVisitor.cpp...
@@ -2525,9 +2535,7 @@ Generating code for file /home/travis/build/hypro/hypro/doc/markdown/gettingStar
 Generating code for file /home/travis/build/hypro/hypro/doc/markdown/gettingStarted/installation.md...
 Generating code for file /home/travis/build/hypro/hypro/doc/markdown/hypro.md...
 Generating code for file /home/travis/build/hypro/hypro/doc/markdown/stateSetRepresentations/generalStateSets.md...
-Generating code for file /home/travis/build/hypro/hypro/doc/markdown/stateSetRepresentations/usage.md...
-Generating code for file /home/travis/build/hypro/hypro/doc/markdown/stateSets.md...
-Generating code for file /home/traverror: error: invalid value 'c++17' in '-std=c++17' [clang]
+Generating code for file /home/travis/build/error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/algorithms/convexHull/ConstrainSet.h:1:9: warning: #pragma once in main file [clang]
 error: /usr/include/wchar.h:39:11: fatal error: 'stdarg.h' file not found [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
@@ -2699,15 +2707,9 @@ error: /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/../H
 error: /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/../HybridAutomaton/decomposition/Decomposition.h:18:44: error: a space is required between consecutive right angle brackets (use '> >') [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/../HybridAutomaton/decomposition/Decomposition.h:19:44: error: a space is required between consecutive right angle brackets (use '> >') [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/decomposition/../../../representations/types.h:2:10: fatal error: 'boost/variant.hpp' file not found [clang]
-error: error: invalid value 'c++17' in '-std=c++17' [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/handlers/guardHandlers/timedGuardHandler.h:1:9: warning: #pragma once in main file [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/../HybridAutomaton/decomposition/Decomposition.h:9:44: error: a space is required between consecutive right angle brackets (use '> >') [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/../HybridAutomaton/decomposition/Decomposition.h:16:44: error: a space is required between consecutive right angle brackets (use '> >') [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/../HybridAutomaton/decomposition/Decomposition.h:17:44: error: a space is required between consecutive right angle brackets (use '> >') [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/../HybridAutomaton/decomposition/Decomposition.h:18:44: error: a space is required between consecutive right angle brackets (use '> >') [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/../HybridAutomaton/decomposition/Decomposition.h:19:44: error: a space is required between consecutive right angle brackets (use '> >') [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/decomposition/../../../representations/types.h:2:10: fatal error: 'boost/variant.hpp' file not found [clang]
-is/build/hypro/hypro/doc/markdown/utilityFunctions.md...
+hypro/hypro/doc/markdown/stateSetRepresentations/usage.md...
+Generating code for file /home/travis/build/hypro/hypro/doc/markdown/stateSets.md...
+Generating code for file /home/travis/build/hypro/hypro/doc/markdown/utilityFunctions.md...
 Generating code for file /home/travis/build/hypro/hypro/doc/markdown/utilityFunctions/plot.md...
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/algorithms/convexHull/ConstrainSet.h...
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/algorithms/convexHull/ConvexHull.h...
@@ -2738,8 +2740,15 @@ Generating code for file /home/travis/build/hypro/hypro/src/hypro/algorithms/rea
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/handlers/guardHandlers/GuardHandlers.h...
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/handlers/guardHandlers/ltiGuardHandler.h...
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/handlers/guardHandlers/rectangularGuardHandler.h...
-Generating code for file /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/handlers/guardHandlers/timedGuardHandler.h...
-Generating code for file /home/travis/build/hypro/hypro/src/hypro/algorithms/error: error: invalid value 'c++17' in '-std=c++17' [clang]
+Generating code for file /home/terror: error: invalid value 'c++17' in '-std=c++17' [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/handlers/guardHandlers/timedGuardHandler.h:1:9: warning: #pragma once in main file [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/../HybridAutomaton/decomposition/Decomposition.h:9:44: error: a space is required between consecutive right angle brackets (use '> >') [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/../HybridAutomaton/decomposition/Decomposition.h:16:44: error: a space is required between consecutive right angle brackets (use '> >') [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/../HybridAutomaton/decomposition/Decomposition.h:17:44: error: a space is required between consecutive right angle brackets (use '> >') [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/../HybridAutomaton/decomposition/Decomposition.h:18:44: error: a space is required between consecutive right angle brackets (use '> >') [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/../HybridAutomaton/decomposition/Decomposition.h:19:44: error: a space is required between consecutive right angle brackets (use '> >') [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/decomposition/../../../representations/types.h:2:10: fatal error: 'boost/variant.hpp' file not found [clang]
+error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/handlers/firstSegmentHandlers/../HandlerFactory.h:1:9: warning: #pragma once in main file [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/../HybridAutomaton/decomposition/Decomposition.h:9:44: error: a space is required between consecutive right angle brackets (use '> >') [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/../HybridAutomaton/decomposition/Decomposition.h:16:44: error: a space is required between consecutive right angle brackets (use '> >') [clang]
@@ -2815,6 +2824,9 @@ error: /home/travis/build/hypro/hypro/src/hypro/representations/Polytope/util.h:
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/carlPolytope/util.h:1:9: warning: #pragma once in main file [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/carlPolytope/../../../carlTypes.h:3:10: fatal error: 'carl/core/MultivariatePolynomial.h' file not found [clang]
+error: error: invalid value 'c++17' in '-std=c++17' [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/util.h:1:9: warning: #pragma once in main file [clang]
+error: /usr/include/wchar.h:39:11: fatal error: 'stdarg.h' file not found [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/util.h:7:9: warning: #pragma once in main file [clang]
 error: /usr/include/wchar.h:39:11: fatal error: 'stdarg.h' file not found [clang]
@@ -2920,13 +2932,8 @@ error: /usr/include/wchar.h:39:11: fatal error: 'stdarg.h' file not found [clang
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/TrafoParameters.h:2:9: warning: #pragma once in main file [clang]
 error: /usr/include/wchar.h:39:11: fatal error: 'stdarg.h' file not found [clang]
-error: error: invalid value 'c++17' in '-std=c++17' [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/workers/ContextBasedReachabilityWorker.h:1:9: warning: #pragma once in main file [clang]
-error: /usr/include/wchar.h:39:11: fatal error: 'stdarg.h' file not found [clang]
-error: error: invalid value 'c++17' in '-std=c++17' [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/workers/IWorker.h:1:9: warning: #pragma once in main file [clang]
-error: /usr/include/wchar.h:39:11: fatal error: 'stdarg.h' file not found [clang]
-reachability/handlers/HandlerFactory.h...
+ravis/build/hypro/hypro/src/hypro/algorithms/reachability/handlers/guardHandlers/timedGuardHandler.h...
+Generating code for file /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/handlers/HandlerFactory.h...
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/handlers/IHandler.h...
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/handlers/invariantHandlers/discreteInvariantHandler.h...
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/handlers/invariantHandlers/InvariantHandlers.h...
@@ -2940,6 +2947,7 @@ Generating code for file /home/travis/build/hypro/hypro/src/hypro/algorithms/rea
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/util.h...
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/representations/Polytope/util.h...
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/carlPolytope/util.h...
+Generating code for file /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/util.h...
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/util.h...
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/handlers/resetHandlers/discreteResetHandler.h...
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/handlers/resetHandlers/ltiResetHandler.h...
@@ -2955,9 +2963,13 @@ Generating code for file /home/travis/build/hypro/hypro/src/hypro/algorithms/rea
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/handlers/timeEvolutionHandlers/TimeEvolutionHandlers.h...
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/Reach.h...
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/TrafoParameters.h...
-Generating code for file /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/workers/ContextBasedReachabilityWorker.h...
-Generating code for file /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/workers/IWorker.h...
-Generating code for file /home/travis/build/hypro/error: error: invalid value 'c++17' in '-std=c++17' [clang]
+Geerror: error: invalid value 'c++17' in '-std=c++17' [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/workers/ContextBasedReachabilityWorker.h:1:9: warning: #pragma once in main file [clang]
+error: /usr/include/wchar.h:39:11: fatal error: 'stdarg.h' file not found [clang]
+error: error: invalid value 'c++17' in '-std=c++17' [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/workers/IWorker.h:1:9: warning: #pragma once in main file [clang]
+error: /usr/include/wchar.h:39:11: fatal error: 'stdarg.h' file not found [clang]
+error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/carlTypes.h:1:9: warning: #pragma once in main file [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/carlTypes.h:3:10: fatal error: 'carl/core/MultivariatePolynomial.h' file not found [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
@@ -3168,16 +3180,9 @@ error: /usr/include/wchar.h:39:11: fatal error: 'stdarg.h' file not found [clang
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/ReachTreeNode.h:7:9: warning: #pragma once in main file [clang]
 error: /usr/include/wchar.h:39:11: fatal error: 'stdarg.h' file not found [clang]
-error: error: invalid value 'c++17' in '-std=c++17' [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/Settings.h:1:9: warning: #pragma once in main file [clang]
-error: /usr/include/wchar.h:39:11: fatal error: 'stdarg.h' file not found [clang]
-error: error: invalid value 'c++17' in '-std=c++17' [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/SettingsProvider.h:1:9: warning: #pragma once in main file [clang]
-error: /usr/include/wchar.h:39:11: fatal error: 'stdarg.h' file not found [clang]
-error: error: invalid value 'c++17' in '-std=c++17' [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/Strategy.h:1:9: warning: #pragma once in main file [clang]
-error: /usr/include/wchar.h:39:11: fatal error: 'stdarg.h' file not found [clang]
-hypro/src/hypro/carlTypes.h...
+nerating code for file /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/workers/ContextBasedReachabilityWorker.h...
+Generating code for file /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/workers/IWorker.h...
+Generating code for file /home/travis/build/hypro/hypro/src/hypro/carlTypes.h...
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/config.h...
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/datastructures/Facet.h...
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h...
@@ -3211,10 +3216,16 @@ Generating code for file /home/travis/build/hypro/hypro/src/hypro/datastructures
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/NodeManager.h...
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/ReachTree.h...
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/ReachTreeNode.h...
-Generating code for file /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/Settings.h...
-Generating code for file /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/SettingsProvider.h...
-Generating code for file /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/Strategy.h...
-Generating code for file /home/travis/build/hypro/hypro/srcerror: error: invalid value 'c++17' in '-std=c++17' [clang]
+Generating code for file /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/Setterror: error: invalid value 'c++17' in '-std=c++17' [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/Settings.h:1:9: warning: #pragma once in main file [clang]
+error: /usr/include/wchar.h:39:11: fatal error: 'stdarg.h' file not found [clang]
+error: error: invalid value 'c++17' in '-std=c++17' [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/SettingsProvider.h:1:9: warning: #pragma once in main file [clang]
+error: /usr/include/wchar.h:39:11: fatal error: 'stdarg.h' file not found [clang]
+error: error: invalid value 'c++17' in '-std=c++17' [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/Strategy.h:1:9: warning: #pragma once in main file [clang]
+error: /usr/include/wchar.h:39:11: fatal error: 'stdarg.h' file not found [clang]
+error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Strategy.h:1:9: warning: #pragma once in main file [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/StrategyNode.h:1:9: warning: #pragma once in main file [clang]
@@ -3341,13 +3352,10 @@ error: /home/travis/build/hypro/hypro/src/hypro/parser/antlr4-cif/InputOutputLex
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/parser/antlr4-cif/InputOutputParser.h:4:9: warning: #pragma once in main file [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/parser/antlr4-cif/InputOutputParser.h:7:10: fatal error: 'antlr4-runtime.h' file not found [clang]
-error: error: invalid value 'c++17' in '-std=c++17' [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/parser/antlr4-cif/InputOutputVisitor.h:4:9: warning: #pragma once in main file [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/parser/antlr4-cif/InputOutputVisitor.h:7:10: fatal error: 'antlr4-runtime.h' file not found [clang]
-error: error: invalid value 'c++17' in '-std=c++17' [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/parser/antlr4-flowstar/ErrorListener.h:11:9: warning: #pragma once in main file [clang]
-error: /usr/include/wchar.h:39:11: fatal error: 'stdarg.h' file not found [clang]
-/hypro/util/linearOptimization/Strategy.h...
+ings.h...
+Generating code for file /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/SettingsProvider.h...
+Generating code for file /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/Strategy.h...
+Generating code for file /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/Strategy.h...
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/StrategyNode.h...
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/StrategyVisitors.h...
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/Task.h...
@@ -3382,9 +3390,13 @@ Generating code for file /home/travis/build/hypro/hypro/src/hypro/parser/antlr4-
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/parser/antlr4-cif/InputOutputBaseVisitor.h...
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/parser/antlr4-cif/InputOutputLexer.h...
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/parser/antlr4-cif/InputOutputParser.h...
-Generating code for file /home/travis/build/hypro/hypro/src/hypro/parser/antlr4-cif/InputOutputVisitor.h...
-Generating code for file /home/travis/build/hypro/hypro/src/hypro/parser/antlr4-flowstar/ErrorListener.h...
-Generating code for file /home/travis/build/hypro/hypro/src/hypro/parser/antlr4-flowstar/HybridAuerror: error: invalid value 'c++17' in '-std=c++17' [clang]
+Generating code for error: error: invalid value 'c++17' in '-std=c++17' [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/parser/antlr4-cif/InputOutputVisitor.h:4:9: warning: #pragma once in main file [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/parser/antlr4-cif/InputOutputVisitor.h:7:10: fatal error: 'antlr4-runtime.h' file not found [clang]
+error: error: invalid value 'c++17' in '-std=c++17' [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/parser/antlr4-flowstar/ErrorListener.h:11:9: warning: #pragma once in main file [clang]
+error: /usr/include/wchar.h:39:11: fatal error: 'stdarg.h' file not found [clang]
+error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/parser/antlr4-flowstar/HybridAutomatonBaseVisitor.h:4:9: warning: #pragma once in main file [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/parser/antlr4-flowstar/HybridAutomatonBaseVisitor.h:7:10: fatal error: 'antlr4-runtime.h' file not found [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
@@ -3434,18 +3446,20 @@ error: /home/travis/build/hypro/hypro/src/hypro/representations/Box/BoxSetting.h
 error: /home/travis/build/hypro/hypro/src/hypro/representations/Box/BoxSetting.h:9:26: error: expected member name or ';' after declaration specifiers [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/representations/Box/BoxSetting.h:11:16: error: unknown type name 'constexpr' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/representations/Box/BoxSetting.h:11:26: error: expected member name or ';' after declaration specifiers [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/representations/Box/BoxSetting.h:16:16: error: unknown type name 'constexpr' [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/representations/Box/BoxSetting.h:16:26: error: expected member name or ';' after declaration specifiers [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/representations/Box/BoxSetting.h:13:16: error: unknown type name 'constexpr' [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/representations/Box/BoxSetting.h:13:26: error: expected member name or ';' after declaration specifiers [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/representations/Box/BoxSetting.h:18:16: error: unknown type name 'constexpr' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/representations/Box/BoxSetting.h:18:26: error: expected member name or ';' after declaration specifiers [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/representations/Box/BoxSetting.h:23:16: error: unknown type name 'constexpr' [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/representations/Box/BoxSetting.h:23:26: error: expected member name or ';' after declaration specifiers [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/representations/Box/BoxSetting.h:20:16: error: unknown type name 'constexpr' [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/representations/Box/BoxSetting.h:20:26: error: expected member name or ';' after declaration specifiers [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/representations/Box/BoxSetting.h:25:16: error: unknown type name 'constexpr' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/representations/Box/BoxSetting.h:25:26: error: expected member name or ';' after declaration specifiers [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/representations/Box/BoxSetting.h:30:16: error: unknown type name 'constexpr' [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/representations/Box/BoxSetting.h:30:26: error: expected member name or ';' after declaration specifiers [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/representations/Box/BoxSetting.h:27:16: error: unknown type name 'constexpr' [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/representations/Box/BoxSetting.h:27:26: error: expected member name or ';' after declaration specifiers [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/representations/Box/BoxSetting.h:32:16: error: unknown type name 'constexpr' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/representations/Box/BoxSetting.h:32:26: error: expected member name or ';' after declaration specifiers [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/representations/Box/BoxSetting.h:34:16: error: unknown type name 'constexpr' [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/representations/Box/BoxSetting.h:34:26: error: expected member name or ';' after declaration specifiers [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/representations/Box/intervalMethods.h:1:9: warning: #pragma once in main file [clang]
 error: /usr/include/wchar.h:39:11: fatal error: 'stdarg.h' file not found [clang]
@@ -3600,13 +3614,9 @@ error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/carlPolytope/carlPolytope.h:1:9: warning: #pragma once in main file [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/carlPolytope/carlPolytopeSettings.h:8:11: warning: no newline at end of file [-Wnewline-eof] [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/algorithms/quantifierElimination/../../carlTypes.h:3:10: fatal error: 'carl/core/MultivariatePolynomial.h' file not found [clang]
-error: error: invalid value 'c++17' in '-std=c++17' [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/carlPolytope/carlPolytopeSettings.h:1:9: warning: #pragma once in main file [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/carlPolytope/carlPolytopeSettings.h:8:11: warning: no newline at end of file [-Wnewline-eof] [clang]
-error: error: invalid value 'c++17' in '-std=c++17' [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/Cone.h:5:9: warning: #pragma once in main file [clang]
-error: /usr/include/wchar.h:39:11: fatal error: 'stdarg.h' file not found [clang]
-tomatonBaseVisitor.h...
+file /home/travis/build/hypro/hypro/src/hypro/parser/antlr4-cif/InputOutputVisitor.h...
+Generating code for file /home/travis/build/hypro/hypro/src/hypro/parser/antlr4-flowstar/ErrorListener.h...
+Generating code for file /home/travis/build/hypro/hypro/src/hypro/parser/antlr4-flowstar/HybridAutomatonBaseVisitor.h...
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/parser/antlr4-flowstar/HybridAutomatonLexer.h...
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/parser/antlr4-flowstar/HybridAutomatonParser.h...
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/parser/antlr4-flowstar/HybridAutomatonVisitor.h...
@@ -3640,9 +3650,13 @@ Generating code for file /home/travis/build/hypro/hypro/src/hypro/representation
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/representations/Polytope/Polytope.h...
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/representations/Polytope/PolytopeSetting.h...
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/carlPolytope/carlPolytope.h...
-Generating code for file /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/carlPolytope/carlPolytopeSettings.h...
-Generating code for file /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/Cone.h...
-Generating code for file /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/Fan.h.error: error: invalid value 'c++17' in '-std=c++17' [clang]
+Generating code for file /home/travis/error: error: invalid value 'c++17' in '-std=c++17' [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/carlPolytope/carlPolytopeSettings.h:1:9: warning: #pragma once in main file [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/carlPolytope/carlPolytopeSettings.h:8:11: warning: no newline at end of file [-Wnewline-eof] [clang]
+error: error: invalid value 'c++17' in '-std=c++17' [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/Cone.h:5:9: warning: #pragma once in main file [clang]
+error: /usr/include/wchar.h:39:11: fatal error: 'stdarg.h' file not found [clang]
+error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/Fan.h:1:9: warning: #pragma once in main file [clang]
 error: /usr/include/wchar.h:39:11: fatal error: 'stdarg.h' file not found [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
@@ -3660,11 +3674,13 @@ error: /usr/include/wchar.h:39:11: fatal error: 'stdarg.h' file not found [clang
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytope.h:5:9: warning: #pragma once in main file [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytope.h:8:5: error: C++ requires a type specifier for all declarations [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytopeSettings.h:7:11: warning: no newline at end of file [-Wnewline-eof] [clang]
 error: /usr/include/wchar.h:39:11: fatal error: 'stdarg.h' file not found [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytopeSettings.h:1:9: warning: #pragma once in main file [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytopeSettings.h:7:11: warning: no newline at end of file [-Wnewline-eof] [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytopeSettings.h:6:12: error: unknown type name 'constexpr' [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytopeSettings.h:6:22: error: expected member name or ';' after declaration specifiers [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytopeSettings.h:7:12: error: unknown type name 'constexpr' [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/VPolytope/VPolytopeSettings.h:7:22: error: expected member name or ';' after declaration specifiers [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunction/BallSupportFunction.h:12:9: warning: #pragma once in main file [clang]
 error: /usr/include/wchar.h:39:11: fatal error: 'stdarg.h' file not found [clang]
@@ -3864,12 +3880,9 @@ error: /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/smtrat/h
 error: /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/smtrat/helper_methods.h:28:20: error: use of undeclared identifier 'preSolutionConstraint' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/smtrat/helper_methods.h:32:5: error: unknown type name 'EvaluationResult' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/smtrat/helper_methods.h:32:21: error: expected unqualified-id [clang]
-error: error: invalid value 'c++17' in '-std=c++17' [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/z3/helper_methods.h:1:9: warning: #pragma once in main file [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/z3/helper_methods.h:2:10: fatal error: 'z3.h' file not found [clang]
-error: error: invalid value 'c++17' in '-std=c++17' [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/smtrat/SimplexSolver.h:4:9: warning: #pragma once in main file [clang]
-..
+build/hypro/hypro/src/hypro/representations/Polytopes/carlPolytope/carlPolytopeSettings.h...
+Generating code for file /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/Cone.h...
+Generating code for file /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/Fan.h...
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.h...
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytopeSetting.h...
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/simplex.h...
@@ -3903,9 +3916,12 @@ Generating code for file /home/travis/build/hypro/hypro/src/hypro/util/linearOpt
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/smtrat/adaptions_smtrat.h...
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/smtrat/convenience.h...
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/smtrat/helper_methods.h...
-Generating code for file /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/z3/helper_methods.h...
-Generating code for file /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/smtrat/SimplexSolver.h...
-Generating code for file /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/soplex/adaptions_soplex.herror: error: invalid value 'c++17' in '-std=c++17' [clang]
+Generating code for file /home/travis/build/hypro/herror: error: invalid value 'c++17' in '-std=c++17' [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/z3/helper_methods.h:1:9: warning: #pragma once in main file [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/z3/helper_methods.h:2:10: fatal error: 'z3.h' file not found [clang]
+error: error: invalid value 'c++17' in '-std=c++17' [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/smtrat/SimplexSolver.h:4:9: warning: #pragma once in main file [clang]
+error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/soplex/adaptions_soplex.h:2:9: warning: #pragma once in main file [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/soplex/adaptions_soplex.h:3:10: fatal error: 'soplex.h' file not found [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
@@ -3917,14 +3933,14 @@ error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/z3/z3Convenience.h:7:9: warning: #pragma once in main file [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/representations/types.h:2:10: fatal error: 'boost/variant.hpp' file not found [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/util/logging/Filewriter.h:1:9: warning: #pragma once in main file [clang]
+error: /usr/lib/gcc/x86_64-linux-gnu/7.4.0/../../../../include/c++/7.4.0/bits/c++0x_warning.h:32:2: error: This file requires compiler and library support for the ISO C++ 2011 standard. This support must be enabled with the -std=c++11 or -std=gnu++11 compiler options. [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/util/logging/../multithreading/LockableBase.h:9:10: error: use of undeclared identifier 'std' [clang]
+error: /home/travis/build/hypro/hypro/src/hypro/util/logging/../multithreading/LockableBase.h:12:2: error: use of undeclared identifier 'std' [clang]
+error: /usr/include/wchar.h:39:11: fatal error: 'stdarg.h' file not found [clang]
+error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/util/logging/Logger.h:1:9: warning: #pragma once in main file [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/util/logging/Logger.h:4:10: fatal error: 'carl/io/streamingOperators.h' file not found [clang]
-error: error: invalid value 'c++17' in '-std=c++17' [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/util/multithreading/Filewriter.h:1:9: warning: #pragma once in main file [clang]
-error: /usr/lib/gcc/x86_64-linux-gnu/7.4.0/../../../../include/c++/7.4.0/bits/c++0x_warning.h:32:2: error: This file requires compiler and library support for the ISO C++ 2011 standard. This support must be enabled with the -std=c++11 or -std=gnu++11 compiler options. [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/util/multithreading/LockableBase.h:9:10: error: use of undeclared identifier 'std' [clang]
-error: /home/travis/build/hypro/hypro/src/hypro/util/multithreading/LockableBase.h:12:2: error: use of undeclared identifier 'std' [clang]
-error: /usr/include/wchar.h:39:11: fatal error: 'stdarg.h' file not found [clang]
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/util/multithreading/LockableBase.h:1:9: warning: #pragma once in main file [clang]
 error: /usr/lib/gcc/x86_64-linux-gnu/7.4.0/../../../../include/c++/7.4.0/bits/c++0x_warning.h:32:2: error: This file requires compiler and library support for the ISO C++ 2011 standard. This support must be enabled with the -std=c++11 or -std=gnu++11 compiler options. [clang]
@@ -4040,12 +4056,14 @@ error: /home/travis/build/hypro/hypro/src/hypro/util/tuple_expansion/make_vector
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/util/VariablePool.h:11:9: warning: #pragma once in main file [clang]
 error: /home/travis/build/hypro/hypro/src/hypro/util/logging/Logger.h:4:10: fatal error: 'carl/io/streamingOperators.h' file not found [clang]
-...
+ypro/src/hypro/util/linearOptimization/z3/helper_methods.h...
+Generating code for file /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/smtrat/SimplexSolver.h...
+Generating code for file /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/soplex/adaptions_soplex.h...
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/z3/adaptions_z3.h...
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/z3/z3Context.h...
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/util/linearOptimization/z3/z3Convenience.h...
+Generating code for file /home/travis/build/hypro/hypro/src/hypro/util/logging/Filewriter.h...
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/util/logging/Logger.h...
-Generating code for file /home/travis/build/hypro/hypro/src/hypro/util/multithreading/Filewriter.h...
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/util/multithreading/LockableBase.h...
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/util/multithreading/LockableObjectWrapper.h...
 Generating code for file /home/travis/build/hypro/hypro/src/hypro/util/multithreading/ScopedLock.h...
@@ -4677,11 +4695,7 @@ Generating docs for compound hypro::timedFirstSegmentHandler...
 Generating docs for compound hypro::timedGuardHandler...
 Generating docs for compound hypro::timedInvariantHandler...
 Generating docs for compound hypro::timedResetHandler...
-Generating docs for compound hypro::timedTickTimeEvolutionHash: 1: latex: not found
-error: Problems running latex. Check your installation or look for typos in _formulas.tex and check _formulas.log!
-sh: 1: dvips: not found
-error: Problems running dvips. Check your installation!
-ndler...
+Generating docs for compound hypro::timedTickTimeEvolutionHandler...
 Generating docs for compound hypro::TPathElement...
 Generating docs for compound hypro::trafoContent...
 Generating docs for compound hypro::TrafoParameters...
@@ -4744,7 +4758,11 @@ Generating docs for compound std::hash< hypro::VertexContainer< Number > >...
 Generating docs for compound std::hash< set< hypro::Vertex< Number > > >...
 Generating docs for compound std::hash< std::pair< first, second > >...
 Generating docs for compound ZUtility::Line_t...
-Generating graph info page...
+Generating grsh: 1: latex: not found
+error: Problems running latex. Check your installation or look for typos in _formulas.tex and check _formulas.log!
+sh: 1: dvips: not found
+error: Problems running dvips. Check your installation!
+aph info page...
 Generating directory documentation...
 Generating bitmaps for formulas in HTML...
 Generating image form_0.png for formula
@@ -4765,187 +4783,196 @@ finalizing index lists...
 writing tag file...
 Running dot...
 Generating dot graphs using 3 parallel threads...
-Running dot for graph 1/181
-Running dot for graph 2/181
-Running dot for graph 3/181
-Running dot for graph 4/181
-Running dot for graph 5/181
-Running dot for graph 6/181
-Running dot for graph 7/181
-Running dot for graph 8/181
-Running dot for graph 9/181
-Running dot for graph 10/181
-Running dot for graph 11/181
-Running dot for graph 12/181
-Running dot for graph 13/181
-Running dot for graph 14/181
-Running dot for graph 15/181
-Running dot for graph 16/181
-Running dot for graph 17/181
-Running dot for graph 18/181
-Running dot for graph 19/181
-Running dot for graph 20/181
-Running dot for graph 21/181
-Running dot for graph 22/181
-Running dot for graph 23/181
-Running dot for graph 24/181
-Running dot for graph 25/181
-Running dot for graph 26/181
-Running dot for graph 27/181
-Running dot for graph 28/181
-Running dot for graph 29/181
-Running dot for graph 30/181
-Running dot for graph 31/181
-Running dot for graph 32/181
-Running dot for graph 33/181
-Running dot for graph 34/181
-Running dot for graph 35/181
-Running dot for graph 36/181
-Running dot for graph 37/181
-Running dot for graph 38/181
-Running dot for graph 39/181
-Running dot for graph 40/181
-Running dot for graph 41/181
-Running dot for graph 42/181
-Running dot for graph 43/181
-Running dot for graph 44/181
-Running dot for graph 45/181
-Running dot for graph 46/181
-Running dot for graph 47/181
-Running dot for graph 48/181
-Running dot for graph 49/181
-Running dot for graph 50/181
-Running dot for graph 51/181
-Running dot for graph 52/181
-Running dot for graph 53/181
-Running dot for graph 54/181
-Running dot for graph 55/181
-Running dot for graph 56/181
-Running dot for graph 57/181
-Running dot for graph 58/181
-Running dot for graph 59/181
-Running dot for graph 60/181
-Running dot for graph 61/181
-Running dot for graph 62/181
-Running dot for graph 63/181
-Running dot for graph 64/181
-Running dot for graph 65/181
-Running dot for graph 66/181
-Running dot for graph 67/181
-Running dot for graph 68/181
-Running dot for graph 69/181
-Running dot for graph 70/181
-Running dot for graph 71/181
-Running dot for graph 72/181
-Running dot for graph 73/181
-Running dot for graph 74/181
-Running dot for graph 75/181
-Running dot for graph 76/181
-Running dot for graph 77/181
-Running dot for graph 78/181
-Running dot for graph 79/181
-Running dot for graph 80/181
-Running dot for graph 81/181
-Running dot for graph 82/181
-Running dot for graph 83/181
-Running dot for graph 84/181
-Running dot for graph 85/181
-Running dot for graph 86/181
-Running dot for graph 87/181
-Running dot for graph 88/181
-Running dot for graph 89/181
-Running dot for graph 90/181
-Running dot for graph 91/181
-Running dot for graph 92/181
-Running dot for graph 93/181
-Running dot for graph 94/181
-Running dot for graph 95/181
-Running dot for graph 96/181
-Running dot for graph 97/181
-Running dot for graph 98/181
-Running dot for graph 99/181
-Running dot for graph 100/181
-Running dot for graph 101/181
-Running dot for graph 102/181
-Running dot for graph 103/181
-Running dot for graph 104/181
-Running dot for graph 105/181
-Running dot for graph 106/181
-Running dot for graph 107/181
-Running dot for graph 108/181
-Running dot for graph 109/181
-Running dot for graph 110/181
-Running dot for graph 111/181
-Running dot for graph 112/181
-Running dot for graph 113/181
-Running dot for graph 114/181
-Running dot for graph 115/181
-Running dot for graph 116/181
-Running dot for graph 117/181
-Running dot for graph 118/181
-Running dot for graph 119/181
-Running dot for graph 120/181
-Running dot for graph 121/181
-Running dot for graph 122/181
-Running dot for graph 123/181
-Running dot for graph 124/181
-Running dot for graph 125/181
-Running dot for graph 126/181
-Running dot for graph 127/181
-Running dot for graph 128/181
-Running dot for graph 129/181
-Running dot for graph 130/181
-Running dot for graph 131/181
-Running dot for graph 132/181
-Running dot for graph 133/181
-Running dot for graph 134/181
-Running dot for graph 135/181
-Running dot for graph 136/181
-Running dot for graph 137/181
-Running dot for graph 138/181
-Running dot for graph 139/181
-Running dot for graph 140/181
-Running dot for graph 141/181
-Running dot for graph 142/181
-Running dot for graph 143/181
-Running dot for graph 144/181
-Running dot for graph 145/181
-Running dot for graph 146/181
-Running dot for graph 147/181
-Running dot for graph 148/181
-Running dot for graph 149/181
-Running dot for graph 150/181
-Running dot for graph 151/181
-Running dot for graph 152/181
-Running dot for graph 153/181
-Running dot for graph 154/181
-Running dot for graph 155/181
-Running dot for graph 156/181
-Running dot for graph 157/181
-Running dot for graph 158/181
-Running dot for graph 159/181
-Running dot for graph 160/181
-Running dot for graph 161/181
-Running dot for graph 162/181
-Running dot for graph 163/181
-Running dot for graph 164/181
-Running dot for graph 165/181
-Running dot for graph 166/181
-Running dot for graph 167/181
-Running dot for graph 168/181
-Running dot for graph 169/181
-Running dot for graph 170/181
-Running dot for graph 171/181
-Running dot for graph 172/181
-Running dot for graph 173/181
-Running dot for graph 174/181
-Running dot for graph 175/181
-Running dot for graph 176/181
-Running dot for graph 177/181
-Running dot for graph 178/181
-Running dot for graph 179/181
-Running dot for graph 180/181
-Running dot for graph 181/181
+Running dot for graph 1/190
+Running dot for graph 2/190
+Running dot for graph 3/190
+Running dot for graph 4/190
+Running dot for graph 5/190
+Running dot for graph 6/190
+Running dot for graph 7/190
+Running dot for graph 8/190
+Running dot for graph 9/190
+Running dot for graph 10/190
+Running dot for graph 11/190
+Running dot for graph 12/190
+Running dot for graph 13/190
+Running dot for graph 14/190
+Running dot for graph 15/190
+Running dot for graph 16/190
+Running dot for graph 17/190
+Running dot for graph 18/190
+Running dot for graph 19/190
+Running dot for graph 20/190
+Running dot for graph 21/190
+Running dot for graph 22/190
+Running dot for graph 23/190
+Running dot for graph 24/190
+Running dot for graph 25/190
+Running dot for graph 26/190
+Running dot for graph 27/190
+Running dot for graph 28/190
+Running dot for graph 29/190
+Running dot for graph 30/190
+Running dot for graph 31/190
+Running dot for graph 32/190
+Running dot for graph 33/190
+Running dot for graph 34/190
+Running dot for graph 35/190
+Running dot for graph 36/190
+Running dot for graph 37/190
+Running dot for graph 38/190
+Running dot for graph 39/190
+Running dot for graph 40/190
+Running dot for graph 41/190
+Running dot for graph 42/190
+Running dot for graph 43/190
+Running dot for graph 44/190
+Running dot for graph 45/190
+Running dot for graph 46/190
+Running dot for graph 47/190
+Running dot for graph 48/190
+Running dot for graph 49/190
+Running dot for graph 50/190
+Running dot for graph 51/190
+Running dot for graph 52/190
+Running dot for graph 53/190
+Running dot for graph 54/190
+Running dot for graph 55/190
+Running dot for graph 56/190
+Running dot for graph 57/190
+Running dot for graph 58/190
+Running dot for graph 59/190
+Running dot for graph 60/190
+Running dot for graph 61/190
+Running dot for graph 62/190
+Running dot for graph 63/190
+Running dot for graph 64/190
+Running dot for graph 65/190
+Running dot for graph 66/190
+Running dot for graph 67/190
+Running dot for graph 68/190
+Running dot for graph 69/190
+Running dot for graph 70/190
+Running dot for graph 71/190
+Running dot for graph 72/190
+Running dot for graph 73/190
+Running dot for graph 74/190
+Running dot for graph 75/190
+Running dot for graph 76/190
+Running dot for graph 77/190
+Running dot for graph 78/190
+Running dot for graph 79/190
+Running dot for graph 80/190
+Running dot for graph 81/190
+Running dot for graph 82/190
+Running dot for graph 83/190
+Running dot for graph 84/190
+Running dot for graph 85/190
+Running dot for graph 86/190
+Running dot for graph 87/190
+Running dot for graph 88/190
+Running dot for graph 89/190
+Running dot for graph 90/190
+Running dot for graph 91/190
+Running dot for graph 92/190
+Running dot for graph 93/190
+Running dot for graph 94/190
+Running dot for graph 95/190
+Running dot for graph 96/190
+Running dot for graph 97/190
+Running dot for graph 98/190
+Running dot for graph 99/190
+Running dot for graph 100/190
+Running dot for graph 101/190
+Running dot for graph 102/190
+Running dot for graph 103/190
+Running dot for graph 104/190
+Running dot for graph 105/190
+Running dot for graph 106/190
+Running dot for graph 107/190
+Running dot for graph 108/190
+Running dot for graph 109/190
+Running dot for graph 110/190
+Running dot for graph 111/190
+Running dot for graph 112/190
+Running dot for graph 113/190
+Running dot for graph 114/190
+Running dot for graph 115/190
+Running dot for graph 116/190
+Running dot for graph 117/190
+Running dot for graph 118/190
+Running dot for graph 119/190
+Running dot for graph 120/190
+Running dot for graph 121/190
+Running dot for graph 122/190
+Running dot for graph 123/190
+Running dot for graph 124/190
+Running dot for graph 125/190
+Running dot for graph 126/190
+Running dot for graph 127/190
+Running dot for graph 128/190
+Running dot for graph 129/190
+Running dot for graph 130/190
+Running dot for graph 131/190
+Running dot for graph 132/190
+Running dot for graph 133/190
+Running dot for graph 134/190
+Running dot for graph 135/190
+Running dot for graph 136/190
+Running dot for graph 137/190
+Running dot for graph 138/190
+Running dot for graph 139/190
+Running dot for graph 140/190
+Running dot for graph 141/190
+Running dot for graph 142/190
+Running dot for graph 143/190
+Running dot for graph 144/190
+Running dot for graph 145/190
+Running dot for graph 146/190
+Running dot for graph 147/190
+Running dot for graph 148/190
+Running dot for graph 149/190
+Running dot for graph 150/190
+Running dot for graph 151/190
+Running dot for graph 152/190
+Running dot for graph 153/190
+Running dot for graph 154/190
+Running dot for graph 155/190
+Running dot for graph 156/190
+Running dot for graph 157/190
+Running dot for graph 158/190
+Running dot for graph 159/190
+Running dot for graph 160/190
+Running dot for graph 161/190
+Running dot for graph 162/190
+Running dot for graph 163/190
+Running dot for graph 164/190
+Running dot for graph 165/190
+Running dot for graph 166/190
+Running dot for graph 167/190
+Running dot for graph 168/190
+Running dot for graph 169/190
+Running dot for graph 170/190
+Running dot for graph 171/190
+Running dot for graph 172/190
+Running dot for graph 173/190
+Running dot for graph 174/190
+Running dot for graph 175/190
+Running dot for graph 176/190
+Running dot for graph 177/190
+Running dot for graph 178/190
+Running dot for graph 179/190
+Running dot for graph 180/190
+Running dot for graph 181/190
+Running dot for graph 182/190
+Running dot for graph 183/190
+Running dot for graph 184/190
+Running dot for graph 185/190
+Running dot for graph 186/190
+Running dot for graph 187/190
+Running dot for graph 188/190
+Running dot for graph 189/190
+Running dot for graph 190/190
 Patching output file 1/1
-lookup cache used 6965/65536 hits=207970 misses=8010
+lookup cache used 7017/65536 hits=208449 misses=8115
 finished...

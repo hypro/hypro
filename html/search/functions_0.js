@@ -1,5 +1,6 @@
 var searchData=
 [
+  ['addconstraint',['addConstraint',['../classhypro_1_1Optimizer.html#ae0f45b33ba78df88b93e2d393823fe42',1,'hypro::Optimizer']]],
   ['addgenerators',['addGenerators',['../classhypro_1_1ZonotopeT.html#a9f59e04172b514229a25d8c9946f1355',1,'hypro::ZonotopeT']]],
   ['addglobalbadstate',['addGlobalBadState',['../classhypro_1_1HybridAutomaton.html#af9210469bda0406b9b1cf0c3c0b12c4c',1,'hypro::HybridAutomaton']]],
   ['addinitialstate',['addInitialState',['../classhypro_1_1HybridAutomaton.html#a8ac7f2ccb4c6825394189c0988d5b629',1,'hypro::HybridAutomaton']]],

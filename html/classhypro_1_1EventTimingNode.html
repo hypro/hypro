@@ -33,7 +33,7 @@
   <td id="projectlogo"><img alt="Logo" src="hypro_Logo.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HyPro
-   &#160;<span id="projectnumber">19.01</span>
+   &#160;<span id="projectnumber">19.02</span>
    </div>
    <div id="projectbrief">A Toolbox for the Reachability Analysis of Hybrid Systems using Geometric Approximations</div>
   </td>
@@ -115,6 +115,7 @@ $(document).ready(function(){initNavTree('classhypro_1_1EventTimingNode.html',''
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pro-attribs">Protected Attributes</a> &#124;
+<a href="#friends">Friends</a> &#124;
 <a href="classhypro_1_1EventTimingNode-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">hypro::EventTimingNode&lt; Number &gt; Class Template Reference</div>  </div>
@@ -152,18 +153,27 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aece08daac191e99eacfc5c648fcbaa32"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aece08daac191e99eacfc5c648fcbaa32"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>setTimings</b> (const <a class="el" href="classhypro_1_1EventTimingContainer.html">EventTimingContainer</a>&lt; Number &gt; &amp;timings)</td></tr>
 <tr class="separator:aece08daac191e99eacfc5c648fcbaa32"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae3b22940bc47f4559572ac2ea843d1f9"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae3b22940bc47f4559572ac2ea843d1f9"></a>
-const <a class="el" href="classhypro_1_1EventTimingContainer.html">EventTimingContainer</a>&lt; Number &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getSettings</b> () const </td></tr>
-<tr class="separator:ae3b22940bc47f4559572ac2ea843d1f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab57b38720908c19b6f19115dd57950ff"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab57b38720908c19b6f19115dd57950ff"></a>
+const <a class="el" href="classhypro_1_1EventTimingContainer.html">EventTimingContainer</a>&lt; Number &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getTimings</b> () const </td></tr>
+<tr class="separator:ab57b38720908c19b6f19115dd57950ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7c9f65e753a691e4d0358f52ce3f5498"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7c9f65e753a691e4d0358f52ce3f5498"></a>
+<a class="el" href="classhypro_1_1EventTimingContainer.html">EventTimingContainer</a>&lt; Number &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>rGetTimings</b> ()</td></tr>
+<tr class="separator:a7c9f65e753a691e4d0358f52ce3f5498"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9f4021c1000cebbc31b55cef60b8a392"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9f4021c1000cebbc31b55cef60b8a392"></a>
+const <a class="el" href="classhypro_1_1Location.html">Location</a>&lt; Number &gt; *&#160;</td><td class="memItemRight" valign="bottom"><b>getLocation</b> () const </td></tr>
+<tr class="separator:a9f4021c1000cebbc31b55cef60b8a392"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a92d863c1c137ed73910c53e824a68a9c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a92d863c1c137ed73910c53e824a68a9c"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>setLocation</b> (const <a class="el" href="classhypro_1_1Location.html">Location</a>&lt; Number &gt; *loc)</td></tr>
 <tr class="separator:a92d863c1c137ed73910c53e824a68a9c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a784bdfa7528157a10d3478f8bbfed78d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a784bdfa7528157a10d3478f8bbfed78d"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>setEntryTimestamp</b> (const carl::Interval&lt; <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt; &amp;t)</td></tr>
 <tr class="separator:a784bdfa7528157a10d3478f8bbfed78d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abceeeb3a9261c249b0e0d5fa16cd71f8"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="abceeeb3a9261c249b0e0d5fa16cd71f8"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>getDotRepresentation</b> (int id, std::string &amp;nodes, std::string &amp;transitions, std::vector&lt; unsigned &gt; &amp;levels) const </td></tr>
-<tr class="separator:abceeeb3a9261c249b0e0d5fa16cd71f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a76e186f9eb449f698eb9909c1d0405e3"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a76e186f9eb449f698eb9909c1d0405e3"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>updateEntryTimestamp</b> (const carl::Interval&lt; <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt; &amp;t)</td></tr>
+<tr class="separator:a76e186f9eb449f698eb9909c1d0405e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3eeee9513ec4a7b00d3a5681eddd1264"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3eeee9513ec4a7b00d3a5681eddd1264"></a>
+std::size_t&#160;</td><td class="memItemRight" valign="bottom"><b>getDotRepresentation</b> (int id, std::string &amp;nodes, std::string &amp;transitions) const </td></tr>
+<tr class="separator:a3eeee9513ec4a7b00d3a5681eddd1264"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classhypro_1_1TreeNode"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classhypro_1_1TreeNode')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classhypro_1_1TreeNode.html">hypro::TreeNode&lt; EventTimingNode&lt; Number &gt; &gt;</a></td></tr>
 <tr class="memitem:a34f2f8edb30a74da49751542341180f3 inherit pub_methods_classhypro_1_1TreeNode"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a34f2f8edb30a74da49751542341180f3"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>TreeNode</b> (unsigned _depth, const std::vector&lt; <a class="el" href="classhypro_1_1EventTimingNode.html">EventTimingNode</a>&lt; Number &gt; * &gt; &amp;_children, <a class="el" href="classhypro_1_1EventTimingNode.html">EventTimingNode</a>&lt; Number &gt; *_parent)</td></tr>
@@ -202,7 +212,7 @@ Protected Attributes</h2></td></tr>
 <a class="el" href="classhypro_1_1EventTimingContainer.html">EventTimingContainer</a>&lt; Number &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>mTimings</b></td></tr>
 <tr class="separator:a5a8a9f2ceddeccdc85c53689738b5247"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7442ca75dc61db313c8a0d19f7dbaf11"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7442ca75dc61db313c8a0d19f7dbaf11"></a>
-const <a class="el" href="classhypro_1_1Location.html">Location</a>&lt; Number &gt; *&#160;</td><td class="memItemRight" valign="bottom"><b>mLocation</b></td></tr>
+const <a class="el" href="classhypro_1_1Location.html">Location</a>&lt; Number &gt; *&#160;</td><td class="memItemRight" valign="bottom"><b>mLocation</b> = nullptr</td></tr>
 <tr class="separator:a7442ca75dc61db313c8a0d19f7dbaf11"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0598a7821208d8d17ffe4e6077cad490"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0598a7821208d8d17ffe4e6077cad490"></a>
 carl::Interval&lt; <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>mEntryTimeStamp</b></td></tr>
@@ -219,13 +229,19 @@ std::vector&lt; <a class="el" href="classhypro_1_1EventTimingNode.html">EventTim
 <a class="el" href="classhypro_1_1EventTimingNode.html">EventTimingNode</a>&lt; Number &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1TreeNode.html#a9d2f003348321ef60086b24bd4945294">mParent</a></td></tr>
 <tr class="memdesc:a9d2f003348321ef60086b24bd4945294 inherit pro_attribs_classhypro_1_1TreeNode"><td class="mdescLeft">&#160;</td><td class="mdescRight">children list <br /></td></tr>
 <tr class="separator:a9d2f003348321ef60086b24bd4945294 inherit pro_attribs_classhypro_1_1TreeNode"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
+Friends</h2></td></tr>
+<tr class="memitem:a34b7d2efb5c8b470463d985d40a9b62f"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a34b7d2efb5c8b470463d985d40a9b62f"></a>
+std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator&lt;&lt;</b> (std::ostream &amp;out, const <a class="el" href="classhypro_1_1EventTimingNode.html">EventTimingNode</a>&lt; Number &gt; &amp;in)</td></tr>
+<tr class="separator:a34b7d2efb5c8b470463d985d40a9b62f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><h3>template&lt;typename Number&gt;<br />
 class hypro::EventTimingNode&lt; Number &gt;</h3>
 
 
-<p>Definition at line <a class="el" href="EventTimingNode_8h_source.html#l00008">8</a> of file <a class="el" href="EventTimingNode_8h_source.html">EventTimingNode.h</a>.</p>
+<p>Definition at line <a class="el" href="EventTimingNode_8h_source.html#l00010">10</a> of file <a class="el" href="EventTimingNode_8h_source.html">EventTimingNode.h</a>.</p>
 </div><hr/>The documentation for this class was generated from the following file:<ul>
 <li>/home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/timing/<a class="el" href="EventTimingNode_8h_source.html">EventTimingNode.h</a></li>
 </ul>

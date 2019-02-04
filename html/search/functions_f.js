@@ -23,6 +23,8 @@ var searchData=
   ['setoffset',['setOffset',['../classhypro_1_1Halfspace.html#aa4a6ba034a64df0e75be1821707ae21d',1,'hypro::Halfspace']]],
   ['setones',['setOnes',['../classhypro_1_1Dictionary.html#ad6fe4718db9d0e3154d25ec35db32b2b',1,'hypro::Dictionary']]],
   ['setpoint',['setPoint',['../classhypro_1_1Vertex.html#a7f6466528dbc07736390861973b69162',1,'hypro::Vertex']]],
+  ['setrelation',['setRelation',['../classhypro_1_1Optimizer.html#aacdf38eaa3ceecf0e3b8fb4b2d941160',1,'hypro::Optimizer']]],
+  ['setrelations',['setRelations',['../classhypro_1_1Optimizer.html#a192502b9b22d8f3a9550c673ff218621',1,'hypro::Optimizer']]],
   ['settings',['settings',['../classhypro_1_1Plotter.html#a7d25a45e3dc66139c2e8ad85f2ee685c',1,'hypro::Plotter']]],
   ['setvalue',['setValue',['../classhypro_1_1Dictionary.html#a2ac0e068c6e99b0ff8d6d1804c7e8e6a',1,'hypro::Dictionary']]],
   ['setvariables',['setVariables',['../classhypro_1_1HybridAutomaton.html#a034cdf9ff7c65547c44679082c84a4d8',1,'hypro::HybridAutomaton']]],
