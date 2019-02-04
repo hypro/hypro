@@ -7,7 +7,7 @@
 #include "../HybridAutomaton/HybridAutomaton.h"
 #include "../HybridAutomaton/decomposition/DecisionEntity.h"
 #include "../HybridAutomaton/decomposition/Decomposition.h"
-#include "../../util/multithreading/Filewriter.h"
+#include "../../util/logging/Filewriter.h"
 #include "../../util/logging/Logger.h"
 #include <carl/util/Singleton.h>
 //#include <hypro/representations/GeometricObject.h>

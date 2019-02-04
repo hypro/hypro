@@ -75,7 +75,7 @@ public:
             for(const auto child : this->getChildren()) {
                 std::stringstream t;
                 t << "node" << (id-1) << " -> node" << offset << " [label=\" ";
-                t << child->getTimings().getEntryTimestamp() << "\n";
+                t << "[" << carl::convert<tNumber,double>(child->getTimings().getEntryTimestamp().lower()) << ";" << carl::convert<tNumber,double>(child->getTimings().getEntryTimestamp().upper()) << "]\n";
                 t <<"\"];" << std::endl;
                 transitions += t.str();;
                 offset = child->getDotRepresentation(offset,nodes,transitions);
