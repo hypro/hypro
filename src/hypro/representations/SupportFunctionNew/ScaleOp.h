@@ -18,6 +18,7 @@ namespace hypro {
 template<typename Number, typename Converter, typename Setting>
 class SupportFunctionNewT;	
 
+//A data struct for ScaleOp, containing all needed info to construct a ScaleOp from it. No child info is saved.
 template<typename Number>
 struct ScaleData : public RGNData {
 	Number factor;
@@ -76,6 +77,7 @@ class ScaleOp : public RootGrowNode<Number,Converter,Setting> {
 	std::size_t getDimension() const { return mDimension; }
 	Number getFactor() const { return factor; }
 	RGNData* getData() const { return new ScaleData<Number>(factor); }
+	void setDimension(const std::size_t d) { mDimension = d; }
 
 	////// RootGrowNode Interface
 

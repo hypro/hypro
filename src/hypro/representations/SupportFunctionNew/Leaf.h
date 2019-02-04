@@ -19,6 +19,7 @@ template<typename Number, typename Converter, typename Setting>
 class RootGrowNode;
 
 //A data struct for leaves, containing all needed info to construct a leaf from it
+//The infos are the address to the representation as an actual number and the type of the representation.
 struct LeafData : public RGNData {
 	uintptr_t addressToRep;
 	representation_name typeOfRep;
@@ -75,6 +76,7 @@ class Leaf : public RootGrowNode<Number,Converter,Setting> {
 	LeafData getLeafData() const {
 		return LeafData(reinterpret_cast<uintptr_t>(rep), rep->type(), isNotRedundant);
 	}
+	void setDimension(const std::size_t d) { mDimension = d; }
 	
 	////// RootGrowNode Interface
 

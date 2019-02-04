@@ -101,41 +101,27 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
 	SupportFunctionNewT( const SupportFunctionNewT& orig );
 
 	/**
-	 * @brief      Settings conversion constructor.
-	 * @param[in]  orig  The original.
-	 */
-	template<typename SettingRhs, carl::DisableIf< std::is_same<Setting, SettingRhs> > = carl::dummy>
-	SupportFunctionNewT(const SupportFunctionNewT<Number,Converter,SettingRhs>& orig){
-
-		//if(orig.getRoot() == nullptr){ mRoot == nullptr; }
-		//std::function<>
-
-		if(orig.getRoot() != nullptr){
-			mRoot = mRoot->convertSettings(orig.getRoot());				
-		} else {
-			mRoot = nullptr;
-		}
-
-		//TODO: Children / Linkage between children and parents
-
-		//Now for all children? -> Yes since mixed settings would destroy the n-ary nodes
-		//for(auto child : orig->getRoot()->getChildren()){
-		//	SupportFunctionNewT<Number,Converter,settings> tmp = SupportFunctionNewT<Number,Converter,Setting>(*child);
-		//}
-	}
-
-	/**
 	 * @brief      Move constructor.
 	 * @param[in]  orig  The original.
 	 */
 	SupportFunctionNewT( SupportFunctionNewT&& orig );
 
 	/**
+	 * @brief      Settings conversion constructor.
+	 * @param[in]  orig  The original.
+	 */
+
+	template<typename SettingRhs, carl::DisableIf< std::is_same<Setting, SettingRhs> > = carl::dummy>
+	SupportFunctionNewT(const SupportFunctionNewT<Number,Converter,SettingRhs>& orig);
+
+	/**
 	 * @brief      Generic Leaf constructor.
 	 * @param[in]  r 	A pointer to a GeometricObject, i.e. Boxes, HPolytopes, etc.
 	 */
 	template<typename Representation>
-	SupportFunctionNewT( GeometricObject<Number,Representation>* r) : mRoot(std::make_shared<Leaf<Number,Converter,Setting,Representation>>(dynamic_cast<Representation*>(r))) { }
+	SupportFunctionNewT( GeometricObject<Number,Representation>* r) 
+		: mRoot(std::make_shared<Leaf<Number,Converter,Setting,Representation>>(dynamic_cast<Representation*>(r))) 
+	{}
 
 	/**
 	 * @brief Destructor.

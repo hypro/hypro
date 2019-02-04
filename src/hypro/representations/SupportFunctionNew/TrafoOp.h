@@ -18,6 +18,7 @@ namespace hypro {
 template<typename Number, typename Converter, typename Setting>
 class SupportFunctionNewT;	
 
+//A data struct for TrafoOp, containing all needed info to construct a TrafoOp from it. No child info is saved.
 template<typename Number, typename Setting>
 struct TrafoData : public RGNData {
 	
@@ -113,6 +114,7 @@ class TrafoOp : public RootGrowNode<Number,Converter,Setting> {
 		}
 	}
 
+	//TrafoData constructor
 	TrafoOp(const TrafoData<Number,Setting>& d) 
 		: originCount(1)
 		, mChildren(PointerVec({1,nullptr}))
@@ -133,6 +135,7 @@ class TrafoOp : public RootGrowNode<Number,Converter,Setting> {
 	std::size_t getSuccessiveTransformations() const { return successiveTransformations; }
 	const std::shared_ptr<const LinTrafoParameters<Number,Setting>>& getParameters() const { return parameters; }
 	RGNData* getData() const { return new TrafoData<Number,Setting>(currentExponent, successiveTransformations, parameters); }
+	void setDimension(const std::size_t d) { mDimension = d; }
 
 	////// RootGrowNode Interface
 

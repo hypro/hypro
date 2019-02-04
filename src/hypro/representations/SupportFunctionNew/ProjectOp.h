@@ -18,6 +18,7 @@ namespace hypro {
 template<typename Number, typename Converter, typename Setting>
 class SupportFunctionNewT;	
 
+//A data struct for ProjectOp, containing all needed info to construct a ProjectOp from it. No child info is saved.
 struct ProjectData : public RGNData {
 	std::vector<std::size_t> dimensions;
 	ProjectData(const std::vector<std::size_t>& dims) : dimensions(dims) {}
@@ -73,11 +74,8 @@ class ProjectOp : public RootGrowNode<Number,Converter,Setting> {
 	unsigned getOriginCount() const { return originCount; }
 	std::size_t getDimension() const { return mDimension; }
 	std::vector<std::size_t> getDimensions() const { return dimensions; }
-	RGNData* getData() const { 
-		std::cout << "ProjectOp getData" << std::endl;
-		return new ProjectData(dimensions);
-	}
-
+	RGNData* getData() const { return new ProjectData(dimensions); }
+	void setDimension(const std::size_t d) { mDimension = d; }
 
 	////// RootGrowNode Interface
 

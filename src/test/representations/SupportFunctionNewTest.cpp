@@ -1093,6 +1093,7 @@ TYPED_TEST(SupportFunctionNewTest, Vertices){
 	Box<TypeParam> box (std::make_pair(p1,p2));
 	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sf(&box);	
 	std::vector<Point<TypeParam>> points = sf.vertices();
+	//Results commented out because the values are actually right, but suffer from numerical instabilities
 	//auto it = points.begin();
 	//EXPECT_TRUE(*(std::find(points.begin(), points.end(), *it)) == p1);
 	//EXPECT_TRUE(*(std::find(points.begin(), points.end(), *it)) == p2);
@@ -1110,6 +1111,7 @@ TYPED_TEST(SupportFunctionNewTest, SettingsConversion){
 	SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewNoReduction> sf2(sf);		
 	EXPECT_EQ(*(dynamic_cast<Leaf<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault,Box<TypeParam>>*>(sf.getRoot().get())->getRepresentation()), *(dynamic_cast<Leaf<TypeParam,Converter<TypeParam>,SupportFunctionNewNoReduction,Box<TypeParam>>*>(sf2.getRoot().get())->getRepresentation()));
 	EXPECT_EQ((dynamic_cast<Leaf<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault,Box<TypeParam>>*>(sf.getRoot().get())->isRedundant()), (dynamic_cast<Leaf<TypeParam,Converter<TypeParam>,SupportFunctionNewNoReduction,Box<TypeParam>>*>(sf2.getRoot().get())->isRedundant()));
+	EXPECT_EQ(sf2.dimension(), sf.dimension());
 	
 	//TrafoOp
 	matrix_t<TypeParam> mat = 2*matrix_t<TypeParam>::Identity(2,2);
@@ -1121,6 +1123,7 @@ TYPED_TEST(SupportFunctionNewTest, SettingsConversion){
 	EXPECT_TRUE((trafo2Node != nullptr));
 	EXPECT_TRUE((trafo2Node->getParameters() != nullptr));
 	EXPECT_EQ((trafo2Node->getParameters()->power), unsigned(1));
+	EXPECT_EQ(trafo2.dimension(), sf.dimension());
 	
 	try {
 
@@ -1138,20 +1141,24 @@ TYPED_TEST(SupportFunctionNewTest, SettingsConversion){
 		//SumOp
 		SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> sumOp = sf.minkowskiSum(scale);
 		SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewNoReduction> sum2(sumOp);
+		EXPECT_EQ(sum2.getRoot()->getChildren().size(), std::size_t(2));
+		EXPECT_EQ(sum2.dimension(), sf.dimension());
 
 		//IntersectOp
 		SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> intersectOp = sf.intersect(scale);
 		SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewNoReduction> inter2(intersectOp);
+		EXPECT_EQ(inter2.getRoot()->getChildren().size(), std::size_t(2));
+		EXPECT_EQ(inter2.dimension(), sf.dimension());
 		
 		//UnionOp	
-		SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> uniteOp = sf.unite(scale);
+		std::vector<SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault>> vec = {proj, scale, sumOp};
+		SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewDefault> uniteOp = sf.unite(vec);
 		SupportFunctionNewT<TypeParam,Converter<TypeParam>,SupportFunctionNewNoReduction> unite2(uniteOp);
+		EXPECT_EQ(unite2.getRoot()->getChildren().size(), std::size_t(4));
+		EXPECT_EQ(unite2.dimension(), sf.dimension());
 
 	} catch(std::runtime_error& e){
 		FAIL();
 	}
-	
-	
-	SUCCEED();
 }
 	

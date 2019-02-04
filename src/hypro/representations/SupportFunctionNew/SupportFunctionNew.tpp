@@ -26,6 +26,40 @@ namespace hypro {
 		orig.clear();
 	}
 
+	//settings converter
+	template<typename Number, typename Converter, typename Setting>
+	template<typename SettingRhs, carl::DisableIf< std::is_same<Setting,SettingRhs> > >
+	SupportFunctionNewT<Number,Converter,Setting>::SupportFunctionNewT(const SupportFunctionNewT<Number,Converter,SettingRhs>& orig){
+		if(orig.getRoot() == nullptr){ 
+			mRoot == nullptr; 
+		} else {
+			using RGNPtr = RootGrowNode<Number,Converter,SettingRhs>*;
+			using SharedRGNPtr = std::shared_ptr<RootGrowNode<Number,Converter,Setting>>;
+
+			//Do nothing
+			std::function<void(RGNPtr)> doNothing = [](RGNPtr ){ };
+
+			//Convert settings of leaves
+			std::function<SharedRGNPtr(RGNPtr)> convertLeaves = 
+				[](RGNPtr n) -> SharedRGNPtr {
+					return convertSettings<Number,Converter,Setting,SettingRhs>(n);
+				};
+
+			//Convert settings of operations, then add their children, then add the dimension
+			std::function<SharedRGNPtr(RGNPtr, std::vector<SharedRGNPtr>)> convertOps = 
+				[](RGNPtr n, std::vector<SharedRGNPtr> v) -> SharedRGNPtr {
+					SharedRGNPtr convertedOp = convertSettings<Number,Converter,Setting,SettingRhs>(n);
+					for(auto& child : v){
+						convertedOp->addToChildren(child);	
+					}
+					convertedOp->setDimension(v.front()->getDimension());
+					return convertedOp;
+				};		
+
+			mRoot = orig.traverse(doNothing, convertLeaves, convertOps);
+		}
+	}
+
 	/***************************************************************************
 	 * Getters & setters
 	 **************************************************************************/
@@ -205,10 +239,6 @@ namespace hypro {
 		std::function<bool(RootGrowNode<Number,Converter,Setting>*, std::vector<bool>)> childrenEmpty =
 			[](RootGrowNode<Number,Converter,Setting>* n, std::vector<bool> childrenEmpty) -> bool {
 				return n->empty(childrenEmpty);
-				//for(auto child : childrenEmpty){
-				//	if(child) return true;
-				//}
-				//return false;
 			};
 
 		return traverse(doNothing, leafEmpty, childrenEmpty);
@@ -263,17 +293,23 @@ namespace hypro {
 
 		if(mRoot == nullptr) return std::vector<EvaluationResult<Number>>();
 
+		using Matrix = Parameters<matrix_t<Number>>;
+		using RGNPtr = RootGrowNode<Number,Converter,Setting>*;
+		using EvalVec = std::vector<EvaluationResult<Number>>;
+
 		//Define lambda functions that will call the functions transform, compute and aggregate dependent on the current node type
-		std::function<Parameters<matrix_t<Number>>(RootGrowNode<Number,Converter,Setting>*, Parameters<matrix_t<Number>>)> trans = 
-			[](RootGrowNode<Number,Converter,Setting>* n, Parameters<matrix_t<Number>> param) -> Parameters<matrix_t<Number>> { 
-				return Parameters<matrix_t<Number>>(n->transform(std::get<0>(param.args))); 
+		std::function<Matrix(RGNPtr, Matrix)> trans = 
+			[](RGNPtr n, Matrix param) -> Matrix { 
+				return Matrix(n->transform(std::get<0>(param.args))); 
 			};
-		std::function<std::vector<EvaluationResult<Number>>(RootGrowNode<Number,Converter,Setting>*, Parameters<matrix_t<Number>>)> comp = 
-			[&](RootGrowNode<Number,Converter,Setting>* n, Parameters<matrix_t<Number>> dir) -> std::vector<EvaluationResult<Number>> { 
+
+		std::function<EvalVec(RGNPtr, Matrix)> comp = 
+			[&](RGNPtr n, Matrix dir) -> EvalVec { 
 				return n->compute(std::get<0>(dir.args), useExact); 
 			};
-		std::function<std::vector<EvaluationResult<Number>>(RootGrowNode<Number,Converter,Setting>*, std::vector<std::vector<EvaluationResult<Number>>>, Parameters<matrix_t<Number>>)> agg = 
-			[](RootGrowNode<Number,Converter,Setting>* n, std::vector<std::vector<EvaluationResult<Number>>> resultStackBack, Parameters<matrix_t<Number>> currentParam) -> std::vector<EvaluationResult<Number>> { 
+
+		std::function<EvalVec(RGNPtr, std::vector<EvalVec>, Matrix)> agg = 
+			[](RGNPtr n, std::vector<EvalVec> resultStackBack, Matrix currentParam) -> EvalVec { 
 				return n->aggregate(resultStackBack, std::get<0>(currentParam.args)); 
 			};
 

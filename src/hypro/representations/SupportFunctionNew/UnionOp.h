@@ -61,6 +61,7 @@ class UnionOp : public RootGrowNode<Number,Converter,Setting> {
 	unsigned getOriginCount() const { return originCount; }
 	std::size_t getDimension() const { return mDimension; }
 	RGNData* getData() const { return new RGNData(); }
+	void setDimension(const std::size_t d) { mDimension = d; }
 
 	////// RootGrowNode Interface
 
