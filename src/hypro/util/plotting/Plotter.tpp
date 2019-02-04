@@ -295,6 +295,7 @@ void Plotter<Number>::writeGnuplot() const {
 
 		mOutfile << "set xtics autofreq\n";
 		mOutfile << "set ytics autofreq\n";
+		mOutfile << "set bmargin 2\n";
 
 		if(!mSettings.plain) {
 			if(mSettings.grid) {
