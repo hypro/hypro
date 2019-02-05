@@ -92,7 +92,7 @@ public:
     std::size_t dimension(std::size_t i) const;
 
     void setName(const std::string& name) { mName = name; mHash = 0; }
-    void setFlow(const matrix_t<Number>& f, std::size_t I = 0) { this->setLinearFlow(linearFlow<Number>(f)); }
+    void setFlow(const matrix_t<Number>& f, std::size_t I = 0) { this->setLinearFlow(linearFlow<Number>(f),I); }
     void setLinearFlow(const linearFlow<Number>& f, std::size_t I = 0);
     void setRectangularFlow(const rectangularFlow<Number>& f, std::size_t I = 0);
     void setLinearFlow(const std::vector<linearFlow<Number>>& flows) { mLinearFlows = flows; mHash = 0; };

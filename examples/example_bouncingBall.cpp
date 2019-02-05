@@ -5,25 +5,19 @@
  */
 
 #include "config.h"
-#include "datastructures/HybridAutomaton/LocationManager.h"
-#include "datastructures/HybridAutomaton/Transition.h"
 #include "datastructures/HybridAutomaton/HybridAutomaton.h"
 #include "datastructures/Point.h"
 #include "representations/GeometricObject.h"
 #include "algorithms/reachability/Reach.h"
-#include "util/Plotter.h"
+#include "util/plotting/Plotter.h"
 
 int main()
 {
 	using namespace hypro;
-	using namespace carl;
 
 	// typedefs for simplification.
 	typedef mpq_class Number;
 	typedef hypro::HPolytope<Number> Representation;
-
-	// LocationManager holds all created locations and allows to create new locations.
-	LocationManager<Number>& lManager = LocationManager<Number>::getInstance();
 
 	// create the discrete structure of the automaton and the automaton itself.
 	std::unique_ptr<Location<Number>> loc1 = std::make_unique<Location<Number>>();
@@ -105,7 +99,7 @@ int main()
 
 
 	// add defined location and transition to the automaton.
-	loc1->addTransition(trans.get());
+	loc1->addTransition(std::move(trans));
 
 	// create Box holding the initial set.
 	matrix_t<Number> boxMat = matrix_t<Number>(4,2);
@@ -126,19 +120,15 @@ int main()
 	boxMat(3,1) = Number(-1);
 
 	// create initial state.
-	hypro::State_t<Number> initialState;
-	initialState.setLocation(loc1.get());
-	initialState.setSet(ConstraintSet<Number>(boxMat, boxVec));
-	bBallAutomaton.addInitialState(initialState);
+	bBallAutomaton.addInitialState(loc1.get(), Condition<Number>(boxMat,boxVec));
 
 	bBallAutomaton.addLocation(std::move(loc1));
-	bBallAutomaton.addTransition(std::move(trans));
 
 	// vector of sets to collect flowpipes (which are again a vector of sets).
 	std::vector<std::vector<Representation>> flowpipes;
 
 	// instanciate reachability analysis algorithm.
-	hypro::reachability::Reach<Number> reacher(bBallAutomaton);
+	hypro::reachability::Reach<Number,hypro::reachability::ReachSettings,hypro::State_t<Number>> reacher(bBallAutomaton);
 	hypro::ReachabilitySettings settings = reacher.settings();
 	settings.timeStep = carl::convert<double,Number>(0.01);
 	settings.timeBound = Number(3);
@@ -147,7 +137,7 @@ int main()
 	reacher.setRepresentationType(Representation::type());
 
 	// perform reachability analysis.
-	std::vector<std::pair<unsigned, reachability::flowpipe_t>> flowpipeIndices = reacher.computeForwardReachability();
+	auto flowpipeIndices = reacher.computeForwardReachability();
 
 	// plot flowpipes.
 	Plotter<Number>& plotter = Plotter<Number>::getInstance();

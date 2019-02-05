@@ -16,6 +16,7 @@ private:
 public:
 	Condition() = default;
 	Condition(const matrix_t<Number>& mat, const vector_t<Number>& vec) : mConstraints( {ConstraintSetT<Number>(mat,vec)} ), mConditionIsBox({TRIBOOL::NSET}), mHash(0) {}
+	Condition(const ConstraintSetT<Number>& constraints) : mConstraints( constraints ), mConditionIsBox({TRIBOOL::NSET}), mHash(0) {}
 	Condition(const std::vector<boost::variant<ConstraintSetT<Number>>>& sets);
 	Condition(const Condition& orig) = default;
 	Condition(Condition&& orig) = default;
