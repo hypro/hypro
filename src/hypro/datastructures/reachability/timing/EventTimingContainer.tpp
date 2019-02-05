@@ -76,6 +76,14 @@ namespace hypro {
 	}
 
 	template<typename Number>
+	bool EventTimingContainer<Number>::hasTransitionInformation(const carl::Interval<mpq_class>& timeInterval, Transition<Number>* transition) const {
+		if(mTransitionEvents.find(transition) == mTransitionEvents.end()) {
+			return false;
+		}
+		return !(mTransitionEvents.at(transition).intersectsEntry(timeInterval, CONTAINMENT::BOT));
+	}
+
+	template<typename Number>
 	bool EventTimingContainer<Number>::hasInvariantEvent(CONTAINMENT type) const {
 		return mInvariantEvents.hasEntry(type);
 	}

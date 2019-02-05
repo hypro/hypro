@@ -457,6 +457,10 @@ namespace hypro
 				mTask->treeNode->rGetRefinements().at(mTask->btInfo.btLevel).fullyComputed = true;
 				mLocalTimings.insertBadState(mCurrentGlobalTimeInterval,CONTAINMENT::YES);
 
+				// write timings.
+				TRACE("hypro.datastructures.timing","Update timing tree, find child.");
+				EventTimingProvider<typename State::NumberType>::getInstance().updateTimings(mTask->treeNode->getPath(), mLocalTimings);
+
 		    	// Invoke backtracking. Unlocks the node, so no manual unlocking required
 	            applyBacktracking();
 	           	throw HardTerminateException("Bad states hit! Terminating this worker!");
@@ -733,6 +737,7 @@ namespace hypro
 		carl::Interval<double> tmp = carl::Interval<double>(carl::toDouble(mCurrentGlobalTimeInterval.lower()), carl::toDouble(mCurrentGlobalTimeInterval.upper()));
 		#endif
 
+		// if the transition is irrelevant for the backtracking, we still want to find potential successors to avoid re-computation.
 		if(mTask->btInfo.currentBTPosition < mTask->btInfo.btPath.size() && mTask->btInfo.btPath.at(mTask->btInfo.currentBTPosition + 1).transition != transition) {
 			TRACE("hypro.worker.discrete","Cannot Omit transition " << transition->getSource()->getName() << " -> " << transition->getTarget()->getName() << " for time interval " << tmp);
 			return false;
@@ -743,21 +748,25 @@ namespace hypro
 		// omit the transition.
 		TRACE("hypro.worker.discrete","Has Transition: " << mLocalTimings.hasTransitionEvent(transition));
 		TRACE("hypro.worker.discrete","Is fully computed: " << mTask->treeNode->isFullyComputedOnSomeLevel());
-		if(!mLocalTimings.hasTransitionEvent(mCurrentGlobalTimeInterval, transition) && !mTask->treeNode->isFullyComputedOnSomeLevel()){
+		TRACE("hypro.worker.discrete","Have transition information for the time interval: " << mLocalTimings.hasTransitionInformation(mCurrentGlobalTimeInterval, transition));
+		if(!mLocalTimings.hasTransitionInformation(mCurrentGlobalTimeInterval, transition)) {
 			TRACE("hypro.worker.discrete","Cannot Omit transition " << transition->getSource()->getName() << " -> " << transition->getTarget()->getName() << " for time interval " << tmp);
 			return false;
-		} else if(!mLocalTimings.hasTransitionEvent(mCurrentGlobalTimeInterval, transition) && mTask->treeNode->isFullyComputedOnSomeLevel()) {
-			TRACE("hypro.worker.discrete","Omit transition " << transition->getSource()->getName() << " -> " << transition->getTarget()->getName() << " for time interval " << tmp);
-			return true;
+		} else {
+			// has transition information for that specific event, now check whether the transition was enabled
+			if(!mLocalTimings.hasTransitionEvent(mCurrentGlobalTimeInterval, transition)){
+				TRACE("hypro.worker.discrete","Omit transition " << transition->getSource()->getName() << " -> " << transition->getTarget()->getName() << " for time interval " << tmp << " as we know it was not enabled.");
+				return true;
+			} else {
+				TRACE("hypro.worker.discrete","Cannot Omit transition " << transition->getSource()->getName() << " -> " << transition->getTarget()->getName() << " for time interval " << tmp << " as there is no information available.");
+				return false;
+			}
 		}
 
-		//if(mTransitionTimings.intersectsEntry(currentTime, CONTAINMENT::NO)) {
-		if(mLocalTimings.getTransitionTimings(transition).intersectsEntry(mCurrentGlobalTimeInterval, CONTAINMENT::YES)) {
-			TRACE("hypro.worker.discrete","Cannot Omit transition " << transition->getSource()->getName() << " -> " << transition->getTarget()->getName() << " for time interval " << tmp);
-			return false;
-		}
-		TRACE("hypro.worker.discrete","Omit transition " << transition->getSource()->getName() << " -> " << transition->getTarget()->getName() << " for time interval " << tmp);
-		return true;
+		// this should not be reachable.
+		assert(false);
+		std::cout << __func__ << ": This should not be reachable." << std::endl;
+		return false;
     }
 
     template<typename State>
