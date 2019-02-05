@@ -1,8 +1,5 @@
 var NAVTREEINDEX24 =
 {
-"classhypro_1_1PolytopeT.html":[6,0,1,149],
-"classhypro_1_1PolytopeT.html#a04eac1d868d31d8b506eaf3972cbddc7":[6,0,1,149,19],
-"classhypro_1_1PolytopeT.html#a147f0bfcf54adb0e4f029f3347387f74":[6,0,1,149,20],
 "classhypro_1_1PolytopeT.html#a15240951970ed93be18a01d08ae5defd":[6,0,1,149,14],
 "classhypro_1_1PolytopeT.html#a170a107c258e507809edf4b85445c035":[6,0,1,149,9],
 "classhypro_1_1PolytopeT.html#a1d8c026b9efe29e4481c63ab2205640d":[6,0,1,149,31],
@@ -249,5 +246,8 @@ var NAVTREEINDEX24 =
 "classhypro_1_1SupportFunctionContent.html#a6cb323d15c2711b75feb212c353a0b1a":[6,0,1,178,40],
 "classhypro_1_1SupportFunctionContent.html#a716ee884a231eaef2666ac72af81443e":[6,0,1,178,36],
 "classhypro_1_1SupportFunctionContent.html#a7542aef7c6f51d3a6be89e87d870ca99":[6,0,1,178,6],
-"classhypro_1_1SupportFunctionContent.html#a78e7b85eed3a8c14e6571c6ebdc3b782":[6,0,1,178,22]
+"classhypro_1_1SupportFunctionContent.html#a78e7b85eed3a8c14e6571c6ebdc3b782":[6,0,1,178,22],
+"classhypro_1_1SupportFunctionContent.html#a854eedd911f5691b614151a5f50a7812":[6,0,1,178,10],
+"classhypro_1_1SupportFunctionContent.html#a8c7ad9761a6afc126671cedaaccc066c":[6,0,1,178,45],
+"classhypro_1_1SupportFunctionContent.html#a9493ce4d68068e7c660aced31f04fc5e":[6,0,1,178,23]
 };

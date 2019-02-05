@@ -114,7 +114,6 @@ $(document).ready(function(){initNavTree('classhypro_1_1Location.html','');});
   <div class="summary">
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pro-methods">Protected Member Functions</a> &#124;
 <a href="#friends">Friends</a> &#124;
 <a href="classhypro_1_1Location-members.html">List of all members</a>  </div>
   <div class="headertitle">
@@ -244,19 +243,6 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator==</b> (const
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator!=</b> (const <a class="el" href="classhypro_1_1Location.html">Location</a>&lt; Number &gt; &amp;rhs) const </td></tr>
 <tr class="separator:a7ec7a51dc8ec407509089a585b583f4b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
-Protected Member Functions</h2></td></tr>
-<tr class="memitem:a6e7ef40440fc9e460618e7fdf47ea41f"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Location.html#a6e7ef40440fc9e460618e7fdf47ea41f">Location</a> (unsigned id)</td></tr>
-<tr class="memdesc:a6e7ef40440fc9e460618e7fdf47ea41f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <a href="#a6e7ef40440fc9e460618e7fdf47ea41f">More...</a><br /></td></tr>
-<tr class="separator:a6e7ef40440fc9e460618e7fdf47ea41f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr><td colspan="2"><div class="groupHeader"></div></td></tr>
-<tr class="memitem:ad5a8502815ab1b69bf812ec6c9539330"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Location.html#ad5a8502815ab1b69bf812ec6c9539330">Location</a> (unsigned id, const <a class="el" href="classhypro_1_1Location.html">Location</a> &amp;loc)</td></tr>
-<tr class="separator:ad5a8502815ab1b69bf812ec6c9539330"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0db96e5ecd37ac0591ee8e81643c8354"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Location.html#a0db96e5ecd37ac0591ee8e81643c8354">Location</a> (unsigned id, const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;mat)</td></tr>
-<tr class="separator:a0db96e5ecd37ac0591ee8e81643c8354"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7cad23114db8cec2b84a8d9315b6f5ac"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1Location.html#a7cad23114db8cec2b84a8d9315b6f5ac">Location</a> (unsigned id, const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;mat, transitionVector &amp;&amp;trans, const Condition&lt; Number &gt; &amp;inv)</td></tr>
-<tr class="separator:a7cad23114db8cec2b84a8d9315b6f5ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
 Friends</h2></td></tr>
 <tr class="memitem:af341b96d0478f585a42f066ebd5c7bde"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af341b96d0478f585a42f066ebd5c7bde"></a>
@@ -276,183 +262,7 @@ class hypro::Location&lt; Number &gt;</h3>
 </dl>
 
 <p>Definition at line <a class="el" href="Location_8h_source.html#l00033">33</a> of file <a class="el" href="Location_8h_source.html">Location.h</a>.</p>
-</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a class="anchor" id="a6e7ef40440fc9e460618e7fdf47ea41f"></a>
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename Number&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classhypro_1_1Location.html">hypro::Location</a>&lt; Number &gt;::<a class="el" href="classhypro_1_1Location.html">Location</a> </td>
-          <td>(</td>
-          <td class="paramtype">unsigned&#160;</td>
-          <td class="paramname"><em>id</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Constructor. </p>
-<p>Note that locations should only be constructed from the LocationManager. </p><dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">id</td><td>The identifier given by the LocationManager. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a class="anchor" id="ad5a8502815ab1b69bf812ec6c9539330"></a>
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename Number&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classhypro_1_1Location.html">hypro::Location</a>&lt; Number &gt;::<a class="el" href="classhypro_1_1Location.html">Location</a> </td>
-          <td>(</td>
-          <td class="paramtype">unsigned&#160;</td>
-          <td class="paramname"><em>id</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const <a class="el" href="classhypro_1_1Location.html">Location</a>&lt; Number &gt; &amp;&#160;</td>
-          <td class="paramname"><em>loc</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">id</td><td>The identifier given by the LocationManager. </td></tr>
-    <tr><td class="paramdir"></td><td class="paramname"></td><td></td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a class="anchor" id="a0db96e5ecd37ac0591ee8e81643c8354"></a>
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename Number&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classhypro_1_1Location.html">hypro::Location</a>&lt; Number &gt;::<a class="el" href="classhypro_1_1Location.html">Location</a> </td>
-          <td>(</td>
-          <td class="paramtype">unsigned&#160;</td>
-          <td class="paramname"><em>id</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;&#160;</td>
-          <td class="paramname"><em>mat</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">id</td><td>The identifier given by the LocationManager. </td></tr>
-    <tr><td class="paramdir"></td><td class="paramname"></td><td></td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a class="anchor" id="a7cad23114db8cec2b84a8d9315b6f5ac"></a>
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename Number&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classhypro_1_1Location.html">hypro::Location</a>&lt; Number &gt;::<a class="el" href="classhypro_1_1Location.html">Location</a> </td>
-          <td>(</td>
-          <td class="paramtype">unsigned&#160;</td>
-          <td class="paramname"><em>id</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const <a class="el" href="namespacehypro.html#a52a4896e811a0710bcfc5a410a780034">matrix_t</a>&lt; Number &gt; &amp;&#160;</td>
-          <td class="paramname"><em>mat</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">transitionVector &amp;&amp;&#160;</td>
-          <td class="paramname"><em>trans</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const Condition&lt; Number &gt; &amp;&#160;</td>
-          <td class="paramname"><em>inv</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">id</td><td>The identifier given by the LocationManager. </td></tr>
-    <tr><td class="paramdir"></td><td class="paramname"></td><td></td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<h2 class="groupheader">Member Function Documentation</h2>
+</div><h2 class="groupheader">Member Function Documentation</h2>
 <a class="anchor" id="a280bb96bba67484bc038bf6337d706a8"></a>
 <div class="memitem">
 <div class="memproto">

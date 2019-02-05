@@ -20,6 +20,7 @@ var classhypro_1_1EventTimingContainer =
     [ "hasInvariantEvent", "classhypro_1_1EventTimingContainer.html#af790b8d3d09a4ae3ff5e9b62d2db645e", null ],
     [ "hasTransitionEvent", "classhypro_1_1EventTimingContainer.html#a101a4f500020ea6cd466a9206d864c1e", null ],
     [ "hasTransitionEvent", "classhypro_1_1EventTimingContainer.html#a94ed983d089c083ca7c8f3d914686271", null ],
+    [ "hasTransitionInformation", "classhypro_1_1EventTimingContainer.html#a58872a671ef53e4b2724d82fab1acb8a", null ],
     [ "initialize", "classhypro_1_1EventTimingContainer.html#ac78c5032a38c9aa46fa9a29bbfee8686", null ],
     [ "insertBadState", "classhypro_1_1EventTimingContainer.html#ad1bbabd180e858b1364763fe0cb23729", null ],
     [ "insertInvariant", "classhypro_1_1EventTimingContainer.html#a51537e0bd0788708c4623d349ec0dbba", null ],

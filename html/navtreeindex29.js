@@ -1,8 +1,5 @@
 var NAVTREEINDEX29 =
 {
-"example__ppl__nncPolyhedra_8cpp.html#a3c04138a5bfe5d72780bb7e82a18e627":[7,0,0,29,0],
-"example__ppl__nncPolyhedra_8cpp_source.html":[7,0,0,29],
-"example__reachability_8cpp_source.html":[7,0,0,30],
 "example__reduction_8cpp_source.html":[7,0,0,31],
 "example__redundantConstraints_8cpp_source.html":[7,0,0,32],
 "example__sfIntersection_8cpp_source.html":[7,0,0,33],
@@ -249,5 +246,8 @@ var NAVTREEINDEX29 =
 "structhypro_1_1EvaluationResult.html#a555738f7c876f135a6703b08d519b472":[6,0,1,38,0],
 "structhypro_1_1EvaluationResult.html#a9277925fdcd332e8b9528b9ca603e846":[6,0,1,38,8],
 "structhypro_1_1EvaluationResult.html#ad04c4d370454e1b426f487819bc99361":[6,0,1,38,7],
-"structhypro_1_1EvaluationResult.html#ad6864807ee9d817d6479b6dcdac7bce5":[6,0,1,38,1]
+"structhypro_1_1EvaluationResult.html#ad6864807ee9d817d6479b6dcdac7bce5":[6,0,1,38,1],
+"structhypro_1_1EvaluationResult.html#adeba850ed63df18f04b910986ecacf86":[6,0,1,38,5],
+"structhypro_1_1EvaluationResult.html#ae03f55adb2f72fd7693e40a8d4ac6799":[6,0,1,38,6],
+"structhypro_1_1HPolytopeSetting.html":[6,0,1,79]
 };
