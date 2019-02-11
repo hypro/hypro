@@ -424,7 +424,7 @@ namespace hypro
 			}
 		}
 
-    	DEBUG("hypro.worker","State after intersection with invariant: " << mComputationState);
+    	TRACE("hypro.worker","State after intersection with invariant: " << mComputationState);
 
 		// For plotting.
 		if(!SettingsProvider<State>::getInstance().skipPlot()) {
@@ -739,7 +739,7 @@ namespace hypro
 
 		// if the transition is irrelevant for the backtracking, we still want to find potential successors to avoid re-computation.
 		if(mTask->btInfo.currentBTPosition < mTask->btInfo.btPath.size() && mTask->btInfo.btPath.at(mTask->btInfo.currentBTPosition + 1).transition != transition) {
-			TRACE("hypro.worker.discrete","Cannot Omit transition " << transition->getSource()->getName() << " -> " << transition->getTarget()->getName() << " for time interval " << tmp);
+			DEBUG("hypro.worker.discrete","Cannot Omit transition " << transition->getSource()->getName() << " -> " << transition->getTarget()->getName() << " for time interval " << tmp);
 			return false;
 		}
 
@@ -750,15 +750,15 @@ namespace hypro
 		TRACE("hypro.worker.discrete","Is fully computed: " << mTask->treeNode->isFullyComputedOnSomeLevel());
 		TRACE("hypro.worker.discrete","Have transition information for the time interval: " << mLocalTimings.hasTransitionInformation(mCurrentGlobalTimeInterval, transition));
 		if(!mLocalTimings.hasTransitionInformation(mCurrentGlobalTimeInterval, transition)) {
-			TRACE("hypro.worker.discrete","Cannot Omit transition " << transition->getSource()->getName() << " -> " << transition->getTarget()->getName() << " for time interval " << tmp);
+			DEBUG("hypro.worker.discrete","Cannot Omit transition " << transition->getSource()->getName() << " -> " << transition->getTarget()->getName() << " for time interval " << tmp);
 			return false;
 		} else {
 			// has transition information for that specific event, now check whether the transition was enabled
 			if(!mLocalTimings.hasTransitionEvent(mCurrentGlobalTimeInterval, transition)){
-				TRACE("hypro.worker.discrete","Omit transition " << transition->getSource()->getName() << " -> " << transition->getTarget()->getName() << " for time interval " << tmp << " as we know it was not enabled.");
+				DEBUG("hypro.worker.discrete","Omit transition " << transition->getSource()->getName() << " -> " << transition->getTarget()->getName() << " for time interval " << tmp << " as we know it was not enabled.");
 				return true;
 			} else {
-				TRACE("hypro.worker.discrete","Cannot Omit transition " << transition->getSource()->getName() << " -> " << transition->getTarget()->getName() << " for time interval " << tmp << " as there is no information available.");
+				DEBUG("hypro.worker.discrete","Cannot Omit transition " << transition->getSource()->getName() << " -> " << transition->getTarget()->getName() << " for time interval " << tmp << " as there is no information available.");
 				return false;
 			}
 		}
