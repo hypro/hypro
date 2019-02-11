@@ -31,7 +31,7 @@ public:
     TimingAggregate(const Transition<Number>* t, const std::vector<EventTimingNode<Number>*>& nodes) {
         mChildTimings[t] = ChildTimingInformation<Number>();
         for(const auto p : nodes) {
-            assert(mChildTimings[t].empty() || mChildTimings[t].begin()->first->getParent() == p->getParent());
+            //assert(mChildTimings[t].empty() || mChildTimings[t].begin()->first->getParent() == p->getParent());
             mChildTimings[t].timingInformation[p] = false;
         }
     }
@@ -46,7 +46,7 @@ public:
         TRACE("hypro.datastructures.timing","Add " << nodes.size() << " for transition " << t);
         mChildTimings[t] = ChildTimingInformation<Number>();
         for(const auto p : nodes) {
-            assert(mChildTimings[t].timingInformation.empty() || mChildTimings[t].timingInformation.begin()->first->getParent() == p->getParent());
+            //assert(mChildTimings[t].timingInformation.empty() || mChildTimings[t].timingInformation.begin()->first->getParent() == p->getParent());
             mChildTimings[t].timingInformation[p] = false;
         }
     }

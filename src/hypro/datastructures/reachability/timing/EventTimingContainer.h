@@ -12,6 +12,7 @@ private:
 	const Location<Number>* mLocation = nullptr;
 	const Transition<Number>* mEntryTransition = nullptr;
 	carl::Interval<tNumber> mEntryTimestamp;
+	std::size_t mLevel = 0;
 
 	// Actual timing storage
 	HierarchicalIntervalVector<CONTAINMENT,tNumber> mInvariantEvents;
@@ -51,6 +52,9 @@ public:
 	std::mutex& getMutex() const { return mutex; }
 	bool isInitialized() const;
 	void initialize(tNumber timeHorizon);
+
+	void setLevel(std::size_t l) { mLevel = l; }
+	std::size_t getLevel() const { return mLevel; }
 
 	const Location<Number>* getLocation() const { return mLocation; }
 	const carl::Interval<tNumber>& getEntryTimestamp() const { return mEntryTimestamp; }
