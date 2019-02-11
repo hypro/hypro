@@ -146,6 +146,12 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>isInitialized</b> () 
 <tr class="memitem:ac78c5032a38c9aa46fa9a29bbfee8686"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac78c5032a38c9aa46fa9a29bbfee8686"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>initialize</b> (<a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> timeHorizon)</td></tr>
 <tr class="separator:ac78c5032a38c9aa46fa9a29bbfee8686"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a879b47475ec48cd057f31fa18e161c94"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a879b47475ec48cd057f31fa18e161c94"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setLevel</b> (std::size_t l)</td></tr>
+<tr class="separator:a879b47475ec48cd057f31fa18e161c94"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a420cdfef1594fcb3213bb7dddd5fc92e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a420cdfef1594fcb3213bb7dddd5fc92e"></a>
+std::size_t&#160;</td><td class="memItemRight" valign="bottom"><b>getLevel</b> () const </td></tr>
+<tr class="separator:a420cdfef1594fcb3213bb7dddd5fc92e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a57d62117c82f0d597eb1dfeff631eb50"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a57d62117c82f0d597eb1dfeff631eb50"></a>
 const <a class="el" href="classhypro_1_1Location.html">Location</a>&lt; Number &gt; *&#160;</td><td class="memItemRight" valign="bottom"><b>getLocation</b> () const </td></tr>
 <tr class="separator:a57d62117c82f0d597eb1dfeff631eb50"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -170,6 +176,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>merge</b> (const <a c
 <tr class="memitem:a9e759d7cf4782e12d593fc91c9b7fe79"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9e759d7cf4782e12d593fc91c9b7fe79"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>setTransitionTimings</b> (const std::map&lt; <a class="el" href="classhypro_1_1Transition.html">Transition</a>&lt; Number &gt; *, <a class="el" href="classhypro_1_1HierarchicalIntervalVector.html">HierarchicalIntervalVector</a>&lt; <a class="el" href="namespacehypro.html#ab7a1dbbbe2d40e57ecab2c9b64b3615d">CONTAINMENT</a>, <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt;&gt; &amp;timings)</td></tr>
 <tr class="separator:a9e759d7cf4782e12d593fc91c9b7fe79"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a024ccb073ad7a23b27b0ceacacdc1ead"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a024ccb073ad7a23b27b0ceacacdc1ead"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setTransitionTimings</b> (<a class="el" href="classhypro_1_1Transition.html">Transition</a>&lt; Number &gt; *t, const <a class="el" href="classhypro_1_1HierarchicalIntervalVector.html">HierarchicalIntervalVector</a>&lt; <a class="el" href="namespacehypro.html#ab7a1dbbbe2d40e57ecab2c9b64b3615d">CONTAINMENT</a>, <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt; &amp;timings)</td></tr>
+<tr class="separator:a024ccb073ad7a23b27b0ceacacdc1ead"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac1c77fa005864eeb9523cc060c04d94b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac1c77fa005864eeb9523cc060c04d94b"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>setInvariantTimings</b> (const <a class="el" href="classhypro_1_1HierarchicalIntervalVector.html">HierarchicalIntervalVector</a>&lt; <a class="el" href="namespacehypro.html#ab7a1dbbbe2d40e57ecab2c9b64b3615d">CONTAINMENT</a>, <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt; &amp;timings)</td></tr>
 <tr class="separator:ac1c77fa005864eeb9523cc060c04d94b"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -197,6 +206,9 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>hasTransitionEvent</b
 <tr class="memitem:a58872a671ef53e4b2724d82fab1acb8a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a58872a671ef53e4b2724d82fab1acb8a"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>hasTransitionInformation</b> (const carl::Interval&lt; mpq_class &gt; &amp;timeInterval, <a class="el" href="classhypro_1_1Transition.html">Transition</a>&lt; Number &gt; *transition) const </td></tr>
 <tr class="separator:a58872a671ef53e4b2724d82fab1acb8a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0e8ae83cb33525c2c79b74bc002ea386"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0e8ae83cb33525c2c79b74bc002ea386"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>hasTransition</b> (<a class="el" href="classhypro_1_1Transition.html">Transition</a>&lt; Number &gt; *t) const </td></tr>
+<tr class="separator:a0e8ae83cb33525c2c79b74bc002ea386"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aadad2303510270f84ba37470eff14f79"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aadad2303510270f84ba37470eff14f79"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>hasInvariantEvent</b> (<a class="el" href="namespacehypro.html#ab7a1dbbbe2d40e57ecab2c9b64b3615d">CONTAINMENT</a> type) const </td></tr>
 <tr class="separator:aadad2303510270f84ba37470eff14f79"><td class="memSeparator" colspan="2">&#160;</td></tr>

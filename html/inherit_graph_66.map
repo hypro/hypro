@@ -1,3 +1,4 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$structhypro_1_1HPolytopeSetting.html" title="hypro::HPolytopeSetting" alt="" coords="5,5,183,32"/>
+<area shape="rect" id="node1" href="$classhypro_1_1GeometricObject.html" title="hypro::GeometricObject\l\&lt; StatisticWrapper\&lt; Representation \&gt; \&gt;" alt="" coords="5,5,288,47"/>
+<area shape="rect" id="node2" href="$classhypro_1_1StatisticWrapper.html" title="Wrapper class which allows to create traces of operations on state set representations. " alt="" coords="336,5,507,47"/>
 </map>
