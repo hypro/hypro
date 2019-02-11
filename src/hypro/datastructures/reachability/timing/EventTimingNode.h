@@ -1,14 +1,14 @@
 #pragma once
 #include "EventTimingContainer.h"
 #include "TimingAggregate.h"
-#include "../TreeNode.h"
+#include "../DAGNode.h"
 #include "../../../util/logging/Logger.h"
 #include <ostream>
 
 namespace hypro {
 
 template<typename Number>
-class EventTimingNode : public TreeNode<EventTimingNode<Number>> {
+class EventTimingNode : public DAGNode<EventTimingNode<Number>> {
 protected:
     EventTimingContainer<Number>    mTimings;
     const Location<Number>*         mLocation = nullptr;
@@ -16,9 +16,9 @@ protected:
     TimingAggregate<Number>         mTimingAggregate;
 
 public:
-    using Node_t = typename TreeNode<EventTimingNode<Number>>::Node_t;
-  	using const_Node_t = typename TreeNode<EventTimingNode<Number>>::const_Node_t;
-  	using NodeList_t = typename TreeNode<EventTimingNode<Number>>::NodeList_t;
+    using Node_t = typename DAGNode<EventTimingNode<Number>>::Node_t;
+  	using const_Node_t = typename DAGNode<EventTimingNode<Number>>::const_Node_t;
+  	using NodeList_t = typename DAGNode<EventTimingNode<Number>>::NodeList_t;
 
     EventTimingNode(){}
     EventTimingNode(const EventTimingContainer<Number>& in)

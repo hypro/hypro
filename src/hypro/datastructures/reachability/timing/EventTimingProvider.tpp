@@ -4,7 +4,6 @@ namespace hypro {
 
 	template<typename Number>
 	EventTimingProvider<Number>::EventTimingProvider() : mRoot(new EventTimingNode<Number>()){
-		mRoot->setDepth(0);
 		TRACE("hypro.datastructures.timing","Root is " << mRoot);
 		#ifndef NDEBUG
 		writeTree();
@@ -15,7 +14,7 @@ namespace hypro {
 	void EventTimingProvider<Number>::initialize(const HybridAutomaton<Number>& ha, tNumber globalTimeHorizon) {
 		for(const auto& state : ha.getInitialStates()) {
 			EventTimingNode<Number>* child = new EventTimingNode<Number>(EventTimingContainer<Number>(globalTimeHorizon));
-			child->setParent(mRoot);
+			child->addParent(mRoot);
 			child->setLocation(state.first);
 			child->setEntryTimestamp(carl::Interval<tNumber>(0));
 			mRoot->addChild(child);
@@ -66,7 +65,7 @@ namespace hypro {
 	typename EventTimingNode<Number>::Node_t EventTimingProvider<Number>::addChildToNode(typename TreeNode<EventTimingNode<Number>>::Node_t parent, tNumber timeHorizon) {
 		typename EventTimingNode<Number>::Node_t newChild = new EventTimingNode<Number>(EventTimingContainer<Number>{timeHorizon});
 		TRACE("hypro.datastructures.timing","Add child " << newChild << " to node " << parent);
-		newChild->setParent(parent);
+		newChild->addParent(parent);
 		parent->addChild(newChild);
 		#ifndef NDEBUG
 		writeTree();
