@@ -103,3 +103,4 @@ private:
 } // hypro
 
 #include "HierarchicalIntervalVector.tpp"
+#include "HIV_util.h"

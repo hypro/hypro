@@ -1,5 +1,6 @@
 #pragma once
 #include "EventTimingContainer.h"
+#include "TimingAggregate.h"
 #include "../TreeNode.h"
 #include "../../../util/logging/Logger.h"
 #include <ostream>
@@ -12,12 +13,14 @@ protected:
     EventTimingContainer<Number>    mTimings;
     const Location<Number>*         mLocation = nullptr;
     carl::Interval<tNumber>         mEntryTimeStamp;
+    TimingAggregate<Number>         mTimingAggregate;
+
 public:
     using Node_t = typename TreeNode<EventTimingNode<Number>>::Node_t;
   	using const_Node_t = typename TreeNode<EventTimingNode<Number>>::const_Node_t;
   	using NodeList_t = typename TreeNode<EventTimingNode<Number>>::NodeList_t;
 
-    EventTimingNode() = default;
+    EventTimingNode(){}
     EventTimingNode(const EventTimingContainer<Number>& in)
         : mTimings(in)
     {}
@@ -26,6 +29,7 @@ public:
     const EventTimingContainer<Number>& getTimings() const {return mTimings;}
     EventTimingContainer<Number>& rGetTimings() {return mTimings;}
     const Location<Number>* getLocation() const {return mLocation;}
+    TimingAggregate<Number>& rGetTimingAggregate() {return mTimingAggregate;}
 
     void setLocation(const Location<Number>* loc) {mLocation = loc;mTimings.setLocation(loc);}
     void setEntryTimestamp(const carl::Interval<tNumber>& t) {
@@ -85,3 +89,5 @@ public:
 };
 
 } // hypro
+
+#include "ETN_util.h"

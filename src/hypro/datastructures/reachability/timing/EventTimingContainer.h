@@ -63,6 +63,7 @@ public:
 	void merge(const EventTimingContainer& snapshot);
 
 	void setTransitionTimings(const std::map<Transition<Number>*, HierarchicalIntervalVector<CONTAINMENT,tNumber>>& timings) { mTransitionEvents = timings; }
+	void setTransitionTimings(Transition<Number>* t, const HierarchicalIntervalVector<CONTAINMENT,tNumber>& timings) { mTransitionEvents[t] = timings; }
 	void setInvariantTimings(const HierarchicalIntervalVector<CONTAINMENT,tNumber>& timings) { mInvariantEvents = timings; }
 	void setBadStateTimings(const HierarchicalIntervalVector<CONTAINMENT,tNumber>& timings) { mBadStateEvents = timings; }
 
@@ -75,6 +76,7 @@ public:
 	bool hasTransitionEvent(Transition<Number>* transition) const;
 	bool hasTransitionEvent(const carl::Interval<tNumber>& timeInterval, Transition<Number>* transition) const;
 	bool hasTransitionInformation(const carl::Interval<mpq_class>& timeInterval, Transition<Number>* transition) const;
+	bool hasTransition(Transition<Number>* t) const {return mTransitionEvents.find(t) != mTransitionEvents.end();}
 
 	bool hasInvariantEvent(CONTAINMENT type) const;
 	bool hasInvariantEvent(const carl::Interval<tNumber>& timeInterval, CONTAINMENT type) const;
@@ -110,3 +112,4 @@ public:
 } // hypro
 
 #include "EventTimingContainer.tpp"
+#include "ETC_util.h"

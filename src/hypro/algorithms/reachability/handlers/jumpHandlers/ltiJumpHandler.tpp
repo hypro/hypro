@@ -54,7 +54,8 @@ namespace hypro {
 						for(auto i = 0; i < currentTargetLevel; ++i){
 							if(child->getRefinements()[i].isDummy){
 								TRACE("hydra.worker.discrete","Add refinement for level " << i);
-								child->convertRefinement(currentTargetLevel, i, SettingsProvider<State>::getInstance().getStrategy().at(i));
+								//child->convertRefinement(currentTargetLevel, i, SettingsProvider<State>::getInstance().getStrategy().at(i));
+								SettingsProvider<State>::getInstance().getStrategy().advanceToLevel(child->rGetRefinements()[i].initialSet, i);
 							}
 						}
 					}
@@ -65,10 +66,11 @@ namespace hypro {
 					TRACE("hydra.worker.discrete", "Add node " << child << " as child to node " << mTask->treeNode << " which has " << mTask->treeNode->getRefinements().size() << " refinements." );
 					TRACE("hydra.worker.discrete", "Child entry timestamp: " << child->getTimestamp(currentTargetLevel) );
 					assert(child->getParent() == mTask->treeNode);
-					assert(child->getTimestamp(currentTargetLevel) == coveredTimeInterval);
 
 					// timing-tree extension
 					auto& tProvider = EventTimingProvider<typename State::NumberType>::getInstance();
+					// store created timing nodes
+					std::map<Transition<typename State::NumberType>*, std::vector<EventTimingNode<typename State::NumberType>*>> createdTimingNodes;
 					// make sure the node does not exist yet
 					TRACE("hypro.datastructures.timing","Regular tree extension, find child.");
 					auto potentialNewNode = tProvider.rGetNode(child->getPath());
@@ -77,9 +79,22 @@ namespace hypro {
 						newNode->rGetTimings().setEntryTransition(transitionStatePair.first);
 						newNode->setEntryTimestamp(child->getTimestamp(currentTargetLevel));
 						newNode->setLocation(transitionStatePair.first->getTarget());
+						if(createdTimingNodes.find(transitionStatePair.first) == createdTimingNodes.end()) {
+							createdTimingNodes[transitionStatePair.first] = std::vector<EventTimingNode<typename State::NumberType>*>{};
+						}
+						createdTimingNodes[transitionStatePair.first].push_back(newNode);
 					} else {
-						// timing node already exists, just update entry timestamp
-						potentialNewNode->updateEntryTimestamp(coveredTimeInterval);
+						// timing node already exists, just update entry timestamp, if allowed
+						// if node is complete, update timings, otherwise mark completed.
+						mTimingNode->rGetTimingAggregate().markCompleted(transitionStatePair.first, potentialNewNode);
+						if(mTimingNode->rGetTimingAggregate().getOpenSuccessorCount(transitionStatePair.first) == 0) {
+							potentialNewNode->updateEntryTimestamp(coveredTimeInterval);
+						}
+					}
+
+					// use created nodes to set aggregate for current node
+					for(const auto& transNodesPair : createdTimingNodes) {
+						mTimingNode->rGetTimingAggregate().addTransition(transNodesPair.first, transNodesPair.second);
 					}
 
 					// create tasks
@@ -122,6 +137,7 @@ namespace hypro {
 				// potential timing-tree extension, do this for every child
 				TRACE("hypro.datastructures.timing","Refinement tree extension, find children.");
 				auto& tProvider = EventTimingProvider<typename State::NumberType>::getInstance();
+				std::map<Transition<typename State::NumberType>*, std::vector<EventTimingNode<typename State::NumberType>*>> createdTimingNodes;
 				for(const auto& child : children) {
 					TRACE("hypro.datastructures.timing","Find timing node for child " << child << " for path " << child->getPath());
 					// make sure the node does not exist yet
@@ -132,11 +148,23 @@ namespace hypro {
 						newNode->rGetTimings().setEntryTransition(transitionStatePair.first);
 						newNode->setEntryTimestamp(child->getTimestamp(currentTargetLevel));
 						newNode->setLocation(transitionStatePair.first->getTarget());
+						if(createdTimingNodes.find(transitionStatePair.first) == createdTimingNodes.end()) {
+							createdTimingNodes[transitionStatePair.first] = std::vector<EventTimingNode<typename State::NumberType>*>{};
+						}
+						createdTimingNodes[transitionStatePair.first].push_back(newNode);
 					} else {
 						// timing node already exists, just update entry timestamp
 						TRACE("hypro.datastructures.timing","Found child in timing tree: " << potentialNewNode << ". Update entry timestamp to " << coveredTimeInterval);
-						potentialNewNode->updateEntryTimestamp(coveredTimeInterval);
+						mTimingNode->rGetTimingAggregate().markCompleted(transitionStatePair.first, potentialNewNode);
+						if(mTimingNode->rGetTimingAggregate().getOpenSuccessorCount(transitionStatePair.first) == 0) {
+							potentialNewNode->updateEntryTimestamp(coveredTimeInterval);
+						}
 					}
+				}
+
+				// use created nodes to set aggregate for current node
+				for(const auto& transNodesPair : createdTimingNodes) {
+					mTimingNode->rGetTimingAggregate().addTransition(transNodesPair.first, transNodesPair.second);
 				}
 
 				typename ReachTreeNode<State>::NodeList_t oldChildren = mTask->treeNode->getChildrenForTransition(transitionStatePair.first);
