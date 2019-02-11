@@ -48,13 +48,12 @@ public:
     std::size_t getDotRepresentation(int id, std::string& nodes, std::string& transitions) const {
         std::stringstream s;
         s << "node" << id << " [label=<<TABLE BORDER=\"0\" CELLBORDER=\"1\" CELLSPACING=\"0\">";
-        std::size_t cnt = 0;
         // add common info
 
         if(this->getLocation() == nullptr){
             s << "<TR><TD COLSPAN=\""<< 2 << "\">@" << this;
         } else {
-        	s << "<TR><TD COLSPAN=\""<< 2 << "\">@" << this << "<BR/>"<< this->getLocation()->getName() << "(" << this->getLocation()->getId() <<")";
+        	s << "<TR><TD COLSPAN=\""<< 2 << "\">@" << this << "<BR/>"<< this->getLocation()->getName() << "(" << this->getLocation()->hash() <<")";
         }
 
         // add timing info

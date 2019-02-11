@@ -85,7 +85,7 @@ namespace hypro
 	   matrix_t<Number> deltaMatrix(_loc->getLinearFlow().dimension(), _loc->getLinearFlow().dimension());
 	    deltaMatrix = _loc->getLinearFlow(mIndex).getFlowMatrix() * carl::convert<tNumber,Number>(mTimeStep);
 	#ifdef REACH_DEBUG
-	    TRACE("hypro.worker", "Flowmatrix:\n" << _loc->getFlow(mIndex) << "\nmultiplied with time step: " << mTimeStep);
+	    TRACE("hypro.worker", "Flowmatrix:\n" << _loc->getLinearFlow(mIndex) << "\nmultiplied with time step: " << mTimeStep);
 	    TRACE("hypro.worker", "delta matrix_t<Number>: " << std::endl);
 	    TRACE("hypro.worker", deltaMatrix << std::endl);
 	    TRACE("hypro.worker", "------" << std::endl);

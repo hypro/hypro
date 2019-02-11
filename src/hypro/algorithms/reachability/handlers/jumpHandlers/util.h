@@ -120,7 +120,8 @@ struct nodeUpdater{
 
 		#ifdef RESET_REFINEMENTS_ON_CONTINUE_AFTER_BT_RUN
 		if(mTargetLevel > 0 && !node->getRefinements().at(0).fullyComputed) {
-			node->convertRefinement(mTargetLevel, 0, SettingsProvider<State>::getInstance().getStrategy().at(0));
+			//node->convertRefinement(mTargetLevel, 0, SettingsProvider<State>::getInstance().getStrategy().at(0));
+			SettingsProvider<State>::getInstance().getStrategy().advanceToLevel(node->rGetRefinements()[mTargetLevel].initialSet, 0);
 			if(SettingsProvider<State>::getInstance().useLocalTiming()) {
 				node->rGetRefinements().at(0).entryTimestamp = carl::Interval<tNumber>(0);
 			}
