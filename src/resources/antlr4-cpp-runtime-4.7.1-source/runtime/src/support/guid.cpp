@@ -43,7 +43,7 @@
 using namespace std;
 
 // overload << so that it's easy to convert to a string
-ostream &operator<<(ostream &s, const Guid &guid)
+ostream &operator<<(std::ostream &s, const Guid &guid)
 {
   return s << hex << setfill('0')
   << setw(2) << (int)guid._bytes[0]

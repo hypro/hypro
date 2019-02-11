@@ -34,10 +34,10 @@ namespace hypro {
 		for(i=0; i<n0; ++i){
 			Ab(i, i+1) = -1;
 		}
-		Ab(n0,0)=-1; 
+		Ab(n0,0)=-1;
 		// Ab (is square) contains all -1's one right to the diagonal and lower left ist also -1.
 
-		matrix_t<Number> An = matrix_t<Number>::Zero(n0+1, d+1); // An has dimensions as the final dictionary. 
+		matrix_t<Number> An = matrix_t<Number>::Zero(n0+1, d+1); // An has dimensions as the final dictionary.
 
 		// make first row (f in the paper) all ones except g-col, which is the last col.
 		for(i=0; i<d; ++i){
@@ -120,34 +120,34 @@ namespace hypro {
 	template<typename Number>
 	void Dictionary<Number>::printDictionary() const {
 		uint32_t i,j;
-		cout << "\n mB size=";
-		cout << mB.size();
-		cout << "\n mN size=";
-		cout << mN.size();
-		cout << "\n mDictionary size=";
-		cout << mDictionary.size();
-		cout << "\n \n";
+	std::cout << "\n mB size=";
+	std::cout << mB.size();
+	std::cout << "\n mN size=";
+	std::cout << mN.size();
+	std::cout << "\n mDictionary size=";
+	std::cout << mDictionary.size();
+	std::cout << "\n \n";
 
-		cout <<"mB = ";
+	std::cout <<"mB = ";
 		for(i=0; i<mB.size(); ++i){
-			cout << mB[i];
-			cout << ";  ";
+		std::cout << mB[i];
+		std::cout << ";  ";
 		}
-		cout <<"\nmN = ";
+	std::cout <<"\nmN = ";
 		for(j=0; j<mN.size(); ++j){
-			cout << mN[j];
-			cout << ";  ";
+		std::cout << mN[j];
+		std::cout << ";  ";
 		}
-		cout << "\n \n";
+	std::cout << "\n \n";
 
 		for(i=0; i<mB.size(); ++i){
 			for(j=0; j<mN.size(); ++j){
-				cout << mDictionary(i,j);
-				cout << " ; ";
+			std::cout << mDictionary(i,j);
+			std::cout << " ; ";
 			}
-			cout << "\n";
+		std::cout << "\n";
 		}
-		cout.flush();
+	std::cout.flush();
 	}
 
 
@@ -212,8 +212,8 @@ namespace hypro {
 			std::cout << "All variables are in their bounds." << std::endl;
 			#endif
 			return false;
-		} 
-		if(!(mConstrains.getPivot(indexRef,diff,pivotRef,mN,mDictionary))) {throw string("\n WARNING: empty set. \n");}//is there a suitable pivot
+		}
+		if(!(mConstrains.getPivot(indexRef,diff,pivotRef,mN,mDictionary))) {throw std::string("\n WARNING: empty set. \n");}//is there a suitable pivot
 		#ifdef DICT_DBG
 		std::cout << "Variable " << indexRef << " is out of bounds by " << diff << std::endl;
 		std::cout << "suitable pivot: " << pivotRef << std::endl;
@@ -581,7 +581,7 @@ namespace hypro {
 						break;
 					}
 				}
-				if(rowIndex==mB.size()-1) {throw(string("WARNING: linealty space found"));}
+				if(rowIndex==mB.size()-1) {throw(std::string("WARNING: linealty space found"));}
 			}
 		}
 	}

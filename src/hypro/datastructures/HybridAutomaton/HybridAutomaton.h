@@ -155,7 +155,7 @@ class HybridAutomaton
     void addLocation(const Location<Number>& location);
     void addLocation(std::unique_ptr<Location<Number>>&& location);
     //void addTransition(const Transition<Number>& transition);
-    //void addTransition(std::unique_ptr<Transition<Number>>&& transition);
+    void addTransition(std::unique_ptr<Transition<Number>>&& transition);
     void addInitialState(const Location<Number>* loc, const Condition<Number>& state) { mInitialStates.emplace(std::make_pair(loc,state)); }
     void addLocalBadState(const Location<Number>* loc, const Condition<Number>& condition) { mLocalBadStates.emplace(std::make_pair(loc,condition)); }
     void addGlobalBadState(const Condition<Number>& state) { mGlobalBadStates.push_back(state); }

@@ -7,7 +7,7 @@
 #include "../HybridAutomaton/HybridAutomaton.h"
 #include "../HybridAutomaton/decomposition/DecisionEntity.h"
 #include "../HybridAutomaton/decomposition/Decomposition.h"
-#include "../../util/multithreading/Filewriter.h"
+#include "../../util/logging/Filewriter.h"
 #include "../../util/logging/Logger.h"
 #include <carl/util/Singleton.h>
 //#include <hypro/representations/GeometricObject.h>
@@ -29,7 +29,8 @@ class SettingsProvider : public carl::Singleton<SettingsProvider<State>>
 
     ReachabilitySettings &getReachabilitySettings();
 
-    unsigned getWorkerThreadCount();
+    unsigned getWorkerThreadCount() const;
+    void setWorkerThreadCount(std::size_t c);
     void setSkipPlot(bool skip) { mSkipPlot = skip; }
     bool skipPlot() const;
     bool useGlobalQueuesOnly() const;
@@ -41,6 +42,7 @@ class SettingsProvider : public carl::Singleton<SettingsProvider<State>>
     bool decomposeAutomaton();
     void setDecomposeAutomaton(bool decompose) { mDoDecomposition = decompose; }
     std::size_t getNumberVariables() const { return mHybridAutomaton.getVariables().size(); }
+    tNumber getGlobalTimeHorizon() const { return mReachabilitySettings.timeBound*mReachabilitySettings.jumpDepth; }
 
 
     void setHybridAutomaton(HybridAutomaton<Number>&& ha);

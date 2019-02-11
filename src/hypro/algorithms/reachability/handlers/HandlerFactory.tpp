@@ -202,8 +202,9 @@ namespace hypro
 										Transition<Number>* transition,
 										StrategyParameters sPars,
 										WorkQueue<std::shared_ptr<Task<State>>>* localQueue,
-										WorkQueue<std::shared_ptr<Task<State>>>* localCEXQueue){
-		return new ltiJumpHandler<State>(successorBuffer, task,transition, sPars, localQueue, localCEXQueue);
+										WorkQueue<std::shared_ptr<Task<State>>>* localCEXQueue,
+										EventTimingNode<typename State::NumberType>* timingNode){
+		return new ltiJumpHandler<State>(successorBuffer, task,transition, sPars, localQueue, localCEXQueue, timingNode);
 	}
 
 } // hypro

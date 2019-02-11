@@ -4,13 +4,13 @@
 namespace hypro {
 
 	template<typename Number>
-	EvaluationResult<Number> smtratOptimizeLinear(const vector_t<Number>& _direction, const matrix_t<Number>& constraints, const vector_t<Number>& constants, const EvaluationResult<Number>& preSolution) {
+	EvaluationResult<Number> smtratOptimizeLinear(const vector_t<Number>& _direction, const matrix_t<Number>& constraints, const vector_t<Number>& constants, std::vector<carl::Relation>& relationSymbols, const EvaluationResult<Number>& preSolution) {
 		EvaluationResult<Number> res;
 		smtrat::Poly objective = createObjective(_direction);
 		//#ifdef RECREATE_SOLVER
 		smtrat::SimplexSolver simplex;
 		simplex.push();
-		std::unordered_map<smtrat::FormulaT, std::size_t> formulaMapping = createFormula(constraints, constants);
+		std::unordered_map<smtrat::FormulaT, std::size_t> formulaMapping = createFormula(constraints, constants, relationSymbols);
 		for(const auto& constraintPair : formulaMapping) {
 			simplex.inform(constraintPair.first);
 			simplex.add(constraintPair.first, false);
@@ -85,11 +85,11 @@ namespace hypro {
 	}
 
 	template<typename Number>
-	bool smtratCheckConsistency(const matrix_t<Number>& constraints, const vector_t<Number>& constants) {
+	bool smtratCheckConsistency(const matrix_t<Number>& constraints, const vector_t<Number>& constants, const std::vector<carl::Relation>& relationSymbols) {
 		//#ifdef RECREATE_SOLVER
         //std::cout << constraints << std::endl << constants << std::endl;
 		smtrat::SimplexSolver simplex;
-		std::unordered_map<smtrat::FormulaT, std::size_t> formulaMapping = createFormula(constraints, constants);
+		std::unordered_map<smtrat::FormulaT, std::size_t> formulaMapping = createFormula(constraints, constants, relationSymbols);
 		for(const auto& constraintPair : formulaMapping) {
 			simplex.inform(constraintPair.first);
 			simplex.add(constraintPair.first, false);
@@ -125,10 +125,10 @@ namespace hypro {
 	}
 
 	template<typename Number>
-	bool smtratCheckPoint(const matrix_t<Number>& constraints, const vector_t<Number>& constants, const Point<Number>& point) {
+	bool smtratCheckPoint(const matrix_t<Number>& constraints, const vector_t<Number>& constants, const std::vector<carl::Relation>& relationSymbols, const Point<Number>& point) {
 		//#ifdef RECREATE_SOLVER
 		smtrat::SimplexSolver simplex;
-		std::unordered_map<smtrat::FormulaT, std::size_t> formulaMapping = createFormula(constraints, constants);
+		std::unordered_map<smtrat::FormulaT, std::size_t> formulaMapping = createFormula(constraints, constants, relationSymbols);
 		for(const auto& constraintPair : formulaMapping) {
 			simplex.inform(constraintPair.first);
 			simplex.add(constraintPair.first, false);
@@ -162,11 +162,11 @@ namespace hypro {
 
 
 	template<typename Number>
-	std::vector<std::size_t> smtratRedundantConstraints(const matrix_t<Number>& constraints, const vector_t<Number>& constants) {
+	std::vector<std::size_t> smtratRedundantConstraints(const matrix_t<Number>& constraints, const vector_t<Number>& constants, const std::vector<carl::Relation>& relationSymbols) {
 		std::vector<std::size_t> res;
 		//#ifdef RECREATE_SOLVER
 		smtrat::SimplexSolver simplex;
-		const std::unordered_map<smtrat::FormulaT, std::size_t> formulaMapping = createFormula(constraints, constants);
+		const std::unordered_map<smtrat::FormulaT, std::size_t> formulaMapping = createFormula(constraints, constants, relationSymbols);
 
 		if(formulaMapping.size() == 1){
 			return res;
@@ -325,11 +325,11 @@ namespace hypro {
 
 
 	template<typename Number>
-	EvaluationResult<Number> smtratGetInternalPoint(const matrix_t<Number>& constraints, const vector_t<Number>& constants) {
+	EvaluationResult<Number> smtratGetInternalPoint(const matrix_t<Number>& constraints, const vector_t<Number>& constants, const std::vector<carl::Relation>& relationSymbols) {
 		//#ifdef RECREATE_SOLVER
 		EvaluationResult<Number> res;
 		smtrat::SimplexSolver simplex;
-		std::unordered_map<smtrat::FormulaT, std::size_t> formulaMapping = createFormula(constraints, constants);
+		std::unordered_map<smtrat::FormulaT, std::size_t> formulaMapping = createFormula(constraints, constants, relationSymbols);
 		for(const auto& constraintPair : formulaMapping) {
 			simplex.inform(constraintPair.first);
 			simplex.add(constraintPair.first, false);

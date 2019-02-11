@@ -15,6 +15,7 @@ namespace reachability {
 
 	template<typename Number, typename ReacherSettings, typename State>
 	void Reach<Number,ReacherSettings,State>::initQueue() {
+		TRACE("hypro.reacher.preprocessing","Have " << mAutomaton.getInitialStates().size() << " initial states.");
 		for ( const auto& locationConstraintPair : mAutomaton.getInitialStates() ) {
 			if(int(mCurrentLevel) <= mSettings.jumpDepth || mSettings.jumpDepth < 0){
 				// Convert representation in state from matrix and vector to used representation type.
@@ -73,6 +74,7 @@ namespace reachability {
 	template<typename Number, typename ReacherSettings, typename State>
 	std::vector<std::pair<unsigned, typename Reach<Number,ReacherSettings,State>::flowpipe_t>> Reach<Number,ReacherSettings,State>::computeForwardReachability() {
 		// set up working queue -> add initial states
+		initQueue();
 		// collect all computed reachable states
 		std::vector<std::pair<unsigned, typename Reach<Number,ReacherSettings,State>::flowpipe_t>> collectedReachableStates;
 

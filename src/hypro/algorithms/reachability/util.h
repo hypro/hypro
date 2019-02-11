@@ -80,7 +80,7 @@ std::vector<Box<Number>> errorBoxes(const Number& delta, const linearFlow<Number
 	assert(initialSet.getDimension() == externalInput.dimension());
 
     std::vector<Box<Number>> res;
-    unsigned dim = flow.dimension();
+    unsigned dim = flow.dimension()+1;
     //std::cout << "Dim: " << dim << std::endl;
     //std::cout << "Delta: " << delta << std::endl;
     matrix_t<Number> matrixBlock = matrix_t<Number>::Zero(3 * dim, 3 * dim);

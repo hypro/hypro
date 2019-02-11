@@ -1,5 +1,6 @@
 #pragma once
 #include "../../../types.h"
+#include <iostream>
 
 namespace hypro {
 
@@ -17,7 +18,7 @@ public:
     virtual ~linearFlow() {}
 
     static DynamicType type() { return DynamicType::linear; }
-    std::size_t dimension() const { return mFlowMatrix.cols(); }
+    std::size_t dimension() const { return mFlowMatrix.cols()-1; }
     std::size_t size() const { return mFlowMatrix.rows(); }
 
     void setFlowMatrix(const matrix_t<Number>& newA) {
@@ -95,7 +96,7 @@ public:
         return !(lhs == rhs);
     }
 
-    friend ostream& operator<<(ostream& out, const linearFlow<Number>& in) {
+    friend std::ostream& operator<<(std::ostream& out, const linearFlow<Number>& in) {
         return out << in.mFlowMatrix;
     }
 };

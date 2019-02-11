@@ -67,7 +67,7 @@ void State<Number,Representation,Rargs...>::addTimeToClocks(tNumber t) {
 	//	mClockAssignment = mClockAssignment.affineTransformation(identity,clockShift);
 	//}
 	assert(checkConsistency());
-	mTimestamp += t;
+	//mTimestamp += t;
 }
 
 template<typename Number, typename Representation, typename ...Rargs>

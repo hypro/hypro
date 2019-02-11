@@ -1,5 +1,5 @@
 #pragma once
-#include "LockableBase.h"
+#include "../multithreading/LockableBase.h"
 #include <fstream>
 
 namespace hypro {

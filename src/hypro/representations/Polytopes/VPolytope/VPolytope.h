@@ -8,6 +8,7 @@
 	static_assert(false, "This file may only be included indirectly by GeometricObject.h");
 #endif
 
+#include "util.h"
 #include "VPolytopeSettings.h"
 #include "../Cone.h"
 #include "../../../algorithms/convexHull/ConvexHull.h"
@@ -15,6 +16,7 @@
 #include "../../../util/linearOptimization/Optimizer.h"
 #include "../../../util/Permutator.h"
 #include "../../../util/pca.h"
+#include "../../../util/statistics/statistics.h"
 #include "../../../datastructures/Facet.h"
 #include <set>
 #include <cassert>
