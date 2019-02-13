@@ -6,7 +6,9 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
 
 	add_executable(runDatastructureTests
 		DAGTest.cpp
+		EventTimingProviderTest.cpp
 		HalfspaceTest.cpp
+		HIVTest.cpp
 		PointTest.cpp
 		VertexTest.cpp
 		VertexContainerTest.cpp
