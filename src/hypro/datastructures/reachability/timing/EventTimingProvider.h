@@ -10,6 +10,7 @@
 #include "../Settings.h"
 #include <carl/util/Singleton.h>
 #include <string>
+#include <optional>
 
 namespace hypro
 {
@@ -28,9 +29,14 @@ private:
 public:
 
 	void initialize(const HybridAutomaton<Number>& ha, tNumber globalTimeHorizon);
+	void initialize(const Location<Number>* loc, tNumber globalTimeHorizon);
 
 	void setName(const std::string& name) { mName = name; }
 	const std::string& getName() const { return mName; }
+
+	EventTimingNode<Number>* getRoot() { return mRoot; }
+
+	void clear() { delete mRoot; mRoot = new EventTimingNode<Number>(); }
 
 	/**
 	 * @brief	Find the best suitable node in the timing tree which matches the passed path.
@@ -42,9 +48,11 @@ public:
 	 */
 	EventTimingNode<Number>* rGetNode(const Path<Number,tNumber>& path) const;
 
+	std::optional<EventTimingContainer<Number>> getTimings(const Path<Number,tNumber>& path) const;
+
 	void updateTimings(const Path<Number,tNumber>& path, const EventTimingContainer<Number>& update);
 
-	typename EventTimingNode<Number>::Node_t addChildToNode(typename TreeNode<EventTimingNode<Number>>::Node_t parent, tNumber timeHorizon);
+	typename EventTimingNode<Number>::Node_t addChildToNode(typename EventTimingNode<Number>::Node_t parent, tNumber timeHorizon);
 
 	std::string getDotRepresentation() const;
 

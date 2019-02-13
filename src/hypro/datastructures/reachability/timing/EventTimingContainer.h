@@ -8,13 +8,7 @@ namespace hypro {
 template<typename Number>
 class EventTimingContainer {
 private:
-	// Members required for identification with a path
-	const Location<Number>* mLocation = nullptr;
-	const Transition<Number>* mEntryTransition = nullptr;
-	carl::Interval<tNumber> mEntryTimestamp;
-	std::size_t mLevel = 0;
-
-	// Actual timing storage
+	// Timing storage
 	HierarchicalIntervalVector<CONTAINMENT,tNumber> mInvariantEvents;
 	std::map<Transition<Number>*, HierarchicalIntervalVector<CONTAINMENT,tNumber>> mTransitionEvents;
 	HierarchicalIntervalVector<CONTAINMENT,tNumber> mBadStateEvents;
@@ -53,21 +47,10 @@ public:
 	bool isInitialized() const;
 	void initialize(tNumber timeHorizon);
 
-	void setLevel(std::size_t l) { mLevel = l; }
-	std::size_t getLevel() const { return mLevel; }
-
-	const Location<Number>* getLocation() const { return mLocation; }
-	const carl::Interval<tNumber>& getEntryTimestamp() const { return mEntryTimestamp; }
-	const Transition<Number>* getEntryTransition() const { return mEntryTransition; }
-
-	void setLocation(const Location<Number>* lc) { mLocation = lc; }
-	void setEntryTimestamp(const carl::Interval<tNumber>& ts) { mEntryTimestamp = ts; }
-	void setEntryTransition(const Transition<Number>* tr) { mEntryTransition = tr; }
-
 	void merge(const EventTimingContainer& snapshot);
 
 	void setTransitionTimings(const std::map<Transition<Number>*, HierarchicalIntervalVector<CONTAINMENT,tNumber>>& timings) { mTransitionEvents = timings; }
-	void setTransitionTimings(Transition<Number>* t, const HierarchicalIntervalVector<CONTAINMENT,tNumber>& timings) { mTransitionEvents[t] = timings; }
+	void setTransitionTimings(Transition<Number>* t, const HierarchicalIntervalVector<CONTAINMENT,tNumber>& timings) { mTransitionEvents.insert_or_assign(t,timings); }
 	void setInvariantTimings(const HierarchicalIntervalVector<CONTAINMENT,tNumber>& timings) { mInvariantEvents = timings; }
 	void setBadStateTimings(const HierarchicalIntervalVector<CONTAINMENT,tNumber>& timings) { mBadStateEvents = timings; }
 
@@ -83,6 +66,7 @@ public:
 	bool hasTransition(Transition<Number>* t) const {return mTransitionEvents.find(t) != mTransitionEvents.end();}
 
 	bool hasInvariantEvent(CONTAINMENT type) const;
+	bool satisfiedInvariant(const carl::Interval<tNumber>& timeInterval) const;
 	bool hasInvariantEvent(const carl::Interval<tNumber>& timeInterval, CONTAINMENT type) const;
 
 	bool hasBadStateEvent() const;
