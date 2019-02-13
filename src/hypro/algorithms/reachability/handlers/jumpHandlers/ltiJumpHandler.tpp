@@ -76,7 +76,7 @@ namespace hypro {
 					auto potentialNewNode = tProvider.rGetNode(child->getPath());
 					if(potentialNewNode == nullptr) {
 						auto newNode = tProvider.addChildToNode(mTimingNode, SettingsProvider<State>::getInstance().getGlobalTimeHorizon());
-						newNode->rGetTimings().setEntryTransition(transitionStatePair.first);
+						newNode->setEntryTransition(transitionStatePair.first);
 						newNode->setEntryTimestamp(child->getTimestamp(currentTargetLevel));
 						newNode->setLocation(transitionStatePair.first->getTarget());
 						if(createdTimingNodes.find(transitionStatePair.first) == createdTimingNodes.end()) {
@@ -88,7 +88,7 @@ namespace hypro {
 						// if node is complete, update timings, otherwise mark completed.
 						mTimingNode->rGetTimingAggregate().markCompleted(transitionStatePair.first, potentialNewNode);
 						if(mTimingNode->rGetTimingAggregate().getOpenSuccessorCount(transitionStatePair.first) == 0) {
-							potentialNewNode->updateEntryTimestamp(coveredTimeInterval);
+							potentialNewNode->extendEntryTimestamp(coveredTimeInterval);
 						}
 					}
 
@@ -145,7 +145,7 @@ namespace hypro {
 					if(potentialNewNode == nullptr) {
 						TRACE("hypro.datastructures.timing","Did not find child in timing tree, create new one.");
 						auto newNode = tProvider.addChildToNode(mTimingNode, SettingsProvider<State>::getInstance().getGlobalTimeHorizon());
-						newNode->rGetTimings().setEntryTransition(transitionStatePair.first);
+						newNode->setEntryTransition(transitionStatePair.first);
 						newNode->setEntryTimestamp(child->getTimestamp(currentTargetLevel));
 						newNode->setLocation(transitionStatePair.first->getTarget());
 						if(createdTimingNodes.find(transitionStatePair.first) == createdTimingNodes.end()) {
@@ -157,7 +157,7 @@ namespace hypro {
 						TRACE("hypro.datastructures.timing","Found child in timing tree: " << potentialNewNode << ". Update entry timestamp to " << coveredTimeInterval);
 						mTimingNode->rGetTimingAggregate().markCompleted(transitionStatePair.first, potentialNewNode);
 						if(mTimingNode->rGetTimingAggregate().getOpenSuccessorCount(transitionStatePair.first) == 0) {
-							potentialNewNode->updateEntryTimestamp(coveredTimeInterval);
+							potentialNewNode->extendEntryTimestamp(coveredTimeInterval);
 						}
 					}
 				}
