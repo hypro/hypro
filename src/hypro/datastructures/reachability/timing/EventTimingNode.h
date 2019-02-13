@@ -12,8 +12,10 @@ class EventTimingNode : public DAGNode<EventTimingNode<Number>> {
 protected:
     EventTimingContainer<Number>    mTimings;
     const Location<Number>*         mLocation = nullptr;
-    carl::Interval<tNumber>         mEntryTimeStamp;
+    const Transition<Number>*       mEntryTransition = nullptr;
+    carl::Interval<tNumber>         mEntryTimestamp;
     TimingAggregate<Number>         mTimingAggregate;
+    std::size_t                     mLevel = 0;
 
 public:
     using Node_t = typename DAGNode<EventTimingNode<Number>>::Node_t;
@@ -25,69 +27,31 @@ public:
         : mTimings(in)
     {}
 
-    void setTimings(const EventTimingContainer<Number>& timings) {mTimings = timings;}
-    const EventTimingContainer<Number>& getTimings() const {return mTimings;}
-    EventTimingContainer<Number>& rGetTimings() {return mTimings;}
-    const Location<Number>* getLocation() const {return mLocation;}
-    TimingAggregate<Number>& rGetTimingAggregate() {return mTimingAggregate;}
+    void setTimings(const EventTimingContainer<Number>& timings);
+    const EventTimingContainer<Number>& getTimings() const;
+    EventTimingContainer<Number>& rGetTimings();
+    const Location<Number>* getLocation() const;
+    const Transition<Number>* getEntryTransition() const;
+    const carl::Interval<tNumber>& getEntryTimestamp() const;
+    TimingAggregate<Number>& rGetTimingAggregate();
 
-    void setLocation(const Location<Number>* loc) {mLocation = loc;mTimings.setLocation(loc);}
-    void setEntryTimestamp(const carl::Interval<tNumber>& t) {
-        TRACE("hypro.datastructures.timing", "Set entry timestamp of " << this << " to " << t);
-        mEntryTimeStamp = t;
-        mTimings.setEntryTimestamp(t);
-    }
+    void setLevel(std::size_t l);
+	std::size_t getLevel() const;
 
-    void updateEntryTimestamp(const carl::Interval<tNumber>& t) {
-        TRACE("hypro.datastructures.timing", "Update entry timestamp of " << this << " to " << t);
-        mEntryTimeStamp = mEntryTimeStamp.convexHull(t);
-        mTimings.setEntryTimestamp(mEntryTimeStamp);
-    }
+    void setLocation(const Location<Number>* loc);
+    void setEntryTimestamp(const carl::Interval<tNumber>& t);
+    void extendEntryTimestamp(const carl::Interval<tNumber>& t);
+    void setEntryTransition(const Transition<Number>* trans);
 
     friend std::ostream& operator<<(std::ostream& out, const EventTimingNode<Number>& in) {
         out << in.getTimings();
         return out;
     }
 
-    std::size_t getDotRepresentation(int id, std::string& nodes, std::string& transitions) const {
-        std::stringstream s;
-        s << "node" << id << " [label=<<TABLE BORDER=\"0\" CELLBORDER=\"1\" CELLSPACING=\"0\">";
-        // add common info
-
-        if(this->getLocation() == nullptr){
-            s << "<TR><TD COLSPAN=\""<< 2 << "\">@" << this;
-        } else {
-        	s << "<TR><TD COLSPAN=\""<< 2 << "\">@" << this << "<BR/>"<< this->getLocation()->getName() << "(" << this->getLocation()->hash() <<")";
-        }
-
-        // add timing info
-        s << "</TD></TR><TR><TD>";
-        s << "inv: </TD><TD>" << mTimings.getInvariantTimings();
-        s << "</TD></TR>";
-        for(const auto& transTimingPair : mTimings.getTransitionTimings()) {
-            s << "<TR><TD>";
-            s << transTimingPair.first->getSource()->getName() << "-- " << transTimingPair.first->getTarget()->getName();
-            s << "</TD><TD>";
-            s << transTimingPair.second;
-            s << "</TD></TR>";
-        }
-        s << "</TABLE>>];" << std::endl;
-        nodes += s.str();
-        std::size_t offset = ++id;
-        if(!this->getChildren().empty()){
-            for(const auto child : this->getChildren()) {
-                std::stringstream t;
-                t << "node" << (id-1) << " -> node" << offset << " [label=\" ";
-                t << "[" << carl::convert<tNumber,double>(child->getTimings().getEntryTimestamp().lower()) << ";" << carl::convert<tNumber,double>(child->getTimings().getEntryTimestamp().upper()) << "]\n";
-                t <<"\"];" << std::endl;
-                transitions += t.str();;
-                offset = child->getDotRepresentation(offset,nodes,transitions);
-            }
-        }
-        return offset;
-    }
+    std::size_t getDotRepresentation(int id, std::string& nodes, std::string& transitions) const;
 };
 
 } // hypro
 
+#include "EventTimingNode.tpp"
 #include "ETN_util.h"
