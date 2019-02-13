@@ -145,7 +145,7 @@ void MLinearFlow::process(int nlhs, mxArray* plhs[], int nrhs, const mxArray* pr
         return;
     }
 
-    if (!strcmp("delete_flow", cmd)){  
+    if (!strcmp("delete", cmd)){  
         delete_flow(nlhs, plhs, nrhs, prhs);
         return;
     }

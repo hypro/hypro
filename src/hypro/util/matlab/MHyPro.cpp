@@ -34,6 +34,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
         // MHyProTaylorModel::process(nlhs, plhs, nrhs, prhs);
     }else if(!strcmp(type, "HybridAutomaton")){
         MHybridAutomaton::process(nlhs, plhs, nrhs, prhs);
+    
     // }else if(!strcmp(type, "Condition")){
     //     MCondition::process(nlhs, plhs, nrhs, prhs);
     // }else if(!strcmp(type, "Location")){
