@@ -89,6 +89,13 @@ namespace hypro {
 	}
 
 	template<typename Number>
+	bool EventTimingContainer<Number>::satisfiedInvariant(const carl::Interval<tNumber>& timeInterval) const {
+		return (mInvariantEvents.hasEntry(timeInterval,CONTAINMENT::PARTIAL) ||
+				mInvariantEvents.hasEntry(timeInterval,CONTAINMENT::FULL) ||
+				mInvariantEvents.hasEntry(timeInterval,CONTAINMENT::YES));
+	}
+
+	template<typename Number>
 	bool EventTimingContainer<Number>::hasInvariantEvent(const carl::Interval<mpq_class>& timeInterval, CONTAINMENT type) const {
 		return mInvariantEvents.hasEntry(timeInterval,type);
 	}

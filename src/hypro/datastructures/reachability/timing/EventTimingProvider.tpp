@@ -41,6 +41,21 @@ namespace hypro {
 	}
 
 	template<typename Number>
+	void EventTimingProvider<Number>::initialize(const Location<Number>* loc, tNumber globalTimeHorizon) {
+		assert(mRoot->getChildren().empty());
+		EventTimingNode<Number>* child = new EventTimingNode<Number>(EventTimingContainer<Number>(globalTimeHorizon));
+		child->addParent(mRoot);
+		child->setLocation(loc);
+		child->setEntryTimestamp(carl::Interval<tNumber>(0));
+		mRoot->addChild(child);
+		TRACE("hypro.datastructures.timing","Add initial node " << child);
+
+		#ifndef NDEBUG
+		writeTree();
+		#endif
+	}
+
+	template<typename Number>
 	const EventTimingNode<Number>* EventTimingProvider<Number>::getTimingNode(const Path<Number,tNumber>& path) const {
 		return findNode(path);
 	}
@@ -48,6 +63,111 @@ namespace hypro {
 	template<typename Number>
 	EventTimingNode<Number>* EventTimingProvider<Number>::rGetNode(const Path<Number,tNumber>& path) const {
 		return findNode(path);
+	}
+
+	template<typename Number>
+	std::optional<EventTimingContainer<Number>> EventTimingProvider<Number>::getTimings(const Path<Number,tNumber>& path) const {
+
+		// abort if we do not have a tree yet
+		if(mRoot->getChildren().size() == 0) {
+			TRACE("hypro.datastructures.timing","No child nodes, abort.");
+			return std::nullopt;
+		}
+
+		// pointers to nodes on the path
+		std::set<EventTimingNode<Number>*> workingSet;
+
+		// fill working set with initial nodes
+		assert(mRoot->getChildren().size() == 1);
+		workingSet.emplace(*(mRoot->getChildren().begin()));
+
+		// iterate over path
+		auto pathIt = path.begin();
+		while(pathIt != path.end()) {
+			TRACE("hypro.datastructures.timing","Follow time step, have " << workingSet.size() << " nodes.");
+			// remove all nodes from working set whose invariant timings do not contain the time interval in the path
+			assert(!pathIt->isDiscreteStep());
+			// stores candidates which match the timeStep
+			std::set<EventTimingNode<Number>*> transitionCandidates;
+			// verify against invariant timings.
+			// Two-phase approach: Collect all which satisfy the invariant somehow,
+			// then merge invariant intervals and check whether the invariant was satisfied the whole time.
+			for(auto nodeIt = workingSet.begin(); nodeIt != workingSet.end();) {
+				// check for full containment
+				if((*nodeIt)->getTimings().satisfiedInvariant(pathIt->getTimestamp())) {
+					transitionCandidates.insert(*nodeIt);
+					++nodeIt;
+				} else if ((*nodeIt)->getTimings().getInvariantTimings().intersectsEntry(pathIt->getTimestamp(), CONTAINMENT::FULL) ||
+				   (*nodeIt)->getTimings().getInvariantTimings().intersectsEntry(pathIt->getTimestamp(), CONTAINMENT::PARTIAL) ||
+				   (*nodeIt)->getTimings().getInvariantTimings().intersectsEntry(pathIt->getTimestamp(), CONTAINMENT::YES) ) {
+					// check for partial containment
+					transitionCandidates.insert(*nodeIt);
+					++nodeIt;
+					//TRACE("hypro.datastructures.timing","Not enough information, abort.");
+					//return std::nullopt;
+				} else {
+					assert(!(*nodeIt)->getTimings().hasInvariantEvent(pathIt->getTimestamp(), CONTAINMENT::YES));
+					assert(!(*nodeIt)->getTimings().hasInvariantEvent(pathIt->getTimestamp(), CONTAINMENT::PARTIAL));
+					assert(!(*nodeIt)->getTimings().hasInvariantEvent(pathIt->getTimestamp(), CONTAINMENT::FULL));
+					// the node does not satisfy the invariant, erase
+					nodeIt = workingSet.erase(nodeIt);
+				}
+			}
+
+			// merge invariant intervals to detect whether the invariant interval is fully covered
+			// Todo: For the last step, is this neccessary?
+			if(!transitionCandidates.empty()) {
+				TRACE("hypro.datastructures.timing","Merge invariant intervals of " << transitionCandidates.size() << " candidates.");
+				auto mergedHIV = (*transitionCandidates.begin())->getTimings().getInvariantTimings();
+				for(auto it = ++transitionCandidates.begin(); it != transitionCandidates.end(); ++it) {
+					mergedHIV = merge({mergedHIV, (*it)->getTimings().getInvariantTimings()});
+				}
+
+				TRACE("hypro.datastructures.timing","Invariant HIV after merge: " << mergedHIV);
+
+				if(!fullCover(mergedHIV, pathIt->getTimestamp(), CONTAINMENT::FULL)) {
+					TRACE("hypro.datastructures.timing","Information incomplete, abort, required timestamp: " << pathIt->getTimestamp());
+					return std::nullopt;
+				}
+			}
+
+			// follow the discrete jump, if applicable
+			++pathIt;
+			if(pathIt != path.end()) {
+				// set up new working set
+				workingSet.clear();
+
+				TRACE("hypro.datastructures.timing","Follow discrete step, have " << transitionCandidates.size() << " nodes.");
+
+				// try to follow the transition
+				assert(pathIt->isDiscreteStep());
+				for(const auto n : transitionCandidates) {
+					for(const auto ch : n->getChildren()) {
+						if(ch->getEntryTransition() == pathIt->transition && carl::set_have_intersection(ch->getEntryTimestamp(), pathIt->getTimestamp())) {
+							workingSet.insert(ch);
+						}
+					}
+				}
+				// increase pathIt to the next time step or the end of the path
+				++pathIt;
+			}
+		}
+
+		if(workingSet.empty()) {
+			TRACE("hypro.datastructures.timing","No nodes found, abort.");
+			return std::nullopt;
+		}
+
+		TRACE("hypro.datastructures.timing","After loop, have " << workingSet.size() << " nodes.");
+
+		// at this point workingSet should contain all nodes which can be reached following the path. Merge those.
+		auto nodeIt = workingSet.begin();
+		EventTimingContainer<Number> res = (*nodeIt)->getTimings();
+		++nodeIt;
+		for( ;nodeIt != workingSet.end(); ++nodeIt ) {
+			merge({res,(*nodeIt)->getTimings()});
+		}
+		return res;
 	}
 
 	template<typename Number>
@@ -62,9 +182,11 @@ namespace hypro {
 	}
 
 	template<typename Number>
-	typename EventTimingNode<Number>::Node_t EventTimingProvider<Number>::addChildToNode(typename TreeNode<EventTimingNode<Number>>::Node_t parent, tNumber timeHorizon) {
+	typename EventTimingNode<Number>::Node_t EventTimingProvider<Number>::addChildToNode(typename EventTimingNode<Number>::Node_t parent, tNumber timeHorizon) {
 		typename EventTimingNode<Number>::Node_t newChild = new EventTimingNode<Number>(EventTimingContainer<Number>{timeHorizon});
 		TRACE("hypro.datastructures.timing","Add child " << newChild << " to node " << parent);
+
+		// set up tree
 		newChild->addParent(parent);
 		parent->addChild(newChild);
 		#ifndef NDEBUG
@@ -79,21 +201,9 @@ namespace hypro {
 		std::string transitions = "";
 		std::string endDelimiter = "}\n";
 		std::vector<unsigned> levels;
+
 		mRoot->getDotRepresentation(0,nodes,transitions);
 
-		/*
-		std::string levelCounts = "//";
-		for(std::size_t i = 0; i < levels.size(); ++i){
-			levelCounts += std::to_string(i);
-			levelCounts += ": ";
-			levelCounts += std::to_string(levels[i]);
-			levelCounts += ", ";
-		}
-
-		levelCounts += "\n";
-
-		return nodes + transitions + endDelimiter + levelCounts;
-		*/
 		return nodes + transitions + endDelimiter;
 	}
 
@@ -124,7 +234,7 @@ namespace hypro {
 				bool found = false;
 				TRACE("hypro.datastructures.timing", "Consider " << curNode->getChildren().size() << " potential child nodes.");
 				for(const auto& child : curNode->getChildren()) {
-					if(child->getTimings().getEntryTransition() == path.at(pos).transition && set_have_intersection(child->getTimings().getEntryTimestamp(), (path.at(pos).timeInterval))) {
+					if(child->getEntryTransition() == path.at(pos).transition && set_have_intersection(child->getEntryTimestamp(), (path.at(pos).timeInterval))) {
 						TRACE("hypro.datastructures.timing", child << " is on the path (child timings: " << child->getTimings());
 						curNode = child;
 						found = true;
@@ -134,8 +244,8 @@ namespace hypro {
 					#ifdef HYPRO_LOGGING
 					else {
 						TRACE("hypro.datastructures.timing", child << " is not on the path (child timings: " << child->getTimings());
-						TRACE("hypro.datastructures.timing", "Reasons: Transitions match: " << (child->getTimings().getEntryTransition() == path.at(pos).transition));
-						TRACE("hypro.datastructures.timing", "Reasons: Timing intervals match: " << (set_have_intersection(child->getTimings().getEntryTimestamp(), (path.at(pos).timeInterval))) << ", entry of child: " <<  carl::Interval<double>(child->getTimings().getEntryTimestamp()) << " and this entry timestamp is " << carl::Interval<double>(path.at(pos).timeInterval) );
+						TRACE("hypro.datastructures.timing", "Reasons: Transitions match: " << (child->getEntryTransition() == path.at(pos).transition));
+						TRACE("hypro.datastructures.timing", "Reasons: Timing intervals match: " << (set_have_intersection(child->getEntryTimestamp(), (path.at(pos).timeInterval))) << ", entry of child: " <<  carl::Interval<double>(child->getEntryTimestamp()) << " and this entry timestamp is " << carl::Interval<double>(path.at(pos).timeInterval) );
 					}
 					#endif
 				}
