@@ -186,3 +186,56 @@ TEST_F(EventTimingTest, FindPath3)
         EXPECT_TRUE((*timings).satisfiedInvariant(carl::Interval<T>(1,2)));
     }
 }
+
+/**
+ * @brief Performing a more complex path find. Idea: We want to simulate several levels of refinement. Some of them will be incomplete - in this test we try to verify a correct fallback to lower levels.
+ * In this case the first refinement level aggregates and the second does not.
+ */
+TEST_F(EventTimingTest, FindPath4)
+{
+    auto& tProvider = EventTimingProvider<double>::getInstance();
+
+    // create some fictional path using location and transition.
+    Path<double,T> p1{
+        {carl::Interval<T>(0,3)},
+        {tRaw, carl::Interval<T>(2,3)},
+        {carl::Interval<T>(2,5)},
+    };
+
+    // add transition event
+    initNode->rGetTimings().insertTransition(tRaw, carl::Interval<T>(2,3), CONTAINMENT::YES);
+
+    // add child node for first level (agg. setting)
+    auto ch1 = tProvider.addChildToNode(initNode, 10);
+    ch1->rGetTimings().insertInvariant(carl::Interval<T>(2,5), CONTAINMENT::FULL);
+    ch1->setEntryTransition(tRaw);
+    ch1->setEntryTimestamp(carl::Interval<T>(2,3));
+    ch1->setLocation(loc);
+
+    // now add 3 child nodes as a result of non-aggregation
+    // covered entry timestamps [2,2.9]
+
+    // add child node for second level (non-agg. setting)
+    auto ch2 = tProvider.addChildToNode(initNode, 10);
+    ch2->rGetTimings().insertInvariant(carl::Interval<T>(2,3), CONTAINMENT::FULL);
+    ch2->setEntryTransition(tRaw);
+    ch2->setEntryTimestamp(carl::Interval<T>(2,2.25));
+    ch2->setLocation(loc);
+
+    auto ch3 = tProvider.addChildToNode(initNode, 10);
+    ch3->rGetTimings().insertInvariant(carl::Interval<T>(3,4), CONTAINMENT::FULL);
+    ch3->setEntryTransition(tRaw);
+    ch3->setEntryTimestamp(carl::Interval<T>(T(2.25),T(2.75)));
+    ch3->setLocation(loc);
+
+    auto ch4 = tProvider.addChildToNode(initNode, 10);
+    ch4->rGetTimings().insertInvariant(carl::Interval<T>(4,5), CONTAINMENT::FULL);
+    ch4->setEntryTransition(tRaw);
+    ch4->setEntryTimestamp(carl::Interval<T>(T(2.75),T(2.9)));
+    ch4->setLocation(loc);
+
+    // query using the previously created path
+    auto timings = tProvider.getTimings(p1);
+    // timings should be null, as we do not have information in ch2.
+    EXPECT_EQ(std::nullopt, timings);
+}
