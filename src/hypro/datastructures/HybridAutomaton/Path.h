@@ -3,6 +3,7 @@
 #include "../../types.h"
 #include "Transition.h"
 #include <deque>
+#include <initializer_list>
 
 
 namespace hypro {
@@ -46,6 +47,10 @@ namespace hypro {
 
 		const carl::Interval<tNumber>& getTimestamp() const {
 			return timeInterval;
+		}
+
+		Transition<Number>* getTransition() const {
+			return transition;
 		}
 
 		/**
@@ -107,10 +112,11 @@ namespace hypro {
 			// or even better: define this recursively. A path is empty or a subpath
 			// Stefan: This is historic :).
 			bool chatteringZeno = false;
-			
+
 		public:
 
 			Path(){};
+			Path(std::initializer_list<TPathElement<Number,tNumber>> pathElems);
 			~Path(){
 				while(!mPath.empty()){
 					mPath.erase(mPath.begin());
