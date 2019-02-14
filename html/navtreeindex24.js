@@ -1,5 +1,17 @@
 var NAVTREEINDEX24 =
 {
+"classhypro_1_1PolynomialODE.html":[6,0,1,147],
+"classhypro_1_1PolynomialODE.html#a153f604c319283df5d240fb59b50287f":[6,0,1,147,4],
+"classhypro_1_1PolynomialODE.html#a50115a0c9dac62cbe93383f183136168":[6,0,1,147,2],
+"classhypro_1_1PolynomialODE.html#a6287307888d8e271d619fe67baa39c51":[6,0,1,147,1],
+"classhypro_1_1PolynomialODE.html#a7278755b59995add221da5b968bc9e5e":[6,0,1,147,0],
+"classhypro_1_1PolynomialODE.html#a7abd778d252102d60ce3763b9737fc6f":[6,0,1,147,10],
+"classhypro_1_1PolynomialODE.html#aa03228ded88fa19fde833634b6909d15":[6,0,1,147,3],
+"classhypro_1_1PolynomialODE.html#aa749868c56259cfacebe586a35d1da7a":[6,0,1,147,9],
+"classhypro_1_1PolynomialODE.html#abc3f55fc346d46049eec280d4342773f":[6,0,1,147,6],
+"classhypro_1_1PolynomialODE.html#acab98b12cb5fd61b59592d70e7b38d71":[6,0,1,147,8],
+"classhypro_1_1PolynomialODE.html#ad5526eb2f3f47b72cf7cb83ca4fcf453":[6,0,1,147,5],
+"classhypro_1_1PolynomialODE.html#aec64dcf2f6f046e562b04b3e51887264":[6,0,1,147,7],
 "classhypro_1_1PolytopeSupportFunction.html":[6,0,1,149],
 "classhypro_1_1PolytopeSupportFunction.html#a16b0c297382280271b0d83493ddc5f67":[6,0,1,149,0],
 "classhypro_1_1PolytopeSupportFunction.html#a1ceeeb0795e454b7d99e97990e5100d5":[6,0,1,149,15],
@@ -237,17 +249,5 @@ var NAVTREEINDEX24 =
 "classhypro_1_1StatisticWrapper.html#aeb83ec47a14432cf669007b093259543":[6,0,1,173,12],
 "classhypro_1_1StatisticWrapper.html#af250252bfe30434d5a181ea98d17a031":[6,0,1,173,9],
 "classhypro_1_1Strategy.html":[6,0,1,176],
-"classhypro_1_1Strategy.html#a10d9500abc0fba06fc698472cbbe6f73":[6,0,1,176,0],
-"classhypro_1_1Strategy.html#a2c725615208fc8e904120d658635d56c":[6,0,1,176,8],
-"classhypro_1_1Strategy.html#a5a35f94c8a56f290e25ab1e03028354b":[6,0,1,176,1],
-"classhypro_1_1Strategy.html#a89a6c308dcc65acc6e52c3afd595798e":[6,0,1,176,2],
-"classhypro_1_1Strategy.html#aae3e7c0352169eaa1bfb223f1b7ace43":[6,0,1,176,4],
-"classhypro_1_1Strategy.html#ad488d3a3969393a997d28c2a8aa48132":[6,0,1,176,6],
-"classhypro_1_1Strategy.html#ae2534b7c506fe839a2e1d58352543837":[6,0,1,176,5],
-"classhypro_1_1Strategy.html#ae339fd73724cecf6860afde81fbc877e":[6,0,1,176,3],
-"classhypro_1_1Strategy.html#ae70049d54958b0cbc497bcc65cb32afa":[6,0,1,176,7],
-"classhypro_1_1SupportFunctionContent.html":[6,0,1,180],
-"classhypro_1_1SupportFunctionContent.html#a02bb7659c82a822fa25a53241e59ed98":[6,0,1,180,43],
-"classhypro_1_1SupportFunctionContent.html#a083986d2adce419578717af7ff69d65a":[6,0,1,180,15],
-"classhypro_1_1SupportFunctionContent.html#a102773eba67c75ab52a2e4f9215c8909":[6,0,1,180,9]
+"classhypro_1_1Strategy.html#a10d9500abc0fba06fc698472cbbe6f73":[6,0,1,176,0]
 };

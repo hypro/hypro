@@ -140,6 +140,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a986eca962cc18e19bd77ed4bc718ca65"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a986eca962cc18e19bd77ed4bc718ca65"></a>
 const carl::Interval&lt; <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getTimestamp</b> () const </td></tr>
 <tr class="separator:a986eca962cc18e19bd77ed4bc718ca65"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2671c369f7dab94ba453163e4d0f4684"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2671c369f7dab94ba453163e4d0f4684"></a>
+<a class="el" href="classhypro_1_1Transition.html">Transition</a>&lt; Number &gt; *&#160;</td><td class="memItemRight" valign="bottom"><b>getTransition</b> () const </td></tr>
+<tr class="separator:a2671c369f7dab94ba453163e4d0f4684"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -175,7 +178,7 @@ struct hypro::TPathElement&lt; Number, tNumber &gt;</h3>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="Path_8h_source.html#l00016">16</a> of file <a class="el" href="Path_8h_source.html">Path.h</a>.</p>
+<p>Definition at line <a class="el" href="Path_8h_source.html#l00017">17</a> of file <a class="el" href="Path_8h_source.html">Path.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="a33f659c0faae4459800ef4ffe6a5111c"></a>
 <div class="memitem">
@@ -220,11 +223,11 @@ template&lt;typename Number , typename tNumber  = hypro::tNumber&gt; </div>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="Path_8h_source.html#l00025">25</a> of file <a class="el" href="Path_8h_source.html">Path.h</a>.</p>
+<p>Definition at line <a class="el" href="Path_8h_source.html#l00026">26</a> of file <a class="el" href="Path_8h_source.html">Path.h</a>.</p>
 
-<p>References <a class="el" href="Path_8h_source.html#l00025">hypro::TPathElement&lt; Number, tNumber &gt;::TPathElement()</a>.</p>
+<p>References <a class="el" href="Path_8h_source.html#l00026">hypro::TPathElement&lt; Number, tNumber &gt;::TPathElement()</a>.</p>
 
-<p>Referenced by <a class="el" href="Path_8h_source.html#l00025">hypro::TPathElement&lt; Number, tNumber &gt;::TPathElement()</a>.</p>
+<p>Referenced by <a class="el" href="Path_8h_source.html#l00026">hypro::TPathElement&lt; Number, tNumber &gt;::TPathElement()</a>.</p>
 
 </div>
 </div>
@@ -260,11 +263,11 @@ template&lt;typename Number , typename tNumber  = hypro::tNumber&gt; </div>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="Path_8h_source.html#l00034">34</a> of file <a class="el" href="Path_8h_source.html">Path.h</a>.</p>
+<p>Definition at line <a class="el" href="Path_8h_source.html#l00035">35</a> of file <a class="el" href="Path_8h_source.html">Path.h</a>.</p>
 
-<p>References <a class="el" href="Path_8h_source.html#l00034">hypro::TPathElement&lt; Number, tNumber &gt;::TPathElement()</a>.</p>
+<p>References <a class="el" href="Path_8h_source.html#l00035">hypro::TPathElement&lt; Number, tNumber &gt;::TPathElement()</a>.</p>
 
-<p>Referenced by <a class="el" href="Path_8h_source.html#l00034">hypro::TPathElement&lt; Number, tNumber &gt;::TPathElement()</a>.</p>
+<p>Referenced by <a class="el" href="Path_8h_source.html#l00035">hypro::TPathElement&lt; Number, tNumber &gt;::TPathElement()</a>.</p>
 
 </div>
 </div>
@@ -295,7 +298,7 @@ template&lt;typename Number , typename tNumber  = hypro::tNumber&gt; </div>
 <p>Determines if the element represents a discrete step. </p>
 <dl class="section return"><dt>Returns</dt><dd>True if discrete step, False otherwise. </dd></dl>
 
-<p>Definition at line <a class="el" href="Path_8h_source.html#l00043">43</a> of file <a class="el" href="Path_8h_source.html">Path.h</a>.</p>
+<p>Definition at line <a class="el" href="Path_8h_source.html#l00044">44</a> of file <a class="el" href="Path_8h_source.html">Path.h</a>.</p>
 
 </div>
 </div>
@@ -344,7 +347,7 @@ template&lt;typename Number , typename tNumber  = hypro::tNumber&gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True if both elements are not equal, False otherwise. </dd></dl>
 
-<p>Definition at line <a class="el" href="Path_8h_source.html#l00093">93</a> of file <a class="el" href="Path_8h_source.html">Path.h</a>.</p>
+<p>Definition at line <a class="el" href="Path_8h_source.html#l00098">98</a> of file <a class="el" href="Path_8h_source.html">Path.h</a>.</p>
 
 </div>
 </div>
@@ -392,7 +395,7 @@ template&lt;typename Number , typename tNumber  = hypro::tNumber&gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A reference to the outstream. </dd></dl>
 
-<p>Definition at line <a class="el" href="Path_8h_source.html#l00057">57</a> of file <a class="el" href="Path_8h_source.html">Path.h</a>.</p>
+<p>Definition at line <a class="el" href="Path_8h_source.html#l00062">62</a> of file <a class="el" href="Path_8h_source.html">Path.h</a>.</p>
 
 </div>
 </div>
@@ -440,7 +443,7 @@ template&lt;typename Number , typename tNumber  = hypro::tNumber&gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True if both elements are equal, False otherwise. </dd></dl>
 
-<p>Definition at line <a class="el" href="Path_8h_source.html#l00074">74</a> of file <a class="el" href="Path_8h_source.html">Path.h</a>.</p>
+<p>Definition at line <a class="el" href="Path_8h_source.html#l00079">79</a> of file <a class="el" href="Path_8h_source.html">Path.h</a>.</p>
 
 </div>
 </div>

@@ -9,7 +9,6 @@ var searchData=
   ['reachabilitysettings',['ReachabilitySettings',['../structhypro_1_1ReachabilitySettings.html#af91b99cf64b956259347ba1595d0ad4d',1,'hypro::ReachabilitySettings']]],
   ['reachtree',['ReachTree',['../classhypro_1_1ReachTree.html',1,'hypro']]],
   ['reachtreenode',['ReachTreeNode',['../classhypro_1_1ReachTreeNode.html',1,'hypro']]],
-  ['reachtreenode',['ReachTreeNode',['../classhypro_1_1ReachTreeNode.html#a18acb6da5ad81c81377b866882f78f3b',1,'hypro::ReachTreeNode']]],
   ['rectangularbadstatehandler',['rectangularBadStateHandler',['../classhypro_1_1rectangularBadStateHandler.html',1,'hypro']]],
   ['rectangularfirstsegmenthandler',['rectangularFirstSegmentHandler',['../classhypro_1_1rectangularFirstSegmentHandler.html',1,'hypro']]],
   ['rectangularflow',['rectangularFlow',['../classhypro_1_1rectangularFlow.html',1,'hypro']]],

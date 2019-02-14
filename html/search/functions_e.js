@@ -3,7 +3,6 @@ var searchData=
   ['rawcoordinates',['rawCoordinates',['../classhypro_1_1Point.html#a444e722bcad6e231fe24ec0dc55867df',1,'hypro::Point']]],
   ['rawpolyhedron',['rawPolyhedron',['../classhypro_1_1PolytopeT.html#a1d8c026b9efe29e4481c63ab2205640d',1,'hypro::PolytopeT']]],
   ['reachabilitysettings',['ReachabilitySettings',['../structhypro_1_1ReachabilitySettings.html#af91b99cf64b956259347ba1595d0ad4d',1,'hypro::ReachabilitySettings']]],
-  ['reachtreenode',['ReachTreeNode',['../classhypro_1_1ReachTreeNode.html#a18acb6da5ad81c81377b866882f78f3b',1,'hypro::ReachTreeNode']]],
   ['reduce',['reduce',['../classhypro_1_1HybridAutomaton.html#a18ace72be9084ee3df5c54aead596737',1,'hypro::HybridAutomaton']]],
   ['reduced',['reduced',['../classhypro_1_1VPolytopeT.html#a7f1d3b3c38761d773df2acc4e5961ffc',1,'hypro::VPolytopeT']]],
   ['reducedimension',['reduceDimension',['../classhypro_1_1Point.html#ab5852c9fed54d03484bcec3a99a99484',1,'hypro::Point']]],

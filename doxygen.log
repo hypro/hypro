@@ -2212,7 +2212,7 @@ Please use a more specific name by including a (larger) part of the path!
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/decomposition/DecisionEntity.h:23: warning: documented symbol `Singleton< DecisionEntity< Number > >' was not declared or defined.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/NodeManager.h:29: warning: documented symbol `Singleton< NodeManager< State > >' was not declared or defined.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/SettingsProvider.h:24: warning: documented symbol `Singleton< SettingsProvider< State > >' was not declared or defined.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/timing/EventTimingProvider.h:19: warning: documented symbol `Singleton< EventTimingProvider< Number > >' was not declared or defined.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/timing/EventTimingProvider.h:20: warning: documented symbol `Singleton< EventTimingProvider< Number > >' was not declared or defined.
 /home/travis/build/hypro/hypro/src/hypro/types.h:35: warning: no matching class member found for 
   template < Number >
   typedef hypro::std::set< vector_t< Number >> vectorSet()
@@ -2288,7 +2288,7 @@ Search for main page...
 Computing page relations...
 Determining the scope of groups...
 Sorting lists...
-Freeing entry treerror opening bib12279.bbl: No such file or directory
+Freeing entry treerror opening bib12230.bbl: No such file or directory
 bibtex command failed: No such file or directory
 error: Problems running bibtex. Verify that the command 'perl --version' works from the command line. Exit code: 2
 error: error: invalid value 'c++17' in '-std=c++17' [clang]
@@ -5066,5 +5066,5 @@ Running dot for graph 202/204
 Running dot for graph 203/204
 Running dot for graph 204/204
 Patching output file 1/1
-lookup cache used 7095/65536 hits=208988 misses=8268
+lookup cache used 7099/65536 hits=209065 misses=8269
 finished...

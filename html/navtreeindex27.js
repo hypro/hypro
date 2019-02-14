@@ -1,5 +1,17 @@
 var NAVTREEINDEX27 =
 {
+"classhypro_1_1WorkQueueT.html#a97e6f8d529b21e1754463d146a94389e":[6,0,1,218,18],
+"classhypro_1_1WorkQueueT.html#aa168cb736cffc7a136def76a8388c2bc":[6,0,1,218,12],
+"classhypro_1_1WorkQueueT.html#aa9d44d9015f1646def026fc2ad73ded4":[6,0,1,218,15],
+"classhypro_1_1WorkQueueT.html#aad1a9ecc69d567bd01e29721d368e73d":[6,0,1,218,8],
+"classhypro_1_1WorkQueueT.html#ab1b8c1cc409a19be47989b8e51cd3c25":[6,0,1,218,13],
+"classhypro_1_1WorkQueueT.html#ac23dfc87b80e72a7c181a9544229584b":[6,0,1,218,10],
+"classhypro_1_1WorkQueueT.html#ac675b19ebeaa41ab596d8dd1577ff128":[6,0,1,218,17],
+"classhypro_1_1WorkQueueT.html#ad26359ed06dde66f00a592719f4a3591":[6,0,1,218,11],
+"classhypro_1_1WorkQueueT.html#ad82edb6ba46e16c66aa5cd8919eaea4a":[6,0,1,218,7],
+"classhypro_1_1WorkQueueT.html#adf3b335ac5ed585c7db538f891d1956c":[6,0,1,218,2],
+"classhypro_1_1WorkQueueT.html#ae5ac9fcf41936a1f2383c87471848d36":[6,0,1,218,1],
+"classhypro_1_1WorkQueueT.html#aee52999fbf2fd883b9d07f9bd26d699d":[6,0,1,218,5],
 "classhypro_1_1ZonotopeT.html":[4,1,3],
 "classhypro_1_1ZonotopeT.html#a040863053ab1f1af805ac8f22ceeebe0":[4,1,3,41],
 "classhypro_1_1ZonotopeT.html#a06175c02604e47c76697689cad7797f0":[4,1,3,4],
@@ -237,17 +249,5 @@ var NAVTREEINDEX27 =
 "classhypro_1_1ltiInvariantHandler.html#aff2d177ca95a45b9469e78a6300f9617":[6,0,1,125,10],
 "classhypro_1_1ltiJumpHandler.html":[6,0,1,126],
 "classhypro_1_1ltiJumpHandler.html#a31d79a2fc4e9b83f9fad42d8062c3189":[6,0,1,126,3],
-"classhypro_1_1ltiJumpHandler.html#a57efa8fa07789a0602ef086c81974ed1":[6,0,1,126,5],
-"classhypro_1_1ltiJumpHandler.html#a8ad1aa8a62ff176fb42b4bb200313e7d":[6,0,1,126,0],
-"classhypro_1_1ltiJumpHandler.html#a987db540911e2d01069e31f37ed6272c":[6,0,1,126,2],
-"classhypro_1_1ltiJumpHandler.html#a9fafb0e00e69be6999a2932fef4fc32d":[6,0,1,126,6],
-"classhypro_1_1ltiJumpHandler.html#ad104c2634741119c0e4ace53a746506d":[6,0,1,126,4],
-"classhypro_1_1ltiJumpHandler.html#ada0d78ba1312a3ce681cf18908b77fe6":[6,0,1,126,1],
-"classhypro_1_1ltiResetHandler.html":[6,0,1,127],
-"classhypro_1_1ltiResetHandler.html#a1839c779fe7d525804cedab36d9c0fd4":[6,0,1,127,2],
-"classhypro_1_1ltiResetHandler.html#a2a82060214bf9f235a8de5b863d1e2be":[6,0,1,127,0],
-"classhypro_1_1ltiResetHandler.html#a51c15fe1918bb7e7d6ef912880f1a2f5":[6,0,1,127,7],
-"classhypro_1_1ltiResetHandler.html#a62768e7cc869b6cd9a3ee4cc2e3dc2ce":[6,0,1,127,3],
-"classhypro_1_1ltiResetHandler.html#a645ade46cced83a62ca5ffaca535cbf4":[6,0,1,127,4],
-"classhypro_1_1ltiResetHandler.html#aa79f55335ffe2c3d04f634d094c83dbb":[6,0,1,127,1]
+"classhypro_1_1ltiJumpHandler.html#a57efa8fa07789a0602ef086c81974ed1":[6,0,1,126,5]
 };
