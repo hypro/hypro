@@ -118,23 +118,23 @@ namespace hypro {
 			// Todo: For the last step, is this neccessary?
 			if(!transitionCandidates.empty()) {
 				TRACE("hypro.datastructures.timing","Merge invariant intervals of " << transitionCandidates.size() << " candidates.");
-				std::map<std::size_t, HierarchicalIntervalVector<Number>> mergedHIVs;
+				std::map<std::size_t, HierarchicalIntervalVector<CONTAINMENT,tNumber>> mergedHIVs;
 				for(auto it = ++transitionCandidates.begin(); it != transitionCandidates.end(); ++it) {
 					std::size_t lvl = (*it)->getLevel();
-					if(std::find(mergedHIVs.begin(), mergedHIVs.end(), lvl) == mergedHIVs.end()) {
-						mergedHIVs[lvl] = (*it)->getTimings().getInvariantTimings();
+					if( mergedHIVs.find(lvl) == mergedHIVs.end()) {
+						mergedHIVs.emplace(lvl, (*it)->getTimings().getInvariantTimings());
 					} else {
-						mergedHIVs[lvl] = merge({mergedHIVs[lvl], (*it)->getTimings().getInvariantTimings()});
+						mergedHIVs.insert_or_assign(lvl,merge({mergedHIVs.at(lvl), (*it)->getTimings().getInvariantTimings()}));
 					}
 				}
 
-				TRACE("hypro.datastructures.timing","Invariant HIV after merge: " << mergedHIV);
-				std::vector<HierarchicalIntervalVector<Number>> hivs;
+				TRACE("hypro.datastructures.timing","Invariant HIV after merge: " << mergedHIVs);
+				std::vector<HierarchicalIntervalVector<CONTAINMENT,tNumber>> hivs;
 				for(const auto& levelHivPair : mergedHIVs) {
 					hivs.emplace_back(levelHivPair.second);
 				}
 
-				auto smallestCover = smallestFullCover(hivs,pathIt->getTimestamp(), CONTAINMENT::FULL);
+				auto smallestCover = smallestFullCover(hivs, pathIt->getTimestamp(), CONTAINMENT::FULL);
 
 				if(!smallestCover) {
 					TRACE("hypro.datastructures.timing","Information incomplete, abort, required timestamp: " << pathIt->getTimestamp());
@@ -184,7 +184,7 @@ namespace hypro {
 		EventTimingContainer<Number> res = (*nodeIt)->getTimings();
 		++nodeIt;
 		for( ;nodeIt != workingSet.end(); ++nodeIt ) {
-			merge({res,(*nodeIt)->getTimings()});
+			res = merge({res,(*nodeIt)->getTimings()});
 		}
 		return res;
 	}
