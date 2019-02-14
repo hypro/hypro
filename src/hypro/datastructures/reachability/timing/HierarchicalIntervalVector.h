@@ -41,6 +41,10 @@ private:
 public:
 	HierarchicalIntervalVector() = delete;
 	HierarchicalIntervalVector(const std::vector<T>& order) : mOrder(order) {}
+	HierarchicalIntervalVector(const HierarchicalIntervalVector<T,Number>& in)
+		: mOrder(in.getTypeOrder())
+		, mIntervals(in.getIntervals())
+	{}
 
 	void initialize(const T& baseElement, Number endTime);
 
