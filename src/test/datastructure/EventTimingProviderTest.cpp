@@ -207,7 +207,63 @@ TEST_F(EventTimingTest, FindPath4)
 
     // add child node for first level (agg. setting)
     auto ch1 = tProvider.addChildToNode(initNode, 10);
-    ch1->rGetTimings().insertInvariant(carl::Interval<T>(2,4), CONTAINMENT::FULL);
+    ch1->rGetTimings().insertInvariant(carl::Interval<T>(2,5), CONTAINMENT::FULL);
+    ch1->setEntryTransition(tRaw);
+    ch1->setEntryTimestamp(carl::Interval<T>(2,3));
+    ch1->setLocation(loc);
+    ch1->setLevel(0);
+
+    // now add 3 child nodes as a result of non-aggregation
+    // covered entry timestamps [2,2.9]
+
+    // add child node for second level (non-agg. setting)
+    auto ch2 = tProvider.addChildToNode(initNode, 10);
+    ch2->rGetTimings().insertInvariant(carl::Interval<T>(2,3), CONTAINMENT::FULL);
+    ch2->setEntryTransition(tRaw);
+    ch2->setEntryTimestamp(carl::Interval<T>(2,2.25));
+    ch2->setLocation(loc);
+    ch2->setLevel(1);
+
+    auto ch3 = tProvider.addChildToNode(initNode, 10);
+    ch3->rGetTimings().insertInvariant(carl::Interval<T>(3,4), CONTAINMENT::FULL);
+    ch3->setEntryTransition(tRaw);
+    ch3->setEntryTimestamp(carl::Interval<T>(T(2.25),T(2.75)));
+    ch3->setLocation(loc);
+    ch3->setLevel(1);
+
+    auto ch4 = tProvider.addChildToNode(initNode, 10);
+    //ch4->rGetTimings().insertInvariant(carl::Interval<T>(4,5), CONTAINMENT::FULL);
+    ch4->setEntryTransition(tRaw);
+    ch4->setEntryTimestamp(carl::Interval<T>(T(2.75),T(2.9)));
+    ch4->setLocation(loc);
+    ch4->setLevel(1);
+
+    // query using the previously created path
+    auto timings = tProvider.getTimings(p1);
+    EXPECT_NE(std::nullopt, timings);
+}
+
+/**
+ * @brief Performing a more complex path find. Idea: We want to simulate several levels of refinement. In this particular test, the most refined setting should be taken (level 1, non-aggregating)
+ */
+TEST_F(EventTimingTest, FindPath5)
+{
+    auto& tProvider = EventTimingProvider<double>::getInstance();
+
+    // create some fictional path using location and transition.
+    Path<double,T> p1{
+        {carl::Interval<T>(0,3)},
+        {tRaw, carl::Interval<T>(2,3)},
+        {carl::Interval<T>(2,5)},
+    };
+
+    // add transition event
+    initNode->rGetTimings().insertTransition(tRaw, carl::Interval<T>(2,3), CONTAINMENT::YES);
+
+    // add child node for first level (agg. setting)
+    auto ch1 = tProvider.addChildToNode(initNode, 10);
+    // set invariant coarser than required
+    ch1->rGetTimings().insertInvariant(carl::Interval<T>(2,6), CONTAINMENT::FULL);
     ch1->setEntryTransition(tRaw);
     ch1->setEntryTimestamp(carl::Interval<T>(2,3));
     ch1->setLocation(loc);
@@ -240,6 +296,5 @@ TEST_F(EventTimingTest, FindPath4)
 
     // query using the previously created path
     auto timings = tProvider.getTimings(p1);
-    // timings should be null, as we do not have information in ch2.
     EXPECT_NE(std::nullopt, timings);
 }
