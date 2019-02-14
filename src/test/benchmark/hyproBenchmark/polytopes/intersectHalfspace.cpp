@@ -4,11 +4,11 @@
 namespace benchmark {
 namespace polytope {
 
-    Results<int> intersectHalfspace(const Settings& settings) {
-        Results<int> res;
+    Results<std::size_t> intersectHalfspace(const Settings& settings) {
+        Results<std::size_t> res;
 
         return res;
     }
-        
-} // polytope 
+
+} // polytope
 } // benchmark
