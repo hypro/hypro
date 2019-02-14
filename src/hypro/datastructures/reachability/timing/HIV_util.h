@@ -43,7 +43,7 @@ namespace hypro {
             // we assume the intervals returned are pairwise-disjunct.
             if(intervals.size() == 1){
                 DEBUG("hypro.datastructures.hiv", "Intersecting interval: " << intervals[0]);
-                if(intervals[0].contains(smallest) && intervals[0].contains(intv)) {
+                if(smallest.contains(intervals[0]) && intervals[0].contains(intv)) {
                     smallest = intervals[0];
                     res = i;
                     hasFullCover = true;
