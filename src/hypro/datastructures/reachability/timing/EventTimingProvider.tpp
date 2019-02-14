@@ -119,12 +119,14 @@ namespace hypro {
 			if(!transitionCandidates.empty()) {
 				TRACE("hypro.datastructures.timing","Merge invariant intervals of " << transitionCandidates.size() << " candidates.");
 				std::map<std::size_t, HierarchicalIntervalVector<CONTAINMENT,tNumber>> mergedHIVs;
-				for(auto it = ++transitionCandidates.begin(); it != transitionCandidates.end(); ++it) {
+				for(auto it = transitionCandidates.begin(); it != transitionCandidates.end(); ++it) {
 					std::size_t lvl = (*it)->getLevel();
 					if( mergedHIVs.find(lvl) == mergedHIVs.end()) {
 						mergedHIVs.emplace(lvl, (*it)->getTimings().getInvariantTimings());
+						TRACE("hypro.datastructures.timing","Found first HIV for level " << lvl << ": " << mergedHIVs.at(lvl));
 					} else {
 						mergedHIVs.insert_or_assign(lvl,merge({mergedHIVs.at(lvl), (*it)->getTimings().getInvariantTimings()}));
+						TRACE("hypro.datastructures.timing","Found another HIV for level " << lvl << " (after merge): " << mergedHIVs.at(lvl));
 					}
 				}
 
@@ -137,9 +139,10 @@ namespace hypro {
 				auto smallestCover = smallestFullCover(hivs, pathIt->getTimestamp(), CONTAINMENT::FULL);
 
 				if(!smallestCover) {
-					TRACE("hypro.datastructures.timing","Information incomplete, abort, required timestamp: " << pathIt->getTimestamp());
+					TRACE("hypro.datastructures.timing","No refinement level covers the invariant, abort.");
 					return std::nullopt;
 				} else {
+					TRACE("hypro.datastructures.timing","Refinement level " << *smallestCover << " has the most precise settings.");
 					for(auto it = transitionCandidates.begin(); it != transitionCandidates.end();) {
 						if( (*it)->getLevel() != smallestCover ) {
 							it = transitionCandidates.erase(it);
@@ -147,14 +150,17 @@ namespace hypro {
 							++it;
 						}
 					}
+					TRACE("hypro.datastructures.timing","Have " << transitionCandidates.size() << " nodes on level " << *smallestCover);
 				}
 			}
 
 			// follow the discrete jump, if applicable
 			++pathIt;
+			// compute fresh working set - either from taking a discrete jump or by copy.
+			workingSet.clear();
 			if(pathIt != path.end()) {
 				// set up new working set
-				workingSet.clear();
+
 
 				TRACE("hypro.datastructures.timing","Follow discrete step, have " << transitionCandidates.size() << " nodes.");
 
@@ -169,6 +175,9 @@ namespace hypro {
 				}
 				// increase pathIt to the next time step or the end of the path
 				++pathIt;
+			} else {
+				// the last element in the path was a time step, move nodes to workingSet
+				workingSet = transitionCandidates;
 			}
 		}
 

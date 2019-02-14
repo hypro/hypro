@@ -207,7 +207,7 @@ TEST_F(EventTimingTest, FindPath4)
 
     // add child node for first level (agg. setting)
     auto ch1 = tProvider.addChildToNode(initNode, 10);
-    ch1->rGetTimings().insertInvariant(carl::Interval<T>(2,5), CONTAINMENT::FULL);
+    ch1->rGetTimings().insertInvariant(carl::Interval<T>(2,4), CONTAINMENT::FULL);
     ch1->setEntryTransition(tRaw);
     ch1->setEntryTimestamp(carl::Interval<T>(2,3));
     ch1->setLocation(loc);
@@ -241,5 +241,5 @@ TEST_F(EventTimingTest, FindPath4)
     // query using the previously created path
     auto timings = tProvider.getTimings(p1);
     // timings should be null, as we do not have information in ch2.
-    EXPECT_EQ(std::nullopt, timings);
+    EXPECT_NE(std::nullopt, timings);
 }
