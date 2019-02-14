@@ -204,6 +204,8 @@ TYPED_TEST(ConverterTest, toBox)
     Converter<TypeParam>::template toBox<BoxLinearOptimizationOn>(this->pplpolytope);
     Converter<TypeParam>::template toBox<BoxLinearOptimizationOn>(this->pplpolytope2);
     #endif
+    Converter<TypeParam>::template toBox<BoxLinearOptimizationOn>(this->sfn1);
+    Converter<TypeParam>::template toBox<BoxLinearOptimizationOn>(this->sfn2);
     SUCCEED();
 }
 
@@ -262,6 +264,8 @@ TYPED_TEST(ConverterTest, toVPolytope)
     auto result10 = Converter<TypeParam>::toVPolytope(this->pplpolytope);
     auto result11 = Converter<TypeParam>::toVPolytope(this->pplpolytope2);
     #endif
+    auto result12 = Converter<TypeParam>::toVPolytope(this->sfn1);
+    auto result13 = Converter<TypeParam>::toVPolytope(this->sfn2);
 	SUCCEED();
 }
 
@@ -280,12 +284,13 @@ TYPED_TEST(ConverterTest, toZonotope)
     auto result10 = Converter<TypeParam>::toZonotope(this->pplpolytope);
     auto result11 = Converter<TypeParam>::toZonotope(this->pplpolytope2);
     #endif
+    auto result12 = Converter<TypeParam>::toZonotope(this->sfn1);
+    auto result13 = Converter<TypeParam>::toZonotope(this->sfn2);
 	SUCCEED();
 }
 
 #ifdef HYPRO_USE_PPL
 TYPED_TEST(ConverterTest, toPolytope){
-
 	auto result1 = Converter<TypeParam>::toPolytope(this->box);
 	auto result2 = Converter<TypeParam>::toPolytope(this->zonotope);
 	auto result3 = Converter<TypeParam>::toPolytope(this->vpolytope);
@@ -296,9 +301,31 @@ TYPED_TEST(ConverterTest, toPolytope){
 	auto result8 = Converter<TypeParam>::toPolytope(this->support);
 	auto result9 = Converter<TypeParam>::toPolytope(this->support2);
 	auto result10 = Converter<TypeParam>::toPolytope(this->pplpolytope);
+    auto result11 = Converter<TypeParam>::toPolytope(this->sfn1);
+    auto result12 = Converter<TypeParam>::toPolytope(this->sfn2);
 	SUCCEED();
 }
 #endif
+
+TYPED_TEST(ConverterTest, toSupportFunctionNew)
+{
+    auto result = Converter<TypeParam>::toSupportFunctionNew(this->zonotope);
+    auto result2 = Converter<TypeParam>::toSupportFunctionNew(this->box);
+    auto result3 = Converter<TypeParam>::toSupportFunctionNew(this->vpolytope);
+    auto result4 = Converter<TypeParam>::toSupportFunctionNew(this->vpolytope2);
+    auto result5 = Converter<TypeParam>::toSupportFunctionNew(this->vpolytope3);
+    auto result6 = Converter<TypeParam>::toSupportFunctionNew(this->hpolytope);
+    auto result7 = Converter<TypeParam>::toSupportFunctionNew(this->hpolytope2);
+    auto result8 = Converter<TypeParam>::toSupportFunctionNew(this->support, ALTERNATIVE);
+    auto result9 = Converter<TypeParam>::toSupportFunctionNew(this->support2, ALTERNATIVE);
+    #ifdef HYPRO_USE_PPL
+    auto result10 = Converter<TypeParam>::toSupportFunctionNew(this->pplpolytope);
+    auto result11 = Converter<TypeParam>::toSupportFunctionNew(this->pplpolytope2);
+    #endif
+    auto result12 = Converter<TypeParam>::toSupportFunctionNew(this->sfn1);
+    auto result13 = Converter<TypeParam>::toSupportFunctionNew(this->sfn2);
+    SUCCEED();
+}
 
 TYPED_TEST(ConverterTest, settingsConversion)
 {

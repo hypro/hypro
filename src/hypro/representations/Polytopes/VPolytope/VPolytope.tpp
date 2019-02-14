@@ -433,6 +433,41 @@ void VPolytopeT<Number, Converter, S>::clear() {
 }
 
 template <typename Number, typename Converter, typename S>
+EvaluationResult<Number> VPolytopeT<Number,Converter,S>::evaluate(const vector_t<Number>& direction) const {
+	if(direction == vector_t<Number>::Zero(direction.rows())) 
+		return EvaluationResult<Number>();
+	Number maxDist = Number(-1e20);
+	EvaluationResult<Number> res;
+	for(const auto& vertex : mVertices){
+		//Point with the furthest distance to the direction vector is the optimal point and is always a corner
+		Number dist = direction.dot(vertex.rawCoordinates());
+		if(dist > maxDist){
+			maxDist = dist;
+			res.optimumValue = vertex.rawCoordinates();
+		}
+	}
+	Number sumOfSquares = Number(0);
+	for(Eigen::Index i = 0; i < direction.rows(); ++i){
+		sumOfSquares += carl::pow(direction(i),2);
+	}
+	res.supportValue = Number(maxDist / sumOfSquares);
+	res.errorCode = SOLUTION::FEAS;
+	return res;
+}
+
+template <typename Number, typename Converter, typename S>
+std::vector<EvaluationResult<Number>> VPolytopeT<Number,Converter,S>::multiEvaluate(const matrix_t<Number>& directions, bool ) const {
+	if(directions == matrix_t<Number>::Zero(directions.rows(), directions.cols()))
+		return std::vector<EvaluationResult<Number>>();
+	std::vector<EvaluationResult<Number>> allRes;
+	for(int i = 0; i < directions.rows(); ++i){
+		EvaluationResult<Number> res = evaluate(directions.row(i));
+		allRes.emplace_back(res);
+	}
+	return allRes;
+}
+
+template <typename Number, typename Converter, typename S>
 Number VPolytopeT<Number, Converter, S>::supremum() const {
 	Number max = 0;
 	for ( auto &point : mVertices ) {

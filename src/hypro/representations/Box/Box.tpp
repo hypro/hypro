@@ -252,25 +252,36 @@ std::vector<Point<Number>> BoxT<Number,Converter,Setting>::vertices( const matri
 
 template<typename Number, typename Converter, class Setting>
 EvaluationResult<Number> BoxT<Number,Converter,Setting>::evaluate( const vector_t<Number>& _direction, bool ) const {
+	DEBUG("hypro.representations.box","In evaluate. direction: " << std::endl << _direction);
+	//std::cout << "In Box::evaluate. direction rows: " << _direction.rows() << " and direction itself: " << _direction << std::endl;
+	//std::cout << "In Box::evaluate. Box itself is: " << *this << std::endl;
 	assert(_direction.rows() == Eigen::Index(this->dimension()));
+	//std::cout << "In evaluate. assert okay" << std::endl;
 	if(this->empty()){
+		//std::cout << "In evaluate. box was empty" << std::endl;
 		return EvaluationResult<Number>(); // defaults to infeasible, i.e. empty.
 	}
-
+	//std::cout << "In evaluate. box not empty" << std::endl;
 	// find the point, which represents the maximum towards the direction - compare signs.
 	vector_t<Number> furthestPoint = vector_t<Number>(this->dimension());
 	for(Eigen::Index i = 0; i < furthestPoint.rows(); ++i) {
+	//for(Eigen::Index i = 0; i < this->dimension(); ++i) {
 		furthestPoint(i) = _direction(i) >= 0 ? mLimits[i].upper() : mLimits[i].lower();
 	}
+	//std::cout << "In evaluate. passed loop" << std::endl;
 	return EvaluationResult<Number>(furthestPoint.dot(_direction),furthestPoint,SOLUTION::FEAS);
 }
 
 template<typename Number, typename Converter, class Setting>
 std::vector<EvaluationResult<Number>> BoxT<Number,Converter,Setting>::multiEvaluate( const matrix_t<Number>& _directions, bool useExact ) const {
+	DEBUG("hypro.representations.box","In Box::multiEvaluate. directions: " << std::endl << _directions);
+	////std::cout << "In Box::multiEvaluate. directions: " << _directions << std::endl;
 	std::vector<EvaluationResult<Number>> res;
 	for(Eigen::Index i = 0; i < _directions.rows(); ++i) {
-		res.emplace_back(this->evaluate(vector_t<Number>(_directions.row(i)), useExact));
+		//res.emplace_back(this->evaluate(vector_t<Number>(_directions.row(i)), useExact));
+		res.emplace_back(this->evaluate(vector_t<Number>(_directions.row(i).transpose()), useExact));
 	}
+	//std::cout << "In Box::multiEvaluate. passed loop" << std::endl;
 	return res;
 }
 

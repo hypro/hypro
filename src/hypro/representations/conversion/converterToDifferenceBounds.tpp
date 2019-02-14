@@ -126,9 +126,10 @@ DifferenceBoundsT<Number,Converter<Number>,DBSetting> Converter<Number>::toDiffe
     return toDifferenceBounds(tmp);
 }
 
-//TODO
 template<typename Number>
 template<typename DBSetting, typename inSetting>
 DifferenceBoundsT<Number,Converter<Number>,DBSetting> Converter<Number>::toDifferenceBounds(const SupportFunctionNewT<Number,Converter<Number>,inSetting>& source, const CONV_MODE ){
-    return DifferenceBoundsT<Number,Converter<Number>,DBSetting>();
+    // TODO make better, this is just the cheap solution
+    HPolytope tmp = toHPolytope(source);
+    return toDifferenceBounds(tmp);
 }

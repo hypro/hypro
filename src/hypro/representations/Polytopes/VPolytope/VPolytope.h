@@ -154,8 +154,8 @@ class VPolytopeT : public GeometricObject<Number, VPolytopeT<Number,Converter,S>
 	 */
 	void clear();
 
-	EvaluationResult<Number> evaluate(const matrix_t<Number>& directions) const __attribute__((warning("not implemented")));
-	std::vector<EvaluationResult<Number>> multiEvaluate(const matrix_t<Number>& directions, bool useExact = true) const __attribute__((warning("not implemented")));
+	EvaluationResult<Number> evaluate(const vector_t<Number>& direction) const;
+	std::vector<EvaluationResult<Number>> multiEvaluate(const matrix_t<Number>& directions, bool useExact = true) const;
 
 	/***************************************************************************
 	 * Getters, Setters, Iterators

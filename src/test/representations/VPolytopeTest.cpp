@@ -356,3 +356,51 @@ TYPED_TEST(VPolytopeTest, Membership)
 	Point<TypeParam> p4({2, 2});
 	EXPECT_TRUE(vpt1.contains(p4));
 }
+
+TYPED_TEST(VPolytopeTest, Evaluation)
+{
+	//With direction (0,0)
+	VPolytope<TypeParam> vpt1 = VPolytope<TypeParam>(this->points1);
+	vector_t<TypeParam> dir0 = vector_t<TypeParam>::Zero(2);
+	EvaluationResult<TypeParam> res0 = vpt1.evaluate(dir0);
+	EXPECT_EQ(res0.optimumValue, vector_t<TypeParam>::Zero(0));
+	EXPECT_EQ(res0.supportValue, TypeParam(0));
+	EXPECT_EQ(res0.errorCode, hypro::SOLUTION::INFEAS);
+
+	//With a direction
+	vector_t<TypeParam> dir1 = vector_t<TypeParam>::Ones(2);
+	EvaluationResult<TypeParam> res1 = vpt1.evaluate(dir1);
+	EXPECT_EQ(res1.optimumValue, this->points1.at(2).rawCoordinates());
+	EXPECT_EQ(res1.supportValue, TypeParam(3.5));
+	EXPECT_EQ(res1.errorCode, hypro::SOLUTION::FEAS);
+
+	//With same direction but double the size
+	vector_t<TypeParam> dir2 = 2*dir1; 
+	EvaluationResult<TypeParam> res2 = vpt1.evaluate(dir2);
+	EXPECT_EQ(res2.optimumValue, this->points1.at(2).rawCoordinates());
+	EXPECT_EQ(res2.supportValue, TypeParam(1.75));
+	EXPECT_EQ(res2.errorCode, hypro::SOLUTION::FEAS);
+
+	//With double direction but inversed
+	vector_t<TypeParam> dir3 = -dir2; 
+	EvaluationResult<TypeParam> res3 = vpt1.evaluate(dir3);
+	EXPECT_EQ(res3.optimumValue, this->points1.at(0).rawCoordinates());
+	EXPECT_EQ(res3.supportValue, TypeParam(-0.75));
+	EXPECT_EQ(res3.errorCode, hypro::SOLUTION::FEAS);
+
+	//Multievaluate all three directions at once
+	matrix_t<TypeParam> dirs = matrix_t<TypeParam>::Zero(3,2);
+	dirs.row(0) = dir1;
+	dirs.row(1) = dir2;
+	dirs.row(2) = dir3;
+	std::vector<EvaluationResult<TypeParam>> res4 = vpt1.multiEvaluate(dirs);
+	EXPECT_EQ(res4.at(0).optimumValue, this->points1.at(2).rawCoordinates());
+	EXPECT_EQ(res4.at(0).supportValue, TypeParam(3.5));
+	EXPECT_EQ(res4.at(0).errorCode, hypro::SOLUTION::FEAS);
+	EXPECT_EQ(res4.at(1).optimumValue, this->points1.at(2).rawCoordinates());
+	EXPECT_EQ(res4.at(1).supportValue, TypeParam(1.75));
+	EXPECT_EQ(res4.at(1).errorCode, hypro::SOLUTION::FEAS);
+	EXPECT_EQ(res4.at(2).optimumValue, this->points1.at(0).rawCoordinates());
+	EXPECT_EQ(res4.at(2).supportValue, TypeParam(-0.75));
+	EXPECT_EQ(res4.at(2).errorCode, hypro::SOLUTION::FEAS);
+}

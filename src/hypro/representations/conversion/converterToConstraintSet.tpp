@@ -72,5 +72,5 @@ ConstraintSetT<Number,CSSetting> Converter<Number>::toConstraintSet( const Diffe
 template<typename Number>
 template<typename CSSetting, typename inSetting>
 ConstraintSetT<Number,CSSetting> Converter<Number>::toConstraintSet( const SupportFunctionNewT<Number,Converter<Number>,inSetting>& _source, const CONV_MODE mode ) {
-	return Converter<Number>::ConstraintSet();
+	return ConstraintSetT<Number,CSSetting>(_source.matrix(), _source.vector());
 }

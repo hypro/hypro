@@ -52,7 +52,7 @@ class BoxT : public GeometricObject<Number, BoxT<Number,Converter,Setting>> {
   protected:
 
     std::vector<carl::Interval<Number>> mLimits; 	/*!< Box as a vector of intervals. */
-	bool 								mEmpty; 	/*!< Cache for emptines. */
+	bool 								mEmpty; 	/*!< Cache for emptiness. */
 
   public:
 	/***************************************************************************
