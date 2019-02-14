@@ -181,6 +181,50 @@ namespace hypro {
 	}
 
 	template<typename T, typename Number>
+	std::vector<carl::Interval<Number>> HierarchicalIntervalVector<T, Number>::getIntersectingIntervals(const carl::Interval<Number>& timeInterval, const T& type) const {
+		std::vector<carl::Interval<Number>> res;
+		DEBUG("hypro.datastructures.hiv", "In: " << timeInterval << ", type " << type << ", this: " << *this );
+		// synthesize intervals which intersect the passed interval
+		for(auto it = mIntervals.begin(); it != mIntervals.end(); ++it) {
+			TRACE("hypro.datastructures.hiv", "Current interval: " << *it );
+			if(it->timePoint < timeInterval.lower()) {
+				continue;
+			}
+
+			// first time point requires special care.
+			if(it == mIntervals.begin()) {
+				TRACE("hypro.datastructures.hiv", "First interval" );
+				if(timeInterval.lower() <= it->timePoint) {
+					TRACE("hypro.datastructures.hiv", "Bounds match" );
+					if(it->type == type) {
+						DEBUG("hypro.datastructures.hiv", "Types match (first interval) - return true." );
+						res.emplace_back(carl::Interval<Number>(timeInterval.lower(), it->timePoint));
+					}
+				}
+			}
+
+			if(it != mIntervals.begin() && carl::set_have_intersection(timeInterval,carl::Interval<Number>(std::prev(it,1)->timePoint, it->timePoint)) && it->type == type) {
+				DEBUG("hypro.datastructures.hiv", "Bound and type match - return true." );
+				res.emplace_back(carl::Interval<Number>(std::prev(it,1)->timePoint, it->timePoint) );
+			}
+
+			// too far.
+			if(it != mIntervals.begin() && std::prev(it,1)->timePoint > timeInterval.upper()){
+				DEBUG("hypro.datastructures.hiv", "No matching time interval found - return false." );
+				break;
+			}
+		}
+		// assert that all intervals are pairwise disjunct -- similar to sanity check.
+		#ifndef NDEBUG
+		for(auto it = res.begin(); it != res.end(); ++it) {
+			assert(it == res.begin() || !carl::set_have_intersection(*it, *std::prev(it)));
+		}
+		#endif
+		DEBUG("hypro.datastructures.hiv", "Found " << res.size() << " intersecting intervals.");
+		return res;
+	}
+
+	template<typename T, typename Number>
 	void HierarchicalIntervalVector<T, Number>::merge(const HierarchicalIntervalVector<T,Number>& rhs) {
 		Number prevTimepoint = Number(0);
 		for(auto& endPoint : rhs.getIntervals()) {

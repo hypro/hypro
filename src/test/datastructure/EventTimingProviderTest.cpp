@@ -211,6 +211,7 @@ TEST_F(EventTimingTest, FindPath4)
     ch1->setEntryTransition(tRaw);
     ch1->setEntryTimestamp(carl::Interval<T>(2,3));
     ch1->setLocation(loc);
+    ch1->setLevel(0);
 
     // now add 3 child nodes as a result of non-aggregation
     // covered entry timestamps [2,2.9]
@@ -221,18 +222,21 @@ TEST_F(EventTimingTest, FindPath4)
     ch2->setEntryTransition(tRaw);
     ch2->setEntryTimestamp(carl::Interval<T>(2,2.25));
     ch2->setLocation(loc);
+    ch2->setLevel(1);
 
     auto ch3 = tProvider.addChildToNode(initNode, 10);
     ch3->rGetTimings().insertInvariant(carl::Interval<T>(3,4), CONTAINMENT::FULL);
     ch3->setEntryTransition(tRaw);
     ch3->setEntryTimestamp(carl::Interval<T>(T(2.25),T(2.75)));
     ch3->setLocation(loc);
+    ch3->setLevel(1);
 
     auto ch4 = tProvider.addChildToNode(initNode, 10);
     ch4->rGetTimings().insertInvariant(carl::Interval<T>(4,5), CONTAINMENT::FULL);
     ch4->setEntryTransition(tRaw);
     ch4->setEntryTimestamp(carl::Interval<T>(T(2.75),T(2.9)));
     ch4->setLocation(loc);
+    ch4->setLevel(1);
 
     // query using the previously created path
     auto timings = tProvider.getTimings(p1);
