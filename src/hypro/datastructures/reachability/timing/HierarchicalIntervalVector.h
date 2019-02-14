@@ -83,6 +83,8 @@ public:
 
 	std::vector<carl::Interval<Number>> getIntersectionIntervals(const carl::Interval<Number>& timeInterval, const T& type) const;
 
+	std::vector<carl::Interval<Number>> getIntersectingIntervals(const carl::Interval<Number>& timeInterval, const T& type) const;
+
 	void merge(const HierarchicalIntervalVector<T,Number>& rhs);
 
 	const endPoint<T,Number>& back() const;

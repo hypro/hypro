@@ -118,16 +118,35 @@ namespace hypro {
 			// Todo: For the last step, is this neccessary?
 			if(!transitionCandidates.empty()) {
 				TRACE("hypro.datastructures.timing","Merge invariant intervals of " << transitionCandidates.size() << " candidates.");
-				auto mergedHIV = (*transitionCandidates.begin())->getTimings().getInvariantTimings();
+				std::map<std::size_t, HierarchicalIntervalVector<Number>> mergedHIVs;
 				for(auto it = ++transitionCandidates.begin(); it != transitionCandidates.end(); ++it) {
-					mergedHIV = merge({mergedHIV, (*it)->getTimings().getInvariantTimings()});
+					std::size_t lvl = (*it)->getLevel();
+					if(std::find(mergedHIVs.begin(), mergedHIVs.end(), lvl) == mergedHIVs.end()) {
+						mergedHIVs[lvl] = (*it)->getTimings().getInvariantTimings();
+					} else {
+						mergedHIVs[lvl] = merge({mergedHIVs[lvl], (*it)->getTimings().getInvariantTimings()});
+					}
 				}
 
 				TRACE("hypro.datastructures.timing","Invariant HIV after merge: " << mergedHIV);
+				std::vector<HierarchicalIntervalVector<Number>> hivs;
+				for(const auto& levelHivPair : mergedHIVs) {
+					hivs.emplace_back(levelHivPair.second);
+				}
 
-				if(!fullCover(mergedHIV, pathIt->getTimestamp(), CONTAINMENT::FULL)) {
+				auto smallestCover = smallestFullCover(hivs,pathIt->getTimestamp(), CONTAINMENT::FULL);
+
+				if(!smallestCover) {
 					TRACE("hypro.datastructures.timing","Information incomplete, abort, required timestamp: " << pathIt->getTimestamp());
 					return std::nullopt;
+				} else {
+					for(auto it = transitionCandidates.begin(); it != transitionCandidates.end();) {
+						if( (*it)->getLevel() != smallestCover ) {
+							it = transitionCandidates.erase(it);
+						} else {
+							++it;
+						}
+					}
 				}
 			}
 
