@@ -5,8 +5,8 @@
 #include "@MHyProObject/MHyProSupportFunction.h"
 #include "@MHyProHAutomaton/MHybridAutomaton.h"
 // #include "@MHyProCondition/MCondition.h"
-// #include "@MHyProFlow/MLinearFlow.h"
-// #include "@MHyProFlow/MAffineFlow.h"
+#include "@MHyProFlow/MLinearFlow.h"
+#include "@MHyProFlow/MAffineFlow.h"
 // #include "@MHyProLabel/MLabel.h"
 // #include "@MHyProLocation/MLocation.h"
 // #include "@MHyProLocation/MLocation.h"
@@ -34,7 +34,6 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
         // MHyProTaylorModel::process(nlhs, plhs, nrhs, prhs);
     }else if(!strcmp(type, "HybridAutomaton")){
         MHybridAutomaton::process(nlhs, plhs, nrhs, prhs);
-    
     // }else if(!strcmp(type, "Condition")){
     //     MCondition::process(nlhs, plhs, nrhs, prhs);
     // }else if(!strcmp(type, "Location")){
@@ -43,10 +42,10 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
     //     MTransition::process(nlhs, plhs, nrhs, prhs);
     // }else if(!strcmp(type, "Label")){
     //     MLabel::process(nlhs, plhs, nrhs, prhs);
-    // }else if(!strcmp(type, "LinearFlow")){
-    //     MLinearFlow::process(nlhs, plhs, nrhs, prhs);
-    // }else if(!strcmp(type, "AffineFlow")){
-    //     MAffineFlow::process(nlhs, plhs, nrhs, prhs);
+    }else if(!strcmp(type, "linearFlow")){
+        MLinearFlow::process(nlhs, plhs, nrhs, prhs);
+    }else if(!strcmp(type, "affineFlow")){
+        MAffineFlow::process(nlhs, plhs, nrhs, prhs);
     // }else if(!strcmp(type, "State")){
     //     MState::process(nlhs, plhs, nrhs, prhs);
     }else{

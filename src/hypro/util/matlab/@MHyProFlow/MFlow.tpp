@@ -66,7 +66,7 @@ void MFlow<T>::type(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
     }else if(type == hypro::DynamicType::rectangular){
         ans = "rectangluar";
     }else{
-        ans = "timed"
+        ans = "timed";
     }
     plhs[0] = mxCreateString(ans.c_str());
 }

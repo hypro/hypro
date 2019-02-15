@@ -7,40 +7,43 @@ classdef MHyProFlow < handle
     
     methods (Access = private)
         
-        % Destructor
-        function delete(obj)
+    % Destructor
+    function delete(obj)
             MHyPro(obj.Type, 'delete', obj.Handle);
         end
     end
     
     methods (Access = public)
         
-        % Constructor
-    function obj = MHyProFlow(varargin) 
+        function obj = MHyProFlow(varargin)
             if strcmp(varargin{1},'linearFlow') || strcmp(varargin{1},'affineFlow')
                 obj.Type = varargin{1};
             else
                 error('MHyProFlow - Constructor: Unknown type.');
-            end
-                
-            if nargin == 2
+            end 
+
+            if nargin == 1
+                % Call the constructor for empty flow
+                obj.Handle = MHyPro(varargin{1}, 'new_empty');
+            elseif nargin == 2
                 if isa(varargin{2}, 'uint64')
-                    obj.Handle = varargin{2};
+                    % Call the copy constructor
+                    obj.Handle = MHyPro(varargin{1}, 'copy', varargin{2});
+                elseif strcmp(varargin{1}, 'linearFlow') && ismatrix(varargin{2})
+                    % Call the matrix constructor for linear flow
+                    obj.Handle = MHyPro('linearFlow', 'new_mat', varargin{2});
                 else
-                    obj.Handle = MHyPro(varargin{1}, varargin{2});
+                    error('MHyProFlow - Constructor: Wrong type of at least one argument.');
                 end
             elseif nargin == 3
-                if strcmp(varargin{2},'copy')
-                    obj.Handle = MHyPro(varargin{1}, varargin{2}, varargin{3}.Handle);
+                if strcmp(varargin{1}, 'affineFlow') && ismatrix(varargin{2}) && isvector(varargin{3})
+                    % Call the matrix-vector constructor for affine flow
+                    obj.Handle = MHyPro('affineFlow', 'new_mat_vec' ,varargin{2}, varargin{3});
                 else
-                    obj.Handle = MHyPro(varargin{1}, varargin{2}, varargin{3});
+                    error('MHyproFlow - Constructor: Wrong type of at leat one argument.');
                 end
-            elseif nargin == 4
-                obj.Handle = MHyPro(varargin{1}, varargin{2}, varargin{3}, varargin{4});
-            elseif nargin == 5
-                obj.Handle = MHyPro(varargin{1}, varargin{2}, varargin{3}, varargin{4}, varargin{5});
-            elseif nargin == 6
-                obj.Handle = MHyPro(varargin{1}, varargin{2}, varargin{3}, varargin{4}, varargin{5}, varargin{6});
+            else
+                error('MHyproFlow - Constructor: Wrong type of at leat one argument.');
             end
         end
 

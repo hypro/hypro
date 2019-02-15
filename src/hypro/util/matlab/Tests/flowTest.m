@@ -12,6 +12,9 @@ linFlow_mat = MHyProFlow('linearFlow', flowMatrix);
 out = linFlow_mat.hasNoFlow();
 disp(['hasNoFlow(): ', num2str(out)]);
 
+size = linFlow_mat.size();
+disp(['size(): ', num2str(size)]);
+
 
 
 
