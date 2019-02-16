@@ -60,7 +60,13 @@ TEST_F(EventTimingTest, FindPath1)
 
     // the path expects one transition event and consequently a child node, which is not yet present
     EXPECT_EQ(nullptr, tProvider.getTimingNode(p1));
-    EXPECT_EQ(std::nullopt, tProvider.getTimings(p1));
+
+    auto timings = tProvider.getTimings(p1);
+    if(timings) {
+        std::cout << "Obtained timings: " << std::endl << *timings << std::endl;
+    }
+
+    EXPECT_EQ(std::nullopt, timings);
 
     // simulate a transition event:
     // create timing node
@@ -118,8 +124,10 @@ TEST_F(EventTimingTest, FindPath2)
 
     // query using the previously created path
     auto timings = tProvider.getTimings(p1);
+
     EXPECT_NE(std::nullopt, timings);
     if(timings) {
+        std::cout << "Obtained timings: " << std::endl << *timings << std::endl;
         EXPECT_TRUE((*timings).satisfiedInvariant(carl::Interval<T>(1,5)));
     }
 }
@@ -183,6 +191,7 @@ TEST_F(EventTimingTest, FindPath3)
     // timings should be null, as we do not have information in ch2.
     EXPECT_NE(std::nullopt, timings);
     if(timings) {
+        std::cout << "Obtained timings: " << std::endl << *timings << std::endl;
         EXPECT_TRUE((*timings).satisfiedInvariant(carl::Interval<T>(1,2)));
     }
 }
@@ -240,6 +249,9 @@ TEST_F(EventTimingTest, FindPath4)
 
     // query using the previously created path
     auto timings = tProvider.getTimings(p1);
+    if(timings) {
+        std::cout << "Obtained timings: " << std::endl << *timings << std::endl;
+    }
     EXPECT_NE(std::nullopt, timings);
 }
 
@@ -296,5 +308,8 @@ TEST_F(EventTimingTest, FindPath5)
 
     // query using the previously created path
     auto timings = tProvider.getTimings(p1);
+    if(timings){
+        std::cout << "Obtained timings: " << std::endl << *timings << std::endl;
+    }
     EXPECT_NE(std::nullopt, timings);
 }

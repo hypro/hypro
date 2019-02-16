@@ -75,127 +75,144 @@ namespace hypro {
 		}
 
 		// pointers to nodes on the path
-		std::set<EventTimingNode<Number>*> workingSet;
+		std::vector<std::set<EventTimingNode<Number>*>> workingSets;
+		// stores candidates which match the timeStep
+		std::vector<std::set<EventTimingNode<Number>*>> transitionCandidates;
 
 		// fill working set with initial nodes
-		assert(mRoot->getChildren().size() == 1);
-		workingSet.emplace(*(mRoot->getChildren().begin()));
+		for(const auto nPtr : mRoot->getChildren()) {
+			workingSets.emplace_back(std::set<EventTimingNode<Number>*>{});
+			workingSets.back().emplace(nPtr);
+			// prepare structure of 2nd set
+			transitionCandidates.emplace_back(std::set<EventTimingNode<Number>*>{});
+		}
 
-		// iterate over path
+		// iterate over path / follow the path
 		auto pathIt = path.begin();
 		while(pathIt != path.end()) {
-			TRACE("hypro.datastructures.timing","Follow time step, have " << workingSet.size() << " nodes.");
+			assert(workingSets.size() == transitionCandidates.size());
+			TRACE("hypro.datastructures.timing","Follow time step, have " << workingSets.size() << " path-candidates.");
 			// remove all nodes from working set whose invariant timings do not contain the time interval in the path
 			assert(!pathIt->isDiscreteStep());
-			// stores candidates which match the timeStep
-			std::set<EventTimingNode<Number>*> transitionCandidates;
 			// verify against invariant timings.
 			// Two-phase approach: Collect all which satisfy the invariant somehow,
 			// then merge invariant intervals and check whether the invariant was satisfied the whole time.
-			for(auto nodeIt = workingSet.begin(); nodeIt != workingSet.end();) {
-				// check for full containment
-				if((*nodeIt)->getTimings().satisfiedInvariant(pathIt->getTimestamp())) {
-					transitionCandidates.insert(*nodeIt);
-					++nodeIt;
-				} else if ((*nodeIt)->getTimings().getInvariantTimings().intersectsEntry(pathIt->getTimestamp(), CONTAINMENT::FULL) ||
-				   (*nodeIt)->getTimings().getInvariantTimings().intersectsEntry(pathIt->getTimestamp(), CONTAINMENT::PARTIAL) ||
-				   (*nodeIt)->getTimings().getInvariantTimings().intersectsEntry(pathIt->getTimestamp(), CONTAINMENT::YES) ) {
-					// check for partial containment
-					transitionCandidates.insert(*nodeIt);
-					++nodeIt;
-					//TRACE("hypro.datastructures.timing","Not enough information, abort.");
-					//return std::nullopt;
-				} else {
-					assert(!(*nodeIt)->getTimings().hasInvariantEvent(pathIt->getTimestamp(), CONTAINMENT::YES));
-					assert(!(*nodeIt)->getTimings().hasInvariantEvent(pathIt->getTimestamp(), CONTAINMENT::PARTIAL));
-					assert(!(*nodeIt)->getTimings().hasInvariantEvent(pathIt->getTimestamp(), CONTAINMENT::FULL));
-					// the node does not satisfy the invariant, erase
-					nodeIt = workingSet.erase(nodeIt);
+
+			// use flag to exit loop early
+			bool allEmpty = true;
+
+			for(std::size_t setIndex = 0; setIndex < workingSets.size(); ++setIndex){
+				for(auto nodeIt = workingSets[setIndex].begin(); nodeIt != workingSets[setIndex].end();) {
+					allEmpty = false;
+					// check for full containment
+					if((*nodeIt)->getTimings().satisfiedInvariant(pathIt->getTimestamp())) {
+						transitionCandidates[setIndex].insert(*nodeIt);
+						nodeIt = workingSets[setIndex].erase(nodeIt);
+					} else if ((*nodeIt)->getTimings().getInvariantTimings().intersectsEntry(pathIt->getTimestamp(), CONTAINMENT::FULL) ||
+					(*nodeIt)->getTimings().getInvariantTimings().intersectsEntry(pathIt->getTimestamp(), CONTAINMENT::PARTIAL) ||
+					(*nodeIt)->getTimings().getInvariantTimings().intersectsEntry(pathIt->getTimestamp(), CONTAINMENT::YES) ) {
+						// check for partial containment
+						transitionCandidates[setIndex].insert(*nodeIt);
+						nodeIt = workingSets[setIndex].erase(nodeIt);
+						//TRACE("hypro.datastructures.timing","Not enough information, abort.");
+						//return std::nullopt;
+					} else {
+						assert(!(*nodeIt)->getTimings().hasInvariantEvent(pathIt->getTimestamp(), CONTAINMENT::YES));
+						assert(!(*nodeIt)->getTimings().hasInvariantEvent(pathIt->getTimestamp(), CONTAINMENT::PARTIAL));
+						assert(!(*nodeIt)->getTimings().hasInvariantEvent(pathIt->getTimestamp(), CONTAINMENT::FULL));
+						// the node does not satisfy the invariant, erase
+						nodeIt = workingSets[setIndex].erase(nodeIt);
+					}
 				}
+				assert(workingSets[setIndex].empty());
+			}
+
+			assert(workingSets.size() == transitionCandidates.size());
+
+			if(allEmpty) {
+				return std::nullopt;
 			}
 
 			// merge invariant intervals to detect whether the invariant interval is fully covered
-			// Todo: For the last step, is this neccessary?
-			if(!transitionCandidates.empty()) {
-				TRACE("hypro.datastructures.timing","Merge invariant intervals of " << transitionCandidates.size() << " candidates.");
-				std::map<std::size_t, HierarchicalIntervalVector<CONTAINMENT,tNumber>> mergedHIVs;
-				for(auto it = transitionCandidates.begin(); it != transitionCandidates.end(); ++it) {
-					std::size_t lvl = (*it)->getLevel();
-					if( mergedHIVs.find(lvl) == mergedHIVs.end()) {
-						mergedHIVs.emplace(lvl, (*it)->getTimings().getInvariantTimings());
-						TRACE("hypro.datastructures.timing","Found first HIV for level " << lvl << ": " << mergedHIVs.at(lvl));
-					} else {
-						mergedHIVs.insert_or_assign(lvl,merge({mergedHIVs.at(lvl), (*it)->getTimings().getInvariantTimings()}));
-						TRACE("hypro.datastructures.timing","Found another HIV for level " << lvl << " (after merge): " << mergedHIVs.at(lvl));
+			for(auto subset : transitionCandidates) {
+				if(!subset.empty()) {
+					TRACE("hypro.datastructures.timing","Merge invariant intervals of " << subset.size() << " candidates.");
+					HierarchicalIntervalVector<CONTAINMENT,tNumber> mergedHIV((*subset.begin())->getTimings().getInvariantTimings());
+					// merge all invariant information
+					for(auto it = ++subset.begin(); it != subset.end(); ++it) {
+						mergedHIV = merge({mergedHIV, (*it)->getTimings().getInvariantTimings()});
 					}
-				}
 
-				TRACE("hypro.datastructures.timing","Invariant HIV after merge: " << mergedHIVs);
-				std::vector<HierarchicalIntervalVector<CONTAINMENT,tNumber>> hivs;
-				for(const auto& levelHivPair : mergedHIVs) {
-					hivs.emplace_back(levelHivPair.second);
-				}
+					TRACE("hypro.datastructures.timing","Invariant HIV after merge: " << mergedHIV);
 
-				auto smallestCover = smallestFullCover(hivs, pathIt->getTimestamp(), CONTAINMENT::FULL);
-
-				if(!smallestCover) {
-					TRACE("hypro.datastructures.timing","No refinement level covers the invariant, abort.");
-					return std::nullopt;
-				} else {
-					TRACE("hypro.datastructures.timing","Refinement level " << *smallestCover << " has the most precise settings.");
-					for(auto it = transitionCandidates.begin(); it != transitionCandidates.end();) {
-						if( (*it)->getLevel() != smallestCover ) {
-							it = transitionCandidates.erase(it);
-						} else {
-							++it;
-						}
+					// if the invariant cannot be fully covered (information missing), remove subset (clear).
+					if(!fullCover(mergedHIV, pathIt->getTimestamp(), CONTAINMENT::FULL)) {
+						subset.clear();
+						TRACE("hypro.datastructures.timing","Clear the subset, no full cover detected.");
+						assert(subset.empty());
 					}
-					TRACE("hypro.datastructures.timing","Have " << transitionCandidates.size() << " nodes on level " << *smallestCover);
 				}
 			}
 
+			assert(workingSets.size() == transitionCandidates.size());
+
 			// follow the discrete jump, if applicable
 			++pathIt;
-			// compute fresh working set - either from taking a discrete jump or by copy.
-			workingSet.clear();
 			if(pathIt != path.end()) {
 				// set up new working set
-
-
-				TRACE("hypro.datastructures.timing","Follow discrete step, have " << transitionCandidates.size() << " nodes.");
+				TRACE("hypro.datastructures.timing","Follow discrete step, have " << transitionCandidates.size() << " sets.");
 
 				// try to follow the transition
 				assert(pathIt->isDiscreteStep());
-				for(const auto n : transitionCandidates) {
-					for(const auto ch : n->getChildren()) {
-						if(ch->getEntryTransition() == pathIt->transition && carl::set_have_intersection(ch->getEntryTimestamp(), pathIt->getTimestamp())) {
-							workingSet.insert(ch);
+				for(std::size_t setIndex = 0; setIndex < transitionCandidates.size(); ++setIndex) {
+					assert(workingSets[setIndex].empty());
+					for(const auto nPtr : transitionCandidates[setIndex]) {
+						TRACE("hypro.datastructures.timing","Consider " << transitionCandidates[setIndex].size() << " nodes.");
+						for(const auto chPtr : nPtr->getChildren()) {
+							if(chPtr->getEntryTransition() == pathIt->transition && carl::set_have_intersection(chPtr->getEntryTimestamp(), pathIt->getTimestamp())) {
+								TRACE("hypro.datastructures.timing","Found matching node.");
+								workingSets[setIndex].insert(chPtr);
+							}
 						}
 					}
+					// prepare for next iteration.
+					transitionCandidates[setIndex].clear();
 				}
 				// increase pathIt to the next time step or the end of the path
 				++pathIt;
 			} else {
 				// the last element in the path was a time step, move nodes to workingSet
-				workingSet = transitionCandidates;
+				TRACE("hypro.datastructures.timing","Copy transitionCandidates to workingSet.");
+				workingSets = transitionCandidates;
+			}
+		}
+		assert(workingSets.size() == transitionCandidates.size());
+		assert(workingSets.size() == mRoot->getChildren().size());
+
+		TRACE("hypro.datastructures.timing","After loop, have " << workingSets.size() << " subsets.");
+
+		// at this point workingSet should contain all nodes which can be reached following the path. Merge those and get the most precise.
+		bool allEmpty = true;
+		std::vector<EventTimingContainer<Number>> candidates;
+		for(const auto set : workingSets) {
+			if(!set.empty()) {
+				TRACE("hypro.datastructures.timing","Merge timings of " << set.size() << " containers.");
+				allEmpty =  false;
+				auto nodeIt = set.begin();
+				EventTimingContainer<Number> res = (*nodeIt)->getTimings();
+				++nodeIt;
+				for( ;nodeIt != set.end(); ++nodeIt ) {
+					res = merge({res,(*nodeIt)->getTimings()});
+				}
+				candidates.emplace_back(std::move(res));
 			}
 		}
 
-		if(workingSet.empty()) {
-			TRACE("hypro.datastructures.timing","No nodes found, abort.");
+		if(allEmpty) {
 			return std::nullopt;
 		}
 
-		TRACE("hypro.datastructures.timing","After loop, have " << workingSet.size() << " nodes.");
-
-		// at this point workingSet should contain all nodes which can be reached following the path. Merge those.
-		auto nodeIt = workingSet.begin();
-		EventTimingContainer<Number> res = (*nodeIt)->getTimings();
-		++nodeIt;
-		for( ;nodeIt != workingSet.end(); ++nodeIt ) {
-			res = merge({res,(*nodeIt)->getTimings()});
-		}
-		return res;
+		return intersect(candidates);
 	}
 
 	template<typename Number>
