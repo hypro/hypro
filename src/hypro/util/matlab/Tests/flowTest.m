@@ -15,8 +15,13 @@ disp(['hasNoFlow(): ', num2str(out)]);
 size = linFlow_mat.size();
 disp(['size(): ', num2str(size)]);
 
+affineFlow_empty = MHyProFlow('affineFlow');
+hasTran = affineFlow_empty.hasTranslation();
+disp(['hasTranslation(): ', num2str(hasTran)]);
 
 
 
 
-res = 1
+
+
+res = 1;

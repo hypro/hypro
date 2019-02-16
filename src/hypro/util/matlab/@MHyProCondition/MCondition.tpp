@@ -34,15 +34,15 @@ void MCondition::new_mat_vec(int nlhs, mxArray* plhs[], int nrhs, const mxArray*
     hypro::vector_t<double> vector = ObjectHandle::mVector2Hypro(prhs[3], vec_len);
     hypro::Condition<double>* cond = new hypro::Condition<double>(matrix, vector);
     plhs[0] = convertPtr2Mat<hypro::Condition<double>>(cond);
-
-
 }
+
 /**
  * @brief
  **/
 void MCondition::new_constr_set(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
     //TODO
 }
+
 /**
  * @brief
  **/
@@ -57,7 +57,6 @@ void MCondition::copy(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]
     hypro::Condition<double>* origin = convertMat2Ptr<hypro::Condition<double>>(prhs[2]);
     hypro::Condition<double>* cond = new hypro::Condition<double>(*origin);
     plhs[0] = convertPtr2Mat<hypro::Condition<double>>(cond);
-
 }
 
 /**
@@ -86,6 +85,7 @@ void MCondition::size(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]
     std::size_t s = cond->size();
     plhs[0] = mxCreateDoubleScalar(s);
 }
+
 /**
  * @brief
  **/
@@ -101,6 +101,7 @@ void MCondition::isempty(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prh
     const bool ans = cond->empty();
     plhs[0] = mxCreateLogicalScalar(ans);
 }
+
 /**
  * @brief
  **/
@@ -112,17 +113,12 @@ void MCondition::getMatrix(int nlhs, mxArray* plhs[], int nrhs, const mxArray* p
     if(nrhs > 3)
         mexErrMsgTxt("MCondition - getMatrix: One or more arguments were ignored!");
     
-
     hypro::Condition<double>* cond = convertMat2Ptr<hypro::Condition<double>>(prhs[2]);
     hypro::matrix_t<double> mat = cond->getMatrix();
-
-    mxArray* m_out;
-    double* out;
-    //m_out = 
     plhs[0] = mxCreateDoubleMatrix(mat.rows(), mat.cols(), mxREAL);
-    //out = mxGetPr(m_out);
     ObjectHandle::convert2Matlab(mat, plhs[0], mat.cols(), mat.rows());
 }
+
 /**
  * @brief
  **/
@@ -134,15 +130,12 @@ void MCondition::getVector(int nlhs, mxArray* plhs[], int nrhs, const mxArray* p
     if(nrhs > 3)
         mexErrMsgTxt("MCondition - getVector: One or more arguments were ignored!");
     
-
     hypro::Condition<double>* cond = convertMat2Ptr<hypro::Condition<double>>(prhs[2]);
     hypro::vector_t<double> vec = cond->getVector();
-
-    mxArray* m_out;
-    double* out;
     plhs[0] = mxCreateDoubleMatrix(vec.rows(), 1, mxREAL);
     ObjectHandle::convert2Matlab(vec, plhs[0], 1, vec.rows());
 }
+
 /**
  * @brief
  **/
@@ -158,6 +151,7 @@ void MCondition::isAxisAligned(int nlhs, mxArray* plhs[], int nrhs, const mxArra
     const bool ans = cond->isAxisAligned();
     plhs[0] = mxCreateLogicalScalar(ans);
 }
+
 /**
  * @brief
  **/
@@ -174,6 +168,7 @@ void MCondition::isAxisAligned_at(int nlhs, mxArray* plhs[], int nrhs, const mxA
     const bool ans = cond->isAxisAligned(s);
     plhs[0] = mxCreateLogicalScalar(ans);
 }
+
 /**
  * @brief
  **/
@@ -192,15 +187,15 @@ void MCondition::setMatrix(int nlhs, mxArray* plhs[], int nrhs, const mxArray* p
     hypro::Condition<double>* cond = convertMat2Ptr<hypro::Condition<double>>(prhs[2]);
     hypro::matrix_t<double> mat = ObjectHandle::mMatrix2Hypro(prhs[3], dimx, dimy);
     cond->setMatrix(mat);
-
 }
+
 /**
  * @brief
  **/
 void MCondition::setVector(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
-    if(nrhs < 4)
+    if(nrhs < 5)
         mexErrMsgTxt("MCondition - setVector: One or more arguments are missing!");
-    if(nrhs > 4)
+    if(nrhs > 5)
         mexErrMsgTxt("MCondition - setVector: One or more arguments were ignored!");
     
     const mwSize* dims;
@@ -209,9 +204,11 @@ void MCondition::setVector(int nlhs, mxArray* plhs[], int nrhs, const mxArray* p
     len = dims[0];
 
     hypro::Condition<double>* cond = convertMat2Ptr<hypro::Condition<double>>(prhs[2]);
-    hypro::matrix_t<double> vec = ObjectHandle::mVector2Hypro(prhs[3], len);
-    cond->setVector(vec);
+    hypro::vector_t<double> vec = ObjectHandle::mVector2Hypro(prhs[3], len);
+    std::size_t s = mxGetScalar(prhs[4]);
+    cond->setVector(vec, s);
 }
+
 /**
  * @brief
  **/
@@ -232,6 +229,7 @@ void MCondition::constraints(int nlhs, mxArray* plhs[], int nrhs, const mxArray*
     plhs[0] = m_out_constrs = mxCreateCellArray(2,dims);
     objArray2Matlab(constrs, m_out_constrs, len);
 }
+
 /**
  * @brief
  **/
@@ -247,6 +245,7 @@ void MCondition::hash(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]
     std::size_t s = cond->hash();
     plhs[0] = mxCreateDoubleScalar(s);
 }
+
 /**
  * @brief
  **/
@@ -269,12 +268,14 @@ void MCondition::getDotRepresentation(int nlhs, mxArray* plhs[], int nrhs, const
     std::string ans = cond->getDotRepresentation(strs);
     plhs[0] = mxCreateString(ans.c_str());
 }
+
 /**
  * @brief
  **/
 void MCondition::decompose(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
     //TODO
 }
+
 /**
  * @brief
  **/
@@ -292,6 +293,7 @@ void MCondition::equals(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs
     }
     plhs[0] = mxCreateLogicalScalar(ans);
 }
+
 /**
  * @brief
  **/
@@ -309,12 +311,14 @@ void MCondition::unequals(int nlhs, mxArray* plhs[], int nrhs, const mxArray* pr
     }
     plhs[0] = mxCreateLogicalScalar(ans);
 }
+
 /**
  * @brief
  **/
 void MCondition::outstream(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
     //TODO
 }
+
 /**
  * @brief
 **/
@@ -340,7 +344,6 @@ void MCondition::combine(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prh
     std::vector<std::string> haVar = ObjectHandle::mStringVector2Hypro(prhs[4], len_haVar);
     std::vector<std::string> lhsVar = ObjectHandle::mStringVector2Hypro(prhs[5], len_lhsVar);
     std::vector<std::string> rhsVar = ObjectHandle::mStringVector2Hypro(prhs[6], len_rhsVar);
-
 }
 
 /**
