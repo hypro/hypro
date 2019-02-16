@@ -18,7 +18,7 @@ namespace hypro {
 		carl::logging::logger().filter("stdout")
 	    ("hypro", carl::logging::LogLevel::LVL_OFF)
 		//("hypro.representations", carl::logging::LogLevel::LVL_TRACE)
-		("hypro.datastructures.timing", carl::logging::LogLevel::LVL_TRACE)
+		//("hypro.datastructures.timing", carl::logging::LogLevel::LVL_TRACE)
 		//("hypro.datastructures.hiv", carl::logging::LogLevel::LVL_TRACE)
 		;
 
