@@ -60,6 +60,16 @@ private:
 	EventTimingNode<Number>* findNode(const Path<Number,tNumber>& path) const;
 	void writeTree() const;
 
+	// for dbg
+	void printSet(const std::vector<std::set<EventTimingNode<Number>*>>& sets) const {
+		TRACE("hypro.datastructures.timing","Have " << sets.size() << " sets.");
+		for(const auto& set : sets) {
+			TRACE("hypro.datastructures.timing","Have " << set.size() << " containers.");
+			for(const auto sPtr : set) {
+				TRACE("hypro.datastructures.timing","Container " << *sPtr);
+			}
+		}
+	}
 };
 
 } // hypro

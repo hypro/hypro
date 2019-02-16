@@ -133,8 +133,13 @@ namespace hypro {
 				return std::nullopt;
 			}
 
+			TRACE("hypro.datastructures.timing","Working set.");
+			printSet(workingSets);
+			TRACE("hypro.datastructures.timing","Transition candidates.");
+			printSet(transitionCandidates);
+
 			// merge invariant intervals to detect whether the invariant interval is fully covered
-			for(auto subset : transitionCandidates) {
+			for(auto& subset : transitionCandidates) {
 				if(!subset.empty()) {
 					TRACE("hypro.datastructures.timing","Merge invariant intervals of " << subset.size() << " candidates.");
 					HierarchicalIntervalVector<CONTAINMENT,tNumber> mergedHIV((*subset.begin())->getTimings().getInvariantTimings());
@@ -153,6 +158,11 @@ namespace hypro {
 					}
 				}
 			}
+
+			TRACE("hypro.datastructures.timing","Working set.");
+			printSet(workingSets);
+			TRACE("hypro.datastructures.timing","Transition candidates.");
+			printSet(transitionCandidates);
 
 			assert(workingSets.size() == transitionCandidates.size());
 
@@ -194,7 +204,7 @@ namespace hypro {
 		// at this point workingSet should contain all nodes which can be reached following the path. Merge those and get the most precise.
 		bool allEmpty = true;
 		std::vector<EventTimingContainer<Number>> candidates;
-		for(const auto set : workingSets) {
+		for(const auto& set : workingSets) {
 			if(!set.empty()) {
 				TRACE("hypro.datastructures.timing","Merge timings of " << set.size() << " containers.");
 				allEmpty =  false;
