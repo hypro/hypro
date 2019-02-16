@@ -19,6 +19,15 @@ namespace hypro {
     }
 
     template<typename T, typename N>
+    static std::optional<HierarchicalIntervalVector<T,N>> intersect(std::initializer_list<HierarchicalIntervalVector<T,N>> l) {
+        if(l.size() == 0) {
+            return std::nullopt;
+        }
+        // debatable
+        return merge(l);
+    }
+
+    template<typename T, typename N>
     static bool fullCover(const HierarchicalIntervalVector<T,N>& in, const carl::Interval<N>& intv, T type) {
         // get all intervals that satisfy bot criteria: Intersection interval-wise and correct type.
         auto intervals = in.getIntersectionIntervals(intv,type);
