@@ -48,11 +48,10 @@ class Label {
       return lhs.getName() < rhs.getName();
     }
 
-    friend ostream& operator<<(ostream& ostr, const Label& l) {
+    friend std::ostream& operator<<(std::ostream& ostr, const Label& l) {
     	ostr << l.getName();
     	return ostr;
     }
 };
 
 }
-

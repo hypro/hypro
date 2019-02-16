@@ -23,23 +23,16 @@ namespace hypro {
 		TRACE("hydra.worker.discrete","Process " << processedStates.size() << " aggregated transitions.");
 		for(const auto& transitionStatePair : processedStates) {
 
+			// we need to determine the time interval during which the transition was enabled.
+			// The covered time interval is required for the timing updates and spans the time interval the transition was enabled
+			// irregardless of aggregation settings (that is, why this is not computed during state stage)
 			carl::Interval<tNumber> coveredTimeInterval = transitionStatePair.second.begin()->getTimestamp();
 
-			// the collected time interval is required for the timing updates and spans the time interval the transition was enabled
-			// irregardless of aggregation settings.
-			/*
-			carl::Interval<tNumber> collectedTimeInterval = transitionStatePair.second.begin()->getTimestamp();
-			for(const auto& s : transitionStatePair.second) {
-				collectedTimeInterval = collectedTimeInterval.convexHull(s.getTimestamp());
-			}
-
-			TRACE("hydra.worker.discrete","Transition covers time " << collectedTimeInterval);
-			*/
-
-
-			// children holds the nodes which need to be added
+			// children holds the nodes which need to be added,
+			// also writes to the coveredTimeInterval to obtain the time the transition was enabled.
 			typename ReachTreeNode<State>::NodeList_t children = createNodesFromStates(transitionStatePair.first, transitionStatePair.second, currentTargetLevel, coveredTimeInterval, mTask->treeNode);
 
+			TRACE("hydra.worker.discrete","Transition covers time " << coveredTimeInterval);
 			TRACE("hydra.worker.discrete","Created " << children.size() << " new nodes which have to be added to the tree.");
 
 			// Update tree
@@ -50,14 +43,14 @@ namespace hypro {
 			// regular, tree-extending (depth) case, i.e. no backtracking
 			// Note: There might be children, but for a different transition, so catch this by the second condition.
 			// Note: There can also be children for this transition, but with a whole different timestamp (wavy trajectories).
-
-			// Note: This branch is only taken, if the bt-path is empty and there do not exist child-nodes for this transition -> a bit too restrictive?
+			// Note: This branch is only taken, if the bt-path is empty and there do not exist child-nodes for this transition.
+			// TODO: Pass the time interval to isTreeExtension and check for the time intervals the transition was enabled.
 			if ( !wasRefinementTask && isTreeExtension<State>(mTask->treeNode, transitionStatePair.first) ){
 				TRACE("hydra.worker.discrete","Regular tree extension.");
 				for(const auto& child : children) {
-					// if the following is set, copy the refinement to level 0
+					// if the following is set, copy the refinement to any other refinement level.
 					#ifdef RESET_REFINEMENTS_ON_CONTINUE_AFTER_BT_RUN
-					if(currentTargetLevel > 0) { // I think this branch can never be reached.
+					if(currentTargetLevel > 0) { // I think this branch can never be reached, as wasRefinementTask prevents this.
 						for(auto i = 0; i < currentTargetLevel; ++i){
 							if(child->getRefinements()[i].isDummy){
 								TRACE("hydra.worker.discrete","Add refinement for level " << i);
@@ -66,11 +59,30 @@ namespace hypro {
 						}
 					}
 					#endif
+
+					// add child to current reach tree.
 					mTask->treeNode->addChild(child);
 					TRACE("hydra.worker.discrete", "Add node " << child << " as child to node " << mTask->treeNode << " which has " << mTask->treeNode->getRefinements().size() << " refinements." );
+					TRACE("hydra.worker.discrete", "Child entry timestamp: " << child->getTimestamp(currentTargetLevel) );
 					assert(child->getParent() == mTask->treeNode);
+					assert(child->getTimestamp(currentTargetLevel) == coveredTimeInterval);
 
-					// timing-tree updates
+					// timing-tree extension
+					auto& tProvider = EventTimingProvider<typename State::NumberType>::getInstance();
+					// make sure the node does not exist yet
+					TRACE("hypro.datastructures.timing","Regular tree extension, find child.");
+					auto potentialNewNode = tProvider.rGetNode(child->getPath());
+					if(potentialNewNode == nullptr) {
+						auto newNode = tProvider.addChildToNode(mTimingNode, SettingsProvider<State>::getInstance().getGlobalTimeHorizon());
+						newNode->rGetTimings().setEntryTransition(transitionStatePair.first);
+						newNode->setEntryTimestamp(child->getTimestamp(currentTargetLevel));
+						newNode->setLocation(transitionStatePair.first->getTarget());
+					} else {
+						// timing node already exists, just update entry timestamp
+						potentialNewNode->updateEntryTimestamp(coveredTimeInterval);
+					}
+
+					// create tasks
 					INFO("hydra.worker.discrete","Enqueue Tree node " << child << " in local queue.");
 					std::shared_ptr<Task<State>> newTask = std::make_shared<Task<State>>(child);
 					// if we do not reset to level 0, set refinementLevel of task
@@ -105,8 +117,27 @@ namespace hypro {
 				// be due to some "wavy" trajectory, i.e. the transition can be enabled multiple times with breaks in between.
 				// This goes towards chattering behavior.
 
-
 				TRACE("hydra.worker.discrete","Current->treeNode is: " << mTask->treeNode);
+
+				// potential timing-tree extension, do this for every child
+				TRACE("hypro.datastructures.timing","Refinement tree extension, find children.");
+				auto& tProvider = EventTimingProvider<typename State::NumberType>::getInstance();
+				for(const auto& child : children) {
+					TRACE("hypro.datastructures.timing","Find timing node for child " << child << " for path " << child->getPath());
+					// make sure the node does not exist yet
+					auto potentialNewNode = tProvider.rGetNode(child->getPath());
+					if(potentialNewNode == nullptr) {
+						TRACE("hypro.datastructures.timing","Did not find child in timing tree, create new one.");
+						auto newNode = tProvider.addChildToNode(mTimingNode, SettingsProvider<State>::getInstance().getGlobalTimeHorizon());
+						newNode->rGetTimings().setEntryTransition(transitionStatePair.first);
+						newNode->setEntryTimestamp(child->getTimestamp(currentTargetLevel));
+						newNode->setLocation(transitionStatePair.first->getTarget());
+					} else {
+						// timing node already exists, just update entry timestamp
+						TRACE("hypro.datastructures.timing","Found child in timing tree: " << potentialNewNode << ". Update entry timestamp to " << coveredTimeInterval);
+						potentialNewNode->updateEntryTimestamp(coveredTimeInterval);
+					}
+				}
 
 				typename ReachTreeNode<State>::NodeList_t oldChildren = mTask->treeNode->getChildrenForTransition(transitionStatePair.first);
 
@@ -115,7 +146,6 @@ namespace hypro {
 				collectTimespansForRefinementLevel<State>(oldTimespans, oldChildren, currentTargetLevel);
 
 				DEBUG("hydra.worker.refinement","For transition " << *transitionStatePair.first << " there are " << oldChildren.size() << " existing relevant children and we attempt to add " << children.size() << " new ones.");
-				//DEBUG("hydra.worker.refinement","The pre-defined timespans are " << oldTimespans);
 
 				// now we need to map the children via their timestamp.
 				// Note: All this relies on the child-nodes to be sorted ascending in their transition timestamps.
@@ -134,9 +164,9 @@ namespace hypro {
 				// in case there are old children left to map (i.e. we had too many old children and already mapped all new ones)
 				// set the remaining old children for the target level to dummy.
 				if(!oldChildren.empty()){
+					RefinementSetting<State> dummyRefinement;
+					dummyRefinement.isDummy = true;
 					for(auto oldChildIt = oldChildren.begin(); oldChildIt != oldChildren.end(); ++oldChildIt) {
-						RefinementSetting<State> dummyRefinement;
-						dummyRefinement.isDummy = true;
 						TRACE("hydra.worker.refinement","Old child " << *oldChildIt << " not required. Set level " << mTask->btInfo.btLevel << " to dummy.");
 						(*oldChildIt)->setNewRefinement(mTask->btInfo.btLevel,dummyRefinement);
 					}
@@ -309,9 +339,10 @@ namespace hypro {
 			std::vector<SUBSPACETYPE> types = *(subspaceTypesIt->second);
 			// perform union directly on the current set vector to avoid an extreme amount of consistency checks
 			std::vector<typename State::repVariant> currentSets = aggregatedState.getSets();
+			// contains the aggregated timestamp, initialized with the first timestamp
+			carl::Interval<tNumber> aggregatedTimestamp = (*transitionStatePair.second.begin()).getTimestamp();
 			//START_BENCHMARK_OPERATION(AGGREGATE);
 			for (auto stateIt = ++transitionStatePair.second.begin(); stateIt != transitionStatePair.second.end(); ++stateIt) {
-				assert(!(*stateIt).getTimestamp().isEmpty());
 				TRACE("hydra.worker.discrete","Agg. aggState and set " << setCnt);
 				// actual aggregation.
 				for(std::size_t i = 0; i < aggregatedState.getNumberSets(); i++){
@@ -328,6 +359,10 @@ namespace hypro {
 					}
 				}
 
+				// timestamp handling
+				assert(!(*stateIt).getTimestamp().isEmpty());
+				aggregatedTimestamp = aggregatedTimestamp.convexHull((*stateIt).getTimestamp());
+
 				leftovers = true;
 				++setCnt;
 				++clusterCnt;
@@ -338,6 +373,7 @@ namespace hypro {
 					leftovers = false;
 					if(stateIt+1 != transitionStatePair.second.end()) {
 						aggregatedState = *(++stateIt);
+						aggregatedTimestamp = aggregatedState.getTimestamp();
 						clusterCnt = 1;
 					} else {
 						break;
@@ -350,6 +386,7 @@ namespace hypro {
 					leftovers = false;
 					if(stateIt+1 != transitionStatePair.second.end()) {
 						aggregatedState = *(++stateIt);
+						aggregatedTimestamp = aggregatedState.getTimestamp();
 						clusterCnt = 1;
 					} else {
 						break;
@@ -359,6 +396,9 @@ namespace hypro {
 			}
 			aggregatedState.setSets(currentSets);
 			//EVALUATE_BENCHMARK_RESULT(AGGREGATE);
+
+			// set timestamps accordingly
+			aggregatedState.setTimestamp(aggregatedTimestamp);
 
 			if(strategy.clustering < 1 || leftovers) {
 				TRACE("hydra.worker.discrete","No clustering.");

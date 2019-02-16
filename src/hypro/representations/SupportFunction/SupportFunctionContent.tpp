@@ -109,11 +109,11 @@ SupportFunctionContent<Number,Setting>::SupportFunctionContent( const matrix_t<N
 				intervals = isBox(_directions,_distances);
 			}
 			if(boost::get<0>(intervals)) {
-				TRACE("hypro.representations.supportFunction","Handed polytope actually is a box, use box representation.")
+				//TRACE("hypro.representations.supportFunction","Handed polytope actually is a box, use box representation.")
 				mBox = new BoxSupportFunction<Number,Setting>(boost::get<1>(intervals));
 				mType = SF_TYPE::BOX;
 			} else {
-				TRACE("hypro.representations.supportFunction","Handed polytope indeed is a polytope, use H-representation.")
+				//TRACE("hypro.representations.supportFunction","Handed polytope indeed is a polytope, use H-representation.")
 				mPolytope = new PolytopeSupportFunction<Number,Setting>( _directions, _distances );
 				mType = SF_TYPE::POLY;
 			}
@@ -128,11 +128,11 @@ SupportFunctionContent<Number,Setting>::SupportFunctionContent( const matrix_t<N
 				intervals = isBox(_directions,_distances);
 			}
 			if(boost::get<0>(intervals)) {
-				TRACE("hypro.representations.supportFunction","Handed box indeed is a box.")
+				//TRACE("hypro.representations.supportFunction","Handed box indeed is a box.")
 				mBox = new BoxSupportFunction<Number,Setting>(boost::get<1>(intervals));
 				mType = SF_TYPE::BOX;
 			} else {
-				TRACE("hypro.representations.supportFunction","Handed box actually is a polytope, use H-representation.")
+				//TRACE("hypro.representations.supportFunction","Handed box actually is a polytope, use H-representation.")
 				mPolytope = new PolytopeSupportFunction<Number,Setting>( _directions, _distances );
 				mType = SF_TYPE::POLY;
 			}
@@ -1408,51 +1408,51 @@ template<typename Number, typename Setting>
 bool SupportFunctionContent<Number,Setting>::contains( const vector_t<Number> &_point ) const {
 	switch ( mType ) {
 		case SF_TYPE::ELLIPSOID: {
-			DEBUG("hypro.representations.supportFunction","ELLIPSOID, point: " << _point);
+			//DEBUG("hypro.representations.supportFunction","ELLIPSOID, point: " << _point);
 		    return ellipsoid()->contains( _point );
 		}
 		case SF_TYPE::INFTY_BALL:
 		case SF_TYPE::TWO_BALL: {
-			DEBUG("hypro.representations.supportFunction","BALL, point: " << _point);
+			//DEBUG("hypro.representations.supportFunction","BALL, point: " << _point);
 			return ball()->contains( _point );
 		}
 		case SF_TYPE::LINTRAFO: {
 			// TODO: Verify.
-			DEBUG("hypro.representations.supportFunction","TRANSFORMATION, point: " << _point);
+			//DEBUG("hypro.representations.supportFunction","TRANSFORMATION, point: " << _point);
 			std::pair<matrix_t<Number>, vector_t<Number>> parameterPair = linearTrafoParameters()->parameters->getParameterSet(linearTrafoParameters()->currentExponent);
 			return linearTrafoParameters()->origin->contains( (parameterPair.first.transpose() * _point) - parameterPair.second );
 		}
 		case SF_TYPE::POLY: {
-			DEBUG("hypro.representations.supportFunction","POLY, point: " << _point);
+			//DEBUG("hypro.representations.supportFunction","POLY, point: " << _point);
 			return polytope()->contains( _point );
 		}
 		case SF_TYPE::BOX: {
-			DEBUG("hypro.representations.supportFunction","POLY, point: " << _point);
+			//DEBUG("hypro.representations.supportFunction","POLY, point: " << _point);
 			return box()->contains( _point );
 		}
 		case SF_TYPE::PROJECTION: {
-			DEBUG("hypro.representations.supportFunction","PROJECTION, point: " << _point);
+			//DEBUG("hypro.representations.supportFunction","PROJECTION, point: " << _point);
 			return projectionParameters()->origin->contains( _point ); // TODO: Correct?
 		}
 		case SF_TYPE::SCALE: {
-			DEBUG("hypro.representations.supportFunction","SCALE, point: " << _point);
+			//DEBUG("hypro.representations.supportFunction","SCALE, point: " << _point);
 			if ( scaleParameters()->factor == 0 )
 				return false;
 			else
 				return scaleParameters()->origin->contains( _point / scaleParameters()->factor );
 		}
 		case SF_TYPE::SUM: {
-			DEBUG("hypro.representations.supportFunction","MINKOWSKI-SUM, point: " << _point);
+			//DEBUG("hypro.representations.supportFunction","MINKOWSKI-SUM, point: " << _point);
 			// current approach: Use templated evaluation.
 			std::vector<vector_t<Number>> templates = computeTemplate<Number>(this->dimension(), defaultTemplateDirectionCount);
 			// use single evaluation, as one invalid eval is enough to determine the point is not contained.
 			for(const auto& dir : templates) {
-				DEBUG("hypro.representations.supportFunction","Evaluate " << dir);
+				////DEBUG("hypro.representations.supportFunction","Evaluate " << dir);
 				EvaluationResult<Number> rhsRes =  summands()->rhs->evaluate(dir, false);
-				DEBUG("hypro.representations.supportFunction","Rhsres: " << rhsRes.supportValue);
+				////DEBUG("hypro.representations.supportFunction","Rhsres: " << rhsRes.supportValue);
 				EvaluationResult<Number> lhsRes =  summands()->lhs->evaluate(dir, false);
-				DEBUG("hypro.representations.supportFunction","Lhsres: " << lhsRes.supportValue);
-				DEBUG("hypro.representations.supportFunction","Summed: " << rhsRes.supportValue + lhsRes.supportValue << " and point dist: " << dir.dot(_point));
+				//DEBUG("hypro.representations.supportFunction","Lhsres: " << lhsRes.supportValue);
+				//DEBUG("hypro.representations.supportFunction","Summed: " << rhsRes.supportValue + lhsRes.supportValue << " and point dist: " << dir.dot(_point));
 				if(dir.dot(_point) > (lhsRes.supportValue + rhsRes.supportValue)) {
 					return false;
 				}
@@ -1460,7 +1460,7 @@ bool SupportFunctionContent<Number,Setting>::contains( const vector_t<Number> &_
 			return true;
 		}
 		case SF_TYPE::UNITE: {
-			DEBUG("hypro.representations.supportFunction","UNION, point: " << _point);
+			//DEBUG("hypro.representations.supportFunction","UNION, point: " << _point);
 			for(const auto& set : unionParameters()->items) {
 				if(set->contains(_point)) {
 					return true;
@@ -1469,7 +1469,7 @@ bool SupportFunctionContent<Number,Setting>::contains( const vector_t<Number> &_
 			return false;
 		}
 		case SF_TYPE::INTERSECT: {
-			DEBUG("hypro.representations.supportFunction","INTERSECTION, point: " << _point);
+			//DEBUG("hypro.representations.supportFunction","INTERSECTION, point: " << _point);
 			return (intersectionParameters()->rhs->contains(_point) && intersectionParameters()->lhs->contains(_point));
 		}
 		case SF_TYPE::NONE: {
@@ -1478,7 +1478,7 @@ bool SupportFunctionContent<Number,Setting>::contains( const vector_t<Number> &_
 			return false;
 		}
 		default:
-			DEBUG("hypro.representations.supportFunction","UNKNOWN, point: " << _point);
+			//DEBUG("hypro.representations.supportFunction","UNKNOWN, point: " << _point);
 			assert( false );
 			return false;
 	}

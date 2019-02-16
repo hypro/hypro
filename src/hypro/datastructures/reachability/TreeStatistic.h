@@ -15,7 +15,7 @@ struct TreeStatistic {
 
 namespace std {
 
-	inline ostream& operator<<(ostream& out, const hypro::TreeStatistic& in) {
+	inline std::ostream& operator<<(std::ostream& out, const hypro::TreeStatistic& in) {
 		out << "Average branching: \t\t" << in.avgBranching << std::endl;
 		out << "Average refinement level: \t" << in.avgLevel << std::endl;
 		out << "Maximal refinement level: \t" << in.levelCnt.size()-1 << std::endl;

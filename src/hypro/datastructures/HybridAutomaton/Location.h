@@ -36,23 +36,6 @@ public:
 
     using transitionVector = std::vector<std::unique_ptr<Transition<Number>>>;
 
-protected:
-    /**
-     * @brief      Constructor
-     * @details    Note that locations should only be constructed from the LocationManager.
-     * @param[in]  id    The identifier given by the LocationManager.
-     */
-    Location(unsigned id);
-    ///@{
-    /**
-     * @param[in]  id    The identifier given by the LocationManager.
-     * @param[loc] The original location which is copied.
-     */
-    Location(unsigned id, const Location& loc);
-    Location(unsigned id, const matrix_t<Number>& mat);
-    Location(unsigned id, const matrix_t<Number>& mat, transitionVector&& trans, const Condition<Number>& inv);
-    ///@}
-
 private:
     mutable std::vector<linearFlow<Number>> mLinearFlows;
     mutable std::vector<rectangularFlow<Number>> mRectangularFlows;
@@ -92,6 +75,7 @@ public:
     std::size_t dimension(std::size_t i) const;
 
     void setName(const std::string& name) { mName = name; mHash = 0; }
+    void setFlow(const matrix_t<Number>& f, std::size_t I = 0) { this->setLinearFlow(linearFlow<Number>(f),I); }
     void setLinearFlow(const linearFlow<Number>& f, std::size_t I = 0);
     void setRectangularFlow(const rectangularFlow<Number>& f, std::size_t I = 0);
     void setLinearFlow(const std::vector<linearFlow<Number>>& flows) { mLinearFlows = flows; mHash = 0; };

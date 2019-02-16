@@ -73,9 +73,9 @@ Point<Number>::Point( const Point<Number> &_p )
 	mHash(0),
 	// mNeighbors(_p.neighbors()),
 	mComposedOf( _p.composedOf() ) {
-	//std::cout << "This coordinates " << mCoordinates << " vs. " << _p.rawCoordinates() << std::endl;
-  	//std::cout << "This hash " << this->hash() << " vs. " << std::endl;
-  	//std::cout << _p.hash() << std::endl;
+	// std::cout << "This coordinates " << mCoordinates << " vs. " << _p.rawCoordinates() << std::endl;
+  	// std::cout << "This hash " << this->hash() << " vs. " << std::endl;
+  	// std::cout << _p.hash() << std::endl;
   	assert(mCoordinates == _p.rawCoordinates());
   	//assert(_p.hash() == this->hash());
   	assert(this->dimension() >= 0);

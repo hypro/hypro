@@ -11,6 +11,7 @@
 
 #include "intervalMethods.h"
 #include "BoxSetting.h"
+#include "../helperMethods/isBox.h"
 #include "../../datastructures/Halfspace.h"
 #include "../../datastructures/Point.h"
 #include "../../util/Permutator.h"
@@ -122,6 +123,7 @@ class BoxT : public GeometricObject<Number, BoxT<Number,Converter,Setting>> {
 		: mLimits(_intervals), mEmpty(false)
 	{
 		for(const auto& i : mLimits){
+			TRACE("hypro.representations","Add interval: " << i);
 			if(i.isEmpty()) {
 				mEmpty = true;
 				break;

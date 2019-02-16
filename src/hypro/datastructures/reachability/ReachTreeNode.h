@@ -80,7 +80,7 @@ struct RefinementSetting {
 		return *this;
 	}
 
-	friend ostream& operator<<(ostream& out, const RefinementSetting& in) {
+	friend std::ostream& operator<<(std::ostream& out, const RefinementSetting& in) {
 		if(in.isDummy){
 			out << "Dummy.";
 		} else {

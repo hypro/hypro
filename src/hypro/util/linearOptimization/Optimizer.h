@@ -24,6 +24,7 @@
 #include "glpk/adaptions_glpk.h"
 
 #include <carl/util/Singleton.h>
+#include <carl/core/Relation.h>
 #include <mutex>
 #include <thread>
 
@@ -37,7 +38,7 @@
 
 
 namespace hypro {
-	
+
 	/**
 	 * @brief      Wrapper class for linear optimization.
 	 * @tparam     Number  The used number type.
@@ -52,6 +53,7 @@ namespace hypro {
 		mutable bool 				mConsistencyChecked;
 		mutable SOLUTION 			mLastConsistencyAnswer;
 		static bool			warnInexact;
+		std::vector<carl::Relation> mRelationSymbols;
 
 		// dependent members, all mutable
 		#ifdef HYPRO_USE_SMTRAT
@@ -76,6 +78,7 @@ namespace hypro {
 			mConstraintMatrix(),
 			mConstraintVector(),
 			mConsistencyChecked(false),
+			mRelationSymbols(),
 			mGlpkContext()
 		{
 			glp_term_out( GLP_OFF );
@@ -112,8 +115,9 @@ namespace hypro {
 			mConstraintMatrix(constraints),
 			mConstraintVector(constants),
 			mConsistencyChecked(false),
+			mRelationSymbols(std::vector<carl::Relation>(constraints.rows(), carl::Relation::LEQ)),
 			mGlpkContext()
-		{	
+		{
 			glp_term_out( GLP_OFF );
 		}
 
@@ -162,6 +166,28 @@ namespace hypro {
 		 * @param[in]  _vector  The vector.
 		 */
 		void setVector(const vector_t<Number>& _vector);
+
+		/**
+		 * @brief Set the Relations for all constraints.
+		 *
+		 * @param rels
+		 */
+		void setRelations(const std::vector<carl::Relation>& rels);
+
+		/**
+		 * @brief 		Add an equality constraint.
+		 *
+		 * @param constraint
+		 * @param constantPart
+		 */
+		void addConstraint(const vector_t<Number>& constraint, Number constantPart, carl::Relation rel);
+
+		/**
+		 * @brief Set the Relation for the constraint at position pos
+		 *
+		 * @param pos
+		 */
+		void setRelation(carl::Relation rel, std::size_t pos);
 
 		/**
 		 * @brief      Clears the problem instance.
@@ -216,6 +242,11 @@ namespace hypro {
 		 * @brief      Updates problem instances.
 		 */
 		void updateConstraints() const;
+
+		/**
+		 * @brief 		clears the cache of computed solutions.
+		 */
+		void clearCache() const;
 	};
 } // namespace hypro
 
