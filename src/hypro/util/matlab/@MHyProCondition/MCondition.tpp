@@ -40,7 +40,7 @@ void MCondition::new_mat_vec(int nlhs, mxArray* plhs[], int nrhs, const mxArray*
  * @brief
  **/
 void MCondition::new_constr_set(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
-    //TODO
+    //TODO:
 }
 
 /**
@@ -273,7 +273,7 @@ void MCondition::getDotRepresentation(int nlhs, mxArray* plhs[], int nrhs, const
  * @brief
  **/
 void MCondition::decompose(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
-    //TODO
+    //TODO:
 }
 
 /**
@@ -316,7 +316,7 @@ void MCondition::unequals(int nlhs, mxArray* plhs[], int nrhs, const mxArray* pr
  * @brief
  **/
 void MCondition::outstream(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
-    //TODO
+    //TODO:
 }
 
 /**

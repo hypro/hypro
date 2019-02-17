@@ -17,7 +17,7 @@ class MTransition{
         static void new_source_target(int, mxArray**, int, const mxArray**);
         static void new_full(int, mxArray**, int, const mxArray**);
         static void copy(int, mxArray**, int, const mxArray**);
-        static void del_label(int, mxArray**, int, const mxArray**);
+        static void delete_tran(int, mxArray**, int, const mxArray**);
         static void getTarget(int, mxArray**, int, const mxArray**);
         static void getSource(int, mxArray**, int, const mxArray**);
         static void getGuard(int, mxArray**, int, const mxArray**);

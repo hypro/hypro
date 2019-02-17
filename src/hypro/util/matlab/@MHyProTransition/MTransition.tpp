@@ -61,35 +61,67 @@ void MTransition::new_full(int nlhs, mxArray* plhs[], int nrhs, const mxArray* p
     hypro::Condition<double>* guard = convertMat2Ptr<hypro::Condition<double>>(prhs[4]);
     hypro::Reset<double>* reset = convertMat2Ptr<hypro::Condition<double>>(prhs[5]);
 
-    
+    hypro::Transition<double>* tran = new hypro::Transition<double>(source, target, guard, reset);
+    plhs[0] = convertPtr2Mat<hypro::Transition<double>>(new hypro::Transition<double>(*tran));
 }
 
 /**
 * @brief
 **/
-void MTransition::del_label(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
-
+void MTransition::delete_tran(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
+     if(nrhs < 3)
+        mexErrMsgTxt("MTransition - delete_tran: Expecting an output.");
+    if(nrhs > 3)
+        mexWarnMsgTxt("MTransition - delete_tran: One or more arguments were ignored.");
+    destroyObject<hypro::Transition<double>>(prhs[2]);
 }
 
 /**
 * @brief
 **/
 void MTransition::getTarget(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
+    if(nlhs != 1)
+        mexErrMsgTxt("MTransition - getTarget: Expecting an output.");
+    if(nrhs < 3)
+        mexErrMsgTxt("MTransition - getTarget: One or more arguments are missing.");
+    if(nrhs > 3)
+        mexWarnMsgTxt("MTransition - getTarget: One or more arguments were ignored.");
 
+    hypro::Transition<double>* tran = convertMat2Ptr<hypro::Transition<double>>(prhs[2]);
+    hypro::Location<double> target = tran->getTarget();
+    plhs[0] = convertPtr2Mat<hypro::Transition<double>>(new hypro::Location<double>(target));
 }
 
 /**
 * @brief
 **/
 void MTransition::getSource(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
+    if(nlhs != 1)
+        mexErrMsgTxt("MTransition - getSource: Expecting an output.");
+    if(nrhs < 3)
+        mexErrMsgTxt("MTransition - getSource: One or more arguments are missing.");
+    if(nrhs > 3)
+        mexWarnMsgTxt("MTransition - getSource: One or more arguments were ignored.");
 
+    hypro::Transition<double>* tran = convertMat2Ptr<hypro::Transition<double>>(prhs[2]);
+    hypro::Location<double> target = tran->getSource();
+    plhs[0] = convertPtr2Mat<hypro::Transition<double>>(new hypro::Location<double>(target));
 }
 
 /**
 * @brief
 **/
 void MTransition::getGuard(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
-
+    if(nlhs != 1)
+        mexErrMsgTxt("MTransition - getSource: Expecting an output.");
+    if(nrhs < 3)
+        mexErrMsgTxt("MTransition - getSource: One or more arguments are missing.");
+    if(nrhs > 3)
+        mexWarnMsgTxt("MTransition - getSource: One or more arguments were ignored.");
+    
+    hypro::Transition<double>* tran = convertMat2Ptr<hypro::Transition<double>>(prhs[2]);
+    hypro::Condition<double> cond = tran->getGuard()
+    
 }
 
 /**
