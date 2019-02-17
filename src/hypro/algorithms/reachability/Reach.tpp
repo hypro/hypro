@@ -51,7 +51,10 @@ namespace reachability {
 						break;
 					}
 					#endif
-
+					case representation_name::SFN: {
+						s.setSetDirect(SupportFunctionNew<Number>(locationConstraintPair.second.getMatrix(),locationConstraintPair.second.getVector()));
+						break;
+					}
 					default: {
 						assert(false);
 					}
@@ -112,7 +115,7 @@ namespace reachability {
 		INFO("hypro.reacher", "Location: " << _state.getLocation()->hash());
 		INFO("hypro.reacher", "Location printed : " << *(_state.getLocation()));
 		INFO("hypro.reacher", "Time step size: " << mSettings.timeStep);
-		INFO("hypro.reacher", "Initial valuation: " << _state);
+		//INFO("hypro.reacher", "Initial valuation: " << _state);
 		//std::cout << boost::get<State>(_state) << std::endl;
 		//std::cout << _state << std::endl;
 #endif
@@ -176,7 +179,6 @@ namespace reachability {
 				INFO("hypro.reacher", "--- Loop entered ---");
 			}
 #endif
-
 			// the first segment covers one time step already
 			tNumber currentLocalTime = mSettings.timeStep;
 			// intersection of bad states and violation of invariant is handled inside the loop
@@ -217,7 +219,7 @@ namespace reachability {
 				std::pair<hypro::CONTAINMENT, State> newSegment = nextSegment.satisfies( _state.getLocation()->getInvariant());
 
 #ifdef REACH_DEBUG
-				INFO("hypro.reacher", "Next Flowpipe Segment: " << newSegment.second);
+				//INFO("hypro.reacher", "Next Flowpipe Segment: " << newSegment.second);
 				INFO("hypro.reacher", "still within Invariant?: " << newSegment.first);
 #endif
 				if ( newSegment.first != CONTAINMENT::NO ) {
@@ -244,6 +246,7 @@ namespace reachability {
 			INFO("hypro.reacher", "flowpipe: " << flowpipe.size() << " Segments computed.");
 			INFO("hypro.reacher", "Process " << nextInitialSets.size() << " new initial sets.");
 			INFO("hypro.reacher", "current level: " << mCurrentLevel);
+
 #endif
 			// The loop terminated correctly (i.e. no bad states were hit), process discrete behavior.
 			assert(nextInitialSets.empty() || (int(mCurrentLevel) < mSettings.jumpDepth || mSettings.jumpDepth < 0));

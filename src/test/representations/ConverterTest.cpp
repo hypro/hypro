@@ -142,8 +142,8 @@ protected:
 	#endif
 
         //Two SupportFunctionNewes
-        sfn1 = SupportFunctionNew<Number>(&box);
-        sfn2 = SupportFunctionNew<Number>(&hpolytope);
+        sfn1 = SupportFunctionNew<Number>(box);
+        sfn2 = SupportFunctionNew<Number>(hpolytope);
 
     }
 

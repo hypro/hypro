@@ -154,6 +154,7 @@ class TrafoOp : public RootGrowNode<Number,Converter,Setting> {
 	//Given the results, return vector of evaluation results (here only first place needed, since unary op), here, we also modify
 	std::vector<EvaluationResult<Number>> aggregate(std::vector<std::vector<EvaluationResult<Number>>>& resultStackBack, const matrix_t<Number>& currentParam) const {
 		assert(resultStackBack.size() == 1); 
+		assert(Eigen::Index(resultStackBack.front().size()) == currentParam.rows());
 		const std::pair<matrix_t<Number>, vector_t<Number>>& parameterPair = parameters->getParameterSet(currentExponent);
 		if(resultStackBack.front().begin()->errorCode != SOLUTION::INFEAS){
 			unsigned directionCnt = 0;
@@ -162,13 +163,14 @@ class TrafoOp : public RootGrowNode<Number,Converter,Setting> {
 				if(entry.errorCode == SOLUTION::INFTY) {
 					entry.supportValue = 1;
 				} else {
-					//TRACE("hypro.representations.supportFunction", ": Entry val before trafo: " << entry.optimumValue);
+					assert(parameterPair.first.cols() == entry.optimumValue.rows());
 					entry.optimumValue = parameterPair.first * entry.optimumValue + parameterPair.second;
 					// As we know, that the optimal vertex lies on the supporting Halfspace, we can obtain the distance by dot product.
 					entry.supportValue = entry.optimumValue.dot(currentDir);
 				}
 				//TRACE("hypro.representations.supportFunction", "Direction: " << t << ", Entry value: " << entry.supportValue);
 				++directionCnt;
+				assert(directionCnt <= currentParam.rows());
 			}
 		}
 		return resultStackBack.front();
@@ -211,6 +213,12 @@ class TrafoOp : public RootGrowNode<Number,Converter,Setting> {
 		if(v.front()) return true;
 		return false;
 	}
+
+	//transform the given matrix 
+	//matrix_t<Number> getMatrix(const std::vector<matrix_t<Number>>& v) const {
+	//	assert(v.size() == 1);
+	//	return parameters->getTransformedDirections(v.front(), currentExponent);
+	//}
 
 };
 

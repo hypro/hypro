@@ -200,9 +200,10 @@ class Converter {
 		static SupportFunctionT<Number,Converter<Number>,SFSetting> toSupportFunction(const ZonotopeT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);
 	    template<typename SFSetting = typename SupportFunction::Settings, typename inSetting>
 		static SupportFunctionT<Number,Converter<Number>,SFSetting> toSupportFunction(const DifferenceBoundsT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);
-		//Here SFN -> SF needed?
 		template<typename SFSetting = typename SupportFunction::Settings, typename inSetting>
 		static SupportFunctionT<Number,Converter<Number>,SFSetting> toSupportFunction(const CarlPolytopeT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);
+		template<typename SFSetting = typename SupportFunction::Settings, typename inSetting>
+		static SupportFunctionT<Number,Converter<Number>,SFSetting> toSupportFunction(const SupportFunctionNewT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::UNDER);
 
 
 		template<typename ZonotopeSetting = typename Zonotope::Settings, typename inSetting>

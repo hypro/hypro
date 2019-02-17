@@ -62,7 +62,13 @@ public:
 
     std::pair<CONTAINMENT, CarlPolytopeT<Number,Converter,Setting>> satisfiesHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const;
 
+    bool contains(const Point<Number>& ) const { assert(false && "NOT IMPLEMENTED"); }
+
     bool contains(const CarlPolytopeT<Number,Converter,Setting>& ) const { assert(false && "NOT IMPLEMENTED"); }
+
+    EvaluationResult<Number> evaluate(const vector_t<Number>& ) const { assert(false && "NOT IMPLEMENTED"); }
+
+    std::vector<EvaluationResult<Number>> multiEvaluate(const matrix_t<Number>& , bool ) const { assert(false && "NOT IMPLEMENTED"); }
 
     std::size_t dimension() const { TRACE("hypro.representations.carlPolytope","Dimension " << mDimension << ". forced: " << mSpaceDimensionSet); return mDimension; }
     const FormulaT<tNumber>& getFormula() const { return mFormula; }

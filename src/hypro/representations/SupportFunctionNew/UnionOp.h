@@ -29,7 +29,6 @@ class UnionOp : public RootGrowNode<Number,Converter,Setting> {
 	unsigned originCount = 2;
 	std::size_t mDimension;
 	std::vector<std::shared_ptr<RootGrowNode<Number,Converter,Setting>>> mChildren;
-	//PointerVec mChildren;
 
 	////// Special members of this class
 
@@ -93,7 +92,6 @@ class UnionOp : public RootGrowNode<Number,Converter,Setting> {
 				} else {
 					assert((*resIt)[resultId].errorCode == SOLUTION::FEAS);
 					accumulatedResult[resultId] = (*resIt)[resultId] > accumulatedResult[resultId] ? (*resIt)[resultId] : accumulatedResult[resultId];
-					//assert(accumulatedResult[resultId].errorCode == SOLUTION::FEAS);
 				}
 			}
 		}

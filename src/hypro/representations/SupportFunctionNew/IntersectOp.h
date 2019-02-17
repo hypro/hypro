@@ -38,11 +38,13 @@ class IntersectOp : public RootGrowNode<Number,Converter,Setting> {
 
 	IntersectOp() = delete;
 
+	//Single sibling constructor
 	IntersectOp(const SupportFunctionNewT<Number,Converter,Setting>& lhs, const SupportFunctionNewT<Number,Converter,Setting>& rhs) : mDimension(lhs.dimension()) { 
 		assert(lhs.dimension() == rhs.dimension());
 		lhs.addOperation(this, std::vector<SupportFunctionNewT<Number,Converter,Setting>>{rhs}); 
 	}
 
+	//Multiple siblings constructor
 	IntersectOp(const SupportFunctionNewT<Number,Converter,Setting>& lhs, const std::vector<SupportFunctionNewT<Number,Converter,Setting>>& rhs) : mDimension(lhs.dimension()) { 
 		for(const auto& sf : rhs){
 			assert(lhs.dimension() == sf.dimension());
@@ -50,6 +52,7 @@ class IntersectOp : public RootGrowNode<Number,Converter,Setting> {
 		lhs.addOperation(this, rhs); 
 	}
 
+	//Data constructor
 	IntersectOp(const RGNData& ){}
 
 	~IntersectOp(){}
@@ -85,34 +88,20 @@ class IntersectOp : public RootGrowNode<Number,Converter,Setting> {
 		// in case one of the results is infeasible (the set is empty), return this result.
 		for(const auto& res : resultStackBack){
 			if(res.begin()->errorCode == SOLUTION::INFEAS){
-				accumulatedResult = res;
-				return accumulatedResult;
+				return res;
 			}
 		}
-		
-		//For all coordinates of all results in resultStackBack, take the iteratively look for the smallest evaluation result
-		for ( unsigned i = 0; i < resultStackBack.at(0).size(); ++i ) {		
-			
-			//Init r with some large numbers or else the loop doesn't start
-			EvaluationResult<Number> r;
-			r.errorCode = SOLUTION::FEAS;
-			r.supportValue = Number(10000000);
-			r.optimumValue = vector_t<Number>::Zero(resultStackBack.at(0).size());
-			for(int j = 0; j < r.optimumValue.rows(); ++j){
-				r.optimumValue[j] = Number(10000000);
-			}
+
+		//For all evaluation results in each direction in resultStackBack, iteratively look for the smallest evaluation result
+		for ( unsigned i = 0; i < resultStackBack.front().size(); ++i ) {		
+			EvaluationResult<Number> r = resultStackBack.front().at(i);
 
 			//actual aggregation loop
 			for(const auto& res : resultStackBack){
 				assert(res[i].errorCode != SOLUTION::INFEAS);
-				if(r.errorCode == SOLUTION::FEAS && res[i].errorCode == SOLUTION::INFTY){
-					r.supportValue = res[i].supportValue;
-					r.optimumValue = res[i].optimumValue;
-				} else {
-					if(r.errorCode == SOLUTION::FEAS && res[i].errorCode == SOLUTION::FEAS){
-						r.supportValue = res[i].supportValue < r.supportValue ? res[i].supportValue : r.supportValue; 
-						r.optimumValue = res[i].optimumValue < r.optimumValue ? res[i].optimumValue : r.optimumValue; 	
-					} 
+				if(res[i].errorCode == SOLUTION::FEAS){
+					r.supportValue = res[i].supportValue < r.supportValue ? res[i].supportValue : r.supportValue; 
+					r.optimumValue = res[i].optimumValue < r.optimumValue ? res[i].optimumValue : r.optimumValue; 		
 				}
 			}
 			accumulatedResult.emplace_back(r);
@@ -222,6 +211,7 @@ class IntersectOp : public RootGrowNode<Number,Converter,Setting> {
 		}
 		return accumulatedResult;
 	}
+
 };
 
 } //namespace hypro

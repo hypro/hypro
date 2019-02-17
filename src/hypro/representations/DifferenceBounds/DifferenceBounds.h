@@ -144,6 +144,10 @@ public:
     std::size_t size() const;
     static representation_name type() {return representation_name::difference_bounds;}
     bool empty() const;
+    /* TODO: not implemented */ 
+    EvaluationResult<Number> evaluate(const vector_t<Number>& direction, bool useExact = true) const; 
+    /* TODO: not implemented */ 
+    std::vector<EvaluationResult<Number>> multiEvaluate(const matrix_t<Number>& directions, bool useExact = true) const; 
     std::vector<Point<Number>> vertices( const matrix_t<Number>& = matrix_t<Number>::Zero(0,0) ) const;
     std::pair<CONTAINMENT, DifferenceBoundsT> satisfiesHalfspace( const Halfspace<Number>& rhs ) const;
     std::pair<CONTAINMENT, DifferenceBoundsT> satisfiesHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const;

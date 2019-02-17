@@ -14,7 +14,6 @@
 
 namespace hypro {
 
-//struct RGNData;
 template<typename Number, typename Converter, typename Setting>
 class RootGrowNode;
 
@@ -44,7 +43,8 @@ class Leaf : public RootGrowNode<Number,Converter,Setting> {
 
 	////// Members for this class
 
-	Representation* rep;
+	std::shared_ptr<Representation> rep;
+
 	mutable bool isNotRedundant = false; 	//A flag that tells us if removeRedundancy() has been used on the representation
 	
   public:
@@ -53,11 +53,13 @@ class Leaf : public RootGrowNode<Number,Converter,Setting> {
 
 	Leaf() : mDimension(std::size_t(0)), rep(nullptr) {}
 
-	Leaf(Representation* r) : mDimension(r->dimension()), rep(r) {}
+	Leaf(Representation& r) : mDimension(r.dimension()), rep(std::make_shared<Representation>(r)) {}
+
+	Leaf(const std::shared_ptr<Representation>& ptr) : mDimension(ptr->dimension()), rep(ptr) {}
 
 	Leaf(const LeafData& d){
 		assert(Representation::type() == d.typeOfRep);
-		rep = reinterpret_cast<Representation*>(d.addressToRep);
+		rep = std::make_shared<Representation>(*(reinterpret_cast<Representation*>(d.addressToRep)));
 		assert(rep != nullptr);
 		mDimension = rep->dimension();
 		isNotRedundant = d.isNotRedundant;
@@ -70,11 +72,11 @@ class Leaf : public RootGrowNode<Number,Converter,Setting> {
 	SFNEW_TYPE getType() const { return type; }
 	unsigned getOriginCount() const { return originCount; }
 	std::size_t getDimension() const { return mDimension; }
-	Representation* getRepresentation() const { return rep; }
+	Representation* getRepresentation() const { return rep.get(); }
 	bool isRedundant() const { return !isNotRedundant; }
 	RGNData* getData() const { return nullptr; }
 	LeafData getLeafData() const {
-		return LeafData(reinterpret_cast<uintptr_t>(rep), rep->type(), isNotRedundant);
+		return LeafData(reinterpret_cast<uintptr_t>(rep.get()), rep->type(), isNotRedundant);
 	}
 	void setDimension(const std::size_t d) { mDimension = d; }
 	
@@ -117,6 +119,8 @@ class Leaf : public RootGrowNode<Number,Converter,Setting> {
 
 	//Calls contains function of given representation
 	bool contains(const vector_t<Number>& point) const { return rep->contains(Point<Number>(point)); }
+
+	//matrix_t<Number> getMatrix() const { return rep->matrix(); }
 
 };
 

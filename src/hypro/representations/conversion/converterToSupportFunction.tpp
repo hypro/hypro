@@ -90,3 +90,10 @@ template<typename SFSetting, typename inSetting>
 SupportFunctionT<Number,Converter<Number>,SFSetting> Converter<Number>::toSupportFunction( const CarlPolytopeT<Number,Converter<Number>,inSetting>& _source, const CONV_MODE ){
     return SupportFunctionT<Number,Converter,SFSetting>(_source.matrix(), _source.vector());
 }
+
+//Not implemented since SFNew made to replace SF
+template<typename Number>
+template<typename SFSetting, typename inSetting>
+SupportFunctionT<Number,Converter<Number>,SFSetting> Converter<Number>::toSupportFunction(const SupportFunctionNewT<Number,Converter<Number>,inSetting>& , const CONV_MODE ){
+    return SupportFunctionT<Number,Converter,SFSetting>();
+}

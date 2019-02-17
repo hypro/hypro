@@ -119,7 +119,6 @@ namespace reachability {
 			// Perform resets.
 			INFO("hypro.reacher","Apply reset.");
 			State tmp = applyReset(collectedSets, aggregationPair.first->getReset());
-			INFO("hypro.reacher","Apply reset done, state after reset: " << tmp);
 			//std::cout << "Vertices after reset: " << std::endl;
 			//for(const auto& vertex : tmp.vertices()) {
 			//	std::cout << convert<Number,double>(vertex) << std::endl;
@@ -136,11 +135,12 @@ namespace reachability {
 				continue;
 			}
 
-			TRACE("hypro.reacher", "Enqueue " <<  s<< " for level " << mCurrentLevel+1 << ", current queue size (before) is " << mWorkingQueue.size());
+			//TRACE("hypro.reacher", "Enqueue " <<  s<< " for level " << mCurrentLevel+1 << ", current queue size (before) is " << mWorkingQueue.size());
+			TRACE("hypro.reacher", "Enqueue state for level " << mCurrentLevel+1 << ", current queue size (before) is " << mWorkingQueue.size());
 			mWorkingQueue.enqueue(std::make_unique<TaskType>(std::make_pair(mCurrentLevel+1, s)));
 		}
 
-		INFO("hypro.reacher", "After aggregation loop");
+		INFO("hypro.reacher", "--- After aggregation loop");
 	}
 
 	template<typename Number,typename ReacherSettings, typename State>

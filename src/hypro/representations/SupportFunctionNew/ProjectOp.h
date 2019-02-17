@@ -137,19 +137,35 @@ class ProjectOp : public RootGrowNode<Number,Converter,Setting> {
 		return false;
 	}
 
-	//Erases all dimensions from a copy of "dimensions" that are denoted in "dims"
+	//Return all dimensions that are in "dims" and also in "dimensions"
 	std::vector<std::size_t> intersectDims(const std::vector<std::vector<std::size_t>>& dims) const {
 		assert(dims.size() == 1);
-		std::vector<std::size_t> tmp = dimensions;
-		for(auto dimIt = dimensions.begin(); dimIt != dimensions.end(); ) {
-			if(std::find(dims.front().begin(), dims.front().end(), *dimIt) == dims.front().end()) {
-				dimIt = tmp.erase(dimIt);
-			} else {
-				++dimIt;
+		std::vector<std::size_t> res;
+		for(auto& d : dims.front()){
+			for(auto& dimToKeep : dimensions){
+				if(d == dimToKeep){
+					res.push_back(d);
+				}
 			}
 		}
-		return tmp;
+		return res;
 	}
+
+	//Unwantend dimensions are set to 0, keep all other entries in v
+	//matrix_t<Number> getMatrix(const std::vector<matrix_t<Number>>& v) const {
+	//	assert(v.size() == 1);
+	//	matrix_t<Number> projectedParameters = matrix_t<Number>::Zero(v.front().rows(), v.front().cols());
+	//	Eigen::Index entryIndex = 0;
+	//	for(const auto& entry : dimensions) {
+	//		TRACE("hypro.representations.supportFunction","Entry: " << entry)
+	//		if(int(entry) < v.front().cols()){ 
+	//			projectedParameters.col(entry) = v.front().col(entry);
+	//			++entryIndex;
+	//		}
+	//	}
+	//	assert(std::size_t(entryIndex) == dimensions.size());
+	//	return projectedParameters;
+	//}
 
 };
 

@@ -111,19 +111,25 @@ std::pair<CONTAINMENT,State<Number,Representation,Rargs...>> State<Number,Repres
 
 	for(std::size_t i = 0; i < mSets.size(); ++i) {
 		// check each substateset agains its invariant subset
+		//DEBUG("hypro.datastructures","Condition matrix: " << std::endl << in.getMatrix(i) << std::endl << "Vector: " << std::endl << in.getVector(i));
+		//DEBUG("hypro.datastructures", "Before genericSatisfiesHalfspacesVisitor. mSets.at(" << i << ") is: "<< std::endl << mSets.at(i));
 		auto resultPair = boost::apply_visitor(genericSatisfiesHalfspacesVisitor<repVariant, Number>(in.getMatrix(i), in.getVector(i)), mSets.at(i));
+		//DEBUG("hypro.datastructures", "After genericSatisfiesHalfspacesVisitor.");
 		assert(resultPair.first != CONTAINMENT::YES); // assert that we have detailed information on the invariant intersection.
 
 		res.setSetDirect(resultPair.second, i);
+		//DEBUG("hypro.datastructures", "i is:" << i << "After setSetDirect.");
 
 		if(resultPair.first == CONTAINMENT::NO) {
 			DEBUG("hypro.datastructures","State set " << i << "(type " << mTypes.at(i) << ") failed the condition - return empty.");
 			strictestContainment = resultPair.first;
 			break;
 		} else if(resultPair.first == CONTAINMENT::PARTIAL) {
+			DEBUG("hypro.datastructures","State set " << i << "(type " << mTypes.at(i) << ") succeeded the condition - return partial.");
 			strictestContainment = CONTAINMENT::PARTIAL;
 		}
 	}
+	DEBUG("hypro.datastructures","State::satisfies: End of loop");
 	return std::make_pair(strictestContainment, res);
 }
 

@@ -140,6 +140,11 @@ class ScaleOp : public RootGrowNode<Number,Converter,Setting> {
 		return false;
 	}
 
+	//Scales the matrix accordingly
+	//matrix_t<Number> getMatrix(const std::vector<matrix_t<Number>>& v) const {
+	//	assert(v.size() == 1);
+	//	return factor * v.front();
+	//}
 };
 
 } //namespace hypro

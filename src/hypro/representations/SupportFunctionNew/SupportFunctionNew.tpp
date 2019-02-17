@@ -26,7 +26,7 @@ namespace hypro {
 		orig.clear();
 	}
 
-	//settings converter
+	//settings constructor
 	template<typename Number, typename Converter, typename Setting>
 	template<typename SettingRhs, carl::DisableIf< std::is_same<Setting,SettingRhs> > >
 	SupportFunctionNewT<Number,Converter,Setting>::SupportFunctionNewT(const SupportFunctionNewT<Number,Converter,SettingRhs>& orig){
@@ -95,10 +95,10 @@ namespace hypro {
 		std::function<void(RootGrowNode<Number,Converter,Setting>*)>& compute, 	
 		std::function<void(RootGrowNode<Number,Converter,Setting>*)>& aggregate) const 
 	{
-		std::function<Parameters<>(RootGrowNode<Number,Converter,Setting>*, Parameters<>)> tNotVoid = [&](RootGrowNode<Number,Converter,Setting>* n, Parameters<> p) -> Parameters<> { transform(n); return Parameters<>(); };
-		std::function<Parameters<>(RootGrowNode<Number,Converter,Setting>*, Parameters<>)> cNotVoid = [&](RootGrowNode<Number,Converter,Setting>* n, Parameters<> p) -> Parameters<> { compute(n); return Parameters<>(); };
-		std::function<Parameters<>(RootGrowNode<Number,Converter,Setting>*, std::vector<Parameters<>>, Parameters<>)> aNotVoid = [&](RootGrowNode<Number,Converter,Setting>* n, std::vector<Parameters<>> v, Parameters<> p) -> Parameters<> { aggregate(n); return Parameters<>(); };
-		traverse(tNotVoid, cNotVoid, aNotVoid, Parameters<>());
+		std::function<Parameters<Dummy>(RootGrowNode<Number,Converter,Setting>*, Parameters<Dummy>)> tNotVoid = [&](RootGrowNode<Number,Converter,Setting>* n, Parameters<Dummy> p) -> Parameters<Dummy> { transform(n); return Parameters<Dummy>(Dummy()); };
+		std::function<Parameters<Dummy>(RootGrowNode<Number,Converter,Setting>*, Parameters<Dummy>)> cNotVoid = [&](RootGrowNode<Number,Converter,Setting>* n, Parameters<Dummy> p) -> Parameters<Dummy> { compute(n); return Parameters<Dummy>(Dummy()); };
+		std::function<Parameters<Dummy>(RootGrowNode<Number,Converter,Setting>*, std::vector<Parameters<Dummy>>, Parameters<Dummy>)> aNotVoid = [&](RootGrowNode<Number,Converter,Setting>* n, std::vector<Parameters<Dummy>> v, Parameters<Dummy> p) -> Parameters<Dummy> { aggregate(n); return Parameters<Dummy>(Dummy()); };
+		traverse(tNotVoid, cNotVoid, aNotVoid, Parameters<Dummy>(Dummy()));
 	}
 
 	//When Param type = void, but Result type not
@@ -109,10 +109,10 @@ namespace hypro {
 		std::function<Result(RootGrowNode<Number,Converter,Setting>*)>& compute, 
 		std::function<Result(RootGrowNode<Number,Converter,Setting>*, std::vector<Result>)>& aggregate) const 
 	{	
-		std::function<Parameters<>(RootGrowNode<Number,Converter,Setting>*, Parameters<>)> tNotVoid = [&](RootGrowNode<Number,Converter,Setting>* n, Parameters<> ) -> Parameters<> { transform(n); return Parameters<>(); };
-		std::function<Result(RootGrowNode<Number,Converter,Setting>*, Parameters<>)> cNotVoid = [&](RootGrowNode<Number,Converter,Setting>* n, Parameters<> ) -> Result { return compute(n); };
-		std::function<Result(RootGrowNode<Number,Converter,Setting>*, std::vector<Result>, Parameters<>)> aWithParams = [&](RootGrowNode<Number,Converter,Setting>* n, std::vector<Result> v, Parameters<> ) -> Result { return aggregate(n,v); };
-		Parameters<> noInitParams = Parameters<>();
+		std::function<Parameters<Dummy>(RootGrowNode<Number,Converter,Setting>*, Parameters<Dummy>)> tNotVoid = [&](RootGrowNode<Number,Converter,Setting>* n, Parameters<Dummy> ) -> Parameters<Dummy> { transform(n); return Parameters<Dummy>(Dummy()); };
+		std::function<Result(RootGrowNode<Number,Converter,Setting>*, Parameters<Dummy>)> cNotVoid = [&](RootGrowNode<Number,Converter,Setting>* n, Parameters<Dummy> ) -> Result { return compute(n); };
+		std::function<Result(RootGrowNode<Number,Converter,Setting>*, std::vector<Result>, Parameters<Dummy>)> aWithParams = [&](RootGrowNode<Number,Converter,Setting>* n, std::vector<Result> v, Parameters<Dummy> ) -> Result { return aggregate(n,v); };
+		Parameters<Dummy> noInitParams = Parameters<Dummy>(Dummy());
 		return traverse(tNotVoid, cNotVoid, aWithParams, noInitParams);
 	}
 
@@ -125,8 +125,8 @@ namespace hypro {
 		std::function<void(RootGrowNode<Number,Converter,Setting>*, Parameters<Rargs...>)>& aggregate,
 		Parameters<Rargs...>& initParams) const 
 	{
-		std::function<Parameters<>(RootGrowNode<Number,Converter,Setting>*, Parameters<Rargs...>)> cNotVoid = [&](RootGrowNode<Number,Converter,Setting>* n, Parameters<Rargs...> p) -> Parameters<>{ compute(n,p); return Parameters<>(); };
-		std::function<Parameters<>(RootGrowNode<Number,Converter,Setting>*, std::vector<Parameters<>>, Parameters<Rargs...>)> aNotVoid = [&](RootGrowNode<Number,Converter,Setting>* n, std::vector<Parameters<>> v, Parameters<Rargs...> p) -> Parameters<> { aggregate(n,p); return Parameters<>(); };
+		std::function<Parameters<Dummy>(RootGrowNode<Number,Converter,Setting>*, Parameters<Rargs...>)> cNotVoid = [&](RootGrowNode<Number,Converter,Setting>* n, Parameters<Rargs...> p) -> Parameters<Dummy>{ compute(n,p); return Parameters<Dummy>(Dummy()); };
+		std::function<Parameters<Dummy>(RootGrowNode<Number,Converter,Setting>*, std::vector<Parameters<Dummy>>, Parameters<Rargs...>)> aNotVoid = [&](RootGrowNode<Number,Converter,Setting>* n, std::vector<Parameters<Dummy>> v, Parameters<Rargs...> p) -> Parameters<Dummy> { aggregate(n,p); return Parameters<Dummy>(Dummy()); };
 		traverse(transform, cNotVoid, aNotVoid, initParams);
 	}
 
@@ -283,8 +283,10 @@ namespace hypro {
 	template<typename Number, typename Converter, typename Setting>
 	EvaluationResult<Number> SupportFunctionNewT<Number,Converter,Setting>::evaluate( const vector_t<Number>& _direction, bool useExact) const {
 		if(mRoot == nullptr) return EvaluationResult<Number>();
+		TRACE("hypro.representations.supportFunctionNew","direction: \n" << _direction);
 		matrix_t<Number> dirAsMatrix = matrix_t<Number>::Zero(1,_direction.rows());
 		dirAsMatrix.row(0) = _direction;
+		TRACE("hypro.representations.supportFunctionNew","dirAsMatrix: \n" << dirAsMatrix);
 		return multiEvaluate(dirAsMatrix, useExact).front();
 	}
 
@@ -361,6 +363,44 @@ namespace hypro {
 		return mRoot->getDimension();
 	}
 
+	template<typename Number, typename Converter, typename Setting>
+	matrix_t<Number> SupportFunctionNewT<Number,Converter,Setting>::matrix() const {
+		/*
+		if(mRoot == nullptr) return matrix_t<Number>::Zero(dimension(), dimension());
+
+		//Do nothing
+		std::function<void(RootGrowNode<Number,Converter,Setting>*)> doNothing = [](RootGrowNode<Number,Converter,Setting>* ){ };
+
+		//Leaves return the matrix of the their representation
+		std::function<matrix_t<Number>(RootGrowNode<Number,Converter,Setting>*)> getMat =
+			[](RootGrowNode<Number,Converter,Setting>* n) -> matrix_t<Number> {
+				return n->getMatrix();
+			};
+
+		//Operations modify the matrices accordingly
+		std::function<matrix_t<Number>(RootGrowNode<Number,Converter,Setting>*, std::vector<matrix_t<Number>>)> aggregateMat =
+			[](RootGrowNode<Number,Converter,Setting>* n, std::vector<matrix_t<Number>> v){
+				return n->getMatrix(v);
+			};
+
+		return traverse(doNothing, getMat, aggregateMat);
+		*/
+		if(mRoot == nullptr) return matrix_t<Number>::Zero(1,1);
+		if(!mTemplateSet) {
+    		evaluateTemplate();
+    	}
+    	return mMatrix;
+	}
+
+	template<typename Number, typename Converter, typename Setting>
+	vector_t<Number> SupportFunctionNewT<Number,Converter,Setting>::vector() const {
+		if(mRoot == nullptr) return matrix_t<Number>::Zero(1,1);
+		if(!mTemplateSet) {
+    		evaluateTemplate();
+    	}
+    	return mVector;
+	}
+
 	//template<typename Number, typename Converter, typename Setting>
 	//void SupportFunctionNewT<Number,Converter,Setting>::removeRedundancy() {
 	//	// Support functions are already non-redundant (Polytope support functions are made non-redundant upon construction).
@@ -399,21 +439,25 @@ namespace hypro {
 
 	template<typename Number, typename Converter, typename Setting>
 	std::pair<CONTAINMENT, SupportFunctionNewT<Number,Converter,Setting>> SupportFunctionNewT<Number,Converter,Setting>::satisfiesHalfspace( const Halfspace<Number>& rhs ) const {
+		TRACE("hypro.representations.supportFunctionNew","Halfspace: " << rhs);
+		if(mRoot == nullptr){
+			return std::make_pair(CONTAINMENT::BOT, *this);
+		}
 		bool limiting = false;
     	EvaluationResult<Number> planeEvalRes = this->evaluate(rhs.normal(), false);
     	if(planeEvalRes.errorCode == SOLUTION::INFEAS){
-			//std::cout << "Is infeasible (should not happen)." << std::endl;
-			//std::cout << "Set is (Hpoly): " << std::endl << Converter::toHPolytope(*this) << std::endl;
+			////std::cout << "Is infeasible (should not happen)." << std::endl;
+			////std::cout << "Set is (Hpoly): " << std::endl << Converter::toHPolytope(*this) << std::endl;
 			//assert(Converter::toHPolytope(*this).empty());
     		return std::make_pair(CONTAINMENT::NO, *this);
     	} else if(planeEvalRes.supportValue > rhs.offset()){
-			//std::cout << "Object will be limited. " << std::endl;
+			////std::cout << "Object will be limited. " << std::endl;
     		// the actual object will be limited by the new plane
     		limiting = true;
-			// std::cout << "evaluate(" << convert<Number,double>(-(_mat.row(rowI))) << ") <=  " << -(_vec(rowI)) << ": " << this->evaluate(-(_mat.row(rowI))).supportValue << " <= " << -(_vec(rowI)) << std::endl;
-    		// std::cout << __func__ <<  ": Limiting plane " << convert<Number,double>(_mat.row(rowI)).transpose() << " <= " << carl::toDouble(_vec(rowI)) << std::endl;
+			// //std::cout << "evaluate(" << convert<Number,double>(-(_mat.row(rowI))) << ") <=  " << -(_vec(rowI)) << ": " << this->evaluate(-(_mat.row(rowI))).supportValue << " <= " << -(_vec(rowI)) << std::endl;
+    		// //std::cout << __func__ <<  ": Limiting plane " << convert<Number,double>(_mat.row(rowI)).transpose() << " <= " << carl::toDouble(_vec(rowI)) << std::endl;
             if(this->evaluate(-(rhs.normal()), false ).supportValue < -(rhs.offset())){
-				//std::cout << "fullyOutside" << std::endl;
+				////std::cout << "fullyOutside" << std::endl;
                 // the object lies fully outside one of the planes -> return false
                 return std::make_pair(CONTAINMENT::NO, this->intersectHalfspace(rhs));
             }
@@ -427,28 +471,34 @@ namespace hypro {
 
 	template<typename Number, typename Converter, typename Setting>
 	std::pair<CONTAINMENT, SupportFunctionNewT<Number,Converter,Setting>> SupportFunctionNewT<Number,Converter,Setting>::satisfiesHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const {
-		TRACE("hypro.representations.supportFunction","Matrix: " << _mat << std::endl << " <= " << _vec );
+		DEBUG("hypro.representations.supportFunctionNew","Matrix: " << _mat << std::endl << " <= " << _vec );
+		//std::cout << "SFN::satisfiesHalfspaces: Matrix: " << _mat << std::endl << " <= " << _vec << std::endl;
+		if(mRoot == nullptr){
+			return std::make_pair(CONTAINMENT::BOT, *this);
+		}
 		if(_mat.rows() == 0) {
 			return std::make_pair(CONTAINMENT::FULL, *this);
 		}
 		assert(_mat.rows() == _vec.rows());
         std::vector<unsigned> limitingPlanes;
         for(unsigned rowI = 0; rowI < _mat.rows(); ++rowI) {
-        	TRACE("hypro.representations.supportFunction", "Evaluate against plane " << rowI );
+        	DEBUG("hypro.representations.supportFunctionNew", "Evaluate against plane " << rowI );
+        	//std::cout << "SFN::satisfiesHalfspaces: Evaluate against plane " << rowI << std::endl;
         	EvaluationResult<Number> planeEvalRes = this->evaluate(_mat.row(rowI), false);
-        	TRACE("hypro.representations.supportFunction", "Return from evaluate." );
+        	//std::cout << "SFN::satisfiesHalfspaces: Return from evaluate" << std::endl;
+        	DEBUG("hypro.representations.supportFunctionNew", "Return from evaluate." );
         	if(planeEvalRes.errorCode == SOLUTION::INFEAS){
-				TRACE("hypro.representations.supportFunction", "Is infeasible (should not happen)." );
-				//TRACE("hypro.representations.supportFunction", "Set is (Hpoly): " << std::endl << Converter::toHPolytope(*this) );
+				TRACE("hypro.representations.supportFunctionNew", "Is infeasible (should not happen)." );
+				//TRACE("hypro.representations.supportFunctionNew", "Set is (Hpoly): " << std::endl << Converter::toHPolytope(*this) );
         		return std::make_pair(CONTAINMENT::NO, *this);
         	//} else if(!carl::AlmostEqual2sComplement(planeEvalRes.supportValue, _vec(rowI), 2) && planeEvalRes.supportValue > _vec(rowI)){
         	} else if(planeEvalRes.supportValue > _vec(rowI)){
-				TRACE("hypro.representations.supportFunction", "Object will be limited, as " << planeEvalRes.supportValue << " > " << _vec(rowI));
+				TRACE("hypro.representations.supportFunctionNew", "Object will be limited, as " << planeEvalRes.supportValue << " > " << _vec(rowI));
         		// the actual object will be limited by the new plane
         		limitingPlanes.push_back(rowI);
 				Number invDirVal = this->evaluate(-(_mat.row(rowI)), false).supportValue;
-				//TRACE("hypro.representations.supportFunction", "evaluate(" << -(_mat.row(rowI)) << ") <=  " << -(_vec(rowI)) << ": " << invDirVal << " <= " << -(_vec(rowI)));
-        		//TRACE("hypro.representations.supportFunction", ": Limiting plane " << _mat.row(rowI).transpose() << " <= " << carl::toDouble(_vec(rowI)));
+				//TRACE("hypro.representations.supportFunctionNew", "evaluate(" << -(_mat.row(rowI)) << ") <=  " << -(_vec(rowI)) << ": " << invDirVal << " <= " << -(_vec(rowI)));
+        		//TRACE("hypro.representations.supportFunctionNew", ": Limiting plane " << _mat.row(rowI).transpose() << " <= " << carl::toDouble(_vec(rowI)));
 
 	            //if(!carl::AlmostEqual2sComplement(invDirVal, Number(-(_vec(rowI))), 2) && invDirVal < -(_vec(rowI))) {
 	            if(invDirVal < -(_vec(rowI))) {
@@ -458,15 +508,17 @@ namespace hypro {
 	            		if(secndPosEval.supportValue > _vec(rowI)) {
 	            			EvaluationResult<Number> secndNegEval = this->evaluate(-(_mat.row(rowI)), true);
 	            			if(secndNegEval.supportValue < -(_vec(rowI))) {
-	            				TRACE("hypro.representations.supportFunction", "fullyOutside" );
+	            				TRACE("hypro.representations.supportFunctionNew", "fullyOutside" );
 				                // the object lies fully outside one of the planes -> return false
+				                //std::cout << "SFN::satisfiesHalfspaces: fullyOutside" << std::endl;
 				                return std::make_pair(CONTAINMENT::NO, this->intersectHalfspaces(_mat,_vec) );
 	            			}
 	            		}
 	            	} else {
 	            		// the values are far enough away from each other to make this result a false negative.
-	            		TRACE("hypro.representations.supportFunction", "fullyOutside, as " << invDirVal << " >= " << -(_vec(rowI)) );
+	            		TRACE("hypro.representations.supportFunctionNew", "fullyOutside, as " << invDirVal << " >= " << -(_vec(rowI)) );
 		                // the object lies fully outside one of the planes -> return false
+		                //std::cout << "SFN::satisfiesHalfspaces: fullyOutside, as " << invDirVal << " >= " << -(_vec(rowI)) << std::endl;
 		                return std::make_pair(CONTAINMENT::NO, this->intersectHalfspaces(_mat,_vec) );
 	            	}
 	            }
@@ -474,26 +526,28 @@ namespace hypro {
         }
     	if(limitingPlanes.size() < unsigned(_mat.rows())){
     		if(limitingPlanes.size() == 0 ){
-    			TRACE("hypro.representations.supportFunction", " Object will stay the same");
+    			TRACE("hypro.representations.supportFunctionNew", " Object will stay the same");
     			return std::make_pair(CONTAINMENT::FULL, *this);
     		}
-    		TRACE("hypro.representations.supportFunction", " Object will be limited but not empty (" << limitingPlanes.size() << " planes)");
+    		TRACE("hypro.representations.supportFunctionNew", " Object will be limited but not empty (" << limitingPlanes.size() << " planes)");
     		// if the result is not fullyOutside, only add planes, which affect the object
         	matrix_t<Number> planes = matrix_t<Number>(limitingPlanes.size(), _mat.cols());
         	vector_t<Number> distances = vector_t<Number>(limitingPlanes.size());
         	for(unsigned i = 0; i < distances.rows(); ++i){
-        		// std::cout << "Set row " << i << " to plane " << limitingPlanes.back() << std::endl;
+        		// //std::cout << "Set row " << i << " to plane " << limitingPlanes.back() << std::endl;
         		planes.row(i) = _mat.row(limitingPlanes.back());
         		distances(i) = _vec(limitingPlanes.back());
         		limitingPlanes.pop_back();
         	}
 			assert(limitingPlanes.empty());
-        	TRACE("hypro.representations.supportFunction", "Intersect with " << planes << ", " << distances);
+        	TRACE("hypro.representations.supportFunctionNew", "Intersect with " << planes << ", " << distances);
+        	//std::cout << "SFN::satisfiesHalfspaces: Intersect with " << planes << ", " << distances << std::endl;
         	return std::make_pair(CONTAINMENT::PARTIAL, this->intersectHalfspaces(planes,distances));
     	} else {
-    		TRACE("hypro.representations.supportFunction", " Object will be fully limited but not empty");
+    		TRACE("hypro.representations.supportFunctionNew", " Object will be fully limited but not empty");
     		assert(limitingPlanes.size() == unsigned(_mat.rows()));
-    		TRACE("hypro.representations.supportFunction", "Intersect with " << _mat << ", " << _vec);
+    		TRACE("hypro.representations.supportFunctionNew", "Intersect with " << _mat << ", " << _vec);
+    		//std::cout << "SFN::satisfiesHalfspaces: Object will be fully limited but not empty. Intersect with " << _mat << ", " << _vec << std::endl;
     		return std::make_pair(CONTAINMENT::PARTIAL, this->intersectHalfspaces(_mat,_vec));
     	}
 	}
@@ -568,9 +622,11 @@ namespace hypro {
 
 	template<typename Number, typename Converter, typename Setting>
 	SupportFunctionNewT<Number,Converter,Setting> SupportFunctionNewT<Number,Converter,Setting>::intersect( const SupportFunctionNewT<Number,Converter,Setting>& rhs ) const {
+		//std::cout << "SFN::intersectstart" << std::endl;
 		std::shared_ptr<IntersectOp<Number,Converter,Setting>> intersec = std::make_shared<IntersectOp<Number,Converter,Setting>>(*this, rhs);
 		std::shared_ptr<RootGrowNode<Number,Converter,Setting>> intersecPtr = std::static_pointer_cast<RootGrowNode<Number,Converter,Setting>>(intersec);
 		SupportFunctionNewT<Number,Converter,Setting> sf = SupportFunctionNewT<Number,Converter,Setting>(intersecPtr);
+		//std::cout << "SFN::intersect start" << std::endl;
 		return sf;	
 	}
 
@@ -590,13 +646,13 @@ namespace hypro {
     	}
     	vector_t<Number> vec = vector_t<Number>(1);
     	vec(0) = hspace.offset();
-    	typename Converter::HPolytope* hpoly = new typename Converter::HPolytope(mat,vec);
-        return intersect(SupportFunctionNewT<Number,Converter,Setting>(hpoly));
+    	typename Converter::HPolytope hpoly(mat,vec);
+    	return intersect(SupportFunctionNewT<Number,Converter,Setting>(hpoly));
 	}
 
 	template<typename Number, typename Converter, typename Setting>
 	SupportFunctionNewT<Number,Converter,Setting> SupportFunctionNewT<Number,Converter,Setting>::intersectHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const {
-		typename Converter::HPolytope* hpoly = new typename Converter::HPolytope(_mat,_vec);
+		typename Converter::HPolytope hpoly(_mat,_vec);
 		return intersect(SupportFunctionNewT<Number,Converter,Setting>(hpoly));	
 	}
 
@@ -699,6 +755,39 @@ namespace hypro {
 			};
 
 		return traverse(doNothing, collectLeafDimensions, intersectDims);
+	}
+
+	template<typename Number, typename Converter, typename Setting>
+	void SupportFunctionNewT<Number,Converter,Setting>::evaluateTemplate(std::size_t directionCount, bool force) const {
+		if(!mTemplateSet || force) {
+			std::vector<vector_t<Number>> templateDirections = computeTemplate<Number>(this->dimension(), directionCount);
+
+		    matrix_t<Number> templateDirectionMatrix = combineRows(templateDirections);
+
+		    //lets the support function evaluate the offset of the halfspaces for each direction
+		    std::vector<EvaluationResult<Number>> offsets = this->multiEvaluate(templateDirectionMatrix);
+
+		    std::vector<std::size_t> boundedConstraints;
+		    for(unsigned offsetIndex = 0; offsetIndex < offsets.size(); ++offsetIndex){
+				//std::cout << "Result: " << offsets[offsetIndex] << std::endl;
+		        if(offsets[offsetIndex].errorCode != SOLUTION::INFTY){
+		            boundedConstraints.push_back(offsetIndex);
+		        }
+		    }
+		    matrix_t<Number> constraints = matrix_t<Number>(boundedConstraints.size(), this->dimension());
+		    vector_t<Number> constants = vector_t<Number>(boundedConstraints.size());
+		    unsigned pos = boundedConstraints.size()-1;
+		    while(!boundedConstraints.empty()){
+		        constraints.row(pos) = templateDirectionMatrix.row(boundedConstraints.back());
+		        constants(pos) = offsets[boundedConstraints.back()].supportValue;
+		        boundedConstraints.pop_back();
+		        --pos;
+		    }
+
+		    mMatrix = constraints;
+		    mVector = constants;
+		    mTemplateSet = true;
+		}
 	}
 
 } // namespace hypro

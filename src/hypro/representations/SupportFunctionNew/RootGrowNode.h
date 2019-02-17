@@ -101,13 +101,13 @@ class RootGrowNode {
 	////// Displaying
 
 	friend std::ostream& operator<<(std::ostream& ostr, const RootGrowNode& r){
-		ostr << "current address: " << &r << " type: " << r.getType() << " children types(address): [";
+		ostr << "RootGrowNode address: " << &r << " own type: " << r.getType() << " children types(address): [";
 		for(auto c : r.getChildren()){
-			ostr << c->getType() << "(" << &c << ")" << ",";
+			ostr << c->getType() << "(" << &(*c) << ")" << ",";
 		}
 		ostr << "]" << std::endl;
 		for(auto c : r.getChildren()){
-			ostr << *c << std::endl;
+			ostr << *c;
 		}
 		return ostr;
 	}
@@ -149,16 +149,15 @@ class RootGrowNode {
 	virtual bool contains(const vector_t<Number>& ) const { assert(false && "contains(p) should only be called by Leaf\n"); return true; } 
 	virtual bool contains(const std::vector<bool>& ) const { assert("contains(v) should only be called by operations\n"); return false; }
 
-	virtual std::vector<std::size_t> intersectDims(const std::vector<std::vector<std::size_t>>& ) const { return std::vector<std::size_t>(); } 
+	virtual std::vector<std::size_t> intersectDims(const std::vector<std::vector<std::size_t>>& dims) const { return dims.front(); } 
+
+	//virtual matrix_t<Number> getMatrix() const { assert(false && "This should only be called by Leaf\n"); return matrix_t<Number>::Zero(getDimension(), getDimension()); }
+	//virtual matrix_t<Number> getMatrix(const std::vector<matrix_t<Number>>& ) const {  assert("contains(v) should only be called by operations\n"); return matrix_t<Number>::Zero(getDimension(), getDimension()); }
 
 };
 ////// Settings conversion
 
-//If the settings are the same, just return the original
-//template<typename Number, typename Converter, typename Setting, typename SettingRhs, carl::EnableIf< std::is_same<Setting, SettingRhs> > = carl::dummy>
-//std::shared_ptr<RootGrowNode<Number,Converter,Setting>> convertSettings(const RootGrowNode<Number,Converter,SettingRhs>* in){ return in; }
-
-//Converts the setting of only the given RootGrowNode to the given setting and returns ashared pointer to a newly allocated RootGrowNode of the same type. 
+//Converts the setting of only the given RootGrowNode to the given setting and returns a shared pointer to a newly allocated RootGrowNode of the same type. 
 //Does not convert its children and does not maintain its connection to its children. This is done in the SupportFunctionNew settings converter.
 template<typename Number, typename Converter, typename Setting, typename SettingRhs, carl::DisableIf< std::is_same<Setting, SettingRhs> > = carl::dummy> 
 std::shared_ptr<RootGrowNode<Number,Converter,Setting>> convertSettings(const RootGrowNode<Number,Converter,SettingRhs>* in) { 
@@ -176,6 +175,12 @@ std::shared_ptr<RootGrowNode<Number,Converter,Setting>> convertSettings(const Ro
 			delete tmpPtr;
 			break;
 		}
+		case SFNEW_TYPE::INTERSECTOP: {
+			std::shared_ptr<IntersectOp<Number,Converter,Setting>> sum = std::make_shared<IntersectOp<Number,Converter,Setting>>(*tmpPtr);
+			clone = std::static_pointer_cast<RootGrowNode<Number,Converter,Setting>>(sum);
+			delete tmpPtr;
+			break;
+		}	
 		case SFNEW_TYPE::PROJECTOP: {
 			std::shared_ptr<ProjectOp<Number,Converter,Setting>> project = std::make_shared<ProjectOp<Number,Converter,Setting>>(*(dynamic_cast<ProjectData*>(tmpPtr)));
 			clone = std::static_pointer_cast<RootGrowNode<Number,Converter,Setting>>(project);
@@ -190,12 +195,6 @@ std::shared_ptr<RootGrowNode<Number,Converter,Setting>> convertSettings(const Ro
 		}
 		case SFNEW_TYPE::SUMOP: {
 			std::shared_ptr<SumOp<Number,Converter,Setting>> sum = std::make_shared<SumOp<Number,Converter,Setting>>(*tmpPtr);
-			clone = std::static_pointer_cast<RootGrowNode<Number,Converter,Setting>>(sum);
-			delete tmpPtr;
-			break;
-		}	
-		case SFNEW_TYPE::INTERSECTOP: {
-			std::shared_ptr<IntersectOp<Number,Converter,Setting>> sum = std::make_shared<IntersectOp<Number,Converter,Setting>>(*tmpPtr);
 			clone = std::static_pointer_cast<RootGrowNode<Number,Converter,Setting>>(sum);
 			delete tmpPtr;
 			break;
@@ -224,13 +223,8 @@ std::shared_ptr<RootGrowNode<Number,Converter,Setting>> convertSettings(const Ro
 					break;
 				}
 				case representation_name::carl_polytope: {
-					//std::shared_ptr<Leaf<N,C,S,typename C::CarlPolytope>> leafPtr = std::make_shared<Leaf<N,C,S,typename C::CarlPolytope>>(dataLe);		
-					//clone = std::static_pointer_cast<RootGrowNode<N,C,S>>(leafPtr);
-					break;
-				}
-				case representation_name::constraint_set: {
-					//std::shared_ptr<Leaf<N,C,S,typename C::ConstraintSet>> leafPtr = std::make_shared<Leaf<N,C,S,typename C::ConstraintSet>>(dataLe);		
-					//clone = std::static_pointer_cast<RootGrowNode<N,C,S>>(leafPtr);
+					std::shared_ptr<Leaf<N,C,S,typename C::CarlPolytope>> leafPtr = std::make_shared<Leaf<N,C,S,typename C::CarlPolytope>>(dataLe);		
+					clone = std::static_pointer_cast<RootGrowNode<N,C,S>>(leafPtr);
 					break;
 				}
 				case representation_name::polytope_h: {
@@ -239,24 +233,29 @@ std::shared_ptr<RootGrowNode<Number,Converter,Setting>> convertSettings(const Ro
 					break;
 				}
 				case representation_name::polytope_v: {
-					//std::shared_ptr<Leaf<N,C,S,typename C::VPolytope>> leafPtr = std::make_shared<Leaf<N,C,S,typename C::VPolytope>>(dataLe);		
-					//clone = std::static_pointer_cast<RootGrowNode<N,C,S>>(leafPtr);
+					std::shared_ptr<Leaf<N,C,S,typename C::VPolytope>> leafPtr = std::make_shared<Leaf<N,C,S,typename C::VPolytope>>(dataLe);		
+					clone = std::static_pointer_cast<RootGrowNode<N,C,S>>(leafPtr);
 					break;
 				}
 				#ifdef HYPRO_USE_PPL
 				case representation_name::ppl_polytope: {
-					//std::shared_ptr<Leaf<N,C,S,typename C::Polytope>> leafPtr = std::make_shared<Leaf<N,C,S,typename C::Polytope>>(dataLe);		
-					//clone = std::static_pointer_cast<RootGrowNode<N,C,S>>(leafPtr);
+					std::shared_ptr<Leaf<N,C,S,typename C::Polytope>> leafPtr = std::make_shared<Leaf<N,C,S,typename C::Polytope>>(dataLe);		
+					clone = std::static_pointer_cast<RootGrowNode<N,C,S>>(leafPtr);
 					break;
 				}
 				#endif
 				case representation_name::zonotope: {
-					//std::shared_ptr<Leaf<N,C,S,typename C::Zonotope>> leafPtr = std::make_shared<Leaf<N,C,S,typename C::Zonotope>>(dataLe);		
-					//clone = std::static_pointer_cast<RootGrowNode<N,C,S>>(leafPtr);
+					std::shared_ptr<Leaf<N,C,S,typename C::Zonotope>> leafPtr = std::make_shared<Leaf<N,C,S,typename C::Zonotope>>(dataLe);		
+					clone = std::static_pointer_cast<RootGrowNode<N,C,S>>(leafPtr);
 					break;
 				}
 				case representation_name::difference_bounds: {
-					//std::shared_ptr<Leaf<N,C,S,typename C::DifferenceBounds>> leafPtr = std::make_shared<Leaf<N,C,S,typename C::DifferenceBounds>>(dataLe);		
+					std::shared_ptr<Leaf<N,C,S,typename C::DifferenceBounds>> leafPtr = std::make_shared<Leaf<N,C,S,typename C::DifferenceBounds>>(dataLe);		
+					clone = std::static_pointer_cast<RootGrowNode<N,C,S>>(leafPtr);
+					break;
+				}
+				case representation_name::constraint_set: {
+					//std::shared_ptr<Leaf<N,C,S,typename C::ConstraintSet>> leafPtr = std::make_shared<Leaf<N,C,S,typename C::ConstraintSet>>(dataLe);		
 					//clone = std::static_pointer_cast<RootGrowNode<N,C,S>>(leafPtr);
 					break;
 				}

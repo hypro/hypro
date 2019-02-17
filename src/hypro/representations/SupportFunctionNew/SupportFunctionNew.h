@@ -24,24 +24,49 @@
 #include "../../util/linearOptimization/Optimizer.h"
 #include "../../util/logging/Logger.h"
 #include "../../util/templateDirections.h"
+#include "../helperMethods/isBox.h"
 
 #include "RootGrowNode.h"
 
 namespace hypro {
 
+//Needed as a filler class to turn Parameters<> into Parameters<Dummy>
+struct Dummy {
+	friend std::ostream& operator<<(std::ostream& str, const Dummy& ){
+		str << "Dummy struct!";
+		return str;
+	}
+};
+
 //A struct for the parameters.
 //All parameters for a std::function must be placed inside a Parameters object.
 //Ensures that traversal() gets only one argument instead of 20 or 30!
+//If no parameter should be inside, please insert the dummy struct, as empty parameters are broken.
 template<typename ...Rargs>
 struct Parameters {
 	
+  public: 
+
 	std::tuple<Rargs...> args;
 
 	Parameters(Rargs... r) : args(std::make_tuple(r...)) {}
-	Parameters(std::tuple<Rargs...> r) : args(r) {}
+	Parameters(std::tuple<Rargs...>& r) : args(r) {}
 	~Parameters(){}
 
-	//static std::size_t size(){ return std::size_t(std::tuple_size<Rargs...>::value); }
+	std::size_t size() const { 
+		return std::tuple_size<std::tuple<Rargs...>>::value;
+	}
+
+	friend std::ostream& operator<<(std::ostream& str, const Parameters<Rargs...>& param){
+		str << "Param << operator, ";
+		if(param.size() > 0){
+			str << "size is: " << param.size() << std::endl;
+			str << std::get<0>(param.args) << std::endl;
+		} else {
+			str << "param.args is empty" << std::endl;
+		}
+		return str;
+	}
 };
 
 /**
@@ -70,14 +95,21 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
   	//Needed for Converter.h
   	typedef Setting Settings;
 
-  protected:
-
 	/***************************************************************************
 	 * Members
 	 **************************************************************************/
 
+  protected:
+
   	//A pointer of shared ownership pointing to a node in the whole tree. This node is the root for this supportfunction, the nodes above root are not known.
   	mutable std::shared_ptr<RootGrowNode<Number,Converter,Setting>> mRoot = nullptr;
+
+  	//The matrix and the vector that represent the SupportFunction 
+  	mutable matrix_t<Number> mMatrix;
+  	mutable vector_t<Number> mVector;
+
+  	//A flag indicating whether the template evaluation to gain mMatrix and mVector has already been used
+  	mutable bool mTemplateSet = false;
 
 	/***************************************************************************
 	 * Constructors
@@ -110,18 +142,40 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
 	 * @brief      Settings conversion constructor.
 	 * @param[in]  orig  The original.
 	 */
-
 	template<typename SettingRhs, carl::DisableIf< std::is_same<Setting, SettingRhs> > = carl::dummy>
-	SupportFunctionNewT(const SupportFunctionNewT<Number,Converter,SettingRhs>& orig);
+	SupportFunctionNewT( const SupportFunctionNewT<Number,Converter,SettingRhs>& orig);
 
 	/**
 	 * @brief      Generic Leaf constructor.
 	 * @param[in]  r 	A pointer to a GeometricObject, i.e. Boxes, HPolytopes, etc.
 	 */
 	template<typename Representation>
-	SupportFunctionNewT( GeometricObject<Number,Representation>* r) 
-		: mRoot(std::make_shared<Leaf<Number,Converter,Setting,Representation>>(dynamic_cast<Representation*>(r))) 
+	SupportFunctionNewT( GeometricObject<Number,Representation>& r) 
+		: mRoot(std::make_shared<Leaf<Number,Converter,Setting,Representation>>(dynamic_cast<Representation&>(r))) 
 	{}
+
+	/**
+	 * @brief      Matrix vector constructor
+	 * @param[in]  mat 	The given matrix
+	 * @param[in]  vec  The given vector
+	 */
+	SupportFunctionNewT( const matrix_t<Number>& mat, const vector_t<Number>& vec)
+	{
+		boost::tuple<bool,std::vector<carl::Interval<Number>>> areArgsBox = isBox(mat,vec);
+		if(boost::get<0>(areArgsBox)){
+			mRoot = std::make_shared<Leaf<Number,Converter,Setting,typename Converter::Box>>(std::make_shared<typename Converter::Box>(boost::get<1>(areArgsBox)));
+		} else {
+			mRoot = std::make_shared<Leaf<Number,Converter,Setting,typename Converter::HPolytope>>(std::make_shared<typename Converter::HPolytope>(mat,vec));
+		}
+	}
+
+	/**
+	 * @brief      Vector of halfspaces constructor
+	 * @param[in]  hspaces  The vector of halfspaces
+	 */
+	SupportFunctionNewT( const std::vector<Halfspace<Number>>& hspaces)
+		: mRoot(std::make_shared<Leaf<Number,Converter,Setting,typename Converter::HPolytope>>(std::make_shared<typename Converter::HPolytope>(hspaces))) 
+	{ /*TODO: Optimize hspace constructor with isBox() */ }
 
 	/**
 	 * @brief Destructor.
@@ -321,11 +375,23 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
 	 * General interface
 	 **************************************************************************/
 
-	 /**
-	  * @brief      Getter for the space dimension.
-	  * @return     The dimension of the space.
-	  */
+	/**
+	 * @brief      Getter for the space dimension.
+	 * @return     The dimension of the space.
+	 */
 	std::size_t dimension() const;
+
+	/**
+	 * @brief      Getter for the constraint matrix
+	 * @return     The constraint matrix
+	 */
+	matrix_t<Number> matrix() const;
+
+	/**
+	 * @brief      Getter for the offset vector
+	 * @return     The offset vector
+	 */
+	vector_t<Number> vector() const;
 
 	/**
 	 * @brief      Removes redundancy.
@@ -446,6 +512,13 @@ class SupportFunctionNewT : public GeometricObject<Number, SupportFunctionNewT<N
 	 * @return 	   A vector containing the indices of the dimensions remaining  
 	 */
 	std::vector<std::size_t> collectProjections() const;
+
+	/**
+	 * @brief	   
+	 * @param[in]  directionCount  Number of directions to be evaluated
+	 * @param[in]  force  		   
+	 */
+	void evaluateTemplate(std::size_t directionCount = defaultTemplateDirectionCount, bool force = false) const;
 
 };
 /** @} */

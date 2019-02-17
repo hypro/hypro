@@ -297,7 +297,7 @@ HPolytopeT<Number,Converter<Number>,HPolySetting> Converter<Number>::toHPolytope
 	
 	//gets dimension of source object
     std::size_t dim = _source.dimension();
-
+    //std::cout << __func__ << "Dimension of source: " << dim << std::endl;
     std::vector<std::size_t> projections = _source.collectProjections();
     //std::cout << __func__ << ": collected " << projections.size() << " projections." << std::endl;
 	if( projections.size() == dim ){
@@ -343,7 +343,7 @@ HPolytopeT<Number,Converter<Number>,HPolySetting> Converter<Number>::toHPolytope
     	return HPolytope(constraints, constants);
 
 	} else {
-		//std::cout << "Projection" << std::endl;
+		//std::cout << __func__ << "Projection" << std::endl;
 		//for(auto dim : projections) {
 		//	std::cout << "projection dimension " << dim << std::endl;
 		//}
@@ -354,7 +354,7 @@ HPolytopeT<Number,Converter<Number>,HPolySetting> Converter<Number>::toHPolytope
 				zeroDimensions.emplace_back(i);
 			}
 		}
-		//std::cout << __func__ << ": compute template ... ";
+		//std::cout << __func__ << ": compute template ... " << std::endl;
 		std::vector<vector_t<Number>> templateDirections = computeTemplate<Number>(projections, numberOfDirections, dim); // TODO: ATTENTION, 8 is hardcoded here.
 		//std::cout << "done." << std::endl;
 		for(auto direction : additionalDirections) {

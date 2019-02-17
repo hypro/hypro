@@ -183,7 +183,7 @@ class ZonotopeT : public GeometricObject<Number, ZonotopeT<Number,Converter,Sett
     void reduceNumberRepresentation();
 
     //BOTH TODO
-    EvaluationResult<Number> evaluate(const matrix_t<Number>& directions) const;
+    EvaluationResult<Number> evaluate(const vector_t<Number>& directions) const;
 	std::vector<EvaluationResult<Number>> multiEvaluate(const matrix_t<Number>& directions, bool useExact = true) const;
 
 	/*****************************************************************************
