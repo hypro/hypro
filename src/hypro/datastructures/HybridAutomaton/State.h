@@ -432,7 +432,7 @@ class State
      * @return     A reference to the outstream.
      */
     #ifdef HYPRO_LOGGING
-    friend ostream& operator<<(ostream& out, const State<Number,Representation,Rargs...>& state) {
+    friend std::ostream& operator<<(std::ostream& out, const State<Number,Representation,Rargs...>& state) {
     	out << "location: " << state.getLocation()->getName() << " at timestamp " << state.getTimestamp() << std::endl;
     	//out << "Set: " << convert<Number,double>(Converter<Number>::toBox(state.getSet())) << std::endl;
     	//out << "Set: " << boost::apply_visitor(genericConversionVisitor<repVariant,Number>(representation_name::box), state.getSet()) << std::endl;
@@ -445,7 +445,7 @@ class State
 	    		out << state.getSet(i) << std::endl;
     	}
     #else
-    friend ostream& operator<<(ostream& out, const State<Number,Representation,Rargs...>&) {
+    friend std::ostream& operator<<(std::ostream& out, const State<Number,Representation,Rargs...>&) {
     #endif
     	return out;
     }

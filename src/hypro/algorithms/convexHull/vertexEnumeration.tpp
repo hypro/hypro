@@ -466,7 +466,7 @@ namespace hypro {
 				vector_t<Number> one = vector_t<Number>(1);
 				one[0]=1;
 				mLinealtySpace.push_back(one);
-				throw string("\n WARNING: no constrains. \n");
+				throw std::string("\n WARNING: no constrains. \n");
 			}
 			Dictionary<Number> dictionary(findFirstVertex());
 			DEBUG("hypro.vertexEnumeration","findFirstVertex");
@@ -546,8 +546,8 @@ namespace hypro {
 			mPivotingMatrix = invA1;
 			mOffset = b1;
 		}
-		catch(string const& message) {
-			cout << message;
+		catch(std::string const& message) {
+		std::cout << message;
 			return false;
 		}
 		DEBUG("hypro.vertexEnumeration","positive constrains");

@@ -34,6 +34,7 @@ namespace Eigen {
 				return true;
 			}
 		}
+		// false, if all coordinates are equal
 		return false;
 	}
 
@@ -46,11 +47,12 @@ namespace Eigen {
 		for ( unsigned dim = 0; dim < lhs.rows(); ++dim ) {
 			if ( lhs( dim ) > rhs( dim ) ) {
 				return false;
-			} else if ( lhs( dim ) <= rhs( dim ) ) {
+			} else if ( lhs( dim ) < rhs( dim ) ) {
 				return true;
 			}
 		}
-		return false;
+		// true, if all coordinates are equal
+		return true;
 	}
 
 	template<typename Number>

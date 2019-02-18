@@ -9,7 +9,6 @@ namespace hypro {
 template<typename State>
 bool isTreeExtension(typename ReachTreeNode<State>::Node_t node, Transition<typename State::NumberType>* transition) {
 	if(node->getChildren().empty()) {
-		//assert(mLocalTimingUpdate.getChildren().empty());
 		TRACE("hydra.worker.discrete","Regular tree extension as there are no child nodes.");
 		return true;
 	} else {
@@ -17,6 +16,8 @@ bool isTreeExtension(typename ReachTreeNode<State>::Node_t node, Transition<type
 		if(tChildren.empty()){
 			TRACE("hydra.worker.discrete","Regular tree extension as there are no child nodes for this transition.");
 			return true;
+		} else {
+			// TODO: We need to account for the time interval the transition was enabled.
 		}
 	}
 	return false;

@@ -1,4 +1,3 @@
-#pragma once
 #include "ResetTypes.h"
 #include "decomposition/Decomposition.h"
 #include "../../types.h"

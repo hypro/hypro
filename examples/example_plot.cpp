@@ -2,7 +2,7 @@
  * \example example_plot.cpp This file shows how to use the plotter.
  */
 
-#include "util/Plotter.h"
+#include "util/plotting/Plotter.h"
 #include "representations/GeometricObject.h"
 
 using namespace hypro;

@@ -2,6 +2,8 @@
 #include "IHandler.h"
 #include "forwardDeclarations.h"
 #include "../../../datastructures/HybridAutomaton/Location.h"
+#include "../../../datastructures/reachability/workQueue/WorkQueue.h"
+#include "../../../datastructures/reachability/timing/EventTimingNode.h"
 
 namespace hypro
 {
@@ -26,7 +28,8 @@ namespace hypro
 										Transition<Number>* transition,
 										StrategyParameters sPars,
 										WorkQueue<std::shared_ptr<Task<State>>>* localQueue,
-										WorkQueue<std::shared_ptr<Task<State>>>* localCEXQueue);
+										WorkQueue<std::shared_ptr<Task<State>>>* localCEXQueue,
+										EventTimingNode<typename State::NumberType>* timingNode);
 	};
 } // hypro
 

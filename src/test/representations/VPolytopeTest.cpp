@@ -356,3 +356,17 @@ TYPED_TEST(VPolytopeTest, Membership)
 	Point<TypeParam> p4({2, 2});
 	EXPECT_TRUE(vpt1.contains(p4));
 }
+
+TYPED_TEST(VPolytopeTest, SatisfiesHalfspaces)
+{
+	// box (1,2) - (3,4)
+	VPolytope<TypeParam> vpt1 = VPolytope<TypeParam>(this->points1);
+
+	EXPECT_EQ(hypro::CONTAINMENT::FULL, vpt1.satisfiesHalfspace(hypro::Halfspace<TypeParam>({1,0},4)).first);
+	EXPECT_EQ(hypro::CONTAINMENT::FULL, vpt1.satisfiesHalfspace(hypro::Halfspace<TypeParam>({1,0},3)).first);
+	EXPECT_EQ(hypro::CONTAINMENT::PARTIAL, vpt1.satisfiesHalfspace(hypro::Halfspace<TypeParam>({1,0},2)).first);
+	EXPECT_EQ(hypro::CONTAINMENT::PARTIAL, vpt1.satisfiesHalfspace(hypro::Halfspace<TypeParam>({1,0},1)).first);
+	EXPECT_EQ(hypro::CONTAINMENT::NO, vpt1.satisfiesHalfspace(hypro::Halfspace<TypeParam>({1,0},0)).first);
+
+	PRINT_STATS();
+}

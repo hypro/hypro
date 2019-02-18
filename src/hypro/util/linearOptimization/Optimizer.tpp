@@ -50,11 +50,9 @@ namespace hypro {
 	void Optimizer<Number>::setMatrix(const matrix_t<Number>& _matrix) {
 		assert(isSane());
 		if(mConstraintMatrix != _matrix){
-			for(auto& idContextPair : mGlpkContext) {
-				idContextPair.second.mConstraintsSet = false;
-			}
-			mConsistencyChecked = false;
+			clearCache();
 			mConstraintMatrix = _matrix;
+			mRelationSymbols = std::vector<carl::Relation>(mConstraintMatrix.rows(), carl::Relation::LEQ);
 		}
 	}
 
@@ -62,12 +60,39 @@ namespace hypro {
 	void Optimizer<Number>::setVector(const vector_t<Number>& _vector) {
 		assert(isSane());
 		if(mConstraintVector != _vector){
-			for(auto& idContextPair : mGlpkContext) {
-				idContextPair.second.mConstraintsSet = false;
-			}
-			mConsistencyChecked = false;
+			clearCache();
 			mConstraintVector = _vector;
 		}
+	}
+
+	template<typename Number>
+	void Optimizer<Number>::setRelations(const std::vector<carl::Relation>& rels) {
+		assert(isSane());
+		mRelationSymbols = rels;
+		clearCache();
+	}
+
+	template<typename Number>
+	void Optimizer<Number>::addConstraint(const vector_t<Number>& constraint, Number constantPart, carl::Relation rel) {
+		assert(isSane());
+		mConstraintMatrix.conservativeResize(mConstraintMatrix.rows()+1, mConstraintMatrix.cols());
+		mConstraintVector.conservativeResize(mConstraintVector.rows()+1);
+		mConstraintMatrix.row(mConstraintMatrix.rows()-1) = constraint;
+		mConstraintVector(mConstraintVector.size()-1) = constantPart;
+		// save that the constraint is an equality constraint.
+		mRelationSymbols.push_back(rel);
+		// reset caches
+		clearCache();
+	}
+
+	template<typename Number>
+	void Optimizer<Number>::setRelation(carl::Relation rel, std::size_t pos) {
+		assert(isSane());
+		assert(pos < mRelationSymbols.size());
+		// save that the constraint is an equality constraint.
+		mRelationSymbols[pos] = rel;
+		// reset caches
+		clearCache();
 	}
 
 	template<typename Number>
@@ -75,6 +100,7 @@ namespace hypro {
 		assert(isSane());
 		mConstraintMatrix = matrix_t<Number>::Zero(1,1);
 		mConstraintVector = vector_t<Number>::Zero(1);
+		mRelationSymbols.clear();
 		//#ifdef HYPRO_USE_SMTRAT
 		//if(lp != nullptr)
 		//	mSmtratSolver.clear();
@@ -189,7 +215,7 @@ namespace hypro {
 			res = z3OptimizeLinear(_direction,mConstraintMatrix,mConstraintVector,res);
 			#elif defined(HYPRO_USE_SMTRAT) // else if HYPRO_USE_SMTRAT
 			COUNT("smtrat");
-			res = smtratOptimizeLinear(_direction,mConstraintMatrix,mConstraintVector,res);
+			res = smtratOptimizeLinear(_direction,mConstraintMatrix,mConstraintVector,mRelationSymbols,res);
 			#elif defined(HYPRO_USE_SOPLEX)
 			COUNT("soplex");
 			res = soplexOptimizeLinear(_direction,mConstraintMatrix,mConstraintVector,res);
@@ -221,7 +247,7 @@ namespace hypro {
 
 		#ifdef HYPRO_USE_SMTRAT
 		//TRACE("hypro.optimizer","Use smtrat for consistency check.");
-		mLastConsistencyAnswer = smtratCheckConsistency(mConstraintMatrix,mConstraintVector) == true ? SOLUTION::FEAS : SOLUTION::INFEAS;
+		mLastConsistencyAnswer = smtratCheckConsistency(mConstraintMatrix,mConstraintVector,mRelationSymbols) == true ? SOLUTION::FEAS : SOLUTION::INFEAS;
 		mConsistencyChecked = true;
         #elif defined(HYPRO_USE_Z3)
 		mLastConsistencyAnswer = z3CheckConsistency(mConstraintMatrix,mConstraintVector) == true ? SOLUTION::FEAS : SOLUTION::INFEAS;
@@ -255,7 +281,7 @@ namespace hypro {
 		#ifdef HYPRO_USE_Z3
 		return z3CheckPoint(mConstraintMatrix,mConstraintVector,_point);
 		#elif defined(HYPRO_USE_SMTRAT)
-		return smtratCheckPoint(mConstraintMatrix, mConstraintVector, _point);
+		return smtratCheckPoint(mConstraintMatrix, mConstraintVector,mRelationSymbols, _point);
 		#elif defined(HYPRO_USE_SOPLEX)
 		return soplexCheckPoint(mConstraintMatrix, mConstraintVector, _point);
 		#else
@@ -277,7 +303,7 @@ namespace hypro {
 		EvaluationResult<Number> res;
 
 		#ifdef HYPRO_USE_SMTRAT
-		res = smtratGetInternalPoint(mConstraintMatrix, mConstraintVector);
+		res = smtratGetInternalPoint(mConstraintMatrix, mConstraintVector,mRelationSymbols);
 		mConsistencyChecked = true;
 		mLastConsistencyAnswer = res.errorCode;
 		#else
@@ -303,7 +329,7 @@ namespace hypro {
 		#ifdef HYPRO_USE_Z3
 		res = z3RedundantConstraints(mConstraintMatrix, mConstraintVector);
 		#elif defined(HYPRO_USE_SMTRAT) // else if HYPRO_USE_SMTRAT
-		res = smtratRedundantConstraints(mConstraintMatrix, mConstraintVector);
+		res = smtratRedundantConstraints(mConstraintMatrix, mConstraintVector,mRelationSymbols);
 		#else
 		res = glpkRedundantConstraints( mGlpkContext[std::this_thread::get_id()], mConstraintMatrix, mConstraintVector);
 		#endif
@@ -321,6 +347,7 @@ namespace hypro {
 
 	template<typename Number>
 	bool Optimizer<Number>::isSane() const {
+		#ifndef NDEBUG
 		/*
 		TRACE("hypro.optimizer","Have " << mGlpkContext.size() << " instances to check.");
 		for(const auto& glpPair : mGlpkContext) {
@@ -331,6 +358,7 @@ namespace hypro {
 			TRACE("hypro.optimizer","Instance " << &glpPair.second << " for thread " << glpPair.first << " is sane.");
 		}
 		*/
+		#endif
 		return true;
 	}
 
@@ -402,7 +430,30 @@ namespace hypro {
 				// convert constraint constants
 				glp_add_rows( glpCtx.lp, numberOfConstraints );
 				for ( int i = 0; i < numberOfConstraints; i++ ) {
-					glp_set_row_bnds( glpCtx.lp, i + 1, GLP_UP, 0.0, carl::toDouble( mConstraintVector(i) ) );
+					// Set relation symbols correctly
+					switch(mRelationSymbols[i]) {
+						case carl::Relation::LEQ: {
+							// set upper bounds, lb-values (here 0.0) are ignored.
+							glp_set_row_bnds( glpCtx.lp, i + 1, GLP_UP, 0.0, carl::toDouble( mConstraintVector(i) ) );
+							break;
+						}
+						case carl::Relation::GEQ: {
+							// if it is an equality, the value is read from the lb-value, ub.values (here 0.0) are ignored.
+							glp_set_row_bnds( glpCtx.lp, i + 1, GLP_LO, carl::toDouble( mConstraintVector(i) ), 0.0 );
+							break;
+						}
+						case carl::Relation::EQ: {
+							// if it is an equality, the value is read from the lb-value, ub.values (here 0.0) are ignored.
+							glp_set_row_bnds( glpCtx.lp, i + 1, GLP_FX, carl::toDouble( mConstraintVector(i) ), 0.0 );
+							break;
+						}
+						case carl::Relation::LESS:
+						case carl::Relation::GREATER:
+						default:
+							// glpk cannot handle strict inequalities.
+							assert(false);
+							std::cout << "This should not happen." << std::endl;
+					}
 				}
 				// add cols here
 				int cols = int(mConstraintMatrix.cols());
@@ -453,6 +504,14 @@ namespace hypro {
 			glpCtx.mConstraintsSet = true;
 		}
 		TRACE("hypro.optimizer","Done.");
+	}
+
+	template<typename Number>
+	void Optimizer<Number>::clearCache() const {
+		for(auto& idContextPair : mGlpkContext) {
+			idContextPair.second.mConstraintsSet = false;
+		}
+		mConsistencyChecked = false;
 	}
 
 } // namespace hypro

@@ -25,109 +25,145 @@ namespace hypro {
 			return;
 		}
 
-		if(Setting::HYPRO_BOX_AVOID_LINEAR_OPTIMIZATION == true){
-			// calculate all possible Halfspace intersections -> TODO: dPermutation can
-			// be improved.
-			Permutator permutator = Permutator( _constraints.rows(), _constraints.cols() );
-			matrix_t<Number> intersection = matrix_t<Number>( _constraints.cols(), _constraints.cols() );
-			vector_t<Number> intersectionConstants = vector_t<Number>( _constraints.cols() );
-			std::set<vector_t<Number>> possibleVertices;
-			std::vector<std::size_t> permutation;
-			while ( !permutator.end()  ) {
-				permutation = permutator();
-				unsigned rowCount = 0;
-				// std::cout << "Intersect :" << std::endl;
-				for ( const auto &rowIndex : permutation ) {
-					// std::cout << _constraints.row(rowIndex) << " <= " <<
-					// _constants(rowIndex) << std::endl;
-					assert(rowCount < _constraints.cols());
-					intersection.row( rowCount ) = _constraints.row( rowIndex );
-					intersectionConstants( rowCount ) = _constants( rowIndex );
-					++rowCount;
-				}
-				// check if rank is full
-				Eigen::FullPivLU<matrix_t<Number>> luDecomposition = intersection.fullPivLu();
-				if ( luDecomposition.rank() == intersection.cols() ) {
-					vector_t<Number> vertex = luDecomposition.solve( intersectionConstants );
-					assert(vertex.rows() == _constraints.cols());
-					possibleVertices.emplace( std::move(vertex) );
-					//std::cout<< "Vertex computed: " << convert<Number,double>(vertex).transpose() << std::endl;
-				}
+		// if possible and allowed by settings, detect whether the constraints represent a box.
+		bool boxDefined = false;
+		if(!boxDefined && Setting::DETECT_BOX) {
+			auto boolIntervalsTuple = isBox(_constraints,_constants);
+			TRACE("hypro.representations","Is box, use interval constructor.");
+			if(boost::get<0>(boolIntervalsTuple)) {
+				*this = BoxT<Number,Converter,Setting>(boost::get<1>(boolIntervalsTuple));
+				boxDefined = true;
 			}
-			assert(!possibleVertices.empty());
-
-			// check if vertices are true vertices (i.e. they fulfill all constraints)
-			for ( auto vertex = possibleVertices.begin(); vertex != possibleVertices.end(); ) {
-				// std::cout  << "Refinement: Consider vertex : " << convert<Number,double>(*vertex).transpose() << std::endl;
-				// possibleVertices.size() << std::endl;
-				bool deleted = false;
-				for ( unsigned rowIndex = 0; rowIndex < _constraints.rows(); ++rowIndex ) {
-					Number res = vertex->dot( _constraints.row( rowIndex ) );
-					if ( res > _constants( rowIndex ) ) {
-						vertex = possibleVertices.erase( vertex );
-						deleted = true;
-						// std::cout << "Deleted because of row " << convert<Number,double>(vector_t<Number>(_constraints.row(rowIndex))) << std::endl;
-						// std::cout << "Res was " << res << " and the constant is " << _constants(rowIndex) << std::endl;
-						break;
-					}
-				}
-				if(!deleted) {
-					++vertex;
-				}
-			}
-			// std::cout<<__func__ << " : " <<__LINE__ <<std::endl;
-			// finish initialization
-			if(possibleVertices.empty()) {
-				*this = BoxT<Number,Converter,Setting>::Empty();
-				return;
-			} else {
-				vector_t<Number> min = *possibleVertices.begin();
-				vector_t<Number> max = *possibleVertices.begin();
-				for ( const auto &point : possibleVertices ) {
-					for( unsigned d = 0; d < point.rows(); ++d){
-						if( min(d) > point(d)) {
-							min(d) = point(d);
-						}
-						if( max(d) < point(d)) {
-							max(d) = point(d);
-						}
-					}
-				}
-				*this = BoxT<Number,Converter,Setting>(std::make_pair(Point<Number>(min),Point<Number>(max)));
-			}
-
-		} else {
-
-			// convert box to a set of constraints, add other halfspaces and evaluate in box main directions to get new intervals.
-			std::vector<vector_t<Number>> tpl = computeTemplate<Number>(_constraints.cols(), 4);
-
-			// evaluate in box directions.
-			Optimizer<Number> opt(_constraints,_constants);
-			std::vector<EvaluationResult<Number>> results;
-			for(Eigen::Index rowIndex = 0; rowIndex < _constraints.rows(); ++rowIndex) {
-				results.emplace_back(opt.evaluate(tpl[rowIndex], false));
-				if(results.back().errorCode == SOLUTION::INFEAS){
-					opt.cleanGLPInstance();
-					*this = BoxT<Number,Converter,Setting>::Empty();
-					return;
-				}
-			}
-			opt.cleanGLPInstance();
-			assert(Eigen::Index(results.size()) == Eigen::Index(tpl.size()));
-
-			// re-construct box from results.
-			mLimits = std::vector<carl::Interval<Number>>(_constraints.cols(), carl::Interval<Number>(0));
-			for(Eigen::Index rowIndex = 0; rowIndex < Eigen::Index(tpl.size()); ++rowIndex) {
-				for(Eigen::Index colIndex = 0; colIndex < _constraints.cols(); ++colIndex) {
-					if(tpl[rowIndex](colIndex) > 0) {
-						mLimits[colIndex].setUpper(results[rowIndex].supportValue);
-					} else if (tpl[rowIndex](colIndex) < 0) {
-						mLimits[colIndex].setLower(-results[rowIndex].supportValue);
-				}
-			}
-			mEmpty = false;
 		}
 
+		if(!boxDefined) {
+			if(Setting::HYPRO_BOX_AVOID_LINEAR_OPTIMIZATION == true){
+				// calculate all possible Halfspace intersections -> TODO: dPermutation can
+				// be improved.
+				Permutator permutator = Permutator( _constraints.rows(), _constraints.cols() );
+				matrix_t<Number> intersection = matrix_t<Number>( _constraints.cols(), _constraints.cols() );
+				vector_t<Number> intersectionConstants = vector_t<Number>( _constraints.cols() );
+				std::set<vector_t<Number>> possibleVertices;
+				std::vector<std::size_t> permutation;
+				while ( !permutator.end()  ) {
+					permutation = permutator();
+					unsigned rowCount = 0;
+					// std::cout << "Intersect :" << std::endl;
+					for ( const auto &rowIndex : permutation ) {
+						// std::cout << _constraints.row(rowIndex) << " <= " <<
+						// _constants(rowIndex) << std::endl;
+						assert(rowCount < _constraints.cols());
+						intersection.row( rowCount ) = _constraints.row( rowIndex );
+						intersectionConstants( rowCount ) = _constants( rowIndex );
+						++rowCount;
+					}
+					// check if rank is full
+					Eigen::FullPivLU<matrix_t<Number>> luDecomposition = intersection.fullPivLu();
+					if ( luDecomposition.rank() == intersection.cols() ) {
+						vector_t<Number> vertex = luDecomposition.solve( intersectionConstants );
+						assert(vertex.rows() == _constraints.cols());
+						possibleVertices.emplace( std::move(vertex) );
+						//std::cout<< "Vertex computed: " << convert<Number,double>(vertex).transpose() << std::endl;
+					}
+				}
+				assert(!possibleVertices.empty());
+
+				// check if vertices are true vertices (i.e. they fulfill all constraints)
+				for ( auto vertex = possibleVertices.begin(); vertex != possibleVertices.end(); ) {
+					// std::cout  << "Refinement: Consider vertex : " << convert<Number,double>(*vertex).transpose() << std::endl;
+					// possibleVertices.size() << std::endl;
+					bool deleted = false;
+					for ( unsigned rowIndex = 0; rowIndex < _constraints.rows(); ++rowIndex ) {
+						Number res = vertex->dot( _constraints.row( rowIndex ) );
+						if ( res > _constants( rowIndex ) ) {
+							vertex = possibleVertices.erase( vertex );
+							deleted = true;
+							// std::cout << "Deleted because of row " << convert<Number,double>(vector_t<Number>(_constraints.row(rowIndex))) << std::endl;
+							// std::cout << "Res was " << res << " and the constant is " << _constants(rowIndex) << std::endl;
+							break;
+						}
+					}
+					if(!deleted) {
+						++vertex;
+					}
+				}
+				// std::cout<<__func__ << " : " <<__LINE__ <<std::endl;
+				// finish initialization
+				if(possibleVertices.empty()) {
+					*this = BoxT<Number,Converter,Setting>::Empty();
+					return;
+				} else {
+					vector_t<Number> min = *possibleVertices.begin();
+					vector_t<Number> max = *possibleVertices.begin();
+					for ( const auto &point : possibleVertices ) {
+						for( unsigned d = 0; d < point.rows(); ++d){
+							if( min(d) > point(d)) {
+								min(d) = point(d);
+							}
+							if( max(d) < point(d)) {
+								max(d) = point(d);
+							}
+						}
+					}
+					*this = BoxT<Number,Converter,Setting>(std::make_pair(Point<Number>(min),Point<Number>(max)));
+					boxDefined = true;
+				}
+			} else {
+				TRACE("hypro.representations","Use linear optimizer.");
+				// convert box to a set of constraints, add other halfspaces and evaluate in box main directions to get new intervals.
+				std::vector<vector_t<Number>> tpl = computeTemplate<Number>(_constraints.cols(), 4);
+
+				// evaluate in box directions.
+				Optimizer<Number> opt(_constraints,_constants);
+				std::vector<EvaluationResult<Number>> results;
+				for(Eigen::Index rowIndex = 0; rowIndex < _constraints.rows(); ++rowIndex) {
+					results.emplace_back(opt.evaluate(tpl[rowIndex], false));
+					if(results.back().errorCode == SOLUTION::INFEAS){
+						opt.cleanGLPInstance();
+						*this = BoxT<Number,Converter,Setting>::Empty();
+						return;
+					}
+				}
+				opt.cleanGLPInstance();
+				assert(Eigen::Index(results.size()) == Eigen::Index(tpl.size()));
+
+				// re-construct box from results.
+				mLimits = std::vector<carl::Interval<Number>>(_constraints.cols(), carl::Interval<Number>(0));
+				std::vector<std::pair<bool,bool>> boundsSet = std::vector<std::pair<bool,bool>>(_constraints.cols(), std::make_pair(false,false));
+				for(Eigen::Index rowIndex = 0; rowIndex < Eigen::Index(tpl.size()); ++rowIndex) {
+					for(Eigen::Index colIndex = 0; colIndex < _constraints.cols(); ++colIndex) {
+						if(tpl[rowIndex](colIndex) > 0) {
+							// each bound only gets set once due to the template.
+							assert(!boundsSet[colIndex].second);
+							TRACE("hypro.representations","Add upper bound " << results[rowIndex].supportValue);
+							if(boundsSet[colIndex].first) {
+								mLimits[colIndex].setUpper(results[rowIndex].supportValue);
+							} else {
+								// set to point value, if lower bound has not been set yet.
+								mLimits[colIndex].set(results[rowIndex].supportValue,results[rowIndex].supportValue);
+							}
+							boundsSet[colIndex].second = true;
+							TRACE("hypro.representations","Result: " << mLimits[colIndex]);
+						} else if (tpl[rowIndex](colIndex) < 0) {
+							// each bound only gets set once due to the template.
+							assert(!boundsSet[colIndex].first);
+							TRACE("hypro.representations","Add lower bound " << -results[rowIndex].supportValue);
+							if(boundsSet[colIndex].second) {
+								mLimits[colIndex].setLower(-results[rowIndex].supportValue);
+							} else {
+								// set to point value, if upper bound has not been set yet.
+								mLimits[colIndex].set(-results[rowIndex].supportValue,-results[rowIndex].supportValue);
+							}
+							boundsSet[colIndex].first = true;
+							TRACE("hypro.representations","Result: " << mLimits[colIndex]);
+					}
+				}
+				mEmpty = false;
+				boxDefined = true;
+			}
+		}
+
+		assert(boxDefined);
 		reduceNumberRepresentation();
 	}
 }
@@ -328,8 +364,8 @@ std::pair<CONTAINMENT, BoxT<Number,Converter,Setting>> BoxT<Number,Converter,Set
 		return std::make_pair(CONTAINMENT::NO, *this);
 	}
 
-	//std::cout << __func__ << " This: " << convert<Number,double>(*this) << std::endl;
-	//std::cout << __func__ << ": input matrix: " << convert<Number,double>(_mat) << std::endl << "input vector: " << convert<Number,double>(_vec) << std::endl;
+	// std::cout << __func__ << " This: " << convert<Number,double>(*this) << std::endl;
+	// std::cout << __func__ << ": input matrix: " << convert<Number,double>(_mat) << std::endl << "input vector: " << convert<Number,double>(_vec) << std::endl;
 	// std::cout << __func__ << ": This->dimension() = " << this->dimension() << std::endl;
 	assert(this->dimension() == unsigned(_mat.cols()));
 	std::vector<unsigned> limitingPlanes;
@@ -393,7 +429,7 @@ BoxT<Number,Converter,Setting> BoxT<Number,Converter,Setting>::linearTransformat
 	}
 	// create both limit matrices
 	// std::cout << __func__ << ": This: " << *this << std::endl;
-	// std::cout << __func__ << ": Matrix" <<  std::endl << A << std::endl << "Vector" << std::endl << b << std::endl;
+	// std::cout << __func__ << ": Matrix" <<  std::endl << A << std::endl;
 	//matrix_t<Number> ax(A);
 	//matrix_t<Number> bx(A);
 	Point<Number> min(vector_t<Number>::Zero(this->dimension()));
@@ -402,7 +438,7 @@ BoxT<Number,Converter,Setting> BoxT<Number,Converter,Setting>::linearTransformat
 		for (int j = 0; j < A.cols(); ++j) {
 			Number a = mLimits[j].lower()*A(k,j);
 			Number b = mLimits[j].upper()*A(k,j);
-			//std::cout << "Obtained values " << a << " and " << b << " for dimension " << k << " and colum " << j << std::endl;
+			// std::cout << "Obtained values " << a << " and " << b << " for dimension " << k << " and colum " << j << std::endl;
 				if(a > b){
 					max[k] += a;
 					min[k] += b;
@@ -410,10 +446,10 @@ BoxT<Number,Converter,Setting> BoxT<Number,Converter,Setting>::linearTransformat
 					max[k] += b;
 					min[k] += a;
 				}
-			//std::cout << "After addition max["<<k<<"] = " << max.at(k) << " and min["<<k<<"] = " << min.at(k) << std::endl;
+			// std::cout << "After addition max["<<k<<"] = " << max.at(k) << " and min["<<k<<"] = " << min.at(k) << std::endl;
 		}
 	}
-	//std::cout << __func__ << ": Min: " << min << ", Max: " << max << std::endl;
+	// std::cout << __func__ << ": Min: " << min << ", Max: " << max << std::endl;
 	BoxT<Number,Converter,Setting> res(std::make_pair(min, max));
 	res.reduceNumberRepresentation();
 	assert(res.contains(Point<Number>(A*this->min().rawCoordinates())));
@@ -487,6 +523,7 @@ BoxT<Number,Converter,Setting> BoxT<Number,Converter,Setting>::intersect( const 
 	std::vector<carl::Interval<Number>> newIntervals;
 	std::size_t dim = this->dimension();
 	std::size_t rdim = rhs.dimension();
+	newIntervals.reserve(std::max(dim,rdim));
 	for(std::size_t d = 0; d < this->dimension(); ++d) {
 		// intersection if both agree on the dimension
 		if(d < rdim)

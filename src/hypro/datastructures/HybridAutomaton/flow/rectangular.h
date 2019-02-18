@@ -2,6 +2,7 @@
 #include <carl/interval/Interval.h>
 #include <carl/core/Variable.h>
 #include <map>
+#include <iostream>
 
 namespace hypro {
 
@@ -69,7 +70,7 @@ public:
         return !(lhs == rhs);
     }
 
-    friend ostream& operator<<(ostream& out, const rectangularFlow<Number>& in) {
+    friend std::ostream& operator<<(std::ostream& out, const rectangularFlow<Number>& in) {
         for(const auto& i : in.getFlowIntervals()) {
             out << i.first << ": " << i.second << ", ";
         }

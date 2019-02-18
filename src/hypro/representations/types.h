@@ -13,7 +13,7 @@ enum representation_name { box=0, carl_polytope, constraint_set, polytope_h, pol
 namespace std {
 
 	/*
-	ostream& operator<<(ostream& out, hypro::representation_name in) {
+	ostream& operator<<(std::ostream& out, hypro::representation_name in) {
 		switch(in){
 			case(hypro::representation_name::box): { return out << "box"; }
 			case(hypro::representation_name::constraint_set): { return out << "constraint_set"; }

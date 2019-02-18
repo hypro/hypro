@@ -1,6 +1,6 @@
 /**
  * @brief Main file which starts all benchmark runs.
- * 
+ *
  * @file runBenchmarks.cpp
  * @author your name
  * @date 2018-09-28

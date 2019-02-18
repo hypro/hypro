@@ -157,8 +157,8 @@ boost::tuple<CONTAINMENT, State, matrix_t<Number>, vector_t<Number>, Box<Number>
         std::vector<Box<Number>> errorBoxVector;
 
         if(_state.getLocation()->getExternalInput().empty()) {
-        	Box<Number> externalInputTmp(std::make_pair(Point<Number>(vector_t<Number>::Zero(dimension+1)),
-                                                        Point<Number>(vector_t<Number>::Zero(dimension+1))));
+        	Box<Number> externalInputTmp(std::make_pair(Point<Number>(vector_t<Number>::Zero(dimension)),
+                                                        Point<Number>(vector_t<Number>::Zero(dimension))));
         	errorBoxVector = errorBoxes(carl::convert<tNumber,Number>(timeStep), _state.getLocation()->getLinearFlow(), initialPair.second, trafoMatrix, externalInputTmp);
         } else {
         	//std::cout << "Model has external input: " << _state.getLocation()->getExternalInput() << std::endl;

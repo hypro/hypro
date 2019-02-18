@@ -12,8 +12,9 @@
 namespace hypro {
 
 	template<typename Number>
-	static std::unordered_map<smtrat::FormulaT, std::size_t> createFormula(const matrix_t<Number>& _constraints, const vector_t<Number> _constants, carl::Relation _rel = carl::Relation::LEQ) {
+	static std::unordered_map<smtrat::FormulaT, std::size_t> createFormula(const matrix_t<Number>& _constraints, const vector_t<Number> _constants, const std::vector<carl::Relation>& relations) {
 		assert(_constraints.rows() == _constants.rows());
+		assert(relations.size() == _constraints.rows());
 
 		VariablePool& pool = VariablePool::getInstance();
 
@@ -25,7 +26,7 @@ namespace hypro {
 			}
 			row -= carl::convert<Number,smtrat::Rational>(_constants(rowIndex));
 			//std::cout << "atempt to insert constraint " << rowIndex << " (" << _constraints.row(rowIndex) << ", " << _constants(rowIndex) << ")" << std::endl;
-			constraints.insert(std::make_pair(smtrat::FormulaT(row,_rel), rowIndex));
+			constraints.insert(std::make_pair(smtrat::FormulaT(row,relations[rowIndex]), rowIndex));
 		}
 		return constraints;
 	}

@@ -74,6 +74,7 @@ public:
 
 	bool hasTransitionEvent(Transition<Number>* transition) const;
 	bool hasTransitionEvent(const carl::Interval<tNumber>& timeInterval, Transition<Number>* transition) const;
+	bool hasTransitionInformation(const carl::Interval<mpq_class>& timeInterval, Transition<Number>* transition) const;
 
 	bool hasInvariantEvent(CONTAINMENT type) const;
 	bool hasInvariantEvent(const carl::Interval<tNumber>& timeInterval, CONTAINMENT type) const;

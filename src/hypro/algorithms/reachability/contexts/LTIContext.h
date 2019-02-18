@@ -11,6 +11,7 @@
 #include "../../../datastructures/reachability/Strategy.h"
 #include "../../../datastructures/reachability/Task.h"
 #include "../../../datastructures/reachability/timing/EventTimingContainer.h"
+#include "../../../datastructures/reachability/timing/EventTimingProvider.h"
 #include "../../../datastructures/HybridAutomaton/decomposition/DecisionEntity.h"
 #include "../../../util/logging/Logger.h"
 #include "../../../util/plotting/PlotData.h"
@@ -30,7 +31,6 @@ namespace hypro
 
 	    EventTimingContainer<Number> mLocalTimings;
     	HierarchicalIntervalVector<CONTAINMENT, tNumber> mTransitionTimings;
-
 
    		std::vector<boost::tuple<Transition<Number>*, State>> mDiscreteSuccessorBuffer;
 

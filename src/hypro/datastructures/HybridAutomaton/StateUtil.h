@@ -11,7 +11,6 @@ namespace hypro {
 			return inState;
 		}
 		auto res = inState;
-		std::size_t pos = 0;
 		for(std::size_t pos = 0; pos < reset.size(); ++pos) {
 			res = res.applyTransformation(reset.getAffineReset(pos).mTransformation, pos);
 			res = res.partialIntervalAssignment(reset.getIntervalReset(pos).mIntervals, pos);

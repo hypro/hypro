@@ -186,8 +186,8 @@ end
 
     
 mex -setup c++; 
-%mex('-v',ipaths{:},'CC=/usr/local/opt/llvm/bin/clang','CXX=/usr/local/opt/llvm/bin/clang++','COMPFLAGS=$COMPFLAGS -std=c++17', 'CXXFLAGS=\$CXXFLAGS -std=c++17',srcFile);
-mex('-v',ipaths{:},srcFile)
+mex('-v',ipaths{:},'CC=/usr/local/opt/llvm/bin/clang','CXX=/usr/local/opt/llvm/bin/clang++','COMPFLAGS=$COMPFLAGS -std=c++17', 'CXXFLAGS=\$CXXFLAGS -std=c++17',srcFile);
+%mex('-v',ipaths{:},srcFile)
 
 
 

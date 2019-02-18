@@ -57,7 +57,7 @@ struct Task {
 		, btInfo(btI)
 	{}
 
-	friend ostream& operator<<(ostream& out, const Task<State>& task) {
+	friend std::ostream& operator<<(std::ostream& out, const Task<State>& task) {
 		//out << *task.treeNode;
 		out << task.treeNode;
 		return out;

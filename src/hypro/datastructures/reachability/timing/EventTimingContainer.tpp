@@ -60,7 +60,9 @@ namespace hypro {
 		return (mTransitionEvents.find(transition) != mTransitionEvents.end() &&
 				(mTransitionEvents.at(transition).size() > 1 ||
 						(mTransitionEvents.at(transition).back().type != CONTAINMENT::BOT &&
-						 mTransitionEvents.at(transition).back().type != CONTAINMENT::NO)));
+						 mTransitionEvents.at(transition).back().type != CONTAINMENT::NO)
+				)
+				);
 	}
 
 	template<typename Number>
@@ -71,6 +73,14 @@ namespace hypro {
 		return (mTransitionEvents.at(transition).intersectsEntry(timeInterval, CONTAINMENT::YES) ||
 				mTransitionEvents.at(transition).intersectsEntry(timeInterval, CONTAINMENT::PARTIAL) ||
 				mTransitionEvents.at(transition).intersectsEntry(timeInterval, CONTAINMENT::FULL));
+	}
+
+	template<typename Number>
+	bool EventTimingContainer<Number>::hasTransitionInformation(const carl::Interval<mpq_class>& timeInterval, Transition<Number>* transition) const {
+		if(mTransitionEvents.find(transition) == mTransitionEvents.end()) {
+			return false;
+		}
+		return !(mTransitionEvents.at(transition).intersectsEntry(timeInterval, CONTAINMENT::BOT));
 	}
 
 	template<typename Number>
