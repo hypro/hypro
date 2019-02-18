@@ -27,7 +27,7 @@ public:
         : mTimings(in)
     {}
 
-    void setTimings(const EventTimingContainer<Number>& timings);
+
     const EventTimingContainer<Number>& getTimings() const;
     EventTimingContainer<Number>& rGetTimings();
     const Location<Number>* getLocation() const;
@@ -38,6 +38,7 @@ public:
     void setLevel(std::size_t l);
 	std::size_t getLevel() const;
 
+    void setTimings(const EventTimingContainer<Number>& timings);
     void setLocation(const Location<Number>* loc);
     void setEntryTimestamp(const carl::Interval<tNumber>& t);
     void extendEntryTimestamp(const carl::Interval<tNumber>& t);

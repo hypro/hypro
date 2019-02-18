@@ -101,6 +101,16 @@ namespace hypro {
 	}
 
 	template<typename Number>
+	std::vector<carl::Interval<tNumber>> EventTimingContainer<Number>::getInvariantEnabledTimings() const {
+		std::vector<carl::Interval<tNumber>> res;
+		// iterate over the stored invariant timings
+		for(auto eventIt = mInvariantEvents.begin(); eventIt != mInvariantEvents.end(); ++eventIt) {
+			if(eventIt == mInvariantEvents.begin() && eventIt->type() )
+		}
+		return res;
+	}
+
+	template<typename Number>
 	bool EventTimingContainer<Number>::hasBadStateEvent() const {
 		return (mBadStateEvents.size() > 1 || mBadStateEvents.back().type != CONTAINMENT::BOT);
 	}

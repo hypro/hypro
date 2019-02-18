@@ -130,8 +130,9 @@ namespace hypro
 			// TODO: Make the whole program stop instead of not creating new tasks.
 			INFO("benchmark", "Model could NOT be verified as SAFE.");
 			DEBUG("hypro.worker","Final bt-level already reached - abort.");
-			std::cout << "Model cannot be verified as being safe." << std::endl;
 			TRACE("hypro.worker","Unlock node " << mTask->treeNode);
+
+			std::cout << "Model cannot be verified as being safe." << std::endl;
 			mTask->treeNode->getMutex().unlock();
 			return;
 		}
@@ -140,9 +141,9 @@ namespace hypro
 		// Either this is the root node or a node on the path to the current node with a higher bt-level.
 		unsigned targetLevel = mTask->btInfo.btLevel + 1;
 		Path<Number,tNumber> btPath = mTask->treeNode->getPath();;
+		ReachTreeNode<State>* btNode = mTask->treeNode;
 
 		DEBUG("hypro.worker.refinement","Target btLevel: " << targetLevel);
-		ReachTreeNode<State>* btNode = mTask->treeNode;
 		DEBUG("hypro.worker.refinement","Find backtrack entry node.");
 		DEBUG("hypro.worker.refinement", std::this_thread::get_id() << ": Local CEX-Queue size: " << mLocalCEXQueue->size() << "localCEXQueue is now:\n" << (*mLocalCEXQueue));
 		TRACE("hypro.worker","Unlock node " << mTask->treeNode);
@@ -164,6 +165,7 @@ namespace hypro
 
 		assert(btNode->getRefinements().size() >= targetLevel);
 
+		// this is the first time this refinement level is used - initialize.
 		if(btNode->getRefinements().size() == targetLevel) {
 			// add a new refinement
 			RefinementSetting<State> newSetting(btNode->getStateAtLevel(mTask->btInfo.btLevel).getLocation());
@@ -176,11 +178,18 @@ namespace hypro
 			newSetting.initialSet.setTimestamp(carl::Interval<tNumber>(0));
 			newSetting.isDummy = false;
 			newSetting.fullyComputed = false;
+
 			// lock node for modification.
+			{
 			std::lock_guard<std::mutex> lock(btNode->getMutex());
 			btNode->setNewRefinement(targetLevel, newSetting);
 			// Todo: re-check -> global timing.
 			btNode->setTimestamp(targetLevel, carl::Interval<tNumber>(0));
+			}
+
+			// add new node in the timing tree.
+			auto& tProvider = EventTimingProvider<typename State::NumberType>::getInstance();
+			tProvider.addChildToNode(tProvider.getRoot(), SettingsProvider<State>::getInstance().getGlobalTimeHorizon());
 		}
 
 			// now create a task and add it to the queue.
@@ -190,12 +199,14 @@ namespace hypro
 		taskPtr->btInfo.currentBTPosition = (btNode->getDepth()-1)*2;
 		taskPtr->btInfo.btLevel = targetLevel;
 		taskPtr->btInfo.btPath = btPath;
-		DEBUG("hypro.worker.refinement","Current refinements size of node " << taskPtr->treeNode <<  " : " << taskPtr->treeNode->getRefinements().size());
 		assert(!taskPtr->treeNode->getRefinements().at(targetLevel).isDummy);
-		DEBUG("hypro.worker.refinement","BT-Path: " << taskPtr->btInfo.btPath);
+
 		// add task
-		DEBUG("hypro.worker.refinement", std::this_thread::get_id() << ": Create new CEX-Task (local) with tree node " << taskPtr->treeNode);
 		mLocalCEXQueue->nonLockingEnqueue(std::move(taskPtr));
+
+		DEBUG("hypro.worker.refinement","Current refinements size of node " << taskPtr->treeNode <<  " : " << taskPtr->treeNode->getRefinements().size());
+		DEBUG("hypro.worker.refinement","BT-Path: " << taskPtr->btInfo.btPath);
+		DEBUG("hypro.worker.refinement", std::this_thread::get_id() << ": Create new CEX-Task (local) with tree node " << taskPtr->treeNode);
 		DEBUG("hypro.worker.refinement", std::this_thread::get_id() << ": Local CEX-Queue size: " << mLocalCEXQueue->size() << "localCEXQueue is now:\n" << mLocalCEXQueue);
 	}
 
@@ -233,13 +244,14 @@ namespace hypro
 	    }
 
 		// obtain already computed timings
-		auto tNode = EventTimingProvider<typename State::NumberType>::getInstance().getTimingNode(mTask->treeNode->getPath());
-		assert(tNode != nullptr);
-		mLocalTimings = tNode->getTimings();
-		if(!mLocalTimings.isInitialized()) {
+		auto timings = EventTimingProvider<typename State::NumberType>::getInstance().getTimings(mTask->treeNode->getPath());
+		assert(timings);
+		if(!timings) {
 			// initialize timing container for recording and storing events.
-			mLocalTimings.initialize(SettingsProvider<State>::getInstance().SettingsProvider<State>::getInstance().getGlobalTimeHorizon());
+			mLocalTimings = EventTimingContainer<Number>(SettingsProvider<State>::getInstance().SettingsProvider<State>::getInstance().getGlobalTimeHorizon());
 			TRACE("hypro.worker.timings", "Initialized local timing container: " << mLocalTimings);
+		} else {
+			mLocalTimings = *timings;
 		}
 		assert(mLocalTimings.isInitialized());
 		TRACE("hypro.worker.timings", "Obtained timings : " << mLocalTimings);
@@ -720,7 +732,7 @@ namespace hypro
     	DEBUG("hypro.worker",  std::this_thread::get_id() << ": --- Loop left ---" << std::endl);
         DEBUG("hypro.worker.discrete",  std::this_thread::get_id() << ": Process " << mDiscreteSuccessorBuffer.size() << " new initial sets which are leftover." << std::endl);
         TRACE("hypro.worker","Initializing discrete successor handler");
-		IJumpHandler* handler = HandlerFactory<State>::getInstance().buildDiscreteSuccessorHandler(&mDiscreteSuccessorBuffer, mTask, nullptr, mStrategy.getParameters(mTask->btInfo.btLevel), mLocalQueue, mLocalCEXQueue,EventTimingProvider<typename State::NumberType>::getInstance().rGetNode(mTask->treeNode->getPath()));
+		IJumpHandler* handler = HandlerFactory<State>::getInstance().buildDiscreteSuccessorHandler(&mDiscreteSuccessorBuffer, mTask, nullptr, mStrategy.getParameters(mTask->btInfo.btLevel), mLocalQueue, mLocalCEXQueue,EventTimingProvider<typename State::NumberType>::getInstance().rGetNode(mTask->treeNode->getPath()), mLocalTimings);
 		TRACE("hypro.worker","Built discrete successor handler of type: " << handler->handlerName());
 		handler->handle();
     }
@@ -786,6 +798,7 @@ namespace hypro
 		// write timings to global timing storage tree.
 		TRACE("hypro.worker.timings","Write local timings " << mLocalTimings << " to global storage.");
 		EventTimingProvider<typename State::NumberType>::getInstance().updateTimings(mTask->treeNode->getPath(), mLocalTimings);
+
 
 		TRACE("hypro.worker.refinement","Done printing refinements.");
 		TRACE("hypro.worker","Unlock node " << mTask->treeNode);
