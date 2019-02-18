@@ -116,7 +116,7 @@ void MLocation::getLinearFlows(int nlhs, mxArray* plhs[], int nrhs , const mxArr
     std::vector<hypro::linearFlow<double>> flows = loc->getLinearFlows();
     int len = flows.size();
     const mwSize dims[2] = {1, (mwSize) len};
-    plhs[0]  = mxCreateCellArray(2,dims);
+    plhs[0]  = mxCreateCellArray(2, dims);
     objArray2Matlab(flows, plhs[0], len);
 }
 
