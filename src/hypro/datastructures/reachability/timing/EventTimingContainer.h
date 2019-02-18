@@ -68,6 +68,7 @@ public:
 	bool hasInvariantEvent(CONTAINMENT type) const;
 	bool satisfiedInvariant(const carl::Interval<tNumber>& timeInterval) const;
 	bool hasInvariantEvent(const carl::Interval<tNumber>& timeInterval, CONTAINMENT type) const;
+	std::vector<carl::Interval<tNumber>> getInvariantEnabledTimings() const;
 
 	bool hasBadStateEvent() const;
 	bool hasBadStateEvent(const carl::Interval<tNumber>& timeInterval, CONTAINMENT type) const;

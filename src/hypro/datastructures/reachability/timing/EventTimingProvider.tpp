@@ -67,6 +67,7 @@ namespace hypro {
 
 	template<typename Number>
 	std::optional<EventTimingContainer<Number>> EventTimingProvider<Number>::getTimings(const Path<Number,tNumber>& path) const {
+		TRACE("hypro.datastructures.timing","Path: " << path);
 
 		// abort if we do not have a tree yet
 		if(mRoot->getChildren().size() == 0) {
@@ -133,11 +134,6 @@ namespace hypro {
 				return std::nullopt;
 			}
 
-			TRACE("hypro.datastructures.timing","Working set.");
-			printSet(workingSets);
-			TRACE("hypro.datastructures.timing","Transition candidates.");
-			printSet(transitionCandidates);
-
 			// merge invariant intervals to detect whether the invariant interval is fully covered
 			for(auto& subset : transitionCandidates) {
 				if(!subset.empty()) {
@@ -158,11 +154,6 @@ namespace hypro {
 					}
 				}
 			}
-
-			TRACE("hypro.datastructures.timing","Working set.");
-			printSet(workingSets);
-			TRACE("hypro.datastructures.timing","Transition candidates.");
-			printSet(transitionCandidates);
 
 			assert(workingSets.size() == transitionCandidates.size());
 
