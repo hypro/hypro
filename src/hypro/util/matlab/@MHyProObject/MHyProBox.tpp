@@ -508,13 +508,11 @@ void MHyProBox::process(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs
     }
 
     if(!strcmp("new_matrix",cmd)){
-        //boxFromMatrix(nlhs, plhs, nrhs, prhs);
         new_mat_vec(nlhs, plhs, nrhs, prhs);
         return;
     }
 
     if (!strcmp("delete", cmd)) {
-        // deleteBox(nlhs, nrhs, prhs);
         deleteObject(nlhs, plhs, nrhs, prhs);
         return;
     }

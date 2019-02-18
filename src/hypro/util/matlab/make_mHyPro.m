@@ -95,6 +95,10 @@ else
         'LDFLAGS=$LDFLAGS -Wl -rpath /Users/marta/hypro/build';};
         
         %Save the found paths
+            mex -setup c++;
+            mex('-v',ipaths{:},'CC=/usr/local/opt/llvm/bin/clang','CXX=/usr/local/opt/llvm/bin/clang++','COMPFLAGS=$COMPFLAGS -std=c++17', 'CXXFLAGS=\$CXXFLAGS -std=c++17',srcFile);
+
+
         
         elseif isunix
         %Linux
@@ -178,6 +182,8 @@ else
         '-I/usr/local/include','-I/home/marta/carl/resources/include',...
         '-L/home/marta/hypro/build','-lhypro','CXXFLAGS=\$CXXFLAGS -std=c++17';};
     
+        mex -setup c++; 
+        mex('-v',ipaths{:},srcFile);    
     else
         %Windows
         mexErrMsgTxt('Not implemented');
@@ -185,9 +191,7 @@ else
 end
 
     
-mex -setup c++; 
-mex('-v',ipaths{:},'CC=/usr/local/opt/llvm/bin/clang','CXX=/usr/local/opt/llvm/bin/clang++','COMPFLAGS=$COMPFLAGS -std=c++17', 'CXXFLAGS=\$CXXFLAGS -std=c++17',srcFile);
-%mex('-v',ipaths{:},srcFile)
+
 
 
 

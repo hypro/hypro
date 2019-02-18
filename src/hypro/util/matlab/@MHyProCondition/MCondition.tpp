@@ -7,7 +7,7 @@ void MCondition::new_empty(int nlhs, mxArray* plhs[], int nrhs, const mxArray* p
     if(nlhs != 1)
         mexErrMsgTxt("MCondition - new_empty: Expecting an output!");
     
-    hypro::Condition<double>* cond = new hypro::Condition();
+    hypro::Condition<double>* cond = new hypro::Condition<double>();
     plhs[0] = convertPtr2Mat<hypro::Condition<double>>(cond);
 }
 

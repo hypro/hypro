@@ -5,11 +5,11 @@
 #include "matrix.h"
 #include "../ClassHandle.h"
 #include "../ObjectHandle.h"
-#include "../../datastructures/HybridAutomaton/Condition.h"
-#include "../../datastructures/HybridAutomaton/Visitors.h"
-#include "../../datastructures/HybridAutomaton/State.h"
-#include "../../representations/types.h"
-#include "../../representations/GeometricObject.h"
+//#include "../../datastructures/HybridAutomaton/Condition.h"
+//#include "../../datastructures/HybridAutomaton/Visitors.h"
+#include "../../../datastructures/HybridAutomaton/State.h"
+#include "../../../representations/types.h"
+#include "../../../representations/GeometricObject.h"
 #include <carl/util/tuple_util.h>
 #include <carl/interval/Interval.h>
 

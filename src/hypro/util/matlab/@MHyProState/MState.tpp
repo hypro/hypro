@@ -6,7 +6,7 @@
 void MState::new_empty(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
     if(nlhs != 1)
         mexErrMsgTxt("MState - new_empty: Expecting an output.");
-    hypro::State_t<double>* st = new hypro::State_t<double>();
+    hypro::State<double>* st = new hypro::State<double>();
     plhs[0] = convertPtr2Mat<hypro::State_t<double>>(st);
 }
 
