@@ -498,9 +498,6 @@ void MLocation::outstream(int nlhs, mxArray* plhs[], int nrhs , const mxArray* p
 /**
  * @brief
  **/
-/**
- * @brief
- **/
 void MLocation::process(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
     // Get the command string
     char cmd[64];

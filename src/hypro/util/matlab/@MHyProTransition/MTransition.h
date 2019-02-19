@@ -1,8 +1,12 @@
 #pragma once
 
-#include "../../../datastructures/HybridAutomaton/Transition.h"
-#include "../../../types.h"
-#include <map>
+// #include "../../../datastructures/HybridAutomaton/Transition.h"
+// #include "../../../types.h"
+// #include <map>
+// #include "mex.h"
+// #include "matrix.h"
+// #include "../ClassHandle.h"
+// #include "../ObjectHandle.h"
 #include "mex.h"
 #include "matrix.h"
 #include "../ClassHandle.h"
@@ -46,5 +50,4 @@ class MTransition{
         static void nequals(int, mxArray**, int, const mxArray**);
 
 };
-
-#include "MTransition.h"
+#include "MTransition.tpp"

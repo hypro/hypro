@@ -48,3 +48,4 @@ class MLocation{
         static void unequals(int, mxArray**, int , const mxArray**);
         static void outstream(int, mxArray**, int , const mxArray**);
 };
+#include "MLocation.tpp"

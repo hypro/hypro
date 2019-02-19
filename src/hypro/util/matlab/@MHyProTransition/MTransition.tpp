@@ -1,4 +1,4 @@
-+#include "MTransition.h"
+#include "MTransition.h"
 
 /**
 * @brief
@@ -58,10 +58,10 @@ void MTransition::new_full(int nlhs, mxArray* plhs[], int nrhs, const mxArray* p
 
     hypro::Location<double>* source = convertMat2Ptr<hypro::Location<double>>(prhs[2]);
     hypro::Location<double>* target = convertMat2Ptr<hypro::Location<double>>(prhs[3]);
-    hypro::Condition<double>* guard = convertMat2Ptr<hypro::Condition<double>>(prhs[4]);
-    hypro::Reset<double>* reset = convertMat2Ptr<hypro::Condition<double>>(prhs[5]);
+    const hypro::Condition<double>* guard = convertMat2Ptr<hypro::Condition<double>>(prhs[4]);
+    const hypro::Reset<double>* reset = convertMat2Ptr<hypro::Reset<double>>(prhs[5]);
 
-    hypro::Transition<double>* tran = new hypro::Transition<double>(source, target, guard, reset);
+    hypro::Transition<double>* tran = new hypro::Transition<double>(source, target, *guard, *reset);
     plhs[0] = convertPtr2Mat<hypro::Transition<double>>(new hypro::Transition<double>(*tran));
 }
 
@@ -88,8 +88,8 @@ void MTransition::getTarget(int nlhs, mxArray* plhs[], int nrhs, const mxArray* 
         mexWarnMsgTxt("MTransition - getTarget: One or more arguments were ignored.");
 
     hypro::Transition<double>* tran = convertMat2Ptr<hypro::Transition<double>>(prhs[2]);
-    hypro::Location<double> target = tran->getTarget();
-    plhs[0] = convertPtr2Mat<hypro::Transition<double>>(new hypro::Location<double>(target));
+    hypro::Location<double>* target = tran->getTarget();
+    plhs[0] = convertPtr2Mat<hypro::Location<double>>(new hypro::Location<double>(*target));
 }
 
 /**
@@ -104,8 +104,8 @@ void MTransition::getSource(int nlhs, mxArray* plhs[], int nrhs, const mxArray* 
         mexWarnMsgTxt("MTransition - getSource: One or more arguments were ignored.");
 
     hypro::Transition<double>* tran = convertMat2Ptr<hypro::Transition<double>>(prhs[2]);
-    hypro::Location<double> target = tran->getSource();
-    plhs[0] = convertPtr2Mat<hypro::Transition<double>>(new hypro::Location<double>(target));
+    hypro::Location<double>* target = tran->getSource();
+    plhs[0] = convertPtr2Mat<hypro::Location<double>>(new hypro::Location<double>(*target));
 }
 
 /**
@@ -285,7 +285,7 @@ void MTransition::setGuard(int nlhs, mxArray* plhs[], int nrhs, const mxArray* p
 
     hypro::Transition<double>* tran = convertMat2Ptr<hypro::Transition<double>>(prhs[2]);
     hypro::Condition<double>* cond = convertMat2Ptr<hypro::Condition<double>>(prhs[3]);
-    tran->setGuard(cond);
+    tran->setGuard(*cond);
 }
 
 /**
@@ -299,7 +299,7 @@ void MTransition::setReset(int nlhs, mxArray* plhs[], int nrhs, const mxArray* p
 
     hypro::Transition<double>* tran = convertMat2Ptr<hypro::Transition<double>>(prhs[2]);
     hypro::Reset<double>* res = convertMat2Ptr<hypro::Reset<double>>(prhs[3]);
-    tran->setReset(res);
+    tran->setReset(*res);
 }
 
 /**
@@ -319,7 +319,7 @@ void MTransition::setUrgent(int nlhs, mxArray* plhs[], int nrhs, const mxArray* 
         mexWarnMsgTxt("MTransition - setSource: One or more input arguments were ignored!");
 
     hypro::Transition<double>* tran = convertMat2Ptr<hypro::Transition<double>>(prhs[2]);
-    const double tempval = (double) mxGetScalar(prhs[3]);
+    const double temp = (double) mxGetScalar(prhs[3]);
     bool val = true;
     if(temp == 0)
         val = false;
@@ -368,8 +368,8 @@ void MTransition::addLabel(int nlhs, mxArray* plhs[], int nrhs, const mxArray* p
         mexWarnMsgTxt("MTransition - addLabel: One or more input arguments were ignored!");
 
     hypro::Transition<double>* tran = convertMat2Ptr<hypro::Transition<double>>(prhs[2]);
-    hypro::Label<double>* lab = convertMat2Ptr<hypro::Label>(prhs[3]);
-    tran->addLabel(lab);
+    hypro::Label* lab = convertMat2Ptr<hypro::Label>(prhs[3]);
+    tran->addLabel(*lab);
 }
 
 /**
@@ -389,8 +389,8 @@ void MTransition::getDotRepresentation(int nlhs, mxArray* plhs[], int nrhs, cons
     dims = mxGetDimensions(prhs[3]);
     len = dims[0];
     std::vector<std::string> vars = ObjectHandle::mStringVector2Hypro(prhs[3], len);
-    std::string str = tran->getDotRepresentation();
-    mxCreateString(ans.c_str());
+    std::string str = tran->getDotRepresentation(vars);
+    mxCreateString(str.c_str());
 }
 
 /**
