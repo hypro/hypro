@@ -32,7 +32,7 @@ classdef MHyProHAutomaton < handle
                 obj.Handle = MHyPro('HybridAutomaton', varargin{1}, varargin{2}, varargin{3});
             end
         end
-        
+                
         function out = dimension(obj)
             out = MHyPro('HybridAutomaton', 'dimension', obj.Handle);
         end

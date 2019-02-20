@@ -55,7 +55,10 @@ classdef MHyProObject < handle
                 obj.Handle = MHyPro(varargin{1}, varargin{2}, varargin{3}, varargin{4}, varargin{5}, varargin{6});
             end
         end
-
+        
+        function out = test(obj)
+            %TODO
+        end
         
         function out = dimension(obj)
             if isa(obj, 'MHyProObject')
@@ -64,28 +67,7 @@ classdef MHyProObject < handle
                 error('MHyProObject - dimension: Wrong type of input argument.');
             end
         end
-        
-        function out = test(obj, set)
-            if strcmp(obj.Type, 'Box')
-                 
-                 out = MHyPro(obj.Type, 'Test', obj.Handle, set);
-                %disp('Handle: ');
-%                 disp(temp);
-% %                 [a, len] = size(temp);
-%                 disp(a);
-%                 disp(len);
-%                  out = cell(size(len));
-%                 for i = 1:(len)
-%                     %disp(temp{i});
-% %                     MHyProObject('Box', temp{i});
-% %                     out{i} = MHyProObject(obj.Type, temp{i});
-%                 end
-                %outt = 1;
-            else
-                error('MHyProObject - getSetting: Not allowed for this type of HyProObject');
-            end
-        end
-        
+                
         function out = empty(obj,dim)
             if isreal(dim)
                 ptr = MHyPro(obj.Type, 'empty', obj.Handle, dim);

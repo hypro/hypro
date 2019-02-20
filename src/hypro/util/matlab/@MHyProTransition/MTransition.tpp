@@ -69,7 +69,7 @@ void MTransition::new_full(int nlhs, mxArray* plhs[], int nrhs, const mxArray* p
 * @brief
 **/
 void MTransition::delete_tran(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
-     if(nrhs < 3)
+    if(nrhs < 3)
         mexErrMsgTxt("MTransition - delete_tran: Expecting an output.");
     if(nrhs > 3)
         mexWarnMsgTxt("MTransition - delete_tran: One or more arguments were ignored.");
@@ -481,7 +481,7 @@ void MTransition::process(int nlhs, mxArray* plhs[], int nrhs, const mxArray* pr
         copy(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if (!strcmp("delete_tran", cmd) && nrhs == 2){  
+    if (!strcmp("delete", cmd) && nrhs == 2){  
         delete_tran(nlhs, plhs, nrhs, prhs);
         return;
     }

@@ -382,6 +382,7 @@ void MLocation::isComposedOf(int nlhs, mxArray* plhs[], int nrhs, const mxArray*
     int len_rhsVars, len_thisVars;
 
     in_rhsVars = mxGetPr(prhs[4]);
+    //TODO
 
 }
 // const mwSize *dims; 
@@ -510,7 +511,7 @@ void MLocation::process(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs
         return;
     }
 
-    if (!strcmp("new_matrix", cmd)){  
+    if (!strcmp("new_mat", cmd)){  
         new_matrix(nlhs, plhs, nrhs, prhs);
         return;
     }
@@ -525,7 +526,7 @@ void MLocation::process(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs
         return;
     }
 
-    if (!strcmp("delete_loc", cmd)){  
+    if (!strcmp("delete", cmd)){  
         delete_loc(nlhs, plhs, nrhs, prhs);
         return;
     }
@@ -590,7 +591,7 @@ void MLocation::process(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs
         return;
     }
 
-    if (!strcmp("setLinearFlow_vec", cmd)){
+    if (!strcmp("setLinearFlows", cmd)){
         setLinearFlow_vec(nlhs, plhs, nrhs, prhs);
         return;
     }

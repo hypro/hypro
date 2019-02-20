@@ -7,10 +7,11 @@ classdef MHyProFlow < handle
     
     methods (Access = private)
         
-    % Destructor
-    function delete(obj)
+        % Destructor
+        function delete(obj)
             MHyPro(obj.Type, 'delete', obj.Handle);
         end
+        
     end
     
     methods (Access = public)

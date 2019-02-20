@@ -1,12 +1,12 @@
 #pragma once
 
-#include "../../../datastructures/HybridAutomaton/Location.h"
+/*#include "../../../datastructures/HybridAutomaton/Location.h"
 #include "../../../datastructures/HybridAutomaton/Transition.h"
 #include "../../../datastructures/HybridAutomaton/Condition.h"
 #include "../../../datastructures/HybridAutomaton/HybridAutomatonComp.h"
 #include "../../../types.h"
 #include "../../../util/adaptions_eigen/adaptions_eigen.h"
-#include <map>
+#include <map>*/
 #include "mex.h"
 #include "matrix.h"
 #include "../ClassHandle.h"
@@ -18,8 +18,8 @@ class MHybridAutomaton{
     private:
         static void new_empty(int, mxArray**, int, const mxArray**);
         static void copy(int, mxArray**, int, const mxArray**);
-        static void new_sets(int, mxArray**, int, const mxArray**);
-        static void del_automaton(int, mxArray**, int, const mxArray**);
+        static void new_loc_init(int, mxArray**, int, const mxArray**);
+        static void delete_autom(int, mxArray**, int, const mxArray**);
         static void getLocations(int, mxArray**, int, const mxArray**);
         static void getLocation_by_hash(int, mxArray**, int, const mxArray**);
         static void getLocation_by_name(int, mxArray**, int, const mxArray**);
@@ -31,15 +31,12 @@ class MHybridAutomaton{
         static void getVariables(int, mxArray**, int, const mxArray**);
         static void getLabels(int, mxArray**, int, const mxArray**);
         static void setLocations(int, mxArray**, int, const mxArray**);
-        // static void setTransitions(int, mxArray**, int, const mxArray**);
         static void setInitialStates(int, mxArray**, int, const mxArray**);
         static void setLocalBadStates(int, mxArray**, int, const mxArray**);
         static void setGlobalBadStates(int, mxArray**, int, const mxArray**);
         static void setVariables(int, mxArray**, int, const mxArray**);
         static void addLocation(int, mxArray**, int, const mxArray**);
-        //static void addLocation_ptr(int, mxArray**, int, const mxArray**);
         static void addTransition(int, mxArray**, int, const mxArray**);
-        // static void addTransition_ptr(int, mxArray**, int, const mxArray**);
         static void addInitialState(int, mxArray**, int, const mxArray**);
         static void addLocalBadState(int, mxArray**, int, const mxArray**);
         static void addGlobalBadState(int, mxArray**, int, const mxArray**);
