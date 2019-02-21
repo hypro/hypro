@@ -48,7 +48,7 @@ namespace hypro {
      * @brief      Enum for set containment results. If known, we can make a statement
      * about full or partial containment, otherwise fall back to YES/NO. Note: BOT is used for UNKNOWN.
      */
-    enum class CONTAINMENT{ NO = 0, FULL, PARTIAL, YES, BOT };
+    enum class CONTAINMENT{ NO=-1, BOT=0, PARTIAL=1, FULL=2,YES=3 };
 
 	/**
 	 * @brief classifies the type of subspace in case subspace decomposition is used.

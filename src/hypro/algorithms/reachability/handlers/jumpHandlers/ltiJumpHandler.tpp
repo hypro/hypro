@@ -42,6 +42,7 @@ namespace hypro {
 					newNode->setEntryTransition(transitionStatePair.first);
 					newNode->setEntryTimestamp(child->getTimestamp(currentTargetLevel));
 					newNode->setLocation(transitionStatePair.first->getTarget());
+					newNode->setLevel(currentTargetLevel);
 			}
 
 			// Update reach tree
@@ -83,6 +84,7 @@ namespace hypro {
 					#ifndef RESET_REFINEMENTS_ON_CONTINUE_AFTER_BT_RUN
 					newTask->btInfo.btLevel = currentTargetLevel;
 					#endif
+					newTask->btInfo.timingLevel = mTask->btInfo.timingLevel;
 
 					// the first property has to be true already while the second never can be satisfied (wasREfinementTask demands NO bt-path)
 					if(!wasRefinementTask || mTask->btInfo.currentBTPosition == mTask->btInfo.btPath.size()){
@@ -430,7 +432,7 @@ namespace hypro {
 			coveredTimeInterval = coveredTimeInterval.convexHull(state.getTimestamp());
 
 			// invariant timings
-			auto invariantTimings = mObtainedTimings.getInvariantEnabledTimings();
+			auto invariantTimings = getEnabledTimings(mObtainedTimings.getInvariantTimings());
 			assert(invariantTimings.size() == 1);
 
 			// set up node properties

@@ -189,7 +189,8 @@ namespace hypro
 
 			// add new node in the timing tree.
 			auto& tProvider = EventTimingProvider<typename State::NumberType>::getInstance();
-			tProvider.addChildToNode(tProvider.getRoot(), SettingsProvider<State>::getInstance().getGlobalTimeHorizon());
+			auto timingChild = tProvider.addChildToNode(tProvider.getRoot(), SettingsProvider<State>::getInstance().getGlobalTimeHorizon());
+			timingChild->setLevel(targetLevel);
 		}
 
 			// now create a task and add it to the queue.
@@ -198,63 +199,65 @@ namespace hypro
 		// transitions are the un-even positions in the bt-path.
 		taskPtr->btInfo.currentBTPosition = (btNode->getDepth()-1)*2;
 		taskPtr->btInfo.btLevel = targetLevel;
+		taskPtr->btInfo.timingLevel = targetLevel;
 		taskPtr->btInfo.btPath = btPath;
 		assert(!taskPtr->treeNode->getRefinements().at(targetLevel).isDummy);
-
-		// add task
-		mLocalCEXQueue->nonLockingEnqueue(std::move(taskPtr));
 
 		DEBUG("hypro.worker.refinement","Current refinements size of node " << taskPtr->treeNode <<  " : " << taskPtr->treeNode->getRefinements().size());
 		DEBUG("hypro.worker.refinement","BT-Path: " << taskPtr->btInfo.btPath);
 		DEBUG("hypro.worker.refinement", std::this_thread::get_id() << ": Create new CEX-Task (local) with tree node " << taskPtr->treeNode);
 		DEBUG("hypro.worker.refinement", std::this_thread::get_id() << ": Local CEX-Queue size: " << mLocalCEXQueue->size() << "localCEXQueue is now:\n" << mLocalCEXQueue);
+
+		// add task
+		mLocalCEXQueue->nonLockingEnqueue(std::move(taskPtr));
 	}
 
 	template<typename State>
 	void LTIContext<State>::execOnStart(){
 		INFO("hypro.worker",  std::this_thread::get_id() << ": Compute flow in location " << mTask->treeNode->getStateAtLevel(mTask->btInfo.btLevel).getLocation()->getName() << "(" << mTask->treeNode->getStateAtLevel(mTask->btInfo.btLevel).getLocation()->hash() << ") on strategy level " << mTask->btInfo.btLevel);
-		DEBUG("hypro.worker",  std::this_thread::get_id() << ": Process Node address:" << mTask->treeNode);
-		DEBUG("hypro.worker",  std::this_thread::get_id() << ": WorkQueue size:" << mLocalQueue->size());
-		DEBUG("hypro.worker",  std::this_thread::get_id() << ": Node path:" << mTask->treeNode->getPath());
+		INFO("hypro.worker",  std::this_thread::get_id() << ": Process Node address:" << mTask->treeNode);
+		INFO("hypro.worker",  std::this_thread::get_id() << ": WorkQueue size:" << mLocalQueue->size());
+		INFO("hypro.worker",  std::this_thread::get_id() << ": Node path:" << mTask->treeNode->getPath());
 	    assert(!mTask->treeNode->getTimestamp(mTask->btInfo.btLevel).isEmpty());
 	    bool isRefinementTask = (mTask->btInfo.btPath.size() > 0);
-	    DEBUG("hypro.worker",  std::this_thread::get_id() << ": Is a backtracking node: " << isRefinementTask);
+	    INFO("hypro.worker",  std::this_thread::get_id() << ": Is a backtracking node: " << isRefinementTask);
 	    if(isRefinementTask){
-	    	DEBUG("hypro.worker",  std::this_thread::get_id() << ": BT-Path: " << mTask->btInfo.btPath);
-	    	DEBUG("hypro.worker",  std::this_thread::get_id() << ": BT-Pos:  " << mTask->btInfo.currentBTPosition);
+	    	INFO("hypro.worker",  std::this_thread::get_id() << ": BT-Path: " << mTask->btInfo.btPath);
+	    	INFO("hypro.worker",  std::this_thread::get_id() << ": BT-Pos:  " << mTask->btInfo.currentBTPosition);
 	    }
 	    // This assertion always holds since the even positions in a path represent its time transitions and if there is no bt-path, the
 	    // bt-pos is set to 0.
 	    assert(mTask->btInfo.currentBTPosition % 2 == 0);
-	    DEBUG("hypro.worker",  std::this_thread::get_id() << ": Depth: " << mTask->treeNode->getDepth() );
-	    DEBUG("hypro.worker",  std::this_thread::get_id() << ": Desired refinement level: " << mTask->btInfo.btLevel);
-	    DEBUG("hypro.worker",  std::this_thread::get_id() << ": Number sets (current strategy level): " << mTask->treeNode->getStateAtLevel(mTask->btInfo.btLevel).getNumberSets());
-	    DEBUG("hypro.worker",  std::this_thread::get_id() << ": Location: " << mTask->treeNode->getStateAtLevel(mTask->btInfo.btLevel).getLocation()->getName() << "(" << mTask->treeNode->getStateAtLevel(mTask->btInfo.btLevel).getLocation()->hash() << ")");
-	    DEBUG("hypro.worker",  std::this_thread::get_id() << ": Time step size (current strategy level): " << carl::toDouble(mStrategy.getParameters(mTask->btInfo.btLevel).timeStep) );
-	    DEBUG("hypro.worker",  std::this_thread::get_id() << ": Representation (current strategy level): " << mStrategy.getParameters(mTask->btInfo.btLevel).representation_type );
-	    DEBUG("hypro.worker",  std::this_thread::get_id() << ": Refinements:");
+	    INFO("hypro.worker",  std::this_thread::get_id() << ": Depth: " << mTask->treeNode->getDepth() );
+	    INFO("hypro.worker",  std::this_thread::get_id() << ": Desired refinement level: " << mTask->btInfo.btLevel);
+	    INFO("hypro.worker",  std::this_thread::get_id() << ": Number sets (current strategy level): " << mTask->treeNode->getStateAtLevel(mTask->btInfo.btLevel).getNumberSets());
+	    INFO("hypro.worker",  std::this_thread::get_id() << ": Location: " << mTask->treeNode->getStateAtLevel(mTask->btInfo.btLevel).getLocation()->getName() << "(" << mTask->treeNode->getStateAtLevel(mTask->btInfo.btLevel).getLocation()->hash() << ")");
+	    INFO("hypro.worker",  std::this_thread::get_id() << ": Time step size (current strategy level): " << carl::toDouble(mStrategy.getParameters(mTask->btInfo.btLevel).timeStep) );
+	    INFO("hypro.worker",  std::this_thread::get_id() << ": Representation (current strategy level): " << mStrategy.getParameters(mTask->btInfo.btLevel).representation_type );
+	    INFO("hypro.worker",  std::this_thread::get_id() << ": Refinements:");
 	    for(auto& ref : mTask->treeNode->rGetRefinements()){
-	    	DEBUG("hypro.worker",  std::this_thread::get_id() << ": " << ref);
-
-			// if the timing container is not initialized, initialize it to the maximal possible time bound.
-			// TODO REMOVE AS SOON AS GLOBAL TIMINGS WORK PROPERLY
-	    	if(!ref.mTimings.isInitialized()) {
-	    		ref.mTimings.initialize(SettingsProvider<State>::getInstance().getGlobalTimeHorizon());
-	    	}
+	    	INFO("hypro.worker",  std::this_thread::get_id() << ": " << ref);
 	    }
 
-		// obtain already computed timings
-		auto timings = EventTimingProvider<typename State::NumberType>::getInstance().getTimings(mTask->treeNode->getPath());
-		assert(timings);
-		if(!timings) {
-			// initialize timing container for recording and storing events.
-			mLocalTimings = EventTimingContainer<Number>(SettingsProvider<State>::getInstance().SettingsProvider<State>::getInstance().getGlobalTimeHorizon());
-			TRACE("hypro.worker.timings", "Initialized local timing container: " << mLocalTimings);
-		} else {
-			mLocalTimings = *timings;
+		if(mSettings.useInvariantTimingInformation ||
+		   mSettings.useGuardTimingInformation ||
+		   mSettings.useBadStateTimingInformation) {
+			// obtain already computed timings
+			auto timings = EventTimingProvider<typename State::NumberType>::getInstance().getTimings(mTask->treeNode->getPath());
+			if(!timings) {
+				// use timings from node in the timing tree as a fallback
+				auto currentTimingNode = EventTimingProvider<typename State::NumberType>::getInstance().rGetNode(mTask->treeNode->getPath(), mTask->btInfo.timingLevel);
+				assert(currentTimingNode != nullptr);
+				if(currentTimingNode != nullptr) {
+					mLocalTimings = currentTimingNode->getTimings();
+				}
+				INFO("hypro.worker.timings", "Initialized local timing container: " << mLocalTimings);
+			} else {
+				mLocalTimings = *timings;
+				INFO("hypro.worker.timings", "Obtained merged timing information: " << mLocalTimings);
+			}
+			assert(mLocalTimings.isInitialized());
 		}
-		assert(mLocalTimings.isInitialized());
-		TRACE("hypro.worker.timings", "Obtained timings : " << mLocalTimings);
 
 		/*
 		// TODO: Temporary - the pathfinder is buggy. SEE ReachabilityWorker.tpp, also needed?
@@ -382,11 +385,29 @@ namespace hypro
 			mFirstSegmentHandlers.at(i)->handle();
 		}
 
-
     	DEBUG("hypro.worker","State  after first segment: " << mComputationState);
 	    initializeInvariantHandlers();
 	    initializeBadStateHandlers();
     }
+
+	template<typename State>
+	void LTIContext<State>::execAfterFirstSegment(){
+		// by now we have a valid first segment. Time to adjust the timings
+    	if(SettingsProvider<State>::getInstance().useLocalTiming()) {
+    		mComputationState.setTimestamp(carl::Interval<tNumber>(Number(0), mStrategy.getParameters(mTask->btInfo.btLevel).timeStep));
+    	} else {
+    		TRACE("hypro.worker","State timestamp: " << mTask->treeNode->getStateAtLevel(mTask->btInfo.btLevel).getTimestamp());
+    		mComputationState.setTimestamp(mTask->treeNode->getStateAtLevel(mTask->btInfo.btLevel).getTimestamp() + carl::Interval<tNumber>(Number(0),mStrategy.getParameters(mTask->btInfo.btLevel).timeStep));
+    	}
+
+    	TRACE("hypro.worker","Set timestamp to " << mComputationState.getTimestamp());
+		// The first segment already covers one time step.
+	    mCurrentLocalTime = mStrategy.getParameters(mTask->btInfo.btLevel).timeStep;
+	    mCurrentGlobalTimeInterval = mComputationState.getTimestamp();
+	    mCurrentTimeInterval = carl::Interval<tNumber>(mCurrentLocalTime-mStrategy.getParameters(mTask->btInfo.btLevel).timeStep, mCurrentLocalTime);
+
+	    DEBUG("hypro.worker", "Current global time interval: " << mCurrentGlobalTimeInterval);
+	}
 
     template<typename State>
 	void LTIContext<State>::checkInvariant(){
@@ -397,30 +418,33 @@ namespace hypro
 	    	CONTAINMENT strictestContainment = CONTAINMENT::FULL;
 	    	// applay handlers to state
 	    	for(std::size_t i = 0; i < mInvariantHandlers.size();i++){
-				mInvariantHandlers.at(i)->handle();
+				if(!omitInvariant()) {
+					mInvariantHandlers.at(i)->handle();
 
-				if(mInvariantHandlers.at(i)->getContainment() == CONTAINMENT::NO) {
-					TRACE("hypro.worker.continuous","State set " << i << "(type " << mComputationState.getSetType(i) << ") failed the condition - return empty.");
-					strictestContainment = mInvariantHandlers.at(i)->getContainment();
-					break;
-				} else if(mInvariantHandlers.at(i)->getContainment() == CONTAINMENT::PARTIAL) {
-					strictestContainment = CONTAINMENT::PARTIAL;
-				}
+					if(mInvariantHandlers.at(i)->getContainment() == CONTAINMENT::NO) {
+						TRACE("hypro.worker.continuous","State set " << i << "(type " << mComputationState.getSetType(i) << ") failed the condition - return empty.");
+						strictestContainment = mInvariantHandlers.at(i)->getContainment();
+						break;
+					} else if(mInvariantHandlers.at(i)->getContainment() == CONTAINMENT::PARTIAL) {
+						strictestContainment = CONTAINMENT::PARTIAL;
+					}
 
-				if(mInvariantHandlers.at(i)->getMarkedForDelete()){
-					deleteRequested = true;
+					if(mInvariantHandlers.at(i)->getMarkedForDelete()){
+						deleteRequested = true;
+					}
 				}
 			}
 
 		    DEBUG("hypro.worker.continuous", "Valuation fulfills Invariant?: ");
 		    DEBUG("hypro.worker.continuous", " " << strictestContainment << std::endl);
 
-			// store timings
-			mLocalTimings.insertInvariant(mCurrentTimeInterval, strictestContainment);
-
 		    if (strictestContainment == CONTAINMENT::NO) {
+				mLocalTimings.rGetInvariantTimings().fill(CONTAINMENT::NO, mComputationState.getTimestamp().lower());
 		    	throw FinishWithDiscreteProcessingException("Segment does not fulfill invariant! Terminating worker by processing discrete States.");
-		    }
+		    } else {
+				// store timings
+				mLocalTimings.insertInvariant(mComputationState.getTimestamp(), strictestContainment);
+			}
 
 			if(deleteRequested){
 				for(auto handler = mInvariantHandlers.begin(); handler != mInvariantHandlers.end(); ){
@@ -451,42 +475,51 @@ namespace hypro
     		bool deleteRequested = false;
 
 	    	// apply handlers to state
-	    	bool intersects = false;
-			for(std::size_t i = 0; i < mBadStateHandlers.size();i++){
-				mBadStateHandlers.at(i)->handle();
-				intersects = mBadStateHandlers.at(i)->intersectsBadState();
-				if(intersects){
-					break;
-				}
-				if(mBadStateHandlers.at(i)->getMarkedForDelete()){
-					deleteRequested = true;
-				}
-			}
-
-	    	if (intersects) {
-	          	DEBUG("hypro.worker", "Bad states hit");
-				mTask->treeNode->rGetRefinements().at(mTask->btInfo.btLevel).hitBadStates = true;
-				mTask->treeNode->rGetRefinements().at(mTask->btInfo.btLevel).fullyComputed = true;
-				mLocalTimings.insertBadState(mCurrentGlobalTimeInterval,CONTAINMENT::YES);
-
-				// write timings.
-				TRACE("hypro.datastructures.timing","Update timing tree, find child.");
-				EventTimingProvider<typename State::NumberType>::getInstance().updateTimings(mTask->treeNode->getPath(), mLocalTimings);
-
-		    	// Invoke backtracking. Unlocks the node, so no manual unlocking required
-	            applyBacktracking();
-	           	throw HardTerminateException("Bad states hit! Terminating this worker!");
-	        }
-
-	        if(deleteRequested){
-				for(auto handler = mBadStateHandlers.begin(); handler != mBadStateHandlers.end(); ){
-
-					if((*handler)->getMarkedForDelete()){
-						delete *handler;
-						handler = mBadStateHandlers.erase(handler);
+			if(!omitBadStateCheck()) {
+				bool intersects = false;
+				for(std::size_t i = 0; i < mBadStateHandlers.size();i++){
+					mBadStateHandlers.at(i)->handle();
+					intersects = mBadStateHandlers.at(i)->intersectsBadState();
+					if(intersects){
+						break;
 					}
-					else{
-						++handler;
+					if(mBadStateHandlers.at(i)->getMarkedForDelete()){
+						deleteRequested = true;
+					}
+				}
+
+				if (intersects) {
+					DEBUG("hypro.worker", "Bad states hit");
+					mTask->treeNode->rGetRefinements().at(mTask->btInfo.btLevel).hitBadStates = true;
+					mTask->treeNode->rGetRefinements().at(mTask->btInfo.btLevel).fullyComputed = true;
+					if(mSettings.useBadStateTimingInformation){
+						mLocalTimings.insertBadState(mComputationState.getTimestamp(),CONTAINMENT::YES);
+					}
+
+
+					// write timings.
+					TRACE("hypro.datastructures.timing","Update timing tree, find child.");
+					EventTimingProvider<typename State::NumberType>::getInstance().updateTimings(mTask->treeNode->getPath(), mLocalTimings);
+
+					// Invoke backtracking. Unlocks the node, so no manual unlocking required
+					applyBacktracking();
+					throw HardTerminateException("Bad states hit! Terminating this worker!");
+				} else {
+					if(mSettings.useBadStateTimingInformation){
+						mLocalTimings.insertBadState(mComputationState.getTimestamp(),CONTAINMENT::NO);
+					}
+				}
+
+				if(deleteRequested){
+					for(auto handler = mBadStateHandlers.begin(); handler != mBadStateHandlers.end(); ){
+
+						if((*handler)->getMarkedForDelete()){
+							delete *handler;
+							handler = mBadStateHandlers.erase(handler);
+						}
+						else{
+							++handler;
+						}
 					}
 				}
 			}
@@ -495,22 +528,6 @@ namespace hypro
 
     template<typename State>
 	void LTIContext<State>::execBeforeLoop(){
-		// by now we have a valid first segment. Time to adjust the timings
-    	if(SettingsProvider<State>::getInstance().useLocalTiming()) {
-    		mComputationState.setTimestamp(carl::Interval<tNumber>(Number(0), mStrategy.getParameters(mTask->btInfo.btLevel).timeStep));
-    	} else {
-    		TRACE("hypro.worker","State timestamp: " << mTask->treeNode->getStateAtLevel(mTask->btInfo.btLevel).getTimestamp());
-    		mComputationState.setTimestamp(mTask->treeNode->getStateAtLevel(mTask->btInfo.btLevel).getTimestamp() + carl::Interval<tNumber>(Number(0),mStrategy.getParameters(mTask->btInfo.btLevel).timeStep));
-    	}
-
-    	TRACE("hypro.worker","Set timestamp to " << mComputationState.getTimestamp());
-		// The first segment already covers one time step.
-	    mCurrentLocalTime = mStrategy.getParameters(mTask->btInfo.btLevel).timeStep;
-	    mCurrentGlobalTimeInterval = mComputationState.getTimestamp();
-	    mCurrentTimeInterval = carl::Interval<tNumber>(mCurrentLocalTime-mStrategy.getParameters(mTask->btInfo.btLevel).timeStep, mCurrentLocalTime);
-
-	    DEBUG("hypro.worker", "Current global time interval: " << mCurrentGlobalTimeInterval);
-
 	    // the valid first segment also computed the trafo mat and translation vec, we can create timestep handlers now
 	    // initialize invariant handlers
 	    TRACE("hypro.worker","Initializing " << mComputationState.getNumberSets() <<" continuous evolution handlers");
@@ -596,8 +613,10 @@ namespace hypro
 
         	if(!it->first->isUrgent() && omitTransition(it->first)){
         		// store that transition was not enabled for this time interval
-            	mTask->treeNode->rGetRefinements().at(mTask->btInfo.btLevel).mTimings.insertTransition(it->first, mCurrentGlobalTimeInterval, CONTAINMENT::NO);
-				mLocalTimings.insertTransition(it->first, mCurrentGlobalTimeInterval, CONTAINMENT::NO);
+            	//mTask->treeNode->rGetRefinements().at(mTask->btInfo.btLevel).mTimings.insertTransition(it->first, mComputationState.getTimestamp(), CONTAINMENT::NO);
+				if(mSettings.useGuardTimingInformation) {
+					mLocalTimings.insertTransition(it->first, mComputationState.getTimestamp(), CONTAINMENT::NO);
+				}
         		continue;
         	}
 
@@ -619,6 +638,7 @@ namespace hypro
 	            //START_BENCHMARK_OPERATION(FULL_CUT);
 	            int i = 0;
 				// iterate over handlers
+				COUNT("GuardCheck");
 				for(auto guardIt = it->second.begin(); guardIt != it->second.end();++guardIt){
 
 	           		//START_BENCHMARK_OPERATION(SUBSPACE_CUT);
@@ -677,13 +697,18 @@ namespace hypro
                 TRACE("hypro.worker.discrete","hybrid transition enabled with timestamp " << guardStatePtr->getTimestamp());
 
     			DEBUG("hypro.worker","Guard satisfying state: " << *guardStatePtr);
+				COUNT("GuardEnabled");
                 mDiscreteSuccessorBuffer.push_back(boost::tuple<Transition<Number>*, State>(it->first, *(guardStatePtr)));
-                mTask->treeNode->rGetRefinements().at(mTask->btInfo.btLevel).mTimings.insertTransition(it->first, mCurrentGlobalTimeInterval, CONTAINMENT::YES);
-				mLocalTimings.insertTransition(it->first, mCurrentGlobalTimeInterval, CONTAINMENT::YES);
+                //mTask->treeNode->rGetRefinements().at(mTask->btInfo.btLevel).mTimings.insertTransition(it->first, mComputationState.getTimestamp(), CONTAINMENT::YES);
+				if(mSettings.useGuardTimingInformation) {
+					mLocalTimings.insertTransition(it->first, mComputationState.getTimestamp(), CONTAINMENT::YES);
+				}
             } else {
             	// store that transition was not enabled for this time interval
-            	mTask->treeNode->rGetRefinements().at(mTask->btInfo.btLevel).mTimings.insertTransition(it->first, mCurrentGlobalTimeInterval, CONTAINMENT::NO);
-				mLocalTimings.insertTransition(it->first, mCurrentGlobalTimeInterval, CONTAINMENT::NO);
+            	//mTask->treeNode->rGetRefinements().at(mTask->btInfo.btLevel).mTimings.insertTransition(it->first, mComputationState.getTimestamp(), CONTAINMENT::NO);
+				if(mSettings.useGuardTimingInformation) {
+					mLocalTimings.insertTransition(it->first, mComputationState.getTimestamp(), CONTAINMENT::NO);
+				}
             }
     	}
     	for(auto disabledTransition : alwaysDisabledTransitions){
@@ -715,8 +740,11 @@ namespace hypro
 				++it;
 			}
 		}
+		#ifdef HYPRO_LOGGING
+		auto tmp = carl::convert<tNumber,double>(mComputationState.getTimestamp());
+		#endif
 
-		DEBUG("hypro.worker","State after timestep: " << mComputationState);
+		DEBUG("hypro.worker","State after timestep: " << mComputationState << " time interval: " << tmp);
     }
 
 
@@ -732,7 +760,7 @@ namespace hypro
     	DEBUG("hypro.worker",  std::this_thread::get_id() << ": --- Loop left ---" << std::endl);
         DEBUG("hypro.worker.discrete",  std::this_thread::get_id() << ": Process " << mDiscreteSuccessorBuffer.size() << " new initial sets which are leftover." << std::endl);
         TRACE("hypro.worker","Initializing discrete successor handler");
-		IJumpHandler* handler = HandlerFactory<State>::getInstance().buildDiscreteSuccessorHandler(&mDiscreteSuccessorBuffer, mTask, nullptr, mStrategy.getParameters(mTask->btInfo.btLevel), mLocalQueue, mLocalCEXQueue,EventTimingProvider<typename State::NumberType>::getInstance().rGetNode(mTask->treeNode->getPath()), mLocalTimings);
+		IJumpHandler* handler = HandlerFactory<State>::getInstance().buildDiscreteSuccessorHandler(&mDiscreteSuccessorBuffer, mTask, nullptr, mStrategy.getParameters(mTask->btInfo.btLevel), mLocalQueue, mLocalCEXQueue,EventTimingProvider<typename State::NumberType>::getInstance().rGetNode(mTask->treeNode->getPath(), mTask->btInfo.timingLevel), mLocalTimings);
 		TRACE("hypro.worker","Built discrete successor handler of type: " << handler->handlerName());
 		handler->handle();
     }
@@ -740,18 +768,23 @@ namespace hypro
     template<typename State>bool
 	LTIContext<State>::omitTransition(Transition<Number>* transition){
     	TRACE("hypro.worker.discrete","Check if transition " << transition << " can be omitted.");
+		// do not use timing information -> return false
+		if(!mSettings.useGuardTimingInformation) {
+			return false;
+		}
 		// the timings for a transition are either empty because this node is not fully computed or because this transition cannot
 		// be enabled although the node has been visited before - the first case requires to check the transition while the later
 		// allows to omit it.
 
 		// temporary for dbg-output
 		#ifdef HYPRO_LOGGING
-		carl::Interval<double> tmp = carl::Interval<double>(carl::toDouble(mCurrentGlobalTimeInterval.lower()), carl::toDouble(mCurrentGlobalTimeInterval.upper()));
+		auto tmp = carl::convert<tNumber,double>(mComputationState.getTimestamp());
 		#endif
 
 		// if the transition is irrelevant for the backtracking, we still want to find potential successors to avoid re-computation.
 		if(mTask->btInfo.currentBTPosition < mTask->btInfo.btPath.size() && mTask->btInfo.btPath.at(mTask->btInfo.currentBTPosition + 1).transition != transition) {
 			DEBUG("hypro.worker.discrete","Cannot Omit transition " << transition->getSource()->getName() << " -> " << transition->getTarget()->getName() << " for time interval " << tmp);
+			COUNT("CannotOmitTransition");
 			return false;
 		}
 
@@ -760,17 +793,20 @@ namespace hypro
 		// omit the transition.
 		TRACE("hypro.worker.discrete","Has Transition: " << mLocalTimings.hasTransitionEvent(transition));
 		TRACE("hypro.worker.discrete","Is fully computed: " << mTask->treeNode->isFullyComputedOnSomeLevel());
-		TRACE("hypro.worker.discrete","Have transition information for the time interval: " << mLocalTimings.hasTransitionInformation(mCurrentGlobalTimeInterval, transition));
-		if(!mLocalTimings.hasTransitionInformation(mCurrentGlobalTimeInterval, transition)) {
+		TRACE("hypro.worker.discrete","Have transition information for the time interval: " << mLocalTimings.hasTransitionInformation(mComputationState.getTimestamp(), transition));
+		if(!mLocalTimings.hasTransitionInformation(mComputationState.getTimestamp(), transition)) {
 			DEBUG("hypro.worker.discrete","Cannot Omit transition " << transition->getSource()->getName() << " -> " << transition->getTarget()->getName() << " for time interval " << tmp);
+			COUNT("CannotOmitTransition");
 			return false;
 		} else {
 			// has transition information for that specific event, now check whether the transition was enabled
-			if(!mLocalTimings.hasTransitionEvent(mCurrentGlobalTimeInterval, transition)){
+			if(!mLocalTimings.hasTransitionEvent(mComputationState.getTimestamp(), transition)){
 				DEBUG("hypro.worker.discrete","Omit transition " << transition->getSource()->getName() << " -> " << transition->getTarget()->getName() << " for time interval " << tmp << " as we know it was not enabled.");
+				COUNT("OmitTransition");
 				return true;
 			} else {
 				DEBUG("hypro.worker.discrete","Cannot Omit transition " << transition->getSource()->getName() << " -> " << transition->getTarget()->getName() << " for time interval " << tmp << " as there is no information available.");
+				COUNT("CannotOmitTransition");
 				return false;
 			}
 		}
@@ -778,8 +814,49 @@ namespace hypro
 		// this should not be reachable.
 		assert(false);
 		std::cout << __func__ << ": This should not be reachable." << std::endl;
+		COUNT("CannotOmitTransition");
 		return false;
     }
+
+	template<typename State>
+	bool LTIContext<State>::omitInvariant() {
+		// do not use timing information -> return false
+		if(!mSettings.useInvariantTimingInformation) {
+			return false;
+		}
+		// temporary for dbg-output
+		#ifdef HYPRO_LOGGING
+		auto tmp = carl::convert<tNumber,double>(mComputationState.getTimestamp());
+		#endif
+		if( fullCover(mLocalTimings.getInvariantTimings(), mComputationState.getTimestamp(),CONTAINMENT::FULL) ) {
+			DEBUG("hypro.worker.discrete","Omit invariant for time interval " << tmp << " as we know it was inside the invariant.");
+			COUNT("OmitInvariant");
+			return true;
+		}
+		COUNT("CannotOmitInvariant");
+		DEBUG("hypro.worker.discrete","Cannot omit invariant for time interval " << tmp << ".");
+		return false;
+	}
+
+	template<typename State>
+	bool LTIContext<State>::omitBadStateCheck() {
+		// do not use timing information -> return false
+		if(!mSettings.useBadStateTimingInformation) {
+			return false;
+		}
+		// temporary for dbg-output
+		#ifdef HYPRO_LOGGING
+		auto tmp = carl::convert<tNumber,double>(mComputationState.getTimestamp());
+		#endif
+		if( !mLocalTimings.hasPositiveBadStateEvent(mComputationState.getTimestamp()) ) {
+			DEBUG("hypro.worker.discrete","Omit bad state check for time interval " << tmp << ".");
+			COUNT("OmitBadStateCheck");
+			return true;
+		}
+		DEBUG("hypro.worker.discrete","Cannot omit bad state check for time interval " << tmp << ".");
+		COUNT("CannotOmitBadStateCheck");
+		return false;
+	}
 
     template<typename State>
 	void LTIContext<State>::execOnEnd() {
@@ -795,9 +872,20 @@ namespace hypro
 			TRACE("hypro.worker.refinement", std::this_thread::get_id() << ": Node: " << mTask->treeNode << ": " << ref);
 		}
 
-		// write timings to global timing storage tree.
-		TRACE("hypro.worker.timings","Write local timings " << mLocalTimings << " to global storage.");
-		EventTimingProvider<typename State::NumberType>::getInstance().updateTimings(mTask->treeNode->getPath(), mLocalTimings);
+		if(mSettings.useInvariantTimingInformation ||
+		   mSettings.useGuardTimingInformation ||
+		   mSettings.useBadStateTimingInformation) {
+			   // write timings to global timing storage tree.
+			INFO("hypro.worker.timings","Write local timings " << mLocalTimings << " to global storage.");
+			auto currentTimingNode = EventTimingProvider<typename State::NumberType>::getInstance().rGetNode(mTask->treeNode->getPath(), mTask->btInfo.timingLevel);
+			assert(currentTimingNode != nullptr);
+			if(currentTimingNode != nullptr) {
+				currentTimingNode->setTimings(mLocalTimings);
+			}
+		}
+
+
+		//EventTimingProvider<typename State::NumberType>::getInstance().updateTimings(mTask->treeNode->getPath(), mLocalTimings);
 
 
 		TRACE("hypro.worker.refinement","Done printing refinements.");
