@@ -14,6 +14,7 @@ namespace reachability {
 		std::pair<CONTAINMENT, State> guardSatisfyingSet = _state.satisfies( _trans->getGuard() );
 
 		//std::cout << "------ guard satisfied? " << guardSatisfyingSet.first << std::endl;
+		INFO("hypro.reacher","------ guard satisfied? " << guardSatisfyingSet.first);
 
 		// check if the intersection is empty
 		if ( guardSatisfyingSet.first != CONTAINMENT::NO ) {
@@ -119,12 +120,20 @@ namespace reachability {
 			// Perform resets.
 			INFO("hypro.reacher","Apply reset.");
 			State tmp = applyReset(collectedSets, aggregationPair.first->getReset());
-			//std::cout << "Vertices after reset: " << std::endl;
-			//for(const auto& vertex : tmp.vertices()) {
-			//	std::cout << convert<Number,double>(vertex) << std::endl;
-			//}
+			INFO("hypro.reacher","Vertices size after reset: " << tmp.vertices().size());
+			for(const auto& vertex : tmp.vertices()) {
+				//std::cout << convert<Number,double>(vertex) << std::endl;
+				INFO("hypro.reacher", vertex << ", ");
+			}
 
 			std::pair<CONTAINMENT, State> invariantSatisfyingSet = tmp.satisfies(aggregationPair.first->getTarget()->getInvariant());
+			INFO("hypro.reacher","does resetted satisfy invariant? " << invariantSatisfyingSet.first << " size of vertices: " << invariantSatisfyingSet.second.vertices().size() << " and resulting vertices: ");
+			for(const auto& vertex : invariantSatisfyingSet.second.vertices()) {
+				//std::cout << convert<Number,double>(vertex) << std::endl;
+				INFO("hypro.reacher", vertex << ", ");
+			}
+			std::cout << "Reset over" << std::endl;
+
 			if(invariantSatisfyingSet.first != CONTAINMENT::NO){
 				//unsigned tmp = Plotter<Number>::getInstance().addObject(invariantSatisfyingSet.second.vertices());
 				//Plotter<Number>::getInstance().setObjectColor(tmp, colors[orange]);

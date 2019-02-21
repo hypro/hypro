@@ -19,11 +19,9 @@ template<typename Number, typename Converter, typename Setting>
 class SupportFunctionNewT;	
 
 //A data struct for TrafoOp, containing all needed info to construct a TrafoOp from it. No child info is saved.
+//TODO: Do currentExponent and successiveTransformations need to be stored?
 template<typename Number, typename Setting>
 struct TrafoData : public RGNData {
-	
-	//TODO: Do currentExponent and successiveTransformations need to be stored?
-
 	unsigned currentExponent;												
 	std::size_t successiveTransformations;									
 	std::shared_ptr<const LinTrafoParameters<Number,Setting>> parameters;

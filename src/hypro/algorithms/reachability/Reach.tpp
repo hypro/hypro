@@ -189,6 +189,7 @@ namespace reachability {
 					//State currentState = _state;
 					State currentState = currentSegment;
 					//std::cout << "-- Checking Transitions!" << std::endl;
+					INFO("hypro.reacher","--- Checking Transitions!");
 					checkTransitions(currentState, currentState.getTimestamp(), nextInitialSets);
 				}
 

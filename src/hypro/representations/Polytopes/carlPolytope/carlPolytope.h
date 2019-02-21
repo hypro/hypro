@@ -62,9 +62,9 @@ public:
 
     std::pair<CONTAINMENT, CarlPolytopeT<Number,Converter,Setting>> satisfiesHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const;
 
-    bool contains(const Point<Number>& ) const { assert(false && "NOT IMPLEMENTED"); }
+    bool contains(const Point<Number>& ) const { assert(false && "NOT IMPLEMENTED"); return false; }
 
-    bool contains(const CarlPolytopeT<Number,Converter,Setting>& ) const { assert(false && "NOT IMPLEMENTED"); }
+    bool contains(const CarlPolytopeT<Number,Converter,Setting>& ) const { assert(false && "NOT IMPLEMENTED"); return false; }
 
     EvaluationResult<Number> evaluate(const vector_t<Number>& ) const { assert(false && "NOT IMPLEMENTED"); }
 
