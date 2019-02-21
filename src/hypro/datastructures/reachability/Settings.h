@@ -19,6 +19,9 @@ struct ReachabilitySettings {
     std::vector<std::vector<std::size_t>>   plotDimensions; /// A set of dimension pairs to plot.
     bool                                    uniformBloating = false; /// Bloating settings.
     int                                     clustering = -1; /// -1 = off, 0 = all (aggregation), i = maximal number of segments to unify
+    bool                                    useInvariantTimingInformation = true;
+    bool                                    useGuardTimingInformation = true;
+    bool                                    useBadStateTimingInformation = true;
 
     /**
      * @brief      Default constructor.
