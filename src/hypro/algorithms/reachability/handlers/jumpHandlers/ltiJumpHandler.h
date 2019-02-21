@@ -21,7 +21,6 @@ namespace hypro {
 		StrategyParameters mStrategy;
 		WorkQueue<std::shared_ptr<Task<State>>>* mLocalQueue;
 		WorkQueue<std::shared_ptr<Task<State>>>* mLocalCEXQueue;
-		EventTimingNode<Number>* mTimingNode;
 		EventTimingContainer<Number> mObtainedTimings;
 
 	public:
@@ -32,7 +31,6 @@ namespace hypro {
 										StrategyParameters strategy,
 										WorkQueue<std::shared_ptr<Task<State>>>* localQueue,
 										WorkQueue<std::shared_ptr<Task<State>>>* localCEXQueue,
-										EventTimingNode<typename State::NumberType>* timingNode,
 										const EventTimingContainer<typename State::NumberType>& timings)
 			: mSuccessorBuffer(successorBuffer)
 			, mTask(task)
@@ -40,7 +38,6 @@ namespace hypro {
 			, mStrategy(strategy)
 			, mLocalQueue(localQueue)
 			, mLocalCEXQueue(localCEXQueue)
-			, mTimingNode(timingNode)
 			, mObtainedTimings(timings)
 		{}
 

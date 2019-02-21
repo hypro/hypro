@@ -37,12 +37,18 @@ namespace hypro {
 
 			// Update timing tree - add node for each child
 			auto& tProvider = EventTimingProvider<typename State::NumberType>::getInstance();
+			EventTimingNode<typename State::NumberType>* timingNode = nullptr;
+			if( SettingsProvider<State>::getInstance().useAnyTimingInformation() ) {
+				timingNode = tProvider.rGetNode(mTask->treeNode->getPath(), mTask->btInfo.timingLevel);
+			}
 			for(const auto& child : children) {
-					auto newNode = tProvider.addChildToNode(mTimingNode, SettingsProvider<State>::getInstance().getGlobalTimeHorizon());
+				if( SettingsProvider<State>::getInstance().useAnyTimingInformation() ) {
+					auto newNode = tProvider.addChildToNode(timingNode, SettingsProvider<State>::getInstance().getGlobalTimeHorizon());
 					newNode->setEntryTransition(transitionStatePair.first);
 					newNode->setEntryTimestamp(child->getTimestamp(currentTargetLevel));
 					newNode->setLocation(transitionStatePair.first->getTarget());
 					newNode->setLevel(currentTargetLevel);
+				}
 			}
 
 			// Update reach tree
@@ -433,10 +439,15 @@ namespace hypro {
 
 			// invariant timings
 			auto invariantTimings = getEnabledTimings(mObtainedTimings.getInvariantTimings());
-			assert(invariantTimings.size() == 1);
+			if(invariantTimings.size() == 1) {
+				newNode->addTimeStepToPath(invariantTimings[0]);
+			} else {
+				// Attention, this is a dummy setting.
+				newNode->addTimeStepToPath(coveredTimeInterval);
+			}
 
 			// set up node properties
-			newNode->addTimeStepToPath(invariantTimings[0]);
+
 			newNode->addTransitionToPath(transition, state.getTimestamp());
 			newNode->setDepth(parent->getDepth() + 1);
 			newNode->setTimestamp(currentTargetLevel, state.getTimestamp());
