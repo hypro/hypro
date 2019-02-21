@@ -59,7 +59,7 @@ struct RefinementSetting {
 		, isEmpty(false)
 	{}
 
-	RefinementSetting(const State& set, const Location<Number>* loc)
+	RefinementSetting(const State& set, const Location<Number>*)
 		: initialSet(set)
 		, mTimings()
 		, fullyComputed()
