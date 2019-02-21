@@ -27,10 +27,10 @@ class ObjectHandle{
         static void pair2Matlab(const std::pair<T,T>&, mxArray*, const int, const int);
 
         template<typename T>
-        static void objArray2Hypro(const mxArray*, const int);
+        static std::vector<T> objArray2Hypro(const mxArray*, const int);
 
         template<typename T>
-        static std::vector<T> objArray2Matlab(const std::vector<T>&, mxArray*, const int);
+        static void objArray2Matlab(const std::vector<T>&, mxArray*, const int);
 
         template<typename T>
         static void vector2Matlab(const std::vector<T>&, mxArray*);

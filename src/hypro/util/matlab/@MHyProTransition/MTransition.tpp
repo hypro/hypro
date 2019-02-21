@@ -473,127 +473,127 @@ void MTransition::process(int nlhs, mxArray* plhs[], int nrhs, const mxArray* pr
         mexErrMsgTxt("MTransition - First input should be a command string less than 64 characters long.");
 
 
-    if (!strcmp("new_empty", cmd) && nrhs == 2){  
+    if (!strcmp("new_empty", cmd)){  
         new_empty(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if (!strcmp("copy", cmd) && nrhs == 2){  
+    if (!strcmp("copy", cmd)){  
         copy(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if (!strcmp("delete", cmd) && nrhs == 2){  
+    if (!strcmp("delete", cmd)){  
         delete_tran(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if (!strcmp("new_source_target", cmd) && nrhs == 2){  
+    if (!strcmp("new_source_target", cmd)){  
         new_source_target(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if (!strcmp("new_full", cmd) && nrhs == 2){  
+    if (!strcmp("new_full", cmd)){  
         new_full(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if (!strcmp("getTarget", cmd) && nrhs == 2){  
+    if (!strcmp("getTarget", cmd)){  
         getTarget(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if (!strcmp("getSource", cmd) && nrhs == 2){  
+    if (!strcmp("getSource", cmd)){  
         getSource(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if (!strcmp("getGuard", cmd) && nrhs == 2){  
+    if (!strcmp("getGuard", cmd)){  
         getGuard(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if (!strcmp("getReset", cmd) && nrhs == 2){  
+    if (!strcmp("getReset", cmd)){  
         getReset(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if (!strcmp("getAggregation", cmd) && nrhs == 2){  
+    if (!strcmp("getAggregation", cmd)){  
         getAggregation(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if (!strcmp("getTriggerTime", cmd) && nrhs == 2){  
+    if (!strcmp("getTriggerTime", cmd)){  
         getTriggerTime(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if (!strcmp("isUrgent", cmd) && nrhs == 2){  
+    if (!strcmp("isUrgent", cmd)){  
         isUrgent(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if (!strcmp("isTimeTriggered", cmd) && nrhs == 2){  
+    if (!strcmp("isTimeTriggered", cmd)){  
         isTimeTriggered(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if (!strcmp("hasIdentityReset", cmd) && nrhs == 2){  
+    if (!strcmp("hasIdentityReset", cmd)){  
         hasIdentityReset(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if (!strcmp("getLabels", cmd) && nrhs == 2){  
+    if (!strcmp("getLabels", cmd)){  
         getLabels(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if (!strcmp("hash", cmd) && nrhs == 2){  
+    if (!strcmp("hash", cmd)){  
         hash(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if (!strcmp("setSource", cmd) && nrhs == 2){  
+    if (!strcmp("setSource", cmd)){  
         setSource(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if (!strcmp("setTarget", cmd) && nrhs == 2){  
+    if (!strcmp("setTarget", cmd)){  
         setTarget(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if (!strcmp("setGuard", cmd) && nrhs == 2){  
+    if (!strcmp("setGuard", cmd)){  
         setGuard(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if (!strcmp("setReset", cmd) && nrhs == 2){  
+    if (!strcmp("setReset", cmd)){  
         setReset(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if (!strcmp("setAggregation", cmd) && nrhs == 2){  
+    if (!strcmp("setAggregation", cmd)){  
         setAggregation(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if (!strcmp("setUrgent", cmd) && nrhs == 2){  
+    if (!strcmp("setUrgent", cmd)){  
         setUrgent(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if (!strcmp("setTriggerTime", cmd) && nrhs == 2){  
+    if (!strcmp("setTriggerTime", cmd)){  
         setTriggerTime(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if (!strcmp("setLabels", cmd) && nrhs == 2){  
+    if (!strcmp("setLabels", cmd)){  
         setLabels(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if (!strcmp("addLabel", cmd) && nrhs == 2){  
+    if (!strcmp("addLabel", cmd)){  
         addLabel(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if (!strcmp("getDotRepresentation", cmd) && nrhs == 2){  
+    if (!strcmp("getDotRepresentation", cmd)){  
         getDotRepresentation(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if (!strcmp("isComposedOf", cmd) && nrhs == 2){  
+    if (!strcmp("isComposedOf", cmd)){  
         isComposedOf(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if (!strcmp("decompose", cmd) && nrhs == 2){  
+    if (!strcmp("decompose", cmd)){  
         decompose(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if (!strcmp("outstream", cmd) && nrhs == 2){  
+    if (!strcmp("outstream", cmd)){  
         outstream(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if (!strcmp("equals", cmd) && nrhs == 2){  
+    if (!strcmp("equals", cmd)){  
         equals(nlhs, plhs, nrhs, prhs);
         return;
     }
-    if (!strcmp("nequals", cmd) && nrhs == 2){  
+    if (!strcmp("nequals", cmd)){  
         nequals(nlhs, plhs, nrhs, prhs);
         return;
     }

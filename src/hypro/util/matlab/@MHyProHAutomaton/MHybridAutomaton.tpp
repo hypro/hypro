@@ -407,187 +407,187 @@
             mexErrMsgTxt("MHybridAutomaton - First input should be a command string less than 64 characters long.");
 
 
-        if (!strcmp("new_empty", cmd) && nrhs == 2){  
+        if (!strcmp("new_empty", cmd)){  
             new_empty(nlhs, plhs, nrhs, prhs);
             return;
         }
 
-        if (!strcmp("copy", cmd) && nrhs == 2){  
+        if (!strcmp("copy", cmd)){  
             copy(nlhs, plhs, nrhs, prhs);
             return;
         }
 
-        if (!strcmp("new_loc", cmd) && nrhs == 2){  
+        if (!strcmp("new_loc", cmd)){  
             new_loc_init(nlhs, plhs, nrhs, prhs);
             return;
         }
 
-        if (!strcmp("delete", cmd) && nrhs == 2){  
+        if (!strcmp("delete", cmd)){  
             delete_autom(nlhs, plhs, nrhs, prhs);
             return;
         }
 
-        if (!strcmp("getLocations", cmd) && nrhs == 2){  
+        if (!strcmp("getLocations", cmd)){  
             getLocations(nlhs, plhs, nrhs, prhs);
             return;
         }
 
-        if (!strcmp("getLocation_by_hash", cmd) && nrhs == 2){  
+        if (!strcmp("getLocation_by_hash", cmd)){  
             getLocation_by_hash(nlhs, plhs, nrhs, prhs);
             return;
         }
 
-        if (!strcmp("getLocation_by_name", cmd) && nrhs == 2){  
+        if (!strcmp("getLocation_by_name", cmd)){  
             getLocation_by_name(nlhs, plhs, nrhs, prhs);
             return;
         }
 
-        if (!strcmp("getTransitions", cmd) && nrhs == 2){  
+        if (!strcmp("getTransitions", cmd)){  
             getTransitions(nlhs, plhs, nrhs, prhs);
             return;
         }
 
-        if (!strcmp("getInitialStates", cmd) && nrhs == 2){  
+        if (!strcmp("getInitialStates", cmd)){  
             getInitialStates(nlhs, plhs, nrhs, prhs);
             return;
         }
 
-        if (!strcmp("getLocalBadStates", cmd) && nrhs == 2){  
+        if (!strcmp("getLocalBadStates", cmd)){  
             getLocalBadStates(nlhs, plhs, nrhs, prhs);
             return;
         }
 
-        if (!strcmp("getGlobalBadStates", cmd) && nrhs == 2){  
+        if (!strcmp("getGlobalBadStates", cmd)){  
             getGlobalBadStates(nlhs, plhs, nrhs, prhs);
             return;
         }
 
-        if (!strcmp("dimension", cmd) && nrhs == 2){  
+        if (!strcmp("dimension", cmd)){  
             dimension(nlhs, plhs, nrhs, prhs);
             return;
         }
 
-        if (!strcmp("getVariables", cmd) && nrhs == 2){  
+        if (!strcmp("getVariables", cmd)){  
             getVariables(nlhs, plhs, nrhs, prhs);
             return;
         }
 
-        if (!strcmp("getLabels", cmd) && nrhs == 2){  
+        if (!strcmp("getLabels", cmd)){  
             getLabels(nlhs, plhs, nrhs, prhs);
             return;
         }
 
-        if (!strcmp("setLocations", cmd) && nrhs == 2){  
+        if (!strcmp("setLocations", cmd)){  
             setLocations(nlhs, plhs, nrhs, prhs);
             return;
         }
 
-        // if (!strcmp("setTransitions", cmd) && nrhs == 2){  
+        // if (!strcmp("setTransitions", cmd)){  
         //     setTransitions(nlhs, plhs, nrhs, prhs);
         //     return;
         // }
 
-        if (!strcmp("setInitialStates", cmd) && nrhs == 2){  
+        if (!strcmp("setInitialStates", cmd)){  
             setInitialStates(nlhs, plhs, nrhs, prhs);
             return;
         }
 
-        if (!strcmp("setLocalBadStates", cmd) && nrhs == 2){  
+        if (!strcmp("setLocalBadStates", cmd)){  
             setLocalBadStates(nlhs, plhs, nrhs, prhs);
             return;
         }
 
-        if (!strcmp("setGlobalBadStates", cmd) && nrhs == 2){  
+        if (!strcmp("setGlobalBadStates", cmd)){  
             setGlobalBadStates(nlhs, plhs, nrhs, prhs);
             return;
         }
 
-        if (!strcmp("setVariables", cmd) && nrhs == 2){  
+        if (!strcmp("setVariables", cmd)){  
             setVariables(nlhs, plhs, nrhs, prhs);
             return;
         }
 
-        if (!strcmp("addLocation", cmd) && nrhs == 2){  
+        if (!strcmp("addLocation", cmd)){  
             addLocation(nlhs, plhs, nrhs, prhs);
             return;
         }
 
-        if (!strcmp("addTransition", cmd) && nrhs == 2){  
+        if (!strcmp("addTransition", cmd)){  
             addTransition(nlhs, plhs, nrhs, prhs);
             return;
         }
 
-        if (!strcmp("addInitialState", cmd) && nrhs == 2){  
+        if (!strcmp("addInitialState", cmd)){  
             addInitialState(nlhs, plhs, nrhs, prhs);
             return;
         }
 
-        if (!strcmp("addLocalBadState", cmd) && nrhs == 2){  
+        if (!strcmp("addLocalBadState", cmd)){  
             addLocalBadState(nlhs, plhs, nrhs, prhs);
             return;
         }
 
-        if (!strcmp("addGlobalBadState", cmd) && nrhs == 2){  
+        if (!strcmp("addGlobalBadState", cmd)){  
             addGlobalBadState(nlhs, plhs, nrhs, prhs);
             return;
         }
 
-        if (!strcmp("removeTransition", cmd) && nrhs == 2){  
+        if (!strcmp("removeTransition", cmd)){  
             removeTransition(nlhs, plhs, nrhs, prhs);
             return;
         }
 
-        if (!strcmp("decompose", cmd) && nrhs == 2){  
+        if (!strcmp("decompose", cmd)){  
             decompose(nlhs, plhs, nrhs, prhs);
             return;
         }
 
-        if (!strcmp("reduce", cmd) && nrhs == 2){  
+        if (!strcmp("reduce", cmd)){  
             reduce(nlhs, plhs, nrhs, prhs);
             return;
         }
 
-        if (!strcmp("isComposedOf", cmd) && nrhs == 2){  
+        if (!strcmp("isComposedOf", cmd)){  
             isComposedOf(nlhs, plhs, nrhs, prhs);
             return;
         }
 
-        if (!strcmp("getDotRepresentation", cmd) && nrhs == 2){  
+        if (!strcmp("getDotRepresentation", cmd)){  
             getDotRepresentation(nlhs, plhs, nrhs, prhs);
             return;
         }
 
-        if (!strcmp("getStatistics", cmd) && nrhs == 2){  
+        if (!strcmp("getStatistics", cmd)){  
             getStatistics(nlhs, plhs, nrhs, prhs);
             return;
         }
 
-        if (!strcmp("equals", cmd) && nrhs == 2){  
+        if (!strcmp("equals", cmd)){  
             equals(nlhs, plhs, nrhs, prhs);
             return;
         }
 
-        if (!strcmp("unequals", cmd) && nrhs == 2){  
+        if (!strcmp("unequals", cmd)){  
             unequals(nlhs, plhs, nrhs, prhs);
             return;
         }
 
-        if (!strcmp("or_operator", cmd) && nrhs == 2){  
+        if (!strcmp("or_operator", cmd)){  
             or_operator(nlhs, plhs, nrhs, prhs);
             return;
         }
 
-        if (!strcmp("plus", cmd) && nrhs == 2){  
+        if (!strcmp("plus", cmd)){  
             plus(nlhs, plhs, nrhs, prhs);
             return;
         }
 
-        if (!strcmp("outstream", cmd) && nrhs == 2){  
+        if (!strcmp("outstream", cmd)){  
             outstream(nlhs, plhs, nrhs, prhs);
             return;
         }
 
-        if (!strcmp("checkConsistency", cmd) && nrhs == 2){  
+        if (!strcmp("checkConsistency", cmd)){  
             checkConsistency(nlhs, plhs, nrhs, prhs);
             return;
         }

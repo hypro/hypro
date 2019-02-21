@@ -11,6 +11,7 @@
 // #include "@MHyProLocation/MLocation.h"
 //#include "@MHyProState/MState.h"
 #include "@MHyProTransition/MTransition.h"
+#include "@MHyProReset/MReset.h"
 #include <iostream>
 #include "mex.h"
 #include "matrix.h"
