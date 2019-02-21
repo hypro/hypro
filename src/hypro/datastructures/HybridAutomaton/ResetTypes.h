@@ -74,7 +74,6 @@ namespace hypro {
         }
 
         friend bool operator==(const IntervalAssignment<Number>& lhs, const IntervalAssignment<Number>& rhs) {
-            bool res = true;
             if(lhs.mIntervals.size() != rhs.mIntervals.size()) return false;
 
             for(std::size_t i = 0; i < lhs.mIntervals.size(); ++i) {
