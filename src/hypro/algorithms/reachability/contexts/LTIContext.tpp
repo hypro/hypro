@@ -439,11 +439,15 @@ namespace hypro
 		    DEBUG("hypro.worker.continuous", " " << strictestContainment << std::endl);
 
 		    if (strictestContainment == CONTAINMENT::NO) {
-				mLocalTimings.rGetInvariantTimings().fill(CONTAINMENT::NO, mComputationState.getTimestamp().lower());
+				if(mSettings.useInvariantTimingInformation) {
+					mLocalTimings.rGetInvariantTimings().fill(CONTAINMENT::NO, mComputationState.getTimestamp().lower());
+				}
 		    	throw FinishWithDiscreteProcessingException("Segment does not fulfill invariant! Terminating worker by processing discrete States.");
 		    } else {
 				// store timings
-				mLocalTimings.insertInvariant(mComputationState.getTimestamp(), strictestContainment);
+				if(mSettings.useInvariantTimingInformation) {
+					mLocalTimings.insertInvariant(mComputationState.getTimestamp(), strictestContainment);
+				}
 			}
 
 			if(deleteRequested){
@@ -498,8 +502,12 @@ namespace hypro
 
 
 					// write timings.
+					if(mSettings.useBadStateTimingInformation ||
+					   mSettings.useGuardTimingInformation ||
+					   mSettings.useInvariantTimingInformation){
 					TRACE("hypro.datastructures.timing","Update timing tree, find child.");
 					EventTimingProvider<typename State::NumberType>::getInstance().updateTimings(mTask->treeNode->getPath(), mLocalTimings);
+					}
 
 					// Invoke backtracking. Unlocks the node, so no manual unlocking required
 					applyBacktracking();
@@ -760,7 +768,7 @@ namespace hypro
     	DEBUG("hypro.worker",  std::this_thread::get_id() << ": --- Loop left ---" << std::endl);
         DEBUG("hypro.worker.discrete",  std::this_thread::get_id() << ": Process " << mDiscreteSuccessorBuffer.size() << " new initial sets which are leftover." << std::endl);
         TRACE("hypro.worker","Initializing discrete successor handler");
-		IJumpHandler* handler = HandlerFactory<State>::getInstance().buildDiscreteSuccessorHandler(&mDiscreteSuccessorBuffer, mTask, nullptr, mStrategy.getParameters(mTask->btInfo.btLevel), mLocalQueue, mLocalCEXQueue,EventTimingProvider<typename State::NumberType>::getInstance().rGetNode(mTask->treeNode->getPath(), mTask->btInfo.timingLevel), mLocalTimings);
+		IJumpHandler* handler = HandlerFactory<State>::getInstance().buildDiscreteSuccessorHandler(&mDiscreteSuccessorBuffer, mTask, nullptr, mStrategy.getParameters(mTask->btInfo.btLevel), mLocalQueue, mLocalCEXQueue, mLocalTimings);
 		TRACE("hypro.worker","Built discrete successor handler of type: " << handler->handlerName());
 		handler->handle();
     }

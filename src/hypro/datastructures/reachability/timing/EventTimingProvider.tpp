@@ -313,7 +313,7 @@ namespace hypro {
 				// discrete step
 				std::vector<EventTimingNode<Number>*> transitionCandidates;
 				for(auto nodeIt = workingSet.begin(); nodeIt != workingSet.end(); ++nodeIt) {
-					if( positiveCover((*nodeIt)->getTimings().getTransitionTimings(pathIt->transition), pathIt->timeInterval) ) {
+					if( (*nodeIt)->getTimings().hasTransition(pathIt->transition) && positiveCover((*nodeIt)->getTimings().getTransitionTimings(pathIt->transition), pathIt->timeInterval) ) {
 						for(const auto chPtr : (*nodeIt)->getChildren()) {
 							if( chPtr->getEntryTransition() == pathIt->transition && chPtr->getEntryTimestamp() == pathIt->timeInterval ) {
 								transitionCandidates.emplace_back(chPtr);
