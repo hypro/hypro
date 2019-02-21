@@ -7,7 +7,31 @@ namespace hypro {
     static HierarchicalIntervalVector<T,N> merge(std::initializer_list<HierarchicalIntervalVector<T,N>> l) {
         assert(l.size() != 0);
         auto lIt = l.begin();
+        HierarchicalIntervalVector<T,N> res = (*lIt);
+        TRACE("hypro.datastructures.hiv", "Res initialized: " << res );
+        lIt++;
+        for(;lIt != l.end(); ++lIt) {
+            N prevTimepoint = N(0);
+            for(auto& endPoint : (*lIt).getIntervals()) {
+                res.insertInterval(endPoint.type, carl::Interval<N>(prevTimepoint, endPoint.timePoint));
+                prevTimepoint = endPoint.timePoint;
+            }
+            TRACE("hypro.datastructures.hiv", "Intermediate res: " << res );
+        }
+        TRACE("hypro.datastructures.hiv", "Final res: " << res );
+        return res;
+    }
+
+    template<typename T, typename N>
+    static HierarchicalIntervalVector<T,N> unite(std::initializer_list<HierarchicalIntervalVector<T,N>> l) {
+        assert(l.size() != 0);
+        auto lIt = l.begin();
         HierarchicalIntervalVector<T,N> res = *lIt++;
+        auto originalOrder = res.getTypeOrder();
+        auto reversedOrder = originalOrder;
+        std::reverse(reversedOrder.begin(), reversedOrder.end());
+        res.setTypeOrder(reversedOrder);
+
         for(;lIt != l.end(); ++lIt) {
             N prevTimepoint = N(0);
             for(auto& endPoint : (*lIt).getIntervals()) {
@@ -15,6 +39,8 @@ namespace hypro {
                 prevTimepoint = endPoint.timePoint;
             }
         }
+        res.setTypeOrder(originalOrder);
+
         return res;
     }
 

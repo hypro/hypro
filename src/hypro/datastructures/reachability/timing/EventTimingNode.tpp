@@ -4,6 +4,7 @@ namespace hypro
 {
     template<typename Number>
     void EventTimingNode<Number>::setTimings(const EventTimingContainer<Number>& timings) {
+        TRACE("hypro.datastructures.timing","Set timings of node (" << this << "): " << *this << " TO " << timings);
         mTimings = timings;
     }
 

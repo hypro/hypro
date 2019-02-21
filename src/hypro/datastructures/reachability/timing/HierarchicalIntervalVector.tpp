@@ -82,13 +82,13 @@ namespace hypro {
 				// at this point we found the correct entry point.
 				assert(it->timePoint  >= startingPoint);
 				assert(it != mIntervals.end());
-				// set new boundary
-				std::cout << "Time point is " << startingPoint << std::endl;
-				std::cout << "Old Time point is " << it->timePoint << std::endl;
-				it->timePoint = startingPoint;
+				// set new boundary, if not already set
+				if(it->type != type) {
+					it->timePoint = startingPoint;
+					++it;
+				}
 
 				// override all following ones -> delete.
-				++it;
 				while(it != mIntervals.end()) {
 					it = mIntervals.erase(it);
 				}
@@ -294,9 +294,12 @@ namespace hypro {
 
 	template<typename T, typename Number>
 	bool HierarchicalIntervalVector<T, Number>::isSane() const {
+		if(mIntervals.size() <= 1) return true;
+
 		for(auto it = mIntervals.begin(); it != mIntervals.end(); ++it) {
 			if(it != mIntervals.begin()) {
 				if(it->type == std::prev(it,1)->type) {
+					DEBUG("hypro.datastructures.timing", "Is not sane: " << *this );
 					return false;
 				}
 			}

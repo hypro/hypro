@@ -26,6 +26,8 @@ struct TBacktrackingInfo {
 	 */
 	unsigned btLevel = 0;
 
+	unsigned timingLevel = 0; /// required for the correct entry node in the timing tree
+
 	TBacktrackingInfo<Number>() :
 		btPath(),
 		currentBTPosition(0),

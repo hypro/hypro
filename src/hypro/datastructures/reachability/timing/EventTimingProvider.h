@@ -41,12 +41,12 @@ public:
 	/**
 	 * @brief	Find the best suitable node in the timing tree which matches the passed path.
 	 */
-	const EventTimingNode<Number>* getTimingNode(const Path<Number,tNumber>& path) const;
+	const EventTimingNode<Number>* getTimingNode(const Path<Number,tNumber>& path, std::size_t level = 0) const;
 
 	/**
 	 * @brief	Find the best suitable node in the timing tree which matches the passed path.
 	 */
-	EventTimingNode<Number>* rGetNode(const Path<Number,tNumber>& path) const;
+	EventTimingNode<Number>* rGetNode(const Path<Number,tNumber>& path, std::size_t level = 0) const;
 
 	std::optional<EventTimingContainer<Number>> getTimings(const Path<Number,tNumber>& path) const;
 
@@ -57,7 +57,7 @@ public:
 	std::string getDotRepresentation() const;
 
 private:
-	EventTimingNode<Number>* findNode(const Path<Number,tNumber>& path) const;
+	EventTimingNode<Number>* findNode(const Path<Number,tNumber>& path, std::size_t level) const;
 	void writeTree() const;
 
 	// for dbg
