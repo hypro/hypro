@@ -69,7 +69,7 @@ class ObjectHandle{
         static std::vector<carl::Term<double>> mMultivariatePoly2Hypro(const mxArray*);
         static std::vector<std::vector<size_t>> mVectorOfVectors2Hypro(const mxArray*, const int, const int);
         static std::vector<std::string> mStringVector2Hypro(const mxArray*, const int);
-        static std::map<const hypro::Location<double>*, hypro::Condition<double>> mLocCondMap2Hypro(const mxArray*, const int);
+        static std::map<const hypro::Location<double>*, hypro::Condition<double>> mLocCondMap2Hypro(const mxArray*);
 };
 
 /**
@@ -305,6 +305,7 @@ void ObjectHandle::convert2Matlab(const std::vector<std::string>& strings, mxArr
         mxSetCell(str_arr, i,  element);
     }
 }
+
 
 /**
  * @brief Converts a Matlab vector of ints into standard vector
@@ -576,8 +577,20 @@ std::vector<std::string> ObjectHandle::mStringVector2Hypro(const mxArray* string
 /**
 * @brief
 **/
-std::map<const hypro::Location<double>*, hypro::Condition<double>> ObjectHandle::mLocCondMap2Hypro(const mxArray*, const int){
-    //TODO
+std::map<const hypro::Location<double>*, hypro::Condition<double>> ObjectHandle::mLocCondMap2Hypro(const mxArray* structArray){
+    double* structPtr = mxGetPr(structArray);
+    const mwSize* dims = mxGetDimensions(structArray);
+    int dimy = dims[0];
+    int dimx = dims[1];
+
+    std::map<const hypro::Location<double>*, hypro::Condition<double>> mapping;
+
+    for(int i = 0; i < dimy; i++){
+        hypro::Location<double>* loc = convertMat2Ptr<hypro::Location<double>>(mxGetFieldByNumber(structArray, i, 0));
+        hypro::Condition<double>* cond = convertMat2Ptr<hypro::Condition<double>>(mxGetFieldByNumber(structArray, i , 1));
+        mapping[loc] = *cond;
+    } 
+
 }
 
 #endif

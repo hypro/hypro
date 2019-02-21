@@ -209,9 +209,11 @@ void MReset::getAffineResets(int nlhs, mxArray* plhs[], int nrhs, const mxArray*
     for(int i = 0; i < affRests.size(); i++){
         conds[i] = affRests[i].mTransformation;
     }
-    plhs[0] = mxCreateDoubleMatrix(1, conds.size(), mxREAL);
+    int len = conds.size();
+    const mwSize dims[2] = {1, (mwSize) len};
+    plhs[0]  = mxCreateCellArray(2,dims);
     objArray2Matlab<hypro::ConstraintSet<double>>(conds, plhs[0], conds.size());
-    //vector2Matlab<hypro::ConstraintSet<double>>(conds, plhs[0]);  
+
 }
 
 /**
