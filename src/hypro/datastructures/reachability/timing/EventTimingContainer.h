@@ -55,8 +55,10 @@ public:
 	void setBadStateTimings(const HierarchicalIntervalVector<CONTAINMENT,tNumber>& timings) { mBadStateEvents = timings; }
 
 	const std::map<Transition<Number>*, HierarchicalIntervalVector<CONTAINMENT,tNumber>>& getTransitionTimings() const;
+	std::map<Transition<Number>*, HierarchicalIntervalVector<CONTAINMENT,tNumber>>& rGetTransitionTimings();
 	const HierarchicalIntervalVector<CONTAINMENT,tNumber>& getTransitionTimings(Transition<Number>* transition) const;
 	const HierarchicalIntervalVector<CONTAINMENT,tNumber>& getInvariantTimings() const;
+	HierarchicalIntervalVector<CONTAINMENT,tNumber>& rGetInvariantTimings() { return mInvariantEvents; }
 	//const std::vector<carl::Interval<Number>>& getInvariantTimings(CONTAINMENT type) const;
 	const HierarchicalIntervalVector<CONTAINMENT,tNumber>& getBadStateTimings() const;
 
@@ -68,10 +70,10 @@ public:
 	bool hasInvariantEvent(CONTAINMENT type) const;
 	bool satisfiedInvariant(const carl::Interval<tNumber>& timeInterval) const;
 	bool hasInvariantEvent(const carl::Interval<tNumber>& timeInterval, CONTAINMENT type) const;
-	std::vector<carl::Interval<tNumber>> getInvariantEnabledTimings() const;
 
 	bool hasBadStateEvent() const;
 	bool hasBadStateEvent(const carl::Interval<tNumber>& timeInterval, CONTAINMENT type) const;
+	bool hasPositiveBadStateEvent(const carl::Interval<mpq_class>& timeInterval) const;
 
 	void insertTransition(Transition<Number>* transition, const carl::Interval<tNumber>& timeInterval, CONTAINMENT type);
 	void insertInvariant(const carl::Interval<tNumber>& timeInterval, CONTAINMENT type);

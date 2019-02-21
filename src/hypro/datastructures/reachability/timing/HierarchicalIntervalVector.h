@@ -38,6 +38,8 @@ private:
 	std::vector<T> mOrder;
 	std::vector<endPoint<T,Number>> mIntervals;
 
+	using Ivec = std::vector<endPoint<T,Number>>;
+
 public:
 	HierarchicalIntervalVector() = delete;
 	HierarchicalIntervalVector(const std::vector<T>& order) : mOrder(order) {}
@@ -53,7 +55,13 @@ public:
 	void fill(const T& type, Number startingPoint);
 	void clear() { mIntervals.clear(); }
 
+	typename Ivec::iterator begin() { return mIntervals.begin(); }
+	typename Ivec::const_iterator begin() const { return mIntervals.begin(); }
+	typename Ivec::iterator end() { return mIntervals.end(); }
+	typename Ivec::const_iterator end() const { return mIntervals.end(); }
+
 	const std::vector<T>& getTypeOrder() const { return mOrder; }
+	void setTypeOrder(const std::vector<T>& in) { mOrder = in; }
 
 	/**
 	 * @brief      Determines if it has an entry of the passed type.

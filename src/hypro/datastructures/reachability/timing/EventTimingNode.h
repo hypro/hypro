@@ -27,7 +27,6 @@ public:
         : mTimings(in)
     {}
 
-
     const EventTimingContainer<Number>& getTimings() const;
     EventTimingContainer<Number>& rGetTimings();
     const Location<Number>* getLocation() const;
@@ -45,6 +44,7 @@ public:
     void setEntryTransition(const Transition<Number>* trans);
 
     friend std::ostream& operator<<(std::ostream& out, const EventTimingNode<Number>& in) {
+        out << "lvl. " << in.getLevel() << ", content: ";
         out << in.getTimings();
         return out;
     }
