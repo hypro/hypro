@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../../../representations/GeometricObject.h"
+// #include "../../../representations/GeometricObject.h"
 #include "MHyProGeometricObject.h"
 #include <iostream>
 #include <string>

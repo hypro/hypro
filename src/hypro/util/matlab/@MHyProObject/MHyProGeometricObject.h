@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../../../representations/GeometricObject.h"
-#include "../../../datastructures/Halfspace.h"
+// #include "../../../representations/GeometricObject.h"
+// #include "../../../datastructures/Halfspace.h"
 #include <iostream>
 #include <map>
 #include <cassert>

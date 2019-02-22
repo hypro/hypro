@@ -148,37 +148,37 @@ std::size_t Location<Number>::hash() const {
 	return mHash;
 }
 
-template<typename Number>
-std::string Location<Number>::getDotRepresentation(const std::vector<std::string>& vars) const {
-	std::stringstream o;
-	o << this->hash() << " [shape=none, margin=0, label=<";
-	o << "<TABLE>";
-	o << "<TR><TD>" << this->getName() << " (" << this->hash() << ") </TD></TR>";
-	// flow
-	matrix_t<Number>& flow = mLinearFlows.begin()->getFlowMatrix();
-	o << "<TR><TD ROWSPAN=\"" << flow.rows() << "\">";
-	for(unsigned i = 0; i < flow.rows()-1; ++i) {
-		o << vars[i] << "' = ";
-		bool allZero = true;
-		for(unsigned j = 0; j < flow.cols() -1; ++j) {
-			if(flow(i,j) != 0) {
-				o << flow(i,j) << "*" << vars[j] << " + ";
-				allZero = false;
-			}
-		}
-		if(flow(i,flow.cols()-1) != 0 || allZero) o << flow(i,flow.cols()-1);
-		if(i < flow.rows() -1)
-			o << "<BR/>";
-	}
-	o << "</TD>";
-	o << "</TR>";
-	// invariant
-	o << mInvariant.getDotRepresentation(vars);
-	o << "</TABLE>";
-	o << ">];\n";
+// template<typename Number>
+// std::string Location<Number>::getDotRepresentation(const std::vector<std::string>& vars) const {
+// 	std::stringstream o;
+// 	o << this->hash() << " [shape=none, margin=0, label=<";
+// 	o << "<TABLE>";
+// 	o << "<TR><TD>" << this->getName() << " (" << this->hash() << ") </TD></TR>";
+// 	// flow
+// 	matrix_t<Number>& flow = mLinearFlows.begin()->getFlowMatrix();
+// 	o << "<TR><TD ROWSPAN=\"" << flow.rows() << "\">";
+// 	for(unsigned i = 0; i < flow.rows()-1; ++i) {
+// 		o << vars[i] << "' = ";
+// 		bool allZero = true;
+// 		for(unsigned j = 0; j < flow.cols() -1; ++j) {
+// 			if(flow(i,j) != 0) {
+// 				o << flow(i,j) << "*" << vars[j] << " + ";
+// 				allZero = false;
+// 			}
+// 		}
+// 		if(flow(i,flow.cols()-1) != 0 || allZero) o << flow(i,flow.cols()-1);
+// 		if(i < flow.rows() -1)
+// 			o << "<BR/>";
+// 	}
+// 	o << "</TD>";
+// 	o << "</TR>";
+// 	// invariant
+// 	o << mInvariant.getDotRepresentation(vars);
+// 	o << "</TABLE>";
+// 	o << ">];\n";
 
-	return o.str();
-}
+// 	return o.str();
+// }
 
 template<typename Number>
 bool Location<Number>::isComposedOf(const Location<Number>& rhs, const std::vector<std::string>& rhsVars, const std::vector<std::string>& thisVars) const {

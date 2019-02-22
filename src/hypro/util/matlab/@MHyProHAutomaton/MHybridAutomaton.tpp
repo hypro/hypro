@@ -14,29 +14,29 @@
     /**
      * @brief
      **/    
-    void MHybridAutomaton::new_loc_init(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
-        if(nlhs != 1)
-            mexErrMsgTxt("MHybridAutomaton - new_sets: One output expected.");
-        if(nrhs < 4)
-            mexErrMsgTxt("MHybridAutomaton - new_sets: One or more arguments are missing.");
+    // void MHybridAutomaton::new_loc_init(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
+    //     if(nlhs != 1)
+    //         mexErrMsgTxt("MHybridAutomaton - new_sets: One output expected.");
+    //     if(nrhs < 4)
+    //         mexErrMsgTxt("MHybridAutomaton - new_sets: One or more arguments are missing.");
         
-        const mwSize *loc_dims;
-        int loc_num;
-        loc_dims = mxGetDimensions(prhs[2]);
-        loc_num = loc_dims[0];
-        const std::vector<hypro::Location<double>> locs = objArray2Hypro<hypro::Location<double>>(prhs[2], loc_num);
-        const std::map<const hypro::Location<double>*, hypro::Condition<double>> mapping = ObjectHandle::mLocCondMap2Hypro(prhs[3]);
+    //     const mwSize *loc_dims;
+    //     int loc_num;
+    //     loc_dims = mxGetDimensions(prhs[2]);
+    //     loc_num = loc_dims[0];
+    //     const std::vector<hypro::Location<double>> locs = objArray2Hypro<hypro::Location<double>>(prhs[2], loc_num);
+    //     const std::map<const hypro::Location<double>*, hypro::Condition<double>> mapping = ObjectHandle::mLocCondMap2Hypro(prhs[3]);
 
-        std::vector<std::unique_ptr<hypro::Location<double>>> ptr_locs;
+    //     std::vector<std::unique_ptr<hypro::Location<double>>> ptr_locs;
 
-        for(const auto &elem : locs){
-            std::unique_ptr<hypro::Location<double>> loc(new hypro::Location<double>(elem));
-            ptr_locs.emplace_back(loc);
-        }
+    //     for(const auto &elem : locs){
+    //         std::unique_ptr<hypro::Location<double>> loc(new hypro::Location<double>(elem));
+    //         ptr_locs.emplace_back(std::move(loc));
+    //     }
 
-        hypro::HybridAutomaton<double>* temp = new hypro::HybridAutomaton<double>(ptr_locs, mapping);
-        plhs[0] = convertPtr2Mat<hypro::HybridAutomaton<double>>(temp);
-    }
+    //     hypro::HybridAutomaton<double>* temp = new hypro::HybridAutomaton<double>(ptr_locs, mapping);
+    //     plhs[0] = convertPtr2Mat<hypro::HybridAutomaton<double>>(temp);
+    // }
 
     /**
      * @brief
@@ -298,7 +298,7 @@
 
         for(const auto &elem : locs){
             std::unique_ptr<hypro::Location<double>> loc(new hypro::Location<double>(elem));
-            ptr_locs.emplace_back(loc);
+            ptr_locs.emplace_back(std::move(loc));
         }
 
         // autom->setLocations(ptr_locs); ??? TODO
@@ -397,19 +397,19 @@
     //}
 
     /**
-     * @brief
+     * @brief THIS IS CORRECT BUT CANNOT BE USED NOW
      **/    
-    void MHybridAutomaton::addTransition(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
-        if(nrhs < 4)
-            mexErrMsgTxt("MHybridAutomaton - addTransition: One or more arguments are missing.");
-        if(nrhs > 4)
-            mexWarnMsgTxt("MHybridAutomaton - addTransition: One or more arguments were ignored.");
+    // void MHybridAutomaton::addTransition(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
+    //     if(nrhs < 4)
+    //         mexErrMsgTxt("MHybridAutomaton - addTransition: One or more arguments are missing.");
+    //     if(nrhs > 4)
+    //         mexWarnMsgTxt("MHybridAutomaton - addTransition: One or more arguments were ignored.");
 
-        hypro::HybridAutomaton<double>* autom = convertMat2Ptr<hypro::HybridAutomaton<double>>(prhs[2]);
-        hypro::Transition<double>* temp = convertMat2Ptr<hypro::Transition<double>>(prhs[3]);
-        std::unique_ptr<hypro::Transition<double>> tran(new hypro::Transition<double>(*temp));
-        autom->addTransition(std::move(tran));
-    }
+    //     hypro::HybridAutomaton<double>* autom = convertMat2Ptr<hypro::HybridAutomaton<double>>(prhs[2]);
+    //     hypro::Transition<double>* temp = convertMat2Ptr<hypro::Transition<double>>(prhs[3]);
+    //     std::unique_ptr<hypro::Transition<double>> tran(new hypro::Transition<double>(*temp));
+    //     autom->addTransition(std::move(tran));
+    // }
 
        /**
         * @brief
@@ -477,36 +477,36 @@
     }
 
     /**
-     * @brief
+     * @brief THIS IS CORRECT BUT CANNOT BE USED NOW
      **/    
-    void MHybridAutomaton::isComposedOf(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
-        if(nlhs != 1)
-             mexErrMsgTxt("MHybridAutomaton - isComposedOf: One output expected.");
-        if(nrhs < 4)
-            mexErrMsgTxt("MHybridAutomaton - isComposedOf: One or more arguments are missing.");
-        if(nrhs > 4)
-            mexWarnMsgTxt("MHybridAutomaton - isComposedOf: One or more arguments were ignored.");
+    // void MHybridAutomaton::isComposedOf(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
+    //     if(nlhs != 1)
+    //          mexErrMsgTxt("MHybridAutomaton - isComposedOf: One output expected.");
+    //     if(nrhs < 4)
+    //         mexErrMsgTxt("MHybridAutomaton - isComposedOf: One or more arguments are missing.");
+    //     if(nrhs > 4)
+    //         mexWarnMsgTxt("MHybridAutomaton - isComposedOf: One or more arguments were ignored.");
 
-        hypro::HybridAutomaton<double>* autom = convertMat2Ptr<hypro::HybridAutomaton<double>>(prhs[2]);
-        hypro::HybridAutomaton<double>* rhs = convertMat2Ptr<hypro::HybridAutomaton<double>>(prhs[3]);
-        autom->isComposedOf(*rhs);
-    }
+    //     hypro::HybridAutomaton<double>* autom = convertMat2Ptr<hypro::HybridAutomaton<double>>(prhs[2]);
+    //     hypro::HybridAutomaton<double>* rhs = convertMat2Ptr<hypro::HybridAutomaton<double>>(prhs[3]);
+    //     autom->isComposedOf(*rhs);
+    // }
 
     /**
-     * @brief
+     * @brief THIS IS CORRECT BUT CANNOT BE USED NOW
      **/    
-    void MHybridAutomaton::getDotRepresentation(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
-        if(nlhs != 1)
-             mexErrMsgTxt("MHybridAutomaton - getDotRepresentation: One output expected.");
-        if(nrhs < 3)
-            mexErrMsgTxt("MHybridAutomaton - getDotRepresentation: One or more arguments are missing.");
-        if(nrhs > 3)
-            mexWarnMsgTxt("MHybridAutomaton - getDotRepresentation: One or more arguments were ignored.");
+    // void MHybridAutomaton::getDotRepresentation(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
+    //     if(nlhs != 1)
+    //          mexErrMsgTxt("MHybridAutomaton - getDotRepresentation: One output expected.");
+    //     if(nrhs < 3)
+    //         mexErrMsgTxt("MHybridAutomaton - getDotRepresentation: One or more arguments are missing.");
+    //     if(nrhs > 3)
+    //         mexWarnMsgTxt("MHybridAutomaton - getDotRepresentation: One or more arguments were ignored.");
 
-        hypro::HybridAutomaton<double>* autom = convertMat2Ptr<hypro::HybridAutomaton<double>>(prhs[2]);
-        std::string rep = autom->getDotRepresentation();
-        plhs[0] = mxCreateString(rep.c_str());
-    }
+    //     hypro::HybridAutomaton<double>* autom = convertMat2Ptr<hypro::HybridAutomaton<double>>(prhs[2]);
+    //     std::string rep = autom->getDotRepresentation();
+    //     plhs[0] = mxCreateString(rep.c_str());
+    // }
 
     /**
      * @brief
@@ -563,22 +563,22 @@
     }
 
     /**
-     * @brief
+     * @brief TODO
      **/    
-    void MHybridAutomaton::or_operator(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
-        if(nlhs != 1)
-             mexErrMsgTxt("MHybridAutomaton - or_operator: One output expected.");
-        if(nrhs < 4)
-            mexErrMsgTxt("MHybridAutomaton - or_operator: One or more arguments are missing.");
-        if(nrhs > 4)
-            mexWarnMsgTxt("MHybridAutomaton - or_operator: One or more arguments were ignored.");
+    // void MHybridAutomaton::or_operator(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]){
+    //     if(nlhs != 1)
+    //          mexErrMsgTxt("MHybridAutomaton - or_operator: One output expected.");
+    //     if(nrhs < 4)
+    //         mexErrMsgTxt("MHybridAutomaton - or_operator: One or more arguments are missing.");
+    //     if(nrhs > 4)
+    //         mexWarnMsgTxt("MHybridAutomaton - or_operator: One or more arguments were ignored.");
 
-        hypro::HybridAutomaton<double>* autom = convertMat2Ptr<hypro::HybridAutomaton<double>>(prhs[2]);
-        hypro::HybridAutomaton<double>* rhs = convertMat2Ptr<hypro::HybridAutomaton<double>>(prhs[3]);
+    //     hypro::HybridAutomaton<double>* autom = convertMat2Ptr<hypro::HybridAutomaton<double>>(prhs[2]);
+    //     hypro::HybridAutomaton<double>* rhs = convertMat2Ptr<hypro::HybridAutomaton<double>>(prhs[3]);
 
-        hypro::HybridAutomaton<double> temp = *autom || *rhs;
-        plhs[0] = convertPtr2Mat<hypro::HybridAutomaton<double>>(new hypro::HybridAutomaton<double>(temp));
-    }
+    //     hypro::HybridAutomaton<double> temp = *autom || *rhs;
+    //     plhs[0] = convertPtr2Mat<hypro::HybridAutomaton<double>>(new hypro::HybridAutomaton<double>(temp));
+    // }
 
     /**
      * @brief
@@ -594,8 +594,8 @@
         hypro::HybridAutomaton<double>* autom = convertMat2Ptr<hypro::HybridAutomaton<double>>(prhs[2]);
         hypro::HybridAutomaton<double>* rhs = convertMat2Ptr<hypro::HybridAutomaton<double>>(prhs[3]);
 
-        hypro::HybridAutomaton<double> temp = *autom + *rhs;
-        plhs[0] = convertPtr2Mat<hypro::HybridAutomaton<double>>(new hypro::HybridAutomaton<double>(temp));
+        hypro::HybridAutomatonComp<double> temp = *autom + *rhs;
+        plhs[0] = convertPtr2Mat<hypro::HybridAutomatonComp<double>>(new hypro::HybridAutomatonComp<double>(temp));
     }
 
     /**
@@ -645,10 +645,10 @@
             return;
         }
 
-        if (!strcmp("new_loc", cmd)){  
-            new_loc_init(nlhs, plhs, nrhs, prhs);
-            return;
-        }
+        // if (!strcmp("new_loc", cmd)){  
+        //     new_loc_init(nlhs, plhs, nrhs, prhs);
+        //     return;
+        // }
 
         if (!strcmp("delete", cmd)){  
             delete_autom(nlhs, plhs, nrhs, prhs);
@@ -740,10 +740,10 @@
             return;
         }
 
-        if (!strcmp("addTransition", cmd)){  
-            addTransition(nlhs, plhs, nrhs, prhs);
-            return;
-        }
+        // if (!strcmp("addTransition", cmd)){  
+        //     addTransition(nlhs, plhs, nrhs, prhs);
+        //     return;
+        // }
 
         if (!strcmp("addInitialState", cmd)){  
             addInitialState(nlhs, plhs, nrhs, prhs);
@@ -760,10 +760,10 @@
             return;
         }
 
-        if (!strcmp("removeTransition", cmd)){  
-            removeTransition(nlhs, plhs, nrhs, prhs);
-            return;
-        }
+        // if (!strcmp("removeTransition", cmd)){  
+        //     removeTransition(nlhs, plhs, nrhs, prhs);
+        //     return;
+        // }
 
         if (!strcmp("decompose", cmd)){  
             decompose(nlhs, plhs, nrhs, prhs);
@@ -775,15 +775,15 @@
             return;
         }
 
-        if (!strcmp("isComposedOf", cmd)){  
-            isComposedOf(nlhs, plhs, nrhs, prhs);
-            return;
-        }
+        // if (!strcmp("isComposedOf", cmd)){  
+        //     isComposedOf(nlhs, plhs, nrhs, prhs);
+        //     return;
+        // }
 
-        if (!strcmp("getDotRepresentation", cmd)){  
-            getDotRepresentation(nlhs, plhs, nrhs, prhs);
-            return;
-        }
+        // if (!strcmp("getDotRepresentation", cmd)){  
+        //     getDotRepresentation(nlhs, plhs, nrhs, prhs);
+        //     return;
+        // }
 
         if (!strcmp("getStatistics", cmd)){  
             getStatistics(nlhs, plhs, nrhs, prhs);
@@ -800,10 +800,10 @@
             return;
         }
 
-        if (!strcmp("or_operator", cmd)){  
-            or_operator(nlhs, plhs, nrhs, prhs);
-            return;
-        }
+        // if (!strcmp("or_operator", cmd)){  
+        //     or_operator(nlhs, plhs, nrhs, prhs);
+        //     return;
+        // }
 
         if (!strcmp("plus", cmd)){  
             plus(nlhs, plhs, nrhs, prhs);

@@ -385,39 +385,28 @@ void MLocation::isComposedOf(int nlhs, mxArray* plhs[], int nrhs, const mxArray*
     //TODO
 
 }
-// const mwSize *dims; 
-// const mxArray *cell;
-// const mxArray *cellArray;
-// mwIndex jcell;
-// double *output;
-// cell = prhs[0];
-// output = mxGetPr(cell);
-// dims = mxGetDimensions(prhs[0]);
-// for (jcell=0; jcell<dims[0]; jcell++) {
-//   cellElement = mxGetCell(cell,jcell);
-//   p = mxGetPr(cellElement)
-//   mexPrintf("The content at %d is %g\n", jcell, *p);
-/**
- * @brief
- **/
-void MLocation::getDotRepresentation(int nlhs, mxArray* plhs[], int nrhs , const mxArray* prhs[]){
-    if(nlhs != 1)
-        mexErrMsgTxt("MLocation - getDotRepresentation: Expecting an output!");
-    if(nrhs < 4)
-        mexErrMsgTxt("MLocation - getDotRepresentation: One or more arguments are missing!");
-    if(nrhs > 4)
-        mexWarnMsgTxt("MLocation - getDotRepresentation: One or more arguments were ignored.");
-    
-    const mwSize* dims;
-    int len;
-    dims = mxGetDimensions(prhs[3]);
-    len = dims[0];
 
-    hypro::Location<double>* loc = convertMat2Ptr<hypro::Location<double>>(prhs[2]);
-    std::vector<std::string> vars = ObjectHandle::mStringVector2Hypro(prhs[3], len);
-    std::string rep = loc->getDotRepresentation(vars);
-    plhs[0] = mxCreateString(rep.c_str());
-}
+/**
+ * @brief THIS IS CORRECT BUT CANNOT BE USED NOW
+ **/
+// void MLocation::getDotRepresentation(int nlhs, mxArray* plhs[], int nrhs , const mxArray* prhs[]){
+//     if(nlhs != 1)
+//         mexErrMsgTxt("MLocation - getDotRepresentation: Expecting an output!");
+//     if(nrhs < 4)
+//         mexErrMsgTxt("MLocation - getDotRepresentation: One or more arguments are missing!");
+//     if(nrhs > 4)
+//         mexWarnMsgTxt("MLocation - getDotRepresentation: One or more arguments were ignored.");
+    
+//     const mwSize* dims;
+//     int len;
+//     dims = mxGetDimensions(prhs[3]);
+//     len = dims[0];
+
+//     hypro::Location<double>* loc = convertMat2Ptr<hypro::Location<double>>(prhs[2]);
+//     std::vector<std::string> vars = ObjectHandle::mStringVector2Hypro(prhs[3], len);
+//     std::string rep = loc->getDotRepresentation(vars);
+//     plhs[0] = mxCreateString(rep.c_str());
+// }
 
 /**
  * @brief
@@ -621,10 +610,10 @@ void MLocation::process(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs
         return;
     }
 
-    if (!strcmp("getDotRepresentation", cmd)){  
-        getDotRepresentation(nlhs, plhs, nrhs, prhs);
-        return;
-    }
+    // if (!strcmp("getDotRepresentation", cmd)){  
+    //     getDotRepresentation(nlhs, plhs, nrhs, prhs);
+    //     return;
+    // }
 
     if (!strcmp("decompose", cmd)){  
         decompose(nlhs, plhs, nrhs, prhs);

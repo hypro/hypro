@@ -154,7 +154,7 @@ class HybridAutomaton
     ///@{
     void addLocation(const Location<Number>& location);
     void addLocation(std::unique_ptr<Location<Number>>&& location);
-    //void addTransition(const Transition<Number>& transition);
+    // void addTransition(const Transition<Number>& transition);
     void addTransition(std::unique_ptr<Transition<Number>>&& transition);
     void addInitialState(const Location<Number>* loc, const Condition<Number>& state) { mInitialStates.emplace(std::make_pair(loc,state)); }
     void addLocalBadState(const Location<Number>* loc, const Condition<Number>& condition) { mLocalBadStates.emplace(std::make_pair(loc,condition)); }
@@ -282,10 +282,10 @@ class HybridAutomaton
      * @return     Return compositional Automata of two Automata.
      */
     friend HybridAutomatonComp<Number> operator+(const HybridAutomaton<Number>& lhs, const HybridAutomaton<Number>& rhs) {
-		HybridAutomatonComp<Number> hac;
-		hac.addAutomata(lhs);
-		hac.addAutomata(rhs);
-		return hac;
+		// HybridAutomatonComp<Number> hac;
+		// hac.addAutomata(lhs);
+		// hac.addAutomata(rhs);
+		// return hac;
     }
 
 #ifdef HYPRO_LOGGING

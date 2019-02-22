@@ -8,7 +8,7 @@
 #include "@MHyProFlow/MLinearFlow.h"
 #include "@MHyProFlow/MAffineFlow.h"
 #include "@MHyProLabel/MLabel.h"
-// #include "@MHyProLocation/MLocation.h"
+#include "@MHyProLocation/MLocation.h"
 //#include "@MHyProState/MState.h"
 #include "@MHyProTransition/MTransition.h"
 #include "@MHyProReset/MReset.h"
@@ -37,7 +37,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
     }else if(!strcmp(type, "Condition")){
         MCondition::process(nlhs, plhs, nrhs, prhs);
     }else if(!strcmp(type, "Location")){
-        // MLocation::process(nlhs, plhs, nrhs, prhs);
+        MLocation::process(nlhs, plhs, nrhs, prhs);
     }else if(!strcmp(type, "Transition")){
         MTransition::process(nlhs, plhs, nrhs, prhs);
     }else if(!strcmp(type, "Label")){
