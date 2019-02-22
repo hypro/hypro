@@ -27,11 +27,6 @@ classdef MHyProTransition < handle
         
         %Constructor
          function obj = MHyProLocation(varargin)
-            if strcmp(varargin{1},'Transition')
-                obj.Type = 'Transition';
-            else
-                error('MHyProTransition - Constructor: Unknown type.');
-            end 
 
             if nargin == 1
                 % Call the constructor for empty flow

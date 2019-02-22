@@ -10,29 +10,12 @@ classdef MHyProLocation < handle
         function delete(obj)
             MHyPro('Location', 'delete', obj.Handle);
         end
-        
-        %Auxiliary functions
-        function out = iscelloftype(cell, type)
-            for i=(1:length(cell))
-                elem = cell(i);
-                if strcmp(elem.Type, type) == 0
-                    out = 0;
-                end
-            end
-            out = 1;
-        end
     end
     
     methods (Access = public)
         
         %Constructor
          function obj = MHyProLocation(varargin)
-            if strcmp(varargin{1},'Location')
-                obj.Type = 'Location';
-            else
-                error('MHyProLocation - Constructor: Unknown type.');
-            end 
-
             if nargin == 1
                 % Call the constructor for empty flow
                 obj.Handle = MHyPro('Location', 'new_empty');

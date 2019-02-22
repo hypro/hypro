@@ -1,4 +1,5 @@
 classdef MHyProFlow < handle
+
     
     properties (SetAccess = public, GetAccess = public)
         Type
