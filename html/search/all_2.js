@@ -13,7 +13,6 @@ var searchData=
   ['checkpoint',['checkPoint',['../classhypro_1_1Optimizer.html#a528ae62064de85098bc5746c11a3a045',1,'hypro::Optimizer']]],
   ['childtiminginformation',['ChildTimingInformation',['../structhypro_1_1ChildTimingInformation.html',1,'hypro']]],
   ['childtiminginformation_3c_20number_20_3e',['ChildTimingInformation&lt; Number &gt;',['../structhypro_1_1ChildTimingInformation.html',1,'hypro']]],
-  ['childtiminginformation_3c_20typename_20state_3a_3anumbertype_20_3e',['ChildTimingInformation&lt; typename State::NumberType &gt;',['../structhypro_1_1ChildTimingInformation.html',1,'hypro']]],
   ['cifexprvisitor',['CIFExprVisitor',['../classhypro_1_1CIFExprVisitor.html',1,'hypro']]],
   ['ciflocationbasevisitor',['CIFLocationBaseVisitor',['../classCIFLocationBaseVisitor.html',1,'']]],
   ['ciflocationlexer',['CIFLocationLexer',['../classCIFLocationLexer.html',1,'']]],
@@ -27,10 +26,10 @@ var searchData=
   ['coeffwisemin',['coeffWiseMin',['../classhypro_1_1Point.html#aa489e2547dd7930a460a8f6664388709',1,'hypro::Point']]],
   ['color',['color',['../classhypro_1_1Vertex.html#a2c16bc5cafc02c562d09fe45f10e287b',1,'hypro::Vertex']]],
   ['colorat',['colorAt',['../classhypro_1_1Grid.html#ae12dedbd65821ecd6ad965bab360253e',1,'hypro::Grid']]],
-  ['compareexpressioncontext',['CompareExpressionContext',['../classCIFLocationParser_1_1CompareExpressionContext.html',1,'CIFLocationParser']]],
   ['compareexpressioncontext',['CompareExpressionContext',['../classExpressionsParser_1_1CompareExpressionContext.html',1,'ExpressionsParser']]],
   ['compareexpressioncontext',['CompareExpressionContext',['../classHybridSystemParser_1_1CompareExpressionContext.html',1,'HybridSystemParser']]],
   ['compareexpressioncontext',['CompareExpressionContext',['../classInputOutputParser_1_1CompareExpressionContext.html',1,'InputOutputParser']]],
+  ['compareexpressioncontext',['CompareExpressionContext',['../classCIFLocationParser_1_1CompareExpressionContext.html',1,'CIFLocationParser']]],
   ['composedof',['composedOf',['../classhypro_1_1Point.html#a72eb033baf9da144122b8189d0ac08dd',1,'hypro::Point']]],
   ['computemaxvdegree',['computeMaxVDegree',['../classhypro_1_1PolytopeT.html#a9fde55f4a56198e86b1e4451dd78bc00',1,'hypro::PolytopeT']]],
   ['computeplanenormal',['computePlaneNormal',['../classhypro_1_1Halfspace.html#adb5e2938f230976484893135809dd6c6',1,'hypro::Halfspace']]],
@@ -66,6 +65,7 @@ var searchData=
   ['coreedgecontext',['CoreEdgeContext',['../classHybridSystemParser_1_1CoreEdgeContext.html',1,'HybridSystemParser']]],
   ['coreedgecontext',['CoreEdgeContext',['../classCIFLocationParser_1_1CoreEdgeContext.html',1,'CIFLocationParser']]],
   ['counterrepository',['CounterRepository',['../classhypro_1_1statistics_1_1CounterRepository.html',1,'hypro::statistics']]],
+  ['coversentry',['coversEntry',['../classhypro_1_1HierarchicalIntervalVector.html#a9258adb71802345bd1820d69f5b775d4',1,'hypro::HierarchicalIntervalVector']]],
   ['currentbtposition',['currentBTPosition',['../structhypro_1_1TBacktrackingInfo.html#a113aa00925adc4303c6cdc62dad52991',1,'hypro::TBacktrackingInfo']]],
   ['cutoffcontext',['CutoffContext',['../classHybridAutomatonParser_1_1CutoffContext.html',1,'HybridAutomatonParser']]]
 ];

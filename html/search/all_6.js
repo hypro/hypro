@@ -49,7 +49,7 @@ var searchData=
   ['getsuccessorcount',['getSuccessorCount',['../classhypro_1_1TimingAggregate.html#a1b8668292ace3c3978e44b9046da03da',1,'hypro::TimingAggregate']]],
   ['getsuccessornodes',['getSuccessorNodes',['../classhypro_1_1TimingAggregate.html#a733bfcd2471a1199e285fe773df35ebb',1,'hypro::TimingAggregate']]],
   ['gettimestamp',['getTimestamp',['../classhypro_1_1ReachTreeNode.html#a2a90e36bd25f3c6f1a1e79913592f3a9',1,'hypro::ReachTreeNode']]],
-  ['gettimingnode',['getTimingNode',['../classhypro_1_1EventTimingProvider.html#a396524bdf38b5ac392a26c4977e9671d',1,'hypro::EventTimingProvider']]],
+  ['gettimingnode',['getTimingNode',['../classhypro_1_1EventTimingProvider.html#a332134a6422afc32064f50ec30253884',1,'hypro::EventTimingProvider']]],
   ['getting_20started',['Getting started',['../gettingStarted.html',1,'']]],
   ['gettransitions',['getTransitions',['../classhypro_1_1HybridAutomaton.html#a99d07d08f0d078115e85b419a1824687',1,'hypro::HybridAutomaton']]],
   ['getvariables',['getVariables',['../classhypro_1_1HybridAutomaton.html#a20912e1e9b6f5e6bc566cc5035c472ea',1,'hypro::HybridAutomaton']]],

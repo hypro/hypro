@@ -140,9 +140,24 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>fill</b> (const T &am
 <tr class="memitem:a64c3681ff64d29a4daaaff0e1218639f"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a64c3681ff64d29a4daaaff0e1218639f"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>clear</b> ()</td></tr>
 <tr class="separator:a64c3681ff64d29a4daaaff0e1218639f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a577d9a98ac3344537aee1386f6516996"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a577d9a98ac3344537aee1386f6516996"></a>
+Ivec::iterator&#160;</td><td class="memItemRight" valign="bottom"><b>begin</b> ()</td></tr>
+<tr class="separator:a577d9a98ac3344537aee1386f6516996"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a45669f76f0b4052e560a979b63a1f7fe"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a45669f76f0b4052e560a979b63a1f7fe"></a>
+Ivec::const_iterator&#160;</td><td class="memItemRight" valign="bottom"><b>begin</b> () const </td></tr>
+<tr class="separator:a45669f76f0b4052e560a979b63a1f7fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1388400136e43f889a60ed96fa9ec48e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1388400136e43f889a60ed96fa9ec48e"></a>
+Ivec::iterator&#160;</td><td class="memItemRight" valign="bottom"><b>end</b> ()</td></tr>
+<tr class="separator:a1388400136e43f889a60ed96fa9ec48e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6e7e0d54a270fdfd1efae8a236acb84d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6e7e0d54a270fdfd1efae8a236acb84d"></a>
+Ivec::const_iterator&#160;</td><td class="memItemRight" valign="bottom"><b>end</b> () const </td></tr>
+<tr class="separator:a6e7e0d54a270fdfd1efae8a236acb84d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acb988bf9b8db597e8ce1a3a44afbced6"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="acb988bf9b8db597e8ce1a3a44afbced6"></a>
 const std::vector&lt; T &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getTypeOrder</b> () const </td></tr>
 <tr class="separator:acb988bf9b8db597e8ce1a3a44afbced6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afdcf1d581fa44571cdfe0cfb19045e5b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="afdcf1d581fa44571cdfe0cfb19045e5b"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setTypeOrder</b> (const std::vector&lt; T &gt; &amp;in)</td></tr>
+<tr class="separator:afdcf1d581fa44571cdfe0cfb19045e5b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a819991fc23d93cad6ef63aad2ced6df0"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HierarchicalIntervalVector.html#a819991fc23d93cad6ef63aad2ced6df0">hasEntry</a> (const T &amp;type) const </td></tr>
 <tr class="memdesc:a819991fc23d93cad6ef63aad2ced6df0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines if it has an entry of the passed type.  <a href="#a819991fc23d93cad6ef63aad2ced6df0">More...</a><br /></td></tr>
 <tr class="separator:a819991fc23d93cad6ef63aad2ced6df0"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -155,6 +170,9 @@ const std::vector&lt; T &gt; &amp;&#160;</td><td class="memItemRight" valign="bo
 <tr class="memitem:a25d382da20c395021470807983bcde6e"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HierarchicalIntervalVector.html#a25d382da20c395021470807983bcde6e">intersectsEntry</a> (const carl::Interval&lt; Number &gt; &amp;timeInterval, const T &amp;type) const </td></tr>
 <tr class="memdesc:a25d382da20c395021470807983bcde6e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines if it the interval intersects some contained interval where the type matches.  <a href="#a25d382da20c395021470807983bcde6e">More...</a><br /></td></tr>
 <tr class="separator:a25d382da20c395021470807983bcde6e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9258adb71802345bd1820d69f5b775d4"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1HierarchicalIntervalVector.html#a9258adb71802345bd1820d69f5b775d4">coversEntry</a> (const carl::Interval&lt; Number &gt; &amp;timeInterval, const T &amp;type) const </td></tr>
+<tr class="memdesc:a9258adb71802345bd1820d69f5b775d4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines, if the passed entry is fully contained in the HIV.  <a href="#a9258adb71802345bd1820d69f5b775d4">More...</a><br /></td></tr>
+<tr class="separator:a9258adb71802345bd1820d69f5b775d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3b6e3f6c861d1195d783ad8ae047d657"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3b6e3f6c861d1195d783ad8ae047d657"></a>
 std::vector&lt; carl::Interval&lt; Number &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getIntersectionIntervals</b> (const carl::Interval&lt; Number &gt; &amp;timeInterval, const T &amp;type) const </td></tr>
 <tr class="separator:a3b6e3f6c861d1195d783ad8ae047d657"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -199,6 +217,46 @@ class hypro::HierarchicalIntervalVector&lt; T, Number &gt;</h3>
 
 <p>Definition at line <a class="el" href="HierarchicalIntervalVector_8h_source.html#l00035">35</a> of file <a class="el" href="HierarchicalIntervalVector_8h_source.html">HierarchicalIntervalVector.h</a>.</p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
+<a class="anchor" id="a9258adb71802345bd1820d69f5b775d4"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T, typename Number&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classhypro_1_1HierarchicalIntervalVector.html">hypro::HierarchicalIntervalVector</a>&lt; T, Number &gt;::coversEntry </td>
+          <td>(</td>
+          <td class="paramtype">const carl::Interval&lt; Number &gt; &amp;&#160;</td>
+          <td class="paramname"><em>timeInterval</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const T &amp;&#160;</td>
+          <td class="paramname"><em>type</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Determines, if the passed entry is fully contained in the HIV. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">timeInterval</td><td></td></tr>
+    <tr><td class="paramname">type</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>true </dd>
+<dd>
+false </dd></dl>
+
+</div>
+</div>
 <a class="anchor" id="a819991fc23d93cad6ef63aad2ced6df0"></a>
 <div class="memitem">
 <div class="memproto">

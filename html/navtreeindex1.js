@@ -1,5 +1,6 @@
 var NAVTREEINDEX1 =
 {
+"annotated.html":[6,0],
 "carlPolytopeSettings_8h_source.html":[7,0,1,0,3,8,0,1],
 "carlPolytope_8h_source.html":[7,0,1,0,3,8,0,0],
 "carlTypes_8h_source.html":[7,0,1,0,5],
@@ -248,6 +249,5 @@ var NAVTREEINDEX1 =
 "classCIFLocationParser.html#a28ba184413479bd6c4d5ec200a7675cfa5f6cb3663e5648f57c8d86d505290954":[6,0,7,125],
 "classCIFLocationParser.html#a28ba184413479bd6c4d5ec200a7675cfa616861498ed6f0f1c86809afd14c1ed7":[6,0,7,164],
 "classCIFLocationParser.html#a28ba184413479bd6c4d5ec200a7675cfa62ca11509f7fa989874ea462f04b49f0":[6,0,7,179],
-"classCIFLocationParser.html#a28ba184413479bd6c4d5ec200a7675cfa6524be38895a1c93c45046d22b5c26eb":[6,0,7,185],
-"classCIFLocationParser.html#a28ba184413479bd6c4d5ec200a7675cfa6590c8ae65a7fbbbc1a0486d45f87d43":[6,0,7,157]
+"classCIFLocationParser.html#a28ba184413479bd6c4d5ec200a7675cfa6524be38895a1c93c45046d22b5c26eb":[6,0,7,185]
 };

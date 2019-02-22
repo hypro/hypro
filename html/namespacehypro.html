@@ -796,12 +796,12 @@ Enumerations</h2></td></tr>
 </td></tr>
 <tr class="separator:a402d1e5727bcf52f5ee140924452c3cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab7a1dbbbe2d40e57ecab2c9b64b3615d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab7a1dbbbe2d40e57ecab2c9b64b3615d"></a>enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacehypro.html#ab7a1dbbbe2d40e57ecab2c9b64b3615d">CONTAINMENT</a> { <br />
-&#160;&#160;<b>NO</b> = 0, 
-<b>FULL</b>, 
-<b>PARTIAL</b>, 
-<b>YES</b>, 
+&#160;&#160;<b>NO</b> =-1, 
+<b>BOT</b> =0, 
+<b>PARTIAL</b> =1, 
+<b>FULL</b> =2, 
 <br />
-&#160;&#160;<b>BOT</b>
+&#160;&#160;<b>YES</b> =3
 <br />
  }<tr class="memdesc:ab7a1dbbbe2d40e57ecab2c9b64b3615d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enum for set containment results. If known, we can make a statement about full or partial containment, otherwise fall back to YES/NO. Note: BOT is used for UNKNOWN. <br /></td></tr>
 </td></tr>
@@ -854,6 +854,9 @@ Enumerations</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
+<tr class="memitem:a56120452411b7a612edc1eda20a0d5ca"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a56120452411b7a612edc1eda20a0d5ca"></a>
+std::vector&lt; carl::Interval&lt; <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getEnabledTimings</b> (const <a class="el" href="classhypro_1_1HierarchicalIntervalVector.html">HierarchicalIntervalVector</a>&lt; <a class="el" href="namespacehypro.html#ab7a1dbbbe2d40e57ecab2c9b64b3615d">CONTAINMENT</a>, <a class="el" href="namespacehypro.html#aecbc4b3475e1d41764127bd99c0e2b1c">tNumber</a> &gt; &amp;in)</td></tr>
+<tr class="separator:a56120452411b7a612edc1eda20a0d5ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a62b0b40853ad5aa4ba457961ebbd0fea"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a62b0b40853ad5aa4ba457961ebbd0fea"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>openFile</b> (const std::string &amp;filename, ANTLRInputStream &amp;input)</td></tr>
 <tr class="separator:a62b0b40853ad5aa4ba457961ebbd0fea"><td class="memSeparator" colspan="2">&#160;</td></tr>
