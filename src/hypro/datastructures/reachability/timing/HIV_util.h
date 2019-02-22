@@ -55,15 +55,25 @@ namespace hypro {
 
     template<typename T, typename N>
     static bool fullCover(const HierarchicalIntervalVector<T,N>& in, const carl::Interval<N>& intv, T type) {
+
+        #ifndef NDEBUG
+        bool verifiedRes = false;
         // get all intervals that satisfy bot criteria: Intersection interval-wise and correct type.
         auto intervals = in.getIntersectionIntervals(intv,type);
         // we assume the intervals returned are pairwise-disjunct.
         if(intervals.size() == 1){
             DEBUG("hypro.datastructures.hiv", "Intersecting interval: " << intervals[0]);
             if(intervals[0] == intv) {
-                return true;
+                verifiedRes = true;
             }
         }
+        #endif
+
+        if(in.coversEntry(intv,type)) {
+            assert(verifiedRes);
+            return true;
+        }
+        assert(!verifiedRes);
         return false;
     }
 
