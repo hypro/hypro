@@ -133,7 +133,68 @@ namespace hypro {
 	bool HierarchicalIntervalVector<T, Number>::intersectsEntry(const carl::Interval<Number>& timeInterval, const T& type) const {
 		assert(this->isSane());
 		DEBUG("hypro.datastructures.hiv", "This: " << *this << " intersects: " << timeInterval << ", type " << type );
-		return getIntersectionIntervals(timeInterval, type).size() > 0;
+
+		auto it = mIntervals.begin();
+		while(it != mIntervals.end()) {
+			TRACE("hypro.datastructures.hiv", "Current it points to " << *it );
+			// handle first interval differently
+			if( it == mIntervals.begin() && it->timePoint >= timeInterval.upper() && it->type == type ) {
+				TRACE("hypro.datastructures.hiv", "Begin and match." );
+				assert(getIntersectionIntervals(timeInterval, type).size() > 0);
+				return true;
+			} else if( it == mIntervals.begin() ) {
+				++it;
+				continue;
+			}
+
+			if(it->timePoint >= timeInterval.lower() && std::prev(it)->timePoint <= timeInterval.upper() && it->type == type) {
+				assert(getIntersectionIntervals(timeInterval, type).size() > 0);
+				return true;
+			}
+
+			if(it->timePoint > timeInterval.upper()) {
+				assert(getIntersectionIntervals(timeInterval, type).size() == 0);
+				return false;
+			}
+
+			++it;
+		}
+		TRACE("hypro.datastructures.hiv", "Not found." );
+		assert(getIntersectionIntervals(timeInterval, type).size() == 0);
+		return false;
+	}
+
+	template<typename T, typename Number>
+	bool HierarchicalIntervalVector<T, Number>::coversEntry(const carl::Interval<Number>& timeInterval, const T& type) const {
+		DEBUG("hypro.datastructures.hiv", "This: " << *this << " covers entry: " << timeInterval << ", type " << type );
+		assert(this->isSane());
+		auto it = mIntervals.begin();
+		while(it != mIntervals.end()) {
+			TRACE("hypro.datastructures.hiv", "Current it points to " << *it );
+			// handle first interval differently
+			if( it == mIntervals.begin() && it->timePoint >= timeInterval.upper() && it->type == type ) {
+				TRACE("hypro.datastructures.hiv", "Begin and match." );
+				return true;
+			} else if( it == mIntervals.begin() ) {
+				++it;
+				continue;
+			}
+
+			// check for containment and matching type - only case in which we return true.
+			if( (it->timePoint >= timeInterval.upper() && std::prev(it)->timePoint <= timeInterval.lower() ) && it->type == type) {
+				TRACE("hypro.datastructures.hiv", "Intermediate and match." );
+				return true;
+			}
+
+			if( std::prev(it)->timePoint > timeInterval.upper() ) {
+				TRACE("hypro.datastructures.hiv", "Too large." );
+				return false;
+			}
+
+			++it;
+		}
+		TRACE("hypro.datastructures.hiv", "Not found." );
+		return false;
 	}
 
 	template<typename T, typename Number>
