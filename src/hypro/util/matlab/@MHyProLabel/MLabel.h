@@ -8,6 +8,7 @@
 #include "../ClassHandle.h"
 #include "../ObjectHandle.h"
 
+
 class MLabel{
 
     public:
@@ -16,7 +17,11 @@ class MLabel{
         static void new_name(int, mxArray**, int, const mxArray**);
         static void copy(int, mxArray**, int, const mxArray**);
         static void del_label(int, mxArray**, int, const mxArray**);
-
+        static void getName(int, mxArray**, int, const mxArray**);
+        static void setName(int, mxArray**, int, const mxArray**);
+        static void equals(int, mxArray**, int, const mxArray**);
+        static void unequals(int, mxArray**, int, const mxArray**);
+        static void less(int, mxArray**, int, const mxArray**);
 };
 
 #include "MLabel.tpp"
