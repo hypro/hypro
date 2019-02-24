@@ -1,0 +1,11 @@
+classdef (Abstract) MHyProGeometricObject < handle
+    
+    properties (Abstract)
+        Handle
+    end
+    
+    method
+    
+    
+    
+end
